@@ -1,0 +1,38 @@
+#This file contains default definitions of genome-specific
+#variables.  It must start with 'name global'
+#
+name global
+dummy nothing
+
+
+name hg17
+dbSnp dbSnpRsHg
+affy true
+
+name hg16
+dbSnp dbSnpRsHg
+affy true
+
+name hg15
+dbSnp dbSnpRsHg
+affy true
+
+
+name mm5
+dbSnp dbSnpRsMm
+affy false
+
+name mm4
+dbSnp dbSnpRsMm
+affy false
+
+name mm3
+dbSnp dbSnpRsMm
+affy false
+
+
+name rn3
+dbSnp dbSnpRsRn
+affy false
+
+
