@@ -12,7 +12,7 @@
 #include "scoredRef.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.54 2004/07/21 19:50:59 sugnet Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.55 2004/08/24 21:04:14 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -582,6 +582,7 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
     if (minimalSpan > usingDataSpan)
 	usingDataSpan = minimalSpan;
 
+
     /*	Now that we know what Span to draw, see if this item should be
      *	drawn at all.
      */
@@ -1017,6 +1018,11 @@ if ((vis == tvFull) && (yLineOnOff == wiggleYLineMarkOn))
 	}
 
     }	/*	drawing y= line marker	*/
+
+/*	Map this wiggle area	*/
+mapBoxHc(seqStart, seqEnd, xOff, yOff, width, tg->height, tg->mapName, 
+            tg->mapName, NULL);
+
 freez(&colorArray);
 freeMem(preDraw);
 }	/*	wigDrawItems()	*/
