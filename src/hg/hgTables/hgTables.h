@@ -27,6 +27,7 @@ extern char *genome;		/* Name of genome - mouse, human, etc. */
 extern char *database;		/* Name of genome database - hg15, mm3, or the like. */
 extern struct trackDb *fullTrackList;	/* List of all tracks in database. */
 extern struct trackDb *curTrack;	/* Currently selected track. */
+extern struct customTrack *theCtList;	/* List of custom tracks. */
 
 /* --------------- HTML Helpers ----------------- */
 
@@ -200,6 +201,26 @@ char *identifierFileName();
 struct hash *identifierHash();
 /* Return hash full of identifiers. */
 
+/* Custom track stuff. */
+
+boolean isCustomTrack(char *table);
+/* Return TRUE if table is a custom track. */
+
+struct customTrack *getCustomTracks();
+/* Get custom track list. */
+
+struct slName *getBedFields(int fieldCount);
+/* Get list of fields for bed of given size. */
+
+struct customTrack *lookupCt(char *name);
+/* Find named custom track. */
+
+struct hTableInfo *ctToHti(struct customTrack *ct);
+/* Create an hTableInfo from a customTrack. */
+
+void doTabOutCustomTracks(struct customTrack *ct, char *fields);
+/* Print out selected fields from custom track.  If fields
+ * is NULL, then print out all fields. */
 
 /* Stuff from other modules used in hgTables.h. */
 

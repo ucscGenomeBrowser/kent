@@ -14,7 +14,7 @@
 #include "hdb.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: joining.c,v 1.20 2004/07/18 23:51:25 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.21 2004/07/19 07:22:39 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -225,6 +225,23 @@ for (field = fieldList; field != NULL; field = field->next)
     }
 slReverse(&dtfList);
 return dtfList;
+}
+
+static struct dyString *makeSimpleCommaFieldList(struct joinerDtf *dtfList)
+/* Make comma-separated list from field components of dtfList. */
+{
+struct dyString *dy = dyStringNew(0);
+struct joinerDtf *dtf;
+boolean needsComma = FALSE;
+for (dtf = dtfList; dtf != NULL; dtf = dtf->next)
+    {
+    if (needsComma)
+        dyStringAppendC(dy, ',');
+    else
+        needsComma = TRUE;
+    dyStringAppend(dy, dtf->field);
+    }
+return dy;
 }
 
 static struct dyString *makeOrderedCommaFieldList(struct sqlConnection *conn, 
@@ -730,8 +747,12 @@ struct joinerDtf *dtfList = fieldsToDtfs(fieldList);
 if (joinerDtfAllSameTable(dtfList))
     {
     struct sqlConnection *conn = sqlConnect(dtfList->database);
-    struct dyString *dy = makeOrderedCommaFieldList(conn, 
-    	dtfList->table, dtfList);
+    struct dyString *dy;
+    
+    if (isCustomTrack(dtfList->table))
+        dy = makeSimpleCommaFieldList(dtfList);
+    else
+	dy = makeOrderedCommaFieldList(conn, dtfList->table, dtfList);
     doTabOutTable(dtfList->database, dtfList->table, conn, dy->string);
     sqlDisconnect(&conn);
     }

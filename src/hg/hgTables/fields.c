@@ -1,5 +1,4 @@
-/* Put up pages for selecting and filtering on fields. */
-
+/* Put up pages for selecting and filtering on fields. */ 
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"
@@ -12,10 +11,11 @@
 #include "trackDb.h"
 #include "asParse.h"
 #include "kxTok.h"
+#include "customTrack.h"
 #include "joiner.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: fields.c,v 1.18 2004/07/19 02:15:36 kent Exp $";
+static char const rcsid[] = "$Id: fields.c,v 1.19 2004/07/19 07:22:39 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -235,7 +235,22 @@ safef(buf, sizeof(buf), "%s%s.%s", setOrClearPrefix, db, table);
 return buf;
 }
 
-static void showTableFields(char *db, char *rootTable)
+static void showTableLastButtons(char *db, char *table)
+/* Put up the last buttons in a showTable section. */
+{
+hPrintf("<BR>\n");
+cgiMakeButton(hgtaDoPrintSelectedFields, "Get Fields");
+hPrintf(" ");
+cgiMakeButton(hgtaDoMainPage, "Cancel");
+hPrintf(" ");
+cgiMakeButton(setClearAllVar(hgtaDoSetAllFieldPrefix,db,table), 
+	"Check All");
+hPrintf(" ");
+cgiMakeButton(setClearAllVar(hgtaDoClearAllFieldPrefix,db,table), 
+	"Clear All");
+}
+
+static void showTableFieldsDb(char *db, char *rootTable)
 /* Put up a little html table with a check box, name, and hopefully
  * a description for each field in SQL rootTable. */
 {
@@ -260,7 +275,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     cgiMakeCheckBox(var, varOn(var));
     hPrintf("</TD>");
     hPrintf("<TD>");
-    hPrintf(" %s<BR>\n", field);
+    hPrintf("%s", field);
     hPrintf("</TD>");
     if (asObj != NULL)
 	{
@@ -273,19 +288,40 @@ while ((row = sqlNextRow(sr)) != NULL)
     hPrintf("</TR>");
     }
 hTableEnd();
-
+showTableLastButtons(db, rootTable);
 freez(&table);
 sqlDisconnect(&conn);
-hPrintf("<BR>\n");
-cgiMakeButton(hgtaDoPrintSelectedFields, "Get Fields");
-hPrintf(" ");
-cgiMakeButton(hgtaDoMainPage, "Cancel");
-hPrintf(" ");
-cgiMakeButton(setClearAllVar(hgtaDoSetAllFieldPrefix,db,rootTable), 
-	"Check All");
-hPrintf(" ");
-cgiMakeButton(setClearAllVar(hgtaDoClearAllFieldPrefix,db,rootTable), 
-	"Clear All");
+}
+
+static void showTableFieldCt(char *db, char *table)
+/* Put up html table with a check box for each field of custom
+ * track. */
+{
+struct customTrack *ct = lookupCt(table);
+struct slName *field, *fieldList = getBedFields(ct->fieldCount);
+
+hTableStart();
+for (field = fieldList; field != NULL; field = field->next)
+    {
+    char *var = checkVarName(db, table, field->name);
+    hPrintf("<TR><TD>");
+    cgiMakeCheckBox(var, varOn(var));
+    hPrintf("</TD><TD>");
+    hPrintf(" %s<BR>\n", field->name);
+    hPrintf("</TD></TR>");
+    }
+hTableEnd();
+showTableLastButtons(db, table);
+}
+
+static void showTableFields(char *db, char *rootTable)
+/* Put up a little html table with a check box, name, and hopefully
+ * a description for each field in SQL rootTable. */
+{
+if (isCustomTrack(rootTable))
+    showTableFieldCt(db, rootTable);
+else
+    showTableFieldsDb(db, rootTable);
 }
 
 static void showLinkedFields(struct dbTable *dtList)

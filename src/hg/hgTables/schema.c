@@ -15,9 +15,10 @@
 #include "joiner.h"
 #include "tableDescriptions.h"
 #include "asParse.h"
+#include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.12 2004/07/18 18:41:10 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.13 2004/07/19 07:22:39 kent Exp $";
 
 
 void describeFields(char *db, char *table, 
@@ -146,7 +147,7 @@ explainCoordSystem();
 }
 
 
-static void showSchema(char *db, char *table)
+static void showSchemaDb(char *db, char *table)
 /* Show schema to open html page. */
 {
 struct sqlConnection *conn = sqlConnect(db);
@@ -183,9 +184,37 @@ if (jpList != NULL)
 	    jp->b->field, jp->a->field);
 	}
     }
-
 webNewSection("Sample Rows");
 printSampleRows(10, conn, splitTable);
+}
+
+static void showSchemaCt(char *table)
+/* Show schema on custom track. */
+{
+struct customTrack *ct = lookupCt(table);
+struct bed *bed;
+int count = 0;
+
+/* Find named custom track. */
+hPrintf("<B>Custom Track ID:</B> %s ", table);
+hPrintf("<B>Field Count:</B> %d<BR>", ct->fieldCount);
+hPrintf("On loading all custom tracks are converted to ");
+hPrintf("<A HREF=\"/goldenPath/help/customTrack.html#BED\">BED</A> ");
+hPrintf("format on loading.");
+webNewSection("Sample Rows");
+hPrintf("<TT><PRE>");
+for (bed = ct->bedList; bed != NULL && count < 10; bed = bed->next, ++count)
+    bedTabOutN(bed, ct->fieldCount, stdout);
+hPrintf("</PRE></TT>\n");
+}
+
+static void showSchema(char *db, char *table)
+/* Show schema to open html page. */
+{
+if (isCustomTrack(table))
+    showSchemaCt(table);
+else
+    showSchemaDb(db, table);
 }
 
 void doTableSchema(char *db, char *table, struct sqlConnection *conn)
