@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.78 2004/06/30 22:33:49 angie Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.79 2004/07/02 01:51:41 donnak Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -500,30 +500,30 @@ cartSaveSession(cart);
 printf("%s", "<TD><CENTER>\n");
 printf("Genome:<BR>");
 printGenomeListHtml(db, onChangeText);
-printf("%s", "</TD><TD><CENTER>\n");
+printf("%s", "</CENTER></TD><TD><CENTER>\n");
 printf("Assembly:<BR>");
 printBlatAssemblyListHtml(db);
-printf("%s", "</TD><TD><CENTER>\n");
+printf("%s", "</CENTER></TD><TD><CENTER>\n");
 printf("Query type:<BR>");
 cgiMakeDropList("type", typeList, ArraySize(typeList), NULL);
-printf("%s", "</TD><TD><CENTER>\n");
+printf("%s", "</CENTER></TD><TD><CENTER>\n");
 printf("Sort output:<BR>");
 cgiMakeDropList("sort", sortList, ArraySize(sortList), cartOptionalString(cart, "sort"));
-printf("%s", "</TD>\n");
+printf("%s", "</CENTER></TD>\n");
 printf("%s", "<TD><CENTER>\n");
 printf("Output type:<BR>");
 cgiMakeDropList("output", outputList, ArraySize(outputList), cartOptionalString(cart, "output"));
-puts("</TD>\n");
+puts("</CENTER></TD>\n");
 
 puts("<TD><CENTER>&nbsp;<BR>\n"
     "<INPUT TYPE=SUBMIT NAME=Submit VALUE=Submit Align=\"bottom\">\n"
-    "</TD>\n"
+    "</CENTER></TD>\n"
     "</TR>\n"
     "<TR>\n"
     "<TD COLSPAN=5>\n"
-    "Please paste in a query sequence to see where it is located in the\n"
-    "the genome.  Multiple sequences can be searched \n"
-    "at once if separated by a line starting with > and the sequence name.\n"
+    "Paste in a query sequence to find its location in the\n"
+    "the genome.  Multiple sequences may be searched \n"
+    "at once if separated by a line starting with > followed by the sequence name.\n"
     "</TD>\n"
     "<TD>\n"
     "<INPUT TYPE=RESET NAME=Reset VALUE=Reset Align=\"bottom\">\n"
@@ -550,13 +550,27 @@ puts("Rather than pasting a sequence, you can choose to upload a text file conta
 	 "the sequence.<BR>");
 puts("Upload sequence: <INPUT TYPE=FILE NAME=\"seqFile\">");
 puts(" <INPUT TYPE=SUBMIT Name=Submit VALUE=\"Submit File\"><P>\n");
-
 printf("%s", 
 "<P>Only DNA sequences of 25,000 or fewer bases and protein or translated \n"
 "sequence of 5000 or fewer letters will be processed.  Up to 25 sequences\n"
 "can be submitted at the same time. The total limit for multiple sequence\n"
-"submissions is 50,000 bases or 12,500 letters.\n</P>"
-"BLAT on DNA is designed to\n"
+"submissions is 50,000 bases or 12,500 letters.\n</P>");
+
+printf("</FORM>\n");
+
+printf("<FORM ACTION=\"../cgi-bin/hgBlat\" METHOD=\"POST\" NAME=\"orgForm\">"
+       "<input type=\"hidden\" name=\"db\" value=\"\">\n"
+       "<input type=\"hidden\" name=\"org\" value=\"\">\n"
+       "<input type=\"hidden\" name=\"userSeq\" value=\"\">\n"
+       "<input type=\"hidden\" name=\"showPage\" value=\"true\">\n"
+       "<input type=\"hidden\" name=\"seqFile\" value=\"\">\n");
+cartSaveSession(cart);
+cartSetString(cart, "db", db);
+puts("</FORM>");
+
+webNewSection("About BLAT");
+printf("%s", 
+"<P>BLAT on DNA is designed to\n"
 "quickly find sequences of 95% and greater similarity of length 40 bases or\n"
 "more.  It may miss more divergent or shorter sequence alignments.  It will find\n"
 "perfect sequence matches of 33 bases, and sometimes find them down to 22 bases.\n"
@@ -573,22 +587,11 @@ printf("%s",
 "manner, except with 4-mers rather than 11-mers.  The protein index takes a little\n"
 "more than 2 gigabytes</P>\n"
 "<P>BLAT was written by <A HREF=\"mailto:kent@soe.ucsc.edu\">Jim Kent</A>.\n"
-"Like most of Jim's software interactive use on this web server is free to all.\n"
+"Like most of Jim's software, interactive use on this web server is free to all.\n"
 "Sources and executables to run batch jobs on your own server are available free\n"
 "for academic, personal, and non-profit purposes.  Non-exclusive commercial\n"
 "licenses are also available.  Contact Jim for details.</P>\n"
-"\n"
-"</FORM>\n");
-
-printf("<FORM ACTION=\"../cgi-bin/hgBlat\" METHOD=\"POST\" NAME=\"orgForm\">"
-       "<input type=\"hidden\" name=\"db\" value=\"\">\n"
-       "<input type=\"hidden\" name=\"org\" value=\"\">\n"
-       "<input type=\"hidden\" name=\"userSeq\" value=\"\">\n"
-       "<input type=\"hidden\" name=\"showPage\" value=\"true\">\n"
-       "<input type=\"hidden\" name=\"seqFile\" value=\"\">\n");
-cartSaveSession(cart);
-cartSetString(cart, "db", db);
-puts("</FORM>");
+"\n");
 }
 
 void doMiddle(struct cart *theCart)
