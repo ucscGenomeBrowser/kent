@@ -13,7 +13,7 @@
 #include "chainBlock.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: axtChain.c,v 1.23 2004/04/28 21:12:39 kent Exp $";
+static char const rcsid[] = "$Id: axtChain.c,v 1.24 2004/04/29 15:16:13 heather Exp $";
 
 int minScore = 1000;
 char *detailsName = NULL;
@@ -656,6 +656,14 @@ void removePartialOverlaps(struct chain *chain,
 /* If adjacent blocks overlap then find crossover points between them. */
 {
 struct boxIn *a, *b;
+int dq = 0;
+int dt = 0;
+int overlap = 0;
+int aSize = 0;
+int bSize = 0;
+int crossover = 0;
+int invCross = 0;
+int overlapAdjustment = 0;
 boolean totalTrimA, totalTrimB;
 
 assert(chain->blockList != NULL);
@@ -679,14 +687,13 @@ for (;;)
         {
 	if (b == NULL)
 	    break;
-	int dq = b->qStart - a->qEnd;
-	int dt = b->tStart - a->tEnd;
+	dq = b->qStart - a->qEnd;
+	dt = b->tStart - a->tEnd;
 	if (dq < 0 || dt < 0)
 	   {
-	   int overlap = -min(dq, dt);
-	   int aSize = a->qEnd - a->qStart;
-	   int bSize = b->qEnd - b->qStart;
-	   int crossover, invCross, overlapAdjustment;
+	   overlap = -min(dq, dt);
+	   aSize = a->qEnd - a->qStart;
+	   bSize = b->qEnd - b->qStart;
 	   if (overlap >= aSize || overlap >= bSize)
 	       {
 	       totalTrimB = TRUE;
