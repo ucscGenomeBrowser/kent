@@ -50,11 +50,10 @@ void addNib(char *file, struct hash *fileHash, struct hash *seqHash)
 struct seqFilePos *sfp;
 char root[128];
 int size;
-
 FILE *f = NULL;
 splitPath(file, NULL, root, NULL);
 AllocVar(sfp);
-uglyf("Adding %s to hash\n", file);
+uglyf("Adding %s\n", file);
 hashAddSaveName(seqHash, root, sfp, &sfp->name);
 sfp->file = hashStoreName(fileHash, file);
 sfp->isNib = TRUE;
@@ -70,6 +69,7 @@ char *line, *name;
 char root[128];
 char *rFile = hashStoreName(fileHash, file);
 
+uglyf("Adding %s\n", file);
 while (lineFileNext(lf, &line, NULL))
     {
     if (line[0] == '>')
@@ -80,7 +80,6 @@ while (lineFileNext(lf, &line, NULL))
 	if (name == NULL)
 	   errAbort("bad line %d of %s", lf->lineIx, lf->fileName);
 	AllocVar(sfp);
-	uglyf("Adding %s to hash\n", name);
 	hashAddSaveName(seqHash, name, sfp, &sfp->name);
 	sfp->file = rFile;
 	sfp->pos = lineFileTell(lf);
@@ -288,6 +287,11 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     lastQ = qs + size;
     lastT = ts + size;
     }
+
+if (psl->strand[0] == '-')
+    reverseComplement(qSeq->dna, qSeq->size);
+if (psl->strand[1] == '-')
+    reverseComplement(tSeq->dna, tSeq->size);
 
 assert(q->stringSize == t->stringSize);
 prettyOutString(q->string, t->string, q->stringSize, 60, psl, f);
