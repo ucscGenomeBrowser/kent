@@ -1016,19 +1016,29 @@ hgGcPercent -chr=${chr} -doGaps -file=stdout -win=5 hg17 \
     cd /cluster/data/genbank
     nice bin/gbAlignStep -srcDb=genbank -type=mrna -verbose=1 -initial hg17
     #	logFile: var/build/logs/2004.06.04-10:47:21.hg17.initalign.log
-XXXX - running 2004-06-04 10:48
-# Completed: 29325 of 29325 jobs
-# CPU time in finished jobs:    5095155s   84919.26m  1415.32h   58.97d  0.162 y
-# IO & Wait Time:                136863s    2281.04m    38.02h    1.58d  0.004 y
-# Average job time:                 178s       2.97m     0.05h    0.00d
-# Longest job:                    17279s     287.98m     4.80h    0.20d
-# Submission to last job:         18142s     302.37m     5.04h    0.21d
+    #	One job was hung up, after killing it on its node, the batch
+    #	finished in a few minutes.
+# Completed: 35720 of 35720 jobs
+# CPU time in finished jobs:    5161424s   86023.74m  1433.73h   59.74d  0.164 y
+# IO & Wait Time:                144149s    2402.48m    40.04h    1.67d  0.005 y
+# Average job time:                 149s       2.48m     0.04h    0.00d
+# Longest job:                    18306s     305.10m     5.08h    0.21d
+# Submission to last job:         35061s     584.35m     9.74h    0.41d
 
     ssh hgwdev
     cd /cluster/data/genbank
     #	some kind of error happened here, had to remove a lock file to
-    #	get this to proceed
+    #	get this to proceed  (this same thing happened again the second
+    #	time around)
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad hg17
+XXXX This doesn't work 2004-06-04:
+->Loading MGC tables: sec=0.01 vm=2.36m
+Can't start query:
+describe all_mrna
+
+mySQL error 1146: Table 'hg17.all_mrna' doesn't exist
+command failed: mgcDbLoad -workdir=work/hgwdev/dbload/hg17/mgc -verbose=1 hg17 data/processed/mgc/2004.06.01/mgcFullStatus.tab.gz at /cluster/store5/genbank/bin/../lib/gbCommon.pm line 197. at /cluster/store5/genbank/bin/../lib/gbCommon.pm line 197.
+
 
     ssh eieio
     cd /cluster/data/genbank/work
