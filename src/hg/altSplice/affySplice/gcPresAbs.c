@@ -1,0 +1,405 @@
+/* gcPresAbs.c - Calculate probability of expression in an mrna
+   sample given a cel file of results. Use empiracal rank within
+   a gc population to estimate probability and fisher's method
+   of combining probabilities to calculate probe set probability.
+*/
+#include "common.h"
+#include "hash.h"
+#include "linefile.h"
+#include "obscure.h"
+#include "options.h"
+#include <gsl/gsl_math.h>
+#include <gsl/gsl_cdf.h>
+
+
+struct row1lq
+/* A single row from a affymetrix 1lq file. Also used for 
+   storing values and probability of expression. */
+{
+    struct row1lq *next;
+    char *psName;
+    char *seq;
+    int x;
+    int y;
+    int gcCount;
+    double intensity;
+    double pVal;
+};
+
+struct psProb 
+/* Probability that a probe set is expressed. */
+{
+    struct psProb *next; /* Next in list. */
+    char psName[128];    /* Name of probe set. */
+    double pVal;         /* P-Value of expression. */
+};
+
+struct row1lq **gcBins = NULL;     /* Bins of lists of row1lqs for different amounts of GCs. */
+struct hash *probeSetHash = NULL;  /* Hash of slRefs for each probe set where slRef->val is a row1lq. */
+int minGcBin = 0;                  /* Minimum GC bin. */
+int maxGcBin = 0;                  /* Maximum GC bin. */
+struct psProb *probePVals = NULL; /* List of psProbe structs with pVals filled in. */
+
+static struct optionSpec optionSpecs[] = 
+/* Our acceptable options to be called with. */
+{
+    {"help", OPTION_BOOLEAN},
+    {"1lqFile", OPTION_STRING},
+    {"outFile", OPTION_STRING},
+    {NULL,0}
+};
+
+static char *optionDescripts[] = 
+/* Description of our options for usage summary. */
+{
+    "Display this message.",
+    "1lq file from affymetrix specifying probe layout on chip",
+    "File to output matrix of probabilities to."
+};
+
+void usage()
+/** Print usage and quit. */
+{
+int i=0;
+warn("gcPresAbs - Calculate probability of expression in an mrna\n"
+     "sample given a cel file of results. Use empiracal rank within\n"
+     "a gc population to estimate probability and fisher's method\n"
+     "of combining probabilities to calculate probe set probability.");
+for(i=0; i<ArraySize(optionSpecs) -1; i++)
+    fprintf(stderr, "  -%s -- %s\n", optionSpecs[i].name, optionDescripts[i]);
+errAbort("\nusage:\n   "
+	 "gcPresAbs -1lqFile=chipmousea.1lq -outFile=probeSet.matrix.probs file1.cel file2.cel ... fileN.cel");
+}
+
+int psCmp(const void *va, const void *vb)
+/* Compare based on probeSet name. */
+{
+const struct psProb *a = *((struct psProb **)va);
+const struct psProb *b = *((struct psProb **)vb);
+return strcmp(a->psName, b->psName);
+}
+
+int row1lqCmp(const void *va, const void *vb)
+/* Compare to sort based on pVal (although when this is called
+  it is still a signal. */
+{
+const struct row1lq *a = *((struct row1lq **)va);
+const struct row1lq *b = *((struct row1lq **)vb);
+return b->intensity - a->intensity;
+}
+
+int countGc(char *sequence)
+/* Count the numbers of G's+C's in the sequence. */
+{
+int count = 0;
+tolowers(sequence);
+count += countChars(sequence, 'g');
+count += countChars(sequence, 'c');
+return count;
+}
+
+void initGcBins(int minGc, int maxGc)
+/* Intialize the gcBins structure for maxGc-minGc bins. */
+{
+int numBins = maxGc - minGc;
+minGcBin = minGc;
+maxGcBin = maxGc;
+AllocArray(gcBins, numBins);
+}
+
+int binForGc(int gcCount)
+/* Return the correct bin for this gc count. */
+{
+int count = 0;
+if(gcCount < minGcBin)
+    gcCount = minGcBin;
+if(gcCount > maxGcBin)
+    gcCount = maxGcBin;
+return gcCount - minGcBin;
+}
+
+void read1lqFile(char *name, struct row1lq ***pRowArray, int *pRowCount)
+/* Read in the 1lq popluating the gcBins and hasing by probe set name.
+   Need to index rows by a few different ways:
+   1) Index in file, for filling in intensity vals from cel files.
+   2) Gc Bin for calculating the rank within a set of probes that have same gc content.
+   3) Probe set for calculating the probability that the probe set as a whole is expressed.
+*/
+{
+struct lineFile *lf = lineFileOpen(name, TRUE);
+struct row1lq **array1lq = NULL;
+struct row1lq *rowList = NULL, *row=NULL, *rowNext = NULL;
+int i;
+char *words[50];
+char *line = NULL;
+int count =0;
+boolean found = FALSE;
+struct slRef *refList = NULL, *ref = NULL;
+while(lineFileNextReal(lf, &line))
+    {
+    if(stringIn("X\tY\t", line))
+	{
+	found = TRUE;
+	break;
+	}
+    }
+if(!found)
+    errAbort("Couldn't find \"X\tY\t\" in 1lq file: %s", name);
+
+while(lineFileChopNextTab(lf, words, sizeof(words))) 
+    {
+    AllocVar(row);
+    row->psName = cloneString(words[5]);
+    row->seq = cloneString(words[2]);
+    row->x = atoi(words[0]);
+    row->y = atoi(words[1]);
+    slAddHead(&rowList, row);
+    (*pRowCount)++;
+    }
+slReverse(&rowList);
+AllocArray(array1lq, (*pRowCount));
+
+probeSetHash = newHash(15);
+
+for(row = rowList; row != NULL; row = rowNext)
+    {
+    int bin = -1;
+    struct slRef *ref = NULL, *reflist = NULL;
+
+    rowNext = row->next;
+    
+    /* Keep track of the row by its index in the file. */
+    array1lq[count++] = row;
+
+    /* Ignore the probes with no sequence data. */
+    if(sameString(row->seq, "!")) 
+	continue;
+    /* Add it to the correct gc bin. */
+    row->gcCount = countGc(row->seq);
+    bin = binForGc(row->gcCount);
+    slAddHead(&gcBins[bin], row);
+
+    /* Create a list of references indexed by the probe sets. */
+    AllocVar(ref);
+    ref->val = row;
+    refList = hashFindVal(probeSetHash, row->psName);
+    if(refList == NULL)
+	hashAddUnique(probeSetHash, row->psName, ref);
+    else
+	slAddTail(&refList, ref);
+    }
+
+for(i = minGcBin; i < maxGcBin; i++)
+    slReverse(&gcBins[i-minGcBin]);
+
+//lineFileClose(&lf);
+*pRowArray = array1lq;
+}
+
+void fillInMatrix(double **matrix, int celIx, int rowCount, char *celFile)
+/* Read in the values of the cel file into matrix column celIx. */
+{
+struct lineFile *lf = lineFileOpen(celFile, TRUE);
+char *words[50];
+char *line = NULL;
+boolean found = FALSE;
+int count =0;
+/* Read out the header. */
+while(lineFileNextReal(lf, &line))
+    {
+    if(stringIn("[INTENSITY]", line))
+	{
+	found = TRUE;
+	break;
+	}
+    }
+if(!found)
+    errAbort("Couldn't find \"[INTENSITY]\" in cel file: %s", celFile);
+count =0;
+lineFileNextReal(lf, &line); /* NumberCells... */
+lineFileNextReal(lf, &line); /* CellHeader...*/
+/* Read in the data. */
+while(lineFileChopNext(lf, words, sizeof(words)))
+    {
+    if(*(words[0]) == '[')
+	break;
+    assert(count+1 <= rowCount);
+    matrix[count][celIx] = atof(words[2]);
+    count++;
+    if(lf->bytesInBuf == 0)
+	warn("Something weird is happening...");
+    }
+//warn("Closing line file.");
+lineFileClose(&lf);
+}
+
+int xy2i(int x, int y)
+/* Take in the x,y coordinates on the array and 
+   return the index into the array. */
+{
+return (712 * y) + x;
+}
+
+void probeSetCalcPval(void *val)
+/* Loop through the slRef list calculating pVal based
+   on row1lq->pval using fishers method for combining probabilities.
+   Create a psProbe val and add it to the probePVals list. */
+{
+struct slRef *ref = NULL, *refList = NULL;
+struct psProb *ps = NULL;
+struct row1lq *row = NULL;
+double probProduct = 0;
+int probeCount = 0;
+refList = val;
+probeCount = slCount(refList);
+assert(probeCount > 0);
+
+/* Allocate some memory. */
+AllocVar(ps);
+row = refList->val;
+safef(ps->psName, sizeof(ps->psName), "%s", row->psName);
+for(ref = refList; ref != NULL; ref = ref->next)
+    {
+    row = ref->val;
+    probProduct = probProduct + log(row->pVal);
+    }
+
+/* Fisher's method for combining probabilities. */
+ps->pVal = gsl_cdf_chisq_P(-2*probProduct,2*probeCount); 
+if(ps->pVal > 1 || ps->pVal < 0) 
+    warn("%s pVal is %.10f, wrong!");
+slAddHead(&probePVals, ps);
+}
+
+
+void fillInProbeSetPvals(double **matrix, int rowCount, int colCount, int colIx, struct row1lq **row1lqArray,
+			 double ***probeSetPValsP, char ***probeSetNamesP, int *psCountP)
+/* Calculate and fill in the probe set probabilities of expression given
+   the data in the matrix. */
+{
+int i = 0, j = 0;
+int rank = 0;
+int binCount = 0;
+struct psProb *probe = NULL;
+struct row1lq *row = NULL;
+int psCount = 0;
+/* Fill in the values for the rows. */
+for(i = 0; i < rowCount; i++)
+    row1lqArray[i]->intensity = matrix[i][colIx];
+
+for(i = minGcBin; i < maxGcBin; i++)
+    {
+    rank = 1;
+    slSort(&gcBins[i-minGcBin], row1lqCmp);
+    binCount = slCount(gcBins[i-minGcBin]);
+    for(row = gcBins[i-minGcBin]; row != NULL; row = row->next)
+	{
+	row->pVal = ((double)rank)/binCount;
+	rank++;
+	}
+    }
+
+hashTraverseVals(probeSetHash, probeSetCalcPval);
+slSort(&probePVals, psCmp);
+psCount = slCount(probePVals);
+/* If this is the first time through Allocate some memory. */
+if(*probeSetPValsP == NULL) 
+    {
+    (*psCountP) = psCount;
+    AllocArray((*probeSetNamesP), psCount);
+    AllocArray((*probeSetPValsP), psCount);
+    for(i = 0; i < psCount; i++)
+	{
+	AllocArray((*probeSetPValsP)[i], colCount);
+	}
+    i = 0;
+    for(probe = probePVals; probe != NULL; probe = probe->next)
+	{
+	(*probeSetNamesP)[i++] = cloneString(probe->psName);
+	}
+    }
+
+i = 0;
+for(probe = probePVals; probe != NULL; probe = probe->next)
+    {
+    (*probeSetPValsP)[i++][colIx] = probe->pVal;
+    }
+slFreeList(&probePVals);
+}
+
+
+void gcPresAbs(char *outFile, char *file1lq, int celCount, char *celFiles[])
+/* Output all of the probe sets and their pvals for expression as
+   calculated from the intensities in the cel files. */
+{
+struct row1lq **rowArray = NULL, *row=NULL;
+char **expNames = NULL;
+double **matrix = NULL;
+double **probeSetPVals = NULL;     /* Matrix of pVals of expression with probe sets ordered altphabetically. */
+char **probeSetNames = NULL;      /* List of probe set names indexing the probeSetPVals matrix. */
+int psCount = 0;
+int i=0,j=0;
+int rowCount=0;
+FILE *out = NULL;
+dotForUserInit(1);
+initGcBins(5,20);
+warn("Reading 1lq file: %s", file1lq);
+read1lqFile(file1lq, &rowArray, &rowCount);
+
+/* Lets initialize some memory. */
+AllocArray(expNames, celCount);
+AllocArray(matrix, rowCount);
+for(i=0; i<rowCount; i++)
+    AllocArray(matrix[i], celCount);
+
+/* Read in the cel files. */
+for(i=0; i<celCount; i++)
+    {
+    warn("Reading in cel file: %s", celFiles[i]);
+    dotForUser();
+    expNames[i] = cloneString(celFiles[i]);
+    fillInMatrix(matrix, i, rowCount, celFiles[i]);
+    }
+
+warn("Calculating pVals");
+for(i=0; i<celCount; i++)
+    {
+    dotForUser();
+    fillInProbeSetPvals(matrix, rowCount, celCount, i, rowArray,
+			&probeSetPVals, &probeSetNames, &psCount);
+    }
+warn("Writing out the results.");
+out = mustOpen(outFile, "w");
+for(i = 0; i < celCount; i++)
+    fprintf(out, "\t%s", expNames[i]);
+fprintf(out, "\n");
+
+for(i = 0; i < psCount; i++) 
+    {
+    fprintf(out, "%s\t", probeSetNames[i]);
+    for(j = 0; j < celCount-1; j++)
+	fprintf(out, "%.10g\t", probeSetPVals[i][j]);
+    fprintf(out, "%.10g\n", probeSetPVals[i][j]);
+    }
+carefulClose(&out);
+warn("Done");
+}
+
+    
+int main(int argc, char *argv[])
+{
+char *affy1lqName = NULL;
+char *outFileName = NULL;
+int origCount = argc;
+optionInit(&argc, argv, optionSpecs);
+if(optionExists("help") || origCount < 3)
+    usage();
+affy1lqName = optionVal("1lqFile", NULL);
+outFileName = optionVal("outFile", NULL);
+if(affy1lqName == NULL || outFileName == NULL)
+    errAbort("Need to specify 1lqFile and outFile, use -help for usage.");
+gcPresAbs(outFileName, affy1lqName, argc-1, argv+1);
+return 0;
+}
+
+
