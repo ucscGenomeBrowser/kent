@@ -10,13 +10,59 @@
 #include "rnaSecStr.h"
 #include "rnautil.h"
 
-static char const rcsid[] = "$Id: rnaFoldTrack.c,v 1.1 2005/03/08 21:50:00 jsp Exp $";
+static char const rcsid[] = "$Id: rnaFoldTrack.c,v 1.2 2005/03/14 18:55:06 jsp Exp $";
+
+
+void bedLoadItemBySqlResult(struct track *tg, struct sqlResult *sr, int rowOffset, ItemLoader loader)
+/* Generic tg->item loader. */
+{
+char **row = NULL;
+struct slList *itemList = NULL, *item = NULL;
+
+if (NULL == sr)
+    errAbort("While loading track %s, bedLoadItemSqlResult was given empty sqlResult", tg->mapName);
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    item = loader(row + rowOffset);
+    slAddHead(&itemList, item);
+    }
+slSort(&itemList, bedCmp);
+tg->items = itemList;
+}
+
+
+void scoreFilterSqlClause(struct track *tg, char *extraWhere, size_t size, int defaultFilterScore)
+/* Make a 'where' clause for the sql query if the scoreFilter has been set. */
+{
+char option[128]; /* Option -  score filter */
+char *optionScoreVal;
+int  optionScore = defaultFilterScore;
+
+safef(option, sizeof(option), "%s.scoreFilter", tg->mapName);
+optionScoreVal = trackDbSetting(tg->tdb, "scoreFilter");
+if (optionScoreVal != NULL)
+    optionScore = atoi(optionScoreVal);
+optionScore = cartUsualInt(cart, option, optionScore);
+
+safef(extraWhere, size, "score >= %d",optionScore);
+}			   		   
 
 
 void loadRnaSecStr(struct track *tg)
 /* Load up rnaSecStr from database table to track items. */
 {
-bedLoadItem(tg, tg->mapName, (ItemLoader)rnaSecStrLoad);
+struct sqlConnection *conn = hAllocConn();
+int rowOffset = 0;
+struct sqlResult *sr = NULL;
+char extraWhere[128];
+
+scoreFilterSqlClause(tg, extraWhere, sizeof(extraWhere), 0);
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, extraWhere, &rowOffset);
+bedLoadItemBySqlResult(tg, sr, rowOffset, (ItemLoader)rnaSecStrLoad);
+
+sqlFreeResult(&sr);
+hFreeConn(&conn);
 }
 
 void freeRnaSecStr(struct track *tg)
