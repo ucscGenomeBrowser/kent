@@ -858,6 +858,7 @@ for (cn = cns; cn != NULL; cn = cn->next)
     mismatch     = 0;
     missing      = 0;
     goodrc       = 0;
+    strandMismatch = 0;
     assemblyDash = 0;
     gapNib       = 0;
     
