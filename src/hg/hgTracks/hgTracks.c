@@ -8054,6 +8054,7 @@ registerTrackHandler("blatMus", longXenoPslMethods);
 registerTrackHandler("aarMm2", longXenoPslMethods);
 registerTrackHandler("blastzMm2", longXenoPslMethods);
 registerTrackHandler("blastzMm2Sc", longXenoPslMethods);
+registerTrackHandler("blastzMm2Ref", longXenoPslMethods);
 registerTrackHandler("xenoBestMrna", xenoMrnaMethods);
 registerTrackHandler("xenoMrna", xenoMrnaMethods);
 registerTrackHandler("xenoEst", xenoMrnaMethods);

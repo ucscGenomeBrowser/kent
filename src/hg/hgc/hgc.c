@@ -6585,13 +6585,12 @@ else if (sameWord(track, "blatMouse") || sameWord(track, "bestMouse")
     {
     doBlatMus(tdb, item);
     }
-else if (sameWord("blastzMm2", track) || sameWord("blastzMm2Sc", track))
+else if (sameWord("blastzMm2", track)
+         || sameWord("blastzMm2Sc", track)
+         || sameWord("blastzMm2Ref", track)
+         || (sameWord("aarMm2", track)))
     {
     doBlatMus(tdb, item);
-    }
-else if (sameWord("aarMm2", track))
-    {
-    doBlatMus( tdb, item );
     }
 else if (sameWord(track, "blatHuman"))
     {
