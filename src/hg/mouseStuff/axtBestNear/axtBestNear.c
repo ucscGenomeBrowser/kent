@@ -9,7 +9,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtBestNear.c,v 1.2 2003/08/31 08:16:58 baertsch Exp $";
+static char const rcsid[] = "$Id: axtBestNear.c,v 1.3 2005/02/24 18:53:29 braney Exp $";
 #define NEARSIZE 2  /* keep this many best hits */
 
 void usage()
@@ -487,10 +487,10 @@ axtBuffer = NULL;
 axtSaved = FALSE;
 while ((axtList = readAxtChunk(lf, ss, minScore, chromName)) != NULL)
     axtBestNearChunk(axtList, inName, ss, f);
-printf("Read %d elements from %s\n", totalRead, inName);
-printf("%d elements in after soft filter.\n", readSoft);
-printf("Output %d alignments including %d trimmed from overlaps\n", writeCount, subsetCount);
-printf("Bases in %d, bases out %d (%4.2f%%)\n", baseInCount, baseOutCount,
+verbose(2,"Read %d elements from %s\n", totalRead, inName);
+verbose(2,"%d elements in after soft filter.\n", readSoft);
+verbose(2,"Output %d alignments including %d trimmed from overlaps\n", writeCount, subsetCount);
+verbose(2,"Bases in %d, bases out %d (%4.2f%%)\n", baseInCount, baseOutCount,
 	100.0 * baseOutCount / baseInCount);
 }
 
