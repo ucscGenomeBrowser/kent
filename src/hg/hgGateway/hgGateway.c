@@ -13,7 +13,7 @@
 #include "hCommon.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.66 2003/10/20 21:50:06 braney Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.67 2003/10/21 21:29:17 angie Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -182,6 +182,11 @@ void doMiddle(struct cart *theCart)
 cart = theCart;
 
 getDbAndGenome(cart, &db, &organism);
+if (! hDbIsActive(db))
+    {
+    db = hDefaultDb();
+    organism = hGenome(db);
+    }
 if (hIsMgcServer())
     cartWebStart(theCart, "MGC %s Genome Browser Gateway \n", organism);
 else
