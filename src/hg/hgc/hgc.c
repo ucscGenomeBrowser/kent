@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.656 2004/06/03 23:12:26 jill Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.657 2004/06/05 00:20:33 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7894,12 +7894,12 @@ if (hTableExists(chainTable_chrom) )
     hAddBinToQuery(chromStart, chromEnd, dy);
     if (sameString(pg->gStrand,pg->strand))
         dyStringPrintf(dy,
-            "tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d ",
+            "tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d and qStrand = '+' ",
             chromStart,chromEnd, pg->gChrom, pg->gStart, pg->gEnd);
     else
         {
         dyStringPrintf(dy,
-            "tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d ",
+            "tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d and qStrand = '-'",
             chromStart,chromEnd, pg->gChrom, hChromSize(pg->gChrom)-(pg->gEnd), 
             hChromSize(pg->gChrom)-(pg->gStart));
         }
@@ -7958,11 +7958,14 @@ char *tbl = cgiUsualString("table", cgiString("g"));
 int rowOffset = 0;
 
 /* Get alignment info. */
-if (startsWith(tbl,"pseudoGeneLink2"))
+if (sameString(tbl,"pseudoGeneLink2"))
     tbl = cloneString("pseudoMrna2");
 if (startsWith(tbl,"pseudoGeneLink"))
     tbl = cloneString("pseudoMrna");
-pslList = loadPslRangeT(tbl, acc, chrom, winStart, winEnd);
+if (hTableExists(tbl) )
+    pslList = loadPslRangeT(tbl, acc, chrom, winStart, winEnd);
+else
+    errAbort("Table %s not found.\n",tbl);
 slSort(&pslList, pslCmpScoreDesc);
 
 /* print header */
