@@ -9,7 +9,7 @@
 #include "sqlNum.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: spideyToPsl.c,v 1.1 2004/01/11 00:33:22 markd Exp $";
+static char const rcsid[] = "$Id: spideyToPsl.c,v 1.2 2004/01/11 20:31:01 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -19,7 +19,9 @@ errAbort(
   "usage:\n"
   "   spideyToPsl [options] in out.psl\n"
   "\n"
-  "where`in' is the alignment output of spidey (with summaries) \n"
+  "where`in' is the alignment output of spidey (with summaries). \n"
+  "Certain problem cases, such as overlaping exons, result in a\n"
+  "warning and skipping the alignment.\n"
   "\n"
   "Options:\n"
   "  -untranslated - format PSLs as untranslated alignments.\n"
@@ -55,9 +57,10 @@ struct parser
     /* current record */
     struct seqParser query;
     struct seqParser target;
+    boolean skip;  /* skip this alignment */
 };
 
-static char* LINE1_PREFIX = "--SPIDEY";  /* first line */
+static char* START_PREFIX = "--SPIDEY";  /* first line */
 
 void parseErr(struct parser *parser, char* format, ...)
 /* prototype to get gnu attribute check */
@@ -96,20 +99,27 @@ seq->size = 0;
 dyStringClear(seq->aln);
 }
 
+char *getAlignIdent(struct parser *p)
+/* get static-buffered string describing the alignment */
+{
+static char buf[1024];
+snprintf(buf, sizeof(buf), "%s %c %d-%d  %s %c %d-%d",
+         p->query.name->string,  p->query.strand,  p->query.start,  p->query.end,
+         p->target.name->string, p->target.strand, p->target.start, p->target.end);
+return buf;
+}
+
 void dumpParser(struct parser *p, char* msg)
 /* print parser contents for debuggins */
 {
 if (msg != NULL)
     fprintf(stderr, "%s\n", msg);
-fprintf(stderr, "%s %d-%d  %s %d-%d\n",
-        p->query.name->string, p->query.start, p->query.end,
-        p->target.name->string, p->target.start, p->target.end);
+fprintf(stderr, "%s\n", getAlignIdent(p));
 fprintf(stderr, "%s\n", p->query.aln->string);
 fprintf(stderr, "%s\n", p->target.aln->string);
 fprintf(stderr, "\n");
 fflush(stderr);
 }
-
 
 char* alignNextLine(struct parser *parser, char* prefix)
 /* Read the next line for an alignment, return NULL on EOF or a new
@@ -118,7 +128,7 @@ char* alignNextLine(struct parser *parser, char* prefix)
 char *line;
 if (!lineFileNext(parser->lf, &line, NULL))
     return NULL; /*EOF*/
-if (startsWith(LINE1_PREFIX, line))
+if (startsWith(START_PREFIX, line))
     {
     lineFileReuse(parser->lf);
     return NULL; /* new alignment */
@@ -138,7 +148,7 @@ if ((prefix != NULL) && !startsWith(prefix, line))
 return line;
 }
 
-char *skipToPrefix(struct parser *parser, char* prefix)
+char *alignSkipToPrefix(struct parser *parser, char* prefix)
 /* Skip to a line prefix, return NULL if not found or a new alignment is
  * reached */
 {
@@ -149,17 +159,17 @@ while ((line = alignNextLine(parser, prefix)) && !startsWith(prefix, line))
 return line;
 }
 
-char *mustSkipToPrefix(struct parser *parser, char* prefix)
+char *alignMustSkipToPrefix(struct parser *parser, char* prefix)
 /* Skip to a line prefix, aborting if it's not found or a new alignment is
  * reached */
 {
-char *line = skipToPrefix(parser, prefix);
+char *line = alignSkipToPrefix(parser, prefix);
 if (line == NULL)
     parseErr(parser, "unexpect end of alignment looking for \"%s\"", prefix);
 return line;
 }
 
-char *skipEmptyLines(struct parser *parser)
+char *alignSkipEmptyLines(struct parser *parser)
 /* Skip empty lines, return NULL EOF or a new alignment is reached */
 {
 char *line;
@@ -202,6 +212,7 @@ int nCols = chopByWhite(line, row, ArraySize(row));
 if (nCols < 2)
     parseErr(parser, "can't parse Strand: line");
 
+
 /* DNA */
 if (sameString(row[1], "plus"))
     parser->target.strand = '+';
@@ -222,11 +233,16 @@ else
 boolean parseAlignHeader(struct parser *parser)
 /* parse the header part of the next alignment, false if no more */
 {
+/* search for start of alignment; this is required if the previous alignment
+ * was skipped due to an error case */
 char *line;
-if (!lineFileNext(parser->lf, &line, NULL))
-    return FALSE;
-if (!startsWith(LINE1_PREFIX, line))
-    parseErr(parser, "alignment does not start with --SPIDEY");
+do 
+    {
+    if (!lineFileNext(parser->lf, &line, NULL))
+        return FALSE; /* EOF */
+    }
+while (!startsWith(START_PREFIX, line));
+
 parseSeqHeader(parser, &parser->target, "Genomic:");
 parseSeqHeader(parser, &parser->query, "mRNA:");
 parseStrand(parser);
@@ -266,7 +282,7 @@ boolean parseAlignRec(struct parser *parser)
 {
 static struct dyString* dnaBuf = NULL;
 int startIdx, endIdx;
-char *line = skipEmptyLines(parser);
+char *line = alignSkipEmptyLines(parser);
 if (line == NULL)
     return FALSE;  /* end of alignment */
 if (startsWith("Exon", line))
@@ -305,7 +321,7 @@ if (line[0] == '\0')
 line = alignNeedNextLine(parser, NULL);
 
 /* now find beginning and end of actual aligned region, skipping leading
- * and trailing spaces */
+ * and trailing spaces, which are not part of the exon coordinates */
 startIdx = 0;
 endIdx = BIGNUM;
 findAlignLineMinMax(dnaBuf->string, &startIdx, &endIdx);
@@ -318,19 +334,21 @@ dyStringAppendN(parser->query.aln, line+startIdx, (endIdx-startIdx)+1);
 /* next line is either blank or protein, just skip it */
 alignNextLine(parser, NULL);
 
+assert(parser->query.aln->stringSize == parser->target.aln->stringSize);
+
 return TRUE;
 }
 
-void addExonToSeq(struct parser *parser, struct seqParser* seqParser,
-                  int start, int end, struct seqParser* otherParser)
+boolean addExonToSeq(struct parser *parser, struct seqParser* seqParser,
+                     int start, int end, struct seqParser* otherParser)
 /* convert spidey coords to [0..n), add or extend seq coordinates given an
- * exon */
+ * exon; return false if an error is detected */
 {
 if (seqParser->strand == '-')
     {
     int tmp = start;
     assert(end <= start);  /* reversed */
-    start = end;
+    start = end;  /* coords are reversed in alignment */
     end = tmp;
     start--;
     reverseIntRange(&start, &end, seqParser->size);
@@ -339,6 +357,15 @@ else
     {
     assert(end >= start);
     start--;
+    }
+
+/* check for overlap */
+if (start < seqParser->end)
+    {
+    fprintf(stderr, "Warning: %s has overlapping exons at %s %d\n",
+            getAlignIdent(parser), seqParser->name->string, start);
+    parser->skip = TRUE;
+    return FALSE;
     }
 
 if (seqParser->start == seqParser->end)
@@ -359,13 +386,14 @@ else
         }
     seqParser->end = end;
     }
+return TRUE;
 }
 
 boolean parseExon(struct parser *parser)
 /* parse an exon entry from the alignment, return FALSE if end of alignment */
 {
 int tStart, tEnd, qStart, qEnd;
-char *line = skipToPrefix(parser, "Exon");
+char *line = alignSkipToPrefix(parser, "Exon");
 if (line == NULL)
     return FALSE;
 /* Exon 11: 9933-10031 (gen)  2351-2449 (mRNA) */
@@ -374,9 +402,10 @@ if (sscanf(line, "Exon %*d: %d-%d (gen)  %d-%d (mRNA)", &tStart, &tEnd,
     parseErr(parser, "can't parse exon line");
 
 /* adjusrt and extend coordinates and alignments */
-addExonToSeq(parser, &parser->query, qStart, qEnd, &parser->target);
-addExonToSeq(parser, &parser->target, tStart, tEnd, &parser->query);
-assert(parser->query.aln->stringSize == parser->target.aln->stringSize);
+if (!addExonToSeq(parser, &parser->query, qStart, qEnd, &parser->target))
+    return FALSE;  /* error, give up on this alignment */
+if (!addExonToSeq(parser, &parser->target, tStart, tEnd, &parser->query))
+    return FALSE;  /* error, give up on this alignment */
 
 /* parse sequences */
 while (parseAlignRec(parser))
@@ -386,24 +415,29 @@ return TRUE;
 }
 
 boolean parseAlign(struct parser *parser)
-/* parse the next alignment, false if empty */
+/* parse the next alignment, false if EOF */
 {
 clearSeqParser(&parser->query);
 clearSeqParser(&parser->target);
+parser->skip = FALSE;
 
 if (!parseAlignHeader(parser))
     return FALSE;
 
 /* verify some other expected line before alignment */
-mustSkipToPrefix(parser, "Missing mRNA ends:");
-mustSkipToPrefix(parser, "Genomic:");
-mustSkipToPrefix(parser, "mRNA:");
+alignMustSkipToPrefix(parser, "Missing mRNA ends:");
+alignMustSkipToPrefix(parser, "Genomic:");
+alignMustSkipToPrefix(parser, "mRNA:");
 
 /* parse exons in alignment */
 while (parseExon(parser))
     continue;
-checkAlignSeq(parser, &parser->query);
-checkAlignSeq(parser, &parser->target);
+
+if (!parser->skip)
+    {
+    checkAlignSeq(parser, &parser->query);
+    checkAlignSeq(parser, &parser->target);
+    }
 return TRUE;
 }
 
@@ -436,6 +470,10 @@ int tEnd = parser->target.end;
 char strand[3];
 struct psl *psl;
 
+#if 0
+dumpParser(parser, "convertAlign");
+#endif
+
 /* convert overall range to positive coordinates */
 if (parser->query.strand == '-') 
     reverseIntRange(&qStart, &qEnd, parser->query.size);
@@ -458,10 +496,8 @@ if (psl != NULL)
         {
         /* fix up psl to be an untranslated alignment */
         if (parser->target.strand == '-')
-            {
             pslRc(psl);
-            psl->strand[1] = '\0';
-            }
+        psl->strand[1] = '\0';  /* single strand */
         }
 
     if (psl != NULL)
@@ -483,7 +519,10 @@ initSeqParser(&parser.target);
 outFh = mustOpen(outName, "w");
 
 while (parseAlign(&parser))
-    convertAlign(&parser, outFh);
+    {
+    if (!parser.skip)
+        convertAlign(&parser, outFh);
+    }
 
 lineFileClose(&parser.lf);
 carefulClose(&outFh);
