@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.21 2004/08/17 19:49:41 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.22 2004/08/17 21:14:57 hiram Exp $";
 
 /* Command line switches. */
 static boolean noAscii = FALSE;	/*	do not output ascii data */
@@ -172,7 +172,7 @@ for (i=0; i<trackCount; ++i)
 
 	totalMatched += valuesMatched;
 
-	if ((valuesMatched > 0) && !silent)
+	if ((!silent && (valuesMatched > 0)) || (!silent && doStats))
 	    {
 	    /*	the TRUE means sort the results.  The FALSE case is
 	     *	possible if you are accumulating results via numerous calls
