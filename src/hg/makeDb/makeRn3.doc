@@ -426,9 +426,11 @@ STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE - 2003-07-02 - Hiram)
     #	44      88     778 chrom.sizes
 
 
-GOLD AND GAP TRACKS (DONE - 2003-07-02 - Hiram)
+GOLD AND GAP TRACKS (DONE - 2003-07-02 - Hiram)(Re-load 2004-10-19 - Hiram)
+    #	since these were first loaded, the hgGoldGapGl has changed to
+    #	fixup the fragStart position to be 0 relative, hence the re-load
     ssh hgwdev
-    cd ~/rn3
+    cd /cluster/data/rn3
     hgGoldGapGl -noGl rn3 /cluster/store3/rn3 .
 
 
