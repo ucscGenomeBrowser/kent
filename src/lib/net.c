@@ -13,7 +13,7 @@
 #include "net.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.35 2005/01/07 19:04:33 galt Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.36 2005/01/10 00:23:21 kent Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -117,7 +117,8 @@ return accept(sd, NULL, &fromLen);
 int netAcceptFrom(int acceptor, unsigned char subnet[4])
 /* Wait for incoming connection from socket descriptor
  * from IP address in subnet.  Subnet is something
- * returned from netParseDottedQuad. Subnet may be NULL. */
+ * returned from netParseSubnet or internetParseDottedQuad. 
+ * Subnet may be NULL. */
 {
 struct sockaddr_in sai;		/* Some system socket info. */
 int len;
@@ -204,6 +205,41 @@ int ret = netReadAll(sd, vBuf, size);
 if (ret < 0)
     errnoAbort("Couldn't finish netReadAll");
 return ret;
+}
+
+static void notGoodSubnet(char *sns)
+/* Complain about subnet format. */
+{
+errAbort("'%s' is not a properly formatted subnet.  Subnets must consist of\n"
+         "one to three dot-separated numbers between 0 and 255\n", sns);
+}
+
+void netParseSubnet(char *in, unsigned char out[4])
+/* Parse subnet, which is a prefix of a normal dotted quad form.
+ * Out will contain 255's for the don't care bits. */
+{
+out[0] = out[1] = out[2] = out[3] = 255;
+if (in != NULL)
+    {
+    char *snsCopy = strdup(in);
+    char *words[5];
+    int wordCount, i;
+    wordCount = chopString(snsCopy, ".", words, ArraySize(words));
+    if (wordCount > 3 || wordCount < 1)
+        notGoodSubnet(in);
+    for (i=0; i<wordCount; ++i)
+	{
+	char *s = words[i];
+	int x;
+	if (!isdigit(s[0]))
+	    notGoodSubnet(in);
+	x = atoi(s);
+	if (x > 255)
+	    notGoodSubnet(in);
+	out[i] = x;
+	}
+    freez(&snsCopy);
+    }
 }
 
 void netParseUrl(char *url, struct netParsedUrl *parsed)

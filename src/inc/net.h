@@ -100,6 +100,10 @@ boolean netPipeIsBroken();
 void  netClearPipeFlag();
 /* Clear broken pipe flag. */
 
+void netParseSubnet(char *in, unsigned char out[4]);
+/* Parse subnet, which is a prefix of a normal dotted quad form.
+ * Out will contain 255's for the don't care bits. */
+
 struct netParsedUrl
 /* A parsed URL. */
    {
