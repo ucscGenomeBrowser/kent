@@ -504,15 +504,15 @@ fprintf(f, "%2dG ", doubleGap);
 fprintf(f, "%2dJ ", jumpBack);
 fprintf(f, "\n");
 
-total_missSmallStart = boolify(missSmallStart);
-total_missLargeStart = boolify(missLargeStart);
-total_missSmallEnd = boolify(missSmallEnd);
-total_missLargeEnd = boolify(missLargeEnd);
-total_missSmallMiddle = boolify(missSmallMiddle);
-total_missLargeMiddle = boolify(missLargeMiddle);
-total_weirdSplice = boolify(weirdSplice);
-total_doubleGap = boolify(doubleGap);
-total_jumpBack = boolify(jumpBack);
+total_missSmallStart += boolify(missSmallStart);
+total_missLargeStart += boolify(missLargeStart);
+total_missSmallEnd += boolify(missSmallEnd);
+total_missLargeEnd += boolify(missLargeEnd);
+total_missSmallMiddle += boolify(missSmallMiddle);
+total_missLargeMiddle += boolify(missLargeMiddle);
+total_weirdSplice += boolify(weirdSplice);
+total_doubleGap += boolify(doubleGap);
+total_jumpBack += boolify(jumpBack);
 ++total_rnaCount;
 if (totalProblems == 0)
     ++total_rnaPerfect;
