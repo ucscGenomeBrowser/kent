@@ -4043,7 +4043,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
         echo done $c
     end
 
-# NET Mm4 (TBD)
+# NET Mm4 (DONE - 2003-11-03 - Hiram)
 
     ssh eieio
     cd /cluster/data/hg16/bed/blastz.mm4/axtChain
@@ -4077,10 +4077,9 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     time netClass hNoClass.net hg16 mm4 mouse.net \
 	-tNewR=/cluster/bluearc/scratch/hg/gs.17/build34/linSpecRep.notInMouse \
 	-qNewR=/cluster/bluearc/scratch/mus/mm4/linSpecRep.notInHuman
-XXXX - running - 2003-11-03 15:00
-    # real    11m35.367s
-    # user    7m20.880s
-    # sys     1m33.360s
+    # real    14m2.042s
+    # user    10m6.450s
+    # sys     1m46.950s
 
     # If things look good do
     ssh eieio
@@ -4088,12 +4087,18 @@ XXXX - running - 2003-11-03 15:00
     rm -r n1 hNoClass.net
     # Make a 'syntenic' subset of these with
     netFilter -syn mouse.net > mouseSyn.net
+    # real    9m44.445s
+    # user    6m42.660s
+    # sys     1m10.100s
 
     # Load the nets into database
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz.mm4/axtChain
     netFilter -minGap=10 mouse.net |  hgLoadNet hg16 netMm4 stdin
     netFilter -minGap=10 mouseSyn.net | hgLoadNet hg16 syntenyNetMm4 stdin
+#   real    12m53.070s
+#   user    6m6.540s
+#   sys     0m50.580s
 
     # Add entries for net and chain to mouse/hg16 trackDb
 
@@ -4102,9 +4107,9 @@ XXXX - running - 2003-11-03 15:00
     cd /cluster/data/hg16/bed/blastz.mm4/axtChain
     mkdir mouseNet
     time netSplit mouse.net mouseNet
-    # real    6m13.469s
-    # user    3m22.670s
-    # sys     0m44.880s
+    # real    10m44.479s
+    # user    6m43.680s
+    # sys     1m20.860s
 
     mkdir ../axtNet
     foreach n (mouseNet/chr*.net)
@@ -4115,7 +4120,7 @@ XXXX - running - 2003-11-03 15:00
 		/cluster/data/hg16/nib \
 		/cluster/data/mm4/nib \
 		../axtNet/$c.axt
-	echo "Complete: $c.net -> $c.axt"
+	echo "Complete: $c.net -> axtNet/$c.axt"
     end
 
     ssh hgwdev
@@ -4154,10 +4159,10 @@ XXXX - running - 2003-11-03 15:00
 
      # check results
 #  featureBits hg16 blastzBestMm4
-#  1030510540 bases of 2627444668 (39.221%) in intersection
+#	253005809 bases of 2865248791 (8.830%) in intersection
 
 #  featureBits hg16 blastzBestMm3
-#  1019460260 bases of 2505900260 (40.682%) in intersection
+#	1007362800 bases of 2865248791 (35.158%) in intersection
 
     # Make /gbdb links and add them to the axtInfo table:
      mkdir -p /gbdb/hg16/axtBestMm4
@@ -4179,10 +4184,10 @@ XXXX - running - 2003-11-03 15:00
     # After creating axtBest alignments above, use subsetAxt to get axtTight:
     ssh eieio
     cd /cluster/data/hg16/bed/blastz.mm4/axtNet
-    mkdir -p ../axtTight
+    mkdir ../axtTight
     tcsh
     foreach i (*.axt)
-      echo $i
+      echo subsetAxt $i ../axtTight/$i
       subsetAxt  $i ../axtTight/$i \
         ~kent/src/hg/mouseStuff/subsetAxt/coding.mat 3400
     end
@@ -4200,6 +4205,7 @@ XXXX - running - 2003-11-03 15:00
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz.mm4/pslTight
     hgLoadPsl hg16 chr*_blastzTightMm4.psl
+XXX running  2003-11-03 16:56
 
     # copy to axt's to download area
     cd /cluster/data/hg16/bed/blastz.mm4/axtTight
