@@ -1224,6 +1224,7 @@ char *aa = NULL;
 int fill; 
 char *lineGapStr = NULL;
 int lineGapSize;
+double min0, max0;
 
 char o1[128]; /* Option 1 - linear interp */
 char o2[128]; /* Option 2 - anti alias */
@@ -1285,6 +1286,28 @@ if( sameString( tg->mapName, "humMus" ) )
     minRange = 600.0;
     maxRange = 1000.0;
     }
+    else if( sameString( tg->mapName, "zooCons" ) )
+    {
+    minRange = 300.0;
+    maxRange = 1000.0;
+
+    min0 = whichNum( 300.0, -11.37750, 5.53297, 1000 );
+    max0 = whichNum( 1000.0, -11.37750, 5.53297, 1000 );
+
+    /*draw horizontal line across track at 0.0, 2.0, and 5.0*/
+    tmp = -whichBin( 0.0, min0, max0, 1000 );
+    y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
+    mgDrawHorizontalLine( mg, y1, lineColor );
+
+    tmp = -whichBin( 2.0, min0, max0, 1000 );
+    y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
+    mgDrawHorizontalLine( mg, y1, lineColor );
+
+    tmp = -whichBin( 5.0, min0, max0, 1000 );
+    y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
+    mgDrawHorizontalLine( mg, y1, lineColor );
+    
+    }
     else
     {
     minRange = 1.0;
@@ -1320,6 +1343,7 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
         if( -(sf->start - sf->end) < minRange || -(sf->start - sf->end) > maxRange)
 	        {
             prevEnd = -1;  /*set so no interpolation where no data*/
+            gapPrevEnd = -1;
             continue;
 	        }
 	
@@ -1936,7 +1960,15 @@ for (i=0; i<sampleCount; ++i)
     AllocVar(sf);
     start = X[i] + sample->chromStart;
     sf->start = start;
-    sf->end = start + Y[i];
+    //errAbort( "Y[%d] = %d", i, Y[i]  );
+
+    if( Y[i] == -29 )           /*hack for negative values not loading correctly*/
+        sf->end = start;
+    else if( Y[i] == 0 )
+        sf->end = start + 1;
+    else
+        sf->end = start + Y[i];
+
     sf->grayIx = grayIx;
     slAddHead(&sfList, sf);
     }
@@ -7527,6 +7559,11 @@ if (withLeftLabels)
 	    {
 	    sprintf( minRangeStr, "%d", 60); //whichNum( 1.0, 1.0, 100.0, 1000 ));
 	    sprintf( maxRangeStr, "%d", 100);// whichNum( 1000.0, 1.0, 100.0, 1000 ));
+	    }
+    else if( sameString( group->mapName, "zooCons" ) )
+	    {
+	    sprintf( minRangeStr, "%g", whichNum( 300.0, -11.37750, 5.53297, 1000 ));
+	    sprintf( maxRangeStr, "%g", whichNum( 1000.0, -11.37750, 5.53297, 1000 ));
 	    }
 	else
 	    {
