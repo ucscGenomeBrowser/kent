@@ -978,6 +978,21 @@ autoScaleDefault Off
 pairwise hmrg
 speciesOrder mouse rat chicken
 
+track mzPt1Mm3Rn3Gg2_pHMM
+shortLabel Hu/Chmp/Mouse/Rat/Chck
+longLabel Human/Chimp/Mouse/Rat/Chicken Multiz Alignments & PhyloHMM Cons 
+group compGeno
+priority 100
+visibility hide
+color 0, 10, 100
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle mzPt1Mm3Rn3Gg2_pHMM_wig
+yLineOnOff Off
+autoScaleDefault Off
+pairwise hmrg
+speciesOrder chimp mouse rat chicken
+
 track leptin
 shortLabel Leptin TBA
 longLabel Leptin Region TBA alignments (human,mouse,rat,chimp,baboon,cow,pig,cat,dog)
