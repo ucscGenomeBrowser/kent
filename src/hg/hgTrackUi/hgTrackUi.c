@@ -22,7 +22,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.130 2004/08/05 22:17:14 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.131 2004/08/13 19:10:38 braney Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -282,7 +282,10 @@ char geneName[64];
 char accName[64];
 char sprotName[64];
 char posName[64];
+char cModeStr[64];
 boolean useGene, useAcc, useSprot, usePos;
+int cMode;
+char *cModes[3] = {"0", "1", "2"};
 
 safef(geneName, sizeof(geneName), "%s.geneLabel", tdb->tableName);
 safef(accName, sizeof(accName), "%s.accLabel", tdb->tableName);
@@ -292,6 +295,16 @@ useGene= cartUsualBoolean(cart, geneName, TRUE);
 useAcc= cartUsualBoolean(cart, accName, FALSE);
 usePos= cartUsualBoolean(cart, posName, FALSE);
 
+safef(cModeStr, sizeof(cModeStr), "%s.cmode", tdb->tableName);
+cMode = cartUsualInt(cart, cModeStr, 0);
+
+printf("<P><B>Color elements: </B> ");
+cgiMakeRadioButton(cModeStr, cModes[0], cMode == 0);
+printf("by score ");
+cgiMakeRadioButton(cModeStr, cModes[1], cMode == 1);
+printf("by D. mel. chromosome ");
+cgiMakeRadioButton(cModeStr, cModes[2], cMode == 2);
+printf("black");
 printf("<P><B>Label elements by: </B> ");
 cgiMakeCheckBox(geneName, useGene);
 printf("FlyBase Gene ");
@@ -308,7 +321,10 @@ char geneName[64];
 char accName[64];
 char sprotName[64];
 char posName[64];
+char cModeStr[64];
 boolean useGene, useAcc, useSprot, usePos;
+int cMode;
+char *cModes[3] = {"0", "1", "2"};
 
 safef(geneName, sizeof(geneName), "%s.geneLabel", tdb->tableName);
 safef(accName, sizeof(accName), "%s.accLabel", tdb->tableName);
@@ -318,6 +334,17 @@ useGene= cartUsualBoolean(cart, geneName, TRUE);
 useAcc= cartUsualBoolean(cart, accName, FALSE);
 useSprot= cartUsualBoolean(cart, sprotName, FALSE);
 usePos= cartUsualBoolean(cart, posName, FALSE);
+
+safef(cModeStr, sizeof(cModeStr), "%s.cmode", tdb->tableName);
+cMode = cartUsualInt(cart, cModeStr, 0);
+
+printf("<P><B>Color elements: </B> ");
+cgiMakeRadioButton(cModeStr, cModes[0], cMode == 0);
+printf("by score ");
+cgiMakeRadioButton(cModeStr, cModes[1], cMode == 1);
+printf("by human chromosome ");
+cgiMakeRadioButton(cModeStr, cModes[2], cMode == 2);
+printf("black");
 
 printf("<P><B>Label elements by: </B> ");
 cgiMakeCheckBox(geneName, useGene);

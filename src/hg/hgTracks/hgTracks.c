@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.777 2004/08/09 21:50:35 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.778 2004/08/13 19:11:30 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -3040,19 +3040,35 @@ int col = tg->ixColor;
 char *acc;
 char *colon, *pos;
 char *buffer;
+char cMode[64];
+int colorMode;
 
 if (getCdsDrawOptionNum(tg)>0 && zoomedToCdsColorLevel)
     return tg->ixColor;
 
-acc = buffer = cloneString(lf->name);
-if ((pos = strchr(acc, '.')) != NULL)
+safef(cMode, sizeof(cMode), "%s.cmode", tg->tdb->tableName);
+colorMode = cartUsualInt(cart, cMode, 0);
+
+switch(colorMode)
     {
-    pos +=4;
-    if ((colon = strchr(pos, ':')) != NULL)
-	{
-	*colon = 0;
-	col = getChromColor(pos, vg);
-	}
+    case 0: /* pslScore */
+	col = shadesOfGray[lf->grayIx];
+	break;
+    case 1: /* pslScore */
+	acc = buffer = cloneString(lf->name);
+	if ((pos = strchr(acc, '.')) != NULL)
+	    {
+	    pos +=4;
+	    if ((colon = strchr(pos, ':')) != NULL)
+		{
+		*colon = 0;
+		col = getChromColor(pos, vg);
+		}
+	    }
+	break;
+    case 2: /* black */
+	col = 1;
+	break;
     }
 
 tg->ixAltColor = col;
