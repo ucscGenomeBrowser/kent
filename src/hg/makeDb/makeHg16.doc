@@ -2176,9 +2176,7 @@ foreach chr (?{,?})
   echo removing symbolic links for chr$chr NT .fa.align files
   rm $chr/NT_??????.fa.align
 end
-<<<<<<< makeHg16.doc
->>>>>>> 1.22
-=======
+
 
 #  BLASTZ SELF (Working - 2003-08-08 - Hiram)
 
