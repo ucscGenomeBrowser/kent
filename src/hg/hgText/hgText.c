@@ -378,7 +378,10 @@ puts("<TR><TD>");
 /* print the location and a jump button */
 {
     char buf[256];
-    sprintf(buf, "%s:%d-%d", chromName, winStart+1, winEnd);
+    if (sameString(position, "genome"))
+        strcpy(buf, position);
+    else
+        sprintf(buf, "%s:%d-%d", chromName, winStart+1, winEnd);
 
     puts("Choose a position: ");
     puts("</TD><TD>");
