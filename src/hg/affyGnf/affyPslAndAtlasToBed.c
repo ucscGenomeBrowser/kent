@@ -9,7 +9,7 @@
 #include "dystring.h"
 #include "expRecord.h"
 
-static char const rcsid[] = "$Id: affyPslAndAtlasToBed.c,v 1.10 2004/03/30 06:48:09 kent Exp $";
+static char const rcsid[] = "$Id: affyPslAndAtlasToBed.c,v 1.11 2004/07/17 22:18:48 hartera Exp $";
 
 
 #define DEBUG 0
@@ -141,9 +141,8 @@ else
 	errAbort("Can't parse target name from %s.", string);
     toRet++;
     tmp = strstr(toRet, ";");
-    if(tmp == NULL)
-	errAbort("Can't parse target name from %s.", string);
-    *tmp = '\0';
+    if(tmp != NULL)
+        *tmp = '\0';
     }
 toRet = cloneString(toRet);
 return toRet;
