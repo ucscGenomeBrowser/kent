@@ -9,6 +9,7 @@
 #include "rmskOut.h"
 #include "chromInserts.h"
 
+boolean nohead = FALSE;	/* No header for psl files? */
 
 void usage()
 /* Explain usage and exit. */
@@ -35,6 +36,9 @@ errAbort(
  "   liftUp dest.agp liftSpec how inserts sourceFile(s)\n"
  "This file describes where large inserts due to heterochromitin\n"
  "should be added.\n"
+ "\n"
+ "options:\n"
+ "   -nohead  No header written for .psl files"
  );
 }
 
@@ -211,9 +215,9 @@ for (i=0; i<sourceCount; ++i)
     while (lineFileNext(lf, &line, &lineSize))
 	{
 	wordCount = chopLine(line, words);
-	if (wordCount < 14 || wordCount > 15)
+	if (wordCount < 14 || wordCount > 16)
 	    errAbort("Expecting 14 words line %d of %s", lf->lineIx, lf->fileName);
-	if (wordCount == 15)
+	if (wordCount >= 15)
 	    id = words[14];
 	else
 	    id = "";
@@ -265,7 +269,8 @@ int offset;
 int blockCount;
 char *tName;
 
-pslWriteHead(dest);
+if (!nohead)
+    pslWriteHead(dest);
 for (i=0; i<sourceCount; ++i)
     {
     source = sources[i];
@@ -756,6 +761,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
+nohead = cgiBoolean("nohead");
 if (argc < 5)
     usage();
 liftUp(argv[1], argv[2], argv[3], argc-4, argv+4);
