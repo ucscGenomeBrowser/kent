@@ -55,9 +55,9 @@ update:
 		dbpath=`ls -1 -d */$$DB 2> /dev/null` ; \
 		if test -n "$$dbpath" ; then \
 		    org=`echo $$dbpath | sed -e 's/\/.*//'` ; \
-		    if test -a $$dbpath/visibility.ra ; then \
+		    if test -f $$dbpath/visibility.ra ; then \
 			vis="-visibility=$$dbpath/visibility.ra" ; \
-		    else if test -a $$org/visibility.ra ; then \
+		    else if test -f $$org/visibility.ra ; then \
 			vis="-visibility=$$org/visibility.ra" ; \
 		    else \
 			vis="" ; \
@@ -77,9 +77,9 @@ alpha:
 		dbpath=`ls -1 -d */$$DB 2> /dev/null` ; \
 		if test -n "$$dbpath" ; then \
 		    org=`echo $$dbpath | sed -e 's/\/.*//'` ; \
-		    if test -a $$dbpath/visibility.ra ; then \
+		    if test -f $$dbpath/visibility.ra ; then \
 			vis="-visibility=$$dbpath/visibility.ra" ; \
-		    else if test -a $$org/visibility.ra ; then \
+		    else if test -f $$org/visibility.ra ; then \
 			vis="-visibility=$$org/visibility.ra" ; \
 		    else \
 			vis="" ; \
@@ -88,7 +88,7 @@ alpha:
 		echo $$cmd ;  $$cmd ; \
 		cmd="hgFindSpec $$org $$DB hgFindSpec ../../lib/hgFindSpec.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
-		if test -a $$dbpath/description.html ; then \
+		if test -f $$dbpath/description.html ; then \
 		    cp $$dbpath/description.html /gbdb/$$DB/html ; \
 		fi ; \
 	    fi ; \
@@ -102,9 +102,9 @@ strict:
 		dbpath=`ls -1 -d */$$DB 2> /dev/null` ; \
 		if test -n "$$dbpath" ; then \
 		    org=`echo $$dbpath | sed -e 's/\/.*//'` ; \
-		    if test -a $$dbpath/visibility.ra ; then \
+		    if test -f $$dbpath/visibility.ra ; then \
 			vis="-visibility=$$dbpath/visibility.ra" ; \
-		    else if test -a $$org/visibility.ra ; then \
+		    else if test -f $$org/visibility.ra ; then \
 			vis="-visibility=$$org/visibility.ra" ; \
 		    else \
 			vis="" ; \
