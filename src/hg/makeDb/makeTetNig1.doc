@@ -371,7 +371,8 @@ if (-e /tmp/tetNig1/$2/$2.cat) /bin/cp /tmp/tetNig1/$2/$2.cat ./
 
 # MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR TETNIG1
 # (DONE, 2004-06-18, hartera)
-                                                                                
+# UPDATED SOURCE AND ASSEMBLY DATE IN dbDb (DONE, 2004-09-09, hartera)
+                                                                         
     # Make trackDb table so browser knows what tracks to expect:
     ssh hgwdev
     mkdir -p ~/kent/src/hg/makeDb/trackDb/tetraodon/tetNig1
@@ -395,6 +396,14 @@ if (-e /tmp/tetNig1/$2/$2.cat) /bin/cp /tmp/tetNig1/$2/$2.cat ./
     | hgsql -h genome-testdb hgcentraltest
     echo 'insert into defaultDb (genome, name) \
           values ("Tetraodon", "tetNig1");' \
+          | hgsql -h genome-testdb hgcentraltest
+    # add correct assembly date and source (2004-09-08, hartera)
+    echo 'update dbDb set description = "Feb 2004" where name = "tetNig1";' \
+          | hgsql -h genome-testdb hgcentraltest
+    echo 'update dbDb set sourceName = "Genoscope and Broad Institute, V7" \
+          where name = "tetNig1";' | hgsql -h genome-testdb hgcentraltest
+    # correction to assembly date format (2004-09-09)
+    echo 'update dbDb set description = "Feb. 2004" where name = "tetNig1";' \
           | hgsql -h genome-testdb hgcentraltest
 
 # MAKE DESCRIPTION/SAMPLE POSITION HTML PAGE (DONE, 2004-08-23, hartera)
@@ -1138,6 +1147,7 @@ axtChain $1 \
     end
 
 # NET FUGU (FR1) BLASTZ (DONE, 2004-09-01, hartera)
+# RELOADED NET WITH CORRECT TABLE NAME (2004-09-02, hartera)
     ssh kksilo
     cd /cluster/data/tetNig1/bed/blastz.fr1/axtChain
     mkdir preNet
@@ -1169,5 +1179,495 @@ axtChain $1 \
     # human-rodent comparisons so do not use here, use -noAr option
     
     time netClass noClass.net tetNig1 fr1 fuguFr1.net -noAr
-    netFilter -minGap=10 fuguFr1.net |  hgLoadNet tetNig1 netHgFr1 stdin
+    netFilter -minGap=10 fuguFr1.net |  hgLoadNet tetNig1 netFr1 stdin
 
+# MAKE DOWNLOADABLE SEQUENCE FILES (DONE, 2004-09-08, hartera)
+    ssh kksilo
+    cd /cluster/data/tetNig1
+    #- Build the .zip files
+    cat << '_EOF_' > jkStuff/zipAll.csh
+rm -rf zip
+mkdir zip
+# chrom AGP's
+zip -j zip/chromAgp.zip [0-9A-Z]*/chr*.agp
+# chrom RepeatMasker out files
+zip -j zip/chromOut.zip [0-9A-Z]*/chr*.fa.out
+# soft masked chrom fasta
+zip -j zip/chromFa.zip [0-9A-Z]*/chr*.fa
+# hard masked chrom fasta
+zip -j zip/chromFaMasked.zip [0-9A-Z]*/chr*.fa.masked
+# chrom TRF output files
+cd bed/simpleRepeat
+zip ../../zip/chromTrf.zip trfMask/chr*.bed
+cd ../..
+# get GenBank native mRNAs
+cd /cluster/data/genbank
+./bin/i386/gbGetSeqs -db=tetNig1 -native GenBank mrna \
+        /cluster/data/tetNig1/zip/mrna.fa
+# get GenBank xeno mRNAs
+./bin/i386/gbGetSeqs -db=tetNig1 -xeno GenBank mrna \
+        /cluster/data/tetNig1/zip/xenoMrna.fa
+# get native GenBank ESTs
+./bin/i386/gbGetSeqs -db=tetNig1 -native GenBank est \
+/cluster/data/tetNig1/zip/est.fa
+
+cd /cluster/data/tetNig1/zip
+# zip GenBank native and xeno mRNAs and native ESTs
+zip -j mrna.zip mrna.fa
+zip -j xenoMrna.zip xenoMrna.fa
+zip -j est.zip est.fa
+'_EOF_'
+    # << this line makes emacs coloring happy
+    nice csh ./jkStuff/zipAll.csh |& tee ./jkStuff/zipAll.log
+    cd jkStuff
+    #- Look at zipAll.log to make sure all file lists look reasonable.
+    # Copy the .zip files to
+    # hgwdev:/usr/local/apache/...
+    cd /cluster/data/tetNig1/zip
+    #- Check zip file integrity:
+    foreach f (*.zip)
+      unzip -t $f > $f.test
+      tail -1 $f.test
+    end
+    wc -l *.zip.test
+# 29 chromAgp.zip.test
+# 29 chromFa.zip.test
+# 29 chromFaMasked.zip.test
+# 29 chromOut.zip.test
+# 87 chromTrf.zip.test
+#  3 est.zip.test
+#  3 mrna.zip.test
+#  3 xenoMrna.zip.test
+#  212 total
+
+    ssh hgwdev
+    /cluster/data/tetNig1/zip
+    set gp = /usr/local/apache/htdocs/goldenPath/tetNig1
+    mkdir -p $gp/bigZips
+    cp -p *.zip $gp/bigZips
+    mkdir -p $gp/chromosomes
+    foreach f (../*/chr*.fa)
+       zip -j $gp/chromosomes/$f:t.zip $f
+    end
+    cd $gp/bigZips
+    md5sum *.zip > md5sum.txt
+    cd $gp/chromosomes
+    md5sum *.zip > md5sum.txt
+    # Take a look at bigZips/* and chromosomes/*, update their README.txt's
+
+# MAKE VSHG17 DOWNLOADABLES (DONE, 2004-09-08, hartera)
+    ssh kksilo
+    # zip chains and nets
+    cd /cluster/data/tetNig1/bed/blastz.hg17.swap/axtChain
+    cp all.chain hg17.chain
+    zip -j /cluster/data/tetNig1/zip/hg17.chain.zip hg17.chain
+    rm hg17.chain
+    zip -j /cluster/data/tetNig1/zip/hg17.net.zip hg17.net
+
+    ssh hgwdev
+    # copy chains and nets to downloads area
+    set gp = /usr/local/apache/htdocs/goldenPath/tetNig1
+    mkdir -p $gp/vsHg17
+    cd $gp/vsHg17
+    mv /cluster/data/tetNig1/zip/hg17*.zip .
+    md5sum *.zip > md5sum.txt
+
+    # move axt files to downloads area and zip
+    cd /cluster/data/tetNig1/bed/blastz.hg17.swap/axtChrom
+    mkdir -p $gp/vsHg17/axtChrom
+    cp -p *.axt $gp/vsHg17/axtChrom
+    cd $gp/vsHg17/axtChrom
+    gzip *.axt
+    md5sum *.gz > md5sum.txt
+
+    # Copy over & edit README.txt w/pointers to chain, net formats.
+
+# MAKE VSFR1 DOWNLOADABLES (DONE, 2004-09-08, hartera)
+    ssh kksilo
+    # zip chains and nets
+    cd /cluster/data/tetNig1/bed/blastz.fr1/axtChain
+    cp all.chain fr1.chain
+    zip -j /cluster/data/tetNig1/zip/fr1.chain.zip fr1.chain
+    rm fr1.chain
+    cp fuguFr1.net fr1.net
+    zip -j /cluster/data/tetNig1/zip/fr1.net.zip fr1.net
+    rm fr1.net
+
+    ssh hgwdev
+    # copy chains and nets to downloads area
+    set gp = /usr/local/apache/htdocs/goldenPath/tetNig1
+    mkdir -p $gp/vsFr1
+    cd $gp/vsFr1
+    mv /cluster/data/tetNig1/zip/fr1*.zip .
+    md5sum *.zip > md5sum.txt
+
+    # move axt files to downloads area and zip
+    cd /cluster/data/tetNig1/bed/blastz.fr1/axtChrom
+    mkdir -p $gp/vsFr1/axtChrom
+    cp -p *.axt $gp/vsFr1/axtChrom
+    cd $gp/vsFr1/axtChrom
+    gzip *.axt
+    md5sum *.gz > md5sum.txt
+
+    # Copy over & edit README.txt w/pointers to chain, net formats.
+
+# BLASTZ SWAP FOR mm5 vs tetNig1 BLASTZ TO CREATE tetNig1 vs MOUSE mm5 BLASTZ
+# (DONE, 2004-09-08, hartera)
+    ssh kksilo
+    mkdir -p /cluster/store8/tetNig1/blastz.mm5.swap.2004-09-08
+    ln -s /cluster/store8/tetNig1/blastz.mm5.swap.2004-09-08 \
+          /cluster/data/tetNig1/bed
+    ln -s /cluster/data/tetNig1/bed/blastz.mm5.swap.2004-09-08 \
+          /cluster/data/tetNig1/bed/blastz.mm5.swap
+    ssh kolossus
+    cd /cluster/data/tetNig1/bed/blastz.mm5.swap
+    # use axtChrom from blastzTetNig1 on mm5
+    set aliDir = /cluster/data/mm5/bed/blastz.tetNig1
+    cp $aliDir/S1.len S2.len
+    cp $aliDir/S2.len S1.len
+    mkdir unsorted axtChrom
+
+    cat $aliDir/axtChrom/chr*.axt \
+    | axtSwap stdin $aliDir/S1.len $aliDir/S2.len stdout \
+    | axtSplitByTarget stdin unsorted
+    # Sort the shuffled .axt files.
+    foreach f (unsorted/*.axt)
+      echo sorting $f:t:r
+      axtSort $f axtChrom/$f:t
+    end
+    du -sh $aliDir/axtChrom unsorted axtChrom
+    # 522M    /cluster/data/mm5/bed/blastz.tetNig1/axtChrom
+    # 523M    unsorted
+    # 522M    axtChrom
+    rm -r unsorted
+    # translate sorted axt files into psl
+    ssh kolossus
+    cd /cluster/data/tetNig1/bed/blastz.mm5.swap
+    mkdir -p pslChrom
+    set tbl = "blastzMm5"
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+    # Load database tables
+    ssh hgwdev
+    cd /cluster/data/tetNig1/bed/blastz.mm5.swap/pslChrom
+    foreach f (./*.psl)
+      /cluster/bin/i386/hgLoadPsl tetNig1 $f
+      echo "$f Done"
+    end
+# featureBits -chrom=chr1 tetNig1 all_mrna blastzMm5 -enrichment
+# all_mrna 2.637%, blastzMm5 12.633%, both 0.852%, cover 32.30%, enrich 2.56x
+
+# CHAIN MOUSE (mm5) BLASTZ (DONE, 2004-09-09, hartera)
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/tetNig1/bed/blastz.mm5.swap
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S /cluster/data/tetNig1/bed/blastz.mm5.swap/axtChrom/*.axt \
+                    > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+                                                                                
+    # Make our own linear gap file with reduced gap penalties,
+    # in hopes of getting longer chains - works well for species at
+    # chicken-human distance or greater
+    cat << '_EOF_' > ../../chickenHumanTuned.gap
+tablesize^V     11
+smallSize^V     111
+position^V      1^V     2^V     3^V     11^V    111^V   2111^V  12111^V 32111^V
+72111^V 152111^V        252111
+qGap^V  325^V   360^V   400^V   450^V   600^V   1100^V  3600^V  7600^V  15600^V
+31600^V 56600
+tGap^V  325^V   360^V   400^V   450^V   600^V   1100^V  3600^V  7600^V  15600^V
+31600^V 56600
+bothGap^V       625^V   660^V   700^V   750^V   900^V   1400^V  4000^V  8000^V
+16000^V 32000^V 57000
+'_EOF_'
+# << this line makes emacs coloring happy
+                                                                                
+cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain -linearGap=../../chickenHumanTuned.gap $1 \
+    /iscratch/i/tetNig1/nib \
+    /iscratch/i/mus/mm5/softNib $2 >& $3 
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+# para time
+# Completed: 27 of 27 jobs
+# CPU time in finished jobs:       2124s      35.40m     0.59h    0.02d  0.000 y
+# IO & Wait Time:                    59s       0.99m     0.02h    0.00d  0.000 y
+# Average job time:                  81s       1.35m     0.02h    0.00d
+# Longest job:                      123s       2.05m     0.03h    0.00d
+# Submission to last job:          3725s      62.08m     1.03h    0.04d
+
+   # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/tetNig1/bed/blastz.mm5.swap/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+                                                                                
+    # take a look at score distr's
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r >> hist5000.out
+      textHistogram -binSize=5000 /tmp/score.$f:t:r >> hist5000.out
+      echo ""
+    end
+    # apart from chrUn_random, not too many chains with score < 5000
+    # load chr 1 into table
+    ssh hgwdev
+    cd /cluster/data/tetNig1/bed/blastz.mm5.swap/axtChain/chain
+    hgLoadChain tetNig1 chr1_chainMm5 chr1.chain
+# no RefSeqs for Tetraodon so use mrna table
+# featureBits -chrom=chr1 tetNig1 all_mrna chainMm5Link -enrichment
+# all_mrna 2.637%, chainMm5Link 11.552%, both 0.823%, cover 31.19%, enrich 2.70x
+    # try filtering with minScore < 5000
+    ssh kksilo
+    cd /cluster/data/tetNig1/bed/blastz.mm5.swap/axtChain
+    mv all.chain all.chain.unfiltered
+    chainFilter -minScore=5000 all.chain.unfiltered > all.chain
+    chainSplit chainFilt5k all.chain
+    
+    ssh hgwdev
+    cd /cluster/data/tetNig1/bed/blastz.mm5.swap/axtChain/chainFilt5k
+    hgLoadChain tetNig1 chr1_chainMm5Filt5k chr1.chain
+# featureBits -chrom=chr1 tetNig1 all_mrna chainMm5Filt5kLink -enrichment
+# all_mrna 2.637%, chainMm5Filt5kLink 10.492%, both 0.780%, cover 29.58%, 
+# enrich 2.82x
+# use chains with minScore=5000 filtering
+# remove test chain tables for chr1
+    ssh hgwdev
+    cd /cluster/data/tetNig1/bed/blastz.mm5.swap/axtChain
+    hgsql -e "drop table chr1_chainMm5;" tetNig1
+    hgsql -e "drop table chr1_chainMm5Link;" tetNig1
+    hgsql -e "drop table chr1_chainMm5Filt5k;" tetNig1
+    hgsql -e "drop table chr1_chainMm5Filt5kLink;" tetNig1
+    rm -r chain
+    mv chainFilt5k chain
+
+    cd /cluster/data/tetNig1/bed/blastz.mm5.swap/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain tetNig1 ${c}_chainMm5 $i
+        echo done $c
+    end
+
+# NET MOUSE (mm5) BLASTZ (DONE, 2004-09-09, hartera)
+    ssh kksilo
+    cd /cluster/data/tetNig1/bed/blastz.mm5.swap/axtChain
+    mkdir preNet
+    cd chain
+    foreach i (*.chain)
+       echo preNetting $i
+       /cluster/bin/i386/chainPreNet $i ../../S1.len ../../S2.len \
+                                     ../preNet/$i
+    end
+    cd ..
+    mkdir n1
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      /cluster/bin/i386/chainNet $i -minSpace=1 ../../S1.len ../../S2.len \
+                                 ../n1/$n /dev/null
+    end
+    cd ..
+    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin noClass.net
+    # memory usage 67969024, utime 336 s/100, stime 36
+
+    # Add classification info using db tables:
+    cd /cluster/data/tetNig1/bed/blastz.mm5.swap/axtChain
+    # netClass looks for ancient repeats in one of the databases
+    # hg17 has this table - hand-curated by Arian but this is for
+    # human-rodent comparisons so do not use here, use -noAr option
+    mkdir -p /cluster/bluearc/mm5/linSpecRep.notInTetraodon
+    mkdir -p /cluster/bluearc/tetNig1/linSpecRep.notInMouse
+    cp -p /iscratch/i/mm5/linSpecRep.notInTetraodon/* \
+          /cluster/bluearc/mm5/linSpecRep.notInTetraodon
+    cp -p /iscratch/i/tetNig1/linSpecRep.notInMouse/* \
+          /cluster/bluearc/tetNig1/linSpecRep.notInMouse
+
+    ssh hgwdev
+    cd /cluster/data/tetNig1/bed/blastz.mm5.swap/axtChain
+    time netClass noClass.net tetNig1 mm5 mouseMm5.net \
+          -tNewR=/cluster/bluearc/tetNig1/linSpecRep.notInMouse \
+          -qNewR=/cluster/bluearc/mm5/linSpecRep.notInTetraodon -noAr
+    # 50.960u 34.880s 2:25.82 58.8%   0+0k 0+0io 200pf+0w
+    netFilter -minGap=10 mouseMm5.net |  hgLoadNet tetNig1 netMm5 stdin
+    # featureBits tetNig1 all_mrna netHg17 -enrichment
+    # all_mrna 3.204%, netHg17 42.716%, both 1.698%, cover 53.00%, enrich 1.24x
+
+# MAKE VSMM5 DOWNLOADABLES (DONE, 2004-09-10, hartera)
+    ssh kksilo
+    # zip chains and nets
+    cd /cluster/data/tetNig1/bed/blastz.mm5.swap/axtChain
+    cp all.chain mm5.chain
+    zip -j /cluster/data/tetNig1/zip/mm5.chain.zip mm5.chain
+    rm mm5.chain
+    cp mouseMm5.net mm5.net
+    zip -j /cluster/data/tetNig1/zip/mm5.net.zip mm5.net
+    rm mm5.net
+
+    ssh hgwdev
+    # copy chains and nets to downloads area
+    set gp = /usr/local/apache/htdocs/goldenPath/tetNig1
+    mkdir -p $gp/vsMm5
+    cd $gp/vsMm5
+    mv /cluster/data/tetNig1/zip/mm5*.zip .
+    md5sum *.zip > md5sum.txt
+    # move axt files to downloads area and zip
+    cd /cluster/data/tetNig1/bed/blastz.mm5.swap/axtChrom
+    mkdir -p $gp/vsMm5/axtChrom
+    cp -p *.axt $gp/vsMm5/axtChrom
+    cd $gp/vsMm5/axtChrom
+    gzip *.axt
+    md5sum *.gz > md5sum.txt
+
+    # Copy over & edit README.txt w/pointers to chain, net formats.
+
+# CLEANUP HUMAN (hg17) BLASTZ (DONE, 2004-09-10, hartera)
+    ssh kksilo
+    cd /cluster/data/tetNig1/bed/blastz.hg17.swap
+    nice rm axtChain/run1/chain/* &
+    nice gzip {axt,psl}Chrom/* axtChain/{all.chain,*.net} &
+
+# CLEANUP FUGU (fr1) BLASTZ (DONE, 2004-09-10, hartera)
+    ssh kksilo
+    cd /cluster/data/tetNig1/bed/blastz.fr1
+    nice rm -rf raw &
+    nice rm -rf lav &
+    nice rm -rf test* &
+    nice rm axtChain/run1/chain/* &
+    nice gzip {axt,psl}Chrom/* axtChain/{all.chain,*.net} &
+
+# CLEANUP MOUSE (mm5) BLASTZ (DONE, 2004-09-10, hartera)
+    ssh kksilo
+    cd /cluster/data/tetNig1/bed/blastz.mm5
+    nice rm -rf raw &
+    nice rm -rf lav &
+    nice rm -rf test* &
+    nice rm axtChain/run1/chain/* &
+    nice gzip {axt,psl}Chrom/* axtChain/{all.chain,*.net} &
+
+# GENSCAN GENE PREDICTION ANNOTATIONS (DONE, 2004-09-10, hartera)
+# Provided by Genoscope, Genscan was run on masked Tetraodon genomic DNA 
+# using parameters calibrated for Tetraodon genes.
+
+    ssh kksilo
+    mkdir -p /cluster/data/tetNig1/bed/Genoscope/genscan
+    cd /cluster/data/tetNig1/bed/Genoscope/genscan
+    awk '{if ($2 == "GSC") print;}'  /cluster/data/tetNig1/tetraodon.all.gff > genscan.gff 
+    foreach c (`cat /cluster/data/tetNig1/chrom.lst`)
+        echo "Processing chr$c ... "
+        awk '{if ($1 == "'chr${c}'") print;}' genscan.gff >> chr${c}.gff
+    end
+
+    # need to remove CDS from name then load
+    foreach f (./chr*.gff) 
+       perl -pi.bak -e 's/CDS G/G/' $f 
+    end
+    # load database with gene predictions
+    ssh hgwdev
+    cd /cluster/data/tetNig1/bed/Genoscope/genscan
+    nice ldHgGene tetNig1 -genePredExt genscan chr*.gff
+    # Read 56120 transcripts in 227294 lines in 27 files
+    # 56120 groups 27 seqs 1 sources 2 feature types
+    # 28060 gene predictions
+
+# GENOSCOPE GAZE ANNOTATIONS (DONE, 2004-09-10, hartera)
+# GAZE annotations have been automatically generated by the GAZE software 
+# (Howe et al.(2002). Genome Res., 12: 1418-27) using a custom designed gene 
+# model. GAZE integrates annotation information from Geneid, Genescan, 
+# Exofish (Human, Mouse, Fugu), Genewise (Human, Mouse) and cDNAs (Tetraodon).
+
+    ssh kksilo
+    mkdir -p /cluster/data/tetNig1/bed/Genoscope/gaze
+    cd /cluster/data/tetNig1/bed/Genoscope/gaze
+    awk '{if ($2 == "GSTEN") print;}' /cluster/data/tetNig1/tetraodon.all.gff > gaze.gff 
+    # remove ; as separators between names of gene, protein, mRNA etc. 
+
+    perl -pi.bak -e "s/\s\;\s/\t/g;" gaze.gff
+    foreach c (`cat /cluster/data/tetNig1/chrom.lst`)
+        echo "Processing chr$c ... "
+        awk '{if ($1 == "'chr${c}'") print;}' gaze.gff >> chr${c}.gff
+    end
+    # need to remove CDS from name then load
+    foreach f (./chr*.gff) 
+       perl -pi.bak -e 's/CDS G/G/' $f 
+    end
+    # load database with gene predictions
+    ssh hgwdev
+    cd /cluster/data/tetNig1/bed/Genoscope/gaze
+    # loaded chr1 only into rahseq first to check then load all chroms
+    nice ldHgGene -genePredExt tetNig1 gaze chr*.gff
+
+# Read 91905 transcripts in 265439 lines in 27 files
+# 91905 groups 27 seqs 1 sources 4 feature types
+# 27918 gene predictions
+
+# HOX GENES TRACK (DONE, 2004-09-10, hartera)
+# Provided by Genoscope: Tetraodon HOX genes were annotated by human experts 
+# using sequence similarities with human, mouse and zebrafish HOX protein and 
+# nucleic sequence.
+
+    ssh kksilo
+    mkdir -p /cluster/data/tetNig1/bed/Genoscope/hoxGenes
+    cd /cluster/data/tetNig1/bed/Genoscope/hoxGenes
+    awk '{if ($2 == "HOX") print;}' /cluster/data/tetNig1/tetraodon.all.gff > hoxGenes.gff 
+    # remove ; as separators between names of gene, protein, mRNA etc. 
+
+    perl -pi.bak -e "s/\s\;\s/\t/g;" hoxGenes.gff
+    foreach c (`cat /cluster/data/tetNig1/chrom.lst`)
+        echo "Processing chr$c ... "
+        awk '{if ($1 == "'chr${c}'") print;}' hoxGenes.gff >> chr${c}.gff
+    end
+    # need to remove CDS from name then load
+    foreach f (./chr*.gff) 
+       perl -pi.bak -e 's/CDS H/H/' $f 
+    end
+    # load database with gene predictions
+    ssh hgwdev
+    cd /cluster/data/tetNig1/bed/Genoscope/hoxGenes
+    # loaded chr1 only into rahseq first to check then load all chroms
+    nice ldHgGene -genePredExt tetNig1 hoxGenes chr*.gff
+# Read 96 transcripts in 142 lines in 27 files
+# 96 groups 6 seqs 1 sources 2 feature types
+# 48 gene predictions
+
+# CYTOKINE GENES TRACK (DONE, 2004-09-10, hartera)
+# Provided by Genoscope: Tetraodon Cytokine genes were annotated by human 
+# experts using sequence similarities with human, mouse and zebrafish 
+# Cytokine protein and nucleic sequence.
+
+    ssh kksilo
+    mkdir -p /cluster/data/tetNig1/bed/Genoscope/cytokines
+    cd /cluster/data/tetNig1/bed/Genoscope/cytokines
+    awk '{if ($2 == "CYT") print;}' /cluster/data/tetNig1/tetraodon.all.gff > cytokines.gff 
+    # remove ; as separators between names of gene, protein, mRNA etc. 
+
+    perl -pi.bak -e "s/\s\;\s/\t/g;" cytokines.gff
+    foreach c (`cat /cluster/data/tetNig1/chrom.lst`)
+        echo "Processing chr$c ... "
+        awk '{if ($1 == "'chr${c}'") print;}' cytokines.gff >> chr${c}.gff
+    end
+    # need to remove CDS from name then load
+    foreach f (./chr*.gff) 
+       perl -pi.bak -e 's/CDS A/A/' $f 
+    end
+    # load database with gene predictions
+    ssh hgwdev
+    cd /cluster/data/tetNig1/bed/Genoscope/cytokines
+    # loaded chr1 only into rahseq first to check then load all chroms
+    nice ldHgGene -genePredExt tetNig1 cytokines chr*.gff
