@@ -687,18 +687,15 @@ mrna is done against unmasked 041203
     cd ~/hg15/bed/est
     ls -1S /scratch/hg/gs.16/build33/trfFa/* > genome.lst
     ls -1S /iscratch/i/mrna.134/Homo_sapiens/est*.fa > mrna.lst
-    # Using split est fa -- so create separate output dirs and special gsub:
-    foreach f (`cat mrna.lst`)
-      mkdir psl/$f:t:r
-    end
     echo '#LOOP \
-/cluster/home/kent/bin/i386/blat {check in line+ $(path1)} {check in line+ $(path2)} -ooc={check in exists /scratch/hg/h/11.ooc} {check out line+ psl/$(root2)/$(root1)_$(root2).psl} \
+/cluster/home/kent/bin/i386/blat {check in line+ $(path1)} {check in line+ $(path2)} -ooc={check in exists /scratch/hg/h/11.ooc} {check out line+ psl/$(root1)_$(root2).psl} \
 #ENDLOOP' > gsub
     gensub2 genome.lst mrna.lst gsub spec
     para create spec
     para try
     # In each dir (~/hg15/bed/mrna, ~/hg15/bed/est):
     para check, para push, para check....
+>>> DONE TO HERE -jk
     # para time > time
       
     # Process mRNA and EST alignments into near best in genome.
@@ -1389,7 +1386,7 @@ CREATE CHROMOSOME REPORTS (TO DO)
     mkdir -p ~/hg15/bed/xenoMrna
     cd ~/hg15/bed/xenoMrna
     mkdir psl
-    ls -1S /scratch/hg/gs.16/build33/trfFa/*.fa.trf > human.lst
+    ls -1S /scratch/hg/gs.16/build33/trfFa/*.fa > human.lst
     ls -1S /iscratch/i/mrna.134/Homo_sapiens/xenoRna*.fa > mrna.lst
     # Using split fa -- so create separate output dirs and special gsub:
     foreach f (`cat mrna.lst`)
@@ -1407,6 +1404,7 @@ CREATE CHROMOSOME REPORTS (TO DO)
     para push 
     # Do para check until the run is done, doing para push if necessary
     # Sort xeno mRNA alignments as so:
+>>>DONE TO HERE (-JK)
     ssh eieio
     cd ~/hg15/bed/xenoMrna
     pslSort dirs raw.psl /cluster/store2/temp psl/xenoRna*
