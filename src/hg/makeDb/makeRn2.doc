@@ -735,24 +735,20 @@ SWAPPING HUMAN-RAT BLASTZ ALIGNMENTS TO RAT-HUMAN: (DONE 03/15/03)
     # axtBest will need .len files - copy those, swap S1<->S2
     cp $aliDir/S1.len S2.len
     cp $aliDir/S2.len S1.len
-    mkdir swapped unsorted axtChrom
-    # Swap target and query coords -- swapped/chrN.axt has all the alignments 
-    # with chrN as query now instead of chrN as target.  
-    foreach f ($aliDir/axtChrom/chr*.axt)
-      echo swapping $f:t:r
-      axtSwap $f $aliDir/S1.len $aliDir/S2.len swapped/$f:t
-    end
-    # Re-apportion alignments so that unsorted/chrN.axt has all the alignments 
-    # with chrN as target.
-    cat swapped/*.axt | axtSplitByTarget stdin unsorted
+    mkdir unsorted axtChrom
+    # Swap target and query coords, then re-apportion alignments so that 
+    # unsorted/chrN.axt has all the alignments with chrN as target.
+    cat $aliDir/axtChrom/chr*.axt \
+    | axtSwap stdin $aliDir/S1.len $aliDir/S2.len stdout \
+    | axtSplitByTarget stdin unsorted
     # Sorted the shuffled .axt files.
     foreach f (unsorted/*.axt)
       echo sorting $f:t:r
       axtSort $f axtChrom/$f:t
     end
-    rm -r unsorted swapped
+    rm -r unsorted
     # Don't bother creating psl for these unfiltered alignments -- but 
-TODO    # tell Jim so he can do chaining/netting.
+    # tell Jim so he can do chaining/netting.
 
 
 MAKING THE BLASTZBESTHUMAN TRACK FROM PENN STATE RN2 AXT FILES (DONE 03/15/03)
