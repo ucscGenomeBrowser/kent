@@ -17,6 +17,7 @@ enum aStates
     aUtr5,                      /* 5' UTR. */
     aUtr3,			/* 3' UTR. */
     
+    aKoz0, aKoz1, aKoz2, aKoz3, aKoz4,  /* Kozak preamble. */
     aStart1, aStart2, aStart3,  /* Start codon. */
     aC1, aC2, aC3,              /* Regular codon. */
     aStop1, aStop2, aStop3,     /* Stop codon. */
@@ -36,6 +37,7 @@ char visStates[] =
     'U',		     /* 5' UTR. */
     'u',                     /* 3' UTR. */
     
+    'k', 'k', 'k', 'k', 'k',  /* Kozak */
     'A', 'A', 'A',  /* Start codon. */
     '1', '2', '3',               /* Regular codon. */
     'Z', 'Z', 'Z',        /* Stop codon. */
@@ -59,6 +61,16 @@ struct dynoData
     double *curScores, *prevScores;	/* Current and previous scores. */
     double *transProbLookup[256];	/* Transition probabilities. */
     int scoreFlopper;			/* Flops between 0 and 1. */
+    };
+
+struct mrnaInfo
+/* Cds position and related stuff - just for testing. */
+    {
+    struct mrnaInfo *next;
+    char *name;		/* Allocated in hash */
+    int size;		/* Size of mRNA */
+    int cdsStart;	/* Start of coding. */
+    int cdsEnd;		/* End of coding. */
     };
 
 static void dynoFlopScores(struct dynoData *dd)
@@ -100,8 +112,13 @@ void makeTransitionProbs(double **transProbLookup)
 int i, j;
 
 /* Make certain transitions reasonably likely. */
-transProbLookup[aUtr5][aUtr5] = scaledLog(0.995);
-transProbLookup[aUtr5][aStart1] = scaledLog(0.005);
+transProbLookup[aUtr5][aUtr5] = scaledLog(0.990);
+transProbLookup[aUtr5][aKoz0] = scaledLog(0.010);
+transProbLookup[aKoz0][aKoz1] = always;
+transProbLookup[aKoz1][aKoz2] = always;
+transProbLookup[aKoz2][aKoz3] = always;
+transProbLookup[aKoz3][aKoz4] = always;
+transProbLookup[aKoz4][aStart1] = always;
 transProbLookup[aStart1][aStart2] = always;
 transProbLookup[aStart2][aStart3] = always;
 transProbLookup[aStart3][aC1] = always;
@@ -153,7 +170,8 @@ for (i=0; i<size; ++i)
 return count;
 }
 
-double upcTraceback(char *name, double *scores, State **allStates, struct axt *axt, FILE *out)
+double upcTraceback(char *name, double *scores, State **allStates, struct axt *axt, 
+	struct hash *checkInHash, FILE *checkOut, FILE *f)
 /* Trace back, adding symbol track.  Then print out result.  Return score. */
 {
 int i;
@@ -175,7 +193,7 @@ for (i=0; i<aStateCount; ++i)
         maxState = i;
         }
     }
-fprintf(out, ">%s %f\n", name, maxScore);
+fprintf(f, ">%s %f\n", name, maxScore);
 
 for (i = symCount-1; i >= 0; i -= 1)
     {
@@ -191,13 +209,39 @@ for (i=0; i<symCount; i += lineSize)
         lineSize = maxLineSize;
     qNum += countReal(axt->qSym+i, lineSize);
     tNum += countReal(axt->tSym+i, lineSize);
-    mustWrite(out, axt->tSym+i, lineSize);
-    fprintf(out, " %d\n", tNum);
-    mustWrite(out, axt->qSym+i, lineSize);
-    fprintf(out, " %d\n", qNum);
-    mustWrite(out, tStates+i, lineSize);
-    fputc('\n', out);
-    fputc('\n', out);
+    mustWrite(f, axt->tSym+i, lineSize);
+    fprintf(f, " %d\n", tNum);
+    mustWrite(f, axt->qSym+i, lineSize);
+    fprintf(f, " %d\n", qNum);
+    mustWrite(f, tStates+i, lineSize);
+    fputc('\n', f);
+    fputc('\n', f);
+    }
+
+if (checkInHash != NULL && checkOut != NULL)
+    {
+    struct mrnaInfo *mi = hashMustFindVal(checkInHash, axt->tName);
+    int i, cdsStart = symCount, cdsEnd = 0;
+    static char isCdsChar[256];
+    isCdsChar['A'] = TRUE;
+    isCdsChar['Z'] = TRUE;
+    isCdsChar['1'] = TRUE;
+    isCdsChar['2'] = TRUE;
+    isCdsChar['3'] = TRUE;
+    for (i=0; i<symCount; ++i)
+        {
+	if (isCdsChar[tStates[i]])
+	    {
+	    if (i < cdsStart)
+	         cdsStart = i;
+	    if (i >= cdsEnd)
+	         cdsEnd = i+1;
+	    }
+	}
+    fprintf(checkOut, "%s\t%d\t%d\t%d\t%d\t%d\n", 
+    	mi->name, mi->size, mi->cdsStart, mi->cdsEnd, 
+	countReal(axt->tSym, cdsStart),
+	countReal(axt->tSym, cdsEnd));
     }
 freeMem(tStates);
 return maxScore;
@@ -212,7 +256,8 @@ errAbort(
   "usage:\n"
   "   twinOrf twinOrf.stats in.axt out.orf\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -checkIn=seq.cds - File that says size and cds position of sequences\n"
+  "   -checkOut=twinOrf.check - File that compares our cds position to real\n"
   );
 }
 
@@ -238,6 +283,13 @@ struct baseOdds
     {
     double odds[7][7];
     int observations;		/* Total # of observations based on. */
+    };
+
+struct markov1
+/* A matrix for markov1 odds. */
+    {
+    double odds[7*7][7*7];
+    int observations;
     };
 
 struct codonOdds
@@ -286,7 +338,7 @@ for (i=0; i<7; ++i)
 }
 
 struct codonOdds *readCodonOdds(struct lineFile *lf, char **initRow)
-/* Read a codon odds table. */
+/* Read a codon odds table.  Convert to logs. */
 {
 struct codonOdds *o;
 int i,j;
@@ -319,6 +371,79 @@ for (i=0; i<7*7*7; ++i)
 	o->odds[i][j] = scaledLog(p);
 	}
     }
+return o;
+}
+
+struct markov1 *readM1Odds(struct lineFile *lf, char **initRow)
+/* Read a 1st order Markov odds table. Don't convert to logs. */
+{
+struct  markov1 *o;
+int i,j;
+double p;
+char *row[7*7+1], *name;
+AllocVar(o);
+o->observations = atoi(initRow[1]);
+for (i=0; i<7*7; ++i)
+    {
+    /* Decompose i into pairs. */
+    int c[2];
+    int k, ic=i;
+    for (k=1; k>=0; --k)
+        {
+	c[k] = ic%7;
+	ic /= 7;
+	}
+    /* Read line and make sure first word matches. */
+    lineFileRow(lf, row);
+    name = row[0];
+    if (name[0] != ixToSym[c[0]] || name[1] != ixToSym[c[1]])
+        {
+	errAbort("Expecting %c%c line %d of %s\n",
+		ixToSym[c[0]], ixToSym[c[1]], lf->lineIx, lf->fileName);
+	}
+    for (j=0; j<7*7; ++j)
+	{
+	p = atof(row[j+1]);
+	if (p <= 0) p = neverProb;
+	o->odds[i][j] = p;
+	}
+    }
+return o;
+}
+
+void m1Normalize(struct markov1 *o)
+/* Normalize rows of markov1 matrix  and convert to logs. */
+{
+int i,j;
+
+for (i=0; i<7*7; ++i)
+   {
+   double rowTotal = 0;
+   for (j=0; j<7*7; ++j)
+       rowTotal += o->odds[i][j];
+   if (rowTotal > 0)
+       {
+       for (j=0; j<7*7; ++j)
+	   o->odds[i][j] = scaledLog(o->odds[i][j]/rowTotal);
+       }
+   }
+}
+
+void downgradeM1(struct markov1 *o, double amount)
+/* Reduce odds of m */
+{
+int i,j;
+for (i=0; i<7*7; ++i)
+    for (j=0; j<7*7; ++j)
+        o->odds[i][j] -= amount;
+}
+
+
+struct markov1 *m1FromCountsInFile(struct lineFile *lf, char **initRow)
+/* Read in counts from file and convert to markov model. */
+{
+struct markov1 *o = readM1Odds(lf, initRow);
+m1Normalize(o);
 return o;
 }
 
@@ -396,10 +521,11 @@ struct trainingData
 /* Stuff loaded from training stats file. */
     {
     struct trainingData *next;
-    struct baseOdds *mrna;	/* All mrna stats */
     struct baseOdds *utr5;	/* 5' UTR */
     struct baseOdds *utr3;	/* 3' UTR */
     struct baseOdds *kozak[10]; /* Kozak (start codon) consensus */
+    struct markov1  *m1Utr5;	/* Markov 1st order of 5' UTR */
+    struct markov1  *m1Utr3;	/* Markov 1st order of 3' UTR */
     struct codonOdds *codon;	/* Codon/codon */
     };
 
@@ -420,9 +546,7 @@ while (lineFileNext(lf, &line, NULL))
          continue;
      chopLine(line, row);
      type = row[0];
-     if (sameString(type, "all"))
-         td->mrna = readBaseOdds(lf, row);
-     else if (sameString(type, "utr3"))
+     if (sameString(type, "utr3"))
          td->utr3 = readBaseOdds(lf, row);
      else if (sameString(type, "utr5"))
          td->utr5 = readBaseOdds(lf, row);
@@ -434,6 +558,10 @@ while (lineFileNext(lf, &line, NULL))
 	     errAbort("kozak out of range line %d of %s", lf->lineIx, lf->fileName);
 	 td->kozak[ix] = readBaseOdds(lf, row);
 	 }
+     else if (sameString(type, "c2_utr5"))
+	 td->m1Utr5 = m1FromCountsInFile(lf, row);
+     else if (sameString(type, "c2_utr3"))
+	 td->m1Utr3 = m1FromCountsInFile(lf, row);
      else if (sameString(type, "codon"))
          td->codon = readCodonOdds(lf, row);
      else
@@ -448,31 +576,47 @@ while (lineFileNext(lf, &line, NULL))
 	 }
      }
 lineFileClose(&lf);
-if (td->mrna == NULL)
-    errAbort("Missing 'all' record from %s\n", fileName);
 if (td->utr3 == NULL)
     errAbort("Missing 'utr3' record from %s\n", fileName);
 if (td->utr5 == NULL)
     errAbort("Missing 'utr5' record from %s\n", fileName);
 if (td->codon == NULL)
     errAbort("Missing 'codon' record from %s\n", fileName);
+if (td->m1Utr5 == NULL)
+    errAbort("Missing 'c1_utr5 record from %s\n", fileName);
+if (td->m1Utr3 == NULL)
+    errAbort("Missing 'c1_utr3 record from %s\n", fileName);
 for (i=0; i<10; ++i)
     {
     if (td->kozak[i] == NULL)
 	errAbort("Missing 'kozak[%d]' record from %s\n", i, fileName);
     }
+downgradeM1(td->m1Utr5, 0.1);
+downgradeM1(td->m1Utr3, 0.1);
 killStopCodons(td->codon);
 killInsertsInCodons(td->codon);
 return td;
 }
 
-double prob0(struct baseOdds *o, char q, char t)
+double prob1(struct baseOdds *o, char q, char t)
 /* Find probability of simple q/t pair. */
 {
 return o->odds[symToIx[t]][symToIx[q]];
 }
 
-double prob2(struct codonOdds *o, char *q, char *t)
+double probM1(struct markov1 *o, char *q, char *t)
+/* Find probability of double */
+{
+int qIx = symToIx[t[0]]*7 + symToIx[q[0]];
+int tIx = symToIx[t[1]]*7 + symToIx[q[1]];
+double x;
+x = o->odds[tIx][qIx];
+uglyf("  probM1(%c%c %c%c) = %f\n", t[0], t[1], q[0], q[1], x);
+return x;
+}
+
+
+double prob3(struct codonOdds *o, char *q, char *t)
 /* Find probability of triple. */
 {
 int qIx = 0, tIx = 0, i;
@@ -485,6 +629,7 @@ for (i=0; i<3; ++i)
     tIx += symToIx[t[i]];
     }
 x =  o->odds[tIx][qIx];
+uglyf("  prob3(%s %s) = %f\n", t, q, x);
 return x;
 }
 
@@ -498,6 +643,7 @@ return x;
 #define endState(curState) \
     dyno->curScores[destState] = newScore; \
     allStates[destState][symIx] = parent; \
+    uglyf(" %d(%c) from %d(%c) score %f\n", curState, visStates[curState], parent, visStates[parent], newScore); \
     }
 
 #define source(sourceState, emitScore) \
@@ -507,31 +653,54 @@ return x;
         parent = sourceState; \
         }
 
-double lastCodonProb(struct codonOdds *o, char *qSym, char *tSym, int symIx)
-/* Return probability of last codon. */
+
+boolean getPrevNonInsert(char *qSym, char *tSym, 
+	int symIx, char *qRes, char *tRes, int resSize)
+/* Get last bases without inserts in t into qRes/tRes. */
 {
-char qCodon[4], tCodon[4];
-int baseIx = 2;
+int baseIx = resSize - 1;
 int i;
-tCodon[3] = qCodon[3] = 0;	/* For debugging */
 for (i=symIx; i >= 0; --i)
     {
     if (tSym[i] != '-')
         {
-	tCodon[baseIx] = tSym[i];
-	qCodon[baseIx] = qSym[i];
+	tRes[baseIx] = tSym[i];
+	qRes[baseIx] = qSym[i];
 	--baseIx;
 	if (baseIx < 0)
 	    break;
 	}
     }
-if (baseIx >= 0)
-    return never;
-// uglyf("%c%c%c %c%c%c  vs %c%c%c %c%c%c\n", tSym[symIx-2], tSym[symIx-1], tSym[symIx], qSym[symIx-2], qSym[symIx-1], qSym[symIx], tCodon[0], tCodon[1], tCodon[2], qCodon[0], qCodon[1], qCodon[2]);
-return prob2(o, qCodon, tCodon);
+return (baseIx < 0);
 }
 
-double fullDynamo(struct trainingData *td, struct dynoData *dyno, struct axt *axt, FILE *out)
+double lastCodonProb(struct codonOdds *o, char *qSym, char *tSym, int symIx)
+/* Return probability of last codon. */
+{
+static char qCodon[4], tCodon[4];
+int i;
+if (!getPrevNonInsert(qSym, tSym, symIx, qCodon, tCodon, 3))
+    return never;
+// uglyf("%c%c%c %c%c%c  vs %c%c%c %c%c%c\n", tSym[symIx-2], tSym[symIx-1], tSym[symIx], qSym[symIx-2], qSym[symIx-1], qSym[symIx], tCodon[0], tCodon[1], tCodon[2], qCodon[0], qCodon[1], qCodon[2]);
+return prob3(o, qCodon, tCodon);
+}
+
+double kozakProb(struct baseOdds *kozak[8], char *qSym, char *tSym, int symIx)
+/* Return probability of kozak consensus. */
+{
+char qs[8], ts[8], q, t;
+double odds = 0;
+int i;
+struct baseOdds *o;
+if (!getPrevNonInsert(qSym, tSym, symIx, qs, ts, 8))
+    return never;
+for (i=0; i<8; ++i)
+    odds += prob1(kozak[i], qs[i], ts[i]);
+return odds;
+}
+
+double fullDynamo(struct trainingData *td, struct dynoData *dyno, struct axt *axt, 
+	struct hash *checkInHash, FILE *checkOut, FILE *f)
 /* Run dynamic programming algorithm on HMM. Return score. */
 {
 char *qSym = axt->qSym;
@@ -571,6 +740,7 @@ for (symIx=0; symIx<scanSize; symIx += 1)
     t = tSym + symIx;
     qc = *q;
     tc = *t;
+    uglyf("%d %c %c\n", symIx, qc, tc);
     if (tc == '-')
         {
 	tNotIns = never;
@@ -584,26 +754,50 @@ for (symIx=0; symIx<scanSize; symIx += 1)
 
     /* Utr5 state. */
     startState(aUtr5)
-        double b = prob0(td->utr5, qc, tc);
+        double b;
+	if (symIx == 0)
+	    b = prob1(td->utr5, qc, tc);
+	else
+	    b = probM1(td->m1Utr5, q-1, t-1);
         source(aUtr5, b);
     endState(aUtr5)
 
-    /* Coding states. */
+
+    /* Near start codon states. */
+    startState(aKoz0)
+        source(aUtr5, always);
+    endState(aKoz0)
+
+    startState(aKoz1)
+        source(aKoz0, always);
+    endState(aKoz1)
+
+    startState(aKoz2)
+        source(aKoz1, always);
+    endState(aKoz2)
+
+    startState(aKoz3)
+        source(aKoz2, always);
+    endState(aKoz3)
+
+    startState(aKoz4)
+        source(aKoz3, always);
+    endState(aKoz4)
+
     startState(aStart1)
-        double b = prob0(td->kozak[5], qc, tc);
-        source(aUtr5, b);
+        source(aKoz4, always);
     endState(aStart1)
 
     startState(aStart2)
-        double b = prob0(td->kozak[6], qc, tc);
-        source(aStart1, b);
+        source(aStart1, always);
     endState(aStart2)
 
     startState(aStart3)
-        double b = prob0(td->kozak[7], qc, tc);
+        double b = kozakProb(td->kozak, qSym, tSym, symIx);
         source(aStart2, b);
     endState(aStart3)
 
+    /* Coding main states */
     startState(aC1)
         source(aC3, tNotIns);	
         source(aStart3, always);
@@ -624,21 +818,23 @@ for (symIx=0; symIx<scanSize; symIx += 1)
 	source(aI3C2, tNotIns);
     endState(aC3)
 
+    /* Coding short inserts. */
     startState(aInsC1)
         source(aC1, tIsIns);
         source(aInsC1, tIsIns);
-    endState(aC1)
+    endState(aInsC1)
 
     startState(aInsC2)
         source(aC2, tIsIns);
         source(aInsC2, tIsIns);
-    endState(aC2)
+    endState(aInsC2)
 
     startState(aInsC3)
         source(aC3, tIsIns);
         source(aInsC3, tIsIns);
-    endState(aC3)
+    endState(aInsC3)
 
+    /* Coding multiple of three inserts. */
     startState(aI1C1)
         source(aC1, tIsIns);
 	source(aI3C1, tIsIns);
@@ -678,6 +874,7 @@ for (symIx=0; symIx<scanSize; symIx += 1)
         source(aI2C3, tIsIns);
     endState(aI3C3)
 
+    /* Stop codon */
     startState(aStop1)
         source(aC3, always);
     endState(aStop1)
@@ -710,7 +907,11 @@ for (symIx=0; symIx<scanSize; symIx += 1)
 
     /* UTR states. */
     startState(aUtr3)
-        double b = prob0(td->utr3, qc, tc);
+        double b;
+	if (symIx == 0)
+	    b = prob1(td->utr3, qc, tc);
+	else
+	    b = probM1(td->m1Utr3, q-1, t-1);
         source(aUtr3, b);
 	source(aStop3, b);
     endState(aUtr3)
@@ -721,7 +922,7 @@ for (symIx=0; symIx<scanSize; symIx += 1)
 
 /* Find best scoring final cell and trace backwards to
  * reconstruct full path. */
-score = upcTraceback(axt->tName, dyno->prevScores, allStates, axt, out);
+score = upcTraceback(axt->tName, dyno->prevScores, allStates, axt, checkInHash, checkOut, f);
 
 /* Clean up and return. */
 for (i=0; i<stateCount; ++i)
@@ -731,21 +932,50 @@ return score;
 }
 
 
-void oneOrf(struct trainingData *td, struct dynoData *dyno, struct axt *axt, FILE *f)
+void oneOrf(struct trainingData *td, struct dynoData *dyno, struct axt *axt, 
+	struct hash *checkInHash, FILE *checkOut, FILE *f)
 /* Try and find one orf in axt. */
 {
-fullDynamo(td, dyno, axt, f);
+fullDynamo(td, dyno, axt, checkInHash, checkOut, f);
 }
 
-void twinOrf(char *statsFile, char *axtFile, char *outFile)
+struct hash *readCheckIn(char *fileName)
+/* Read in file into a hash of mrnaInfos. */
+{
+if (fileName == NULL)
+    return NULL;
+else
+    {
+    struct hash *hash = newHash(16);
+    struct lineFile *lf = lineFileOpen(fileName, TRUE);
+    char *row[4];
+    while (lineFileRow(lf, row))
+	{
+	struct mrnaInfo *m;
+	AllocVar(m);
+	hashAddSaveName(hash, row[0], m, &m->name);
+	m->size = lineFileNeedNum(lf, row, 1);
+	m->cdsStart = lineFileNeedNum(lf, row, 2);
+	m->cdsEnd = lineFileNeedNum(lf, row, 3);
+	}
+    return hash;
+    }
+}
+
+void twinOrf(char *statsFile, char *axtFile, char *outFile, 
+	char *checkInFile, char *checkOutFile)
 /* twinOrf - Predict open reading frame in cDNA given a cross species alignment. */
 {
 struct trainingData *td = loadTrainingData(statsFile);
 struct dynoData *dyno = newDynoData(aStateCount);
 struct lineFile *lf = lineFileOpen(axtFile, TRUE);
+struct hash *checkInHash = readCheckIn(checkInFile);
 FILE *f = mustOpen(outFile, "w");
+FILE *checkOut = NULL;
 struct axt *axt;
 
+if (checkOutFile != NULL)
+     checkOut = mustOpen(checkOutFile, "w");
 never = scaledLog(neverProb);
 always = scaledLog(1.0);
 makeTransitionProbs(dyno->transProbLookup);
@@ -754,7 +984,7 @@ while ((axt = axtRead(lf)) != NULL)
     uglyf("%s\n", axt->tName);
     tolowers(axt->qSym);
     tolowers(axt->tSym);
-    oneOrf(td, dyno, axt, f);
+    oneOrf(td, dyno, axt, checkInHash, checkOut, f);
     axtFree(&axt);
     }
 lineFileClose(&lf);
@@ -767,7 +997,9 @@ int main(int argc, char *argv[])
 optionHash(&argc, argv);
 if (argc != 4)
     usage();
+if (optionVal("checkOut", NULL) && !optionVal("checkIn", NULL))
+    errAbort("CheckOut without checkIn");
 initSymToIx();
-twinOrf(argv[1], argv[2], argv[3]);
+twinOrf(argv[1], argv[2], argv[3], optionVal("checkIn", NULL), optionVal("checkOut", NULL));
 return 0;
 }
