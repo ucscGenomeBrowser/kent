@@ -5,3 +5,4 @@ all:
 	cd ixword1;make
 	cd ixword3;make
 	cd makepgo;make
+	cd stToXao; make
