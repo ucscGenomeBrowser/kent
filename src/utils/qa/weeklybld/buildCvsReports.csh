@@ -61,9 +61,9 @@ endif
 cd /projects/compbio/bin
 
 if ( "$mode" == "review") then
-    ./cvs-reports-review $toTag $reviewTag $TODAY $REVIEWDAY
+    ./cvs-reports-delta $toTag $reviewTag $TODAY $REVIEWDAY review
 else    
-    ./cvs-reports-delta $reviewTag $toTag $REVIEWDAY $TODAY
+    ./cvs-reports-delta $reviewTag $toTag $REVIEWDAY $TODAY branch
 endif    
 
 if ( $status ) then
