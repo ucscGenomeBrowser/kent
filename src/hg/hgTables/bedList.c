@@ -17,7 +17,7 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.7 2004/07/23 08:18:12 kent Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.8 2004/07/23 22:03:55 kent Exp $";
 
 
 struct bed *getRegionAsBed(
@@ -353,8 +353,6 @@ void doGetBedOrCt(struct sqlConnection *conn, boolean doCt, boolean doCtFile)
 {
 char *table = curTrack->tableName;
 struct hTableInfo *hti = getHti(database, table);
-struct bed *bedList;
-struct bed *bedPtr;
 struct featureBits *fbList = NULL, *fbPtr;
 struct customTrack *ctNew = NULL;
 boolean doCtHdr = (cartBoolean(cart, hgtaPrintCustomTrackHeaders) 
@@ -365,86 +363,95 @@ char *ctVis  = cgiUsualString(hgtaCtVis, "dense");
 char *ctUrl  = cgiUsualString(hgtaCtUrl, "");
 char *fbQual = fbOptionsToQualifier();
 char fbTQ[128];
-int fields;
+int fields = hTableInfoBedFieldCount(hti);
 boolean gotResults = FALSE;
-struct lm *lm = lmInit(64*1024);
+struct region *region, *regionList = getRegions();
 
 if (!doCt)
     {
     textOpen();
     }
 
-bedList = getAllIntersectedBeds(conn, curTrack, lm);
 
-fields = hTableInfoBedFieldCount(hti);
-
-if (doCtHdr && (bedList != NULL))
+for (region = regionList; region != NULL; region = region->next)
     {
-    int visNum = (int) hTvFromStringNoAbort(ctVis);
-    if (visNum < 0)
-	visNum = 0;
-    if (doCt)
-	ctNew = newCt(ctName, ctDesc, visNum, ctUrl, fields);
+    struct bed *bedList, *bed;
+    struct lm *lm = lmInit(64*1024);
+    bedList = cookedBedList(conn, curTrack, region, lm);
+    if (doCtHdr && (bedList != NULL) && !gotResults)
+	{
+	int visNum = (int) hTvFromStringNoAbort(ctVis);
+	if (visNum < 0)
+	    visNum = 0;
+	if (doCt)
+	    ctNew = newCt(ctName, ctDesc, visNum, ctUrl, fields);
+	else
+	    hPrintf("track name=\"%s\" description=\"%s\" visibility=%d url=%s \n",
+		   ctName, ctDesc, visNum, ctUrl);
+	}
+
+    if ((fbQual == NULL) || (fbQual[0] == 0))
+	{
+	for (bed = bedList;  bed != NULL;  bed = bed->next)
+	    {
+	    char *ptr = strchr(bed->name, ' ');
+	    if (ptr != NULL)
+		*ptr = 0;
+	    if (!doCt)
+		bedTabOutN(bed, fields, stdout);
+	    else
+		{
+		struct bed *dupe = cloneBed(bed); /* Out of local memory. */
+	        slAddHead(&ctNew->bedList, dupe);
+		}
+	    gotResults = TRUE;
+	    }
+	}
     else
-	hPrintf("track name=\"%s\" description=\"%s\" visibility=%d url=%s \n",
-	       ctName, ctDesc, visNum, ctUrl);
-    }
-
-if ((fbQual == NULL) || (fbQual[0] == 0))
-    {
-    for (bedPtr = bedList;  bedPtr != NULL;  bedPtr = bedPtr->next)
 	{
-	char *ptr = strchr(bedPtr->name, ' ');
-	if (ptr != NULL)
-	    *ptr = 0;
-	if (!doCt)
+	safef(fbTQ, sizeof(fbTQ), "%s:%s", hti->rootName, fbQual);
+	fbList = fbFromBed(fbTQ, hti, bedList, 0, 0, FALSE, FALSE);
+	for (fbPtr=fbList;  fbPtr != NULL;  fbPtr=fbPtr->next)
 	    {
-	    bedTabOutN(bedPtr, fields, stdout);
+	    char *ptr = strchr(fbPtr->name, ' ');
+	    if (ptr != NULL)
+		*ptr = 0;
+	    if (! doCt)
+		{
+		struct bed *fbBed = fbToBedOne(fbPtr);
+		slAddHead(&ctNew->bedList, fbBed );
+		}
+	    else
+		{
+		hPrintf("%s\t%d\t%d\t%s\t%d\t%c\n",
+		       fbPtr->chrom, fbPtr->start, fbPtr->end, fbPtr->name,
+		       0, fbPtr->strand);
+		}
+	    gotResults = TRUE;
 	    }
-	gotResults = TRUE;
+	featureBitsFreeList(&fbList);
 	}
-    if (ctNew != NULL)
-	ctNew->bedList = bedList;
-    }
-else
-    {
-    safef(fbTQ, sizeof(fbTQ), "%s:%s", hti->rootName, fbQual);
-    fbList = fbFromBed(fbTQ, hti, bedList, 0, 0, FALSE, FALSE);
-    for (fbPtr=fbList;  fbPtr != NULL;  fbPtr=fbPtr->next)
+
+    if ((ctNew != NULL) && (ctNew->bedList != NULL))
 	{
-	char *ptr = strchr(fbPtr->name, ' ');
-	if (ptr != NULL)
-	    *ptr = 0;
-	if (! doCt)
+	/* Load existing custom tracks and add this new one: */
+	struct customTrack *ctList = getCustomTracks();
+	char *ctFileName = cartOptionalString(cart, "ct");
+	struct tempName tn;
+	slReverse(&ctNew->bedList);
+	slAddHead(&ctList, ctNew);
+	/* Save the custom tracks out to file (overwrite the old file): */
+	if (ctFileName == NULL)
 	    {
-	    hPrintf("%s\t%d\t%d\t%s\t%d\t%c\n",
-		   fbPtr->chrom, fbPtr->start, fbPtr->end, fbPtr->name,
-		   0, fbPtr->strand);
+	    makeTempName(&tn, "hgtct", ".bed");
+	    ctFileName = cloneString(tn.forCgi);
 	    }
-	gotResults = TRUE;
+	customTrackSave(ctList, ctFileName);
+	cartSetString(cart, "ct", ctFileName);
 	}
-    if (ctNew != NULL)
-	ctNew->bedList = fbToBed(fbList);
-    featureBitsFreeList(&fbList);
+    bedList = NULL;
+    lmCleanup(&lm);
     }
-
-if ((ctNew != NULL) && (ctNew->bedList != NULL))
-    {
-    /* Load existing custom tracks and add this new one: */
-    struct customTrack *ctList = getCustomTracks();
-    char *ctFileName = cartOptionalString(cart, "ct");
-    struct tempName tn;
-    slAddHead(&ctList, ctNew);
-    /* Save the custom tracks out to file (overwrite the old file): */
-    if (ctFileName == NULL)
-	{
-	makeTempName(&tn, "hgtct", ".bed");
-	ctFileName = cloneString(tn.forCgi);
-	}
-    customTrackSave(ctList, ctFileName);
-    cartSetString(cart, "ct", ctFileName);
-    }
-
 if (!gotResults)
     {
     if (doCt)
@@ -478,7 +485,6 @@ else if (doCt)
 	   "<A HREF=\"%s\">click here to continue</A>.\n",
 	   redirDelay, browserUrl);
     }
-lmCleanup(&lm);
 }
 
 void doGetBed(struct sqlConnection *conn)
