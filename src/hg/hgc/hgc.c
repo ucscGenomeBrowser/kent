@@ -3578,7 +3578,6 @@ if (!(strcmp(otherName,"human")
     longXenoPsl1(tdb, item, otherName, chromStr );
     }
 
-freeString( temp );
 }
 
 
