@@ -6,7 +6,7 @@
 #include "axt.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: afiAli.c,v 1.2 2004/07/07 02:25:47 kent Exp $";
+static char const rcsid[] = "$Id: afiAli.c,v 1.3 2004/11/22 20:36:54 kent Exp $";
 
 static bioSeq *getSeq(struct sqlConnection *conn, char *geneId, 
 	struct column *nameCol, char *tableId)
@@ -46,68 +46,6 @@ else
     }
 }
 
-static void printAxtAli(struct axt *axt, int maxLine, struct axtScoreScheme *ss, FILE *f)
-/* Print out an alignment. */
-{
-int lineStart;
-int qPos = axt->qStart;
-int tPos = axt->tStart;
-int symPos;
-int aDigits = digitsBaseTen(axt->qEnd);
-int bDigits = digitsBaseTen(axt->tEnd);
-int digits = max(aDigits, bDigits);
-
-for (symPos = 0; symPos < axt->symCount; symPos += maxLine)
-    {
-    /* Figure out which part of axt to use for this line. */
-    int lineSize = axt->symCount - symPos;
-    int lineEnd, i;
-    if (lineSize > maxLine)
-        lineSize = maxLine;
-    lineEnd = symPos + lineSize;
-
-    /* Draw query line including numbers. */
-    fprintf(f, "%0*d ", digits, qPos+1);
-    for (i=symPos; i<lineEnd; ++i)
-        {
-	char c = axt->qSym[i];
-	fputc(c, f);
-	if (c != '.' && c != '-')
-	    ++qPos;
-	}
-    fprintf(f, " %0*d\n", digits, qPos);
-
-    /* Draw line with match/mismatch symbols. */
-    spaceOut(f, digits+1);
-    for (i=symPos; i<lineEnd; ++i)
-        {
-	char q = axt->qSym[i];
-	char t = axt->tSym[i];
-	char out = ' ';
-	if (q == t)
-	    out = '|';
-	else if (ss != NULL && ss->matrix[q][t] > 0)
-	    out = '+';
-	fputc(out, f);
-	}
-    fputc('\n', f);
-
-    /* Draw target line including numbers. */
-    fprintf(f, "%0*d ", digits, tPos+1);
-    for (i=symPos; i<lineEnd; ++i)
-        {
-	char c = axt->tSym[i];
-	fputc(c, f);
-	if (c != '.' && c != '-')
-	    ++tPos;
-	}
-    fprintf(f, " %0*d\n", digits, tPos);
-
-    /* Draw extra empty line. */
-    fputc('\n', f);
-    }
-}
-
 void doAffineAlignment(struct sqlConnection *conn)
 /* Put up page that shows affine alignment. */
 {
@@ -128,7 +66,7 @@ if (a != NULL && b != NULL)
 	    {
 	    printf("Alignment between %s (top %s %daa) and %s (bottom %s %daa) score %d\n\n",
 		    a->name, aId, a->size, b->name, bId, b->size, axt->score);
-	    printAxtAli(axt, 60, ss, stdout);
+	    axtPrintTraditional(axt, 60, ss, stdout);
 	    axtFree(&axt);
 	    }
 	else
