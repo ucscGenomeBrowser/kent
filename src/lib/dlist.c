@@ -5,7 +5,7 @@
 #include "common.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: dlist.c,v 1.7 2003/05/17 06:45:09 kent Exp $";
+static char const rcsid[] = "$Id: dlist.c,v 1.8 2003/12/22 19:51:20 markd Exp $";
 
 void dlListInit(struct dlList *dl)
 /* Initialize list to be empty */
@@ -25,18 +25,27 @@ dl->tail = (struct dlNode *)(&dl->head);
 return dl;
 }
 
+void dlListReset(struct dlList *dl)
+/* Reset a list to the empty state (does not free values)  */
+{
+struct dlNode *node, *next;
+for (node = dl->head; node->next != NULL; node = next)
+    {
+    next = node->next;
+    freeMem(node);
+    }
+dl->head = (struct dlNode *)(&dl->nullMiddle);
+dl->nullMiddle = NULL;
+dl->tail = (struct dlNode *)(&dl->head);
+}
+
 void freeDlList(struct dlList **pList)
 /* Free up a doubly linked list and it's nodes (but not the node values). */
 {
 struct dlList *list = *pList;
 if (list != NULL)
     {
-    struct dlNode *node, *next;
-    for (node = list->head; node->next != NULL; node = next)
-        {
-        next = node->next;
-        freeMem(node);
-        }
+    dlListReset(list);
     freez(pList);
     }
 }
@@ -133,6 +142,8 @@ struct dlNode *before = node->prev;
 struct dlNode *after = node->next;
 before->next = after;
 after->prev = before;
+node->prev = NULL;
+node->next = NULL;
 }
 
 void dlRemoveHead(struct dlList *list)
@@ -225,6 +236,24 @@ boolean dlEmpty(struct dlList *list)
 /* Return TRUE if list is empty. */
 {
 return (list->head->next == NULL);
+}
+
+struct dlNode *dlGetStart(struct dlList *list)
+/* The the node before the start of the list */
+{
+if (dlEmpty(list))
+    return list->head;
+else
+    return list->head->prev;
+}
+
+struct dlNode *dlGetEnd(struct dlList *list)
+/* The the node after the end of the list */
+{
+if (dlEmpty(list))
+    return list->tail;
+else
+    return list->tail->next;
 }
 
 void *dlListToSlList(struct dlList *dList)

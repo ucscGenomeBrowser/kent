@@ -49,6 +49,9 @@ struct dlList *newDlList();
 void dlListInit(struct dlList *dl);
 /* Initialize list to be empty */
 
+void dlListReset(struct dlList *dl);
+/* Reset a list to the empty state (does not free values)  */
+
 void freeDlList(struct dlList **pList);
 /* Free up a doubly linked list and it's nodes (but not the node values). */
 #define dlListFree freeDlList
@@ -102,6 +105,12 @@ int dlCount(struct dlList *list);
 
 boolean dlEmpty(struct dlList *list);
 /* Return TRUE if list is empty. */
+
+struct dlNode *dlGetStart(struct dlList *list);
+/* The the node before the start of the list */
+
+struct dlNode *dlGetEnd(struct dlList *list);
+/* The the node after the end of the list */
 
 void dlSort(struct dlList *list, int (*compare )(const void *elem1,  const void *elem2));
 /* Sort a doubly linked list with Qsort and a temporary array. 
