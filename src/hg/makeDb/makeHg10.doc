@@ -808,7 +808,7 @@ LOAD SOFTBERRY GENES (done)
      - cd ~/oo/bed
      - mkdir softberry
      - cd softberry
-     - get ftp://www.softberry.com/pub/SC_DEC01/*
+     - wget ftp://www.softberry.com/pub/SC_HUM_DEC01/soft_fg_hum_dec01.tar.gz
      - mkdir output
      - Run the fixFormat.pl routine in
      	~/oo/bed/softberry like so:
@@ -819,6 +819,13 @@ LOAD SOFTBERRY GENES (done)
      ldHgGene hg10 softberryGene chr*.gff
      hgPepPred hg10 softberry *.pro
      hgSoftberryHom hg10 *.pro
+     - RT 283 fixed 7/19/02:
+     cd ~/hg10/bed/softberry/output
+     foreach f (chr*.gff)
+       set f2 = $f:r-fixed.gff
+       ../removeBogusExons.pl $f > $f2
+     end
+     ldHgGene hg10 softberryGene chr*-fixed.gff
 
 LOAD GENEID GENES (done)
      mkdir ~/oo/bed/geneid
