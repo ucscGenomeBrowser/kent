@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslChain.c,v 1.2 2003/11/05 05:04:42 braney Exp $";
+static char const rcsid[] = "$Id: pslChain.c,v 1.3 2003/11/06 14:39:40 braney Exp $";
 
 struct score
 {
@@ -879,7 +879,7 @@ while ((psl = pslNext(lf)) != NULL)
     slAddHead(&sp->blockList, b);
 
     sp->axtCount += 1;
-    pslFree(&psl);
+    //pslFree(&psl);
     }
 
 lineFileClose(&lf);
@@ -939,16 +939,33 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     psl.tStarts=tStarts;	/* Start of each block in target. */
 
     a = NULL;
-    for (b = chain->blockList, count = 0; b != NULL; count++,b = b->next)
+    for (b = chain->blockList, count = 0; b != NULL; b = b->next)
 	{
-	blockSizes[count]= b->qEnd - b->qStart;
-	if (chain->qStrand == '-')
-	    tStarts[count]=  b->tEnd;
-	else
-	    tStarts[count]=  b->tStart;
+	struct psl *ipsl;
+	int ii;
 
-	qStarts[count]=  b->qStart;
-	totalSize += blockSizes[count];
+	ipsl = (struct psl *)b->data;
+	/*
+	if (chain->qStrand == '-')
+	{
+	printf("ipsl %d %d block %d %d\n",ipsl->tSize - ipsl->tStart, ipsl->tSize - ipsl->tEnd,b->tStart,b->tEnd);
+	    tStarts[count]=  b->tEnd;
+	    }
+	else
+	{
+	printf("ipsl %d %d block %d %d\n",ipsl->tStart, ipsl->tEnd,b->tStart,b->tEnd);
+	    tStarts[count]=  b->tStart;
+	    }
+	    */
+
+	for(ii=0; ii < ipsl->blockCount; count++, ii++)
+	{
+	    tStarts[count]=  ipsl->tStarts[ii];
+	    qStarts[count]=   ipsl->qStarts[ii];
+	    blockSizes[count]= ipsl->blockSizes[ii];
+	    totalSize += blockSizes[count];
+	}
+	/*
 	if (a != NULL)
 	    {
 	    if (b->qStart > a->qEnd + 1)
@@ -962,6 +979,7 @@ for (chain = chainList; chain != NULL; chain = chain->next)
 		psl.tBaseInsert += b->tStart - a->tEnd;
 		}
 	    }
+	    */
 
 	a = b;
 	}
