@@ -1,17 +1,18 @@
 # Build all directories in utils
 
-all:    cgi utils
+BROWSER_BINS=cartReset das hgBlat hgCoordConv hgGateway hgText hgTracks \
+	hgTrackUi hgc cartDump
 
-utils:  lib
+all::    cgi utils
+
+utils:
+	cd lib && ${MAKE}
 	@for D in $(USE_DIRS) x; do \
             if test "$$D" != "x" ; then \
                 ( cd $$D && echo $$D && $(MAKE) ) ;\
                 x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
             fi ;\
 	done
-
-lib:
-	cd lib && ${MAKE}
 
 # List of directories to build
 USE_DIRS = $(DIRS)
@@ -35,64 +36,52 @@ BAD_DIRS = \
 	wikiPlot 
 
 # Compile only, the cgi's for those builds without write access
-#	to apache cgi-bin directories
+#	to apache cgi-bin directories  (this compiles and links executables)
 
 compile:
 	cd lib && ${MAKE}
-	cd cartReset && ${MAKE} compile
-	cd das && ${MAKE} compile
-	cd hgBlat && ${MAKE} compile
-	cd hgCoordConv && ${MAKE} compile
-	cd hgGateway && ${MAKE} compile
-	cd hgText && ${MAKE} compile
-	cd hgTracks && ${MAKE} compile
-	cd hgTrackUi && ${MAKE} compile
-	cd hgc && ${MAKE} compile
-	cd cartDump && ${MAKE} compile
+	@for D in ${BROWSER_BINS}; do \
+		(cd $${D} && ${MAKE} compile;) \
+	done
 
 # Build cgi's
+#   cgi: Destination for the binaries is /usr/local/apache/cgi-bin-${USER}
 
 cgi:
 	cd lib && ${MAKE}
-	cd cartReset && ${MAKE}
-	cd das && ${MAKE}
-	cd hgBlat && ${MAKE}
-	cd hgCoordConv && ${MAKE}
-	cd hgGateway && ${MAKE}
-	cd hgText && ${MAKE}
-	cd hgTracks && ${MAKE}
-	cd hgTrackUi && ${MAKE}
-	cd hgc && ${MAKE}
-	cd cartDump && ${MAKE}
+	@for D in ${BROWSER_BINS}; do \
+		(cd $${D} && ${MAKE};) \
+	done
+
+#   alpha: Destination for the binaries is /usr/local/apache/cgi-bin/
 
 alpha:
 	cd lib && ${MAKE}
-	cd cartReset && ${MAKE} alpha
-	cd das && ${MAKE} alpha
-	cd hgBlat && ${MAKE} alpha
-	cd hgCoordConv && ${MAKE} alpha
-	cd hgGateway && ${MAKE} alpha
-	cd hgText && ${MAKE} alpha
-	cd hgTracks && ${MAKE} alpha
-	cd hgTrackUi && ${MAKE} alpha
-	cd hgc && ${MAKE} alpha
-	cd cartDump && ${MAKE} alpha
+	@for D in ${BROWSER_BINS}; do \
+		(cd $${D} && ${MAKE} alpha;) \
+	done
+
+#   beta: Destination for the binaries is /usr/local/apache/cgi-bin-beta/
 
 beta:
 	cd lib && ${MAKE}
-	cd cartReset && ${MAKE} beta
-	cd das && ${MAKE} beta
-	cd hgBlat && ${MAKE} beta
-	cd hgCoordConv && ${MAKE} beta
-	cd hgGateway && ${MAKE} beta
-	cd hgText && ${MAKE} beta
-	cd hgTracks && ${MAKE} beta
-	cd hgTrackUi && ${MAKE} beta
-	cd hgc && ${MAKE} beta
-	cd cartDump && ${MAKE} beta
+	@for D in ${BROWSER_BINS}; do \
+		(cd $${D} && ${MAKE} beta;) \
+	done
+
+# install: Destination for the binaries is ${DESTDIR}/usr/local/apache/cgi-bin
+
+install:
+	cd lib && ${MAKE}
+	@for D in ${BROWSER_BINS}; do \
+		(cd $${D} && ${MAKE} install;) \
+	done
 
 clean: 
-	cd lib && ${MAKE} clean;
+	cd lib && ${MAKE} clean
+	@for D in ${BROWSER_BINS}; do \
+		(cd $${D} && ${MAKE} clean;) \
+	done
 
 
 DIRS = \
