@@ -19,7 +19,7 @@
 #include "bits.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: orthoEvaluate.c,v 1.4 2003/06/22 21:53:04 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoEvaluate.c,v 1.5 2003/06/23 06:37:30 sugnet Exp $";
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -27,6 +27,10 @@ static struct optionSpec optionSpecs[] =
     {"help", OPTION_BOOLEAN},
     {"db", OPTION_STRING},
     {"bedFile", OPTION_STRING},
+    {"bedOutFile", OPTION_STRING},
+    {"htmlFile", OPTION_STRING},
+    {"htmlFrameFile", OPTION_STRING},
+    {"numPicks", OPTION_INT},
     {"bestOrfExe", OPTION_STRING},
     {"tmpFa", OPTION_STRING},
     {"tmpOrf", OPTION_STRING},
@@ -39,6 +43,10 @@ static char *optionDescripts[] =
     "Display this message.",
     "Database (i.e. hg15) that bedFile corresponds to.",
     "File with beds to be evaluated.",
+    "File to output final bed picks for track.",
+    "File for html output.",
+    "[optional default: frame.html] File for html frames.",
+    "[optional default: 100] Number of introns to pick.",
     "[optional default: borf] bestOrf executable name.",
     "[optional default: generated] temp fasta file for bestOrf.",
     "[optional default: generated] temp output file for bestOrf."
@@ -78,6 +86,8 @@ struct intronEv
     float borfScore;       /* Score for ev from borf program. */
 };
 
+static boolean doHappyDots;   /* output activity dots? */
+
 void usage()
 /** Print usage and quit. */
 {
@@ -98,6 +108,18 @@ errAbort("\nusage:\n"
 	 "NOTE: THIS PROGRAM UNDER DEVLOPMENT. NOT FOR PRODUCTION USE!\n");
 }
 
+void occassionalDot()
+/* Write out a dot every 20 times this is called. */
+{
+static int dotMod = 100;
+static int dot = 100;
+if (doHappyDots && (--dot <= 0))
+    {
+    putc('.', stdout);
+    fflush(stdout);
+    dot = dotMod;
+    }
+}
 
 struct bed *loadNativeAgxBedsForBed(struct bed *orthoBed, char *table)
 /* Load up all the beds that span the area in bed. */
@@ -408,6 +430,7 @@ ev->numIntrons = orthoBed->blockCount -1;
 ev->inCodInt = inCodInt;
 ev->orientation = orientation;
 ev->support = support;
+ev->agxNames = agxNames;
 dnaSeqFree(&genoSeq);
 }
 
@@ -538,8 +561,10 @@ struct borf *borf = NULL;
 struct orthoEval *evList = NULL, *ev = NULL;
 hSetDb(db);
 bedList = bedLoadNAll(bedFile, 12);
+warn("Scoring beds");
 for(bed = bedList; bed != NULL; bed = bed->next)
     {
+    occassionalDot();
     AllocVar(ev);
     ev->orthoBed = bed;
     ev->borf = borf = borfForBed(bed);
@@ -549,8 +574,162 @@ for(bed = bedList; bed != NULL; bed = bed->next)
 //    borfTabOut(borf, stdout);
     slAddHead(&evList, ev);
     }
+warn("\nDone.");
 //bedFreeList(&bedList);
 return evList;
+}
+
+struct intronEv *intronIvForEv(struct orthoEval *ev, int intron)
+/* Return an intronEv record for a particular intron. */
+{
+struct intronEv *iv = NULL;
+struct bed *bed = NULL;
+assert(ev);
+assert(ev->orthoBed);
+assert(intron < ev->orthoBed->blockCount - 1);
+bed = ev->orthoBed;
+AllocVar(iv);
+iv->ev = ev;
+iv->chrom = bed->chrom;
+
+iv->e1S = bed->chromStart + bed->chromStarts[intron];
+iv->e1E = iv->e1S + bed->blockSizes[intron];
+iv->e2S = bed->chromStart + bed->chromStarts[intron+1];
+iv->e2E = iv->e2S + bed->blockSizes[intron+1];
+
+if(ev->agxNames[intron] != NULL)
+    iv->agxName = ev->agxNames[intron];
+else
+    iv->agxName = ev->agxBedName;
+
+iv->support = ev->support[intron];
+iv->orientation = ev->orientation[intron];
+iv->inCodInt = ev->inCodInt[intron];
+iv->borfScore = ev->borf->score;
+return iv;
+}
+
+int scoreForIntronEv(const struct intronEv *iv)
+/* Score function based on native support, orientation, and coding. */
+{
+static FILE *tmp = NULL;
+int score = 0;
+
+if(tmp == NULL)
+    tmp = mustOpen("scores.tab", "w");
+fprintf(tmp, "%d\t%d\t%d\t%f\n", iv->orientation, iv->support, iv->borfScore, iv->inCodInt);
+if(iv->orientation != 0)
+    score += 5;
+score += iv->support *2;
+score += (float) iv->borfScore/5;
+if(iv->inCodInt)
+    score = score +2;
+return score;
+}
+
+boolean checkMgcPicks(struct intronEv *iv)
+/* Try to look up an mgc pick in this area. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+int rowOffset = 0;
+char *mgcTable = optionVal("mgcTable", "chuckMgcPicked");
+char *mgcGenes = optionVal("mgcGenes", "chuckMgcGenes");
+boolean foundSome = FALSE;
+sr = hRangeQuery(conn, mgcTable, iv->chrom, iv->e1S, iv->e2E, NULL, &rowOffset); 
+if(sqlNextRow(sr) != NULL)
+    foundSome = TRUE;
+sqlFreeResult(&sr);
+
+if(foundSome == FALSE)
+    {
+    sr = hRangeQuery(conn, mgcGenes, iv->chrom, iv->e1S, iv->e2E, NULL, &rowOffset); 
+    if(sqlNextRow(sr) != NULL)
+	foundSome = TRUE;
+    sqlFreeResult(&sr);
+    }
+
+hFreeConn(&conn);
+return foundSome;
+}
+
+int intronEvalCmp(const void *va, const void *vb)
+/* Compare to sort based score function. */
+{
+const struct intronEv *a = *((struct intronEv **)va);
+const struct intronEv *b = *((struct intronEv **)vb);
+float aScore = scoreForIntronEv(a);
+float bScore = scoreForIntronEv(b);
+return bScore - aScore; /* reverse to get largest values first. */
+}
+
+boolean isUniqueCoordAndAgx(struct intronEv *iv, struct hash *posHash, struct hash *agxHash)
+/* Return TRUE if iv isn't in posHash and agxHash.
+   Return FALSE otherwise. */
+{
+static char key[1024];
+boolean unique = TRUE;
+
+safef(key, sizeof(key), "%s-%d-%d-%d-%d", iv->chrom, iv->e1S, iv->e1E, iv->e2S, iv->e2E);
+/* Unique location (don't pick same intron twice. */
+if(hashFindVal(posHash, key) == NULL)
+    hashAdd(posHash, key, iv);
+else 
+    unique = FALSE;
+
+/* Unique loci, don't pick from same overall loci if possible. */
+if(iv->agxName != NULL)
+    safef(key, sizeof(key), "%s", iv->agxName);
+else 
+    safef(key, sizeof(key), "%s", iv->ev->orthoBed->name);
+
+if(hashFindVal(agxHash, key) == NULL)
+    hashAdd(agxHash, key, iv);
+else
+    unique = FALSE;
+
+if(unique)
+    unique = !checkMgcPicks(iv);
+
+return unique;
+}
+
+struct bed *bedForIv(struct intronEv *iv)
+/* Make a bed to represent a intronEv structure. */
+{
+struct bed *bed = NULL;
+AllocVar(bed);
+bed->chrom = cloneString(iv->chrom);
+bed->chromStart = bed->thickStart = iv->e1S;
+bed->chromEnd = bed->thickEnd = iv->e2E;
+bed->name = cloneString(iv->ev->orthoBed->name);
+if(iv->orientation == 1)
+    safef(bed->strand, sizeof(bed->strand), "+");
+else if(iv->orientation == -1)
+    safef(bed->strand, sizeof(bed->strand), "-");
+else 
+    safef(bed->strand, sizeof(bed->strand), "%s", iv->ev->orthoBed->strand);
+bed->blockCount = 2;
+AllocArray(bed->chromStarts, 2);
+bed->chromStarts[0] = iv->e1S - bed->chromStart;
+bed->chromStarts[1] = iv->e2S - bed->chromStart;
+AllocArray(bed->blockSizes, 2);
+bed->blockSizes[0] = iv->e1E - iv->e1S;
+bed->blockSizes[1] = iv->e2E - iv->e2S;
+bed->score = scoreForIntronEv(iv);
+return bed;
+}
+
+void writeOutFrames(FILE *htmlOut, char *fileName, char *db)
+{
+fprintf(htmlOut, "<html><head><title>Introns and flanking exons for RACE PCR</title></head>\n"
+	"<frameset cols=\"18%,82%\">\n"
+	"<frame name=\"_list\" src=\"./%s\">\n"
+	"<frame name=\"browser\" src=\"http://mgc.cse.ucsc.edu/cgi-bin/hgTracks?db=%s&position=chrX:151171710-151173193&"
+	"hgt.customText=http://www.soe.ucsc.edu/~sugnet/tmp/mgcIntron.bed\">\n"
+	"</frameset>\n"
+	"</html>\n", fileName, db);
 }
 
 void orthoEvaluate(char *bedFile, char *db)
@@ -561,47 +740,63 @@ void orthoEvaluate(char *bedFile, char *db)
    3) Is in coding region.
 */
 {
-struct orhtoEval *evList = NULL, *ev = NULL;
+struct orthoEval *evList = NULL, *ev = NULL;
 struct intronEv *ivList = NULL, *iv = NULL;
 struct hash *posHash = newHash(12), *agxHash = newHash(12);
 char *htmlOutName= NULL, *bedOutName = NULL;
-FILE *htmlOut = NULL, *bedOut = NULL;
+char *htmlFrameName=NULL;
+FILE *htmlOut=NULL, *bedOut=NULL, *htmlFrameOut=NULL;
 struct bed *bed = NULL;
 int maxPicks = optionInt("numPicks", 100);
 int i=0;
 
 htmlOutName = optionVal("htmlFile", NULL);
 bedOutName = optionVal("bedOutFile", NULL);
+htmlFrameName = optionVal("htmlFrameFile", "frame.html");
 if(htmlOutName == NULL)
     errAbort("Please specify an htmlFile. Use -help for usage.");
 if(bedOutName == NULL)
     errAbort("Please specify an bedOutFile. Use -help for usage.");
 evList = scoreOrthoBeds(bedFile, db);
+warn("Creating intron records");
 for(ev = evList; ev != NULL; ev = ev->next)
     {
     for(i=0; i<ev->numIntrons; i++)
 	{
+	occassionalDot();
 	iv = intronIvForEv(ev, i);
 	slAddHead(&ivList, iv);
 	}
     }
-slSort(&ivList, intronEvalSort);
+warn("\nDone");
+warn("Sorting");
+slSort(&ivList, intronEvalCmp);
 htmlOut = mustOpen(htmlOutName, "w");
 bedOut = mustOpen(bedOutName, "w");
+htmlFrameOut = mustOpen(htmlFrameName, "w");
+writeOutFrames(htmlFrameOut, htmlOutName, db);
+fprintf(htmlOut, "<html><body><table border=1><tr><th>Mouse Acc.</th><th>Score</th></tr>\n");
+warn("Writing out");
 for(iv = ivList; iv != NULL && maxPicks > 0; iv = iv->next)
     {
     if(isUniqueCoordAndAgx(iv, posHash, agxHash))
 	{
 	bed = bedForIv(iv);
-	fprintf(htmlOut, "<tr><td><a href=\"http://mgc.cse.ucsc.edu/cgi-bin/hgTracks?db=hg15&position=%s:%d-%d\"> ",
-		"%s </a> %d</td></tr>", 
-		bed->chrom, bed->chromStart, bed->chromEnd, bed->name, iv->support);
+	fprintf(htmlOut, "<tr><td><a target=\"browser\" "
+		"href=\"http://mgc.cse.ucsc.edu/cgi-bin/hgTracks?db=hg15&position=%s:%d-%d\"> "
+		"%s </a></td><td>%d</td></tr>\n", 
+		bed->chrom, bed->chromStart-40, bed->chromEnd+50, bed->name, bed->score);
 	bedTabOutN(bed, 12, bedOut);
 	bedFree(&bed);
+	maxPicks--;
 	}
     }
+
+fprintf(htmlOut, "</table></body></html>\n");
 carefulClose(&bedOut);
 carefulClose(&htmlOut);
+carefulClose(&htmlFrameOut);
+warn("Done.");
 hashFree(&posHash);
 hashFree(&agxHash);
 }
@@ -611,6 +806,7 @@ int main(int argc, char *argv[])
 {
 char *db = NULL;
 char *bedFile = NULL;
+doHappyDots = isatty(1);  /* stdout */
 if(argc == 1)
     usage();
 optionInit(&argc, argv, optionSpecs);
