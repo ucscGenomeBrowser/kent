@@ -1628,6 +1628,7 @@ if (winEnd - winStart > 20000)
 else
     {
     struct mafAli *mafList, *maf;
+    int realCount = 0;
     char dbChrom[64];
     mafList = mafLoadInRegion(conn, tdb->tableName, seqName, winStart, winEnd);
     safef(dbChrom, sizeof(dbChrom), "%s.%s", database, seqName);
@@ -1639,8 +1640,11 @@ else
 	    {
 	    subset->score = mafScoreMultiz(subset);
 	    mafWrite(stdout, subset);
+	    ++realCount;
 	    }
 	}
+    if (realCount == 0)
+        printf("No multiple alignment in browser window");
     printf("</PRE></TT>");
     }
 }

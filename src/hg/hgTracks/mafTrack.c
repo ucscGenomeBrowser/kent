@@ -225,12 +225,13 @@ static void processScore(struct mafAli *maf, char *masterText,
 /* Make an array of colors to output corresponding to score. */
 {
 int textIx, outIx = 0;
-double maxScore = mafScoreMultizMaxCol(slCount(maf->components));
-double minScore = -maxScore;  /* Just an approximation. */
-double scoreScale = maxShade/(maxScore - minScore);
+double maxScore, minScore;
+double scoreScale;
 double score;
 int shade;
 
+mafColMinMaxScore(maf, &minScore, &maxScore);
+scoreScale = maxShade/(maxScore - minScore);
 memset(outLine, MG_WHITE, outSize);
 for (textIx = 0; textIx < maf->textSize; ++textIx)
     {
@@ -245,6 +246,7 @@ for (textIx = 0; textIx < maf->textSize; ++textIx)
 	}
     }
 }
+
 
 static void mafDrawBases(struct track *tg, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
@@ -303,11 +305,11 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 	int subStart,subEnd;
 	int lineOffset, subSize;
 	mcMaster = mafFindComponent(sub, dbChrom);
+	if (mcMaster->strand == '-')
+	    mafFlipStrand(sub);
 	subStart = mcMaster->start;
 	subEnd = subStart + mcMaster->size;
 	subSize = subEnd - subStart;
-	if (mcMaster->strand == '-')
-	    reverseIntRange(&subStart, &subEnd, mcMaster->srcSize);
 	lineOffset = subStart - seqStart;
 	for (mc = sub->components; mc != NULL; mc = mc->next)
 	    {
@@ -355,6 +357,186 @@ y += tg->lineHeight;
 hashFree(&miHash);
 }
 
+void mafFillInPixelScores(struct mafAli *maf, struct mafComp *mcMaster,
+	double *scores, int numScores)
+/* Calculate one score per pixel normalized to be between 0.0 and 1.0. */
+{
+int i,j;
+double score, minScore, maxScore, scoreScale;
+int textSize = maf->textSize;
+int masterSize = mcMaster->size;
+char *masterText = mcMaster->text;
+
+mafColMinMaxScore(maf, &minScore, &maxScore);
+scoreScale = 1.0/(maxScore - minScore);
+if (numScores >= masterSize)	 /* More pixels than bases */
+    {
+    int x1,x2;
+    int masterPos = 0;
+    for (i=0; i<textSize; ++i)
+        {
+	if (masterText[i] != '-')
+	    {
+	    score = mafScoreRangeMultiz(maf, i, 1);
+	    score = (score - minScore) * scoreScale;
+	    if (score < 0.0) score = 0.0;
+	    if (score > 1.0) score = 1.0;
+	    x1 = masterPos*numScores/masterSize;
+	    x2 = (masterPos+1)*numScores/masterSize;
+	    for (j=x1; j<x2; ++j)
+	        scores[j] = score;
+	    ++masterPos;
+	    }
+	}
+    }
+else	/* More bases than pixels. */
+    {
+    int b1=0,b2, deltaB, delta;
+    int t1=0,t2, deltaT;
+    for (i=0; i<numScores; ++i)
+        {
+	b2 = (i+1)*masterSize/numScores;
+	deltaB = b2 - b1;
+	for (t2 = t1; t2 < textSize; ++t2)
+	    {
+	    if (deltaB <= 0)
+		break;
+	    if (masterText[t2] != '-')
+		deltaB -= 1;
+	    }
+	deltaT = t2 - t1;
+	score = mafScoreRangeMultiz(maf, t1, deltaT)/(b2-b1);
+	score = (score - minScore) * scoreScale;
+	if (score < 0.0) score = 0.0;
+	if (score > 1.0) score = 1.0;
+	scores[i] = score;
+	b1 = b2;
+	t1 = t2;
+	}
+    }
+}
+
+static void mafDrawOverview(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw wiggle-plot based on overall maf scores rather than
+ * computing them for sections.  For this routine we don't
+ * need to actually load the mafs, it's sufficient to load
+ * the scoredRefs. */
+{
+char **row;
+unsigned int extFileId = 0;
+int rowOffset;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = hRangeQuery(conn, tg->mapName, chromName, 
+    seqStart, seqEnd, NULL, &rowOffset);
+double scale = scaleForPixels(width);
+int x1,x2,y,w;
+int height1 = tg->heightPer-1;
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct scoredRef ref;
+    scoredRefStaticLoad(row + rowOffset, &ref);
+    x1 = round((ref.chromStart - seqStart)*scale);
+    x2 = round((ref.chromEnd - seqStart)*scale);
+    w = x2-x1;
+    if (w < 1) w = 1;
+    if (vis == tvFull)
+	{
+	y = ref.score * height1;
+	vgBox(vg, x1 + xOff, yOff + height1 - y, 1, y+1, color);
+	}
+    else
+	{
+	int shade = ref.score * maxShade;
+	Color c = shadesOfGray[shade];
+	vgBox(vg, x1 + xOff, yOff, 1, tg->heightPer, c);
+	}
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
+static void mafDrawDetails(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw wiggle/density plot based on scoring things on the fly. 
+ * The */
+{
+int seqSize = seqEnd - seqStart;
+struct mafAli *mafList, *full, *sub = NULL, *maf = NULL;
+struct mafComp *mcMaster, mc;
+char dbChrom[64];
+struct sqlConnection *conn = hAllocConn();
+int height1 = tg->heightPer-1;
+
+safef(dbChrom, sizeof(dbChrom), "%s.%s", database, chromName);
+mafList = mafLoadInRegion(conn, tg->mapName, chromName, seqStart, seqEnd);
+for (full = mafList; full != NULL; full = full->next)
+    {
+    double scoreScale;
+    int mafStartOff;
+    int mafPixelStart, mafPixelEnd, mafPixelWidth;
+    int i;
+    double *pixelScores = NULL;
+    if (mafNeedSubset(full, dbChrom, seqStart, seqEnd))
+        sub = maf = mafSubset(full, dbChrom, seqStart, seqEnd);
+    else
+        maf = full;
+    if (maf != NULL)
+	{
+	mcMaster = mafFindComponent(maf, dbChrom);
+	if (mcMaster->strand == '-')
+	    mafFlipStrand(maf);
+	mafPixelStart = (mcMaster->start - seqStart) * width/winBaseCount;
+	mafPixelEnd = (mcMaster->start + mcMaster->size - seqStart) 
+	    * width/winBaseCount;
+	mafPixelWidth = mafPixelEnd-mafPixelStart;
+	if (mafPixelWidth < 1) mafPixelWidth = 1;
+	AllocArray(pixelScores, mafPixelWidth);
+	mafFillInPixelScores(maf, mcMaster, pixelScores, mafPixelWidth);
+	for (i=0; i<mafPixelWidth; ++i)
+	    {
+	    if (vis == tvFull)
+		{
+		int y = pixelScores[i] * height1;
+		vgBox(vg, i+mafPixelStart+xOff, yOff + height1 - y, 
+		    1, y+1, color);
+		}
+	    else
+	        {
+		int shade = pixelScores[i] * maxShade;
+		Color c = shadesOfGray[shade];
+		vgBox(vg, i+mafPixelStart+xOff, yOff, 
+		    1, tg->heightPer, c);
+		}
+	    }
+	}
+    mafAliFree(&sub);
+    }
+mafAliFreeList(&mafList);
+hFreeConn(&conn);
+}
+
+static void mafDrawGraphic(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw wiggle or density plot, not base-by-base. */
+{
+int seqSize = seqEnd - seqStart;
+if (seqSize >= 500000)
+    {
+    mafDrawOverview(tg, seqStart, seqEnd, vg, 
+    	xOff, yOff, width, font, color, vis);
+    }
+else
+    {
+    mafDrawDetails(tg, seqStart, seqEnd, vg, 
+	xOff, yOff, width, font, color, vis);
+    }
+}
+
 static void mafDraw(struct track *tg, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
@@ -364,6 +546,8 @@ static void mafDraw(struct track *tg, int seqStart, int seqEnd,
 enum mafState display = tg->customInt;
 if (display == mafBases)
     mafDrawBases(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
+else 
+    mafDrawGraphic(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
 mapBoxHc(seqStart, seqEnd, xOff, yOff, width, tg->height, tg->mapName, 
     tg->mapName, NULL);
 }

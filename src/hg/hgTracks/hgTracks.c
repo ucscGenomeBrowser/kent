@@ -237,7 +237,7 @@ va_start(args, format);
 hWrites("\n<!-- DEBUG: ");
 hvPrintf(format, args);
 hWrites(" -->\n");
-//fflush(stdout); /* USED ONLY FOR DEBUGGING BECAUSE THIS IS SLOW - MATT */
+fflush(stdout); /* USED ONLY FOR DEBUGGING BECAUSE THIS IS SLOW - MATT */
 va_end(args);
 }
 
@@ -1495,7 +1495,6 @@ int bin;
 double y1;
 bin = -whichSampleBin( where, min0, max0, binCount);
 y1 = (int)((double)y+((double)bin)*hFactor+(double)heightPer);
-printHtmlComment("drawWiggleHorizontalLine %d %f", bin, y1);
 vgBox( vg, 0, y1, vg->width, 1, lineColor );
 }
 
@@ -1623,7 +1622,6 @@ if( sameString( tg->mapName, "humMusL" )
 
     if( isFull )
 	{
-	printHtmlComment("doingWiggleLine horizontal on %s", tg->mapName);
 	for( i=1; i<=6; i++ )
 	    drawWiggleHorizontalLine( vg, (double)i, min0, max0,
 		binCount, y, hFactor, heightPer, gridColor );
@@ -10606,7 +10604,6 @@ winBaseCount = winEnd - winStart;
 if (winBaseCount <= 0)
     errAbort("Window out of range on %s", chromName);
 /* Save computed position in cart. */
-printHtmlComment("zoomedToBaseLevel = %d\n", zoomedToBaseLevel);
 sprintf(newPos, "%s:%d-%d", chromName, winStart+1, winEnd);
 cartSetString(cart, "position", newPos);
 if (cgiVarExists("hgt.psOutput"))
