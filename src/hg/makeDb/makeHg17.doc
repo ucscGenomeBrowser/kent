@@ -10896,6 +10896,68 @@ end
 # Perform preliminary review of Proteome Browser for hg17, then
   notify QA for formal review.
 
+####  Blat knownGene proteins to determine exons  (braney DONE 12/11/04)
+    ssh hgwdev
+    cd /cluster/data/hg17/bed
+    mkdir blat.hg17KG.2004-12-08
+    rm blat.hg17KG
+    ln -s  blat.hg17KG.2014-12-08 blat.hg17KG
+    cd blat.hg17KG
+    pepPredToFa hg17 knownGenePep known.fa
+    hgPepPred hg17 generic blastKGPep01 known.fa
+    grep ">" known.fa | sed "s/>//" > kgName.lst
+    ssh kk
+    cd /cluster/data/hg17/bed/blat.hg17KG
+    cat << '_EOF_' > blatSome
+#!/bin/csh -fe
+/cluster/bin/i386/blat -t=dnax -q=prot -out=pslx $1 $2 $3
+'_EOF_'
+    cat << '_EOF_' > blatGsub
+#LOOP
+blatSome $(path1) {check in line $(path2)} {check out line psl/$(root1)/$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs happy
+    chmod +x blatSome
+    ls -1S /scratch/hg/gs.18/build35/bothMaskedNibs/*.nib > human.lst
+    mkdir kgfa
+    cd kgfa
+    faSplit sequence ../known.fa 3010 kg
+    cd ..
+    ls -1S kgfa/*.fa > kg.lst
+    gensub2 human.lst kg.lst blatGsub blatSpec
+    mkdir psl
+    cd psl
+    foreach i (`cat ../human.lst`)
+	mkdir `basename $i .nib`
+    end
+    cd ..
+    para create blatSpec
+    para push
+
+# Completed: 134130 of 134136 jobs
+# Crashed: 6 jobs
+# CPU time in finished jobs:   29801114s  496685.23m  8278.09h  344.92d  0.945 y
+# IO & Wait Time:               1983513s   33058.55m   550.98h   22.96d  0.063 y
+# Average job time:                 237s       3.95m     0.07h    0.00d
+# Longest job:                    63306s    1055.10m    17.59h    0.73d
+# Submission to last job:        169384s    2823.07m    47.05h    1.96d
+
+# did 6 crashed jobs on small cluster
+    ssh eieio
+    cd /cluster/data/hg17/bed/blat.hg17KG
+    pslSort dirs raw.psl /tmp psl/*
+    pslReps -nohead -minCover=0.9 -minAli=0.9 raw.psl cooked.psl /dev/null
+    pslUniq cooked.psl hg17KG.psl
+    pslxToFa hg17KG.psl hg17KG_ex.fa -liftTarget=genome.lft -liftQuery=protein.lft
+    kgName hg17 hg17KG.psl blastKGRef01
+
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blat.hg17KG
+    hgsql hg17 < ~/kent/src/hg/lib/blastRef.sql
+    echo "rename table blastRef to blastKGRef01" | hgsql hg17
+    echo "load data local infile 'blastKGRef01' into table blastKGRef01" | hgsql hg17
+
 #### TIGR GENE INDEX (DONE 2004-12-04 Fan)
     mkdir -p /cluster/data/hg17/bed/tigr
     cd /cluster/data/hg17/bed/tigr
