@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.12 2003/09/25 01:06:04 kent Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.13 2003/09/26 07:36:33 kent Exp $";
 
 struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -127,9 +127,9 @@ cartRemovePrefix(cart, keyWordUploadPrefix);
 hPrintf("<H2>Upload List : %s - %s</H2>\n", col->shortLabel, col->longLabel);
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST ENCTYPE=\"multipart/form-data\">\n");
 cartSaveSession(cart);
-hPrintf("Please enter the name of a file in your computer containing a space");
+hPrintf("Please enter the name of a file from your computer that contains a space,");
 hPrintf("tab, or ");
-hPrintf("line separated list of the item want to include.<BR>");
+hPrintf("line separated list of the items you want to include.<BR>");
 
 varName = colVarName(col, keyWordPastedPrefix);
 hPrintf("<INPUT TYPE=FILE NAME=\"%s\"> ", varName);
@@ -327,10 +327,13 @@ for (onOff = 1; onOff >= 0; --onOff)
 		col->filterControls(col, conn);
 		hPrintf("</TD></TR>");
 		hPrintf("</TABLE>");
+		hPrintf("<BR>");
 		hPrintf("</TD></TR>");
 		}
 	    }
 	hPrintf("</TABLE>\n");
+	hPrintf("<BR>");
+	cgiMakeButton(advFilterBrowseVarName, "Submit");
 	}
     }
 hPrintf("</FORM>\n");
