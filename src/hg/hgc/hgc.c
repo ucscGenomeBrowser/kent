@@ -4226,6 +4226,27 @@ slReverse(&bedList);
 return bedList;
 }
 
+struct bed * loadMsBedAll(char *table)
+/* load every thing from a bed 15 table */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+struct bed *bedList = NULL, *bed;
+char query[512];
+sprintf(query, "select * from %s", table); 
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    bed = bedLoadN(row, 15);
+    slAddHead(&bedList, bed);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&bedList);
+return bedList;
+}
+
 struct expRecord * loadExpRecord(char *table, char *database)
 /* load everything from an expRecord table in the
    specified database, usually hgFixed instead of hg7, hg8, etc. */
@@ -4237,6 +4258,63 @@ snprintf(query, sizeof(query), "select * from %s", table);
 erList = expRecordLoadByQuery(conn, query);
 sqlDisconnect(&conn);
 return erList;
+}
+
+void msBedGetExpDetailsLink(char *expName, struct trackDb *tdb, char *expTable)
+/* Create link to download data from a MsBed track */
+{
+char *msBedTable = tdb->tableName;
+
+printf("<H3>Download raw data for experiments:</H3>\n");
+printf("<UL>\n");
+hgcAnchorSomewhere("getMsBedAll", expTable, msBedTable, seqName);
+printf("<LI>All data</A>\n");
+hgcAnchorSomewhere("getMsBedRange", expTable, msBedTable, seqName);
+printf("<LI>Data in range</A>\n");
+printf("</UL>\n");
+}
+
+void getMsBedExpDetails(struct trackDb *tdb, char *expName, boolean all)
+/* Create tab-delimited output to download */
+{
+char *expTable = cartString(cart, "i");
+char *bedTable = cartString(cart, "o");
+struct expRecord *er, *erList=NULL;
+struct bed *b, *bedList=NULL;
+char line[1024];
+int i;
+
+/* Get all of the expression record details */
+erList = loadExpRecord(expTable, "hgFixed");
+
+/* Get either all of the data, or only that data in the range */
+if (all) 
+    bedList = loadMsBedAll(bedTable);
+else 
+    bedList = loadMsBed(bedTable, seqName, winStart, winEnd); 
+
+/* Print out a header row */
+printf("<HTML><BODY><PRE>\n");
+printf("Name\tChr\tChrStart\tChrEnd");
+for (er = erList; er != NULL; er = er->next)
+    if (sameString(bedTable, "cghNci60"))
+	printf("\t%s(%s)",er->name, er->extras[1]);
+    else 
+	printf("\t%s",er->name);
+printf("\n");
+
+/* Print out a row for each of the record in the bedList */
+for (b = bedList; b != NULL; b = b->next)
+    {
+    printf("%s\t%s\t%d\t%d",b->name, b->chrom, b->chromStart, b->chromEnd);
+    for (i = 0; i < b->expCount; i++)
+	if (i == b->expIds[i])
+	    printf("\t%f",b->expScores[i]);
+	else
+	    printf("\t");
+    printf("\n");
+    }
+printf("</PRE>");
 }
 
 struct bed *rosettaFilterByExonType(struct bed *bedList)
@@ -4538,6 +4616,8 @@ bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
 genericHeader(tdb, itemName);
 
 printf("%s", tdb->html);
+printf("<br><br>");
+msBedGetExpDetailsLink(expName, tdb, tableName);
 printf("<br><br>");
 if(bedList == NULL)
     printf("<b>No CGH Data in this Range.</b>\n");
@@ -5086,6 +5166,14 @@ else if (sameWord(track, "htcDnaNearGene"))
    {
    htcDnaNearGene(item);
    }
+else if (sameWord(track, "getMsBedAll"))
+    {
+    getMsBedExpDetails(tdb, item, TRUE);
+    }
+else if (sameWord(track, "getMsBedRange"))
+    {
+    getMsBedExpDetails(tdb, item, FALSE);
+    }
 else if (sameWord(track, "cghNci60"))
     {
     cghNci60Details(tdb, item);
