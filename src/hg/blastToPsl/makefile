@@ -27,7 +27,7 @@ my: compile scoreSort blast0To8 pslUniq pslChain
 	mv pslChain $(BINDIR)
 
 pslChain: pslChain.o
-	${CC} -static pslChain.o ${F64} ${MYLIBS} ${L} 
+	${CC} pslChain.o ${F64} ${MYLIBS} ${L} 
 	mv a.out pslChain
 vegaBuildInfo: vegaBuildInfo.o
 	${CC} vegaBuildInfo.o ${F64} ${MYLIBS} ${L} 
@@ -36,7 +36,7 @@ pslUniq: pslUniq.o
 	${CC} pslUniq.o ${F64} ${MYLIBS} ${L} 
 	mv a.out pslUniq
 blast0ToPsl: blast0ToPsl.o
-	${CC} -static blast0ToPsl.o ${F64} ${MYLIBS} ${L} 
+	${CC} blast0ToPsl.o ${F64} ${MYLIBS} ${L} 
 	mv a.out blast0ToPsl
 tryToPsl: tryToPsl.o
 	${CC} tryToPsl.o ${F64} ${MYLIBS} ${L} 
