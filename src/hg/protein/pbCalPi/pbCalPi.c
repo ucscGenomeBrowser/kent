@@ -8,7 +8,7 @@ void usage()
 errAbort(
   "pbCalPi - Calculate pI values from a list of protein IDs \n"
   "usage:\n"
-  "   pbCalPi listFile protDb outFile\n"
+  "   pbCalPi listFile spDb outFile\n"
   "      listFile is the input  file name of list of protein accession numbers\n"
   "      spDb     is the swissprot database name\n"
   "      outFile  is the output file name of tab delineated file of protein accession number and pI value\n"
@@ -162,10 +162,8 @@ if ((inf = fopen(infName, "r")) == NULL)
 outf1 = mustOpen(outfName, "w");
 conn  = hAllocConn();
 
-while (1)
+while ((inLine = fgets(line, 1000, inf)) != NULL)
     {
-    inLine = fgets(line, 1000, inf);
-    if (inLine == NULL)break;
     *(inLine+strlen(inLine)-1) = '\0';
 
     acc = inLine;
