@@ -1335,7 +1335,7 @@ printf("<BR>\n");
 chainWinSize = min(winEnd-winStart, chain.tEnd - chain.tStart);
 if (chainWinSize < 1000000)
     {
-    hgcAnchorSomewhere("htcChainAli", item, "o", chain.tName);
+    hgcAnchorSomewhere("htcChainAli", item, track, chain.tName);
     printf("View details of parts of chain within browser window.</A><BR>\n");
     }
 else
@@ -1385,7 +1385,7 @@ return nibLoadPart(nibFile, start, end - start);
 }
 
 void genericNetClick(struct sqlConnection *conn, struct trackDb *tdb, 
-	char *item, int start, char *otherDb)
+	char *item, int start, char *otherDb, char *chainTrack)
 /* Generic click handler for net tracks. */
 {
 char table[64];
@@ -1456,7 +1456,7 @@ if (net.chainId != 0)
 	    {
 	    char id[20];
 	    snprintf(id, sizeof(id), "%d", net.chainId);
-	    hgcAnchorWindow("htcChainAli", id, ns, ne, "o", seqName);
+	    hgcAnchorWindow("htcChainAli", id, ns, ne, chainTrack, seqName);
 	    printf("View details of parts of net within browser window.</A><BR>\n");
 	    }
 	else
@@ -1527,14 +1527,14 @@ if (wordCount > 0)
 	}
     else if (sameString(type, "netAlign"))
         {
-	if (wordCount < 2)
-	    errAbort("Missing other database field in netAlign track type field");
-	genericNetClick(conn, tdb, item, start, words[1]);
+	if (wordCount < 3)
+	    errAbort("Missing field in netAlign track type field");
+	genericNetClick(conn, tdb, item, start, words[1], words[2]);
 	}
     else if (sameString(type, "chain"))
         {
 	if (wordCount < 2)
-	    errAbort("Missing other database field in chain track type field");
+	    errAbort("Missing field in chain track type field");
 	genericChainClick(conn, tdb, item, start, words[1]);
 	}
 
@@ -3040,6 +3040,7 @@ dna = cloneString(dnaSeq->dna);
 if (qName == NULL) 
     qName = psl->qName;
 
+
 fprintf(f, "<H4><A NAME=cDNA></A>%s%s</H4>\n", qName, (qIsRc  ? " (reverse complemented)" : ""));
 fprintf(f, "<PRE><TT>");
 tolowers(oLetters);
@@ -3389,7 +3390,7 @@ void htcChainAli(char *item)
 struct chain *chain;
 struct psl *fatPsl, *psl = NULL;
 int id = atoi(item);
-char *track = cartString(cart, "table");
+char *track = cartString(cart, "o");
 char *type = trackTypeInfo(track);
 char *typeWords[2];
 char *otherDb, *org, *otherOrg;
@@ -3412,7 +3413,9 @@ if (chain->blockList == NULL)
     return;
     }
 fatPsl = chainToPsl(chain);
+
 chainFree(&chain);
+
 psl = pslTrimToTargetRange(fatPsl, winStart, winEnd);
 pslFree(&fatPsl);
 
@@ -3422,7 +3425,7 @@ puts("<HTML>");
 sprintf(name, "%s.%s", otherOrg, psl->qName);
 printf("<HEAD>\n<TITLE>%s %s vs %s %s </TITLE>\n</HEAD>\n\n", 
 	otherOrg, psl->qName, org, psl->tName );
-showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->tEnd, name);
+showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name);
 }
 
 
@@ -9922,7 +9925,6 @@ else if (containsStringNoCase(track, "blastzStrictChain")
     strcpy(&dbName[3], orgName);
     len = strlen(orgName);
     strcpy(&dbName[3 + len], "3");
-//    uglyf("DBNAME: %s, ORGNAME: %s, ITEM: %s\n", dbName, orgName, item);
     longXenoPsl1(tdb, item, orgName, "chromInfo", dbName);
     }
 else if (sameWord(track, "blatChimp"))
