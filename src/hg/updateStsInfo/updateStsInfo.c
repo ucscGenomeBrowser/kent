@@ -62,6 +62,7 @@ struct hash *nameHash;
 struct hash *dbStsIdHash;
 struct hash *gbAccHash;
 struct hash *ucscIdHash;
+struct hash *orgHash;
 
 struct stsInfo2 *siList = NULL;
 
@@ -171,7 +172,7 @@ void addElementInt(unsigned el, unsigned **array, int *count)
   sprintf(arrayNew, "%s%d,", arrayCurr, el);
   size++;
   dArray = array;
-  if (*dArray)
+  if (*count > 0)
     freeMem(dArray);
   sqlUnsignedDynamicArray(arrayNew, &uArray, &sizeOne);
   assert(sizeOne == size);
@@ -242,6 +243,7 @@ void readStsInfo(struct lineFile *sif)
       /* Determine next ucsc id to be used */
       if (si->identNo >= nextUcscId)
 	nextUcscId = si->identNo + 1;
+
       /* Create sts struct */
       if (sameString(si->organism, "Homo sapiens\0"))
 	{
@@ -268,13 +270,13 @@ void readStsInfo(struct lineFile *sif)
 	  for (i = 0; i < si->otherDbstsCount; i++)
 	    {
 	      sprintf(name, "%d", si->otherDbSTS[i]);
-	      hashAdd(ucscIdHash, name, s);
+	      if (!hashLookup(ucscIdHash, name))
+		hashAdd(ucscIdHash, name, s);
 	    }
 	  
 	  /* Add names to name hash and genbank hash */
 	  hashAdd(nameHash, si->name, s);
-      
-	  for (i = 0; i < si->gbCount; i++) 
+      	  for (i = 0; i < si->gbCount; i++) 
 	    {
 	      hashAdd(nameHash, si->genbank[i], s);
 	      AllocVar(gb);
@@ -289,16 +291,19 @@ void readStsInfo(struct lineFile *sif)
 	  for (i = 0; i < si->nameCount; i++) 
 	    hashAdd(nameHash, si->otherNames[i], s);
 	  
-	  /* Create primer info and add to hash */
-	  AllocVar(p);
-	  p->next = NULL;
-	  p->dbStsId = si->dbSTSid;
-	  p->left = cloneString(si->leftPrimer);
-	  p->right = cloneString(si->rightPrimer);
-	  p->dist = cloneString(si->distance);
-	  p->ucscId = si->identNo;
-	  sprintf(name, "%d", p->dbStsId);
-	  hashAdd(primerHash, name, p);
+	  /* Create primer info if available and add to hash */
+	  if (differentString(si->leftPrimer, "\0"))
+	    {
+	      AllocVar(p);
+	      p->next = NULL;
+	      p->dbStsId = si->dbSTSid;
+	      p->left = cloneString(si->leftPrimer);
+	      p->right = cloneString(si->rightPrimer);
+	      p->dist = cloneString(si->distance);
+	      p->ucscId = si->identNo;
+	      sprintf(name, "%d", p->dbStsId);
+	      hashAdd(primerHash, name, p);
+	    }
 	}
     }
 }
@@ -335,35 +340,175 @@ void readGbAcc(struct lineFile *gaf)
     }
 }
 
+void updatePrimerInfo(struct primer *p, struct sts *s)
+/* Update primer information for an STS marker from a primer record */
+{
+  s->si->dbSTSid = p->dbStsId;
+  s->si->leftPrimer = cloneString(p->left);
+  s->si->rightPrimer = cloneString(p->right);
+  s->si->distance = cloneString(p->dist);
+  s->dbstsIdExists = TRUE;
+  p->ucscId = s->si->identNo;
+}
+
+void readDbstsPrimers(struct lineFile *dsf)
+/* Read in primer and organism info from dbSTS.sts */
+{
+  struct primer *p;
+  struct sts *s;
+  char *words[8], *name, *org;
+  int dbStsId, newId;
+
+  orgHash = newHash(20);
+
+  while (lineFileChopNextTab(dsf, words, 8))
+    {
+      /* Check that the organism is human, or at least that a human record 
+	 has not already been read in for this dbSTS id */
+      org = cloneString(words[7]);
+      if (!hashLookup(orgHash, words[0]) || (sameString(org, "Homo sapiens\0")))
+	hashAdd(orgHash, words[0], org);
+      /* If not human, then don't process any further */
+      if (differentString(org, "Homo sapiens\0"))
+	continue;
+
+      /* See if this dbSTS id is currently in use by a STS marker */
+      dbStsId = sqlUnsigned(words[0]);
+      if (hashLookup(ucscIdHash, words[0]))
+	s = hashMustFindVal(ucscIdHash, words[0]);
+      else
+	s = NULL;
+      /* See if primers already recorded for this dbSTS id from STS Info file */
+      if (hashLookup(primerHash, words[0]))
+	{
+	  p = hashMustFindVal(primerHash, words[0]);
+	  /* If STS marker not mapped, update primer information */
+	  if (s == NULL && !s->mapped)
+	    {
+	      freez(&(p->left));
+	      p->left = cloneString(words[1]);
+	      freez(&(p->right));
+	      p->left = cloneString(words[2]);
+	      freez(&(p->dist));
+	      p->left = cloneString(words[3]);
+	    }
+	}
+      /* If no record of this primer, create one */
+      else
+	{
+	  AllocVar(p);
+	  p->next = NULL;
+	  p->dbStsId = dbStsId;
+	  p->left = cloneString(words[1]);
+	  p->right = cloneString(words[2]);
+	  p->dist = cloneString(words[3]);
+	  if (s != NULL)
+	    p->ucscId = s->si->identNo;
+	  else
+	    p->ucscId = 0;
+	  name = cloneString(words[0]);
+	  hashAdd(primerHash, name, p);
+	}
+      /* If dbSTS id linked to a STS marker already */
+      if (s != NULL)
+	{
+	  /* If linked to ucsc record and record not mapped or doesn't have primer information,
+	     update primer info */
+	  if (((!s->mapped) || (sameString(s->si->leftPrimer, "\0"))) && (s->si->dbSTSid == dbStsId))
+	    updatePrimerInfo(p, s);
+	}
+      /* If not linked to a ucsc record and human, check if the name is already in use */
+      else if ((sameString(org, "Homo sapiens\0")) && (hashLookup(nameHash, words[4])))
+	    {
+	      s = hashMustFindVal(nameHash, words[4]);
+
+	      /* Update the marker record with the dbSTS id and primer info if none exists */
+	      if ((s->si->dbSTSid == 0) || (s->si->dbSTSid >= 1000000) || 
+		  (sameString(s->si->leftPrimer, "\0")))
+		updatePrimerInfo(p, s);
+	      /* If the record is already linked to another dbSTS id, add this to other list */
+	      else 
+		{
+		  newId = sqlUnsigned(words[0]);
+		  addElementInt(newId, &s->si->otherDbSTS, &s->si->otherDbstsCount);
+		}
+	      hashAdd(ucscIdHash, words[0], s);
+	    }
+    }
+}
+
 void readDbstsNames(struct lineFile *daf)
 /* Read in dbSTS names and create new stsInfo record, if necessary */
 {
   struct sts *s, *s2;
   struct stsInfo2 *si;
   struct primer *p;
-  char *words[4], *names[32], prefix[0], name[16];
+  char *words[4], *names[32], prefix[0], name[16], *org;
   int dbstsId, ucscId, nameCount, i;
 
   while (lineFileChopNext(daf, words, 2))
     {
+      /* Make sure this is a human marker */
+      org = hashFindVal(orgHash, words[0]);
+      if (hashLookup(orgHash, words[0]) && !sameString(org, "Homo sapiens\0") && !sameString(org, "\0"))
+	  continue;
       dbstsId = sqlUnsigned(words[0]);
+      /* Find the primers for this dbSTS id */
+      if (hashLookup(primerHash, words[0])) 
+	p = hashMustFindVal(primerHash, words[0]);
       /* Determine if this id is already being used */
       if (hashLookup(ucscIdHash, words[0]))
 	s = hashMustFindVal(ucscIdHash, words[0]);
       else
 	s = NULL;
+      /* If the id has not been assigned, see any of the names are being used */
+      if (s == NULL) 
+	{
+	  nameCount = chopByChar(words[1], ';', names, ArraySize(names));
+	  for (i = 0; i < nameCount; i++) 
+	    {
+	      touppers(names[i]);
+	      /* See if this name associated with a ucsc record already */
+	      if (hashLookup(nameHash, names[i]))
+		{
+		  s = hashMustFindVal(nameHash, names[i]);
+		  /* See if this record needs an dbSTS id */
+		  if ((s->si->dbSTSid == 0) || (s->si->dbSTSid >= 1000000) ||  
+		      (sameString(s->si->leftPrimer, "\0")))
+		    {
+		      s->si->dbSTSid = dbstsId;
+		      /* If no primer info recorded, add it if possible */
+		      if (((!s->mapped) || (sameString(s->si->leftPrimer, "\0")))
+			  && (hashLookup(primerHash, words[0])))
+			{
+			  p = hashMustFindVal(primerHash, words[0]);
+			  s->si->leftPrimer = cloneString(p->left);
+			  s->si->rightPrimer = cloneString(p->right);
+			  s->si->distance = cloneString(p->dist);
+			}
+		      i = nameCount;
+		    }
+		  else
+		      addElementInt(dbstsId, &s->si->otherDbSTS, &s->si->otherDbstsCount);
+		}
+	    }
+	}
       if (s != NULL)
 	{
 	  /* Determine if all of the names are recorded */
-	  s->dbstsIdExists = TRUE;
+	  if (s->si->dbSTSid == dbstsId)
+	    s->dbstsIdExists = TRUE;
 	  nameCount = chopByChar(words[1], ';', names, ArraySize(names));
 	  for (i = 0; i < nameCount; i++) 
+	    {
+	      touppers(names[i]);
 	      if (!hashLookup(nameHash, names[i]))
 		{
 		  subChar(names[i],',',':');
 		  addName(s, names[i]);
 		  hashAdd(nameHash, names[i], s);
 		}
+	    }
 	}
       else
 	{
@@ -385,28 +530,36 @@ void readDbstsNames(struct lineFile *daf)
 	      si->next = NULL;
 	      si->identNo = nextUcscId;
 	      nextUcscId++;
-	      si->gbCount = 0;
-	      si->gdbCount = 0;
-	      si->nameCount = 0;
+	      touppers(names[0]);
 	      si->name = cloneString(names[0]);
+	      si->gbCount = 0;
+	      si->genbank = NULL;
+	      si->gdbCount = 0;
+	      si->gdb = NULL;
+	      si->nameCount = 0;
+	      si->otherNames = NULL;
 	      if (checkGb(names[0]) || checkGdb(names[0]))
 		addName(s, names[0]);
 	      hashAdd(nameHash, names[0], s);
 	      for (i = 1; i < nameCount; i++) 
 		{
 		  subChar(names[i], ',', ':');
+		  touppers(names[i]);
 		  addName(s, names[i]);
 		  hashAdd(nameHash, names[i], s);
 		}
 	      si->dbSTSid = dbstsId;
+	      si->otherDbstsCount = 0;
+	      si->otherDbSTS = NULL;
 	      si->leftPrimer = cloneString(p->left);
 	      si->rightPrimer = cloneString(p->right);
 	      si->distance = cloneString(p->dist);
-	      si->otherDbstsCount = 0;
 	      si->organism = cloneString("Homo sapiens");
 	      si->sequence = 0;
 	      si->otherUCSCcount = 0;
+	      si->otherUCSC = NULL;
 	      si->mergeUCSCcount = 0;
+	      si->mergeUCSC = NULL;
 	      si->genethonName = cloneString("");
 	      si->genethonChr = cloneString("");
 	      si->marshfieldName = cloneString("");
@@ -435,83 +588,7 @@ void readDbstsNames(struct lineFile *daf)
 				 
 }
 
-void readDbstsPrimers(struct lineFile *dsf)
-/* Read in primer and organism info from dbSTS.sts */
-{
-  struct primer *p;
-  struct sts *s;
-  char *words[8], *name;
-  int dbStsId, newId;
-
-  while (lineFileChopNextTab(dsf, words, 8))
-    {
-      dbStsId = sqlUnsigned(words[0]);
-      if (hashLookup(ucscIdHash, words[0]))
-	s = hashMustFindVal(ucscIdHash, words[0]);
-      else
-	s = NULL;
-      if (hashLookup(primerHash, words[0]))
-	p = hashMustFindVal(primerHash, words[0]);
-      else
-	p = NULL;
-      /* If primer record already recorded */
-      if (p != NULL)
-	{
-	  /* If linked to ucsc record and record not mapped */
-	  if ((s != NULL) && (!s->mapped) && (s->si->dbSTSid == dbStsId))
-	    {
-	      freez(&(p->left));
-	      p->left = cloneString(words[1]);
-	      freez(&(p->right));
-	      p->left = cloneString(words[2]);
-	      freez(&(p->dist));
-	      p->left = cloneString(words[3]);
-	    }
-	}
-      else if ((s == NULL) && (sameString(words[7], "Homo sapiens\0")) && (hashLookup(nameHash, words[4])))
-	    {
-	      s = hashMustFindVal(nameHash, words[4]);
-
-	      AllocVar(p);
-	      p->next = NULL;
-	      p->dbStsId = dbStsId;
-	      p->left = cloneString(words[1]);
-	      p->right = cloneString(words[2]);
-	      p->dist = cloneString(words[3]);
-	      p->ucscId = s->si->identNo;
-	      hashAdd(primerHash, words[0], p);
-
-	      if (s->si->dbSTSid == 0)
-		{
-		  s->si->dbSTSid = dbStsId;
-		  s->si->leftPrimer = cloneString(p->left);
-		  s->si->rightPrimer = cloneString(p->right);
-		  s->si->distance = cloneString(p->dist);
-		  s->dbstsIdExists = TRUE;
-		}
-	      else 
-		{
-		  newId = sqlUnsigned(words[0]);
-		  addElementInt(newId, &s->si->otherDbSTS, &s->si->otherDbstsCount);
-		}
-	      hashAdd(ucscIdHash, words[0], s);
-	    }
-      else if ((s == NULL) && (sameString(words[7], "Homo sapiens\0")))
-	{
-	  AllocVar(p);
-	  p->next = NULL;
-	  p->dbStsId = dbStsId;
-	  p->left = cloneString(words[1]);
-	  p->right = cloneString(words[2]);
-	  p->dist = cloneString(words[3]);
-	  p->ucscId = 0;
-	  name = cloneString(words[0]);
-	  hashAdd(primerHash, name, p);
-	}
-    }
-}
-
-void writeOut(FILE *of, FILE *opf, FILE *off)
+void writeOut(FILE *of, FILE *opf, FILE *oaf, FILE *off)
 /* Write out update files for info, primers, and sequences */
 {
   struct sts *s;
@@ -560,18 +637,37 @@ void writeOut(FILE *of, FILE *opf, FILE *off)
 	  fprintf(of, "\t%s\t%s\t%.2f\t%.2f\n", si->decodeName, si->decodeChr,
 		  si->decodePos, si->decodeLOD);
 	  
-	  /*stsInfo2TabOut(s->si, of);*/
-	  if (differentString(s->si->leftPrimer, "\0"))
-	    fprintf(opf, "%d\t%s\t%s\t%s\t%d\n", s->si->dbSTSid, s->si->leftPrimer,
-		    s->si->rightPrimer, s->si->distance, s->si->identNo);
+	  /* Write out to primers file */
+	  if (differentString(si->leftPrimer, "\0"))
+	    fprintf(opf, "%d\t%s\t%s\t%s\t%d\n", si->dbSTSid, si->leftPrimer,
+		    si->rightPrimer, si->distance, si->identNo);
+
+	  /* Write out to alias file */
+	  fprintf(oaf, "%s\t%d\t%s\n", si->name, si->identNo, si->name);
+	  for (i = 0; i < si->gbCount; i++) 
+	    if (differentString(si->genbank[i], si->name))
+	      fprintf(oaf, "%s\t%d\t%s\n", si->genbank[i], si->identNo, si->name);
+	  for (i = 0; i < si->gdbCount; i++) 
+	    if (differentString(si->gdb[i], si->name))
+	      fprintf(oaf, "%s\t%d\t%s\n", si->gdb[i], si->identNo, si->name);
+	  for (i = 0; i < si->nameCount; i++) 
+	    if (differentString(si->otherNames[i], si->name))
+	      fprintf(oaf, "%s\t%d\t%s\n", si->otherNames[i], si->identNo, si->name);
+	  
+
+	  /* Write out to fa file */
+
+
 	}
+      else
+	verbose(1, "%d\t%s\t%d\t(%d) not in dbSTS anymore\n", si->identNo, si->name, si->dbSTSid, s->dbstsIdExists);
     }
 }
 
 int main(int argc, char *argv[])
 {
   struct lineFile *sif, *asf, *dsf, *daf, *dff, *gbf;
-  FILE *of, *opf, *off;
+  FILE *of, *opf, *oaf, *off;
   char filename[256], *gbName;
   int verb = 0;
 
@@ -598,6 +694,8 @@ verboseSetLevel(verb);
  of = mustOpen(filename, "w");
  sprintf(filename, "%s.primers", argv[6]);
  opf = mustOpen(filename, "w");
+ sprintf(filename, "%s.alias", argv[6]);
+ oaf = mustOpen(filename, "w");
  sprintf(filename, "%s.fa", argv[6]);
  off = mustOpen(filename, "w");
 
@@ -621,7 +719,8 @@ verboseSetLevel(verb);
  readDbstsNames(daf);
 
  /* Print out the new files */
- writeOut(of, opf, off);
+ verbose(1, "Creating output files\n");
+ writeOut(of, opf, oaf, off);
 
  lineFileClose(&asf);
  lineFileClose(&dsf);
@@ -631,6 +730,7 @@ verboseSetLevel(verb);
    lineFileClose(&gbf);   
  fclose(of);
  fclose(opf);
+ fclose(oaf);
  fclose(off);
 
  return(0);
