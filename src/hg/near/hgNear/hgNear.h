@@ -190,6 +190,9 @@ struct order
     char *queryOne;		/* SQL to query on one gene. */
     char *queryAll;		/* SQL to query on all genes. */
     boolean protKey;		/* Use protein rather than mRNA ids. */
+
+    /* Group tables. */
+    char *groupField;		/* Group field in group table. */
     };
 
 struct order *orderGetAll(struct sqlConnection *conn);
