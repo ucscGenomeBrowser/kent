@@ -1617,7 +1617,7 @@ maxRange = whichSampleBin( maxRangeCutoff, tg->minRange, tg->maxRange, binCount 
 
 if( sameString( tg->mapName, "humMusL" ) 
 	|| sameString( tg->mapName, "musHumL" )  
-	|| sameString( tg->mapName, "regPotential" )
+	|| sameString( tg->mapName, "regpotent" )
 	|| sameString( tg->mapName, "olly25")
 	|| sameString( tg->mapName, "olly2")
 	)
@@ -1693,14 +1693,12 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	    }
 
 	/* Draw the points themselves*/
-	if (wiggleType != wiggleLinearInterpolation)
-	    {
-	    drawScaledBox(vg, sampleX, sampleX+1, scale, 
-	    	xOff, (int)y1-1, 3, color);
-	    if( fill )
+	drawScaledBox(vg, sampleX, sampleX+1, scale, 
+		xOff, (int)y1-1, 3, color);
+	if( fill )
 		drawScaledBox(vg, sampleX, sampleX+1, scale, xOff, (int)y1+2, 
-		    ybase-y1-2, bColor);
-	    }
+	    			ybase-y1-2, bColor);
+
 	prevX = gapPrevX = sampleX;
 	prevY = y1;
 	}
@@ -8773,7 +8771,7 @@ if (withLeftLabels)
 	
     	if( sameString( track->mapName, "humMusL" ) ||
 		 sameString( track->mapName, "musHumL" ) ||
-	    sameString( track->mapName, "regPotential" ) )
+	    sameString( track->mapName, "regpotent" ) )
 	    {
 	    int binCount = round(1.0/track->scaleRange);
 	    minRange = whichSampleBin( minRangeCutoff, track->minRange, track->maxRange, binCount );
@@ -10146,6 +10144,7 @@ registerTrackHandler("mgcNcbiPicks", estMethods);
 registerTrackHandler("mgcNcbiSplicedPicks", intronEstMethods);
 registerTrackHandler("mgcUcscPicks", intronEstMethods);
 registerTrackHandler("humMusL", humMusLMethods);
+registerTrackHandler("regpotent", humMusLMethods);
 registerTrackHandler("zoo", zooMethods);
 registerTrackHandler("musHumL", musHumLMethods);
 registerTrackHandler("affyTranscriptome", affyTranscriptomeMethods);
