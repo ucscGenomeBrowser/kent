@@ -9,5 +9,5 @@ indexgl: ${O}
 	${STRIP} ${HOME}/bin/${MACHTYPE}/indexgl${EXE}
 
 lib:
-	cd ../../lib;make; cd ../index/indexgl
+	cd ../../lib && ${MAKE}
 

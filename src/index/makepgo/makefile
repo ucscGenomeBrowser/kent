@@ -8,5 +8,5 @@ makepgo: $(O)
 	mv a.out $(HOME)/bin/$(MACHTYPE)/makepgo
 
 lib:
-	cd ../../lib;make; cd ../index/makepgo
+	cd ../../lib && ${MAKE}
 

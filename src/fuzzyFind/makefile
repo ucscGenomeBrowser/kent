@@ -9,4 +9,4 @@ fuzzyFind.exe: $(O) lib
 	mv fuzzyFind.exe ../cgi-bin
 
 lib:
-	cd ../lib; make; cd ../fuzzyFind
+	cd ../lib && ${MAKE}

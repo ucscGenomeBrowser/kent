@@ -8,5 +8,5 @@ indexfa: $(O) lib
 	mv a.out $(HOME)/bin/$(MACHTYPE)/indexfa
 
 lib:
-	cd ../../lib;make; cd ../index/indexfa
+	cd ../../lib && ${MAKE}
 

@@ -3,7 +3,7 @@ include ../../inc/common.mk
 O =  cdnaOff.o 
 
 cdnaOff: $(O)  
-	cd ../lib;make
+	cd ../lib && ${MAKE}
 	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/cdnaOff $O ../lib/cdnaAli.o ../../lib/$(MACHTYPE)/jkweb.a
 
 
