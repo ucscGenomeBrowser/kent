@@ -31,6 +31,7 @@ puts("<A HREF=\"../cgi-bin/cartReset\">Select here to reset</A> the "
      "browser user interface settings to their defaults.");
 printf("</P><CENTER>");
 printf("position ");
+cartSaveSession(cart);
 cgiMakeTextVar("position", cartUsualString(cart, "position", "SFRS4"), 30);
 printf(" pixel width ");
 cgiMakeIntVar("pix", cartUsualInt(cart, "pix", 610), 4);
