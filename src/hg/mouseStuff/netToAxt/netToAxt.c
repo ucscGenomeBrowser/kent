@@ -8,11 +8,10 @@
 #include "dnautil.h"
 #include "dnaseq.h"
 #include "chainToAxt.h"
-#include "nib.h"
 #include "axt.h"
-#include "twoBit.h"
+#include "nibTwo.h"
 
-static char const rcsid[] = "$Id: netToAxt.c,v 1.18 2004/10/23 15:07:27 kent Exp $";
+static char const rcsid[] = "$Id: netToAxt.c,v 1.19 2004/10/23 15:16:43 kent Exp $";
 
 boolean qChain = FALSE;  /* Do chain from query side. */
 int maxGap = 100;
@@ -32,107 +31,6 @@ errAbort(
   "   -gapOut=gap.tab - Output gap sizes to file\n"
   ,  maxGap
   );
-}
-
-struct nibTwoCache
-/* This is a cache for either a directory full of nib files or a .2bit file. */
-    {
-    struct nibTwoCache *next;	/* Next in list */
-    char *pathName;		/* Nib dir name or .2bit file name. */
-    boolean isTwoBit;		/* True if this is a .2bit file. */
-    struct twoBitFile *tbf;	/* Two bit file handle if any. */
-    struct hash *nibHash;	/* Hash of nibInfo's if any. */
-    };
-
-struct nibTwoCache *nibTwoCacheNew(char *pathName)
-/* Get something that will more or less transparently get sequence from 
- * nib files or .2bit. */ 
-{
-struct nibTwoCache *ntc;
-AllocVar(ntc);
-ntc->pathName = cloneString(pathName);
-ntc->isTwoBit = twoBitIsFile(pathName);
-if (ntc->isTwoBit)
-    ntc->tbf = twoBitOpen(pathName);
-else
-    ntc->nibHash = newHash(10);
-return ntc;
-}
-
-void nibTwoCacheFree(struct nibTwoCache **pNtc)
-/* Free up resources associated with nibTwoCache. */
-{
-struct nibTwoCache *ntc = *pNtc;
-if (ntc != NULL)
-    {
-    freez(&ntc->pathName);
-    if (ntc->isTwoBit)
-        twoBitClose(&ntc->tbf);
-    else
-        {
-	struct hashEl *el, *list = hashElListHash(ntc->nibHash);
-	struct nibInfo *nib;
-	for (el = list; el != NULL; el = el->next)
-	     {
-	     nib = el->val;
-	     nibInfoFree(&nib);
-	     }
-	hashElFreeList(&list);
-	hashFree(&ntc->nibHash);
-	}
-    freez(pNtc);
-    }
-}
-
-struct dnaSeq *nibTwoCacheSeq(struct nibTwoCache *ntc, char *seqName)
-/* Return all of sequence. */
-{
-if (ntc->isTwoBit)
-    return twoBitReadSeqFrag(ntc->tbf, seqName, 0, 0);
-else
-    {
-    struct nibInfo *nib = nibInfoFromCache(ntc->nibHash, ntc->pathName, seqName);
-    return nibLdPart(nib->fileName, nib->f, 0, nib->size, nib->size);
-    }
-}
-
-struct dnaSeq *nibTwoCacheSeqPart(struct nibTwoCache *ntc, char *seqName, int start, int size,
-	int *retFullSeqSize)
-/* Return part of sequence. If *retFullSeqSize is non-null then return full size of
- * sequence (not just loaded part) there. */
-{
-if (ntc->isTwoBit)
-    {
-    if (retFullSeqSize != NULL)
-        *retFullSeqSize = twoBitSeqSize(ntc->tbf, seqName);
-    return twoBitReadSeqFrag(ntc->tbf, seqName, start, start+size);
-    }
-else
-    {
-    struct nibInfo *nib = nibInfoFromCache(ntc->nibHash, ntc->pathName, seqName);
-    if (retFullSeqSize != NULL)
-        *retFullSeqSize = nib->size;
-    return nibLdPart(nib->fileName, nib->f, nib->size, start, size);
-    }
-}
-
-struct dnaSeq *nibTwoLoadOne(char *pathName, char *seqName)
-/* Return sequence from a directory full of nibs or a .2bit file. */
-{
-struct dnaSeq *seq;
-if (twoBitIsFile(pathName))
-    {
-    struct twoBitFile *tbf = twoBitOpen(pathName);
-    seq = twoBitReadSeqFrag(tbf, seqName, 0, 0);
-    twoBitClose(&tbf);
-    }
-else
-    {
-    char path[512];
-    sprintf(path, "%s/%s.nib", pathName, seqName);
-    seq = nibLoadAllMasked(NIB_MASK_MIXED, path);
-    }
-return seq;
 }
 
 void writeGaps(struct chain *chain, FILE *f)
