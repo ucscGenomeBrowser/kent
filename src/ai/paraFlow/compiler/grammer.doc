@@ -75,3 +75,10 @@ expList: expression
 
 typedVarTuple:  type varName
 	| type varName ',' typedVarTuple
+
+baseType: 'var' | 'string' | 'bit' | 'byte' | 'short' | 'int' | 'long'
+	| class varName | collection varName
+
+composition: 'array' : 'list' : 'tree' : 'dir'
+
+composedTypes: baseType
