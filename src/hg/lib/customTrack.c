@@ -21,7 +21,7 @@
 #include "cheapcgi.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.50 2004/11/10 04:39:11 kent Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.51 2004/11/18 23:27:28 kent Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -132,6 +132,20 @@ for (i = 0; i < wigOptCount; ++i)
 tdb->settings = dyStringCannibalize(&wigSettings);
 }
 
+char *customTrackTableFromLabel(char *label)
+/* Convert custom track short label to table name. */
+{
+char buf[256];
+char *tmp;
+tmp = cloneString(label);
+eraseWhiteSpace(tmp);	/*	perhaps should be erase any */
+stripChar(tmp,'_');	/*	thing that isn't isalnum	*/
+stripChar(tmp,'-');	/*	since that's the Invalid table */
+sprintf(buf, "ct_%s", tmp);	/*	name check in hgText	*/
+freeMem(tmp);
+return cloneString(buf);
+}
+
 static struct customTrack *trackFromLine(char *line, int lineIx)
 /* Convert a track specification line to a custom table. */
 {
@@ -205,17 +219,11 @@ if ((val = hashFindVal(hash, "type")) != NULL)
     }
 if ((val = hashFindVal(hash, "name")) != NULL)
     {
-    char *tmp;
-    char buf[256];
     tdb->shortLabel = cloneString(val);
-    tmp = cloneString(tdb->shortLabel);
-    eraseWhiteSpace(tmp);	/*	perhaps should be erase any */
-    stripChar(tmp,'_');	/*	thing that isn't isalnum	*/
-    stripChar(tmp,'-');	/*	since that's the Invalid table */
-    sprintf(buf, "ct_%s", tmp);	/*	name check in hgText	*/
-    tdb->tableName = cloneString(buf);
-    freeMem(tmp);
+    tdb->tableName = customTrackTableFromLabel(tdb->shortLabel);
     }
+
+
 if ((val = hashFindVal(hash, "description")) != NULL)
     tdb->longLabel = cloneString(val);
 if ((val = hashFindVal(hash, "url")) != NULL)

@@ -63,6 +63,9 @@ boolean customTrackNeedsLift(struct customTrack *trackList);
 struct bed *customTrackBed(char *row[13], int wordCount, struct hash *chromHash, int lineIx);
 /* Convert a row of strings to a bed. */
 
+char *customTrackTableFromLabel(char *label);
+/* Convert custom track short label to table name. */
+
 boolean customTrackTest();
 /* Tests module - returns FALSE and prints warning message on failure. */
 
