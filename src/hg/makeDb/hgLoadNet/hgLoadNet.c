@@ -10,7 +10,7 @@
 #include "chainNet.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgLoadNet.c,v 1.13 2004/10/14 18:04:11 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadNet.c,v 1.14 2004/10/24 19:25:46 kent Exp $";
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
@@ -103,8 +103,8 @@ else if (!oldTable)
     dyStringAppend(dy, "  qTrf int not null, \n");
     dyStringAppend(dy, "#Indices\n");
     if (!noBin)
-	dyStringAppend(dy, "  INDEX(tName(8),bin),\n");
-    dyStringAppend(dy, "  INDEX(tName(8),tStart)\n");
+	dyStringAppend(dy, "  INDEX(tName(16),bin),\n");
+    dyStringAppend(dy, "  INDEX(tName(16),tStart)\n");
     dyStringAppend(dy, ")\n");
     sqlRemakeTable(conn, track, dy->string);
     }
