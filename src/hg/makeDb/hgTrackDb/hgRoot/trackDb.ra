@@ -62,7 +62,7 @@ altColor 0,0,0
 type bed 4+
 
 track mouseSynWhd
-shortLabel Whitehead Synteny
+shortLabel Mouse Synteny
 longLabel Whitehead Corresponding Chromosome in Mouse (300k window)
 priority 4 
 visibility hide
@@ -600,7 +600,7 @@ type psl xeno
 url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
 
 track anyCovBed
-shortLabel mRNA or EST Coverage
+shortLabel mRNA/EST/psued
 longLabel Blastz Alignments of GenBank mRNA including Pseudogenes and all ESTs
 priority 23.5
 visibility hide
@@ -610,7 +610,7 @@ type bed 3
 
 
 track anyMrnaCov
-shortLabel mRNA Coverage
+shortLabel mRNA/psued
 longLabel Blastz Alignments of GenBank mRNA including Pseudogenes
 priority 23.4
 visibility hide
@@ -1123,7 +1123,7 @@ color 12,12,120
 type genePred refPep refMrna
 
 track transfacRatios
-shortLabel Transfac LikeRatios
+shortLabel Transfac Ratios
 longLabel Transfac Likelihood Ratios
 priority 41.0034
 visibility full
