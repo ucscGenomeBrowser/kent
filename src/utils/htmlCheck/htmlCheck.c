@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.3 2004/02/26 10:26:22 kent Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.4 2004/02/26 18:01:11 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -23,7 +23,7 @@ errAbort(
   "   header - read the header and print to stdout\n"
   "   printLinks - print links\n"
   "   printTags - print out just the tags\n"
-  "   validate - do some basic validations\n"
+  "   validate - do some basic validations including TABLE/TR/TD nesting\n"
   );
 }
 
