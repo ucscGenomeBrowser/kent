@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.21 2003/11/10 20:39:35 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.22 2003/11/11 18:31:48 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -286,7 +286,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	wi->start = wiggle->chromStart;
 	wi->end = wiggle->chromEnd;
 	wi->grayIx = grayInRange(wiggle->score, 0, 127);
-	wi->name = cloneString(tg->mapName);
+	/*	May need unique name here some day XXX	*/
+	wi->name = tg->shortLabel;
 	wi->orientation = orientFromChar(wiggle->strand[0]);
 	fileNameSize = strlen("/gbdb//wib/") + strlen(database)
 	    + strlen(wiggle->File) + 1;
@@ -407,9 +408,6 @@ for (i = 0; i < preDrawSize; ++i) {
 	preDraw[i].max = -1.0e+300;
 	preDraw[i].min = 1.0e+300;
 }
-
-snprintf(dbgMsg, DBGMSGSZ, "going into pre-draw prep");
-wigDebugPrint("wigDrawItems");
 
 /*	walk through all the data and prepare the preDraw array	*/
 for (wi = tg->items; wi != NULL; wi = wi->next)
@@ -537,8 +535,6 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 		    preDraw[xCoord].min = wi->lowerLimit;
 		preDraw[xCoord].sumData += wi->sumData;
 		preDraw[xCoord].sumSquares += wi->sumSquares;
-snprintf(dbgMsg, DBGMSGSZ, "one whole block at item %d, with %d points", itemCount, wi->Count);
-wigDebugPrint("wigDrawItems");
 		}
 	}
 	freeMem(ReadData);
@@ -559,9 +555,6 @@ for (i = preDrawZero; i < preDrawZero+width; ++i)
 	overallLowerLimit = preDraw[i].min;
     }
 overallRange = overallUpperLimit - overallLowerLimit;
-
-snprintf(dbgMsg, DBGMSGSZ, "done preDraw, %d items, range: [%g:%g]", itemCount, overallLowerLimit, overallUpperLimit );
-wigDebugPrint("wigDrawItems");
 
 /*	now we are ready to draw.  Each element in the preDraw[] array
  *	cooresponds to a single pixel on the screen
@@ -587,16 +580,11 @@ if (autoScale == wiggleScaleAuto)
 	graphUpperLimit = overallUpperLimit;
 	graphLowerLimit = overallLowerLimit;
 	}
-snprintf(dbgMsg, DBGMSGSZ, "autoScale requested");
     } else {
 	graphUpperLimit = wigCart->maxY;
 	graphLowerLimit = wigCart->minY;
-snprintf(dbgMsg, DBGMSGSZ, "manualScale requested");
     }
 graphRange = graphUpperLimit - graphLowerLimit;
-wigDebugPrint("wigDrawItems");
-snprintf(dbgMsg, DBGMSGSZ, "Scale: [%g:%g] range: %g", graphLowerLimit, graphUpperLimit, graphRange);
-wigDebugPrint("wigDrawItems");
 
 /*	right now this is a simple pixel by pixel loop.  Future
  *	enhancements will smooth this data and draw boxes where pixels
@@ -780,7 +768,6 @@ double minY;	/*	from trackDb.ra words, the absolute minimum */
 double maxY;	/*	from trackDb.ra words, the absolute maximum */
 char cartStr[64];	/*	to set cart strings	*/
 struct wigCartOptions *wigCart;
-
 
 AllocVar(wigCart);
 
