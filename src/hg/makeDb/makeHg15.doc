@@ -645,7 +645,7 @@ DONE TO HERE
     | hgsql hg15
 
 
-# GC PERCENT (TO DO)
+# GC PERCENT (DONE 041203)
      ssh hgwdev
      mkdir -p ~/hg15/bed/gcPercent
      cd ~/hg15/bed/gcPercent
@@ -677,6 +677,7 @@ DONE TO HERE
     # Make sure that /scratch/hg/gs.16/build33/trfFa is loaded with NT_*.fa 
     # and has been pushed to the big cluster nodes.  (MASK SEQUENCE above)
     # Make sure mrna/est .fa's are under /iscratch/i too (GENBANK above)
+mrna is done against unmasked 041203
     ssh kk
     mkdir -p ~/hg15/bed/{mrna,est}/psl
     cd ~/hg15/bed/mrna
