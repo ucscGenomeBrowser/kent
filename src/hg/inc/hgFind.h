@@ -24,6 +24,7 @@ struct hgPositions
     int posCount;                 /* Number of positions in all tables. */
     struct hgPos *singlePos;      /* If resolves to a single position, reference to that here. */
     char *extraCgi;		  /* Extra info to embed in CGI requests to browser. */
+    boolean useAlias;             /* Set if an alias is used */
     };
 
 void hgPositionsFree(struct hgPositions **pEl);
