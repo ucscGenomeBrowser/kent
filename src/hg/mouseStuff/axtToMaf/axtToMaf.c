@@ -3,11 +3,12 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
-#include "axt.h"
+#include "portable.h"
 #include "obscure.h"
+#include "axt.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: axtToMaf.c,v 1.5 2004/03/25 00:58:42 baertsch Exp $";
+static char const rcsid[] = "$Id: axtToMaf.c,v 1.6 2004/10/27 22:57:32 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -22,13 +23,27 @@ errAbort(
   "Options:\n"
   "    -qPrefix=XX. - add XX. to start of query sequence name in maf\n"
   "    -tPrefex=YY. - add YY. to start of target sequence name in maf\n"
+  "    -tSplit Create a separate maf file for each target sequence.\n"
+  "            In this case output is a dir rather than a file\n"
+  "            In this case in.maf must be sorted by target.\n"
   "    -score       - recalculate score \n"
   "    -scoreZero   - recalculate score if zero \n"
   );
 }
 
+static struct optionSpec options[] = {
+   {"qPrefix", OPTION_STRING},
+   {"tPrefix", OPTION_STRING},
+   {"tSplit", OPTION_BOOLEAN},
+   {"score", OPTION_BOOLEAN},
+   {"scoreZero", OPTION_BOOLEAN},
+   {NULL, 0},
+};
+
+
 char *qPrefix = "";
 char *tPrefix = "";
+boolean tSplit = FALSE;
 boolean score = FALSE;
 boolean scoreZero = FALSE;
 
@@ -58,12 +73,22 @@ void axtToMaf(char *in, char *tSizes, char *qSizes, char *out)
 /* axtToMaf - Convert from axt to maf format. */
 {
 struct lineFile *lf = lineFileOpen(in, TRUE);
-FILE *f = mustOpen(out, "w");
+FILE *f = NULL;
+char *tName = cloneString("");
 struct hash *tSizeHash = loadIntHash(tSizes);
 struct hash *qSizeHash = loadIntHash(qSizes);
 struct axt *axt;
+struct hash *uniqHash = newHash(18);
 
-mafWriteStart(f, "blastz");
+if (tSplit)
+    {
+    makeDir(out);
+    }
+else
+    {
+    f = mustOpen(out, "w");
+    mafWriteStart(f, "blastz");
+    }
 while ((axt = axtRead(lf)) != NULL)
     {
     struct mafAli *ali;
@@ -93,6 +118,22 @@ while ((axt = axtRead(lf)) != NULL)
     comp->text = axt->tSym;
     axt->tSym = NULL;
     slAddHead(&ali->components, comp);
+    if (tSplit && !sameString(axt->tName, tName))
+        {
+	char path[PATH_LEN];
+	if (f != NULL)
+	    mafWriteEnd(f);
+	freez(&tName);
+	tName = cloneString(axt->tName);
+	if (hashLookup(uniqHash, tName) != NULL)
+	    errAbort("%s isn't sorted, which is necessary when -tSplit option is used",
+	        lf->fileName);
+	hashAdd(uniqHash, tName, NULL);
+	safef(path, sizeof(path), "%s/%s.maf", out, tName);
+	carefulClose(&f);
+	f = mustOpen(path, "w");
+	mafWriteStart(f, "blastz");
+	}
     mafWrite(f, ali);
     mafAliFree(&ali);
     axtFree(&axt);
@@ -103,9 +144,10 @@ mafWriteEnd(f);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionHash(&argc, argv);
+optionInit(&argc, argv, options);
 qPrefix = optionVal("qPrefix", qPrefix);
 tPrefix = optionVal("tPrefix", tPrefix);
+tSplit = optionExists("tSplit");
 score = optionExists("score");
 scoreZero = optionExists("scoreZero");
 if (argc != 5)
