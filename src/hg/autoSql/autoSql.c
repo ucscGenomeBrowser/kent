@@ -851,7 +851,7 @@ fprintf(hFile, " * Dispose of this with %sFreeList(). */\n\n", tableName);
 
 fprintf(f, "struct %s *%sLoadAll(char *fileName) \n", tableName, tableName);
 fprintf(f, "/* Load all %s from a tab-separated file.\n", tableName);
-fprintf(f, " * Dispose of this with %sFreeList(). */\n\n", tableName);
+fprintf(f, " * Dispose of this with %sFreeList(). */\n", tableName);
 fprintf(f, "{\n");
 fprintf(f, "struct %s *list = NULL, *el;\n", tableName);
 fprintf(f, "struct lineFile *lf = lineFileOpen(fileName, TRUE);\n");
