@@ -405,8 +405,6 @@ int ptArrayIx(void *pt, void *array, int arraySize);
 
 #define stringIx(string, array) stringArrayIx( (string), (array), ArraySize(array))
 
-
-
 /* Some stuff that is left out of GNU .h files!? */
 #ifndef SEEK_SET
 #define SEEK_SET 0
@@ -510,5 +508,8 @@ void removeReturns(char* dest, char* src);
 int intExp(char *text);
 /* Convert text to integer expression and evaluate. 
  * Throws if it finds a non-number. */
+
+char* readLine(FILE* fh);
+/* Read a line of any size into dynamic memory, return null on EOF */
 
 #endif /* COMMON_H */

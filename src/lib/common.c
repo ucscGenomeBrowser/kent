@@ -1103,3 +1103,38 @@ for (;;)
     }
 }
 
+char* readLine(FILE* fh)
+/* Read a line of any size into dynamic memory, return null on EOF */
+{
+int bufCapacity = 256;
+int bufSize = 0;
+char* buf = needMem(bufCapacity);
+int ch;
+
+/* loop until EOF of EOLN */
+while (((ch = getc(fh)) != EOF) && (ch != '\n'))
+    {
+    /* expand if almost full, always keep one extra char for
+     * zero termination */
+    if (bufSize >= bufCapacity-2)
+        {
+        bufCapacity *= 2;
+        buf = realloc(buf, bufCapacity);
+        if (buf == NULL)
+            {
+            errAbort("Out of memory - request size %d bytes", bufCapacity);
+            }
+        }
+    buf[bufSize++] = ch;
+    }
+
+/* only return EOF if no data was read */
+if ((ch == EOF) && (bufSize == 0))
+    {
+    freeMem(buf);
+    return NULL;
+    }
+buf[bufSize] = '\0';
+return buf;
+}
+
