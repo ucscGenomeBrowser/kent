@@ -6164,3 +6164,34 @@ axtFilter -notQ=chrUn $1 \
      hgPepPred hg16 softberry fgenesh_jul03/*.protein
      hgSoftberryHom hg16 fgenesh_jul03/*.protein
 
+#Make a track from Tarjei's chimp deletions file (2/12/04)
+#  80-12000 bp indels in human/chimp alignments
+
+    #make .bed files from Tarjei's .fa files
+    cd /cluster/data/panTro1/bed/indels
+    /cluster/bin/i386/faSimplify indels.human.fa , , temp.fa
+    /cluster/bin/i386/faSize detailed=on temp.fa > human.start.txt
+    /cluster/bin/i386/faSimplify indels.human.fa ">" , temp.fa
+    /cluster/bin/i386/faSize detailed=on temp.fa > human.chr.txt
+    R
+    #Commands in R
+    chr<-read.table("human.chr.txt")
+    start<-read.table("human.start.txt")
+    both<-cbind(chr,start)
+    sum(both[,2]!=both[,4])
+    both[,4]<-both[,2]+both[,3]
+    write(t(both[,-2]),"indels.human.bed",ncol=3)
+    q()
+    #load track into browser
+    mkdir -p /gbdb/hg16/hg_insert
+    ln -s  /cluster/data/panTro1/bed/indels/indels.human.bed /gbdb/hg16/hg_insert
+    cd /cluster/data/panTro1/bed/indels
+    /cluster/bin/i386/hgLoadBed hg16 hg_insert indels.human.bed
+    #change name to humanDels
+    hgsql hg16
+	rename table hg_insert to chimpDels;
+	exit
+    #add description file chimpDels.html 
+    # to ~/kent/src/hg/makeDb/trackDb/human/hg16
+    #add a track entry to trackDb.ra 
+    # in ~/kent/src/hg/makeDb/trackDb/human/hg16
