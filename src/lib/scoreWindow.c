@@ -1,6 +1,8 @@
 /* scoreWindow - find window with most matches to a given char */
 #include "common.h"
 
+static char const rcsid[] = "$Id: scoreWindow.c,v 1.4 2004/07/16 22:42:55 baertsch Exp $";
+
 int scoreWindow(char c, char *s, int size, int *score, int *start, int *end, int match, int misMatch)
 /* simple program to find max scoring window representing string of char c in a string s of size size */
 /* index of max score is returned , match and misMatch are the scores to assign, suggested defaults are match=1 and misMatch=1*/
