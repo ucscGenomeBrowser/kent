@@ -10,7 +10,7 @@
 #include "genePred.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.18 2003/08/06 03:19:26 baertsch Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.19 2003/08/28 04:27:51 kent Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -636,3 +636,18 @@ for (i=0; i<gp->exonCount; i++)
     }
 return count;
 }
+
+int genePredCodingBases(struct genePred *gp)
+/* Count up the number of coding bases in gene prediction. */
+{
+int i, exonCount = gp->exonCount;
+int cdsStart = gp->cdsStart, cdsEnd = gp->cdsEnd;
+int baseCount = 0;
+for (i=0; i<exonCount; ++i)
+    {
+    baseCount += positiveRangeIntersection(cdsStart,cdsEnd,
+    	gp->exonStarts[i], gp->exonEnds[i]);
+    }
+return baseCount;
+}
+
