@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.24 2004/11/08 04:03:03 kent Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.25 2004/11/08 17:43:00 kent Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -224,7 +224,6 @@ if (isWiggle(db, table))
     bedList = getWiggleAsBed(db, table, region, filter, idHash, lm, conn);
 else
     {
-
     bedSqlFieldsExceptForChrom(hti, &fieldCount, &fields);
     isPsl = htiIsPsl(hti);
     isGenePred = sameString("exonEnds", hti->endsSizesField);
@@ -526,9 +525,12 @@ for (region = regionList; region != NULL; region = region->next)
 	    {
 	    for (bed = bedList;  bed != NULL;  bed = bed->next)
 		{
-		char *ptr = strchr(bed->name, ' ');
-		if (ptr != NULL)
-		    *ptr = 0;
+		if (bed->name != NULL)
+		    {
+		    char *ptr = strchr(bed->name, ' ');
+		    if (ptr != NULL)
+			*ptr = 0;
+		    }
 		if (doCt)
 		    {
 		    struct bed *dupe = cloneBed(bed); /* Out of local memory. */
@@ -546,9 +548,12 @@ for (region = regionList; region != NULL; region = region->next)
 	    fbList = fbFromBed(fbTQ, hti, bedList, 0, 0, FALSE, FALSE);
 	    for (fbPtr=fbList;  fbPtr != NULL;  fbPtr=fbPtr->next)
 		{
-		char *ptr = strchr(fbPtr->name, ' ');
-		if (ptr != NULL)
-		    *ptr = 0;
+		if (fbPtr->name != NULL)
+		    {
+		    char *ptr = strchr(fbPtr->name, ' ');
+		    if (ptr != NULL)
+			*ptr = 0;
+		    }
 		if (doCt)
 		    {
 		    struct bed *fbBed = fbToBedOne(fbPtr);
