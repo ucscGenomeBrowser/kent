@@ -153,27 +153,23 @@ typedef void (*GfSaveAli)(char *chromName, int chromSize, int chromOffset,
 /* This is the type of a client provided function to save an alignment. */
 
 void gfAlignDnaClumps(struct gfClump *clumpList, struct dnaSeq *seq,
-    boolean isRc,  enum ffStringency stringency, int minMatch, 
-    GfSaveAli outFunction, void *outData);
+    boolean isRc,  int minMatch, GfSaveAli outFunction, void *outData);
 /* Convert gfClumps to an actual alignment that gets saved via 
  * outFunction/outData. gfSavePsl is a handy outFunction to use.  Put
  * a FILE as outData in this case.. */
 
 void gfAlignAaClumps(struct genoFind *gf,  struct gfClump *clumpList, aaSeq *seq,
-    boolean isRc,  enum ffStringency stringency, int minMatch,  
-    GfSaveAli outFunction, void *outData);
+    boolean isRc,  int minMatch,  GfSaveAli outFunction, void *outData);
 /* Convert gfClumps to an actual alignment that gets saved via 
  * outFunction/outData. */
 
 void gfFindAlignAaTrans(struct genoFind *gfs[3], aaSeq *qSeq, struct hash *t3Hash, 
-	enum ffStringency stringency, int minMatch,  
-	GfSaveAli outFunction, void *outData);
+	int minMatch,  GfSaveAli outFunction, void *outData);
 /* Look for qSeq alignment in three translated reading frames. Save alignment
  * via outFunction/outData. */
 
 void gfFindAlignTransTrans(struct genoFind *gfs[3], struct dnaSeq *qSeq, struct hash *t3Hash, 
-	boolean isRc, enum ffStringency stringency, int minMatch,  
-	GfSaveAli outFunction, void *outData);
+	boolean isRc, int minMatch,  GfSaveAli outFunction, void *outData);
 /* Look for alignment to three translations of qSeq in three translated reading frames. 
  * Save alignment via outFunction/outData. */
 
@@ -233,7 +229,7 @@ void gfSavePslx(char *chromName, int chromSize, int chromOffset,
  * pslx format.  This is meant for translated alignments. */
 
 void gfAlignStrand(int conn, char *nibDir, struct dnaSeq *seq,
-    boolean isRc,  enum ffStringency stringency, int minMatch, GfSaveAli outFunction, void *outData);
+    boolean isRc,  int minMatch, GfSaveAli outFunction, void *outData);
 /* Search genome on server with one strand of other sequence to find homology. 
  * Then load homologous bits of genome locally and do detailed alignment.
  * Call 'outFunction' with each alignment that is found.  gfSavePsl is a handy

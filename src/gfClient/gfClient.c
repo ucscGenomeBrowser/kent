@@ -14,7 +14,6 @@ void gfClient(char *hostName, char *portName, char *nibDir, char *inName,
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 static bioSeq seq;
 struct ssBundle *bundleList;
-enum ffStringency stringency = ffCdna;
 FILE *out = mustOpen(outName, "w");
 enum gfType qType = gfTypeFromName(qTypeName);
 enum gfType tType = gfTypeFromName(tTypeName);
@@ -49,11 +48,11 @@ while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, qType != gftProt)
 	}
     else if ((tType == gftDna || tType == gftRna) && (qType == gftDna || qType == gftRna))
 	{
-	gfAlignStrand(conn, nibDir, &seq, FALSE, stringency, 36, gfSavePsl, out);
+	gfAlignStrand(conn, nibDir, &seq, FALSE, 36, gfSavePsl, out);
 	close(conn);
 	conn = gfConnect(hostName, portName);
 	reverseComplement(seq.dna, seq.size);
-	gfAlignStrand(conn, nibDir, &seq, TRUE,  stringency, 36, gfSavePsl, out);
+	gfAlignStrand(conn, nibDir, &seq, TRUE,  36, gfSavePsl, out);
 	}
     else
         {

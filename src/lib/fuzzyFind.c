@@ -283,8 +283,8 @@ if (nGap < 0)   /* Jumping back in needle gets rid of previous alignment. */
 return acc + digitsBaseTwo(hGap+nGap);
 }
 
-static int calcNormalGap(int hGap, int nGap)
-/* Figure out gap penalty */
+static int calcTightGap(int hGap, int nGap)
+/* Figure out gap penalty using tight model (gaps bad!) */
 {
 if (hGap == 0 && nGap == 0)
     return 0;
@@ -304,6 +304,28 @@ else
     }
 }
 
+static int calcLooseGap(int hGap, int nGap)
+/* Figure out gap penalty using loose model (gaps not so bad) */
+{
+if (hGap == 0 && nGap == 0)
+    return 0;
+else
+    {
+    int overlap = min(hGap, nGap);
+    int penalty = 8;
+    if (overlap < 0)
+	overlap = 0;
+
+    if (hGap < 0)
+	hGap = -8*hGap;
+    if (nGap < 0)
+	nGap = -2*nGap;
+    penalty += log(hGap-overlap+1) + log(nGap-overlap+1);
+    return penalty;
+    }
+}
+
+
 int ffCalcGapPenalty(int hGap, int nGap, enum ffStringency stringency)
 /* Return gap penalty for given h and n gaps. */
 {
@@ -312,8 +334,9 @@ switch (stringency)
     case ffCdna:
 	return ffCalcCdnaGapPenalty(hGap, nGap);
     case ffTight:
+	return calcTightGap(hGap,nGap);
     case ffLoose:
-	return calcNormalGap(hGap,nGap);
+	return calcLooseGap(hGap,nGap);
     }
 }
 

@@ -495,7 +495,7 @@ for (ffi = bun->ffList; ffi != NULL; ffi = ffi->next)
 
 
 void gfAlignStrand(int conn, char *nibDir, struct dnaSeq *seq,
-    boolean isRc,  enum ffStringency stringency, int minMatch, GfSaveAli outFunction, void *outData)
+    boolean isRc, int minMatch, GfSaveAli outFunction, void *outData)
 /* Search genome on server with one strand of other sequence to find homology. 
  * Then load homologous bits of genome locally and do detailed alignment.
  * Call 'outFunction' with each alignment that is found. */
@@ -517,10 +517,10 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->qSeq = seq;
     bun->genoSeq = targetSeq;
     bun->data = range;
-    alignComponents(range, bun, stringency);
-    ssStitch(bun, stringency);
+    alignComponents(range, bun, ffCdna);
+    ssStitch(bun, ffCdna);
     saveAlignments(chromName, chromSize, range->tStart, 
-	bun, outData, isRc, stringency, minMatch, outFunction);
+	bun, outData, isRc, ffCdna, minMatch, outFunction);
     ssBundleFree(&bun);
     freeDnaSeq(&targetSeq);
     }
@@ -569,7 +569,7 @@ return rangeList;
 }
 
 void gfAlignDnaClumps(struct gfClump *clumpList, struct dnaSeq *seq,
-    boolean isRc,  enum ffStringency stringency, int minMatch, 
+    boolean isRc,  int minMatch, 
     GfSaveAli outFunction, void *outData)
 /* Convert gfClumps to an actual alignment that gets saved via 
  * outFunction/outData. */
@@ -591,10 +591,10 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->qSeq = seq;
     bun->genoSeq = targetSeq;
     bun->data = range;
-    alignComponents(range, bun, stringency);
-    ssStitch(bun, stringency);
+    alignComponents(range, bun, ffCdna);
+    ssStitch(bun, ffCdna);
     saveAlignments(targetSeq->name, targetSeq->size, 0, 
-	bun, outData, isRc, stringency, minMatch, outFunction);
+	bun, outData, isRc, ffCdna, minMatch, outFunction);
     ssBundleFree(&bun);
     }
 gfRangeFreeList(&rangeList);
@@ -769,7 +769,7 @@ return ffi;
 }
 
 void gfAlignAaClumps(struct genoFind *gf,  struct gfClump *clumpList, aaSeq *seq,
-    boolean isRc,  enum ffStringency stringency, int minMatch, 
+    boolean isRc,  int minMatch, 
     GfSaveAli outFunction, void *outData)
 /* Convert gfClumps to an actual alignment that gets saved via 
  * outFunction/outData. */
@@ -795,18 +795,16 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->data = range;
     bun->ffList = rangesToFfItem(range->components, seq);
     bun->isProt = TRUE;
-    ssStitch(bun, stringency);
+    ssStitch(bun, ffTight);
     saveAlignments(targetSeq->name, targetSeq->size, 0, 
-	bun, outData, isRc, stringency, minMatch, outFunction);
+	bun, outData, isRc, ffTight, minMatch, outFunction);
     ssBundleFree(&bun);
     }
 gfRangeFreeList(&rangeList);
 }
 
-/* ~~~ */
 void gfFindAlignAaTrans(struct genoFind *gfs[3], aaSeq *qSeq, struct hash *t3Hash, 
-	enum ffStringency stringency, int minMatch, 
-	GfSaveAli outFunction, void *outData)
+	int minMatch, GfSaveAli outFunction, void *outData)
 /* Look for qSeq alignment in three translated reading frames. Save alignment
  * via outFunction/outData. */
 {
@@ -843,9 +841,9 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->ffList = rangesToFfItem(range->components, qSeq);
     bun->isProt = TRUE;
     bun->t3List = t3;
-    ssStitch(bun, stringency);
+    ssStitch(bun, ffCdna);
     saveAlignments(targetSeq->name, t3->seq->size, 0, 
-	bun, outData, FALSE, stringency, minMatch, outFunction);
+	bun, outData, FALSE, ffCdna, minMatch, outFunction);
     ssBundleFree(&bun);
     }
 for (frame=0; frame<3; ++frame)
@@ -1124,18 +1122,12 @@ for (tIsRc=0; tIsRc <= 1; ++tIsRc)
 	bun->genoSeq = targetSeq;
 	bun->data = range;
 	bun->ffList = rangesToFfItem(range->components, qSeq);
-	ssStitch(bun, ffCdna);
+	ssStitch(bun, ffLoose);
 	outData->targetRc = tIsRc;
 	splitPath(range->tName, dir, chromName, ext);
 	t3 = range->t3;
 	saveAlignments(chromName, t3->nibSize, t3->start, 
-	    bun, outData, qIsRc, ffCdna, minMatch, outFunction);
-#ifdef SOON
-	saveAlignments(targetSeq->name, targetSeq->size, 0, 
 	    bun, outData, qIsRc, ffLoose, minMatch, outFunction);
-    saveAlignments(chromName, chromSize, range->tStart, 
-	bun, outData, isRc, stringency, minMatch, outFunction);
-#endif /* SOON */
 	ssBundleFree(&bun);
 	}
 
@@ -1158,8 +1150,7 @@ lmCleanup(&lm);
 }
 
 void gfFindAlignTransTrans(struct genoFind *gfs[3], struct dnaSeq *qSeq, struct hash *t3Hash, 
-	boolean isRc, enum ffStringency stringency, int minMatch, 
-	GfSaveAli outFunction, void *outData)
+	boolean isRc, int minMatch, GfSaveAli outFunction, void *outData)
 /* Look for alignment to three translations of qSeq in three translated reading frames. 
  * Save alignment via outFunction/outData. */
 {
@@ -1197,9 +1188,9 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->genoSeq = targetSeq;
     bun->data = range;
     bun->ffList = rangesToFfItem(range->components, qSeq);
-    ssStitch(bun, stringency);
+    ssStitch(bun, ffLoose);
     saveAlignments(targetSeq->name, targetSeq->size, 0, 
-	bun, outData, isRc, stringency, minMatch, outFunction);
+	bun, outData, isRc, ffLoose, minMatch, outFunction);
     ssBundleFree(&bun);
     }
 trans3Free(&qTrans);
@@ -1275,9 +1266,9 @@ int countNs = 0;
 DNA *np, *hp, n, h;
 int blockSize;
 int i;
-int badScore;
 struct trans3 *t3 = NULL;
 struct trans3 *t3List = NULL;
+int score = 0;
 
 
 if (t3Hash != NULL)
@@ -1292,6 +1283,7 @@ for (ff = ali; ff != NULL; ff = nextFf)
     blockSize = ff->nEnd - ff->nStart;
     np = ff->nStart;
     hp = ff->hStart;
+    score += dnaScoreMatch(np, hp, blockSize);
     for (i=0; i<blockSize; ++i)
 	{
 	n = np[i];
@@ -1308,21 +1300,27 @@ for (ff = ali; ff != NULL; ff = nextFf)
 	}
     if (nextFf != NULL)
 	{
-	if (ff->nEnd != nextFf->nStart)
+	int nhStart = t3GenoPos(nextFf->hStart, genoSeq, t3List) + chromOffset;
+	int ohEnd = t3GenoPos(ff->hEnd, genoSeq, t3List) + chromOffset;
+	int hGap = nhStart - ohEnd;
+	int nGap = nextFf->nStart - ff->nEnd;
+
+	if (nGap != 0)
 	    {
 	    ++nInsertCount;
-	    nInsertBaseCount += nextFf->nStart - ff->nEnd;
+	    nInsertBaseCount += nGap;
 	    }
-	if (ff->hEnd != nextFf->hStart)
+	if (hGap != 0)
 	    {
 	    ++hInsertCount;
-	    hInsertBaseCount += t3GenoPos(nextFf->hStart, genoSeq, t3List) - t3GenoPos(ff->hEnd, genoSeq, t3List);
+	    hInsertBaseCount += hGap;
 	    }
+	score -= ffCalcGapPenalty(hGap, nGap, stringency);
 	}
     }
 
 /* See if it looks good enough to output. */
-if (matchCount >= minMatch)
+if (score >= minMatch)
     {
     if (isRc)
 	{
