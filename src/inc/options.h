@@ -37,6 +37,9 @@ float optionFloat(char *name, float defaultVal);
 boolean optionExists(char *name);
 /* Return TRUE if option has been set. */
 
+void optionMustExist(char *name);
+/* Abort if option has not been set. */
+
 void optionInit(int *pArgc, char *argv[], struct optionSpec *optionSpecs);
 /* Read options in command line into options hash.
  * Options come in three forms:

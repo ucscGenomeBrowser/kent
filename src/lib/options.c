@@ -10,7 +10,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: options.c,v 1.12 2003/07/08 05:58:41 kent Exp $";
+static char const rcsid[] = "$Id: options.c,v 1.13 2003/08/13 04:39:09 kent Exp $";
 
 #ifdef MACHTYPE_alpha
     #define strtoll strtol
@@ -272,4 +272,9 @@ boolean optionExists(char *name)
 return optGet(name) != NULL;
 }
 
-
+void optionMustExist(char *name)
+/* Abort if option has not been set. */
+{
+if (optGet(name) == NULL)
+    errAbort("Missing required command line flag %s", name);
+}
