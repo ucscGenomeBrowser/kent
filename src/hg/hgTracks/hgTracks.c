@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.869 2005/01/26 03:26:47 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.870 2005/01/27 23:47:36 hartera Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8401,7 +8401,7 @@ if (hTableExists(classTable))
            /* get color from trackDb settings hash */
               {
               found = TRUE;
-              safef(gClass, sizeof gClass, "%s%s", GENEPRED_CLASS_PREFIX, classes[class]);
+              safef(gClass, sizeof(gClass), "%s%s", GENEPRED_CLASS_PREFIX, classes[class]);
               colorString = trackDbSetting(tg->tdb, gClass);
               break;
               }
