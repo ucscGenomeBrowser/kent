@@ -140,15 +140,19 @@ char *unquoteSequence(char *s, int lineCount, char *fileName)
 int missed = 0;
 char *header0 = "Sequence ";
 char *header1 = "Transcript ";
+char *header2 = "CDS ";
 s = trimSpaces(s);
 if (!startsWith(header0, s)) { ++missed; }
 if (!startsWith(header1, s)) { ++missed; }
-if ( 2 == missed)
+if (!startsWith(header2, s)) { ++missed; }
+if ( 3 == missed)
     errAbort("Expecting Sequence before gene name line %d of %s", lineCount, fileName);
 if (startsWith(header0, s)) {
 	return unquote(s + strlen(header0), lineCount, fileName);
-    } else {
+    } else if(startsWith(header1, s)) {
 	return unquote(s + strlen(header1), lineCount, fileName);
+    } else {
+	return unquote(s + strlen(header2), lineCount, fileName);
     }
 }
 
@@ -213,19 +217,20 @@ while (fgets(line, sizeof(line), in))
 	 *	miRNA
 	 *	hand_built
 	 *	rRNA
+	 *	DO NOT ELIMINATE THE FOLLOWING, these are the exons
+			sameString(source, "hand_built") ||
+			sameString(source, "curated") ||
+			sameString(source, "mRNA") ||
+			sameString(source, "Coding_transcript") ||
+			sameString(source, "Genefinder") ||
 	 */
         if (sameString(type, "exon") || sameString(type, "coding_exon"))
             {
 		if (sameString(source, "Genomic_cannonical") ||
 			sameString(source, "Pseudogene") ||
-			sameString(source, "curated") ||
-			sameString(source, "Genefinder") ||
-			sameString(source, "Coding_transcript") ||
 			sameString(source, "non-coding_transcript") ||
 			sameString(source, "history") ||
 			sameString(source, "Transposon") ||
-			sameString(source, "hand_built") ||
-			sameString(source, "mRNA") ||
 			sameString(source, "rRNA") ||
 			sameString(source, "scRNA") ||
 			sameString(source, "snRNA") ||
