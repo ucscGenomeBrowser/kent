@@ -134,6 +134,11 @@ int rudpReceiveFrom(struct rudp *ru, void *messageBuf, int bufSize,
  * success. On failure prints a warning, sets errno, and returns -1. 
  * Also returns ip address of message source. */
 
+int rudpReceiveTimeOut(struct rudp *ru, void *messageBuf, int bufSize, 
+	struct sockaddr_in *retFrom, int timeOut);
+/* Like rudpReceive from above, but with a timeOut (in microseconds)
+ * parameter.  If timeOut is zero then it will wait forever. */
+
 void rudpPrintStatus(struct rudp *ru);
 /* Print out status info. */
 

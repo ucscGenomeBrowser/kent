@@ -173,8 +173,49 @@ int microDiff = 0;
 if (secDiff != 0)
     microDiff = secDiff * 1000000;
 microDiff += (t2->tv_usec - t1->tv_usec);
-assert(microDiff >= 0);
+if (microDiff < 0)
+    {
+    /* Note, this case actually happens, currently particularly on
+     * kkr2u62 and kkr8u19.  I think this is just a bug in their clock
+     * hardware/software.  However in general it _could_ happen very
+     * rarely on normal machines when the clock is reset by the
+     * network time protocol thingie. */
+    warn("t1 %u.%u, t2 %u.%u.  t1 > t2 but later?!", t1->tv_sec, t1->tv_usec,
+    	t2->tv_sec, t2->tv_usec);
+    microDiff = 0;
+    }
 return microDiff;
+}
+
+static boolean readReadyWait(int sd, int microseconds)
+/* Wait for descriptor to have some data to read, up to
+ * given number of microseconds. */
+{
+struct timeval tv;
+fd_set set;
+int readyCount;
+
+for (;;)
+    {
+    if (microseconds > 1000000)
+	{
+	tv.tv_sec = microseconds/1000000;
+	tv.tv_usec = microseconds%1000000;
+	}
+    else
+	{
+	tv.tv_sec = 0;
+	tv.tv_usec = microseconds;
+	}
+    FD_ZERO(&set);
+    FD_SET(sd, &set);
+    readyCount = select(sd+1, &set, NULL, NULL, &tv);
+    if (readyCount == EINTR)	/* Select interrupted, not timed out. */
+	continue;
+    else if (readyCount < 0)
+        warn("select failure in rudp: %s", strerror(errno));
+    return readyCount > 0;	/* Zero readCount indicates time out */
+    }
 }
 
 static boolean getOurAck(struct rudp *ru, struct timeval *startTv)
@@ -186,32 +227,24 @@ static boolean getOurAck(struct rudp *ru, struct timeval *startTv)
 struct rudpHeader head;
 int readyCount, readSize;
 int timeOut = ru->timeOut;
-fd_set set;
 
 for (;;)
     {
     /* Set up select with our time out. */
     struct sockaddr_in sai;
     int saiSize = sizeof(sai);
+    int dt;
     struct timeval tv;
-    tv.tv_sec = 0;
-    tv.tv_usec = timeOut;
-    FD_ZERO(&set);
-    FD_SET(ru->socket, &set);
-    readyCount = select(ru->socket+1, &set, NULL, NULL, &tv);
-    if (readyCount == EINTR)	/* Select interrupted, not timed out. */
-	continue;
-    if (readyCount == 0)
-	return FALSE;		/* Timed out.  We return unsuccessfully. */
 
-    /* Read message and if it's our ack return true.   */
-    if (FD_ISSET(ru->socket, &set))
+    if (readReadyWait(ru->socket, timeOut))
 	{
+	/* Read message and if it's our ack return true.   */
 	readSize = recvfrom(ru->socket, &head, sizeof(head), 0, NULL, NULL);
 	if (readSize >= sizeof(head) && head.type == rudpAck && head.id == ru->lastId)
 	    {
 	    gettimeofday(&tv, NULL);
-	    rudpAddRoundTripTime(ru, timeDiff(startTv, &tv));
+	    dt = timeDiff(startTv, &tv);
+	    rudpAddRoundTripTime(ru, dt);
 	    return TRUE;
 	    }
 	}
@@ -237,6 +270,7 @@ char outBuf[udpEthMaxSize];
 struct rudpHeader *head;
 int fullSize = size + sizeof(*head);
 int i, err = 0, maxRetry = ru->maxRetries;
+
 
 /* Make buffer with header in front of message. 
  * At some point we might replace this with a scatter/gather
@@ -285,22 +319,33 @@ return err;
 }
 
 
-int rudpReceiveFrom(struct rudp *ru, void *messageBuf, int bufSize, 
-	struct sockaddr_in *retFrom)
+int rudpReceiveTimeOut(struct rudp *ru, void *messageBuf, int bufSize, 
+	struct sockaddr_in *retFrom, int timeOut)
 /* Read message into buffer of given size.  Returns actual size read on
  * success. On failure prints a warning, sets errno, and returns -1. 
- * Also returns ip address of message source. */
+ * Also returns ip address of message source. If timeOut is nonzero,
+ * it represents the timeout in milliseconds.  It will set errno to
+ * ETIMEDOUT in this case.*/
 {
 char inBuf[udpEthMaxSize];
 struct rudpHeader *head = (struct rudpHeader *)inBuf;
 struct rudpHeader ackHead;
 struct sockaddr_in sai;
+int saiSize = sizeof(sai);
 int readSize, err;
 assert(bufSize <= rudpMaxSize);
 ru->receiveCount += 1;
 for (;;)
     {
-    int saiSize = sizeof(sai);
+    if (timeOut != 0)
+	{
+	if (!readReadyWait(ru->socket, timeOut))
+	    {
+	    warn("rudpReceive timed out\n");
+	    errno = ETIMEDOUT;
+	    return -1;
+	    }
+	}
     readSize = recvfrom(ru->socket, inBuf, sizeof(inBuf), 0, 
 	(struct sockaddr*)&sai, &saiSize);
     if (retFrom != NULL)
@@ -342,6 +387,15 @@ for (;;)
     break;
     }
 return readSize;
+}
+
+int rudpReceiveFrom(struct rudp *ru, void *messageBuf, int bufSize, 
+	struct sockaddr_in *retFrom)
+/* Read message into buffer of given size.  Returns actual size read on
+ * success. On failure prints a warning, sets errno, and returns -1. 
+ * Also returns ip address of message source. */
+{
+return rudpReceiveTimeOut(ru, messageBuf, bufSize, retFrom, 0);
 }
 
 int rudpReceive(struct rudp *ru, void *messageBuf, int bufSize)
