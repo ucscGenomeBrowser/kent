@@ -33,7 +33,7 @@
 #include "botDelay.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.116 2004/03/20 00:20:06 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.117 2004/03/22 22:16:07 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -4181,10 +4181,11 @@ static void wigStatsRow(char *chrom, unsigned start, unsigned end,
 printf("<TR><TH ALIGN=LEFT> %s </TH>\n", chrom);
 printf("\t<TD ALIGN=RIGHT> %u </TD>\n", start);
 printf("\t<TD ALIGN=RIGHT> %u </TD>\n", end);
-printf("\t<TD ALIGN=RIGHT> %d </TD>\n", span);
 printf("\t<TD ALIGN=RIGHT> %u </TD>\n", count);
-printf("\t<TD ALIGN=RIGHT> %g </TD>\n", wigUpperLimit);
+printf("\t<TD ALIGN=RIGHT> %d </TD>\n", span);
+printf("\t<TD ALIGN=RIGHT> %u </TD>\n", count*span);
 printf("\t<TD ALIGN=RIGHT> %g </TD>\n", wigLowerLimit);
+printf("\t<TD ALIGN=RIGHT> %g </TD>\n", wigUpperLimit);
 printf("\t<TD ALIGN=RIGHT> %g </TD>\n", wigUpperLimit - wigLowerLimit);
 printf("\t<TD ALIGN=RIGHT> %g </TD>\n", mean);
 printf("\t<TD ALIGN=RIGHT> %g </TD>\n", variance);
@@ -4198,27 +4199,51 @@ static void wigDoStats(char *database, char *table, struct slName *chromList,
 int spanCount = 0;
 struct wiggleData *wigData;
 struct slName *chromPtr;
+char *db = getTableDb();
+struct sqlConnection *conn = hAllocOrConnect(db);
+struct sqlResult *sr;
+char query[256];
+char **row;
+int numChroms = slCount(chromList);
+
+snprintf(query, sizeof(query), "show table status like '%s'", table);
+sr = sqlMustGetResult(conn,query);
+row = sqlNextRow(sr);
 
 // For some reason BORDER=1 does not work in our web.c nested table scheme.
 // So use web.c's trick of using an enclosing table to provide a border.  
-puts("<BR><!--outer table is for border purposes-->" "\n"
+puts("<P><!--outer table is for border purposes-->" "\n"
      "<TABLE BGCOLOR=\"#"HG_COL_BORDER"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
 
 puts("<TABLE BORDER=\"1\" BGCOLOR=\""HG_COL_INSIDE"\" CELLSPACING=\"0\">");
 
-printf("<TR><TH COLSPAN=11> Wiggle data statistics </TH></TR>\n");
-printf("<TR><TH COLSPAN=11> Database: %s, Table: %s</TH></TR>\n", database,
-    table);
+if (row != NULL)
+    {
+    printf("<TR><TD COLSPAN=12>\n");
+    printf("<TABLE COLS=12 ALIGN=CENTER HSPACE=0>"
+	"<TR><TH COLSPAN=1 ALIGN=LEFT> Database: %s </TH><TH COLSPAN=1 ALIGN=CENTER> Table: %s </TH><TH COLSPAN=10 ALIGN=RIGHT>  Last update: %s </TH></TR></TABLE></TD></TR>\n",
+	database, table, row[11]);
+    }
+else
+    {
+    printf("<TR><TH COLSPAN=6 ALIGN=LEFT> Database: %s </TH><TH COLSPAN=6 ALIGN=RIGHT> Table: %s </TH></TR>\n", database,
+	table);
+    }
+
 printf("<TR><TH> Chrom </TH><TH> Data <BR> start </TH>");
-printf("<TH> Data <BR> end </TH><TH> Span </TH>");
-printf("<TH> # of Data <BR> values </TH><TH> Upper <BR> limit</TH>");
-printf("<TH> Lower <BR> limit </TH><TH> Range </TH><TH> Mean </TH>");
-printf("<TH> Variance </TH><TH> Standard <BR> Deviation </TH></TR>\n");
+printf("<TH> Data <BR> end </TH>");
+printf("<TH> # of Data <BR> values </TH><TH> Data <BR> span </TH>");
+printf("<TH> Bases <BR> covered </TH><TH> Minimum </TH>");
+printf("<TH> Maximum </TH><TH> Range </TH><TH> Mean </TH>");
+printf("<TH> Variance </TH><TH> Standard <BR> deviation </TH></TR>\n");
 
 for (chromPtr=chromList;  chromPtr != NULL; chromPtr=chromPtr->next)
     {
     char *chrom = chromPtr->name;
-    wigData = wigFetchData(database, table, chrom, winStart, winEnd);
+    if (numChroms > 1)
+	wigData = wigFetchData(database, table, chrom, winStart, winEnd, TRUE);
+    else
+	wigData = wigFetchData(database, table, chrom, winStart, winEnd, FALSE);
     if (wigData)
 	{
 	unsigned span = 0;
@@ -4277,11 +4302,11 @@ for (chromPtr=chromList;  chromPtr != NULL; chromPtr=chromPtr->next)
     else
 	{
 	printf("<TR><TH ALIGN=LEFT> %s </TH>", chrom);
-	printf("<TH COLSPAN=10> No data </TH></TR>\n");
+	printf("<TH COLSPAN=11> No data </TH></TR>\n");
 	}
     }
 printf("</TABLE>\n");
-puts("</TD></TR></TABLE>");
+puts("</TD></TR></TABLE></P>");
 }
 
 void doGetStatsPositional()
@@ -4316,12 +4341,18 @@ int **blockCountArrs;
 int **blockSizeArrs;
 int i, j;
 struct sqlConnection *conn = hAllocOrConnect(db);
+struct sqlConnection *conn2;
 struct trackDb *tdb;
+struct trackDb *tdb2;
 char *track = getTrackName();
+char *track2 = getTrack2Name();
 char *typeLine;
+char *typeLine2;
 char *trackType = (char *) NULL;
+char *trackType2 = (char *) NULL;
 int wordCount;
 char *words[128];
+boolean wiggleDone = FALSE;
 
 saveOutputOptionsState();
 saveIntersectOptionsState();
@@ -4338,6 +4369,19 @@ if (tdb->type)
 
 if (op == NULL)
     table2 = NULL;
+
+if ((table2 != (char *)NULL) && (db2 != (char *)NULL))
+    {
+    conn2 = hAllocOrConnect(db2);
+    tdb2 = hMaybeTrackInfo(conn2, track2);
+    if (tdb->type)
+	{
+	typeLine2 = cloneString(tdb2->type);
+	wordCount = chopLine(typeLine2,words);
+	if (wordCount > 0)
+	    trackType2 = words[0];
+	}
+    }
 
 if (allGenome)
     chromList = getOrderedChromList();
@@ -4417,7 +4461,15 @@ if (trackType != (char *) NULL)
     {
     if (sameWord(trackType,"wig"))
 	wigDoStats(database, table, chromList, winStart, winEnd);
+	wiggleDone = TRUE;
     }
+
+if (trackType2 != (char *) NULL)
+    {
+    if (sameWord(trackType2,"wig"))
+	wigDoStats(db2, table2, chromList, winStart, winEnd);
+    }
+
 
 if (table2 != NULL)
     {
@@ -4580,111 +4632,115 @@ if (hti->hasBlocks)
     getCumulativeStats(blockSizeArrs, itemCounts, numChroms, blockSizeStats);
     }
 
-// For some reason BORDER=1 does not work in our web.c nested table scheme.
-// So use web.c's trick of using an enclosing table to provide a border.  
-puts("<!--outer table is for border purposes-->" "\n"
-     "<TABLE BGCOLOR=\"#"HG_COL_BORDER"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
-puts("<TABLE BORDER=\"1\" BGCOLOR=\""HG_COL_INSIDE"\" CELLSPACING=\"0\">");
-/* Use fixed-font for decimal point/integer alignment. */
-/* All these non-blocking spaces are to widen the first column so that some 
- * row descriptions below do not get wrapped (which would mess up the <br> 
- * formatting of row contents). */
-puts("<TR><TH><TT>statistic&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TT></TH>");
-/* These non-blocking spaces are for decimal point/integer alignment: */
-puts("<TH ALIGN=\"RIGHT\"><TT>total&nbsp;&nbsp;&nbsp;</TT></TH>");
-if (numCols > 1)
-    for (chromPtr=chromList;  chromPtr != NULL;  chromPtr=chromPtr->next)
-	printf("<TH><TT>%s</TT></TH>", breakChromRandomName(chromPtr->name));
-puts("</TR>");
-puts("<TR><TD><TT>items matching query</TT></TD>");
-for (i=0;  i < numCols;  i++)
-    printf("<TD ALIGN=\"RIGHT\"><TT>%d&nbsp;&nbsp;&nbsp;</TT></TD>",
-	   itemCounts[i]);
-puts("</TR>");
-puts("<TR><TD><TT>bases covered by matching items</TT></TD>");
-for (i=0;  i < numCols;  i++)
-    printf("<TD ALIGN=\"RIGHT\"><TT>%d&nbsp;&nbsp;&nbsp;</TT></TD>",
-	   bitCounts[i]);
-puts("</TR>");
-if ((constraints != NULL) || ((table2 != NULL) && (constraints2 != NULL)))
+if (! wiggleDone)
     {
-    puts("<TR><TD><TT>items without constraints</TT></TD>");
+    // For some reason BORDER=1 does not work in our web.c nested table scheme.
+    // So use web.c's trick of using an enclosing table to provide a border.  
+    puts("<!--outer table is for border purposes-->" "\n"
+	 "<TABLE BGCOLOR=\"#"HG_COL_BORDER"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
+    puts("<TABLE BORDER=\"1\" BGCOLOR=\""HG_COL_INSIDE"\" CELLSPACING=\"0\">");
+    /* Use fixed-font for decimal point/integer alignment. */
+    /* All these non-blocking spaces are to widen the first column so that some 
+     * row descriptions below do not get wrapped (which would mess up the <br> 
+     * formatting of row contents). */
+    puts("<TR><TH><TT>statistic&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TT></TH>");
+    /* These non-blocking spaces are for decimal point/integer alignment: */
+    puts("<TH ALIGN=\"RIGHT\"><TT>total&nbsp;&nbsp;&nbsp;</TT></TH>");
+    if (numCols > 1)
+	for (chromPtr=chromList;  chromPtr != NULL;  chromPtr=chromPtr->next)
+	    printf("<TH><TT>%s</TT></TH>", breakChromRandomName(chromPtr->name));
+    puts("</TR>");
+    puts("<TR><TD><TT>items matching query</TT></TD>");
     for (i=0;  i < numCols;  i++)
 	printf("<TD ALIGN=\"RIGHT\"><TT>%d&nbsp;&nbsp;&nbsp;</TT></TD>",
-	       itemUncCounts[i]);
+	       itemCounts[i]);
     puts("</TR>");
-    }
-if (itemCounts[0] > 0)
-    {
-    if (hti->strandField[0] != 0)
-	{
-	puts("<TR><TD><TT>items on strand: <br>+<br>-<br>?</TT></TD>");
-	for (i=0;  i < numCols;  i++)
-	    printf("<TD ALIGN=\"RIGHT\"><TT><br>%d&nbsp;&nbsp;&nbsp;<br>%d&nbsp;&nbsp;&nbsp;<br>%d&nbsp;&nbsp;&nbsp;</TT></TD>",
-		   strandPCounts[i], strandMCounts[i], strandQCounts[i]);
-	puts("</TR>");
-	}
-    puts("<TR><TD><TT>(chromEnd - chromStart): <br>min<br>avg<br>max<br>stdev</TT></TD>");
+    puts("<TR><TD><TT>bases covered by matching items</TT></TD>");
     for (i=0;  i < numCols;  i++)
-	printf("<TD ALIGN=\"RIGHT\"><TT><br>%d&nbsp;&nbsp;&nbsp;<br>%.2f<br>%d&nbsp;&nbsp;&nbsp;<br>%.2f</TT></TD>",
-	       chromLengthStats[i].min, chromLengthStats[i].avg,
-	       chromLengthStats[i].max, chromLengthStats[i].stdev);
+	printf("<TD ALIGN=\"RIGHT\"><TT>%d&nbsp;&nbsp;&nbsp;</TT></TD>",
+	       bitCounts[i]);
     puts("</TR>");
-    if (hti->scoreField[0] != 0)
+    if ((constraints != NULL) || ((table2 != NULL) && (constraints2 != NULL)))
 	{
-	puts("<TR><TD><TT>score: <br>min<br>avg<br>max<br>stdev</TT></TD>");
+	puts("<TR><TD><TT>items without constraints</TT></TD>");
 	for (i=0;  i < numCols;  i++)
-	    printf("<TD ALIGN=\"RIGHT\"><TT><br>%d&nbsp;&nbsp;&nbsp;<br>%.2f<br>%d&nbsp;&nbsp;&nbsp;<br>%.2f</TT></TD>",
-		   scoreStats[i].min, scoreStats[i].avg,
-		   scoreStats[i].max, scoreStats[i].stdev);
+	    printf("<TD ALIGN=\"RIGHT\"><TT>%d&nbsp;&nbsp;&nbsp;</TT></TD>",
+		   itemUncCounts[i]);
 	puts("</TR>");
 	}
-    if (hti->hasCDS != 0)
+    if (itemCounts[0] > 0)
 	{
-	char *exons = hti->hasBlocks ? " exons" : "";
-	printf("<TR><TD><TT>bases in 5\' UTR%s: <br>min<br>avg<br>max<br>stdev</TT></TD>\n",
-	       exons);
+	if (hti->strandField[0] != 0)
+	    {
+	    puts("<TR><TD><TT>items on strand: <br>+<br>-<br>?</TT></TD>");
+	    for (i=0;  i < numCols;  i++)
+		printf("<TD ALIGN=\"RIGHT\"><TT><br>%d&nbsp;&nbsp;&nbsp;<br>%d&nbsp;&nbsp;&nbsp;<br>%d&nbsp;&nbsp;&nbsp;</TT></TD>",
+		       strandPCounts[i], strandMCounts[i], strandQCounts[i]);
+	    puts("</TR>");
+	    }
+	puts("<TR><TD><TT>(chromEnd - chromStart): <br>min<br>avg<br>max<br>stdev</TT></TD>");
 	for (i=0;  i < numCols;  i++)
 	    printf("<TD ALIGN=\"RIGHT\"><TT><br>%d&nbsp;&nbsp;&nbsp;<br>%.2f<br>%d&nbsp;&nbsp;&nbsp;<br>%.2f</TT></TD>",
-		   utr5Stats[i].min, utr5Stats[i].avg,
-		   utr5Stats[i].max, utr5Stats[i].stdev);
+		   chromLengthStats[i].min, chromLengthStats[i].avg,
+		   chromLengthStats[i].max, chromLengthStats[i].stdev);
 	puts("</TR>");
-	printf("<TR><TD><TT>bases in CDS%s: <br>min<br>avg<br>max<br>stdev</TT></TD>\n",
-	       exons);
-	for (i=0;  i < numCols;  i++)
-	    printf("<TD ALIGN=\"RIGHT\"><TT><br>%d&nbsp;&nbsp;&nbsp;<br>%.2f<br>%d&nbsp;&nbsp;&nbsp;<br>%.2f</TT></TD>",
-		   cdsStats[i].min, cdsStats[i].avg,
-		   cdsStats[i].max, cdsStats[i].stdev);
-	puts("</TR>");
-	printf("<TR><TD><TT>bases in 3\' UTR%s: <br>min<br>avg<br>max<br>stdev</TT></TD>\n",
-	       exons);
-	for (i=0;  i < numCols;  i++)
-	    printf("<TD ALIGN=\"RIGHT\"><TT><br>%d&nbsp;&nbsp;&nbsp;<br>%.2f<br>%d&nbsp;&nbsp;&nbsp;<br>%.2f</TT></TD>",
-		   utr3Stats[i].min, utr3Stats[i].avg,
-		   utr3Stats[i].max, utr3Stats[i].stdev);
-	puts("</TR>");
+	if (hti->scoreField[0] != 0)
+	    {
+	    puts("<TR><TD><TT>score: <br>min<br>avg<br>max<br>stdev</TT></TD>");
+	    for (i=0;  i < numCols;  i++)
+		printf("<TD ALIGN=\"RIGHT\"><TT><br>%d&nbsp;&nbsp;&nbsp;<br>%.2f<br>%d&nbsp;&nbsp;&nbsp;<br>%.2f</TT></TD>",
+		       scoreStats[i].min, scoreStats[i].avg,
+		       scoreStats[i].max, scoreStats[i].stdev);
+	    puts("</TR>");
+	    }
+	if (hti->hasCDS != 0)
+	    {
+	    char *exons = hti->hasBlocks ? " exons" : "";
+	    printf("<TR><TD><TT>bases in 5\' UTR%s: <br>min<br>avg<br>max<br>stdev</TT></TD>\n",
+		   exons);
+	    for (i=0;  i < numCols;  i++)
+		printf("<TD ALIGN=\"RIGHT\"><TT><br>%d&nbsp;&nbsp;&nbsp;<br>%.2f<br>%d&nbsp;&nbsp;&nbsp;<br>%.2f</TT></TD>",
+		       utr5Stats[i].min, utr5Stats[i].avg,
+		       utr5Stats[i].max, utr5Stats[i].stdev);
+	    puts("</TR>");
+	    printf("<TR><TD><TT>bases in CDS%s: <br>min<br>avg<br>max<br>stdev</TT></TD>\n",
+		   exons);
+	    for (i=0;  i < numCols;  i++)
+		printf("<TD ALIGN=\"RIGHT\"><TT><br>%d&nbsp;&nbsp;&nbsp;<br>%.2f<br>%d&nbsp;&nbsp;&nbsp;<br>%.2f</TT></TD>",
+		       cdsStats[i].min, cdsStats[i].avg,
+		       cdsStats[i].max, cdsStats[i].stdev);
+	    puts("</TR>");
+	    printf("<TR><TD><TT>bases in 3\' UTR%s: <br>min<br>avg<br>max<br>stdev</TT></TD>\n",
+		   exons);
+	    for (i=0;  i < numCols;  i++)
+		printf("<TD ALIGN=\"RIGHT\"><TT><br>%d&nbsp;&nbsp;&nbsp;<br>%.2f<br>%d&nbsp;&nbsp;&nbsp;<br>%.2f</TT></TD>",
+		       utr3Stats[i].min, utr3Stats[i].avg,
+		       utr3Stats[i].max, utr3Stats[i].stdev);
+	    puts("</TR>");
+	    }
+	if (hti->hasBlocks != 0)
+	    {
+	    char *thingy = startsWith("psl", hti->type) ? "gapless block" : "exon";
+	    printf("<TR><TD><TT>%ss: <br>min<br>avg<br>max<br>stdev</TT></TD>\n",
+		   thingy);
+	    for (i=0;  i < numCols;  i++)
+		printf("<TD ALIGN=\"RIGHT\"><TT><br>%d&nbsp;&nbsp;&nbsp;<br>%.2f<br>%d&nbsp;&nbsp;&nbsp;<br>%.2f</TT></TD>",
+		       blockCountStats[i].min, blockCountStats[i].avg,
+		       blockCountStats[i].max, blockCountStats[i].stdev);
+	    puts("</TR>");
+	    printf("<TR><TD><TT>bases per %s: <br>min<br>avg<br>max<br>stdev</TT></TD>\n",
+		   thingy);
+	    for (i=0;  i < numCols;  i++)
+		printf("<TD ALIGN=\"RIGHT\"><TT><br>%d&nbsp;&nbsp;&nbsp;<br>%.2f<br>%d&nbsp;&nbsp;&nbsp;<br>%.2f</TT></TD>",
+		       blockSizeStats[i].min, blockSizeStats[i].avg,
+		       blockSizeStats[i].max, blockSizeStats[i].stdev);
+	    puts("</TR>");
+	    }
 	}
-    if (hti->hasBlocks != 0)
-	{
-	char *thingy = startsWith("psl", hti->type) ? "gapless block" : "exon";
-	printf("<TR><TD><TT>%ss: <br>min<br>avg<br>max<br>stdev</TT></TD>\n",
-	       thingy);
-	for (i=0;  i < numCols;  i++)
-	    printf("<TD ALIGN=\"RIGHT\"><TT><br>%d&nbsp;&nbsp;&nbsp;<br>%.2f<br>%d&nbsp;&nbsp;&nbsp;<br>%.2f</TT></TD>",
-		   blockCountStats[i].min, blockCountStats[i].avg,
-		   blockCountStats[i].max, blockCountStats[i].stdev);
-	puts("</TR>");
-	printf("<TR><TD><TT>bases per %s: <br>min<br>avg<br>max<br>stdev</TT></TD>\n",
-	       thingy);
-	for (i=0;  i < numCols;  i++)
-	    printf("<TD ALIGN=\"RIGHT\"><TT><br>%d&nbsp;&nbsp;&nbsp;<br>%.2f<br>%d&nbsp;&nbsp;&nbsp;<br>%.2f</TT></TD>",
-		   blockSizeStats[i].min, blockSizeStats[i].avg,
-		   blockSizeStats[i].max, blockSizeStats[i].stdev);
-	puts("</TR>");
-	}
-    }
-puts("</TABLE>");
-puts("</TD></TR></TABLE>");
+    puts("</TABLE>");
+    puts("</TD></TR></TABLE>");
+    }	/*	if (! wiggleDone)	*/
+
 freez(&(chromLengthArrs[0]));
 freez(&chromLengthArrs);
 freez(&chromLengthStats);
@@ -4780,9 +4836,9 @@ saveIntersectOptionsState();
 printf("Content-Type: text/plain\n\n");
 webStartText();
 
-/*
-wigData = wigFetchData(database, table, chrom, winStart, winEnd);
-*/
+if (! allGenome)
+    wigData = wigFetchData(database, table, chrom, winStart, winEnd, FALSE);
+
 if (wigData)
     {
     unsigned span = 0;
@@ -4818,7 +4874,7 @@ if (wigData)
 	}
     }
 else
-    printf("#\tdata display currently disabled, check back later\n");
+    printf("#\tfor test purposes only, wiggle data is available only one chrom at a time\n");
 
 webEnd();
 }
