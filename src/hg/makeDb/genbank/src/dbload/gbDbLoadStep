@@ -15,15 +15,6 @@
 #   -drop - drop tables before load.  This removes all of genbank and
 #    refseq data, not just what is being loaded.
 #
-#   -buildFullMgc=db  - build the full CDS MGC track for this database, maybe
-#    repeated.
-#   -buildAllMgc=db  - build all MGC tracks for this database, maybe
-#    repeated.
-#   -noPerChrom=db  - don't build per-chromsome tables for this database,
-#    maybe repeated.
-#   -xenoRefSeq=db  - create xeno RefSeq tracks for $db, maybe repeated.
-#   -xenoMrnaDesc=db  - load xeno mRNA descriptions for $db, maybe repeated.
-#
 use strict;
 use warnings;
 use File::Basename;
@@ -37,8 +28,30 @@ my %buildFullMgc;
 my %buildAllMgc;
 my $verboseArg;
 
+# get the MGC table conf value, or undef if no MGC table load.
+sub getMgcConf($) {
+    my($db) = @_;
+    my $host = callProg("uname -n");
+    chomp($host);
+    
+    # try to find a 
+    my $conf = getConf("$db.mgcTable.$host");
+    if (!defined($conf)) {
+        $conf = getConf("$db.mgcTable.default");
+    }
+    if (defined($conf )) {
+        if ($conf eq "no") {
+            $conf = undef;
+        } elsif (!(($conf eq "full") || ($conf eq "all"))) {
+            gbError("invalid value for $db.mgcTable \"$conf\", expected full, all, or no");
+        }
+    }
+return $conf;
+}
+
 # load MGC tables (note uses several globals)
-sub loadMgc() {
+sub loadMgc($$) {
+    my($db, $conf) = @_;
     # find newest MGC build (in data/download/mgc/2003.04.09), looking
     # for md5 file.
     my $mgcGlob = "data/processed/mgc/*/mgc.md5";
@@ -49,19 +62,17 @@ sub loadMgc() {
     # pick newest and get dir
     my $mgcDir = dirname($mgcCompleteFiles[$#mgcCompleteFiles]);
 
-    # load database for db which were requests; all overrides full
-    foreach my $db (@databases) {
-        my @mgcArgs = ("-workdir=$workDir/$db/mgc");
-        if (defined($verboseArg)) {
-            push(@mgcArgs, $verboseArg);
-        }
-        if (defined($buildAllMgc{$db})) {
-            runProg("mgcDbLoad " . join(" ", @mgcArgs)
+    # load db which were requests; all overrides full
+    my @mgcArgs = ("-workdir=$workDir/$db/mgc");
+    if (defined($verboseArg)) {
+        push(@mgcArgs, $verboseArg);
+    }
+    if ($conf eq "all") {
+        runProg("mgcDbLoad " . join(" ", @mgcArgs)
                     . " -allMgcTables $db $mgcDir/mgcStatus.tab.gz");
-        } elsif (defined($buildFullMgc{$db})) {
-            runProg("mgcDbLoad " . join(" ", @mgcArgs)
-                    . "$db $mgcDir/mgcFullStatus.tab.gz");
-        }
+    } elsif ($conf eq "full") {
+        runProg("mgcDbLoad " . join(" ", @mgcArgs)
+                . "$db $mgcDir/mgcFullStatus.tab.gz");
     }
 }
 
@@ -80,9 +91,6 @@ chomp($hostName);
 my $drop = 0;
 my $keep = 0;
 my $haveMgc = 0;
-my %noPerChrom;
-my %xenoRefSeq;
-my %xenoMrnaDesc;
 my $initialLoad = 0;
 my $allowLargeDeletes = 0;
 while (($#ARGV >= 0) && ($ARGV[0] =~ /^-.*/)) {
@@ -100,15 +108,6 @@ while (($#ARGV >= 0) && ($ARGV[0] =~ /^-.*/)) {
         $gbCommon::verbose = 1;
     } elsif ($opt eq "-initialLoad") {
         $initialLoad = 1;
-    } elsif ($opt =~ /^-noPerChrom($|=)/) {
-        my $db = parseOptEq($opt);
-        $noPerChrom{$db} = 1;
-    } elsif ($opt =~ /^-xenoRefSeq($|=)/) {
-        my $db = parseOptEq($opt);
-        $xenoRefSeq{$db} = 1;
-    } elsif ($opt =~ /^-xenoMrnaDesc($|=)/) {
-        my $db = parseOptEq($opt);
-        $xenoMrnaDesc{$db} = 1;
     } elsif ($opt =~ /^-buildFullMgc($|=)/) {
         my $mgcDb = parseOptEq($opt);
         $buildFullMgc{$mgcDb} = 1;
@@ -151,15 +150,6 @@ foreach my $db (@databases) {
     }
     
     my @dbArgs = @args;
-    if (defined($noPerChrom{$db})) {
-        push(@dbArgs, "-noPerChrom");
-    }
-    if (defined($xenoRefSeq{$db})) {
-        push(@dbArgs, "-xenoRefSeq");
-    }
-    if (defined($xenoMrnaDesc{$db})) {
-        push(@dbArgs, "-xenoMrnaDesc");
-    }
     if ($allowLargeDeletes) {
         push(@dbArgs, "-allowLargeDeletes");
     }
@@ -167,8 +157,11 @@ foreach my $db (@databases) {
 }
 
 # process MGC build requests
-if ($haveMgc) {
-    loadMgc();
+foreach my $db (@databases) {
+    my $conf = getMgcConf($db);
+    if (defined($db)) {
+        loadMgc($db, $conf);
+    }
 }
 
 if (!$keep) {

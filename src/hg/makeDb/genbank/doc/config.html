@@ -46,8 +46,12 @@
            for <CODE>pslReps</CODE> for RefSeq native mRNAs, or <CODE>no</CODE> to skip pslReps.
      <li> <code><em>$db</em>.refseq.mrna.xeno.pslReps</code>
 
-     <li> <code><em>$db</em>.mgcTables</code> - indicates which MGC tables to
-          create.  <CODE></CODE>
+     <li> <code><em>$db</em>.mgcTables.<em>$host</em></code> - indicates which
+          MGC tables to create when loading database on <CODE><em>$host</em></code>.
+          Values are <CODE>no</CODE>, <CODE>all</CODE>, <CODE>full</CODE>.
+          <CODE><em>$host</em></code> is the value returned by <CODE>uname -n</CODE>.
+     <li> <code><em>$db</em>.mgcTables.default</code> - indicates which
+          MGC tables to create when the is no host-specific setting.
      <li> <code><em>$db</em>.perChromTables</code> - Set to <CODE>no</CODE>
           if per-chromosome alignment tables should not be created.
      <li> <code><em>$db</em>.genbank.mrna.native.load</code> - Load native
