@@ -18,6 +18,11 @@ CREATE TABLE pseudoGeneLink (
     chainId int unsigned not null,	# chain id of gene/pseudogene alignment
     strand varchar(255) not null,	# strand of gene
     polyA int unsigned not null,	# length of polyA
+    polyAstart int unsigned not null,	# start f polyA
+    pchrom varchar(255) not null,	# Chromosome name for pseudogene
+    pStart int unsigned not null,	# pseudogene alignment start position
+    pEnd int unsigned not null,	# pseudogene alignment end position
+    pStrand varchar(255) not null,	# strand of pseudoegene
               #Indices
-    PRIMARY KEY(name)
+    PRIMARY KEY(name,pchrom(5),pStart)
 );
