@@ -513,6 +513,7 @@ o - Load Sanger22 genes:
       - grep -v Pseudogene Chr22*.genes.gff | hgSanger22 hg8 stdin Chr22*.cds.gff *.genes.dna *.cds.pep 0
       - sanger22-gff-doctor -pseudogenes Chr22.3.1x.cds.gff Chr22.3.1x.exons.gff \
         | ldHgGene hg8 sanger22pseudo stdin
+      - hgPepPred hg8 generic sanger22pep *.pep
 
 o - Load Sanger20 genes:
      First download files from James Gilbert's email to ~/oo/bed/sanger20 and
