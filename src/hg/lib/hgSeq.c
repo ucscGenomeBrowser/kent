@@ -416,7 +416,7 @@ unsigned *starts = NULL;
 unsigned *sizes = NULL;
 boolean *exonFlags = NULL;
 boolean *cdsFlags = NULL;
-int i, rowCount;
+int i, rowCount, totalCount;
 boolean promoter   = cgiBoolean("hgSeq.promoter");
 boolean intron     = cgiBoolean("hgSeq.intron");
 boolean utrExon5   = cgiBoolean("hgSeq.utrExon5");
@@ -490,7 +490,7 @@ if (sqlConstraints != NULL && sqlConstraints[0] != 0)
 // uglyf("# query: %s\n", query->string);
 sr = sqlGetResult(conn, query->string);
 
-rowCount = 0;
+rowCount = totalCount = 0;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     rowCount++;
@@ -723,14 +723,19 @@ while ((row = sqlNextRow(sr)) != NULL)
 	strncpy(itemName, table, sizeof(itemName));
     hgSeqRegionsDb(db, chrom, strand[0], itemName, concatRegions,
 		   count, starts, sizes, exonFlags, cdsFlags);
+    totalCount += count;
     freeMem(starts);
     freeMem(sizes);
     freeMem(exonFlags);
     freeMem(cdsFlags);
     }
 if (rowCount == 0)
-    printf("\n# No items in table %s in the range %s:%d-%d\n\n",
-	   table, chrom, chromStart+1, chromEnd);
+    printf("\n# No items in table %s in the range %s:%d-%d%s%s\n\n",
+	   table, chrom, chromStart+1, chromEnd,
+	   sqlConstraints ? " with SQL constraints " : "",
+	   sqlConstraints ? sqlConstraints : "");
+else if (totalCount == 0)
+    printf("\n# No regions were selected.\n\n");
 sqlFreeResult(&sr);
 if (sameString(db, hGetDb()))
     hFreeConn(&conn);
