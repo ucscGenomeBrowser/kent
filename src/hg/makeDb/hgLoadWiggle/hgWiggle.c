@@ -11,13 +11,12 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.8 2004/08/04 20:35:47 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.9 2004/08/04 22:02:10 hiram Exp $";
 
 /* Command line switches. */
 static boolean silent = FALSE;	/*	no data points output */
 static boolean timing = FALSE;	/*	turn timing on	*/
 static boolean skipDataRead = FALSE;	/*	do not read the wib data */
-static char *dataConstraint;	/*	one of < = >= <= == != 'in range' */
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -293,6 +292,7 @@ float lowerLimit = -1 * INFINITY;  /*	for constraint comparison	*/
 float upperLimit = INFINITY;	/*	for constraint comparison	*/
 unsigned span = 0;	/*	select for this span only	*/
 char *chr = NULL;		/* work on this chromosome only */
+static char *dataConstraint;	/*	one of < = >= <= == != 'in range' */
 
 optionInit(&argc, argv, optionSpecs);
 
@@ -320,7 +320,7 @@ else
     }
 if (chr)
     {
-    wDS->addChromConstraint(wDS, chr);
+    wDS->setChromConstraint(wDS, chr);
     verbose(2, "#\tchrom constraint: (%s)\n", wDS->sqlConstraint);
     }
 if (silent)
@@ -331,7 +331,7 @@ if (skipDataRead)
     verbose(2, "#\tskipDataRead option on, do not read .wib data\n");
 if (span)
     {
-    wDS->addSpanConstraint(wDS, span);
+    wDS->setSpanConstraint(wDS, span);
     verbose(2, "#\tspan constraint: (%s)\n", wDS->sqlConstraint);
     }
 if (dataConstraint)
