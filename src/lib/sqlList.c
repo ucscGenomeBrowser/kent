@@ -553,6 +553,12 @@ char **sArray, **dArray = NULL;
 int size;
 int i;
 
+if (s == NULL)
+    {
+    *retArray = NULL;
+    *retSize = 0;
+    return;
+    }
 s = cloneString(s);
 sqlStringStaticArray(s, &sArray, &size);
 if (size > 0)

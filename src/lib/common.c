@@ -603,6 +603,18 @@ for (;;)
     }
 }
 
+int countChars(char *s, char c)
+/* Return number of characters c in string s. */
+{
+char a;
+int count = 0;
+while ((a = *s++) != 0)
+    if (a == c)
+        ++count;
+return count;
+}
+
+
 /* int chopString(in, sep, outArray, outSize); */
 /* This chops up the input string (cannabilizing it)
  * into an array of zero terminated strings in
