@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.687 2004/07/14 21:20:24 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.688 2004/07/14 22:42:36 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1710,6 +1710,13 @@ chain = chainHeadLoad(row + rowOffset);
 sqlFreeResult(&sr);
 chainDbAddBlocks(chain, track, conn);
 return chain;
+}
+
+void linkToOtherBrowserExtra(char *otherDb, char *chrom, int start, int end, char *extra)
+/* Make anchor tag to open another browser window. */
+{
+printf("<A TARGET=\"_blank\" HREF=\"/cgi-bin/hgTracks?db=%s&%s&position=%s%%3A%d-%d\">",
+   otherDb, extra, chrom, start+1, end);
 }
 
 void linkToOtherBrowser(char *otherDb, char *chrom, int start, int end)
@@ -7391,7 +7398,7 @@ printf("<ul>");
 if (!sameString(pg->refSeq,"noRefSeq"))
     {
     printf("<LI><B>RefSeq:</B> %s \n", pg->refSeq);
-    linkToOtherBrowser(database, pg->gChrom, pg->rStart, pg->rEnd);
+    linkToOtherBrowserExtra(database, pg->gChrom, pg->rStart, pg->rEnd, "refGene=pack");
     printf("%s:%d-%d \n", pg->gChrom, pg->rStart, pg->rEnd);
     printf("</A></LI>");
     }
@@ -7408,7 +7415,7 @@ if (!sameString(pg->kgName,"noKg"))
                 "hgg_start", pg->kStart,
                 "hgg_end", pg->kEnd);
     printf(">%s</A>  ",pg->kgName);
-    linkToOtherBrowser(database, pg->gChrom, pg->kStart, pg->kEnd);
+    linkToOtherBrowserExtra(database, pg->gChrom, pg->kStart, pg->kEnd, "knownGene=pack");
     printf("%s:%d-%d \n", pg->gChrom, pg->kStart, pg->kEnd);
     printf("</A></LI>");
     if (hTableExists("knownGene"))
@@ -7432,14 +7439,14 @@ else
     {
     /* display mrna */
     printf("<LI><B>mRna:</B> %s \n", pg->name);
-    linkToOtherBrowser(database, pg->gChrom, pg->gStart, pg->gEnd);
+    linkToOtherBrowserExtra(database, pg->gChrom, pg->gStart, pg->gEnd, "all_mrna=pack");
     printf("%s:%d-%d \n", pg->gChrom, pg->gStart, pg->gEnd);
     printf("</A></LI>");
     }
 if (!sameString(pg->mgc,"noMgc"))
     {
     printf("<LI><B>MGC Gene:</B> %s \n", pg->mgc);
-    linkToOtherBrowser(database, pg->gChrom, pg->mStart, pg->mEnd);
+    linkToOtherBrowserExtra(database, pg->gChrom, pg->mStart, pg->mEnd, "mgcGenes=pack");
     printf("%s:%d-%d \n", pg->gChrom, pg->mStart, pg->mEnd);
     printf("</A></LI>");
     }
