@@ -16,7 +16,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.66 2003/09/11 05:31:19 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.67 2003/09/11 06:39:07 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -46,6 +46,18 @@ const struct genePos *a = *((struct genePos **)va);
 const struct genePos *b = *((struct genePos **)vb);
 return strcmp(a->name, b->name);
 }
+
+int genePosCmpPos(const void *va, const void *vb)
+/* Sort function to compare two genePos by chrom,start. */
+{
+const struct genePos *a = *((struct genePos **)va);
+const struct genePos *b = *((struct genePos **)vb);
+int diff =  strcmp(a->chrom, b->chrom);
+if (diff == 0)
+    diff = a->start - b->start;
+return diff;
+}
+
 
 void genePosFillFrom5(struct genePos *gp, char **row)
 /* Fill in genePos from row containing ascii version of
@@ -817,7 +829,7 @@ for (gp = geneList; gp != NULL; gp = gp->next)
 
 /* Calculate distances, trim unset distances, and sort. */
 if (ord->calcDistances)
-    ord->calcDistances(ord, conn, geneList, geneHash, displayCount);
+    ord->calcDistances(ord, conn, &geneList, geneHash, displayCount);
 if (!gotAdvFilter())
     trimFarGenes(&geneList);
 slSort(&geneList, genePosCmpDistance);

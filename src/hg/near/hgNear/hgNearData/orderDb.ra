@@ -22,3 +22,13 @@ name goSimilarity
 shortLabel GO Similarity
 longLabel Number of shared Gene Ontology terms
 type goSimilarity
+
+name abc
+shortLabel Name
+longLabel Alphabetical order of name
+type abc kgXref kgID geneSymbol
+
+name genomePos
+shortLabel Chromosome
+longLabel Ordered by chromosome position
+type genomePos

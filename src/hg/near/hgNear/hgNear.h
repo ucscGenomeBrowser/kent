@@ -29,6 +29,9 @@ struct genePos
 int genePosCmpName(const void *va, const void *vb);
 /* Sort function to compare two genePos by name. */
 
+int genePosCmpPos(const void *va, const void *vb);
+/* Sort function to compare two genePos by chrom,start. */
+
 void genePosFillFrom5(struct genePos *gp, char **row);
 /* Fill in genePos from row containing ascii version of
  * name/chrom/start/end/protein. */
@@ -136,17 +139,18 @@ struct order
     /* Return TRUE if this ordering can be computed from available data. */
 
     void (*calcDistances)(struct order *ord, struct sqlConnection *conn, 
-    	struct genePos *geneList, struct hash *geneHash, int maxCount);
-    /* Fill in distance fields of first maxCount members of geneList.
-     * GeneHash and geneList contain the same genes.  GeneHash is
-     * keyed by gene->name. */
+    	struct genePos **pGeneList, struct hash *geneHash, int maxCount);
+    /* Fill in distance fields of first maxCount members of *pGeneList.
+     * GeneHash and *pGeneList contain the same genes.  GeneHash is
+     * keyed by gene->name. This function may reorder *pGeneList, 
+     * though it will ultimately be sorted by distance. */
 
     /* -- Data that may be order-specific. -- */
     char *table;			/* Name of associated table. */
     char *keyField;		/* GeneId field in associated table. */
     char *valField;		/* Value field in associated table. */
     char *curGeneField;		/* curGeneId field in associated table. */
-    float distanceMultiplier;	/* What to multiply valField by to get distance. */
+    float distanceMultiplier;	/* What to multiply valField by for distance. */
     };
 
 struct order *orderGetAll(struct sqlConnection *conn);

@@ -28,7 +28,7 @@ boolean xyzExists(struct order *ord, struct sqlConnection *conn)
 }
 
 void xyzCalcDistances(struct order *ord, struct sqlConnection *conn, 
-    struct genePos *geneList, struct hash *geneHash, int maxCount)
+    struct genePos **pGeneList, struct hash *geneHash, int maxCount)
 /* Fill in distance fields in geneList. */
 {
 }
@@ -38,12 +38,6 @@ static void xyzMethods(struct order *ord, char *parameters)
 {
 ord->exists = xyzExists;
 ord->calcDistances = xyzCalcDistances;
-}
-
-static int xyzCompare(struct genePos **pA, struct genePos **pB)
-/* Compare *pA and *pB for sort. */
-{
-struct genePos *a = *pA, *b = *pB;
 }
 
 #endif /* TEMPLATE */
@@ -93,7 +87,7 @@ sqlFreeResult(&sr);
 }
 
 static void pairCalcDistances(struct order *ord, struct sqlConnection *conn, 
-    struct genePos *geneList, struct hash *geneHash, int maxCount)
+    struct genePos **pGeneList, struct hash *geneHash, int maxCount)
 /* Fill in distance fields in geneList. */
 {
 struct dyString *query = dyStringNew(1024);
@@ -136,7 +130,7 @@ return i;
 }
 
 void nameSimilarityCalcDistances(struct order *ord, struct sqlConnection *conn, 
-    struct genePos *geneList, struct hash *geneHash, int maxCount)
+    struct genePos **pGeneList, struct hash *geneHash, int maxCount)
 /* Fill in distance fields in geneList. */
 {
 struct sqlResult *sr;
@@ -182,12 +176,12 @@ ord->calcDistances = nameSimilarityCalcDistances;
 }
 
 static void geneDistanceCalcDistances(struct order *ord, 
-	struct sqlConnection *conn, struct genePos *geneList, 
+	struct sqlConnection *conn, struct genePos **pGeneList, 
 	struct hash *geneHash, int maxCount)
 /* Fill in distance fields in geneList. */
 {
 struct genePos *gp, *curGp = curGeneId;
-for (gp = geneList; gp != NULL; gp = gp->next)
+for (gp = *pGeneList; gp != NULL; gp = gp->next)
     {
     if (sameString(gp->chrom, curGp->chrom))
 	gp->distance = abs(gp->start - curGp->start);
@@ -199,6 +193,78 @@ static void geneDistanceMethods(struct order *ord, char *parameters)
 {
 ord->calcDistances = geneDistanceCalcDistances;
 }
+
+void abcCalcDistances(struct order *ord, struct sqlConnection *conn, 
+    struct genePos **pGeneList, struct hash *geneHash, int maxCount)
+/* Fill in distance fields in geneList. */
+{
+struct hashEl *sortList = NULL, *sortEl;
+struct genePos *gp;
+int count = 0;
+struct sqlResult *sr;
+char **row;
+char query[512];
+
+/* Make up a list keyed by name with genePos vals, and sort it */
+safef(query, sizeof(query), "select %s,%s from %s", 
+	ord->keyField, ord->valField, ord->table);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct hashEl *hel = hashLookup(geneHash, row[0]);
+    while (hel != NULL)
+        {
+	gp = hel->val;
+	AllocVar(sortEl);
+	sortEl->name = cloneString(row[1]);
+	sortEl->val = gp;
+	slAddHead(&sortList, sortEl);
+	hel = hashLookupNext(hel);
+	}
+    }
+sqlFreeResult(&sr);
+slSort(&sortList, hashElCmp);
+
+/* Assign distance according to order in list. */
+for (sortEl = sortList; sortEl != NULL; sortEl = sortEl->next)
+    {
+    gp = sortEl->val;
+    gp->distance = ++count;
+    }
+
+/* Clean up. */
+for (sortEl = sortList; sortEl != NULL; sortEl = sortEl->next)
+    freeMem(sortEl->name);
+slFreeList(&sortList);
+}
+
+static void abcMethods(struct order *ord, char *parameters)
+/* Fill in abc methods. */
+{
+ord->table = cloneString(nextWord(&parameters));
+ord->keyField = cloneString(nextWord(&parameters));
+ord->valField = cloneString(nextWord(&parameters));
+ord->exists = tableExists;
+ord->calcDistances = abcCalcDistances;
+}
+
+void genomePosCalcDistances(struct order *ord, struct sqlConnection *conn, 
+    struct genePos **pGeneList, struct hash *geneHash, int maxCount)
+/* Fill in distance fields in geneList. */
+{
+int count = 0;
+struct genePos *gp;
+slSort(pGeneList, genePosCmpPos);
+for (gp = *pGeneList; gp != NULL; gp = gp->next)
+    gp->distance = ++count;
+}
+
+static void genomePosMethods(struct order *ord, char *parameters)
+/* Fill in genomePos methods. */
+{
+ord->calcDistances = genomePosCalcDistances;
+}
+
 
 static void orderSetMethods(struct order *ord)
 /* Set up methods for this ordering. */
@@ -216,6 +282,11 @@ else if (sameString(type, "geneDistance"))
      geneDistanceMethods(ord, s);
 else if (sameString(type, "goSimilarity"))
      goSimilarityMethods(ord, s);
+else if (sameString(type, "abc"))
+     abcMethods(ord, s);
+else if (sameString(type, "genomePos"))
+     genomePosMethods(ord, s);
+/* Fill in abc methods. */
 else
      errAbort("Unrecognized type %s in ordering %s", ord->type, ord->name);
 freez(&dupe);
