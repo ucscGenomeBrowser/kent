@@ -30,7 +30,7 @@
 #include "extFileTbl.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.9 2003/08/04 07:48:11 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.10 2003/08/22 22:36:38 genbank Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -599,36 +599,11 @@ slFreeList(&tables);
 hFreeConn(&conn);
 }
 
-void moveAll(char *srcDb, char* destDb)
-/* Rename all gbLoadRna tables from database to another. */
-{
-struct slName *tables, *tbl;
-struct sqlConnection *conn;
-struct dyString* sqlCmd = dyStringNew(256);
-char *sep;
-hgSetDb(srcDb);
-conn = hAllocConn();
-
-/* using one does rename atomically */
-tables = getTableList(conn);
-dyStringAppend(sqlCmd, "rename table");
-sep = " "; /* before first table arg */
-for (tbl = tables; tbl != NULL; tbl = tbl->next)
-    {
-    dyStringPrintf(sqlCmd, "%s%s to %s.%s",
-                   sep,tbl->name, destDb, tbl->name);
-    sep = ", "; /* before other table arg */
-    }
-sqlUpdate(conn, sqlCmd->string);
-dyStringFree(&sqlCmd);
-slFreeList(&tables);
-hFreeConn(&conn);
-}
-
 void copyTable(struct sqlConnection *conn, char* destDb, char* srcTable,
                char* destTable)
 /* copy a table from one database to another */
 {
+// FIXME: when on mysql 4.0, use alter table disable keys while copying
 char destDbTable[512], sqlCmd[512];
 safef(destDbTable, sizeof(destDbTable), "%s.%s", destDb, destTable);
 
@@ -639,8 +614,39 @@ safef(sqlCmd, sizeof(sqlCmd), "insert into %s select * from %s",
 sqlUpdate(conn, sqlCmd);
 }
 
+void copyChromInfo(struct sqlConnection *conn, char* destDb)
+/* copy the chromInfo into the dest table if it doesn't already exist.
+ * Which not a genbank managed table, this is needed to find the alignments
+ * for moving/copying tables. */
+{
+char destDbTable[512];
+safef(destDbTable, sizeof(destDbTable), "%s.%s", destDb, "chromInfo");
+if (!sqlTableExists(conn, destDbTable))
+    copyTable(conn, destDb, "chromInfo", "chromInfo");
+}
+
 void copyAll(char *srcDb, char* destDb)
 /* Copy all gbLoadRna tables from database to another. */
+{
+struct slName *tables, *tbl;
+struct sqlConnection *conn;
+hgSetDb(srcDb);
+conn = hAllocConn();
+
+copyChromInfo(conn, destDb);
+
+/* copy each table */
+tables = getTableList(conn);
+for (tbl = tables; tbl != NULL; tbl = tbl->next)
+    {
+    copyTable(conn, destDb, tbl->name, tbl->name);
+    }
+slFreeList(&tables);
+hFreeConn(&conn);
+}
+
+void moveAll(char *srcDb, char* destDb)
+/* Rename all gbLoadRna tables from database to another. */
 {
 struct slName *tables, *tbl;
 struct sqlConnection *conn;
@@ -648,6 +654,8 @@ struct dyString* sqlCmd = dyStringNew(256);
 char *sep;
 hgSetDb(srcDb);
 conn = hAllocConn();
+
+copyChromInfo(conn, destDb);
 
 /* using one does rename atomically */
 tables = getTableList(conn);

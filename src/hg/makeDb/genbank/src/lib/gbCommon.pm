@@ -346,9 +346,9 @@ sub getFileModTime($) {
 }
 
 # Run a program, exit if an error occurs.
-sub runProg($) {
-  my($command) = @_;
-  if ($gbCommon::verbose) {
+sub runProg($;$) {
+  my($command, $quiet) = @_;
+  if ($gbCommon::verbose && !$quite) {
       print STDERR "$command\n";
   }
   my $stat = system($command);
@@ -372,10 +372,13 @@ sub runProgNoAbort($) {
 
 # Run a command, returning the output and exiting if there
 # is an error.
-sub callProg($) {
-  my($command) = @_;
-
-  if ($gbCommon::verbose) {
+sub callProg($;$) {
+  my($command, $quiet) = @_;
+  if (!defined($quiet)) {
+      $quite = 0;
+  }
+  
+  if ($gbCommon::verbose && !$quite) {
       print STDERR "$command\n";
   }
   my $output = `$command`;
@@ -739,7 +742,9 @@ sub callMysql($) {
     my($args) = @_;
 
     my($user, $pass) = getMysqlUser();
-    return callProg("mysql -u$user -p$pass $args");
+    # still not super secure, since ps can see env.
+    $main::ENV{MYSQL_PWD} = $pass;
+    return callProg("mysql -u$user $args");
 }
 
 # execute a mysqldump with genome user/password
