@@ -224,23 +224,31 @@ aaSeq *hPepSeq(char *acc);
 /* Return sequence for a peptide. */
 
 boolean hGenBankHaveSeq(char *acc, char *compatTable);
-/* Check if GenBank or RefSeq mRNA or peptide sequence is in the database.
- * This handles compatibility between pre-incremental genbank databases that
- * keep sequences in a table and the newer ones that keep all sequences as
- * external.
+/* Get a GenBank or RefSeq mRNA or EST sequence or NULL if it doesn't exist.
+ * This handles compatibility between pre-incremental genbank databases where
+ * refSeq sequences were stored in tables and the newer scheme that keeps all
+ * sequences in external files.  If compatTable is not NULL and the table
+ * exists, this is checked as a fallback.  If compatTable is null, only the
+ * external file tables are checked.
  */
 
 struct dnaSeq *hGenBankGetMrna(char *acc, char *compatTable);
-/* Get a GenBank or RefSeq mRNA or EST sequence This handles compatibility
- * between pre-incremental genbank databases that keep sequences in a table
- * and the newer ones that keep all sequences as external.  Returns NULL if
- * not found.
+/* Get a GenBank or RefSeq mRNA or EST sequence or NULL if it doesn't exist.
+ * This handles compatibility between pre-incremental genbank databases where
+ * refSeq sequences were stored in tables and the newer scheme that keeps all
+ * sequences in external files.  If compatTable is not NULL and the table
+ * exists, this is checked as a fallback.  If compatTable is null, only the
+ * external file tables are checked.
  */
 
 aaSeq *hGenBankGetPep(char *acc, char *compatTable);
-/* Get a RefSeq mRNA peptide sequence This handles compatibility between
- * pre-incremental genbank databases that keep sequences in a table and the
- * newer ones that keep all sequences as external.  Returns NULL if not found.
+/* Get a RefSeq peptide sequence or NULL if it doesn't exist.  This handles
+ * compatibility between pre-incremental genbank databases where refSeq
+ * sequences were stored in tables and the newer scheme that keeps all
+ * sequences in external files.  If compatTable is not NULL and the table
+ * exists, this is checked as a fallback.  If compatTable is null, only the
+ * external file tables are checked.  Note, older databases only have
+ * peptides in the tables.
  */
 
 struct bed *hGetBedRange(char *table, char *chrom, int chromStart,

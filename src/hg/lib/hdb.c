@@ -24,7 +24,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.115 2003/06/24 03:48:56 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.116 2003/06/25 20:48:14 markd Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -875,45 +875,53 @@ return faSeqFromMemText(buf, FALSE);
 
 static boolean checkIfInTable(struct sqlConnection *conn, char *acc,
                               char *column, char *table)
-/* check if a table exists and sequence is in the table */
+/* check if a a sequences exists in a table */
 {
 boolean inTable = FALSE;
-if (hTableExists(table))
-    {
-    char query[256];
-    struct sqlResult *sr;
-    char **row;
-    safef(query, sizeof(query), "select 0 from %s where %s = '%s'",
-          table, column, acc);
-    sr = sqlGetResult(conn, query);
-    inTable = ((row = sqlNextRow(sr)) != NULL);
-    sqlFreeResult(&sr);
-    }
+char query[256];
+struct sqlResult *sr;
+char **row;
+safef(query, sizeof(query), "select 0 from %s where %s = '%s'",
+      table, column, acc);
+sr = sqlGetResult(conn, query);
+inTable = ((row = sqlNextRow(sr)) != NULL);
+sqlFreeResult(&sr);
 return inTable;
 }
 
 boolean hGenBankHaveSeq(char *acc, char *compatTable)
 /* Check if GenBank or RefSeq mRNA or peptide sequence is in the database.
- * This handles compatibility between pre-incremental genbank databases that
- * keep sequences in a table and the newer ones that keep all sequences as
- * external.
+ * This handles compatibility between pre-incremental genbank databases 
+ * where refSeq sequences were stored in tables and the newer scheme
+ * that keeps all sequences in external files.  If compatTable is not
+ * NULL and the table exists, this is checked as a fallback.  If compatTable
+ * is null, only the external file tables are checked.
  */
 {
 struct sqlConnection *conn = hAllocConn();
-boolean haveSeq = checkIfInTable(conn, acc, "acc", "gbSeq")
-    || checkIfInTable(conn, acc, "name", compatTable);
+boolean haveSeq = FALSE;
+if (sqlTableExists(conn, "gbSeq"))
+    haveSeq = checkIfInTable(conn, acc, "acc", "gbSeq");
+else
+    haveSeq = checkIfInTable(conn, acc, "acc", "seq");
+
+/* If not found, and have compatTable, check it.  This is done
+ * even if we have gbSeq to allow for partial migration of databases */
+if (!haveSeq && (compatTable != NULL) && sqlTableExists(conn, compatTable))
+    haveSeq = checkIfInTable(conn, acc, "name", compatTable);
+
 hFreeConn(&conn);
 return haveSeq;
 }
 
-static struct dnaSeq *loadSeqFromTable(char *acc, char *table)
+static struct dnaSeq *loadSeqFromTable(struct sqlConnection *conn,
+                                       char *acc, char *table)
 /* load a sequence from table. */
 {
 struct dnaSeq *seq = NULL;
 struct sqlResult *sr;
 char **row;
 char query[256];
-struct sqlConnection *conn = hAllocConn();
 
 safef(query, sizeof(query), "select name,seq from %s where name = '%s'",
       table, acc);
@@ -922,42 +930,55 @@ if ((row = sqlNextRow(sr)) != NULL)
     seq = newDnaSeq(cloneString(row[1]), strlen(row[1]), row[0]);
 
 sqlFreeResult(&sr);
-hFreeConn(&conn);
 return seq;
 }
 
 struct dnaSeq *hGenBankGetMrna(char *acc, char *compatTable)
-/* Get a GenBank or RefSeq mRNA or EST sequence This handles compatibility
- * between pre-incremental genbank databases that keep sequences in a table
- * and the newer ones that keep all sequences as external.  Returns NULL if
- * not found.
+/* Get a GenBank or RefSeq mRNA or EST sequence or NULL if it doesn't exist.
+ * This handles compatibility between pre-incremental genbank databases where
+ * refSeq sequences were stored in tables and the newer scheme that keeps all
+ * sequences in external files.  If compatTable is not NULL and the table
+ * exists, this is checked as a fallback.  If compatTable is null, only the
+ * external file tables are checked.
  */
 {
+struct sqlConnection *conn = hAllocConn();
 struct dnaSeq *seq = NULL;
-if (hTableExists("gbSeq"))
+
+if (sqlTableExists(conn, "gbSeq"))
     seq = hRnaSeq(acc);
 
-/* try the old table, even on new databases, this helps migration to the new
- * scheme. */
-if ((seq == NULL) && hTableExists(compatTable))
-    seq = loadSeqFromTable(acc, compatTable);
+/* If not found, and have compatTable, check it.  This is done
+ * even if we have gbSeq to allow for partial migration of databases */
+if ((seq == NULL) && (compatTable != NULL) && sqlTableExists(conn, compatTable))
+    seq = loadSeqFromTable(conn, acc, compatTable);
+
+hFreeConn(&conn);
 return seq;
 }
 
 aaSeq *hGenBankGetPep(char *acc, char *compatTable)
-/* Get a RefSeq mRNA peptide sequence This handles compatibility between
- * pre-incremental genbank databases that keep sequences in a table and the
- * newer ones that keep all sequences as external.  Returns NULL if not found.
+/* Get a RefSeq peptide sequence or NULL if it doesn't exist.  This handles
+ * compatibility between pre-incremental genbank databases where refSeq
+ * sequences were stored in tables and the newer scheme that keeps all
+ * sequences in external files.  If compatTable is not NULL and the table
+ * exists, this is checked as a fallback.  If compatTable is null, only the
+ * external file tables are checked.  Note, older databases only have
+ * peptides in the tables.
  */
 {
+struct sqlConnection *conn = hAllocConn();
 struct dnaSeq *seq = NULL;
-if (hTableExists("gbSeq"))
+
+if (sqlTableExists(conn, "gbSeq"))
     seq = hPepSeq(acc);
 
-/* try the old table, even on new databases, this helps migration to the new
- * scheme. */
-if ((seq == NULL) && hTableExists(compatTable))
-    seq = loadSeqFromTable(acc, compatTable);
+/* If not found, and have compatTable, check it.  This is done
+ * even if we have gbSeq to allow for partial migration of databases */
+if ((seq == NULL) && (compatTable != NULL) && sqlTableExists(conn, compatTable))
+    seq = loadSeqFromTable(conn, acc, compatTable);
+
+hFreeConn(&conn);
 return seq;
 }
 
