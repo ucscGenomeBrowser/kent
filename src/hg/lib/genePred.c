@@ -10,7 +10,7 @@
 #include "genePred.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.15 2003/06/06 13:08:40 baertsch Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.16 2003/06/15 06:50:58 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -284,6 +284,7 @@ int startOffset, endOffset;
 int cdsStart = -1, cdsEnd = -1;
 int i;
 
+/* get CDS offsets in portion of query that aligned */
 if (psl->strand[0] == '-')
     {
     endOffset = rnaCdsStart - psl->qStart;
@@ -296,7 +297,7 @@ else
     }
 
 /* Adjust starting pos. */
-for (i=0; i<psl->blockCount; ++i)
+for (i=0; i<psl->blockCount; i++)
     {
     int blockSize = psl->blockSizes[i];
     if (startOffset < 0)
@@ -338,9 +339,19 @@ for (i=psl->blockCount-1; i >= 0; --i)
     }
 
 if ((cdsStart == -1) || (cdsEnd == -1))
-    cdsEnd = cdsStart = psl->tEnd;
-*retCdsStart = cdsStart;
-*retCdsEnd = cdsEnd;
+    {
+    /* one or both not found, mark as no CDS annotation */ 
+    *retCdsStart = psl->tEnd;
+    *retCdsEnd = psl->tEnd;
+    }
+else
+    {
+    /* return in genomic coords */
+    if (psl->strand[1] == '-')
+        reverseIntRange(&cdsStart, &cdsEnd, psl->tSize);
+    *retCdsStart = cdsStart;
+    *retCdsEnd = cdsEnd;
+    }
 }
 
 static void pslToExons(struct psl *psl, struct genePred *gene,
@@ -349,14 +360,30 @@ static void pslToExons(struct psl *psl, struct genePred *gene,
  * separated by small inserts as necessary. */
 {
 int iBlk, iExon = -1;
+int startIdx, stopIdx, idxIncr;
 
 gene->exonStarts = needMem(psl->blockCount*sizeof(unsigned));
 gene->exonEnds = needMem(psl->blockCount*sizeof(unsigned));
 
-for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
+if (psl->strand[1] == '-')
+    {
+    startIdx = psl->blockCount-1;
+    stopIdx = -1;
+    idxIncr = -1;
+    }
+else
+    {
+    startIdx = 0;
+    stopIdx = psl->blockCount;
+    idxIncr = 1;
+    }
+
+for (iBlk = startIdx; iBlk != stopIdx; iBlk += idxIncr)
     {
     unsigned tStart = psl->tStarts[iBlk];
     unsigned tEnd = tStart + psl->blockSizes[iBlk];
+    if (psl->strand[1] == '-')
+        reverseIntRange(&tStart, &tEnd, psl->tSize);
     if ((iExon < 0) || ((tStart - gene->exonEnds[iExon]) > insertMergeSize))
         {
         iExon++;
@@ -378,9 +405,20 @@ struct genePred *gene;
 AllocVar(gene);
 gene->name = cloneString(psl->qName);
 gene->chrom = cloneString(psl->tName);
-gene->strand[0] = psl->strand[0];
 gene->txStart = psl->tStart;
 gene->txEnd = psl->tEnd;
+
+/* get strand in genome that the positive version mRNA aligns to */
+if (psl->strand[1] == '\0')
+    {
+    /* assumed pos target strand, so neg query would be pos target */
+    gene->strand[0] = psl->strand[0];
+    }
+else 
+    {
+    /* query and target strand are different; will be neg when query pos */
+    gene->strand[0] = ((psl->strand[0] != psl->strand[1]) ? '-' : '+');
+    }
 
 if ((cdsStart == -1) || (cdsEnd == -1))
     {
