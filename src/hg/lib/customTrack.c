@@ -21,7 +21,7 @@
 #include "cheapcgi.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.53 2004/11/23 22:32:23 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.54 2004/11/24 19:44:02 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -215,6 +215,21 @@ if ((val = hashFindVal(hash, "type")) != NULL)
 	track->wiggle = TRUE;
 	if ((val = hashFindVal(hash, "wigType")) != NULL)
 	    tdb->type = cloneString(val);
+	}
+    }
+if (!track->wiggle)
+    {
+    if ((val = hashFindVal(hash, "itemRgb")) != NULL)
+	{
+	/*	There are no other tdb->settings for non-Wiggle track types */
+	if (differentWord(val,"Off"))
+	    {
+	    struct dyString *bedSettings = newDyString(0);
+	    char *format0="itemRgb On\n";
+
+	    dyStringPrintf(bedSettings, format0);
+	    tdb->settings = dyStringCannibalize(&bedSettings);
+	    }
 	}
     }
 if ((val = hashFindVal(hash, "name")) != NULL)
