@@ -333,6 +333,7 @@ struct wiggleDataStream
     unsigned spanLimit;		/*	for span==spanLimit on file reads */
     int winStart;		/*	for fetches between winStart, winEnd */
     int winEnd;			/*	for fetches between winStart, winEnd */
+    int offset;			/*	offset to add to positions on output */
     unsigned long long rowsRead;     /*	reading stats, SQL rows read */
     unsigned long long validPoints;  /*	reading stats, number of data bytes */
     unsigned long long noDataPoints; /* reading stats, NO_DATA bytes	*/
