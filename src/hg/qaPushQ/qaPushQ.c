@@ -22,7 +22,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.15 2004/05/11 19:42:05 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.16 2004/05/11 19:58:43 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -172,6 +172,7 @@ char *colHdr[] = {
 
 char pushQtbl[256] = "pushQ";   /* default */
 
+char month[256] = "current";  
 
 enum colEnum colOrder[MAXCOLS];
 int numColumns = 0;
@@ -685,14 +686,13 @@ char **row;
 char query[256];
 char lastP = ' ';
 int c = 0;
-char *month = cgiUsualString("month","");
 char monthsql[256];
 
 /* initialize column display order */
 initColsFromString(showColumns);
 
 safef(monthsql,sizeof(monthsql),"");
-if (!sameString(month,""))
+if (!(sameString(month,"")||sameString(month,"current")))
     {
     safef(monthsql,sizeof(monthsql)," where priority='L' and qadate like '%s%%' ",month);
     }
@@ -730,7 +730,7 @@ if (sameString(month,""))
     }
 else
     {
-    printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=display>Current</A>\n");
+    printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=display&month=current>Current</A>\n");
     }
 printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=reset>Logout</A>\n");
 printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showAllCol>All Columns</A>\n");
@@ -1616,6 +1616,11 @@ while(parseList(myUser.contents,'?',i,tempVar,sizeof(tempVar)))
 	safef(pushQtbl,sizeof(pushQtbl),tempVal);
 	}
 
+    if (sameString(tempVarName,"month"))
+	{
+	safef(month,sizeof(month),tempVal);
+	}
+
     // debug
     //safef(msg,sizeof(msg),"tempVar=%s<br>\n tempVarName=%s<br>\n tempVal=%s<br>\n showColumns=%s<br>\n",tempVar,tempVarName,tempVal,showColumns);
     //htmShell(TITLE, doMsg, NULL);
@@ -1634,7 +1639,8 @@ char query[256];
 struct dyString * newcontents = newDyString(2048);  /* need room */
 
 dyStringPrintf(newcontents, "?showColumns=%s", showColumns);
-dyStringPrintf(newcontents, "?org=%s", pushQtbl);
+dyStringPrintf(newcontents, "?org=%s"        , pushQtbl   );
+dyStringPrintf(newcontents, "?month=%s"      , month      );
 
 freeMem(&myUser.contents);
 myUser.contents = newcontents->string;
@@ -1846,7 +1852,7 @@ char query[256];
 
 printf("<h4>Logs for Month</h4>\n");
 printf("<br>\n");
-printf("<A href=qaPushQ?action=display>Current</A><br>\n");
+printf("<A href=qaPushQ?action=display&month=current>Current</A><br>\n");
 printf("<br>\n");
 
 safef(query, sizeof(query), "select distinct substring(qadate,1,7) from %s where priority='L' order by qadate desc",pushQtbl);
@@ -2307,6 +2313,7 @@ printf("Logout - clears your cookie and logs out.<br>\n");
 printf("All Columns - allows you to bring back hidden columns.<br>\n");
 printf("Default Columns - reset your column preferences to default columns and order.<br>\n");
 printf("Log by Month - view old log records by month<br>\n");
+printf("Gateway - click to select alternate push queues, if any, e.g. new track/org<br>\n");
 printf("HELP - click to see this help.<br>\n");
 printf("<br>\n");
 printf("! - click to hide a column you do not wish to see.<br>\n");
@@ -2437,7 +2444,9 @@ int main(int argc, char *argv[], char *env[])
 {
 
 char *action = NULL;   /* have to put declarations first */
-char *org = NULL;
+
+char *org = NULL;      /* changes pushQtbl */
+char *newmonth = NULL; /* changes month */
 
 if (!cgiIsOnWeb())
     {
@@ -2518,6 +2527,11 @@ if (!sameString(org,""))
     safef(pushQtbl,sizeof(pushQtbl),org);
     }
 
+newmonth = cgiUsualString("month","");  /* get org, defaults to display of main push queue */
+if (!sameString(newmonth,""))
+    {
+    safef(month,sizeof(month),newmonth);
+    }
 
 /*
 htmShell(TITLE,dumpCookieList, NULL);
