@@ -1,4 +1,22 @@
-This file describes how we made the zoo browser database.
+This file describes how we made the zoo browser database starting first with
+just using the mouse data.
+
+DOWNLOAD THE ZOO MOUSE DATA AND SET UP A LOCAL DIRECTORY STRUCTURE
+o - See the doc in /cluster/store2/zoo/zoo.readme for download instructions,
+then download the data.
+    cd /cluster/store2/zoo
+    mkdir zooMouse1
+    cd zooMouse1
+    mkdir 1 (This fakes the chromosome directory structure so we can fake a
+browser track with 1 chromosome)
+    cd 1
+    mkdir ctgCFTR
+    cp /cluster/store2/zoo/rawData/CFTRseqs/mouse_CFTR.fasta.masked ctgCFTR
+    cd ..
+    ln -s ctgCFTR/mouse_CFTR.fasta.masked ./chr1.fa
+    cd /cluster/store2/zoo/zooMouse1
+    mkdir bed
+    ln -s /cluster/store1/gs.11/build28/jkstuff ./jkstuff
 
 
 PROCESSING MOUSE MRNA FROM GENBANK INTO DATABASE. (done)
@@ -27,26 +45,37 @@ o - Create the database.
 o - Make sure there is at least 5 gig free on hgwdev:/usr/local/mysql 
 o - Store the mRNA (non-alignment) info in database.
      hgLoadRna new zooMouse1
-     hgLoadRna add zooMouse1 /cluster/store1/mrna.127/mouseRna.fa /cluster/store1/mrna
-.127/mouseRna.ra
-     hgLoadRna add zooMouse1 /cluster/store1/mrna.127/mouseEst.fa /cluster/store1/mrna
-.127/mouseEst.ra
-    The last line will take quite some time to complete.  It will count up to
-    about 3,800,000 before it is done.
-    NOTE: I had to patch the extFile table a little after this.  Time to add a t
-ype option
-    to hgLoadRna perhaps.
+     hgLoadRna add -type=mRNA zooMouse1 /cluster/store1/mrna.127/mouseRna.fa /cluster/store1/mrna.127/mouseRna.ra
+     hgLoadRna add -type=EST zooMouse1 /cluster/store1/mrna.127/mouseEst.fa cvs update/cluster/store1/mrna.127/mouseEst.ra
+    The last line will take quite some time to complete.  
+        It will count up to about 3,800,000 before it is done.
+
+REPEAT MASKING (done)
+
+We don't use the cluster for this because we have such a small input data set.
+Repeat mask on sensitive settings by doing.
+    ssh kk
+    cd ~/zoo/bed
+    mkdir rmskS
+    cd rmskS
+    cp /cluster/store2/mm.2001.11/mm1/bed/rmskS/rmskS.csh  .
+    edit rmskS.csh to update paths to current mouse assembly and to output
+    directory called "out"
+    mkdir out
+    run ./rmskS.csh chr1.fa     
+
+Then load the .out files into the database with:
+    ssh hgwdev
+    cd /cluster/store2/zoo/zooMouse1/bed/rmskS/out 
+    hgLoadOut zooMouse1 *.fa.out
 
 
-REPEAT MASKING  (done)
-This was already done by the zoo consortium.
-
-STORING ZOO SEQUENCE AND ASSEMBLY INFORMATION  (done)
+STORING ZOO SEQUENCE AND ASSEMBLY INFORMATION  (done) 
 
 Create packed chromosome sequence files 
      ssh kkstore
-     cd ~/oo
-     tcsh jkStuff/makeNib.sh
+     cd ~/zoo
+     cp /cluster/store2/mm.2001.11/jkStuff/makeNib.sh .
      You will get some error messages because we aren't processing as
          many chromsomes as makeNib.sh is expecting but that's ok.
 
@@ -386,7 +415,7 @@ o - Load best in genome into database as so:
 	cd ~/mouse/vsOo33/bestMouse
         hgLoadPsl mm1 *.psl
 
-PRODUCING CROSS_SPECIES mRNA ALIGMENTS (in progress)
+PRODUCING CROSS_SPECIES mRNA ALIGMENTS (todo)
 
 Here you align vertebrate mRNAs against the masked genome on the
 cluster you set up during the previous step.
