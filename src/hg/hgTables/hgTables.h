@@ -568,9 +568,6 @@ void doOutCustomTrack(char *table, struct sqlConnection *conn);
 void doOutGalaQuery(struct trackDb *track, char *table, struct sqlConnection *conn);
 /* Put up form to select GALA query output format. */
 
-void doGalaQueryOptions(struct trackDb *track, char *table, struct sqlConnection *conn);
-/* print options form for GALA query output */
-
 void doSummaryStats(struct sqlConnection *conn);
 /* Put up page showing summary stats for track. */
 

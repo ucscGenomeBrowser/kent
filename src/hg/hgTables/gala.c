@@ -20,7 +20,7 @@
 #include "htmlPage.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: gala.c,v 1.2 2004/09/23 15:55:43 giardine Exp $";
+static char const rcsid[] = "$Id: gala.c,v 1.3 2004/09/23 21:30:37 giardine Exp $";
 
 boolean galaAvail(char *db) 
 /* Return TRUE if GALA is available for this build */
@@ -50,8 +50,9 @@ if (lf != NULL)
      while (lineFileNextRowTab(lf, row, ArraySize(row)))
           if (sameString(db, row[2]))
               {
+              char *url = cloneString(row[0]);
               lineFileClose(&lf);
-              return row[0];
+              return url;
               }
      }
 errAbort("GALA page not available for %s", db);
@@ -59,13 +60,7 @@ return NULL;
 }
 
 void doOutGalaQuery(struct trackDb *track, char *table, struct sqlConnection *conn)
-/* Put up form to select Custom Track output format. */
-{
-doGalaQueryOptions(track, table, conn);
-}
-
-void doGalaQueryOptions (struct trackDb *track, char *table, struct sqlConnection *conn)
-/* Put up form to get options for GALA query */
+/* Put up form to select options for GALA output format. (similiar to ct) */
 {
 char *table2 = NULL;    /* For now... */
 struct hTableInfo *hti = getHti(database, table);
@@ -195,13 +190,11 @@ for (region = regionList; region != NULL; region = region->next)
             {
             for (bed = bedList;  bed != NULL;  bed = bed->next)
                 {
+                struct bed *dupe = cloneBed(bed); 
                 char *ptr = strchr(bed->name, ' ');
                 if (ptr != NULL)
                     *ptr = 0;
-                {
-                struct bed *dupe = cloneBed(bed); /* Out of local memory. */
                 slAddHead(&ctNew->bedList, dupe);
-                }
                 gotResults = TRUE;
                 }
             }
@@ -211,13 +204,11 @@ for (region = regionList; region != NULL; region = region->next)
             fbList = fbFromBed(fbTQ, hti, bedList, 0, 0, FALSE, FALSE);
             for (fbPtr=fbList;  fbPtr != NULL;  fbPtr=fbPtr->next)
                 {
+                struct bed *fbBed = fbToBedOne(fbPtr);
                 char *ptr = strchr(fbPtr->name, ' ');
                 if (ptr != NULL)
                     *ptr = 0;
-                {
-                struct bed *fbBed = fbToBedOne(fbPtr);
                 slAddHead(&ctNew->bedList, fbBed );
-                }
                 gotResults = TRUE;
                 }
             featureBitsFreeList(&fbList);
@@ -233,12 +224,9 @@ if (!gotResults)
     }
 else 
     {
-    char *wigPosition = NULL;
     char *serverName = cgiServerName();
     char galaUrl[512];
     char headerText[512];
-    char posBuf[256];
-    char *position = cartOptionalString(cart, "position");
     int redirDelay = 0;
     char urlForResultTrack[PATH_LEN];
     struct lineFile *lf;
@@ -247,33 +235,7 @@ else
     /* Overwrite existing custom track for GALA: */
         {
         struct tempName tn;
-        if (wigOutData)
-            {
-            unsigned i;
-            unsigned chromEnd;
-            struct asciiDatum *aData;
-            char posBuf[256];
-            struct wiggleDataStream *wds = NULL;
-            /*  create an otherwise empty wds so we can print out the list */
-            wds = wiggleDataStreamNew();
-            wds->ascii = wigDataList;
-            wds->asciiOut(wds, ctNew->wigAscii, TRUE, FALSE);
-            aData = wds->ascii->data;
-            chromEnd = 0;
-            for( i = 0; i < wds->ascii->count; ++i, ++aData)
-                if (aData->chromStart > chromEnd) chromEnd = aData->chromStart;
-
-            chromEnd += wds->ascii->span;
-
-            safef(posBuf, sizeof(posBuf),
-                "%s:%d-%d", wds->ascii->chrom, wds->ascii->data->chromStart,
-                chromEnd);
-            wigPosition = cloneString(posBuf);
-
-            wiggleDataStreamFree(&wds);
-            }
-        else
-            slReverse(&ctNew->bedList);
+        slReverse(&ctNew->bedList);
 
         /* Save the custom track out to file for GALA(overwrite the old file) */
         galaFileName = cartOptionalString(cart, "ctGala");
@@ -287,25 +249,14 @@ else
         }
 
     /*  Put up redirect-to-browser page. */
-
-    if (position == NULL)
-        {
-        struct bed *bed = ctNew->bedList;
-        safef(posBuf, sizeof(posBuf),
-                "%s:%d-%d", bed->chrom, bed->chromStart+1, bed->chromEnd);
-        position = posBuf;
-        }
     /* change name to full url instead of relative */
     stripString(galaFileName, ".."); 
-    ZeroVar(&urlForResultTrack);
     safef(urlForResultTrack, sizeof(urlForResultTrack),
           "http://%s%s", serverName, galaFileName);
-    ZeroVar(&galaUrl);
     safef(galaUrl, sizeof(galaUrl),
           "%s?mode=%s&usrfile3=%s", getGalaUrl(database), "Add+user+ranges", 
           urlForResultTrack);
     
-    ZeroVar(&headerText);
     safef(headerText, sizeof(headerText),
           "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"%d; URL=%s\">",
           redirDelay, galaUrl);
