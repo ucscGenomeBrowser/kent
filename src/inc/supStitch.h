@@ -61,7 +61,7 @@ void ssBundleFreeList(struct ssBundle **pList);
 
 
 int ssStitch(struct ssBundle *bundle, enum ffStringency stringency, 
-	int minScore);
+	int minScore, int maxToReturn);
 /* Glue together mrnas in bundle as much as possible. Returns number of
  * alignments after stitching. Updates bundle->ffList with stitched
  * together version. */
