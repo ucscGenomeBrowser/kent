@@ -10,7 +10,7 @@
 #include "genePred.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.12 2004/03/17 03:45:57 kate Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.13 2004/04/02 16:23:57 kent Exp $";
 
 /* Javascript to help make a selection from a drop-down
  * go back to the server. */
@@ -87,6 +87,12 @@ if (cartTrack != NULL)
     selectedName = findLabel(nameList, cartTrack);
 if (selectedName == NULL)
     selectedName = findLabel(nameList, "Known Genes");
+if (selectedName == NULL)
+    selectedName = findLabel(nameList, "SGD Genes");
+if (selectedName == NULL)
+    selectedName = findLabel(nameList, "BDGP Genes");
+if (selectedName == NULL)
+    selectedName = findLabel(nameList, "WormBase Genes");
 if (selectedName == NULL)
     selectedName = findLabel(nameList, "RefSeq Genes");
 if (selectedName == NULL)
