@@ -6,10 +6,11 @@
 #include "dlist.h"
 #include "jksql.h"
 #include "genePred.h"
+#include "genePredReader.h"
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.12 2004/03/06 23:00:16 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.13 2004/03/22 04:28:45 markd Exp $";
 
 /* Command line driven variables. */
 char *clChrom = NULL;
@@ -20,7 +21,9 @@ void usage()
 errAbort(
   "clusterGenes - Cluster genes from genePred tracks\n"
   "usage:\n"
-  "   clusterGenes outputFile database table1 ... tableN\n"
+  "   clusterGenes [options] outputFile database table1 ... tableN\n"
+  "   clusterGenes [options] -trackNames outputFile database track1 table1 ... trackN tableN\n"
+  "\n"
   "Where outputFile is a tab-separated file describing the clustering,\n"
   "database is a genome database such as mm4 or hg16,\n"
   "and the table parameters are either tables in genePred format in that\n"
@@ -30,6 +33,9 @@ errAbort(
   "   -chrom=chrN - Just work on one chromosome\n"
   "   -chromFile=file - Just work on chromosomes listed in this file\n"
   "   -cds - cluster only on CDS exons\n"
+  "   -trackNames - If specified, input are pairs of track names and files.\n"
+  "    This is useful when the file names don't reflact the desired track\n"
+  "    names.\n"
   "\n"
   "The conflicts column contains `y' if the cluster has comficts.\n"
   "A conflict is a cluster where all of the genes don't share exons. \n"
@@ -41,35 +47,59 @@ static struct optionSpec options[] = {
    {"chrom", OPTION_STRING},
    {"chromFile", OPTION_STRING},
    {"cds", OPTION_BOOLEAN},
+   {"trackNames", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
 /* from command line  */
-boolean useCds;
+boolean gUseCds;
+boolean gTrackNames;
 
 struct track
-/*  Object representing a track. Only one object is allocated for a track,
- *  pointers can be compared */
+/*  Object representing a track. */
 {
     struct track *next;
-    char *name;
+    char *name;          /* name to use */
+    char *table;         /* table or file */
+    boolean isDb;        /* is this a database table or file? */
 };
 
-/* Global list of tracks (tables) in use. */
-struct track* allTracks = NULL;
-
-struct track* getTrack(char* name)
-/* find the track object for name, creating if needed */
+struct track* trackNew(char* name,
+                       char *table)
+/* create a new track, adding it to the global list, if name is NULL,
+ * name is derived from table. */
 {
 struct track* track;
-for (track = allTracks; track != NULL; track = track->next)
-    {
-    if (sameString(track->name, name))
-        return track;
-    }
 AllocVar(track);
-track->name = cloneString(name);
-slAddTail(&allTracks, track);
+
+/* determin if table or file */
+if (fileExists(table))
+    track->isDb = FALSE;
+else if (hTableExists(table))
+    track->isDb = TRUE;
+else
+    errAbort("table %s.%s or file %s doesn't exist", hGetDb(), table, table);
+
+/* either default or save name */
+if (name == NULL)
+    {
+    if (!track->isDb)
+        {
+        /* will load from file */
+        char trackName[256];
+        splitPath(table, NULL, trackName, NULL);
+        track->name = cloneString(trackName);
+        }
+    else
+        {
+        /* will load from db table */
+        track->name = cloneString(table);
+        }
+    }
+else
+    track->name = cloneString(name);
+
+track->table = cloneString(table);
 return track;
 }
 
@@ -79,7 +109,7 @@ boolean gpGetExon(struct genePred* gp, int exonIx, int *exonStartRet, int *exonE
 {
 int exonStart = gp->exonStarts[exonIx];
 int exonEnd = gp->exonEnds[exonIx];
-if (useCds)
+if (gUseCds)
     {
     if (exonStart < gp->cdsStart)
         exonStart = gp->cdsStart;
@@ -450,45 +480,32 @@ for (exonIx = 0; exonIx < gp->exonCount; ++exonIx)
     }
 }
 
-void loadGenesFromTable(struct clusterMaker *cm, struct sqlConnection *conn,
-                        char *table, char *chrom, char strand,
-                        struct genePred **gpList)
-/* load genes into cluster from a table */
+void loadGenes(struct clusterMaker *cm, struct sqlConnection *conn,
+               struct track* track, char *chrom, char strand,
+               struct genePred **gpList)
+/* load genes into cluster from a table or file */
 {
-char extraWhere[64];
-struct sqlResult *sr;
-char **row;
-int rowOffset;
-struct track *track = getTrack(table);
+struct genePredReader *gpr;
+struct genePred *gp;
+if (verboseLevel() >= 2)
+    fprintf(stderr, "%s %s %c\n", track->table, chrom, strand);
 
-safef(extraWhere, sizeof(extraWhere), "strand = '%c'", strand);
-sr = hChromQuery(conn, table, chrom, extraWhere, &rowOffset);
-while ((row = sqlNextRow(sr)) != NULL)
+/* setup reader for file or table */
+if (track->isDb)
     {
-    struct genePred *gp = genePredLoad(row + rowOffset);
-    slAddHead(gpList, gp);
-    clusterMakerAdd(cm, track, gp);
-    ++totalGeneCount;
+    char where[128];
+    safef(where, sizeof(where), "chrom = '%s' and strand = '%c'", chrom, strand);
+    gpr = genePredReaderQuery(conn, track->table,  where);
     }
-sqlFreeResult(&sr);
-}
-
-void loadGenesFromFile(struct clusterMaker *cm, char *gpFile, char *chrom,
-                       char strand, struct genePred **gpList)
-/* load genes into cluster from a table */
-{
-struct lineFile *lf = lineFileOpen(gpFile, TRUE);
-char *row[GENEPRED_NUM_COLS];
-char trackName[PATH_LEN];
-struct track *track;
-splitPath(gpFile, NULL, trackName, NULL);
-track = getTrack(trackName);
-
-
-while (lineFileNextRowTab(lf, row, GENEPRED_NUM_COLS))
+else 
     {
-    struct genePred *gp = genePredLoad(row);
-    if ((gp->strand[0] == strand) && sameString(gp->chrom, chrom))
+    gpr = genePredReaderFile(track->table, chrom);
+    }
+
+/* read and add to cluster and deletion list */
+while ((gp = genePredReaderNext(gpr)) != NULL)
+    {
+    if (gp->strand[0] == strand)
         {
         slAddHead(gpList, gp);
         clusterMakerAdd(cm, track, gp);
@@ -499,36 +516,21 @@ while (lineFileNextRowTab(lf, row, GENEPRED_NUM_COLS))
         genePredFree(&gp);
         }
     }
-lineFileClose(&lf); 
-}
-
-void loadGenes(struct clusterMaker *cm, struct sqlConnection *conn,
-               char *table, char *chrom, char strand,
-               struct genePred **gpList)
-/* load genes into cluster from a table or file */
-{
-if (verboseLevel() >= 2)
-    fprintf(stderr, "%s %s %c\n", table, chrom, strand);
-if (fileExists(table))
-    loadGenesFromFile(cm, table, chrom, strand, gpList);
-else if (hTableExists(table))
-    loadGenesFromTable(cm, conn, table, chrom, strand, gpList);
-else
-    errAbort("Table or file %s doesn't exist in %s", table, hGetDb());
+genePredReaderFree(&gpr);
 }
 
 void clusterGenesOnStrand(struct sqlConnection *conn,
-	int tableCount, char *tables[], char *chrom, char strand, 
-	FILE *f)
+                          struct track* tracks, char *chrom, char strand, 
+                          FILE *f)
 /* Scan through genes on this strand, cluster, and write clusters to file. */
 {
 struct genePred *gpList = NULL;
 struct cluster *clusterList = NULL, *cluster;
-int tableIx;
+struct track* track;
 struct clusterMaker *cm = clusterMakerStart(hChromSize(chrom));
 
-for (tableIx = 0; tableIx < tableCount; ++tableIx)
-    loadGenes(cm, conn, tables[tableIx], chrom, strand, &gpList);
+for (track = tracks; track != NULL; track = track->next)
+    loadGenes(cm, conn, track, chrom, strand, &gpList);
 
 clusterList = clusterMakerFinish(&cm);
 for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
@@ -561,11 +563,32 @@ slReverse(&chroms);
 return chroms;
 }
 
-void clusterGenes(char *outFile, char *database, int tableCount, char *tables[])
+struct track *buildTrackList(int specCount, char *specs[])
+/* build list of tracks, consisting of list of tables, files, or
+ * pairs of trackNames and files */
+{
+struct track* tracks = NULL;
+int i;
+if (gTrackNames)
+    {
+    for (i = 0; i < specCount; i += 2)
+        slSafeAddHead(&tracks, trackNew(specs[i], specs[i+1]));
+    }
+else
+    {
+    for (i = 0; i < specCount; i++)
+        slSafeAddHead(&tracks, trackNew(NULL, specs[i]));
+    }
+slReverse(&tracks);
+return tracks;
+}
+
+void clusterGenes(char *outFile, char *database, int specCount, char *specs[])
 /* clusterGenes - Cluster genes from genePred tracks. */
 {
 struct slName *chromList, *chrom;
 struct sqlConnection *conn;
+struct track *tracks;
 FILE *f = mustOpen(outFile, "w");
 fprintf(f, "#");
 fprintf(f, "cluster\t");
@@ -578,6 +601,8 @@ fprintf(f, "strand\t");
 fprintf(f, "conflicts\n");
 
 hSetDb(database);
+tracks  = buildTrackList(specCount, specs);
+
 if (optionExists("chrom"))
     chromList = slNameNew(optionVal("chrom", NULL));
 else if (optionExists("chromFile"))
@@ -587,8 +612,8 @@ else
 conn = hAllocConn();
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
-    clusterGenesOnStrand(conn, tableCount, tables, chrom->name, '+', f);
-    clusterGenesOnStrand(conn, tableCount, tables, chrom->name, '-', f);
+    clusterGenesOnStrand(conn, tracks, chrom->name, '+', f);
+    clusterGenesOnStrand(conn, tracks, chrom->name, '-', f);
     }
 }
 
@@ -596,9 +621,18 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc < 4)
-    usage();
-useCds = optionExists("cds");
+gUseCds = optionExists("cds");
+gTrackNames = optionExists("trackNames");
+if (!gTrackNames)
+    {
+    if (argc < 4)
+        usage();
+    }
+else
+    {
+    if ((argc < 5) || !(argc & 1))
+        usage();
+    }
 clusterGenes(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }
