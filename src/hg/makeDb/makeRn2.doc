@@ -869,7 +869,7 @@ Set up cluster run more or less as so:
       find /mnt/scratch/hg/mrna.133/org -name mrna.fa | \
          xargs ls -l | awk '{print $5,$9}' | sort -gr | \
          awk '{print $2}' >  allMrna.lst
-DONE TO HERE
+
 This produces a size-sorted file of all organisms mrna.
 Then edit xenoRna.lst removing the Rattus_norvegicus line, and writing
 the first line into 1.org, the second line into 2.org,  and
@@ -887,10 +887,10 @@ If all looks well do
 Sort xeno mRNA alignments as so:
        ssh eieio
        cd ~/rn2/bed/xenoMrna
-       pslSort dirs raw.psl /cluster/store2/temp psl
+       pslSort dirs raw.psl /cluster/store4/temp psl
        pslReps raw.psl cooked.psl /dev/null -minAli=0.25
        liftUp chrom.psl ../../jkStuff/liftAll.lft warn cooked.psl
-       pslSortAcc nohead chrom /cluster/store2/temp chrom.psl
+       pslSortAcc nohead chrom /cluster/store4/temp chrom.psl
        pslCat -dir chrom > xenoMrna.psl
        rm -r chrom raw.psl cooked.psl chrom.psl
 
