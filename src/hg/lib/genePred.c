@@ -349,7 +349,8 @@ struct genePred *genePredFromPsl(struct psl *psl, int cdsStart, int cdsEnd,
                                  int insertMergeSize)
 /* Convert a PSL of an RNA alignment to a genePred, converting a genbank CDS
  * specification string to genomic coordinates. Small inserts, no more
- * than insertMergeSize, will be dropped and the blocks merged. */
+ * than insertMergeSize, will be dropped and the blocks merged.  CDS start or
+ * end of -1 creates without CDS annotation*/
 {
 struct genePred *gene;
 AllocVar(gene);
@@ -359,8 +360,14 @@ gene->strand[0] = psl->strand[0];
 gene->txStart = psl->tStart;
 gene->txEnd = psl->tEnd;
 
-findCdsStartEndInGenome(psl, cdsStart, cdsEnd,
-                        &gene->cdsStart, &gene->cdsEnd);
+if ((cdsStart == -1) || (cdsEnd == -1))
+    {
+    gene->cdsStart = psl->tEnd;
+    gene->cdsEnd = psl->tEnd;
+    }
+else
+    findCdsStartEndInGenome(psl, cdsStart, cdsEnd,
+                            &gene->cdsStart, &gene->cdsEnd);
 pslToExons(psl, gene, insertMergeSize);
 return gene;
 }

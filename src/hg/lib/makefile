@@ -32,7 +32,7 @@ O = affyAtlas.o agpFrag.o agpGap.o altGraphX.o ancientRref.o \
     syntenyBerk.o syntenySanger.o tilingPath.o traceInfo.o trackDb.o \
     trackDbCustom.o trackTable.o wabAli.o \
     coordConv.o expRecord.o dnaProbe.o \
-    ggMrnaAli.o \
+    ggMrnaAli.o genbank.o \
     glDbRep.o ggDump.o sample.o exprBed.o genMapDb.o \
     dbSnpRS.o synMap.o refSeqStatus.o web.o affyPairs.o affyOffset.o columnInfo.o \
     imageClone.o stanMad.o bactigPos.o stsMapRat.o vegaInfo.o

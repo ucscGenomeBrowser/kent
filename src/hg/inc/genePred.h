@@ -69,7 +69,8 @@ struct genePred *genePredFromPsl(struct psl *psl, int cdsStart, int cdsEnd,
                                  int insertMergeSize);
 /* Convert a PSL of an RNA alignment to a genePred, converting a genbank CDS
  * specification string to genomic coordinates. Small inserts, no more
- * than insertMergeSize, will be dropped and the blocks merged. */
+ * than insertMergeSize, will be dropped and the blocks merged.  CDS start or
+ * end of -1 creates without CDS annotation*/
 
 #endif /* GENEPRED_H */
 

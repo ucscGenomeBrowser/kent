@@ -79,8 +79,8 @@ void trackDbOutput(struct trackDb *el, FILE *f, char sep, char lastSep);
 int trackDbCmp(const void *va, const void *vb);
 /* Sort track by priority. */
 
-void trackDbPolish(struct trackDb *bt);
-/* Fill in missing values with defaults. */
+void trackDbOverrideVisbility(struct hash *tdHash, char *visibilityRa);
+/* override visbility settings using a ra file */
 
 struct trackDb *trackDbFromRa(char *raFile);
 /* Load track info from ra file into list. */
