@@ -92,7 +92,7 @@ return result;
 }
 
 static boolean findKnownGeneExact(char *spec, struct hgPositions *hgp, char *tableName)
-/* Look for position in gene prediction table. */
+/* Look for position in Known Genes table. */
 {
 struct sqlConnection *conn;
 struct sqlResult *sr = NULL;
@@ -125,6 +125,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	AllocVar(table);
 	dyStringClear(query);
 	dyStringPrintf(query, "%s Gene Predictions", tableName);
+	table->description = cloneString("Known Genes");
 	table->name = cloneString(query->string);
 	slAddHead(&hgp->tableList, table);
 	}
@@ -174,7 +175,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	ok = TRUE;
 	AllocVar(table);
 	dyStringClear(query);
-	dyStringPrintf(query, "%s Gene Predictions", tableName);
+	table->description = cloneString("Known Genes");
+	dyStringPrintf(query, "%s", tableName);
 	table->name = cloneString(query->string);
 	slAddHead(&hgp->tableList, table);
 	}
