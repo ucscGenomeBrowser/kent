@@ -864,7 +864,7 @@ if (protCntInSwissByGene > protCntInSupportedGenomeDb)
     {
     if (protCntInSupportedGenomeDb >1)
     	{
-    	hPrintf("<FONT SIZE=4><B>Other Oganisms:</B></FONT>\n");
+    	hPrintf("<FONT SIZE=4><B>Other Organisms:</B></FONT>\n");
     	hPrintf("<UL>");
 	}
     else
