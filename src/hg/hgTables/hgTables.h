@@ -25,6 +25,7 @@ extern struct cart *cart;	/* This holds cgi and other variables between clicks. 
 extern struct hash *oldVars;	/* The cart before new cgi stuff added. */
 extern char *genome;		/* Name of genome - mouse, human, etc. */
 extern char *database;		/* Name of genome database - hg15, mm3, or the like. */
+extern char *freezeName;	/* Date of assembly. */
 extern struct trackDb *fullTrackList;	/* List of all tracks in database. */
 extern struct trackDb *curTrack;	/* Currently selected track. */
 extern struct customTrack *theCtList;	/* List of custom tracks. */
@@ -180,6 +181,9 @@ char *filterFieldVarName(char *db, char *table, char *field, char *type);
 #define hgtaDoSetAllFieldPrefix "hgta_doSetAllField."
 #define hgtaDoGenePredSequence "hgta_doGenePredSequence"
 #define hgtaDoGenomicDna "hgta_doGenomicDna"
+#define hgtaDoGetBed "hgta_doGetBed"
+#define hgtaDoGetCustomTrack "hgta_doGetCustomTrack"
+#define hgtaDoGetCustomTrackFile "hgta_doGetCustomTrackFile"
 
 /* Other CGI variables. */
 #define hgtaGroup "hgta_group"
@@ -196,6 +200,11 @@ char *filterFieldVarName(char *db, char *table, char *field, char *type);
 #define hgtaIdentifierFile "hgta_identifierFile"
 #define hgtaFilterOn "hgta_filterOn"
 #define hgtaGeneSeqType "hgta_geneSeqType"
+#define hgtaPrintCustomTrackHeaders "hgta_printCustomTrackHeaders"
+#define hgtaCtName "hgta_ctName"
+#define hgtaCtDesc "hgta_ctDesc"
+#define hgtaCtVis "hgta_ctVis"
+#define hgtaCtUrl "hgta_ctUrl"
 
 /* Prefix for variables managed by field selector. */
 #define hgtaFieldSelectPrefix "hgta_fs."
@@ -243,6 +252,10 @@ struct bed *customTrackGetFilteredBeds(char *name,
 
 struct customTrack *lookupCt(char *name);
 /* Find named custom track. */
+
+struct customTrack *newCt(char *ctName, char *ctDesc, int visNum, char *ctUrl,
+			  int fields);
+/* Make a new custom track record for the query results. */
 
 struct hTableInfo *ctToHti(struct customTrack *ct);
 /* Create an hTableInfo from a customTrack. */
@@ -306,7 +319,10 @@ void doOutSequence(struct trackDb *track, struct sqlConnection *conn);
 /* Output sequence page. */
 
 void doOutBed(struct trackDb *track, struct sqlConnection *conn);
-/* Output selected regions as bed. */
+/* Put up form to select BED output format. */
+
+void doOutCustomTrack(struct trackDb *track, struct sqlConnection *conn);
+/* Put up form to select Custom Track output format. */
 
 void doFilterPage(struct sqlConnection *conn);
 /* Respond to filter create/edit button */
@@ -325,6 +341,15 @@ void doGenePredSequence(struct sqlConnection *conn);
 
 void doGenomicDna(struct sqlConnection *conn);
 /* Get genomic sequence (UI has already told us how). */
+
+void doGetBed(struct sqlConnection *conn);
+/* Get BED output (UI has already told us how). */
+
+void doGetCustomTrack(struct sqlConnection *conn);
+/* Get Custom Track output (UI has already told us how). */
+
+void doGetCustomTrackFile(struct sqlConnection *conn);
+/* Get Custom Track file output (UI has already told us how). */
 
 void printMainHelp();
 /* Put up main page help info. */

@@ -16,7 +16,7 @@
 #include "hgSeq.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.2 2004/07/20 05:58:19 kent Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.3 2004/07/20 08:22:17 kent Exp $";
 
 static char *genePredMenu[] = 
     {
@@ -213,7 +213,7 @@ hgSeqOptionsHtiCart(hti, cart);
 hPrintf("<BR>\n");
 cgiMakeButton(hgtaDoGenomicDna, "Get Sequence");
 hPrintf(" ");
-cgiMakeButton(hgtaDoTopSubmit, "Cancel");
+cgiMakeButton(hgtaDoMainPage, "Cancel");
 hPrintf("</FORM>");
 htmlClose();
 }

@@ -17,7 +17,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.37 2004/07/20 05:58:19 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.38 2004/07/20 08:22:17 kent Exp $";
 
 
 void usage()
@@ -37,6 +37,7 @@ struct cart *cart;	/* This holds cgi and other variables between clicks. */
 struct hash *oldVars;	/* The cart before new cgi stuff added. */
 char *genome;		/* Name of genome - mouse, human, etc. */
 char *database;		/* Name of genome database - hg15, mm3, or the like. */
+char *freezeName;	/* Date of assembly. */
 struct trackDb *fullTrackList;	/* List of all tracks in database. */
 struct trackDb *curTrack;	/* Currently selected track. */
 
@@ -619,6 +620,8 @@ else if (sameString(output, outSequence))
     doOutSequence(track, conn);
 else if (sameString(output, outBed))
     doOutBed(track, conn);
+else if (sameString(output, outCustomTrack))
+    doOutCustomTrack(track, conn);
 else
     errAbort("Don't know how to handle %s output yet", output);
 }
@@ -679,7 +682,12 @@ else if (cartVarExists(cart, hgtaDoGenePredSequence))
     doGenePredSequence(conn);
 else if (cartVarExists(cart, hgtaDoGenomicDna))
     doGenomicDna(conn);
-/* Get genomic sequence from genePred. */
+else if (cartVarExists(cart, hgtaDoGetBed))
+    doGetBed(conn);
+else if (cartVarExists(cart, hgtaDoGetCustomTrack))
+    doGetCustomTrack(conn);
+else if (cartVarExists(cart, hgtaDoGetCustomTrackFile))
+    doGetCustomTrackFile(conn);
 else if (cartVarExists(cart, hgtaDoMainPage))
     doMainPage(conn);
 else	/* Default - put up initial page. */
@@ -702,6 +710,7 @@ cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
 /* Set up global variables. */
 getDbAndGenome(cart, &database, &genome);
 hSetDb(database);
+freezeName = hFreezeFromDb(database);
 conn = hAllocConn();
 fullTrackList = getFullTrackList();
 curTrack = findSelectedTrack(fullTrackList, NULL);

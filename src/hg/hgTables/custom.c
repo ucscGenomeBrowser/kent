@@ -43,6 +43,36 @@ for (ct=ctList;  ct != NULL;  ct=ct->next)
 return NULL;
 }
 
+struct customTrack *newCt(char *ctName, char *ctDesc, int visNum, char *ctUrl,
+			  int fields)
+/* Make a new custom track record for the query results. */
+{
+struct customTrack *ct;
+struct trackDb *tdb;
+char buf[256];
+
+AllocVar(ct);
+AllocVar(tdb);
+safef(buf, sizeof(buf), "ct_%s", ctName);
+tdb->tableName = cloneString(buf);
+tdb->shortLabel = ctName;
+tdb->longLabel = ctDesc;
+safef(buf, sizeof(buf), "bed %d .", fields);
+tdb->type = cloneString(buf);
+tdb->visibility = visNum;
+tdb->url = ctUrl;
+ct->tdb = tdb;
+ct->fieldCount = fields;
+ct->needsLift = FALSE;
+ct->fromPsl = FALSE;
+ct->wiggle = FALSE;
+ct->wigAscii = (char *)NULL;
+ct->wigFile = (char *)NULL;
+ct->wibFile = (char *)NULL;
+return ct;
+}
+
+
 struct hTableInfo *ctToHti(struct customTrack *ct)
 /* Create an hTableInfo from a customTrack. */
 {
