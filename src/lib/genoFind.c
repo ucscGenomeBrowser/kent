@@ -7,6 +7,7 @@
 #include "fa.h"
 #include "dystring.h"
 #include "errabort.h"
+#include "sig.h"
 #include "ooc.h"
 #include "genoFind.h"
 #include "trans3.h"
@@ -470,6 +471,34 @@ printf("Done adding\n");
 return gf;
 }
 
+static void maskSimplePepRepeat(struct genoFind *gf)
+/* Remove tiles from index that represent repeats
+ * of period one and two. */
+{
+int i;
+int tileSize = gf->tileSize;
+int maxPat = gf->maxPat;
+bits32 *listSizes = gf->listSizes;
+
+for (i=0; i<20; ++i)
+    {
+    int j, k;
+    for (j=0; j<20; ++j)
+	{
+	int tile = 0;
+	for (k=0; k<tileSize; ++k)
+	    {
+	    tile *= 20;
+	    if (k&1)
+		tile += j;
+	    else
+	        tile += i;
+	    }
+	listSizes[tile] = maxPat;
+	}
+    }
+}
+
 void gfIndexTransNibs(struct genoFind *transGf[2][3], int nibCount, char *nibNames[], 
     int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile)
 /* Make translated (6 frame) index for all nib files. */
@@ -494,27 +523,9 @@ for (isRc=0; isRc <= 1; ++isRc)
     }
 
 /* Mask simple AA repeats (of period 1 and 2). */
-for (i=0; i<20; ++i)
-    {
-    int j, k;
-    for (j=0; j<20; ++j)
-	{
-	int tile = 0;
-	for (k=0; k<tileSize; ++k)
-	    {
-	    tile *= 20;
-	    if (k&1)
-		tile += j;
-	    else
-	        tile += i;
-	    }
-	for (isRc = 0; isRc <= 1; ++isRc)
-	    {
-	    for (frame = 0; frame < 3; ++frame)
-		transGf[isRc][frame]->listSizes[tile] = maxPat;
-	    }
-	}
-    }
+for (isRc = 0; isRc <= 1; ++isRc)
+    for (frame = 0; frame < 3; ++frame)
+	maskSimplePepRepeat(transGf[isRc][frame]);
 /* Scan through nib files once counting tiles. */
 for (i=0; i<nibCount; ++i)
     {
@@ -607,10 +618,10 @@ bits32 offset = 0, nibSize;
 char *nibName;
 struct gfSeqSource *ss;
 
+if (isPep)
+    maskSimplePepRepeat(gf);
 for (seq = seqList; seq != NULL; seq = seq->next)
-    {
     gfCountSeq(gf, seq);
-    }
 gfAllocLists(gf);
 gfZeroNonOverused(gf);
 AllocArray(gf->sources, seqCount);
@@ -929,7 +940,7 @@ else
     }
 }
 
-static int nearEnough = 512;
+static int gfNearEnough = 300;
 
 static struct gfClump *clumpNear(struct genoFind *gf, struct gfClump *oldClumps, int minMatch)
 /* Go through clump list and make sure hits are also near each other.
@@ -939,6 +950,7 @@ struct gfClump *newClumps = NULL, *clump, *nextClump;
 struct gfHit *hit, *nextHit;
 int tileSize = gf->tileSize;
 bits32 lastT;
+int nearEnough = (gf->isPep ? gfNearEnough/3 : gfNearEnough);
 
 for (clump = oldClumps; clump != NULL; clump = nextClump)
     {
@@ -966,9 +978,6 @@ for (clump = oldClumps; clump != NULL; clump = nextClump)
 		 }
 	     else
 	         {
-#ifdef OLD
-		 slFreeList(&newHits);
-#endif /* OLD */
 		 newHits = NULL;
 		 clump->hitCount = 0;
 		 }
@@ -1006,6 +1015,7 @@ int tileSize = gf->tileSize;
 int bucketShift = 16;		/* 64k buckets. */
 bits32 bucketSize = (1<<bucketShift);
 int bucketCount = (gf->totalSeqSize >> bucketShift) + 1;
+int nearEnough = (gf->isPep ? gfNearEnough/3 : gfNearEnough);
 bits32 boundary = bucketSize - nearEnough;
 int i;
 struct gfHit **buckets = NULL, **pb;
@@ -1213,5 +1223,79 @@ for (qFrame = 0; qFrame<3; ++qFrame)
     hitCount += oneHit;
     }
 *retHitCount = hitCount;
+}
+
+void gfMakeOoc(char *outName, char *files[], int fileCount, 
+	int tileSize, bits32 maxPat, enum gfType tType)
+/* Count occurences of tiles in seqList and make a .ooc file. */
+{
+boolean dbIsPep = (tType == gftProt || tType == gftDnaX || tType == gftRnaX);
+struct genoFind *gf = gfNewEmpty(gfMinMatch, gfMaxGap, tileSize, maxPat, NULL, dbIsPep);
+bits32 *sizes = gf->listSizes;
+int tileSpaceSize = gf->tileSpaceSize;
+bioSeq *seq, *seqList;
+bits32 sig = oocSig, psz = tileSize;
+int i;
+int oocCount = 0;
+char *inName;
+FILE *f = mustOpen(outName, "w");
+
+uglyf("Making %s maxPat %u tileSize %d\n", outName, maxPat, tileSize);
+for (i=0; i<fileCount; ++i)
+    {
+    inName = files[i];
+    uglyf("Loading %s\n", inName);
+    if (isNib(inName))
+        {
+	seqList = nibLoadAll(inName);
+	}
+    else
+        {
+	seqList = faReadSeq(inName, tType != gftProt);
+	}
+    uglyf("Counting %s\n", inName);
+    for (seq = seqList; seq != NULL; seq = seq->next)
+	{
+	int isRc;
+	for (isRc = 0; isRc <= 1; ++isRc)
+	    {
+	    if (tType == gftDnaX || tType == gftRnaX)
+		{
+		struct trans3 *t3 = trans3New(seq);
+		int frame;
+		for (frame=0; frame<3; ++frame)
+		    {
+		    gfCountSeq(gf, t3->trans[frame]);
+		    }
+		trans3Free(&t3);
+		}
+	    else
+		{
+		gfCountSeq(gf, seq);
+		}
+	    if (tType == gftProt || tType == gftRnaX)
+	        break;
+	    else 
+	        {
+		reverseComplement(seq->dna, seq->size);
+		}
+	    }
+	}
+    freeDnaSeqList(&seqList);
+    }
+uglyf("Writing %s\n", outName);
+writeOne(f, sig);
+writeOne(f, psz);
+for (i=0; i<tileSpaceSize; ++i)
+    {
+    if (sizes[i] >= maxPat)
+	{
+	writeOne(f, sizes[i]);
+	++oocCount;
+	}
+    }
+carefulClose(&f);
+genoFindFree(&gf);
+uglyf("Wrote %d overused %d-mers to %s\n", oocCount, tileSize, outName);
 }
 
