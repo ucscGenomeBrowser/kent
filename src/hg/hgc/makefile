@@ -27,6 +27,11 @@ compile: $O
 	strip $A
 	chmod a+rx $A
 
+debug: $O
+	gcc $O $(MYLIBS) $(L) 
+	mv a.out $A
+
+
 lib:
 	cd ../../lib; make
 
