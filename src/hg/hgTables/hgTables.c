@@ -16,7 +16,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.26 2004/07/18 03:20:14 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.27 2004/07/18 04:15:13 kent Exp $";
 
 
 void usage()
@@ -156,6 +156,28 @@ slFreeList(&chromList);
 return regionList;
 }
 
+struct region *getEncodeRegions()
+/* Get encode regions from encodeRegions table. */
+{
+struct sqlConnection *conn = sqlConnect(database);
+struct sqlResult *sr;
+char **row;
+struct region *list = NULL, *region;
+sr = sqlGetResult(conn, "select chrom,chromStart,chromEnd from encodeRegions");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    AllocVar(region);
+    region->chrom = cloneString(row[0]);
+    region->start = atoi(row[1]);
+    region->end = atoi(row[2]);
+    slAddHead(&list, region);
+    }
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
+slReverse(&list);
+return list;
+}
+
 struct region *getRegions()
 /* Consult cart to get list of regions to work on. */
 {
@@ -176,8 +198,14 @@ else if (sameString(regionType, "range"))
 		 "in the range control.", range);
 	}
     }
+else if (sameString(regionType, "encode"))
+    {
+    regionList = getEncodeRegions();
+    }
 else
-    errAbort("Sorry, don't understand %s type region yet", regionType);
+    {
+    errAbort("Unrecognized region type %s", regionType);
+    }
 return regionList;
 }
 

@@ -15,7 +15,7 @@
 #include "grp.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.7 2004/07/18 03:37:22 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.8 2004/07/18 04:15:13 kent Exp $";
 
 
 static struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -225,7 +225,7 @@ hPrintf("<TABLE BORDER=0>\n");
 /* Region line */
     {
     char *regionType = cartUsualString(cart, hgtaRegionType, "genome");
-    boolean doEncode = sameWord(genome, "human");
+    boolean doEncode = sqlTableExists(conn, "encodeRegions");
     char *range = cartUsualString(cart, hgtaRange, "");
 
     hPrintf("<TR><TD><B>region:</B>\n");

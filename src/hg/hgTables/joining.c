@@ -14,7 +14,7 @@
 #include "hdb.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: joining.c,v 1.17 2004/07/18 03:20:14 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.18 2004/07/18 04:15:13 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -609,7 +609,6 @@ struct joinerPair *routeList = NULL, *route;
 struct joinerDtf *tableDtfs = NULL;
 struct joinedTables *joined = NULL;
 struct hash *tableHash = newHash(8);
-struct sqlConnection *conn = sqlConnect(primaryDb);
 struct region *regionList = getRegions();
 int totalKeyCount = 0, totalFieldCount = 0;
 int curKeyCount = 0, curFieldCount = 0;
@@ -677,7 +676,6 @@ for (route = routeList; route != NULL; route = route->next)
 	hashFree(&keyHash);
 	}
     }
-sqlDisconnect(&conn);
 joinerDtfFreeList(&tableDtfs);
 hashFree(&tableHash);
 tableJoinerFreeList(&tjList);
