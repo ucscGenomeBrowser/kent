@@ -117,4 +117,7 @@ void dotForUser();
 void spaceToUnderbar(char *s);
 /* Convert white space to underbar. */
 
+int chrStrippedCmp(char *chrA, char *chrB);
+/*	compare chrom names after stripping chr, Scaffold_ or ps_ prefix */
+
 #endif /* OBSCURE_H */
