@@ -897,6 +897,10 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     cd /cluster/data/xenTro1/bed/zb.galGal2/axtChain
     netFilter -minGap=10 galGal2.net |  hgLoadNet galGal2 netXenTro1 stdin
 
+    # index had NULL cardinality; analzye table to fix (DONE 1/18/2005 Heather)
+    hgsql hg17
+    analyze table netXenTro1
+
 # SWAP EVERYTHING AND REMAKE NET FROM XENOPUS REFERENCE
     ssh kksilo
     cd /cluster/data/xenTro1/bed
