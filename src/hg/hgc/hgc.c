@@ -1223,10 +1223,11 @@ if (pepTable != NULL && hTableExists(pepTable))
     char query[256];
     struct sqlResult *sr;
     char **row;
+    char *pepNameCol = sameString(pepTable, "gbSeq") ? "acc" : "name";
     conn = hAllocConn();
     // simple query to see if pepName has a record in pepTable:
-    safef(query, sizeof(query), "select 0 from %s where name = '%s'",
-	  pepTable, pepName);
+    safef(query, sizeof(query), "select 0 from %s where %s = '%s'",
+	  pepTable, pepNameCol, pepName);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -2832,7 +2833,8 @@ if (row != NULL)
     /* Now we have all the info out of the database and into nicely named
      * local variables.  There's still a few hoops to jump through to 
      * format this prettily on the web with hyperlinks to NCBI. */
-    printf("<H2>Information on %s <A HREF=\"", type);
+    printf("<H2>Information on %s%s <A HREF=\"", 
+           (isMgcTrack ? "MGC " : ""), type);
     printEntrezNucleotideUrl(stdout, acc);
     printf("\" TARGET=_blank>%s</A></H2>\n", acc);
 
@@ -5638,7 +5640,7 @@ printStanSource(rl->mrnaAcc, "mrna");
 htmlHorizontalLine();
 
 /* older databases have peptide sequence in a table, newer have in ext file */
-pepTbl = sqlTableExists(conn, "refPep") ? "refPep" : "seq";
+pepTbl = sqlTableExists(conn, "gbSeq") ? "gbSeq" : "refPep" ;
 geneShowPosAndLinks(rl->mrnaAcc, rl->protAcc, tdb, pepTbl, "htcTranslatedProtein",
 		    "htcRefMrna", "htcGeneInGenome", "mRNA Sequence");
 
