@@ -791,7 +791,7 @@ identifier knownIsoformCluster
 
 identifier ccdsGeneId 
 "CCDS Gene ID"
-    $kgDb.ccdsGene.name
+    $kgDb.ccdsGene.name dupeOk
     $kgDb.ccdsInfo.ccds full
 
 # Fields parsed out of a Genbank flat file, associated with mRNA records
