@@ -2884,11 +2884,14 @@ hFreeConn(&conn);
 void loadknownGene(struct track *tg)
 /* Load up known genes. */
 {
+enum trackVisibility vis = tg->visibility;
 tg->items = lfFromGenePredInRange("knownGene", chromName, winStart, winEnd);
-if ((limitVisibility(tg) == tvFull) ||  (limitVisibility(tg) == tvPack) )
+if (vis != tvDense)
     {
     lookupKnownGeneNames(tg->items);
+    slSort(&tg->items, linkedFeaturesCmpStart);
     }
+limitVisibility(tg);
 }
 
 Color knownGeneColor(struct track *tg, void *item, struct vGfx *vg)
@@ -3219,14 +3222,14 @@ hFreeConn(&conn);
 void loadRefGene(struct track *tg)
 /* Load up RefSeq known genes. */
 {
-enum trackVisibility vis;
+enum trackVisibility vis = tg->visibility;
 tg->items = lfFromGenePredInRange("refGene", chromName, winStart, winEnd);
-vis = limitVisibility(tg);
 if (vis != tvDense)
     {
     lookupRefNames(tg->items);
     slSort(&tg->items, linkedFeaturesCmpStart);
     }
+vis = limitVisibility(tg);
 }
 
 
