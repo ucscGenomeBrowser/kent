@@ -232,8 +232,12 @@ void wigFetchYLineMarkValue(struct trackDb *tdb, double *tDbYMark);
 #define YLINEMARK "yLineMark"
 
 /*	compute the data value give the bin	*/
+/*
 #define BIN_TO_VALUE(bin,lowerLimit,range) ((range > 0.0) ? \
 	lowerLimit+((double)bin/(double)MAX_WIG_VALUE*range) : lowerLimit)
+*/
+#define BIN_TO_VALUE(bin,lowerLimit,range) \
+	lowerLimit+(range*((double)bin/(double)MAX_WIG_VALUE))
 /*	This needs to be adjusted for data with positive and
  *	negative values, a special bin for 0 needs to be set aside and
  *	the positive and negative values kept separately
