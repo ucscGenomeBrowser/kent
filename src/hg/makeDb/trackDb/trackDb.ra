@@ -1291,15 +1291,10 @@ searchTable stsMap
 searchType bed
 xrefTable stsAlias
 xrefQuery select trueName,alias from %s where alias like '%s'
+searchBoth on
 termRegex [^[:space:]]+
 searchDescription Alias of STS Marker
 searchPriority 11
-padding 100000
-
-searchTable stsMap
-searchType bed
-termRegex [^[:space:]]+
-searchPriority 12
 padding 100000
 
 searchName mrnaKeyword
