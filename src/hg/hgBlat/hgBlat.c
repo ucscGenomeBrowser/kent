@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.85 2004/10/20 16:27:26 kent Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.86 2004/10/20 17:03:59 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -578,9 +578,9 @@ puts("Upload sequence: <INPUT TYPE=FILE NAME=\"seqFile\">");
 puts(" <INPUT TYPE=SUBMIT Name=Submit VALUE=\"Submit File\"><P>\n");
 printf("%s", 
 "<P>Only DNA sequences of 25,000 or fewer bases and protein or translated \n"
-"sequence of 5000 or fewer letters will be processed.  Up to 25 sequences\n"
+"sequence of 10000 or fewer letters will be processed.  Up to 25 sequences\n"
 "can be submitted at the same time. The total limit for multiple sequence\n"
-"submissions is 50,000 bases or 12,500 letters.\n</P>");
+"submissions is 50,000 bases or 25,000 letters.\n</P>");
 if (hgPcrOk(db))
     printf(" For locating PCR primers, use <A HREF=\"../cgi-bin/hgPcr?db=%s\">In-Silico PCR</A>"
            " for best results instead of BLAT.", db);
