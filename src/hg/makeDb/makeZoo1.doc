@@ -131,12 +131,12 @@ The above is all done for you in the makeZoo.pl script.
 PRODUCING KNOWN GENES (todo)
 
 o - Download everything from ftp://ncbi.nlm.nih.gov/refseq/H_sapiens/mRNA_Prot/
-    into /cluster/store1/mrna.127/refSeq.
+    into /cluster/store1/mrna.129/refSeq.
 o - Unpack this into fa files and get extra info with:
-       cd /cluster/store1/mrna.127/refSeq
+       cd /cluster/store1/mrna.129/refSeq
        gunzip $ORG.gbff.gz
        gunzip $ORG.faa.gz
-The above 2 files need to be symlinked from /cluster/store1/mrna.128/refSeq/$ORG/$ORG.fa /cluster/store1/mrna.128/org/$ORG/refSeq.fa
+The above 2 files need to be symlinked from /cluster/store1/mrna.129/refSeq/$ORG/$ORG.fa /cluster/store1/mrna.128/org/$ORG/refSeq.fa
 and refSeq.ra respectively.
 o - Get extra info from NCBI and produce refGene table as so:
        ssh hgwdev
@@ -148,8 +148,8 @@ o - Align these by processes described under mRNA/EST alignments above.
 o - Produce refGene, refPep, refMrna, and refLink tables as so:
        ssh hgwdev
        cd ~/mm/bed/refSeq
-       ln -s /cluster/store1/mrna.127 mrna
-       hgRefSeqMrna mm1 mrna/$ORGRefSeq.fa mrna/$ORGRefSeq.ra all_refSeq.psl loc2ref mrna/refSeq/$ORG.faa mim2loc
+       ln -s /cluster/store1/mrna.129 mrna
+hgRefSeqMrna mm1 mrna/$ORGRefSeq.fa mrna/$ORGRefSeq.ra all_refSeq.psl loc2ref mrna/refSeq/$ORG.faa mim2loc
 o - Add Jackson labs info
      cd ~/mm/bed
      mkdir jaxOrtholog
@@ -174,7 +174,7 @@ Then run genSub2 to generate the cross-product of all sequences aligned against 
 the gsub I used to test this. For each organism it creates a file called chr1_$X_mrna.fa and chr1_$X_est.fa, where X is the organism whose
 mrna and est this organism's sequence was aligned against it using BLAT.
 For example, for the zooMouse/1/chr1.fa sequence aligned against the Cat mrna we get zooMouse/bed/mrna/psl/chr1_Felis_catus_mrna.fa
-The above loogic is already commented out in the makeZoo.pl script. It just has to be selectively uncommented.
+The above logic is already commented out in the makeZoo.pl script. It just has to be selectively uncommented.
 
 
 SIMPLE REPEAT TRACK (todo)

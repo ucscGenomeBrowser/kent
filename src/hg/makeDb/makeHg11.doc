@@ -464,36 +464,50 @@ Locate motifs on all promoters with
 DOING HUMAN/MOUSE ALIGMENTS (todo)
 
 o - Start with the mouse assembly in 1 Mb chunks lower-case
-    repeat and tandem-repeat masked in /scratch/hg/mm1/trfFa,
-    and the human assembly in contigs similiarly masked in
-    /scratch/hg/gs.12/build29/trfFa
+    repeat and tandem-repeat masked on kkstore by copying files there
+    in the following way.
+
+Mouse contigs:
+mkdir /scratch/hg/mm2/rmsk
+cp bed/rmsk/out/* /scratch/hg/mm2/rmsk
+cp -R /cluster/store2/mm.2002.02/mm2/trfFa/ /scratch/hg/mm2/
+
+Human contigs:
+mkdir /scratch/hg/gs.12/build29/rmsk
+cp /cluster/store1/gs.12/build29/?/*/*.out /scratch/hg/gs.12/build29/rmsk
+cp /cluster/store1/gs.12/build29/??/*/*.out /scratch/hg/gs.12/build29/rmsk
+cp -R /cluster/store2/gs.12/build29/bed/trfFa /scratch/hg/gs.12/build29/trfFa
+
     Then
         ssh kkstore
 	cd ~/oo/bed
 	mkdir blatMus
 	cd blatMus
-	ls -1 /scratch/hg/mm1/trfFa/*.fa.trf > mouseAll
+	ls -1 /scratch/hg/mm2/trfFa/*.fa.trf > mouseAll
 	mkdir mm
 	cd mm
-	splitFile ../mouseAll 50 mm
+	splitFile ../mouseAll 50 mmsplitFile ../smallH 4 small
 	cd ..
 	ls -1 mm/* > mouse.lst
     Then bundle up the human into pieces of less than 12
     meg mostly by
-	ls -lS /scratch/hg/gs.12/build29/trfFa/*.fa.trf > bigHuman
+	ls -lhS /scratch/hg/gs.12/build29/trfFa/*.fa.trf > bigHuman
     edit this file and move all of the lines less than 3 meg
     into the file smallHuman.  Then do
-        awk '{printf("/scratch/hg/gs.12/build29/trfFa/%s\n", $9);}' bigHuman > bigH
-        awk '{printf("/scratch/hg/gs.12/build29/trfFa/%s\n", $9);}' smallHuman > smallH
+        awk '{printf("%s\n", $9);}' bigHuman > bigH
+        awk '{printf("%s\n", $9);}' smallHuman > smallH
 	mkdir hs
 	cd hs
 	splitFile ../bigH 1 big
-	rm big177
+	rm big32 # Note, this is just an empty file that the splitFile program erroneously created
 	splitFile ../smallH 4 small
-	rm small 705
+	rm small504
         cd ..
 	ls -1 hs/* > human.lst
-    (The rm's probably indicate splitFile needs a fix - they are zero length).
+    (The rm commands above indicate that splitFile needs a fix - they are zero length).
+
+Copy the old gsub here
+cp /cluster/store1/gs.11/build28/bed/blatMouse/gsub .
     Finally generate the job list with
         gensub2 human.lst mouse.lst gsub spec
 
@@ -501,7 +515,8 @@ o - Do the cluster run as so
        ssh kk
        cd ~/oo/bed/blatMus
        mkdir psl
-       para create spec
+       para create specE
+ABOVE IS ALL DONE - FAILING WITH SEG FAULT IN PARA TRY - DO PARA PROBLEMS TO SEE THIS.
        para try
     and then do para push/check/push/check/shove etc.
 
@@ -766,17 +781,18 @@ LOAD SNPS (Done; Daryl Thomas May 28, 2002)
       hgLoadBed hg11 snpNih snpNih.bed
      -gzip all of the big files
 
-LOAD CPGISLANDS (todo)
+LOAD CPGISLANDS (todo) NEW RELEASE NOT YET AVAILABLE
      - login to hgwdev
-     - cd /cluster/store1/gs.12/build29/bed
-     - mkdir cpgIsland
-     - cd cpgIsland
-     - hg11 < ~kent/src/hg/lib/cpgIsland.sql
-     - wget http://genome.wustl.edu:8021/pub/gsc1/achinwal/MapAccessions/Freezes/cpg_dec2001.tar.gz
-     - tar -xf cpg*.tar
-     - copy filter.awk from a previous release, e.g. ~kent/oo.33/bed/cpgIsland
-     - awk -f filter.awk */*/NT_*/*.cpg > contig.bed
-     - liftUp cpgIsland.bed ../../jkStuff/liftAll.lft warn contig.bed
+     cd /cluster/store1/gs.12/build29/bed
+     mkdir cpgIsland
+     cd cpgIsland
+     hg11 < ~kent/src/hg/lib/cpgIsland.sql
+     wget http://genome.wustl.edu:8021/pub/gsc1/achinwal/MapAccessions/Freezes/cpg_apr01.oo29.tar 
+     tar -xf cpg*.tar
+     -copy filter.awk from a previous release, e.g. ~kent/oo.33/bed/cpgIsland to cpg_apr01.oo29
+     cd cpg_apr01.oo29
+     awk -f filter.awk */ctg*/*.cpg.out > contig.bed
+     liftUp cpgIsland.bed ../../../jkStuff/liftAll.lft warn contig.bed
      - Enter database with "hg11" command.
      - At mysql> prompt type in:
           load data local infile 'cpgIsland.bed' into table cpgIsland
@@ -786,9 +802,10 @@ LOAD ENSEMBL GENES (todo)
      mkdir ensembl
      cd ensembl
      Place the gtf dump file, xxx.gtf.gtz (for ensembl gene
-     predictions) here. (e.g. wget
-     http://www.sanger.ac.uk/~birney/all_april_ctg.gtf.gz)
-     gunzip xxx.gtf.gtz
+     predictions) here. (e.g.
+     wget http://www.sanger.ac.uk/~birney/all_april_ctg.gtf.gz)
+     gunzip xxx.gtf.gz
+DONE TO HERE
      Starting from Hg10, ensembl seems to have done their own lifting,
      so just collect all chromosome .gtf files.
      cat ?.gtf ??.gtf >all.gtf
@@ -889,6 +906,7 @@ LOAD SOFTBERRY GENES (todo)
      - cd ~/oo/bed
      - mkdir softberry
      - cd softberry
+DONE TO HERE - WAITING FOR NEW DATA
      - get ftp://www.softberry.com/pub/SC_DEC01/*
      - mkdir output
      - Run the fixFormat.pl routine in
@@ -912,7 +930,7 @@ LOAD GENEID GENES (todo)
      ldHgGene hg11 geneid download/*.gtf -exon=CDS
      hgPepPred hg11 generic geneidPep download/*.prot
 
-LOAD ACEMBLY (done 05/31/02)
+LOAD ACEMBLY (DONE 05/31/02)
     mkdir -p ~/oo/bed/acembly
     cd ~/oo/bed/acembly
     - Get acembly*gene.gff from Jean and Danielle Thierry-Mieg
@@ -1024,7 +1042,8 @@ LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (markd)
        /cluster/store1/gs.12/build29/bed/blastz.mm2.2002-04-14/aar/xali
      - Loaded into aarMm2
 
- MITOCHONDRIAL DNA PSEUDO-CHROMOSOME
+MITOCHONDRIAL DNA PSEUDO-CHROMOSOME - DONE
+
 Download the fasta file from http://www.gen.emory.edu/MITOMAP/mitomapRCRS.fasta
 Put it in /cluster/store1/mrna.129
 ssh hgwdev
@@ -1036,7 +1055,7 @@ tcsh jkStuff/makeNib.sh
 hgNibSeq -preMadeNib hg11 /cluster/store1/gs.12/build29/nib ?/chr*.fa ??/chr*.fa
 
 
-MAKING THE DOWNLOADABLE DATABASE FILES
+MAKING THE DOWNLOADABLE DATABASE FILES - DONE
 
 mkdir /usr/local/apache/htdocs/goldenPath/05apr2002
 mkdir /usr/local/apache/htdocs/goldenPath/05apr2002/chromosomes
