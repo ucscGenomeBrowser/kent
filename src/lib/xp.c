@@ -443,9 +443,9 @@ else
 	    break;
 	    }
 	else if (c == '?' || c == '-')
-	    {
 	    xpEatComment(xp, c);
-	    }
+	else if (c == '!')
+	    xpEatComment(xp, '-');
 	else
 	    {
 	    xpUngetChar(xp);
@@ -481,6 +481,10 @@ for (;;)
 	if (c == '?' || c == '-')
 	    {
 	    xpEatComment(xp, c);
+	    }
+	else if (c == '!')
+	    {
+	    xpEatComment(xp, '-');
 	    }
 	else
 	    {

@@ -64,13 +64,15 @@ return digCount;
 void readInGulp(char *fileName, char **retBuf, size_t *retSize)
 /* Read whole file in one big gulp. */
 {
-size_t size = *retSize = (size_t)fileSize(fileName);
+size_t size = (size_t)fileSize(fileName);
 char *buf;
 FILE *f = mustOpen(fileName, "rb");
 *retBuf = buf = needLargeMem(size+1);
 mustRead(f, buf, size);
 buf[size] = 0;      /* Just in case it needs zero termination. */
 fclose(f);
+if (retSize != NULL)
+    *retSize = size;
 }
 
 void readAllWords(char *fileName, char ***retWords, int *retWordCount, char **retBuf)
