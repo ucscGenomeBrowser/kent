@@ -9,6 +9,7 @@ CREATE TABLE dbDb (
     description varchar(255) not null,	# Short description - 'Aug. 8, 2001' or the like
     nibPath longblob not null,	# Path to packed sequence files
     organism varchar(255) not null,	# Common name of organism - first letter capitalized
+    genome varchar(255) not null,	# Unifying genome collection to which an assembly belongs
     defaultPos varchar(255) not null,	# Default starting position
     active int not null,	# Flag indicating whether this db is in active use
               #Indices
