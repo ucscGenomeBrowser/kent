@@ -4,5 +4,6 @@
 O = paraQuit.o
 
 paraQuit: $(O)
-	gcc -o paraQuit $O ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a
+	gcc -o $(HOME)/bin/$(MACHTYPE)/paraQuit $O ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a
+	strip $(HOME)/bin/$(MACHTYPE)/paraQuit
 

@@ -1,4 +1,4 @@
-/* paraHub - parasol hub server. */
+/* paraQuit - tell list of node servers to stand down. */
 #include <signal.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -8,6 +8,7 @@
 #include "dystring.h"
 #include "linefile.h"
 #include "paraLib.h"
+#include "net.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -15,39 +16,6 @@ void usage()
 errAbort("paraQuit - kill parasol node servers.\n"
          "usage:\n"
 	 "    paraQuit machineList\n");
-}
-
-int getSocket(char *hostName)
-/* Try and fill in socket of mach. */
-{
-int sd, ns;
-struct sockaddr_in sai;
-int fromlen;
-struct hostent *host;
-
-/* Set up connection. */
-host = gethostbyname(hostName);
-if (host == NULL)
-    {
-    herror("");
-    warn("Couldn't find host %s.  h_errno %d", hostName, h_errno);
-    return -1;
-    }
-sai.sin_family = AF_INET;
-sai.sin_port = htons(paraPort);
-memcpy(&sai.sin_addr.s_addr, host->h_addr_list[0], sizeof(sai.sin_addr.s_addr));
-if ((sd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
-    {
-    warn("Couldn't make socket to %s", hostName);
-    return -1;
-    }
-if ((ns = connect(sd, &sai, sizeof(sai))) == -1)
-    {
-    warn("Couldn't connect to %s", hostName);
-    close(sd);
-    return -1;
-    }
-return sd;
 }
 
 void paraQuit(char *machineList)
@@ -59,15 +27,15 @@ int i;
 int sd;
 char buf[256];
 
-sprintf(buf, "%s quit", paraSig);
 readAllWords(machineList, &mNames, &mCount, &mBuf);
 for (i=0; i<mCount; ++i)
     {
     name = mNames[i];
     uglyf("Telling %s to quit \n", name);
-    if ((sd = getSocket(name)) >= 0)
+    if ((sd = netConnPort(name, paraPort)) >= 0)
 	{
-	write(sd, buf, strlen(buf));
+	write(sd, paraSig, strlen(paraSig));
+	netSendLongString(sd, "quit");
 	close(sd);
 	}
     }

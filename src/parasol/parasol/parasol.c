@@ -22,7 +22,7 @@ errAbort(
   "   parasol remove machine machineName\n"
   "   parasol add job command-line\n"
   "   parasol remove job id\n"
-  "   parasol dehub (kill hub)\n"
+  "   parasol close (close down system - kill paraHub, but not paraNodes on remote machines)\n"
   "   parasol remove user name [jobPattern]\n"
   "   parasol list machines\n"
   "   parasol list jobs\n"
@@ -197,7 +197,7 @@ if (hubFd != 0)
     hubFd = 0;
     }
 sprintf(portName, "%d", paraPort);
-hubFd = netMustConnect("localHost", portName);
+hubFd = netMustConnect(getHost(), portName);
 }
 
 struct jobInfo *getJobList()
@@ -308,10 +308,15 @@ else if (sameString(command, "list"))
     }
 else if (sameString(command, "status"))
     status();
-else if (sameString(command, "dehub"))
+else if (sameString(command, "close"))
     dehub();
 else
     usage();
+if (hubFd != 0)
+    {
+    close(hubFd);
+    hubFd = 0;
+    }
 }
 
 int main(int argc, char *argv[])

@@ -64,4 +64,7 @@ void startHeartbeat();
 void endHeartbeat();
 /* Kill heartbeat deamon. */
 
+int hubConnect();
+/* Return connection to hub socket - with paraSig already written. */
+
 #endif /* PARAHUB_H */

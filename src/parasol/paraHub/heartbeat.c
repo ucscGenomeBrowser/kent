@@ -10,22 +10,19 @@
 #include "net.h"
 #include "paraHub.h"
 
-int heartPid;	/* Process id of heartbeat. */
+static int heartPid;	/* Process id of heartbeat. */
 
-void heartbeatDeamon()
+static void heartbeatDeamon()
 /* Send out a beat every now and again to hub. */
 {
 int hubFd;
-int sigSize = strlen(paraSig);
-char portName[16];
-sprintf(portName, "%d", paraPort);
 for (;;)
     {
-    sleep(10);
-    hubFd = netConnect("localhost", portName);
+    sleep(30);
+    uglyf("heartbeat: thump\n");
+    hubFd = hubConnect();
     if (hubFd > 0)
         {
-	write(hubFd, paraSig, sigSize);
 	netSendLongString(hubFd, "heartbeat");
 	close(hubFd);
 	}

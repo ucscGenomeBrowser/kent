@@ -28,8 +28,8 @@ struct dlList *freeMachines;     /* List of machines ready for jobs. */
 struct dlList *busyMachines;     /* List of machines running jobs. */
 struct dlList *downMachines;     /* List of machines that aren't running. */
 
-struct dlList *pendingList;     /* Jobs still to do. */
-struct dlList *runningList;     /* Jobs that are running. */
+struct dlList *pendingJobs;     /* Jobs still to do. */
+struct dlList *runningJobs;     /* Jobs that are running. */
 int nextJobId = 0;		/* Next free job id. */
 
 void removeJobId(int id);
@@ -42,8 +42,8 @@ void setupLists()
 freeMachines = newDlList();
 busyMachines = newDlList();
 downMachines = newDlList();
-pendingList = newDlList();
-runningList = newDlList();
+pendingJobs = newDlList();
+runningJobs = newDlList();
 freeSpokes = newDlList();
 busySpokes = newDlList();
 }
@@ -135,9 +135,63 @@ if (job != NULL)
     }
 }
 
-void runNextJobs()
+void runNextJob()
 /* Assign next job in pending queue if any to a machine. */
 {
+if (!dlEmpty(freeMachines) && !dlEmpty(freeSpokes) && !dlEmpty(pendingJobs))
+    {
+    struct dlNode *mNode, *jNode, *sNode;
+    struct spoke *spoke;
+    struct job *job;
+    struct machine *machine;
+
+    /* Get free resources from free list and move them to busy lists. */
+    mNode = dlPopHead(freeMachines);
+    dlAddTail(busyMachines, mNode);
+    machine = mNode->val;
+    jNode = dlPopHead(pendingJobs);
+    dlAddTail(runningJobs, jNode);
+    job = jNode->val;
+    sNode = dlPopHead(freeSpokes);
+    dlAddTail(busySpokes, sNode);
+    spoke = sNode->val;
+
+    /* Tell machine, job, and spoke about each other. */
+    machine->job = job;
+    job->machine = machine;
+    spokeSendJob(spoke, machine, job);
+    }
+}
+
+void runNextJobs()
+/* Try to run a couple of jobs. */
+{
+runNextJob();
+runNextJob();
+}
+
+void recycleSpoke(char *spokeName)
+/* Try to find spoke and put it back on free list. */
+{
+struct dlNode *node;
+struct spoke *spoke;
+boolean foundSpoke = FALSE;
+for (node = busySpokes->head; !dlEnd(node); node = node->next)
+    {
+    spoke = node->val;
+    if (sameString(spoke->socketName, spokeName))
+        {
+	dlRemove(node);
+	freez(&spoke->machine);
+	dlAddTail(freeSpokes, node);
+	foundSpoke = TRUE;
+	break;
+	}
+    }
+if (!foundSpoke)
+    warn("Couldn't free spoke %s", spokeName);
+else
+    runNextJobs();
 }
 
 void addJob(char *line)
@@ -161,7 +215,7 @@ if (line == NULL || line[0] == 0)
 command = line;
 job = jobNew(command, user, dir, in, out, err);
 job->submitTime = time(NULL);
-dlAddTail(pendingList, job->node);
+dlAddTail(pendingJobs, job->node);
 runNextJobs();
 }
 
@@ -183,6 +237,7 @@ return NULL;
 void recycleMachine(struct machine *mach)
 /* Recycle machine into free list. */
 {
+uglyf("hub: recycleMachine %s\n", mach->name);
 mach->job = NULL;
 dlRemove(mach->node);
 dlAddTail(freeMachines, mach->node);
@@ -221,9 +276,9 @@ finishJob(job);
 void removeJobId(int id)
 /* Remove job of a given id. */
 {
-struct job *job = jobFind(runningList, id);
+struct job *job = jobFind(runningJobs, id);
 if (job == NULL)
-   job = jobFind(pendingList, id);
+   job = jobFind(pendingJobs, id);
 if (job != NULL)
     removeJob(job);
 }
@@ -235,13 +290,24 @@ name = trimSpaces(name);
 removeJobId(atoi(name));
 }
 
-void jobDone(char *name)
+void jobDone(char *line)
+/* Handle job is done message. */
 {
 struct job *job;
-name = trimSpaces(name);
-job = jobFind(runningList, atoi(name));
-if (job != NULL)
-    finishJob(job);
+char *id, *status;
+id = nextWord(&line);
+status = nextWord(&line);
+if (id != NULL)
+    {
+    uglyf("hub: jobDone() status = %s, id = %s\n", status, id);
+    job = jobFind(runningJobs, atoi(id));
+    uglyf("hub: jobDone() job = %p\n", job);
+    if (job != NULL)
+	{
+	uglyf("hub: jobDone() mach = %p\n", job->machine);
+	finishJob(job);
+	}
+    }
 }
 
 void listMachines(int fd)
@@ -292,8 +358,8 @@ void listJobs(int fd)
 {
 struct dyString *dy = newDyString(256);
 
-oneJobList(fd, runningList, dy);
-oneJobList(fd, pendingList, dy);
+oneJobList(fd, runningJobs, dy);
+oneJobList(fd, pendingJobs, dy);
 netSendLongString(fd, "");
 freeDyString(&dy);
 }
@@ -305,7 +371,7 @@ void status(int fd)
 char buf[256];
 sprintf(buf, "%d machines busy, %d free, %d jobs running, %d waiting, %d spokes busy, %d free", 
 	dlCount(busyMachines), dlCount(freeMachines), 
-	dlCount(runningList), dlCount(pendingList),
+	dlCount(runningJobs), dlCount(pendingJobs),
 	dlCount(busySpokes), dlCount(freeSpokes));
 netSendLongString(fd, buf);
 netSendLongString(fd, "");
@@ -345,6 +411,17 @@ void processHeartbeat()
 runNextJobs();
 }
 
+int hubConnect()
+/* Return connection to hub socket - with paraSig already written. */
+{
+int hubFd;
+int sigSize = strlen(paraSig);
+hubFd  = netConnPort(getHost(), paraPort);
+if (hubFd > 0)
+    write(hubFd, paraSig, sigSize);
+return hubFd;
+}
+
 void startHub()
 /* Do hub daemon - set up socket, and loop around on it until we get a quit. */
 {
@@ -353,7 +430,7 @@ int socketHandle = 0, connectionHandle = 0;
 char sig[20], *line, *command;
 static struct sockaddr_in sai;		/* Some system socket info. */
 int fromLen;
-char *hostName = "localhost";
+char *hostName = getHost();
 int sigLen = strlen(paraSig);
 char *buf = NULL;
 
@@ -388,6 +465,8 @@ for (;;)
     command = nextWord(&line);
     if (sameWord(command, "jobDone"))
          jobDone(line);
+    else if (sameWord(command, "recycleSpoke"))
+         recycleSpoke(line);
     else if (sameWord(command, "heartbeat"))
          processHeartbeat();
     else if (sameWord(command, "addJob"))

@@ -21,7 +21,37 @@ int spokeLastId;	/* Id of last spoke allocated. */
 static void spokeSendRemote(char *socketName, char *machine, char *message)
 /* Send message to remote machine. */
 {
+int sd;
+int hubFd;
+char buf[512];
+
 uglyf("%s->%s: %s", socketName, machine, message);
+
+/* Try and tell machine about job. */
+sd = netConnPort(machine, paraPort);
+if (sd > 0)
+    {
+    write(sd, paraSig, strlen(paraSig));
+    netSendLongString(sd, message);
+    close(sd);
+    }
+else
+    {
+    /* Tell hub about failure if any */
+    hubFd = hubConnect();
+    sprintf(buf, "nodeDown %s %d", machine, sd);
+    netSendLongString(hubFd, buf);
+    close(hubFd);
+    }
+
+/* Tell hub we're free. */
+hubFd = hubConnect();
+if (hubFd > 0)
+    {
+    sprintf(buf, "recycleSpoke %s", socketName);
+    netSendLongString(hubFd, buf);
+    close(hubFd);
+    }
 }
 
 static void spokeProcess(char *socketName)
@@ -31,12 +61,14 @@ int conn, fromLen;
 char *buf, *line, *machine, sig[20];
 int sd;
 struct sockaddr_un sa;
-int sigLen = strlen(sig);
+int sigLen = strlen(paraSig);
 
 /* Do some precomputation on signature. */
 assert(sigLen < sizeof(sig));
+sig[sigLen] = 0;
 
 /* Make your basic socket. */
+uglyf("%s: starting\n", socketName);
 sd = socket(AF_UNIX, SOCK_STREAM, 0);
 if (sd < 0)
     {
@@ -45,6 +77,7 @@ if (sd < 0)
     }
 
 /* Bind it to file system. */
+uglyf("%s: ok1\n", socketName);
 ZeroVar(&sa);
 sa.sun_family = AF_UNIX;
 strncpy(sa.sun_path, socketName, sizeof(sa.sun_path));
@@ -56,21 +89,29 @@ if (bind(sd, (struct sockaddr *)&sa, sizeof(sa)) < 0)
     }
 
 /* Listen on socket until we get killed. */
+uglyf("%s: ok2\n", socketName);
 listen(sd,2);
+conn = accept(sd, NULL, &fromLen);
 for (;;)
     {
-    conn = accept(sd, NULL, &fromLen);
-    if (!netMustReadAll(conn, sig, sigLen) || !sameString(sig, paraSig))
-	{
+    uglyf("%s: ok3\n", socketName);
+    if (!netMustReadAll(conn, sig, sigLen))
+        {
 	close(conn);
-        continue;
+	continue;
 	}
+    uglyf("%s: ok4\n", socketName);
+    if (!sameString(sig, paraSig))
+        {
+	close(conn);
+	continue;
+	}
+    uglyf("%s: ok5\n", socketName);
     line = buf = netGetLongString(conn);
     uglyf("%s: %s\n", socketName, line);
     machine = nextWord(&line);
     if (machine != NULL && line != NULL && line[0] != 0)
 	spokeSendRemote(socketName, machine, line);
-    close(conn);
     freez(&buf);
     }
 }
@@ -148,13 +189,10 @@ if (spoke != NULL)
     }
 }
 
-void spokeSendMessage(struct spoke *spoke, struct machine *machine, char *message)
-/* Send a generic message to machine through spoke. */
+static int spokeGetSocket(struct spoke *spoke)
+/* Get socket for spoke, opening it if not already open. */
 {
-struct dyString *dy = newDyString(1024);
 int sd = spoke->socket;
-
-/* Open up socket if it's not already. */
 if (sd == 0)
     {
     struct sockaddr_un sa;
@@ -163,7 +201,7 @@ if (sd == 0)
     if (sd < 0)
 	{
         warn("couldn't open socket in spokeSendMessage");
-	return;
+	return -1;
 	}
 
     /* Get connection to socket process via file system. */
@@ -174,14 +212,52 @@ if (sd == 0)
         {
 	warn("couldn't connect to socket in spokeSendMessage");
 	close(sd);
-	return;
+	return -1;
 	}
     spoke->socket = sd;
     }
+return sd;
+}
 
-/* Send out signature, machine, and message to spoke. */
-dyStringPrintf(dy, "%s %s", machine, message);
-write(sd, paraSig, strlen(paraSig));
-netSendLongString(sd, dy->string);
+void spokeSendMessage(struct spoke *spoke, struct machine *machine, char *message)
+/* Send a generic message to machine through spoke. */
+{
+struct dyString *dy = newDyString(1024);
+int sd = spokeGetSocket(spoke);
+
+if (sd > 0)
+    {
+    /* Send out signature, machine, and message to spoke. */
+    spoke->machine = cloneString(machine->name);
+    dyStringPrintf(dy, "%s %s", spoke->machine, message);
+    write(sd, paraSig, strlen(paraSig));
+    netSendLongString(sd, dy->string);
+    }
+dyStringFree(&dy);
+}
+
+void spokeSendJob(struct spoke *spoke, struct machine *machine, struct job *job)
+/* Tell spoke to start up a job. */
+{
+struct dyString *dy = newDyString(1024);
+int sd = spokeGetSocket(spoke);
+
+uglyf("hub: host = %s\n", getHost());
+if (sd > 0)
+    {
+    spoke->machine = cloneString(machine->name);
+    dyStringPrintf(dy, "%s %s", machine->name, "run");
+    dyStringPrintf(dy, " %s", getHost());
+    dyStringPrintf(dy, " %d", job->id);
+    dyStringPrintf(dy, " %s", job->user);
+    dyStringPrintf(dy, " %s", job->dir);
+    dyStringPrintf(dy, " %s", job->in);
+    dyStringPrintf(dy, " %s", job->out);
+    dyStringPrintf(dy, " %s", job->err);
+    dyStringPrintf(dy, " %s", job->cmd);
+    write(sd, paraSig, strlen(paraSig));
+    uglyf("hub: spoke %s machine %s gets job %s\n", spoke->socketName, machine->name, job->cmd);
+    netSendLongString(sd, dy->string);
+    }
 dyStringFree(&dy);
 }
