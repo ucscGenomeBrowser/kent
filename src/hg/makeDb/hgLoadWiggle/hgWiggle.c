@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.32 2004/09/23 21:55:26 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.33 2004/11/01 18:51:03 hiram Exp $";
 
 /* Command line switches. */
 static boolean doAscii = TRUE;	/*	do not output ascii data */
@@ -429,11 +429,11 @@ if (position)
 	}
     if (2 != chopByChar(stripped, '-', startEnd, 2))
 	errAbort("can not parse position: '%s' '%s'", position, stripped);
-    winStart = sqlUnsigned(startEnd[0]) - 1;	/* !!! 1-relative coming in */
+    winStart = BASE_0(sqlUnsigned(startEnd[0])); /* !!! 1-relative coming in */
     winEnd = sqlUnsigned(startEnd[1]);
     freeMem(stripped);
     wds->setPositionConstraint(wds, winStart, winEnd);
-    verbose(VERBOSE_CHR_LEVEL, "#\tposition specified: %u-%u\n", wds->winStart+1, wds->winEnd);
+    verbose(VERBOSE_CHR_LEVEL, "#\tposition specified: %u-%u\n", BASE_1(wds->winStart), wds->winEnd);
     }
 wds->offset = lift;
 if (lift > 0)
