@@ -8,6 +8,16 @@ color 150,100,30
 altColor 230,170,40
 type bed 3 +
 
+track ensGene
+shortLabel Ensembl Genes
+longLabel Ensembl Gene Predictions
+group genes
+priority 40
+visibility dense
+color 150,0,0
+type genePred ensPep
+url http://www.ensembl.org/perl/transview?transcript=$$track genscan
+
 track genscan
 shortLabel Genscan Genes
 longLabel Genscan Gene Predictions
