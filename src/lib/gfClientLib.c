@@ -205,29 +205,18 @@ slReverse(&geneList);
 return geneList;
 }
 
-static struct dnaSeq *expandAndLoad(struct gfRange *range, char *nibDir, struct dnaSeq *query, int *retNibSize)
-/* Expand range to cover an additional 500 bases on either side.
- * Load up target sequence and return. (Done together because don't
- * know target size before loading.) */
+static void expandRange(struct gfRange *range, int qSize, int tSize)
+/* Expand range to cover an additional 500 bases on either side. */
 {
-struct dnaSeq *target = NULL;
 int extra = 500;
 int x;
-char nibFileName[512];
-FILE *f = NULL;
-int nibSize;
 
-/* Open file and get size of target. */
-sprintf(nibFileName, "%s/%s", nibDir, range->tName);
-nibOpenVerify(nibFileName, &f, &nibSize);
-
-/* Add to ends of range, clipping to fit inside sequence. */
 x = range->qStart - extra;
 if (x < 0) x = 0;
 range->qStart = x;
 
 x = range->qEnd + extra;
-if (x > query->size) x = query->size;
+if (x > qSize) x = qSize;
 range->qEnd = x;
 
 x = range->tStart - extra;
@@ -235,9 +224,23 @@ if (x < 0) x = 0;
 range->tStart = x;
 
 x = range->tEnd + extra;
-if (x > nibSize) x = nibSize;
+if (x > tSize) x = tSize;
 range->tEnd = x;
+}
 
+static struct dnaSeq *expandAndLoad(struct gfRange *range, char *nibDir, struct dnaSeq *query, int *retNibSize)
+/* Expand range to cover an additional 500 bases on either side.
+ * Load up target sequence and return. (Done together because don't
+ * know target size before loading.) */
+{
+struct dnaSeq *target = NULL;
+char nibFileName[512];
+FILE *f = NULL;
+int nibSize;
+
+sprintf(nibFileName, "%s/%s", nibDir, range->tName);
+nibOpenVerify(nibFileName, &f, &nibSize);
+expandRange(range, query->size, nibSize);
 target = nibLdPart(nibFileName, f, nibSize, range->tStart, range->tEnd - range->tStart);
 fclose(f);
 *retNibSize = nibSize;
@@ -329,7 +332,7 @@ int chromSize;
 
 rangeList = gfQuerySeq(hostName, portName, seq);
 slSort(&rangeList, gfRangeCmpTarget);
-rangeList = gfRangesBundle(rangeList, 100000);
+rangeList = gfRangesBundle(rangeList, 500000);
 for (range = rangeList; range != NULL; range = range->next)
     {
     splitPath(range->tName, dir, chromName, ext);
@@ -385,10 +388,11 @@ struct dnaSeq *targetSeq;
 
 rangeList = seqClumpToRangeList(clumpList);
 slSort(&rangeList, gfRangeCmpTarget);
-rangeList = gfRangesBundle(rangeList, 100000);
+rangeList = gfRangesBundle(rangeList, 500000);
 for (range = rangeList; range != NULL; range = range->next)
     {
     targetSeq = range->tSeq;
+    expandRange(range, seq->size, targetSeq->size);
     range->tStart = 0;
     range->tEnd = targetSeq->size;
     AllocVar(bun);
