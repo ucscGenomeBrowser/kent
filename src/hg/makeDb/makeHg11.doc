@@ -613,8 +613,8 @@ Request a binrysnc from the admin's of kkstore's /scratch/hg/mrna.129
 When done, do:
        gensub2 human.lst mrna.lst gsub spec
        para create spec
-       para push IN PROGRESS
-
+       para push DONE
+IN PROGRESS
 Sort xenoEst alignments:
        ssh kkstore
        cd ~/oo/bed/xenoEst
@@ -636,7 +636,7 @@ Load into database as so:
        end
 
 
-PRODUCING FISH ALIGNMENTS (IN PROGRESS)
+PRODUCING FISH ALIGNMENTS (DONE)
 
 o - Do fish/human alignments.
        ssh kk
@@ -654,11 +654,11 @@ o - Do fish/human alignments.
      Make sure jobs are going ok with para check.  Then
        para push
      wait about 2 hours and do another
-       para push IN PROGRESS
+       para push
      do para checks and if necessary para pushes until done
      or use para shove.
 o - Sort alignments as so 
-       pslCat -dir psl | liftUp -type=.psl stdout ~/mm/jkStuff/liftAll.lft warn stdin | pslSortAcc nohead chrom temp stdin
+       pslCat -dir psl | liftUp -type=.psl stdout ~/oo/jkStuff/liftAll.lft warn stdin | pslSortAcc nohead chrom temp stdin
 o - Copy to hgwdev:/scratch.  Rename to correspond with tables as so and 
     load into database:
        ssh hgwdev
@@ -668,7 +668,9 @@ o - Copy to hgwdev:/scratch.  Rename to correspond with tables as so and
            mv $i ${r}_blatFish.psl
        end
        hgLoadPsl hg11 *.psl
-
+DONE
+Now load the fish seqeuence data
+hgLoadRna hgLoadRna addSeq hg11 /projects/hg3/fish/tet6/tet*.fa
 
 
 TIGR GENE INDEX (todo)
@@ -708,7 +710,8 @@ LOAD CHROMOSOME BANDS (todo)
       - login to hgwdev
       cd /cluster/store1/gs.12/build29/bed
       mkdir cytoBands
-      cp /projects/cc/hg/mapplots/data/tracks/build29/cytobands.bed cytoBands
+      cp /projects/cc/hg/mapplots/data/tracks/oo.29/cytobands.bed cytoBands
+      cd cytoBands
       hg11 < ~/src/hg/lib/cytoBand.sql
       Enter database with "hg11" command.
       - At mysql> prompt type in:
