@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.30 2004/06/28 04:34:04 angie Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.31 2004/08/18 04:34:42 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -479,7 +479,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (vis == tvFull)
         {
         y = ref.score * height1;
-        vgBox(vg, x1 + xOff, yOff + height1 - y, 1, y+1, color);
+        vgBox(vg, x1 + xOff, yOff + height1 - y, w, y+1, color);
         }
     else
         {
@@ -488,7 +488,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         if ((shade < 0) || (shade >= maxShade))
             shade = 0;
         c = shadesOfGray[shade];
-        vgBox(vg, x1 + xOff, yOff, 1, height-1, c);
+        vgBox(vg, x1 + xOff, yOff, w, height-1, c);
         }
     }
 sqlFreeResult(&sr);
@@ -718,7 +718,7 @@ memcpy(selfLine, seq->dna, winBaseCount);
 toUpperN(selfLine, winBaseCount);
 freeDnaSeq(&seq);
 
-/* Make hash of items keyed by database. */
+/* Make hash of species items keyed by database. */
 i = 0;
 for (mi = miList; mi != NULL; mi = mi->next)
     {
@@ -759,8 +759,8 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 		}
 	    else
 	        {
-		mi = hashMustFindVal(miHash, db);
-		processOtherSeq(mc->text, mcMaster->text, sub->textSize, 
+                mi = hashMustFindVal(miHash, db);
+                processOtherSeq(mc->text, mcMaster->text, sub->textSize, 
                                 lines[mi->ix], lineOffset, subSize);
 		}
 	    }
