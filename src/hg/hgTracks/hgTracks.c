@@ -76,7 +76,7 @@
 #include "cds.h"
 #include "simpleNucDiff.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.658 2004/01/22 20:02:45 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.659 2004/01/26 18:07:45 hiram Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -5955,6 +5955,7 @@ if (withLeftLabels)
 	    if (withCenterLabels)
 		y += fontHeight;
 	    y += track->height;
+	    vgUnclip(vg);
 	    continue;
 	    }
     	if( sameString( track->mapName, "humMusL" ) ||
@@ -6250,13 +6251,13 @@ if (withLeftLabels)
 		    vg, leftLabelX, y, leftLabelWidth, tHeight,
 		    withCenterLabels, font, track->ixColor, track->limitedVis);
 		    }
+		vgUnclip(vg);
 		}
 	    if (withCenterLabels)
 		y += fontHeight;
 	    y += track->height;
 	    }
 	}
-    vgUnclip(vg);
     }
 
 /* Make map background. */
