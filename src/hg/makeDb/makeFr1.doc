@@ -194,6 +194,10 @@ exit; # don't actually run this like a script :)
     mv fugu_v3.masked.agp Un/chrUn.agp
     mv fugu_v3.masked.lft Un/chrUn.lft
 
+    # reran scaffoldFaToAgp with new version to generate a gap
+    # file that contains gaps within contig
+    mv fugu_v3.masked.gap Un/chrUn.gap
+
     # Create chromosome FA file from AGP and file of masked scaffolds
     cd Un
     agpToFa -simpleMultiMixed chrUn.agp chrUn chrUn.fa ../fugu_v3.masked.fa
@@ -235,6 +239,15 @@ exit; # don't actually run this like a script :)
     # create assembly and gap tracks
     ssh hgwdev
     hgGoldGapGl -noGl fr1 ~ fr1 
+
+    # reload gap track so that it also includes gaps for N's in scaffolds
+    hgLoadGap fr1 /cluster/data/fr1
+    
+    # make Map Contigs track for comparison to Assembly track
+    # cd /cluster/data/fr1/Un
+    # mkdir -p lift
+    # grep scaffold chrUn.lft > lift/ordered.lft
+    # hgCtgPos fr1 /cluster/data/fr1
 
 
 # CREATING GRP TABLE FOR TRACK GROUPING (5/2/03 KRR)
@@ -636,10 +649,12 @@ hide mol
     # load into database
     cd $fr1dir/chrom
     hgLoadPsl -noTNameIx fr1 chrUn_blatHg15.psl
+    rm -fr psl
 
 
-# TETRAODON BLAT ALIGNMENT (IN PROGRESS 2003-09-11 kate)
-# NOTE: too many alignments -- must repeat/trf-mask tetra sequence
+# TETRAODON BLAT ALIGNMENT (DONE 2003-09-29 kate)
+    # Blat using 2002 Tetraodon nigroviridis (V6) from genoscope
+    # repeat and trf-masked contigs
     ssh kk
     mkdir /cluster/data/fr1/bed/blatTetra
     cd /cluster/data/fr1/bed/blatTetra
@@ -654,17 +669,17 @@ hide mol
     cd run
     ls -1S /iscratch/i/fugu/trfFa/*.fa > fugu.lst
         # 578 files
-    cp -rp /cluster/data/tetra /cluster/bluearc
-    ls -1S /cluster/bluearc/tetra/*.fa > tetra.lst
-        # 36 files
+    ls -1S /iscratch/i/tetra/*.fa > tetra.lst
+        # 632 files
     cat << 'EOF' > gsub
 #LOOP
-/cluster/bin/i386/blat -mask=lower -q=dnax -t=dnax {check in line+ $(path1)} {check in line+ $(path2)} {check out line+ /cluster/data/fr1/bed/blatTetra/psl/$(root1)/$(root1)_$(root2).psl}
+/cluster/bin/i386/blat -mask=lower -qMask=lower -q=dnax -t=dnax {check in line+ $(path1)} {check in line+ $(path2)} {check out line+ /cluster/data/fr1/bed/blatTetra/psl/$(root1)/$(root1)_$(root2).psl}
 #ENDLOOP
 'EOF'
 
     gensub2 fugu.lst tetra.lst gsub spec
-        # 23120 jobs
+    wc -l spec
+        #  365296 spec
     para create spec
     para try
     para check
@@ -679,6 +694,7 @@ hide mol
                 /cluster/data/fr1/Un/chrUn.lft warn stdin | \
         pslSortAcc nohead chrom temp stdin
         # 15 minutes ?
+    rm -fr psl
     
     # load into database
     ssh hgwdev
@@ -688,18 +704,16 @@ hide mol
 
     # Add entry to trackDb.ra
 
-    # make hg16 symlink in /gbdb and load human sequence data
-    set gbdbdir=/gbdb/fr1/tetra
-    mkdir $gbdbdir
-    cd $gbdbdir
-    foreach f (/cluster/data/tetra/*)
-        ln -s $f .
-    end
+    # make symlinks in /gbdb and load tetra sequence data
+    cat * > ../tetra.masked.fa
+    cd /gbdb/fr1
+    ln -s /cluster/data/tetra/tetra.masked.fa 
 
-    # load human sequences into database
+    # load tetra sequences into database
     ssh hgwdev
     cd /cluster/data/fr1/bed/blatTetra
-    hgLoadSeq fr1 /gbdb/fr1/tetra/*.fa
+    hgLoadSeq fr1 /gbdb/fr1/tetra.masked.fa
+       # Warning: load of seq did not go as planned: 108177 record(s), 1147 row(s) skipped, 13534 warning(s) loading .
 
 
 # HUMAN HG16 BLAT SWAPPED FROM HUMAN BROWSER
@@ -1198,6 +1212,28 @@ SEQ2_LEN=$BASE/S2.len
     # align mrnas, then ests
     nice ./bin/gbAlignStep -initial -type=mrna -clusterRootDir=/cluster/bluearc/genbank -iserver=no fr1 
     nice ./bin/gbAlignStep -initial -type=est -clusterRootDir=/cluster/bluearc/genbank -iserver=no fr1 
+<<<<<<< makeFr1.doc
+
+# TBA PROJECTION - NON-MAMMAL SPECIES INCLUDED (Fugu & Chicken)  2003-10-20 kate
+#       Note: CFTR region in fugu is spread across 4 non-consecutive scaffolds
+# These are hg16/rn3/mm3 plus NISC sequences.  See hg16 doc for details.
+    ssh hgwdev
+    mkdir -p  /cluster/data/fr1/bed/nisc/cftr
+    set table = tbaFishBirdCFTR
+    mkdir -p /gbdb/fr1/$table
+    cd /gbdb/fr1/$table
+    foreach i (1 2 3 4)
+        ln -s /cluster/data/nisc/targets/cftr/CFTR.non-mammal/fugu$i.out \
+                /cluster/data/fr1/bed/nisc/cftr/tbaFishBird.$i.maf
+        ln -s /cluster/data/fr1/bed/nisc/cftr/tbaFishBird.$i.maf \
+                /gbdb/fr1/${table}/tba.$i.maf
+    end
+    cd /cluster/data/fr1/bed/nisc/cftr
+    /cluster/bin/i386/hgLoadMaf -WARN fr1 $table
+        # 60 warnings
+        
+    
+=======
 
 # ECORES FROM GENOSCOPE [in progress, hartera, 2004-03-29]
 # download data from  http://www.genoscope.cns.fr/externe/tetraodon/Data3/ecores
@@ -1281,6 +1317,11 @@ SEQ2_LEN=$BASE/S2.len
     # add html for details pages to this directory:
     # ecoresMm3.html, ecoresRn3.html and ecoresHg16.html
 
+<<<<<<< makeFr1.doc
+<<<<<<< makeFr1.doc
+>>>>>>> 1.10
+=======
+=======
 # SWAP ZEBRAFISH-FUGU BLASTZ TO FUGU-ZEBRAFISH (danRer1) 
 # (DONE, 2004-06-16, hartera)
     ssh kolossus
@@ -1324,6 +1365,7 @@ SEQ2_LEN=$BASE/S2.len
       echo "$f Done"
     end
 
+>>>>>>> 1.14
 # MAKE Human Proteins track
     ssh eieio
     mkdir -p /cluster/data/fr1/blastDb
@@ -1452,6 +1494,9 @@ chainSome $(path1)
     rm -rf blastOut
 
 # End tblastn
+<<<<<<< makeFr1.doc
+>>>>>>> 1.12
+=======
 
 # BLASTZ SWAP FOR danRer2 vs. fr1 BLASTZ TO CREATE fr1 vs. danRer2
 # (DONE, 2004-12-15, hartera)
@@ -1640,6 +1685,9 @@ axtChain $1 /cluster/bluearc/fugu/fr1/chromNib \
     nice gzip axtChain/all.chain.antirepeat axtChain/chainAR/*.chain &
     nice rm -fr axtChain/chain axtChain/chainRaw &
     
+<<<<<<< makeFr1.doc
+>>>>>>> 1.14
+=======
 # MAKE VSDANRER2 DOWNLOADABLES (DONE, 2004-12-23, hartera)
     ssh hgwdev
     cd /cluster/data/fr1/bed/blastz.danRer2.swap/axtChrom
@@ -1661,6 +1709,9 @@ axtChain $1 /cluster/bluearc/fugu/fr1/chromNib \
     md5sum *.gz > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
 
+<<<<<<< makeFr1.doc
+>>>>>>> 1.15
+=======
 # MAKE Human Proteins track (hg17 DONE 
     ssh eieio
     mkdir -p /cluster/data/fr1/blastDb
@@ -1791,3 +1842,4 @@ chainSome $(path1)
     # back to eieio
     rm -rf blastOut
 # End tblastn
+>>>>>>> 1.16
