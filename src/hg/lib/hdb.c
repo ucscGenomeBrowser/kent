@@ -25,7 +25,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.143 2003/09/22 18:41:18 hiram Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.144 2003/10/02 05:24:25 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -269,6 +269,27 @@ char *hDefaultDb()
 /* Return the default db if all else fails */
 {
 return hDefaultDbForGenome(DEFAULT_GENOME);
+}
+
+char *hDefaultChrom()
+/* Return the first chrom in chromInfo from the current db. */
+{
+struct sqlConnection *conn = hAllocConn();
+char *defaultChrom;
+char buf[128];
+
+defaultChrom = sqlQuickQuery(conn, "select chrom from chromInfo limit 1",
+			     buf, sizeof(buf));
+hFreeConn(&conn);
+if (defaultChrom == NULL)
+    {
+    errAbort("Can't find first chromosome in %s.chromInfo", hdbName);
+    }
+else
+    {
+    defaultChrom = cloneString(defaultChrom);
+    }
+return(defaultChrom);
 }
 
 char *hGetDb()

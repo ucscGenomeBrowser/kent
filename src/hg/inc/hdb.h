@@ -97,6 +97,9 @@ void hSetDb2(char *dbName);
 char *hDefaultDb();
 /* Return the default db if all else fails */
 
+char *hDefaultChrom();
+/* Return the first chrom in chromInfo from the current db. */
+
 char *hGetDb();
 /* Return the current database name. */
 
