@@ -1,25 +1,25 @@
 #This file contains definitions of orderings common to all genomes.
 #
 
+name expGnfAtlas2
+shortLabel Expression (GNF Atlas2)
+longLabel Difference in Expression with Selected Gene According to GNF Gene Expression Atlas2
+type pair gnfAtlas2Distance query target distance 1
+priority 1.0
+
 name knownExpUcla
 shortLabel Expression (UCLA)
 longLabel Difference in Expression with Selected Gene
 type pair knownExpDistance query target distance 1
-priority 1
+priority 1.5
 
-#name knownExpGnf
-#shortLabel Expression (GNF)
-#longLabel Difference in Expression with Selected Gene
-#type pair knownGnfDistance query target distance 1
-#priority 2
-
-name knownExpGnfU95
+name expGnfU95
 shortLabel Expression (GNF)
 longLabel Difference in Expression with Selected Gene
 type pair gnfU95Distance query target distance 1
 priority 2.1
 
-name knownExpGnfU74A
+name expGnfU74A
 shortLabel Expression (GNF U74A)
 longLabel Difference in Expression with Selected Gene
 type pair affyGnfU74ADistance query target distance 1
