@@ -27,6 +27,9 @@ static char const rcsid[] = "";
 
 /* Command line variables. */
 char *db  = NULL;	/* DB from command line */
+
+char *flankPath  = NULL; /* path to flank files *.seq.gz */
+
 char *chr = NULL;	/* chr name from command line e.g "chr1" */
 
 int threshold = 70;  /* minimum score for match */
@@ -42,7 +45,9 @@ void usage()
 errAbort(
   "snpValid - Validate snp alignments\n"
   "usage:\n"
-  "   snpValid db \n"
+  "   snpValid db flankPath\n"
+  "     db is the database, e.g. hg16.\n"
+  "     flankPath is the path to the flank files *.seq.gz.\n"
   "options:\n"
   "   -chr=name - Use chrom name (e.g chr1) to limit validation, default all chromosomes.\n"
   "   -threshold=number - Use threshold as minimum score 0-99, default %u.\n"
@@ -136,12 +141,19 @@ char *row[4];
 int rowCount=4;
 char *ch = &chrom[3];
 
-safef(fileName,sizeof(fileName),"/cluster/bluearc/snp/hg16/build122/seq/ds_ch%s.xml.contig.seq.gz",ch);
+// safef(fileName,sizeof(fileName),"/cluster/bluearc/snp/hg16/build122/seq/ds_ch%s.xml.contig.seq.gz",ch);
+
+safef(fileName,sizeof(fileName),"%s/ds_ch%s.xml.contig.seq.gz",flankPath,ch);
 
 lf=lineFileMayOpen(fileName, TRUE);
 if (lf == NULL)
     {
-    return NULL;
+    safef(fileName,sizeof(fileName),"%s/ds_ch%s.xml.contig.seq",flankPath,ch);
+    lf=lineFileMayOpen(fileName, TRUE);
+    if (lf == NULL)
+	{
+	return NULL;
+	}
     }
 
 while (lineFileNextRowTab(lf, row, rowCount))
@@ -909,7 +921,7 @@ for (cn = cns; cn != NULL; cn = cn->next)
 	    int strand=1;
 	    char *rc = NULL;
 	    int m = 0;
-	    int lf = 0;  /* size of left flank context (lower case dna) */
+	    int lf = 0;  /* size of left flank context (lower case dna) (this was when dbSnpRs? may still be true for affy) */
 	    int rf = 0;  /* size of right flank context (lower case dna) */
 	    int ls = 0;  /* total size of assembly dna context plus actual region in dbSnpRs/affy */
 	    char *origSeq = NULL; /* use to display the original dnSnpRs.assembly seq */
@@ -937,6 +949,9 @@ for (cn = cns; cn != NULL; cn = cn->next)
 			rf = maxFlank;
 			flank->rightFlank[rf]=0;
 			}
+		    /* at Daryl's request, lower case */
+		    toLowerN(flank->leftFlank , lf);
+		    toLowerN(flank->rightFlank, rf);
 		    
 		    flankSize = lf+1+rf;
 		    seq = needMem(flankSize+1);
@@ -955,6 +970,7 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		printf("(no assembly context) rsId=%s chrom=%s %u %u \n assembly=%s \n\n",
 		  id,
 		  snp->chrom,
+
 		  snp->chromStart,
 		  snp->chromEnd,
 		  seq
@@ -1237,9 +1253,10 @@ int main(int argc, char *argv[])
 srand( (unsigned)time( NULL ) );
  
 optionInit(&argc, argv, options);
-if (argc != 2)
+if (argc != 3)
     usage();
 db = argv[1];
+flankPath = argv[2];
 chr       = optionVal("chr"      , chr      );
 threshold = optionInt("threshold", threshold);
 Verbose   = optionInt("verbose"  , Verbose  );
