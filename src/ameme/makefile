@@ -11,7 +11,7 @@ alpha: $(O)
 cgi: $(O)
 	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkweb.a -lm 
 	mv a.out ameme.exe
-	chmod a+rx ameme.exe
+	chmod 755 ameme.exe
 	mv ameme.exe $(HOME)/.html/cgi-bin
 
 

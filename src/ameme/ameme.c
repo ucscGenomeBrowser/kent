@@ -1778,7 +1778,7 @@ buf[consIx] = 0;
 return buf;
 }
 
-static void motifHitSection(struct dnaSeq *seq, struct dnaMotif *motif)
+static void motifHitSection(struct dnaSeq *seq, struct dnaMotif *motif, FILE *f)
 /* Print out section about motif. */
 {
 #ifdef GS_PATH
@@ -1787,23 +1787,20 @@ char *gs = GS_PATH;
 char *gs = NULL;
 #endif
 
-fprintf(htmlOut,"<PRE>");
 if (motif != NULL)
     {
     struct tempName pngTn;
+    fprintf(f,"<PRE>");
     dnaMotifMakeProbabalistic(motif);
     makeTempName(&pngTn, "logo", ".png");
     dnaMotifToLogoPng(motif, 47, 140, gs, "../trash", pngTn.forCgi);
-    fprintf(htmlOut,"   ");
-    fprintf(htmlOut,"<IMG SRC=\"%s\" BORDER=1>", pngTn.forHtml);
-    fprintf(htmlOut,"\n");
+    fprintf(f,"   ");
+    fprintf(f,"<IMG SRC=\"%s\" BORDER=1>", pngTn.forHtml);
+    fprintf(f,"\n");
+    fprintf(f,"motif consensus\n");
+    dnaMotifPrintProb(motif, f);
+    fprintf(f,"</PRE>");
     }
-if (motif != NULL)
-    {
-    fprintf(htmlOut,"motif consensus\n");
-    dnaMotifPrintProb(motif, htmlOut);
-    }
-fprintf(htmlOut,"</PRE>");
 }
 
 void printProfile(FILE *f, struct profile *prof)
@@ -1855,7 +1852,8 @@ for (i = 0; i<4; ++i)
         }
     fprintf(f, "\n");
     }
-motifHitSection(NULL, motif);
+if (f == htmlOut)
+    motifHitSection(NULL, motif, f);
 }
 
 void makeNullModels(struct seqList *bgSeq)
