@@ -171,8 +171,8 @@ sub updateRefSeq($) {
     my($version) = @_;
 
     # mRNA and peptide fasta
-    my $fullRE = qr/(^rscu\.gbff\.Z$)|(rscu\.fsa\.Z$)|(^README$)/;
-    my $dailyRE = qr/(^.*\.gbff\.Z$)|(.*\.fsa\.Z$)/;
+    my $fullRE = qr/(^rscu\.gbff\.Z$)|(^README$)/;
+    my $dailyRE = qr/(^.*\.gbff\.Z$)/;
 
     ftpOpen();
 

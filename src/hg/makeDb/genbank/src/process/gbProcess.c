@@ -25,7 +25,11 @@
  * file rather than the external files.
  *
  */
-
+/* FIXME: the output file selection is very convoluted.
+ * FIXME: doesn't use gbOpenOutput mechanism for ra files; this is
+ * due to the reopening of the files for by-prefix output.
+ * FIXME: BAC stuff is untested.
+ */
 #include "common.h"
 #include "portable.h"
 #include "hash.h"
@@ -37,52 +41,37 @@
 #include "gbFa.h"
 #include "keys.h"
 #include "options.h"
+#include "gbFilter.h"
 #include "gbParse.h"
 #include "gbDefs.h"
-#include "pepFa.h"
 #include "gbFileOps.h"
 #include "gbProcessed.h"
 
-static char const rcsid[] = "$Id: gbProcess.c,v 1.1 2003/06/03 01:27:48 markd Exp $";
+static char const rcsid[] = "$Id: gbProcess.c,v 1.2 2003/06/27 01:10:51 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
-    {"byOrganism", OPTION_STRING},
+    {"filterFile", OPTION_STRING},
+    {"filter", OPTION_STRING},
     {"byAccPrefix", OPTION_INT},
     {"gbidx", OPTION_STRING},
-    {"pepFaIn", OPTION_STRING},
-    {"pepFaOut", OPTION_STRING},
+    {"pepFa", OPTION_STRING},
     {NULL, 0}
 };
-
-enum formatType
-/* Are we working on genomic sequence or mRNA?  Need to write
- * one big .fa file, or a separate one for each sequence. */
-    {
-    ftUnknown,  /* Default.  Useful for mRNA. Extracts sequence into one big file. */
-    ftBac,      /* For genomic. Extracts sequence into separate files. */
-    ftEst,      /* Sequence into one big file.  Some special EST oriented processing. */
-    };
-
-enum formatType formatType = ftUnknown;         /* Current format type - set at beginning. */
-
-struct filter
-/* Controls which records are chosen and which fields are written. */
-    {
-    struct keyExp *keyExp;      /* If this expression evaluates true, the record is included. */
-    struct slName *hideKeys;    /* A list of keys to not write out. */
-    };
 
 /* Key/Value Table - Gets filled in as we parse through the
  * genBank record.  Sent to expression evaluator along with
  * filter.keyExp after genBank record is parsed. */
 static struct kvt *kvt;
 
-/* Buffers for /db_xref information that was collected. Need because global
- * kvt doesn't own memory of values  */
+/* Buffers for information that was collected that was parsed and saved
+ * in the kvt. Needed because kvt doesn't own memory of values.  Most
+ * of kvt memory is in tables in gbParse. (all yuk) */
 static struct dyString *dbXrefBuf = NULL;
 static struct dyString *omimIdBuf = NULL;
 static char locusLinkId[64];
+static char faOffStr[128], faSizeStr[64];
+static char pepSizeStr[64], pepFaOffStr[128], pepFaSizeStr[64];
 
 /* Base names for output files */
 static char *faName, *raName, *gbIdxName;
@@ -92,12 +81,6 @@ static char faBacDir[PATH_LEN]; /* directory for BACs */
 static int gByAccPrefixSize = 0;
 static char gCurAccPrefix[32];  /* current prefix characters */
 
-/* Flag indicating whether we are separating the output by organism, 
- * and directory and current organism */
-static boolean gByOrganism = FALSE;
-static char *gOrgOutputDir = NULL;
-static char gCurOrganism[PATH_LEN];
-
 /* Open output files.  If output by organism or acc prefix, a table is
  * kept of the files that have already been created so that they can be
  * appended to all but the first open. */
@@ -105,6 +88,7 @@ static struct gbFa *faFile = NULL;
 static FILE *raFile = NULL;
 static FILE *gbIdxFile = NULL;
 static struct hash *openedFiles = NULL;
+static struct gbFa *gPepFa = NULL;
 
 struct authorExample
 /* We keep one of these for each author, the better
@@ -178,30 +162,6 @@ if (contigCount >= ArraySize(contigStarts) )
 contigStarts[contigCount] = start;
 contigEnds[contigCount] = end;
 ++contigCount;
-}
-
-
-char *nextWordStart(char *s)
-/* Return start of next (white space separated) word. */
-{
-char c;
-/* Skip over current word. */
-for (;;)
-    {
-    if ((c = *s++) == 0)
-        return NULL;
-    if (isspace(c))
-        break;
-    }
-/* Skip over white space. */
-for (;;)
-    {
-    if ((c = *s) == 0)
-        return NULL;
-    if (!isspace(c))
-        return s;
-    ++s;
-    }
 }
 
 
@@ -612,29 +572,6 @@ if (dir == NULL)
 return dir;
 }
 
-static void charReplace(char *str, char *origList, char *newList)
-/*
-Utility function to replace all occurrences of the 
-original chars with their respective new ones in a string.
-Each character at index X in the origList gets replaced by the
-corresponding one at the same index in newList.
-
-param str - The string to operate on.
-param origList - The set of chars in the string to replace.
-param newList - The replacement set of char to place in the string.
- */
-{
-int repCount = strlen(origList);
-int repIndex = 0;
-
-assert(repCount == strlen(newList));
-
-for (repIndex = 0; repIndex < repCount; ++repIndex) 
-    {
-    subChar(str, origList[repIndex], newList[repIndex]);
-    }
-}
-
 void procHumanBac(DNA *dna, int dnaSize)
 /* Special handling for human BAC fields.  This will add values to kvt global
  * and fill in contig* globals. */
@@ -802,48 +739,6 @@ hashAdd(openedFiles, path, NULL);
 return TRUE;
 }
 
-void openByOrgFiles(char* org)
-/* Open up the by organism output files when gCurOrganism changes */
-{
-char *mode;
-char orgDir[PATH_LEN], fullOrgPath[PATH_LEN];
-char raPath[PATH_LEN], faPath[PATH_LEN], gbIdxPath[PATH_LEN];
-                
-if (org == NULL)
-    strcpy(gCurOrganism, "Unspecified");
-else
-    strcpy(gCurOrganism, org);
-
-carefulClose(&raFile);
-gbFaClose(&faFile);
-carefulClose(&gbIdxFile);
-                    
-/* Replace illegal directory chars */
-strcpy(orgDir, org);
-charReplace(orgDir, " ()'/", "_###~");
-
-/* ensure that the directory exists */
-safef(fullOrgPath, sizeof(fullOrgPath), "%s/%s", gOrgOutputDir, orgDir);
-if (!fileExists(fullOrgPath))
-    makeDir(fullOrgPath);
-
-safef(raPath, sizeof(raPath), "%s/%s/%s", gOrgOutputDir, orgDir, raName); 
-mode = isFirstOpen(raPath) ? "w" : "a";
-raFile = mustOpen(raPath, mode);
-
-safef(faPath, sizeof(faPath), "%s/%s/%s", gOrgOutputDir, orgDir, faName); 
-faFile = gbFaOpen(faPath, mode);
-
-if (gbIdxName != NULL)
-    {
-    safef(gbIdxPath, sizeof(gbIdxPath), "%s/%s/%s", gOrgOutputDir, orgDir,
-          gbIdxName); 
-    gbIdxFile = mustOpen(gbIdxPath, mode);
-    }
-
-strcpy(faBacDir, faPath);
-}
-
 void makeAccPrefixedFile(char* accPrefix, char *inFile, char *prefixedFile)
 /* generate an output with the prefixed included  */
 {
@@ -910,15 +805,10 @@ if (gbIdxName != NULL)
 strcpy(gCurAccPrefix, accPrefix);
 }
 
-void setupOutputFiles(char *acc, char *org)
+void setupOutputFiles(char *acc, char *org, struct filter *filter)
 /* Get the output files (in globals) for a sequence, opening as needed. */
 {
-if (gByOrganism)
-    {
-    if (!sameString(gCurOrganism, org))
-        openByOrgFiles(org);
-    }
-else if (gByAccPrefixSize > 0)
+if (gByAccPrefixSize > 0)
     {
     char accPrefix[32];
     strncpy(accPrefix, acc, gByAccPrefixSize);
@@ -933,7 +823,7 @@ else
     if (raFile == NULL)
         {
         raFile = mustOpen(raName, "w");
-        if (formatType != ftBac)
+        if (!filter->isBAC)
             faFile = gbFaOpen(faName, "w");
         if (gbIdxName != NULL)
             gbIdxFile = mustOpen(gbIdxName, "w");
@@ -1048,6 +938,31 @@ if (stat != NULL)
     kvtAdd(kvt, "rss", stat);
 }
 
+void writePepSeq()
+/* If information is available, write the peptide sequence and
+ * save offset and size in kvt */
+{
+if ((gPepFa != NULL) && (gbProteinIdField->val->stringSize > 0)
+    && (gbTranslationField->val->stringSize > 0))
+    {
+    int faSize;
+    gbFaWriteSeq(gPepFa, gbProteinIdField->val->string, NULL,
+                 gbTranslationField->val->string, -1);
+    
+    safef(pepSizeStr, sizeof(pepSizeStr), "%u", 
+          gbTranslationField->val->stringSize);
+    kvtAdd(kvt, "prs", pepSizeStr);
+
+    safef(pepFaOffStr, sizeof(pepFaOffStr), "%lld", gPepFa->recOff);
+    kvtAdd(kvt, "pfo", pepFaOffStr);
+
+    faSize = gPepFa->off - gPepFa->recOff;
+    safef(pepFaSizeStr, sizeof(pepFaSizeStr), "%d", faSize);
+    kvtAdd(kvt, "pfs", pepFaSizeStr);
+    }
+}
+        
+
 void procGbEntry(struct lineFile *lf, struct hash *estAuthorHash,
                  struct filter *filter)
 /* process one entry in the genbank file . readGbInfo should be called
@@ -1060,9 +975,7 @@ DNA *dna;
 int dnaSize;
 char sizeString[16];
 char accVer[64];
-char faOffStr[128];
 int faSize;
-char faSizeStr[64];
 char *locus = gbLocusField->val->string;
 char *accession = gbAccessionField->val->string;
 int version = 0;
@@ -1164,8 +1077,6 @@ if (((wordCount >= 5) && sameString(words[4], "EST")) ||
 /* Handle some other fields handling */
 parseDbXrefs();
 parseRefSeq();
-if (gbPrtField->val->stringSize > 0)
-    pepFaGetInfo(gbPrtField->val->string, kvt);
 
 if ((filter->keyExp == NULL) || keyExpEval(filter->keyExp, kvt))
     {
@@ -1176,7 +1087,7 @@ if ((filter->keyExp == NULL) || keyExpEval(filter->keyExp, kvt))
     safef(sizeString, sizeof(sizeString), "%d", dnaSize);
     sizeKey = kvtAdd(kvt, "siz", sizeString);
     
-    if ((formatType == ftBac) && (org != NULL) && sameString(org, "Homo sapiens"))
+    if ((filter->isBAC) && (org != NULL) && sameString(org, "Homo sapiens"))
         procHumanBac(dna, dnaSize);
 
     if (isEst)
@@ -1207,14 +1118,14 @@ if ((filter->keyExp == NULL) || keyExpEval(filter->keyExp, kvt))
     if (commentKey != NULL)
         commentKey->val = NULL;  /* Don't write out comment either. */
 
-    setupOutputFiles(accession, org);
+    setupOutputFiles(accession, org, filter);
 
-    if (formatType == ftBac)
+    if (filter->isBAC)
         {
         printf("bacWrite()\n");
         bacWrite(faBacDir, accession, version, dna);
         }
-    else
+    if (faFile != NULL)
         {
         /* save fasta offset, size in ra */
         safef(accVer, sizeof(accVer), "%s.%d", accession, version);
@@ -1224,6 +1135,11 @@ if ((filter->keyExp == NULL) || keyExpEval(filter->keyExp, kvt))
         kvtAdd(kvt, "fao", faOffStr);
         safef(faSizeStr, sizeof(faSizeStr), "%d", faSize);
         kvtAdd(kvt, "fas", faSizeStr);
+        }
+    if (gPepFa != NULL)
+        {
+        /* must write before writing kvt */
+        writePepSeq();
         }
     kvtWriteAll(kvt, raFile, filter->hideKeys);
     if (gbIdxFile != NULL)
@@ -1263,139 +1179,76 @@ errAbort("gbProcess - Convert GenBank flat format file to an fa file containing\
          "the sequence data, an ra file containing other relevant info and\n"
          "a ta file containing summary statistics.\n"
          "usage:\n"
-         "   gbProcess filterFile faFile raFile genBankFile(s)\n"
+         "   gbProcess [options] faFile raFile genBankFile(s)\n"
          "where filterFile is definition of which records and fields\n"
          "to use or the word null if you want no filtering."
          "options:\n"
-         "     -byOrganism=outputDir - Make separate files for each organism\n"
+         "     -filterFile=file - filter file"
+         "     -filter=filter - filter expressions, lines seperated by semi-colons"
          "     -byAccPrefix=n - separate into files by the first n,\n"
          "      case-insensitive letters of the accession\n"
          "     -gbidx=name - Make an index file byte this name\n"
-         "     -pepFaIn=fa - read this refSeq peptide product fasta file.\n"
-         "     -pepFaOut=fa - copy the refSeq peptide products to this fasta\n"
+         "     -pepFa=fa - write peptide products to this fasta\n"
          "      file, massaging the ids and recording the offsets in the\n"
          "      ra file\n"
          "This will read compressed input, but does not write compressed\n"
-         "output due to need to append with byOrganism and byAccPrefix.\n");
+         "output due to need to append with byAccPrefix.\n");
 }
 
-struct filter *makeFilter(char *fileName)
-/* Create filter from filter specification file. */
-{
-struct filter *filt;
-FILE *f;
-char line[1024];
-int lineCount=0;
-char *words[128];
-int wordCount;
-int i;
-
-AllocVar(filt);
-if (sameString(fileName, "null"))
-    return filt;
-f = mustOpen(fileName, "r");
-while (fgets(line, sizeof(line), f))
-    {
-    ++lineCount;
-    if (startsWith("//", line) )
-        continue;
-    if (startsWith("restrict", line))
-        {
-        char *s = skipToNextWord(line);
-        filt->keyExp = keyExpParse(s);
-        }
-    else if (startsWith("hide", line))
-        {
-        wordCount = chopLine(line, words);
-        for (i=1; i<wordCount; ++i)
-            {
-            struct slName *name = newSlName(words[i]);
-            slAddHead(&filt->hideKeys, name);
-            }
-        }
-    else if (startsWith("type", line))
-        {
-        char *type;
-        wordCount = chopLine(line, words);
-        if (wordCount < 2)
-            errAbort("Expecting at least two words in type line of %s\n", fileName);
-        type = words[1];
-        if (sameWord(type, "BAC"))
-            {
-            formatType = ftBac;
-            }
-        else
-            errAbort("Unrecognized type %s in %s\n", type, fileName);
-        }
-    else if (skipLeadingSpaces(line) != NULL)
-        {
-        errAbort("Can't understand line %d of %s:\n%s", lineCount, fileName,  line);
-        }
-    }
-carefulClose(&f);
-return filt;
-}
 
 int main(int argc, char *argv[])
 /* Check parameters, set up, loop through each GenBank file. */
 {
-char *filterName;
+char *filterFile, *filterExpr;
 struct filter *filter;
 char *gbName;
-int i = 0;
-int startIndex = 4;
+int argi = 1;
 struct hash *estAuthorHash = NULL;
-char *pepFaIn, *pepFaOut;
+char *pepFa;
 
 optionInit(&argc, argv, optionSpecs);
-if (argc < 5)
+if (argc < 4)
     usage();
 
-gOrgOutputDir = optionVal("byOrganism", NULL);
-gByOrganism = (gOrgOutputDir != NULL);
 gByAccPrefixSize = optionInt("byAccPrefix", 0);
 gbIdxName = optionVal("gbidx", NULL);
-pepFaIn = optionVal("pepFaIn", NULL);
-pepFaOut = optionVal("pepFaOut", NULL);
+pepFa = optionVal("pepFa", NULL);
+filterFile = optionVal("filterFile", NULL);
+filterExpr = optionVal("filter", NULL);
+if ((filterFile != NULL) && (filterExpr != NULL))
+    errAbort("can't specify both -filterFile and -filter");
 
 if (gByAccPrefixSize > 4)  /* keep small to avoid tons of open files */
     errAbort("max value of -byAccPrefix is 4");
-if (((pepFaIn == NULL) || (pepFaOut == NULL))
-    && (pepFaIn != pepFaOut))
-    errAbort("must specified either both or neither of -pepFaIn and -pepFaOut");
 
-gCurOrganism[0] = '\0';
 gCurAccPrefix[0] = '\0';
 
-filterName = argv[1];
-faName = argv[2];
+faName = argv[argi++];
 strncpy(faBacDir, faName, sizeof(faBacDir));
-raName = argv[3];
+raName = argv[argi++];
 
-filter  = makeFilter(filterName);
+if (filterFile != NULL)
+    filter = makeFilterFromFile(filterFile);
+else if (filterExpr != NULL)
+    filter = makeFilterFromString(filterExpr);
+else
+    filter = makeFilterEmpty();
 estAuthorHash = newHash(10);
 kvt = newKvt(128);
 gbfInit();
 
-/* process peptide fa and save info */
-if (pepFaIn != NULL)
-    pepFaProcess(pepFaIn, pepFaOut);
+if (pepFa != NULL)
+    gPepFa = gbFaOpen(pepFa,"w");
 
-if (gByOrganism) 
+while (argi < argc)
     {
-    printf("Processing output by organism into directory: %s\n", gOrgOutputDir);
-    makeDir(gOrgOutputDir);
-    }
-
-
-for (i = startIndex; i < argc; ++i)
-    {
-    gbName = argv[i];
+    gbName = argv[argi++];
     printf("Processing %s into %s and %s\n", gbName, faName, raName);
     procOneGbFile(gbName, estAuthorHash, filter);
     }
 
 gbFaClose(&faFile);
+gbFaClose(&gPepFa);
 carefulClose(&raFile);
 carefulClose(&gbIdxFile);
 

@@ -12,6 +12,7 @@ struct lineFile;
 #define GBF_MULTI_LINE 0x02
 #define GBF_TO_LOWER   0x04
 #define GBF_MULTI_VAL  0x08
+#define GBF_CONCAT_VAL 0x10 /* don't space-seperate multiline values */
 
 struct gbFieldUseCounter
 /* For some fields we use this to keep track of all
@@ -55,6 +56,8 @@ extern struct gbField *gbMapField;
 extern struct gbField *gbPrtField;
 extern struct gbField *gbGeneDbxField;
 extern struct gbField *gbCdsDbxField;
+extern struct gbField *gbProteinIdField;
+extern struct gbField *gbTranslationField;
 
 
 char *skipLeadingNonSpaces(char *s);
@@ -63,6 +66,9 @@ char *skipLeadingNonSpaces(char *s);
 char *skipToNextWord(char *s);
 /* Returns start of next (white space separated) word.
  * Returns NULL if not another word. */
+
+char *nextWordStart(char *s);
+/* Return start of next (white space separated) word. */
 
 char *skipThrough(char *s, char *through);
 /* Skip to next character in s that's not part of through. */

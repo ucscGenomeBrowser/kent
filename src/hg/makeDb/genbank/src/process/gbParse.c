@@ -8,7 +8,7 @@
 #include "gbParse.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbParse.c,v 1.1 2003/06/03 01:27:48 markd Exp $";
+static char const rcsid[] = "$Id: gbParse.c,v 1.2 2003/06/27 01:10:51 markd Exp $";
 
 
 /* Some fields we'll want to use directly. */
@@ -31,6 +31,8 @@ struct gbField *gbMapField;
 struct gbField *gbPrtField;
 struct gbField *gbGeneDbxField;
 struct gbField *gbCdsDbxField;
+struct gbField *gbProteinIdField;
+struct gbField *gbTranslationField;
 
 char *skipLeadingNonSpaces(char *s)
 /* Return first non-white space or NULL. */
@@ -74,6 +76,29 @@ for (;;)
         return NULL;
     else
         return s;
+    }
+}
+
+char *nextWordStart(char *s)
+/* Return start of next (white space separated) word. */
+{
+char c;
+/* Skip over current word. */
+for (;;)
+    {
+    if ((c = *s++) == 0)
+        return NULL;
+    if (isspace(c))
+        break;
+    }
+/* Skip over white space. */
+for (;;)
+    {
+    if ((c = *s) == 0)
+        return NULL;
+    if (!isspace(c))
+        return s;
+    ++s;
     }
 }
 
@@ -223,6 +248,12 @@ slAddTail(&c1->children, c2);
 c2 = newField("/product", "pro", GBF_NONE, 128);
 slAddTail(&c1->children, c2);
 
+gbProteinIdField = newField("/protein_id", "prt", GBF_NONE, 32);
+slAddTail(&c1->children, gbProteinIdField);
+
+gbTranslationField = newField("/translation", NULL, GBF_MULTI_LINE|GBF_CONCAT_VAL, 128);
+slAddTail(&c1->children, gbTranslationField);
+
 c2 = newField("/note", "cno", GBF_MULTI_LINE, 128);
 slAddTail(&c1->children, c2);
 gbStruct = gbs;
@@ -319,7 +350,8 @@ for (;;)
         lineFileReuse(lf);
         break;
         }
-    dyStringAppendC(gbf->val, ' ');
+    if ((gbf->flags & GBF_CONCAT_VAL) == 0)
+        dyStringAppendC(gbf->val, ' ');
     }
 
 /* Return if value is just '.' */

@@ -75,17 +75,15 @@ sub processSeqs($$$@) {
     unlink(glob("$outDir/$type.*"));
 
     # setup filter
-    my $filtFile = "$outDir/$type.fil.tmp";
-    open(FILT, ">", $filtFile) || gbError("can't open for write:  $filtFile");
+    my $filter;
     if ($type eq "mrna") {
-        print FILT "restrict mol=mRNA & !(cat=EST)\n";
+        $filter = "restrict mol=mRNA & !(cat=EST)";
     } elsif ($type eq "est") {
-        print FILT "restrict mol=mRNA & (cat=EST)\n";
+        $filter = "restrict mol=mRNA & (cat=EST)";
     } else {
         gbError("unknown type '$type'");
     }
-    print FILT "hide mol\n";
-    close(FILT) || die("close failed");
+    $filter .= ";hide mol";
 
     # Create file in an atomic manner.  For ESTs we split by first two
     # letters of accession, so we can have multiple.
@@ -97,6 +95,7 @@ sub processSeqs($$$@) {
     # remove all old files
     unlink(getOutFileList($type, undef, ($gbidx, $fa, $ra, $pepFa)));
     unlink(getOutFileList($type, ".tmp", ($gbidx, $fa, $ra, $pepFa)));
+    makeDir($outDir);    
 
     # generate files with .tmp extension
     my $cmd = "gbProcess -gbidx=$gbidx.tmp";
@@ -105,22 +104,11 @@ sub processSeqs($$$@) {
     }
     my $inPepFa;
     if ($isRefSeq) {
-        # add option to get peptide seqs, if file exists.
-        if ($#gbFiles > 0) {
-            die("only one processSeqs input file supported for RefSeq");
-        }
-        $inPepFa = $gbFiles[0];
-        $inPepFa =~ s/\.gbff\.Z$/.fsa.Z/;
-        if (-e $inPepFa) {
-            $cmd .= " -pepFaIn=$inPepFa -pepFaOut=$pepFa.tmp";
-        }
+        # add option to output peptide seqs for refseq
+        $cmd .= " -pepFa=$pepFa.tmp";
     }
-    $cmd .= " $filtFile $fa.tmp $ra.tmp " . join(" ", @gbFiles);
+    $cmd .= " -filter='$filter' $fa.tmp $ra.tmp " . join(" ", @gbFiles);
     runProg($cmd);
-
-    if (!$main::keep) {
-        unlink($filtFile);
-    }
 
     # process resulting output files
     my $md5File = "$outDir/$type.md5";
@@ -130,7 +118,7 @@ sub processSeqs($$$@) {
 
     if ($#raTmpFiles >= 0) {
         # compress ra files and rename
-        runProg("gzip -9 " . join(" ", @raTmpFiles));
+        runProg("gzip -1 " . join(" ", @raTmpFiles));
         my @raGzTmpFiles = getOutFileList($type, ".tmp.gz", $ra);
         my @outFiles = renameOutFiles(".tmp.gz", ".gz", @raGzTmpFiles);
 
