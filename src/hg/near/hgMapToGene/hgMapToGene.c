@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgMapToGene.c,v 1.8 2004/03/03 18:10:42 sugnet Exp $";
+static char const rcsid[] = "$Id: hgMapToGene.c,v 1.9 2004/04/16 07:04:33 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -157,7 +157,7 @@ if (val != NULL)
     fprintf(f, "%s\t%s\n", key, val);
 }
 
-void oneChromStrandBedToGene(struct sqlConnection *conn, 
+void oneChromStrandTrackToGene(struct sqlConnection *conn, 
 			     char *chrom, char strand,
 			     char *geneTable, char *geneTableType, 
 			     char *otherTable,  char *otherType,
@@ -185,7 +185,7 @@ else
 /* Read data into binKeeper. */
 if (startsWith("bed", otherType))
     {
-    char *numString = otherType + 4;
+    char *numString = otherType + 3;
     bedNum = atoi(numString);
     if (bedNum < 6)	/* Just one strand in bed. */
         {
@@ -200,7 +200,7 @@ if (startsWith("bed", otherType))
 	safef(extraBuf, sizeof(extraBuf), "strand = '%c'", strand);
 	extra = extraBuf;
 	}
-    sr = hChromQuery(conn, otherTable, chrom, NULL, &rowOffset);
+    sr = hChromQuery(conn, otherTable, chrom, extra, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	bed = bedLoadN(row+rowOffset, bedNum);
@@ -245,7 +245,6 @@ else
     errAbort("%s: unrecognized track type %s", otherTable, otherType);
     }
 sqlFreeResult(&sr);
-
 
 /* Scan through gene preds looking for best overlap if any. */
 sr = hChromQuery(conn, geneTable, chrom, extra, &rowOffset);
@@ -329,9 +328,9 @@ if (!createOnly)
 	{
 	if (verboseLevel() > 0)
 	    printf("%s\n", chrom->name);
-	oneChromStrandBedToGene(conn, chrom->name, '+', geneTable, geneTableType,  
+	oneChromStrandTrackToGene(conn, chrom->name, '+', geneTable, geneTableType,  
 	    otherTable, otherType, dupeHash, doAll, lookupHash, f);
-	oneChromStrandBedToGene(conn, chrom->name, '-', geneTable, geneTableType,
+	oneChromStrandTrackToGene(conn, chrom->name, '-', geneTable, geneTableType,
 	    otherTable, otherType, dupeHash, doAll, lookupHash, f);
 	}
     hashFree(&dupeHash);
