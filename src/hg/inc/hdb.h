@@ -529,6 +529,10 @@ struct axtInfo *hGetAxtAlignments(char *db);
 /* Get list of alignments where we have axt files listed in axtInfo . 
  * Dispose of this with axtInfoFreeList. */
 
+struct axtInfo *hGetAxtAlignmentsChrom(char *otherDb, char *chrom);
+/* Get list of alignments where we have axt files listed in axtInfo for a specified chromosome . 
+ * Dispose of this with axtInfoFreeList. */
+
 struct dbDb *hGetBlatIndexedDatabases();
 /* Get list of databases for which there is a BLAT index. 
  * Dispose of this with dbDbFreeList. */

@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.190 2004/06/22 19:46:20 galt Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.191 2004/07/13 12:44:13 baertsch Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -3177,6 +3177,30 @@ slReverse(&aiList);
 return aiList;
 }
 
+struct axtInfo *hGetAxtAlignmentsChrom(char *otherDb, char *chrom)
+/* Get list of alignments where we have axt files listed in axtInfo for a specified chromosome . 
+ * Dispose of this with axtInfoFreeList. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+struct axtInfo *aiList = NULL, *ai;
+char query[256];
+
+sprintf(query, "select * from axtInfo where species = '%s' and chrom = '%s'",
+	otherDb, chrom);
+/* Scan through axtInfo table, loading into list */
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    ai = axtInfoLoad(row);
+    slAddHead(&aiList, ai);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&aiList);
+return aiList;
+}
 struct dbDb *hGetBlatIndexedDatabases()
 /* Get list of databases for which there is a BLAT index. 
  * Dispose of this with dbDbFreeList. */
