@@ -152,7 +152,7 @@ char options[]="chainHg16=squish&chromInfo=full&encodeRegionLior"
 
 printf("          <A TARGET=\"_BLANK\" HREF=\"%s",URL);
 printf("db=%s&position=%s:%d-%d&%s\"><FONT color=%s>%s:%d-%d</FONT></A><BR>\n",
-       assembly,chrom,chromStart-1,chromEnd,options,color,chrom,chromStart,chromEnd);
+       assembly,chrom,chromStart+1,chromEnd,options,color,chrom,chromStart+1,chromEnd);
 }
 
 void printColumnSeparator()
@@ -379,7 +379,7 @@ for (i=0; i < assemblyCount; i++)
 	for (cr=crList, j=1; cr!=NULL; cr=cr->next, j++)
 	    {
 	    fprintf(f, "%s\t%d\t%d\t%s.%dof%d\n",
-		  cr->chrom, cr->chromStart-1, cr->chromEnd, region->name, j, count);
+		  cr->chrom, cr->chromStart, cr->chromEnd, region->name, j, count);
 	    if (cr->chromEnd-cr->chromStart<2000)
 		printLink(assembly[i], cr->chrom, cr->chromStart, cr->chromEnd,"red");
 	    else
@@ -393,9 +393,9 @@ for (i=0; i < assemblyCount; i++)
 	for (cr=crList; cr!=NULL; cr=cr->next)
 	    {
 	    if (cr->chromEnd-cr->chromStart<2000 || cr->chromEnd-cr->chromStart > (2*region->size))
-		printf("          <FONT COLOR=RED>%d</FONT><BR>\n",cr->chromEnd-cr->chromStart+1);
+		printf("          <FONT COLOR=RED>%d</FONT><BR>\n",cr->chromEnd-cr->chromStart);
 	    else
-		printf("          %d<BR>\n",cr->chromEnd-cr->chromStart+1);
+		printf("          %d<BR>\n",cr->chromEnd-cr->chromStart);
 	    }
 	printColumnSeparator();
 
