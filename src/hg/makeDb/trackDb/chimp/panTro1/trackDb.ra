@@ -25,6 +25,7 @@ autoScaleDefault Off
 maxHeightPixels 128:36:16
 graphTypeDefault Bar
 gridDefault OFF
+windowingFunction Mean
 color 0,128,255
 altColor 255,128,0
 defaultViewLimits 30:70
