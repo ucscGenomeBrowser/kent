@@ -153,7 +153,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.801 2004/12/17 19:12:50 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.802 2004/12/21 23:20:46 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6882,12 +6882,16 @@ if (url != NULL && url[0] != 0)
     	ans = sqlGetField(conn, database, "superfamily", "name", cond_str);
     	if (ans != NULL)
 	    {
-            printf("<B>Superfamily Link: </B>");
+	    /* double check to make sure trackDb is also updated to be in sync with existence of supfamily table */
 	    tdbSf = hashFindVal(trackHash, "superfamily");;
-            safef(supfamURL, sizeof(supfamURL), "<A HREF=\"%s%s;seqid=%s\" target=_blank>", 
-	    	  tdbSf->url, genomeStr, proteinID);
-            printf("%s", supfamURL);
-            printf("%s</A><BR><BR>\n", proteinID);
+            if (tdbSf != NULL)
+	    	{
+		printf("<B>Superfamily Link: </B>");
+            	safef(supfamURL, sizeof(supfamURL), "<A HREF=\"%s%s;seqid=%s\" target=_blank>", 
+	    	      tdbSf->url, genomeStr, proteinID);
+            	printf("%s", supfamURL);
+            	printf("%s</A><BR><BR>\n", proteinID);
+		}
             }
     	}
     free(shortItemName);
