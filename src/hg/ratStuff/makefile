@@ -13,4 +13,6 @@ USE_DIRS = $(DIRS)
 
 DIRS = \
 	mafFilter \
+	mafFrag \
+	mafFrags \
 	stageMultiz
