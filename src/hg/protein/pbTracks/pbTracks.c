@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.16 2004/01/16 20:57:13 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.17 2004/01/21 22:55:32 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -31,6 +31,9 @@ int gfxBorder = 1;		/* Width of graphics border. */
 int insideWidth;		/* Width of area to draw tracks in in pixels. */
 
 char *protDbName;               /* Name of proteome database for this genome. */
+
+struct tempName gifTn, gifTn2;  /* gifTn for tracks image and gifTn2 for stamps image */
+boolean hideControls = FALSE;   /* Hide all controls? */
 boolean suppressHtml = FALSE;	/* If doing PostScript output we'll suppress most
          			 * of HTML output. */
 char *proteinID;
@@ -94,6 +97,18 @@ boolean initialWindow = TRUE;
 struct vGfx *vg, *vg2;
 Color bkgColor;
 
+void dvPrintf(char *format, va_list args)
+/* Suppressable variable args hPrintf. */
+{
+char temp[1000];
+sprintf(temp,"<br>%s", format);
+
+    vprintf(temp, args);
+fflush(stdout);
+}
+
+// used for debugging only
+// #include "dPrint.c"
 
 void hvPrintf(char *format, va_list args)
 /* Suppressable variable args hPrintf. */
@@ -157,10 +172,9 @@ freez(&pdfTmpName);
 return pdfName;
 }
 
-void makeActiveImagePB(char *psOutput)
+void makeActiveImagePB(char *psOutput, char *psOutput2)
 /* Make image and image map. */
 {
-struct tempName gifTn, gifTn2;
 char *mapName = "map";
 int pixWidth, pixHeight;
 
@@ -181,7 +195,6 @@ if (strcmp(proteinID, protDisplayID) != 0)hPrintf(" (aka %s)", protDisplayID);
 
 hPrintf(" %s\n", description);
 hPrintf("</font><br><br>");
-fflush(stdout);
 
 protSeq = getAA(proteinID);
 if (protSeq == NULL)
@@ -191,8 +204,7 @@ if (protSeq == NULL)
 protSeqLen = strlen(protSeq);
 
 iypos = 15; 
-doTracks(proteinID, mrnaID, protSeq, &iypos);
-
+doTracks(proteinID, mrnaID, protSeq, &iypos, psOutput);
 if (!hTableExists("pbStamp")) goto histDone; 
 
 pbScale = 3;
@@ -201,8 +213,16 @@ insideWidth = pixWidth-gfxBorder;
 
 pixHeight = 350;
 
-makeTempName(&gifTn2, "hgt", ".gif");
-vg2 = vgOpenGif(pixWidth, pixHeight, gifTn2.forCgi);
+if (psOutput2)
+    {
+    vg2 = vgOpenPostScript(pixWidth, pixHeight, psOutput2);
+    }
+else
+    {
+    makeTempName(&gifTn2, "pbt", ".gif");
+    vg2 = vgOpenGif(pixWidth, pixHeight, gifTn2.forCgi);
+    }
+
 g_vg = vg2;
 
 bkgColor = vgFindColorIx(vg2, 255, 254, 232);
@@ -249,9 +269,15 @@ doPathwayLinks(protDisplayID, mrnaID);
 printFASTA(proteinID, protSeq);
 }
 
-void doTrackForm(char *psOutput)
+void doTrackForm(char *psOutput, char *psOutput2)
 /* Make the tracks display form */
 {
+if (psOutput != NULL)
+    {
+    suppressHtml = TRUE;
+    hideControls = TRUE;
+    }
+
 /* Tell browser where to go when they click on image. */
 hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" METHOD=POST>\n\n", "../cgi-bin/pbTracks");
 cartSaveSession(cart);
@@ -260,40 +286,58 @@ hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#"HG_COL_HOTLINKS"\" BORDER=\"0\" CELL
 hPrintf("<TD ALIGN=LEFT><A HREF=\"/index.html\">%s</A></TD>", wrapWhiteFont("Home"));
 hPrintf("<TD ALIGN=CENTER><FONT COLOR=\"#FFFFFF\" SIZE=4>%s</FONT></TD>", 
 	"UCSC Proteome Browser (V1.0)");
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/pbTracks?%s=%u&pbt.psOutput=on\">%s</A></TD>\n",
+	cartSessionVarName(), cartSessionId(cart), wrapWhiteFont("PDF/PS"));
 hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/pbTracksHelp.shtml\">%s</A></TD>",
         wrapWhiteFont("Help"));
 hPrintf("</TR></TABLE>");
 fflush(stdout);
 
 /* Make clickable image and map. */
-makeActiveImagePB(psOutput);
+makeActiveImagePB(psOutput, psOutput2);
 
-hPrintf("</FORM>");
+if (psOutput == NULL) hPrintf("</FORM>");
 }
-
 
 void handlePostscript()
 /* Deal with Postscript output. */
 {
 struct tempName psTn;
+struct tempName psTn2;
 char *pdfFile = NULL;
-makeTempName(&psTn, "hgt", ".eps");
-hPrintf("<H1>PostScript/PDF Output</H1>\n");
-hPrintf("PostScript images can be printed at high resolution "
-       "and edited by many drawing programs such as Adobe "
-       "Illustrator.<BR>");
-doTrackForm(psTn.forCgi);
-hPrintf("<A HREF=\"%s\">Click here to download</A> "
-       "the current browser graphic in PostScript.  ", psTn.forCgi);
+
+makeTempName(&psTn, "pbt", ".eps");
+makeTempName(&psTn2,"pbt2",".eps");
+
+printf("<H1>PostScript/PDF Output</H1>\n");
+printf("PostScript images can be printed at high resolution "
+       "and edited by many drawing programs such as Adobe Illustrator.");
+printf("  PDF can be viewed with Adobe Acrobat Reader.<BR><BR>\n");
+
+doTrackForm(psTn.forCgi, psTn2.forCgi);
+
+printf("<A HREF=\"%s\">Click here to download</A> "
+       "the current protein tracks graphic in PostScript.  ", psTn.forCgi);
 pdfFile = convertEpsToPdf(psTn.forCgi);
 if(pdfFile != NULL) 
     {
-    hPrintf("<BR><BR>PDF can be viewed with Adobe Acrobat Reader.<BR>\n");
-    hPrintf("<A HREF=\"%s\">Click here to download</A> "
-	   "the current browser graphic in PDF", pdfFile);
+    printf("<BR><A HREF=\"%s\">Click here to download</A> "
+	   "the current protein tracks graphic in PDF", pdfFile);
     }
 else
-    hPrintf("<BR><BR>PDF format not available");
+    printf("<BR><BR>PDF format not available");
+
+printf("<BR><BR><A HREF=\"%s\">Click here to download</A> "
+       "the current protein histograms graphic in PostScript.  ", psTn.forCgi);
+pdfFile = convertEpsToPdf(psTn2.forCgi);
+if(pdfFile != NULL) 
+    {
+    printf("<BR><A HREF=\"%s\">Click here to download</A> "
+	   "the current protein histograms graphic in PDF", pdfFile);
+    }
+else
+    printf("<BR><BR>PDF format not available");
+
 freez(&pdfFile);
 }
 
@@ -380,7 +424,6 @@ if (positionStr != NULL)
     prevGBStartPos = atoi(chp1);
     chp1 = chp9 + 1;
     prevGBEndPos   = atoi(chp1);
-    //printf("<br>%s---%d---%d\n", prevGBChrom, prevGBStartPos, prevGBEndPos);fflush(stdout); 
     }
 else
     {
@@ -390,7 +433,10 @@ else
     }
 
 /* Do main display. */
-doTrackForm(NULL);
+if (cgiVarExists("pbt.psOutput"))
+    handlePostscript();
+else
+    doTrackForm(NULL, NULL);
 }
 
 void doDown(struct cart *cart)
@@ -401,18 +447,18 @@ hPrintf("updating the database and the display software.\n");
 hPrintf("Please try again later.\n");
 }
 
-/* Other than submit and Submit all these vars should start with hgt.
+/* Other than submit and Submit all these vars should start with pbt.
  * to avoid weeding things out of other program's namespaces.
  * Because the browser is a central program, most of it's cart 
- * variables are not hgt. qualified.  It's a good idea if other
+ * variables are not pbt. qualified.  It's a good idea if other
  * program's unique variables be qualified with a prefix though. */
-char *excludeVars[] = { "submit", "Submit", "hgt.reset",
-			"hgt.in1", "hgt.in2", "hgt.in3", "hgt.inBase",
-			"hgt.out1", "hgt.out2", "hgt.out3",
-			"hgt.left1", "hgt.left2", "hgt.left3", 
-			"hgt.right1", "hgt.right2", "hgt.right3", 
-			"hgt.dinkLL", "hgt.dinkLR", "hgt.dinkRL", "hgt.dinkRR",
-			"hgt.tui", "hgt.hideAll", "hgt.psOutput", "hideControls",
+char *excludeVars[] = { "submit", "Submit", "pbt.reset",
+			"pbt.in1", "pbt.in2", "pbt.in3", "pbt.inBase",
+			"pbt.out1", "pbt.out2", "pbt.out3",
+			"pbt.left1", "pbt.left2", "pbt.left3", 
+			"pbt.right1", "pbt.right2", "pbt.right3", 
+			"pbt.dinkLL", "pbt.dinkLR", "pbt.dinkRL", "pbt.dinkRR",
+			"pbt.tui", "pbt.hideAll", "pbt.psOutput", "hideControls",
 			NULL };
 
 void resetVars()
@@ -433,7 +479,7 @@ int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
-if (cgiVarExists("hgt.reset"))
+if (cgiVarExists("pbt.reset"))
     resetVars();
 cartHtmlShell("UCSC Proteome Browser V1.0", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;

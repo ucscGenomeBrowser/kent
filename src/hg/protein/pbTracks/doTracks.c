@@ -394,7 +394,7 @@ vgTextRight(g_vg, xx-25, yy-9*tb, 10, 10, MG_BLACK, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
 mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-9*tb-2, trackTitleLen*6+12, 14, trackTitle, "aaScale");
 
-*yOffp = *yOffp + 12;
+*yOffp = *yOffp + 15;
 }
 
 void mapBoxExon(int x, int y, int width, int height, char *mrnaID, 
@@ -416,7 +416,7 @@ hPrintf(" target=_blank ALT=\"UCSC Genome Browser %s\">\n", posStr);
 int calPrevGB(int exonCount, char *chrom, char strand, int aaLen, int *yOffp, char *proteinID, char *mrnaID)
 // calculate the appropriate X offset for the previous Genome Browser position range
 {
-int xx, yy, xx0, xxSave;
+int xx, yy, xx0;
 int i, j;
 char exonNumStr[10];
 int mrnaLen;
@@ -538,7 +538,7 @@ return(prevGBOffset);
 void doPrevGB(int exonCount, char *chrom, char strand, int aaLen, int *yOffp, char *proteinID, char *mrnaID)
 // draw the previous Genome Browser position range
 {
-int xx, yy, xx0, xxSave;
+int xx, yy, xx0;
 int i, j;
 char prevPosMessage[300];
 char exonNumStr[10];
@@ -701,15 +701,21 @@ else
     if (strand == '-') sprintf(prevPosMessage, "%s (negative strand)", prevPosMessage);
     calxy(0, *yOffp, &xx0, &yy);
     calxy(jPrevExonPos/3, *yOffp, &xx, &yy);
-    xxSave = xx - 6*strlen(prevPosMessage);
-    if (xxSave < xx0) 
+    if (xx < xx0)
 	{
     	vgText(g_vg, xx0, yy-8, MG_BLACK, g_font, prevPosMessage);
 	}
     else
 	{
-    	vgTextRight(g_vg, xx, yy-8, 10, 10, MG_BLACK, g_font, prevPosMessage);
-    	}
+ 	if (jPrevExonPos/3 < aaLen/2)
+	    {
+    	    vgText(g_vg, xx, yy-8, MG_BLACK, g_font, prevPosMessage);
+    	    }
+	else
+	    {
+    	    vgTextRight(g_vg, xx, yy-8, 10, 10, MG_BLACK, g_font, prevPosMessage);
+    	    }
+	}
     }
 
 calxy0(0, *yOffp, &xx, &yy);
@@ -1192,7 +1198,7 @@ else
     }
 }
 
-void doTracks(char *proteinID, char *mrnaID, char *aa, int *yOffp)
+void doTracks(char *proteinID, char *mrnaID, char *aa, int *yOffp, char *psOutput)
 /* draw various protein tracks */
 {
 int i,j,l;
@@ -1222,6 +1228,12 @@ char *chrom;
 char strand;
 
 g_font = mgSmallFont();
+sprintf(pbScaleStr, "%d", pbScale);
+
+if (psOutput != NULL)
+    {
+    pbScale         = atoi(cartOptionalString(cart, "pbt.pbScaleStr"));
+    }
 
 if (cgiOptionalString("trackOffset") != NULL)
 	{
@@ -1248,36 +1260,39 @@ else
     scaleButtonPushed = FALSE;
     }
 
-if (cgiVarExists("hgt.left3"))
+if (psOutput == NULL)
+{
+if (cgiVarExists("pbt.left3"))
     {
     relativeScroll(-0.95);
     initialWindow = FALSE;
     }
-else if (cgiVarExists("hgt.left2"))
+else if (cgiVarExists("pbt.left2"))
     {
     relativeScroll(-0.475);
     initialWindow = FALSE;
     }
-else if (cgiVarExists("hgt.left1"))
+else if (cgiVarExists("pbt.left1"))
     {
     relativeScroll(-0.02);
     initialWindow = FALSE;
     }
-else if (cgiVarExists("hgt.right1"))
+else if (cgiVarExists("pbt.right1"))
     {
     relativeScroll(0.02);
     initialWindow = FALSE;
     }
-else if (cgiVarExists("hgt.right2"))
+else if (cgiVarExists("pbt.right2"))
     {
     relativeScroll(0.475);
     initialWindow = FALSE;
     }
-else if (cgiVarExists("hgt.right3"))
+else if (cgiVarExists("pbt.right3"))
     {
     relativeScroll(0.95);
     initialWindow = FALSE;
     }
+}
 
 dnaUtilOpen();
 
@@ -1298,6 +1313,13 @@ if (mrnaID != NULL)
     	if (trackOrigOffset > (protSeqLen*pbScale - 600))
 	    trackOrigOffset = protSeqLen*pbScale - 600;
 	}
+
+    // if this if for PDF/Postscript, the trackOrigOffset is already calculated previously,
+    // use the saved value
+    if (psOutput != NULL)
+    	{
+    	trackOrigOffset = atoi(cartOptionalString(cart, "pbt.trackOffset"));
+    	}
     }
 
 if ((cgiOptionalString("aaOrigOffset") != NULL) && scaleButtonPushed)
@@ -1328,16 +1350,26 @@ if (sfCount > 0) pixHeight = pixHeight + 20;
 if (pbScale >=6)  pixHeight = pixHeight + 20;
 if (pbScale >=18) pixHeight = pixHeight + 30;
 
-makeTempName(&gifTn, "hgt", ".gif");
+if (psOutput)
+    {
+    vg = vgOpenPostScript(pixWidth, pixHeight, psOutput);
+    suppressHtml = TRUE;
+    hideControls = TRUE;
+    }
+else
+    {
+    makeTempName(&gifTn, "pbt", ".gif");
+    vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi);
+    }
 
 /* Put up horizontal scroll controls. */
 hWrites("Move ");
-hButton("hgt.left3", "<<<");
-hButton("hgt.left2", " <<");
-hButton("hgt.left1", " < ");
-hButton("hgt.right1", " > ");
-hButton("hgt.right2", ">> ");
-hButton("hgt.right3", ">>>");
+hButton("pbt.left3", "<<<");
+hButton("pbt.left2", " <<");
+hButton("pbt.left1", " < ");
+hButton("pbt.right1", " > ");
+hButton("pbt.right2", ">> ");
+hButton("pbt.right3", ">>>");
 
 hPrintf(" &nbsp &nbsp ");
 
@@ -1355,7 +1387,6 @@ hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"FULL\">\n");
 hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"DNA\">\n");
 hPrintf("<FONT SIZE=1><BR><BR></FONT>\n");
 
-vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi);
 g_vg = vg;
 
 bkgColor = vgFindColorIx(vg, 255, 254, 232);
@@ -1417,5 +1448,10 @@ cgiMakeHiddenVar("trackOffset", trackOffset);
 aaOrigOffset = trackOrigOffset/pbScale;
 sprintf(aaOrigOffsetStr, "%d", aaOrigOffset);
 cgiMakeHiddenVar("aaOrigOffset", aaOrigOffsetStr);
+
+// save the following state variables, to be used by PDF/Postcript processing
+cartSetString(cart,"pbt.pbScaleStr", pbScaleStr);
+cartSetString(cart,"pbt.trackOffset", trackOffset);
+cartSaveSession(cart);
 }
 

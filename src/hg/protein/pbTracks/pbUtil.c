@@ -442,7 +442,6 @@ for (i=istart; i<=iend; i++)
     il++;
     if (il == 50) 
 	{
-	//hPrintf("<br>");
 	il = 0;
 	}
     }
