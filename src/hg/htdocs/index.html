@@ -4,8 +4,28 @@
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
 	<TITLE>UCSC Genome Bioinformatics Home</TITLE>
 	<LINK REL="STYLESHEET" HREF="style/HGStyle.css">
+
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+
+var theDb = 'hg11';
+
+function initDb()
+{
+theDb = document.dbForm.genome.options[document.dbForm.genome.selectedIndex].value;
+}
+
+function dbGo(theUrl)
+{
+document.location = theUrl + 'db=' + theDb;
+}
+
+//-->
+</SCRIPT>
+
+
 </HEAD>
-<BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#6600FF">
+<BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#6600FF" onLoad="initDb()">
 <A NAME="TOP"></A>
 
 <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="images/title.jpg"></TH></TR>
@@ -38,27 +58,27 @@
    	 	<TABLE WIDTH="100%" BORDER=0 CELLSPACING="0" CELLPADDING=10>
 		<TR HEIGHT="100%">
 			<TD BGCOLOR="738ED3" VALIGN="top" HEIGHT="100%"> 
-				<FORM ACTION="" METHOD="">
+				<FORM NAME="dbForm">
 			<table cellpadding="" cellspacing="0" margins="0" border="0"><tr><td valign="top">
 				<FONT CLASS="leftbar">Organism</FONT>
 			</td></tr><tr valign="bottom"><td valign="bottom">
-					<SELECT NAME="" >
-						<OPTION VALUE="">Human
-						<OPTION VALUE="">Mouse 
+					<SELECT NAME="genome" onChange="initDb();">
+						<OPTION VALUE="hg11">Human
+						<OPTION VALUE="mm2">Mouse 
 					</SELECT>
 			</td></tr></table><hr>
-			<A CLASS="leftbar" HREF="../cgi-bin/hgGateway">
+			<A CLASS="leftbar" HREF="javascript:dbGo('/cgi-bin/hgGateway?');">
 				Browser</A><hr>
-			<A CLASS="leftbar" HREF="../cgi-bin/hgBlat?command=start">
+			<A CLASS="leftbar" HREF="javascript:dbGo('/cgi-bin/hgBlat?command=start?');">
 				Blat</A><hr>
-			<A CLASS="leftbar" HREF="goldenPath/hgText.html">
+			<A CLASS="leftbar" HREF="javascript:dbGo('/cgi-bin/hgText?');">
 				Tables</A><hr>
+			</FORM>
+
 			<A CLASS="leftbar" HREF="downloads.html">
 				Downloads</A><hr>
 		  	<A CLASS="leftbar" HREF="mirror.html">
 				Mirrors</A><hr>
-  			<A CLASS="leftbar" HREF="goldenPath/hgText.html">
-				Tables</A><hr>
   			<A CLASS="leftbar" HREF="http://genome-archive.cse.ucsc.edu">
 				Archive</A><hr>
 			<A CLASS="leftbar" HREF="goldenPath/credits.html">
@@ -70,7 +90,6 @@
 				Jobs</A><hr>
   			<A CLASS="leftbar" HREF="bestlinks.html">
 				Links</A><hr>
-				</FORM>
 			<BR>
 			<IMG SRC="images/DOT.gif" HEIGHT=1100 WIDTH=1>
 		</TD></TR></TABLE>
