@@ -33,7 +33,59 @@ exit; # don't actually run this like a script :)
 
     mget chr*.agp
     mget chr*.fa.gz
+    gunzip *.gz
 
+# Download contig agp's into gs.17/build34
+
+    get ref_placed.agp   # used to be in reference.agp
+    get ref_unplaced.agp # used to be in reference.agp
+    get DR51.agp
+    get DR52.agp
+    get PAR.agp          # new for this build - PAR regions added to chrY
+    cat ref_placed.agp ref_unplaced.agp DR51.agp DR52.agp > ncbi_build34.agp
+
+# Download contig fa's into gs.17/ffa
+
+    get ref_placed.fa.gz   # used to be in reference.fa
+    get ref_unplaced.fa.gz # used to be in reference.fa
+    get DR51.fa.gz
+    get DR52.fa.gz
+    get PAR.fa.gz          # new for this build - PAR regions added to chrY
+    cat ref_placed.fa ref_unplaced.fa DR51.fa DR52.fa > ncbi_build34.fa
+    *** get sequence.inf ***
+
+# Download assembly related files into gs.17/build34
+
+    get seq_contig.md
+    *** get contig_overlaps.agp ***
+    
+# Sanity check
+    /cluster/bin/i386/checkYbr build33/ncbi_build34.agp ffa/ncbi_build34.fa \
+      build34/seq_contig.md
+
+# Convert fa files into UCSC style fa files and place in "contigs" directory
+# inside the gs.17/build34 directory 
+
+    cd build34
+    mkdir contigs
+    /cluster/bin/i386/faNcbiToUcsc -split -ntLast ../ffa/ncbi_build34.fa \
+      contigs
+   
+# Copy over chrM contig from previous version
+    cd ~/oo
+    cp -r gs.16/build33/M .
+
+# Determine the chromosome sizes from agps
+
+    /cluster/bin/scripts/getChromSizes ../agp
+
+# Create lift files (this will create chromosome directory structure) and inserts file
+  
+    /cluster/bin/scripts/createNcbiLifts -s chrom_sizes seq_contig.md .
+
+# Create contig agp files (will create contig directory structure)
+	
+    /cluster/bin/scripts/createNcbiCtgAgp seq_contig.md ncbi_build34.agp .
 
 # CREATE STS/FISH/BACENDS/CYTOBANDS DIRECTORY STRUCTURE AND SETUP
 
