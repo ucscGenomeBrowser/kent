@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.35 2004/03/03 17:57:53 sugnet Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.36 2004/03/23 23:28:28 daryl Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -268,8 +268,8 @@ static char *snpTypeDataName[] = {
 
 static char *snpTypeStates[] = {
     "include",
-    "exclude",
-    "exclude",
+    "include",
+    "include",
 };
 
 enum snpTypeEnum snpTypeStringToEnum(char *string)
@@ -363,11 +363,11 @@ static char *snpSourceDataName[] = {
 
 static char *snpSourceColor[] = {
     "red",
-    "green",
+    "blue",
     "blue",
     "black",
-    "exclude",
-    "exclude",
+    "green",
+    "green",
 };
 
 enum snpSourceEnum snpSourceStringToEnum(char *string)
