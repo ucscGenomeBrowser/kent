@@ -10,7 +10,7 @@
 #include "nib.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: netToBedWithId.c,v 1.1 2003/08/13 03:55:21 kent Exp $";
+static char const rcsid[] = "$Id: netToBedWithId.c,v 1.2 2003/08/13 04:43:08 kent Exp $";
 
 boolean qChain = FALSE;  /* Do chain from query side. */
 int maxGap = 10000;
@@ -190,33 +190,7 @@ for (fill = fillList; fill != NULL; fill = fill->next)
     }
 }
 
-static void rMarkUsed(struct cnFill *fillList, Bits *bits, int maxId)
-/* Recursively mark bits that are used. */
-{
-struct cnFill *fill;
-for (fill = fillList; fill != NULL; fill = fill->next)
-    {
-    if (fill->chainId != 0)
-	{
-	if (fill->chainId >= maxId)
-	    errAbort("chainId %d, can only handle up to %d", 
-	    	fill->chainId, maxId);
-        bitSetOne(bits, fill->chainId);
-	}
-    if (fill->children != NULL)
-	rMarkUsed(fill->children, bits, maxId);
-    }
-}
-
-void chainNetMarkUsed(struct chainNet *net, Bits *bits, int bitCount)
-/* Fill in a bit array with 1's corresponding to
- * chainId's used in net file. */
-{
-rMarkUsed(net->fillList, bits, bitCount);
-}
-
 #define maxChainId (256*1024*1024)
-
 
 Bits *findUsedIds(char *netFileName)
 /* Create a bit array with 1's corresponding to
@@ -248,6 +222,7 @@ struct hash *qChromHash = hashNew(0);
 char path[512];
 
 chainHash = chainReadUsedSwap(chainName, qChain, usedBits);
+bitFree(&usedBits);
 while ((net = chainNetRead(lf)) != NULL)
     {
     fprintf(stderr, "Processing %s\n", net->name);
