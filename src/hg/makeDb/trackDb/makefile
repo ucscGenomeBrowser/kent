@@ -29,6 +29,7 @@ update:
 	hgTrackDb worm cb1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb drosophila dm1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb drosophila dp1 trackDb_$(USER) ../../lib/trackDb.sql .
+	hgTrackDb sacCer sacCer1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb archae pae trackDb_$(USER) ../../lib/trackDb.sql .
 	cd zoo; make update; cd ..
 
@@ -60,6 +61,7 @@ alpha:
 	hgTrackDb worm cb1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb drosophila dm1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb drosophila dp1 trackDb ../../lib/trackDb.sql .
+	hgTrackDb sacCer sacCer1 trackDb ../../lib/trackDb.sql .
 	cd zoo; make alpha; cd ..
 	cp fugu/fr1/description.html /gbdb/fr1/html
 
@@ -77,6 +79,7 @@ strict:
 	hgTrackDb -strict=yes worm cb1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -strict=yes drosophila dm1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -strict=yes drosophila dp1 trackDb ../../lib/trackDb.sql .
+	hgTrackDb -strict=yes sacCer sacCer1 trackDb ../../lib/trackDb.sql .
 
 beta:
 	# this will fail if we are not in a beta checkout:
@@ -97,6 +100,7 @@ beta:
 	hgTrackDb worm cb1 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb drosophila dm1 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb drosophila dp1 trackDb_beta ../../lib/trackDb.sql .
+	hgTrackDb sacCer sacCer1 trackDb ../../lib/trackDb.sql .
 	cd zoo; make beta; cd ..
 
 old_alpha:
