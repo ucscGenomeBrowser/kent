@@ -31,6 +31,7 @@ int numAssemblies = 0;
 struct dbDb *dbList = hGetIndexedDatabases();
 struct dbDb *cur = NULL;
 struct hash *hash = hashNew(7); // 2^^7 entries = 128
+char *onChangeText = "onchange='document.orgForm.submit()';";
 
 if (oldDb != NULL && !sameString(db, oldDb))
     {
@@ -38,7 +39,7 @@ if (oldDb != NULL && !sameString(db, oldDb))
     }
 
 puts(
-"<FORM ACTION=\"/cgi-bin/hgGateway\" METHOD=\"GET\" NAME=\"changeGenome\">\n"
+"<FORM ACTION=\"/cgi-bin/hgGateway\" METHOD=\"GET\" NAME=\"orgForm\">\n"
 "<!--cheap trick to get background on row to be continuous-->\n"
 "<table CELLPADDING=3 CELLSPACING=0 MARGIN=0 WIDTH=100%><tr>\n"
 "<td ALIGN=\"left\">&nbsp;</td>\n"
@@ -56,11 +57,11 @@ for (cur = dbList; cur != NULL; cur = cur->next)
         numOrganisms++;
         }
     }
-cgiMakeDropListFull(orgCgiName, orgList, orgList, numOrganisms, organism);
+cgiMakeDropListFull(orgCgiName, orgList, orgList, numOrganisms, 
+                           organism, onChangeText);
 cartSaveSession(cart);
 
 puts(
-"<input type=\"submit\" value=\"Go\" name=\"Go\" alt=\"Go\" align=\"absmiddle\">\n"
 "</td></tr></table>\n"
 "</FORM>\n"
 "<CENTER>"
@@ -113,7 +114,7 @@ for (cur = dbList; cur != NULL; cur = cur->next)
        }
     }
 
-cgiMakeDropListFull(assemblyCgiName, assemblyList, values, numAssemblies, assembly);
+cgiMakeDropListFull(assemblyCgiName, assemblyList, values, numAssemblies, assembly, NULL);
 
 printf(" position\n");
 
