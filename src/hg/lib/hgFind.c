@@ -1060,8 +1060,8 @@ if (hTableExists("fishClones"))
 		      fc->chrom); 
 	AllocVar(pos);
 	pos->chrom = chrom;
-	pos->chromStart = fc->chromStart - 100000;
-	pos->chromEnd = fc->chromEnd + 100000;
+	pos->chromStart = fc->chromStart;
+	pos->chromEnd = fc->chromEnd;
 	pos->name = cloneString(spec);
 	dyStringPrintf(query, "%s Positions in FISH Clones track", spec);
 	table->description = cloneString(query->string);
@@ -1114,14 +1114,68 @@ if (hTableExists("bacEndPairs"))
 		     be->chrom); 
 	AllocVar(pos);
 	pos->chrom = chrom;
-	pos->chromStart = be->chromStart - 100000;
-	pos->chromEnd = be->chromEnd + 100000;
+	pos->chromStart = be->chromStart;
+	pos->chromEnd = be->chromEnd;
 	pos->name = cloneString(spec);
 	dyStringPrintf(query, "%s Positions found using BAC end sequences", spec);
 	table->description = cloneString(query->string);
 	table->name = cloneString("bacEndPairs");
 	slAddHead(&table->posList, pos);
 	lfsFree(&be);
+	}
+    if (table != NULL)
+        slReverse(&table->posList);
+    }
+freeDyString(&query);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return ok;
+}
+
+static boolean findFosEndPairs(char *spec, struct hgPositions *hgp)
+/* Look for position in fosEndPairs table. */
+{
+struct sqlConnection *conn;
+struct sqlResult *sr = NULL;
+struct dyString *query = NULL;
+char **row;
+boolean ok = FALSE;
+struct lfs *fe;
+char *chrom;
+char buf[64];
+struct hgPosTable *table = NULL;
+struct hgPos *pos = NULL;
+
+if (hTableExists("fosEndPairs"))
+    {
+    conn = hAllocConn();
+    query = newDyString(256);
+    dyStringPrintf(query, "select * from fosEndPairs where name = '%s'", spec);
+    sr = sqlGetResult(conn, query->string);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	if (ok == FALSE)
+	    {
+	    ok = TRUE;
+	    AllocVar(table);
+	    dyStringClear(query);
+	    slAddHead(&hgp->tableList, table);
+	    }
+	AllocVar(fe);
+	fe = lfsLoad(row+1);
+	if ((chrom = hgOfficialChromName(fe->chrom)) == NULL)
+	    errAbort("Internal Database error: Odd chromosome name '%s' in fosEndPairs",
+		     fe->chrom); 
+	AllocVar(pos);
+	pos->chrom = chrom;
+	pos->chromStart = fe->chromStart;
+	pos->chromEnd = fe->chromEnd;
+	pos->name = cloneString(spec);
+	dyStringPrintf(query, "%s Positions found using fosmid end sequences", spec);
+	table->description = cloneString(query->string);
+	table->name = cloneString("fosEndPairs");
+	slAddHead(&table->posList, pos);
+	lfsFree(&fe);
 	}
     if (table != NULL)
         slReverse(&table->posList);
@@ -2033,6 +2087,7 @@ else
     findRefGenes(query, hgp);
     findFishClones(query, hgp);
     findBacEndPairs(query, hgp);
+    findFosEndPairs(query, hgp);
     findStsPos(query, hgp);
     findMrnaKeys(query, hgp, hgAppName, cart);
     findZooGenes(query, hgp);
