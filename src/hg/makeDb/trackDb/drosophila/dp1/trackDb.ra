@@ -6,6 +6,37 @@ priority 9
 visibility pack
 color 150,0,0
 
+track drosRefSeq
+shortLabel All-Dros. RefSeq
+longLabel RefSeq Genes from All Drosophila Species
+group rna
+priority 61
+visibility dense
+spectrum on
+color 12,12,120
+type psl xeno
+url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=$$&doptcmdl=GenBank&tool=genome.ucsc.edu
+
+track drosMrna
+shortLabel All-Dros. mRNAs
+longLabel All Drosophila Species mRNAs from Genbank
+group rna
+priority 63
+visibility dense
+spectrum on
+type psl xeno
+url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=$$&doptcmdl=GenBank&tool=genome.ucsc.edu
+
+track drosEst
+shortLabel All-Dros. ESTs
+longLabel All Drosophila Species ESTs from Genbank 
+group rna
+priority 65
+visibility dense
+spectrum on
+type psl xeno
+url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=$$&doptcmdl=GenBank&tool=genome.ucsc.edu
+
 track bdgpLiftGene
 shortLabel D.mel. BDGP Genes
 longLabel D.melanogaster BDGP Genes Mapped to D.pseudoobscura
