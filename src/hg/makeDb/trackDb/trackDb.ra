@@ -375,7 +375,7 @@ type genePred twinscanPep
 
 track pseudoUcsc
 shortLabel Ucsc pseudo
-longLabel Processed Pseudogene Locus based on BLASTZ Chains UCSC
+longLabel Processed Pseudogene Locus based on blastz Chains UCSC
 group genes
 priority 45
 visibility hide
@@ -478,8 +478,8 @@ spectrum on
 type psl .
 
 track mrnaBlastz
-shortLabel $Organism mRNAs BLASTZ
-longLabel $Organism mRNAs from Genbank Aligned with BLASTZ
+shortLabel $Organism mRNAs blastz
+longLabel $Organism mRNAs from Genbank Aligned with blastz
 group rna
 priority 54
 visibility hide
@@ -552,7 +552,7 @@ url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
 
 track anyCovBed
 shortLabel mRNA/EST/pseud
-longLabel BLASTZ Alignments of GenBank mRNA Including Pseudogenes and All ESTs
+longLabel blastz Alignments of GenBank mRNA Including Pseudogenes and All ESTs
 group rna
 priority 66
 visibility hide
@@ -561,7 +561,7 @@ type bed 3
 
 track anyMrnaCov
 shortLabel mRNA/pseud
-longLabel BLASTZ Alignments of GenBank mRNA Including Pseudogenes
+longLabel blastz Alignments of GenBank mRNA Including Pseudogenes
 group rna
 priority 67
 visibility hide
@@ -888,7 +888,7 @@ type sample 0 8
 
 track syntenyHuman
 shortLabel Human Synteny
-longLabel Human/Mouse Synteny Using BLASTZ Single Coverage (100k window)
+longLabel Human/Mouse Synteny Using blastz Single Coverage (100k window)
 group compGeno
 priority 127
 visibility hide
@@ -898,7 +898,7 @@ type bed 4 +
 
 track ratChain
 shortLabel Rat Chain 
-longLabel Chained BLASTZ Rat/$Organism Alignments
+longLabel Chained blastz Rat/$Organism Alignments
 group compGeno
 priority 133
 visibility hide
@@ -936,7 +936,7 @@ altColor 0,0,0
 type bed 4+
 
 shortLabel Rat Synteny
-longLabel Human/Rat Synteny Using BLASTZ Single Coverage (100,000 base window)
+longLabel Human/Rat Synteny Using blastz Single Coverage (100,000 base window)
 group compGeno
 priority 138
 visibility hide
@@ -956,7 +956,7 @@ type bed 6+
 
 track syntenyRat
 shortLabel Rat Synteny
-longLabel $Organism/Rat Synteny Using BLASTZ Single Coverage (100k window)
+longLabel $Organism/Rat Synteny Using blastz Single Coverage (100k window)
 group compGeno
 priority 140
 visibility hide
@@ -1056,7 +1056,7 @@ type bed 4 +
 
 track blastzSelfUnmasked
 shortLabel Self Unmasked
-longLabel BLASTZ Self Join without Repeats Masked (tandem repeats masked)
+longLabel blastz Self Join without Repeats Masked (tandem repeats masked)
 group x
 priority 159
 visibility hide

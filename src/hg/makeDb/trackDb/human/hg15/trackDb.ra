@@ -61,7 +61,7 @@ type maf
 
 track axtBestMm3
 shortLabel Human/Mouse
-longLabel BLASTZ Score Based Mouse/Human Wiggle Track
+longLabel blastz Score Based Mouse/Human Wiggle Track
 group compGeno
 priority 125.99
 visibility full
@@ -82,7 +82,7 @@ type sample 0 8
 
 track blastzBestMm3
 shortLabel Best Mouse
-longLabel BLASTZ Mouse (Feb. 03) Best in Genome Alignments
+longLabel blastz Mouse (Feb. 03) Best in Genome Alignments
 group compGeno
 priority 126
 visibility dense
@@ -93,7 +93,7 @@ type psl xeno mm3
 
 track blastzTightMm3
 shortLabel Tight Mouse
-longLabel BLASTZ Mouse (Feb. 03), Tight Subset of Best Alignments
+longLabel blastz Mouse (Feb. 03), Tight Subset of Best Alignments
 group compGeno
 priority 123
 visibility hide
@@ -103,8 +103,8 @@ spectrum on
 type psl xeno mm3
 
 track blastzMm3
-shortLabel BLASTZ Mouse
-longLabel All BLASTZ Mouse (Feb. 03) Alignments
+shortLabel Mouse blastz
+longLabel blastz All Mouse (Feb. 03) Alignments
 group compGeno
 priority 130
 visibility hide
@@ -115,7 +115,7 @@ type psl xeno mm3
 
 track mouseChain
 shortLabel Mouse Chain 
-longLabel Chained BLASTZ Mouse/$Organism Alignments
+longLabel Chained blastz Mouse/$Organism Alignments
 group compGeno
 priority 133
 visibility hide
@@ -135,7 +135,7 @@ type netAlign mm3 mouseChain
 
 track syntenyMouse
 shortLabel Mouse Synteny
-longLabel Human/Mouse Synteny using BLASTZ single coverage (100k window)
+longLabel Human/Mouse Synteny using blastz single coverage (100k window)
 group compGeno
 priority 138
 visibility hide
@@ -145,7 +145,7 @@ type bed 4 .
 
 track blastzTightRn2
 shortLabel Tight Rat 
-longLabel BLASTZ Rat (Jan. 03), Tight Subset of Best Alignments
+longLabel Rat blastz (Jan. 03), Tight Subset of Best Alignments
 group compGeno
 priority 140
 visibility hide
@@ -156,7 +156,7 @@ type psl xeno rn2
 
 track syntenyRat
 shortLabel Rat Synteny
-longLabel $Organism/Rat Synteny using BLASTZ single coverage (100k window)
+longLabel $Organism/Rat Synteny using blastz single coverage (100k window)
 group compGeno
 priority 140.5
 visibility hide
@@ -166,7 +166,7 @@ type bed 4 +
 
 track blastzBestRn2
 shortLabel Best Rat
-longLabel BLASTZ Rat (Jan. 03) Best in Genome Alignments
+longLabel Rat blastz (Jan. 03) Best in Genome Alignments
 group compGeno
 priority 141
 visibility hide
@@ -176,8 +176,8 @@ spectrum on
 type psl xeno rn2
 
 track blastzRn2
-shortLabel BLASTZ Rat
-longLabel Merged BLASTZ Rat (Jan. 03) Alignments
+shortLabel Rat blastz
+longLabel Merged blastz Rat (Jan. 03) Alignments
 group compGeno
 priority 142
 visibility dense
@@ -188,7 +188,7 @@ type psl xeno rn2
 
 track humanChain
 shortLabel Human Chain 
-longLabel Chained BLASTZ Human/$Organism Alignments
+longLabel Chained blastz Human/$Organism Alignments
 group varRep
 priority 146
 visibility hide
@@ -207,10 +207,10 @@ spectrum on
 type bed 12 
 
 track blastzCe1
-shortLabel BLASTZ C elegans
-longLabel All BLASTZ C elegans alignments
+shortLabel Worm blastz
+longLabel C elegans blastz alignments
 group compGeno
-priority 111
+priority 109
 visibility hide
 color 100,50,0
 altColor 255,240,200
