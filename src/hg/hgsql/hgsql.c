@@ -20,6 +20,18 @@ errAbort(
   );
 }
 
+boolean stringHasSpace(char *s)
+/* Return TRUE if white space in string */
+{
+char c;
+while ((c = *s++) != 0)
+    {
+    if (isspace(c))
+        return TRUE;
+    }
+return FALSE;
+}
+
 void hgsql(int argc, char *argv[])
 /* hgsql - Execute some sql code using passwords in .hg.conf. */
 {
@@ -29,14 +41,21 @@ char *password = cfgOption("db.password");
 char *user = cfgOption("db.user");
 dyStringPrintf(command, "mysql -A -u %s -p%s", user, password);
 for (i=0; i<argc; ++i)
-    dyStringPrintf(command, " %s", argv[i]);
+    {
+    boolean hasSpace = stringHasSpace(argv[i]);
+    dyStringAppendC(command, ' ');
+    if (hasSpace)
+	dyStringAppendC(command, '\'');
+    dyStringAppend(command, argv[i]);
+    if (hasSpace)
+	dyStringAppendC(command, '\'');
+    }
 system(command->string);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionHash(&argc, argv);
 if (argc <= 1)
     usage();
 hgsql(argc-1, argv+1);
