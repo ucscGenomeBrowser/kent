@@ -573,10 +573,11 @@ static struct simpleFeature *splitByCodon( char *chrom,
     boolean foundStart = FALSE;
     struct simpleFeature *sfList = NULL, *sf = NULL;
     struct simpleFeature *tmp = NULL;
-    partialCodonSeq[0] = '\0';
 
     int i0, iN, iInc;
     boolean posStrand;
+
+    partialCodonSeq[0] = '\0';
 
 
     if (lf->orientation > 0) //positive strand
@@ -881,6 +882,10 @@ if(mrnaS >= 0)
 	{
 
 	int mrnaGrayIx;
+        boolean trueBool = TRUE;
+        boolean *nullFoundStart = &trueBool;
+        boolean startColor = FALSE;
+
 	//compute mrna codon and get genomic codon
 	//by decoding grayIx.
 	if (lf->orientation == -1)
@@ -893,9 +898,6 @@ if(mrnaS >= 0)
 	//re-set color of this block based on mrna seq rather tha
 	//than genomic, but keep the odd/even cycle of dark/light
 	//blue.
-        boolean trueBool = TRUE;
-        boolean *nullFoundStart = &trueBool;
-        boolean startColor = FALSE;
         mrnaGrayIx = setColorByCds(tempStr,(grayIx > 26),nullFoundStart, FALSE);
         if(color == cdsColor[CDS_START])
                 startColor = TRUE;

@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.17 2004/03/17 18:26:49 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.18 2004/04/02 20:21:38 hiram Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -443,10 +443,11 @@ while ((row = sqlNextRow(sr)) != NULL)
         }
     else
         {
+        Color c;
         int shade = ref.score * maxShade;
         if ((shade < 0) || (shade >= maxShade))
             shade = 0;
-        Color c = shadesOfGray[shade];
+        c = shadesOfGray[shade];
         vgBox(vg, x1 + xOff, yOff, 1, height-1, c);
         }
     }
