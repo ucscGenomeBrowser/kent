@@ -804,7 +804,7 @@ for (cn = cns; cn != NULL; cn = cn->next)
 	  snp->name,
 	  snp->strand
 	  );
-	continue;
+	//continue;
 
 	
         while (cmp < 0)
@@ -1082,7 +1082,7 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		    safef(snpLkup,sizeof(snpLkup),"%s","affy120"); break;
 		case 2:
 		    //safef(snpLkup,sizeof(snpLkup),"%s",dbSnpTbl); break;
-		    safef(snpLkup,sizeof(snpLkup),"flanks for %s",snp->chrom); break;
+		    safef(snpLkup,sizeof(snpLkup),"flnk%s",snp->chrom); break;
 		case 3:
 		    safef(snpLkup,sizeof(snpLkup),"%s","affy10"); break;
 		}
@@ -1160,7 +1160,7 @@ printf("         nib in gap : %u \n",totalGapNib);
 
 
 //printf("\n       Total rows in snpMap: %u \n ",snpMapRows);
-printf("\n       Total rows in snpMap: %u \n ",snpRows);
+printf("\n          Total rows in snp: %u \n ",snpRows);
 printf("\n        # no dna found for : %u \n ",noDna);
 
 printf("\n\n=========================================\n");
