@@ -60,6 +60,9 @@ void hDefaultConnect();
 char *hTrackDbName();
 /* return the name of the track database from the config file. Freez when done */
 
+char *hPdbFromGdb(char *genomeDb);
+/* return the name of the proteome database given the genome database name */
+
 void hSetDbConnect(char* host, char *db, char *user, char *password);
 /* set the connection information for the database */
 
@@ -119,9 +122,6 @@ boolean hTableExists2(char *table);
 void hParseTableName(char *table, char trackName[128], char chrom[32]);
 /* Parse an actual table name like "chr17_random_blastzWhatever" into 
  * the track name (blastzWhatever) and chrom (chr17_random). */
-
-int hdbChromSize(struct sqlConnection *conn, char *chromName);
-/* Get chromosome size from given database connection. */
 
 int hChromSize(char *chromName);
 /* Return size of chromosome. */
@@ -358,10 +358,7 @@ return - The default database name for this organism
 char *sqlGetField(struct sqlConnection *connIn, 
    	          char *dbName, char *tblName, char *fldName, 
   	          char *condition);
-/* get a single field from the database, given database name, 
- * table name, field name, and a condition string */
-
-char *hPdbFromGdb(char *genomeDb);
-/* Find proteome database name given genome database name */
+/* Return a single field from the database, given database name, 
+   table name, field name, and a condition string */
 
 #endif /* HDB_H */
