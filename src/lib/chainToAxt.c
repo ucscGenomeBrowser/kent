@@ -7,11 +7,11 @@
 #include "axt.h"
 #include "chainToAxt.h"
 
-static char const rcsid[] = "$Id: chainToAxt.c,v 1.2 2003/08/06 20:52:59 baertsch Exp $";
+static char const rcsid[] = "$Id: chainToAxt.c,v 1.3 2005/01/10 00:15:13 kent Exp $";
 
 static struct axt *axtFromBlocks(
 	struct chain *chain,
-	struct boxIn *startB, struct boxIn *endB,
+	struct cBlock *startB, struct cBlock *endB,
 	struct dnaSeq *qSeq, int qOffset,
 	struct dnaSeq *tSeq, int tOffset)
 /* Convert a list of blocks (guaranteed not to have inserts in both
@@ -19,7 +19,7 @@ static struct axt *axtFromBlocks(
 {
 int symCount = 0;
 int dq, dt, blockSize = 0, symIx = 0;
-struct boxIn *b, *a = NULL;
+struct cBlock *b, *a = NULL;
 struct axt *axt;
 char *qSym, *tSym;
 
@@ -97,7 +97,7 @@ struct axt *chainToAxt(struct chain *chain,
  * where there is a chain longer than maxChain.
  */
 {
-struct boxIn *startB = chain->blockList, *endB, *a = NULL, *b;
+struct cBlock *startB = chain->blockList, *endB, *a = NULL, *b;
 struct axt *axtList = NULL, *axt;
 
 for (b = chain->blockList; b != NULL; b = b->next)
