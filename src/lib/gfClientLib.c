@@ -36,7 +36,9 @@ sai.sin_port = htons(port);
 memcpy(&sai.sin_addr.s_addr, hostent->h_addr_list[0], sizeof(sai.sin_addr.s_addr));
 sd = socket(AF_INET, SOCK_STREAM, 0);
 if (sd < 0)
+    {
     errnoAbort("Couldn't setup socket %s %s", hostName, portName);
+    }
 return sd;
 }
 
@@ -125,7 +127,12 @@ int rowSize;
 /* Connect to server. */
 int sd = setupSocket(hostName, portName);
 if (connect(sd, &sai, sizeof(sai)) == -1)
+    {
+    errnoAbort("Sorry, the BLAT server seems to be down.  It's a very "
+               "new piece of software.  Please try again in a day or "
+	       "two.  Thanks for bearing with us as we debug it.");
     errnoAbort("Couldn't connect to socket in oneStrand");
+    }
 
 /* Do start of query. */
 sprintf(buf, "%squery %d", gfSignature(), seq->size);
@@ -139,6 +146,7 @@ write(sd, seq->dna, seq->size);
 for (;;)
     {
     gfRecieveString(sd, buf);
+    // uglyf("gf: %s\n", buf);
     if (sameString(buf, "end"))
 	{
 	break;
@@ -295,7 +303,7 @@ static void saveAlignments(char *chromName, int chromSize, int chromOffset,
 struct dnaSeq *tSeq = bun->genoSeq, *qSeq = bun->qSeq;
 struct ssFfItem *ffi;
 
-if (minMatch < qSeq->size/2) minMatch = qSeq->size/2;
+if (minMatch > qSeq->size/2) minMatch = qSeq->size/2;
 for (ffi = bun->ffList; ffi != NULL; ffi = ffi->next)
     {
     struct ffAli *ff = ffi->ff;
