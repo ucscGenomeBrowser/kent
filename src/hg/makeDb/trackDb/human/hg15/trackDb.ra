@@ -338,3 +338,11 @@ priority 1102
 visibility hide
 type psl xeno
 
+track chesSimpleRepeat
+shortLabel Filtered Simple Repeats
+longLabel Filtered Simple Tandem Repeats (period <= 12)
+group x
+priority 148
+visibility hide
+type bed 4 +
+
