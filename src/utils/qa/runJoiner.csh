@@ -37,7 +37,7 @@ else
   if (! -d xxJoinDirxx) then
     mkdir xxJoinDirxx
   endif
-  cvs co -d xxJoinDirxx kent/src/hg/makeDb/schema/all.joiner
+  cvs co -d xxJoinDirxx kent/src/hg/makeDb/schema/all.joiner >& /dev/null
   set joinerPath="xxJoinDirxx"
   if ( $status ) then
     echo "cvs check-out failed for versionInfo.h on $HOST"
@@ -62,11 +62,17 @@ tac ~/schema/all.joiner \
   | sed "/\.$table\./,/^identifier /\!d" | \
   grep "identifier" | gawk '{print $2}' > xxIDxx
 
+# if (-e xxIDxx) then
 if (-e xxIDxx) then
+  set idVal=`wc -l xxIDxx | gawk '{print $1}'`
   echo
-  echo found identifiers:
-  echo
-  cat xxIDxx
+  if ($idVal != 0) then
+    echo "found identifiers:"
+    echo
+    cat xxIDxx
+  else
+    echo "  no identifiers for this table"
+  endif
   echo
 endif
 
