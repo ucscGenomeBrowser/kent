@@ -30,7 +30,7 @@
 #include "extFileTbl.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.13 2003/08/25 05:12:59 genbank Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.14 2003/09/27 05:58:28 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -68,7 +68,7 @@ static struct dbLoadOptions gOptions; /* options from cmdline and conf */
 
 /* other globals */
 static int gTotalExtChgCnt = 0;  /* total number of extChg seqs processed */
-static boolean gStopWhenSafe = FALSE;  /* stop at the end of the current
+static boolean gStopSignaled = FALSE;  /* stop at the end of the current
                                        * partition */
 static boolean gMaxShrinkageError = FALSE;  /* exceeded maxShrinkage 
                                              * in some partation */
@@ -78,6 +78,23 @@ static struct sqlUpdater* gPendingStatusUpdates = NULL;
 
 /* loaded updates table */
 static struct gbLoadedTbl* gLoadedTbl = NULL;
+
+void checkForStop()
+/* called at safe places to check for stop request, either from a signal
+ * or var/dbload.stop existing */
+{
+static char* STOP_FILE = "var/dbload.stop";
+if (gStopSignaled)
+    {
+    fprintf(stderr, "*** Stopped by SIGUSR1 request ***\n");
+    exit(1);
+    }
+if (fileExists(STOP_FILE))
+    {
+    fprintf(stderr, "*** Stopped by %s request ***\n", STOP_FILE);
+    exit(1);
+    }
+}
 
 void checkInitialLoad(struct sqlConnection *conn)
 /* verify that certain table don't exist whne initialLoad is specified */
@@ -423,6 +440,8 @@ if (gOptions.flags & DBLOAD_DRY_RUN)
     return;
     }
 
+checkForStop(); /* last safe place */
+
 /* first clean out old and changed */
 deleteOutdated(conn, select, statusTbl, tmpDir);
 
@@ -473,6 +492,8 @@ void loadPartition(struct gbSelect* select, struct sqlConnection* conn,
  * partition of the data.  The gbLoadedTbl is loaded as needed for new
  * release. forceLoad overrides checking the gbLoaded table */
 {
+checkForStop();  /* don't even get started */
+
 /* Need to make sure this release has been loaded into the gbLoaded obj */
 gbLoadedTblUseRelease(gLoadedTbl, conn, select->release);
 
@@ -481,11 +502,7 @@ gbLoadedTblUseRelease(gLoadedTbl, conn, select->release);
 if (forceLoad || anyUpdatesNeedLoaded(select))
     doLoadPartition(select);
 
-if (gStopWhenSafe)
-    {
-    fprintf(stderr, "*** Stopped at user request ***\n");
-    exit(1);
-    }
+checkForStop();  /* database committed */
 }
 
 void loadDelayedTables()
@@ -556,13 +573,8 @@ if ((gOptions.flags & DBLOAD_INITIAL)
     loadDelayedTables();
 
 /* clean up extFile table if we change references for any seq */
-#if 0 /*FIXME: hak to force update of refseq pep */
-if ((gTotalExtChgCnt > 0) && ((gOptions.flags & DBLOAD_DRY_RUN) == 0))
-    cleanExtFileTable();
-#else
 if ((gOptions.flags & DBLOAD_EXT_FILE_UPDATE) && ((gOptions.flags & DBLOAD_DRY_RUN) == 0))
     cleanExtFileTable();
-#endif
 
 /* clean up */
 slFreeList(&selectList);
@@ -770,10 +782,10 @@ errAbort(
   );
 }
 
-void sigStopWhenSafe(int sig)
+void sigStopSignaled(int sig)
 /* signal handler that sets the stopWhenSafe flag */
 {
-gStopWhenSafe = TRUE;
+gStopSignaled = TRUE;
 }
 
 int main(int argc, char *argv[])
@@ -785,7 +797,7 @@ setlinebuf(stdout);
 setlinebuf(stderr);
 
 ZeroVar(&sigSpec);
-sigSpec.sa_handler = sigStopWhenSafe;
+sigSpec.sa_handler = sigStopSignaled;
 sigSpec.sa_flags = SA_RESTART;
 if (sigaction(SIGUSR1, &sigSpec, NULL) < 0)
     errnoAbort("can't set SIGUSR1 handler");

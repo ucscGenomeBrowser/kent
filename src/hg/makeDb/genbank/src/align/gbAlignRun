@@ -14,7 +14,7 @@
 # Note: rsh does not return the exit code of the remove process, thus
 # ssh is used.
 #
-# $Id: gbAlignRun,v 1.5 2003/07/29 04:44:49 markd Exp $
+# $Id: gbAlignRun,v 1.6 2003/09/27 05:58:28 markd Exp $
 #
 use strict;
 use warnings;
@@ -25,9 +25,9 @@ use gbCommon;
 
 # Limit the number of jobs pushed by para shove on each pass to this
 # amount.  This will cause para shove to exit sooner if the jobs are
-# failing.
-my $PARA_MAX_PUSH = 20000;
-my $PARA_MAX_QUEUE = 200000;
+# failing.  Don't set it too low, or it takes longer to run.
+my $PARA_MAX_PUSH = 200000;
+my $PARA_MAX_QUEUE = 250000;
 
 my $RSH = "ssh";
 
