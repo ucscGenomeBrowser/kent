@@ -27,7 +27,7 @@
 #include "maf.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.155 2003/11/21 17:07:40 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.156 2003/12/03 03:41:40 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -231,14 +231,11 @@ hdbName2 = dbName;
 }
 
 char *hDefaultDbForGenome(char *genome)
-/*
-Purpose: Return the default database matching the Genome.
-
-param Genome - The Genome for which we are trying to get the 
-    default database.
-return - The default database name for this Genome
-Free the returned database name.
- */
+/* Purpose: Return the default database matching the Genome.
+ * param Genome - The Genome for which we are trying to get the 
+ *    default database.
+ * return - The default database name for this Genome
+ * Free the returned database name. */
 {
 struct sqlConnection *conn = hConnectCentral();
 struct sqlResult *sr = NULL;
