@@ -12,7 +12,7 @@
 
 static struct sqlConnCache *hdbCc = NULL;
 
-char *hdbName = "hg5";
+char *hdbName = "hg6";
 
 void hSetDb(char *dbName)
 /* Set the database name. */
@@ -85,6 +85,13 @@ seq = nibLoadPart(fileName, start, end-start);
 if (dnaCase == dnaUpper)
     touppers(seq->dna);
 return seq;
+}
+
+struct dnaSeq *hLoadChrom(char *chromName)
+/* Fetch entire chromosome into memory. */
+{
+int size = hChromSize(chromName);
+return hDnaFromSeq(chromName, 0, size, dnaLower);
 }
 
 struct largeSeqFile
