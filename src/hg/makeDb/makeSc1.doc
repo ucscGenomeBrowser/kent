@@ -300,3 +300,18 @@ BLATTING OTHER SARS WHOLE GENOMES AGAINST TOR2 (DONE 04/25/03)
     hgLoadRna addSeq sc1 /gbdb/sc1/otherSARS/otherSARS.fa -type=otherSARS.fa
     # And load the alignments:
     hgLoadPsl sc1 otherSARS.psl
+
+LOADING VIRAL mrna for blastz track (done 4/30/03)
+
+cd ~/sars/genbank
+gunzip -c /cluster/store5/genbank/data/download/genbank.135.0/gb{phg,vrl,vrt}*.seq.gz | gbToFaRa any.fil viralany.fa viralany.ra viralany.ta stdin
+gunzip -c /cluster/store5/genbank/data/download/refseq.135.0/cumulative/rscu.gbff.Z | gbToFaRa refseq.fil refseqviral.fa refseqviral.ra refseqviral.ta stdin
+cat viralany.fa refseqviral.fa > viral.fa
+cat viralany.ra refseqviral.ra > viral.ra
+mv viral.fa viralany.fa
+mv viral.ra viralany.ra
+hgLoadRna new sc1
+hgLoadRna add -type=mRNA sc1 /gbdb/sc1/mrnaViral/viralany.fa viralany.ra
+hgLoadRna addSeq -abbr=prot sc1 /gbdb/sc1/swissprot/viralProt.fa
+hgLoadRna addSeq sc1 /gbdb/sc1/otherSARS/otherSARS.fa -type=otherSARS.fa
+
