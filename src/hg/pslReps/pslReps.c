@@ -6,9 +6,27 @@
 #include "hash.h"
 #include "memalloc.h"
 #include "psl.h"
-#include "cheapcgi.h"
+#include "options.h"
+#include "obscure.h"
+#include "sqlNum.h"
 
-static char const rcsid[] = "$Id: pslReps.c,v 1.15 2003/09/29 19:50:13 braney Exp $";
+static char const rcsid[] = "$Id: pslReps.c,v 1.16 2004/01/27 21:15:19 markd Exp $";
+
+/* command line */
+static struct optionSpec optionSpecs[] = {
+    {"minAli", OPTION_FLOAT},
+    {"nearTop", OPTION_FLOAT},
+    {"minCover", OPTION_FLOAT},
+    {"minNearTopSize", OPTION_INT},
+    {"ignoreSize", OPTION_BOOLEAN},
+    {"sizeMatters", OPTION_BOOLEAN},  /* opposite of ignore size, for compat */
+    {"noIntrons", OPTION_BOOLEAN},
+    {"singleHit", OPTION_BOOLEAN},
+    {"nohead", OPTION_BOOLEAN},
+    {"ignoreNs", OPTION_BOOLEAN},
+    {"coverQSizes", OPTION_STRING},
+    {NULL, 0}
+};
 
 double minAli = 0.93;
 double nearTop = 0.01;
@@ -21,6 +39,7 @@ boolean singleHit = FALSE;
 boolean noHead = FALSE;
 boolean quiet = FALSE;
 int minNearTopSize = 30;
+char *coverQSizeFile = NULL;
 
 void usage()
 /* Print usage instructions and exit. */
@@ -46,7 +65,29 @@ errAbort(
     "    -nearTop=0.N how much can deviate from top and be taken\n"
     "               default is 0.01\n"
     "    -minNearTopSize=N  Minimum size of alignment that is near top\n"
-    "               for aligmnent to be kept.  Default 30.\n");
+    "               for aligmnent to be kept.  Default 30.\n"
+    "    -coverQSizes=file Tab-separate file with effective query sizes.\n"
+    "                     When used with -minCover, this allows polyAs\n"
+    "                     to be excluded from the coverage calculation\n");
+}
+
+/* hash table of query name to sizes */
+struct hash* coverQSizes = NULL;
+
+void loadCoverQSizes(char* coverQSizeFile)
+/* load coverage query sizes */
+{
+struct lineFile *lf = lineFileOpen(coverQSizeFile, TRUE);
+char *row[2];
+coverQSizes = hashNew(0);
+
+while (lineFileNextRowTab(lf, row, ArraySize(row)))
+    {
+    int qSize = sqlSigned(row[1]);
+    hashAdd(coverQSizes, row[0], intToPt(qSize));
+    }
+
+lineFileClose(&lf);
 }
 
 int calcMilliScore(struct psl *psl)
@@ -140,10 +181,18 @@ return FALSE;
 boolean passMinCoverage(struct psl *psl)
 /* Does this psl have enough bases aligned to pass the minCover filter. */
 {
+int qSize = psl->qSize;
+if (coverQSizes != NULL)
+    {
+    struct hashEl *hel = hashLookup(coverQSizes, psl->qName);
+    if (hel != NULL)
+        qSize = ptToInt(hel->val);
+    }
+
 if(ignoreNs)
-    return (psl->match + psl->repMatch >= minCover * (psl->qSize - psl->nCount));
+    return (psl->match + psl->repMatch >= minCover * (qSize - psl->nCount));
 else
-    return (psl->match + psl->repMatch >= minCover * psl->qSize);
+    return (psl->match + psl->repMatch >= minCover * qSize);
 }
 
 boolean passFilters(struct psl *psl, int *scoreTrack)
@@ -325,6 +374,8 @@ struct psl *pslList = NULL, *psl = NULL;
 char lastName[512];
 int aliCount = 0;
 quiet = sameString(bestAliName, "stdout") || sameString(repName, "stdout");
+if (coverQSizeFile != NULL)
+    loadCoverQSizes(coverQSizeFile);
 
 if (!quiet)
     printf("Processing %s to %s and %s\n", inName, bestAliName, repName);
@@ -365,18 +416,21 @@ if (!quiet)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (argc != 4)
     usage();
-minAli = cgiOptionalDouble("minAli", minAli);
-nearTop = cgiOptionalDouble("nearTop", nearTop);
-minCover = cgiOptionalDouble("minCover", minCover);
-minNearTopSize = cgiOptionalInt("minNearTopSize", minNearTopSize);
-ignoreSize = cgiBoolean("ignoreSize");
-noIntrons = cgiBoolean("noIntrons");
-singleHit = cgiBoolean("singleHit");
-noHead = cgiBoolean("nohead");
-ignoreNs = cgiBoolean("ignoreNs");
+minAli = optionFloat("minAli", minAli);
+nearTop = optionFloat("nearTop", nearTop);
+minCover = optionFloat("minCover", minCover);
+minNearTopSize = optionInt("minNearTopSize", minNearTopSize);
+ignoreSize = optionExists("ignoreSize");
+if (optionExists("sizeMatters"))
+    warn("warning: -sizeMatters is deprecated and is now the default");
+noIntrons = optionExists("noIntrons");
+singleHit = optionExists("singleHit");
+noHead = optionExists("nohead");
+ignoreNs = optionExists("ignoreNs");
+coverQSizeFile = optionVal("coverQSizes", NULL);
 pslReps(argv[1], argv[2], argv[3]);
 return 0;
 }
