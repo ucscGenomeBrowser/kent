@@ -339,6 +339,8 @@ boolean anyIntersection();
 #define hgtaDoGetBed "hgta_doGetBed"
 #define hgtaDoGetCustomTrack "hgta_doGetCustomTrack"
 #define hgtaDoGetCustomTrackFile "hgta_doGetCustomTrackFile"
+#define hgtaDoGetGalaQuery "hgta_doGetGalaQuery"
+#define hgtaDoAllGalaQuery "hgta_doAllGalaQuery"
 
 /* Other CGI variables. */
 #define hgtaGroup "hgta_group"
@@ -401,6 +403,7 @@ boolean anyIntersection();
 #define outHyperlinks "hyperlinks"
 #define outWigData "wigData"
 #define outWigBed "wigBed"
+#define outGala "galaQuery"
 
 /* --------- Identifier list handling stuff. ------------ */
 
@@ -561,6 +564,12 @@ void doOutGff(char *table, struct sqlConnection *conn);
 void doOutCustomTrack(char *table, struct sqlConnection *conn);
 /* Put up form to select Custom Track output format. */
 
+void doOutGalaQuery(struct trackDb *track, struct sqlConnection *conn);
+/* Put up form to select GALA query output format. */
+
+void doGalaQueryOptions(struct trackDb *track, struct sqlConnection *conn);
+/* print options form for GALA query output */
+
 void doSummaryStats(struct sqlConnection *conn);
 /* Put up page showing summary stats for track. */
 
@@ -602,6 +611,18 @@ void doGetCustomTrack(struct sqlConnection *conn);
 
 void doGetCustomTrackFile(struct sqlConnection *conn);
 /* Get Custom Track file output (UI has already told us how). */
+
+/* --------------- GALA functions --------------- */
+#define galaCmdBufferSize 160
+
+void doGetGalaQuery(struct sqlConnection *conn);
+/* Get GALA query output */
+
+void doAllGalaQuery(struct sqlConnection *conn);
+/* Run GALA generated query in table browser, return results to GALA */
+
+boolean galaAvail(char *db);
+/* Check to see if GALA is available for this freeze */
 
 #endif /* HGTABLES_H */
 

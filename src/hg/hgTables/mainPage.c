@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.43 2004/09/21 01:33:33 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.44 2004/09/21 18:44:53 giardine Exp $";
 
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -297,11 +297,56 @@ static char *wigLabels[] =
     "custom track",
     };
 
+static char *galaUsualTypes[] =
+    {
+    outPrimaryTable,
+    outSelectedFields,
+    outSequence,
+    outGff,
+    outBed,
+    outGala,
+    outCustomTrack,
+    outHyperlinks,
+    };
+static char *galaUsualLabels[] =
+    {
+    "all fields from primary table",
+    "selected fields from related tables",
+    "sequence",
+    "GTF - gene transfer format",
+    "BED - browser extensible data",
+    "query results to GALA",
+    "custom track",
+    "hyperlinks to Genome Browser",
+    };
+static char *galaWigTypes[] =
+     {
+     outWigData,
+     outWigBed,
+     outGala,
+     outCustomTrack,
+     };
+static char *galaWigLabels[] =
+    {
+    "data points",
+    "bed format",
+    "query results to GALA",
+    "custom track",
+    };
+
 hPrintf("<TR><TD><B>output:</B>\n");
 if (isWig)
-    showOutDropDown(wigTypes, wigLabels, ArraySize(wigTypes));
+    if (galaAvail(database))
+        showOutDropDown(galaWigTypes, galaWigLabels, ArraySize(galaWigTypes));
+    else
+        showOutDropDown(wigTypes, wigLabels, ArraySize(wigTypes));
 else if (isPositional)
-    showOutDropDown(usualTypes, usualLabels, ArraySize(usualTypes));
+    {
+    if (galaAvail(database))
+        showOutDropDown(galaUsualTypes, galaUsualLabels, ArraySize(galaUsualTypes));
+    else
+        showOutDropDown(usualTypes, usualLabels, ArraySize(usualTypes));
+    }
 else
     showOutDropDown(tracklessTypes, tracklessLabels, ArraySize(tracklessTypes));
 }

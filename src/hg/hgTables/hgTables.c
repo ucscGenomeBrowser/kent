@@ -20,7 +20,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.65 2004/09/18 00:20:16 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.66 2004/09/21 18:44:53 giardine Exp $";
 
 
 void usage()
@@ -878,6 +878,8 @@ else if (sameString(output, outWigData))
     doOutWigData(track, table, conn);
 else if (sameString(output, outWigBed))
     doOutWigBed(track, table, conn);
+else if (sameString(output, outGala))
+    doOutGalaQuery(track, conn);
 else
     errAbort("Don't know how to handle %s output yet", output);
 }
@@ -948,6 +950,10 @@ else if (cartVarExists(cart, hgtaDoGetCustomTrackFile))
     doGetCustomTrackFile(conn);
 else if (cartVarExists(cart, hgtaDoMainPage))
     doMainPage(conn);
+else if (cartVarExists(cart, hgtaDoAllGalaQuery))
+    doAllGalaQuery(conn);
+else if (cartVarExists(cart, hgtaDoGetGalaQuery))
+    doGetGalaQuery(conn);
 else	/* Default - put up initial page. */
     doMainPage(conn);
 cartRemovePrefix(cart, hgtaDo);
