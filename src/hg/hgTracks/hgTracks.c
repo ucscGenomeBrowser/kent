@@ -74,7 +74,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.529 2003/06/12 18:07:14 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.530 2003/06/16 22:28:16 hiram Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -4930,6 +4930,26 @@ else if (!strcmp(name,"Y"))
     chromNum = 24;
 else if (!strcmp(name,"Y "))
     chromNum = 24;
+else if (!strcmp(name,"I"))
+    chromNum = 1;
+else if (!strcmp(name,"I "))
+    chromNum = 1;
+else if (!strcmp(name,"II"))
+    chromNum = 2;
+else if (!strcmp(name,"II "))
+    chromNum = 2;
+else if (!strcmp(name,"III"))
+    chromNum = 3;
+else if (!strcmp(name,"III "))
+    chromNum = 3;
+else if (!strcmp(name,"IV"))
+    chromNum = 4;
+else if (!strcmp(name,"IV "))
+    chromNum = 4;
+else if (!strcmp(name,"V"))
+    chromNum = 5;
+else if (!strcmp(name,"V "))
+    chromNum = 5;
 if (chromNum > 24) chromNum = 0;
 colorNum = chromColor[chromNum];
 return colorNum;
@@ -10185,6 +10205,8 @@ registerTrackHandler("blastBestHuman", longXenoPslMethods);
 registerTrackHandler("blastzAllHuman", longXenoPslMethods);
 registerTrackHandler("blastzTightHuman", longXenoPslMethods);
 registerTrackHandler("blastzMouseSyn", longXenoPslMethods);
+registerTrackHandler("blastzCe1", longXenoPslMethods);
+registerTrackHandler("blastzSelf", longXenoPslMethods);
 registerTrackHandler("xenoBlastzMrna", xenoMrnaMethods);
 registerTrackHandler("xenoBestMrna", xenoMrnaMethods);
 registerTrackHandler("xenoMrna", xenoMrnaMethods);
