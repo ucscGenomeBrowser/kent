@@ -7367,7 +7367,7 @@ void lfsMapItemName(struct track *tg, void *item, char *itemName, int start, int
 {
 struct linkedFeaturesSeries *lfs = tg->items;
 struct linkedFeaturesSeries *lfsItem = item;
-if(tg->visibility == tvFull)
+if(tg->visibility != tvDense && tg->visibility != tvHide)
     mapBoxHcTwoItems(start, end, x,y, width, height, tg->mapName, itemName, itemName, itemName);
 }
 
@@ -8100,6 +8100,20 @@ else
     /* use default behavior of one row for each experiment */
     tg->items = lfsFromMsBed(tg, bedList);
     bedFreeList(&bedList);
+    }
+
+for(lfs = tg->items; lfs != NULL; lfs = lfs->next) 
+    /* Set the beginning and end of each linkedFeaturesSeries. */
+    {
+    lfs->start = BIGNUM;
+    lfs->end = 0;
+    for(lf = lfs->features; lf != NULL; lf = lf->next) 
+	{
+	if(lf->start < lfs->start)
+	    lfs->start = lf->start;
+	if(lf->end > lfs->end)
+	    lfs->end = lf->end;
+	}
     }
 }
 
