@@ -187,6 +187,7 @@ clTableName = optionVal("table", NULL);
 xaFormat = optionExists("xa");
 append = optionExists("append");
 exportOutput = optionExists("export");
+noBin = optionExists("nobin");
 if (noBin && exportOutput)
     errAbort("-nobin not supported with -export\n");
 if (argc < 3)
