@@ -12,22 +12,31 @@ void usage()
 errAbort(
   "axtBest - Remove second best alignments\n"
   "usage:\n"
-  "   axtBest in.axt chrom chromSize out.axt\n"
+  "   axtBest in.axt chrom out.axt\n"
   "options:\n"
-  "   -softWin=N  - Size of soft window, default 10000\n"
-  "   -minWin=N  - Size of hard window.  Default 34\n"
+  "   -winSize=N  - Size of window, default 1000\n"
+  "   -minScore=N - Minimum score alignments to consider.  Default 1000\n"
+  "   -minOutSize=N - Minimum score of piece to output. Default 10\n"
   "   -matrix=file.mat - override default scoring matrix\n"
-  "Alignments are first scored using a soft score that\n"
-  "averages score of a large surrounding window.  Alignments\n"
-  "that are never the best in such a window are thrown out.\n"
-  "Alignments are then scored in a small hard window, and\n"
-  "alignments that are the best in such a window are output.\n"
-  );
+  "Alignments scoring over minScore (where each matching base counts\n"
+  "about +100 in the default scoring scheme) are projected onto the\n"
+  "target sequence.  The score within each overlapping 1000 base window\n"
+  "is calculated, and the best scoring alignments in each window are\n"
+  "marked.  Alignments that are never the best are thrown out.\n"
+  "The best scoring alignment for each window is the output, chopping\n"
+  "up alignments if necessary\n");
 }
 
 /* Variable that can be set from command line. */
-int softWin = 10000;
-int minWin = 100;
+int winSize = 10000;
+int minScore = 1000;
+int minOutSize = 10;
+
+/* Variables to keep statistics on aligments. */
+int writeCount = 0;	/* Keep track of number actually written. */
+int subsetCount = 0;    /* Keep track of trimmed number written. */
+int baseOutCount = 0;   /* Keep track of target bases written. */
+int baseInCount = 0;    /* Keep track of target bases input. */
 
 static int baseVal[256];
 /* Table to look up integer values for bases. */
@@ -44,25 +53,64 @@ baseVal['g'] = baseVal['G'] = G_BASE_VAL;
 baseVal['t'] = baseVal['T'] = T_BASE_VAL;
 }
 
-struct axt *axtReadAll(char *fileName, char *chromName, int chromSize)
+int axtScore(struct axt *axt, struct axtScoreScheme *ss)
+/* Return calculated score of axt. */
+{
+int i, symCount = axt->symCount;
+char *qSym = axt->qSym, *tSym = axt->tSym;
+char q,t;
+int score = 0;
+boolean lastGap = FALSE;
+int gapStart = ss->gapOpen;
+int gapExt = ss->gapExtend;
+
+for (i=0; i<symCount; ++i)
+    {
+    q = qSym[i];
+    t = tSym[i];
+    if (q == '-' || t == '-')
+        {
+	if (lastGap)
+	    score -= gapExt;
+	else
+	    {
+	    score -= gapStart;
+	    lastGap = TRUE;
+	    }
+	}
+    else
+        {
+	score += ss->matrix[baseVal[q]][baseVal[t]];
+	lastGap = FALSE;
+	}
+    }
+return score;
+}
+
+struct axt *readAllAxt(char *fileName, struct axtScoreScheme *ss, int threshold,
+	char *chromName)
 /* Read all axt's in a file. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-struct axt *list = NULL, *el;
-while ((el = axtRead(lf)) != NULL)
+struct axt *list = NULL, *axt;
+while ((axt = axtRead(lf)) != NULL)
     {
-    if (sameString(chromName, el->tName))
+    if (sameString(chromName, axt->tName))
 	{
-	if (el->tEnd > chromSize)
-	    errAbort("tEnd > chromSize (%d > %d) line %d of %s",
-	    	el->tEnd, chromSize, lf->lineIx, lf->fileName);
-	if (el->tStrand != '+')
+	if (axt->tStrand != '+')
 	    errAbort("Can't handle minus target strand line %d of %s",
 	        lf->lineIx, lf->fileName);
-	slAddHead(&list, el);
+	axt->score = axtScore(axt, ss);
+	baseInCount += axt->tEnd - axt->tStart;
+	if (axt->score >= threshold)
+	    {
+	    slAddHead(&list, axt);
+	    }
+	else
+	    axtFree(&axt);
 	}
     else
-        axtFree(&el);
+        axtFree(&axt);
     }
 slReverse(&list);
 return list;
@@ -93,8 +141,6 @@ int halfWin = winSize/2;
 int winHalf = winSize - halfWin;
 
 /* Calculate base-by-base alignment scores into tScore array. */
-uglyf("markBest(%s %d %d, %s %d %d)\n", axt->tName, axt->tStart, axt->tEnd, axt->qName, axt->qStart, axt->qEnd);
-uglyf("%s\n%s\n", axt->tSym, axt->qSym);
 tScore = AllocArray(tProjScores, tSize);
 for (i=0; i<symCount; ++i)
     {
@@ -146,7 +192,6 @@ if (soft)
 	   b->score = score;
 	   b->axt = axt;
 	   }
-	uglyf("%2d %c %c %4d %4d\n", i, tSym[i], qSym[i], tScore[i], score);
 	b += 1;
 	}
     }
@@ -165,7 +210,6 @@ else
 		b->axt = axt;
 		}
 	    b += 1;
-	    uglyf("%2d %c %c %4d %4d\n", i, tSym[i], qSym[i], tScore[i], score);
 	    }
 	}
     else
@@ -180,7 +224,6 @@ else
 		b->axt = axt;
 		}
 	    b += 1;
-	    uglyf("%2d %c %c %4d %4d\n", i, tSym[i], qSym[i], tScore[i], score);
 	    }
 	for (i=halfWin; i<lastHalfWin; ++i)
 	    {
@@ -191,7 +234,6 @@ else
 		b->axt = axt;
 		}
 	    b += 1;
-	    uglyf("%2d %c %c %4d %4d\n", i, tSym[i], qSym[i], tScore[i], score);
 	    }
 	score = tScore[tSize-1] - tScore[lastHalfWin];
 	for (i=lastHalfWin; i<tSize; ++i)
@@ -202,46 +244,11 @@ else
 		b->axt = axt;
 		}
 	    b += 1;
-	    uglyf("%2d %c %c %4d %4d\n", i, tSym[i], qSym[i], tScore[i], score);
 	    }
 	}
     }
 assert(b == bk + axt->tEnd);
 freez(&tScore);
-}
-
-int axtScore(struct axt *axt, struct axtScoreScheme *ss)
-/* Return calculated score of axt. */
-{
-int i, symCount = axt->symCount;
-char *qSym = axt->qSym, *tSym = axt->tSym;
-char q,t;
-int score = 0;
-boolean lastGap = FALSE;
-int gapStart = ss->gapOpen;
-int gapExt = ss->gapExtend;
-
-for (i=0; i<symCount; ++i)
-    {
-    q = qSym[i];
-    t = tSym[i];
-    if (q == '-' || t == '-')
-        {
-	if (lastGap)
-	    score -= gapExt;
-	else
-	    {
-	    score -= gapStart;
-	    lastGap = TRUE;
-	    }
-	}
-    else
-        {
-	score += ss->matrix[baseVal[q]][baseVal[t]];
-	lastGap = FALSE;
-	}
-    }
-return score;
 }
 
 char *skipIgnoringDash(char *a, int size, bool skipTrailingDash)
@@ -270,19 +277,26 @@ for (i=0; i<size; ++i)
 return count;
 }
 
+void writeAxtTrackStats(struct axt *axt, FILE *f)
+/* Write axt and keep track of some stats. */
+{
+if (axt->tEnd - axt->tStart >= minOutSize)
+    {
+    axtWrite(axt, f);
+    ++writeCount;
+    baseOutCount += axt->tEnd - axt->tStart;
+    }
+}
+
 void axtSubsetOnT(struct axt *axt, int newStart, int newEnd, 
 	struct axtScoreScheme *ss, FILE *f)
 /* Write out subset of axt that goes from newStart to newEnd
  * in target coordinates. */
 {
-uglyf("axtSubsetOnT(%s %d %d, %s %d %d -> %s %d %d)\n",
-	axt->qName, axt->qStart, axt->qEnd,
-	axt->tName, axt->tStart, axt->tEnd,
-	axt->tName, newStart, newEnd);
 if (newStart == axt->tStart && newEnd == axt->tEnd)
     {
     axt->score = axtScore(axt, ss);
-    axtWrite(axt, f);
+    writeAxtTrackStats(axt, f);
     }
 else
     {
@@ -299,12 +313,14 @@ else
     a.qSym = qSymStart;
     a.tSym = tSymStart;
     a.score = axtScore(&a, ss);
-    axtWrite(&a, f);
+    // uglyf("subsetting %s %d %d %s %d %d to %s %d %d, score %d\n", axt->qName, axt->qStart, axt->qEnd, axt->tName, axt->tStart, axt->tEnd, axt->tName, newStart, newEnd, a.score);
+    writeAxtTrackStats(&a, f);
+    ++subsetCount;
     }
 }
 
 void outputBestRanges(struct bestKeeper *bk, int chromSize, 
-	struct axtScoreScheme *ss, int minSize, FILE *f)
+	struct axtScoreScheme *ss, FILE *f)
 /* Find runs inside of bk that refer to same alignment and
  * then output. */
 {
@@ -320,9 +336,7 @@ for (i=0; i<=chromSize; ++i)
         {
 	if (lastAxt != NULL)
 	    {
-	    int size = i - s;
-	    if (size > minSize)
-		axtSubsetOnT(lastAxt, s, i, ss, f);
+	    axtSubsetOnT(lastAxt, s, i, ss, f);
 	    }
 	s = i;
 	lastAxt = axt;
@@ -330,7 +344,28 @@ for (i=0; i<=chromSize; ++i)
     }
 }
 
-void axtBest(char *inName, char *chromName, int chromSize, char *outName)
+int maxChromSize(struct axt *axtList)
+/* Return largest tEnd. */
+{
+int maxSize = 0;
+struct axt *axt;
+for (axt = axtList; axt != NULL; axt = axt->next)
+    {
+    if (axt->tEnd > maxSize)
+        maxSize = axt->tEnd;
+    }
+return maxSize;
+}
+
+void clearBkScores(struct bestKeeper *bk, int size)
+/* Set scores in bk to large negative number. */
+{
+int i;
+for (i=0; i<size; ++i)
+    bk->score = -1024*1024;
+}
+
+void axtBest(char *inName, char *chromName, char *outName)
 /* axtBest - Remove second best alignments. */
 {
 FILE *f = mustOpen(outName, "w");
@@ -339,23 +374,26 @@ struct axtScoreScheme *ss = NULL;
 struct axt *axtList = NULL, *axt, *nextAxt, *goodList = NULL;
 struct bestKeeper *bk = NULL;
 int i;
+int chromSize;
 
-if (chromSize <= 0)
-    errAbort("ChromSize must be a positive number");
 if (matrixName == NULL)
     ss = axtScoreSchemeDefault();
 else
     ss = axtScoreSchemeRead(matrixName);
-axtList = axtReadAll(inName, chromName, chromSize);
-uglyf("Read %d elements from %s\n", slCount(axtList), inName);
+axtList = readAllAxt(inName, ss, minScore, chromName);
+chromSize = maxChromSize(axtList);
+printf("Read %d elements from %s\n", slCount(axtList), inName);
 AllocArray(bk, chromSize+1);	/* Include extra sentinal value. */
-uglyf("Allocated %d elements in array\n", chromSize);
+printf("Allocated %d elements in array\n", chromSize);
 
 /* Find local best in big soft window and get rid of
  * alignments that aren't best anywhere, using axt->score
  * field for scratch space. */
+clearBkScores(bk, chromSize);
 for (axt = axtList; axt != NULL; axt = axt->next)
-    markBest(axt, bk, chromSize, ss, softWin, TRUE);
+    {
+    markBest(axt, bk, chromSize, ss, winSize, TRUE);
+    }
 for (axt = axtList; axt != NULL; axt = axt->next)
     axt->score = 0;
 for (i=0; i<chromSize; ++i)
@@ -366,23 +404,26 @@ for (i=0; i<chromSize; ++i)
 for (axt = axtList; axt != NULL; axt = nextAxt)
     {
     nextAxt = axt->next;
-    if (axt->score >= minWin)
+    if (axt->score)
         {
 	slAddHead(&goodList, axt);
 	}
     }
 slReverse(&goodList);
 axtList = NULL;
-uglyf("%d elements in goodList\n", slCount(goodList));
+printf("%d elements in after soft filter.\n", slCount(goodList));
 
 
 /* Find local best alignments in big hard window and
  * output them. */
 memset(bk, 0, chromSize * sizeof(*bk));
+clearBkScores(bk, chromSize);
 for (axt = goodList; axt != NULL; axt = axt->next)
-    markBest(axt, bk, chromSize, ss, softWin, FALSE);
-outputBestRanges(bk, chromSize, ss, minWin, f);
-
+    markBest(axt, bk, chromSize, ss, winSize, FALSE);
+outputBestRanges(bk, chromSize, ss, f);
+uglyf("Output %d alignments including %d trimmed from overlaps\n", writeCount, subsetCount);
+uglyf("Bases in %d, bases out %d (%4.2f%%)\n", baseInCount, baseOutCount,
+	100.0 * baseOutCount / baseInCount);
 }
 
 
@@ -390,11 +431,12 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionHash(&argc, argv);
-if (argc != 5)
+if (argc != 4)
     usage();
-softWin = optionInt("softWin", softWin);
-minWin = optionInt("minWin", minWin);
+winSize = optionInt("winSize", winSize);
+minScore = optionInt("minScore", minScore);
+minOutSize = optionInt("minOutSize", minOutSize);
 initBaseVal();
-axtBest(argv[1], argv[2], atoi(argv[3]), argv[4]);
+axtBest(argv[1], argv[2], argv[3]);
 return 0;
 }
