@@ -135,7 +135,8 @@ if (showSideBySide)
     fprintf(f, "<H4><A NAME=ali></A>Side by Side Alignment</H4>\n");
     lastAli = NULL;
     charsInLine = 0;
-    bafInit(&baf, needle, 0, haystack, hayNumOffset, rcHaystack, f, 50, FALSE);
+    bafInit(&baf, needle, 0, FALSE, 
+    	haystack, hayNumOffset, rcHaystack, f, 50, FALSE);
     for (ali=leftAli; ali!=NULL; ali = ali->right)
 	{
 	boolean doBreak = TRUE;

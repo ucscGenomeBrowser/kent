@@ -73,13 +73,14 @@ int seqOutColorLookup[3] =
     };
 
 
-void bafInit(struct baf *baf, DNA *needle, int nNumOff, DNA *haystack, 
-	int hNumOff, boolean hCountDown, FILE *out, 
+void bafInit(struct baf *baf, DNA *needle, int nNumOff,  boolean nCountDown,
+	DNA *haystack, int hNumOff, boolean hCountDown, FILE *out, 
 	int lineSize, boolean isTrans )
 /* Initialize block alignment formatter. */
 {
 baf->cix = 0;
 baf->needle = needle;
+baf->nCountDown = nCountDown;
 baf->haystack = haystack;
 baf->nNumOff = nNumOff;
 baf->hNumOff = hNumOff;
@@ -135,11 +136,22 @@ int hEnd = baf->hCurPos + baf->hNumOff;
 int startDigits = maxDigits(nStart, hStart);
 int endDigits = maxDigits(nEnd, hEnd);
 int hStartNum, hEndNum;
+int nStartNum, nEndNum;
 
-fprintf(baf->out, "%0*d ", startDigits, nStart);
+if (baf->nCountDown)
+    {
+    nStartNum = 1+baf->nNumOff - baf->nLineStart;
+    nEndNum = baf->nNumOff - baf->nCurPos;
+    }
+else
+    {
+    nStartNum = 1+baf->nNumOff + baf->nLineStart;
+    nEndNum = baf->nNumOff + baf->nCurPos;
+    }
+fprintf(baf->out, "%0*d ", startDigits, nStartNum);
 for (i=0; i<count; ++i)
     fputc(baf->nChars[i], baf->out);
-fprintf(baf->out, " %0*d\n", endDigits, nEnd);
+fprintf(baf->out, " %0*d\n", endDigits, nEndNum);
 
 for (i=0; i<startDigits; ++i)
     fputc('>', baf->out);
