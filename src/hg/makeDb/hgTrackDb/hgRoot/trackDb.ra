@@ -744,10 +744,19 @@ spectrum on
 private 1
 type psl .
 
+track blatMus0202sm
+shortLabel blatMus0202sm
+longLabel Blat soft-masked alignment of mm.2002.02/arachne for contamination checking
+priority 50.1
+visibility hide
+spectrum on
+private 1
+type psl .
+
 track blatMus0202Contam
 shortLabel blatMus0202Contam
 longLabel Known contamination of blatMus0202
-priority 50.0
+priority 50.2
 visibility hide
 private 1
 type psl .
