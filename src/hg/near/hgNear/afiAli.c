@@ -6,7 +6,7 @@
 #include "axt.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: afiAli.c,v 1.1 2004/07/06 16:30:25 kent Exp $";
+static char const rcsid[] = "$Id: afiAli.c,v 1.2 2004/07/07 02:25:47 kent Exp $";
 
 static bioSeq *getSeq(struct sqlConnection *conn, char *geneId, 
 	struct column *nameCol, char *tableId)
@@ -126,8 +126,8 @@ if (a != NULL && b != NULL)
 	struct axt *axt = axtAffine(a, b, ss);
 	if (axt != NULL)
 	    {
-	    printf("Alignment between %s (top %daa) and %s (bottom %daa) score %d\n\n",
-		    a->name, a->size, b->name, b->size, axt->score);
+	    printf("Alignment between %s (top %s %daa) and %s (bottom %s %daa) score %d\n\n",
+		    a->name, aId, a->size, b->name, bId, b->size, axt->score);
 	    printAxtAli(axt, 60, ss, stdout);
 	    axtFree(&axt);
 	    }
