@@ -21,7 +21,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.124 2004/07/23 23:35:56 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.125 2004/07/24 15:56:38 braney Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -881,7 +881,7 @@ else if (sameString(track, "xenoEst"))
         mrnaUi(tdb, TRUE);
 else if (sameString(track, "rosetta"))
         rosettaUi(tdb);
-else if (sameString(track, "blastHg16KG"))
+else if (sameString(track, "blastHg16KG") || sameString(track, "tblastnHg16KGPep"))
         blastUi(tdb);
 else if (startsWith("wig", tdb->type))
         {
