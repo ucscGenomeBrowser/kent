@@ -493,7 +493,7 @@ if (probe != NULL)
 	sqlFreeResult(&sr);
 	}
     if (tfList == NULL)
-	printf("No significant immunoprecipitation at this level.");
+	printf("No significant immunoprecipitation.");
     else
 	{
 	tfBindLevelSection("Good (P 0.001)", 0.000, 0.004, tfList, conn, motifTable);
