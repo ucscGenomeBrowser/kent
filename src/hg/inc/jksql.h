@@ -133,8 +133,31 @@ char *sqlQuickQuery(struct sqlConnection *sc, char *query, char *buf, int bufSiz
  * for cases where you are just looking up one small thing.  
  * Returns NULL if query comes up empty. */
 
+char *sqlNeedQuickQuery(struct sqlConnection *sc, char *query, 
+	char *buf, int bufSize);
+/* Does query and returns first field in first row.  Meant
+ * for cases where you are just looking up one small thing.  
+ * Prints error message and aborts if query comes up empty. */
+
 int sqlQuickNum(struct sqlConnection *conn, char *query);
-/* Get numerical result from simple query */
+/* Get numerical result from simple query. Returns 0 
+ * if query returns no result. */
+
+int sqlNeedQuickNum(struct sqlConnection *conn, char *query);
+/* Get numerical result or die trying. */
+
+char *sqlQuickString(struct sqlConnection *conn, char *query);
+/* Return result of single-row/single column query in a
+ * string that should eventually be freeMem'd. */
+
+char *sqlNeedQuickString(struct sqlConnection *sc, char *query);
+/* Return result of single-row/single column query in a
+ * string that should eventually be freeMem'd.  This will
+ * print an error message and abort if result returns empty. */
+
+struct slName *sqlQuickList(struct sqlConnection *conn, char *query);
+/* Return a list of slNames for a single column query.
+ * Do a slFreeList on result when done. */
 
 void sqlDropTable(struct sqlConnection *sc, char *table);
 /* Drop table if it exists. */

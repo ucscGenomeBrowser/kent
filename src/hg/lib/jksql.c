@@ -12,7 +12,7 @@
 #include "jksql.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.38 2003/09/20 00:49:49 kent Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.39 2003/10/01 06:21:33 kent Exp $";
 
 boolean sqlTrace = FALSE;  /* setting to true prints each query */
 int sqlTraceIndent = 0;    /* number of spaces to indent traces */
@@ -598,6 +598,19 @@ sqlFreeResult(&sr);
 return ret;
 }
 
+char *sqlNeedQuickQuery(struct sqlConnection *sc, char *query, 
+	char *buf, int bufSize)
+/* Does query and returns first field in first row.  Meant
+ * for cases where you are just looking up one small thing.  
+ * Prints error message and aborts if query comes up empty. */
+{
+char *s = sqlQuickQuery(sc, query, buf, bufSize);
+if (s == NULL)
+    errAbort("query not found: %s", query);
+return s;
+}
+
+
 int sqlQuickNum(struct sqlConnection *conn, char *query)
 /* Get numerical result from simple query */
 {
@@ -608,11 +621,63 @@ int ret = 0;
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
-    {
     ret = sqlSigned(row[0]);
-    }
 sqlFreeResult(&sr);
 return ret;
+}
+
+int sqlNeedQuickNum(struct sqlConnection *conn, char *query)
+/* Get numerical result or die trying. */
+{
+char buf[32];
+sqlNeedQuickQuery(conn, query, buf, sizeof(buf));
+return sqlSigned(buf);
+}
+
+char *sqlQuickString(struct sqlConnection *sc, char *query)
+/* Return result of single-row/single column query in a
+ * string that should eventually be freeMem'd. */
+{
+struct sqlResult *sr;
+char **row;
+char *ret = NULL;
+
+if ((sr = sqlGetResult(sc, query)) == NULL)
+    return NULL;
+row = sqlNextRow(sr);
+if (row != NULL)
+    ret = cloneString(row[0]);
+sqlFreeResult(&sr);
+return ret;
+}
+
+char *sqlNeedQuickString(struct sqlConnection *sc, char *query)
+/* Return result of single-row/single column query in a
+ * string that should eventually be freeMem'd.  This will
+ * print an error message and abort if result returns empty. */
+{
+char *s = sqlQuickString(sc, query);
+if (s == NULL)
+    errAbort("query not found: %s", query);
+return s;
+}
+
+struct slName *sqlQuickList(struct sqlConnection *conn, char *query)
+/* Return a list of slNames for a single column query.
+ * Do a slFreeList on result when done. */
+{
+struct slName *list = NULL, *n;
+struct sqlResult *sr;
+char **row;
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    n = slNameNew(row[0]);
+    slAddHead(&list, n);
+    }
+sqlFreeResult(&sr);
+slReverse(&list);
+return list;
 }
 
 int sqlTableSize(struct sqlConnection *conn, char *table)
