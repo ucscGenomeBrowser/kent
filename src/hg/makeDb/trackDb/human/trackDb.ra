@@ -124,7 +124,7 @@ visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
-type bed 12
+type bed 12 .
 
 track pseudoYale
 shortLabel Yale Pseudo
@@ -174,7 +174,7 @@ longLabel Alternative Splicing from ESTs/mRNAs
 group rna
 priority 74
 visibility hide
-type bed 3
+type bed 3 .
 
 track mgcIntrons
 shortLabel mgcIntronPicks
@@ -182,7 +182,7 @@ longLabel Introns and Flanking Exons for RACE PCR
 group rna
 priority 76
 visibility hide
-type bed 12
+type bed 12 .
 
 track orthoMrna
 shortLabel Mouse mRNAs
@@ -191,7 +191,7 @@ group rna
 color 16,107,44
 priority 77
 visibility hide
-type bed 12
+type bed 12 .
 
 track gnfAtlas2
 shortLabel GNF Atlas 2
@@ -300,43 +300,13 @@ priority 89.2
 visibility hide
 type psl .
 
-track affyTfbs_Sp1
-shortLabel Sp1 TFBS
-longLabel Affymetrix Experimentally Derived Sp1 Binding Sites
-group regulation
-priority 91.0
-visibility hide
-color 255,0,0
-chromosomes chr22,chr21
-type bed
-
-track affyTfbs_cMyc
-shortLabel cMyc TFBS
-longLabel Affymetrix Experimentally Derived cMyc Binding Sites
-group regulation
-priority 91.1
-visibility hide
-color 0,255,0
-chromosomes chr22,chr21
-type bed
-
-track affyTfbs_p53
-shortLabel p53 TFBS
-longLabel Affymetrix Experimentally Derived p53 Binding Sites
-group regulation
-priority 91.2
-visibility hide
-color 65,105,225
-chromosomes chr22,chr21
-type bed
-
 track promoterStanford
 shortLabel Stanford Promoters
 longLabel Stanford Promoters
 group regulation
 priority 92
 visibility hide
-type bed 6
+type bed 6 .
 
 track promoterStanfordGene
 shortLabel Stanford Gene Model
@@ -345,8 +315,7 @@ group regulation
 priority 93
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
-type bed 12
-
+type bed 12 .
 
 track regpotent
 shortLabel Reg. Potential
@@ -377,7 +346,7 @@ visibility hide
 color 30,130,210
 altColor 200,220,255
 spectrum on
-type bed 5 
+type bed 5 .
 
 track slamNonCodingRat
 shortLabel Slam Non-Coding Rat
@@ -388,7 +357,7 @@ visibility hide
 color 30,130,210
 altColor 200,220,255
 spectrum on
-type bed 5
+type bed 5 .
 
 track chimpSimpleDiff
 shortLabel Chimp Diff
@@ -396,7 +365,7 @@ longLabel $o_Organism ($o_date/$o_db) Simple Differences in Regions of High Qual
 group compGeno
 priority 206
 visibility hide
-type bed 3+
+type bed 3 +
 otherDb panTro1
 
 track encodeRegions
@@ -427,8 +396,16 @@ chromosomes chr21,
 color 0,0,0
 altColor 0,0,0
 spectrum on
-type bed 12
+type bed 12 .
 url http://www.perlegen.com/haplotype/blk/$$.html
+
+track ld
+shortLabel HapMap LD
+longLabel HapMap Linkage Disequilibrium
+group varRep
+priority 144.5
+visibility hide
+type bed 4 +
 
 track haplotype
 shortLabel Haplotype Blocks
@@ -440,7 +417,7 @@ chromosomes chr22,
 color 0,0,0
 altColor 0,0,0
 spectrum on
-type bed 12
+type bed 12 .
 
 track chainSelf
 shortLabel Self Chain 
