@@ -118,7 +118,7 @@
 #include "encodeRegionInfo.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.528 2003/12/05 22:35:57 donnak Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.529 2003/12/06 03:01:42 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7131,7 +7131,6 @@ void doPseudoPsl(struct trackDb *tdb, char *acc)
 /* Click on an pseudogene based on mrna alignment. */
 {
 char *track = tdb->tableName;
-char query[256];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row;
@@ -7176,8 +7175,12 @@ cartWebStart(cart, acc);
 printf("<H4>PseudoGene/Genomic Alignment</H4>");
 printAlignments(pslList, start, "htcCdnaAli", table, acc);
 
-sprintf(query, "select * from pseudoGeneLink where name = '%s' and chrom = '%s' and chromStart = %d", acc, chrom, start);
-sr = sqlGetResult(conn, query);
+struct dyString *query = newDyString(1024);
+
+dyStringPrintf(query, "select * from pseudoGeneLink where ");
+hAddBinToQuery(start, start+10, query);
+dyStringPrintf(query, "name = '%s' and chrom = '%s' and chromStart = %d ", acc, chrom, start);
+sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     pg = pseudoGeneLinkLoad(row);
@@ -7186,11 +7189,10 @@ while ((row = sqlNextRow(sr)) != NULL)
         pseudoPrintPos(pslList->tName, pslList->tStart, pslList->tEnd, pg, table);
         }
     }
-//htmlHorizontalLine();
-//printf("<p><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
-//        "View DNA for this feature</A><BR>\n",  hgcPathAndSettings(),
-//	psl->tStart, psl->tName, psl->tStart, psl->tEnd, "+", tbl);
 printTrackHtml(tdb);
+
+dyStringFree(&query);
+sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
