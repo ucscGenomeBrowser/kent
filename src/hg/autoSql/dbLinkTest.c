@@ -144,15 +144,124 @@ at->vals[2] = cloneString("autoSql autoTest vals");
 return at;
 }
 
+boolean autoTestsIdentical(struct autoTest *at1, struct autoTest *at2)
+/* Check to see if at's are identical by writing them to
+   files and diffing the results. */
+{
+char *tFile = "_testAutoTest.test";
+char *tDbFile = "_testAutoTestFromDb.test";
+FILE *out = NULL;
+FILE *outDb = NULL;
+boolean result = FALSE;
+
+/* Tab out results. */
+if(fileExists(tFile))
+    errAbort("Can't create file %s. Already exists", tFile);
+out = mustOpen(tFile, "w");
+autoTestTabOut(at1, out);
+if(fileExists(tDbFile))
+    errAbort("Can't create file %s. Already exists", tDbFile);
+outDb = mustOpen(tDbFile, "w");
+autoTestTabOut(at2, outDb);
+
+carefulClose(&out);
+carefulClose(&outDb);
+
+/* Compare files. */
+result = testingFileIdentical(tFile, tDbFile);
+
+/* Cleanup. */
+remove(tFile);
+remove(tDbFile);
+
+return result;
+}
+
+void testCommaOutputInput()
+/* Test if we can write and read to text files. */
+{
+struct autoTest *at = newAutoTestSample();
+struct autoTest *atRead = NULL;
+char *fileName =  "_testAutoTest.test";
+char * line = NULL;
+struct lineFile *lf = NULL;
+FILE *out = NULL;
+boolean result = FALSE;
+fprintf(stderr, "testCommaOutputInput() - ");
+fflush(stderr);
+
+/* Open file and write. */
+if(fileExists(fileName))
+    errAbort("testOutputInput() - Can't open %s to write, already exists.", fileName);
+out = mustOpen(fileName, "w");
+autoTestCommaOut(at, out);
+carefulClose(&out);
+/* Read in. */
+lf = lineFileOpen(fileName, TRUE);
+lineFileNextReal(lf, &line);
+atRead = autoTestCommaIn(&line, NULL);
+remove(fileName);
+/* Compare. */
+result = autoTestsIdentical(at, atRead);
+if(result)
+    {
+    warn("PASSED.");
+    numPassed++;
+    }
+else
+    {
+    warn("FAILED.");
+    numFailed++;
+    }
+lineFileClose(&lf);
+autoTestFree(&at);
+autoTestFree(&atRead);
+}
+
+void testTabOutputInput()
+/* Test if we can write and read to text files. */
+{
+struct autoTest *at = newAutoTestSample();
+struct autoTest *atRead = NULL;
+char *fileName =  "_testAutoTest.test";
+char * line = NULL;
+struct lineFile *lf = NULL;
+FILE *out = NULL;
+boolean result = FALSE;
+fprintf(stderr, "testTabOutputInput() - ");
+fflush(stderr);
+
+/* Open file and write. */
+if(fileExists(fileName))
+    errAbort("testOutputInput() - Can't open %s to write, already exists.", fileName);
+out = mustOpen(fileName, "w");
+autoTestTabOut(at, out);
+carefulClose(&out);
+/* Read in. */
+atRead = autoTestLoadAll(fileName);
+remove(fileName);
+/* Compare. */
+result = autoTestsIdentical(at, atRead);
+if(result)
+    {
+    warn("PASSED.");
+    numPassed++;
+    }
+else
+    {
+    warn("FAILED.");
+    numFailed++;
+    }
+lineFileClose(&lf);
+autoTestFree(&at);
+autoTestFree(&atRead);
+}
+
 void testInsertion(struct sqlConnection *conn, boolean escaped)
 /* Test saveToDb() and loadByQuery() functions. */
 {
 struct autoTest *at=NULL, *atFromDb=NULL;
 char query[256];
-char *tFile = "_testAutoTest.test";
-char *tDbFile = "_testAutoTestFromDb.test";
-FILE *out = NULL;
-FILE *outDb = NULL;
 boolean result = FALSE;
 
 if(escaped)
@@ -174,22 +283,8 @@ else
     autoTestSaveToDb(conn, at, testTableName, 1024);
 snprintf(query, sizeof(query), "select * from %s where id = %d", testTableName, at->id);
 atFromDb = autoTestLoadByQuery(conn, query);
+result = autoTestsIdentical(at, atFromDb);
 
-/* Tab out results. */
-if(fileExists(tFile))
-    errAbort("Can't create file %s. Already exists", tFile);
-out = mustOpen(tFile, "w");
-autoTestTabOut(at, out);
-if(fileExists(tDbFile))
-    errAbort("Can't create file %s. Already exists", tDbFile);
-outDb = mustOpen(tDbFile, "w");
-autoTestTabOut(atFromDb, outDb);
-
-carefulClose(&out);
-carefulClose(&outDb);
-
-/* Compare files. */
-result = testingFileIdentical(tFile, tDbFile);
 if(result)
     {
     warn("PASSED.");
@@ -201,9 +296,7 @@ else
     numFailed++;
     }
 
-/* Cleanup. */
-remove(tFile);
-remove(tDbFile);
+
 autoTestFree(&at);
 autoTestFree(&atFromDb);
 }
@@ -212,6 +305,8 @@ void doTests()
 /* Run our set of tests that use functions exploited by -dbLink flag. */
 {
 struct sqlConnection *conn = dbConnect();
+testCommaOutputInput();
+//testTabOutputInput();
 setupTable(conn);
 testInsertion(conn, FALSE);
 testInsertion(conn, TRUE);

@@ -528,7 +528,7 @@ if (obType != NULL)
     if (lt->type == t_object)
 	{
 	fprintf(f, "%ss = sqlEatChar(s, '{');\n", indent);
-	fprintf(f, "%sif(*(s+1) != '}')",indent);
+	fprintf(f, "%sif(s[0] != '}')",indent);
 	fprintf(f, "%s    slSafeAddHead(&ret->%s, %sCommaIn(&s,NULL));\n", indent,
 	     col->name, obType->name);
 	fprintf(f, "%ss = sqlEatChar(s, '}');\n", indent);
@@ -537,7 +537,7 @@ if (obType != NULL)
     else if (lt->type == t_simple)
 	{
 	fprintf(f, "%ss = sqlEatChar(s, '{');\n", indent);
-	fprintf(f, "%sif(*(s+1) != '}')",indent);
+	fprintf(f, "%sif(s[0] != '}')",indent);
 	fprintf(f, "%s    %sCommaIn(&s, &ret->%s%s);\n", indent,
 	    obType->name, col->name, arrayRef);
 	fprintf(f, "%ss = sqlEatChar(s, '}');\n", indent);
