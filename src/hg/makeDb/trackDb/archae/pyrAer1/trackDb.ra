@@ -6,7 +6,7 @@ priority 2.5
 visibility dense
 color 160,40,40
 type bed 6 +
-                                                                                               
+
 track loweSnoGene
 shortLabel Lowe snoRNA
 longLabel snoRNA genes found by Todd Lowe
@@ -47,3 +47,11 @@ visibility pack
 spectrum on
 type bed 6 .
 
+track codeBlast
+shortLabel BLASTP codes
+longLabel Conservation of proteins with BLASTP
+group compGeno
+priority 4.5
+visibility dense
+color 160,40,40
+type bed 6 +
