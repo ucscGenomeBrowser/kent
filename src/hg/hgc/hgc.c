@@ -4663,19 +4663,17 @@ if (url != NULL && url[0] != 0)
     }
         
 
-    sprintf(cond_str, "gene='%s'", itemName);    
-    geneID = sqlGetField(conn, database, "ensMap", "transcript", cond_str);
     printf("<B>Ensembl Gene Link: </B>");
-    printf("<A HREF=\"http://www.ensembl.org/%s/geneview?gene=%s\" target=_blank>", 
-	   genomeStrEnsembl,geneID);
-    printf("%s</A>", geneID);
+    printf("<A HREF=\"http://www.ensembl.org/%s/geneview?transcript=%s\" target=_blank>", 
+       genomeStrEnsembl,itemName);
+    printf("%s</A><br>", itemName);
 
     if (hTableExists("superfamily"))
 	{
     	sprintf(cond_str, "transcript_name='%s'", itemName);    
     	proteinID = sqlGetField(conn, protDbName, "ensemblXref", "translation_name", cond_str);
    
-        printf("<B>   Protein: </B>");
+        printf("<B>Ensembl Protein: </B>");
         printf("<A HREF=\"http://www.ensembl.org/%s/protview?peptide=%s\" target=_blank>", 
            genomeStrEnsembl,proteinID);
         printf("%s</A><BR>\n", proteinID);
