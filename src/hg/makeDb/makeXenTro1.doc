@@ -328,5 +328,5 @@ cvs commit etc/genbank.conf
     ssh hgwdev
     cd /cluster/data/xenTro1/bed/gc5Base
     mkdir /gbdb/xenTro1/wib
-    ln -s `pwd`/*.wib /gbdb/xenTro1/wib
+    ln -s `pwd`/gc5Base.wib /gbdb/xenTro1/wib
     hgLoadWiggle -pathPrefix=/gbdb/xenTro1/wib xenTro1 gc5Base gc5Base.wig
