@@ -619,7 +619,7 @@ while(NULL != ptr)
     strcpy(resultPtr, new);
 /*     fprintf(stderr, "RESULT: %s XXXXXXXXXXXXXXXXXXXXXXX<BR>\n", result); */
     resultPtr += newLen;
-/*    fprintf(stderr, "RESULT: %s XXXXXXXXXXXXXXXXXXXXXXX<BR>\n", result); */
+/*    fprintf(stderr, "RESULT: %s XXXXXXXXXXXXXXXXXXXXXXX<BR>\n", result); */ 
     ptr = strstr(string, old);
     }
 
