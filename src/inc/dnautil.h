@@ -68,6 +68,8 @@ extern DNA ntCompTable[256];
 extern int ntValMasked[256];
 extern DNA valToNtMasked[256];
 
+/*Complement DNA (not reverse)*/
+void complement(DNA *dna, long length);
 
 /* Reverse complement DNA. */
 void reverseComplement(DNA *dna, long length);
