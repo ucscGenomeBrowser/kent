@@ -134,5 +134,10 @@ mgc:
 	hgTrackDb -strict=yes -visibility=mgcView.ra mouse mm3 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -strict=yes rat rn2 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -strict=yes rat rn3 trackDb ../../lib/trackDb.sql .
-	#hgTrackDb -strict=yes -visibility=fugu/visibility.ra fugu fr1 trackDb ../../lib/trackDb.sql .
+	hgTrackDb -strict=yes -visibility=fugu/visibility.ra fugu fr1 trackDb ../../lib/trackDb.sql .
+	hgTrackDb worm ce1 trackDb_beta ../../lib/trackDb.sql .
+	hgTrackDb worm cb1 trackDb_beta ../../lib/trackDb.sql .
+	hgTrackDb drosophila dm1 trackDb_beta ../../lib/trackDb.sql .
+	hgTrackDb drosophila dp1 trackDb_beta ../../lib/trackDb.sql .
+	hgTrackDb sacCer sacCer1 trackDb ../../lib/trackDb.sql .
 
