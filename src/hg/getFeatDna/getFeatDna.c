@@ -55,60 +55,6 @@ errAbort(
   );
 }
 
-static boolean fitFields(struct hash *hash, char *chrom, char *start, char *end,
-	char retChrom[32], char retStart[32], char retEnd[32])
-/* Return TRUE if chrom/start/end are in hash.  
- * If so copy them to retChrom, retStart, retEnd. 
- * Helper routine for findChromStartEndFields below. */
-{
-if (hashLookup(hash, chrom) && hashLookup(hash, start) && hashLookup(hash, end))
-    {
-    strcpy(retChrom, chrom);
-    strcpy(retStart, start);
-    strcpy(retEnd, end);
-    return TRUE;
-    }
-else
-    return FALSE;
-}
-
-void hFindChromStartEndFields(char *table, 
-	char retChrom[32], char retStart[32], char retEnd[32])
-/* Given a table return the fields for selecting chromosome, start, and end. */
-{
-char query[256];
-struct sqlResult *sr;
-char **row;
-struct hash *hash = newHash(5);
-struct sqlConnection *conn = hAllocConn();
-
-/* Read table description into hash. */
-sprintf(query, "describe %s", table);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    hashAdd(hash, row[0], NULL);
-    }
-sqlFreeResult(&sr);
-
-/* Look for bed-style names. */
-if (fitFields(hash, "chrom", "chromStart", "chromEnd", retChrom, retStart, retEnd))
-    ;
-/* Look for psl-style names. */
-else if (fitFields(hash, "tName", "tStart", "tEnd", retChrom, retStart, retEnd))
-    ;
-/* Look for gene prediction names. */
-else if (fitFields(hash, "chrom", "txStart", "txEnd", retChrom, retStart, retEnd))
-    ;
-/* Look for repeatMasker names. */
-else if (fitFields(hash, "genoName", "genoStart", "genoEnd", retChrom, retStart, retEnd))
-    ;
-else
-    errAbort("Couldn't find chrom/start/end fields in table %s", table);
-freeHash(&hash);
-hFreeConn(&conn);
-}
-
 static int blockIx = 0;	/* Index of block written. */
 
 char *makeFaStartLine(char *chrom, char *table, int start, int size)
@@ -132,7 +78,7 @@ void writeOut(FILE *f, char *chrom, int start, int size, char strand, DNA *dna, 
 {
 if (sameWord(outputType, "pos"))
     fprintf(f, "%s\t%d\t%d\t%c\n", chrom, start, start+size, strand);
-else if (sameWord(outputType, "fasta")
+else if (sameWord(outputType, "fasta"))
     faWriteNext(f, faHeader, dna, size);
 else
     errAbort("Unknown output type %s\n", outputType);
@@ -175,7 +121,8 @@ char nibFileName[512];
 FILE *nibFile = NULL;
 int nibSize;
 
-hFindChromStartEndFields(table, chromField, startField, endField);
+if (!hFindChromStartEndFields(table, chromField, startField, endField))
+    errAbort("Couldn't find chrom/start/end fields in table %s", table);
 
 if (merge >= 0)
     {
