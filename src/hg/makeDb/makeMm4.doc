@@ -1,6 +1,13 @@
 # This file describes how we made the browser database on the mouse
 # genome, October 2003 build. - Mm4
 #
+#
+#	NOTE:  There is a new chrMT sequence in the build 32
+#	>gi|34538597|ref|NC_005089.1| Mus musculus mitochondrion
+#
+#   Will have to beware of this NC_ contig in the processing since
+#	all previous builds had only NT_ contigs
+#
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE 2003-10-16 - Hiram)
     ssh kksilo
     mkdir -p /cluster/store6/mm4/ncbi
@@ -25,17 +32,152 @@
 	echo $f:r done
     end
    /cluster/bin/i386/faSize *.fa >> faSize.out
+   grep "^>" *.fa > ../chrfasta.all.fa.headers
    gzip *.fa
+
+
+
+# BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS (DONE 2003-10-16 - Hc)
+    ssh kksilo
+    cd /cluster/data/mm4
+    gunzip ncbi/allrefcontig.chr.agp.gz
+    # splitFaIntoContigs doesn't do right with agp lines arriving in a 
+    # different order than fasta chrom sequences.  so split up the agp 
+    # into one per chrom.
+    foreach c ( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X Y MT )
+      mkdir $c
+      perl -we "while(<>){if (/^chr$c\t/) {print;}}" \
+        ./ncbi/allrefcontig.chr.agp \
+        > $c/chr$c.agp
+      gunzip -c ./ncbi/chrfasta/chr$c.fa.gz \
+        | perl -wpe 's/^>lcl\|(chr\w+)\.fa.*/>$1/' \
+        | splitFaIntoContigs $c/chr$c.agp \
+          stdin /cluster/data/mm4 -nSize=5000000
+    end
+    gzip ncbi/chrfasta/chr*.fa
+
+# CREATE CHROM-LEVEL AGP AND FASTA FOR _RANDOMS (DONE 2003-10-17 Hiram)
+    ssh kksilo
+    cd /cluster/data/mm4/ncbi
+
+    gunzip seq_contig.md.gz
+
+    mkdir ../Un
+    # reorder random contigs in allrefcontig agp file to match seq_contig.md
+    # this is required by the ncbiToRandomAgps scripts
+    ../jkStuff/ncbiFixAgp allrefcontig.chr.agp > \
+                        allrefcontig.chr.ordered.agp
+    ../jkStuff/ncbiToRandomAgps seq_contig.md allrefcontig.chr.ordered.agp \
+                        contig.idmap ..
+        # creating ../mm4/1/chr1_random.agp...
+        # ... creating ../mm4/Un/chrUn_random.agp...
+    # had to fixup ncbiToRandomAgps to match the lines better, and to
+    #	do the MT/NC_ mitochondrion thing
+
+    ssh kksilo
+    cd /cluster/data/mm4
+    foreach c (?{,?})
+      if (-e $c/chr${c}_random.ctg.agp) then
+        echo building $c/chr${c}_random.fa
+        gunzip -c ./ncbi/contigfasta/chr$c.fa.gz \
+          | perl -wpe 's/^>lcl\|(Mm\w+)\s+.*$/>$1/' \
+          > ./tmp.fa
+        agpToFa -simpleMulti $c/chr${c}_random.ctg.agp chr${c}_random \
+          $c/chr${c}_random.fa ./tmp.fa
+        rm tmp.fa
+      endif
+    end
+        # building 1/chr1_random.fa
+	# ... etc ...
+
+#	Program error: trying to allocate 1446087545 bytes in needLargeMem
+#	agpToFa: memalloc.c:82: needLargeMem: Assertion `0' failed.
+#	Abort
+#	The above breaks the chrUn build, try this on kolossus:
+    ssh kolossus
+    cd kent.x86_64/src/hg/agpToFa
+    make
+
+    cd /cluster/data/mm4
+    foreach c (Un)
+      if (-e $c/chr${c}_random.ctg.agp) then
+        echo building $c/chr${c}_random.fa
+        gunzip -c ./ncbi/contigfasta/chr$c.fa.gz \
+          | perl -wpe 's/^>lcl\|(Mm\w+)\s+.*$/>$1/' \
+          > ./tmp.fa
+        $HOME/bin/x86_64/agpToFa -simpleMulti \
+		$c/chr${c}_random.ctg.agp chr${c}_random \
+          $c/chr${c}_random.fa ./tmp.fa
+        rm tmp.fa
+      endif
+    end
+#	That worked on kolossus after adding:
+#if defined(MACHTYPE_x86_64)
+static size_t maxAlloc = 8LL*1024LL*1024LL*1024LL;
+#else
+static size_t maxAlloc = 128*4*1024*1024;
+#endif
+#	To src/lib/memalloc.c
+
+    # Clean these up to avoid confusion later... they're easily rebuilt.
+    rm ?{,?}/*.ctg.agp
+
+# BREAK UP _RANDOMS INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS (2003-07-02 Kate)
+    ssh kksilo
+    cd /cluster/data/mm4
+    foreach c (?{,?})
+      if (-e $c/chr${c}_random.agp) then
+        splitFaIntoContigs $c/chr${c}_random.agp $c/chr${c}_random.fa . \
+          -nSize=5000000
+        mv ${c}_random/lift/oOut.lst $c/lift/rOut.lst
+        mv ${c}_random/lift/ordered.lft $c/lift/random.lft
+        mv ${c}_random/lift/ordered.lst $c/lift/random.lst
+        rmdir ${c}_random/lift
+        rm ${c}_random/chr${c}_random.{agp,fa}
+        mv ${c}_random/* $c
+        rmdir ${c}_random
+      endif
+    end
+    #  This has a lot of output.  It is difficult to see if anything
+    #	goes wrong.  It fails on the chrUn:
+Processing agpFile Un/chrUn_random.agp and fasta file Un/chrUn_random.fa, with nonbridged split boundaries of 5000000 bases, bridged split boundaries of 0 bases
+Out of memory - request size 1073741824 bytes
+
+mv: can't stat source Un_random/lift/oOut.lst
+mv: can't stat source Un_random/lift/ordered.lft
+mv: can't stat source Un_random/lift/ordered.lst
+rmdir: `Un_random/lift': No such file or directory
+rm: cannot lstat `Un_random/chrUn_random.agp': No such file or directory
+rm: cannot lstat `Un_random/chrUn_random.fa': No such file or directory
+mv: No match.
+rmdir: `Un_random': No such file or directory
+
+    #	This might not be a good idea.  I started this on kolossus and
+    #	it has been running for over an hour, consuming CPU time but
+    #	seemingly not getting anywhere.
+    #	try it on kolossus
+    ssh kolossus
+    cd kent.x86_64/src/hg/splitFaIntoContigs
+    make
+
+    cd /cluster/data/mm4
+    foreach c (Un)
+      if (-e $c/chr${c}_random.agp) then
+        $HOME/bin/x86_64/splitFaIntoContigs $c/chr${c}_random.agp \
+	$c/chr${c}_random.fa . -nSize=5000000
+        mv ${c}_random/lift/oOut.lst $c/lift/rOut.lst
+        mv ${c}_random/lift/ordered.lft $c/lift/random.lft
+        mv ${c}_random/lift/ordered.lst $c/lift/random.lst
+        rmdir ${c}_random/lift
+        rm ${c}_random/chr${c}_random.{agp,fa}
+        mv ${c}_random/* $c
+        rmdir ${c}_random
+      endif
+    end
+
 
 XXXX  -----   all below is old data for reference only  XXXXXXXXXX
 XXXX	The sections below will be deleted as they are performed above
-
-#	Things to watch out for mm4 build:
-#	the usual location of /cluster/store2 has changed to /cluster/store5
-#	Thus, the usual NFS server machine was kkstore is now eieio
-#	Therefore, for I/O intensive operations, work on eieio
-#	Due to the global replace of mm3 with mm4, some comment
-#	references may not be correct.
 
 # NOTE: The README_PREBUILD file for this assembly mentions several
 # differences from the previous release (build 30):
@@ -50,117 +192,7 @@ XXXX	The sections below will be deleted as they are performed above
 # added in later, and database reloads were performed to include Y. 7/8/03 KRR
 
 
-# Check chromosome files
-    cd chrfasta
-    cp /dev/null faSize.out
-    foreach f (*.fa)
-        echo $f >> faSize.out
-        /cluster/bin/i386/faSize $f >> faSize.out
-    end
-   /cluster/bin/i386/faSize *.fa >> faSize.out
-   gzip *.fa
-
-
-# GET MISSING FILES FROM NCBI (DONE 2003-07-01 - Kate)
-    # These were left out of the original release,
-    # and were provided on 6/30/03.
-    cd /cluster/store5/mm.2003.06/ncbi
-    ftp ftp.ncbi.nih.gov
-      # user hgpguest, password from /cse/guests/kent/buildHg6.doc
-      cd mouse_31
-      prompt
-      bin
-      mget contig_overlaps.agp.gz  ctg_coords.gz seq_contig.md.gz README_PREBUILD
-      quit    
-      gunzip contig_overlaps.agp.gz ctg_coords.gz seq_contig.md.gz
-
-# BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS (DONE 2003-06-18 - hc)
-
-    # This version of the mouse sequence data is in 
-    # /cluster/store5/mm.2003.06/mm4/assembly
-    # This will split the mouse sequence into approx. 5 Mbase supercontigs 
-    # between non-bridged clone contigs and drop the resulting dir structure 
-    # in /cluster/store5/mm.2003.06/mm4.
-    # The resulting dir structure will include 1 dir for each chromosome, 
-    # each of which has a set of subdirectories, one subdir per supercontig. 
-
-    ssh eieio
-    mkdir /cluster/store5/mm.2003.06/mm4
-    ln -s /cluster/store5/mm.2003.06/mm4 /cluster/data/mm4
-    cd /cluster/store5/mm.2003.06/mm4
-    # splitFaIntoContigs doesn't do right with agp lines arriving in a 
-    # different order than fasta chrom sequences.  so split up the agp 
-    # into one per chrom.
-    foreach c ( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X Y Un )
-      mkdir $c
-      if (! -e /cluster/store5/mm.2003.06/ncbi/chrfasta/chr$c.fa.gz) then
-        continue
-      endif
-      perl -we "while(<>){if (/^chr$c\t/) {print;}}" \
-        ../ncbi/allrefcontig.chr.agp \
-        > $c/chr$c.agp
-      gunzip -c /cluster/store5/mm.2003.06/ncbi/chrfasta/chr$c.fa.gz \
-        | perl -wpe 's/^>lcl\|(chr\w+)\.fa.*/>$1/' \
-        | splitFaIntoContigs $c/chr$c.agp \
-          stdin /cluster/store5/mm.2003.06/mm4 -nSize=5000000
-    end
-    # NOTE: no chrUn (only random)
-
-
-# CREATE CHROM-LEVEL AGP AND FASTA FOR _RANDOMS (2003-07-02 Kate)
-    ssh eieio
-    cd /cluster/store5/mm.2003.06/ncbi
-
-    # reorder random contigs in allrefcontig agp file to match seq_contig.md
-    # this is required by the ncbiToRandomAgps scripts
-    ../mm4/jkStuff/ncbiFixAgp allrefcontig.chr.agp > \
-                        allrefcontig.chr.ordered.agp
-    ../mm4/jkStuff/ncbiToRandomAgps seq_contig.md allrefcontig.chr.ordered.agp \
-                        contig.idmap ../mm4
-        # creating ../mm4/1/chr1_random.agp...
-        # ... creating ../mm4/Un/chrUn_random.agp...
-
-    cd /cluster/store5/mm.2003.06/mm4
-    foreach c (?{,?})
-      if (-e $c/chr${c}_random.ctg.agp) then
-        echo building $c/chr${c}_random.fa
-        gunzip -c ../ncbi/contigfasta/chr$c.fa.gz \
-          | perl -wpe 's/^>lcl\|(Mm\w+)\s+.*$/>$1/' \
-          > ./tmp.fa
-        agpToFa -simpleMulti $c/chr${c}_random.ctg.agp chr${c}_random \
-          $c/chr${c}_random.fa ./tmp.fa
-        rm tmp.fa
-      endif
-    end
-        # building 1/chr1_random.fa
-        # Writing 8573794 bases to 1/chr1_random.fa ...
-        # building 19/chr19_random.fa
-        # Writing 2953240 bases to 19/chr19_random.fa
-        # building Un/chrUn_random.fa
-        # Program error: trying to allocate 1444837753 bytes in needLargeMem
-        # agpToFa: memalloc.c:82: needLargeMem: Assertion `0' failed.
-        # 20 minutes or so
-
-    # Rebuild chrUn
-    # With 50000-long gaps in between, chrUn is just 
-    # too damn big to fit in memory on any of our machines!!  So use a 
-    # gap size of 1000 (OK with Jim and Terry) just for chrUn.  
-    cd /cluster/store5/mm.2003.06/ncbi
-    ../mm4/jkStuff/ncbiToRandomAgps -gapLen 1000 -chrom Un \
-      seq_contig.md allrefcontig.chr.ordered.agp contig.idmap ../mm4
-    cd /cluster/store5/mm.2003.06/mm4
-    set c=Un
-    echo building $c/chr${c}_random.fa
-    gunzip -c ../ncbi/contigfasta/chr$c.fa.gz \
-      | perl -wpe 's/^>lcl\|(Mm\w+)\s+.*$/>$1/' \
-      > ./tmp.fa
-    agpToFa -simpleMulti $c/chr${c}_random.ctg.agp chr${c}_random \
-      $c/chr${c}_random.fa ./tmp.fa
-    rm tmp.fa
-        # Writing 85430752 bases to Un/chrUn_random.fa
-
-    # Clean these up to avoid confusion later... they're easily rebuilt.
-    rm ?{,?}/*.ctg.agp
+XXXXXX
 
 
 # BREAK UP _RANDOMS INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS (2003-07-02 Kate)
