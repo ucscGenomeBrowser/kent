@@ -82,7 +82,7 @@ fprintf(fp, "%s%c", startData->data.pGap->chrom, sep);
 fprintf(fp, "%d%c", chromSize, lastSep);
 }
 
-void writeChromLiftFiles(char *chromName, int chromSize, struct agpData *startAgpData, char *destDir)
+void writeLiftFiles(char *chromName, int chromSize, struct agpData *startAgpData, char *destDir)
 /*
 Writes the lift and list files out for a single chromsome
 
@@ -97,14 +97,24 @@ char command[DEFAULT_PATH_SIZE];
 char filename[DEFAULT_PATH_SIZE];
 struct agpData *loopStartData = NULL;
 struct agpData *curData = NULL;
-FILE *fp = NULL;
+FILE *fpLft = NULL;
+FILE *fpLst = NULL;
+FILE *fpLstOut = NULL;
+
 int contigSize = 0;
 
 sprintf(command, "mkdir -p %s/lift", destDir);
 system(command);
-sprintf(filename, "%s/lift/ordered.lft", destDir);
 
-fp = fopen(filename, "w");
+sprintf(filename, "%s/lift/ordered.lft", destDir);
+fpLft = fopen(filename, "w");
+
+sprintf(filename, "%s/lift/ordered.lst", destDir);
+fpLst = fopen(filename, "w");
+
+sprintf(filename, "%s/lift/oOut.lst", destDir);
+fpLstOut = fopen(filename, "w");
+
 curData = startAgpData;
 while (NULL != curData) 
     {
@@ -115,14 +125,19 @@ while (NULL != curData)
 
     if (curData->endOfContig)
 	{
-	writeAgpLiftData(loopStartData, curData, chromSize, contigSize, fp, '\t', '\n');
+	contigSize = curData->data.pGap->chromEnd - loopStartData->data.pGap->chromStart;
+	writeLiftData(loopStartData, curData, chromSize, contigSize, fpLft, '\t', '\n');
+	writeListData(loopStartData, fpLft);
+	writeListOutData(loopStartData, fpLft);
 	loopStartData = NULL;
 	}
 
     curData = curData->next;
     }
 
-fclose(fp);
+fclose(fpLft);
+fclose(fpLst);
+fclose(fpLstOut);
 }
 
 void writeAgpFile(char *chromName, struct agpData *startAgpData, char *filename)
@@ -445,7 +460,7 @@ while (faSpeedReadNext(lfFa, &dna, &dnaSize, &chromName))
 
     writeChromFaFile(chromName, dna, dnaSize, destDir);
     writeChromAgpFile(chromName, startAgpData, destDir);
-    writeChromLiftFiles(chromName, dnaSize, startAgpData, destDir);
+    writeLiftFiles(chromName, dnaSize, startAgpData, destDir);
 
     printf("Done processing chromosome %s\n", chromName);
     }
