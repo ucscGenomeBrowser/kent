@@ -760,6 +760,31 @@ else if (intronDir > 0)
 return intronDir;
 }
 
+boolean pslHasIntron(struct psl *psl, struct dnaSeq *seq, int seqOffset)
+/* Return TRUE if there's a probable intron. */
+{
+int blockCount = psl->blockCount, i;
+unsigned *tStarts = psl->tStarts;
+unsigned *blockSizes = psl->blockSizes;
+unsigned *qStarts = psl->qStarts;
+int blockSize, start, end;
+DNA *dna = seq->dna;
+
+for (i=1; i<blockCount; ++i)
+    {
+    blockSize = blockSizes[i-1];
+    start = qStarts[i-1]+blockSize;
+    end = qStarts[i];
+    if (start == end)
+        {
+	start = tStarts[i-1]+blockSize-seqOffset;
+	end = tStarts[i]-seqOffset;
+	if (intronOrientation(dna+start, dna+end) != 0)
+	    return TRUE;
+	}
+    }
+return FALSE;
+}
 
 void pslTailSizes(struct psl *psl, int *retStartTail, int *retEndTail)
 /* Find the length of "tails" (rather than extensions) implied by psl. */
@@ -936,24 +961,24 @@ pslRecalcBounds(newPsl);
 return newPsl;
 }
 
-char* pslGetCreateSql(char* table, boolean tNameIx, boolean withBin,
-                      boolean xaFormat)
-/* Get SQL required to create PSL table.  */
+char* pslGetCreateSql(char* table, unsigned options)
+/* Get SQL required to create PSL table.  Options is a bit set consisting
+ * of PSL_TNAMEIX, PSL_WITH_BIN, and PSL_XA_FORMAT */
 {
 struct dyString *sqlCmd = newDyString(2048);
 char *sqlCmdStr;
-char *extraIx = (tNameIx ? "tName(8)," : "" );
+char *extraIx = ((options & PSL_TNAMEIX) ? "tName(8)," : "" );
 char *binIxString = "";
-if (withBin)
+if (options & PSL_WITH_BIN)
     {
-    if (tNameIx)
+    if (options & PSL_TNAMEIX)
 	binIxString = "INDEX(tName(8),bin),\n";
     else
         binIxString = "INDEX(bin),\n";
     }
 dyStringPrintf(sqlCmd, createString, table, 
-    (withBin ?"bin smallint unsigned not null,\n" : ""));
-if (xaFormat)
+    ((options & PSL_WITH_BIN) ? "bin smallint unsigned not null,\n" : ""));
+if (options & PSL_XA_FORMAT)
     {
     dyStringPrintf(sqlCmd, "qSeq longblob not null,\n");
     dyStringPrintf(sqlCmd, "tSeq longblob not null,\n");

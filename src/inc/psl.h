@@ -25,7 +25,12 @@
 #include "dnaseq.h"
 #endif
 
-#define PSL_NUM_COLS 21
+#define PSL_NUM_COLS 21  /* number of columns in a PSL */
+
+/* Options to pslGetCreateSql */
+#define PSL_TNAMEIX   0x01  /* create target name index */
+#define PSL_WITH_BIN  0x02  /* add bin column */
+#define PSL_XA_FORMAT 0x04  /* add XA format columns */
 
 struct psl
 /* Summary info about a patSpace alignment */
@@ -151,6 +156,9 @@ int pslIntronOrientation(struct psl *psl, struct dnaSeq *genoSeq, int offset);
  *       -1 if introns make it look like alignment is on - strand,
  *        0 if can't tell. */
 
+boolean pslHasIntron(struct psl *psl, struct dnaSeq *seq, int seqOffset);
+/* Return TRUE if there's a probable intron. */
+
 void pslTailSizes(struct psl *psl, int *retStartTail, int *retEndTail);
 /* Find the length of "tails" (rather than extensions) implied by psl. */
 
@@ -168,9 +176,9 @@ struct psl *pslTrimToTargetRange(struct psl *oldPsl, int tMin, int tMax);
 /* Return psl trimmed to fit inside tMin/tMax.  Note this does not
  * update the match/misMatch and related fields. */
 
-char* pslGetCreateSql(char* table, boolean tNameIx, boolean withBin,
-                      boolean xaFormat);
-/* Get SQL required to create PSL table.  */
+char* pslGetCreateSql(char* table, unsigned options);
+/* Get SQL required to create PSL table.  Options is a bit set consisting
+ * of PSL_TNAMEIX, PSL_WITH_BIN, and PSL_XA_FORMAT */
 
 #endif /* PSL_H */
 

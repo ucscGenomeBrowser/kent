@@ -7,10 +7,8 @@
 #include "xAli.h"
 #include "hdb.h"
 
-boolean tNameIx = FALSE;
-boolean noBin = FALSE;
+unsigned pslCreateOpts = 0;
 boolean append = FALSE;
-boolean xaFormat = FALSE;
 boolean exportOutput = FALSE;
 char *clTableName = NULL;
 
@@ -38,7 +36,7 @@ errAbort(
 
 void createTable(struct sqlConnection *conn, char* table)
 {
-char *sqlCmd = pslGetCreateSql(table, tNameIx, !noBin, xaFormat);
+char *sqlCmd = pslGetCreateSql(table, pslCreateOpts);
 if (exportOutput)
     {
     char sqlFName[1024];
@@ -73,8 +71,8 @@ for (i = 0; i<pslCount; ++i)
         strcpy(table, clTableName);
     else
 	splitPath(pslName, NULL, table, NULL);
-    if (noBin)
-        strcpy(tabFile, pslName);
+    if (!(pslCreateOpts & PSL_WITH_BIN))
+        strcpy(tabFile, pslName);  /* not bin, load directly */
     else
         {
         FILE *f;
@@ -85,7 +83,7 @@ for (i = 0; i<pslCount; ++i)
             strcpy(tabFile, "psl.tab");
 
 	f = mustOpen(tabFile, "w");
-	if (xaFormat)
+	if (pslCreateOpts & PSL_XA_FORMAT)
 	    {
 	    struct xAli *xa;
 	    char *row[23];
@@ -130,13 +128,16 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionHash(&argc, argv);
-tNameIx = optionExists("tNameIx");
+if (optionExists("tNameIx"))
+    pslCreateOpts |= PSL_TNAMEIX;
+if (!optionExists("nobin"))
+    pslCreateOpts |= PSL_WITH_BIN;
+if (optionExists("xa"))
+    pslCreateOpts |= PSL_XA_FORMAT;
 clTableName = optionVal("table", NULL);
-xaFormat = optionExists("xa");
 append = optionExists("append");
 exportOutput = optionExists("export");
-noBin = optionExists("nobin");
-if (noBin && exportOutput)
+if ((!(pslCreateOpts & PSL_WITH_BIN)) && exportOutput)
     errAbort("-nobin not supported with -export\n");
 if (argc < 3)
     usage();
