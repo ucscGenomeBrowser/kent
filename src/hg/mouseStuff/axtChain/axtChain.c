@@ -13,7 +13,7 @@
 #include "chainBlock.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: axtChain.c,v 1.25 2004/04/29 15:35:10 heather Exp $";
+static char const rcsid[] = "$Id: axtChain.c,v 1.26 2004/04/29 18:14:38 kent Exp $";
 
 int minScore = 1000;
 char *detailsName = NULL;
@@ -651,19 +651,54 @@ for (b = a->next; b != NULL; b = b->next)
     }
 }
 
+void checkStartBeforeEnd(struct chain *chain, char *message)
+/* Check qStart < qEnd, tStart < tEnd for each block. */
+{
+struct boxIn *b;
+for (b = chain->blockList; b != NULL; b = b->next)
+    {
+    if (b->qStart >= b->qEnd || b->tStart >= b->tEnd)
+	errAbort("Start after end in (%d %d) to (%d %d) %s",
+	    b->qStart, b->tStart, b->qEnd, b->tEnd, message);
+    }
+}
+
+void checkChainGaps(struct chain *chain, char *message)
+/* Check that gaps between blocks are non-negative. */
+{
+struct boxIn *a, *b;
+a = chain->blockList;
+if (a == NULL)
+    return;
+for (b = a->next; b != NULL; b = b->next)
+    {
+    if (a->qEnd > b->qStart || a->tEnd > b->tStart)
+	{
+	errAbort("Negative gap between (%d %d - %d %d) and (%d %d - %d %d) %s",
+	    a->qStart, a->tStart, a->qEnd, a->tEnd, 
+	    b->qStart, b->tStart, b->qEnd, b->tEnd, message);
+	}
+    a = b;
+    }
+}
+
+void setChainBounds(struct chain *chain)
+/* Set chain overall bounds to fit blocks. */
+{
+struct boxIn *b = chain->blockList;
+chain->qStart = b->qStart;
+chain->tStart = b->tStart;
+while (b->next != NULL)
+     b = b->next;
+chain->qEnd = b->qEnd;
+chain->tEnd = b->tEnd;
+}
+
 void removePartialOverlaps(struct chain *chain, 
 	struct dnaSeq *qSeq, struct dnaSeq *tSeq, int matrix[256][256])
 /* If adjacent blocks overlap then find crossover points between them. */
 {
 struct boxIn *a, *b;
-int dq = 0;
-int dt = 0;
-int overlap = 0;
-int aSize = 0;
-int bSize = 0;
-int crossover = 0;
-int invCross = 0;
-int overlapAdjustment = 0;
 boolean totalTrimA, totalTrimB;
 
 assert(chain->blockList != NULL);
@@ -685,15 +720,17 @@ for (;;)
     b = a->next;
     for (;;)
         {
+	int dq, dt;
 	if (b == NULL)
 	    break;
 	dq = b->qStart - a->qEnd;
 	dt = b->tStart - a->tEnd;
 	if (dq < 0 || dt < 0)
 	   {
-	   overlap = -min(dq, dt);
-	   aSize = a->qEnd - a->qStart;
-	   bSize = b->qEnd - b->qStart;
+	   int overlap = -min(dq, dt);
+	   int aSize = a->qEnd - a->qStart;
+	   int bSize = b->qEnd - b->qStart;
+	   int crossover, invCross, overlapAdjustment;
 	   if (overlap >= aSize || overlap >= bSize)
 	       {
 	       totalTrimB = TRUE;
@@ -740,10 +777,13 @@ for (;;)
         break;
     }
 
-/* Do an internal sanity check to make sure that things
- * still are sorted by both qStart and tStart. */
-checkChainIncreases(chain, "after removePartialOverlaps");
+/* Reset chain bounds - may have clipped them in this
+ * process. */
+setChainBounds(chain);
 
+/* Do internal sanity checks. */
+checkChainGaps(chain, "after removePartialOverlaps");
+checkStartBeforeEnd(chain, "after removePartialOverlaps");
 }
 
 #ifdef TESTONLY
