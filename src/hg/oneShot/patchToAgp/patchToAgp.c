@@ -53,14 +53,28 @@ struct lineFile *lf = lineFileOpen(inName, TRUE);
 FILE *f = mustOpen(outName, "w");
 int ix = 0;
 struct hash *versionHash = readVersionInfo(infName);
+int ntStart, ntEnd, cStart, cEnd;
+int diff;
 
 while (lineFileRow(lf, row))
     {
-    fprintf(f, "%s\t%s\t%s\t%d\t%s\t%s\t%s\t%s\t%c\n",
-	row[0],
-	row[2], row[3], ++ix,
+    ntStart = atoi(row[2]);
+    ntEnd = atoi(row[3]);
+    cStart = atoi(row[7]);
+    cEnd = atoi(row[8]);
+    if (cStart <= 0)
+        {
+	warn("Fixing negative clone start line %d of %s", lf->lineIx, lf->fileName);
+	diff = 1 - cStart;
+	cStart += diff;
+	cEnd += diff;
+	if (cEnd - cStart != ntEnd - ntStart)
+	     errAbort("Couldn't fix properly");
+	}
+    fprintf(f, "%s\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%c\n",
+	row[0], ntStart, ntEnd, ++ix,
 	row[5], fixVersion(row[6], versionHash),
-	row[7], row[8], 
+	cStart, cEnd,
 	row[4][0]);
     }
 }
