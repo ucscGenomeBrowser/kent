@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.650 2004/06/01 20:18:40 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.651 2004/06/01 22:05:03 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14189,19 +14189,17 @@ void doScaffoldEcores(struct trackDb *tdb, char *item)
 /* genomes for display and to use to create the correct outside link URL */
 {
 char *dupe, *words[16];
-char title[256];
 int wordCount;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
 int num;
-char table[64];
 struct bed *bed = NULL;
 char query[512];
 struct sqlResult *sr;
 char **row;
 char *scaffoldName;
 int scaffoldStart, scaffoldEnd;
-struct dyString *d, *itemUrl;
+struct dyString *itemUrl = newDyString(128), *d;
 char *old = "_";
 char *new = "";
                                                                                 
@@ -14218,13 +14216,14 @@ while ((row = sqlNextRow(sr)) != NULL)
     bed = bedLoadNBin(row, num);
                                                                                 
 genericHeader(tdb, item);
-/* convert chromosome co-ordinates to scaffold position and make into item for URL */
-if (hScaffoldPos(bed->chrom, bed->chromStart, bed->chromEnd, &scaffoldName, &scaffoldStart, &scaffoldEnd) )
+/* convert chromosome co-ordinates to scaffold position and */
+/* make into item for URL */
+if (hScaffoldPos(bed->chrom, bed->chromStart, bed->chromEnd, &scaffoldName,            &scaffoldStart, &scaffoldEnd) )
    {
-   dyStringPrintf(d, "%s:%d-%d", scaffoldName, scaffoldStart, scaffoldEnd);
+   dyStringPrintf(itemUrl, "%s:%d-%d", scaffoldName, scaffoldStart,                           scaffoldEnd);
    /* remove underscore in scaffold name */
-   itemUrl = dyStringSub(d->string, old, new);
-   dyStringFree(&d);
+   d = dyStringSub(itemUrl->string, old, new);
+   itemUrl = d;
    printCustomUrl(tdb, itemUrl->string, TRUE);
    }
                                                                                 
