@@ -16,6 +16,7 @@
 #include "hCommon.h"
 #include "hgFind.h"
 #include "dbDb.h"
+#include "axtInfo.h"
 #include "subText.h"
 #include "blatServers.h"
 
@@ -1383,6 +1384,30 @@ slReverse(&dbList);
 return dbList;
 }
 
+struct axtInfo *hGetAxtAlignments(char *db)
+/* Get list of alignments where we have axt files listed in axtInfo . 
+ * Dispose of this with axtInfoFreeList. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+struct axtInfo *aiList = NULL, *ai;
+char query[256];
+
+sprintf(query, "select * from axtInfo where species = '%s' and chrom = 'chr1'",db);
+/* Scan through axtInfo table, loading into list */
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    ai = axtInfoLoad(row);
+    slAddHead(&aiList, ai);
+    }
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+slReverse(&aiList);
+return aiList;
+}
+
 
 struct dbDb *hGetBlatIndexedDatabases()
 /* Get list of databases for which there is a BLAT index. 
@@ -1495,6 +1520,10 @@ if (strstrNoCase(organism, "mouse"))
 else if (strstrNoCase(organism, "zoo"))
     {
     result = "zooBaboon1";
+    }
+else if (strstrNoCase(organism, "human"))
+    {
+    result = "hg10";
     }
 
 return result;
