@@ -75,7 +75,7 @@ type chain fr1
 otherDb fr1
 
 track netFr1
-shortLabel Human Net
+shortLabel Fugu Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 130.3
