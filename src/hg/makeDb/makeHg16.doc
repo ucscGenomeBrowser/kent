@@ -6276,7 +6276,7 @@ axtFilter -notQ=chrUn $1 \
     #add a track entry to trackDb.ra 
     # in ~/kent/src/hg/makeDb/trackDb/human/hg16
 
-#	FAMILY BROWSER UPDATE	(WORKING - 2004-02-17 - Hiram)
+#	FAMILY BROWSER UPDATE	(DONE - 2004-02-17 - Hiram)
 #	to be done after knownGene tables are complete from known gene
 #	process.
 #
@@ -6774,6 +6774,8 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     mkdir jaxOrtholog
     cd jaxOrtholog
     wget --timestamping ftp://ftp.informatics.jax.org/pub/reports/HMD_Human4.rpt
+    # save a little space
+    gzip HMD_Human4.rpt
 
     # this is a tricky one to parse.  This .rpt file is plain text, no
     # tabs, with expected text columns to contain the data.  We need to
@@ -6804,25 +6806,25 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     humanSymbol = substr($0,153,26)
     gsub(" ","",humanSymbol)
     Band = substr($0,179)
-    humanBand = Band;
-    numBands = split(Band,humanBands," ")
-    if (numBands > 1) { humanBand = humanBands[0] }
-    gsub(" ","",humanBand)
+    gsub(" *$","",Band)
+    gsub("^ *","",Band)
     mouseBand = substr($0,111,11)
     gsub(" ","",mouseBand)
     if (length(mouseBand) < 1) { mouseBand = "N/A" }
-    printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\n", humanSymbol,humanBand,
+    printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\n", humanSymbol,Band,
 	$1,$3,$4,$5,mouseBand
 }
 '_EOF_'
     # then using that script to fix it:
-    awk -f jaxToUCSC.awk *.rpt > jaxOrtholog.tab
+    zcat HMD_Human4.rpt.gz | awk -f jaxToUCSC.awk > jaxOrtholog.tab
 
     # Drop (just in case), create and load the table:
     hgsql -e 'drop table jaxOrtholog;' hg16
     hgsql hg16 < ~/kent/src/hg/lib/jaxOrtholog.sql
     hgsql -e \
 	'load data local infile "jaxOrtholog.tab" into table jaxOrtholog;' hg16
+    # save a little space
+    gzip jaxOrtholog.tab
 
 LOAD ACEMBLY (WORKING - 2004-02-21 - Hiram)
     mkdir -p /cluster/data/hg16/bed/acembly
