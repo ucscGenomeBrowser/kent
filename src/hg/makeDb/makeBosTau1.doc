@@ -22,5 +22,50 @@ exit; # don't actually run this like a script :)
     cd Bin0
     wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20040927-freeze/Bin0/Btau20040927-freeze-bin0.fa.gz
     wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20040927-freeze/Bin0/Btau20040927-freeze-bin0.fa.qual.gz
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20040927-freeze/Bin0/Btau_lib_insert_size_20040927.tbl.gz
+    cd ..
+
+    mkdir contigs
+    cd contigs
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20040927-freeze/contigs/Btau20040927-freeze-contigs.fa.gz
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20040927-freeze/contigs/Btau20040927-freeze-contigs.fa.qual.gz
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20040927-freeze/contigs/Btau_v1.0_20040927.agp.gz
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20040927-freeze/contigs/AAFC01_accs.gz
+    cd ..
+
+    mkdir linearScaffolds
+    cd linearScaffolds
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20040927-freeze/linearScaffolds/Btau20040927-freeze-assembly.fa.gz
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20040927-freeze/linearScaffolds/Btau20040927-freeze-assembly.fa.qual.gz
+    cd ..
+
+    mkdir repeat-reads
+    cd repeat-reads
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20040927-freeze/repeat-reads/Btau20040927-freeze-repeat-reads.fa.gz
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20040927-freeze/repeat-reads/Btau20040927-freeze-repeat-reads.fa.qual.gz
+    cd ..
+
+# GUNZIP
+  gunzip */*.gz
+
+# CHECK FILES
+
+# Check that IDs in .fa match IDs in .qual
+  
+  grep ">" *.fa > id.fa
+  grep ">" *.qual > id.qual
 
 
+# SPLIT SCAFFOLDS
+
+  ssh eieio
+  cd /cluster/data/bosTau1
+  mkdir scaffolds
+  /cluster/bin/i386/faSplit byname downloads/linearScaffolds/Btau20040927-freeze-assembly.fa scaffolds -outDirDepth=3
+  # not sure why these didn't get put under scaffolds directory
+  mv 1 scaffolds
+  mv 2 scaffolds
+  mv 3 scaffolds
+  mv 4 scaffolds
+
+  
