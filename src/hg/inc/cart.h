@@ -5,7 +5,7 @@
 #ifndef CART_H
 #define CART_H
 
-#ifndef JKSQL
+#ifndef JKSQL_H
 #include "jksql.h"
 #endif
 

@@ -9,6 +9,7 @@
 #include "cart.h"
 #include "web.h"
 #include "hdb.h"
+#include "jksql.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 
