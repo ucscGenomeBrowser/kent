@@ -191,7 +191,6 @@ else if (!endsWith(input, ".nib") && !endsWith(output, ".nib"))
 	    {
 	    end = start + maxSize;
 	    if (end > seq.size) end = seq.size;
-	    uglyf(">>> start %d, end %d\n", start, end);
 	    faWrite(tempFile, seq.name, seq.dna+start, end - start);
 	    trfSysCall(tempFile);
 	    makeTrfRootName(trfRootName, tempFile);
