@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hCommon.c,v 1.20 2003/06/24 07:06:08 kent Exp $";
+static char const rcsid[] = "$Id: hCommon.c,v 1.21 2004/03/05 15:11:01 baertsch Exp $";
 
 static char *_hgcName = "../cgi-bin/hgc";	/* Path to click processing program. */
 static char *_hgTracksName = "../cgi-bin/hgTracks"; /* Path back to self. */
@@ -176,6 +176,45 @@ if (startsWith("chr", s))
 return s;
 }
 
+int chromToInt(char *s)
+/* converts a chrom name chrXX into an integer from 1 to 54. 
+    X = 23 Y = 24 Un = 25 M = 26 random = chr + 26;*/
+{
+char *u;
+int ret = 0;
+char str[64];
+
+if (!startsWith("chr", s))
+    {
+    return 0;
+    }
+s += 3;
+sprintf(str,"%s",s);
+u = strchr(str,'_');
+if (u != NULL)
+    {
+    ret = 26;
+    *u = '\0';
+    }
+switch (str[0])
+    {
+    case 'X':
+        ret += 23; 
+        break;
+    case 'Y':
+        ret += 24; 
+        break;
+    case 'U':
+        ret += 25; 
+        break;
+    case 'M':
+        ret += 26; 
+        break;
+    default:
+        ret += atoi(s);
+    }
+return ret;
+}
 boolean hIsMgcServer()
 /* Is this the MGC-customized server? Change for config variable
  * mgc.server=yes */
@@ -190,3 +229,4 @@ if (!haveChecked)
     }
 return mgcHost;
 }
+
