@@ -15,7 +15,7 @@
 #include "chainNet.h"
 #include "liftUp.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.30 2004/02/08 17:30:20 kent Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.31 2004/06/21 16:58:30 hiram Exp $";
 
 boolean isPtoG = TRUE;  /* is protein to genome lift */
 boolean nohead = FALSE;	/* No header for psl files? */
@@ -1245,7 +1245,10 @@ for (i=0; i<sourceCount; ++i)
     source = sources[i];
     if (!pipeOut) printf("Processing %s\n", source);
     contig = contigInDir(source, dirBuf);
-    if (!startsWith("ctg", contig) && !startsWith("NT_", contig) && !startsWith("NG_", contig))
+    if (!startsWith("ctg", contig) &&
+	!startsWith("NC_", contig) &&
+	!startsWith("NT_", contig) &&
+	!startsWith("NG_", contig))
         {
 	sprintf(chromName, "chr%s", contig);
 	contig = chromName;
