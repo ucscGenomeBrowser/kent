@@ -173,10 +173,10 @@ slReverse(&newList);
 *pBoxList = newList;
 }
 
-int scoreBlock(char *q, char *t, int size, int matrix[256][256])
+double scoreBlock(char *q, char *t, int size, int matrix[256][256])
 /* Score block through matrix. */
 {
-int score = 0;
+double score = 0;
 int i;
 for (i=0; i<size; ++i)
     score += matrix[q[i]][t[i]];
@@ -198,7 +198,7 @@ char *lqStart = qSeq->dna + left->qEnd - overlap;
 char *rtStart = tSeq->dna + right->tStart;
 char *ltStart = tSeq->dna + left->tEnd - overlap;
 int i;
-int score, bestScore, rScore, lScore;
+double score, bestScore, rScore, lScore;
 
 score = bestScore = rScore = scoreBlock(rqStart, rtStart, overlap, matrix);
 lScore = scoreBlock(lqStart, ltStart, overlap, matrix);
@@ -451,14 +451,24 @@ int dt = b->tStart - a->tEnd;
 int overlapAdjustment = 0;
 if (dq < 0 || dt < 0)
    {
+   int bSize = b->qEnd - b->qStart;
    int overlap = -min(dq, dt);
    int crossover;
-   findCrossover(a, b, scoreData.qSeq, scoreData.tSeq, overlap, 
-   	scoreData.ss->matrix,
-   	&crossover, &overlapAdjustment);
-   dq += overlap;
-   dt += overlap;
-   ++overlapCount;
+   if (overlap > bSize) 
+       {
+       /* B is enclosed in A.  Discourage this overlap. */
+       overlapAdjustment = scoreBlock(scoreData.qSeq->dna + a->qStart, 
+       	scoreData.tSeq->dna + a->tStart, a->tEnd - a->tStart, scoreData.ss->matrix);
+       }
+   else
+       {
+       findCrossover(a, b, scoreData.qSeq, scoreData.tSeq, overlap, 
+	    scoreData.ss->matrix,
+	    &crossover, &overlapAdjustment);
+       dq += overlap;
+       dt += overlap;
+       ++overlapCount;
+       }
    }
 ++connCount;
 return overlapAdjustment + gapCost(dq, dt);
@@ -759,7 +769,6 @@ else
 for (sp = spList; sp != NULL; sp = sp->next)
     {
     slReverse(&sp->blockList);
-    uglyf("Got %d blocks, %d axts in %s\n", slCount(sp->blockList), sp->axtCount, sp->name);
     removeExactOverlaps(&sp->blockList);
     uglyf("%d blocks after duplicate removal\n", slCount(sp->blockList));
     loadIfNewSeq(qNibDir, sp->qName, sp->qStrand, &qName, &qSeq, &qStrand);
