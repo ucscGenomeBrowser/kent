@@ -15,7 +15,7 @@
 #include "chainNet.h"
 #include "liftUp.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.29 2004/02/08 02:38:03 kent Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.30 2004/02/08 17:30:20 kent Exp $";
 
 boolean isPtoG = TRUE;  /* is protein to genome lift */
 boolean nohead = FALSE;	/* No header for psl files? */
@@ -559,15 +559,27 @@ for (sourceIx = 0; sourceIx < sourceCount; ++sourceIx)
 		{
 		if (querySide)
 		    {
-		    errAbort("Can't yet handle query side lifts "
-		             "when there are '-' in spec file.");
+		    int qSpan = chain->qEnd - chain->qStart;
+		    if (chain->qStrand == '-')
+		        chain->qStart += spec->offset;
+		    else
+		        {
+			chain->qStart = spec->newSize - spec->offset 
+				- (chain->qSize - chain->qStart);
+			}
+		    chain->qEnd = chain->qStart + qSpan;
+		    chain->qStrand = flipStrand(chain->qStrand);
+		    freeMem(chain->qName);
+		    chain->qName = cloneString(spec->newName);
+		    chain->qSize = spec->newSize;
+		    /* We don't need to mess with the blocks here
+		     * since they are all relative to the start. */
 	            }
 		else
 		    {
 		    /* We try and keep the target strand positive, so we end up
 		     * flipping in both target and query and flipping the target
 		     * strand. */
-		    freeMem(chain->tName);
 		    reverseIntRange(&chain->qStart, &chain->qEnd, chain->qSize);
 		    reverseIntRange(&chain->tStart, &chain->tEnd, chain->tSize);
 		    chain->qStrand = flipStrand(chain->qStrand);
@@ -585,6 +597,7 @@ for (sourceIx = 0; sourceIx < sourceCount; ++sourceIx)
 		    /* On target side add offset as well and update name and size. */
 		    chain->tStart += offset;
 		    chain->tEnd   += offset;
+		    freeMem(chain->tName);
 		    chain->tName = cloneString(spec->newName);
 		    chain->tSize = spec->newSize;
 		    }

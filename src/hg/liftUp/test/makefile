@@ -45,6 +45,15 @@ chainRcT: output
 	    input/rcTest.lft warn input/rcRcContig.chain
 	diff expected/rcRcLifted.chain output/rcRcLifted.chain
 
+chainRcQ: output
+	$(HOME)/bin/$(MACHTYPE)/liftUp output/rcSwapLifted.chain \
+	    input/rcTest.lft warn input/rcContigSwap.chain -chainQ
+	diff expected/rcSwapLifted.chain output/rcSwapLifted.chain
+	$(HOME)/bin/$(MACHTYPE)/liftUp output/rcRcSwapLifted.chain \
+	    input/rcTest.lft warn input/rcRcContigSwap.chain -chainQ
+	diff expected/rcRcSwapLifted.chain output/rcRcSwapLifted.chain
+
+
 output:
 	${MKDIR} output
 
