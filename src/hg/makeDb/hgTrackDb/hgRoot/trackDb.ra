@@ -62,6 +62,14 @@ visibility hide
 spectrum on
 type bed 4 +
 
+track GCwiggle
+shortLabel GC Samples 
+longLabel GC Percent Sample Track (every 20,000 bases)
+priority 6.1
+visible hide
+chromosomes chr22,
+type sample 9
+
 track ctgPos
 shortLabel Map Contigs
 longLabel Physical Map Contigs
@@ -640,7 +648,6 @@ chromosomes chr7,
 color 100,50,0
 altColor 0,0,255
 type sample 9
-
 
 track altGraph
 shortLabel altGraph
