@@ -114,6 +114,19 @@ if (e != NULL)
 return table;
 }
 
+boolean isChromId(char *seqName)
+{
+return((! startsWith("chr", seqName)) &&
+       (isdigit(seqName[0]) ||
+	sameString("X", seqName)  || sameString("X_random", seqName)  ||
+	sameString("Y", seqName)  || sameString("Y_random", seqName)  ||
+	sameString("Un", seqName) || sameString("Un_random", seqName) ||
+	sameString("UL", seqName) || sameString("UL_random", seqName) ||
+	sameString("NA", seqName) || sameString("NA_random", seqName) ||
+	sameString("NA_unmapped", seqName) || 
+	sameString("M", seqName)  ));
+}
+
 struct tableDef *getTables()
 /* Get all tables. */
 {
@@ -228,9 +241,11 @@ struct segment
     int start;		/* Zero based start. */
     int end;		/* Base after end. */
     boolean wholeThing;	/* TRUE if user requested whole sequence. */
+    char *seqName;      /* Name of sequence in external DAS world */
     };
 
-struct segment *segmentNew(char *seq, int start, int end, boolean wholeThing)
+struct segment *segmentNew(char *seq, int start, int end, boolean wholeThing,
+			   char *seqName)
 /* Make a new segment. */
 {
 struct segment *segment;
@@ -239,6 +254,7 @@ segment->seq = cloneString(seq);
 segment->start = start;
 segment->end = end;
 segment->wholeThing = wholeThing;
+segment->seqName = cloneString(seqName);
 return segment;
 }
 
@@ -249,7 +265,7 @@ struct segment *dasSegmentList(boolean mustExist)
 {
 struct slName *segList, *seg;
 struct segment *segmentList = NULL, *segment;
-char *seq;
+char *seq, *seqName;
 int start=0, end=0;
 boolean wholeThing;
 
@@ -264,7 +280,13 @@ if (segList != NULL)
 
 	wholeThing = FALSE;
 	partCount = chopString(seg->name, ":,", parts, ArraySize(parts));
-	seq = parts[0];
+	seq = seqName = parts[0];
+	if (isChromId(seqName))
+	    {
+	    /* Prepend "chr" if client passes in chromosome number */
+	    seq = needMem(strlen(seqName)+4);
+	    snprintf(seq, strlen(seqName)+4, "chr%s", seqName);
+	    }
 	if (partCount == 1)
 	    {
 	    start = 0;
@@ -284,7 +306,7 @@ if (segList != NULL)
 	    {
 	    earlyError(402);
 	    }
-	segment = segmentNew(seq, start, end, wholeThing);
+	segment = segmentNew(seq, start, end, wholeThing, seqName);
 	slAddHead(&segmentList, segment);
 	}
     slReverse(&segmentList);
@@ -292,7 +314,7 @@ if (segList != NULL)
 else
     {
     /* Handle old format (pre 0.995 spec) lists. */
-    seq = cgiOptionalString("ref");
+    seq = seqName = cgiOptionalString("ref");
     wholeThing = TRUE;
     if (seq == NULL)
 	{
@@ -302,6 +324,12 @@ else
 	    {
 	    return NULL;
 	    }
+	}
+    if (isChromId(seqName))
+	{
+	/* Prepend "chr" if client passes in chromosome number */
+	seq = needMem(strlen(seqName)+4);
+	snprintf(seq, strlen(seqName)+4, "chr%s", seqName);
 	}
     if (cgiVarExists("start"))
 	{
@@ -319,7 +347,7 @@ else
         end = hChromSize(seq);
     if (start > end)
 	earlyError(405);
-    segmentList = segmentNew(seq, start, end, wholeThing);
+    segmentList = segmentNew(seq, start, end, wholeThing, seqName);
     }
 /* Check all segments are chromosomes. */
 for (segment = segmentList; segment != NULL; segment = segment->next)
@@ -511,7 +539,7 @@ for (segment = segmentList;;)
         printf("<SEGMENT version=\"%s\">\n", version);
     else
 	printf("<SEGMENT id=\"%s\" start=\"%d\" stop=\"%d\" version=\"%s\">\n", 
-	    segment->seq, segment->start+1, segment->end, version);
+	    segment->seqName, segment->start+1, segment->end, version);
     for (td = tdList; td != NULL; td = td->next)
 	{
 	if (catTypeFilter(category, td->category, type, td->name) )
@@ -675,7 +703,7 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 int start, end;
-char *seq;
+char *seq, *seqName;
 struct dyString *query = newDyString(0);
 
 /* Write out DAS features header. */
@@ -691,9 +719,10 @@ for (segment = segmentList; segment != NULL; segment = segment->next)
     seq = segment->seq;
     start = segment->start;
     end = segment->end;
+    seqName = segment->seqName;
     printf(
     "<SEGMENT id=\"%s\" start=\"%d\" stop=\"%d\" version=\"%s\" label=\"%s\">\n",
-	   seq, start+1, end, version, seq);
+	   seqName, start+1, end, version, seqName);
 
     /* Query database and output features. */
     for (td = tdList; td != NULL; td = td->next)
@@ -779,7 +808,11 @@ sr = sqlGetResult(conn, "select * from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     ci = chromInfoLoad(row);
-    printf(" <SEGMENT id=\"%s\" start=\"%d\" stop=\"%d\" orientation=\"+\" subparts=\"no\">%s</SEGMENT>\n", ci->chrom, 1, ci->size, ci->chrom);
+    /* "chr"-less chromosome ID for clients such as Ensembl: */
+    if (startsWith("chr", ci->chrom))
+	printf(" <SEGMENT id=\"%s\" start=\"%d\" stop=\"%d\" orientation=\"+\" subparts=\"no\">%s</SEGMENT>\n", ci->chrom+3, 1, ci->size, ci->chrom+3);
+    else
+	printf(" <SEGMENT id=\"%s\" start=\"%d\" stop=\"%d\" orientation=\"+\" subparts=\"no\">%s</SEGMENT>\n", ci->chrom, 1, ci->size, ci->chrom);
     chromInfoFree(&ci);
     }
 #ifdef SOON
@@ -806,7 +839,7 @@ printf("<DASDNA>\n");
 for (segment = segmentList; segment != NULL; segment = segment->next)
     {
     printf("<SEQUENCE id=\"%s\" start=\"%d\" stop=\"%d\" version=\"%s\">\n",
-	    segment->seq, segment->start+1, segment->end, version);
+	    segment->seqName, segment->start+1, segment->end, version);
     printf("<DNA length=\"%d\">\n", segment->end - segment->start);
 
     /* Write out DNA. */
