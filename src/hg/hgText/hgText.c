@@ -26,7 +26,7 @@
 #include "portable.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.91 2003/08/22 22:49:12 donnak Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.92 2003/09/03 21:59:51 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -485,7 +485,7 @@ cartSetString(cart, "position",position);
 cartSaveSession(cart);
 puts("</FORM>");
 
-hgPositionsHelpHtml(organism);
+hgPositionsHelpHtml(organism, database);
 webEnd();
 }
 

@@ -12,7 +12,7 @@
 #include "hCommon.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.63 2003/08/25 23:26:06 kent Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.64 2003/09/03 21:59:33 hiram Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -157,7 +157,7 @@ puts("</center>\n"
 );
 puts("</center>");
 
-hgPositionsHelpHtml(organism);
+hgPositionsHelpHtml(organism, db);
 
 webNewSection("Add Your Own Tracks");
 puts("We're changing the interface. To add your own tracks "

@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgBatch.c,v 1.9 2003/05/06 07:22:19 kate Exp $";
+static char const rcsid[] = "$Id: hgBatch.c,v 1.10 2003/09/03 21:59:07 hiram Exp $";
 
 #define hgTextPhase  "Advanced query..."
 char *db;	/* Current database. */
@@ -148,7 +148,7 @@ cgiMakeTextVar("position", position, 30);
 cgiMakeButton("submit", "Submit");
 printf("</FORM>\n");
 
-hgPositionsHelpHtml(organism);
+hgPositionsHelpHtml(organism, db);
 }
 
 void pasteForm()
