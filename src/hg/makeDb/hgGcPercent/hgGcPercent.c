@@ -8,7 +8,7 @@
 #include "cheapcgi.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgGcPercent.c,v 1.9 2004/03/11 23:14:00 hiram Exp $";
+static char const rcsid[] = "$Id: hgGcPercent.c,v 1.10 2004/03/31 19:20:39 baertsch Exp $";
 
 /* Command line switches. */
 int winSize = 20000;               /* window size */
@@ -17,6 +17,7 @@ char *file = (char *)NULL;	/* file name for output */
 char *chr = (char *)NULL;	/* process only chromosome listed */
 boolean noDots = FALSE;	/* TRUE == do not display ... progress */
 boolean doGaps = FALSE;	/* TRUE == process gaps correctly */
+int overlap = 0;                /* overlap size */
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -26,6 +27,7 @@ static struct optionSpec optionSpecs[] = {
     {"chr", OPTION_STRING},
     {"noDots", OPTION_BOOLEAN},
     {"doGaps", OPTION_BOOLEAN},
+    {"overlap", OPTION_INT},
     {NULL, 0}
 };
 
@@ -44,6 +46,7 @@ errAbort(
   "   -chr=<chrN> - process only chrN from the nibDir\n"
   "   -noDots - do not display ... progress during processing\n"
   "   -doGaps - process gaps correctly (default: gaps are not counted as GC)\n"
+  "   -overlap=N - overlap windows by N bases (default 0)\n"
   "   -verbose=N - display details to stderr during processing");
 }
 
@@ -74,7 +77,7 @@ int dotMod = 0;
 
 printf("#	Calculating gcPercent with window size %d\n",winSize);
 nibOpenVerify(nibFile, &nf, &chromSize);
-for (start=0; start<chromSize; start = end)
+for (start=0; start<chromSize; start =  end - overlap)
     {
     if ((++dotMod&127) == 0)
 	{
@@ -192,6 +195,7 @@ winSize = optionInt("win", 20000);
 noLoad = optionExists("noLoad");
 noDots = optionExists("noDots");
 doGaps = optionExists("doGaps");
+overlap = optionInt("overlap", 0);
 file = optionVal("file", NULL);
 chr = optionVal("chr", NULL);
 
