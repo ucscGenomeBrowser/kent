@@ -8,7 +8,7 @@
 #include "errabort.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.78 2005/03/08 21:56:47 jsp Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.79 2005/04/02 17:54:53 markd Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -339,19 +339,13 @@ void slUniqify(void *pList, int (*compare )(const void *elem1,  const void *elem
 {
 struct slList **pSlList = (struct slList **)pList;
 struct slList *oldList = *pSlList;
-struct slList *newList = NULL, *el, *next;
-int origSize = 0, newSize = 0;  /* Keep these counts for debugging. */
+struct slList *newList = NULL, *el;
 
 slSort(&oldList, compare);
-for (el = oldList; el != NULL; el = next)
+while ((el = slPopHead(&oldList)) != NULL)
     {
-    ++origSize;
-    next = el->next;
-    if (newList == NULL || compare(&newList, &el) != 0)
-        {
+    if ((newList == NULL) || (compare(&newList, &el) != 0))
         slAddHead(&newList, el);
-        ++newSize;
-        }
     else if (free != NULL)
         free(el);
     }
