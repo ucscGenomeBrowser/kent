@@ -1049,7 +1049,7 @@ type psl xeno
 track twinscan
 shortLabel Twinscan
 longLabel Twinscan Gene Predictions Using Mouse/Human Homology
-priority 30
+priority 15
 visibility dense
 color 0,100,100
 altColor 0,50,50
