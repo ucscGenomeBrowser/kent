@@ -3,7 +3,7 @@ itemUrl http://www.ensembl.org/Mus_musculus/geneview?transcript=%s
 
 name u74Id
 shortLabel U74 ID
-longLabel ID of Associated Affymetrix U74 vs (A, B, and C) expression data 
+longLabel ID of Associated Affymetrix U74 vs. (A, B, and C) Expression Data 
 priority 2.62
 visibility off
 type lookup knownToU74 name value
@@ -11,7 +11,7 @@ search exact
 
 name gnfU74ADense
 shortLabel Short GNF U74A 
-longLabel Selected GNF Expression Atlas data from U74A chip.
+longLabel Selected GNF Expression Atlas Data from U74A Chip
 priority 2.7
 visibility on
 type expRatio knownToU74 affyGnfU74A hgFixed.affyGnfU74AExps
@@ -20,7 +20,7 @@ representatives 83,6,77,55,51,63,12,16,18,4,
 
 name gnfU74AAll
 shortLabel All GNF U74A 
-longLabel All GNF Expression Atlas data from U74A chip.
+longLabel All GNF Expression Atlas Data from U74A Chip
 priority 2.8
 visibility off
 type expRatio knownToU74 affyGnfU74A hgFixed.affyGnfU74AExps
@@ -29,7 +29,7 @@ representatives 85,86,87,88,69,70,83,84,-1,10,11,53,54,67,68,71,72,-1,27,28,59,6
 
 name gnfU74BAll
 shortLabel All GNF U74B 
-longLabel All GNF Expression Atlas data from U74B chip.
+longLabel All GNF Expression Atlas Data from U74B Chip
 priority 3.0
 visibility off
 type expRatio knownToU74 affyGnfU74B hgFixed.affyGnfU74BExps
@@ -38,7 +38,7 @@ representatives 0,1,2,3,-1,16,17,4,5,-1,6,7,10,11,-1,18,19,8,9,-1,12,13,14,15,
 
 name gnfU74CAll
 shortLabel All GNF U74C 
-longLabel All GNF Expression Atlas data from U74C chip.
+longLabel All GNF Expression Atlas Data from U74C Chip
 priority 3.1
 visibility off
 type expRatio knownToU74 affyGnfU74C hgFixed.affyGnfU74CExps

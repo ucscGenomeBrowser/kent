@@ -9,14 +9,14 @@ type debug
 
 name num
 shortLabel #
-longLabel item number in displayed list/select gene
+longLabel Item Number in Displayed List/Select Gene
 priority 1
 visibility on
 type num
 
 name name
 shortLabel Name
-longLabel gene name/select gene
+longLabel Gene Name/Select Gene
 priority 2
 visibility on
 type knownName kgXref kgID geneSymbol
@@ -24,8 +24,8 @@ search fuzzy
 searchLabel Known Gene Names
 
 name proteinName
-shortLabel SwissProt
-longLabel SwissProt protein display ID
+shortLabel Swiss-Prot
+longLabel Swiss-Prot protein display ID
 priority 2.1
 visibility off
 type lookup kgXref kgID spDisplayID
@@ -42,7 +42,7 @@ itemUrl http://www.ncbi.nlm.nih.gov/LocusLink/list.cgi?V=0&Q=%s
 
 name acc
 shortLabel GenBank
-longLabel GenBank mRNA accession
+longLabel GenBank mRNA Accession
 priority 2.3
 visibility off
 type acc
@@ -50,7 +50,7 @@ itemUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&t
 
 name ensembl
 shortLabel Ensembl
-longLabel Ensembl transcript ID
+longLabel Ensembl Transcript ID
 priority 2.5
 visibility off
 type lookup knownToEnsembl name value
@@ -58,35 +58,35 @@ search prefix
 
 name bitScore
 shortLabel Bits
-longLabel NCBI BLASTP bit score
+longLabel NCBI Blastp Bit Score
 priority 4
 visibility off
 type distance knownBlastTab query target bitScore
 
 name eVal
-shortLabel E Value
-longLabel NCBI BLASTP E value
+shortLabel E-Value
+longLabel NCBI Blastp E-Value
 priority 5
 visibility on
 type distance knownBlastTab query target eValue
 
 name percentId
 shortLabel %ID
-longLabel NCBI BLASTP percent identity
+longLabel NCBI Blastp Percent Identity
 priority 6
 visibility off
 type distance knownBlastTab query target identity
 
 name knownPos
 shortLabel Genome Position
-longLabel Genome position/link to Genome Browser
+longLabel Genome Position/Link to Genome Browser
 priority 7
 visibility on
 type knownPos 
 
 name codingSnps
 shortLabel Coding SNPs
-longLabel Simple nucleotide polymorphisms in coding regions
+longLabel Simple Nucleotide Polymorphisms in Coding Regions
 priority 7.5
 visibility off
 type association knownToCdsSnp
@@ -97,7 +97,7 @@ itemUrl http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s
 
 name humanOrthologs
 shortLabel Human
-longLabel Human ortholog (best blastp hit to UCSC Known hg16)
+longLabel Human Ortholog (Best Blastp Hit to UCSC Known hg16)
 priority 7.9
 visibility off
 type lookup hgBlastTab query target
@@ -105,7 +105,7 @@ itemUrl http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&position=%s
 
 name mouseOrthologs
 shortLabel Mouse
-longLabel Mouse ortholog (best blastp hit to UCSC Known mm3)
+longLabel Mouse Ortholog (Best Blastp Hit to UCSC Known mm3)
 priority 8.0
 visibility off
 type lookup mmBlastTab query target
@@ -113,7 +113,7 @@ itemUrl http://genome.ucsc.edu/cgi-bin/hgTracks?org=mouse&position=%s
 
 name zebrafishOrthologs
 shortLabel Zebrafish
-longLabel Danio rario ortholog (best blastp hit to Ensembl)
+longLabel <em>Danio rario</em> Ortholog (Best Blastp Hit to Ensembl)
 priority 8.1
 visibility off
 type lookup drBlastTab query target
@@ -121,7 +121,7 @@ itemUrl http://www.ensembl.org/Danio_rerio/protview?peptide=%s
 
 name flyOrthologs
 shortLabel Drosophila
-longLabel D. melanogaster ortholog (best blastp hit to flybase proteins)
+longLabel <em>D. melanogaster</em> Ortholog (Best Blastp Hit to FlyBase Proteins)
 priority 8.3
 visibility off
 type lookup dmBlastTab query target
@@ -129,7 +129,7 @@ itemUrl http://flybase.bio.indiana.edu/.bin/fbidq.html?%s
 
 name wormOrthologs
 shortLabel C. elegans
-longLabel C. elegans ortholog (best blastp hit to wormpep)
+longLabel <em>C. elegans</em> Ortholog (Best Blastp Hit to WormPep)
 priority 8.4
 visibility off
 type lookup ceBlastTab query target
@@ -137,7 +137,7 @@ itemUrl http://www.wormbase.org/db/gene/gene?name=%s
 
 name yeastOrthologs
 shortLabel Yeast
-longLabel Saccharomyces cerevisiae ortholog (best blastp hit to RefSeq)
+longLabel <em>Saccharomyces cerevisiae</em> Ortholog (Best Blastp Hit to RefSeq)
 priority 8.5
 visibility off
 type lookup scBlastTab query target
@@ -145,7 +145,7 @@ itemUrl http://db.yeastgenome.org/cgi-bin/SGD/locus.pl?locus=%s
 
 name pfamDomains
 shortLabel Pfam Domains
-longLabel Protein family domain structure.
+longLabel Protein Family Domain Structure
 priority 9
 visibility off
 type pfam proteins072003.pfamXref proteins072003.pfamDesc
@@ -158,7 +158,7 @@ protDb proteins072003
 
 name go
 shortLabel Gene Ontology
-longLabel Gene Ontology (GO) terms associated with gene.
+longLabel Gene Ontology (GO) Terms Associated with Gene
 priority 10
 visibility off
 type go
@@ -166,7 +166,7 @@ colWidth 50
 
 name description
 shortLabel Description
-longLabel Short description line/link to details page
+longLabel Short description Line/Link to Details Page
 priority 20
 visibility on
 type knownDetails kgXref kgID description
