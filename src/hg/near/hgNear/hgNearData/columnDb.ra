@@ -27,10 +27,10 @@ searchLabel Known Gene Names
 
 name proteinName
 shortLabel Swiss-Prot
-longLabel Swiss-Prot Protein Display ID
+longLabel Swiss-Prot Protein Accession Number
 priority 2.1
 visibility off
-type lookup kgXref kgID spDisplayID
+type lookup kgXref kgID spID
 search fuzzy
 itemUrl http://us.expasy.org/cgi-bin/niceprot.pl?%s
 
