@@ -102,13 +102,16 @@
 #include "stsInfoMouseNew.h"
 #include "vegaInfo.h"
 #include "scoredRef.h"
+#include "minGeneInfo.h"
+#include "tigrCmrGene.h"
+#include "llaInfo.h"
 #include "hgc.h"
 #include "genbank.h"
 #include "pseudoGeneLink.h"
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.448 2003/06/30 20:54:06 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.449 2003/06/30 21:45:41 aamp Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -10835,6 +10838,169 @@ hFreeConn(&conn);
 return bedWSList;
 }
 
+/* Lowe Lab additions */
+
+void llArrayInfo(struct trackDb *tdb, char *itemName) 
+/* This one prints out a bunch of array information when a gene is clicked on.  
+*  It reads a table if it exists.  */
+{
+char *track = tdb->tableName;
+struct llaInfo *lla = NULL;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr, *sr2;
+char **row, **row2;
+char *infoName = strcat(track,"Info");
+char query[256], query2[256];
+
+if (hTableExists(infoName))
+    {
+    sprintf(query, "select * from %s where name = '%s'", infoName, itemName);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL) 
+	{
+	int i;
+	lla = llaInfoLoad(row);
+	printf("<B>Top %d correlated things:</B><BR><BR>\n", lla->numCorrs); 
+	printf("<TABLE>\n");
+	printf("<TR><TD><B>Rank</B></TD><TD><B>Thing</B></TD><TD><B>Distance (1-correlation)</B></TD></TR>\n");
+	for (i = 0; i < lla->numCorrs; i++) 
+	    {
+	    printf("<TR><TD>%d</TD><TD>%s</TD><TD>%f</TD>\n",(i+1),lla->corrNames[i],lla->corrs[i]);
+	    }
+	printf("</TABLE>\n");
+	htmlHorizontalLine();
+	printf("<b>PCR product length:</b> %d<br>\n", lla->prodLen);
+	printf("<b>Source ORF length: </b> %d<br>\n", lla->ORFLen);
+	printf("<b>PCR melting temperature: </b> %.1f&#176;C<br>\n", lla->meltTm);
+	printf("<b>Forward+reverse primer cross complementarity:</b> %.1f<br>\n", lla->frcc);
+	printf("<b>3' forward+reverse primer cross complementarity:</b> %.1f<br>\n", lla->fr3pcc);
+	printf("<u><b>Sense primer</b></u>\n<ul>\n");
+	printf("  <li><b>Annealing temperature: </b>%.1f&#176;C</li>\n", lla->SnTm);
+	printf("  <li><b>GC percent:</b> %.1f&#37;</li>\n", lla->SnGc);
+	printf("  <li><b>Self-complementary score:</b> %.1f</li>\n", lla->SnSc);
+	printf("  <li><b>3' self-complementary score:</b> %.1f</li>\n", lla->Sn3pSc);
+	printf("  <li><b>Nucleotide sequence:</b>\n");
+	printf("      <p><pre>%s</pre></p></li>\n", lla->SnSeq);
+	printf("</ul>\n");
+	printf("<u><b>Antisense primer</b></u>\n<ul>\n");
+	printf("  <li><b>Annealing temperature:</b> %.1f&#176;C</li>\n", lla->AsnTm);
+	printf("  <li><b>GC percent:</b> %.1f&#37;</li>\n", lla->AsnGc);
+	printf("  <li><b>Self-complementary score:</b> %.1f</li>\n", lla->AsnSc);
+	printf("  <li><b>3' self-complementary score:</b> %.1f</li>\n", lla->Asn3pSc);
+	printf("  <li><b>Nucleotide sequence:</b>\n");
+	printf("      <p><pre>%s</pre></p></li>\n", lla->AsnSeq);
+	printf("</ul>\n");
+	htmlHorizontalLine();    
+	llaInfoFree(&lla);
+	}
+    puts(tdb->html);
+    sqlFreeResult(&sr);
+    }
+hFreeConn(&conn);
+}
+
+void llArrayDetails(struct trackDb *tdb, char *expName) 
+/* print out a page for the affy data from gnf based on ratio of
+* measurements to the median of the measurements. */
+{
+char *itemName = cgiUsualString("i2","none");
+genericHeader(tdb, itemName);
+llArrayInfo(tdb, itemName);
+}
+
+void llDoCodingGenes(struct trackDb *tdb, char *item, 
+		     char *pepTable, char *extraTable)
+/* Handle click on gene track. */
+{
+struct minGeneInfo ginfo;
+char query[256];
+struct sqlResult *sr;
+char **row;
+char *dupe, *type, *words[16];
+char title[256];
+int wordCount;
+int start = cartInt(cart, "o"), num = 0;
+struct sqlConnection *conn = hAllocConn();
+
+dupe = cloneString(tdb->type);
+genericHeader(tdb, item);
+wordCount = chopLine(dupe, words);
+if (wordCount > 1)
+    num = atoi(words[1]);
+if (num < 3) num = 3;
+genericBedClick(conn, tdb, item, start, num);
+if (pepTable != NULL && hTableExists(pepTable))
+    {
+    char *pepNameCol = sameString(pepTable, "gbSeq") ? "acc" : "name";
+    conn = hAllocConn();
+    // simple query to see if pepName has a record in pepTable:
+    safef(query, sizeof(query), "select 0 from %s where %s = '%s'",
+	  pepTable, pepNameCol, item);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+	hgcAnchorSomewhere("htcTranslatedProtein", item, pepTable, seqName);
+	printf("Predicted Protein</A> <BR>\n"); 
+	}
+    sqlFreeResult(&sr);
+    }
+if (extraTable != NULL && hTableExists(extraTable)) 
+    {
+    conn = hAllocConn();
+    sprintf(query, "select * from %s where name = '%s'", extraTable, item);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL) 
+	{
+	minGeneInfoStaticLoad(row, &ginfo);
+	printf("<B>Product: </B>%s<BR>\n", ginfo.product);
+	printf("<B>Note: </B>%s<BR>\n", ginfo.note);
+	}
+    sqlFreeResult(&sr);
+    }
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
+
+void llDoTigrCmrGenes(struct trackDb *tdb, char *geneName)
+/* Handle click on gene track. */
+{
+char *track = tdb->tableName;
+struct tigrCmrGene *cmr = NULL;
+char query[256];
+struct sqlResult *sr;
+char **row;
+struct sqlConnection *conn = hAllocConn();
+
+genericHeader(tdb,geneName);
+/*
+showGenePos(geneName,tdb);
+*/
+sprintf(query, "select * from %s where tigrLocus = '%s'", strcat(track,"Info"), geneName);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    cmr = tigrCmrGeneLoad(row);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+if (cmr != NULL)
+    {
+    printf("<B>TIGR Common Name:</B> %s<BR>\n",cmr->tigrCommon);
+    printf("<B>TIGR Gene Symbol: </B> %s<BR>\n",cmr->tigrGene);
+    printf("<B>TIGR Enzyme Commission Number: </B> %s<BR>\n",cmr->tigrECN);
+    printf("<B>Primary Locus Name: </B> %s<BR>\n",cmr->primLocus);
+    printf("<B>TIGR Sequence Length: </B> %d<BR>\n",cmr->tigrLength);
+    printf("<B>TIGR Protein Length: </B> %d<BR>\n",cmr->tigrPepLength);
+    printf("<B>TIGR Main Role: </B> %s<BR>\n",cmr->tigrMainRole);
+    printf("<B>TIGR Subrole: </B> %s<BR>\n",cmr->tigrSubRole);
+    printf("<B>TIGR SwissProt/TrEmbl Accession: </B> %s<BR>\n",cmr->swissProt);
+    printf("<B>TIGR Genbank ID: </B> %s<BR>\n",cmr->genbank);
+    printf("<B>TIGR Molecular Weight: </B> %.2f<BR>\n",cmr->tigrMw);
+    printf("<B>TIGR PI: </B> %.4f<BR>\n",cmr->tigrPi);
+    printf("<B>TIGR GC Content: </B> %.1f<BR>\n",cmr->tigrGc);
+    }
+printTrackHtml(tdb);
+}
 
 void doSageDataDisp(char *tableName, char *itemName, struct trackDb *tdb) 
 {
@@ -12013,6 +12179,21 @@ else if( sameWord(track, "gcPercent"))
 else if( sameWord(track, "altGraphX") || sameWord(track, "altGraphXCon"))
     {
     doAltGraphXDetails(tdb,item);
+    }
+
+/* Lowe Lab Stuff */
+
+else if (sameWord(track, "gbProtCode"))
+    {
+    llDoCodingGenes(tdb, item,"gbProtCodePep","gbProtCodeXra");
+    }
+else if (sameWord(track, "tigrCmrORFs"))
+    {
+    llDoTigrCmrGenes(tdb,item);
+    }
+else if (startsWith("lla", track)) 
+    {
+    llArrayDetails(tdb,item);
     }
 
 /*Evan's stuff*/
