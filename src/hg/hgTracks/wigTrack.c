@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.35 2004/02/02 23:15:14 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.36 2004/02/02 23:36:19 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -26,7 +26,7 @@ struct wigCartOptions
     enum wiggleGraphOptEnum lineBar;		/*  Line or Bar chart */
     enum wiggleScaleOptEnum autoScale;		/*  autoScale on */
     enum wiggleWindowingEnum windowingFunction;	/*  max,mean,min */
-    enum wiggleSmoothingEnum smoothingWindow;	/*  N: [0:16] */
+    enum wiggleSmoothingEnum smoothingWindow;	/*  N: [1:15] */
     enum wiggleYLineMarkEnum yLineOnOff;	/*  OFF/ON	*/
     double minY;	/*	from trackDb.ra words, the absolute minimum */
     double maxY;	/*	from trackDb.ra words, the absolute maximum */
@@ -523,6 +523,8 @@ if (currentFile)
 for (i = 0; i < preDrawSize; ++i)
     {
     double dataValue;
+    if (preDraw[i].count)
+	{
     switch (windowingFunction)
 	{
 	case (wiggleWindowingMin):
@@ -547,13 +549,15 @@ for (i = 0; i < preDrawSize; ++i)
 	}
 	preDraw[i].plotValue = dataValue;
 	preDraw[i].smooth = dataValue;
+	}
     }
 
-/*	Are we perhaps doing smoothing ?	*/
-if (wigCart->smoothingWindow > 1)
+/*	Are we perhaps doing smoothing ?  smoothingWindow is 1 off due
+ *	to enum funny business in inc/hui.h and lib/hui.c 	*/
+if (wigCart->smoothingWindow > 0)
     {
     int winBegin = 0;
-    int winEnd = -wigCart->smoothingWindow;
+    int winEnd = -wigCart->smoothingWindow - 1;	/* enum funny business */
     double sum = 0.0;
     unsigned long long points = 0LL;
 
@@ -561,15 +565,21 @@ if (wigCart->smoothingWindow > 1)
 	{
 	if (winEnd >=0)
 	    {
-	    points -= preDraw[winEnd].count;
-	    sum -= preDraw[winEnd].plotValue * preDraw[winEnd].count;
+	    if (preDraw[winEnd].count)
+		{
+		points -= preDraw[winEnd].count;
+		sum -= preDraw[winEnd].plotValue * preDraw[winEnd].count;
+		}
 	    }
-	points += preDraw[winBegin].count;
-	sum += preDraw[winBegin].plotValue * preDraw[winBegin].count;
+	if (preDraw[winBegin].count)
+	    {
+	    points += preDraw[winBegin].count;
+	    sum += preDraw[winBegin].plotValue * preDraw[winBegin].count;
+	    }
 	if (points && preDraw[winBegin].count)
 	    preDraw[winBegin].smooth = sum / points;
 	else
-	    preDraw[winBegin].smooth = 0.0;
+	    preDraw[winBegin].smooth = 38.0;
 	++winEnd;
 	}
     }
