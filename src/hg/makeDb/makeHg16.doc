@@ -4102,6 +4102,15 @@ sleep 1
 	/cluster/data/hg16/bed/blastz.gg0/S2.len $4
 '_EOF_'
     # << this line makes emacs coloring happy
+
+    # NOTE: in a subsequent run, we have used -minScore=6000 and added
+    # the -matrix option to use HoxD55.q (need to add a line with gap
+    # penalties to the bottom of the score matrix file, e.g., "O =
+    # 400, E = 30"; see
+    # /cluster/data/hg16/bed/blastz.gg0/run.3.2003-11-11).  These new
+    # options should be considered part of the standard procedure, at
+    # least for now.
+
     chmod +x doBestAxt
     cd ../axtChrom
     ls -1S | sed 's/.axt$//' > ../run.3/chrom.list
