@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.40 2004/01/15 16:40:56 hartera Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.41 2004/01/17 09:36:09 markd Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -954,6 +954,25 @@ for (i=0; i<blockCount; ++i)
 reverseUnsigned(tStarts, blockCount);
 reverseUnsigned(qStarts, blockCount);
 reverseUnsigned(blockSizes, blockCount);
+}
+
+void pslRc(struct psl *psl)
+/* reverse-complement a PSL alignment.  This makes target strand explicit. */
+{
+int i;
+
+/* swap strand, forcing target to have an explict strand */
+psl->strand[0] = (psl->strand[0] != '-') ? '-' : '+';
+psl->strand[1] = (psl->strand[1] != '-') ? '-' : '+';
+
+for (i = 0; i < psl->blockCount; i++)
+    {
+    psl->qStarts[i] = psl->qSize - (psl->qStarts[i] + psl->blockSizes[i]);
+    psl->tStarts[i] = psl->tSize - (psl->tStarts[i] + psl->blockSizes[i]);
+    }
+reverseUnsigned(psl->tStarts, psl->blockCount);
+reverseUnsigned(psl->qStarts, psl->blockCount);
+reverseUnsigned(psl->blockSizes, psl->blockCount);
 }
 
 void pslTargetOffset(struct psl *psl, int offset)

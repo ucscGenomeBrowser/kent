@@ -188,6 +188,9 @@ void pslRcBoth(struct psl *psl);
 /* Swap around things in psl so it works as if the alignment
  * was done on the reverse strand of the target. */
 
+void pslRc(struct psl *psl);
+/* reverse-complement a PSL alignment.  This makes target strand explicit. */
+
 void pslTargetOffset(struct psl *psl, int offset);
 /* Add offset to target positions in psl. */
 
