@@ -145,7 +145,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.746 2004/09/10 23:02:24 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.747 2004/09/12 23:44:04 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5379,12 +5379,20 @@ sprintf(query, "name = '%s'", item);
 motif = dnaMotifLoadWhere(conn, motifTable, query);
 if (motif != NULL)
     {
+    struct tempName pngTn;
+    dnaMotifMakeProbabalistic(motif);
     printConsensus(motif);
     printf("motif consensus\n");
     printProbRow("A", motif->aProb, motif->columnCount);
     printProbRow("C", motif->cProb, motif->columnCount);
     printProbRow("G", motif->gProb, motif->columnCount);
     printProbRow("T", motif->tProb, motif->columnCount);
+    printf("<BR>\n");
+    makeTempName(&pngTn, "logo", ".png");
+    dnaMotifToLogoPng(motif, 40, 120, NULL, "../trash", pngTn.forCgi);
+    printf("<IMG SRC=\"%s\" BORDER=1>", pngTn.forHtml);
+    printf(" motif sequence logo\n");
+    printf("<BR>\n");
     }
 printf("</PRE>");
 
