@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.27 2004/07/20 21:43:40 sugnet Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.28 2005/03/12 01:20:24 sugnet Exp $";
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
 struct evidence *evidenceCommaIn(char **pS, struct evidence *ret)
@@ -1069,6 +1069,7 @@ int width = 0;
 int currentStart = 0;
 boolean extending = FALSE;
 enum ggEdgeType eType;
+assert(ag && ag->edgeCount > 0 && baseCount > 0);
 AllocArray(bases, baseCount);
 
 /* first paint the bases. */
@@ -2290,7 +2291,7 @@ for(compIx = 0; compIx < compCount; compIx++)
 	    agxNew->vTypes[vCNew] = agx->vTypes[i];
 	    agxNew->vPositions[vCNew] = agx->vPositions[i];
 	    agxNew->tStart = min(agxNew->tStart, agxNew->vPositions[vCNew]);
-	    agxNew->tEnd = min(agxNew->tEnd, agxNew->vPositions[vCNew]);
+	    agxNew->tEnd = max(agxNew->tEnd, agxNew->vPositions[vCNew]);
 	    vCNew++;
 	    }
 	else
@@ -2309,7 +2310,7 @@ for(compIx = 0; compIx < compCount; compIx++)
 	    {
 	    agxNew->edgeStarts[eCNew] = mapping[eStarts[i]];
 	    agxNew->edgeEnds[eCNew] = mapping[eEnds[i]];
-	    agxNew->edgeTypes[eCNew] = mapping[agx->edgeTypes[i]];
+
 	    /* Add evidence to growing list. */
 	    slAddHead(&evList, evNew[i]);
 	    eCNew++;
@@ -2326,6 +2327,9 @@ for(compIx = 0; compIx < compCount; compIx++)
     slReverse(&evList);
     agxNew->evidence = evList;
     slAddHead(&agxList, agxNew);
+
+    for(i=0; i < eCNew; i++) 
+	agx->edgeTypes[i] = getSpliceEdgeType(agxNew, i);
 
     /* Cleanup. */
     freez(&mapping);
@@ -2364,6 +2368,8 @@ while(adjVertCount < adjCounts[vertIx])
 vColors[vertIx] = agBlack;
 }
 
+
+
 struct altGraphX *agxConnectedComponents(struct altGraphX *agx)
 /* Find the connected components of the graph and break them up into
    seperate graphs. Free the result with altGraphXFreeList().
@@ -2376,7 +2382,11 @@ int **adjList = NULL;   /* Adjacency list. */
 int *adjCounts = NULL;  /* Number of vertices in the adj list. */
 int *vColors = NULL;     /* Colors of vertices. */
 int *vComponents = NULL; /* Component each vertice is in. */
-int i = 0, vertIx = 0;
+unsigned char *vTypes = agx->vTypes;  /* Convenience variable. */
+int *vPos = agx->vPositions; /* Convenience variable. */
+int *starts = agx->edgeStarts;
+int *ends = agx->edgeEnds;
+int i = 0, vertIx = 0, j = 0;
 int vC = agx->vertexCount;
 int eC = agx->edgeCount;
 int *eS = agx->edgeStarts;
@@ -2386,7 +2396,7 @@ struct altGraphX *agxList = NULL;
 
 /* Allocate the adj list memeory. */
 AllocArray(adjList, vC);
-AllocArray(adjCounts, vC);
+AllocArray(adjCounts, vC); 
 AllocArray(vColors, vC);
 AllocArray(vComponents, vC);
 for(i = 0; i < vC; i++)
@@ -2399,6 +2409,34 @@ for(i = 0; i < eC; i++)
     {
     adjList[eS[i]][adjCounts[eS[i]]++] = eE[i];
     adjList[eE[i]][adjCounts[eE[i]]++] = eS[i];
+    }
+
+/* If two exons overlap link the starts and ends so they
+   can be in the same component. */
+for(i = 0; i < eC; i++) 
+    {
+    if(!(getSpliceEdgeType(agx, i) == ggExon)) /* only exons. */
+	continue;
+    for(j = 0; j < eC; j++)
+	{
+	if(!(getSpliceEdgeType(agx, i) == ggExon) || i == j || 
+	   starts[i] == starts[j] || ends[i] == ends[j])
+	    continue; /* Only looking at exons. */
+	/* If the exons overlap connect the vertices in the adjacency lists. */
+	if(rangeIntersection(vPos[starts[i]],vPos[ends[i]], vPos[starts[j]], vPos[ends[j]]) > 0)
+	    {
+	    if(uniqeInArray(adjList[eS[i]], adjCounts[eS[i]], eS[j])) 
+		adjList[eS[i]][adjCounts[eS[i]]++] = eS[j];
+	    if(uniqeInArray(adjList[eS[j]], adjCounts[eS[j]], eS[i]))
+		adjList[eS[j]][adjCounts[eS[j]]++] = eS[i];
+
+	    if(uniqeInArray(adjList[eE[i]], adjCounts[eE[i]], eE[j])) 
+		adjList[eE[i]][adjCounts[eE[i]]++] = eE[j];
+	    if(uniqeInArray(adjList[eE[j]], adjCounts[eE[j]], eE[i]))
+		adjList[eE[j]][adjCounts[eE[j]]++] = eE[i];
+
+	    }
+	}
     }
 
 for(vertIx = 0; vertIx < vC; vertIx++)
@@ -2414,3 +2452,4 @@ freez(&vComponents);
 freez(&adjList);
 return agxList;
 }
+
