@@ -5074,16 +5074,17 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     # hgTracks.c needed to be updated to recognize syntenyMm4 so it
     # would color properly.
 
-
-# TIGR GENE INDEX (DONE 2003-11-10 kate)
-    mkdir -p /cluster/data/hg16/bed/tigr    
-    cd /cluster/data/hg16/bed/tigr  
-    wget ftp://ftp.tigr.org/pub/data/tgi/Homo_sapiens/TGI_track_HumanGenome_build34.tgz
+# TIGR GENE INDEX (DONE 2004-05017 Fan)
+    mkdir -p /cluster/data/hg16/bed/tigr
+    cd /cluster/data/hg16/bed/tigr
+    wget ftp://ftp.tigr.org/pub/data/tgi/Homo_sapiens/TGI_track_HumanGenome_hg16_05-2004.tgz
     tar xvzf TGI*.tgz
+
     foreach f (*cattle*)
       set f1 = `echo $f | sed -e 's/cattle/cow/g'`
       mv $f $f1
     end
+
     foreach o (mouse cow human pig rat)
       echo $o
       setenv O $o
@@ -5091,10 +5092,19 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
         tail +2 $f | perl -wpe 's /THC/TC/; s/(TH?C\d+)/$ENV{O}_$1/;' > $f.gff
       end
     end
+
     ssh hgwdev
     cd /cluster/data/hg16/bed/tigr
-    ldHgGene -exon=TC hg16 tigrGeneIndex *.gff
-        #Read 280734 transcripts in 1218611 lines in 120 files
+    hgsql hg16 -e "drop table tigrGeneIndex"
+    hgsql hg16 < ~/kent/src/hg/lib/tigrGeneIndex.sql
+
+    foreach f (*.gff)
+        echo Processing $f ...
+        /cluster/home/fanhsu/bin/i386/ldHgGene -oldTable -exon=TC hg16 tigrGeneIndex $f
+        hgsql hg16 -e "select count(*) from tigrGeneIndex"
+    end
+    # Total of 354491 entries created in tigrGeneIndex table.
+    
     gzip *.gff *TCs
 
 # LOAD VEGA GENES AND PSEUDOGENES (DONE 2003-11-11 braney )
