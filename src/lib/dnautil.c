@@ -355,30 +355,41 @@ while (x > 4)
 return count;
 }
 
-
+long dnaOrAaFilteredSize(char *raw, char filter[256])
 /* Return how long DNA will be after non-DNA is filtered out. */
-long dnaFilteredSize(char *rawDna)
 {
-DNA c;
+char c;
 long count = 0;
-initNtChars();
-while ((c = *rawDna++) != 0)
+dnaUtilOpen();
+while ((c = *raw++) != 0)
     {
-    if (ntChars[c]) ++count;
+    if (filter[c]) ++count;
     }
 return count;
 }
 
-/* Filter out non-DNA characters and change to lower case. */
-void dnaFilter(char *in, DNA *out)
+void dnaOrAaFilter(char *in, char *out, char filter[256])
+/* Run chars through filter. */
 {
-DNA c;
-initNtChars();
+char c;
+dnaUtilOpen();
 while ((c = *in++) != 0)
     {
-    if ((c = ntChars[c]) != 0) *out++ = c;
+    if ((c = filter[c]) != 0) *out++ = c;
     }
 *out++ = 0;
+}
+
+long dnaFilteredSize(char *rawDna)
+/* Return how long DNA will be after non-DNA is filtered out. */
+{
+return dnaOrAaFilteredSize(rawDna, ntChars);
+}
+
+void dnaFilter(char *in, DNA *out)
+/* Filter out non-DNA characters and change to lower case. */
+{
+dnaOrAaFilter(in, out, ntChars);
 }
 
 void dnaFilterToN(char *in, DNA *out)
@@ -394,17 +405,24 @@ while ((c = *in++) != 0)
 *out++ = 0;
 }
 
-/* Filter out non-DNA characters but leave case intact. */
 void dnaMixedCaseFilter(char *in, DNA *out)
+/* Filter out non-DNA characters but leave case intact. */
 {
-DNA c;
-initNtMixedCaseChars();
-while ((c = *in++) != 0)
-    {
-    if ((c = ntMixedCaseChars[c]) != 0) *out++ = c;
-    }
-*out++ = 0;
+dnaOrAaFilter(in, out, ntMixedCaseChars);
 }
+
+long aaFilteredSize(char *raw)
+/* Return how long aa will be after non-aa chars is filtered out. */
+{
+return dnaOrAaFilteredSize(raw, aaChars);
+}
+
+void aaFilter(char *in, DNA *out)
+/* Filter out non-aa characters and change to upper case. */
+{
+dnaOrAaFilter(in, out, aaChars);
+}
+
 
 void dnaBaseHistogram(DNA *dna, int dnaSize, int histogram[4])
 /* Count up frequency of occurance of each base and store 
@@ -625,6 +643,7 @@ if (!opened)
     initNtVal();
     initAaVal();
     initNtChars();
+    initNtMixedCaseChars();
     initNtCompTable();
     opened = TRUE;
     }

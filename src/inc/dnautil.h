@@ -106,8 +106,14 @@ int nextPowerOfFour(long x);
 /* Return how long DNA will be after non-DNA is filtered out. */
 long dnaFilteredSize(char *rawDna);
 
+/* Return how long peptide will be after non-peptide is filtered out. */
+long aaFilteredSize(char *rawDna);
+
 /* Filter out non-DNA characters. */
 void dnaFilter(char *in, DNA *out);
+
+/* Filter out non-peptide characters. */
+void aaFilter(char *in, DNA *out);
 
 /* Change all non-DNA characters to N. */
 void dnaFilterToN(char *in, DNA *out);
