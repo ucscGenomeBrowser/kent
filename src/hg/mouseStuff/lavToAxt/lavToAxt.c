@@ -41,8 +41,7 @@ struct cachedNib
     };
 
 struct cachedNib *openFromCache(struct dlList *cache, char *dirName, char *seqName)
-/* Return open file handle via cache.  The simple logic here
- * depends on not more than N files being returned at once. */
+/* Return open file handle via cache.  */
 {
 static int maxCacheSize=32;
 int cacheSize = 0;
@@ -215,7 +214,7 @@ for (;;)
 }
 
 void parseS(struct lineFile *lf, int *tSize, int *qSize)
-/* Parse z stanza and return tSize and qSize */
+/* Parse s stanza and return tSize and qSize */
 {
 char *line, *words[3];
 if (!lineFileRow(lf, words))
@@ -378,13 +377,8 @@ void parseIntoAxt(char *lavFile, FILE *f,
 /* Parse a blastz lav file and put it an axt. */
 {
 struct lineFile *lf = lineFileOpen(lavFile, TRUE);
-char *line, *words[10];
-boolean gotAli = FALSE;
-int wordCount;
-struct block *blockList = NULL, *block;
-int matchOne, match = 0, mismatch = 0, bases;
-double scale;
-int id;
+char *line;
+struct block *blockList = NULL;
 boolean isRc = FALSE;
 char *tName = NULL, *qName = NULL;
 int qSize = 0, tSize = 0;
