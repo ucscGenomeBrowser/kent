@@ -123,11 +123,19 @@ void freez(void *ppt);
 #define CloneArray(a, count) cloneMem(a, (count)*sizeof(a[0]))
 /* Make new dynamic array initialized with  count elements of a */
 
-void errAbort(char *format, ...);
+void errAbort(char *format, ...)
 /* Abort function, with optional (printf formatted) error message. */
+#ifdef __GNUC__
+__attribute__ ((noreturn))
+#endif
+;
 
-void errnoAbort(char *format, ...);
+void errnoAbort(char *format, ...)
 /* Prints error message from UNIX errno first, then does errAbort. */
+#ifdef __GNUC__
+__attribute__ ((noreturn))
+#endif
+;
 
 #define internalErr()  errAbort("Internal error %s %d", __FILE__, __LINE__)
 /* Generic internal error message */

@@ -17,14 +17,26 @@
 
 #ifndef ERRABORT_H
 #define ERRABORT_H
-void errAbort(char *format, ...);
+void errAbort(char *format, ...)
 /* Abort function, with optional (printf formatted) error message. */
+#ifdef __GNUC__
+__attribute__ ((noreturn))
+#endif
+;
 
-void vaErrAbort(char *format, va_list args);
+void vaErrAbort(char *format, va_list args)
 /* Abort function, with optional (vprintf formatted) error message. */
+#ifdef __GNUC__
+__attribute__ ((noreturn))
+#endif
+;
 
-void errnoAbort(char *format, ...);
+void errnoAbort(char *format, ...)
 /* Prints error message from UNIX errno first, then does errAbort. */
+#ifdef __GNUC__
+__attribute__ ((noreturn))
+#endif
+;
 
 typedef void (*AbortHandler)();
 /* Function that can abort. */
@@ -35,8 +47,12 @@ void pushAbortHandler(AbortHandler handler);
 void popAbortHandler();
 /* Revert to old abort handler. */
 
-void noWarnAbort();
+void noWarnAbort()
 /* Abort without message. */
+#ifdef __GNUC__
+__attribute__ ((noreturn))
+#endif
+;
 
 void pushDebugAbort();
 /* Push abort handler that will invoke debugger. */
