@@ -10,7 +10,7 @@
 #include "genePred.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.13 2004/04/02 16:23:57 kent Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.14 2004/06/01 21:29:53 kate Exp $";
 
 /* Javascript to help make a selection from a drop-down
  * go back to the server. */
@@ -167,7 +167,7 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
 }
 
 static void blueCapWrite(FILE *f, char *s, int size)
-/* Write with capital letters in blue. */
+/* Write capital letters in blue. */
 {
 boolean isBlue = FALSE;
 int i;
@@ -196,34 +196,63 @@ if (isBlue)
     fprintf(f, "</FONT>");
 }
 
+void initSummaryLine(char *summaryLine, int size)
+/* Fill summary line with stars and null terminate */
+{
+int i;
+for (i = 0; i < size; i++)
+    summaryLine[i] = '*';
+summaryLine[i+1] = 0;
+}
+void updateSummaryLine(char *summaryLine, char *referenceText,
+                                        char *alignText, int size)
+/* Blank out columns in the summary line where this alignment
+ * differs from the reference */
+{
+int i;
+for (i=0; i<size; i++)
+    {
+    if (alignText[i] != referenceText[i])
+        summaryLine[i] = ' ';
+    }
+}
+
 static void mafPrettyBody(FILE *f, struct mafAli *maf, int lineSize)
 /* Print MAF base by base with line-breaks. */
 {
 int srcChars = 0;
 struct mafComp *mc;
 int i, lineStart, lineEnd;
+char *summaryLine = needMem(lineSize+1);
+char *referenceText = maf->components->text;
+        /* first sequence in the alignment */
 
-/* Figure out length of source field. */
+/* Figure out length of source (species) field. */
 for (mc = maf->components; mc != NULL; mc = mc->next)
     {
     int len = strlen(mc->src);
     if (srcChars < len)
         srcChars = len;
     }
-
 for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
     {
+    int size;
     lineEnd = lineStart + lineSize;
     if (lineEnd >= maf->textSize)
         lineEnd = maf->textSize;
+    size = lineEnd - lineStart;
+    initSummaryLine(summaryLine, size);
     for (mc = maf->components; mc != NULL; mc = mc->next)
         {
+        char *text = mc->text + lineStart;
 	fprintf(f, "%-*s ", srcChars, mc->src);
-	blueCapWrite(f, mc->text + lineStart, lineEnd - lineStart);
+	blueCapWrite(f, text, size);
+        updateSummaryLine(summaryLine, referenceText, text, size);
 	fprintf(f, "\n");
 	}
-    fprintf(f, "\n");
+    fprintf(f, "%-*s %s\n\n", srcChars, "", summaryLine);
     }
+freeMem(summaryLine);
 }
 
 
