@@ -307,6 +307,7 @@ _EOF_
     mkdir zips
     zip -j zips/chromOut.zip RMOut/Group?{,?}.out
     zip -j zips/chromFa.zip maskedFa/Group?{,?}.fa
+    zip -j zips/GroupTrf.zip bed/simpleRepeat/trfMask.bed    
     for fa in maskedFa/Group?{,?}.fa; do
       maskOutFa $fa hard $fa.hardMasked
     done
