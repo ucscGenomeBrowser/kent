@@ -30,7 +30,8 @@ errAbort(
  "   -goldName=gold.NN - use gold.NN instead of contig.agp\n"
  "   -imre  - cloneMap is Imre TPF/FPC directory format rather than Wash U\n"
  "   -imreMerge=dir - Merge WashU and TPF maps.  You need to also specify fpcChrom\n"
- "    -fpcChrom=M,N - List of chromosomes where the WashU map should predominate.\n"
+ "   -fpcChrom=M,N - List of chromosomes where the WashU map should predominate.\n"
+ "   -chrom=N - List of chromosomes to output (default all)\n"
  );
 }
 
@@ -64,30 +65,48 @@ for (ci = ciList; ci != NULL; ci = ci->next)
 fclose(f);
 }
 
+boolean filterChromOutput(char *name)
+/* Return TRUE if we want to output this chromosome. */
+{
+struct slName *list;
+boolean ok;
+
+if ((list = cgiStringList("chrom")) == NULL)
+    return TRUE;
+ok = slNameInList(list, name);
+slFreeList(&list);
+return ok;
+}
+
 void writeLift(char *fileName, struct contigInfo *ciList, struct chromInserts *chromInserts,
 	char *chromName, char *shortName)
 /* Write list file that contains all contigs. */
 {
-FILE *f = mustOpen(fileName, "w");
-struct contigInfo *ci, *prev = NULL;
-int offset = 0;
-int size = 0;
-struct bigInsert *bi;
+if (filterChromOutput(shortName))
+    {
+    FILE *f = mustOpen(fileName, "w");
+    struct contigInfo *ci, *prev = NULL;
+    int offset = 0;
+    int size = 0;
+    struct bigInsert *bi;
 
-for (ci = ciList; ci != NULL; ci = ci->next)
-    {
-    size += chromInsertsGapSize(chromInserts, ci->name, ci == ciList);
-    size += ci->size;
+    boolean slNameInList(struct slName *list, char *string);
+
+    for (ci = ciList; ci != NULL; ci = ci->next)
+	{
+	size += chromInsertsGapSize(chromInserts, ci->name, ci == ciList);
+	size += ci->size;
+	}
+    if (chromInserts != NULL && chromInserts->terminal != NULL)
+	size += chromInserts->terminal->size;
+    for (ci = ciList; ci != NULL; ci = ci->next)
+	{
+	offset += chromInsertsGapSize(chromInserts, ci->name, ci == ciList);
+	fprintf(f, "%d\t%s/%s\t%d\t%s\t%d\n", offset, shortName, ci->name, ci->size, chromName, size);
+	offset += ci->size;
+	}
+    fclose(f);
     }
-if (chromInserts != NULL && chromInserts->terminal != NULL)
-    size += chromInserts->terminal->size;
-for (ci = ciList; ci != NULL; ci = ci->next)
-    {
-    offset += chromInsertsGapSize(chromInserts, ci->name, ci == ciList);
-    fprintf(f, "%d\t%s/%s\t%d\t%s\t%d\n", offset, shortName, ci->name, ci->size, chromName, size);
-    offset += ci->size;
-    }
-fclose(f);
 }
 
 
