@@ -10,7 +10,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.52 2003/09/25 03:01:03 kent Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.53 2003/11/11 22:09:53 jill Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -595,6 +595,12 @@ void cgiMakeButton(char *name, char *value)
 /* Make 'submit' type button. */
 {
 printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\">", name, value);
+}
+
+void cgiMakeOnClickButton(char *command, char *value)
+/* Make 'push' type button with client side onClick (java)script. */
+{
+printf("<INPUT TYPE=\"button\" VALUE=\"%s\" onClick=\"%s\">", value, command);
 }
 
 void cgiMakeOptionalButton(char *name, char *value, boolean disabled)

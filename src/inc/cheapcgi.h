@@ -107,6 +107,9 @@ char *cgiEncode(char *inString);
 void cgiMakeButton(char *name, char *value);
 /* Make 'submit' type button. */
 
+void cgiMakeOnClickButton(char *command, char *value);
+/* Make 'push' type button with client side onClick (java)script. */
+
 void cgiMakeOptionalButton(char *name, char *value, boolean disabled);
 /* Make 'submit' type button that can be disabled. */
 
