@@ -940,9 +940,8 @@ LOAD JACKSON LABS QTL (done 7/16/02)
        in our stsMapMouse table...?)
      cd ~/mm2/bed/qtl
      ./fixit.pl mgi_qtl.rpt > mgi_qtl.bed
-     autoSql jaxQTL.as jaxQTL
-     - edit jaxQTL.sql to list name, not chrom, as primary key
-     hgLoadBed -noBin -tab -sqlTable=./jaxQTL.sql mm2 jaxQTL mgi_qtl.bed
+     hgLoadBed -noBin -tab -sqlTable=$HOME/kent/src/hg/lib/jaxQTL.sql \
+       mm2 jaxQTL mgi_qtl.bed
 
 LOAD SOFTBERRY GENES (todo)
      - ln -s /cluster/store2/mm.2002.02/mm2 ~/mm
