@@ -1511,8 +1511,8 @@ struct mrnaFilter
 struct mrnaUiData
 /* Data for mrna-specific user interface. */
    {
-   boolean isXeno;	/* Is this cross-species? */
    char *filterTypeVar;	/* cgi variable that holds type of filter. */
+   char *logicTypeVar;	/* cgi variable that indicates logic. */
    struct mrnaFilter *filterList;	/* List of filters that can be applied. */
    };
 
@@ -1535,10 +1535,12 @@ struct mrnaUiData *newMrnaUiData(char *track, boolean isXeno)
 struct mrnaUiData *mud;
 char buf[64];
 AllocVar(mud);
-mud->isXeno = isXeno;
 sprintf(buf, "%sFt", track);
 mud->filterTypeVar = cloneString(buf);
-addMrnaFilter(mud, track, "organism", "org", "organism");
+sprintf(buf, "%sLt", track);
+mud->logicTypeVar = cloneString(buf);
+if (isXeno)
+    addMrnaFilter(mud, track, "organism", "org", "organism");
 addMrnaFilter(mud, track, "author", "aut", "author");
 addMrnaFilter(mud, track, "library", "lib", "library");
 addMrnaFilter(mud, track, "tissue", "tis", "tissue");
@@ -1555,7 +1557,7 @@ void oneMrnaFilterUi(struct controlGrid *cg, char *text, char *var)
 {
 controlGridStartCell(cg);
 printf("%s:<BR>", text);
-cgiMakeTextVar(var, cgiUsualString(var, ""), 25);
+cgiMakeTextVar(var, cgiUsualString(var, ""), 19);
 controlGridEndCell(cg);
 }
 
@@ -1574,6 +1576,8 @@ struct mrnaFilter *fil;
 struct controlGrid *cg = NULL;
 char *filterTypeVar = mud->filterTypeVar;
 char *filterTypeVal = cgiUsualString(filterTypeVar, "red");
+char *logicTypeVar = mud->logicTypeVar;
+char *logicTypeVal = cgiUsualString(logicTypeVar, "and");
 
 /* Define type of filter. */
 printf("<B>Filter:</B> ");
@@ -1582,13 +1586,16 @@ mudRadio(filterTypeVar, filterTypeVal, "green");
 mudRadio(filterTypeVar, filterTypeVal, "blue");
 mudRadio(filterTypeVar, filterTypeVal, "exclude");
 mudRadio(filterTypeVar, filterTypeVal, "include");
-printf(" ");
+printf("  <B>Combination Logic:</B> ");
+mudRadio(logicTypeVar, logicTypeVal, "and");
+mudRadio(logicTypeVar, logicTypeVal, "or");
+
 cgiMakeButton("submit", "refresh");
 printf("<BR>\n");
 
 /* List various fields you can filter on. */
 printf("<table border=0 cellspacing=1 cellpadding=1 width=%d><tr>\n", CONTROL_TABLE_WIDTH);
-cg = startControlGrid(3, NULL);
+cg = startControlGrid(4, NULL);
 for (fil = mud->filterList; fil != NULL; fil = fil->next)
      oneMrnaFilterUi(cg, fil->label, fil->key);
 endControlGrid(&cg);
@@ -1605,6 +1612,7 @@ int i = 0;
 boolean anyFilter = FALSE;
 boolean colorIx = 0;
 boolean isExclude = FALSE;
+boolean andLogic = TRUE;
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -1637,6 +1645,9 @@ else if (sameString(type, "include"))
     isExclude = FALSE;
 else
     errAbort("Unknown filter type %s (%s)", type, mud->filterTypeVar);
+type = cgiUsualString(mud->logicTypeVar, "and");
+andLogic = sameString(type, "and");
+
 
 /* Make a pass though each filter, and start setting up search for
  * those that have some text. */
@@ -1658,8 +1669,15 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
     struct hash *hash = fil->hash;
     if (hash != NULL)
 	{
-	char *pattern = fil->pattern;
-	boolean anyWild = (strchr(pattern, '*') != NULL || strchr(pattern, '?') != NULL);
+	boolean anyWild;
+	char *pattern = cloneString(fil->pattern);
+	if (lastChar(pattern) != '*')
+	    {
+	    int len = strlen(pattern)+1;
+	    pattern = needMoreMem(pattern, len, len+1);
+	    pattern[len-1] = '*';
+	    }
+	anyWild = (strchr(pattern, '*') != NULL || strchr(pattern, '?') != NULL);
 	sprintf(query, "select * from %s", fil->table);
 	touppers(pattern);
 	sr = sqlGetResult(conn, query);
@@ -1677,6 +1695,7 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 		}
 	    }
 	sqlFreeResult(&sr);
+	freez(&pattern);
 	}
     }
 
@@ -1684,7 +1703,7 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
  * match filter. */
 for (lf = *pLfList; lf != NULL; lf = next)
     {
-    boolean passed = TRUE;
+    boolean passed = andLogic;
     next = lf->next;
     sprintf(query, "select * from mrna where acc = '%s'", lf->name);
     sr = sqlGetResult(conn, query);
@@ -1693,8 +1712,18 @@ for (lf = *pLfList; lf != NULL; lf = next)
 	for (fil = mud->filterList; fil != NULL; fil = fil->next)
 	    {
 	    if (fil->hash != NULL)
+		{
 		if (hashLookup(fil->hash, row[fil->mrnaTableIx]) == NULL)
-		    passed = FALSE;
+		    {
+		    if (andLogic)    
+			passed = FALSE;
+		    }
+		else
+		    {
+		    if (!andLogic)
+		        passed = TRUE;
+		    }
+		}
 	    }
 	}
     sqlFreeResult(&sr);
@@ -2298,15 +2327,19 @@ void estMethods(struct trackGroup *tg)
 /* Make track group of EST methods - overrides color handler. */
 {
 tg->itemColor = estColor;
+#ifdef FILTER_CODE
 tg->extraUiData = newMrnaUiData(tg->mapName, FALSE);
 tg->extraUi = mrnaUi;
+#endif /* FILTER_CODE */
 }
 
 void mrnaMethods(struct trackGroup *tg)
 /* Make track group of mRNA methods. */
 {
+#ifdef FILTER_CODE
 tg->extraUiData = newMrnaUiData(tg->mapName, FALSE);
 tg->extraUi = mrnaUi;
+#endif /* FILTER_CODE */
 }
 
 
@@ -3323,8 +3356,10 @@ void xenoMrnaMethods(struct trackGroup *tg)
 /* Fill in custom parts of xeno mrna alignments. */
 {
 tg->itemName = xenoMrnaName;
+#ifdef FILTER_CODE
 tg->extraUiData = newMrnaUiData(tg->mapName, TRUE);
 tg->extraUi = mrnaUi;
+#endif /* FILTER_CODE */
 }
 
 void loadRnaGene(struct trackGroup *tg)
@@ -6095,14 +6130,16 @@ if (!hideControls)
     printf("</CENTER>\n");
 
     /* Do Extra parts of UI. */
+    htmlHorizontalLine();
+    printf("<H2>Additional Track Options</H2>\n");
     for (group = tGroupList; group != NULL; group = group->next)
 	{
 	if (group->visibility != tvHide && group->extraUi != NULL)
 	    {
-	    htmlHorizontalLine();
 	    printf("<A NAME=\"%s\">", group->mapName);
-	    printf("<H3>%s</H3>\n", group->longLabel);
+	    printf("<H3><B>%s</B> - %s</H3>\n", group->shortLabel, group->longLabel);
 	    group->extraUi(group);
+	    htmlHorizontalLine();
 	    }
 	}
     }
