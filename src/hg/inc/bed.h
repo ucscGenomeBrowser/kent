@@ -144,6 +144,14 @@ struct bed *bedLoadNBin(char *row[], int wordCount);
 void bedOutputN(struct bed *el, int wordCount, FILE *f, char sep, char lastSep);
 /* Write a bed of wordCount fields. */
 
+void bedOutputNitemRgb(struct bed *el, int wordCount, FILE *f,
+	char sep, char lastSep);
+/* Write a bed of wordCount fields, interpret column 9 as RGB. */
+
+#define bedTabOutNitemRgb(el,wordCount, f) bedOutputNitemRgb(el,wordCount,f,'\t','\n')
+/* Print out bed as a line in a tab-separated file. Interpret
+   column 9 as RGB */
+
 #define bedTabOutN(el,wordCount, f) bedOutputN(el,wordCount,f,'\t','\n')
 /* Print out bed as a line in a tab-separated file. */
 
