@@ -6,12 +6,18 @@
 #include "dnautil.h"
 #include "rbTree.h"
 #include "chainBlock.h"
+#include "jksql.h"
+#include "hdb.h"
+#include "localmem.h"
+#include "agpGap.h"
+#include "rmskOut.h"
 
 int minSpace = 25;	/* Minimum gap size to fill. */
 int minFill;		/* Minimum fill to record. */
 int minScore = 2000;	/* Minimum chain score to look at. */
-
-boolean uglier = FALSE;	/* True for verbose debugging info. */
+double oGapRatio = 0.5; /* Minimum ratio of coverage by N's in other
+                         * sequence for a gap to be considered an oGap. */
+boolean verbose = FALSE;/* Verbose output. */
 
 void usage()
 /* Explain usage and exit. */
@@ -19,13 +25,22 @@ void usage()
 errAbort(
   "chainNet - Make alignment nets out of chains\n"
   "usage:\n"
-  "   chainNet database in.chain target.sizes query.sizes target.net query.net\n"
+  "   chainNet tDb qDb in.chain target.sizes query.sizes target.net query.net\n"
   "options:\n"
   "   -minSpace=N - minimum gap size to fill, default %d\n"
   "   -minFill=N  - default half of minSpace\n"
-  "   -minScore=N - minimum chain score to consider, default %d\n",
-  minSpace, minScore);
+  "   -minScore=N - minimum chain score to consider, default %d\n"
+  "   -oGapRatio=0.N - minimum coverage by N's in other sequence for\n"
+  "                    a gap to be classified an 'oGap'. Default %3.1f\n"
+  "   -verbose - make copious output\n"
+  , minSpace, minScore, oGapRatio);
 }
+
+struct range
+/* A part of a chromosome. */
+    {
+    int start, end;	/* Half open zero based coordinates. */
+    };
 
 struct gap
 /* A gap in sequence alignments. */
@@ -33,6 +48,8 @@ struct gap
     struct gap *next;	    /* Next gap in list. */
     int start,end;	    /* Range covered in chromosome. */
     struct fill *fillList;  /* List of gap fillers. */
+    bool oGap;	    	    /* True if gap corresponds to sequence gap in other
+                             * sequence. */
     };
 
 struct fill
@@ -47,8 +64,10 @@ struct fill
 struct space
 /* A part of a gap. */
     {
-    struct gap *gap;    /* The actual gap. */
     int start, end;	/* Portion of gap covered, always plus strand. */
+                        /* The start of this structure has to be identical
+			 * with struct range above. */
+    struct gap *gap;    /* The actual gap. */
     };
 
 struct chrom
@@ -58,8 +77,11 @@ struct chrom
     char *name;		    /* Name - allocated in hash */
     int size;		    /* Size of chromosome. */
     struct gap *root;	    /* Root of the gap/chain tree */
-    struct rbTree *spaces;  /* Store gaps here for fast lookup. */
+    struct rbTree *spaces;  /* Store gaps here for fast lookup. Items are spaces. */
+    struct rbTree *repeats; /* Store repeats here for fast lookup.  Items are ranges.*/
+    struct rbTree *seqGaps; /* Gaps (stretches of Ns) in sequence.  Items are ranges.*/
     };
+
 
 
 int gapCmpStart(const void *va, const void *vb)
@@ -93,6 +115,20 @@ else
     return 0;
 }
 
+int rangeCmp(void *va, void *vb)
+/* Return -1 if a before b,  0 if a and b overlap,
+ * and 1 if a after b. */
+{
+struct range *a = va;
+struct range *b = vb;
+if (a->end <= b->start)
+    return -1;
+else if (b->end <= a->start)
+    return 1;
+else
+    return 0;
+}
+
 void dumpSpace(void *item, FILE *f)
 /* Print out range info. */
 {
@@ -107,27 +143,98 @@ struct space *space = item;
 printf("%d,%d\n", space->start, space->end);
 }
 
-struct gap *addGap(struct chrom *chrom, 
-	int minStart, int maxEnd, int start, int end)
-/* Add gap to chromosome. */
+void addSpaceForGap(struct chrom *chrom, struct gap *gap)
+/* Given a gap, create corresponding space in chromosome's
+ * space rbTree. */
 {
-struct gap *gap;
 struct space *space;
-if (start <= minStart) return NULL;
-if (end >= maxEnd) return NULL;
-if (end - start < minSpace) return NULL;
-AllocVar(gap);
 AllocVar(space);
 space->gap = gap;
-space->start = gap->start = start;
-space->end = gap->end = end;
+space->start = gap->start;
+space->end = gap->end;
 rbTreeAdd(chrom->spaces, space);
+}
+
+struct gap *gapNew(int start, int end)
+/* Create a new gap. */
+{
+struct gap *gap;
+AllocVar(gap);
+gap->start = start;
+gap->end = end;
 return gap;
 }
 
-void makeChroms(char *sizeFile, struct hash **retHash, struct chrom **retList)
+struct gap *addGap(struct chrom *chrom, int start, int end)
+/* Create a new gap and add it to chromosome space tree. */
+{
+struct gap *gap = gapNew(start, end);
+addSpaceForGap(chrom, gap);
+return gap;
+}
+
+boolean strictlyInside(int minStart, int maxEnd, int start, int end)
+/* Return TRUE if minStart < start <= end < maxEnd 
+ * and end - start >= minSpace */
+{
+return (minStart < start && start + minSpace <= end && end < maxEnd);
+}
+
+struct rbTree *getSeqGaps(char *db, char *chrom, struct lm *lm)
+/* Return a tree of ranges for sequence gaps in chromosome */
+{
+struct sqlConnection *conn = sqlConnect(db);
+struct rbTree *tree = rbTreeNew(rangeCmp);
+int rowOffset;
+struct sqlResult *sr = hChromQuery(conn, "gap", chrom, NULL, &rowOffset);
+char **row;
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct agpGap gap;
+    struct range *range;
+    agpGapStaticLoad(row+rowOffset, &gap);
+    lmAllocVar(lm, range);
+    range->start = gap.chromStart;
+    range->end = gap.chromEnd;
+    rbTreeAdd(tree, range);
+    }
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
+return tree;
+}
+
+struct rbTree *getRepeats(char *db, char *chrom, struct lm *lm)
+/* Return a tree of ranges for sequence gaps in chromosome */
+{
+struct rbTree *tree = rbTreeNew(rangeCmp);
+#ifdef SOON
+struct sqlConnection *conn = sqlConnect(db);
+int rowOffset;
+struct sqlResult *sr = hChromQuery(conn, "rmsk", chrom, NULL, &rowOffset);
+char **row;
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct rmskOut r;
+    struct range *range;
+    rmskOutStaticLoad(row+rowOffset, &r);
+    lmAllocVar(lm, range);
+    range->start = r.genoStart;
+    range->end = r.genoEnd;
+    rbTreeAdd(tree, range);
+    }
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
+#endif /* SOON */
+return tree;
+}
+
+
+void makeChroms(char *sizeFile, char *db, struct lm *lm,
+	struct hash **retHash, struct chrom **retList)
 /* Read size file and make chromosome structure for each
- * element. */
+ * element.  Read in gaps and repeats. */
 {
 struct lineFile *lf = lineFileOpen(sizeFile, TRUE);
 char *row[2];
@@ -143,7 +250,9 @@ while (lineFileRow(lf, row))
     hashAddSaveName(hash, name, chrom, &chrom->name);
     chrom->size = lineFileNeedNum(lf, row, 1);
     chrom->spaces = rbTreeNew(spaceCmp);
-    chrom->root = addGap(chrom, -1, chrom->size+1, 0, chrom->size);
+    chrom->root = addGap(chrom, 0, chrom->size);
+    chrom->seqGaps = getSeqGaps(db, chrom->name, lm);
+    chrom->repeats = getRepeats(db, chrom->name, lm);
     }
 lineFileClose(&lf);
 slReverse(&chromList);
@@ -235,7 +344,7 @@ refAdd(&fsList, item);
 }
 
 struct slRef *findSpaces(struct rbTree *tree, int start, int end)
-/* Return a list of subGaps that intersect interval between start
+/* Return a list of spaces that intersect interval between start
  * and end. */
 {
 static struct space space;
@@ -247,6 +356,13 @@ slReverse(&fsList);
 return fsList;
 }
 
+struct slRef *findRanges(struct rbTree *tree, int start, int end)
+/* Return list of ranges that intersect interval. */
+{
+return findSpaces(tree, start, end);
+}
+
+
 void reverseBlocksQ(struct boxIn **pList, int qSize)
 /* Reverse qside of blocks. */
 {
@@ -256,8 +372,47 @@ for (b = *pList; b != NULL; b = b->next)
     reverseIntRange(&b->qStart, &b->qEnd, qSize);
 }
 
+int intersectingGapSize(struct chrom *chrom, int start, int end)
+/* Return total size of gaps intersecting ranges start-end. */
+{
+struct slRef *refList = findRanges(chrom->seqGaps, start, end);
+struct slRef *ref;
+int size, totalSize = 0;
 
-void addChainT(struct chrom *chrom, struct chain *chain)
+for (ref = refList; ref != NULL; ref = ref->next)
+    {
+    struct range *range = ref->val;
+    size = rangeIntersection(start, end, range->start, range->end);
+    assert(size > 0);
+    totalSize += size;
+    }
+slFreeList(&refList);
+return totalSize;
+}
+
+
+boolean oSeqPlugged(struct chrom *otherChrom, int otherStart, int otherEnd,
+	int thisStart, int thisEnd)
+/* Return TRUE if gap could plausibly be explained by missing
+ * sequence on the other chromosome. */
+{
+int otherSize = otherEnd - otherStart;
+int thisSize = thisEnd - thisStart;
+int minSize = min(otherSize, thisSize);
+int maxSize = max(otherSize, thisSize);
+int oGapSize;
+boolean isPlugged;
+if (otherSize < 100)  /* Smallest gap size */
+    return FALSE;
+if (minSize * 2 + 2000 < maxSize) /* 2x expansion plus one LINE */
+    return FALSE;
+oGapSize = intersectingGapSize(otherChrom, otherStart, otherEnd);
+isPlugged = (oGapSize >= oGapRatio * otherSize);
+return isPlugged;
+}
+
+
+void addChainT(struct chrom *chrom, struct chrom *otherChrom, struct chain *chain)
 /* Add T side of chain to fill/gap tree of chromosome. 
  * This is the easier case since there are no strand
  * issues to worry about. */
@@ -294,8 +449,13 @@ for (ref = spaceList; ref != NULL; ref = ref->next)
 		break;
 	    gapStart = block->tEnd;
 	    gapEnd = nextBlock->tStart;
-	    if ((gap = addGap(chrom, space->start, space->end, gapStart, gapEnd)) != NULL)
+	    if (strictlyInside(space->start, space->end, gapStart, gapEnd))
 		{
+		gap = gapNew(gapStart, gapEnd);
+		if (oSeqPlugged(otherChrom, block->qEnd, nextBlock->qStart, gapStart, gapEnd))
+		    gap->oGap = TRUE;
+		else
+		    addSpaceForGap(chrom, gap);
 		slAddHead(&fill->gapList, gap);
 		}
 	    }
@@ -305,7 +465,7 @@ for (ref = spaceList; ref != NULL; ref = ref->next)
 slFreeList(&spaceList);
 }
 
-void addChainQ(struct chrom *chrom, struct chain *chain)
+void addChainQ(struct chrom *chrom, struct chrom *otherChrom, struct chain *chain)
 /* Add Q side of chain to fill/gap tree of chromosome. 
  * For this side we have to cope with reverse strand
  * issues. */
@@ -351,8 +511,9 @@ for (ref = spaceList; ref != NULL; ref = ref->next)
 		break;
 	    gapStart = block->qEnd;
 	    gapEnd = nextBlock->qStart;
-	    if ((gap = addGap(chrom, space->start, space->end, gapStart, gapEnd)) != NULL)
+	    if (strictlyInside(space->start, space->end, gapStart, gapEnd))
 		{
+		gap = addGap(chrom, gapStart, gapEnd);
 		slAddHead(&fill->gapList, gap);
 		}
 	    }
@@ -367,8 +528,8 @@ if (isRev)
 void addChain(struct chrom *qChrom, struct chrom *tChrom, struct chain *chain)
 /* Add as much of chain as possible to chromosomes. */
 {
-addChainQ(qChrom, chain);
-addChainT(tChrom, chain);
+addChainQ(qChrom, tChrom, chain);
+addChainT(tChrom, qChrom, chain);
 }
 
 int rOutDepth = 0;
@@ -383,7 +544,11 @@ static void rOutputGap(struct gap *gap, FILE *f)
 struct fill *fill;
 ++rOutDepth;
 spaceOut(f, rOutDepth);
-fprintf(f, "gap %d %d %d\n", gap->start, gap->end, gap->end - gap->start);
+if (gap->oGap)
+    fprintf(f, "oGap");
+else
+    fprintf(f, "gap");
+fprintf(f, " %d %d %d\n", gap->start, gap->end, gap->end - gap->start);
 for (fill = gap->fillList; fill != NULL; fill = fill->next)
     rOutputFill(fill, f);
 --rOutDepth;
@@ -544,7 +709,7 @@ if (lineFileNext(lf, &line, NULL))
 lineFileClose(&lf);
 }
 
-void chainNet(char *database, char *chainFile, char *tSizes, char *qSizes
+void chainNet(char *tDb, char *qDb, char *chainFile, char *tSizes, char *qSizes
 	, char *tNet, char *qNet)
 /* chainNet - Make alignment nets out of chains. */
 {
@@ -552,18 +717,23 @@ struct lineFile *lf = lineFileOpen(chainFile, TRUE);
 struct hash *qHash, *tHash;
 struct chrom *qChromList, *tChromList, *tChrom, *qChrom;
 struct chain *chain;
+struct lm *lm = lmInit(0);	/* Local memory for chromosome data. */
 
-makeChroms(qSizes, &qHash, &qChromList);
-makeChroms(tSizes, &tHash, &tChromList);
+makeChroms(qSizes, qDb, lm, &qHash, &qChromList);
+makeChroms(tSizes, tDb, lm, &tHash, &tChromList);
 printf("Got %d chroms in %s, %d in %s\n", slCount(tChromList), tSizes,
 	slCount(qChromList), qSizes);
 while ((chain = chainRead(lf)) != NULL)
     {
     if (chain->score < minScore) 
     	break;
-    uglyf("chain %f (%d els) %s %d-%d %c %s %d-%d\n", chain->score, slCount(chain->blockList), chain->tName, chain->tStart, chain->tEnd, chain->qStrand, chain->qName, chain->qStart, chain->qEnd);
-    // uglier = (sameString(chain->tName, "chr5") && sameString(chain->qName, "chr15"));
-    if (uglier) uglyf("uglier!!\n");
+    if (verbose)
+	{
+	printf("chain %f (%d els) %s %d-%d %c %s %d-%d\n", 
+		chain->score, slCount(chain->blockList), 
+		chain->tName, chain->tStart, chain->tEnd, 
+		chain->qStrand, chain->qName, chain->qStart, chain->qEnd);
+	}
     qChrom = hashMustFindVal(qHash, chain->qName);
     if (qChrom->size != chain->qSize)
         errAbort("%s is %d in %s but %d in %s", chain->qName, 
@@ -575,7 +745,9 @@ while ((chain = chainRead(lf)) != NULL)
 		chain->tSize, chainFile,
 		tChrom->size, tSizes);
     addChain(qChrom, tChrom, chain);
-    // uglyf("%s has %d inserts, %s has %d\n", tChrom->name, tChrom->spaces->n, qChrom->name, qChrom->spaces->n);
+    if (verbose)
+	printf("%s has %d inserts, %s has %d\n", tChrom->name, 
+		tChrom->spaces->n, qChrom->name, qChrom->spaces->n);
     }
 printf("writing %s\n", tNet);
 outputNetSide(tChromList, tNet, FALSE);
@@ -588,11 +760,13 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionHash(&argc, argv);
-if (argc != 7)
+if (argc != 8)
     usage();
 minSpace = optionInt("minSpace", minSpace);
 minFill = optionInt("minFill", minSpace/2);
 minScore = optionInt("minScore", minScore);
-chainNet(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
+oGapRatio = optionFloat("oGapRatio", oGapRatio);
+verbose = optionExists("verbose");
+chainNet(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6],argv[7]);
 return 0;
 }
