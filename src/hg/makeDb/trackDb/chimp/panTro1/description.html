@@ -1,6 +1,6 @@
 <H3>About the <em>Pan troglodytes</em> assembly</H3>
 <P>
-The 13 Nov. 2003 chimpanzee Arachne assembly -- labeled Build 1 Version 1 
+The 13 Nov. 2003 chimpanzee Arachne assembly -- labeled NCBI Build 1 Version 1 
 (UCSC version panTro1) -- was produced by the Chimpanzee Genome Sequencing Consortium.
 This assembly covers about 95 percent of the genome and is based on 4X sequence 
 coverage. It is composed of 361,782 contigs with an N50 length of 15.7 kb, and 
@@ -26,9 +26,10 @@ be available soon.
 
 <H3>Sample position queries</H3>
 <P>
-A genome position can be specified by the accession number of a
-sequenced genomic clone, an mRNA or EST or STS marker, or
-a cytological band, a chromosomal coordinate range, or keywords from 
+A genome position can be specified by the HUGO gene name of
+a human RefSeq, the accession number of a
+mRNA or EST, a chromosomal coordinate range, a scaffold (supercontig)
+coordinate range, or keywords from 
 the GenBank description of an mRNA. The following list shows 
 examples of valid position queries for the chimpanzee genome.
 See the
@@ -40,12 +41,50 @@ User's Guide</A> for more information.
        	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD>
     </TR>
     <TR><TD VALIGN=Top><BR></TD></TR>
-    <TR><TD VALIGN=Top NOWRAP>chr7</TD>
+    <TR><TD VALIGN=Top NOWRAP>chr23</TD>
         <TD WIDTH=14></TD>
-       	<TD VALIGN=Top>Displays all of chromosome 7</TD>
+       	<TD VALIGN=Top>Displays all of chromosome 23</TD>
     </TR>
-    <TR><TD VALIGN=Top NOWRAP>chr3:1-1000000</TD>
+    <TR><TD VALIGN=Top NOWRAP>chr6:118,000,000-119,000,000</TD>
        	<TD WIDTH=14></TD>
-       	<TD VALIGN=Top>Displays first million bases of chr 3, counting from p arm telomere</TD>
+       	<TD VALIGN=Top>Displays a million bases of chromosome 6, beginning at 118 million bases offset from p arm telomere</TD>
+    </TR>
+    <TR><TD VALIGN=Top NOWRAP>scaffold_1:1-1000000</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Displays first million bases of genome positioned at scaffold 1 of the assembly</TD>
+    </TR>
+    <TR><TD VALIGN=Top NOWRAP>BRCA1</TD>
+       	<TD WIDTH=14></TD>
+       	<TD>Displays region of genome where human RefSeq gene BRCA1 aligns</TD>
+    </TR>
+    <TR><TD VALIGN=Top NOWRAP>AF115459</TD>
+       	<TD WIDTH=14></TD>
+   	<TD VALIGN=Top>Displays region of genome with mRNA with GenBank accession number AF115459</TD>
+    </TR>
+    <TR>
+	<TD VALIGN=Top NOWRAP>348</TD>
+	<TD><BR></TD>
+	<TD VALIGN=Top NOWRAP>Displays the region of genome with LocusLink identifier 348</TD>
+    </TR>
+    <TR><TD VALIGN=Top NOWRAP>pseudogene mRNA</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Lists transcribed pseudogenes, but not cDNAs</TD>
+    </TR>
+    <TR><TD VALIGN=Top NOWRAP>sialic acid</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Lists mRNAs wnd RefSeqs with sialic acid in the GenBank keywords</TD>
+    </TR>
+    <TR><TD VALIGN=Top NOWRAP>huntington</TD>
+       	<TD WIDTH=14></TD>
+ 	<TD VALIGN=Top>Lists mRNA's associated with Huntington's disease</TD>
+    </TR>
+    <TR><TD VALIGN=Top NOWRAP>Paabo,S.</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Lists mRNAs deposited by co-author S. Paabo</TD>
+    </TR>
+    <TR><TD VALIGN=Top><br></TD></TR>
+    <TR><TD COLSPAN="3"> Use this last format for author queries. Although GenBank 
+			requires the search format <em>Paabo S</em>, internally it uses 
+			the format <em>Paabo,S.</em>.</TD>
     </TR>
 </TABLE>
