@@ -156,7 +156,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.813 2005/01/12 08:45:50 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.814 2005/01/12 11:49:47 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11249,8 +11249,6 @@ while ((row = sqlNextRow(sr))!=NULL)
 	{
 	exception=cloneString(snp.exception);
 	bedPrintPos((struct bed *)&snp, 3);
-	printf("<BR>\n");
-	printSnpAlignment(snp);
 	printf("<BR>\n");
 	firstOne=0;
 	}
