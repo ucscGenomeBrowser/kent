@@ -96,7 +96,7 @@ canPack off
 
 track affyU74
 shortLabel Affymetrix U74
-longLabel Alignments of Affymetrix Targets from MG-U74 v2 (A,B, and C)
+longLabel Alignments of Affymetrix Consensus Sequences from MG-U74 v2 (A,B, and C)
 group regulation
 priority 86
 visibility hide
