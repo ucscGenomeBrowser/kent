@@ -76,7 +76,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.564 2003/07/24 00:15:08 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.565 2003/07/26 14:03:21 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -4321,7 +4321,7 @@ else
 void loadSimpleRepeats(struct track *tg)
 /* Load up simpleRepeats from database table to track items. */
 {
-bedLoadItem(tg, "simpleRepeat", (ItemLoader)simpleRepeatLoad);
+bedLoadItem(tg, tg->mapName, (ItemLoader)simpleRepeatLoad);
 }
 
 void freeSimpleRepeats(struct track *tg)
@@ -10142,6 +10142,7 @@ registerTrackHandler("rnaGene", rnaGeneMethods);
 registerTrackHandler("rmsk", repeatMethods);
 registerTrackHandler("rmskNew", repeatMethods);
 registerTrackHandler("simpleRepeat", simpleRepeatMethods);
+registerTrackHandler("chesSimpleRepeat", simpleRepeatMethods);
 registerTrackHandler("uniGene",uniGeneMethods);
 registerTrackHandler("perlegen",perlegenMethods);
 registerTrackHandler("haplotype",haplotypeMethods);
