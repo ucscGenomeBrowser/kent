@@ -2,12 +2,12 @@ include ../../inc/common.mk
 
 
 L = -lm
-MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
+MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = checkAgpAndFa.o
 
-checkAgpAndFa: $O $(MYLIBS)
+checkAgpAndFa: $O 
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/checkAgpAndFa $O $(MYLIBS) $L
 	cp $(HOME)/bin/$(MACHTYPE)/checkAgpAndFa .
 
