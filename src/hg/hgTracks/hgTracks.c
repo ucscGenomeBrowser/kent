@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.804 2004/09/17 03:17:20 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.805 2004/09/27 18:38:21 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -8263,7 +8263,7 @@ if (hgPcrOk(database))
 hPrintf("<TD ALIGN=CENTER><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s\">"
       " %s </A></TD>",  hgcNameAndSettings(),
       winStart, chromName, winStart, winEnd, database, uiVars->string, wrapWhiteFont(" DNA "));
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgText?db=%s&position=%s:%d-%d&phase=table&tbPosOrKeys=pos&%s=%u\">%s</A></TD>",
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTables?db=%s&position=%s:%d-%d&hgta_regionType=range&%s=%u\">%s</A></TD>",
        database, chromName, winStart+1, winEnd, cartSessionVarName(),
        cartSessionId(cart), wrapWhiteFont("Tables"));
 
