@@ -10,7 +10,7 @@
 #include "filePath.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.17 2004/03/01 04:24:38 kent Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.18 2004/03/01 06:03:36 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -28,10 +28,12 @@ errAbort(
   "   getVars - print the form variables to stdout\n"
   "   getLinks - print links\n"
   "   getTags - print out just the tags\n"
-  "   checkLinks - check links in page (non-recursively)\n"
-  "   checkAllLinks - check links in page and all subpages in same host\n"
-//  "   checkLocalLinks - check local links in page (non-recursively)\n"
-//  "   checkAllLinks - check local links in page and all subpages in same host\n"
+  "   checkLinks - check links in page\n"
+  "   checkLinks2 - check links in page and all subpages in same host\n"
+  "             (Just one level of recursion)\n"
+  "   checkLocalLinks - check local links in page\n"
+  "   checkLocalLinks2 - check local links in page and connected local pages\n"
+  "             (Just one level of recursion)\n"
   "   validate - do some basic validations including TABLE/TR/TD nesting\n"
   );
 }
@@ -277,8 +279,8 @@ void tagVaWarn(struct htmlPage *page, struct htmlTag *tag, char *format,
 char context[80];
 strncpy(context, tag->start, sizeof(context));
 context[sizeof(context)-1] = 0;
-warn("Error near line %d: %s", findLineNumber(page->htmlText, tag->start), 
-	context);
+warn("Error near line %d of %s:\n %s", findLineNumber(page->htmlText, tag->start), 
+	page->url, context);
 vaWarn(format, args);
 }
 
@@ -1269,189 +1271,8 @@ else
 return dyStringCannibalize(&dy);
 }
 
-char *skipOverProtocol(char *s)
-/* Skip over http:// or ftp:// or https:// */
-{
-char *p;
-if ((p = stringIn("://", s)) != NULL)
-    return p+3;
-else
-    return s;
-}
-
-int hostNameSize(char *s)
-/* Return size of host name (not including last slash) */
-{
-char *e = strchr(s, '/');
-if (e == NULL)
-    return strlen(s);
-else
-    return e - s;
-}
-
-boolean sameHost(char *a, char *b)
-/* Given URLs a and b, return TRUE if they refer to same host. */
-{
-int aSize, bSize;
-a = skipOverProtocol(a);
-b = skipOverProtocol(b);
-aSize = hostNameSize(a);
-bSize = hostNameSize(b);
-if (aSize != bSize)
-    return FALSE;
-return (memcmp(a, b, aSize) == 0);
-}
-
-static struct htmlTag *findNamedAnchor(struct htmlPage *page, char *name)
-/* Find anchor of given name. */
-{
-struct htmlTag *tag;
-for (tag = page->tags; tag != NULL; tag = tag->next)
-    {
-    if (sameWord(tag->name, "A"))
-        {
-	char *anchorName = tagAttributeVal(page, tag, "name", NULL);
-	if (anchorName != NULL && sameWord(anchorName, name))
-	    return tag;
-	}
-    }
-return NULL;
-}
-
-static jmp_buf recoverJumpBuf;
-
-static void recoverAbort()
-/* semiAbort */
-{
-longjmp(recoverJumpBuf, -1);
-}
-
-char *slurpUrl(char *url)
-/* Grab url.  If there's a problem report error and return NULL */
-{
-int status;
-char *retVal = NULL;
-pushAbortHandler(recoverAbort);
-status = setjmp(recoverJumpBuf);
-if (status == 0)    /* Always true except after long jump. */
-    {
-    struct dyString *dy = netSlurpUrl(url);
-    retVal = dyStringCannibalize(&dy);
-    }
-popAbortHandler();
-return retVal;
-}
-
-void checkRecursiveLinks(struct hash *uniqHash, struct htmlPage *page, 
-	boolean recurse, boolean justLocal)
-/* Check links recursively up to depth. */
-{
-struct slName *linkList = htmlPageLinks(page), *link;
-for (link = linkList; link != NULL; link = link->next)
-    {
-    if (link->name[0] == '#')
-        {
-	if (findNamedAnchor(page, link->name+1) == NULL)
-	    {
-	    warn("%s%s doesn't exist", page->url, link->name);
-	    }
-	}
-    else
-	{
-	char *url = htmlExpandUrl(page->url, link->name);
-	if (url != NULL)
-	    {
-	    boolean isLocal = sameHost(page->url, url);
-	    if (isLocal || !justLocal)
-		{
-		if (!hashLookup(uniqHash, url))
-		    {
-		    char *fullText = slurpUrl(url);
-		    if (fullText)
-			{
-			char *s = fullText;
-			struct httpStatus *status = httpStatusParse(&s);
-			hashAdd(uniqHash, url, NULL);
-			if (status->status != 200 && status->status != 302 
-			    && status->status != 301)
-			     warn("%d from %s", status->status, url);
-			else
-			    {
-			    if (recurse && isLocal)
-				{
-				struct htmlPage *newPage = 
-				   htmlPageParseOk(url, fullText);
-				if (newPage != NULL)
-				    {
-				    fullText = NULL;
-				    uglyf("Recursing into %s\n", url);
-				    checkRecursiveLinks(uniqHash, newPage, 
-					recurse, justLocal);
-				    htmlPageFree(&newPage);
-				    }
-				}
-			    }
-			freez(&fullText);
-			}
-		    }
-		}
-	    freez(&url);
-	    }
-	}
-    }
-slFreeList(&linkList);
-}
-
-void checkLinks(struct htmlPage *page, boolean recurse, boolean justLocal)
-/* Check links (just one level deep. */
-{
-struct hash *uniqHash = hashNew(0);
-hashAdd(uniqHash, page->url, NULL);
-checkRecursiveLinks(uniqHash, page, recurse, justLocal);
-hashFree(&uniqHash);
-}
-
-void htmlCheck(char *command, char *url)
-/* Read url. Switch on command and dispatch to appropriate routine. */
-{
-struct dyString *dy = netSlurpUrl(url);
-char *fullText = dyStringCannibalize(&dy);
-if (sameString(command, "getAll"))
-    mustWrite(stdout, fullText, strlen(fullText));
-else if (sameString(command, "ok"))
-    checkOk(fullText);
-else if (sameString(command, "getHeader"))
-    getHeader(fullText);
-else /* Do everything that requires full parsing. */
-    {
-    struct htmlPage *page = htmlPageParseOk(url, fullText);
-    if (sameString(command, "getHtml"))
-        fputs(page->htmlText, stdout);
-    else if (sameString(command, "getLinks"))
-	getLinks(page);
-    else if (sameString(command, "getForms"))
-        getForms(page);
-    else if (sameString(command, "getVars"))
-        getVars(page);
-    else if (sameString(command, "getTags"))
-	getTags(page);
-    else if (sameString(command, "validate"))
-	validate(page);	
-    else if (sameString(command, "checkLinks"))
-        checkLinks(page, FALSE, FALSE);
-    else if (sameString(command, "checkAllLinks"))
-        checkLinks(page, TRUE, FALSE);
-    else if (sameString(command, "checkLocalLinks"))
-        checkLinks(page, FALSE, TRUE);
-    else if (sameString(command, "checkAllLocalLinks"))
-        checkLinks(page, TRUE, TRUE);
-    else
-	errAbort("Unrecognized command %s", command);
-    htmlPageFree(&page);
-    }
-}
-
-static void testExpandRelativeUrl()
+#ifdef TEST
+static void testHtmlExpandUrl()
 /* DO some testing of expandRelativeUrl. */
 {
     {
@@ -1693,6 +1514,194 @@ static void testExpandRelativeUrl()
     char *relUrl = "http://test.org/credits.html";
     char *newUrl = htmlExpandUrl(oldUrl, relUrl);
     printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+}
+#endif /* TEST */
+
+
+char *skipOverProtocol(char *s)
+/* Skip over http:// or ftp:// or https:// */
+{
+char *p;
+if ((p = stringIn("://", s)) != NULL)
+    return p+3;
+else
+    return s;
+}
+
+int hostNameSize(char *s)
+/* Return size of host name (not including last slash) */
+{
+char *e = strchr(s, '/');
+if (e == NULL)
+    return strlen(s);
+else
+    return e - s;
+}
+
+boolean sameHost(char *a, char *b)
+/* Given URLs a and b, return TRUE if they refer to same host. */
+{
+int aSize, bSize;
+a = skipOverProtocol(a);
+b = skipOverProtocol(b);
+aSize = hostNameSize(a);
+bSize = hostNameSize(b);
+if (aSize != bSize)
+    return FALSE;
+return (memcmp(a, b, aSize) == 0);
+}
+
+static struct htmlTag *findNamedAnchor(struct htmlPage *page, char *name)
+/* Find anchor of given name. */
+{
+struct htmlTag *tag;
+for (tag = page->tags; tag != NULL; tag = tag->next)
+    {
+    if (sameWord(tag->name, "A"))
+        {
+	char *anchorName = tagAttributeVal(page, tag, "name", NULL);
+	if (anchorName != NULL && sameWord(anchorName, name))
+	    return tag;
+	}
+    }
+return NULL;
+}
+
+static jmp_buf recoverJumpBuf;
+
+static void recoverAbort()
+/* semiAbort */
+{
+longjmp(recoverJumpBuf, -1);
+}
+
+char *slurpUrl(char *url)
+/* Grab url.  If there's a problem report error and return NULL */
+{
+int status;
+char *retVal = NULL;
+pushAbortHandler(recoverAbort);
+status = setjmp(recoverJumpBuf);
+if (status == 0)    /* Always true except after long jump. */
+    {
+    struct dyString *dy = netSlurpUrl(url);
+    retVal = dyStringCannibalize(&dy);
+    }
+popAbortHandler();
+return retVal;
+}
+
+void checkRecursiveLinks(struct hash *uniqHash, struct htmlPage *page, 
+	int depth, boolean justLocal)
+/* Check links recursively up to depth. */
+{
+struct slName *linkList = htmlPageLinks(page), *link;
+for (link = linkList; link != NULL; link = link->next)
+    {
+    if (link->name[0] == '#')
+        {
+	if (findNamedAnchor(page, link->name+1) == NULL)
+	    {
+	    warn("%s%s doesn't exist", page->url, link->name);
+	    }
+	}
+    else
+	{
+	char *url = htmlExpandUrl(page->url, link->name);
+	if (url != NULL)
+	    {
+	    boolean isLocal = sameHost(page->url, url);
+	    if (isLocal || !justLocal)
+		{
+		if (!hashLookup(uniqHash, url))
+		    {
+		    struct hash *headerHash = newHash(8);
+		    int status = netUrlHead(url, headerHash);
+		    hashAdd(uniqHash, url, NULL);
+		    if (status != 200 && status != 302 && status != 301)
+			warn("%d from %s", status, url);
+		    else
+			{
+			if (depth > 1 && isLocal)
+			    {
+			    char *contentType = hashFindVal(headerHash, "Content-Type:");
+			    if (contentType != NULL && startsWith("text/html", contentType))
+				{
+				char *fullText = slurpUrl(url);
+				if (fullText != NULL)
+				    {
+				    struct htmlPage *newPage = 
+				       htmlPageParse(url, fullText);
+				    if (newPage != NULL && newPage->status->status==200)
+					{
+					fullText = NULL;
+					printf("Recursing into %s\n", url);
+					checkRecursiveLinks(uniqHash, newPage, 
+					    depth-1, justLocal);
+					htmlPageFree(&newPage);
+					}
+				    freez(&fullText);
+				    }
+				}
+			    }
+			}
+		    hashFree(&headerHash);
+		    }
+		}
+	    freez(&url);
+	    }
+	}
+    }
+slFreeList(&linkList);
+}
+
+void checkLinks(struct htmlPage *page, int depth, boolean justLocal)
+/* Check links (just one level deep. */
+{
+struct hash *uniqHash = hashNew(0);
+hashAdd(uniqHash, page->url, NULL);
+checkRecursiveLinks(uniqHash, page, depth, justLocal);
+hashFree(&uniqHash);
+}
+
+void htmlCheck(char *command, char *url)
+/* Read url. Switch on command and dispatch to appropriate routine. */
+{
+struct dyString *dy = netSlurpUrl(url);
+char *fullText = dyStringCannibalize(&dy);
+if (sameString(command, "getAll"))
+    mustWrite(stdout, fullText, strlen(fullText));
+else if (sameString(command, "ok"))
+    checkOk(fullText);
+else if (sameString(command, "getHeader"))
+    getHeader(fullText);
+else /* Do everything that requires full parsing. */
+    {
+    struct htmlPage *page = htmlPageParseOk(url, fullText);
+    if (sameString(command, "getHtml"))
+        fputs(page->htmlText, stdout);
+    else if (sameString(command, "getLinks"))
+	getLinks(page);
+    else if (sameString(command, "getForms"))
+        getForms(page);
+    else if (sameString(command, "getVars"))
+        getVars(page);
+    else if (sameString(command, "getTags"))
+	getTags(page);
+    else if (sameString(command, "validate"))
+	validate(page);	
+    else if (sameString(command, "checkLinks"))
+        checkLinks(page, 1, FALSE);
+    else if (sameString(command, "checkLinks2"))
+        checkLinks(page, 2, FALSE);
+    else if (sameString(command, "checkLocalLinks"))
+        checkLinks(page, 1, TRUE);
+    else if (sameString(command, "checkLocalLinks2"))
+        checkLinks(page, 2, TRUE);
+    else
+	errAbort("Unrecognized command %s", command);
+    htmlPageFree(&page);
     }
 }
 
