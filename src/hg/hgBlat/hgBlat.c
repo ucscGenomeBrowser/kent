@@ -30,8 +30,8 @@ char *sortList[] = {"query,score", "query,start", "chrom,score", "chrom,start", 
 struct serverTable serverTable[] =  {
 // {"hg5", "Oct. 7, 2000", TRUE, "kks00", "17776", "/projects/cc/hg/oo.23/nib"},
 // {"hg5", "Oct. 7, 2000", FALSE, "kks00", "17777", "/projects/cc/hg/oo.23/nib"},
-{"hg6", "Dec. 12, 2000", TRUE,  "cc", "17778", "/projects/hg2/gs.6/oo.27/nib"},
-{"hg6", "Dec. 12, 2000", FALSE, "cc", "17779", "/projects/hg2/gs.6/oo.27/nib"},
+{"hg6", "Dec. 12, 2000", TRUE,  "blat2", "17778", "/projects/hg2/gs.6/oo.27/nib"},
+{"hg6", "Dec. 12, 2000", FALSE, "blat2", "17779", "/projects/hg2/gs.6/oo.27/nib"},
 {"hg7", "April 1, 2001", TRUE, "blat1", "17778", "/projects/hg3/gs.7/oo.29/nib"},
 {"hg7", "April 1, 2001", FALSE, "blat1", "17779", "/projects/hg3/gs.7/oo.29/nib"},
 };
