@@ -14,6 +14,7 @@
  */
 
 #include "common.h"
+#include "portable.h"
 #include "hash.h"
 #include "linefile.h"
 #include "dnautil.h"
@@ -22,9 +23,6 @@
 #include "fa.h"
 #include "keys.h"
 #include "options.h"
-
-/* Default size of directory path string buffers */
-#define PATH_LEN 256
 
 enum formatType
 /* Are we working on genomic sequence or mRNA?  Need to write
@@ -1053,32 +1051,21 @@ return - A newly allocated string containing the
  */
 {
 char *retStr = NULL;
-int strIndex = 0;
-int strLen = 0;
-int charNum = 0;
-int totalChars = strlen(origList);
+int repCount = strlen(origList);
+int repIndex = 0;
 
-assert(totalChars == strlen(newList));
-
-if (NULL != src && 0 != strlen(src))
+assert(repCount == strlen(newList));
+if (src == NULL) 
     {
-    strLen = strlen(src);
-    retStr = needMem(strLen + 1);
+    return NULL;
     }
 
-strcpy(retStr, src);
+retStr = cloneString(src);
 
-for (charNum = 0; charNum < totalChars; charNum++)
+for (repIndex = 0; repIndex < repCount; ++repIndex) 
     {
-     for (strIndex = 0; strIndex < strLen; strIndex++)
-         {
-         if (retStr[strIndex] == origList[charNum]) 
-             {
-             retStr[strIndex] = newList[charNum];
-             }
-         }
+    subChar(retStr, origList[repIndex], newList[repIndex]);
     }
-
 return retStr;
 }
 
@@ -1406,15 +1393,16 @@ while (readGbInfo(lf))
             if (gByOrganism) 
                 {
                 char *orgDir = NULL;
-                char command[PATH_LEN];
+                char fullOrgPath[PATH_LEN];
                 char raPath[PATH_LEN];
                 char faPath[PATH_LEN];
                 
                 /* If we are on a new organism, open a new file,
                    otherwise just reuse our old file handles. */
-                if (NULL == oldOrg || 0 != strcmp(oldOrg, org)) 
+                if (NULL == oldOrg || !sameString(oldOrg, org)) 
                     {
-                    oldOrg = needMem(strlen(org) + 1);
+                    freez(&oldOrg);
+                    oldOrg = cloneString(org);
                     strcpy(oldOrg, org);
                     fflush(raFile);
                     fflush(faFile);
@@ -1433,8 +1421,8 @@ while (readGbInfo(lf))
             
                     if (!hashLookup(orgHash, org))
                         {
-                        sprintf(command, "mkdir -p %s/%s", gOutputDir, orgDir);
-                        system(command);
+                        sprintf(fullOrgPath, "%s/%s", gOutputDir, orgDir);
+                        makeDir(fullOrgPath);
                         hashAdd(orgHash, org, orgDir);
                         }
 
@@ -1644,7 +1632,6 @@ struct hash *uniqHash = NULL;
 struct hash *estAuthorHash = NULL;
 struct hash *orgHash = NULL;
 static char *byOrgOption = "-byOrganism=";
-char command[PATH_LEN];
 
 optionHash(&argc, argv);
 if (argc < 6)
@@ -1670,8 +1657,7 @@ ta = mustOpen(taName, "wb");
 if (gByOrganism) 
     {
     printf("Processing output by organism into directory: %s\n", gOutputDir);
-    sprintf(command, "mkdir -p %s", gOutputDir);
-    system(command);
+    makeDir(gOutputDir);
     }
 else
     {

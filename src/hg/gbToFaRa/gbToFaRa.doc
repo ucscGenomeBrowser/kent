@@ -1,6 +1,6 @@
 gbToFaRa reads one or more GenBank format files and a filter file as input. 
-It then ouputs the GenBank data into a set of fasta .fa files and .ra metadata
-files. It also outputs a .ta file containing summary statistics.
+It then ouputs the GenBank data into a set of fasta .fa files and .ra 
+(rna annotations) files. It also outputs a .ta file containing summary statistics.
 Additionally, it has an option called "-byOrganism=" that makes the program 
 create a separate ouput directory for each organism for which it writes out data.
 The .fa and .ra files are then placed in each respective organism's subdirectory under
