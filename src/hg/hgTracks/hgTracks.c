@@ -75,7 +75,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.535 2003/06/18 20:23:16 sugnet Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.536 2003/06/19 13:26:03 weber Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -1610,31 +1610,22 @@ maxRange = whichSampleBin( maxRangeCutoff, tg->minRange, tg->maxRange, binCount 
 
 //errAbort( "(%g,%g) cutoff=(%g,%g)\n", tg->minRange, tg->maxRange, minRangeCutoff, maxRangeCutoff );
 
-if( sameString( tg->mapName, "humMusL" ) 
-	|| sameString( tg->mapName, "musHumL" )  
-	|| sameString( tg->mapName, "regpotent" )
-	|| sameString( tg->mapName, "mm3Rn2L" )
-	|| sameString( tg->mapName, "hg15Mm3L" )
-	|| sameString( tg->mapName, "olly25")
-	|| sameString( tg->mapName, "olly2")
-	)
-    {
 
-
-    min0 = whichSampleNum( minRange, tg->minRange, tg->maxRange, binCount );
-    max0 = whichSampleNum( maxRange, tg->minRange, tg->maxRange,  binCount );
-
-    if( isFull )
-	{
-	for( i=1; i<=6; i++ )
-	    drawWiggleHorizontalLine( vg, (double)i, min0, max0,
-		binCount, y, hFactor, heightPer, gridColor );
-	}
-    }
-else if( sameString( tg->mapName, "zoo" ) || sameString( tg->mapName, "zooNew" ) )
+if( sameString( tg->mapName, "zoo" ) || sameString( tg->mapName, "zooNew" ) )
     {
     /*Always interpolate zoo track (since gaps are explicitly defined*/
     lineGapSize = -1;
+    }
+else if( tg->minRange == 0 && tg->maxRange == 8 )    //range for all L-score tracks
+    {
+    if( isFull )
+    {
+        min0 = whichSampleNum( minRange, tg->minRange, tg->maxRange, binCount );
+        max0 = whichSampleNum( maxRange, tg->minRange, tg->maxRange,  binCount );
+        for( i=1; i<=6; i++ )
+            drawWiggleHorizontalLine( vg, (double)i, min0, max0,
+	            binCount, y, hFactor, heightPer, gridColor );
+        }
     }
 
 for(lf = tg->items; lf != NULL; lf = lf->next) 
@@ -6976,7 +6967,7 @@ return aV - bV;
 void loadHumMusL(struct track *tg)
 /* Load humMusL track with 2 zoom levels and one normal level. 
  * Also used for loading the musHumL track (called Human Cons) 
- * on the mm2 mouse browser. It decides which of 4 tables to
+ * on the mouse browser. It decides which of 4 tables to
  * load based on how large of a window the user is looking at*/
 {
 struct sqlConnection *conn = hAllocConn();
@@ -7061,14 +7052,6 @@ void humMusLMethods( struct track *tg )
 tg->loadItems = loadHumMusL;
 tg->totalHeight = consTotalHeight;
 }
-
-void musHumLMethods( struct track *tg )
-/* Overide the musHumL load function to look for zoomed out tracks. */
-{
-tg->loadItems = loadHumMusL;
-tg->totalHeight = consTotalHeight;
-}
-
 
 void loadAffyTranscriptome(struct track *tg)
 /* Convert sample info in window to linked feature. */
@@ -8611,6 +8594,7 @@ if (withLeftLabels)
 	    sameString( track->mapName, "musHumL" ) ||
 	    sameString( track->mapName, "mm3Rn2L" ) ||		
 	    sameString( track->mapName, "hg15Mm3L" ) ||		
+        sameString( track->mapName, "mm3Hg15L" ) ||
 	    sameString( track->mapName, "regpotent" ) ||
 	    sameString( track->mapName, "HMRConservation" )  )
 	    {
@@ -8693,7 +8677,8 @@ if (withLeftLabels)
 				 sameString( track->mapName, "hg15Mm3L" ))
 			    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, itemHeight,
 					track->ixColor, font, "Mouse Cons");
-			else if( sameString( track->mapName, "musHumL" ))
+			else if( sameString( track->mapName, "musHumL" ) ||
+                     sameString( track->mapName, "mm3Hg15L"))
 			    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, itemHeight,
 					track->ixColor, font, "Human Cons");
 			else if( sameString( track->mapName, "mm3Rn2L" ))
@@ -10024,7 +10009,8 @@ registerTrackHandler("regpotent", humMusLMethods);
 registerTrackHandler("mm3Rn2L", humMusLMethods);
 registerTrackHandler("hg15Mm3L", humMusLMethods);
 registerTrackHandler("zoo", zooMethods);
-registerTrackHandler("musHumL", musHumLMethods);
+registerTrackHandler("musHumL", humMusLMethods);
+registerTrackHandler("mm3Hg15L", humMusLMethods);
 registerTrackHandler("affyTranscriptome", affyTranscriptomeMethods);
 registerTrackHandler("rikenMrna", rikenMethods);
 registerTrackHandler("ensRiken", ensRikenMethods);
