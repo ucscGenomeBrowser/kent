@@ -180,7 +180,7 @@ slReverse(&rangeList);
 return rangeList;
 }
 
-static void gfQuerySeqTrans(char *hostName, char *portName, aaSeq *seq, struct gfClump *clumps[2][3])
+static void gfQuerySeqTrans(char *hostName, char *portName, aaSeq *seq, struct gfClump *clumps[2][3], struct gfSeqSource **retSsList, int *retTileSize)
 /* Query server for clumps where aa sequence hits translated index. */
 {
 int sd;
@@ -189,7 +189,7 @@ struct gfClump *clump;
 struct gfHit *hit;
 int tileSize = 4;
 char *line, *var, *val, *word;
-char *s;
+char *s = NULL;
 char buf[256], *row[12];
 struct hash *ssHash = newHash(0);
 struct gfSeqSource *ssList = NULL, *ss;
@@ -226,7 +226,6 @@ for (;;)
 	     internalErr();
 	 }
     }
-freez(&s);
 
 
 /* Read results line by line and save in memory. */
@@ -255,7 +254,7 @@ for (;;)
     clump->tStart = sqlUnsigned(row[3]);
     clump->tEnd = sqlUnsigned(row[4]);
     clump->hitCount = sqlUnsigned(row[5]);
-    isRc = ((row[6][0] == '-') ? 0 : 1);
+    isRc = ((row[6][0] == '-') ? 1 : 0);
     frame = sqlUnsigned(row[7]);
     slAddHead(&clumps[isRc][frame], clump);
 
@@ -281,6 +280,8 @@ close(sd);
 for (isRc = 0; isRc <= 1; ++isRc)
     for (frame = 0; frame<3; ++frame)
 	slReverse(&clumps[isRc][frame]);
+*retSsList = ssList;
+*retTileSize = tileSize;
 uglyf("Done gfSeqQueryTrans\n");
 }
 
@@ -325,7 +326,7 @@ slReverse(&geneList);
 return geneList;
 }
 
-static void expandRange(struct gfRange *range, int qSize, int tSize)
+static void expandRange(struct gfRange *range, int qSize, int tSize, boolean respectFrame)
 /* Expand range to cover an additional 500 bases on either side. */
 {
 int extra = 500;
@@ -341,6 +342,13 @@ range->qEnd = x;
 
 x = range->tStart - extra;
 if (x < 0) x = 0;
+if (respectFrame) 
+    {
+    int frame = range->tStart % 3;
+    uglyf("  Respecting frame %d, range->tStart %d, old x %d\n", frame, range->tStart, x);
+    x = x - (x % 3) + frame;
+    uglyf("  new x %d\n", x);
+    }
 range->tStart = x;
 
 x = range->tEnd + extra;
@@ -348,7 +356,7 @@ if (x > tSize) x = tSize;
 range->tEnd = x;
 }
 
-static struct dnaSeq *expandAndLoad(struct gfRange *range, char *nibDir, struct dnaSeq *query, int *retNibSize)
+static struct dnaSeq *expandAndLoad(struct gfRange *range, char *nibDir, int querySize, int *retNibSize, boolean respectFrame)
 /* Expand range to cover an additional 500 bases on either side.
  * Load up target sequence and return. (Done together because don't
  * know target size before loading.) */
@@ -360,7 +368,7 @@ int nibSize;
 
 sprintf(nibFileName, "%s/%s", nibDir, range->tName);
 nibOpenVerify(nibFileName, &f, &nibSize);
-expandRange(range, query->size, nibSize);
+expandRange(range, querySize, nibSize, respectFrame);
 target = nibLdPart(nibFileName, f, nibSize, range->tStart, range->tEnd - range->tStart);
 fclose(f);
 *retNibSize = nibSize;
@@ -454,7 +462,7 @@ rangeList = gfRangesBundle(rangeList, 500000);
 for (range = rangeList; range != NULL; range = range->next)
     {
     splitPath(range->tName, dir, chromName, ext);
-    targetSeq = expandAndLoad(range, nibDir, seq, &chromSize);
+    targetSeq = expandAndLoad(range, nibDir, seq->size, &chromSize, FALSE);
     AllocVar(bun);
     bun->qSeq = seq;
     bun->genoSeq = targetSeq;
@@ -469,21 +477,35 @@ for (range = rangeList; range != NULL; range = range->next)
 gfRangeFreeList(&rangeList);
 }
 
+char *clumpTargetName(struct gfClump *clump)
+/* Return target name of clump - whether it is in memory or on disk. */
+{
+struct gfSeqSource *target = clump->target;
+char *name;
+if (target->seq != NULL)
+    name = target->seq->name;
+else
+    name = target->fileName;
+if (name == NULL)
+    internalErr();
+return name;
+}
+
 static struct gfRange *seqClumpToRangeList(struct gfClump *clumpList)
 /* Convert from clump list to range list. */
 {
 struct gfRange *rangeList = NULL, *range;
 struct gfClump *clump;
 struct dnaSeq *seq;
+char *name;
+
 for (clump = clumpList; clump != NULL; clump = clump->next)
     {
     AllocVar(range);
     range->qStart = clump->qStart;
     range->qEnd = clump->qEnd;
-    seq = clump->target->seq;
-    if (seq == NULL)
-        errAbort("Error gfClientLib.c. NULL target seq in range.");
-    range->tName = cloneString(seq->name);
+    name = clumpTargetName(clump);
+    range->tName = cloneString(name);
     range->tStart = clump->tStart;
     range->tEnd = clump->tEnd;
     range->tSeq = seq;
@@ -509,7 +531,7 @@ rangeList = gfRangesBundle(rangeList, 500000);
 for (range = rangeList; range != NULL; range = range->next)
     {
     targetSeq = range->tSeq;
-    expandRange(range, seq->size, targetSeq->size);
+    expandRange(range, seq->size, targetSeq->size, FALSE);
     range->tStart = 0;
     range->tEnd = targetSeq->size;
     AllocVar(bun);
@@ -626,6 +648,8 @@ for (hit = clump->hitList; ; hit = hit->next)
 	    {
 	    qs = qSeq->dna + qStart;
 	    ts = tSeq->dna + tStart;
+	    uglyf("  qs = %c%c%c%c\n", qs[0], qs[1], qs[2], qs[3]);
+	    uglyf("  ts = %c%c%c%c\n", ts[0], ts[1], ts[2], ts[3]);
 	    qe = qSeq->dna + qEnd;
 	    te = tSeq->dna + tEnd;
 	    extendHitRight(qSeq->size - qEnd, tSeq->size - tEnd,
@@ -778,6 +802,22 @@ for (frame=0; frame<3; ++frame)
     gfClumpFreeList(&clumps[frame]);
 }
 
+struct trans3 *findTrans3(struct hash *t3Hash, char *name, int start, int end)
+/* Find trans3 in hash which corresponds to sequence of given name and includes
+ * bases between start and end. */
+{
+struct trans3 *t3;
+uglyf("findTrans3(%s, %d, %d)\n", name, start, end);
+for (t3 = hashFindVal(t3Hash, name); t3 != NULL; t3 = t3->next)
+    {
+    uglyf("  Loooking at t3 %s %d %d\n", t3->name, t3->start, t3->end);
+    if (t3->start <= start && t3->end >= end)
+        return t3;
+    }
+internalErr();
+return NULL;
+}
+
 void gfAlignTrans(char *hostName, char *portName, char *nibDir, aaSeq *seq,
     int minMatch, GfSaveAli outFunction, struct gfSavePslxData *outData)
 /* Search indexed translated genome on server with an amino acid sequence. 
@@ -785,36 +825,131 @@ void gfAlignTrans(char *hostName, char *portName, char *nibDir, aaSeq *seq,
  * Call 'outFunction' with each alignment that is found. */
 {
 struct ssBundle *bun;
-struct gfClump *clumps[2][3];
-struct gfRange *rangeList = NULL, *range;
-struct dnaSeq *targetSeq;
+struct gfClump *clumps[2][3], *clump;
+struct gfRange *rangeList = NULL, *range, *rl;
+struct dnaSeq *targetSeq, *tSeqList = NULL;
 char dir[256], chromName[128], ext[64];
-int chromSize;
+int chromSize, tileSize;
+int frame, isRc = 0;
+struct hash *t3Hash = NULL;
+struct slRef *t3RefList = NULL, *ref;
+struct gfSeqSource *ssList = NULL;
+struct trans3 *t3;
 
-gfQuerySeqTrans(hostName, portName, seq, clumps);
+/* Get clumps from server. */
+gfQuerySeqTrans(hostName, portName, seq, clumps, &ssList, &tileSize);
 
-#ifdef SOON
- ~~~
-rangeList = gfQuerySeq(hostName, portName, seq);
-slSort(&rangeList, gfRangeCmpTarget);
-rangeList = gfRangesBundle(rangeList, 500000);
-for (range = rangeList; range != NULL; range = range->next)
+// for (isRc = 0; isRc <= 1;  ++isRc)
     {
-    splitPath(range->tName, dir, chromName, ext);
-    targetSeq = expandAndLoad(range, nibDir, seq, &chromSize);
-    AllocVar(bun);
-    bun->qSeq = seq;
-    bun->genoSeq = targetSeq;
-    bun->data = range;
-    alignComponents(range, bun, stringency);
-    ssStitch(bun, stringency);
-    saveAlignments(chromName, chromSize, range->tStart, 
-	bun, outData, isRc, stringency, minMatch, outFunction);
-    ssBundleFree(&bun);
-    freeDnaSeq(&targetSeq);
-    }
-gfRangeFreeList(&rangeList);
+    uglyf("Looking at %c strand of database\n", (isRc ? '-' : '+'));
+    t3Hash = newHash(10);
+    /* Figure out which parts of sequence we need to load. */
+    for (frame = 0; frame < 3; ++frame)
+	{
+	rl = seqClumpToRangeList(clumps[isRc][frame]);
+	rangeList = slCat(rangeList, rl);
+	}
+    /* Convert from amino acid to nucleotide coordinates. */
+    for (range = rangeList; range != NULL; range = range->next)
+	{
+	range->qStart *= 3;
+	range->qEnd *= 3;
+	range->tStart *= 3;
+	range->tEnd *= 3;
+	}
+    slSort(&rangeList, gfRangeCmpTarget);
+    uglyf("%d ranges\n", slCount(rangeList));
+    rangeList = gfRangesBundle(rangeList, 500000);
+    uglyf("%d bundles\n", slCount(rangeList));
+
+
+    /* Construct t3Hash and load sequence into it (but don't expand to
+     * all translated reading frames yet.) */
+    for (range = rangeList; range != NULL; range = range->next)
+	{
+	int chromSize;
+	struct trans3 *oldT3;
+
+	targetSeq = expandAndLoad(range, nibDir, seq->size*3, &chromSize, TRUE);
+	slAddHead(&tSeqList, targetSeq);
+	freez(&targetSeq->name);
+	targetSeq->name = cloneString(range->tName);
+	t3 = trans3New(targetSeq);
+	refAdd(&t3RefList, t3);
+	t3->start = range->tStart;
+	t3->end = range->tEnd;
+	if ((oldT3 = hashFindVal(t3Hash, range->tName)) != NULL)
+	    {
+	    slAddTail(&oldT3->next, t3);
+	    }
+	else
+	    {
+	    hashAdd(t3Hash, range->tName, t3);
+	    }
+	}
+
+    /* The old range list was not very precise - it was just to get
+     * the DNA loaded.  */
+    gfRangeFreeList(&rangeList);
+
+
+    /* Patch up clump list and associated sequence source to refer
+     * to bits of genome loaded into memory. */
+    uglyf("I should be extending the hits now, but I'm not\n");
+    for (frame = 0; frame < 3; ++frame)
+	{
+	uglyf("frame %d\n", frame);
+	for (clump = clumps[isRc][frame]; clump != NULL; clump = clump->next)
+	    {
+	    struct gfSeqSource *ss = clump->target;
+	    t3 = findTrans3(t3Hash, clumpTargetName(clump), clump->tStart*3, clump->tStart*3);
+	    uglyf("clump %s, start %d, end %d, t3->start %d, t3->end %d\n",
+	    	clumpTargetName(clump), clump->tStart, clump->tStart, t3->start, t3->end);
+	    ss->seq = t3->trans[frame];
+	    ss->start = t3->start/3;
+	    ss->end = t3->end/3;
+	    clumpToHspRange(clump, seq, tileSize, frame, &rangeList);
+	    }
+	}
+    slReverse(&rangeList);
+    slSort(&rangeList, gfRangeCmpTarget);
+    rangeList = gfRangesBundle(rangeList, 500000/3);
+    for (range = rangeList; range != NULL; range = range->next)
+	{
+	targetSeq = range->tSeq;
+	t3 = hashMustFindVal(t3Hash, targetSeq->name);
+	AllocVar(bun);
+	bun->qSeq = seq;
+	bun->genoSeq = targetSeq;
+	bun->data = range;
+	bun->ffList = rangesToFfItem(range->components, seq);
+	bun->isProt = TRUE;
+	bun->tripleSeq = t3->trans;
+	ssStitch(bun, ffCdna);
+	uglyf("Should be writing alignment\n");
+#ifdef SOON
+	saveAlignments(targetSeq->name, targetSeq->size, 0, 
+	    bun, outData, FALSE, ffCdna, minMatch, outFunction);
 #endif /* SOON */
+	ssBundleFree(&bun);
+	}
+
+    /* Cleanup for this strand of database. */
+    freeHash(&t3Hash);
+    for (ref = t3RefList; ref != NULL; ref = ref->next)
+        {
+	struct trans3 *t3 = ref->val;
+	trans3Free(&t3);
+	}
+    slFreeList(&t3RefList);
+    freeDnaSeqList(&tSeqList);
+    }
+
+/* Final cleanup. */
+for (isRc=0; isRc<=1; ++isRc)
+    for (frame=0; frame<3; ++frame)
+	gfClumpFreeList(&clumps[isRc][frame]);
+
 }
 
 void untranslateRangeList(struct gfRange *rangeList, int qFrame, int tFrame, struct hash *t3Hash)
