@@ -159,7 +159,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.833 2005/02/10 20:45:16 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.834 2005/02/11 23:08:15 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1777,20 +1777,24 @@ if ((pepTable != NULL) && hGenBankHaveSeq(pepName, pepTable))
     }
 if (!foundPep)
     {
-    puts("<LI>\n");
-    hgcAnchorSomewhere("htcTranslatedPredMRna", geneName, "translate", seqName);
-    /* put out correct message to describe translated mRNA */
-    printf("Translated Protein</A> from ");
-    if (sameString(geneTable, "refGene") ) 
-        {
-        printf("genomic DNA\n");
-        } 
-    else
-        {
-        printf("predicted mRNA \n"); 
-        }
-    puts("</LI>\n");
-    foundPep = TRUE;
+    char *autoTranslate = trackDbSetting(tdb, "autoTranslate");
+    if (autoTranslate == NULL || differentString(autoTranslate, "0"))
+	{
+	puts("<LI>\n");
+	hgcAnchorSomewhere("htcTranslatedPredMRna", geneName, "translate", seqName);
+	/* put out correct message to describe translated mRNA */
+	printf("Translated Protein</A> from ");
+	if (sameString(geneTable, "refGene") ) 
+	    {
+	    printf("genomic DNA\n");
+	    } 
+	else
+	    {
+	    printf("predicted mRNA \n"); 
+	    }
+	puts("</LI>\n");
+	foundPep = TRUE;
+	}
     }
 
 puts("<LI>\n");
