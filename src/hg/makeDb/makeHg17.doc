@@ -9683,3 +9683,25 @@ line+ psl/$(root1)_$(root2).psl}
     hgsql hg17 -e 'load data local infile "hg17.kgSpAlias.tab" into table kgSpAlias'
 
 
+# SEGMENTAL DUPLICATIONS (DONE 10/21/04 angie)
+    ssh hgwdev
+    mkdir /cluster/data/hg17/bed/genomicSuperDups
+    cd /cluster/data/hg17/bed/genomicSuperDups
+    # A tar file containing files for both hg16 and hg17 was downloaded into 
+    # /cluster/data/hg16/bed/genomicSuperDups;  move over the hg17 part.
+    mv /cluster/data/hg16/bed/genomicSuperDups/bd35 .
+    cd bd35
+    # A note from Xinwei She about the contents:
+#Build35 contains only 2 tables: genomicSuperDups and celeraDupPositive.
+    # use tail +2 to skip past the header line:
+    # actually, celeraDupPositive.tab.gz has one extra bogus line so +3 for it:
+    zcat celeraDupPositive.tab.gz | tail +3 \
+    | hgLoadBed -tab -sqlTable=$HOME/kent/src/hg/lib/celeraDupPositive.sql \
+        hg17 celeraDupPositive stdin
+    zcat genomicSuperDups.tab.gz | tail +2 \
+    | hgLoadBed -tab -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql \
+        hg17 genomicSuperDups stdin
+    # clean up
+    rm bed.tab
+
+
