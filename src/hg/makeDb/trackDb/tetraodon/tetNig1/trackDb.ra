@@ -22,7 +22,7 @@ longLabel Genoscope Annotations Using GAZE
 group genes
 priority 48
 visibility dense
-color 170,100,0
+color 0,0,206
 type genePred
 
 track genscan
@@ -36,21 +36,22 @@ type genePred
 
 track hoxGenes
 shortLabel HOX Genes
-longLabel HOX Genes Annotations (Human Curated)
+longLabel HOX Gene Annotations (Human Curated)
 group genes
 priority 51
 visibility hide
 chromosomes chr2,chr8,chr9,chr17,chr21,chrUn_random,
-color 170,100,0
+color 50,130,0
 type genePred
 
 track cytokines
 shortLabel Cytokine Genes
-longLabel Cytokine Genes Annotations (Human Curated)
+longLabel Cytokine Gene Annotations (Human Curated)
 group genes
 priority 52
 visibility hide
-color 170,100,0
+chromosomes chr1,chr2,chr3,chr4,chr7,chr8,chr10,chr12,chr13,chr15,chr16,chr1_random,chr3_random,chrUn_random,
+color 50,130,0
 type genePred
 
 searchTable gaze
