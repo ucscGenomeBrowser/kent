@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.22 2004/08/17 21:14:57 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.23 2004/08/17 22:23:08 hiram Exp $";
 
 /* Command line switches. */
 static boolean noAscii = FALSE;	/*	do not output ascii data */
@@ -22,6 +22,7 @@ static boolean fetchNothing = FALSE;	/*  no ascii, bed, or stats returned */
 static boolean timing = FALSE;	/*	turn timing on	*/
 static boolean skipDataRead = FALSE;	/*	do not read the wib data */
 static boolean rawDataOut = FALSE;	/*	just the values, no positions */
+static boolean statsHTML = FALSE;	/*	stats output in HTML */
 static char *db = NULL;			/* database specification	*/
 static char *chr = NULL;		/* work on this chromosome only */
 static char *chromLst = NULL;	/*	file with list of chroms to process */
@@ -46,6 +47,7 @@ static struct optionSpec optionSpecs[] = {
     {"timing", OPTION_BOOLEAN},
     {"skipDataRead", OPTION_BOOLEAN},
     {"rawDataOut", OPTION_BOOLEAN},
+    {"statsHTML", OPTION_BOOLEAN},
     {"span", OPTION_INT},
     {"ll", OPTION_FLOAT},
     {"ul", OPTION_FLOAT},
@@ -67,7 +69,8 @@ errAbort(
   "   -chromLst=<file> - file with list of chroms to examine\n"
   "   -noAscii - do *not* perform the default ascii output\n"
   "   -rawDataOut - output just the data values, nothing else ( | textHistogram )\n"
-  "   -doStats - perform stats measurement\n"
+  "   -statsHTML - output stats in HTML instead of plain text (sets doStats too)\n"
+  "   -doStats - perform stats measurement, default output text, see -statsHTML\n"
   "   -doBed - output bed format\n"
   "   -silent - no output, scanning data only and prepares result\n"
   "   -fetchNothing - scanning data only, *NOT* preparing result\n"
@@ -183,7 +186,7 @@ for (i=0; i<trackCount; ++i)
 	     *	stats until all done.
 	     */
 	    if (doStats && !chromPtr)
-		wDS->statsOut(wDS, "stdout", TRUE);
+		wDS->statsOut(wDS, "stdout", TRUE, statsHTML);
 	    if (doBed)
 		wDS->bedOut(wDS, "stdout", TRUE);
 	    if (!noAscii)
@@ -222,7 +225,7 @@ for (i=0; i<trackCount; ++i)
 	/*	when working through a chrom list, stats only at the end */
 	if (doStats && chromList)
 	    {
-	    wDS->statsOut(wDS, "stdout", TRUE);
+	    wDS->statsOut(wDS, "stdout", TRUE, statsHTML);
 	    wDS->freeStats(wDS);
 	    }
     }
@@ -278,9 +281,13 @@ fetchNothing = optionExists("fetchNothing");
 timing = optionExists("timing");
 skipDataRead = optionExists("skipDataRead");
 rawDataOut = optionExists("rawDataOut");
+statsHTML = optionExists("statsHTML");
 span = optionInt("span", 0);
 lowerLimit = optionFloat("ll", -1 * INFINITY);
 upperLimit = optionFloat("ul", INFINITY);
+
+if (statsHTML)
+    doStats = TRUE;
 
 if (db)
     verbose(2, "#\tdatabase: %s\n", db);
@@ -349,6 +356,8 @@ if (skipDataRead)
     verbose(2, "#\tskipDataRead option on, do not read .wib data\n");
 if (rawDataOut)
     verbose(2, "#\trawDataOut option on, only data values are output\n");
+if (statsHTML)
+    verbose(2, "#\tstatsHTML option on, output stats in HTML format\n");
 if (span)
     {
     wDS->setSpanConstraint(wDS, span);
