@@ -52,6 +52,17 @@ DOWNLOAD SEQUENCE (DONE 2003-05-12 - Hiram)
     # hgGoldGap does not handle dir names over 2 characters:
     mv sangerFa/III sangerFa/3
 
+# CREATE AN .agp FILE FOR ChrM (DONE, 2004-04-19, hartera)
+
+    ssh hgwdev
+    cd /cluster/data/ce1/sanger
+    cat << '_EOF_' > CHROMOSOME_M.agp
+M       1       13794   1       F       X54252.1      1       13794   +
+'_EOF_'
+    mkdir -p /cluster/data/ce1/sangerFa/M
+    ln -s /cluster/data/ce1/sanger/CHROMOSOME_M.agp \
+           /cluster/data/ce1/sangerFa/M/chrM.agp
+    
 # CREATING DATABASE (DONE 2003-05-12 - Hiram)
 
     # Create the database.
@@ -344,6 +355,52 @@ CREATE TABLE chrM_gap (
     #	be fixed so it can display the assembly track without the need
     #	for the gap tables to exist.
 
+# REMAKE GAP TRACKS - ADD POSITIONS OF Ns TO ChrN_gap TABLES 
+# (DONE, 2004-04-30, hartera)
+# Add Ns to gap tables as for Ce2, this is described on Gap details page
+    # next machine
+    ssh hgwdev
+    mkdir -p /cluster/data/ce1/bed/gap
+    cd /cluster/data/ce1/bed/gap
+    # finds motifs and finds location of gaps as part of output
+    foreach c (I II III IV V X M)
+        findMotif -chr=chr${c} -verbose=4 -motif=gcatg \
+            /gbdb/ce1/nib >& chr${c}Bed.stderr
+    end
+    grep -h GAP *.stderr | sed -e "s/#GAP //" > gap.bed
+    # All the gap tables are empty so 
+    # Load in gap.bed
+    # Need to add extra fields to gap.bed file
+                                                                                
+    cat << '_EOF_' > /cluster/data/ce1/scripts/createGapFile.pl
+#!/usr/bin/perl -w
+use strict;
+                                                                                
+my $oldchr = "";
+while (<STDIN>) {
+  my @fields = split(/\t/);
+  my $chr = $fields[0];
+  if ($chr ne $oldchr) {
+     open(OUT, ">$chr"."_gap.bed");
+     $oldchr = $chr;
+  }
+  print OUT "$fields[0]\t$fields[1]\t$fields[2]\t$fields[3]\tN\t$fields[4]\tfragment\tyes\n";
+}
+'_EOF_'
+
+    perl /cluster/data/ce1/scripts/createGapFile.pl < gap.bed
+    # load into relevant tables
+    foreach c (I II III IV V X M)
+        hgLoadBed -tab -oldTable ce1 chr${c}_gap chr${c}_gap.bed
+    end
+
+# MAKE chrM_gold TABLE FROM NEW chrM.agp FILE CREATED ABOVE 
+# (DONE, 2004-04-19, hartera)
+    # next machine
+    ssh hgwdev
+    cd /cluster/data/ce1/
+    hgGoldGapGl -noGl -chrom=chrM ce1 /cluster/data/ce1 sangerFa
+
 MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR CE1 (DONE 2002-05-12 - Hiram)
     # next machine
      ssh hgwdev
@@ -354,6 +411,7 @@ MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR CE1 (DONE 2002-05-12 - Hiram)
         | hgsql -h genome-testdb hgcentraltest
     # Note: for next assembly, set scientificName column to 
     # "Caenorhabditis elegans"
+
     echo 'insert into dbDb values("ce1", "May 2003", \
 	"/gbdb/ce1/nib", "Worm", "chrII:14642289-14671631", 1, 10, \
 	"C. elegans");' \
