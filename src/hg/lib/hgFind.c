@@ -124,6 +124,8 @@ static boolean isAncientRName(char *name)
 return startsWith("ar", name);
 }
 
+
+
 static void findAncientRPos(char *name, char **retChromName, 
 	int *retWinStart, int *retWinEnd)
 /* Find human/mouse ancient repeat start, end, and chrom
@@ -1283,6 +1285,43 @@ freeDyString(&ds);
 hFreeConn(&conn);
 }
 
+static boolean isAffyProbeName(char *name)
+/* Return TRUE if name is an Affymetrix Probe ID for HG-U95Av2. */
+{
+return startsWith("HG-U95Av2:", name);
+}
+
+static void findAffyProbePos(char *name, char **retChromName, 
+	int *retWinStart, int *retWinEnd)
+/* Find affy probe start, end, and chrom
+ * from "name".  Don't alter
+ * return variables if some sort of error. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+struct dyString *query = newDyString(256);
+char **row;
+struct bed *bed = NULL;
+char *temp = strstr(name, ":"); /* parse name out of something like "HG-U95Av2:probeName" */
+assert(temp);
+temp++;
+dyStringPrintf(query, "select * from affyRatio where name = '%s'", temp);
+if(!hTableExists("affyRatio"))
+    errAbort("Sorry GNF Ratio track not available yet in this version of the browser.");
+sr = sqlMustGetResult(conn, query->string);
+row = sqlNextRow(sr);
+if (row == NULL)
+    errAbort("Couldn't find affy probe: %s", name);
+bed = bedLoadN(row,15);
+*retChromName = hgOfficialChromName(bed->chrom);
+*retWinStart = bed->chromStart;
+*retWinEnd = bed->chromEnd;
+bedFree(&bed);
+freeDyString(&query);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 static boolean genomePos(char *spec, char **retChromName, 
 	int *retWinStart, int *retWinEnd, struct cart *cart, boolean showAlias)
 /* Search for positions in genome that match user query.   
@@ -1323,6 +1362,8 @@ else
     return FALSE;
     }
 }
+
+
 
 boolean findGenomePos(char *spec, char **retChromName, 
 	int *retWinStart, int *retWinEnd, struct cart *cart)
@@ -1457,6 +1498,11 @@ if (hgIsChromRange(query))
     singlePos(hgp, "Chromosome Range", NULL, query, chrom, start, end);
     }
 
+else if (isAffyProbeName(query))
+    {
+    findAffyProbePos(query, &chrom, &start, &end);
+    singlePos(hgp, "GNF Ratio Expression data", NULL, query, chrom, start, end);
+    }
 else if (isAncientRName(query))
     {
     findAncientRPos( query, &chrom, &start, &end );
