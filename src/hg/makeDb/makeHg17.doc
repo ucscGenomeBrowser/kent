@@ -5620,7 +5620,7 @@ root=`basename $file .ss.gz`
 chrom=`echo $root | awk -F\. '{print $1}'`
 
 mkdir -p $TMP 
-zcat $file | $PHAST/phastCons - hg17panTro1mm5rn3canFam1galGal2fr1danRer1.mod --nrates 40 --suppress-missing --transitions 0.080,0.008 --quiet > $TMP/$root.pp
+zcat $file | $PHAST/phastCons - hg17panTro1mm5rn3canFam1galGal2fr1danRer1.mod --nrates 40 --transitions 0.080,0.008 --quiet > $TMP/$root.pp
 [ $? -eq 0 ] || exit 1
 mkdir -p PHASTCONS/$chrom
 gzip -c $TMP/$root.pp > PHASTCONS/$chrom/$root.pp.gz
@@ -6144,7 +6144,7 @@ root=`basename $file .ss.gz`
 chrom=`echo $root | awk -F\. '{print $1}'`
 
 mkdir -p $TMP 
-zcat $file | $PHAST/phastCons - hg17panTro1mm4rn3galGal2fr1danRer1.mod --nrates 40 --suppress-missing --transitions 0.080,0.008 --quiet > $TMP/$root.pp
+zcat $file | $PHAST/phastCons - hg17panTro1mm4rn3galGal2fr1danRer1.mod --nrates 40 --transitions 0.080,0.008 --quiet > $TMP/$root.pp
 mkdir -p PHASTCONS/$chrom
 gzip -c $TMP/$root.pp > PHASTCONS/$chrom/$root.pp.gz
 rm $TMP/$root.pp
