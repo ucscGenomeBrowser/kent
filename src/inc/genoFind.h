@@ -25,11 +25,11 @@
 #endif 
 
 enum gfConstants {
-    gfMinMatch = 3,
+    gfMinMatch = 2,
     gfMaxGap = 2,
-    gfTileSize = 12,
+    gfTileSize = 11,
     gfMaxTileUse = 1024,
-    gfPepMaxTileUse = 4096,
+    gfPepMaxTileUse = 30000,
 };
 
 struct gfSeqSource
@@ -236,5 +236,10 @@ void gfAlignTransTrans(int conn, char *nibDir, struct dnaSeq *seq, boolean isRc,
 
 int gfConnect(char *hostName, char *portName);
 /* Set up our network connection to server. */
+
+void gfMakeOoc(char *outName, char *files[], int fileCount, 
+	int tileSize, bits32 maxPat, enum gfType tType);
+/* Count occurences of tiles in seqList and make a .ooc file. */
+
 #endif /* GENOFIND_H */
 
