@@ -1633,6 +1633,8 @@ char *table = getTableName();
 char *track = getTrackName();
 webStart(cart, "Table Browser: %s", freezeName);
 checkTableExists(fullTableName);
+if (! fbUnderstandTrackDb(getTableDb(), track))
+    webAbort("Error", "Can't do Custom Track/Bed for table %s", track);
 puts("<FORM ACTION=\"/cgi-bin/hgText\" METHOD=\"GET\">\n");
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
@@ -1734,12 +1736,11 @@ if ((fbQual == NULL) || (fbQual[0] == 0))
 else
     {
     snprintf(fbTQ, sizeof(fbTQ), "%s:%s", track, fbQual);
-    fbSetClip(FALSE);
     for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	{
 	getFullTableName(fullTableName, chromPtr->name);
 	fbList = fbGetRangeQueryDb(db, fbTQ, chrom, winStart, winEnd,
-				   constraints);
+				   constraints, FALSE, FALSE);
 	for (fbPtr=fbList;  fbPtr != NULL;  fbPtr=fbPtr->next)
 	    {
 	    char *ptr = strchr(fbPtr->name, ' ');
