@@ -183,5 +183,15 @@ shortLabel 2-4hr
 longLabel Univ. Virginia Temporal Profiling of DNA Replication (0-2 hrs) in ENCODE Regions
 ---------------------
 
+======================================================================
+wiggle trackDb options:
 
-
+autoScale         on|off               # default is off
+gridDefault       on|off               # default is off (draw y=0.0 line)
+maxHeightPixels   max:default:min      # default is 128:128:11
+graphType         bar|points           # default is bar
+viewLimits        lower:upper          # default is from the type line limits
+yLineMark         real-value           # default is 0.0
+yLineOnOff        on|off               # default is off (draw y=yLineMark line)
+windowingFunction maximum|mean|minimum # default is maximum
+smoothingWindow   off|[2-16]           # default is off
