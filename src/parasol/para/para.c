@@ -91,11 +91,14 @@ errAbort(
   "   the `check out' tests fail.\n"
   "para priority 999\n"
   "   Set batch priority.\n"
-  "   1 is highest priority, 10 is normal, 100 for bottomfeeders.\n"
-  "   Setting priority to 1-9 will be logged.\n"
+  "   1 is highest priority, %d is normal, %d for bottomfeeders.\n"
+  "   Setting priority to 1-%d will be logged.\n"
   "\n"
   "Common options\n"
-  "   -verbose=1 - set verbosity level.\n"
+  "   -verbose=1 - set verbosity level.\n",
+  NORMAL_PRIORITY,
+  NORMAL_PRIORITY * NORMAL_PRIORITY,
+  NORMAL_PRIORITY-1
   );
 }
 
