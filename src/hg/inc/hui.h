@@ -42,9 +42,9 @@ char *wrapWhiteFont(char *s);
 #define MAF_DOT_VAR       "mafDot"
 #define MAF_CHAIN_VAR     "mafChain"
 
-/* display of bases for tracks such as EST's that have psl and sequence */
+/* display of bases for tracks that are type psl and have sequence e.g. ESTs */
 #define PSL_SEQUENCE_BASES	"pslSequenceBases"
-#define PSL_SEQUENCE_DEFAULT	"off"
+#define PSL_SEQUENCE_DEFAULT	"no"
 
 /******  Some stuff for tables of controls ******/
 #define CONTROL_TABLE_WIDTH 610
