@@ -28,6 +28,14 @@ static char *checkVarName(char *db, char *table, char *field)
 return fsVarName("check", db, table, field);
 }
 
+static char *typePrefix(char *type)
+/* Return prefix for type */
+{
+static char buf[128];
+safef(buf, sizeof(buf), "%s.%s.", hgtaFieldSelectPrefix, type);
+return buf;
+}
+
 #define linkedSym "linked"
 
 static char *linkedPrefix()
@@ -297,32 +305,33 @@ void doPrintSelectedFields()
 {
 char *db = cartString(cart, hgtaDatabase);
 char *table = cartString(cart, hgtaTable);
-struct sqlConnection *conn = sqlConnect(db);
-char *varPrefix = checkVarName(db, table, "");
+char *varPrefix = typePrefix("check");
 int varPrefixSize = strlen(varPrefix);
 struct hashEl *varList = NULL, *var;
-struct dyString *fields = dyStringNew(0);
-int fieldCount = 0;
+struct slName *fieldList = NULL, *field;
 
 textOpen();
+
+/* Gather together field list from cart. */
 varList = cartFindPrefix(cart, varPrefix);
 for (var = varList; var != NULL; var = var->next)
     {
     if (!sameString(var->val, "0"))
 	{
-	if (fieldCount > 0)
-	    dyStringAppendC(fields, ',');
-	dyStringAppend(fields, var->name + varPrefixSize);
-	++fieldCount;
+	field = slNameNew(var->name + varPrefixSize);
+	uglyf("field: %s\n", field->name);
+	slAddHead(&fieldList, field);
 	}
     }
-if (fieldCount < 1)
+if (fieldList == NULL)
     errAbort("Please go back and select at least one field");
-doTabOutTable(table, conn, fields->string);
+slReverse(&fieldList);
+
+/* Do output. */
+tabOutSelectedFields(db, table, fieldList);
 
 /* Clean up. */
-dyStringFree(&fields);
+slFreeList(&fieldList);
 hashElFreeList(&varList);
-sqlDisconnect(&conn);
 }
 

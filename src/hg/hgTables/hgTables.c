@@ -16,7 +16,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.22 2004/07/17 18:29:10 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.23 2004/07/17 20:05:25 kent Exp $";
 
 
 void usage()
@@ -449,7 +449,7 @@ return hti->chromField[0] && hti->startField[0] && hti->endField[0];
 
 
 void doTabOutTable(char *table, struct sqlConnection *conn, char *fields)
-/* Do tab-separated output on table. */
+/* Do tab-separated output on fields of a single table. */
 {
 struct region *region, *regionList = NULL;
 struct hTableInfo *hti = NULL;
