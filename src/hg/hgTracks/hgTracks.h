@@ -327,6 +327,11 @@ void bedDrawSimpleAt(struct track *tg, void *item,
 	double scale, MgFont *font, Color color, enum trackVisibility vis);
 /* Draw a single simple bed item at position. */
 
+typedef struct slList *(*ItemLoader)(char **row);
+
+void bedLoadItem(struct track *tg, char *table, ItemLoader loader);
+/* Generic tg->item loader. */
+
 void linkedFeaturesFreeList(struct linkedFeatures **pList);
 /* Free up a linked features list. */
 
@@ -368,6 +373,9 @@ void spreadString(struct vGfx *vg, int x, int y, int width, int height,
 
 void goldMethods(struct track *tg);
 /* Make track for golden path (assembly track). */
+
+void cytoBandMethods(struct track *tg);
+/* Make track for simple repeats. */
 
 void chainMethods(struct track *tg);
 /* Return name of item from extra field. */
