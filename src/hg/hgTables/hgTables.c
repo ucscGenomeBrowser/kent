@@ -23,7 +23,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.93 2004/12/02 00:33:43 hiram Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.94 2004/12/02 03:22:54 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1116,9 +1116,11 @@ struct slName *fullTableFields(char *db, char *table)
 char dtBuf[256];
 struct sqlConnection *conn;
 struct slName *fieldList = NULL, *dtfList = NULL, *field, *dtf;
+char *splitTable;
 dbOverrideFromTable(dtBuf, &db, &table);
 conn = sqlConnect(db);
-fieldList = sqlListFields(conn, table);
+splitTable = chromTable(conn, table);
+fieldList = sqlListFields(conn, splitTable);
 for (field = fieldList; field != NULL; field = field->next)
     {
     char buf[256];
@@ -1127,7 +1129,8 @@ for (field = fieldList; field != NULL; field = field->next)
     slAddHead(&dtfList, dtf);
     }
 slReverse(&dtfList);
-slFreeList(fieldList);
+slFreeList(&fieldList);
+freez(&splitTable);
 sqlDisconnect(&conn);
 return dtfList;
 }
