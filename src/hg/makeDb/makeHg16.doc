@@ -1537,9 +1537,13 @@ SEQ2_LEN=$BASE/S2.len
 
     # make tight subset of net
     ssh eieio
-    cd /cluster/data/hg16/bed/blastz.mm3/axtNet
+    cd /cluster/data/hg16/bed/blastz.mm3/axtChain
+    mv ../axtNet/chr1.axt ../axtNet/chr1.old.axt
+    netToAxt mouseNet/chr1.net chain/chr1.chain /cluster/data/hg16/nib \
+                /cluster/data/mm3.RM030619/mixedNib ../axtNet/chr1.axt
     mv ../axtTight/chr1.axt ../axtTight/chr1.axt.old
-    subsetAxt  chr1.axt ../axtTight/chr1.axt \
+    cd ../axtNet
+    subsetAxt chr1.axt ../axtTight/chr1.axt \
                 /cluster/data/subsetAxt/coding.mat 3400
 
     # translate to psl
@@ -1550,7 +1554,8 @@ SEQ2_LEN=$BASE/S2.len
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz.mm3/pslTight
     hgLoadPsl hg16 chr1_blastzTightMm3.psl
-        # hg16: 11144665 bases of 221562941 (5.030%) in intersection
+        # $ featureBits -chrom=chr1 hg16 chr1_blastzTightMm3.psl
+        # 14052627 bases of 221562941 (6.342%) in intersection
         # hg15: 13990547 bases of 218713898 (6.397%) in intersection
 
     # make axtNet300
