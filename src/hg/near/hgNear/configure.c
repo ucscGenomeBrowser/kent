@@ -12,7 +12,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.21 2003/09/07 02:08:19 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.22 2003/09/07 02:44:05 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -285,7 +285,7 @@ doConfigure(conn, colList, NULL);
 #endif /* OLD */
 
 void doConfigUseSaved(struct sqlConnection *conn, struct column *colList)
-/* Respond to Use Saved Settings buttin in configuration page. */
+/* Respond to Use Saved Settings button in configuration page. */
 {
 struct userSettings *us = colUserSettings();
 userSettingsUseSelected(us);

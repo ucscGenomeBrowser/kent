@@ -16,11 +16,12 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.59 2003/09/07 02:08:19 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.60 2003/09/07 02:44:05 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
 	saveCurrentConfName, useSavedConfName, 
+	filSaveCurrentVarName, filUseSavedVarName,
 	getSeqVarName, getSeqPageVarName, getGenomicSeqVarName, getTextVarName, 
 	advFilterVarName, advFilterClearVarName, advFilterBrowseVarName,
 	advFilterListVarName, resetConfName, idVarName, idPosVarName, NULL }; 
@@ -1490,13 +1491,21 @@ else if (cartVarExists(cart, hideAllConfName))
     doConfigHideAll(conn, colList);
 else if (cartVarExists(cart, showAllConfName))
     doConfigShowAll(conn, colList);
+
 else if (cartVarExists(cart, saveCurrentConfName))
-    // doConfigSaveCurrent(conn, colList);
     doNameCurrentColumns();
 else if (cartVarExists(cart, savedCurrentConfName))
     doSaveCurrentColumns(conn, colList);
 else if (cartVarExists(cart, useSavedConfName))
     doConfigUseSaved(conn, colList);
+
+else if (cartVarExists(cart, filSaveCurrentVarName))
+    doNameCurrentFilters();
+else if (cartVarExists(cart, filSavedCurrentVarName))
+    doSaveCurrentFilters(conn, colList);
+else if (cartVarExists(cart, filUseSavedVarName))
+    doUseSavedFilters(conn, colList);
+
 else if (cartVarExists(cart, advFilterVarName))
     doAdvFilter(conn, colList);
 else if (cartVarExists(cart, advFilterClearVarName))

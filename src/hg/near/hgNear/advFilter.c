@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.2 2003/09/06 18:55:09 kent Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.3 2003/09/07 02:44:05 kent Exp $";
 
 struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -261,6 +261,14 @@ cgiMakeButton(advFilterBrowseVarName, "Browse Results");
 hPrintf("</TD></TR></TABLE>\n");
 }
 
+struct userSettings *filUserSettings()
+/* Return userSettings object for columns. */
+{
+return userSettingsNew(cart, advFilterPrefix, 
+	filSavedCurrentVarName, filSaveSettingsPrefix);
+}
+
+
 void doAdvFilter(struct sqlConnection *conn, struct column *colList)
 /* Put up advanced filter page. */
 {
@@ -268,6 +276,7 @@ struct column *col;
 boolean passPresent[2];
 int onOff = 0;
 boolean anyForSecondPass = FALSE;
+struct userSettings *us = filUserSettings();
 
 makeTitle("Gene Family Filter", "hgNearAdvFilter.html");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST>\n");
@@ -276,7 +285,20 @@ cartSaveSession(cart);
 /* Put up little table with clear all/submit */
 bigButtons();
 hPrintf("Hint: you can combine filters by copying the results of 'List Matching Names' "
-        "and then doing a 'Paste List' in the Name controls.");
+        "and then doing a 'Paste List' in the Name controls.<BR>");
+if (userSettingsAnySaved(us))
+    {
+    cgiMakeButton(filSaveCurrentVarName, "Save Filter");
+    hPrintf(" ");
+    userSettingsDropDown(us);
+    hPrintf(" ");
+    cgiMakeButton(filUseSavedVarName, "Use Saved Filter");
+    }
+else
+    {
+    hPrintf("It's possible to ");
+    cgiMakeButton(filSaveCurrentVarName, "Save Filter");
+    }
 
 /* See if have any to do in either first (displayed columns)
  * or second (hidden columns) pass. */
@@ -400,6 +422,26 @@ for (gp = inList, count=0; gp != NULL; gp = next, count++)
     }
 slReverse(&outList);
 return outList;
+}
+
+void doNameCurrentFilters()
+/* Put up page to save current filter settings. */
+{
+userSettingsSaveForm(filUserSettings(), "Save Current Filter Configuration");
+}
+
+void doSaveCurrentFilters(struct sqlConnection *conn, struct column *colList)
+/* Handle save current filters form result. */
+{
+if (userSettingsProcessForm(filUserSettings()))
+    doAdvFilter(conn, colList);
+}
+
+void doUseSavedFilters(struct sqlConnection *conn, struct column *colList)
+/* Use indicated filter settings. */
+{
+userSettingsUseSelected(filUserSettings());
+doAdvFilter(conn, colList);
 }
 
 #ifdef OLD

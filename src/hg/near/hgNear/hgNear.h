@@ -159,6 +159,11 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define savedCurrentConfName "near.do.colUserSet.saved" /* Saved column set. */
 #define useSavedConfName "near.do.colUserSet.used"      /* Use column set. */
 
+#define filSaveSettingsPrefix "near_filUserSet_" /* Prefix for filter sets. */
+#define filSaveCurrentVarName "near.do.filUserSet.save"   /* Save filter set. */
+#define filSavedCurrentVarName "near.do.filUserSet.saved" /* Saved filter set. */
+#define filUseSavedVarName "near.do.filUserSet.used"      /* Use filter set. */
+
 #define showAllSpliceVarName "near.showAllSplice" 
 	/* Show all splice varients. */
 #define expRatioColorVarName "near.expRatioColors" 
@@ -349,6 +354,15 @@ struct column *advFilterKeyClearPressed(struct column *colList);
 void doAdvFilterKeyClear(struct sqlConnection *conn, struct column *colList, 
     struct column *col);
 /* Handle clear keyword list button press in advanced filter form. */
+
+void doNameCurrentFilters();
+/* Put up page to save current filter settings. */
+
+void doSaveCurrentFilters(struct sqlConnection *conn, struct column *colList);
+/* Handle save current filters form result. */
+
+void doUseSavedFilters(struct sqlConnection *conn, struct column *colList);
+/* Use indicated filter settings. */
 
 struct genePos *weedUnlessInHash(struct genePos *inList, struct hash *hash);
 /* Return input list with stuff not in hash removed. */
