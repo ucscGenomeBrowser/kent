@@ -16,6 +16,17 @@ group map
 visibility dense
 type bed 3 +
 
+track knownGene
+shortLabel Known Genes
+longLabel Known Genes (Nov 22, 04) Based on SWISS-PROT, TrEMBL, mRNA, and RefSeq
+group genes
+priority 34
+visibility pack
+color 12,12,120
+type genePred knownGenePep knownGeneMrna
+hgGene on
+cdsDrawDefault genomic\ codons
+
 track ECgene
 shortLabel ECgene Genes
 longLabel ECgene v1.2 Gene Predictions with Alt-Splicing
