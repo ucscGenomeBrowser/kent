@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.20 2005/02/01 03:57:19 kate Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.21 2005/02/01 04:25:17 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -605,9 +605,9 @@ tg->itemName = perlegenName;
 /*******************************************************************/
 
 /* Declare our color gradients and the the number of colors in them */
-Color   ldShadesOfGreen[LD_DATA_SHADES+1];
-Color   ldShadesOfRed[LD_DATA_SHADES+1];
-Color   ldShadesOfBlue[LD_DATA_SHADES+1];
+Color   ldShadesOfGreen[LD_DATA_SHADES];
+Color   ldShadesOfRed[LD_DATA_SHADES];
+Color   ldShadesOfBlue[LD_DATA_SHADES];
 boolean ldColorsMade  = FALSE; /* Have the shades been allocated? */
 int     maxLdRgbShade = LD_DATA_SHADES - 1;
 
@@ -628,9 +628,9 @@ void ldLoadItems(struct track *tg)
 /* loadItems loads up items for the chromosome range indicated.   */
 {
 bedLoadItem(tg, tg->mapName, (ItemLoader)ldLoad);
-tg->canPack=FALSE;
-tg->limitedVis=TRUE;
-tg->visibility=tvFull;
+tg->canPack    = FALSE;
+tg->limitedVis = TRUE;
+tg->visibility = tvFull;
 }
 
 static void mapDiamondUi(int xl, int yl, int xr, int yr, 
@@ -646,19 +646,19 @@ mapStatusMessage("%s controls", shortLabel);
 hPrintf(">\n");
 }
 
+int ldCoverage()
+{
+return min(cartUsualInt(cart, "ldCov", 100000), 500000);
+}
+
 int ldTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Return total height. Called before and after drawItems. 
  * Must set height, lineHeight, heightPer */ 
 {
-tg->lineHeight          = 0;
-tg->heightPer           = 0;
-tg->height = min(cartUsualInt(cart, "ldHeight", 200), 400);
+tg->lineHeight = 0;
+tg->heightPer  = 0;
+tg->height     = min(cartUsualInt(cart, "ldHeight", 100), 400);
 return tg->height;
-}
-
-int ldCoverage()
-{
-return min(cartUsualInt(cart, "ldCov", 100000), 500000);
 }
 
 double ldSlope(int height, int width)
@@ -672,13 +672,15 @@ Color *posShades = tg->colorShades;
 Color *negShades = tg->altColorShades;
 if (abs(score)>1)
     errAbort("Score must be between -1 and 1, inclusive. (score=%.3f)",score);
+//printf("(%.1f,%d) ",score,(int)(score * LD_DATA_SHADES));
 if (score>=0)
-    return posShades[(int)(score * (LD_DATA_SHADES+1))];
+    return posShades[(int)(score * LD_DATA_SHADES)];
 return negShades[(int)(-score * LD_DATA_SHADES)];
 }
 
-void drawDiamond(struct vGfx *vg, int xl, int yl, int xr, int yr,
-        int xt, int yt, int xb, int yb, Color fillColor, Color outlineColor)
+void drawDiamond(struct vGfx *vg, 
+		 int xl, int yl, int xt, int yt, int xr, int yr, int xb, int yb, 
+		 Color fillColor, boolean drawOutline, Color outlineColor)
 /* Draw diamond shape. */
 {
 struct gfxPoly *poly = gfxPolyNew();
@@ -687,85 +689,63 @@ gfxPolyAddPoint(poly, xt, yt);
 gfxPolyAddPoint(poly, xr, yr);
 gfxPolyAddPoint(poly, xb, yb);
 vgDrawPoly(vg, poly, fillColor, TRUE);
-vgDrawPoly(vg, poly, outlineColor, FALSE);
+if (drawOutline)
+    vgDrawPoly(vg, poly, outlineColor, FALSE);
 gfxPolyFree(&poly);
 }
 
 void ldDrawDiamond(struct track *tg, struct vGfx *vg, int width, int xOff, int yOff, 
-		 int i, int j, int k, int l, double score, char *name, 
-		 char *shortLabel, boolean drawOutline, Color outlineColor)
-/* Draw a single pairwise LD box */
+		   int i, int j, int k, int l, double score, char *name, 
+		   char *shortLabel, boolean drawOutline, Color outlineColor,
+		   double scale, int height, double slope)
+/* Draw and map a single pairwise LD box */
 {
-double scale  = scaleForPixels(insideWidth);
-int    height = ldTotalHeight(tg, tvFull);
-double m      = ldSlope(height, ldCoverage());
 Color  color  = ldDiamondColor(tg, score);
-int    xl,xr,xt,xb,yl,yr,yt,yb;
+int xl = round((double)(scale*((k+i)/2-winStart))) + xOff;
+int xt = round((double)(scale*((l+i)/2-winStart))) + xOff;
+int xr = round((double)(scale*((l+j)/2-winStart))) + xOff;
+int xb = round((double)(scale*((k+j)/2-winStart))) + xOff;
+int yl = round((double)(scale*slope*(k-i))) + yOff;
+int yt = round((double)(scale*slope*(l-i))) + yOff;
+int yr = round((double)(scale*slope*(l-j))) + yOff;
+int yb = round((double)(scale*slope*(k-j))) + yOff;
 
-/* only calculate what is necesary by ignoring items to be 
- * drawn entirely outside the box.  Calculated in order of 
- * 'most likely' violations - left, right, top are first. */
-xl=round((double)(scale*((k+i)/2-winStart)))+xOff;
-if (xl > xOff+width)
-    return; /*  left-most point is to the right of the window */
-xr=round((double)(scale*((l+j)/2-winStart)))+xOff;
-if (xr < xOff)
-    return; /* right-most point is to the left  of the window */
-yb=round((double)(scale*m*(k-j)))+yOff;
-if (yb > height+yOff)
-    return; /*     bottom point is to the top  of the window */
-
-xt = round((double)(scale*((l+i)/2-winStart))) + xOff;
-xb = round((double)(scale*((k+j)/2-winStart))) + xOff;
-yl = round((double)(scale*m*(k-i))) + yOff;
-yr = round((double)(scale*m*(l-j))) + yOff;
-yt = round((double)(scale*m*(l-i))) + yOff;
-
-if (xr>=xOff && xl<width+xOff)
-    {
-    drawDiamond(vg, xl, yl, xr, yr, xt, yt, xb, yb, 
-	      color, outlineColor);
-    /* this section should be corrected by the slope for the 
-     * non-zeroed coordinate,  which would make a polygon 
-     * instead of a diamond.  It's a non-trivial problem, 
-     * as it could be a 5, 6, 7, or 8 sided polygon */
-/*
-    if (xl<xOff) xl=xOff; if (xl>width)  xl=width;
-    if (xr<xOff) xr=xOff; if (xr>width)  xr=width;
-    if (xt<xOff) xt=xOff; if (xt>width)  xt=width;
-    if (xb<xOff) xb=xOff; if (xb>width)  xb=width;
-    if (yl<yOff) yl=yOff; if (yl>height) yl=height;
-    if (yr<yOff) yr=yOff; if (yr>height) yr=height;
-    if (yt<yOff) yt=yOff; if (yt>height) yt=height;
-    if (yb<yOff) yb=yOff; if (yb>height) yb=height; 
-*/
-    mapDiamondUi(xl, yl, xt, yt, xr, yr, xb, yb, name, shortLabel);
-    }
+if (yb<=0)
+    yb=1;
+drawDiamond(vg, xl, yl, xt, yt, xr, yr, xb, yb, color, drawOutline, outlineColor);
+mapDiamondUi(   xl, yl, xt, yt, xr, yr, xb, yb, name, shortLabel);
 }
 
 void drawNecklace(struct track *tg, int width, int xOff, int yOff, 
 		  void *item, struct vGfx *vg, Color outlineColor,
 		  int *chromStarts, double *values, int arraySize,
-		  boolean drawOutline)
+		  boolean drawOutline, double scale, int height, double slope)
 /* Draw a string of diamonds that represent the pairwise LD
  * values for the current marker */
 {
-struct ld *ld       = item;
-int        n        = 0;
-int        coverage = ldCoverage();
+struct ld *ld             = item;
+int        n              = 0;
+int        coverage       = ldCoverage();
+boolean    trimToTriangle = cartUsualBoolean(cart, "ldTrim", TRUE);
 
+ldDrawDiamond(tg, vg, width, xOff, yOff, ld->chromStart, 
+	      chromStarts[0], ld->chromStart, chromStarts[0], 
+	      values[0], ld->name, tg->shortLabel, drawOutline, outlineColor,
+	      scale, height, slope);
 for (n=0; n < ld->ldCount-1; n++)
     {
-    if (n>0&&chromStarts[n-1]>winEnd) /* clip to triangle */
+    if (trimToTriangle && chromStarts[n] > winEnd) /* clip to triangle */
 	return;
-    if ((chromStarts[n]-ld->chromStart)/2 > winEnd) /* left is outside window */
+    if ((chromStarts[n]+ld->chromStart)/2 > winEnd) /* left is outside window */
 	return;
     if ((chromStarts[n]-chromStarts[0]) > coverage) /* bottom is outside window */
 	return;
-//    if ((chromStarts[n+1]-chromStarts[0])/2 >= winStart)
+    if ((chromStarts[0]+chromStarts[n+1])/2 < winStart) /* right is outside window */
+	continue;
     ldDrawDiamond(tg, vg, width, xOff, yOff, ld->chromStart, 
 		  chromStarts[0], chromStarts[n], chromStarts[n+1], 
-		  values[n], ld->name, tg->shortLabel, drawOutline, outlineColor);
+		  values[n], ld->name, tg->shortLabel, drawOutline, outlineColor,
+		  scale, height, slope);
     }
 }
 
@@ -773,8 +753,47 @@ void ldTransformLods(int arraySize, double *values)
 /* take an array of non-negative numbers and transform them to [0,1] */
 {
 int i;
+//printf("<BR>");
 for (i=0; i<arraySize; i++)
-    values[i]=1-exp(-values[i]);
+//    {
+//    if (i<10)
+//	printf("[%.1f,",values[i]);
+    values[i]=1-exp(-1*values[i]/3); /* need to work on this function */
+//    if (i<10)
+//	printf("%.1f]",values[i]/3);
+//    }
+}
+
+Color *ldFillColors(char *colorString)
+/* reuturn the array of colors for the LD diamonds */
+{
+if (sameString(colorString,"red")) 
+    return ldShadesOfRed;
+else if (sameString(colorString,"blue"))
+    return ldShadesOfBlue;
+else if (sameString(colorString,"blue"))
+    return ldShadesOfGreen;
+else
+    errAbort("LD fill color must be 'red', 'blue', or 'green'; "
+	     "'%s' is not recognized", colorString);
+return 0;
+}
+
+Color ldOutlineColor(char *outColor)
+/* get outline color from cart */
+{
+if (sameString(outColor,"yellow"))
+    return MG_YELLOW;
+else if (sameString(outColor,"red"))
+    return MG_RED;
+else if (sameString(outColor,"blue"))
+    return MG_BLUE;
+else if (sameString(outColor,"green"))
+    return MG_GREEN;
+else if (sameString(outColor,"white"))
+    return MG_WHITE;
+else
+    return MG_BLACK;
 }
 
 void ldDrawItems(struct track *tg, int seqStart, int seqEnd,
@@ -782,83 +801,63 @@ void ldDrawItems(struct track *tg, int seqStart, int seqEnd,
 		  MgFont *font, Color color, enum trackVisibility vis)
 /* Draw item list, one per track. */
 {
-int        arraySize;
-struct ld *el           = NULL;
-int       *chromStarts  = NULL;
-double    *values       = NULL;
-char      *posColor     = cartUsualString(cart, "ldPos",    "red");
-char      *negColor     = cartUsualString(cart, "ldNeg",    "blue");
-char      *outColor     = cartUsualString(cart, "ldOut",    "white");
-char      *valArray     = cartUsualString(cart, "ldValues", "dprime");
-Color      outlineColor = MG_BLUE;
-boolean    drawOutline  = differentString(outColor,"none");
-char      *commaSepList = NULL;
-boolean isLod = FALSE, isRsquared = FALSE, isDprime=FALSE;
+int        arraySize      = 0;
+struct ld *el             = NULL;
+int       *chromStarts    = NULL;
+double    *values         = NULL;
+char      *valArray       = cartUsualString(cart, "ldValues", "lod");
+char      *outColor       = cartUsualString(cart, "ldOut",    "black");
+boolean    drawOutline    = differentString(outColor,"none");
+Color      outlineColor   = MG_BLACK;
+boolean    trimToTriangle = cartUsualBoolean(cart, "ldTrim", TRUE);
+boolean    isLod          = FALSE;
+boolean    isRsquared     = FALSE;
+boolean    isDprime       = FALSE;
+double     scale          = scaleForPixels(insideWidth);
+int        height         = ldTotalHeight(tg, tvFull);
+double     slope          = ldSlope(height, ldCoverage());
 
 makeLdShades(vg);
+/* is this necessary here, or is it in ldColors? */
+tg->colorShades    = ldFillColors(cartUsualString(cart, "ldPos", "red"));
+tg->altColorShades = ldFillColors(cartUsualString(cart, "ldNeg", "blue"));
 
-/* get positive color from cart */
-if (sameString(posColor,"red"))
-    tg->colorShades = ldShadesOfRed;
-else if (sameString(posColor,"blue"))
-    tg->colorShades = ldShadesOfBlue;
-else
-    tg->colorShades = ldShadesOfGreen;
+if (drawOutline) 
+    outlineColor = ldOutlineColor(outColor);
 
-/* get negative color from cart */
-if (sameString(negColor,"blue"))
-    tg->altColorShades = ldShadesOfBlue;
-else if (sameString(negColor,"green"))
-    tg->altColorShades = ldShadesOfGreen;
-else
-    tg->altColorShades = ldShadesOfRed;
-
-/* get outline color from cart */
-if (drawOutline)
-    {
-    if (sameString(outColor,"yellow"))
-	outlineColor = MG_YELLOW;
-    else if (sameString(outColor,"red"))
-	outlineColor = MG_RED;
-    else if (sameString(outColor,"black"))
-	outlineColor = MG_BLACK;
-    else if (sameString(outColor,"green"))
-	outlineColor = MG_GREEN;
-    else if (sameString(outColor,"white"))
-	outlineColor = MG_WHITE;
-    else
-	outlineColor = MG_BLUE;
-    }
-
-
-/* choose values from different arrays based on cart settings */
-if (sameString(valArray,"rsquared"))
-    isRsquared = TRUE;
+/* choose LD values based on cart settings */
+if (sameString(valArray, "lod"))
+    isLod = TRUE;
 else if (sameString(valArray, "dprime"))
     isDprime = TRUE;
-else if (sameString(valArray, "lod"))
-    isLod = TRUE;
+else if (sameString(valArray,"rsquared"))
+    isRsquared = TRUE;
 else
-    errAbort ("LD score value must be 'rsquared', 'dprime', or 'lod'.  "
+    errAbort ("LD score value must be 'rsquared', 'dprime', or 'lod'; "
 	      "'%s' is not known", valArray);
 
 for (el=tg->items; el!=NULL; el=el->next)
     {
     sqlSignedDynamicArray(el->ldStarts, &chromStarts, &arraySize);
-    if (chromStarts[0] < winStart) /* clip to triangle */
+    if (trimToTriangle && chromStarts[0] < winStart) /* trim to triangle */
 	continue;
-    if (isLod)
-	commaSepList = el->lod;
+//    printf("<BR>");
+//    printf("<BR>r^2:%s",el->rsquared);
+//    printf("<BR>d':%s",el->dprime);
+//    printf("<BR>lod:%s",el->lod);
+//    printf("<BR>");
+    if (isRsquared)
+	sqlDoubleDynamicArray(el->rsquared, &values, &arraySize);
     else if (isDprime)
-	commaSepList = el->dprime;
-    else if (isRsquared)
-	commaSepList = el->rsquared;
-    sqlDoubleDynamicArray(commaSepList, &values, &arraySize);
-
-	/* transform lod values to [0,1] */
+	sqlDoubleDynamicArray(el->dprime, &values, &arraySize);
+    else if (isLod)
+	{
+	sqlDoubleDynamicArray(el->lod, &values, &arraySize);
 	ldTransformLods(arraySize, values);
+	}
     drawNecklace(tg, width, xOff, yOff, el, vg, outlineColor, 
-		 chromStarts, values, arraySize, drawOutline);
+		 chromStarts, values, arraySize, drawOutline,
+		 scale, height, slope);
     }
 }
 
@@ -874,6 +873,7 @@ void ldDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
 	Color color, enum trackVisibility vis)
 /* Draw Left Labels - don't do anything. */
 {
+return;
 }
 
 void ldMethods(struct track *tg)
@@ -884,4 +884,6 @@ tg->totalHeight    = ldTotalHeight;
 tg->drawItems      = ldDrawItems;
 tg->freeItems      = ldFreeItems;
 tg->drawLeftLabels = ldDrawLeftLabels;
+tg->canPack        = FALSE;
+//tg->canDense       = FALSE;
 }

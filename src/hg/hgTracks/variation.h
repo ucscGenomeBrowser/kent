@@ -82,12 +82,12 @@ void perlegenMethods(struct track *tg);
 /* setup special methods for Perlegen haplotype track */
 
 
-/* 20 shades from black to fully saturated of red/green/blue for
+/* 10 shades from black to fully saturated of red/green/blue for
  * expression data. */
-#define LD_DATA_SHADES 16
-extern Color ldShadesOfGreen[LD_DATA_SHADES+1];
-extern Color ldShadesOfRed[LD_DATA_SHADES+1];
-extern Color ldShadesOfBlue[LD_DATA_SHADES+1];
+#define LD_DATA_SHADES 10
+extern Color ldShadesOfGreen[LD_DATA_SHADES];
+extern Color ldShadesOfRed[LD_DATA_SHADES];
+extern Color ldShadesOfBlue[LD_DATA_SHADES];
 extern boolean ldColorsMade; /* Have the shades of Green, Red, and Blue been allocated? */
 extern int maxLdRgbShade;
 
