@@ -11,9 +11,9 @@
 #   -verbose
 #   -keep
 #   -initialLoad
-#   -downloadDump - dump genbank tables and mrna.zip to directories
-#    to $gbRoot/download.  Directory under this is taken from $db.downloadDir
-#    conf item
+#   -downloadDump=days - dump genbank tables and mrna.zip to directories
+#    to $gbRoot/download  If download/dump.time doesn't exists or time is
+#    more than $days days old.
 #   -drop - drop tables before load.  This removes all of genbank and
 #    refseq data, not just what is being loaded.
 #  -gbdbGenBank=dir - Use dir instead of /gbdb/genbank, for testing.
@@ -143,6 +143,27 @@ sub makeMrnaZip($) {
     removeDir($downloadTmpDir);
 }
 
+# handle download file processing
+sub handleDownloadDump($$) {
+    my($db, $downloadDumpDays) = @_;
+    # check time 
+    my $timeFile = "download/" . getConf("$db.downloadDir") . "/download.time";
+    my $downloadTime;
+    if (! -e $timeFile) {
+        $downloadTime = 0;
+    } else {
+        $downloadTime = loadTimeFile($timeFile);
+    }
+    my $deltaDays = (time() - $downloadTime) * 60 * 60 * 24;
+
+    # update if non-existant or out-of-date
+    if ($deltaDays > $downloadDumpDays) {
+        dumpGenbankTables($db);
+        makeMrnaZip($db);
+        makeTimeFile($timeFile);
+    }
+}
+
 # drop genbank tables
 sub dropTables($) {
     my($db) = @_;
@@ -159,7 +180,7 @@ my $drop = 0;
 my $keep = 0;
 my $initialLoad = 0;
 my $allowLargeDeletes = 0;
-my $downloadDump = 0;
+my $downloadDumpDays;
 my $gbdbGenBank;
 while (($#ARGV >= 0) && ($ARGV[0] =~ /^-.*/)) {
     my $opt = $ARGV[0];
@@ -176,8 +197,8 @@ while (($#ARGV >= 0) && ($ARGV[0] =~ /^-.*/)) {
         $gbCommon::verbose = 1;
     } elsif ($opt eq "-initialLoad") {
         $initialLoad = 1;
-    } elsif ($opt eq "-downloadDump") {
-        $downloadDump = 1;
+    } elsif ($opt eq "^-downloadDump(=|$)") {
+        $downloadDumpDays = parseOptEq($opt);
     } elsif ($opt eq "-allowLargeDeletes") {
         $allowLargeDeletes = 1;
     } elsif ($opt eq "-keep") {
@@ -232,10 +253,9 @@ foreach my $db (@databases) {
 }
 
 # create dump files if requested
-if ($downloadDump) {
+if ($downloadDumpDays) {
     foreach my $db (@databases) {
-        dumpGenbankTables($db);
-        makeMrnaZip($db);
+        handleDownloadDump($db, $downloadDumpDays);
     }
 }
 
