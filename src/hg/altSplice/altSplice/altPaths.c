@@ -8,15 +8,15 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: altPaths.c,v 1.2 2004/07/10 19:30:05 sugnet Exp $";
+static char const rcsid[] = "$Id: altPaths.c,v 1.3 2004/07/13 00:22:38 sugnet Exp $";
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
 {
     {"help", OPTION_BOOLEAN},
     {"saveGraphs", OPTION_STRING},
+    {"pathBeds", OPTION_STRING},
     {"dumpDistMatrix", OPTION_STRING},
-    {"dumpPathBeds", OPTION_STRING},
     {"oldClassification", OPTION_BOOLEAN},
     {NULL, 0}
 };
@@ -26,10 +26,9 @@ static char *optionDescripts[] =
 {
     "Display this message.",
     "Save the sub-graphs records in this file.",
+    "Print all of the paths to a file in bed form.",
     "Dump out the distance matrix to this file (for debugging and testing)",
-    "Dump out the paths as a bed file (for debugging and testing)",
     "Use the older style of classifying events (like altAnalysis).",
-    
 };
 
 FILE *distMatrixFile = NULL; /* File to dump out distance matrixes to
@@ -51,6 +50,7 @@ static int altOtherCount = 0;
 static int alt3PrimeSoftCount = 0;
 static int alt5PrimeSoftCount = 0;
 static int altMutExclusiveCount = 0;
+static int altControlCount = 0;
 
 void usage() 
 /* How to use the program. */
@@ -98,6 +98,9 @@ switch (type)
     case altMutExclusive:
 	altMutExclusiveCount++;
 	break;
+    case altControl:
+	altControlCount++;
+	break;
     default:
 	errAbort("logSpliceType() - Don't recognize type %d", type);
     }
@@ -113,6 +116,7 @@ fprintf(stderr, "alt Mutual Exclusive Count:\t%d\n", altMutExclusiveCount);
 fprintf(stderr, "alt Txn Start Count:\t%d\n", alt5PrimeSoftCount);
 fprintf(stderr, "alt Txn End Count:\t%d\n", alt3PrimeSoftCount);
 fprintf(stderr, "alt Other Count:\t%d\n", altOtherCount);
+fprintf(stderr, "%d control paths.\n", altControlCount);
 fprintf(stderr, "%d alt spliced sites out of %d total loci with %.2f alt splices per alt spliced loci\n",
 	totalSplices, totalLoci, (float)totalSplices/altSpliceLoci);
 }
@@ -315,7 +319,7 @@ for(i = source; i <= sink; i++)
 return FALSE;
 }	
 
-void pathAddHead(int vert, struct path *path)
+void pathAddHead(struct path *path, int vert)
 /* Add vert to the beginning of a path. */
 {
 int i = 0;
@@ -330,6 +334,18 @@ for(i = path->vCount; i > 0; i--)
     }
 path->vertices[0] = vert;
 path->vCount++;
+}
+
+void pathAddTail(struct path *path, int vert)
+/* Add vert to the end of a path. */
+{
+int i = 0;
+if(path->maxVCount <= path->vCount + 1)
+    {
+    ExpandArray(path->vertices, path->maxVCount, path->maxVCount*2);
+    path->maxVCount = 2*path->maxVCount;
+    }
+path->vertices[path->vCount++] = vert;
 }
     
 struct path *pathsBetweenVerts(int **distance, int source, int sink, 
@@ -369,7 +385,7 @@ for(i = source; i <= sink; i++)
 	    for(sub = subPaths; sub != NULL; sub = subNext)
 		{
 		subNext = sub->next;
-		pathAddHead(startIx, sub);
+		pathAddHead(sub, startIx);
 		slAddHead(&pathList, sub);
 		}
 	    }
@@ -911,6 +927,41 @@ if(ag->strand[0] == '-')
 return type;
 }
 
+struct path *newPath(int maxVerts)
+/* Create a path with the number of possible vertices set 
+   to maxVerts. */
+{
+struct path *path = NULL;
+assert(maxVerts); /* Can't call with zero. */
+AllocVar(path);
+path->maxVCount = maxVerts;
+AllocArray(path->vertices, path->maxVCount);
+return path;
+}
+
+struct splice *newSplice(struct altGraphX *ag, int vertIx, int sink, int source)
+/* Create a new splice given an altGraphX record and return it. */
+{
+struct splice *splice = NULL;
+char buff[256];
+/* Allocate and initialize the splice. */
+AllocVar(splice);
+splice->tName = cloneString(ag->tName);
+splice->tStart = BIGNUM;
+splice->tEnd = -1;
+splice->strand[0] = ag->strand[0];
+splice->agxId = ag->id;
+splice->vCount = ag->vertexCount;
+splice->vPositions = CloneArray(ag->vPositions, splice->vCount);
+splice->vTypes = CloneArray(ag->vTypes, splice->vCount);
+if(vertIx == source)
+    safef(buff, sizeof(buff), "%s.s", ag->name, vertIx);
+else
+    safef(buff, sizeof(buff), "%s.%d", ag->name, vertIx);
+splice->name = cloneString(buff);
+return splice;
+}
+
 void findAltSplicesFromVertice(struct altGraphX *ag, int source, int sink, bool **em, 
 			       int **distance, struct splice **spliceList, 
 			       int vertIx, int *endIx)
@@ -926,18 +977,7 @@ int i = 0;
 char buff[256];
 struct path *path = NULL;
 
-/* Allocate and initialize the splice. */
-AllocVar(splice);
-splice->tName = cloneString(ag->tName);
-splice->tStart = BIGNUM;
-splice->tEnd = -1;
-splice->agxId = ag->id;
-if(vertIx == source)
-    safef(buff, sizeof(buff), "%s.s", ag->name, vertIx);
-else
-    safef(buff, sizeof(buff), "%s.%d", ag->name, vertIx);
-splice->name = cloneString(buff);
-
+splice = newSplice(ag, vertIx, sink, source);
 slAddHead(spliceList, splice);
 
 /* Find all of the splice sites that vertIx connects
@@ -1024,6 +1064,33 @@ freez(&D);
 *pD = NULL;
 }
 
+void finishSplice(struct splice *splice, int **distance,
+		  struct altGraphX *ag, int source, int sink)
+/* Set the tStart, tEnd, etc. of a splice to make 
+   it ready for recording. */
+{
+struct path *path = NULL;
+simplifyAndOrderPaths(splice, distance, ag, source, sink);
+/* Loop through paths and get the min and max chromosomal
+   coordinates. */
+for(path = splice->paths; path != NULL; path = path->next)
+    {
+    splice->tStart = min(splice->tStart, path->tStart);
+    splice->tEnd = max(splice->tEnd, path->tEnd);
+    }
+}
+
+int countAltSplices(struct splice *spliceList)
+/* Return the number of entries that are not type==altControl */
+{
+struct splice *splice = NULL;
+int altCount = 0;
+for(splice = spliceList; splice != NULL; splice = splice->next)
+    if(splice->type != altControl)
+	altCount++;
+return altCount;
+}
+
 int doAltPathsAnalysis(struct altGraphX *agx, FILE *spliceOut)
 /* Examine each altGraphX record for splicing events. Return number
  of alt events in graph. */
@@ -1036,6 +1103,13 @@ int **distance = createDistanceMatrix(agx, em, source, sink);
 int vertIx = 0;
 int numAltEvents = 0;
 struct splice *splice = NULL, *spliceList = NULL;
+struct path *path = NULL;
+
+/* Initialize first splice. */
+splice = newSplice(agx, 0, sink, source);
+splice->paths = newPath(sink - source);
+
+/* Start searching for alt-splicing events. */
 for(vertIx = source; vertIx <= sink; )
     {
     /* If a vertex is alt spliced, find the end of the alt-splicing
@@ -1043,23 +1117,71 @@ for(vertIx = source; vertIx <= sink; )
     if(altSplicedVertex(distance, vertIx, source, sink))
 	{
 	int nextVertIx = vertIx;
-	findAltSplicesFromVertice(agx, source, sink, em, distance, &spliceList, vertIx, &nextVertIx);
+	/* If we have a control splice going, finish it and push it on
+	   the list. */
+	if(splice->paths->vCount > 1)
+	    {
+	    splice->type = altControl;
+	    finishSplice(splice, distance, agx, source, sink);
+	    logSpliceType(splice->type, splice->paths->bpCount);
+	    slAddHead(&spliceList, splice);
+	    }
+	else
+	    spliceFree(&splice);
+
+	/* Find the end of this alt-splicing event. */
+	findAltSplicesFromVertice(agx, source, sink, em, distance, 
+				  &spliceList, vertIx, &nextVertIx);
+
+	/* Make sure that we found an end that is ahead of the start. */
 	if(vertIx >= nextVertIx) 
-	    errAbort("vertIx = %d and nextVertIx = %d in agx: %s", vertIx, nextVertIx, agx->name);
+	    errAbort("vertIx = %d and nextVertIx = %d in agx: %s", 
+		     vertIx, nextVertIx, agx->name);
 	vertIx = nextVertIx;
+	
+	splice = NULL;
+	/* Initialize next control path. */
+	splice = newSplice(agx, vertIx, sink, source);
+	splice->paths = newPath(max(sink - vertIx,2));
 	}
-    else /* Try the next vertex. */
+    else 
 	{
+	/* Add a vertex to the control path. */
+	pathAddTail(splice->paths, vertIx);
+        /* Try the next vertex. */
 	vertIx++;
 	}
     }
+/* If we have a control splice going, finish it and push it on
+   the list. */
+if(splice != NULL && splice->paths->vCount > 1)
+    {
+    splice->type = altControl;
+    finishSplice(splice, distance, agx, source, sink);
+    logSpliceType(splice->type, splice->paths->bpCount);
+    slAddHead(&spliceList, splice);
+    }
+else
+    spliceFree(&splice);
 
-numAltEvents = slCount(spliceList);
+/* Count the alt-events. */
+numAltEvents = countAltSplices(spliceList);
 
 /* Output the alternative splicing events. */
 slSort(&spliceList, spliceCmp);
 for(splice = spliceList; splice != NULL; splice = splice->next)
     {
+    for(path = splice->paths; path != NULL; path = path->next)
+	{
+	/* If writing beds, create the bed and write it out. */
+	if(pathBedFile != NULL)
+	    {	
+	    struct bed *bed = bedForPath(path, splice, agx, source, sink, TRUE);
+	    if(bed != NULL)
+		bedTabOutN(bed, 12, pathBedFile);
+	    bedFree(&bed);
+	    }
+	}
     spliceTabOut(splice, spliceOut);
     }
 
@@ -1127,7 +1249,7 @@ distMatrixFile = mustOpen(dumpName, "w");
 void initPathBeds()
 /* Set up a file handle to dump paths in bed form to. */
 {
-char *fileName = optionVal("dumpPathBeds", NULL);
+char *fileName = optionVal("pathBeds", NULL);
 assert(fileName);
 pathBedFile = mustOpen(fileName, "w");
 }
@@ -1142,7 +1264,7 @@ if(argc != 3)
     usage();
 if(optionExists("dumpDistMatrix"))
     initDumpDistMatrix();
-if(optionExists("dumpPathBeds"))
+if(optionExists("pathBeds"))
     initPathBeds();
 if(optionExists("oldClassification"))
     oldClassification = TRUE;
