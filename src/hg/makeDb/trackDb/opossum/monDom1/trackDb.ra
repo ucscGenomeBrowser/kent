@@ -18,13 +18,15 @@ type psl .
 cdsDrawOptions enabled
 
 track ultra
-shortLabel ultra
-longLabel 100%id >=200bp to hg17 (inc. contam, uncorrelated names)
+shortLabel Ultra Conserved
+longLabel Ultraconserved Elements 100%id >=200bp to hg17 (inc. contam, uncorrelated names)
 group compGeno
 priority 141
 visibility pack
-color 100,255,0
+color 150,0,0
 type bed 4 .
+searchMethod exact
+searchType bed
   
 track blastHg17KG
 shortLabel Human Proteins
