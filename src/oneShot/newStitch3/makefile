@@ -9,4 +9,4 @@ O = newStitch3.o
 
 newStitch3: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/newStitch3 $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/newStitch3
+#	strip $(HOME)/bin/$(MACHTYPE)/newStitch3
