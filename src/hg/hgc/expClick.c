@@ -10,7 +10,7 @@
 #include "cheapcgi.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: expClick.c,v 1.4 2003/09/24 17:41:11 kuhn Exp $";
+static char const rcsid[] = "$Id: expClick.c,v 1.5 2003/09/24 19:29:08 kent Exp $";
 
 struct rgbColor getColorForExprBed(float val, float max)
 /* Return the correct color for a given score */
@@ -645,7 +645,7 @@ if(name != NULL)
     printf("<li> A graphical representation is also <a href=\"%s%s\" TARGET=\"_blank\">available</a> ",netaffxDisp, name);
     printf("&nbsp;[SVG viewer required]</li>\n");
     printf("</ul>\n");
-    printf("<p>A <a href=\"%s%s#Q\">histogram</a> of the data for the selected probe set (%s) used against all ",gnfDetailed, name, name);
+    printf("<p>A <a href=\"%s%s&chip=%sA#Q\" TARGET=\"_blank\">histogram</a> of the data for the selected probe set (%s) used against all ",gnfDetailed, name, chip, name);
     printf("tissues is available at the <a href=\"http://expression.gnf.org/cgi-bin/index.cgi\" TARGET=\"_blank\">GNF web supplement</a>.\n");
     }
 }
