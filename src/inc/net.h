@@ -47,12 +47,19 @@ boolean netSendString(int sd, char *s);
 boolean netSendLongString(int sd, char *s);
 /* Send a string down a socket - up to 64k characters. */
 
+boolean netSendHugeString(int sd, char *s);
+/* Send a string down a socket - up to 4G characters. */
+
 char *netRecieveString(int sd, char buf[256]);
 /* Read string into buf and return it.  If buf is NULL
  * an internal buffer will be used. Abort if any problem. */
 
 char *netRecieveLongString(int sd);
-/* Read string and return it.  freeMem
+/* Read string up to 64k and return it.  freeMem
+ * the result when done. Abort if any problem*/
+
+char *netRecieveHugeString(int sd);
+/* Read string up to 4G and return it.  freeMem
  * the result when done. Abort if any problem*/
 
 char *netGetString(int sd, char buf[256]);
@@ -61,7 +68,12 @@ char *netGetString(int sd, char buf[256]);
  * and return NULL if any problem. */
 
 char *netGetLongString(int sd);
-/* Read string and return it.  freeMem
+/* Read string up to 64k and return it.  freeMem
+ * the result when done.  Print warning message and
+ * return NULL if any problem. */
+
+char *netGetHugeString(int sd);
+/* Read string up to 4 gig and return it.  freeMem
  * the result when done.  Print warning message and
  * return NULL if any problem. */
 

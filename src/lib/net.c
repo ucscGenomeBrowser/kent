@@ -397,6 +397,31 @@ if (write(sd, s, length)<0)
 return TRUE;
 }
 
+boolean netSendHugeString(int sd, char *s)
+/* Send a long string down socket: four bytes for length. */
+{
+unsigned long length = strlen(s);
+UBYTE b[4];
+int i;
+for (i=3; i>=0; --i)
+    {
+    b[i] = length & 0xff;
+    length >>= 8;
+    }
+if (write(sd, b, 4) < 0)
+    {
+    warn("Couldn't send huge string to socket");
+    return FALSE;
+    }
+if (write(sd, s, length) < 0)
+    {
+    warn("Couldn't send huge string to socket");
+    return FALSE;
+    }
+return TRUE;
+}
+
+
 char *netGetString(int sd, char buf[256])
 /* Read string into buf and return it.  If buf is NULL
  * an internal buffer will be used. Print warning message
@@ -451,6 +476,40 @@ s[length] = 0;
 return s;
 }
 
+char *netGetHugeString(int sd)
+/* Read string and return it.  freeMem
+ * the result when done. */
+{
+UBYTE b[4];
+char *s = NULL;
+unsigned long length = 0;
+int sz, i;
+sz = netReadAll(sd, b, 4);
+if (sz == 0)
+    return NULL;
+if (sz < 4)
+    {
+    warn("Couldn't read huge string length");
+    return NULL;
+    }
+for (i=0; i<4; ++i)
+    {
+    length <<= 8;
+    length += b[i];
+    }
+s = needMem(length+1);
+if (length > 0)
+    {
+    if (netReadAll(sd, s, length) < 0)
+	{
+	warn("Couldn't read huge string body");
+	return NULL;
+	}
+    }
+s[length] = 0;
+return s;
+}
+
 
 char *netRecieveString(int sd, char buf[256])
 /* Read string into buf and return it.  If buf is NULL
@@ -471,6 +530,17 @@ if (s == NULL)
      noWarnAbort();   
 return s;
 }
+
+char *netRecieveHugeString(int sd)
+/* Read string and return it.  freeMem
+ * the result when done. Abort if any problem*/
+{
+char *s = netGetHugeString(sd);
+if (s == NULL)
+     noWarnAbort();   
+return s;
+}
+
 
 struct lineFile *netHttpLineFileMayOpen(char *url, struct netParsedUrl **npu)
 /* Parse URL and open an HTTP socket for it but don't send a request yet. */
