@@ -58,7 +58,7 @@ foreach table (`cat $db.tables`)
     echo "using databases:  dev: $db  beta: $dbBeta"
   endif
   set beta=`hgsql -h hgwbeta -N -e 'SHOW TABLE STATUS LIKE "'$table'"' \
-      $dbBeta | awk '{print $14, $15}'`
+      $dbBeta | awk '{print $13, $14}'`
   echo "."$dev
   echo "."$beta
   echo
