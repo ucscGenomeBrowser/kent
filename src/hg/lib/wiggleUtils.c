@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.7 2004/03/24 17:22:30 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.8 2004/03/24 18:28:07 angie Exp $";
 
 static char *currentFile = (char *) NULL;	/* the binary file name */
 static FILE *f = (FILE *) NULL;			/* file handle to binary file */
@@ -235,8 +235,8 @@ if (! sqlTableExists(conn, tableName))
 sr = sqlMustGetResult(conn,query);
 while ((row = sqlNextRow(sr)) != NULL)
 {
-    ++rowCount;
     unsigned span = sqlUnsigned(row[0]);
+    ++rowCount;
 
     snprintf(spanName, sizeof(spanName), "%u", span);
     el = hashLookup(spans, spanName);
