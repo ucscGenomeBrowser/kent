@@ -40,6 +40,30 @@ exonArrows off
 showTopScorers 200
 type bed 5 .
 
+track multiz7way
+shortLabel 7way Cons.
+longLabel 6 Flies and Mosquito Multiz Alignments & phastCons Scores
+group compGeno
+priority 106
+visibility pack
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons7way
+yLineOnOff Off
+autoScaleDefault Off
+pairwise 041109
+speciesOrder droYak1 droAna1 dp2 droVir1 droMoj1 anoGam1
+
+track phastConsElements7way
+shortLabel 7way Most Cons.
+longLabel PhastCons Conserved Elements (6 Flies, Mosquito and Honeybee)
+group compGeno
+priority 106.01
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
 track anophelesEcores
 shortLabel Anopheles Ecores
 longLabel $Organism/$o_Organism ($o_date/$o_db) Evolutionary Conserved Regions
