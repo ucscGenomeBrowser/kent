@@ -17,6 +17,7 @@ errAbort(
   "   -split - split into separate files\n"
   "   -ntLast - look for NT_ on last bit\n"
   "   -wordBefore=xx The word before the accession, default 'gb'\n"
+  "   -wordIx=N The word (starting at zero) the accession is in\n"
   );
 }
 
@@ -32,6 +33,7 @@ boolean ntLast = cgiBoolean("ntLast");
 struct dnaSeq seq;
 FILE *f = NULL;
 char *wordBefore = cgiUsualString("wordBefore", "gb");
+int wordIx = cgiUsualInt("wordIx", -1);
 
 if (split)
     makeDir(out);
@@ -65,17 +67,26 @@ while (lineFileNext(lf, &line, NULL))
 	    int wordCount, i;
 	    char *accession = NULL;
 	    wordCount = chopString(line+1, "|", words, ArraySize(words));
-	    for (i=0; i<wordCount-1; ++i)
+	    if (wordIx >= 0)
 		{
-		if (sameString(words[i], wordBefore))
-		    {
-		    accession = words[i+1];
-		    break;
-		    }
+		if (wordIx >= wordCount)
+		    errAbort("Sorry only %d words", wordCount);
+	        accession = words[wordIx];
 		}
-	    if (accession == NULL)
-	        errAbort("Couldn't find '%s' line %d of %s", 
-			wordBefore, lf->lineIx, lf->fileName);
+	    else
+		{
+		for (i=0; i<wordCount-1; ++i)
+		    {
+		    if (sameString(words[i], wordBefore))
+			{
+			accession = words[i+1];
+			break;
+			}
+		    }
+		if (accession == NULL)
+		    errAbort("Couldn't find '%s' line %d of %s", 
+			    wordBefore, lf->lineIx, lf->fileName);
+		}
 	    chopSuffix(accession);
 	    fprintf(f, ">%s\n", accession);
 	    }
