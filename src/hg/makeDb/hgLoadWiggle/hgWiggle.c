@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.24 2004/08/18 18:41:46 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.25 2004/08/18 19:07:35 hiram Exp $";
 
 /* Command line switches. */
 static boolean noAscii = FALSE;	/*	do not output ascii data */
@@ -276,7 +276,7 @@ if (timing)
 	}
     else
 	{
-    verbose(VERBOSE_ALWAYS_ON,"#\ttotal %llu valid bytes, %lu no-data bytes, %ld ms, %llu rows\n#\t%llu matched = %% 0.00, %llu wib bytes, %llu bytes skipped\n",
+    verbose(VERBOSE_ALWAYS_ON,"#\ttotal %llu valid bytes, %llu no-data bytes, %ld ms, %llu rows\n#\t%llu matched = %% 0.00, %llu wib bytes, %llu bytes skipped\n",
 	wDS->validPoints, wDS->noDataPoints, et, wDS->rowsRead,
 	wDS->valuesMatched, wDS->bytesRead, wDS->bytesSkipped);
 	}
