@@ -44,7 +44,8 @@ struct region
 extern struct cart *cart;	/* This holds cgi and other variables between clicks. */
 extern struct hash *oldVars;	/* The cart before new cgi stuff added. */
 extern char *genome;		/* Name of genome - mouse, human, etc. */
-extern char *database;		/* Name of genome database - hg15, mm3, or the like. */
+extern char *dbDatabase;	/* Genome database, from db variable. */
+extern char *database;		/* Current database, often but not always dbDatabase. */
 extern char *freezeName;	/* Date of assembly. */
 extern struct trackDb *fullTrackList;	/* List of all tracks in database. */
 extern struct trackDb *curTrack;	/* Currently selected track. */
@@ -149,9 +150,17 @@ struct sqlResult *regionQuery(struct sqlConnection *conn, char *table,
 	char *extraWhere);
 /* Construct and execute query for table on region. */
 
+void dbOverrideFromTable(char buf[256], char **pDb, char **pTable);
+/* If *pTable includes database, overrider *pDb with it, using
+ * buf to hold string. */
+
 struct grp *makeGroupList(struct sqlConnection *conn, 
 	struct trackDb *trackList);
 /* Get list of groups that actually have something in them. */
+
+struct grp *findSelectedGroup(struct grp *groupList, char *cgiVar);
+/* Find user-selected group if possible.  If not then
+ * go to various levels of defaults. */
 
 struct slName *tablesForTrack(struct trackDb *track);
 /* Return list of all tables associated with track. */
@@ -345,6 +354,7 @@ boolean anyIntersection();
 /* Other CGI variables. */
 #define hgtaGroup "hgta_group"
 #define hgtaTrack "hgta_track"
+#define hgtaSelDb "hgta_selDb"
 #define hgtaRegionType "hgta_regionType"
 #define hgtaRange "hgta_range"
 #define hgtaOffsetStart "hgta_offsetStart"

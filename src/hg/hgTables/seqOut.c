@@ -16,7 +16,7 @@
 #include "hgSeq.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.10 2004/09/17 03:17:20 kent Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.11 2004/09/25 05:09:02 kent Exp $";
 
 static char *genePredMenu[] = 
     {
@@ -259,7 +259,7 @@ else
 void doOutSequence(struct sqlConnection *conn)
 /* Output sequence page. */
 {
-if (sameString(curTrack->tableName, curTable) 
+if (curTrack != NULL && sameString(curTrack->tableName, curTable) 
 	&& startsWith("genePred", curTrack->type))
     genePredOptions(curTrack, curTrack->type, conn);
 else

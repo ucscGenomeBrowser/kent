@@ -16,86 +16,8 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.47 2004/09/24 05:34:01 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.48 2004/09/25 05:09:02 kent Exp $";
 
-
-struct grp *makeGroupList(struct sqlConnection *conn, 
-	struct trackDb *trackList)
-/* Get list of groups that actually have something in them. */
-{
-struct sqlResult *sr;
-char **row;
-struct grp *groupList = NULL, *group;
-struct hash *groupsInTrackList = newHash(0);
-struct hash *groupsInDatabase = newHash(0);
-struct trackDb *track;
-
-/* Stream throught track list building up hash of active groups. */
-for (track = trackList; track != NULL; track = track->next)
-    {
-    if (!hashLookup(groupsInTrackList,track->grp))
-        hashAdd(groupsInTrackList, track->grp, NULL);
-    }
-
-/* Scan through group table, putting in ones where we have data. */
-sr = sqlGetResult(conn,
-    "select * from grp order by priority");
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    group = grpLoad(row);
-    if (hashLookup(groupsInTrackList, group->name))
-	{
-	slAddTail(&groupList, group);
-	hashAdd(groupsInDatabase, group->name, group);
-	}
-    else
-        grpFree(&group);
-    }
-sqlFreeResult(&sr);
-
-/* Do some error checking for tracks with group names that are
- * not in database.  Just warn about them. */
-for (track = trackList; track != NULL; track = track->next)
-    {
-    if (!hashLookup(groupsInDatabase, track->grp))
-         warn("Track %s has group %s, which isn't in grp table",
-	 	track->tableName, track->grp);
-    }
-
-/* Create dummpy group for all tracks. */
-AllocVar(group);
-group->name = cloneString("all");
-group->label = cloneString("All Tracks");
-slAddTail(&groupList, group);
-
-hashFree(&groupsInTrackList);
-hashFree(&groupsInDatabase);
-return groupList;
-}
-
-static struct grp *findGroup(struct grp *groupList, char *name)
-/* Return named group in list, or NULL if not found. */
-{
-struct grp *group;
-for (group = groupList; group != NULL; group = group->next)
-    if (sameString(name, group->name))
-        return group;
-return NULL;
-}
-
-struct grp *findSelectedGroup(struct grp *groupList, char *cgiVar)
-/* Find user-selected group if possible.  If not then
- * go to various levels of defaults. */
-{
-char *defaultGroup = "genes";
-char *name = cartUsualString(cart, cgiVar, defaultGroup);
-struct grp *group = findGroup(groupList, name);
-if (group == NULL)
-    group = findGroup(groupList, defaultGroup);
-if (group == NULL)
-    group = groupList;
-return group;
-}
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -172,28 +94,72 @@ hPrintf("</SELECT>\n");
 return selGroup;
 }
 
+struct slName *getDbListForGenome()
+/* Get list of selectable databases. */
+{
+struct slName *dbList = NULL;
+slNameAddTail(&dbList, "swissProt");
+slNameAddTail(&dbList, "proteins");
+slNameAddTail(&dbList, "hgFixed");
+slNameAddTail(&dbList, database);
+return dbList;
+}
+
+char *findSelDb()
+/* Find user selected database (as opposed to genome database). */
+{
+struct slName *dbList = getDbListForGenome();
+char *selDb = cartUsualString(cart, hgtaTrack, NULL);
+if (!slNameInList(dbList, selDb))
+    selDb = cloneString(dbList->name);
+slFreeList(&dbList);
+return selDb;
+}
+
 struct trackDb *showTrackField(struct grp *selGroup,
 	char *trackVar, char *trackScript)
 /* Show track control. Returns selected track. */
 {
-struct trackDb *track, *selTrack;
+struct trackDb *track, *selTrack = NULL;
 if (trackScript == NULL)
     trackScript = "";
-hPrintf("<B>track:</B>\n");
-if (selGroup != NULL && sameString(selGroup->name, "all"))
-    selGroup = NULL;
-if (selGroup == NULL) /* All Tracks */
-    slSort(&fullTrackList, trackDbCmpShortLabel);
-selTrack = findSelectedTrack(fullTrackList, selGroup, trackVar);
-hPrintf("<SELECT NAME=%s %s>\n", trackVar, trackScript);
-for (track = fullTrackList; track != NULL; track = track->next)
+if (sameString(selGroup->name, "allTables"))
     {
-    if (selGroup == NULL || sameString(selGroup->name, track->grp))
-	hPrintf(" <OPTION VALUE=%s%s>%s\n", track->tableName,
-	    (track == selTrack ? " SELECTED" : ""),
-	    track->shortLabel);
+    char *selDb = findSelDb();
+    struct slName *dbList = getDbListForGenome(), *db;
+    hPrintf("<B>database:</B>\n");
+    hPrintf("<SELECT NAME=%s %s>\n", trackVar, trackScript);
+    for (db = dbList; db != NULL; db = db->next)
+	{
+	hPrintf(" <OPTION VALUE=%s%s>%s\n", db->name,
+		(sameString(db->name, selDb) ? " SELECTED" : ""),
+		db->name);
+	}
+    hPrintf("</SELECT>\n");
     }
-hPrintf("</SELECT>\n");
+else
+    {
+    hPrintf("<B>track:</B>\n");
+    hPrintf("<SELECT NAME=%s %s>\n", trackVar, trackScript);
+    boolean allTracks = sameString(selGroup->name, "allTracks");
+    if (allTracks)
+        {
+	selTrack = findSelectedTrack(fullTrackList, NULL, trackVar);
+	slSort(&fullTrackList, trackDbCmpShortLabel);
+	}
+    else
+	{
+	selTrack = findSelectedTrack(fullTrackList, selGroup, trackVar);
+	}
+    for (track = fullTrackList; track != NULL; track = track->next)
+	{
+	if (allTracks || sameString(selGroup->name, track->grp))
+	    hPrintf(" <OPTION VALUE=%s%s>%s\n", track->tableName,
+		(track == selTrack ? " SELECTED" : ""),
+		track->shortLabel);
+	}
+    hPrintf("</SELECT>\n");
+    }
 hPrintf("\n");
 return selTrack;
 }
@@ -211,13 +177,70 @@ hPrintf("</TD></TR>\n");
 return track;
 }
 
+char *unsplitTableName(char *table)
+/* Convert chr*_name to name */
+{
+if (startsWith("chr", table))
+    {
+    char *s = strchr(table, '_');
+    if (s != NULL)
+        {
+	if (startsWith("_random_", s))
+	    table = s+8;
+	else
+	    table = s+1;
+	}
+    }
+return table;
+}
+
+struct slName *tablesForDb(char *db)
+/* Find tables associated with database. */
+{
+boolean isGenomeDb = sameString(db, database);
+struct sqlConnection *conn = sqlConnect(db);
+struct slName *raw, *rawList = sqlListTables(conn);
+struct slName *cooked, *cookedList = NULL;
+struct hash *uniqHash = newHash(0);
+
+sqlDisconnect(&conn);
+for (raw = rawList; raw != NULL; raw = raw->next)
+    {
+    if (isGenomeDb)
+	{
+	/* Deal with tables split across chromosomes. */
+	char *root = unsplitTableName(raw->name);
+	if (!hashLookup(uniqHash, root))
+	    {
+	    hashAdd(uniqHash, root, NULL);
+	    cooked = slNameNew(root);
+	    slAddHead(&cookedList, cooked);
+	    }
+	}
+    else
+        {
+	char dbTable[256];
+	safef(dbTable, sizeof(dbTable), "%s.%s", db, raw->name);
+	cooked = slNameNew(dbTable);
+	slAddHead(&cookedList, cooked);
+	}
+    }
+hashFree(&uniqHash);
+slFreeList(&rawList);
+slSort(&cookedList, slNameCmp);
+return cookedList;
+}
+
 char *showTableField(struct trackDb *track)
 /* Show table control and label. */
 {
 struct slName *name, *nameList = NULL;
 char *selTable;
 
-nameList = tablesForTrack(track);
+if (track == NULL)
+    nameList = tablesForDb(findSelDb());
+else
+    nameList = tablesForTrack(track);
 
 /* Get currently selected table.  If it isn't in our list
  * then revert to first in list. */

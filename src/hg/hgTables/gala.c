@@ -20,7 +20,7 @@
 #include "htmlPage.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: gala.c,v 1.4 2004/09/24 14:06:08 giardine Exp $";
+static char const rcsid[] = "$Id: gala.c,v 1.5 2004/09/25 05:09:02 kent Exp $";
 
 boolean galaAvail(char *db) 
 /* Return TRUE if GALA is available for this build */
@@ -66,7 +66,10 @@ char *table2 = NULL;    /* For now... */
 struct hTableInfo *hti = getHti(database, table);
 char buf[256];
 char *setting;
-htmlOpen("Output %s as %s", "results to GALA", track->shortLabel);
+char *shortLabel = table;
+if (track != NULL)
+    shortLabel = track->shortLabel;
+htmlOpen("Output %s as %s", "results to GALA", shortLabel);
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=GET>\n");
 hPrintf("%s\n", "<A HREF=\"/goldenPath/help/hgTextHelp.html#FeatureBits\">"
      "<B>Help</B></A><P>");
@@ -75,7 +78,7 @@ setting = cgiUsualString(hgtaCtName, buf);
 cgiMakeHiddenVar(hgtaCtName, setting);
 hPrintf("%s\n", "description=");
 safef(buf, sizeof(buf), "table browser query on %s%s%s",
-         track->shortLabel,
+         shortLabel,
          (table2 ? ", " : ""),
          (table2 ? table2 : ""));
 setting = cgiUsualString(hgtaCtDesc, buf);
@@ -103,7 +106,7 @@ htmlClose();
 void doGetGalaQuery (struct sqlConnection *conn)
 /* actually print the page with link to GALA and redirect */
 {
-char *table = curTrack->tableName;
+char *table = curTable;
 struct hTableInfo *hti = getHti(database, table);
 struct featureBits *fbList = NULL, *fbPtr;
 struct customTrack *ctNew = NULL;
@@ -191,9 +194,12 @@ for (region = regionList; region != NULL; region = region->next)
             for (bed = bedList;  bed != NULL;  bed = bed->next)
                 {
                 struct bed *dupe = cloneBed(bed); 
-                char *ptr = strchr(dupe->name, ' ');
-                if (ptr != NULL)
-                    *ptr = 0;
+		if (dupe->name != NULL)
+		    {
+		    char *ptr = strchr(dupe->name, ' ');
+		    if (ptr != NULL)
+			*ptr = 0;
+		    }
                 slAddHead(&ctNew->bedList, dupe);
                 gotResults = TRUE;
                 }

@@ -12,7 +12,7 @@
 #include "gff.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: gffOut.c,v 1.9 2004/08/28 23:42:14 kent Exp $";
+static char const rcsid[] = "$Id: gffOut.c,v 1.10 2004/09/25 05:09:02 kent Exp $";
 
 static void addGffLineFromBed(struct gffLine **pGffList, struct bed *bed,
 			      char *source, char *feature,
@@ -219,9 +219,6 @@ struct bed *bedList;
 struct gffLine *gffList, *gffPtr;
 char source[64];
 int itemCount;
-// Would be nice to allow user to select this, but I don't want to 
-// make an options page for just one param... any others?  
-// ? exon / CDS ?
 boolean gtf2StopCodons = FALSE;
 struct region *region, *regionList = getRegions();
 

@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.22 2004/09/15 17:14:54 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.23 2004/09/25 05:09:02 kent Exp $";
 
 extern char *maxOutMenu[];
 
@@ -316,12 +316,18 @@ static void doOutWig(struct trackDb *track, char *table, struct sqlConnection *c
 {
 struct region *regionList = getRegions(), *region;
 int maxOut = 0, outCount, curOut = 0;
+char *shortLabel = table, *longLabel = table;
 
 maxOut = wigMaxOutput(database, curTable);
 
 textOpen();
 
-wigDataHeader(track->shortLabel, track->longLabel, NULL, wigOutType);
+if (track != NULL)
+    {
+    shortLabel = track->shortLabel;
+    longLabel = track->longLabel;
+    }
+wigDataHeader(shortLabel, longLabel, NULL, wigOutType);
 
 for (region = regionList; region != NULL; region = region->next)
     {

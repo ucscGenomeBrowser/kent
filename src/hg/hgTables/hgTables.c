@@ -21,7 +21,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.70 2004/09/24 05:34:01 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.71 2004/09/25 05:09:02 kent Exp $";
 
 
 void usage()
@@ -40,8 +40,10 @@ errAbort(
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
 struct hash *oldVars;	/* The cart before new cgi stuff added. */
 char *genome;		/* Name of genome - mouse, human, etc. */
-char *database;		/* Name of genome database - hg15, mm3, or the like. */
+char *database;		/* Current genome database - hg17, mm5, etc. */
 char *freezeName;	/* Date of assembly. */
+struct grp *fullGroupList;	/* List of all groups. */
+struct grp *curGroup;	/* Currently selected group. */
 struct trackDb *fullTrackList;	/* List of all tracks in database. */
 struct trackDb *curTrack;	/* Currently selected track. */
 char *curTable;		/* Currently selected table. */
@@ -115,39 +117,12 @@ hPrintf(".");
 char *curTableLabel()
 /* Return label for current table - track short label if it's a track */
 {
-if (sameString(curTrack->tableName, curTable))
+if (curTrack != NULL && sameString(curTrack->tableName, curTable))
     return curTrack->shortLabel;
 else
     return curTable;
 }
 
-/* --------------- Compression on the fly stuff ------ */
-
-#ifdef MIGHT_WORK_SOMEDAY
-struct pipeline *gzipPipe = NULL;
-
-void gzipPipeOpen()
-/* Redirect stdout to go through a pipe to gzip. */
-{
-static char *gzip[] = {"gzip", "-c", "-f", NULL};
-gzipPipe = pipelineCreateWrite1(gzip, pipelineInheritFd, NULL);
-if (dup2(pipelineFd(gzipPipe), 1) < 0)
-   errnoAbort("dup2 to stdout failed");
-}
-
-
-void gzipPipeClose()
-/* Finish up gzip pipeline. */
-{
-if (gzipPipe != NULL)
-    {
-    fclose(stdout);  /* must close first or pipe will hang */
-    pipelineWait(&gzipPipe);
-    }
-}
-#endif /* MIGHT_WORK_SOMEDAY */
-
-   
 /* --------------- Text Mode Helpers ----------------- */
 
 static void textWarnHandler(char *format, va_list args)
@@ -177,15 +152,6 @@ char *fileName = cartUsualString(cart, hgtaOutFileName, "");
 trimSpaces(fileName);
 if (fileName[0] == 0)
     printf("Content-Type: text/plain\n\n");
-#ifdef MIGHT_WORK_SOMEDAY
-else if (endsWith(fileName, ".gz") || endsWith(fileName, ".GZ"))
-    {
-    printf("Content-Disposition: attachment; filename=%s\n", fileName);
-    printf("Content-Type: application/x-gzip\n");
-    printf("\n");
-    gzipPipeOpen();
-    }
-#endif /* MIGHT_WORK_SOMEDAY */
 else
     {
     printf("Content-Disposition: attachment; filename=%s\n", fileName);
@@ -197,6 +163,21 @@ pushAbortHandler(textAbortHandler);
 }
 
 /* --------- Utility functions --------------------- */
+
+void dbOverrideFromTable(char buf[256], char **pDb, char **pTable)
+/* If *pTable includes database, overrider *pDb with it, using
+ * buf to hold string. */
+{
+char *s;
+safef(buf, 256, "%s", *pTable);
+s = strchr(buf, '.');
+if (s != NULL)
+    {
+    *pDb = buf;
+    *s++ = 0;
+    *pTable = s;
+    }
+}
 
 static struct trackDb *getFullTrackList()
 /* Get all tracks including custom tracks if any. */
@@ -588,6 +569,91 @@ if (track == NULL)
 return track;
 }
 
+struct grp *makeGroupList(struct sqlConnection *conn, 
+	struct trackDb *trackList)
+/* Get list of groups that actually have something in them. */
+{
+struct sqlResult *sr;
+char **row;
+struct grp *groupList = NULL, *group;
+struct hash *groupsInTrackList = newHash(0);
+struct hash *groupsInDatabase = newHash(0);
+struct trackDb *track;
+
+/* Stream throught track list building up hash of active groups. */
+for (track = trackList; track != NULL; track = track->next)
+    {
+    if (!hashLookup(groupsInTrackList,track->grp))
+        hashAdd(groupsInTrackList, track->grp, NULL);
+    }
+
+/* Scan through group table, putting in ones where we have data. */
+sr = sqlGetResult(conn,
+    "select * from grp order by priority");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    group = grpLoad(row);
+    if (hashLookup(groupsInTrackList, group->name))
+	{
+	slAddTail(&groupList, group);
+	hashAdd(groupsInDatabase, group->name, group);
+	}
+    else
+        grpFree(&group);
+    }
+sqlFreeResult(&sr);
+
+/* Do some error checking for tracks with group names that are
+ * not in database.  Just warn about them. */
+for (track = trackList; track != NULL; track = track->next)
+    {
+    if (!hashLookup(groupsInDatabase, track->grp))
+         warn("Track %s has group %s, which isn't in grp table",
+	 	track->tableName, track->grp);
+    }
+
+/* Create dummy group for all tracks. */
+AllocVar(group);
+group->name = cloneString("allTracks");
+group->label = cloneString("All Tracks");
+slAddTail(&groupList, group);
+
+/* Create another dummy group for all tables. */
+AllocVar(group);
+group->name = cloneString("allTables");
+group->label = cloneString("All Tables");
+slAddTail(&groupList, group);
+
+hashFree(&groupsInTrackList);
+hashFree(&groupsInDatabase);
+return groupList;
+}
+
+static struct grp *findGroup(struct grp *groupList, char *name)
+/* Return named group in list, or NULL if not found. */
+{
+struct grp *group;
+for (group = groupList; group != NULL; group = group->next)
+    if (sameString(name, group->name))
+        return group;
+return NULL;
+}
+
+struct grp *findSelectedGroup(struct grp *groupList, char *cgiVar)
+/* Find user-selected group if possible.  If not then
+ * go to various levels of defaults. */
+{
+char *defaultGroup = "genes";
+char *name = cartUsualString(cart, cgiVar, defaultGroup);
+struct grp *group = findGroup(groupList, name);
+if (group == NULL)
+    group = findGroup(groupList, defaultGroup);
+if (group == NULL)
+    group = groupList;
+return group;
+}
+
+
 static void addTablesAccordingToTrackType(struct slName **pList, 
 	struct hash *uniqHash, struct trackDb *track)
 /* Parse out track->type and if necessary add some tables from it. */
@@ -648,18 +714,20 @@ hashFree(&uniqHash);
 return nameList;
 }
 
-char *findSelectedTable(struct trackDb *track, char *var)
+static char *findSelectedTable(struct sqlConnection *conn, struct trackDb *track, char *var)
 /* Find selected table.  Default to main track table if none
  * found. */
 {
-if (isCustomTrack(track->tableName))
+if (track == NULL)
+    return cartString(cart, var);
+else if (isCustomTrack(track->tableName))
     return track->tableName;
 else
     {
-    char *table = cartUsualString(cart, var, track->tableName);
     struct slName *tableList = tablesForTrack(track);
+    char *table = cartUsualString(cart, var, tableList->name);
     if (slNameInList(tableList, table))
-        return table;
+	return table;
     return tableList->name;
     }
 }
@@ -694,7 +762,7 @@ char *getIdField(char *db, struct trackDb *track, char *table,
 char *idField = NULL;
 if (hti != NULL && hti->nameField[0] != 0)
     idField = cloneString(hti->nameField);
-else
+else if (track != NULL)
     {
     struct hTableInfo *trackHti = getHti(db, track->tableName);
     if (hti != NULL && trackHti->nameField[0] != 0)
@@ -843,8 +911,7 @@ else
     }
 }
 
-void doOutPrimaryTable(char *trackName, char *table, 
-	struct sqlConnection *conn)
+void doOutPrimaryTable(char *table, struct sqlConnection *conn)
 /* Dump out primary table. */
 {
 textOpen();
@@ -903,11 +970,16 @@ void doTopSubmit(struct sqlConnection *conn)
  * This basically just dispatches based on output type. */
 {
 char *output = cartString(cart, hgtaOutputType);
-char *trackName = cartString(cart, hgtaTrack);
+char *trackName = NULL;
 char *table = cartString(cart, hgtaTable);
-struct trackDb *track = mustFindTrack(trackName, fullTrackList);
+struct trackDb *track = NULL;
+if (!sameString(curGroup->name, "allTables"))
+    {
+    trackName = cartString(cart, hgtaTrack);
+    track = mustFindTrack(trackName, fullTrackList);
+    }
 if (sameString(output, outPrimaryTable))
-    doOutPrimaryTable(trackName, table, conn);
+    doOutPrimaryTable(table, conn);
 else if (sameString(output, outSelectedFields))
     doOutSelectedFields(table, conn);
 else if (sameString(output, outSequence))
@@ -1024,21 +1096,24 @@ cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
 /* Set up global variables. */
 allJoiner = joinerRead("all.joiner");
 getDbAndGenome(cart, &database, &genome);
-hSetDb(database);
 freezeName = hFreezeFromDb(database);
+hSetDb(database);
 conn = hAllocConn();
+
+/* Get list of groups that actually have something in them. */
 fullTrackList = getFullTrackList();
 curTrack = findSelectedTrack(fullTrackList, NULL, hgtaTrack);
-curTable = findSelectedTable(curTrack, hgtaTable);
+fullGroupList = makeGroupList(conn, fullTrackList);
+curGroup = findSelectedGroup(fullGroupList, hgtaGroup);
+if (sameString(curGroup->name, "allTables"))
+    curTrack = NULL;
+curTable = findSelectedTable(conn, curTrack, hgtaTable);
 
 /* Go figure out what page to put up. */
 dispatch(conn);
 
 /* Save variables. */
 cartCheckout(&cart);
-#ifdef MIGHT_WORK_SOMEDAY
-gzipPipeClose();
-#endif /* MIGHT_WORK_SOMEDAY */
 }
 
 int main(int argc, char *argv[])
