@@ -114,3 +114,20 @@ shortCircuit 1
 termRegex [Dr][[:alnum:]_\.]+.*_at
 searchPriority 15
 
+searchTable blastHg17KG
+searchType psl
+xrefTable hg17.blastKGRef01
+xrefQuery select acc,extra1 from %s where extra1 like '%%%s%%'
+searchPriority 25
+
+searchName blastHg17KGGene
+searchTable blastHg17KG
+searchType psl
+xrefTable hg17.blastKGRef01
+xrefQuery select acc,geneId from %s where geneId like '%%%s%%'
+searchPriority 25
+
+searchTable blastHg17KG
+searchType psl
+query select tName,tStart,tEnd,qName from %s where qName like '%%%s%%'
+searchPriority 25
