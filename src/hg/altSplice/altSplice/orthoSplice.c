@@ -36,8 +36,9 @@
 #include "geneGraph.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.15 2003/08/18 15:59:10 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.16 2003/09/14 23:05:52 sugnet Exp $";
 static struct rbTree *netTree = NULL;  /* Global red-black tree to store cnfills in for quick searching. */
+static struct rbTree *orthoAgxTree = NULL; /* Global red-black tree to store agx's so don't need db. */
 static char *workingChrom = NULL;      /* Chromosme we are working on. */
 
 struct orthoSpliceEdge 
@@ -104,6 +105,7 @@ static struct optionSpec optionSpecs[] =
     {"commonFile", OPTION_STRING},
     {"edgeFile", OPTION_STRING},
     {"trumpNum", OPTION_INT},
+    {"orthoAgxFile", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -121,7 +123,8 @@ static char *optionDescripts[] =
     "File name to print individual reports to.",
     "File name to print common altGraphX records to.",
     "File name to print individual edge reports to.",
-    "[optional: default infinite] Number of mRNAs required to keep edge even if not conserved."
+    "[optional: default infinite] Number of mRNAs required to keep edge even if not conserved.",
+    "[optional] Don't use database, read in possible orthologous altGraphX records from file.",
 };
 
 void usage()
@@ -289,6 +292,50 @@ if (doHappyDots && (--dot <= 0))
     }
 }
 
+int agxRangeCmp(void *va, void *vb)
+/* Return -1 if a before b,  0 if a and b overlap,
+ * and 1 if a after b. */
+{
+struct altGraphX *a = va;
+struct altGraphX *b = vb;
+int diff;
+diff = strcmp(a->tName, b->tName);
+if(diff != 0) 
+    {
+    if (diff > 0)
+	return 1; 
+    else
+	return -1;
+    }
+diff = strcmp(a->strand, b->strand);
+if(diff != 0) 
+    {
+    if (diff > 0)
+	return 1; 
+    else
+	return -1;
+    }
+if (a->tEnd <= b->tStart)
+    return -1;
+else if (b->tEnd <= a->tStart)
+    return 1;
+else
+    return 0;
+}
+
+struct rbTree *rbTreeFromAgxFile(char *fileName)
+/* Build an rbTree from an agxt file */
+{
+struct rbTree *rbTree = rbTreeNew(agxRangeCmp);
+struct altGraphX *ag = NULL, *agList = NULL;
+agList = altGraphXLoadAll(fileName);
+
+for(ag=agList; ag != NULL; ag = ag->next)
+    {
+    rbTreeAdd(rbTree, ag);
+    }
+return rbTree;
+}
 
 int cnFillRangeCmp(void *va, void *vb)
 /* Return -1 if a before b,  0 if a and b overlap,
@@ -516,7 +563,7 @@ else
     }
 }
 
-struct chain *chainForBlocks(struct sqlConnection *conn, char *db, char *netTable, 
+struct chain *chainForBlocks(char *db, char *netTable, 
 			     char *chrom, int start, int end,
 			     int *blockStarts, int *blockSizes, int blockCount)
 /** Load the chain in the database for this position from the net track. */
@@ -1094,6 +1141,45 @@ freez(&edgeSeen);
 freez(&cEdgeSeen);
 }
 
+struct altGraphX *agxForCoordinates(char *chrom, int chromStart, int chromEnd, char strand, 
+				    char *altTable, struct altGraphX **toFree)
+{
+struct slRef *refList=NULL, *ref = NULL;
+struct altGraphX *ag = NULL, *agList = NULL;
+struct altGraphX *range = NULL;
+
+if(orthoAgxTree == NULL)
+    {
+    char query[256];
+    struct sqlConnection *orthoConn = NULL; 
+    orthoConn = hAllocConn2();
+    safef(query, sizeof(query), "select * from %s where tName='%s' and tStart<%d and tEnd>%d and strand like '%s'",
+	  altTable, chrom, chromEnd, chromStart, strand);
+    agList = altGraphXLoadByQuery(orthoConn, query);
+    hFreeConn2(&orthoConn);
+    *toFree = agList;
+    return agList;
+    }
+else 
+    {
+    AllocVar(range);
+    range->tName = chrom;
+    range->tStart = chromStart;
+    range->tEnd = chromEnd;
+    safef(range->strand, sizeof(range->strand), "%c", strand);
+    refList = rbTreeItemsInRange(orthoAgxTree, range, range);
+    for(ref = refList; ref != NULL; ref = ref->next)
+	{
+	slSafeAddHead(&agList, ((struct slList *)ref->val));
+	}
+    slReverse(&agList);
+    freez(&range);
+    (*toFree) = NULL;
+    return agList;
+    }
+return NULL;
+}
+
 struct altGraphX *makeCommonAltGraphX(struct altGraphX *ag, struct chain *chain)
 /** For each edge in ag see if there is a similar edge in the
     orthologus altGraphX structure and output it if there. */
@@ -1102,7 +1188,8 @@ bool **agEm = NULL;
 bool **orthoEm = NULL;
 bool **commonEm = NULL;
 bool ***orthoEmP = NULL;
-struct altGraphX *commonAg = NULL, *orthoAgList = NULL, *oAg = NULL;
+struct altGraphX *commonAg = NULL, *orthoAgList = NULL, 
+    *oAg = NULL, *agxToFree = NULL;
 struct orthoAgReport *agRep = NULL;
 struct orthoSpliceEdge *seList = NULL;
 char *strand = NULL;
@@ -1111,16 +1198,15 @@ int *orthoAgIx = NULL; /* Map of which orthoAg the vertexes in vertexMap belong 
 struct chain *subChain = NULL, *toFree = NULL;
 int i=0,j=0;
 int vCount = ag->vertexCount;
-char query[256];
 int qs = 0, qe = 0;
 bool match = FALSE;
 bool reverse = FALSE;
-struct sqlConnection *orthoConn = NULL; 
+
 /* First find the orthologous splicing graph. */
 chainSubsetOnT(chain, ag->tStart, ag->tEnd, &subChain, &toFree);    
 if(subChain == NULL)
     return NULL;
-orthoConn = hAllocConn2();
+
 qChainRangePlusStrand(subChain, &qs, &qe);
 if ((subChain->qStrand == '-'))
     reverse = TRUE;
@@ -1134,11 +1220,8 @@ if(reverse)
 else
     strand = ag->strand;
     
-safef(query, sizeof(query), "select * from %s where tName='%s' and tStart<%d and tEnd>%d and strand like '%s'",
-      altTable, subChain->qName, qe, qs, strand);
-orthoAgList = altGraphXLoadByQuery(orthoConn, query);
+orthoAgList = agxForCoordinates(subChain->qName, qs, qe, strand[0], altTable, &agxToFree);
 
-hFreeConn2(&orthoConn);
 chainFreeList(&toFree);
 if(orthoAgList == NULL)
     return NULL;
@@ -1217,7 +1300,7 @@ for(i=0, oAg=orthoAgList; i<slCount(orthoAgList); i++, oAg=oAg->next)
 if(commonAg->edgeCount == 0)
     freeCommonAg(&commonAg);
 freez(&vertexMap);
-altGraphXFreeList(&orthoAgList);
+altGraphXFreeList(&agxToFree);
 slFreeList(&seList);
 return commonAg;
 }
@@ -1230,7 +1313,6 @@ struct altGraphX *findOrthoAltGraphX(struct altGraphX *ag, char *db,
 struct altGraphX *orthoAg = NULL;
 struct chain *chain = NULL;
 struct chain *subChain = NULL, *toFree = NULL;
-struct sqlConnection *conn = hAllocConn();
 struct orthoSpliceEdge *seList = NULL, *se = NULL;
 int i;
 int qs = 0, qe = 0;
@@ -1248,11 +1330,10 @@ for(i=0; i<ag->edgeCount; i++)
 	blockCount++;
 	}
     }
-chain = chainForBlocks(conn, db, netTable, ag->tName, ag->tStart, ag->tEnd,
+chain = chainForBlocks(db, netTable, ag->tName, ag->tStart, ag->tEnd,
 		       starts, sizes, blockCount);
 freez(&starts);
 freez(&sizes);
-hFreeConn(&conn);
 if(chain == NULL)
     return NULL;
 seList = altGraphXToOSEdges(ag);
@@ -1279,6 +1360,7 @@ char *edgeFileName = optionVal("edgeFile", NULL);
 FILE *cFile = NULL;
 char *netFile = optionVal("netFile", NULL);
 char *chrom = optionVal("chrom", NULL);
+char *orthoAgxFile = optionVal("orthoAgxFile", NULL);
 int foundOrtho=0, noOrtho=0;
 
 trumpNum = optionInt("trumpNum", BIGNUM); 
@@ -1296,13 +1378,18 @@ if(edgeFileName == NULL)
     errAbort("orthoSplice - must specify edgeFile.");
 if(chrom == NULL)
     errAbort("Must specify -chrom");
+
 workingChrom = chrom;
 if(netFile != NULL)
     {
     warn("Loading net info from file %s", netFile);
     netTree = rbTreeFromNetFile(netFile);
     }
-
+if(orthoAgxFile != NULL)
+    {
+    warn("Loading orthoAltGraphX records from file", orthoAgxFile);
+    orthoAgxTree = rbTreeFromAgxFile(orthoAgxFile);
+    }
 /* Want to read in and process each altGraphX record individually
    to save memory, so figure out how many columns in each row we have currently and
    load them one by one. */
