@@ -275,6 +275,25 @@ va_end(args);
 exit(0);
 }
 
+static boolean haveDatabase(char *db)
+/* check if the database server has the specified database */
+{
+/* list of databases that actually exists (not really worth hashing) */
+static struct hash* validDatabases = NULL;
+if (validDatabases == NULL)
+    {
+    struct sqlConnection *sc = hAllocConn();
+    struct slName* allDatabases = sqlGetAllDatabase(sc);
+    struct slName* dbName = allDatabases;
+    validDatabases = hashNew(8);
+    for (; dbName != NULL; dbName = dbName->next)
+        hashAdd(validDatabases, dbName->name, NULL);
+    hFreeConn(&sc);
+    slFreeList(&allDatabases);
+    }
+return (hashLookup(validDatabases, db) != NULL);
+}
+
 void printGenomeListHtml(char *db, char *onChangeText)
 /* Prints to stdout the HTML to render a dropdown list 
  * containing a list of the possible genomes to choose from.
@@ -292,7 +311,7 @@ char *values [128];
 
 for (cur = dbList; cur != NULL; cur = cur->next)
     {
-    if (!hashFindVal(hash, cur->genome))
+    if (!hashFindVal(hash, cur->genome) && haveDatabase(cur->name))
         {
         hashAdd(hash, cur->genome, cur);
         orgList[numGenomes] = cur->genome;
@@ -302,6 +321,7 @@ for (cur = dbList; cur != NULL; cur = cur->next)
     }
 
 cgiMakeDropListFull(orgCgiName, orgList, values, numGenomes, selGenome, onChangeText);
+hashFree(&hash);
 }
 
 void printSomeAssemblyListHtmlParm(char *db, struct dbDb *dbList, char *dbCgi, char *javascript)
@@ -325,7 +345,8 @@ char *selAssembly = NULL;
 for (cur = dbList; cur != NULL; cur = cur->next)
     {
     if (strstrNoCase(genome, cur->genome)
-        && (cur->active || strstrNoCase(cur->name, db)))
+        && (cur->active || strstrNoCase(cur->name, db))
+        && haveDatabase(cur->name))
         {
         assemblyList[numAssemblies] = cur->description;
         values[numAssemblies] = cur->name;
@@ -339,7 +360,7 @@ for (cur = dbList; cur != NULL; cur = cur->next)
        }
     }
 
-    cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, selAssembly, javascript);
+cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, selAssembly, javascript);
 }
 
 void printSomeAssemblyListHtml(char *db, struct dbDb *dbList)

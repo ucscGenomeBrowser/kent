@@ -100,6 +100,20 @@ char* sqlGetDatabase(struct sqlConnection *sc)
 return sc->conn->db;
 }
 
+struct slName *sqlGetAllDatabase(struct sqlConnection *sc)
+/* Get a list of all database on the server */
+{
+struct sqlResult *sr = sqlGetResult(sc, "show databases");
+char **row;
+struct slName *databases = NULL;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    slSafeAddHead(&databases, slNameNew(row[0]));
+    }
+sqlFreeResult(&sr);
+return databases;
+}
+
 void sqlCleanupAll()
 /* Cleanup all open connections and resources. */
 {
