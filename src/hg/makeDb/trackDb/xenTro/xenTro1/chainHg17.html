@@ -3,7 +3,7 @@
 This track shows $o_organism/$organism genomic alignments using
 a gap scoring system that allows longer gaps than traditional
 affine gap scoring systems.  It can also tolerate gaps
-in both mouse and $organism simultaneously.  These &quot;double-sided&quot;
+in both $o_organism and $organism simultaneously.  These &quot;double-sided&quot;
 gaps can be caused by local inversions and overlapping deletions
 in both species. The $o_organism sequence is from the $o_date 
 (NCBI build35/UCSC hg17) genome.</P>
@@ -28,7 +28,7 @@ location (in thousands) of the match for each matching alignment.
 The genomes are aligned with blastz.  The resulting alignments are 
 converted into axt format
 and the resulting axts are fed into axtChain.  AxtChain organizes all 
-the alignments between a single mouse and a single $organism chromosome,
+the alignments between a single $o_organism and a single $organism chromosome,
 into a group,  and makes a kd-tree out of all the gapless subsections
 (blocks) of the alignments.  Next, maximally scoring chains of these
 blocks are found by running a dynamic program over the kd-tree.  Chains
@@ -58,7 +58,7 @@ Chiaromonte F, Yap VB, Miller W (2002).
 Kent WJ, Baertsch R, Hinrichs A, Miller W, and Haussler D (2003).
 <A HREF="http://www.pnas.org/cgi/content/abstract/1932072100v1" 
 TARGET=_blank>Evolution's cauldron: 
-Duplication, deletion, and rearrangement in the mouse and human genomes</A>. 
+Duplication, deletion, and rearrangement in the $o_organism and human genomes</A>. 
 <I>Proc Natl Acad Sci USA</I> 100(20):11484-11489 Sep 30 2003.
 <P>
 Schwartz S, Kent WJ, Smit A, Zhang Z, Baertsch R, Hardison R, Haussler D, and 
