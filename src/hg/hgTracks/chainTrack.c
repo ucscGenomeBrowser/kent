@@ -14,7 +14,7 @@
 #include "chainDb.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.19 2004/07/23 23:29:25 hiram Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.20 2004/07/26 18:59:18 hiram Exp $";
 
 
 struct cartOptions
@@ -87,9 +87,6 @@ int overLeft, overRight;
 
 if (tg->items == NULL)		/*Exit Early if nothing to do */
     return;
-
-if (!exprBedColorsMade)
-    makeRedGreenShades(vg);
 
 lm = lmInit(1024*4);
 hash = newHash(0);
@@ -219,8 +216,6 @@ char optionChr[128]; /* Option -  chromosome filter */
 char *optionChrStr;
 char extraWhere[128] ;
 struct cartOptions *chainCart;
-float highScore = -1.0e+300;
-float lowScore = +1.0e+300;
 
 chainCart = (struct cartOptions *) tg->extraUiData;
 
@@ -246,12 +241,14 @@ while ((row = sqlNextRow(sr)) != NULL)
     lf->grayIx = maxShade;
     if (chainCart->chainColor == chainColorScoreColors)
 	{
-	lf->score = sqlFloat(row[11]);
-	if (lf->score > highScore) highScore = lf->score;
-	if (lf->score < lowScore) lowScore = lf->score;
+	float normScore = sqlFloat((row+rowOffset)[11]);
+	lf->grayIx = (int) ((float)maxShade * (normScore/100.0));
+	if (lf->grayIx > (maxShade+1)) lf->grayIx = maxShade+1;
+	lf->score = normScore;
 	}
     else
 	lf->score = chain.score;
+
     lf->filterColor = -1;
 
     if (chain.qStrand == '-')
@@ -273,36 +270,28 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&list, lf);
     }
 
-/* Make sure this is sorted if in full mode. */
+/* Make sure this is sorted if in full mode. Sort by score when
+ * coloring by score and in dense */
 if (tg->visibility != tvDense)
     slSort(&list, linkedFeaturesCmpStart);
+else if ((tg->visibility == tvDense) &&
+	(chainCart->chainColor == chainColorScoreColors))
+    slSort(&list, chainCmpScore);
 else
     slReverse(&list);
 tg->items = list;
 
-if (chainCart->chainColor == chainColorScoreColors)
-    {
-    tg->minRange = lowScore;	/* borrowing meaning of these from "sample" */
-    tg->maxRange = highScore;	/*	tracks	*/
-    }
 
 /* Clean up. */
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-}
+}	/*	chainLoadItems()	*/
 
 static Color chainScoreColor(struct track *tg, void *item, struct vGfx *vg)
 {
 struct linkedFeatures *lf = (struct linkedFeatures *)item;
-int shadeIx = EXPR_DATA_SHADES - 1;
-float range = tg->maxRange - tg->minRange;
 
-if (range > 0.0)
-    shadeIx = (int) ((EXPR_DATA_SHADES-1) * ((lf->score - tg->minRange)/range));
-
-shadeIx = (int) ((EXPR_DATA_SHADES-1) * ((lf->score - 30.0)/70.0));
-
-return(tg->colorShades[shadeIx%EXPR_DATA_SHADES]);
+return(tg->colorShades[lf->grayIx]);
 }
 
 static Color chainNoColor(struct track *tg, void *item, struct vGfx *vg)
@@ -334,7 +323,7 @@ if (normScoreAvailable)
 	{
 	case (chainColorScoreColors):
 	    tg->itemColor = chainScoreColor;
-	    tg->colorShades = shadesOfRed;
+	    tg->colorShades = shadesOfGray;
 	    break;
 	case (chainColorNoColors):
 	    tg->itemColor = chainNoColor;
