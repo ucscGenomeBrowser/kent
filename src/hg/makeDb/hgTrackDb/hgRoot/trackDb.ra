@@ -920,7 +920,7 @@ type bed 5 .
 url http://www.genoscope.cns.fr/proxy/cgi-bin/exofish.cgi?Id=$$&Mode=Id
 
 track blatFish
-shortLabel Fish Blat
+shortLabel Tetraodon Blat
 longLabel Tetraodon nigriviridis Translated Blat Alignments
 priority 28
 visibility dense
