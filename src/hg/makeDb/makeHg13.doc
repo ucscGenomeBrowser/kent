@@ -1837,18 +1837,18 @@ LOAD SAGE DATA (DONE 02/18/03)
 
     
 MAKE UNIGENE ALIGNMENTS (DONE 02/18/03)
-    cd /projects/cc/hg/sugnet/uniGene
-    ncftp ftp.ncbi.nih.gov
-      cd repository/UniGene/
-      mget Hs.info Hs.seq.uniq.gz Hs.data.gz
-      quit
-    # Cut out the unigene build number and append it to unigene
-    set version = `perl -e '$t=<>;$t=~/\#(\d+)/;print "$1\n";' < Hs.info`
-    mkdir uniGene.$version
-    mv Hs.* uniGene.$version
-    cd uniGene.$version
+    # Download of the latest UniGene version is now automated by a 
+    # cron job -- see /cluster/home/angie/crontab , 
+    # /cluster/home/angie/unigeneVers/unigene.csh .  
+    # If hgwdev gets rebooted, that needs to be restarted... maybe there's 
+    # a more stable place to set up that cron job.  
+
+    # substitute XXX -> the uniGene version used by SAGE, if building the 
+    # uniGene/SAGE track;  or just the latest uniGene version in 
+    # /projects/cc/hg/sugnet/uniGene/ , if doing uniGene alignments only.
+    set version = XXX
+    cd /projects/cc/hg/sugnet/uniGene/uniGene.$version
     gunzip Hs.seq.uniq.gz 
-    gunzip Hs.data.gz 
     ../countSeqsInCluster.pl Hs.data counts.tab
     ../parseUnigene.pl Hs.seq.uniq Hs.seq.uniq.simpleHeader.fa leftoverData.tab
     # ssh kkstore
@@ -1908,11 +1908,11 @@ o - Rescuing STS track:
      - mv chrom.psl ../convert.psl
 
 
-LOADING MOUSE MM3 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 02/10/03)
+LOADING MOUSE MM3 BLASTZ ALIGNMENTS FROM PENN STATE: (IN PROGRESS 03/10/03)
 
     # Translate Penn State .lav files into sorted axt:
     ssh eieio
-    set base="/cluster/store4/gs.14/build31/bed/blastz.mm3.2003-02-07-ASH"
+    set base="/cluster/store4/gs.14/build31/bed/blastz.mm3.2003-03-09-ASH"
     set seq1_dir="/cluster/store4/gs.14/build31/mixedNib/"
     set seq2_dir="/cluster/store2/mm.2003.02/mm3/mixedNib/"
     set tbl="blastzMm"
@@ -1929,23 +1929,6 @@ LOADING MOUSE MM3 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 02/10/03)
       popd
     end
 
-    # chr19 alignments are so huge that they cause axtSort to run out 
-    # of memory.  Run them in two passes like this:
-    foreach c (lav/chr19)
-      pushd $c
-      set chr=$c:t
-      set out=$base/axtChrom/$chr.axt
-      echo "Translating $chr lav to $out"
-      foreach d (*.lav)
-        set smallout=$d.axt
-        lavToAxt $d $seq1_dir $seq2_dir stdout \
-        | axtSort stdin $smallout
-      end
-      cat `ls -1 *.lav.axt | sort -g` \
-        > $out
-      popd
-    end
-
     # Translate the sorted axt files into psl:
     cd $base
     mkdir -p pslChrom
@@ -1955,17 +1938,17 @@ LOADING MOUSE MM3 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 02/10/03)
     end
 
     # Load tables
-    ssh hgwdev
-    set base="/cluster/store4/gs.14/build31/bed/blastz.mm3.2003-02-07-ASH"
+TODO    ssh hgwdev
+    set base="/cluster/store4/gs.14/build31/bed/blastz.mm3.2003-03-09-ASH"
     set tbl="blastzMm"
     cd $base/pslChrom
     hgLoadPsl hg13 chr*_${tbl}.psl
 
-MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM3 AXT FILES (DONE 02/10/03)
+MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM3 AXT FILES (IN PROGRESS 03/10/03)
 
     # Consolidate AXT files to chrom level, sort, pick best, make psl.
     ssh eieio
-    set base="/cluster/store4/gs.14/build31/bed/blastz.mm3.2003-02-07-ASH"
+    set base="/cluster/store4/gs.14/build31/bed/blastz.mm3.2003-03-09-ASH"
     set tbl="blastzBestMouse"
     cd $base
     mkdir -p axtBest pslBest
@@ -1992,7 +1975,7 @@ MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM3 AXT FILES (DONE 02/10/03)
 
     # Load tables
      ssh hgwdev
-     set base="/cluster/store4/gs.14/build31/bed/blastz.mm3.2003-02-07-ASH"
+     set base="/cluster/store4/gs.14/build31/bed/blastz.mm3.2003-03-09-ASH"
      set tbl="blastzBestMouse"
      cd $base/pslBest
      hgLoadPsl hg13 chr*_${tbl}.psl
@@ -2014,10 +1997,10 @@ MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM3 AXT FILES (DONE 02/10/03)
      hgsql hg13 < ~/kent/src/hg/lib/axtInfo.sql
      hgsql hg13 < axtInfoInserts.sql
 
-MAKING THE AXTTIGHT FROM AXTBEST (DONE 02/10/03)
+MAKING THE AXTTIGHT FROM AXTBEST (IN PROGRESS 03/10/03)
     # After creating axtBest alignments above, use subsetAxt to get axtTight:
     ssh eieio
-    cd ~/hg13/bed/blastz.mm3.2003-02-07-ASH/axtBest
+    cd ~/hg13/bed/blastz.mm3.2003-03-09-ASH/axtBest
     mkdir -p ../axtTight
     foreach i (*.axt)
       subsetAxt  $i ../axtTight/$i \
@@ -2032,7 +2015,7 @@ MAKING THE AXTTIGHT FROM AXTBEST (DONE 02/10/03)
     end
     # Load tables into database
     ssh hgwdev
-    cd ~/hg13/bed/blastz.mm3.2003-02-07-ASH/pslTight
+    cd ~/hg13/bed/blastz.mm3.2003-03-09-ASH/pslTight
     hgLoadPsl hg13 chr*_blastzTightMouse.psl
 
 BEGINNING OF RAT BLASTZ
