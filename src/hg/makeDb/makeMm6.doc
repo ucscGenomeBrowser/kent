@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.6 2005/03/15 20:04:50 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.7 2005/03/17 20:53:35 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -30,6 +30,33 @@
 	ftp://ftp-private.ncbi.nih.gov/mouse_34
 #	Downloaded: 1,586,892,564 bytes in 57 files
 #
+#	NOTE: chrY - radical change from mm5 - most of it was moved into
+#	chrY_random
+#	Notes from Deanna Church:
+##############################################################################
+# There are some general stats on chromosome lengths and N50s (for this build
+# and compared to Build 33) as well as a comparison to the non-sequence based
+# maps. 
+
+# Before there is too much alarm I want to point out that there is a fair
+# amount of N50 variation from chromosome to chromosome, as well as a few
+# chromosomes that have significantly different N50 than in Build 33. The most
+# severe case is Mmu2 (36 Mb in Build 34 vs 90 Mb in Build 33). Remember Mmu2
+# was not automatically assembled and this drop is due to gaps being
+# purposefully introduced. A couple of auto-assembled chromosomes also saw
+# drops in N50 (Mmu5 down ~13Mb and Mmu13 down about 6 Mb)- however, this is
+# also likely due to clones having been introduced to the TPF. In these cases,
+# many of the clones have no sequence- and there is likely no WGS to hold
+# things together either. So, I don't think this by itself is cause for
+# concern- the N50 for these two chromosomes is still >19 Mb, so they are very
+# contiguous.
+
+# On the plus side, Mmu14 has an N50 increase of 41 Mb, Mmu12 has an increase
+# of 24 Mb and Mmu8 has an increase of 13 Mb. 
+
+# The genome average N50 increased from 23.2 Mb to 26.2 Mb.
+##############################################################################
+
 #  No chrM or chrMT was delivered.  Pick up NC_005089.1 fasta file
 #	for chrM sequence from NCBI and place in this ncbi download
 #	directory as chrM in both chrfasta and contigfasta
@@ -647,124 +674,24 @@ note: 394 records dropped due to repStart > repEnd
     done
     #	the notInHuman, notInDog, and notInCow ended up being identical
 
-# PRODUCING GENSCAN PREDICTIONS (DONE 2005-03-14 Hiram)
-    ssh hgwdev
-    mkdir /cluster/data/mm6/bed/genscan
-    cd /cluster/data/mm6/bed/genscan
-    # Check out hg3rdParty/genscanlinux to get latest genscan:
-    cvs co hg3rdParty/genscanlinux
-    # Run on small cluster (more mem than big cluster).
-    ssh kki
-    cd /cluster/data/mm6/bed/genscan
-    # Make 3 subdirectories for genscan to put their output files in
-    mkdir gtf pep subopt
-    # Generate a list file, genome.list, of all the hard-masked contigs that 
-    # *do not* consist of all-N's (which would cause genscan to blow up)
-    ls -1S /panasas/store/mm6/fasta/*.masked > genome.list
-
-    # Create template file, gsub, for gensub2.  For example (3-line file):
-    cat << '_EOF_' > gsub
-#LOOP
-/cluster/bin/x86_64/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan - par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
-#ENDLOOP
-'_EOF_'
-    # << keep emacs coloring happy
-    gensub2 genome.list single gsub jobList
-    para create jobList
-    para try, check, push, check, ...
-    #	Had two jobs crash:
-# Completed: 38 of 40 jobs
-# Crashed: 2 jobs
-# CPU time in finished jobs:     343416s    5723.60m    95.39h    3.97d  0.011 y
-# IO & Wait Time:                  3443s      57.38m     0.96h    0.04d  0.000 y
-# Average job time:                9128s     152.13m     2.54h    0.11d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:           27423s     457.05m     7.62h    0.32d
-# Submission to last job:         34524s     575.40m     9.59h    0.40d
-
-
-    # If there are crashes, diagnose with "para problems".  
-    para problems > problems.0
-    ssh kolossus
-    cd /cluster/data/mm6/bed/genscan
-    /cluster/bin/x86_64/gsBig /panasas/store/mm6/fasta/chr2.fa.masked gtf/chr2.fa.gtf -trans=pep/chr2.fa.pep -subopt=subopt/chr2.fa.bed -exe=hg3rdParty/genscanlinux/genscan - par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
-    /cluster/bin/x86_64/gsBig /panasas/store/mm6/fasta/chr14.fa.masked gtf/chr14.fa.gtf -trans=pep/chr14.fa.pep -subopt=subopt/chr14.fa.bed -exe=hg3rdParty/genscanlinux/genscan - par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
-XXX - RUNNING - 2005-03-15 09:48
-
-    # If a job crashes due to genscan running out of memory, re-run it 
-    # manually with "-window=1200000" instead of "-window=2400000".
-/cluster/bin/i386/gsBig /cluster/data/mm6/19/chr19_1/chr19_1.fa.masked 
-gtf/chr19_1.fa.gtf -trans=pep/chr19_1.fa.pep -subopt=subopt/chr19_1.fa.bed -
-exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -
-tmp=/tmp -window=1200000
-
-    # Convert these to chromosome level files as so:
+# NIBS for BLASTZ (DONE - 2005-03-15 - Hiram)
+    #	turns out not all the details are worked out with the blastz
+    #	script to allow it to use a 2bit file for target.  So, we will
+    #	need nib files until then.  Eventually this requirement should
+    #	be eliminated.
     ssh kksilo
-    cd /cluster/data/mm6/bed/genscan
-    liftUp genscan.gtf ../../jkStuff/liftAll.lft warn gtf/*.gtf
-    liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft warn subopt/*.bed
-    cat pep/*.pep > genscan.pep
-
-    # Load into the database as so:
-    ssh hgwdev
-    cd /cluster/data/mm6/bed/genscan
-    # Reloaded without -genePredExt 1/6/05:
-    ldHgGene mm6 -gtf genscan genscan.gtf
-    hgPepPred mm6 generic genscanPep genscan.pep
-    hgLoadBed mm6 genscanSubopt genscanSubopt.bed
-
-# BLASTZ HUMAN Hg17 (WORKING - 2005-03-14 - Hiram)
-    ssh kk
-    mkdir /cluster/data/mm6/bed/blastzHg17.2005_03_14
-    cd /cluster/data/mm6/bed/blastzHg17.2005_03_14
-    cp /cluster/data/mm5/bed//blastz.hg17/DEF .
-    edit DEF file
-    cat << '_EOF_' > DEF
-# mouse vs. human
-export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
-
-ALIGN=blastz-run
-BLASTZ=blastz
-BLASTZ_H=2000
-BLASTZ_ABRIDGE_REPEATS=1
-
-# TARGET
-# Mouse
-SEQ1_DIR=/panasas/store/mm6/mm6.2bit
-# not used
-SEQ1_RMSK=/panasas/store/mm6/rmsk
-# not used
-SEQ1_FLAG=-rodent
-SEQ1_SMSK=/panasas/store/mm6/linSpecRep.notInHuman
-SEQ1_IN_CONTIGS=0
-SEQ1_CHUNK=10000000
-SEQ1_LAP=10000
-
-# QUERY
-# Human
-SEQ2_DIR=/iscratch/i/hg17/bothMaskedNibs
-# RMSK not currently used
-SEQ2_RMSK=
-# FLAG not currently used
-SEQ2_FLAG=
-SEQ2_SMSK=/iscratch/i/hg17/linSpecRep.notInMouse
-SEQ2_IN_CONTIGS=0
-SEQ2_CHUNK=30000000
-SEQ2_LAP=0
-
-BASE=/cluster/data/mm6/bed/blastzHg17.2005_03_14
-
-DEF=$BASE/DEF
-RAW=$BASE/raw
-CDBDIR=$BASE
-SEQ1_LEN=$BASE/S1.len
-SEQ2_LEN=$BASE/S2.len
-'_EOF_'
-    # << keep emacs coloring happy
-
-    cp /cluster/data/mm6/chrom.sizes ./S1.len
-    sort -rn +1 /cluster/data/hg17/chrom.sizes > S2.len
-    /cluster/bin/scripts/doBlastzChainNet.pl -debug `pwd`/DEF
+    cd /cluster/data/mm6
+    mkdir nib
+    for C in ?/chr?*.fa ??/chr??*.fa
+    do
+	B=${C/*\/}
+	B=${B/.fa/}
+	echo faToNib -softMask ${C} nib/${B}.nib
+	rm -f nib/${B}.nib
+	faToNib -softMask ${C} nib/${B}.nib
+    done
+    mkdir /panasas/store/mm6/nib
+    cp -p nib/* /panasas/store/mm6/nib
 
 #########################################################################
 # GENBANK auto update started (WORKING - 2005-03-15 - Hiram)
@@ -806,4 +733,463 @@ mm6.mgcTables.mgc = all
 
     cd /cluster/data/genbank
     nice bin/gbAlignStep -srcDb=genbank -type=mrna -verbose=1 -initial mm6
-    #	logFile: var/build/logs/2004.06.04-10:47:21.hg17.initalign.log
+    #	logFile: var/build/logs/2005.03.15-10:18:30.mm6.initalign.log
+# Completed: 2400 of 2400 jobs
+# CPU time in finished jobs:    5777428s   96290.47m  1604.84h   66.87d  0.183 y
+# IO & Wait Time:                261508s    4358.47m    72.64h    3.03d  0.008 y
+# Average job time:                2516s      41.94m     0.70h    0.03d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:           47756s     795.93m    13.27h    0.55d
+# Submission to last job:         48256s     804.27m    13.40h    0.56d
+
+
+    # Load the results from the above
+    ssh hgwdev
+    cd /cluster/data/genbank
+    # There is a lock file present, I believe from the previous load:
+    [hiram@hgwdev /cluster/data/genbank/var/dbload/hgwdev/run] ls -l
+    #	-rw-r--r--    1 hiram    protein        18 Mar 15 10:08 dbload.lock
+    # checking that it is actually owned by yourself, it is safe to remove
+    #	it.  The next load will not proceed with this lock in place.
+    rm var/dbload/hgwdev/run/dbload.lock
+
+    time nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad mm6
+    #	22 minute load time
+
+    #	And finally, the big est run - expect several days on this one
+    ssh eieio
+    cd /cluster/data/genbank/work
+    mv initial.mm6 initial.mm6.genbank.mrna
+
+    #	since it is going to run several days, create a screen for it to
+    #	run in.  detach and reattach as necessary to view the progress
+    #	of the job
+    cd /cluster/data/genbank
+    screen
+    nice bin/gbAlignStep -srcDb=genbank -type=est -verbose=1 -initial mm6
+    #	logFile: var/build/logs/2005.03.16-10:26:46.mm6.initalign.log
+    #	detach from screen session: Ctrl-a Ctrl-d
+    #	to reattach to this screen session:
+    ssh eieio
+    screen -d -r
+
+XXXX - RUNNING - 2005-03-16 10:43
+
+
+#########################################################################
+# PRODUCING GENSCAN PREDICTIONS (DONE 2005-03-14 - 2005-03-17 Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/mm6/bed/genscan
+    cd /cluster/data/mm6/bed/genscan
+    # Check out hg3rdParty/genscanlinux to get latest genscan:
+    cvs co hg3rdParty/genscanlinux
+    # Run on small cluster (more mem than big cluster).
+    ssh kki
+    cd /cluster/data/mm6/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    # Generate a list file, genome.list, of all the hard-masked contigs that 
+    # *do not* consist of all-N's (which would cause genscan to blow up)
+    ls -1S /panasas/store/mm6/fasta/*.masked > genome.list
+
+    # Create template file, gsub, for gensub2.  For example (3-line file):
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/x86_64/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan - par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << keep emacs coloring happy
+    gensub2 genome.list single gsub jobList
+    para create jobList
+    para try, check, push, check, ...
+    #	Had two jobs crash:
+# Completed: 38 of 40 jobs
+# Crashed: 2 jobs
+# CPU time in finished jobs:     343416s    5723.60m    95.39h    3.97d  0.011 y
+# IO & Wait Time:                  3443s      57.38m     0.96h    0.04d  0.000 y
+# Average job time:                9128s     152.13m     2.54h    0.11d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:           27423s     457.05m     7.62h    0.32d
+# Submission to last job:         34524s     575.40m     9.59h    0.40d
+
+
+    # If there are crashes, diagnose with "para problems".  
+    para problems > problems.0
+    #	Two of them needed to be rerun, adjust window down to 2000000 to
+    #	get them to complete.  Lower that number if the error persists.
+    ssh kolossus
+    cd /cluster/data/mm6/bed/genscan
+    /cluster/bin/x86_64/gsBig /panasas/store/mm6/fasta/chr2.fa.masked gtf/chr2.fa.gtf -trans=pep/chr2.fa.pep -subopt=subopt/chr2.fa.bed -exe=hg3rdParty/genscanlinux/genscan - par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2000000
+    /cluster/bin/x86_64/gsBig /panasas/store/mm6/fasta/chr14.fa.masked gtf/chr14.fa.gtf -trans=pep/chr14.fa.pep -subopt=subopt/chr14.fa.bed -exe=hg3rdParty/genscanlinux/genscan - par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2000000
+
+    # cat the results into single files
+    ssh kksilo
+    cd /cluster/data/mm6/bed/genscan
+    cat gtf/chr?.fa.gtf gtf/chr??.fa.gtf gtf/chr?_random.fa.gtf \
+	gtf/chr??_random.fa.gtf > genscan.gtf
+    cat subopt/chr?.fa.bed subopt/chr??.fa.bed subopt/chr?_random.fa.bed \
+	subopt/chr??_random.fa.bed > genscanSubopt.bed
+    cat pep/chr?.fa.pep pep/chr??.fa.pep pep/chr?_random.fa.pep \
+	pep/chr??_random.fa.pep > genscan.pep
+
+    # Load into the database as so:
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/genscan
+    ldHgGene mm6 -gtf genscan genscan.gtf
+    hgPepPred mm6 generic genscanPep genscan.pep
+    hgLoadBed mm6 genscanSubopt genscanSubopt.bed
+
+    #	check the numbers
+    featureBits mm6 genscan
+    #	54894283 bases of 2597150411 (2.114%) in intersection
+    featureBits mm5 genscan
+    #	55024722 bases of 2615483787 (2.104%) in intersection
+    featureBits mm4 genscan
+    #	56164126 bases of 2627444668 (2.138%) in intersection
+    featureBits mm3 genscan
+    #	51697165 bases of 2505900260 (2.063%) in intersection
+
+    featureBits mm6 genscanSubopt
+    #	57856316 bases of 2597150411 (2.228%) in intersection
+    featureBits mm5 genscanSubopt
+    #	58474899 bases of 2615483787 (2.236%) in intersection
+    featureBits mm4 genscanSubopt
+    #	59601009 bases of 2627444668 (2.268%) in intersection
+    featureBits mm3 genscanSubopt
+    #	56085184 bases of 2505900260 (2.238%) in intersection
+
+
+#########################################################################
+#	BLASTZ NOTE:  with the advent of Angie's script to run the
+#	blastz process through to chains and nets loaded into the
+#	database and download files prepared, it is now a juggling act
+#	to see which klusters are available.  The particular options to
+#	the script to make it go to one kluster or another are to be
+#	determined at run-time.  The typical run-times listed here will
+#	be a factor in your choice of kluster to operate on.
+#########################################################################
+# BLASTZ HUMAN Hg17 (WORKING - 2005-03-14 - Hiram)
+    ssh kk
+    mkdir /cluster/data/mm6/bed/blastzHg17.2005_03_14
+    cd /cluster/data/mm6/bed/blastzHg17.2005_03_14
+    cat << '_EOF_' > DEF
+# mouse vs. human
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Mouse
+SEQ1_DIR=/panasas/store/mm6/nib
+# not used
+SEQ1_RMSK=/panasas/store/mm6/rmsk
+# not used
+SEQ1_FLAG=-rodent
+SEQ1_SMSK=/panasas/store/mm6/linSpecRep.notInHuman
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY
+# Human
+SEQ2_DIR=/iscratch/i/hg17/bothMaskedNibs
+# RMSK not currently used
+SEQ2_RMSK=
+# FLAG not currently used
+SEQ2_FLAG=
+SEQ2_SMSK=/iscratch/i/hg17/linSpecRep.notInMouse
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm6/bed/blastzHg17.2005_03_14
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << keep emacs coloring happy
+
+    cp /cluster/data/mm6/chrom.sizes ./S1.len
+    sort -rn +1 /cluster/data/hg17/chrom.sizes > S2.len
+    nohup /usr/bin/time --portability /cluster/bin/scripts/doBlastzChainNet.pl \
+	-bigClusterHub kk9 `pwd`/DEF > blast.run.out 2>&1 &
+XXXX - RUNNING - 2005-03-15 16:20
+
+#########################################################################
+# BLASTZ RAT Rn3 (WORKING - 2005-03-15 - Hiram)
+    ssh kksilo
+    mkdir /cluster/data/mm6/bed/blastzRn3.2005_03_15
+    cd /cluster/data/mm6/bed/blastzRn3.2005_03_15
+    cat << '_EOF_' > DEF
+# mouse vs. human
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Mouse
+SEQ1_DIR=/panasas/store/mm6/nib
+# not used
+SEQ1_RMSK=/panasas/store/mm6/rmsk
+# not used
+SEQ1_FLAG=-rodent
+SEQ1_SMSK=/panasas/store/mm6/linSpecRep.notInRat
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY
+# Rat
+SEQ2_DIR=/iscratch/i/rn3/bothMaskedNibs
+# RMSK not currently used
+SEQ2_RMSK=
+# FLAG not currently used
+SEQ2_FLAG=
+SEQ2_SMSK=/cluster/bluearc/rat/rn3/linSpecRep.notInMouse
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm6/bed/blastzRn3.2005_03_15
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << keep emacs coloring happy
+
+    cp /cluster/data/mm6/chrom.sizes ./S1.len
+    sort -rn +1 /cluster/data/rn3/chrom.sizes > S2.len
+    #	establish a screen to control this job
+    screen
+    time /cluster/bin/scripts/doBlastzChainNet.pl `pwd`/DEF > \
+	blast.run.out 2>&1 &
+    #	detach from screen session: Ctrl-a Ctrl-d
+    #	to reattach to this screen session:
+    ssh kksilo
+    screen -d -r
+XXXX - RUNNING - 2005-03-16 11:33
+# Completed: 40713 of 40713 jobs
+# CPU time in finished jobs:   18170174s  302836.24m  5047.27h  210.30d  0.576 y
+# IO & Wait Time:               1770530s   29508.83m   491.81h   20.49d  0.056 y
+# Average job time:                 490s       8.16m     0.14h    0.01d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:           28252s     470.87m     7.85h    0.33d
+# Submission to last job:         69864s    1164.40m    19.41h    0.81d
+
+# Completed: 331 of 331 jobs
+# CPU time in finished jobs:       1168s      19.46m     0.32h    0.01d  0.000 y
+# IO & Wait Time:                  3047s      50.79m     0.85h    0.04d  0.000 y
+# Average job time:                  13s       0.21m     0.00h    0.00d
+# Longest job:                      119s       1.98m     0.03h    0.00d
+# Submission to last job:           359s       5.98m     0.10h    0.00d
+
+# Completed: 40 of 40 jobs
+# CPU time in finished jobs:      12274s     204.56m     3.41h    0.14d  0.000 y
+# IO & Wait Time:                  1719s      28.66m     0.48h    0.02d  0.000 y
+# Average job time:                 350s       5.83m     0.10h    0.00d
+# Longest job:                     1016s      16.93m     0.28h    0.01d
+# Submission to last job:          1482s      24.70m     0.41h    0.02d
+
+#########################################################################
+# BLASTZ Zebrafish danRer2 (WORKING - 2005-03-17 - Hiram)
+    ssh kksilo
+    mkdir /cluster/data/mm6/bed/blastzDanRer2.2005_03_17
+    cd /cluster/data/mm6/bed/blastzDanRer2.2005_03_17
+
+    cat << '_EOF_' > DEF
+# mouse (mm6) vs zebrafish (danRer2)
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+
+# Reuse parameters from hg16-fr1, danRer-hg17 and mm6-danRer1
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Mouse
+SEQ1_DIR=/panasas/store/mm6/nib
+SEQ1_RMSK=
+SEQ1_FLAG=
+SEQ1_SMSK=
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Zebrafish (danRer2)
+SEQ2_DIR=/iscratch/i/danRer2/nib
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_SMSK=
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm6/bed/blastzDanRer2.2005_03_17
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << keep emacs coloring happy
+
+    cp /cluster/data/mm6/chrom.sizes ./S1.len
+    sort -rn +1 /cluster/data/danRer2/chrom.sizes > S2.len
+    #	establish a screen to control this job
+    screen
+    time /cluster/bin/scripts/doBlastzChainNet.pl `pwd`/DEF > \
+	blast.run.out 2>&1 &
+    #	detach from screen session: Ctrl-a Ctrl-d
+    #	to reattach to this screen session:
+    ssh kksilo
+    screen -d -r
+XXXX - RUNNING - 2005-03-17 10:00
+
+
+#########################################################################
+# BLASTZ FUGU fr1 (WORKING - 2005-03-17 - Hiram)
+    ssh kksilo
+    mkdir /cluster/data/mm6/bed/blastzFr1.2005_03_17
+    cd /cluster/data/mm6/bed/blastzFr1.2005_03_17
+
+    cat << '_EOF_' > DEF
+# mouse vs. fugu
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+
+# Reuse parameters from human-chicken, except L=6000 (more relaxed)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Mouse
+SEQ1_DIR=/panasas/store/mm6/nib
+SEQ1_RMSK=
+SEQ1_FLAG=
+SEQ1_SMSK=
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Fugu
+SEQ2_DIR=/iscratch/i/fr1/nib
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_SMSK=
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm6/bed/blastzFr1.2005_03_17
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    cp /cluster/data/mm6/chrom.sizes ./S1.len
+    sort -rn +1 /cluster/data/fr1/chrom.sizes > S2.len
+    #	establish a screen to control this job
+    screen
+    time /cluster/bin/scripts/doBlastzChainNet.pl -bigClusterHub kki \
+	`pwd`/DEF > blast.run.out 2>&1 &
+    #	detach from screen session: Ctrl-a Ctrl-d
+    #	to reattach to this screen session:
+    ssh kksilo
+    screen -d -r
+XXXX - RUNNING - 2005-03-17 11:00
+
+
+# CPGISLANDS (DONE - 2005-03-17 - Hiram)
+    ssh hgwdev
+    mkdir -p /cluster/data/mm6/bed/cpgIsland
+    cd /cluster/data/mm6/bed/cpgIsland
+
+    # Build software from Asif Chinwalla (achinwal@watson.wustl.edu)
+    cvs co hg3rdParty/cpgIslands
+    cd hg3rdParty/cpgIslands
+    make
+    #	gcc readseq.c cpg_lh.c -o cpglh.exe
+    mv cpglh.exe ../..
+    
+    # cpglh.exe requires hard-masked (N) .fa's.  
+    # There may be warnings about "bad character" for IUPAC ambiguous 
+    # characters like R, S, etc.  Ignore the warnings.  
+    ssh kksilo
+    cd /cluster/data/mm6/bed/cpgIsland
+    for F in ../../*/chr*.fa.masked
+    do
+	FA=${F/*\/}
+	C=${FA/.fa.masked/}
+	echo "./cpglh.exe ${FA} > ${C}.cpg"
+	./cpglh.exe ${F} > ${C}.cpg
+    done > cpglh.out 2>&1 &
+
+    #	three warnings:
+    #	Bad char 0x52 = 'R' at line 164245, base 8212187, sequence chr14
+    #	Bad char 0x53 = 'S' at line 167424, base 8371114, sequence chr14
+    #	Bad char 0x53 = 'S' at line 167426, base 8371198, sequence chr14
+    #	Several chroms have 0 results:
+    #	-rw-rw-r--  1     0 Mar 17 12:13 chr10_random.cpg
+    #	-rw-rw-r--  1     0 Mar 17 12:18 chr9_random.cpg
+    #	-rw-rw-r--  1     0 Mar 17 12:18 chrM.cpg
+    #	-rw-rw-r--  1     0 Mar 17 12:18 chrY.cpg
+    #	-rw-rw-r--  1     0 Mar 17 12:18 chrY_random.cpg
+# XXX - this is interesting that chrY, either one, have nothing.
+#	the previous mm5 release did have some on chrY
+
+    # Transform cpglh output to bed +
+    cat << '_EOF_' > filter.awk
+{
+$2 = $2 - 1;
+width = $3 - $2;
+printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
+       $1, $2, $3, $5,$6, width,
+       $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
+}
+'_EOF_'
+    # << this line makes emacs coloring happy
+    awk -f filter.awk chr*.cpg > cpgIsland.bed
+
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/cpgIsland
+    hgLoadBed mm6 cpgIslandExt -tab -noBin \
+      -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
+    #	Reading cpgIsland.bed
+    #	Loaded 16100 elements of size 10
+    #	Sorted
+    #	Saving bed.tab
+    #	Loading mm6
+    featureBits mm6 cpgIslandExt
+    #	10432360 bases of 2597150411 (0.402%) in intersection
+    featureBits mm5 cpgIslandExt
+    #	10422989 bases of 2615483787 (0.399%) in intersection
+    featureBits mm4 cpgIsland
+    #	11109692 bases of 2627444668 (0.423%) in intersection
+    featureBits mm3 cpgIsland
+    #	10102968 bases of 2505900260 (0.403%) in intersection
+
