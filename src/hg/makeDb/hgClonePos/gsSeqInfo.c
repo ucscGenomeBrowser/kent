@@ -6,7 +6,7 @@
 #include "jksql.h"
 #include "gsSeqInfo.h"
 
-static char const rcsid[] = "$Id: gsSeqInfo.c,v 1.2 2003/05/06 07:22:24 kate Exp $";
+static char const rcsid[] = "$Id: gsSeqInfo.c,v 1.3 2003/06/10 16:59:40 kent Exp $";
 
 void gsSeqInfoStaticLoad(char **row, struct gsSeqInfo *ret)
 /* Load a row from gsSeqInfo table into ret.  The contents of ret will
@@ -99,31 +99,31 @@ void gsSeqInfoOutput(struct gsSeqInfo *el, FILE *f, char sep, char lastSep)
 {
 int i;
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->acc, sep);
+fprintf(f, "%s", el->acc);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->gi, sep);
+fprintf(f, "%s", el->gi);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->size, sep);
+fprintf(f, "%u", el->size);
 fputc(sep,f);
-fprintf(f, "%u", el->phase, sep);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->draft, sep);
-if (sep == ',') fputc('"',f);
+fprintf(f, "%u", el->phase);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->chrom, sep);
+fprintf(f, "%s", el->draft);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->lab, sep);
+fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->cloneName, lastSep);
+fprintf(f, "%s", el->lab);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->cloneName);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
