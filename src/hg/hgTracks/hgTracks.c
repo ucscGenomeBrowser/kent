@@ -4919,7 +4919,7 @@ if (isFull)
     for (level = 1 ; level <=8 ; level++)
         {
         sprintf(where,"level = %d",level);
-        sr = hOrderedRangeQuery(conn, "blastzNet", chromName, winStart, winEnd, where, &rowOffset);
+        sr = hOrderedRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, where, &rowOffset);
         row = sqlNextRow(sr) ;
         if (row == NULL) continue;
         netAlignStaticLoad(row+rowOffset, &na);
@@ -5028,7 +5028,7 @@ else
     struct netAlign na;
     struct dyString *query = newDyString(1024);
     /* Do black and white on single track.  Fetch less than we need from database. */
-    if (hFindSplitTable(chromName, "blastzNetAlign", table, &hasBin))
+    if (hFindSplitTable(chromName, tg->mapName, table, &hasBin))
         {
 	dyStringPrintf(query, "select tStart,tEnd, qName from %s where ", table);
 	if (hasBin)
@@ -10124,6 +10124,7 @@ registerTrackHandler("syntenyBerk", syntenyBerkMethods);
 registerTrackHandler("syntenySanger", syntenySangerMethods);
 registerTrackHandler("blastzNetAlign", netMethods);
 registerTrackHandler("blastzNet", netMethods);
+registerTrackHandler("blastzNetOld", netMethods);
 registerTrackHandler("netAlign", netMethods);
 registerTrackHandler("mouseOrtho", mouseOrthoMethods);
 registerTrackHandler("mouseOrthoSeed", mouseOrthoMethods);
