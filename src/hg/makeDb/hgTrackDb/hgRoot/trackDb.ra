@@ -779,11 +779,21 @@ type bed 5 +
 
 track humMus
 shortLabel Mouse Evolution
-longLabel Human/Mouse Evolutionary Mutual Information
-altColor 10,50,100
+longLabel Human/Mouse Evolutionary Mutual Information (s-score)
+altColor 255,0,0
 priority 25.6
 visibility hide
 type sample 9 
+
+
+track humMusL
+shortLabel Mouse CDF
+longLabel Human/Mouse Evolutionary Mutual Information CDF (L-score)
+altColor 0,0,255
+priority 25.7
+visibility hide
+type sample 9 
+
 
 track zooCons
 shortLabel Zoo Conservation
