@@ -36,7 +36,6 @@ longLabel NCBI RefSeq Gene Accession
 priority 2.2
 visibility off
 type lookup knownToRefSeq name value
-itemUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
 itemUrl http://www.ncbi.nlm.nih.gov/LocusLink/list.cgi?V=0&Q=%s
 
 name acc
@@ -183,7 +182,8 @@ longLabel D. melanogaster ortholog (best blastp hit to SwissProt Drosophila)
 priority 8.3
 visibility off
 type lookup dmBlastTab query target
-itemUrl http://us.expasy.org/cgi-bin/niceprot.pl?%s
+itemUrl http://flybase.bio.indiana.edu/.bin/fbidq.html?%s
+#itemUrl http://us.expasy.org/cgi-bin/niceprot.pl?%s
 
 name wormOrthologs
 shortLabel C. elegans
@@ -206,7 +206,7 @@ shortLabel Pfam Domains
 longLabel Protein family domain structure.
 priority 9
 visibility off
-type association proteins072003.pfamXref proteins072003.pfamDesc
+type pfam proteins072003.pfamXref proteins072003.pfamDesc
 queryFull select swissDisplayID,description from proteins072003.pfamXref,proteins072003.pfamDesc where pfamXref.pfamAC = pfamDesc.pfamAC
 queryOne select description,proteins072003.pfamDesc.pfamAC from proteins072003.pfamXref,proteins072003.pfamDesc where swissDisplayID = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC order by description
 invQueryOne select swissDisplayID from proteins072003.pfamXref,proteins072003.pfamDesc where description = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC

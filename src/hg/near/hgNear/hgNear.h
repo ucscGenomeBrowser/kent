@@ -53,7 +53,7 @@ struct column
 /* A column in the big table. The central data structure for
  * hgNear. */
    {
-   /* Data set during initializatio that is guaranteed to be in each track.  */
+   /* Data set during initialization that is guaranteed to be in each track.  */
    struct column *next;		/* Next column. */
    char *name;			/* Column name, not allocated here. */
    char *shortLabel;		/* Column label. */
@@ -103,12 +103,14 @@ struct column
    /* Return list of positions for advanced filter. */
 
    /* -- Data that may be column-specific. -- */
-      /* Most columns that need any data at all use the next few fields. */
+      /* Most columns that need any extra data at all use the next few fields. */
    char *table;			/* Name of associated table. */
    char *keyField;		/* GeneId field in associated table. */
    char *valField;		/* Value field in associated table. */
+
       /* The distance type columns like homology need this field too. */
    char *curGeneField;		/* curGeneId field in associated table.  Used by distance columns*/
+
       /* The expression ratio type columns use the next bunch of fields as well as
        * the table/key/val fields above. */
    char *experimentTable;	/* Experiment table in hgFixed if any. */
@@ -129,11 +131,11 @@ struct column
    boolean protKey;	/* Use protein rather than geneId for key. */
 
    /* Pfam uses this. */
-   char *pfamProtDb; /* Which protein database pfam tables are in. */
+   char *protDb; /* Which protein database pfam tables are in. */
    };
 
 struct order
-/* An row order of the big table. */
+/* A row order of the big table. */
     {
     struct order *next;	/* Next in list. */
     char *name;			/* Symbolic name, not allocated here. */
@@ -513,6 +515,9 @@ void setupColumnExpRatio(struct column *col, char *parameters);
 
 void setupColumnGo(struct column *col, char *parameters);
 /* Set up gene ontology column. */
+
+void setupColumnPfam(struct column *col, char *parameters);
+/* Setup Pfam column. */
 
 void goSimilarityMethods(struct order *ord, char *parameters);
 /* Set up go similarity ordering. */

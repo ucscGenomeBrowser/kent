@@ -17,7 +17,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.79 2003/09/17 17:17:47 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.80 2003/09/20 00:50:55 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -463,7 +463,7 @@ static char *debugCellVal(struct column *col, struct genePos *gp,
 	struct sqlConnection *conn)
 /* Return value for debugging column. */
 {
-char buf[16];
+char buf[32];
 safef(buf, sizeof(buf), "%f", gp->distance);
 return cloneString(buf);
 }
@@ -1063,6 +1063,8 @@ else if (sameString(type, "expRatio"))
     setupColumnExpRatio(col, s);
 else if (sameString(type, "go"))
     setupColumnGo(col, s);
+else if (sameString(type, "pfam"))
+    setupColumnPfam(col, s);
 else
     errAbort("Unrecognized type %s for %s", col->type, col->name);
 freez(&dupe);
@@ -1586,7 +1588,6 @@ int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
 htmlSetStyle(htmlStyleUndecoratedLink);
-hPrintf("</TD><TD>");
 oldCart = hashNew(10);
 cartHtmlShell("Gene Family v1", doMiddle, hUserCookie(), excludeVars, oldCart);
 return 0;
