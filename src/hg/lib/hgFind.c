@@ -118,6 +118,39 @@ static boolean isContigName(char *contig)
 return startsWith("ctg", contig);
 }
 
+static boolean isAncientRName(char *name)
+/* Return TRUE if name is an ancientRepeat ID. */
+{
+return (startsWith("chr", name) && (name[strlen(name)-2] == '.'));
+}
+
+static void findAncientRPos(char *name, char **retChromName, 
+	int *retWinStart, int *retWinEnd)
+/* Find human/mouse ancient repeat start, end, and chrom
+ * from "name".  Don't alter
+ * return variables if some sort of error. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+struct dyString *query = newDyString(256);
+char **row;
+struct bed *bed = NULL;
+dyStringPrintf(query, "select * from ancientR where name = '%s'", name);
+sr = sqlMustGetResult(conn, query->string);
+row = sqlNextRow(sr);
+if (row == NULL)
+    errAbort("Couldn't find human/mouse ancient repeat: %s", name);
+bed = bedLoadN(row+1,12);  /* 1 here since hasBin is TRUE, 12 for extended bed 12*/
+*retChromName = hgOfficialChromName(bed->chrom);
+*retWinStart = bed->chromStart;
+*retWinEnd = bed->chromEnd;
+bedFree(&bed);
+freeDyString(&query);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
+
 static void findContigPos(char *contig, char **retChromName, 
 	int *retWinStart, int *retWinEnd)
 /* Find position in genome of contig.  Don't alter
@@ -1272,6 +1305,11 @@ if (hgIsChromRange(query))
     {
     hgParseChromRange(query, &chrom, &start, &end);
     singlePos(hgp, "Chromosome Range", NULL, query, chrom, start, end);
+    }
+else if (isAncientRName(query))
+    {
+    findAncientRPos( query, &chrom, &start, &end );
+    singlePos( hgp, "Human/Mouse Ancient Repeats", NULL, query, chrom, start, end );
     }
 else if (isContigName(query))
     {
