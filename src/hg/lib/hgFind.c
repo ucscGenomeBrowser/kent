@@ -33,14 +33,14 @@
 #include "web.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.81 2003/06/04 23:14:28 hiram Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.82 2003/06/11 02:44:41 kent Exp $";
 
 char *MrnaIDforGeneName(char *geneName)
 /* return mRNA ID for a gene name */
 {
 struct sqlConnection *conn;
 struct sqlResult *sr = NULL;
-char query[128];
+char query[256];
 char **row;
 boolean ok = FALSE;
 char *result = NULL;
@@ -829,9 +829,9 @@ else
     static char typeBuf[16];
     char *type;
     struct sqlConnection *conn = hAllocConn();
-    char query[128];
+    char query[256];
 
-    sprintf(query, "select type from mrna where acc = '%s'", acc);
+    safef(query, sizeof(query), "select type from mrna where acc = '%s'", acc);
     type = sqlQuickQuery(conn, query, typeBuf, sizeof(typeBuf));
     hFreeConn(&conn);
     return type;
@@ -2205,7 +2205,7 @@ if (extraCgi == NULL)
 hgp->extraCgi = cloneString(extraCgi);
 
 relativeFlag = FALSE;
-strncpy(buf, query, 256);
+safef(buf, sizeof(buf), "%s", query);
 startOffset = strchr(buf, ':');
 if (startOffset != NULL) 
     {
