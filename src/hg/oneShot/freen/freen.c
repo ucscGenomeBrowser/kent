@@ -5,114 +5,79 @@
 #include "options.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: freen.c,v 1.38 2003/09/25 00:03:47 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.39 2003/09/30 00:21:48 kent Exp $";
 
 void usage()
 /* Print usage and exit. */
 {
-errAbort("usage: freen spWp.ace seqPepDesc.ace outFile");
+errAbort("usage: freen infile.sp outfile.type");
 }
 
-struct hash *wpToSp(char *fileName)
-/* Make hash that maps from wormPep to SwissProt/Trembl. */
-{
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char swissProt[64];
-boolean gotIt = FALSE;
-char *line, *word, *row[4];
-struct hash *hash = newHash(17);
-int count = 0;
-
-while (lineFileNext(lf, &line, NULL))
+struct counter
+/* Help count up things. */
     {
-    line = skipLeadingSpaces(line);
-    if (startsWith("Protein", line))
-        gotIt = FALSE;
-    if (startsWith("Database", line))
-        {
-	int wordCount = chopLine(line, row);
-	if (wordCount >= 4)
-	    {
-	    gotIt = TRUE;
-	    safef(swissProt, sizeof(swissProt), "%s", row[3]);
-	    }
-	}
-    else if (startsWith("WORMPEP", line))
-        {
-	if (gotIt)
-	    {
-	    int wordCount = chopLine(line, row);
-	    lineFileExpectWords(lf, 3, wordCount);
-	    hashAdd(hash, row[2], cloneString(swissProt));
-	    ++count;
-	    }
-	}
-    }
-if (count == 0)
-   errAbort("%s doesn't seem to be a Ace dump of WormPep to SwissProt/TRembl",
-   	fileName);
-lineFileClose(&lf);
-return hash;
-}
+    struct counter *next;
+    char *name;		/* Name - not allocated here. */
+    int lineCount;	/* Number of lines this is in. */
+    int instanceCount;	/* NUmber of instances of this. */
+    int recCount;	/* Number of records this is in. */
+    int lastRec;	/* Last record this seen in. */
+    };
 
-void parseWormSpMappings(char *spWpFile, char *seqPepDescFile, char *outFile)
-/* Parse out swissProt mappings to simple column format. */
-{
-struct hash *spHash = wpToSp(spWpFile);
-struct lineFile *lf = lineFileOpen(seqPepDescFile, TRUE);
-FILE *f = mustOpen(outFile, "w");
-char seq[64];
-char pep[64];
-char *description;
-char *sp;
-char *line, *word;
-
-seq[0] = pep[0] = 0;
-while (lineFileNext(lf, &line, NULL))
-    {
-    if ((word = nextWord(&line)) == NULL)
-	{
-	seq[0] = pep[0] = 0;
-        continue;
-	}
-    if (sameString(word, "Sequence"))
-        {
-	word = nextWord(&line);
-	safef(seq, sizeof(seq), "%s", word);
-	}
-    else if (sameWord(word, "WormPep"))
-        {
-	word = nextWord(&line);
-	safef(pep, sizeof(pep), "%s", word);
-	}
-    else if (sameWord(word, "Description"))
-        {
-	description = skipLeadingSpaces(line);
-	if (!parseQuotedString(description, description, &line))
-	    errAbort("Expecting quoted string line %d of %s", 
-	    	lf->lineIx, lf->fileName);
-	sp = hashFindVal(spHash, pep);
-	if (sp == NULL) sp = "";
-	fprintf(f, "%s\t%s\t%s\n", seq, sp, description);
-	seq[0] = pep[0] = 0;
-	}
-    }
-carefulClose(&f);
-lineFileClose(&lf);
-}
-
-void freen(char *a, char *b, char *c)
+void freen(char *in, char *out)
 /* Test some hair-brained thing. */
 {
-parseWormSpMappings(a, b, c);
+struct lineFile *lf = lineFileOpen(in, TRUE);
+FILE *f;
+struct hash *hash = newHash(0);
+char *line, *word;
+struct hashEl *list, *el;
+int recCount = 1;
+struct counter *counter, *lastCounter = NULL, *counterList = NULL;
+while (lineFileNext(lf, &line, NULL))
+    {
+    if (isspace(line[0]))
+        continue;
+    word = nextWord(&line);
+    counter = hashFindVal(hash, word);
+    if (counter == NULL)
+        {
+	AllocVar(counter);
+	hashAddSaveName(hash, word, counter, &counter->name);
+	slAddHead(&counterList, counter);
+	}
+    counter->lineCount += 1;
+    if (counter != lastCounter)
+        counter->instanceCount += 1;
+    if (recCount != counter->lastRec)
+	{
+        counter->recCount += 1;
+	counter->lastRec = recCount;
+	}
+    lastCounter = counter;
+    if (word[0] == '/' && word[1] == '/')
+        ++recCount;
+    }
+lineFileClose(&lf);
+f = mustOpen(out, "w");
+list = hashElListHash(hash);
+slSort(&list, hashElCmp);
+for (el = list; el != NULL; el = el->next)
+    {
+    counter = el->val;
+    fprintf(f, "%s\t%d\t%d\t%d\n", counter->name, 
+    	counter->lineCount, counter->instanceCount,
+	counter->recCount);
+    }
+carefulClose(&f);
 }
 
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-if (argc != 4)
+if (argc != 3)
    usage();
-freen(argv[1], argv[2], argv[3]);
+freen(argv[1], argv[2]);
 return 0;
 }
