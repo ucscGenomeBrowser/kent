@@ -3524,12 +3524,12 @@ LOAD AFFYRATIO [GNF done jk Sept 18, 2003]
     mkdir affyGnf
     cd affyGnf/
     mkdir -p /iscratch/i/affy
-    cp /projects/compbio/data/microarray/affyGnf/sequences/HG-U95/HG-U95Av2_target /iscratch/i/affy
+    cp /projects/compbio/data/microarray/affyGnf/sequences/HG-U95/HG-U95Av2_all2.fa /iscratch/i/affy
     iSync
 
     ssh kk
     cd /cluster/data/hg16/bed/affyGnf
-    ls -1 /iscratch/i/affy/HG-U95Av2_target > affy.lst
+    ls -1 /iscratch/i/affy/HG-U95Av2_all2.fa > affy.lst
     ls -1 /scratch/hg/gs.17/build34/trfFa/ > allctg.lst
     echo '#LOOP\n/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.17/build34/trfFa/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
     gensub2 allctg.lst affy.lst template.sub para.spec
@@ -3554,8 +3554,9 @@ LOAD AFFYRATIO [GNF done jk Sept 18, 2003]
     ssh hgwdev
     cd /cluster/data/hg16/bed/affyGnf
     /cse/grads/sugnet/bin/i386/affyPslAndAtlasToBed affyU95.psl   /projects/compbiodata/microarray/affyGnf/human_atlas_U95_gnf.noquotes.txt affyRatio.bed affyRatio.exr >& affyPslAndAtlasToBed.log 
-    hgLoadBed -sqlTable=$HOME/src/hg/lib/affyRatio.sql hg16 affyRatio affyRatio.bed
-    
+    hgLoadBed -sqlTable=$HOME/src/hg/lib/affyRatio.sql hg16 affyRatio affyRatio.bed    
+    hgLoadPsl hg16 affyU95.psl
+
     # Clean up
     rm -r psl tmp err affyRatio.bed affyRatio.exr bed.tab scores.tab *.debug batch.bak contig.psl raw.psl
 
@@ -3568,12 +3569,12 @@ LOAD AffyUclaRatio [in progress jk Sept 19, 2003]
     mkdir affyUcla
     cd affyUcla/
     mkdir -p /iscratch/i/affy
-    cp /projects/compbio/data/microarray/affyUcla/sequences/HG-U133AB_all /iscratch/i/affy
+    cp /projects/compbio/data/microarray/affyUcla/sequences/HG-U133AB_all2.fa /iscratch/i/affy
     iSync
 
     ssh kk
     cd /cluster/data/hg16/bed/affyGnf
-    ls -1 /iscratch/i/affy/HG-U133AB_all > affy.lst
+    ls -1 /iscratch/i/affy/HG-U133AB_all2.fa > affy.lst
     ls -1 /scratch/hg/gs.17/build34/trfFa/ > allctg.lst
     echo '#LOOP\n/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.17/build34/trfFa/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
     gensub2 allctg.lst affy.lst template.sub para.spec
@@ -3594,9 +3595,18 @@ LOAD AffyUclaRatio [in progress jk Sept 19, 2003]
     cd /cluster/data/hg16/bed/affyUcla
     affyUclaMergePslData affyUclaMergePslData -pslFile=affyU133.psl -affyFile=/projects/compbio/data/microarray/affyUcla/data/030602_ucla_normal_human_tissue_snapshot.txt -bedOut=affyUcla.bed -expRecordOut=affyUcla.expRecords -expFile=/projects/compbio/data/microarray/affyUcla/data/expNames -toDiffFile=toDiff.txt
     hgLoadBed -sqlTable=$HOME/src/hg/lib/affyUcla.sql hg16 affyUcla affyUcla.bed
+    hgLoadPsl hg16 affyUcla.psl
     
     # Clean up
     rm -r psl tmp err affyUcla.bed affyUcla.expRecords bed.tab *.debug batch.bak contig.psl raw.psl
+    
+    # Add in sequence data for affyU95 and affyU133 tracks.
+    # Copy probe sequence to /gbdb if it isn't already
+    mkdir -p /gbdb/hgFixed/affyProbes
+    cd /gbdb/hgFixed/affyProbes
+    ln -s /projects/compbio/data/microarray/affyGnf/sequences/HG-U95/HG-U95Av2_all2.fa .
+    ln -s /projects/compbio/data/microarray/affyUcla/sequences/HG-U133AB_all2.fa .
+    hgLoadSeq hg16 /gbdb/hgFixed/affyProbes/HG-*2.fa
 
 # GENE BOUNDS (RNACLUSTER) (DONE 10-05-03 Chuck)
     # Create rnaCluster table (depends on {est,mrna}OrientInfo created but not checked in)
