@@ -89,7 +89,7 @@
 #include "bedCart.h"
 #include "cytoBand.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.922 2005/03/04 02:51:49 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.923 2005/03/08 00:39:58 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7075,10 +7075,9 @@ else
    display a left label in pack mode.  To use the full mode
    labeling, temporarily set visibility to full.
    Restore savedVis later */
-{
-if (sameString(track->tdb->type, "wigMaf"))
+if (startsWith("wigMaf", track->tdb->type))
     vis = tvFull;
-}
+
 switch (vis)
     {
     case tvHide:
@@ -8715,6 +8714,7 @@ int wordCount;
 if (typeLine == NULL)
     return;
 wordCount = chopLine(cloneString(typeLine), words);
+//wordCount = chopLine(typeLine, words);
 if (wordCount <= 0)
     return;
 type = words[0];
