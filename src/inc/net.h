@@ -94,6 +94,10 @@ struct lineFile *netLineFileOpen(char *url);
  * will skip any headers.   Free this with
  * lineFileClose(). */
 
+struct lineFile *netLineFileMayOpen(char *url);
+/* Same as netLineFileOpen, but warns and returns
+ * null rather than aborting on problems. */
+
 struct dyString *netSlurpUrl(char *url);
 /* Go grab all of URL and return it as dynamic string. */
 
