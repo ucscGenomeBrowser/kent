@@ -1,4 +1,4 @@
-/* links.c - Handle links section and other species homologies. */
+/* links.c - Handle links section. */
 
 #include "common.h"
 #include "hash.h"
@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: links.c,v 1.17 2004/08/24 17:50:04 kent Exp $";
+static char const rcsid[] = "$Id: links.c,v 1.18 2004/11/21 07:33:02 kent Exp $";
 
 struct link
 /* A link to another web site. */
@@ -240,13 +240,3 @@ section->raFile = "links.ra";
 return section;
 }
 
-struct section *otherOrgsSection(struct sqlConnection *conn,
-	struct hash *sectionRa)
-/* Create links section. */
-{
-struct section *section = sectionNew(sectionRa, "otherOrgs");
-section->exists = linksExists;
-section->print = linksPrint;
-section->raFile = "otherOrgs.ra";
-return section;
-}

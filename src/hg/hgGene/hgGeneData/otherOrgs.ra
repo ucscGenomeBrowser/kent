@@ -5,51 +5,68 @@ name human
 shortLabel Human
 tables hgBlastTab 
 idSql select target from hgBlastTab where query = '%s'
-url ../cgi-bin/hgTracks?org=human&position=%s
-hgsid on
+genomeUrl ../cgi-bin/hgTracks?org=Human&position=%s
+sorterUrl ../cgi-bin/hgNear?org=Human&near.oldOrg=Human&near_search=%s
+otherUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
+otherName GenBank
 priority 10
 
 name mouse
 shortLabel Mouse
 tables mmBlastTab 
 idSql select target from mmBlastTab where query = '%s'
-url ../cgi-bin/hgTracks?org=mouse&position=%s
-hgsid on
+genomeUrl ../cgi-bin/hgTracks?org=Mouse&position=%s
+sorterUrl ../cgi-bin/hgNear?org=Mouse&near.oldOrg=Mouse&near_search=%s
+otherUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
+otherName GenBank
 priority 20
 
 name rat
 shortLabel Rat
 tables rnBlastTab 
 idSql select target from rnBlastTab where query = '%s'
-url ../cgi-bin/hgTracks?org=rat&position=%s
-hgsid on
+genomeUrl ../cgi-bin/hgTracks?org=Rat&position=%s
+sorterUrl ../cgi-bin/hgNear?org=Rat&near.oldOrg=Rat&near_search=%s
+otherUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
+otherName GenBank
 priority 25
 
 name zebrafish
 shortLabel Zebrafish
 tables drBlastTab
 idSql select target from drBlastTab where query = '%s'
-url http://www.ensembl.org/Danio_rerio/protview?peptide=%s
+genomeUrl ../cgi-bin/hgTracks?org=Zebrafish&position=%s
+otherName Ensembl
+otherUrl http://www.ensembl.org/Danio_rerio/protview?peptide=%s
 priority 30
 
 name drosophila
 shortLabel D. melanogaster
 tables dmBlastTab
 idSql select target from dmBlastTab where query = '%s'
-url http://flybase.bio.indiana.edu/cgi-bin/fbidq.html?%s
+genomeUrl ../cgi-bin/hgTracks?org=D.+melanogaster&position=%s
+sorterUrl ../cgi-bin/hgNear?org=D.+melanogaster&near.oldOrg=D.+melanogaster&near_search=%s
+otherName FlyBase
+otherUrl http://flybase.bio.indiana.edu/cgi-bin/fbidq.html?%s
 priority 40
 
 name cElegans
 shortLabel C. elegans
 tables ceBlastTab
 idSql select target from ceBlastTab where query = '%s'
-url http://www.wormbase.org/db/gene/gene?name=%s
+genomeUrl ../cgi-bin/hgTracks?org=C.+elegans&position=%s
+sorterUrl ../cgi-bin/hgNear?org=C.+elegans&near.oldOrg=C.+elegans&near_search=%s
+otherName WormBase
+otherUrl http://www.wormbase.org/db/gene/gene?name=%s
 priority 50
 
 name yeast
 shortLabel S. cerevisiae
 tables scBlastTab
 idSql select target from scBlastTab where query = '%s'
-url http://db.yeastgenome.org/cgi-bin/SGD/locus.pl?locus=%s
+genomeUrl ../cgi-bin/hgTracks?org=S.+cerevisiae&position=%s
+sorterUrl ../cgi-bin/hgNear?org=S.+cerevisiae&near.oldOrg=S.+cerevisiae&near_search=%s
+otherName SGD
+otherUrl http://db.yeastgenome.org/cgi-bin/SGD/locus.pl?locus=%s
 priority 60
 
