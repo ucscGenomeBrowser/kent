@@ -7,12 +7,11 @@
 #include "rbTree.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: chainNet.c,v 1.30 2004/02/23 09:07:22 kent Exp $";
+static char const rcsid[] = "$Id: chainNet.c,v 1.31 2004/02/23 17:03:52 kent Exp $";
 
 int minSpace = 25;	/* Minimum gap size to fill. */
 int minFill;		/* Minimum fill to record. */
 double minScore = 2000;	/* Minimum chain score to look at. */
-boolean usingStdout = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -31,7 +30,7 @@ errAbort(
   "   -minSpace=N - minimum gap size to fill, default %d\n"
   "   -minFill=N  - default half of minSpace\n"
   "   -minScore=N - minimum chain score to consider, default %d\n"
-  "   -verbose=N - make copious output\n"
+  "   -verbose=N - Alter verbosity (default 1)\n"
   , minSpace, minScore);
 }
 
@@ -111,13 +110,6 @@ void dumpSpace(void *item, FILE *f)
 {
 struct space *space = item;
 fprintf(f, "%d,%d", space->start, space->end);
-}
-
-void doSpace(void *item)
-/* Do something to range. */
-{
-struct space *space = item;
-printf("%d,%d\n", space->start, space->end);
 }
 
 void addSpaceForGap(struct chrom *chrom, struct gap *gap)
@@ -712,20 +704,23 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     }
 }
 
-void printMem()
+void printMem(FILE *f)
 /* Print out memory used and other stuff from linux. */
 {
-struct lineFile *lf = lineFileOpen("/proc/self/stat", TRUE);
-char *line, *words[50];
-int wordCount;
-if (lineFileNext(lf, &line, NULL))
+struct lineFile *lf = lineFileMayOpen("/proc/self/stat", TRUE);
+if (lf != NULL)
     {
-    wordCount = chopLine(line, words);
-    if (wordCount >= 23)
-        printf("memory usage %s, utime %s s/100, stime %s\n", 
-		words[22], words[13], words[14]);
+    char *line, *words[50];
+    int wordCount;
+    if (lineFileNext(lf, &line, NULL))
+	{
+	wordCount = chopLine(line, words);
+	if (wordCount >= 23)
+	    fprintf(f, "memory usage %s, utime %s s/100, stime %s\n", 
+		    words[22], words[13], words[14]);
+	}
+    lineFileClose(&lf);
     }
-lineFileClose(&lf);
 }
 
 
@@ -740,14 +735,11 @@ struct chrom *qChromList, *tChromList, *tChrom, *qChrom;
 struct chain *chain;
 double lastScore = -1;
 
-if (sameWord(tNet, "stdout") || sameWord(qNet, "stdout"))
-    usingStdout = TRUE;
 
 makeChroms(qSizes, &qHash, &qChromList);
 makeChroms(tSizes, &tHash, &tChromList);
-if (! usingStdout)
-    printf("Got %d chroms in %s, %d in %s\n", slCount(tChromList), tSizes,
-	   slCount(qChromList), qSizes);
+verbose(1, "Got %d chroms in %s, %d in %s\n", slCount(tChromList), tSizes,
+       slCount(qChromList), qSizes);
 
 /* Loop through chain file building up net. */
 while ((chain = chainRead(lf)) != NULL)
@@ -761,7 +753,7 @@ while ((chain = chainRead(lf)) != NULL)
 	{
     	break;
 	}
-    verbose(1, "chain %f (%d els) %s %d-%d %c %s %d-%d\n", 
+    verbose(2, "chain %f (%d els) %s %d-%d %c %s %d-%d\n", 
 	    chain->score, slCount(chain->blockList), 
 	    chain->tName, chain->tStart, chain->tEnd, 
 	    chain->qStrand, chain->qName, chain->qStart, chain->qEnd);
@@ -776,28 +768,24 @@ while ((chain = chainRead(lf)) != NULL)
 		chain->tSize, chainFile,
 		tChrom->size, tSizes);
     addChain(qChrom, tChrom, chain);
-    verbose(1, "%s has %d inserts, %s has %d\n", tChrom->name, 
+    verbose(2, "%s has %d inserts, %s has %d\n", tChrom->name, 
 	    tChrom->spaces->n, qChrom->name, qChrom->spaces->n);
     }
 /* Build up other side of fills.  It's just for historical 
  * reasons this is not done during the main build up.   
  * It's a little less efficient this way, but to change it
  * some hard reverse strand issues would have to be juggled. */
-if (! usingStdout)
-    printf("Finishing nets\n");
+verbose(1, "Finishing nets\n");
 finishNet(qChromList, TRUE);
 finishNet(tChromList, FALSE);
 
 /* Write out basic net files. */
-if (! usingStdout)
-    printf("writing %s\n", tNet);
+verbose(1, "writing %s\n", tNet);
 outputNetSide(tChromList, tNet, FALSE);
-if (! usingStdout)
-    printf("writing %s\n", qNet);
+verbose(1, "writing %s\n", qNet);
 outputNetSide(qChromList, qNet, TRUE);
-
-if (! usingStdout)
-    printMem();
+if (verboseLevel() > 1)
+    printMem(stderr);
 }
 
 int main(int argc, char *argv[])
