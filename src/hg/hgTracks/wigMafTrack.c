@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.47 2004/11/05 17:18:10 kent Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.48 2004/11/09 17:10:30 kent Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -636,6 +636,8 @@ for (mi = miList; mi != NULL; mi = mi->next)
         /* display pairwise alignments in this region in dense format */
         vgSetClip(vg, xOff, yOff, width, mi->height);
         tableName = getMafTablename(mi->name, suffix);
+	if (!hTableExists(tableName))
+	    tableName = getMafTablename(mi->db, suffix);
         if (hTableExists(tableName))
             drawMafScore(tableName, mi->height, seqStart, seqEnd, 
                                  vg, xOff, yOff, width, font,
