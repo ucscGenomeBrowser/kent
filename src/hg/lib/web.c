@@ -276,15 +276,11 @@ exit(0);
 }
 
 void printGenomeListHtml(char *db, char *onChangeText)
-/*
-Prints to stdout the HTML to render a dropdown list containing a list of the possible
-Genomes to choose from.
-
-param curGenome - The Genome to choose as selected. 
-If NULL, no default selection.
-
-param onChangeText - Optional (can be NULL) text to pass in any onChange javascript.
- */
+/* Prints to stdout the HTML to render a dropdown list 
+ * containing a list of the possible genomes to choose from.
+ * param curGenome - The Genome to choose as selected. 
+ * If NULL, no default selection.  param onChangeText - Optional 
+ * (can be NULL) text to pass in any onChange javascript. */
 {
 char *orgList[128];
 int numGenomes = 0;
@@ -352,14 +348,12 @@ printSomeAssemblyListHtmlParm(db, dbList, dbCgiName, NULL);
 }
 
 void printAssemblyListHtml(char *db)
-{
 /* Find all the assemblies that pertain to the selected genome 
-Prints to stdout the HTML to render a dropdown list containing a list of the possible
-assemblies to choose from.
-
-param curDb - The assembly (the database name) to choose as selected. 
-If NULL, no default selection.
- */
+ * Prints to stdout the HTML to render a dropdown list containing 
+ * a list of the possible assemblies to choose from.
+ * Param db - The assembly (the database name) to choose as selected. 
+ * If NULL, no default selection.  */
+{
 struct dbDb *dbList = hGetIndexedDatabases();
 printSomeAssemblyListHtml(db, dbList);
 }
@@ -473,15 +467,14 @@ param cart - The cart to use to first search for a suitable database name
 return - The database matching this Genome type
 */
 char *retDb = cartUsualString(cart, dbCgiName, hGetDb());
-char *queryGenome = NULL;
 
 if (!hDbExists(retDb))
     {
     retDb = hDefaultDb();
     }
 
-queryGenome = hGenome(retDb);
-if (!strstrNoCase(genome, queryGenome))
+/* If genomes dont match, then get the default db for that genome */
+if (!containsStringNoCase(genome, hGenome(retDb)))
     {
     retDb = hDefaultDbForGenome(genome);
     }
@@ -511,7 +504,6 @@ if (*retDb)
         {
         *retDb = hDefaultDb();
         }
-
     *retGenome = hGenome(*retDb);
     }
 else if (*retGenome)
