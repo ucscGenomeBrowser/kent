@@ -1231,7 +1231,6 @@ if (row != NULL)
     }
 else
     {
-    warn(dy->string);
     warn("Couldn't find '%s' in mrna table", acc);
     }
 
