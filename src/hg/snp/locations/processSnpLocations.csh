@@ -2,8 +2,8 @@
 
 # check usage
 if ($# != 4) then
-    echo "Usage:   processSnpLocations.csh Database Organism NCBI_Build dbSnpBuild"
-    echo "Example: processSnpLocations.csh hg16     human    34         119"
+    echo "Usage:   processSnpLocations.csh DB   Organism NCBI_Build dbSnpBuild"
+    echo "Example: processSnpLocations.csh hg16 human    34         119"
     exit
 endif
 
@@ -13,10 +13,13 @@ set organism  = $2
 set ncbiBuild = $3
 set snpBuild  = $4
 set oo        = /cluster/data/$database
+set LOCDIR    = ${HOME}/kent/src/hg/snp/locations
 
 if      ($organism == "human") then
+    set tables    = "snpTsc snpNih snpMap"
     set inputFile = $organism.b$ncbiBuild.snp$snpBuild
 else 
+    set tables    = "snpNih snpMap"
     set inputFile = $organism.ncbi.b$ncbiBuild
 endif
 
@@ -28,9 +31,11 @@ cd       $oo/bed/snp/build$snpBuild/snpMap
 rm -f snp* $organism* bed.tab seq_contig.md liftAll.lft |& grep -v "No match."
 
 echo Start command: processSnpLocations.csh $argv
-echo File: ftp://ftp.ncbi.nlm.nih.gov/snp/$organism/genome_reports/$inputFile.gz
+echo File: \
+	ftp://ftp.ncbi.nlm.nih.gov/snp/$organism/genome_reports/$inputFile.gz
 echo `date` Getting data
-wget ftp://ftp.ncbi.nlm.nih.gov/snp/$organism/genome_reports/$inputFile.gz|& grep -v 0K|grep -v ^L|grep -v ^C|grep -v done|grep -v ^$
+wget ftp://ftp.ncbi.nlm.nih.gov/snp/$organism/genome_reports/$inputFile.gz \
+	    |& grep -v 0K|grep -v ^L|grep -v ^C|grep -v done|grep -v ^$
 
 if ( "$organism" == "human" ) then
     ln -s ../../../../seq_contig.md .
@@ -43,20 +48,21 @@ if ( "$organism" == "human" ) then
     calcFlipSnpPos seq_contig.md $inputFile $inputFile.flipped
 
     echo `date` Making temp file snpMap.contig.bed
-    awk -f ~/lib/snpMapFilter.awk $inputFile.flipped > snpMap.contig.bed
-    gzip $inputFile.flipped
+    awk -f $LOCDIR/snpMapFilter.awk \
+	$inputFile.flipped > snpMap.contig.bed
+    rm -f $inputFile.flipped
 
     echo `date` Lifting snpMap.contig.bed to snpMap.bed
     liftUp snpMap.bed liftAll.lft warn snpMap.contig.bed
-    # rm snpMap.contig.bed
+    rm -f snpMap.contig.bed
 
     echo `date` Making snpNih.bed
-    grep BAC_OVERLAP snpMap.bed | awk -f ~/lib/snpFilter.awk >  snpNih.bed
-    grep OTHER       snpMap.bed | awk -f ~/lib/snpFilter.awk >> snpNih.bed
+    grep BAC_OVERLAP snpMap.bed | awk -f $LOCDIR/snpFilter.awk >  snpNih.bed
+    grep OTHER       snpMap.bed | awk -f $LOCDIR/snpFilter.awk >> snpNih.bed
 
     echo `date` Making snpTsc.bed
-    grep RANDOM      snpMap.bed | awk -f ~/lib/snpFilter.awk >  snpTsc.bed
-    grep MIXED       snpMap.bed | awk -f ~/lib/snpFilter.awk >> snpTsc.bed
+    grep RANDOM      snpMap.bed | awk -f $LOCDIR/snpFilter.awk >  snpTsc.bed
+    grep MIXED       snpMap.bed | awk -f $LOCDIR/snpFilter.awk >> snpTsc.bed
 
     # snpTsc is specific to human, so load it here
     echo `date` Loading snpTsc.bed
@@ -79,23 +85,21 @@ echo `date` Loading snpNih.bed
 hgLoadBed $database snpNih snpNih.bed -tab
 
 echo `date` Loading snpMap.bed
-hgLoadBed $database snpMap snpMap.bed -sqlTable=$HOME/kent/src/hg/lib/snpMap.sql -tab
+hgLoadBed $database snpMap snpMap.bed \
+    -sqlTable=$HOME/kent/src/hg/lib/snpMap.sql -tab
 
 # useful data checks:
-
-# wc -l snpTsc.bed; hg16 -e "select count(*) from snpTsc; select * from snpTsc limit 5; desc snpTsc; show indexes from snpTsc"
-# wc -l snpNih.bed; hg16 -e "select count(*) from snpNih; select * from snpNih limit 5; desc snpNih; show indexes from snpNih"
-# wc -l snpMap.bed; hg16 -e "select count(*) from snpMap; select * from snpMap limit 5; desc snpMap; show indexes from snpMap"
-
-# wc -l snpNih.bed; mm4  -e "select count(*) from snpNih; select * from snpNih limit 5; desc snpNih; show indexes from snpNih"
-# wc -l snpMap.bed; mm4  -e "select count(*) from snpMap; select * from snpMap limit 5; desc snpMap; show indexes from snpMap"
-
-# wc -l snpNih.bed; rn3  -e "select count(*) from snpNih; select * from snpNih limit 5; desc snpNih; show indexes from snpNih"
-# wc -l snpMap.bed; rn3  -e "select count(*) from snpMap; select * from snpMap limit 5; desc snpMap; show indexes from snpMap"
+foreach table in ( $tables )
+    wc -l $table.bed; 
+    echo "select count(*) from $table"  | hgsql $database
+    echo "select * from $table limit 5" | hgsql $database
+    echo "desc $table"                  | hgsql $database
+    echo "show indexes from $table"     | hgsql $database
+end
 
 # clean up
 echo `date` Zipping input files
-# rm -f bed.tab
+rm -f bed.tab
 gzip $inputFile* snp*.bed
 echo `date` Done.
 
