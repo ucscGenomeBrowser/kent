@@ -1,5 +1,6 @@
-fullDir /gbdb/bioImage/full/inSitu/Mouse/mahoney/wholeMount
-thumbDir /gbdb/bioImage/thumb/inSitu/Mouse/mahoney/wholeMount
+fullDir /gbdb/bioImage/full/inSitu/Mouse/mahoney/slices
+screenDir /gbdb/bioImage/700/inSitu/Mouse/mahoney/slices
+thumbDir /gbdb/bioImage/200/inSitu/Mouse/mahoney/slices
 isDefault 1
 taxon 10090
 bodyPart brain

@@ -69,8 +69,9 @@ table image
     (
     int id;		"ID of image"
     string fileName;	"Image file name not including directory"
-    int fullLocation;	"Location of full image"
-    int thumbLocation;	"Location of thumbnail image"
+    int fullLocation;	"Location of full-size image"
+    int screenLocation;	"Location of screen-sized image"
+    int thumbLocation;	"Location of thumbnail-sized image"
     int submissionSet;	"Submission set this is part of"
     int sectionSet;	"Set of sections this is part of or 0 if none"
     int sectionIx;	"Position (0 based) within set of sections"

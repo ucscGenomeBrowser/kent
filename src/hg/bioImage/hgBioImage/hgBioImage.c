@@ -31,21 +31,39 @@ errAbort(
   );
 }
 
-char *bioImageFullPath(struct sqlConnection *conn, int id)
-/* Fill in path for full image bioImage of given id. */
+static char *somePath(struct sqlConnection *conn, int id, char *locationField)
+/* Fill in path based on given location field */
 {
 char query[256], path[PATH_LEN];
 struct sqlResult *sr;
 char **row;
 safef(query, sizeof(query), 
 	"select location.name,image.fileName from image,location"
-	" where image.id = %d and location.id=image.fullLocation", id);
+	" where image.id = %d and location.id=image.%s", id, locationField);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     errAbort("No image of id %d", id);
 safef(path, PATH_LEN, "%s/%s", row[0], row[1]);
 sqlFreeResult(&sr);
 return cloneString(path);
+}
+
+char *bioImageFullSizedPath(struct sqlConnection *conn, int id)
+/* Fill in path for full image bioImage of given id. */
+{
+return somePath(conn, id, "fullLocation");
+}
+
+char *bioImageThumbSizePath(struct sqlConnection *conn, int id)
+/* Fill in path for thumbnail image bioImage of given id. */
+{
+return somePath(conn, id, "thumbLocation");
+}
+
+char *bioImageScreenSizedPath(struct sqlConnection *conn, int id)
+/* Fill in path for screen-sized image bioImage of given id. */
+{
+return somePath(conn, id, "screenLocation");
 }
 
 char *cloneOrNull(char *s)
@@ -243,15 +261,15 @@ void webMain(struct sqlConnection *conn, int id, char *geneName)
 char query[256];
 struct sqlResult *sr;
 char **row;
-char *fullPath = bioImageFullPath(conn, id);
+char *screenSizedPath = bioImageScreenSizedPath(conn, id);
 char *treatment, *publication;
 char *setUrl, *itemUrl;
 
-printf("<B>organism:</B> %s  ", bioImageOrganism(conn, id));
-printf("<B>stage:</B> %s<BR>\n", bioImageStage(conn, id));
 printf("<B>gene:</B> %s ", naForNull(geneName));
 printf("<B>accession:</B> %s ", naForNull(bioImageAccession(conn,id)));
 printf("<B>type:</B> %s<BR>\n", naForNull(bioImageType(conn,id)));
+printf("<B>organism:</B> %s  ", bioImageOrganism(conn, id));
+printf("<B>stage:</B> %s<BR>\n", bioImageStage(conn, id));
 printf("<B>body part:</B> %s ", naForNull(bioImageBodyPart(conn,id)));
 printf("<B>section type:</B> %s<BR>\n", naForNull(bioImageSliceType(conn,id)));
 treatment = bioImageTreatment(conn,id);
@@ -284,7 +302,7 @@ if (setUrl != NULL || itemUrl != NULL)
 	}
     printf("<BR>\n");
     }
-printf("<IMG SRC=\"/%s\"><BR>\n", fullPath);
+printf("<IMG SRC=\"/%s\"><BR>\n", screenSizedPath);
 }
 
 void cartMain(struct cart *theCart)

@@ -87,8 +87,9 @@ CREATE TABLE sectionSet (
 CREATE TABLE image (
     id int auto_increment not null,	# ID of image
     fileName varchar(255) not null,	# Image file name not including directory.
-    fullLocation int not null,	# Location of full image
-    thumbLocation int not null,	# Location of thumbnail image
+    fullLocation int not null,	# Location of full-sized image
+    screenLocation int not null, # Location of screen-sized image
+    thumbLocation int not null,	# Location of thumbnail-sized image
     submissionSet int not null,	# Submission set this is part of
     sectionSet int not null,	# Set of sections this is part of or 0 if none
     sectionIx int not null,	# Position (0 based) within set of sections

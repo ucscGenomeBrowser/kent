@@ -75,7 +75,7 @@ return val;
 
 static char *requiredItemFields[] = {"fileName", "submitId"};
 static char *requiredSetFields[] = {"contributer"};
-static char *requiredFields[] = {"fullDir", "thumbDir", "taxon", "isEmbryo", "age", "bodyPart", 
+static char *requiredFields[] = {"fullDir", "screenDir", "thumbDir", "taxon", "isEmbryo", "age", "bodyPart", 
 	"sliceType", "imageType", };
 static char *optionalFields[] = {"sectionSet", "sectionIx", "gene", "locusLink", "refSeq", "genbank", };
 
@@ -195,6 +195,7 @@ struct sqlConnection *conn = sqlConnect(database);
 int rowSize;
 int submissionSetId;
 struct hash *fullDirHash = newHash(0);
+struct hash *screenDirHash = newHash(0);
 struct hash *thumbDirHash = newHash(0);
 struct hash *treatmentHash = newHash(0);
 struct hash *bodyPartHash = newHash(0);
@@ -249,6 +250,8 @@ while (lineFileNextRowTab(lf, words, rowSize))
     {
     int fullDir = cachedId(conn, "location", "name", 
     	fullDirHash, "fullDir", raHash, rowHash, words);
+    int screenDir = cachedId(conn, "location", "name", 
+    	screenDirHash, "screenDir", raHash, rowHash, words);
     int thumbDir = cachedId(conn, "location", 
     	"name", thumbDirHash, "thumbDir", raHash, rowHash, words);
     int bodyPart = cachedId(conn, "bodyPart", 
@@ -311,6 +314,7 @@ while (lineFileNextRowTab(lf, words, rowSize))
     dyStringPrintf(dy, " id = default,\n");
     dyStringPrintf(dy, " fileName = '%s',\n", fileName);
     dyStringPrintf(dy, " fullLocation = %d,\n", fullDir);
+    dyStringPrintf(dy, " screenLocation = %d,\n", screenDir);
     dyStringPrintf(dy, " thumbLocation = %d,\n", thumbDir);
     dyStringPrintf(dy, " submissionSet = %d,\n", submissionSetId);
     dyStringPrintf(dy, " sectionSet = %d,\n", sectionId);
