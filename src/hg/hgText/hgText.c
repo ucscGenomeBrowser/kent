@@ -145,6 +145,7 @@ int outputTypeNonPosMenuSize = 3;
 #define getSequencePhase    "Get sequence"
 #define getBedPhase         "Get BED"
 #define intersectOptionsPhase "Intersect Results..."
+#define histPhase           "Get Histogram"
 /* Old "phase" values handled for backwards compatibility: */
 #define oldAllFieldsPhase   "Get all fields"
 
@@ -474,6 +475,12 @@ if (!allLetters(word))
     webAbort("Error", "Invalid %s \"%s\".", desc, word);
 }
 
+boolean isSqlStringType(char *type)
+{
+return(strstr(type, "char") ||
+       strstr(type, "text") ||
+       strstr(type, "blob"));
+}
 
 char *getPosition(char **retChrom, int *retStart, int *retEnd)
 /* Get position from cgi (not cart); use hgFind if necessary; return NULL 
@@ -1059,8 +1066,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	else
 	    puts(" AND </TD></TR>\n");
 	printf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", row[0]);
-	if (strstr(row[1], "char") || strstr(row[1], "text") ||
-	    strstr(row[1], "blob"))
+	if (isSqlStringType(row[1]))
 	    {
 	    snprintf(name, sizeof(name), "dd%s_%s", tableId, row[0]);
 	    cgiMakeDropList(name, ddOpMenu, ddOpMenuSize,
@@ -1945,8 +1951,8 @@ else
     }
 
 if (hti == NULL)
-    webAbort("Error", "Could not find table info for table %s",
-	     table);
+    webAbort("Error", "Could not find table info for table %s in db %s",
+	     table, db);
 return(hti);
 }
 
@@ -3259,15 +3265,114 @@ webEnd();
 }
 
 
+void descForm()
+/* Print out an HTML FORM showing table fields and types, and offering 
+ * histograms for the text/enum fields. */
+{
+struct sqlConnection *conn;
+struct sqlResult *sr;
+struct dyString *query = newDyString(256);
+char **row;
+char *table = getTableName();
+char *db = getTableDb();
+char button[64];
+
+// Not supported for custom tracks, just for database tables.
+if (sameString(customTrackPseudoDb, db))
+    return;
+
+dyStringClear(query);
+dyStringPrintf(query, "desc %s", fullTableName);
+if (sameString(database, db))
+    conn = hAllocConn();
+else
+    conn = hAllocConn2();
+sr = sqlGetResult(conn, query->string);
+printf("<FORM ACTION=\"%s\" NAME=\"descForm\">\n\n", hgTextName());
+cartSaveSession(cart);
+cgiMakeHiddenVar("db", database);
+cgiMakeHiddenVar("table", getTableVar());
+preserveConstraints(fullTableName, db, NULL);
+cgiContinueHiddenVar("position");
+cgiMakeHiddenVar("phase", histPhase);
+printf("Fields of %s:<P>\n", table);
+puts("<TABLE BORDER=1> <TR> <TH>name</TH> <TH>type</TH> <TH>&nbsp;</TH> </TR>");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    printf("<TR> <TD>%s</TD> <TD>%s</TD> <TD>", row[0], row[1]);
+    if ((isSqlStringType(row[1]) || startsWith("enum", row[1])) &&
+	! sameString(row[1], "longblob"))
+	{
+	snprintf(button, sizeof(button), "Get histogram for %s", row[0]);
+	cgiMakeButton("outputType", button);
+	}
+    puts("</TD> </TR>\n");
+    }
+puts("</TABLE>");
+puts("</FORM>");
+sqlFreeResult(&sr);
+
+if (sameString(database, db))
+    hFreeConn(&conn);
+else
+    hFreeConn2(&conn);
+}
+
 void doGetStatsNonpositional()
 /* Print out statistics about nonpositional query results. */
 {
-struct hTableInfo *hti = getOutputHti();
+struct sqlConnection *conn;
+struct dyString *query = newDyString(256);
+char **row;
+char *constraints;
+char *table = getTableName();
+char *db = getTableDb();
+int numRows;
+
+saveOutputOptionsState();
+
 webStart(cart, "Table Browser: %s: %s", freezeName, statsPhase);
 checkTableExists(fullTableName);
-//#*** This never has to deal with custom tracks or intersections -- 
-//#*** go straight to db.
-printf("Not implemented for non-positional tables yet...\n");
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\">\n\n", hgTextName());
+cartSaveSession(cart);
+cgiMakeHiddenVar("db", database);
+cgiMakeHiddenVar("table", getTableVar());
+preserveConstraints(fullTableName, db, NULL);
+cgiContinueHiddenVar("position");
+
+printf("<H4> Get Output: </H4>\n");
+cgiMakeDropList("outputType", outputTypeNonPosMenu, outputTypeNonPosMenuSize,
+		statsPhase);
+cgiMakeButton("phase", getOutputPhase);
+puts("</FORM>");
+
+printf("<HR><H4> Your query on %s: </H4>\n", table);
+constraints = constrainFields(NULL);
+if ((constraints != NULL) && (constraints[0] == 0))
+    constraints = NULL;
+
+if (constraints != NULL)
+    printf("Constraints on %s: %s<P>\n", table, constraints);
+else
+    printf("No constraints selected on fields of %s.<P>\n", table);
+
+dyStringClear(query);
+dyStringPrintf(query, "select count(*) from %s%s%s", table,
+	       (constraints ? " where "   : ""),
+	       (constraints ? constraints : ""));
+if (sameString(database, db))
+    conn = hAllocConn();
+else
+    conn = hAllocConn2();
+numRows = sqlQuickNum(conn, query->string);
+if (sameString(database, db))
+    hFreeConn(&conn);
+else
+    hFreeConn2(&conn);
+printf("Number of rows in %s%s: %d<P>\n", table,
+       constraints ? " matching constraints" : "", numRows);
+
+descForm();
 webEnd();
 }
 
@@ -3282,14 +3387,9 @@ struct slName *chromList = hAllChromNames();
 
 for (chromPtr=chromList;  chromPtr != NULL;  chromPtr=chromPtr->next)
     {
+    struct slName *newEl = newSlName(chromPtr->name);
     if (endsWith(chromPtr->name, "_random"))
 	{
-	struct slName *newEl;
-	char buf[32];
-	char *ptr = strstr(chromPtr->name, "_random");
-	*ptr = 0;
-	snprintf(buf, sizeof(buf), "%s_<BR>random", chromPtr->name);
-	newEl = newSlName(buf);
 	if (isdigit(chromPtr->name[3]))
 	    slAddHead(&randList, newEl);
 	else
@@ -3297,7 +3397,6 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr=chromPtr->next)
 	}
     else
 	{
-	struct slName *newEl = newSlName(chromPtr->name);
 	if (isdigit(chromPtr->name[3]))
 	    slAddHead(&nonrList, newEl);
 	else
@@ -3424,6 +3523,21 @@ for (bed=bedList, j=0;  bed != NULL;  bed=bed->next, j++)
     cdss[j]  = cds;
     utr3s[j] = utr3;
     }
+}
+
+char *breakChromRandomName(char *name)
+/* If name ends with _random, put an HTML linebreak in there. */
+{
+if (endsWith(name, "_random"))
+    {
+    char buf[32];
+    char *ptr = strstr(name, "_random");
+    *ptr = 0;
+    snprintf(buf, sizeof(buf), "%s_<BR>random", name);
+    return(cloneString(buf));
+    }
+else
+    return(cloneString(name));
 }
 
 void doGetStatsPositional()
@@ -3696,7 +3810,7 @@ puts("<TR><TH>statistic&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb
 puts("<TH ALIGN=\"RIGHT\">total&nbsp;&nbsp;&nbsp;</TH>");
 if (numCols > 1)
     for (chromPtr=chromList;  chromPtr != NULL;  chromPtr=chromPtr->next)
-	printf("<TH>%s</TH>", chromPtr->name);
+	printf("<TH>%s</TH>", breakChromRandomName(chromPtr->name));
 puts("</TR>");
 puts("<TR><TD>items matching query</TD>");
 for (i=0;  i < numCols;  i++)
@@ -3818,6 +3932,8 @@ freez(&itemUncCounts);
 freez(&strandPCounts);
 freez(&strandMCounts);
 freez(&strandQCounts);
+
+descForm();
 webEnd();
 }
 
@@ -3830,6 +3946,146 @@ if (tableIsPositional)
 else
     doGetStatsNonpositional();
 }
+
+
+static int descendingFreqCmp(const void *el1, const void *el2)
+/* descending sort on pointers to pointers to hash elements whose 
+ * values are int (not pointer to int! because of hashAddInt()). */
+{
+const struct hashEl *hel1 = *((struct hashEl **)el1);
+const struct hashEl *hel2 = *((struct hashEl **)el2);
+int v1 = (int)(hel1->val);
+int v2 = (int)(hel2->val);
+int dif;
+
+dif = v2 - v1;
+if (dif == 0)
+    dif = strcmp(hel1->name, hel2->name);
+return(dif);
+}
+
+void doGetHistogram()
+/* Print out a histogram for the text value of some field. */
+{
+struct sqlConnection *conn;
+struct sqlResult *sr;
+struct dyString *query = newDyString(256);
+struct hash *freqHash = newHash(16);
+struct hashEl *els, *el;
+struct slName *chromList, *chromPtr;
+char **row;
+char *words[5];
+char *constraints;
+char *table = getTableName();
+char *db = getTableDb();
+struct hTableInfo *hti = getHti(db, table);
+char *outputType = cgiString("outputType");
+char *field;
+int count;
+int maxFreq, freq;
+int i;
+double scale;
+
+webStart(cart, "Table Browser: %s: %s", freezeName, histPhase);
+checkTableExists(fullTableName);
+count = chopLine(outputType, words);
+if (count < 4)
+    errAbort("doGetHistogram: CGI var outputType should be of the form \"Get histogram for XXXX\" where XXXX is a valid field name");
+field = words[3];
+if (sameString(customTrackPseudoDb, db))
+    {
+    printf("Histograms are only supported on fields of database tables, not custom tracks.\n");
+    webEnd();
+    return;
+    }
+
+constraints = constrainFields(NULL);
+if ((constraints != NULL) && (constraints[0] == 0))
+    constraints = NULL;
+if (allGenome)
+    chromList = hAllChromNames();
+else
+    chromList = newSlName(chrom);
+
+if (sameString(database, db))
+    conn = hAllocConn();
+else
+    conn = hAllocConn2();
+for (chromPtr=chromList;  chromPtr != NULL;  chromPtr=chromPtr->next)
+    {
+    getFullTableName(fullTableName, chromPtr->name, table);
+    dyStringClear(query);
+    dyStringPrintf(query, "SELECT %s FROM %s", field, fullTableName);
+    if (tableIsPositional)
+	{
+	dyStringPrintf(query, " WHERE %s < %d AND %s > %d",
+		       hti->startField, winEnd, hti->endField, winStart);
+	if (! sameString("", hti->chromField))
+	    dyStringPrintf(query, " AND %s = \'%s\'",
+			   hti->chromField, chrom);
+	if ((constraints != NULL) && (constraints[0] != 0))
+	    dyStringPrintf(query, " AND %s", constraints);
+	}
+    else if (constraints)
+	dyStringPrintf(query, " WHERE %s", constraints);
+    sr = sqlGetResult(conn, query->string);
+    // make a hash of field values to frequencies:
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	if ((el = hashLookup(freqHash, row[0])) == NULL)
+	    hashAddInt(freqHash, row[0], 1);
+	else
+	    {
+	    if (! sameString(el->name, row[0]))
+		printf("Hash-collision warning: %s --> %s<P>\n",
+		       el->name, row[0]);
+	    (int)(el->val) = (int)(el->val) + 1;
+	    }
+	}
+    sqlFreeResult(&sr);
+    }
+if (sameString(database, db))
+    hFreeConn(&conn);
+else
+    hFreeConn2(&conn);
+
+// sort the elements by count, descending:
+els = hashElListHash(freqHash);
+if (els == NULL)
+    {
+    printf("No results returned from query.\n");
+    webEnd();
+    return;
+    }
+slSort(&els, descendingFreqCmp);
+maxFreq = (int)els->val;
+if (maxFreq > 50)
+    scale = (50.0 / maxFreq);
+else
+    scale = 1.0;
+// print out name, bar, count for each element
+printf("<H4> Histogram of values for %s.%s%s%s, sorted by descending frequency: </H4>\n",
+       table, field,
+       (constraints? " "         : ""),
+       (constraints? constraints : ""));
+puts("<TT><PRE>");
+printf("%50s %-50s %8s\n", "value", "", "count");
+puts("--------------------------------------------------------------------------------------------------------------");
+for (el = els;  el != NULL;  el=el->next)
+    {
+    printf("%50s ", el->name);
+    freq = (int)el->val;
+    freq = (int)(scale * freq);
+    for (i=0;  i < freq;  i++)
+	putchar('*');
+    for (i=freq; i < 50;  i++)
+	putchar(' ');
+    printf(" %8d\n", (int)el->val);
+    }
+puts("</PRE></TT>");
+webEnd();
+}
+
 
 void doMiddle(struct cart *theCart)
 /* the main body of the program */
@@ -3945,6 +4201,8 @@ else
 	doGetStats();
     else if (existsAndEqual("phase", intersectOptionsPhase))
 	doIntersectOptions();
+    else if (existsAndEqual("phase", histPhase))
+	doGetHistogram();
     else
 	webAbort("Table Browser: CGI option error",
 		 "Error: unrecognized value of CGI var phase: %s",
