@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.43 2005/02/11 23:03:43 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.44 2005/02/12 00:15:07 hiram Exp $";
 
 extern char *maxOutMenu[];
 
@@ -245,7 +245,7 @@ struct lm *lm1 = lmInit(64*1024);
 bedList = getFilteredBeds(conn, track2->tableName, region, lm1, NULL);
 
 /*	If table 2 bed list needs to be complemented (!table2), then do so */
-if (bedList && (invTable2 || sameString("none", op)))
+if (invTable2 || sameString("none", op))
     {
     unsigned chromStart = 0;		/*	start == end == 0	*/
     unsigned chromEnd = 0;		/*	means do full chrom	*/
@@ -259,8 +259,16 @@ if (bedList && (invTable2 || sameString("none", op)))
 	chromEnd = region->end;
 	}
 
-    inverseBedList=invertBedList(bedList, lm2, region->chrom, chromStart,
-	chromEnd, chromSize);
+    if ((struct bed *)NULL == bedList)
+	{
+	if (0 == region->end)
+	    chromEnd = chromSize;
+	addBedElement(&inverseBedList, region->chrom, chromStart, chromEnd,
+		1, lm2);
+	}
+    else
+	inverseBedList=invertBedList(bedList, lm2, region->chrom, chromStart,
+	    chromEnd, chromSize);
 
     lmCleanup(&lm1);			/*	== bedFreeList(&bedList) */
 
@@ -282,10 +290,13 @@ unsigned long long valuesMatched = 0;
  *	table 2 since it was then inverted at that time so it is already
  *	"none" of itself.
  */
-if (*intersectBedList)
+if (anyIntersection())
     {
-    valuesMatched = wds->getDataViaBed(wds, db, splitTableOrFileName,
-	operations, intersectBedList);
+    if (*intersectBedList)
+	{
+	valuesMatched = wds->getDataViaBed(wds, db, splitTableOrFileName,
+	    operations, intersectBedList);
+	}
     }
 else
     {
