@@ -558,12 +558,13 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 hFreeConn(&conn);
 }
 
-int showProtAlignment(struct psl *psl, aaSeq *aaSeq, FILE *f)
+int showGfAlignment(struct psl *psl, bioSeq *oSeq, FILE *f, enum gfType qType)
 /* Show protein/DNA alignment. */
 {
 struct dnaSeq *dnaSeq = NULL;
 int tStart = psl->tStart, tEnd = psl->tEnd;
 boolean tIsRc = (psl->strand[1] == '-');
+boolean isProt = (qType == gftProt);
 
 
 /* Load dna sequence. */
@@ -584,7 +585,7 @@ fprintf(f, "<H4><A NAME=cDNA></A>%s%s</H4>\n", psl->qName, (psl->strand[0] == '-
 /* Display amino acid sequence. */
     {
     struct cfm cfm;
-    char *colorFlags = needMem(aaSeq->size);
+    char *colorFlags = needMem(oSeq->size);
     int i,j;
 
     for (i=0; i<psl->blockCount; ++i)
@@ -594,18 +595,29 @@ fprintf(f, "<H4><A NAME=cDNA></A>%s%s</H4>\n", psl->qName, (psl->strand[0] == '-
 	int sz = psl->blockSizes[i]-1;
 	colorFlags[qs] = socBrightBlue;
 	colorFlags[qs+sz] = socBrightBlue;
-	for (j=1; j<sz; ++j)
+	if (isProt)
 	    {
-	    AA aa = aaSeq->dna[qs+j];
-	    DNA *codon = &dnaSeq->dna[ts + 3*j];
-	    AA trans = lookupCodon(codon);
-	    if (trans != 'X' && trans == aa)
-		colorFlags[qs+j] = socBlue;
+	    for (j=1; j<sz; ++j)
+		{
+		AA aa = oSeq->dna[qs+j];
+		DNA *codon = &dnaSeq->dna[ts + 3*j];
+		AA trans = lookupCodon(codon);
+		if (trans != 'X' && trans == aa)
+		    colorFlags[qs+j] = socBlue;
+		}
+	    }
+	else
+	    {
+	    for (j=1; j<sz; ++j)
+	        {
+		if (oSeq->dna[qs+j] == dnaSeq->dna[ts+j])
+		    colorFlags[qs+j] = socBlue;
+		}
 	    }
 	}
     cfmInit(&cfm, 10, 60, TRUE, FALSE, f, 0);
-    for (i=0; i<aaSeq->size; ++i)
-	cfmOut(&cfm, aaSeq->dna[i], seqOutColorLookup[colorFlags[i]]);
+    for (i=0; i<oSeq->size; ++i)
+	cfmOut(&cfm, oSeq->dna[i], seqOutColorLookup[colorFlags[i]]);
     cfmCleanup(&cfm);
     freez(&colorFlags);
     htmHorizontalLine(f);
@@ -626,17 +638,28 @@ fprintf(f, "<H4><A NAME=genomic></A>Genomic %s %s:</H4>\n",
 	int qs = psl->qStarts[i];
 	int ts = psl->tStarts[i] - tStart;
 	int sz = psl->blockSizes[i];
-	for (j=0; j<sz; ++j)
+	if (isProt)
 	    {
-	    AA aa = aaSeq->dna[qs+j];
-	    int codonStart = ts + 3*j;
-	    DNA *codon = &dnaSeq->dna[codonStart];
-	    AA trans = lookupCodon(codon);
-	    if (trans != 'X' && trans == aa)
+	    for (j=0; j<sz; ++j)
 		{
-		colorFlags[codonStart] = socBlue;
-		colorFlags[codonStart+1] = socBlue;
-		colorFlags[codonStart+2] = socBlue;
+		AA aa = oSeq->dna[qs+j];
+		int codonStart = ts + 3*j;
+		DNA *codon = &dnaSeq->dna[codonStart];
+		AA trans = lookupCodon(codon);
+		if (trans != 'X' && trans == aa)
+		    {
+		    colorFlags[codonStart] = socBlue;
+		    colorFlags[codonStart+1] = socBlue;
+		    colorFlags[codonStart+2] = socBlue;
+		    }
+		}
+	    }
+	else
+	    {
+	    for (j=1; j<sz; ++j)
+	        {
+		if (oSeq->dna[qs+j] == dnaSeq->dna[ts+j])
+		    colorFlags[ts+j] = socBlue;
 		}
 	    }
 	colorFlags[ts] = socBrightBlue;
@@ -659,14 +682,13 @@ fprintf(f, "<H4><A NAME=genomic></A>Genomic %s %s:</H4>\n",
     htmHorizontalLine(f);
     }
 
-/* ~~~ */
 /* Display side by side. */
 fprintf(f, "<H4><A NAME=ali></A>Side by Side Alignment</H4>\n");
     {
     struct baf baf;
     int i,j;
 
-    bafInit(&baf, aaSeq->dna, 0, dnaSeq->dna, psl->tStart, tIsRc, f, 60, TRUE);
+    bafInit(&baf, oSeq->dna, 0, dnaSeq->dna, psl->tStart, tIsRc, f, 60, isProt);
     for (i=0; i<psl->blockCount; ++i)
 	{
 	int qs = psl->qStarts[i];
@@ -674,14 +696,24 @@ fprintf(f, "<H4><A NAME=ali></A>Side by Side Alignment</H4>\n");
 	int sz = psl->blockSizes[i];
 	bafSetPos(&baf, qs, ts);
 	bafStartLine(&baf);
-	for (j=0; j<sz; ++j)
+	if (isProt)
 	    {
-	    AA aa = aaSeq->dna[qs+j];
-	    int codonStart = ts + 3*j;
-	    DNA *codon = &dnaSeq->dna[codonStart];
-	    bafOut(&baf, ' ', codon[0]);
-	    bafOut(&baf, aa, codon[1]);
-	    bafOut(&baf, ' ', codon[2]);
+	    for (j=0; j<sz; ++j)
+		{
+		AA aa = oSeq->dna[qs+j];
+		int codonStart = ts + 3*j;
+		DNA *codon = &dnaSeq->dna[codonStart];
+		bafOut(&baf, ' ', codon[0]);
+		bafOut(&baf, aa, codon[1]);
+		bafOut(&baf, ' ', codon[2]);
+		}
+	    }
+	else
+	    {
+	    for (j=0; j<sz; ++j)
+		{
+		bafOut(&baf, oSeq->dna[qs+j], dnaSeq->dna[ts+j]);
+		}
 	    }
 	bafFlushLine(&baf);
 	}
@@ -737,7 +769,7 @@ blockCount = ffShAliPart(body, ffAli, psl->qName, rna, rnaSize, 0,
 return blockCount;
 }
 
-void showSomeAlignment(struct psl *psl, bioSeq *oSeq, boolean isProt)
+void showSomeAlignment(struct psl *psl, bioSeq *oSeq, enum gfType qType)
 /* Display protein or DNA alignment in a frame. */
 {
 int blockCount;
@@ -752,10 +784,10 @@ makeTempName(&bodyTn, "body", ".html");
 /* Writing body of alignment. */
 body = mustOpen(bodyTn.forCgi, "w");
 htmStart(body, psl->qName);
-if (isProt)
-    blockCount = showProtAlignment(psl, oSeq, body);
-else
+if (qType == gftRna || qType == gftDna)
     blockCount = showDnaAlignment(psl, oSeq, body);
+else 
+    blockCount = showGfAlignment(psl, oSeq, body, qType);
 fclose(body);
 chmod(bodyTn.forCgi, 0666);
 
@@ -817,7 +849,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 
 rnaSeq = hRnaSeq(acc);
-showSomeAlignment(psl, rnaSeq, FALSE);
+showSomeAlignment(psl, rnaSeq, gftDna);
 }
 
 void htcUserAli(char *fileNames)
@@ -850,7 +882,7 @@ lineFileClose(&lf);
 if (psl == NULL)
     errAbort("Couldn't find alignment at %s:%d", seqName, start);
 oSeq = faReadSeq(faName, !isProt);
-showSomeAlignment(psl, oSeq, isProt);
+showSomeAlignment(psl, oSeq, qt);
 }
 
 
