@@ -16,8 +16,10 @@ errAbort(
   "options:\n"
   "   -split - split into separate files\n"
   "   -ntLast - look for NT_ on last bit\n"
+  "   -wordBefore=xx The word before the accession, default 'gb'\n"
   );
 }
+
 
 void faNcbiToUcsc(char *inFile, char *out)
 /* faNcbiToUcsc - Convert FA file from NCBI to UCSC format.. */
@@ -29,6 +31,7 @@ boolean split = cgiBoolean("split");
 boolean ntLast = cgiBoolean("ntLast");
 struct dnaSeq seq;
 FILE *f = NULL;
+char *wordBefore = cgiUsualString("wordBefore", "gb");
 
 if (split)
     makeDir(out);
@@ -62,23 +65,17 @@ while (lineFileNext(lf, &line, NULL))
 	    int wordCount, i;
 	    char *accession = NULL;
 	    wordCount = chopString(line+1, "|", words, ArraySize(words));
-	    if (sameString(words[0], "ri"))
+	    for (i=0; i<wordCount-1; ++i)
 		{
-		accession = words[2];
-		}
-	    else
-		{
-		for (i=0; i<wordCount-1; ++i)
+		if (sameString(words[i], wordBefore))
 		    {
-		    if (sameString(words[i], "gb"))
-			{
-			accession = words[i+1];
-			break;
-			}
+		    accession = words[i+1];
+		    break;
 		    }
 		}
 	    if (accession == NULL)
-	        errAbort("Couldn't find 'gb' line %d of %s", lf->lineIx, lf->fileName);
+	        errAbort("Couldn't find '%s' line %d of %s", 
+			wordBefore, lf->lineIx, lf->fileName);
 	    chopSuffix(accession);
 	    fprintf(f, ">%s\n", accession);
 	    }
