@@ -129,7 +129,7 @@ shortLabel Briggsae Aligns
 longLabel $o_Organism ($o_date/$o_db) Blastz Alignments from Net
 group compGeno
 priority 127
-visibility dense
+visibility hide
 color 100,50,0
 altColor 128,120,100
 type axt cb1
@@ -147,21 +147,9 @@ spectrum on
 type psl xeno cb1
 otherDb cb1
 
-track phyloHMMcons_Cb1
-shortLabel PhyloHMMcons Cb1
-longLabel Phylo-HMM-based conservation, elegans/briggsae
-group compGeno
-priority 129
-visibility hide
-maxHeightPixels 100:40:20
-color 175,150,128
-altColor 255,128,0
-type wig 0.0 1.0
-autoScaleDefault Off
-
-track conservation
+track c_briggsae_pwMaf
 shortLabel Conservation
-longLabel Blastz Alignment with C. Briggsae & Conservation 
+longLabel Blastz Alignments with C. Briggsae & Conservation 
 group compGeno
 priority 100
 visibility pack
@@ -171,7 +159,7 @@ wiggle phastCons
 yLineOnOff Off
 autoScaleDefault Off
 pairwise pwMaf
-speciesOrder cb1
+speciesOrder c_briggsae
 
 track blastzSelf
 shortLabel Self Blastz
