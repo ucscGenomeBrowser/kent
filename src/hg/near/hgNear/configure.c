@@ -12,7 +12,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.25 2003/09/12 08:06:15 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.26 2003/09/16 20:54:18 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -25,15 +25,14 @@ static void configTable(struct column *colList, struct sqlConnection *conn)
 {
 struct column *col;
 char varName[128];
-char *onOffVal;
-static char *onOffMenu[] = {"off", "on"};
+boolean isVis;
 
 hPrintf("<TABLE BORDER=1>\n");
 
 /* Write out first row - labels. */
 hPrintf("<TR BGCOLOR=\"#EFEFFF\">");
 hPrintf("<TH>Name</TH>");
-hPrintf("<TH>State</TH>");
+hPrintf("<TH>On</TH>");
 hPrintf("<TH>Position</TH>");
 hPrintf("<TH>Description</TH>");
 hPrintf("<TH>Configuration</TH>");
@@ -51,19 +50,27 @@ for (col = colList; col != NULL; col = col->next)
 
     /* Do on/off dropdown. */
     hPrintf("<TD>");
-    safef(varName, sizeof(varName), "%s%s", colConfigPrefix, col->name);
-    onOffVal = cartUsualString(cart, varName, onOffString(col->on));
-    cgiMakeDropList(varName, onOffMenu, ArraySize(onOffMenu), onOffVal);
+    safef(varName, sizeof(varName), "%s%s.vis", colConfigPrefix, col->name);
+    isVis = cartUsualBoolean(cart, varName, col->on);
+    cgiMakeCheckBox(varName, isVis);
     hPrintf("</TD>");
 
     /* Do left/right button */
     hPrintf("<TD ALIGN=CENTER>");
     safef(varName, sizeof(varName), "near.up.%s", col->name);
     if (col != colList)
-	cgiMakeButton(varName, " up ");
+	{
+	// cgiMakeButton(varName, " up ");
+	hPrintf("<INPUT NAME=\"%s\" TYPE=\"IMAGE\" VALUE=\"up\" ", varName);
+	hPrintf("SRC=\"../images/up.gif\">");
+	}
     safef(varName, sizeof(varName), "near.down.%s", col->name);
     if (col->next != NULL)
-	cgiMakeButton(varName, "down");
+	{
+	// cgiMakeButton(varName, "down");
+	hPrintf("<INPUT NAME=\"%s\" TYPE=\"IMAGE\" VALUE=\"down\" ", varName);
+	hPrintf("SRC=\"../images/down.gif\">");
+	}
     hPrintf("</TD>");
 
     /* Do long label. */
@@ -98,10 +105,11 @@ static void bumpColList(char *bumpHow, struct column **pColList)
 char *dupe = cloneString(bumpHow);
 char *words[4], *upDown, *colName;
 
-if (chopString(dupe, ".", words, ArraySize(words)) != 3)
+if (chopString(dupe, ".", words, ArraySize(words)) < 3)
     {
+    warn("Strange bumpHow value %s in bumpColList", bumpHow);
     cartRemove(cart, bumpHow);
-    errAbort("Strange bumpHow value %s in bumpColList", bumpHow);
+    noWarnAbort();
     }
 upDown = words[1];
 colName = words[2];
@@ -250,15 +258,15 @@ doConfigure(conn, colList, NULL);
 }
 
 static void  configAllVis(struct sqlConnection *conn, struct column *colList,
-	char *how)
+	boolean how)
 /* Respond to hide all button in configuration page. */
 {
 char varName[64];
 struct column *col;
 for (col = colList; col != NULL; col = col->next)
     {
-    safef(varName, sizeof(varName), "%s%s", colConfigPrefix, col->name);
-    cartSetString(cart, varName, how);
+    safef(varName, sizeof(varName), "%s%s.vis", colConfigPrefix, col->name);
+    cartSetBoolean(cart, varName, how);
     }
 doConfigure(conn, colList, NULL);
 }
@@ -266,13 +274,13 @@ doConfigure(conn, colList, NULL);
 void doConfigHideAll(struct sqlConnection *conn, struct column *colList)
 /* Respond to hide all button in configuration page. */
 {
-configAllVis(conn, colList, "off");
+configAllVis(conn, colList, 0);
 }
 
 void doConfigShowAll(struct sqlConnection *conn, struct column *colList)
 /* Respond to hide all button in configuration page. */
 {
-configAllVis(conn, colList, "on");
+configAllVis(conn, colList, 1);
 }
 
 void doConfigUseSaved(struct sqlConnection *conn, struct column *colList)

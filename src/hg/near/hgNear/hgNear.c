@@ -16,7 +16,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.76 2003/09/16 19:14:51 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.77 2003/09/16 20:54:18 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -927,10 +927,10 @@ struct column *col;
 
 for (col = colList; col != NULL; col = col->next)
     {
-    safef(varName, sizeof(varName), "%s%s", colConfigPrefix, col->name);
+    safef(varName, sizeof(varName), "%s%s.vis", colConfigPrefix, col->name);
     val = cartOptionalString(cart, varName);
     if (val != NULL)
-	col->on = sameString(val, "on");
+	col->on = sameString(val, "1");
     }
 }
 
