@@ -60,6 +60,21 @@ h = ih;
 vgBox(g_vg, x, y-h, w+1, h, color);
 }
 
+void hLine2(double fx, double fy, double fw, double ih, int color)
+/* draw a horizontal line based on data coordinates, 
+   this function extend 1 pixel more to the right,
+   useful for picture fine tuning of slight difference due to rounding.  
+*/
+{
+int x, y, w, h;
+calStampXY(stampPictPtr, fx, fy, &x, &y);
+
+w = (int)(fw * xScale);
+h = ih;
+// 1 pixel more to the width
+vgBox(g_vg, x, y-h, w+1+1, h, color);
+}
+
 void vLine(double fx, double fy, double fh, int iw, int color)
 /* draw a vertical line based on data coordinates */
 {
@@ -451,7 +466,8 @@ for (index=0; index < (n-1); index++)
     }
     
 hLine(txmin, tymin, txmax-txmin, 2, boundaryColor);
-hLine(txmin, tymax, txmax-txmin, 2, boundaryColor);
+// this line needs to call hLine2 for fine tuning at the right hand side ending 
+hLine2(txmin, tymax, txmax-txmin, 2, boundaryColor);
 vLine(txmin, tymin, tymax-tymin, 2, boundaryColor);
 vLine(txmax, tymin, tymax-tymin, 2, boundaryColor);
     
@@ -516,7 +532,8 @@ for (index=0; index < (n-1); index++)
 vLine(tx[0], 0, ty[0], 1,  MG_BLUE);
     
 hLine(txmin, tymin, txmax-txmin, 2, boundaryColor);
-hLine(txmin, tymax, txmax-txmin, 2, boundaryColor);
+// this line needs to call hLine2 for fine tuning at the right hand side ending 
+hLine2(txmin, tymax, txmax-txmin, 2, boundaryColor);
 vLine(txmin, tymin, tymax-tymin, 2, boundaryColor);
 vLine(txmax, tymin, tymax-tymin, 2, boundaryColor);
  
