@@ -348,18 +348,12 @@ o - Load into the database as so:
      hgLoadBed mm2 genscanSubopt genscanSubopt.bed
 
 
-TWINSCAN GENE PREDICTIONS (05/23/02 - pep todo, new data on the way)
+TWINSCAN GENE PREDICTIONS (done 6/3/02 - pep todo)
 
     mkdir -p ~/mm2/bed/twinscan
     cd ~/mm2/bed/twinscan
-#    wget http://genes.cs.wustl.edu/mouse/AllChrs.tgz
-#    gunzip -c AllChrs.tgz | tar xvf -
-#*** hack until all chromosomes are recomputed:
-#*** foreach i (1 2 3 4 5 6 7 8 9 10 11 12)
-foreach i (13 14 15 16 17 18 19 X)
-  wget http://genes.cs.wustl.edu/mouse/chr$i.gtf
-end
-#***
+    wget http://genes.cs.wustl.edu/mouse/AllChr.tgz
+    gunzip -c AllChr.tgz | tar xvf -
     ldHgGene mm2 twinscan chr*.gtf -exon=CDS
     ??? hgPepPred mm2 generic twinscanPep *.prot
 
@@ -770,7 +764,22 @@ LOAD ENSEMBL/RIKEN - SECRET! (05/31/02 - pep todo)
        mouse-riken-fixed.pep
      hgPepPred mgsc generic ensRikenPep mouse-riken-fixed.pep
      - NOTE: hooks had to be added to hgTracks.c to enable/disable this 
-       track together with the main riken track.
+       track together with the main riken track.  see revision history 
+       comments for hgTracks.c version 1.262 .
+     - NOTE: had to create empty ensRiken table in mm2 in order for 
+             hdb.c to believe the track exists.  I used this sql command:
+     CREATE TABLE ensRiken (
+	name varchar(255) not null,
+	chrom varchar(255) not null,
+	strand char(1) not null,
+	txStart int(10) unsigned not null,
+	txEnd int(10) unsigned not null,
+	cdsStart int(10) unsigned not null,
+	cdsEnd int(10) unsigned not null,
+	exonCount int(10) unsigned not null,
+	exonStarts longblob not null,
+	exonEnds longblob not null
+	);
 
 LOAD SANGER22 GENES (todo)
       - cd ~/mm/bed
@@ -842,6 +851,18 @@ LOAD GENIE (done 05/30/02)
      wget http://www.neomorphic.com/mgap/mgscv3/fa/mgscv3.aa.tgz
      gunzip -c mgscv3.aa.tgz | tar xvf -
      hgPepPred mm2 genie geniePep chr*.aa.fa
+
+LOAD GENIE CLONE BOUNDS (done 6/3/02)
+     mkdir -p ~/mm2/bed/genieBounds
+     cd ~/mm2/bed/genieBounds
+     wget http://www.neomorphic.com/mgap/mgscv3/cb.bed/mgscv3_cb.bed.tgz
+     gunzip -c mgscv3_cb.bed.tgz | tar xvf -
+     - Trim the track definition from each file (these are actually custom 
+       track files):
+     foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X Un)
+       tail +2 chr${c}_cb.bed > chr${c}_cb-fixed.bed
+     end
+     hgLoadBed mm2 genieBounds *-fixed.bed
 
 LOAD SOFTBERRY GENES (todo)
      - ln -s /cluster/store2/mm.2002.02/mm2 ~/mm
