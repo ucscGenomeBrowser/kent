@@ -1272,6 +1272,8 @@ if( sameString( tg->mapName, "humMus" ) )
     max0 = whichNum( maxRange, -7.99515, 6.54171, 1000 );
 
     /*draw horizontal line across track at 0.0, 2.0, and 5.0*/
+    if( !isFull )
+    {
     tmp = -whichBin( 0.0, min0, max0, 1000 );
     y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
     mgDrawHorizontalLine( mg, y1, lineColor );
@@ -1283,6 +1285,7 @@ if( sameString( tg->mapName, "humMus" ) )
     tmp = -whichBin( 5.0, min0, max0, 1000 );
     y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
     mgDrawHorizontalLine( mg, y1, lineColor );
+    }
     
     }
     else if( sameString( tg->mapName, "humMusL" ) )
@@ -1294,6 +1297,8 @@ if( sameString( tg->mapName, "humMus" ) )
     min0 = whichNum( minRange, 0.0, 3.66958, 1000 );
     max0 = whichNum( maxRange, 0.0, 3.66958, 1000 );
 
+    if( !isFull )
+    {   
     tmp = -whichBin( 1.0, min0, max0, 1000 );
     y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
     mgDrawHorizontalLine( mg, y1, lineColor );
@@ -1305,6 +1310,7 @@ if( sameString( tg->mapName, "humMus" ) )
     tmp = -whichBin( 3.0, min0, max0, 1000 );
     y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
     mgDrawHorizontalLine( mg, y1, lineColor );
+    }
 
     }
     else if( sameString( tg->mapName, "zoo" ) )
@@ -7865,9 +7871,12 @@ if (withLeftLabels)
 	    sprintf( maxRangeStr, "%0.2g", max0 );
 
 
+        if( group->limitedVis == tvDense )
+        {
         printYAxisLabel( mg, y, group, "0.0", min0, max0 );
         printYAxisLabel( mg, y, group, "2.0", min0, max0 );
         printYAxisLabel( mg, y, group, "5.0", min0, max0 );
+        }
 
 	    }
     else if( sameString( group->mapName, "humMusL" ) )
@@ -7877,10 +7886,12 @@ if (withLeftLabels)
         sprintf( minRangeStr, "%0.2g", min0  );
         sprintf( maxRangeStr, "%0.2g", max0 );
 
-
+        if( group->limitedVis == tvDense )
+        {
         printYAxisLabel( mg, y, group, "1.0", min0, max0 );
         printYAxisLabel( mg, y, group, "2.0", min0, max0 );
         printYAxisLabel( mg, y, group, "3.0", min0, max0 );
+        }
         
     }
 	else if( sameString( group->mapName, "zoo" ) )
@@ -8117,13 +8128,10 @@ for (group = groupList; group != NULL; group = group->next)
 
 		    /*wiggle tracks don't always increment height (y-value) here*/
 		    newy = y;
-		    if( !start && group->subType == lfSubSample )
+		    if( item->next != NULL && !start && group->subType == lfSubSample )
 			{
-			if( item->next != NULL )
-			    {
 			    newy += updateY( group->itemName(group, item), 
 					     group->itemName(group, item->next), height );
-			    }
 			}
 		    else
 			    newy += height;
