@@ -8853,6 +8853,7 @@ makeSeaShades(vg);
 
 /* Start up client side map. */
 hPrintf("<MAP Name=%s>\n", mapName);
+
 /* Find colors to draw in. */
 for (track = trackList; track != NULL; track = track->next)
     {
@@ -9265,7 +9266,7 @@ for (track = trackList; track != NULL; track = track->next)
 	    if (withCenterLabels)
 		y += fontHeight;
 	    mapBoxToggleVis(trackPastTabX,y,trackPastTabWidth,track->lineHeight,track);
-	    y += track->lineHeight;
+	    y += track->height;
     
 	    break;
 	}
