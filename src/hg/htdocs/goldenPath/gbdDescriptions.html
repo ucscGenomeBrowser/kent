@@ -2022,6 +2022,10 @@ cover the same region (replaced by snpMap starting with hg13) </LI>
   href="#MrnaChar">development</A> 
   - Stage of development of organism 
   <LI><A 
+  href="#MrnaInfo">gbCdnaInfo</A> 
+  - Very relational mRNA and EST information table. Consists mostly of the mRNA 
+  accession and pointers into other tables that contain additional mRNA information. 
+  <LI><A 
   href="#MrnaChar">geneName</A> 
   - Name of gene 
   <LI><A 
@@ -2033,10 +2037,6 @@ cover the same region (replaced by snpMap starting with hg13) </LI>
   <LI><A 
   href="#MrnaChar">moddate</A> 
   - Last modification date
-  <LI><A 
-  href="#MrnaInfo">mrna</A> 
-  - Very relational mRNA and EST information table. Consists mostly of the mRNA 
-  accession and pointers into other tables that contain additional mRNA information. 
   <LI><A 
   href="#MrnaChar">mrnaClone</A> 
   - Clone name (mostly for ESTs) 
@@ -4855,14 +4855,14 @@ The bacEndPairs table uses all fields.
 	</TD></TR></TABLE>
 	<TABLE BGCOLOR="fffee8" WIDTH=100% CELLPADDING=0><TH HEIGHT=10></TH><TR><TD WIDTH=10>&nbsp;</TD><TD>
 
-This is a family of tables. The main table, <TT>mrna</TT>, consists of minor mRNA and EST identification
+This is a family of tables. The main table, <TT>gbCdnaInfo</TT>, consists of minor mRNA and EST identification
 information, and then ids pointing to the corresponding tables which contain other information.  For example,
-to determine the organism, the 'organism' field in the <TT>mrna</TT> table contains an id. Finding this id
+to determine the organism, the 'organism' field in the <TT>gbCdnaInfo</TT> table contains an id. Finding this id
 in the corresponding <TT>organism</TT> table will give the name of the organism.
 
 
 <H4><A name=MrnaInfo></A>Main mRNA/EST Information Table</H4>
-<PRE>table mrna
+<PRE>table gbCdnaInfo
 "Basic information about mRNA and ESTs with links to other tables"
    (
    uint   id;              "Id, same as seq ID"
@@ -4892,9 +4892,9 @@ in the corresponding <TT>organism</TT> table will give the name of the organism.
 This table is used for the author, bacClone, cds, cell, center, chromosome, 
 cytoMap, description, development, geneName, keyword, library, mrnaClone, 
 organism, productName, sex, source, and tissue tables.  Each has a 
-reference in the above mrna table.
+reference in the above gbCdnaInfo table.
 <PRE>table mrnaCharacteristic
-"Characteristics of mRNA and EST referenced in the mrna table"
+"Characteristics of mRNA and EST referenced in the gbCdnaInfo table"
    (
    int    id;              "Unique id of characteristic in each table"
    string name;            "Characteristic"
