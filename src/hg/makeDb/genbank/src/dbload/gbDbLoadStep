@@ -4,7 +4,7 @@
 #
 # Load databases on the current server.
 #
-# $Id: gbDbLoadStep,v 1.24 2004/05/28 03:25:08 genbank Exp $
+# $Id: gbDbLoadStep,v 1.25 2004/05/28 18:07:25 genbank Exp $
 #
 use strict;
 use warnings;
@@ -101,17 +101,6 @@ sub loadMgc($$) {
     }
 }
 
-# get the relative download directory for this genome.  It defaults to
-# the database name.  Older database have it configured.
-sub getRelDownloadDir($) {
-    my($db) = @_;
-    my $relDir = findConf("$db.downloadDir");
-    if (!defined($relDir)) {
-        $relDir = $db;
-    }
-    return $relDir;
-}
-
 # create one sequence zip file if the table is loaded for this genome.
 sub createSeqZip($$$$$) {
     my($db, $srcDb, $type, $orgCat, $outBase) = @_;
@@ -150,12 +139,7 @@ sub createDownload($$) {
     my($db, $getDownloadSeqsDays) = @_;
     # check time 
     my $timeFile = getDownloadTimeFile($db);
-    my $downloadTime;
-    if (! -e $timeFile) {
-        $downloadTime = 0;
-    } else {
-        $downloadTime = loadTimeFile($timeFile);
-    }
+    my $downloadTime = loadTimeFile($timeFile);
     my $deltaDays = (time() - $downloadTime) / (60 * 60 * 24);
 
     # update if non-existant or out-of-date

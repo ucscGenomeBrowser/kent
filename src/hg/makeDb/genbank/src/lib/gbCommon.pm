@@ -25,7 +25,8 @@ BEGIN {
                            parseOptEq inList getTmpDir readFile makeAbs
                            backgroundStart backgroundWait
                            findConf getConf getConfNo getDbConf getDbConfNo splitSpaceList
-                           getHgConf setupHgConf callMysql runMysqlDump runMysql getDownloadTimeFile);
+                           getHgConf setupHgConf callMysql runMysqlDump runMysql
+                           getDownloadTimeFile getRelDownloadDir);
     
     # make stdout/stderr always line buffered
     STDOUT->autoflush(1);
@@ -91,10 +92,16 @@ sub makeTimeFile($) {
     renameFile($timeFileTmp, $timeFile);
 }
 
-# load a time from a file containing the interger time as the first column
-# of the first ime
+# load a time from a file containing the integer time as the first column
+# of the first line.  If file does not exist, return 0, which allows
+# for comparing time files without check if the file exists.
 sub loadTimeFile($) {
     my($timeFile) = @_;
+
+    if (!-e $timeFile) {
+        return 0;
+    }
+
     # really sucks that TIME is global scope
     open(TIME, $timeFile) || die("can't open $timeFile");
     my $line = <TIME>;
@@ -810,6 +817,17 @@ sub runMysql($) {
 sub getDownloadTimeFile($) {
     my($db) = @_;
     return "download/" . getRelDownloadDir($db) . "/download.time";
+}
+
+# get the relative download directory for this genome.  It defaults to
+# the database name.  Older database have it configured.
+sub getRelDownloadDir($) {
+    my($db) = @_;
+    my $relDir = findConf("$db.downloadDir");
+    if (!defined($relDir)) {
+        $relDir = $db;
+    }
+    return $relDir;
 }
 
 

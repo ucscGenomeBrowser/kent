@@ -4,7 +4,7 @@
 #
 # update download directories
 #
-# $Id: gbUpdateDownload,v 1.1 2004/05/28 00:15:50 markd Exp $
+# $Id: gbUpdateDownload,v 1.2 2004/05/28 18:07:25 genbank Exp $
 #
 my $usage = 
     "gbUpdateDownload [options]\n"
@@ -21,23 +21,38 @@ use FindBin;
 use lib "$FindBin::Bin/../lib";
 use gbCommon;
 
-# 
-# Generate list of databases with download files
-#
-sub getDownloadDbs() {
+# location of /usr/local/apache/htdocs/goldenPath on hgdownload:
+my $htdocsDir = "/mirrordata/apache/htdocs/goldenPath";
+
+# check if a download directory for a databases needs updated
+sub downloadNeedsUpdated($) {
+    my($db) = @_;
+    my $dbDir = getRelDownloadDir($db);
+    my $downloadTime = getDownloadTimeFile($db);
+    my $htdocsTime = "$htdocsDir/$dbDir/download.time";
+
+    return (loadTimeFile($downloadTime) > loadTimeFile($htdocsTime));
+}
+
+# Generate list of databases with download files that are outdated
+sub getOutdatedDownloadDbs() {
     my @downDbs;
     foreach my $downTime (glob("download/*/download.time")) {
-        push(@downDbs, basename(dirname($downTime)))
+        my $db = basename(dirname($downTime));
+        if (downloadNeedsUpdated($db)) {
+            push(@downDbs, $db);
+        }
     }
     return @downDbs;
 }
 
-# update the download files for the web server.  Must check time file
-# to keep in-progress dump from being updated
+
+
+
+# update the download files for the web server.
 sub updateDownload($) {
     my($db) = @_;
     my $dbDir = getRelDownloadDir($db);
-    my $htdocsDir = "/usr/local/apache/htdocs/goldenPath";
 
     my $downloadTime = getDownloadTimeFile($db);
     my $htdocsTime = "$htdocsDir/$dbDir/download.time";
@@ -48,7 +63,6 @@ sub updateDownload($) {
         # download dir can't have trailing / for rsync
         my $downloadDir = "download/$dbDir";
         $downloadDir =~ s/\/$//;
-        my $htdocsDir = "/usr/local/apache/htdocs/goldenPath";
         if ($gbCommon::verbose) {
             prMsg("update download files for $db");
         }
@@ -73,10 +87,13 @@ if ($#ARGV >= 0) {
     gbError("wrong # args: gbUpdateDownload [options]");
 }
 
-beginTask("update-download", "update-download");
+my @downDbs = getOutdatedDownloadDbs();
 
-foreach my $db (getDownloadDbs()) {
-    updateDownload($db);
+# only start task if at least one is outdated
+if ($#downDbs >= 0) {
+    beginTask("update-download", "update-download");
+    foreach my $db (@downDbs) {
+        updateDownload($db);
+    }
+    endTask();
 }
-
-endTask();

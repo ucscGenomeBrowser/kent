@@ -1,5 +1,4 @@
 #!/bin/bash -e
-
 # Script to update donwload files.
 
 set -e  # errors terminate
@@ -15,4 +14,5 @@ cd $gbRoot
 # and is less than one day old,  error if older.
 gbCheckLock $gbRoot/var/update-download/run/update-download.lock
 
+# main script checks time files
 ./bin/gbUpdateDownload
