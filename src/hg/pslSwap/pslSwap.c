@@ -9,7 +9,7 @@
 #include "nib.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslSwap.c,v 1.4 2003/12/17 21:58:22 braney Exp $";
+static char const rcsid[] = "$Id: pslSwap.c,v 1.5 2003/12/19 19:23:50 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -18,6 +18,8 @@ errAbort(
   "pslSwap - Swap query and target in  PSL  \n"
   "usage:\n"
   "   pslSwap in.psl out.psl\n"
+  "options:\n"
+  "   -keepStrand     don't force target strand to '+'\n"
   );
 }
 
