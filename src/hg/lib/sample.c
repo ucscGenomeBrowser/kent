@@ -8,6 +8,24 @@
 #include "jksql.h"
 #include "sample.h"
 
+void sampleStaticLoad(char **row, struct sample *ret)
+/* Load a row from sample table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+int sizeOne,i;
+char *s;
+
+ret->chrom = row[0];
+ret->chromStart = sqlUnsigned(row[1]);
+ret->chromEnd = sqlUnsigned(row[2]);
+ret->name = row[3];
+ret->score = sqlUnsigned(row[4]);
+strcpy(ret->strand, row[5]);
+ret->sampleCount = sqlUnsigned(row[6]);
+ret->samplePosition = row[7];
+ret->sampleHeight = row[8];
+}
+
 struct sample *sampleLoad(char **row)
 /* Load a sample from row fetched with select * from sample
  * from database.  Dispose of this with sampleFree(). */
@@ -24,11 +42,8 @@ ret->name = cloneString(row[3]);
 ret->score = sqlUnsigned(row[4]);
 strcpy(ret->strand, row[5]);
 ret->sampleCount = sqlUnsigned(row[6]);
-
-sqlSignedDynamicArray(row[7], &ret->samplePosition, &sizeOne);
-assert(sizeOne == ret->sampleCount);
-sqlSignedDynamicArray(row[8], &ret->sampleHeight, &sizeOne);
-assert(sizeOne == ret->sampleCount);
+ret->samplePosition = cloneString(row[7]);
+ret->sampleHeight = cloneString(row[8]);
 return ret;
 }
 
@@ -75,6 +90,29 @@ dyStringFree(&query);
 return list;
 }
 
+struct sample *sampleCommaIn(char **pS, struct sample *ret)
+/* Create a sample out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new sample */
+{
+char *s = *pS;
+int i;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->chrom = sqlStringComma(&s);
+ret->chromStart = sqlUnsignedComma(&s);
+ret->chromEnd = sqlUnsignedComma(&s);
+ret->name = sqlStringComma(&s);
+ret->score = sqlUnsignedComma(&s);
+sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
+ret->sampleCount = sqlUnsignedComma(&s);
+ret->samplePosition = sqlStringComma(&s);
+ret->sampleHeight = sqlStringComma(&s);
+*pS = s;
+return ret;
+}
+
 void sampleFree(struct sample **pEl)
 /* Free a single dynamically allocated sample such as created
  * with sampleLoad(). */
@@ -100,5 +138,39 @@ for (el = *pList; el != NULL; el = next)
     sampleFree(&el);
     }
 *pList = NULL;
+}
+
+void sampleOutput(struct sample *el, FILE *f, char sep, char lastSep) 
+/* Print out sample.  Separate fields with sep. Follow last field with lastSep. */
+{
+int i;
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->chrom);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->chromStart);
+fputc(sep,f);
+fprintf(f, "%u", el->chromEnd);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->name);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->score);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->strand);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->sampleCount);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->samplePosition);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->sampleHeight);
+if (sep == ',') fputc('"',f);
+fputc(lastSep,f);
 }
 
