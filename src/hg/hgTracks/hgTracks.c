@@ -1319,7 +1319,11 @@ if( sameString( tg->mapName, "humMus" ) )
     }
     else if( sameString( tg->mapName, "zoo" ) )
     {
-    minRange = 600.0;
+
+    /*Always interpolate zoo track (since gaps are explicitly defined*/
+    lineGapSize = -1;
+
+    minRange = 500.0;
     maxRange = 1000.0;
     }
     else if( sameString( tg->mapName, "zooCons" ) )
@@ -1397,7 +1401,7 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
                 {
                 if( wiggleType == wiggleLinearInterpolation ) /*connect samples*/
                     {
-                    if( prevEnd - s <= lineGapSize )     /*don't interpolate over large gaps*/
+                    if( lineGapSize < 0 || prevEnd - s <= lineGapSize )     /*don't interpolate over large gaps*/
                         {
                         if( sameString( aa, "on" )) /*use anti-aliasing*/
                             mgConnectingLine( mg, x1, y1, x2, y2, shades, ybase, 1, fill );
@@ -8094,8 +8098,8 @@ if (withLeftLabels)
     }
 	else if( sameString( group->mapName, "zoo" ) )
 	    {
-	    sprintf( minRangeStr, "%d", 60); //whichNum( 1.0, 1.0, 100.0, 1000 ));
-	    sprintf( maxRangeStr, "%d", 100);// whichNum( 1000.0, 1.0, 100.0, 1000 ));
+	    sprintf( minRangeStr, "%d", (int)whichNum( 500.0, 1.0, 100.0, 1000 ));
+	    sprintf( maxRangeStr, "%d", (int)whichNum( 1000.0, 1.0, 100.0, 1000 ));
 	    }
     else if( sameString( group->mapName, "zooCons" ) )
 	    {
@@ -9174,6 +9178,8 @@ registerTrackHandler("aarMm2", longXenoPslMethods);
 registerTrackHandler("blastzMm2", longXenoPslMethods);
 registerTrackHandler("blastzMm2Sc", longXenoPslMethods);
 registerTrackHandler("blastzMm2Ref", longXenoPslMethods);
+registerTrackHandler("blastzStrictChainMouse", longXenoPslMethods);
+registerTrackHandler("blastzStrictChainHuman", longXenoPslMethods);
 registerTrackHandler("blastzBestMouse", longXenoPslMethods);
 registerTrackHandler("blastzHg", longXenoPslMethods);
 registerTrackHandler("blastzHgRef", longXenoPslMethods);
