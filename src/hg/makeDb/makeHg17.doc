@@ -1535,6 +1535,59 @@ cat > gsub << 'EOF'
     hgLoadSeq hg17 /gbdb/hg17/bacends/BACends.fa
         # 158588 sequences
 
+    # Re-ran pslPairs with updated pairs file to take advantage of new feature of
+    # allowing comma separated lists of end accessions for each end for a clone
+    
+    # First, create new pairs file (bacEndPairs.txt, bacEndSingles.txt)
+    mkdir /cluster/data/ncbi/bacends/human/bacends.5
+    cd /cluster/data/ncbi/bacends/human/bacends.5
+    cp ../bacends.4/cl_ac_gi_len .
+    /cluster/bin/scripts/convertEndPairInfo cl_ac_gi_len
+
+    # Next, re-create the bed file
+    mkdir /cluster/data/hg17/bed/bacends.update
+    cd /cluster/data/hg17/bed/bacends.update
+    ln -s /cluster/data/hg17/bed/bacends/bacEnds.sorted.psl ./bacEnds.sorted.psl
+    set ncbiDir = /cluster/data/ncbi/bacends/human/bacends.5
+    ~/bin/i386/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 -max=350000 -slopval=10000 -hardMax=500000 -slop -short -long -orphan -mismatch -verbose bacEnds.sorted.psl $ncbiDir/bacEndPairs.txt all_bacends bacEnds
+
+    # create header required by "rdb" tools
+    # TODO: replace w/ awk & sort
+    echo 'chr\tstart\tend\tclone\tscore\tstrand\tall\tfeatures\tstarts\tsizes' > header
+    echo '10\t10N\t10N\t10\t10N\t10\t10\t10N\t10\t10' >> header
+    cat header bacEnds.pairs | row score ge 300 | sorttbl chr start | headchg -del > bacEndPairs.bed
+    cat header  bacEnds.slop bacEnds.short bacEnds.long bacEnds.mismatch bacEnds.orphan \
+        | row score ge 300 | sorttbl chr start | headchg -del > bacEndPairsBad.bed
+
+    # wc *.bed
+    # 204884 2253724 20612402 bacEndPairs.bed
+    # 79401  873411 6527559 bacEndPairsBad.bed
+
+    # previous
+    # wc ../bacends/*.bed
+    # 201380 2215180 20280578 ../bacends/bacEndPairs.bed
+    # 81773  899503 6712402 ../bacends/bacEndPairsBad.bed
+
+    extractPslLoad -noBin bacEnds.sorted.psl bacEndPairs.bed \
+                bacEndPairsBad.bed | \
+                        sorttbl tname tstart | headchg -del > bacEnds.load.psl
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/bacends.update
+    hgLoadBed hg17 bacEndPairs bacEndPairs.bed \
+                 -sqlTable=/cluster/home/kate/kent/src/hg/lib/bacEndPairs.sql 
+        # Loaded 204884  
+    # note - this track isn't pushed to RR, just used for assembly QA
+    hgLoadBed hg17 bacEndPairsBad bacEndPairsBad.bed \
+                 -sqlTable=/cluster/home/kate/kent/src/hg/lib/bacEndPairsBad.sql
+        # Loaded 79401
+    #hgLoadPsl hg17 -nobin -table=all_bacends bacEnds.load.psl
+    # NOTE: truncates file to 0 if -nobin is used
+    hgLoadPsl hg17 -table=all_bacends bacEnds.load.psl
+    # load of all_bacends did not go as planned: 1729146 record(s), 0 row(s) skipped, 70 warning(s) loading psl.tab
+
+
 # PLACE ASSEMBLY CLONES - misc instructions, only somewhat relevant
 #	See PLACE ASSEMBLY CLONES ON CONTIGS AND SEQUENCE below
 
