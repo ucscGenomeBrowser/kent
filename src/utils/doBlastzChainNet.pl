@@ -3,19 +3,14 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.2 2005/02/17 23:17:10 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.3 2005/02/19 01:10:22 angie Exp $
 
 # to-do items:
 # - lots of testing
 # - handle .2bit for target
-# - install .over.chain in the correct location
-# - use "Self" in the database table names instead of $QDb when      
-#   loading self alignments
 # - better logging: right now it just passes stdout and stderr,
 #   leaving redirection to a logfile up to the user
 # - do something sensible with directory location w.r.t. DEF arg   
-# - add a -stop option (or at least a -noInstall) for intentionally
-#   partial runs
 # - add swapping (optionally) so we get chains, nets etc. for both
 #   species (non-self alignments only)
 # - compress more files in the cleanup step
@@ -40,24 +35,27 @@ my $paraRun = ("$para make jobList\n" .
 my $dbHost = 'hgwdev';
 my $clusterData = '/cluster/data';
 my $trackBuild = 'bed';
+my $goldenPath = '/usr/local/apache/htdocs/goldenPath';
+my $downloadPath = "$dbHost:$goldenPath";
 
 # Option variable names:
 use vars qw/
     $opt_continue
+    $opt_stop
     $opt_debug
     $opt_verbose
     $opt_help
     /;
 
-# Numeric values of -continue options for determining precedence:
-my %continueVal = ( 'cat' => 1,
-		    'chainRun' => 2,
-		    'chainMerge' => 3,
-		    'net' => 4,
-		    'load' => 5,
-		    'download' => 6,
-		    'cleanup' => 7,
-		  );
+# Numeric values of -continue/-stop options for determining precedence:
+my %stepVal = ( 'cat' => 1,
+		'chainRun' => 2,
+		'chainMerge' => 3,
+		'net' => 4,
+		'load' => 5,
+		'download' => 6,
+		'cleanup' => 7,
+	      );
 
 # Option defaults:
 my $defaultVerbose = 1;
@@ -67,17 +65,18 @@ sub usage {
   my ($status, $detailed) = @_;
   my $base = $0;
   $base =~ s/^(.*\/)?//;
-  my $continueVals = join(", ",
-			  sort { $continueVal{$a} <=> $continueVal{$b} }
-			  keys %continueVal);
+  my $stepVals = join(", ",
+		      sort { $stepVal{$a} <=> $stepVal{$b} }  keys %stepVal);
   # Basic help (for incorrect usage):
   print STDERR "
 usage: $base DEF
 options:
     -continue step        Pick up at the step where a previous run left off
-                          (i.e. ran into trouble which has been fixed).
+                          (some debugging and cleanup may be necessary first).
                           step must be one of the following:
-                          $continueVals
+                          $stepVals
+    -stop step            Stop after completing the specified step.
+                          (same possible values as for -continue above)
     -debug                Don't actually run commands, just display them.
     -verbose num          Set verbose level to num (default $defaultVerbose).
     -help                 Show detailed help and exit.
@@ -86,7 +85,8 @@ Automates UCSC's blastz/chain/net pipeline:
     2. Small cluster consolidation of blastz result files.
     3. Small cluster chaining run.
     4. Sorting and netting of chains on the fileserver.
-    5. Generation of liftOver-suitable chains from nets+chains on fileserver.
+    5. Generation of liftOver-suitable chains from nets+chains on fileserver
+       (not done for self-alignments).
     6. Generation of axtNet and mafNet files on the fileserver.
     7. Addition of gap/repeat info to nets on hgwdev.
     8. Loading of chain and net tables on hgwdev.
@@ -105,9 +105,12 @@ Assumptions:
    $clusterData/\$tDb/$trackBuild/blastz.\$qDb.\$date/ will be the directory 
    created for this run, where \$tDb is the target/reference db and 
    \$qDb is the query.  
-   hgwdev:/usr/local/apache/htdocs/goldenPath/\$tDb/vs\$QDb/ is the 
-   directory where downloadable files need to go.
-   -- need to add liftover files too --
+   $downloadPath/\$tDb/vs\$QDb/ (or vsSelf) 
+   is the directory where downloadable files need to go.
+   LiftOver chains (not applicable for self-alignments) are to be copied 
+   to these directories:
+   $clusterData/\$tDb/$trackBuild/bedOver/
+   $downloadPath/\$tDb/liftOver/ 
 2. DEF's SEQ1* variables describe the target/reference assembly.
    DEF's SEQ2* variables describe the query assembly.
    If those are the same assembly, then we're doing self-alignments and 
@@ -166,11 +169,12 @@ BLASTZ_Q=$clusterData/blastz/HoxD55.q
 
 # Globals:
 my %defVars = ();
-my ($DEF, $tDb, $qDb, $QDb, $isSelf, $buildDir, $startStep);
+my ($DEF, $tDb, $qDb, $QDb, $isSelf, $buildDir, $startStep, $stopStep);
 
 sub checkOptions {
   # Make sure command line options are valid/supported.
   my $ok = GetOptions("continue=s",
+		      "stop=s",
 		      "verbose=n",
 		      "debug",
 		      "help");
@@ -178,13 +182,27 @@ sub checkOptions {
   &usage(0, 1) if ($opt_help);
   $opt_verbose = $defaultVerbose if (! defined $opt_verbose);
   if ($opt_continue) {
-    if (! defined $continueVal{$opt_continue}) {
+    if (! defined $stepVal{$opt_continue}) {
       warn "\nUnsupported -continue value \"$opt_continue\".\n";
       &usage(1);
     }
-    $startStep = $continueVal{$opt_continue};
+    $startStep = $stepVal{$opt_continue};
   } else {
     $startStep = 0;
+  }
+  if ($opt_stop) {
+    if (! defined $stepVal{$opt_stop}) {
+      warn "\nUnsupported -stop value \"$opt_stop\".\n";
+      &usage(1);
+    }
+    $stopStep = $stepVal{$opt_stop};
+  } else {
+    $stopStep = scalar(keys %stepVal);
+  }
+  if ($stopStep < $startStep) {
+    warn "\n-stop step ($opt_stop) must not precede -continue step " .
+      "($opt_continue).\n";
+    &usage(1);
   }
 }
 
@@ -278,8 +296,8 @@ sub requireNum {
     if ($val !~ /^\d+$/);
 }
 
-my $oldDbFormat = '[a-z][a-z]\d+';
-my $newDbFormat = '[a-z][a-z][a-z][A-Z][a-z][a-z]\d+';
+my $oldDbFormat = '[a-z][a-z](\d+)?';
+my $newDbFormat = '[a-z][a-z][a-z][A-Z][a-z][a-z](\d+)?';
 sub getDbFromPath {
   # Require that $val is a full path that contains a recognizable db as 
   # one of its elements (possibly the last one).
@@ -386,7 +404,7 @@ _EOF_
 # It partitions target and query sequences into chunks of a sensible size 
 # for cluster runs;  creates a jobList for parasol;  performs the cluster 
 # run;  and checks results.  
-# This script will fail if any of its steps fail.
+# This script will fail if any of its commands fail.
 
 cd $runDir
 $partitionTargetCmd
@@ -455,7 +473,7 @@ _EOF_
 # It is to be executed on $paraHub in $runDir .
 # It sets up and performs a small cluster run to concatenate all files in 
 # each subdirectory of ../psl into a per-target-chunk file.
-# This script will fail if any of its steps fail.
+# This script will fail if any of its commands fail.
 
 cd $runDir
 ls -1d ../psl/* | sed -e 's@/\$@\@' > tParts.lst
@@ -528,7 +546,7 @@ _EOF_
 # It is to be executed on $paraHub in $runDir .
 # It sets up and performs a small cluster run to chain all alignments 
 # to each target sequence.
-# This script will fail if any of its steps fail.
+# This script will fail if any of its commands fail.
 
 cd $runDir
 awk '{print \$1;}' $defVars{'SEQ1_LEN'} > chrom.lst
@@ -573,7 +591,7 @@ sub postProcessChains {
 # It is to be executed on $fileServer in $runDir .
 # It postprocesses the results of the chaining cluster run into a 
 # merged & sorted genome-wide set of chains with stable IDs.
-# This script will fail if any of its steps fail.
+# This script will fail if any of its commands fail.
 
 cd $runDir
 chainMergeSort run/chain/*.chain > all.chain
@@ -608,6 +626,13 @@ sub netChains {
       "(can't find $successFile).\n";
   }
   my $over = $tDb . "To" . $QDb . ".over.chain";
+  my $bedOverDir = "$clusterData/$tDb/$trackBuild/";
+  my $liftOver = ($isSelf ? "# No liftOver chains for self-alignments." :
+		  "# Make liftOver chains:\n" .
+		  "netChainSubset noClass.net all.chain stdout " .
+		  "| chainSort stdin $over\n" .
+		  "mkdir -p $bedOverDir\n" .
+		  "cp -p $over $bedOverDir/$over");
   my $bossScript = "$buildDir/axtChain/netChains.csh";
   open(SCRIPT, ">$bossScript")
     || die "Couldn't open $bossScript for writing: $!\n";
@@ -618,7 +643,7 @@ sub netChains {
 # It is to be executed on $fileServer in $runDir .
 # It generates nets (without repeat/gap stats -- those are added later on 
 # $dbHost) from chains, and generates axt, maf and .over.chain from the nets.
-# This script will fail if any of its steps fail.
+# This script will fail if any of its commands fail.
 
 cd $runDir
 
@@ -627,9 +652,7 @@ chainPreNet all.chain $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} stdout \\
 | chainNet stdin -minSpace=1 $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} stdout /dev/null \\
 | netSyntenic stdin noClass.net
 
-# Make liftOver chains:
-netChainSubset noClass.net all.chain stdout \\
-| chainSort stdin $over
+$liftOver
 
 # Make axtNet for download
 netSplit noClass.net net
@@ -673,6 +696,8 @@ sub loadUp {
       "(can't find $successDir).\n";
   }
   my $bossScript = "$buildDir/axtChain/loadUp.csh";
+  my $chain = $isSelf ? 'chainSelf' : "chain$QDb";
+  my $net = $isSelf ? 'netSelf' : "net$QDb";
   open(SCRIPT, ">$bossScript")
     || die "Couldn't open $bossScript for writing: $!\n";
   print SCRIPT <<_EOF_
@@ -682,13 +707,13 @@ sub loadUp {
 # It is to be executed on $dbHost in $runDir .
 # It loads the chain tables into $tDb, adds gap/repeat stats to the .net file,
 # and loads the net table.
-# This script will fail if any of its steps fail.
+# This script will fail if any of its commands fail.
 
 # Load chains:
 cd $runDir/chain
 foreach f (*.chain)
     set c = \$f:r
-    hgLoadChain $tDb \${c}_chain$QDb \$f
+    hgLoadChain $tDb \${c}_$chain \$f
 end
 
 # Add gap/repeat stats to the net file using database tables:
@@ -697,7 +722,7 @@ netClass -noAr noClass.net $tDb $qDb $qDb.net
 
 # Load nets:
 netFilter -minGap=10 $qDb.net \\
-| hgLoadNet $tDb net$QDb stdin
+| hgLoadNet $tDb $net stdin
 _EOF_
   ;
   close(SCRIPT);
@@ -738,7 +763,7 @@ sub makeDownloads {
 # from $DEF.
 # It is to be executed on $fileServer in $runDir .
 # It compresses chain, net and axtNet files for download.
-# This script will fail if any of its steps fail.
+# This script will fail if any of its commands fail.
 
 cd $runDir
 
@@ -763,6 +788,12 @@ sub installDownloads {
   # Load chains; add repeat/gap stats to net; load nets.
   my $runDir = "$buildDir/axtChain";
   my $bossScript = "$buildDir/axtChain/installDownloads.csh";
+  my $vs = $isSelf ? 'vsSelf' : "vs$QDb";
+  my $over = $tDb . "To" . $QDb . ".over.chain";
+  my $liftOver = ($isSelf ? '# No liftOver chains for self-alignments.' :
+		  "mkdir -p $goldenPath/$tDb/liftOver\n" .
+		  "cp -p $buildDir/axtChain/$over " .
+		  "$goldenPath/$tDb/liftOver/$over");
   open(SCRIPT, ">$bossScript")
     || die "Couldn't open $bossScript for writing: $!\n";
   print SCRIPT <<_EOF_
@@ -770,21 +801,23 @@ sub installDownloads {
 # This script was automatically generated by $0 
 # from $DEF.
 # It is to be executed on $dbHost in $runDir .
-# It creates the download directory for chains, nets and axtNet.
-# This script will fail if any of its steps fail.
+# It creates the download directory for chains, nets and axtNet,
+# and copies the liftOver chains (if applicable) to the liftOver download dir.
+# This script will fail if any of its commands fail.
 
-mkdir /usr/local/apache/htdocs/goldenPath/$tDb/vs$QDb
-cd /usr/local/apache/htdocs/goldenPath/$tDb/vs$QDb
+mkdir $goldenPath/$tDb/$vs
+cd $goldenPath/$tDb/$vs
 mv $clusterData/$tDb/zips/$qDb.*gz .
 mv $clusterData/$tDb/zips/axtNet .
 md5sum *.gz */*.gz > md5sum.txt
-# Make a README.txt which explains the files & formats.
+
+$liftOver
 _EOF_
   ;
   close(SCRIPT);
   &run("chmod a+x $bossScript");
   &run("ssh -x $dbHost $bossScript");
-# copy liftover chain to the right place on hgwdev too...
+  print STDERR "Reminder: make $downloadPath/README.txt.\n"
 # maybe also peek in trackDb and see if entries need to be added for chain/net
 }
 
@@ -802,7 +835,7 @@ sub cleanup {
 # from $DEF.
 # It is to be executed on $fileServer in $runDir .
 # It cleans up files after a successful blastz/chain/net/install series.
-# This script will fail if any of its steps fail, but uses rm -f so 
+# This script will fail if any of its commands fail, but uses rm -f so
 # individual failures should be ignored (e.g. if a partial cleanup has 
 # already been performed).
 
@@ -847,43 +880,43 @@ my $fileServer = `fileServer $buildDir/`;
 chomp $fileServer;
 
 my $step = 0;
-if ($startStep <= $step) {
+if ($startStep <= $step && $step <= $stopStep) {
   &doBlastzClusterRun($bigClusterHub);
 }
 
 $step++;
-if ($startStep <= $step) {
+if ($startStep <= $step && $step <= $stopStep) {
   &doCatRun($smallClusterHub);
 }
 
 $step++;
-if ($startStep <= $step) {
+if ($startStep <= $step && $step <= $stopStep) {
   &doChainRun($smallClusterHub);
 }
 
 $step++;
-if ($startStep <= $step) {
+if ($startStep <= $step && $step <= $stopStep) {
   &postProcessChains($fileServer);
 }
 
 $step++;
-if ($startStep <= $step) {
+if ($startStep <= $step && $step <= $stopStep) {
   &netChains($fileServer);
 }
 
 $step++;
-if ($startStep <= $step) {
+if ($startStep <= $step && $step <= $stopStep) {
   &loadUp();
 }
 
 $step++;
-if ($startStep <= $step) {
+if ($startStep <= $step && $step <= $stopStep) {
   &makeDownloads($fileServer);
   &installDownloads();
 }
 
 $step++;
-if ($startStep <= $step) {
+if ($startStep <= $step && $step <= $stopStep) {
   &cleanup($fileServer);
 }
 
