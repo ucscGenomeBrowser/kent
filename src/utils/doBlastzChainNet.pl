@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.7 2005/02/26 01:14:58 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.8 2005/03/03 00:25:20 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -652,11 +652,16 @@ sub postProcessChains {
   # chainMergeSort etc.
   my ($workhorse, $fileServer) = @_;
   my $runDir = "$buildDir/axtChain";
+  my $chain = "$tDb.$qDb.all.chain.gz";
   # First, make sure we're starting clean.
-  if (-e "$runDir/all.chain") {
+  if (-e "$runDir/$chain") {
     die "postProcessChains: looks like this was run successfully already " .
-      "(all.chain exists).  Either run with -continue net or some later " .
-	"stage, or move aside/remove $runDir/chain and run again.\n";
+      "($chain exists).  Either run with -continue net or some later " .
+      "stage, or move aside/remove $runDir/$chain and run again.\n";
+  } elsif (-e "$runDir/all.chain" || -e "$runDir/all.chain.gz") {
+    die "postProcessChains: looks like this was run successfully already " .
+      "(all.chain[.gz] exists).  Either run with -continue net or some later " .
+      "stage, or move aside/remove $runDir/all.chain[.gz] and run again.\n";
   } elsif (-e "$runDir/chain" && ! $opt_debug) {
     die "postProcessChains: looks like we are not starting with a clean " .
       "slate.  Please move aside or remove $runDir/chain and run again.\n";
@@ -668,11 +673,29 @@ sub postProcessChains {
       "(can't find $successFile).\n";
   }
   &run("ssh -x $workhorse nice " .
-       "'chainMergeSort $runDir/run/chain/*.chain > $runDir/all.chain'");
+       "'chainMergeSort $runDir/run/chain/*.chain " .
+       "| gzip -c > $runDir/$chain'");
   if ($splitRef) {
     &run("ssh -x $fileServer nice " .
-	 "chainSplit $runDir/chain $runDir/all.chain");
+	 "chainSplit $runDir/chain $runDir/$chain");
   }
+}
+
+
+sub getAllChain {
+  # Find the most likely candidate for all.chain from a previous run/step.
+  my ($runDir) = @_;
+  my $chain;
+  if (-e "$runDir/$tDb.$qDb.all.chain.gz") {
+    $chain = "$tDb.$qDb.all.chain.gz";
+  } elsif (-e "$runDir/$tDb.$qDb.all.chain") {
+    $chain = "$tDb.$qDb.all.chain";
+  } elsif (-e "$runDir/all.chain.gz") {
+    $chain = "all.chain.gz";
+  } elsif (-e "$runDir/all.chain") {
+    $chain = "all.chain";
+  }
+  return $chain;
 }
 
 
@@ -680,19 +703,26 @@ sub swapChains {
   # chainMerge step for -swap: chainSwap | chainSort.
   my ($workhorse, $fileServer) = @_;
   my $runDir = "$swapDir/axtChain";
+  my $inChain = &getAllChain("$buildDir/axtChain");
+  my $swappedChain = "$qDb.$tDb.all.chain.gz";
   # First, make sure we're starting clean.
-  if (-e "$runDir/all.chain") {
+  if (-e "$runDir/$swappedChain") {
     die "swapChains: looks like this was run successfully already " .
-      "($runDir/all.chain exists).  Either run with -continue net or some " .
-	"later stage, or move aside/remove $runDir/all.chain and run again.\n";
+     "($runDir/$swappedChain exists).  Either run with -continue net or some " .
+     "later stage, or move aside/remove $runDir/$swappedChain and run again.\n";
+  } elsif (-e "$runDir/all.chain" || -e "$runDir/all.chain.gz") {
+    die "swapChains: looks like this was run successfully already " .
+     "($runDir/all.chain[.gz] exists).  Either run with -continue net or some " .
+     "later stage, or move aside/remove $runDir/all.chain[.gz] and run again.\n";
   }
   # Main routine already made sure that $buildDir/axtChain/all.chain is there.
   &run("ssh -x $workhorse nice " .
-       "'chainSwap $buildDir/axtChain/all.chain stdout " .
-       "| nice chainSort stdin $runDir/all.chain'");
+       "'chainSwap $buildDir/axtChain/$inChain stdout " .
+       "| nice chainSort stdin stdout " .
+       "| nice gzip -c > $runDir/$swappedChain'");
   if ($splitRef) {
     &run("ssh -x $fileServer nice " .
-	 "chainSplit $runDir/chain $runDir/all.chain");
+	 "chainSplit $runDir/chain $runDir/$swappedChain");
   }
 }
 
@@ -730,16 +760,16 @@ sub netChains {
 	"and run again.\n";
   }
   # Make sure previous stage was successful.
-  my $successFile = "$buildDir/axtChain/all.chain";
-  if (! -e $successFile && ! $opt_debug) {
+  my $chain = &getAllChain($runDir);
+  if (! defined $chain && ! $opt_debug) {
     die "netChains: looks like previous stage was not successful " .
-      "(can't find $successFile).\n";
+      "(can't find [$tDb.$qDb.]all.chain[.gz]).\n";
   }
-  my $over = $tDb . "To" . $QDb . ".over.chain.gz";
-  my $bedOverDir = "$clusterData/$tDb/$trackBuild";
+  my $over = "$tDb.$qDb.over.chain.gz";
+  my $bedOverDir = "$clusterData/$tDb/$trackBuild/bedOver";
   my $liftOver = ($isSelf ? "# No liftOver chains for self-alignments." :
 		  "# Make liftOver chains:\n" .
-		  "netChainSubset -verbose=0 noClass.net all.chain stdout " .
+		  "netChainSubset -verbose=0 noClass.net $chain stdout " .
 		  "| chainSort stdin stdout | gzip -c > $over\n" .
 		  "mkdir -p $bedOverDir\n" .
 		  "cp -p $over $bedOverDir/$over");
@@ -758,7 +788,7 @@ sub netChains {
 cd $runDir
 
 # Make nets ("noClass", i.e. without rmsk/class stats which are added later):
-chainPreNet all.chain $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} stdout \\
+chainPreNet $chain $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} stdout \\
 | chainNet stdin -minSpace=1 $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} stdout /dev/null \\
 | netSyntenic stdin noClass.net
 
@@ -775,16 +805,17 @@ mkdir axtNet
 foreach f (axtChain/net/*.net)
 netToAxt \$f axtChain/chain/\$f:t:r.chain \\
   $defVars{SEQ1_DIR} $defVars{SEQ2_DIR} stdout \\
-  | axtSort stdin axtNet/\$f:t:r.axt
+  | axtSort stdin stdout \\
+  | gzip -c > axtNet/\$f:t:r.$tDb.$qDb.net.axt.gz
 end
 
 # Make mafNet for multiz: one .maf per $tDb seq.
 mkdir mafNet
-foreach f (axtNet/*.axt)
-  set maf = mafNet/\$f:t:r.maf
-  axtToMaf \$f \\
+foreach f (axtNet/*.$tDb.$qDb.net.axt.gz)
+  axtToMaf -tPrefix=$tDb. -qPrefix=$qDb. \$f \\
         $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} \\
-        \$maf -tPrefix=$tDb. -qPrefix=$qDb.
+        stdout \\
+  | gzip -c > mafNet/\$f:t:r:r:r:r:r.maf.gz
 end
 _EOF_
       ;
@@ -792,15 +823,17 @@ _EOF_
     print SCRIPT <<_EOF_
 # Make axtNet for download: one .axt for all of $tDb.
 mkdir ../axtNet
-netToAxt -verbose=0 noClass.net all.chain \\
+netToAxt -verbose=0 noClass.net $chain \\
   $defVars{SEQ1_DIR} $defVars{SEQ2_DIR} stdout \\
-  | axtSort stdin ../axtNet/$qDb.axt
+| axtSort stdin stdout \\
+| gzip -c > ../axtNet/$tDb.$qDb.net.axt.gz
 
 # Make mafNet for multiz: one .maf for all of $tDb.
 mkdir ../mafNet
-axtToMaf ../axtNet/$qDb.axt \\
+axtToMaf -tPrefix=$tDb. -qPrefix=$qDb. ../axtNet/$tDb.$qDb.net.axt.gz \\
   $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} \\
-  ../mafNet/$qDb.maf -tPrefix=$tDb. -qPrefix=$qDb.
+  stdout \\
+| gzip -c > ../mafNet/$tDb.$qDb.net.maf.gz
 _EOF_
       ;
   }
@@ -814,10 +847,10 @@ sub loadUp {
   # Load chains; add repeat/gap stats to net; load nets.
   my $runDir = "$buildDir/axtChain";
   # First, make sure we're starting clean.
-  if (-d "$runDir/$qDb.net") {
+  if (-e "$runDir/$tDb.$qDb.net" || -e "$runDir/$tDb.$qDb.net.gz") {
     die "netChains: looks like this was run successfully already " .
-      "($qDb.net exists).  Either run with -continue download, " .
-	"or move aside/remove $runDir/$qDb.net and run again.\n";
+      "($tDb.$qDb.net[.gz] exists).  Either run with -continue download, " .
+	"or move aside/remove $runDir/$tDb.$qDb.net[.gz] and run again.\n";
   }
   # Make sure previous stage was successful.
   my $successDir = "$buildDir/mafNet/";
@@ -854,7 +887,7 @@ _EOF_
   } else {
     print SCRIPT <<_EOF_
 cd $runDir
-hgLoadChain -tIndex $tDb $chain all.chain
+hgLoadChain -tIndex $tDb $chain $tDb.$qDb.all.chain.gz
 _EOF_
       ;
   }
@@ -862,10 +895,10 @@ _EOF_
 
 # Add gap/repeat stats to the net file using database tables:
 cd $runDir
-netClass -verbose=0 -noAr noClass.net $tDb $qDb $qDb.net
+netClass -verbose=0 -noAr noClass.net $tDb $qDb $tDb.$qDb.net
 
 # Load nets:
-netFilter -minGap=10 $qDb.net \\
+netFilter -minGap=10 $tDb.$qDb.net \\
 | hgLoadNet -verbose=0 $tDb $net stdin
 _EOF_
   ;
@@ -877,54 +910,14 @@ _EOF_
 
 
 sub makeDownloads {
-  # Make compressed chain, net, axtNet files for download.
+  # Compress the netClassed .net for download (other files should have been
+  # compressed already).
   my ($machine) = @_;
   my $runDir = "$buildDir/axtChain";
-  # First, make sure we're starting clean.
-  if (-d "$clusterData/$tDb/zips/axtNet") {
-    die "netChains: looks like this was run successfully already " .
-      "(zips/axtNet exists).  Either run with -continue cleanup, " .
-	"or move aside/remove $clusterData/$tDb/zips/axtNet/ " . 
-	  "and zips/$qDb.*.gz and run again.\n";
-  } elsif (-e "$clusterData/$tDb/zips/$qDb.chain.gz" ||
-	   -e "$clusterData/$tDb/zips/$qDb.net.gz") {
-    die "netChains: looks like we are not starting with a " .
-      "clean slate.  Please move aside or remove " .
-	"zips/$qDb.*.gz and run again.\n";
+  if (-e "$runDir/$tDb.$qDb.net") {
+    &run("ssh -x $machine nice " .
+	 "gzip $runDir/$tDb.$qDb.net");
   }
-  # Make sure previous stage was successful.
-  my $successFile = "$buildDir/axtChain/$qDb.net";
-  if (! -e $successFile && ! $opt_debug) {
-    die "netChains: looks like previous stage was not successful " .
-      "(can't find $successFile).\n";
-  }
-  my $bossScript = "$buildDir/axtChain/makeDownloads.csh";
-  open(SCRIPT, ">$bossScript")
-    || die "Couldn't open $bossScript for writing: $!\n";
-  print SCRIPT <<_EOF_
-#!/bin/csh -efx
-# This script was automatically generated by $0 
-# from $DEF.
-# It is to be executed on $machine in $runDir .
-# It compresses chain, net and axtNet files for download.
-# This script will fail if any of its commands fail.
-
-cd $runDir
-
-mkdir -p $clusterData/$tDb/zips
-gzip -c all.chain \\
-  > $clusterData/$tDb/zips/$qDb.chain.gz
-gzip -c $qDb.net \\
-  > $clusterData/$tDb/zips/$qDb.net.gz
-mkdir $clusterData/$tDb/zips/axtNet
-foreach f (../axtNet/*.axt)
-  gzip -c \$f > $clusterData/$tDb/zips/axtNet/\$f:t.gz
-end
-_EOF_
-  ;
-  close(SCRIPT);
-  &run("chmod a+x $bossScript");
-  &run("ssh -x $machine nice $bossScript");
 }
 
 
@@ -933,11 +926,21 @@ sub installDownloads {
   my $runDir = "$buildDir/axtChain";
   my $bossScript = "$buildDir/axtChain/installDownloads.csh";
   my $vs = $isSelf ? 'vsSelf' : "vs$QDb";
-  my $over = $tDb . "To" . $QDb . ".over.chain.gz";
+  # Make sure previous stage was successful.
+  my $successFile = "$runDir/$tDb.$qDb.net.gz";
+  if (! -e $successFile && ! $opt_debug) {
+    die "installDownloads: looks like previous stage was not successful " .
+      "(can't find $successFile).\n";
+  }
+  my $axt = ($splitRef ?
+	     "mkdir axtNet\n" . "ln -s $buildDir/axtNet/*.axt.gz axtNet/" :
+	     "ln -s $buildDir/axtNet/$tDb.$qDb.net.axt.gz .");
+  my $over = "$tDb.$qDb.over.chain.gz";
   my $liftOver = ($isSelf ? '# No liftOver chains for self-alignments.' :
 		  "mkdir -p $goldenPath/$tDb/liftOver\n" .
 		  "cp -p $buildDir/axtChain/$over " .
-		  "$goldenPath/$tDb/liftOver/$over");
+		  "$goldenPath/$tDb/liftOver/$over\n" .
+		  "ln -s $runDir/$tDb.$qDb.over.chain.gz .");
   open(SCRIPT, ">$bossScript")
     || die "Couldn't open $bossScript for writing: $!\n";
   print SCRIPT <<_EOF_
@@ -951,13 +954,16 @@ sub installDownloads {
 
 mkdir $goldenPath/$tDb/$vs
 cd $goldenPath/$tDb/$vs
-mv $clusterData/$tDb/zips/$qDb.*gz .
-mv $clusterData/$tDb/zips/axtNet .
-md5sum *.gz */*.gz > md5sum.txt
+ln -s $runDir/$tDb.$qDb.all.chain.gz .
+ln -s $runDir/$tDb.$qDb.net.gz .
+
+$axt
 
 $liftOver
+
+md5sum *.gz */*.gz > md5sum.txt
 _EOF_
-  ;
+      ;
   close(SCRIPT);
   &run("chmod a+x $bossScript");
   &run("ssh -x $dbHost nice $bossScript");
@@ -967,7 +973,7 @@ _EOF_
 
 
 sub cleanup {
-  # Make compressed chain, net, axtNet files for download.
+  # Remove intermediate files.
   my ($machine) = @_;
   my $runDir = $buildDir;
   my $outRoot = $opt_blastzOutRoot ? "$opt_blastzOutRoot/psl" : "$buildDir/psl";
@@ -999,6 +1005,11 @@ _EOF_
     print SCRIPT <<_EOF_
 rm -fr $buildDir/axtChain/net/
 rm -fr $buildDir/axtChain/chain/
+_EOF_
+      ;
+  } else {
+    print SCRIPT <<_EOF_
+rm -f  $buildDir/axtChain/*.tab
 _EOF_
       ;
   }
@@ -1034,15 +1045,16 @@ $buildDir = $defVars{'BASE'} ||
   "$clusterData/$tDb/$trackBuild/blastz.$qDb.$date";
 
 if ($opt_swap) {
-  if (! -e "$buildDir/axtChain/all.chain") {
-    die "-swap: Can't find $buildDir/axtChain/all.chain\n" .
+  my $inChain = &getAllChain("$buildDir/axtChain");
+  if (! defined $inChain) {
+    die "-swap: Can't find $buildDir/axtChain/[$tDb.$qDb.]all.chain[.gz]\n" .
         "which is required for -swap.\n";
   }
   $swapDir = "$clusterData/$qDb/$trackBuild/blastz.$tDb.swap";
   &mustMkdir("$swapDir/axtChain");
   $splitRef = (`wc -l < $defVars{SEQ2_LEN}` < $splitThreshold);
-  &verbose(1, "Swapping from $buildDir/axtChain/all.chain to\n" .
-	      "$swapDir/axtChain/all.chain.\n");
+  &verbose(1, "Swapping from $buildDir/axtChain/$inChain\n" .
+	      "to $swapDir/axtChain/$qDb.$tDb.all.chain.gz .\n");
 } else {
   if (! -d $buildDir) {
     &mustMkdir($buildDir);
