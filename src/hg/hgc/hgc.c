@@ -289,7 +289,7 @@ hgFreeConn(&conn);
 }
 
 void printAlignments(struct psl *pslList, 
-	int startFirst, char *hgcCommand, char *typeName, char *seqName)
+	int startFirst, char *hgcCommand, char *typeName, char *itemIn)
 /* Print list of mRNA alignments. */
 {
 struct psl *psl;
@@ -310,7 +310,7 @@ for (same = 1; same >= 0; same -= 1)
 	if (same ^ (psl->tStart != startFirst))
 	    {
 	    sprintf(otherString, "%d&type=%s", psl->tStart, typeName);
-	    hgcAnchorSomewhere(hgcCommand, seqName, otherString, psl->tName);
+	    hgcAnchorSomewhere(hgcCommand, itemIn, otherString, psl->tName);
 	    printf("%5d  %5.1f%%  %9s     %s %9d %9d  %8s %5d %5d %5d</A>",
 		psl->match + psl->misMatch + psl->repMatch + psl->nCount,
 		100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
@@ -579,6 +579,7 @@ boolean qIsRc = (psl->strand[0] == '-');
 boolean isProt = (qType == gftProt);
 int tStart = psl->tStart, tEnd = psl->tEnd;
 int qStart = 0;
+int mulFactor = (isProt ? 3 : 1);
 
 
 /* Load dna sequence. */
@@ -682,7 +683,7 @@ fprintf(f, "<H4><A NAME=genomic></A>Genomic %s %s:</H4>\n",
 		}
 	    }
 	colorFlags[ts] = socBrightBlue;
-	colorFlags[ts+sz*3-1] = socBrightBlue;
+	colorFlags[ts+sz*mulFactor-1] = socBrightBlue;
 	}
     cfmInit(&cfm, 10, 60, TRUE, tIsRc, f, psl->tStart);
     for (i=0; i<dnaSeq->size; ++i)
@@ -693,7 +694,6 @@ fprintf(f, "<H4><A NAME=genomic></A>Genomic %s %s:</H4>\n",
 	     {
 	     fprintf(f, "<A NAME=%d></A>", ++curBlock);
 	     }
-	     
 	cfmOut(&cfm, dnaSeq->dna[i], seqOutColorLookup[colorFlags[i]]);
 	}
     cfmCleanup(&cfm);

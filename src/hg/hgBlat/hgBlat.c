@@ -168,7 +168,7 @@ else
     }
 printf("<H2>BLAT Search Results</H2>");
 printf("<TT><PRE>");
-printf("   ACTIONS      QUERY           SCORE START END  TOTAL IDENTITY CHRO STRAND  START    END  \n");
+printf("   ACTIONS      QUERY           SCORE START  END QSIZE IDENTITY CHRO STRAND  START    END  \n");
 printf("--------------------------------------------------------------------------------------------\n");
 for (psl = pslList; psl != NULL; psl = psl->next)
     {

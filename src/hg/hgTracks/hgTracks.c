@@ -496,14 +496,27 @@ return level;
 }
 
 
-int mrnaGrayIx(int start, int end, int score)
+int pslGrayIx(struct psl *psl, boolean isXeno)
 /* Figure out gray level for an RNA block. */
 {
-int size = end-start;
-int halfSize = (size>>1);
+double misFactor;
+double hitFactor;
 int res;
-res =  (maxShade * score + halfSize)/size;
-if (res < 1) res = 1;
+
+if (isXeno)
+    {
+    misFactor = (psl->misMatch + psl->qNumInsert + psl->tNumInsert)*1.2;
+    }
+else
+    {
+    misFactor = (psl->misMatch + psl->qNumInsert)*5;
+    }
+misFactor /= (psl->match + psl->misMatch + psl->repMatch);
+hitFactor = 1.0 - misFactor;
+res = round(hitFactor * maxShade);
+// uglyf("psl->qName %s, isXeno %d, misFactor %f, hitFactor %f, res %d<BR>\n", psl->qName, isXeno, misFactor, hitFactor, res);
+if (res < 0) res = 0;
+if (res >= maxShade) res = maxShade-1;
 return res;
 }
 
@@ -870,15 +883,14 @@ else
 }
 
 
-struct linkedFeatures *lfFromPslx(struct psl *psl, int sizeMul)
+struct linkedFeatures *lfFromPslx(struct psl *psl, int sizeMul, boolean isXeno)
 /* Create a linked feature item from pslx.  Pass in sizeMul=1 for DNA, 
  * sizeMul=3 for protein. */
 {
 unsigned *starts = psl->tStarts;
 unsigned *sizes = psl->blockSizes;
 int i, blockCount = psl->blockCount;
-int grayIx = mrnaGrayIx(psl->qStart, 
-	psl->qEnd, psl->match - psl->misMatch + psl->repMatch - psl->qNumInsert);
+int grayIx = pslGrayIx(psl, isXeno);
 struct simpleFeature *sfList = NULL, *sf;
 struct linkedFeatures *lf;
 boolean rcTarget = (psl->strand[1] == '-');
@@ -908,18 +920,20 @@ for (i=0; i<blockCount; ++i)
 slReverse(&sfList);
 lf->components = sfList;
 finishLf(lf);
+lf->start = psl->tStart;	/* Correct for rounding errors... */
+lf->end = psl->tEnd;
 return lf;
 }
 
-struct linkedFeatures *lfFromPsl(struct psl *psl)
+struct linkedFeatures *lfFromPsl(struct psl *psl, boolean isXeno)
 /* Create a linked feature item from psl. */
 {
-return lfFromPslx(psl, 1);
+return lfFromPslx(psl, 1, isXeno);
 }
 
 
 
-struct linkedFeatures *lfFromPslsInRange(char *table, int start, int end)
+struct linkedFeatures *lfFromPslsInRange(char *table, int start, int end, char *chromName, boolean isXeno)
 /* Return linked features from range of table. */
 {
 char query[256];
@@ -928,13 +942,21 @@ struct sqlResult *sr = NULL;
 char **row;
 struct linkedFeatures *lfList = NULL, *lf;
 
-sprintf(query, "select * from %s where tStart<%u and tEnd>%u",
-    table, winEnd, winStart);
+if (chromName == NULL)
+    {
+    sprintf(query, "select * from %s where tStart<%u and tEnd>%u",
+	table, winEnd, winStart);
+    }
+else
+    {
+    sprintf(query, "select * from %s where tName = '%s' and tStart<%u and tEnd>%u",
+	table, chromName, winEnd, winStart);
+    }
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct psl *psl = pslLoad(row);
-    lf = lfFromPsl(psl);
+    lf = lfFromPsl(psl, isXeno);
     slAddHead(&lfList, lf);
     pslFree(&psl);
     }
@@ -944,12 +966,14 @@ hFreeConn(&conn);
 return lfList;
 }
 
+
+
 void loadMrnaAli(struct trackGroup *tg)
 /* Load up rnas from table into trackGroup items. */
 {
 char table[64];
 sprintf(table, "%s_mrna", chromName);
-tg->items = lfFromPslsInRange(table, winStart, winEnd);
+tg->items = lfFromPslsInRange(table, winStart, winEnd, NULL, FALSE);
 }
 #ifdef ROGIC_CODE
 struct linkedFeatures *lfFromPslsInRangeByChrom(char *table, char *chrom, int start, int end)
@@ -1063,7 +1087,7 @@ while ((psl = pslNext(f)) != NULL)
     {
     if (sameString(psl->tName, chromName) && psl->tStart < winEnd && psl->tEnd > winStart)
 	{
-	lf = lfFromPslx(psl, sizeMul);
+	lf = lfFromPslx(psl, sizeMul, TRUE);
 	sprintf(buf2, "%s %s", ss, psl->qName);
 	lf->extra = cloneString(buf2);
 	slAddHead(&lfList, lf);
@@ -1094,7 +1118,7 @@ void loadEstAli(struct trackGroup *tg)
 {
 char table[64];
 sprintf(table, "%s_est", chromName);
-tg->items = lfFromPslsInRange(table, winStart, winEnd);
+tg->items = lfFromPslsInRange(table, winStart, winEnd, NULL, FALSE);
 }
 
 struct trackGroup *estTg()
@@ -1115,7 +1139,7 @@ void loadIntronEstAli(struct trackGroup *tg)
 {
 char table[64];
 sprintf(table, "%s_intronEst", chromName);
-tg->items = lfFromPslsInRange(table, winStart, winEnd);
+tg->items = lfFromPslsInRange(table, winStart, winEnd, NULL, FALSE);
 }
 
 struct trackGroup *intronEstTg()
@@ -1127,6 +1151,25 @@ tg->visibility = tvDense;
 tg->longLabel = "Human ESTs That Have Been Spliced";
 tg->shortLabel = "Spliced ESTs";
 tg->loadItems = loadIntronEstAli;
+tg->drawItems = linkedFeaturesAverageDense;
+return tg;
+}
+
+void loadMusTest1(struct trackGroup *tg)
+/* Load up mouse alignments (psl format) from table. */
+{
+tg->items = lfFromPslsInRange("musTest1", winStart, winEnd, chromName, TRUE);
+}
+
+struct trackGroup *musTest1Tg()
+/* Make track group of full length mRNAs. */
+{
+struct trackGroup *tg = linkedFeaturesTg();
+tg->mapName = "hgMusTest1";
+tg->visibility = tvDense;
+tg->longLabel = "Mouse Translated Blat Alignments Test 1";
+tg->shortLabel = "Mouse Test1";
+tg->loadItems = loadMusTest1;
 tg->drawItems = linkedFeaturesAverageDense;
 return tg;
 }
@@ -4636,6 +4679,7 @@ if (hTableExists("est3")) slSafeAddHead(&tGroupList, est3Tg());
 if (hTableExists("cpgIsland")) slSafeAddHead(&tGroupList, cpgIslandTg());
 if (hTableExists("cpgIsland2")) slSafeAddHead(&tGroupList, cpgIsland2Tg());
 if (hTableExists("exoMouse")) slSafeAddHead(&tGroupList, exoMouseTg());
+if (hTableExists("musTest1")) slSafeAddHead(&tGroupList, musTest1Tg());
 if (hTableExists("exoFish")) slSafeAddHead(&tGroupList, exoFishTg());
 if (chromTableExists("_tet_waba")) slSafeAddHead(&tGroupList, tetTg());
 if (hTableExists("rnaGene")) slSafeAddHead(&tGroupList, rnaGeneTg());
