@@ -1,12 +1,14 @@
 .c.o:
 	gcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -I../../inc -I../../../inc -c $*.c
 
-L = -lm
+L = -lm $(MYSQLLIBS)
 MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = cartDump.o
 
 cartDump: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/cartDump $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/cartDump
+	gcc -ggdb -o cartDump $O $(MYLIBS) $L
+	strip cartDump
+	chmod a+rx cartDump
+	mv cartDump $(HGCGI)

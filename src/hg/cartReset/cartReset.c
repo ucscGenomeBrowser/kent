@@ -3,30 +3,20 @@
 #include "linefile.h"
 #include "hash.h"
 #include "cheapcgi.h"
+#include "htmshell.h"
+#include "cart.h"
 
-void usage()
-/* Explain usage and exit. */
-{
-errAbort(
-  "cartReset - Reset cart\n"
-  "usage:\n"
-  "   cartReset XXX\n"
-  "options:\n"
-  "   -xxx=XXX\n"
-  );
-}
 
-void cartReset(char *XXX)
+void doMiddle()
 /* cartReset - Reset cart. */
 {
+cartResetInDb("hguid");
+printf("Your settings are now reset to defaults.");
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
-if (argc != 2)
-    usage();
-cartReset(argv[1]);
+htmShell("Reset Cart", doMiddle, NULL);
 return 0;
 }
