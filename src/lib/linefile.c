@@ -10,7 +10,7 @@
 #include "errabort.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: linefile.c,v 1.29 2004/04/15 07:28:29 kent Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.30 2004/04/19 06:28:56 angie Exp $";
 
 struct lineFile *lineFileAttatch(char *fileName, bool zTerm, int fd)
 /* Wrap a line file around an open'd file. */
@@ -158,7 +158,7 @@ while (!gotLf)
     if (oldEnd > 0 && sizeLeft > 0)
 	memmove(buf, buf+oldEnd, sizeLeft);
     lf->bufOffsetInFile += oldEnd;
-    if (lf->fd)
+    if (lf->fd >= 0)
 	readSize = lineFileLongNetRead(lf->fd, buf+sizeLeft, readSize);
     else
         readSize = 0;
