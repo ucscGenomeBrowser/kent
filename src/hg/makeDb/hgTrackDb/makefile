@@ -35,9 +35,6 @@ update:
 	hgTrackDb mm1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
 	hgTrackDb mm2 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
 
-zooMouse1:
-	hgTrackDb zooMouse1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-
 beta_old_update:
 	hgTrackDb hg6  trackDb ../../lib/trackDb.sql hgRoot
 	hgTrackDb hg7  trackDb ../../lib/trackDb.sql hgRoot
@@ -52,11 +49,33 @@ beta_update:
 	hgTrackDb mm1 trackDb ../../lib/trackDb.sql hgRoot
 	hgTrackDb mm2 trackDb ../../lib/trackDb.sql hgRoot
 
-beta_zooMouse1:
-	hgTrackDb zooMouse1 trackDb ../../lib/trackDb.sql hgRoot
+zooUpdate:
+	hgTrackDb zooBaboon1 ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooCat1 ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooChicken1 ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooChimp1 ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooCow1 ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooDog1 ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooFugu1 ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooHuman1 ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooMouse1 ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooPig1 ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooRat1 ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooZebrafish1 ../../lib/trackDb.sql hgRoot
 
-
-
+betaZooUpdate:
+	hgTrackDb trackDb_$(USER) zooBaboon1 ../../lib/trackDb.sql hgRoot
+	hgTrackDb trackDb_$(USER) zooCat1 ../../lib/trackDb.sql hgRoot
+	hgTrackDb trackDb_$(USER) zooChicken1 ../../lib/trackDb.sql hgRoot
+	hgTrackDb trackDb_$(USER) zooChimp1 ../../lib/trackDb.sql hgRoot
+	hgTrackDb trackDb_$(USER) zooCow1 ../../lib/trackDb.sql hgRoot
+	hgTrackDb trackDb_$(USER) zooDog1 ../../lib/trackDb.sql hgRoot
+	hgTrackDb trackDb_$(USER) zooFugu1 ../../lib/trackDb.sql hgRoot
+	hgTrackDb trackDb_$(USER) zooHuman1 ../../lib/trackDb.sql hgRoot
+	hgTrackDb trackDb_$(USER) zooMouse1 ../../lib/trackDb.sql hgRoot
+	hgTrackDb trackDb_$(USER) zooPig1 ../../lib/trackDb.sql hgRoot
+	hgTrackDb trackDb_$(USER) zooRat1 ../../lib/trackDb.sql hgRoot
+	hgTrackDb trackDb_$(USER) zooZebrafish1 ../../lib/trackDb.sql hgRoot
 
 debug : $O
 	gcc -ggdb -o hgTrackDb $O $(MYLIBS) $L	
