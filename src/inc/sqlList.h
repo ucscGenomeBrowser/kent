@@ -52,6 +52,25 @@ void sqlStringDynamicArray(char *s, char ***retArray, int *retSize);
 void sqlStringFreeDynamicArray(char ***pArray);
 /* Free up a dynamic array (ends up freeing array and first string on it.) */
 
+char *sqlFloatArrayToString( float *array, int arraySize);
+char *sqlUnsignedArrayToString( unsigned *array, int arraySize);
+char *sqlSignedArrayToString( int *array, int arraySize);
+char *sqlShortArrayToString( short *array, int arraySize);
+char *sqlUshortArrayToString( unsigned short *array, int arraySize);
+char *sqlByteArrayToString( signed char *array, int arraySize);
+char *sqlUbyteArrayToString( unsigned char *array, int arraySize);
+char *sqlStringArrayToString( char **array, int arraySize);
+/* Convert arrays into comma separated strings. The char *'s returned
+ * should be freeMem()'d when done */
+
+char *sqlEscapeString(const char *orig);
+/* Prepares string for entry in the database. Remember to free returned string.
+ * returned string contains strlen(length)*2+1 as many bytes as orig because in worst case
+ * every character has to be escaped.
+ * Example 1: The Gene's Name -> The Gene''s Name
+ * Example 2: he said "order and orient" -> he said ""order and orient"" */
+
+
 int sqlUnsignedComma(char **pS);
 /* Return signed number at *pS.  Advance *pS past comma at end.
  * This function is used by the system that automatically loads
