@@ -107,6 +107,7 @@ else
 		page->status->status);
 	errMessage = errCatch->message->string;
 	qs->hardError = TRUE;
+	htmlPageFree(&page);
 	}
     else
         {
