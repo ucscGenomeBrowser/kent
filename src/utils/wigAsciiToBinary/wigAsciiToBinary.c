@@ -40,7 +40,7 @@
 
 #define	NO_DATA	128
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.3 2003/09/16 15:28:29 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.4 2003/09/16 20:24:37 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -78,11 +78,23 @@ errAbort(
 );
 }
 
+/*
+ *	The table rows need to be printed in a couple of different
+ *	places in the code and it wouldn't work well as a subroutine,
+ *	so it is a define here, which works just fine.
+ *	Definition of this row format can be found in hg/inc/wiggle.h
+ *	and hg/lib/wiggle.as, etc ...
+ *	Probably do not need the score field which is simply output as
+ *	zero here.  And probably do not need the strand either, but will
+ *	keep them around in case some good use can be found later.
+ */
 #define OUTPUT_ROW \
     chromEnd = chromStart + (bincount * dataSpan) - 1; \
-    fprintf( wigout, "%s\t%llu\t%llu\t%s_%llu_%lluwiggle\t%llu\t%llu\n", \
+    fprintf( wigout, \
+"%s\t%llu\t%llu\t%s_%llu_%swiggle\t0\t%c\t%llu\t%llu\t%llu\t%s\n", \
 	chromName, chromStart, chromEnd, chromName, rowCount, \
-	dataSpan, fileOffsetBin, bincount ); \
+	spanName, strand, dataSpan, bincount, fileOffsetBin, \
+	binfile ); \
     ++rowCount; \
     bincount = 0;	/* to count up to binsize	*/ \
     chromStart = Offset + dataSpan; \
@@ -111,11 +123,27 @@ char *chromName = (char *) NULL;	/* pseudo bed-6 data to follow */
 unsigned long long chromStart = 0;	/* for table row data */
 unsigned long long chromEnd = 0;	/* for table row data */
 char strand = '+';			/* may never use - strand ? */
+char spanName[64];			/* short-hand name for dataSpan */
 
 /*	for each input data file	*/
 for( i = 1; i < argc; ++i )
     {
     if( verbose ) printf("translating file: %s\n", argv[i]);
+    /* let's shorten the dataSpan name which will be used in the
+     * "Name of item" column
+     */
+    if ( dataSpan < 1024 )
+	{
+	    snprintf( spanName, sizeof(spanName)-1, "%llu", dataSpan );
+	} else if ( dataSpan < 1024*1024 ) {
+	    snprintf( spanName, sizeof(spanName)-1, "%lluK", dataSpan/1024 );
+	} else if ( dataSpan < 1024*1024*1024 ) {
+	    snprintf( spanName, sizeof(spanName)-1, "%lluM",
+		    dataSpan/(1024*1024) );
+	} else {
+	    snprintf( spanName, sizeof(spanName)-1, "%lluG",
+		    dataSpan/(1024*1024) );
+	}
     /*	Name mangling to determine output file name */
     if( chrom )	/*	when specified, simply use it	*/
 	{
