@@ -1525,32 +1525,32 @@ LOAD AVID MOUSE TRACK (todo)
       hgLoadBed avidRepeat avidRepeat.bed
       hgLoadBed avidUnique avidUnique.bed
 
-LOAD SNPS (TODO)
+LOAD SNPS (done; D Thomas; build 111 on 3/4/03)
       ssh hgwdev
       cd ~/oo/bed
       mkdir snp
       cd snp
-      mkdir build110
-      cd build110
+      mkdir build111
+      cd build111
       ln -s ../../../seq_contig.md .
-      ln -s ~/lastOo/bed/cpgIsland/filter.awk .
+      ln -s ../build110/filter.awk .
 
-     -Download SNPs from ftp://ftp.ncbi.nlm.nih.gov/pub/sherry/gp.ncbi.b31.gz
+     -Download SNPs from ftp://ftp.ncbi.nlm.nih.gov/human/snp/human.b31.snp111
      -Unpack
-      calcFlipSnpPos seq_contig.md gp.ncbi.b31 gp.ncbi.b31.flipped
-      mv gp.ncbi.b31 gp.ncbi.b31.original
-      gzip gp.ncbi.b31.original
+      calcFlipSnpPos seq_contig.md human.b31.snp111 human.b31.snp111.flipped
+      mv human.b31.snp111 human.b31.snp111.original
+      gzip human.b31.snp111.original
 
-      grep RANDOM       gp.ncbi.b31.flipped >  snpTsc.txt
-      grep MIXED        gp.ncbi.b31.flipped >> snpTsc.txt
-      grep BAC_OVERLAP  gp.ncbi.b31.flipped >  snpNih.txt
-      grep OTHER        gp.ncbi.b31.flipped >> snpNih.txt
+      grep RANDOM       human.b31.snp111.flipped >  snpTsc.txt
+      grep MIXED        human.b31.snp111.flipped >> snpTsc.txt
+      grep BAC_OVERLAP  human.b31.snp111.flipped >  snpNih.txt
+      grep OTHER        human.b31.snp111.flipped >> snpNih.txt
 
       awk -f filter.awk snpTsc.txt > snpTsc.contig.bed
       awk -f filter.awk snpNih.txt > snpNih.contig.bed
 
-      liftUp snpTsc.bed ../../jkStuff/liftAll.lft warn snpTsc.contig.bed
-      liftUp snpNih.bed ../../jkStuff/liftAll.lft warn snpNih.contig.bed
+      liftUp snpTsc.bed ../../../jkStuff/liftAll.lft warn snpTsc.contig.bed
+      liftUp snpNih.bed ../../../jkStuff/liftAll.lft warn snpNih.contig.bed
 
       hgLoadBed hg13 snpTsc snpTsc.bed
       hgLoadBed hg13 snpNih snpNih.bed
