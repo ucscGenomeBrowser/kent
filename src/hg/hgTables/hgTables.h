@@ -108,6 +108,10 @@ void doTabOutTable(char *database, char *table,
 	struct sqlConnection *conn, char *fields);
 /* Do tab-separated output on table. */
 
+struct bed *getFilteredBedsInRegion(struct sqlConnection *conn, 
+	struct trackDb *track);
+/* getBed - get list of beds in region that pass filtering. */
+
 struct hTableInfo *getHti(char *db, char *table);
 /* Return primary table info. */
 
@@ -217,8 +221,7 @@ char *identifierFileName();
 struct hash *identifierHash();
 /* Return hash full of identifiers. */
 
-/* Custom track stuff. */
-
+/* ----------- Custom track stuff. -------------- */
 boolean isCustomTrack(char *table);
 /* Return TRUE if table is a custom track. */
 
@@ -228,17 +231,26 @@ struct customTrack *getCustomTracks();
 struct slName *getBedFields(int fieldCount);
 /* Get list of fields for bed of given size. */
 
+struct bed *customTrackGetFilteredBeds(char *name, 
+	boolean *retGotFilter, boolean *retGotIds);
+/* Get list of beds from custom track of given name that are
+ * in current regions and that pass filters.  You can bedFree
+ * this when done.  
+ * If you pass in a non-null retGotFilter this will let you know
+ * if a filter was applied.  Similarly retGotIds lets you know
+ * if an identifier list was applied*/
+
 struct customTrack *lookupCt(char *name);
 /* Find named custom track. */
 
 struct hTableInfo *ctToHti(struct customTrack *ct);
 /* Create an hTableInfo from a customTrack. */
 
-void doTabOutCustomTracks(struct customTrack *ct, char *fields);
+void doTabOutCustomTracks(char *name, char *fields);
 /* Print out selected fields from custom track.  If fields
  * is NULL, then print out all fields. */
 
-/* Stuff from other modules used in hgTables.h. */
+/* ----------- Page displayers -------------- */
 
 void doMainPage(struct sqlConnection *conn);
 /* Put up the first page user sees. */

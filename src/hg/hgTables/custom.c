@@ -400,26 +400,75 @@ hashElFreeList(&varList);
 return bf;
 }
 
-void doTabOutCustomTracks(struct customTrack *ct, char *fields)
+struct bed *customTrackGetFilteredBeds(char *name, 
+	boolean *retGotFilter, boolean *retGotIds)
+/* Get list of beds from custom track of given name that are
+ * in current regions and that pass filters.  You can bedFree
+ * this when done.  
+ * If you pass in a non-null retGotFilter this will let you know
+ * if a filter was applied.  Similarly retGotIds lets you know
+ * if an identifier list was applied*/
+{
+struct customTrack *ct = lookupCt(name);
+struct bedFilter *bf = NULL;
+struct bed *bedList = NULL, *bed;
+struct hash *idHash = NULL;
+struct region *region;
+
+/* Figure out how to filter things. */
+if (ct == NULL)
+    errAbort("Can't find custom track %s", name);
+bf = bedFilterForCustomTrack(name);
+if (ct->fieldCount > 3)
+    idHash = identifierHash();
+
+for (region = getRegions(); region != NULL; region = region->next)
+    {
+    for (bed = ct->bedList; bed != NULL; bed = bed->next)
+	{
+	if (idHash == NULL || hashLookup(idHash, bed->name))
+	    {
+	    if (sameString(bed->chrom, region->chrom))
+		{
+		if (region->end == 0 || 
+		   (bed->chromStart < region->end 
+		   && bed->chromEnd > region->start))
+		    {
+		    if (bf == NULL || bedFilterOne(bf, bed))
+			{
+			struct bed *copy = cloneBed(bed);
+			slAddHead(&bedList, copy);
+			}
+		    }
+		}
+	    }
+	}
+    }
+if (retGotFilter != NULL)
+    *retGotFilter = (bf != NULL);
+if (retGotIds != NULL)
+    *retGotIds = (idHash != NULL);
+hashFree(&idHash);
+slReverse(&bedList);
+return bedList;
+}
+
+void doTabOutCustomTracks(char *name, char *fields)
 /* Print out selected fields from custom track.  If fields
  * is NULL, then print out all fields. */
 {
-struct bed *bedList, *bed;
+boolean gotFilter, gotIds;
+struct bed *bed, *bedList = NULL;
 struct slName *chosenFields, *field;
-struct bedFilter *bf = NULL;
-struct region *region;
 boolean gotResults = FALSE;
-struct hash *idHash = NULL;
-
-
-bf = bedFilterForCustomTrack(ct->tdb->tableName);
+struct customTrack *ct = lookupCt(name);
 
 if (fields == NULL)
     chosenFields = getBedFields(ct->fieldCount);
 else
     chosenFields = commaSepToSlNames(fields);
-if (ct->fieldCount > 3)
-    idHash = identifierHash();
+
+bedList = customTrackGetFilteredBeds(name, &gotFilter, &gotIds);
 hPrintf("#");
 for (field = chosenFields; field != NULL; field = field->next)
     {
@@ -429,56 +478,22 @@ for (field = chosenFields; field != NULL; field = field->next)
     }
 hPrintf("\n");
 
-if (fullGenomeRegion())
+for (bed = bedList; bed != NULL; bed = bed->next)
     {
-    for (bed = ct->bedList; bed != NULL; bed = bed->next)
-        {
-	if (idHash == NULL || hashLookup(idHash, bed->name))
-	    {
-	    if (bf == NULL || bedFilterOne(bf, bed))
-		{
-		tabBedRow(bed, chosenFields);
-		gotResults = TRUE;
-		}
-	    }
-	}
-    }
-else
-    {
-    for (region = getRegions(); region != NULL; region = region->next)
-	{
-	for (bed = ct->bedList; bed != NULL; bed = bed->next)
-	    {
-	    if (idHash == NULL || hashLookup(idHash, bed->name))
-		{
-		if (sameString(bed->chrom, region->chrom))
-		    {
-		    if (region->end == 0 || 
-		       (bed->chromStart < region->end && bed->chromEnd > region->start))
-			{
-			if (bf == NULL || bedFilterOne(bf, bed))
-			    {
-			    tabBedRow(bed, chosenFields);
-			    gotResults = TRUE;
-			    }
-			}
-		    }
-		}
-	    }
-	}
+    tabBedRow(bed, chosenFields);
+    gotResults = TRUE;
     }
 if (!gotResults)
     {
     hPrintf("# No results");
-    if (idHash != NULL)
+    if (gotIds)
 	hPrintf(" matching identifier list");
-    if (bf != NULL)
+    if (gotFilter)
         hPrintf(" passing filter");
     if (!fullGenomeRegion())
-	{
         hPrintf(" in given region");
-	}
     hPrintf(".");
     }
 }
+
 
