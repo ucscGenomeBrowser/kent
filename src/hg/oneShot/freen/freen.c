@@ -7,8 +7,9 @@
 #include "dnaseq.h"
 #include "twoBit.h"
 #include "portable.h"
+#include "hdb.h"
 
-static char const rcsid[] = "$Id: freen.c,v 1.51 2004/10/23 15:08:00 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.52 2004/11/05 02:10:34 kent Exp $";
 
 void usage()
 /* Print usage and exit. */
@@ -19,16 +20,8 @@ errAbort("usage: freen something");
 void freen(char *a)
 /* Test some hair-brained thing. */
 {
-long start = clock1000();
-struct twoBitFile *tbf = twoBitOpen(a);
-long openTime = clock1000();
-struct dnaSeq *seq = twoBitReadSeqFrag(tbf, "scaffold_1000", 0, 0);
-long seqTime = clock1000();
-twoBitClose(&tbf);
-long end = clock1000();
-printf("Took %ld millis to twoBitOpen %s\n", openTime - start, a);
-printf("Took %ld millis to load %s (%d bases)\n", seqTime - openTime, seq->name, seq->size);
-printf("Took %ld millis to twoBitClose %s\n", end - seqTime, a);
+hSetDb(a);
+uglyf("%s %d\n", a, hGetMinIndexLength());
 }
 
 
