@@ -28,9 +28,11 @@ endif
 
 # --------------------------------------------
 
+set count=0
 set errFlag="0"
 hgsql -N -e "SELECT chrom FROM chromInfo" $db | sort  > $db.chromInfo.dev
 foreach chrom (`cat $db.chromInfo.dev`)
+  set count=`echo $count | gawk '{print $1 + 1}'`
   set size=`hgsql -N -e 'SELECT size FROM chromInfo WHERE chrom = "'$chrom'"' $db`
   set gaps=`hgsql -N -e 'SELECT SUM(chromEnd) - SUM(chromStart) FROM gap WHERE chrom = "'$chrom'"' $db`
   set gold=`hgsql -N -e 'SELECT SUM(chromEnd) - SUM(chromStart) FROM gold \
@@ -38,11 +40,16 @@ foreach chrom (`cat $db.chromInfo.dev`)
   set totalsize=`echo "$gaps $gold" | gawk '{print $1 + $2}'`
   if ($totalsize != $size) then
     echo "gap + gold not equal to size for $chrom"
+    echo "gap + gold not equal to size for $chrom" >> $db.gapGoldWrong
     set errFlag="1"
+  else
+    echo $count $chrom
   endif
 end
 
 if ($errFlag == "0") then
   echo "gap + gold = chromInfo.size for all chroms."
+else
+  echo cat $db.gapGoldWrong
 endif
 # rm -f $db.chromInfo.dev
