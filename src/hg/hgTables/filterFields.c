@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.35 2005/03/16 19:14:51 angie Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.36 2005/03/18 00:22:08 angie Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -1359,13 +1359,13 @@ for (var = varList; var != NULL; var = var->next)
 		if (strchr(pat, '.')) /* Assume floating point */
 		    {
 		    double a = atof(words[0]), b = atof(words[1]);
-		    dyStringPrintf(dy, "%s.%s >= %f && %s.%s < %f",
+		    dyStringPrintf(dy, "%s.%s >= %f && %s.%s <= %f",
 		    	explicitDbTable, field, a, explicitDbTable, field, b);
 		    }
 		else
 		    {
 		    int a = atoi(words[0]), b = atoi(words[1]);
-		    dyStringPrintf(dy, "%s.%s >= %d && %s.%s < %d",
+		    dyStringPrintf(dy, "%s.%s >= %d && %s.%s <= %d",
 		    	explicitDbTable, field, a, explicitDbTable, field, b);
 		    }
 		freez(&dupe);
