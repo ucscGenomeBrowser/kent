@@ -14,7 +14,7 @@
 #include "chainDb.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.23 2004/09/08 00:40:47 braney Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.24 2004/10/25 21:04:48 kent Exp $";
 
 
 struct cartOptions
@@ -24,7 +24,7 @@ struct cartOptions
 
 static void doQuery(struct sqlConnection *conn, char *fullName, 
 			struct lm *lm, struct hash *hash, 
-			int start, int end, char * chainId)
+			int start, int end, char * chainId, boolean isSplit)
 /* doQuery- check the database for chain elements between
  * 	start and end.  Use the passed hash to resolve chain
  * 	id's and place the elements into the right
@@ -36,16 +36,23 @@ char **row;
 struct linkedFeatures *lf;
 struct simpleFeature *sf;
 struct dyString *query = newDyString(1024);
+char *force = "";
+
+if (isSplit)
+    force = "force index (bin)";
 
 if (chainId == NULL)
     dyStringPrintf(query, 
-	"select chainId,tStart,tEnd,qStart from %sLink force index (bin) where ",fullName);
+	"select chainId,tStart,tEnd,qStart from %sLink %s where ",
+	fullName, force);
 else
     dyStringPrintf(query, 
-	"select chainId, tStart,tEnd,qStart from %sLink force index (bin) where chainId=%s and ",fullName,chainId);
+	"select chainId, tStart,tEnd,qStart from %sLink %s where chainId=%s and ",
+	fullName, force, chainId);
+if (!isSplit)
+    dyStringPrintf(query, "tName='%s' and ", chromName);
 hAddBinToQuery(start, end, query);
 dyStringPrintf(query, "tStart<%u and tEnd>%u", end, start);
-//printf("%s<br>\n",query->string);
 sr = sqlGetResult(conn, query->string);
 
 /* Loop through making up simple features and adding them
@@ -125,16 +132,20 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
 /* if some chains are bigger than 3 pixels */
 if (hash->size)
     {
+    boolean isSplit = TRUE;
     /* Make up range query. */
     sprintf(fullName, "%s_%s", chromName, tg->mapName);
     if (!hTableExistsDb(hGetDb(), fullName))
+	{
 	strcpy(fullName, tg->mapName);
+	isSplit = FALSE;
+	}
 
     /* in dense mode we don't draw the lines 
      * so we don't need items off the screen 
      */
     if (vis == tvDense)
-	doQuery(conn, fullName, lm,  hash, seqStart, seqEnd, NULL);
+	doQuery(conn, fullName, lm,  hash, seqStart, seqEnd, NULL, isSplit);
     else
 	{
 	/* if chains extend beyond edge of window we need to get 
@@ -149,7 +160,7 @@ if (hash->size)
 	start = seqStart - extra;
 	extra = (STARTSLOP < maxOverRight) ? STARTSLOP : maxOverRight;
 	end = seqEnd + extra;
-	doQuery(conn, fullName, lm,  hash, start, end, NULL);
+	doQuery(conn, fullName, lm,  hash, start, end, NULL, isSplit);
 
 	for (lf = tg->items; lf != NULL; lf = lf->next)
 	    {
@@ -170,7 +181,7 @@ if (hash->size)
 		extra *= MULTIPLIER;
 		start = end;
 		end = start + extra;
-                doQuery(conn, fullName, lm,  hash, start, end, lf->extra);
+                doQuery(conn, fullName, lm,  hash, start, end, lf->extra, isSplit);
 		if (lf->components != NULL)
 		    slSort(&lf->components, linkedFeaturesCmpStart);
 		}
@@ -202,7 +213,7 @@ if (hash->size)
 		start = end - extra;
                 if (start < 0)
                     start = 0;
-		doQuery(conn, fullName, lm,  hash, start, end, lf->extra);
+		doQuery(conn, fullName, lm,  hash, start, end, lf->extra, isSplit);
 		slSort(&lf->components, linkedFeaturesCmpStart);
 		}
 	    if ((lf->components->start > seqStart) && (lf->start < lf->components->start))
