@@ -15,9 +15,14 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "hgTrackDb - Create trackDb table from text files\n"
+  "hgTrackDb - Create trackDb table from text files.\n\n"
+  "Note that the browser supports multiple trackDb tables, usually\n"
+  "in the form: trackDb_YourUserName. Which particular trackDb\n"
+  "table the browser uses is specified in the hg.conf file found\n"
+  "either in your home directory as '.hg.conf' or in the web \n"
+  "server's cgi-bin directory as 'hg.conf'.\n"
   "usage:\n"
-  "   hgTrackDb database trackDb.sql hgRoot\n"
+  "   hgTrackDb database trackDb_$(USER) trackDb.sql hgRoot\n"
   );
 }
 
@@ -77,14 +82,44 @@ sqlUpdate(conn, dy->string);
 freeDyString(&dy);
 }
 
-void hgTrackDb(char *database, char *sqlFile, char *hgRoot)
+char *subTrackName(char *create, char *tableName)
+/* Substitute tableName for whatever is between CREATE TABLE  and  first '(' 
+   freez()'s create passed in. */
+{
+char newCreate[strlen(create) + strlen(tableName) + 10];
+char *front = NULL;
+char *rear = NULL;
+int length = (strlen(create) + strlen(tableName) + 10);
+/* try to find "TABLE" or "table" in create */
+front = strstr(create, "TABLE");
+if(front == NULL)
+    front = strstr(create, "table");
+if(front == NULL)
+    errAbort("hgTrackDb::subTrackName() - Can't find 'TABLE' in %s", create);
+
+/* try to find first "(" in string */
+rear = strstr(create, "(");
+if(rear == NULL)
+    errAbort("hgTrackDb::subTrackName() - Can't find '(' in %s", create);
+
+/* set to NULL character after "TABLE" */
+front += 5;
+*front = '\0';
+
+snprintf(newCreate, length , "%s %s %s", create, tableName, rear);
+return cloneString(newCreate);
+}
+
+
+void hgTrackDb(char *database, char *trackDbName, char *sqlFile, char *hgRoot)
 /* hgTrackDb - Create trackDb table from text files. */
 {
 struct hash *uniqHash = newHash(8);
 struct hash *htmlHash = newHash(8);
 struct trackDb *tdList = NULL, *td;
 char dirName[512], raName[512];
-char *tab = "trackDb.tab";
+char tab[512];
+snprintf(tab, sizeof(tab), "%s.tab", trackDbName);
 
 /* Create track list from hgRoot and hgRoot/database. */
 sprintf(dirName, "%s/%s", hgRoot, database);
@@ -117,12 +152,13 @@ printf("Loaded %d track descriptions total\n", slCount(tdList));
     /* Load in table definition. */
     readInGulp(sqlFile, &create, NULL);
     create = trimSpaces(create);
+    create = subTrackName(create, trackDbName);
     end = create + strlen(create)-1;
     if (*end == ';') *end = 0;
-    sqlRemakeTable(conn, "trackDb", create);
+    sqlRemakeTable(conn, trackDbName, create);
 
     /* Load in regular fields. */
-    sprintf(query, "load data local infile '%s' into table trackDb", tab);
+    sprintf(query, "load data local infile '%s' into table %s", tab, trackDbName);
     sqlUpdate(conn, query);
 
     /* Load in html fields. */
@@ -130,7 +166,7 @@ printf("Loaded %d track descriptions total\n", slCount(tdList));
 	{
 	char *html = hashFindVal(htmlHash, td->tableName);
         if (html != NULL)
-	    updateBigTextField(conn, "trackDb", "tableName", td->tableName, "html", html);
+	    updateBigTextField(conn,  trackDbName, "tableName", td->tableName, "html", html);
 	}
 
     sqlDisconnect(&conn);
@@ -142,8 +178,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
-if (argc != 4)
+if (argc != 5)
     usage();
-hgTrackDb(argv[1], argv[2], argv[3]);
+hgTrackDb(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }

@@ -1,5 +1,5 @@
 .c.o:
-	gcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -I../../inc -I../../../inc -c $*.c
+	gcc -ggdb -Wformat -Wimplicit -Wreturn-type -I../inc -I../../inc -I../../../inc -c $*.c
 
 L = -lm $(MYSQLLIBS)
 MYLIBDIR = ../../../lib/$(MACHTYPE)
@@ -7,21 +7,55 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = hgTrackDb.o
 
+
+
 hgTrackDb: $O 
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgTrackDb $O $(MYLIBS) $L
 	strip $(HOME)/bin/$(MACHTYPE)/hgTrackDb
 
+
+# Browser supports multiple trackDb's so that individual developers
+# can change things rapidly without stepping on other people's toes. 
+# Usually when updating it is best to update your own trackDb and
+# test it to make sure it works and that you have cvs updated all
+# of hgRoot before doing a make beta_*_update. Note that you
+# must specify which trackDb you are using in your .hg.conf file
+# or in the cgi-bin-$(USER)/hg.conf file. Something like: 
+# db.trackDb=trackDb_YourUserName
+
 old_update:
-	hgTrackDb hg6 ../../lib/trackDb.sql hgRoot
-	hgTrackDb hg7 ../../lib/trackDb.sql hgRoot
+	hgTrackDb hg6  trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb hg7  trackDb_$(USER) ../../lib/trackDb.sql hgRoot
 
 update:
-	hgTrackDb hg8 ../../lib/trackDb.sql hgRoot
-	hgTrackDb hg9 ../../lib/trackDb.sql hgRoot
-	hgTrackDb hg10 ../../lib/trackDb.sql hgRoot
-	hgTrackDb hg11 ../../lib/trackDb.sql hgRoot
-	hgTrackDb mm1 ../../lib/trackDb.sql hgRoot
-	hgTrackDb mm2 ../../lib/trackDb.sql hgRoot
+	hgTrackDb hg8 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb hg9 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb hg10 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb hg11 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb mm1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb mm2 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
 
 zooMouse1:
-	hgTrackDb zooMouse1 ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooMouse1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+
+beta_old_update:
+	hgTrackDb hg6  trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb hg7  trackDb ../../lib/trackDb.sql hgRoot
+
+beta_update:
+	hgTrackDb hg8 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb hg9 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb hg10 trackDb ../../lib/trackDb.sql hgRoo
+	hgTrackDb hg11 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb mm1 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb mm2 trackDb ../../lib/trackDb.sql hgRoot
+
+beta_zooMouse1:
+	hgTrackDb zooMouse1 trackDb ../../lib/trackDb.sql hgRoot
+
+
+
+
+debug : $O
+	gcc -ggdb -o hgTrackDb $O $(MYLIBS) $L	
+	cp hgTrackDb $(HOME)/bin/$(MACHTYPE)/
