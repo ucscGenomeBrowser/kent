@@ -11,7 +11,7 @@ O = agpFrag.o agpGap.o bed.o chromInfo.o chromInserts.o \
     glDbRep.o ggCluster.o ggDbIo.o ggDbRep.o ggDump.o \
     ggGraph.o hCommon.o hdb.o hgGene.o hgRelate.o isochores.o \
     jksql.o knownInfo.o knownMore.o mapSts.o mouseSyn.o \
-    ooUtils.o pepPred.o qaSeq.o refLink.o repMask.o rmskOut.o \
+    ooUtils.o pepPred.o qaSeq.o refLink.o rmskOut.o \
     rnaGene.o roughAli.o simpleRepeat.o snp.o softberryHom.o \
     stsAlias.o stsMarker.o wabAli.o
 
