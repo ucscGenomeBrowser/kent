@@ -41,7 +41,7 @@
 #define	NO_DATA	128
 #define MAX_BYTE_VALUE	127
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.12 2003/11/10 16:58:24 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.13 2003/11/17 18:02:41 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -186,6 +186,10 @@ if (bincount)
 	}
 
     chromEnd = chromStart + (bincount * dataSpan);
+    if (verbose)
+	{
+    printf("row: %llu %llu-%llu total: %llu valid: %llu, miss: %llu, file offset: %llu\n", rowCount, chromStart+add_offset, chromEnd+add_offset, bincount, validCount, bincount-validCount, fileOffsetBegin );
+	}
     fprintf( wigout,
 "%s\t%llu\t%llu\t%s.%llu_%s\t%d\t%c\t%d\t%llu\t%llu\t%llu\t%s\t%g\t%g\t%llu\t%g\t%g\n",
 	chromName, chromStart+add_offset, chromEnd+add_offset,
@@ -195,6 +199,8 @@ if (bincount)
     ++rowCount;
     }
 bincount = 0;	/* to count up to binsize	*/
+for (i=0; i < binsize; ++i)	/*	reset valid indicator	*/
+	validData[i] = FALSE;
 chromStart = Offset + dataSpan;
 fileOffsetBegin = fileOffset;
 
@@ -217,7 +223,7 @@ char *wigfile = (char *) NULL;	/*	file name of wiggle database file */
 /*	for each input data file	*/
 for( i = 1; i < argc; ++i )
     {
-    if (verbose ) printf("translating file: %s\n", argv[i]);
+    if (verbose) printf("translating file: %s\n", argv[i]);
     /* let's shorten the dataSpan name which will be used in the
      * "Name of item" column
      */
@@ -267,7 +273,7 @@ errAbort("Can not determine output file name, no -wibFile specified\n");
 	    }
 	}
 
-    if (verbose ) printf("output files: %s, %s\n", binfile, wigfile);
+    if (verbose) printf("output files: %s, %s\n", binfile, wigfile);
     lineCount = 0;	/* to count all lines	*/
     validLines = 0;	/* to count only lines with data */
     rowCount = 0;	/* to count rows output */
@@ -311,7 +317,7 @@ errAbort("Expecting at least two words at line %d, found %d", lineCount, wordCou
 	/* see if this is the first time through, establish chromStart 	*/
 	if (validLines == 1 ) {
 	    chromStart = Offset;
-	    if (verbose )
+	    if (verbose)
 printf("first offset: %llu\n", chromStart);
 	}
 	/* if we are working on a zoom level and the data is not exactly
@@ -325,6 +331,8 @@ printf("first offset: %llu\n", chromStart);
 	    {
 	    int skippedBases;
 	    int spansSkipped;
+	    if (Offset < previousOffset)
+		errAbort("ERROR: chrom positions not in order. previous: %llu > %llu <-current", previousOffset, Offset);
 	    skippedBases = Offset - previousOffset;
 	    spansSkipped = skippedBases / dataSpan;
 	    if ((spansSkipped * dataSpan) != skippedBases)
@@ -332,7 +340,7 @@ printf("first offset: %llu\n", chromStart);
 	    }
 	if (readingFrameSlipped)
 	    {
-	    if (verbose )
+	    if (verbose)
 printf("data not spanning %llu bases, prev: %llu, this: %llu, at line: %d\n", dataSpan, previousOffset, Offset, lineCount );
 	    output_row();
 	    }
@@ -341,20 +349,20 @@ printf("data not spanning %llu bases, prev: %llu, this: %llu, at line: %d\n", da
 	    {
 	    unsigned long long off;
 	    unsigned long long fillSize;	/* number of bytes */
-	    if (verbose )
+	    if (verbose)
 printf("missing data offsets: %llu - %llu\n",previousOffset+1,Offset-1);
 	    /*	If we are just going to fill the rest of this bin with
 	     *  no data, then may as well stop here.  No need to fill
 	     *  it with nothing.
 	     */
 	    fillSize = (Offset - (previousOffset + dataSpan)) / dataSpan;
-	    if (verbose )
+	    if (verbose)
 printf("filling NO_DATA for %llu bytes\n", fillSize );
 	    if (fillSize + bincount >= binsize )
 		{
+	    if (verbose)
+printf("completing a bin due to  NO_DATA for %llu bytes, only %llu - %llu = %llu to go\n", fillSize, binsize, bincount, binsize - bincount );
 		    output_row();
-	    if (verbose )
-printf("completed a bin due to  NO_DATA for %llu bytes, only %llu - %llu = %llu to go\n", fillSize, binsize, bincount, binsize - bincount );
 		} else {
 		fillSize = 0;
 		/*	fill missing data with NO_DATA indication	*/
@@ -366,7 +374,7 @@ printf("completed a bin due to  NO_DATA for %llu bytes, only %llu - %llu = %llu 
 		    ++bincount;	/*	count scores in this bin */
 		    if (bincount >= binsize ) break;
 		    }
-	    if (verbose )
+	    if (verbose)
 printf("filled NO_DATA for %llu bytes\n", fillSize );
 		/*	If that finished off this bin, output it */
 		    if (bincount >= binsize )
@@ -403,7 +411,7 @@ printf("filled NO_DATA for %llu bytes\n", fillSize );
     binfile = (char *) NULL;
     wigfile = (char *) NULL;
     chromName = (char *) NULL;
-    if (verbose )
+    if (verbose)
 printf("fini: %s, read %d lines, table rows: %llu, data bytes: %lld\n",
 	argv[i], lineCount, rowCount, fileOffset );
     printf("data limits: [%g:%g], range: %g\n", overallLowerLimit,
@@ -427,7 +435,7 @@ wibFile = optionVal("wibFile", NULL);
 name = optionVal("name", NULL);
 verbose = optionExists("verbose");
 
-if (verbose ) {
+if (verbose) {
     printf("options: -verbose, offset= %llu, binsize= %llu, dataSpan= %llu\n",
 	add_offset, binsize, dataSpan);
     if (chrom ) {
