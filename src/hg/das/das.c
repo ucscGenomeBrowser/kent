@@ -13,7 +13,7 @@
 #include "trackTable.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: das.c,v 1.16 2003/06/20 02:27:17 kent Exp $";
+static char const rcsid[] = "$Id: das.c,v 1.17 2003/09/03 02:48:07 kate Exp $";
 
 char *version = "1.00";
 char *database = NULL;	
@@ -92,10 +92,19 @@ struct tableDef
     boolean hasBin;		/* Has bin field. */
     };
 
+boolean hasLogicalChromName(char *name)
+/* Return TRUE if name begins with "chr" or "target" (for Zoo) prefix */
+{
+if (startsWith("chr", name) ||
+    startsWith("target", name))
+        return TRUE;
+return FALSE;
+}
+
 boolean tableIsSplit(char *table)
 /* Return TRUE if table is split. */
 {
-if (!startsWith("chr", table))
+if (!hasLogicalChromName(table))
     return FALSE;
 if (strchr(table, '_') == NULL)
     return FALSE;
@@ -117,8 +126,9 @@ return table;
 }
 
 boolean isChromId(char *seqName)
+/* Return TRUE if ID is just a chromosome number/name, w/o "chr" prefix */
 {
-return((! startsWith("chr", seqName)) &&
+return((!hasLogicalChromName(seqName)) &&
        (isdigit(seqName[0]) ||
 	sameString("X", seqName)  || sameString("X_random", seqName)  ||
 	sameString("Y", seqName)  || sameString("Y_random", seqName)  ||
@@ -354,7 +364,7 @@ else
 /* Check all segments are chromosomes. */
 for (segment = segmentList; segment != NULL; segment = segment->next)
     {
-    if (!startsWith("chr", segment->seq))
+    if (!hasLogicalChromName(segment->seq))
         earlyError(403);
     }
 return segmentList;
