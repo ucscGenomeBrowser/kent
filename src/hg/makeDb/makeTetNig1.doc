@@ -2290,7 +2290,7 @@ axtChain $1 \
     sed -e 's/ /\t/g' ExofishTnig1Hs35.gff > Tnig1Hs35format.gff
     # if "ecore" is changed to "CDS" and "ecotig" to "transcript" this loads
     # correctly into the table.
-    sed -e 's/ecore/CDS/' | sed -e 's/ecotig/transcript/' Tnig1Hs35format.gff \
+    sed -e 's/ecore/CDS/' Tnig1Hs35format.gff | sed -e 's/ecotig/transcript/' \
            > tetNig1vsHg17.gff
   
     ssh hgwdev
