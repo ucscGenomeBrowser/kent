@@ -511,6 +511,7 @@ static boolean initted = FALSE;
 if (!initted)
     {
     htmStart(stdout, "Early Error");
+    printf("<!-- HGERROR -->\n");
     initted = TRUE;
     }
 htmlVaParagraph(format,args);
