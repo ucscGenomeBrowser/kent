@@ -89,7 +89,7 @@
 #include "bedCart.h"
 #include "cytoBand.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.911 2005/02/21 01:47:00 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.912 2005/02/22 21:28:18 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9478,6 +9478,7 @@ registerTrackHandler("ensEst", ensGeneMethods);
 registerTrackHandler("mrna", mrnaMethods);
 registerTrackHandler("intronEst", estMethods);
 registerTrackHandler("est", estMethods);
+registerTrackHandler("all_est", estMethods);
 registerTrackHandler("tightMrna", mrnaMethods);
 registerTrackHandler("tightEst", mrnaMethods);
 registerTrackHandler("cpgIsland", cpgIslandMethods);
