@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "altSpliceSite.h"
 
-static char const rcsid[] = "$Id: altSpliceSite.c,v 1.1 2003/06/17 22:39:45 sugnet Exp $";
+static char const rcsid[] = "$Id: altSpliceSite.c,v 1.2 2003/07/21 04:35:28 sugnet Exp $";
 
 struct altSpliceSite *altSpliceSiteLoad(char **row)
 /* Load a altSpliceSite from row fetched with select * from altSpliceSite
@@ -37,6 +37,16 @@ sqlUnsignedDynamicArray(row[11], &ret->spliceTypes, &sizeOne);
 assert(sizeOne == ret->altCount);
 sqlUnsignedDynamicArray(row[12], &ret->support, &sizeOne);
 assert(sizeOne == ret->altCount);
+sqlUnsignedDynamicArray(row[13], &ret->altBpStarts, &sizeOne);
+assert(sizeOne == ret->altCount);
+sqlUnsignedDynamicArray(row[14], &ret->altBpEnds, &sizeOne);
+assert(sizeOne == ret->altCount);
+sqlFloatDynamicArray(row[15], &ret->altCons, &sizeOne);
+assert(sizeOne == ret->altCount);
+sqlFloatDynamicArray(row[16], &ret->upStreamCons, &sizeOne);
+assert(sizeOne == ret->altCount);
+sqlFloatDynamicArray(row[17], &ret->downStreamCons, &sizeOne);
+assert(sizeOne == ret->altCount);
 return ret;
 }
 
@@ -46,7 +56,7 @@ struct altSpliceSite *altSpliceSiteLoadAll(char *fileName)
 {
 struct altSpliceSite *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[13];
+char *row[18];
 
 while (lineFileRow(lf, row))
     {
@@ -64,7 +74,7 @@ struct altSpliceSite *altSpliceSiteLoadAllByChar(char *fileName, char chopper)
 {
 struct altSpliceSite *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[13];
+char *row[18];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -134,6 +144,46 @@ for (i=0; i<ret->altCount; ++i)
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
+s = sqlEatChar(s, '{');
+AllocArray(ret->altBpStarts, ret->altCount);
+for (i=0; i<ret->altCount; ++i)
+    {
+    ret->altBpStarts[i] = sqlUnsignedComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+s = sqlEatChar(s, '{');
+AllocArray(ret->altBpEnds, ret->altCount);
+for (i=0; i<ret->altCount; ++i)
+    {
+    ret->altBpEnds[i] = sqlUnsignedComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+s = sqlEatChar(s, '{');
+AllocArray(ret->altCons, ret->altCount);
+for (i=0; i<ret->altCount; ++i)
+    {
+    ret->altCons[i] = sqlFloatComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+s = sqlEatChar(s, '{');
+AllocArray(ret->upStreamCons, ret->altCount);
+for (i=0; i<ret->altCount; ++i)
+    {
+    ret->upStreamCons[i] = sqlFloatComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+s = sqlEatChar(s, '{');
+AllocArray(ret->downStreamCons, ret->altCount);
+for (i=0; i<ret->altCount; ++i)
+    {
+    ret->downStreamCons[i] = sqlFloatComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
 *pS = s;
 return ret;
 }
@@ -152,6 +202,11 @@ freeMem(el->altStarts);
 freeMem(el->altTypes);
 freeMem(el->spliceTypes);
 freeMem(el->support);
+freeMem(el->altBpStarts);
+freeMem(el->altBpEnds);
+freeMem(el->altCons);
+freeMem(el->upStreamCons);
+freeMem(el->downStreamCons);
 freez(pEl);
 }
 
@@ -230,6 +285,46 @@ if (sep == ',') fputc('{',f);
 for (i=0; i<el->altCount; ++i)
     {
     fprintf(f, "%u", el->support[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+fputc(sep,f);
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->altCount; ++i)
+    {
+    fprintf(f, "%u", el->altBpStarts[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+fputc(sep,f);
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->altCount; ++i)
+    {
+    fprintf(f, "%u", el->altBpEnds[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+fputc(sep,f);
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->altCount; ++i)
+    {
+    fprintf(f, "%f", el->altCons[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+fputc(sep,f);
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->altCount; ++i)
+    {
+    fprintf(f, "%f", el->upStreamCons[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+fputc(sep,f);
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->altCount; ++i)
+    {
+    fprintf(f, "%f", el->downStreamCons[i]);
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);

@@ -18,6 +18,11 @@ CREATE TABLE altSpliceSite (
     altTypes longblob not null,	# Types of vertexes connecting to.
     spliceTypes longblob not null,	# Types of of splice sites.
     support longblob not null,	# Number of mRNAs supporting this edge.
+    altBpStarts longblob not null,	# Start of alternatively spliced base pairs, type independent.
+    altBpEnds longblob not null,	# End of alternatively spliced base pairs, type independent.
+    altCons longblob not null,	# Average s-score of altSpilce region.
+    upStreamCons longblob not null,	# Average s-score 100bp to start of altSpilce.
+    downStreamCons longblob not null,	# Average s-score 100bp past end of altSpilce.
               #Indices
     PRIMARY KEY(chrom)
 );

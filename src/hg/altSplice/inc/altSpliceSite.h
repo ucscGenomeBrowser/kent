@@ -5,7 +5,19 @@
 #ifndef ALTSPLICESITE_H
 #define ALTSPLICESITE_H
 
-#define ALTSPLICESITE_NUM_COLS 13
+#define ALTSPLICESITE_NUM_COLS 18
+
+enum altSpliceType
+/* Type of alternative splicing event. */
+{
+    alt5Prime,   /* 0 */
+    alt3Prime,   /* 1 */
+    altCassette, /* 2 */
+    altRetInt,   /* 3 */
+    altIdentity, /* 4 */
+    altOther,    /* 5 */
+    altControl   /* 6 */
+};
 
 struct altSpliceSite
 /* Structre to hold information about one splice site in graph. */
@@ -24,6 +36,11 @@ struct altSpliceSite
     unsigned *altTypes;	/* Types of vertexes connecting to. */
     unsigned *spliceTypes;	/* Types of of splice sites. */
     unsigned *support;	/* Number of mRNAs supporting this edge. */
+    unsigned *altBpStarts;	/* Start of alternatively spliced base pairs, type independent. */
+    unsigned *altBpEnds;	/* End of alternatively spliced base pairs, type independent. */
+    float *altCons;	/* Average s-score of altSpilce region. */
+    float *upStreamCons;	/* Average s-score 100bp to start of altSpilce. */
+    float *downStreamCons;	/* Average s-score 100bp past end of altSpilce. */
     };
 
 struct altSpliceSite *altSpliceSiteLoad(char **row);
