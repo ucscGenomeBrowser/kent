@@ -1,4 +1,5 @@
 /* regionPicker - Code to pick regions to annotate deeply.. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
