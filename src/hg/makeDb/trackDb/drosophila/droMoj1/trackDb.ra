@@ -75,15 +75,3 @@ searchType genePred
 termRegex contig_[0-9]+\.[0-9]+
 searchPriority 50
 
-searchName mrnaAcc2
-searchTable all_mrna
-searchMethod prefix
-searchType mrnaAcc
-shortCircuit 1
-termRegex [a-z][a-z0-9][0-9]+
-searchPriority 10
-
-searchName mrnaKeyword2
-searchTable all_mrna
-searchType mrnaKeyword
-searchPriority 30
