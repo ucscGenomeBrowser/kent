@@ -36,7 +36,8 @@ enum genePredFields
     genePredIdFld         = 0x01,  /* id field */
     genePredName2Fld      = 0x02,  /* name2 field */
     genePredCdsStatFld    = 0x04,  /* cdsStart/EndStat fields */
-    genePredExonFramesFld = 0x08   /* exonFrames field */
+    genePredExonFramesFld = 0x08,  /* exonFrames field */
+    genePredAllFlds       = 0xFF   /* include all extended fields */
 };
 
 struct genePred
