@@ -661,9 +661,10 @@ printEstPairInfo(track, name);
 
 #endif /* ROGIC_CODE */
 
-void doHgRna(char *track, char *acc)
+void doHgRna(struct trackDb *tdb, char *acc)
 /* Click on an individual RNA. */
 {
+char *track = tdb->tableName;
 char query[256];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
@@ -680,10 +681,10 @@ if (stringIn("est", track) || stringIn("Est", track))
     type = "EST";
     table = "all_est";
     }
-else if (sameString("xenoMrna", track))
+else if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track))
     {
     type = "non-Human RNA";
-    table = "xenoMrna";
+    table = track;
     }
 else 
     {
@@ -713,6 +714,11 @@ htmlHorizontalLine();
 printf("<H3>%s/Genomic Alignments</H3>", type);
 
 printAlignments(pslList, start, "htcCdnaAli", table, acc);
+if (tdb->html != NULL && tdb->html[0] != 0)
+    {
+    htmlHorizontalLine();
+    puts(tdb->html);
+    }
 }
 
 void parseSs(char *ss, char **retPslName, char **retFaName, char **retQName)
@@ -1253,7 +1259,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 
 rnaSeq = hRnaSeq(acc);
-if (sameString("xenoMrna", table))
+if (sameString("xenoMrna", table) || sameString("xenoBestMrna", table))
     showSomeAlignment(psl, rnaSeq, gftDnaX);
 else
     showSomeAlignment(psl, rnaSeq, gftDna);
@@ -3271,9 +3277,9 @@ if (sameWord(track, "getDna"))
     }
 else if (sameWord(track, "mrna") || sameWord(track, "mrna2") || 
 	sameWord(track, "est") || sameWord(track, "intronEst") || 
-	sameWord(track, "xenoRna"))
+	sameWord(track, "xenoMrna") || sameWord(track, "xenoBestMrna"))
     {
-    doHgRna(track, item);
+    doHgRna(tdb, item);
     }
 #ifdef ROGIC_CODE
 else if (sameWord(track, "estPair"))
@@ -3337,7 +3343,7 @@ else if (sameWord(track, "genomicDups"))
     {
     doGenomicDups(track, item);
     }
-else if (sameWord(track, "blatMouse"))
+else if (sameWord(track, "blatMouse") || sameWord(track, "bestMouse"))
     {
     doBlatMouse(tdb, item);
     }

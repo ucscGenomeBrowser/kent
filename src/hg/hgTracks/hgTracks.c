@@ -635,7 +635,7 @@ else
 misFactor /= (psl->match + psl->misMatch + psl->repMatch);
 hitFactor = 1.0 - misFactor;
 res = round(hitFactor * maxShade);
-if (res < 0) res = 0;
+if (res < 1) res = 1;
 if (res >= maxShade) res = maxShade-1;
 return res;
 }
