@@ -81,6 +81,9 @@ char *hTrackDbLocalName();
 /* return the name of the trackDbLocal from the config file, or NULL if none.
  * Freez when done */
 
+void hSetTrackDbName(char *trackDbName);
+/* Override the hg.conf db.trackDb setting. */
+
 char *hPdbFromGdb(char *genomeDb);
 /* return the name of the proteome database given the genome database name */
 

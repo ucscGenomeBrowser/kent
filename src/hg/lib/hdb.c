@@ -31,7 +31,7 @@
 #include "grp.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.209 2004/10/11 20:18:31 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.210 2004/10/13 23:45:36 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -259,6 +259,12 @@ if (hdbTrackDbLocal == NULL)
     return NULL;
 else
     return cloneString(hdbTrackDbLocal);
+}
+
+void hSetTrackDbName(char *trackDbName)
+/* Override the hg.conf db.trackDb setting. */
+{
+hdbTrackDb = cloneString(trackDbName);
 }
 
 void hSetDbConnect(char* host, char *db, char *user, char *password)
