@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "options.h"
 #include "cart.h"
+#include "dystring.h"
 #include "jksql.h"
 #include "cheapcgi.h"
 #include "portable.h"
@@ -48,7 +49,7 @@ sqlFreeResult(&sr);
 return cloneString(path);
 }
 
-char *bioImageFullSizedPath(struct sqlConnection *conn, int id)
+char *bioImageFullSizePath(struct sqlConnection *conn, int id)
 /* Fill in path for full image bioImage of given id. */
 {
 return somePath(conn, id, "fullLocation");
@@ -60,7 +61,7 @@ char *bioImageThumbSizePath(struct sqlConnection *conn, int id)
 return somePath(conn, id, "thumbLocation");
 }
 
-char *bioImageScreenSizedPath(struct sqlConnection *conn, int id)
+char *bioImageScreenSizePath(struct sqlConnection *conn, int id)
 /* Fill in path for screen-sized image bioImage of given id. */
 {
 return somePath(conn, id, "screenLocation");
@@ -254,14 +255,71 @@ char *bioImageItemUrl(struct sqlConnection *conn, int id)
 return submissionSetPart(conn, id, "itemUrl");
 }
 
-
-
-void webMain(struct sqlConnection *conn, int id, char *geneName)
+struct slInt *bioImageOnSameGene(struct sqlConnection *conn, int id)
+/* Get bio images that are on same gene. */
 {
-char query[256];
+struct dyString *dy = dyStringNew(0);
 struct sqlResult *sr;
 char **row;
-char *screenSizedPath = bioImageScreenSizedPath(conn, id);
+char *gene, *refSeq, *locusLink, *genbank, *submitId;
+int submissionSet;
+struct slInt *list = NULL, *el;
+
+
+/* Fetch all the gene ID data. */
+dyStringPrintf(dy,
+    "select gene,refSeq,locusLink,genBank,submitId,submissionSet "
+    "from image where id=%d", id);
+sr = sqlGetResult(conn, dy->string);
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("Can't find image #%d in bioImage database", id);
+gene = cloneOrNull(row[0]);
+refSeq = cloneOrNull(row[1]);
+locusLink = cloneOrNull(row[2]);
+genbank = cloneOrNull(row[3]);
+submitId = cloneOrNull(row[4]);
+submissionSet = atoi(row[5]);
+sqlFreeResult(&sr);
+
+/* Fetch everything that refers to same gene. */
+dyStringClear(dy);
+dyStringPrintf(dy, "select id from image ");
+dyStringPrintf(dy, "where (image.submissionSet=%d and image.submitId='%s') ",
+	submissionSet, submitId);
+if (gene != NULL)
+    dyStringPrintf(dy, "or image.gene = '%s' ", gene);
+if (refSeq != NULL)
+    dyStringPrintf(dy, "or image.refSeq = '%s' ", refSeq);
+if (locusLink != NULL)
+    dyStringPrintf(dy, "or image.locusLink = '%s' ", locusLink);
+if (genbank != NULL)
+    dyStringPrintf(dy, "or image.genbank = '%s' ", genbank);
+dyStringPrintf(dy, "order by priority");
+sr = sqlGetResult(conn, dy->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = slIntNew(atoi(row[0]));
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+
+/* Clean up and return */
+freeMem(gene);
+freeMem(refSeq);
+freeMem(locusLink);
+freeMem(genbank);
+freeMem(submitId);
+dyStringFree(&dy);
+return list;
+}
+
+
+void printCaption(struct sqlConnection *conn, int id, char *geneName)
+/* Print information about image. */
+{
+char query[256];
+char **row;
 char *treatment, *publication;
 char *setUrl, *itemUrl;
 
@@ -302,7 +360,33 @@ if (setUrl != NULL || itemUrl != NULL)
 	}
     printf("<BR>\n");
     }
-printf("<IMG SRC=\"/%s\"><BR>\n", screenSizedPath);
+}
+
+
+void mainPage(struct sqlConnection *conn, int id, char *geneName)
+/* Put up fancy main page - image, caption, and then a bunch of thumbnails. */
+{
+struct slInt *thumbList = NULL, *thumb;
+
+cartWebStart(cart, "UCSC BioImage Browser on %s", geneName);
+printf("<A HREF=\"");
+printf("../cgi-bin/hgBioImage?%s=%d&%s=on", hgbiId, id, hgbiDoFullSize);
+printf("\">");
+printf("<IMG SRC=\"/%s\" BORDER=1></A><BR>\n", bioImageScreenSizePath(conn, id));
+printf("\n");
+printCaption(conn, id, geneName);
+
+htmlHorizontalLine();
+printf("Other images associated with gene.  Click to view details.<BR>");
+thumbList = bioImageOnSameGene(conn, id);
+for (thumb = thumbList; thumb != NULL; thumb = thumb->next)
+    {
+    char *imageFile = bioImageThumbSizePath(conn, thumb->val);
+    printf("<A HREF=\"../cgi-bin/hgBioImage?%s=%d\">", hgbiId, thumb->val);
+    printf("<IMG SRC=\"/%s\" BORDER=1></A>\n", imageFile);
+    printf("&nbsp;");
+    }
+cartWebEnd();
 }
 
 void cartMain(struct cart *theCart)
@@ -311,15 +395,24 @@ void cartMain(struct cart *theCart)
 {
 cart = theCart;
 
-
+/* Break out new block after have set cart */
     {
     int id = cartUsualInt(cart, hgbiId, 1);
     struct sqlConnection *conn = sqlConnect("bioImage");
-    /* Default case - start fancy web page. */
     char *geneName = bioImageGeneName(conn, id);
-    cartWebStart(cart, "UCSC BioImage Browser on %s", geneName);
-    webMain(conn, id, geneName);
-    cartWebEnd();
+    if (cartVarExists(cart, hgbiDoFullSize))
+	{
+	htmStart(stdout, "BioImage Full Sized Image");
+	printf("<IMG SRC=\"/%s\"><BR>\n", bioImageFullSizePath(conn, id));
+	printCaption(conn, id, geneName);
+	htmlEnd();
+	}
+    else  /* Default case - start fancy web page. */
+	{
+	mainPage(conn, id, geneName);
+	}
+
+    cartRemovePrefix(cart, hgbiDoPrefix);
     sqlDisconnect(&conn);
     }
 }
@@ -330,7 +423,6 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
-htmlSetStyle(htmlStyleUndecoratedLink);
 if (argc != 1)
     usage();
 oldCart = hashNew(12);
