@@ -1,12 +1,14 @@
 /* para - para - manage a batch of jobs in parallel on a compute cluster.. */
+#include <sys/wait.h>
 #include "common.h"
 #include "linefile.h"
+#include "options.h"
 #include "hash.h"
 #include "dystring.h"
 #include "obscure.h"
-#include "cheapcgi.h"
-#include "jobDb.h"
 #include "portable.h"
+#include "jobDb.h"
+#include "jobResult.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -70,10 +72,9 @@ int sleepTime = 20*60;
 
 /* Some variable we might want to move to a config file someday. */
 char *tempName = "para.tmp";	/* Name for temp files. */
-char *submitCommand = "parasol -err=err/runJob.e\\$JOB_ID -out=out/runJob.o\\$JOB_ID runJob";
-char *statusCommand = "parasol qstat";
+char *resultsName = "para.results"; /* Name of results file. */
+char *statusCommand = "parasol pstat";
 char *killCommand = "parasol remove job";
-char *runJobCommand = "runJob";
 
 enum jaState 
 /* A job is in one of these states. */
@@ -126,7 +127,7 @@ char *cloneEvenNull(char *s)
 if (s == NULL)
    return cloneString("");
 else
-    return cloneString(s);
+   return cloneString(s);
 }
 
 struct job *jobFromLine(struct lineFile *lf, char *line)
@@ -395,10 +396,6 @@ wordCount = chopLine(line, words);
 if (wordCount < 3 || !sameString("your", words[0]) || !isdigit(words[2][0]))
     errAbort("qsub output seems to have changed, you'll have to update fillInSub");
 sub->id = cloneString(words[2]);
-sprintf(buf, "out/runJob.o%s", sub->id);
-sub->outFile = cloneString(buf);
-sprintf(buf, "err/runJob.e%s", sub->id);
-sub->errFile = cloneString(buf);
 lineFileClose(&lf);
 }
 
@@ -408,35 +405,28 @@ void submitJob(struct job *job)
 struct dyString *cmd = dyStringNew(1024);
 struct submission *sub;
 int err;
+char dirBuf[512];
 
-dyStringAppend(cmd, submitCommand);
-dyStringAppend(cmd, " ");
-dyStringAppend(cmd, runJobCommand);
-dyStringAppend(cmd, " ");
-dyStringAppend(cmd, job->command);
-dyStringPrintf(cmd, " > %s", tempName);
+if (getcwd(dirBuf, sizeof(dirBuf)) == NULL)
+    errAbort("Couldn't get current directory");
+dyStringPrintf(cmd, "parasol results=%s/para.results qsub %s > %s", 
+	dirBuf, job->command, tempName);
 
-uglyf("%s\n", cmd->string);
-#ifdef SOON
 err = system(cmd->string);
 AllocVar(sub);
 slAddHead(&job->submissionList, sub);
 job->submissionCount += 1;
-sub->submitTime = cloneString(nowAsString());
-sub->startTime = cloneString("");
-sub->endTime = cloneString("");
+sub->submitTime = time(NULL);
 if (err != 0)
     {
     sub->submitError = TRUE;
     sub->id = cloneString("n/a");
     sub->errFile = cloneString("n/a");
-    sub->outFile = cloneString("n/a");
     }
 else
     {
     fillInSub(tempName, sub);
     }
-#endif /* SOON */
 dyStringFree(&cmd);
 }
 
@@ -456,12 +446,12 @@ struct lineFile *lf;
 struct hash *hash = newHash(0);
 struct job *job;
 struct submission *sub;
-char *line, *words[10];
+char *line, *row[5];
 int wordCount;
 int queueSize = 0;
 
-/* Execute qstat system call. */
-printf("jobs (everybody's) in Codine queue: ");
+/* Execute pstat system call. */
+printf("jobs (everybody's) in Parasol queue: ");
 fflush(stdout);
 dyStringAppend(cmd, statusCommand);
 dyStringPrintf(cmd, " > %s", tempName);
@@ -482,36 +472,21 @@ for (job = db->jobList; job != NULL; job = job->next)
 
 /* Read status output. */
 lf = lineFileOpen(tempName, TRUE);
-if (lineFileNext(lf, &line, NULL))	/* Empty is ok. */
+while (lineFileRow(lf, row))
     {
-    if (!startsWith("job-ID", line))
-	statusOutputChanged();
-    if (!lineFileNext(lf, &line, NULL) || !startsWith("-----", line))
-	statusOutputChanged();
-    while (lineFileNext(lf, &line, NULL))
-        {
-	wordCount = chopLine(line, words);
-	if (wordCount < 7)
-	    statusOutputChanged();
-	++queueSize;
-	if ((sub = hashFindVal(hash, words[0])) != NULL)
+    char *state = row[0], *jobId = row[1], *user = row[2],
+         *exe = row[3], *ticks = row[4];
+    time_t t = atol(ticks);
+    if ((sub = hashFindVal(hash, jobId)) != NULL)
+	{
+	if (sameString(state, "r"))
 	    {
-	    char *state = words[4];
-	    if (state[0] == 'E')
-		sub->queueError = TRUE;
-	    else if (state[0] == 'd')
-	        ;	/* Externally deleted? */
-	    else 
-	        {
-		if (sameString(state, "r"))
-		    {
-		    sub->running = TRUE;
-		    }
-		else
-		    {
-		    sub->inQueue = TRUE;
-		    }
-		}
+	    sub->running = TRUE;
+	    sub->startTime = t;
+	    }
+	else
+	    {
+	    sub->inQueue = TRUE;
 	    }
 	}
     }
@@ -585,6 +560,20 @@ long nowInSeconds()
 return dateToSeconds(nowAsString());
 }
 
+struct hash *hashResults(char *fileName)
+/* Return hash of job results keyed on id as string. */
+{
+struct hash *hash = newHash(0);
+if (fileExists(fileName))
+    {
+    struct jobResult *el, *list = jobResultLoadAll(fileName);
+    for (el = list; el != NULL; el = el->next)
+	hashAdd(hash, el->jobId, el);
+    }
+return hash;
+}
+
+#ifdef OLD
 struct runJobOutput
 /* Info about a run job. */
     {
@@ -675,6 +664,7 @@ if (gotEnd)
 lineFileClose(&lf);
 return  &ret;
 }
+#endif /* OLD */
 
 void killSubmission(struct submission *sub)
 /* Kill a submission. */
@@ -688,18 +678,36 @@ if (err != 0)
 freeDyString(&cmd);
 }
 
-void markRunJobStatus(struct jobDb *db)
-/* Mark jobs based on runJob output file. */
+int statusToRetVal(int status)
+/* Convert wait() return status to return value. */
+{
+if (WIFEXITED(status))
+    return WEXITSTATUS(status);
+else 
+    return -666;
+}
+
+double jrCpuTime(struct jobResult *jr)
+/* Get CPU time in seconds for job. */
+{
+return 1.0/(double)CLK_TCK * (jr->usrTicks + jr->sysTicks);
+}
+
+struct hash *markRunJobStatus(struct jobDb *db)
+/* Mark jobs based on results output file. 
+ * Returns has of results. */
 {
 struct job *job;
 struct submission *sub;
-char *line, *words[10];
+char *line, *words[11];
 int wordCount;
 long killSeconds = killTime*60;
 long warnSeconds = warnTime*60;
 long duration;
 struct hash *checkHash = newHash(0);
+struct hash *resultsHash = hashResults(resultsName);
 char host[128];
+time_t now = time(NULL);
 
 for (job=db->jobList; job != NULL; job = job->next)
     {
@@ -709,56 +717,34 @@ for (job=db->jobList; job != NULL; job = job->next)
 	 * possibly finished. */
 	if (!sub->queueError && !sub->inQueue && !sub->crashed && !sub->hung && !sub->ranOk)
 	    {
-	    struct runJobOutput *rjo = parseRunJobOutput(sub->outFile);
-	    sub->startTime = cloneEvenNull(rjo->startTime);
-	    sub->endTime = cloneEvenNull(rjo->endTime);
-	    if (rjo->trackingError)
+	    struct jobResult *jr = hashFindVal(resultsHash, sub->id);
+	    if (jr == NULL)
 	        {
-		long subTime, curTime;
-		subTime = dateToSeconds(sub->submitTime);
-		curTime = nowInSeconds();
-		duration = curTime - subTime;
-		if (duration > 60*20)	/* Give it up to 20 minutes to show up. */
+		long subTime;
+		subTime = sub->submitTime;
+		duration = now - subTime;
+		if (duration > 60)	/* Give it up to 60 seconds to show up. */
 		    sub->trackingError = 3;
 		else
 		    sub->inQueue = TRUE;
 		}
 	    else
 	        {
-		sub->cpuTime = rjo->cpuTime;
-		sub->retVal = rjo->retVal;
-		sub->gotRetVal = rjo->gotRet;
-		if (rjo->gotRet)
-		    {
-		    if (sub->retVal == 0 && checkOneJob(job, "out", checkHash) == 0)
-			sub->ranOk = TRUE;
-		    else
-			sub->crashed = TRUE;
-		    }
+		sub->startTime = jr->startTime;
+		sub->endTime = jr->endTime;
+		sub->cpuTime = jrCpuTime(jr);
+		sub->retVal = statusToRetVal(jr->status);
+		sub->gotRetVal = TRUE;
+		if (sub->retVal == 0 && checkOneJob(job, "out", checkHash) == 0)
+		    sub->ranOk = TRUE;
 		else
-		    {
-		    if (sub->running)
-			{
-			duration = nowInSeconds() - dateToSeconds(sub->startTime);
-			if (duration >= killSeconds)
-			    {
-			    sub->hung = TRUE;
-			    killSubmission(sub);
-			    }
-			else if (duration >= warnSeconds)
-			    sub->slow = TRUE;
-			}
-		    else
-		        {
-			warn("Codine seems to have lost track of %s.  It's not running but hasn't returned", sub->id);
-			sub->trackingError = 4;
-			}
-		    }
+		    sub->crashed = TRUE;
 		}
 	    }
 	}
     }
 freeHash(&checkHash);
+return resultsHash;
 }
 
 boolean needsRerun(struct submission *sub)
@@ -781,7 +767,6 @@ int tryCount;
 boolean finished = FALSE;
 
 makeDir("err");
-makeDir("out");
 queueSize = markQueuedJobs(db);
 markRunJobStatus(db);
 
@@ -932,9 +917,10 @@ for (job = db->jobList; job != NULL; job = job->next)
     }
 }
 
-void printErrFile(struct submission *sub)
+void printErrFile(struct submission *sub, struct jobResult *jr)
 /* Print error file if it exists. */
 {
+#ifdef SOON
 if (fileExists(sub->errFile))
     {
     char *buf;
@@ -948,32 +934,32 @@ else
     {
     printf("stderr file doesn't exist\n");
     }
+#endif /* SOON */
+uglyf("stderr file reporting coming soon.\n");
 }
 
-void problemReport(struct job *job, struct submission *sub, char *type)
+void problemReport(struct job *job, struct submission *sub, char *type, struct hash *resultsHash)
 /* Print report on one problem. */
 {
 struct check *check;
 struct hash *hash = newHash(0);
-struct runJobOutput *rjo = parseRunJobOutput(sub->outFile);
+struct jobResult *jr = hashFindVal(resultsHash, sub->id);
 
 printf("job: %s\n", job->command);
 printf("id: %s\n", sub->id);
-printf("host: %s\n", rjo->host);
 printf("failure type: %s\n", type);
-if (sub->trackingError)
+if (jr == NULL)
      printf("tracking error: %d\n", sub->trackingError);
-if (rjo->startTime)
-    printf("start time: %s\n", rjo->startTime);
-if (rjo->gotRet)
+else
     {
-    printf("return: %d\n", rjo->retVal);
+    time_t startTime = jr->startTime;
+    printf("host: %s\n", jr->host);
+    printf("start time: %s\n", ctime(&startTime));
+    printf("return: %d\n", statusToRetVal(jr->status));
     for (check = job->checkList; check != NULL; check = check->next)
-	{
 	doOneCheck(check, hash, stdout);
-	}
+    printErrFile(sub, jr);
     }
-printErrFile(sub);
 printf("\n");
 hashFree(&hash);
 }
@@ -985,31 +971,32 @@ struct jobDb *db = readBatch(batch);
 struct job *job;
 struct submission *sub;
 int problemCount = 0;
+struct hash *resultsHash;
 
 markQueuedJobs(db);
-markRunJobStatus(db);
+resultsHash = markRunJobStatus(db);
 for (job = db->jobList; job != NULL; job = job->next)
     {
     for (sub = job->submissionList; sub != NULL; sub = sub->next)
 	{
 	if (sub->hung)
 	    {
-	    problemReport(job, sub, "hung");
+	    problemReport(job, sub, "hung", resultsHash);
 	    ++problemCount;
 	    }
 	else if (sub->slow)
 	    {
-	    problemReport(job, sub, "slow");
+	    problemReport(job, sub, "slow", resultsHash);
 	    ++problemCount;
 	    }
 	else if (sub->trackingError)
 	    {
-	    problemReport(job, sub, "tracking error");
+	    problemReport(job, sub, "tracking error", resultsHash);
 	    ++problemCount;
 	    }
 	else if (needsRerun(sub))
 	    {
-	    problemReport(job, sub, "crash");
+	    problemReport(job, sub, "crash", resultsHash);
 	    ++problemCount;
 	    }
 	}
@@ -1017,23 +1004,26 @@ for (job = db->jobList; job != NULL; job = job->next)
 printf("%d problems total\n", problemCount);
 }
 
+#ifdef SOON
 void runningReport(struct job *job, struct submission *sub)
-/* Print report on one problem. */
+/* Print report on one running job. */
 {
 struct check *check;
-struct hash *hash = newHash(0);
-struct runJobOutput *rjo = parseRunJobOutput(sub->outFile);
-int duration = nowInSeconds() - dateToSeconds(rjo->startTime);
 
 printf("command: %s\n", job->command);
 printf("jobId: %s\n", sub->id);
-printf("host: %s\n", rjo->host);
-printf("start time: %s\n", rjo->startTime);
-printf("run time so far: %d sec,  %4.2f min, %4.2f hours,  %4.2f days\n", 
-	duration, duration/60.0, duration/3600.0,  duration/(3600.0*24.0));
-printErrFile(sub);
+if (jr == NULL)
+    printf("tracking error\n");
+else
+    {
+    int duration = time(NULL) - jr->startTime;
+    printf("host: %s\n", jr->host);
+    printf("start time: %s\n", ctime(&rjo->startTime));
+    printf("run time so far: %d sec,  %4.2f min, %4.2f hours,  %4.2f days\n", 
+	    duration, duration/60.0, duration/3600.0,  duration/(3600.0*24.0));
+    printErrFile(sub, jr);
+    }
 printf("\n");
-hashFree(&hash);
 }
 
 void paraRunning(char *batch)
@@ -1056,6 +1046,7 @@ for (job = db->jobList; job != NULL; job = job->next)
     }
 printf("total jobs running: %d\n", runCount);
 }
+#endif /* SOON */
 
 
 
@@ -1092,50 +1083,49 @@ printf("\n");
 long calcFirstToLast(struct jobDb *db)
 /* Calculate time between first submission and last job finish. */
 {
-long subTime, firstSub = BIGNUM, endTime, lastEnd = 0;
 boolean first = TRUE;
 struct job *job;
 struct submission *sub;
-char *firstString = NULL, *endString = NULL;
-long now = nowInSeconds();
+long now = time(NULL);
+long subTime, firstSub = BIGNUM, endTime, lastEnd = 0;
+boolean gotEnd = FALSE;
 
 for (job = db->jobList; job != NULL; job = job->next)
     {
     if ((sub = job->submissionList) != NULL)
         {
-	subTime = dateToSeconds(sub->submitTime);
-	if (subTime < now)	/* Protect against wacked out clocks. */
+	subTime = sub->submitTime;
+	if (subTime != 0 && subTime < now)	/* Protect against wacked out clocks. */
 	    {
 	    if (first)
 		{
-		firstString = sub->submitTime;
 		firstSub = subTime;
 		first = FALSE;
 		}
 	    else
 		{
 		if (subTime < firstSub) 
-		    {
-		    firstString = sub->submitTime;
 		    firstSub = subTime;
-		    }
 		}
 	    }
-	if (sub->endTime != NULL && sub->endTime[0] != 0)
+	if (sub->endTime != 0)
 	    {
-	    endTime = dateToSeconds(sub->endTime);
+	    endTime = sub->endTime;
 	    if (endTime < now)	/* Protect against wacked out clocks. */
 		{
 		if (endTime > lastEnd) 
 		    {
-		    endString = sub->endTime;
 		    lastEnd = endTime;
+		    gotEnd = TRUE;
 		    }
 		}
 	    }
 	}
     }
-return lastEnd - firstSub;
+if (gotEnd)
+    return lastEnd - firstSub;
+else
+    return now - firstSub;
 }
 
 void paraTimes(char *batch)
@@ -1154,9 +1144,11 @@ int crashCount = 0;
 int queueCount = 0;
 int runTime = 0;
 int otherCount = 0;
+struct hash *resultsHash;
+long now = time(NULL);
 
 markQueuedJobs(db);
-markRunJobStatus(db);
+resultsHash = markRunJobStatus(db);
 for (job = db->jobList; job != NULL; job = job->next)
     {
     ++jobCount;
@@ -1164,12 +1156,9 @@ for (job = db->jobList; job != NULL; job = job->next)
         {
 	if (sub->running)
 	   {
-	   struct runJobOutput *rjo = parseRunJobOutput(sub->outFile);
-	   int oneTime = nowInSeconds() - dateToSeconds(rjo->startTime);
+	   int oneTime = now - sub->startTime;
 	   if (oneTime < 0)
-	       {
-	       warn("Strange start time in %s: %s", rjo->host, rjo->startTime);
-	       }
+	       warn("Strange start time in %s: %s", sub->startTime);
 	   else
 	       runTime += oneTime;
 	   ++runningCount;
@@ -1184,16 +1173,16 @@ for (job = db->jobList; job != NULL; job = job->next)
 	   }
 	else
 	   {
-	   struct runJobOutput *rjo = parseRunJobOutput(sub->outFile);
-	   if (rjo->gotRet && rjo->endTime != NULL)
+	   struct jobResult *jr = hashFindVal(resultsHash, sub->id);
+	   if (jr != NULL)
 	       {
 	       ++timedCount;
-	       totalCpu += rjo->cpuTime;
-	       oneWall = dateToSeconds(rjo->endTime) - dateToSeconds(rjo->startTime);
+	       totalCpu += jrCpuTime(jr);
+	       oneWall = jr->endTime - jr->startTime;
 	       if (oneWall < 0)	/* Protect against clock reset. */
 		   {
-		   warn("End before start job %s host %s", sub->id, rjo->host);
-		   warn("Start %s,  End %s", rjo->startTime, rjo->endTime);
+		   warn("End before start job %s host %s", sub->id, jr->host);
+		   warn("Start %lu,  End %lu", jr->startTime, jr->endTime);
 	           oneWall = totalCpu;	
 		   }
 	       totalWall += oneWall;
@@ -1233,41 +1222,21 @@ if (timedCount > 0)
     }
 }
 
-void paraFix(char *batch)
-/* para - para - manage a batch of jobs in parallel on a compute cluster.. */
-{
-struct jobDb *db = readBatch(batch);
-struct job *job;
-struct submission *sub;
-
-for (job = db->jobList; job != NULL; job = job->next)
-    {
-    for (sub = job->submissionList; sub != NULL; sub = sub->next)
-        {
-	if (sub->trackingError)
-	    sub->crashed = FALSE;
-	}
-    }
-
-
-writeBatch(db, batch);
-}
-
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 char *command;
 char *batch;
 
-cgiSpoof(&argc, argv);
+optionHash(&argc, argv);
 if (argc < 3)
     usage();
-retries = cgiUsualInt("retries",  retries);
-maxQueue = cgiUsualInt("maxQueue",  maxQueue);
-minPush = cgiUsualInt("minPush",  minPush);
-maxPush = cgiUsualInt("maxPush",  maxPush);
-warnTime = cgiUsualInt("warnTime", warnTime);
-killTime = cgiUsualInt("killTime", killTime);
+retries = optionInt("retries",  retries);
+maxQueue = optionInt("maxQueue",  maxQueue);
+minPush = optionInt("minPush",  minPush);
+maxPush = optionInt("maxPush",  maxPush);
+warnTime = optionInt("warnTime", warnTime);
+killTime = optionInt("killTime", killTime);
 command = argv[1];
 batch = argv[2];
 if (sameString(command, "make"))
@@ -1319,15 +1288,12 @@ else if (sameString(command, "problems") || sameString(command, "problem"))
     }
 else if (sameString(command, "running"))
     {
-    paraRunning(batch);
+    // paraRunning(batch);
+    uglyf("running command coming back soon I hope");
     }
 else if (sameString(command, "time") || sameString(command, "times"))
     {
     paraTimes(batch);
-    }
-else if (sameString(command, "fix"))
-    {
-    paraFix(batch);
     }
 else
     {

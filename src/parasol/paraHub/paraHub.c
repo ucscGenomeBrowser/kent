@@ -827,7 +827,7 @@ netSendLongString(fd, "");
 freeDyString(&dy);
 }
 
-void oneQstatList(int fd, struct dlList *list, char *state, struct dyString *dy)
+void oneQstatList(int fd, struct dlList *list, boolean running, struct dyString *dy)
 /* Write out one job list in qstat format. */
 {
 struct dlNode *node;
@@ -835,24 +835,24 @@ struct job *job;
 time_t t;
 char *machName;
 char *s;
+char *state = (running ? "r" : "qw");
 
 for (node = list->head; !dlEnd(node); node = node->next)
     {
     job = node->val;
     if (job->machine != NULL)
-	{
         machName = upToFirstDot(job->machine->name, TRUE);
-	}
     else
         machName = "none";
-    if (state[0] == 'r')
+    if (running)
         t = job->startTime;
     else
         t = job->submitTime;
     dyStringClear(dy);
     dyStringPrintf(dy, "%-7d -100 %-10s %-12s %-5s ", job->id, job->exe, job->user, state);
     appendLocalTime(dy, t);
-    dyStringPrintf(dy, " %-10s MASTER", machName);
+    if (running)
+	dyStringPrintf(dy, " %-10s MASTER", machName);
     netSendLongString(fd, dy->string);
     }
 }
@@ -863,13 +863,51 @@ void qstat(int fd)
 if (!dlEmpty(runningJobs) || !dlEmpty(pendingJobs))
     {
     struct dyString *dy = newDyString(256);
-    netSendLongString(fd, "job-ID prior name       user         state submit/start at     queue      master  ja-task-ID");
-    netSendLongString(fd, "---------------------------------------------------------------------------------------------");
-    oneQstatList(fd, runningJobs, "r", dy);
-    oneQstatList(fd, pendingJobs, "qw", dy);
+    netSendLongString(fd, "job-ID prior name       user         state submit/start at     queue      master");
+    netSendLongString(fd, "--------------------------------------------------------------------------------");
+    oneQstatList(fd, runningJobs, TRUE, dy);
+    oneQstatList(fd, pendingJobs, FALSE, dy);
     freeDyString(&dy);
     }
 netSendLongString(fd, "");
+}
+
+void onePstatList(int fd, struct dlList *list, boolean running, struct dyString *dy)
+/* Write out one job list in qstat format. */
+{
+struct dlNode *node;
+struct job *job;
+time_t t;
+char *machName;
+char *s;
+char *state = (running ? "r" : "q");
+
+for (node = list->head; !dlEnd(node); node = node->next)
+    {
+    job = node->val;
+    if (job->machine != NULL)
+	machName = job->machine->name;
+    else
+        machName = "none";
+    if (running)
+        t = job->startTime;
+    else
+        t = job->submitTime;
+    dyStringClear(dy);
+    dyStringPrintf(dy, "%s %d %s %s %lu", 
+        state, job->id, job->user, job->exe, t);
+    netSendLongString(fd, dy->string);
+    }
+}
+
+void pstat(int fd)
+/* Write list of jobs in pstat format. */
+{
+struct dyString *dy = newDyString(0);
+onePstatList(fd, runningJobs, TRUE, dy);
+onePstatList(fd, pendingJobs, FALSE, dy);
+netSendLongString(fd, "");
+freeDyString(&dy);
 }
 
 void status(int fd)
@@ -1042,6 +1080,8 @@ for (;;)
          status(connectionHandle);
     else if (sameWord(command, "qstat"))
          qstat(connectionHandle);
+    else if (sameWord(command, "pstat"))
+         pstat(connectionHandle);
     else if (sameWord(command, "addSpoke"))
          addSpoke(socketHandle, connectionHandle);
     if (sameWord(command, "quit"))

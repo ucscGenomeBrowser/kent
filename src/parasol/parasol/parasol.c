@@ -302,6 +302,12 @@ void qstat()
 hubCommandAndPrint("qstat");
 }
 
+void pstat()
+/* Send pstat to hub and print result. */
+{
+hubCommandAndPrint("pstat");
+}
+
 void ping(int count)
 /* Ping hub server given number of times. */
 {
@@ -388,6 +394,8 @@ else if (sameString(command, "status"))
     status();
 else if (sameString(command, "qstat"))
     qstat();
+else if (sameString(command, "pstat"))
+    pstat();
 else if (sameString(command, "close"))
     dehub();
 else
