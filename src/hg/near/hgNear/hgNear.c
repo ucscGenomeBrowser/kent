@@ -18,7 +18,7 @@
 #include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.128 2004/02/12 19:03:59 heather Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.129 2004/02/19 17:04:22 heather Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	detailsVarName, colInfoVarName,
@@ -1827,6 +1827,6 @@ htmlSetStyle(htmlStyleUndecoratedLink);
 htmlSetBgColor(HG_CL_OUTSIDE);
 // htmlSetBgColor(HG_CL_INSIDE);
 oldCart = hashNew(10);
-cartHtmlShell("Gene Family v16", doMiddle, hUserCookie(), excludeVars, oldCart);
+cartHtmlShell("Gene Family v17", doMiddle, hUserCookie(), excludeVars, oldCart);
 return 0;
 }
