@@ -1,4 +1,5 @@
 /* Command line main driver module for paraFlow compiler. */
+/* Copyright 2005 Jim Kent.  All rights reserved. */
 #include "common.h"
 #include "linefile.h"
 #include "options.h"

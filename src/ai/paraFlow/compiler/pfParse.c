@@ -1,4 +1,5 @@
 /* pfParse build up parse tree from token stream */
+/* Copyright 2005 Jim Kent.  All rights reserved. */
 
 #include "common.h"
 #include "hash.h"

@@ -1,4 +1,5 @@
 /* pfScope - handle heirarchies of symbol tables. */
+/* Copyright 2005 Jim Kent.  All rights reserved. */
 
 #ifndef PFSCOPE_H
 #define PFSCOPE_H

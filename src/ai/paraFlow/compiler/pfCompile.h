@@ -1,4 +1,6 @@
 /* pfCompile - High level structures and routines for paraFlow compiler. */
+/* Copyright 2005 Jim Kent.  All rights reserved. */
+
 #ifndef PFCOMPILE_H
 #define PFCOMPILE_H
 

@@ -1,4 +1,5 @@
 /* pfBindVars - bind variables into parse tree. */
+/* Copyright 2005 Jim Kent.  All rights reserved. */
 
 #ifndef PFBINDVARS_H
 #define PFBINDVARS_H

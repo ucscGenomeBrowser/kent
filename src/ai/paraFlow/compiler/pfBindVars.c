@@ -1,4 +1,5 @@
 /* pfBindVars - bind variables into parse tree. */
+/* Copyright 2005 Jim Kent.  All rights reserved. */
 
 #include "common.h"
 #include "hash.h"

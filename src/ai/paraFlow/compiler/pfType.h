@@ -1,4 +1,6 @@
 /* pfType - ParaFlow type heirarchy */
+/* Copyright 2005 Jim Kent.  All rights reserved. */
+
 #ifndef PFTYPE_H
 #define PFTYPE_H
 

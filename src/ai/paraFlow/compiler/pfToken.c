@@ -1,5 +1,6 @@
 /* pfToken - reads a file and produces paraTokens from
  * it. */
+/* Copyright 2005 Jim Kent.  All rights reserved. */
 
 #include "common.h"
 #include "hash.h"

@@ -1,4 +1,5 @@
 /* pfToken - turns files into lexical tokens. */
+/* Copyright 2005 Jim Kent.  All rights reserved. */
 
 #ifndef PFTOKEN_H
 #define PFTOKEN_H
