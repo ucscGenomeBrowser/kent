@@ -41,7 +41,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.107 2003/09/10 16:36:34 hiram Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.108 2003/09/16 04:35:58 braney Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -2264,10 +2264,17 @@ if (gotRefLink)
 if (rlList != NULL)
     {
     struct hash *hash = newHash(8);
+    char *refGene = "refGene";
+    char *xenoRefGene = "xenoRefGene";
     AllocVar(table);
+
+    if (!sqlTableExists(conn, refGene))
+	if (sqlTableExists(conn, xenoRefGene))
+	    refGene = xenoRefGene;
+
     slAddHead(&hgp->tableList, table);
     table->description = cloneString("RefSeq Genes");
-    table->name = cloneString("refGene");
+    table->name = cloneString(refGene);
     for (rl = rlList; rl != NULL; rl = rl->next)
         {
         /* Don't return duplicate mrna accessions */
@@ -2279,7 +2286,7 @@ if (rlList != NULL)
 
         hashAdd(hash, rl->mrnaAcc, rl);
 	dyStringClear(ds);
-	dyStringPrintf(ds, "select * from refGene where name = '%s'", rl->mrnaAcc);
+	dyStringPrintf(ds, "select * from %s where name = '%s'",refGene, rl->mrnaAcc);
 	sr = sqlGetResult(conn, ds->string);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
