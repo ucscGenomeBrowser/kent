@@ -135,6 +135,8 @@ void tabOutSelectedFields(
 #define hgtaDoValueRange "hgta_doValueRange"
 #define hgtaDoPrintSelectedFields "hgta_doPrintSelectedFields"
 #define hgtaDoSelectFieldsMore "hgta_doSelectFieldsMore"
+#define hgtaDoClearAllFieldPrefix "hgta_doClearAllField."
+#define hgtaDoSetAllFieldPrefix "hgta_doSetAllField."
 
 /* Other CGI variables. */
 #define hgtaGroup "hgta_group"
@@ -214,6 +216,12 @@ void doPrintSelectedFields();
 
 void doSelectFieldsMore();
 /* Continue with select fields dialog. */
+
+void doClearAllField(char *dbTable);
+/* Clear all checks by fields in db.table. */
+
+void doSetAllField(char *dbTable);
+/* Set all checks by fields in db.table. */
 
 void doOutSelectedFields(struct trackDb *track, struct sqlConnection *conn);
 /* Put up select fields (for tab-separated output) page. */

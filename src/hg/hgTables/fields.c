@@ -13,36 +13,29 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char *fsVarName(char *type, char *db, char *table, char *field)
-/* Get variable name that encodes type, table and field. */
+
+static char *checkVarPrefix()
+/* Return prefix for checkBox */
 {
 static char buf[128];
-safef(buf, sizeof(buf), "%s.%s.%s.%s.%s", 
-	hgtaFieldSelectPrefix, type, db, table, field);
+safef(buf, sizeof(buf), "%s.check.", hgtaFieldSelectPrefix);
 return buf;
 }
 
 static char *checkVarName(char *db, char *table, char *field)
 /* Get variable name for check box on given table/field. */
 {
-return fsVarName("check", db, table, field);
-}
-
-static char *typePrefix(char *type)
-/* Return prefix for type */
-{
 static char buf[128];
-safef(buf, sizeof(buf), "%s.%s.", hgtaFieldSelectPrefix, type);
+safef(buf, sizeof(buf), "%s%s.%s.%s", checkVarPrefix(), db, table, field);
 return buf;
 }
 
-#define linkedSym "linked"
 
 static char *linkedPrefix()
 /* Get prefix for openLinked check-boxes. */
 {
 static char buf[128];
-safef(buf, sizeof(buf), "%s.%s.", hgtaFieldSelectPrefix, linkedSym);
+safef(buf, sizeof(buf), "%s.%s.", hgtaFieldSelectPrefix, "linked");
 return buf;
 }
 
@@ -51,8 +44,8 @@ static char *linkedTableVar(char *db, char *table)
  * linked tables or not. */
 {
 static char buf[128];
-safef(buf, sizeof(buf), "%s.%s.%s.%s", 
-	hgtaFieldSelectPrefix, linkedSym, db, table);
+safef(buf, sizeof(buf), "%s%s.%s", 
+	linkedPrefix(), db, table);
 return buf;
 }
 
@@ -61,6 +54,15 @@ static boolean varOn(char *var)
 {
 return cartVarExists(cart, var) && cartBoolean(cart, var);
 }
+
+static char *setClearAllVar(char *setOrClearPrefix, char *db, char *table)
+/* Return concatenation of a and b. */
+{
+static char buf[128];
+safef(buf, sizeof(buf), "%s%s.%s", setOrClearPrefix, db, table);
+return buf;
+}
+
 
 struct dbTable
 /* database/table pair. */
@@ -147,12 +149,19 @@ hTableEnd();
 freez(&table);
 sqlDisconnect(&conn);
 hPrintf("<BR>\n");
-cgiMakeButton(hgtaDoPrintSelectedFields, "Submit");
+cgiMakeButton(hgtaDoPrintSelectedFields, "Get Fields");
 hPrintf(" ");
 cgiMakeButton(hgtaDoMainPage, "Cancel");
+hPrintf(" ");
+cgiMakeButton(setClearAllVar(hgtaDoSetAllFieldPrefix,db,rootTable), 
+	"Check All");
+hPrintf(" ");
+cgiMakeButton(setClearAllVar(hgtaDoClearAllFieldPrefix,db,rootTable), 
+	"Clear All");
 }
 
-static void showLinkedTables(struct joiner *joiner, struct dbTable *inList)
+static void showLinkedTables(struct joiner *joiner, struct dbTable *inList,
+	char *buttonName, char *buttonText)
 /* Print section with list of linked tables and check boxes to turn them
  * on. */
 {
@@ -223,16 +232,15 @@ if (outList != NULL)
     hTableEnd();
     hPrintf("<BR>");
 
-    cgiMakeButton(hgtaDoSelectFieldsMore, "Allow Selection From Checked Tables");
+    cgiMakeButton(buttonName, buttonText);
     }
 }
 
-struct dbTable *extraTableList()
+static struct dbTable *extraTableList(char *prefix)
 /* Get list of tables (other than the primary table)
  * where we are displaying fields. */
 {
 struct hashEl *varList = NULL, *var;
-char *prefix = linkedPrefix();
 int prefixSize = strlen(prefix);
 struct dbTable *dtList = NULL, *dt;
 
@@ -285,11 +293,12 @@ cgiMakeHiddenVar(hgtaDatabase, database);
 cgiMakeHiddenVar(hgtaTable, table);
 
 showTableFields(joiner, database, table);
-dtList = extraTableList();
+dtList = extraTableList(linkedPrefix());
 showLinkedFields(joiner, dtList);
 dt = dbTableNew(database, table);
 slAddHead(&dtList, dt);
-showLinkedTables(joiner, dtList);
+showLinkedTables(joiner, dtList, hgtaDoSelectFieldsMore,
+	"Allow Selection From Checked Tables");
 
 /* clean up. */
 hPrintf("</FORM>");
@@ -318,7 +327,7 @@ void doPrintSelectedFields()
 {
 char *db = cartString(cart, hgtaDatabase);
 char *table = cartString(cart, hgtaTable);
-char *varPrefix = typePrefix("check");
+char *varPrefix = checkVarPrefix();
 int varPrefixSize = strlen(varPrefix);
 struct hashEl *varList = NULL, *var;
 struct slName *fieldList = NULL, *field;
@@ -346,4 +355,31 @@ tabOutSelectedFields(db, table, fieldList);
 slFreeList(&fieldList);
 hashElFreeList(&varList);
 }
+
+static void setCheckVarsForTable(char *dbTable, char *val)
+/* Return list of check variables for this table. */
+{
+char prefix[128];
+struct hashEl *varList, *var;
+safef(prefix, sizeof(prefix), "%s%s.", checkVarPrefix(), dbTable);
+varList = cartFindPrefix(cart, prefix);
+for (var = varList; var != NULL; var = var->next)
+    cartSetString(cart, var->name, val);
+hashElFreeList(&varList);
+}
+
+void doClearAllField(char *dbTable)
+/* Clear all checks by fields in db.table. */
+{
+setCheckVarsForTable(dbTable, "0");
+doSelectFieldsMore();
+}
+
+void doSetAllField(char *dbTable)
+/* Set all checks by fields in db.table. */
+{
+setCheckVarsForTable(dbTable, "1");
+doSelectFieldsMore();
+}
+
 

@@ -16,7 +16,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.27 2004/07/18 04:15:13 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.28 2004/07/18 06:44:27 kent Exp $";
 
 
 void usage()
@@ -206,6 +206,8 @@ else
     {
     errAbort("Unrecognized region type %s", regionType);
     }
+// uglyf("regionTYpe %s\n", regionType);
+// for (region=regionList;region!=NULL;region=region->next) uglyf("%s:%d-%d\n", region->chrom, region->start, region->end);
 return regionList;
 }
 
@@ -637,6 +639,7 @@ void dispatch(struct sqlConnection *conn)
 /* Scan for 'Do' variables and dispatch to appropriate page-generator.
  * By default head to the main page. */
 {
+struct hashEl *varList;
 if (cartVarExists(cart, hgtaDoTest))
     doTest();
 else if (cartVarExists(cart, hgtaDoTopSubmit))
@@ -666,6 +669,10 @@ else if (cartVarExists(cart, hgtaDoSelectFieldsMore))
     doSelectFieldsMore();
 else if (cartVarExists(cart, hgtaDoPrintSelectedFields))
     doPrintSelectedFields();
+else if ((varList = cartFindPrefix(cart, hgtaDoClearAllFieldPrefix)) != NULL)
+    doClearAllField(varList->name + strlen(hgtaDoClearAllFieldPrefix));
+else if ((varList = cartFindPrefix(cart, hgtaDoSetAllFieldPrefix)) != NULL)
+    doSetAllField(varList->name + strlen(hgtaDoSetAllFieldPrefix));
 else if (cartVarExists(cart, hgtaDoMainPage))
     doMainPage(conn);
 else	/* Default - put up initial page. */
