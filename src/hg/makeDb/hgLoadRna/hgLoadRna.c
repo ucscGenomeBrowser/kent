@@ -346,6 +346,8 @@ errAbort(
   "This creates freshly the RNA part of the database\n"
   "   hgLoadRna add [-type=type] database /full/path/mrna.fa mrna.ra [-ignore]\n"
   "      type can be mRNA or EST or whatever goes into extFile.name\n"
+  "      The type for the mrna table (mRNA or EST) will be guest from type.\n"
+  "      If it can't be guest, it must be specified with -mrnaType=\n"
   "This adds mrna info to the database\n"
   "   hgLoadRna drop database\n"
   "This drops the tables created by hgLoadRna from database.\n"
@@ -358,7 +360,7 @@ errAbort(
   );
 }
 
-void addRna(char *faName, char *symFaName, char *raName, char *type)
+void addRna(char *faName, char *symFaName, char *raName, char *type, char *mrnaType)
 /* Add in RNA data from fa and ra files. */
 {
 struct sqlConnection *conn = hgStartUpdate();
@@ -517,7 +519,7 @@ for (;;)
     fprintf(seqTab, "%u\t%s\t%d\t%s\t%lu\t%lu\t%d\n",
 	id, faAcc, dnaSize, sqlDate, extFileId, faOffset, faSize);
     fprintf(mrnaTab, "%u\t%s\t%s\t%s\t%c\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\n",
-            id, faAcc, version, type, dir,
+            id, faAcc, version, mrnaType, dir,
             uniSrc->curId, uniOrg->curId, uniLib->curId, uniClo->curId,
             uniSex->curId, uniTis->curId, uniDev->curId, uniCel->curId,
             uniCds->curId, uniKey->curId, uniDef->curId, uniGen->curId, uniPro->curId, uniAut->curId);
@@ -541,10 +543,11 @@ printf("All done\n");
 void hgLoadRna(char *database, char *faPath, char *raFile)
 /* hgLoadRna - load browser database with mRNA/EST info.. */
 {
-char *type, *symName;
+char *type, *symName, *mrnaType;
 hgSetDb(database);
 
 type = cgiOptionalString("type");
+mrnaType = cgiOptionalString("mrnaType");
 if (type == NULL)
     {
     if (strstrNoCase(raFile, "xenoRna"))
@@ -556,8 +559,19 @@ if (type == NULL)
     else
 	type = "mRNA";
     }
+
+if (mrnaType == NULL)
+    {
+    if (strstrNoCase(type, "rna") || strstrNoCase(type, "refseq"))
+        mrnaType = "mRNA";
+    else if (strstrNoCase(type, "est"))
+        type = "EST";
+    else
+        errAbort("can't guess mrna type from \"%s\", specify with -mrnaType");
+    }
+
 printf("Adding data of type: %s\n", type);
-addRna(faPath, type, raFile, type);
+addRna(faPath, type, raFile, type, mrnaType);
 }
 
 void abbreviate(char *s, char *fluff)
