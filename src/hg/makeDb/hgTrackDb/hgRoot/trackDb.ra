@@ -377,8 +377,8 @@ altColor 128,228,128
 type bed 4 +
 
 track xenoMrna
-shortLabel Nonhuman mRNA
-longLabel Nonhuman mRNAs from Genbank
+shortLabel Non$organism mRNA
+longLabel Non$organism mRNAs from Genbank
 priority 23
 visibility dense
 spectrum on
@@ -386,15 +386,15 @@ type psl xeno
 
 track xenoBestMrna
 shortLabel Other Best mRNAs
-longLabel Nonhuman mRNAs from Genbank Best in Genome Alignments
+longLabel Non$organism mRNAs from Genbank Best in Genome Alignments
 priority 23.1
 visibility hide
 spectrum on
 type psl xeno
 
 track xenoEst
-shortLabel Nonhuman EST
-longLabel Nonhuman ESTs from Genbank 
+shortLabel Non$organism EST
+longLabel Non$organism ESTs from Genbank 
 priority 23.2
 visibility hide
 spectrum on
@@ -561,7 +561,7 @@ track blatFish
 shortLabel Fish Blat
 longLabel Tetraodon nigroviridis Translated Blat Alignments
 priority 28
-visibility hide
+visibility dense
 color 0,60,120
 altColor 200,220,255
 spectrum on
