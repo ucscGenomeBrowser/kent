@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.15 2004/09/22 01:06:44 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.16 2004/09/29 19:33:13 kate Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -184,7 +184,9 @@ else if (chainsHit->next != NULL && !multiple)
     {
     return "Duplicated in new";
     }
-/* sort chains by position in query  so that we can merge overlaps */
+/* sort chains by position in target to order subregions by orthology */
+slSort(&chainsHit, chainCmpTarget);
+
 for (chain = chainsHit; chain != NULL; chain = chain->next)
     {
     int start=s, end=e;
@@ -192,7 +194,7 @@ for (chain = chainsHit; chain != NULL; chain = chain->next)
         /* no real need to verify ratio again (it would require
          * adjusting coords again). */
         minRatio = 0;
-    verbose(3,"sorted hit chain %s:%d %s:%d-%d %c\n",
+    verbose(3,"hit chain %s:%d %s:%d-%d %c\n",
         chain->tName, chain->tStart,  chain->qName, chain->qStart, chain->qEnd,
         chain->qStrand);
     if (!mapThroughChain(chain, minRatio, &start, &end))
@@ -216,27 +218,7 @@ for (chain = chainsHit; chain != NULL; chain = chain->next)
     bed->strand[1] = 0;
     slAddHead(&bedList, bed);
     }
-slSort(&bedList, bedCmpExtendedChr);
-
-/* merge overlapping regions
-   * NOTE: should make this configurable */
-for (bed = bedList; bed != NULL; bed = bed->next)
-    {
-    if (prevBed && sameString(bed->chrom, prevBed->chrom) && 
-                bed->chromStart <= prevBed->chromEnd)
-        {
-        /* this region overlaps the previous, so extend
-           * the previous to include this one
-           * TODO: make the merge optional -- might want to see dups */
-        verbose(2,"merging %s:%d-%d, %s:%d-%d\n",
-                    prevBed->chrom, prevBed->chromStart, prevBed->chromEnd,
-                    bed->chrom, bed->chromStart, bed->chromEnd);
-        prevBed->chromEnd = max(prevBed->chromEnd, bed->chromEnd);
-        slRemoveEl(&bedList, bed);
-        continue;
-        }
-    prevBed = bed;
-    }
+slReverse(&bedList);
 *bedRet = bedList;
 return NULL;
 }
