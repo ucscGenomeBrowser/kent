@@ -4,6 +4,7 @@
 #include "linefile.h"
 #include "options.h"
 #include "hash.h"
+#include "localmem.h"
 #include "dystring.h"
 #include "obscure.h"
 #include "portable.h"
@@ -12,6 +13,9 @@
 #include "paraMessage.h"
 #include "jobDb.h"
 #include "jobResult.h"
+
+/* should we output dots to let the user know we are doing something?*/
+static boolean doHappytDots;
 
 void usage()
 /* Explain usage and exit. */
@@ -67,6 +71,9 @@ errAbort(
   "   Print info on currently running jobs\n"
   "para time\n"
   "   List timing information\n"
+  "para recover jobList newJobList\n"
+  "   Generate a job list by selecting jobs from an existing list`where\n"
+  "   the `check out' tests fail.\n"
   );
 }
 
@@ -182,16 +189,37 @@ struct fileStatus
     bool exists;	/* TRUE if file exists. */
     bool hasData;	/* TRUE if nonempty. */
     bool completeLastLine; /* TRUE if last line ends with <lf> */
+    bool checkedLastLine;   /* TRUE if done completeLastLine check */
     bool reported;	/* TRUE if reported error. */
     };
 
-struct fileStatus *getFileStatus(char *file)
-/* Get information on file. */
+struct fileStatus *basicFileCheck(char *file, struct hash *hash)
+/* Do quick file checks caching result */
 {
-struct fileStatus *fi;
+struct fileStatus *fi = hashFindVal(hash, file);
+struct stat statBuf;
+FILE *f;
+if (fi != NULL)
+    return fi;
+lmAllocVar(hash->lm, fi);
+if (stat(file, &statBuf) == 0)
+    {
+    fi->exists = TRUE;
+    fi->hasData = (statBuf.st_size > 0);
+    }
+return fi;
+}
+
+struct fileStatus *completeLastLineCheck(char *file, struct hash *hash)
+/* Do slower checks for complete last line, caching result */
+{
+struct fileStatus *fi = hashFindVal(hash, file);
 FILE *f;
 
-AllocVar(fi);
+if ((fi != NULL) && (fi->checkedLastLine))
+    return fi;
+if (fi == NULL)
+    lmAllocVar(hash->lm, fi);
 if ((f = fopen(file, "rb")) != NULL)
     {
     fi->exists = TRUE;
@@ -207,26 +235,30 @@ if ((f = fopen(file, "rb")) != NULL)
 	}
     fclose(f);
     }
+fi->checkedLastLine = TRUE;
 return fi;
 }
 
 int doOneCheck(struct check *check, struct hash *hash, FILE *f)
-/* Do one check.  Return error count from check. */
+/* Do one check.  Return error count from check. f maybe NULL to discard
+ * errors. */
 {
 struct fileStatus *fi;
 char *file = check->file;
 char *what = check->what;
 
-if ((fi = hashFindVal(hash, file)) == NULL)
-    {
-    fi = getFileStatus(file);
-    hashAdd(hash, file, fi);
-    }
+/* only do slower completeLastLine check if needed */
+if (startsWith("line", what))
+    fi = completeLastLineCheck(file, hash);
+else
+    fi = basicFileCheck(file, hash);
+
 if (!fi->reported)
     {
     if (!fi->exists)
 	{
-	fprintf(f, "%s does not exist\n", file);
+        if (f != NULL)
+            fprintf(f, "%s does not exist\n", file);
 	fi->reported = TRUE;
 	return 1;
 	}
@@ -234,7 +266,8 @@ if (!fi->reported)
 	{
 	if (!fi->hasData)
 	    {
-	    fprintf(f, "%s is empty\n", file);
+            if (f != NULL)
+                fprintf(f, "%s is empty\n", file);
 	    fi->reported = TRUE;
 	    return 1;
 	    }
@@ -243,7 +276,8 @@ if (!fi->reported)
 	{
 	if (fi->hasData && !fi->completeLastLine)
 	    {
-	    fprintf(f, "%s has an incomplete last line\n", file);
+            if (f != NULL)
+                fprintf(f, "%s has an incomplete last line\n", file);
 	    fi->reported = TRUE;
 	    return 1;
 	    }
@@ -252,13 +286,15 @@ if (!fi->reported)
 	{
 	if (!fi->hasData)
 	    {
-	    fprintf(f, "%s is empty\n", file);
+            if (f != NULL)
+                fprintf(f, "%s is empty\n", file);
 	    fi->reported = TRUE;
 	    return 1;
 	    }
 	else if (!fi->completeLastLine)
 	    {
-	    fprintf(f, "%s has an incomplete last line\n", file);
+            if (f != NULL)
+                fprintf(f, "%s has an incomplete last line\n", file);
 	    fi->reported = TRUE;
 	    return 1;
 	    }
@@ -272,7 +308,7 @@ if (!fi->reported)
 	warn("Unknown check '%s'", what);
 	}
     }
-return 0;
+return fi->reported ? 1 : 0;
 }
 
 void occassionalDot()
@@ -280,7 +316,7 @@ void occassionalDot()
 {
 static int dotMod = 20;
 static int dot = 20;
-if (--dot <= 0)
+if (doHappytDots && (--dot <= 0))
     {
     putc('.', stdout);
     fflush(stdout);
@@ -301,7 +337,7 @@ if (--dot <= 0)
 }
 
 
-int checkOneJob(struct job *job, char *when, struct hash *hash)
+int checkOneJob(struct job *job, char *when, struct hash *hash, FILE *f)
 /* Perform checks on one job if checks not already in hash. 
  * Returns number of errors. */
 {
@@ -312,7 +348,7 @@ for (check = job->checkList; check != NULL; check = check->next)
     {
     if (sameWord(when, check->when))
 	{
-	errCount += doOneCheck(check, hash, stderr);
+	errCount += doOneCheck(check, hash, f);
 	occassionalDot();
 	}
     }
@@ -324,11 +360,11 @@ void doChecks(struct jobDb *db, char *when)
 {
 int errCount = 0;
 struct job *job;
-struct hash *hash = newHash(0);
+struct hash *hash = newHash(19);
 
 printf("Checking %sput files", when);
 for (job = db->jobList; job != NULL; job = job->next)
-    errCount += checkOneJob(job, when, hash);
+    errCount += checkOneJob(job, when, hash, stderr);
 if (errCount > 0)
     errAbort("%d total errors in file check", errCount);
 freeHashAndVals(&hash);
@@ -472,19 +508,14 @@ strcat(batchDir, "/");
 return batchRunning(batchDir);
 }
 
-void paraCreate(char *batch, char *jobList)
-/* Create a batch database from a job list. */
+struct jobDb *parseJobList(char *jobList)
+/* parse a job list */
 {
 struct lineFile *lf = lineFileOpen(jobList, TRUE);
 char *line;
 int jobCount = 0;
 struct jobDb *db;
 struct job *job;
-char backup[512];
-
-if (thisBatchRunning())
-    errAbort("This batch is currently running.  Please para stop first.");
-makeDir("err");
 AllocVar(db);
 while (lineFileNext(lf, &line, NULL))
     {
@@ -497,6 +528,19 @@ while (lineFileNext(lf, &line, NULL))
     }
 lineFileClose(&lf);
 slReverse(&db->jobList);
+return db;
+}
+
+void paraCreate(char *batch, char *jobList)
+/* Create a batch database from a job list. */
+{
+char backup[512];
+struct jobDb *db;
+
+if (thisBatchRunning())
+    errAbort("This batch is currently running.  Please para stop first.");
+makeDir("err");
+db = parseJobList(jobList);
 
 doChecks(db, "in");
 sprintf(backup, "%s.bak", batch);
@@ -505,6 +549,27 @@ atomicWriteBatch(db, batch);
 printf("%d jobs written to %s\n", db->jobCount, batch);
 }
 
+void paraRecover(char *batch, char *jobList, char *newJobList)
+/* Create a new job list from an existing list based on check outs that
+ * failed. */
+{
+struct jobDb *db;
+struct job *job;
+struct hash *hash = newHash(19);
+FILE *newFh = mustOpen(newJobList, "w");
+db = parseJobList(jobList);
+
+for (job = db->jobList; job != NULL; job = job->next)
+    {
+    if (checkOneJob(job, "out", hash, NULL))
+        fprintf(newFh, "%s\n", job->spec);
+    }
+if (ferror(newFh))
+    errAbort("write failed: %s", newJobList);
+carefulClose(&newFh);
+jobDbFree(&db);
+freeHash(&hash);
+}
 
 boolean submitJob(struct job *job, char *curDir)
 /* Attempt to submit job. */
@@ -681,7 +746,7 @@ for (job=db->jobList; job != NULL; job = job->next)
 		sub->host = cloneString(jr->host);
 		sub->inQueue = FALSE;
 		sub->running = FALSE;
-		if (isStatusOk(sub->status) && checkOneJob(job, "out", checkHash) == 0)
+		if (isStatusOk(sub->status) && checkOneJob(job, "out", checkHash, stderr) == 0)
 		    sub->ranOk = TRUE;
 		else
 		    sub->crashed = TRUE;
@@ -1376,6 +1441,7 @@ int main(int argc, char *argv[])
 {
 char *command;
 char *batch;
+doHappytDots = isatty(1);  /* stdin */
 
 optionHash(&argc, argv);
 if (argc < 2)
@@ -1395,6 +1461,12 @@ if (sameWord(command, "create") || sameWord(command, "creat"))
     if (argc != 3)
         usage();
     paraCreate(batch, argv[2]);
+    }
+else if (sameWord(command, "recover"))
+    {
+    if (argc != 4)
+        usage();
+    paraRecover(batch, argv[2], argv[3]);
     }
 else if (sameWord(command, "check"))
     {
