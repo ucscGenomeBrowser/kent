@@ -14,7 +14,7 @@
 #include "cdsColors.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.83 2004/01/31 08:04:47 daryl Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.84 2004/02/02 19:53:10 hiram Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -413,6 +413,8 @@ int defaultHeight;	/*	pixels per item	*/
 char *horizontalGrid = NULL;	/*	Grid lines, off by default */
 char *lineBar;	/*	Line or Bar graph */
 char *autoScale;	/*	Auto scaling on or off */
+char *windowingFunction;	/*	Maximum, Mean, or Minimum */
+char *smoothingWindow;	/*	OFF or [2:16] */
 int maxHeightPixels = atoi(DEFAULT_HEIGHT_PER);
 int minHeightPixels = MIN_HEIGHT_PER;
 
@@ -425,12 +427,16 @@ snprintf( &options[5][0], 256, "%s.maxY", tdb->tableName );
 snprintf( &options[7][0], 256, "%s.horizGrid", tdb->tableName );
 snprintf( &options[8][0], 256, "%s.lineBar", tdb->tableName );
 snprintf( &options[9][0], 256, "%s.autoScale", tdb->tableName );
+snprintf( &options[10][0], 256, "%s.windowingFunction", tdb->tableName );
+snprintf( &options[11][0], 256, "%s.smoothingWindow", tdb->tableName );
 
 wigFetchMinMaxPixels(tdb, &minHeightPixels, &maxHeightPixels, &defaultHeight);
 wigFetchMinMaxY(tdb, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
 (void) wigFetchHorizontalGrid(tdb, &horizontalGrid);
 (void) wigFetchAutoScale(tdb, &autoScale);
 (void) wigFetchGraphType(tdb, &lineBar);
+(void) wigFetchWindowingFunction(tdb, &windowingFunction);
+(void) wigFetchSmoothingWindow(tdb, &smoothingWindow);
 
 printf("<TABLE BORDER=0><TR><TD ALIGN=LEFT>\n");
 
@@ -452,10 +458,15 @@ printf("<b>Vertical viewing range</b>:&nbsp;&nbsp;\n<b>min:&nbsp;</b>");
 cgiMakeDoubleVar(&options[4][0], minY, 6);
 printf("&nbsp;&nbsp;&nbsp;&nbsp;<b>max:&nbsp;</b>");
 cgiMakeDoubleVar(&options[5][0], maxY, 6);
-printf("<BR>(viewing range limits:&nbsp;min:&nbsp;%g&nbsp;&nbsp;max:&nbsp;%g)",
+printf("<BR>\n(viewing range limits:&nbsp;min:&nbsp;%g&nbsp;&nbsp;max:&nbsp;%g)",
     tDbMinY, tDbMaxY);
-printf("<BR><b>Data view scaling:&nbsp;</b>");
+printf("<BR>\n<b>Data view scaling:&nbsp;</b>");
 wiggleScaleDropDown(&options[9][0], autoScale);
+printf("<BR>\n<b>Windowing function:&nbsp;</b>");
+wiggleWindowingDropDown(&options[10][0], windowingFunction);
+printf("<BR>\n<b>Smoothing window:&nbsp;</b>");
+wiggleSmoothingDropDown(&options[11][0], smoothingWindow);
+printf("&nbsp;pixels");
 printf("</TD></TR></TABLE>\n");
 
 freeMem(typeLine);

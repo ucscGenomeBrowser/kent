@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.33 2004/01/29 00:47:20 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.34 2004/02/02 19:53:34 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -25,6 +25,8 @@ struct wigCartOptions
     enum wiggleGridOptEnum horizontalGrid;	/*  grid lines, ON/OFF */
     enum wiggleGraphOptEnum lineBar;		/*  Line or Bar chart */
     enum wiggleScaleOptEnum autoScale;		/*  autoScale on */
+    enum wiggleWindowingEnum windowingFunction;	/*  max,mean,min */
+    enum wiggleSmoothingEnum smoothingWindow;	/*  N: [0:16] */
     double minY;	/*	from trackDb.ra words, the absolute minimum */
     double maxY;	/*	from trackDb.ra words, the absolute maximum */
     int maxHeight;	/*	maximum pixels height from trackDb	*/
@@ -39,6 +41,7 @@ struct preDrawElement
 	unsigned long long	count;	/* number of datum at this point */
 	double	sumData;	/*	sum of all values at this point	*/
 	double  sumSquares;	/* sum of (values squared) at this point */
+	double  smooth;	/*	smoothing value	*/
     };
 
 struct wigItem
@@ -314,6 +317,7 @@ struct wigCartOptions *wigCart;
 enum wiggleGridOptEnum horizontalGrid;
 enum wiggleGraphOptEnum lineBar;
 enum wiggleScaleOptEnum autoScale;
+enum wiggleWindowingEnum windowingFunction;
 Color shadesOfPrimary[EXPR_DATA_SHADES];
 Color shadesOfAlt[EXPR_DATA_SHADES];
 Color black = vgFindColorIx(vg, 0, 0, 0);
@@ -340,6 +344,7 @@ wigCart = (struct wigCartOptions *) tg->extraUiData;
 horizontalGrid = wigCart->horizontalGrid;
 lineBar = wigCart->lineBar;
 autoScale = wigCart->autoScale;
+windowingFunction = wigCart->windowingFunction;
 
 if (pixelsPerBase > 0.0)
     basesPerPixel = 1.0 / pixelsPerBase;
@@ -595,10 +600,28 @@ for (x1 = 0; x1 < width; ++x1)
 	 *	and negative values if more than one data point is in
 	 *	this pixel.
 	 */
-	if (fabs(preDraw[preDrawIndex].min) > fabs(preDraw[preDrawIndex].max))
-	    dataValue = preDraw[preDrawIndex].min;
-	else 
-	    dataValue = preDraw[preDrawIndex].max;
+	switch (windowingFunction)
+	    {
+	    case (wiggleWindowingMin):
+		if (fabs(preDraw[preDrawIndex].min)
+				< fabs(preDraw[preDrawIndex].max))
+		    dataValue = preDraw[preDrawIndex].min;
+		else 
+		    dataValue = preDraw[preDrawIndex].max;
+		break;
+	    case (wiggleWindowingMean):
+		dataValue =
+		    preDraw[preDrawIndex].sumData / preDraw[preDrawIndex].count;
+		break;
+	    default:
+	    case (wiggleWindowingMax):
+		if (fabs(preDraw[preDrawIndex].min)
+			> fabs(preDraw[preDrawIndex].max))
+		    dataValue = preDraw[preDrawIndex].min;
+		else 
+		    dataValue = preDraw[preDrawIndex].max;
+		break;
+	    }
 
 	y1 = h * ((graphUpperLimit - dataValue)/graphRange);
 	yPointGraph = yOff + y1 - 1;
@@ -827,6 +850,8 @@ wigCart->lineBar = wigFetchGraphType(tdb, (char **) NULL);
 wigCart->horizontalGrid = wigFetchHorizontalGrid(tdb, (char **) NULL);
 
 wigCart->autoScale = wigFetchAutoScale(tdb, (char **) NULL);
+wigCart->windowingFunction = wigFetchWindowingFunction(tdb, (char **) NULL);
+wigCart->smoothingWindow = wigFetchSmoothingWindow(tdb, (char **) NULL);
 
 wigFetchMinMaxPixels(tdb, &minHeight, &maxHeight, &defaultHeight);
 	

@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.31 2004/01/31 08:09:32 daryl Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.32 2004/02/02 19:52:25 hiram Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -762,6 +762,65 @@ void rosettaExonDropDown(char *var, char *curVal)
 /* Make drop down of exon type options. */
 {
 cgiMakeDropList(var, rosettaExonOptions, ArraySize(rosettaExonOptions), curVal);
+}
+
+/****** Options for the wiggle track Windowing *******/
+
+static char *wiggleWindowingOptions[] = {
+    "Maximum",
+    "Mean",
+    "Minimum"
+    };
+
+enum wiggleWindowingEnum wiggleWindowingStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, wiggleWindowingOptions);
+if (x < 0)
+   errAbort("hui::wiggleWindowingStringToEnum() - Unknown option %s", string);
+return x;
+}
+
+char *wiggleWindowingEnumToString(enum wiggleWindowingEnum x)
+/* Convert from enum to string representation. */
+{
+return wiggleWindowingOptions[x];
+}
+
+void wiggleWindowingDropDown(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropList(var, wiggleWindowingOptions, ArraySize(wiggleWindowingOptions), 
+	curVal);
+}
+
+/****** Options for the wiggle track Smoothing *******/
+
+static char *wiggleSmoothingOptions[] = {
+    "OFF", "OFF", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11",
+    "12", "13", "14", "15", "16"
+    };
+
+enum wiggleSmoothingEnum wiggleSmoothingStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, wiggleSmoothingOptions);
+if (x < 0)
+   errAbort("hui::wiggleSmoothingStringToEnum() - Unknown option %s", string);
+return x;
+}
+
+char *wiggleSmoothingEnumToString(enum wiggleSmoothingEnum x)
+/* Convert from enum to string representation. */
+{
+return wiggleSmoothingOptions[x];
+}
+
+void wiggleSmoothingDropDown(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropList(var, wiggleSmoothingOptions, ArraySize(wiggleSmoothingOptions), 
+	curVal);
 }
 
 /****** Options for the wiggle track AutoScale *******/
