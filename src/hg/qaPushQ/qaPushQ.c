@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.45 2004/05/28 21:40:53 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.46 2004/06/01 23:17:37 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -763,8 +763,14 @@ switch(col)
 	{
 	printf("&nbsp;&nbsp;"
 	    "<A href=\"/cgi-bin/qaPushQ?action=promote&qid=%s&cb=%s\">^</A>&nbsp;&nbsp;"
-	    "<A href=\"/cgi-bin/qaPushQ?action=demote&qid=%s&cb=%s\" >v</A>", 
-	    ki->qid, newRandState, ki->qid, newRandState);
+	    "<A href=\"/cgi-bin/qaPushQ?action=demote&qid=%s&cb=%s\">v</A>&nbsp;&nbsp;"
+	    "<A href=\"/cgi-bin/qaPushQ?action=top&qid=%s&cb=%s\">T</A>&nbsp;&nbsp;"
+	    "<A href=\"/cgi-bin/qaPushQ?action=bottom&qid=%s&cb=%s\">B</A>", 
+	    ki->qid, newRandState, 
+	    ki->qid, newRandState, 
+	    ki->qid, newRandState, 
+	    ki->qid, newRandState
+	    );
 	}
 	printf("</td>\n");
 	break;
@@ -1166,6 +1172,8 @@ XdoPromote(-1);
 }
 
 
+
+
 int getNextAvailQid()
 /* adding new pushQ rec, get next available qid number */
 {
@@ -1206,6 +1214,59 @@ else
     }
 q.rank++;
 return q.rank;
+}
+
+
+void doTop()
+{
+
+struct pushQ q;
+char query[256];
+char newQid[sizeof(q.qid)] = "";
+
+safef(newQid, sizeof(newQid), cgiString("qid"));
+
+loadPushQ(newQid, &q,FALSE);
+
+/* first close the hole where it was */
+safef(query, sizeof(query), 
+"update %s set rank = rank + 1 where priority ='%s' and rank < %d ", 
+pushQtbl, q.priority, q.rank);
+sqlUpdate(conn, query);
+
+q.rank = 1;
+safef(query, sizeof(query), 
+"update %s set rank = %d where qid = '%s' ", 
+pushQtbl, q.rank, q.qid);
+sqlUpdate(conn, query);
+
+doDisplay();
+}
+
+void doBottom()
+{
+
+struct pushQ q;
+char query[256];
+char newQid[sizeof(q.qid)] = "";
+
+safef(newQid, sizeof(newQid), cgiString("qid"));
+
+loadPushQ(newQid, &q,FALSE);
+
+/* first close the hole where it was */
+safef(query, sizeof(query), 
+"update %s set rank = rank - 1 where priority ='%s' and rank > %d ", 
+pushQtbl, q.priority, q.rank);
+sqlUpdate(conn, query);
+
+q.rank = getNextAvailRank(q.priority);
+safef(query, sizeof(query), 
+"update %s set rank = %d where qid = '%s' ", 
+pushQtbl, q.rank, q.qid);
+sqlUpdate(conn, query);
+
+doDisplay();
 }
 
 
@@ -3182,6 +3243,16 @@ else if (sameString(action,"promote"))
 else if (sameString(action,"demote")) 
     {
     doDemote();
+    }
+
+else if (sameString(action,"top")) 
+    {
+    doTop();
+    }
+
+else if (sameString(action,"bottom")) 
+    {
+    doBottom();
     }
 
 else if (sameString(action,"pushDone")) 
