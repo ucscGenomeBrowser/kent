@@ -4009,7 +4009,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	ident = ((bed->score + 500.0)/1500.0)*100.0;
     
     /* finish off report ... */
-    printf("<B>Alignment id:</B> %s<BR>\n", name);
+    printf("<h4><i>Joint Alignment</i></h4>");
+    printf("<B>ID:</B> %s<BR>\n", name);
     printf("<B>Number of aligned blocks:</B> %d<BR>\n", bed->blockCount);
 
     if( ident == 50.0 )
@@ -4017,6 +4018,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
         printf("<B>Percent identity of aligned blocks:</B> %g%%<BR>\n", ident);
 
+    printf("<h4><i>Human Sequence</i></h4>");
     printf("<B>Strand:</B> %s<BR>\n", bed->strand);
     bedPrintPos(bed);
 
