@@ -44,7 +44,7 @@ group compGeno
 color 100,50,0
 altColor 175,150,128
 priority 118
-visibility pack
+visibility full
 type sample 9
 
 track blastzTightHuman
