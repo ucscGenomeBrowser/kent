@@ -46,7 +46,7 @@ struct hash *chromsDone[2];
 
 static void printBedEl(struct bed *bedEl)
 {
-printf("%s\t%u\t%u\t%s\t0\t+\n", bedEl->chrom, bedEl->chromStart,
+printf("%s\t%u\t%u\t%s\n", bedEl->chrom, bedEl->chromStart,
 	bedEl->chromEnd, bedEl->name);
 }
 
@@ -511,19 +511,18 @@ puts("</FORM>");
 webEnd();
 }	/*	void doWiggleCtOptions(boolean doCt)	*/
 
-static void dyConstraints(char *constraints, int tableId,
-    struct dyString *dy)
+static void fileConstraints(char *constraints, int tableId, FILE *f)
 {
 if (constraints)
-	dyStringPrintf(dy, "#\tSQL query constraint: %s\n", constraints);
+	fprintf(f, "#\tSQL query constraint: %s\n", constraints);
 if (wigConstraint[tableId])
     {
     if (sameWord(wigConstraint[tableId],"in range"))
-	dyStringPrintf(dy,"#\tdata value constraint range: %s [%g , %g]\n",
+	fprintf(f,"#\tdata value constraint range: %s [%g , %g]\n",
 	    wigConstraint[tableId], wigDataConstraint[tableId][0],
 		wigDataConstraint[tableId][1]);
     else
-	dyStringPrintf(dy,"#\tdata value constraint: %s %g\n",
+	fprintf(f,"#\tdata value constraint: %s %g\n",
 	    wigConstraint[tableId], wigDataConstraint[tableId][0]);
     }
 }
@@ -554,7 +553,8 @@ char *visibility;
 int visNum = 0;
 boolean wigBED = FALSE;
 struct bed *bedList = NULL;
-struct dyString *wigAsciiData = newDyString(0);
+FILE *wigAsciiFH = (FILE *) NULL;
+
 
 if (! sameString(customTrackPseudoDb, db))
     {
@@ -569,9 +569,6 @@ if (setting != (char *) NULL)
 setting = cartCgiUsualString(cart, "tbWigDataType", "wigData");
 if ( sameString(setting, "bedData") )
     wigBED = TRUE;
-
-if (doCt)		/*	TEMPORARY UNTIL WIGGLE TRACKS DRAW */
-    wigBED = TRUE;	/*	FOR SOURCE RELEASE 2004-04-28 */
 
 saveOutputOptionsState();
 saveIntersectOptionsState();
@@ -622,12 +619,27 @@ if (doCt)
     {
     int fields=0;
     if (wigBED)
-	fields=6;
+	fields=4;
     ctNew = newCT(tableName, longLabel, visNum, ctUrl, fields);
     if (wigBED)
 	ctNew->wiggle = FALSE;
     else
+	{
+	struct tempName tn;
+	makeTempName(&tn, "hgtct", ".wig");
+	ctNew->wigFile = cloneString(tn.forCgi);
+	makeTempName(&tn, "hgtct", ".wib");
+	ctNew->wibFile = cloneString(tn.forCgi);
+	makeTempName(&tn, "hgtct", ".wia");
+	ctNew->wigAscii = cloneString(tn.forCgi);
+	wigAsciiFH = mustOpen(ctNew->wigAscii, "w");
+#if defined(DEBUG)	/*	dbg	*/
+	/* allow file readability for debug */
+	chmod(ctNew->wigAscii, 0666);
+#endif
+
 	ctNew->wiggle = TRUE;
+	}
     }
 
 for (chromPtr=chromList;  chromPtr != NULL && (linesOutput < maxLinesOut);
@@ -686,6 +698,8 @@ for (chromPtr=chromList;  chromPtr != NULL && (linesOutput < maxLinesOut);
 	    colorR = tdb->colorR; colorG = tdb->colorG; colorB = tdb->colorB;
 	    altColorR = tdb->altColorR; altColorG = tdb->altColorG;
 	    altColorB = tdb->altColorB;
+	    colorR = colorG = colorB = 0;
+	    altColorR = altColorG = altColorB = 128;
 	    }
 	else
 	    {
@@ -698,13 +712,17 @@ for (chromPtr=chromList;  chromPtr != NULL && (linesOutput < maxLinesOut);
 	    colorR = colorG = colorB = 255;
 	    altColorR = altColorG = altColorB = 128;
 	    }
+
 	if (doCt)
+	    {
 	    ctNew->tdb->longLabel = longLabel;
+	    }
 
 	if (doCtHdr && (!wigBED))
 	    {
 	    if (doCt)
 		{
+		struct dyString *wigSettings = newDyString(0);
 		ctNew->tdb->priority = priority;
 		ctNew->tdb->colorR = colorR;
 		ctNew->tdb->colorG = colorB;
@@ -712,9 +730,12 @@ for (chromPtr=chromList;  chromPtr != NULL && (linesOutput < maxLinesOut);
 		ctNew->tdb->altColorR = altColorR;
 		ctNew->tdb->altColorG = altColorB;
 		ctNew->tdb->altColorB = altColorB;
-		/*	settings to be done */
-		ctNew->tdb->settings = cloneString("type='wiggle_0'");
-		dyConstraints(constraints, WIG_TABLE_1, wigAsciiData);
+		/*	more settings to be done */
+		dyStringPrintf(wigSettings,
+			    "type='wiggle_0'\twigFile='%s'\twibFile='%s'",
+			    ctNew->wigFile, ctNew->wibFile);
+		ctNew->tdb->settings = dyStringCannibalize(&wigSettings);
+		fileConstraints(constraints, WIG_TABLE_1, wigAsciiFH);
 		}
 	    else
 		{
@@ -740,7 +761,7 @@ for (chromPtr=chromList;  chromPtr != NULL && (linesOutput < maxLinesOut);
 		if (!wigBED)
 		    {
 		    if (doCt)
-			dyStringPrintf(wigAsciiData,
+			fprintf(wigAsciiFH,
 			    "variableStep chrom=%s span=%u\n",
 			    wdPtr->chrom, wdPtr->span);
 		    else
@@ -757,7 +778,7 @@ for (chromPtr=chromList;  chromPtr != NULL && (linesOutput < maxLinesOut);
 		if (!wigBED)
 		    {
 		    if (doCt)
-			dyStringPrintf(wigAsciiData,
+			fprintf(wigAsciiFH,
 			    "variableStep chrom=%s span=%u\n",
 			    wdPtr->chrom, wdPtr->span);
 		    else
@@ -774,7 +795,7 @@ for (chromPtr=chromList;  chromPtr != NULL && (linesOutput < maxLinesOut);
 			    (i < wdPtr->count); ++i, ++wd)
 		    {
 		    if (doCt)
-			dyStringPrintf(wigAsciiData, "%u\t%g\n",
+			fprintf(wigAsciiFH, "%u\t%g\n",
 			    wd->chromStart+1, wd->value);
 		    else
 			printf("%u\t%g\n", wd->chromStart+1, wd->value);
@@ -805,22 +826,20 @@ for (chromPtr=chromList;  chromPtr != NULL && (linesOutput < maxLinesOut);
 	}
     }
 
-if ((ctNew != NULL) && (wigAsciiData->stringSize > 0))
-    ctNew->wigData = dyStringCannibalize(&wigAsciiData);
-
 if ((ctNew != NULL) && (bedList != NULL))
     {
     slReverse(&bedList);
     ctNew->bedList = bedList;
     }
 
-if ((ctNew != NULL) && ((ctNew->bedList != NULL) || (ctNew->wigData != NULL)))
+if ((ctNew != NULL) && ((ctNew->bedList != NULL) || (ctNew->wigAscii != NULL)))
     {
     /* Load existing custom tracks and add this new one: */
     struct customTrack *ctList = getCustomTracks();
     char *ctFileName = cartOptionalString(cart, "ct");
     struct tempName tn;
     slAddHead(&ctList, ctNew);
+    carefulClose(&wigAsciiFH);
     /* Save the custom tracks out to file (overwrite the old file): */
     if (ctFileName == NULL)
 	{
