@@ -540,6 +540,8 @@ fprintf(f,
     "#aName   \taSize\taHitS\taHitT\tbName     \tbSize\tbHitS\tbHitT\tStrict\tLoose\tObliv.\tExtra\n");
 for (ocp = ocpList; ocp != NULL; ocp = ocp->next)
     {
+    if (ocp->a->phase == 0 || ocp->b->phase == 0)
+        continue;
     fprintf(f, "%s\t%d\t%c\t%c\t%s\t%d\t%c\t%c\t\%d\t%d\t%d\t0\n", 
     	ocp->a->name, ocp->a->size, ocp->aHitS, ocp->aHitT,
 	ocp->b->name, ocp->b->size, ocp->bHitS, ocp->bHitT, ocp->overlap,
