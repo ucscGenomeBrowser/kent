@@ -9,6 +9,7 @@ HG_INC=-I../inc -I../../inc -I../../../inc -I../../../../inc
 # HG_WARN = ${HG_WARN_ERR}
 HG_WARN_ERR = -DJK_WARN -Wall -Werror
 
+SCRIPTS=/cluster/bin/scripts
 CGI_BIN=/usr/local/apache/cgi-bin
 MKDIR=mkdir -p
 
