@@ -51,6 +51,7 @@ if (sameWord(db, "hg5"))
 for (i=0; i<ArraySize(serverTable); ++i)
     {
     serve = &serverTable[i];
+	
     if (sameWord(serve->db, db) && serve->isTrans == isTrans)
         return serve;
     if (sameWord(serve->genome, db) && serve->isTrans == isTrans)
@@ -386,7 +387,7 @@ char *db = cgiOptionalString("db");
 struct serverTable *serve = findServer(db, FALSE);
 
 printf("%s", 
-"<FORM ACTION=\"../cgi-bin/hgBlat\" METHOD=POST>\n"
+"<FORM ACTION=\"../cgi-bin/hgBlat\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n"
 "<H1 ALIGN=CENTER>BLAT Search Human Genome</H1>\n"
 "<P>\n"
 "<TABLE BORDER=0 WIDTH=\"96%\">\n"
@@ -413,9 +414,15 @@ printf("%s", "<TD WIDTH=\"25%\">\n"
 puts("Please paste in a query sequence to see where it is located in the ");
 puts("UCSC assembly of the human genome.  Multiple sequences can be searched\n");
 puts("at once if separated by a line starting with > and the sequence name.\n");
+puts("<P>");
 
 puts("<TEXTAREA NAME=userSeq ROWS=14 COLS=80></TEXTAREA>\n");
+puts("<P>");
 
+puts("Rather than pasting a sequence, you can choose to upload a text file containing "
+	 "the sequence.<BR>");
+puts("Upload sequence: <INPUT TYPE=FILE NAME=\"seqFile\"");
+puts("<P>");
 
 cgiMakeHiddenVar("db", serve->db);
 
@@ -451,9 +458,19 @@ printf("%s",
 
 void doMiddle()
 {
+// get the sequence
 char *userSeq = cgiOptionalString("userSeq");
 
-if (userSeq == NULL)
+// have no sequence in userSeq
+if(userSeq != 0 && userSeq[0] == '\0') {
+	// try the file
+	userSeq = cgiOptionalString("seqFile");
+}
+
+//printf("seqFile: %s\n", cgiOptionalString("seqFile"));
+//printf("file   : %s\n", cgiOptionalString("file"));
+
+if(userSeq == NULL || userSeq[0] == '\0')
     askForSeq();
 else
     blatSeq(userSeq);
