@@ -551,23 +551,30 @@ Alternatively, you can toggle between dense and full modes
 for a displayed track (or pack mode when available) by clicking on the optional 
 center label for the track. 
 <P>
-<B>Changing the display of a track by using filters</B><BR>
+<B>Changing the display of a track by using filters and configuration options</B><BR>
 Some tracks have additional filter and configuration capabilities, 
-e.g. EST tracks, mRNA tracks, NC160, etc. These filters
+e.g. EST tracks, mRNA tracks, NC160, etc. These options
 let the user modify the color or restrict the data displayed within an annotation track.
 Filters are useful for focusing attention on items relevant to the current task
 in tracks that contain large amounts of data. For example, to highlight ESTs
 expressed in the liver, set the EST track filter to display items in a
-different color when the associated tissue keyword is "liver".
+different color when the associated tissue keyword is "liver". Configuration
+options let the user adjust the display to best show the data of interest.
+For example, the min vertical viewing range value on wiggle tracks
+can be used to establish a data threshold. By setting the min value to &quot;50&quot;, only data values greater than 50 percent will display.
 <P>
-To access the filter for a specific annotation track, click on the label for the track's
-control under the Track Controls section or on the gray mini-button to the left of the
-displayed track. The Genome Browser will display a description page for the
-track that contains a filter at the top of the page and a section entitled
-<I>Using the Filter</I> that contains instructions for using the filter. Filter
-settings are persistent from session to session on the same web browser. To
-turn off filtering for a track, delete any text in the filter text boxes and
-return the buttons to their original state on the track's description page, or simply 
+To access filter and configuration options for a specific annotation track, open
+the tracks' description page by clicking the label for the track's control menu 
+under the Track Controls section or the mini-button to the left of the displayed 
+track. The filter and configration section is located at the top of the 
+description page. In most instance, more information about the configuration 
+options is available within the description text or through a special help link 
+located in the configuration section. 
+<P>
+Filter and configuration settings are persistent from session to session on the 
+same web browser. To turn off user-configured settings for a track, delete any 
+text in the filter text boxes and return the buttons to their original state on 
+the track's description page, or simply 
 click the <I>reset all</I> button on the Genome Browser page.
 <P>
 <B>Zooming and scrolling the tracks display</B><BR>
@@ -1492,8 +1499,7 @@ displayed.
 
 <P><B>Affymetrix GNF1H</B><BR>
 This track shows the location of the sequences used for the selection of probes 
-on Affymetrix GNF1H chips. This contains 11406 predicted genes that do not 
-overlap with the Affy U133A chip.
+on Affymetrix GNF1H chips. 
 
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
@@ -1515,9 +1521,33 @@ overlap with the Affy U133A chip.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
-<P><B>Affymetrix U133</B><BR>
-This track shows the location of the consensus and exemplar sequences used for 
-the selection of probes on the Affymetrix HG-U133A and HG-U133B chips.
+<P><B>Affymetrix GNF1H</B><BR>
+This track shows the location of the sequences used for the selection of probes 
+on Affymetrix GNF1M chips. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B> 
+	This track follows display conventions similar to mRNA tracks.
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	In dense or packed display mode, the track shows averages of related
+	tissues. In full display mode, all tissues are displayed. Click on an 
+	individual tissue entry to show a gene expression map for all tissues in 
+	the experiment. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>affyGnf1m</I> positional table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>Affymetrix MOE430</B><BR>
+This track shows the location of the sequences used for 
+the selection of probes on the Affymetrix Mouse MOE430 set of chips (A and B).
 
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
@@ -1537,6 +1567,31 @@ the selection of probes on the Affymetrix HG-U133A and HG-U133B chips.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
+<P><B>Affymetrix U74</B><BR>
+This track shows the location of sequences used for 
+the selection of probes on the Affymetrix MG-U74v2 set of chips (A, B, and C).
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B> 
+	This track follows display conventions similar to mRNA tracks.
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an item in one of the fuller modes displays positional
+	and % identity information. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>affyU74</I> positional table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>Affymetrix U95</B><BR>
+This track shows the location of the consensus and exemplar sequences used for 
+the selection of probes on the Affymetrix HG-U95Av2 chip.
 <P><B>Affymetrix U95</B><BR>
 This track shows the location of the consensus and exemplar sequences used for 
 the selection of probes on the Affymetrix HG-U95Av2 chip.
@@ -1702,11 +1757,10 @@ details.
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	Clicking on an entry in full display mode will show mouse and 
-	human position information, alignment details, and link to a detailed
-	view of parts of the alignment.
-	links.</TD></TR>
+	human position information, alignment details, and a link to a detailed
+	view of parts of the alignment.  </TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track filter:</I></B> 
+	<B><I>Track configuration:</I></B> 
 	The track description page contains a filter that can be used to turn 
 	on the chromosome color track or to filter the display output by 
 	chromosome.</TD></TR>
@@ -1733,11 +1787,10 @@ details.
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	Clicking on an entry in full display mode will show human and 
-	mouse position information, alignment details, and link to a detailed
-	view of parts of the alignment.
-	links.</TD></TR>
+	mouse position information, alignment details, and a link to a detailed
+	view of parts of the alignment.</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track filter:</I></B> 
+	<B><I>Track configuration:</I></B> 
 	The track description page contains a filter that can be used to turn 
 	on the chromosome color track or to filter the display output by 
 	chromosome.</TD></TR>
@@ -1764,11 +1817,10 @@ details.
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	Clicking on an entry in full display mode will show rat and 
-	mouse position information, alignment details, and link to a detailed
-	view of parts of the alignment.
-	links.</TD></TR>
+	mouse position information, alignment details, and a link to a detailed
+	view of parts of the alignment. </TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track filter:</I></B> 
+	<B><I>Track configuration:</I></B> 
 	The track description page contains a filter that can be used to turn 
 	on the chromosome color track or to filter the display output by 
 	chromosome.</TD></TR>
@@ -1795,12 +1847,11 @@ rates at 4-fold degenerate positions.
 	This track uses the display conventions for wiggle tracks.
 	</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track filter:</I></B> 
-	Clicking on the mini-button to the left of the track will display the track
-	description page which contains a filter to fine-tune the track display.
-	The filter allows the user to configure several aspects of the track 
-	display, including the interpolation, anti-aliasing, block fill, vertical
-	range, and the track height.</TD></TR>
+	<B><I>Track configuration:</I></B> 
+	The track description page contains options to configure 
+	several of the graph characteristics. To read more information
+	about each option, click the &quot;Graph configuration help&quot; link. 
+	</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	Clicking on one of the peaks in the track when in full display mode will 
@@ -1829,11 +1880,10 @@ assembly to the human genome.
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	Clicking on an entry in full display mode will show human and 
-	mouse position information, alignment details, and link to a detailed
-	view of parts of the alignment.
-	links.</TD></TR>
+	mouse position information, alignment details, and a link to a detailed
+	view of parts of the alignment.  </TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track filter:</I></B> 
+	<B><I>Track configuration:</I></B> 
 	The track description page contains a filter that can be used to turn 
 	on the chromosome color track or to filter the display output by 
 	chromosome.</TD></TR>
@@ -1940,111 +1990,6 @@ axtChain.
 
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Display conventions:</I></B>
-	This track uses the display conventions for chain tracks.</TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track details:</I></B> 
-	Clicking on an item in full display mode shows position information
-	in the chimp and the selected genome, the chain ID and score, and 
-	provides links to view details of parts of the chain or to open the 
-	chimp browser to the corresponding position. </TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Table details:</I></B> 
-	To view a text version of the data set, select the 
-	<I>chrN_chainPanTroX</I> positional table in the Table Browser, where <I>X</I>
-	is the assembly version in which you're interested. To view the table
-	definition, click <A
-	HREF="../gbdDescriptions.html#Chain"
-	TARGET=_blank>here</A>.</TD></TR>
-</TABLE></P>
-
-<P><B>Chimp Deletions </B><BR>
-This track displays regions of the human genome assembly that are deleted in the 
-chimpanzee assembly. Only regions of between 80 and 12000 bases are included. 
-A similar track, showing human deletions in the chimpanzee assembly, appears in 
-the chimp genome browser.
-
-<TABLE CELLPADDING=0 CELLSPACING=0>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Display conventions:</I></B> 
-	Base deletions are represented by blocks.</TD></TR>	
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track details:</I></B> 
-	Clicking on an item in full display mode will show position information 
-	and a link to the DNA associated with the feature. </TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Table details:</I></B> 
-	To view a text version of the data set, select the 
-	<I>chimpDels</I> positional table in the Table Browser. To view the table
-	definition, click <A
-	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#BED"
-	TARGET=_blank>here</A>.</TD></TR>
-</TABLE></P>
-
-<P><B>Chimp Diff </B><BR>
-This track shows simple differences between chimp alignments and the human 
-assembly within regions of high quality chimp sequence. 
-
-<TABLE CELLPADDING=0 CELLSPACING=0>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Display conventions:</I></B> 
-	Base differences are represented by thin vertical blocks.</TD></TR>	
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track details:</I></B> 
-	Clicking on an item in full display mode will show details on the bases
-	that differ, position information, and a link to the DNA associated with
-	the feature. </TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Table details:</I></B> 
-	To view a text version of the data set, select the 
-	<I>chimpSimpleDiff</I> positional table in the Table Browser. To view the table
-	definition, click <A
-	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#ChimpSimpleDiff"
-	TARGET=_blank>here</A>.</TD></TR>
-</TABLE></P>
-
-<P><B>Chimp Recip Chain </B><BR>
-This track shows reciprocal best chimpanzee alignments to the selected genome
-assembly generated blastz, blat and axtChain. Due to the draft nature of the 
-initial chimp assembly, this track uses a "reciprocal best" strategy that 
-attempts to minimize paralog fill-in for missing orthologous chimp sequence by 
-filtering out of the human net all sequences not in the chimp side of the net. 
-See the track description page for more information about the methods used to
-generate this track.
-
-<TABLE CELLPADDING=0 CELLSPACING=0>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Display conventions:</I></B>
-	This track uses the display conventions for chain tracks.</TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track details:</I></B> 
-	Clicking on an item in full display mode shows position information
-	in the human and chimp, the chain ID and score, and provides links to view
-	details of parts of the chain or to open the chimp browser to the 
-	corresponding position. </TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Table details:</I></B> 
-	To view a text version of the data set, select the 
-	<I>chrN_rBestChainPanTro1</I> positional table in the Table Browser.
-	To view the table definition, click <A
-	HREF="../gbdDescriptions.html#Chain"
-	TARGET=_blank>here</A>.</TD></TR>
-</TABLE></P>
-
-<P><B>Chimp Recip Net </B><BR>
-This track shows the reciprocal best alignment net between the chimpanzee and the
-selected genome assembly. Due to the draft nature of the
-initial chimp assembly, this track uses a "reciprocal best" strategy that
-attempts to minimize paralog fill-in for missing orthologous chimp sequence by
-filtering out of the human net all sequences not in the chimp side of the net.
-See the track description page for more information about the methods used to
-generate this track.
-
-<TABLE CELLPADDING=0 CELLSPACING=0>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Display conventions:</I></B>
-	This track uses the display conventions for net tracks.</TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	In full display mode, clicking on a box shows details information about 
 	the chain as a whole, while clicking on a line shows information
@@ -2057,6 +2002,64 @@ generate this track.
 	<I>rBestNetPanTro1</I> positional table in the Table Browser. 
 	To view the table definition, click <A
 	HREF="../gbdDescriptions.html#NetAlign"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>Chimp Deletions</B><BR>
+This track displays regions of the human assembly that are deleted in the 
+chimp assembly. Only regions of between 80 and 12000 bases are included. 
+The name of each deletion is a unique pointer to that deletion followed by an 
+underscore and then its length. A similar track, showing human deletions in the 
+chimp assembly, appears in the chimp Genome Browser.
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	Deletions are indicated by thin vertical lines. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on a deletion in full display mode provides the item name,
+	position, genomic size, and a link to the DNA underlying the feature.
+	</TD></TR> 
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>chimpDels</I> positional table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#BED"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>Chimp Diff</B><BR>
+This track shows simple differences between chimp alignments and the human 
+assembly within regions of high quality chimp sequence. For a difference to be 
+included in this track, it had to meet the following criteria: 
+<UL>
+<LI>the difference must occur at a base of quality 30 or better 
+<LI>all bases within an 11-base window around this base must have a quality of 
+25 or better 
+<LI>the 11-base window must contain no more than two base differences 
+<LI>no insertions or deletions may be present within the window 
+</UL>
+Only reciprocal best chimp alignments were considered for this track (see the 
+Chimp Net track description page for more information about this alignment 
+strategy). 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	Differences are indicated by thin vertical lines. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on a deletion in full display mode provides the item name,
+	position, genomic size, and a link to the DNA underlying the feature.
+	</TD></TR> 
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>chimpSimpleDiff</I> positional table in the Table Browser. To view 
+	the table definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#ChimpSimpleDiff"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
@@ -2169,6 +2172,7 @@ is a region where C's followed by G's (CpGs) are present at significantly
 higher levels than is typical for the genome as a whole. The CpG islands 
 displayed in this browser are all at least 200 bases long, and have a GC 
 content of at least 50%.
+<P>
 CpG islands are associated with genes, particularly housekeeping genes, in 
 vertebrates. They are particularly common near transcription start sites, and 
 may be associated with promoter regions. Normally a CpG is rare in vertebrate 
@@ -2184,7 +2188,7 @@ some reason, perhaps having to do with the regulation of gene expression.
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Display conventions:</I></B>
 	CpG islands are represented by green boxes. Darker green items indicate CpG 
-	islands that exceed 300 occurrences.</TD></TR> 
+	islands that contain  300 or more bases.</TD></TR> 
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Display conventions:</I></B>
 	Clicking on a CpG entry in full display mode will show basic track information, 
@@ -2694,27 +2698,6 @@ during the finishing process.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
-<P><B>GC% 20K</B><BR>
-This shows the percentage of G or C bases in a 20,000-base window. High GC 
-content is associated with gene rich areas. 
-<TABLE CELLPADDING=0 CELLSPACING=0>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Display conventions:</I></B> 
-	Windows with high GC content are drawn more darkly than those with low GC 
-	content. </TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track details:</I></B> 
-	Clicking on an item in full mode provides position information and the GC 
-	percent for the item.</TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Table details:</I></B> 
-	To view a text version of the data set, select the 
-	<I>gcPercent</I> positional table in the Table Browser. To view the table
-	definition, click <A
-	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#GCpercent"
-	TARGET=_blank>here</A>.</TD></TR>
-</TABLE></P>
-
 <P><B>GC Percent</B><BR>
 This shows the percentage of bases that are G or C in a 5-base window. High GC 
 content is associated with gene rich areas. 
@@ -2723,11 +2706,11 @@ content is associated with gene rich areas.
 	<B><I>Display conventions:</I></B> 
 	This track uses the display conventions for wiggle tracks.</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track filter:</I></B> 
-	Clicking on the mini-button to the left of the track will display the track
-	description page which contains a filter to fine-tune the track display.
-	The filter allows the user to configure several of the graph
-	characteristics. </TD></TR>
+	<B><I>Track configuration:</I></B> 
+	The track description page contains options to configure 
+	several of the graph characteristics. To read more information
+	about each option, click the &quot;Graph configuration help&quot; link. 
+	</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	Clicking on one of the peaks in the track when in full display mode will 
@@ -2754,12 +2737,10 @@ gene-rich areas.
 	<B><I>Display conventions:</I></B> 
 	This track uses the display conventions for wiggle tracks.</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track filter:</I></B> 
-	Clicking on the mini-button to the left of the track will display the track
-	description page which contains a filter to fine-tune the track display.
-	The filter allows the user to configure several aspects of the track 
-	display, including the interpolation, anti-aliasing, block fill, and the 
-	track height.</TD></TR>
+	<B><I>Track configuration:</I></B> 
+	The track description page contains a filter that can be used to turn 
+	on the chromosome color track or to filter the display output by 
+	chromosome.</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	Clicking on one of the peaks in the track when in full display mode will 
@@ -2775,6 +2756,76 @@ gene-rich areas.
 	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#WiggleTrack"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
+
+<P><B>GNF U74A</B><BR>
+This track shows expression data from GNF using the Affymetrix U74A chip. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B> 
+	This track follows display conventions similar to mRNA tracks.
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	In dense or packed display mode, the track shows averages of related
+	tissues. In full display mode, all tissues are displayed. Click on an 
+	individual tissue entry to show a gene expression map for all tissues in 
+	the experiment. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>affyGnfU74A</I> positional table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#BED"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>GNF U74B</B><BR>
+This track shows expression data from GNF using the Affymetrix U74B chip. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B> 
+	This track follows display conventions similar to mRNA tracks.
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	In dense or packed display mode, the track shows averages of related
+	tissues. In full display mode, all tissues are displayed. Click on an 
+	individual tissue entry to show a gene expression map for all tissues in 
+	the experiment. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>affyGnfU74B</I> positional table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#BED"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>GNF U74C</B><BR>
+This track shows expression data from GNF using the Affymetrix U74C chip. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B> 
+	This track follows display conventions similar to mRNA tracks.
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	In dense or packed display mode, the track shows averages of related
+	tissues. In full display mode, all tissues are displayed. Click on an 
+	individual tissue entry to show a gene expression map for all tissues in 
+	the experiment. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>affyGnfU74C</I> positional table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#BED"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
 
 <P><B>Gene Annotations </B>(Zoo)<BR>
 This track displays NISC-generated, curated gene annotations for each of the 
@@ -2974,11 +3025,10 @@ information about the experiments, refer to the description page for this track.
 	of the signal of that particular experiment to the median signal of all 
 	experiments for that probe. </TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track filter:</I></B>	
-	Clicking on the mini-button to the left of the track will display the track
-	description page containing a filter to fine-tune the track display.
-	The filter allows the user to change the display mode, group the displayed
-	results, and change the display colors. </TD></TR>
+	<B><I>Track configuration:</I></B> 
+	The track description page contains options to change the display mode,
+	group the displayed results, and change the display colors.
+	</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Table details:</I></B> 
 	To view a text version of the data set, select the 
@@ -3046,6 +3096,34 @@ Dawson E. et. al. (2002), "<A HREF="http://bioinformatics.well.ox.ac.uk/~lon/chr
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
+<P><B>Human Best </B><BR>
+This track displays best-in-genome alignments of the specified human draft
+assembly to the selected genome baed on the associated alignment net, i.e. the
+best chain for every part of the human genome. See the track description page
+for the Human Net track for more information about the methods used to generate
+this track.
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for cross-species synteny 
+	tracks.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode will show position information
+	for the human alignment and the selected genome, alignment details, and 
+	a link to a detailed view of parts of the alignment.
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>axtNetHgX</I> positional table in the Table Browser, where 
+	<em>X</em> is the assembly version in which you're interested. 
+	To view the table definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
 <P><B>Human Blat </B><BR>
 This track displays translated BLAT alignments of the human genome
 vs. the mouse genome. 
@@ -3074,6 +3152,30 @@ genome or human contamination in the mouse genome.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
+<P><B>Human Chain </B><BR>
+This track shows human genomic alignment to the selected genome using blastz and
+axtChain. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for chain tracks.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an item in full display mode shows position information
+	in the mouse and the selected genome, the chain ID and score, and 
+	provides links to view details of parts of the chain or to open the 
+	mouse browser to the corresponding position. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>chrN_chainHgX</I> positional table in the Table Browser, where <I>X</I>
+	is the assembly version in which you're interested. To view the table
+	definition, click <A
+	HREF="../gbdDescriptions.html#Chain"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
 <P><B>Human Cons </B><BR>
 This track displays the conservation between the mouse and human genomes for 
 50bp windows in the mouse genome that have at least 15bp aligned to human. The 
@@ -3091,12 +3193,11 @@ L-score of 3 means a 1/1000 probability, etc. The L-scores display as
 	This track uses the display conventions for wiggle tracks.
 	</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track filter:</I></B> 
-	Clicking on the mini-button to the left of the track will display the track
-	description page which contains a filter to fine-tune the track display.
-	The filter allows the user to configure several aspects of the track 
-	display, including the interpolation, anti-aliasing, block fill, and the 
-	track height.</TD></TR>
+	<B><I>Track configuration:</I></B> 
+	The track description page contains options to configure 
+	several of the graph characteristics. To read more information
+	about each option, click the &quot;Graph configuration help&quot; link. 
+	</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	Clicking on one of the peaks in the track when in full display mode will 
@@ -3113,6 +3214,31 @@ L-score of 3 means a 1/1000 probability, etc. The L-scores display as
 	<I>musHumL</I> positional table in the Table Browser. To view the table
 	definition, click <A
 	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#WiggleTrack"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>Human Deletions</B><BR>
+This track displays regions of the chimp assembly that are deleted in the 
+human assembly. Only regions of between 80 and 12000 bases are included. 
+The name of each deletion is a unique pointer to that deletion followed by an 
+underscore and then its length. A similar track, showing chimp deletions in the 
+human assembly, appears in the human Genome Browser.
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	Deletions are indicated by thin vertical lines. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on a deletion in full display mode provides the item name,
+	position, genomic size, and a link to the DNA underlying the feature.
+	</TD></TR> 
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>humanDels</I> positional table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#BED"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
@@ -3143,11 +3269,10 @@ kept.
 	in to display entries in full display mode due to the 300 line display 
 	limit.</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track filter:</I></B> 
-	Clicking on the mini-button to the left of the track will display the track
-	description page which contains a filter to fine-tune the track display.
-	The filter allows the user to restrict the display to only those entries that 
-	match certain keywords, and to change the color of the selected entries.</TD></TR>
+	<B><I>Track configuration:</I></B> 
+	The track description page contains a filter to restrict the display to 
+	only those entries that match certain keywords and to change the color 
+	of the selected entries.</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	Clicking on an individual EST entry will show basic track information,
@@ -3176,12 +3301,12 @@ to be kept.
 	<B><I>Display conventions:</I></B>
 	This track follows the display conventions for mRNA tracks. </TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track details:</I></B> 
-	Clicking on the mini-button to the left of the track will display the track
-	description page which contains a filter to fine-tune the track display.
-	The filter allows the user to restrict the display to only those entries that 
-	match certain keywords, and to change the color of the selected entries.</TD></TR>
+	<B><I>Track configuration:</I></B> 
+	The track description page contains a filter to restrict the display to 
+	only those entries that match certain keywords and to change the color 
+	of the selected entries.</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
 	Clicking on an entry in full display mode will show a summary of the Genbank 
 	entry on that mRNA, convenient hyperlinks to major databases, and base-by-base 
 	mRNA/genomic alignments. </TD></TR>
@@ -3191,6 +3316,30 @@ to be kept.
 	<I>chrN_mrna</I> positional table in the Table Browser. To view the table
 	definition, click <A
 	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>Human Net</B><BR>
+This track shows the best human chain for every part of the selected genome.
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for net tracks.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	In full display mode, clicking on a box shows details information about 
+	the chain as a whole, while clicking on a line shows information
+	about the gap. The detailed information is useful in determining the 
+	cause of the gap or, for lower level chains, the genomic 
+	rearrangement.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>netHgX</I> positional table in the Table Browser, where <I>X</I>
+	is the assembly version in which you're interested. To view the table
+	definition, click <A
+	HREF="../gbdDescriptions.html#NetAlign"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
@@ -3533,12 +3682,11 @@ L-score of 3 means a 1/1000 probability, etc. The L-scores display as
 	This track uses the display conventions for wiggle tracks.
 	</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track filter:</I></B> 
-	Clicking on the mini-button to the left of the track will display the track
-	description page which contains a filter to fine-tune the track display.
-	The filter allows the user to configure several aspects of the track 
-	display, including the interpolation, anti-aliasing, block fill, and the 
-	track height.</TD></TR>
+	<B><I>Track configuration:</I></B> 
+	The track description page contains options to configure 
+	several of the graph characteristics. To read more information
+	about each option, click the &quot;Graph configuration help&quot; link. 
+	</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	Clicking on one of the peaks in the track when in full display mode will 
@@ -3600,11 +3748,10 @@ near-best-in-genome filter.
 	<B><I>Display conventions:</I></B>
 	This track uses the display conventions for mRNA tracks.</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track filter:</I></B> 
-	Clicking on the mini-button to the left of the track will display the track
-	description page which contains a filter to fine-tune the track display.
-	The filter allows the user to restrict the display to only those entries that 
-	match certain keywords, and to change the color of the selected entries.</TD></TR>
+	<B><I>Track configuration:</I></B> 
+	The track description page contains a filter to restrict the display to 
+	only those entries that match certain keywords and to change the color 
+	of the selected entries.</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	Clicking on an entry in full display mode will show a summary of the Genbank 
@@ -3711,11 +3858,13 @@ cancer drug screen</A>.
 	variation. Black  indicates an undetectable change in expression; gray shows 
 	missing data. </TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track configuration:</I></B> 
+	The track description page contains a filter to limit the tissue types 
+	displayed and change the color scheme of the display.  </TD></TR>
 	<B><I>Track details:</I></B> 
-	Clicking on an individual track item in full mode open a rich details page. 
-	The exon probe and experiment selected are highlighted in blue under item 
-	name. Use filter page options to limit tissue types displayed and change the 
-	color scheme of the display. </TD></TR>
+	Clicking on an individual track item in full mode open a rich details 
+	page.  The exon probe and experiment selected are highlighted in blue 
+	under item name. </TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Table details:</I></B> 
 	To view a text version of the data set, select the 
@@ -3765,11 +3914,10 @@ Matches are often plausible ortholog candidates.
 	<B><I>Display conventions:</I></B>
 	This track uses the display conventions for mRNA tracks. </TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track filter:</I></B> 
-	Clicking on the mini-button to the left of the track will display the track
-	description page which contains a filter to fine-tune the track display.
-	The filter allows the user to restrict the display to only those entries that 
-	match certain keywords, and to change the color of the selected entries.</TD></TR>
+	<B><I>Track configuration:</I></B> 
+	The track description page contains a filter to restrict the display to 
+	only those entries that match certain keywords and to change the color 
+	of the selected entries.</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	Clicking on an entry in full display mode will show a summary of the Genbank 
@@ -3794,11 +3942,10 @@ filter. Some mRNAs align to multiple places but only the near-best are retained.
 	<B><I>Display conventions:</I></B>
 	This track uses the display conventions for mRNA tracks. </TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track filter:</I></B> 
-	Clicking on the mini-button to the left of the track will display the track
-	description page which contains a filter to fine-tune the track display.
-	The filter allows the user to restrict the display to only those entries that 
-	match certain keywords, and to change the color of the selected entries.</TD></TR>
+	<B><I>Track configuration:</I></B> 
+	The track description page contains a filter to restrict the display to 
+	only those entries that match certain keywords and to change the color 
+	of the selected entries.</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	Clicking on an entry in full display mode will show a summary of the Genbank 
@@ -3823,11 +3970,10 @@ filter. Some mRNAs align to multiple places but only the near-best are retained.
 	<B><I>Display conventions:</I></B>
 	This track uses the display conventions for mRNA tracks. </TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track filter:</I></B> 
-	Clicking on the mini-button to the left of the track will display the track
-	description page which contains a filter to fine-tune the track display.
-	The filter allows the user to restrict the display to only those entries that 
-	match certain keywords, and to change the color of the selected entries.</TD></TR>
+	<B><I>Track configuration:</I></B> 
+	The track description page contains a filter to restrict the display to 
+	only those entries that match certain keywords and to change the color 
+	of the selected entries.</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	Clicking on an entry in full display mode will show a summary of the Genbank 
@@ -3876,12 +4022,11 @@ model of neutral evolution.
 	This track uses the display conventions for wiggle tracks.
 	</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track filter:</I></B> 
-	Clicking on the mini-button to the left of the track will display the track
-	description page which contains a filter to fine-tune the track display.
-	The filter allows the user to configure several aspects of the track 
-	display, including the interpolation, anti-aliasing, block fill, vertical
-	range, and the track height.</TD></TR>
+	<B><I>Track configuration:</I></B> 
+	The track description page contains options to configure 
+	several of the graph characteristics. To read more information
+	about each option, click the &quot;Graph configuration help&quot; link. 
+	</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	Clicking on one of the peaks in the track when in full display mode will 
@@ -3958,6 +4103,41 @@ reported peak LOD scores taken from Jackson Lab's
 	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#JaxQTL"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
+
+<P><B>Quality</B><BR>
+The Quality Scores track shows the sequencing quality score (between 0 and 100) 
+of each base in the assembly. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	The height at each position of the track indicates the quality of the 
+	base. When zoomed out to a large range, the heights reflect the averaged 
+	scores. Scores of 40 or higher reflect high confidence in the sequence 
+	(with an error rate of less than 1/10,000); scores of 20 or higher 
+	reflect reasonable confidence (of working draft quality). </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>quality</I> positional table in the Table Browser.
+	To view the table definition, click <A
+	HREF="../gbdDescriptions.html#WiggleTrack2"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>Chimp Recip Net </B><BR>
+This track shows the reciprocal best alignment net between the chimpanzee and the
+selected genome assembly. Due to the draft nature of the
+initial chimp assembly, this track uses a "reciprocal best" strategy that
+attempts to minimize paralog fill-in for missing orthologous chimp sequence by
+filtering out of the human net all sequences not in the chimp side of the net.
+See the track description page for more information about the methods used to
+generate this track.
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for net tracks.</TD></TR>
 
 <P><B>Random SNPs</B> (older archived versions only)<BR> 
 This track displays single nucleotide polymorphisms (SNPs)found by random 
@@ -4073,11 +4253,10 @@ displayed by default.
 	contained within that window. Darker shades of gray correspond to higher
 	recombination rates.
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track filter:</I></B> 
-	Clicking on the mini-button to the left of the track will display the track
-	description page which contains a filter to select the map distances (sex averaged 
-	distance, female distance, or male distance) for the 3 different types of 
-	maps.  </TD></TR>
+	<B><I>Track configuration:</I></B> 
+	The track description page contains a filter to map distances 
+	(sex-averaged distance, female distance, or male distance) for the 3 
+	different types of maps.  </TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
  	Clicking in full mode shows position information 
@@ -4113,10 +4292,11 @@ identity to be kept.
 	corresponding protein, mRNA, and genomic sequences, and related links to 
 	outside databases. </TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track filter:</I></B> 
-	The track description page contains a filter to configure the feature
-	label to display the gene name (default), the accession name, both the 
-	gene and accession names, or no label at all.</TD></TR>
+	<B><I>Track configuration:</I></B> 
+	The track description page contains configuration options to
+	change the feature label to display the gene name (default), the 
+	accession name, both the gene and accession names, or no label at all.
+	</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Table details:</I></B> 
 	To view a text version of the data set, select the 
@@ -4150,6 +4330,34 @@ micro-satellite, tRNA, and other repeat families.
 	<I>chrN_rmsk</I> positional table in the Table Browser. To view the table
 	definition, click <A
 	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#RepeatInfo"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>RGD Genes</B><BR>
+This track shows RefSeq genes curated by the Rat Genome Database (RGD). 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B> 
+	This track follows the display conventions used by gene prediction tracks.
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode will display position 
+	information, links to sequence displays, and links to outside sources
+	showing additional information. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track configuration:</I></B> 
+	The track description page contains a filter that can be used to turn
+	on codon coloring for the track. Click the &quot;Codon coloring help&quot;
+	link on the page for more information about this feature.
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>rgdGene</I> positional table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#GenePredictions"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
@@ -4195,9 +4403,9 @@ of nearby exons.
 	separate tracks. Click on the mini-button to the left of the track to
 	display a track description page containing more information.</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track filter:</I></B> 
-	The track description page contains a filter to fine-tune the track display.
-	The following display options are configurable:
+	<B><I>Track configuration:</I></B> 
+	The track description page contains a filter to fine-tune the track 
+	display. The following display options are configurable:
 	<BLOCKQUOTE>
 		o Reference Sample: Determines which of the 69 different
 		experiments are displayed, based on the reference sample
@@ -4634,11 +4842,10 @@ page for more details.
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	Clicking on an entry in full display mode will show mouse and 
-	human position information, alignment details, and link to a detailed
-	view of parts of the alignment.
-	links.</TD></TR>
+	human position information, alignment details, and a link to a detailed
+	view of parts of the alignment.  </TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track filter:</I></B> 
+	<B><I>Track configuration:</I></B> 
 	The track description page contains a filter that can be used to turn 
 	on the chromosome color track or to filter the display output by 
 	chromosome.</TD></TR>
@@ -4665,11 +4872,10 @@ page for more details.
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	Clicking on an entry in full display mode will show human and 
-	mouse position information, alignment details, and link to a detailed
-	view of parts of the alignment.
-	links.</TD></TR>
+	mouse position information, alignment details, and a link to a detailed
+	view of parts of the alignment.  </TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track filter:</I></B> 
+	<B><I>Track configuration:</I></B> 
 	The track description page contains a filter that can be used to turn 
 	on the chromosome color track or to filter the display output by 
 	chromosome.</TD></TR>
@@ -4696,11 +4902,10 @@ page for more details.
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	Clicking on an entry in full display mode will show mouse and 
-	rat position information, alignment details, and link to a detailed
-	view of parts of the alignment.
-	links.</TD></TR>
+	rat position information, alignment details, and a link to a detailed
+	view of parts of the alignment.  </TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track filter:</I></B> 
+	<B><I>Track configuration:</I></B> 
 	The track description page contains a filter that can be used to turn 
 	on the chromosome color track or to filter the display output by 
 	chromosome.</TD></TR>
@@ -4891,13 +5096,11 @@ blastz pair-wise alignments.
 	of less than 50% are not shown because they fall below the minimum
 	y-axis value. </TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track filter:</I></B> 
-	Clicking on the mini-button to the left of the track will display the 
-	track
-	description page which contains a filter to fine-tune the track display.
-	The filter allows the user to configure several aspects of the track 
-	display, including the interpolation, anti-aliasing, block fill, vertical
-	range, track height, and number of species shown.</TD></TR>
+	<B><I>Track configuration:</I></B> 
+	The track description page contains options to configure 
+	several of the graph characteristics. To read more information
+	about each option, click the &quot;Graph configuration help&quot; link. 
+	</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	Clicking on an entry in full display mode will show basic track
