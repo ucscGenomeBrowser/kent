@@ -1,5 +1,0 @@
-This is the preamble
-#LOOP
-My name is $(root1).
-#ENDLOOP
-The End
