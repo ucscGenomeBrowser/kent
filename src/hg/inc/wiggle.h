@@ -249,7 +249,7 @@ enum wigCompare
 enum wigDataFetchType
 /*	bit masks to specify type of data to fetch via getData()	*/
     {
-    wigFetchAscii = 1, wigFetchBed = 2, wigFetchStats = 4,
+    wigFetchNoOp = 1, wigFetchAscii = 2, wigFetchBed = 4, wigFetchStats = 8,
     };
 
 struct wiggleDataStream
@@ -300,8 +300,9 @@ struct wiggleDataStream
     void (*setDataConstraint)(struct wiggleDataStream *wDS,
 	char *dataConstraint, double lowerLimit, double upperLimit);
 				/*	setting data compare limits 	*/
+    void (*statsOut)(struct wiggleDataStream *wDS, char *fileName);
     void (*asciiOut)(struct wiggleDataStream *wDS, char *fileName);
-    void (*getData)(struct wiggleDataStream *wDS, enum wigDataFetchType type);
+    void (*getData)(struct wiggleDataStream *wDS, int operations);
     void (*closeWigConn)(struct wiggleDataStream *wDS);
 				/*	close a connection, leaves data here */
     void (*openWigConn)(struct wiggleDataStream *wDS, char *tableName);
