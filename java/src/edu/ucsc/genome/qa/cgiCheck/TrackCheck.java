@@ -56,7 +56,7 @@ public class TrackCheck {
     // make sure CLASSPATH has been set for JDBC driver
     if (!QADBLibrary.checkDriver()) return;
     
-    // get read access to database
+    // get metadata
     HGDBInfo metadbinfo; 
     try {
       metadbinfo = new HGDBInfo("hgwbeta", "hgcentraltest");
@@ -101,7 +101,7 @@ public class TrackCheck {
 	  }
 
 	  // get tracks for this assembly (read track controls from web)
-	  String hgtracksURL = "http://" + target.machine + "/cgi-bin/hgTracks?db=";
+	  String hgtracksURL = "http://" + target.server + "/cgi-bin/hgTracks?db=";
 	  hgtracksURL = hgtracksURL + assembly;
 	  ArrayList trackList = 
 	    // HgTracks.getTrackControls(hgtracksURL, defaultPos, debug);
@@ -117,7 +117,7 @@ public class TrackCheck {
 	    System.out.println(track);
 	    String mode = "default";
 	    // String mode = "all";
-	    HgTracks.exerciseTrack(target.machine, assembly, chroms, 
+	    HgTracks.exerciseTrack(target.server, assembly, chroms, 
 				       track, mode, defaultPos, "full", target.zoomCount);
 	    // HgTracks.exerciseTrack(target.machine, assembly, chroms, 
 				       // track, mode, defaultPos, "dense");
