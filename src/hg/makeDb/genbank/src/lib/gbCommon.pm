@@ -25,7 +25,7 @@ BEGIN {
                            parseOptEq inList getTmpDir readFile makeAbs
                            backgroundStart backgroundWait
                            findConf getConf getConfNo getDbConf getDbConfNo splitSpaceList
-                           getHgConf setupHgConf callMysql runMysqlDump runMysql);
+                           getHgConf setupHgConf callMysql runMysqlDump runMysql getDownloadTimeFile);
     
     # make stdout/stderr always line buffered
     STDOUT->autoflush(1);
@@ -805,6 +805,13 @@ sub runMysql($) {
     my($user, $pass) = getMysqlUser();
     runProg("mysql -u$user -p$pass $args");
 }
+
+# get download time file for a db
+sub getDownloadTimeFile($) {
+    my($db) = @_;
+    return "download/" . getRelDownloadDir($db) . "/download.time";
+}
+
 
 # perl requires a true value at the end
 1;

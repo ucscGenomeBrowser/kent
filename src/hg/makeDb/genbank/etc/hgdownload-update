@@ -13,6 +13,6 @@ cd $gbRoot
 
 # Checking for an existing lock file, Silently exits if lock file exists
 # and is less than one day old,  error if older.
-gbCheckLock $gbRoot/var/copy/run/update-download.lock
+gbCheckLock $gbRoot/var/update-download/run/update-download.lock
 
 ./bin/gbUpdateDownload
