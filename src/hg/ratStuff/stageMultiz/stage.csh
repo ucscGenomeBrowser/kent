@@ -60,7 +60,7 @@
 #create little script to run blastz.
 cat > doMultiz << endDoMultiz
 #!/bin/csh -ef
-multiz \$1 \$2 > \$3
+multiz \$1 - \$2 > \$3
 endDoMultiz
 chmod a+x doMultiz
 
