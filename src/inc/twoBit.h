@@ -57,6 +57,10 @@ struct dnaSeq *twoBitReadSeqFrag(struct twoBitFile *tbf, char *name,
  * be mixed case, with repeats in lower case and rest in
  * upper case. */
 
+struct dnaSeq *twoBitReadSeqFragLower(struct twoBitFile *tbf, char *name,
+	int fragStart, int fragEnd);
+/* Same as twoBitReadSeqFrag, but sequence is returned in lower case. */
+
 struct dnaSeq *twoBitLoadAll(char *spec);
 /* Return list of all sequences matching spec.  If
  * spec is a simple file name then this will be

@@ -5,7 +5,17 @@ MYLIBDIR = ../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkOwnLib.a $(MYLIBDIR)/jkweb.a 
 
 O = gfServer.o
+X = gfServer.27x1
 
 gfServer: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/gfServer $O $(MYLIBS) $L
+	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/$X $O $(MYLIBS) $L
 	strip $(HOME)/bin/$(MACHTYPE)/gfServer
+
+test:
+	${MKDIR} tests/output
+	$X direct tests/input/mCrea.mrna tests/input/hCreaGeno.nib \
+		tests/input/mCreaGeno.nib > tests/output/testNib
+	$X direct tests/input/mCrea.mrna tests/input/creaGeno.2bit \
+		>tests/output/testTwoBit
+	diff -r -x CVS tests/expected tests/output
+	rm -r tests/output

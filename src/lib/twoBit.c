@@ -7,7 +7,7 @@
 #include "obscure.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: twoBit.c,v 1.4 2004/02/24 22:12:09 kent Exp $";
+static char const rcsid[] = "$Id: twoBit.c,v 1.5 2004/02/25 05:42:02 kent Exp $";
 
 static int countBlocksOfN(char *s, int size)
 /* Count number of blocks of N's (or n's) in s. */
@@ -349,13 +349,12 @@ for (;;)
     }
 }
 
-
-struct dnaSeq *twoBitReadSeqFrag(struct twoBitFile *tbf, char *name,
-	int fragStart, int fragEnd)
+static struct dnaSeq *twoBitReadSeqFragExt(struct twoBitFile *tbf, char *name,
+	int fragStart, int fragEnd, boolean doMask)
 /* Read part of sequence from .2bit file.  To read full
- * sequence call with start=end=0.  Note that sequence will
- * be mixed case, with repeats in lower case and rest in
- * upper case. */
+ * sequence call with start=end=0.  Sequence will be lower
+ * case if doMask is false, mixed case (repeats in lower)
+ * if doMask is true. */
 {
 struct dnaSeq *seq;
 bits32 seqSize;
@@ -527,27 +526,52 @@ if (nBlockCount > 0)
 	}
     }
 
-toUpperN(seq->dna, seq->size);
-if (maskBlockCount > 0)
+if (doMask)
     {
-    int startIx = findGreatestLowerBound(maskBlockCount, maskStarts, fragStart);
-    for (i=startIx; i<maskBlockCount; ++i)
-        {
-	int s = maskStarts[i];
-	int e = s + maskSizes[i];
-	if (s >= fragEnd)
-	    break;
-	if (s < fragStart)
-	    s = fragStart;
-	if (e > fragEnd)
-	    e = fragEnd;
-	if (s < e)
-	    toLowerN(seq->dna + s - fragStart, e - s);
+    toUpperN(seq->dna, seq->size);
+    if (maskBlockCount > 0)
+	{
+	int startIx = findGreatestLowerBound(maskBlockCount, maskStarts, 
+		fragStart);
+	for (i=startIx; i<maskBlockCount; ++i)
+	    {
+	    int s = maskStarts[i];
+	    int e = s + maskSizes[i];
+	    if (s >= fragEnd)
+		break;
+	    if (s < fragStart)
+		s = fragStart;
+	    if (e > fragEnd)
+		e = fragEnd;
+	    if (s < e)
+		toLowerN(seq->dna + s - fragStart, e - s);
+	    }
 	}
     }
-
+freez(&nStarts);
+freez(&nSizes);
+freez(&maskStarts);
+freez(&maskSizes);
 return seq;
 }
+
+struct dnaSeq *twoBitReadSeqFrag(struct twoBitFile *tbf, char *name,
+	int fragStart, int fragEnd)
+/* Read part of sequence from .2bit file.  To read full
+ * sequence call with start=end=0.  Note that sequence will
+ * be mixed case, with repeats in lower case and rest in
+ * upper case. */
+{
+return twoBitReadSeqFragExt(tbf, name, fragStart, fragEnd, TRUE);
+}
+
+struct dnaSeq *twoBitReadSeqFragLower(struct twoBitFile *tbf, char *name,
+	int fragStart, int fragEnd)
+/* Same as twoBitReadSeqFrag, but sequence is returned in lower case. */
+{
+return twoBitReadSeqFragExt(tbf, name, fragStart, fragEnd, FALSE);
+}
+
 
 struct dnaSeq *twoBitLoadAll(char *spec)
 /* Return list of all sequences matching spec.  If

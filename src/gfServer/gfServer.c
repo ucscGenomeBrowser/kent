@@ -11,6 +11,7 @@
 #include "dnautil.h"
 #include "dnaseq.h"
 #include "nib.h"
+#include "twoBit.h"
 #include "fa.h"
 #include "dystring.h"
 #include "errabort.h"
@@ -19,7 +20,7 @@
 #include "cheapcgi.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfServer.c,v 1.37 2003/12/21 06:34:07 kent Exp $";
+static char const rcsid[] = "$Id: gfServer.c,v 1.38 2004/02/25 05:42:02 kent Exp $";
 
 int maxNtSize = 40000;
 int maxAaSize = 8000;
@@ -34,15 +35,17 @@ int maxTransHits = 200; /* Can be overridden from command line. */
 int maxGap = gfMaxGap;
 FILE *logFile = NULL;
 boolean seqLog = FALSE;
-boolean maskNib = FALSE;
+boolean doMask = FALSE;
+boolean canStop = FALSE;
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "gfServer v %d - Make a server to quickly find where DNA occurs in genome.\n"
+  "gfServer v %dx1 - Make a server to quickly find where DNA occurs in genome.\n"
   "To set up a server:\n"
-  "   gfServer start host port file(s).nib\n"
+  "   gfServer start host port file(s)\n"
+  "   Where the files are in .nib or .2bit format\n"
   "To remove a server:\n"
   "   gfServer stop host port\n"
   "To query a server with DNA sequence:\n"
@@ -79,12 +82,14 @@ errAbort(
   "               Default is %d\n"
   "   -maxAsSize=N Maximum size of protein or translated DNA queries\n"
   "               Default is %d\n"
+  "   -canStop If set then a quit message will actually take down the\n"
+  "            server\n"
   ,	gfVersion, repMatch, maxDnaHits, maxTransHits, maxNtSize, maxAaSize
   );
 
 }
 
-void genoFindDirect(char *probeName, int nibCount, char *nibFiles[])
+void genoFindDirect(char *probeName, int fileCount, char *seqFiles[])
 /* Don't set up server - just directly look for matches. */
 {
 struct genoFind *gf = NULL;
@@ -97,7 +102,8 @@ ZeroVar(&seq);
 if (doTrans)
     errAbort("Don't support translated direct stuff currently, sorry");
 
-gf = gfIndexNibs(nibCount, nibFiles, minMatch, maxGap, tileSize, repMatch, FALSE,
+gf = gfIndexNibsAndTwoBits(fileCount, seqFiles, minMatch, maxGap, 
+	tileSize, repMatch, FALSE,
 	allowOneMismatch);
 
 while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
@@ -330,7 +336,8 @@ else    /* They long jumped here because of an error. */
 memTrackerEnd();
 }
 
-void startServer(char *hostName, char *portName, int nibCount, char *nibFiles[])
+void startServer(char *hostName, char *portName, int fileCount, 
+	char *seqFiles[])
 /* Load up index and hang out in RAM. */
 {
 struct genoFind *gf = NULL;
@@ -350,12 +357,12 @@ logIt("gfServer version %d on host %s, port %s\n", gfVersion,
 if (doTrans)
     {
     logIt("setting up translated index\n");
-    gfIndexTransNibs(transGf, nibCount, nibFiles, 
-    	minMatch, maxGap, tileSize, repMatch, NULL, allowOneMismatch, maskNib);
+    gfIndexTransNibsAndTwoBits(transGf, fileCount, seqFiles, 
+    	minMatch, maxGap, tileSize, repMatch, NULL, allowOneMismatch, doMask);
     }
 else
     {
-    gf = gfIndexNibs(nibCount, nibFiles, minMatch, 
+    gf = gfIndexNibsAndTwoBits(fileCount, seqFiles, minMatch, 
     	maxGap, tileSize, repMatch, NULL, allowOneMismatch);
     }
 logIt("indexing complete\n");
@@ -401,8 +408,10 @@ for (;;)
     command = nextWord(&line);
     if (sameString("quit", command))
         {
-	logIt("Ignoring quit message\n");
-	break;
+	if (canStop)
+	    break;
+	else
+	    logIt("Ignoring quit message\n");
 	}
     else if (sameString("status", command))
         {
@@ -517,11 +526,11 @@ for (;;)
         {
 	struct gfSeqSource *ss;
 	int i;
-	sprintf(buf, "%d", nibCount);
+	sprintf(buf, "%d", fileCount);
 	netSendString(connectionHandle, buf);
-	for (i=0; i<nibCount; ++i)
+	for (i=0; i<fileCount; ++i)
 	    {
-	    sprintf(buf, "%s", nibFiles[i]);
+	    sprintf(buf, "%s", seqFiles[i]);
 	    netSendString(connectionHandle, buf);
 	    }
 	}
@@ -685,7 +694,8 @@ maxTransHits = cgiOptionalInt("maxTransHits", maxTransHits);
 maxNtSize = cgiOptionalInt("maxNtSize", maxNtSize);
 maxAaSize = cgiOptionalInt("maxAaSize", maxAaSize);
 seqLog = cgiBoolean("seqLog");
-maskNib = cgiBoolean("mask");
+doMask = cgiBoolean("mask");
+canStop = cgiBoolean("canStop");
 if (argc < 2)
     usage();
 if (sameWord(command, "direct"))

@@ -233,16 +233,16 @@ struct genoFind *gfIndexSeq(bioSeq *seqList,
  *      maskUpper - Mask out upper case sequence (currently only for nucleotides).
  * For DNA sequences upper case bits will be unindexed. */
 
-struct genoFind *gfIndexNibs(int nibCount, char *nibNames[],
+struct genoFind *gfIndexNibsAndTwoBits(int fileCount, char *fileNames[],
 	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile, 
 	boolean allowOneMismatch);
-/* Make index for all nib files. */
+/* Make index for all .nib and .2bit files. */
 
-void gfIndexTransNibs(struct genoFind *transGf[2][3], 
-    int nibCount, char *nibNames[], 
+void gfIndexTransNibsAndTwoBits(struct genoFind *transGf[2][3], 
+    int fileCount, char *fileNames[], 
     int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile,
     boolean allowOneMismatch, boolean mask);
-/* Make translated (6 frame) index for all nib files. */
+/* Make translated (6 frame) index for all .nib and .2bit files. */
 
 /* -------- Routines to scan index for homolgous areas ------------ */
 
