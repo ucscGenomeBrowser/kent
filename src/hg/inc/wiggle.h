@@ -11,7 +11,7 @@
 #define WIGGLE_NUM_COLS 13
 
 struct wiggle
-/* Wiggle track values to display as y-values (first 6 fields are bed6) */
+/* Wiggle track values to display as y-values (first 4 fields are bed4) */
     {
     struct wiggle *next;	/* Next in singly linked list. */
     char *chrom;		/* Human chromosome or FPC contig */
@@ -363,13 +363,23 @@ void wiggleDataStreamFree(struct wiggleDataStream **wds);
 /*	in lib/wiggleUtils.c	*/
 void printHistoGram(struct histoResult *histoResults, boolean html);
 
+void wigPrintDataConstraint(struct wiggleDataStream *wds, FILE * fh);
+/*	output string to file handle fh indicating current data constraint */
+
 void statsPreamble(struct wiggleDataStream *wds, char *chrom,
     int winStart, int winEnd, unsigned span, unsigned long long valuesMatched,
 	char *table2);
-/*	common beginning to stats table display	*/
+/*	common beginning to wiggle stats displays	*/
 
-/*	This function is being phased out, use the wiggleDataStream to
- *	do this business.
+void wigStatsHeader(struct wiggleDataStream *wds, FILE * fh, boolean htmlOut);
+/*	begin wiggle stats table */
+void wigStatsTableHeading(FILE * fh, boolean htmlOut);
+/*	Print the single html (or text) table row for statistics
+	column headings */
+
+/*	This function wigFetchData is being phased out, use the
+ *	wiggleDataStream to do this business.  There is one use of
+ *	this in hgText - itself to be phased out someday.
  */
 struct wiggleData *wigFetchData(char *db, char *table, char *chromName,
     int winStart, int winEnd, boolean summaryOnly, boolean freeData,
