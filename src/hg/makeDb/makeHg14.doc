@@ -104,6 +104,9 @@ exit; # don't actually run this like a script :)
 
     /cluster/bin/scripts/revCompNcbiCtgFa seq_contig.md .
 
+# Not done for build32 because all contigs on + strand.  It should be this
+# way for the rest of the assemblies
+
 # (NOTE: STS placements may be done at this point before repeat masking and 
 # using the .fa's on NFS for QC analysis - all other placements should be 
 # done after repeat masking and distributing to cluster nodes)
