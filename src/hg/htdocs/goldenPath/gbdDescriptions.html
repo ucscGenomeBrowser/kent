@@ -1119,6 +1119,18 @@
   href="#FbTranscript">fbTranscript</A> 
   - Links FlyBase gene IDs and BDGP transcript IDs
   <LI><A 
+  href="#FlyBase2004Xref">flyBase2004Xref</A> 
+  - Cross reference of FlyBase gene ID, symbolic gene name, synonyms, and accessions (circa late 2004)
+  <LI><A 
+  href="#GenePredictions">flyBaseGene</A> 
+  - FlyBase gene predictions
+  <LI><A 
+  href="#PepPredictions">flyBasePep</A> 
+  - FlyBase genes translated proteins
+  <LI><A 
+  href="#BED">flyBaseNoncoding</A> 
+  - FlyBase genes noncoding RNAs
+  <LI><A 
   href="#FlyBaseSwissProt">flyBaseSwissProt</A> 
   - FlyBase acc to SwissProt acc, plus some other SwissProt info
   <LI><A 
@@ -3311,6 +3323,21 @@ Last used Apr. 2001.
     string geneId;	"FlyBase ID"
     string geneSym;	"Short gene symbol"
     string geneName;	"Gene name - up to a couple of words"
+    )
+</PRE>
+
+<H4><A name=FlyBase2004Xref></A>FlyBase Genes Cross-Reference (2004)</H4>
+<PRE>table flyBase2004Xref
+"FlyBase cross references circa late 2004 (dm2/4.0; dp3/1.0 uses a subset)"
+    (
+    string name;                "FlyBase annotation gene ID"
+    string symbol;              "Symbolic gene name"
+    lstring synonyms;           "Comma-separated list of synonyms"
+    string fbtr;                "FlyBase FBtr acc"
+    string fbgn;                "FlyBase FBgn acc"
+    string fbpp;                "FlyBase FBpp acc"
+    string fban;                "FlyBase FBan acc"
+    string type;                "Annotation type (for noncoding only)"
     )
 </PRE>
 
