@@ -6700,83 +6700,70 @@ name = strstr(lf->name, "/");
 name ++;
 if(name != NULL)
     return name;
-else
-    return "unknown";
+return "unknown";
 }
 
-Color perlegenColor(struct track *tg, struct linkedFeatures *lf, struct simpleFeature *sf, struct vGfx *vg)
+Color haplotypeColor(struct track *tg, struct linkedFeatures *lf,
+                     struct simpleFeature *sf, struct vGfx *vg)
 /* if it is the start or stop blocks make the color the shades
  * otherwise use black */
 {
 if(lf->components == sf || (sf->next == NULL))
     return tg->colorShades[lf->grayIx+tg->subType];
-else
-    return blackIndex();
+return blackIndex();
 }
 
-int perlegenHeight(struct track *tg, struct linkedFeatures *lf, struct simpleFeature *sf) 
+int haplotypeHeight(struct track *tg, struct linkedFeatures *lf,
+                    struct simpleFeature *sf)
 /* if the item isn't the first or the last make it smaller */
 {
 if(sf == lf->components || sf->next == NULL)
     return tg->heightPer;
-else 
-    return (tg->heightPer-4);
+return (tg->heightPer-4);
 }
 
-static void perlegenLinkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-/* currently this routine is adapted from Terry's linkedFeatureSeriesDraw() routine.
- * it could be cleaned up some but more importantly it should be integrated back 
- * into the main draw routine */
+static void haplotypeLinkedFeaturesDrawAt(struct track *tg, void *item,
+                                          struct vGfx *vg, int xOff, int y,
+                                          double scale, MgFont *font,
+                                          Color color, enum trackVisibility vis)
+/* draws and individual haplotype and a given location */
 {
-int baseWidth = seqEnd - seqStart;
-struct linkedFeatures *lf;
-struct simpleFeature *sf;
-int y = yOff;
+struct linkedFeatures *lf = item;
+struct simpleFeature *sf = NULL;
+int x1 = 0;
+int x2 = 0;
+int w = 0;
 int heightPer = tg->heightPer;
-int lineHeight = tg->lineHeight;
-int x1,x2;
-int midLineOff = heightPer/2;
-int shortOff = 2, shortHeight = heightPer-4;
-int s, e, e2, s2;
-boolean isFull = (vis == tvFull);
+int shortHeight = heightPer / 2;
+int s = 0;
+int e = 0;
 Color *shades = tg->colorShades;
-Color bColor = tg->ixAltColor;
-double scale = scaleForPixels(width);
-boolean isXeno = tg->subType == lfSubXeno;
-boolean hideLine = (vis == tvDense && tg->subType == lfSubXeno);
-int midY = y + midLineOff;
-int compCount = 0;
-int w;
-int prevEnd = -1;
+boolean isXeno = (tg->subType == lfSubXeno);
+boolean hideLine = (vis == tvDense && isXeno);
 
-lf=tg->items;    
-for(lf = tg->items; lf != NULL; lf = lf->next) 
+/* draw haplotype thick line ... */
+if (lf->components != NULL && !hideLine)
     {
-    if (lf->components != NULL && !hideLine)
-	{
-	x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
-	x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
-	w = x2-x1;
-	color =  shades[lf->grayIx+isXeno];
-	/* draw perlgen thick line ... */
-	vgBox(vg, x1, y+shortOff+1, w, shortHeight-2, color);
-	}
-    for (sf = lf->components; sf != NULL; sf = sf->next)
-	{
-	color = perlegenColor(tg, lf, sf, vg);
-	heightPer = perlegenHeight(tg, lf, sf);
-	s = sf->start;
-	e = sf->end;
-	drawScaledBox(vg, s, e, scale, xOff, y+((tg->heightPer - heightPer)/2), heightPer, color);
-	/* if we're at the stop or start of a linked feature add a black tick for the snp 
-	 * in addtion to the larger tic of shaded color */
-	if(heightPer == tg->heightPer)
-	    drawScaledBox(vg, s, e, scale, xOff, y+((tg->heightPer - heightPer - 4)/2), (heightPer -4), blackIndex());
-	}
-    if (isFull)
-	y += lineHeight;
+    x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
+    x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
+    w = x2 - x1;
+    color =  shades[lf->grayIx+isXeno];
+    vgBox(vg, x1, y+3, w, shortHeight-2, color);
+    if (vis==tvSquish)
+	vgBox(vg, x1, y+1, w, tg->heightPer/2, color);
+    else
+	vgBox(vg, x1, y+3, w, shortHeight-1, color);
+    }
+for (sf = lf->components; sf != NULL; sf = sf->next)
+    {
+    s = sf->start;
+    e = sf->end;
+    heightPer = haplotypeHeight(tg, lf, sf);
+    if (vis==tvSquish)
+	drawScaledBox(vg, s, e, scale, xOff, y, tg->heightPer, blackIndex());
+    else
+	drawScaledBox(vg, s, e, scale, xOff,
+		      y+((tg->heightPer-heightPer)/2), heightPer, blackIndex());
     }
 }
 
@@ -8165,10 +8152,17 @@ tg->loadItems = loadMultScoresBed;
 tg->trackFilter = lfsFromCghNci60Bed;
 }
 
-void perlegenMethods(struct track *tg)
+void haplotypeMethods(struct track *tg)
 /* setup special methods for haplotype track */
 {
-tg->drawItems = perlegenLinkedFeaturesDraw;
+tg->drawItemAt = haplotypeLinkedFeaturesDrawAt;
+tg->colorShades = shadesOfSea;
+}
+
+void perlegenMethods(struct track *tg)
+/* setup special methods for Perlegen haplotype track */
+{
+tg->drawItemAt = haplotypeLinkedFeaturesDrawAt;
 tg->itemName = perlegenName;
 tg->colorShades = shadesOfSea;
 }
@@ -10084,6 +10078,7 @@ registerTrackHandler("rmskNew", repeatMethods);
 registerTrackHandler("simpleRepeat", simpleRepeatMethods);
 registerTrackHandler("uniGene",uniGeneMethods);
 registerTrackHandler("perlegen",perlegenMethods);
+registerTrackHandler("haplotype",haplotypeMethods);
 registerTrackHandler("nci60", nci60Methods);
 registerTrackHandler("cghNci60", cghNci60Methods);
 registerTrackHandler("rosetta", rosettaMethods);
