@@ -10,11 +10,11 @@
 static Bits oneBit[8] = { 0x80, 0x40, 0x20, 0x10, 0x8, 0x4, 0x2, 0x1};
 static Bits leftMask[8] = {0xFF, 0x7F, 0x3F, 0x1F,  0xF,  0x7,  0x3,  0x1,};
 static Bits rightMask[8] = {0x80, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC, 0xFE, 0xFF,};
-static int bitsInByte[256];
+int bitsInByte[256];
 
 static boolean inittedBitsInByte = FALSE;
 
-static void initBitsInByte()
+void bitsInByteInit()
 /* Initialize bitsInByte array. */
 {
 int i;
@@ -114,7 +114,7 @@ int i;
 int count = 0;
 
 if (!inittedBitsInByte)
-    initBitsInByte();
+    bitsInByteInit();
 if (startByte == endByte)
     return bitsInByte[b[startByte] & leftMask[startBits] & rightMask[endBits]];
 count = bitsInByte[b[startByte] & leftMask[startBits]];

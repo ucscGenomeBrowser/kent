@@ -41,5 +41,11 @@ void bitOr(Bits *a, Bits *b, int bitCount);
 void bitNot(Bits *a, int bitCount);
 /* Flip all bits in a. */
 
+int bitsInByte[256];
+/* Lookup table for how many bits are set in a byte. */
+
+void bitsInByteInit();
+/* Initialize bitsInByte array. */
+
 #endif /* BITS_H */
 
