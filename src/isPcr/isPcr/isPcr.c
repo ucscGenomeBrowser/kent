@@ -22,6 +22,7 @@ char *makeOoc = NULL;
 int repMatch = 1024*4;
 double minRepDivergence = 15;
 char *out = "fa";
+boolean flipReverse = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -57,6 +58,7 @@ errAbort(
   "               it is marked as overused.  Typically this is 256 for tileSize\n"
   "               12, 1024 for tile size 11, 4096 for tile size 10.\n"
   "               Default is 1024.  Only comes into play with makeOoc\n"
+  "   -flipReverse Reverse complement reverse (second) primer before using\n"
   "   -out=XXX - Output format.  Either\n"
   "      fa - fasta with position, primers in header (default)\n"
   "      bed - tab delimited format. Fields: chrom/start/end/name/score/strand\n"
@@ -75,6 +77,7 @@ static struct optionSpec options[] = {
    {"minGood", OPTION_INT},
    {"makeOoc", OPTION_STRING},
    {"repMatch", OPTION_INT},
+   {"flipReverse", OPTION_BOOLEAN},
    {"out", OPTION_STRING},
    {NULL, 0},
 };
@@ -147,10 +150,12 @@ while (lineFileRow(lf, row))
     {
     struct gfPcrInput gpi;
     gfPcrInputStaticLoad(row, &gpi);
-    //printf("PCR on %s %s %s\n", gpi.name, gpi.fPrimer, gpi.rPrimer);
+    verbose(2, "PCR on %s %s %s\n", gpi.name, gpi.fPrimer, gpi.rPrimer);
     if (strlen(gpi.fPrimer) < 11 || strlen(gpi.rPrimer) < 11)
             errAbort("Primer too short (<10): %s %s %s", 
                                 gpi.name, gpi.fPrimer, gpi.rPrimer);
+    if (flipReverse)
+        reverseComplement(gpi.rPrimer, strlen(gpi.rPrimer));
     pcrStrand(gf, gpi.name, gpi.fPrimer, gpi.rPrimer, 0, maxSize, '+', out, f);
     pcrStrand(gf, gpi.name, gpi.fPrimer, gpi.rPrimer, 0, maxSize, '-', out, f);
     }
@@ -173,6 +178,7 @@ minGood = optionInt("minGood", minGood);
 mask = optionVal("mask", mask);
 makeOoc = optionVal("makeOoc", makeOoc);
 repMatch = optionInt("repMatch", repMatch);
+flipReverse = optionExists("flipReverse");
 minRepDivergence = optionInt("minRepDivergence", minRepDivergence);
 out = optionVal("out", out);
 isPcr(argv[1], argv[2], argv[3]);
