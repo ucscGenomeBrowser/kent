@@ -44,6 +44,7 @@
 #include "stsMarker.h"
 #include "stsMap.h"
 #include "mouseOrtho.h"
+#include "humanParalog.h"
 #include "synteny100000.h"
 #include "mouseSyn.h"
 #include "knownMore.h"
@@ -552,7 +553,7 @@ if (w < 1)
 mgDrawBox(mg, x1, y, w, height, color);
 }
 void drawScaledBoxSample(struct memGfx *mg, int chromStart, int chromEnd, double scale, 
-	int xOff, int y, int height, Color color)
+	int xOff, int y, int height, Color color, int score)
 /* Draw a box scaled from chromosome to window coordinates. */
 {
 int i;
@@ -567,9 +568,8 @@ if ((x1 >= 0) && (x1 < MAXPIXELS) && (chromEnd >= winStart) && (chromStart <= wi
     for (i = x1 ; i < x1+w; i++)
         {
         assert(i<MAXPIXELS);
-        z = colorBin[i][color] ;  /*increment color count for this pixel */
-        z++;
-        colorBin[i][color] = z;
+        z = colorBin[i][color] ;  /*pick color of highest scoreing alignment  for this pixel */
+        colorBin[i][color] = (z > score)? z : score;
         }
     }
 }
@@ -1115,19 +1115,19 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
                 {
                 e2 = e;
                 if (e2 > tallStart) e2 = tallStart;
-                drawScaledBoxSample(mg, s, e2, scale, xOff, y+shortOff, shortHeight, color );
+                drawScaledBoxSample(mg, s, e2, scale, xOff, y+shortOff, shortHeight, color , lf->score);
                 s = e2;
                 }
             if (e > tallEnd)
                 {
                 s2 = s;
                 if (s2 < tallEnd) s2 = tallEnd;
-                drawScaledBoxSample(mg, s2, e, scale, xOff, y+shortOff, shortHeight, color );
+                drawScaledBoxSample(mg, s2, e, scale, xOff, y+shortOff, shortHeight, color , lf->score);
                 e = s2;
                 }
             if (e > s)
                 {
-                drawScaledBoxSample(mg, s, e, scale, xOff, y, heightPer, color);
+                drawScaledBoxSample(mg, s, e, scale, xOff, y, heightPer, color, lf->score);
                 ++compCount;
                 }
             if(hgDebug)
@@ -1971,6 +1971,7 @@ struct linkedFeatures *lf;
 boolean rcTarget = (psl->strand[1] == '-');
 
 AllocVar(lf);
+lf->score = (psl->match - psl->misMatch - psl->repMatch);
 lf->grayIx = grayIx;
 if (nameGetsPos)
     {
@@ -4246,6 +4247,36 @@ else
 return ((Color)getChromColor(chromStr, mg));
 }
 
+void loadHumanParalog(struct trackGroup *tg)
+{
+bedLoadItem(tg, "humanParalog", (ItemLoader)humanParalogLoad);
+slSort(&tg->items, bedCmpPlusScore);
+}
+
+void freeHumanParalog(struct trackGroup *tg)
+{
+humanParalogFreeList((struct humanParalog**)&tg->items);
+}
+
+Color humanParalogItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Return color of psl track item based on chromsome. */
+{
+char chromStr[20];     
+struct humanParalog *ms = item;
+if (strlen(ms->name) == 8)
+{
+    strncpy(chromStr,(char *)(ms->name+1),1);
+    chromStr[1] = '\0';
+}
+else if (strlen(ms->name) == 9)
+{
+    strncpy(chromStr,(char *)(ms->name+1),2);
+    chromStr[2] = '\0';
+}
+else
+    strncpy(chromStr,ms->name,2);
+return ((Color)getChromColor(chromStr, mg));
+}
 Color syntenyItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
 /* Return color of psl track item based on chromsome. */
 {
@@ -4293,6 +4324,21 @@ snprintf( option, sizeof(option), "%s.color", tg->mapName);
 optionStr = cartUsualString(cart, option, "on");
 if( sameString( optionStr, "on" )) /*use anti-aliasing*/
     tg->itemColor = mouseOrthoItemColor;
+else
+    tg->itemColor = NULL;
+tg->drawName = TRUE;
+}
+void humanParalogMethods(struct trackGroup *tg)
+{
+char option[128];
+char *optionStr ;
+tg->loadItems = loadHumanParalog;
+tg->freeItems = freeHumanParalog;
+
+snprintf( option, sizeof(option), "%s.color", tg->mapName);
+optionStr = cartUsualString(cart, option, "on");
+if( sameString( optionStr, "on" )) /*use anti-aliasing*/
+    tg->itemColor = humanParalogItemColor;
 else
     tg->itemColor = NULL;
 tg->drawName = TRUE;
@@ -8381,6 +8427,8 @@ registerTrackHandler("stsMap", stsMapMethods);
 registerTrackHandler("mouseSyn", mouseSynMethods);
 registerTrackHandler("synteny100000", synteny100000Methods);
 registerTrackHandler("mouseOrtho", mouseOrthoMethods);
+registerTrackHandler("mouseOrthoSeed", mouseOrthoMethods);
+registerTrackHandler("humanParalog", humanParalogMethods);
 registerTrackHandler("isochores", isochoresMethods);
 registerTrackHandler("gcPercent", gcPercentMethods);
 registerTrackHandler("ctgPos", contigMethods);
@@ -8408,6 +8456,7 @@ registerTrackHandler("blastzMm2", longXenoPslMethods);
 registerTrackHandler("blastzMm2Sc", longXenoPslMethods);
 registerTrackHandler("blastzMm2Ref", longXenoPslMethods);
 registerTrackHandler("blastzHg", longXenoPslMethods);
+registerTrackHandler("blastzHgRef", longXenoPslMethods);
 registerTrackHandler("xenoBestMrna", xenoMrnaMethods);
 registerTrackHandler("xenoMrna", xenoMrnaMethods);
 registerTrackHandler("xenoEst", xenoMrnaMethods);
@@ -8569,7 +8618,10 @@ if (!hideControls)
      * the controls don't wrap around randomly
      */
     if( chromosomeColorsMade )
+        {
+        printf("<B>Chromosome Color Key:</B><BR> ");
         printf("<IMG SRC = \"../images/colorchrom.gif\" BORDER=1 WIDTH=375 HEIGHT=65 ><BR>\n");
+        }
     printf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
     printf("<tr><th colspan=%d>\n", MAX_CONTROL_COLUMNS);
     smallBreak();
