@@ -280,6 +280,7 @@ void writeSeqTable(char *faName, FILE *out, boolean unburyAccession, boolean isP
 struct lineFile *lf = lineFileOpen(faName, TRUE);
 bioSeq seq;
 int dotMod = 0;
+char *dotIndex = 0;
 
 printf("Reading %s\n", faName);
 while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, !isPep))
@@ -289,8 +290,22 @@ while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, !isPep))
 	dotMod = 0;
 	dotOut();
 	}
-    if (unburyAccession)
+    if (unburyAccession) 
+        {
 	seq.name = unburyAcc(lf, seq.name);
+        }
+
+    dotIndex = strchr(seq.name, '.');
+    if (dotIndex)
+        {
+        char accNum[32];    
+        int dotPos = dotIndex - seq.name; /* G*dd*am stupid C pointer arith. No other way to do get the string
+                                            length up to the period. Grrr */
+        strncpy(accNum, seq.name, dotPos);
+        accNum[dotPos] = 0; /* Null terminate */
+        seq.name = accNum;
+        }
+
     fprintf(out, "%s\t%s\n", seq.name, seq.dna);
     }
 if (clDots) printf("\n");
@@ -434,6 +449,7 @@ while (lineFileNext(lf, &line, NULL))
     {
     int mimVal;
     char *mrnaAcc;
+    char *dotIndex = NULL;
 
     if (line[0] == '#')
         continue;
@@ -442,6 +458,18 @@ while (lineFileNext(lf, &line, NULL))
         errAbort("Expecting at least 5 tab-separated words line %d of %s",
 		lf->lineIx, lf->fileName);
     mrnaAcc = row[1];
+
+    dotIndex = strchr(mrnaAcc, '.');
+    if (dotIndex)
+        {
+        char accNum[32];    
+        int dotPos = dotIndex - mrnaAcc; /* G*dd*am stupid C pointer arith. No other way to do get the string
+                                           length up to the period. Grrr */
+        strncpy(accNum, mrnaAcc, dotPos);
+        accNum[dotPos] = 0; /* Null terminate */
+        mrnaAcc = accNum;
+        }
+
     if (mrnaAcc[2] != '_')
         warn("%s is and odd name %d of %s", 
 		mrnaAcc, lf->lineIx, lf->fileName);
@@ -450,6 +478,18 @@ while (lineFileNext(lf, &line, NULL))
 	void *v;
 	rsi->locusLinkId = lineFileNeedNum(lf, row, 0);
 	rsi->omimId = ptToInt(hashFindVal(loc2mimHash, row[0]));
+
+        dotIndex = strchr(row[4], '.');
+        if (dotIndex)
+            {
+            char accNum[32];    
+            int dotPos = dotIndex - row[4]; /* G*dd*am stupid C pointer arith. No other way to do get the string
+                                                length up to the period. Grrr */
+            strncpy(accNum, row[4], dotPos);
+            accNum[dotPos] = 0; /* Null terminate */
+            row[4] = accNum;
+            }
+
 	rsi->proteinAcc = cloneString(row[4]);
 	}
     }
