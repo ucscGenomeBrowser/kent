@@ -82,12 +82,13 @@ void calxy(int xin, int yin, int *outxp, int *outyp);
 
 void get_exons(char *proteinID, char *mrnaID);
 void printExonAA(char *proteinID, char *aa, int exonNum);
-void doGenomeBrowserLink(char *proteinID, char *mrnaID);
+void doGenomeBrowserLink(char *protDisplayID, char *mrnaID);
+void doFamilyBrowserLink(char *protDisplayID, char *mrnaID);
 
 void doTracks(char *proteinID, char *mrnaID, char *aa, struct vGfx *vg, int *yOffp);
 void doStamps(char *proteinID, char *mrnaID, char *aa, struct vGfx *vg, int *yOffp);
 
 void domainsPrint(struct sqlConnection *conn, char *swissProtAcc);
-void aaPropertyInit();
+void aaPropertyInit(int *hasResFreq);
 
 #endif

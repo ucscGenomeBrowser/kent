@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-//static char const rcsid[] = "$Id: pbTracks.c,v 1.1 2003/11/27 01:31:24 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.2 2003/12/08 16:38:57 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -51,7 +51,7 @@ char aa[100000];
 struct vGfx *g_vg;
 MgFont *g_font;
 int currentYoffset;
-int pbScale = {1};
+int pbScale = {6};
 
 double tx[100000], ty[100000];
 
@@ -132,8 +132,8 @@ return pdfName;
 void makeActiveImagePB(char *psOutput)
 /* Make image and image map. */
 {
-struct vGfx *vg;
-struct tempName gifTn;
+struct vGfx *vg, *vg2;
+struct tempName gifTn, gifTn2;
 char *mapName = "map";
 int pixWidth, pixHeight;
 
@@ -149,14 +149,13 @@ int  i,l;
 int  ii = 0;
 int  iypos;
 
-hPrintf("<CENTER>");
 hPrintf("<br><font size=4>");
-hPrintf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\"><B>%s</B></A>\n", 
+hPrintf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank><B>%s</B></A>\n", 
 	proteinID, proteinID);
 if (strcmp(proteinID, protDisplayID) != 0)hPrintf(" (aka %s)", protDisplayID);
 
-hPrintf("<br>%s\n", description);
-hPrintf("</font>");
+hPrintf(" %s\n", description);
+hPrintf("</font><br><br>");
 fflush(stdout);
 
 protSeq = strdup(getAA(proteinID));
@@ -164,22 +163,26 @@ protSeqLen = strlen(protSeq);
  
 if (cgiOptionalString("pbScale") != NULL)
 	{
-	if (strcmp(cgiOptionalString("pbScale"), "3X") == 0) pbScale = 3;
-	if (strcmp(cgiOptionalString("pbScale"), "6X") == 0) pbScale = 6;
+	if (strcmp(cgiOptionalString("pbScale"), "1/6")  == 0) pbScale = 1;
+	if (strcmp(cgiOptionalString("pbScale"), "1/2")  == 0) pbScale = 3;
+	if (strcmp(cgiOptionalString("pbScale"), "FULL") == 0) pbScale = 6;
 	}
 
 pixWidth = 160+ protSeqLen*pbScale;
 if (pixWidth < 550) pixWidth = 550;
 insideWidth = pixWidth-gfxBorder;
 
-pixHeight = 420;
+pixHeight = 220;
+
 //make room for individual residues display
 if (pbScale >=6) pixHeight = pixHeight + 20;
 
 makeTempName(&gifTn, "hgt", ".gif");
 vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi);
+g_vg = vg;
 
 bkgColor = vgFindColorIx(vg, 255, 254, 232);
+
 vgBox(vg, 0, 0, insideWidth, pixHeight, bkgColor);
 
 /* Start up client side map. */
@@ -191,38 +194,79 @@ iypos = 15;
 /* Draw tracks. */
 doTracks(proteinID, mrnaID, protSeq, vg, &iypos);
 
-/* Draw stamps. */
-doStamps(proteinID, mrnaID, protSeq, vg, &iypos);
-
 /* Finish map. */
 hPrintf("</MAP>\n");
 
 /* Save out picture and tell html file about it. */
-
 vgClose(&vg);
-
-//smallBreak();
-hPrintf("<P>");
-//smallBreak();
 
 if (cgiOptionalString("exonNum") == NULL)
     {
     hPrintf("<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s onMouseOut=\"javascript:popupoff();\"><BR>",
             gifTn.forCgi, pixWidth, pixHeight, mapName);
 
-    hPrintf("<br>Current scale: %dX ", pbScale);
+    hPrintf("Current scale: ");
+    if (pbScale == 1) hPrintf("1/6 ");
+    if (pbScale == 3) hPrintf("1/2 ");
+    if (pbScale == 6) hPrintf("FULL ");
     hPrintf("&nbsp&nbsp&nbsp Rescale to ");
-    hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"1X\">\n");
-    hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"3X\">\n");
-    hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"6X\">\n");
+    hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"1/6\">\n");
+    hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"1/2\">\n");
+    hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"FULL\">\n");
+    hPrintf("&nbsp&nbsp&nbsp&nbsp");
+    hPrintf("<A HREF=\"../pbHelp.html\" TARGET=_blank>");
+    hPrintf("Explanation of Tracks</A>");
     }
-hPrintf("</CENTER><P>");
-//spConn = sqlConnect("swissProt");
+hPrintf("<P>");
+
+if (!hTableExists("pbStamp")) goto histDone; 
+
+hPrintf("<B><font size=4>Protein Property Histograms</font></B>");
+
+pbScale = 3;
+pixWidth = 765;
+insideWidth = pixWidth-gfxBorder;
+
+pixHeight = 350;
+
+makeTempName(&gifTn2, "hgt", ".gif");
+vg2 = vgOpenGif(pixWidth, pixHeight, gifTn2.forCgi);
+g_vg = vg2;
+
+bkgColor = vgFindColorIx(vg2, 255, 254, 232);
+vgBox(vg2, 0, 0, insideWidth, pixHeight, bkgColor);
+
+/* Start up client side map. */
+hPrintf("<MAP Name=%s>\n", mapName);
+
+vgSetClip(vg2, 0, gfxBorder, insideWidth, pixHeight - 2*gfxBorder);
+iypos = 15;
+
+/* Draw stamps. */
+doStamps(proteinID, mrnaID, protSeq, vg2, &iypos);
+
+/* Finish map. */
+hPrintf("</MAP>\n");
+
+/* Save out picture and tell html file about it. */
+vgClose(&vg2);
+hPrintf("<P>");
+
+hPrintf("<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s onMouseOut=\"javascript:popupoff();\"><BR>",
+            gifTn2.forCgi, pixWidth, pixHeight, mapName);
+for (i=0; i<30; i++)hPrintf("&nbsp&nbsp&nbsp");
+hPrintf("<A HREF=\"../pbHelp.html\" TARGET=_blank>");
+hPrintf("Explanation of Protein Properties</A><BR>");
+
+hPrintf("<P>");
+
+histDone:
 
 domainsPrint(conn, proteinID);
 
 if (cgiOptionalString("exonNum") == NULL)printExonAA(proteinID, protSeq, -1);
-doGenomeBrowserLink(proteinID, mrnaID);
+doGenomeBrowserLink(protDisplayID, mrnaID);
+doFamilyBrowserLink(protDisplayID, mrnaID);
 }
 
 void doTrackForm(char *psOutput)
@@ -236,17 +280,14 @@ hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#"HG_COL_HOTLINKS"\" BORDER=\"0\" CELL
 hPrintf("<TD ALIGN=LEFT><A HREF=\"/index.html\">%s</A></TD>", wrapWhiteFont("Home"));
 hPrintf("<TD ALIGN=CENTER><FONT COLOR=\"#FFFFFF\" SIZE=4>%s</FONT></TD>", 
 	"UCSC Proteome Browser (V1.0)");
-hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/%s\">%s</A></TD>",
-        "hgTracksHelp.html", wrapWhiteFont("Help"));
+hPrintf("<TD ALIGN=Right><A HREF=\"../pbHelp.html\">%s</A></TD>",
+        wrapWhiteFont("Help"));
 hPrintf("</TR></TABLE>");
 fflush(stdout);
-
-//hPrintf("<CENTER>");
 
 /* Make clickable image and map. */
 makeActiveImagePB(psOutput);
 
-//hPrintf("</CENTER>\n");
 hPrintf("</FORM>");
 }
 
@@ -299,6 +340,7 @@ cart = theCart;
 //hPrintf("State: %s\n", state->string);   
 
 getDbAndGenome(cart, &database, &organism);
+
 hSetDb(database);
 protDbName = hPdbFromGdb(database);
 spConn = sqlConnect("swissProt");
@@ -323,7 +365,7 @@ if (proteinAC == NULL)
     proteinAC = sqlGetField(conn, protDbName, "spXref3", "accession", cond_str);
     if (proteinAC == NULL)
 	{
-	errAbort("Protein %s not found at SWISS-PROT/TrEMBL", proteinID);
+	errAbort("'%s' does not seem to be a valid SWISS-PROT/TrEMBL protein ID.", proteinID);
 	}
     else
 	{

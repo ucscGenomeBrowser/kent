@@ -17,7 +17,7 @@
 
 //static struct hash *genomeSettings;  /* Genome-specific settings from settings.ra. */
 
-void aaPropertyInit()
+void aaPropertyInit(int *hasResFreq)
 // initialize AA properties 
 {
 int i, j, ia, iaCnt;
@@ -82,10 +82,20 @@ aa_hydro['V'] =  4.200;
 
 // get average frequency distribution for each AA residue
 conn= hAllocConn();
+if (!hTableExists("resAvgStd"))
+    {
+    *hasResFreq = 0;
+    return;
+    }
+else
+    {
+    *hasResFreq = 1;
+    }
 sprintf(query,"select * from %s.resAvgStd", database);
 iaCnt = 0;
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
+    
 while (row != NULL)
     {
     for (j=0; j<20; j++)
@@ -197,8 +207,6 @@ void get_exons(char *proteinID, char *mrnaID)
     sprintf(query2,"select * from %s.knownGene where name='%s';", 
     		   database, mrnaID);
 
-    //hPrintf("<br>%s<br>", query2);
-
     sr2 = sqlMustGetResult(conn2, query2);
     row2 = sqlNextRow(sr2);
     while (row2 != NULL)
@@ -305,8 +313,7 @@ l =strlen(aa);
 
 ilast = 0;
 
-//!!
-hPrintf("</center><pre>");
+hPrintf("<pre>");
 
 if (exonNum == -1)
     {
@@ -315,7 +322,7 @@ if (exonNum == -1)
     chp = aa;
     for (i=0; i<l; i++)
 	{
-	if ((i%50) == 0) hPrintf("<br>");
+	if ((i%50) == 0) hPrintf("\n");
 	
 	hPrintf("%c", *chp);
 	chp++;
@@ -388,11 +395,32 @@ for (i=istart; i<=iend; i++)
 hPrintf("</font>");
 hPrintf("</pre>");
 }
-
-void doGenomeBrowserLink(char *proteinID, char *mrnaID)
+void doGenomeBrowserLink(char *protDisplayID, char *mrnaID)
 {
-hPrintf("<B>UCSC Genome Browser: </B> corresponding mRNA ");
-hPrintf("<A HREF=\"http:hgTracks?position=%s&db=%s\"", mrnaID, database);
-hPrintf("TARGET=_BLANK>%s</A>&nbsp\n", mrnaID);
+hPrintf("\n<B>UCSC Genome Browser: </B> ");
+if (mrnaID != NULL)
+    {
+    hPrintf("<A HREF=\"../cgi-bin/hgTracks?position=%s&db=%s\"", mrnaID, database);
+    }
+else
+    {
+    hPrintf("<A HREF=\"../cgi-bin/hgTracks?position=%s&db=%s\"", protDisplayID, database);
+    }
+hPrintf("TARGET=_BLANK>%s</A>&nbsp<BR>\n", mrnaID);
 }
+
+void doFamilyBrowserLink(char *protDisplayID, char *mrnaID)
+{
+hPrintf("\n<BR><B>UCSC Gene Family Browser: </B> ");
+if (mrnaID != NULL)
+    {
+    hPrintf("<A HREF=\"../cgi-bin/hgNear?near_search=%s\"", mrnaID);
+    }
+else
+    {
+    hPrintf("<A HREF=\"../cgi-bin/hgNear?near_search=%s\"", protDisplayID);
+    }
+hPrintf("TARGET=_BLANK>%s</A>&nbsp<BR>\n", mrnaID);
+}
+
 
