@@ -3923,3 +3923,292 @@ hgsql \
     hgLoadBed mm4 miRNA mouse.mir.bed
     # entry in trackDb/trackDb.ra already there for same track in Hg16
     #	see makeHg16.doc for more comments on this
+
+
+
+######## PROTEOME BROWSER BUILD #######  (DONE - 2004-04-05 - Fan)
+# These are instructions for building the
+# Proteome Browser.  Don't start these until
+# there is a knownGene track.
+
+o Create the working directory
+
+  mkdir /cluster/store6/mm4/bed/pb
+  cd /cluster/store6/mm4/bed/pb 
+
+o save old PB tables (if they exist) to the backup DB, kgMm4Sav
+
+From mysql prompt:
+
+alter table mm4.pepCCntDist rename as kgMm4Sav.pepCCntDist;
+alter table mm4.pepExonCntDist rename as kgMm4Sav.pepExonCntDist;
+alter table mm4.pepHydroDist rename as kgMm4Sav.pepHydroDist;
+alter table mm4.pepIPCntDist rename as kgMm4Sav.pepIPCntDist;
+alter table mm4.pepMolWtDist rename as kgMm4Sav.pepMolWtDist;
+alter table mm4.pepMwAa rename as kgMm4Sav.pepMwAa;
+alter table mm4.pepPi rename as kgMm4Sav.pepPi;
+alter table mm4.pepPiDist rename as kgMm4Sav.pepPiDist;
+alter table mm4.pepResDist rename as kgMm4Sav.pepResDist;
+
+alter table mm4.pbAaDistA rename as kgMm4Sav.pbAaDistA;
+alter table mm4.pbAaDistC rename as kgMm4Sav.pbAaDistC;
+alter table mm4.pbAaDistD rename as kgMm4Sav.pbAaDistD;
+alter table mm4.pbAaDistE rename as kgMm4Sav.pbAaDistE;
+alter table mm4.pbAaDistF rename as kgMm4Sav.pbAaDistF;
+alter table mm4.pbAaDistG rename as kgMm4Sav.pbAaDistG;
+alter table mm4.pbAaDistH rename as kgMm4Sav.pbAaDistH;
+alter table mm4.pbAaDistI rename as kgMm4Sav.pbAaDistI;
+alter table mm4.pbAaDistK rename as kgMm4Sav.pbAaDistK;
+alter table mm4.pbAaDistL rename as kgMm4Sav.pbAaDistL;
+alter table mm4.pbAaDistM rename as kgMm4Sav.pbAaDistM;
+alter table mm4.pbAaDistN rename as kgMm4Sav.pbAaDistN;
+alter table mm4.pbAaDistP rename as kgMm4Sav.pbAaDistP;
+alter table mm4.pbAaDistQ rename as kgMm4Sav.pbAaDistQ;
+alter table mm4.pbAaDistR rename as kgMm4Sav.pbAaDistR;
+alter table mm4.pbAaDistS rename as kgMm4Sav.pbAaDistS;
+alter table mm4.pbAaDistT rename as kgMm4Sav.pbAaDistT;
+alter table mm4.pbAaDistV rename as kgMm4Sav.pbAaDistV;
+alter table mm4.pbAaDistW rename as kgMm4Sav.pbAaDistW;
+alter table mm4.pbAaDistY rename as kgMm4Sav.pbAaDistY;
+alter table mm4.pbAnomLimit rename as kgMm4Sav.pbAnomLimit;
+alter table mm4.pbResAvgStd rename as kgMm4Sav.pbResAvgStd;
+alter table mm4.pbStamp rename as kgMm4Sav.pbStamp;
+
+
+o Define pep* tables in mm4 DB
+
+	cat ~/kent/src/hg/lib/pep*.sql > pepAll.sql
+
+  First edit out pepPred table definition, then
+
+	hgsql mm4 < pepAll.sql
+
+
+o Build the pepMwAa table
+
+  hgsql proteins040315 -e "select info.acc, molWeight, aaSize from sp040315.info, sp040315.accToTaxon where accToTaxon.taxon=10090 and accToTaxon.acc = info.acc" > pepMwAa.tab
+
+
+hgsql mm4 <<end
+load data local infile "pepMwAa.tab" into table mm4.pepMwAa;
+end
+
+o Build the pepPi table
+
+  hgsql proteins040315 -e "select info.acc from sp040315.info, sp040315.accToTaxon where accToTaxon.taxon=10090 and accToTaxon.acc = info.acc" > protAcc.lis
+
+  pbCalPi protAcc.lis sp040315 pepPi.tab
+
+hgsql mm4 <<end
+load data local infile "pepPi.tab" into table mm4.pepPi;
+end
+
+o Calculate and load pep distributions
+
+  pbCalDist sp040315 proteins040315 10090 mm4
+
+  From mysql prompt:
+
+use mm4;
+
+load data local infile "pepExonCntDist.tab" into table mm4.pepExonCntDist;
+load data local infile "pepCCntDist.tab" into table mm4.pepCCntDist;
+load data local infile "pepHydroDist.tab" into table mm4.pepHydroDist;
+load data local infile "pepMolWtDist.tab" into table mm4.pepMolWtDist;
+load data local infile "pepResDist.tab" into table mm4.pepResDist;
+load data local infile "pepIPCntDist.tab" into table mm4.pepIPCntDist;
+load data local infile "pepPiDist.tab" into table mm4.pepPiDist;
+
+o Calculate frequency distributions
+
+  pbCalResStd sp040315 proteins040315 10090 mm4
+
+o Create pbAaDistX tables
+
+  cat  ~/kent/src/hg/lib/pbAaDist*.sql >pbAaAll.sql
+  hgsql mm4 < pbAaAll.sql
+
+  From mysql prompt:
+
+  use mm4;
+
+load data local infile "pbAaDistC.tab" into table mm4.pbAaDistC;
+load data local infile "pbAaDistM.tab" into table mm4.pbAaDistM;
+load data local infile "pbAaDistH.tab" into table mm4.pbAaDistH;
+load data local infile "pbAaDistY.tab" into table mm4.pbAaDistY;
+load data local infile "pbAaDistN.tab" into table mm4.pbAaDistN;
+load data local infile "pbAaDistF.tab" into table mm4.pbAaDistF;
+load data local infile "pbAaDistI.tab" into table mm4.pbAaDistI;
+load data local infile "pbAaDistD.tab" into table mm4.pbAaDistD;
+load data local infile "pbAaDistQ.tab" into table mm4.pbAaDistQ;
+load data local infile "pbAaDistK.tab" into table mm4.pbAaDistK;
+load data local infile "pbAaDistR.tab" into table mm4.pbAaDistR;
+load data local infile "pbAaDistT.tab" into table mm4.pbAaDistT;
+load data local infile "pbAaDistV.tab" into table mm4.pbAaDistV;
+load data local infile "pbAaDistP.tab" into table mm4.pbAaDistP;
+load data local infile "pbAaDistG.tab" into table mm4.pbAaDistG;
+load data local infile "pbAaDistE.tab" into table mm4.pbAaDistE;
+load data local infile "pbAaDistA.tab" into table mm4.pbAaDistA;
+load data local infile "pbAaDistA.tab" into table mm4.pbAaDistL;
+load data local infile "pbAaDistA.tab" into table mm4.pbAaDistS;
+
+o Create pbAnomLimit and pbResAvgStd tables
+
+   hgsql mm4 < ~/src/hg/lib/pbAnomLimit.sql
+   hgsql mm4 < ~/src/hg/lib/pbResAvgStd.sql
+
+   hgsql mm4 -e \
+	"load data local infile "pbResAvgStd.tab" into table mm4.pbResAvgStd;"
+   hgsql mm4 -e \
+	"load data local infile "pbAnomLimit.tab" into table mm4.pbAnomLimit;"
+
+
+o Download data files from Ensembl and create ensGeneXref and ensTranscript tables
+
+     mkdir /cluster/bluearc/fan/ensembl/19_32aM
+     cd /cluster/bluearc/fan/ensembl/19_32aM
+
+     wget --timestamping \
+	"ftp://ftp.ensembl.org/pub/mouse-19.32a/data/mysql/mus_musculus_lite_19_32a/gene_xref.txt.table.gz"
+
+     wget --timestamping \
+	"ftp://ftp.ensembl.org/pub/mouse-19.32a/data/mysql/mus_musculus_lite_19_32a/transcript.txt.table.gz"
+
+     wget --timestamping \
+	"ftp://ftp.ensembl.org/pub/mouse-19.32a/data/mysql/mus_musculus_lite_19_32a/mus_musculus_lite_19_32a.sql.gz""
+
+     gzip -d *.gz
+
+  If mm4.ensGeneXref table already exists
+
+     alter table mm4.ensGeneXref rename as kgMm4Sav.ensGeneXref;
+
+  ENSEMBL IS KNOWN FOR CHANGING THEIR TABLE DEFINTION AND CONTENT!!!
+  So, first check if the table definition of gene_xref in mus_musculus_lite_19_32a.sql
+  is the same as ~/src/hg/lib/ensGeneXref.sql.  If they are not the same, some
+  programming change to hgTracks.c and possibly other programs may be needed. 
+
+  If they are the same, create gensGeneXref table in mm4 by:
+
+     hgsql mm4 < ~/src/hg/lib/ensGeneXref.sql
+
+     hgsql mm4 -e \
+	"load data local infile "gene_xref.txt.table" into table mm4.ensGeneXref;"
+
+  If mm4.ensTranscript exists
+
+  	alter table mm4.ensTranscript rename as kgMm4Sav.ensTranscript;
+ 
+  Again, check if the table definition of transcript in mus_musculus_lite_19_32a.sql
+  is the same as ~/src/hg/lib/ensTranscript.sql.  If they are not the same, some
+  programming change to hgTracks.c and possibly other programs may be needed. 
+
+  If they are the same, create gensTranscript table in mm4 by:
+
+     hgsql mm4 < ~/src/hg/lib/ensTranscript.sql
+ 
+     hgsql mm4 -e \
+	"load data local infile "transcript.txt.table" into table mm4.ensTranscript;"
+
+
+!!! Need to add an index on id of the des table of superfam040321.
+
+
+o Download Superfamily data files and build the Superfamily DB
+
+  	mkdir /cluster/store1/superFamily/040321
+	cd /cluster/store1/superFamily/040321
+
+  ftp over the following two files:
+
+	ass_28-Mar-2004.tab.gz
+	supfam_21-Mar-2004.sql.gz
+		
+   	hgsql superfam040321 < ~/src/hg/lib/sfAssign.sql
+
+   	hgsql superfam040321 -e \
+	   "load data local infile "ass_28-Mar-2004.tab" into table superfam040321.sfAssign;"
+
+o Build or rebuild Superfamily track and create sf tables needed for PB 
+
+  If mm4.superfamily already exists
+
+	alter table mm4.superfamily rename as kgMm4Sav.superfamily;
+
+    	sf5 mm4 superfam040321 >doSf.log
+   
+  It is normal that many proteins does not have corresponding Superfamily entries.
+
+   	hgLoadBed mm4 superfamily sf.tab -tab
+
+   If mm4.sfDescription exists,
+
+   	alter table mm4.sfDescription rename as kgMm4Sav.sfDescription;
+
+   hgsql mm4 < ~/src/hg/lib/sfDescription.sql
+
+   hgsql mm4 -e \
+	"LOAD DATA local INFILE 'sfDesc.tab'  into table mm4.sfDescription;"
+
+   hgsql mm4 < ~/src/hg/lib/sfAssign.sql
+
+   cd /cluster/store1/superFamily/040331
+   
+   hgsql mm4 -e \
+	"load data local infile "ass_28-Mar-2004.tab" into table mm4.sfAssign;"
+
+   If mm4.sfDes already exists,
+
+   	alter table mm4.sfDes rename as kgMm4Sav.sfDes;
+
+   hgsql superfam040321 -e "select * from des" >des.tab
+
+   hgsql mm4 < ~/src/hg/lib/sfDes.sql
+
+   hgsql mm4 -e \
+	"load data local infile "des.tab" into table mm4.sfDes;"
+
+o Create pbStamp table for PB
+   
+  If mm4.pbStamp already exists,
+
+  hgsql mm4 -e
+   	"alter table mm4.pbStamps rename as kgMm4Sav.pbStamp;"
+
+  hgsql mm4 < ~/src/hg/lib/pbStamp.sql
+
+  cd ~/kent/src/hg/proteins/pbTracks
+  hgsql mm4 -e \
+ 	"load data local infile "pbStampMouse.tab" into table mm4.pbStamp;"
+
+o Enable Proteome Browser
+
+  if ~/kent/src/hg/hgGene/hgGeneData/Mouse/links.ra does not exist:
+
+     cd ~/kent/src/hg/hgGene/hgGeneData/Mouse
+     mkdir mm4
+     cd mm4
+
+     Create links.ra with the following content
+
+# mm4 Proteome Browser link info.
+
+name protBrowser
+shortLabel Proteome Browser
+tables kgXref
+idSql select spDisplayID from kgXref where kgID = '%s'
+nameSql select spId from kgXref where kgID = '%s'
+url ../cgi-bin/pbTracks?proteinID=%s
+priority 12
+
+     cd ../..
+     make alpha
+
+o Adjust drawing parameters for Proteome Browser stamps
+
+  Now invoke Proteome Browser and adjust various drawing parameters
+  (mostly the ymax of each stamp) by updating the pbStampMouse.tab 
+  file and then reload the pbStamp table. 
+
+o Perform preliminary review of Proteom Browser for mm4, then
+  notify QA for formal review.
