@@ -1,6 +1,8 @@
 This file describes how we made the browser database on 
 NCBI build 30 (July, 2002 freeze)
 
+[For importing GTF tracks, use /projects/compbio/bin/validate_gtf.pl]
+
 (The numbered stuff was brought in from
  /cluster/store3/gs.13/build30/build.ncbi.doc)
 
@@ -10,8 +12,10 @@ HOW TO BUILD A ASSEMBLY FROM NCBI FILES
 NOTE: It is best to run most of this stuff on kkstore since it
 is not adverse to handling files > 2Gb
 
-0) Make gs.XX directory, gs.XX/buildXX directory, and gs.XX/ffa directory. Copy this
-document into gs.XX/buildXX
+0) Make gs.XX directory, gs.XX/buildXX directory, and gs.XX/ffa directory.
+   Make a symbolic link from your home directory to the build dir:
+
+	ln -s /cluster/store1/gs.13/build30 ~/oo
 
 1) Download seq_contig.md, ncbi_buildXX.agp, contig_overlaps.agp and contig fa file 
 into gs.XX/buildXX/ directory. 
@@ -77,10 +81,12 @@ done after repeat masking and distributing to cluster nodes)
 
 9) Generate RepeatMasked files for contigs (Patrick)
    For the NCBI assembly we repeat mask on the sensitive mode setting.
+   If there is a new version of RepeatMasker, build it and ask the admins 
+   to binrsync it (/scratch/hg/RepeatMasker/RepeatMasker).
 
         cd ~/oo
         /cluster/bin/scripts/RMfa RMJobs */NT_*/*.fa
-        log into kk
+        ssh kk
         cd ~/oo
         para create RMJobs
         para try
@@ -90,8 +96,26 @@ done after repeat masking and distributing to cluster nodes)
 10) Lift up RepeatMask .out files to chromosome coordinates via
        cd ~/oo
        tcsh jkStuff/liftOut2.sh
-    Then load the .out files into the database with:
-       hgLoadOut hg12 ?/*.fa.out ??/*.fa.out
+
+10.1) Validate the RepeatMasking by randomly selecting a few NT_*.fa files, 
+      manually repeat masking them and matching the .out files with the 
+      related part in the chromosome-level .out files.  For example:
+
+	ssh kk
+	cd ~/oo
+      Pick several values of $chr and $nt and run these commands: 
+	set chr = ?
+	set nt  = NT_??????
+	mv $chr/$nt/$nt.fa.out $chr/$nt/$nt.fa.out.bak
+	/scratch/hg/RepeatMasker/RepeatMasker -q $chr/$nt/$nt.fa
+	rm $chr/$nt/$nt.fa.{masked,cat,cut,stderr,tbl}
+      Compare each $chr/$nt/$nt.fa.out against the original and against 
+      the appropriate part of $chr/chr$chr.fa.out (use the coords for 
+      $nt given in seq_contig.md).  
+	mv $chr/$nt/$nt.fa.out.bak $chr/$nt/$nt.fa.out
+
+     For build 30, the following were checked:
+     1/NT_004321, Y/NT_025975, 11/NT_033237
 
 11) Generate contig and chromosome level masked and unmasked files via:
        tcsh jkStuff/chrFa.sh
@@ -133,6 +157,10 @@ o - Create the trackDb table as so
        make update
        cvs commit makefile
 
+
+LOAD REPEAT MASKS (TODO)
+    Load the RepeatMasker .out files into the database with:
+       hgLoadOut hg12 ?/*.fa.out ??/*.fa.out
 
 STORING O+O SEQUENCE AND ASSEMBLY INFORMATION (DONE)
 
