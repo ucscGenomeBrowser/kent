@@ -18,10 +18,10 @@
 #include "psl.h"
 #include "qaSeq.h"
 
-int version = 99;       /* Current version number. */
+int version = 100;       /* Current version number. */
 
 int minFragSize = 1;            /* Minimum size of fragments we'll accept. */
-int maxMapDeviation = 600000;   /* No map deviations further than this allowed. */
+int maxMapDeviation = 700000;   /* No map deviations further than this allowed. */
 int freeMapDeviation = 250000;  /* Map deviations to this point free. */
 
 int maxTailSize = 2000;	/* Maximum non-aligning end. */
@@ -77,6 +77,7 @@ struct oogClone
     struct oogClone *next;     /* Next in clone list. */
     char *name;                /* Name of clone. */
     int mapPos;                /* Relative position in contig according to map. */
+    int flipTendency;	       /* Tendency of clone to flip according to map. */
     enum htgPhase phase;       /* HTG phase. */
     int size;                  /* Size in bases. */
     struct dlList *fragList;   /* List of frags in clone. */
@@ -105,7 +106,6 @@ struct oogFrag
     struct raft *raft;		/* Raft fragment is in. */
     int clonePos;               /* Position within clone. (Assuming frags back to back.) */
     int defaultPos;             /* Default position in contig. */
-    bool isNtOrigFrag;          /* True if frag part of original NT clone (not psuedo clone). */
     };
 
 struct oogEdge
@@ -3824,7 +3824,7 @@ void loadAllClones(char *infoName, char *genoList,
 struct lineFile *lf;
 char *line;
 int lineSize;
-char *words[3];
+char *words[4];
 int wordCount;
 char **genoFiles;
 int genoCount;
@@ -3882,9 +3882,7 @@ if (!sameWord("PLACED", words[1]))
 *retCtgName = cloneString(words[0]);
 while (lineFileNext(lf, &line, &lineSize))
     {
-    if ((wordCount = chopLine(line, words)) < 2)
-	errAbort("Bad info file format line %d of %s\n", lf->lineIx, lf->fileName);
-    if (!words[1][0] == '-' && !isdigit(words[1][0]))
+    if ((wordCount = chopLine(line, words)) < 4)
 	errAbort("Bad info file format line %d of %s\n", lf->lineIx, lf->fileName);
     acc = words[0];
     if ((hel = hashLookup(cloneHash, acc)) == NULL)
@@ -3897,9 +3895,9 @@ while (lineFileNext(lf, &line, &lineSize))
     else
 	{
 	clone = hel->val;
-	clone->mapPos = atoi(words[1]) * 1000;
-	if (wordCount >= 3)
-	    clone->phase = atoi(words[2]);
+	clone->mapPos = lineFileNeedNum(lf, words, 1) * 1000;
+	clone->phase = lineFileNeedNum(lf, words, 2);
+	clone->flipTendency = lineFileNeedNum(lf, words, 3);
 	calcFragDefaultPositions(clone, clone->mapPos);
 	}
     }
@@ -3988,22 +3986,21 @@ int calcRaftFlipTendency(struct raft *raft)
 int diffTotal = 0;
 int diffOne;
 struct raftFrag *rf, *rfNext;
-struct oogFrag *aFrag, *bFrag;
+struct oogFrag *frag;
 int diffInMap;
 
 for (rf = raft->fragList; rf != NULL; rf = rf->next)
     {
+    frag = rf->frag;
+    diffTotal += frag->clone->flipTendency * rf->orientation;
     if ((rfNext = rf->next) != NULL)
 	{
-	diffInMap = rfNext->frag->defaultPos - rf->frag->defaultPos;
-	if (intAbs(diffInMap) < maxMapDeviation)
-	    {
-	    diffTotal += diffInMap;
-	    }
-	else
-	    {
-	    logIt("  Unreasonable distance in map %d\n", diffInMap /* uglyf */);
-	    }
+	diffInMap = rfNext->frag->defaultPos - frag->defaultPos;
+	if (diffInMap > frag->size)
+	    diffInMap = frag->size;
+	else if (diffInMap < -frag->size)
+	    diffInMap = -frag->size;
+	diffTotal += diffInMap;
 	}
     }
 return diffTotal;
