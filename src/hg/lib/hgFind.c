@@ -1376,6 +1376,10 @@ if (sqlTableExists(conn, "pjt_gene"))
     {
     dyStringPrintf(ds, "select * from pjt_gene where name like '%%%s%%'", spec);
     }
+else
+    {
+    return;
+    }
 
 AllocVar(table);
 slAddHead(&hgp->tableList, table);
