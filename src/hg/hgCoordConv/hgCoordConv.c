@@ -335,6 +335,7 @@ char *dbChoice = NULL;
 int i = 0;
 cart = lCart;
 cartWebStart("Converting Coordinates Between Drafts");
+#ifdef SOON
 puts( 
      "<p>This page attempts to convert coordinates from one draft of the human genome\n"
      "to another. The mechanism for doing this is to cut out and align pieces from the\n"
@@ -374,6 +375,7 @@ cgiMakeButton("Submit","submit");
 printf("</center></td></tr></table>\n");
 cgiMakeHiddenVar("calledSelf", "on");
 printf("</form>\n");
+#endif /* SOON */
 cartHtmlEnd();
 }
 

@@ -418,8 +418,18 @@ if (subList == NULL)
     {
     struct subText *sub;
     char *organism = hOrganism(database);
-    sub = subTextNew("$ORGANISM", organism);
+    char *lcOrg = cloneString(organism);
+    char *ucOrg = cloneString(organism);
+    tolowers(lcOrg);
+    touppers(ucOrg);
+    sub = subTextNew("$Organism", organism);
     slAddHead(&subList, sub);
+    sub = subTextNew("$ORGANISM", ucOrg);
+    slAddHead(&subList, sub);
+    sub = subTextNew("$organism", lcOrg);
+    slAddHead(&subList, sub);
+    freez(&ucOrg);
+    freez(&lcOrg);
     freez(&organism);
     }
 return subTextString(subList, in);

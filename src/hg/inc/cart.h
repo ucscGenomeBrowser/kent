@@ -136,13 +136,17 @@ void cartHtmlStart(char *title);
 /* Write HTML header and put in normal error handler. Needed with cartEmptyShell,
  * but not cartHtmlShell. */
 
-void cartWebStart(char *format, ...);
-/* Print out pretty wrapper around things when working
- * from cart. */
-
 void cartHtmlEnd();
 /* Write out HTML footer and get rid or error handler. Needed with cartEmptyShell,
  * but not cartHtmlShell. */
+
+void cartWebStart(char *format, ...);
+/* Print out pretty wrapper around things when working
+ * from cart. Balance this with cartWebEnd. */
+
+void cartWebEnd();
+/* End out pretty wrapper around things when working
+ * from cart. */
 
 void cartHtmlShell(char *title, void (*doMiddle)(struct cart *cart), 
 	char *cookieName, char **exclude, struct hash *oldVars);
