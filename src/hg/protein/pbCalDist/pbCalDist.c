@@ -159,10 +159,10 @@ protDbName 	    = argv[2];
 taxon 	 	    = argv[3];
 database 	    = argv[4];
 
-o1 = mustOpen("pepProp.tab",    "w");
+//o1 = mustOpen("pepProp.tab",    "w");
 o2 = mustOpen("pepResDist.tab", "w");
-o4 = mustOpen("pfamCount.tab",  "w");
-o5 = mustOpen("interProCount.tab",  "w");
+//o4 = mustOpen("pfamCount.tab",  "w");
+//o5 = mustOpen("interProCount.tab",  "w");
 
 conn  = hAllocConn();
 conn2 = hAllocConn();
@@ -172,9 +172,11 @@ for (j=0; j<23; j++)
     aaResCnt[j] = 0;
     }
 
-icnt = jExon = pcnt = interProCount = 0;
+icnt = jExon = pcnt = 0;
+//interProCount = 0;
 pIcnt = 0;
-molWtCnt = pfamCount = 0;
+molWtCnt = 0;
+//pfamCount = 0;
 
 sprintf(query2,"select acc from %s.accToTaxon where taxon=%s;", proteinDatabaseName, taxon);
 sr2  = sqlMustGetResult(conn2, query2);
@@ -199,7 +201,7 @@ while (row2 != NULL)
 	    {
 	    interProCount = interProCount + atoi(answer2);
 	    interProCountDouble[ipcnt] = (double)(atoi(answer2));
-	    fprintf(o5, "%s\t%s\n", accession, answer2);
+	    //fprintf(o5, "%s\t%s\n", accession, answer2);
 	    ipcnt++;
 	    }
 	else
@@ -207,7 +209,10 @@ while (row2 != NULL)
 	    printf("%s is not in  InterPro DB.\n", accession);fflush(stdout);
 	    }
 	}
+    
     // count Pfam domains
+    // This part is replaced by InterPro count
+    /*
     if (answer != NULL)
 	{
 	kgId = answer;;
@@ -221,6 +226,7 @@ while (row2 != NULL)
 	    pcnt++;
 	    }
 	}
+    */
     
     // count exons, using coding exons from kgProtMap table
     sprintf(cond_str, "qName='%s'", accession);
@@ -306,8 +312,8 @@ while (row2 != NULL)
     aaLenDouble[icnt]  = len;
     cCountDouble[icnt] = (double)cCnt;
     avgHydro[icnt] = hydroSum/(double)len; 
-    fprintf(o1, "%s\t%s\t%d\t%s\t%d\t%f\n", 
-	    accession, protDisplayId, len, exonCnt, cCnt, avgHydro[icnt]);fflush(stdout);
+    //fprintf(o1, "%s\t%s\t%d\t%s\t%d\t%f\n", 
+    // 	    accession, protDisplayId, len, exonCnt, cCnt, avgHydro[icnt]);fflush(stdout);
     icnt++;
     sqlFreeResult(&sr);
     row2 = sqlNextRow(sr2);
@@ -332,13 +338,13 @@ carefulClose(&o2);
 calDist(molWt,  	 molWtCnt, 20, 10000.0, 10000.0,"pepMolWtDist.tab");
 calDist(pI,  	         pIcnt,    61,     3.0, 0.2, 	"pepPiDist.tab");
 calDist(avgHydro,     	  icnt,    41,    -2.0, 0.1, 	"pepHydroDist.tab");
-calDist(cCountDouble, 	  icnt,    51,     0.0, 1.0, 	"cCntDist.tab");
-calDist(exonCountDouble, jExon,    31,     0.0, 1.0, 	"exonCntDist.tab");
-calDist(pfamCountDouble,  pcnt,    16,     0.0, 1.0, 	"pfamCntDist.tab");
-calDist(interProCountDouble,  ipcnt,    16,     0.0, 1.0, 	"interProCntDist.tab");
+calDist(cCountDouble, 	  icnt,    51,     0.0, 1.0, 	"pepCCntDist.tab");
+calDist(exonCountDouble, jExon,    31,     0.0, 1.0, 	"pepExonCntDist.tab");
+calDist(interProCountDouble,  ipcnt,    16,     0.0, 1.0, 	"pepIPCntDist.tab");
+//calDist(pfamCountDouble,  pcnt,    16,     0.0, 1.0, 	"pfamCntDist.tab");
 
-carefulClose(&o1);
-carefulClose(&o4);
+//carefulClose(&o1);
+//carefulClose(&o4);
 
 sqlFreeResult(&sr2);
 hFreeConn(&conn);
