@@ -4,11 +4,19 @@ the blastz alignments.
 	Let $D represent the database (hg12)
 	Let $O represent the assembly directory (....build30)
 
-1. Generate the chromosome level axtFiles in $B/axtChrom and
+o  Make chrom.sizes and chrom.list files 
+     ssh hgwdev
+     cd $O
+     mysql -u hguser -phguserstuff -A -N $D > chrom.sizes <<end
+     select chrom,size from chromInfo;
+     end
+     awk '{print $1;}' chrom.sizes > chrom.list
+    
+o  Generate the chromosome level axtFiles in $B/axtChrom and
    axtBest files in $B/axtBest following the procedure in 
    src/hg/makeDb/*.doc.
 
-2. Generate bed files
+o  Generate bed files for alignments
    cd $B 
    mkdir bedAll
    cd axtChrom
@@ -16,9 +24,9 @@ the blastz alignments.
    cd ..
    mkdir bedBest
    cd axtBest
-   cat *.axt | axtToBed sdtin ../bedBest/best.bed
+   cat *.axt | axtToBed stdin ../bedBest/best.bed
 
-3. Generate bed files for various features
+o  Generate bed files for various gene related features
    ssh hgwdev
    cd $B
    mkdir refParts
@@ -30,20 +38,41 @@ the blastz alignments.
    featureBits $D refGene:upstream:200 -bed=up200.bed
    featureBits $D refGene:end:200 -bed=down200.bed
 
-4. Generate axt files for various features
+o  Get the latest knownReg.bed from Laura Elnitski at Penn State
+   and put it in $B/refParts
+
+o  Generate bed files for ancient repeats.
+    ssh hgwdev
+    cd $B/refParts
+    foreach i (`cat $O/chrom.list`)
+       set t = ${i}_arTmp
+       mysql -u hguser -phguserstuff -A -N $D -e "select genoName,genoStart,genoEnd,repName from $t" >> ancientRepeats.bed
+       echo $t
+    end
+
+o  Generate bed files for genome (excluding gaps)
+    ssh hgwdev
+    cd $B/refParts
+    foreach i (`cat $O/chrom.list`)
+       set t = ${i}_gold
+       mysql -u hguser -phguserstuff -A -N $D -e "select chrom,chromStart,chromEnd from $t" >> genome.bed
+       echo $t
+    end
+
+o  Generate axt files for various features
    ssh kkstore
    cd $B/refParts
    foreach i (*.bed)
        cat ../axtBest/*.axt | axtAndBed stdin $i $i:r.axt
    end
 
-5. Generate substitution matrices and indel size distributions
+o  Generate substitution matrices and indel size distributions
    foreach i (*.axt)
        axtCalcMatrix $i > $i:r.mat
    end
    axtCalcMatrix ../axtBest/*.axt > genome.mat
 
-6. Generate coverage files.
+o  Generate coverage files.
    ssh hgwdev
    cd $B/refParts
    foreach i (*.bed)
@@ -52,15 +81,15 @@ the blastz alignments.
    end
    bedCoverage $D ../bedAll/all.bed > genome.depth
 
-7. Generate GC composition files
+o  Generate GC composition files
    ssh kkstore
    cd $B/refParts
    foreach i (*.bed)
-       gcForBed $O/nib > $i:r.gc
+       gcForBed $i $O/nib > $i:r.gc
        echo done $i:r.gc
    end
 
-8. Figure out how much of human 20 is syntenic to mouse 2.
+o  Figure out how much of human 20 is syntenic to mouse 2.
    cd $B/refParts
      axtQueryCount ../axtBest/chr20.axt > chr20.qc
      grep -v chr2 chr20.qc | addCols stdin
@@ -69,15 +98,7 @@ the blastz alignments.
    line (the second column) with bases covered by the
    next line (also second column).
 
-9. Make chrom.sizes file 
-     ssh hgwdev
-     cd $O
-     mysql -u hguser -phguserstuff -A -N $D > chrom.sizes <<end
-     select chrom,size from chromInfo;
-     end
-   Delete the first line from chromSizes.
-    
-9. Make data to use for 'generic gene' graph:
+o  Make data to use for 'generic gene' graph:
      ssh kkstore
      cd $B/refParts
      ggcPic ../axtBest $O/chrom.sizes $O/bed/refSeq/refGene.tab ggc -geneParts=ggc.parts -generic
