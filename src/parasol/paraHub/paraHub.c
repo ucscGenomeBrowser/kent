@@ -1119,6 +1119,8 @@ if (user == NULL) return 0;
 if (batch == NULL) return 0;
 batch->priority = priority;
 updateUserPriority(user);
+if ((priority>=1)&&(priority<NORMAL_PRIORITY))
+    logInfo("User %s set priority=%d for batch %s\n", userName, priority, dir);
 return priority;
 }
 
