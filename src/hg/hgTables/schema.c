@@ -19,7 +19,7 @@
 #include "bedCart.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.28 2004/11/24 22:41:55 hiram Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.29 2005/03/14 22:27:05 angie Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -118,7 +118,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (!tooBig)
 	{
 	hPrintf(" <TD>");
-	if (isSqlStringType(row[1]) && !sameString(row[1], "longblob"))
+	if ((isSqlStringType(row[1]) && !sameString(row[1], "longblob")) ||
+	    isSqlEnumType(row[1]) || isSqlSetType(row[1]))
 	    {
 	    hPrintf("<A HREF=\"../cgi-bin/hgTables");
 	    hPrintf("?%s", cartSidUrlString(cart));

@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.32 2005/03/03 06:47:19 donnak Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.33 2005/03/14 22:27:04 angie Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -610,6 +610,66 @@ if (logOp == NULL)
 hPrintf("</TD><TD> %s </TD></TR>\n", logOp);
 }
 
+static void makeEnumValMenu(char *type, char ***pMenu, int *pMenuSize)
+/* Given a SQL type description of an enum or set, parse out the list of 
+ * values and turn them into a char array for menu display, with "*" as 
+ * the first item (no constraint). 
+ * This assumes that the values do not contain the ' character.
+ * This will leak a little mem unless you free *pMenu[1] and *pMenu 
+ * when done. */
+{
+static char *noop = "*";
+char *dup = NULL;
+char *words[256];
+int wordCount = 0;
+int len = 0, i = 0;
+if (startsWith("enum(", type))
+    dup = cloneString(type + strlen("enum("));
+else if (startsWith("set(", type))
+    dup = cloneString(type + strlen("set("));
+else
+    errAbort("makeEnumValMenu: expecting a SQL type description that begins "
+	     "with \"enum(\" or \"set(\", but got \"%s\".", type);
+stripChar(dup, '\'');
+wordCount = chopCommas(dup, words);
+len = strlen(words[wordCount-1]);
+if (words[wordCount-1][len-1] == ')')
+    words[wordCount-1][len-1] = 0;
+else
+    errAbort("makeEnumValMenu: expecting a ')' at the end of the last word "
+	     "of SQL type, but got \"%s\"", type);
+*pMenuSize = wordCount + 1;
+*pMenu = (char **)needLargeZeroedMem(sizeof(char *) * (wordCount + 1));
+*pMenu[0] = noop;
+for (i = 1;  i < wordCount + 1;  i++)
+    {
+    (*pMenu)[i] = words[i-1];
+    }
+}
+
+void enumFilterOption(char *db, char *table, char *field, char *type,
+		      char *logOp)
+/* Print out a table row with filter constraint options for an enum/set.  */
+{
+char *name = NULL;
+char **valMenu = NULL;
+int valMenuSize = 0;
+
+hPrintf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", field);
+name = filterFieldVarName(db, table, field, filterDdVar);
+cgiMakeDropList(name, ddOpMenu, ddOpMenuSize,
+		cartUsualString(cart, name, ddOpMenu[0]));
+hPrintf(" %s </TD><TD>\n", isSqlSetType(type) ? "include" : "match");
+name = filterPatternVarName(db, table, field);
+makeEnumValMenu(type, &valMenu, &valMenuSize);
+cgiMakeDropList(name, valMenu, valMenuSize,
+		cartUsualString(cart, name, valMenu[0]));
+if (logOp == NULL)
+    logOp = "";
+hPrintf("</TD><TD> %s </TD></TR>\n", logOp);
+}
+
+
 void numericFilterOption(char *db, char *table, char *field, char *label,
 	char *logOp)
 /* Print out a table row with filter constraint options for a number. */
@@ -698,6 +758,10 @@ else
 	if (isSqlStringType(type))
 	    {
 	    stringFilterOption(db, rootTable, field, logic);
+	    }
+	else if (isSqlEnumType(type) || isSqlSetType(type))
+	    {
+	    enumFilterOption(db, rootTable, field, type, logic);
 	    }
 	else
 	    {
@@ -1133,19 +1197,39 @@ else
     }
 }
 
+static char *getSqlType(struct sqlConnection *conn, char *table, char *field)
+/* Return the type of the given field. */
+{
+struct sqlResult *sr = NULL;
+char **row = NULL;
+char query[512];
+char *type = NULL;
+safef(query, sizeof(query), "describe %s %s", table, field);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    type = cloneString(row[1]);
+else
+    errAbort("getSqlType: no results for query \"%s\".", query);
+sqlFreeResult(&sr);
+return type;
+}
+
+
 char *filterClause(char *db, char *table, char *chrom)
 /* Get filter clause (something to put after 'where')
  * for table */
 {
+struct sqlConnection *conn = sqlConnect(db);
 char varPrefix[128];
 int varPrefixSize, fieldNameSize;
 struct hashEl *varList, *var;
 struct dyString *dy = NULL;
 boolean needAnd = FALSE;
-char dbTableBuf[256];
-char splitTable[256];
 char oldDb[128];
+char dbTableBuf[256];
 char explicitDb[128];
+char splitTable[256];
+char explicitDbTable[512];
 
 /* Return NULL if no filter on us. */
 if (! (anyFilter() && filteredOrLinked(db, table)))
@@ -1159,13 +1243,11 @@ else
      explicitDb[0] = 0;
      
 /* Cope with split table. */
-    {
-    struct sqlConnection *conn = sqlConnect(db);
-    safef(splitTable, sizeof(splitTable), "%s_%s", chrom, table);
-    if (!sqlTableExists(conn, splitTable))
-	safef(splitTable, sizeof(splitTable), "%s", table);
-    sqlDisconnect(&conn);
-    }
+safef(splitTable, sizeof(splitTable), "%s_%s", chrom, table);
+if (!sqlTableExists(conn, splitTable))
+    safef(splitTable, sizeof(splitTable), "%s", table);
+safef(explicitDbTable, sizeof(explicitDbTable), "%s%s",
+      explicitDb, splitTable);
 
 /* Get list of filter variables for this table. */
 safef(varPrefix, sizeof(varPrefix), "%s%s.%s.", hgtaFilterVarPrefix, db, table);
@@ -1224,23 +1306,33 @@ for (var = varList; var != NULL; var = var->next)
 		if (needOr)
 		    dyStringAppend(dy, " OR ");
 		needOr = TRUE;
-		dyStringPrintf(dy, "%s%s.%s ", explicitDb, splitTable, field);
-		if (sqlWildcardIn(sqlPat))
+		if (isSqlSetType(getSqlType(conn, explicitDbTable, field)))
 		    {
 		    if (neg)
 			dyStringAppend(dy, "not ");
-		    dyStringAppend(dy, "like ");
+		    dyStringPrintf(dy, "FIND_IN_SET('%s', %s.%s)>0",
+				   word, explicitDbTable, field);
 		    }
 		else
 		    {
-		    if (neg)
-			dyStringAppend(dy, "!= ");
+		    dyStringPrintf(dy, "%s.%s", explicitDbTable, field);
+		    if (sqlWildcardIn(sqlPat))
+			{
+			if (neg)
+			    dyStringAppend(dy, "not ");
+			dyStringAppend(dy, "like ");
+			}
 		    else
-			dyStringAppend(dy, "= ");
+			{
+			if (neg)
+			    dyStringAppend(dy, "!= ");
+			else
+			    dyStringAppend(dy, "= ");
+			}
+		    dyStringAppendC(dy, '\'');
+		    dyStringAppend(dy, word);
+		    dyStringAppendC(dy, '\'');
 		    }
-		dyStringAppendC(dy, '\'');
-		dyStringAppend(dy, word);
-		dyStringAppendC(dy, '\'');
 		}
 	    if (composite) dyStringAppendC(dy, ')');
 	    freez(&sqlPat);
@@ -1267,20 +1359,20 @@ for (var = varList; var != NULL; var = var->next)
 		if (strchr(pat, '.')) /* Assume floating point */
 		    {
 		    double a = atof(words[0]), b = atof(words[1]);
-		    dyStringPrintf(dy, "%s%s.%s >= %f && %s%s.%s < %f",
-		    	explicitDb, splitTable, field, a, explicitDb, splitTable, field, b);
+		    dyStringPrintf(dy, "%s.%s >= %f && %s.%s < %f",
+		    	explicitDbTable, field, a, explicitDbTable, field, b);
 		    }
 		else
 		    {
 		    int a = atoi(words[0]), b = atoi(words[1]);
-		    dyStringPrintf(dy, "%s%s.%s >= %d && %s%s.%s < %d",
-		    	explicitDb, splitTable, field, a, explicitDb, splitTable, field, b);
+		    dyStringPrintf(dy, "%s.%s >= %d && %s.%s < %d",
+		    	explicitDbTable, field, a, explicitDbTable, field, b);
 		    }
 		freez(&dupe);
 		}
 	    else
 	        {
-		dyStringPrintf(dy, "%s%s.%s %s ", explicitDb, splitTable, field, cmpVal);
+		dyStringPrintf(dy, "%s.%s %s ", explicitDbTable, field, cmpVal);
 		if (strchr(pat, '.'))	/* Assume floating point. */
 		    dyStringPrintf(dy, "%f", atof(pat));
 		else
@@ -1305,6 +1397,7 @@ for (var = varList; var != NULL; var = var->next)
     }
 
 /* Clean up and return */
+sqlDisconnect(&conn);
 hashElFreeList(&varList);
 if (dy->stringSize == 0)
     {

@@ -282,7 +282,13 @@ boolean isPositional(char *db, char *table);
 /* Return TRUE if it looks to be a positional table. */
 
 boolean isSqlStringType(char *type);
-/* Return TRUE if it a a stringish SQL type. */
+/* Return TRUE if type is a stringish SQL type. */
+
+boolean isSqlEnumType(char *type);
+/* Return TRUE if type is an enum. */
+
+boolean isSqlSetType(char *type);
+/* Return TRUE if type is a set. */
 
 boolean isSqlNumType(char *type);
 /* Return TRUE if it is a numerical SQL type. */

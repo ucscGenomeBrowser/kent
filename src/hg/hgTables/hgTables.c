@@ -23,7 +23,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.101 2005/02/21 23:57:04 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.102 2005/03/14 22:27:04 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -616,10 +616,22 @@ return result;
 }
 
 boolean isSqlStringType(char *type)
-/* Return TRUE if it a a stringish SQL type. */
+/* Return TRUE if type is a stringish SQL type. */
 {
 return strstr(type, "char") || strstr(type, "text") 
-	|| strstr(type, "blob") || startsWith("enum", type);
+       || strstr(type, "blob");
+}
+
+boolean isSqlEnumType(char *type)
+/* Return TRUE if type is an enum. */
+{
+return startsWith("enum", type);
+}
+
+boolean isSqlSetType(char *type)
+/* Return TRUE if type is a set. */
+{
+return startsWith("set", type);
 }
 
 boolean isSqlNumType(char *type)
