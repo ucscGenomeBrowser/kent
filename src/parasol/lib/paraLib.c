@@ -1,6 +1,7 @@
 #include <sys/utsname.h>
 #include <pwd.h>
 #include <sys/types.h>
+#include <signal.h>
 #include "common.h"
 #include "options.h"
 #include "errabort.h"
@@ -146,15 +147,31 @@ if (logFile != NULL)
    fflush(logFile);
 }
 
+static char *logName = NULL;
+
+static void reopenLog(int s)
+/* Close and reopen log files in response to signal. */
+{
+if (logName != NULL)
+    {
+    carefulClose(&logFile);
+    logFile = fopen(logName, "w");
+    }
+}
+
 void setupDaemonLog(char *fileName)
 /* Setup log file, and warning handler that goes to this
  * file.  If fileName is NULL then no log, and warning
  * messages go into the bit bucket. */
 {
 if (fileName != NULL)
+    {
     logFile = mustOpen(fileName, "w");
+    logName = cloneString(fileName);
+    }
 if (!logFlush)
     logFlush = optionExists("logFlush");
+signal(SIGHUP, reopenLog);
 pushWarnHandler(warnToLog);
 }
 
