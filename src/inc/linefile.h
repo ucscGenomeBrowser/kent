@@ -57,6 +57,9 @@ void lineFileReuse(struct lineFile *lf);
 #define lineFileTell(lf) ((lf)->bufOffsetInFile + (lf)->lineStart)
 /* Current offset (of string start) in file. */
 
+void lineFileSeek(struct lineFile *lf, off_t offset, int whence);
+/* Seek to read next line from given position. */
+ 
 void lineFileExpectWords(struct lineFile *lf, int expecting, int got);
 /* Check line has right number of words. */
 
