@@ -1,4 +1,4 @@
-JKSRCDIR = /cluster/home/ctrople/kent/src
+JKSRCDIR = /projects/compbiousr/kent/src
 JKLIBDIR = $(JKSRCDIR)/lib/$(MACHTYPE)
 
 .c.o:
