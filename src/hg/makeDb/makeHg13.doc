@@ -224,7 +224,7 @@ MAKE LIFTALL.LFT (DONE 12/4/02)
     cat ?{,?}/lift/{ordered,random}.lft > jkStuff/liftAll.lft
 
 
-STORING O+O SEQUENCE AND ASSEMBLY INFORMATION (IN PROGRESS 12/5/02 - MATT)
+STORING O+O SEQUENCE AND ASSEMBLY INFORMATION (DONE 12/18/02 - MATT)
 
 Create packed chromosome sequence files 
      ssh eieio
@@ -249,8 +249,7 @@ Note: for build31, Terry specially requested these files from NCBI:
   draft.finf
   predraft.finf
   extras.finf
-DONE TO HERE
-TODO BELOW
+
      cd /cluster/store4/gs.14/build31
      jkStuff/liftGl.sh contig.gl
      hgGoldGapGl hg13 /cluster/store4/gs.14 build31 
@@ -258,7 +257,7 @@ TODO BELOW
      hgClonePos hg13 build31 ffa/sequence.inf /cluster/store4/gs.14 -maxErr=3
 #(Ignore warnings about missing clones - these are in chromosomes 21 and 22)
      hgCtgPos hg13 build31 
-DONE BELOW HERE - ABOVE IS TODO
+
 Make and load GC percent table
      ssh hgwdev
      cd ~/oo
@@ -266,6 +265,7 @@ Make and load GC percent table
      cd bed/gcPercent
      hgsql hg13  < ~/src/hg/lib/gcPercent.sql
      hgGcPercent hg13 ../../nib
+
 
 GETTING FRESH mRNA, EST, REFSEQ SEQUENCE FROM GENBANK. (DONE 12/03/02 - MATT)
 
@@ -1295,7 +1295,7 @@ EOF
     hgLoadPsl hg13 *.psl
 
 
-PRODUCING CROSS_SPECIES mRNA ALIGNMENTS (TO DO)
+PRODUCING CROSS_SPECIES mRNA ALIGNMENTS (DONE 12/17/02 - MATT)
 
 Here you align vertebrate mRNAs against the masked genome on the
 cluster you set up during the previous step.
@@ -1355,24 +1355,23 @@ Load into database as so:
        hgLoadRna add -type=xenoRna hg13 /gbdb/hg13/mrna.132/xenoRna.fa /gbdb/hg13/mrna.132/xenoRna.ra
        hgLoadRna add -type=xenoEst hg13 /gbdb/hg13/mrna.132/xenoEst.fa /gbdb/hg13/mrna.132/xenoEst.ra
 
-DONE TO HERE 
 Similarly do xenoEst aligments:
    Prepare the est data:
-        cd /cluster/store1/mrna.132
-        faSplit sequence xenoEst.fa 16 xenoEst    
+        ssh kkstore
+        cd /scratch/hg/mrna.132/Homo_sapiens
+        faSplit sequence  /cluster/store1/mrna.132/xenoEst.fa 16 xenoEst    
 
-       ssh kkstore
        cd /cluster/store4/gs.14/build31/bed
        mkdir xenoEst
        cd xenoEst
        mkdir psl
        ls -1S /scratch/hg/gs.14/build31/trfFa.1204/*.fa.trf > human.lst
-       cp /cluster/store1/mrna.132/xenoEst?*.fa /scratch/hg/mrna.132
-       ls -1S /scratch/hg/mrna.132/xenoEst?*.fa > mrna.lst
+       ls -1S /scratch/hg/mrna.132/Homo_sapiens/xenoEst?*.fa > mrna.lst
        cp ~/hg12/bed/xenoEst/gsub .
 
 Request a binrysnc from the admin's of kkstore's /scratch/hg/mrna.132
 When done, do:
+       ssh kk
        gensub2 human.lst mrna.lst gsub spec
        para create spec
        para push
@@ -1391,9 +1390,59 @@ Load into database as so:
        ssh hgwdev
        cd ~/oo/bed/xenoEst
        hgLoadPsl hg13 xenoEst.psl -tNameIx
-       cd /cluster/store1/mrna.132
-       hgLoadRna add hg13 xenoEst.fa xenoEst.ra
-    
+
+PRODUCING FUGU ALIGNMENTS (DONE 12/12/02 - MATT)
+o - Do fugu/human alignments.
+       ssh kk
+       cd ~/oo/bed
+       mkdir blatFugu
+       cd blatFugu
+       mkdir psl
+       foreach f (~/oo/?{,?}/NT_??????/NT_??????.fa)
+         set c=$f:t
+         mkdir -p psl/$c
+       end
+       ls -1S /scratch/hg/fugu/split500/*.fa > fugu.lst
+       ls -1S /scratch/hg/gs.14/build31/trfFa.1204/*.fa.trf > human.lst
+       # Copy over gsub from previous version.
+       gensub2 human.lst fugu.lst gsub spec
+
+       para create spec
+       para try
+     Make sure jobs are going ok with para check.  Then
+       para push -maxJobs=10000
+     wait about 2 hours and do another
+       para push
+     do para checks and if necessary para pushes until done
+     or use para shove.
+
+o - Sort alignments as so
+    ssh eieio
+    cd ~/oo/bed/blatFugu
+       pslCat -dir psl/NT_??????.fa | \
+         liftUp -type=.psl stdout ~/oo/jkStuff/liftAll.lft warn stdin | \
+         pslSortAcc nohead chrom temp stdin
+
+o - Rename to correspond with tables as so and
+    load into database:
+       ssh hgwdev
+       cd ~/oo/bed/blatFugu/chrom
+       rm -f chr*_blatFugu.psl
+       foreach i (chr?{,?}{,_random}.psl)
+           set r = $i:r
+           mv $i ${r}_blatFugu.psl
+       end
+       hgLoadPsl hg13 *.psl
+
+Make fugu symlink
+cd /gbdb/hg13
+mkdir fugu
+cd fugu
+ln -s /cluster/store3/fuguSeq/fugu_v3_mask.fasta /gbdb/hg13/fugu/fugu_v3_mask.fasta
+Now load the Fugu sequence data
+       hgLoadRna addSeq hg13 /gbdb/hg13/fugu/fugu_v3_mask.fasta
+
+
 PRODUCING FISH ALIGNMENTS (TO DO)
 o - Do fish/human alignments.
        ssh kk
