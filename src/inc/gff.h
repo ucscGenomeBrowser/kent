@@ -24,6 +24,8 @@ struct gffLine
     char *geneId;    /* gene_id in GTF, NULL in GFF.  Not allocated here. */
     char *exonId;       /* exon_id in GTF, NULL in GFF. Not allocated here. */
     int exonNumber; /* O in GFF or if missing in GTF.  Otherwise exon number. */
+    char *intronId;       /* intron_id in GTF, NULL in GFF. Not allocated here. */
+    char *intronStatus;   /* intron status. Not allocated here. */
     };
 
 struct gffGroup
@@ -80,6 +82,7 @@ struct gffFile
     struct hash *groupHash;	/* Associates group names and gffGroups. */
     struct hash *geneIdHash;    /* Hash of all geneIds. */
     struct hash *exonHash;       /* Hash of all exonIds. */
+    struct hash *intronStatusHash;/* Hash of intron statuses. */
     struct gffLine *lineList;   /* List of lines - lines may be in groupList instead. */
     struct gffSeqName *seqList; /* List of sequences in file. */
     struct gffSource *sourceList; /* List of all sources in file. */
