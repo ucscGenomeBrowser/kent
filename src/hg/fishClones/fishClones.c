@@ -249,6 +249,7 @@ struct map *createMap(char *mapInfo, char *center, char *chr)
 
   AllocVar(ret);
   ret->next = NULL;
+
   /* Determine chromosome */
   mi = cloneString(mapInfo);
   if (stringIn("p", mapInfo))
@@ -260,8 +261,9 @@ struct map *createMap(char *mapInfo, char *center, char *chr)
   else
     errAbort("Couldn't determine chrom for %s\n", mapInfo);
   safef(chrom, sizeof(chrom), "chr%s", words[0]);
-  verbose(3, "\tchromosome for %s is %s\n", mapInfo, chrom);
+  verbose(4, "\tchromosome for %s is %s\n", mapInfo, chrom);
   ret->chrom = cloneString(chrom);
+  free(mi);
 
   if (stringIn("~\0", mapInfo))
     {
@@ -316,6 +318,7 @@ struct name *createName(char *n)
   AllocVar(ret);
   ret->next = NULL;
   ret->name = cloneString(n);
+  touppers(ret->name);
   ret->phase = 0;
   return(ret);
 }
@@ -394,11 +397,35 @@ boolean inNameList(struct name *n, struct name *nList)
   return(FALSE);
 }
 
+boolean samePos(struct position *p1, struct position *p2)
+/* Determine of p1 and p2 are the same */
+{
+  if ((sameString(p1->name, p2->name))
+      && (p1->start == p2->start) && (p1->end == p2->end) 
+      && ((p1->chrom == NULL && p2->chrom == NULL) || 
+	  ((p1->chrom != NULL) && (p2->chrom != NULL) && sameString(p1->chrom, p2->chrom))))
+    return(TRUE);
+
+  return(FALSE);
+}
+
+boolean inPosList(struct position *p, struct position *pList)
+/* Determine if p is in pList */
+{
+  struct position *p1;
+
+  for (p1 = pList; p1 != NULL; p1 = p1->next)
+    if (samePos(p, p1))
+      return(TRUE);
+  
+  return(FALSE);
+}
+
 void readFishInfo(struct lineFile *ff)
 /* Read in FISH information from NCBI */
 {
   int wordCount, wordCount1, i, j;
-  char *words[7], *chr, *clone, *map, *acc, *sts, *bacEnd;
+  char *words[7], *chr, *clone, *map, *acc, *sts, *bacEnd, name[32];
   char *accs[16], *stss[16], *bacEnds[16], *stsName[16], *maps[16], *mapInfo[16], *mapInfoCen[16];
   char *p, *center;
   struct fishClone *fc;
@@ -415,21 +442,23 @@ void readFishInfo(struct lineFile *ff)
     {
       chr = cloneString(words[0]);
       clone = cloneString(words[1]);
+
       /* Create and add to hash */
-      verbose(3, "\tadding %s to hash for %s\n", clone, chr);
+      verbose(4, "\tadding %s to hash for %s\n", clone, chr);
       fc = createFishClone(clone);
       slAddHead(&fcList, fc);
       hashAdd(fishClones, clone, fc);
+
       /* Record cytogenetic map positions */
       map = cloneString(words[3]);
-      verbose(3, "\tprocessing map info %s\n", map);
+      verbose(4, "\tprocessing map info %s\n", map);
       wordCount = chopByChar(map, ';', maps, ArraySize(maps));
       for (i = 0; i < wordCount; i++)
 	{
 	  p = strrchr(maps[i], ')');
 	  *p = '\0';
 	  wordCount1 = chopByChar(maps[i], '(', mapInfoCen, ArraySize(mapInfo)); 
-	  center = mapInfoCen[1];
+	  center = cloneString(mapInfoCen[1]);
 	  wordCount1 = chopByChar(mapInfoCen[0], ',', mapInfo, ArraySize(mapInfo));
 	  for (j = 0; j < wordCount1; j++)
 	    {
@@ -438,12 +467,10 @@ void readFishInfo(struct lineFile *ff)
 	      fc->numCyto++;
 	    }
 	}
+
       /* Record accessions assigned to clone */
       acc = cloneString(words[4]);
-      p = strrchr(acc, '.');
-      if (p != NULL)
-	*p = '\0';
-      verbose(3, "\tprocessing acc info %s\n", acc);
+      verbose(4, "\tprocessing acc info %s\n", acc);
       wordCount = chopByChar(acc, ';', accs, ArraySize(accs));
       for (i = 0; i < wordCount; i++)
 	{
@@ -451,40 +478,55 @@ void readFishInfo(struct lineFile *ff)
 	  p = strrchr(accs[i], '.');
 	  if (p != NULL)
 	    *p = '\0';
-	  verbose(3, "\tprocessing acc info for %s\n", accs[i]);
+	  verbose(4, "\tprocessing acc info for %s\n", accs[i]);
 	  pos = createPosition(accs[i], "Accession");
-	  slAddHead(&fc->acc, pos);
-	  hashAdd(positions, accs[i], pos);
-	  hashAdd(posClone, accs[i], fc);
+	  if (!hashLookup(positions, accs[i]))
+	      hashAdd(positions, accs[i], pos);
+	  if (!inPosList(pos, fc->acc))
+	    {
+	      slAddHead(&fc->acc, pos);
+	      hashAdd(posClone, accs[i], fc);
+	    }
 	}
+
       /* Record sts markers assigned to clone */
       sts = cloneString(words[5]);
-      verbose(3, "\tprocessing sts info %s\n", sts);
+      verbose(4, "\tprocessing sts info %s\n", sts);
       wordCount = chopByChar(sts, ';', stss, ArraySize(stss));
       for (i = 0; i < wordCount; i++)
 	{
 	  /* Split off UniSTS id */
 	  wordCount1 = chopByWhite(stss[i], stsName, ArraySize(stsName));
-	  verbose(3, "\tprocessing sts info for %s\n", stsName[0]);
+	  verbose(4, "\tprocessing sts info for %s\n", stsName[0]);
+	  safef(name, sizeof(name), "%s_%s", clone, stsName[0]);
 	  pos = createPosition(stsName[0], "STS Marker");
-	  slAddHead(&fc->sts, pos);
-	  hashAdd(positions, stsName[0], pos);
-	  hashAdd(posClone, stsName[0], fc);
+	  if (!hashLookup(positions, name))
+	      hashAdd(positions, name, pos);
+	  if (!inPosList(pos, fc->sts))
+	    {
+	      slAddHead(&fc->sts, pos);
+	      hashAdd(posClone, name, fc);
+	    }
 	}
+
       /* Record bac ends assigned to clone */
       bacEnd = cloneString(words[6]);
-      verbose(3, "\tprocessing bacend info %s\n", bacEnd);
+      verbose(4, "\tprocessing bacend info %s\n", bacEnd);
       wordCount = chopByChar(bacEnd, ';', bacEnds, ArraySize(bacEnds));
       for (i = 0; i < wordCount; i++)
 	{
 	  /* Split off version */
 	  p = strrchr(bacEnds[i], '.');
 	  *p = '\0';
-	  verbose(3, "\tprocessing bacEnd info for %s\n", bacEnds[i]);
+	  verbose(4, "\tprocessing bacEnd info for %s\n", bacEnds[i]);
 	  pos = createPosition(bacEnds[i], "BAC End");
-	  slAddHead(&fc->end, pos);
-	  hashAdd(positions, bacEnds[i], pos);
-	  hashAdd(posClone, bacEnds[i], fc);
+	  if (!hashLookup(positions, bacEnds[i]))
+	      hashAdd(positions, bacEnds[i], pos);
+	  if (!inPosList(pos, fc->end))
+	    {
+	      slAddHead(&fc->end, pos);
+	      hashAdd(posClone, bacEnds[i], fc);
+	    }
 	}
     }
 }
@@ -508,14 +550,19 @@ void readCloneAcc(struct lineFile *cf)
       if (p != NULL) 
 	*p = '\0';
       /* Check if clone a fish clone, and that accession not previously recorded */
-      if ((hashLookup(fishClones, clone)) && (!hashLookup(positions, acc)))
+      if (hashLookup(fishClones, clone)) 
 	{
-	  pos = createPosition(acc, "Accession");
-	  hashAdd(positions, acc, pos);
 	  fc = hashMustFindVal(fishClones, clone);
-	  hashAdd(posClone, acc, fc);
-	  slAddHead(&fc->acc, pos);	  
+	  pos = createPosition(acc, "Accession");
+	  if (!hashLookup(positions, acc))
+	      hashAdd(positions, acc, pos);
+	  if (!inPosList(pos, fc->acc))
+	    {
+	      hashAdd(posClone, acc, fc);
+	      slAddHead(&fc->acc, pos);	  
+	    }
 	}
+      free(clone);
     }
 }
 
@@ -533,14 +580,19 @@ void readBacEnds(struct lineFile *bef)
       clone = cloneString(words[0]);
       be = cloneString(words[1]);
       /* Check if clone a fish clone, and that accession not previously recorded */
-      if ((hashLookup(fishClones, clone)) && (!hashLookup(positions, be)))
+      if (hashLookup(fishClones, clone))
 	{
-	  pos = createPosition(be, "BAC End");
-	  hashAdd(positions, be, pos);
 	  fc = hashMustFindVal(fishClones, clone);
-	  hashAdd(posClone, be, fc);
-	  slAddHead(&fc->end, pos);	  
+	  pos = createPosition(be, "BAC End");
+	  if (!hashLookup(positions, be))
+	      hashAdd(positions, be, pos);
+	  if (!inPosList(pos, fc->end))
+	    {
+	      hashAdd(posClone, be, fc);
+	      slAddHead(&fc->end, pos);
+	    }
 	}
+      free(clone);
     }
 }
 
@@ -548,7 +600,7 @@ void readStsMarkers(struct lineFile *sf)
 /* Read in STS Marker information from FHCRC */
 {
   int lineSize, wordCount;
-  char *words[4], *clone, *sts;
+  char *words[4], *clone, *sts, name[32];
   struct position *pos;
   struct fishClone *fc;
 
@@ -557,14 +609,25 @@ void readStsMarkers(struct lineFile *sf)
     {
       clone = cloneString(words[0]);
       sts = cloneString(words[1]);
+      safef(name, sizeof(name), "%s_%s", clone, sts);
       /* Check if clone a fish clone, and that accession not previously recorded */
-      if ((hashLookup(fishClones, clone)) && (!hashLookup(positions, sts)))
+      if (hashLookup(fishClones, clone)) 
 	{
-	  pos = createPosition(sts, "STS Marker");
-	  hashAdd(positions, sts, pos);
 	  fc = hashMustFindVal(fishClones, clone);
-	  hashAdd(posClone, sts, fc);
-	  slAddHead(&fc->sts, pos);	  
+	  pos = createPosition(sts, "STS Marker");
+	  /* Make sure it isn't an accession or end sequence */
+	  if (!hashLookup(positions, sts))
+	    {
+	      if (!hashLookup(positions, name))
+		hashAdd(positions, name, pos);
+	      verbose(4, "\tchecking sts marker %s for %s\n", sts, clone);
+	      if (!inPosList(pos, fc->sts)) 
+		{
+		  verbose(4, "\tadding sts marker %s for %s\n", sts, clone);
+		  hashAdd(posClone, name, fc);
+		  slAddHead(&fc->sts, pos);
+		}
+	    }
 	}
     }
 }
@@ -586,18 +649,16 @@ void readBacEndsPsl(struct lineFile *bpf)
     psl = pslLoad(words);
     if (hashLookup(positions, psl->qName))
       {
-	pos = hashFindVal(positions, psl->qName);
-	/* Check if this is a duplicate position for the clone */
-	if (pos->chrom)
-	  {
-	    pos = createPosition(psl->qName, "BAC End");
-	    fc = hashMustFindVal(posClone, psl->qName);
-	    slAddHead(&fc->end, pos);
-	  }
-	/* Record loction of alignment */
+	pos = createPosition(psl->qName, "BAC End");
 	pos->chrom = cloneString(psl->tName);
 	pos->start = psl->tStart;
 	pos->end = psl->tEnd;
+	fc = hashMustFindVal(posClone, psl->qName);
+	/* Check if this is a duplicate */
+	if (!inPosList(pos, fc->end))
+	  slAddHead(&fc->end, pos);
+	else
+	  positionFree(&pos);
       }
     }
 }
@@ -621,18 +682,19 @@ void readClonePsl(struct lineFile *cpf)
     acc = cloneString(psl->qName);
     p = strrchr(acc, '.');
     *p = '\0';    
-    pos = hashMustFindVal(positions, acc);
-    /* Check if this is a duplicate position for the clone */
-    if (pos->chrom)
+    if (hashLookup(positions, acc))
       {
 	pos = createPosition(acc, "Accession");
+	pos->chrom = cloneString(psl->tName);
+	pos->start = psl->tStart;
+	pos->end = psl->tEnd;
 	fc = hashMustFindVal(posClone, acc);
-	slAddHead(&fc->acc, pos);
+	/* Check if this is a duplicate */
+	if (!inPosList(pos, fc->acc))
+	  slAddHead(&fc->acc, pos);
+	else
+	  positionFree(&pos);
       }
-    /* Record loction of alignment */
-    pos->chrom = cloneString(psl->tName);
-    pos->start = psl->tStart;
-    pos->end = psl->tEnd;
     }
 }
 
@@ -668,16 +730,16 @@ void findAccPosition(struct sqlConnection *conn, struct position *pos, struct fi
 	  newPos->start = cp->chromStart;
 	  newPos->end = cp->chromEnd;
 	  newPos->phase = cp->phase;
-	  clonePosFree(&cp);
 	  slAddHead(&fc->acc, newPos);
+	  clonePosFree(&cp);
 	}
     }
   else
     {
-    missing = createName(pos->name);
-    slAddHead(&fc->missingAcc, missing);
+      missing = createName(pos->name);
+      slAddHead(&fc->missingAcc, missing);
     }
-    
+  
   sqlFreeResult(&sr);
 }
 
@@ -728,8 +790,8 @@ void findStsPosition(struct sqlConnection *conn, struct position *pos, struct fi
 	  newPos->chrom = cloneString(s->chrom);
 	  newPos->start = s->chromStart;
 	  newPos->end = s->chromEnd;
-	  stsMapFree(&s);
 	  slAddHead(&fc->sts, newPos);
+	  stsMapFree(&s);
 	}
     }
   sqlFreeResult(&sr);
@@ -785,7 +847,6 @@ int combinePos(struct place *p, struct position *pos)
 	  n = createName(pos->name);
 	  n->phase = pos->phase;
 	  slAddHead(&p->acc, n);
-	  /* p->type = pos->type; */	  
 	} 
       if (sameString(pos->type, "BAC End Pair"))
 	{
@@ -796,8 +857,6 @@ int combinePos(struct place *p, struct position *pos)
 	  n = createName(words[1]);
 	  slAddHead(&p->bePair, n);
 	  p->numBacEndPair++;
-	  /* if (!sameString(p->type, "Accession"))
-	     p->type = pos->type; */
 	} 
       if (sameString(pos->type, "STS Marker"))
 	{
@@ -811,8 +870,6 @@ int combinePos(struct place *p, struct position *pos)
 	    } 
 	  else 
 	    nameFree(&n);
-	  /* if (sameString(p->type, "BAC End"))
-	     p->type = pos->type; */
 	} 
       if (sameString(pos->type, "BAC End"))
 	{
@@ -851,9 +908,9 @@ int scorePlace(struct place *p, struct map *m)
       if (sameString(m1->chrom, words[0]))
 	{
 	  if (wordCount == 1)
-	    ret += 2;
+	    ret += 3;
 	  else
-	    ret += 1;
+	    ret += 2;
 	  break;
 	}
     }
@@ -1099,7 +1156,10 @@ void writeOut(FILE *of, FILE *af)
 	    }
 	  if (p->numBacEnd) 
 	    {
-	      fprintf(of, "%s", p->bacEnd->name);
+	      if (p->numBacEndPair)
+		fprintf(of, ",%s", p->bacEnd->name);
+	      else
+		fprintf(of, "%s", p->bacEnd->name);
 	      for (n = p->bacEnd->next; n != NULL; n=n->next)
 		fprintf(of, ",%s", n->name);
 	    }
@@ -1126,7 +1186,13 @@ int main(int argc, char *argv[])
   optionInit(&argc, argv, optionSpecs);
   if (argc < 4)
     {
-      fprintf(stderr, "USAGE: fishClones <database> <hbrc> <clac.out> <cl_acc_gi_len> <bacEnds.psl> <out file prefix\n  Options:\n\t-fhcrc=<file>\tSTS marker associations from FHCRC\n\t-psl=<psl file>\tpsl file of clone placements\n\t-verbose=<level>\tdisplay all messages\n\t-noBin\t\tdo not include bin column in output file\n\t-noRandom\tdo not include placements on random portions\n");
+      fprintf(stderr, "USAGE: fishClones <database> <hbrc> <clac.out> <cl_acc_gi_len> <bacEnds.psl> <out file prefix>\n");
+      fprintf(stderr, "Options:\n");
+      fprintf(stderr, "\t-fhcrc=<file>\tSTS marker associations from FHCRC\n");
+      fprintf(stderr, "\t-psl=<psl_file>\tpsl file of clone placements\n");
+      fprintf(stderr, "\t-verbose=<level>\tdisplay all messages\n");
+      fprintf(stderr, "\t-noBin\t\tdo not include bin column in output file\n");
+      fprintf(stderr, "\t-noRandom\tdo not include placements on random portions\n");
       return 1;
     }
   db = argv[1];
@@ -1157,21 +1223,26 @@ int main(int argc, char *argv[])
   verbose(1, "Reading Fish Clones file\n");
   readFishInfo(ff);
   lineFileClose(&ff);
+  writeOut(of, af);
   verbose(1, "Reading Clone/Acc (clac.out) file\n");
   readCloneAcc(cf);
   lineFileClose(&cf);
+  writeOut(of, af);
   verbose(1, "Reading BAC Ends file\n");
   readBacEnds(bef);
   lineFileClose(&bef);
+  writeOut(of, af);
   verbose(1, "Reading BAC Ends psl file\n");
   readBacEndsPsl(bpf);
   lineFileClose(&bpf);
+  writeOut(of, af);
   if (stsName)
     {
       verbose(1, "Reading additional STS Marker links\n");
       readStsMarkers(sf);
       lineFileClose(&sf);
     }
+  writeOut(of, af);
   if (pslName)
     {
       verbose(1, "Reading additional clone psl positions\n");
