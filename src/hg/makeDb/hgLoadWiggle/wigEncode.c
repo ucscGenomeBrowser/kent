@@ -1,6 +1,6 @@
 /* wigEncode - Convert wiggle ascii to wiggle binary format */
 
-static char const rcsid[] = "$Id: wigEncode.c,v 1.2 2004/11/01 19:31:38 hiram Exp $";
+static char const rcsid[] = "$Id: wigEncode.c,v 1.3 2004/11/01 19:33:08 hiram Exp $";
 
 #include "common.h"
 #include "wiggle.h"
@@ -14,7 +14,7 @@ errAbort("wigEncode - convert Wiggle ascii data to binary format\n\n"
 	"\n"
 	"This processes the three data input format types described at:\n"
 	"\thttp://genome.ucsc.edu/encode/submission.html#WIG\n"
-	"*without* the track type= lines\n"
+	"*without* the \"track type=wiggle_0\" lines\n"
 	"\t(future improvements will tolerate the track lines)\n"
 	"Example:\n"
 	"    hgGcPercent -wigOut -doGaps -file=stdout -win=5 xenTro1 \\\n"
