@@ -1612,19 +1612,16 @@ LOAD SANGER22 GENES  TO DO
 	hgSanger20 hg13 *.gtf *.info
 
 
-LOAD RNAGENES (TO DO)
+LOAD RNAGENES
       ssh hgwdev
       mkdir -p ~/hg13/bed/rnaGene
       cd ~/hg13/bed/rnaGene
-      wget ftp://ftp.genetics.wustl.edu/pub/eddy/pickup/ncRNA-chr7-20020621.gff.gz
-      gunzip -c ncRNA-chr7-20020621.gff.gz \
-        | grep -v "^#" \
-        | perl -wpe 's/chrom(\d+)\.\w+\.fsa/chr$1/' \
-        > chr7_ncrna.gff
-
+      wget ftp://ftp.genetics.wustl.edu/pub/eddy/pickup/ncrna-hg13.gff.gz
+      gunzip -c ncrna-hg13.gff.gz | grep -v '^#' > contig.gff
+      liftUp chrom.gff ../../jkStuff/liftAll.lft warn contig.gff
       echo 'drop table hgRnaGene;' | hgsql hg13
       hgsql hg13 < ~/kent/src/hg/lib/rnaGene.sql
-      hgRnaGenes hg13 chr7_ncrna-fixed.gff
+      hgRnaGenes hg13 chrom.gff
 
 LOAD EXOFISH (todo)
      - login to hgwdev
