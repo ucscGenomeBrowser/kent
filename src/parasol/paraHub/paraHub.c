@@ -66,6 +66,18 @@
 #include "paraHub.h"
 #include "machSpec.h"
 
+/* command line option specifications */
+static struct optionSpec optionSpecs[] = {
+    {"spokes", OPTION_INT},
+    {"jobCheckPeriod", OPTION_INT},
+    {"machineCheckPeriod", OPTION_INT},
+    {"subnet", OPTION_STRING},
+    {"nextJobId", OPTION_INT},
+    {"logFacility", OPTION_STRING},
+    {"noResume", OPTION_BOOLEAN},
+    {NULL, 0}
+};
+
 int version = 8;	/* Version number. */
 
 /* Some command-line configurable quantities and their defaults. */
@@ -2030,7 +2042,7 @@ if (sns != NULL)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionHash(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (argc < 2)
     usage();
 jobCheckPeriod = optionInt("jobCheckPeriod", jobCheckPeriod);

@@ -14,6 +14,19 @@
 #include "paraMessage.h"
 #include "internet.h"
 
+/* command line option specifications */
+static struct optionSpec optionSpecs[] = {
+    {"logFacility", OPTION_STRING},
+    {"hub", OPTION_STRING},
+    {"umask", OPTION_INT},
+    {"userPath", OPTION_STRING},
+    {"sysPath", OPTION_STRING},
+    {"randomDelay", OPTION_INT},
+    {"cpu", OPTION_INT},
+    {"localhost", OPTION_STRING},
+    {NULL, 0}
+};
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -265,15 +278,6 @@ void getTicksToHundreths()
 #else
     ticksToHundreths = 100.0/sysconf(_SC_CLK_TCK);
 #endif /* CLK_TCK */
-}
-
-int forkOrDie()
-/* Fork.  Print warning if it fails and return -1. */
-{
-int childId = fork();
-if (childId == -1)
-    errnoAbort("Unable to fork");
-return childId;
 }
 
 void execProc(char *managingHost, char *jobIdString, char *reserved,
@@ -801,7 +805,7 @@ if (forkOrDie() == 0)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionHash(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (argc != 2)
     usage();
 maxProcs = optionInt("cpu", 1);
