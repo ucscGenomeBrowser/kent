@@ -11,7 +11,7 @@
 #include "binRange.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: hgClusterGenes.c,v 1.5 2003/09/17 17:21:39 kent Exp $";
+static char const rcsid[] = "$Id: hgClusterGenes.c,v 1.6 2003/09/24 04:09:49 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -25,14 +25,17 @@ errAbort(
   "options:\n"
   "   -chrom=chrN - Just work on one chromosome\n"
   "   -verbose=N - Print copious debugging info. 0 for none, 3 for loads\n"
+  "   -noProt - Skip protein field\n"
   );
 }
 
 int verbose = 0;
+boolean noProt = FALSE;
 
 static struct optionSpec options[] = {
    {"chrom", OPTION_STRING},
    {"verbose", OPTION_INT},
+   {"noProt", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -308,7 +311,7 @@ struct genePred *gp, *gpList = NULL;
 char extraWhere[64], query[256];
 struct cluster *clusterList = NULL, *cluster;
 int nameLen;
-struct hash *protHash = newHash(16);
+struct hash *protHash = NULL;
 
 if (verbose >= 1)
     printf("%s %c\n", chrom, strand);
@@ -326,11 +329,15 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 
 /* Build hash to map between transcript names and protein IDs. */
-safef(query, sizeof(query), "select name, proteinId from %s", geneTable);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    hashAdd(protHash, row[0], cloneString(row[1]));
-sqlFreeResult(&sr);
+if (!noProt)
+    {
+    protHash = newHash(16);
+    safef(query, sizeof(query), "select name, proteinId from %s", geneTable);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	hashAdd(protHash, row[0], cloneString(row[1]));
+    sqlFreeResult(&sr);
+    }
 
 slReverse(&gpList);
 clusterList = makeCluster(gpList, hChromSize(chrom));
@@ -339,6 +346,7 @@ for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
     struct hashEl *helList = hashElListHash(cluster->geneHash);
     struct hashEl *hel;
     struct genePred *cannonical = NULL;
+    char *protName;
     int cannonicalSize = -1, size = 0;
     ++clusterId;
     for (hel = helList; hel != NULL; hel = hel->next)
@@ -352,9 +360,12 @@ for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
 	    cannonicalSize = size;
 	    }
 	}
+    protName = cannonical->name;
+    if (protHash != NULL)
+        protName = hashMustFindVal(protHash, protName);
     fprintf(canFile, "%s\t%d\t%d\t%d\t%s\t%s\n", 
     	chrom, cluster->start, cluster->end, clusterId, cannonical->name,
-	(char *)hashMustFindVal(protHash, cannonical->name));
+	protName);
     ++totalClusterCount;
     }
 genePredFreeList(&gpList);
@@ -397,6 +408,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 verbose = optionInt("verbose", verbose);
+noProt = optionExists("noProt");
 if (argc != 5)
     usage();
 hgClusterGenes(argv[1], argv[2], argv[3], argv[4]);
