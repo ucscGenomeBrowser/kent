@@ -256,7 +256,7 @@ type chain seq
 
 track netRxBestPt0
 shortLabel Chimp Net
-longLabel Chimp (Nov 03) Reciprocal Best Net
+longLabel Chimp (Nov 03) Reciprocal Best Net (Colored by Scaffold)
 group compGeno
 priority 145.7
 visibility dense
