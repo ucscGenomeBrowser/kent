@@ -1,0 +1,43 @@
+
+To fetch the source tree via CVS,
+set the following environment in your shell environment:
+
+CVS_RSH=ssh
+CVSROOT=:pserver:anonymous@hgwdev.cse.ucsc.edu:/cbse
+export CVSROOT CVS_RSH
+
+Then execute the following commands in the directory
+where you want the source downloaded:
+
+cvs login		# this will ask for a password
+			# use the word: genome
+cvs co kent		# will create the source hierarchy
+			# in a directory called ./kent
+
+A fully built source tree hierarchy occupies approximately 60 Mb
+
+To update this source tree you have previously fetched:
+
+cvs login		# this will ask for a password
+			# use the word: genome
+cd <kent>		# the 'kent' directory originally created by the 'co'
+cvs update -d -P	# creates new directories and prunes empty directories 
+
+To have these arguments in your CVS environment so you do not need
+to remember them each time, place the following line:
+update -d -P
+
+In a file in your home directory: ~/.cvsrc
+
+Then a simple 'cvs update' will always do the right thing.
+
+To update the source tree delivered on this CD-ROM.
+With the CVSROOT and CVS_RSH as described above.
+
+cvs login               # this will ask for a password
+                        # use the word: genome
+mkdir <kent>		# create a directory where you want the browser source
+cp -Rp /mnt/cdrom/source_tree_built/kent/* <kent>	# copy from CD-ROM
+cd <kent>		# to the directory where you work on the source
+cvs update -A -d -P	# the -A will reset the release version tags
+			# that are in the source tree on the CD-ROM
