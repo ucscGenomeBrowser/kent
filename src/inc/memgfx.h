@@ -95,13 +95,14 @@ void mgPutSegZeroClear(struct memGfx *mg, int x, int y, int width, Color *dots);
 void mgDrawBox(struct memGfx *mg, int x, int y, int width, int height, Color color);
 /* Draw a (horizontal) box */
 
-
 void mgDrawLine(struct memGfx *mg, int x1, int y1, int x2, int y2, Color color);
 /* Draw a line from one point to another. */
 
-
 void mgDrawHorizontalLine(struct memGfx *mg, int y1, Color color);
 /*special case of mgDrawLine*/
+
+void mgLineH(struct memGfx *mg, int y, int x1, int x2, Color color);
+/* Draw horizizontal line width pixels long starting at x/y in color */
 
 void mgSaveGif(struct memGfx *mg, char *name);
 /* Save memory bitmap as a gif. */
@@ -195,5 +196,21 @@ void mgCircle(struct memGfx *mg, int xCen, int yCen, int rad,
 	Color color, boolean filled);
 /* Draw a circle using a stepping algorithm.  Doesn't correct
  * for non-square pixels. */
+
+struct gfxPoint;  /* A 2-d point. */
+struct gfxPoly;	  /* A 2-d polygon. */
+
+struct gfxPoly *gfxPolyNew();
+/* Create new (empty) polygon */
+
+void gfxPolyFree(struct gfxPoly **pPoly);
+/* Free up resources associated with polygon */
+
+void gfxPolyAddPoint(struct gfxPoly *poly, int x, int y);
+/* Add point to polygon. */
+
+void mgDrawPoly(struct memGfx *mg, struct gfxPoly *poly, Color color,
+	boolean filled);
+/* Draw polygon, possibly filled in color. */
 
 #endif /* MEMGFX_H */
