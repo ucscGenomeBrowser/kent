@@ -732,6 +732,7 @@ shortLabel blatMus0202
 longLabel Blat alignment of mm.2002.02/arachne for contamination checking
 priority 50.0
 visibility hide
+spectrum on
 private 1
 type psl .
 
