@@ -22,6 +22,7 @@ bzp->weight = 11;
 bzp->rna = 0;
 bzp->minScore = 2000;
 bzp->multiHits = 1;
+bzp->transition = 1;
 bzp->minGapless = 1600;
 bzp->minChain = 2000;
 bzp->maxDrop = 1500;
@@ -56,6 +57,10 @@ printf("  -multiHits=%d - If nonzero takes multiple hits on diagonal to trigger\
        "                  gapless extension (MSP). Greatly speeds up searches\n"
        "                  of larger databases at a modest cost in sensitivity\n", 
                bzp->multiHits);
+printf("  -transition=%d - If nonzero search single base transition mutations in\n"
+       "                   seed. This moderately increases sensitivity at the\n"
+       "                   expense of tripling the large database search time\n"
+       , bzp->transition);
 printf("  -minScore=%d - Minimum score of to output after final chaining.  Each \n"
        "                 matching base contributes roughly 100 to the score.  This has\n"
        "                 little effect on the speed, but higher minScores will weed out\n"
@@ -97,6 +102,7 @@ bzp->weight = optionInt("weight", bzp->weight);
 bzp->rna = optionExists("rna");
 bzp->minScore = optionInt("minScore", bzp->minScore);
 bzp->multiHits = optionInt("multiHits", bzp->multiHits);
+bzp->transition = optionInt("transition", bzp->transition);
 bzp->minGapless = optionInt("minGapless", bzp->minGapless);
 bzp->minChain = optionInt("minChain", bzp->minChain);
 bzp->maxDrop = optionInt("maxDrop", bzp->maxDrop);

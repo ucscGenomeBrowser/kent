@@ -14,6 +14,7 @@ struct bzp
     boolean rna;	/* True if want to find introns. */
     int minScore;     /* Minimum score for final chain to be output. */
     int multiHits;	/* If non-zero takes two hits on diag to trigger MSP. */
+    int transition;   /* If non-zero look allow one transition in seed. */
     int minGapless;    /* Min score for MSP to trigger extension */
     int minChain;     /* Min score for chain to trigger extension. */
     int maxDrop;      /* Maximum amount score can drop before stopping. */
@@ -49,8 +50,9 @@ void bzpServerOptionsHelp(struct bzp *bzp);
 
 #define BZP_CLIENT_OPTIONS \
    {"rna", OPTION_BOOLEAN}, \
-   {"minScore", OPTION_INT}, \
    {"multiHits", OPTION_INT}, \
+   {"transition", OPTION_INT}, \
+   {"minScore", OPTION_INT}, \
    {"minGapless", OPTION_INT}, \
    {"minChain", OPTION_INT}, \
    {"maxDrop", OPTION_INT}, \

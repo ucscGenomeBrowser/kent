@@ -145,7 +145,7 @@ int queryPos;
 int i;
 struct rbTree *tree = rbTreeNew(diagonalTrackCmp);
 int hitCount = 0, mspCount = 0, doubleHitCount = 0;
-int nbdToggleStart = (1 << (2*(index->seedWeight-1)));
+int nbdToggleStart;
 boolean multiHits = bzp->multiHits;
 
 int diagBufSize = 0;
@@ -154,6 +154,10 @@ struct dlList *diagLists = NULL;
 struct diagNode *diagNodes = NULL, *diagNode = NULL;
 int diagCircIx = 0;
 
+if (bzp->transition)
+    nbdToggleStart = (1 << (2*(index->seedWeight-1)));
+else
+    nbdToggleStart = 0;
 if (multiHits)
     {
     diagBufSize = calcCloseBufSize(index->seedWeight, target->size);
