@@ -22,7 +22,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.9 2004/05/07 23:57:20 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.10 2004/05/09 09:55:53 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -1095,6 +1095,7 @@ char query[256];
 char *delbutton   = cgiUsualString("delbutton"  ,"");
 char *pushbutton  = cgiUsualString("pushbutton" ,"");
 char *clonebutton = cgiUsualString("clonebutton","");
+char *showSizes   = cgiUsualString("showSizes"  ,"");
 
 char *meta = ""
 "<head>"
@@ -1343,6 +1344,12 @@ if (sameString(clonebutton,"clone"))
 url = newDyString(2048);  /* need room for 5 fields cgi encoded */ 
 
 dyStringAppend(url, "/cgi-bin/qaPushQ");  
+
+
+if (sameString(showSizes,"Show Sizes")) 
+    {
+    dyStringPrintf(url,"?action=showSizes&qid=%s",q.qid);
+    }
 
 meta = replaceChars(meta, "{url}", url->string);
 
@@ -1831,16 +1838,96 @@ releaseLock();
 
 
 
-long getTableSize(char *rhost, char *db, char *tbl)
+
+void getIndexes(struct sqlConnection *conn, char *tbl, char *s, int ssize)
 /* Get table size via show table status command. Return -1 if err. Will match multiple if "%" used in tbl */ 
 {
 char query[256];
 char **row;
 struct sqlResult *sr;
 char *fld = NULL;
-int f = 0, d = 0, i = 0;
-long size = 0;
-long totalsize = 0;
+int f = 0, i = 0, n = 0, c = 0;
+char lastKeyName[256]="";
+
+
+safef(query, sizeof(query), "show index from %s",tbl);
+sr = sqlGetResult(conn, query);
+f = 0;
+i = 0;
+n = 0;
+if (ssize > 0) s[0]=0;
+while ((fld = sqlFieldName(sr)) != NULL)
+    {
+    if (sameString(fld,"Key_name"))
+	{
+	n = f;
+	}
+    if (sameString(fld,"Column_name"))
+	{
+	i = f;
+	}
+    f++;
+    }
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    c++;
+    if (sameString(row[n],lastKeyName))
+    	{
+	strcat(s,"+");
+	strcat(s,row[i]);
+	}
+    else
+	{
+	if (c > 1) 
+	    {
+	    strcat(s,", ");
+	    }
+	strcat(s, row[i]);
+	safef(lastKeyName,sizeof(lastKeyName),row[n]);
+	}
+    }
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
+}
+
+
+
+void mySprintWithCommas(char *s, int slength, long long size)
+/* the one in obscure.c was overflowing, so here's mine  */
+{
+char *temp=NULL;
+char sep[2]="";
+s[0]=0;
+temp = needMem(slength);
+while (size >= 1000)
+    {
+    safef(temp,slength,s);
+    safef(s,slength,"%03d%s%s",(int)(size%1000),sep,temp);
+    size/=1000;
+    safef(sep,sizeof(sep),",");
+    }
+if (size > 0)
+    {
+    safef(temp,slength,s);
+    safef(s,slength,"%3d%s%s",(int)size,sep,temp);
+    }
+freez(&temp);
+}
+
+
+
+long long getTableSize(char *rhost, char *db, char *tbl)
+/* Get table size via show table status command. Return -1 if err. Will match multiple if "%" used in tbl */ 
+{
+char query[256];
+char **row;
+struct sqlResult *sr;
+char *fld = NULL;
+int f = 0, d = 0, i = 0, n = 0, c = 0;
+unsigned long size = 0;
+long long totalsize = 0;
+char nicenumber[256]="";
+char  indexlist[256]="";
 
 char *host     = NULL;
 char *user     = NULL;
@@ -1871,10 +1958,15 @@ conn = sqlConnectRemote(host, user, password, db);
 safef(query, sizeof(query), "show table status like '%s'",tbl);
 sr = sqlGetResult(conn, query);
 f = 0;
-d = -1;
-i = -1;
+d = 0;
+i = 0;
+n = 0;
 while ((fld = sqlFieldName(sr)) != NULL)
     {
+    if (sameString(fld,"Name"))
+	{
+	n = f;
+	}
     if (sameString(fld,"Data_length"))
 	{
 	d = f;
@@ -1887,18 +1979,31 @@ while ((fld = sqlFieldName(sr)) != NULL)
     }
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    if (d != -1)
-	{
-	sscanf(row[d],"%d",&size);
-	totalsize+=size;
-	}
-    if (i != -1)
-	{
-	sscanf(row[i],"%d",&size);
-	totalsize+=size;
-	}
+    c++;
+    printf("<tr>");
+    printf("<td>%s</td>",row[n]);
+    
+    sscanf(row[d],"%lu",&size);
+    totalsize+=size;
+    mySprintWithCommas(nicenumber, sizeof(nicenumber), size);
+    printf("<td align=right>%s</td>",nicenumber);
+	
+    sscanf(row[i],"%lu",&size);
+    totalsize+=size;
+    mySprintWithCommas(nicenumber, sizeof(nicenumber), size);
+    printf("<td align=right>%s</td>",nicenumber);
+	
+    getIndexes( sqlConnectRemote(host, user, password, db), row[n], indexlist, sizeof(indexlist));
+    printf("<td>%s</td>",indexlist);
+	
+    printf("</tr>\n");
     }
 sqlFreeResult(&sr);
+
+if (c == 0)
+    {
+    printf("<tr><td>%s</td><td>%s</td></tr>\n",tbl,"error fetching");
+    }
 
 sqlDisconnect(&conn);
 return totalsize;
@@ -1944,8 +2049,8 @@ void doShowSizes()
 {
 char tbl[256] = "";
 char  db[256] = "";
-long size = 0;
-long totalsize = 0;
+unsigned long size = 0;
+long long totalsize = 0;
 int i = 0, ii = 0, iii = 0;
 int j = 0, jj = 0, jjj = 0;
 int g = 0, gg = 0, ggg = 0;
@@ -1977,10 +2082,10 @@ safef(newQid, sizeof(newQid), cgiString("qid"));
 printf("<H2>Show File Sizes </H2>\n");
 
 loadPushQ(newQid, &q, FALSE); 
-printf("location: %s <br>\n",q.currLoc);
-printf("database: %s <br>\n",q.dbs);
-printf("  tables: %s <br>\n",q.tbls);
-printf("     cgi: %s <br>\n",q.cgis);
+printf("Location: %s <br>\n",q.currLoc);
+printf("Database: %s <br>\n",q.dbs    );
+printf("  Tables: %s <br>\n",q.tbls   );
+printf("    CGIs: %s <br>\n",q.cgis   );
 printf(" <br>\n");
 
 cutParens(q.dbs);
@@ -2023,9 +2128,13 @@ for(j=0;parseList(q.dbs, ',' ,j,dbsComma,sizeof(dbsComma));j++)
 	    safef(db,sizeof(db),"%s",dbsVal);
 
 	    printf(" <br>\n");
-	    printf("<h4>%s:</h4>\n",db);
+	    printf("<h4>%s on %s:</h4>\n",db,q.currLoc);
 	    printf("<table cellpadding=5 >");
-	    printf("<th>Table</th><th># bytes</th>");
+	    printf("<th>Table</th>"
+	           "<th>data size</th>"
+	           "<th>index size</th>"
+	           "<th>index keys</th>"
+	    );
 
 	    /* we parsed the db multiples, now parse the tbl mutiples  */
 	    for(i=0;parseList(q.tbls, ',' ,i,tempComma,sizeof(tempComma));i++)
@@ -2044,21 +2153,19 @@ for(j=0;parseList(q.dbs, ',' ,j,dbsComma,sizeof(dbsComma));j++)
 		    for (iii=0;iii<=strlen(tempSpace);iii++)
 			{
 			c = tempSpace[iii];
+			if (c=='*') c = '%';
 			if (
 			    ((c>='A')&&(c<='Z'))
 			 || ((c>='a')&&(c<='z'))
 			 || ((c>='0')&&(c<='9'))
+			 || (c=='_')
+			 || (c=='%')
 			)
 			    {
 			    tempVal[iii]=c;
 			    }
 			else
 			    {
-			    if ((c=='*') || (c=='%'))
-				{
-				tempVal[iii]='%';
-				iii++;
-				}
 			    tempVal[iii]=0;
 			    break;
 			    }
@@ -2066,17 +2173,7 @@ for(j=0;parseList(q.dbs, ',' ,j,dbsComma,sizeof(dbsComma));j++)
 		    if (tempVal[0]!=0) 
 			{
 			safef(tbl,sizeof(tbl),"%s",tempVal);
-			size = getTableSize(q.currLoc,db,tbl);
-			if (size >= 0)
-			    {
-			    totalsize+=size;
-			    sprintLongWithCommas(nicenumber, size);
-			    printf("<tr><td>%s</td><td>%s</td></tr>\n",tbl,nicenumber);
-			    }
-			else
-			    {
-			    printf("<tr><td>%s</td><td>%s</td></tr>\n",tbl,"error fetching");
-			    }
+			totalsize += getTableSize(q.currLoc,db,tbl);
 			}
 		    }
 		}
@@ -2087,55 +2184,65 @@ for(j=0;parseList(q.dbs, ',' ,j,dbsComma,sizeof(dbsComma));j++)
      }
 
 
-printf(" <br>\n");
-printf("<h4>CGIs:</h4>\n");
-printf("<table cellpadding=5 >");
-printf("<th>cgi</th><th># bytes</th>");
-for(g=0;parseList(q.cgis, ',' ,g,gComma,sizeof(gComma));g++)
+if (!sameString(q.cgis,""))
     {
-    if (gComma[0]==0) 
+    printf(" <br>\n");
+    printf("<h4>CGIs on %s:</h4>\n",utsName.nodename);
+    printf("<table cellpadding=5 >");
+    printf("<th>cgi</th><th># bytes</th>");
+    for(g=0;parseList(q.cgis, ',' ,g,gComma,sizeof(gComma));g++)
 	{
-	continue;
-	}
-    for(gg=0;parseList(gComma, ' ' ,gg,gSpace,sizeof(gSpace));gg++)
-	{
-	if (gSpace[0]==0) 
+	if (gComma[0]==0) 
 	    {
 	    continue;
 	    }
-	gVal[0]=0;
-	for (ggg=0;ggg<=strlen(gSpace);ggg++)
+	for(gg=0;parseList(gComma, ' ' ,gg,gSpace,sizeof(gSpace));gg++)
 	    {
-	    gc = gSpace[ggg];
-	    if (
-		((gc>='A')&&(gc<='Z'))
-	     || ((gc>='a')&&(gc<='z'))
-	     || ((gc>='0')&&(gc<='9'))
-	     || (gc=='.')
-	     )
+	    if (gSpace[0]==0) 
 		{
-		gVal[ggg]=gc;
+		continue;
 		}
-	    else
+	    gVal[0]=0;
+	    for (ggg=0;ggg<=strlen(gSpace);ggg++)
 		{
-		gVal[ggg]=0;
-		break;
+		gc = gSpace[ggg];
+		if (
+		    ((gc>='A')&&(gc<='Z'))
+		 || ((gc>='a')&&(gc<='z'))
+		 || ((gc>='0')&&(gc<='9'))
+		 || (gc=='.')
+		 )
+		    {
+		    gVal[ggg]=gc;
+		    }
+		else
+		    {
+		    gVal[ggg]=0;
+		    break;
+		    }
 		}
-	    }
-	if (gVal[0]!=0) 
-	    {
-	    safef(cgiPath,sizeof(cgiPath),"%s%s","./",gVal);
-	    size=fsize(cgiPath);
-	    sprintLongWithCommas(nicenumber, size);
-	    printf("<tr><td>%s<td/><td>%s</td></tr>\n",gVal,nicenumber);
-	    totalsize+=size;
-	    }   
+	    if (gVal[0]!=0) 
+		{
+		safef(cgiPath,sizeof(cgiPath),"%s%s","./",gVal);
+		size=fsize(cgiPath);
+		if (size == -1)
+		    {
+		    safef(nicenumber,sizeof(nicenumber),"not found");
+		    }
+		else
+		    {
+		    sprintLongWithCommas(nicenumber, size);
+		    }
+		printf("<tr><td>%s<td/><td>%s</td></tr>\n",gVal,nicenumber);
+		totalsize+=size;
+		}   
+	     }
 	 }
-     }
-printf("</table>");
+    printf("</table>");
+    }
 
 printf(" <br>\n");
-sprintLongWithCommas(nicenumber, totalsize);
+mySprintWithCommas(nicenumber, sizeof(nicenumber), totalsize);
 printf(" Total size of all: %s <br>\n",nicenumber);
 
 printf(" <br>\n");
@@ -2143,7 +2250,7 @@ sprintLongWithCommas(nicenumber, totalsize / (1024 * 1024) );
 printf("<p style=\"color:red\">Total: %s MB</p>\n",nicenumber);
 
 printf(" <br>\n");
-printf("<a href=\"\" onClick=\"window.close();return 1;\">Close this window when finished.</a> <br>\n");
+printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s\">RETURN</a> <br>\n",newQid);
 cleanUp();
 }
 
