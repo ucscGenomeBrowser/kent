@@ -16,7 +16,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.31 2004/07/02 22:13:27 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.32 2004/07/06 16:34:53 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -30,7 +30,6 @@ struct genePred *curGenePred;	/* Current gene prediction structure. */
 int curGeneStart,curGeneEnd;	/* Position in chromosome. */
 struct sqlConnection *spConn;	/* Connection to SwissProt database. */
 char *swissProtAcc;		/* SwissProt accession (may be NULL). */
-char *aliWith;	        /* Name of gene to align with this one if any. */
 
 
 void usage()
@@ -402,7 +401,6 @@ addGoodSection(sequenceSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(microarraySection(conn, sectionRa), conn, &sectionList);
 addGoodSection(rnaStructureSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(domainsSection(conn, sectionRa), conn, &sectionList);
-addGoodSection(aliWithSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(altSpliceSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(multipleAlignmentsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(swissProtCommentsSection(conn, sectionRa), conn, &sectionList);
@@ -605,7 +603,6 @@ curGenePred = getCurGenePred(conn);
 curGeneName = getGeneName(curGeneId, conn);
 spConn = sqlConnect("swissProt");
 swissProtAcc = getSwissProtAcc(conn, spConn, curGeneId);
-aliWith = cartOptionalString(cart, hggAliWithVar);
 
 /* Check command variables, and do the ones that
  * don't want to put up the hot link bar etc. */
@@ -627,7 +624,7 @@ else
 cartRemovePrefix(cart, hggDoPrefix);
 }
 
-char *excludeVars[] = {"Submit", "submit", hggAliWithVar, NULL};
+char *excludeVars[] = {"Submit", "submit", NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */

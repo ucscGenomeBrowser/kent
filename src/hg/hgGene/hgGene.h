@@ -100,10 +100,6 @@ struct section *domainsSection(struct sqlConnection *conn,
 	struct hash *sectionRa);
 /* Create domains section. */
 
-struct section *aliWithSection(struct sqlConnection *conn, 
-	struct hash *sectionRa);
-/* Create aliWith section (protein/protein alignment). */
-
 struct section *pathwaysSection(struct sqlConnection *conn, 
 	struct hash *sectionRa);
 /* Create pathways section. */
@@ -185,7 +181,6 @@ char *getFlyBaseId(struct sqlConnection *conn, char *geneId);
 #define hggDoRnaFoldDisplay "hgg_do_rnaFoldDisplay"
 
 #define geneCgi "../cgi-bin/hgGene"
-#define hggAliWithVar "hgg_aliWith"
 
 /* -------- Commands ---------- */
 
@@ -224,4 +219,3 @@ struct genePred *curGenePred;	/* Current gene prediction structure. */
 extern int curGeneStart,curGeneEnd;	/* Position in chromosome. */
 struct sqlConnection *spConn;	/* Connection to SwissProt database. */
 extern char *swissProtAcc;	/* SwissProt accession (may be NULL). */
-extern char *aliWith;		/* Protein to align with. */
