@@ -7,7 +7,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgCeOrfToGene.c,v 1.2 2003/09/24 11:26:37 kent Exp $";
+static char const rcsid[] = "$Id: hgCeOrfToGene.c,v 1.3 2003/10/26 08:16:24 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -97,7 +97,6 @@ sqlFreeResult(&sr);
 
 createTable(conn, table, unique);
 hgLoadTabFile(conn, tempDir, table, &f);
-hgRemoveTabFile(tempDir, table);
 }
 
 int main(int argc, char *argv[])
