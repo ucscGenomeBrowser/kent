@@ -2853,6 +2853,7 @@ tg->items = lfFromGenePredInRange("refGene", chromName, winStart, winEnd);
 if (limitVisibility(tg, tg->items) == tvFull)
     {
     lookupRefNames(tg->items);
+    slSort(&tg->items, linkedFeaturesCmpStart);
     }
 }
 
