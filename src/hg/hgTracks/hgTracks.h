@@ -116,6 +116,9 @@ struct track
     struct spaceSaver *ss;  /* Layout when packed. */
 
     struct trackDb *tdb; /*todo:change visibility, etc. to use this */
+
+    float expScale;	/* What to scale expression tracks by. */
+    char *expTable;	/* Expression table in hgFixed. */
     };
 
 struct trackRef 
@@ -496,6 +499,9 @@ void humMusLMethods( struct track *tg );
 
 void zooMethods( struct track *tg );
 /* Overide the zoo sample type load function to look for zoomed out tracks. */
+
+void expRatioMethods(struct track *tg);
+/* Set up methods for expRatio type tracks in general. */
 
 void affyTranscriptomeMethods(struct track *tg);
 /* Overide the load function to look for zoomed out tracks. */

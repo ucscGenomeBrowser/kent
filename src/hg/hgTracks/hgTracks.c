@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.600 2003/09/22 18:04:40 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.601 2003/09/23 16:14:19 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -5931,6 +5931,10 @@ else if (sameWord(type, "axt"))
         errAbort("Expecting 2 words in axt track type for %s", tdb->tableName);
     axtMethods(track, words[1]);
     }
+else if (sameWord(type, "expRatio"))
+    {
+    expRatioMethods(track);
+    }
 }
 
 struct track *trackFromTrackDb(struct trackDb *tdb)
@@ -5963,8 +5967,8 @@ if (tdb->useScore)
     else
 	track->colorShades = shadesOfGray;
     }
-fillInFromType(track, tdb);
 track->tdb = tdb;
+fillInFromType(track, tdb);
 return track;
 }
 
@@ -6478,7 +6482,7 @@ registerTrackHandler("cghNci60", cghNci60Methods);
 registerTrackHandler("rosetta", rosettaMethods);
 registerTrackHandler("affy", affyMethods);
 registerTrackHandler("affyRatio", affyRatioMethods);
-registerTrackHandler("affyUcla", affyUclaMethods);
+// registerTrackHandler("affyUcla", affyUclaMethods);
 registerTrackHandler("ancientR", ancientRMethods );
 registerTrackHandler("altGraphX", altGraphXMethods );
 registerTrackHandler("altGraphXCon", altGraphXMethods );
