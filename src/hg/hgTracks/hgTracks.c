@@ -41,10 +41,8 @@
 #include "mouseSyn.h"
 #include "knownMore.h"
 #include "exprBed.h"
-#include "browserTable.h"
 #include "estPair.h"
 #include "customTrack.h"
-#include "softPromoter.h"
 #include "trackDb.h"
 
 #define CHUCK_CODE 1
@@ -216,14 +214,8 @@ struct trackGroup
                                 * to share code. */
     char *version;	/* Versioning information about table. */
     unsigned short private;	/* True(1) if private, false(0) otherwise. */
-    unsigned short useScore;	/* If True(1) use score information in table, only shades of gray color supported. */
     int bedSize;		/* Number of fields if a bed file. */
-    unsigned short isSplit;	/* True(1) if table is split over different chromosomes. i.e. chrN_est */
-    int priority;	/* Priority to load tracks in, i.e. order to load tracks in. */
-    char trackType[33];	/* Initially just 'bed' and 'psl' supported. */
-    char *credit;	/* Who to credit/blame for information in table. */
-    char *url;	/* Link to more information about track. */
-    char *other;	/* Other track specific associated information. */
+    float priority;	/* Priority to load tracks in, i.e. order to load tracks in. */
 };
 
 struct trackGroup *tGroupList = NULL;  /* List of all tracks. */
@@ -232,6 +224,20 @@ static boolean tgLoadNothing(){return TRUE;}
 static void tgDrawNothing(){}
 static void tgFreeNothing(){}
 static char *tgNoName(){return"";}
+
+int tgCmpPriority(const void *va, const void *vb)
+/* Compare to sort based on priority. */
+{
+const struct trackGroup *a = *((struct trackGroup **)va);
+const struct trackGroup *b = *((struct trackGroup **)vb);
+float dif = a->priority - b->priority;
+if (dif < 0)
+   return -1;
+else if (dif == 0.0)
+   return 0;
+else
+   return 1;
+}
 
 static int tgFixedItemHeight(struct trackGroup *tg, void *item)
 /* Return item height for fixed height track. */
@@ -255,8 +261,6 @@ switch (vis)
     }
 return tg->height;
 }
-
-
 
 int tgWeirdItemStart(struct trackGroup *tg, void *item)
 /* Space filler function for tracks without regular items. */
@@ -4085,356 +4089,10 @@ tg->loadItems = loadRosettaTeBed;
 tg->freeItems = freeExprBed;
 }
 
-struct browserTable *checkDbForTables()
-/* Look in the database meta table to get information on which
- *   tables to load that aren't hardcoded into the database. */
-{
-struct browserTable *tableList = NULL;
-struct browserTable *table = NULL;
-char query[256];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-char **row;
-
-sprintf(query, "select * from browserTable order by priority");
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    table = browserTableLoad(row);
-    slAddHead(&tableList, table);
-    }
-slReverse(&tableList);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return tableList;
-}
-
-void bedBasicLoad(struct trackGroup *tg)
-/* load up basic beds from table into trackGroupItems */
-{
-bedLoadItem(tg, tg->mapName, (ItemLoader) bedLoad);
-}
-
-void bedWScoresLoad(struct trackGroup *tg)
-/* load up beds and their scores from table into trackGroupItems */
-{
-bedLoadItem(tg, tg->mapName, (ItemLoader) bedLoadWScore);
-}
-
-void bedFreeItemList(struct trackGroup *tg)
-/* Free up the bed items */
-{
-bedFreeList((struct bed **)&tg->items);
-}
-
-#ifdef UNNEEDED
-static void bedWScoresDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-			   struct memGfx *mg, int xOff, int yOff, int width, 
-			   MgFont *font, Color color, enum trackVisibility vis)
-/* Draw bed items with shades of gray indicating scores. */
-{
-int baseWidth = seqEnd - seqStart;
-struct bed *item;
-int y = yOff;
-int heightPer = tg->heightPer;
-int lineHeight = tg->lineHeight;
-int x1,x2,w;
-boolean isFull = (vis == tvFull);
-double scale = width/(double)baseWidth;
-int invPpt;
-
-for (item = tg->items; item != NULL; item = item->next)
-    {
-    x1 = round((double)((int)item->chromStart-winStart)*scale) + xOff;
-    x2 = round((double)((int)item->chromEnd-winStart)*scale) + xOff;
-    w = x2-x1;
-    color = shadesOfGray[grayInRange(item->score, 0, 1000)];
-    if (w < 1)
-	w = 1;
-    mgDrawBox(mg, x1, y, w, heightPer, color);
-    mapBoxHc(item->chromStart, item->chromEnd, x1, y, w, heightPer, tg->mapName,
-	item->name, item->name);
-    if (isFull)
-	y += lineHeight;
-    }
-}
-#endif /* unneeded */
-
-void btToTgBasicCopy(struct browserTable *bt, struct trackGroup *tg)
-/* Update track group with data in browser table. */
-{
-char buff[256];
-sprintf(buff, "%s [%s]", bt->longLabel, bt->version);
-
-tg->mapName = cloneString(bt->mapName);
-tg->longLabel = cloneString(buff);
-tg->shortLabel = cloneString(bt->shortLabel);
-tg->mapName = cloneString(bt->tableName);
-tg->visibility = bt->visibility;
-
-tg->private = bt->private;
-tg->isSplit = bt->isSplit;
-tg->priority = bt->priority;
-strncpy(tg->trackType,bt->trackType,ArraySize(bt->trackType));
-if(bt->useScore) 
-    {
-    /* with scores we only support black and shades of grey */
-    tg->colorShades = shadesOfGray;
-    }
-else 
-    {
-    tg->color.r = bt->colorR;
-    tg->color.g = bt->colorG;
-    tg->color.b = bt->colorB;
-    tg->altColor.r = bt->altColorR;
-    tg->altColor.g = bt->altColorG;
-    tg->altColor.b = bt->altColorB;
-    }
-}
-
-struct trackGroup *createBedTg(struct browserTable *bt)
-/* create a generic bed track using information from browser
- * meta table. */
-{
-struct trackGroup *tg = bedTg();
-btToTgBasicCopy(bt, tg);
-tg->freeItems = bedFreeItemList;
-tg->drawItems = bedDrawSimple;
-if(bt->useScore) 
-    tg->loadItems = bedWScoresLoad;
-else
-    tg->loadItems = bedBasicLoad;
-return tg;
-}
-
-void loadPsl(struct trackGroup *tg)
-/* load up all of the psls from correct table into tg->items item list*/
-{
-tg->items = lfFromPslsInRange(tg->mapName, winStart,winEnd, chromName, FALSE);
-}
-
-void loadXenoPsl(struct trackGroup *tg)
-/* load up all of the psls from correct table into tg->items item list*/
-{
-tg->items = lfFromPslsInRange(tg->mapName, winStart,winEnd, chromName, TRUE);
-}
-
-struct trackGroup *createPslTg(struct browserTable *table)
-/* create a generic psl (linkedFeature) track using information from browser
- * meta table. */
-{
-struct trackGroup *tg = linkedFeaturesTg();
-char buff[strlen(table->longLabel) + strlen(table->version) + 10];
-sprintf(buff, "%s [%s]", table->longLabel, table->version);
-
-tg->mapName = cloneString(table->mapName);
-tg->longLabel = cloneString(buff);
-tg->shortLabel = cloneString(table->shortLabel);
-tg->mapName = cloneString(table->tableName);
-tg->visibility = table->visibility;
-
-tg->color.r = table->colorR;
-tg->color.g = table->colorG;
-tg->color.b = table->colorB;
-
-tg->altColor.r = table->altColorR;
-tg->altColor.g = table->altColorG;
-tg->altColor.b = table->altColorB;
-
-tg->private = table->private;
-tg->isSplit = table->isSplit;
-tg->priority = table->priority;
-strncpy(tg->trackType,table->trackType,ArraySize(table->trackType));
-tg->colorShades = NULL;
-tg->loadItems = loadPsl;
-return tg;
-}
-
-int compareTablePriorities(const void *vp1, const void *vp2)
-/* comparison function for sorting browserTables */
-{
-const struct browserTable *bt1 = *((struct browserTable **)vp1);
-const struct browserTable *bt2 = *((struct browserTable **)vp2);
-return (bt1->priority - bt2->priority);
-}
-
-void addTablesFromBrowserTable(struct trackGroup **tGroupList, 
-			       struct browserTable **tableList)
-/* Creates appropriate trackGroups for tables defined in the browserTable
-   and adds them to the main trackGroup list to be displayed. */
-{
-struct browserTable *table = NULL;
-struct trackGroup *tgList = NULL, *tg = NULL;
-slSort(tableList, compareTablePriorities);
-for(table = *tableList; table != NULL; table = table->next)
-    {
-    if(hTableExists(table->tableName))
-	{
-	if((table->private && privateVersion()) || !table->private)
-	    { 
-	    if(sameString(table->trackType, "bed"))
-		tg = createBedTg(table);
-	    else if(sameString(table->trackType, "psl"))
-		tg = createPslTg(table);
-	    else 
-		tg = NULL;
-	    }
-	if(tg != NULL)
-	    slSafeAddHead(tGroupList, tg);
-	}
-    }
-}
-	
-struct trackGroup *createTrackGroup(struct browserTable *table,
-				    struct trackGroup *(*tgConstructor)())
-/* Currently we're going to trust the constructor for most of this stuff except
-   the version. */
-{
-struct trackGroup *tg = NULL;
-char *buff = NULL;
-tg=tgConstructor();
-buff = needMem(sizeof(char) *(strlen(tg->longLabel) + strlen(table->version) + 10));
-sprintf(buff, "%s [%s]", tg->longLabel, table->version);
-tg->longLabel = cloneString(buff);
-freez(&buff);
-return tg;
-}
-   
-void createAndAddTrack(char *trackType,
-		       struct trackGroup **tGroupList,
-		       struct browserTable **tableList,
-		       struct trackGroup *(*tgConstructor)())
-{
-/* Searches through list of tables in browser table to see if 
- it contains information for this track. If it does use it 
- to create the new track. Otherwise just use the constructor */
-struct trackGroup *tg = NULL;
-struct browserTable *table = NULL;
-for(table = *tableList; table != NULL; table=table->next)
-    {
-    if(sameString(table->trackType, trackType))
-	{
-	slSafeAddHead(tGroupList, createTrackGroup(table, tgConstructor));
-	slRemoveEl(tableList, table);
-	browserTableFree(&table);
-	return;
-	}
-    }
-slSafeAddHead(tGroupList, tgConstructor());
-}
-
 #endif /*CHUCK_CODE*/
 
 
 
-void ctLoadSimpleBed(struct trackGroup *tg)
-/* Load the items in one custom track - just move beds in
- * window... */
-{
-struct customTrack *ct = tg->customPt;
-struct bed *bed, *nextBed, *list = NULL;
-for (bed = ct->bedList; bed != NULL; bed = nextBed)
-    {
-    nextBed = bed->next;
-    if (bed->chromStart < winEnd && bed->chromEnd > winStart 
-    		&& sameString(chromName, bed->chrom))
-	{
-	slAddHead(&list, bed);
-	}
-    }
-slSort(&list, bedCmp);
-tg->items = list;
-}
-
-void ctLoadGappedBed(struct trackGroup *tg)
-/* Convert bed info in window to linked feature. */
-{
-struct customTrack *ct = tg->customPt;
-struct bed *bed;
-struct linkedFeatures *lfList = NULL, *lf;
-
-for (bed = ct->bedList; bed != NULL; bed = bed->next)
-    {
-    if (bed->chromStart < winEnd && bed->chromEnd > winStart 
-    		&& sameString(chromName, bed->chrom))
-	{
-	lf = lfFromBed(bed);
-	slAddHead(&lfList, lf);
-	}
-    }
-slReverse(&lfList);
-tg->items = lfList;
-}
-
-char *ctMapItemName(struct trackGroup *tg, void *item)
-{
-  char *itemName = tg->itemName(tg, item);
-  static char buf[256];
-  sprintf(buf, "%s %s", ctFileName, itemName);
-  return buf;
-}
-
-struct trackGroup *newCustomTrack(struct customTrack *ct)
-/* Make up a new custom track. */
-{
-struct trackGroup *tg;
-
-if (ct->fieldCount < 12)
-    {
-    tg = createBedTg(ct->bt);
-    tg->loadItems = ctLoadSimpleBed;
-    tg->freeItems = NULL;
-    }
-else
-    {
-    struct browserTable *bt = ct->bt;
-    tg = linkedFeaturesTg();
-    btToTgBasicCopy(bt, tg);
-    if (!bt->useScore)
-        tg->colorShades = NULL;
-    tg->loadItems = ctLoadGappedBed;
-    }
-tg->customPt = ct;
-tg->mapItemName = ctMapItemName;
-return tg;
-}
-
-void loadCustomTracks(struct trackGroup **pGroupList)
-/* Load up custom tracks and append to list. */
-{
-struct customTrack *ctList = NULL, *ct;
-struct trackGroup *tg;
-char *customText = cgiOptionalString("customText");
-char *fileName = cgiOptionalString("ct");
-
-customText = skipLeadingSpaces(customText);
-if (customText == NULL || customText[0] == 0)
-    customText = cgiOptionalString("customFile");
-customText = skipLeadingSpaces(customText);
-if (customText != NULL && customText[0] != 0)
-    {
-    static struct tempName tn;
-    makeTempName(&tn, "ct", ".bed");
-    ctList = customTracksFromText(customText);
-    ctFileName = tn.forCgi;
-    customTrackSave(ctList, tn.forCgi);
-    makeHiddenVar("ct", tn.forCgi);
-    }
-else if (fileName != NULL)
-    {
-    ctList = customTracksFromFile(fileName);
-    ctFileName = fileName;
-    }
-for (ct = ctList; ct != NULL; ct = ct->next)
-    {
-    char *vis;
-    tg = newCustomTrack(ct);
-    vis = cgiOptionalString(tg->mapName);
-    if (vis != NULL)
-	tg->visibility = stringArrayIx(vis, tvStrings, ArraySize(tvStrings));
-    slAddHead(pGroupList, tg);
-    }
-}
 
 
 enum trackVisibility limitVisibility(struct trackGroup *tg)
@@ -4839,6 +4497,18 @@ void loadGenePred(struct trackGroup *tg)
 tg->items = lfFromGenePredInRange(tg->mapName, chromName, winStart, winEnd);
 }
 
+void loadPsl(struct trackGroup *tg)
+/* load up all of the psls from correct table into tg->items item list*/
+{
+tg->items = lfFromPslsInRange(tg->mapName, winStart,winEnd, chromName, FALSE);
+}
+
+void loadXenoPsl(struct trackGroup *tg)
+/* load up all of the psls from correct table into tg->items item list*/
+{
+tg->items = lfFromPslsInRange(tg->mapName, winStart,winEnd, chromName, TRUE);
+}
+
 void fillInFromType(struct trackGroup *group, struct trackDb *tdb)
 /* Fill in various function pointers in group from type field of tdb. */
 {
@@ -4912,8 +4582,8 @@ group->altColor.b = tdb->altColorB;
 group->lineHeight = mgFontLineHeight(tl.font)+1;
 group->heightPer = group->lineHeight - 1;
 group->private = tdb->private;
-group->useScore = tdb->useScore;
-if (group->useScore)
+group->priority = tdb->priority;
+if (tdb->useScore)
     {
     /* Todo: expand spectrum opportunities. */
     if (colorsSame(&brownColor, &group->color))
@@ -4963,12 +4633,116 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void ctLoadSimpleBed(struct trackGroup *tg)
+/* Load the items in one custom track - just move beds in
+ * window... */
+{
+struct customTrack *ct = tg->customPt;
+struct bed *bed, *nextBed, *list = NULL;
+for (bed = ct->bedList; bed != NULL; bed = nextBed)
+    {
+    nextBed = bed->next;
+    if (bed->chromStart < winEnd && bed->chromEnd > winStart 
+    		&& sameString(chromName, bed->chrom))
+	{
+	slAddHead(&list, bed);
+	}
+    }
+slSort(&list, bedCmp);
+tg->items = list;
+}
+
+void ctLoadGappedBed(struct trackGroup *tg)
+/* Convert bed info in window to linked feature. */
+{
+struct customTrack *ct = tg->customPt;
+struct bed *bed;
+struct linkedFeatures *lfList = NULL, *lf;
+
+for (bed = ct->bedList; bed != NULL; bed = bed->next)
+    {
+    if (bed->chromStart < winEnd && bed->chromEnd > winStart 
+    		&& sameString(chromName, bed->chrom))
+	{
+	lf = lfFromBed(bed);
+	slAddHead(&lfList, lf);
+	}
+    }
+slReverse(&lfList);
+tg->items = lfList;
+}
+
+char *ctMapItemName(struct trackGroup *tg, void *item)
+/* Return composite item name for custom tracks. */
+{
+  char *itemName = tg->itemName(tg, item);
+  static char buf[256];
+  sprintf(buf, "%s %s", ctFileName, itemName);
+  return buf;
+}
+
+struct trackGroup *newCustomTrack(struct customTrack *ct)
+/* Make up a new custom track. */
+{
+struct trackGroup *tg;
+char buf[64];
+tg = trackGroupFromTrackDb(ct->tdb);
+if (ct->fieldCount < 12)
+    {
+    tg->loadItems = ctLoadSimpleBed;
+    }
+else
+    {
+    tg->loadItems = ctLoadGappedBed;
+    }
+tg->customPt = ct;
+tg->mapItemName = ctMapItemName;
+return tg;
+}
+
+void loadCustomTracks(struct trackGroup **pGroupList)
+/* Load up custom tracks and append to list. */
+{
+struct customTrack *ctList = NULL, *ct;
+struct trackGroup *tg;
+char *customText = cgiOptionalString("customText");
+char *fileName = cgiOptionalString("ct");
+
+customText = skipLeadingSpaces(customText);
+if (customText == NULL || customText[0] == 0)
+    customText = cgiOptionalString("customFile");
+customText = skipLeadingSpaces(customText);
+if (customText != NULL && customText[0] != 0)
+    {
+    static struct tempName tn;
+    makeTempName(&tn, "ct", ".bed");
+    ctList = customTracksFromText(customText);
+    ctFileName = tn.forCgi;
+    customTrackSave(ctList, tn.forCgi);
+    makeHiddenVar("ct", tn.forCgi);
+    }
+else if (fileName != NULL)
+    {
+    ctList = customTracksFromFile(fileName);
+    ctFileName = fileName;
+    }
+for (ct = ctList; ct != NULL; ct = ct->next)
+    {
+    char *vis;
+    tg = newCustomTrack(ct);
+    vis = cgiOptionalString(tg->mapName);
+    if (vis != NULL)
+	tg->visibility = stringArrayIx(vis, tvStrings, ArraySize(tvStrings));
+    slAddHead(pGroupList, tg);
+    }
+}
+
+
 void doForm()
 /* Make the tracks display form with the zoom/scroll
  * buttons and the active image. */
 {
 struct trackGroup *group;
-struct browserTable *tableList = NULL, *table = NULL;
 char *freezeName = NULL;
 int controlColNum=0;
 
@@ -4993,9 +4767,6 @@ if (calledSelf)
     if ((s = cgiOptionalString("ruler")) != NULL)
 	withRuler = !sameWord(s, "off");
     }
-
-if(hTableExists("browserTable"))
-   tableList = checkDbForTables();
 
 /* Register tracks that include some non-standard methods. */
 registerTrackHandler("cytoBand", cytoBandMethods);
@@ -5025,16 +4796,12 @@ registerTrackHandler("simpleRepeat", simpleRepeatMethods);
 registerTrackHandler("rosettaTe",rosettaTeMethods);   
 registerTrackHandler("rosettaPe",rosettaPeMethods); 
 
-/* Load first track user has pasted or blatted in. */
+/* Load first track user has pasted or blatted in. Then tracks
+ * that are built into database. */
 loadCustomTracks(&tGroupList);
 if (userSeqString != NULL) slSafeAddHead(&tGroupList, userPslTg());
-
-/* Load tracks from database. */
 loadFromTrackDb(&tGroupList, privateVersion());
-addTablesFromBrowserTable(&tGroupList,&tableList);
-
-
-slReverse(&tGroupList);
+slSort(&tGroupList, tgCmpPriority);
 
 /* Get visibility values if any from ui. */
 for (group = tGroupList; group != NULL; group = group->next)
