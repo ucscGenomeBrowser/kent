@@ -15,7 +15,7 @@
 #include "mafTrack.h"
 #include "mafSummary.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.57 2005/03/09 01:43:05 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.58 2005/03/09 21:38:06 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -113,7 +113,7 @@ if (speciesOrder == NULL && speciesGroup == NULL)
       "Track %s missing required trackDb setting: speciesOrder or speciesGroup",
                 track->mapName);
 if (speciesGroup)
-    groupCt = chopLine(speciesGroup, groups);
+    groupCt = chopLine(cloneString(speciesGroup), groups);
 
 /* Make up items for other organisms by scanning through group & species 
    track settings */
@@ -125,7 +125,7 @@ for (group = 0; group < groupCt; group++)
                                 SPECIES_GROUP_PREFIX, groups[group]);
         speciesOrder = trackDbRequiredSetting(track->tdb, sGroup);
         }
-    speciesCt = chopLine(speciesOrder, species);
+    speciesCt = chopLine(cloneString(speciesOrder), species);
     for (i = 0; i < speciesCt; i++)
         {
         /* skip this species if UI checkbox was unchecked */
@@ -274,6 +274,15 @@ static boolean displayZoomedIn(struct track *track)
 return track->customPt != NULL;
 }
 
+static void markNotPairwiseItem(struct wigMafItem *mi)
+{
+    mi->ix = -1;
+}
+static boolean isPairwiseItem(struct wigMafItem *mi)
+{
+    return mi->ix != -1;
+}
+
 static struct wigMafItem *loadPairwiseItems(struct track *track)
 /* Make up items for modes where pairwise data are shown.
    First an item for the score wiggle, then a pairwise item
@@ -299,7 +308,7 @@ if (wigTrack != NULL)
     {
     mi = scoreItem(wigTotalHeight(wigTrack, tvFull));
     /* mark this as not a pairwise item */
-    mi->ix = -1;
+    markNotPairwiseItem(mi);
     slAddHead(&miList, mi);
     }
 if (displayPairwise(track))
@@ -575,6 +584,7 @@ struct mafSummary *ms, *summaryList;
 struct hash *componentHash = newHash(6);
 struct hashEl *hel;
 struct hashCookie cookie;
+struct dyString *where = dyStringNew(256);
 
 if (miList == NULL)
     return FALSE;
@@ -583,10 +593,21 @@ if (miList == NULL)
 if ((summary = summarySetting(track)) == NULL)
     return FALSE;
 
-/* load maf summary entries from table */
+/* load maf summary entries for all species in item list */
 conn = hAllocConn();
+dyStringAppend(where, "src in (");
+for (mi = miList; mi != NULL; mi = mi->next)
+    {
+    if (!isPairwiseItem(mi))
+        /* exclude non-species items (e.g. conservation wiggle */
+        continue;
+    dyStringPrintf(where, "'%s'", mi->db);
+    if (mi->next != NULL)
+        dyStringAppend(where, ",");
+    }
+dyStringAppend(where, ")");
 sr = hOrderedRangeQuery(conn, summary, chromName, seqStart, seqEnd,
-                        NULL, &rowOffset);
+                        dyStringCannibalize(&where), &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     ms = mafSummaryLoad(row + rowOffset);
