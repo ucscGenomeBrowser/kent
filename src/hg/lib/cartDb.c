@@ -15,8 +15,12 @@ void cartDbStaticLoad(char **row, struct cartDb *ret)
 int sizeOne,i;
 char *s;
 
-ret->id = row[0];
+ret->id = sqlUnsigned(row[0]);
 ret->contents = row[1];
+ret->reserved = sqlSigned(row[2]);
+ret->firstUse = row[3];
+ret->lastUse = row[4];
+ret->useCount = sqlSigned(row[5]);
 }
 
 struct cartDb *cartDbLoad(char **row)
@@ -28,8 +32,12 @@ int sizeOne,i;
 char *s;
 
 AllocVar(ret);
-ret->id = cloneString(row[0]);
+ret->id = sqlUnsigned(row[0]);
 ret->contents = cloneString(row[1]);
+ret->reserved = sqlSigned(row[2]);
+ret->firstUse = cloneString(row[3]);
+ret->lastUse = cloneString(row[4]);
+ret->useCount = sqlSigned(row[5]);
 return ret;
 }
 
@@ -39,7 +47,7 @@ struct cartDb *cartDbLoadAll(char *fileName)
 {
 struct cartDb *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[2];
+char *row[6];
 
 while (lineFileRow(lf, row))
     {
@@ -86,8 +94,12 @@ int i;
 
 if (ret == NULL)
     AllocVar(ret);
-ret->id = sqlStringComma(&s);
+ret->id = sqlUnsignedComma(&s);
 ret->contents = sqlStringComma(&s);
+ret->reserved = sqlSignedComma(&s);
+ret->firstUse = sqlStringComma(&s);
+ret->lastUse = sqlStringComma(&s);
+ret->useCount = sqlSignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -99,8 +111,9 @@ void cartDbFree(struct cartDb **pEl)
 struct cartDb *el;
 
 if ((el = *pEl) == NULL) return;
-freeMem(el->id);
 freeMem(el->contents);
+freeMem(el->firstUse);
+freeMem(el->lastUse);
 freez(pEl);
 }
 
@@ -122,12 +135,24 @@ void cartDbOutput(struct cartDb *el, FILE *f, char sep, char lastSep)
 {
 int i;
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->id);
+fprintf(f, "%u", el->id);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->contents);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%d", el->reserved);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->firstUse);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->lastUse);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%d", el->useCount);
 fputc(lastSep,f);
 }
 

@@ -418,6 +418,12 @@ sqlFreeResult(&sr);
 return ix;
 }
 
+unsigned int sqlLastAutoId(struct sqlConnection *conn)
+/* Return last automatically incremented id inserted into database. */
+{
+return mysql_insert_id(conn->conn);
+}
+
 /* Stuff to manage and cache up to 16 open connections on 
  * a database.  Typically you only need 3.
  * MySQL takes about 2 milliseconds on a local
