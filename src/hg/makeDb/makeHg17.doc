@@ -5247,20 +5247,24 @@ exit $status
 
 
 # NET CHIMP (DONE 2004-6-24 kate)
-    ssh eieio
+    # Redone to make chimp.net on 2004-10-11 kate (other files have
+    # new times, but are the same as 6-24 versions)
+    ssh kolossus
     cd /cluster/data/hg17/bed/blastz.panTro1.2004-06-22/axtChain
     #chainPreNet all.chain ../S1.len ../S2.len stdout \
     #| chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
     #| netSyntenic stdin noClass.net
 
-    chainPreNet all.chain ../S1.len ../S2.len stdout \
-    | chainNet stdin -minSpace=10 ../S1.len ../S2.len human.net  /dev/null
+    time chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=10 ../S1.len ../S2.len human.net chimp.net
+        # 42.860u 2.080s 2:11.11 34.2% 
     netSyntenic human.net noClass.net
 
     # Add classification info using db tables:
     ssh hgwdev
     cd /cluster/data/hg17/bed/blastz.panTro1.2004-06-22/axtChain
     netClass noClass.net hg17 panTro1 human.net
+    rm noClass.net
 
     # Make a 'syntenic' subset:
     ssh eieio
@@ -5279,6 +5283,79 @@ exit $status
     netFilter -minGap=10 humanSyn.net | hgLoadNet hg17 netSyntenyPanTro1 stdin
     # Add entries for chainPanTro1, netPanTro1 to
     # human/hg17 trackDb
+
+
+# RECIPROCAL BEST CHAINS FOR ENSEMBL GENE BUILD (WORKING 2004-10-11 kate)
+
+    # Starting with the chimp-reference net, which contains the best human
+    # alignments to chimp, extract the subset of chains in the net.
+    # (these are the "best" chains of human alignments to chimp).
+    # Net these chains and use the resulting human-reference net (the
+    # "reciprocal best" net).  Extract the chains from this net to
+    # obtain "reciprocal best" chains of chimp alignments to human.
+
+    ssh kolossus
+    cd /cluster/data/hg17/bed/blastz.panTro1.2004-06-22/axtChain
+    mkdir rBest
+    grep chain all.chain | wc -l
+
+    # extract "best" chains from the chimp-reference net
+    time chainSwap all.chain stdout | \
+        netChainSubset chimp.net stdin stdout | \
+        chainSort stdin rBest/chimp.best.chain
+    grep chain rBest/chimp.best.chain | wc -l
+        # 64396 
+
+    # for comparison later, extract "best" chains from human-reference net
+    netChainSubset human.net all.chain stdout | \
+        chainSort stdin rBest/human.best.chain
+    cd rBest
+
+    # net the best chains from the chimp net and pull the human-ref net
+    time chainPreNet chimp.best.chain ../../S2.len ../../S1.len stdout | \
+       chainNet stdin -minSpace=10 ../../S2.len ../../S1.len \
+                         /dev/null human.rbest.net
+
+    # extract "reciprocal best" chains from the "best" human-reference net
+    netChainSubset human.rbest.net ../all.chain stdout | \
+        chainSort stdin human.rbest.chain
+
+    # take a look
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.panTro1.2004-06-22/axtChain
+    cd rBest
+    mkdir rBestChain
+    chainSplit rBestChain human.rbest.chain
+    hgLoadChain hg17 chr7_rBestChainPanTro1 rBestChain/chr7.chain
+        # Loading 1639 chains into hg17.chr7_rBestChainPanTro1
+    mkdir bestChain
+    chainSplit bestChain human.best.chain
+    hgLoadChain hg17 chr7_bestChainPanTro1 bestChain/chr7.chain
+        # Loading 6516 chains into hg17.chr7_bestChainPanTro1
+    # compare 
+    hgsql hg16 -s -e "select count(*) from chr7_rBestChainPanTro1"
+        # 2416
+    # spot-checked by comparing chr7 best and rbest:
+    # 1. for a a chain appearing in rBest,  click thru to human browser, 
+    #   then via chimp net back to human browser at same region
+    # 2. for a chain in "best", but not rBest, do the same, verify
+    #   that it produces a different region in the human browser
+
+    # post pre-Q/A file for ensembl download
+    cd /cluster/data/hg17/bed/blastz.panTro1.2004-06-22/axtChain/rBest
+    gzip human.rbest.chain
+    cp human.rbest.chain.gz \
+        /usr/local/apache/htdocs/kate/ensembl/hg17-panTro1.rbest.chain.gz
+    cd /usr/local/apache/htdocs/kate/ensembl
+    md5sum *.gz > md5sum.txt
+
+    # cleanup (TODO -- after QA)
+    ssh hgwdev
+    hgsql hg17 -e "drop table chr7_rBestChainPanTro1"
+    hgsql hg17 -e "drop table chr7_bestChainPanTro1"
+    cd /cluster/data/hg17/bed/blastz.panTro1.2004-06-22/axtChain
+    mv rBest/human.rbest.chain.gz ..
+    rm -fr rBest
 
 
 # GENERATE CHIMP MAF FOR MULTIZ FROM NET (DONE 2004-06-24 kate)
