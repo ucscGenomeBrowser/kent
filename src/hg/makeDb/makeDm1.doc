@@ -314,11 +314,11 @@ exit; # don't actually run this like a script :)
     echo 'INSERT INTO dbDb \
         (name, description, nibPath, organism, \
                 defaultPos, active, orderKey, genome, scientificName, \
-                htmlPath, hgNearOk) values \
+                htmlPath, hgNearOk, hgPbOk, sourceName) values \
         ("dm1", "Jan. 2003", "/gbdb/dm1/nib", "Fruitfly", \
                "chr2L:827700-845800", 1, 55, "Fruitfly", \
                 "Drosophila melanogaster", "/gbdb/dm1/html/description.html", \
-                0);' \
+                0, 0, "BDGP v. 3");' \
       | hgsql -h genome-testdb hgcentraltest
     echo 'INSERT INTO defaultDb (genome, name) values ("Fruitfly", "dm1");' \
       | hgsql -h genome-testdb hgcentraltest

@@ -313,11 +313,11 @@ if (-e /tmp/anoGam1/$2/$2.cat) /bin/cp /tmp/anoGam1/$2/$2.cat ./
       -e 'INSERT INTO dbDb \
         (name, description, nibPath, organism, \
                 defaultPos, active, orderKey, genome, scientificName, \
-                htmlPath, hgNearOk) values \
+                htmlPath, hgNearOk, hgPbOk, sourceName) values \
         ("anoGam1", "Feb. 2003", "/gbdb/anoGam1/nib", "A. gambiae", \
                "chr2L:827700-845800", 1, 59, "A. gambiae", \
                 "Anopheles gambiae", "/gbdb/anoGam1/html/description.html", \
-                0);'
+                0, 0, "MOZ2");'
     hgsql -h genome-testdb hgcentraltest \
       -e 'INSERT INTO defaultDb (genome, name) values ("A. gambiae", "anoGam1");'
 

@@ -327,10 +327,10 @@ done >> seq_contig.md
     # Enter hg17 into hgcentraltest.dbDb so test browser knows about it:
     hgsql -e 'INSERT INTO dbDb (name, description, nibPath, organism, \
 	defaultPos, active, orderKey, genome, scientificName, \
-	htmlPath, hgNearOk) \
+	htmlPath, hgNearOk, hgPbOk, sourceName) \
 	VALUES("hg17", "May 2004", "/gbdb/hg17/nib", "Human", \
 	"chr4:56214201-56291736", 1, 10, "Human", "Homo sapiens", \
-	"/gbdb/hg17/html/description.html", 0);' \
+	"/gbdb/hg17/html/description.html", 0, 0, "NCBI Build 35");' \
 	-h genome-testdb hgcentraltest
     # Make trackDb table so browser knows what tracks to expect:
     cd ~kent/src/hg/makeDb/trackDb
