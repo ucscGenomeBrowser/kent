@@ -1,0 +1,91 @@
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+	<TITLE>Human Genome Working Draft - v29</TITLE>
+	<LINK REL="STYLESHEET" HREF="/style/HGStyle.css">
+</HEAD>
+<BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#6600FF">
+<A NAME="TOP"></A>
+
+<TABLE BORDER=0 WIDTH="100%">
+<TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="/images/title.jpg"></TH></TR>
+
+<!--HOTLINKS BAR----------------------------------------------------------->
+<TR><TD COLSPAN=2 HEIGHT=40>
+   <CENTER>
+	<TABLE BGCOLOR="2636D1" WIDTH=100% CELLSPACING=0 CELLPADDING=0 BORDER=1 HEIGHT="22"><TR><TD>
+		<TABLE WIDTH=431 CELLSPACING=4 CELLPADDING=0 BORDER=0><TR>
+		<TD WIDTH=1></TD>
+		<TD WIDTH=75>
+			<A HREF="/index.html" onMouseOver="HOME.src='/images/hl_home.jpg'" onMouseOut="HOME.src='/images/h_home.jpg'">
+			<IMG SRC="/images/h_home.jpg" ALIGN="absmiddle" BORDER="0" NAME="HOME" ALT="Home" ></A></TD>
+		<TD WIDTH=155>
+			<A HREF="/goldenPath/hgTracks.html" onMouseOver="BROWSER.src='/images/hl_browser.jpg'" onMouseOut="BROWSER.src='/images/h_browser.jpg'">
+			<IMG SRC="/images/h_browser.jpg" ALIGN="absmiddle" BORDER="0" NAME="BROWSER" ALT="&nbsp;&nbsp; Genome Browser"></A></TD>		
+		<TD WIDTH=100>
+			<A HREF="/cgi-bin/hgBlat?command=start" onMouseOver="SEARCH.src='/images/hl_blat.jpg'" onMouseOut="SEARCH.src='/images/h_blat.jpg'">
+			<IMG SRC="/images/h_blat.jpg" ALIGN="absmiddle" BORDER="0" NAME="SEARCH" ALT="&nbsp;&nbsp; BLAT Search"></A></TD>	
+		<TD WIDTH=100>
+			<A HREF="/FAQ.html" onMouseOver="GUIDE.src='/images/hl_faq.jpg'" onMouseOut="GUIDE.src='/images/h_faq.jpg'">
+			<IMG SRC="/images/h_faq.jpg" ALIGN="absmiddle" BORDER="0" NAME="GUIDE" ALT="&nbsp;&nbsp; FAQ"></A></TD>
+		</TR></TABLE>
+	 </TR></TABLE>
+	 </CENTER>
+    </TD>
+</TR>
+
+<!--Content Tables------------------------------------------------------->
+<TR><TD CELLPADDING=10>	
+	<TABLE BGCOLOR="fffee8" WIDTH="100%" BORDERCOLOR="888888" BORDER=1><TR><TD>
+	<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%><TR><TD>
+		<FONT SIZE="4"><b>&nbsp; Anonymous CVS access to Browser Code</b></FONT>
+	</TD></TR></TABLE>
+	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
+	<TR><TD WIDTH=10>&nbsp;</TD><TD>
+</TR></TABLE>
+<B>csh or tcsh</B><P>
+setenv CVSROOT :pserver:anonymous@genome-test.cse.ucsc.edu:/cbse
+<P>
+<B>bash or sh</B>
+<P>
+export CVSROOT=:pserver:anonymous@genome-test.cse.ucsc.edu:/cbse
+<P>
+<BR>
+cvs login<BR>
+Logging in to :pserver:anonymous@genome-test.cse.ucsc.edu:2401/cbse<BR>
+CVS password: <I>genome</I><BR>
+cvs co kent<BR>
+<PRE>
+cvs server: Updating kent
+cvs server: Updating kent/cvsTest
+U kent/cvsTest/.cvsignore
+U kent/cvsTest/README
+U kent/cvsTest/makefile
+U kent/cvsTest/test.c
+U kent/cvsTest/test.doc
+U kent/cvsTest/test.h
+cvs server: Updating kent/src
+U kent/src/README
+
+etc...
+</PRE>
+<BR>
+To update an existing source tree, use the command:
+	<em> cvs update -A -d -P </em> <BR>
+You will want to keep your source tree up to date at least
+once a week.  It is under development and often
+has significant enhancements and new features added on a regular basis.
+
+<!-- END SECOND SECTION ---------------------------------------------->
+
+</TD></TR>
+<TR><TD ALIGN=LEFT>
+<i>Should you have any comments, inquires or questions, please contact
+<A HREF="mailto:&#103;&#101;n&#111;&#109;&#101;&#45;mi&#114;&#114;&#111;&#114;&#64;&#99;&#115;&#101;.&#117;&#99;&#115;&#99;.&#101;du">
+&#103;&#101;n&#111;&#109;&#101;&#45;mi&#114;&#114;&#111;&#114;&#64;&#99;&#115;&#101;.&#117;&#99;&#115;&#99;.&#101;du</A>
+</i>.
+<BR><i>Last Modified: 2003-11-03 - 03 November 2003</i>
+</TD></TR>
+</TABLE>
+</BODY></HTML>
+

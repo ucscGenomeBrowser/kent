@@ -88,8 +88,9 @@ MYSQLLIBS='/usr/local/mysql/lib/mysql/libmysqlclient.a -lz -lsocket -lnsl'
 <br><br>
 
 <li>Unzip jksrc.zip <br>
-	This creates the source hierarchy: <em> ./kent </em>
-<br><br>
+	This creates the source hierarchy: <em> ./kent </em> <br>
+	(the source tree is also available via <A HREF="cvs.html"> CVS </A>
+	<br><br>
 
 <li>Go to the kent/src directory and type 'make libs'. <br>
 	This builds the libraries in directories:
@@ -132,6 +133,17 @@ MYSQLLIBS='/usr/local/mysql/lib/mysql/libmysqlclient.a -lz -lsocket -lnsl'
 	For any particular program, go to its source directory
 	and type 'make'.  The resulting binary will
 	be moved to your home directory: <em> ~/bin/$MACHTYPE </em>
+	as a convenience.  You can move these elsewhere as desired.  <br>
+
+	<p>There are hundreds of utilities used in processing the genomes
+and preparing data for creating tracks in the browser.  There is a general
+guideline to the major catagories of types of processing in the source
+tree file: <em> ./kent/src/README </em> </p>
+
+	<p> To see examples of how the various programs are used and
+how tracks are created, examine any of the make*.doc files in:
+    <em> ./kent/src/hg/makeDb/make*.doc </em>
+(these are ordinary text files, not microsoft word doc files) </p>
 
 </ol>
 <p>
@@ -141,8 +153,10 @@ MYSQLLIBS='/usr/local/mysql/lib/mysql/libmysqlclient.a -lz -lsocket -lnsl'
 <p>
 <hr WIDTH="100%">
 <br><i>Should you have any comments, inquires or questions, please contact
-<a href="mailto:genome-mirror@cse.ucsc.edu">genome-mirror@cse.ucsc.edu</a></i>.
-<br><i>Last Modified: 2003-10-16 - 16 October 2003</i>
+<A HREF="mailto:&#103;&#101;n&#111;&#109;&#101;&#45;mi&#114;&#114;&#111;&#114;&#64;&#99;&#115;&#101;.&#117;&#99;&#115;&#99;.&#101;du">
+&#103;&#101;n&#111;&#109;&#101;&#45;mi&#114;&#114;&#111;&#114;&#64;&#99;&#115;&#101;.&#117;&#99;&#115;&#99;.&#101;du</A>
+</i>.
+<br><i>Last Modified: 2003-11-03 - 03 November 2003</i>
 <br>
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
