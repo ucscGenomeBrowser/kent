@@ -2754,34 +2754,16 @@ rm $TMP/$root.ss.gz
 #Longest job:                        9s       0.15m     0.00h    0.00d
 #Submission to last job:           287s       4.78m     0.08h    0.00d
 
-    # Create bed track; we want to tweak the scores and the names.
-    # Scores are transformed as follows, for a reasonable-looking 
-    # bed 0-1000 "spectrum".  Let x_max be the maximum (believable) score 
-    # (here x_max  = 1819) and let x_med be the median score (here x_med =
-    # 20).  The  scores are transformed via the function f(x) = a *
-    # log x + b, s.t. f(x_med) = 300 and f(x_max) = 1000.  Solving
-    # for a and b, you obtain  b = (300 log x_max - 1000 log x_med) /
-    # (log x_max - log x_med), a = (1000 - b) / log x_max.  Here a =
-    # 232.335, b = -743.92.
-    # better done on kksilo:
-    # get max:
-    cat PREDICTIONS/*/*.bed > raw.bed
-    set max = `awk '{print $5;}' raw.bed | sort -n | tail -1`
-#1819
-    # get median:
-    set lineCount = `cat raw.bed | wc -l`
-    set medOffset = `expr '(' $lineCount / 2 ')' + 1`
-    set med = `awk '{print $5;}' raw.bed | sort -n \
-               | tail +$medOffset | head -1`
-#20
-    # b and a:
-    set b = `awk 'BEGIN {print ((300 * log('$max')) - (1000 * log('$med')));}'`
-#-743.92
-    set a = `awk 'BEGIN {print (1000 - '$b') / log('$max');}'`
-#232.335
-    awk '{printf "%s\t%s\t%s\tlod=%d\t%d\n", \
-            $1, $2, $3, $5, '$a' * log($5) + '$b';}' raw.bed > all.bed
-    hgLoadBed dm1 phastCons4wayElements all.bed
+    # Reloaded 8/24/04 with corrected transform / new script:
+    # Create bed track: tweak scores and names, trim the unused strand column.
+    cat PREDICTIONS/*/*.bed \
+    | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+    | /cluster/bin/scripts/lodToBedScore \
+    > all.bed
+
+    hgLoadBed dm1 phastConsElements all.bed
+    featureBits dm1 phastConsElements
+#22859943 bases of 126527731 (18.067%) in intersection
 
     # make top-5000 list and launcher on Adam's home page:
     sort -k5,5nr raw.bed | head -5000 > top5000.bed
