@@ -57,6 +57,14 @@ printf(" ");
 fcoeDropDown("fishClones.type", fishClonesMap);
 }
 
+void recombRateUi(struct trackDb *tdb)
+/* Put up UI recombRate. */
+{
+char *recombRateMap = cartUsualString(cart, "recombRate.type", rroeEnumToString(0));
+printf("<b>Map Distances: </b>");
+rroeDropDown("recombRate.type", recombRateMap);
+}
+
 void cghNci60Ui(struct trackDb *tdb)
 /* Put up UI cghNci60. */
 {
@@ -271,6 +279,8 @@ if (sameString(track, "stsMap"))
     stsMapUi(tdb);
 else if (sameString(track, "fishClones"))
     fishClonesUi(tdb);
+else if (sameString(track, "recombRate"))
+    recombRateUi(tdb);
 else if (sameString(track, "nci60"))
     nci60Ui(tdb);
 else if (sameString(track, "cghNci60"))

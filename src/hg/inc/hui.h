@@ -89,6 +89,22 @@ char *fcoeEnumToString(enum fishClonesOptEnum x);
 void fcoeDropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
+/****** Some stuff for recombRate related controls *******/
+enum recombRateOptEnum {
+   rroeDecodeAvg = 0,
+   rroeDecodeFemale = 1,
+   rroeDecodeMale = 2,
+};
+
+enum recombRateOptEnum rroeStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *rroeEnumToString(enum recombRateOptEnum x);
+/* Convert from enum to string representation. */
+
+void rroeDropDown(char *var, char *curVal);
+/* Make drop down of options. */
+
 /****** Some stuff for cghNci60 related controls *******/
 enum cghNci60OptEnum {
    cghoeTissue = 0,

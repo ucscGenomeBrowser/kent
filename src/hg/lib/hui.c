@@ -164,6 +164,36 @@ cgiMakeDropList(var, fishClonesOptions, ArraySize(fishClonesOptions),
 	curVal);
 }
 
+/****** Some stuff for recombRate related controls *******/
+
+static char *recombRateOptions[] = {
+    "deCODE Sex Averaged Distances",
+    "deCODE Female Distances",
+    "deCODE Male Distances",
+};
+
+enum recombRateOptEnum rroeStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, recombRateOptions);
+if (x < 0)
+   errAbort("Unknown option %s", string);
+return x;
+}
+
+char *rroeEnumToString(enum recombRateOptEnum x)
+/* Convert from enum to string representation. */
+{
+return recombRateOptions[x];
+}
+
+void rroeDropDown(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropList(var, recombRateOptions, ArraySize(recombRateOptions), 
+	curVal);
+}
+
 /****** Some stuff for CGH NCI60 related controls *******/
 
 static char *cghNci60Options[] = {
