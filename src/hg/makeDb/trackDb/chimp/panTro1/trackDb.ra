@@ -3,7 +3,7 @@ shortLabel Assembly
 longLabel Assembly from Fragments 
 group map
 priority 10
-visibility dense
+visibility hide
 color 150,100,30
 altColor 230,170,40
 type bed 3 +
@@ -21,9 +21,9 @@ shortLabel Quality Scores
 longLabel Quality Scores
 group map
 priority 12
-visibility dense
+visibility full
 autoScaleDefault Off
-maxHeightPixels 128:16:11
+maxHeightPixels 128:12:12
 graphTypeDefault Bar
 gridDefault OFF
 color 100,0,0
@@ -51,7 +51,7 @@ shortLabel Human RefSeq
 longLabel Human RefSeq Genes
 group genes
 priority 35
-visibility dense
+visibility pack
 color 12,12,120
 type genePred
 
@@ -82,5 +82,5 @@ shortLabel Human Deletions
 longLabel Deletions in Human (hg16-Jul 03) Relative to Chimp
 group compGeno
 priority 147
-visibility dense
+visibility hide
 type bed
