@@ -127,11 +127,14 @@ hgPositionsHelpHtml(organism);
 webNewSection("Add Your Own Tracks");
 
 puts(
-"<P>You can add your own annotation tracks to the browser using \n"
+"<P>Display your own annotation tracks in the browser using \n"
 "the <A HREF=\"../goldenPath/help/customTrack.html\"> \n"
-"procedure described here</A>.  Annotations can be stored in files or\n"
-"pasted in. You can also paste in a URL or list of URLs which refer to \n"
+"procedure described here</A>.  Annotations may be stored in files or\n"
+"pasted in. You can also paste in a URL or a list of URLs which refer to \n"
 "files in one of the supported formats.</P>\n"
+"Click \n"
+"<A HREF=\"../goldenPath/customTracks/custTracks.html\" TARGET=_blank>here</A> \n"
+"to view a collection of custom annotation tracks submitted by Genome Browser users.</P> \n"
 "\n"
 "	Annotation File: <INPUT TYPE=FILE NAME=\"hgt.customFile\"><BR>\n"
 "	<TEXTAREA NAME=\"hgt.customText\" ROWS=14 COLS=80></TEXTAREA>\n"
