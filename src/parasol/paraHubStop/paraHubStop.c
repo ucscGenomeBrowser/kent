@@ -18,7 +18,7 @@ errAbort(
 void paraHubStop(char *now)
 /* paraHubStop - Shut down paraHub daemon. */
 {
-int hubFd = netMustConnect(getHost(), paraPort);
+int hubFd = netMustConnect("localhost", paraPort);
 sendWithSig(hubFd, "quit");
 close(hubFd);
 }

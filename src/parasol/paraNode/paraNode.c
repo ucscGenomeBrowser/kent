@@ -15,9 +15,10 @@
 #include "paraLib.h"
 #include "net.h"
 
-char *hostName;			/* Name of this host. */
 char *hubName;			/* Name of hub machine, may be NULL. */
+char *hostName;			/* Name of this machine. */
 in_addr_t hubIp;		/* Hub IP address. */
+in_addr_t localIp;		/* localhost IP address. */
 int busyProcs = 0;		/* Number of processers in use. */
 int maxProcs = 1;		/* Number of processers allowed to use. */
 int socketHandle;		/* Main message queue socket. */
@@ -135,13 +136,13 @@ if (fork() == 0)
     }
 else
     {
-    /* Wait on executed job and send jobID and status back to whoever
-     * started the job. */
+    /* Wait on executed job and send jobID and status back to 
+     * main process. */
     int status;
     int sd;
 
     wait(&status);
-    sd = netConnect(hostName, paraPort);
+    sd = netConnect("localhost", paraPort);
     if (sd >= 0)
         {
 	char buf[256];
@@ -378,7 +379,8 @@ for (;;)
     	(struct sockaddr *)&hubAddress, &len_inet);
     if (connectionHandle >= 0)
 	{
-	if (hubName == NULL || hubAddress.sin_addr.s_addr == hubIp)
+	if (hubName == NULL || hubAddress.sin_addr.s_addr == hubIp
+	    || hubAddress.sin_addr.s_addr == localIp)
 	    {
 	    if (netReadAll(connectionHandle, signature, sigLen) == sigLen)
 		{
@@ -447,6 +449,18 @@ if (fork() == 0)
     }
 }
 
+in_addr_t lookupIp(char *host)
+/* Return IP address of host. */
+{
+struct hostent *hostent = gethostbyname(host);
+struct sockaddr_in address;	
+if (hostent == NULL)
+errAbort("Couldn't find hub %s", host);
+memcpy(&address.sin_addr.s_addr, hostent->h_addr_list[0], 
+sizeof(address.sin_addr.s_addr));
+return address.sin_addr.s_addr;
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
@@ -455,18 +469,11 @@ if (argc != 2)
     usage();
 maxProcs = optionInt("cpu", 1);
 
-/* Look up hub IP address. */
+/* Look up IP addresses. */
+localIp = lookupIp("localhost");
 hubName = optionVal("hub", NULL);
 if (hubName != NULL)
-    {
-    struct hostent *hostent = gethostbyname(hubName);
-    struct sockaddr_in hubAddress;	
-    if (hostent == NULL)
-	errAbort("Couldn't find hub %s", hostName);
-    memcpy(&hubAddress.sin_addr.s_addr, hostent->h_addr_list[0], 
-    	sizeof(hubAddress.sin_addr.s_addr));
-    hubIp = hubAddress.sin_addr.s_addr;
-    }
+    hubIp = lookupIp(hubName);
 
 paraFork();
 return 0;

@@ -17,8 +17,10 @@ errAbort(
  "     <name> <number of cpus>\n"
  "It may have other columns as well\n"
  "options:\n"
- "    -exe=/path/to/paranode"
- "    -rsh=/path/to/rsh/like/command");
+ "    -exe=/path/to/paranode\n"
+ "    -log=/path/to/log/file\n"
+ "    -hub=machineHostingParaHub - nodes will ignore messages from elsewhere\n"
+ "    -rsh=/path/to/rsh/like/command\n");
 }
 
 void paraNodeStart(char *machineList)
@@ -27,6 +29,8 @@ void paraNodeStart(char *machineList)
 int i;
 char *exe = optionVal("exe", "paraNode");
 char *rsh = optionVal("rsh", "rsh");
+char *log = optionVal("log", NULL);
+char *hub = optionVal("hub", NULL);
 struct lineFile *lf = lineFileOpen(machineList, TRUE);
 char *row[2];
 struct dyString *dy = newDyString(256);
@@ -40,6 +44,10 @@ while (lineFileRow(lf, row))
 		lf->lineIx, lf->fileName);
     dyStringClear(dy);
     dyStringPrintf(dy, "%s %s %s start -cpu=%d", rsh, name, exe, cpu);
+    if (log != NULL)
+       dyStringPrintf(dy, " log=%s", log);
+    if (hub != NULL)
+       dyStringPrintf(dy, " hub=%s", hub);
     printf("%s\n", dy->string);
     system(dy->string);
     }

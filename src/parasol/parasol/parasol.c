@@ -228,7 +228,7 @@ void reopenHub()
 /* Close hub if it's already open.  Then reopen it. */
 {
 closeHubFd();
-hubFd = netMustConnect(getHost(), paraPort);
+hubFd = netMustConnect("localhost", paraPort);
 }
 
 struct jobInfo *getJobList()
