@@ -4879,12 +4879,17 @@ struct sqlResult *sr;
 char **row;
 char query[256];
 char *mgiID;
-
+char *sqlRnaName = rnaName;
 struct refLink *rl;
 struct genePred *gp;
 
+/* Make sure to escape single quotes for DB parseability */
+if (strchr(rnaName, '\''))
+    {
+    sqlRnaName = replaceChars(rnaName, "'", "''");
+    }
 cartWebStart(cart, "RefSeq Gene");
-sprintf(query, "select * from refLink where mrnaAcc = '%s'", rnaName);
+sprintf(query, "select * from refLink where mrnaAcc = '%s'", sqlRnaName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     errAbort("Couldn't find %s in refLink table - database inconsistency.", rnaName);
@@ -4899,7 +4904,7 @@ printf(" TARGET=_blank>%s</A>", rl->mrnaAcc);
 if (hTableExists("refSeqStatus"))
     {
     sprintf(query, "select status from refSeqStatus where mrnaAcc = '%s'",
-	    rnaName);
+	    sqlRnaName);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
         {
@@ -4959,7 +4964,14 @@ printf("%s</A><BR>\n", rl->name);
 if (hTableExists("jaxOrtholog"))
     {
     struct jaxOrtholog jo;
-    sprintf(query, "select * from jaxOrtholog where humanSymbol='%s'", rl->name);
+    char * sqlRlName = rl->name;
+
+    /* Make sure to escape single quotes for DB parseability */
+    if (strchr(rl->name, '\''))
+        {
+        sqlRlName = replaceChars(rl->name, "'", "''");
+        }
+    sprintf(query, "select * from jaxOrtholog where humanSymbol='%s'", sqlRlName);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
