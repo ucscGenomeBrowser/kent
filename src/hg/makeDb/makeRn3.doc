@@ -3003,7 +3003,7 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     # ecoresFr1.html and ecoresTetraodon.html
 
 # Affymetrix RAE230 GeneChip track - affyRAE230
-# [DONE, hartera, 2003-03-26]
+# [DONE, hartera, 2004-03-26]
 
     mkdir /projects/compbio/data/microarray/affyRat
     # Download RAE230A and RAE230B consensus sequences from Affymetrix web site
