@@ -27,7 +27,8 @@ clean:
 	- find . -name \*.o -print | xargs rm
 
 SCRIPTS = \
-        iSync
+        iSync \
+        lodToBedScore
 
 # List of directories to build
 USE_DIRS = $(DIRS)
