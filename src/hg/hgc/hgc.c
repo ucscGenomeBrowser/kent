@@ -3553,14 +3553,31 @@ longXenoPsl1(tdb, item, "Mouse", "mouseChrom");
 }
 
 
-void doMultAlign(struct trackDb *tdb, char *item, char *otherName )
+void doMultAlignZoo(struct trackDb *tdb, char *item, char *otherName )
 /* Put up cross-species alignment when the second species
  * sequence is in a nib file. */
 {
 //errAbort("(%s)\n", item );
 char chromStr[64];
-sprintf( chromStr, "%sChrom" , otherName );
-longXenoPsl1(tdb, item, otherName, chromStr );
+
+// Check to see if name is one of zoo names
+if (!(strcmp(otherName,"human") 
+      && strcmp(otherName,"chimp") 
+      && strcmp(otherName,"baboon") 
+      && strcmp(otherName,"cow")
+      && strcmp(otherName,"pig")
+      && strcmp(otherName,"cat")
+      && strcmp(otherName,"dog")
+      && strcmp(otherName,"mouse")
+      && strcmp(otherName,"rat")
+      && strcmp(otherName,"chicken")
+      && strcmp(otherName,"fugu")
+      && strcmp(otherName,"zebrafish")))
+    {
+    sprintf( chromStr, "%sChrom" , otherName );
+    longXenoPsl1(tdb, item, otherName, chromStr );
+    }
+
 freeString( temp );
 }
 
@@ -6808,7 +6825,7 @@ else if (sameWord("blastzMm2", track)
     }
 else if (startsWith("multAlignWebb", track))
     {
-    doBlatMultAlign(tdb, item, &track[13] );
+    doMultAlignZoo(tdb, item, &track[13] );
     }
 else if (sameWord(track, "blatHuman"))
     {
