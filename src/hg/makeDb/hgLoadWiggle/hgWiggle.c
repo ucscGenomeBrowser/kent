@@ -11,10 +11,13 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.12 2004/08/09 21:42:41 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.13 2004/08/10 21:00:54 hiram Exp $";
 
 /* Command line switches. */
+static boolean noAscii = FALSE;	/*	do not output ascii data */
+static boolean doStats = FALSE;	/*	perform stats measurement */
 static boolean silent = FALSE;	/*	no data points output */
+static boolean fetchNothing = FALSE;	/*  no ascii, bed, or stats returned */
 static boolean timing = FALSE;	/*	turn timing on	*/
 static boolean skipDataRead = FALSE;	/*	do not read the wib data */
 static char *chr = NULL;		/* work on this chromosome only */
@@ -26,7 +29,10 @@ static struct optionSpec optionSpecs[] = {
     {"chr", OPTION_STRING},
     {"chromLst", OPTION_STRING},
     {"dataConstraint", OPTION_STRING},
+    {"noAscii", OPTION_BOOLEAN},
+    {"doStats", OPTION_BOOLEAN},
     {"silent", OPTION_BOOLEAN},
+    {"fetchNothing", OPTION_BOOLEAN},
     {"timing", OPTION_BOOLEAN},
     {"skipDataRead", OPTION_BOOLEAN},
     {"span", OPTION_INT},
@@ -46,7 +52,10 @@ errAbort(
   "   -db=<database> - use specified database\n"
   "   -chr=chrN - examine data only on chrN\n"
   "   -chromLst=<file> - file with list of chroms to examine\n"
-  "   -silent - no output, scanning data only\n"
+  "   -noAscii - do *not* perform the default ascii output\n"
+  "   -doStats - perform stats measurement\n"
+  "   -silent - no output, scanning data only and prepares result\n"
+  "   -fetchNothing - scanning data only, *NOT* preparing result\n"
   "   -timing - display timing statistics\n"
   "   -skipDataRead - do not read the .wib data (for no-read speed check)\n"
   "   -dataConstraint='DC' - where DC is one of < = >= <= == != 'in range'\n"
@@ -114,6 +123,7 @@ for (i=0; i<trackCount; ++i)
     for (chromPtr=chromList;  (once == 1) || (chromPtr != NULL); )
 	{
 	long chrStartClock = clock1000();
+	int whatToDo = wigFetchAscii;
 
 	if (chromPtr)
 	    {
@@ -122,11 +132,25 @@ for (i=0; i<trackCount; ++i)
 	    }
 
 	wDS->openWigConn(wDS, tracks[i]);
-	wDS->getData(wDS, wigFetchAscii);
+
+	if (noAscii)
+		whatToDo &= ~wigFetchAscii;
+	if (doStats)
+		whatToDo |= wigFetchStats;
+	if (fetchNothing)
+		whatToDo |= wigFetchNoOp;
+
+	wDS->getData(wDS, whatToDo);
 	wDS->closeWigConn(wDS);
 	if (!silent)
-	    wDS->asciiOut(wDS, "stdout");
+	    {
+	    if (doStats)
+		wDS->statsOut(wDS, "stdout");
+	    if (!noAscii)
+		wDS->asciiOut(wDS, "stdout");
+	    }
 	wDS->freeAscii(wDS);
+	wDS->freeStats(wDS);
 	if (timing)
 	    {
 	    long et;
@@ -195,7 +219,10 @@ wDS->db = optionVal("db", NULL);
 chr = optionVal("chr", NULL);
 chromLst = optionVal("chromLst", NULL);
 dataConstraint = optionVal("dataConstraint", NULL);
+noAscii = optionExists("noAscii");
+doStats = optionExists("doStats");
 silent = optionExists("silent");
+fetchNothing = optionExists("fetchNothing");
 timing = optionExists("timing");
 skipDataRead = optionExists("skipDataRead");
 span = optionInt("span", 0);
@@ -222,8 +249,14 @@ if (chr)
     wDS->setChromConstraint(wDS, chr);
     verbose(2, "#\tchrom constraint: (%s)\n", wDS->sqlConstraint);
     }
+if (noAscii)
+    verbose(2, "#\tnoAscii option on, do not perform the default ascii output\n");
+if (doStats)
+    verbose(2, "#\tdoStats option on, perform statistics measurements\n");
 if (silent)
-    verbose(2, "#\tsilent option on, no data points output\n");
+    verbose(2, "#\tsilent option on, no data points output, data is scanned\n");
+if (fetchNothing)
+    verbose(2, "#\tfetchNothing option on, data will be scanned, no results prepared\n");
 if (timing)
     verbose(2, "#\ttiming option on\n");
 if (skipDataRead)
