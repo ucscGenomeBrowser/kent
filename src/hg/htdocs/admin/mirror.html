@@ -92,7 +92,17 @@ It has only been tested on Redhat Linux 7.1 systems, but you may find it useful.
 <li> Find where your web pages are located. For example on a Redhat Linux
 	system using a stock apache RPM, the web pages are stored in /var/www/html. 
 	We will refer to this directory as WEBROOT in this document and you should 
-	substitute your real path for WEBROOT where you see that in our writeup. <br>
+	substitute your real path for WEBROOT where you see that in our writeup. But before
+	do this, you <b>MUST</b> be aware of the following: <br>
+      <ul type="DISC"><b>
+      <li> THE FOLLOWING ASSUMES YOU ARE NOT ALREADY SERVING UP DATA USING YOUR 
+	   APACHE SERVER. BEAR IN MIND THE SELECTION OF THE WEBROOT WILL OVERWRITE ANY 
+	   EXISTING DATA IN THAT AREA.
+      <li> DO NOT BLINDLY COPY OUR DATA OVER EXISTING FILES AT YOUR SITE.
+      <li> WEBROOT SHOULD REPRESENT A EMPTY DIRECTORY WHERE YOU WANT THE MIRROR TO BE STORED.
+	   IF YOU ALREADY HAVE DATA YOU SHOULD MAKE A SUBDIRECTORY TO HOLD THE MIRRORED PAGES. <br>
+      </ul></b>
+
 <li> Find where your cgi-bin directory is located. It should be under
 	the parent directory of the WEBROOT directory. For example on a Redhat Linux 
 	system using a stock apache RPM, the path of the cgi-bin directory is 
@@ -231,10 +241,15 @@ ii)&nbsp;&nbsp;  Create tables:
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 % mysql -options $DBVERSION &lt; *.sql
 <p> 
-iii)&nbsp;&nbsp;   Load data into the tables:
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-% mysqlimport -options $DBVERSION *.txt
-<br><br>
+iii)&nbsp;&nbsp;   Load data into the tables: (You may have to use the following 
+shell script for this step.)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<blockquote>
+for file in *  <br>
+do <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	mysqlimport -options $DBVERSION $file  <br>
+done <br>
+</blockquote> 
 
 <li>Issue permission to the "$DBVERSION" database.<br>
 <br>
@@ -260,7 +275,7 @@ rsync --progress -avz &nbsp;  rsync://genome-rsync.cse.ucsc.edu/projects/ &nbsp;
 <ol type="a">
 <li>Go to the CGIBIN directory, then do the following:
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-rsync -av &nbsp; rsync://genome-rsync/cgiscripts/&nbsp; $CGIBIN/.
+rsync -av &nbsp; rsync://genome-rsync.cse.ucsc.edu/cgiscripts/&nbsp; $CGIBIN/.
 <br><br>
 
 <li>In the CGIBIN directory, make a <a href="sample.html">hg.conf</a> file, in which, $USERNAME,$HOSTNAME and $PASSWORD used for the "$DBVERSION" database should be specified. Remember, variables should not be used in this file. 
