@@ -53,7 +53,7 @@ Does:
    - create a list of all expected PSL files.";
 
 #
-# $Id: gbAlignSetup,v 1.12 2004/11/13 17:23:19 markd Exp $
+# $Id: gbAlignSetup,v 1.13 2005/03/25 08:27:51 markd Exp $
 #
 use strict;
 use warnings;
@@ -565,9 +565,7 @@ sub partitionMondoTwoBitChrom($$$$@) {
 # partition a 2bit file with lots of small sequences in it.  Write files in
 # $outDir/$id.seqs, where id is the first sequence in the list.  Return list
 # of workDir relative seq files. This was done for bosTau1, which had 450K
-# scaffolds, lots of small ones.  Since gbBlat loops over the sequences,
-# invoking several programs, try to balancing number of sequences for each
-# jobs as well as sizes
+# scaffolds, lots of small ones.  Balancing is a hack.
 sub partitionMondoTwoBitFile($$$$) {
     my($db, $twoBitFile, $numParts, $outDir) = @_;
     my @seqFiles;
