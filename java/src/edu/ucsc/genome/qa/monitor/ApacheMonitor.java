@@ -73,6 +73,9 @@ public class ApacheMonitor {
       int secondsDelta = target.minutes * 60;
       int timeDelta = secondsNow - secondsDelta;
 
+      if (debug == true) {
+        System.out.println("got past timestamp query");
+      }
       // check for any rows within time delta
       String nullquery = "SELECT COUNT(*) AS cnt FROM ";
       nullquery = nullquery + target.sourceTable + " ";
@@ -80,19 +83,35 @@ public class ApacheMonitor {
       if (!allMachines) {
         nullquery = nullquery + " AND machine_id = " + target.targetMachine;
       }
+
+      if (debug == true) {
+        System.out.println(nullquery);
+        System.out.println("setting new null query");
+        nullquery = "SELECT COUNT(*) AS cnt FROM access_log " +
+               "WHERE status = 500 AND time_stamp > 1091396000";
+        System.out.println(nullquery);
+      }
       //# System.out.println(nullquery);
       ResultSet nullRS = stmt.executeQuery(nullquery);
+      if (debug == true) {
+        System.out.println("created ResultSet object");
+      }
       nullRS.next();
       int nullcnt = nullRS.getInt("cnt");
       //# System.out.println("Count of rows with any status code = " + nullcnt);
 
-
+      if (debug == true) {
+        System.out.println("got past first COUNT query");
+      }
       // check for matching rows
       String testquery = "SELECT COUNT(*) AS cnt FROM ";
       testquery = testquery + target.sourceTable + " ";
       testquery = testquery + "WHERE status = " + target.errorCode + " ";
       testquery = testquery + "AND time_stamp > " + timeDelta;
 
+      if (debug == true) {
+        System.out.println("got past second COUNT query");
+      }
       if (!allMachines) {
         testquery = testquery + " and machine_id = " + target.targetMachine;
       }
@@ -116,7 +135,7 @@ public class ApacheMonitor {
       if (cnt == 0) System.exit(0);
 
       // get all matching rows
-      String listquery = "SELECT request_uri, machine_id, virtual_host, time_stamp FROM ";
+      String listquery = "SELECT machine_id, request_uri, time_stamp FROM ";
       listquery = listquery + target.sourceTable + " ";
       listquery = listquery + "WHERE status = " + target.errorCode + " ";
       listquery = listquery + "AND time_stamp > " + timeDelta;
@@ -124,28 +143,23 @@ public class ApacheMonitor {
         listquery = listquery + " AND machine_id = " + target.targetMachine;
       }
 
-      System.out.println(listquery);
-
       ResultSet listRS = stmt.executeQuery(listquery);
       while (listRS.next()) {
         String request_uri = listRS.getString("request_uri");
         String machine_id  = listRS.getString("machine_id");
-        String virtual_host = listRS.getString("virtual_host");
 	int time_stamp = listRS.getInt("time_stamp");
 	int deltaSeconds = secondsNow - time_stamp;
 	int deltaMinutes = deltaSeconds / 60;
 	System.out.print("Status " + target.errorCode + " from " + request_uri + " on ");
 	System.out.println(machine_id + "; " + deltaMinutes + " minutes ago");
-        // if (virtual_host != "genome.cse.ucsc.edu" {
-	//   System.out.println("    from " + virtual_host);
-        // }
       }
 
       stmt.close();
       conn.close();
 
     } catch (Exception e) {
-      System.err.println(e.getMessage());
+      // System.err.println(e.getMessage());
+      throw new Error(e);
     }
 
   }
