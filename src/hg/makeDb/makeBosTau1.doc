@@ -460,7 +460,7 @@ SEQ2_LEN=$BASE/S2.len
   # check how many lines in j
   sed -e 's@^blastz-run@/cluster/bin/penn/blastz-run@' j > jobList
   para create jobList
-  para try, push check, para push, para check....
+  para try, para check, para push, para check....
 
   # convert out to lav
   ssh kki
@@ -609,6 +609,8 @@ SEQ2_LEN=$BASE/S2.len
     mkdir -p blastz.swap/axtChain
     /cluster/bin/i386/chainSwap blastz/axtChain/all.chain blastz.swap/axtChain/all.chain
 
+    /cluster/bin/i386/hgLoadChain -tIndex bosTau1 chainHg17 all.chain
+
     ssh kolossus
     cd /cluster/data/bosTau1/bed/blastz.swap/axtChain
     /cluster/home/heather/bin/x86_64/chainPreNet all.chain ../../blastz/S2.len ../../blastz/S1.len chainPreNet.out
@@ -626,7 +628,6 @@ SEQ2_LEN=$BASE/S2.len
     /cluster/bin/i386/netClass -noAr noClass.net bosTau1 hg17 hg17.net 
     rm noClass.net (need to do this)
     /cluster/bin/i386/netFilter -minGap=10 hg17.net | /cluster/bin/i386/hgLoadNet bosTau1 netHg17 stdin 
-    /cluster/bin/i386/hgLoadChain -tIndex bosTau1 chainHg17 all.chain
     rm chain.tab link.tab
 
 # GC5BASE - (DONE 2004-10-27 - Hiram)
@@ -916,3 +917,100 @@ chainSome $(path1)
 
     cp -p Bos_taurus.jpg /usr/local/apache/htdocs/images
     #	add links to this image in the description.html page, request push
+
+
+# REPEAT axtChain (DONE Jan. 3rd - Jan. 11, Heather)
+
+    # axtChain
+    ssh kki
+    cd /cluster/data/bosTau1/bed/blastz
+    mv run1 run1-dec15
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chainRaw
+    ls -1S /cluster/data/bosTau1/bed/blastz/axtTemp/*.axt > input.lst
+
+    cat << '_EOF_' > gsub
+    #LOOP
+    doChain {check in exists $(path1)} {check out line+ chainRaw/$(root1).chain} {check out exists out/$(root1).out}
+    #ENDLOOP
+    '_EOF_'
+    # << this line makes emacs coloring happy
+    
+    cat << '_EOF_' > doChain
+    #!/bin/csh
+'_EOF_'
+    axtChain $1 /iscratch/i/hg17/bothMaskedNibs /iscratch/i/bosTau1/nib/bosTau1.2bit $2 > $3
+    
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try
+    para check
+    para push
+
+    # Completed: 46 of 46 jobs
+    # Average job time:                  83s       1.39m     0.02h    0.00d
+    # Longest job:                     1240s      20.67m     0.34h    0.01d
+    # Submission to last job:          1326s      22.10m     0.37h    0.02d
+
+
+    # mergesort
+    ssh kksilo
+    cd /cluster/data/bosTau1/bed/blastz/axtChain
+    /cluster/bin/i386/chainMergeSort run1/chainRaw/*.chain > all.chain.jan3
+
+    # chainAntiRepeat
+    ssh kksilo
+    cd /cluster/data/bosTau1/bed/blastz/axtChain/run1
+    mkdir chainAntiRepeat
+    # test with just one
+    /cluster/bin/i386/chainAntiRepeat /cluster/store5/gs.18/build35/nib /cluster/data/bosTau1/bosTau1.2bit \
+      chainRaw/chr18.chain chainAntiRepeat/chr18.chain
+    # do them all
+    foreach f (chainRaw/*.chain)
+      set f1 = $f:t
+      echo $f1
+        /cluster/bin/i386/chainAntiRepeat /cluster/store5/gs.18/build35/nib /cluster/data/bosTau1/bosTau1.2bit \
+	  $f chainAntiRepeat/$f1
+    end
+
+    # mergesort again
+    ssh kksilo
+    cd /cluster/data/bosTau1/bed/blastz/axtChain
+    /cluster/bin/i386/chainMergeSort run1/chainAntiRepeat/*.chain > all.chain.jan5
+    gzip all.chain.jan3
+
+    # split
+    mv chain chain-nov18
+    /cluster/bin/i386/chainSplit chain all.chain.jan5
+
+    # look at the distribution
+    foreach f (chain/*.chain)
+          grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+	  echo $f:t:r
+	  textHistogram -binSize=5000 /tmp/score.$f:t:r
+	  echo ""
+    end
+    # see files histogram.out and histogram.interesting
+
+    # run chainFilter
+    /cluster/bin/i386/chainFilter -minScore=5000 all.chain.jan5 > all.chain.jan5.filtered
+    gzip all.chain.jan5
+
+    # split
+    rm chain/*
+    /cluster/bin/i386/chainSplit chain all.chain.jan5.filtered
+    gzip all.chain.jan5.filtered
+
+    # load
+    ssh hgwdev
+    # drop the old chrN_chainBosTau1 tables from hg17
+    cd /cluster/data/bosTau1/bed/blastz/axtChain/chain
+    foreach i (*.chain)
+      set c = $i:r
+      echo loading $c
+      /cluster/bin/i386/hgLoadChain hg17 ${c}_chainBosTau1 $i
+    end
+
