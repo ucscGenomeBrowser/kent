@@ -7140,3 +7140,120 @@ BASE=/cluster/data/mm5/bed/blastz.bosTau1.2005-02-19
     # Add chainBosTau1 and netBosTau1 to mm5/trackDb.ra
     # Add /usr/local/apache/htdocs/goldenPath/mm5/vsBosTau1/README.txt
 
+
+# LOAD SNPS (Done; March 3, 2005; Heather)
+
+
+  # directory structure
+  ssh hgwdev
+  cd /cluster/bluearc/snp
+  mkdir mm5.heather
+  cd mm5.heather
+  mkdir det loc seq str xml
+
+  # get data
+  ftp ftp.ncbi.nih.gov
+  cd snp/mouse/XML
+  prompt
+  mget ds_ch*.xml.gz
+
+  # make sure script is current (should add makefile so general build does this)
+  cp -f /cluster/home/heather/kent/src/hg/snp/parseDbSnpXML /cluster/bin/scripts
+
+  # build jobList for parsing
+  touch jobList
+  foreach file ( ds_ch*.xml.gz )
+    set out = $file:t:r
+    echo /cluster/bin/scripts/parseDbSnpXML $file /cluster/bluearc/snp/mm5.heather $out.contig >> jobList
+  end
+
+  # do the parsing
+  ssh kk
+  cd /cluster/bluearc/snp/mm5.heather
+  para create jobList
+  para try
+  para check
+  para push
+
+  # output goes to det, loc, seq, str and xml directories
+
+  # concatenate details
+  ssh hgwdev
+  zcat det/ds_ch*.xml.contig.det.gz > in.bed
+
+  # couldn't find contig-based lift file from mm5
+  # generate from ctgPos
+  echo "select chromStart, chrom, contig, size, chrom from ctgPos;" > ctgPos.sql
+  hgsql mm5 < ctgPos.out > ctgPos.out
+  # edit ctgPos.out to put in proper format -- next time write script for this
+
+  # lift
+  # expect warnings from non-reference assemblies (limited to first 10)
+  liftUp out.bed ctgPos.out warn in.bed
+
+  # load (exception column will be empty for all rows)
+  hgLoadBed mm5 snp out.bed -sqlTable=/cluster/home/heather/kent/src/hg/lib/snp.sql
+
+  # generate exceptions 1-20; drop 7 and 9 as they will be changing
+  cd /usr/local/apache/htdocs/qa/test-results/snpException
+  mkdir mm5
+  cd mm5
+  snpException mm5 0 mm5snpException
+
+  # Invariant 1 has 0 exceptions, written to this file: mm5snpException.01.bed
+  # Invariant 2 has 0 exceptions, written to this file: mm5snpException.02.bed
+  # Invariant 3 has 0 exceptions, written to this file: mm5snpException.03.bed
+  # Invariant 4 has 0 exceptions, written to this file: mm5snpException.04.bed
+  # Invariant 5 has 0 exceptions, written to this file: mm5snpException.05.bed
+  # Invariant 6 has 3 exceptions, written to this file: mm5snpException.06.bed
+  # Invariant 7 has 1 exceptions, written to this file: mm5snpException.07.bed
+  # Invariant 8 has 0 exceptions, written to this file: mm5snpException.08.bed
+  # Invariant 9 has 22 exceptions, written to this file: mm5snpException.09.bed
+  # Invariant 10 has 0 exceptions, written to this file: mm5snpException.10.bed
+  # Invariant 11 has 0 exceptions, written to this file: mm5snpException.11.bed
+  # Invariant 12 has 0 exceptions, written to this file: mm5snpException.12.bed
+  # Invariant 13 has 0 exceptions, written to this file: mm5snpException.13.bed
+  # Invariant 14 has 0 exceptions, written to this file: mm5snpException.14.bed
+  # Invariant 15 has 0 exceptions, written to this file: mm5snpException.15.bed
+  # Invariant 16 has 0 exceptions, written to this file: mm5snpException.16.bed
+  # Invariant 17 has 0 exceptions, written to this file: mm5snpException.17.bed
+  # Invariant 18 has 3634 exceptions, written to this file: mm5snpException.18.bed
+  # Invariant 19 has 0 exceptions, written to this file: mm5snpException.19.bed
+  # Invariant 20 has 0 exceptions, written to this file: mm5snpException.20.bed
+  # Invariant 21 has no query string
+  # Invariant 22 has no query string
+  # Invariant 23 has no query string
+  # Invariant 24 has no query string
+
+  mv mm5snpException.07.bed mm5snpException.07.bed.notused
+  mv mm5snpException.09.bed mm5snpException.09.bed.notused
+
+
+  # snpValid
+  cd /cluster/bluearc/snp/mm5.heather/seq
+  nice snpValid mm5 . > & snpValid.out &
+  tail -20 snpValid.out
+
+  # Grand Totals:
+  # matches: 494545
+  # mismatches: 246 (exceptionId #22)
+  # missing from flanks: 0 (exceptionId #23)
+  # rev compl matches: 56285
+  # not rptd strand : 1 (exceptionId #24)
+  # assembly = -: 0
+  # nib in gap : 0 (must be 0)
+  # Total rows in snp: 494791
+  # no dna found for : 0
+  # Total goodExact: 493886
+  # Total  badExact: 534 (exceptionId #21)
+
+  # copy 21-24 exceptions to location of 1-20
+  cp *bed /usr/local/apache/htdocs/qa/test-results/snpException/mm5
+
+  # add exception data to snp table
+  cp ../build124/updateExceptionList.pl .
+
+  tail +3 mm5snpException.* | awk '/rs/ {printf "%s\t%d\t%d\n",$4,$2,$5}' | sort -k1,2n > exceptionList.txt  
+  updateExceptionList.pl < exceptionList.txt > updateExceptionList.sql
+  hgsql mm5 < updateExceptionList.sql
+
