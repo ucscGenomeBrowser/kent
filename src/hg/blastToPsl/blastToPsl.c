@@ -9,7 +9,7 @@
 #include "blastTab.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: blastToPsl.c,v 1.2 2003/07/29 18:23:31 braney Exp $";
+static char const rcsid[] = "$Id: blastToPsl.c,v 1.3 2003/07/30 21:58:34 braney Exp $";
 
 static int lifted;
 
@@ -168,6 +168,25 @@ memcpy(temp, array, count * sizeof(unsigned));
 for(ii=0; ii < count; ii++)
     array[ii] = temp[count - 1 - ii];
 }
+void pslFix(struct psl *psl)
+{
+int ii, diff;
+
+for(ii=1; ii < psl->blockCount; ii++)
+    {
+    diff = (psl->qStarts[ii-1] + psl->blockSizes[ii-1] ) - psl->qStarts[ii];
+    if (diff > 0)
+	psl->blockSizes[ii - 1] -= diff;
+    }
+/*
+for(ii=1; ii < psl->blockCount; ii++)
+    {
+    diff = (psl->tStarts[ii-1] + 3*psl->blockSizes[ii-1] ) - psl->tStarts[ii];
+    if (diff > 0)
+	psl->blockSizes[ii - 1] -= diff;
+    }
+    */
+}
 
 void makeChains(struct blastTab *patches, struct hash *tHash,struct hash *qHash,  struct psl **pslList) 
 {
@@ -179,6 +198,7 @@ double score = 0.0;
 int tSize, qSize;
 struct hashEl *hel;
 struct sz *sz;
+int count = 0;
 
 if ((hel = hashLookup(tHash, patches->target)) == NULL)
     {
@@ -247,12 +267,13 @@ for(el = patches ;el; el=el->next)
 	psl->qEnd = el->qEnd;
     if (el->qStart < psl->qStart)
 	psl->qStart = el->qStart;
-    psl->qStarts[psl->blockCount] = el->qStart - 1;
-    psl->blockSizes[psl->blockCount] =el->qEnd - (el->qStart - 1);
+    psl->qStarts[psl->blockCount] = el->qStart;
+    psl->blockSizes[psl->blockCount] =el->qEnd - (el->qStart);
+    count += psl->blockSizes[psl->blockCount];
 
     if (negStrand)
 	{
-	psl->tStarts[psl->blockCount] =  tSize - el->tStart;
+	psl->tStarts[psl->blockCount] =  tSize - el->tStart + 1;
 	psl->tEnd = el->tStart;
 	}
     else
@@ -270,8 +291,9 @@ if (negStrand)
     reverse(psl->tStarts, psl->blockCount);
     reverse(psl->blockSizes, psl->blockCount);
     }
-psl->repMatch = (psl->qEnd - psl->qStart)* score * 1000 / qSize ;
+psl->repMatch = count * score * 1000 / qSize ;
 
+pslFix(psl);
 if (psl->blockCount > 200)
     abort();
 slAddHead(pslList, psl);
