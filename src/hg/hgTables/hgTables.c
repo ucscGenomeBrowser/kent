@@ -20,7 +20,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.61 2004/09/11 03:29:36 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.62 2004/09/14 03:57:24 hiram Exp $";
 
 
 void usage()
@@ -937,7 +937,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 htmlPushEarlyHandlers(); /* Make errors legible during initialization. */
-pushCarefulMemHandler(500000000);
+pushCarefulMemHandler(1500000000);  /* enough for wiggle intersects on chr1 */
 cgiSpoof(&argc, argv);
 hgTables();
 return 0;
