@@ -2530,11 +2530,12 @@ return tg;
 
 
 
-struct linkedFeatures *lfFromGenePredInRange(char *table, 
+struct linkedFeatures *connectedLfFromGenePredInRange(
+        struct sqlConnection *conn, char *table, 
 	char *chrom, int start, int end)
-/* Return linked features from range of a gene prediction table. */
+/* Return linked features from range of a gene prediction table after 
+ * we have already connected to database. */
 {
-struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row;
 struct linkedFeatures *lfList = NULL, *lf;
@@ -2572,6 +2573,16 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 slReverse(&lfList);
 sqlFreeResult(&sr);
+return lfList;
+}
+
+struct linkedFeatures *lfFromGenePredInRange(char *table, 
+	char *chrom, int start, int end)
+/* Return linked features from range of a gene prediction table. */
+{
+struct linkedFeatures *lfList = NULL;
+struct sqlConnection *conn = hAllocConn();
+lfList = connectedLfFromGenePredInRange(conn, table, chrom, start, end);
 hFreeConn(&conn);
 return lfList;
 }
@@ -8171,18 +8182,33 @@ void rikenMethods(struct trackGroup *tg)
 tg->loadItems = rikenMrnaLoadItems;
 }
 
-void secretRikenTrack(struct trackGroup **pTrackList)
-/* If not on right host remove Riken track. */
+void ensRikenLoadItems(struct trackGroup *tg)
+/* Load ensRiken genepreds  - have to get them from special secret database. */
+{
+struct sqlConnection *conn = sqlConnect("mgsc");
+tg->items = connectedLfFromGenePredInRange(conn, tg->mapName, chromName,
+					   winStart, winEnd);
+sqlDisconnect(&conn);
+}
+
+void ensRikenMethods(struct trackGroup *tg)
+/* Load up ensRiken specific methods. */
+{
+tg->loadItems = ensRikenLoadItems;
+}
+
+void secretRikenTracks(struct trackGroup **pTrackList)
+/* If not on right host remove Riken tracks. */
 {
 if (!hIsMgscHost())
     {
     struct trackGroup *tg;
     for (tg = *pTrackList; tg != NULL; tg = tg->next)
         {
-	if (sameString(tg->mapName, "rikenMrna"))
+	  if (sameString(tg->mapName, "rikenMrna") ||
+	      sameString(tg->mapName, "ensRiken"))
 	     {
 	     slRemoveEl(pTrackList, tg);
-	     break;
 	     }
 	}
     }
@@ -8636,12 +8662,13 @@ registerTrackHandler("mgcNcbiSplicedPicks", intronEstMethods);
 registerTrackHandler("mgcUcscPicks", intronEstMethods);
 registerTrackHandler("affyTranscriptome", affyTranscriptomeMethods);
 registerTrackHandler("rikenMrna", rikenMethods);
+registerTrackHandler("ensRiken", ensRikenMethods);
 
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
 loadFromTrackDb(&tGroupList);
-secretRikenTrack(&tGroupList);
+secretRikenTracks(&tGroupList);
 if (userSeqString != NULL) slSafeAddHead(&tGroupList, userPslTg());
 loadCustomTracks(&tGroupList);
 
