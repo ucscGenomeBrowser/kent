@@ -243,7 +243,7 @@ type chain seq
 
 track netRxBestPt0
 shortLabel Chimp Net
-longLabel Chimp (Nov 03) Reciprocal Best Net (Colored by Scaffold)
+longLabel Chimp (panTro1-Nov 03) Reciprocal Best Net (Colored by Scaffold)
 group compGeno
 priority 145.7
 visibility dense
@@ -252,7 +252,7 @@ type netAlign seq chainPt0
 
 track chimpDels
 shortLabel Chimp Deletions
-longLabel Deletions in Chimp (pt0) Relative to Human
+longLabel Deletions in Chimp (panTro1-Nov 03) Relative to Human
 group compGeno
 priority 147.4
 visibility hide
