@@ -2327,3 +2327,15 @@ o - Load refFull alignments into database
       cd /cluster/store1/gs.13/build30/bed/refFull
       pslCat -dir chrom > refFullAli.psl
       hgLoadPsl hg12 -tNameIx refFullAli.psl
+
+LOAD SLAM GENES 
+     ln -s /cluster/store1/gs.13/build30/ ~/oo
+     cd ~/oo/bed
+     mkdir slam
+     cd slam
+     wget http://bio.math.berkeley.edu/slam/mouse/gff/hsCDS.gff.gz
+     wget http://baboon.math.berkeley.edu/~scawley/hsCDS.bed.gz
+     gunzip *
+     - make sure there are no plus signs the gff files it will break the browser.
+     ldHgGene hg12 slam hsCDS.gff
+     hgLoadBed hg12 slamNonCoding hsCDS.bed
