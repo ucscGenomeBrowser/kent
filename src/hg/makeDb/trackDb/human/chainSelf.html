@@ -5,9 +5,12 @@ a gap scoring system that allows longer gaps than traditional
 affine gap scoring systems. The system can also tolerate gaps
 in both sets of sequence simultaneously.  After 
 filtering out the &quot;trivial&quot; alignments produced when
-identical locations of the genome map to one another (e.g. chr22 maps to 
+identical locations of the genome map to one another (e.g. chr22 mapping to 
 chr22), the remaining alignments point out areas of duplication within the 
-$organism genome.
+$organism genome. The pseudoautosomal regions of chrX and chrY are an exception: 
+in this assembly, these regions have been copied from chrX into chrY, 
+resulting in a large amount of self chains aligning in these positions on both 
+chromosomes. 
 <P>
 The chain track displays boxes joined together by either single or
 double lines. The boxes represent aligning regions. 
