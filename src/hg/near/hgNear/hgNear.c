@@ -1,4 +1,4 @@
-/* hgNear - gene family browser. */
+/* hgNear - gene sorter. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -20,7 +20,7 @@
 #include "hgNear.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.147 2004/04/26 17:20:49 galt Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.148 2004/05/25 18:00:43 donnak Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1006,11 +1006,11 @@ col->advFilter = floatAdvFilter;
 
 static void makeGenomeAssemblyControls()
 /* Query database to figure out which ones
- * support neighborhood browser. */
+ * support gene sorter. */
 {
-/* Make up a list of genome that have a family
- * browser, and a list of assemblies that have a
- * family browser for the current genome. */
+/* Make up a list of genome that have a gene
+ * sorter, and a list of assemblies that have a
+ * gene sorter for the current genome. */
 struct slRef *as, *asList = NULL;
 struct slRef *org, *orgList = NULL;
 struct dbDb *db, *dbList = hGetIndexedDatabases();
@@ -1592,11 +1592,11 @@ hPrintf("</PRE></TT>");
 void doMainDisplay(struct sqlConnection *conn, 
 	struct order *ord, struct order *ordList,
 	struct column *colList, struct genePos *geneList)
-/* Put up the main family browser display - a control panel followed by 
+/* Put up the main gene sorter display - a control panel followed by 
  * a big table. */
 {
 char buf[128];
-safef(buf, sizeof(buf), "UCSC %s Gene Family Browser", genome);
+safef(buf, sizeof(buf), "UCSC %s Gene Sorter", genome);
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" NAME=\"mainForm\" METHOD=GET>\n");
 makeTitle(buf, "hgNearHelp.html");
 cartSaveSession(cart);
@@ -1913,7 +1913,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "hgNear - gene family browser - a cgi script\n"
+  "hgNear - gene sorter - a cgi script\n"
   "usage:\n"
   "   hgNear\n"
   );
@@ -1927,6 +1927,6 @@ cgiSpoof(&argc, argv);
 htmlSetStyle(htmlStyleUndecoratedLink);
 htmlSetBgColor(HG_CL_OUTSIDE);
 oldCart = hashNew(10);
-cartHtmlShell("Gene Family v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldCart);
+cartHtmlShell("Gene Sorter v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldCart);
 return 0;
 }

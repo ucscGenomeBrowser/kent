@@ -11,7 +11,7 @@
 #include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.22 2004/04/15 07:29:50 kent Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.23 2004/05/25 18:00:43 donnak Exp $";
 
 struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -256,7 +256,7 @@ int onOff = 0;
 boolean anyForSecondPass = FALSE;
 struct userSettings *us = filUserSettings();
 
-makeTitle("Gene Family Filter", "hgNearHelp.html#Filter");
+makeTitle("Gene Sorter Filter", "hgNearHelp.html#Filter");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST>\n");
 cartSaveSession(cart);
 
