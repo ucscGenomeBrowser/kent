@@ -1,5 +1,6 @@
 /* hgc - Human Genome Click processor - gets called when user clicks
  * on something in human tracks display. */
+
 #include "common.h"
 #include "hCommon.h"
 #include "hash.h"
@@ -92,16 +93,17 @@
 #include "hgSeq.h"
 #include "chain.h"
 #include "netAlign.h"
+#include "hgc.h"
 
-char mousedb[] = "mm1";
 
 struct cart *cart;	/* User's settings. */
-
 char *seqName;		/* Name of sequence we're working on. */
 int winStart, winEnd;   /* Bounds of sequence. */
 char *database;		/* Name of mySQL database. */
 
 char *protDbName;	/* Name of proteome database */
+
+char mousedb[] = "mm1";
 
 /* JavaScript to automatically submit the form when certain values are
  * changed. */
@@ -128,63 +130,63 @@ char *genMapDbScript = "http://genomics.med.upenn.edu/cgi-bin/genmapdb/byclonese
 /* initialized by getCtList() if necessary: */
 struct customTrack *theCtList = NULL;
 
-static void hgcStart(char *title)
+void hgcStart(char *title)
 /* Print out header of web page with title.  Set
  * error handler to normal html error handler. */
 {
 cartHtmlStart(title);
 }
 
-double whichNum( double tmp, double min0, double max0, int n)
+static double whichNum( double tmp, double min0, double max0, int n)
 /*gets range nums. from bin values*/
 {
 return( (max0 - min0)/(double)n * tmp + min0 );
 }
 
 
-void printEntrezNucleotideUrl(FILE *f, char *accession)
+static void printEntrezNucleotideUrl(FILE *f, char *accession)
 /* Print URL for Entrez browser on a nucleotide. */
 {
 fprintf(f, "\"%s&db=n&term=%s\"", entrezScript, accession);
 }
 
-void printEntrezProteinUrl(FILE *f, char *accession)
+static void printEntrezProteinUrl(FILE *f, char *accession)
 /* Print URL for Entrez browser on a nucleotide. */
 {
 fprintf(f, "\"%s&db=p&term=%s\"", entrezScript, accession);
 }
 
-void printSwissProtProteinUrl(FILE *f, char *accession)
+static void printSwissProtProteinUrl(FILE *f, char *accession)
 /* Print URL for Entrez browser on a nucleotide. */
 {
 fprintf(f, "\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\"", accession);
 }
 
-void printEntrezUniSTSUrl(FILE *f, char *name)
+static void printEntrezUniSTSUrl(FILE *f, char *name)
 /* Print URL for Entrez browser on a STS name. */
 {
 fprintf(f, "\"%s&term=%s\"", unistsnameScript, name);
 }
 
-void printUnistsUrl(FILE *f, int id)
+static void printUnistsUrl(FILE *f, int id)
 /* Print URL for UniSTS record for an id. */
 {
 fprintf(f, "\"%s%d\"", unistsScript, id);
 }
 
-void printGdbUrl(FILE *f, char *id)
+static void printGdbUrl(FILE *f, char *id)
 /* Print URL for GDB browser for an id */
 {
 fprintf(f, "\"%s%s\"", gdbScript, id);
 }
 
-void printCloneRegUrl(FILE *f, char *clone)
+static void printCloneRegUrl(FILE *f, char *clone)
 /* Print URL for Clone Registry at NCBI for a clone */
 {
 fprintf(f, "\"%s%s\"", cloneRegScript, clone);
 }
 
-void printGenMapDbUrl(FILE *f, char *clone)
+static void printGenMapDbUrl(FILE *f, char *clone)
 /* Print URL for GenMapDb at UPenn for a clone */
 {
 fprintf(f, "\"%s%s\"", genMapDbScript, clone);
@@ -209,7 +211,8 @@ return dy->string;
 }
 
 void hgcAnchorSomewhere(char *group, char *item, char *other, char *chrom)
-/* Generate an anchor that calls click processing program with item and other parameters. */
+/* Generate an anchor that calls click processing program with item 
+ * and other parameters. */
 {
 char *tbl = cgiUsualString("table", cgiString("g"));
 printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&table=%s\">",
@@ -221,10 +224,11 @@ void hgcAnchorWindow(char *group, char *item, int thisWinStart,
         int thisWinEnd, char *other, char *chrom)
 /* Generate an anchor that calls click processing program with item
  * and other parameters, INCLUDING the ability to specify left and
- * rigmt window positions different from the current window*/
+ * right window positions different from the current window*/
 {
 printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s\">",
-	hgcPathAndSettings(), group, item, chrom, thisWinStart, thisWinEnd, other);
+	hgcPathAndSettings(), group, item, chrom, 
+	thisWinStart, thisWinEnd, other);
 }
 
 
@@ -243,15 +247,18 @@ printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&db2=%s&xyzzy=xyzzy#%s\">",
 dbDbFreeList(&dbList);
 }
 
-void hgcAnchorSomewhereDb(char *group, char *item, char *other, char *chrom, char *db)
-/* Generate an anchor that calls click processing program with item and other parameters. */
+void hgcAnchorSomewhereDb(char *group, char *item, char *other, 
+	char *chrom, char *db)
+/* Generate an anchor that calls click processing program with item 
+ * and other parameters. */
 {
 printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&db=%s\">",
 	hgcPathAndSettings(), group, item, chrom, winStart, winEnd, other, db);
 }
 
 void hgcAnchor(char *group, char *item, char *other)
-/* Generate an anchor that calls click processing program with item and other parameters. */
+/* Generate an anchor that calls click processing program with item 
+ * and other parameters. */
 {
 hgcAnchorSomewhere(group, item, other, seqName);
 }
@@ -268,7 +275,6 @@ if (*pEnd > chromSize) *pEnd = chromSize;
 return *pStart < *pEnd;
 }
 
-
 void printCappedSequence(int start, int end, int extra)
 /* Print DNA from start to end including extra at either end.
  * Capitalize bits from start to end. */
@@ -283,8 +289,9 @@ s = start - extra;
 e = end + extra;
 clipToChrom(&s, &e);
 
-printf("<P>Here is the sequence around this feature: bases %d to %d of %s.  The bases "
-       "that contain the feature itself are in upper case.</P>\n", s, e, seqName);
+printf("<P>Here is the sequence around this feature: bases %d to %d of %s. "
+       "The bases that contain the feature itself are in upper case.</P>\n", 
+       s, e, seqName);
 seq = hDnaFromSeq(seqName, s, e, dnaLower);
 toUpperN(seq->dna + (start-s), end - start);
 printf("<PRE><TT>");
@@ -353,14 +360,12 @@ void genericHeader(struct trackDb *tdb, char *item)
 /* Put up generic track info. */
 {
 char buf[256];
-/* sprintf(buf, "%s (%s)", tdb->shortLabel, item);
-   hgcStart(buf);
-   printf("<H2>%s (%s)</H2>\n", tdb->longLabel, item);*/
 sprintf(buf, "%s (%s)\n", tdb->longLabel, item);
 cartWebStart(cart, buf);
 }
 
-struct dyString *subMulti(char *orig, int subCount, char *in[], char *out[])
+static struct dyString *subMulti(char *orig, int subCount, 
+	char *in[], char *out[])
 /* Perform multiple substitions on orig. */
 {
 int i;
@@ -553,23 +558,24 @@ switch (class)
 
 void startColor(FILE *f, int color, int track)
 {
-//if (prevColor != color)
-    fprintf(f,"</FONT><FONT COLOR=\"%06X\">",color);
+fprintf(f,"</FONT><FONT COLOR=\"%06X\">",color);
 currentColor[track] = color;
 }
+
 void startColorStr(struct dyString *dy, int color, int track)
 {
 currentColor[track] = color;
 if (prevColor[track] != currentColor[track])
     dyStringPrintf(dy,"</FONT><FONT COLOR=\"%06X\">",color);
 }
+
 void stopColor(FILE *f, int track)
 {
 prevColor[track] = currentColor[track];
 }
+
 void stopColorStr(struct dyString *dy, int track)
 {
-//if (prevColor != currentColor)
 prevColor[track] = currentColor[track];
 }
 
@@ -577,10 +583,12 @@ void endLine(FILE *f)
 {
     fprintf(f,"</FONT>");
 }
+
 void endLineStr(struct dyString *dy)
 {
     dyStringPrintf(dy,"</FONT>");
 }
+
 void setClass(FILE *f, int class, int track)
 {
 startColor(f,setAttributeColor(class),track);
@@ -592,6 +600,7 @@ void addTag(struct dyString *dy, struct dyString *tag)
 {
     dyStringPrintf(dy,"<A name=%s></a>",tag->string);
 }
+
 void setClassStr(struct dyString *dy, int class, int track)
 {
 if (class == STARTCODON)
@@ -609,7 +618,8 @@ void resetClassStr(struct dyString *dy, int track)
     stopColorStr(dy,track);
 }
 
-void axtOneGeneOut(struct axt *axtList, int lineSize, FILE *f, struct genePred *gp)
+void axtOneGeneOut(struct axt *axtList, int lineSize, 
+	FILE *f, struct genePred *gp)
 /* Output axt and orf in pretty format. */
 {
 struct axt *axt;
@@ -1232,8 +1242,9 @@ if (hTableExists("axtInfo"))
 printf("</UL>\n");
 }
 
-void geneShowPosAndLinksMouse(char *geneName, char *pepName, struct trackDb *tdb, 
-	char *pepTable, struct sqlConnection *connMm, char *pepClick, 
+void geneShowPosAndLinksMouse(char *geneName, char *pepName, 
+	struct trackDb *tdb, char *pepTable, 
+	struct sqlConnection *connMm, char *pepClick, 
 	char *mrnaClick, char *genomicClick, char *mrnaDescription)
 /* Show parts of gene common to everything */
 {
@@ -1253,6 +1264,7 @@ hgcAnchorSomewhereDb(genomicClick, geneName, geneTable, seqName, mousedb);
 printf("<LI>Genomic Sequence</A> DNA sequence from assembly\n");
 printf("</UL>\n");
 }
+
 void geneShowCommon(char *geneName, struct trackDb *tdb, char *pepTable)
 /* Show parts of gene common to everything */
 {
@@ -1260,8 +1272,8 @@ geneShowPosAndLinks(geneName, geneName, tdb, pepTable, "htcTranslatedProtein",
 	"htcGeneMrna", "htcGeneInGenome", "Predicted mRNA");
 }
 
-
-void geneShowMouse(char *geneName, struct trackDb *tdb, char *pepTable, struct sqlConnection *connMm)
+void geneShowMouse(char *geneName, struct trackDb *tdb, char *pepTable,
+	struct sqlConnection *connMm)
 /* Show parts of gene common to everything */
 {
 geneShowPosAndLinksMouse(geneName, geneName, tdb, pepTable, connMm, "htcTranslatedProtein",
@@ -2332,59 +2344,46 @@ char *seqid, *fantomid, *cloneid, *modified_time, *accession, *comment;
 char *qualifier, *anntext, *datasrc, *srckey, *href, *evidence;   
 
 accession = acc;
+snprintf(qry, sizeof(qry), 
+	"select seqid from rikenaltid where altid='%s';", accession);
+sr = sqlMustGetResult(conn, qry);
+row = sqlNextRow(sr);
 
-	//!! uncomment the following line, if you want to test Riken annotation 
-	// before the new genbank data get loaded into the mouse genome database.  
-	//    Fan 3/28/02
-	accession = strdup("AK002809");
+if (row != NULL)
+    {
+    seqid=strdup(row[0]);
 
-	snprintf(qry, sizeof(qry), "select seqid from rikenaltid where altid='%s';", accession);
-	sr = sqlMustGetResult(conn, qry);
-	row = sqlNextRow(sr);
+    snprintf(qry, sizeof(qry), 
+    	"select Qualifier, Anntext, Datasrc, Srckey, Href, Evidence "
+	"from rikenann where seqid='%s';", seqid);
 
-	if (row != NULL)
-		{
-		seqid=strdup(row[0]);
+    sqlFreeResult(&sr);
+    sr = sqlMustGetResult(conn, qry);
+    row = sqlNextRow(sr);
 
-		snprintf(qry, sizeof(qry), "select Qualifier, Anntext, Datasrc, Srckey, Href, Evidence from rikenann where seqid='%s';", seqid);
+    while (row !=NULL)
+	{
+	qualifier = row[0];
+	anntext   = row[1];
+	datasrc   = row[2];
+	srckey    = row[3];
+	href      = row[4];
+	evidence  = row[5];
+	row = sqlNextRow(sr);		
+	}
 
-		sqlFreeResult(&sr);
-		sr = sqlMustGetResult(conn, qry);
-		row = sqlNextRow(sr);
-	
-		while (row !=NULL)
-			{
-			qualifier = row[0];
-			anntext   = row[1];
-			datasrc   = row[2];
-			srckey    = row[3];
-			href      = row[4];
-			evidence  = row[5];
-	
-	  //                    printf("<h4>%s</h4>\n", href);
-			      
-	//		printf("<B>Riken/%s link:</B> ",datasrc);
-	        	
-			//printf("<h2>%s</h2>\n", href);
-//!			printf("<A HREF=\"%s\">", href);	
-//!	  printf("x");
-	  //      	printf("%s",anntext);
-//!			printf("</A><BR>\n");
+    snprintf(qry, sizeof(qry), 
+    	"select comment from rikenseq where id='%s';", seqid);
+    sqlFreeResult(&sr);
+    sr = sqlMustGetResult(conn, qry);
+    row = sqlNextRow(sr);
 
-			row = sqlNextRow(sr);		
-			}
-	
-		snprintf(qry, sizeof(qry), "select comment from rikenseq where id='%s';", seqid);
-		sqlFreeResult(&sr);
-		sr = sqlMustGetResult(conn, qry);
-		row = sqlNextRow(sr);
-
-		if (row != NULL)
-	        	{
-			comment = row[0];
-			printf("<B>Riken/comment:</B> %s<BR>\n",comment);
-			}
-		}  
+    if (row != NULL)
+	{
+	comment = row[0];
+	printf("<B>Riken/comment:</B> %s<BR>\n",comment);
+	}
+    }  
 }
 
 void printStanSource(char *acc, char *type)
@@ -2540,39 +2539,6 @@ hgFreeConn(&conn);
 }
 
 
-void printEstPairInfo(char *track, char *name)
-/* print information about 5' - 3' EST pairs */
-{
-struct sqlConnection *conn = hgAllocConn();
-struct sqlResult *sr;
-char query[256]; 
-char **row;
-struct estPair *ep = NULL;
-
-sprintf(query, "select * from %s where mrnaClone='%s'", track, name);
-sr = sqlGetResult(conn, query);
- if((row = sqlNextRow(sr)) != NULL)
-   {
-     ep = estPairLoad(row);
-     printf("<H2>Information on 5' - 3' EST pair from the clone %s </H2>\n\n", name);
-     printf("<B>chromosome:</B> %s<BR>\n", ep->chrom); 
-     printf("<B>Start position in chromosome :</B> %u<BR>\n", ep->chromStart); 
-     printf("<B>End position in chromosome :</B> %u<BR>\n", ep->chromEnd);
-     printf("<B>5' accession:</B> <A HREF=\"../cgi-bin/hgc?o=%u&t=%u&g=est&i=%s&c=%s&l=%d&r=%d&db=%s\"> %s</A><BR>\n", ep->start5, ep->end5, ep->acc5, ep->chrom, winStart, winEnd, database, ep->acc5); 
-     printf("<B>Start position of 5' est in chromosome :</B> %u<BR>\n", ep->start5); 
-     printf("<B>End position of 5' est in chromosome :</B> %u<BR>\n", ep->end5); 
-     printf("<B>3' accession:</B> <A HREF=\"../cgi-bin/hgc?o=%u&t=%u&g=est&i=%s&c=%s&l=%d&r=%d&db=%s\"> %s</A><BR>\n", ep->start3, ep->end3, ep->acc3, ep->chrom, winStart, winEnd, database, ep->acc3);  
-     printf("<B>Start position of 3' est in chromosome :</B> %u<BR>\n", ep->start3); 
-     printf("<B>End position of 3' est in chromosome :</B> %u<BR>\n", ep->end3);
-   }
- else
-   {
-     warn("Couldn't find %s in mrna table", name);
-   }   
-sqlFreeResult(&sr);
-hgFreeConn(&conn);
-}
-
 void printAlignments(struct psl *pslList, 
 	int startFirst, char *hgcCommand, char *typeName, char *itemIn)
 /* Print list of mRNA alignments. */
@@ -2608,13 +2574,6 @@ for (same = 1; same >= 0; same -= 1)
 printf("</TT></PRE>");
 }
 
-
-void doHgEstPair(char *track, char *name)
-/* Click on EST pair */
-{
-cartWebStart(cart, name);
-printEstPairInfo(track, name);
-}
 
 void doHgRna(struct trackDb *tdb, char *acc)
 /* Click on an individual RNA. */
@@ -7931,8 +7890,9 @@ printf("</table>\n");
 freez(&header);
 }
 
-void msBedPrintTableHeader(struct bed *bedList, struct hash *erHash, char *itemName, 
-			    char **headerNames, int headerCount, char *scoresHeader)
+void msBedPrintTableHeader(struct bed *bedList, 
+	struct hash *erHash, char *itemName, 
+	char **headerNames, int headerCount, char *scoresHeader)
 /* print out a bed with multiple scores header for a table.
    headerNames contain titles of columns up to the scores columns. scoresHeader
    is a single string that will span as many columns as there are beds.*/
@@ -7956,7 +7916,8 @@ for(bed = bedList; bed != NULL; bed = bed->next)
 printf("</tr>\n");
 }
 
-void msBedDefaultPrintHeader(struct bed *bedList, struct hash *erHash, char *itemName)
+void msBedDefaultPrintHeader(struct bed *bedList, struct hash *erHash, 
+	char *itemName)
 /* print out a header with names for each bed with itemName highlighted */
 {
 char *headerNames[] = {"Experiment"};
@@ -7964,7 +7925,8 @@ char *scoresHeader = "Item Name";
 msBedPrintTableHeader(bedList, erHash, itemName, headerNames, ArraySize(headerNames), scoresHeader);
 }
 
-void rosettaPrintHeader(struct bed *bedList, struct hash *erHash, char *itemName)
+void rosettaPrintHeader(struct bed *bedList, 
+	struct hash *erHash, char *itemName)
 /* print out the header for the rosetta details table */
 {
 char *headerNames[] = {"&nbsp", "Hybridization"};
@@ -7972,7 +7934,8 @@ char *scoresHeader = "Exon Number";
 msBedPrintTableHeader(bedList, erHash, itemName, headerNames, ArraySize(headerNames), scoresHeader);
 }
 
-void cghNci60PrintHeader(struct bed *bedList, struct hash *erHash, char *itemName)
+void cghNci60PrintHeader(struct bed *bedList, 
+	struct hash *erHash, char *itemName)
 /* print out the header for the CGH NCI 60 details table */
 {
 char *headerNames[] = {"Cell Line", "Tissue"};
@@ -8041,7 +8004,8 @@ printf("</tr></table>\n");
 printf("</td></tr></table>\n");
 }
 
-void msBedExpressionPrintRow(struct bed *bedList, struct hash *erHash, int expIndex, char *expName, float maxScore)
+void msBedExpressionPrintRow(struct bed *bedList, struct hash *erHash, 
+	int expIndex, char *expName, float maxScore)
 /* print the name of the experiment and color the 
    background of individual cells using the score to 
    create false two color display */
@@ -8097,11 +8061,11 @@ printf("</tr>\n");
 
 
 void msBedPrintTable(struct bed *bedList, struct hash *erHash, char *itemName, 
-		     char *expName, float minScore, float maxScore, float stepSize,
-		     void(*printHeader)(struct bed *bedList, struct hash *erHash, char *item),
-		     void(*printRow)(struct bed *bedList,struct hash *erHash, int expIndex, char *expName, float maxScore),
-		     void(*printKey)(float minVal, float maxVal, float size, struct rgbColor(*getColor)(float val, float max)),
-		     struct rgbColor(*getColor)(float val, float max))
+     char *expName, float minScore, float maxScore, float stepSize,
+     void(*printHeader)(struct bed *bedList, struct hash *erHash, char *item),
+     void(*printRow)(struct bed *bedList,struct hash *erHash, int expIndex, char *expName, float maxScore),
+     void(*printKey)(float minVal, float maxVal, float size, struct rgbColor(*getColor)(float val, float max)),
+     struct rgbColor(*getColor)(float val, float max))
 /* prints out a table from the data present in the bedList */
 {
 int i,featureCount=0, currnetRow=0, square=10;
@@ -9730,10 +9694,6 @@ else if (sameWord(track, "refFullAli"))
 else if (sameWord(track, "rikenMrna"))
     {
     doRikenRna(tdb, item);
-    }
-else if (sameWord(track, "estPair"))
-    {
-    doHgEstPair(track, item);
     }
 else if (sameWord(track, "ctgPos"))
     {
