@@ -151,9 +151,13 @@ int ffIntronOrientation(struct ffAli *ali);
 
 /************* Functions other alignment modules might use ****************/
 
-void ffSlideIntrons(struct ffAli *ali);
+boolean ffSlideIntrons(struct ffAli *ali);
 /* Slide introns (or spaces between aligned blocks)
- * to match consensus. */
+ * to match consensus.  Return TRUE if any slid. */
+
+boolean ffSlideOrientedIntrons(struct ffAli *ali, int orient);
+/* Slide introns (or spaces between aligned blocks)
+ * to match consensus on given strand (usually from ffIntronOrientation). */
 
 struct ffAli *ffTrimFlakyEnds(struct ffAli *ali, int minMatchSize, 
 	boolean freeFlakes);

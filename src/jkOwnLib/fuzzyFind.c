@@ -1891,22 +1891,30 @@ right->hStart += offset;
 return offset;
 }
 
-
-void ffSlideIntrons(struct ffAli *ali)
+boolean ffSlideOrientedIntrons(struct ffAli *ali, int orient)
 /* Slide introns (or spaces between aligned blocks)
- * to match consensus. */
+ * to match consensus on given strand. */
 {
 struct ffAli *left = ali, *right;
-int slid;
-boolean orient = ffIntronOrientation(ali);
-
+boolean slid = FALSE;
 if (left == NULL)
-    return;
+    return FALSE;
 while((right = left->right) != NULL)
     {
-    slid = slideIntron(left, right, orient);
+    if (slideIntron(left, right, orient))
+        slid = TRUE;
     left = right;
     }
+return slid;
+}
+
+
+boolean ffSlideIntrons(struct ffAli *ali)
+/* Slide introns (or spaces between aligned blocks)
+ * to match consensus.  Return TRUE if any slid. */
+{
+int orient = ffIntronOrientation(ali);
+return ffSlideOrientedIntrons(ali, orient);
 }
 
 static struct ffAli *findBestAli(DNA *ns, DNA *ne, DNA *hs, DNA *he, enum ffStringency stringency)

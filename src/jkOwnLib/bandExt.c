@@ -21,7 +21,7 @@ enum parentPos
    ppLeft,	/* Parent is left in graph (corresponds to insert) */
    };
 
-boolean bandExt(struct axtScoreScheme *ss, int maxInsert,
+boolean bandExt(boolean global, struct axtScoreScheme *ss, int maxInsert,
 	char *aStart, int aSize, char *bStart, int bSize, int dir,
 	int symAlloc, int *retSymCount, char *retSymA, char *retSymB, 
 	int *retStartA, int *retStartB)
@@ -191,7 +191,8 @@ for (aPos=0; aPos < aSize; ++aPos)
 	}
     else if (bestColScore < maxDrop)
 	{
-	break;
+	if (!global)
+	    break;
 	}
     else
 	{
@@ -211,11 +212,19 @@ for (aPos=0; aPos < aSize; ++aPos)
 
 
 /* Trace back. */
-if (bestScore > 0)
+if (global || bestScore > 0)
     {
     didExt = TRUE;
-    aPos = aBestPos;
-    bPos = bBestPos;
+    if (global)
+        {
+	aPos = aSize-1;
+	bPos = bSize-1;
+	}
+    else
+	{
+	aPos = aBestPos;
+	bPos = bBestPos;
+	}
     for (;;)
 	{
 	int pOffset = bPos - bOffsets[aPos] + maxInsert;
@@ -387,7 +396,7 @@ else
     hs = origFf->hStart - hSize;
     }
 
-gotExt = bandExt(ss, maxInsert, ns, nSize, hs, hSize, dir,
+gotExt = bandExt(FALSE, ss, maxInsert, ns, nSize, hs, hSize, dir,
 	symAlloc, &symCount, nBuf, hBuf, &nExt, &hExt);
 if (gotExt)
     {
@@ -424,7 +433,7 @@ boolean gotExt;
 
 printf("%s %s %d\n", aFile, aSeq->name, aSeq->size);
 printf("%s %s %d\n", bFile, bSeq->name, bSeq->size);
-gotExt = bandExt(ss, clMaxInsert, aSeq->dna, aSeq->size, bSeq->dna, bSeq->size, clDir,
+gotExt = bandExt(FALSE, ss, clMaxInsert, aSeq->dna, aSeq->size, bSeq->dna, bSeq->size, clDir,
 	symAlloc, &symCount, aSym, bSym, &aExt, &bExt);
 printf("%sextended to %d %d\n", (gotExt ? "" : "not "), aExt, bExt);
 if (gotExt)
