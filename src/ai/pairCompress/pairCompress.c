@@ -15,15 +15,18 @@ errAbort(
   "pairCompress - Pairwise compresser - similar to lz in some ways, "
   "but adds new symbol rather than new letter at each stage\n"
   "usage:\n"
-  "   pairCompress input\n"
+  "   pairCompress input out.stream out.symbols\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -binary=out.bin\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"binary", OPTION_STRING},
    {NULL, 0},
 };
+
+FILE *binaryFile = NULL;
 
 struct nHashEl
 /* An element in a nHash list. */
@@ -194,6 +197,72 @@ if (sym != NULL)
     }
 }
 
+static int maxSym = 0x200;
+static int curSym = 0xFF;
+static int symBitCount = 9;
+static bits32 bitBuf = 0;
+static int bufBitSize = 32;
+static int bitsLeftInBuf = 32;
+
+static bits32 rMask[] = {
+	0x1, 0x3, 0x7, 0xF, 0x1F, 0x3F, 0x7F, 0xFF,
+	0x1FF, 0x3FF, 0x7FF, 0xFFF, 0x1FFF, 0x3FFF, 0x7FFF, 0xFFFF,
+	0x1FFFF, 0x3FFFF, 0x7FFFF, 0xFFFFF, 0x1FFFFF, 0x3FFFFF, 0x7FFFFF, 0xFFFFFF,
+	0x1FFFFFF, 0x3FFFFFF, 0x7FFFFFF, 0xFFFFFFF, 0x1FFFFFFF, 0x3FFFFFFF, 0x7FFFFFFF, 0xFFFFFFFF,
+	};
+
+void outBinary(int sym)
+/* Output to binary file. */
+{
+if (++curSym >= maxSym)
+    {
+    symBitCount += 1;
+    maxSym <<= 1;
+    }
+if (bitsLeftInBuf >=  symBitCount)
+    {
+    bitBuf <<= symBitCount;
+    bitBuf |= sym;
+    bitsLeftInBuf -= symBitCount;
+    if (bitsLeftInBuf == 0)
+	{
+	writeOne(binaryFile, bitBuf);
+	bitsLeftInBuf = bufBitSize;
+	}
+    }
+else
+    {
+    int bitsLeftInSym = symBitCount - bitsLeftInBuf;
+    bitBuf <<= bitsLeftInBuf;
+    bitBuf |= (sym >> bitsLeftInSym);
+    writeOne(binaryFile, bitBuf);
+    bitBuf = (sym & rMask[bitsLeftInSym]);
+    bitsLeftInBuf = bufBitSize - bitsLeftInSym;
+    }
+}
+
+void outFinalBits()
+/* Write out last bit. */
+{
+int bitsInBuf = bufBitSize - bitsLeftInBuf;
+if (bitsInBuf != 0)
+    {
+    bitBuf <<= bitsLeftInBuf;
+    writeOne(binaryFile, bitBuf);
+    }
+}
+
+void testBinaryOutput()
+{
+int i;
+for (i=0; i<256; ++i)
+    outBinary(i);
+outFinalBits();
+errAbort("All for now");
+}
+
+
+
 void output(FILE *f, struct compSym *cur, struct compSym *baby)
 /* Output to compression stream. */
 {
@@ -201,6 +270,8 @@ outSym(f, cur);
 fprintf(f, "\t");
 outSym(f, baby);
 fprintf(f, "\n");
+if (binaryFile)
+    outBinary(cur->id);
 }
 
 void pairCompress(char *inText, int inSize, char *streamOut, char *symOut)
@@ -248,6 +319,11 @@ for (sym = symList; sym != NULL; sym = sym->next)
     fprintf(f, "\n");
     }
 carefulClose(&f);
+if (binaryFile)
+    {
+    outFinalBits();
+    carefulClose(&binaryFile);
+    }
 }
 
 void readAndCompress(char *inFile, char *outStream, char *outSym)
@@ -266,6 +342,10 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
+if (optionExists("binary"))
+    {
+    binaryFile = mustOpen(optionVal("binary", NULL), "w");
+    }
 readAndCompress(argv[1], argv[2], argv[3]);
 return 0;
 }
