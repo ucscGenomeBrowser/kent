@@ -89,7 +89,13 @@ int chainCmpScore(const void *va, const void *vb)
 {
 const struct chain *a = *((struct chain **)va);
 const struct chain *b = *((struct chain **)vb);
-return b->score - a->score;
+double diff = b->score - a->score;
+if (diff < 0)
+   return -1;
+else if (diff > 0)
+   return 1;
+else
+   return 0;
 }
 
 static int medianVal(struct dlList *list, int medianIx, int dim)
@@ -326,11 +332,11 @@ for (leaf = leafList; leaf != NULL; leaf = leaf->next)
     }
 }
 
-static int scoreBlocks(struct boxIn *blockList, ConnectCost connectCost)
+static double scoreBlocks(struct boxIn *blockList, ConnectCost connectCost)
 /* Score list of blocks including gaps between blocks. */
 {
 struct boxIn *block, *lastBlock = NULL;
-int score = 0;
+double score = 0;
 for (block = blockList; block != NULL; block = block->next)
     {
     score += block->score;
@@ -436,7 +442,7 @@ void chainWrite(struct chain *chain, FILE *f)
 /* Write out chain to file. */
 {
 struct boxIn *b, *nextB;
-fprintf(f, "chain %d %s %d + %d %d %s %d %c %d %d\n", chain->score,
+fprintf(f, "chain %1.0f %s %d + %d %d %s %d %c %d %d\n", chain->score,
     chain->tName, chain->tSize, chain->tStart, chain->tEnd,
     chain->qName, chain->qSize, chain->qStrand, chain->qStart, chain->qEnd);
 for (b = chain->blockList; b != NULL; b = nextB)
@@ -465,7 +471,7 @@ if (!lineFileRow(lf, row))
 if (!sameString(row[0], "chain"))
     errAbort("Expecting 'chain' line %d of %s", lf->lineIx, lf->fileName);
 AllocVar(chain);
-chain->score = lineFileNeedNum(lf, row, 1);
+chain->score = atof(row[1]);
 chain->tName = cloneString(row[2]);
 chain->tSize = lineFileNeedNum(lf, row, 3);
 

@@ -15,7 +15,7 @@ struct chain
     {
     struct chain *next;	  	  /* Next in list. */
     struct boxIn *blockList;      /* List of blocks. */
-    int score;		  	  /* Total score for chain. */
+    double score;	  	  /* Total score for chain. */
     char *qName;		  /* query name, allocated here. */
     int qSize;			  /* Overall size of query. */
     char qStrand;		  /* Query strand. */
