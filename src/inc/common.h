@@ -430,6 +430,10 @@ void splitPath(char *path, char dir[256], char name[128], char extension[64]);
  * . if any.   Pass in NULL for dir, name, or extension if you don't care about
  * that part. */
 
+char *addSuffix(char *head, char *suffix);
+/* Return a needMem'd string containing "headsuffix". Should be free'd
+ when finished. */
+
 void chopSuffix(char *s);
 /* Remove suffix (last . in string and beyond) if any. */
 

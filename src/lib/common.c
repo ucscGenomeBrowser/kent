@@ -1021,6 +1021,16 @@ if (extension != NULL)
     }
 }
 
+char *addSuffix(char *head, char *suffix)
+/* Return a needMem'd string containing "headsuffix". Should be free'd
+ when finished. */
+{
+char *ret = NULL;
+int size = strlen(head) + strlen(suffix) +1;
+snprintf(ret, size, "%s%s", head, suffix);
+return ret;
+}
+
 void chopSuffix(char *s)
 /* Remove suffix (last . in string and beyond) if any. */
 {
