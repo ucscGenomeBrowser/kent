@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.60 2005/02/13 20:11:09 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.61 2005/02/24 00:52:02 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -1245,6 +1245,36 @@ if (gp->optFields & genePredExonFramesFld)
     }
 }
 
+static void checkCdsBounds(char *desc, FILE* out, struct genePred* gp)
+/* check cdsStart/cdsEnd */
+{
+int iExon;
+boolean foundCdsStart = FALSE, foundCdsEnd = FALSE;
+if (gp->cdsStart > gp->cdsEnd)
+    gpError("%s: %s cdsStart %u > cdsEnd %u", desc, gp->name,
+            gp->cdsStart, gp->cdsEnd);
+if ((gp->cdsStart < gp->txStart) || (gp->cdsStart > gp->txEnd))
+    gpError("%s: %s cdsStart %u not in tx bounds %u-%u", desc,
+            gp->name, gp->cdsStart, gp->txStart, gp->txEnd);
+if ((gp->cdsEnd < gp->txStart) || (gp->cdsEnd > gp->txEnd))
+    gpError("%s: %s cdsEnd %u not in tx bounds %u-%u", desc, 
+            gp->name, gp->cdsEnd, gp->txStart, gp->txEnd);
+/*  is cdsStart/cdsEnd in an exon?  */
+for (iExon = 0; iExon < gp->exonCount; iExon++)
+    {
+    if ((gp->cdsStart >= gp->exonStarts[iExon])
+        && (gp->cdsStart < gp->exonEnds[iExon]))
+        foundCdsStart = TRUE;
+    if ((gp->cdsEnd > gp->exonStarts[iExon])
+        && (gp->cdsEnd <= gp->exonEnds[iExon]))
+        foundCdsEnd = TRUE;
+    }
+if (!foundCdsStart)
+    gpError("%s: %s cdsStart %u not in an exon", desc, gp->name, gp->cdsStart);
+if (!foundCdsEnd)
+    gpError("%s: %s cdsEnd %u not in an exon", desc, gp->name, gp->cdsEnd);
+}
+
 int genePredCheck(char *desc, FILE* out, int chromSize, 
                   struct genePred* gp)
 /* Validate a genePred for consistency.  desc is printed the error messages
@@ -1255,7 +1285,6 @@ int genePredCheck(char *desc, FILE* out, int chromSize,
 int iExon;
 gpErrorCnt = 0;
 gpErrFh = out;
-
 if (!(sameString(gp->strand, "+") || sameString(gp->strand, "-")))
     gpError("%s: invalid strand: \"%s\"", desc, gp->strand);
 
@@ -1273,19 +1302,10 @@ else if (chromSize > 0)
 if (gp->txStart >= gp->txEnd)
     gpError("%s: %s txStart %u >= txEnd %u", desc, gp->name,
             gp->txStart, gp->txEnd);
+
 /* no CDS is indicated by cdsStart == cdsEnd */
 if (gp->cdsStart != gp->cdsEnd)
-    {
-    if (gp->cdsStart > gp->cdsEnd)
-        gpError("%s: %s cdsStart %u > cdsEnd %u", desc, gp->name,
-                gp->cdsStart, gp->cdsEnd);
-    if ((gp->cdsStart < gp->txStart) || (gp->cdsStart > gp->txEnd))
-        gpError("%s: %s cdsStart %u not in tx bounds %u-%u", desc,
-                gp->name, gp->cdsStart, gp->txStart, gp->txEnd);
-    if ((gp->cdsEnd < gp->txStart) || (gp->cdsEnd > gp->txEnd))
-        gpError("%s: %s cdsEnd %u not in tx bounds %u-%u", desc, 
-                gp->name, gp->cdsEnd, gp->txStart, gp->txEnd);
-    }
+    checkCdsBounds(desc, out, gp);
 
 /* make sure first/last exons match tx range */
 if (gp->txStart != gp->exonStarts[0])
