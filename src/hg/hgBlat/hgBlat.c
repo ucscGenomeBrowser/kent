@@ -19,7 +19,7 @@
 #include "web.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.65 2003/06/23 05:25:54 kent Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.66 2003/07/10 17:09:38 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -599,7 +599,7 @@ printf("%s",
 "loaded into memory for a detailed alignment. Protein BLAT works in a similar\n"
 "manner, except with 4-mers rather than 11-mers.  The protein index takes a little\n"
 "more than 2 gigabytes</P>\n"
-"<P>BLAT was written by <A HREF=\"mailto:jim_kent@pacbell.net\">Jim Kent</A>.\n"
+"<P>BLAT was written by <A HREF=\"mailto:kent@soe.ucsc.edu\">Jim Kent</A>.\n"
 "Like most of Jim's software interactive use on this web server is free to all.\n"
 "Sources and executables to run batch jobs on your own server are available free\n"
 "for academic, personal, and non-profit purposes.  Non-exclusive commercial\n"
