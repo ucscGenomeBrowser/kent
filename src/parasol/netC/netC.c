@@ -42,12 +42,22 @@ int optLen = sizeof(optVal);
 sai.sin_family = AF_INET;
 sai.sin_port = htons(port);
 sai.sin_addr.s_addr = htonl(INADDR_BROADCAST);
-sd = socket(AF_INET, SOCK_DGRAM, 0);
+sd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 if (setsockopt(sd, SOL_SOCKET, SO_BROADCAST, (char *)&optVal, optLen) != 0)
     {
     close(sd);
     errAbort("Can't set broadcast option on socket\n");
     }
+{
+int b=0;
+int bSz = sizeof(b);
+if (getsockopt(sd, IPPROTO_IP, IP_TTL, (char *)&b, &bSz) != 0)
+    {
+    close(sd);
+    errAbort("Can't get TTL on socket\n");
+    }
+uglyf("ttl = %d\n", b);
+}
 
 for (i=0; i<argc; ++i)
     {
