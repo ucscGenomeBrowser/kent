@@ -74,7 +74,9 @@ for (;;)
 	        {
 		for (el = list; el != NULL; el = el->next)
 		    {
-		    if (psl->tEnd - psl->tStart > 4000)
+		    if (psl == NULL)
+			pslTabOut(el, f);
+		    else if (psl->tEnd - psl->tStart > 4000)
 			pslTabOut(el, f);
 		    }
 		}
