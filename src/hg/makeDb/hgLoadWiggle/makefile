@@ -8,6 +8,8 @@ O = hgLoadWiggle.o
 
 A = hgLoadWiggle
 
+all::	${A} hgWiggle
+
 hgLoadWiggle: $O ${MYLIBS}
 	${CC} -o ${HOME}/bin/${MACHTYPE}/${A} $O ${MYLIBS} $L
 	strip ${HOME}/bin/${MACHTYPE}/${A}
@@ -22,6 +24,10 @@ hgWiggle:	hgWiggle.o ${MYLIBS}
 		${MYLIBS} $L
 	strip ${HOME}/bin/${MACHTYPE}/hgWiggle
 
+compile:	${O} hgWiggle.o ${MYLIBS}
+	${CC} -o ${A} $O ${MYLIBS} $L
+	${CC} -o hgWiggle hgWiggle.o ${MYLIBS} $L
+
 test:
 	cd test_data && ./runtest
 
@@ -31,4 +37,4 @@ clean:
 	test_data/chr1_begin.ascii test_data/chr1_end.ascii \
 	test_data/chr1_middle.ascii test_data/chrM.ascii test_data/chrM.wib \
 	test_data/chrM.wig test_data/wiggle.tab \
-	${O} hgDumpWiggle.o hgWiggle.o
+	${O} hgDumpWiggle.o hgWiggle.o hgWiggle ${A}
