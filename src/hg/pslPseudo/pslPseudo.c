@@ -29,7 +29,7 @@
 #define PSEUDO 1
 #define NOTPSEUDO -1
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.11 2004/03/25 06:48:52 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.12 2004/04/01 03:41:58 baertsch Exp $";
 
 char *db;
 char *nibDir;
@@ -136,6 +136,7 @@ sfp->file = hashStoreName(fileHash, file);
 sfp->isNib = TRUE;
 nibOpenVerify(file, &f, &size);
 sfp->pos = size;
+fclose(f);
 }
 
 void addFa(char *file, struct hash *fileHash, struct hash *seqHash)
@@ -459,28 +460,6 @@ if (qIsNib)
 if (tIsNib)
     freez(&tName);
 return axt;
-}
-int calcScore(struct psl *psl)
-{
-char nibFile[256];
-FILE *f;
-int seqSize;
-int size = (psl->tEnd)-(psl->tStart);
-struct dnaSeq *tSeq = NULL;
-struct dnaSeq *qSeq = NULL;
-struct dnaSeq *mrna = NULL;
-errAbort("calcScore");
-//safef(nibFile, sizeof(nibFile), "%s/%s.nib", nibDir, psl->tName);
-nibOpenVerify(nibFile, &f, &seqSize);
-assert(seqSize == psl->tSize);
-tSeq = nibLdPart(nibFile, f, seqSize, psl->tStart, size);
-for (mrna = mrnaList; mrna != NULL ; mrna = mrna->next)
-    if (sameString(mrna->name, psl->qName))
-        {
-        qSeq = mrna;
-        break;
-        }
-return axtScoreSym(ss, size, qSeq->dna, tSeq->dna);
 }
 int calcMilliScore(struct psl *psl)
 /* Figure out percentage score. */
@@ -1362,9 +1341,9 @@ if (pslList != NULL)
                                     maxExons, geneOverlap, "?", polyA, polyAstart, NOTPSEUDO,
                                     exonCover, intronCount, bestAliCount, tReps, qReps, overlapDiagonal); 
                         else if (kg == NULL && mgc == NULL && gp == NULL)
-                            outputNoLink(psl, "mrna", bestPsl->qName, bestPsl->tName, bestPsl->tStart, bestPsl->tEnd, 
+                            outputLink(psl, "mrna", bestPsl->qName, bestPsl->tName, bestPsl->tStart, bestPsl->tEnd, 
                                         maxExons, geneOverlap, bestPsl->strand, polyA, polyAstart, PSEUDO,
-                                        exonCover, intronCount, bestAliCount, tReps, qReps, overlapDiagonal); 
+                                        exonCover, intronCount, bestAliCount, tReps, qReps, overlapDiagonal, kg, mgc, gp); 
                         else
                             outputLink( psl, "knownGene", bestPsl->qName, bestPsl->tName, bestPsl->tStart, bestPsl->tEnd, 
                                     maxExons, geneOverlap, bestPsl->strand, polyA, polyAstart, PSEUDO,
