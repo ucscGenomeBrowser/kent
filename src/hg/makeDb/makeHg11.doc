@@ -57,7 +57,7 @@ Make and load GC percent table
      hgsql hg11  < ~/src/hg/lib/gcPercent.sql
      hgGcPercent hg11 ../../nib
 
-SIMPLE REPEAT TRACK (DONE)
+SIMPLE REPEAT TRACK (IN PROGRESS)
 
 o - Create cluster parasol job like so:
         ssh kk
@@ -72,7 +72,7 @@ o - Create cluster parasol job like so:
 	para try
 	para check
 	para push
-        liftUp simpleRepeat.bed ~/oo/jkStuff/liftAll.lft warn trf/*.bed
+        liftUp simpleRepeat.bed ~/oo/jkStuff/liftAll.lft warn trf/*.bed TODO - Can't find liftAll.lft file
 
 o - Load this into the database as so
         ssh hgwdev
@@ -80,7 +80,7 @@ o - Load this into the database as so
 	hgLoadBed hg11 simpleRepeat simpleRepeat.bed -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
 
 
-PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (DONE)
+PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (IN PROGRESS)
 
 Make sure that the NT*.fa files are lower-case repeat masked.
 Do something much like the simpleRepeat track, but only
@@ -104,6 +104,7 @@ When that is done do:
     ssh kkstore
     mkdir /scratch/hg/gs.12/build29/trfFa
     cd ~/oo
+NOTE:Below is a tcsh script
     foreach i (? ??)
 	cd $i
         foreach j (NT*)
@@ -112,7 +113,7 @@ When that is done do:
 	end
 	cd ..
     end
-Then ask admins to do a binrsync.
+Then ask admins to do a binrsync. IN PROGRESS
 
 
 
@@ -156,7 +157,9 @@ o - Store the mRNA (non-alignment) info in database.
     The last line will take quite some time to complete.  It will count up to
     about 3,800,000 before it is done.
 
-REPEAT MASKING  (DONE - by Patrick G. and Jim K.)
+
+
+REPEAT MASKING  (DONE - by Patrick G. and Terry F.)
 
 For the NCBI assembly we repeat mask on the sensitive mode setting.
 Patrick Gavin did this, and perhaps will fill in the details later.
@@ -176,15 +179,15 @@ Then lift these up to chromosome coordinates with
 Then load the .out files into the database with:
     ssh hgwdev
     cd ~/oo
-    hgLoadOut hg11 ?/*.fa.out ??/*.fa.out
+    hgLoadOut hg11 ?/*.fa.out ??/*.fa.out DONE BY MATT
 
 
 MAKING AND STORING mRNA AND EST ALIGNMENTS (IN PROGRESS)
 
 o - Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
-    Copy the above 3 files from /cluster/store1/mrna.129 into /scratch/hg/h/mrna
+    Copy the above 3 files from /cluster/store1/mrna.129 into /scratch/hg/h/mrna
     Request the admins to do a binrsync to the cluster.
-
+DONE
 o - Use BLAT to generate refSeq, mRNA and EST alignments as so:
       Make sure that /scratch/hg/gs.12/build29/contigs is loaded
       with NT_*.fa and pushed to the cluster nodes.
@@ -202,9 +205,10 @@ o - Use BLAT to generate refSeq, mRNA and EST alignments as so:
 	      para create spec
               cd ..
 	  end 
+DONE
 
     Now, by hand cd to the mrna, refSeq, and est directories respectively
-     and run a para push and para check in each one.
+     and run a para push and para check in each one. DONE
       
 o - Process refSeq mRNA and EST alignments into near best in genome.
       cd ~/oo/bed
@@ -214,29 +218,29 @@ o - Process refSeq mRNA and EST alignments into near best in genome.
       pslReps -minCover=0.2 -sizeMatters -minAli=0.98 -nearTop=0.002 raw.psl contig.psl /dev/null
       liftUp -nohead all_refSeq.psl ../../jkStuff/liftAll.lft carry contig.psl
       pslSortAcc nohead chrom /cluster/fast1/temp all_refSeq.psl
-      cd .. DONE
+      cd ..
 
       cd mrna
       pslSort dirs raw.psl /cluster/fast1/temp psl
       pslReps -minAli=0.96 -nearTop=0.01 raw.psl contig.psl /dev/null
       liftUp -nohead all_mrna.psl ../../jkStuff/liftAll.lft carry contig.psl
       pslSortAcc nohead chrom /cluster/fast1/temp all_mrna.psl
-      cd .. DONE
+      cd .. 
 
       cd est
       pslSort dirs raw.psl /cluster/fast1/temp psl
       pslReps -minAli=0.93 -nearTop=0.01 raw.psl contig.psl /dev/null
       liftUp -nohead all_est.psl ../../jkStuff/liftAll.lft carry contig.psl
       pslSortAcc nohead chrom /cluster/fast1/temp all_est.psl
-      cd .. DONE
+      cd .. 
 
-o - Load refSeq alignments into database DONE
+o - Load refSeq alignments into database TODO
       ssh hgwdev
       cd /cluster/store1/gs.12/build29/bed/refSeq
       pslCat -dir chrom > refSeqAli.psl
       hgLoadPsl hg11 -tNameIx refSeqAli.psl
 
-o - Load mRNA alignments into database. DONE
+o - Load mRNA alignments into database. TODO
       ssh hgwdev
       cd /cluster/store1/gs.12/build29/bed/mrna/chrom
       foreach i (*.psl)
@@ -246,7 +250,7 @@ o - Load mRNA alignments into database. DONE
       cd ..
       hgLoadPsl hg11 all_mrna.psl -nobin
 
-o - Load EST alignments into database. DONE
+o - Load EST alignments into database. TODO
       ssh hgwdev
       cd /cluster/store1/gs.12/build29/bed/est/chrom
       foreach i (*.psl)
@@ -302,7 +306,7 @@ o - Create rnaCluster table
    hgLoadBed hg11 rnaCluster chrom/*.bed
 
 
-PRODUCING KNOWN GENES (DONE)
+PRODUCING KNOWN GENES (TODO)
 
 o - Download everything from ftp://ncbi.nlm.nih.gov/refseq/H_sapiens/mRNA_Prot/
     into /cluster/store1/mrna.129/refSeq. DONE
@@ -311,7 +315,7 @@ o - Unpack this into fa files and get extra info with:
        gunzip hs.gbff
        gunzip hs.faa.gz
        gbToFaRa ~/hg/h/mrna.fil ../refSeq.fa ../refSeq.ra ../refSeq.ta DONE
-o - Align refSeq.fa to genome as described under mRNA/EST alignments above. - IN PROGRESS
+o - Align refSeq.fa to genome as described under mRNA/EST alignments above. DONE
 o - Get extra info from NCBI and produce refGene table as so:
        ssh hgwdev
        cd ~/oo/bed
@@ -319,15 +323,15 @@ o - Get extra info from NCBI and produce refGene table as so:
        cd refSeq
        wget ftp://ncbi.nlm.nih.gov/refseq/LocusLink/loc2ref DONE
        wget ftp://ncbi.nlm.nih.gov/refseq/LocusLink/mim2loc DONE
-o - Similarly download refSeq proteins in fasta format to refSeq.pep - WHERE IS THIS FILE?
+o - Similarly download refSeq proteins in fasta format to refSeq.pep - I believe this is hs.faa
 o - RefSeq should have already been aligned to the genome by processes 
         described under mRNA/EST alignments above.
 o - Produce refGene, refPep, refMrna, and refLink tables as so:
        ssh hgwdev
        cd ~/oo/bed/refSeq
        ln -s /cluster/store1/mrna.129 mrna
-       hgRefSeqMrna hg11 mrna/refSeq.fa mrna/refSeq.ra all_refSeq.psl loc2ref mrna/refSeq/hs.faa mim2loc
-o - Add Jackson labs info
+       hgRefSeqMrna hg11 mrna/refSeq.fa mrna/refSeq.ra all_refSeq.psl loc2ref mrna/refSeq/hs.faa mim2loc TODO
+o - Add Jackson labs info DONE
      cd ~/oo/bed
      mkdir jaxOrtholog
      cd jaxOrtholog
@@ -494,7 +498,7 @@ Here you align vertebrate mRNAs against the masked genome on the
 cluster you set up during the previous step.
 
 o - Make sure that gbpri, gbmam, gbrod, and gbvert are downloaded from Genbank into
-    /cluster/store1/genbank.129 DONE
+    /cluster/store1/genbank.129 TODO
 
 o - Process these out of genbank flat files as so:
        ssh kkstore
@@ -506,7 +510,7 @@ o - Process these out of genbank flat files as so:
        cd /projects/hg2
        mkdir mrna.129
        cp /cluster/store1/mrna.129/xenoRna*.* mrna.129
-Above set of commands is DONE.
+Above set of commands is TODO.
 
 Set up cluster run.  First make sure genome is in kks00:/scratch/hg/gs.8/build29/contigTrf
 in RepeatMasked + trf form.  (This is probably done already in mouse alignment
