@@ -1,3 +1,5 @@
+# So far have looked through hg16,mm4,rn3,ce1,dm1 databases
+
 # Define databases used for various organisms
 set hg hg11,hg12,hg13,hg15,hg16
 set mm mm1,mm2,mm3,mm4
@@ -20,9 +22,19 @@ set plaFac falciparum
 set gbd $hg,$mm,$rn,$fr,$ce,$ci,$cb,$dm,$dp,$sc,$sacCer,$panTro,$galGal,$pyrFur,$pyrAer,$plaFac
 
 # Define 'other' database for chains
-set otherDb pt0,mm3,rn3,hg16
+set chainDb Hg15,Hg16,Pt0,Mm2,Mm3,Mm4,Rn2,Rn3,Cb1,Dp1
+
+# Define databases that support known genes
+set knownDb $hg,$mm,$rn
+
+# Define databases that support family browser
+set familyDb $hg,$mm,$ce,$sacCer,$dm
 
 # Define the shared identifiers and the fields they appear in.
+identifier goId external=GO
+    $dm.bdgpInfo.go comma
+    $dm.bdgpNonCodingInfo comma
+
 identifier ECgeneName
 "Link together EC gene predicted gene structure and peptide"
     $gbd.ECgene.name
@@ -144,8 +156,8 @@ identifier $hg.acAccessionVersion typeOf=bacAccession
 
 identifier proteinAccession typeOf=genbankAccession
 "Genbank protein accession."
-    $gbd.kgProtAlias.alias 
-    $gbd.kgXref.protAcc
+    $knownDb.kgProtAlias.alias 
+    $knownDb.kgXref.protAcc
     $gbd.refLink.protAcc 
 
 identifier estOrMrnaAccession typeOf=genbankAccession
@@ -198,9 +210,9 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd.bioCycPathway.geneId
     $gbd.cgapAlias.alias
     $gbd.imageClone.acc subset
-    $hg.kgAlias.alias subset
-    $gbd.kgXref.refseq
-    $gbd.knownToRefSeq.value
+    $knownDb.kgAlias.alias subset
+    $knownDb.kgXref.refseq
+    $knownDb.knownToRefSeq.value
     $gbd.mrnaRefseq.refseq
     $gbd.refFlat.name
     $gbd.refGene.name
@@ -208,14 +220,16 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd.refSeqId.qName
     $gbd.refSeqStatus.mrnaAcc
     $gbd.refSeqSummarry.mrnaAcc
+    $dm.bdgpToRefSeq.value
 
 identifier knownGeneId typeOf=nativeMrnaAccession
 "Known Gene ID - the genbank accession of the representative mRNA"
     $gbd.bioCycPathway.kgID
-    $hg,$mm.ceBlastTab.query
-    $hg,$mm.dmBlastTab.query
-    $hg,$mm.drBlastTab.query
-    $hg,$mm.scBlastTab.query
+    $knownDb.ceBlastTab.query
+    $knownDb.dmBlastTab.query
+    $knownDb.drBlastTab.query
+    $knownDb.mmBlastTab.query
+    $knownDb.scBlastTab.query
     $gbd.dupSpMrna.mrnaID
     $gbd.mrna.acc subset
     $gbd.seq.acc subset
@@ -223,33 +237,34 @@ identifier knownGeneId typeOf=nativeMrnaAccession
     $gbd.foldUtr5.name
     $hg.gnfU95Distance.query
     $hg.gnfU95Distance.target
+    $mm.gnfU74ADistance.query
+    $mm.gnfU74ADistance.target
+    $mm.gnfU74BDistance.query
+    $mm.gnfU74BDistance.target
+    $mm.gnfU74CDistance.query
+    $mm.gnfU74CDistance.target
     $gbd.keggPathway.kgID
-    $gbd.kgAlias.kgID
-    $gbd.kgProtAlias.kgID
-    $gbd.kgXref.kgID
-    $gbd.kgXref.mRNA
-    $gbd.knownBlastTab.query
-    $gbd.knownBlastTab.target
-    $gbd.knownCanonical.transcript
-    $gbd.knownGene.name
-    $gbd.knownGeneMrna.name
-    $gbd.knownGenePep.name
-    $gbd.knownGnfDistance.query
-    $gbd.knownGnfDistance.target
-    $gbd.knownIsoforms.transcript
-    $gbd.knownToCdsSnp.name
-    $gbd.knownToEnsembl.name
-    $gbd.knownToLocusLink.name
-    $gbd.knownToPfam.name
-    $gbd.knownToRefSeq.name
-    $gbd.knownToSuper.name
+    $knownDb.kgAlias.kgID
+    $knownDb.kgProtAlias.kgID
+    $knownDb.kgXref.kgID
+    $knownDb.kgXref.mRNA
+    $knownDb.knownBlastTab.query
+    $knownDb.knownBlastTab.target
+    $knownDb.knownCanonical.transcript
+    $knownDb.knownGene.name
+    $knownDb.knownGeneMrna.name
+    $knownDb.knownGenePep.name
+    $knownDb.knownGnfDistance.query
+    $knownDb.knownGnfDistance.target
+    $knownDb.knownIsoforms.transcript
+    $knownDb.knownToCdsSnp.name
+    $knownDb.knownToEnsembl.name
+    $knownDb.knownToLocusLink.name
+    $knownDb.knownToPfam.name
+    $knownDb.knownToRefSeq.name
+    $knownDb.knownToSuper.name
     $hg.knownToU133.name
     $hg.knownToU95.name
-    $hg.mmBlastTab.query
-
-identifier mouseKnownGeneId typeOf=knownGeneId
-"A known gene in mouse."
-    $gbd.mmBlastTab.target
 
 identifier $hg.osmidId
 "Human Fosmid (~50kb genomic sequence) clone"
@@ -383,8 +398,9 @@ identifier keggMapId external=KEGG
 identifier locusLinkId external=LocusLink
 "NCBI LocusLink ID"
     $gbd.keggPathway.mapID
-    $gbd.knownToLocusLink.value
+    $knownDb.knownToLocusLink.value
     $gbd.refLink.locusLinkId
+    $dm.bdgpToLocusLink.value
 
 identifier omimId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) ID"
@@ -392,48 +408,140 @@ identifier omimId external=OMIM
 
 identifier knownAlignId
 "Which (of sometimes multiple) mapping of a known gene"
-    $gbd.knownGene.alignId
+    $knownDb.knownGene.alignId
 
-identifier knownClusterId
+identifier knownIsoformCluster
 "ID of a cluster of overlapping known genes"
-    $gbd.knownCanonical.clusterId
-    $gbd.knownIsoforms.clusterId
+    $knownDb.knownCanonical.clusterId
+    $knownDb.knownIsoforms.clusterId
 
 identifier swissProtId external=SwissProt
 "Swiss Prot ID. Same as accession for uncurated trEMBL proteins"
     $gbd.dupSpMrna.proteinID
     $gbd.dupSpMrna.dupProteinID
-    $gbd.kgProtAlias.displayID
-    $gbd.kgXref.spDisplayID
-    $gbd.knownCanonical.protein
-    $gbd.knownGene.proteinId
+    $knownDb.kgProtAlias.displayID
+    $knownDb.kgXref.spDisplayID
+    $knownDb.knownCanonical.protein
+    $knownDb.knownGene.proteinId
     $gbd.spMrna.spID
+    $dm.bdgpSwissProt.spSymbol
+    $dm.flyBaseSwissProt.spSymbol
 
 identifier swissProtAccession external=SwissProt
 "SwissProt Accession"
-    $gbd.kgProtAlias.alias part
-    $gbd.kgProtMap.qName
-    $gbd.kgXref.spID
+    $knownDb.kgProtAlias.alias part
+    $knownDb.kgProtMap.qName
+    $knownDb.kgXref.spID
     $gbd.pepMwAa.accession
     $gbd.pepPi.accession
+    $ce.sangerCanonical.protein
+    $ce.sangerGene.proteinID
+    $ce.sangerLinks.protName
+    $dm.bdgpCanonical.protein
+    $dm.bdgpGene.proteinId
+    $dm.bdgpSwissProt.swissProtId
+    $dm.flyBaseSwissProt.swissProtId
 
 identifier pfamId external=Pfam
 "Pfam (Protein Family) ID"
-    $gbd.knownToPfam.value
+    $knownDb.knownToPfam.value
+    $dm.bdgpToPfam.value
 
 identifier superfamilyId external=Superfamily
 "Protein Superfamily ID"
-    $gbd.knownToSuper.value
+    $knownDb.knownToSuper.value
     $gbd.sfAssign.sfID
     $gbd.sfDes.id
+
+identifier wormBaseIsoformCluster
+"Overlapping (after splicing) WormBase transcripts"
+    $ce.sangerCanonical.clusterId
+    $ce.sangerIsoforms.clusterId
 
 identifier wormBaseId external=WormBase
 "WormBase (C. elegans) ORF ID"
     $gbd.ceBlastTab.target
+    $ce.sangerGene.name
+    $ce.kimExpDistance.query
+    $ce.kimExpDistance.target
+    $ce.orfToGene
+    $ce.sangerBlastTab.query
+    $ce.sangerBlastTab.target
+    $ce.sangerCanonical.transcript
+    $ce.sangerIsoforms.transcript
+    $ce.sangerLinks.orfName
+    $ce.sangerPep.name
+    $ce.sangerToKim.name
+    $ce.sangerToPfam.name
+    $ce.sangerToRefSeq.name
+    $ce.dmBlastTab.query
+    $ce.drBlastTab.query
+    $ce.hgBlastTab.query
+    $ce.mmBlastTab.query
+    $ce.scBlastTab.query
 
-identifier flyBaseId external=FlyBase
+identifier flyBaseRefId
+"FlyBase (Drosophila) Reference (Literature)"
+    $dm.fbPhenotype.fbRef
+    $dm.fbRef.id
+
+identifier flyBaseAlleleId
+"FlyBase (Drosophila) Allele ID"
+    $dm.fbAllele.id
+    $dm.fbPhenotype.fbAllele
+
+identifier flyBaseGeneId external=FlyBase
 "FlyBase (Drosophila) Gene ID"
     $gbd.dmBlastTab.target
+    $dm.bdgpExprLink.flyBaseId
+    $dm.bdgpGeneInfo.flyBaseId
+    $dm.bdgpNonCodingInfo.flyBaseId
+    $dm.bdgpSwissProt.flyBaseId
+    $dm.fbAllele.geneId
+    $dm.fbGene.geneId
+    $dm.fbPhenotype.geneId
+    $dm.fbSynonym.geneId
+    $dm.fbTranscript.geneId
+    $dm.flyBaseSwissProt.flyBaseId
+
+identifier bdgpIsoformCluster
+"Overlapping (after splicing) BDGP Drosophila transcripts"
+    $dm.bdgpIsoforms.clusterId
+    $dm.bdgpCanonical.clusterId
+
+identifier bdgpGeneId external=BDGP
+"Berkeley Drosophila Genome Project Gene ID"
+    $dm.bdgpExprLink.bdgpName
+    $dm.bdgpGeneInfo.bdgpName
+    $dm.bdgpToCanonical.value
+
+identifier bdgpTranscriptId external=BDGP
+"Berkeley Drosophila Genome Project Transcript ID"
+    $dm.arbExpDistance.query
+    $dm.arbExpDistance.target
+    $dm.bdgpBlastTab.query
+    $dm.bdgpBlastTab.target
+    $dm.bdgpCanonical.transcript
+    $dm.bdgpIsoforms.transcript
+    $dm.bdgpGene.name
+    $dm.bdgpGenePep.name
+    $dm.bdgpNear.name
+    $dm.bdgpSwissProt.bdgpName
+    $dm.bdgpToCanonical.name
+    $dm.bdgpToLocusLink.name
+    $dm.bdgpToPfam.name
+    $dm.bdgpToRefSeq.name
+    $dm.ceBlastTab.query
+    $dm.drBlastTab.query
+    $dm.hgBlastTab.query
+    $dm.mmBlastTab.query
+    $dm.scBlastTab.query
+    $dm.fbTranscript.transcriptId
+
+identifier bdgpNonCodingId external=BDGP
+"Berkeley Drosophila Genome Project Noncoding Gene ID"
+    $dm.bdgpNonCoding.name chopAfter=-
+    $dm.bdgpNonCodingInfo.bdgpName
 
 identifier scdId external=SGD
 "Sacchromyces Genome Database ORF ID"
@@ -458,7 +566,7 @@ identifier ensemblTranscriptId external=Ensembl
     $gbd.ensGtp.transcript chopAfter=.
     $gbd.ensPep.name
     $gbd.ensTranscript.transcript_name
-    $gbd.knownToEnsembl.value
+    $knownDb.knownToEnsembl.value
     $gbd.sfDescription.name
 
 identifier cgapId
@@ -473,7 +581,7 @@ identifier cgapMapId
 
 identifier dbSnpId external=dbSNP
 "NCBI dbSNP ID"
-    $gbd.knownToCdsSnp.value
+    $knownDb.knownToCdsSnp.value
     $gbd.snpMap.name
     $gbd.snpNih.name
     $gbd.snpTsc.name
