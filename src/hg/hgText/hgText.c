@@ -1986,7 +1986,6 @@ char *constraints;
 char *table2 = getTable2Name();
 char *op = cgiOptionalString("hgt.intersectOp");
 char *track = getTrackName();
-char *outputType = cgiString("outputType");
 int fields;
 int i, totalCount;
 
@@ -2597,6 +2596,7 @@ webEnd();
 
 
 void doGetSequence()
+/* Display FASTA sequence. */
 {
 struct hTableInfo *hti = getOutputHti();
 struct bed *bedList = getBedList(FALSE, NULL);
