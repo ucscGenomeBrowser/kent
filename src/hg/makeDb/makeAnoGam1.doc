@@ -720,10 +720,24 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     netFilter -minGap=10 melanogasterSyn.net | hgLoadNet anoGam1 netSyntenyDm1 stdin
 
 
+# MAKE AXTNET FOR DOWNLOAD (DONE 8/20/04 angie)
+    ssh kksilo
+    cd /cluster/data/anoGam1/bed/blastz.dm1.swap.2004-06-10/axtChain
+    netSplit melanogaster.net net
+    cd /cluster/data/anoGam1/bed/blastz.dm1.swap.2004-06-10
+    mkdir axtNet
+    foreach f (axtChain/net/*)
+      set chr = $f:t:r
+      netToAxt $f axtChain/chain/$chr.chain /cluster/data/anoGam1/nib \
+        /cluster/data/dm1/nib stdout \
+      | axtSort stdin axtNet/$chr.axt
+    end
+
+
 # MAKE VSDM1 DOWNLOADABLES (DONE 6/9/04 angie)
     ssh kksilo
     cd /cluster/data/anoGam1/bed/blastz.dm1.swap.2004-06-10/axtChain
-    cp all.chain melanogaster.chain
+    ln all.chain melanogaster.chain
     zip /cluster/data/anoGam1/zip/melanogaster.chain.zip melanogaster.chain
     rm melanogaster.chain
     zip /cluster/data/anoGam1/zip/melanogaster.net.zip melanogaster.net
@@ -734,6 +748,15 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     mv /cluster/data/anoGam1/zip/melanogaster*.zip .
     md5sum *.zip > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
+    # Add axtChrom.zip (as advertised in original README) and axtNet/*.gz 
+    # (new std offering) 8/20/04:
+    mkdir axtNet
+    foreach f (/cluster/data/anoGam1/bed/blastz.dm1.swap.2004-06-10/axtNet/*)
+      gzip -c $f > axtNet/$f:t.gz
+    end
+    zip -j axtChrom.zip \
+      /cluster/data/anoGam1/bed/blastz.dm1.swap.2004-06-10/axtChrom/*.axt
+    md5sum *.zip *.gz */*.gz > md5sum.txt
 
 
 # MAKE 11.OOC FILE FOR BLAT (DONE 8/2/04 angie)
