@@ -14,7 +14,7 @@
 #include "netAlign.h"
 #include "chainNetDbLoad.h"
 
-static char const rcsid[] = "$Id: chainNetDbLoad.c,v 1.5 2003/05/06 07:22:21 kate Exp $";
+static char const rcsid[] = "$Id: chainNetDbLoad.c,v 1.6 2004/05/05 22:56:22 baertsch Exp $";
 
 struct cnFill *cnFillFromNetAlign(struct netAlign *na, struct hash *nameHash)
 /* Convert netAlign to cnFill. Name hash is a place to store
@@ -230,6 +230,7 @@ char table[64];
 boolean hasBin;
 struct chain *chain;
 char query[256];
+struct dyString *dy = newDyString(128);
 
 /* Load chain header. */
 if (!hFindSplitTableDb(database, chrom, track, table, &hasBin))
@@ -246,19 +247,22 @@ sqlFreeResult(&sr);
 /* Load links. */
 if (loadAll)
     {
-    snprintf(query, sizeof(query),
+    dyStringPrintf(dy, 
 	 "select * from %sLink where chainId = %d", table, id);
     }
 else
     {
-    snprintf(query, sizeof(query),
-	 "select * from %sLink where chainId = %d and tStart < %d and tEnd > %d", 
-	 table, id, end, start);
+    dyStringPrintf(dy, 
+	 "select * from %sLink where ",table );
+    hAddBinToQuery(end, start, dy);
+    dyStringPrintf(dy," chainId = %d and tStart < %d and tEnd > %d", 
+	 id, end, start);
     }
-sr = sqlGetResult(conn, query);
+sr = sqlGetResult(conn, dy->string);
 chainLinkAddResult(sr, hasBin, chain);
 sqlFreeResult(&sr);
 sqlDisconnect(&conn);
+freeDyString(&dy);
 return chain;
 }
 
