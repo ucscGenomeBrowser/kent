@@ -12,7 +12,7 @@ O = agpFrag.o agpGap.o bed.o chromInfo.o chromInserts.o \
     ggGraph.o hCommon.o hdb.o hgGene.o hgRelate.o isochores.o \
     jksql.o knownInfo.o knownMore.o mapSts.o mouseSyn.o \
     ooUtils.o pepPred.o psl.o qaSeq.o repMask.o rmskOut.o \
-    rnaGene.o roughAli.o simpleRepeat.o snp.o softberryHom.o sqlList.o sqlNum.o \
+    rnaGene.o roughAli.o simpleRepeat.o snp.o softberryHom.o \
     stsAlias.o stsMarker.o wabAli.o
 
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) 
