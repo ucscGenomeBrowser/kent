@@ -899,40 +899,41 @@ static struct rgbColor chrom5 = {0, 255, 255}; /* cyan? aka lt blue */
 static struct rgbColor chrom6 = {0, 0, 255}; /* blue */
 static struct rgbColor chrom7 = {255, 0, 255}; /* magenta aka purple */
 static struct rgbColor chrom8 = {102, 51, 0}; /* brown */
-chromColor[0] = mgFindColor(mg, 0,0, 0);
-chromColor[1] = mgFindColor(mg, 255,204, 204);  /* light red */
-chromColor[2] = mgFindColor(mg, 204,0, 0);      /* med red */
-chromColor[3] = mgFindColor(mg, 255,0, 0);      /* bright red */
 
-chromColor[4] = mgFindColor(mg, 255,102,0);     /* bright orange */
-chromColor[5] = mgFindColor(mg, 255,153,0);
-chromColor[6] = mgFindColor(mg, 255,0,204);     /* magenta */
+chromColor[0] = mgFindColor(mg, 0,0, 0); /*black*/
+chromColor[1] = mgFindColor(mg, 0xff,0xcc, 0xcc);  /* light red */
+chromColor[2] = mgFindColor(mg, 0xcc,0, 0);      /* med red */
+chromColor[3] = mgFindColor(mg, 0xff,0, 0);      /* bright red */
 
-chromColor[7] = mgFindColor(mg, 255,255,204);     /* light yellow  */
-chromColor[8] = mgFindColor(mg, 255,255,153);   /* med yellow */
-chromColor[9] = mgFindColor(mg, 255,255,0);     /* bright yellow*/
+chromColor[4] = mgFindColor(mg, 0xff,0x66,0);     /* bright orange */
+chromColor[5] = mgFindColor(mg, 0xff,0x99,0);
+chromColor[6] = mgFindColor(mg, 0xff,0,0xcc);     /* magenta */
 
-chromColor[10] = mgFindColor(mg, 0,255,0);      /*bt gr*/
-chromColor[11] = mgFindColor(mg, 204,255,0);    /* yellow green */
-chromColor[12] = mgFindColor(mg, 102,102,0);  /* dark  green*/
+chromColor[7] = mgFindColor(mg, 0xff,0xff,0x0);     /* bright yellow  */
+chromColor[8] = mgFindColor(mg, 0xcc,0xcc,0x99);     /* olive green*/
+chromColor[9] = mgFindColor(mg, 0x99,0x66,0x0);   /* brown */
 
-chromColor[13] = mgFindColor(mg, 204,255,255);  /*lt cyan*/
-chromColor[14] = mgFindColor(mg, 153,204,204);  /* gray cyan */
-chromColor[15] = mgFindColor(mg, 0,255,255);    /*med cyan*/
+chromColor[10] = mgFindColor(mg, 0,0xff,0);      /*bt gr*/
+chromColor[11] = mgFindColor(mg, 0xcc,0xff,0);    /* yellow green */
+chromColor[12] = mgFindColor(mg, 0x66,0x66,0);  /* dark  green*/
 
-chromColor[16] = mgFindColor(mg, 153,204,255);  /*light med blue */
-chromColor[17] = mgFindColor(mg, 102,153,255);  /* med blue */
-chromColor[18] = mgFindColor(mg, 0,0 ,204);     /* deep blue */
+chromColor[13] = mgFindColor(mg, 0xcc,0xff,0xff);  /*lt cyan*/
+chromColor[14] = mgFindColor(mg, 0,0xff,0xff);    /*med cyan*/
+chromColor[15] = mgFindColor(mg, 0x0,0x0,0x0); /* black */
 
-chromColor[19] = mgFindColor(mg, 204,153,255);  /*lt violet*/
-chromColor[20] = mgFindColor(mg, 204,051,255);  /* med violet */
-chromColor[21] = mgFindColor(mg, 153,0,204);    /* dark violet */
+chromColor[16] = mgFindColor(mg, 0x99,0xcc,0xff);  /*light med blue */
+chromColor[17] = mgFindColor(mg, 0x66,0x99,0xff);  /* med blue */
+chromColor[18] = mgFindColor(mg, 0,0 ,0xcc);     /* deep blue */
 
-chromColor[22] = mgFindColor(mg, 204,204,204); /* light gray */
-chromColor[23] = mgFindColor(mg, 153,153,153); /* med gray */
-chromColor[24] = mgFindColor(mg, 102,102,102);  /* med gray */
+chromColor[19] = mgFindColor(mg, 0xcc,0x99,0xff);  /*lt violet*/
+chromColor[20] = mgFindColor(mg, 0xcc,0x33,0xff);  /* med violet */
+chromColor[21] = mgFindColor(mg, 0x99,0,0xcc);    /* dark violet */
 
-chromColor[25] = mgFindColor(mg, 255,255,255); /* black */
+chromColor[22] = mgFindColor(mg, 0xcc,0xcc,0xcc); /* light gray */
+chromColor[23] = mgFindColor(mg, 0x99,0x99,0x99); /* med gray */
+chromColor[24] = mgFindColor(mg, 0x66,0x66,0x66);  /* med gray */
+
+chromColor[25] = mgFindColor(mg, 0x0,0x0,0x0); /* black */
 /*
 mgMakeColorGradient(mg, &white, &chrom1, CHROMOSOME_SHADES, shadesOfChrom1);
 mgMakeColorGradient(mg, &white, &chrom2, CHROMOSOME_SHADES, shadesOfChrom2);
@@ -2821,8 +2822,13 @@ tg->itemColor = genieKnownColor;
 char *refGeneName(struct trackGroup *tg, void *item)
 /* Return abbreviated genie name. */
 {
+    static char cat[128];
 struct linkedFeatures *lf = item;
-if (lf->extra != NULL) return lf->extra;
+if (lf->extra != NULL) 
+    {
+    sprintf(cat,"%s %s",(char *)lf->extra, lf->name);
+    return cat;
+    }
 else return lf->name;
 }
 
@@ -9420,6 +9426,7 @@ registerTrackHandler("recombRate", recombRateMethods);
 registerTrackHandler("mouseSyn", mouseSynMethods);
 registerTrackHandler("mouseSynWhd", mouseSynWhdMethods);
 registerTrackHandler("synteny100000", synteny100000Methods);
+registerTrackHandler("syntenyBuild30", synteny100000Methods);
 registerTrackHandler("syntenyBerk", syntenyBerkMethods);
 registerTrackHandler("syntenySanger", syntenySangerMethods);
 registerTrackHandler("mouseOrtho", mouseOrthoMethods);
@@ -9463,17 +9470,24 @@ registerTrackHandler("multAlignWebbrat", longXenoPslMethods);
 registerTrackHandler("multAlignWebbzebrafish", longXenoPslMethods);
 registerTrackHandler("aarMm2", longXenoPslMethods);
 registerTrackHandler("blastzMm2", longXenoPslMethods);
+registerTrackHandler("blastzMm2_0817", longXenoPslMethods);
+registerTrackHandler("blastzMm2_0824", longXenoPslMethods);
 registerTrackHandler("blastzMm2Sc", longXenoPslMethods);
 registerTrackHandler("blastzMm2Ref", longXenoPslMethods);
+registerTrackHandler("recipBest", longXenoPslMethods);
 registerTrackHandler("blastzStrictChainMouse", longXenoPslMethods);
 registerTrackHandler("blastzStrictChainHuman", longXenoPslMethods);
+registerTrackHandler("blastzMouse", longXenoPslMethods);
 registerTrackHandler("blastzBestMouse", longXenoPslMethods);
+registerTrackHandler("blastzBestMouse_0824", longXenoPslMethods);
 registerTrackHandler("blastzHg", longXenoPslMethods);
 registerTrackHandler("blastzHgRef", longXenoPslMethods);
 registerTrackHandler("blastzHgTop", longXenoPslMethods);
 registerTrackHandler("blastzMmHg", longXenoPslMethods);
 registerTrackHandler("blastzMmHgRef", longXenoPslMethods);
+registerTrackHandler("blastzMmHg12", longXenoPslMethods);
 registerTrackHandler("blastzBestHuman", longXenoPslMethods);
+registerTrackHandler("blastzBestHuman12", longXenoPslMethods);
 registerTrackHandler("blastzAllHuman", longXenoPslMethods);
 registerTrackHandler("xenoBestMrna", xenoMrnaMethods);
 registerTrackHandler("xenoMrna", xenoMrnaMethods);
