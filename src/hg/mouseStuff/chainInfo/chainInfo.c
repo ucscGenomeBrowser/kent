@@ -7,15 +7,19 @@
 #include "hdb.h"
 #include "dnautil.h"
 #include "chain.h"
+#include "chainNet.h"
 #include "axt.h"
+#include "bed.h"
 #include "axtInfo.h"
 #include "rmskOut.h"
 #include "binRange.h"
 #include "obscure.h"
 #include "genePred.h"
 
-int minGap = 40;
+int minGap = 60; /* minimum intron size */
 float minOverlap = 0.90;
+int bigChain = 1000000; /* max chain size  to consider */
+static struct hash *chainHash = NULL; /* hash of all chains indexed by chainId*/
 
 struct intronChain {
     /* scoring of aligned introns in a chain */ 
@@ -32,6 +36,7 @@ struct intronChain {
     float score2;               /* ratio of introns target/query , negative if query has more */
     int overlap1;               /* bases that overlap with gene */
     int overlap2;
+    char strand;                /* strand where putative pseudogene is */
 };
 
 void usage()
@@ -40,14 +45,16 @@ void usage()
 errAbort(
   "chainInfo - parse chains to determine number of introns on query and target\n"
   "usage:\n"
-  "   chainInfo target_db target_chrom chainFile target.lst query.lst target_repeatMasker.out query_repeatDir output refGene.tab genePred2.tab genePred3.tab\n"
+  "   chainInfo query_db target_chrom chainFile syntenicNet.bed target.lst query.lst target_repeatMasker.out query_repeatDir output refGene.tab genePred2.tab genePred3.tab\n"
   "options:\n"
-    "    -minGap=N minimum size to be considered a gap.  Default is 40.\n"
+    "    -minGap=N minimum size to be considered a gap (intron).  Default is 60.\n"
     "    -minOverlap=0.N threshold for repeat overlap with gap to be considered a repeat instead of intron.  Default is 0.90.\n"
-  "db is target database to match genes to pseudogene\n"
+  "db is query database to match genes to pseudogene\n"
   "chrom is target chromosome to match genes to pseudogene\n"
+  "syntenicNet.bed is a filter net file using netFilter -syn converted to bed format\n"
   "query_repeatDir is the dirctory containing repeatMasker out files chrXX.fa.out\n"
   "target.lst, query.lst is a list of chromosome names followed by size of each chromosome\n"
+  "refGene.tab, genePred2,3 are bed12 files of genes in query database\n"
   );
 }
 
@@ -118,7 +125,8 @@ int tGapStart = 0;
 int qGapStart = 0;
 int tGapEnd = 0;
 int qGapEnd = 0, tg,qg;
-int tReps, qReps, percentOverlap, percentQOverlap;
+int tReps, qReps;
+float percentOverlap, percentQOverlap;
 struct binKeeper *bkQ;
 
 
@@ -127,6 +135,7 @@ iChain->chain = chain;
 iChain->qIntron = 0;         iChain->tIntron = 0;          
 iChain->tGap = 0;              iChain->qGap = 0;               
 iChain->tReps = 0;             iChain->qReps = 0;             iChain->total = 0;                  
+iChain->strand = ' ';
 
 for (b = chain->blockList; b != NULL; b = nextB)
     {
@@ -136,11 +145,15 @@ for (b = chain->blockList; b != NULL; b = nextB)
     tGapStart = b->tEnd;
     tGapEnd = nextB->tStart;
     if (chain->qStrand == '+')
-        { qGapStart = b->qEnd;
-        qGapEnd = nextB->qStart; }
+        { 
+        qGapStart = b->qEnd;
+        qGapEnd = nextB->qStart; 
+        }
     else
-        { qGapStart = chain->qSize-nextB->qStart;
-        qGapEnd = chain->qSize-b->qEnd; }
+        { 
+        qGapStart = chain->qSize-nextB->qStart;
+        qGapEnd = chain->qSize-b->qEnd; 
+        }
     tg = tGapEnd - tGapStart;
     qg = qGapEnd - qGapStart;
     t += tg;
@@ -151,7 +164,7 @@ for (b = chain->blockList; b != NULL; b = nextB)
     for (el = binKeeperFindSorted(bk, tGapStart, tGapEnd); el != NULL; el = el->next)
         {
         rmsk = el->val;
-        tReps = positiveRangeIntersection(tGapStart, tGapEnd, rmsk->genoStart, rmsk->genoEnd);
+        tReps += positiveRangeIntersection(tGapStart, tGapEnd, rmsk->genoStart, rmsk->genoEnd);
         }
     percentOverlap = (float)tReps / (float)(tGapEnd - tGapStart);
     if (((tGapEnd - tGapStart) > 0) && percentOverlap > minOverlap)
@@ -165,12 +178,15 @@ for (b = chain->blockList; b != NULL; b = nextB)
 
     /* remove repeasts so we don't call them 'introns' on query */
     /* get bk for query */
-    bkQ = hashFindVal(bkHash, chain->qName);
     qReps = 0;
-    for (el = binKeeperFindSorted(bkQ, qGapStart, qGapEnd); el != NULL; el = el->next)
+    if (bkHash != NULL)
         {
-        rmsk = el->val;
-        qReps = positiveRangeIntersection(qGapStart, qGapEnd, rmsk->genoStart, rmsk->genoEnd);
+        bkQ = hashFindVal(bkHash, chain->qName);
+        for (el = binKeeperFindSorted(bkQ, qGapStart, qGapEnd); el != NULL; el = el->next)
+            {
+            rmsk = el->val;
+            qReps += positiveRangeIntersection(qGapStart, qGapEnd, rmsk->genoStart, rmsk->genoEnd);
+            }
         }
     percentQOverlap = (float)qReps / (float)(qGapEnd - qGapStart);
     if (((qGapEnd - qGapStart) > 0) && percentQOverlap > minOverlap)
@@ -216,8 +232,8 @@ if (t != chain->tEnd)
 assert(iChain->tIntron>=0);
 assert(iChain->qIntron>=0);
 
-iChain->score2 = iChain->tIntron > iChain->qIntron ? (iChain->tIntron+1.0)/(iChain->qIntron+1.0) : -(iChain->qIntron+1.0)/(iChain->tIntron+1.0) ;
-iChain->score1 = (iChain->tIntron > iChain->qIntron) ? ((iChain->tGap+1)/(iChain->qGap+1)) : -(iChain->qGap+1)/(iChain->tGap+1);
+iChain->score2 = iChain->qIntron > iChain->tIntron ? (iChain->qIntron+1.0)/(iChain->tIntron+1.0) : -(iChain->tIntron+1.0)/(iChain->qIntron+1.0) ;
+iChain->score1 = (iChain->qIntron > iChain->tIntron) ? ((iChain->qGap+1)/(iChain->tGap+1)) : -(iChain->tGap+1)/(iChain->qGap+1);
 return iChain;
 }
 struct binKeeper *readRepeats(char *chrom, char *rmskFileName, struct hash *tSizeHash)
@@ -285,10 +301,14 @@ struct chain *readSortChains(char *fileName)
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct chain *chainList = NULL, *chain;
+char chainId[128];
 
+chainHash = newHash(0);
 while ((chain = chainRead(lf)) != NULL)
     {
     slAddHead(&chainList, chain);
+    safef(chainId, sizeof(chainId), "%d", chain->id);
+    hashAddUnique(chainHash, chainId, chain);
     }
 lineFileClose(&lf);
 
@@ -298,63 +318,194 @@ slSort(&chainList, chainCmpQuery);
 return chainList;
 }
 
+struct chain *chainFromId(int id)
+/** Return a chain given the id. */
+{
+char key[128];
+struct chain *chain = NULL;
+if(chainHash == NULL)
+    errAbort("chainFromId() - no chains found");
+safef(key, sizeof(key), "%d", id);
+chain =  hashFindVal(chainHash, key);
+if(chain == NULL)
+    warn("Chain not found for id: %d", id);
+return chain;
+}
+boolean checkChain(struct chain *chain, int start, int end)
+/* Return true if chain covers start, end, false otherwise. */
+{
+struct chain *subChain=NULL, *toFree=NULL;
+boolean good = FALSE;
+if (chain == NULL) return good;
+chainSubsetOnT(chain, start, end, &subChain, &toFree);    
+if(subChain != NULL)
+    good = TRUE;
+chainFree(&toFree);
+return good;
+}
 
-void scoreChains(struct chain *chainList, char *db, FILE *f, struct binKeeper *bk, struct hash *bkHash, struct genePred *gpList1, struct genePred *gpList2, struct genePred *gpList3)
+struct chain *lookForChain(struct cnFill *list, int start, int end)
+/* Recursively look for a chain in this list containing the coordinates 
+   desired. */
+{
+struct cnFill *fill=NULL;
+struct cnFill *gap=NULL;
+
+struct chain *chain = NULL;
+for(fill = list; fill != NULL; fill = fill->next)
+    {
+    if (positiveRangeIntersection(fill->tStart, fill->tStart+fill->tSize, start, end))
+        {
+        chain = chainFromId(fill->chainId);
+        if(checkChain(chain, start,end))
+            return chain;
+        for(gap = fill->children; gap != NULL; gap = gap->next)
+            {
+            chain = chainFromId(fill->chainId);
+            if(checkChain(chain, start,end))
+                return chain;
+            if(gap->children)
+                {
+                chain = lookForChain(gap->children, start, end);
+                if(checkChain(chain, start,end))
+                    return chain;
+                }
+            }
+        }
+    }
+return chain;
+}
+
+struct cnFill *getNetList(struct chain *chain, struct chainNet *netList)
+/* return all cnFills from a netList that overlap a particular chain  by at least 100 bases*/
+{
+struct cnFill *fillList = NULL, *fill, *fillClone;
+struct chainNet *net;
+
+for (net = netList; net != NULL; net = net->next)
+    {
+    for (fill = net->fillList; fill != NULL; fill = fill->next)
+    {
+    if (positiveRangeIntersection(fill->tStart,fill->tStart+fill->tSize,  chain->tStart, chain->tEnd) > 10)
+        {
+        fillClone = cnFillNew();
+        fillClone->next = NULL ;
+        fillClone->children = fill->children ;
+        fillClone->tStart = fill->tStart ;
+        fillClone->tSize = fill->tSize ;
+        fillClone->qName = cloneString(fill->qName) ;
+        fillClone->type = cloneString(fill->type) ;
+        fillClone->qStrand = fill->qStrand ;
+        fillClone->qStart = fill->qStart ;
+        fillClone->qSize = fill->qSize ;
+        fillClone->chainId = fill->chainId ;
+        fillClone->ali = fill->ali = fill->ali ;
+        fillClone->tN = fill->tN = fill->tN ;
+        fillClone->qN = fill->qN = fill->qN ;
+        fillClone->tR = fill->tR ;
+        fillClone->qR = fill->qR ;
+        fillClone->tNewR = fill->tNewR ;
+        fillClone->qNewR = fill->qNewR ;
+        fillClone->tOldR = fill->tOldR ;
+        fillClone->qOldR = fill->qOldR ;
+        fillClone->tTrf = fill->tTrf ;
+        fillClone->qTrf = fill->qTrf ;
+        fillClone->qOver = fill->qOver ;
+        fillClone->qFar = fill->qFar ;
+        fillClone->qDup = fill->qDup ;
+	
+        slAddHead(&fillList, fillClone);
+        printf(" %s %d-%d ", fill->type, fill->tStart, fill->tStart+fill->tSize);
+        }
+    //else printf(" %d-%d ", fill->tStart, fill->tStart+fill->tSize);
+    }
+    }
+//slReverse(&fillList);
+if (fillList == NULL)
+    printf("return null for %d %s %s:%d-%d\n",chain->id, chain->qName, chain->tName, chain->tStart, chain->tEnd);
+return fillList;
+}
+void scoreChains(struct chain *chainList, struct bed *bedList, char *db, FILE *f, struct binKeeper *bk, struct hash *bkHash, struct genePred *gpList1, struct genePred *gpList2, struct genePred *gpList3)
 /* score all chains in a chain file based on ration of introns and gaps  , mask repeats first */
+/* reduce score for chains that are on the main syntenic net */
 /* return best overlapping gene in the target sequence */
 {
-    struct chain *chain, *retSubChain,*retChainToFree;
-    struct intronChain *iChain=NULL, *iChainList = NULL;
-    struct genePred *gp = NULL, *vg;
-    int overlap1;
+struct chain *chain, *retSubChain,*retChainToFree, *netChain;
+struct cnFill *fillList, *fill;
+struct intronChain *iChain=NULL, *iChainList = NULL;
+struct genePred *gp = NULL, *vg;
+struct bed *bed;
+int overlap1, overlapVega;
+boolean onDiagonal;
+int overlapDiagonal;
 
-    hSetDb(db);
-    for (chain = chainList; chain != NULL; chain = chain->next)
+hSetDb(db);
+for (chain = chainList; chain != NULL; chain = chain->next)
+    {
+    /* skip long chains - they are not pseudogenes */
+    if ((chain->tEnd-chain->tStart)> bigChain) 
+        continue;
+    overlapDiagonal = 0;
+    for (bed = bedList ; bed != NULL ; bed = bed->next)
         {
-        gp = getOverlappingGene(&gpList1, "refGene",chain->tName, chain->tStart, chain->tEnd , &overlap1);
-        if (gp == NULL)
-            {
-            gp = getOverlappingGene(&gpList2, "softberryGene",chain->tName, chain->tStart, chain->tEnd, &overlap1);
-            }
+        if( positiveRangeIntersection(bed->chromStart, bed->chromEnd, chain->tStart, chain->tEnd) > overlapDiagonal )
+            overlapDiagonal = positiveRangeIntersection(bed->chromStart, bed->chromEnd, chain->tStart, chain->tEnd);
+        }
+    /* look for gene on query side */
+    gp = getOverlappingGene(&gpList1, "refGene",chain->qName, qStart(chain), qEnd(chain) , &overlap1);
+    if (gp == NULL)
+        {
+        gp = getOverlappingGene(&gpList2, "softberryGene",chain->qName, qStart(chain), qEnd(chain) , &overlap1);
+        }
+    /* check for annontated pseudogene */
+    vg = getOverlappingGene(&gpList3, "vegaPseudoGene",chain->tName, chain->tStart, chain->tEnd, &overlapVega );
+
+    /* if we found something , score it and output record */
+    if (gp != NULL || vg != NULL)
+        {
+        assert (chain->tEnd > 0);
+        retSubChain = NULL;
         if (gp != NULL)
+            if (chain->qStrand =='+')
+                chainSubsetOnQ(chain, gp->txStart, gp->txEnd, &retSubChain,  &retChainToFree);
+            else
+                chainSubsetOnQ(chain, chain->qSize - gp->txEnd, chain->qSize - gp->txStart, &retSubChain,  &retChainToFree);
+
+        if (retSubChain != NULL)
             {
-            chainSubsetOnT(chain, gp->cdsStart, gp->cdsEnd, &retSubChain,  &retChainToFree);
-            if (retSubChain != NULL)
-                {
-                iChain = scoreNextAlignedIntron(retSubChain,f, bk, bkHash);
-                iChain->overlap1 = overlap1;
-                slAddHead(&iChainList, iChain);
-                //chain = iChain->chain;
-        //        if (chain->qStrand == '-')
-        //            fprintf(f,"%7.1f %7.1f %6d %2d %2d %5d %5d %4d %4d %s %d %d %s %d %d %d",iChain->score1, iChain->score2, chain->tEnd-chain->tStart, iChain->tIntron, iChain->qIntron, iChain->tGap, iChain->qGap, iChain->tReps, iChain->qReps, chain->tName, chain->tStart, chain->tEnd, chain->qName, chain->qStart, chain->qEnd, chain->id);
-        //        else
-                if (gp != NULL)
-                    fprintf(f," %7.1f %7.1f %6d %2d %2d %5d %5d %4d %4d %s %d %d %s %d %d %c %d",iChain->score1, iChain->score2, retSubChain->tEnd-retSubChain->tStart, iChain->tIntron, iChain->qIntron, iChain->tGap, iChain->qGap, iChain->tReps, iChain->qReps, chain->tName, retSubChain->tStart, retSubChain->tEnd, retSubChain->qName, qStart(retSubChain), qEnd(retSubChain), retSubChain->qStrand, chain->id);
-                if (gp != NULL && genePredBases(gp) != 0)
-                    fprintf(f," %s %s %d %d %d %2.2f",gp->name, gp->chrom, gp->cdsStart, gp->cdsEnd, iChain->overlap1, (float)iChain->overlap1/(float)genePredBases(gp));
-            //    else
-            //        fprintf(f," NO gene 0 0 0 0.0");
+            iChain = scoreNextAlignedIntron(retSubChain,f, bk, bkHash);
+            iChain->overlap1 = overlap1;
+            iChain->overlap1 = overlapVega;
+            if (gp != NULL)
+                iChain->strand = gp->strand[0] == retSubChain->qStrand ? '+' : '-';
+            slAddHead(&iChainList, iChain);
+            if (gp != NULL) 
+                fprintf(f," %7.1f %7.1f %6d %2d %2d %5d %5d %4d %4d %s %d %d %c %s %d %d %c %d %d" ,
+                        iChain->score1, iChain->score2, retSubChain->tEnd-retSubChain->tStart, iChain->tIntron, iChain->qIntron, 
+                        iChain->tGap, iChain->qGap, iChain->tReps, iChain->qReps, chain->tName, 
+                        retSubChain->tStart, retSubChain->tEnd, iChain->strand , retSubChain->qName, qStart(retSubChain), qEnd(retSubChain), retSubChain->qStrand, 
+                        chain->id, overlapDiagonal);
+            else
+                fprintf(f,"-%7.1f %7.1f %6d %2d %2d %5d %5d %4d %4d %s %d %d %c %s %d %d %c %d %d",
+                        iChain->score1, iChain->score2, retSubChain->tEnd-retSubChain->tStart, iChain->tIntron, iChain->qIntron, 
+                        iChain->tGap, iChain->qGap, iChain->tReps, iChain->qReps, chain->tName, 
+                        retSubChain->tStart, retSubChain->tEnd, iChain->strand , retSubChain->qName, qStart(retSubChain), qEnd(retSubChain), retSubChain->qStrand, 
+                        chain->id, overlapDiagonal);
+            if (gp != NULL && genePredBases(gp) != 0)
+                fprintf(f," %s %s %d %d %d %2.2f %c",
+                        gp->name, gp->chrom, gp->txStart, gp->txEnd, iChain->overlap1, (float)iChain->overlap1/(float)genePredBases(gp), gp->strand[0]);
+            else
+                fprintf(f," NO gene 0 0 0 0.0");
 
+            if (vg != NULL && genePredBases(vg) != 0 && gp != NULL)
+                fprintf(f," %s %s %d %d %d %2.2f %c",
+                        vg->name, vg->chrom, vg->txStart, vg->txEnd, iChain->overlap2, (float)iChain->overlap2/(float)genePredBases(vg), vg->strand[0]);
 
-                vg = getOverlappingGene(&gpList3, "vegaPseudoGene",retSubChain->qName, qStart(retSubChain), qEnd(retSubChain), &iChain->overlap2);
-                if (vg != NULL && genePredBases(vg) != 0 && gp != NULL)
-                    fprintf(f," %s %s %d %d %d %2.2f",vg->name, vg->chrom, vg->cdsStart, vg->cdsEnd, iChain->overlap2, (float)iChain->overlap2/(float)genePredBases(vg));
-
-                if (gp != NULL)
-                    fprintf(f,"\n");
-                }
+            fprintf(f,"\n");
             chainFree(&retChainToFree);
             }
-        /*
-       AllocVar(chainId);
-        sprintf(chainId, "%d",chain->id);
-        if (hashLookup(hash, chainId) == NULL)
-                {
-                hashAddUnique(hash, chainId, chain);
-                }
-        */
         }
-    //lineFileClose(&lf);
+    }
 }
 
 int main(int argc, char *argv[])
@@ -369,31 +520,43 @@ struct chain *chainList;
 struct genePred *genePred1;
 struct genePred *genePred2;
 struct genePred *genePred3;
+struct lineFile *lf = NULL;
+struct chainNet *netList = NULL, *net;
+struct bed *bedList = NULL, *bed;
+char  *row[3];
 
 optionHash(&argc, argv);
-if (argc != 12)
+if (argc != 13)
     usage();
-outFile = mustOpen(argv[8], "w");
+outFile = mustOpen(argv[9], "w");
 /*hSetDb(argv[1]);
 hSetDb2(argv[2]);
 db = hGetDb();
 db2 = hGetDb2();*/
 minGap = optionInt("minGap", minGap);
 minOverlap = optionFloat("minOverlap", minOverlap);
-tSizeHash = readSizes(argv[4]);
-printf("Loading Target Repeats\n");
-tBk = readRepeats(argv[2], argv[6], tSizeHash);
-printf("Loading Query Repeats\n");
-bkHash = readRepeatsAll(argv[2], argv[5], argv[7]);
+tSizeHash = readSizes(argv[5]);
+
+printf("Loading Syntenic Bed\n");
+lf = lineFileOpen(argv[4], TRUE);
+while (lineFileRow(lf,row))
+    {
+    bed = bedLoad3(row);
+    slAddHead(&bedList, bed);
+    }
+printf("Loading %s\n",argv[10]);
+genePred1 = genePredLoadAll(argv[10]);
+printf("Loading %s\n",argv[11]);
+genePred2 = genePredLoadAll(argv[11]);
+printf("Loading %s\n",argv[12]);
+genePred3 = genePredLoadAll(argv[12]);
 printf("Loading Chains\n");
 chainList = readSortChains(argv[3]);
-printf("Loading %s\n",argv[9]);
-genePred1 = genePredLoadAll(argv[9]);
-printf("Loading %s\n",argv[10]);
-genePred2 = genePredLoadAll(argv[10]);
-printf("Loading %s\n",argv[11]);
-genePred3 = genePredLoadAll(argv[11]);
+printf("Loading Target Repeats\n");
+tBk = readRepeats(argv[2], argv[7], tSizeHash);
+printf("Loading Query Repeats\n");
+bkHash = readRepeatsAll(argv[2], argv[6], argv[8]);
 printf("Scoring Chains\n");
-scoreChains(chainList, argv[1], outFile, tBk, bkHash, genePred1, genePred2, genePred3);
+scoreChains(chainList, bedList, argv[1], outFile, tBk, bkHash, genePred1, genePred2, genePred3);
 return 0;
 }

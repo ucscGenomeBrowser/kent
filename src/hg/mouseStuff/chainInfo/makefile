@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = chainInfo.o
 
 chainInfo: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/chainInfo $O $(MYLIBS) $L
+	gcc -ggdb -O -o $(HOME)/bin/$(MACHTYPE)/chainInfo $O $(MYLIBS) $L
 #	strip $(HOME)/bin/$(MACHTYPE)/chainInfo
