@@ -32,8 +32,11 @@ long clock1000()
 /* A millisecond clock. */
 {
 struct timeval tv;
+static long origSec;
 gettimeofday(&tv, NULL);
-return tv.tv_sec + tv.tv_usec / 1000;
+if (origSec == 0)
+    origSec = tv.tv_sec;
+return (tv.tv_sec-origSec)*1000 + tv.tv_usec / 1000;
 }
 
 long clock1()
