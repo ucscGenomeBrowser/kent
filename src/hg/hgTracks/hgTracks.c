@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.760 2004/07/03 23:42:13 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.761 2004/07/09 22:30:51 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -4559,6 +4559,15 @@ tg->itemName = xenoMrnaName;
 tg->extraUiData = newMrnaUiData(tg->mapName, TRUE);
 }
 
+void xenoRefGeneMethods(struct track *tg)
+/* Make track of known genes from xenoRefSeq. */
+{
+tg->loadItems = loadRefGene;
+tg->itemName = xenoMrnaName;
+tg->mapItemName = refGeneMapName;
+tg->itemColor = refGeneColor;
+}
+
 boolean isNonChromColor(Color color)
 /* test if color is a non-chrom color (black or gray) */
 {
@@ -8107,7 +8116,7 @@ registerTrackHandler("knownGene", knownGeneMethods);
 registerTrackHandler("superfamily", superfamilyMethods);
 registerTrackHandler("refGene", refGeneMethods);
 registerTrackHandler("blastHg16KG", blastMethods);
-registerTrackHandler("xenoRefGene", refGeneMethods);
+registerTrackHandler("xenoRefGene", xenoRefGeneMethods);
 registerTrackHandler("sanger22", sanger22Methods);
 registerTrackHandler("sanger22pseudo", sanger22Methods);
 registerTrackHandler("vegaGene", vegaMethods);
