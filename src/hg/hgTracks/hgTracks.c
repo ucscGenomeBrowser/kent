@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.831 2004/11/05 00:04:57 donnak Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.831.2.1 2004/11/06 02:49:32 galt Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6599,7 +6599,12 @@ for (i=0; i<count; i++, text++, textPos++)
 	vgTextCentered(vg, x1+x, y, x2-x1, height, MG_WHITE, font, c);
 	}
     else
-	vgTextCentered(vg, x1+x, y, x2-x1, height, clr, font, c);
+        {
+        /* restore char for unaligned sequence to lower case */
+        if (tolower(c[0]) == tolower(UNALIGNED_SEQ))
+            c[0] = UNALIGNED_SEQ;
+        vgTextCentered(vg, x1+x, y, x2-x1, height, clr, font, c);
+        }
     }
 freez(&inMotif);
 }
