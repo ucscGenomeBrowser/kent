@@ -4162,6 +4162,25 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
+void htcKnownGeneMrna(char *geneName)
+/* Display mRNA associated with a knownGene gene. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+
+hgcStart("RefSeq mRNA");
+sprintf(query, "select name,seq from knownGeneMrna where name = '%s'", geneName);
+sr = sqlGetResult(conn, query);
+printf("<PRE><TT>");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    faWriteNext(stdout, row[0], row[1], strlen(row[1]));
+    }
+sqlFreeResult(&sr);
+}
+
 void cartContinueRadio(char *var, char *val, char *defaultVal)
 /* Put up radio button, checking it if it matches val */
 {
@@ -4451,8 +4470,8 @@ while (row != NULL)
 sqlFreeResult(&sr);
 printf("<BR>");
 
-/* The following is disabled until UCSC Proteome Browser relased to public
-
+//The following is disabled until UCSC Proteome Browser relased to public
+/*
 // display link to UCSC Proteome Browser
 printf("<LI><B>UCSC Proteome Browser: </B>");
 printf("<A HREF=\"http://hgwdev-fanhsu.cse.ucsc.edu/cgi-bin/pb8?");
@@ -4467,7 +4486,6 @@ row = sqlNextRow(sr);
 if (row != NULL) printf(", ");
 while (row != NULL)    
 	{
-    	//spID  = row[0];
 	printf("<A HREF=\"http://hgwdev-fanhsu.cse.ucsc.edu/cgi-bin/pb8?");
 	printf("proteinDB=SWISS&proteinID=%s&mrnaID=%s\" ", row[0], mrnaName);
 	printf(" target=_blank>");
@@ -4482,7 +4500,6 @@ printf("</UL>");
 fflush(stdout);
 
 // Display RefSeq related info, if there is a corresponding RefSeq
-//sprintf(query, "select refAcc from proteins.locAccRef where acc = '%s'",  mrnaName);
 sprintf(query, "select refseq from %s.mrnaRefseq where mrna = '%s'",  database, mrnaName);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -4549,7 +4566,7 @@ else
    	    {
     	    printf("<B>LocusLink:</B> ");
     	    printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?");
-	    printf("=%d\" TARGET=_blank>", rl->locusLinkId);
+	    printf("l=%d\" TARGET=_blank>", rl->locusLinkId);
     	    printf("%d</A><BR>\n", rl->locusLinkId);
     	    if ((strstr(hgGetDb(), "mm") != NULL) && hTableExists("MGIid"))
 	    	{
@@ -4604,7 +4621,7 @@ else
     	    {
     	    printf("\n");
     	    printf("<B>AceView:</B> ");
-    	    printf("<A HREF = \"http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?");
+    	    printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/AceView/av.cgi?");
 	    printf("db=human&l=%s\" TARGET=_blank>", rl->name);
     	    printf("%s</A><BR>\n", rl->name);
     	    }
@@ -4612,8 +4629,8 @@ else
     	}
 
     htmlHorizontalLine();
-    geneShowPosAndLinks(mrnaName, rl->protAcc, tdb, "refPep", "htcTranslatedProtein",
-			"htcRefMrna", "htcGeneInGenome", "mRNA Sequence");
+    geneShowPosAndLinks(mrnaName, mrnaName, tdb, "knownGenePep", "htcTranslatedProtein",
+			"htcKnownGeneMrna", "htcGeneInGenome", "mRNA Sequence");
     }
 
 printTrackHtml(tdb);
@@ -4931,7 +4948,7 @@ if (startsWith("hg", hGetDb()))
     {
     printf("\n");
     printf("<B>AceView:</B> ");
-    printf("<A HREF = \"http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=%s\" TARGET=_blank>",
+    printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/AceView/av.cgi?db=human&l=%s\" TARGET=_blank>",
 	   rl->name);
     printf("%s</A><BR>\n", rl->name);
     }
@@ -5674,7 +5691,6 @@ boolean alignmentOK;
 
 cartWebStart(cart, "Alignment of %s in %s to %s",
 	     name, hOrganism(database), hOrganism(db2));
-hSetDb2(db2);
 
 // get nibFile
 sprintf(query, "select fileName from chromInfo where chrom = '%s'",  chrom);
@@ -10134,6 +10150,10 @@ else if (sameWord(track, "htcGeneMrna"))
 else if (sameWord(track, "htcRefMrna"))
     {
     htcRefMrna(item);
+    }
+else if (sameWord(track, "htcKnownGeneMrna"))
+    {
+    htcKnownGeneMrna(item);
     }
 else if (sameWord(track, "htcGeneInGenome"))
     {
