@@ -216,6 +216,10 @@ else if (sameString(track, "mrna"))
     mrnaUi(tdb, FALSE);
 else if (sameString(track, "est"))
     mrnaUi(tdb, FALSE);
+else if (sameString(track, "tightMrna"))
+    mrnaUi(tdb, FALSE);
+else if (sameString(track, "tightEst"))
+    mrnaUi(tdb, FALSE);
 else if (sameString(track, "intronEst"))
     mrnaUi(tdb, FALSE);
 else if (sameString(track, "xenoMrna"))

@@ -5371,7 +5371,8 @@ else if (sameWord(track, "htcGetDna3"))
 else if (sameWord(track, "mrna") || sameWord(track, "mrna2") || 
 	sameWord(track, "est") || sameWord(track, "intronEst") || 
 	sameWord(track, "xenoMrna") || sameWord(track, "xenoBestMrna") ||
-	sameWord(track, "xenoEst") || sameWord(track, "psu"))
+	sameWord(track, "xenoEst") || sameWord(track, "psu") ||
+	sameWord(track, "tightMrna") | sameWord(track, "tightEst"))
     {
     doHgRna(tdb, item);
     }

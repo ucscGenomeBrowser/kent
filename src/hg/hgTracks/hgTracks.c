@@ -7047,6 +7047,8 @@ registerTrackHandler("ensGene", ensGeneMethods);
 registerTrackHandler("mrna", mrnaMethods);
 registerTrackHandler("intronEst", estMethods);
 registerTrackHandler("est", estMethods);
+registerTrackHandler("tightMrna", mrnaMethods);
+registerTrackHandler("tightEst", mrnaMethods);
 registerTrackHandler("estPair", estPairMethods);
 registerTrackHandler("cpgIsland", cpgIslandMethods);
 registerTrackHandler("exoMouse", exoMouseMethods);
