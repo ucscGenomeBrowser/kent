@@ -39,24 +39,40 @@ exit; # don't actually run this like a script :)
     get ref_placed.agp   # used to be in reference.agp
     get ref_unplaced.agp # used to be in reference.agp
     get DR51.agp
-    get DR52.agp
     get PAR.agp          # new for this build - PAR regions added to chrY
-    cat ref_placed.agp ref_unplaced.agp DR51.agp DR52.agp > ncbi_build34.agp
+    cat ref_placed.agp ref_unplaced.agp DR51.agp > ncbi_build34.agp
 
 # Download contig fa's into gs.17/ffa
 
     get ref_placed.fa.gz   # used to be in reference.fa
     get ref_unplaced.fa.gz # used to be in reference.fa
     get DR51.fa.gz
-    get DR52.fa.gz
     get PAR.fa.gz          # new for this build - PAR regions added to chrY
-    cat ref_placed.fa ref_unplaced.fa DR51.fa DR52.fa > ncbi_build34.fa
+    cat ref_placed.fa ref_unplaced.fa DR51.fa > ncbi_build34.fa
     *** get sequence.inf ***
 
 # Download assembly related files into gs.17/build34
 
     get seq_contig.md
     *** get contig_overlaps.agp ***
+
+# Save a copy of the original seq_contig.md file
+
+    cp seq_contig.md se_contig.md.orig
+
+# For build34, edit the seq_contig.md file to remove the alternative chr7 sequence
+# supplied by the Toronto group: NT_079590, NT_079591, NT_079592, NT_079593, NT_079594,
+# NT_079595, NT_079596, NT_079597
+
+# Edit seq_contig.md to make the DR51 alternative haplotype look like a chr6_random
+# sequence:
+# 9606  6       32491690        32629063        +       NG_002432       GI:28212469     CONTIG    DR51    1
+# to 
+# 9606  6|NG_002432     1       137374  +       NG_002432       GI:28212469     CONTIG  DR51      1
+
+# Move this edited line next to other chr6_random contigs (for creating the lift file)
+
+
     
 # Sanity check
     /cluster/bin/i386/checkYbr build33/ncbi_build34.agp ffa/ncbi_build34.fa \
@@ -69,27 +85,6 @@ exit; # don't actually run this like a script :)
     mkdir contigs
     /cluster/bin/i386/faNcbiToUcsc -split -ntLast ../ffa/ncbi_build34.fa \
       contigs
-    # The above command misses several sequences.  Two because they are
-    # not named NT_ but rather NG_ - and one for unknown reasons.
-    # As done below in the simpleRepeats instructions, the following
-    # will fetch these sequences out of the ncbi_build34.fa file:
-    ssh eieio
-    cd ~/hg16/contigs
-    faOneRecord /cluster/store4/gs.17/ffa/ncbi_build34.fa \
-	"ref|NG_002392" > NG_002392.fa
-    faOneRecord /cluster/store4/gs.17/ffa/ncbi_build34.fa \
-	"ref|NG_002432" > NG_002432.fa
-    #	I don't know about this one.  Its problem is that it is listed
-    #	twice in the seq_contig.md file, in both the X and Y
-    #	chromosomes.
-    faOneRecord /cluster/store4/gs.17/ffa/ncbi_build34.fa \
-	"ref|NT_079581" > NT_079581.fa
-    # These three files end up with non-Standard (for UCSC) ident lines,
-    # edit them to remove everything on the first line except
-    # their NG_, NT_ numbers:
-	>NG_002392
-	>NG_002432
-	>NT_079581
    
 # Copy over chrM contig from previous version
     cd ~/oo
@@ -109,6 +104,28 @@ exit; # don't actually run this like a script :)
 # Create contig agp files (will create contig directory structure)
 	
     /cluster/bin/scripts/createNcbiCtgAgp seq_contig.md ncbi_build34.agp .
+
+# Create chromsome agp files
+
+    /cluster/bin/scripts/createNcbiChrAgp .
+
+# Check that they match the original chrN.agp files (except for gaps), and then copy the
+# originals in since they contain better gap information.  Delete the comments from these.
+
+# Distribute contig .fa to appropriate directory (assumes all files
+# are in "contigs" directory).
+
+    cd ~/hg16
+    /cluster/bin/scripts/distNcbiCtgFa contigs .
+    rm -r contigs
+
+# Since PAR contigs are used twice, these need to be duplicated in chrY.
+    cp -r X/NT_079581 Y/
+    cp -r X/NT_079582 Y/
+    cp -r X/NT_079583 Y/
+    cp -r X/NT_079584 Y/
+    cp -r X/NT_079585 Y/
+
 
 # CREATE STS/FISH/BACENDS/CYTOBANDS DIRECTORY STRUCTURE AND SETUP
 
