@@ -121,12 +121,9 @@ void hgLoadTabFile(struct sqlConnection *conn, char *tmpDir, char *tableName,
 /* Load tab delimited file corresponding to tableName. close fh if not NULL */
 {
 char path[PATH_LEN];
-char query[PATH_LEN+128];
 getTabFile(tmpDir, tableName, path);
 carefulClose(fh);
-safef(query, sizeof(query), "LOAD data local infile '%s' into table %s",
-      path, tableName);
-sqlUpdate(conn, query);
+sqlLoadTabFile(conn, path, tableName);
 }
 
 HGID hgGetMaxId(struct sqlConnection *conn, char *tableName)
