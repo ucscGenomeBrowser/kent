@@ -27,7 +27,19 @@ DBS = 	hg13 hg15 hg16 \
 	sacCer1 \
 	pyrAer1 \
 	pyrFur2 \
-	sc1
+	sc1 \
+	aquAeo1 \
+	bucBuc1 \
+        metMar1 \
+        borBro1 \
+	salTyp1 \
+	metKan1 \
+	aerPer1 \
+	escColH7 \
+	theAci1 \
+	sulTok1 \
+	pyrHor1 \
+	geoSul1
 
 MGC_DBS = \
 	hg15 hg16 \
