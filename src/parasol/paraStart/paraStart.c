@@ -14,12 +14,12 @@ void usage()
 {
 errAbort("paraStart - start parasol hub server on host list.\n"
          "usage:\n"
-	 "    paraStart machineList\n");
+	 "    paraStart machineList\n"
+	 "where machineList is a file containing a list of hosts\n");
 }
 
 void paraStart(char *machineList)
-/* Make up data structure to keep track of each machine. 
- * Try to get sockets on all of them. */
+/* Start node servers on all machines in list. */
 {
 int mCount;
 char *mBuf, **mNames, *name;
