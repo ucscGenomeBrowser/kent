@@ -307,7 +307,6 @@ longLabel $Organism Gene Models from NCBI
 priority 15
 visibility dense
 type genePred ncbiPep
-url http://www.ncbi.nlm.nih.gov/LocusLink/list.cgi?submit=submit&Q=$$
 
 track genomeScan
 shortLabel NCBI GenomeScan
@@ -955,8 +954,8 @@ chromosomes chr22,chr21
 type sample 9
 
 track multAlignWebbcat
-shortLabel Cat alignment
-longLabel Cat alignment from Webb's Multiple Alignment
+shortLabel Cat
+longLabel Cat alignment from Webb's Multiple alignment
 priority 51
 visibility dense
 type psl xeno
