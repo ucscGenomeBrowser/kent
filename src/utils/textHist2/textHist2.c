@@ -124,16 +124,53 @@ if (ps != NULL)
     }
 }
 
+void psXyOut(struct psOutput *ps, int x, int y)
+/* Output x,y position transformed into PostScript space. */
+{
+FILE *f = ps->f;
+psFloatOut(f, x * ps->xScale + ps->xOff);
+psFloatOut(f, y * ps->yScale + ps->yOff);
+}
+
+void psWhOut(struct psOutput *ps, int width, int height)
+/* Output width/height transformed into PostScript space. */
+{
+FILE *f = ps->f;
+psFloatOut(f, width * ps->xScale);
+psFloatOut(f, height * -ps->yScale);
+}
+
 void psDrawBox(struct psOutput *ps, int x, int y, int width, int height)
 /* Draw a filled box in current color. */
 {
+psWhOut(ps, width, height);
+psXyOut(ps, x, y+height);
+fprintf(ps->f, "fillBox\n");
+}
+
+void psMoveTo(struct psOutput *ps, int x, int y)
+/* Move PostScript position to given point. */
+{
+psXyOut(ps, x, y);
+fprintf(ps->f, "moveto\n");
+}
+
+void psTextAt(struct psOutput *ps, int x, int y, char *text)
+/* Output text in current font at given position. */
+{
+psMoveTo(ps, x, y);
+fprintf(ps->f, "(%s) show\n", text);
+}
+
+void psTextDown(struct psOutput *ps, int x, int y, char *text)
+/* Output text going downwards rather than across at position. */
+{
 FILE *f = ps->f;
-int yEnd = y + height;
-psFloatOut(f, width * ps->xScale);
-psFloatOut(f, height * -ps->yScale);
-psFloatOut(f, x * ps->xScale + ps->xOff);
-psFloatOut(f, yEnd * ps->yScale + ps->yOff);
-fprintf(f, "fillBox\n");
+psMoveTo(ps, x, y);
+fprintf(ps->f, "gsave\n");
+fprintf(ps->f, "-90 rotate\n");
+fprintf(ps->f, "(%s) show\n", text);
+fprintf(ps->f, "grestore\n");
 }
 
 void psSetColor(struct psOutput *ps, int r, int g, int b)
@@ -165,6 +202,15 @@ psFloatOut(f, grayVal);
 fprintf(f, "setgray\n");
 }
 
+double mightLog(double val)
+/* Put val through a log transform if doLog is set. */
+{
+if (doLog)
+    val = log(1+val);
+return val;
+}
+
+
 double findMaxVal(int *hist)
 /* Find maximum val in histogram. */
 {
@@ -173,9 +219,7 @@ int i;
 double val, maxVal = 0;
 for (i=0; i<bothBins; ++i)
     {
-    val = hist[i];
-    if (doLog)
-        val = log(1+val);
+    val = mightLog(hist[i]);
     if (maxVal < val)
         maxVal = val;
     }
@@ -185,28 +229,53 @@ return maxVal;
 void psOutput(int *hist, char *psFile)
 /* Output histogram in postscript format. */
 {
-double psInnerSize = psSize;
 double labelSize = 72.0/2;
+double psInnerSize = psSize - labelSize;
 double tickSize = labelSize/4;
 double textSize = labelSize - tickSize;
 struct psOutput *ps = psOpen(psFile, psSize, psSize, psSize, psSize, margin);
 double val, maxVal = findMaxVal(hist);
 int x, y, both;
 double grayScale;
+double xPos, yPos, xMid, yMid;
+double xBinPts = psInnerSize/xBins;
+double yBinPts = psInnerSize/yBins;
 
 grayScale = 1.0 / maxVal;
 for (y=0; y<yBins; ++y)
     {
+    int yg = yBins-1-y;
+    yPos = yg*yBinPts;
     for (x=0; x<xBins; ++x)
         {
-	val;
+	xPos = x * xBinPts + labelSize;
 	both = y*xBins + x;
-	val = hist[both];
-	if (doLog)
-	    val = log(1+val);
+	val = mightLog(hist[both]);
 	psSetGray(ps, 1.0 - val * grayScale);
-	psDrawBox(ps, x, yBins-1-y, 1, 1);
+	psDrawBox(ps, xPos, yPos, xBinPts, yBinPts);
 	}
+    }
+
+/* Draw ticks and labels. */
+psSetGray(ps, 0);
+yPos = psInnerSize;
+for (x=1; x<xBins; ++x)
+    {
+    char buf[16];
+    sprintf(buf, "%d", x*xBinSize+xMin);
+    xPos = x * xBinPts + labelSize;
+    xMid = xPos;
+    psDrawBox(ps, xPos, yPos, 1, tickSize);
+    psTextDown(ps, xPos, yPos+tickSize+2, buf);
+    }
+for (y=1; y<yBins; ++y)
+    {
+    char buf[16];
+    int yg = yBins-y;
+    sprintf(buf, "%d", y*yBinSize+yMin);
+    yPos = yg*yBinPts;
+    psDrawBox(ps, textSize, yPos, tickSize, 1);
+    psTextAt(ps, 0, yPos, buf);
     }
 psClose(&ps);
 }
