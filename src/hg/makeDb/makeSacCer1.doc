@@ -783,6 +783,9 @@ end
     hgLoadBed sacCer1 transRegCode transRegCode.bed -sqlTable=$HOME/kent/src/hg/lib/transRegCode.sql
     hgsql sacCer1 < $HOME/kent/src/hg/lib/transRegCodeMotif.sql
     hgsql sacCer1 -e 'load data local infile "transRegCodeMotif.tab" into table transRegCodeMotif'
+    # Get rid of some crufty motif placements Ben Gordon doesn't like anymore that aren't in the
+    # transRegCodeMotif table.
+    hgsql sacCer1 -e 'delete from transRegCode where name="CRZ1" or name="ECM22" or name="SFL1"'
 
 #CREATING DOWNLOADS DIRECTORY
     ssh hgwdev
