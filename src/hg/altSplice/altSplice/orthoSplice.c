@@ -35,7 +35,7 @@
 #include "chainNetDbLoad.h"
 #include "geneGraph.h"
 
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.12 2003/07/13 06:17:20 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.13 2003/07/22 02:43:20 sugnet Exp $";
 
 struct orthoSpliceEdge 
 /* Structure to hold information about one edge in 
@@ -375,12 +375,12 @@ for(fill = list; fill != NULL; fill = fill->next)
 	chain = chainFromId(fill->chainId);
 	if(checkChain(chain, start,end))
 	    return chain;
-	if(gap->children)
-	    {
-	    chain = lookForChain(gap->children, start, end);
-	    if(checkChain(chain, start, end))
-		return chain;
-	    }
+/* 	if(gap->children) */
+/* 	    { */
+/* 	    chain = lookForChain(gap->children, start, end); */
+/* 	    if(checkChain(chain, start, end)) */
+/* 		return chain; */
+/* 	    } */
 	}
     }
 return chain;
