@@ -651,6 +651,17 @@ printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%d>", varName,
 	maxDigits, initialVal);
 }
 
+void cgiMakeDoubleVar(char *varName, double initialVal, int maxDigits)
+/* Make a text control filled with initial floating-point value.  */
+{
+if (maxDigits == 0) maxDigits = 4;
+
+printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%g>", varName, 
+	maxDigits, initialVal);
+}
+
+
+
 void cgiMakeDropList(char *name, char *menu[], int menuSize, char *checked)
 /* Make a drop-down list with names. */
 {
