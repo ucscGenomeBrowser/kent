@@ -501,6 +501,8 @@ void doOutWigData(struct trackDb *track, char *table, struct sqlConnection *conn
 
 void doSummaryStatsWiggle(struct sqlConnection *conn);
 /* Put up page showing summary stats for wiggle track. */
+void wigShowFilter(struct sqlConnection *conn);
+/* print out wiggle data value filter */
 
 /* ----------- Custom track stuff. -------------- */
 boolean isCustomTrack(char *table);
