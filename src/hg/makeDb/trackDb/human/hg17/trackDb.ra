@@ -6,6 +6,18 @@ group map
 visibility dense
 type bed 3 +
 
+track firstEF
+shortLabel FirstEF 
+longLabel FirstEF: First-Exon and Promoter Prediction
+group regulation
+priority 90.1
+visibility hide
+spectrum on
+type bed 6
+scoreMin 900
+scoreMax 1000
+url http://rulai.cshl.org/tools/FirstEF/Readme/README.html
+
 track multiz8way
 shortLabel Conservation
 longLabel Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish Multiz Alignments & Conservation 
