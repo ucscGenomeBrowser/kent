@@ -111,7 +111,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.452 2003/07/11 23:09:28 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.453 2003/07/14 23:32:54 ytlu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7664,6 +7664,7 @@ char stsClone[45];
 int i;
 struct psl *pslList = NULL, *psl;
 int pslStart;
+ char sChar='%';
 
 /* Print out non-sequence info */
 
@@ -7703,11 +7704,11 @@ if (row != NULL)
 	    }
 	if( infoRow->RGDId != 0)
 	    {
-	      printf("<TR><TH ALIGN=left>RGD Marker ID:</TH><TD><B><A HREF=\"http://rgd.mcw.edu/tools/query/query.cgi?id=%d\">%d</A></TD></TR>\n",infoRow->RGDId,infoRow->RGDId ); 
+	      printf("<TR><TH ALIGN=left>MGI Marker ID:</TH><TD><B><A HREF=\"http://www.informatics.jax.org/searches/marker_report.cgi?accID=MGI%c3A%d\">%d</A></TD></TR>\n",sChar,infoRow->RGDId,infoRow->RGDId ); 
 	    }
 	if( strcmp(infoRow->RGDName, "") )
 	    {
-	    printf("<TR><TH ALIGN=left>RGD Marker Name:</TH><TD>%s</TD></TR>\n", infoRow->RGDName);
+	    printf("<TR><TH ALIGN=left>MGI Marker Name:</TH><TD>%s</TD></TR>\n", infoRow->RGDName);
 	    }
 	printf("</TABLE>\n");
 	htmlHorizontalLine();
