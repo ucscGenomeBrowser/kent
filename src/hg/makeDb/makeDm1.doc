@@ -817,6 +817,8 @@ SEQ2_LEN=$BASE/S2.len
       liftUp -chainQ ../axtChainChrom/chain/$f:t \
         /cluster/data/dp1/jkStuff/liftAll.lft warn $f
     end
+    liftUp -chainQ ../axtChainChrom/all.chain \
+      /cluster/data/dp1/jkStuff/liftAll.lft warn all.chain
 
     ssh hgwdev
     cd /cluster/data/dm1/bed/blastz.dp1.2003-11-14/axtChainChrom/chain
@@ -882,6 +884,18 @@ SEQ2_LEN=$BASE/S2.len
         netToAxt -maxGap=300 $i ../chain/$c.chain /cluster/data/dm1/nib \
           /cluster/data/dp1/nib ../../axtNetChrom/$c.axt
         echo done ../axt/$c.axt
+    end
+    cd ..
+    rm -r fruitflyNet
+    cd /cluster/data/dm1/bed/blastz.dp1.2003-11-14/axtChainScaffoldQ
+    mkdir ../axtNetScaffoldQ
+    netSplit fruitflyFilt.net fruitflyNet
+    cd fruitflyNet
+    foreach i (*.net)
+        set c = $i:r
+        netToAxt -maxGap=300 $i ../chain/$c.chain /cluster/data/dm1/nib \
+          /cluster/data/dp1/scaffoldsNib ../../axtNetScaffoldQ/$c.axt
+        echo done ../axtNetScaffoldQ/$c.axt
     end
     cd ..
     rm -r fruitflyNet
@@ -1546,6 +1560,23 @@ end
     mkdir bigZips database
     # Create README.txt files in bigZips/ and database/ to explain the files.
     cp -p /cluster/data/dm1/zips/*.zip bigZips
+
+
+# ADD BLASTZ/CHAIN/NET DOWNLOADABLE FILES (DONE 12/1/03 angie)
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/dm1/vsDp1
+    cd /usr/local/apache/htdocs/goldenPath/dm1/vsDp1
+    gzip -c \
+      /cluster/data/dm1/bed/blastz.dp1.2003-11-14/axtChainScaffoldQ/all.chain \
+      > chain.gz
+    gzip -c \
+      /cluster/data/dm1/bed/blastz.dp1.2003-11-14/axtChainScaffoldQ/fruitflyFilt.net \
+      > net.gz
+    mkdir axtNet
+    foreach f (/cluster/data/dm1/bed/blastz.dp1.2003-11-14/axtNetScaffoldQ/chr*axt)
+      gzip -c $f > axtNet/$f:t.gz
+    end
+    # Make a README.txt which explains the files & formats.
 
 
 # ANOPHELES ECORES FROM GENOSCOPE (DONE 11/10/03 angie)
