@@ -140,7 +140,7 @@ static void altGraphXDraw(struct track *tg, int seqStart, int seqEnd,
 			 struct vGfx *vg, int xOff, int yOff, int width, 
 			 MgFont *font, Color color, enum trackVisibility vis)
 /* Draws the blocks for an alt-spliced gene and the connections. This
- * is more compace for both the dense an full modes than
+ * is more compact for both the dense an full modes than
  * altGraphXDrawPackTrack() but will overwrite on exon on top of
  * another so you may not see alternative 5' splice sites. If we're in close we
  * use altGraphXDrawPackTrack() otherwise we default to this. */
@@ -327,7 +327,7 @@ char buff[32];
 struct altGraphX *ag = item;
 int count =0, i=0;
 for(i=0; i<ag->edgeCount; i++)
-    if(ag->edgeTypes[i] == ggCassette)
+    if(ag->edgeTypes[i] == ggExon)
 	count++;
 snprintf(buff, sizeof(buff), "%d", count );
 return (cloneString(buff));
