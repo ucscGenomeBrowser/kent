@@ -7443,6 +7443,115 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     # rm dbSnpRs*
 
 
+
+# LOAD SNPS ( Daryl Thomas; February ??, 2005)
+    set db    = hg16
+    set org   = human
+    set build = 122
+    set dir   = /cluster/bluearc/snp/$db/build$build
+
+    # ssh to some quiet machine with fast access to the bluearc
+    # it takes ~4.5 hours to download the data 
+    # (build 124 directly to /cluster/bluearc/... from eieio)
+    # Check to make sure the chrMT file is included
+    mkdir -p $dir $dir/ds_ch.xml $dir/det $dir/str $dir/loc $dir/seq
+    cd $dir
+    ln -s /cluster/data/$db/jkStuff/liftAll.lft .
+
+    screen
+    ftp ftp.ncbi.nih.gov
+    cd snp/$org/XML
+    prompt
+    mget ds_ch*.xml.gz
+    exit # screen
+    exit # machine
+
+    # TODO: check chromStart for each locType
+
+    cp -f {$HOME}/kent/src/hg/snp/parseDbSnpXML /cluster/bin/scripts
+    chmod 775 /cluster/bin/scripts/parseDbSnpXML
+
+    ssh kk
+    touch jobList
+    foreach file ( /cluster/bluearc/snp/$db/build$build/ds_ch*.xml.gz )
+	    set out = $file:t:r
+	    echo /cluster/bin/scripts/parseDbSnpXML $file /cluster/bluearc/snp/$db/build$build $out.contig >> jobList
+    end
+
+    # para create jobList; para push; para check ... 
+# CPU time in finished jobs:      28235s     470.58m     7.84h    0.33d  0.001 y
+# IO & Wait Time:                  1986s      33.10m     0.55h    0.02d  0.000 y
+# Average job time:                1119s      18.65m     0.31h    0.01d
+# Longest job:                     2339s      38.98m     0.65h    0.03d
+    exit # kk
+
+    mv -r $dir /cluster/data/$db/bed/snp/build$build
+    set dir = /cluster/data/$db/bed/snp/build$build
+    cd $dir
+
+    ssh eieio # or wherever data is local
+
+    # concatenate the details files to make it easier to lift (and load)
+    time zcat det/ds_ch*.xml.contig.det.gz > $db.build$build.contig.bed
+    # 16.120u 13.070s 1:35.26 30.6%   0+0k 0+0io 86pf+0w (hgwdev)
+    time gzip $db.build$build.contig.bed
+    # 102.307u 5.524s 1:48.97 98.9%   0+0k 0+0io 1pf+0w (eieio/store5)
+
+    # some of the NT contigs are not in the liftSpec - this is expected as snps that map to
+    # alternate assemblies (Celera) are in the original files, but we disregard their mappings.
+    time liftUp $db.build$build.bed liftAll.lft warn $db.build$build.contig.bed.gz 
+    # 190.473u 18.873s 3:52.33 90.1%  0+0k 0+0io 1pf+0w (eieio/store5)
+
+    time gzip $db.build$build.bed
+    # 107.476u 5.286s 1:54.25 98.6%   0+0k 0+0io 0pf+0w
+
+    ssh hgwdev # or wherever database is located
+    # hgLoadBed is the important step - check to make sure there are no warnings
+    time hgLoadBed $db snp $db.build$build.bed.gz -sqlTable=${HOME}/kent/src/hg/lib/snp.sql
+    # Loaded 8722437 elements of size 16
+    # 206.170u 48.370s 35:59.52 11.7% 0+0k 0+0io 82994pf+0w
+
+
+    # basic snp table is now loaded, but exception column needs to be updated
+    # ~ 3 hours wall clock time from here to end
+
+    # run queries from snpException.query against snp table
+    mkdir -p /usr/local/apache/htdocs/qa/test-results/snpException/build$build
+    cd       /usr/local/apache/htdocs/qa/test-results/snpException/build$build
+    time snpException $db 0 ${db}snpException > ${db}snpException.log
+    chmod o+rx . 
+    chmod o+r  * 
+    # 24.590u 34.150s 41:04.48 2.3%   0+0k 0+0io 191pf+0w
+
+    # check alignment of flanking sequences
+    time snpValid $db /cluster/data/$db/bed/snp/build$build/seq > ${db}snpValid.log
+    # 4688.790u 172.770s 1:28:45.62 91.2%     0+0k 0+0io 23000pf+0w
+    # 5205.860u 216.570s 1:55:10.27 78.4%     0+0k 0+0io 72408pf+0w (hgwdev)
+
+    ### NOTE: the pseudoautosomal snps are reported in the chrX files
+    ### only, which causes problems for snpValid when checking the
+    ### chrY snp mappings.  I got around this by confirming that all
+    ### of the 'missing flank' errors (#23) were in pseudoautosomal
+    ### regions and ignoring them.  I manually truncated the
+    ### hg17snpException.23.bed file before continuing with the next
+    ### step.  This could/should be fixed in the next iteration.
+
+    # create list of statements to update the snp table and run them
+    time tail +3 ${db}snpException.* | awk '/rs/ {printf "%s\t%d\t%d\n",$4,$2,$5}' | sort -k1,2n > exceptionList.txt
+    # ~10 seconds
+    time updateExceptionList.pl < exceptionList.txt > updateExceptionList.sql
+    # 36.270u 1.980s 0:38.27 99.9%    0+0k 0+0io 337pf+0w
+    time hgsql $db < updateExceptionList.sql
+    # 18.130u 26.680s 58:39.97 1.2%   0+0k 0+0io 413pf+0w build122 (had to optimize table during run)
+    # 8.420u 10.370s 11:58.44 2.6%    0+0k 0+0io 413pf+0w build123 (this is mostly a mysql process)
+    # 6.550u  9.370s 14:34.17 1.8%    0+0k 0+0io 413pf+0w build124
+    # > wc -l build12*/updateExceptionList.sql
+    # 1110994 build122/updateExceptionList.sql
+    #  387166 build123/updateExceptionList.sql
+    #  383759 build124/updateExceptionList.sql
+
+
+
 # JAX ORTHOLOG (WORKING hiram 2004-02-20 )
     # Add Jackson labs info
     cd /cluster/data/hg16/bed
