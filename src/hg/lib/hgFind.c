@@ -1587,6 +1587,9 @@ else if (findGenePred(query, hgp, "softberryGene"))
 else if (findGenePred(query, hgp, "acembly"))
     {
     }
+else if (findGenePred(query, hgp, "genscan"))
+    {
+    }
 else if (findGenethonPos(query, &chrom, &start, &end))	/* HG3 only. */
     {
     singlePos(hgp, "STS Position", NULL, query, chrom, start, end);
