@@ -55,7 +55,7 @@ puts(
     "<BODY BGCOLOR=\"FFF9D2\" LINK=\"0000CC\" VLINK=\"#330066\" ALINK=\"#6600FF\">" "\n"
     "<A NAME=\"TOP\"></A>" "\n"
     "" "\n"
-    "<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>" "\n");
+    "<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=\"100%\">" "\n");
 
 if (withLogo)
     puts(
