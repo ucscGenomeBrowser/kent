@@ -52,8 +52,6 @@ visibility hide
 color 12,12,120
 type genePred xenoRefPep xenoRefMrna
 
-track mgcGenes
-
 track snapGene
 shortLabel SNAP Genes
 longLabel SNAP Gene Predictions
@@ -69,15 +67,6 @@ group genes
 priority 49
 visibility dense
 type genePred
-
-track blastHg16KG
-shortLabel Human knownGene tBLASTn
-longLabel Human knownGene tBLASTn
-group compGeno
-priority 114
-visibility pack
-colorChromDefault off
-type psl protein
 
 track blatSavignyi
 shortLabel C. savignyi Blat
