@@ -77,6 +77,42 @@ INSTALL INSTRUCTIONS FOR CODE USING THE BROWSER DATABASE
 4. Execute make in the directory containing the
    application you wish to build.
 
+MAJOR MODULES
+
+Here is a list of some of the more useful modules in
+the library.  Unless noted the module is a .h file
+in the inc directory and a .c file in the lib
+directory.
+
+o - common  - String handling, singly-linked list handling. 
+    Other basic stuff every other module uses.
+o - hash - Simple but effective hash table routines.
+o - linefile - Line oriented file input, on some systems
+    much faster than fgets().
+o - cheapcgi - Parses out cgi variables for scripts called
+    from web pages.
+o - htmshell - Helps generate HTML output for scripts that
+    are called from web pages or just want to make web
+    pages.
+o - memgfx - Creates a 256 color image in memory which
+    can be drawn on, then saved as a .GIF file which
+    can be encorperated into a web page.
+o - fuzzyFind - Align two pieces of DNA that are 
+    relatively similar (~80% base identity or better).
+    Works best when one sequence is less than 30,000
+    bases and the other less than 100,000 bases.
+o - patSpace and supStitch - Align longer pieces of
+    DNA.
+o - xensmall - Align two small pieces of dissimilar DNA.
+    (7 State Pairwise HMM)
+o - xenbig - Align two large pieces of dissimilar DNA.
+o - jksql - Interface to mySQL that frees resources on
+    exit and error conditions.
+o - dnautils and dnaseq - Simple utilities on DNA.
+o - fa - Read/write fasta format files.
+o - serv* and port* - Adapt the code to the peculiarities of
+    various web servers.
+
 
 CODE CONVENTIONS
 
@@ -245,40 +281,4 @@ if (doMask)
     }
 return twoBit;
 }
-
-MAJOR MODULES
-
-Here is a list of some of the more useful modules in
-the library.  Unless noted the module is a .h file
-in the inc directory and a .c file in the lib
-directory.
-
-o - common  - String handling, singly-linked list handling. 
-    Other basic stuff every other module uses.
-o - hash - Simple but effective hash table routines.
-o - linefile - Line oriented file input, on some systems
-    much faster than fgets().
-o - cheapcgi - Parses out cgi variables for scripts called
-    from web pages.
-o - htmshell - Helps generate HTML output for scripts that
-    are called from web pages or just want to make web
-    pages.
-o - memgfx - Creates a 256 color image in memory which
-    can be drawn on, then saved as a .GIF file which
-    can be encorperated into a web page.
-o - fuzzyFind - Align two pieces of DNA that are 
-    relatively similar (~80% base identity or better).
-    Works best when one sequence is less than 30,000
-    bases and the other less than 100,000 bases.
-o - patSpace and supStitch - Align longer pieces of
-    DNA.
-o - xensmall - Align two small pieces of dissimilar DNA.
-    (7 State Pairwise HMM)
-o - xenbig - Align two large pieces of dissimilar DNA.
-o - jksql - Interface to mySQL that frees resources on
-    exit and error conditions.
-o - dnautils and dnaseq - Simple utilities on DNA.
-o - fa - Read/write fasta format files.
-o - serv* and port* - Adapt the code to the peculiarities of
-    various web servers.
 
