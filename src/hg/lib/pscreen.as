@@ -10,5 +10,4 @@ table pscreen
     uint stockNumber;  "Mutant strain stock number, for ordering"
     uint geneCount;    "Number of genes disrupted by this insert"
     string[geneCount] geneIds;   "IDs of genes disrupted"
-    int[geneCount] geneDeltas;   "Offset of disruption relative to gene TS???"
     )

@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: pscreen.c,v 1.2 2004/08/05 21:32:49 angie Exp $";
+static char const rcsid[] = "$Id: pscreen.c,v 1.3 2004/08/25 23:58:20 angie Exp $";
 
 struct pscreen *pscreenLoad(char **row)
 /* Load a pscreen from row fetched with select * from pscreen
@@ -30,11 +30,6 @@ int sizeOne;
 sqlStringDynamicArray(row[8], &ret->geneIds, &sizeOne);
 assert(sizeOne == ret->geneCount);
 }
-{
-int sizeOne;
-sqlSignedDynamicArray(row[9], &ret->geneDeltas, &sizeOne);
-assert(sizeOne == ret->geneCount);
-}
 return ret;
 }
 
@@ -44,7 +39,7 @@ struct pscreen *pscreenLoadAll(char *fileName)
 {
 struct pscreen *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[10];
+char *row[9];
 
 while (lineFileRow(lf, row))
     {
@@ -62,7 +57,7 @@ struct pscreen *pscreenLoadAllByChar(char *fileName, char chopper)
 {
 struct pscreen *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[10];
+char *row[9];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -102,17 +97,6 @@ for (i=0; i<ret->geneCount; ++i)
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
 }
-{
-int i;
-s = sqlEatChar(s, '{');
-AllocArray(ret->geneDeltas, ret->geneCount);
-for (i=0; i<ret->geneCount; ++i)
-    {
-    ret->geneDeltas[i] = sqlSignedComma(&s);
-    }
-s = sqlEatChar(s, '}');
-s = sqlEatChar(s, ',');
-}
 *pS = s;
 return ret;
 }
@@ -130,7 +114,6 @@ freeMem(el->name);
 if (el->geneIds != NULL)
     freeMem(el->geneIds[0]);
 freeMem(el->geneIds);
-freeMem(el->geneDeltas);
 freez(pEl);
 }
 
@@ -180,17 +163,6 @@ for (i=0; i<el->geneCount; ++i)
     if (sep == ',') fputc('"',f);
     fprintf(f, "%s", el->geneIds[i]);
     if (sep == ',') fputc('"',f);
-    fputc(',', f);
-    }
-if (sep == ',') fputc('}',f);
-}
-fputc(sep,f);
-{
-int i;
-if (sep == ',') fputc('{',f);
-for (i=0; i<el->geneCount; ++i)
-    {
-    fprintf(f, "%d", el->geneDeltas[i]);
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);

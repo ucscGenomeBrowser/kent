@@ -15,7 +15,6 @@ CREATE TABLE pscreen (
     stockNumber int unsigned not null,	# Mutant strain stock number, for ordering
     geneCount int unsigned not null,	# Number of genes disrupted by this insert
     geneIds longblob not null,	# IDs of genes disrupted
-    geneDeltas longblob not null,	# Offset of disruption relative to gene TS???
               #Indices
     INDEX(chrom(8),bin),
     INDEX(chrom(8),chromStart),
