@@ -86,6 +86,7 @@ if (mgColorsFree(mg))
 return mgClosestColor(mg, r, g, b);
 }
 
+
 struct rgbColor mgColorIxToRgb(struct memGfx *mg, int colorIx)
 /* Return rgb value at color index. */
 {
@@ -118,6 +119,7 @@ for (i=0; i<mg->colorsUsed; ++i)
 return closestIx;
 }
 
+
 Color mgAddColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned char b)
 /* Adds color to end of color map if there's room. */
 {
@@ -130,7 +132,7 @@ if (colIx < 256)
     c->g = g;
     c->b = b;
     mg->colorsUsed += 1;
-    colHashAdd(mg->colorHash, r, g, b, colIx);;
+    colHashAdd(mg->colorHash, r, g, b, colIx);
     }
 return (Color)colIx;
 }
