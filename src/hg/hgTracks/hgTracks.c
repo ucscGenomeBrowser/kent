@@ -52,7 +52,6 @@
 #include "mouseSynWhd.h"
 #include "syntenyBerk.h"
 #include "syntenySanger.h"
-#include "blastzNet.h"
 #include "netAlign.h"
 #include "netGap.h"
 #include "knownMore.h"
@@ -5508,27 +5507,6 @@ void loadMouseSyn(struct trackGroup *tg)
 bedLoadItem(tg, "mouseSyn", (ItemLoader)mouseSynLoad);
 }
 
-void loadBlastzNet(struct trackGroup *tg)
-{
-bedLoadItem(tg, "blastzNet", (ItemLoader)blastzNetLoad);
-slSort(&tg->items, bedCmp);
-}
-
-void freeBlastzNet(struct trackGroup *tg)
-{
-blastzNetFreeList((struct blastzNet**)&tg->items);
-}
-
-void blastzNetMethods(struct trackGroup *tg)
-{
-tg->loadItems = loadBlastzNet;
-tg->freeItems = freeBlastzNet;
-tg->itemColor = syntenyItemColor;
-tg->drawName = FALSE;
-tg->subType = lfWithBarbs ;
-
-}
-
 void synteny100000Methods(struct trackGroup *tg)
 {
 tg->loadItems = loadSynteny100000;
@@ -9978,8 +9956,6 @@ registerTrackHandler("synteny100000", synteny100000Methods);
 registerTrackHandler("syntenyBuild30", synteny100000Methods);
 registerTrackHandler("syntenyBerk", syntenyBerkMethods);
 registerTrackHandler("syntenySanger", syntenySangerMethods);
-registerTrackHandler("blastzNet_25", blastzNetMethods);
-registerTrackHandler("blastzNet", blastzNetMethods);
 registerTrackHandler("blastzNetAlign", netMethods);
 registerTrackHandler("netAlign", netMethods);
 registerTrackHandler("mouseOrtho", mouseOrthoMethods);
