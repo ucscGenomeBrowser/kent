@@ -5,7 +5,7 @@
 #include "options.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: hgSgdGff3.c,v 1.5 2003/12/09 02:57:27 kent Exp $";
+static char const rcsid[] = "$Id: hgSgdGff3.c,v 1.6 2003/12/10 00:46:18 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -155,8 +155,11 @@ for (tf = tfList; tf != NULL; tf = nextTf)
 	/* Write BED. */
 	int start = atoi(tf->fields[3]) - 1;
 	int end = atoi(tf->fields[4]);
-	fprintf(otherFile, "chr%s\t%d\t%d\t%s\t%s\t%s\n",
-		tf->fields[0], start, end, tf->fields[8], tf->fields[6], type);
+	char strand = tf->fields[6][0];
+	if (strand != '+' && strand != '-')
+	    strand = '.';
+	fprintf(otherFile, "chr%s\t%d\t%d\t%s\t0\t%c\t%s\n",
+		tf->fields[0], start, end, tf->fields[8], strand, type);
 	}
     }
 }
