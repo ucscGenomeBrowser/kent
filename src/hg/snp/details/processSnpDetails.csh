@@ -13,7 +13,8 @@ set organism  = $2
 set snpBuild  = $3
 set oo        = /cluster/data/$database
 set fileBase  = dbSnpRS${database}Build$snpBuild
-set DETAILDIR = /kent/src/hg/snp/details
+set DETAILDIR = ${HOME}/kent/src/hg/snp/details
+set nice      = "nice "
 
 # Run from directory $oo/bed/snp/build$snpBuild/details
 mkdir -p $oo/bed/snp/build$snpBuild/details/Done
@@ -47,39 +48,42 @@ touch $fileBase.obs
 foreach chrom ( $chroms )
     echo
     echo `date` Getting data for chr$chrom
-    wget ftp://ftp.ncbi.nlm.nih.gov/snp/$organism/XML/ds_ch$chrom.xml.gz \
+    $nice wget ftp://ftp.ncbi.nlm.nih.gov/snp/$organism/XML/ds_ch$chrom.xml.gz \
 	|& grep ds_ch | grep -v "=" | grep -v XML
     
     echo `date` Unzipping XML file `pwd`/ds_ch$chrom.xml.gz
-    gunzip ds_ch$chrom.xml.gz 
+    $nice gunzip ds_ch$chrom.xml.gz 
 
     echo `date` Getting details from ds_ch$chrom.xml
-    getObsHet < ds_ch$chrom.xml > Observed/ch$chrom.obs
+    $nice getObsHet < ds_ch$chrom.xml > Observed/ch$chrom.obs
 
     echo `date` Zipping ds_ch$chrom.xml
-    gzip ds_ch$chrom.xml
+    $nice gzip ds_ch$chrom.xml
     mv   ds_ch*.xml.gz Done
 
     echo `date` Collecting details
-    cat  Observed/ch$chrom.obs >> $fileBase.obs
+    $nice cat  Observed/ch$chrom.obs >> $fileBase.obs
 
     echo `date` Zipping ch$chrom.obs
-    gzip Observed/ch$chrom.obs
+    $nice gzip Observed/ch$chrom.obs
 end
 
 echo
 echo `date` Starting dbSnp
 echo
-$DETAILDIR/dbSnp $database $fileBase
+$nice $DETAILDIR/dbSnp $database $fileBase
 echo
 echo `date` Finished dbSnp
 echo
 
+exit;
+
 # clean up
 echo `date` Zipping files
-gzip $fileBase.err $fileBase.obs
+$nice gzip $fileBase.err $fileBase.obs
 echo `date` Done.
 echo
+
 echo load data local infile "$fileBase.out" into table $table \
      | hgsql $database
 
