@@ -23,7 +23,7 @@ struct chain *chainBlocks(char *qName, int qSize, char qStrand,
 	ConnectCost connectCost, GapCost gapCost, FILE *details);
 /* Create list of chains from list of blocks.  The blockList will get
  * eaten up as the blocks are moved from the list to the chain. 
- * The chain returned is sorted by score. 
+ * The list of chains returned is sorted by score. 
  *
  * The details FILE may be NULL, and is where additional information
  * about the chaining is put.
