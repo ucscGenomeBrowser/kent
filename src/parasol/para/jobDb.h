@@ -19,7 +19,7 @@ struct submission
     unsigned char gotRetVal;	/* True if got return value */
     unsigned char submitError;	/* An error occurred submitting it */
     unsigned char inQueue;	/* Currently in queuing system */
-    unsigned char queueError;	/* In error stat in queue */
+    unsigned char queueError;	/* In error state in queue */
     unsigned char trackingError;	/* Have lost track of this somehow - no output, not on queue */
     unsigned char running;	/* Currently running */
     unsigned char crashed;	/* Looks like it ran but crashed */

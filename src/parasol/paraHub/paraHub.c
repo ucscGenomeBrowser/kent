@@ -125,6 +125,9 @@ struct user *userList;		/* List of all users. */
 struct dlList *queuedUsers;	/* Users with jobs in queue. */
 struct dlList *unqueuedUsers;   /* Users with no jobs in queue. */
 
+struct hash *stringHash;	/* Unique strings throughout system go here
+                                 * including directory names and results file
+				 * names. */
 
 struct resultQueue *resultQueues; /* Result files. */
 int finishedJobCount = 0;		/* Number of finished jobs. */
@@ -439,10 +442,10 @@ job->id = ++nextJobId;
 job->exe = cloneString(exeFromCommand(cmd));
 job->cmd = cloneString(cmd);
 job->user = findUser(user);
-job->dir = cloneString(dir);
+job->dir = hashStoreName(stringHash, dir);
 job->in = cloneString(in);
 job->out = cloneString(out);
-job->results = cloneString(results);
+job->results = hashStoreName(stringHash, results);
 return job;
 }
 
@@ -455,11 +458,9 @@ if (job != NULL)
     freeMem(job->node);
     freeMem(job->exe);
     freeMem(job->cmd);
-    freeMem(job->dir);
     freeMem(job->in);
     freeMem(job->out);
     freeMem(job->err);
-    freeMem(job->results);
     freez(pJob);
     }
 }
@@ -916,6 +917,35 @@ while ((name = nextWord(&names)) != NULL)
 netSendLongString(connectionHandle, "ok");
 }
 
+
+void chillBatch(char *line, int connectionHandle)
+/* Stop launching jobs from a batch, but don't disturb
+ * running jobs. */
+{
+char *userName = nextWord(&line);
+char *batch = nextWord(&line);
+char *res = "err";
+if (batch != NULL)
+    {
+    struct user *user = hashFindVal(userHash, userName);
+    batch = hashStoreName(stringHash, batch);
+    if (user != NULL)
+	{
+	struct dlNode *el, *next;
+	for (el = user->jobQueue->head; !dlEnd(el); el = next)
+	    {
+	    struct job *job = el->val;
+	    next = el->next;
+	    if (job->results == batch)
+		recycleJob(job);	/* This free's el too! */
+	    }
+	res = "ok";
+	}
+    }
+netSendLongString(connectionHandle, res);
+}
+
+
 void jobDone(char *line)
 /* Handle job is done message. */
 {
@@ -1249,6 +1279,7 @@ setupDaemonLog(optionVal("log", NULL));
 logIt("Starting paraHub on %s\n", hubHost);
 
 /* Set up various lists. */
+stringHash = newHash(0);
 setupLists();
 startMachines(machineList);
 assert(sigLen < sizeof(sig));
@@ -1312,6 +1343,8 @@ for (;;)
 	     nodeCheckIn(line);
 	else if (sameWord(command, "removeJob"))
 	     removeJobAcknowledge(line, connectionHandle);
+	else if (sameWord(command, "chill"))
+	     chillBatch(line, connectionHandle);
 	else if (sameWord(command, "ping"))
 	     respondToPing(connectionHandle);
 	else if (sameWord(command, "addMachine"))

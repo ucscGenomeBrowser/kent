@@ -12,7 +12,7 @@ object submission
     ubyte gotRetVal;	"True if got return value"
     ubyte submitError;	"An error occurred submitting it"
     ubyte inQueue;	"Currently in queuing system"
-    ubyte queueError;	"In error stat in queue"
+    ubyte queueError;	"In error state in queue"
     ubyte trackingError; "Have lost track of this somehow - no output, not on queue"
     ubyte running;	"Currently running"
     ubyte crashed;	"Looks like it ran but crashed"

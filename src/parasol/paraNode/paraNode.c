@@ -212,6 +212,19 @@ if ((grandChildId = fork()) == 0)
     setpgrp();
     umask(umaskVal); 
 
+    /* Update environment. */
+        {
+	struct hash *hash = environToHash(environ);
+	hashUpdate(hash, "JOB_ID", jobIdString);
+	hashUpdate(hash, "USER", user);
+	hashUpdate(hash, "HOME", homeDir);
+	hashUpdate(hash, "HOST", hostName);
+	hashUpdate(hash, "PARASOL", "1");
+	updatePath(hash, userPath, homeDir, sysPath);
+	environ = hashToEnviron(hash);
+	freeHashAndVals(&hash);
+	}
+
     /* Redirect standard io.  There has to  be a less
      * cryptic way to do this. Close all open files, then
      * open in/out/err in order so they have descriptors
@@ -226,23 +239,11 @@ if ((grandChildId = fork()) == 0)
     open(out, O_WRONLY | O_CREAT, 0666);
     open(err, O_WRONLY | O_CREAT, 0666);
 
-    /* Update environment. */
-        {
-	struct hash *hash = environToHash(environ);
-	hashUpdate(hash, "JOB_ID", jobIdString);
-	hashUpdate(hash, "USER", user);
-	hashUpdate(hash, "HOME", homeDir);
-	hashUpdate(hash, "HOST", hostName);
-	hashUpdate(hash, "PARASOL", "1");
-	updatePath(hash, userPath, homeDir, sysPath);
-	environ = hashToEnviron(hash);
-	freeHashAndVals(&hash);
-	}
     
     if ((execErr = execvp(exe, params)) < 0)
 	{
-	perror("");
-	warn("Error execlp'ing %s %s", exe, params);
+	perror("execvp");
+	warn("Error execvp'ing %s %s", exe, params);
 	}
     exit(execErr);
     }

@@ -45,23 +45,26 @@ errAbort(
   "   Create database and run all jobs in it if possible.  If one job\n"
   "   failes repeatedly this will fail.  Suitable for inclusion in makefiles\n"
   "   Same as a 'create' followed by a 'shove'.\n"
-  "para check \n"
+  "para check\n"
   "   This checks on the progress of the jobs.\n"
-  "para stop \n"
+  "para stop\n"
   "   This stops all the jobs in the batch\n"
-  "para finished \n"
+  "para chill\n"
+  "   Tells system to not launch more jobs in this batch, but\n"
+  "   does not stop jobs that are already running.\n"
+  "para finished\n"
   "   List jobs that have finished\n"
-  "para hung \n"
+  "para hung\n"
   "   List hung jobs in the batch\n"
-  "para crashed \n"
+  "para crashed\n"
   "   List jobs that crashed or failed output checks the last time they were run.\n"
-  "para failed \n"
+  "para failed\n"
   "   List jobs that crashed after repeated restarts.\n"
-  "para problems \n"
+  "para problems\n"
   "   List jobs that had problems (even if successfully rerun).  Includes host info\n"
-  "para running \n"
+  "para running\n"
   "   Print info on currently running jobs\n"
-  "para time \n"
+  "para time\n"
   "   List timing information\n"
   );
 }
@@ -428,22 +431,23 @@ atomicWriteBatch(db, batch);
 printf("%d jobs written to %s\n", db->jobCount, batch);
 }
 
-char *submitJobToHub(char *jobMessage)
-/* Submit job to hub.  Return jobId, or NULL on failure. */
+char *hubSingleLineQuery(char *query)
+/* Send message to hub and get single line response.
+ * This should be freeMem'd when done. */
 {
 int hubFd = netConnect("localhost", paraPort);
-char *jobIdString;
+char *result;
 
 if (hubFd < 0)
     return NULL;
-if (!sendWithSig(hubFd, jobMessage))
+if (!sendWithSig(hubFd, query))
     {
     close(hubFd);
     return NULL;
     }
-jobIdString = netRecieveLongString(hubFd);
+result = netRecieveLongString(hubFd);
 close(hubFd);
-return jobIdString;
+return result;
 }
 
 boolean submitJob(struct job *job, char *curDir)
@@ -454,7 +458,7 @@ struct submission *sub;
 char *jobId = NULL;
 
 dyStringPrintf(cmd, "addJob %s %s /dev/null /dev/null %s/para.results %s", cuserid(NULL), curDir, curDir, job->command);
-jobId = submitJobToHub(cmd->string);
+jobId = hubSingleLineQuery(cmd->string);
 if (jobId != NULL)
     {
     AllocVar(sub);
@@ -637,13 +641,7 @@ for (job=db->jobList; job != NULL; job = job->next)
 	    struct jobResult *jr = hashFindVal(resultsHash, sub->id);
 	    if (jr == NULL)
 	        {
-		long subTime;
-		subTime = sub->submitTime;
-		duration = now - subTime;
-		if (duration > 60)	/* Give it up to 60 seconds to show up. */
-		    sub->trackingError = 3;
-		else
-		    sub->inQueue = TRUE;
+		sub->trackingError = 3;
 		}
 	    else
 	        {
@@ -1026,6 +1024,69 @@ printf("total jobs running: %d\n", runCount);
 }
 
 
+void sendChillMessage()
+/* Tell hub to chill out on job */
+{
+struct dyString *dy = newDyString(1024);
+char curDir[512];
+char *result;
+if (getcwd(curDir, sizeof(curDir)) == NULL)
+    errAbort("Couldn't get current directory");
+dyStringPrintf(dy, "chill %s %s/para.results", cuserid(NULL), curDir);
+result = hubSingleLineQuery(dy->string);
+dyStringFree(&dy);
+if (result == NULL || !sameString(result, "ok"))
+    errAbort("Couldn't chill %s\n", curDir);
+freez(&result);
+}
+
+
+int cleanTrackingErrors(struct jobDb *db)
+/* Remove submissions with tracking errors. 
+ * Returns count of these submissions */
+{
+int count = 0;
+struct job *job;
+struct submission *sub;
+for (job = db->jobList; job != NULL; job = job->next)
+    {
+    sub = job->submissionList;
+    if (sub != NULL)
+        {
+	if (sub->trackingError)
+	    {
+	    job->submissionCount -= 1;
+	    job->submissionList = sub->next;
+	    ++count;
+	    }
+	}
+    }
+return count;
+}
+
+void removeChilledSubmissions(char *batch)
+/* Remove submissions from job database if we
+ * asked them to chill out. */
+{
+struct jobDb *db = readBatch(batch);
+int chillCount;
+
+markQueuedJobs(db);
+markRunJobStatus(db);
+chillCount = cleanTrackingErrors(db);
+printf("Chilled %d jobs\n", chillCount);
+atomicWriteBatch(db, batch);
+}
+
+void paraChill(char *batch)
+/*  Tells system to not launch more jobs in this batch, but
+ *  does not stop jobs that are already running.\n */
+{
+sendChillMessage();
+printf("Told hub to chill out %s\n", batch);
+removeChilledSubmissions(batch);
+}
+
 /* Death row is where jobs to be killed get
  * bundled together to send to server in 
  * batches of 256 or so. */
@@ -1041,8 +1102,6 @@ deathRow = newDyString(16*1024);
 deathRowSize = 0;
 dyStringAppend(deathRow, "removeJob");
 }
-
-
 
 
 void deathRowExecute()
@@ -1076,18 +1135,6 @@ dyStringPrintf(deathRow, " %s", jobId);
 if (deathRowSize >= deathRowMaxSize)
     deathRowExecute();
 }
-
-void killSubmission(struct submission *sub)
-/* Kill a submission. */
-{
-struct dyString *cmd = newDyString(256);
-int hubFd = netConnect("localhost", paraPort);
-dyStringPrintf(cmd, "%s %s", "removeJob", sub->id);
-mustSendWithSig(hubFd, cmd->string);
-close(hubFd);
-freeDyString(&cmd);
-}
-
 
 void paraStop(char *batch)
 /* Stop batch of jobs. */
@@ -1323,6 +1370,10 @@ else if (sameString(command, "try"))
 else if (sameString(command, "stop"))
     {
     paraStop(batch);
+    }
+else if (sameString(command, "chill"))
+    {
+    paraChill(batch);
     }
 else if (sameString(command, "hung"))
     {
