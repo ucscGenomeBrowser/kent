@@ -1,0 +1,17 @@
+track mrna
+shortLabel $Organism mRNAs
+longLabel $Organism mRNAs from Genbank 
+group rna
+priority 54
+visibility pack
+spectrum on
+type psl .
+
+track viralProt
+shortLabel corona prot
+longLabel Coronavirus proteins from Swissprot 
+group x
+priority 54
+visibility pack
+type psl .
+
