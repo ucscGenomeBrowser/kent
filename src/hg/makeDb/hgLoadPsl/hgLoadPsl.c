@@ -1,7 +1,10 @@
 /* hgLoadPsl - Load up a mySQL database with psl alignment tables. */
 #include "common.h"
+#include "cheapcgi.h"
 #include "jksql.h"
 #include "dystring.h"
+
+boolean tNameIx = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -11,7 +14,9 @@ errAbort(
   "usage:\n"
   "   hgLoadPsl database file1.psl ... fileN.psl\n"
   "This must be run in the same directory as the .psl files\n"
-  "It will create a table for each psl file.");
+  "It will create a table for each psl file.\n"
+  "options:\n"
+  "   -tNameIx  add target name index");
 }
 
 char *createString = 
@@ -24,7 +29,7 @@ char *createString =
     "qBaseInsert int unsigned not null,	# Number of bases inserted in query\n"
     "tNumInsert int unsigned not null,	# Number of inserts in target\n"
     "tBaseInsert int unsigned not null,	# Number of bases inserted in target\n"
-    "strand char(1) not null,	# + or - for strand\n"
+    "strand char(2) not null,	# + or - for strand.  First character is query, second is target.\n"
     "qName varchar(255) not null,	# Query sequence name\n"
     "qSize int unsigned not null,	# Query sequence size\n"
     "qStart int unsigned not null,	# Alignment start position in query\n"
@@ -38,9 +43,9 @@ char *createString =
     "qStarts longblob not null,	# Start of each block in query.\n"
     "tStarts longblob not null,	# Start of each block in target.\n"
               "#Indices\n"
-    "INDEX(tStart),\n"
+    "INDEX(%stStart),\n"
     "INDEX(qName(12)),\n"
-    "INDEX(tEnd)\n"
+    "INDEX(%stEnd)\n"
 ")\n";
 
 void hgLoadPsl(char *database, int pslCount, char *pslNames[])
@@ -51,6 +56,7 @@ char dir[256], table[128], ext[64];
 char *pslName;
 struct sqlConnection *conn = sqlConnect(database);
 struct dyString *ds = newDyString(2048);
+char *extraIx = (tNameIx ? "tName(12)," : "" );
 
 for (i = 0; i<pslCount; ++i)
     {
@@ -58,7 +64,7 @@ for (i = 0; i<pslCount; ++i)
     printf("Processing %s\n", pslName);
     splitPath(pslName, dir, table, ext);
     dyStringClear(ds);
-    dyStringPrintf(ds, createString, table);
+    dyStringPrintf(ds, createString, table, extraIx, extraIx);
     sqlMaybeMakeTable(conn, table, ds->string);
     dyStringClear(ds);
     dyStringPrintf(ds, 
@@ -75,6 +81,8 @@ sqlDisconnect(&conn);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+cgiSpoof(&argc, argv);
+tNameIx = cgiBoolean("tNameIx");
 if (argc < 3)
     usage();
 hgLoadPsl(argv[1], argc-2, argv+2);
