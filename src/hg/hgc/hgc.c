@@ -149,8 +149,9 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 #include "jalview.h"
+#include "flyreg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.785 2004/11/23 00:12:50 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.786 2004/11/23 02:41:57 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -187,6 +188,7 @@ struct bed *sageExpList = NULL;
 /* See this NCBI web doc for more info about entrezFormat:
  * http://www.ncbi.nlm.nih.gov/entrez/query/static/linking.html */
 char *entrezFormat = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=%s&term=%s&doptcmdl=%s&tool=genome.ucsc.edu";
+char *entrezUidFormat = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=%s&list_uids=%d&dopt=%s&tool=genome.ucsc.edu";
 /* db=unists is not mentioned in NCBI's doc... so stick with this usage: */
 char *unistsnameScript = "http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=unists";
 char *unistsScript = "http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=";
@@ -226,6 +228,12 @@ static void printEntrezPubMedUrl(FILE *f, char *term)
 /* Print URL for Entrez browser on a PubMed search. */
 {
 fprintf(f, entrezFormat, "PubMed", term, "DocSum");
+}
+
+static void printEntrezPubMedUidUrl(FILE *f, int pmid)
+/* Print URL for Entrez browser on a PubMed search. */
+{
+fprintf(f, entrezUidFormat, "PubMed", pmid, "Summary");
 }
 
 static void printEntrezOMIMUrl(FILE *f, int id)
@@ -14950,6 +14958,48 @@ readInGulp(helpName, &helpBuf, NULL);
 puts(helpBuf);
 }
 
+static void doFlyreg(struct trackDb *tdb, char *item)
+/* flyreg.org: Drosophila DNase I Footprint db. */
+{
+struct dyString *query = newDyString(256);
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+int start = cartInt(cart, "o");
+int end   = cartInt(cart, "t");
+char fullTable[64];
+boolean hasBin = FALSE;
+int i = 0;
+
+genericHeader(tdb, item);
+hFindSplitTable(seqName, tdb->tableName, fullTable, &hasBin);
+dyStringPrintf(query, "select * from %s where chrom = '%s' and ",
+	       fullTable, seqName);
+hAddBinToQuery(start, end, query);
+dyStringPrintf(query, "chromStart = %d and name = '%s'", start, item);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct flyreg fr;
+    flyregStaticLoad(row+hasBin, &fr);
+    if (i++ > 0)
+	htmlHorizontalLine();
+    printf("<B>Factor:</B> %s<BR>\n", fr.name);
+    printf("<B>Target:</B> %s<BR>\n", fr.target);
+    printf("<B>PubMed ID:</B> <A HREF=\"");
+    printEntrezPubMedUidUrl(stdout, fr.pmid);
+    printf("\" TARGET=_BLANK>%d</A><BR>\n", fr.pmid);
+    bedPrintPos((struct bed *)(&fr), 3);
+    }
+if (i == 0)
+    errAbort("query returned no results: \"%s\"", query);
+dyStringFree(&query);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+printTrackHtml(tdb);
+}
+
+
 void doMiddle()
 /* Generate body of HTML. */
 {
@@ -15693,6 +15743,10 @@ else if (sameWord(organism, "fugu") && startsWith("ecores", track))
 else if (startsWith("pscreen", track))
     {
     doPscreen(tdb, item);
+    }
+else if (sameWord("flyreg", track))
+    {
+    doFlyreg(tdb, item);
     }
 else if (tdb != NULL)
     {
