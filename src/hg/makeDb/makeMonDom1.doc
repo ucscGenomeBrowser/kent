@@ -1084,10 +1084,15 @@ done
 	/usr/local/apache/htdocs/goldenPath/hg17/vsMonDom1/opossum.net
     cd /usr/local/apache/htdocs/goldenPath/hg17/vsMonDom1
     gzip opossum.net
+    #	The axtNet files need to go too (2005-02-24 - Hiram)
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/hg17/vsMonDom1/axtNet
+    cd /usr/local/apache/htdocs/goldenPath/hg17/vsMonDom1/axtNet
+    cp -p /cluster/data/monDom1/bed/zb.hg17/axtNet/*.axt .
+    gzip *
 
     # index had NULL cardinality; analyze to fix (2005-01-18 - Heather)
-    hgsql hg17
-    analyze table netMonDom1
+    hgsql hg17 -e "analyze table netMonDom1;"
 
 # MAKE NET MAFS FOR MULTIZ (2004-12-24 kate)
     ssh kksilo
@@ -2963,16 +2968,25 @@ cd /cluster/data/monDom1
 #- Build the .zip files
 rm -rf zip
 mkdir zip
-# soft masked scaffold fasta
-zip -j zip/softMask.fa.zip maskedScaffolds.fa &
-# RepeatMasker library
-zip -j zip/novel.RM.lib.fa.zip jkStuff/monDom1.novel.RM.lib &
-# hard masked scaffold fasta
-zip -j zip/hardMask.fa.zip hardMaskedScaffolds.fa &
+#	! 2005-02-08 - Should not be .zip files, should be .gz files
+#zip -j zip/softMask.fa.zip maskedScaffolds.fa &
+#zip -j zip/hardMask.fa.zip hardMaskedScaffolds.fa &
+#zip -j zip/novel.RM.lib.fa.zip jkStuff/monDom1.novel.RM.lib &
+#zip ../../zip/trf.bed.zip trfMask.bed &
 
+# RepeatMasker library
+gzip -c jkStuff/monDom1.novel.RM.lib > zip/novel.RM.lib.fa.gz
+touch -r jkStuff/monDom1.novel.RM.lib zip/novel.RM.lib.fa.gz
+# soft masked scaffold fasta
+gzip -c maskedScaffolds.fa > zip/softMask.fa.gz
+touch -r maskedScaffolds.fa zip/softMask.fa.gz
+# hard masked scaffold fasta
+gzip -c hardMaskedScaffolds.fa > zip/hardMask.fa.gz
+touch -r hardMaskedScaffolds.fa zip/hardMask.fa.gz
 # TRF output files
-cd bed/simpleRepeat
-zip ../../zip/trf.bed.zip trfMask.bed &
+gzip -c bed/simpleRepeat/trfMask.bed > zip/trf.bed.gz
+touch -r bed/simpleRepeat/trfMask.bed zip/trf.bed.gz
+
 
 # get GenBank native mRNAs
 cd /cluster/data/genbank
@@ -2988,10 +3002,11 @@ cd /cluster/data/genbank
 cd /cluster/data/monDom1/zip
 # zip GenBank native and xeno mRNAs and native ESTs, 
 # after the above gbGetSeqs jobs are done.
-zip -j mrna.fa.zip mrna.fa 
-zip -j xenoMrna.fa.zip xenoMrna.fa 
+# zip -j mrna.fa.zip mrna.fa 
+# zip -j xenoMrna.fa.zip xenoMrna.fa 
 # zip -j est.fa.zip est.fa 
-rm -f mrna.fa xenoMrna.fa est.fa
+#rm -f mrna.fa xenoMrna.fa est.fa
+gzip mrna.fa xenoMrna.fa
 
 #	RepeatMasker out files, we don't have this as traditionally delivered
 #	since the process involved turning the data into the database
@@ -3001,18 +3016,24 @@ ssh hgwdev
 mkdir -p /usr/local/apache/htdocs/goldenPath/monDom1/bigZips
 cd /usr/local/apache/htdocs/goldenPath/monDom1/bigZips
 hgsqldump monDom1 rmsk -T .
-zip -j rmsk.txt.zip rmsk.txt &
-rm rmsk.txt
+#zip -j rmsk.txt.zip rmsk.txt &
+#rm rmsk.txt
+gzip rmsk.txt &
 
 ssh hgwdev
 cd /usr/local/apache/htdocs/goldenPath/monDom1
 rsync -a --progress /cluster/data/monDom1/zip/ .
 
-# Check zip file integrity
-for i in *.zip
+for i in *.gz
 do
-    unzip -t $i | tail -1
+    /bin/echo -n "$i - "
+    zcat $i | sum -r
 done
+# Check zip file integrity
+#for i in *.zip
+#do
+#    unzip -t $i | tail -1
+#done
 #	No errors detected in compressed data of hardMask.fa.zip.
 #	No errors detected in compressed data of mrna.fa.zip.
 #	No errors detected in compressed data of novel.RM.lib.fa.zip.
@@ -3021,5 +3042,6 @@ done
 #	No errors detected in compressed data of trf.bed.zip.
 #	No errors detected in compressed data of xenoMrna.fa.zip.
 
-md5sum *.zip > md5sum.txt
+# md5sum *.zip > md5sum.txt
+md5sum *.gz > md5sum.txt
 # update README.txt.
