@@ -665,8 +665,8 @@ printf("Got %d clones to avoid from %s\n", badCount, fileName);
 void readGsClones(char *gsDir, struct hash *cloneHash, struct cloneInfo **pCloneList)
 /* Read in clones from freeze directory. */
 {
-static char *subDirs[3] = {"fin", "draft", "predraft"};
-static char path[3][512];
+static char *subDirs[4] = {"fin", "draft", "predraft", "extras"};
+static char path[4][512];
 int i;
 char *subDir;	
 
