@@ -52,8 +52,6 @@
 #include "lfs.h"
 #include "mcnBreakpoints.h"
 
-#define hgTracksName() "../cgi-bin/jkTracks"	/* uglyf */
-
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
 #define FUREY_CODE 1
@@ -408,8 +406,8 @@ if (chrom == NULL)
     start = winStart;
     end = winEnd;
     }
-printf("HREF=\"%s?seqName=%s&winStart=%d&winEnd=%d", 
-	hgTracksName(), chrom, start, end);
+printf("HREF=\"%s?position=%s:%d-%d",
+	hgTracksName(), chrom, start+1, end);
 printf("&%s\"", ui->string);
 freeDyString(&ui);
 
@@ -5886,7 +5884,7 @@ if (userSeqString && !fileExists(userSeqString))
 if (userSeqString != NULL)
     eUserSeqString = cgiEncode(userSeqString);
 
-hideControls = cartBoolean(cart, "hideControls", selfName);
+hideControls = cartUsualBoolean(cart, "hideControls", FALSE, selfName);
 withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE, selfName);
 withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE, selfName);
 withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE, selfName);
@@ -6025,13 +6023,6 @@ if (!hideControls)
     smallBreak();
 
     /* Display bottom control panel. */
-    fputs("Chromosome ", stdout);
-    cgiMakeDropList("seqName", hgChromNames, 24, chromName);
-    fputs(" bases ",stdout);
-    cgiMakeIntVar("winStart", winStart, 12);
-    fputs(" - ", stdout);
-    cgiMakeIntVar("winEnd", winEnd, 12);
-    fputs("<BR>\n", stdout);
     printf(" Guidelines ");
     cgiMakeCheckBox("guidelines", withGuidelines);
     printf(" <B>Labels:</B> ");
@@ -6198,23 +6189,9 @@ hDefaultConnect();
 initTl();
 
 /* Read in input from CGI. */
-position = cartOptionalString(cart, "position");
-if ((submitVal = cartOptionalString(cart, "submit")) != NULL)
-    if (sameString(submitVal, "refresh"))
-        position = NULL;
-if (position == NULL)
-    position = "";
-if (position != NULL && position[0] != 0)
-    {
-    if (!findGenomePos(position, &chromName, &winStart, &winEnd))
-        return;
-    }
-if (chromName == NULL)
-    {
-    chromName = cartString(cart, "seqName");
-    winStart = cartIntExp(cart, "winStart");
-    winEnd = cartIntExp(cart, "winEnd");
-    }
+position = cartString(cart, "position");
+if (!findGenomePos(position, &chromName, &winStart, &winEnd))
+    return;
 
 /* Clip chromosomal position to fit. */
 seqBaseCount = hChromSize(chromName);
@@ -6233,12 +6210,8 @@ if (winStart < 0)
     winStart = 0;
 if (winEnd > seqBaseCount)
     winEnd = seqBaseCount;
-if (winStart >= seqBaseCount)
-    errAbort("Can't start at %d.  %s only has %d bases!",
-        winStart, chromName, seqBaseCount);
-
 winBaseCount = winEnd - winStart;
-if (winBaseCount == 0)
+if (winBaseCount <= 0)
     errAbort("Window out of range on %s", chromName);
 
 /* Do zoom/scroll if they hit it. */
