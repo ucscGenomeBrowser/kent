@@ -9,7 +9,7 @@
 #include "options.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: hgGcPercent.c,v 1.16 2004/11/18 22:56:11 hiram Exp $";
+static char const rcsid[] = "$Id: hgGcPercent.c,v 1.17 2005/02/17 19:55:52 aamp Exp $";
 
 /* Command line switches. */
 int winSize = 20000;            /* window size */
@@ -160,20 +160,25 @@ void makeGcTabFromNib(char *nibFile, char *chrom, FILE *f)
 int start = 0, end = 0;
 int chromSize;
 FILE *nf = NULL;
-
+struct dnaSeq *seq = NULL;
+    
 nibOpenVerify(nibFile, &nf, &chromSize);
+seq = nibLdPart(nibFile, nf, chromSize, 0, chromSize);
 
 for (start=0, end=0;  start < chromSize && end < chromSize;  
      start = end - overlap)
     {
-    struct dnaSeq *seq = NULL;
+    struct dnaSeq *subSeq = NULL;
+    DNA *subSeqDNA = NULL;
     end = start + winSize;
     if (end > chromSize)
         end = chromSize;
-    seq = nibLdPart(nibFile, nf, chromSize, start, end - start);
-    makeGcLineFromSeq(seq, chrom, start, end, f);
-    freeDnaSeq(&seq);
+    subSeqDNA = cloneStringZ(seq->dna + start, end - start);
+    subSeq = newDnaSeq(subSeqDNA, end - start, NULL);
+    makeGcLineFromSeq(subSeq, chrom, start, end, f);
+    freeDnaSeq(&subSeq);
     }
+freeDnaSeq(&seq);
 carefulClose(&nf);
 if (!noDots)
     verbose(1, "\n");
@@ -192,6 +197,8 @@ for (el = twoBitNames; el != NULL; el = el->next)
     int start = 0, end = 0;
     int chromSize = twoBitSeqSize(tbf, el->name);
     char *chrom = el->name;
+    struct dnaSeq *seq = NULL;
+
     if (chr)
 	{
 	verbose(2, "#\tchecking name: %s =? %s\n", chrom, chr);
@@ -199,17 +206,21 @@ for (el = twoBitNames; el != NULL; el = el->next)
 	    continue;
 	}
     verbose(2, "#\tProcessing twoBit sequence %s\n", chrom);
+    seq = twoBitReadSeqFrag(tbf, chrom, 0, chromSize);
     for (start=0, end=0;  start < chromSize && end < chromSize;  
 	 start = end - overlap)
 	{
-	struct dnaSeq *seq = NULL;
+	struct dnaSeq *subSeq = NULL;
+	DNA *subSeqDNA = NULL;
 	end = start + winSize;
 	if (end > chromSize)
 	    end = chromSize;
-	seq = twoBitReadSeqFrag(tbf, chrom, start, end);
-	makeGcLineFromSeq(seq, chrom, start, end, f);
-	freeDnaSeq(&seq);
+	subSeqDNA = cloneStringZ(seq->dna + start, end - start);
+	subSeq = newDnaSeq(subSeqDNA, end - start, NULL);
+	makeGcLineFromSeq(subSeq, chrom, start, end, f);
+	freeDnaSeq(&subSeq);
 	}
+    freeDnaSeq(&seq);
     }
 if (!noDots)
     verbose(1, "\n");
