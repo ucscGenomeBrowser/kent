@@ -103,7 +103,10 @@ exit; # don't actually run this like a script :)
     mkdir M/lift
     echo "chrM_1/chrM_1.fa.out" > M/lift/oOut.lst
     echo "chrM_1" > M/lift/ordered.lst
-    echo "0	M/chrM_1	16775	chrM	16775" > M/lift/ordered.lft
+    # 7/13/04: Oops, first time around, used the wrong hardcoded value!
+    # So liftAll.lft had too big of an upper limit for chrM until now:
+    set msize = `faSize M/chrM.fa | awk '{print $1;}'`
+    echo "0\tM/chrM_1\t$msize\tchrM\t$msize" > M/lift/ordered.lft
 
 
 # MAKE JKSTUFF AND BED DIRECTORIES (DONE 5/21/04 angie)
@@ -300,7 +303,8 @@ if (-e /tmp/droYak1/$2/$2.cat) /bin/cp /tmp/droYak1/$2/$2.cat ./
     cvs commit drosophila/droYak1
 
 
-# MAKE LIFTALL.LFT (DONE 2/24/04 angie)
+# MAKE LIFTALL.LFT (DONE 5/21/04 angie)
+    # Redone 7/13/04: chrM/lift/ordered.lft was regenerated w/correct size.
     ssh kksilo
     cd /cluster/data/droYak1
     cat */lift/{ordered,random}.lft > jkStuff/liftAll.lft
@@ -650,5 +654,82 @@ axtFilter -notQ=chrUn_random $1 \
     mv /cluster/data/droYak1/zip/melanogaster*.zip .
     md5sum *.zip > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
+
+
+# AUTO UPDATE GENBANK MRNA RUN  (DONE 7/15/04 angie)
+    ssh hgwdev
+    # Update genbank config and source in CVS:
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup .
+    # See if /cluster/data/genbank/etc/genbank.conf has had any un-checked-in
+    # edits, check them in if necessary:
+    diff /cluster/data/genbank/etc/genbank.conf etc/genbank.conf
+
+    # Edit etc/genbank.conf and add these lines:
+# droYak1 (D. yakuba)
+droYak1.genome = /iscratch/i/droYak1/nib/chr*.nib
+droYak1.lift = /cluster/data/droYak1/jkStuff/liftAll.lft
+droYak1.refseq.mrna.native.load = no
+droYak1.genbank.mrna.xeno.load = yes
+droYak1.genbank.est.xeno.load = no
+droYak1.downloadDir = droYak1
+
+    cvs ci etc/genbank.conf
+    # Since D. yakuba is a new species for us, edit src/lib/gbGenome.c.  
+    # Pick some other browser species, & monkey-see monkey-do.  
+    cvs diff src/lib/gbGenome.c
+    make
+    cvs ci src/lib/gbGenome.c
+
+    # Install to /cluster/data/genbank:
+    make install-server
+
+    ssh eieio
+    cd /cluster/data/genbank
+    # This is an -initial run, mRNA only:
+    nice bin/gbAlignStep -srcDb=genbank -type=mrna -initial droYak1 &
+    tail -f [its logfile]
+    # Load results:
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad droYak1
+    featureBits droYak1 mrna
+#350085 bases of 169423277 (0.207%) in intersection
+    featureBits droYak1 xenoMrna
+#22644430 bases of 169423277 (13.366%) in intersection
+    # Clean up:
+    rm -rf work/initial.droYak1
+
+    ssh eieio
+    # -initial for ESTs (now with /cluster/store7 and iservers):
+    nice bin/gbAlignStep -srcDb=genbank -type=est -initial droYak1 &
+    tail -f [its logfile]
+    # Load results:
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 droYak1 &
+    # Wow, very very little for yakuba, even for ESTs!
+    featureBits droYak1 intronEst
+#277291 bases of 169423277 (0.164%) in intersection
+    featureBits droYak1 est
+#420049 bases of 169423277 (0.248%) in intersection
+    # Clean up:
+    rm -rf work/initial.droYak1
+
+
+# MAKE GCPERCENT (DONE 7/21/04 angie)
+    ssh hgwdev
+    mkdir /cluster/data/droYak1/bed/gcPercent
+    cd /cluster/data/droYak1/bed/gcPercent
+    # create and load gcPercent table
+    hgsql droYak1  < ~/src/hg/lib/gcPercent.sql
+    hgGcPercent droYak1 ../../nib
+
+
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR CANFAM1 (DONE 7/21/04 angie)
+    ssh hgwdev
+    echo 'insert into blatServers values("droYak1", "blat7", "17780", 1, 0); \
+          insert into blatServers values("droYak1", "blat7", "17781", 0, 1);' \
+      | hgsql -h genome-testdb hgcentraltest
 
 
