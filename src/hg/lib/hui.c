@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.24 2003/09/20 01:39:14 braney Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.25 2003/09/27 08:28:48 hiram Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -420,6 +420,34 @@ void rosettaExonDropDown(char *var, char *curVal)
 cgiMakeDropList(var, rosettaExonOptions, ArraySize(rosettaExonOptions), curVal);
 }
 
+/****** Options for the wiggle track horizontal grid lines *******/
+
+static char *wiggleGridOptions[] = {
+    "ON",
+    "OFF"
+    };
+
+enum wiggleGridOptEnum wiggleGridStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, wiggleGridOptions);
+if (x < 0)
+   errAbort("hui::wiggleGridStringToEnum() - Unknown option %s", string);
+return x;
+}
+
+char *wiggleGridEnumToString(enum wiggleGridOptEnum x)
+/* Convert from enum to string representation. */
+{
+return wiggleGridOptions[x];
+}
+
+void wiggleGridDropDown(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropList(var, wiggleGridOptions, ArraySize(wiggleGridOptions), 
+	curVal);
+}
 
 /****** Some stuff for wiggle track related controls *******/
 
