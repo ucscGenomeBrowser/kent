@@ -80,11 +80,9 @@ int machineCheckPeriod = 20;	/* Minutes between checking dead machines. */
 int assumeDeadPeriod = 60;      /* If haven't heard from job in this long assume
                                  * machine running it is dead. */
 int initialSpokes = 30;		/* Number of spokes to start with. */
-unsigned char subnet[4] = {255,255,255,255};   /* Subnet to check. */
+unsigned char hubSubnet[4] = {255,255,255,255};   /* Subnet to check. */
 int nextJobId = 0;		/* Next free job id. */
 time_t startupTime;		/* Clock tick of paraHub startup. */
-
-unsigned char localHost[4] = {127,0,0,1};	   /* Address for local host */
 
 void usage()
 /* Explain usage and exit. */
@@ -1541,29 +1539,6 @@ while (lineFileRow(lf, row))
 lineFileClose(&lf);
 }
 
-void unpackIp(in_addr_t packed, unsigned char unpacked[4])
-/* Unpack IP address into 4 bytes. */
-{
-memcpy(unpacked, &packed, sizeof(unpacked));
-}
-
-boolean ipAddressOk(in_addr_t packed, unsigned char *spec)
-/* Return TRUE if packed IP address matches spec. */
-{
-unsigned char unpacked[4], c;
-int i;
-unpackIp(packed, unpacked);
-for (i=0; i<sizeof(unpacked); ++i)
-    {
-    c = spec[i];
-    if (c == 255)
-        break;
-    if (c != unpacked[i])
-        return FALSE;
-    }
-return TRUE;
-}
-
 struct multiMachine 
 /* A machine with multiple CPUs.   A little kludge
  * for now to cope with most of system thinking a 
@@ -1809,7 +1784,7 @@ for (i=0; i<running; ++i)
 	}
     if (!parseRunJobMessage(pm->data, &rjm))
         {
-	pljErr(mm, 5);
+	pljErr(mm, 2);
 	return FALSE;
 	}
     snprintf(resultsFile, sizeof(resultsFile), "%s/%s", rjm.dir, "para.results");
@@ -1818,7 +1793,7 @@ for (i=0; i<running; ++i)
 *pRunning += running;
 if (!pmReceive(pm, ru))
     {
-    pljErr(mm, 2);
+    pljErr(mm, 3);
     return FALSE;
     }
 recent = atoi(pm->data);
@@ -1828,19 +1803,19 @@ for (i=0; i<recent; ++i)
     char *startLine = NULL;
     if (!pmReceive(pm, ru))
         {
-	pljErr(mm, 3);
+	pljErr(mm, 4);
 	return FALSE;
 	}
     startLine = cloneString(pm->data);;
     if (!parseRunJobMessage(startLine, &rjm))
         {
-	pljErr(mm, 4);
+	pljErr(mm, 5);
 	freez(&startLine);
 	return FALSE;
 	}
     if (!pmReceive(pm, ru))
         {
-	pljErr(mm, 5);
+	pljErr(mm, 6);
 	freez(&startLine);
 	return FALSE;
 	}
@@ -1958,60 +1933,49 @@ for (;;)
     {
     struct paraMessage *pm = hubMessageGet();
     findNow();
-    if (ipAddressOk(pm->ipAddress.sin_addr.s_addr, subnet) || 
-    	ipAddressOk(pm->ipAddress.sin_addr.s_addr, localHost))
-	{
-	line = pm->data;
-	logIt("hub: %s\n", line);
-	command = nextWord(&line);
-	if (sameWord(command, "jobDone"))
-	     jobDone(line);
-	else if (sameWord(command, "recycleSpoke"))
-	     recycleSpoke(line);
-	else if (sameWord(command, "heartbeat"))
-	     processHeartbeat();
-	else if (sameWord(command, "addJob"))
-	     addJobAcknowledge(line, pm);
-	else if (sameWord(command, "nodeDown"))
-	     nodeDown(line);
-	else if (sameWord(command, "alive"))
-	     nodeAlive(line);
-	else if (sameWord(command, "checkIn"))
-	     nodeCheckIn(line);
-	else if (sameWord(command, "removeJob"))
-	     removeJobAcknowledge(line, pm);
-	else if (sameWord(command, "chill"))
-	     chillBatch(line, pm);
-	else if (sameWord(command, "ping"))
-	     respondToPing(pm);
-	else if (sameWord(command, "addMachine"))
-	     addMachine(line);
-	else if (sameWord(command, "removeMachine"))
-	     removeMachine(line);
-	else if (sameWord(command, "listJobs"))
-	     listJobs(pm);
-	else if (sameWord(command, "listMachines"))
-	     listMachines(pm);
-	else if (sameWord(command, "listUsers"))
-	     listUsers(pm);
-	else if (sameWord(command, "listBatches"))
-	     listBatches(pm);
-	else if (sameWord(command, "status"))
-	     status(pm);
-	else if (sameWord(command, "pstat"))
-	     pstat(pm);
-	else if (sameWord(command, "addSpoke"))
-	     addSpoke();
-	if (sameWord(command, "quit"))
-	     break;
-	}
-    else
-        {
-	char ip[4];
-	unpackIp(pm->ipAddress.sin_addr.s_addr, ip);
-	logIt("hub: unauthorized %d.%d.%d.%d\n", 
-		ip[0], ip[1], ip[2], ip[3]);
-	}
+    line = pm->data;
+    logIt("hub: %s\n", line);
+    command = nextWord(&line);
+    if (sameWord(command, "jobDone"))
+	 jobDone(line);
+    else if (sameWord(command, "recycleSpoke"))
+	 recycleSpoke(line);
+    else if (sameWord(command, "heartbeat"))
+	 processHeartbeat();
+    else if (sameWord(command, "addJob"))
+	 addJobAcknowledge(line, pm);
+    else if (sameWord(command, "nodeDown"))
+	 nodeDown(line);
+    else if (sameWord(command, "alive"))
+	 nodeAlive(line);
+    else if (sameWord(command, "checkIn"))
+	 nodeCheckIn(line);
+    else if (sameWord(command, "removeJob"))
+	 removeJobAcknowledge(line, pm);
+    else if (sameWord(command, "chill"))
+	 chillBatch(line, pm);
+    else if (sameWord(command, "ping"))
+	 respondToPing(pm);
+    else if (sameWord(command, "addMachine"))
+	 addMachine(line);
+    else if (sameWord(command, "removeMachine"))
+	 removeMachine(line);
+    else if (sameWord(command, "listJobs"))
+	 listJobs(pm);
+    else if (sameWord(command, "listMachines"))
+	 listMachines(pm);
+    else if (sameWord(command, "listUsers"))
+	 listUsers(pm);
+    else if (sameWord(command, "listBatches"))
+	 listBatches(pm);
+    else if (sameWord(command, "status"))
+	 status(pm);
+    else if (sameWord(command, "pstat"))
+	 pstat(pm);
+    else if (sameWord(command, "addSpoke"))
+	 addSpoke();
+    if (sameWord(command, "quit"))
+	 break;
     pmFree(&pm);
     }
 endHeartbeat();
@@ -2051,7 +2015,7 @@ if (sns != NULL)
 	x = atoi(s);
 	if (x > 255)
 	    notGoodSubnet(sns);
-	subnet[i] = x;
+	hubSubnet[i] = x;
 	}
     freez(&snsCopy);
     }
