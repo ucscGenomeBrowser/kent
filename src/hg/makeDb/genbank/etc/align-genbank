@@ -16,7 +16,7 @@ set -e
 trap "echo Error: genbank-align failed on `hostname` >&2; exit 1" ERR
 
 # config
-databases="hg15 mm3 rn2 rn3 hg16"
+databases="hg15 mm3 rn3 hg16"
 
 # initialize
 gbRoot=/cluster/store5/genbank
