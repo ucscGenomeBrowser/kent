@@ -5,9 +5,11 @@ list of string beaches;
 
 dir of int numVals;
 
-tree of int:string;
+dir of tree of string catalog;
 
-pointer of int px;
+tree of string bt;
 
-pointer to tree of float:string;
+int px;
+
+tree of float tracker, wacker
 

@@ -6,7 +6,7 @@ list of string beaches = ("Cowell's", "main", "4 mile", "Pismo");
 
 dir of int numVals = ( "one":1, "two":2, "three":3);
 
-tree of int:string = ( 10:"ten", 12:"twelve", 20,"twenty" );
+tree of string = ( 10:"ten", 12:"twelve", 20:"twenty" );
 
 int x = 2;
 
