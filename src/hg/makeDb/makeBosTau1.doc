@@ -584,7 +584,14 @@ SEQ2_LEN=$BASE/S2.len
   foreach f (axtNet/*.axt)
     set c = $f:t:r
     echo "axtSort on $c"
-    /cluster/bin/i386/axtSort/$f axtNetSort/$c.axt
+    /cluster/bin/i386/axtSort $f axtNetSort/$c.axt
+  end
+
+  mkdir mafNet
+  foreach f (axtNetSort/*.axt)
+    set c = $f:t:r
+    echo "axtToMaf on $c"
+    /cluster/bin/i386/axtToMaf $f /cluster/data/hg17/chrom.sizes /cluster/data/bosTau1/chrom.sizes mafNet/$c.maf -tPrefix=hg17. -qPrefix=bosTau1.
   end
 
 
