@@ -106,7 +106,7 @@ int z;
 int maxCount;
 int bestColor;
 int maxChromShade = CHROMOSOME_SHADES - 1;
-int maxItemsInFullTrack = 200;  /* Maximum number of items displayed in full */
+int maxItemsInFullTrack = 250;  /* Maximum number of items displayed in full */
 int guidelineSpacing = 10;	/* Pixels between guidelines. */
 
 struct cart *cart;	/* The cart where we keep persistent variables. */
