@@ -17,7 +17,15 @@
 #include "altGraph.h"
 #endif
 
- enum ggVertexType
+#ifndef ALTGRAPHX_H
+#include "altGraphX.h"
+#endif
+
+#ifndef JKSQL_H
+#include "jksql.h"
+#endif
+
+enum ggVertexType
  /* Classifies a vertex.  */
     {
     ggSoftStart,  /* First vertex - exact position unknown. */
@@ -27,6 +35,15 @@
     ggUnused,     /* Vertex no longer part of graph. */
     };
 
+enum ggEdgeType
+/* classifies an edge */
+{
+    ggExon,      /* Exon, not necessarily coding */
+    ggIntron,    /* Intron, spliced out */
+    ggSJ,        /* Splice Junction */
+    ggCassette,  /* Cassette exon */
+};
+
 struct ggVertex
 /* A vertex in our gene graph. */
     {
@@ -34,6 +51,22 @@ struct ggVertex
     UBYTE type;		/* vertex type. */
     };
 
+struct ggEvidence
+/* An id of an mrna in mrnaRefs */
+{
+    struct ggEvidence *next;   /* Next in list. */
+    int id;                    /* Index into mrnaRefs of supporting mRNA. */
+};
+
+struct ggEdge
+/* An edge of two vertices */
+{
+    struct ggEdge *next;       /* Next in list. */
+    int vertex1;               /* Index of vertex 1 in vertices array. */
+    int vertex2;               /* Index of vertex 2 in vertices array. */
+    enum ggEdgeType type;      /* Type of vertex, ggExon, ggIntron, etc. */
+};
+    
 struct ggAliInfo
 /* mRNA alignment info as it pertains to graph generator. */
     {
@@ -42,8 +75,6 @@ struct ggAliInfo
     int vertexCount;             /* Vertex count. */
     struct ggMrnaAli *ma;	/* Associated mrnaInfo. */
     };
-
-
 
 struct ggMrnaCluster
 /* Input structure for gene grapher */
@@ -68,8 +99,12 @@ struct geneGraph
     unsigned int tStart;                /* start of graph in target. */
     unsigned int tEnd;                  /* end of graph in target. */
     char strand[3];                     /* + or - */
-    char **mrnaRefs;                    /* names/ids of mrnas supporting this. */
     int mrnaRefCount;                   /* Count of mRNAs supporting this. */
+    char **mrnaRefs;                    /* names/ids of mrnas supporting this. */
+    int *mrnaTissues;                   /* tissues from which mrnas originated, 0 if unknown. Indexes into tissue table */
+    int *mrnaLibs;                       /* libraries from which mrnas originated, 0 if unknown, Indexes into library table */
+    struct ggEvidence ***evidence;       /* Like adjacency matrix except each point is an linked list of supporting evidence */
+
 };
 
 void freeDenseAliInfo(struct ggAliInfo **pDa);
@@ -131,6 +166,36 @@ struct geneGraph *ggFromRow(char **row);
 
 struct altGraph *ggToAltGraph(struct geneGraph *gg);
 /* convert a gene graph to an altGraph data structure */
+
+boolean isSameGeneGraph(struct geneGraph *gg1, struct geneGraph *gg2);
+/* returns true if the gene graphs are the same, otherwise returns false */
+
+struct altGraphX *ggToAltGraphX(struct geneGraph *gg);
+/* convert a gene graph to an altGraph data structure */
+
+struct geneGraph *altGraphXToGG(struct altGraphX *ag);
+/* Convert an altGraphX to a geneGraph. Free with freeGeneGraph */
+
+void ggEvidenceFree(struct ggEvidence **pEl);
+/* Free a single dynamically allocated ggEvidence */
+
+void ggEvidenceFreeList(struct ggEvidence **pList);
+/* Free a list of dynamically allocated ggEvidence's */
+
+void ggEvidenceDebug(struct geneGraph *gg);
+/* dump out the edge matrix and evidence matrix for a genegraph */
+
+boolean matricesInSync(struct geneGraph *gg);
+/* return TRUE if edge and evidence matrices are in synch, FALSE otherwise */
+
+boolean checkEvidenceMatrix(struct geneGraph *gg);
+/* check to make sure that now edge has more weight than possible */
+
+void ggFillInTissuesAndLibraries(struct geneGraph *gg, struct sqlConnection *sc);
+/* load up the library and tissue information for mrnas. */
+
+struct ggEdge *ggFindCassetteExons(struct geneGraph *gg);
+/* return a list of edges that appear to be cassette exons */
 
 #endif /* GENEGRAPH_H */
 
