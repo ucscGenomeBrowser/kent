@@ -12,7 +12,7 @@
 #include "localmem.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: ra.c,v 1.5 2003/06/21 16:51:03 kent Exp $";
+static char const rcsid[] = "$Id: ra.c,v 1.6 2003/08/01 23:59:43 kent Exp $";
 
 struct hash *raNextRecord(struct lineFile *lf)
 /* Return a hash containing next record.   
@@ -59,3 +59,31 @@ for (;;)
    }
 return hash;
 }
+
+struct hash *raFromString(char *string)
+/* Return hash of key/value pairs from string.
+ * As above freeHash this when done. */
+{
+char *dupe = cloneString(string);
+char *s = dupe, *lineEnd;
+struct hash *hash = newHash(7);
+char *key, *val;
+
+for (;;)
+    {
+    s = skipLeadingSpaces(s);
+    if (s == NULL || s[0] == 0)
+        break;
+    lineEnd = strchr(s, '\n');
+    if (lineEnd != NULL)
+        *lineEnd++ = 0;
+    key = nextWord(&s);
+    val = skipLeadingSpaces(s);
+    s = lineEnd;
+    val = lmCloneString(hash->lm, val);
+    hashAdd(hash, key, val);
+    }
+freeMem(dupe);
+return hash;
+}
+

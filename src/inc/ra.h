@@ -15,5 +15,9 @@ struct hash *raNextRecord(struct lineFile *lf);
  * keys and values as well, so you'll have to
  * cloneMem them if you want them for later. */
 
+struct hash *raFromString(char *string);
+/* Return hash of key/value pairs from string.
+ * As above freeHash this when done. */
+
 #endif /* RA_H */
 
