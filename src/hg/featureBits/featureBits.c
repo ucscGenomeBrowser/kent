@@ -14,7 +14,7 @@
 #include "agpGap.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.21 2004/03/13 05:25:28 markd Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.22 2004/04/04 04:02:25 sugnet Exp $";
 
 int minSize = 1;	/* Minimum size of feature. */
 char *clChrom = "all";	/* Which chromosome. */
@@ -40,6 +40,9 @@ errAbort(
   "   -or               Or tables together instead of anding them\n"
   "   -countGaps        Count gaps in denominator\n"
   "   -noRandom         Don't include _random chromosomes\n"
+  "   -minFeatureSize   Don't include bits of the track that are smaller than\n"
+  "                     minFeatureSize, useful for differentiating between\n"
+  "                     alignment gaps and introns.\n"
   "   '-where=some sql pattern'  restrict to features matching some sql pattern\n"
   "You can include a '!' before a table name to negate it.\n"
   "Some table names can be followed by modifiers such as:\n"
@@ -305,6 +308,7 @@ boolean hasBin;
 char t[512], *s;
 char table[512];
 boolean isSplit;
+int minFeatureSize = optionInt("minFeatureSize", 0);
 
 isolateTrackPartOfSpec(track, t);
 s = strrchr(t, '.');
@@ -316,8 +320,8 @@ else
     {
     isSplit = hFindSplitTable(chrom, t, table, &hasBin);
     if (hTableExists(table))
-	fbOrTableBitsQuery(acc, track, chrom, chromSize, conn, where,
-			   TRUE, TRUE);
+	fbOrTableBitsQueryMinSize(acc, track, chrom, chromSize, conn, where,
+			   TRUE, TRUE, minFeatureSize);
     }
 }
 
