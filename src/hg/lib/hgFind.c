@@ -238,7 +238,7 @@ else
 	    }
 	else
 	    {
-	    return(findKnownGeneLike(mrnaID, hgp, tableName));
+	    return(findKnownGeneLike(spec, hgp, tableName));
 	    }
 	}
     }
