@@ -50,9 +50,10 @@ struct baf
     int lineSize;
     bool hCountDown;     /* True if want numbers counting down. */
     bool isTrans;	 /* True if haystack is translated. */
+    bool nCountDown;	 /* True if want needle numbers counting down. */
     };
 
-void bafInit(struct baf *baf, DNA *needle, int nNumOff, 
+void bafInit(struct baf *baf, DNA *needle, int nNumOff, boolean nCountDown,
 	DNA *haystack, int hNumOff, boolean hCountDown, 
 	FILE *out, int lineSize, boolean isTrans);
 /* Initialize block alignment formatter. */
