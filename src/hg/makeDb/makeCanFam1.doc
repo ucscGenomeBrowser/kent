@@ -1443,8 +1443,10 @@ rm $TMP/$root.ss.gz
     # b and a:
     set b = `awk 'BEGIN {print ((300 * log('$max')) - (1000 * log('$med')));}'`
 #-1112.18
+# acs (8/18/04): should be -258.32  (missing tail end of formula)
     set a = `awk 'BEGIN {print (1000 - '$b') / log('$max');}'`
 #272.914
+# should be 162.59 (below has been redone)
     awk '{printf "%s\t%s\t%s\tlod=%d\t%d\n", \
             $1, $2, $3, $5, '$a' * log($5) + '$b';}' raw.bed > all.bed
     hgLoadBed canFam1 phastConsElements all.bed
