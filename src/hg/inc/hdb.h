@@ -185,6 +185,9 @@ boolean hgPbOk(char *database);
 /* Return TRUE if ok to put up Proteome Browser (pbTracks)
  * on this database. */
 
+boolean hgPcrOk(char *database);
+/* Return TRUE if ok to put up hgPcr on this database. */
+
 boolean hTableExists(char *table);
 /* Return TRUE if a table exists in database. */
 

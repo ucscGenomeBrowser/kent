@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.198 2004/07/20 16:13:23 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.199 2004/07/21 16:55:27 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1669,6 +1669,19 @@ if (!dbDbHasPbOk) return(FALSE);
 
 safef(query, sizeof(query),
         "select hgPbOk from dbDb where name = '%s'", database);
+ok = sqlQuickNum(conn, query);
+hDisconnectCentral(&conn);
+return ok;
+}
+
+boolean hgPcrOk(char *database)
+/* Return TRUE if ok to put up hgPcr on this database. */
+{
+struct sqlConnection *conn = hConnectCentral();
+char query[256];
+boolean ok;
+safef(query, sizeof(query), 
+	"select canPcr from blatServers where db = '%s' and isTrans=0", database);
 ok = sqlQuickNum(conn, query);
 hDisconnectCentral(&conn);
 return ok;
