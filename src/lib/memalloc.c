@@ -12,7 +12,7 @@
 #include "memalloc.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: memalloc.c,v 1.13 2003/12/24 08:28:33 markd Exp $";
+static char const rcsid[] = "$Id: memalloc.c,v 1.14 2004/05/05 22:53:20 baertsch Exp $";
 
 static void *defaultAlloc(size_t size)
 /* Default allocator. */
@@ -89,7 +89,7 @@ if (size == 0 || size >= maxAlloc)
     assert(FALSE);
     }
 if ((pt = mhStack->alloc(size)) == NULL)
-    errAbort("Out of memory - request size %d bytes\n", size);
+    errAbort("Out of memory needLargeMem - request size %d bytes\n", size);
 return pt;
 }
 
@@ -137,7 +137,7 @@ if (size == 0)
     assert(FALSE);
     }
 if ((pt = mhStack->alloc(size)) == NULL)
-    errAbort("Out of memory - request size %d bytes\n", size);
+    errAbort("Out of huge memory - request size %d bytes\n", size);
 return pt;
 }
 
@@ -186,7 +186,7 @@ if (size == 0 || size > 100000000)
     assert(FALSE);
     }
 if ((pt = mhStack->alloc(size)) == NULL)
-    errAbort("Out of memory - request size %d bytes\n", size);
+    errAbort("Out of memory needMem - request size %d bytes\n", size);
 memset(pt, 0, size);
 return pt;
 }
