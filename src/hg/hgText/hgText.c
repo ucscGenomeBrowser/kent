@@ -35,7 +35,7 @@
 #include "hgText.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.153 2004/07/20 16:13:59 kent Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.154 2004/08/06 22:30:51 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -46,7 +46,7 @@ struct customTrack *theCtList = NULL;
 struct slName *browserLines = NULL;
 
 /* can change this to "GET" for debugging, "POST" for production  dbg */
-char *httpFormMethod = "GET";
+char *httpFormMethod = "POST";
 
 #define TOO_BIG_FOR_HISTO 500000
 
@@ -1022,8 +1022,10 @@ while((row = sqlNextRow(sr)) != NULL)
 	continue;
 
     /* if table name is of the form, chr*_random_* or chr*_*: */
-    if (sscanf(row[0], "chr%32[^_]_random_%64s", chrom, post) == 2 ||
-	sscanf(row[0], "chr%32[^_]_%64s", chrom, post) == 2)
+    if ( (sscanf(row[0], "chr%32[^_]_random_%64s", chrom, post) == 2) ||
+	(sscanf(row[0], "chr%32[^_]_hla_hap1_%64s", chrom, post) == 2) ||
+	(sscanf(row[0], "chr%32[^_]_hla_hap2_%64s", chrom, post) == 2) ||
+	(sscanf(row[0], "chr%32[^_]_%64s", chrom, post) == 2))
 	{
 	snprintf(name, sizeof(name), "chrN_%s", post);
 	// If a chrN_ table is already in the (positional) hash, 
