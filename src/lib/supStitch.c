@@ -508,7 +508,7 @@ struct ffAli *smallMiddleExons(struct ffAli *aliList, struct ssBundle *bundle,
 /* Look for small exons in the middle. */
 {
 if (bundle->t3List != NULL)
-    return aliList;	/* Can't handle middle stuff. */
+    return aliList;	/* Can't handle intense translated stuff. */
 else
     {
     struct dnaSeq *qSeq =  bundle->qSeq;
@@ -563,6 +563,7 @@ int score;
 int newAliCount = 0;
 int totalFfCount = 0;
 int trimCount = qSeq->size/200 + 2000;
+boolean firstTime = TRUE;
 
 if (bundle->ffList == NULL)
     return 0;
@@ -603,7 +604,12 @@ while (ffList != NULL)
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
     bestPath = ffMergeHayOverlaps(bestPath);
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
-    bestPath = smallMiddleExons(bestPath, bundle, stringency);
+    if (firstTime)
+	{
+	/* Only look for middle exons the first time.  Next times
+	 * this might regenerate most of the first alignment... */
+	bestPath = smallMiddleExons(bestPath, bundle, stringency);
+	}
     if (!bundle->isProt)
 	ffSlideIntrons(bestPath);
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
@@ -619,6 +625,7 @@ while (ffList != NULL)
 	ffFreeAli(&bestPath);
 	}
     ssGraphFree(&graph);
+    firstTime = FALSE;
     }
 slReverse(&bundle->ffList);
 return newAliCount;
