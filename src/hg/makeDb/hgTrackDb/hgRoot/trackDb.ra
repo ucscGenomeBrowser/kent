@@ -1118,7 +1118,7 @@ longLabel Transfac Likelihood Ratios
 priority 41.0034
 visibility full
 color 12,12,120
-type bed 12
+type bed 6
 
 track footPrinterHMR
 shortLabel FootPrinterHMR
