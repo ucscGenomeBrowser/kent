@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.745 2004/05/30 17:11:33 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.746 2004/06/02 19:23:03 fanhsu Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -2617,7 +2617,15 @@ else
 	    }
 	else
 	    {
-	    proteinName = strdup("");
+	    if (hTableExists("ensemblXref3"))
+    		{
+		sprintf(conditionStr, "transcript='%s'", sw->name);
+    		proteinName = sqlGetField(conn, database, "ensemblXref3", "protein", conditionStr);
+    		}
+	    else
+	    	{
+	    	proteinName = strdup("");
+		}
 	    }
 	}
     }
@@ -2662,7 +2670,15 @@ else
             }
         else
             {
-            proteinName = strdup("");
+	    if (hTableExists("ensemblXref3"))
+    		{
+		sprintf(conditionStr, "transcript='%s'", sw->name);
+    		proteinName = sqlGetField(conn, database, "ensemblXref3", "protein", conditionStr);
+    		}
+	    else
+	    	{
+	    	proteinName = strdup("");
+		}
             }
         }
     }
