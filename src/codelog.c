@@ -758,3 +758,5 @@
       SGI compatibility.  Mouse wiggle track now in production 
       (actually probably was back in 446).
 448 - New version (V16) of the genome browser.
+449 - Blat v. 18.  Alpha version of browser with PostScript and
+      some other stuff.
