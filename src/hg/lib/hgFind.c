@@ -449,9 +449,12 @@ char **row;
 int rowOffset;
 char table[64];
 
-sprintf(table, "all_%s", type);
+if (type[0] == 0)
+    strncpy(table, "xenoMrna", sizeof(table));
+else
+    snprintf(table, sizeof(table), "all_%s", type);
 rowOffset = hOffsetPastBin(NULL, table);
-sprintf(query, "select * from %s where qName = '%s'", table, acc);
+snprintf(query, sizeof(query), "select * from %s where qName = '%s'", table, acc);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
