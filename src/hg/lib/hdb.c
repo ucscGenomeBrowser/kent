@@ -308,7 +308,7 @@ for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
     }
 }
 
-void *readOpenFileSection(int fd, long offset, size_t size, char *fileName)
+void *readOpenFileSection(int fd, unsigned long offset, size_t size, char *fileName)
 /* Allocate a buffer big enough to hold a section of a file,
  * and read that section into it. */
 {
@@ -332,7 +332,7 @@ char query[256];
 int fd;
 HGID extId;
 size_t size;
-long offset;
+unsigned long offset;
 char *buf;
 struct dnaSeq *seq;
 struct largeSeqFile *lsf;
