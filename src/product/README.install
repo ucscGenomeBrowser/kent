@@ -15,7 +15,7 @@ The example mysql user here is: "browser" with a password of: "genome"
 		http://localhost/
 	    Provides the Apache default home page from your machine
 	b. MySQL database is installed and working
-		$ mysql -pgenome -e 'show tables;' mysql
+		$ mysql -u browser -pgenome -e 'show tables;' mysql
 	    MySQL can be run from the command line, and
 	    the tables from the database mysql can be displayed.
         c. MySQL development package is installed (mysql-devel)
@@ -91,8 +91,8 @@ The example mysql user here is: "browser" with a password of: "genome"
 	database that allows the browser to find specific organism
 	databases.
 
-	mysql -pgenome -e "create database hgcentral;"
-	mysql -pgenome hgcentral < ${CDROM}/example/hgcentral.sql
+	mysql -u browser -pgenome -e "create database hgcentral;"
+	mysql -u browser -pgenome hgcentral < ${CDROM}/example/hgcentral.sql
 
 	Please note, it is possible to create alternative hgcentral
 	databases.  For example, for test purposes.  In this
@@ -101,8 +101,8 @@ The example mysql user here is: "browser" with a password of: "genome"
 	file as mentioned in the next step.  To create a second copy
 	of the hgcentral database:
 
-	mysql -pgenome -e "create database hgcentraltest;"
-	mysql -pgenome hgcentraltest < ${CDROM}/example/hgcentral.sql
+	mysql -u browser -pgenome -e "create database hgcentraltest;"
+	mysql -u browser -pgenome hgcentraltest < ${CDROM}/example/hgcentral.sql
 
 9.  Create the hg.conf file in ${WEBROOT}/cgi-bin/hg.conf
 	to allow the CGI binaries to find the hgcentral database
@@ -144,51 +144,50 @@ The example mysql user here is: "browser" with a password of: "genome"
 	ln -s ${GBDB}/gbdb /gbdb
 	cp -Rp ${CDROM}/gbdb /${GBDB}
 
-12.  Load the hgFixed database (a database common to all organisms)
+12.  Load the databases
 
-	mysql -pgenome -e "create database hgFixed;"
-	cd ${WEBROOT}/html/goldenPath/hgFixed/database
+for DIR_NAME in cb1 hgFixed proteinDB/proteins040315
+do
+    DB=`basename ${DIR_NAME}`
+    #	Create the cb1 database and load its data
+    mysql -u browser -pgenome -e "create database ${DB};" mysql
+    cd ${WEBROOT}/html/goldenPath/${DIR_NAME}/database
+    for SQL in *.sql
+    do
+	T_NAME=${SQL%%.sql}
+	echo "loading table ${T_NAME}"
+	mysql -u browser -pgenome ${DB} -e "DROP TABLE ${T_NAME};"
+	mysql -u browser -pgenome ${DB} < ${SQL}
+	zcat "${T_NAME}.txt.gz" | mysql -u browser -pgenome ${DB} \
+	    --local-infile=1 \
+	    -e "LOAD DATA LOCAL INFILE \"/dev/stdin\" INTO TABLE ${T_NAME};"
+    done
+done
 
-	# Create tables in hgFixed:
-	for file in *.sql
-	do
-		mysql -pgenome hgFixed < $file
-	done
-	# Load the data into the tables:
-	for file in *.txt.gz
-	do
-		FN=`echo $file | sed -e "s/.gz//"`
-		echo "working on $file"
-		gunzip $file
-		mysqlimport -pgenome hgFixed $FN
-		echo "imported $FN"
-		gzip $FN &
-	done
+	An alternative to loading the database tables from text files,
+	is to directly rsync the MySQL tables themselves and place them
+	in your MySQL /var/ directory.  These tables are much larger
+	than the text files due to the sizes of indexes created during a
+	table load, but it can save a lot of time since the data loading
+	step is quite compute intensive.  A typical rsync command for an
+	entire database (e.g. hg17) would be something like:
+	rsync -avzP --delete --max-delete=20 \
+		rsync://hgdownload.cse.ucsc.edu/mysql/hg17/ \
+		/var/lib/mysql/hg17/
 
-	Note that last gzip is in the background to allow processing
-	of the next file to proceed while previous files are gzipped
-	back to their original state.  This process consumes quite
-	a bit of time.
-
-13.  Load the example C. briggsae organism database.
-
-	mysql -pgenome -e "create database cb1;"
-	cd ${WEBROOT}/html/goldenPath/cbJul2002/database
-	# Create and load the data into the tables:
-	for SQL in *.sql
-	do
-	    T_NAME=${SQL%%.sql}
-	    echo "loading table ${T_NAME}"
-	    mysql -pgenome cb1 -e "DROP TABLE ${T_NAME};"
-	    mysql -pgenome cb1 < ${SQL}
-	    zcat "${T_NAME}.txt.gz" | mysql -pgenome cb1 -e \
-		"LOAD DATA LOCAL INFILE \"/dev/stdin\" INTO TABLE ${T_NAME};"
-	done
-
-14.  The browser should now appear at the URL:
+13.  The browser should now appear at the URL:
 	http://localhost/
 
 	Check your Apache error_log file for hints to solving problems.
+
+14.  blat server setup
+	The blatServers table in the database hgcentral needs to
+	have a fully qualified host name specified in the 'host' column.
+	Educational and non-profit institutions are allowed to use
+	blat free of charge.  Commercial installations of the browser
+	require a license for blat.  See also: http://www.genomeblat.com/
+	and: http://genome.ucsc.edu/license/
+	In the source tree: src/gfServer/README.blat
 
 15.  Known problems:
 
@@ -204,23 +203,28 @@ The example mysql user here is: "browser" with a password of: "genome"
 	genomes available at genome.ucsc.edu
 	Only the cb1 genome is available in this sample installation.
 
-	A cron job mechanism to keep the trash directory clean over
-	time has not been described.  Users should implement a
-	cron job to periodically remove files from trash.
+	A cron job should be set to periodically clean the files in trash.
+	Please note the example at ${CDROM}/example/CleanTrash.sh
 
         src/lib/log.c optionally uses syslog to support logging
         by parasol and gfServer. This is not required for these
         programs to function.  Older implementions of syslog 
-        may not have the vsyslog() function.  If you gets errors,
-        add -DNO_SYSLOG to the HG_DEFS line in inc/common.mk.
+        may not have the vsyslog() function.  If you have compile
+	errors, add -DNO_SYSLOG to the HG_DEFS line in inc/common.mk.
 
 16.  Useful links:
 
 	Links to various documentation related to the browser software:
 
-		http://www.soe.ucsc.edu/~donnak/eng/intro.html
+		http://genome-test.cse.ucsc.edu/eng/
 
-	A presentation on creating tracks for the browser:
+	There are numerous README files in the source tree on
+	a variety of specific subjects, e.g.:
+		./src/README
+		./src/product/README.*
+		./src/hg/makeDb/trackDB/README
+		./src/hg/makeDb/make*.doc   (plain text files)
 
-		http://www.soe.ucsc.edu/~sugnet/doc/trackHowto/
 
+====================================================================
+This file last updated: $Date: 2005/03/07 18:31:56 $

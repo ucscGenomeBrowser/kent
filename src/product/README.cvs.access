@@ -65,3 +65,6 @@ Which can perform the CVS update and format the output in
 a useful report to monitor source tree changes.  This script
 can be used as a cron job thereby sending the report as
 email each time it operates.
+
+====================================================================
+This file last updated: $Date: 2005/03/07 18:31:56 $

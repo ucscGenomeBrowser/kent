@@ -1,5 +1,8 @@
 #!/usr/bin/env perl
 
+#
+#	$Id: ex.cvsup.pl,v 1.3 2005/03/07 18:31:56 hiram Exp $
+#
 # cvsup - do a cvs update, report results concisely
 
 use warnings;

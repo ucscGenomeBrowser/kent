@@ -2,6 +2,8 @@
 #
 #	Run this script periodically to clean browser trash directory
 #
+#	$Id: ex.CleanTrash.sh,v 1.2 2005/03/07 18:31:56 hiram Exp $
+#
 #	As a safety check and to get this script started correctly
 #	you need to touch a CleanUp file in the trash directory:
 #	touch ${WEBROOT}/CleanUp

@@ -10,9 +10,9 @@ include ../inc/common.mk
 DESTDIR=.
 install_dir=${DESTDIR}/install_image
 
-all::	INST_DIR COPYRIGHT.txt README.building.source.txt \
+all::	INST_DIR source_tar COPYRIGHT.txt README.building.source.txt \
 	README.cvs.access.txt README.install.txt \
-	README.mysql.setup.txt source_tar \
+	README.mysql.setup.txt \
 	source_built example webroot gbdb goldenPath
 
 INST_DIR:
@@ -105,7 +105,7 @@ gbdb:	INST_DIR
 	fi
 	rsync -avzP \
 		rsync://hgdownload.cse.ucsc.edu/gbdb/cb1/ \
-		"${install_dir}/gbdb/"
+		"${install_dir}/gbdb/cb1/"
 	touch gbdb
 
 goldenPath:	INST_DIR
@@ -115,6 +115,9 @@ goldenPath:	INST_DIR
 		${MKDIR} "${install_dir}/goldenPath/cbJul2002/database"; \
 		${MKDIR} "${install_dir}/goldenPath/hgFixed"; \
 		${MKDIR} "${install_dir}/goldenPath/hgFixed/database"; \
+		${MKDIR} "${install_dir}/goldenPath/proteinDB"; \
+		${MKDIR} "${install_dir}/goldenPath/proteinDB/proteins040315"; \
+		${MKDIR} "${install_dir}/goldenPath/proteinDB/proteins040315/database"; \
 	fi
 	rsync -avzP \
 		rsync://hgdownload.cse.ucsc.edu/goldenPath/cbJul2002/database/ \
@@ -122,6 +125,12 @@ goldenPath:	INST_DIR
 	rsync -avzP \
 		rsync://hgdownload.cse.ucsc.edu/goldenPath/hgFixed/database/kimWormLife* \
 		"${install_dir}/goldenPath/hgFixed/database/"
+	rsync -avzP \
+		rsync://hgdownload.cse.ucsc.edu/goldenPath/proteinDB/README.txt \
+		"${install_dir}/goldenPath/proteinDB/"
+	rsync -avzP \
+		rsync://hgdownload.cse.ucsc.edu/goldenPath/proteinDB/proteins040315/database/ \
+		"${install_dir}/goldenPath/proteinDB/proteins040315/database/"
 	touch goldenPath
 
 webroot:	INST_DIR

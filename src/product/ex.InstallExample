@@ -2,6 +2,8 @@
 #
 #	Typical sequence of commands for an install
 #
+#	$Id: ex.InstallExample,v 1.5 2005/03/07 18:31:56 hiram Exp $
+#
 #	The following example sequence assumes everything works
 #	perfectly.  There is no error checking on these commands to
 #	verify they are functioning OK.
@@ -38,6 +40,17 @@ fi
 #	Establish MySQL user permissions
 ${CDROM}/example/MySQLUserPerms.sh
 
+#	Verify that those MySQL permissions are working
+
+mysql -u browser -pgenome -e "show tables;" mysql
+
+if [ "$?" -ne 0 ]; then
+    echo "ERROR: problem with MySQL permissions for MySQL user 'browser'"
+    echo "using the password 'genome'.  This was expected to have been"
+    echo "set up with the MySQLUserPerms.sh script."
+    exit 255
+fi
+
 #	Create directories for the browser html and cgi binaries
 mkdir ${WEBROOT}/html
 mkdir ${WEBROOT}/cgi-bin
@@ -50,12 +63,9 @@ ln -s ${WEBROOT}/trash  ${WEBROOT}/html/trash
 cp -Rp ${CDROM}/webrootHTML/* ${WEBROOT}/html
 cp -p ${CDROM}/built_CGI-BIN/* ${WEBROOT}/cgi-bin
 
-#	Create hgcentral (and hgcentraltest) databases
-mysql -pgenome -e "create database hgcentral;"
-mysql -pgenome hgcentral < ${CDROM}/example/hgcentral.sql
-
-mysql -pgenome -e "create database hgcentraltest;"
-mysql -pgenome hgcentraltest < ${CDROM}/example/hgcentral.sql
+#	Create hgcentral database
+mysql -u browser -pgenome -e "create database hgcentral;"
+mysql -u browser -pgenome hgcentral < ${CDROM}/example/hgcentral.sql
 
 #	Set cgi-bin/hg.conf for CGI binaries to access MySQL
 cp ${CDROM}/example/hg.conf ${WEBROOT}/cgi-bin
@@ -72,18 +82,32 @@ cp -Rp ${CDROM}/gbdb ${GBDB}
 cd ${WEBROOT}/html/goldenPath
 ln -s cbJul2002 cb1
 
-for DB in cb1 hgFixed
+for DIR_NAME in cb1 hgFixed proteinDB/proteins040315
 do
+    DB=`basename ${DIR_NAME}`
     #	Create the cb1 database and load its data
-    mysql -pgenome -e "create database ${DB};" mysql
-    cd ${WEBROOT}/html/goldenPath/cbJul2002/database
+    mysql -u browser -pgenome -e "create database ${DB};" mysql
+    cd ${WEBROOT}/html/goldenPath/${DIR_NAME}/database
     for SQL in *.sql
     do
 	T_NAME=${SQL%%.sql}
 	echo "loading table ${T_NAME}"
-	mysql -pgenome ${DB} -e "DROP TABLE ${T_NAME};"
-	mysql -pgenome ${DB} < ${SQL}
-	zcat "${T_NAME}.txt.gz" | mysql -pgenome ${DB} -e \
+	mysql -u browser -pgenome ${DB} -e "DROP TABLE ${T_NAME};"
+	mysql -u browser -pgenome ${DB} < ${SQL}
+	zcat "${T_NAME}.txt.gz" | mysql -u browser -pgenome ${DB} \
+	    --local-infile=1 -e \
 	    "LOAD DATA LOCAL INFILE \"/dev/stdin\" INTO TABLE ${T_NAME};"
     done
 done
+#
+#	An alternative to loading the database tables from text files,
+#	is to directly rsync the MySQL tables themselves and place them
+#	in your MySQL /var/ directory.  These tables are much larger
+#	than the text files due to the sizes of indexes created during a
+#	table load, but it can save a lot of time since the data loading
+#	step is quite compute intensive.  A typical rsync command for an
+#	entire database would be something like:
+#	rsync -avzP --delete --max-delete=20 \
+#		rsync://hgdownload.cse.ucsc.edu/mysql/hg17/ \
+#		/var/lib/mysql/hg17/
+#

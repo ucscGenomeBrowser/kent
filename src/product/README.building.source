@@ -57,3 +57,6 @@ To build the source tree.
 	$ cd hg
 	$ make compile
 	$ make install DESTDIR=/destination/prefix
+
+====================================================================
+This file last updated: $Date: 2005/03/07 18:31:55 $
