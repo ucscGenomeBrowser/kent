@@ -53,7 +53,7 @@ errAbort("paraNode - parasol node server.\n"
 	 "    -cpu=N  Number of CPUs to use - default 1.\n");
 }
 
-static char const rcsid[] = "$Id: paraNode.c,v 1.75 2004/09/29 02:25:42 markd Exp $";
+static char const rcsid[] = "$Id: paraNode.c,v 1.76 2005/02/22 19:51:22 markd Exp $";
 
 /* Command line overwriteable variables. */
 char *hubName;			/* Name of hub machine, may be NULL. */
@@ -619,8 +619,8 @@ if ((user == NULL) || (fileName != NULL))
             user = "<null>";
 	pmPrintf(&pmIn, "Couldn't open fetch file: \"%s\" %s for user %s",
                  fileName, strerror(errno), user);
-	warn("Couldn't open fetch file: \"%s\" %s for user %s (depth=%d, pid=%d)",
-             fileName, strerror(errno), user, paraForkDepth, getpid());
+	warn("Couldn't open fetch file: \"%s\" %s for user %s (pid=%d)",
+             fileName, strerror(errno), user, getpid());
 	pmSend(&pmIn, mainRudp);
 	pmClear(&pmIn);
 	pmSend(&pmIn, mainRudp);
@@ -767,9 +767,9 @@ for (;;)
 	    /* Host and signature look ok,  read a string and
 	     * parse out first word as command. */
 	    line = pmIn.data;
-	    logDebug("message from %s (depth=%d, pid=%d): \"%s\"",
+	    logDebug("message from %s (pid=%d): \"%s\"",
                      paraFormatIp(pmIn.ipAddress.sin_addr.s_addr), 
-                     paraForkDepth, getpid(), line);
+                     getpid(), line);
 	    command = nextWord(&line);
 	    if (command != NULL)
 		{
@@ -792,16 +792,16 @@ for (;;)
 		else if (sameString("fetch", command))
 		    doFetch(line);
                 else
-                    logWarn("invalid command (depth=%d, pid=%d): \"%s\"", 
-                            paraForkDepth, getpid(), command);
+                    logWarn("invalid command (pid=%d): \"%s\"", 
+                            getpid(), command);
 		}
 	    logDebug("done command");
 	    }
 	else
 	    {
-	    logWarn("command from unauthorized host %s (depth=%d, pid=%d)",
+	    logWarn("command from unauthorized host %s (pid=%d)",
                     paraFormatIp(pmIn.ipAddress.sin_addr.s_addr),
-                    paraForkDepth, getpid());
+                    getpid());
 	    }
 	}
     }
