@@ -202,9 +202,6 @@ fprintf(f, ">%s</MAPMASTER>\n", obj->text);
 void dsnSave(struct dsn *obj, int indent, FILE *f)
 /* Save a das. */
 {
-struct source *source;
-struct description *description;
-struct mapmaster mapmaster;
 if (obj == NULL) return;
 xapIndent(indent, f);
 fprintf(f, "<DSN");
