@@ -23,18 +23,18 @@ struct pos
     int pos;
     };
 
-int compare(const void *va, const void *vb)
+int compare(void *va, void *vb)
 /* compare function */
 {
-const struct pos *a = va;
-const struct pos *b = vb;
+struct pos *a = va;
+struct pos *b = vb;
 return a->pos - b->pos;
 }
 
-static void dumpPos(const void *item, FILE *f)
+static void dumpPos(void *item, FILE *f)
 /* Print out position. */
 {
-const struct pos *pos = item;
+struct pos *pos = item;
 fprintf(f, "%d", pos->pos);
 }
 void testEasy()
@@ -69,6 +69,13 @@ tree = NULL;
 printf("\n");
 }
 
+void printPos(void *item)
+/* Print out position. */
+{
+struct pos *pos = item;
+printf("%d\n", pos->pos);
+}
+
 void testHard(int count)
 /* Do more thorough test. */
 {
@@ -93,6 +100,14 @@ for (i=0; i<count; ++i)
     rbTreeAdd(tree, pos);
     }
 rbTreeDump(tree, stdout, dumpPos);
+
+    {
+    struct pos minp, maxp;
+    minp.pos = 11;
+    maxp.pos = 20;
+    printf("rbTreeTraverseRange(%d %d)\n", minp.pos, maxp.pos);
+    rbTreeTraverseRange(tree, &minp, &maxp, printPos);
+    }
 
 rbTreeFree(&tree);
 }
