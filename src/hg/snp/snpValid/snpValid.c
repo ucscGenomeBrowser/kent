@@ -388,11 +388,12 @@ return cloneStringZ(chromSeq->dna + snp->chromStart - lf, ls);
 
 void writeExOut(enum snpExceptionType i, struct snp *snp)
 {
-fprintf(exf[i],"%s\t%d\t%d\t%s\t%s\t%s\n",
+fprintf(exf[i],"%s\t%d\t%d\t%s\t%d\t%s\t%s\n",
   snp->chrom,
   snp->chromStart,
   snp->chromEnd,
-  snp->name,
+  snp->name, 
+  i+BASE_SNP_EX_NUM, 
   snp->strand,
   snp->locType
   );
