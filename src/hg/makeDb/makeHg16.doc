@@ -5500,3 +5500,166 @@ EOF
       /cluster/data/hg16/bed/bedOver/rnaGene/rnaGeneLiftGene.bed
 
 
+# rmMm3Rn3 3-way Regulatory Potential Score track (WORKING - 2004-01-08 - Hiram)
+#	Data from: James Taylor james@bx.psu.edu
+#	Track description from: Francesca Chiaromonte chiaro@stat.psu.edu
+    ssh eieio
+    # Right now we are out of space on this /cluster/store4 filesystem,
+    #	so send the data to the bluearc
+    mkdir /cluster/bluearc/hg16/bed/RegPotentialMm3Rn3
+    ln -s /cluster/bluearc/hg16/bed/RegPotentialMm3Rn3 \
+    	/cluster/data/hg16/bed/RegPotentialMm3Rn3
+
+    cd /cluster/data/hg16/bed/RegPotentialMm3Rn3
+    mkdir data
+    cd data
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y)
+    wget --timestamping \
+	"http://www.bx.psu.edu/~james/rp/hg16_mm3_rn3/chr${c}.hmr.maf.gz_rpscores.txt.truncated.bz2"
+    wget --timestamping \
+	"http://www.bx.psu.edu/~james/rp/hg16_mm3_rn3/chr${c}.hmr.maf.gz_rpscores.txt.bz2"
+    end
+    # The truncated files are the scores of interest they would like
+    #	to see in the public browser.  The other files are the raw data
+    #	that they would like to see in the genome-test browser.
+
+    #	The data is for every 5 bases.  Doesn't appear to be in order,
+    #	so sort it into wigAsciiToBinary
+    cd /cluster/data/hg16/bed/RegPotentialMm3Rn3
+    mkdir wigTruncated
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y)
+	bzcat data/chr${c}.hmr.maf.gz_rpscores.txt.truncated.bz2 | sort -n | \
+	    wigAsciiToBinary -chrom=chr${c} -dataSpan=5 \
+	    -verbose -wibFile=wigTruncated/chr${c}_rpMm3Rn3 \
+	    -name=chr${c}_rpMm3Rn3 stdin > chr${c}.out
+    end
+
+    #	To load the data
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/RegPotentialMm3Rn3/wigTruncated
+    setenv TBL RegPotential3X
+    hgLoadWiggle hg16 ${TBL} chr1_rpMm3Rn3.wig
+    ln -s `pwd`/chr1_rpMm3Rn3.wib /gbdb/hg16/wib
+    foreach c (2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y)
+	hgLoadWiggle -oldTable hg16 ${TBL} chr${c}_rpMm3Rn3.wig
+	rm -f /gbdb/hg16/wib/chr${c}_rpMm3Rn3.wib
+	ln -s `pwd`/chr${c}_rpMm3Rn3.wib /gbdb/hg16/wib
+    end
+
+    # entry to trackDb/human/hg16/trackDb.ra:
+    #	track RegPotential3X
+    #	shortLabel 3x Reg Potential
+    #	longLabel 3-way Regulatory Potential, Human, Mouse, Rat (hg16,mm3,rn3)
+    #	group compGeno
+    #	priority 145.8
+    #	visibility hide
+    #	autoScaleDefault Off
+    #	maxHeightPixels 128
+    #	color 0,128,255
+    #	altColor 255,128,0
+    #	type wig 0.0 0.01
+
+    #	And then for the raw data they would like to see
+    ssh eieio
+    cd /cluster/data/hg16/bed/RegPotentialMm3Rn3
+    mkdir wigRawData
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y)
+	bzcat data/chr${c}.hmr.maf.gz_rpscores.txt.bz2 | sort -n | \
+	    wigAsciiToBinary -chrom=chr${c} -dataSpan=5 \
+	    -verbose -wibFile=wigRawData/chr${c}_rpMm3Rn3_Data \
+	    -name=chr${c}_rpMm3Rn3_Data stdin > chr${c}.out
+    end
+
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/RegPotentialMm3Rn3/wigRawData
+    setenv TBL RegPotential3XData
+    hgLoadWiggle hg16 ${TBL} chr1_rpMm3Rn3_Data.wig
+    ln -s `pwd`/chr1_rpMm3Rn3_Data.wib /gbdb/hg16/wib
+    foreach c (2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y)
+	hgLoadWiggle -oldTable hg16 ${TBL} \
+		chr${c}_rpMm3Rn3_Data.wig
+	rm -f /gbdb/hg16/wib/chr${c}_rpMm3Rn3_Data.wib
+	ln -s `pwd`/chr${c}_rpMm3Rn3_Data.wib /gbdb/hg16/wib
+    end
+
+# rmMm4 2-way Regulatory Potential Score track (WORKING - 2004-01-08 - Hiram)
+#	Data from: James Taylor james@bx.psu.edu
+#	Track description from: Francesca Chiaromonte chiaro@stat.psu.edu
+    ssh eieio
+    # Right now we are out of space on this /cluster/store4 filesystem,
+    #	so send the data to the bluearc
+    mkdir /cluster/bluearc/hg16/bed/RegPotentialMm4
+    ln -s /cluster/bluearc/hg16/bed/RegPotentialMm4 \
+    	/cluster/data/hg16/bed/RegPotentialMm4
+
+    cd /cluster/data/hg16/bed/RegPotentialMm4
+
+    mkdir data
+    cd data
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 M X Y)
+    wget --timestamping \
+	"http://www.bx.psu.edu/~james/rp/hg16_mm4/chr${c}.axt_rpscores.txt.truncated"
+    wget --timestamping \
+	"http://www.bx.psu.edu/~james/rp/hg16_mm4/chr${c}.axt_rpscores.txt"
+    end
+    # The truncated files are the scores of interest they would like
+    #	to see in the public browser.  The other files are the raw data
+    #	that they would like to see in the genome-test browser.
+
+    #	The data is for every 5 bases.  Doesn't appear to be in order,
+    #	so sort it into wigAsciiToBinary
+    cd /cluster/data/hg16/bed/RegPotentialMm4
+    mkdir wigTruncated
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 M X Y)
+	sort -n data/chr${c}.axt_rpscores.txt.truncated | \
+	    wigAsciiToBinary -chrom=chr${c} -dataSpan=5 \
+	    -verbose -wibFile=wigTruncated/chr${c}_rpMm4 \
+	    -name=chr${c}_rpMm4 stdin > chr${c}.out
+    end
+
+    #	To load the data
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/RegPotentialMm4/wigTruncated
+    setenv TBL RegPotential2X
+    hgLoadWiggle hg16 ${TBL} chr1_rpMm4.wig
+    ln -s `pwd`/chr1_rpMm4.wib /gbdb/hg16/wib
+
+    foreach c (2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 M X Y)
+	hgLoadWiggle -oldTable hg16 ${TBL} chr${c}_rpMm4.wig
+	rm -f /gbdb/hg16/wib/chr${c}_rpMm4.wib
+	ln -s `pwd`/chr${c}_rpMm4.wib /gbdb/hg16/wib
+    end
+
+    #	And then for the raw data they would like to see
+    ssh eieio
+    cd /cluster/data/hg16/bed/RegPotentialMm4
+    mkdir wigRawData
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 M X Y)
+	sort -n data/chr${c}.axt_rpscores.txt | \
+	    wigAsciiToBinary -chrom=chr${c} -dataSpan=5 \
+	    -verbose -wibFile=wigRawData/chr${c}_rpMm4_Data \
+	    -name=chr${c}_rpMm4_Data stdin > chr${c}.out
+    end
+
+    #	To load the data
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/RegPotentialMm4/wigRawData
+    setenv TBL RegPotential2XData
+    hgLoadWiggle hg16 ${TBL} chr1_rpMm4_Data.wig
+    ln -s `pwd`/chr1_rpMm4_Data.wib /gbdb/hg16/wib
+
+    foreach c (2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 M X Y)
+	hgLoadWiggle -oldTable hg16 ${TBL} chr${c}_rpMm4_Data.wig
+	rm -f /gbdb/hg16/wib/chr${c}_rpMm4_Data.wib
+	ln -s `pwd`/chr${c}_rpMm4_Data.wib /gbdb/hg16/wib
+    end
+
+    # the initial data should have been compressed and zcat into
+    #	wigAsciiToBinary.  Since it came uncompressed it was quicker
+    #	to work with it that way.  So, after the fact, compress the
+    #	initial data and zcat it the next time.
+    ssh eieio
+    cd /cluster/data/hg16/bed/RegPotentialMm4/data
+    gzip *.txt *.truncated
+    #	I'll bet you could gzip the .wig files too and zcat them
+    #	into hgLoadWiggle
