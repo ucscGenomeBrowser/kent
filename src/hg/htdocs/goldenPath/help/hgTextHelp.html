@@ -318,6 +318,13 @@ then you must
 a list of names/accessions before retrieving data.  
 
 <P>
+When a non-positional table is selected, the position and any specified 
+names/accessions are ignored.  All items in the table will be returned 
+by default.  To restrict non-positional table items by name or accession, 
+paste values into the filter input for the appropriate field on the 
+<A HREF="#AdvancedQuery">Advanced Query</A> page.  
+
+<P>
 The "Get all fields" button simply retrieves 
 all elements from the table (at the specified position, if the table is 
 positional), and prints them out as 
@@ -345,6 +352,10 @@ Here the user can enter in a list of item names (usually accessions for
 gene/mRNA/EST tracks), which may contain wildcard characters ("?" to match 
 exactly one character, "*" to match 0 or more characters).  
 
+<P>
+Note: name/accession matching is not supported for non-positional 
+tables.  
+
 
 <A NAME="UploadNames"></A>
 <H4> Upload a File of Names/Accessions  </H4>
@@ -353,6 +364,10 @@ On this page, the user can upload a file containing item names
 (usually accessions for gene/mRNA/EST tracks).  Wildcards are not 
 allowed; the names must have exact matches in the table, or they will 
 be ignored.  
+
+<P>
+Note: name/accession matching is not supported for non-positional 
+tables.  
 
 
 <A NAME="DescTable"></A>
