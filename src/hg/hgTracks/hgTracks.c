@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.872 2005/01/29 00:34:38 hartera Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.873 2005/01/31 23:40:36 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1587,9 +1587,14 @@ if (vis == tvPack || vis == tvSquish)
             {
             int nameWidth = mgFontStringWidth(font, name);
             int dotWidth = tl.nWidth/2;
+	    boolean snapLeft = FALSE;
 	    drawNameInverted = highlightItem(tg, item);
             textX -= nameWidth + dotWidth;
-            if (textX < insideX)        /* Snap label to the left. */
+	    snapLeft = (textX < insideX);
+	    /* Special tweak for expRatio in pack mode: force all labels 
+	     * left to prevent only a subset from being placed right: */
+	    snapLeft |= (startsWith("expRatio", tg->tdb->type));
+            if (snapLeft)        /* Snap label to the left. */
 		{
 		textX = leftLabelX;
 		vgUnclip(vg);
@@ -9428,7 +9433,18 @@ for (track = trackList; track != NULL; track = track->next)
     {
     char *s = cartOptionalString(cart, track->mapName);
     if (s != NULL)
+	{
 	track->visibility = hTvFromString(s);
+	if (isCompositeTrack(track))
+	    {
+	    struct track *subtrack;
+	    for (subtrack = track->subtracks; subtrack != NULL;
+		 subtrack = subtrack->next)
+		{
+		subtrack->visibility = track->visibility;
+		}
+	    }
+	}
     }
 
 /* If hideAll flag set, make all tracks hidden */
