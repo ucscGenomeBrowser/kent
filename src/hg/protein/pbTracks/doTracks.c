@@ -4,8 +4,8 @@
 #include "portable.h"
 #include "memalloc.h"
 #include "jksql.h"
-#include "memgfx.h"
 #include "vGfx.h"
+#include "memgfx.h"
 #include "htmshell.h"
 #include "cart.h"
 #include "hdb.h"
@@ -319,19 +319,136 @@ void mapBoxExon(int x, int y, int width, int height, char *mrnaID,
 		int exonNum, char *chrom, int exonGenomeStartPos, int exonGenomeEndPos)
 {
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x-1, y-1, x+width+1, y+height+1);
-//hPrintf("HREF=\"../cgi-bin/hgTracks?db=%s&position=%s:%d-%d\"", database, 
-hPrintf("HREF=\"http://hgwdev-markd.cse.ucsc.edu/cgi-bin/hgTracks?db=%s&position=%s:%d-%d&%s=full", 
-	database, chrom, exonGenomeStartPos-1, exonGenomeEndPos+3, kgProtMapTableName);
-hPrintf("&knownGene=full&mrna=full\"");
+hPrintf("HREF=\"../cgi-bin/hgTracks?db=%s&position=%s:%d-%d\"" 
+	,database, chrom, exonGenomeStartPos-1, exonGenomeEndPos+3);
+//hPrintf("HREF=\"http://hgwdev-markd.cse.ucsc.edu/cgi-bin/hgTracks?db=%s&position=%s:%d-%d&%s=full" 
+//	,database, chrom, exonGenomeStartPos-1, exonGenomeEndPos+3, kgProtMapTableName);
+//hPrintf("&knownGene=full&mrna=full\"");
 hPrintf(" target=_blank ALT=\"Exon %d\">\n", exonNum);
 }
 
-void mapBoxExonOld(int x, int y, int width, int height, char *mrnaID, int exonNum)
+void mapBoxPrevGB(int x, int y, int width, int height, char *posStr)
 {
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x-1, y-1, x+width+1, y+height+1);
-hPrintf("HREF=\"pbTracks?mrnaID=%s&exonNum=%d\"", 
-	mrnaID, exonNum);
-hPrintf(" target=_blank ALT=\"Exon %d\">\n", exonNum);
+hPrintf("HREF=\"../cgi-bin/hgTracks?db=%s&position=%s\"", database, posStr);
+hPrintf(" target=_blank ALT=\"UCSC Genome Browser %s\">\n", posStr);
+}
+
+void doPrevGB(int exonCount, char *chrom, char strand, int aaLen, int *yOffp, char *proteinID, char *mrnaID)
+// draw the previous Genome Browser position range
+{
+int xx, yy;
+int i, j;
+char prevPosMessage[200];
+char exonNumStr[10];
+int mrnaLen;
+Color color;
+
+int exonStartPos, exonEndPos;
+int exonGenomeStartPos, exonGenomeEndPos;
+int exonNumber;
+int printedExonNumber = -1;
+int exonColor[2];
+int currentPos;
+int currentPBPos;
+int jPrevStart, jPrevEnd;
+int jcnt = 0;
+
+int defaultColor;
+defaultColor = vgFindColorIx(g_vg, 170, 170, 170);
+
+// The imaginary mRNA length is 3 times of aaLen
+mrnaLen = aaLen * 3;
+
+exonColor[0] = MG_BLUE;
+exonColor[1] = vgFindColorIx(g_vg, 0, 180, 0);
+
+jPrevStart = mrnaLen-1;
+jPrevEnd   = 0;
+
+exonNumber = 1;
+
+exonStartPos 	   = blockStartPositive[exonNumber-1]; 
+exonEndPos 	   = blockEndPositive[exonNumber-1];
+exonGenomeStartPos = blockGenomeStartPositive[exonNumber-1];
+exonGenomeEndPos   = blockGenomeEndPositive[exonNumber-1];
+
+currentYoffset = *yOffp;
+    
+calxy(0, *yOffp, &xx, &yy);
+vgTextRight(g_vg, xx-25, yy-9, 10, 10, MG_BLACK, g_font, "Genome Browser");
+
+for (j = 0; j < mrnaLen; j++)
+    {
+    color = defaultColor;
+    calxy(j/3, *yOffp, &xx, &yy);
+    if (j > exonEndPos)
+	{
+	if (printedExonNumber != exonNumber)
+	    {
+            if ((exonEndPos - exonStartPos)*pbScale/3 > 12) 
+	    	{
+	    	sprintf(exonNumStr, "%d", exonNumber);
+	    	}
+ 	    printedExonNumber = exonNumber;
+	    }
+
+	if (exonNumber < exonCount)
+    	    {
+	    exonNumber++;
+	    exonStartPos       = blockStartPositive[exonNumber-1]; 
+	    exonEndPos 	       = blockEndPositive[exonNumber-1];
+	    exonGenomeStartPos = blockGenomeStartPositive[exonNumber-1];
+	    exonGenomeEndPos   = blockGenomeEndPositive[exonNumber-1];
+	    }
+    	}
+
+    if ((j >= exonStartPos) && (j <= exonEndPos))
+	{
+	color = exonColor[(exonNumber-1) % 2];
+	}
+    if (strand == '-')
+	{
+    	currentPos = blockGenomeStartPositive[exonNumber-1] + (blockEndPositive[exonNumber-1]-j)+1;
+    	}
+    else
+	{
+    	currentPos = blockGenomeStartPositive[exonNumber-1]+(j - blockStartPositive[exonNumber-1])+1;
+    	}
+
+    if ((currentPos >= prevGBStartPos) && (currentPos <= prevGBEndPos))
+	{
+	jcnt++;
+	if (j < jPrevStart) jPrevStart = j;
+	if (j > jPrevEnd)   jPrevEnd   = j;
+	}
+    }
+
+positionStr = strdup(cartOptionalString(cart, "position"));
+
+calxy(jPrevStart/3, *yOffp, &xx, &yy);
+if (pbScale > 6)
+    {
+    vgBox(g_vg,  xx+(jPrevStart%3)*6, yy-2, (jPrevEnd-jPrevStart+1)*pbScale/3, 2, MG_BLACK);
+    }
+else
+    {
+    vgBox(g_vg,  xx, yy-2, (jPrevEnd-jPrevStart+1)*pbScale/3, 2, MG_BLACK);
+    }
+
+mapBoxPrevGB(xx+(jPrevStart%3)*6, yy-2, (jPrevEnd-jPrevStart+1)*pbScale/3, 2, positionStr);
+sprintf(prevPosMessage, "You were at: %s", positionStr);
+if (jPrevStart < (mrnaLen/2))
+   {
+   vgText(g_vg, xx+(jPrevStart%3)*pbScale/3, yy-10, MG_BLACK, g_font, prevPosMessage);
+   }
+else
+   {
+   calxy(jPrevEnd/3, *yOffp, &xx, &yy);
+   vgTextRight(g_vg, xx-6, yy-10, 10, 10, MG_BLACK, g_font, prevPosMessage);
+   }
+
+*yOffp = *yOffp + 7;
 }
 
 void doExon(int exonCount, char *chrom, int aaLen, int *yOffp, char *proteinID, char *mrnaID)
@@ -428,16 +545,18 @@ mapBoxExon(xx - (exonEndPos - exonStartPos)*pbScale/3, yy-9,
 #define MAX_SF 200
 #define MAXNAMELEN 256
 
+int sfId[MAX_SF];
 int sfStart[MAX_SF], sfEnd[MAX_SF];
 char superfam_name[MAX_SF][256];
 
 struct sqlConnection *conn, *conn2;
 
-int get_superfamilies(char *proteinID, char *ensPepName)
+int getSuperfamilies(char *proteinID)
 {
 char *before, *after = "", *s;
 char startString[64], endString[64];
 
+struct sqlConnection *conn, *conn2;
 char query[MAXNAMELEN], query2[MAXNAMELEN];
 struct sqlResult *sr, *sr2;
 char **row, **row2;
@@ -451,66 +570,58 @@ char *name, *chrom, *strand, *txStart, *txEnd, *cdsStart, *cdsEnd,
 char *region;
 int  done;
 
-//char *proteinAcc;
 char *gene_name;
 char *ensPep;
+char *transcriptName;
 
 char *chp, *chp2;
 int  i,l;
 int  ii = 0;
 int  int_start, int_end;
     
-conn = hAllocConn();
-/*
-sprintf(cond_str, "displayID='%s'", proteinID);
-proteinAcc = sqlGetField(conn, "proteins", "spXref3", "accession", cond_str);
-if (proteinAcc == NULL) return(0);
-*/
-sprintf(cond_str, "external_name='%s' AND external_db='SWISSPROT'", protDisplayID);
-ensPep = sqlGetField(conn, "proteins", "bothEnsXref", "translation_name", cond_str);
+conn  = hAllocConn();
+conn2 = hAllocConn();
 
-if (ensPep == NULL) 
+// two steps query needed because the recent Ensembl gene_xref 11/2003 table does not have 
+// valid translation_name
+sprintf(cond_str, "external_name='%s'", protDisplayID);
+transcriptName = sqlGetField(conn, database, "ensGeneXref", "transcript_name", cond_str);
+if (transcriptName == NULL)
     {
-    sprintf(cond_str, "external_name='%s' AND external_db='SPTREMBL'", protDisplayID);
-    ensPep = sqlGetField(conn, "proteins", "bothEnsXref", "translation_name", cond_str);
-
+    return(0); 
+    }
+else
+    {
+    sprintf(cond_str, "transcript_name='%s';", transcriptName);
+    ensPep = sqlGetField(conn, database, "ensTranscript", "translation_name", cond_str);
     if (ensPep == NULL) 
 	{
-	return(0); 
-	}
+	hFreeConn(&conn);
+    	return(0); 
+    	}
     }
-strcpy(ensPepName, ensPep);
 
-sprintf(query, "select * from supfam062903.sfAssign where seqID='%s' and evalue <= 0.02;", ensPep);
- 	
+ensPepName = ensPep;
+
+sprintf(query, "select * from %s.sfAssign where seqID='%s' and evalue <= 0.02;", database, ensPep);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL) return(0);
     
 while (row != NULL)
-   {      
-   genomeID = row[0];
-   seqID    = row[1];
-   modelID  = row[2];
-   region   = row[3];
-   eValue   = row[4];
-   sfID	    = row[5];
-   sfDesc   = row[6];
-printf("<br>region=%s\n", region);fflush(stdout);
-   // !!! check if replacement is necessary
-
-/*		l = strlen(sfDesc);
-		chp = sfDesc;
-		for (i=0; i<l; i++)
-			{
-			if (*chp == ' ') *chp = '_';
-			chp ++;
-			}
-		//hPrintf("<br>%10s %10s %10s %s\n", seqID, start, end, sfDesc); fflush(stdout);
-*/		
+    {      
+    genomeID = row[0];
+    seqID    = row[1];
+    modelID  = row[2];
+    region   = row[3];
+    eValue   = row[4];
+    sfID     = row[5];
+    //sfDesc   = row[6];
+    // !!! the recent Suprefamily sfAssign table does not have valid sf description
+    sprintf(cond_str, "id=%s;", sfID);
+    sfDesc = sqlGetField(conn2, database, "sfDes", "description", cond_str);
 
     //!!! refine logic here later to be defensive against illegal syntax
-
     chp = region;
     done = 0;
     while (!done)
@@ -534,58 +645,32 @@ printf("<br>region=%s\n", region);fflush(stdout);
 	chp2++;
 	sscanf(chp, "%d", &int_end);
 
+ 	sfId[ii]    = atoi(sfID);
 	sfStart[ii] = int_start;
 	sfEnd[ii]   = int_end;
 	strncpy(superfam_name[ii], sfDesc, MAXNAMELEN-1);
-	//hPrintf("<br>ii=%3d, start=%3d end=%3d\n", ii, sfStart[ii], sfEnd[ii]);
-	//fflush(stdout);
- 
 	ii++;
 	chp = chp2;
 	}
-
-    //!!! are we going to do anything with score here?
-    /*
-		E = atof(eValue);
-		score = (-log(E)/MAX_LOG_EVALUE)*10000.0;
-		if (score <= 0.0) score = 0.0;
-		if (score > 1000.0) score = 1000.0;
-		
-		//sscanf(eValue, "%f", &E);
-		*/
 
     row = sqlNextRow(sr);
     }
 
 hFreeConn(&conn);
+hFreeConn(&conn2);
 sqlFreeResult(&sr);
   
-    //hPrintf("<br>Total of %d domain found.\n", ii); fflush(stdout);  
 return(ii);
 }
     
 
-void mapBoxSuperfamily(int x, int y, int width, int height, char *pep_name, char *sf_name)
+void mapBoxSuperfamily(int x, int y, int width, int height, char *sf_name, int sfID)
 {
-//hPrintf("<br>Organism=%s<br>", organism);
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x-1, y-1, x+width+1, y+height+1);
 
-if (strcmp(organism, "Human") == 0)
-    {
-    hPrintf("HREF=\"%s?genome=hs&seqid=%s\"",
-	"http://supfam.org/SUPERFAMILY/cgi-bin/gene.cgi",
-	pep_name);
-	//"http://supfam.org/SUPERFAMILY/cgi-bin/search.cgi", pep_name);
-	hPrintf(" ALT=\"%s\">\n", sf_name);
-    }
-else
-    {
-    hPrintf("HREF=\"%s?genome=mm&seqid=%s\"",
-	"http://supfam.org/SUPERFAMILY/cgi-bin/gene.cgi",
-	pep_name);
-	//"http://supfam.org/SUPERFAMILY/cgi-bin/search.cgi", pep_name);
-	hPrintf(" ALT=\"%s\">\n", sf_name);
-    }
+hPrintf("HREF=\"%s?sunid=%d\"",
+	"http://supfam.org/SUPERFAMILY/cgi-bin/scop.cgi", sfID);
+hPrintf(" target=_blank ALT=\"%s\">\n", sf_name);
 }
 
 void vgDrawBox(struct vGfx *vg, int x, int y, int width, int height, Color color)
@@ -641,9 +726,10 @@ for (ii=0; ii<sf_cnt; ii++)
 	vgDrawBox(g_vg, xx, yy-9+(jj%3)*4, (sfEnd[ii] - sfStart[ii])*pbScale, 9, MG_YELLOW);
 	mapBoxSuperfamily(xx, yy-9+(jj%3)*4, 
 			  (sfEnd[ii] - sfStart[ii])*pbScale, 9,
-		 	  pepName, superfam_name[ii]);
+		 	  superfam_name[ii], sfId[ii]);
     	if (show_name) vgTextRight(g_vg, 
-	    			   xx+(sfEnd[ii] - sfStart[ii])*pbScale/2 + (len/2)*5 - 5, 
+	    			   //xx+(sfEnd[ii] - sfStart[ii])*pbScale/2 + (len/2)*5 - 5, 
+	    			   xx+(sfEnd[ii] - sfStart[ii])*pbScale/2 + (len/2)*5, 
 				   yy-9+(jj%3)*4, 10, 10, MG_BLACK, g_font, superfam_name[ii]);
 	}
     }
@@ -808,11 +894,11 @@ void doTracks(char *proteinID, char *mrnaID, char *aa, struct vGfx *vg, int *yOf
 int i,j,l;
 
 //int y0 = 5;
-char ensPepName[200];
+//char ensPepName[200];
 char *exonNumStr;
 int exonNum;
 
-int sf_cnt;
+//int sf_cnt;
 double pI, aaLen;
 double exonCount;
 char *chp;
@@ -843,11 +929,13 @@ g_vg = vg;
 g_font = mgSmallFont();
 
 dnaUtilOpen();
-if ((exonNumStr=cgiOptionalString("exonNum")) != NULL)
+/*if ((exonNumStr=cgiOptionalString("exonNum")) != NULL)
     {
     sscanf(exonNumStr, "%d", &exonNum);
     printExonAA(proteinID, aa, exonNum);
     }
+*/
+
 
 l=strlen(aa);
 doAAScale(l, yOffp, 1);
@@ -855,8 +943,14 @@ if (mrnaID != NULL)
     {
     getExonInfo(proteinID, &exCount, &chrom, &strand);
     }
+
 if (pbScale >= 6)  doResidues(aa, l, yOffp);
 if (pbScale >= 18) doDnaTrack(chrom, strand, exCount, l, yOffp);
+
+if (mrnaID != NULL)
+    {
+    doPrevGB(exCount, chrom, strand, l, yOffp, proteinID, mrnaID);
+    }
 
 if (mrnaID != NULL)
     {
@@ -872,7 +966,7 @@ doCysteines(aa, l, yOffp);
 //sf_cnt = get_superfamilies(proteinID, ensPepName);
 //printf("<br>sf_cnt = %d\n", sf_cnt);fflush(stdout);
 
-//if (sf_cnt > 0) doSuperfamily(ensPepName, sf_cnt, yOffp); 
+if (sfCount > 0) doSuperfamily(ensPepName, sfCount, yOffp); 
 
 if (hasResFreq) doAnomalies(aa, l, yOffp);
 doAAScale(l, yOffp, -1);
