@@ -73,7 +73,7 @@
 #include "obscure.h"
 #define USUAL
 //#define AFFYSPLICE
-static char const rcsid[] = "$Id: altSplice.c,v 1.20 2005/03/12 01:19:43 sugnet Exp $";
+static char const rcsid[] = "$Id: altSplice.c,v 1.21 2005/03/28 17:38:49 sugnet Exp $";
 
 int cassetteCount = 0; /* Number of cassette exons counted. */
 int misSense = 0;      /* Number of cassette exons that would introduce a missense mutation. */
@@ -452,8 +452,10 @@ char *wholeTables[] = {"splicesTmp"};
 #endif
 #ifdef USUAL
 char *tablePrefixes[] = {"_mrna", "_intronEst"};
-char *wholeTables[] = {};
-//char *wholeTables[] = {"refSeqAli"};
+/* char *wholeTables[] = {}; */ /* Uncomment this if want to skip refSeq alignments
+				   usually for comparison purposes. */
+				   
+char *wholeTables[] = {"refSeqAli"};
 #endif
 int i;
 char buff[256];
