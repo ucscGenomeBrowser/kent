@@ -153,7 +153,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.802 2004/12/21 23:20:46 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.803 2004/12/22 22:10:13 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -586,7 +586,14 @@ printPos(bed->chrom, bed->chromStart, bed->chromEnd, strand, TRUE, bed->name);
 void genericHeader(struct trackDb *tdb, char *item)
 /* Put up generic track info. */
 {
-if (item != NULL && item[0] != 0)
+char *dupe, *words[16], *type = "";
+int wordCount;
+dupe = cloneString(tdb->type);
+wordCount = chopLine(dupe, words);
+if (wordCount > 0)
+    type = words[0];
+
+if (item != NULL && item[0] != 0 && (!sameString(type, "netAlign") ) )
     cartWebStart(cart, "%s (%s)", tdb->longLabel, item);
 else
     cartWebStart(cart, "%s", tdb->longLabel);
