@@ -2106,7 +2106,7 @@ printf("<th align=center colspan=%d valign=top>Exons</th>\n",featureCount);
 printf("</tr>\n<tr><td>&nbsp</td>\n");
 for(exp = expList; exp != NULL; exp = exp->next)
     {
-    printf("<td align=center>\n");
+    printf("<td valign=top align=center>\n");
     printTableHeaderName(exp->name);
     printf("</td>");
     }
@@ -2121,7 +2121,7 @@ for(i = 0; i < expList->numExp; i++)
 	{
 	/* use the background colors to creat patterns */
 	struct rgbColor rgb = getColorForExprBed(exp->scores[i], 2.0, TRUE);
-	printf("<td height=%d width=%d bgcolor=\"#%X%X%X\">&nbsp</td>\n", square, square, rgb.r, rgb.g, rgb.b);
+	printf("<td height=%d width=%d bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", square, square, rgb.r, rgb.g, rgb.b);
 	}
     printf("</tr>\n");
     }
