@@ -10,7 +10,7 @@
 #	are created.  See also, scripts:
 #	mkSwissProtDB.sh and mkProteinsDB.sh
 #
-#	"$Id: KGprocess.sh,v 1.15 2004/03/23 18:05:52 hiram Exp $"
+#	"$Id: KGprocess.sh,v 1.16 2004/03/23 18:37:19 hiram Exp $"
 #
 #	January 2004 - added the kgProtMap process, a second cluster run
 #	Thu Nov 20 11:16:16 PST 2003 - Created - Hiram
@@ -400,6 +400,7 @@ if [ ! -d clusterRun ]; then
 
     rm -f iserverSetupOK
     echo "`date` Preparing iservers for kluster run"
+    #	required destination format is: kgDB/${DB}/<whatever>
     ssh kkr1u00 ${ISERVER_SETUP} `pwd`/clusterRun kgDB/${DB}/kgBestMrna
     RC=$?
     if [ "${RC}" -ne 0 ]; then
