@@ -350,13 +350,14 @@ boolean anyIntersection();
 #define hgtaDoGetCustomTrackFile "hgta_doGetCustomTrackFile"
 #define hgtaDoGetGalaQuery "hgta_doGetGalaQuery"
 #define hgtaDoAllGalaQuery "hgta_doAllGalaQuery"
+#define hgtaDoLookupPosition "hgta_doLookupPosition"
 
 /* Other CGI variables. */
 #define hgtaGroup "hgta_group"
 #define hgtaTrack "hgta_track"
 #define hgtaSelDb "hgta_selDb"
 #define hgtaRegionType "hgta_regionType"
-#define hgtaRange "hgta_range"
+#define hgtaRange "position"
 #define hgtaOffsetStart "hgta_offsetStart"
 #define hgtaOffsetEnd "hgta_offsetEnd"
 #define hgtaOffsetRelativeTo "hgta_offsetRelativeTo"

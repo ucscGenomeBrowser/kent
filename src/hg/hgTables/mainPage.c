@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.49 2004/09/25 19:41:46 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.50 2004/09/27 18:15:39 kent Exp $";
 
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
@@ -440,9 +440,10 @@ if (isPositional)
 	hPrintf(" ENCODE ");
 	}
     makeRegionButton("range", regionType);
-    hPrintf(" range ");
-    hPrintf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=29 VALUE=\"%s\" onFocus=\"%s\">\n",
+    hPrintf(" position ");
+    hPrintf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=26 VALUE=\"%s\" onFocus=\"%s\">\n",
     	hgtaRange, range, jsOnRangeChange(hgtaRegionType, "regionType", "range"));
+    cgiMakeButton(hgtaDoLookupPosition, "Lookup");
     hPrintf("</TD></TR>\n");
     }
 else
@@ -566,7 +567,9 @@ hPrintf("%s",
   "Use this program to get the data associated with a track in text "
   "format, to calculate intersections between tracks, and to retrieve "
   "DNA sequence covered by a track. See <A HREF=\"#Help\">Using the Table "
-  "Browser</A> for a description of the controls in this form. ");
+  "Browser</A> for a description of the controls in this form.  The "
+  "<A HREF=\"../cgi-bin/hgText\">old Table Browser Page</A> is still available "
+  "for a limited period.");
 
 /* Main form. */
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" NAME=\"mainForm\" METHOD=GET>\n");
