@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.32 2003/11/15 21:14:09 kent Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.33 2003/11/19 18:19:13 markd Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -767,13 +767,21 @@ return ffList;
 int pslOrientation(struct psl *psl)
 /* Translate psl strand + or - to orientation +1 or -1 */
 {
-/* code below doesn't support negative target strand (translated blat) */
-if (psl->strand[1] == '-')
-    errAbort("pslOrientation doesn't support a negative target strand");
-if (psl->strand[0] == '-')
-    return -1;
+if (psl->strand[1] != '\0')
+    {
+    /* translated blat */
+    if (psl->strand[0] != psl->strand[1])
+        return -1;
+    else
+        return 1;
+    }
 else
-    return 1;
+    {
+    if (psl->strand[0] == '-')
+        return -1;
+    else
+        return 1;
+    }
 }
 
 int pslWeightedIntronOrientation(struct psl *psl, struct dnaSeq *genoSeq, int offset)
@@ -1057,10 +1065,10 @@ return sqlCmdStr;
 static void printPslDesc(char* pslDesc, FILE* out, struct psl* psl)
 /* print description of a PSL on first error */
 {
-fprintf(out, "Error: invalid PSL: %s:%u-%u %s:%u-%u %s\n",
+fprintf(out, "Error: invalid PSL: %s:%u-%u %s:%u-%u %s %s\n",
         psl->qName, psl->qStart, psl->qEnd,
         psl->tName, psl->tStart, psl->tEnd,
-        pslDesc);
+        psl->strand, pslDesc);
 }
 
 static void chkRanges(char* pslDesc, FILE* out, struct psl* psl,
@@ -1186,6 +1194,7 @@ chkRanges(pslDesc, out, psl, psl->qName, "query", 'q',
           strand, psl->qSize, psl->qStart, psl->qEnd,
           psl->blockCount, psl->blockSizes, psl->qStarts,
           &errCount);
+
 return errCount;
 }
 
