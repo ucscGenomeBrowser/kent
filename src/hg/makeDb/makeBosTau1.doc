@@ -207,7 +207,9 @@ exit; # don't actually run this like a script :)
   # concatenate into one output file; took about 90 minutes
   ssh kksilo
   cd /cluster/data/bosTau1
+  mkdir repeats
   /bin/tcsh concatRM.tcsh
+  cd repeats
   # use grep -v to get rid of all the headers
   # then, add back in an initial header
   # this is so hgLoadOut is happy
