@@ -40,7 +40,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.113 2003/10/09 20:50:24 daryl Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.114 2003/10/10 17:33:29 angie Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -393,6 +393,49 @@ return(startsWith("RNOR", contig) && (strlen(contig) == 12) &&
        isdigit(contig[11]));
 }
 
+static boolean isFlyBaseId(char *id)
+/* Return TRUE if id is a FlyBase ID (e.g. FBgn0123456, FBti0123456). */
+{
+return(startsWith("FB", id) && (strlen(id) == 11) &&
+       isalpha(id[2]) &&
+       isalpha(id[3]) &&
+       isdigit(id[4]) &&
+       isdigit(id[5]) &&
+       isdigit(id[6]) &&
+       isdigit(id[7]) &&
+       isdigit(id[8]) &&
+       isdigit(id[9]) &&
+       isdigit(id[10]));
+}
+
+static boolean isBDGPName(char *name)
+/* Return TRUE if name is from BDGP (matching {CG,TE,CR}0123{,4}{,-R?})  */
+{
+int len = strlen(name);
+boolean isBDGP = FALSE;
+if (startsWith("CG", name) || startsWith("TE", name) || startsWith("CR", name))
+    {
+    int numNum = 0;
+    int i;
+    for (i=2;  i < len;  i++)
+	{
+	if (isdigit(name[i]))
+	    numNum++;
+	else
+	    break;
+	}
+    if ((numNum >= 4) && (numNum <= 5))
+	{
+	if (i == len)
+	    isBDGP = TRUE;
+	else if ((i == len-3) &&
+		 (name[i] == '-') && (name[i+1] == 'R') && isalpha(name[i+2]))
+	    isBDGP = TRUE;
+	}
+    }
+return(isBDGP);
+}
+
 static boolean isAncientRName(char *name)
 /* Return TRUE if name is an ancientRepeat ID. */
 {
@@ -591,6 +634,7 @@ boolean findRatContigPos(char *name, char **retChromName,
 {
 return findChromContigPos(name, retChromName, retWinStart, retWinEnd);
 }
+
 static boolean isScaffoldPos(char *query)
 /* Return TRUE if the query specifies a numbered scaffold */
 {
@@ -598,6 +642,94 @@ int junk;
 if (sscanf(query, "scaffold_%d", &junk) == 1)
     return TRUE;
 return FALSE;
+}
+
+char *findFlyBasePos(char *name, char *table,
+		     char **retChromName, int *retWinStart, int *retWinEnd)
+/* Find position in genome of Flybase ID in name.  
+ * Don't alter return variables unless found. 
+ * Return bdgpGene name for FlyBase ID because that's the table we open up. */
+{
+struct sqlConnection *conn = NULL;
+struct sqlResult *sr = NULL;
+struct genePred *gp = NULL;
+char **row = NULL;
+char *bdgpName = NULL;
+char query[512];
+char buf[128];
+char infoTable[128];
+
+safef(infoTable, sizeof(infoTable), "%sInfo", table);
+if (hTableExists(infoTable))
+    {
+    conn = hAllocConn();
+    safef(query, sizeof(query),
+	  "select bdgpName from %s where flyBaseId = '%s';", infoTable, name);
+    bdgpName = sqlQuickQuery(conn, query, buf, sizeof(buf));
+    if (bdgpName != NULL)
+	{
+	safef(query, sizeof(query),
+	      "select * from %s where name like '%s-%%';",
+	      table, bdgpName);
+	sr = sqlGetResult(conn, query);
+	if ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    gp = genePredLoad(row);
+	    *retChromName = cloneString(gp->chrom);
+	    *retWinStart  = gp->txStart;
+	    *retWinEnd    = gp->txEnd;
+	    bdgpName = cloneString(gp->name);
+	    genePredFree(&gp);
+	    }
+	else
+	    {
+	    bdgpName = NULL;
+	    }
+	sqlFreeResult(&sr);
+	}
+    hFreeConn(&conn);
+    }
+return(bdgpName);
+}
+
+char *findBDGPPos(char *bdgpName, char *table,
+		  char **retChromName, int *retWinStart, int *retWinEnd)
+/* Find position in genome of gene for bdgpName.
+ * Don't alter return variables unless found. 
+ * Return complete gene name for (possibly incomplete) bdgpName. */
+{
+struct sqlConnection *conn = NULL;
+struct sqlResult *sr = NULL;
+struct genePred *gp = NULL;
+char **row = NULL;
+char *geneName = NULL;
+char *ptr = strchr(bdgpName, '-');
+char query[512];
+char buf[128];
+
+if (hTableExists(table))
+    {
+    conn = hAllocConn();
+    if (ptr != NULL)
+	safef(query, sizeof(query),
+	      "select * from %s where name = '%s';", table, bdgpName);
+    else
+	safef(query, sizeof(query),
+	      "select * from %s where name like '%s-%%';", table, bdgpName);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+	gp = genePredLoad(row);
+	*retChromName = cloneString(gp->chrom);
+	*retWinStart  = gp->txStart;
+	*retWinEnd    = gp->txEnd;
+	geneName = cloneString(gp->name);
+	genePredFree(&gp);
+	}
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+return(geneName);
 }
 
 boolean parseScaffoldRange(char *query, char **retChromName, 
@@ -2820,6 +2952,7 @@ char *chrom;
 boolean relativeFlag;
 char buf[256];
 char *startOffset,*endOffset;
+char *name;
 int iStart = 0, iEnd = 0;
 int kgFound;
 
@@ -2917,6 +3050,52 @@ else if (isRatContigName(query) && findRatContigPos(query, &chrom, &start, &end)
 	start = start + iStart;
 	}
     singlePos(hgp, "Rat Contig", NULL, "gold", query, chrom, start, end);
+    }
+else if (isFlyBaseId(query) &&
+	 ((name = findFlyBasePos(query, "bdgpGene", &chrom, &start, &end))
+	  != NULL))
+    {
+    if (relativeFlag == TRUE)
+	{
+	end = start + iEnd;
+	start = start + iStart;
+	}
+    singlePos(hgp, "FlyBase", NULL, "bdgpGene", name, chrom, start, end);
+    }
+else if (isFlyBaseId(query) &&
+	 ((name = findFlyBasePos(query, "bdgpNonCoding", &chrom, &start, &end))
+	  != NULL))
+    {
+    if (relativeFlag == TRUE)
+	{
+	end = start + iEnd;
+	start = start + iStart;
+	}
+    singlePos(hgp, "FlyBase", NULL, "bdgpNonCoding", name, chrom, start, end);
+    }
+else if (isBDGPName(query) &&
+	 ((name = findBDGPPos(query, "bdgpGene", &chrom, &start, &end))
+	  != NULL))
+    {
+    if (relativeFlag == TRUE)
+	{
+	end = start + iEnd;
+	start = start + iStart;
+	}
+    singlePos(hgp, "BDGP Protein-coding Gene", NULL, "bdgpGene",
+	      name, chrom, start, end);
+    }
+else if (isBDGPName(query) &&
+	 ((name = findBDGPPos(query, "bdgpNonCoding", &chrom, &start, &end))
+	  != NULL))
+    {
+    if (relativeFlag == TRUE)
+	{
+	end = start + iEnd;
+	start = start + iStart;
+	}
+    singlePos(hgp, "BDGP Non-coding Gene", NULL, "bdgpNonCoding",
+	      name, chrom, start, end);
     }
 else if (isScaffoldPos(query) && 
         parseScaffoldRange(query, &chrom, &start, &end))
