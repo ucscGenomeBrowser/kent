@@ -33,5 +33,11 @@ void fbOrTableBits(Bits *bits, char *trackQualifier, char *chrom,
 	int chromSize, struct sqlConnection *conn);
 /* Ors in features in track on chromosome into bits.  */
 
+void fbOptions(char *track);
+/* Print out an HTML table with radio buttons for featureBits options. */
+
+char *fbOptionsToQualifier();
+/* Translate CGI variable created by fbOptions() to a featureBits qualifier. */
+
 #endif /* FEATUREBITS_H */
 

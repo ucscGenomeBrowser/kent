@@ -3,6 +3,7 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "bits.h"
+#include "cheapcgi.h"
 #include "trackDb.h"
 #include "bed.h"
 #include "psl.h"
@@ -169,6 +170,37 @@ else
     return 'f';
 }
 
+static void fbNoOptions()
+{
+puts("<TABLE><TR><TD>\n");
+cgiMakeRadioButton("fbQual", "whole", TRUE);
+puts(" Whole Item </TD><TD> </TD></TR></TABLE>\n");
+}
+
+static void fbPslOptions()
+{
+puts("<TABLE><TR><TD>\n");
+cgiMakeRadioButton("fbQual", "whole", TRUE);
+puts(" Whole Alignment </TD><TD> ");
+puts(" </TD></TR><TR><TD>\n");
+cgiMakeRadioButton("fbQual", "exon", FALSE);
+puts(" Blocks plus </TD><TD> ");
+cgiMakeTextVar("fbExonBases", "0", 8);
+puts(" bases at each end </TD></TR><TR><TD>\n");
+cgiMakeRadioButton("fbQual", "intron", FALSE);
+puts(" Regions between blocks plus </TD><TD> ");
+cgiMakeTextVar("fbIntronBases", "0", 8);
+puts(" bases at each end </TD></TR><TR><TD>\n");
+cgiMakeRadioButton("fbQual", "upstream", FALSE);
+puts(" Upstream by </TD><TD> ");
+cgiMakeTextVar("fbUpBases", "200", 8);
+puts(" bases </TD></TR><TR><TD>\n");
+cgiMakeRadioButton("fbQual", "end", FALSE);
+puts(" Downstream by </TD><TD> ");
+cgiMakeTextVar("fbDownBases", "200", 8);
+puts(" bases </TD></TR></TABLE>");
+}
+
 static struct featureBits *fbPslBits(int winStart, int winEnd, 
 	struct sqlResult *sr, int rowOffset,
 	char *qualifier, char *extra)
@@ -265,6 +297,35 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 slReverse(&fbList);
 return fbList;
+}
+
+static void fbBedOptions(int fields)
+{
+boolean doIntron = (fields >= 12);
+
+puts("<TABLE><TR><TD>\n");
+cgiMakeRadioButton("fbQual", "whole", TRUE);
+puts(" Whole Gene </TD><TD> ");
+puts(" </TD></TR><TR><TD>\n");
+cgiMakeRadioButton("fbQual", "exon", FALSE);
+puts(" Exons plus </TD><TD> ");
+cgiMakeTextVar("fbExonBases", "0", 8);
+puts(" bases at each end </TD></TR><TR><TD>\n");
+if (doIntron)
+    {
+    cgiMakeRadioButton("fbQual", "intron", FALSE);
+    puts(" Introns plus </TD><TD> ");
+    cgiMakeTextVar("fbIntronBases", "0", 8);
+    puts(" bases at each end </TD></TR><TR><TD>\n");
+    }
+cgiMakeRadioButton("fbQual", "upstream", FALSE);
+puts(" Upstream by </TD><TD> ");
+cgiMakeTextVar("fbUpBases", "200", 8);
+puts(" bases </TD></TR><TR><TD>\n");
+cgiMakeRadioButton("fbQual", "end", FALSE);
+puts(" Downstream by </TD><TD> ");
+cgiMakeTextVar("fbDownBases", "200", 8);
+puts(" bases </TD></TR></TABLE>");
 }
 
 static struct featureBits *fbBedBits(int fields, int winStart, int winEnd, struct sqlResult *sr, 
@@ -365,6 +426,39 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 slReverse(&fbList);
 return fbList;
+}
+
+static void fbGenePredOptions()
+{
+puts("<TABLE><TR><TD>\n");
+cgiMakeRadioButton("fbQual", "whole", TRUE);
+puts(" Whole Gene </TD><TD> ");
+puts(" </TD></TR><TR><TD>\n");
+cgiMakeRadioButton("fbQual", "exon", FALSE);
+puts(" Exons plus </TD><TD> ");
+cgiMakeTextVar("fbExonBases", "0", 8);
+puts(" bases at each end </TD></TR><TR><TD>\n");
+cgiMakeRadioButton("fbQual", "intron", FALSE);
+puts(" Introns plus </TD><TD> ");
+cgiMakeTextVar("fbIntronBases", "0", 8);
+puts(" bases at each end </TD></TR><TR><TD>\n");
+cgiMakeRadioButton("fbQual", "cds", FALSE);
+puts(" Coding Exons </TD><TD> ");
+puts(" </TD></TR><TR><TD>\n");
+cgiMakeRadioButton("fbQual", "utr3", FALSE);
+puts(" 3' UTR </TD><TD> ");
+puts(" </TD></TR><TR><TD>\n");
+cgiMakeRadioButton("fbQual", "utr5", FALSE);
+puts(" 5' UTR </TD><TD> ");
+puts(" </TD></TR><TR><TD>\n");
+cgiMakeRadioButton("fbQual", "upstream", FALSE);
+puts(" Upstream by </TD><TD> ");
+cgiMakeTextVar("fbUpBases", "200", 8);
+puts(" bases </TD></TR><TR><TD>\n");
+cgiMakeRadioButton("fbQual", "end", FALSE);
+puts(" Downstream by </TD><TD> ");
+cgiMakeTextVar("fbDownBases", "200", 8);
+puts(" bases </TD></TR></TABLE>");
 }
 
 static struct featureBits *fbGenePredBits(int winStart, int winEnd, 
@@ -510,6 +604,11 @@ slReverse(&fbList);
 return fbList;
 }
 
+void fbRmskOptions()
+{
+fbNoOptions();
+}
+
 static struct featureBits *fbRmskBits(int winStart, int winEnd, 
 	struct sqlResult *sr, int rowOffset,
 	char *qualifier, char *extra)
@@ -543,6 +642,72 @@ if (wordCount < 1)
 *retTrack = words[0];
 *retQualifier = words[1];
 *retExtra = words[2];
+}
+
+void fbOptions(char *track)
+/* Print out an HTML table with radio buttons for featureBits options. */
+{
+struct sqlConnection *conn;
+struct trackDb *tdb;
+char *type;
+
+if (! fbUnderstandTrack(track))
+    {
+    fbNoOptions();
+    return;
+    }
+
+conn = hAllocConn();
+tdb = hTrackInfo(conn, track);
+type = tdb->type;
+if (startsWith("psl ", type))
+    {
+    fbPslOptions();
+    }
+else if (startsWith("bed ", type))
+    {
+    int fields = atoi(type + strlen("bed "));
+    if (fields <= 3) fields = 3;
+    fbBedOptions(fields);
+    }
+else if (sameString("genePred", type) || startsWith("genePred ", type))
+    {
+    fbGenePredOptions();
+    }
+else if (sameString("rmsk", type))
+    {
+    fbRmskOptions();
+    }
+else
+    {
+    errAbort("Unknown table type %s", type);
+    }
+hFreeConn(&conn);
+}
+
+char *fbOptionsToQualifier()
+/* Translate CGI variable created by fbOptions() to a featureBits qualifier. */
+{
+char qual[128];
+char *fbQual  = cgiOptionalString("fbQual");
+
+if (fbQual == NULL)
+    return NULL;
+
+if (sameString(fbQual, "whole"))
+    qual[0] = 0;
+else if (sameString(fbQual, "exon"))
+    snprintf(qual, sizeof(qual), "%s:%s", fbQual, cgiString("fbExonBases"));
+else if (sameString(fbQual, "intron"))
+    snprintf(qual, sizeof(qual), "%s:%s", fbQual,
+			 cgiString("fbIntronBases"));
+else if (sameString(fbQual, "upstream"))
+    snprintf(qual, sizeof(qual), "%s:%s", fbQual, cgiString("fbUpBases"));
+else if (sameString(fbQual, "end"))
+    snprintf(qual, sizeof(qual), "%s:%s", fbQual, cgiString("fbDownBases"));
+else
+    strcpy(qual, fbQual);
+return(cloneString(qual));
 }
 
 struct featureBits *fbGetRange(char *trackQualifier, char *chrom,
