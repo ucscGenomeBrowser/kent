@@ -3,7 +3,9 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-# Handed-edited to set table name and indices
+# Handed-edited to set table name and indices.
+# The indices are built useing a fixed number of characters of the column
+# to keep the size of the table under 2 GB.
 
 #subset of the sequencing trace ancillary information, see http://www.ncbi.nlm.nih.gov/Traces/TraceArchiveRFC.html
 CREATE TABLE mouseTraceInfo (
@@ -11,7 +13,6 @@ CREATE TABLE mouseTraceInfo (
     templateId varchar(255) not null,	# Name of the template
     size int unsigned not null,	# Size of read
               #Indices
-    PRIMARY KEY(ti),
-    INDEX(ti),
-    INDEX(templateId)
+    PRIMARY KEY(ti(12)),
+    INDEX(templateId(16))
 );
