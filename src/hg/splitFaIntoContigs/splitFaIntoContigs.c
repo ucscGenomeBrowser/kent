@@ -39,6 +39,10 @@ struct agpData
 /* Flag to indicate either base gap or valid fragment */
     boolean isGap;
 
+/* Flag to indicate whether this data entry is the last in
+   a supercontig */
+    boolean endOfContig;
+
 /* Pointer to prev in doubly-linked list */
     struct agpData *prev;
 /* Pointer to next in doubly-linked list */
@@ -135,7 +139,7 @@ param startGap - Pointer to the dna gap or fragment at which we are starting to
 param destDir - The destination dir to which to write the agp file.
  */
 {
-char *filename = NULL;
+char filename[DEFAULT_PATH_SIZE];
 
 sprintf(filename, "%s/%s.agp", destDir, chromName);
 printf("Writing chromosome agp file\n");
@@ -238,8 +242,9 @@ if (line[0] == '#' || line[0] == '\n')
     continue;
     }
 
-chopLine(line, words);
+curAgpData = AllocVar(curAgpData);
 
+chopLine(line, words);
 if ('N' == words[4][0])
     {
     agpGap = agpGapLoad(words);
@@ -254,11 +259,8 @@ if ('N' == words[4][0])
         }
 
     splitPointFound = (0 == strcasecmp(agpGap->bridge, NO));
-    curAgpData = AllocVar(curAgpData);
     curAgpData->isGap = TRUE;
     curAgpData->data.pGap = agpGap;
-    curAgpData->prev = NULL;
-    curAgpData->next = NULL;
     }
 else
     {
@@ -270,11 +272,8 @@ else
         }
 
     splitPointFound = FALSE;
-    curAgpData = AllocVar(curAgpData);
     curAgpData->isGap = FALSE;
     curAgpData->data.pFrag = agpFrag;
-    curAgpData->prev = NULL;
-    curAgpData->next = NULL;
     }
 
 /* Since this our first loop iteration,
@@ -292,12 +291,17 @@ else
 
 prevAgpData = curAgpData;
 
-/* TODO: Free non-used returned agpGap and agpFrag entries */
+curAgpData->endOfContig = FALSE;
+curAgpData->prev = NULL;
+curAgpData->next = NULL;
+
 numBasesRead = curAgpData->data.pGap->chromEnd - startIndex;
 } while ((numBasesRead < splitSize || !splitPointFound)
              && curAgpData->data.pGap->chromEnd < dnaSize);
 
 curAgpData->next = NULL; /* Terminate the linked list */
+
+curAgpData->endOfContig = TRUE;
 return curAgpData;
 }
 
@@ -317,6 +321,7 @@ return startAgpData - The first agp entry in the sequence.
 {
 struct agpData *startAgpData = NULL;
 struct agpData *endAgpData = NULL;
+struct agpData *prevAgpData = NULL;
 struct agpData *startChromAgpData = NULL;
 
 char filename[DEFAULT_PATH_SIZE];
@@ -327,6 +332,15 @@ int sequenceNum = 0;
 do
     {
     endAgpData = nextAgpEntryToSplitOn(agpFile, dnaSize, splitSize, &startAgpData);
+    /* Point the end of the previous loop iteration's linked list at
+       the start of this new one */
+    if (NULL != prevAgpData)
+	{
+	prevAgpData->next = startAgpData;
+	startAgpData->prev = prevAgpData;
+	}
+    prevAgpData = endAgpData;
+
     sequenceNum++;
     sprintf(contigDir, "%s/%s_%d", destDir, startAgpData->data.pGap->chrom, sequenceNum);
     sprintf(command, "mkdir -p %s", contigDir);
