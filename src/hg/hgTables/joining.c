@@ -13,7 +13,7 @@
 #include "hdb.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: joining.c,v 1.10 2004/07/17 17:09:28 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.11 2004/07/17 17:54:50 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -159,7 +159,8 @@ for (i=0; i<keyCount; ++i)
     keys[i] = lmCloneString(lm, row[i]);
 }
 
-char *chopKey(struct slName *prefixList, struct slName *suffixList, char *key)
+static char *chopKey(struct slName *prefixList, 
+	struct slName *suffixList, char *key)
 /* Chop off any prefixes/suffixes from key. */
 {
 struct slName *n;
@@ -409,8 +410,9 @@ dyStringAppend(dy, s);
 
 void tjLoadSome(struct region *regionList,
     struct joinedTables *joined, int fieldOffset, int keyOffset,
-    char *idField, struct hash *idHash, struct tableJoiner *tj,
-    struct hTableInfo *hti, boolean isFirst)
+    char *idField, struct hash *idHash, 
+    struct slName *chopBefore, struct slName *chopAfter,
+    struct tableJoiner *tj, struct hTableInfo *hti, boolean isFirst)
 /* Load up rows. */
 {
 struct region *region;
@@ -426,6 +428,8 @@ struct sqlConnection *conn = sqlConnect(tj->database);
 uglyf("tjLoadSome %s.%s keyOffset %d\n", tj->database, tj->table, keyOffset);
 /* Create field spec for sql - first fields user will see, and
  * second keys if any. */
+if (chopBefore != NULL) uglyf("chopBefore %s\n", chopBefore->name);
+if (chopAfter != NULL) uglyf("chopAfter %s\n", chopAfter->name);
 for (dtf = tj->fieldList; dtf != NULL; dtf = dtf->next)
     {
     struct joinerDtf *dupe = joinerDtfClone(dtf);
@@ -468,7 +472,7 @@ for (region = regionList; region != NULL; region = region->next)
 	    char *e;
 	    if (isFirst)
 		{
-		if (hashLookup(idHash, chopKey(NULL, NULL, id)))
+		if (hashLookup(idHash, id))
 		    {
 		    if (jrRowAdd(joined, row, fieldCount, keyCount) == NULL)
 		        break;
@@ -476,7 +480,9 @@ for (region = regionList; region != NULL; region = region->next)
 		}
 	    else
 		{
-		struct joinedRow *jr = hashFindVal(idHash, id);
+		struct joinedRow *jr;
+		id = chopKey(chopBefore, chopAfter, id);
+		jr = hashFindVal(idHash, id);
 		if (jr != NULL)
 		    jrRowExpand(joined, jr, row, 
 		    	fieldOffset, fieldCount, keyOffset, keyCount);
@@ -509,7 +515,8 @@ if (hti->nameField[0] != 0)
     idHash = identifierHash();
     idField = hti->nameField;
     }
-tjLoadSome(regionList, joined, 0, 0, idField, idHash, tj, hti, TRUE);
+tjLoadSome(regionList, joined, 0, 0, 
+	idField, idHash, NULL, NULL, tj, hti, TRUE);
 hashFree(&idHash);
 return joined;
 }
@@ -530,22 +537,25 @@ return -1;
 }
 
 struct hash *hashKeyField(struct joinedTables *joined, int keyIx,
-	struct slName *chopPrefix, struct slName *chopSuffix)
+	struct slName *chopBefore, struct slName *chopAfter)
 /* Make a hash based on key field. */
 {
 int hashSize = digitsBaseTwo(joined->rowCount);
 struct hash *hash = NULL;
 struct joinedRow *jr;
 
+uglyf("hashKeyField keyIx %d\n", keyIx);
 if (hashSize > 20)
     hashSize = 20;
+if (chopAfter != NULL) uglyf("chopAfter %s\n", chopAfter->name);
+if (chopBefore != NULL) uglyf("chopBefore %s\n", chopBefore->name);
 hash = newHash(hashSize);
 for (jr = joined->rowList; jr != NULL; jr = jr->next)
     {
     char *key = jr->keys[keyIx];
     if (key != NULL)
 	{
-	key = chopKey(chopPrefix, chopSuffix, jr->keys[keyIx]);
+	key = chopKey(chopBefore, chopAfter, jr->keys[keyIx]);
 	hashAdd(hash, key, jr);
 	}
     }
@@ -562,6 +572,22 @@ for (el = list; el != NULL; el = el->next)
     if (sameString(el->database, database) && sameString(el->table, table))
         return el;
     }
+return NULL;
+}
+
+static struct joinerField *findJoinerField(struct joinerSet *js, 
+	struct joinerDtf *dtf)
+/* Find field in set if any that matches dtf */
+{
+struct joinerField *jf;
+for (jf = js->fieldList; jf != NULL; jf = jf->next)
+     {
+     if (sameString(dtf->table, jf->table) && sameString(dtf->field, jf->field))
+         {
+	 if (slNameInList(jf->dbList, dtf->database))
+	     return jf;
+	 }
+     }
 return NULL;
 }
 
@@ -651,7 +677,14 @@ else
         {
 	struct tableJoiner *tj = findTableJoiner(tjList, 
 		route->b->database, route->b->table);
+        struct joinerField *jfA, *jfB;
 	if (tj == NULL)
+	    internalErr();
+	jfA = findJoinerField(route->identifier, route->a);
+	if (jfA == NULL)
+	    internalErr();
+	jfB = findJoinerField(route->identifier, route->b);
+	if (jfB == NULL)
 	    internalErr();
 	if (!tj->loaded)
 	    {
@@ -661,9 +694,12 @@ else
 	    if (keyIx < 0)
 		internalErr();
 	    uglyf("keyIx for %s.%s.%s = %d\n", route->a->database, route->a->table, route->a->field, keyIx);
-	    keyHash = hashKeyField(joined, keyIx, NULL, NULL);
+	    keyHash = hashKeyField(joined, keyIx, 
+	    	jfA->chopBefore, jfA->chopAfter);
 	    tjLoadSome(regionList, joined, curFieldCount, curKeyCount,
-	        route->b->field, keyHash, tj, hti, FALSE);
+	        route->b->field, keyHash, 
+		jfB->chopBefore, jfB->chopAfter, 
+		tj, hti, FALSE);
 	    curKeyCount += slCount(tj->keysOut);
 	    curFieldCount += slCount(tj->fieldList);
 	    uglyf("After load next %d rows, %d fields, %d keys\n", joined->rowCount, slCount(joined->fieldList), slCount(joined->keyList));
@@ -701,7 +737,9 @@ slAddTail(&fieldList, field);
 
 field = slNameNew("hg16.ensGene.name");
 slAddTail(&fieldList, field);
-field = slNameNew("hg16.kgXref.description");
+field = slNameNew("hg16.ensGtp.transcript");
+slAddTail(&fieldList, field);
+field = slNameNew("hg16.ensGtp.gene");
 slAddTail(&fieldList, field);
 
 textOpen();
