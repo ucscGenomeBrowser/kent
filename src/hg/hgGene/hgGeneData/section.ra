@@ -8,6 +8,11 @@ shortLabel Sequence
 longLabel Sequence
 priority 20
 
+name swissProtComments
+shortLabel SwissProt Comments
+longLabel Descriptive Text from SwissProt
+priority 30
+
 name microarray
 shortLabel Microarray
 longLabel Microarray Expression Data
@@ -31,16 +36,11 @@ priority 70
 name otherOrgs
 shortLabel Other Species
 longLabel Homologous Genes in Other Species (BLASTP Best Hit)
-priority 75
+priority 80
 
 name multipleAlignments
 shortLabel Multiple Alignments
 longLabel Multiple Alignments of Homologs in Other Organisms
-priority 80
-
-name swissProtComments
-shortLabel SwissProt Comments
-longLabel Descriptive Text from SwissProt
 priority 90
 
 name go

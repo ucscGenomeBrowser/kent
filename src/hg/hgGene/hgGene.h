@@ -124,6 +124,12 @@ struct hash *readRa(char *rootName, struct hash **retHashOfHash);
 int gpRangeIntersection(struct genePred *gp, int start, int end);
 /* Return number of bases range start,end shares with genePred. */
 
+boolean checkDatabases(char *databases);
+/* Check all databases in space delimited string exist. */
+
+boolean checkTables(char *databases, struct sqlConnection *conn);
+/* Check all tables in space delimited string exist. */
+
 /* -------- CGI Command Variables ---------- */
 #define hggDoPrefix "hgg_do_"	/* Prefix for all commands. */
 #define hggDoGetMrnaSeq "hgg_do_getMrnaSeq"

@@ -15,7 +15,7 @@
 #include "genePred.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.13 2003/10/14 15:58:00 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.14 2003/10/14 17:52:19 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -111,6 +111,42 @@ for (i=0; i<exonCount; ++i)
     	start, end);
     }
 return intersect;
+}
+
+boolean checkDatabases(char *databases)
+/* Check all databases in space delimited string exist. */
+{
+char *dupe = cloneString(databases);
+char *s = dupe, *word;
+boolean ok = TRUE;
+while ((word = nextWord(&s)) != NULL)
+     {
+     if (!sqlDatabaseExists(word))
+         {
+	 ok = FALSE;
+	 break;
+	 }
+     }
+freeMem(dupe);
+return ok;
+}
+
+boolean checkTables(char *tables, struct sqlConnection *conn)
+/* Check all tables in space delimited string exist. */
+{
+char *dupe = cloneString(tables);
+char *s = dupe, *word;
+boolean ok = TRUE;
+while ((word = nextWord(&s)) != NULL)
+     {
+     if (!sqlTableExists(conn, word))
+         {
+	 ok = FALSE;
+	 break;
+	 }
+     }
+freeMem(dupe);
+return ok;
 }
 
 
@@ -217,11 +253,24 @@ return name;
 void printDescription(char *id, struct sqlConnection *conn)
 /* Print out description of gene given ID. */
 {
-char *description = genoQuery(id, "descriptionSql", conn);
-if (description == NULL)
-    description = "No description available";
-hPrintf("%s", description);
-freeMem(description);
+char *description = NULL;
+char *summaryTables = genomeSetting("summaryTables");
+description = genoQuery(id, "descriptionSql", conn);
+hPrintf("<B>Description:</B> ");
+if (description != NULL)
+    hPrintf("%s<BR>", description);
+else
+    hPrintf("%s<BR>", "No description available");
+freez(&description);
+if (checkTables(summaryTables, conn))
+    {
+    char *summary = genoQuery(id, "summarySql", conn);
+    if (summary != NULL)
+        {
+	hPrintf("<B>%s:</B> %s", genomeSetting("summarySource"), summary);
+	freez(&summary);
+	}
+    }
 }
 
 char *sectionSetting(struct section *section, char *name)
@@ -336,17 +385,13 @@ struct section *section;
 hPrintf("<BR>\n");
 hPrintf("<BR>\n");
 hPrintLinkTableStart();
-#ifdef SOMETIMES
-hPrintf("<TD BGCOLOR=\"#000000\"><FONT COLOR=\"#D9E4F8\">&nbsp;&nbsp;Index&nbsp;&nbsp;</FONT></TD>");
+hPrintf("<TD BGCOLOR=\"#1616D1\"><FONT COLOR=\"#FFFFFF\">Page Index</FONT></TD>");
 itemPos += 1;
-#endif /* SOMETIMES */
 for (section=sectionList; section != NULL; section = section->next)
     {
     if (++itemPos > maxPerRow)
         {
 	hPrintf("</TR><TR>");
-	// hPrintLinkTableEnd();
-	// hPrintLinkTableStart();
 	itemPos = 1;
 	++rowIx;
 	}

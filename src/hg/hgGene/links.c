@@ -51,42 +51,6 @@ static char *linkOptionalField(struct hash *hash, char *name)
 return hashFindVal(hash, name);
 }
 
-static boolean checkDatabases(char *databases)
-/* Check all databases in space delimited string exist. */
-{
-char *dupe = cloneString(databases);
-char *s = dupe, *word;
-boolean ok = TRUE;
-while ((word = nextWord(&s)) != NULL)
-     {
-     if (!sqlDatabaseExists(word))
-         {
-	 ok = FALSE;
-	 break;
-	 }
-     }
-freeMem(dupe);
-return ok;
-}
-
-static boolean checkTables(char *databases, struct sqlConnection *conn)
-/* Check all tables in space delimited string exist. */
-{
-char *dupe = cloneString(databases);
-char *s = dupe, *word;
-boolean ok = TRUE;
-while ((word = nextWord(&s)) != NULL)
-     {
-     if (!sqlTableExists(conn, word))
-         {
-	 ok = FALSE;
-	 break;
-	 }
-     }
-freeMem(dupe);
-return ok;
-}
-
 static struct link *getLinkList(struct sqlConnection *conn,
 	char *raFile)
 /* Get list of links - starting with everything in .ra file,
