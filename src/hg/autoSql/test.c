@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "test.h"
 
-static char const rcsid[] = "$Id: test.c,v 1.8 2003/06/11 03:24:01 kent Exp $";
+static char const rcsid[] = "$Id: test.c,v 1.9 2003/06/13 00:19:01 kent Exp $";
 
 struct pt *ptCommaIn(char **pS, struct pt *ret)
 /* Create a pt out of a comma separated string. 
@@ -96,7 +96,7 @@ fputc(sep,f);
 fprintf(f, "%d", el->z);
 fputc(sep,f);
 if (sep == ',') fputc('{',f);
-if(el->pt != NULL)    ptCommaOut(&el->pt,f);
+ptCommaOut(&el->pt,f);
 if (sep == ',') fputc('}',f);
 fputc(lastSep,f);
 }
@@ -502,11 +502,11 @@ fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('{',f);
-if(el->a != NULL)    ptCommaOut(&el->a,f);
+ptCommaOut(&el->a,f);
 if (sep == ',') fputc('}',f);
 fputc(sep,f);
 if (sep == ',') fputc('{',f);
-if(el->b != NULL)    ptCommaOut(&el->b,f);
+ptCommaOut(&el->b,f);
 if (sep == ',') fputc('}',f);
 fputc(sep,f);
 /* Loading pt list. */
