@@ -1019,7 +1019,40 @@ gridDefault OFF
 color 0,128,255
 altColor 255,128,0
 type wig 0 50
+    #	This wiggle track needs some zoom tables to aid display on whole
+    #	chromosome views
+    ssh kksilo
+    cd /cluster/data/panTro1
+    mkdir -p bed/qual/wigData1K
+    mkdir -p bed/qual/dataLimits1K
+    cat << '_EOF_' > jkStuff/qualZoom1K.sh
+#!/bin/sh
+for c in ? ??
+do
+    echo "chr${c} quality 1K zoom"
+    qacToWig $c/chr${c}.qac -name=chr${c} stdout |
+        wigZoom stdin | wigAsciiToBinary -dataSpan=1024 \
+        -chrom=chr${c} -wibFile=bed/qual/wigData1K/qc1K_${c} \
+        -name=${c} stdin > bed/qual/dataLimits1K/chr${c}
+    echo "chr${c}_random quality 1K zoom"
+    if [ -f $c/chr${c}_random.qac ]; then
+	qacToWig $c/chr${c}_random.qac -name=chr${c}_random stdout |
+	    wigZoom stdin | wigAsciiToBinary -dataSpan=1024 \
+	    -chrom=chr${c}_random -wibFile=bed/qual/wigData1K/qc1K_${c}r \
+	    -name=${c}_random stdin > bed/qual/dataLimits1K/chr${c}r
+    fi
+done
+'_EOF_'
+    chmod +x ./jkStuff/qualZoom1K.sh
+    time ./jkStuff/qualZoom1K.sh
 
+    ssh hgwdev
+    cd bed/qual/wigData1K
+    #	Do not need these for chrom M
+    rm -f qc1K_M.wig qc1K_Mr.wig
+    hgLoadWiggle -oldTable panTro1 quality *.wig
+    #	create symlinks for .wib files
+    ln -s `pwd`/*.wib /gbdb/panTro1/wib
 
 # HUMAN ALIGNMENTS (IN PROGRESS 2004-02-10 kate)
 
