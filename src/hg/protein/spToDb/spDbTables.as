@@ -1,15 +1,15 @@
 table displayId
 "Relate ID and primary accession. A good table to use just get handle on all records."
     (
-    char[6] acc;	"Primary accession"
+    char[8] acc;	"Primary accession"
     char[10] val;	"SwissProt display ID"
     )
 
 table otherAcc
 "Relate ID and other accessions"
     (
-    char[6] acc;	"Primary accession"
-    char[6] val;	"Secondary accession"
+    char[8] acc;	"Primary accession"
+    char[8] val;	"Secondary accession"
     )
 
 table organelle
@@ -19,10 +19,10 @@ table organelle
     string val;	"Text description"
     )
 
-table singles
-"Main SwissProt table - everything that is single instance per record and small"
+table info
+"Small stuff with at most one copy associated with each SwissProt record"
     (
-    char[6] acc;	"Primary accession"
+    char[8] acc;	"Primary accession"
     byte isCurated;	"True if curated (SwissProt rather than trEMBL)"
     int aaSize;		"Size in amino acids"
     int molWeight;	"Molecular weight"
@@ -35,21 +35,21 @@ table singles
 table description
 "Description lines"
     (
-    char[6] acc;	"Primary accession"
+    char[8] acc;	"Primary accession"
     lstring val; 	"SwissProt DE lines"
     )
 
 table geneLogic
 "Gene including and/or logic if multiple"
     (
-    char[6] acc;	"Primary accession"
+    char[8] acc;	"Primary accession"
     lstring val;	"Gene(s) and logic to relate them."
     )
 
 table gene
 "Gene/accession relationship. Both sides can be multiply valued."
     (
-    char[6] acc;	"Primary accession"
+    char[8] acc;	"Primary accession"
     string val;		"Single gene name"
     )
 
@@ -71,7 +71,7 @@ table commonName
 table accToTaxon
 "accession/taxon relationship"
     (
-    char[6] acc;	"Primary accession"
+    char[8] acc;	"Primary accession"
     int	taxon;		"ID in taxon table"
     )
 
@@ -85,7 +85,7 @@ table keyword
 table accToKeyword
 "Relate keywords and accessions"
     (
-    char[6] acc;	"Primary accession"
+    char[8] acc;	"Primary accession"
     int keyword;	"ID in keyword table"
     )
 
@@ -106,7 +106,7 @@ table commentVal
 table comment
 "A structured comment"
     (
-    char[6] acc;     "Primary accession"
+    char[8] acc;     "Primary accession"
     int commentType; "ID in commentType table"
     int commentVal;  "ID in commentVal table"
     )
@@ -114,7 +114,7 @@ table comment
 table protein
 "Amino acid sequence"
     (
-    char[6] acc;	"Primary accession"
+    char[8] acc;	"Primary accession"
     lstring val;	"Amino acids"
     )
 
@@ -128,7 +128,7 @@ table extDb
 table extDbRef
 "A reference to another database"
     (
-    char[6] acc;	"Primary SwissProt accession"
+    char[8] acc;	"Primary SwissProt accession"
     int extDb;		"ID in extDb table"
     string extAcc1;	"External accession"
     string extAcc2;	"External accession"
@@ -152,7 +152,7 @@ table featureType
 table feature
 "A description of part of a protein"
     (
-    char[6] acc;	"Primary accession"
+    char[8] acc;	"Primary accession"
     int start;	"Start coordinate (zero based)"
     int end;	"End coordinate (non-inclusive)"
     int featureClass;	"ID of featureClass"
@@ -194,7 +194,7 @@ table citation
 "A SwissProt citation of a reference"
     (
     int id;		"ID of this citation"
-    char[6] acc;	"Primary accession"
+    char[8] acc;	"Primary accession"
     int reference;	"ID in reference table"
     int rp;		"ID in rp table"
     )
