@@ -100,6 +100,22 @@ struct wiggleData
     struct wiggleDatum *data;	/* many individual data items here */
     };
 
+struct wiggleStats
+/* linked list of wiggle statistics */
+    {
+    struct wiggleStats *next;  /* Next in singly linked list. */
+    char *chrom;	/* chromosome or contig */
+    unsigned chromStart;    /* Start position, first value */
+    unsigned chromEnd;      /* End position, last value */
+    unsigned span;	/* each value spans this many bases */
+    unsigned count;	/* number of values in this block */
+    double lowerLimit;	/* lowest data value in this block */
+    double dataRange;	/* lowerLimit + dataRange = upperLimit */
+    double mean;	/* mean of data points */
+    double variance;	/* variance of data points */
+    double stddev;	/* standard deviation of data points */
+    };
+
 #include "hdb.h"
 
 #define HTI_IS_WIGGLE (hti->spanField[0] !=0)
@@ -115,11 +131,12 @@ void wigSetCart(struct track *track, char *dataID, void *dataValue);
     /*	set one of the variables in the wigCart	*/
 
 /*	in lib/wiggleUtils.c	*/
-struct wiggleData *wigFetchData(char *db, char *tableName, char *chromName,
+struct wiggleData *wigFetchData(char *db, char *table, char *chromName,
     int winStart, int winEnd, boolean summaryOnly, boolean freeData,
 	int tableId, boolean (*wiggleCompare)(int tableId, double value,
 	    boolean summaryOnly, struct wiggle *wiggle),
-		char *constraints);
+		char *constraints, struct bed **bedList,
+		    unsigned maxBedElements, struct wiggleStats **wsList);
 /*  return linked list of wiggle data between winStart, winEnd
  *	summaryOnly TRUE will not look at all the data, just the
  *	summaries in the table rows
