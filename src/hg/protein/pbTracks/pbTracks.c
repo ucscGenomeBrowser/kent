@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.15 2004/01/16 20:00:43 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.16 2004/01/16 20:57:13 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -209,7 +209,7 @@ bkgColor = vgFindColorIx(vg2, 255, 254, 232);
 vgBox(vg2, 0, 0, insideWidth, pixHeight, bkgColor);
 
 /* Start up client side map. */
-mapName=strdup("pbStamps");
+mapName=cloneString("pbStamps");
 hPrintf("\n<MAP Name=%s>\n", mapName);
 
 vgSetClip(vg2, 0, gfxBorder, insideWidth, pixHeight - 2*gfxBorder);
@@ -367,12 +367,12 @@ sprintf(cond_str, "accession='%s'", proteinID);
 description = sqlGetField(NULL, protDbName, "spXref3", "description", cond_str);
 
 // obtain previous genome position range selected by the Genome Browser user
-positionStr = strdup(cartOptionalString(cart, "position"));
+positionStr = cloneString(cartOptionalString(cart, "position"));
 if (positionStr != NULL)
     {
     chp = strstr(positionStr, ":");
     *chp = '\0';
-    prevGBChrom = strdup(positionStr);
+    prevGBChrom = cloneString(positionStr);
     
     chp1 = chp + 1;
     chp9 = strstr(chp1, "-");
