@@ -40,7 +40,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.95 2003/07/15 19:13:58 donnak Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.96 2003/08/01 23:06:10 donnak Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -2972,10 +2972,10 @@ if (strstrNoCase(organism, "human"))
     puts("<P><H3>Statistical information</P></H3>\n");
     puts(
 "<UL>"
-"<LI><A HREF=\"http://genome.ucsc.edu/goldenPath/certTable.html\">Non-standard Join Certificates (April 2003 Human Genome only)</A>"
-"<LI><A HREF=\"http://genome.ucsc.edu/goldenPath/stats.html\">Summary statistics</A>"
-"<LI><A HREF=\"http://genome.ucsc.edu/goldenPath/chromReports\">Chromosome Reports</A>"
-"<LI><A HREF=\"http://genome.ucsc.edu/goldenPath/mapPlots/\">Genome Map Plots</A>"
+"<LI><A HREF=\"/goldenPath/certificates/\">Non-Standard Join Certificates</A>"
+"<LI><A HREF=\"/goldenPath/stats.html\">Summary Statistics</A>"
+"<LI><A HREF=\"/goldenPath/chromReports\">Chromosome Reports</A>"
+"<LI><A HREF=\"/goldenPath/mapPlots/\">Genome Map Plots</A>"
 "</UL></P>"
 "<P></P>"
 );
