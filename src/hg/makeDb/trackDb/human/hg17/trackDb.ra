@@ -167,7 +167,7 @@ shortLabel 10-Way Conservation
 longLabel 10-Way Vertebrate Multiz Alignment & Conservation 
 group compGeno
 priority 109.11
-visibility pack
+visibility hide
 #color 0, 10, 100
 #altColor 50,50,50
 #altColor 255,128,0
@@ -199,7 +199,7 @@ shortLabel Conservation
 longLabel Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish Multiz Alignments & Conservation 
 group compGeno
 priority 109.51
-visibility hide
+visibility pack
 #color 0, 10, 100
 altColor 50,50,50
 #altColor 255,128,0
