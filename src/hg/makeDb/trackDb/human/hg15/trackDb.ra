@@ -55,26 +55,6 @@ visibility hide
 color 0,90,100
 type genePred sgpPep
 
-track intronEst
-shortLabel Spliced ESTs
-longLabel $Organism ESTs That Have Been Spliced
-group rna
-priority 56
-visibility dense
-spectrum on
-intronGap 30
-type psl est
-
-track est
-shortLabel $Organism ESTs
-longLabel $Organism ESTs Including Unspliced
-group rna
-priority 57
-visibility hide
-spectrum on
-intronGap 30
-type psl est
-
 track multizMm3Rn2 
 shortLabel Human/Mouse/Rat
 longLabel Human/Mouse/Rat Alignments
