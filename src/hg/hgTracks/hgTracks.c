@@ -1550,11 +1550,15 @@ struct linkedFeaturesPair *lfFromPslsInRangeForEstPair(char *table, char *chrom,
   char **row, **row1, **row2;
   struct linkedFeaturesPair *lfListPair = NULL, *lf=NULL;
   struct estPair *ep = NULL;
+  char mytable[64];
+  boolean hasBin;
+  int rowOffset;
 
+  hFindSplitTable(chrom, "all_est", mytable, &hasBin);
   sprintf(query, "select * from %s where chrom='%s' and chromStart<%u and chromEnd>%u",
-    table, chrom, winEnd, winStart);
+	  table, chrom, winEnd, winStart);
 
-  sr = sqlGetResult(conn, query);
+  sr = sqlGetResult(conn, query); 
   while ((row = sqlNextRow(sr)) != NULL)
     {
       AllocVar(lf);
@@ -1565,7 +1569,12 @@ struct linkedFeaturesPair *lfFromPslsInRangeForEstPair(char *table, char *chrom,
       sr1 = sqlGetResult(conn1, query1);
       if((row1 = sqlNextRow(sr1)) != NULL)
 	{
-	  struct psl *psl = pslLoad(row1);
+	  struct psl *psl;
+	  if (hasBin) {
+	    psl = pslLoad(row1 + 1);
+	  } else {
+	    psl = pslLoad(row1);
+	  }
 	  lf->lf5prime = lfFromPsl(psl, isXeno);
 	  pslFree(&psl);
 	}
@@ -1576,7 +1585,12 @@ struct linkedFeaturesPair *lfFromPslsInRangeForEstPair(char *table, char *chrom,
         sr1 = sqlGetResult(conn1, query2); 
         if((row2 = sqlNextRow(sr1)) != NULL) 
   	{ 
-  	  struct psl *psl = pslLoad(row2); 
+	  struct psl *psl;
+	  if (hasBin) {
+	    psl = pslLoad(row2 + 1);
+	  } else {
+	    psl = pslLoad(row2);
+	  }
   	  lf->lf3prime = lfFromPsl(psl, isXeno); 
   	  pslFree(&psl); 
 	} 
