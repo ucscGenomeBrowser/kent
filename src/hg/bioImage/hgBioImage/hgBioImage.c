@@ -31,10 +31,10 @@ errAbort(
   );
 }
 
-void bioImageFullPath(struct sqlConnection *conn, int id, char path[PATH_LEN])
+char *bioImageFullPath(struct sqlConnection *conn, int id)
 /* Fill in path for full image bioImage of given id. */
 {
-char query[256];
+char query[256], path[PATH_LEN];
 struct sqlResult *sr;
 char **row;
 safef(query, sizeof(query), 
@@ -45,28 +45,39 @@ if ((row = sqlNextRow(sr)) == NULL)
     errAbort("No image of id %d", id);
 safef(path, PATH_LEN, "%s/%s", row[0], row[1]);
 sqlFreeResult(&sr);
+return cloneString(path);
 }
 
-void bioImageOrganism(struct sqlConnection *conn, int id, char organism[PATH_LEN])
-/* Return binomial scientific name of organism associated with given image. */
+char *cloneOrNull(char *s)
+/* Return copy of string, or NULL if it is empty */
 {
-char query[256];
+if (s == NULL || s[0] == 0)
+    return NULL;
+return cloneString(s);
+}
+
+char *bioImageOrganism(struct sqlConnection *conn, int id)
+/* Return binomial scientific name of organism associated with given image. 
+ * FreeMem this when done. */
+{
+char query[256], buf[256];
 safef(query, sizeof(query),
 	"select uniProt.taxon.binomial from image,uniProt.taxon"
          " where image.id = %d and image.taxon = uniProt.taxon.id",
 	 id);
-sqlNeedQuickQuery(conn, query, organism, PATH_LEN);
+sqlNeedQuickQuery(conn, query, buf, sizeof(buf));
+return cloneString(buf);
 }
 
 
-void bioImageStage(struct sqlConnection *conn, int id, char stage[PATH_LEN])
-/* Return string describing growth stage of organism */
+char *bioImageStage(struct sqlConnection *conn, int id)
+/* Return string describing growth stage of organism 
+ * FreeMem this when done. */
 {
-char query[256];
+char query[256], buf[256];
 double daysPassed;
 char *startMarker;
 struct sqlResult *sr;
-
 char **row;
 safef(query, sizeof(query),
     "select isEmbryo,age from image where id = %d", id);
@@ -78,28 +89,29 @@ if (!sameString(row[0], "0"))
 else
     startMarker = "birth";
 daysPassed = atof(row[1]);
-safef(stage, PATH_LEN, "%3.1f days after %s", daysPassed, startMarker);
+safef(buf, sizeof(buf), "%3.1f days after %s", daysPassed, startMarker);
 sqlFreeResult(&sr);
+return cloneString(buf);
 }
 
-void bioImageGeneName(struct sqlConnection *conn, int id, char geneName[PATH_LEN])
+char *bioImageGeneName(struct sqlConnection *conn, int id)
 /* Return gene name  - HUGO if possible, RefSeq/GenBank, etc if not. */
 {
-char query[256];
+char query[256], buf[256];
 safef(query, sizeof(query),
 	"select gene from image where id=%d", id);
-sqlNeedQuickQuery(conn, query, geneName, PATH_LEN);
-if (geneName[0] == 0)
+sqlNeedQuickQuery(conn, query, buf, sizeof(buf));
+if (buf[0] == 0)
     {
     safef(query, sizeof(query),
         "select refSeq from image where id=%d", id);
-    sqlNeedQuickQuery(conn, query, geneName, PATH_LEN);
-    if (geneName[0] == 0)
+    sqlNeedQuickQuery(conn, query, buf, sizeof(buf));
+    if (buf[0] == 0)
         {
 	safef(query, sizeof(query),
 	    "select genbank from image where id=%d", id);
-	sqlNeedQuickQuery(conn, query, geneName, PATH_LEN);
-	if (geneName[0] == 0)
+	sqlNeedQuickQuery(conn, query, buf, sizeof(buf));
+	if (buf[0] == 0)
 	    {
 	    char locusLink[32];
 	    safef(query, sizeof(query), 
@@ -109,45 +121,121 @@ if (geneName[0] == 0)
 	        {
 		safef(query, sizeof(query),
 		    "select submitId from image where id=%d", id);
-		sqlNeedQuickQuery(conn, query, geneName, PATH_LEN);
+		sqlNeedQuickQuery(conn, query, buf, sizeof(buf));
 		}
 	    else
 	        {
-		safef(geneName, PATH_LEN, "NCBI Gene ID #%s", locusLink);
+		safef(buf, sizeof(buf), "NCBI Gene ID #%s", locusLink);
 		}
 	    }
 	}
     }
+return cloneString(buf);
 }
 
-void bioImageAccession(struct sqlConnection *conn, int id, char accession[PATH_LEN])
+char *bioImageAccession(struct sqlConnection *conn, int id)
 /* Return RefSeq/Genbank accession or n/a if none available. */
 {
-char query[256];
+char query[256], buf[256];
 safef(query, sizeof(query),
 	"select refSeq from image where id=%d", id);
-sqlNeedQuickQuery(conn, query, accession, PATH_LEN);
-if (accession[0] == 0)
+sqlNeedQuickQuery(conn, query, buf, sizeof(buf));
+if (buf[0] == 0)
     {
     safef(query, sizeof(query),
         "select genbank from image where id=%d", id);
-    sqlNeedQuickQuery(conn, query, accession, PATH_LEN);
-    if (accession[0] == 0)
-	safef(accession, PATH_LEN, "n/a");
+    sqlNeedQuickQuery(conn, query, buf, sizeof(buf));
     }
+return cloneOrNull(buf);
 }
 
-void bioImageType(struct sqlConnection *conn, int id, char type[PATH_LEN])
+char *bioImageSubmitId(struct sqlConnection *conn, int id)
+/* Return submitId  for image. */
+{
+char query[256], buf[256];
+safef(query, sizeof(query), 
+	"select submitId from image"
+	" where image.id=%d", id);
+return cloneString(sqlQuickQuery(conn, query, buf, sizeof(buf)));
+}
+
+char *bioImageType(struct sqlConnection *conn, int id)
 /* Return RefSeq/Genbank accession or n/a if none available. */
 {
-char query[256];
+char query[256], buf[256];
 safef(query, sizeof(query),
 	"select imageType.name from image,imageType "
 	"where image.id=%d and imageType.id = image.imageType", id);
-sqlNeedQuickQuery(conn, query, type, PATH_LEN);
-if (type[0] == 0)
-    safef(type, PATH_LEN, "n/a");
+sqlNeedQuickQuery(conn, query, buf, sizeof(buf));
+return cloneOrNull(buf);
 }
+
+static char *indirectString(struct sqlConnection *conn, int id, char *table, char *valField)
+/* Return value on table that is connected via id to image. */
+{
+char query[256], buf[512];
+safef(query, sizeof(query),
+	"select %s.%s from image,%s "
+	"where image.id=%d and image.%s = %s.id",
+	table, valField, table, id, table, table);
+return cloneOrNull(sqlQuickQuery(conn, query, buf, sizeof(buf)));
+}
+
+char *bioImageBodyPart(struct sqlConnection *conn, int id)
+/* Return body part if any. */
+{
+return indirectString(conn, id, "bodyPart", "name");
+}
+
+char *bioImageSliceType(struct sqlConnection *conn, int id)
+/* Return slice type if any. */
+{
+return indirectString(conn, id, "sliceType", "name");
+}
+
+char *bioImageTreatment(struct sqlConnection *conn, int id)
+/* Return treatment if any. */
+{
+return indirectString(conn, id, "treatment", "conditions");
+}
+
+static char *submissionSetPart(struct sqlConnection *conn, int id, char *field)
+/* Return field from submissionSet that is linked to image. */
+{
+return indirectString(conn, id, "submissionSet", field);
+}
+
+char *bioImageContributers(struct sqlConnection *conn, int id)
+/* Return comma-separated list of contributers in format Kent W.H, Wu F.Y. */
+{
+return submissionSetPart(conn, id, "contributers");
+}
+
+char *bioImagePublication(struct sqlConnection *conn, int id)
+/* Return name of publication associated with image. */
+{
+return submissionSetPart(conn, id, "publication");
+}
+
+char *bioImagePubUrl(struct sqlConnection *conn, int id)
+/* Return url of publication associated with image. */
+{
+return submissionSetPart(conn, id, "pubUrl");
+}
+
+char *bioImageSetUrl(struct sqlConnection *conn, int id)
+/* Return contributer url associated with image set. */
+{
+return submissionSetPart(conn, id, "setUrl");
+}
+
+char *bioImageItemUrl(struct sqlConnection *conn, int id)
+/* Return contributer url associated with this image. 
+ * Substitute in submitId for %s before using. */
+{
+return submissionSetPart(conn, id, "itemUrl");
+}
+
 
 
 void webMain(struct sqlConnection *conn, int id, char *geneName)
@@ -155,22 +243,48 @@ void webMain(struct sqlConnection *conn, int id, char *geneName)
 char query[256];
 struct sqlResult *sr;
 char **row;
-char fullPath[PATH_LEN], organism[PATH_LEN], stage[PATH_LEN], accession[PATH_LEN],
-	imageType[PATH_LEN];
+char *fullPath = bioImageFullPath(conn, id);
+char *treatment, *publication;
+char *setUrl, *itemUrl;
 
-
-bioImageFullPath(conn, id, fullPath);
+printf("<B>organism:</B> %s  ", bioImageOrganism(conn, id));
+printf("<B>stage:</B> %s<BR>\n", bioImageStage(conn, id));
+printf("<B>gene:</B> %s ", naForNull(geneName));
+printf("<B>accession:</B> %s ", naForNull(bioImageAccession(conn,id)));
+printf("<B>type:</B> %s<BR>\n", naForNull(bioImageType(conn,id)));
+printf("<B>body part:</B> %s ", naForNull(bioImageBodyPart(conn,id)));
+printf("<B>section type:</B> %s<BR>\n", naForNull(bioImageSliceType(conn,id)));
+treatment = bioImageTreatment(conn,id);
+if (treatment != NULL)
+    printf("<B>treatment:</B> %s<BR>\n", treatment);
+publication = bioImagePublication(conn,id);
+if (publication != NULL)
+    {
+    char *pubUrl = bioImagePubUrl(conn,id);
+    printf("<B>reference:</B> ");
+    if (pubUrl != NULL)
+        printf("<A HREF=\"%s\" target=_blank>%s</A>", pubUrl, publication);
+    else
+        printf("%s", publication);
+    printf("<BR>\n");
+    }
+printf("<B>contributors:</B> %s<BR>\n", naForNull(bioImageContributers(conn,id)));
+setUrl = bioImageSetUrl(conn, id);
+itemUrl = bioImageItemUrl(conn, id);
+if (setUrl != NULL || itemUrl != NULL)
+    {
+    printf("<B>contributer links:</B> ");
+    if (setUrl != NULL)
+        printf("<A HREF=\"%s\" target=_blank>image set</A> ", setUrl);
+    if (itemUrl != NULL)
+	{
+        printf("<A HREF=\"");
+	printf(itemUrl, bioImageSubmitId(conn, id));
+	printf("\" target=_blank>this image</A>");
+	}
+    printf("<BR>\n");
+    }
 printf("<IMG SRC=\"/%s\"><BR>\n", fullPath);
-uglyf("<B>Image path:</B> %s<BR>\n", fullPath);
-bioImageOrganism(conn, id, organism);
-printf("<B>organism:</B> %s  ", organism);
-bioImageAccession(conn, id, accession);
-bioImageStage(conn, id, stage);
-bioImageType(conn, id, imageType);
-printf("<B>stage:</B> %s<BR>\n", stage);
-printf("<B>gene:</B> %s ", geneName);
-printf("<B>accession:</B> %s ", accession);
-printf("<B>type:</B> %s<BR>\n", imageType);
 }
 
 void cartMain(struct cart *theCart)
@@ -184,8 +298,7 @@ cart = theCart;
     int id = cartUsualInt(cart, hgbiId, 1);
     struct sqlConnection *conn = sqlConnect("bioImage");
     /* Default case - start fancy web page. */
-    char geneName[PATH_LEN];
-    bioImageGeneName(conn, id, geneName);
+    char *geneName = bioImageGeneName(conn, id);
     cartWebStart(cart, "UCSC BioImage Browser on %s", geneName);
     webMain(conn, id, geneName);
     cartWebEnd();
