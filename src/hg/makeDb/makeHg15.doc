@@ -4191,3 +4191,61 @@ tail -100f split.log
     cd /cluster/store6/weber/affy/graph/hg15/gz
     rm *.tab *.wib *.wig
     gzip *.signal
+
+# Creating Zoom to 10 base view of the affyTranscription data above
+#		(DONE - 2004-08-06 - Hiram)
+    ssh eieio
+    cd /cluster/data/hg15/bed/affyTranscription
+    ln -s /cluster/store6/weber/affy/graph/hg15/gz/*.signal.gz .
+    cat << '_EOF_' > runZoom.sh
+#!/bin/sh
+#
+
+mkdir -p zoom10wib
+mkdir -p zoom10limits
+
+for F in *.signal.gz
+do
+    C=${F/.sk.signal.gz/}
+    echo "wigZoom -dataSpan=10 $F | wigAsciiToBinary -dataSpan=10 -chrom=${C}"
+    zcat $F | awk '{if ($2 < 0) { printf "%d\t0\n", $1 } else { print }}' | \
+        wigZoom -dataSpan=10 stdin | \
+	    wigAsciiToBinary -dataSpan=10 -chrom=${C} \
+		-wibFile=zoom10wib/${C}.zoom10 stdin 2> zoom10limits/${C}
+done
+'_EOF_'
+    # << keep emacs happy
+    chmod +x runZoom.sh
+    time ./runZoom.sh
+    #	takes about 15 minutes
+    #	the awk statement takes the negative values and brings them up
+    #	to zero as was done for the original data with the -minVal=0
+    #	argument to the wigAsciiToBinary  (would need to add this arg to
+    #	wigZoom to do the same thing here without the awk.)
+
+    #	Load this zoom 10 view
+    ssh hgwdev
+    cd /gbdb/hg15/wib/affyTranscription
+    ln -s /cluster/data/hg15/bed/affyTranscription/zoom10wib/*.wib .
+
+    cd /cluster/data/hg15/bed/affyTranscription/zoom10wib
+    #	Let's make sure we don't ruin the table:
+    hgsql -N -e "select count(*) from affyTranscription;" hg15
+    #	+--------+
+    #	| 575775 |
+    #	+--------+
+    hgLoadWiggle -oldTable -pathPrefix=/gbdb/hg15/wib/affyTranscription hg15 \
+	affyTranscription *.wig
+    hgsql -N -e "select count(*) from affyTranscription;" hg15
+    #	+--------+
+    #	| 649503 |
+    #	+--------+
+
+    #	To test, at a browser image width of 1123 and a 10,000 bp display
+    #	at:
+    #	chr7:26,828,631-26,838,630
+    #	That is exactly 10 bases per pixel.
+    #	go plus or minus one base from there to go under and over
+    #	the threshold, no dramatic change should be seen in the
+    #	display (while in "Mean" windowing viewing mode which isn't the
+    #	default for this track.)
