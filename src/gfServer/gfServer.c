@@ -19,7 +19,7 @@
 #include "cheapcgi.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfServer.c,v 1.36 2003/12/18 04:28:53 kent Exp $";
+static char const rcsid[] = "$Id: gfServer.c,v 1.37 2003/12/21 06:34:07 kent Exp $";
 
 int maxNtSize = 40000;
 int maxAaSize = 8000;
@@ -305,7 +305,7 @@ static void errorSafeQuery(boolean doTrans, boolean queryIsProt,
 int status;
 memTrackerStart();
 pushAbortHandler(gfAbort);
-ripCord = needMem(64*1024);	/* A little memory for recovery. */
+ripCord = needMem(64*1024); /* Memory for error recovery. memTrackerEnd frees */
 status = setjmp(gfRecover);
 if (status == 0)    /* Always true except after long jump. */
     {
@@ -327,7 +327,6 @@ else    /* They long jumped here because of an error. */
     logIt("Recovering from error via longjmp\n");
     netSendString(connectionHandle, "Error: gfServer out of memory. Try reducing size of query.");
     }
-freez(&ripCord);
 memTrackerEnd();
 }
 
