@@ -1,6 +1,7 @@
 #include "common.h"
 #include "dnaseq.h"
 #include "localmem.h"
+#include "memalloc.h"
 #include "bits.h"
 #include "genoFind.h"
 #include "fuzzyFind.h"
@@ -1168,6 +1169,7 @@ while (right != NULL)
         {
 	freeMem(left);
 	ffList = right;
+	right->left = NULL;
 	}
     else
         break;
