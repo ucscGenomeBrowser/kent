@@ -88,7 +88,6 @@ char sequenceName[DEFAULT_PATH_SIZE];
 printf("Writing gap file for chromo %s\n", endGap->chrom);
 
 /*
-
 filename = outputDir/chromName/chromFrag/chromFrag.fa
 example:
 
@@ -185,7 +184,7 @@ if (NULL == *retStartGap)
     {
     *retStartGap = agpGap;
     }
-
+/* TODO: Free non-used returned agpGap and agpFrag entries */
 numBasesRead = agpGap->chromEnd - startIndex;
 } while ((numBasesRead < splitSize || !splitPointFound)
              && agpGap->chromEnd < dnaSize);
@@ -209,9 +208,10 @@ struct agpGap *endAgpGap = NULL;
 
 do
     {
+    /* TODO: free endAgpGap if not NULL */
     endAgpGap = nextAgpEntryToSplitOn(agpFile, dnaSize, splitSize, &startAgpGap);
     createSplitFile(dna, startAgpGap, endAgpGap);
-    /* TODO: Free the start gap if not null */
+    /* TODO: free startAgpGap */
     startAgpGap = NULL;
     } while (endAgpGap->chromEnd < dnaSize);
 }
@@ -239,11 +239,9 @@ printf("Processing agpFile %s and fasta file %s, with split boundaries of %d bas
 while (faSpeedReadNext(lfFa, &dna, &dnaSize, &chromName))
     {
     printf("\nProcessing data for Chromosome: %s, size: %d\n", chromName, dnaSize);
-
     writeChromFaFile(chromName, dna, dnaSize);
     makeSuperContigs(lfAgp, dna, dnaSize, splitSize);
     printf("Done processing chromosome %s\n", chromName);
-    /* TODO: Free the fa entry if necessary */
     }
 
 printf("Done processing agpFile %s and fasta file %s, with split boundaries of %d kbases\n", agpFile, faFile, splitSize);
@@ -279,6 +277,7 @@ if (5 == argc)
 setbuf(stdout, NULL);
 
 splitFaIntoContigs(argv[1], argv[2], size);
+faFreeFastBuf();
 return 0;
 }
 
