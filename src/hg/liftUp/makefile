@@ -7,6 +7,13 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = liftUp.o
 
-liftUp: $O ../../lib/$(MACHTYPE)/jkweb.a 
-	gcc -o $(HOME)/bin/$(MACHTYPE)/liftUp $O $(MYLIBS) $L
+all: liftUp test
+
+liftUp: $O $(MYLIBS)
+	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/liftUp $O $(MYLIBS) $L
+
+test: force
+	cd test && ${MAKE}
+
+force: 
 
