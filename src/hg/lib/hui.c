@@ -11,7 +11,7 @@
 #include "hCommon.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.45 2004/07/19 22:55:57 hiram Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.46 2004/08/16 22:40:01 heather Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -190,7 +190,7 @@ cgiMakeDropList(var, stsMapOptions, ArraySize(stsMapOptions),
 static char *stsMapMouseOptions[] = {
     "All Genetic",
     "WICGR Genetic Map",
-    "MGD Geneic Map",
+    "MGD Genetic Map",
     "RH",
 };
 
