@@ -3,8 +3,14 @@
  * a small size, then extend these hits as far as possible
  * while the sequences perfectly match, then call on routines
  * in this module to do further extensions allowing small
- * gaps and mismatches. */
-/* Copyright 2003 Jim Kent.  All rights reserved. */
+ * gaps and mismatches. 
+ *
+ * This version of the algorithm uses affine gap scorea and
+ * has the neat feature that the band can wander around.  
+ * When a score exceeds any previous score, the band will be 
+ * recentered around the highest scoring position. */
+
+/* Copyright 2003-5 Jim Kent.  All rights reserved. */
 
 #include "common.h"
 #include "dnaseq.h"
@@ -13,15 +19,28 @@
 #include "localmem.h"
 #include "bandExt.h"
 
-static char const rcsid[] = "$Id: bandExt.c,v 1.1 2004/12/03 04:29:02 kent Exp $";
+static char const rcsid[] = "$Id: bandExt.c,v 1.9 2005/01/10 00:05:21 kent Exp $";
 
-enum parentPos
-/* Record of parant positions. */
+/* Definitions for traceback byte.  This is encoded as so:
+ *     xxxxLUMM
+ * where the x's are not used.  The L bit is set if parent of the left insert
+ * is also a left insert (otherwise it is a match). Likewise the U bit is set
+ * if the parent of an up insert is also an up insert.  The MM bits contain the
+ * parent of the match state. */
+
+#define mpMatch 1
+#define mpUp 2
+#define mpLeft 3
+#define mpMask 3
+#define upExt (1<<2)
+#define lpExt (1<<3)
+
+struct score
+/* Info on score in our three states. */
    {
-   ppNone,	/* Starting fresh from here. */
-   ppUp,	/* Parent is up in graph (corresponds to insert) */
-   ppDiag,	/* Parent is diagonal in graph (corresponds to match) */
-   ppLeft,	/* Parent is left in graph (corresponds to insert) */
+   int match;
+   int up;
+   int left;
    };
 
 boolean bandExt(boolean global, struct axtScoreScheme *ss, int maxInsert,
@@ -38,12 +57,12 @@ boolean bandExt(boolean global, struct axtScoreScheme *ss, int maxInsert,
  * alignment is returned in the various ret values.  The function
  * overall returns TRUE if an extension occurred, FALSE if not. */
 {
-int i;			/* A humble index. */
+int i,j;			/* A humble index or two. */
 int *bOffsets = NULL;	/* Offset of top of band. */
 UBYTE **parents = NULL;	/* Array of parent positions. */
-int *curScores = NULL;	/* Scores for current column. */
-int *prevScores = NULL;	/* Scores for previous column. */
-int *swapScores;	/* Helps to swap cur & prev column. */
+struct score *curScores = NULL;	/* Scores for current column. */
+struct score *prevScores = NULL;	/* Scores for previous column. */
+struct score *swapScores;	/* Helps to swap cur & prev column. */
 int bandSize = 2*maxInsert + 1;	 /* Size of band including middle */
 int maxIns1 = maxInsert + 1;   	 /* Max insert plus one. */
 int bandPlus = bandSize + 2*maxIns1;  /* Band plus sentinels on either end. */
@@ -55,13 +74,15 @@ int colShift = 1;	/* Vertical shift between this column and previous. */
 int prevScoreOffset;	/* Offset into previous score column. */
 int curScoreOffset;	/* Offset into current score column. */
 int symCount = 0;	/* Size of alignment and size allocated for it. */
-int gapPenalty = ss->gapOpen;	 /* Each gap costs us this. */
-int badScore = -gapPenalty*10;	 /* A score bad enough no one will want to link with us. */
-int maxDrop = -gapPenalty*maxInsert; /* Max score drop allowed before giving up. */
-int score;			 /* Current score. */
+int gapOpen = ss->gapOpen;	 /* First base in gap costs this. */
+int gapExtend = ss->gapExtend;	 /* Extra bases in gap cost this. */
+int badScore = -gapOpen*100;	 /* A score bad enough no one will want to link with us. */
+int gMatch = ss->matrix['g']['g'];	 /* What a good match is worth */
+int maxDrop = gapOpen + gapExtend*maxInsert; /* Max score drop allowed before giving up. */
 int midScoreOff;		 /* Offset to middle of scoring array. */
 struct lm *lm;			 /* Local memory pool. */
 boolean didExt = FALSE;
+int initGapScore = -gapOpen;
 
 #ifdef DEBUG
 uglyf("bandExt: aStart %d, aSize %d, symAlloc %d\n", aSize, bSize, symAlloc);
@@ -79,16 +100,21 @@ if (dir < 0)
     reverseBytes(bStart, bSize);
     }
 
-/* Make up a local mem structure big enough for everything. */
-lm = lmInit(aSize*(bandSize+sizeof(*bOffsets)) + bandPlus*(4*sizeof(int)));
+/* Make up a local mem structure big enough for everything. 
+ * This is just a minor, perhaps misguided speed tweak to
+ * avoid multiple mallocs. */
+lm = lmInit(
+    sizeof(bOffsets[0])*aSize +
+    sizeof(parents[0])*bandSize +
+    bandSize*(sizeof(parents[0][0])*aSize) +
+    sizeof(curScores[0]) * bandPlus +
+    sizeof(prevScores[0]) * bandPlus );
 
 /* Allocate data structures out of local memory pool. */
 lmAllocArray(lm, bOffsets, aSize);
 lmAllocArray(lm, parents, bandSize);
 for (i=0; i<bandSize; ++i)
-    {
     lmAllocArray(lm, parents[i], aSize);
-    }
 lmAllocArray(lm, curScores, bandPlus);
 lmAllocArray(lm, prevScores, bandPlus);
 
@@ -97,33 +123,30 @@ lmAllocArray(lm, prevScores, bandPlus);
  * the start and at the beginning. */
 for (i=0; i<bandPlus; ++i)
     {
-    curScores[i] = prevScores[i] = badScore;
+    struct score *cs = &curScores[i];
+    cs->match = cs->up = cs->left = badScore;
+    cs = &prevScores[i];
+    cs->match = cs->up = cs->left = badScore;
     }
 
 /* Set up scoring array so that extending without an initial insert
  * looks relatively good. */
 midScoreOff = 1 + 2 * maxInsert;
-prevScores[midScoreOff] = 0;
+prevScores[midScoreOff].match = 0;
 
 /* Set up scoring array so that initial inserts of up to maxInsert
  * are allowed but penalized appropriately. */
-score = 0;
-for (i=1; i<=maxInsert; ++i)
     {
-    score -= gapPenalty;
-    curScores[midScoreOff-i] = prevScores[midScoreOff-i] 
-	    = prevScores[midScoreOff+i] = score;
-    }
-
-#ifdef DEBUG
-    /* Print previous score array. */
-    printf("%c ", '@');
-    for (i=0; i<bandPlus; ++i)
+    int score = -gapOpen;
+    for (i=0; i<maxInsert; ++i)
 	{
-	printf("%3d ", prevScores[i]);
+	prevScores[midScoreOff+i].up = score;
+	score -= gapExtend;
 	}
-    printf("(%d)\n", -colShift);
-#endif /* DEBUG */
+    }
+#ifdef OLD
+#endif /* OLD */
+
 
 for (aPos=0; aPos < aSize; ++aPos)
     {
@@ -139,52 +162,116 @@ for (aPos=0; aPos < aSize; ++aPos)
     if (colBottom > bSize) colBottom = bSize;
     curScoreOffset =  maxIns1 + colTop - (bandCenter - maxInsert);
     prevScoreOffset = curScoreOffset + colShift;
+#ifdef DEBUG
+    uglyf("curScoreOffset %d, maxIns %d, prevScoreOffset %d\n", curScoreOffset, maxInsert, prevScoreOffset);
+#endif /* DEBUG */
+
+    /* At top we deal with possibility of initial insert that
+     * comes in at this point, unless the band has wandered off. */
+    if (aPos < maxInsert)
+	{
+	curScores[curScoreOffset-1].up = initGapScore;
+	initGapScore -= gapExtend;
+	}
+    else
+	curScores[curScoreOffset-1].up = badScore;
+
     for (bPos = colTop; bPos < colBottom; ++bPos)
 	{
-	/* Initialize parent and score to match (diagonal) */
-	UBYTE parent = ppDiag;
-	int score = prevScores[prevScoreOffset-1] + matRow[bStart[bPos]];
-	int s;
+	UBYTE parent;
+	struct score *curScore = &curScores[curScoreOffset];
 
-	/* Try insert in one direction and record if better. */
-	s = prevScores[prevScoreOffset] - gapPenalty;
-	if (s > score)
+#ifdef DEBUG
+	uglyf("aPos %d, bPos %d, %c vs %c\n", aPos, bPos, aBase, bStart[bPos]);
+	uglyf("  diag[%d %d %d], left[%d %d %d], up[%d %d %d]\n", 
+		prevScores[prevScoreOffset-1].match, 
+		prevScores[prevScoreOffset-1].left, 
+		prevScores[prevScoreOffset-1].up, 
+		prevScores[prevScoreOffset].match, 
+		prevScores[prevScoreOffset].left, 
+		prevScores[prevScoreOffset].up, 
+		curScores[curScoreOffset-1].match, 
+		curScores[curScoreOffset-1].left, 
+		curScores[curScoreOffset-1].up);
+#endif /* DEBUG */
+
+	/* Handle ways into the matching state and record if it's
+	 * best score so far. */
 	    {
-	    score = s;
-	    parent = ppLeft;
+	    int match = matRow[bStart[bPos]];
+	    struct score *a = &prevScores[prevScoreOffset-1];
+	    int diagScore = a->match;
+	    int leftScore = a->left;
+	    int upScore = a->up;
+	    int score;
+	    if (diagScore >= leftScore && diagScore >= upScore)
+	        {
+		score = diagScore + match;
+		parent = mpMatch;
+		}
+	    else if (leftScore > upScore)
+	        {
+		score = leftScore + match;
+	        parent = mpLeft;
+		}
+	    else
+	        {
+	        score = upScore + match;
+	        parent = mpUp;
+	        }
+	    curScore->match = score;
+	    if (score > bestColScore)
+	        {
+		bestColScore = score;
+		bestColPos = bPos;
+		}
 	    }
 
-	/* Try insert in other direction and record if better. */
-	s = curScores[curScoreOffset-1] - gapPenalty;
-	if (s > score)
+	/* Handle ways into left gap state. */
 	    {
-	    score = s;
-	    parent = ppUp;
+	    struct score *a = &prevScores[prevScoreOffset];
+	    int extScore = a->left - gapExtend;
+	    int openScore = a->match - gapOpen;
+	    if (extScore >= openScore)
+	        {
+		parent |= lpExt;
+		curScore->left = extScore;
+		}
+	    else
+	        {
+		curScore->left = openScore;
+		}
 	    }
 
-	/* Record best direction and score, noting if it is best in column. */
-	curScores[curScoreOffset] = score;
+	/* Handle ways into up gap state. */
+	    {
+	    struct score *a = &curScore[-1];
+	    int extScore = a->up - gapExtend;
+	    int openScore = a->match - gapOpen;
+	    if (extScore >= openScore)
+	        {
+		parent |= upExt;
+		curScore->up = extScore;
+		}
+	    else
+	        {
+		curScore->up = openScore;
+		}
+	    }
+
 	parents[curScoreOffset - maxIns1][aPos] = parent;
-	if (score > bestColScore)
-	    {
-	    bestColScore = score;
-	    bestColPos = bPos;
-	    }
 
+#ifdef DEBUG
+	uglyf(" cur [%d %d %d]\n", 
+		curScore->match, 
+		curScore->left, 
+		curScore->up);
+#endif /* DEBUG */
 	/* Advance to next row in column. */
 	curScoreOffset += 1;
 	prevScoreOffset += 1;
 	}
 
-#ifdef DEBUG
-    /* Print current score array. */
-    printf("%c ", aBase);
-    for (i=0; i<bandPlus; ++i)
-	{
-	printf("%3d ", curScores[i]);
-	}
-    printf("(%d)\n", bandCenter);
-#endif /* DEBUG */
 
     /* If this column's score is best so far make note of
      * it and shift things so that the matching bases at the
@@ -199,7 +286,7 @@ for (aPos=0; aPos < aSize; ++aPos)
 	bBestPos = bestColPos;
 	colShift = (bestColPos + 1) - bandCenter;
 	}
-    else if (bestColScore < maxDrop)
+    else if (bestColScore < bestScore - maxDrop)
 	{
 	if (!global)
 	    break;
@@ -222,8 +309,13 @@ for (aPos=0; aPos < aSize; ++aPos)
 
 
 /* Trace back. */
+#ifdef DEBUG
+uglyf("traceback: bestScore %d, aBestPos %d, bBestPos %d\n", bestScore, aBestPos, bBestPos);
+#endif /* DEBUG */
 if (global || bestScore > 0)
     {
+    boolean upState = FALSE;
+    boolean leftState = FALSE;
     didExt = TRUE;
     if (global)
         {
@@ -242,28 +334,45 @@ if (global || bestScore > 0)
 	pOffset = bPos - bOffsets[aPos] + maxInsert;
 	if (pOffset < 0 || pOffset >= bandSize)
 	    {
+#ifdef DEBUG
+	    uglyf("bPos %d, aPos %d, bOffsets[aPos] %d, maxInsert %d\n", bPos, aPos, bOffsets[aPos], maxInsert);
+	    uglyf("pOffset = %d, bandSize = %d\n", pOffset, bandSize);
+	    uglyf("aSize %d, bSize %d\n", aSize, bSize);
+	    faWriteNext(uglyOut, "uglyA", aStart, aSize);
+	    faWriteNext(uglyOut, "uglyB", bStart, bSize);
+#endif /* DEBUG */
 	    assert(global);
 	    return FALSE;
 	    }
 	parent = parents[pOffset][aPos];
-	switch (parent)
+#ifdef DEBUG
+	uglyf("parent %d, upState %d, leftState %d\n", parent, upState, leftState);
+#endif /* DEBUG */
+	if (upState)
 	    {
-	    case ppDiag:
-		retSymA[symCount] = aStart[aPos];
-		retSymB[symCount] = bStart[bPos];
-		aPos -= 1;
-		bPos -= 1;
-		break;
-	    case ppUp:
-		retSymA[symCount] = '-';
-		retSymB[symCount] = bStart[bPos];
-		bPos -= 1;
-		break;
-	    case ppLeft:
-		retSymA[symCount] = aStart[aPos];
-		retSymB[symCount] = '-';
-		aPos -= 1;
-		break;
+	    retSymA[symCount] = '-';
+	    retSymB[symCount] = bStart[bPos];
+	    bPos -= 1;
+	    upState = (parent&upExt);
+	    }
+	else if (leftState)
+	    {
+	    retSymA[symCount] = aStart[aPos];
+	    retSymB[symCount] = '-';
+	    aPos -= 1;
+	    leftState = (parent&lpExt);
+	    }
+	else
+	    {
+	    retSymA[symCount] = aStart[aPos];
+	    retSymB[symCount] = bStart[bPos];
+	    aPos -= 1;
+	    bPos -= 1;
+	    parent &= mpMask;
+	    if (parent == mpUp)
+	        upState = TRUE;
+	    else if (parent == mpLeft)
+	        leftState = TRUE;
 	    }
 	if (++symCount >= symAlloc)
 	    errAbort("unsufficient symAlloc in bandExt");
@@ -377,73 +486,3 @@ freeMem(symBuf);
 return ffList;
 }
 
-#ifdef TEST_ONLY
-
-void testBandExt(char *scoreFile, char *aFile, char *bFile)
-/* test - Test something. */
-{
-struct axtScoreScheme *ss = axtScoreSchemeRead(scoreFile);
-struct dnaSeq *aSeq = faReadDna(aFile);
-struct dnaSeq *bSeq = faReadDna(bFile);
-int symAlloc = aSeq->size*2;
-char *aSym = needMem(symAlloc);
-char *bSym = needMem(symAlloc);
-int aExt, bExt, symCount;
-boolean gotExt;
-
-printf("%s %s %d\n", aFile, aSeq->name, aSeq->size);
-printf("%s %s %d\n", bFile, bSeq->name, bSeq->size);
-gotExt = bandExt(FALSE, ss, clMaxInsert, aSeq->dna, aSeq->size, bSeq->dna, bSeq->size, clDir,
-	symAlloc, &symCount, aSym, bSym, &aExt, &bExt);
-printf("%sextended to %d %d\n", (gotExt ? "" : "not "), aExt, bExt);
-if (gotExt)
-    printf("%s\n%s\n", aSym, bSym);
-}
-
-void test(char *scoreFile, char *aFile, char *bFile)
-/* test - Test something. */
-{
-struct axtScoreScheme *ss = axtScoreSchemeRead(scoreFile);
-struct dnaSeq *aSeq = faReadDna(aFile);
-struct dnaSeq *bSeq = faReadDna(bFile);
-struct ffAli *ffList, *ff, *origFf;
-
-printf("%s %s %d\n", aFile, aSeq->name, aSeq->size);
-printf("%s %s %d\n", bFile, bSeq->name, bSeq->size);
-AllocVar(origFf);
-if (clDir > 0)
-    {
-    origFf->nStart = origFf->nEnd = aSeq->dna;
-    origFf->hStart = origFf->hEnd = bSeq->dna;
-    }
-else
-    {
-    origFf->nStart = origFf->nEnd = aSeq->dna + aSeq->size;
-    origFf->hStart = origFf->hEnd = bSeq->dna + bSeq->size;
-    }
-ffList = bandExtFf(NULL, ss, clMaxInsert, origFf,
-	aSeq->dna, aSeq->dna + aSeq->size,
-	bSeq->dna, bSeq->dna + bSeq->size,
-	clDir, 50);
-for (ff = ffList; ff != NULL; ff = ff->right)
-    {
-    mustWrite(stdout, ff->nStart, ff->nEnd - ff->nStart);
-    fprintf(stdout, " %d\n", ff->nEnd - aSeq->dna);
-    mustWrite(stdout, ff->hStart, ff->hEnd - ff->hStart);
-    fprintf(stdout, " %d\n\n", ff->hEnd - bSeq->dna);
-    }
-}
-
-int main(int argc, char *argv[])
-/* Process command line. */
-{
-optionHash(&argc, argv);
-if (argc != 4)
-    usage();
-clMaxInsert = optionInt("maxInsert", clMaxInsert);
-clDir = optionInt("dir", clDir);
-test(argv[1], argv[2], argv[3]);
-return 0;
-}
-
-#endif /* TEST_ONLY */
