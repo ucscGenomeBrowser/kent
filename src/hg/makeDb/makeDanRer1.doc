@@ -1,0 +1,20 @@
+#!/bin/csh -f # set emacs mode
+exit; # don't actually run this like a script :)
+
+# Danio Rerio (zebrafish) from Sanger, version Zv3 (released 11/27/03)
+#   Project website:
+#    http://www.sanger.ac.uk/Projects/D_rerio/
+#  Asembly notes:
+#    http://www.sanger.ac.uk/Projects/D_rerio/Zv3_assembly_information.shtml
+
+# DOWNLOAD SEQUENCE 
+
+    ssh kksilo
+    mkdir /cluster/store7/danRer1
+    ln -s /cluster/store7/danRer1 /cluster/data
+    cd /cluster/data/danRer1
+    wget ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv3release/README
+    wget ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv3release/Zv3.contigs.agp
+    wget ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv3release/Zv3.supercontigs.agp
+    wget ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv3release/Zv3.supercontigs.fa 
+    wget ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv3release/Zv3.supercontigs.fa.tag
