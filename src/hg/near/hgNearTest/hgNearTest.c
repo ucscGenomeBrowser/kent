@@ -12,7 +12,7 @@
 #include "../hgNear/hgNear.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgNearTest.c,v 1.10 2004/03/04 05:35:33 kent Exp $";
+static char const rcsid[] = "$Id: hgNearTest.c,v 1.11 2004/03/04 06:04:48 kent Exp $";
 
 /* Command line variables. */
 char *dataDir = "/usr/local/apache/cgi-bin/hgNearData";
@@ -47,7 +47,7 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-char *hgTestScanForErrorMessage(char *text)
+char *qaTestScanForErrorMessage(char *text)
 /* Scan text for error message.  If one exists then
  * return copy of it.  Else return NULL. */
 {
@@ -70,6 +70,27 @@ if (startErr != NULL)
     return cloneStringZ(startErr, errSize);
     }
 return NULL;
+}
+
+int qaCountBetween(char *s, char *startPattern, char *endPattern, 
+	char *midPattern)
+/* Count the number of midPatterns that occur between start and end pattern. */
+{
+int count = 0;
+char *e;
+s = stringIn(startPattern, s);
+if (s != NULL)
+    {
+    s += strlen(startPattern);
+    e = stringIn(endPattern, s);
+    while (s < e)
+        {
+	if (startsWith(midPattern, s))
+	    ++count;
+	s += 1;
+	}
+    }
+return count;
 }
 
 struct qaStatus
@@ -126,7 +147,7 @@ else
 	}
     else
         {
-	errMessage = hgTestScanForErrorMessage(page->fullText);
+	errMessage = qaTestScanForErrorMessage(page->fullText);
 	}
     }
 qs->errMessage = cloneString(errMessage);
@@ -183,6 +204,24 @@ errCatchEnd(errCatch);
 qs = qaStatusOnPage(errCatch, page, startTime, retPage);
 errCatchFree(&errCatch);
 return qs;
+}
+
+void qaStatusSoftError(struct qaStatus *qs, char *format, ...)
+/* Add error message for something less than a crash. */
+{
+struct dyString *dy = dyStringNew(0);
+va_list args;
+va_start(args, format);
+if (qs->errMessage)
+    {
+    dyStringAppend(dy, qs->errMessage);
+    dyStringAppendC(dy, '\n');
+    }
+dyStringVaPrintf(dy, format, args);
+va_end(args);
+freez(&qs->errMessage);
+qs->errMessage = cloneString(dy->string);
+dyStringFree(&dy);
 }
 
 struct qaStatistics
@@ -286,45 +325,6 @@ for (i=0; i<ArraySize(test->info); ++i)
 fprintf(f, "%s\n", test->status->errMessage);
 }
 
-void qaStatusSoftError(struct qaStatus *qs, char *format, ...)
-/* Add error message for something less than a crash. */
-{
-struct dyString *dy = dyStringNew(0);
-va_list args;
-va_start(args, format);
-if (qs->errMessage)
-    {
-    dyStringAppend(dy, qs->errMessage);
-    dyStringAppendC(dy, '\n');
-    }
-dyStringVaPrintf(dy, format, args);
-va_end(args);
-freez(&qs->errMessage);
-qs->errMessage = cloneString(dy->string);
-dyStringFree(&dy);
-}
-
-int qaCountBetween(char *s, char *startPattern, char *endPattern, 
-	char *midPattern)
-/* Count the number of midPatterns that occur between start and end pattern. */
-{
-int count = 0;
-char *e;
-s = stringIn(startPattern, s);
-if (s != NULL)
-    {
-    s += strlen(startPattern);
-    e = stringIn(endPattern, s);
-    while (s < e)
-        {
-	if (startsWith(midPattern, s))
-	    ++count;
-	s += 1;
-	}
-    }
-return count;
-}
-
 int nearCountRows(struct htmlPage *page)
 /* Count number of rows in big table. */
 {
@@ -362,6 +362,13 @@ if (oldPage != NULL)
     }
 }
 
+void quickErrReport()
+/* Report error at head of list if any */
+{
+struct nearTest *test = nearTestList;
+if (test->status->errMessage != NULL)
+    nearTestLogOne(test, stderr);
+}
 
 void testCol(struct htmlPage *emptyConfig, char *org, char *db, char *col, char *gene)
 /* Test one column. */
@@ -375,51 +382,39 @@ htmlPageSetVar(emptyConfig, NULL, visVar, "on");
 htmlPageSetVar(emptyConfig, NULL, orderVarName, "geneDistance");
 htmlPageSetVar(emptyConfig, NULL, countVarName, "25");
 
-qs = qaPageFromForm(emptyConfig, emptyConfig->forms, 
-	"submit", "Submit", &printPage);
-test = nearTestNew(qs, "colPrint", "n/a", org, db, col, gene);
+printPage = quickSubmit(emptyConfig, NULL, org, db, col, gene, "colPrint", "Submit", "on");
 if (printPage != NULL)
     {
     int expectCount = 25;
     int lineCount = nearCountRows(printPage);
     if (lineCount != expectCount)
-	qaStatusSoftError(qs, "Got %d rows, expected %d", lineCount, expectCount);
+	qaStatusSoftError(nearTestList->status, 
+		"Got %d rows, expected %d", lineCount, expectCount);
     }
-if (test->status->errMessage != NULL)
-    nearTestLogOne(test, stderr);
+quickErrReport();
 htmlPageFree(&printPage);
 htmlPageSetVar(emptyConfig, NULL, visVar, NULL);
 }
 
-struct htmlPage *emptyConfigPage(struct htmlPage *dbPage, char *org,
-	char *db)
+struct htmlPage *emptyConfigPage(struct htmlPage *dbPage, char *org, char *db)
 /* Get empty configuration page. */
 {
-struct nearTest *test;
-struct qaStatus *qs;
-struct htmlPage *emptyConfig;
-qs = qaPageFromForm(dbPage, dbPage->forms, "near.do.colHideAll", "on", &emptyConfig);
-test = nearTestNew(qs, "emptyConfig", "n/a", org, db, "n/a", "n/a");
-if (emptyConfig == NULL)
-    warn("Couldn't get empty config page for %s\n", db);
-return emptyConfig;
+return quickSubmit(dbPage, NULL, org, db, NULL, NULL, "emptyConfig", hideAllConfName, "on");
 }
 
 void testColInfo(struct htmlPage *dbPage, char *org, char *db, char *col) 
 /* Click on all colInfo columns. */
 {
-struct nearTest *test;
-struct qaStatus *qs;
-struct htmlPage *infoPage;
-qs = qaPageFromForm(dbPage, dbPage->forms, colInfoVarName, col, &infoPage);
-test = nearTestNew(qs, "colInfo", "n/a", org, db, col, "n/a");
-if (infoPage == NULL)
-    warn("Couldn't get empty config page for %s\n", db);
-else
+struct htmlPage *infoPage = 
+    quickSubmit(dbPage, NULL, org, db, col, NULL, "colInfo", colInfoVarName, col);
+
+if (infoPage != NULL)
     {
     if (stringIn("No additional info available", infoPage->htmlText))
-	qaStatusSoftError(qs, "%s failed - no %s.html?", colInfoVarName, col);
+	qaStatusSoftError(nearTestList->status, 
+		"%s failed - no %s.html?", colInfoVarName, col);
     }
+quickErrReport();
 htmlPageFree(&infoPage);
 }
 
@@ -466,30 +461,47 @@ if (emptyConfig != NULL )
 htmlPageFree(&emptyConfig);
 }
 
+#ifdef SOON
 void testSort(struct htmlPage *emptyConfig, char *org, char *db, char *sort, char *gene)
 /* Test one column. */
 {
 struct htmlPage *printPage = NULL;
-struct nearTest *test;
-struct qaStatus *qs;
+htmlPageSetVar(emptyConfig, NULL, "near.col.acc.vis", "on");
+htmlPageSetVar(emptyConfig, NULL, orderVarName, sort);
+htmlPageSetVar(emptyConfig, NULL, countVarName, "25");
+htmlPageSetVar(emptyConfig, NULL, searchVarName, gene);
+printPage = quickSubmit(emptyConfig, sort, org, db, NULL, gene, "sortType", NULL, NULL);
+if (printPage != NULL)
+    {
+    int lineCount = nearCountRows(printPage);
+    if (lineCount < 1)
+	qaStatusSoftError(nearTestList->status, "No rows for sort %s", sort);
+    }
+quickErrReport();
+htmlPageFree(&printPage);
+}
+#endif /* SOON */
+
+void testSort(struct htmlPage *emptyConfig, char *org, char *db, char *sort, char *gene)
+/* Test one column. */
+{
+struct htmlPage *printPage = NULL;
 htmlPageSetVar(emptyConfig, NULL, "near.col.acc.vis", "on");
 htmlPageSetVar(emptyConfig, NULL, orderVarName, sort);
 htmlPageSetVar(emptyConfig, NULL, countVarName, "25");
 htmlPageSetVar(emptyConfig, NULL, searchVarName, gene);
 
-qs = qaPageFromForm(emptyConfig, emptyConfig->forms, 
-	"submit", "Submit", &printPage);
-test = nearTestNew(qs, "sortType", sort, org, db, "n/a", gene);
+printPage = quickSubmit(emptyConfig, sort, org, db, NULL, gene, "sortType", "submit", "on");
 if (printPage != NULL)
     {
     int lineCount = nearCountRows(printPage);
     if (lineCount < 1)
-	qaStatusSoftError(qs, "No rows for sort %s", sort);
+	qaStatusSoftError(nearTestList->status, "No rows for sort %s", sort);
     }
-if (test->status->errMessage != NULL)
-    nearTestLogOne(test, stderr);
+quickErrReport();
 htmlPageFree(&printPage);
 }
+
 
 
 void testDbSorts(struct htmlPage *dbPage, char *org, char *db, 
