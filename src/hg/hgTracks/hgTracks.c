@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.616 2003/10/16 17:57:56 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.617 2003/10/20 21:49:29 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6426,6 +6426,7 @@ hashFree(&hash);
 *pGroupList = list;
 }
 
+
 void doTrackForm(char *psOutput)
 /* Make the tracks display form with the zoom/scroll
  * buttons and the active image. */
@@ -6684,7 +6685,7 @@ if (!hideControls)
 	sprintf(buf, "%s:%d-%d", chromName, winStart+1, winEnd);
 	position = cloneString(buf);
 	hWrites("position ");
-	hTextVar("position", position, 30);
+	hTextVar("position", addCommasToPos(position), 30);
 	sprintLongWithCommas(buf, winEnd - winStart);
 	hPrintf(" size %s ", buf);
 	hWrites(" image width ");
@@ -7013,6 +7014,7 @@ if (! isGenome(pos))
 return(pos);
 }
 
+
 void tracksDisplay()
 /* Put up main tracks display. This routine handles zooming and
  * scrolling. */
@@ -7029,6 +7031,9 @@ if (NULL == position)
 
 if((position == NULL) || sameString(position, ""))
     errAbort("Please go back and enter a coordinate range in the \"position\" field.<br>For example: chr22:20100000-20200000.\n");
+
+/* doesn't free old position */
+position = stripCommas(position);
 
 chromName = NULL;
 winStart = 0;
