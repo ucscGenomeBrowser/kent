@@ -1083,7 +1083,7 @@ for (col = table->columnList; col != NULL; col = col->next)
 	    {
 	    if (mightNeedQuotes)
 		fprintf(f, "if (sep == ',') fputc('\"',f);\n");
-	    fprintf(f, "fprintf(f, \"%%%c\", el->%s, %s);\n", outChar, 
+	    fprintf(f, "fprintf(f, \"%%%c\", el->%s);\n", outChar, 
 		colName, lineEnd);
 	    if (mightNeedQuotes)
 		fprintf(f, "if (sep == ',') fputc('\"',f);\n");

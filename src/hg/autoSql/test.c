@@ -27,9 +27,9 @@ void ptOutput(struct pt *el, FILE *f, char sep, char lastSep)
 /* Print out pt.  Separate fields with sep. Follow last field with lastSep. */
 {
 int i;
-fprintf(f, "%d", el->x, sep);
+fprintf(f, "%d", el->x);
 fputc(sep,f);
-fprintf(f, "%d", el->y, lastSep);
+fprintf(f, "%d", el->y);
 fputc(lastSep,f);
 }
 
@@ -83,14 +83,14 @@ void pointOutput(struct point *el, FILE *f, char sep, char lastSep)
 {
 int i;
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->acc, sep);
+fprintf(f, "%s", el->acc);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%d", el->x, sep);
+fprintf(f, "%d", el->x);
 fputc(sep,f);
-fprintf(f, "%d", el->y, sep);
+fprintf(f, "%d", el->y);
 fputc(sep,f);
-fprintf(f, "%d", el->z, sep);
+fprintf(f, "%d", el->z);
 fputc(sep,f);
 if (sep == ',') fputc('{',f);
 ptCommaOut(&el->pt,f);
@@ -133,7 +133,6 @@ return ret;
 struct polygon *polygonLoadAll(char *fileName) 
 /* Load all polygon from a tab-separated file.
  * Dispose of this with polygonFreeList(). */
-
 {
 struct polygon *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
@@ -216,9 +215,9 @@ void polygonOutput(struct polygon *el, FILE *f, char sep, char lastSep)
 /* Print out polygon.  Separate fields with sep. Follow last field with lastSep. */
 {
 int i;
-fprintf(f, "%u", el->id, sep);
+fprintf(f, "%u", el->id);
 fputc(sep,f);
-fprintf(f, "%d", el->pointCount, sep);
+fprintf(f, "%d", el->pointCount);
 fputc(sep,f);
 /* Loading point list. */
     {
@@ -287,7 +286,6 @@ return ret;
 struct polyhedron *polyhedronLoadAll(char *fileName) 
 /* Load all polyhedron from a tab-separated file.
  * Dispose of this with polyhedronFreeList(). */
-
 {
 struct polyhedron *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
@@ -377,7 +375,7 @@ void polyhedronOutput(struct polyhedron *el, FILE *f, char sep, char lastSep)
 /* Print out polyhedron.  Separate fields with sep. Follow last field with lastSep. */
 {
 int i;
-fprintf(f, "%u", el->id, sep);
+fprintf(f, "%u", el->id);
 fputc(sep,f);
 if (sep == ',') fputc('{',f);
 for (i=0; i<2; ++i)
@@ -389,7 +387,7 @@ for (i=0; i<2; ++i)
     }
 if (sep == ',') fputc('}',f);
 fputc(sep,f);
-fprintf(f, "%d", el->polygonCount, sep);
+fprintf(f, "%d", el->polygonCount);
 fputc(sep,f);
 /* Loading polygon list. */
     {
@@ -460,7 +458,7 @@ void twoPointOutput(struct twoPoint *el, FILE *f, char sep, char lastSep)
 {
 int i;
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->name, sep);
+fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('{',f);
@@ -505,7 +503,6 @@ return ret;
 struct stringArray *stringArrayLoadAll(char *fileName) 
 /* Load all stringArray from a tab-separated file.
  * Dispose of this with stringArrayFreeList(). */
-
 {
 struct stringArray *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
@@ -574,7 +571,7 @@ void stringArrayOutput(struct stringArray *el, FILE *f, char sep, char lastSep)
 /* Print out stringArray.  Separate fields with sep. Follow last field with lastSep. */
 {
 int i;
-fprintf(f, "%d", el->numNames, sep);
+fprintf(f, "%d", el->numNames);
 fputc(sep,f);
 if (sep == ',') fputc('{',f);
 for (i=0; i<el->numNames; ++i)
