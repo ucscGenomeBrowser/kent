@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.749 2004/06/02 23:45:10 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.750 2004/06/03 20:46:09 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -8591,10 +8591,12 @@ withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
 insideX = trackOffsetX();
 insideWidth = tl.picWidth-gfxBorder-insideX;
 
-s = cartCgiUsualString(cart, "ruler", "dense");
-if (sameWord(s, "full"))
+if (cgiVarExists("hgt.hideAll"))
+    cartSetString(cart, RULER_TRACK_NAME, "dense");
+s = cartUsualString(cart, RULER_TRACK_NAME, "full");
+if (sameWord(s, "full") || sameWord(s, "on"))
     rulerMode = RULER_MODE_FULL;
-else if (sameWord(s, "dense") || sameWord(s, "on"))
+else if (sameWord(s, "dense"))
     rulerMode = RULER_MODE_ON;
 else
     rulerMode = RULER_MODE_OFF;
