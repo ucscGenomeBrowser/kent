@@ -9,3 +9,6 @@ O = axtToMaf.o
 axtToMaf: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/axtToMaf $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtToMaf${EXE}
+
+test: $(INSTALLDIR)/$(PROG)
+	cd tests && ${MAKE} test
