@@ -1,15 +1,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-  <meta content="text/html; charset=ISO-8859-1"
- http-equiv="content-type">
-  <title>Boston University rcPCR ENCODE DATA Description</title>
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+      <title>Boston University rcPCR ENCODE DATA Description</title>
   <meta content="Ulas Karaoz" name="author">
 </head>
 <body>
 <h2>Description</h2>
 <P>
-This track displays expression levels of first and a constitutive exons of
+
+This track displays expression levels of <B>[WORDING?] first and a constitutive</B> exons of
 genes in ENCODE regions, based on a real competitive Polymerase Chain
 Reaction (rcPCR) technique described in <a href="#References">Ding
 et al. 2003</a>. Expression levels
@@ -26,16 +26,16 @@ The rcPCR technique combines competitive PCR and Matrix-assisted laser
 desorption/ionization time-of-flight mass spectrometry (MALDI-TOF MS)
 for gene expression analysis. To measure the expression level of a
 gene, an oligonucleotide standard (60-80 bases; its concentration is
-known) complementary to the target sequence, except for a single base
+known) complementary to the target sequence, with for a single base
 mismatch in the middle, is added as the competitor for PCR. The gene of
 interest and the oligonucleotide standard resemble two alleles of a
 heterozygous locus in an allele frequency analysis experiment, and thus
-can be analyzed with the quantified by the high-throughput MALDI-TOF MS
+can be quantified by the high-throughput MALDI-TOF MS
 based MassARRAY system (Sequenom Inc.). After PCR, a base extension
 reaction is carried out with an extension primer, a ThermoSequenase and
-a mixture of ddNTPs/dNTP. The extension primer anneals to the immediate
-5 &#8217;-upstream sequence of the mismatch position. Depending on the nature
-of the mismatch and the mixture composition of ddNTPs/dNTP, one or two
+a mixture of <B> [CHECK THIS] ddNTPs/dNTP</B>. The extension primer anneals to the immediate
+5&#8217;-upstream sequence of the mismatch position. Depending on the nature
+of the mismatch and the mixture composition of ddNTPs/dNTP, <B>[??] one or two</B>
 bases are added to the extension primer, producing two extension
 products with one base-length difference. These two extension products
 are then detected and quantified by the high-throughput MALDI-TOF MS
@@ -43,31 +43,31 @@ based MassARRAY system (Sequenom Inc.).<br>
 </p>
 <p>
 Alternative transcription start sites (TSS) for 20 ENCODE genes were predicted
-using our in-house computational tool PromoSer (<a
- TARGET=_BLANK href="http://biowulf.bu.edu/zlab/Promoser/">http://biowulf.bu.edu/zlab/Promoser/</a>).
+using PromoSer (<a
+ TARGET=_BLANK href="http://biowulf.bu.edu/zlab/Promoser/">http://biowulf.bu.edu/zlab/Promoser/</a>), our in-house computational tool.
 PromoSer computationally identifies the TSS by considering alignments
 of a large number of partial and full-length mRNA sequences and ESTs to
 genomic DNA, with provision for alternative promoters. In PromoSer, the
 treatment of alternative first exons (or the resulting TSSs) is as
-follows. All transcripts (mRNA, full length mRNA and EST) deemed to
-belong to the same gene cluster are examined. Individual ESTs were not
+follows. All transcripts (mRNA, full length mRNA and EST) from
+the same gene cluster are examined. Individual ESTs were not
 considered for alternative TSSs and only the 5' most position from all
 ESTs in the cluster was considered a potential TSS. If multiple 5'-end
 positions were more than 20 bp apart, they were reported as alternative
 TSSs.</p>
 <p>
-For each gene, we identified all alternative first exons based on manual
-selections of PromoSer predictions. We also selected an exon that is
-shared by all transcripts (called the constitutive exon). It should be
-noted that the amplicons are designed according to transcript sequences
+For each gene, we identified all alternative first exons based on <B> [??]manual
+selection </B> of PromoSer predictions.  We also selected an exon that is
+shared by all transcripts (called the constitutive exon).  
+The amplicons are designed according to transcript sequences
 and can span a large distance on the genomic sequence. In addition,
 some amplicons are designed across the junctions between first exons
 and the constitutive second exons, and thus these amplicons may overlap
 with the amplicons that correspond to the constitutive second exons. <br>
 </p>
 <p>
-The nomenclature of each alternative transcript is such that the gene name
-is followed by an identifier for the alternative first exon or the
+The name for each alternative transcript starts with the gene name
+and is followed by an identifier for the alternative first exon or the
 constitutive exon. For example, for gene CAV1, there are three
 alternative first exons (CAV1-E1A, CAV1-E1B, and CAV1-E1C) and the
 third exon is chosen as the constitutively expressed exon (CAV1-E3).
@@ -75,16 +75,17 @@ The absolute expression levels of all exons are individually quantified
 by rcPCR by designing four assays with PCR amplicons corresponding to
 each exon. Their expression ratios (CAV1-E1A/CAV1-E3, CAV1-E1B/CAV1-E3,
 CAV1-E1C/CAV1-E3) indicate the relative abundance of the three
-alternative first exons. 10 different tissue types are used for the
-expression analysis. We used 18S rRNA for exon absolute expression
+alternative first exons. In each of the 10 different tissue types are used for the
+expression analysis, we used 18S rRNA for exon absolute expression
 normalization among different tissues.<br>
 </p>
 <p>
-Values shown on this
-track represent the relative abundance of the alternative first exons
-with
-respect to the 18S rRNA. The values have been scaled to show graded
-colors on the browser.
+<B> [Is CAV1-E1C the same as CAV-E3 ?]
+</p>
+<p>
+Values shown on this track represent the relative abundance of the
+alternative first exons with respect to the 18S rRNA. The values have
+been scaled to show graded colors on the browser.
 </p>
 <h2>Verification</h2>
 <p>
