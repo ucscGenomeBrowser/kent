@@ -11,10 +11,17 @@
 #include "axt.h"
 #include "nibTwo.h"
 
-static char const rcsid[] = "$Id: netToAxt.c,v 1.20 2005/01/10 00:38:45 kent Exp $";
+static char const rcsid[] = "$Id: netToAxt.c,v 1.21 2005/02/25 23:47:35 angie Exp $";
 
 boolean qChain = FALSE;  /* Do chain from query side. */
 int maxGap = 100;
+
+static struct optionSpec optionSpecs[] = {
+    {"qChain", OPTION_BOOLEAN},
+    {"maxGap", OPTION_INT},
+    {"gapOut", OPTION_STRING},
+    {NULL, 0}
+};
 
 void usage()
 /* Explain usage and exit. */
@@ -144,7 +151,7 @@ chainHash = chainReadUsedSwap(chainName, qChain, usedBits);
 bitFree(&usedBits);
 while ((net = chainNetRead(lf)) != NULL)
     {
-    fprintf(stderr, "Processing %s\n", net->name);
+    verbose(1, "Processing %s\n", net->name);
     tChrom = nibTwoLoadOne(tNibDir, net->name);
     if (tChrom->size != net->size)
 	errAbort("Size mismatch on %s.  Net/nib out of sync or possibly nib dirs swapped?", 
@@ -160,7 +167,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 dnaUtilOpen();
-optionHash(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 qChain = optionExists("qChain");
 maxGap = optionInt("maxGap", maxGap);
 if (argc != 6)
