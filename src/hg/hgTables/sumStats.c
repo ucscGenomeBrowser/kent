@@ -20,7 +20,7 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: sumStats.c,v 1.12 2004/09/25 05:38:37 kent Exp $";
+static char const rcsid[] = "$Id: sumStats.c,v 1.13 2004/11/07 16:43:01 kent Exp $";
 
 long long basesInRegion(struct region *regionList)
 /* Count up all bases in regions. */
@@ -214,7 +214,7 @@ void numberStatRow(char *label, long long x)
 {
 hPrintf("<TR><TD>%s</TD><TD ALIGN=RIGHT>", label);
 printLongWithCommas(stdout, x);
-hPrintf("</TD><TR>\n");
+hPrintf("</TD></TR>\n");
 }
 
 void floatStatRow(char *label, double x)
@@ -222,7 +222,7 @@ void floatStatRow(char *label, double x)
 {
 hPrintf("<TR><TD>%s</TD><TD ALIGN=RIGHT>", label);
 hPrintf("%3.2f", x);
-hPrintf("</TD><TR>\n");
+hPrintf("</TD></TR>\n");
 }
 
 
