@@ -67,6 +67,17 @@ altColor 200,220,255
 spectrum on
 type psl .
 
+track bayGenomics
+shortLabel BayGenomics geneTrap 
+longLabel BayGenomics Gene Trapping in Embryonic Stem Cell Lines
+group rna
+priority 69.5
+visibility hide
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl .
+
 track blastzTightRat
 shortLabel Tight Rat 
 longLabel Blastz Rat, Tight Subset of Best Alignments
