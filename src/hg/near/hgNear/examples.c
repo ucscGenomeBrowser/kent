@@ -29,7 +29,7 @@ hPrintf("%s",
 hPrintf("%s", genomeSetting("examples"));
 
 hPrintf("%s", 
- "<LI>Choose the gene relationship by which you would like to sort the list "
+ "<LI>Choose the gene relationship with which you would like to sort the list "
  "by selecting an option from the <em>sort by</em> pull-down menu." 
  "<LI>Press the Go! button to display your results. " 
  "</OL>"
