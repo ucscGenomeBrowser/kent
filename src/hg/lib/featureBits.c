@@ -221,20 +221,44 @@ slReverse(&fbList);
 return fbList;
 }
 
-static struct featureBits *fbBedBits(int winStart, int winEnd, struct sqlResult *sr, int rowOffset,
-	char *qualifier, char *extra)
+static struct featureBits *fbBedBits(int fields, int winStart, int winEnd, struct sqlResult *sr, 
+	int rowOffset, char *qualifier, char *extra)
 /* Given a sqlQuery result on a bed table - or results of whole thing. */
 {
 struct bed *bed;
 char **row;
 struct featureBits *fbList = NULL;
+char strand = '?';
+boolean doUp;
+int promoSize;
 
+doUp = upstreamQualifier(qualifier, extra, &promoSize);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    bed = bedLoad3(row+rowOffset);
+    int s, e; 
+    bed = bedLoadN(row+rowOffset, fields);
+    if (fields >= 5)
+         strand = bed->strand[0];
+    if (doUp)
+        {
+	if (strand == '-')
+	    {
+	    s = bed->chromEnd;
+	    e = s + promoSize;
+	    }
+	else
+	    {
+	    e = bed->chromStart;
+	    s = e - promoSize;
+	    }
+	}
+    else
+        {
+	s = bed->chromStart;
+	e = bed->chromEnd;
+	}
     fbAddFeature(&fbList, NULL, bed->chrom, 
-    	bed->chromStart, bed->chromEnd - bed->chromStart, 
-    	'?', winStart, winEnd);
+	s, e - s, strand, winStart, winEnd);
     bedFree(&bed);
     }
 slReverse(&fbList);
@@ -394,7 +418,9 @@ if (startsWith("psl ", type))
     }
 else if (startsWith("bed ", type))
     {
-    fbList = fbBedBits(chromStart, chromEnd, sr, rowOffset, qualifier, extra);
+    int fields = atoi(type + strlen("bed "));
+    if (fields <= 3) fields = 3;
+    fbList = fbBedBits(fields, chromStart, chromEnd, sr, rowOffset, qualifier, extra);
     }
 else if (sameString("genePred", type) || startsWith("genePred ", type))
     {
