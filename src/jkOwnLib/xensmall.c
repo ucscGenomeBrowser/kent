@@ -8,7 +8,7 @@
 #include "xenalign.h"
 #include "pairHmm.h"
 
-static char const rcsid[] = "$Id: xensmall.c,v 1.6 2004/06/30 16:22:11 kent Exp $";
+static char const rcsid[] = "$Id: xensmall.c,v 1.7 2004/06/30 16:32:45 kent Exp $";
 
 static double calcGcRatio(DNA *a, int aSize, DNA *b, int bSize)
 /* Figure out percentage of g/c in a and b. */
@@ -217,7 +217,7 @@ int xenAlignSmall(DNA *query, int querySize, DNA *target, int targetSize, FILE *
 /* Use dynamic programming to do small scale (querySize * targetSize < 10,000,000)
  * alignment of DNA. */
 {
-struct phmmMatrix a;
+struct phmmMatrix *a;
 struct phmmState *hf, *lf, *iq, *it, *c1, *c2, *c3;
 int qIx, tIx, sIx;  /* Query, target, and state indices */
 int rowOffset, newCellOffset;
@@ -239,20 +239,20 @@ gcRatio = calcGcRatio(query, querySize, target, targetSize);
 calcCostBenefit(gcRatio);
 
 /* Initialize 7 state matrix. */
-phmmMatrixInit(&a, 7, query, querySize, target, targetSize);
-hf = phmmNameState(&a, hiFiIx, "highFi", 'H');
-lf = phmmNameState(&a, loFiIx, "lowFi", 'L');
-iq = phmmNameState(&a, qSlipIx, "qSlip", 'Q');
-it = phmmNameState(&a, tSlipIx, "tSlip", 'T');
-c1 = phmmNameState(&a, c1Ix, "frame1", '1');
-c2 = phmmNameState(&a, c2Ix, "frame2", '2');
-c3 = phmmNameState(&a, c3Ix, "frame3", '3');
+a = phmmMatrixNew(7, query, querySize, target, targetSize);
+hf = phmmNameState(a, hiFiIx, "highFi", 'H');
+lf = phmmNameState(a, loFiIx, "lowFi", 'L');
+iq = phmmNameState(a, qSlipIx, "qSlip", 'Q');
+it = phmmNameState(a, tSlipIx, "tSlip", 'T');
+c1 = phmmNameState(a, c1Ix, "frame1", '1');
+c2 = phmmNameState(a, c2Ix, "frame2", '2');
+c3 = phmmNameState(a, c3Ix, "frame3", '3');
 
-qSlipOff = -a.qDim;
+qSlipOff = -a->qDim;
 tSlipOff = -1;
 matchOff = qSlipOff + tSlipOff;
 
-for (tIx = 1; tIx < a.tDim; tIx += 1)
+for (tIx = 1; tIx < a->tDim; tIx += 1)
     {
     UBYTE mommy = 0;
     int score, tempScore;
@@ -332,11 +332,11 @@ for (tIx = 1; tIx < a.tDim; tIx += 1)
     state->newScore = score; \
     }
 
-    rowOffset = tIx*a.qDim;
-    for (qIx = 1; qIx < a.qDim; qIx += 1)
+    rowOffset = tIx*a->qDim;
+    for (qIx = 1; qIx < a->qDim; qIx += 1)
         {
-        int qBase = letterIx(a.query[qIx-1]);
-        int tBase = letterIx(a.target[tIx-1]);
+        int qBase = letterIx(a->query[qIx-1]);
+        int tBase = letterIx(a->target[tIx-1]);
 
         newCellOffset = rowOffset + qIx;
         
@@ -443,9 +443,9 @@ for (tIx = 1; tIx < a.tDim; tIx += 1)
         }
     /* Swap score columns so current becomes last, and last gets
      * reused. */
-    for (sIx = 0; sIx < a.stateCount; ++sIx)
+    for (sIx = 0; sIx < a->stateCount; ++sIx)
         {
-        struct phmmState *as = &a.states[sIx];
+        struct phmmState *as = &a->states[sIx];
         int *swapTemp = as->lastScores;
         as->lastScores = as->scores;
         as->scores = swapTemp;
@@ -453,11 +453,11 @@ for (tIx = 1; tIx < a.tDim; tIx += 1)
     }
 
 /* Trace back from best scoring cell. */
-pairList = phmmTraceBack(&a, bestCell);
-phmmPrintTrace(&a, pairList, TRUE, f, printExtraAtEnds);
+pairList = phmmTraceBack(a, bestCell);
+phmmPrintTrace(a, pairList, TRUE, f, printExtraAtEnds);
 
 slFreeList(&pairList);
-phmmMatrixCleanup(&a);
+phmmMatrixFree(&a);
 return bestScore;
 #undef matchScore
 #undef qSlipScore
@@ -486,7 +486,7 @@ int xenAlignAffine(char *query, int querySize, char *target, int targetSize,
 	FILE *f, boolean printExtraAtEnds)
 /* Use dynamic programming to do protein/protein alignment. */
 {
-struct phmmMatrix a;
+struct phmmMatrix *a;
 struct phmmState *hf, *iq, *it;
 int qIx, tIx, sIx;  /* Query, target, and state indices */
 int rowOffset, newCellOffset;
@@ -509,16 +509,16 @@ halfGapStart = gapStart/2;
 gapExt = -20;
 
 /* Initialize 3 state matrix (match, query insert, target insert). */
-phmmMatrixInit(&a, 3, query, querySize, target, targetSize);
-hf = phmmNameState(&a, hiFiIx, "match", 'M');
-iq = phmmNameState(&a, qSlipIx, "qSlip", 'Q');
-it = phmmNameState(&a, tSlipIx, "tSlip", 'T');
+a = phmmMatrixNew(3, query, querySize, target, targetSize);
+hf = phmmNameState(a, hiFiIx, "match", 'M');
+iq = phmmNameState(a, qSlipIx, "qSlip", 'Q');
+it = phmmNameState(a, tSlipIx, "tSlip", 'T');
 
-qSlipOff = -a.qDim;
+qSlipOff = -a->qDim;
 tSlipOff = -1;
 matchOff = qSlipOff + tSlipOff;
 
-for (tIx = 1; tIx < a.tDim; tIx += 1)
+for (tIx = 1; tIx < a->tDim; tIx += 1)
     {
     UBYTE mommy = 0;
     int score, tempScore;
@@ -599,11 +599,11 @@ for (tIx = 1; tIx < a.tDim; tIx += 1)
     }
 
 
-    rowOffset = tIx*a.qDim;
-    for (qIx = 1; qIx < a.qDim; qIx += 1)
+    rowOffset = tIx*a->qDim;
+    for (qIx = 1; qIx < a->qDim; qIx += 1)
         {
-        int qBase = letterIx(a.query[qIx-1]);
-        int tBase = letterIx(a.target[tIx-1]);
+        int qBase = letterIx(a->query[qIx-1]);
+        int tBase = letterIx(a->target[tIx-1]);
 
         newCellOffset = rowOffset + qIx;
         
@@ -639,9 +639,9 @@ for (tIx = 1; tIx < a.tDim; tIx += 1)
         }
     /* Swap score columns so current becomes last, and last gets
      * reused. */
-    for (sIx = 0; sIx < a.stateCount; ++sIx)
+    for (sIx = 0; sIx < a->stateCount; ++sIx)
         {
-        struct phmmState *as = &a.states[sIx];
+        struct phmmState *as = &a->states[sIx];
         int *swapTemp = as->lastScores;
         as->lastScores = as->scores;
         as->scores = swapTemp;
@@ -649,11 +649,11 @@ for (tIx = 1; tIx < a.tDim; tIx += 1)
     }
 
 /* Trace back from best scoring cell. */
-pairList = phmmTraceBack(&a, bestCell);
-phmmPrintTrace(&a, pairList, TRUE, f, printExtraAtEnds);
+pairList = phmmTraceBack(a, bestCell);
+phmmPrintTrace(a, pairList, TRUE, f, printExtraAtEnds);
 
 slFreeList(&pairList);
-phmmMatrixCleanup(&a);
+phmmMatrixFree(&a);
 return bestScore;
 #undef matchScore
 #undef qSlipScore

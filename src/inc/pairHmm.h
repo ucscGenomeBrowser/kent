@@ -66,11 +66,11 @@ struct phmmMatrix
     int *allScores;	      /* Memory for two rows of scores. */
     };
 
-void phmmMatrixInit(struct phmmMatrix *am, int stateCount, 
+struct phmmMatrix *phmmMatrixNew(int stateCount,
     char *query, int querySize, char *target, int targetSize);
 /* Allocate all memory required for an phmmMatrix. Set up dimensions. */
 
-void phmmMatrixCleanup(struct phmmMatrix *am);
+void phmmMatrixFree(struct phmmMatrix **pAm);
 /* Free up memory required for an phmmMatrix and make sure
  * nobody reuses it. */
 

@@ -18,7 +18,7 @@ void phmmUnpackMommy(UBYTE mommy, int *retStateIx, int *retQoff,
 *retToff = -((mommy&64)>>6);
 }
 
-void phmmMatrixInit(struct phmmMatrix *am, int stateCount, 
+struct phmmMatrix *phmmMatrixNew(int stateCount,
     char *query, int querySize, char *target, int targetSize)
 /* Allocate all memory required for an phmmMatrix. Set up dimensions. */
 {
@@ -27,8 +27,9 @@ struct phmmMommy *allCells;
 int allCellSize;
 int rowSize;
 int *allScores;
+struct phmmMatrix *am;
 
-zeroBytes(am, sizeof(*am));
+AllocVar(am);
 am->query = query;
 am->target = target;
 am->querySize = querySize;
@@ -60,16 +61,21 @@ for (i=0; i<stateCount; ++i)
     am->states[i].lastScores = allScores;
     allScores += rowSize;
     }
+return am;
 }
 
-void phmmMatrixCleanup(struct phmmMatrix *am)
+void phmmMatrixFree(struct phmmMatrix **pAm)
 /* Free up memory required for an phmmMatrix and make sure
  * nobody reuses it. */
 {
-freeMem(am->states);
-freeMem(am->allCells);
-freeMem(am->allScores);
-zeroBytes(am, sizeof(*am));
+struct phmmMatrix *am = *pAm;
+if (am != NULL)
+    {
+    freeMem(am->states);
+    freeMem(am->allCells);
+    freeMem(am->allScores);
+    freez(pAm);
+    }
 }
 
 struct phmmState *phmmNameState(struct phmmMatrix *am, int stateIx, 
