@@ -5341,8 +5341,8 @@ done
     nice rm axtChain/run1/chain/* 
 
 # do the following later, after rn3-mm5 net and chain done.
-#    nice gzip {axt,psl}Chrom/* lav/*/* axtChain/{all.chain,*.net} &
-
+    nice gzip {axt,psl}Chrom/* lav/*/* axtChain/{all.chain,*.net} &
+# The above line done on 9/7/04. Fan.
 :
 # CREATE CYTOBAND TRACK (DONE - 2004-09-7 - Fan)
     # Should be done after NCBI updated their MapViewer to the latest release.
