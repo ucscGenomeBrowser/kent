@@ -1,0 +1,383 @@
+#!/usr/bin/perl -w
+
+# DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
+# edit ~/kent/src/utils/blastz-run-ucsc instead.
+
+# Based on Scott Schwartz's bash script blastz-run;
+# rewritten in perl and extended to handle .2bit inputs and 
+# multi-record fasta for target as well as query by Angie Hinrichs.
+
+# $Id: blastz-run-ucsc,v 1.1 2005/01/27 01:03:31 angie Exp $
+
+use Getopt::Long;
+use strict;
+
+use vars qw/
+    $opt_help
+    /;
+
+sub usage {
+  my ($status) = @_;
+  my $base = $0;
+  $base =~ s/^(.*\/)?//;
+    print STDERR "
+usage: $base target query DEF out.lav
+    Unpacks sequence (if necessary), runs blastz 
+    and lifts (a.k.a. \"normalizes\") output (if necessary).  
+    Target and query can be list files containing one sequence specifier 
+    per line, or sequence specifiers.  A sequence specifier is a .2bit, 
+    .nib or .fa(.gz) files, possibly with a sequence and range specifier 
+    appended.  
+    DEF is a Scott Schwartz-style bash script containing blastz parameters.  
+    out.lav is the (lifted/\"normalized\") output of blastz.  
+\n";
+  exit $status;
+}
+
+# This hash will contain the params defined in the Scott-style DEF script:
+my %defVars = ();
+# Temporary local directory for intermediate files:
+my $TMP;
+# For lifting, we'll need to know the sequence sizes:
+my %tSizes = ();
+my %qSizes = ();
+
+
+sub run {
+  # Run a command in sh, with PATH specified in %defVars.
+  my ($cmd) = @_;
+  my $setPath = "export PATH=";
+  $setPath .= "$defVars{PATH}:" if (defined $defVars{'PATH'});
+  $setPath .= "/cluster/bin/scripts:/bin:/usr/bin; ";
+  my $ret = system($setPath . $cmd);
+  if ($ret != 0) {
+    die "Couldn't start command:\n$cmd\n$!\n";
+  } elsif ($?) {
+    die "Error from command:\n$setPath\n$cmd\n$!\n";
+  }
+}
+
+sub loadDef {
+  # Read parameters from a bash script with Scott's param variable names:
+  my ($def) = @_;
+  open (DEF, "$def") || die "Can't open def file $def: $!\n";
+  while (<DEF>) {
+    s/^\s*export\s+//;
+    next if (/^\s*#/ || /^\s*$/);
+    if (/(\w+)\s*=\s*(.*)/) {
+      my ($var, $val) = ($1, $2);
+      while ($val =~ /\$(\w+)/) {
+	my $subst = $defVars{$1};
+	$val =~ s/\$$1/$subst/ if (defined $subst);
+      }
+      $defVars{$var} = $val;
+    }
+  }
+  close(DEF);
+}
+
+sub loadSeqSizes {
+  # Load up sequence -> size mapping from $sizeFile into $hashRef.
+  my ($sizeFile, $hashRef) = @_;
+  open(SIZE, "$sizeFile") || die "Can't open size file $sizeFile: $!\n";
+  while (<SIZE>) {
+    chomp;
+    my ($seq, $size) = split;
+    $hashRef->{$seq} = $size;
+  }
+  close(SIZE);
+}
+
+sub fileBase {
+  # Get rid of leading path and .suffix (and .gz too if it's there).
+  my ($path) = @_;
+  $path =~ s/^(.*\/)?(\S+)\.\w+(\.gz)?/$2/;
+  return $path;
+}
+
+sub parseFileSpec {
+  # Take a file spec with possible seq name, start and end specifiers and 
+  # split into components.
+  my ($info, $dir) = @_;
+  my ($fName, $seq, $start, $end);
+  if ($info =~ /^(\S+):(\w+):(\d+)-(\d+)$/) {
+    ($fName, $seq, $start, $end) = ($1, $2, $3, $4);
+  } elsif ($info =~ /^(\S+):(\d+)-(\d+)$/) {
+    ($fName, $seq, $start, $end) = ($1, &fileBase($info), $2, $4);
+  } else {
+    ($fName, $seq, $start, $end) = ($info, &fileBase($info), 0, 0);
+  }
+  $fName = "$dir/$fName" if ($fName !~ /^[\/.]/);
+  return ($fName, $seq, $start, $end);
+}
+
+sub enumerateFileSpecs {
+  # Given a sequence file name, sequence file name + offset spec, or 
+  # a name of a file containing a list of such file specs, return a 
+  # list of file specs.
+  my ($listOrSpec) = @_;
+  my @specs = ();
+  my ($fName, $seq, $start, $end) = &parseFileSpec($listOrSpec);
+  if ($fName =~ /\.(fa(\.gz)?|nib|2bit)$/) {
+    # It appears to be a single spec not a list.
+    push @specs, $listOrSpec;
+  } else {
+    # It doesn't have a recognized file ending -- it had better be a list.
+    # Assume each line contains a single spec.
+    open(LST, "$listOrSpec") || die "Couldn't open list file $listOrSpec: $!\n";
+    while (<LST>) {
+      chomp;
+      push @specs, $_;
+    }
+    close(LST);
+  }
+  return @specs;
+}
+
+sub getBlastzParams {
+  # Look for BLASTZ_? param specs in %defVars; turn into blastz command line 
+  # option string.  (blastz command line option names are all 1-character, 
+  # and all 1-char BLASTZ_? DEF params are blastz command line options.)
+  my $params = " ";
+  foreach my $p (keys %defVars) {
+    if ($p =~ /^BLASTZ_(\w)$/) {
+      $params .= "$1=$defVars{$p} ";
+    }
+  }
+  return $params;
+}
+
+sub blastzRangeSpec {
+  # Return a blastz-style range spec unless a null range is passed in.
+  my ($start, $end) = @_;
+  if ($end != 0) {
+    $start += 1;
+    return "[$start,$end]";
+  } else {
+    return "";
+  }
+}
+
+sub unpackForBlastz {
+  # If the sequence file is .fa.gz or .2bit, uncompress/extract fa into 
+  # a local file;  if it's something that blastz already supports like 
+  # .fa or .nib, translate the offset spec (if any) into blastz's format.
+  my ($spec, $seqDir) = @_;
+  my ($fname, $seq, $start, $end) = &parseFileSpec($spec, $seqDir);
+  my $local = "$TMP/t.$seq.$start.$end.fa";
+  if ($fname =~ /\.2bit$/) {
+    my $extract = "twoBitToFa $fname:$seq";
+    $extract .= ":$start-$end" if ($end != 0);
+    $extract .= " $local";
+    &run($extract);
+  } elsif ($fname =~ /\.fa(\.gz)?$/) {
+    if ($1) {
+      &run("gunzip -c $fname > $local");
+    } else {
+      $local = $fname;
+    }
+    $local .= &blastzRangeSpec($start, $end);
+  } elsif ($fname =~ /\.nib$/) {
+    $local = $fname;
+    $local .= &blastzRangeSpec($start, $end);
+  } else {
+    die "Don't know what type of sequence file this is: $fname"
+  }
+  return ($seq, $local);
+}
+
+sub parseBlastzSpec {
+  # Extract info back out of blastz spec.  Leave start 1-based.
+  my ($spec) = @_;
+  my ($fname, $seq, $start, $end);
+  if ($spec =~ /^(\S*\/)?(.S+)\.(fa|nib)(\[(\d+),(\d+)\])?$/) {
+    $fname = "$1$2.$3";
+    $seq = $2;
+    if ($4) {
+      $start = $5;
+      $end = $6;
+    } else {
+      $start = 0;
+      $end = 0;
+    }
+  } else {
+    die "Can't parse this blastz spec: $spec";
+  }
+  return ($fname, $seq, $start, $end);
+}
+
+sub plainBlastz {
+  # just run blastz -- target and query can have "[$start,$end]" specifiers
+  # where $start is 1-based.  Put output in file name $raw.
+  my ($target, $query, $options, $raw) = @_;
+  my $blastz = $defVars{'BLASTZ'} || "blastz";
+  &run("blastz $target $query $options > $raw");
+}
+
+sub selectRpts {
+  # This used to be an awk, piped to select_rpts, piped to sort -n.  
+  # select_rpts is a little perl script, and getting the DEF PATH into the 
+  # pipe command seems more trouble than it's worth -- so inline not only 
+  # the awk but also the select_rpts here.  Still pipe to sort -n just in case.
+  my ($allRepFile, $start, $end, $selRepFile) = @_;
+  open (ALL, "<$allRepFile") || die "Can't open $allRepFile: $!\n";
+  open (SEL, "| sort -n > $selRepFile") 
+    || die "Can't open pipe to sort -n > $selRepFile: $!\n";
+  print SEL "\%:repeats\n";
+  while (<ALL>) {
+    if (/^\d+/) {
+      my @words = split;
+      my ($repStart, $repEnd) = ($words[5], $words[6]);
+      next if ((! defined $repStart) || (! defined $repEnd));
+      $repStart += 1;
+      next if ($repStart > $repEnd);
+      next if (($repEnd < $start) || ($repStart > $end));
+      $repStart = $start if ($repStart < $start);
+      $repEnd   = $end   if ($repEnd   > $end);
+      print SEL "$repStart $repEnd rpt\n";
+    }
+  }
+  close(SEL);
+  close(ALL);
+}
+
+sub abridgeLinSpecReps {
+  # Before running blastz, snip out lineage-specific repeats from each 
+  # sequence.  Then run blastz only on that strand.  After running blastz, 
+  # fix up the alignment coords to reflect the original sequence including 
+  # the lineage-specific repeats.
+  # Currently this only works on per-chromosome sequence and repeat files.
+  my ($tSpec, $qSpec, $blastzOptions, $raw) = @_;
+  my ($tFname, $tSeq, $tStart, $tEnd) = &parseBlastzSpec($tSpec);
+  my ($qFname, $qSeq, $qStart, $qEnd) = &parseBlastzSpec($qSpec);
+
+  if ($tEnd == 0 || $qEnd == 0) {
+    die "When abridging repeats, sequence filenames must be followed by " .
+        "range specs even if the whole sequence is aligned.\n";
+  }
+
+  my $S1X = "$defVars{SEQ1_SMSK}/$tSeq.out.spec";
+  my $S2X = "$defVars{SEQ2_SMSK}/$qSeq.out.spec";
+  die "$S1X not found" if (! -f $S1X);
+  die "$S2X not found" if (! -f $S2X);
+
+  my $TS1X = "$TMP/s1.rpts";
+  my $TS2X = "$TMP/s2.rpts";
+  my $TS1 = "$TMP/s1.fa";
+  my $TS2 = "$TMP/s2.fa";
+  my $TS1S = "$TMP/s1.strip.fa";
+  my $TS2S = "$TMP/s2.strip.fa";
+  my $TS2R = "$TMP/s2.rev.fa";
+  my $TS2SR = "$TMP/s2.strip.rev.fa";
+  my $TZF = "$TMP/fwd.lav";
+  my $TZR = "$TMP/rev.lav";
+  my $TZS = "$TMP/std.lav";
+
+  # Get repeats in range:
+  &selectRpts($S1X, $tStart, $tEnd, $TS1X);
+  &selectRpts($S2X, $qStart, $qEnd, $TS2X);
+
+  # Get sequence in range:
+  &run("fasta-subseq $tFname $tStart $tEnd > $TS1");
+  &run("fasta-subseq $qFname $qStart $qEnd > $TS2");
+
+  # Snip out the repeats:
+  &run("strip_rpts $TS1 $TS1X > $TS1S");
+  &run("strip_rpts $TS2 $TS2X > $TS2S");
+
+  # Run blastz on query forward strand and restore repeats:
+  &plainBlastz($TS1S, $TS2S, "B=0" . $blastzOptions, $TZF);
+  &run("restore_rpts $TZF " .
+            "$TS1 \"\\\"$tFname\\\" $tStart $tEnd\" " .
+            "$TS2 \"\\\"$qFname\\\" $qStart $qEnd\" " .
+            "$TS1X $TS2X > $raw");
+
+  # Run blastz on query reverse strand and restore repeats:
+  &run("revcomp $TS2S > $TS2SR");
+  &plainBlastz($TS1S, $TS2SR, "B=0" . $blastzOptions, $TZR);
+  &run("restore_rpts $TZR " .
+            "$TS1 \"\\\"$tFname\\\" $tStart $tEnd\" " .
+            "$TS2 \"\\\"$qFname-\\\" $qStart $qEnd\" " .
+            "$TS1X $TS2X reverse >> $raw");
+}
+
+sub liftLav {
+  # Run blastz-normalizeLav to lift up chunk coords to sequence level.
+  my ($raw, $out, $tSeq, $qSeq) = @_;
+  my $tLen = $tSizes{$tSeq};
+  my $qLen = $qSizes{$qSeq};
+  &run("blastz-normalizeLav $tLen $qLen < $raw > $out");
+}
+
+
+#########################################################################
+#
+# -- main --
+
+my $ok = GetOptions("help");
+&usage(1) if (!$ok);
+&usage(0) if ($opt_help);
+&usage(1) if (scalar(@ARGV) != 4);
+my ($target, $query, $DEF, $out) = @ARGV;
+
+die "$out already exists\n" if (-f "$out");
+
+&loadDef($DEF);
+&loadSeqSizes($defVars{'SEQ1_LEN'}, \%tSizes);
+&loadSeqSizes($defVars{'SEQ2_LEN'}, \%qSizes);
+
+my $doAbridge = $defVars{'BLASTZ_ABRIDGE_REPEATS'} || 0;
+if ($doAbridge && $defVars{'SEQ2_IN_CONTIGS'}) {
+  die "Sorry, DEF can't have BLASTZ_ABRIDGE_REPEATS set if SEQ2_IN_CONTIGS --" .
+       "not supported.\n";
+}
+
+# Make a temporary directory for intermediate files:
+$TMP = `mktemp -d /tmp/blastz.XXXXXX` || die "Can't mktemp";
+chomp $TMP;
+print STDERR "temp files in $TMP --  If this dies, clean them up.\n";
+
+# Some internal defaults for blastz params, carried over from 
+# Scott's blastz-run:
+$defVars{'BLASTZ_H'} = 2000 if (! defined $defVars{'BLASTZ_H'});
+$defVars{'BLASTZ_M'} = 40000000 if (! defined $defVars{'BLASTZ_M'});
+
+my $blastzOptions = &getBlastzParams(%defVars);
+
+my @tFileSpecs = &enumerateFileSpecs($target);
+my @qFileSpecs = &enumerateFileSpecs($query);
+
+if ($doAbridge && scalar(@qFileSpecs) > 1) {
+  die "Sorry, DEF can't have BLASTZ_ABRIDGE_REPEATS set if a list of query " .
+      "sequences is passed in -- not supported.\n";
+}
+
+# Local file to hold concatenated results of all {target, query} runs:
+my $localOut = "$TMP/local.lav";
+&run("cat /dev/null > $localOut");
+# Local temporary files that are overwritten by each {target, query} run:
+my $littleRaw = "$TMP/little.raw";
+my $littleOut = "$TMP/little.lav";
+
+# Run blastz on each {target, query} pair;  lift and collect results.
+foreach my $tSpec (@tFileSpecs) {
+  my ($tSeq, $tLocal) = &unpackForBlastz($tSpec, $defVars{'SEQ1_DIR'});
+  foreach my $qSpec (@qFileSpecs) {
+    my ($qSeq, $qLocal) = &unpackForBlastz($qSpec, $defVars{'SEQ2_DIR'});
+    if ($doAbridge) {
+      &abridgeLinSpecReps($tLocal, $qLocal, $blastzOptions, $littleRaw);
+    } else {
+      &plainBlastz($tLocal, $qLocal, $blastzOptions, $littleRaw);
+    }
+    &liftLav($littleRaw, $littleOut, $tSeq, $qSeq);
+    &run("cat $littleOut >> $localOut");
+    &run("rm $tLocal") if ($tLocal =~ /^$TMP/);
+    &run("rm $qLocal") if ($qLocal =~ /^$TMP/);
+  }
+}
+# Move collected results to final location.
+&run("mv $localOut $out");
+
+# Clean up temporary directory:
+&run("rm -rf $TMP");
+
