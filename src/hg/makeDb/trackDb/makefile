@@ -42,6 +42,8 @@ alpha:
 	cd zoo; make alpha; cd ..
 
 beta:
+	# this will fail if we are not in a beta checkout:
+	cvs status trackDb.ra | egrep 'v[0-9]+_branch' > /dev/null
 	hgTrackDb human hg8 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb human hg9 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb human hg10 trackDb_beta ../../lib/trackDb.sql .
