@@ -2,7 +2,7 @@ include ../../../../inc/common.mk
 
 all:
 
-test: refSeqTest refSeqCdsTest trackNamesTest
+test: refSeqTest refSeqCdsTest trackNamesTest selectTrackTest
 
 # test files blatRefSeq.gp  ncbiRefSeq.gp
 #  chr1:11,689,948-12,078,317 - some basic genes
@@ -21,6 +21,10 @@ refSeqCdsTest: mkout
 trackNamesTest: mkout
 	clusterGenes -cds -trackNames output/trackNamesTest.gl hg16 fred input/blatRefSeq.gp barney input/ncbiRefSeq.gp
 	diff -u expected/trackNamesTest.gl output/trackNamesTest.gl
+
+selectTrackTest: mkout
+	clusterGenes -cds -selectTrack=ncbiRefSeq output/selectTrackTest.gl hg16 input/blatRefSeq.gp input/ncbiRefSeq.gp
+	diff -u expected/selectTrackTest.gl output/selectTrackTest.gl
 
 mkout:
 	${MKDIR} output

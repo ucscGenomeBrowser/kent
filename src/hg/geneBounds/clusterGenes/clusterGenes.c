@@ -10,7 +10,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.15 2004/04/06 23:39:28 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.16 2004/07/07 08:14:55 markd Exp $";
 
 /* Command line driven variables. */
 char *clChrom = NULL;
@@ -36,6 +36,8 @@ errAbort(
   "   -trackNames - If specified, input are pairs of track names and files.\n"
   "    This is useful when the file names don't reflact the desired track\n"
   "    names.\n"
+  "   -selectTrack=track - only output clusters that contain genes from this\n"
+  "    track\n"
   "\n"
   "The cdsConflicts and exonConflicts columns contains `y' if the cluster has\n"
   "conficts. A conflict is a cluster where all of the genes don't share exons. \n"
@@ -48,12 +50,14 @@ static struct optionSpec options[] = {
    {"chromFile", OPTION_STRING},
    {"cds", OPTION_BOOLEAN},
    {"trackNames", OPTION_BOOLEAN},
+   {"selectTrack", OPTION_STRING},
    {NULL, 0},
 };
 
 /* from command line  */
 boolean gUseCds;
 boolean gTrackNames;
+char *gSelectTrack = NULL;
 
 struct track
 /*  Object representing a track. */
@@ -177,6 +181,21 @@ struct cluster
     boolean hasExonConflicts;   /* does this cluster have conflicts? */
     boolean hasCdsConflicts;
     };
+
+boolean clusterShouldSave(struct cluster *cluster)
+/* check if cluster should be saved */
+{
+if (gSelectTrack == NULL)
+    return TRUE;
+else
+    {
+    struct clusterGene *gene;
+    for (gene = cluster->genes; gene != NULL; gene = gene->next)
+        if (sameString(gene->track->name, gSelectTrack))
+            return TRUE;
+    return FALSE;
+    }
+}
 
 void clusterDump(struct cluster *cluster)
 /* Dump contents of cluster to stderr. */
@@ -323,7 +342,6 @@ if (verboseLevel() >= 3)
     }
 }
 
-
 boolean shareExons(struct genePred *gp1, struct genePred *gp2, boolean cdsOnly)
 /* determine if two genes share exons or CDS exons */
 {
@@ -446,7 +464,12 @@ getConflicts(clusterList);
 
 /* assign ids */
 for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
-    cluster->id = nextClusterId++;
+    {
+    if (clusterShouldSave(cluster))
+        cluster->id = nextClusterId++;
+    else
+        cluster->id = -1;  /* don't save this one */
+    }
 
 /* Clean up and go home. */
 binKeeperFree(&cm->bk);
@@ -605,12 +628,13 @@ for (track = tracks; track != NULL; track = track->next)
 
 clusterList = clusterMakerFinish(&cm);
 for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
-    {
-    struct clusterGene *cg;
-    for (cg = cluster->genes; cg != NULL; cg = cg->next)
-        prGene(f, cluster, cg);
-    ++totalClusterCount;
-    }
+    if (cluster->id >= 0)
+        {
+        struct clusterGene *cg;
+        for (cg = cluster->genes; cg != NULL; cg = cg->next)
+            prGene(f, cluster, cg);
+        ++totalClusterCount;
+        }
 
 genePredFreeList(&gpList);
 }
@@ -695,6 +719,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 gUseCds = optionExists("cds");
 gTrackNames = optionExists("trackNames");
+gSelectTrack = optionVal("selectTrack", NULL);
 if (!gTrackNames)
     {
     if (argc < 4)
