@@ -35,7 +35,7 @@
 #include "chainNetDbLoad.h"
 #include "geneGraph.h"
 
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.11 2003/07/10 16:36:07 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.12 2003/07/13 06:17:20 sugnet Exp $";
 
 struct orthoSpliceEdge 
 /* Structure to hold information about one edge in 
@@ -717,7 +717,7 @@ for(i=0; i<vC; i++)
 	vertex2Count+=ev->evCount;
 	}
     }
-return (vertex1Count >= vertex2Count);
+return (vertex1Count > vertex2Count);
 }
 
 
@@ -751,11 +751,10 @@ for(i=0; i<vCount; i++)
 		{
 		orthoV = findBestOrthoEndByOverlap(ag, em, orthoAg, orthoEm, chain, vMap, j, i, reverse);
 		}
-	    /* Try to see if there is a consensus mapping with the most evidence. 
-	     Might have to change this to not override hard edges already mapped with
-	    soft edges. */
+	    /* Try to see if there is a consensus mapping with the most evidence, don't
+	       change a hard vertex though. */
 	    currentMap = currentAssignment(vMap, vCount, orthoV);
-	    if(currentMap == -1 || moreEvidence(ag, em,currentMap, i))
+	    if(currentMap == -1 || (!isHardVertex(ag,currentMap) && moreEvidence(ag, em,currentMap, i)))
 		{
 		vMap[i] = orthoV;
 		}
