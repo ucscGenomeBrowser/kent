@@ -242,13 +242,28 @@ stored in a single table rather than one table per chromosome:</P>
   known gene track). 
   <LI><A 
   href="#PepPredictions">refPep</A> 
-  - RefSeq translated protiens (Dec. 2000 and later) 
+  - RefSeq translated proteins (Dec. 2000 and later) 
   <LI><A 
   href="#MrnaPredictions">refMrna</A> 
   - RefSeq mRNA (Dec. 2000 and later) 
   <LI><A 
   href="#RefLink">refLink</A> 
   - Relates RefSeq mRNA accession to LocusLink, HUGO, etc. (Dec. 2000 and later) 
+  <LI><A 
+  href="#RikenAltid">rikenaltid</A> 
+  - Riken altid table (Mouse Feb. 2002 and later)</LI>
+  <LI><A 
+  href="#RikenAnn">rikenann</A> 
+  - Riken annotation table (Mouse Feb. 2002 and later)</LI>
+  <LI><A 
+  href="#RikenCluster">rikencluster</A> 
+  - Riken cluster table (Mouse Feb. 2002 and later)</LI> 
+  <LI><A 
+  href="#RikenClusterSeq">rikenclusterseq</A> 
+  - Riken cluster sequence regulation table (Mouse Feb. 2002 and later)</LI>
+  <LI><A 
+  href="#RikenSeq">rikenseq</A> 
+  - Riken sequence table (Mouse Feb. 2002 and later)</LI>
   <LI><A 
   href="#RNAgenes">rnaGene</A> 
   - functional RNA genes (Last used Apr. 2001) </LI>
@@ -882,6 +897,74 @@ These tables were created from RepeatMasker .out files.
     uint    repEnd;     "End in repeat sequence"
     int     repLeft;    "Size left in repeat sequence"
     char[1] id;         "'*' or ' '.  I don't know what this means"
+    )
+</PRE>
+
+<H3><A name=RikenAltid></A>Riken Altid Table</H3>
+<PRE>table rikenaltid
+"Riken altid table"
+    (
+    char[64]    ID;             "ID (composite)"
+    char[32]    SeqID;          "Sequence ID"
+    char[32]    AltIDType;      "Alternate ID type"
+    string      AltID;          "Alternate ID"
+    )
+</PRE>
+
+<H3><A name=RikenAnn></A>Riken Annotation Table</H3>
+<PRE>table rikenann
+"Riken annotation table"
+    (
+    string  ID;             "ID"
+    string  seqid;          "parent sequence id"
+    uint    i;              "sequential number"
+    string  Qualifier;      "Qualifier"
+    string  Anntext;        "Anntext"
+    string  Datasrc;        "Datasrc"
+    string  Srckey;         "Srckey"
+    string  Href;           "xlink_href"
+    string  Evidence;       "Evidence"
+    )
+</PRE>
+
+<H3><A name=RikenCluster></A>Riken Cluster Table</H3>
+<PRE>table rikencluster
+"Riken cluster table"
+    (
+    string  ID;                     "ID"
+    string  Fantomid;               "Famtom"
+    string  RepresentativeSeqid;    "Representative sequence ID"
+    uint    Nsequence;              "Number of Sequencesse"
+    )
+</PRE>
+
+
+<H3><A name=RikenClusterSeq></A>Riken Cluster Sequence Regulation Table</H3>
+<PRE>table rikenclusterseq
+"Riken cluster sequence regulation table"
+    (
+    string  ClusterID;              "Cluster ID"
+    string  SeqID;                  "Sequence ID"
+    )
+</PRE>
+
+
+<H3><A name=RikenSeq></A>Riken Sequence table</H3>
+<PRE>table rikenseq
+"Riken sequence table"
+    (
+    string  ID;             "ID"
+    uint    Naltid;         "Number of altid"
+    string  Seqid;          "sequence ID (no more valid per Riken DTD)"
+    string  Fantomid;       "Fantom ID (no more valid per Riken DTD)"
+    string  Cloneid;        "Clone ID (no more valid per Riken DTD)"
+    string  Rearrayid;      "Rearray ID (no more valid per Riken DTD)"
+    string  Accession;      "Accession (no more valid per Riken DTD)"
+    string  Annotator;      "Annotator"
+    string  version;        "Version"
+    string  ModifiedTime;   "Modified Time"
+    uint    Nannotation;    "Number of Annotations"
+    string  Comment;        "Comment"
     )
 </PRE>
 
