@@ -40,6 +40,7 @@ if ($status) then
       $0
       exit 1 
     endif 
+  endif 
 endif 
 
 
@@ -49,8 +50,11 @@ if ($status) then
   if ($status) then
     set end=`hgsql -N -e "DESC $track" $db | gawk '{print $1}' | egrep -w "txEnd"`
     if ($status) then
-      echo '\n  '$db.$track' has no "chromEnd" or "tEnd" or "txEnd" fields.\n'
-      exit 1 
+      set end=`hgsql -N -e "DESC $track" $db | gawk '{print $1}' | egrep -w "repEnd"`
+      if ($status) then
+        echo '\n  '$db.$track' has no "chromEnd", "tEnd", "txEnd" or "repEnd" fields.\n'
+         exit 1 
+      endif
     endif 
   endif 
 endif 
