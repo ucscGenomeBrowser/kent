@@ -10,7 +10,7 @@
 #include "liftSpec.h"
 #include "ctgPos.h"
 
-static char const rcsid[] = "$Id: hgCtgPos.c,v 1.5 2004/06/08 22:00:40 hiram Exp $";
+static char const rcsid[] = "$Id: hgCtgPos.c,v 1.6 2004/06/17 18:39:06 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -161,6 +161,7 @@ for (fi = fiList; fi != NULL; fi = fi->next)
 slSort(&ctgList, cmpCtgPos);
 printf("Got %d contigs total\n", slCount(ctgList));
 saveCtgPos(ctgList, database);
+hashFree(&chromDirHash);
 }
 
 int main(int argc, char *argv[])
