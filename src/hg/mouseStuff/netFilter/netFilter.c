@@ -25,6 +25,10 @@ errAbort(
   "   -minGap=N  - restrict to those with gap size (tSize) >= minSize\n"
   "   -minAli=N - restrict to those with at least given bases aligning\n"
   "   -syn        - do filtering based on synteny.  \n"
+  "   -type=XXX - restrict to given type\n"
+  "   -fill - Only pass fills, not gaps. Only useful with -line.\n"
+  "   -gap  - Only pass gaps, not fills. Only useful with -line.\n"
+  "   -line - Do this a line at a time, not recursing\n"
   );
 }
 
@@ -66,6 +70,9 @@ double minSynAli = 10000;     /* Minimum alignment size. */
 double maxFar = 200000;  /* Maximum distance to allow synteny. */
 int minGap = 0;		      /* Minimum gap size. */
 int minAli = 0;			/* Minimum ali size. */
+boolean fillOnly = FALSE;	/* Only pass fills? */
+boolean gapOnly = FALSE;	/* Only pass gaps? */
+char *type = NULL;		/* Only pass given type */
 
 boolean synFilter(struct cnFill *fill)
 /* Filter based on synteny */
@@ -88,8 +95,17 @@ if (qHash != NULL && !hashLookup(qHash, fill->qName))
     return FALSE;
 if (notQHash != NULL && hashLookup(notQHash, fill->qName))
     return FALSE;
+if (type != NULL)
+    {
+    if (fill->type == NULL)
+        return FALSE;
+    if (!sameString(type, fill->type))
+        return FALSE;
+    }
 if (fill->chainId)
     {
+    if (gapOnly)
+        return FALSE;
     if (fill->score < minScore || fill->score > maxScore)
 	return FALSE;
     if (fill->ali < minAli)
@@ -99,6 +115,8 @@ if (fill->chainId)
     }
 else
     {
+    if (fillOnly)
+        return FALSE;
     if (fill->tSize < minGap)
         return FALSE;
     }
@@ -138,11 +156,39 @@ if ((net->fillList = cnPrune(net->fillList)) != NULL)
     }
 }
 
+void netLineFilter(struct lineFile *lf, FILE *f)
+/* Do filter one line at a time. */
+{
+struct hash *nameHash = newHash(0);
+char *line, *l;
+int d;
+
+while (lineFileNext(lf, &line, NULL))
+    {
+    d = countLeadingChars(line, ' ');
+    l = line + d;
+    if (startsWith("fill", l) || startsWith("gap", l))
+        {
+	struct cnFill *fill = cnFillFromLine(nameHash, lf, l);
+	if (filterOne(fill))
+	    cnFillWrite(fill, f, d);
+	cnFillFree(&fill);
+	}
+    else
+        {
+	fprintf(f, "%s\n", line);
+	}
+    }
+
+hashFree(&nameHash);
+}
+
 void netFilter(int inCount, char *inFiles[])
 /* netFilter - Filter out parts of net.. */
 {
 FILE *f = stdout;
 int i;
+boolean doLine = optionExists("line");
 
 tHash = hashCommaOption("t");
 notTHash = hashCommaOption("notT");
@@ -153,23 +199,33 @@ maxScore = optionInt("maxScore", BIGNUM);
 doSyn = optionExists("syn");
 minGap = optionInt("minGap", minGap);
 minAli = optionInt("minAli", minAli);
+fillOnly = optionExists("fill");
+gapOnly = optionExists("gap");
+type = optionVal("type", type);
 
 for (i=0; i<inCount; ++i)
     {
     struct lineFile *lf = lineFileOpen(inFiles[i], TRUE);
-    struct chainNet *net;
-    while ((net = chainNetRead(lf)) != NULL)
+    if (doLine)
         {
-	boolean writeIt = TRUE;
-	if (tHash != NULL && !hashLookup(tHash, net->name))
-	    writeIt = FALSE;
-	if (notTHash != NULL && hashLookup(notTHash, net->name))
-	    writeIt = FALSE;
-	if (writeIt)
+	netLineFilter(lf, f);
+	}
+    else
+	{
+	struct chainNet *net;
+	while ((net = chainNetRead(lf)) != NULL)
 	    {
-	    writeFiltered(net, f);
+	    boolean writeIt = TRUE;
+	    if (tHash != NULL && !hashLookup(tHash, net->name))
+		writeIt = FALSE;
+	    if (notTHash != NULL && hashLookup(notTHash, net->name))
+		writeIt = FALSE;
+	    if (writeIt)
+		{
+		writeFiltered(net, f);
+		}
+	    chainNetFree(&net);
 	    }
-	chainNetFree(&net);
 	}
     lineFileClose(&lf);
     }
