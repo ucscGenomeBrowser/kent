@@ -1514,6 +1514,99 @@ for (oneBun = *pOneList; oneBun != NULL; oneBun = oneBun->next)
 ssBundleFreeList(pOneList);
 }
 
+void jiggleSmallExons(struct ffAli *ali, struct dnaSeq *nSeq, struct dnaSeq *hSeq)
+/* See if can jiggle small exons to match splice sites a little
+ * better. */
+{
+struct ffAli *left, *mid, *right;
+int orient;
+boolean creeped = FALSE;
+
+if (ffAliCount(ali) < 3)
+    return;
+orient = ffIntronOrientation(ali);
+left = ali;
+mid = left->right;
+right = mid->right;
+while (right != NULL)
+    {
+    int midSizeN = mid->nEnd - mid->nStart;
+    if (midSizeN < 10 && mid->hStart - left->hEnd > 1 && right->hStart - mid->hEnd > 1)
+        {
+	DNA *spLeft, *spRight;	/* Splice sites on either side of exon. */
+	DNA exonX[10+2+2];    /* Storage for exon with splice sites. */
+	DNA *match;
+	static int creeps[4][2] = { {2, 2}, {2, 1}, {1, 2}, {1, 1},};
+	int creepIx, creepL, creepR;
+	DNA *hs = mid->hStart, *he = mid->hEnd;
+	DNA *hMin = left->hEnd,  *hMax = right->hStart;
+	if (orient >= 0)
+	    {
+	    spLeft = "ag";
+	    spRight = "gt";
+	    }
+	else
+	    {
+	    spLeft = "ca";
+	    spRight = "ct";
+	    }
+        for (creepIx=0; creepIx<4; ++creepIx)
+	    {
+	    creepL = creeps[creepIx][0];
+	    creepR = creeps[creepIx][1];
+	    /* Check to see if we already match consensus, and if so just bail. */
+	    if (hs[-1] == spLeft[1] && he[0] == spRight[0])
+	        {
+		if ((creepL == 1 || hs[-2] == spLeft[0]) 
+			&& (creepR == 1 || he[1] == spRight[1]))
+		    {
+		    break;
+		    }
+		}
+	    memcpy(exonX, spLeft + 2 - creepL, creepL);
+	    memcpy(exonX + creepL, mid->nStart, midSizeN);
+	    memcpy(exonX + creepL + midSizeN, spRight, creepR);
+	    match = memMatch(exonX, midSizeN + creepR + creepL, hMin, hMax - hMin);
+	    if (match != NULL)
+	        {
+		mid->hStart = match + creepL;
+		mid->hEnd = mid->hStart + (he - hs);
+		creeped = TRUE;
+		break;
+		}
+	    }
+	}
+    left = mid;
+    mid = right;
+    right = right->right;
+    }
+if (creeped)
+    ffSlideIntrons(ali);
+}
+
+struct ffAli *refineSmallExons(struct ffAli *ff, struct dnaSeq *nSeq, struct dnaSeq *hSeq)
+/* Tweak small exons slightly - refining positions to match splice
+ * sites if possible and looking a little harder for small first
+ * and last exons. */
+{
+jiggleSmallExons(ff, nSeq, hSeq);
+// ff = addSmallInitial(ff, nSeq, hSeq);
+return ff;
+}
+
+static void refineSmallExonsInBundle(struct ssBundle *bun)
+/* Tweak small exons slightly - refining positions to match splice
+ * sites if possible and looking a little harder for small first
+ * and last exons. */
+{
+struct ssFfItem *fi;    /* Item list - memory owned by bundle. */
+
+for (fi = bun->ffList; fi != NULL; fi = fi->next)
+    {
+    fi->ff = refineSmallExons(fi->ff, bun->qSeq, bun->genoSeq);
+    }
+}
+
 void gfLongDnaInMem(struct dnaSeq *query, struct genoFind *gf, 
    boolean isRc, int minScore, Bits *qMaskBits, 
    GfSaveAli outFunction, void *outData)
@@ -1577,6 +1670,7 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
 for (bun = bigBunList; bun != NULL; bun = bun->next)
     {
     ssStitch(bun, ffCdna);
+    refineSmallExonsInBundle(bun);
     saveAlignments(bun->genoSeq->name, bun->genoSeq->size, 0, 
 	bun, outData, isRc, ffCdna, minScore, outFunction);
     }
