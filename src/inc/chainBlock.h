@@ -20,13 +20,14 @@ struct chain
     struct chain *next;	  	  /* Next in list. */
     struct boxIn *blockList;      /* List of blocks. */
     double score;	  	  /* Total score for chain. */
+    char *tName;		  /* target name, allocated here. */
+    int tSize;			  /* Overall size of target. */
+    /* tStrand always + */
+    int tStart,tEnd;		  /* Range covered in query. */
     char *qName;		  /* query name, allocated here. */
     int qSize;			  /* Overall size of query. */
     char qStrand;		  /* Query strand. */
     int qStart,qEnd;		  /* Range covered in query. */
-    char *tName;		  /* target name, allocated here. */
-    int tSize;			  /* Overall size of target. */
-    int tStart,tEnd;		  /* Range covered in query. */
     int id;			  /* ID of chain in file. */
     };
 
