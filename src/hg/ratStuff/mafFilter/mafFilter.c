@@ -6,7 +6,7 @@
 #include "options.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: mafFilter.c,v 1.4 2005/01/13 16:08:29 kate Exp $";
+static char const rcsid[] = "$Id: mafFilter.c,v 1.5 2005/01/13 18:56:18 kate Exp $";
 
 #define DEFAULT_FACTOR 5
 #define DEFAULT_MIN_ROW 2
@@ -69,7 +69,7 @@ boolean filterOne(struct mafAli *maf)
 {
 int ncol = maf->textSize;
 int nrow = slCount(maf->components);
-int fscore = -minFactor * (ncol^2) * nrow;
+int fscore = -minFactor * ncol * ncol * nrow;
 
 if (nrow < minRow || ncol < minCol ||
     (gotMinScore && maf->score < minScore) ||
@@ -77,6 +77,7 @@ if (nrow < minRow || ncol < minCol ||
     {
     verbose(3, "col=%d, row=%d, score=%f, fscore=%d\n", 
                         ncol, nrow, maf->score, fscore);
+    verbose(3, "ncol**2=%d\n", ncol * ncol);
     return FALSE;
     }
 else
