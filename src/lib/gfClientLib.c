@@ -921,7 +921,6 @@ for (range = rangeList; range != NULL; range = range->next)
 }
 
 
-/* ~~~ */
 void gfAlignTrans(int conn, char *nibDir, aaSeq *seq,
     int minMatch, 
     GfSaveAli outFunction, struct gfSavePslxData *outData)
@@ -1145,6 +1144,8 @@ for (tIsRc=0; tIsRc <= 1; ++tIsRc)
     freeDnaSeqList(&tSeqList);
     }
 trans3Free(&qTrans);
+for (ss = ssList; ss != NULL; ss = ss->next)
+    freeMem(ss->fileName);
 slFreeList(&ssList);
 lmCleanup(&lm);
 }
@@ -1196,6 +1197,7 @@ for (range = rangeList; range != NULL; range = range->next)
 for (qFrame = 0; qFrame<3; ++qFrame)
     for (tFrame=0; tFrame<3; ++tFrame)
 	gfClumpFreeList(&clumps[qFrame][tFrame]);
+gfRangeFreeList(&rangeList);
 trans3Free(&qTrans);
 lmCleanup(&lm);
 }
