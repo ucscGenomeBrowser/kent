@@ -66,4 +66,7 @@ struct asObject
 struct asObject *asParseFile(char *fileName);
 /* Parse autoSql .as file. */
 
+struct asObject *asParseText(char *text);
+/* Parse autoSql from text (as opposed to file). */
+
 #endif /* ASPARSE_H */
