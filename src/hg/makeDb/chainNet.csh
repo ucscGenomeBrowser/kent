@@ -1,6 +1,10 @@
 #!/bin/csh -ef
 
-#some variable you need to set before running this script
+# This script will create chains and nets on a blastz
+# cross species alignment run and load them into the
+# browser database.  
+
+# some variable you need to set before running this script
 set tDbName = mm3
 set qDbName = rn2
 set aliDir = /cluster/store2/mm.2003.02/mm3/bed/blastz.rn2.2003-03-07-ASH
@@ -23,14 +27,16 @@ cat >chainRun.csh <<endCat
     cd axtChain
     mkdir run1
     cd run1
+    mkdir chain out
     ls -1S ../../axtChrom/*.axt.gz > input.lst
     echo '#LOOP' > gsub
     echo 'doChain {check in exists \$(path1)} {check out line+ chain/\$(root1).chain} {check out line+ out/\$(root1).out}' >> gsub
     echo '#ENDLOOP' >> gsub
     gensub2 input.lst single gsub spec
     para create spec
-    echo '#!/bin/csh -ef' > doChain
+    echo '#\!/bin/csh -ef' > doChain
     echo 'gunzip -c \$1 | axtChain stdin  $tSeqDir/mixedNib $qSeqDir/mixedNib \$2 > \$3' >> doChain
+    chmod a+x doChain
     para shove
 endCat
 
