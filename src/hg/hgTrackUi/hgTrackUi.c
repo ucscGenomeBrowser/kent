@@ -22,7 +22,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.126 2004/07/26 19:01:34 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.127 2004/07/30 18:39:35 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -425,7 +425,7 @@ int scoreVal = 0;
 char tempScore[256];
 /* initial value of score theshold is 0, unless
  * overridden by the scoreFilter setting in the track */
-printf("<p><b>Only Show items that score above </b>: ");
+printf("<p><b>Only Show items that score at or above </b>: ");
 snprintf(scoreVar, sizeof(scoreVar), "%s.scoreFilter", tdb->tableName);
 scoreSetting = cartUsualInt(cart,  scoreVar,  scoreVal);
 safef(tempScore, sizeof(tempScore), "%d",scoreSetting);
@@ -917,15 +917,13 @@ else if (sameString(track, "humMusL") ||
          sameString( track, "mm3Hg15L" ) ||
          sameString( track, "hg15Mm3L" ))
             humMusUi(tdb,7);
-else if ( (sameString(database,"hg17") && sameString(track, "chainSelf")))
-            chainColorUi(tdb);	/* under development */
 /* NOTE: type psl xeno <otherDb> tracks use crossSpeciesUi, so
  * add explicitly here only if track has another type (bed, chain).
  * For crossSpeciesUi, the
  * default for chrom coloring is "on", unless track setting
  * colorChromDefault is set to "off" */
 else if (endsWith("chainSelf", track))
-    crossSpeciesUi(tdb);
+    chainColorUi(tdb);
 else if (sameString(track, "orthoTop4"))
     /* still used ?? */
     crossSpeciesUi(tdb);
