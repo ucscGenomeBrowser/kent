@@ -126,7 +126,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.557 2004/02/01 21:39:09 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.558 2004/02/02 04:52:00 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3341,27 +3341,15 @@ if (row != NULL)
         {
         printf("<B>Version:</B> %s<BR>\n", version);
         }
-    if (startsWith("Human", organism))
-    {
-      /* Put up Gene Lynx */
-      if (sameWord(type, "mrna"))
-          printGeneLynxAcc(acc);
-    }
-
-    if (!startsWith("Worm", organism) && !startsWith("Fugu", organism) &&
-	!startsWith("dm", database) && !startsWith("Yeast", organism))
-    {
-	/* Put up Stanford Source link. */
-	printStanSource(acc, type);
-    }
-
-    if ((strstr(hgGetDb(), "mm") != NULL) 
-        && hTableExists("rikenaltid"))
+    if (sameWord(type, "mrna") && startsWith("Human", organism))
 	{
-        sqlFreeResult(&sr);
-//!	printRikenInfo(acc, conn);
+	printGeneLynxAcc(acc);
 	}
-
+    if (startsWith("Human", organism) || startsWith("Mouse", organism) ||
+	startsWith("Rat", organism))
+	{
+	printStanSource(acc, type);
+	}
     }
 else
     {
