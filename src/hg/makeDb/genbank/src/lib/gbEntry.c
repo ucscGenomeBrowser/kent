@@ -8,7 +8,7 @@
 #include "localmem.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: gbEntry.c,v 1.1 2003/06/03 01:27:45 markd Exp $";
+static char const rcsid[] = "$Id: gbEntry.c,v 1.2 2003/06/20 04:37:04 markd Exp $";
 
 struct gbEntry* gbEntryNew(struct gbRelease* release, char* acc,
                            char* organism, unsigned type)
@@ -41,10 +41,22 @@ return entry;
 
 struct gbProcessed* gbEntryFindProcessed(struct gbEntry* entry,
                                          int version)
-/* Find the newest processed entry for a specific update, or NULL not found */
+/* Find the newest processed object for a specific version, or NULL not
+ * found */
 {
 struct gbProcessed* processed = entry->processed;
 while ((processed != NULL) && (processed->version != version))
+    processed = processed->next;
+return processed;
+}
+
+struct gbProcessed* gbEntryFindUpdateProcessed(struct gbEntry* entry,
+                                               struct gbUpdate* update)
+/* Find the processed object for a specific update, or NULL if not in this
+ * update. */
+{
+struct gbProcessed* processed = entry->processed;
+while ((processed != NULL) && (processed->update != update))
     processed = processed->next;
 return processed;
 }

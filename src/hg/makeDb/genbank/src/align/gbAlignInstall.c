@@ -17,7 +17,7 @@
 #include "estOrientInfo.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbAlignInstall.c,v 1.2 2003/06/10 17:51:57 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignInstall.c,v 1.3 2003/06/20 04:37:03 markd Exp $";
 
 /*
  * Notes:
@@ -150,18 +150,31 @@ return gbPipelineFile(pipeline);
 }
 
 struct gbEntry* getEntry(struct gbSelect* select, char* acc, char* refFile)
-/* Get the entry obj for an accession referenced in a file.  If
- * not found and accession ignored, return NULL, otherwise its and error.
- * This allows for an ignored entry to be added after alignment. */
+/* Get the entry obj for an accession referenced in a file.  If not found and
+ * accession ignored, return NULL, otherwise it's and error.  This allows for
+ * an ignored entry to be added after alignment.  Also check that the entry is
+ * part of the current update.  This handles this an ingored accession being
+ * found in a PSL, etc.
+ */
 {
 struct gbEntry* entry = gbReleaseFindEntry(select->release, acc);
 if (entry == NULL)
     {
+    /* note: this isn't actually checking for a specific acc/moddate being
+     * ignored, it's just not generating an error if the entry is not found
+     * and it's ignored for any moddate. */
     if (gbIgnoreFind(select->release->ignore, acc) != NULL)
-        return NULL;
-    else
-        errAbort("can't find accession \"%s\" in gbIndex, referenced in %s",
-                 acc, refFile);
+        return NULL;  // igored, assume the best
+    errAbort("can't find accession \"%s\" in gbIndex, referenced in %s",
+             acc, refFile);
+    }
+
+/* check for being in this update */
+assert(select->update != NULL);
+if (gbEntryFindUpdateProcessed(entry, select->update) == NULL)
+    {
+    assert(gbIgnoreFind(select->release->ignore, acc) != NULL);
+    return NULL;  /* not in update, probably ignored */
     }
 return entry;
 }
@@ -169,7 +182,7 @@ return entry;
 boolean countAlign(struct gbSelect* select, char* acc, unsigned version,
                    char* refFile)
 /* Increment the count of alignment records for a object; return false
- * if ignored and not counted. */
+ * if entry should be skipped and not counted. */
 {
 struct gbEntry* entry = getEntry(select, acc, refFile);
 if (entry == NULL)
@@ -192,7 +205,7 @@ unsigned version;
 struct gbEntry* entry;
 
 version = gbSplitAccVer(psl->qName, acc);
-entry = gbReleaseFindEntry(migrate->prevSelect->release, acc);
+entry = getEntry(migrate->prevSelect, acc, inPsl);
 
 if ((entry != NULL) && (version == entry->selectVer))
     {
@@ -239,7 +252,7 @@ unsigned version;
 struct gbEntry* entry;
 
 version = gbSplitAccVer(oi->name, acc);
-entry = gbReleaseFindEntry(migrate->prevSelect->release, acc);
+entry = getEntry(migrate->prevSelect, acc, inOi);
 if ((entry != NULL) && (version == entry->selectVer))
     {
     if (getEntry(migrate->select, acc, inOi) != NULL)
@@ -274,7 +287,7 @@ gzLineFileClose(&inOiLf);
 
 /* Nasty issue: orientInfo records do not have a query range, yet there
  * are a few cases where different parts of the same mRNA aligned to
- * the same ramge of the genome.  This means we can't veryfy the number of
+ * the same ramge of the genome.  This means we can't verify the number of
  * OI rows. */
 #if 0
 // FIXME: OI can be duplicated 
@@ -295,7 +308,7 @@ unsigned version;
 struct gbEntry* entry;
 
 version = gbSplitAccVer(psl->qName, acc);
-entry = gbReleaseFindEntry(migrate->prevSelect->release, acc);
+entry = getEntry(migrate->prevSelect, acc, inPsl);
 if ((entry != NULL) && (version == entry->selectVer))
     {
     if (getEntry(migrate->select, acc, inPsl) != NULL)
@@ -374,7 +387,8 @@ gbAlignFindNeedAligned(select, prevSelect, migrateCallback, &migrate);
 if (migrate.alignCnt > 0)
     {
     migratePsls(&migrate, outPsl, outPslFh);
-    migrateOrientInfos(&migrate, outOi, outOiFh);
+    if(outOiFh != NULL)
+        migrateOrientInfos(&migrate, outOi, outOiFh);
     if (outIntronPslFh != NULL)
         migrateIntronPsls(&migrate, outIntronPslFh);
     }
@@ -568,7 +582,7 @@ void installOrgCatAligned(struct gbSelect* select, unsigned orgCat,
 {
 unsigned holdOrgCats = select->orgCats;
 char outPsl[PATH_LEN], outOi[PATH_LEN], outIntronPsl[PATH_LEN];
-FILE *outPslFh, *outOiFh, *outIntronPslFh = NULL;
+FILE *outPslFh = NULL, *outOiFh = NULL, *outIntronPslFh = NULL;
 unsigned alignCnt = 0, intronPslCnt = 0;
 
 select->orgCats = orgCat;
@@ -722,4 +736,3 @@ return 0;
  * c-file-style: "jkent-c"
  * End:
  */
-

@@ -37,7 +37,13 @@ struct gbEntry* gbEntryNew(struct gbRelease* release, char* acc,
 
 struct gbProcessed* gbEntryFindProcessed(struct gbEntry* entry,
                                          int version);
-/* Find the newest processed entry for a specific version, or NULL not found */
+/* Find the newest processed object for a specific version, or NULL not
+ * found */
+
+struct gbProcessed* gbEntryFindUpdateProcessed(struct gbEntry* entry,
+                                               struct gbUpdate* update);
+/* Find the processed object for a specific update, or NULL if not in this
+ * update. */
 
 struct gbProcessed* gbEntryAddProcessed(struct gbEntry* entry,
                                         struct gbUpdate* update,
