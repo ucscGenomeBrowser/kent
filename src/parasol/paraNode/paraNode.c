@@ -293,7 +293,7 @@ if ((grandChildId = fork()) == 0)
 	hashUpdate(hash, "USER", user);
 	hashUpdate(hash, "HOME", homeDir);
 	hashUpdate(hash, "HOST", hostName);
-	hashUpdate(hash, "PARASOL", "1");
+	hashUpdate(hash, "PARASOL", "6");
 	updatePath(hash, userPath, homeDir, sysPath);
 	environ = hashToEnviron(hash);
 	freeHashAndVals(&hash);
@@ -432,7 +432,6 @@ void doCheck(char *line, struct sockaddr_in *hubIp)
 /* Send back check result - either a check in message or
  * jobDone. */
 {
-char *managingHost = nextWord(&line);
 char *jobIdString = nextWord(&line);
 if (jobIdString != NULL)
     {
