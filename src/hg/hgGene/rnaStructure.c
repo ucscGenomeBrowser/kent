@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: rnaStructure.c,v 1.4 2003/11/12 18:47:21 kent Exp $";
+static char const rcsid[] = "$Id: rnaStructure.c,v 1.5 2004/03/01 06:18:23 kent Exp $";
 
 static boolean rnaStructureExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -107,6 +107,7 @@ for (side = 0; side < ArraySize(names); ++side)
 	    hggMrnaFoldRegion, table,
 	    hggDoRnaFoldDisplay, "text");
 	hPrintf(" Text ");
+	hPrintf("</A>");
 	hPrintLinkCellEnd();
 	}
     sqlFreeResult(&sr);
