@@ -35,7 +35,7 @@ errAbort(
   "\n"
   "Options:\n"
   "    -maxN=N - Suppress pieces with more than maxN n's.  Only used with size.\n"
-  "              default is size/2\n"
+  "              default is size-1 (only suppresses pieces that are all N).\n"
   "    -oneFile - Put output in one file. Only used with size\n"
   "    -out=outFile Get masking from outfile.  Only used with size.\n"
   "    -lift=file.lft Put info on how to reconstruct sequence from\n"
@@ -296,7 +296,7 @@ void splitByCount(char *inName, int pieceSize, char *outRoot, unsigned long estS
 {
 unsigned long pieces = (estSize + pieceSize-1)/pieceSize;
 int digits = digitsBaseTen(pieces);
-int maxN = optionInt("maxN", pieceSize);
+int maxN = optionInt("maxN", pieceSize-1);
 boolean oneFile = optionExists("oneFile");
 char fileName[512];
 char dirOnly[256], noPath[128];
