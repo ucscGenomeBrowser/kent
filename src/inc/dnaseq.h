@@ -19,6 +19,9 @@ struct dnaSeq
     int size;             /* Size of sequence. */
     };
 
+typedef struct dnaSeq bioSeq;	/* Preferred use if either DNA or protein. */
+typedef struct dnaSeq aaSeq;	/* Preferred use if protein. */
+
 struct dnaSeq *newDnaSeq(DNA *dna, int size, char *name);
 /* Create a new DNA seq. */
 

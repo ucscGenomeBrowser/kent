@@ -4,6 +4,10 @@
 #ifndef GENOFIND_H
 #define GENOFIND_H
 
+#ifndef DNASEQ_H
+#include "dnaseq.h"
+#endif
+
 #ifndef FUZZYFIND_H
 #include "fuzzyFind.h"
 #endif
@@ -21,7 +25,7 @@ struct gfSeqSource
     {
     struct gfSeqSource *next;
     char *fileName;	/* Name of file. */
-    struct dnaSeq *seq;	/* Sequences.  Usually either this or fileName is NULL. */
+    bioSeq *seq;	/* Sequences.  Usually either this or fileName is NULL. */
     bits32 start,end;	/* Position within merged sequence. */
     };
 
@@ -70,26 +74,25 @@ struct genoFind
     int tileMask;			 /* 1-s for each N-mer. */
     int sourceCount;			 /* Count of source files. */
     struct gfSeqSource *sources;         /* List of sequence sources. */
+    boolean isPep;			 /* Is a peptide. */
     };
 
 void genoFindFree(struct genoFind **pGenoFind);
 /* Free up a genoFind index. */
 
-struct genoFind *gfIndexSeq(struct dnaSeq *seqList,
-	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile);
+struct genoFind *gfIndexSeq(bioSeq *seqList,
+	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile,
+	boolean isPep);
 /* Make index for all seqs in list. 
  *      minMatch - minimum number of matching tiles to trigger alignments
  *      maxGap   - maximum deviation from diagonal of tiles
  *      tileSize - size of tile in nucleotides
  *      maxPat   - maximum use of tile to not be considered a repeat
- *      oocFile  - .ooc format file that lists repeat tiles.  May be NULL. */
+ *      oocFile  - .ooc format file that lists repeat tiles.  May be NULL. 
+ *      isPep    - TRUE if indexing proteins, FALSE for DNA. */
 
 struct genoFind *gfIndexNibs(int nibCount, char *nibNames[],
 	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile);
-/* Make index for all nib files. */
-
-struct genoFind *gfPepIndexNibs(int nibCount, char *nibNames[],
-	int minMatch, int maxGap, int tileSize, int maxPat);
 /* Make index for all nib files. */
 
 struct gfClump *gfFindClumps(struct genoFind *gf, struct dnaSeq *seq);
