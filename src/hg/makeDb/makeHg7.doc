@@ -630,6 +630,14 @@ o - Rescuing STS track:
      - mv chrom.psl ../convert.psl
 
 LOADING PENN STATE MOUSE REFERENCE ALIGNMENTS
-     - zcat /projects/hg3/mouse/penn/alignments.gz >alignments
-     - hgRefAlign webb hg7 mouseRef alignments
-     - rm alignments
+  o Load main track
+     - cd /projects/hg3/mouse/penn
+     - zcat alignments.gz | hgRefAlign webb hg7 mouseRef -
+
+  o Load tracks for moderately duplicated and highly conserved
+    *NOTE: this is temporary *
+     -  awk -f class-track.awk highly_conserved \
+         | hgRefAlign webb hg7 mouseRefHCons -
+     -  awk -f class-track.awk moderately_duplicated \
+         | hgRefAlign webb hg7 mouseRefMDup -
+     
