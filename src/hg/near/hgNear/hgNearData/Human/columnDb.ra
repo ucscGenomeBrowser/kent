@@ -21,7 +21,7 @@ name expDense
 shortLabel Short Expression
 longLabel Selected UCLA Expression Data
 priority 2.7
-visibility on
+visibility off
 type expRatio knownToU133 affyUcla hgFixed.affyUclaExps
 max 1.0
 representatives 9,37,24,17,34,12,19,21,22,35,
@@ -42,30 +42,57 @@ priority 2.9
 visibility off
 type distance knownExpDistance query target distance
 
-name gnfDense
-shortLabel Short GNF
-longLabel Selected GNF Expression Data from Normal Tissues on U95 Chip
+#name gnfDense
+#shortLabel Short GNF
+#longLabel Selected GNF Expression Data from Normal Tissues on U95 Chip
+#priority 3.0
+#visibility on
+#type expRatio knownToU95 affyRatio hgFixed.affyExps
+#max 5.0
+#representatives 30,6,29,10,53,35,11,12,13,4,
+#skipName 7
+#
+#name gnfAll
+#shortLabel Long GNF
+#longLabel All GNF Expression Data from Normal Tissues on U95 Chip
+#priority 3.1
+#visibility off
+#type expRatio knownToU95 affyRatio hgFixed.affyExps
+#max 5.0
+#representatives 9,18,64,76,1,30,31,-1,66,67,68,77,78,62,65,55,-1,0,79,60,33,36,69,70,-1,16,39,6,7,20,22,21,38,-1,71,61,74,56,59,82,57,72,-1,8,23,29,17,-1,10,37,34,52,19,-1,28,15,53,26,-1,35,54,11,24,3,13,-1,12,25,63,75,-1,4,5,32,51,48,49,50,14,27,-1,2,81,84,58,73,83,-1,40,44,42,43,41,45,46,47,
+#skipName 7
+#
+#name gnfDistance
+#shortLabel GNF Delta
+#longLabel Normalized Difference in GNF Expression from Selected Gene
+#priority 3.2
+#visibility off
+#type distance knownGnfDistance query target distance
+#
+
+name gnfU95
+shortLabel GNF U95
+longLabel GNF Expression Atlas Human Data on Affy U95 Chips
 priority 3.0
 visibility on
-type expRatio knownToU95 affyRatio hgFixed.affyExps
-max 5.0
-representatives 30,6,29,10,53,35,11,12,13,4,
-skipName 7
+type expMulti knownToU95
+selected gnfHumanU95MedianExps gnfHumanU95MedianRatio gnfHumanU95Median 3,12,10,33,32,35,37,39,36,41
+median gnfHumanU95MedianExps gnfHumanU95MedianRatio gnfHumanU95Median 0,1,2,3,4,5,-1,6,7,8,9,-1,10,11,12,13,14,-1,15,16,17,18,19,20,-1,21,22,23,24,-1,25,26,27,28,-1,29,30,31,32,33,34,-1,35,36,37,38,39,40,-1,41,42,43,44,45,46
+all gnfHumanU95AllExps gnfHumanU95AllRatio gnfHumanU95All 0,1,4,5,6,2,3,-1,7,8,9,10,11,12,-1,13,14,15,16,17,48,49,-1,18,19,20,21,22,23,-1,58,56,57,73,74,75,-1,76,77,93,94,78,79,80,-1,95,96,99,100,89,90,-1,81,82,83,84,97,98,91,92,-1,31,32,30,59,60,87,88,-1,38,39,40,33,34,35,36,37,-1,50,51,26,27,-1,68,69,46,47,-1,52,53,54,55,61,62,63,-1,64,65,66,67,85,86,-1,24,25,41,42,43,44,45,-1,28,29,70,71,72,
+ratioMax 5.0
+absoluteMax 30000 
 
-name gnfAll
-shortLabel Long GNF
-longLabel All GNF Expression Data from Normal Tissues on U95 Chip
+name gnfU95Max
+shortLabel Max GNF 
+longLabel Maximum Expression Value of GNF Expression Atlas
 priority 3.1
 visibility off
-type expRatio knownToU95 affyRatio hgFixed.affyExps
-max 5.0
-representatives 9,18,64,76,1,30,31,-1,66,67,68,77,78,62,65,55,-1,0,79,60,33,36,69,70,-1,16,39,6,7,20,22,21,38,-1,71,61,74,56,59,82,57,72,-1,8,23,29,17,-1,10,37,34,52,19,-1,28,15,53,26,-1,35,54,11,24,3,13,-1,12,25,63,75,-1,4,5,32,51,48,49,50,14,27,-1,2,81,84,58,73,83,-1,40,44,42,43,41,45,46,47,
-skipName 7
+type expMax knownToU95 gnfHumanU95Median
 
-name gnfDistance
+name gnfU95Distance
 shortLabel GNF Delta
 longLabel Normalized Difference in GNF Expression from Selected Gene
 priority 3.2
 visibility off
-type distance knownGnfDistance query target distance
+type distance gnfU95Distance query target distance
 

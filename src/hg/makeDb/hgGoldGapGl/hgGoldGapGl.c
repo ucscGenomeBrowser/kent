@@ -12,7 +12,7 @@
 #include "glDbRep.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgGoldGapGl.c,v 1.14 2003/09/27 02:01:02 kate Exp $";
+static char const rcsid[] = "$Id: hgGoldGapGl.c,v 1.15 2003/10/02 20:10:12 kate Exp $";
 
 
 void usage()
@@ -24,7 +24,6 @@ errAbort(
   "   hgGoldGapGl database gsDir ooSubDir\n"
   "options:\n"
   "   -noGl  - don't do gl bits\n"
-  "   -gapOnly  - don't do gold or gl tables\n"
   "   -chrom=chrN - just do a single chromosome.  Don't delete old tables.\n"
   "example:\n"
   "   hgGoldGapGl hg5 /projects/hg/gs.5 oo.21\n");
@@ -79,7 +78,7 @@ char *createGl =
 ")\n";
 
 
-void makeGoldAndGap(struct sqlConnection *conn, char *chromDir, boolean gapOnly)
+void makeGoldAndGap(struct sqlConnection *conn, char *chromDir)
 /* Read in .agp files in chromDir and use them to create the
  * gold and gap tables for the corresponding chromosome(s). */
 {
@@ -135,33 +134,31 @@ for (fi = fiList; fi != NULL; fi = fi->next)
 	    }
 	else
 	    {
-            struct agpFrag gold;
-            agpFragStaticLoad(words, &gold);
-            gold.chromStart -= 1;
-            fprintf(goldTab, "%u\t", hFindBin(start, end));
-            agpFragTabOut(&gold, goldTab);
+	    struct agpFrag gold;
+	    agpFragStaticLoad(words, &gold);
+	    gold.chromStart -= 1;
+	    fprintf(goldTab, "%u\t", hFindBin(start, end));
+	    agpFragTabOut(&gold, goldTab);
 	    }
 	}
     lineFileClose(&lf);
+    fclose(goldTab);
     fclose(gapTab);
 
     /* Create gold table and load it up. */
-    if (!gapOnly)
-        {
-        if (sqlTableExists(conn, goldName))
-            {
-            dyStringClear(ds);
-            dyStringPrintf(ds, "drop table %s", goldName);
-            sqlUpdate(conn, ds->string);
-            }
-        dyStringClear(ds);
-        dyStringPrintf(ds, createGold, goldName);
-        sqlUpdate(conn, ds->string);
-        dyStringClear(ds);
-        dyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
-            goldTabName, goldName);
-        sqlUpdate(conn, ds->string);
-        }
+    if (sqlTableExists(conn, goldName))
+	{
+	dyStringClear(ds);
+	dyStringPrintf(ds, "drop table %s", goldName);
+	sqlUpdate(conn, ds->string);
+	}
+    dyStringClear(ds);
+    dyStringPrintf(ds, createGold, goldName);
+    sqlUpdate(conn, ds->string);
+    dyStringClear(ds);
+    dyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
+        goldTabName, goldName);
+    sqlUpdate(conn, ds->string);
     remove(goldTabName);
 
     /* Create gap table and load it up. */
@@ -259,8 +256,7 @@ while (lineFileRow(lf, row))
 lineFileClose(&lf);
 }
 
-void hgGoldGapGl(char *database, char *gsDir, char *ooSubDir,
-                         boolean doGl, boolean gapOnly, char *oneChrom)
+void hgGoldGapGl(char *database, char *gsDir, char *ooSubDir, boolean doGl, char *oneChrom)
 /* hgGoldGapGl - Put chromosome .agp and .gl files into browser database.. */
 { 
 struct fileInfo *chrFiList, *chrFi; 
@@ -274,6 +270,7 @@ sprintf(ooDir, "%s/%s", gsDir, ooSubDir);
 /* target prefix is used in zoo browser */
 if (oneChrom != NULL && (startsWith("chr", oneChrom) || startsWith("target", oneChrom)))
     oneChrom += 3;
+    
 
 if (doGl)
     {
@@ -289,7 +286,7 @@ for (chrFi = chrFiList; chrFi != NULL; chrFi = chrFi->next)
 	if (oneChrom == NULL || sameWord(chrFi->name, oneChrom))
 	    {
 	    sprintf(pathName, "%s/%s", ooDir, chrFi->name);
-	    makeGoldAndGap(conn, pathName, gapOnly);
+	    makeGoldAndGap(conn, pathName);
 	    if (doGl)
 		makeGl(conn, pathName, cloneVerHash);
 	    gotAny = TRUE;
@@ -306,14 +303,11 @@ if (!gotAny)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-boolean doGl, gapOnly;
+boolean doGl;
 optionHash(&argc, argv);
 if (argc != 4)
     usage();
 doGl = !(optionExists("noGl") || optionExists("nogl"));
-gapOnly = optionExists("gapOnly") || optionExists("gaponly");
-if (gapOnly)
-    doGl = FALSE;
-hgGoldGapGl(argv[1], argv[2], argv[3], doGl, gapOnly, optionVal("chrom", NULL));
+hgGoldGapGl(argv[1], argv[2], argv[3], doGl, optionVal("chrom", NULL));
 return 0;
 }

@@ -370,7 +370,10 @@ void findAliEnds(struct ffAli *ali, DNA *needle, DNA *hay,
     long *retNeedleStart, long *retNeedleEnd,
     long *retHayStart, long *retHayEnd)
 {
-DNA *hStart, *hEnd, *nStart, *nEnd;
+DNA *hStart = NULL;
+DNA *hEnd = NULL;
+DNA *nStart = NULL;
+DNA *nEnd = NULL;
 boolean first = TRUE;
 
 while (ali->left) ali = ali->left;
@@ -872,7 +875,7 @@ for (ra = ci->roughAli; ra != NULL; ra = ra->next)
     int oldBestScore = -0x7fffffff;
     int oldScore;
     struct ffAli *bestAli = NULL;
-    boolean bestIsRc;
+    boolean bestIsRc = FALSE;
 
     if (ra->isDupe)
         continue;
@@ -1491,7 +1494,7 @@ freeHash(&hash);
 uglyf("Done analyse\n");
 }
 
-test(int argc, char *argv[])
+int test(int argc, char *argv[])
 {
 int start, stop;
 

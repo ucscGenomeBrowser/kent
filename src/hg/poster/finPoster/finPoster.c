@@ -27,7 +27,7 @@
 #include "hCommon.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: finPoster.c,v 1.8 2003/09/20 00:50:04 kent Exp $";
+static char const rcsid[] = "$Id: finPoster.c,v 1.10 2003/10/08 07:39:09 kent Exp $";
 
 /* Which database to use */
 char *database = "hg16";
@@ -1158,59 +1158,12 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
-int countSnps(struct sqlConnection *conn, 
-	char *chrom, int chromStart, int chromEnd)
-/* Count the number of SNPs in window. */
-{
-char query[256];
-
-sprintf(query, 
-    "select count(*) from snpTsc where chrom = '%s' and chromStart < %d and chromEnd > %d",
-    chrom, chromEnd, chromStart);
-return sqlQuickNum(conn, query);
-}
-
-void slowGetSnpDensity(struct chromGaps *cg, char *chrom, int chromSize, struct sqlConnection *conn, FILE *f)
-/* Make SNP density track. */
-{
-int windowSize = 50000;
-int s, e;
-int size;
-double ratio, totalRatio = 0;
-double maxCount = 0, minCount=windowSize*2, totalCount = 0;
-
-for (s = 0; s < chromSize; s += 50000)
-    {
-    e = s + windowSize;
-    if (e > chromSize) e = chromSize;
-    size = e - s;
-    if (size > windowSize/2)
-        {
-	ratio = 1.0 - nRatio(conn, chrom, s, e);
-	uglyf("%s:%d-%d ratio %f\n", chrom, s, e, ratio);
-	if (ratio >= 0.5)
-	    {
-	    int rawCount = countSnps(conn, chrom, s, e);
-	    double count = rawCount/ratio;
-	    uglyf(" rawCount %d, count %f\n", rawCount, count);
-	    if (count < minCount)
-	        minCount = count;
-	    if (count > maxCount)
-	        maxCount = count;
-	    totalRatio += ratio;
-	    totalCount += count;
-	    }
-	}
-    }
-printf("%s SNP density in %d windows is between %f and %f, average %f\n",
-	chrom, windowSize, minCount, maxCount, totalCount/totalRatio);
-}
-
 void getSnpDensity(struct chromGaps *cg, char *chrom, int chromSize, struct sqlConnection *conn, FILE *f)
 /* Put out SNP density info. */
 {
 int windowSize = 100000;
-double scale = 500.0;
+int smoothSize = 10;	/* Number of windows to smooth. */
+double scale = 900.0;
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -1218,11 +1171,11 @@ struct snp snp;
 struct agpFrag frag;
 int winsPerChrom = (chromSize + windowSize-1)/windowSize;
 int *winBases;
-int *winRepBases;
+int *winSnpBases;
 int i;
 int baseCount, repCount;
 double density;
-double minDen = 1.0, maxDen = 0.0;
+double minDen = 1000000.0, maxDen = 0.0;
 int winStart, winEnd;
 int rowOffset;
 
@@ -1230,12 +1183,12 @@ printf("  Getting SNPs in %d windows of size %d\n", winsPerChrom, windowSize);
 fflush(stdout);
 
 /* Count up SNPs in each window. */
-AllocArray(winRepBases, winsPerChrom);
-sr = hChromQuery(conn, "snpTsc", chrom, NULL, &rowOffset);
+AllocArray(winSnpBases, winsPerChrom);
+sr = hChromQuery(conn, "snpTscDh", chrom, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     snpStaticLoad(row+rowOffset, &snp);
-    addSegTotals(snp.chromStart, snp.chromEnd, winRepBases, windowSize, chromSize);
+    addSegTotals(snp.chromStart, snp.chromEnd, winSnpBases, windowSize, chromSize);
     }
 sqlFreeResult(&sr);
 
@@ -1250,39 +1203,35 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 
 /* Output density. */
-for (i=0; i<winsPerChrom; ++i)
+for (i=0; i<winsPerChrom-smoothSize; ++i)
     {
-    if ((baseCount = winBases[i]) > windowSize/2)
+    int baseCount=0, j;
+    int snpCount = 0;
+    int winIx;
+    for (j=0; j<smoothSize; ++j)
         {
-	repCount = winRepBases[i];
-	density = (double)repCount/(double)baseCount;
+	baseCount += winBases[i+j];
+	snpCount += winSnpBases[i+j];
+	}
+    if (baseCount > windowSize * smoothSize /2)
+        {
+	density = (double)snpCount/(double)baseCount;
+	density *= scale;
 	if (density < minDen) minDen = density;
 	if (density > maxDen) maxDen = density;
-	density *= scale;
 	if (density > 1.0) density = 1.0;
-	winStart = i*windowSize;
+	winStart = i*windowSize + (smoothSize-1)*windowSize/2;
 	winEnd = winStart + windowSize;
-	if (winEnd > chromSize) winEnd = chromSize;
-	printTabNum(f, cg, chrom, winStart, winEnd, 
-		"SNP", "wiggle", 128, 0, 128, density);
+	if (winStart >= 0 && winEnd <= chromSize)
+	    {
+	    printTabNum(f, cg, chrom, winStart, winEnd, 
+		    "SNP", "wiggle", 128, 0, 128, density);
+	    }
 	}
     }
-printf("   %s minDen %f, maxDen %f\n", chrom, minDen, maxDen);
+printf(" SNP %s minDen %f, maxDen %f\n", chrom, minDen, maxDen);
 freeMem(winBases);
-freeMem(winRepBases);
-}
-
-void fakeMutationRate(struct chromGaps *cg, char *chrom, int chromSize, struct sqlConnection *conn, FILE *f)
-/* Draw sine wave to fake mutation rate. */
-{
-int i;
-for (i=0; i<chromSize; i += 25000)
-    {
-    double angle = 3.1415 * i / 1000000;
-    double val = (1.0 + sin(angle)) * 0.5;
-    printTabNum(f, cg, chrom, i, i+25000, 
-	    "mutation", "wiggle", 0, 128, 0, val);
-    }
+freeMem(winSnpBases);
 }
 
 struct wigglePos
@@ -1335,12 +1284,15 @@ double scale = 1.0/(wc->maxVal-minVal);
 struct binKeeper *bk = gapBinKeeper(conn, chrom, chromSize);
 
 slReverse(&wc->posList);
+scale *= 1.2;
 for (wig = wc->posList; wig != NULL; wig = wig->next)
     {
     struct binElement *gapList = binKeeperFind(bk, wig->start, wig->end);
     if (gapList == NULL)
 	{
 	double val = (wig->val - minVal) * scale;
+	if (val < 0) val = 0;
+	if (val > 1) val = 1;
 	printTabNum(f, cg, chrom, wig->start, wig->end, 
 		"mutation", "wiggle", 0, 128, 0, val);
 	}
@@ -1382,8 +1334,8 @@ while (lineFileRow(lf, row))
 	if (val < wc->minVal) wc->minVal = val;
 	if (val > wc->maxVal) wc->maxVal = val;
 	AllocVar(wig);
-	wig->start = atoi(row[1]);
-	wig->end = atoi(row[2]);
+	wig->start = atoi(row[1]) + 450000;
+	wig->end = atoi(row[2]) - 450000;
 	wig->val = val;
 	slAddHead(&wc->posList, wig);
 	}

@@ -9,7 +9,7 @@
 #include "dystring.h"
 #include "expRecord.h"
 
-static char const rcsid[] = "$Id: affyPslAndAtlasToBed.c,v 1.5 2003/09/27 01:34:07 kent Exp $";
+static char const rcsid[] = "$Id: affyPslAndAtlasToBed.c,v 1.8 2003/10/06 23:12:13 kent Exp $";
 
 
 #define DEBUG 0
@@ -21,10 +21,12 @@ errAbort("affyPslAndAtlasToBed - Takes an alignment of affy probe target\n"
 	 "usage:\n"
 	 "    affyPslAndAtlasToBed pslFile atlasFile out.bed out.expRecord\n"
 	 "options:\n"
+	 "    -shortOut Do short output format (no mapping only spots)\n"
 	 "    -newType Use for newer type including mouse\n"
 	 "    -chip=XXXX (default HG-U95Av2)\n");
 }
 
+boolean shortOut = FALSE;
 boolean newType = FALSE;
 char *chip = "HG-U95Av2";
 
@@ -34,6 +36,7 @@ int noExpCount = 0;       /* how many points contain no experimental data */
 int missingVal = -10000;  /* use this value for missing data */
 
 static struct optionSpec options[] = {
+   {"shortOut", OPTION_BOOLEAN},
    {"newType", OPTION_BOOLEAN},
    {"suffix", OPTION_STRING},
    {"chip", OPTION_STRING},
@@ -529,40 +532,37 @@ carefulClose(&f);
 return wordCount;
 }
 
-int intCmp(const void *va, const void *vb)
-/* Compare two ints. */
-{
-int *a = (int *)va;
-int *b = (int *)vb;
-return *a - *b;
-}
-
-int findPositiveMedian(int *data, int count)
+int findPositiveMedian(double *data, int count, double minVal)
 /* Find median of positive numbers in data. */
 {
-int *sorted;
+double *sorted;
 int i, realCount = 0;
-int median = -1;
+double median = -1;
 AllocArray(sorted, count);
 for (i=0; i<count; ++i)
     {
-    if (data[i] >= 0)
+    if (data[i] >= minVal)
         {
 	sorted[realCount] = data[i];
 	++realCount;
 	}
     }
-if (realCount > 0)
+if (realCount > 2)
     {
-    int halfReal = (realCount>>1);
-    qsort(sorted, realCount, sizeof(sorted[0]), intCmp);
-    if (realCount&1)
-	median = sorted[halfReal];
-    else
-        median = ((sorted[halfReal-1] + sorted[halfReal]) >> 1);
+    median = doubleMedian(realCount, sorted);
     }
 freez(&sorted);
 return median;
+}
+
+void shortDataOut(FILE *f, char *name, int count, double *scores)
+/* Do short type output. */
+{
+int i;
+fprintf(f, "%s\t%d\t", name, count);
+for (i=0; i<count; ++i)
+    fprintf(f, "%0.3f,", scores[i]);
+fprintf(f, "\n");
 }
 
 void affyPslAndAtlasToBedNew(char *pslFile, char *atlasFile, char *bedOut, 
@@ -573,7 +573,7 @@ struct lineFile *lf = lineFileOpen(atlasFile, TRUE);
 char *line;
 int i, wordCount, expCount;
 char **row;
-int *data, median;
+double *data, median;
 double invMedian, ratio, logRatio;
 char *affyId;
 struct hash *hash = newHash(17);
@@ -586,6 +586,8 @@ int minExpVal = 20;
 /* Open Atlas file and use first line to create experiment table. */
 if (!lineFileNext(lf, &line, NULL))
     errAbort("%s is empty", lf->fileName);
+if (startsWith("Affy", line))
+    line += 4;
 if (line[0] != '\t')
     errAbort("%s doesn't seem to be a new format atlas file", lf->fileName);
 expCount = lineToExp(line, expRecOut);
@@ -593,8 +595,10 @@ if (expCount <= 0)
     errAbort("No experiments in %s it seems", lf->fileName);
 warn("%d experiments\n", expCount);
 
+f = mustOpen(bedOut, "w");
+
 /* Build up a hash keyed by affyID with an int array of data
- * for value. */
+ * for value.  Do output in short case. */
 AllocArray(row, expCount);
 while (lineFileNextReal(lf, &line))
     {
@@ -610,8 +614,26 @@ while (lineFileNextReal(lf, &line))
 	}
     AllocArray(data, expCount);
     for (i=0; i<expCount; ++i)
-        data[i] = atoi(row[i]);
-    hashAdd(hash, affyId, data);
+	{
+        data[i] = atof(row[i]);
+	if (data[i] < minExpVal)
+	    data[i] = minExpVal;
+	}
+    median = findPositiveMedian(data, expCount, minExpVal);
+    if (median >= 0)
+	{
+	invMedian = 1.0/median;
+	for (i=0; i<expCount; ++i)
+	    {
+	    double val = data[i];
+	    val = safeLog2(invMedian*val);
+	    data[i] = val;
+	    }
+	if (shortOut)
+	    shortDataOut(f, affyId, expCount, data);
+	else
+	    hashAdd(hash, affyId, data);
+	}
     data = NULL;
     ++dataCount;
     }
@@ -619,40 +641,34 @@ lineFileClose(&lf);
 warn("%d rows of expression data\n", dataCount);
 
 /* Stream through psl file, converting it to bed with expression data. */
-lf = pslFileOpen(pslFile);
-f = mustOpen(bedOut, "w");
-while ((psl = pslNext(lf)) != NULL)
+if (!shortOut)
     {
-    ++pslCount;
-    data = hashFindVal(hash, psl->qName);
-    if (data != NULL)
-        {
-	struct bed *bed = bedFromPsl(psl);
-	bed->expCount = expCount;
-	AllocArray(bed->expIds, expCount);
-	AllocArray(bed->expScores, expCount);
-	median = findPositiveMedian(data, expCount);
-	if (median >= minExpVal)
+    lf = pslFileOpen(pslFile);
+    while ((psl = pslNext(lf)) != NULL)
+	{
+	++pslCount;
+	data = hashFindVal(hash, psl->qName);
+	if (data != NULL)
 	    {
-	    invMedian = 1.0/median;
+	    struct bed *bed = bedFromPsl(psl);
+	    bed->expCount = expCount;
+	    AllocArray(bed->expIds, expCount);
+	    AllocArray(bed->expScores, expCount);
 	    for (i=0; i<expCount; ++i)
 		{
-		int val = data[i];
-		if (val >= minExpVal)
-		    bed->expScores[i] = safeLog2(invMedian*val);
-		else
-		    bed->expScores[i] = missingVal;
+		bed->expScores[i] = data[i];
 		bed->expIds[i] = i;
 		}
 	    bedTabOutN(bed, 15, f);
 	    ++bedCount;
+
+	    bedFree(&bed);
 	    }
-	bedFree(&bed);
+	pslFree(&psl);
 	}
-    pslFree(&psl);
+    warn("%d records in %s", pslCount, pslFile);
+    warn("%d records written to %s", bedCount, bedOut);
     }
-warn("%d records in %s", pslCount, pslFile);
-warn("%d records written to %s", bedCount, bedOut);
 lineFileClose(&lf);
 carefulClose(&f);
 }
@@ -660,6 +676,7 @@ carefulClose(&f);
 int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
+shortOut = optionExists("shortOut");
 newType = optionExists("newType");
 chip = optionVal("chip", chip);
 if(argc != 5)

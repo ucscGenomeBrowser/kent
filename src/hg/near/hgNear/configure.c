@@ -12,13 +12,30 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.35 2003/09/27 02:24:52 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.37 2003/10/08 07:29:10 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
 {
 return on ? "on" : "off";
 }
+
+char *configVarName(struct column *col, char *varName)
+/* Return variable name for configuration. */
+{
+static char name[64];
+safef(name, sizeof(name), "%s%s.%s", colConfigPrefix, col->name, varName);
+return name;
+}
+
+char *configVarVal(struct column *col, char *varName)
+/* Return value for configuration variable.  Return NULL if it
+ * doesn't exist or if it is "" */
+{
+char *name = configVarName(col, varName);
+return cartNonemptyString(cart, name);
+}
+
 
 static void configTable(struct column *colList, struct sqlConnection *conn)
 /* Write out configuration table */
@@ -103,14 +120,14 @@ static void bumpColList(char *bumpHow, struct column **pColList)
 char *dupe = cloneString(bumpHow);
 char *words[4], *upDown, *colName;
 
-if (chopString(dupe, ".", words, ArraySize(words)) < 3)
+if (chopString(dupe, ".", words, ArraySize(words)) < 4)
     {
     warn("Strange bumpHow value %s in bumpColList", bumpHow);
     cartRemove(cart, bumpHow);
     noWarnAbort();
     }
-upDown = words[1];
-colName = words[2];
+upDown = words[2];
+colName = words[3];
 
 if (sameString(upDown, "up"))
     {
@@ -155,7 +172,7 @@ savePriorities(*pColList);
 static char *colorSchemeVals[] = {
 /* Menu option for color scheme. */
    "red high/green low",
-   "blue high/green low",
+   "yellow high/blue low",
 };
 
 static void colorSchemeDropDown()

@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.30 2003/09/29 19:38:15 braney Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.31 2003/10/06 23:12:40 kent Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -619,6 +619,7 @@ return  (((psl->strand[1] == '+' ) &&
    ((psl->strand[1] == '-') && 
     (psl->tStart == (psl->tSize-(psl->tStarts[lastBlock] + 3*psl->blockSizes[lastBlock])))));
 }
+
 int pslCalcMilliBad(struct psl *psl, boolean isMrna)
 /* Calculate badness in parts per thousand. */
 {

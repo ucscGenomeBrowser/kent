@@ -124,9 +124,10 @@ for (i=0; i<hitCount; ++i)
 for (;;)
     {
     boolean startedExon = FALSE;
-    int diagDiff;
-    int tOff, pOff;
-    int thisDiff;
+    int diagDiff = 0;
+    int tOff = 0;
+    int pOff = 0;
+    int thisDiff = 0;
     for (i=0; i<hitCount; ++i)
         {
         if (hits[i].isLumped == FALSE)
@@ -179,10 +180,11 @@ for (i=0; i<exonCount; ++i)
 for (;;)
     {
     boolean startedGene = FALSE;
-    int lastDiff;
-    int tOff, pOff;
-    int thisDiff;
-    int exonsInThis;
+    int lastDiff = 0;
+    int tOff = 0;
+    int pOff = 0;
+    int thisDiff = 0;
+    int exonsInThis = 0;
 
     for (i=0; i<exonCount; ++i)
         {
@@ -520,7 +522,10 @@ void findAliEnds(struct ffAli *ali, DNA *needle, DNA *hay,
     long *retNeedleStart, long *retNeedleEnd,
     long *retHayStart, long *retHayEnd)
 {
-DNA *hStart, *hEnd, *nStart, *nEnd;
+DNA *hStart = NULL;
+DNA *hEnd = NULL;
+DNA *nStart = NULL;
+DNA *nEnd = NULL;
 boolean first = TRUE;
 
 while (ali->left) ali = ali->left;

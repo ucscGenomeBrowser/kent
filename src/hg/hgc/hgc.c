@@ -109,8 +109,11 @@
 #include "pseudoGeneLink.h"
 #include "axtLib.h"
 #include "ensFace.h"
+#include "bdgpGeneInfo.h"
+#include "flyBaseSwissProt.h"
+#include "affyGenoDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.488 2003/10/02 05:17:32 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.499 2003/10/13 23:55:02 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -227,6 +230,18 @@ static void printGenMapDbUrl(FILE *f, char *clone)
 /* Print URL for GenMapDb at UPenn for a clone */
 {
 fprintf(f, "\"%s%s\"", genMapDbScript, clone);
+}
+
+static void printFlyBaseUrl(FILE *f, char *fbId)
+/* Print URL for FlyBase browser. */
+{
+fprintf(f, "\"http://flybase.bio.indiana.edu/.bin/fbidq.html?%s\"", fbId);
+}
+
+static void printBDGPUrl(FILE *f, char *bdgpName)
+/* Print URL for Berkeley Drosophila Genome Project browser. */
+{
+fprintf(f, "\"http://www.fruitfly.org/cgi-bin/annot/gene?%s\"", bdgpName);
 }
 
 char *hgcPath()
@@ -3034,7 +3049,7 @@ void printMgcRnaSpecs(struct trackDb *tdb, char *acc, int imageId)
 /* print status information for MGC mRNA or EST; must have imageId */
 {
 struct sqlConnection *conn = hgAllocConn();
-char *mgcOrganism, *statusDesc;
+char *mgcOrganism = NULL, *statusDesc;
 
 /* link to MGC site only for full-length mRNAs */
 if (sameString(tdb->tableName, "mgcGenes"))
@@ -3444,7 +3459,7 @@ int first;
 cartWebStart(cart, fragName);
 hFindSplitTable(seqName, track, splitTable, &hasBin);
 sprintf(query, "select * from %s where frag = '%s' and chromStart = %d", 
-	splitTable, fragName, start+1);
+	splitTable, fragName, start);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 agpFragStaticLoad(row+hasBin, &frag);
@@ -5658,19 +5673,36 @@ char goAspectChar[10];
 int  iGoAsp;
 char *diseaseDesc;
 boolean hasGO, hasPathway, hasMedical;
+boolean showGeneSymbol;
 
-if (hTableExists("knownGeneLink"))
+showGeneSymbol = FALSE;
+
+if (hTableExists("kgXref"))
     {
     sprintf(cond_str, "kgID='%s'", mrnaName);
     geneSymbol = sqlGetField(conn, database, "kgXref", "geneSymbol", cond_str);
-    if (geneSymbol == NULL) geneSymbol = mrnaName;
+    if (geneSymbol == NULL) 
+	{
+	geneSymbol = mrnaName;
+	}
+    else
+	{
+	showGeneSymbol = TRUE;
+	}
     }
 else
     {
     geneSymbol = mrnaName;
     }
 
-sprintf(cart_name, "Known Gene: %s", geneSymbol);
+if (showGeneSymbol)
+    {
+    sprintf(cart_name, "Known Gene: %s", geneSymbol);
+    }
+else
+    {
+    sprintf(cart_name, "Known Gene");
+    }
 cartWebStart(cart, cart_name);
 
 dnaBased = FALSE;
@@ -5833,7 +5865,7 @@ printf("</UL>");
 if (sqlTableExists(conn, "knownCanonical"))
     {
     printf("<B>UCSC Gene Family Browser:</B> ");
-    printf("<A HREF=\"http:/cgi-bin/hgNear?near_search=%s\"", mrnaName);
+    printf("<A HREF=\"/cgi-bin/hgNear?near_search=%s\"", mrnaName);
     printf("TARGET=_blank>%s</A>&nbsp\n", geneSymbol);fflush(stdout);
     printf("<BR><BR>");
     }
@@ -6062,8 +6094,25 @@ if (cgapID != NULL)
     	}
     printf("<LI><B>NCI Cancer Genome Anatomy:&nbsp</B>");
     printf("<A HREF = \"");
-    printf("http://cgap.nci.nih.gov/Genes/GeneInfo?ORG=Hs&CID=%s", cgapID);
-    printf("\" TARGET=_blank>%s</A> </LI>\n", cgapID);
+    printf("http://cgap.nci.nih.gov/Genes/GeneInfo?ORG=");
+
+    // select appropriate two letters used by CGAP for organism
+    if (sameWord(organism, "Human"))
+	{
+	printf("Hs");
+	}
+    else
+	{
+    	if (sameWord(organism, "Mouse"))
+	    {
+	    printf("Mm");
+	    }
+	else
+	    {
+	    errAbort("Our current database table for NCI CGAP does not cover oganism %s.\n", organism); 
+	    }
+	}
+    printf("&CID=%s\" TARGET=_blank>%s</A> </LI>\n", cgapID, cgapID);
     }
 
 // process links to Atlas of Genetics and Cytogenetics in Oncology and Haematology 
@@ -7218,6 +7267,142 @@ geneShowCommon(geneName, tdb, "vegaPep");
 printTrackHtml(tdb);
 }
 
+
+void doBDGPGene(struct trackDb *tdb, char *geneName)
+/* Show Berkeley Drosophila Genome Project gene info. */
+{
+struct bdgpGeneInfo *bgi = NULL;
+struct flyBaseSwissProt *fbsp = NULL;
+char *geneTable = tdb->tableName;
+char *truncName = cloneString(geneName);
+char *ptr = strchr(truncName, '-');
+char infoTable[128];
+char pepTable[128];
+char query[512];
+
+if (ptr != NULL)
+    *ptr = 0;
+safef(infoTable, sizeof(infoTable), "%sInfo", geneTable);
+
+genericHeader(tdb, geneName);
+
+if (hTableExists(infoTable))
+    {
+    struct sqlConnection *conn = hAllocConn();
+    struct sqlResult *sr;
+    char **row;
+    safef(query, sizeof(query),
+	  "select * from %s where bdgpName = \"%s\";",
+	  infoTable, truncName);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+	bgi = bdgpGeneInfoLoad(row);
+	if (hTableExists("flyBaseSwissProt"))
+	    {
+	    safef(query, sizeof(query),
+		  "select * from flyBaseSwissProt where flyBaseId = \"%s\"",
+		  bgi->flyBaseId);
+	    sqlFreeResult(&sr);
+	    sr = sqlGetResult(conn, query);
+	    if ((row = sqlNextRow(sr)) != NULL)
+		fbsp = flyBaseSwissProtLoad(row);
+	    }
+	}
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+if (bgi != NULL)
+    {
+    if (!sameString(bgi->symbol, geneName))
+	{
+	printf("<B>Gene symbol:</B> %s<BR>\n", bgi->symbol);
+	}
+    if (fbsp != NULL)
+	{
+	printf("<B>SwissProt:</B> <A HREF=");
+	printSwissProtProteinUrl(stdout, fbsp->swissProtId);
+	printf(" TARGET=_BLANK>%s</A> (%s) %s<BR>\n",
+	       fbsp->swissProtId, fbsp->spSymbol, fbsp->spGeneName);
+	}
+    printf("<B>FlyBase:</B> <A HREF=");
+    printFlyBaseUrl(stdout, bgi->flyBaseId);
+    printf(" TARGET=_BLANK>%s</A><BR>\n", bgi->flyBaseId);
+    printf("<B>BDGP:</B> <A HREF=");
+    printBDGPUrl(stdout, truncName);
+    printf(" TARGET=_BLANK>%s</A><BR>\n", truncName);
+    }
+printCustomUrl(tdb, geneName, FALSE);
+showGenePos(geneName, tdb);
+if (bgi != NULL)
+    {
+    if (bgi->go != NULL && bgi->go[0] != 0)
+	{
+	struct sqlConnection *goConn = sqlMayConnect("go");
+	char *goTerm = NULL;
+	char *words[10];
+	char buf[512];
+	int wordCount = chopCommas(bgi->go, words);
+	int i;
+	puts("<B>Gene Ontology terms from BDGP:</B> <BR>");
+	for (i=0;  i < wordCount && words[i][0] != 0;  i++)
+	    {
+	    if (i > 0 && sameWord(words[i], words[i-1]))
+		continue;
+	    goTerm = "";
+	    if (goConn != NULL)
+		{
+		safef(query, sizeof(query),
+		      "select name from term where acc = 'GO:%s';",
+		      words[i]);
+		goTerm = sqlQuickQuery(goConn, query, buf, sizeof(buf));
+		if (goTerm == NULL)
+		    goTerm = "";
+		}
+	    printf("&nbsp;&nbsp;&nbsp;GO:%s: %s<BR>\n",
+		   words[i], goTerm);
+	    }
+	sqlDisconnect(&goConn);
+	}
+    if (bgi->cytorange != NULL && bgi->cytorange[0] != 0)
+	{
+	printf("<B>Cytorange:</B> %s<BR>", bgi->cytorange);
+	}
+    }
+printf("<H3>Links to sequence:</H3>\n");
+printf("<UL>\n");
+
+safef(pepTable, sizeof(pepTable), "%sPep", geneTable);
+if (hGenBankHaveSeq(geneName, pepTable))
+    {
+    puts("<LI>\n");
+    hgcAnchorSomewhere("htcTranslatedProtein", geneName, pepTable,
+		       seqName);
+    printf("Predicted Protein</A> \n"); 
+    puts("</LI>\n");
+    }
+
+puts("<LI>\n");
+hgcAnchorSomewhere("htcGeneMrna", geneName, geneTable, seqName);
+printf("%s</A> may be different from the genomic sequence.\n", 
+       "Predicted mRNA");
+puts("</LI>\n");
+
+puts("<LI>\n");
+hgcAnchorSomewhere("htcGeneInGenome", geneName, geneTable, seqName);
+printf("Genomic Sequence</A> from assembly\n");
+puts("</LI>\n");
+
+if (hTableExists("axtInfo"))
+    {
+    puts("<LI>\n");
+    hgcAnchorGenePsl(geneName, geneTable, seqName, "startcodon");
+    printf("Comparative Sequence</A> Annotated codons and translated protein with alignment to another species <BR>\n");
+    puts("</LI>\n");
+    }
+printf("</UL>\n");
+printTrackHtml(tdb);
+}
 
 void parseChromPointPos(char *pos, char *retChrom, int *retPos)
 /* Parse out chrN:123 into chrN and 123. */
@@ -9558,6 +9743,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+
 void doSnp(struct trackDb *tdb, char *itemName)
 /* Put up info on a SNP. */
 {
@@ -9595,6 +9781,140 @@ printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
+
+void doAffyGenoDetails(struct trackDb *tdb, char *name)
+/* print additional SNP details */
+{
+struct sqlConnection *conn = sqlConnect("hgFixed");
+char query[1024];
+struct affyGenoDetails *snp=NULL;
+snprintf(query, sizeof(query),
+         "select  affyId, rsId, baseA, baseB, sequenceA, sequenceB, "
+	 "        enzyme, minFreq, hetzyg, avHetSE, "
+         "        NA04477, NA04479, NA04846, NA11036, NA11038, NA13056, "
+         "        NA17011, NA17012, NA17013, NA17014, NA17015, NA17016, "
+         "        NA17101, NA17102, NA17103, NA17104, NA17105, NA17106, "
+         "        NA17201, NA17202, NA17203, NA17204, NA17205, NA17206, "
+         "        NA17207, NA17208, NA17210, NA17211, NA17212, NA17213, "
+         "        PD01, PD02, PD03, PD04, PD05, PD06, PD07, PD08, PD09, "
+         "        PD10, PD11, PD12, PD13, PD14, PD15, PD16, PD17, PD18, "
+         "        PD19, PD20, PD21, PD22, PD23, PD24 "
+         "from    affyGenoDetails "
+         "where   affyId = '%s'", name);
+snp = affyGenoDetailsLoadByQuery(conn, query);
+if (snp!=NULL)
+    {
+    printf("<BR>\n");
+    printf("<B>Sample Prep Enzyme:</B> <I>%s</I><BR>\n",snp->enzyme);
+    printf("<B>Minimum Allele Frequency:</B> %.3f<BR>\n",snp->minFreq);
+    printf("<B>Heterozygosity:</B> %.3f<BR>\n",snp->hetzyg);
+    printf("<B>Base A:          </B> <font face=\"Courier\">%s<BR></font>\n",snp->baseA);
+    printf("<B>Base B:          </B> <font face=\"Courier\">%s<BR></font>\n",snp->baseB);
+    printf("<B>Sequence of Allele A:</B>&nbsp;<font face=\"Courier\">%s</font><BR>\n",snp->sequenceA);
+    printf("<B>Sequence of Allele B:</B>&nbsp;<font face=\"Courier\">%s</font><BR>\n",snp->sequenceB);
+    if (snp->rsId>0)
+	{
+	printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+	printf("type=rs&rs=rs%d\" TARGET=_blank>dbSNP link for rs%d</A></P>\n", snp->rsId, snp->rsId);
+	}
+    doSnpLocusLink(tdb, name);
+    printf("<BR>Genotypes:<BR>");
+    printf("\n<BR><font face=\"Courier\">");
+    printf("NA04477:&nbsp;%s&nbsp;&nbsp;", snp->NA04477);
+    printf("NA04479:&nbsp;%s&nbsp;&nbsp;", snp->NA04479);
+    printf("NA04846:&nbsp;%s&nbsp;&nbsp;", snp->NA04846);
+    printf("NA11036:&nbsp;%s&nbsp;&nbsp;", snp->NA11036);
+    printf("NA11038:&nbsp;%s&nbsp;&nbsp;", snp->NA11038);
+    printf("NA13056:&nbsp;%s&nbsp;&nbsp;", snp->NA13056);
+    printf("\n<BR>NA17011:&nbsp;%s&nbsp;&nbsp;", snp->NA17011);
+    printf("NA17012:&nbsp;%s&nbsp;&nbsp;", snp->NA17012);
+    printf("NA17013:&nbsp;%s&nbsp;&nbsp;", snp->NA17013);
+    printf("NA17014:&nbsp;%s&nbsp;&nbsp;", snp->NA17014);
+    printf("NA17015:&nbsp;%s&nbsp;&nbsp;", snp->NA17015);
+    printf("NA17016:&nbsp;%s&nbsp;&nbsp;", snp->NA17016);
+    printf("\n<BR>NA17101:&nbsp;%s&nbsp;&nbsp;", snp->NA17101);
+    printf("NA17102:&nbsp;%s&nbsp;&nbsp;", snp->NA17102);
+    printf("NA17103:&nbsp;%s&nbsp;&nbsp;", snp->NA17103);
+    printf("NA17104:&nbsp;%s&nbsp;&nbsp;", snp->NA17104);
+    printf("NA17105:&nbsp;%s&nbsp;&nbsp;", snp->NA17105);
+    printf("NA17106:&nbsp;%s&nbsp;&nbsp;", snp->NA17106);
+    printf("\n<BR>NA17201:&nbsp;%s&nbsp;&nbsp;", snp->NA17201);
+    printf("NA17202:&nbsp;%s&nbsp;&nbsp;", snp->NA17202);
+    printf("NA17203:&nbsp;%s&nbsp;&nbsp;", snp->NA17203);
+    printf("NA17204:&nbsp;%s&nbsp;&nbsp;", snp->NA17204);
+    printf("NA17205:&nbsp;%s&nbsp;&nbsp;", snp->NA17205);
+    printf("NA17206:&nbsp;%s&nbsp;&nbsp;", snp->NA17206);
+    printf("\n<BR>NA17207:&nbsp;%s&nbsp;&nbsp;", snp->NA17207);
+    printf("NA17208:&nbsp;%s&nbsp;&nbsp;", snp->NA17208);
+    printf("NA17210:&nbsp;%s&nbsp;&nbsp;", snp->NA17210);
+    printf("NA17211:&nbsp;%s&nbsp;&nbsp;", snp->NA17211);
+    printf("NA17212:&nbsp;%s&nbsp;&nbsp;", snp->NA17212);
+    printf("NA17213:&nbsp;%s&nbsp;&nbsp;", snp->NA17213);
+    printf("\n<BR>PD01:&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;", snp->PD01);
+    printf("PD02:&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;", snp->PD02);
+    printf("PD03:&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;", snp->PD03);
+    printf("PD04:&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;", snp->PD04);
+    printf("PD05:&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;", snp->PD05);
+    printf("PD06:&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;", snp->PD06);
+    printf("\n<BR>PD07:&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;", snp->PD07);
+    printf("PD08:&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;", snp->PD08);
+    printf("PD09:&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;", snp->PD09);
+    printf("PD10:&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;", snp->PD10);
+    printf("PD11:&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;", snp->PD11);
+    printf("PD12:&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;", snp->PD12);
+    printf("\n<BR>PD13:&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;", snp->PD13);
+    printf("PD14:&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;", snp->PD14);
+    printf("PD15:&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;", snp->PD15);
+    printf("PD16:&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;", snp->PD16);
+    printf("PD17:&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;", snp->PD17);
+    printf("PD18:&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;", snp->PD18);
+    printf("\n<BR>PD19:&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;", snp->PD19);
+    printf("PD20:&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;", snp->PD20);
+    printf("PD21:&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;", snp->PD21);
+    printf("PD22:&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;", snp->PD22);
+    printf("PD23:&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;", snp->PD23);
+    printf("PD24:&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;", snp->PD24);
+    printf("\n</font>\n");
+    }
+else printf("<BR>%s<BR>\n",query);
+affyGenoDetailsFree(&snp);
+sqlDisconnect(&conn);
+}
+
+void doAffyGeno(struct trackDb *tdb, char *itemName)
+/* Put up info on an Affymetrix SNP. */
+{
+char *group = tdb->tableName;
+struct snp snp;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int rowOffset;
+int rsId = 0;
+
+cartWebStart(cart, "Single Nucleotide Polymorphism (SNP)");
+printf("<H2>Single Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
+sprintf(query, "select * "
+	       "from   affyGeno "
+	       "where  chrom = '%s' "
+	       "  and  chromStart = %d "
+	       "  and  name = '%s'",
+               seqName, start, itemName);
+rowOffset = hOffsetPastBin(seqName, group);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    snpStaticLoad(row+rowOffset, &snp);
+    bedPrintPos((struct bed *)&snp, 3);
+    }
+doAffyGenoDetails(tdb, itemName);
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 
 void doTigrGeneIndex(struct trackDb *tdb, char *item)
 /* Put up info on tigr gene index item. */
@@ -11276,7 +11596,7 @@ struct spaceSaver *ssList = NULL;
 struct hash *heightHash = NULL;
 int rowCount = 0;
 struct tempName gifTn;
-int pixWidth = atoi(cartUsualString(cart, "pix", "600" ));
+int pixWidth = atoi(cartUsualString(cart, "pix", "620" ));
 int pixHeight = 0;
 struct vGfx *vg;
 int lineHeight = 0;
@@ -12080,7 +12400,7 @@ else if (containsStringNoCase(track, "blastzStrictChain")
     strcpy(&dbName[3 + len], "3");
     longXenoPsl1(tdb, item, orgName, "chromInfo", dbName);
     }
-else if (sameWord(track, "blatChimp") ||
+ else if (sameWord(track, "blatChimp") ||
          sameWord(track, "chimpBac") ||
          sameWord(track, "bacChimp"))
     { 
@@ -12213,6 +12533,10 @@ else if (startsWith("ct_", track))
 else if (sameWord(track, "snpTsc") || sameWord(track, "snpNih"))
     {
     doSnp(tdb, item);
+    }
+else if (sameWord(track, "affyGeno"))
+    {
+    doAffyGeno(tdb, item);
     }
 else if (sameWord(track, "uniGene_2") || sameWord(track, "uniGene"))
     {
@@ -12421,6 +12745,10 @@ else if (sameWord(track, "jaxQTL"))
 else if (sameWord(track, "gbProtAnn"))
     {
     doGbProtAnn(tdb, item);
+    }
+else if (sameWord(track, "bdgpGene") || sameWord(track, "bdgpNonCoding"))
+    {
+    doBDGPGene(tdb, item);
     }
 else if (tdb != NULL)
     {

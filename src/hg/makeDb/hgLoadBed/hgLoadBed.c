@@ -9,7 +9,7 @@
 #include "bed.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.16 2003/09/19 19:27:06 baertsch Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.17 2003/10/06 23:17:38 kent Exp $";
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
@@ -181,6 +181,12 @@ else if (!oldTable)
        dyStringAppend(dy, "  blockSizes longblob not null,\n");
     if (bedSize >= 12)
        dyStringAppend(dy, "  chromStarts longblob not null,\n");
+    if (bedSize >= 13)
+       dyStringAppend(dy, "  expCount int unsigned not null,\n");
+    if (bedSize >= 14)
+       dyStringAppend(dy, "  expIds longblob not null,\n");
+    if (bedSize >= 15)
+       dyStringAppend(dy, "  expScores longblob not null,\n");
     dyStringAppend(dy, "#Indices\n");
     if (!noBin)
        dyStringAppend(dy, "  INDEX(chrom(8),bin),\n");

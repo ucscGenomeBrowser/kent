@@ -17,7 +17,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.98 2003/10/02 17:25:18 heather Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.101 2003/10/09 00:02:43 heather Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	detailsVarName, colInfoVarName,
@@ -127,6 +127,31 @@ else
    return wildMatchAll(word, wildList);
 }
 
+boolean anyRealInCart(struct cart *cart, char *wild)
+/* Return TRUE if variables are set matching wildcard. */
+{
+struct hashEl *varList = NULL, *var;
+boolean ret = FALSE;
+
+varList = cartFindLike(cart, wild);
+for (var = varList; var != NULL; var = var->next)
+    {
+    char *s = var->val;
+    if (s != NULL)
+	{
+	s = trimSpaces(s);
+	if (s[0] != 0)
+	    {
+	    ret = TRUE;
+	    break;
+	    }
+	}
+    }
+hashElFreeList(&varList);
+return ret;
+}
+
+
 /* ---- Some html helper routines. ---- */
 
 void hvPrintf(char *format, va_list args)
@@ -194,6 +219,18 @@ boolean columnSettingExists(struct column *col, char *name)
 {
 return hashFindVal(col->settings, name) != NULL;
 }
+
+struct sqlConnection *hgFixedConn()
+/* Return connection to hgFixed database. 
+ * This is effectively a global, but not
+ * opened until needed. */
+{
+static struct sqlConnection *conn = NULL;
+if (conn == NULL)
+    conn = sqlConnect("hgFixed");
+return conn;
+}
+
 
 char *colVarName(struct column *col, char *prefix)
 /* Return variable name prefix.col->name. This is just a static
@@ -310,16 +347,9 @@ char *cellLookupVal(struct column *col, struct genePos *gp,
  * col->valField. */
 {
 char query[512];
-struct sqlResult *sr;
-char **row;
-char *res = NULL;
 safef(query, sizeof(query), "select %s from %s where %s = '%s'",
 	col->valField, col->table, col->keyField, gp->name);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    res = cloneString(row[0]);
-sqlFreeResult(&sr);
-return res;
+return sqlQuickString(conn, query);
 }
 
 void cellSimplePrint(struct column *col, struct genePos *gp, 
@@ -639,7 +669,7 @@ return resList;
 }
 
 void lookupAdvFilterControls(struct column *col, struct sqlConnection *conn)
-/* Print out controls for advanced filter. */
+/* Print out controls for advanced filter on lookup column. */
 {
 char *fileName = advFilterVal(col, "keyFile");
 hPrintf("%s search (including * and ? wildcards):", col->shortLabel);
@@ -743,8 +773,8 @@ sqlFreeResult(&sr);
 return res;
 }
 
-void distanceFilterControls(struct column *col, struct sqlConnection *conn)
-/* Print out controls for advanced filter. */
+void minMaxAdvFilterControls(struct column *col, struct sqlConnection *conn)
+/* Print out controls for min/max advanced filter. */
 {
 hPrintf("minimum: ");
 advFilterRemakeTextVar(col, "min", 8);
@@ -796,7 +826,7 @@ col->valField = cloneString(valField);
 col->curGeneField = cloneString(curGene);
 col->exists = simpleTableExists;
 col->cellVal = cellDistanceVal;
-col->filterControls = distanceFilterControls;
+col->filterControls = minMaxAdvFilterControls;
 col->advFilter = distanceAdvFilter;
 }
 
@@ -1102,6 +1132,10 @@ else if (sameString(type, "knownName"))
     setupColumnKnownName(col, s);
 else if (sameString(type, "expRatio"))
     setupColumnExpRatio(col, s);
+else if (sameString(type, "expMulti"))
+    setupColumnExpMulti(col, s);
+else if (sameString(type, "expMax"))
+    setupColumnExpMax(col, s);
 else if (sameString(type, "go"))
     setupColumnGo(col, s);
 else if (sameString(type, "pfam"))
@@ -1716,6 +1750,6 @@ int main(int argc, char *argv[])
 cgiSpoof(&argc, argv);
 htmlSetStyle(htmlStyleUndecoratedLink);
 oldCart = hashNew(10);
-cartHtmlShell("Gene Family v2", doMiddle, hUserCookie(), excludeVars, oldCart);
+cartHtmlShell("Gene Family v3", doMiddle, hUserCookie(), excludeVars, oldCart);
 return 0;
 }

@@ -82,7 +82,7 @@ long i;
 struct hashEl *hel;
 struct hash *hash;
 struct hash *whenceHash;
-struct user *user;
+struct user *user = NULL;
 int day, hour;
 struct user *userList = NULL;
 int topCount;

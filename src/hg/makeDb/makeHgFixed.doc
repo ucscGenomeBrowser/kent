@@ -1,0 +1,48 @@
+#This describes how at least some of the tables in
+#hgFixed were created.  This is a database containing
+#primarily expression data.  There are two main formats:
+#  expRecord.as - This describes the mRNA sources for
+#     a series of microarray experiments 
+#  expData.as - This describes the measured value 
+#     in either absolute or relative ratio terms of
+#     each gene/probe/target in a series of microarray
+#     experiments.  Each expData is associated with
+#     an expRecord, thogh expDatas sometimes share
+#     the same expRecord.
+
+#The Human Affy GNF Expression Atlas 2003 Version:
+# Create the main expRecord table and the expData table for
+# the absolute measurements as so:
+hgGnfMicroarray gnfHumanU95AllExps gnfHumanU95All /projects/compbio/data/microarray/affyGnfHuman/data_public_U95
+# Convert these to ratios using the median of medians of non-cancerous
+# cell types as the denominator as so:
+cd ~/src/hg/makeDb/hgRatioMicroarray
+hgRatioMicroarray gnfHumanU95All gnfHumanU95AllRatio -clump=gnfClump.ra
+# Take the median value over multiple replicants and put in this table:
+cd ../hgMedianMicroarray
+hgMedianMicroarray hgFixed gnfHumanU95AllRatio gnfHumanU95AllExps gnfU95Median.ra gnfHumanU95MedianRatio gnfHumanU95MedianExps -minExps=1
+# Also make a median version of the absolute measurements
+hgMedianMicroarray hgFixed gnfHumanU95All gnfHumanU95AllExps gnfU95Median.ra gnfHumanU95Median gnfHumanU95MedianExps -minExps=1
+
+# The Mouse Affy GNF Expression Atlas:
+# Create the expRecord tables for U74 a/b/c and the expData table for
+# the absolute measurements:
+hgGnfMicroarray gnfMouseU74aAllExps gnfMouseU74aAll /projects/compbio/data/microarray/affyGnfMouse/data/data_public_U74
+hgGnfMicroarray gnfMouseU74bAllExps gnfMouseU74bAll /projects/compbio/data/microarray/affyGnfMouse/data/U74B_b.txt
+hgGnfMicroarray gnfMouseU74cAllExps gnfMouseU74cAll /projects/compbio/data/microarray/affyGnfMouse/data/U74C_b.txt
+# Convert these to ratios using the median of medians of 
+# cell types as the denominator as so:
+cd ~/src/hg/makeDb/hgRatioMicroarray
+hgRatioMicroarray gnfMouseU74aAll gnfMouseU74aAllRatio -clump=gnfMouseU74aClump.ra
+hgRatioMicroarray gnfMouseU74bAll gnfMouseU74bAllRatio -clump=gnfMouseU74bClump.ra
+hgRatioMicroarray gnfMouseU74cAll gnfMouseU74cAllRatio -clump=gnfMouseU74cClump.ra
+# Take the median value over multiple replicants and put in this table:
+cd ../hgMedianMicroarray
+hgMedianMicroarray hgFixed gnfMouseU74aAllRatio gnfMouseU74aAllExps gnfMouseU74aMedian.ra gnfMouseU74aMedianRatio gnfMouseU74aMedianExps -minExps=1
+hgMedianMicroarray hgFixed gnfMouseU74bAllRatio gnfMouseU74bAllExps gnfMouseU74bMedian.ra gnfMouseU74bMedianRatio gnfMouseU74bMedianExps -minExps=1
+hgMedianMicroarray hgFixed gnfMouseU74cAllRatio gnfMouseU74cAllExps gnfMouseU74cMedian.ra gnfMouseU74cMedianRatio gnfMouseU74cMedianExps -minExps=1
+# Also make a median version of the absolute measurements
+hgMedianMicroarray hgFixed gnfMouseU74aAll gnfMouseU74aAllExps gnfMouseU74aMedian.ra gnfMouseU74aMedian gnfMouseU74aMedianExps -minExps=1
+hgMedianMicroarray hgFixed gnfMouseU74bAll gnfMouseU74bAllExps gnfMouseU74bMedian.ra gnfMouseU74bMedian gnfMouseU74bMedianExps -minExps=1
+hgMedianMicroarray hgFixed gnfMouseU74cAll gnfMouseU74cAllExps gnfMouseU74cMedian.ra gnfMouseU74cMedian gnfMouseU74cMedianExps -minExps=1
+

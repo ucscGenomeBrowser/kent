@@ -49,7 +49,7 @@ hPrintf("%s",
  "<em>Description</em> will open a page showing detailed information about "
  "the gene.</P>"
  "<P>One of the most powerful features of the Browser is its "
- "filtering capbilities, accessed via the <em>filter</em> button. Use the "
+ "filtering capabilities, accessed via the <em>filter</em> button. Use the "
  "filter to fine-tune the list of displayed genes to a subset based on a "
  "selection of detailed and flexible criteria. For example, the filter may "
  "be used to select all human genes over-expressed in the cerebellum that have "

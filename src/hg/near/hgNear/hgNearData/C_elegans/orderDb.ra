@@ -12,3 +12,5 @@ type pair sangerBlastTab query target bitScore -1
 name nameSimilarity
 type nameSimilarity orfToGene name value
 
+name abc
+type abc orfToGene name value

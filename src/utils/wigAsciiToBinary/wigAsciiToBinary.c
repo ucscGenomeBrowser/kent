@@ -40,7 +40,7 @@
 
 #define	NO_DATA	128
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.7 2003/09/24 16:06:21 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.8 2003/10/03 21:00:31 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -115,6 +115,7 @@ void wigAsciiToBinary( int argc, char *argv[] )
 {
 int i = 0;				/* general purpose int counter	*/
 struct lineFile *lf;			/* for line file utilities	*/
+char * fileName;			/* the basename of the input file */
 char *line = (char *) NULL;		/* to receive data input line	*/
 char *words[2];				/* to split data input line	*/
 int wordCount = 0;			/* result of split	*/
@@ -145,6 +146,7 @@ for( i = 1; i < argc; ++i )
     /* let's shorten the dataSpan name which will be used in the
      * "Name of item" column
      */
+    fileName = basename(argv[i]);
     if ( dataSpan < 1024 )
 	{
 	    snprintf( spanName, sizeof(spanName)-1, "%llu", dataSpan );
@@ -173,10 +175,10 @@ for( i = 1; i < argc; ++i )
 	binfile = addSuffix(wibFile, ".wib");
 	wigfile = addSuffix(wibFile, ".wig");
 	} else {	/*	not specified, construct from input names */
-	if( startsWith("chr",argv[i]) )
+	if( startsWith("chr",fileName) )
 	    {
 	    char *tmpString;
-	    tmpString = cloneString(argv[i]);
+	    tmpString = cloneString(fileName);
 	    chopSuffix(tmpString);
 	    binfile = addSuffix(tmpString, ".wib");
 	    wigfile = addSuffix(tmpString, ".wig");
@@ -202,9 +204,12 @@ errAbort("Can not determine output file name, no -wibFile specified\n");
     while (lineFileNext(lf, &line, NULL))
 	{
 	++lineCount;
+	chopPrefixAt(line, '#'); /* ignore any comments starting with # */
+	if( strlen(line) < 3 )	/*	anything left on this line */
+	    continue;		/*	no, go to next line	*/
 	wordCount = chopByWhite(line, words, 2);
-	if( wordCount != 2 )
-errAbort("Expecting two words at line %d, found %d", lineCount, wordCount);
+	if( wordCount < 2 )
+errAbort("Expecting at least two words at line %d, found %d", lineCount, wordCount);
 	Offset = atoll(words[0]);
 	score = atoi(words[1]);
 	if( Offset < 1 )
@@ -226,8 +231,17 @@ warn("WARNING: truncating score %d to 127 at line %d\n", score, lineCount );
 	/* see if this is the first time through, establish chromStart 	*/
 	if( lineCount == 1 )
 	    chromStart = Offset;
+	/* if we are working on a zoom level and the data is not exactly
+	 * spaced according to the span, then we need to put each value
+	 * in its own row in order to keep positioning correct for these
+	 * data values.
+	 */
+	if( (dataSpan > 1) && (Offset != (previousOffset + dataSpan) ) )
+	    {
+	    OUTPUT_ROW;
+	    }
 	/*	Check to see if data is being skipped	*/
-	if( Offset > (previousOffset + dataSpan) )
+	else if( Offset > (previousOffset + dataSpan) )
 	    {
 	    unsigned long long off;
 	    unsigned long long fillSize;	/* number of bytes */

@@ -358,8 +358,8 @@ int count;
 struct hiRange *hi;
 struct hiRange *newList = NULL;
 char c, lastC = FALSE;
-int s;
-int i;
+int s = 0;
+int i = 0;
 static char *flagBuf;
 static int flagBufSize = 0;
 
@@ -534,6 +534,7 @@ for (block = ali->blockList;block != NULL; block = block->next)
     if (hGap >= 16 && nGap >= -1 && nGap <= 1)
         return TRUE;
     }   
+    return FALSE;
 }
 
 

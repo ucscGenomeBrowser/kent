@@ -221,7 +221,7 @@ int tableSize = (1<<(oligoSize+oligoSize));
 int tableByteSize = tableSize * sizeof(int);
 int tableIx;
 int bestVal = -0x3ffffff;
-int bestIx;
+int bestIx = 0;
 
 for (tableIx = 0; tableIx < tableSize; ++tableIx)
     {
@@ -287,7 +287,7 @@ int tableSize = (1<<(oligoSize+oligoSize));
 int tableByteSize = tableSize * sizeof(int);
 int tableIx;
 int bestVal = -0x3ffffff;
-int bestIx;
+int bestIx = 0;
 
 for (tableIx = 0; tableIx < tableSize; ++tableIx)
     {

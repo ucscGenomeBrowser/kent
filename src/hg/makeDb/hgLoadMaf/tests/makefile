@@ -3,13 +3,21 @@
 PROG = hgLoadMaf
 P = ${HOME}/bin/${MACHTYPE}/${PROG}
 
-test: testNan 
+test: testoutput clean
+
+TEST1 = testNan
+
+testoutput: ${TEST1}
 
 clean:
-	rm -f output/*
+	rm -fr output
 
-testNan:
-	@$P -warn -test=input/testNan.maf hg16 testNan > output/testNan.log
-	@mv testNan.tab output
-	@diff output/testNan.tab expected/testNan.tab >> output/testNan.log
+testNan: init-tests
+	$P -warn -test=input/${TEST1}.maf hg16 ${TEST1} > output/${TEST1}.log
+	mv ${TEST1}.tab output
+	diff output/${TEST1}.tab expected
+	diff output/${TEST1}.log expected
+
+init-tests:
+	mkdir -p output
 

@@ -7,7 +7,7 @@
 #include "agpFrag.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: agpFrag.c,v 1.5 2003/05/06 07:22:20 kate Exp $";
+static char const rcsid[] = "$Id: agpFrag.c,v 1.6 2003/10/06 23:15:29 kent Exp $";
 
 void agpFragStaticLoad(char **row, struct agpFrag *ret)
 /* Load a row from agpFrag table into ret.  The contents of ret will
@@ -17,12 +17,12 @@ int sizeOne,i;
 char *s;
 
 ret->chrom = row[0];
-ret->chromStart = sqlUnsigned(row[1])-1;
+ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->ix = sqlSigned(row[3]);
 strcpy(ret->type, row[4]);
 ret->frag = row[5];
-ret->fragStart = sqlSigned(row[6])-1;
+ret->fragStart = sqlSigned(row[6]);
 ret->fragEnd = sqlUnsigned(row[7]);
 strcpy(ret->strand, row[8]);
 }
@@ -37,12 +37,12 @@ char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
-ret->chromStart = sqlUnsigned(row[1])-1;
+ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->ix = sqlSigned(row[3]);
 strcpy(ret->type, row[4]);
 ret->frag = cloneString(row[5]);
-ret->fragStart = sqlUnsigned(row[6])-1;
+ret->fragStart = sqlUnsigned(row[6]);
 ret->fragEnd = sqlUnsigned(row[7]);
 strcpy(ret->strand, row[8]);
 return ret;
@@ -59,12 +59,12 @@ int i;
 if (ret == NULL)
     AllocVar(ret);
 ret->chrom = sqlStringComma(&s);
-ret->chromStart = sqlUnsignedComma(&s)-1;
+ret->chromStart = sqlUnsignedComma(&s);
 ret->chromEnd = sqlUnsignedComma(&s);
 ret->ix = sqlSignedComma(&s);
 sqlFixedStringComma(&s, ret->type, sizeof(ret->type));
 ret->frag = sqlStringComma(&s);
-ret->fragStart = sqlUnsignedComma(&s)-1;
+ret->fragStart = sqlUnsignedComma(&s);
 ret->fragEnd = sqlUnsignedComma(&s);
 sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
 *pS = s;

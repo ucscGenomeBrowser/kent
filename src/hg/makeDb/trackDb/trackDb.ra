@@ -681,8 +681,8 @@ visibility hide
 type psl .
 
 track altGraphX
-shortLabel AltGraphX
-longLabel AltGraphX
+shortLabel Alt-Splicing
+longLabel Alternative Splicing from ESTs/mRNAs
 group rna
 priority 74
 visibility hide

@@ -50,9 +50,9 @@ for (i=0; i<hisSize; ++i)
     {
     millis = his[i][baseVal] * 1000 / sum4(his[i]);
     if (millis >= 10)
-	printf("%3d%% ", (millis+5)/10);
+	printf("%3ld%% ", (millis+5)/10);
     else
-	printf("%d.%d%% ", millis/10, millis%10);
+	printf("%ld.%ld%% ", millis/10, millis%10);
     }
 printf("<BR>\n");
 }

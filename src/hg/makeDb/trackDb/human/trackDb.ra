@@ -155,3 +155,10 @@ spectrum on
 type chain hg16
 otherDb hg16
 
+track affyGeno
+shortLabel Affymetrix 120K SNP
+longLabel Affymetrix 120K SNP Release Oct 2003
+group varRep
+priority 146
+visibility pack
+type bed 4 .

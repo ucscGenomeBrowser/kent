@@ -18,12 +18,19 @@ itemUrl http://us.expasy.org/cgi-bin/niceprot.pl?%s
 name refSeq
 type lookup sangerToRefSeq name value
 
+name altSplice
+shortLabel Alt Splice
+longLabel Alternate-Splicing Curated by Zahler Lab
+priority 2.5
+visibility off
+type lookup altSplice name value
+
 name kimLifeCycleMedian
 shortLabel Median Expression
 longLabel Median Kim-lab Life-cycle Expression Data
 priority 2.7
 visibility on
-type expRatio sangerToKim kimLifeCycleMedian hgFixed.kimWormLifeCycleMedian
+type expRatio sangerToKim hgFixed.kimWormLifeMedianRatio hgFixed.kimWormLifeMedianExps
 max 3.0
 representatives 0,1,2,3,4,5,6
 
@@ -32,7 +39,7 @@ shortLabel Long Expression
 longLabel All Kim-lab Life-cycle Data Expression Data
 priority 2.8
 visibility off
-type expRatio sangerToKim kimLifeCycle hgFixed.kimWormLifeCycle
+type expRatio sangerToKim hgFixed.kimWormLifeAllRatio hgFixed.kimWormLifeAllExps
 max 3.0
 representatives 8,11,15,16,-1,10,12,17,-1,13,18,21,22,-1,23,4,20,-1,6,5,14,-1,7,9,19,-1,0,1,2,3,
 

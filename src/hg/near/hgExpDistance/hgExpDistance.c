@@ -8,7 +8,7 @@
 #include "bed.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgExpDistance.c,v 1.2 2003/06/24 07:08:40 kent Exp $";
+static char const rcsid[] = "$Id: hgExpDistance.c,v 1.3 2003/10/07 05:47:51 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -16,7 +16,7 @@ void usage()
 errAbort(
   "hgExpDistance - Create table that measures expression distance between pairs\n"
   "usage:\n"
-  "   hgExpDistance database expPosTable expNameTable dest.tab\n"
+  "   hgExpDistance database expPosTable expNameTable distanceTable\n"
   "example:\n"
   "   hgExpDistance hg15 affyUcla affyUclaExp dest.tab\n"
   "options:\n"
@@ -289,6 +289,7 @@ for (curGene = geneList; curGene != NULL; curGene = curGene->next)
 	}
     dotOut();
     }
+printf("Made %s.tab\n", outTable);
 
 /* Create and load table. */
 conn = sqlConnect(database);

@@ -121,6 +121,13 @@ struct column
    int *representatives;	/* Array (may be null) of representatives. */
    boolean expRatioUseBlue;	/* Use blue rather than red in expRatio. */
 
+       /* The expMulti (absolute and ratio) columns use these fields. */
+   struct expMultiData *emdList;	/* List of all experiment display types. */
+   struct expMultiData *emd;		/* Currently selected display type. */
+   double expRatioScale;		/* 1/Maximum non-clipped expression ratio. */
+   double expAbsScale;			/* 1/Maximum non-clipped absolute expression. */
+   boolean expShowAbs;			/* Show absolute rather than ratio. */
+
       /* The GO column uses this. */
    struct sqlConnection *goConn;  /* Connection to go database. */
 
@@ -134,6 +141,19 @@ struct column
    /* Pfam uses this. */
    char *protDb; /* Which protein database pfam tables are in. */
    };
+
+struct expMultiData 
+/* Info on how to display expression data that can come in many forms. */
+    {
+    struct expMultiData *next;
+    char *name;		/* Symbolic name. */
+    char *shortLabel;	/* UI short label. */
+    char *experimentTable;	/* Table of sample descriptions. */
+    char *ratioTable;	/* Table of ratios. */
+    char *absoluteTable;	/* Table of absolute expression values. */
+    int representativeCount;	/* Count of representative experiments. */
+    int *representatives;	/* Array of representatives. */
+    };
 
 struct order
 /* A row order of the big table. */
@@ -261,6 +281,9 @@ boolean wildMatchAll(char *word, struct slName *wildList);
 boolean wildMatchList(char *word, struct slName *wildList, boolean orLogic);
 /* Return TRUE if word matches things in wildList. */
 
+boolean anyRealInCart(struct cart *cart, char *wild);
+/* Return TRUE if variables are set matching wildcard. */
+
 struct hash *readRas(char *rootName);
 /* Read in ra in root, root/org, and root/org/database. */
 
@@ -346,7 +369,10 @@ boolean simpleTableExists(struct column *col, struct sqlConnection *conn);
 /* This returns true if col->table exists. */
 
 void lookupAdvFilterControls(struct column *col, struct sqlConnection *conn);
-/* Print out controls for advanced filter. */
+/* Print out controls for advanced filter on lookup column. */
+
+void minMaxAdvFilterControls(struct column *col, struct sqlConnection *conn);
+/* Print out controls for min/max advanced filter. */
 
 struct searchResult *lookupTypeSimpleSearch(struct column *col, 
     struct sqlConnection *conn, char *search);
@@ -372,6 +398,13 @@ struct hash *keyFileHash(struct column *col);
 struct slName *keyFileList(struct column *col);
 /* Make up list from key file for this column.
  * return NULL if no key file. */
+
+char *configVarName(struct column *col, char *varName);
+/* Return variable name for configuration. */
+
+char *configVarVal(struct column *col, char *varName);
+/* Return value for configuration variable.  Return NULL if it
+ * doesn't exist or if it is "" */
 
 struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn);
@@ -402,10 +435,6 @@ boolean advFilterOrLogic(struct column *col, char *varName,
 
 boolean gotAdvFilter();
 /* Return TRUE if advanced filter variables are set. */
-
-boolean advFilterColAnySet(struct column *col);
-/* Return TRUE if any of the advanced filter variables
- * for this col are set. */
 
 void advFilterKeyUploadButton(struct column *col);
 /* Make a button for uploading keywords. */
@@ -460,12 +489,6 @@ void doUseSavedFilters(struct sqlConnection *conn, struct column *colList);
 struct genePos *weedUnlessInHash(struct genePos *inList, struct hash *hash);
 /* Return input list with stuff not in hash removed. */
 
-#ifdef OLD
-struct genePos *getSearchNeighbors(struct column *colList, 
-	struct sqlConnection *conn, struct hash *goodHash, int maxCount);
-/* Get neighbors by search. */
-#endif /* OLD */
-
 void gifLabelVerticalText(char *fileName, char **labels, int labelCount,
 	int height);
 /* Make a gif file with given labels. */
@@ -473,6 +496,11 @@ void gifLabelVerticalText(char *fileName, char **labels, int labelCount,
 int gifLabelMaxWidth(char **labels, int labelCount);
 /* Return maximum pixel width of labels.  It's ok to have
  * NULLs in labels array. */
+
+struct sqlConnection *hgFixedConn();
+/* Return connection to hgFixed database. 
+ * This is effectively a global, but not
+ * opened until needed. */
 
 /* ---- Column method setters. ---- */
 
@@ -511,7 +539,14 @@ void setupColumnSwissProt(struct column *col, char *parameters);
 /* Set up a column that protein name and links to SwissProt. */
 
 void setupColumnExpRatio(struct column *col, char *parameters);
-/* Set up expression ration type column. */
+/* Set up expression ratio type column. */
+
+void setupColumnExpMulti(struct column *col, char *parameters);
+/* Set up expression type column that can be ratio or absolute,
+ * short or long. */
+
+void setupColumnExpMax(struct column *col, char *parameters);
+/* Set up maximum expression value column. */
 
 void setupColumnGo(struct column *col, char *parameters);
 /* Set up gene ontology column. */
@@ -550,14 +585,6 @@ void doAdvFilterClear(struct sqlConnection *conn, struct column *colList);
 void doAdvFilterList(struct sqlConnection *conn, struct column *colList);
 /* List gene names matching advanced filter. */
 
-#ifdef OLD
-void doAdvFilterListProt(struct sqlConnection *conn, struct column *colList);
-/* List proteins matching advanced filter. */
-
-void doAdvFilterListAcc(struct sqlConnection *conn, struct column *colList);
-/* List accessions matching advanced filter. */
-#endif /* OLD */
-
 void doConfigure(struct sqlConnection *conn, struct column *colList, 
 	char *bumpVar);
 /* Configuration page. */
@@ -579,11 +606,6 @@ void doNameCurrentColumns();
 
 void doSaveCurrentColumns(struct sqlConnection *conn, struct column *colList);
 /* Save the current columns, and then go on. */
-
-#ifdef OLD
-void doConfigSaveCurrent(struct sqlConnection *conn, struct column *colList);
-/* Respond to Save Current Settings buttin in configuration page. */
-#endif /* OLD */
 
 void doConfigUseSaved(struct sqlConnection *conn, struct column *colList);
 /* Respond to Use Saved Settings buttin in configuration page. */

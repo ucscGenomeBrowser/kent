@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.609 2003/10/02 16:30:22 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.612 2003/10/09 10:20:10 daryl Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -2815,6 +2815,44 @@ void vegaMethods(struct track *tg)
 /* Special handling for vegaGene/vegaPseudoGene items. */
 {
 tg->itemColor = vegaColor;
+}
+
+char *bdgpGeneName(struct track *tg, void *item)
+/* Return bdgpGene symbol. */
+{
+struct linkedFeatures *lf = item;
+char *name = cloneString(lf->name);
+char infoTable[128];
+safef(infoTable, sizeof(infoTable), "%sInfo", tg->mapName);
+if (hTableExists(infoTable))
+    {
+    struct sqlConnection *conn = hAllocConn();
+    char *symbol = NULL;
+    char *ptr = strchr(name, '-');
+    char query[256];
+    char buf[64];
+    if (ptr != NULL)
+	*ptr = 0;
+    safef(query, sizeof(query),
+	  "select symbol from %s where bdgpName = '%s';", infoTable, name);
+    symbol = sqlQuickQuery(conn, query, buf, sizeof(buf));
+    hFreeConn(&conn);
+    if (symbol != NULL)
+	{
+	char *ptr = stringIn("{}", symbol);
+	if (ptr != NULL)
+	    *ptr = 0;
+	freeMem(name);
+	name = cloneString(symbol);
+	}
+    }
+return(name);
+}
+
+void bdgpGeneMethods(struct track *tg)
+/* Special handling for bdgpGene items. */
+{
+tg->itemName = bdgpGeneName;
 }
 
 void bedLoadItem(struct track *tg, char *table, ItemLoader loader)
@@ -6474,6 +6512,8 @@ registerTrackHandler("sanger22", sanger22Methods);
 registerTrackHandler("sanger22pseudo", sanger22Methods);
 registerTrackHandler("vegaGene", vegaMethods);
 registerTrackHandler("vegaPseudoGene", vegaMethods);
+registerTrackHandler("bdgpGene", bdgpGeneMethods);
+registerTrackHandler("bdgpNonCoding", bdgpGeneMethods);
 registerTrackHandler("genieAlt", genieAltMethods);
 registerTrackHandler("ensGene", ensGeneMethods);
 registerTrackHandler("ensEst", ensGeneMethods);
@@ -6515,6 +6555,7 @@ registerTrackHandler("altGraphXCon", altGraphXMethods );
 registerTrackHandler("triangle", triangleMethods );
 registerTrackHandler("triangleSelf", triangleMethods );
 registerTrackHandler("transfacHit", triangleMethods );
+registerTrackHandler("leptin", mafMethods );
 /* Lowe lab related */
 registerTrackHandler("gbProtCode", gbGeneMethods);
 registerTrackHandler("tigrCmrORFs", tigrGeneMethods);
@@ -7203,6 +7244,6 @@ cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
 if (cgiVarExists("hgt.reset"))
     resetVars();
-cartHtmlShell("UCSC Genome Browser v37", doMiddle, hUserCookie(), excludeVars, NULL);
+cartHtmlShell("UCSC Genome Browser v38", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }

@@ -9,8 +9,14 @@
 #include "hdb.h"
 #include "hgRelate.h"
 #include "expRecord.h"
+#include "expData.h"
 
-static char const rcsid[] = "$Id: hgMedianMicroarray.c,v 1.2 2003/10/01 22:24:42 kent Exp $";
+static char const rcsid[] = "$Id: hgMedianMicroarray.c,v 1.3 2003/10/06 23:16:29 kent Exp $";
+
+char *tabDir = ".";
+boolean doLoad;
+int limit = 0;
+int minExps = 2;
 
 void usage()
 /* Explain usage and exit. */
@@ -31,17 +37,16 @@ errAbort(
   "   -tab=dir - Output tab-separated files to directory.\n"
   "   -noLoad  - If true don't load database and don't clean up tab files\n"
   "   -limit=N - Only do limit rows of table, for testing\n"
+  "   -minExps=N - Minimum number of experiments to use, default %d\n"
+  , minExps
   );
 }
-
-char *tabDir = ".";
-boolean doLoad;
-int limit = 0;
 
 static struct optionSpec options[] = {
    {"tab", OPTION_STRING},
    {"noLoad", OPTION_BOOLEAN},
    {"limit", OPTION_INT},
+   {"minExps", OPTION_INT},
    {NULL, 0},
 };
 
@@ -95,26 +100,6 @@ slReverse(&medList);
 return medList;
 }
 
-static void createExpTable(struct sqlConnection *conn, char *table)
-/* Create expression table. */
-{
-char query[1024];
-
-safef(query, sizeof(query),
-"CREATE TABLE %s (\n"
-"    id int unsigned not null,	# internal id of experiment\n"
-"    name varchar(255) not null,	# name of experiment\n"
-"    description longblob not null,	# description of experiment\n"
-"    url longblob not null,	# url relevant to experiment\n"
-"    ref longblob not null,	# reference for experiment\n"
-"    credit longblob not null,	# who to credit with experiment\n"
-"    numExtras int unsigned not null,	# number of extra things\n"
-"    extras longblob not null,	# extra things of interest, i.e. classifications\n"
-"              #Indices\n"
-"    PRIMARY KEY(id)\n"
-")\n",   table);
-sqlRemakeTable(conn, table, query);
-}
 
 void makeNewExpTable(char *oldTable, struct medSpec *medList, char *newTable)
 /* Create new expTable in hgFixed that is very similar
@@ -157,26 +142,11 @@ for (med = medList; med != NULL; med = med->next)
 
 if (doLoad)
     {
-    createExpTable(conn, newTable);
+    expRecordCreateTable(conn, newTable);
     hgLoadTabFile(conn, tabDir, newTable, &f);
     hgRemoveTabFile(tabDir, newTable);
     }
 sqlDisconnect(&conn);
-}
-
-static void createDataTable(struct sqlConnection *conn, char *table)
-/* Create data table. */
-{
-char query[512];
-
-safef(query, sizeof(query),
-"CREATE TABLE %s (\n"
-"    name varchar(255) not null,\n"
-"    expCount int unsigned not null,\n"
-"    expScores longblob not null,\n"
-"    INDEX(name(10))\n"
-")\n",   table);
-sqlRemakeTable(conn, table, query);
 }
 
 #define missingData -10000
@@ -231,7 +201,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 		++realCount;
 		}
 	    }
-	if (realCount < 2)
+	if (realCount < minExps)
 	    median = missingData;
 	else
 	    median = doubleMedian(realCount, selVals);
@@ -244,7 +214,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 if (doLoad)
     {
-    createDataTable(conn, newTable);
+    expDataCreateTable(conn, newTable);
     hgLoadTabFile(conn, tabDir, newTable, &f);
     hgRemoveTabFile(tabDir, newTable);
     }
@@ -269,6 +239,7 @@ optionInit(&argc, argv, options);
 if (argc != 7)
     usage();
 doLoad = !optionExists("noLoad");
+minExps = optionInt("minExps", minExps);
 if (optionExists("tab"))
     {
     tabDir = optionVal("tab", tabDir);
