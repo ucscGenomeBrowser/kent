@@ -171,6 +171,8 @@ struct pfCompile *pfc = pfCompileNew(fileName);
 struct pfParse *program = pfParseProgram(fileName, pfc);
 
 pfBindVars(pfc, program);
+pfParseDump(program, 0, stdout);
+uglyf(">>>type checking<<<\n");
 pfTypeCheck(pfc, program);
 
 pfParseDump(program, 0, stdout);
