@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.647 2004/05/28 23:32:15 jill Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.648 2004/06/01 17:50:16 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6973,7 +6973,6 @@ void printSuperfamilyCustomUrl(struct trackDb *tdb, char *itemName, boolean enco
 /* Print Superfamily URL. */
 {
 char *url = tdb->url;
-
 if (url != NULL && url[0] != 0)
     {
     char supfamURL[1024];
@@ -7030,8 +7029,7 @@ if (url != NULL && url[0] != 0)
 
     printf("<B>Superfamily Link: </B>");
     sprintf(supfamURL, "<A HREF=\"%s%s;seqid=%s\" target=_blank>", 
-	    "http://supfam.org/SUPERFAMILY/cgi-bin/gene.cgi?genome=", 
-	    genomeStr, itemName);
+	    url, genomeStr, itemName);
     printf("%s", supfamURL);
     printf("%s</A><BR><BR>\n", itemName);
     }
