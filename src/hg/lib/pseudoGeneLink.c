@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "pseudoGeneLink.h"
 
-static char const rcsid[] = "$Id: pseudoGeneLink.c,v 1.6 2003/11/24 11:47:25 baertsch Exp $";
+static char const rcsid[] = "$Id: pseudoGeneLink.c,v 1.7 2003/12/04 07:59:38 baertsch Exp $";
 
 struct pseudoGeneLink *pseudoGeneLinkLoad(char **row)
 /* Load a pseudoGeneLink from row fetched with select * from pseudoGeneLink
@@ -40,20 +40,22 @@ ret->gene = cloneString(row[15]);
 ret->gChrom = cloneString(row[16]);
 ret->gStart = sqlUnsigned(row[17]);
 ret->gEnd = sqlUnsigned(row[18]);
-ret->score2 = sqlUnsigned(row[19]);
-ret->score3 = sqlUnsigned(row[20]);
-ret->chainId = sqlUnsigned(row[21]);
-ret->gStrand = cloneString(row[22]);
-ret->polyA = sqlUnsigned(row[23]);
-ret->polyAstart = sqlUnsigned(row[24]);
-ret->exonCover = sqlUnsigned(row[25]);
-ret->intronCount = sqlUnsigned(row[26]);
-ret->bestAliCount = sqlUnsigned(row[27]);
-ret->matches = sqlUnsigned(row[28]);
-ret->qSize = sqlUnsigned(row[29]);
+ret->gStrand = cloneString(row[19]);
+ret->exonCount = sqlUnsigned(row[20]);
+ret->geneOverlap = sqlUnsigned(row[21]);
+ret->polyA = sqlUnsigned(row[22]);
+ret->polyAstart = sqlUnsigned(row[23]);
+ret->exonCover = sqlUnsigned(row[24]);
+ret->intronCount = sqlUnsigned(row[25]);
+ret->bestAliCount = sqlUnsigned(row[26]);
+ret->matches = sqlUnsigned(row[27]);
+ret->qSize = sqlUnsigned(row[28]);
+ret->qEnd = sqlUnsigned(row[29]);
 ret->tReps = sqlUnsigned(row[30]);
 ret->qReps = sqlUnsigned(row[31]);
 ret->overlapDiag = sqlUnsigned(row[32]);
+ret->coverage = sqlUnsigned(row[33]);
+ret->chainId = sqlUnsigned(row[34]);
 return ret;
 }
 
@@ -63,7 +65,7 @@ struct pseudoGeneLink *pseudoGeneLinkLoadAll(char *fileName)
 {
 struct pseudoGeneLink *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[33];
+char *row[35];
 
 while (lineFileRow(lf, row))
     {
@@ -81,7 +83,7 @@ struct pseudoGeneLink *pseudoGeneLinkLoadAllByChar(char *fileName, char chopper)
 {
 struct pseudoGeneLink *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[33];
+char *row[35];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -136,10 +138,9 @@ ret->gene = sqlStringComma(&s);
 ret->gChrom = sqlStringComma(&s);
 ret->gStart = sqlUnsignedComma(&s);
 ret->gEnd = sqlUnsignedComma(&s);
-ret->score2 = sqlUnsignedComma(&s);
-ret->score3 = sqlUnsignedComma(&s);
-ret->chainId = sqlUnsignedComma(&s);
 ret->gStrand = sqlStringComma(&s);
+ret->exonCount = sqlUnsignedComma(&s);
+ret->geneOverlap = sqlUnsignedComma(&s);
 ret->polyA = sqlUnsignedComma(&s);
 ret->polyAstart = sqlUnsignedComma(&s);
 ret->exonCover = sqlUnsignedComma(&s);
@@ -147,9 +148,12 @@ ret->intronCount = sqlUnsignedComma(&s);
 ret->bestAliCount = sqlUnsignedComma(&s);
 ret->matches = sqlUnsignedComma(&s);
 ret->qSize = sqlUnsignedComma(&s);
+ret->qEnd = sqlUnsignedComma(&s);
 ret->tReps = sqlUnsignedComma(&s);
 ret->qReps = sqlUnsignedComma(&s);
 ret->overlapDiag = sqlUnsignedComma(&s);
+ret->coverage = sqlUnsignedComma(&s);
+ret->chainId = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -255,15 +259,13 @@ fprintf(f, "%u", el->gStart);
 fputc(sep,f);
 fprintf(f, "%u", el->gEnd);
 fputc(sep,f);
-fprintf(f, "%u", el->score2);
-fputc(sep,f);
-fprintf(f, "%u", el->score3);
-fputc(sep,f);
-fprintf(f, "%u", el->chainId);
-fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->gStrand);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->exonCount);
+fputc(sep,f);
+fprintf(f, "%u", el->geneOverlap);
 fputc(sep,f);
 fprintf(f, "%u", el->polyA);
 fputc(sep,f);
@@ -279,11 +281,17 @@ fprintf(f, "%u", el->matches);
 fputc(sep,f);
 fprintf(f, "%u", el->qSize);
 fputc(sep,f);
+fprintf(f, "%u", el->qEnd);
+fputc(sep,f);
 fprintf(f, "%u", el->tReps);
 fputc(sep,f);
 fprintf(f, "%u", el->qReps);
 fputc(sep,f);
 fprintf(f, "%u", el->overlapDiag);
+fputc(sep,f);
+fprintf(f, "%u", el->coverage);
+fputc(sep,f);
+fprintf(f, "%u", el->chainId);
 fputc(lastSep,f);
 }
 
