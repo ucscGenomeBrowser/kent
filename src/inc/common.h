@@ -45,6 +45,9 @@
 
 #define BIGNUM 0x3fffffff	/* A really big number */
 
+/* Default size of directory path string buffers */
+#define PATH_LEN 512
+
 /* How big is this array? */
 #define ArraySize(a) (sizeof(a)/sizeof((a)[0]))
 
@@ -525,5 +528,8 @@ long fileSize(char *fileName);
 
 boolean fileExists(char *fileName);
 /* Does a file exist? */
+
+char *strstrNoCase(char *haystack, char *needle);
+/* A case-insensitive strstr */
 
 #endif /* COMMON_H */

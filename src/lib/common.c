@@ -1180,3 +1180,36 @@ close(fd);
 return TRUE;
 }
 
+char *strstrNoCase(char *haystack, char *needle)
+/*
+  A case-insensitive strstr function
+
+param haystack - The string to be searched
+param needle - The string to llok for in the haystack string
+
+return - A pointer to the first occurence of the desired substring
+ */
+{
+char *haystackCopy = NULL;
+char *needleCopy = NULL;
+int index = 0;
+int haystackLen = strlen(haystack);
+int needleLen = strlen(needle);
+
+haystackCopy = (char*) needMem(haystackLen + 1);
+needleCopy = (char*) needMem(needleLen + 1);
+
+for(index = 0; index < haystackLen;  index++)
+    {
+    haystackCopy[index] = tolower(haystack[index]);
+    }
+haystackCopy[haystackLen] = 0; /* Null terminate */
+
+for(index = 0; index < needleLen;  index++)
+    {
+    needleCopy[index] = tolower(needle[index]);
+    }
+needleCopy[needleLen] = 0; /* Null terminate */
+
+return strstr(haystackCopy, needleCopy);
+}
