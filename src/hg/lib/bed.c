@@ -7,7 +7,7 @@
 #include "linefile.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.15 2003/05/06 07:22:20 kate Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.16 2003/06/16 21:04:42 baertsch Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -322,6 +322,46 @@ if (wordCount > 13)
     sqlSignedDynamicArray(row[13], &bed->expIds, &count);
 if (wordCount > 14)
     sqlFloatDynamicArray(row[14], &bed->expScores, &count);
+return bed;
+}
+struct bed *bedLoadNBin(char *row[], int wordCount)
+/* Convert a row of strings to a bed. */
+{
+struct bed * bed;
+int count;
+
+AllocVar(bed);
+bed->chrom = cloneString(row[1]);
+bed->chromStart = sqlUnsigned(row[2]);
+bed->chromEnd = sqlUnsigned(row[3]);
+if (wordCount > 3)
+     bed->name = cloneString(row[4]);
+if (wordCount > 4)
+     bed->score = sqlSigned(row[5]);
+if (wordCount > 5)
+     bed->strand[0] = row[6][0];
+if (wordCount > 6)
+     bed->thickStart = sqlUnsigned(row[7]);
+else
+     bed->thickStart = bed->chromStart;
+if (wordCount > 7)
+     bed->thickEnd = sqlUnsigned(row[8]);
+else
+     bed->thickEnd = bed->chromEnd;
+if (wordCount > 8)
+    bed->reserved = sqlUnsigned(row[9]);
+if (wordCount > 9)
+    bed->blockCount = sqlUnsigned(row[10]);
+if (wordCount > 10)
+    sqlSignedDynamicArray(row[11], &bed->blockSizes, &count);
+if (wordCount > 11)
+    sqlSignedDynamicArray(row[12], &bed->chromStarts, &count);
+if (wordCount > 12)
+    bed->expCount = sqlUnsigned(row[13]);
+if (wordCount > 13)
+    sqlSignedDynamicArray(row[14], &bed->expIds, &count);
+if (wordCount > 14)
+    sqlFloatDynamicArray(row[15], &bed->expScores, &count);
 return bed;
 }
 
