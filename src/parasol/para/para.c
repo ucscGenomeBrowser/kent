@@ -816,6 +816,7 @@ for (tryCount=1; tryCount<=retries && !finished; ++tryCount)
 	    // occassionalSleep();
             if (delayTime > 0)
                 {
+                atomicWriteBatch(db, batch);
                 sleep(delayTime);
                 }
 	    ++pushCount;
