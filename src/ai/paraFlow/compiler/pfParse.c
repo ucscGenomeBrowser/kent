@@ -1513,10 +1513,6 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
 void varDecAndAssignToVarInit(struct pfParse *pp)
 /* Convert pptVarDec to pptVarInit. */
 {
-struct pfParse *p;
-
-for (p = pp->children; p != NULL; p = p->next)
-    varDecAndAssignToVarInit(p);
 if (pp->type == pptVarDec)
     {
     pp->type = pptVarInit;
@@ -1541,6 +1537,10 @@ if (pp->type == pptVarInit)
     pfParseTypeSub(type, pptNameUse, pptTypeName);
     name->type = pptSymName;
     }
+/* Note in this case we *don't* want depth first, which
+ * effectively is why this has to be done in a second pass. */
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    varDecAndAssignToVarInit(pp);
 }
 
 
