@@ -13,7 +13,7 @@
 #include "hCommon.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.81 2005/03/09 06:34:19 donnak Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.82 2005/03/24 21:25:53 braney Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -187,6 +187,7 @@ puts("</FORM><BR>");
 void doMiddle(struct cart *theCart)
 /* Set up pretty web display and save cart in global. */
 {
+char *scientificName = NULL;
 cart = theCart;
 
 getDbGenomeClade(cart, &db, &organism, &clade);
@@ -196,10 +197,29 @@ if (! hDbIsActive(db))
     organism = hGenome(db);
     clade = hClade(organism);
     }
+scientificName = hScientificName(db);
 if (hIsMgcServer())
     cartWebStart(theCart, "MGC %s Genome Browser Gateway \n", organism);
 else
-    cartWebStart(theCart, "%s Genome Browser Gateway \n", organism);
+    {
+    char buffer[128];
+
+    /* tell html routines *not* to escape htmlOut strings*/
+    htmlNoEscape();
+    buffer[0] = 0;
+    if (*scientificName != 0)
+	{
+	if (sameString(clade,"ancestor"))
+	    safef(buffer, sizeof(buffer), "(<I>%s</I> Ancestor) ", scientificName);
+	else
+	    safef(buffer, sizeof(buffer), "(<I>%s</I>) ", scientificName);
+	}
+    if (sameString(clade,"ancestor"))
+	cartWebStart(theCart, "%s Common Ancestor %sGenome Browser Gateway\n", organism,buffer);
+    else
+	cartWebStart(theCart, "%s %sGenome Browser Gateway\n", organism,buffer);
+    htmlDoEscape();
+    }
 hgGateway();
 cartWebEnd();
 }
