@@ -3076,6 +3076,7 @@ return blockCount;
 void showGeneAlignment()
 {
 }
+
 void showSomeAlignment(struct psl *psl, bioSeq *oSeq, enum gfType qType, int qStart, int qEnd,
 	char *qName)
 /* Display protein or DNA alignment in a frame. */
@@ -3118,10 +3119,12 @@ chmod(indexTn.forCgi, 0666);
 
 /* Write (to stdout) the main html page containing just the frame info. */
 puts("<FRAMESET COLS = \"13%,87% \" >");
-printf("  <FRAME SRC=\"%s\" NAME=\"index\" RESIZE>\n", indexTn.forCgi);
-printf("  <FRAME SRC=\"%s\" NAME=\"body\" RESIZE>\n", bodyTn.forCgi);
-puts("</FRAMESET>");
+printf("  <FRAME SRC=\"%s\" NAME=\"index\">\n", indexTn.forCgi);
+printf("  <FRAME SRC=\"%s\" NAME=\"body\">\n", bodyTn.forCgi);
 puts("<NOFRAMES><BODY></BODY></NOFRAMES>");
+puts("</FRAMESET>");
+puts("</HTML>\n");
+exit(0);	/* Avoid cartHtmlEnd. */
 }
 
 
@@ -3140,8 +3143,9 @@ int start;
 boolean hasBin;
 
 /* Print start of HTML. */
-printf("<HEAD>\n<TITLE>%s vs Genomic</TITLE>\n</HEAD>\n\n", acc);
+fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">\n", stdout);
 puts("<HTML>");
+printf("<HEAD>\n<TITLE>%s vs Genomic</TITLE>\n</HEAD>\n\n", acc);
 
 /* Get some environment vars. */
 type = cartString(cart, "aliTrack");
@@ -3178,8 +3182,9 @@ enum gfType tt, qt;
 boolean isProt;
 
 /* Print start of HTML. */
-printf("<HEAD>\n<TITLE>User Sequence vs Genomic</TITLE>\n</HEAD>\n\n");
+fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">\n", stdout);
 puts("<HTML>");
+printf("<HEAD>\n<TITLE>User Sequence vs Genomic</TITLE>\n</HEAD>\n\n");
 
 start = cartInt(cart, "o");
 parseSs(fileNames, &pslName, &faName, &qName);
@@ -3222,8 +3227,9 @@ char fullTable[64];
 boolean hasBin;
 
 /* Print start of HTML. */
-printf("<HEAD>\n<TITLE>Sequence %s</TITLE>\n</HEAD>\n\n", readName);
+fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">\n", stdout);
 puts("<HTML>");
+printf("<HEAD>\n<TITLE>Sequence %s</TITLE>\n</HEAD>\n\n", readName);
 
 start = cartInt(cart, "o");
 hFindSplitTable(seqName, table, fullTable, &hasBin);
@@ -5127,6 +5133,9 @@ if (sqlQuickQuery(conn2, query, nibFile, sizeof(nibFile)) == NULL)
     errAbort("Sequence %s isn't in %s in database %s", qChrom, otherChromTable, otherDb);
 musSeq = nibLoadPart(nibFile, psl->qStart, psl->qEnd - psl->qStart);
 snprintf(name, sizeof(name), "%s.%s", otherOrg, qChrom);
+fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Frameset//EN\">\n", stdout);
+puts("<HTML>");
+printf("<HEAD>\n<TITLE>%s %dk</TITLE>\n</HEAD>\n\n", name, psl->qStart/1000);
 showSomeAlignment(psl, musSeq, gftDnaX, psl->qStart, psl->qEnd, name);
 hFreeConn2(&conn2);
 }
