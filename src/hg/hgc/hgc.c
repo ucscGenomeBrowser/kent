@@ -116,7 +116,7 @@
 #include "encodeRegionInfo.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.514 2003/11/17 21:04:10 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.515 2003/11/18 02:05:49 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -8063,8 +8063,9 @@ if (sqlQuickQuery(conn2, query, qNibFile, sizeof(qNibFile)) == NULL)
     errAbort("Sequence chr1 isn't in chromInfo");
 // get gp
 //hFindSplitTable(chrom, track, table, &hasBin);
-hFindSplitTableDb(db2, qChrom, track, table, &hasBin);
-if (sameString(track, "mrna"))
+if (!hFindSplitTableDb(db2, qChrom, track, table, &hasBin))
+    errAbort("htcPseudoGene: table %s not found.\n",track);
+else if (sameString(track, "mrna"))
     {
     struct psl *psl = NULL ;
     safef(query, sizeof(query),
@@ -8080,7 +8081,7 @@ if (sameString(track, "mrna"))
         }
     sqlFreeResult(&sr);
     }
-else
+else if (table != NULL)
     {
     safef(query, sizeof(query),
              "select * from %s where name = '%s' and chrom = '%s' ",
