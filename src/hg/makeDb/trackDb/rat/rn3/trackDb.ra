@@ -43,7 +43,7 @@ type psl xeno hg15
     
 track chainHg15
 shortLabel Human Chain 
-longLabel Chained Human (Apr. 2003) Alignments
+longLabel Human (Apr. 2003) Chained Alignments
 group compGeno
 priority 115
 visibility dense
@@ -105,7 +105,7 @@ type psl xeno mm3
     
 track chainMm3
 shortLabel Mouse Chain 
-longLabel Chained Mouse (Feb. 03) Alignments
+longLabel Mouse (Feb. 03) Chained Alignments
 group compGeno
 priority 215
 visibility dense
