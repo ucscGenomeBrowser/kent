@@ -852,7 +852,7 @@ tok = tok->next;	/* Skip over 'foreach' */
 element = parseNameUse(pp, &tok, scope);
 skipRequiredName("in", &tok);
 collection = parseNameUse(pp, &tok, scope);
-statement = pfParseStatement(pp, &tok, scope);
+statement = pfParseSemiStatement(pp, &tok, scope);
 slAddHead(&pp->children, statement);
 slAddHead(&pp->children, collection);
 slAddHead(&pp->children, element);
@@ -905,7 +905,7 @@ if (tok->type != ')')
 tok = tok->next;
 
 /* Get body of loop. */
-statement = pfParseStatement(pp, &tok, scope);
+statement = pfParseSemiStatement(pp, &tok, scope);
 
 /* Hang various subparts of for statement onto children list. */
 slAddHead(&pp->children, statement);
@@ -916,6 +916,30 @@ slAddHead(&pp->children, init);
 return pp;
 }
 
+
+static struct pfParse *parseWordStatement(struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope, enum pfParseType type)
+/* Parse one word statement. */
+{
+struct pfToken *tok = *pTokList;
+*pTokList = tok->next;
+return pfParseNew(type, tok, parent);
+}
+
+static struct pfParse *parseBreak(struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse break statement */
+{
+return parseWordStatement(parent, pTokList, scope, pptBreak);
+}
+
+static struct pfParse *parseContinue(struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse continue statement */
+{
+return parseWordStatement(parent, pTokList, scope, pptContinue);
+}
+    	
 struct pfParse *pfParseStatement(struct pfParse *parent, 
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse a single statement, and add results to (head) of
@@ -944,6 +968,12 @@ switch (tok->type)
     case pftFor:
 	statement = parseFor(parent, &tok, scope);
 	break;
+    case pftBreak:
+    	statement = parseBreak(parent, &tok, scope);
+	break;
+    case pftContinue:
+        statement = parseContinue(parent, &tok, scope);
+        break;
     case pftClass:
 	statement = parseClass(parent, &tok, scope);
 	break;
