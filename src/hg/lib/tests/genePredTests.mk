@@ -152,7 +152,8 @@ fromGxfTests: fromGxfMinTest fromGxfFrameTest \
 	fromGxfExonSelTest fromGxfExonSelFrameTest \
 	fromGxfVegaTest fromGxfVegaFrameTest fromGxfVegaPseudoTest \
 	fromGxfAcemblyTest fromGxfAcemblyFrameTest \
-	fromGxfNcbiTest fromGtfRegressTest fromGffRegressTest
+	fromGxfNcbiTest fromGtfRegressTest fromGffRegressTest \
+	fromGffCeSangerTest fromGffCeSangerTypeTest
 
 
 doFromGxfTest = ${MAKE} -f genePredTests.mk doFromGxfTest
@@ -194,13 +195,23 @@ fromGxfNcbiTest:
 fromGtfRegressTest:
 	${doFromGxfTest} id=$@ what=fromGtf inBase=regress.gtf opts="-cdsStatFld -exonFramesFld"
 
-
-# GFF bug regressions; weird things ce2/sangerGene:
-#   - single exon CDS genes with frame column not being set
-#   - bogus key name fields that get converted to ids 'ZC101.2c ; Confirmed_by_EST'
+# GFF bug regressions
+#  - none right now
 fromGffRegressTest:
-	${doFromGxfTest} id=$@ what=fromGff inBase=regress.gff opts="-cdsStatFld -exonFramesFld -exonSelectWord=exon -ignoreUnconverted"
+###	${doFromGxfTest} id=$@ what=fromGff inBase=regress.gff opts="-cdsStatFld -exonFramesFld -exonSelectWord=exon -ignoreUnconverted"
 
+# ce2 sangerGene GFF bugs
+#   - single exon CDS genes with frame column not being set (from ce2/sangerGene)
+#   - bogus key name fields that get converted to ids 'ZC101.2c ; Confirmed_by_EST'
+# FIXME: this is not currently producing the correct frame information without specifying -exonSelectWork=coding_exon
+# probably need some serious work to be able to take in the majority off GFFs.
+fromGffCeSangerTest:
+	${doFromGxfTest} id=$@ what=fromGff inBase=ceSangerGene.gff opts="-cdsStatFld -exonFramesFld -exonSelectWord=exon -ignoreUnconverted"
+
+# ce2 sangerGene GFF bugs
+# specifying exon type of coding_exon created only one exon.
+fromGffCeSangerTypeTest:
+	${doFromGxfTest} id=$@ what=fromGff inBase=ceSangerGene.gff opts="-cdsStatFld -exonFramesFld -ignoreUnconverted -exonSelectWord=coding_exon"
 
 # recursive target for GFF/GTF tests
 #  id - test id

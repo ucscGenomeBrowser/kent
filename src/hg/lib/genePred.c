@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.49 2004/05/10 23:15:27 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.50 2004/05/11 23:10:51 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -488,7 +488,7 @@ struct genePred *gp;
 int stopCodonStart = -1, stopCodonEnd = -1;
 int cdsStart = BIGNUM, cdsEnd = -BIGNUM;
 int exonCount = 0;
-boolean haveCds = FALSE, haveStartCodon = FALSE, haveStopCodon = FALSE;
+boolean haveStartCodon = FALSE, haveStopCodon = FALSE;
 struct gffLine *gl;
 unsigned *eStarts, *eEnds, *eFrames;
 boolean haveFrame = FALSE;
@@ -509,7 +509,6 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
             cdsStart = gl->start;
 	if (gl->end > cdsEnd)
             cdsEnd = gl->end;
-        haveCds = TRUE;
 	}
     if (sameWord(feat, "start_codon"))
         haveStartCodon = TRUE;
@@ -568,7 +567,7 @@ if (optFields & genePredName2Fld)
     }
 if (optFields & genePredCdsStatFld)
     {
-    if (haveCds)
+    if (cdsStart < cdsEnd)
         {
         if (!useStartStops)
             {
@@ -633,8 +632,13 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
             }
         }
     /* frame: don't include start/stop_codon check here, only CDS. This is
-     * outside of the isExon test to handle GFF */
-    if ((optFields & genePredExonFramesFld) && sameWord(gl->feature, "CDS"))
+     * outside of the isExon test to handle GFF.  Here we check for being in
+     * CDS range og the gp, since some GFFs (ce sangerGene) have a feature
+     * just for the full CDS range.
+     */
+    if ((optFields & genePredExonFramesFld)
+        && genePredCdsIntersect(gp, eStarts[i], eEnds[i])
+        && !sameWord(gl->feature, "stop_codon"))
         {
         /* set frame if this is a CDS, convert from GFF/GTF definition.
          * Leave unchanged if no frame so as not to overwrite frame from
@@ -1146,3 +1150,8 @@ if (end > gp->cdsEnd)
 return (start < end);
 }
 
+boolean genePredCdsIntersect(struct genePred *gp, int start, int end)
+/* Check if a reage intersects the CDS */
+{
+return (rangeIntersection(gp->cdsStart, gp->cdsEnd, start, end) > 0);
+}
