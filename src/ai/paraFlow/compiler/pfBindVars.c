@@ -76,7 +76,7 @@ switch (pp->type)
 	    }
 	break;
 	}
-    case pptTuple:
+    case pptTypeTuple:
         {
 	pp->ty = pfTypeNew(NULL);
 	pp->ty->isTuple = TRUE;
@@ -131,10 +131,6 @@ switch (pp->type)
 	struct pfParse *output = input->next;
 	struct pfParse *body = output->next;
 	name->type = pptSymName;
-	assert(input->type == pptTuple);
-	assert(output->type == pptTuple);
-	pfParseTypeSub(input, pptTuple, pptTypeTuple);
-	pfParseTypeSub(output, pptTuple, pptTypeTuple);
 	if (hashLookup(pp->scope->parent->vars, name->name))
 	    errAt(pp->tok, "%s redefined", name->name);
 	pfScopeAddVar(pp->scope->parent, name->name, pp->ty);

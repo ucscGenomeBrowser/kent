@@ -556,8 +556,18 @@ if (tok->type == '(')
     if (tok->type != ')')
         {
 	parameters = pfParseExpression(pp, &tok, scope);
-	func->next = parameters;
+	if (parameters->type != pptTuple)
+	    {
+	    struct pfParse *tuple = singleTuple(pp, tok, parameters);
+	    parameters->parent = tuple;
+	    parameters = tuple;
+	    }
 	}
+    else
+        {
+	parameters = emptyTuple(pp, tok, scope);
+	}
+    func->next = parameters;
     if (tok->type != ')')
         expectingGot(")", tok);
     tok = tok->next;
@@ -987,6 +997,9 @@ if (tok->type == pftInto)
 else
     output = emptyTuple(pp, tok, scope);
 body = parseCompound(pp, &tok, scope);
+
+input->type  = pptTypeTuple;
+output->type  = pptTypeTuple;
 
 slAddHead(&pp->children, body);
 slAddHead(&pp->children, output);
