@@ -5,7 +5,7 @@ The instructions here are similar to the Mirror site instructions at:
 	http://genome.ucsc.edu/admin/mirror.html
 	with the exception of downloading the databases.
 
-The example setup here will install a single organism database
+The example setup here will install a single-organism database
 to get the browser started.  Additional organism databases can
 be added after the browser is installed and functioning.
 The example mysql user here is: "browser" with a password of: "genome"
@@ -40,7 +40,7 @@ The example mysql user here is: "browser" with a password of: "genome"
 	two directories to be next to each other in ${WEBROOT}
 	since referrals in html are often: "../cgi-bin"
 
-	Please note, at this time there are several hard coded root
+	Please note, at this time there are several hard-coded root
 	pathways in the browser CGI binaries that require them
 	to reside in Apache's WEBROOT hierarchy in order to function.
 	Until these path names are corrected, the browser will
@@ -199,7 +199,7 @@ The example mysql user here is: "browser" with a password of: "genome"
 	Only the cb1 genome is available in this sample installation.
 
 	A cron job mechanism to keep the trash directory clean over
-	time has not been described.  User's should implement a
+	time has not been described.  Users should implement a
 	cron job to periodically remove files from trash.
 
 16.  Useful links:

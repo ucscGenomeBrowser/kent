@@ -109,7 +109,7 @@ access and the "readwrite" user for hgcentral database access:
 ###########################################################
 # db.host is the name of the MySQL host to connect to
 db.host=localhost
-# db.user is the username is use when connecting to the host
+# db.user is the username in use when connecting to the host
 db.user=readonly
 # this is the password to use with the above hostname
 db.password=access
@@ -132,7 +132,7 @@ central.domain=.cse.ucsc.edu
 ============================================================
 
 Developers can access the browser databases via the 'hgsql'
-command which can be built in the source tree at:
+command which can be built in the source-tree at:
 	kent/src/hg/hgsql/
 
 This 'hgsql' command provides a convenient front-end to
@@ -144,7 +144,7 @@ and the specified database user identity is used for accesses
 to the browser databases.
 
 This same function of reading ~/.hg.conf for database access
-is built into all the source tree binaries which modify the genome
+is built into all the source-tree binaries which modify the genome
 databases.
 
 The above example hg.conf could be used as a user's ~/.hg.conf
