@@ -14,7 +14,7 @@
 #include "chainNet.h"
 #include "liftUp.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.24 2003/12/01 22:39:28 braney Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.25 2003/12/17 22:06:10 braney Exp $";
 
 boolean isPtoG = TRUE;  /* is protein to genome lift */
 boolean nohead = FALSE;	/* No header for psl files? */
@@ -328,11 +328,13 @@ for (i=0; i<sourceCount; ++i)
 			psl->qEnd = psl->qStart;
 			psl->qStart = tmp;
 			psl->qStart *= -3;
+			psl->qEnd *= -3;
 			psl->qStart += offset;
 			psl->qEnd += offset;
 			}
-		    else
+		    else if (spec->strand == '+')
 			{
+			psl->qStart *= 3;
 			psl->qStart += offset;
 			psl->qEnd *= 3;
 			psl->qEnd += offset;
@@ -354,9 +356,18 @@ for (i=0; i<sourceCount; ++i)
 		psl->strand[strandChar] = spec->strand;
 		for (j=0; j<blockCount; ++j)
 		    {
-		    int tr = seqSize - (starts[j] + blockSizes[j]);
-		    tr += offset;
-		    starts[j] = spec->newSize - tr;
+		    starts[j] *= -3;
+		    starts[j] += offset;
+		    starts[j] = spec->newSize - starts[j];
+		    }
+		}
+	    else if (isPtoG && (spec->strand == '+'))
+	        {
+		psl->strand[strandChar] = spec->strand;
+		for (j=0; j<blockCount; ++j)
+		    {
+		    starts[j] *= 3;
+		    starts[j] += offset;
 		    }
 		}
 	    else if (psl->strand[strandChar] == '-')
