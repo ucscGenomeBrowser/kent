@@ -1,42 +1,42 @@
 
 cgi:
-	cd lib; make; cd ..
-	cd cartReset; make; cd ..
-	cd das; make; cd ..
-	cd hgBlat; make; cd ..
-	cd hgCoordConv; make; cd ..
-	cd hgGateway; make; cd ..
-	cd hgText; make; cd ..
-	cd hgTracks; make; cd ..
-	cd hgTrackUi; make; cd ..
-	cd hgc; make; cd ..
-	cd cartDump; make; cd ..
+	cd lib && ${MAKE}
+	cd cartReset && ${MAKE}
+	cd das && ${MAKE}
+	cd hgBlat && ${MAKE}
+	cd hgCoordConv && ${MAKE}
+	cd hgGateway && ${MAKE}
+	cd hgText && ${MAKE}
+	cd hgTracks && ${MAKE}
+	cd hgTrackUi && ${MAKE}
+	cd hgc && ${MAKE}
+	cd cartDump && ${MAKE}
 
 alpha:
-	cd lib; make; cd ..
-	cd cartReset; make alpha; cd ..
-	cd das; make alpha; cd ..
-	cd hgBlat; make alpha; cd ..
-	cd hgCoordConv; make alpha; cd ..
-	cd hgGateway; make alpha; cd ..
-	cd hgText; make alpha; cd ..
-	cd hgTracks; make alpha; cd ..
-	cd hgTrackUi; make alpha; cd ..
-	cd hgc; make alpha; cd ..
-	cd cartDump; make alpha; cd ..
+	cd lib && ${MAKE}
+	cd cartReset && ${MAKE} alpha
+	cd das && ${MAKE} alpha
+	cd hgBlat && ${MAKE} alpha
+	cd hgCoordConv && ${MAKE} alpha
+	cd hgGateway && ${MAKE} alpha
+	cd hgText && ${MAKE} alpha
+	cd hgTracks && ${MAKE} alpha
+	cd hgTrackUi && ${MAKE} alpha
+	cd hgc && ${MAKE} alpha
+	cd cartDump && ${MAKE} alpha
 
 beta:
-	cd lib; make; cd ..
-	cd cartReset; make beta; cd ..
-	cd das; make beta; cd ..
-	cd hgBlat; make beta; cd ..
-	cd hgCoordConv; make beta; cd ..
-	cd hgGateway; make beta; cd ..
-	cd hgText; make beta; cd ..
-	cd hgTracks; make beta; cd ..
-	cd hgTrackUi; make beta; cd ..
-	cd hgc; make beta; cd ..
-	cd cartDump; make beta; cd ..
+	cd lib && ${MAKE}
+	cd cartReset && ${MAKE} beta
+	cd das && ${MAKE} beta
+	cd hgBlat && ${MAKE} beta
+	cd hgCoordConv && ${MAKE} beta
+	cd hgGateway && ${MAKE} beta
+	cd hgText && ${MAKE} beta
+	cd hgTracks && ${MAKE} beta
+	cd hgTrackUi && ${MAKE} beta
+	cd hgc && ${MAKE} beta
+	cd cartDump && ${MAKE} beta
 
 clean: 
-	cd lib; make clean; cd ..;
+	cd lib && ${MAKE} clean;
