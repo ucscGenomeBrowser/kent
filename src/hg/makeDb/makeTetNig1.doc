@@ -1181,6 +1181,144 @@ axtChain $1 \
     time netClass noClass.net tetNig1 fr1 fuguFr1.net -noAr
     netFilter -minGap=10 fuguFr1.net |  hgLoadNet tetNig1 netFr1 stdin
 
+# MAKE Human Proteins track
+    ssh kksilo
+    mkdir -p /cluster/data/tetNig1/blastDb
+    cd /cluster/data/tetNig1
+    cat */*/*.lft > jkStuff/subLift.lft
+    for i in */*/*_*_*.fa; do ln -s `pwd`/$i blastDb; done  
+    # remove *_random_#.fa (not listed)
+    cd blastDb
+    for i in *.fa; do formatdb -i $i -p F 2> /dev/null; done
+    rm *.fa 
+
+    ssh kkr1u00
+    mkdir -p /iscratch/i/tetNig1/blastDb
+    cd /cluster/data/tetNig1/blastDb
+    cp * /iscratch/i/tetNig1/blastDb
+    (~kent/bin/iSync) 2>&1 > sync.out
+    
+    mkdir -p /cluster/data/tetNig1/bed/tblastn.hg17KG
+    cd /cluster/data/tetNig1/bed/tblastn.hg17KG
+    ls -1S /iscratch/i/tetNig1/blastDb/*.nsq | sed "s/\.nsq//" > tetra.lst
+    exit
+
+    # back to kksilo
+    cd /cluster/data/tetNig1/bed/tblastn.hg17KG
+    mkdir kgfa
+    # calculate a reasonable number of jobs
+    calc `wc /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl | awk "{print \\\$1}"`/\(150000/`wc tetra.lst | awk "{print \\\$1}"`\)
+    # 40262/(150000/979) = 262.776653
+    split -l 263 /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl kgfa/kg
+    cd kgfa
+    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    cd ..
+    ls -1S kgfa/*.fa > kg.lst
+    mkdir blastOut
+    for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+    tcsh
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/iscratch/i/blast/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.1 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+if /cluster/bin/i386/blastToPsl $f.1 $f.2
+then
+        liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/tetNig1/jkStuff/subLift.lft warn $f.2
+        liftUp -nosort -type=".psl" -nohead $f.4 /cluster/data/tetNig1/jkStuff/liftAll.lft warn $f.3
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg17/bed/blat.hg17KG/protein.lft warn $f.4
+        mv $3.tmp $3
+        rm -f $f.1 $f.2 $f.3 $f.4
+        exit 0
+    fi
+fi
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
+exit 1
+'_EOF_'
+
+    chmod +x blastSome
+    gensub2 tetra.lst kg.lst blastGsub blastSpec
+
+    # exit from tcsh
+    exit 
+    ssh kk
+    cd /cluster/data/tetNig1/bed/tblastn.hg17KG
+    para create blastSpec
+    para try, push
+# Completed: 144760 of 144760 jobs
+# CPU time in finished jobs:   22218348s  370305.81m  6171.76h  257.16d  0.705 y
+# IO & Wait Time:               3507367s   58456.11m   974.27h   40.59d  0.111 y
+# Average job time:                 178s       2.96m     0.05h    0.00d
+# Longest job:                     2810s      46.83m     0.78h    0.03d
+# Submission to last job:         41709s     695.15m    11.59h    0.48d
+
+    tcsh
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainSome $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainSome
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=50000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainSome
+
+    ls -1dS `pwd`/blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+
+    ssh kki
+    cd /cluster/data/tetNig1/bed/tblastn.hg17KG
+    para create chainSpec
+    para push
+# Completed: 261 of 261 jobs
+# CPU time in finished jobs:        828s      13.81m     0.23h    0.01d  0.000 y
+# IO & Wait Time:                 19521s     325.34m     5.42h    0.23d  0.001 y
+# Average job time:                  78s       1.30m     0.02h    0.00d
+# Longest job:                      270s       4.50m     0.07h    0.00d
+# Submission to last job:          3878s      64.63m     1.08h    0.04d
+
+    exit
+    # back to kksilo
+    cd /cluster/data/tetNig1/bed/tblastn.hg17KG/blastOut
+    for i in kg??
+    do 
+	awk "(\$13 - \$12)/\$11 > 0.6 {print}" c.$i.psl > c60.$i.psl
+	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+	echo $i
+    done
+
+    cat u.*.psl m60* | liftUp -nosort -type=".psl" -nohead stdout /cluster/data/tetNig1/jkStuff/liftAll.lft warn stdin |  \
+    	sort -T /tmp -k 14,14 -k 17,17n -k 17,17n  | uniq  > ../blastHg17KG.psl
+    cd ..
+
+    ssh hgwdev
+    cd /cluster/data/tetNig1/bed/tblastn.hg17KG
+    hgLoadPsl tetNig1 blastHg17KG.psl
+    exit
+
+    # back to kksilo
+    rm -rf blastOut
+
+# End tblastn
+
 # MAKE DOWNLOADABLE SEQUENCE FILES (DONE, 2004-09-08, hartera)
     ssh kksilo
     cd /cluster/data/tetNig1
