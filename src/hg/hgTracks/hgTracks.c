@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.898 2005/02/09 19:53:06 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.899 2005/02/09 19:57:54 sugnet Exp $";
 
 extern void bedGraphMethods(struct track *track, struct trackDb *tdb, 
 	int wordCount, char *words[]);
@@ -10119,7 +10119,7 @@ slFreeList(&nameList);
 void setRulerMode()
 /* Set the rulerMode variable from cart. */
 {
-char *s = cartUsualString(cart, RULER_TRACK_NAME, "full");
+char *s = cartUsualString(cart, RULER_TRACK_NAME, "dense");
 if (sameWord(s, "full") || sameWord(s, "on"))
     rulerMode = tvFull;
 else if (sameWord(s, "dense"))
