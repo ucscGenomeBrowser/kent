@@ -7,7 +7,7 @@
 #include "dlist.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: growNet.c,v 1.3 2004/11/13 00:18:46 kent Exp $";
+static char const rcsid[] = "$Id: growNet.c,v 1.4 2004/11/13 05:01:38 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -119,7 +119,12 @@ for (i=0; i<count; ++i)
     if (v == 0)
         break;
     if (v < 0x100)
-        printf("%c ", v);
+	{
+	if (v == 0)
+	    printf("^0");
+	else
+	    printf("%c ", v);
+	}
     else
         printf("%x ", v);
     }
@@ -241,7 +246,14 @@ else
     for (i=0; i<count; ++i)
 	{
         assoc->predictions[i].p *= invCount;
-	uglyf("%c %f,", assoc->predictions[i].symbol, assoc->predictions[i].p);
+	    { /* uglyf */
+	    int sym = assoc->predictions[i].symbol; /* uglyf */
+	    if (sym == 0)
+	        uglyf("^0");
+	    else
+	        uglyf("%c", sym);
+	    uglyf(" %f,", assoc->predictions[i].p);
+	    }
 	}
     uglyf("\n");
     }
@@ -279,6 +291,7 @@ for (i=0; i<assoc->symbolCount; ++i)
 uglyf("Creating associator: %d %d %d\n   ", assoc->symbolCount, assoc->forceOrder, assoc->forceBoundaries);
 dumpAssociator(assoc);
 allocatePredictions(assoc);
+assoc->score = 0.5;
 return assoc;
 }
 
@@ -286,12 +299,15 @@ struct interleaver *interleaverNew(struct growNet *gn)
 /* Create new interleaver. */
 {
 struct interleaver *il;
+int i;
 AllocVar(il);
 if (gn != NULL)
     il->selfNode = dlAddValTail(gn->interleavers, il);
 il->inList = dlListNew();
 il->inDone = dlListNew();
 il->subscriptions = dlListNew();
+for (i=0; i < ArraySize(il->history); ++i)
+    il->history[i] = ' ';
 return il;
 }
 
@@ -347,7 +363,6 @@ if (matchCount == 0)
 /* Some matches, start computing recognition probability. */
 pRecognized = (double)matchCount / symCount;
 
-#ifdef SOON
 /* Figured out in local area how much of history matches symbols */
 matchCount = mismatchCount = 0;
 for (histIx = 0; histIx < histCount; ++histIx)
@@ -370,7 +385,6 @@ for (histIx = 0; histIx < histCount; ++histIx)
 	break;
     }
 pRecognized *= (double)matchCount / (matchCount + mismatchCount);
-#endif /* SOON */
 return pRecognized;
 }
 
@@ -381,57 +395,53 @@ int *symbols = assoc->symbols;
 int *history = il->history;
 if (assoc->forceOrder)
     {
-    // if (assoc->compressRuns)
-    // else
-        {
-	int startIx, i;
-	boolean match = FALSE;
+    int startIx, i;
+    boolean match = FALSE;
 
-	for (startIx=0; startIx<assoc->symbolCount; ++startIx)
+    for (startIx=0; startIx<assoc->symbolCount; ++startIx)
+	{
+	int i;
+	boolean subMatch = TRUE;
+	for (i=startIx; i<assoc->symbolCount; ++i)
 	    {
-	    int i;
-	    boolean subMatch = TRUE;
-	    for (i=startIx; i<assoc->symbolCount; ++i)
-	        {
-		if (symbols[i] != history[i - startIx])
-		    {
-		    subMatch = FALSE;
-		    break;
-		    }
-		}
-	    if (subMatch)
-	        {
-		match = TRUE;
+	    if (symbols[i] != history[i - startIx])
+		{
+		subMatch = FALSE;
 		break;
 		}
 	    }
-	if (match)
+	if (subMatch)
 	    {
-	    if (startIx == 0)
-		{
-	        assoc->pPredicted = 0.0;
-		assoc->predictionCount = 0;
-		assoc->pRecognized = 1.0;
-		}
-	    else
-		{
-		assoc->predictionCount = 1;
-		assoc->predictions[0].p = 1.0;
-		assoc->predictions[0].symbol = assoc->symbols[startIx-1];
-		assoc->pRecognized = (double)(assoc->symbolCount - startIx)
-			/assoc->symbolCount;
-	        assoc->pPredicted = assoc->pRecognized;
-		}
+	    match = TRUE;
+	    break;
+	    }
+	}
+    if (match)
+	{
+	if (startIx == 0)
+	    {
+	    assoc->pPredicted = 0.0;
+	    assoc->predictionCount = 0;
+	    assoc->pRecognized = 1.0;
 	    }
 	else
 	    {
-	    assoc->pRecognized = assoc->pPredicted = 0.0;
+	    assoc->predictionCount = 1;
+	    assoc->predictions[0].p = 1.0;
+	    assoc->predictions[0].symbol = assoc->symbols[startIx-1];
+	    assoc->pRecognized = (double)(assoc->symbolCount - startIx)
+		    /assoc->symbolCount;
+	    assoc->pPredicted = assoc->pRecognized;
 	    }
+	}
+    else
+	{
+	assoc->pRecognized = assoc->pPredicted = 0.0;
 	}
     }
 else if (assoc->forceBoundaries)
     {
-    int maxToSniff = assoc->symbolCount*1.2;  /* Possibly make this another parameter */
+    int maxToSniff = assoc->symbolCount*1.0;  /* Possibly make this another parameter */
     int startIx, bestStartIx = -1;
     int startSym = assoc->symbols[assoc->symbolCount-1];
     double pRecognized, pRecognizedBest = 0.0;
@@ -455,7 +465,6 @@ else if (assoc->forceBoundaries)
     assoc->pRecognized = pRecognizedBest;
     assoc->predictionCount = assoc->predictionAlloc;
 
-    uglyf("pRecogStart %f, startIx %d, symCount %d\n", pRecogStart, bestStartIx, assoc->symbolCount);
     if (bestStartIx >= 0)
 	{
 	int histCount = bestStartIx;
@@ -487,7 +496,7 @@ else if (assoc->forceBoundaries)
 else  /* No boundaries, no order. */
     {
     int histIx, symIx, matchCount = 0, mismatchCount = 0;
-    int maxToSniff = assoc->symbolCount*1.2;  /* Possibly make this another parameter */
+    int maxToSniff = assoc->symbolCount*1.0;  /* Possibly make this another parameter */
     if (maxToSniff > ArraySize(il->history))
         maxToSniff = ArraySize(il->history);
     assoc->pRecognized *= (double)matchCount / (matchCount + mismatchCount);
@@ -530,6 +539,10 @@ for (node = cl->inList->head; !dlEnd(node); node = node->next)
 	}
     }
 cl->output = bestAssoc;
+if (bestAssoc != NULL)
+    uglyf("classifier %d picked %d, prob %f\n", cl->id, bestAssoc->id, bestP);
+else
+    uglyf("classifier %d declines to pick\n", cl->id);
 }
 
 void interleaverRecordInput(struct interleaver *il, int input)
@@ -644,15 +657,72 @@ for (node = il->subscriptions->head; !dlEnd(node); node = node->next)
     }
 }
 
+struct dlNode *randomCycleList(struct dlList *list)
+/* Pick a random number from 1 to 15.  Move the head of the
+ * list to the tail that number of times, and return the head. */
+{
+struct dlNode *node;
+int count = (rand()&15) + 1;
+if (list == NULL || dlEmpty(list))
+    return NULL;
+while (--count >= 0)
+    {
+    node = dlPopHead(list);
+    dlAddTail(list, node);
+    }
+return list->head;
+}
+
+struct classifier *classifierNewRandom(struct growNet *gn, int inputCount)
+/* Create new classifier with inputCount random inputs. */
+{
+struct classifier *cl;
+int i;
+
+AllocVar(cl);
+cl->id = gn->nextId++;
+cl->selfNode = dlAddValTail(gn->classifiers, cl);
+cl->inList = dlListNew();
+cl->inDone = dlListNew();
+cl->subscriptions = dlListNew();
+uglyf("classifierNewRandom(%d) - id = %d connects to associators: ", inputCount, cl->id);
+
+for (i=0; i<inputCount; ++i)
+    {
+    struct dlNode *gnNode = randomCycleList(gn->associators);
+    struct associator *assoc = gnNode->val;
+    struct dlNode *aNode;
+    struct associatorSubscription *sub;
+
+    aNode = dlAddValTail(cl->inList, assoc);
+    AllocVar(sub);
+    sub->assocNode = aNode;
+    sub->classifier = cl;
+    dlAddValTail(assoc->subscriptions, sub);
+    uglyf(" %d", assoc->id); 
+    }
+uglyf("\n");
+return cl;
+}
+
+
 void growNetNext(struct growNet *gn, int sym)
 /* Feed next symbol to grow net. */
 {
 struct associator *assoc;
+struct classifier *cl;
+struct interleaver *il;
+int i;
 interleaverRecordInput(gn->inputInterleaver, sym);
 dumpInterleaver(gn->inputInterleaver);
 propagateFromInterleaver(gn, gn->inputInterleaver);
-assoc = associatorNewRandom(gn, gn->inputInterleaver);
-assoc->score = 0.5;
+for (i=0; i<5; ++i)
+    assoc = associatorNewRandom(gn, gn->inputInterleaver);
+cl = classifierNewRandom(gn, 3);
+#ifdef SOON
+il = interleaverNew(gn, cl, TRUE);
+il = interleaverNew(gn, cl, FALSE);
+#endif /* SOON */
 }
 
 void growNet(char *inFile)
