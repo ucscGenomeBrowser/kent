@@ -12,7 +12,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.12 2003/06/21 00:08:28 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.13 2003/06/21 00:24:09 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, defaultConfName,
 	resetConfName, NULL }; 
@@ -91,6 +91,13 @@ else
     }
 }
 
+void labelSimplePrint(struct column *col)
+/* This just prints cell->shortLabel. */
+{
+hPrintf("<B>%s</B>", col->shortLabel);
+}
+
+
 static void cellSelfLinkPrint(struct column *col, char *geneId,
 	struct sqlConnection *conn)
 /* Print self and hyperlink to make this the search term. */
@@ -127,6 +134,7 @@ void columnDefaultMethods(struct column *col)
 col->exists = alwaysExists;
 col->cellVal = noVal;
 col->cellPrint = cellSimplePrint;
+col->labelPrint = labelSimplePrint;
 }
 
 /* ---- Accession column ---- */
@@ -608,7 +616,11 @@ for (col = colList; col != NULL; col = col->next)
     {
     char *colName = col->shortLabel;
     if (col->on)
-	hPrintf("<TD><B>%s</B></TD>", colName); 
+	{
+	hPrintf("<TD>");
+	col->labelPrint(col);
+	hPrintf("</TD>");
+	}
     }
 hPrintf("</TR>\n");
 

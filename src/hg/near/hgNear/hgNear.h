@@ -35,6 +35,9 @@ struct column
    void (*cellPrint)(struct column *col, char *geneId, struct sqlConnection *conn);
    /* Print one cell of this column. */
 
+   void (*labelPrint)(struct column *col);
+   /* Print the label in the label row. */
+
    /* -- Data that may be track-specific. -- */
    char *table;			/* Name of associated table. */
    char *keyField;		/* GeneId field in associated table. */
@@ -98,6 +101,9 @@ char *cellLookupVal(struct column *col, char *geneId, struct sqlConnection *conn
 
 void cellSimplePrint(struct column *col, char *geneId, struct sqlConnection *conn);
 /* This just prints cellSimpleVal. */
+
+void labelSimplePrint(struct column *col);
+/* This just prints cell->shortLabel. */
 
 static void cellSelfLinkPrint(struct column *col, char *geneId,
 	struct sqlConnection *conn);
