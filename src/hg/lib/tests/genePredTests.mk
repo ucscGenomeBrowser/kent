@@ -21,7 +21,7 @@ TEST_TBL=gpTest_${USER}
 #   - refSeqFrame.gp - with cdsStat and frame fields (from mrnaToGene)
 
 
-test: fileTests tableTests fromPslTests compatTblTests
+test: fileTests tableTests fromPslTests compatTblTests fromGxfTests
 	hgsql -e "drop table ${TEST_TBL}" ${DB}
 
 ###
@@ -138,6 +138,55 @@ knownGeneTest:
 doCompatTblTest: mkout
 	${GENE_PRED_TESTER} -maxRows=1000 -needRows=1000 -info=${OUT_DIR}/${id}.info readTable ${DB} ${tbl}
 	diff -u ${EXP_DIR}/${id}.info ${OUT_DIR}/${id}.info
+
+##
+# GFF/GTF conversion tests; try bits of files from several different
+# sources.
+##
+fromGxfTests: fromGxfMinTest fromGxfFrameTest \
+	fromGxfExonSelTest fromGxfExonSelFrameTest \
+	fromGxfVegaTest fromGxfVegaFrameTest fromGxfVegaPseudoTest \
+	fromGxfAcemblyTest fromGxfAcemblyFrameTest
+
+
+doFromGxfTest = ${MAKE} -f genePredTests.mk doFromGxfTest
+
+fromGxfMinTest:
+	${doFromGxfTest} id=$@ what=fromGtf inBase=twinscan.gtf
+
+fromGxfFrameTest:
+	${doFromGxfTest} id=$@ what=fromGtf inBase=twinscan.gtf opts="-cdsStatFld -exonFramesFld -name2Fld"
+
+fromGxfExonSelTest:
+	${doFromGxfTest} id=$@ what=fromGff inBase=tigr.gff opts="-exonSelectWord=TC"
+
+fromGxfExonSelFrameTest:
+	${doFromGxfTest} id=$@ what=fromGff inBase=tigr.gff opts="-exonSelectWord=TC -cdsStatFld -exonFramesFld"
+
+fromGxfVegaTest:
+	${doFromGxfTest} id=$@ what=fromGtf inBase=vegaGene.gtf opts="-name2Fld"
+
+fromGxfVegaFrameTest:
+	${doFromGxfTest} id=$@ what=fromGtf inBase=vegaGene.gtf opts="-name2Fld -cdsStatFld -exonFramesFld -idFld"
+
+fromGxfVegaPseudoTest:
+	${doFromGxfTest} id=$@ what=fromGtf inBase=vegaPseudo.gtf opts="-name2Fld"
+
+fromGxfAcemblyTest:
+	${doFromGxfTest} id=$@ what=fromGff inBase=acembly.gff
+
+fromGxfAcemblyFrameTest:
+	${doFromGxfTest} id=$@ what=fromGff inBase=acembly.gff opts="-name2Fld -cdsStatFld -exonFramesFld -idFld"
+
+# recursive target for GFF/GTF tests
+#  id - test id
+#  what - fromGtf or fromGff
+#  inFile - base name for GFF/GTF file
+#  opts - genePredTester options to add
+doFromGxfTest: mkout
+	${GENE_PRED_TESTER} ${opts} -output=${OUT_DIR}/${id}.gp ${what} input/genePred/${inBase}
+	${GENE_PRED_TESTER} ${XXXopts} readFile ${OUT_DIR}/${id}.gp
+	diff -u ${EXP_DIR}/${id}.gp ${OUT_DIR}/${id}.gp
 
 
 mkout:

@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.22 2004/02/15 21:23:27 baertsch Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.23 2004/02/24 03:42:01 markd Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
 boolean requireCDS = FALSE;     /* should genes with CDS be dropped */
@@ -49,7 +49,7 @@ errAbort(
     "     -frame       load frame information\n");
 }
 
-boolean gFrame = FALSE;
+boolean gOptFields = 0;  /* optional fields from cmdline */
 
 void loadIntoDatabase(char *database, char *table, char *tabName,
                       bool appendTbl)
@@ -59,15 +59,15 @@ struct sqlConnection *conn = sqlConnect(database);
 
 if (!appendTbl)
     {
-    unsigned optFields = gFrame ? (genePredCdsStatFld|genePredExonFramesFld) : 0;
-    char *createSql = genePredGetCreateSql(table,  optFields, 0);
+    char *createSql = genePredGetCreateSql(table,  gOptFields, 0);
     sqlRemakeTable(conn, table, createSql);
     freeMem(createSql);
     }
 sqlLoadTabFile(conn, tabName, table, SQL_TAB_FILE_WARN_ON_WARN);
 
 /* add a comment to the history table and finish up connection */
-hgHistoryComment(conn, "Add gene predictions to %s table %s frame info.", table, gFrame ? "with" : "w/o");
+hgHistoryComment(conn, "Add gene predictions to %s table %s frame info.", table,
+                 ((gOptFields & genePredExonFramesFld) ? "with" : "w/o"));
 sqlDisconnect(&conn);
 }
 
@@ -87,7 +87,6 @@ void ldHgGenePred(char *database, char *table, int gCount, char *gNames[])
 /* Load up database from a bunch of genePred files. */
 {
 char *tabName = "genePred.tab";
-unsigned optFields = gFrame ? (genePredCdsStatFld|genePredExonFramesFld) : 0;
 FILE *f;
 struct genePred *gpList = NULL, *gp;
 int i;
@@ -95,7 +94,7 @@ int i;
 for (i=0; i<gCount; ++i)
     {
     printf("Reading %s\n", gNames[i]);
-    gpList = slCat(genePredExtLoadAll(gNames[i], optFields), gpList);
+    gpList = slCat(genePredExtLoadAll(gNames[i], gOptFields), gpList);
     }
 printf("%d gene predictions\n", slCount(gpList));
 slSort(&gpList, genePredCmp);
@@ -154,9 +153,9 @@ for (group = gff->groupList; group != NULL; group = group->next)
 	name = convertSoftberryName(name);
 	}
     if (isGtf)
-        gp = genePredFromGroupedGtf(gff, group, name, gFrame);
+        gp = genePredFromGroupedGtf(gff, group, name, gOptFields);
     else
-        gp = genePredFromGroupedGff(gff, group, name, exonType, gFrame);
+        gp = genePredFromGroupedGff(gff, group, name, exonType, gOptFields);
     if (gp != NULL)
 	{
 	if (nonCoding)
@@ -196,7 +195,8 @@ if (optionExists("exon") && optionExists("gtf"))
 exonType = optionVal("exon", exonType);
 outFile = optionVal("out", NULL);
 requireCDS = optionExists("requireCDS");
-gFrame = optionExists("frame");
+ if (optionExists("frame"))
+     gOptFields |= (genePredCdsStatFld|genePredExonFramesFld);
 
 if (optionExists("predTab"))
     ldHgGenePred(argv[1], argv[2], argc-3, argv+3);

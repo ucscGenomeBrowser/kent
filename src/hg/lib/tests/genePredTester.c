@@ -4,6 +4,7 @@
 #include "genePredReader.h"
 #include "options.h"
 #include "psl.h"
+#include "gff.h"
 #include "genbank.h"
 #include "localmem.h"
 #include "hash.h"
@@ -11,7 +12,7 @@
 #include "jksql.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: genePredTester.c,v 1.2 2004/02/14 20:52:24 markd Exp $";
+static char const rcsid[] = "$Id: genePredTester.c,v 1.3 2004/02/24 03:42:02 markd Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -43,6 +44,14 @@ errAbort(
     "  Create genePred objects from PSL.If -output is specified, the\n"
     "  objects are written to that file.\n"
     "\n"
+    "o fromGff gffFile \n"
+    "  Create genePred objects from a GFF file..If -output is specified, the\n"
+    "  objects are written to that file.\n"
+    "\n"
+    "o fromGtf gtfFile \n"
+    "  Create genePred objects from a GTF file..If -output is specified, the\n"
+    "  objects are written to that file.\n"
+    "\n"
     "Options:\n"
     "  -verbose=0 - set verbose level\n"
     "  -idFld - include id field\n"
@@ -56,7 +65,9 @@ errAbort(
     "  -chrom=chrom - restrict file reading to this chromosome\n"
     "  -output=fname - write output to this file \n"
     "  -info=fname - write info about genePred to this file.\n"
-    "  -withBin - create bin column when loading a table\n",
+    "  -withBin - create bin column when loading a table\n"
+    "  -exonSelectWord=feat - use feat as the exon feature name when creating\n"
+    "   from GFF\n",
     msg);
 }
 
@@ -74,11 +85,12 @@ static struct optionSpec options[] = {
     {"output", OPTION_STRING},
     {"info", OPTION_STRING},
     {"withBin", OPTION_BOOLEAN},
+    {"exonSelectWord", OPTION_STRING},
     {NULL, 0},
 };
 int gVerbose = 0;
-unsigned gOptFields = 0;
-unsigned gCreateOpts = 0;
+unsigned gOptFields = genePredNoOptFld;;
+unsigned gCreateOpts = genePredBasicSql;
 int gMaxRows = BIGNUM;
 int gMinRows = 1;
 int gNeedRows = -1;
@@ -86,12 +98,13 @@ char *gWhere = NULL;
 char *gChrom = NULL;
 char *gOutput = NULL;
 char *gInfo = NULL;
+char *gExonSelectWord = NULL;
 
 void checkNumRows(char *src, int numRows)
 /* check the number of row constraints */
 {
 if (numRows < gMinRows)
-    errAbort("expected at least %d rows from %s, got %d", src, gMinRows, numRows);
+    errAbort("expected at least %d rows from %s, got %d", gMinRows, src, numRows);
 if ((gNeedRows >= 0) && (numRows != gNeedRows))
     errAbort("expected %d rows from %s, got %d", src, gNeedRows, numRows);
 if (gVerbose > 0)
@@ -159,10 +172,8 @@ int numRows = 0;
 char tabFile[PATH_LEN];
 FILE *tabFh;
 
-
 safef(tabFile, sizeof(tabFile), "genePred.%d.tmp", getpid());
 tabFh = mustOpen(tabFile, "w");
-
 
 while ((numRows < gMaxRows) && ((gp = genePredReaderNext(gpr)) != NULL))
     {
@@ -262,6 +273,58 @@ hashFree(&cdsTbl);
 checkNumRows(pslFile, numRows);
 }
 
+void groupConvertWarn(char *gxfFile, boolean isGtf, struct gffGroup *group)
+/* issue a warning when a GxF group can't be converted to a genePred */
+{
+struct gffLine *line;
+
+fprintf(stderr, "Warning: Can't convert %s to genePred: %s\n",
+        (isGtf ? "GTF" : "GFF"), gxfFile);
+for (line = group->lineList; line != NULL; line = line->next)
+    {
+    fprintf(stderr, "\t%s\t%s\t%s\t%d\t%d\t%g\t%c\t%c\t%s\t%s\t%s\t%d\n",
+            line->seq, line->source, line->feature, line->start, line->end,
+            line->score, line->strand, line->frame, line->group, line->geneId,
+            line->exonId, line->exonNumber);
+    }
+}
+
+void fromGxf(char *gxfFile, boolean isGtf)
+/* Implements the fromGff/fromGtf tasks */
+{
+struct gffFile *gxf = gffRead(gxfFile);
+struct gffGroup *group;
+struct genePred *gp;
+int numRows = 0;
+FILE *outFh = NULL;
+
+if (gOutput != NULL)
+    outFh = mustOpen(gOutput, "w");
+
+gffGroupLines(gxf);
+for (group = gxf->groupList; group != NULL; group = group->next)
+    {
+    if (isGtf)
+        gp = genePredFromGroupedGtf(gxf, group, group->name, gOptFields);
+    else
+        gp = genePredFromGroupedGff(gxf, group,  group->name, gExonSelectWord,
+                                    gOptFields);
+    if (gp == NULL)
+        groupConvertWarn(gxfFile, isGtf, group);
+    else
+        {
+        if (outFh != NULL)
+            genePredTabOut(gp, outFh);
+        if (numRows == 0)
+            writeInfo(gp);
+        genePredFree(&gp);
+        numRows++;
+        }
+    }
+gffFileFree(&gxf);
+carefulClose(&outFh);
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
@@ -285,6 +348,7 @@ gNeedRows = optionInt("minRows", gNeedRows);
 gWhere = optionVal("where", gWhere);
 gOutput = optionVal("output", gOutput);
 gInfo = optionVal("info", gInfo);
+gExonSelectWord = optionVal("exonSelectWord", gExonSelectWord);
 
 if (optionExists("withBin"))
     gCreateOpts |= genePredWithBin;
@@ -312,6 +376,18 @@ else if (sameString(task, "fromPsl"))
     if (argc != 4)
         usage("fromPsl task requires two argument");
     fromPsl(argv[2], argv[3]);
+    }
+else if (sameString(task, "fromGff"))
+    {
+    if (argc != 3)
+        usage("fromGff task requires one argument");
+    fromGxf(argv[2], FALSE);
+    }
+else if (sameString(task, "fromGtf"))
+    {
+    if (argc != 3)
+        usage("fromGtf task requires one argument");
+    fromGxf(argv[2], TRUE);
     }
 else 
     {

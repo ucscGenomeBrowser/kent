@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.32 2004/02/20 22:53:24 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.33 2004/02/24 03:42:02 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -390,132 +390,76 @@ if (dif == 0)
 return dif;
 }
 
-struct genePred *genePredFromGroupedGff(struct gffFile *gff, struct gffGroup *group, char *name,
-	char *exonSelectWord, boolean gFrame)
-/* Convert gff->groupList to genePred list. */
+static boolean isExon(char *feat, boolean isGtf, char *exonSelectWord)
+/* determine if a feature is an exon; different criteria for GFF ane GTF */
 {
-struct genePred *gp;
-int cdsStart = BIGNUM, cdsEnd = -BIGNUM;
-int exonCount = 0;
-struct gffLine *gl;
-unsigned *eStarts, *eEnds, *eFrames;
-int i;
-boolean anyExon = FALSE;
-
-/* Look to see if any exons.  If not allow CDS to be
- * used instead. */
-if (exonSelectWord)
-    {
-    for (gl = group->lineList; gl != NULL; gl = gl->next)
-	{
-	if (sameWord(gl->feature, exonSelectWord))
-	    {
-	    anyExon = TRUE;
-	    break;
-	    }
-	}
-    }
+/* FIXME: shouldn't actually need to allow CDS here for GTF */
+if (isGtf)
+    return (sameWord(feat, "CDS") || sameWord(feat, "exon"));
 else
-    anyExon = TRUE;
-if (!anyExon)
-    exonSelectWord = "CDS";
-
-/* Count up exons and figure out cdsStart and cdsEnd. */
-for (gl = group->lineList; gl != NULL; gl = gl->next)
-    {
-    char *feat = gl->feature;
-    if (exonSelectWord == NULL || sameWord(feat, exonSelectWord))
-        {
-	++exonCount;
-	}
-    if (sameWord(feat, "CDS") || sameWord(feat, "start_codon") 
-        || sameWord(feat, "stop_codon"))
-	{
-	if (gl->start < cdsStart) cdsStart = gl->start;
-	if (gl->end > cdsEnd) cdsEnd = gl->end;
-	}
-    }
-if (cdsStart > cdsEnd)
-    {
-    /* no cds annotated */
-    cdsStart = 0;
-    cdsEnd = 0;
-    }
-if (exonCount == 0)
-    return NULL;
-
-/* Allocate genePred and fill in values. */
-AllocVar(gp);
-gp->name = cloneString(name);
-gp->chrom = cloneString(group->seq);
-gp->strand[0] = group->strand;
-gp->txStart = group->start;
-gp->txEnd = group->end;
-gp->cdsStart = cdsStart;
-gp->cdsEnd = cdsEnd;
-gp->exonCount = exonCount;
-gp->exonStarts = AllocArray(eStarts, exonCount);
-gp->exonEnds = AllocArray(eEnds, exonCount);
-if (gFrame)
-    {
-    gp->exonFrames = AllocArray(eFrames, exonCount);
-    gp->optFields |= genePredExonFramesFld;
-    gp->optFields |= genePredCdsStatFld;
-    gp->cdsStartStat = cdsComplete;
-    gp->cdsEndStat = cdsComplete;
-    }
-else
-    eFrames = NULL;
-i = 0;
-for (gl = group->lineList; gl != NULL; gl = gl->next)
-    {
-    if (exonSelectWord == NULL || sameWord(gl->feature, exonSelectWord))
-        {
-	eStarts[i] = gl->start;
-	eEnds[i] = gl->end;
-        if (gFrame && isdigit(gl->frame))
-            {
-            eFrames[i] = (int)gl->frame - '0';
-            }
-	++i;
-	}
-    }
-return gp;
+    return ((exonSelectWord == NULL) || sameWord(feat, exonSelectWord));
 }
 
+static void chkGroupLine(struct gffGroup *group, struct gffLine *gl, struct genePred *gp)
+/* check that a gffLine is consistent with the genePred being built.  this
+ * helps detect some problems that lead to corrupt genePreds */
+{
+if (!sameString(gl->seq, gp->chrom) && (gl->strand == gp->strand[0]))
+    {
+    fprintf(stderr, "invalid gffGroup detected on line: ");
+    gffTabOut(gl, stderr);
+    errAbort("GFF/GTF group %s on %s%c, this line is on %s%c, all group members must be on same seq and strand",
+             group->name, gp->chrom, gp->strand[0],
+                     gl->seq, gl->strand);
+    }
+}
 
-struct genePred *genePredFromGroupedGtf(struct gffFile *gff, struct gffGroup *group, char *name, boolean gFrame)
-/* Convert gff->groupList to genePred list, using GTF feature conventions;
- * including the stop codon in the 3' UTR, not the CDS (grr).  Assumes
- * gffGroup is sorted in assending coords, with overlaping starts sorted by
- * end coords, which is true if it was created by gffGroupLines(). */
+static boolean isCds(char *feat, boolean isGtf)
+/* determine if a feature is CDS; different criteria for GFF ane GTF */
+{
+if (isGtf)
+    return sameWord(feat, "CDS");
+else
+    return (sameWord(feat, "CDS") || sameWord(feat, "start_codon") 
+            || sameWord(feat, "stop_codon"));
+}
+
+static struct genePred *mkFromGroupedGxf(struct gffFile *gff, struct gffGroup *group, char *name,
+                                         boolean isGtf, char *exonSelectWord, unsigned optFields)
+/* common function to create genePreds from GFFs or GTFs.  This is a little
+ * ugly with to many check of isGtf, however the was way to much identical
+ * code the other way.*/
 {
 struct genePred *gp;
 int stopCodonStart = -1, stopCodonEnd = -1;
 int cdsStart = BIGNUM, cdsEnd = -BIGNUM;
 int exonCount = 0;
+boolean haveCds = FALSE, haveStartCodon = FALSE, haveStopCodon = FALSE;
 struct gffLine *gl;
 unsigned *eStarts, *eEnds, *eFrames;
 int i;
-boolean anyExon = FALSE;
 
 /* Count up exons and figure out cdsStart and cdsEnd. */
 for (gl = group->lineList; gl != NULL; gl = gl->next)
     {
     char *feat = gl->feature;
-    if (sameWord(feat, "CDS") || sameWord(feat, "exon"))
-        {
+    if (isExon(feat, isGtf, exonSelectWord))
 	++exonCount;
+    if (isCds(feat, isGtf))
+        {
+	if (gl->start < cdsStart)
+            cdsStart = gl->start;
+	if (gl->end > cdsEnd)
+            cdsEnd = gl->end;
+        haveCds = TRUE;
 	}
-    if (sameWord(feat, "CDS"))
-	{
-	if (gl->start < cdsStart) cdsStart = gl->start;
-	if (gl->end > cdsEnd) cdsEnd = gl->end;
-	}
+    if (sameWord(feat, "start_codon"))
+        haveStartCodon = TRUE;
     if (sameWord(feat, "stop_codon"))
         {
         stopCodonStart = gl->start;
         stopCodonEnd = gl->end;
+        haveStopCodon = TRUE;
         }
     }
 if (exonCount == 0)
@@ -526,9 +470,9 @@ if (cdsStart > cdsEnd)
     cdsStart = 0;
     cdsEnd = 0;
     }
-else if (stopCodonStart >= 0)
+else if (isGtf && (stopCodonStart >= 0))
     {
-    /* adjust CDS to include stop codon */
+    /* adjust CDS to include stop codon in GTF */
     if (group->strand == '+')
         cdsEnd = stopCodonEnd;
     else
@@ -546,18 +490,46 @@ gp->cdsStart = cdsStart;
 gp->cdsEnd = cdsEnd;
 gp->exonStarts = AllocArray(eStarts, exonCount);
 gp->exonEnds = AllocArray(eEnds, exonCount);
-if (gFrame)
+gp->optFields = optFields;
+
+if (optFields & genePredName2Fld)
+    {
+    if (group->lineList->geneId != NULL)
+        gp->name2 = cloneString(group->lineList->geneId);
+    else
+        gp->name2 = cloneString("");
+    }
+if (optFields & genePredCdsStatFld)
+    {
+    if (haveCds)
+        {
+        if (group->strand == '+')
+            {
+            gp->cdsStartStat = (haveStartCodon ? cdsComplete : cdsIncomplete);
+            gp->cdsEndStat = (haveStopCodon ? cdsComplete : cdsIncomplete);;
+            }
+        else
+            {
+            gp->cdsEndStat = (haveStartCodon ? cdsComplete : cdsIncomplete);
+            gp->cdsStartStat = (haveStopCodon ? cdsComplete : cdsIncomplete);;
+            }
+        }
+    else
+        {
+        gp->cdsStartStat = cdsNone;
+        gp->cdsEndStat = cdsNone;
+        }
+    }
+if (optFields & genePredExonFramesFld)
     {
     gp->exonFrames = AllocArray(eFrames, exonCount);
-    gp->optFields |= genePredExonFramesFld;
-    gp->optFields |= genePredCdsStatFld;
-    gp->cdsStartStat = cdsComplete;
-    gp->cdsEndStat = cdsComplete;
+    for (i = 0; i < exonCount; i++)
+        gp->exonFrames[i] = -1;
     }
-else
-    eFrames = NULL;
+eFrames = gp->exonFrames;
 
-/* adjust tx range to include stop codon */
+
+/* adjust tx range to include stop codon on */
 if ((group->strand == '+') && (gp->txEnd == stopCodonStart))
      gp->txEnd = stopCodonEnd;
 else if ((group->strand == '-') && (gp->txStart == stopCodonEnd))
@@ -567,24 +539,19 @@ i = 0;
 /* fill in exons, merging overlaping and adjacent exons */
 for (gl = group->lineList; gl != NULL; gl = gl->next)
     {
-    if (sameWord(gl->feature, "CDS") || sameWord(gl->feature, "exon"))
+    if ((optFields & genePredExonFramesFld) && isCds(gl->feature, isGtf))
         {
-        if (!(sameString(gl->seq, gp->chrom) && (gl->strand == gp->strand[0])))
-            {
-            fprintf(stderr, "invalid gffGroup detected on line: ");
-            gffTabOut(gl, stderr);
-            errAbort("GFF/GTF group %s on %s%c, this line is on %s%c, all group members must be on same seq and strand",
-                     group->name, gp->chrom, gp->strand[0],
-                     gl->seq, gl->strand);
-            }
+        /* set frame if this is a CDS */
+        if (isdigit(gl->frame))
+            eFrames[i] = (int)gl->frame - '0';
+        }
+    if (isExon(gl->feature, isGtf, exonSelectWord))
+        {
+        chkGroupLine(group, gl, gp);
         if ((i == 0) || (gl->start > eEnds[i-1]))
             {
             eStarts[i] = gl->start;
             eEnds[i] = gl->end;
-            if (gFrame && isdigit(gl->frame))
-                {
-                eFrames[i] = (int)gl->frame - '0';
-                }
             ++i;
             }
         else
@@ -594,15 +561,66 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
             if (gl->end > eEnds[i-1])
                 eEnds[i-1] = gl->end;
             }
-        /* extend exon for stop codon if needed */
-        if ((group->strand == '+') && (eEnds[i-1] == stopCodonStart))
-            eEnds[i-1] = stopCodonEnd;
-        else if ((group->strand == '-') && (eStarts[i-1] == stopCodonEnd))
-            eStarts[i-1] = stopCodonStart;
+        /* extend exon for stop codon in GTF if needed */
+        if (isGtf)
+            {
+            if ((group->strand == '+') && (eEnds[i-1] == stopCodonStart))
+                eEnds[i-1] = stopCodonEnd;
+            else if ((group->strand == '-') && (eStarts[i-1] == stopCodonEnd))
+                eStarts[i-1] = stopCodonStart;
+            }
         }
     }
-gp->exonCount= i;
+gp->exonCount = i;
 return gp;
+}
+
+struct genePred *genePredFromGroupedGff(struct gffFile *gff, struct gffGroup *group, char *name,
+	char *exonSelectWord, unsigned optFields)
+/* Convert gff->groupList to genePred list. */
+{
+struct genePred *gp;
+int cdsStart = BIGNUM, cdsEnd = -BIGNUM;
+int exonCount = 0;
+boolean haveCds = FALSE, haveStartCodon = FALSE, haveStopCodon = FALSE;
+struct gffLine *gl;
+unsigned *eStarts, *eEnds, *eFrames;
+int i;
+boolean anyExon = FALSE;
+
+/* Look to see if any exons.  If not allow CDS to be used instead. */
+if (exonSelectWord)
+    {
+    for (gl = group->lineList; gl != NULL; gl = gl->next)
+	{
+	if (sameWord(gl->feature, exonSelectWord))
+	    {
+	    anyExon = TRUE;
+	    break;
+	    }
+	}
+    }
+else
+    anyExon = TRUE;
+if (!anyExon)
+    exonSelectWord = "CDS";
+
+return mkFromGroupedGxf(gff, group, name, FALSE, exonSelectWord, optFields);
+}
+
+struct genePred *genePredFromGroupedGtf(struct gffFile *gff, struct gffGroup *group, char *name, unsigned optFields)
+/* Convert gff->groupList to genePred list, using GTF feature conventions;
+ * including the stop codon in the 3' UTR, not the CDS (grr).  Assumes
+ * gffGroup is sorted in assending coords, with overlaping starts sorted by
+ * end coords, which is true if it was created by gffGroupLines().  If
+ * optFields contains the bit set of optional fields to add to the genePred.
+ * If genePredName2Fld is specified, then the gene_id is used for the name2
+ * field.  If genePredCdsStatFld is set, then the CDS status information is
+ * set based on the presences of start_codon, stop_codon, and CDS features.
+ * If genePredExonFramesFld is set, then frame is set as specified in the GTF.
+ */
+{
+return mkFromGroupedGxf(gff, group, name, TRUE, NULL, optFields);
 }
 
 static void mapCdsToGenome(struct psl *psl, struct genbankCds* cds,

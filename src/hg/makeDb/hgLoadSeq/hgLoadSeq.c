@@ -8,7 +8,7 @@
 #include "fa.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.9 2004/02/23 09:07:21 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.10 2004/02/24 03:42:01 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -67,15 +67,6 @@ if (s != NULL && fluff != NULL)
     }
 }
 
-HGID seqLoaded(struct sqlConnection* conn, char* acc)
-/* determine if a sequence is already in the db, id if it is or 0 */
-{
-char accBuf[512], query[512];
-safef(query, sizeof(query), "select id from seq where acc = '%s'",
-      sqlEscapeTabFileString2(accBuf, acc));
-return sqlQuickNum(conn, query);
-}
-
 boolean loadFaSeq(struct lineFile *faLf, HGID extFileId, FILE *seqTab,
                   struct sqlConnection* conn)
 /* Add next sequence in fasta file to tab file */
@@ -116,29 +107,13 @@ if (faSeekNextRecord(faLf))
 faEndOffset = faLf->bufOffsetInFile + faLf->lineStart;
 faSize = (int)(faEndOffset - faOffset); 
 
-if (replace)
-    {
-    seqId = seqLoaded(conn, faAcc);
-    if (seqId != 0)
-        {
-        char query[512];
-        safef(query, sizeof(query), "UPDATE seq SET size=%d, extFile=%d, "
-              "file_offset=%lld, file_size=%d", dnaSize, extFileId, faOffset, faSize);
-        sqlUpdate(conn, query);
-        }
-    }
-
-if (seqId == 0)
-    {
-    /* add to tab file */
-    seqId = hgNextId();
+/* add to tab file */
+seqId = hgNextId();
     
-    /* note: sqlDate column is empty */
-
-    fprintf(seqTab, "%u\t%s\t%d\t\t%u\t%lld\t%d\n",
-            seqId, sqlEscapeTabFileString2(faAccBuf, faAcc),
-            dnaSize, extFileId, faOffset, faSize);
-    }
+/* note: sqlDate column is empty */
+fprintf(seqTab, "%u\t%s\t%d\t\t%u\t%lld\t%d\n",
+        seqId, sqlEscapeTabFileString2(faAccBuf, faAcc),
+        dnaSize, extFileId, faOffset, faSize);
 return TRUE;
 }
 

@@ -23,13 +23,15 @@ enum cdsStatus
 enum genePredCreateOpts
 /* bit set of options for genePredGetCreateSql */
 {
-    genePredWithBin = 0x01  /* create bin column */
+    genePredBasicSql = 0x00, /* used if nothing special */
+    genePredWithBin = 0x01   /* create bin column */
 };
 
 
 enum genePredFields
 /* bit set to indicate which optional fields are used */
 {
+    genePredNoOptFld      = 0x00,  /* use for no opt fields */
     genePredIdFld         = 0x01,  /* id field */
     genePredName2Fld      = 0x02,  /* name2 field */
     genePredCdsStatFld    = 0x04,  /* cdsStart/EndStat fields */
@@ -56,8 +58,9 @@ struct genePred
                                    * database) */
     unsigned id;                  /* Numeric id of gene annotation,
                                    * zero if not available. */
-    char *name2;                  /* Secondary name. (e.g. name of gene),
-                                   * or NULL if not available */
+    char *name2;                  /* Secondary name. (e.g. name of gene), or
+                                   * empty if none, NULL if field not
+                                   * requested */
     enum cdsStatus cdsStartStat;  /* Status of cdsStart annotation */
     enum cdsStatus cdsEndStat;    /* Status of cdsStart annotation */
     int *exonFrames;              /* List of frame for each exon, or -1
@@ -125,18 +128,25 @@ int genePredCmp(const void *va, const void *vb);
 /* Compare to sort based on chromosome, txStart. */
 
 struct genePred *genePredFromGroupedGff(struct gffFile *gff, struct gffGroup *group, 
-	char *name, char *exonSelectWord, boolean gFrame);
+	char *name, char *exonSelectWord, unsigned optFields);
 /* Convert gff->groupList to genePred list.   Only put lines where feature type  matches
  * exonSelectWord into the gene.  (If exonSelectWord is NULL, all go in)
- * if gFrame is true, fill in frame info from gff using optional genePred fields
+ * If optFields contains the bit set of optional fields to add to the genePred.
+ * If genePredCdsStatFld is set, then the CDS status information is
+ * set based on the presences of start_codon, stop_codon, and CDS features.
+ * If genePredExonFramesFld is set, then frame is set as specified in the GTF.
  */
 
-struct genePred *genePredFromGroupedGtf(struct gffFile *gff, struct gffGroup *group, char *name, boolean gFrame);
+struct genePred *genePredFromGroupedGtf(struct gffFile *gff, struct gffGroup *group, char *name, unsigned optFields);
 /* Convert gff->groupList to genePred list, using GTF feature conventions;
  * including the stop codon in the 3' UTR, not the CDS (grr).  Assumes
  * gffGroup is sorted in assending coords, with overlaping starts sorted by
- * end coords, which is true if it was created by gffGroupLines(). 
- * if gFrame is true, fill in frame info from gff using optional genePred fields
+ * end coords, which is true if it was created by gffGroupLines().  If
+ * optFields contains the bit set of optional fields to add to the genePred.
+ * If genePredName2Fld is specified, then the gene_id is used for the name2
+ * field.  If genePredCdsStatFld is set, then the CDS status information is
+ * set based on the presences of start_codon, stop_codon, and CDS features.
+ * If genePredExonFramesFld is set, then frame is set as specified in the GTF.
  */
 
 struct genePred *genePredFromPsl2(struct psl *psl, unsigned optFields,
