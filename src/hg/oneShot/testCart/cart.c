@@ -5,6 +5,7 @@
 #include "jksql.h"
 #include "cartDb.h"
 #include "htmshell.h"
+#include "errabort.h"
 #include "cart.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
@@ -379,6 +380,7 @@ void cartHtmlShell(char *title, void (*doMiddle)(struct cart *cart), char *cooki
  * comma-separated list of variables that you don't want to save in the cart between
  * invocations of the cgi-script. */
 {
+int status;
 char *hguidString = findCookieData("hguid");
 int hguid = (hguidString == NULL ? 0 : atoi(hguidString));
 int hgsid = cgiUsualInt("hgsid", 0);
@@ -393,10 +395,24 @@ puts("Content-Type:text/html");
 puts("\n");
 
 htmStart(stdout, title);
-doMiddle(cart);
+
+/* Set up error recovery (for out of memory and the like)
+ * so that we finish web page regardless of problems. */
+pushAbortHandler(htmlAbort);
+pushWarnHandler(htmlVaWarn);
+status = setjmp(htmlRecover);
+
+/* Do your main thing. */
+if (status == 0)
+    {
+    doMiddle(cart);
+    if (!savedSession)
+	errAbort("Program error - need to call saveSession inside form");
+    }
+
+popWarnHandler();
+popAbortHandler();
 cartFree(&cart);
-if (!savedSession)
-    errAbort("Program error - need to call saveSession inside form");
 htmlEnd();
 }
 
