@@ -32,7 +32,7 @@ enum lowTypes
 /* Different low level types (not including lists and objects) */
    {
    t_float,    /* single precision floating point. */
-   t_char,     /* fixed size character array. */
+   t_char,     /* character or fixed size character array. */
    t_int,      /* signed 32 bit integer */
    t_uint,     /* unsigned 32 bit integer */
    t_short,    /* signed 16 bit integer */
@@ -375,8 +375,6 @@ for (;;)
 	tkzMustHaveNext(tkz);
 	if (col->lowType->type == t_char)
 	    {
-	    if (!col->isList || !col->fixedSize)
-		tkzErrAbort(tkz, "char %s must be a fixed sized array\n",  col->name);
 	    col->isList = FALSE;	/* It's not really a list... */
 	    }
 	slAddHead(&obj->columnList, col);
@@ -420,7 +418,7 @@ for (col = table->columnList; col != NULL; col = col->next)
     if (col->isList || col->isArray)
 	fprintf(f, "longblob not null");
     else if (lt->type == t_char)
-	fprintf(f, "char(%d) not null", col->fixedSize);
+	fprintf(f, "char(%d) not null", col->fixedSize ? col->fixedSize : 1);
     else
 	fprintf(f, "%s not null", lt->sqlName);
     fputc(',', f);
@@ -480,7 +478,10 @@ for (col = dbObj->columnList; col != NULL; col = col->next)
 	fprintf(f, "    %s", lt->cName);
 	if (lt->type == t_char)
 	    {
-	    fprintf(f, " %s[%d]", col->name, col->fixedSize+1); 
+	    if (col->fixedSize > 0)
+		fprintf(f, " %s[%d]", col->name, col->fixedSize+1); 
+	    else
+		fprintf(f, " %s", col->name); 
 	    }
 	else
 	    {
@@ -540,8 +541,12 @@ else if (lt->type == t_float)
     fprintf(f, "%sret->%s%s = sqlFloatComma(&s);\n", indent, col->name, arrayRef);
 else if (lt->type == t_char)
     {
-    fprintf(f, "%ssqlFixedStringComma(&s, ret->%s%s, sizeof(ret->%s%s));\n",
-	indent, col->name, arrayRef, col->name, arrayRef);
+    if (col->fixedSize > 0)
+	fprintf(f, "%ssqlFixedStringComma(&s, ret->%s%s, sizeof(ret->%s%s));\n",
+		indent, col->name, arrayRef, col->name, arrayRef);
+    else
+	fprintf(f, "%ssqlFixedStringComma(&s, &(ret->%s), sizeof(ret->%s));\n",
+		indent, col->name, col->name);
     }
 else
     fprintf(f, "%sret->%s%s = sqlSignedComma(&s);\n", indent, col->name, arrayRef);
@@ -653,7 +658,10 @@ if (col->isSizeLink == isSizeLink)
 		    fprintf(f, "ret->%s = row[%d];\n", col->name, colIx);
 		break;
 	    case t_char:
-		fprintf(f, "strcpy(ret->%s, row[%d]);\n", col->name, colIx);
+		if (col->fixedSize > 0)
+		    fprintf(f, "strcpy(ret->%s, row[%d]);\n", col->name, colIx);
+		else
+		    fprintf(f, "ret->%s = row[%d][0];\n", col->name, colIx);
 		break;
 	    case t_object:
 		{
@@ -980,10 +988,11 @@ for (col = table->columnList; col != NULL; col = col->next)
     switch(type)
 	{
 	case t_char:
+	    outString = (col->fixedSize > 0) ? "'%s'" : "'%c'";
+	    break;
 	case t_string:
 	case t_lstring:
 	    outString = "'%s'";
-
 	    break;
 	case t_float:
 	    outString = "%f";
@@ -1358,6 +1367,9 @@ for (col = table->columnList; col != NULL; col = col->next)
     switch(type)
 	{
 	case t_char:
+	    outChar = (col->fixedSize > 0) ? 's' : 'c';
+	    mightNeedQuotes = TRUE;
+	    break;
 	case t_string:
 	case t_lstring:
 	    outChar = 's';
