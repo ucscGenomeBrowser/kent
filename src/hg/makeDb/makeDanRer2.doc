@@ -6,8 +6,16 @@ exit; # don't actually run this like a script :)
 #    http://www.sanger.ac.uk/Projects/D_rerio/
 #  Assembly notes:
 #    http://www.sanger.ac.uk/Projects/D_rerio/Zv4_assembly_information.shtml
+#  NOTE: Error in scaffolds agp file. Notified Sanger and got new scaffolds
+# agp and recreated FASTA files from this new one (2004-11-29)
+# Previous agp file was missing a scaffold from the end of most chromosomes.
+# There is also a chrUn set of scaffolds that are in the chunks agp file - these# just have the identifier Zv4_scaffoldN instead of a chromosome number and 
+# they are scaffolds that correspond to FPC contigs but their position is 
+# unknown so they are not mapped to a chromosome.
 
 # DOWNLOAD SEQUENCE (DONE, 2004-10-18, hartera)
+# ERRORS IN SCAFFOLDS AGP SO GET NEW AGP FROM SANGER AND DOWNLOAD 
+# (hartera, 2004-11-29) from Mario Caccamo: mc2@sanger.ac.uk
      ssh kksilo
      mkdir /cluster/store8/danRer2
      ln -s /cluster/store8/danRer2 /cluster/data
@@ -22,8 +30,17 @@ exit; # don't actually run this like a script :)
        ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv4release/Zv4.scaffolds.agp
      wget --timestamp \
        ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv4release/Zv4.fasta
+# get new agp file and download to /cluster/data/danRer2 (hartera, 2004-11-29)
+     # Remove all chrom directories to start processing with new agp file
+     ssh kksilo
+     cd /cluster/data/danRer2
+     foreach c (`cat chrom.lst`)
+        rm -r $c
+     end
 
 # DOWNLOAD MITOCHONDRION GENOME SEQUENCE (DONE, 2004-10-18, hartera)
+# DOWNLOAD SEQUENCE AND CREATE FILES AGAIN (hartera, 2004-11-30)
+     ssh kksilo
      mkdir -p /cluster/data/danRer2/M
      cd /cluster/data/danRer2/M
      # go to http://www.ncbi.nih.gov/ and search Nucleotide for
@@ -52,6 +69,7 @@ chrM       1       16596   1       F       AC024175.3      1       16596   +
 
 # Create list of chromsosomes (DONE, 2004-10-18, hartera)
 # Add "M" for mitochondrion chromosome (2004-10-25, hartera)
+# Add "Un" for chrUn (2004-11-29, hartera)
      ssh kksilo
      cd /cluster/data/danRer2
      awk '{print $1;}' Zv4.scaffolds.agp | sort -n | uniq > chrom.lst
@@ -59,8 +77,13 @@ chrM       1       16596   1       F       AC024175.3      1       16596   +
      echo "NA" >> chrom.lst
      # add chrM
      echo "M" >> chrom.lst
+     # add chrUn
+     echo "Un" >> chrom.lst
 
 # SPLIT AGP FILES BY CHROMOSOME (DONE, 2004-10-19, hartera)
+# AGP USED TO CREATE FASTA WAS SCAFFOLDS AGP 
+# RE-DO SPLITTING AGP FILES AFTER GETTING NEW SCAFFOLDS AGP 
+# (hartera, 2004-11-29)
      ssh kksilo
      cd /cluster/data/danRer2
      # There are 2 .agp files: one for scaffolds (supercontigs on danRer1) and 
@@ -80,6 +103,9 @@ chrM       1       16596   1       F       AC024175.3      1       16596   +
      end
 
 # CREATE AGP AND FASTA FOR chrNA (DONE, 2004-10-25, hartera)
+# REMAKE AGP WITH NEW SCAFFOLDS AGP FILE AND CREATE chrUn AGP 
+# (hartera, 2004-11-29)
+
      ssh kksilo
      cd /cluster/data/danRer2
      # for NA make agp files
@@ -105,10 +131,11 @@ chrM       1       16596   1       F       AC024175.3      1       16596   +
      end 
      # change the type to "W" in the agp for WGS
      perl -pi.bak -e "s/D/W/;" NA/chrNA.agp
+     cd NA
      mv chrNA.agp chrNA.scaffolds.agp
      rm *.bak
      # use this chrNA.scaffolds.agp to create chrNA.chunks.agp
-cat << '_EOF_' > createChunksAgp.pl
+cat << '_EOF_' > /cluster/data/danRer2/jkStuff/createChunksAgp.pl
 #!/usr/bin/perl -w
 use strict;
 
@@ -131,37 +158,91 @@ while (my $line = <SCAFS>) {
    }
    print "\n";
 }
+'_EOF_'
 
-   chmod +x createChunksAgp.pl
-   perl createChunksAgp.pl chrNA.scaffolds.agp > chrNA.chunks.agp
+     chmod +x /cluster/data/danRer2/jkStuff/createChunksAgp.pl
+     perl ../jkStuff/createChunksAgp.pl chrNA.scaffolds.agp > chrNA.chunks.agp
+
+   # Also create agp for chrUn - these are scaffolds that map to FPC contigs
+   # but are unplaced on the chromosomes
+     # for Un, make agp files
+     ssh kksilo
+     cd /cluster/data/danRer2
+     mkdir Un
+     # make a scaffolds agp for Un - use first 9 fields of chunks file
+     # and remove ".1" from 6th field
+     awk 'BEGIN {OFS="\t"} {if ($1 ~ /Zv4_scaffold/) \
+         print $1, $2, $3, $4, $5, $6, $7, $8, $9}' \
+         Zv4.chunks.agp | perl -pi.bak -e 's/(Zv4_NA[0-9]+)\.1+/$1/' \
+         > Un/Un.scaffolds.agp 
+     # from scaffolds agp, get name of scaffolds to get from FASTA file for Un
+     foreach c (Un)
+       awk '{print $1;}' $c/$c.scaffolds.agp > $c/chr$c.scaffolds.lst
+       $HOME/bin/i386/faSomeRecords /cluster/data/danRer2/Zv4.fasta \
+          $c/chr$c.scaffolds.lst $c/chr$c.fa
+     end
+     # create agp with 1000Ns between scaffolds as contig gaps for chrUn
+     foreach c (Un)
+        $HOME/bin/i386/scaffoldFaToAgp $c/chr$c.fa
+        mv $c/chr$c.fa $c/chr$c.scaffolds.fa
+     end 
+     # change the type to "W" in the agp for WGS
+     perl -pi.bak -e "s/D/W/;" Un/chrUn.agp
+     cd Un
+     mv chrUn.agp chrUn.scaffolds.agp
+     rm *.bak
+     # create chunks agp for chrUn
+     perl ../jkStuff/createChunksAgp.pl chrUn.scaffolds.agp > chrUn.chunks.agp
 
 # BUILD CHROM-LEVEL SEQUENCE (DONE, 2004-10-21, hartera)
+# Move scaffolds files for NA into scaffolds directory (2004-11-22, hartera)
+# RE-BUILD SEQUENCE WITH NEW AGPS FROM CORRECTED SCAFFOLDS AGP 
+# (2004-11-30, hartera)
      ssh kksilo
      cd /cluster/data/danRer2
      # Sequence is already in upper case so no need to change
      foreach c (`cat chrom.lst`)
        echo "Processing ${c}"
-       $HOME/bin/i386/agpToFa -simpleMultiMixed $c/chr$c.scaffolds.agp $c \
+       $HOME/bin/i386/agpToFa -simpleMultiMixed $c/chr$c.scaffolds.agp chr$c \
          $c/chr$c.fa ./Zv4.fasta
        echo "${c} - DONE"
      end
      # some Ns in sequence files are in lower case so change to upper case
      foreach c (`cat chrom.lst`) 
         cat $c/chr${c}.fa | tr 'n' 'N' > $c/chr${c}.fa.tr
-        cp $c/chr${c}.fa.tr $c/chr${c}.fa
+        if ($c == "Un") then  
+           perl -pi.bak -e 's/^>chrUN/>chrUn/' $c/chr${c}.fa.tr
+        endif
+        mv $c/chr${c}.fa.tr $c/chr${c}.fa
      end
-     # check files and them remove chrN.fa.tr files 
+     # move scaffolds agp to be chrom agp and clean up (2004-11-30)
      foreach c (`cat chrom.lst`)
-        rm $c/chr${c}.fa.tr
+        cd $c
+        rm *.bak
+        cp chr${c}.scaffolds.agp chr${c}.agp
+        mkdir agps
+        mv chr${c}.*.agp ./agps/
+        cd ..
+     end
+
+     # move scaffolds files for NA into scaffolds directory (2004-11-22)
+     # and again (2004-11-30)
+     foreach c (NA Un)
+        mkdir -p /cluster/data/danRer2/$c/scaffolds
+        cd /cluster/data/danRer2/$c
+        mv chr$c.scaffolds.* ./scaffolds
+        rm $c.*.agp
+        cd .. 
      end
 
 # CHECK CHROM AND VIRTUAL CHROM SEQUENCES (DONE, 2004-10-21, hartera)
+# CHECKED THESE ARE OK (hartera, 2004-11-30)
      # Check that the size of each chromosome .fa file is equal to the
      # last coord of the .agp:
      ssh hgwdev
      cd /cluster/data/danRer2
      foreach c (`cat chrom.lst`)
-       foreach f ( $c/chr$c.scaffolds.agp )
+       foreach f ( $c/chr$c.agp )
          set agpLen = `tail -1 $f | awk '{print $3;}'`
          set h = $f:r
          set g = $h:r
@@ -178,11 +259,12 @@ while (my $line = <SCAFS>) {
 
 # BREAK UP SEQUENCE INTO 5MB CHUNKS AT CONTIGS/GAPS FOR CLUSTER RUNS
 # (DONE, 2004-10-25, hartera)
+# RE-DONE (2004-11-30, hartera)
                                                                                 
      ssh kksilo
      cd /cluster/data/danRer2
      foreach c (`cat chrom.lst`)
-       foreach agp ($c/chr$c.{,chunks.}agp)
+       foreach agp ($c/chr$c.agp)
          if (-e $agp) then
            set fa = $c/chr$c.fa
            echo splitting $agp and $fa
@@ -208,6 +290,7 @@ while (my $line = <SCAFS>) {
     echo 'create database danRer2' | hgsql ''
     # if you need to delete that database:  !!! WILL DELETE EVERYTHING !!!
     echo 'drop database danRer2' | hgsql danRer2
+    # Delete and re-create database as above (hartera, 2004-11-30)
     # Use df to make sure there is at least 10 gig free on
     df -h /var/lib/mysql
 # Before loading data:
@@ -215,6 +298,7 @@ while (my $line = <SCAFS>) {
 # /dev/sdc1             1.8T  637G 1023G  39% /var/lib/mysql
 
 # CREATING GRP TABLE FOR TRACK GROUPING (DONE, 2004-10-25, hartera)
+# RECREATE GRP TABLE (hartera, 2004-11-30)
     # next machine
     ssh hgwdev
     #  the following command copies all the data from the table
@@ -224,8 +308,7 @@ while (my $line = <SCAFS>) {
     # if you need to delete that table:   !!! WILL DELETE ALL grp data !!!
     echo 'drop table grp;' | hgsql danRer2
 
-# REPEAT MASKING - Run RepeatMasker on chroms (in progress, 2004-10-25, hartera)
-#- Split contigs into 500kb chunks, at gaps if possible:
+# REPEAT MASKING - Run RepeatMasker on chroms (DONE, 2004-10-26, hartera)
 # There is a new Repeat library at WUSTL that has new repeats for Danio rerio
 # This is Dr.repeats.020501
 # Add a README about these repeats
@@ -240,10 +323,12 @@ while (my $line = <SCAFS>) {
     cat danioRW.lib >> danioRMandRW.lib
     # add type as "unknown" to this file as these repeats are not classified
     perl -pi.bak -e 's/^(>Dr[0-9]+)/$1#Unknown/' danioRMandRW.lib
+    # these new repeats are not classified by type so add "DrRW" as type later
     # Add a README about these repeats from WUSTL
     wget --timestamp \
           http://www.genetics.wustl.edu/fish_lab/repeats/Readme.txt
 
+#- Split contigs into 500kb chunks, at gaps if possible:
     foreach c (`cat chrom.lst`)
       foreach d ($c/chr${c}*_?{,?})
         cd $d
@@ -254,4 +339,597 @@ while (my $line = <SCAFS>) {
         cd ../..
       end
     end
+
+#- Make the run directory and job list:
+    cd /cluster/data/danRer2
+    # use RepeatMasker from January 2004
+    cat << '_EOF_' > jkStuff/RMZebrafish
+#!/bin/csh -fe
+                                                                                
+cd $1
+pushd .
+/bin/mkdir -p /tmp/danRer2/$2
+/bin/cp $2 /tmp/danRer2/$2/
+cd /tmp/danRer2/$2
+/cluster/bluearc/RepeatMasker/RepeatMasker -ali -s -lib danioRMandRW.lib $2
+popd
+/bin/cp /tmp/danRer2/$2/$2.out ./
+if (-e /tmp/danRer2/$2/$2.align) /bin/cp /tmp/danRer2/$2/$2.align ./
+if (-e /tmp/danRer2/$2/$2.tbl) /bin/cp /tmp/danRer2/$2/$2.tbl ./
+if (-e /tmp/danRer2/$2/$2.cat) /bin/cp /tmp/danRer2/$2/$2.cat ./
+/bin/rm -fr /tmp/danRer2/$2/*
+/bin/rmdir --ignore-fail-on-non-empty /tmp/danRer2/$2
+/bin/rmdir --ignore-fail-on-non-empty /tmp/danRer2
+'_EOF_'
+    chmod +x jkStuff/RMZebrafish2
+    mkdir RMRun
+    cp /dev/null RMRun/RMJobs
+    foreach c (`cat chrom.lst`)
+      foreach d ($c/chr${c}_?{,?})
+          set ctg = $d:t
+          foreach f ( $d/${ctg}_?{,?}.fa )
+            set f = $f:t
+            echo /cluster/data/danRer2/jkStuff/RMZebrafish \
+                 /cluster/data/danRer2/$d $f \
+               '{'check out line+ /cluster/data/danRer2/$d/$f.out'}' \
+              >> RMRun/RMJobs
+          end
+      end
+    end
+                                                                                
+    #- Do the run
+    ssh kk
+    cd /cluster/data/danRer2/RMRun
+    para create RMJobs
+    para try, para check, para check, para push, para check,...
+# para time
+# CPU time in finished jobs:   10326858s  172114.29m  2868.57h  119.52d  0.327 y
+# IO & Wait Time:                 33702s     561.71m     9.36h    0.39d  0.001 y
+# Average job time:                3081s      51.35m     0.86h    0.04d
+# Longest job:                     4065s      67.75m     1.13h    0.05d
+# Submission to last job:         39673s     661.22m    11.02h    0.46d
+
+
+    #- Lift up the 500KB chunk .out's to 5MB ("pseudo-contig") level
+    ssh kksilo
+    cd /cluster/data/danRer2
+    foreach d (*/chr*_?{,?})
+      set contig = $d:t
+      echo $contig
+      liftUp $d/$contig.fa.out $d/$contig.lft warn $d/${contig}_*.fa.out \
+        > /dev/null
+    end
+                                                                                
+    #- Lift pseudo-contigs to chromosome level
+    foreach c (`cat chrom.lst`)
+      echo lifting $c
+      cd $c
+      if (-e lift/ordered.lft && ! -z lift/ordered.lft) then
+        liftUp chr$c.fa.out lift/ordered.lft warn `cat lift/oOut.lst` \
+        > /dev/null
+      endif
+      cd ..
+    end
+
+    #- Load the .out files into the database with:
+    ssh hgwdev
+    cd /cluster/data/danRer2
+    hgLoadOut danRer2 */chr*.fa.out
+# When try masking sequence (see below) there are 60 instances of negative 
+# co-ordinates:
+#     2 Dr000074
+#     48 Dr000158
+#     6 Dr000375
+#      1 Dr000511
+#      1 Dr000759
+#      1 Dr000975
+#      5 Dr001181
+# Sent sample output from chr1_3_21 to Arian Smit and he suggested that 
+# Dr000158 is a Satellite. When this classification is added to the FASTA
+# header: >Dr000158#Satellite, the negative co-ordinates disappeared.
+# If the classification is changed to "Unknown" then there are negative 
+# co-ordinates.
+# Took a look at these 7 repeats above and found overlapping matches
+# Yi Zhou at Boston Children's Hospital looked at the repeats and split 
+# them up into smaller chunks: danioRMandRWsplit.libe
+# Running RepeatMasker with this library removed a lot of negative co-ordinates
+# but some new ones appeared. There are 7 instances of negative co-ordinates.
+# TDR5, (TAGA)n, Dr000355, Dr001182
+# Dr001182 has two repeats, the second being an imperfect replicate of the
+# first so this was split into two repeats and RepeatMasker run again (11/18/04)
+# This time there were TDR5, (TAGA)n, Dr000355, Dr000509 with negative repeats
+# but only 5 instances.
+# 11/13/04
+# try RepeatMasker with 7 repeats with negative co-ords split into smaller
+# repeats. get list of repeat names without these then get those sequences
+    ssh kksilo
+    cd /cluster/data/danRer2/bed/
+    $HOME/bin/i386/faSomeRecords \
+          /cluster/bluearc/RepeatMasker/Libraries/danioRMandRW.lib \
+          rmandrw.txt danioRMandRWsplit.lib
+# splitreps is list of split repeats
+    cat splitreps >> danioRMandRWsplit.lib
+    mv danioRMandRWsplit.lib /cluster/bluearc/RepeatMasker/Libraries/
+    # then run repeat masker on problem repeat areas e.g. chr1_3_21.fa
+    mkdir /cluster/data/danRer2/RMRun/testSplitReps
+    cd /cluster/data/danRer2/RMRun/testSplitReps
+    nice /cluster/bluearc/RepeatMasker/RepeatMasker -ali -s -lib danioRMandRWsplit.lib chr1_3_21.fa 
+  # works well so change all the classes to unknown and re-run with this library
+   perl -pi.bak -e 's/^>(Dr[0-9a-z\-]+)#DrRW/>$1#Unknown/' danioRMandRWsplit.lib
+ # then run RepeatMasker as above with new split library (DONE, 2004-11-16)
+ # edit RMZebrafish to use this library (library is danioRMandRWsplit.lib) 
+ # and run from RMRun2 directory
+   # need to remove chrN.fa.masked files
+   # then convert chrN.fa back to upper case
+    ssh kksilo
+    cd /cluster/data/danRer2
+    foreach c (`cat chrom.lst`)
+       cd $c
+       echo "Processing $c ..."
+       rm chr${c}.fa.masked
+       cat chr${c}.fa | tr '[a-z]' '[A-Z]' > chr${c}.tmp
+       perl -pi.bak -e 's/^>CHR([0-9A-Z]+)/>chr$1/' chr${c}.tmp 
+       mv chr${c}.tmp chr${c}.fa
+       rm chr${c}.tmp.bak
+       cd ..
+    end
+# still get some negative co-ordinates when try masking
+# Dr001182 is a repeat sequence which contains two instances of a repeat with
+# the second one not being a perfect match to the first
+# split these into two repeats and then re-run RepeatMasker
+#
+# e-mailed Kerstin Jekosch at Sanger as it looks like they have used this
+# WUSTL Repeat library to mask the Zv4 assembly for Ensembl. Kerstin recommended
+# downloading this new library from RepBase as it has been properly 
+# formatted for RepBase version 10. In RepBase, it is the Zebrafish Unclassified
+# library and it consists of 958 unfinished consensus sequences of unclassified
+# repeats extracted from the library at 
+# http://www.genetics.wustl.edu/fish_lab/repeats/Dr.repeats.020501 
+# which has a total of 1225 repeats. 267 repeats present in the library have
+# been replaced by a set of consensus sequences of classified transposable 
+# elements that are reported in Repbase Update and Repbase Reports.
+
+# DOWNLOAD NEW VERSION OF THE WUSTL ZEBRAFISH REPEATS FROM REPBASE
+# (DONE, 2004-11-18, hartera)
+# Go to http://www.girinst.org/server/RepBase/
+# and select zebunc (Zebrafish unclassified library)
+# click on repeatmaskerlibraries and then download 
+# repeatmaskerlibrariesJuly2004.tar.gz
+    gunzip repeatmaskerlibrariesJuly2004.tar.gz
+    tar xvf repeatmaskerlibrariesJuly2004.tar
+    perl -pi.bak -e 's/^>(Dr[0-9]+)/>$1#Unknown/' zebunc.ref
+    cat danio.lib zebunc.ref >> danioandzebunc.lib
+
+# REDO REPEATMASKER RUN AND LOAD NEW RESULTS (DONE, 2004-11-22, hartera)
+# REDONE (hartera, 2004-12-01)
+    # sequences already split into 500kb chunks - see above
+    # use RepeatMasker open-3.0 version, Sep 2004, this was in 
+    #  /cluster/bluearc/RepeatMasker.040909 and is now the default
+    # new zebrafish library was downloaded from RepBase - zebunc.ref
+    # copy to /cluster/bluearc/RepeatMasker.040909/Libraries
+    # add "Unknown" as classification for these repeats
+    perl -pi.bak -e 's/>(Dr[0-9]+)/>$1#Unknown \@danio [S:]' zebunc.ref
+    # add to RepeatMasker library
+    mv RepeatMasker.lib RepeatMasker.lib.old
+    cat RepeatMasker.lib.old zebunc.ref >> RepeatMasker.lib
+
+    cat << '_EOF_' > jkStuff/RMZebrafish
+#!/bin/csh -fe
+                                                                                
+cd $1
+pushd .
+/bin/mkdir -p /tmp/danRer2/$2
+/bin/cp $2 /tmp/danRer2/$2/
+cd /tmp/danRer2/$2
+/cluster/bluearc/RepeatMasker/RepeatMasker -ali -s -species danio $2
+popd
+/bin/cp /tmp/danRer2/$2/$2.out ./
+if (-e /tmp/danRer2/$2/$2.align) /bin/cp /tmp/danRer2/$2/$2.align ./
+if (-e /tmp/danRer2/$2/$2.tbl) /bin/cp /tmp/danRer2/$2/$2.tbl ./
+if (-e /tmp/danRer2/$2/$2.cat) /bin/cp /tmp/danRer2/$2/$2.cat ./
+/bin/rm -fr /tmp/danRer2/$2/*
+/bin/rmdir --ignore-fail-on-non-empty /tmp/danRer2/$2
+/bin/rmdir --ignore-fail-on-non-empty /tmp/danRer2
+'_EOF_'
+    chmod +x jkStuff/RMZebrafish
+    rm -r RMRun
+    mkdir -p RMRun
+
+    cp /dev/null RMRun/RMJobs
+    foreach c (`cat chrom.lst`)
+      foreach d ($c/chr${c}_?{,?})
+          set ctg = $d:t
+          foreach f ( $d/${ctg}_?{,?}.fa )
+            set f = $f:t
+            echo /cluster/data/danRer2/jkStuff/RMZebrafish \
+                 /cluster/data/danRer2/$d $f \
+               '{'check out line+ /cluster/data/danRer2/$d/$f.out'}' \
+              >> RMRun/RMJobs
+          end
+      end
+    end
+                                                                                
+    #- Do the run
+    ssh kk
+    cd /cluster/data/danRer2/RMRun
+    para create RMJobs
+    para try, para check, para check, para push, para check,...
+# para time
+# Completed: 3899 of 3899 jobs
+# CPU time in finished jobs:   11636116s  193935.26m  3232.25h  134.68d  0.369 y
+# IO & Wait Time:                 39078s     651.31m    10.86h    0.45d  0.001 y
+# Average job time:                2994s      49.91m     0.83h    0.03d
+# Longest job:                     4064s      67.73m     1.13h    0.05d
+# Submission to last job:         19022s     317.03m     5.28h    0.22d
+
+    #- Lift up the 500KB chunk .out's to 5MB ("pseudo-contig") level
+    ssh kksilo
+    cd /cluster/data/danRer2
+    foreach d (*/chr*_?{,?})
+      set contig = $d:t
+      echo $contig
+      liftUp $d/$contig.fa.out $d/$contig.lft warn $d/${contig}_*.fa.out \
+        > /dev/null
+    end
+                                                                                
+    #- Lift pseudo-contigs to chromosome level
+    foreach c (`cat chrom.lst`)
+      echo lifting $c
+      cd $c
+      if (-e lift/ordered.lft && ! -z lift/ordered.lft) then
+        liftUp chr$c.fa.out lift/ordered.lft warn `cat lift/oOut.lst` \
+        > /dev/null
+      endif
+      cd ..
+    end
+
+    #- Load the .out files into the database with:
+    ssh hgwdev
+    cd /cluster/data/danRer2
+    hgLoadOut danRer2 */chr*.fa.out
+# Note: 23 records dropped due to repStart > repEnd
+# Processing 1/chr1.fa.out
+bad rep range in: 1354  157     0       0       chr1    7313059 7313288 -5489473
+5       -       (0)     (917)   (917)   689     5       3        
+bad rep range in: 794   247     63      0       chr1    22624284        22624474
+        -39583549       -       (0)     (860)   (860)   659     0       1       
+*
+bad rep range in: 841   234     44      0       chr1    27730487        27730692
+        -34477331       -       (0)     (555)   (555)   342     5       1       
+# Processing 11/chr11.fa.out
+bad rep range in: 2007  124     74      108     chr11   6853360 6853376 -3076000
+2       +       HATN10_DR       DNA     hAT     167     166     -289    2
+# Processing 13/chr13.fa.out
+bad rep range in: 939   65      0       158     chr13   11182894        11182923
+        -26476056       +       DIRS1_DR        LTR     DIRS1   6133    6132    
+0       1
+# Processing 14/chr14.fa.out
+bad rep range in: 350   125     29      137     chr14   39592288        39592300
+        -20407524       +       HAT1_DR DNA     hAT     612     611     -2681   
+8
+# Processing 16/chr16.fa.out
+bad rep range in: 311   225     0       136     chr16   38708823        38708835
+        -4054346        +       Dr000294        Unknown Unknown 403     400     
+-549    6
+# Processing 18/chr18.fa.out
+bad rep range in: 9780  128     42      58      chr18   12479604        12480762
+        -35227702       +       Dr000158        Unknown Unknown 45      -2229   
+-3930   1
+# Processing 19/chr19.fa.out
+bad rep range in: 249   169     0       167     chr19   25584255        25584266
+        -26439321       +       Dr000331        Unknown Unknown 314     311     
+-844    3
+# Processing 2/chr2.fa.out
+bad rep range in: 596   206     44      0       chr2    24978519        24978655
+        -27097055       -       (1)     (317)   (317)   176     5       4       
+ 
+bad rep range in: 326   56      19      0       chr2    40153004        40153058
+        -11922652       -       (129)   (79)    (79)    25      5       2       
+ 
+bad rep range in: 1454  56      0       0       chr2    50993722        50993901
+        -1081809        -       (0)     (1155)  (1155)  977     5       8 
+# Processing 3/chr3.fa.out
+bad rep range in: 605   76      0       11      chr3    42820214        42820307
+        -1974931        -       (6)     (5062)  (5062)  4971    5       3       
+# Processing 4/chr4.fa.out
+bad rep range in: 1072  143     21      100     chr4    920087  920366  -3235941
+8       -       (1)     (540)   (540)   284     5       1        
+bad rep range in: 330   194     109     29      chr4    1398685 1398823 -3188096
+1       -       (204)   (375)   (375)   227     5       14       
+bad rep range in: 978   212     58      90      chr4    24351201        24351580
+        -8928204        -       (594)   (553)   (553)   187     5       1   
+# Processing 5/chr5.fa.out
+bad rep range in: 4380  113     49      44      chr5    4937637 4937659 -6284667
+7       +       TDR23   DNA     DNA     889     888     -259    1
+# Processing 6/chr6.fa.out
+bad rep range in: 649   14      0       0       chr6    7782737 7782809 -2542980
+7       -       (956)   (419)   (419)   348     5       1        
+# Processing 7/chr7.fa.out
+bad rep range in: 272   158     0       50      chr7    19882140        19882200
+        -42635991       -       (800)   (419)   (419)   363     5       7    
+# Processing NA/chrNA.fa.out
+bad rep range in: 1068  181     113     122     chrNA   75025954        75025966
+        -243271514      +       TDR18   DNA     DNA     188     187     -385    
+5
+bad rep range in: 493   109     3       153     chrNA   202800523       20280058
+5       -115496895      +       Dr000876        Unknown Unknown 1       -32     
+-157    1
+bad rep range in: 444   271     4       164     chrNA   249521533       24952154
+8       -68775932       +       CR1-1_DR        LINE    L2      4833    4832    
+-490    9
+# Processing Un/chrUn.fa.out
+bad rep range in: 237   149     0       152     chrUn   96855194        96855206
+        -76596190       +       Dr000331        Unknown Unknown 312     311     
+-844    1
+
+# To display the new repeats which are classed as "Unknown", add this class
+# to $HOME/kent/src/hg/hgTracks/rmskTrack.c 
+# to the repeatClassNames and repeatClasses arrays
+
+# MAKE LIFTALL.LFT (DONE, 2004-10-26, hartera)
+# RE-DONE (hartera, 2004-12-01)
+    ssh kksilo
+    cd /cluster/data/danRer2
+    cat */lift/ordered.lft > jkStuff/liftAll.lft
+
+# SIMPLE REPEAT [TRF] TRACK  (DONE, 2004-10-26, hartera)
+# RE-DONE (in progress, hartera, 2004-12-01)
+    # TRF runs pretty quickly now... it takes a few hours total runtime,
+    # so instead of binrsyncing and para-running, just do this on the
+    # local fileserver
+    ssh kksilo
+    rm -r /cluster/data/danRer2/bed/simpleRepeat
+    mkdir -p /cluster/data/danRer2/bed/simpleRepeat
+    cd /cluster/data/danRer2/bed/simpleRepeat
+    mkdir trf
+    cp /dev/null jobs.csh
+    foreach d (/cluster/data/danRer2/*/chr*_?{,?})
+      set ctg = $d:t
+      foreach f ($d/${ctg}.fa)
+        set fout = $f:t:r.bed
+        echo $fout
+        echo "/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $f /dev/null -bedAt=trf/$fout -tempDir=/tmp" \
+        >> jobs.csh
+      end
+    end
+                                                                                
+    chmod a+x jobs.csh
+    csh -ef jobs.csh >&! jobs.log &
+    # check on this with
+    tail -f jobs.log
+    wc -l jobs.csh
+    ls -1 trf | wc -l
+    endsInLf trf/*
+    # 
+    liftUp simpleRepeat.bed /cluster/data/danRer2/jkStuff/liftAll.lft warn \
+      trf/*.bed
+    # Load into database
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/simpleRepeat
+    hgLoadBed danRer2 simpleRepeat simpleRepeat.bed \
+      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+
+# PROCESS SIMPLE REPEATS INTO MASK (DONE, 2004-10-26, hartera)
+    # After the simpleRepeats track has been built, make a filtered version
+    # of the trf output: keep trf's with period <= 12:
+    ssh kksilo
+    cd /cluster/data/danRer2/bed/simpleRepeat
+    mkdir -p trfMask
+    foreach f (trf/chr*.bed)
+      awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
+    end
+    # Lift up filtered trf output to chrom coords as well:
+    cd /cluster/data/danRer2
+    mkdir bed/simpleRepeat/trfMaskChrom
+    foreach c (`cat chrom.lst`)
+      if (-e $c/lift/ordered.lst) then
+        perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+          $c/lift/ordered.lst > $c/lift/oTrf.lst
+        liftUp bed/simpleRepeat/trfMaskChrom/chr$c.bed \
+          jkStuff/liftAll.lft warn `cat $c/lift/oTrf.lst`
+      endif
+      if (-e $c/lift/random.lst) then
+        perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+           $c/lift/random.lst > $c/lift/rTrf.lst
+        liftUp bed/simpleRepeat/trfMaskChrom/chr${c}_random.bed \
+          jkStuff/liftAll.lft warn `cat $c/lift/rTrf.lst`
+      endif
+    end
+
+# MASK SEQUENCE WITH REPEATMASKER AND SIMPLE REPEAT/TRF 
+# (DONE, 2004-11-22, hartera)
+    ssh kksilo
+    cd /cluster/data/danRer2
+    # Soft-mask (lower-case) the contig and chr .fa's,
+    # then make hard-masked versions from the soft-masked.
+    set trfCtg=bed/simpleRepeat/trfMask
+    set trfChr=bed/simpleRepeat/trfMaskChrom
+    # errors in the RepeatMasker output with negative co-ordinates 
+    # (60 instances) - mainly for specific sequences in the new zebrafish 
+    # library so took a look at these together with Yi Zhou from Boston 
+    # Children's Hospital who split these repeats into smaller sequences.
+    # These were used to replace the original repeats in the repeat library and     # RepeatMasker was re-run. Finally, it was found that a newer version of 
+    # RepeatMasker open-3.0.5 version reduced the negative co-ordinates to 
+    # 2 instances and a cleaned up version of the new zebrafish library 
+    # from RepBase was also used - see above.
+    foreach f (*/chr*.fa)
+      echo "repeat- and trf-masking $f"
+      maskOutFa -soft $f $f.out $f
+      set chr = $f:t:r
+      maskOutFa -softAdd $f $trfChr/$chr.bed $f
+      echo "hard-masking $f"
+      maskOutFa $f hard $f.masked
+    end
+# with the new version of RepeatMasker, there are 2 instances of negative
+# co-ordinates which can just be ignored. 
+# WARNING: negative rEnd: -2229 chr18:12479605-12480762 Dr000158
+# WARNING: negative rEnd: -32 chrNA:202800524-202800585 Dr000876
+    # mask contigs also
+
+    foreach c (`cat chrom.lst`)
+      echo "repeat- and trf-masking contigs of chr$c"
+      foreach d ($c/chr*_?{,?})
+        set ctg=$d:t
+        set f=$d/$ctg.fa
+        maskOutFa -soft $f $f.out $f
+        maskOutFa -softAdd $f $trfCtg/$ctg.bed $f
+        maskOutFa $f hard $f.masked
+      end
+    end
+# same warnings here too:
+# WARNING: negative rEnd: -2229 chr18_3:2110746-2111903 Dr000158
+# WARNING: negative rEnd: -32 chrNA_41:1844381-1844442 Dr000876
+
+    # Build nib files, using the soft masking in the fa
+    mkdir nib
+    foreach f (*/chr*.fa)
+      faToNib -softMask $f nib/$f:t:r.nib
+    end
+
+# STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE, 2004-11-22, hartera)
+    # Make symbolic links from /gbdb/danRer2/nib to the real nibs.
+    ssh hgwdev
+    cd /cluster/data/danRer2
+    mkdir -p /gbdb/danRer2/nib
+    foreach f (/cluster/data/danRer2/nib/chr*.nib)
+      ln -s $f /gbdb/danRer2/nib
+    end
+    # Load /gbdb/danRer2/nib paths into database and save size info
+    # hgNibSeq creates chromInfo table
+    hgNibSeq -preMadeNib danRer2 /gbdb/danRer2/nib */chr*.fa
+    echo "select chrom,size from chromInfo" | hgsql -N danRer2 > chrom.sizes
+    # take a look at chrom.sizes, should be 29 lines
+    wc chrom.sizes
+                                                                                
+    # Make one big 2bit file as well, and make a link to it in
+    # /gbdb/danRer2/nib because hgBlat looks there:
+    faToTwoBit */chr*.fa danRer2.2bit
+    ln -s /cluster/data/danRer2/danRer2.2bit /gbdb/danRer2/nib/
+
+# MAKE GOLD AND GAP TRACKS (DONE, 2004-11-22, hartera)
+    ssh hgwdev
+    cd /cluster/data/danRer2
+    # the gold and gap tracks are created from the chrN.agp file and this is
+    # the scaffolds or supercontigs agp 
+    # move other agp files out of the way to an agps directory
+    foreach c (`cat chrom.lst`)
+       mkdir ./$c/agps
+       mv ./$c/chr${c}.chunks.agp ./$c/agps/
+       mv ./$c/chr${c}.scaffolds.agp ./$c/agps/
+    end
+    # move the scaffolds agp for NA to agps directory
+    mv ./NA/scaffolds/chrNA.scaffolds.agp ../agps
+    # the gold and gap tracks are created from the chrN.agp file
+    hgGoldGapGl -noGl -chromLst=chrom.lst danRer2 /cluster/data/danRer2 .
+
+# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR DANRER2
+# (DONE, 2004-11-22, hartera)
+    # Make trackDb table so browser knows what tracks to expect:
+    ssh hgwdev
+    mkdir -p ~/kent/src/hg/makeDb/trackDb/zebrafish/danRer2
+                                                                                
+    cd $HOME/kent/src/hg/makeDb/trackDb
+    cvs up -d -P
+    # Edit that makefile to add danRer2 in all the right places and do
+    make update
+    make alpha
+    cvs commit -m "Added danRer2." makefile
+    # Add dbDb and defaultDb entries:
+    echo 'insert into dbDb (name, description, nibPath, organism,  \
+          defaultPos, active, orderKey, genome, scientificName,  \
+          htmlPath, hgNearOk, hgPbOk, sourceName)  \
+          values("danRer2", "June 2004", \
+          "/gbdb/danRer1/nib", "Zebrafish", "chr2:16,330,443-16,335,196", 1, \
+          37, "Zebrafish", "Danio rerio", \
+          "/gbdb/danRer2/html/description.html", 0, 0, \
+          "Sanger Centre, Danio rerio Sequencing Project Zv4");' \
+    | hgsql -h genome-testdb hgcentraltest
+    # set danRer2 to be the default assembly for Zebrafish
+    echo 'update defaultDb set name = "danRer2" \
+          where genome = "Zebrafish";' \
+          | hgsql -h genome-testdb hgcentraltest
+
+# MAKE DESCRIPTION/SAMPLE POSITION HTML PAGE (DONE, 2004-11-22, hartera)
+    ssh hgwdev
+    mkdir /cluster/data/danRer2/html
+    # make a symbolic link from /gbdb/danRer2/html to /cluster/data/danRer2/html
+    ln -s /cluster/data/danRer2/html /gbdb/danRer2/html
+    # Add a description page for zebrafish
+    cd /cluster/data/danRer2/html
+    cp $HOME/kent/src/hg/makeDb/trackDb/zebrafish/danRer1/description.html .
+    # Edit this for zebrafish danRer2
+                                                                                
+    # create a description.html page here
+    mkdir -p ~/kent/src/hg/makeDb/trackDb/zebrafish/danRer2
+    cd ~/kent/src/hg/makeDb/trackDb/zebrafish
+    cvs add danRer2
+    cvs commit danRer2
+    # Add description page here too
+    cd danRer2 
+    cp /cluster/data/danRer2/html/description.html .
+    cvs add description.html
+    cvs commit -m "First draft of description page for danRer2." \
+        description.html
+
+# PUT MASKED SEQUENCE OUT FOR CLUSTER RUNS (DONE, 2004-11-22, hartera)
+    ssh kkr1u00
+    # Chrom-level mixed nibs that have been repeat- and trf-masked:
+    rm -rf /iscratch/i/danRer2/nib
+    mkdir -p /iscratch/i/danRer2/nib
+    cp -p /cluster/data/danRer2/nib/chr*.nib /iscratch/i/danRer2/nib
+    # Pseudo-contig fa that have been repeat- and trf-masked:
+    rm -rf /iscratch/i/danRer2/trfFa
+    mkdir /iscratch/i/danRer2/trfFa
+    foreach d (/cluster/data/danRer2/*/chr*_?{,?})
+      cp $d/$d:t.fa /iscratch/i/danRer2/trfFa
+    end
+    rm -rf /iscratch/i/danRer2/rmsk
+    mkdir -p /iscratch/i/danRer2/rmsk
+    cp -p /cluster/data/danRer2/*/chr*.fa.out /iscratch/i/danRer2/rmsk
+    cp -p /cluster/data/danRer2/danRer2.2bit /iscratch/i/danRer2/
+    iSync
+
+# CREATE gc5Base wiggle TRACK (in progress, 2004-11-22, hartera)
+    ssh kksilo
+    mkdir /cluster/data/danRer2/bed/gc5Base
+    cd /cluster/data/danRer2/bed/gc5Base
+    #   in the script below, the 'grep -w GC' selects the lines of
+    #   output from hgGcPercent that are real data and not just some
+    #   information from hgGcPercent.  The awk computes the number
+    #   of bases that hgGcPercent claimed it measured, which is not
+    #   necessarily always 5 if it ran into gaps, and then the division
+    #   by 10.0 scales down the numbers from hgGcPercent to the range
+    #   [0-100].  Two columns come out of the awk print statement:
+    #   <position> and <value> which are fed into wigAsciiToBinary through
+    #   the pipe.  It is set at a dataSpan of 5 because each value
+    #   represents the measurement over five bases beginning with
+    #   <position>.  The result files end up in ./wigData5.
+    #   A new script is used (from makeHg17.doc) which gets around the
+    #   problem that wigAsciiToBinary was calculating chromEnd to be
+    #   beyond the real chromosome end
+                                                                                
+    mkdir wigData5 
+    cd wigData5
+    # this calculates the zoom data too                                                                                
+    hgGcPercent -wigOut -doGaps -file=stdout -win=5 danRer2 \
+        /iscratch/i/danRer2/nib | \
+        wigEncode stdin gc5Base.wig gc5Base.wib
+
+# ENSEMBL GENES (in progress, 2004-11-18, hartera)
+    ssh hgwdev                                                                      mkdir -p /cluster/data/danRer2/bed/ensembl
+    cd /cluster/data/danRer2/bed/ensembl
+    # Get the ensembl protein data from
+    # http://www.ensembl.org/Danio_rerio/martview
+    # Follow this sequence through the pages:
+    # Page 1) Make sure that the Danio_rerio choice is selected. Hit next.
+    # Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
+    # Page 3) Choose the "Structures" box.
+    # Page 4) Choose GTF as the ouput.  choose gzip compression.  hit export.
+    # Save as ensemblGene.gtf.gz
+
+
+
+
+
+
 
