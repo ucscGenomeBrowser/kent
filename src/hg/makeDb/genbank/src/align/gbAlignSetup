@@ -75,14 +75,8 @@ sub getUpdateUnaligned($$$$) {
         my $nativeAlIdx = "$baseIdx.native.alidx";
         my $xenoAlIdx = "$baseIdx.xeno.alidx";
         my $name = "$release/$db/$update/$typeAccPrefix";
-        if ($release =~ /refseq.*$/) {
-            if (! -e $nativeAlIdx) {
-                $unaligned{$name} = 1;
-            }
-        } else {
-            if (! (-e $nativeAlIdx && -e $xenoAlIdx)) {
-                $unaligned{$name} = 1;
-            }
+        if (! (-e $nativeAlIdx && -e $xenoAlIdx)) {
+            $unaligned{$name} = 1;
         }
     }
     return sort(keys(%unaligned));
@@ -230,7 +224,7 @@ sub partitionNibFile($$) {
             }
         }
     }
-    close(NIBFH);
+    close(NIBFH) || die("close failed");
     return @nibSpecs;
 }
 
@@ -458,8 +452,8 @@ if (defined($rsRelease)) {
 
 print("numAlign: $totalNumAlign\n");
 # install jobs and expected file.
-close(EXPECTED);
-close(JOBS);
+close(EXPECTED) || die("close failed");
+close(JOBS) || die("close failed");
 if ($totalNumAlign > 0) {
     renameFile($alignExpectedTmp, $alignExpected);
     renameFile($alignJobsTmp, $alignJobs);
@@ -469,5 +463,5 @@ if ($totalNumAlign > 0) {
     # leave flag indicating nothing to align
     my $alignNone = "$main::workDir/align.none";
     open(NONE, ">$alignNone") || die("can't create $alignNone");
-    close(NONE);
+    close(NONE) || die("close failed");
 }

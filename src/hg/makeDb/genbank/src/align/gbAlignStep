@@ -239,7 +239,7 @@ if (inList("run", @tasks) && !-e $alignNone) {
 if (defined($continueTask) && ($continueTask eq "finish")) {
     # finishing by hand, create align.done file.
     open(DONE, ">$alignDone") || die("can't create $alignDone");
-    close(DONE);
+    close(DONE) || die("close failed");
 }
 
 if (inList("finish", @tasks) && !-e $alignNone) {

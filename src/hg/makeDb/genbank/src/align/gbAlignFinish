@@ -75,7 +75,7 @@ sub parseDirPrefix($) {
     return ($release, $database, $update, $type, $typePrefix);
 }
 
-# Determine pslReps parameters to use.
+# Determine pslReps parameters to use.  Return undef to skip PSL reps.
 sub getPslRepsArgs($$) {
     my ($release, $typePrefix) = @_;
     
@@ -86,18 +86,22 @@ sub getPslRepsArgs($$) {
 
     if ($release =~ /^refseq\..*/) {
         # RefSeq:
-        return "-minCover=0.15 -sizeMatters -minAli=0.96 -nearTop=0.001";
+        if ($orgCat eq "native") {
+            return "-minCover=0.15 -sizeMatters -minAli=0.96 -nearTop=0.001";
+        } elsif ($orgCat eq "xeno") {
+            return "-minCover=0.15 -sizeMatters -minAli=0.96 -nearTop=0.05";
+        }
     } else {
         # GenBank:
         if ($type eq "mrna") {
             if ($orgCat eq "native") {
-                return "-minAli=0.98 -sizeMatters -nearTop=0.005";
+                return "-minAli=0.96 -sizeMatters -nearTop=0.005";
             } elsif ($orgCat eq "xeno") {
                 return "-minAli=0.25";
             }
         } elsif ($type eq "est") {
             if ($orgCat eq "native") {
-                return "-minAli=0.98 -sizeMatters -nearTop=0.005";
+                return "-minAli=0.96 -sizeMatters -nearTop=0.005";
             } elsif ($orgCat eq "xeno") {
                 return "-minAli=0.10";
             }
@@ -116,11 +120,11 @@ sub combinePslSet($$$$$$) {
 
     my $cmd = "find $queryDir -name '*.psl.gz' | xargs zcat "
         . "| sort -T $tmpDir -k 10,10 -k 12n,12n ";
-    if (defined($liftFile)) {
+    if (defined($pslRepsArgs)) {
         $cmd .= "| pslReps -nohead $pslRepsArgs stdin stdout /dev/null "
-            . "| liftUp -nohead -type=.psl stdout $liftFile carry stdin";
-    } else {
-        $cmd .= "| pslReps -nohead $pslRepsArgs stdin stdout /dev/null ";
+    }
+    if (defined($liftFile)) {
+        $cmd .= "| liftUp -nohead -type=.psl stdout $liftFile carry stdin ";
     }
     $cmd .= " >> $outPsl";
     runPipe($cmd);
@@ -251,7 +255,7 @@ sub combineIntronPslSet($$$$$) {
 }
 
 # Combine and lift intronPsl files. This processing parallels combinePsls,
-# however intronPsl files only exist for ESTs and not all EST psl will
+# however intronPsl files only exist for native ESTs and not all EST psl will
 # have intronPsl files.
 sub combineIntronPsls($$$$$$@) {
     my($typePrefix, $liftFile, $updWorkDir, $tmpDir, $outPsl, $pslQueryOffsets, @queryDirs) = @_;
@@ -309,8 +313,8 @@ sub finishOrgCatAligns($$$) {
                           $updWorkDir, $tmpDir, \%pslQueryOffset,
                           @queryDirs);
 
-        # build orient info and intron psl if we have PSLs.
-        if (defined($outPsl)) {
+        # build orient info and intron psl if we have PSLs and are native.
+        if (defined($outPsl) && ($orgCat eq "native")) {
             $outOI = combineOIs($typePrefix, $liftFile, $updWorkDir,
                                 $tmpDir, $outPsl, \%pslQueryOffset,
                                 @queryDirs);
@@ -336,12 +340,7 @@ sub finishAligns($) {
     }
     # check if already completed
     my $alidxBase = "data/aligned/$release/$database/$update/$typePrefix";
-    my $finished;
-    if ($release =~ /^refseq/) {
-        $finished = (-e "$alidxBase.native.alidx");
-    } else {
-        $finished = (-e "$alidxBase.native.alidx" && -e "$alidxBase.xeno.alidx");
-    }
+    my $finished = (-e "$alidxBase.native.alidx" && -e "$alidxBase.xeno.alidx");
     if ($finished) {
         if ($main::verbose) {
             print STDERR "finishAligns: $alidxBase.*.alidx exists, skipping,\n";
@@ -388,7 +387,7 @@ sub verifyExpectedPsls() {
             $missingCnt++;
         }
     }
-    close(EXPECTED);
+    close(EXPECTED) || die("close failed");
     if ($missingCnt > 0) {
         die("$missingCnt missing PSLs");
     }

@@ -24,8 +24,9 @@ use gbCommon;
 # amount.  This will cause para shove to exit sooner if the jobs are
 # failing.
 my $PARA_MAX_PUSH = 20000;
+my $PARA_MAX_QUEUE = 200000;
 
-set $RSH = "ssh";
+my $RSH = "ssh";
 
 # Entry
 setTaskName("gbAlignRun");
@@ -81,7 +82,7 @@ if ($main::paraHost ne "localhost") {
 chdir $main::workDir || dir("can't chdir to $main::workDir");
 
 # this runs to completion
-runProg("$rshCmd para make -maxPush=$PARA_MAX_PUSH align.jobs </dev/null");
+runProg("$rshCmd para make -maxPush=$PARA_MAX_PUSH -maxQueue=$PARA_MAX_QUEUE align.jobs </dev/null");
 
 # Check results
 my $paraCheck = callProg("$rshCmd para check </dev/null");
@@ -96,4 +97,4 @@ if (($paraCheck =~ /crashed:/) || ($paraCheck =~ /failed:/)) {
 runProg("$rshCmd para time </dev/null");
 
 open(DONE, ">", "align.done") || gbError("can't create $doneFlag");
-close(DONE);
+close(DONE) || die("close failed");

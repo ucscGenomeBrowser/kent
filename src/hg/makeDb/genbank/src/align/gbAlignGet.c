@@ -18,7 +18,7 @@
 #include "gbFa.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbAlignGet.c,v 1.1 2003/06/03 01:27:42 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignGet.c,v 1.2 2003/06/10 17:51:57 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -262,8 +262,7 @@ if (alignCnts.alignCnt > 0)
 
 /* leave calling cards */
 markAligns(select, GB_NATIVE);
-if (select->release->srcDb != GB_REFSEQ)
-    markAligns(select, GB_XENO);
+markAligns(select, GB_XENO);
 
 /* print before releasing memory */
 gbVerbLeave(1, "gbAlignGet: %s", gbSelectDesc(select));
@@ -284,18 +283,8 @@ struct alignCnts cnts;
 struct alignCnts alignCnts;
 ZeroVar(&alignCnts);
 
-if (select->release->srcDb == GB_GENBANK)
-    {
-    /* genbank, native and xeno */
-    cnts = alignGet(select, prevSelect, GB_NATIVE|GB_XENO);
-    alignCntsSum(&alignCnts, &cnts);
-    }
-else
-    {
-    /* refseq, just native */
-    cnts = alignGet(select, prevSelect, GB_NATIVE);
-    alignCntsSum(&alignCnts, &cnts);
-    }
+cnts = alignGet(select, prevSelect, GB_NATIVE|GB_XENO);
+alignCntsSum(&alignCnts, &cnts);
 return alignCnts;
 }
 

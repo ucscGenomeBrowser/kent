@@ -17,7 +17,7 @@
 #include "estOrientInfo.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbAlignInstall.c,v 1.1 2003/06/03 01:27:42 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignInstall.c,v 1.2 2003/06/10 17:51:57 markd Exp $";
 
 /*
  * Notes:
@@ -578,12 +578,15 @@ if (prevSelect != NULL)
 /* setup output PSL and orientInfo files */
 gbAlignedGetPath(select, "psl.gz", NULL, outPsl);
 outPslFh = openSortOutput(outPsl, PSL_SORT_SPEC);
-gbAlignedGetPath(select, "oi.gz", NULL, outOi);
-outOiFh = openSortOutput(outOi, OI_SORT_SPEC);
-if (select->type == GB_EST)
+if (select->orgCats == GB_NATIVE)
     {
-    gbAlignedGetPath(select, "intronPsl.gz", NULL, outIntronPsl);
-    outIntronPslFh = openSortOutput(outIntronPsl, PSL_SORT_SPEC);
+    gbAlignedGetPath(select, "oi.gz", NULL, outOi);
+    outOiFh = openSortOutput(outOi, OI_SORT_SPEC);
+    if (select->type == GB_EST)
+        {
+        gbAlignedGetPath(select, "intronPsl.gz", NULL, outIntronPsl);
+        outIntronPslFh = openSortOutput(outIntronPsl, PSL_SORT_SPEC);
+        }
     }
 
 /* previous aligned if this is a full update */
@@ -594,27 +597,31 @@ if (prevSelect != NULL)
 
 /* copy currently aligned, if they exist */
 alignCnt += copyPsls(select, outPslFh);
-copyOrientInfos(select, outOiFh);
 
-if (select->type == GB_EST)
+if (select->orgCats == GB_NATIVE)
     {
-    intronPslCnt += copyIntronPsls(select, outIntronPslFh);
-    if (intronPslCnt > 0)
-        gbOutputRename(outIntronPsl, &outIntronPslFh);
+    if (alignCnt > 0)
+        {
+        copyOrientInfos(select, outOiFh);
+        gbOutputRename(outOi, &outOiFh);
+        }
     else
-        gbOutputRemove(outIntronPsl, &outIntronPslFh);
+        gbOutputRemove(outOi, &outOiFh);
+
+    if (select->type == GB_EST)
+        {
+        intronPslCnt += copyIntronPsls(select, outIntronPslFh);
+        if (intronPslCnt > 0)
+            gbOutputRename(outIntronPsl, &outIntronPslFh);
+        else
+            gbOutputRemove(outIntronPsl, &outIntronPslFh);
+        }
     }
 
 if (alignCnt > 0)
-    {
-    gbOutputRename(outOi, &outOiFh);
     gbOutputRename(outPsl, &outPslFh);
-    }
 else
-    {
-    gbOutputRemove(outOi, &outOiFh);
     gbOutputRemove(outPsl, &outPslFh);
-    }
 
 createAlignedIndex(select, alignIdx);
 
@@ -693,10 +700,7 @@ if (sep != NULL)
 index = gbIndexNew(database, NULL);
 select.release = gbIndexMustFindRelease(index, relName);
 select.update = gbReleaseMustFindUpdate(select.release, updateName);
-if (select.release->srcDb == GB_REFSEQ)
-    select.orgCats = GB_NATIVE;
-else
-    select.orgCats = GB_NATIVE|GB_XENO;
+select.orgCats = GB_NATIVE|GB_XENO;
 
 gbVerbMsg(0, "gbAlignInstall: %s/%s/%s/%s", select.release->name,
           select.release->genome->database, select.update->name,

@@ -109,6 +109,7 @@ esac
 # determine blat parameters
 case "$orgCat" in
     native)
+        isNative=YES
         case "$type" in
             mrna)
                 blatParams="-q=rna -fine $oocOpt" ;;
@@ -116,6 +117,7 @@ case "$orgCat" in
                 blatParams="-mask=lower $oocOpt" ;;
         esac;;
     xeno) 
+        isNative=NO
         case "$type" in
             mrna)
                 blatParams="-q=rnax -t=dnax -mask=lower";;
@@ -149,13 +151,14 @@ zcat $rnaFa >$rnaFaTmp
 localPsl="$tmpDir/$outBase.psl"
 $BLAT -noHead $blatParams $genomeFile $rnaFaTmp $localPsl
 
-# the rest is done only if the output file length is greater than zero
-if [ -s $localPsl ] ; then
+# orientation info info and ESTs w/intron selection is only done for
+# native and if the output file length is greater than zero
+if [ -s $localPsl -a $isNative == "YES" ] ; then
     # get orientation info
     localOi="$tmpDir/$outBase.oi"
     $POLYINFO $localPsl $genomeFile $rnaFaTmp $localOi
 
-    # if these are ESTs, select ones that have introns, saving only
+    # if these are native ESTs, select ones that have introns, saving only
     # if some actually exist.
     localIntronPsl="$tmpDir/$outBase.intronPsl"
     if [ $type == "est" ] ; then
