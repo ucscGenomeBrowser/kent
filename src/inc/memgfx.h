@@ -175,6 +175,11 @@ void mgDrawRulerBumpText(struct memGfx *mg, int xOff, int yOff,
 /* Draw a ruler inside the indicated part of mg with numbers that start at
  * startNum and span range.  Bump text positions slightly. */
 
+void mgConnectingLine( struct memGfx *mg, int x1, int y1, int x2, int y2, Color color );
+/*Draw a line between two points, (x1,y1) to (x2,y2). Will be used
+ * with wiggle tracks to interpolate between samples, connecting the
+ * end of one block to the beginning of the next one.   */
+
 void mgBarbedHorizontalLine(struct memGfx *mg, int x, int y, 
 	int width, int barbHeight, int barbSpacing, int barbDir, Color color,
 	boolean drawMiddle);
