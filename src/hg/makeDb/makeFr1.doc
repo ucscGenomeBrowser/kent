@@ -1186,3 +1186,15 @@ SEQ2_LEN=$BASE/S2.len
     # Take a look at bigZips/* update the README.txt
 
 
+# move fr1 to incremental genbank/refseq updates:
+    # need to create a lift file to splice chrUn into fragments larger
+    # than the scaffolds or there will be far to many jobs
+    cd /cluster/data/fr1/Un
+    ./makeFragLift chrUn.lft >chrUn-frag.lft
+
+    cd /cluster/data/genbank/
+    # edit etc/genbank.conf to add fr1
+
+    # align mrnas, then ests
+    nice ./bin/gbAlignStep -initial -type=mrna -clusterRootDir=/cluster/bluearc/genbank -iserver=no fr1 
+    nice ./bin/gbAlignStep -initial -type=est -clusterRootDir=/cluster/bluearc/genbank -iserver=no fr1 
