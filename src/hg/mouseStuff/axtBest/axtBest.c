@@ -9,7 +9,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtBest.c,v 1.11 2003/05/06 07:22:27 kate Exp $";
+static char const rcsid[] = "$Id: axtBest.c,v 1.12 2003/08/20 18:24:26 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -31,6 +31,13 @@ errAbort(
   "The best scoring alignment for each window is the output, chopping\n"
   "up alignments if necessary\n");
 }
+
+struct optionSpec options[] = {
+   {"winSize", OPTION_INT},
+   {"minScore", OPTION_INT},
+   {"minOutSize", OPTION_INT},
+   {"matrix", OPTION_STRING},
+};
 
 /* Variable that can be set from command line. */
 int winSize = 10000;
@@ -363,7 +370,7 @@ printf("Bases in %d, bases out %d (%4.2f%%)\n", baseInCount, baseOutCount,
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionHash(&argc, argv);
+optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
 winSize = optionInt("winSize", winSize);
