@@ -359,8 +359,9 @@ char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-struct genePred *gp;
+struct genePred *gp = NULL;
 boolean hasBin; 
+int posCount = 0;
 char table[64];
 
 hFindSplitTable(seqName, track, table, &hasBin);
@@ -368,6 +369,9 @@ sprintf(query, "select * from %s where name = '%s'", table, name);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    if (posCount > 0)
+        printf("<BR>\n");
+    ++posCount;
     gp = genePredLoad(row + hasBin);
     printPos(gp->chrom, gp->txStart, gp->txEnd, gp->strand, FALSE);
     genePredFree(&gp);
