@@ -111,7 +111,7 @@ longLabel Clone Coverage/Fragment Position
 group map
 visibility hide
 altColor 180,180,180 
-typoe clonePos
+type clonePos
 
 track bacEndPairs
 shortLabel BAC End Pairs
