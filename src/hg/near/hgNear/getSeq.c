@@ -9,10 +9,12 @@
 #include "dnautil.h"
 #include "hdb.h"
 #include "cheapcgi.h"
+#include "hgSeq.h"
 #include "hgNear.h"
 #include "genePred.h"
+#include "bed.h"
 
-static char const rcsid[] = "$Id: getSeq.c,v 1.2 2003/08/21 06:11:03 kent Exp $";
+static char const rcsid[] = "$Id: getSeq.c,v 1.3 2003/08/21 07:32:00 kent Exp $";
 
 static void printNameAndDescription(struct sqlConnection *conn, char *id)
 /* Look up name and description and print. */
@@ -44,6 +46,7 @@ char query[256];
 struct genePos *gp;
 struct sqlConnection *conn2 = hAllocConn();
 
+hPrintf("</TT></PRE>");
 for (gp = geneList; gp != NULL; gp = gp->next)
     {
     char *id = gp->name;
@@ -60,6 +63,7 @@ for (gp = geneList; gp != NULL; gp = gp->next)
 	}
     sqlFreeResult(&sr);
     }
+hPrintf("<TT><PRE>");
 hFreeConn(&conn2);
 }
 
@@ -118,6 +122,7 @@ int upSize = cartInt(cart, proUpSizeVarName);
 int downSize = cartInt(cart, proDownSizeVarName);
 boolean fiveOnly = cartBoolean(cart, proIncludeFiveOnly);
 
+hPrintf("<TT><PRE>");
 for (gp = geneList; gp != NULL; gp = gp->next)
     {
     char *id = gp->name;
@@ -135,25 +140,68 @@ for (gp = geneList; gp != NULL; gp = gp->next)
 	    writeSeqWithBreaks(stdout, seq->dna, seq->size, 50);
 	    dnaSeqFree(&seq);
 	    }
+	genePredFree(&gene);
 	}
     }
+hPrintf("</TT></PRE>");
 hFreeConn(&conn2);
+}
+
+static void getGenomic(struct sqlConnection *conn, struct genePos *geneList)
+/* Put up dialog to get genomic sequence. */
+{
+struct hTableInfo *hti = hFindTableInfo(NULL, "knownGene");
+hPrintf("<H2>Get Genomic Sequence Near Gene</H2>");
+hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=GET>\n");
+cartSaveSession(cart);
+hgSeqOptionsHtiCart(hti, cart);
+hPrintf("<BR>\n");
+cgiMakeButton(getGenomicSeqVarName, "Get DNA");
+hPrintf("</FORM>");
+}
+
+void doGetGenomicSeq(struct sqlConnection *conn, struct column *colList,
+	struct genePos *geneList)
+/* Retrieve genomic sequence sequence according to options. */
+{
+struct hTableInfo *hti = hFindTableInfo(NULL, "knownGene");
+struct genePos *gp;
+char query[256];
+struct sqlResult *sr;
+char **row;
+
+hPrintf("<TT><PRE>");
+for (gp = geneList; gp != NULL; gp = gp->next)
+    {
+    char *id = gp->name;
+    safef(query, sizeof(query), "select * from knownGene where name='%s'", id);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	struct genePred *gene = genePredLoad(row);
+	struct bed *bed = bedFromGenePred(gene);
+	hgSeqBed(hti, bed);
+	bedFree(&bed);
+	genePredFree(&gene);
+	}
+    }
+hPrintf("</TT></PRE>");
 }
 
 void doGetSeq(struct sqlConnection *conn, struct column *colList, 
 	struct genePos *geneList, char *how)
 /* Put up the get sequence page. */
 {
-hPrintf("<TT><PRE>");
 if (sameString(how, "protein"))
     getProtein(conn, geneList);
 else if (sameString(how, "mRNA"))
     getMrna(conn, geneList);
 else if (sameString(how, "promoter"))
     getPromoter(conn, geneList);
+else if (sameString(how, "genomic"))
+    getGenomic(conn, geneList);
 else
     errAbort("Unrecognized %s value %s", getSeqHowVarName, how);
-hPrintf("</TT></PRE>");
 }
 
 static void howRadioButton(char *how)
@@ -187,6 +235,8 @@ hPrintf("&nbsp;&nbsp;&nbsp;");
 cgiMakeCheckBox(proIncludeFiveOnly, 
     cartUsualBoolean(cart, proIncludeFiveOnly, TRUE));
 hPrintf("Include only those with annotated 5' UTRs<BR>");
+howRadioButton("genomic");
+hPrintf("Genomic<BR>\n");
 cgiMakeButton(getSeqVarName, "Get DNA");
 hPrintf("</FORM>\n");
 }

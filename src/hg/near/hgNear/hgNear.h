@@ -120,6 +120,7 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define idPosVarName "near.idPos"      	/* chrN:X-Y position of id, may be empty. */
 #define groupVarName "near.group"	/* Grouping scheme. */
 #define getSeqVarName "near.getSeq"	/* Button to get sequence. */
+#define getGenomicSeqVarName "near.getGenomicSeq"	/* Button to fetch genomic sequence. */
 #define getSeqHowVarName "near.getSeqHow" /* How to get sequence. */
 #define getSeqPageVarName "near.getSeqPage" /* Button go to getSequence page. */
 #define proUpSizeVarName "near.proUpSize" /* Promoter upstream size. */
@@ -377,7 +378,11 @@ void doGetSeqPage(struct sqlConnection *conn, struct column *colList);
 
 void doGetSeq(struct sqlConnection *conn, struct column *colList, 
 	struct genePos *geneList, char *how);
-/* Display get page. */
+/* Show sequence. */
+
+void doGetGenomicSeq(struct sqlConnection *conn, struct column *colList,
+	struct genePos *geneList);
+/* Retrieve genomic sequence sequence according to options. */
 
 #endif /* HGNEAR_H */
 

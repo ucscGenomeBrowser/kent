@@ -14,11 +14,11 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.41 2003/08/21 06:11:03 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.42 2003/08/21 07:32:00 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	defaultConfName, hideAllConfName, 
-	getSeqVarName, getSeqPageVarName, getTextVarName, 
+	getSeqVarName, getSeqPageVarName, getGenomicSeqVarName, getTextVarName, 
 	advSearchVarName, advSearchClearVarName, advSearchBrowseVarName,
 	advSearchListVarName, resetConfName, idVarName, idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. */
@@ -1194,6 +1194,8 @@ if (cartVarExists(cart, getTextVarName))
     doGetText(conn, colList, geneList);
 else if (cartVarExists(cart, getSeqVarName))
     doGetSeq(conn, colList, geneList, cartString(cart, getSeqHowVarName));
+else if (cartVarExists(cart, getGenomicSeqVarName))
+    doGetGenomicSeq(conn, colList, geneList);
 else
     doMainDisplay(conn, colList, geneList);
 }
