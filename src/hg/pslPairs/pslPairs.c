@@ -31,6 +31,8 @@ static struct optionSpec optionSpecs[] = {
     {"max", OPTION_INT},
     {"slopval", OPTION_INT},
     {"nearTop", OPTION_FLOAT},
+    {"minId", OPTION_FLOAT},
+    {"minOrphanId", OPTION_FLOAT},
     {"tInsert", OPTION_INT},
     {"hardMax", OPTION_INT},
     {NULL, 0}
@@ -50,6 +52,8 @@ int SLOPVAL;
 float NEARTOP;
 int TINSERT;
 int HARDMAX;
+float MIN_ID;
+float MIN_ORPHAN_ID;
 
 FILE *of, *orf, *sf, *mf, *esf, *elf;
 
@@ -183,7 +187,7 @@ struct pslPair *createPslPair(struct pslAli *e1, struct pslAli *e2)
   struct pslPair *pp;
 
   if (strcmp(e1->psl->tName, e2->psl->tName)) return NULL;
-  if ((e1->id < 0.96) && (e2->id < 0.96)) return NULL;
+  if ((e1->id < MIN_ID) && (e2->id < MIN_ID)) return NULL;
   AllocVar(pp);
   pp->next = NULL;
   if ((e1->psl->tStart) < (e2->psl->tStart))
@@ -387,10 +391,10 @@ void printOrphan(FILE *out, struct pslAli *paList, struct clone *clone, char *ps
     if (pa->score > best)
       best = pa->score;
   for (pa = paList; pa != NULL; pa=pa->next)
-    if ((((pa->score)/best) > NEARTOP) && (pa->id >= 0.96))
+    if ((((pa->score)/best) > NEARTOP) && (pa->id >= MIN_ORPHAN_ID))
       count++;
   for (pa = paList; pa != NULL; pa=pa->next)
-    if ((((pa->score)/best) > NEARTOP) && (pa->id >= 0.96))
+    if ((((pa->score)/best) > NEARTOP) && (pa->id >= MIN_ORPHAN_ID))
       {
       int bin = binFromRange(pa->psl->tStart,pa->psl->tEnd);
       int score = 1000;
@@ -410,6 +414,8 @@ void printOrphan(FILE *out, struct pslAli *paList, struct clone *clone, char *ps
 	{
 	strand = "-";
 	genStart = pa->psl->tStart-(MIN/2);
+	if (genStart < 0)
+	  genStart = 0;
 	genEnd = pa->psl->tEnd;
 	}
       d1 = pa->psl->tEnd - pa->psl->tStart + 1;
@@ -454,9 +460,9 @@ int main(int argc, char *argv[])
   char filename[64], *db, *pslTable;
 
   optionInit(&argc, argv, optionSpecs);
-  if (argc < 3)
+  if (argc < 4)
     {
-      fprintf(stderr, "USAGE: pslPairs <psl file> <pair file> <psl table name> <out file prefix>\n  Options:\n\t-max=N\t\tmaximum length of clone sequence (default=50000)\n\t-min=N\t\tminimum length of clone sequence (default=30000)\n\t-slopval=N\tdeviation from max/min clone lengths allowed for slop report (default=5000)\n\t-nearTop=N\tmaximium deviation from best match allowed (default=0.001)\n\t-tInsert=N\tmaximum insert bases allowed in sequence alignment (default=500)\n\t-hardMax=N\tabsolute maximum clone length for long report (default=75000)\n\t-verbose\tdisplay all informational messages\n\t-noBin\tdo not include bin column in output file\n\t-noRandom\tdo not include placements on random portions\n\t-slop\t\tcreate file of pairs that fall within slop length\n\t-short\t\tcreate file of pairs shorter than min size\n\t-long\t\tcreate file of pairs longer than max size, but less than hardMax size\n\t-mismatch\tcreate file of pairs with bad orientation of ends\n\t-orphan\t\tcreate file of unmatched end sequences\n");
+      fprintf(stderr, "USAGE: pslPairs <psl file> <pair file> <psl table name> <out file prefix>\n  Options:\n\t-max=N\t\tmaximum length of clone sequence (default=50000)\n\t-min=N\t\tminimum length of clone sequence (default=30000)\n\t-slopval=N\tdeviation from max/min clone lengths allowed for slop report (default=5000)\n\t-nearTop=N\tmaximium deviation from best match allowed (default=0.001)\n\t-minId=N\tminimum pct ID of at least one end (default=0.96)\n\t-minOrphanId=N\tminimum pct ID for orphan alignment (default=0.96)\n\t-tInsert=N\tmaximum insert bases allowed in sequence alignment (default=500)\n\t-hardMax=N\tabsolute maximum clone length for long report (default=75000)\n\t-verbose\tdisplay all informational messages\n\t-noBin\t\tdo not include bin column in output file\n\t-noRandom\tdo not include placements on random portions\n\t-slop\t\tcreate file of pairs that fall within slop length\n\t-short\t\tcreate file of pairs shorter than min size\n\t-long\t\tcreate file of pairs longer than max size, but less than hardMax size\n\t-mismatch\tcreate file of pairs with bad orientation of ends\n\t-orphan\t\tcreate file of unmatched end sequences\n");
       return 1;
     }
   VERBOSE = optionExists("verbose");
@@ -477,6 +483,8 @@ int main(int argc, char *argv[])
       SLOPVAL = 0;
   NEARTOP = optionFloat("nearTop",0.001);
   NEARTOP = 1 - NEARTOP;
+  MIN_ID = optionFloat("minId",0.96);
+  MIN_ORPHAN_ID = optionFloat("minOrphanId",0.96);
 
   pf = pslFileOpen(argv[1]);
   prf = lineFileOpen(argv[2],TRUE);
