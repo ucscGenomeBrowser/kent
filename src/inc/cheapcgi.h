@@ -120,7 +120,10 @@ void cgiMakeIntVar(char *varName, int initialVal, int maxDigits);
 /* Make a text control filled with initial value.  */
 
 void cgiMakeDropList(char *name, char *menu[], int menuSize, char *checked);
-/* Make a drop-down list. */
+/* Make a drop-down list with names. */
+
+void cgiMakeDropListFull(char *name, char *menu[], char *values[], int menuSize, char *checked, char *extraAttribs);
+/* Make a drop-down list with names and values. */
 
 void cgiMakeHiddenVar(char *varName, char *string);
 /* Store string in hidden input for next time around. */

@@ -84,3 +84,14 @@ void htmEmptyShell(void (*doMiddle)(), char *method);
  * Method should be "query" or "get" or "post".
  */
 void htmShell( char *title, void (*doMiddle)(), char *method); 
+
+/* Wrap an html file around the passed in function.
+ * The passed in function is already in the body. It
+ * should just make paragraphs and return. 
+ * Method should be "query" or "get" or "post".
+param title - The HTML page title
+param head - The head text: can be a refresh directive or javascript
+param method - The function pointer to execute in the middle
+param method - The browser request method to use
+ */
+void htmShellWithHead( char *title, char *head, void (*doMiddle)(), char *method); 
