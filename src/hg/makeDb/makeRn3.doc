@@ -682,6 +682,13 @@ MAKE DOWNLOADABLE SEQUENCE FILES (DONE - 2003-07-03 - 2003-07-09 - Hiram)
     # Load the bed file
     hgLoadBed -noBin -sqlTable=/cluster/home/kent/src/hg/lib/cytoBand.sql rn3 cytoBand cytoBand.bed
 
+   # extend to cytoBandIdeo
+   ssh hgwdev
+   cd kent/src/hg/lib
+   hgsql rn3 < cytoBandIdeo.sql
+   # mysql: insert into cytoBandIdeo select * from cytoBand
+   # add entry in kent/src/hg/makeDb/trackDb/rat/rn3/trackDb.ra
+
 # PREPARE CLUSTER FOR BLASTZ RUN (IN PROGRESS - 2003-07-10 - kate)
     # This needs to be done after trf-masking and nib generation.
 
