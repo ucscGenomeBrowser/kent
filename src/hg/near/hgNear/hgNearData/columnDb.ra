@@ -53,116 +53,6 @@ priority 2.5
 visibility off
 type lookup knownToEnsembl name value
 search prefix
-itemUrl http://www.ensembl.org/Homo_sapiens/geneview?transcript=%s
-
-name expId
-shortLabel U133 ID
-longLabel ID of Associated Affymetrix U133 expression data 
-priority 2.61
-visibility off
-type lookup knownToU133 name value
-
-name u95Id
-shortLabel U95 ID
-longLabel ID of Associated Affymetrix U95 expression data 
-priority 2.62
-visibility off
-type lookup knownToU95 name value
-
-name u74Id
-shortLabel U74 ID
-longLabel ID of Associated Affymetrix U74 vs (A, B, and C) expression data 
-priority 2.62
-visibility off
-type lookup knownToU74 name value
-
-name expDense
-shortLabel Short Expression
-longLabel Selected UCLA expression data.
-priority 2.7
-visibility on
-type expRatio knownToU133 affyUcla hgFixed.affyUclaExps
-max 1.0
-representatives 9,37,24,17,34,12,19,21,22,35,
-
-name expAll
-shortLabel Long Expression
-longLabel All UCLA expression data from normal tissues on U133 chip.
-priority 2.8
-visibility off
-type expRatio knownToU133 affyUcla hgFixed.affyUclaExps
-max 1.0
-representatives 3,4,9,2,8,36,5,6,-1,37,1,33,23,25,20,-1,24,0,29,38,-1,17,7,31,41,-1,30,34,18,32,10,-1,11,12,13,39,26,-1,14,19,15,21,16,22,-1,35,27,28,40,
-
-name expDistance
-shortLabel Exp Delta
-longLabel Normalized difference in expression from selected gene.
-priority 2.9
-visibility off
-type distance knownExpDistance query target distance
-
-name gnfDense
-shortLabel Short GNF
-longLabel Selected GNF expression data from normal tissues on U95 chip.
-priority 3.0
-visibility off
-type expRatio knownToU95 affyRatio hgFixed.affyExps
-max 5.0
-representatives 30,6,29,10,53,35,11,12,13,4,
-skipName 7
-
-name gnfAll
-shortLabel Long GNF
-longLabel All GNF expression data from normal tissues on U95 chip.
-priority 3.1
-visibility off
-type expRatio knownToU95 affyRatio hgFixed.affyExps
-max 5.0
-representatives 9,18,64,76,1,30,31,-1,66,67,68,77,78,62,65,55,-1,0,79,60,33,36,69,70,-1,16,39,6,7,20,22,21,38,-1,71,61,74,56,59,82,57,72,-1,8,23,29,17,-1,10,37,34,52,19,-1,28,15,53,26,-1,35,54,11,24,3,13,-1,12,25,63,75,-1,4,5,32,51,48,49,50,14,27,-1,2,81,84,58,73,83,-1,40,44,42,43,41,45,46,47,
-skipName 7
-
-name gnfDistance
-shortLabel GNF Delta
-longLabel Normalized difference in GNF expression from selected gene.
-priority 3.2
-visibility off
-type distance knownGnfDistance query target distance
-
-name gnfU74ADense
-shortLabel Short GNF U74A 
-longLabel Selected GNF Expression Atlas data from U74A chip.
-priority 2.7
-visibility on
-type expRatio knownToU74 affyGnfU74A hgFixed.affyGnfU74AExps
-max 5.0
-representatives 83,6,77,55,51,63,12,16,18,4,
-
-name gnfU74AAll
-shortLabel All GNF U74A 
-longLabel Selected GNF Expression Atlas data from U74A chip.
-priority 2.8
-visibility off
-type expRatio knownToU74 affyGnfU74A hgFixed.affyGnfU74AExps
-max 5.0
-representatives 85,86,87,88,69,70,83,84,-1,10,11,53,54,67,68,71,72,-1,27,28,59,60,61,62,-1,6,7,81,82,37,38,22,23,-1,77,78,33,34,25,26,39,40,-1,55,56,31,32,45,46,-1,29,30,51,52,49,50,14,15,-1,8,9,0,1,63,64,-1,12,13,16,17,18,19,-1,4,5,24,75,76,79,80,-1,57,58,35,36,41,42,-1,20,21,65,66,2,3,-1,47,48,43,44,73,74,
-
-name gnfU74BAll
-shortLabel All GNF U74B 
-longLabel Selected GNF Expression Atlas data from U74B chip.
-priority 3.0
-visibility off
-type expRatio knownToU74 affyGnfU74B hgFixed.affyGnfU74BExps
-max 5.0
-representatives 0,1,2,3,-1,16,17,4,5,-1,6,7,10,11,-1,18,19,8,9,-1,12,13,14,15,
-
-name gnfU74CAll
-shortLabel All GNF U74C 
-longLabel Selected GNF Expression Atlas data from U74C chip.
-priority 3.1
-visibility off
-type expRatio knownToU74 affyGnfU74C hgFixed.affyGnfU74CExps
-max 5.0
-representatives 0,1,2,3,-1,16,17,4,5,-1,6,7,10,11,-1,18,19,8,9,-1,12,13,14,15,
 
 name bitScore
 shortLabel Bits
@@ -206,7 +96,7 @@ itemUrl http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s
 name humanOrthologs
 shortLabel Human
 longLabel Human ortholog (best blastp hit to UCSC Known hg16)
-priority 8.0
+priority 7.9
 visibility off
 type lookup hgBlastTab query target
 itemUrl http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&position=%s
