@@ -7,8 +7,9 @@
 #include "linefile.h"
 #include "bed.h"
 #include "binRange.h"
+#include "hdb.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.31 2004/09/11 16:43:44 sugnet Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.32 2004/09/15 18:21:44 kate Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -106,6 +107,19 @@ const struct bed *a = *((struct bed **)va);
 const struct bed *b = *((struct bed **)vb);
 int dif;
 dif = strcmp(a->chrom, b->chrom);
+if (dif == 0)
+    dif = a->chromStart - b->chromStart;
+return dif;
+}
+
+int bedCmpExtendedChr(const void *va, const void *vb)
+/* Compare to sort based on chrom,chromStart.  Use extended
+ * chrom name comparison, that strip prefixes and does numeric compare */
+{
+const struct bed *a = *((struct bed **)va);
+const struct bed *b = *((struct bed **)vb);
+int dif;
+dif = chrNameCmp(a->chrom, b->chrom);
 if (dif == 0)
     dif = a->chromStart - b->chromStart;
 return dif;
@@ -453,8 +467,6 @@ fputc(sep,f);
 fprintf(f, "%d", el->score);
 if (wordCount <= 5)
     {
-    fputc(lastSep, f);
-    return;
     }
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
