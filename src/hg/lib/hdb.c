@@ -32,7 +32,7 @@
 #include "twoBit.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.240 2005/02/23 19:23:25 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.241 2005/03/28 19:44:36 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1541,7 +1541,7 @@ if (hti->cdsStartField[0] != 0)
 else
     dyStringPrintf(query, ",%s,%s", hti->startField, hti->startField);  // keep the same #fields!
 // row[7], row[8], row[9] -> count, starts, ends/sizes or empty.
-if (hti->countField[0] != 0)
+if (hti->startsField[0] != 0)
     dyStringPrintf(query, ",%s,%s,%s", hti->countField, hti->startsField,
 		   hti->endsSizesField);
 else
