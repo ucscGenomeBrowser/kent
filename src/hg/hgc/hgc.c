@@ -146,7 +146,7 @@
 #include "pscreen.h"
 #include "transRegCode.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.754 2004/09/17 03:17:20 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.755 2004/09/21 01:08:35 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5369,7 +5369,7 @@ if (seq != NULL)
     {
     touppers(seq->dna);
     printSpacedDna(seq->dna, seq->size);
-    printf("sequence here\n");
+    printf("this occurence\n");
     }
 if (motif != NULL)
     {
