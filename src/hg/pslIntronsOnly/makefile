@@ -1,5 +1,5 @@
 .c.o:
-	gcc -ggdb -O -Wimplicit -I../inc -I../../inc -c $*.c
+	gcc -ggdb -O -Wall -Wimplicit -I../inc -I../../inc -c $*.c
 
 L = -lm
 MYLIBDIR = ../../lib/$(MACHTYPE)

@@ -7,6 +7,6 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = polyInfo.o ../lib/estInfo.o
 
-polyInfo: $O $(MYLIBS)
+polyInfo: $O $(MYLIBS) makefile
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/polyInfo $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/polyInfo
+#	strip $(HOME)/bin/$(MACHTYPE)/polyInfo
