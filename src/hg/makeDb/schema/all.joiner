@@ -497,6 +497,18 @@ identifier sageExpId
     $gbd.sageExp.num 
     $gbd.sage.exps comma full
 
+identifier rinnSexSampleId
+"Identifiers of RNA samples used in Rinn Sex Experiments on mouse Affy MOE430 Chip"
+     hgFixed.mouseRinnSexExps.id
+     hgFixed.mouseRinnSex.expScores comma indexOf full
+     hgFixed.mouseRinnSexRatio.expScores comma indexOf full
+
+identifier rinnSexMedianSampleId
+"Identifiers of median RNA samples used in Rinn Sex Experiments on mouse Affy MOE430 Chip"
+     hgFixed.mouseRinnSexMedianExps.id
+     hgFixed.mouseRinnSexMedian.expScores comma indexOf full
+     hgFixed.mouseRinnSexMedianRatio.expScores comma indexOf full
+
 
 # Stuff to link together alignment chains and nets
 
