@@ -1141,6 +1141,33 @@ freeDyString(&query);
 hFreeConn(&conn);
 }
 
+static void addRefLinks(struct sqlConnection *conn, struct dyString *query,
+	struct refLink **pList)
+/* Query database and add returned refLinks to head of list. */
+{
+struct sqlResult *sr = sqlGetResult(conn, query->string);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct refLink *rl = refLinkLoad(row);
+    slAddHead(pList, rl);
+    }
+sqlFreeResult(&sr);
+}
+
+
+static boolean isUnsignedInt(char *s)
+/* Return TRUE if s is in format to be an unsigned int. */
+{
+int size=0;
+char c;
+while ((c = *s++) != 0)
+    {
+    if (++size > 10 || !isdigit(c))
+        return FALSE;
+    }
+return TRUE;
+}
 
 static void findRefGenes(char *spec, struct hgPositions *hgp)
 /* Look up refSeq genes in table. */
@@ -1154,28 +1181,36 @@ struct hgPosTable *table = NULL;
 struct hgPos *pos;
 struct genePred *gp;
 struct refLink *rlList = NULL, *rl;
+boolean gotRefLink = sqlTableExists(conn, "refLink");
 
-if ((startsWith("NM_", spec) || startsWith("XM_", spec)) && sqlTableExists(conn, "refLink"))
+if (gotRefLink)
     {
-    dyStringPrintf(ds, "select * from refLink where mrnaAcc = '%s'", spec);
-    sr = sqlGetResult(conn, ds->string);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-	rl = refLinkLoad(row);
-	slAddHead(&rlList, rl);
+    if (startsWith("NM_", spec) || startsWith("XM_", spec))
+	{
+	dyStringPrintf(ds, "select * from refLink where mrnaAcc = '%s'", spec);
+	addRefLinks(conn, ds, &rlList);
 	}
-    sqlFreeResult(&sr);
-    }
-else if (sqlTableExists(conn, "refLink"))
-    {
-    dyStringPrintf(ds, "select * from refLink where name like '%s%%'", spec);
-    sr = sqlGetResult(conn, ds->string);
-    while ((row = sqlNextRow(sr)) != NULL)
+    else if (startsWith("NP_", spec) || startsWith("XP_", spec))
         {
-	rl = refLinkLoad(row);
-	slAddHead(&rlList, rl);
+	dyStringPrintf(ds, "select * from refLink where protAcc = '%s'", spec);
+	addRefLinks(conn, ds, &rlList);
 	}
-    sqlFreeResult(&sr);
+    else if (isUnsignedInt(spec))
+        {
+	dyStringPrintf(ds, "select * from refLink where locusLinkId = %s", spec);
+	addRefLinks(conn, ds, &rlList);
+	dyStringClear(ds);
+	dyStringPrintf(ds, "select * from refLink where omimId = %s", spec);
+	addRefLinks(conn, ds, &rlList);
+	}
+    else 
+	{
+	dyStringPrintf(ds, "select * from refLink where name like '%%%s%%'", spec);
+	addRefLinks(conn, ds, &rlList);
+	dyStringClear(ds);
+	dyStringPrintf(ds, "select * from refLink where product like '%%%s%%'", spec);
+	addRefLinks(conn, ds, &rlList);
+	}
     }
 if (rlList != NULL)
     {
@@ -1203,8 +1238,6 @@ if (rlList != NULL)
 	    }
 	sqlFreeResult(&sr);
 	}
-#ifdef SOON
-#endif /* SOON */
     refLinkFreeList(&rlList);
     }
 freeDyString(&ds);
