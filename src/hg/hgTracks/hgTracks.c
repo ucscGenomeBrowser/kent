@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.763 2004/07/14 21:34:12 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.764 2004/07/16 18:43:38 fanhsu Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -3113,10 +3113,11 @@ char *full = lf->name;
 static char abbrev[32];
 
 strncpy(abbrev, full, sizeof(abbrev));
-abbr(abbrev, "SEPT20T.");
+/*abbr(abbrev, "SEPT20T.");
 abbr(abbrev, "T000000");
 abbr(abbrev, "T00000");
 abbr(abbrev, "T0000");
+*/
 return abbrev;
 }
 
