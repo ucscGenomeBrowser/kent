@@ -3406,7 +3406,7 @@ echo "drop table firstEF;" | hgsql hg15
 hgLoadBed hg15 firstEF firstEF.bed
 rm -rf out
 
-# COW SYNTENY (In progress, Heather, Mar. 2005)
+# COW SYNTENY (Done, Heather, Mar. 2005)
 # Data from Harris A. Lewin <h-lewin@uiuc.edu>
 
 ssh hgwdev
