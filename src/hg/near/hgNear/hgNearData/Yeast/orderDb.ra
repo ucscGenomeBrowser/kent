@@ -3,6 +3,12 @@
 name blastp
 type pair sgdBlastTab query target bitScore -1 
 
+name choExpn
+shortLabel Expression (Cho)
+longLabel Difference in Expression with Selected Gene
+type pair choExpDistance query target distance 1
+priority 3.9
+
 name pfamSimilarity
 type association sgdToPfam
 queryOne select value from sgdToPfam where name='%s'

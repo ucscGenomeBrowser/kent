@@ -35,6 +35,17 @@ queryFull select acc,pdb from  proteins031112.pdbSP,swissProt.displayId where va
 queryOne select pdb,pdb from proteins031112.pdbSP,swissProt.displayId where val=sp and acc='%s'
 invQueryOne select acc from proteins031112.pdbSP,swissProt.displayId where val=sp and pdb='%s'
 
+name yeastChoCellCycle
+shortLabel Cho Cell Cycle
+longLabel Genome-wide transcriptional analysis of the mitotic cell cycle, Cho et al
+priority 3.0
+visibility on
+type expMulti sgdToSgd
+selected yeastChoCellCycleExps yeastChoCellCycleRatio yeastChoCellCycle 0,2,4,6,8,10,12,14,16
+all yeastChoCellCycleExps yeastChoCellCycleRatio yeastChoCellCycle 0,1,2,3,4,5,-1,6,7,8,9,10,11,-1,12,13,14,15,16
+ratioMax 2.5
+absoluteMax 6000 
+
 name pfamDomains
 queryFull select swissAC,description from proteins031112.pfamXref,proteins031112.pfamDesc where pfamXref.pfamAC = pfamDesc.pfamAC
 queryOne select description,proteins031112.pfamDesc.pfamAC from proteins031112.pfamXref,proteins031112.pfamDesc where swissAC = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC order by description
