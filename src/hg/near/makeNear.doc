@@ -123,7 +123,7 @@ hgsql $db < ~/src/hg/affyGnf/affyGnfU95.sql
 hgMapToGene $db affyU95 knownGene knownToU95
 cd ~/src/hg/near/hgExpDistance
 #hgExpDistance $db affyGnfU95 affyGnfU95Exps knownGnfDistance -lookup=knownToU95
-hgExpDistance $db hgFixed.gnfHumanU95MedianRatio hgFixed.gnfHumanU95MedianExps knownGnfDistance -lookup=knownToU95
+hgExpDistance $db hgFixed.gnfHumanU95MedianRatio hgFixed.gnfHumanU95MedianExps gnfU95Distance -lookup=knownToU95
 
 #For worm did instead
 #hgExpDistance ce1 kimLifeCycleMedian kimWormLifeCycleMedian kimExpDistance
