@@ -1,7 +1,7 @@
 /* gfOut - stuff to manage output for genoFind system -
  * currently supports psl, axt, blast, and wu-blast. 
  *
- * Copyright 2001-2002 Jim Kent.  All rights reserved. */
+ * Copyright 2001-2003 Jim Kent.  All rights reserved. */
 
 #include "common.h"
 #include "linefile.h"
@@ -13,6 +13,8 @@
 #include "trans3.h"
 #include "psl.h"
 #include "genoFind.h"
+
+static char const rcsid[] = "$Id: gfOut.c,v 1.7 2003/09/09 21:44:02 kent Exp $";
 
 struct pslxData
 /* This is the data structure put in gfOutput.data for psl/pslx output. */

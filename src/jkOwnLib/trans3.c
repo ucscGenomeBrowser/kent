@@ -1,14 +1,11 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
-
 /* trans3 - a sequence and three translated reading frames. */
+/* Copyright 2000-2003 Jim Kent.  All rights reserved. */
 
 #include "common.h"
 #include "dnaseq.h"
 #include "trans3.h"
+
+static char const rcsid[] = "$Id: trans3.c,v 1.3 2003/09/09 21:44:03 kent Exp $";
 
 struct trans3 *trans3New(struct dnaSeq *seq)
 /* Create a new set of translated sequences. */

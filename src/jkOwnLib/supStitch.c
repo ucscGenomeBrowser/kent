@@ -1,13 +1,9 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
 /* supStitch stitches together a bundle of ffAli alignments that share
  * a common query and target sequence into larger alignments if possible.
  * This is commonly used when the query sequence was broken up into
  * overlapping blocks in the initial alignment, and also to look for
  * introns larger than fuzzyFinder can handle. */
+/* Copyright 2000-2003 Jim Kent.  All rights reserved. */
 
 #include "common.h"
 #include "dnautil.h"
@@ -18,6 +14,7 @@
 #include "supStitch.h"
 #include "chainBlock.h"
 
+static char const rcsid[] = "$Id: supStitch.c,v 1.18 2003/09/09 21:44:03 kent Exp $";
 
 void ssFfItemFree(struct ssFfItem **pEl)
 /* Free a single ssFfItem. */

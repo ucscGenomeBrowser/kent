@@ -1,14 +1,13 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
 /* xensmall.c - align using dynamic programming. */
+/* Copyright 2000-2003 Jim Kent.  All rights reserved. */
+
 #include "common.h"
 #include "memalloc.h"
 #include "cheapcgi.h"
 #include "dnautil.h"
 #include "xenalign.h"
+
+static char const rcsid[] = "$Id: xensmall.c,v 1.2 2003/09/09 21:44:03 kent Exp $";
 
 /* Mommy coding scheme - this is how one cell in the dynamic programming table
  * points to it's parent (mommy) cell.  Since these tables are really big,

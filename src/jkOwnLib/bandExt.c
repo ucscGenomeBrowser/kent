@@ -4,6 +4,7 @@
  * while the sequences perfectly match, then call on routines
  * in this module to do further extensions allowing small
  * gaps and mismatches. */
+/* Copyright 2003 Jim Kent.  All rights reserved. */
 
 #include "common.h"
 #include "dnaseq.h"
@@ -11,6 +12,8 @@
 #include "fuzzyFind.h"
 #include "localmem.h"
 #include "bandExt.h"
+
+static char const rcsid[] = "$Id: bandExt.c,v 1.7 2003/09/09 21:44:02 kent Exp $";
 
 enum parentPos
 /* Record of parant positions. */

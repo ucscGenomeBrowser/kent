@@ -1,9 +1,12 @@
 /* ffAliHelp - Helper routines for things that produce (rather than just
  * consume) ffAli type alignments. */
+/* Copyright 2000-2003 Jim Kent.  All rights reserved. */
 
 #include "common.h"
 #include "fuzzyFind.h"
 #include "dnaseq.h"
+
+static char const rcsid[] = "$Id: ffAliHelp.c,v 1.3 2003/09/09 21:44:02 kent Exp $";
 
 void ffCat(struct ffAli **pA, struct ffAli **pB)
 /* Concatenate B to the end of A. Eat up second list

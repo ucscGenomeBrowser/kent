@@ -1,6 +1,6 @@
 /* gfClientLib - stuff to interface with a genoFind server running somewhere
  * on the web. */
-/* Copyright 2001-2002 Jim Kent.  All rights reserved. */
+/* Copyright 2001-2003 Jim Kent.  All rights reserved. */
 #include "common.h"
 #include "net.h"
 #include "linefile.h"
@@ -14,6 +14,8 @@
 #include "errabort.h"
 #include "nib.h"
 #include "trans3.h"
+
+static char const rcsid[] = "$Id: gfClientLib.c,v 1.23 2003/09/09 21:44:02 kent Exp $";
 
 void dumpRange(struct gfRange *r, FILE *f)
 /* Dump range to file. */

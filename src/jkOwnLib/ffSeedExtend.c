@@ -1,3 +1,6 @@
+/* ffSeedExtend - extend alignment out from ungapped seeds. */
+/* Copyright 2003 Jim Kent.  All rights reserved. */
+
 #include "common.h"
 #include "dnaseq.h"
 #include "localmem.h"
@@ -8,6 +11,8 @@
 #include "supStitch.h"
 #include "bandExt.h"
 #include "gfInternal.h"
+
+static char const rcsid[] = "$Id: ffSeedExtend.c,v 1.19 2003/09/09 21:44:02 kent Exp $";
 
 static void extendExactRight(int qMax, int tMax, char **pEndQ, char **pEndT)
 /* Extend endQ/endT as much to the right as possible. */
