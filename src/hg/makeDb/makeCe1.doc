@@ -3,7 +3,7 @@ exit; # don't actually run this like a script :)
 
 # This file describes how to make the browser database for the
 # worm C. elegans
-# Currently 2003-05-12 this file is in a state of flux as it is being
+# Currently 2003-05-28 this file is in a state of flux as it is being
 # worked out.
 
 DOWNLOAD SEQUENCE (DONE 2003-05-12 - Hiram)
@@ -32,14 +32,17 @@ DOWNLOAD SEQUENCE (DONE 2003-05-12 - Hiram)
 #	that manually via the WEB browser is not such a big deal.  And
 #	besides, once it is fetched, it is pretty much stable so you can
 #	merely copy from a previous Ce build.  A copy has been manually
-#	placed in ~ce1/ncbi/x54252.fa
+#	placed in ~/ce1/ncbi/x54252.fa
 #	
     sed -e "s/^>.*/>chrM/" ./ncbi/x54252.fa > ./chrM.fa
     mkdir nib
-#   translate to unzipped .fa and to nib and rename the agp files
+#   translate to unzipped .fa, all upper case, and to nib and
+#	rename the agp files
+#	These nib files are going to be remade below after RepeatMasker
+#	and simpleRepeat have been run.
     foreach f (I II III IV V X)
 	echo -n "${f} "
-	zcat sanger/CHROMOSOME_${f}.dna.gz | \
+	zcat sanger/CHROMOSOME_${f}.dna.gz | tr '[a-z]' '[A-Z]' | \
 		sed -e "s/CHROMOSOME_/chr/" > chr${f}.fa
         ln -s sanger/CHROMOSOME_${f}.agp ./chr${f}.agp
 	faToNib chr${f}.fa nib/chr${f}.nib
@@ -90,7 +93,7 @@ STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE 2003-05-12 - Hiram)
     hgsql ce1  < ~/kent/src/hg/lib/chromInfo.sql
     # if you need to delete that table:   !!! DELETES ALL DATA IN TABLE !!!
 	echo 'drop table chromInfo;' | hgsql ce1
-    cd ~/ce1
+    cd ~/ce1/softMask
     hgNibSeq -preMadeNib ce1 /gbdb/ce1/nib chr*.fa
 # Typical output:
 # Processing chrI.fa to /gbdb/ce1/nib/chrI.nib
@@ -217,7 +220,7 @@ PREPARE Split contigs into 100,000 bp chunks for cluster runs
     cat split/*.lft > liftAll.lft
     # copy them to /iscratch/i for cluster rsync
     ssh kkr1u00
-    cd ~ce1/split
+    cd ~/ce1/split
     foreach c (I II III IV V X M)
 	echo -n "${c} "
 	mkdir -p /iscratch/i/worms/Celegans/${c}
@@ -225,7 +228,7 @@ PREPARE Split contigs into 100,000 bp chunks for cluster runs
     end
     ~kent/bin/iSync
 
-Run RepeatMasker on the chromosomes
+# Run RepeatMasker on the chromosomes (DONE 2003-05-27 - Hiram)
     ssh kk
     cd ~/ce1
     mkdir RMRun
@@ -247,101 +250,107 @@ Run RepeatMasker on the chromosomes
     para check
     # when they are finished, liftUp and load the .out files into the database:
     ssh eieio
-    cd ~ce1/RMRun
+    cd ~/ce1/RMRun
     foreach c (I II III IV V X M)
 	liftUp chr${c}.fa.out ../split/chr${c}.lft warn ${c}/*.fa.out
     end
     
     ssh hgwdev
-    cd ~ce1/RMRun
+    cd ~/ce1/RMRun
     hgLoadOut ce1 chr*.fa.out
 
+# SIMPLE REPEAT [TRF] TRACK (DONE 2003-05-27 - Hiram)
+    # ensure chr*.fa files exist on /iscratch/i
+    ssh kkr1u00
+    cp -p /cluster/store4/worm/ce1/*.fa  /iscratch/i/worms/Celegans
+    ~kent/bin/iSync
 
-PRODUCING FUGU FISH ALIGNMENTS  (NEED TO DO THIS ON Repeat Masked bits)
-    # Assumes split and rsync of ce1 has taken place above
-    # and Fugu pieces are also already on kluster.
+    # Create cluster parasol job:
     ssh kk
-    mkdir -p ~/ce1/bed/blatFugu
-    cd ~/ce1/bed/blatFugu
-    mkdir psl
-    foreach f (~/ce1/split/?{,?,??})
-      set c=$f:t
-      mkdir -p psl/$c
-    end
-    ls -1S /iscratch/i/fugu/*.fa > fugu.lst
-    ls /scratch/hiram/Celegans/?{,?,??}/c*.fa > worm.lst
-    gensub2 worm.lst fugu.lst gsub spec
+    mkdir -p ~/ce1/bed/simpleRepeat
+    cd ~/ce1/bed/simpleRepeat
+    mkdir trf
+    ls -1S /iscratch/i/worms/Celegans/chr*.fa > genome.lst
+    cp ~/hg15/bed/simpleRepeat/gsub .
+    echo "" > dummy.lst
+    gensub2 genome.lst dummy.lst gsub spec
     para create spec
-    para try
+    para try    # there are only 7, so this runs them all
     para check
-    para push
-    para check
+# Longest job:                      983s      16.38m     0.27h    0.01d
 
-    #  When cluster run is done, sort alignments
+    #  When cluster run is done, combine into one:
+    cat trf/*.bed > simpleRepeat.bed
+    
+    # Load into the database:
+    ssh hgwdev
+    cd ~/ce1/bed/simpleRepeat
+    /cluster/bin/i386/hgLoadBed ce1 simpleRepeat simpleRepeat.bed \
+      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+
+# PROCESS SIMPLE REPEATS INTO MASK (DONE 2003-05-27 - Hiram)
     ssh eieio
-    cd ~ce1/bed/blatFugu
-    foreach d (I II III IV V X M)
-        echo -n "${d} "
-	pslCat psl/${d}/c*.psl | \
-	liftUp -type=.psl stdout ../../split/chr${d}.lft warn stdin | \
-	pslSortAcc nohead chrom temp stdin
+    cd ~/ce1/bed/simpleRepeat
+    mkdir -p trfMask
+    foreach f (trf/*.bed)
+	awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
     end
 
-    #  And rename to correspond with tables:
-    ssh hgwdev
-    cd ~ce1/bed/blatFugu/chrom
-    rm -f chr*_blatFugu.psl
-    foreach d (I II III IV V X M)
-	mv chr${d}.psl chr${d}_blatFugu.psl
-    end
-    hgLoadPsl ce1 chr*_blatFugu.psl
-
-    # Make fugu /gbdb/ symlink and load Fugu sequence data.
-    mkdir /gbdb/ce1/fuguSeq
-    cd /gbdb/ce1/fuguSeq
-    ln -s /cluster/store3/fuguSeq/fugu_v3_mask.fasta
-    cd /cluster/store2/tmp
-    hgLoadRna addSeq ce1 /gbdb/ce1/fuguSeq/fugu_v3_mask.fasta
-
-
-Run RepeatMasker on the chromosomes (This needs to be done with split
-                                     pieces.  I ran this on the whole
-                                     chromosomes and the jobs
-                                     took 6 to 8 hours each.
-    ssh kk
+# Create Soft and Hard masks from RepeatMaster and TRF outputs:
+#  and rebuild the nib files
+    ssh eieio
     cd ~/ce1
-    mkdir RMRun
-    cd RMRun
-    cp -p ../chr*.fa .
-    # create job list
-    rm -f RMJobs
-    foreach f (I II III IV V X M)
-	echo /scratch/hg/RepeatMasker/RepeatMasker -el chr${f}.fa \
-	'{'check out line+ /cluster/store4/worm/ce1/RMRun/chr${f}.fa.out'}' \
-	>> RMJobs
+    mkdir softMask
+    foreach c (I II III IV V X M)
+        echo -n "masking chr${c} "
+	/cluster/bin/i386/maskOutFa chr${c}.fa RMRun/chr${c}.fa.out \
+		softMask/chr${c}.fa -soft
+	/cluster/bin/i386/maskOutFa softMask/chr${c}.fa \
+		bed/simpleRepeat/trfMask/chr${c}.bed \
+		softMask/chr${c}.fa -softAdd
+		faToNib -softMask softMask/chr${c}.fa nib/chr${c}.nib
     end
-    para create RMJobs
-    para try	#	Since there are only 7, this runs them all
-    para check
-    # when they are finished, load the .out files into the database:
-    ssh hgwdev
-    cd ~ce1/RMRun
-    hgLoadOut ce1 chr*.fa.out
+    # unknown if hardMasks are actually needed for anything
+    mkdir hardMask
+    foreach c (I II III IV V X M)
+        echo "masking chr${c}"
+	/cluster/bin/i386/maskOutFa softMask/chr${c}.fa hard \
+		hardMask/chr${c}.fa
+    end
+
+    #  With masked nib files ready, prepare cluster for blastz runs
+    ssh kkr1u00
+    cd ~/ce1/softMask
+    mkdir -p /iscratch/i/worms/Celegans/trfFa
+    cp -p *.fa /iscratch/i/worms/Celegans/trfFa
 
 
-# MAKING AND STORING mRNA AND EST ALIGNMENTS (WORKING 2003-05-19 - Hiram)
+# MAKING AND STORING mRNA AND EST ALIGNMENTS (WORKING 2003-05-28 - Hiram)
+    ssh kkr1u00
+    cd /iscratch/i/worms/Celegans
+    mkdir mRNA
+    faSplit sequence /iscratch/i/mrna.134/Caenorhabditis_elegans/mrna.fa \
+		1000000 mRNA/m
+    mkdir EST
+    faSplit sequence /iscratch/i/mrna.134/Caenorhabditis_elegans/est.fa \
+		1000000 EST/e
+    ~kent/bin/iSync
+
     ssh kkstore
-    cd ~ce1/bed
+    cd ~/ce1/bed
     mkdir mrna est
     cd mrna
-    ls -1S /scratch/hiram/Celegans/chr*.fa > genome.lst
-    cp -p /iscratch/i/mrna.134/Caenorhabditis_elegans/mrna.fa \
-	/scratch/hiram/Celegans
-    # push-request this /scratch/hiram/Celegans directory
-    # when that is done, then back on kk:
+    mkdir psl
+    ls -1S /iscratch/i/worms/Celegans/trfFa/chr*.fa > genome.lst
+    ls -1S /iscratch/i/worms/Celegans/mRNA/m*.fa > mrna.lst
+    cp ~/hg15/bed/mrna/gsub .
+    gensub2 genome.lst mrna.lst gsub spec
+    para create spec
+    para try
+
 
     ssh kk
-    cd ~ce1/bed/mrna
+    cd ~/ce1/bed/mrna
     mkdir psl
     ls -1S /scratch/hiram/Celegans/mrna.fa > mrna.lst
     cp -p ../../gsub .	# this will be from previous version when there is one
@@ -381,6 +390,50 @@ SIMPLE REPEAT TRACK (DONE 2003-05-20 - 12:37 - Hiram)
     cat trf/chr*.bed > simpleRepeat.bed
     hgLoadBed ce1 simpleRepeat simpleRepeat.bed \
       -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+
+PRODUCING FUGU FISH ALIGNMENTS  (DONE 2003-05-28 - Hiram)
+    # Assumes masked NIBs have been prepared as above
+    # and Fugu pieces are already on kluster /iscratch/i.
+    ssh kk
+    mkdir -p ~/ce1/bed/blatFugu
+    cd ~/ce1/bed/blatFugu
+    mkdir psl
+    ls -1S /iscratch/i/fugu/*.fa > fugu.lst
+    ls -1S /cluster/store4/worm/ce1/nib/chr*.nib > worm.lst
+    echo '#LOOP
+/cluster/bin/i386/blat -q=dnax -t=dnax -mask=lower {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP' > gsub
+
+    gensub2 worm.lst fugu.lst gsub spec
+    para create spec
+    para try
+    para check
+    para push
+    para check
+# Longest job:                     1290s      21.50m     0.36h    0.01d
+
+    # want names chrI_blatFugu
+    #  When cluster run is done, sort alignments
+    ssh eieio
+    cd ~/ce1/bed/blatFugu
+    foreach d (I II III IV V X M)
+        echo -n "${d} "
+	pslCat psl/chr${d}_*.psl | \
+	pslSortAcc nohead chrom temp stdin
+	rm -f chrom/chr${d}_blatFugu.psl
+	mv chrom/chr${d}.psl chrom/chr${d}_blatFugu.psl
+    end
+
+    ssh hgwdev
+    cd ~/ce1/bed/blatFugu/chrom
+    hgLoadPsl ce1 chr*_blatFugu.psl
+
+    # Make fugu /gbdb/ symlink and load Fugu sequence data.
+    mkdir /gbdb/ce1/fuguSeq
+    cd /gbdb/ce1/fuguSeq
+    ln -s /cluster/store3/fuguSeq/fugu_v3_mask.fasta
+    cd /cluster/store2/tmp
+    hgLoadRna addSeq ce1 /gbdb/ce1/fuguSeq/fugu_v3_mask.fasta
 
 RUN Waba alignment with briggsae
     # prepare contigs from C. briggsae
