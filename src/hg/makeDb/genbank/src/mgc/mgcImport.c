@@ -1,4 +1,4 @@
-/* mgcImport - load browser database with mRNA/EST info.. */
+/* mgcImport - convert tables dumps from NCBI */
 
 #include "common.h"
 #include "options.h"
@@ -10,7 +10,7 @@
 #include "linefile.h"
 #include "gbFileOps.h"
 
-static char const rcsid[] = "$Id: mgcImport.c,v 1.3 2003/06/18 05:20:14 markd Exp $";
+static char const rcsid[] = "$Id: mgcImport.c,v 1.4 2003/06/27 18:39:34 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -152,13 +152,30 @@ void processStage1Row(struct mgcStatusTbl *mgcStatusTbl, char **row)
 {
 struct mgcStage1 stage1;
 mgcStage1StaticLoad(row, &stage1);
-if ((stage1.picked == 2) && (stage1.live == 2) && (stage1.currpick == 2)
-    && (stage1.suppress == 1)
-    && mgcStatusTblFind(mgcStatusTbl, stage1.id_clone) == NULL)
-    mgcStatusTblAdd(mgcStatusTbl, stage1.id_clone,
-                    &MGC_PICKED, NULL,
+
+/*
+ * Determine if it's a candidate or pick
+ *
+ * (stage1.suppress == 1) && (stage1.live == 2)
+ *    - if a valid entry
+ * (stage1.currpick == 2) && (stage1.picked == 1)
+ *    - candidate picks, are waiting on a full plate
+ * (stage1.currpick == 1) && (stage1.picked == 2)
+ *    - picked,sent to LLNL for rearraying 
+ */
+if ((stage1.suppress == 1) && (stage1.live == 2)
+    && ((stage1.currpick == 2) || (stage1.picked == 2))
+    && (mgcStatusTblFind(mgcStatusTbl, stage1.id_clone) == NULL))
+    {
+    struct mgcStatusType* status;
+    if (stage1.currpick == 2)
+        status = &MGC_CANDIDATE;
+    else
+        status = &MGC_PICKED;
+    mgcStatusTblAdd(mgcStatusTbl, stage1.id_clone, status, NULL,
                     mgcOrganismNameToCode(stage1.organism,
                                           "stage1 table"));
+    }
 }
 
 void processStage1(struct mgcStatusTbl *mgcStatusTbl, char *tabFile)

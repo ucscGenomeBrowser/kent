@@ -39,6 +39,7 @@ struct mgcStatusType
 extern struct mgcStatusType MGC_UNPICKED;
 
 /*** these are in-progress status ***/
+extern struct mgcStatusType MGC_CANDIDATE;
 extern struct mgcStatusType MGC_PICKED;
 extern struct mgcStatusType MGC_NOT_BACK;
 extern struct mgcStatusType MGC_NO_DECISION;

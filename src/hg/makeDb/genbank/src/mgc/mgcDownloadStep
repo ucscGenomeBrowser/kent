@@ -102,8 +102,8 @@ sub extractTar($) {
 }
 
 # Do download for the specified data dir, if it's not there.
-sub doDownload($$) {
-    my($dateStr, $downloadDir) = @_;
+sub doDownload($) {
+    my($downloadDir) = @_;
 
     my $md5file = "$downloadDir/mgc.md5";
     if (! -e $md5file) {
@@ -122,9 +122,11 @@ sub doDownload($$) {
     }
 }
 
-# Process downloaded tables into status files
-sub doProcess($$$) {
-    my($dateStr, $downloadDir, $processedDir) = @_;
+# Process downloaded tables into status files for the specified directory,
+# if it's not already been done.
+sub doProcess($) {
+    my($downloadDir) = @_;
+    my $processedDir = "data/processed/mgc/" . basename($downloadDir);
     my $md5file = "$processedDir/mgc.md5";
     if (! -e $md5file) {
         if ($gbCommon::verbose) {
@@ -185,10 +187,12 @@ ftpOpen();
 # check a checksum file exists, indicating completion.
 my $dateStr = getDownloadDate();
 my $downloadDir = "data/download/mgc/$dateStr";
-my $processedDir = "data/processed/mgc/$dateStr";
 
-doDownload($dateStr, $downloadDir);
+doDownload($downloadDir);
 ftpClose();
-doProcess($dateStr, $downloadDir, $processedDir);
 
+# check if any download dirs need processed
+foreach my $downDir (glob("data/download/mgc/*.*.*")) {
+    doProcess($downDir);
+}
 endTask();

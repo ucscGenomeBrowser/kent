@@ -3,7 +3,7 @@
 #include "localmem.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.4 2003/06/18 05:20:14 markd Exp $";
+static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.5 2003/06/27 18:39:34 markd Exp $";
 
 /* 
  * Clone detailed status values.
@@ -21,46 +21,48 @@ struct mgcStatusType MGC_UNPICKED = {
     "unpicked", 1, "not picked", MGC_STATE_UNPICKED};
 
 /*** these are in-progress status ***/
+struct mgcStatusType MGC_CANDIDATE = {
+    "candidate", 2, "candidate pick", MGC_STATE_PENDING};
 struct mgcStatusType MGC_PICKED = {
-    "picked", 2, "picked", MGC_STATE_PENDING};
+    "picked", 3, "picked", MGC_STATE_PENDING};
 struct mgcStatusType MGC_NOT_BACK = {
-    "notBack", 3, "not back", MGC_STATE_PENDING};
+    "notBack", 4, "not back", MGC_STATE_PENDING};
 struct mgcStatusType MGC_NO_DECISION = {
-    "noDecision", 4, "no decision yet", MGC_STATE_PENDING};
+    "noDecision", 5, "no decision yet", MGC_STATE_PENDING};
 
 /*** these are full-length status ***/
 struct mgcStatusType MGC_FULL_LENGTH = {
-    "fullLength", 5, "full length", MGC_STATE_FULL_LENGTH};
+    "fullLength", 6, "full length", MGC_STATE_FULL_LENGTH};
 struct mgcStatusType MGC_FULL_LENGTH_SHORT = {
-    "cantSequence", 6, "full length (short isoform)", MGC_STATE_FULL_LENGTH};
+    "cantSequence", 7, "full length (short isoform)", MGC_STATE_FULL_LENGTH};
 
 /*** these are error status ***/
 struct mgcStatusType MGC_INCOMPLETE = {
-    "incomplete", 7, "incomplete", MGC_STATE_PROBLEM};
+    "incomplete", 8, "incomplete", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_CHIMERIC = {
-    "chimeric", 8, "chimeric", MGC_STATE_PROBLEM};
+    "chimeric", 9, "chimeric", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_FRAME_SHIFTED = {
-    "frameShift", 9, "frame shifted", MGC_STATE_PROBLEM};
+    "frameShift", 10, "frame shifted", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_CONTAMINATED = {
-    "contaminated", 10, "contaminated", MGC_STATE_PROBLEM};
+    "contaminated", 11, "contaminated", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_RETAINED_INTRON = {
-    "retainedIntron", 11, "retained intron", MGC_STATE_PROBLEM};
+    "retainedIntron", 12, "retained intron", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_MIXED_WELLS = {
-    "mixedWells", 12, "mixed wells", MGC_STATE_PROBLEM};
+    "mixedWells", 13, "mixed wells", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_NO_GROWTH = {
-    "noGrowth", 13, "no growth", MGC_STATE_PROBLEM};
+    "noGrowth", 14, "no growth", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_NO_INSERT = {
-    "noInsert", 14, "no insert", MGC_STATE_PROBLEM};
+    "noInsert", 15, "no insert", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_NO_5_EST_MATCH = {
-    "no5est", 15, "no 5' EST match", MGC_STATE_PROBLEM};
+    "no5est", 16, "no 5' EST match", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_MICRODELETION = {
-    "microDel", 16, "no cloning site / microdeletion", MGC_STATE_PROBLEM};
+    "microDel", 17, "no cloning site / microdeletion", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_LIBRARY_ARTIFACTS = {
-    "artifact", 17, "library artifacts", MGC_STATE_PROBLEM};
+    "artifact", 18, "library artifacts", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_NO_POLYA_TAIL = {
-    "noPolyATail", 18, "no polyA-tail", MGC_STATE_PROBLEM};
+    "noPolyATail", 19, "no polyA-tail", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_CANT_SEQUENCE = {
-    "cantSequence", 19, "unable to sequence", MGC_STATE_PROBLEM};
+    "cantSequence", 20, "unable to sequence", MGC_STATE_PROBLEM};
 
 /* hash of status code to status object */
 static struct hash *statusHash = NULL;
@@ -89,6 +91,7 @@ char *mgcStatusCreateSql =
 "   imageId INT UNSIGNED NOT NULL,"  /* IMAGE id for clone */
 "   status ENUM("                    /* MGC status code */
 "       'unpicked',"
+"       'candidate',"
 "       'picked',"
 "       'notBack',"
 "       'noDecision',"
@@ -187,6 +190,7 @@ static void buildStatusHash()
 statusHash = hashNew(9);
 
 addStatus(&MGC_UNPICKED);
+addStatus(&MGC_CANDIDATE);
 addStatus(&MGC_PICKED);
 addStatus(&MGC_NOT_BACK);
 addStatus(&MGC_NO_DECISION);
