@@ -5897,6 +5897,7 @@ EOF
 
 
 # LIFTOVER RNAGENE FROM HG15 (DONE CIRCA 12/27/03 schattner)
+#	Replaced below by new RNAGENES (2004-03-09)
     cd /cluster/data/hg16/bed/bedOver
     mkdir rnaGene
     cd rnaGene
@@ -5906,6 +5907,23 @@ EOF
     hgLoadBed -noBin -sqlTable=$HOME/kent/src/hg/lib/rnaGene.sql hg16 rnaGene \
       /cluster/data/hg16/bed/bedOver/rnaGene/rnaGeneLiftGene.bed
 
+
+LOAD RNAGENES (DONE - 2004-03-09 - Hiram)
+    ssh hgwdev
+    mkdir -p /cluster/data/hg16/bed/rnaGene
+    cd /cluster/data/hg16/bed/rnaGene
+    mkdir rnaGenePrevious
+    #	save previous rnaGene track for reference
+    hgsqldump -T rnaGenePrevious hg16 rnaGene
+    wget --timestamping \
+	ftp://ftp.genetics.wustl.edu/pub/eddy/annotation/human-hg16/*
+    grep -v "^#" ncrna-hg16-mito.gff | sed -e "s/^NT_999999/chrM/" > mito.gff
+    grep -v "^#" ncrna-hg16-chrom.gff > chrom.gff
+    cat chrom.gff mito.gff > all.gff
+
+    hgsql -e 'drop table rnaGene;' hg16
+    hgsql hg16 < ~/kent/src/hg/lib/rnaGene.sql
+    hgRnaGenes hg16 all.gff
 
 # rmMm3Rn3 3-way Regulatory Potential Score track (DONE - 2004-01-14 - Hiram)
 #	Data from: James Taylor james@bx.psu.edu
