@@ -217,7 +217,7 @@ static char *nci60Options[] = {
     "PROSTATE",
     "RENAL",
     "NSCLC",
-    "DUPLICATES",
+    "DUPLICATE",
     "UNKNOWN"
     };
 
@@ -226,7 +226,7 @@ enum nci60OptEnum nci60StringToEnum(char *string)
 {
 int x = stringIx(string, nci60Options);
 if (x < 0)
-   errAbort("Unknown option %s", string);
+   errAbort("hui::nci60StringToEnum() - Unknown option %s", string);
 return x;
 }
 
