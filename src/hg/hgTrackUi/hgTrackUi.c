@@ -336,6 +336,8 @@ else if (sameString(track, "humMus"))
     genericWiggleUi(tdb,5);
 else if (sameString(track, "humMusL"))
     genericWiggleUi(tdb,5);
+else if (sameString(track, "musHumL"))
+    genericWiggleUi(tdb,5);
 else if (sameString(track, "zooCons"))
     genericWiggleUi(tdb,5);
 else if (sameString(track, "blastzMm2"))
