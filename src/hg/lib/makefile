@@ -27,7 +27,7 @@ O = affyAtlas.o agpFrag.o agpGap.o altGraphX.o ancientRref.o \
     rnaGene.o rnaGroup.o rikenBest.o rikenCluster.o roughAli.o \
     sage.o sageCounts.o sageExp.o sanger22extra.o \
     simpleRepeat.o snp.o softberryHom.o \
-    softPromoter.o stsAlias.o stsInfo.o stsInfo2.o \
+    softPromoter.o stsAlias.o stsInfo.o stsInfo2.o stsInfoRat.o\
     stsMap.o stsMapMouse.o stsMarker.o stsInfoMouse.o synteny100000.o\
     syntenyBerk.o syntenySanger.o tilingPath.o traceInfo.o trackDb.o \
     trackDbCustom.o trackTable.o wabAli.o \
