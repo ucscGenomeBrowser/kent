@@ -163,3 +163,9 @@ visibility hide
 spectrum on
 type netAlign tetNig1 chainTetNig1
 otherDb tetNig1
+
+searchTable wz_ests
+searchMethod prefix
+searchType psl
+shortCircuit 1
+
