@@ -383,8 +383,9 @@ Submission to last job:          5989s      99.82m     1.66h    0.07d
     # Load into database
     ssh hgwdev
     cd /cluster/data/xenTro1/bed/xenLaeRna
-    hgLoadPsl xenTro1 xenLaeRna.psl 
     ln -s /cluster/data/xenTro1/bed/xenLaeRna/xenLaeRna.fa /gbdb/xenTro1/xenLaeRna.fa
+    hgLoadSeq xenTro1 /gbdb/xenTro1/xenLaeRna.fa
+    hgLoadPsl xenTro1 xenLaeRna.psl 
 
 
 
