@@ -16,38 +16,37 @@ errAbort(
   );
 }
 
-static int trimGapPenalty(int hGap, int nGap)
+
+static int trimGapPenalty(int hGap, int nGap, char *iStart, char *iEnd, int orientation)
 /* Calculate gap penalty for routine below. */
 {
-int penalty;
-if (hGap <=2 && nGap <= 2)
-    penalty = hGap + nGap;
-else if (hGap < 25)
-    penalty = 5 + 2*sqrt(hGap+nGap);
-else
+int penalty =  ffCalcGapPenalty(hGap, nGap, ffCdna);
+if (hGap > 2 || nGap > 2)	/* Not just a local extension. */
+				/* Score gap to favor introns. */
     {
-    penalty = 1.4*log(hGap + nGap + 1) + 3;
-    if (nGap > 0)
-	penalty += 4;
-    if (hGap > 400000)	/* Discourage really long introns. */
-	{
-	penalty += (hGap - 400000)/3000;
-	if (hGap > ffIntronMax)
-	    penalty += (hGap - ffIntronMax)/2000;
-	}
+    penalty <<= 1;
+    if (nGap > 0)	/* Intron gaps are not in n side at all. */
+	 penalty += 3;
+    			/* Good splice sites give you bonus 2,
+			 * bad give you penalty of six. */
+    penalty += 6 - 2*ffScoreIntron(iStart[0], iStart[1], 
+    	iEnd[-2], iEnd[-1], orientation);
     }
 return penalty;
 }
 
 
+
 void test1(int hGap, int nGap)
 /* test - Test something. */
 {
+char *consensus = "agtag";
+
 // printf("logBaseTwo(1000) %d, log(1000) %f\n", digitsBaseTwo(1000),  log(1000));
 printf("%d %d: orig %d, old %d, new %d\n", 
 	hGap, nGap, ffCalcGapPenalty(hGap, nGap, ffCdna) + 4,
 	2*ffCalcGapPenalty(hGap, nGap, ffCdna) + 4,
-	trimGapPenalty(hGap, nGap)
+	trimGapPenalty(hGap, nGap, consensus, consensus+4, 1)
 	);
 }
 
