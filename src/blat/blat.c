@@ -131,6 +131,7 @@ printf(
   "                   pslx - Tab separated format with sequence\n"
   "                   axt - blastz-associated axt format\n"
   "                   maf - multiz-associated maf format\n"
+  "                   sim4 - similar to sim4 format\n"
   "                   wublast - similar to wublast format\n"
   "                   blast - similar to NCBI blast format\n"
   "   -fine       For high quality mRNAs look harder for small initial and\n"
