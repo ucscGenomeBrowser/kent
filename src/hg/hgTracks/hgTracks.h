@@ -716,9 +716,12 @@ void drawScaledBoxSample(struct vGfx *vg,
         int score);
 /* Draw a box scaled from chromosome to window coordinates. */
 
+boolean genePredClassFilter(struct track *tg, void *item);
+/* Returns true if an item should be added to the filter. */
+
 Color genePredItemClassColor(struct track *tg, void *item, struct vGfx *vg);
 /* Return color to draw a genePred based on looking up the gene class */
-/* in an itemClass table */
+/* in an itemClass table. */
         
 struct track *trackFromTrackDb(struct trackDb *tdb);
 
