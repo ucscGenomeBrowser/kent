@@ -346,7 +346,7 @@ for (;symIx < axt->symCount; ++symIx)
     }
 }
 
-void addPos(struct c1Counts *cm, struct axt *axt, int pos)
+void addPos(struct c1Counts *c1, struct c2Counts *c2, struct axt *axt, int pos)
 /* Add count from match at pos to matrix. */
 {
 int symIx;
@@ -362,8 +362,16 @@ for (symIx = 0; symIx < axt->symCount; ++symIx)
 	    char q = axt->qSym[symIx];
 	    int tIx = symToIx[t];
 	    int qIx = symToIx[q];
+	    int tLastIx = symToIx[axt->tSym[symIx-1]];
+	    int qLastIx = symToIx[axt->qSym[symIx-1]];
 	    if (tIx >= 0 && qIx >= 0)
-		cm->counts[tIx][qIx] += 1;
+		{
+		c1->counts[tIx][qIx] += 1;
+		if (tLastIx >= 0 && qLastIx >= 0)
+		    {
+		    c2->counts[ix2(tLastIx,qLastIx)][ix2(tIx,qIx)] += 1;
+		    }
+		}
 	    break;
 	    }
 	++tPos;
@@ -565,31 +573,39 @@ struct hash *rsiHash = readRefRa(raFile);
 struct lineFile *lf = lineFileOpen(axtFile, TRUE);
 FILE *f = mustOpen(outFile, "w");
 struct axt *axt;
-static struct c1Counts kozak[10], c1all, c1utr5, c1utr3, c1cds;
-static struct c2Counts c2All, c2Utr5, c2Utr3, c2Cds;
+static struct c1Counts c1Kozak[10], c1all, c1utr5, c1utr3, c1cds;
+static struct c2Counts c2Kozak[10], c2All, c2Utr5, c2Utr3, c2Cds;
 static struct c3Counts c3All, c3Utr5, c3Utr3, c3Cds;
 char label[64];
 char *predictFile = optionVal("predict", NULL);
 int i;
-struct c3Counts codons;
+static struct c3Counts cod1, cod2, cod3, stop;
 
-initC3Counts(&codons, 1);
+initC3Counts(&cod1, 0);
+initC3Counts(&cod2, 0);
+initC3Counts(&cod3, 0);
+initC3Counts(&c3Utr3, 0);
+initC3Counts(&c3Utr5, 0);
+initC3Counts(&stop, 0);
 
 threshold = optionFloat("threshold", threshold);
 while ((axt = axtRead(lf)) != NULL)
     {
     struct refSeqInfo *rsi = hashFindVal(rsiHash, axt->tName);
-    if (rsi != NULL && rsi->cdsStart >= 5)
+    if (rsi != NULL && rsi->cdsStart >= 6)
         {
 	if (checkAtg(axt, rsi->cdsStart))
 	    {
 	    for (i=0; i<10; ++i)
-		addPos(&kozak[i], axt, rsi->cdsStart - 5 + i);
+		addPos(&c1Kozak[i], &c2Kozak[i], axt, rsi->cdsStart - 5 + i);
 	    addRange(&c1all, &c2All, &c3All, axt, 0, rsi->size);
 	    addRange(&c1utr5, &c2Utr5, &c3Utr5, axt, 0, rsi->cdsStart);
 	    addRange(&c1cds, &c2Cds, &c3Cds, axt, rsi->cdsStart, rsi->cdsEnd);
 	    addRange(&c1utr3, &c2Utr3, &c3Utr3, axt, rsi->cdsEnd, rsi->size);
-	    addCodons(&codons, axt, rsi->cdsStart+3, rsi->cdsEnd-3);
+	    addCodons(&cod1, axt, rsi->cdsStart+1, rsi->cdsEnd-5);
+	    addCodons(&cod2, axt, rsi->cdsStart+2, rsi->cdsEnd-4);
+	    addCodons(&cod3, axt, rsi->cdsStart+3, rsi->cdsEnd-3);
+	    addCodons(&stop, axt, rsi->cdsEnd-3, rsi->cdsEnd);
 	    }
 	}
     axtFree(&axt);
@@ -614,13 +630,19 @@ dumpC3(f, &c3Utr3, "c3_utr3");
 
 for (i=0; i<10; ++i)
     {
-    sprintf(label, "kozak[%d]", i-5);
-    dumpC1(f, &kozak[i], label);
+    sprintf(label, "c1_kozak[%d]", i-5);
+    dumpC1(f, &c1Kozak[i], label);
+    sprintf(label, "c2_kozak[%d]", i-5);
+    dumpC2(f, &c2Kozak[i], label);
     }
-dumpC3(f, &codons, "codon");
+dumpC3(f, &cod1, "cod1");
+dumpC3(f, &cod2, "cod2");
+dumpC3(f, &cod3, "cod3");
+dumpC3(f, &stop, "stop");
+
 if (predictFile)
     {
-    predict(kozak, &c1all, axtFile, predictFile, rsiHash);
+    predict(c1Kozak, &c1all, axtFile, predictFile, rsiHash);
     }
 }
 
