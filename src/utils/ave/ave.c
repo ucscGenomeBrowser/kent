@@ -65,9 +65,10 @@ void ave(char *fileName)
 int count = 0, alloc = 1024;
 int *array;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *words[128];
+char *words[128], *word;
 int wordCount;
 int wordIx = col-1;
+int num;
 
 AllocArray(array, alloc);
 while ((wordCount = lineFileChop(lf, words)) > 0)
@@ -77,8 +78,14 @@ while ((wordCount = lineFileChop(lf, words)) > 0)
 	alloc <<= 1;
 	ExpandArray(array, count, alloc);
 	}
-    array[count++] = lineFileNeedNum(lf, words, wordIx);
+    word = words[wordIx];
+    if (word[0] == '-' || isdigit(word[0]))
+        {
+	array[count++] = atoi(word);
+	}
     }
+if (count == 0)
+    errAbort("No numerical data column %d of %s", col, fileName);
 qsort(array, count, sizeof(array[0]), cmpInt);
 showStats(array, count);
 }
