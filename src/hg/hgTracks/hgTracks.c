@@ -6735,6 +6735,15 @@ tg->loadItems = loadUniGeneAli;
 tg->colorShades = shadesOfGray;
 }
 
+char *snpName(struct track *tg, void *item)
+/* prepend 'rs' to the rdId */
+{
+struct bed *bed = item;
+char name[20];
+snprintf(name, sizeof(name), "rs%s", bed->name);
+return (cloneString(name));
+}
+
 char *perlegenName(struct track *tg, void *item)
 /* return the actual perlegen name, in form xx/yyyy cut off xx/ return yyyy */
 {
@@ -6748,7 +6757,7 @@ else
     return "unknown";
 }
 
-Color perlegenColor(struct track *tg, struct linkedFeatures *lf, struct simpleFeature *sf, struct vGfx *vg)
+Color haplotypeColor(struct track *tg, struct linkedFeatures *lf, struct simpleFeature *sf, struct vGfx *vg)
 /* if it is the start or stop blocks make the color the shades
  * otherwise use black */
 {
@@ -6758,7 +6767,7 @@ else
     return blackIndex();
 }
 
-int perlegenHeight(struct track *tg, struct linkedFeatures *lf, struct simpleFeature *sf) 
+int haplotypeHeight(struct track *tg, struct linkedFeatures *lf, struct simpleFeature *sf) 
 /* if the item isn't the first or the last make it smaller */
 {
 if(sf == lf->components || sf->next == NULL)
@@ -6767,7 +6776,7 @@ else
     return (tg->heightPer-4);
 }
 
-static void perlegenLinkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
+static void haplotypeLinkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* currently this routine is adapted from Terry's linkedFeatureSeriesDraw() routine.
@@ -6809,8 +6818,8 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	}
     for (sf = lf->components; sf != NULL; sf = sf->next)
 	{
-	color = perlegenColor(tg, lf, sf, vg);
-	heightPer = perlegenHeight(tg, lf, sf);
+	color = haplotypeColor(tg, lf, sf, vg);
+	heightPer = haplotypeHeight(tg, lf, sf);
 	s = sf->start;
 	e = sf->end;
 	drawScaledBox(vg, s, e, scale, xOff, y+((tg->heightPer - heightPer)/2), heightPer, color);
@@ -8209,12 +8218,25 @@ tg->loadItems = loadMultScoresBed;
 tg->trackFilter = lfsFromCghNci60Bed;
 }
 
-void perlegenMethods(struct track *tg)
+void haplotypeMethods(struct track *tg)
 /* setup special methods for haplotype track */
 {
-tg->drawItems = perlegenLinkedFeaturesDraw;
-tg->itemName = perlegenName;
+tg->drawItems = haplotypeLinkedFeaturesDraw;
 tg->colorShades = shadesOfSea;
+}
+
+void perlegenMethods(struct track *tg)
+/* setup special methods for Perlegen haplotype track */
+{
+tg->itemName = perlegenName;
+tg->drawItems = haplotypeLinkedFeaturesDraw;
+tg->colorShades = shadesOfSea;
+}
+
+void snpMethods(struct track *tg)
+/* setup special methods for SNP tracks */
+{
+tg->itemName = snpName;
 }
 
 void loadAncientR(struct track *tg)
@@ -10092,6 +10114,9 @@ registerTrackHandler("rmskNew", repeatMethods);
 registerTrackHandler("simpleRepeat", simpleRepeatMethods);
 registerTrackHandler("uniGene",uniGeneMethods);
 registerTrackHandler("perlegen",perlegenMethods);
+registerTrackHandler("haplotype",haplotypeMethods);
+registerTrackHandler("snpNih", snpMethods);
+registerTrackHandler("snpTsc", snpMethods);
 registerTrackHandler("nci60", nci60Methods);
 registerTrackHandler("cghNci60", cghNci60Methods);
 registerTrackHandler("rosetta", rosettaMethods);
