@@ -2429,3 +2429,26 @@ http://genome.imim.es/genepredictions/M.musculus/mmOct2003/geneid_v1.1/$chr.prot
     ldHgGene mm4 geneid download/*.gtf -exon=CDS
     hgPepPred mm4 generic geneidPep download/*-fixed.prot
 
+# TWINSCAN 1.3 GENE PREDICTIONS (2003-12-15 braney)
+
+    cd /cluster/data/mm4/bed
+    rm -fr twinscan
+    mkdir twinscan.2003-12-15
+    ln -s twinscan.2003-12-15 twinscan
+    cd twinscan
+    tarFile=MGSCv3_v_NCBI34_11-24-03.tgz
+    wget http://genes.cs.wustl.edu/predictions/mouse/11-24-03/MGSCv3_v_NCBI34_11-24-03.tgz
+    wget  http://genes.cs.wustl.edu/predictions/mouse/11-24-03/md5sum.txt
+
+    # check file transferred correctly
+    md5sum $tarFile | diff - md5sum.txt
+    tar xvfz $tarFile
+    unset tarFile 
+
+    # pare down protein FASTA header to id and add missing .a:
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X )
+      echo chr$c
+      perl -wpe 's/^(\>\S+)\s.*$/$1.a/' < chr_ptx/chr$c.ptx > chr_ptx/chr$c-fixed.fa
+    end
+    ldHgGene mm4 twinscan chr_gtf/chr*.gtf -gtf
+    hgPepPred mm4 generic twinscanPep chr_ptx/chr*-fixed.fa
