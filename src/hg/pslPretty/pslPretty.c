@@ -9,7 +9,7 @@
 #include "nib.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslPretty.c,v 1.25 2004/02/10 01:05:11 kent Exp $";
+static char const rcsid[] = "$Id: pslPretty.c,v 1.26 2004/03/02 17:19:20 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -604,7 +604,6 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
 	qGap = qs - lastQ;
 	tGap = ts - lastT;
 	minGap = min(qGap, tGap);
-	uglyf("block %d, minGap %d\n", blockIx, minGap);
 	if (minGap > 0)
 	    {
 	    writeGap(q, qGap, qSeq->dna + lastQ, t, tGap, tSeq->dna + lastT);
