@@ -16,7 +16,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.68 2003/09/11 21:20:14 hiram Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.69 2003/09/12 09:26:24 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -24,7 +24,8 @@ char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	filSaveCurrentVarName, filUseSavedVarName,
 	getSeqVarName, getSeqPageVarName, getGenomicSeqVarName, getTextVarName, 
 	advFilterVarName, advFilterClearVarName, advFilterBrowseVarName,
-	advFilterListVarName, idVarName, idPosVarName, NULL }; 
+	advFilterListVarName, advFilterListProtVarName,
+	advFilterListAccVarName, idVarName, idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. */
 
 /* ---- Global variables. ---- */
@@ -1358,6 +1359,10 @@ else if (cartVarExists(cart, advFilterBrowseVarName))
     doAdvFilterBrowse(conn, colList);
 else if (cartVarExists(cart, advFilterListVarName))
     doAdvFilterList(conn, colList);
+else if (cartVarExists(cart, advFilterListProtVarName))
+    doAdvFilterListProt(conn, colList);
+else if (cartVarExists(cart, advFilterListAccVarName))
+    doAdvFilterListAcc(conn, colList);
 else if (cartVarExists(cart, getSeqPageVarName))
     doGetSeqPage(conn, colList);
 else if (cartVarExists(cart, idVarName))

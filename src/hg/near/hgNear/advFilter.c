@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.6 2003/09/12 08:06:15 kent Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.7 2003/09/12 09:26:24 kent Exp $";
 
 struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -279,13 +279,13 @@ hPrintf(
 "Hint: you can combine filters by copying the results of 'List Names'<BR>\n"
 "and then doing a 'Paste List' in the Name controls.<BR>");
 hPrintf("</TD></TR><TR><TD>");
+hPrintf("Quick Text:");
+hPrintf("</TD><TD>");
 cgiMakeButton(advFilterListVarName, "List Names");
 hPrintf("</TD><TD>");
-cgiMakeButton(advFilterListVarName, "List Proteins");
+cgiMakeButton(advFilterListProtVarName, "List Proteins");
 hPrintf("</TD><TD>");
-cgiMakeButton(advFilterListVarName, "List Accessions");
-hPrintf("</TD><TD>");
-cgiMakeButton(advFilterListVarName, "List Exp ID");
+cgiMakeButton(advFilterListAccVarName, "List Accessions");
 hPrintf("</TD></TR></TABLE>\n");
 }
 
@@ -302,6 +302,9 @@ makeTitle("Gene Family Filter", "hgNearAdvFilter.html");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST>\n");
 cartSaveSession(cart);
 
+hPrintf("<BR>");
+hPrintf("With this page you can restrict which genes appear in the main<BR>");
+hPrintf("table based on the values in any column.<BR>");
 /* Put up little table with clear all/submit */
 bigButtons();
 
@@ -342,9 +345,6 @@ for (onOff = 1; onOff >= 0; --onOff)
 	hPrintf("</TABLE>\n");
 	}
     }
-
-/* Put submit buttons at bottom of page as well. */
-bigButtons();
 hPrintf("</FORM>\n");
 }
 
@@ -362,12 +362,12 @@ void doAdvFilterBrowse(struct sqlConnection *conn, struct column *colList)
 doSearch(conn, colList);
 }
 
-void doAdvFilterList(struct sqlConnection *conn, struct column *colList)
-/* List gene names matching advanced filter. */
+void doAdvFilterListCol(struct sqlConnection *conn, struct column *colList,
+	char *colName)
+/* List a column for genes matching advanced filter. */
 {
 struct genePos *gp, *list = NULL;
-struct hash *uniqHash = newHash(16);
-struct column *col = findNamedColumn(colList, "name");
+struct column *col = findNamedColumn(colList, colName);
 
 if (col == NULL)
     {
@@ -397,9 +397,27 @@ for (gp = list; gp != NULL; gp = gp->next)
     {
     hPrintf("%s\n", gp->name);
     }
-    
 hPrintf("</PRE></TT>");
 }
+
+void doAdvFilterList(struct sqlConnection *conn, struct column *colList)
+/* List gene names matching advanced filter. */
+{
+doAdvFilterListCol(conn, colList, "name");
+}
+
+void doAdvFilterListProt(struct sqlConnection *conn, struct column *colList)
+/* List proteins matching advanced filter. */
+{
+doAdvFilterListCol(conn, colList, "proteinName");
+}
+
+void doAdvFilterListAcc(struct sqlConnection *conn, struct column *colList)
+/* List accessions matching advanced filter. */
+{
+doAdvFilterListCol(conn, colList, "acc");
+}
+
 
 
 static struct genePos *firstBitsOfList(struct genePos *inList, int maxCount, 
