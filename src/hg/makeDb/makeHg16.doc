@@ -9044,6 +9044,7 @@ java -jar ./eponine-scan.jar -threshold 0.999 -seq $1 > $2
     rm blat.hg16KG
     ln -s  blat.hg16KG.2004-05-27 blat.hg16KG
     pepPredToFa hg16 knownGenePep known.fa
+    hgPepPred hg16 generic blastKGPep00 known.fa
     grep ">" known.fa | sed "s/>//" > kgName.lst
     kgName hg16 kgName.lst kg.mapNames
     cat << '_EOF_' > blatSome
