@@ -10,9 +10,12 @@ splitFaIntoContigs - take a .agp file and a .fa file and a split size in kilobas
 #include "agpGap.h"
 #include "agpFrag.h"
 
+/* Default array size for file paths */
+#define DEFAULT_PATH_SIZE 1024
+
 /* 
 Flag showing that we have a non-bridged gap, indicating
-that we can split a sequence here into supercontigs
+that we can split a sequence at the end of it into supercontigs
 */
 static const char *NO = "no";
 
@@ -22,7 +25,7 @@ static const int defaultSize = 1000000;
 /*
 The top-level dir where we are sticking all the split up data files
 */
-static char outputDir[256];
+static char outputDir[DEFAULT_PATH_SIZE];
 
 void usage()
 /* 
@@ -38,10 +41,18 @@ fflush(stdout);
 }
 
 void writeChromFaFile(char *chromName, char *dna, int dnaSize)
+/*
+Writes the contents of a single chromsome out to a file in FASTA format
+
+param chromName - The name of the chromosome for which we are writing
+ the fa file.
+param dna - Pointer to the dna array.
+param dnaSize - The size of the dna array.
+ */
 {
-char command[256];
-char destDir[256];
-char filename [256];
+char command[DEFAULT_PATH_SIZE];
+char destDir[DEFAULT_PATH_SIZE];
+char filename [DEFAULT_PATH_SIZE];
 int i = 0;
 
 /* Strip off the leading "chr" prefix */
@@ -54,35 +65,43 @@ faWrite(filename, chromName, dna, dnaSize);
 }
 
 void createSplitFile(DNA *dna, struct agpGap *startGap, struct agpGap *endGap)
+/*
+Creates a fasta file containing the contents of a supercontig in FASTA format.
+
+param dna - Pointer to the dna array.
+param startGap - Pointer to the dna gap or fragment at which we are starting to
+ write data. The data will include the contents of this gap/frag.
+param endGap - Pointer to the dna gap or fragment at which we are stopping to
+ write data. The data will include the contents of this gap/frag.
+ */
 {
 int startOffset = startGap->chromStart;
 int endOffset = endGap->chromEnd;
 int i = 0;
-char filename[32];
-char command[256];
+char filename[DEFAULT_PATH_SIZE];
+char command[DEFAULT_PATH_SIZE];
 static int sequenceNum = 0;
-char destDir[256];
+char destDir[DEFAULT_PATH_SIZE];
 int dnaSize = 0;
-char sequenceName[32];
+char sequenceName[DEFAULT_PATH_SIZE];
 
 printf("Writing gap file for chromo %s\n", endGap->chrom);
 
 /*
 
 filename = outputDir/chromName/chromFrag/chromFrag.fa
-
 example:
 
 outputDir = output
 chromName = chr1 - we strip off the chr
 chromFrag = chr1_1
 output/1/chr1_1/chr1_1.fa
-
 */
 
 if (0 == startGap->chromStart)
     {
-    /* Restart the sequence number */
+    /* Restart the sequence number since we are now
+       in a new chromosome*/
     sequenceNum = 0;
     }
 
@@ -100,6 +119,20 @@ faWrite(filename, sequenceName, &dna[startOffset], dnaSize);
 }
 
 struct agpGap* nextAgpEntryToSplitOn(struct lineFile *lfAgpFile, int dnaSize, int splitSize, struct agpGap **retStartGap)
+/*
+Finds the next agp entry in the agp file at which to split on.
+
+param lfAgpFile - The .agp file we are examining.
+param dnaSize - The total size of the chromsome's dna sequence 
+ we are splitting up. Used to prevent overrun of the algorithm
+ that looks at agp entries.
+param splitSize - The size of the split fragments that we are
+ trying to make.
+param retGapStart - An out param returning the starting(inclusive) gap that we
+ will start to split on.
+
+return struct agpGap* - The ending (inclusive) agp gap we are to split on.
+ */
 {
 int startIndex = 0;
 int numBasesRead = 0;
@@ -161,6 +194,15 @@ return agpGap;
 }
 
 void makeSuperContigs(struct lineFile *agpFile, DNA *dna, int dnaSize, int splitSize)
+/*
+Makes supercontig files for each chromosome
+
+param agpFile - The agpFile we are examining.
+param dna - The dna sequence we are splitting up.
+param dnaSize - The size of the dna sequence we are splitting up.
+param splitSize - The sizes of the supercontigs we are splitting the 
+ dna into.
+ */
 {
 struct agpGap *startAgpGap = NULL;
 struct agpGap *endAgpGap = NULL;
@@ -176,13 +218,13 @@ do
 
 void splitFaIntoContigs(char *agpFile, char *faFile, int splitSize)
 /* 
-splitFaIntoContigs - read the .agp file and make sure that it agrees with the .fa file. 
+splitFaIntoContigs - read the .agp file the .fa file. and split each
+ chromsome into supercontigs at non-bridged sections.
 
 param agpFile - The pathname of the agp file to check.
 param faFile - The pathname of the fasta file to check.
-
-exceptions - this function aborts if it detects an entry where the agp and fasta
-files do not agree
+param splitSize - The sizes of the supercontigs we are splitting the
+ dna into.
 */
 {
 struct lineFile *lfAgp = lineFileOpen(agpFile, TRUE);
@@ -213,7 +255,7 @@ Process command line then delegate main work to splitFaIntoContigs().
 */
 {
 int size = defaultSize;
-char command[256];
+char command[DEFAULT_PATH_SIZE];
 
 cgiSpoof(&argc, argv);
 
@@ -239,3 +281,4 @@ setbuf(stdout, NULL);
 splitFaIntoContigs(argv[1], argv[2], size);
 return 0;
 }
+
