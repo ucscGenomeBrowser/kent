@@ -21,7 +21,7 @@
 #include "web.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgPcr.c,v 1.2 2004/06/07 23:02:57 kent Exp $";
+static char const rcsid[] = "$Id: hgPcr.c,v 1.3 2004/06/07 23:41:55 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -190,27 +190,59 @@ void doGetPrimers(char *db, char *organism, struct pcrServer *serverList,
 {
 struct pcrServer *server;
 
-printf("<H1>%s In Silico PCR</H1>", "UCSC");
 printf("<FORM ACTION=\"../cgi-bin/hgPcr\" METHOD=\"GET\" NAME=\"mainForm\">\n");
 cartSaveSession(cart);
-printf("Forward Primer: ");
+
+printf("<TABLE BORDER=0 WIDTH=\"96%%\" COLS=7><TR>\n");
+
+printf("%s", "<TD><CENTER>\n");
+printf("Genome:<BR>");
+showGenomes(organism, serverList);
+printf("%s", "</TD>\n");
+
+printf("%s", "<TD><CENTER>\n");
+printf("Assembly:<BR>");
+showAssemblies(organism, db, serverList);
+printf("%s", "</TD>\n");
+
+printf("%s", "<TD COLWIDTH=2><CENTER>\n");
+printf("Forward Primer:<BR>");
 cgiMakeTextVar("wp_f", fPrimer, 22);
-printf(" Reverse Primer: ");
+printf("%s", "</TD>\n");
+
+printf("%s", "<TD><CENTER COLWIDTH=2>\n");
+printf(" Reverse Primer:<BR>");
 cgiMakeTextVar("wp_r", rPrimer, 22);
-printf("<BR>");
+printf("%s", "</TD>\n");
+
+printf("%s", "<TD><CENTER>\n");
+printf("&nbsp;<BR>");
+cgiMakeButton("Submit", "Submit");
+printf("%s", "</TD>\n");
+
+printf("</TR></TABLE><BR>");
+
+printf("<TABLE BORDER=0 WIDTH=\"96%%\" COLS=4><TR>\n");
+printf("%s", "<TD><CENTER>\n");
 printf("Max Product Size: ");
 cgiMakeIntVar("wp_size", maxSize, 5);
+printf("%s", "</TD>\n");
+
+printf("%s", "<TD><CENTER>\n");
 printf(" Min Perfect Match Size: ");
 cgiMakeIntVar("wp_perfect", minPerfect, 2);
+printf("%s", "</TD>\n");
+
+printf("%s", "<TD><CENTER>\n");
 printf(" Min Good Match Size: ");
 cgiMakeIntVar("wp_good", minGood, 2);
-printf("<BR>\n");
-printf("Genome: ");
-showGenomes(organism, serverList);
-printf("Assembly: ");
-showAssemblies(organism, db, serverList);
+printf("%s", "</TD>\n");
+
+printf("%s", "<TD><CENTER>\n");
 printf(" <A HREF=\"../cgi-bin/hgPcr?wp_help=on\" TARGET=\"_blank\">User Guide</A> \n");
-cgiMakeButton("Submit", "Submit");
+printf("%s", "</TD>\n");
+printf("</TR></TABLE><BR>");
+
 printf("</FORM>\n");
 
 /* Put up a second form who's sole purpose is to preserve state
@@ -322,7 +354,7 @@ void doMiddle(struct cart *theCart)
 {
 cart = theCart;
 dnaUtilOpen();
-cartWebStart(cart, "In-Silico PCR");
+cartWebStart(cart, "UCSC In-Silico PCR");
 dispatch();
 cartWebEnd();
 }
