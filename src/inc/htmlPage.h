@@ -1,4 +1,14 @@
-/* htmlPage - stuff to read, parse, and submit  htmlPages and forms. */
+/* htmlPage - stuff to read, parse, and submit  htmlPages and forms. 
+ *
+ * typical usage is:
+ *   struct htmlPage *page = htmlPageGet(url);
+ *   htmlPageValidateOrAbort(page);
+ *   var = htmlPageGetVar(page, page->forms, "org");
+ *   if (var != NULL)
+ *      printf("Organism = var->org);
+ *   htmlPageSetVar(page, page->forms, "org", "Human");
+ *   newPage = htmlPageFromForm(page, page->forms, "submit", "Go");
+ */
 
 #ifndef HTMLPAGE_H
 #define HTMLPAGE
@@ -143,10 +153,10 @@ struct htmlFormVar *htmlFormVarGet(struct htmlForm *form, char *name);
 void htmlFormVarSet(struct htmlForm *form, char *name, char *val);
 /* Set variable to given value.  */
 
-struct htmlFormVar *htmlGetVar(struct htmlPage *page, struct htmlForm *form, char *name);
+struct htmlFormVar *htmlPageGetVar(struct htmlPage *page, struct htmlForm *form, char *name);
 /* Get named variable.  If form is NULL, first form in page is used. */
 
-void htmlSetVar(struct htmlPage *page, struct htmlForm *form, char *name, char *val);
+void htmlPageSetVar(struct htmlPage *page, struct htmlForm *form, char *name, char *val);
 /* Set variable to given value.  If form is NULL, first form in page is used. */
 
 void htmlPageFree(struct htmlPage **pPage);

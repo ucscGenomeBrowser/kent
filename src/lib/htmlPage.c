@@ -1,4 +1,14 @@
-/* htmlPage - stuff to read, parse, and submit  htmlPages and forms. */
+/* htmlPage - stuff to read, parse, and submit  htmlPages and forms. 
+ *
+ * typical usage is:
+ *   struct htmlPage *page = htmlPageGet(url);
+ *   htmlPageValidateOrAbort(page);
+ *   var = htmlPageGetVar(page, page->forms, "org");
+ *   if (var != NULL)
+ *      printf("Organism = var->org);
+ *   htmlPageSetVar(page, page->forms, "org", "Human");
+ *   newPage = htmlPageFromForm(page, page->forms, "submit", "Go");
+ */
 
 #include "common.h"
 #include "errabort.h"
@@ -12,7 +22,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.4 2004/03/03 20:52:52 kent Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.5 2004/03/03 21:17:10 kent Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -905,7 +915,7 @@ var->curVal = cloneString(val);
 }
 
 
-struct htmlFormVar *htmlGetVar(struct htmlPage *page, struct htmlForm *form, char *name)
+struct htmlFormVar *htmlPageGetVar(struct htmlPage *page, struct htmlForm *form, char *name)
 /* Get named variable.  If form is NULL, first form in page is used. */
 {
 if (form == NULL)
@@ -913,7 +923,7 @@ if (form == NULL)
 return htmlFormVarGet(form, name);
 }
 
-void htmlSetVar(struct htmlPage *page, struct htmlForm *form, char *name, char *val)
+void htmlPageSetVar(struct htmlPage *page, struct htmlForm *form, char *name, char *val)
 /* Set variable to given value.  If form is NULL, first form in page is used. */
 {
 if (form == NULL)

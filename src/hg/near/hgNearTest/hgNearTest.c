@@ -11,7 +11,7 @@
 #include "htmlPage.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgNearTest.c,v 1.3 2004/03/03 20:54:21 kent Exp $";
+static char const rcsid[] = "$Id: hgNearTest.c,v 1.4 2004/03/03 21:17:10 kent Exp $";
 
 /* Command line variables. */
 char *dataDir = "/usr/local/apache/cgi-bin/hgNearData";
@@ -221,9 +221,9 @@ struct qaStatus *status;
 char visVar[256];
 safef(visVar, sizeof(visVar), "near.col.%s.vis", col);
 uglyf("testCol(%s,%s,%s,%s)\n", org, db, col, gene);
-htmlSetVar(emptyConfig, NULL, visVar, "on");
-htmlSetVar(emptyConfig, NULL, "near.order", "geneDistance");
-htmlSetVar(emptyConfig, NULL, "near.count", "25");
+htmlPageSetVar(emptyConfig, NULL, visVar, "on");
+htmlPageSetVar(emptyConfig, NULL, "near.order", "geneDistance");
+htmlPageSetVar(emptyConfig, NULL, "near.count", "25");
 
 status = qaPageFromForm(emptyConfig, emptyConfig->forms, 
 	"submit", "Submit", &colPage);
@@ -232,7 +232,7 @@ slAddHead(pTestList, test);
 if (colPage != NULL && colPage->fullText != NULL)
     uglyf(" %d chars\n", strlen(colPage->fullText));
 htmlPageFree(&colPage);
-htmlSetVar(emptyConfig, NULL, visVar, NULL);
+htmlPageSetVar(emptyConfig, NULL, visVar, NULL);
 }
 
 void testDb(struct htmlPage *orgPage, char *org, char *db, struct colTest **pTestList)
@@ -246,7 +246,7 @@ char *canonicalTable = hashMustFindVal(genomeRa, "canonicalTable");
 struct slName *gene, *geneList = randomSample(db, canonicalTable, "transcript", clRepeat);
 
 uglyf("testDb(%s,%s)\n", org, db);
-htmlSetVar(orgPage, NULL, "db", db);
+htmlPageSetVar(orgPage, NULL, "db", db);
 emptyConfig = htmlPageFromForm(orgPage, orgPage->forms, "near.do.colHideAll", "on");
 if (emptyConfig == NULL)
     errAbort("Couldn't get empty config for %s\n", db);
@@ -266,7 +266,7 @@ slReverse(&colList);
 
 for (gene = geneList; gene != NULL; gene = gene->next)
     {
-    htmlSetVar(emptyConfig, NULL, "near_search", gene->name);
+    htmlPageSetVar(emptyConfig, NULL, "near_search", gene->name);
     for (col = colList; col != NULL; col = col->next)
 	{
 	testCol(emptyConfig, org, db, col->name, gene->name, pTestList);
@@ -287,9 +287,9 @@ struct htmlFormVar *dbVar;
 struct slName *db;
 
 uglyf("testOrg %s (%s)\n", org, forceDb);
-htmlSetVar(rootPage, rootForm, "org", org);
-htmlSetVar(rootPage, rootForm, "db", org);
-htmlSetVar(rootPage, rootForm, "near_search", "");
+htmlPageSetVar(rootPage, rootForm, "org", org);
+htmlPageSetVar(rootPage, rootForm, "db", org);
+htmlPageSetVar(rootPage, rootForm, "near_search", "");
 orgPage = htmlPageFromForm(rootPage, rootPage->forms, "submit", "Go");
 if ((mainForm = htmlFormGet(orgPage, "mainForm")) == NULL)
     errAbort("Couldn't get main form on orgPage");
