@@ -260,7 +260,7 @@ type genePred
 
 track loweProbes
 shortLabel Lowe's Probes
-longLabel 3 Oligos selected from sanger 22 on Chr22
+longLabel Candidate oligos for Stanford microarray
 priority 12.99
 visibility hide
 chromosomes chr22,
@@ -517,7 +517,8 @@ shortLabel UniGene
 longLabel UniGene Alignments and SAGE Info
 priority 20.5
 visibility hide
-type psl .
+spectrum on
+type bed 12 
 
 track mgc_mrna
 shortLabel MGC mRNAs
