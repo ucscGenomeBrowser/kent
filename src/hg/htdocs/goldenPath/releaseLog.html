@@ -2,15 +2,17 @@
 <HTML>
 <HEAD>
     <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
-    <TITLE>UCSC Genome Bioinformatics: Release Log</TITLE>
+    <META name="description" content="UCSC Genome Browser Release Log">
+    <META name="keywords" content="genome, genome browser, genome assembly, UCSC, bioinformatics, release, table, track, annotation">
     <LINK REL="STYLESHEET" HREF="/style/HGStyle.css">
+    <TITLE>UCSC Genome Bioinformatics: Release Log</TITLE>
 </HEAD>
 
 <BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
 <A NAME="TOP"></A>
 
 <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
-    <TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="/images/title.jpg"></TH></TR>
+    <TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="/images/title.jpg" ALT="UCSC Genome Bioinformatics"></TH></TR>
 </TABLE>
 
 <!--Hotlinks bar-------------------------------------------------->
@@ -27,282 +29,477 @@
                         Blat Search</a> &nbsp; - &nbsp;
                 <A HREF="/cgi-bin/hgText?command=start" class="topbar">
                         Table Browser</a> &nbsp; - &nbsp;
-                <A HREF="FAQ.html" class="topbar">
+                <A HREF="../FAQ.html" class="topbar">
                         FAQ</a> &nbsp; - &nbsp;
-                <A HREF="goldenPath/help/hgTracksHelp.html" class="topbar">
+                <A HREF="help/hgTracksHelp.html" class="topbar">
                         User Guide</a> &nbsp;</font></TD>
         </TR></TABLE>
     </TD></TR></TABLE>
 </TD></TR></TABLE>
 
-<!--Content Table------------------------------------------------------->
+<!--Menu------------------------------------------------------->
 <TABLE BORDER=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><TH></TR>
-<TR><TD COLSPAN=2 CELLPADDING=10 HEIGHT=40>
-    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDERCOLOR="888888" BORDER=1>
-    <TR><TD>
-    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
-        <TR><TD>
-	<FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Tracks available: Human April 2003 (hg15)</B></FONT>
+<TR><TD CELLPADDING=10>	
+    <!--outer table is for border purposes-->
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
+	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+                <TR><TD> <FONT SIZE="4"><b>&nbsp;   Track and Table Releases</b></FONT>
+	        </TD></TR></TABLE>
+	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
+	        <TR><TD WIDTH=10>&nbsp;</TD><TD>
+
+ 	        This page contains track and table release information for 
+		the following genome assemblies: 
+	        <UL>
+	        <LI><A CLASS="toc" HREF="#hg15">Human Apr. 2003 (hg15)</A></LI>
+	        <LI><A CLASS="toc" HREF="#hg13">Human Nov. 2002 (hg13)</A></LI>
+	        <LI><A CLASS="toc" HREF="#mm3">Mouse Feb. 2003 (mm3)</A></LI>
+	        <LI><A CLASS="toc" HREF="#rn3">Rat Jun. 2003 (rn3)</A></LI>
+	        <LI><A CLASS="toc" HREF="#rn2">Rat Jan. 2003 (rn2)</A></LI>
+	        <LI><A CLASS="toc" HREF="#ce1">C. elegans May 2003 (ce1)</A></LI>
+	        <LI><A CLASS="toc" HREF="#cb1">C. briggsae Jul. 2002 (cb1)</A></LI>
+	        <LI><A CLASS="toc" HREF="#sc1">SARS Apr. 2003 (sc1)</A></LI>
+	        </UL>
+		<P>
+	        For more information about the tracks and tables listed on this 
+		page, refer to the <A HREF="gbdDescriptions.html">Description 
+	        of the annotation database</A> and the <A 
+	        HREF="help/hgTracksHelp.html#IndivTracks">User's Guide</A>.
+            </TD><TD WIDTH=15></TD></TR></TABLE>
+        <br></TD></TR></TABLE>
     </TD></TR></TABLE>
+</TD></TR></TABLE>
+
+<A NAME="hg15"></A>
+<!--hg15 Table------------------------------------------------------->
+<TABLE BORDER=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><TH></TR>
+<TR><TD CELLPADDING=10>
+    <!--outer table is for border purposes-->
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>
+            <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+                <TR><TD> <FONT SIZE="4"><b>&nbsp;   Human Apr. 2003 (hg15)</B></FONT>
+                </TD></TR></TABLE>
     <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TH HEIGHT=10></TH>
         <TR><TD WIDTH=10></TD><TD>
-	<!--finished chromosome table-->
+	<!--track table-->
 	    <TABLE BORDER=1 BORDERCOLOR="#aaaaaa" CELLPADDING=4 WIDTH="100%">
-	    <TR><TD nowrap><FONT color="#006666"><B>Track or Table Name</B></FONT></TD>
+	    <TR><TD nowrap><FONT color="#006666"><B>Track/Table Name</B></FONT></TD>
 	        <TD nowrap><FONT color="#006666"><B>Release Date</B></FONT>
             </TD></TR>
-	    <TR valign="top"><TD align="left">
-                Initial hg15 release: Assembly, Gap, STS Markers, Map Contigs,
-                GC Percent, Known Genes, RefSeq Genes, 
-                Genscan Genes, Human mRNAs, Spliced ESTs, 
-                Human ESTs, Nonhuman mRNA, CpG Islands,
-                Fugu Blat, Tight Mouse, RepeatMasker, 
-                Simple Repeats, Mouse Synteny</TD>
-                <TD>14 Apr 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                liftAll.zip (correction for NT_008183 - table only)</TD>
-		<TD>16 Apr 2003</TD>
-  	    </TR>
-	    <TR valign="top"><TD align="left">
-                BAC End Pairs</TD>
-		<TD>25 Apr 2003</TD>
-  	    </TR>
-	    <TR valign="top"><TD align="left">
-                Coverage</TD>
-		<TD>25 Apr 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Chromosome Band</TD>
-		<TD>28 Apr 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Fgenesh Gene Predictions</TD>
-		<TD>28 Apr 2003</TD>
-	    </TR>
+
             <TR valign="top"><TD align="left">
-                FISH Clones</TD>
-		<TD>28 Apr 2003</TD>
-	    </TR>
+                Ensembl Genes</TD>
+                <TD>15 Jul 2003</TD>
+            </TR>
             <TR valign="top"><TD align="left">
-                GC Pecent (data reloaded) </TD>
-		<TD>29 Apr 2003</TD>
-	    </TR>
+                bigZips (upstream files updated)</TD>
+                <TD>9 Jul 2003</TD>
+            </TR>
             <TR valign="top"><TD align="left">
-                GeneBands (table only)</TD>
-		<TD>30 Apr 2003</TD>
-	    </TR>
+                Best Mouse (using mm3)</TD>
+                <TD>9 Jul 2003</TD>
+            </TR>
+	    <TR valign="top"><TD align="left">
+                Mouse Cons (using mm3)</TD>
+                <TD>9 Jul 2003</TD>
+            </TR>
             <TR valign="top"><TD align="left">
-                NCI60 </TD>
-		<TD>30 Apr 2003</TD>
-	    </TR>
+                Blastz axtTight mouse alignments (using mm3)</TD>
+                <TD>25 Jun 2003</TD>
+            </TR>
+            <TR valign="top"><TD align="left">
+                Acembly</TD>
+                <TD>5 Jun 2003</TD>
+            </TR>
+            <TR valign="top"><TD align="left">
+                AxtInfo (updated to use axtNetMm3)</TD>
+                <TD>30 May 2003</TD>
+            </TR>
+            <TR valign="top"><TD align="left">
+                MGC Genes</TD>
+                <TD>27 May 2003</TD>
+            </TR>
+            <TR valign="top"><TD align="left">
+                Human/Mouse/Rat (using mm3, rn2)</TD>
+                <TD>27 May 2003</TD>
+            </TR>
+            <TR valign="top"><TD align="left">
+                Rat Synteny (using rn2)</TD>
+                <TD>27 May 2003</TD>
+            </TR>
+            <TR valign="top"><TD align="left">
+                Gene Bounds</TD>
+                <TD>27 May 2003</TD>
+            </TR>
+            <TR valign="top"><TD align="left">
+                Tight Rat (using rn2)</TD>
+                <TD>27 May 2003</TD>
+            </TR>
+            <TR valign="top"><TD align="left">
+                UniGene (v. Hs 160)</TD>
+                <TD>27 May 2003</TD>
+            </TR>
+            <TR valign="top"><TD align="left">
+                Haplotype Blocks (chr 21 and 22 only)</TD>
+                <TD>20 May 2003</TD>
+            </TR>
+            <TR valign="top"><TD align="left">
+                SGP Genes (using mm3)</TD>
+                <TD>20 May 2003</TD>
+            </TR>
+            <TR valign="top"><TD align="left">
+                Fosmid End Pairs</TD>
+                <TD>20 May 2003</TD>
+            </TR>
+            <TR valign="top"><TD align="left">
+                Overlap and Random SNPs (v. snp114)</TD>
+                <TD>15 May 2003</TD>
+            </TR>
+            <TR valign="top"><TD align="left">
+                Blastz axtBest mouse alignments (using mm3)</TD>
+                <TD>13 May 2003</TD>
+            </TR>
+            <TR valign="top"><TD align="left">
+                Human/Mouse Chain and Net (using mm3)</TD>
+                <TD>9 May 2003</TD>
+            </TR>
+            <TR valign="top"><TD align="left">
+                Twinscan (using mm2)</TD>
+                <TD>8 May 2003</TD>
+            </TR>
+            <TR valign="top"><TD align="left">
+                Geneid Genes</TD>
+                <TD>8 May 2003</TD>
+            </TR>
+            <TR valign="top"><TD align="left">
+                Recomb Rate</TD>
+                <TD>1 May 2003</TD>
+            </TR>
             <TR valign="top"><TD align="left">
                 GNF Ratio</TD>
-		<TD>30 Apr 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Recomb Rate</TD>
-		<TD>1 May 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Geneid</TD>
-		<TD>8 May 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Twinscan</TD>
-		<TD>8 May 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Human/Mouse Chain and Net</TD>
-		<TD>9 May 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Fosmid End Pairs</TD>
-		<TD>20 May 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                SGP Genes</TD>
-		<TD>20 May 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                SNPs</TD>
-		<TD>15 May 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Haplotype Blocks (chr 21 and 22)</TD>
-		<TD>20 May 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                UniGene</TD>
-		<TD>27 May 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Tight Rat</TD>
-		<TD>27 May 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Gene Bounds</TD>
-		<TD>27 May 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Rat Synteny</TD>
-		<TD>27 May 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                MGC Genes</TD>
-		<TD>27 May 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                AxtInfo (updated to use axtNetMm3)</TD>
-		<TD>30 May 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Acembly</TD>
-		<TD>5 Jun 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                GC Percent (data reload)</TD>
-		<TD>29 Apr 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Mouse Cons (with mm3)</TD>
-		<TD>9 Jul 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                BigZips (upstream files updated)</TD>
-		<TD>9 Jul 2003</TD>
-	    </TR>
+                <TD>30 Apr 2003</TD>
+            </TR>
+            <TR valign="top"><TD align="left">
+                NCI60 </TD>
+                <TD>30 Apr 2003</TD>
+            </TR>
+            <TR valign="top"><TD align="left">
+                geneBands (table only)</TD>
+                <TD>30 Apr 2003</TD>
+            </TR>
+            <TR valign="top"><TD align="left">
+                GC Pecent (data reloaded) </TD>
+                <TD>29 Apr 2003</TD>
+            </TR>
+            <TR valign="top"><TD align="left">
+                FISH Clones</TD>
+                <TD>28 Apr 2003</TD>
+            </TR>
+            <TR valign="top"><TD align="left">
+                Fgenesh++ Genes </TD>
+                <TD>28 Apr 2003</TD>
+            </TR>
+            <TR valign="top"><TD align="left">
+                Chromosome Band</TD>
+                <TD>28 Apr 2003</TD>
+            </TR>
+            <TR valign="top"><TD align="left">
+                Coverage</TD>
+                <TD>25 Apr 2003</TD>
+            </TR>
+            <TR valign="top"><TD align="left">
+                BAC End Pairs</TD>
+                <TD>25 Apr 2003</TD>
+            </TR>
+            <TR valign="top"><TD align="left">
+                liftAll.zip (correction for NT_008183 - table only)</TD>
+                <TD>16 Apr 2003</TD>
+            </TR>
+            <TR valign="top"><TD align="left">
+                Initial hg15 release: Assembly, Gap, STS Markers, Map Contigs,
+                GC Percent, Known Genes, RefSeq Genes,
+                Genscan Genes, Human mRNAs, Spliced ESTs,
+                Human ESTs, NonHuman mRNAs, CpG Islands,
+                Fugu Blat (v 3.0), Tight Mouse (mm3), RepeatMasker,
+                Simple Repeats, Mouse Synteny (mm3)</TD>
+                <TD>14 Apr 2003</TD>
+            </TR>
 	    </TABLE>
     </TD><TD WIDTH=15></TD></TR></TABLE>
     <BR></TD></TR></TABLE>
 </TD></TR></TABLE>
+</TD></TR></TABLE>
 
-<!--Content Table------------------------------------------------------->
+<A NAME="hg13"></A>
+<!--hg13 Table------------------------------------------------------->
 <TABLE BORDER=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><TH></TR>
-<TR><TD COLSPAN=2 CELLPADDING=10 HEIGHT=40>
-    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDERCOLOR="888888" BORDER=1>
-    <TR><TD>
+<TR><TD CELLPADDING=10>
+    <!--outer table is for border purposes-->
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>
     <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
         <TR><TD>
-	<FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Tracks available: Human Nov 2002 (hg13)</B></FONT>
+	<FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Human Nov. 2002 (hg13)</B></FONT>
     </TD></TR></TABLE>
     <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TH HEIGHT=10></TH>
         <TR><TD WIDTH=10></TD><TD>
-	<!--finished chromosome table-->
+	<!--track table-->
 	    <TABLE BORDER=1 BORDERCOLOR="#aaaaaa" CELLPADDING=4 WIDTH="100%">
-	    <TR><TD nowrap><FONT color="#006666"><B>Track name</B></FONT></TD>
+	    <TR><TD nowrap><FONT color="#006666"><B>Track/Table Name</B></FONT></TD>
 	        <TD nowrap><FONT color="#006666"><B>Release Date</B></FONT>
             </TD></TR>
 	    <TR valign="top"><TD align="left">
-                Initial hg13 Release: Assembly, Gap, STS Markers, Map Contigs,
-                GC Percent, Known Genes, RefSeq Genes, 
-                Genscan Genes, Human mRNAs, Spliced ESTs, 
-                Human ESTs, Nonhuman mRNA, CpG Islands,
-                Fugu Blat, Tight Mouse, RepeatMasker, 
-                Simple Repeats</TD>
-                <TD>23 Dec 2002</TD>
+                Segmental Dups</TD>
+		<TD>24 Jun 2003</TD>
 	    </TR>
 	    <TR valign="top"><TD align="left">
-                Fosmid End Pairs</TD>
-		<TD>10 Feb 2003</TD>
+                Mouse Synteny (using mm3)</TD>
+		<TD>6 Jun 2003</TD>
 	    </TR>
 	    <TR valign="top"><TD align="left">
-                UniGene</TD>
-		<TD>20 Feb 2003</TD>
+                Fgenesh++ Genes (new data)</TD>
+		<TD>30 May 2003</TD>
 	    </TR>
 	    <TR valign="top"><TD align="left">
-                Mouse Cons</TD>
-		<TD>21 Feb 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                BAC End Pairs</TD>
-		<TD>27 Feb 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Acembly Gene Predictions (IDs changed)</TD>
-		<TD>27 Feb 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                RepeatMasker (updated)</TD>
-		<TD>13 Mar 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Ensembl Gene Predictions</TD>
-		<TD>14 Mar 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Random SNPs, Overlap SNPs</TD>
-		<TD>27 Mar 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                TIGR Gene Index</TD>
-		<TD>28 Mar 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Superfamily</TD>
-		<TD>30 Mar 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Rat Synteny (data updated)</TD>
-		<TD>7 Apr 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                SLAM</TD>
-		<TD>28 Apr 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Human/Mouse Chain and Net</TD>
-		<TD>2 May 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Random SNPs, Overlap SNPs (updated)</TD>
-		<TD>15 May 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Haplotype Blocks (chr21 and 22)</TD>
-		<TD>20 May 2003</TD>
+                Transcriptome (chr21 and 22)</TD>
+		<TD>28 May 2003</TD>
 	    </TR>
 	    <TR valign="top"><TD align="left">
                 RNA Genes</TD>
 		<TD>28 May 2003</TD>
 	    </TR>
 	    <TR valign="top"><TD align="left">
-                Affy Transcriptome (chr21 and 22)</TD>
-		<TD>28 May 2003</TD>
+                Haplotype Blocks (chr21 and 22)</TD>
+		<TD>20 May 2003</TD>
 	    </TR>
 	    <TR valign="top"><TD align="left">
-                Fgenesh Gene Predictions (new data)</TD>
-		<TD>30 May 2003</TD>
+                Random SNPs, Overlap SNPs (updated)</TD>
+		<TD>15 May 2003</TD>
 	    </TR>
 	    <TR valign="top"><TD align="left">
-                Segmental Dups</TD>
-		<TD>24 Jun 2003</TD>
+                Human/Mouse Chain and Net (using mm3)</TD>
+		<TD>2 May 2003</TD>
 	    </TR>
 	    <TR valign="top"><TD align="left">
-                Mouse Synteny</TD>
-		<TD>6 Jun 2003</TD>
+                SLAM Rat (using rn1)</TD>
+		<TD>28 Apr 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                SLAM Mouse (using mm2)</TD>
+		<TD>28 Apr 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Rat Synteny (using rn1)</TD>
+		<TD>7 Apr 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Superfamily</TD>
+		<TD>30 Mar 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                TIGR Gene Index</TD>
+		<TD>28 Mar 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Random SNPs, Overlap SNPs</TD>
+		<TD>27 Mar 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Ensembl Genes </TD>
+		<TD>14 Mar 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                RepeatMasker (updated)</TD>
+		<TD>13 Mar 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Acembly Genes (IDs changed)</TD>
+		<TD>27 Feb 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                BAC End Pairs</TD>
+		<TD>27 Feb 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Mouse Cons (using mm2) </TD>
+		<TD>21 Feb 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                UniGene (v. Hs 159)</TD>
+		<TD>20 Feb 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Fosmid End Pairs</TD>
+		<TD>10 Feb 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Coverage</TD>
+		<TD>10 Feb 2003</TD> 
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Blastz human alignments downloads (using hg13)</TD>
+		<TD>7 Feb 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Geneid Genes</TD>
+		<TD>6 Feb 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                SGP Genes (using mm2)</TD>
+		<TD>6 Feb 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                GenMapDB Clones</TD>
+		<TD>22 Jan 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Twinscan</TD>
+		<TD>22 Jan 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Recomb Rate</TD>
+		<TD>20 Jan 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Initial hg13 Release: Assembly, Gap, STS Markers, Map Contigs,
+                GC Percent, FISH Clones, Chromosome Band, Known Genes, RefSeq Genes, 
+                Genscan Genes, Human mRNAs, Spliced ESTs, 
+                Human ESTs, NonHuman mRNAs, Gene Bounds, CpG Islands,
+                Fugu Blat (v. 3.0), Tight Mouse (mm3), Best Mouse (mm3), 
+		RepeatMasker, Simple Repeats</TD>
+                <TD>23 Dec 2002</TD>
 	    </TR>
 	    </TABLE>
     </TD><TD WIDTH=15></TD></TR></TABLE>
     <BR></TD></TR></TABLE>
 </TD></TR></TABLE>
+</TD></TR></TABLE>
 
-<!--Content Table------------------------------------------------------->
+<A NAME="mm3"></A>
+<!--mm3 Table------------------------------------------------------->
 <TABLE BORDER=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><TH></TR>
-<TR><TD COLSPAN=2 CELLPADDING=10 HEIGHT=40>
-    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDERCOLOR="888888" BORDER=1>
-    <TR><TD>
+<TR><TD CELLPADDING=10>
+    <!--outer table is for border purposes-->
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>
     <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
         <TR><TD>
-	<FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Tracks available: Mouse Feb 2003 (mm3)</B></FONT>
+	<FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Mouse Feb. 2003 (mm3)</B></FONT>
     </TD></TR></TABLE>
     <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TH HEIGHT=10></TH>
         <TR><TD WIDTH=10></TD><TD>
-	<!--finished chromosome table-->
+	<!--track table-->
 	    <TABLE BORDER=1 BORDERCOLOR="#aaaaaa" CELLPADDING=4 WIDTH="100%">
-	    <TR><TD nowrap><FONT color="#006666"><B>Track name</B></FONT></TD>
+	    <TR><TD nowrap><FONT color="#006666"><B>Track/Table Name</B></FONT></TD>
 	        <TD nowrap><FONT color="#006666"><B>Release Date</B></FONT>
             </TD></TR>
+	    <TR valign="top"><TD align="left">
+                Bac End Pairs (added data for chrX)</TD>
+		<TD>25 Jun 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Human Cons (using hg15)</TD>
+		<TD>24 Jun 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Human Chain/Net (updated from hg13 to hg15)</TD>
+		<TD>17 Jun 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Ensembl Genes</TD>
+		<TD>13 Jun 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Ensembl EST Genes </TD>
+		<TD>13 Jun 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Mouse ESTs, Spliced ESTs, Gene Bounds (additions for 
+		random chromosomes)</TD>
+		<TD>30 May 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Geneid Genes</TD>
+		<TD>28 May 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Rat Synteny (using rn1)</TD>
+		<TD>27 May 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                CpG Islands (random data added)</TD>
+		<TD>27 May 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Human Synteny (using hg13)</TD>
+		<TD>27 May 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                MGC Genes </TD>
+		<TD>27 May 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Twinscan (using hg13)</TD>
+		<TD>22 May 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Known Genes</TD>
+		<TD>16 May 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Blastz human alignments downloads (using hg15)</TD>
+		<TD>14 May 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Blastz rat alignments downloads (using rn2)</TD>
+		<TD>13 May 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                SGP Genes (using hg13)</TD>
+		<TD>8 May 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Human/Mouse Chain and Net (using hg15)</TD>
+		<TD>2 May 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Fugu Blat</TD>
+		<TD>29 Apr 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                BAC Ends Pairs</TD>
+		<TD>29 Apr 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                STS Markers</TD>
+		<TD>29 Apr 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Fgenesh++ Genes</TD>
+		<TD>17 Apr 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Simple Repeats (data added for randoms)</TD>
+		<TD>17 Apr 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Best Rat, Tight Rat (using rn2)</TD>
+		<TD>2 Apr 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Best Human, Tight Human (using hg15)</TD>
+		<TD>2 Apr 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                NonMouse mRNAs</TD>
+		<TD>1 Apr 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                AxtInfo (tables)</TD>
+		<TD>31 Mar 2003</TD>
+	    </TR>
 	    <TR valign="top"><TD align="left">
                 Initial mm3 Release: Assembly, Gap, Map Contigs,
                 GC Percent, RefSeq Genes, 
@@ -311,160 +508,210 @@
                 RepeatMasker, Simple Repeats, Overlap SNPs</TD>
                 <TD>7 Mar 2003</TD>
 	    </TR>
-	    <TR valign="top"><TD align="left">
-                AxtInfo (tables)</TD>
-		<TD>31 Mar 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                NonMouse mRNAs</TD>
-		<TD>1 Apr 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Best Human, Tight Human</TD>
-		<TD>2 Apr 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Best Rat, Tight Rat</TD>
-		<TD>2 Apr 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Simple Repeats (data added for randoms)</TD>
-		<TD>17 Apr 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Fgenesh Gene Predictions</TD>
-		<TD>17 Apr 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                STS Markers</TD>
-		<TD>29 Apr 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                BAC Ends Pairs</TD>
-		<TD>29 Apr 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Fugu Blat</TD>
-		<TD>29 Apr 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Human/Mouse Chain and Net</TD>
-		<TD>2 May 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                SGP Genes</TD>
-		<TD>8 May 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Twinscan (against hg13)</TD>
-		<TD>22 May 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                MGC Genes </TD>
-		<TD>27 May 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Human Synteny</TD>
-		<TD>27 May 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Rat Synteny</TD>
-		<TD>27 May 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                CpG Islands (random data added)</TD>
-		<TD>27 May 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Geneid</TD>
-		<TD>28 May 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Mouse ESTs, Spliced ESTs, Gene Bounds (additions for 
-		random chromosomes)</TD>
-		<TD>30 May 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Ensembl EST Genes</TD>
-		<TD>13 Jun 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Ensembl Genes</TD>
-		<TD>13 Jun 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Human Chain/Net (updated from hg13 to hg15)</TD>
-		<TD>17 Jun 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Human Cons</TD>
-		<TD>24 Jun 2003</TD>
-	    </TR>
-	    <TR valign="top"><TD align="left">
-                Bac End Pairs (added data for chrX)</TD>
-		<TD>25 Jun 2003</TD>
-	    </TR>
-
-
 	    </TABLE>
     </TD><TD WIDTH=15></TD></TR></TABLE>
     <BR></TD></TR></TABLE>
 </TD></TR></TABLE>
+</TD></TR></TABLE>
 
-<!--Content Table------------------------------------------------------->
+<A NAME="rn3"></A>
+<!--rn3 Table------------------------------------------------------->
 <TABLE BORDER=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><TH></TR>
-<TR><TD COLSPAN=2 CELLPADDING=10 HEIGHT=40>
-    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDERCOLOR="888888" BORDER=1>
-    <TR><TD>
+<TR><TD CELLPADDING=10>
+    <!--outer table is for border purposes-->
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>
     <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
         <TR><TD>
-	<FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Tracks available: Rat Jan 2003 (rn2)</B></FONT>
+	<FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Rat Jun. 2003 (rn3)</B></FONT>
     </TD></TR></TABLE>
     <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TH HEIGHT=10></TH>
         <TR><TD WIDTH=10></TD><TD>
-	<!--finished chromosome table-->
+	<!--track table-->
 	    <TABLE BORDER=1 BORDERCOLOR="#aaaaaa" CELLPADDING=4 WIDTH="100%">
-	    <TR><TD nowrap><FONT color="#006666"><B>Track name</B></FONT></TD>
+	    <TR><TD nowrap><FONT color="#006666"><B>Track/Table Name</B></FONT></TD>
 	        <TD nowrap><FONT color="#006666"><B>Release Date</B></FONT>
             </TD></TR>
 	    <TR valign="top"><TD align="left">
-                Initial rn2 Release: Assembly, Gap, Bactigs,
-                GC Percent, RefSeq Genes, STS Markers,
-                Genscan Genes, Rat mRNAs, Spliced ESTs, 
-                Rat ESTs, CpG Islands,
-                RepeatMasker, Simple Repeats</TD>
-                <TD>14 Mar 2003</TD>
+                Twinscan (using hg15)</TD>
+		<TD>14 Jul 2003</TD>
 	    </TR>
 	    <TR valign="top"><TD align="left">
-                Twinscan Gene Predictions</TD>
-		<TD>2 Apr 2003</TD>
+                Initial rn3 Release: Assembly, Gap, Bactigs,
+                GC Percent, Bac End Pairs, RefSeq Genes, STS Markers,
+                Geneid Genes, 
+		Genscan Genes, Rat mRNAs, Spliced ESTs, Rat ESTs, NonRat mRNAs, 
+		NonRat ESTs, CpG Islands, RepeatMasker, Simple Repeats, 
+		bigZips downloads, chromosome downloads</TD>
+                <TD>14 Jul 2003</TD>
+	    </TR>
+	    </TABLE>
+    </TD><TD WIDTH=15></TD></TR></TABLE>
+    <BR></TD></TR></TABLE>
+</TD></TR></TABLE>
+</TD></TR></TABLE>
+
+<A NAME="rn2"></A>
+<!--rn2 Table------------------------------------------------------->
+<TABLE BORDER=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><TH></TR>
+<TR><TD CELLPADDING=10>
+    <!--outer table is for border purposes-->
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>
+    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+        <TR><TD>
+	<FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Rat Jan. 2003 (rn2)</B></FONT>
+    </TD></TR></TABLE>
+    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TH HEIGHT=10></TH>
+        <TR><TD WIDTH=10></TD><TD>
+	<!--track table-->
+	    <TABLE BORDER=1 BORDERCOLOR="#aaaaaa" CELLPADDING=4 WIDTH="100%">
+	    <TR><TD nowrap><FONT color="#006666"><B>Track/Table Name</B></FONT></TD>
+	        <TD nowrap><FONT color="#006666"><B>Release Date</B></FONT>
+            </TD></TR>
+	    <TR valign="top"><TD align="left">
+                Known Genes</TD>
+		<TD>30 May 2003</TD>
 	    </TR>
 	    <TR valign="top"><TD align="left">
-                Fgenesh Gene Predictions</TD>
-		<TD>17 Apr 2003</TD>
+                Fugu Blat (v. 3.0)</TD>
+		<TD>29 May 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Geneid Genes</TD>
+		<TD>28 May 2003</TD>
 	    </TR>
 	    <TR valign="top"><TD align="left">
                 SGP Genes </TD>
 		<TD>20 May 2003</TD>
 	    </TR>
 	    <TR valign="top"><TD align="left">
-                Geneid </TD>
-		<TD>28 May 2003</TD>
+                Fgenesh++ Genes </TD>
+		<TD>17 Apr 2003</TD>
 	    </TR>
 	    <TR valign="top"><TD align="left">
-                Fugu Blat</TD>
-		<TD>29 May 2003</TD>
+                Gene Bounds</TD>
+		<TD>13 Apr 2003</TD>
 	    </TR>
 	    <TR valign="top"><TD align="left">
-                Known Genes</TD>
-		<TD>30 May 2003</TD>
+                BAC End Pairs</TD>
+		<TD>13 Apr 2003</TD>
 	    </TR>
-
-
+	    <TR valign="top"><TD align="left">
+                Twinscan (using hg13)</TD>
+		<TD>2 Apr 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Initial rn2 Release: Assembly, Gap, Bactigs,
+                GC Percent, RefSeq Genes, STS Markers,
+                Genscan Genes, Rat mRNAs, Spliced ESTs, 
+                Rat ESTs, NonRat mRNAs, CpG Islands,
+                RepeatMasker, Simple Repeats, bigZips downloads, chromosome
+		downloads</TD>
+                <TD>14 Mar 2003</TD>
+	    </TR>
 	    </TABLE>
     </TD><TD WIDTH=15></TD></TR></TABLE>
     <BR></TD></TR></TABLE>
 </TD></TR></TABLE>
+</TD></TR></TABLE>
+
+<A NAME="ce1"></A>
+<!--ce1 Table------------------------------------------------------->
+<TABLE BORDER=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><TH></TR>
+<TR><TD CELLPADDING=10>
+    <!--outer table is for border purposes-->
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>
+    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+        <TR><TD>
+	<FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; C. elegans May 2003 (ce1)</B></FONT>
+    </TD></TR></TABLE>
+    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TH HEIGHT=10></TH>
+        <TR><TD WIDTH=10></TD><TD>
+	<!--track table-->
+	    <TABLE BORDER=1 BORDERCOLOR="#aaaaaa" CELLPADDING=4 WIDTH="100%">
+	    <TR><TD nowrap><FONT color="#006666"><B>Track/Table Name</B></FONT></TD>
+	        <TD nowrap><FONT color="#006666"><B>Release Date</B></FONT>
+            </TD></TR>
+	    <TR valign="top"><TD align="left">
+                Initial ce1 Release: Assembly, Gap, 
+                GC Percent, RefSeq Genes, Sanger Genes,
+                Worm mRNAs, Worm ESTs, 
+                Fugu Blat, Briggsae Waba, Briggsae Chain, Briggsae Blastz,
+                RepeatMasker, Simple Repeats, Self Chain, chromosome
+		downloads </TD>
+                <TD>24 Jun 2003</TD>
+	    </TR>
+	    </TABLE>
+    </TD><TD WIDTH=15></TD></TR></TABLE>
+    <BR></TD></TR></TABLE>
+</TD></TR></TABLE>
+</TD></TR></TABLE>
+
+<A NAME="cb1"></A>
+<!--cb1 Table------------------------------------------------------->
+<TABLE BORDER=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><TH></TR>
+<TR><TD CELLPADDING=10>
+    <!--outer table is for border purposes-->
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>
+    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+        <TR><TD>
+	<FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; C. briggsae Jul. 2002 (cb1)</B></FONT>
+    </TD></TR></TABLE>
+    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TH HEIGHT=10></TH>
+        <TR><TD WIDTH=10></TD><TD>
+	<!--track table-->
+	    <TABLE BORDER=1 BORDERCOLOR="#aaaaaa" CELLPADDING=4 WIDTH="100%">
+	    <TR><TD nowrap><FONT color="#006666"><B>Track/Table Name</B></FONT></TD>
+	        <TD nowrap><FONT color="#006666"><B>Release Date</B></FONT>
+            </TD></TR>
+	    <TR valign="top"><TD align="left">
+                Initial ce1 Release: Assembly, Gap, 
+                GC Percent, Worm mRNAs, Worm ESTs, 
+                Elegans Chain, Elegans Blastz, 
+                RepeatMasker, Simple Repeats, data set downloads </TD>
+                <TD>24 Jun 2003</TD>
+	    </TR>
+	    </TABLE>
+    </TD><TD WIDTH=15></TD></TR></TABLE>
+    <BR></TD></TR></TABLE>
+</TD></TR></TABLE>
+</TD></TR></TABLE>
+
+<A NAME="sc1"></A>
+<!--SARS Table------------------------------------------------------->
+<TABLE BORDER=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><TH></TR>
+<TR><TD CELLPADDING=10>
+    <!--outer table is for border purposes-->
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>
+    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+        <TR><TD>
+	<FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; SARS Apr. 2003 (sc1)</B></FONT>
+    </TD></TR></TABLE>
+    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TH HEIGHT=10></TH>
+        <TR><TD WIDTH=10></TD><TD>
+	<!--track table-->
+	    <TABLE BORDER=1 BORDERCOLOR="#aaaaaa" CELLPADDING=4 WIDTH="100%">
+	    <TR><TD nowrap><FONT color="#006666"><B>Track/Table Name</B></FONT></TD>
+	        <TD nowrap><FONT color="#006666"><B>Release Date</B></FONT>
+            </TD></TR>
+	    <TR valign="top"><TD align="left">
+                bigZips downloads </TD>
+                <TD>5 Jun 2003</TD>
+	    </TR>
+	    <TR valign="top"><TD align="left">
+                Initial sc1 Release: GC Percent, GenBank Protein Annotations,
+                Fgenesv+ Genes, Viral mRNAs, Viral mRNAs Chained, 
+                Other SARS, Coronavirus Proteins</TD>
+                <TD>23 May 2003</TD>
+	    </TR>
+	    </TABLE>
+    </TD><TD WIDTH=15></TD></TR></TABLE>
+    <BR></TD></TR></TABLE>
+</TD></TR></TABLE>
+</TD></TR></TABLE>
 
 </BODY></HTML>
-
