@@ -16,15 +16,15 @@ void chainStaticLoad(char **row, struct chain *ret)
 int sizeOne,i;
 char *s;
 
-ret->qName = row[1];
-ret->qSize = sqlUnsigned(row[2]);
-ret->qStrand = row[3][0];
-ret->qStart = sqlUnsigned(row[4]);
-ret->qEnd = sqlUnsigned(row[5]);
-ret->tName = row[6];
-ret->tSize = sqlUnsigned(row[7]);
-ret->tStart = sqlUnsigned(row[8]);
-ret->tEnd = sqlUnsigned(row[9]);
+ret->tName = row[1];
+ret->tSize = sqlUnsigned(row[2]);
+ret->tStart = sqlUnsigned(row[3]);
+ret->tEnd = sqlUnsigned(row[4]);
+ret->qName = row[5];
+ret->qSize = sqlUnsigned(row[6]);
+ret->qStrand = row[7][0];
+ret->qStart = sqlUnsigned(row[8]);
+ret->qEnd = sqlUnsigned(row[9]);
 ret->id = sqlUnsigned(row[10]);
 }
 
@@ -37,15 +37,15 @@ int sizeOne,i;
 char *s;
 
 AllocVar(ret);
-ret->qName = cloneString(row[1]);
-ret->qSize = sqlUnsigned(row[2]);
-ret->qStrand = row[3][0];
-ret->qStart = sqlUnsigned(row[4]);
-ret->qEnd = sqlUnsigned(row[5]);
-ret->tName = cloneString(row[6]);
-ret->tSize = sqlUnsigned(row[7]);
-ret->tStart = sqlUnsigned(row[8]);
-ret->tEnd = sqlUnsigned(row[9]);
+ret->tName = cloneString(row[1]);
+ret->tSize = sqlUnsigned(row[2]);
+ret->tStart = sqlUnsigned(row[3]);
+ret->tEnd = sqlUnsigned(row[4]);
+ret->qName = cloneString(row[5]);
+ret->qSize = sqlUnsigned(row[6]);
+ret->qStrand = row[7][0];
+ret->qStart = sqlUnsigned(row[8]);
+ret->qEnd = sqlUnsigned(row[9]);
 ret->id = sqlUnsigned(row[10]);
 return ret;
 }
@@ -79,15 +79,15 @@ int i;
 if (ret == NULL)
     AllocVar(ret);
 ret->score = sqlDoubleComma(&s);
+ret->tName = sqlStringComma(&s);
+ret->tSize = sqlUnsignedComma(&s);
+ret->tStart = sqlUnsignedComma(&s);
+ret->tEnd = sqlUnsignedComma(&s);
 ret->qName = sqlStringComma(&s);
 ret->qSize = sqlUnsignedComma(&s);
 sqlFixedStringComma(&s, &(ret->qStrand), sizeof(ret->qStrand));
 ret->qStart = sqlUnsignedComma(&s);
 ret->qEnd = sqlUnsignedComma(&s);
-ret->tName = sqlStringComma(&s);
-ret->tSize = sqlUnsignedComma(&s);
-ret->tStart = sqlUnsignedComma(&s);
-ret->tEnd = sqlUnsignedComma(&s);
 ret->id = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
@@ -100,8 +100,8 @@ void chainFree(struct chain **pEl)
 struct chain *el;
 
 if ((el = *pEl) == NULL) return;
-freeMem(el->qName);
 freeMem(el->tName);
+freeMem(el->qName);
 freez(pEl);
 }
 
@@ -125,6 +125,16 @@ int i;
 fprintf(f, "%f", el->score);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->tName);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->tSize);
+fputc(sep,f);
+fprintf(f, "%u", el->tStart);
+fputc(sep,f);
+fprintf(f, "%u", el->tEnd);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->qName);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
@@ -137,16 +147,6 @@ fputc(sep,f);
 fprintf(f, "%u", el->qStart);
 fputc(sep,f);
 fprintf(f, "%u", el->qEnd);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->tName);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-fprintf(f, "%u", el->tSize);
-fputc(sep,f);
-fprintf(f, "%u", el->tStart);
-fputc(sep,f);
-fprintf(f, "%u", el->tEnd);
 fputc(sep,f);
 fprintf(f, "%u", el->id);
 fputc(lastSep,f);
