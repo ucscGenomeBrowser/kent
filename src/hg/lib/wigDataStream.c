@@ -8,7 +8,7 @@
 #include "hgColors.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.57 2004/10/26 18:15:04 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.58 2004/10/27 21:27:27 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wds, char *left, char *right)
@@ -1450,7 +1450,7 @@ if (bedList && *bedList)
 	    bedPosition = (unsigned long)((void *)boolPtr - (void *)bedArray);
 	    bedMarked += elSize;	/*	number of bases marked	*/
 	    }
-	bedEnd = bedPosition;
+	bedEnd = bedPosition + bedStart;
 	bedExtent = bedEnd - bedStart;
 	verbose(VERBOSE_CHR_LEVEL,
 		"#\tbed range %u = %u - %u, allocated %u bytes\n",
@@ -1772,7 +1772,7 @@ if (wds->bed)
 else
     {
     showConstraints(wds, fh);
-    fprintf(fh, "#\tbed: no data points found for bed format output (maxOutput: %llu\n", wds->maxOutput);
+    fprintf(fh, "#\tbed: no data points found for bed format output (maxOutput: %llu)\n", wds->maxOutput);
     }
 carefulClose(&fh);
 return (linesOut);
