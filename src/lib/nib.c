@@ -38,7 +38,7 @@ static struct dnaSeq *nibInput(int options, char *fileName, char *seqName,
 int end;
 DNA *d;
 int bVal;
-DNA *valTobNtTbl = ((options &  NIB_MASK_MIXED) ? valToNtMasked : valToNt);
+DNA *valToNtTbl = ((options &  NIB_MASK_MIXED) ? valToNtMasked : valToNt);
 struct dnaSeq *seq;
 Bits* mask = NULL;
 int bytePos, byteSize;
@@ -67,7 +67,7 @@ if (start & 1)
 	{
 	errAbort("Read error 1 in %s", fileName);
 	}
-    *d++ = valTobNtTbl[(bVal&0xf)];
+    *d++ = valToNtTbl[(bVal&0xf)];
     size -= 1;
     if (mask != NULL)
         {
@@ -82,8 +82,8 @@ while (--byteSize >= 0)
     bVal = getc(f);
     if (bVal < 0)
 	errAbort("Read error 2 in %s", fileName);
-    d[0] = valTobNtTbl[(bVal>>4)];
-    d[1] = valTobNtTbl[(bVal&0xf)];
+    d[0] = valToNtTbl[(bVal>>4)];
+    d[1] = valToNtTbl[(bVal&0xf)];
     d += 2;
     if (mask != NULL)
         {
@@ -99,7 +99,7 @@ if (size&1)
     bVal = getc(f);
     if (bVal < 0)
 	errAbort("Read error 3 in %s", fileName);
-    *d++ = valTobNtTbl[(bVal>>4)];
+    *d++ = valToNtTbl[(bVal>>4)];
     if (mask != NULL)
         {
         if ((bVal>>4) == 0)
