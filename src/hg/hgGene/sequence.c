@@ -105,8 +105,14 @@ printSeqLink(conn, geneId, tableId, hggDoGetMrnaSeq, title);
 static void printProteinLink(struct sqlConnection *conn, char *geneId)
 /* Print out link to fetch mRNA. */
 {
+char *table = genomeSetting("knownGenePep");
+char query[256];
+char title[128];
+safef(query, sizeof(query), 
+	"select length(seq) from %s where name='%s'" , table,  geneId);
+safef(title, sizeof(title), "Protein (%d aa)", sqlQuickNum(conn,query));
 printSeqLink(conn, geneId, "knownGenePep", hggDoGetProteinSeq,
-	"Protein");
+	title);
 }
 
 
