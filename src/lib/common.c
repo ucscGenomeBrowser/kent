@@ -7,7 +7,7 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.43 2003/05/25 15:21:50 baertsch Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.44 2003/06/05 01:16:50 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1336,7 +1336,8 @@ Will also robustly handle null strings
 param haystack - The string to be searched
 param needle - The string to llok for in the haystack string
 
-return - A pointer to the first occurence of the desired substring
+return - The position of the first occurence of the desired substring
+or -1 if it is not found
  */
 {
 char *haystackCopy = NULL;
@@ -1344,6 +1345,7 @@ char *needleCopy = NULL;
 int index = 0;
 int haystackLen = 0;
 int needleLen = 0;
+char *p, *q;
 
 if (NULL == haystack || NULL == needle) 
     {
@@ -1368,7 +1370,15 @@ for(index = 0; index < needleLen;  index++)
     }
 needleCopy[needleLen] = 0; /* Null terminate */
 
-return strstr(haystackCopy, needleCopy);
+p=strstr(haystackCopy, needleCopy);
+q=haystackCopy;
+ 
+freeMem(haystackCopy);
+freeMem(needleCopy);
+
+if(p==NULL) return NULL;
+
+return p-q+haystack;
 }
 
 int vasafef(char* buffer, int bufSize, char *format, va_list args)
