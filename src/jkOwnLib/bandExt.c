@@ -19,7 +19,7 @@
 #include "localmem.h"
 #include "bandExt.h"
 
-static char const rcsid[] = "$Id: bandExt.c,v 1.9 2005/01/10 00:05:21 kent Exp $";
+static char const rcsid[] = "$Id: bandExt.c,v 1.10 2005/01/12 20:13:00 kent Exp $";
 
 /* Definitions for traceback byte.  This is encoded as so:
  *     xxxxLUMM
@@ -84,13 +84,6 @@ struct lm *lm;			 /* Local memory pool. */
 boolean didExt = FALSE;
 int initGapScore = -gapOpen;
 
-#ifdef DEBUG
-uglyf("bandExt: aStart %d, aSize %d, symAlloc %d\n", aSize, bSize, symAlloc);
-mustWrite(uglyOut, aStart, aSize);
-uglyf("\n");
-mustWrite(uglyOut, bStart, bSize);
-uglyf("\n");
-#endif /* DEBUG */
 /* For reverse direction just reverse bytes here and there.  It's
  * a lot easier than the alternative and doesn't cost much time in
  * the global scheme of things. */
@@ -99,6 +92,14 @@ if (dir < 0)
     reverseBytes(aStart, aSize);
     reverseBytes(bStart, bSize);
     }
+#ifdef DEBUG
+uglyf("bandExt: dir %d, aStart %d, aSize %d, symAlloc %d\n", dir,
+	aSize, bSize, symAlloc);
+mustWrite(uglyOut, aStart, aSize);
+uglyf("\n");
+mustWrite(uglyOut, bStart, bSize);
+uglyf("\n");
+#endif /* DEBUG */
 
 /* Make up a local mem structure big enough for everything. 
  * This is just a minor, perhaps misguided speed tweak to
@@ -144,9 +145,6 @@ prevScores[midScoreOff].match = 0;
 	score -= gapExtend;
 	}
     }
-#ifdef OLD
-#endif /* OLD */
-
 
 for (aPos=0; aPos < aSize; ++aPos)
     {
@@ -332,7 +330,8 @@ if (global || bestScore > 0)
 	int pOffset;
 	UBYTE parent;
 	pOffset = bPos - bOffsets[aPos] + maxInsert;
-	if (pOffset < 0 || pOffset >= bandSize)
+	if (pOffset < 0) pOffset = 0;
+	if (pOffset >= bandSize)
 	    {
 #ifdef DEBUG
 	    uglyf("bPos %d, aPos %d, bOffsets[aPos] %d, maxInsert %d\n", bPos, aPos, bOffsets[aPos], maxInsert);
@@ -346,7 +345,7 @@ if (global || bestScore > 0)
 	    }
 	parent = parents[pOffset][aPos];
 #ifdef DEBUG
-	uglyf("parent %d, upState %d, leftState %d\n", parent, upState, leftState);
+	uglyf("aPos %d, bPos %d, parent %d, pMask %d upState %d, leftState %d\n", aPos, bPos, parent, parent & mpMask, upState, leftState);
 #endif /* DEBUG */
 	if (upState)
 	    {
