@@ -25,7 +25,7 @@
 #include "fa.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadRna.c,v 1.24 2003/06/12 17:34:26 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadRna.c,v 1.25 2003/06/12 23:57:16 markd Exp $";
 
 /* Command line options and defaults. */
 char *abbr = NULL;
@@ -131,7 +131,6 @@ static char *CHK_TABLES[] = {
     "gbStatus", "gbSeq", "gbExtFile", NULL
 };
 int i;
-char *foundGbTable = NULL;
 struct sqlConnection *conn = sqlConnect(database);
 
 for (i = 0; CHK_TABLES[i] != NULL; i++)

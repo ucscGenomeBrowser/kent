@@ -10,7 +10,7 @@
 #include "hgRelate.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: hgRefSeqMrna.c,v 1.12 2003/06/10 19:26:38 markd Exp $";
+static char const rcsid[] = "$Id: hgRefSeqMrna.c,v 1.13 2003/06/12 23:57:16 markd Exp $";
 
 
 /* Variables that can be set from command line. */
@@ -92,7 +92,6 @@ static char *CHK_TABLES[] = {
     "gbStatus", "gbSeq", "gbExtFile", NULL
 };
 int i;
-char *foundGbTable = NULL;
 struct sqlConnection *conn = sqlConnect(database);
 
 for (i = 0; CHK_TABLES[i] != NULL; i++)
