@@ -323,6 +323,7 @@ exit; # don't actually run this like a script :)
 # MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE (DONE 041103)
     ssh hgwdev
     # Enter hg15 into hgcentraltest.dbDb so test browser knows about it:
+    # Note: for next assembly, set scientificName column to "Homo sapiens"
     echo 'insert into dbDb values("hg15", "Human April 2003", \
             "/gbdb/hg15/nib", "Human", "DUSP18", 1, 80, "Human");' \
     | hgsql -h genome-testdb hgcentraltest

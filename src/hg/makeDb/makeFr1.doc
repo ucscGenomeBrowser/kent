@@ -285,6 +285,7 @@ exit; # don't actually run this like a script :)
 
     # Warning: must genome and organism fields must correspond
     # with defaultDb values
+    # Note: for next assembly, set scientificName column to "Fugu rubripes"
     echo 'INSERT INTO dbDb \
         (name, description, nibPath, organism, \
                 defaultPos, active, orderKey, genome) values \
@@ -664,6 +665,7 @@ hide mol
         
 
 # PRODUCE TETRAODON BLASTZ (6/13/03 IN PROGRESS KRR)
+# NOTE: the tetra sequence wasn't repeatmasked -> must be redone
 
     cd eieio
     mkdir ~/fr1/bed/blastzTetra

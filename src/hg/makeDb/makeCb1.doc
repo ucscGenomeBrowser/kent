@@ -308,6 +308,8 @@ drop table seq; drop table sex; drop table source; drop table tissue;' \
     #  If you need to delete that entry:
         echo 'delete from defaultDb where name="cb1";' \
         | hgsql -h genome-testdb hgcentraltest
+    # Note: for next assembly, set scientificName column to 
+    # "Caenorhabditis briggsae"
     echo 'insert into dbDb values("cb1", "July 2002", \
         "/gbdb/cb1/nib", "Worm", "chrUn:74980670-74998831", 1, 10, \
         "C. briggsae");' \

@@ -436,6 +436,7 @@ MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR RN3 (DONE - 2003-06-24 - Hiram)
         30, "Rat");' | hgsql -h genome-testdb hgcentraltest
     # Temporary entry until mrna tables come along.  Approximate
     # calculated position the same as rn2
+    # Note: for next assembly, set scientificName column to "Rattus norvegicus"
     echo 'insert into dbDb values("rn3", "Jun 2003", \
         "/gbdb/rn3/nib", "Rat", "chr5:168054448-168086858", 1, \
         30, "Rat");' | hgsql -h genome-testdb hgcentraltest
