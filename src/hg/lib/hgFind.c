@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.144 2004/07/12 19:32:51 braney Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.145 2004/07/15 06:33:57 markd Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -1899,11 +1899,6 @@ if (useWeb)
 }
 
 
-struct hgPositions *hgPositionsFind(char *query, char *extraCgi, 
-	char *hgAppName, struct cart *cart, boolean multiTerm);
-/* Return table of positions that match query or NULL if none such. */
-
-
 static struct hgPositions *genomePos(char *spec, char **retChromName, 
 	int *retWinStart, int *retWinEnd, struct cart *cart, boolean showAlias,
 	boolean useWeb, char *hgAppName)
@@ -2397,7 +2392,8 @@ else
 		}
 	    }
 	}
-    cartSetString(cart, "hgFind.matches", hgpMatchNames->string);
+    if (cart != NULL)
+        cartSetString(cart, "hgFind.matches", hgpMatchNames->string);
     }
 slReverse(&hgp->tableList);
 fixSinglePos(hgp);
