@@ -225,11 +225,39 @@ printf("&nbsp;bases");
 
 
 }
+void blastzHgRefUi(struct trackDb *tdb)
+/* put up UI for the selecting rainbow chromosome color or intensity score*/
+{
+char *aa = cartUsualString(cart, "blastzHgRef.color", "off");
 
+printf("<p><b>Color track based on chromosome</b>: ");
+cgiMakeRadioButton("blastzHgRef.color", "on", sameString(aa, "on"));
+printf(" on ");
+cgiMakeRadioButton("blastzHgRef.color", "off", sameString(aa, "off"));
+printf(" off ");
+
+printf("<br><br>");
+
+}
+
+void blastzHgUi(struct trackDb *tdb)
+/* put up UI for the selecting rainbow chromosome color or intensity score*/
+{
+char *aa = cartUsualString(cart, "blastzHg.color", "off");
+
+printf("<p><b>Color track based on chromosome</b>: ");
+cgiMakeRadioButton("blastzHg.color", "on", sameString(aa, "on"));
+printf(" on ");
+cgiMakeRadioButton("blastzHg.color", "off", sameString(aa, "off"));
+printf(" off ");
+
+printf("<br><br>");
+
+}
 void blastzMm2Ui(struct trackDb *tdb)
 /* put up UI for the selecting rainbow chromosome color or intensity score*/
 {
-char *aa = cartUsualString(cart, "blastzMm2.color", "on");
+char *aa = cartUsualString(cart, "blastzMm2.color", "off");
 
 printf("<p><b>Color track based on mouse chromosome</b>: ");
 cgiMakeRadioButton("blastzMm2.color", "on", sameString(aa, "on"));
@@ -244,7 +272,7 @@ printf("<br><br>");
 void blastzMm2ScUi(struct trackDb *tdb)
 /* put up UI for the selecting rainbow chromosome color or intensity score*/
 {
-char *aa = cartUsualString(cart, "blastzMm2Sc.color", "on");
+char *aa = cartUsualString(cart, "blastzMm2Sc.color", "off");
 
 printf("<p><b>Color track based on mouse chromosome</b>: ");
 cgiMakeRadioButton("blastzMm2Sc.color", "on", sameString(aa, "on"));
@@ -274,7 +302,7 @@ printf("<br><br>");
 void aarMm2Ui(struct trackDb *tdb)
 /* put up UI for the selecting rainbow chromosome color or intensity score*/
 {
-char *aa = cartUsualString(cart, "aarMm2.color", "on");
+char *aa = cartUsualString(cart, "aarMm2.color", "off");
 
 printf("<p><b>Color track based on mouse chromosome</b>: ");
 cgiMakeRadioButton("aarMm2.color", "on", sameString(aa, "on"));
@@ -318,7 +346,7 @@ printf("<br><br>");
 void blatMusUi(struct trackDb *tdb)
 /* put up UI for the selecting rainbow chromosome color or intensity score*/
 {
-char *aa = cartUsualString(cart, "blatMus.color", "on");
+char *aa = cartUsualString(cart, "blatMus.color", "off");
 
 printf("<p><b>Color track based on mouse chromosome</b>: ");
 cgiMakeRadioButton("blatMus.color", "on", sameString(aa, "on"));
@@ -509,6 +537,10 @@ else if (sameString(track, "blastzMm2Sc"))
     blastzMm2ScUi(tdb);
 else if (sameString(track, "blastzMm2Ref"))
     blastzMm2RefUi(tdb);
+else if (sameString(track, "blastzHgRef"))
+    blastzHgRefUi(tdb);
+else if (sameString(track, "blastzHg"))
+    blastzHgUi(tdb);
 else if (sameString(track, "aarMm2"))
     aarMm2Ui(tdb);
 else if (sameString(track, "mouseOrtho"))
