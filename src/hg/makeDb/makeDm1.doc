@@ -815,7 +815,7 @@ SEQ2_LEN=$BASE/S2.len
     end
 
 
-# CHAIN YAKUBA BLASTZ (DONE 8/3/04 angie)
+# CHAIN PSEUDOOBSCURA BLASTZ (DONE 8/3/04 angie)
     # Run axtChain on little cluster
     ssh kki
     cd /cluster/data/dm1/bed/blastz.dp2.2004-08-03
@@ -882,8 +882,7 @@ axtChain -verbose=0 $1 \
     # Add classification info using db tables:
     ssh hgwdev
     cd /cluster/data/dm1/bed/blastz.dp2.2004-08-03/axtChain
-    netClass -noAr noClass.net dm1 dp2 pseudoobscura.net \
-    |& g -v "table gap doesn't exist"
+    netClass -noAr noClass.net dm1 dp2 pseudoobscura.net
 
     # Make a 'syntenic' subset:
     ssh kksilo
@@ -3010,7 +3009,7 @@ rm $tmpfile
     hgLoadBed dm1 phastConsElements all.bed
 
     # Create wiggle on the small cluster
-    ssk kki
+    ssh kki
     mkdir /cluster/data/dm1/bed/multiz.dm1droYak1dp2anoGam1/phastCons/run.wib
     cd /cluster/data/dm1/bed/multiz.dm1droYak1dp2anoGam1/phastCons/run.wib
     rm -rf /cluster/bluearc/dm1/phastCons/wib
@@ -3481,5 +3480,1569 @@ axtChain -verbose=0 $1 \
     # Do what its output says to do next:
     ssh hgwdev
     ~/kent/src/hg/makeDb/makeLoChain/makeLoChain-load.csh dm1 dm2
+
+
+# BLASTZ D.ANANASSAE (DONE 11/4/04 angie)
+    ssh kksilo
+    mkdir /cluster/data/dm1/bed/blastz.droAna1.2004-11-03
+    cd /cluster/data/dm1/bed/blastz.droAna1.2004-11-03
+    ln -s blastz.droAna1.2004-11-03 /cluster/data/dm1/bed/blastz.droAna1
+    cat << '_EOF_' > DEF
+# D.melanogaster vs. D.ananassae
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET - D. melanogaster
+SEQ1_DIR=/iscratch/i/dm1/nib
+SEQ1_SMSK=
+SEQ1_FLAG=-drosophila
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY - D. ananassae
+SEQ2_DIR=/iscratch/i/droAna1/chunksUnsplit
+SEQ2_SMSK=
+SEQ2_FLAG=-drosophila
+SEQ2_IN_CONTIGS=1
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/dm1/bed/blastz.droAna1.2004-11-03
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    # run bash shell if you don't already:
+    bash
+    source DEF
+    mkdir run
+    /cluster/bin/scripts/blastz-make-joblist $DEF > $BASE/run/j
+    sh ./xdir.sh
+    cd run
+    sed -e 's#^#/cluster/bin/penn/#' j > j2
+    wc -l j*
+    head j2
+    mv j2 j
+    # cluster run
+    ssh kk
+    cd /cluster/data/dm1/bed/blastz.droAna1.2004-11-03/run
+    para create j
+    para try, check, push, check, ....
+#Completed: 9723 of 9723 jobs
+#Average job time:                  22s       0.36m     0.01h    0.00d
+#Longest job:                      832s      13.87m     0.23h    0.01d
+#Submission to last job:          1145s      19.08m     0.32h    0.01d
+
+    # back in the bash shell on kksilo...
+    mkdir /cluster/data/dm1/bed/blastz.droAna1.2004-11-03/run.1
+    cd /cluster/data/dm1/bed/blastz.droAna1.2004-11-03/run.1
+    /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE > j
+    # small cluster run
+    ssh kki
+    cd /cluster/data/dm1/bed/blastz.droAna1.2004-11-03/run.1
+    para create j
+    para try, check, push, check, ....
+#Completed: 21 of 21 jobs
+#Average job time:                  32s       0.54m     0.01h    0.00d
+#Longest job:                       42s       0.70m     0.01h    0.00d
+#Submission to last job:            68s       1.13m     0.02h    0.00d
+    cd ..
+    rm -r raw
+
+    # Translate .lav to axt:
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.droAna1.2004-11-03
+    mkdir axtChrom
+    foreach c (lav/*)
+      pushd $c
+      set chr=$c:t
+      set out=axtChrom/$chr.axt
+      echo "Translating $chr lav to $out"
+      cat `ls -1 *.lav | sort -g` \
+        | lavToAxt stdin /cluster/data/dm1/nib \
+            /cluster/data/droAna1/droAna1.2bit stdout \
+        | axtSort stdin ../../$out
+      popd
+    end
+
+
+# CHAIN ANANASSAE BLASTZ (DONE 11/4/04 angie)
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/dm1/bed/blastz.droAna1.2004-11-03
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir chain
+    ls -1S /cluster/data/dm1/bed/blastz.droAna1.2004-11-03/axtChrom/*.axt \
+      > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh -ef
+axtChain -verbose=0 $1 \
+  /iscratch/i/dm1/nib \
+  /iscratch/i/droAna1/droAna1.2bit stdout \
+| chainAntiRepeat /iscratch/i/dm1/nib /iscratch/i/droAna1/droAna1.2bit \
+    stdin $2
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+#Completed: 11 of 11 jobs
+#Average job time:                  10s       0.17m     0.00h    0.00d
+#Longest job:                       19s       0.32m     0.01h    0.00d
+#Submission to last job:            19s       0.32m     0.01h    0.00d
+
+    # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.droAna1.2004-11-03/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    rm run1/chain/*.chain
+
+    # take a look at score distr's
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r
+      textHistogram -binSize=10000 /tmp/score.$f:t:r
+      echo ""
+    end
+
+    # Load chains into database
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blastz.droAna1.2004-11-03/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        echo loading $c
+        hgLoadChain dm1 ${c}_chainDroAna1 $i
+    end
+
+
+# NET ANANASSAE BLASTZ (DONE 11/4/04 angie)
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.droAna1.2004-11-03/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+
+    # Add classification info using db tables:
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blastz.droAna1.2004-11-03/axtChain
+    netClass -noAr noClass.net dm1 droAna1 ananassae.net
+
+    # Make a 'syntenic' subset:
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.droAna1.2004-11-03/axtChain
+    rm noClass.net
+    netFilter -syn ananassae.net > ananassaeSyn.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blastz.droAna1.2004-11-03/axtChain
+    netFilter -minGap=10 ananassae.net |  hgLoadNet dm1 netDroAna1 stdin
+    netFilter -minGap=10 ananassaeSyn.net \
+    | hgLoadNet dm1 netSyntenyDroAna1 stdin
+
+
+# GENERATE DROANA1 AXTNET AND MAF FOR MULTIZ (DONE 11/5/04 angie)
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.droAna1/axtChain
+    netSplit ananassae.net net
+    cd ..
+    mkdir axtNet
+    foreach f (axtChain/net/chr*.net)
+      netToAxt $f axtChain/chain/$f:t:r.chain \
+        /cluster/data/dm1/nib /cluster/data/droAna1/droAna1.2bit stdout \
+      | axtSort stdin axtNet/$f:t:r.axt
+    end
+    mkdir mafNet
+    foreach f (axtNet/chr*.axt)
+      set maf = mafNet/$f:t:r.maf
+      axtToMaf $f \
+            /cluster/data/dm1/chrom.sizes /cluster/data/droAna1/chrom.sizes \
+            $maf -tPrefix=dm1. -qPrefix=droAna1.
+    end
+
+
+# MAKE VSDROANA1 DOWNLOADABLES (DONE 11/5/04 angie)
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.droAna1
+    nice gzip axtChain/{all.chain,*.net} axtNet/*.axt axtChrom/*.axt
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/dm1/vsDroAna1
+    cd /usr/local/apache/htdocs/goldenPath/dm1/vsDroAna1
+    cp -p /cluster/data/dm1/bed/blastz.droAna1/axtChain/all.chain.gz \
+      ananassae.chain.gz
+    cp -p /cluster/data/dm1/bed/blastz.droAna1/axtChain/ananassae.net.gz .
+    cp -pR /cluster/data/dm1/bed/blastz.droAna1/axtNet .
+    md5sum *.gz */*.gz > md5sum.txt
+    # Make a README.txt which explains the files & formats.
+
+
+# BLASTZ D.MOJAVENSIS (DONE 11/4/04 angie)
+    ssh kksilo
+    mkdir /cluster/data/dm1/bed/blastz.droMoj1.2004-11-04
+    cd /cluster/data/dm1/bed/blastz.droMoj1.2004-11-04
+    ln -s blastz.droMoj1.2004-11-04 /cluster/data/dm1/bed/blastz.droMoj1
+    cat << '_EOF_' > DEF
+# D.melanogaster vs. D.mojavensis
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET - D. melanogaster
+SEQ1_DIR=/iscratch/i/dm1/nib
+SEQ1_SMSK=
+SEQ1_FLAG=-drosophila
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY - D. mojavensis
+SEQ2_DIR=/iscratch/i/droMoj1/chunks
+SEQ2_SMSK=
+SEQ2_FLAG=-drosophila
+SEQ2_IN_CONTIGS=1
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/dm1/bed/blastz.droMoj1.2004-11-04
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    # run bash shell if you don't already:
+    bash
+    source DEF
+    mkdir run
+    /cluster/bin/scripts/blastz-make-joblist $DEF > $BASE/run/j
+    sh ./xdir.sh
+    cd run
+    sed -e 's#^#/cluster/bin/penn/#' j > j2
+    wc -l j*
+    head j2
+    mv j2 j
+    # cluster run
+    ssh kk
+    cd /cluster/data/dm1/bed/blastz.droMoj1.2004-11-04/run
+    para create j
+    para try, check, push, check, ....
+    # I should have split these a little coarser -- avg job time too small.
+#Completed: 18396 of 18396 jobs
+#Average job time:                  20s       0.33m     0.01h    0.00d
+#Longest job:                      472s       7.87m     0.13h    0.01d
+#Submission to last job:           629s      10.48m     0.17h    0.01d
+
+    # back in the bash shell on kksilo...
+    mkdir /cluster/data/dm1/bed/blastz.droMoj1.2004-11-04/run.1
+    cd /cluster/data/dm1/bed/blastz.droMoj1.2004-11-04/run.1
+    /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE > j
+    # small cluster run
+    ssh kki
+    cd /cluster/data/dm1/bed/blastz.droMoj1.2004-11-04/run.1
+    para create j
+    para try, check, push, check, ....
+#Completed: 21 of 21 jobs
+#Average job time:                  38s       0.63m     0.01h    0.00d
+#Longest job:                       43s       0.72m     0.01h    0.00d
+#Submission to last job:            75s       1.25m     0.02h    0.00d
+    cd ..
+    rm -r raw
+
+    # Translate .lav to axt:
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.droMoj1.2004-11-04
+    mkdir axtChrom
+    foreach c (lav/*)
+      pushd $c
+      set chr=$c:t
+      set out=axtChrom/$chr.axt
+      echo "Translating $chr lav to $out"
+      cat `ls -1 *.lav | sort -g` \
+        | lavToAxt stdin /cluster/data/dm1/nib \
+            /cluster/data/droMoj1/droMoj1.2bit stdout \
+        | axtSort stdin ../../$out
+      popd
+    end
+
+
+# CHAIN MOJAVENSIS BLASTZ (DONE 11/4/04 angie)
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/dm1/bed/blastz.droMoj1.2004-11-04
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir chain
+    ls -1S /cluster/data/dm1/bed/blastz.droMoj1.2004-11-04/axtChrom/*.axt \
+      > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh -ef
+axtChain -verbose=0 $1 \
+  /iscratch/i/dm1/nib \
+  /iscratch/i/droMoj1/droMoj1.2bit stdout \
+| chainAntiRepeat /iscratch/i/dm1/nib /iscratch/i/droMoj1/droMoj1.2bit \
+    stdin $2
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+#Completed: 11 of 11 jobs
+#Average job time:                   6s       0.10m     0.00h    0.00d
+#Longest job:                       11s       0.18m     0.00h    0.00d
+#Submission to last job:            11s       0.18m     0.00h    0.00d
+
+    # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.droMoj1.2004-11-04/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    rm run1/chain/*.chain
+
+    # take a look at score distr's
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r
+      textHistogram -binSize=10000 /tmp/score.$f:t:r
+      echo ""
+    end
+
+    # Load chains into database
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blastz.droMoj1.2004-11-04/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        echo loading $c
+        hgLoadChain dm1 ${c}_chainDroMoj1 $i
+    end
+
+
+# NET MOJAVENSIS BLASTZ (DONE 11/4/04 angie)
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.droMoj1.2004-11-04/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+
+    # Add classification info using db tables:
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blastz.droMoj1.2004-11-04/axtChain
+    netClass -noAr noClass.net dm1 droMoj1 mojavensis.net 
+
+    # Make a 'syntenic' subset:
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.droMoj1.2004-11-04/axtChain
+    rm noClass.net
+    netFilter -syn mojavensis.net > mojavensisSyn.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blastz.droMoj1.2004-11-04/axtChain
+    netFilter -minGap=10 mojavensis.net |  hgLoadNet dm1 netDroMoj1 stdin
+    netFilter -minGap=10 mojavensisSyn.net \
+    | hgLoadNet dm1 netSyntenyDroMoj1 stdin
+
+
+# GENERATE DROMOJ1 AXTNET AND MAF FOR MULTIZ (DONE 11/5/04 angie)
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.droMoj1/axtChain
+    netSplit mojavensis.net net
+    cd ..
+    mkdir axtNet
+    foreach f (axtChain/net/chr*.net)
+      netToAxt $f axtChain/chain/$f:t:r.chain \
+        /cluster/data/dm1/nib /cluster/data/droMoj1/droMoj1.2bit stdout \
+      | axtSort stdin axtNet/$f:t:r.axt
+    end
+    mkdir mafNet
+    foreach f (axtNet/chr*.axt)
+      set maf = mafNet/$f:t:r.maf
+      axtToMaf $f \
+            /cluster/data/dm1/chrom.sizes /cluster/data/droMoj1/chrom.sizes \
+            $maf -tPrefix=dm1. -qPrefix=droMoj1.
+    end
+
+
+# MAKE VSDROMOJ1 DOWNLOADABLES (DONE 11/5/04 angie)
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.droMoj1
+    nice gzip axtChain/{all.chain,*.net} axtNet/*.axt axtChrom/*.axt
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/dm1/vsDroMoj1
+    cd /usr/local/apache/htdocs/goldenPath/dm1/vsDroMoj1
+    cp -p /cluster/data/dm1/bed/blastz.droMoj1/axtChain/all.chain.gz \
+      mojavensis.chain.gz
+    cp -p /cluster/data/dm1/bed/blastz.droMoj1/axtChain/mojavensis.net.gz .
+    cp -pR /cluster/data/dm1/bed/blastz.droMoj1/axtNet .
+    md5sum *.gz */*.gz > md5sum.txt
+    # Make a README.txt which explains the files & formats.
+
+
+# BLASTZ D.VIRILIS (DONE 11/7/04 angie)
+    ssh kksilo
+    mkdir /cluster/data/dm1/bed/blastz.droVir1.2004-11-07
+    cd /cluster/data/dm1/bed/blastz.droVir1.2004-11-07
+    ln -s blastz.droVir1.2004-11-07 /cluster/data/dm1/bed/blastz.droVir1
+    cat << '_EOF_' > DEF
+# D.melanogaster vs. D.virilis
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET - D. melanogaster
+SEQ1_DIR=/iscratch/i/dm1/nib
+SEQ1_SMSK=
+SEQ1_FLAG=-drosophila
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY - D. virilis
+SEQ2_DIR=/iscratch/i/droVir1/chunks
+SEQ2_SMSK=
+SEQ2_FLAG=-drosophila
+SEQ2_IN_CONTIGS=1
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/dm1/bed/blastz.droVir1.2004-11-07
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    # run bash shell if you don't already:
+    bash
+    source DEF
+    mkdir run
+    /cluster/bin/scripts/blastz-make-joblist $DEF > $BASE/run/j
+    sh ./xdir.sh
+    cd run
+    sed -e 's#^#/cluster/bin/penn/#' j > j2
+    wc -l j*
+    head j2
+    mv j2 j
+    # cluster run
+    ssh kk
+    cd /cluster/data/dm1/bed/blastz.droVir1.2004-11-07/run
+    para create j
+    para try, check, push, check, ....
+#Completed: 2121 of 2121 jobs
+#Average job time:                  81s       1.34m     0.02h    0.00d
+#Longest job:                      796s      13.27m     0.22h    0.01d
+#Submission to last job:          1412s      23.53m     0.39h    0.02d
+
+    # back in the bash shell on kksilo...
+    mkdir /cluster/data/dm1/bed/blastz.droVir1.2004-11-07/run.1
+    cd /cluster/data/dm1/bed/blastz.droVir1.2004-11-07/run.1
+    /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE > j
+    # small cluster run
+    ssh kki
+    cd /cluster/data/dm1/bed/blastz.droVir1.2004-11-07/run.1
+    para create j
+    para try, check, push, check, ....
+#Completed: 21 of 21 jobs
+#Average job time:                  10s       0.16m     0.00h    0.00d
+#Longest job:                       14s       0.23m     0.00h    0.00d
+#Submission to last job:            21s       0.35m     0.01h    0.00d
+    cd ..
+    rm -r raw
+
+    # Translate .lav to axt:
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.droVir1.2004-11-07
+    mkdir axtChrom
+    foreach c (lav/*)
+      pushd $c
+      set chr=$c:t
+      set out=axtChrom/$chr.axt
+      echo "Translating $chr lav to $out"
+      cat `ls -1 *.lav | sort -g` \
+        | lavToAxt stdin /cluster/data/dm1/nib \
+            /cluster/data/droVir1/droVir1.2bit stdout \
+        | axtSort stdin ../../$out
+      popd
+    end
+
+
+# CHAIN VIRILIS BLASTZ (DONE 11/7/04 angie)
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/dm1/bed/blastz.droVir1.2004-11-07
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir chain
+    ls -1S /cluster/data/dm1/bed/blastz.droVir1.2004-11-07/axtChrom/*.axt \
+      > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh -ef
+axtChain -verbose=0 $1 \
+  /iscratch/i/dm1/nib \
+  /iscratch/i/droVir1/droVir1.2bit stdout \
+| chainAntiRepeat /iscratch/i/dm1/nib /iscratch/i/droVir1/droVir1.2bit \
+    stdin $2
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+#Completed: 11 of 11 jobs
+#Average job time:                  10s       0.16m     0.00h    0.00d
+#Longest job:                       16s       0.27m     0.00h    0.00d
+#Submission to last job:            16s       0.27m     0.00h    0.00d
+
+    # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.droVir1.2004-11-07/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    rm run1/chain/*.chain
+
+    # take a look at score distr's
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r
+      textHistogram -binSize=10000 /tmp/score.$f:t:r
+      echo ""
+    end
+
+    # Load chains into database
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blastz.droVir1.2004-11-07/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        echo loading $c
+        hgLoadChain dm1 ${c}_chainDroVir1 $i
+    end
+
+
+# NET VIRILIS BLASTZ (DONE 11/7/04 angie)
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.droVir1.2004-11-07/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+
+    # Add classification info using db tables:
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blastz.droVir1.2004-11-07/axtChain
+    netClass -noAr noClass.net dm1 droVir1 virilis.net 
+
+    # Make a 'syntenic' subset:
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.droVir1.2004-11-07/axtChain
+    rm noClass.net
+    netFilter -syn virilis.net > virilisSyn.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blastz.droVir1.2004-11-07/axtChain
+    netFilter -minGap=10 virilis.net |  hgLoadNet dm1 netDroVir1 stdin
+    netFilter -minGap=10 virilisSyn.net \
+    | hgLoadNet dm1 netSyntenyDroVir1 stdin
+
+
+# GENERATE DROVIR1 AXTNET AND MAF FOR MULTIZ (DONE 11/7/04 angie)
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.droVir1/axtChain
+    netSplit virilis.net net
+    cd ..
+    mkdir axtNet
+    foreach f (axtChain/net/chr*.net)
+      netToAxt $f axtChain/chain/$f:t:r.chain \
+        /cluster/data/dm1/nib /cluster/data/droVir1/droVir1.2bit stdout \
+      | axtSort stdin axtNet/$f:t:r.axt
+    end
+    mkdir mafNet
+    foreach f (axtNet/chr*.axt)
+      set maf = mafNet/$f:t:r.maf
+      axtToMaf $f \
+            /cluster/data/dm1/chrom.sizes /cluster/data/droVir1/chrom.sizes \
+            $maf -tPrefix=dm1. -qPrefix=droVir1.
+    end
+
+
+# MAKE VSDROVIR1 DOWNLOADABLES (DONE 11/7/04 angie)
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.droVir1
+    nice gzip axtChain/{all.chain,*.net} axtNet/*.axt axtChrom/*.axt
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/dm1/vsDroVir1
+    cd /usr/local/apache/htdocs/goldenPath/dm1/vsDroVir1
+    cp -p /cluster/data/dm1/bed/blastz.droVir1/axtChain/all.chain.gz \
+      virilis.chain.gz
+    cp -p /cluster/data/dm1/bed/blastz.droVir1/axtChain/virilis.net.gz .
+    cp -pR /cluster/data/dm1/bed/blastz.droVir1/axtNet .
+    md5sum *.gz */*.gz > md5sum.txt
+    # Make a README.txt which explains the files & formats.
+
+
+# BLASTZ A.MELLIFERA (DONE 11/8/04 angie)
+    # Use human-fugu sensitivity settings, as with mosquito.
+    ssh kksilo
+    mkdir /cluster/data/dm1/bed/blastz.apiMel1.2004-11-08
+    cd /cluster/data/dm1/bed/blastz.apiMel1.2004-11-08
+    ln -s blastz.apiMel1.2004-11-08 /cluster/data/dm1/bed/blastz.apiMel1
+    cat << '_EOF_' > DEF
+# D.melanogaster vs. A.mellifera
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET - D. melanogaster
+SEQ1_DIR=/iscratch/i/dm1/nib
+SEQ1_SMSK=
+SEQ1_FLAG=-drosophila
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY - A. mellifera
+SEQ2_DIR=/iscratch/i/apiMel1/chunksUnsplit
+SEQ2_SMSK=
+SEQ2_FLAG=-drosophila
+SEQ2_IN_CONTIGS=1
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/dm1/bed/blastz.apiMel1.2004-11-08
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    # run bash shell if you don't already:
+    bash
+    source DEF
+    mkdir run
+    /cluster/bin/scripts/blastz-make-joblist $DEF > $BASE/run/j
+    sh ./xdir.sh
+    cd run
+    sed -e 's#^#/cluster/bin/penn/#' j > j2
+    wc -l j*
+    head j2
+    mv j2 j
+    # cluster run
+    ssh kk
+    cd /cluster/data/dm1/bed/blastz.apiMel1.2004-11-08/run
+    para create j
+    para try, check, push, check, ....
+#Completed: 6867 of 6867 jobs
+#Average job time:                  87s       1.45m     0.02h    0.00d
+#Longest job:                      833s      13.88m     0.23h    0.01d
+#Submission to last job:          3109s      51.82m     0.86h    0.04d
+
+    # back in the bash shell on kksilo...
+    mkdir /cluster/data/dm1/bed/blastz.apiMel1.2004-11-08/run.1
+    cd /cluster/data/dm1/bed/blastz.apiMel1.2004-11-08/run.1
+    /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE > j
+    # small cluster run
+    ssh kki
+    cd /cluster/data/dm1/bed/blastz.apiMel1.2004-11-08/run.1
+    para create j
+    para try, check, push, check, ....
+#Completed: 21 of 21 jobs
+#Average job time:                  12s       0.20m     0.00h    0.00d
+#Longest job:                       25s       0.42m     0.01h    0.00d
+#Submission to last job:            85s       1.42m     0.02h    0.00d
+    cd ..
+    rm -r raw
+
+    # Translate .lav to axt:
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.apiMel1.2004-11-08
+    mkdir axtChrom
+    foreach c (lav/*)
+      pushd $c
+      set chr=$c:t
+      set out=axtChrom/$chr.axt
+      echo "Translating $chr lav to $out"
+      cat `ls -1 *.lav | sort -g` \
+        | lavToAxt stdin /cluster/data/dm1/nib \
+            /cluster/data/apiMel1/apiMel1.2bit stdout \
+        | axtSort stdin ../../$out
+      popd
+    end
+
+
+# CHAIN MELLIFERA BLASTZ (DONE 11/8/04 angie)
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/dm1/bed/blastz.apiMel1.2004-11-08
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir chain
+    ls -1S /cluster/data/dm1/bed/blastz.apiMel1.2004-11-08/axtChrom/*.axt \
+      > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh -ef
+axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
+         -linearGap=/cluster/data/blastz/chickenHumanTuned.gap \
+         -verbose=0 $1 \
+  /iscratch/i/dm1/nib \
+  /iscratch/i/apiMel1/apiMel1.2bit stdout \
+| chainAntiRepeat /iscratch/i/dm1/nib /iscratch/i/apiMel1/apiMel1.2bit \
+    stdin $2
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+#Completed: 11 of 11 jobs
+#Average job time:                  11s       0.18m     0.00h    0.00d
+#Longest job:                       69s       1.15m     0.02h    0.00d
+#Submission to last job:            69s       1.15m     0.02h    0.00d
+
+    # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.apiMel1.2004-11-08/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    rm run1/chain/*.chain
+
+    # take a look at score distr's
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r
+      textHistogram -binSize=10000 /tmp/score.$f:t:r
+      echo ""
+    end
+
+    # Load chains into database
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blastz.apiMel1.2004-11-08/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        echo loading $c
+        hgLoadChain dm1 ${c}_chainApiMel1 $i
+    end
+
+
+# NET MELLIFERA BLASTZ (DONE 11/8/04 angie)
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.apiMel1.2004-11-08/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+
+    # Add classification info using db tables:
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blastz.apiMel1.2004-11-08/axtChain
+    netClass -noAr noClass.net dm1 apiMel1 mellifera.net 
+
+    # Make a 'syntenic' subset:
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.apiMel1.2004-11-08/axtChain
+    rm noClass.net
+    netFilter -syn mellifera.net > melliferaSyn.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blastz.apiMel1.2004-11-08/axtChain
+    netFilter -minGap=10 mellifera.net |  hgLoadNet dm1 netApiMel1 stdin
+    netFilter -minGap=10 melliferaSyn.net \
+    | hgLoadNet dm1 netSyntenyApiMel1 stdin
+
+
+# GENERATE APIMEL1 AXTNET AND MAF FOR MULTIZ (DONE 11/8/04 angie)
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.apiMel1/axtChain
+    netSplit mellifera.net net
+    cd ..
+    mkdir axtNet
+    foreach f (axtChain/net/chr*.net)
+      netToAxt $f axtChain/chain/$f:t:r.chain \
+        /cluster/data/dm1/nib /cluster/data/apiMel1/apiMel1.2bit stdout \
+      | axtSort stdin axtNet/$f:t:r.axt
+    end
+    mkdir mafNet
+    foreach f (axtNet/chr*.axt)
+      set maf = mafNet/$f:t:r.maf
+      axtToMaf $f \
+            /cluster/data/dm1/chrom.sizes /cluster/data/apiMel1/chrom.sizes \
+            $maf -tPrefix=dm1. -qPrefix=apiMel1.
+    end
+
+
+# MAKE VSAPIMEL1 DOWNLOADABLES (DONE 11/8/04 angie)
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.apiMel1
+    nice gzip axtChain/{all.chain,*.net} axtNet/*.axt axtChrom/*.axt
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/dm1/vsApiMel1
+    cd /usr/local/apache/htdocs/goldenPath/dm1/vsApiMel1
+    cp -p /cluster/data/dm1/bed/blastz.apiMel1/axtChain/all.chain.gz \
+      mellifera.chain.gz
+    cp -p /cluster/data/dm1/bed/blastz.apiMel1/axtChain/mellifera.net.gz .
+    cp -pR /cluster/data/dm1/bed/blastz.apiMel1/axtNet .
+    md5sum *.gz */*.gz > md5sum.txt
+    # Make a README.txt which explains the files & formats.
+
+
+# DATAMINE FOR PHYLOGENETIC TREE INFO FOR 12-FLY PROJECT (IN PROGRESS 11/9/04 angie)
+    # Google... -> Entrez "Tamura K" ->
+#Temporal patterns of fruit fly (Drosophila) evolution revealed by mutation clocks.
+#Tamura K, Subramanian S, Kumar S.
+#http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=12949132
+#Our analysis of 2977 pairwise sequence comparisons from 176 nuclear
+#genes reveals a long-term fruit fly mutation clock ticking at a rate
+#of 11.1 mutations per kilobase pair per Myr. Genomic mutation
+#clock-based timings of the landmark speciation events leading to the
+#evolution of D. melanogaster show that it shared most recent common
+#ancestry
+# 5.4 MYA with D. simulans, 
+#12.6 MYA with D. erecta+D. orena, 
+#12.8 MYA with D. yakuba+D. teisseri, 
+#35.6 MYA with the takahashii subgroup, 
+#41.3 MYA with the montium subgroup, 
+#44.2 MYA with the ananassae subgroup, 
+#54.9 MYA with the obscura group, 
+#62.2 MYA with the willistoni group, and 
+#62.9 MYA with the subgenus Drosophila.
+
+    # 12-species project whitepaper (June 2003):
+# http://genome.gov/Pages/Research/Sequencing/SeqProposals/Drosophila.pdf
+# Eventual 12-fly tree from page 3:
+   (((((((melanogaster (simulans sechellia))
+	 yakuba)
+	erecta)
+       ananassae)
+      (pseudoobscura persimilis))
+     willistoni)
+    (grimshawi (mojavensis virilis)))
+# Rough MYA from page 3 (Some 2-4x shorter estimates than Tamura et al!):
+   (((((((melanogaster (simulans sechellia):1):4
+	 yakuba:5)
+	erecta:7)
+       ananassae:13)
+      (pseudoobscura persimilis):1):27
+     willistoni):37
+    (grimshawi (mojavensis virilis):25):7)
+
+    # chainLink coverage of species aligned to date:
+    ssh hgwdev
+    foreach db (DroYak1 DroAna1 Dp2 DroVir1 DroMoj1 AnoGam1 ApiMel1)
+      echo -n "$db: "
+      nice featureBits dm1 chain${db}Link
+    end
+#DroYak1: 108256417 bases of 126527731 (85.559%) in intersection
+#DroAna1: 82740388 bases of 126527731 (65.393%) in intersection
+#Dp2:     73920914 bases of 126527731 (58.423%) in intersection
+#DroVir1: 53742261 bases of 126527731 (42.475%) in intersection
+#DroMoj1: 49844756 bases of 126527731 (39.394%) in intersection
+#AnoGam1: 19437860 bases of 126527731 (15.363%) in intersection
+#ApiMel1: 16555940 bases of 126527731 (13.085%) in intersection
+
+
+# VAR_MULTIZ INSECTS TO DATE (DONE 11/9/04 angie)
+    # Today's tree (8-way):
+    # ((((((dm1 droYak1) droAna1) dp2) (droVir1 droMoj1)) anoGam1) apiMel1)
+    ssh kksilo
+    mkdir /cluster/data/dm1/bed/multiz8way.2004-11-09
+    ln -s /cluster/data/dm1/bed/multiz8way.2004-11-09 \
+      /cluster/data/dm1/bed/multiz8way
+    cd /cluster/data/dm1/bed/multiz8way
+    # Setup: Copy pairwise MAF to /cluster/bluearc:
+    mkdir /cluster/bluearc/flyVarMultiz8way
+    foreach db (droYak1 droAna1 dp2 droVir1 droMoj1 anoGam1 apiMel1)
+      cp -pR /cluster/data/dm1/bed/blastz.$db/mafNet \
+        /cluster/bluearc/flyVarMultiz8way/$db
+    end
+    # Make output dir:
+    mkdir maf
+    # Create script to run var_multiz in the right order:
+    cat << '_EOF_' > doVarMultiz.csh
+#!/bin/csh -fe
+set chr = $1
+set tmp = /scratch/flyVarMultiz8way.$chr
+mkdir $tmp
+
+set REF = dm1.$chr
+set YAK = /cluster/bluearc/flyVarMultiz8way/droYak1/$chr.maf
+set ANA = /cluster/bluearc/flyVarMultiz8way/droAna1/$chr.maf
+set PSE = /cluster/bluearc/flyVarMultiz8way/dp2/$chr.maf
+set VIR = /cluster/bluearc/flyVarMultiz8way/droVir1/$chr.maf
+set MOJ = /cluster/bluearc/flyVarMultiz8way/droMoj1/$chr.maf
+set ANO = /cluster/bluearc/flyVarMultiz8way/anoGam1/$chr.maf
+set API = /cluster/bluearc/flyVarMultiz8way/apiMel1/$chr.maf
+set DEST = /cluster/data/dm1/bed/multiz8way/maf/$chr.maf
+
+set VMZ = /cluster/bin/penn/var_multiz
+set PROJECT = /cluster/bin/penn/maf_project
+
+if ( -s $YAK && -s $ANA ) then 
+    echo "Aligning $YAK $ANA..."
+    $VMZ $YAK $ANA 1 0 > $tmp/$chr.tmp.maf
+    echo "Projecting on $REF..."
+    $PROJECT $tmp/$chr.tmp.maf $REF > $tmp/$chr.YakAna.maf
+else if ( -s $YAK ) then
+    cp $YAK $tmp/$chr.YakAna.maf
+else if ( -s $ANA ) then
+    cp $ANA $tmp/$chr.YakAna.maf
+endif
+
+if ( -s $PSE && -s $tmp/$chr.YakAna.maf ) then
+    echo "Adding $PSE..."
+    $VMZ $tmp/$chr.YakAna.maf $PSE 1 0 > $tmp/$chr.tmp.maf
+    echo "Projecting on $REF..."
+    $PROJECT $tmp/$chr.tmp.maf $REF > $tmp/$chr.YakAnaPse.maf
+else if ( -s $PSE ) then
+    cp $PSE $tmp/$chr.YakAnaPse.maf
+else if ( -s $tmp/$chr.YakAna.maf ) then
+    cp $tmp/$chr.YakAna.maf $tmp/$chr.YakAnaPse.maf
+endif 
+
+# droVir1 and droMoj1 are a subtree -- run on just them, then fold in:
+if ( -s $VIR && -s $MOJ ) then 
+    echo "Aligning $VIR $MOJ..."
+    $VMZ $VIR $MOJ 0 0 > $tmp/$chr.tmp.maf
+    echo "Projecting on $REF..."
+    $PROJECT $tmp/$chr.tmp.maf $REF > $tmp/$chr.VirMoj.maf
+else if ( -s $VIR ) then
+    cp $VIR $tmp/$chr.VirMoj.maf
+else if ( -s $MOJ ) then
+    cp $MOJ $tmp/$chr.VirMoj.maf
+endif
+
+if ( -s $tmp/$chr.VirMoj.maf && -s $tmp/$chr.YakAnaPse.maf ) then
+    echo "Adding $tmp/$chr.VirMoj.maf..."
+    $VMZ $tmp/$chr.YakAnaPse.maf $tmp/$chr.VirMoj.maf 1 0 > $tmp/$chr.tmp.maf
+    echo "Projecting on $REF..."
+    $PROJECT $tmp/$chr.tmp.maf $REF > $tmp/$chr.YakAnaPseVirMoj.maf
+else if ( -s $tmp/$chr.VirMoj.maf ) then
+    cp $tmp/$chr.VirMoj.maf $tmp/$chr.YakAnaPseVirMoj.maf
+else if ( -s $tmp/$chr.YakAnaPse.maf ) then
+    cp $tmp/$chr.YakAnaPse.maf $tmp/$chr.YakAnaPseVirMoj.maf
+endif 
+
+if ( -s $ANO && -s $tmp/$chr.YakAnaPseVirMoj.maf ) then
+    echo "Adding $ANO..."
+    $VMZ $tmp/$chr.YakAnaPseVirMoj.maf $ANO 1 0 > $tmp/$chr.tmp.maf
+    echo "Projecting on $REF..."
+    $PROJECT $tmp/$chr.tmp.maf $REF > $tmp/$chr.YakAnaPseVirMojAno.maf
+else if ( -s $ANO ) then
+    cp $ANO $tmp/$chr.YakAnaPseVirMojAno.maf
+else if ( -s $tmp/$chr.YakAnaPseVirMoj.maf ) then
+    cp $tmp/$chr.YakAnaPseVirMoj.maf $tmp/$chr.YakAnaPseVirMojAno.maf
+endif 
+
+if ( -s $API && -s $tmp/$chr.YakAnaPseVirMojAno.maf ) then
+    echo "Adding $API..."
+    $VMZ $tmp/$chr.YakAnaPseVirMojAno.maf $API 1 0 > $tmp/$chr.tmp.maf
+    echo "Projecting on $REF..."
+    $PROJECT $tmp/$chr.tmp.maf $REF > $tmp/$chr.final.maf
+    cp $tmp/$chr.final.maf $DEST
+else if ( -s $API ) then
+    cp $API $DEST
+else if ( -s $tmp/$chr.YakAnaPseVirMojAno.maf ) then
+    cp $tmp/$chr.YakAnaPseVirMojAno.maf $DEST
+endif 
+
+rm $tmp/$chr.*.maf
+rmdir $tmp
+'_EOF_'
+    # << keep emacs coloring happy    
+    chmod 755 doVarMultiz.csh
+    awk '{print "./doVarMultiz.csh " $1;}' /cluster/data/dm1/chrom.sizes \
+      > jobs.lst
+    # Run on small cluster
+    ssh kki
+    cd /cluster/data/dm1/bed/multiz8way
+    para create jobs.lst
+    para try, check, push, check, ...
+#Completed: 11 of 11 jobs
+#Average job time:                1272s      21.19m     0.35h    0.01d
+#Longest job:                     3747s      62.45m     1.04h    0.04d
+#Submission to last job:          3747s      62.45m     1.04h    0.04d
+
+    # make /gbdb/ links to 8way and pairwise maf files:
+    ssh hgwdev
+    mkdir -p /gbdb/dm1/multiz8way/maf/multiz8way
+    ln -s /cluster/data/dm1/bed/multiz8way/maf/chr*.maf \
+      /gbdb/dm1/multiz8way/maf/multiz8way/
+    # pairwise setting from trackDb.ra entry:
+    set pairwise = 041109
+    foreach orgName (d_yakuba d_ananassae d_pseudoobscura d_virilis \
+                     d_mojavensis a_gambiae a_mellifera)
+      mkdir /gbdb/dm1/multiz8way/maf/${orgName}_$pairwise
+    end
+    ln -s /cluster/data/dm1/bed/blastz.droYak1.2004-05-22/mafNet/*.maf \
+      /gbdb/dm1/multiz8way/maf/d_yakuba_$pairwise
+    ln -s /cluster/data/dm1/bed/blastz.droAna1.2004-11-03/mafNet/*.maf \
+      /gbdb/dm1/multiz8way/maf/d_ananassae_$pairwise
+    ln -s /cluster/data/dm1/bed/blastz.dp2.2004-08-03/mafNet/*.maf \
+      /gbdb/dm1/multiz8way/maf/d_pseudoobscura_$pairwise
+    ln -s /cluster/data/dm1/bed/blastz.droVir1.2004-11-07/mafNet/*.maf \
+      /gbdb/dm1/multiz8way/maf/d_virilis_$pairwise
+    ln -s /cluster/data/dm1/bed/blastz.droMoj1.2004-11-04/mafNet/*.maf \
+      /gbdb/dm1/multiz8way/maf/d_mojavensis_$pairwise
+    ln -s /cluster/data/dm1/bed/blastz.anoGam1.2004-06-10/mafNet/*.maf \
+      /gbdb/dm1/multiz8way/maf/a_gambiae_$pairwise
+    ln -s /cluster/data/dm1/bed/blastz.apiMel1.2004-11-08/mafNet/*.maf \
+      /gbdb/dm1/multiz8way/maf/a_mellifera_$pairwise
+    # load into database
+    cd /tmp
+    hgLoadMaf -warn dm1 multiz8way \
+      -pathPrefix=/gbdb/dm1/multiz8way/maf/multiz8way
+    foreach orgName (d_yakuba d_ananassae d_pseudoobscura d_virilis \
+                     d_mojavensis a_gambiae a_mellifera)
+      hgLoadMaf -WARN dm1 ${orgName}_$pairwise \
+        -pathPrefix=/gbdb/dm1/multiz8way/maf/${orgName}_$pairwise
+    end
+
+    # put 8way MAF out for download
+    ssh kksilo
+    cd /cluster/data/dm1/bed/multiz8way
+    mkdir ../../zips/mzMafs
+    foreach f (maf/*.maf)
+      gzip -c $f > ../../zips/mzMafs/$f:t.gz
+    end
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/dm1/multiz8way
+    cd /usr/local/apache/htdocs/goldenPath/dm1/multiz8way
+    mv /cluster/data/dm1/zips/mzMafs/* .
+    rmdir /cluster/data/dm1/zips/mzMafs
+    md5sum *.gz > md5sum.txt
+    # make a README.txt
+
+    # Cleanup
+    rm -rf /cluster/bluearc/flyVarMultiz8way/
+
+
+# PHASTCONS 8WAY (IN PROGRESS 11/10/04 angie)
+    ssh kksilo
+    # copy chrom fa to bluearc, break up the genome-wide MAFs into pieces
+    mkdir -p /cluster/bluearc/dm1/chrom
+    cp -p /cluster/data/dm1/?{,?}/chr*.fa /cluster/bluearc/dm1/chrom/
+    ssh kki
+    mkdir /cluster/data/dm1/bed/multiz8way/phastCons
+    mkdir /cluster/data/dm1/bed/multiz8way/phastCons/run.split
+    cd /cluster/data/dm1/bed/multiz8way/phastCons/run.split
+    set WINDOWS = /cluster/bluearc/dm1/phastCons/WINDOWS
+    rm -fr $WINDOWS
+    mkdir -p $WINDOWS
+    cat << 'EOF' > doSplit.sh
+#!/bin/csh -ef
+
+set PHAST=/cluster/bin/phast
+set FA_SRC=/cluster/bluearc/dm1/chrom
+set WINDOWS=/cluster/bluearc/dm1/phastCons/WINDOWS
+
+set maf=$1
+set c = $maf:t:r
+set tmpDir = /scratch/msa_split/$c
+rm -rf $tmpDir
+mkdir -p $tmpDir
+# apiMel1-specific tweak for msa_split:
+perl -wpe 's/(apiMel1\.Group\w+)\.(\d+)/$1_$2/' $1 > $tmpDir/$c.maf
+${PHAST}/msa_split $tmpDir/$c.maf -i MAF -M ${FA_SRC}/$c.fa \
+   -O dm1,droYak1,droAna1,dp2,droVir1,droMoj1,anoGam1,apiMel1 \
+   -w 1000000,0 -r $tmpDir/$c -o SS -I 1000 -B 5000
+cd $tmpDir
+foreach file ($c.*.ss)
+  gzip -c $file > ${WINDOWS}/$file.gz
+end
+rm -f $tmpDir/$c.maf
+rm -f $tmpDir/$c.*.ss
+rmdir $tmpDir
+'EOF'
+# << for emacs
+    chmod a+x doSplit.sh
+    rm -f jobList
+    foreach file (/cluster/data/dm1/bed/multiz8way/maf/*.maf) 
+      if (-s $file) then
+        echo "doSplit.sh {check in line+ $file}" >> jobList
+      endif
+    end
+    para create jobList
+    para try,  check, push, check...
+#Completed: 11 of 11 jobs
+#Average job time:                  50s       0.83m     0.01h    0.00d
+#Longest job:                      130s       2.17m     0.04h    0.00d
+#Submission to last job:           130s       2.17m     0.04h    0.00d
+    cd ..
+
+    # use the model previously estimated as a starting model...
+    cp /cluster/data/dm1/bed/multiz.dm1droYak1dp2anoGam1/phastCons/starting-tree.mod .
+    # then add the new species with scaled distance estimates.  
+    # As long as they're reasonable, the estimation process should be 
+    # able to converge on the right values.  
+    $EDITOR starting-tree.mod
+#TREE: ((((((dm1:0.058,droYak1:0.074):0.1,droAna1:0.17):0.33,dp2:0.200):0,(droVir1:0.3,droMoj1:0.3):0):0.2,anoGam1:0.5):0,apiMel1:0.5);
+
+    # Get genome-wide average GC content (for all species together,
+    # not just the reference genome).  If you have a globally
+    # estimated tree model, as above, you can get this from the
+    # BACKGROUND line in the .mod file.  E.g.,
+# ALPHABET: A C G T
+# ...
+# BACKGROUND: 0.276938 0.223190 0.223142 0.276730
+    # add up the C and G:
+    awk '$1 == "BACKGROUND:" {printf "%0.3f\n", $3 + $4;}' starting-tree.mod
+#0.446
+    # Great, use 0.446 as the --gc parameter in phastCons below:.
+
+    # Now set up cluster job to estimate model parameters.  
+    # Use parameters iteratively determined for dm2 -- see makeDm2.doc:
+    # --target-coverage 0.20 --expected-lengths 25
+    # Parameters will be estimated separately for each alignment fragment 
+    # then will be combined across fragments.
+
+    mkdir run.estimate
+    cd run.estimate
+    cat << '_EOF_' > doEstimate.sh
+#!/bin/csh -ef
+zcat $1 \
+| /cluster/bin/phast/phastCons - ../starting-tree.mod --gc 0.446 --nrates 1,1 \
+    --no-post-probs --ignore-missing --expected-lengths 25 \
+    --target-coverage 0.20 --quiet --log $2 --estimate-trees $3
+'_EOF_'
+# << for emacs
+    chmod a+x doEstimate.sh
+    rm -fr LOG TREES
+    mkdir -p LOG TREES
+    rm -f jobList
+    foreach f (/cluster/bluearc/dm1/phastCons/WINDOWS/*.ss.gz)
+      set root = $f:t:r:r
+      echo doEstimate.sh $f LOG/$root.log TREES/$root >> jobList
+    end
+    # run cluster job
+    ssh kk9
+    cd /cluster/data/dm1/bed/multiz8way/phastCons/run.estimate
+    para create jobList
+    para try, check, push, check, ...
+#Completed: 134 of 134 jobs
+#Average job time:                2054s      34.23m     0.57h    0.02d
+#Longest job:                     4051s      67.52m     1.13h    0.05d
+#Submission to last job:         64611s    1076.85m    17.95h    0.75d
+
+    # Now combine parameter estimates.  We can average the .mod files
+    # using phyloBoot.  This must be done separately for the conserved
+    # and nonconserved models
+    ssh kksilo
+    cd /cluster/data/dm1/bed/multiz8way/phastCons/run.estimate
+    ls -1 TREES/*.cons.mod > cons.txt
+    /cluster/bin/phast/phyloBoot --read-mods '*cons.txt' \
+      --output-average ave.cons.mod > cons_summary.txt
+    ls -1 TREES/*.noncons.mod > noncons.txt
+    /cluster/bin/phast/phyloBoot --read-mods '*noncons.txt' \
+      --output-average ave.noncons.mod > noncons_summary.txt
+    grep TREE ave*.mod
+#ave.cons.mod:TREE: ((((((dm1:0.024149,droYak1:0.028681):0.037845,droAna1:0.074610):0.020246,dp2:0.078803):0.018879,(droVir1:0.046349,droMoj1:0.051929):0.065674):0.063543,anoGam1:0.171043):0.118046,apiMel1:0.118046);
+#ave.noncons.mod:TREE: ((((((dm1:0.084284,droYak1:0.100215):0.137342,droAna1:0.270012):0.074910,dp2:0.285747):0.071341,(droVir1:0.165827,droMoj1:0.186367):0.245918):0.239605,anoGam1:0.624082):0.439708,apiMel1:0.439708);
+    cat cons_summary.txt 
+    # look over the files cons_summary.txt and noncons_summary.txt.
+    # The means and medians should be roughly equal and the stdevs
+    # should be reasonably small compared to the means, particularly
+    # for rate matrix parameters (at bottom) and for branches to the
+    # leaves of the tree.  The stdevs may be fairly high for branches
+    # near the root of the tree; that's okay.  Some min values may be
+    # 0 for some parameters.  That's okay, but watch out for very large
+    # values in the max column, which might skew the mean.  If you see
+    # any signs of bad outliers, you may have to track down the
+    # responsible .mod files and throw them out.  I've never had to do
+    # this; the estimates generally seem pretty well behaved.
+
+    # NOTE: Actually, a random sample of several hundred to a thousand
+    # alignment fragments (say, a number equal to the number of
+    # available cluster nodes) should be more than adequate for
+    # parameter estimation.  If pressed for time, use this strategy.
+
+    # Now we are ready to set up the cluster job for computing the
+    # conservation scores and predicted elements.  It's all downhill
+    # from here.
+    ssh kk9
+    mkdir /cluster/data/dm1/bed/multiz8way/phastCons/run.phast
+    cd /cluster/data/dm1/bed/multiz8way/phastCons/run.phast
+    cat << 'EOF' > doPhastCons.sh
+#!/bin/csh -ef
+set pref = $1:t:r:r
+set chr = `echo $pref | awk -F\. '{print $1}'`
+set tmpfile = /scratch/phastCons.$$
+zcat $1 \
+| /cluster/bin/phast/phastCons - \
+    ../run.estimate/ave.cons.mod,../run.estimate/ave.noncons.mod \
+    --expected-lengths 25 --target-coverage 0.20 --quiet --seqname $chr \
+    --idpref $pref \
+    --viterbi /cluster/bluearc/dm1/phastCons/ELEMENTS/$pref.bed --score \
+    --require-informative 0 \
+  > $tmpfile
+gzip -c $tmpfile > /cluster/bluearc/dm1/phastCons/POSTPROBS/$pref.pp.gz
+rm $tmpfile
+'EOF'
+# << for emacs
+    chmod a+x doPhastCons.sh
+    rm -fr /cluster/bluearc/dm1/phastCons/{POSTPROBS,ELEMENTS}
+    mkdir -p /cluster/bluearc/dm1/phastCons/{POSTPROBS,ELEMENTS}
+    rm -f jobList
+    foreach f (/cluster/bluearc/dm1/phastCons/WINDOWS/*.ss.gz)
+      echo doPhastCons.sh $f >> jobList
+    end
+    para create jobList
+    para try, check, push, check, ...
+#Completed: 134 of 134 jobs
+#Average job time:                  15s       0.26m     0.00h    0.00d
+#Longest job:                       22s       0.37m     0.01h    0.00d
+#Submission to last job:            48s       0.80m     0.01h    0.00d
+
+    # back on kksilo:
+    # combine predictions and transform scores to be in 0-1000 interval
+    # do in a way that avoids limits on numbers of args
+    cd /cluster/data/dm1/bed/multiz8way/phastCons
+    awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+      /cluster/bluearc/dm1/phastCons/ELEMENTS/*.bed \
+    | /cluster/bin/scripts/lodToBedScore > all.bed
+
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/multiz8way/phastCons
+    featureBits dm1 all.bed
+#38825802 bases of 126527731 (30.686%) in intersection
+    # OK, close enough.
+    hgLoadBed dm1 phastConsElements8way all.bed
+
+    # Create wiggle on the small cluster
+    ssh kki
+    mkdir /cluster/data/dm1/bed/multiz8way/phastCons/run.wib
+    cd /cluster/data/dm1/bed/multiz8way/phastCons/run.wib
+    rm -rf /cluster/bluearc/dm1/phastCons/wib
+    mkdir -p /cluster/bluearc/dm1/phastCons/wib
+    cat << 'EOF' > doWigEncode
+#!/bin/csh -ef
+set chr = $1
+cd /cluster/bluearc/dm1/phastCons/wib
+zcat `ls -1 /cluster/bluearc/dm1/phastCons/POSTPROBS/$chr.*.pp.gz \
+      | sort -t\. -k2,2n` \
+| wigEncode stdin ${chr}_phastCons.wi{g,b}
+'EOF'
+# << for emacs
+    chmod a+x doWigEncode
+    rm -f jobList
+    foreach chr (`ls -1 /cluster/bluearc/dm1/phastCons/POSTPROBS \
+                  | awk -F\. '{print $1}' | sort -u`)
+      echo doWigEncode $chr >> jobList
+    end
+    para create jobList
+    para try, check, push, check, ...
+#Completed: 11 of 11 jobs
+#Average job time:                  10s       0.16m     0.00h    0.00d
+#Longest job:                       22s       0.37m     0.01h    0.00d
+#Submission to last job:            22s       0.37m     0.01h    0.00d
+
+    # back on kksilo, copy wibs, wigs and POSTPROBS (people sometimes want 
+    # the raw scores) from bluearc
+    cd /cluster/data/dm1/bed/multiz8way/phastCons
+    rm -rf wib POSTPROBS
+    rsync -av /cluster/bluearc/dm1/phastCons/wib .
+    rsync -av /cluster/bluearc/dm1/phastCons/POSTPROBS .
+
+    # load wiggle component of Conservation track
+    ssh hgwdev
+    mkdir /gbdb/dm1/multiz8way/wib
+    cd /cluster/data/dm1/bed/multiz8way/phastCons
+    chmod 775 . wib
+    chmod 664 wib/*.wib
+    ln -s `pwd`/wib/*.wib /gbdb/dm1/multiz8way/wib/
+    hgLoadWiggle dm1 phastCons8way \
+      -pathPrefix=/gbdb/dm1/multiz8way/wib wib/*.wig
+
+    # make top-5000 list and launcher on Adam's home page:
+    sed -e 's/lod=//' all.bed | sort -k4,4nr | head -5000 \
+    | awk '{printf "%s\t%d\t%d\tlod=%d\t%d\n", $1, $2, $3, $4, $4}' \
+    > top5000.bed
+    /cluster/home/acs/bin/make-launcher-with-scores.sh top5000.bed \
+      /cse/grads/acs/public_html/dm-top5000-8way \
+      "top 5000 conserved elements (8way)" dm1
+
+    # and clean up bluearc.
+#TODO
+    rm -r /cluster/bluearc/dm1/phastCons
+    rm -r /cluster/bluearc/dm1/chrom
+
+
+# BLASTZ D. PSEUDOOBSCURA (DP3) (DONE 11/16/04 angie)
+    ssh kksilo
+    mkdir /cluster/data/dm1/bed/blastz.dp3.2004-11-16
+    cd /cluster/data/dm1/bed/blastz.dp3.2004-11-16
+    ln -s blastz.dp3.2004-11-16 /cluster/data/dm1/bed/blastz.dp3
+    cat << '_EOF_' > DEF
+# D.melanogaster vs. D.pseudoobscura
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET - D. melanogaster
+SEQ1_DIR=/iscratch/i/dm1/nib
+# unused: SEQ1_RMSK=
+SEQ1_SMSK=
+SEQ1_FLAG=-drosophila
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY - D. pseudoobscura
+SEQ2_DIR=/iscratch/i/dp3/nib
+# unused: SEQ2_RMSK=
+SEQ2_SMSK=
+SEQ2_FLAG=-drosophila
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/dm1/bed/blastz.dp3.2004-11-16
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    # run bash shell if you don't already:
+    bash
+    source DEF
+    mkdir run
+    ~angie/hummus/make-joblist $DEF > $BASE/run/j
+    sh ./xdir.sh
+    cd run
+    sed -e 's#^#/cluster/bin/penn/#' j > j2
+    wc -l j*
+    head j2
+    mv j2 j
+    # cluster run
+    ssh kk
+    cd /cluster/data/dm1/bed/blastz.dp3.2004-11-16/run
+    para create j
+    para try, check, push, check, ....
+#Completed: 504 of 504 jobs
+#Average job time:                 196s       3.26m     0.05h    0.00d
+#Longest job:                      931s      15.52m     0.26h    0.01d
+#Submission to last job:          1285s      21.42m     0.36h    0.01d
+
+    # back in the bash shell on kksilo...
+    mkdir /cluster/data/dm1/bed/blastz.dp3.2004-11-16/run.1
+    cd /cluster/data/dm1/bed/blastz.dp3.2004-11-16/run.1
+    /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE > j
+    # small cluster run
+    ssh kki
+    cd /cluster/data/dm1/bed/blastz.dp3.2004-11-16/run.1
+    para create j
+    para try, check, push, check, ....
+#Completed: 21 of 21 jobs
+#Average job time:                  11s       0.18m     0.00h    0.00d
+#Longest job:                       21s       0.35m     0.01h    0.00d
+#Submission to last job:            27s       0.45m     0.01h    0.00d
+
+    # Translate .lav to axt:
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.dp3.2004-11-16
+    rm -r raw
+    mkdir axtChrom
+    foreach c (lav/*)
+      pushd $c
+      set chr=$c:t
+      set out=axtChrom/$chr.axt
+      echo "Translating $chr lav to $out"
+      cat `ls -1 *.lav | sort -g` \
+        | lavToAxt stdin /cluster/data/dm1/nib /cluster/data/dp3/nib stdout \
+        | axtSort stdin ../../$out
+      popd
+    end
+
+
+# CHAIN PSEUDOOBSCURA BLASTZ (DONE 11/17/04 angie)
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/dm1/bed/blastz.dp3.2004-11-16
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir chain
+    ls -1S /cluster/data/dm1/bed/blastz.dp3.2004-11-16/axtChrom/*.axt \
+      > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh -ef
+axtChain -verbose=0 $1 \
+  /iscratch/i/dm1/nib \
+  /iscratch/i/dp3/nib stdout \
+| chainAntiRepeat /iscratch/i/dm1/nib /iscratch/i/dp3/nib \
+    stdin $2
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+#Completed: 11 of 11 jobs
+#Average job time:                  13s       0.22m     0.00h    0.00d
+#Longest job:                       25s       0.42m     0.01h    0.00d
+#Submission to last job:            25s       0.42m     0.01h    0.00d
+
+    # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.dp3.2004-11-16/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    rm run1/chain/*.chain
+
+    # take a look at score distr's
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r
+      textHistogram -binSize=10000 /tmp/score.$f:t:r
+      echo ""
+    end
+
+    # Load chains into database
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blastz.dp3.2004-11-16/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        echo loading $c
+        hgLoadChain dm1 ${c}_chainDp3 $i
+    end
+
+
+# NET PSEUDOOBSCURA BLASTZ (DONE 11/17/04 angie)
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.dp3.2004-11-16/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+
+    # Add classification info using db tables:
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blastz.dp3.2004-11-16/axtChain
+    netClass -noAr noClass.net dm1 dp3 pseudoobscura.net
+
+    # Make a 'syntenic' subset:
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.dp3.2004-11-16/axtChain
+    rm noClass.net
+    netFilter -syn pseudoobscura.net > pseudoobscuraSyn.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blastz.dp3.2004-11-16/axtChain
+    netFilter -minGap=10 pseudoobscura.net |  hgLoadNet dm1 netDp3 stdin
+    netFilter -minGap=10 pseudoobscuraSyn.net \
+    | hgLoadNet dm1 netSyntenyDp3 stdin
+
+
+# GENERATE DP3 AXTNET AND MAF FOR MULTIZ (DONE 11/17/04 angie)
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.dp3/axtChain
+    netSplit pseudoobscura.net net
+    cd ..
+    mkdir axtNet
+    foreach f (axtChain/net/chr*.net)
+      netToAxt $f axtChain/chain/$f:t:r.chain \
+        /cluster/data/dm1/nib /cluster/data/dp3/dp3.2bit stdout \
+      | axtSort stdin axtNet/$f:t:r.axt
+    end
+    mkdir mafNet
+    foreach f (axtNet/chr*.axt)
+      set maf = mafNet/$f:t:r.maf
+      axtToMaf $f \
+            /cluster/data/dm1/chrom.sizes /cluster/data/dp3/chrom.sizes \
+            $maf -tPrefix=dm1. -qPrefix=dp3.
+    end
+
+
+# MAKE VSDP3 DOWNLOADABLES (DONE 11/17/04 angie)
+    ssh kksilo
+    mkdir /cluster/data/dm1/zips/axtNet
+    gzip -c \
+      /cluster/data/dm1/bed/blastz.dp3.2004-11-16/axtChain/all.chain \
+      > /cluster/data/dm1/zips/pseudoobscura.chain.gz
+    gzip -c \
+      /cluster/data/dm1/bed/blastz.dp3.2004-11-16/axtChain/pseudoobscura.net \
+      > /cluster/data/dm1/zips/pseudoobscura.net.gz
+    foreach f (/cluster/data/dm1/bed/blastz.dp3.2004-11-16/axtNet/chr*axt)
+      gzip -c $f > /cluster/data/dm1/zips/axtNet/$f:t.gz
+    end
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/dm1/vsDp3
+    cd /usr/local/apache/htdocs/goldenPath/dm1/vsDp3
+    mv /cluster/data/dm1/zips/pseu*gz .
+    mv /cluster/data/dm1/zips/axtNet .
+    md5sum *.gz */*.gz > md5sum.txt
+    # Make a README.txt which explains the files & formats.
 
 

@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.58 2004/11/06 07:12:58 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.59 2004/11/16 01:05:18 hiram Exp $";
 
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
@@ -502,6 +502,8 @@ if (anyFilter())
     cgiMakeButton(hgtaDoFilterPage, "Edit");
     hPrintf(" ");
     cgiMakeButton(hgtaDoClearFilter, "Clear");
+    if (isWig)
+	wigShowFilter(conn);
     }
 else
     {

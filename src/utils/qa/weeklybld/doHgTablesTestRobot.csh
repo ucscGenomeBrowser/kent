@@ -5,7 +5,7 @@ if ( "$HOST" != "hgwbeta" ) then
  exit 1
 endif
 
-cd $BUILDDIR/v${BRANCHNN}_branch/kent/src/hg/near/hgTablesTest
+cd $BUILDDIR/v${BRANCHNN}_branch/kent/src/hg/hgTablesTest
 make 
 cd $WEEKLYBLD
 $HOME/bin/$MACHTYPE/hgTablesTest hgwbeta.cse.ucsc.edu/cgi-bin/hgTables ./logs/hgTables-v${BRANCHNN}.log

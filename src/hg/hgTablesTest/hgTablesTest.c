@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.28 2004/11/10 16:18:56 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.30 2004/11/13 17:52:04 kent Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -23,7 +23,7 @@ char *clGroup = NULL;	/* Group from command line. */
 char *clTrack = NULL;	/* Track from command line. */
 char *clTable = NULL;	/* Table from command line. */
 int clGroups = BIGNUM;	/* Number of groups to test. */
-int clTracks = 2;	/* Number of track to test. */
+int clTracks = 4;	/* Number of track to test. */
 int clTables = 2;	/* Number of tables to test. */
 int clDbs = 1;		/* Number of databases per organism. */
 int clOrgs = 2;		/* Number of organisms to test. */
@@ -240,7 +240,6 @@ int testAllFields(struct htmlPage *tablePage, struct htmlForm *mainForm,
 struct htmlPage *outPage;
 int rowCount = 0;
 
-carefulCheckHeap();
 htmlPageSetVar(tablePage, NULL, hgtaOutputType, "primaryTable");
 outPage = quickSubmit(tablePage, org, db, group, track, table,
     "allFields", hgtaDoTopSubmit, "submit");
@@ -497,7 +496,7 @@ return obsolete;
 
 void testOneTable(struct htmlPage *trackPage, char *org, char *db,
 	char *group, char *track, char *table)
-/* Test stuff on one table. */
+/* Test stuff on one table if we haven't already tested this table. */
 {
 static struct hash *uniqHash = NULL;
 char fullName[256];
@@ -541,6 +540,9 @@ if (!hashLookup(uniqHash, fullName))
 		}
 	    else if (outTypeAvailable(mainForm, "primaryTable"))
 		{
+		/* If BED type is not available then the region will be ignored, and
+		 * we'll end up scanning whole table.  Make sure table is not huge
+		 * before proceeding. */
 		if (tableSize(db, table) < 500000)
 		    {
 		    int rowCount;
@@ -667,11 +669,8 @@ getTestRegion(db, region, sizeof(region));
 htmlPageSetVar(orgPage, NULL, "position", region);
 htmlPageSetVar(orgPage, NULL, hgtaRegionType, "range");
 dbPage = quickSubmit(orgPage, org, db, NULL, NULL, NULL, "selectDb", "submit", "go");
-quickErrReport();
 if (dbPage != NULL)
-    {
     testGroups(dbPage, org, db, clGroups);
-    }
 htmlPageFree(&dbPage);
 }
 
@@ -723,18 +722,21 @@ while (s != NULL && s[0] != 0)
     e = strchr(s, '\n');
     if (e != NULL)
        *e++ = 0;
-    fieldCount = chopTabs(s, row);
-    if (fieldCount != 2)
-        {
-	qaStatusSoftError(tablesTestList->status, 
-		"Got %d fields line %s of  joined result, expected 2", 
-		fieldCount, lineIx);
-	break;
+    if (s[0] != '#')
+	{
+	fieldCount = chopTabs(s, row);
+	if (fieldCount != 2)
+	    {
+	    qaStatusSoftError(tablesTestList->status, 
+		    "Got %d fields line %s of  joined result, expected 2", 
+		    fieldCount, lineIx);
+	    break;
+	    }
+	if (sameString(row[1], "n/a"))
+	     gotNa = TRUE;
+	if (countChars(s, ',') >= 2)
+	     gotCommas = TRUE;
 	}
-    if (sameString(row[1], "n/a"))
-         gotNa = TRUE;
-    if (countChars(s, ',') >= 2)
-         gotCommas = TRUE;
     s = e;
     }
 if (!gotCommas)
@@ -982,6 +984,8 @@ void hgTablesTest(char *url, char *logName)
 struct htmlPage *rootPage = htmlPageGet(url);
 logFile = mustOpen(logName, "w");
 htmlPageValidateOrAbort(rootPage);
+
+/* Go test what they've specified in command line. */
 if (clDb != NULL)
     {
     testDb(rootPage, NULL, clDb);
@@ -1007,9 +1011,13 @@ else
 	    }
 	}
     }
+
+/* Do some more complex tests on swissProt. */
 testJoining(rootPage);
 testFilter(rootPage);
 testIdentifier(rootPage);
+
+/* Clean up and report. */
 htmlPageFree(&rootPage);
 slReverse(&tablesTestList);
 reportSummary(tablesTestList, stdout);

@@ -270,6 +270,10 @@ exit; # don't actually run this like a script :)
   /cluster/bin/i386/maskOutFa -softAdd bosTau1.softmask.fa bed/simpleRepeat/trf.bed bosTau1.softmask2.fa
 
   # hard masking (Ns instead of lower case) for download files
+  # split for use by genscan
+  /cluster/bin/i386/maskOutFa bosTau1.softmask2.fa hard bosTau1.hardmask.fa
+  mkdir hardmask-split
+  /cluster/bin/i386/faSplit about bosTau1.hardmask.fa 2000000 hardmask-split
 
 # REGENERATE 2BIT NIB (DONE, Oct. 10, 2004, Heather)
   ssh kksilo
@@ -513,7 +517,12 @@ SEQ2_LEN=$BASE/S2.len
     mkdir /gbdb/bosTau1/wib
     ln -s `pwd`/gc5Base.wib /gbdb/bosTau1/wib
     hgLoadWiggle -pathPrefix=/gbdb/bosTau1/wib bosTau1 gc5Base gc5Base.wig
-
+    #	The index is no good for this organism due to the scaffold
+    #	naming scheme, drop the index and create one that works:
+    hgsql -e "drop index chrom on gc5Base;" bosTau1
+    hgsql -e "create index chrom on gc5Base (chrom(16));" bosTau1
+    #	The speeds up an operation on the hgTables browser by orders of
+    #	magnitude - whole genome statistics display
 
 # LOAD GAP & GOLD TABLES FROM AGP (DONE 11/10/04 angie)
     ssh hgwdev
@@ -526,5 +535,51 @@ SEQ2_LEN=$BASE/S2.len
     # "show index from gap/gold" shows NULL cardinalities for chrom.  
     # Rebuild indices with "analyze table".
     hgsql bosTau1 -e 'analyze table gold; analyze table gap;'
+
+
+# GENSCAN (DONE Nov. 17, 2004 Heather)
+  # uses hard-masked sequence files
+  ssh hgwdev
+  mkdir /cluster/data/bosTau1/bed/genscan
+  cd /cluster/data/xenTro1/bed/genscan
+  cvs co hg3rdParty/genscanlinux
+  mkdir gtf pep subopt
+
+  # Run on small cluster (more memory than big cluster).
+  ssh kki
+
+  # generate list of hard-masked scaffolds that are not all-N's
+  # (genscan crashes if all-N's)
+  foreach f ( `ls -1S /cluster/data/bosTau1/hardmask-split/*` )
+    egrep '[ACGT]' $f > /dev/null
+    if ($status == 0) echo $f >> genome.list
+  end
+  wc -l genome.list
+  # Create gsub
+  cat << '_EOF_' > gsub
+  #LOOP
+  /cluster/bin/x86_64/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+  #ENDLOOP
+  '_EOF_'
+  # << this line makes emacs coloring happy
+  /cluster/bin/i386/gensub2 genome.list single gsub jobList
+  para create jobList
+  para try, check, push, check, ...
+  ls -1 gtf | wc -l
+  endsInLf gtf/*
+
+  # Concatenate
+  ssh kksilo
+  cd /cluster/data/bosTau1/bed/genscan
+  cat gtf/*.gtf > genscan.gtf
+  cat pep/*.pep > genscan.pep
+  cat subopt/*.bed > genscanSubopt.bed
+
+  # Load
+  ssh hgwdev
+  cd /cluster/data/bosTau1/bed/genscan
+  ldHgGene -gtf bosTau1 genscan genscan.gtf
+  hgPepPred bosTau1 generic genscanPep genscan.pep
+  hgLoadBed bosTau1 genscanSubopt genscanSubopt.bed
 
 

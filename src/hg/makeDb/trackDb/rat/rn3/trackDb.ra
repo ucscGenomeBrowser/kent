@@ -23,6 +23,15 @@ altColor 128,128,128
 defaultViewLimits 30:70
 type wig 0 100 
 
+track ECgene
+shortLabel ECgene Genes
+longLabel ECgene v1.2 Gene Predictions with Alt-Splicing 
+group genes
+priority 41.5
+visibility hide
+color 155, 0, 125
+type genePred ECgenePep
+
 track twinscan
 shortLabel Twinscan
 longLabel Twinscan Gene Predictions Using Rat/Human Homology

@@ -400,6 +400,7 @@ sub runProgNoAbort($) {
 
 # Run a command, returning the output and exiting if there
 # is an error.
+# FIXME: not safe to use with a pipe, add a sanity check
 sub callProg($;$) {
   my($command, $quiet) = @_;
   if (!defined($quiet)) {

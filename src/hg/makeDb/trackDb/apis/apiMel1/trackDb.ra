@@ -8,7 +8,7 @@ spectrum on
 type psl est
 
 track all_mrna
-shortLabel D. pseudo. mRNAs
+shortLabel A. mel. mRNAs
 longLabel $Organism mRNAs from GenBank 
 group rna
 priority 54
@@ -18,7 +18,7 @@ type psl mrna
 
 track bdgpLiftGene
 shortLabel D.mel. BDGP Genes
-longLabel $o_Organism ($o_date/$o_db) BDGP Genes Mapped to D.pseudoobscura
+longLabel $o_Organism ($o_date/$o_db) BDGP Genes Mapped to $Organism
 group genes
 priority 45.5
 visibility pack
@@ -49,7 +49,7 @@ type netAlign dm1 chainDm1
 otherDb dm1
 
 track xenoMrna
-shortLabel Non-D. pseudo. mRNAs
+shortLabel Non-A. mel. mRNAs
 longLabel Non-$Organism mRNAs from GenBank
 group rna
 priority 63
@@ -60,7 +60,7 @@ cdsDrawOptions enabled
 
 
 track xenoRefGene
-shortLabel Non-D. pseudo. RefSeq
+shortLabel Non-A. mel. RefSeq
 longLabel Non-$Organism RefSeq Genes
 group genes
 priority 35.1

@@ -778,7 +778,8 @@ else
     mode=2; /* start on dbSnps with "rs*" in snpMap.rsId */
     }
 
-uglyf("maxFlank = %d \n",maxFlank);
+printf("maxFlank = %d \n",maxFlank);
+printf("threshold = %d \n",threshold);
 
 for (cn = cns; cn != NULL; cn = cn->next)
     {
@@ -795,6 +796,18 @@ for (cn = cns; cn != NULL; cn = cn->next)
     if (chr != NULL)
 	if (!sameWord(chr,cn->name))
 	    continue;
+
+    // currently there are no flanks for chrN_random
+    if (endsWith(cn->name,"_random"))
+	continue;
+    // currently there are no flanks for 
+    if (endsWith(cn->name,"_hla_hap1"))
+	continue;
+    if (endsWith(cn->name,"_hla_hap2"))
+	continue;
+    // currently no flanks for chrM 
+    if (sameWord(cn->name,"chrM"))
+	continue;
 
     uglyf("beginning chrom %s \n",cn->name);
    

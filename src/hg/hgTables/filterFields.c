@@ -17,7 +17,7 @@
 #include "joiner.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.17 2004/11/05 23:33:08 kent Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.18 2004/11/17 02:17:33 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -379,6 +379,9 @@ doBigSelectPage(db, table);
 void doOutSelectedFields(char *table, struct sqlConnection *conn)
 /* Put up select fields (for tab-separated output) page. */
 {
+if (anyIntersection())
+    errAbort("Can't do selected fields output when intersection is on. "
+    "Please go back and select another output type, or clear the intersection.");
 table = connectingTableForTrack(table);
 cartRemovePrefix(cart, hgtaFieldSelectPrefix);
 doBigSelectPage(database, table);

@@ -16,6 +16,15 @@ group map
 visibility dense
 type bed 3 +
 
+track ECgene
+shortLabel ECgene Genes
+longLabel ECgene v1.2 Gene Predictions with Alt-Splicing
+group genes
+priority 41.5
+visibility hide
+color 155, 0, 125
+type genePred ECgenePep
+
 track rnaGene
 shortLabel RNA Genes
 longLabel Non-coding RNA Genes (dark) and Pseudogenes (light) [Lifted from hg16]
@@ -159,7 +168,6 @@ longLabel PhastCons Conserved Elements, Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish
 group compGeno
 priority 109.1
 visibility hide
-spectrum on
 exonArrows off
 showTopScorers 200
 type bed 5 .
@@ -219,7 +227,6 @@ longLabel PhastCons Conserved Elements, TBA 37-way
 group compGeno
 priority 109.999
 visibility hide
-spectrum on
 exonArrows off
 showTopScorers 200
 type bed 5 .
@@ -244,7 +251,6 @@ longLabel PhastCons Conserved Elements, VarMultiz 5-Way
 group compGeno
 priority 191.1
 visibility hide
-spectrum on
 exonArrows off
 showTopScorers 200
 type bed 5 .

@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "rmskOut.h"
 
-static char const rcsid[] = "$Id: hgLoadOut.c,v 1.11 2004/10/24 18:31:22 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadOut.c,v 1.12 2004/11/16 22:09:21 markd Exp $";
 
 char *createRmskOut = "CREATE TABLE %s (\n"
 "   bin smallint unsigned not null,     # bin index field for range queries\n"
@@ -36,6 +36,17 @@ boolean noSplit = FALSE;
 char *tabFileName = NULL;
 char *suffix = NULL;
 FILE *tabFile = NULL;
+int badRepCnt = 0;
+
+/* command line option specifications */
+static struct optionSpec optionSpecs[] = {
+    {"tabFile", OPTION_STRING},
+    {"tabfile", OPTION_STRING},
+    {"nosplit", OPTION_BOOLEAN},
+    {"noSplit", OPTION_BOOLEAN},
+    {"table", OPTION_STRING},
+    {NULL, 0}
+};
 
 void usage()
 /* Explain usage and exit. */
@@ -81,6 +92,23 @@ if (s[0] == '(')
     return -atoi(s+1);
 else
     return atoi(s);
+}
+
+boolean checkRepeat(struct rmskOut *r)
+/* check for bogus repeat */
+{
+/* this is bogus on both strands */
+if (r->repStart > r->repEnd)
+    {
+    badRepCnt++;
+    if (verboseLevel() > 1)
+        {
+        verbose(2, "bad rep range in: ");
+        rmskOutTabOut(r, stderr);
+        }
+    return FALSE;
+    }
+return TRUE;
 }
 
 void loadOneOut(struct sqlConnection *conn, char *rmskFile, char *suffix)
@@ -145,9 +173,12 @@ while (lineFileNext(lf, &line, &lineSize))
     r.repEnd = atoi(words[12]);
     r.repLeft = parenSignInt(words[13], lf);
     r.id[0] = ((wordCount > 14) ? words[14][0] : ' ');
-    if (!noBin)
-       fprintf(f, "%u\t", hFindBin(r.genoStart, r.genoEnd));
-    rmskOutTabOut(&r, f);
+    if (checkRepeat(&r))
+        {
+        if (!noBin)
+            fprintf(f, "%u\t", hFindBin(r.genoStart, r.genoEnd));
+        rmskOutTabOut(&r, f);
+        }
     }
 
 /* Create database table. */
@@ -212,20 +243,25 @@ for (i=0; i<rmskCount; ++i)
     loadOneOut(conn, rmskFileNames[i], suffix);
     }
 sqlDisconnect(&conn);
+if (badRepCnt > 0)
+    {
+    warn("note: %d records dropped due to repStart > repEnd\n", badRepCnt);
+    if (verboseLevel() < 2)
+        warn("      run with -verbose=2 for details\n");
+    }
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (argc < 3)
     usage();
-noSplit = (cgiBoolean("noSplit") || cgiBoolean("nosplit"));
-suffix = cgiOptionalString("table");
-if (suffix == NULL) 
-    suffix = "rmsk";
-tabFileName = cgiOptionalString("tabFile");
-if (tabFileName == NULL) tabFileName = cgiOptionalString("tabfile");
+noSplit = (optionExists("noSplit") || optionExists("nosplit"));
+suffix = optionVal("table", "rmsk");
+tabFileName = optionVal("tabFile", tabFileName);
+if (tabFileName == NULL)
+    tabFileName = optionVal("tabfile", tabFileName);
 if (tabFileName != NULL)
     tabFile = mustOpen(tabFileName, "w");
 hgLoadOut(argv[1], argc-2, argv+2, suffix) ;

@@ -20,14 +20,18 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: sumStats.c,v 1.14 2004/11/07 16:49:09 kent Exp $";
+static char const rcsid[] = "$Id: sumStats.c,v 1.15 2004/11/17 23:27:56 hiram Exp $";
 
-long long basesInRegion(struct region *regionList)
-/* Count up all bases in regions. */
+long long basesInRegion(struct region *regionList, int limit)
+/* Count up all bases in regions to limit number of regions, 0 == no limit */
 {
 long long total = 0;
 struct region *region;
-for (region = regionList; region != NULL; region = region->next)
+int regionCount = 0;
+
+for (region = regionList;
+	(region != NULL) && (!(limit && (regionCount >= limit)));
+	    region = region->next, ++regionCount)
     {
     if (region->end == 0)
         total += hChromSize(region->chrom);
@@ -37,15 +41,22 @@ for (region = regionList; region != NULL; region = region->next)
 return total;
 }
 
-long long gapsInRegion(struct sqlConnection *conn, struct region *regionList)
-/* Return count of gaps in all regions. */
+long long gapsInRegion(struct sqlConnection *conn, struct region *regionList,
+	int limit)
+/* Return count of gaps in all regions to limit number of regions,
+ *	limit=0 == no limit, do them all
+ */
 {
 long long gapBases = 0;
 char *splitTable = chromTable(conn, "gap");
+int regionCount = 0;
+
 if (sqlTableExists(conn, splitTable))
     {
     struct region *region;
-    for (region = regionList; region != NULL; region = region->next)
+    for (region = regionList;
+	    (region != NULL) && (!(limit && (regionCount >= limit)));
+		region = region->next, ++regionCount)
 	{
 	int rowOffset;
 	char **row;
@@ -291,8 +302,8 @@ for (region = regionList; region != NULL; region = region->next)
     freeTime  += clock1000() - endTime;
     }
 
-regionSize = basesInRegion(regionList);
-gapTotal = gapsInRegion(conn, regionList);
+regionSize = basesInRegion(regionList, 0);
+gapTotal = gapsInRegion(conn, regionList, 0);
 realSize = regionSize - gapTotal;
 
 

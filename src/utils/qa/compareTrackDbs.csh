@@ -3,7 +3,7 @@
 if ($#argv < 3 || $#argv > 4) then
  echo ""
  echo "  compares trackDb on two machines."
- echo "  optionally compares other field instead of tableName."
+ echo "  optionally compares another field instead of tableName."
  echo "  this will break when hgText is replaced by hgTables."
  echo
  echo "    usage: machine1, machine2, database, [field] (defaults to tableName)"
@@ -15,11 +15,12 @@ endif
 #set machine1 = "hgwbeta"
 #set machine2 = "hgw1"
 
-set machine1 = $1
-set machine2 = $2
+set machine1 = $argv[1]
+set machine2 = $argv[2]
+set db = $argv[3]
 
-set validMach1=`echo $machine1 | grep "hgw" | wc -l`
-set validMach2=`echo $machine2 | grep "hgw" | wc -l`
+set validMach1=`echo $machine1 | egrep "hgw|mgc" | wc -l`
+set validMach2=`echo $machine2 | egrep "hgw|mgc" | wc -l`
 
 if ($validMach1 == 0 || $validMach2 == 0) then
   echo
@@ -29,9 +30,15 @@ if ($validMach1 == 0 || $validMach2 == 0) then
   exit 1
 endif
 
+set dbOk=`hgsql -t -e "SHOW databases" | grep " $db " | wc -l`
+if ($dbOk == 0) then
+  echo
+  echo " $db is not a valid database."
+  echo "    usage: machine1, machine2, database, [field] (defaults to tableName)"
+  echo
+  exit 1
+endif
 
-#set db = "hg16"
-set db = $3
 
 set table = "trackDb"
 set field = "tableName"
@@ -43,6 +50,7 @@ if ($#argv == 4) then
   if ($fieldOk == 0) then
     echo
     echo " $field is not a valid field for $table"
+    echo "    usage: machine1, machine2, database, [field] (defaults to tableName)"
     echo
     exit 1
   endif
@@ -71,7 +79,7 @@ if ( $status ) then
  echo "The differences above are found in $table.$field"
  echo "between $machine1 and $machine2\n"
 else
-  echo " No differences in $table.$field."
+  echo "\n  No differences in $table.$field"
   echo
 endif
 

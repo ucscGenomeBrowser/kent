@@ -26,6 +26,7 @@ table pushQ
     lstring   notes;      "Notes"
     char [1]  pushState;  "Push State = NYD = No, Yes, Done"
     char [10] initdate;   "Initial Submission Date"
+    char [10] lastdate;   "Last QA Date"
     uint      bounces;    "Bounce-count (num times bounced back to developer)"
     char[8]   lockUser;   "User who has locked record, or empty string"
     char[16]  lockDateTime; "When user placed lock, or empty string"

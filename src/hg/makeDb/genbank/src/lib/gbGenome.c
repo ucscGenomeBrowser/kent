@@ -3,7 +3,7 @@
 #include "gbDefs.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: gbGenome.c,v 1.23 2004/11/05 19:41:19 angie Exp $";
+static char const rcsid[] = "$Id: gbGenome.c,v 1.25 2004/11/12 18:16:53 angie Exp $";
 
 struct dbToSpecies
 /* structure mapping database prefix to species (e.g. hg -> "Homo sapiens").
@@ -23,6 +23,7 @@ static char *rnNames[] = {"Rattus norvegicus", "Rattus sp.", NULL};
 static char *ciNames[] = {"Ciona intestinalis", NULL};
 static char *frNames[] = {"Takifugu rubripes", NULL};
 static char *dmNames[] = {"Drosophila melanogaster", "Drosophila sp.", NULL};
+static char *dpNames[] = {"Drosophila pseudoobscura", NULL};
 static char *sacCerNames[] = {"Saccharomyces cerevisiae", NULL};
 static char *panTroNames[] = {"Pan troglodytes", NULL};
 static char *galGalNames[] = {"Gallus gallus", "Gallus sp.", NULL};
@@ -33,8 +34,9 @@ static char *canFamNames[] = {"Canis familiaris", "Canis sp.",
 static char *droYakNames[] = {"Drosophila yakuba", NULL};
 static char *droAnaNames[] = {"Drosophila ananassae", NULL};
 static char *droMojNames[] = {"Drosophila mojavensis", NULL};
+static char *droVirNames[] = {"Drosophila virilis", NULL};
 static char *anoGamNames[] = {"Anopheles gambiae", NULL};
-static char *dpNames[] = {"Drosophila pseudoobscura", NULL};
+static char *apiMelNames[] = {"Apis mellifera", NULL};
 static char *tetNigNames[] = {"Tetraodon nigroviridis", NULL};
 static char *bosTauNames[] = {"Bos taurus", NULL};
 static char *xenTroNames[] = {"Xenopus tropicalis", NULL};
@@ -57,6 +59,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"ci", ciNames, NULL},
     {"fr", frNames, NULL},
     {"dm", dmNames, NULL},
+    {"dp", dpNames, NULL},
     {"sacCer", sacCerNames, NULL},
     {"panTro", panTroNames, NULL},
     {"galGal", galGalNames, NULL},
@@ -66,8 +69,9 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"droYak", droYakNames, NULL},
     {"droAna", droAnaNames, NULL},
     {"droMoj", droMojNames, NULL},
+    {"droVir", droVirNames, NULL},
     {"anoGam", anoGamNames, NULL},
-    {"dp", dpNames, NULL},
+    {"apiMel", apiMelNames, NULL},
     /*  "Tetraodon" was onced used for "Tetraodon nigroviridis" */
     {"tetNig", tetNigNames, "Tetraodon"},
     {"bosTau", bosTauNames, "Bos taurus "},

@@ -1205,6 +1205,7 @@ windowingFunction Mean
 gridDefault OFF
 color 0,128,255
 altColor 255,128,0
+spanList 1,1024
 type wig 0 100 
 
 track gc5Base
@@ -1221,6 +1222,7 @@ windowingFunction Mean
 color 0,0,0
 altColor 128,128,128
 defaultViewLimits 30:70
+spanList 5
 type wig 0 100 
 
 track encode_tba
@@ -1424,7 +1426,6 @@ longLabel PhastCons Conserved Elements
 group compGeno
 priority 105
 visibility hide
-spectrum on
 exonArrows off
 showTopScorers 200
 type bed 5 .
@@ -1570,7 +1571,8 @@ searchTable snp
 searchMethod exact
 searchType bed
 shortCircuit 1
-termRegex (rs[0-9]*)
+termRegex (rs[0-9]{3}[0-9]+|SNP_A-[0-9]+(_[0-9]+)?)
+dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
 searchPriority 12
 padding 5000
 
@@ -1690,6 +1692,15 @@ searchPriority 15
 
 searchName snpMapLong
 searchTable snpMap
+searchMethod exact
+searchType bed
+termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
+dontCheck (rs[0-9]{3}[0-9]+|SNP_A-[0-9]+(_[0-9]+)?)
+searchPriority 16
+padding 5000
+
+searchName snpLong
+searchTable snp
 searchMethod exact
 searchType bed
 termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)

@@ -22,7 +22,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.84 2004/10/31 02:55:42 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.86 2004/11/17 23:27:56 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -350,11 +350,16 @@ if (sameString(region, "range"))
 return region;
 }
 
-void regionFillInChromEnds(struct region *regionList)
-/* Fill in end fields if set to zero to be whole chrom. */
+void regionFillInChromEnds(struct region *regionList, int limit)
+/* Fill in end fields if set to zero to be whole chrom up
+	to limit number of regions, limit=0 == no limit, all chroms */
 {
 struct region *region;
-for (region = regionList; region != NULL; region = region->next)
+int regionCount=0;
+
+for (region = regionList;
+	(region != NULL) && (!(limit && (regionCount >= limit)));
+	    region = region->next, ++regionCount)
     {
     if (region->end == 0)
         region->end = hChromSize(region->chrom);
@@ -367,7 +372,7 @@ struct region *getRegionsWithChromEnds()
  * than zero for full chromosomes. */
 {
 struct region *regionList = getRegions();
-regionFillInChromEnds(regionList);
+regionFillInChromEnds(regionList, 0);
 return regionList;
 }
 
@@ -961,6 +966,9 @@ else
 void doOutPrimaryTable(char *table, struct sqlConnection *conn)
 /* Dump out primary table. */
 {
+if (anyIntersection())
+    errAbort("Can't do all fields output when intersection is on. "
+    "Please go back and select another output type, or clear the intersection.");
 textOpen();
 doTabOutTable(database, table, conn, NULL);
 }

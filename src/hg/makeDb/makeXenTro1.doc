@@ -591,7 +591,11 @@ psl/$(root1)_$(root2).psl}
     # Sort alignments:
     ssh kksilo
     cd /cluster/data/xenTro1/bed/blatFr1
+    
+# added the liftUp step, and reloaded blatFr1 table.  11/16/04 Fan.    
     pslCat -dir psl \
+    | liftUp -type=.psl -pslQ stdout /cluster/data/fr1/jkStuff/liftAll.lft \
+          warn stdin \
     | pslSortAcc nohead chrom /tmp stdin
 
     # load psl into database:
@@ -724,12 +728,12 @@ SEQ2_LEN=$BASE/S2.len
     cd /cluster/data/xenTro1/bed/zb.galGal2
     mkdir -p axtChain/run1
     cd axtChain/run1
-    mkdir out chain
+    mkdir out chainRaw
     ls -1S /cluster/data/xenTro1/bed/zb.galGal2/axtTemp/*.axt \
       > input.lst
     cat << '_EOF_' > gsub
 #LOOP
-doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+doChain {check in exists $(path1)} {check out line+ chainRaw/$(root1).chain} {check out line+ out/$(root1).out}
 #ENDLOOP
 '_EOF_'
     # << this line makes emacs coloring happy
@@ -753,10 +757,9 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
                       -linearGap=../../xenopusHumanTuned.gap \
                       -minScore=5000 $1 \
        /iscratch/i/galGal2/nib \
-       /iscratch/i/xenTro1/xenTro1.2bit $2 \
-    | chainAntiRepeat /iscratch/i/galGal2/nib  \
-       /iscratch/i/xenTro1/xenTro1.2bit stdin $3 \
+       /iscratch/i/xenTro1/xenTro1.2bit $2 $3
 '_EOF_'
+
     # << this line makes emacs coloring happy
     chmod a+x doChain
     gensub2 input.lst single gsub jobList
@@ -775,10 +778,21 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 # Note, the two crashed were from chr6_random and chr8_random, that simply
 # had no alignments and thus produced empty files, so no problem.
 
+    # On the cluster server weed the chains for repeats
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/zb.galGal2/axtChain
+    mkdir chain
+    cd chainRaw
+    foreach i (*.chain)
+        chainAntiRepeat /cluster/data/galGal2/nib /cluster/data/xenTro1/xenTro1.2bit $i ../chain/$i
+    end
+
     # now on the cluster server, sort chains.  The chainMergeSort and chainSplit
     # steps both take about 10 minutes
     ssh kksilo
     cd /cluster/data/xenTro1/bed/zb.galGal2/axtChain
+
+
     chainMergeSort run1/chain/*.chain > all.chain
     rm run1/chain/*.chain
     rm -r ../axtTemp
@@ -971,12 +985,12 @@ cat `ls -1 *.lav | sort -g` \
     cd /cluster/data/xenTro1/bed/zb.hg17
     mkdir -p axtChain/run1
     cd axtChain/run1
-    mkdir out chain
+    mkdir out chainRaw
     ls -1S /cluster/data/xenTro1/bed/zb.hg17/axtChrom/*.axt \
       > input.lst
     cat << '_EOF_' > gsub
 #LOOP
-doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+doChain {check in exists $(path1)} {check out line+ chainRaw/$(root1).chain} {check out line+ out/$(root1).out}
 #ENDLOOP
 '_EOF_'
     # << this line makes emacs coloring happy
@@ -1015,6 +1029,15 @@ IO & Wait Time:                  7221s     120.34m     2.01h    0.08d  0.000 y
 Average job time:                 209s       3.48m     0.06h    0.00d
 Longest job:                     2042s      34.03m     0.57h    0.02d
 Submission to last job:          2042s      34.03m     0.57h    0.02d
+
+    # On the cluster server weed the chains for repeats
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/zb.hg17/axtChain
+    mkdir chain
+    cd chainRaw
+    foreach i (*.chain)
+        chainAntiRepeat /cluster/data/galGal2/nib /cluster/data/xenTro1/xenTro1.2bit $i ../chain/$i
+    end
 
     # now on the cluster server, sort chains.  The chainMergeSort and chainSplit
     # steps both take about 10 minutes
@@ -1196,12 +1219,12 @@ SEQ2_LEN=$BASE/S2.len
     cd /cluster/data/xenTro1/bed/zb.mm5
     mkdir -p axtChain/run1
     cd axtChain/run1
-    mkdir out chain
+    mkdir out chainRaw
     ls -1S /cluster/data/xenTro1/bed/zb.mm5/axtTemp/*.axt \
       > input.lst
     cat << '_EOF_' > gsub
 #LOOP
-doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+doChain {check in exists $(path1)} {check out line+ chainRaw/$(root1).chain} {check out line+ out/$(root1).out}
 #ENDLOOP
 '_EOF_'
     # << this line makes emacs coloring happy
@@ -1240,6 +1263,15 @@ IO & Wait Time:                  7221s     120.34m     2.01h    0.08d  0.000 y
 Average job time:                 209s       3.48m     0.06h    0.00d
 Longest job:                     2042s      34.03m     0.57h    0.02d
 Submission to last job:          2042s      34.03m     0.57h    0.02d
+
+    # On the cluster server weed the chains for repeats
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/zb.mm5/axtChain
+    mkdir chain
+    cd chainRaw
+    foreach i (*.chain)
+        chainAntiRepeat /cluster/data/galGal2/nib /cluster/data/xenTro1/xenTro1.2bit $i ../chain/$i
+    end
 
     # now on the cluster server, sort chains.  The chainMergeSort and chainSplit
     # steps both take about 10 minutes
@@ -1411,7 +1443,7 @@ SEQ2_LEN=$BASE/S2.len
     end
 
 
-# CHAIN CHICKEN BLASTZ 
+# CHAIN ZEBRAFISH BLASTZ 
     # Run axtChain on little cluster
     # Note, for this one might as well do it serially on file server too.
     # The longest job (chr19) takes up 90% of the time.
@@ -1419,12 +1451,12 @@ SEQ2_LEN=$BASE/S2.len
     cd /cluster/data/xenTro1/bed/zb.danRer1
     mkdir -p axtChain/run1
     cd axtChain/run1
-    mkdir out chain
+    mkdir out chainRaw
     ls -1S /cluster/data/xenTro1/bed/zb.danRer1/axtTemp/*.axt \
       > input.lst
     cat << '_EOF_' > gsub
 #LOOP
-doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+doChain {check in exists $(path1)} {check out line+ chainRaw/$(root1).chain} {check out line+ out/$(root1).out}
 #ENDLOOP
 '_EOF_'
     # << this line makes emacs coloring happy
@@ -1468,6 +1500,15 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 # Note, the two crashed were from chr6_random and chr8_random, that simply
 # had no alignments and thus produced empty files, so no problem.
 
+    # On the cluster server weed the chains for repeats
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/zb.danRer1/axtChain
+    mkdir chain
+    cd chainRaw
+    foreach i (*.chain)
+        chainAntiRepeat /cluster/data/galGal2/nib /cluster/data/xenTro1/xenTro1.2bit $i ../chain/$i
+    end
+
     # now on the cluster server, sort chains.  The chainMergeSort and chainSplit
     # steps both take about 10 minutes
     ssh kksilo
@@ -1487,7 +1528,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     end
     featureBits danRer1 chainXenTro1Link
 
-# NET XENOPUS BLASTZ
+# NET XENOPUS/ZEBRAFISH BLASTZ
     ssh kksilo
     cd /cluster/data/xenTro1/bed/zb.danRer1/axtChain
     chainPreNet all.chain ../S1.len ../S2.len stdout \
@@ -1535,13 +1576,13 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     rm noClass.net
     netFilter -minGap=10 xenTro1.net | hgLoadNet xenTro1 netDanRer1 stdin
 
-    # Load chains into database (takes about 3 hours).  These are so large
+    # Load chains into database (takes about 8 hours).  These are so large
     # we have to split them first.  
     ssh kksilo
     cd /cluster/store8/xenTro1/bed/bz.danRer1/axtChain
     chainSplit -lump=10 lumps all.chain
 
-    ssh hgwdev (TODO - loaded up to 005.chain overnight)
+    ssh hgwdev
     cd /cluster/store8/xenTro1/bed/bz.danRer1/axtChain/lumps
     hgLoadChain -tIndex xenTro1 chainDanRer1 000.chain
     rm 000.chain
@@ -1651,7 +1692,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 	  echo msa_split $i
 	  /cluster/bin/phast/msa_split /cluster/data/xenTro1/bed/multiz/mtz/$i.maf \
 	     --refseq /cluster/bluearc/xenTro1/scaffoldFa/$i.fa \
-	     --in-format MAF --windows 1000000,1000 --between-blocks 5000 \
+	     --in-format MAF --windows 1000000,0 --between-blocks 5000 \
 	     --out-format SS --out-root $i
       endif
   end
@@ -1960,3 +2001,49 @@ md5sum *.zip > md5sum.txt
     mv /cluster/data/xenTro1/zip/axtNet .
     md5sum *.gz > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
+
+# LOAD CPGISSLANDS (DONE 10/28/04 Fan)
+    ssh hgwdev
+    mkdir -p /cluster/data/xenTro1/bed/cpgIsland
+    cd /cluster/data/xenTro1/bed/cpgIsland
+    # Build software from Asif Chinwalla (achinwal@watson.wustl.edu)
+    cvs co hg3rdParty/cpgIslands
+    cd hg3rdParty/cpgIslands
+    make
+    mv cpglh.exe /cluster/data/xenTro1/bed/cpgIsland/
+    
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/cpgIsland
+    foreach f (../../softMasked2/*.fa)
+      set fout=$f:t:r:r.cpg
+      echo running cpglh on $f to $fout
+      ./cpglh.exe $f > $fout
+    end
+    # Transform cpglh output to bed +
+    cat << '_EOF_' > filter.awk
+/* Input columns: */
+/* chrom, start, end, len, CpG: cpgNum, perGc, cpg:gpc, observed:expected */
+/* chr1\t 41776\t 42129\t 259\t CpG: 34\t 65.8\t 0.92\t 0.94 */
+/* Output columns: */
+/* chrom, start, end, name, length, cpgNum, gcNum, perCpg, perGc, obsExp */
+/* chr1\t41775\t42129\tCpG: 34\t354\t34\t233\t19.2\t65.8\to0.94 */
+{
+$2 = $2 - 1;
+width = $3 - $2;
+printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
+       $1, $2, $3, $5,$6, width,
+       $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
+}
+'_EOF_'
+    # << this line makes emacs coloring happy
+    awk -f filter.awk chr*.cpg > cpgIsland.bed
+
+    # load into database:
+    ssh hgwdev
+    cd /cluster/data/xenTro1/bed/cpgIsland
+    hgLoadBed xenTro1 cpgIslandExt -tab -noBin \
+      -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
+    wc -l cpgIsland.bed 
+#  44091 cpgIsland.bed
+    featureBits xenTro1 cpgIslandExt
+#19279778 bases of 1381238994 (1.396%) in intersection

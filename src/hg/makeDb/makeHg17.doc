@@ -4206,18 +4206,12 @@ XXX - have not created the knownToEnsembl table yet - 2004-07-15 - Hiram
 hgMapToGene hg17 ensGene knownGene knownToEnsembl
 #	table row count went from previous version: 36068 to 38251
 
-XXX - DO NOT YET HAVE snp tables - not at NCBI yet - 2004-07-15 - Hiram
-# Make knownToCdsSnp column.  This is a little complicated by
-# having to merge data form the snpTsc and the snpNih tracks.
-hgMapToGene hg17 snpTsc knownGene knownToCdsSnp -createOnly -all -cds
-hgMapToGene hg17 snpTsc knownGene snp1 -noLoad -all -cds
-hgMapToGene hg17 snpNih knownGene snp2 -noLoad -all -cds
-sort snp1.tab snp2.tab > knownToCdsSnp.tab
-rm snp1.tab snp2.tab
-hgsql \
-    -e 'load data local infile "knownToCdsSnp.tab" into table knownToCdsSnp;' \
-	hg17
-#	row count went from 87273 to 106199
+# Make knownToCdsSnp table (DONE Nov 11, 2004, Heather)
+  ssh hgwdev
+  nice hgMapToGene hg17 snp knownGene knownToCdsSnp -all -cds
+# row count 165728
+# unique 34013
+# approx. 5 minutes running time
 
 # Make C. elegans ortholog column using blastp on wormpep.
 # First make C. elegans protein database and copy it to cluster/bluearc
@@ -4539,7 +4533,7 @@ cd /cluster/data/hg17/bed/geneSorter/blastp/dm1/run/out
 hgLoadBlastTab hg17 dmBlastTab -maxPer=1 *.tab
 #	row count went from 29322 to 29341
 
-####  Blat knownGene proteins to determine exons (braney 2004-06-20)
+####  Blat knownGene proteins to determine exons (braney 2004-06-20 DONE)
     ssh hgwdev
     cd /cluster/data/hg17/bed
     mkdir blat.hg17KG.2004-06-20
@@ -4547,8 +4541,12 @@ hgLoadBlastTab hg17 dmBlastTab -maxPer=1 *.tab
     ln -s  blat.hg17KG.2004-06-20 blat.hg17KG
     cd blat.hg17KG
     pepPredToFa hg17 knownGenePep known.fa
+    hgPepPred hg17 generic blastKGPep00 known.fa
     grep ">" known.fa | sed "s/>//" > kgName.lst
-    kgName hg17 kgName.lst kg.mapNames
+    kgName hg17 kgName.lst blastKGRef00
+    hgsql hg17 < ~/kent/src/lib/hg/blastRef.sql
+    echo "rename table blastRef to blastKGRef00" | hgsql hg17
+    echo "load data local infile 'blastKGRef00' into table blastKGRef00" | hgsql hg17
     ssh kk
     cd /cluster/data/hg17/bed/blat.hg17KG
     cat << '_EOF_' > blatSome
@@ -6897,6 +6895,16 @@ cat > makeMaf.csh << '_EOF_'
       /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/rat.chain.gz
     cp -p /cluster/data/hg17/bed/blastz.rn3/axtChain/rat.net.gz \
       /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/rat.net.gz
+    cd /usr/local/apache/htdocs/goldenPath/hg17/vsRn3
+    md5sum *.gz */*.gz > md5sum.txt
+    # Update the README.txt
+
+# ADD CHAIN AND NET TO VSHG17 DOWNLOAD AREAS (DONE Sept. 8th, 2004, heather)
+    ssh hgwdev
+    cp -p /cluster/data/mm5/bed/blastz.hg17/axtChain/all.chain.gz \
+      /usr/local/apache/htdocs/goldenPath/mm5/vsHg17/human.chain.gz
+    cp -p /cluster/data/mm5/bed/blastz.hg17/axtChain/human.net.gz \
+      /usr/local/apache/htdocs/goldenPath/mm5/vsHg17/human.net.gz
     cd /usr/local/apache/htdocs/goldenPath/hg17/vsRn3
     md5sum *.gz */*.gz > md5sum.txt
     # Update the README.txt

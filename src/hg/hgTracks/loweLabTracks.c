@@ -255,7 +255,7 @@ int length, x, y, z;
 char codeList[18] = {'g', 'z', 'c','e','o','b','v','u', 'y', 't','h','d','k','l', 'm','a','n','r'};
 char *codeNames[18] = {"within genus", "\t", "crenarchaea","euryarchaea","\t","bacteria", "\t", "eukarya","\t","thermophile","hyperthermophile","acidophile","alkaliphile", "halophile","methanogen","strict aerobe","strict anaerobe", "anerobe or aerobe"}; int i;
  
- sprintf(query, "select * from %s where chromStart > %i AND chromEnd < %i", tg->mapName, winStart,winEnd);
+sprintf(query, "select * from %s where chromStart > %i AND chromEnd < %i", tg->mapName, winStart,winEnd);
 sr = sqlGetResult(conn, query);
 
 while ((row = sqlNextRow(sr)) != NULL)
@@ -283,9 +283,47 @@ for(cb = list; cb != NULL; cb = cb->next)
     tempstring=cloneString(cb->code);
  
     chopString(tempstring, "," , temparray, ArraySize(temparray));
-    temparray3=(char**)calloc(18*8,8);
+    temparray3=(char**)calloc(18*8,sizeof(char**));
     for(x=0; x<18; x++){
-	temparray3[x]=cloneString(temparray[x]);	
+        temparray3[x]=(char *)calloc(256, sizeof(char*));
+	//Fix to cloneString problem when both patricia and my track
+	//was showing at the same time	
+	if(temparray[x]!=NULL){
+	    if(atoi(temparray[x])==1000){
+		temparray3[x]="1000";
+	    }
+	    else if(atoi(temparray[x])==900){
+		temparray3[x]="900";
+	    }
+	    else if(atoi(temparray[x])==800){
+		temparray3[x]="800";
+            }
+	    else if(atoi(temparray[x])==700){
+		temparray3[x]="700";
+	    }
+	    else if(atoi(temparray[x])==600){
+		temparray3[x]="600";
+	    }
+	    else if(atoi(temparray[x])==500){
+		temparray3[x]="500";
+	    }
+	    else if(atoi(temparray[x])==400){
+		temparray3[x]="400";
+	    }
+	    else if(atoi(temparray[x])==300){
+		temparray3[x]="300";
+	    }
+	    else if(atoi(temparray[x])==200){
+		temparray3[x]="200";
+	    }
+	    else if(atoi(temparray[x])==100){
+		temparray3[x]="100";
+	    }
+	    else{
+		temparray3[x]="0";
+ 	    }
+        }
+	
     }
     lf->extra = temparray3;
     
@@ -334,6 +372,7 @@ if(tg->limitedVis != tvDense)
 slFreeList(&track);
 
 slFreeList(&scores);
+//slFreeList(&tg);
 
 slFreeList(&codes);
 codeBlastFree(&list);

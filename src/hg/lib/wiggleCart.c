@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.10 2004/05/11 17:08:02 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.12 2004/11/17 17:59:01 hiram Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 

@@ -3695,3 +3695,10 @@ cat > template << 'EOF'
     cut -f 4 stsMarkers2.final | sort -n | uniq > stsMarkers2.found
     wc -l stsMarkers2.found
     # 16310 stsMarkers2.found out of 17311 
+
+# ENABLE AUTO BUILD MGC GENES TRACK (DONE markd)
+   - add the following lines to danRer1 entry in /cluster/data/genbank/etc/genbank.conf
+      danRer1.mgcTables.default = full
+      danRer1.mgcTables.mgc = all
+   - wait one day for nightly build to align and load them into the db
+   - rebuild trackDb

@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.28 2004/10/26 23:05:59 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.33 2004/11/18 20:00:25 hiram Exp $";
 
 extern char *maxOutMenu[];
 
@@ -197,6 +197,8 @@ switch (wigOutType)
     };
 
 WIG_INIT;
+if (hasConstraint)
+    freeMem(dataConstraint);	/* been cloned into wds */
 
 wds->setMaxOutput(wds, maxOut);
 wds->setChromConstraint(wds, region->chrom);
@@ -236,7 +238,7 @@ else
 	    {
 	    unsigned span;	
 	    span = minSpan(conn, splitTableOrFileName, region->chrom,
-		region->start, region->end, cart);
+		region->start, region->end, cart, curTrack);
 	    wds->setSpanConstraint(wds, span);
 	    valuesMatched = wds->getDataViaBed(wds, database,
 		splitTableOrFileName, operations, &intersectBedList);
@@ -392,6 +394,8 @@ struct bed *intersectBedList = NULL;
 int maxOut;
 
 WIG_INIT;
+if (hasConstraint)
+    freeMem(dataConstraint);	/* been cloned into wds */
 
 maxOut = wigMaxOutput(database, curTable);
 
@@ -431,7 +435,7 @@ else
 
 	/* XXX TBD, watch for a span limit coming in as an SQL filter */
 	span = minSpan(conn, splitTableOrFileName, region->chrom,
-	    region->start, region->end, cart);
+	    region->start, region->end, cart, curTrack);
 	wds->setSpanConstraint(wds, span);
 
 	if (table2 || intersectBedList)
@@ -494,17 +498,18 @@ void doSummaryStatsWiggle(struct sqlConnection *conn)
 {
 struct trackDb *track = curTrack;
 char *table = curTable;
-struct region *region, *regionList = getRegionsWithChromEnds();
+struct region *region, *regionList = getRegions();
 char *regionName = getRegionName();
-long long regionSize = basesInRegion(regionList);
-long long gapTotal = gapsInRegion(conn, regionList);
-long startTime, wigFetchTime;
+long long regionSize = 0;
+long long gapTotal = 0;
+long startTime = 0, wigFetchTime = 0, freeTime = 0;
 char splitTableOrFileName[256];
 struct customTrack *ct;
 boolean isCustom = FALSE;
 struct wiggleDataStream *wds = NULL;
 unsigned long long valuesMatched = 0;
 int regionCount = 0;
+int regionsDone = 0;
 unsigned span = 0;
 char *dataConstraint;
 double ll = 0.0;
@@ -541,6 +546,8 @@ for (region = regionList; region != NULL; region = region->next)
     struct bed *intersectBedList = NULL;
     boolean hasBin;
     int operations;
+
+    ++regionsDone;
 
     if (table2)
 	{
@@ -591,7 +598,7 @@ for (region = regionList; region != NULL; region = region->next)
 	if (hFindSplitTable(region->chrom, table, splitTableOrFileName, &hasBin))
 	    {
 	    span = minSpan(conn, splitTableOrFileName, region->chrom,
-		region->start, region->end, cart);
+		region->start, region->end, cart, curTrack);
 	    wds->setSpanConstraint(wds, span);
 	    if (table2 || intersectBedList)
 		{
@@ -641,7 +648,18 @@ for (region = regionList; region != NULL; region = region->next)
 	wds->freeStats(wds);
 	gotSome = TRUE;
 	}
-    }
+    if ((regionCount > MAX_REGION_DISPLAY) &&
+		(regionsDone >= MAX_REGION_DISPLAY))
+	{
+	hPrintf("<TR><TH ALIGN=CENTER COLSPAN=12> Can not display more "
+	    "than %d regions, <BR> would take too much time </TH></TR>\n",
+		MAX_REGION_DISPLAY);
+	break;	/*	exit this for loop	*/
+	}
+    }	/*for (region = regionList; region != NULL; region = region->next) */
+
+if (hasConstraint)
+    freeMem(dataConstraint);	/* been cloned into wds */
 
 if (1 == regionCount)
     {
@@ -655,6 +673,8 @@ if (1 == regionCount)
 
     if ( ! ((valuesMatched == 0) && table2) )
 	wds->statsOut(wds, "stdout", TRUE, TRUE, TRUE, FALSE);
+    regionSize = basesInRegion(regionList,0);
+    gapTotal = gapsInRegion(conn, regionList,0);
     }
 else
     {	/* this is a bit of a kludge here since these printouts are done in the
@@ -663,9 +683,24 @@ else
 	 *	pulled out of there and made independent and more
 	 *	versatile.
 	 */
-    long long realSize = regionSize - gapTotal;
+    long long realSize;
     double variance;
     double stddev;
+
+    /*	Too expensive to lookup the numbers for thousands of regions */
+    if (regionsDone >= MAX_REGION_DISPLAY)
+	{
+	regionSize = basesInRegion(regionList,MAX_REGION_DISPLAY);
+	regionFillInChromEnds(regionList, MAX_REGION_DISPLAY);
+	gapTotal = gapsInRegion(conn, regionList,MAX_REGION_DISPLAY);
+	}
+    else
+	{
+	regionSize = basesInRegion(regionList,0);
+	regionFillInChromEnds(regionList, 0);
+	gapTotal = gapsInRegion(conn, regionList,0);
+	}
+    realSize = regionSize - gapTotal;
 
     /*	close the table which was left open in the loop above	*/
     if (!gotSome)
@@ -702,6 +737,7 @@ else
     hPrintf("\t<TD ALIGN=RIGHT> %g </TD>\n", variance);
     hPrintf("\t<TD ALIGN=RIGHT> %g </TD>\n", stddev);
     hPrintf("</TR>\n");
+    wigStatsTableHeading(stdout, TRUE);
     hPrintf("</TABLE></TD></TR></TABLE></P>\n");
     }
 
@@ -743,6 +779,26 @@ stringStatRow("region", regionName);
 numberStatRow("bases in region", regionSize);
 numberStatRow("bases in gaps", gapTotal);
 floatStatRow("load and calc time", 0.001*wigFetchTime);
+stringStatRow("filter", (anyFilter() ? "on" : "off"));
+stringStatRow("intersection", (anyIntersection() ? "on" : "off"));
 hTableEnd();
 htmlClose();
 }	/*	void doSummaryStatsWiggle(struct sqlConnection *conn)	*/
+
+void wigShowFilter(struct sqlConnection *conn)
+/* print out wiggle data value filter */
+{
+double ll, ul;
+char *constraint;
+
+if (checkWigDataFilter(database, curTable, &constraint, &ll, &ul))
+{
+    if (constraint && sameWord(constraint, "in range"))
+	{
+	hPrintf("&nbsp;&nbsp;data value %s [%g : %g)\n", constraint, ll, ul);
+	}
+    else
+	hPrintf("&nbsp;&nbsp;data value %s %g\n", constraint, ll);
+    freeMem(constraint);
+}
+}

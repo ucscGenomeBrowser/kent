@@ -2,9 +2,12 @@ include ../../../../inc/common.mk
 
 all:
 
-test: rnaBindingClusterCorrTest rnaBindingClusterCorrAntiTest \
-   altProbesBrainSpTest
+test: eseScorerTest rnaBindingClusterCorrTest rnaBindingClusterCorrAntiTest altProbesTest
 
+
+eseScorerTest: mkout
+	eseScorer input/eseScorerTest.score input/eseScorerTest.fa output/eseScorerTest.result
+	diff output/eseScorerTest.result expected/eseScorerTest.gold.out
 
 #	altHtmlPagesSjRatioTest altHtmlPagesSjRatioLog2Test \
 
@@ -13,13 +16,8 @@ test: rnaBindingClusterCorrTest rnaBindingClusterCorrAntiTest \
 # psIntenTest.tab - Intensities for gene probe sets.
 # rnaBinderTest.tab - List of fake RNA binding genes to compare to cluster.
 # sjIndexTest.tab - Splice junction indexes for sj's in cluster.
-
-altProbesBrainSpTest: mkout
-	altProbes -junctionProbes=input/ndr2PSets.bed -probFile=input/altProbesNdr2PSets.pval \
-	   -db=mm2 -intensityFile=input/altProbsNdr2PSets.intensity \
-	   -spliceFile=input/altProbesNdr2CassEvent.splice -brainSpecific=bs.clean >& tmp.txt
-	diff -u tmp.txt expected/Ndr2BsSpecific.txt
-	rm tmp.txt
+altProbesTest: 
+	altProbes -doTests
 
 rnaBindingClusterCorrTest: mkout
 	rnaBindingClusterCorr -sjIndexFile=input/sjIndexTest.tab -psFile=input/psIntenTest.tab \

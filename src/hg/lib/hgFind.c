@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.151 2004/10/12 13:24:15 aamp Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.152 2004/11/17 23:37:13 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -855,8 +855,9 @@ else
 	    pos->chromEnd = psl->tEnd;
 	    pos->name = cloneString(psl->qName);
 	    pos->browserName = cloneString(psl->qName);
-	    dyStringPrintf(dy, "<A HREF=\"%s%cposition=%s",
-	        hgAppName, hgAppCombiner, hgPosBrowserRange(pos, NULL) );
+	    dyStringPrintf(dy, "<A HREF=\"%s%cposition=%s&%s=%s",
+	        hgAppName, hgAppCombiner, hgPosBrowserRange(pos, NULL),
+		tableName, hTrackOpenVis(tableName));
 	    if (ui != NULL)
 	        dyStringPrintf(dy, "&%s", ui);
 	    dyStringPrintf(dy, "%s\">",

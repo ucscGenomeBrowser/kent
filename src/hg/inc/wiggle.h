@@ -11,7 +11,7 @@
 #define WIGGLE_NUM_COLS 13
 
 struct wiggle
-/* Wiggle track values to display as y-values (first 6 fields are bed6) */
+/* Wiggle track values to display as y-values (first 4 fields are bed4) */
     {
     struct wiggle *next;	/* Next in singly linked list. */
     char *chrom;		/* Human chromosome or FPC contig */
@@ -194,6 +194,8 @@ extern enum wiggleYLineMarkEnum wigFetchYLineMark(struct trackDb *tdb,
 /* return On/Off status of y= line marker	*/
 void wigFetchYLineMarkValue(struct trackDb *tdb, double *tDbYMark);
 /* return value for the y line marker to be drawn	*/
+int *wiggleSpanList(struct trackDb *tdb);
+/******	spanList - fetch list of spans from trackDb *********************/
 
 /*	cart and trackDb strings	*/
 #define VIEWLIMITS "viewLimits"
@@ -213,6 +215,8 @@ void wigFetchYLineMarkValue(struct trackDb *tdb, double *tDbYMark);
 #define SMOOTHINGWINDOW "smoothingWindow"
 #define YLINEONOFF "yLineOnOff"
 #define YLINEMARK "yLineMark"
+#define SPANLIST "spanList"
+#define	MAX_SPAN_COUNT	128
 
 /*	compute the data value give the bin	*/
 /*
@@ -350,8 +354,24 @@ struct wiggleDataStream
     };
 
 /*	in lib/wigDataStream.c	*/
+/*	Two methods to create and destroy object	*/
 struct wiggleDataStream *wiggleDataStreamNew();
 void wiggleDataStreamFree(struct wiggleDataStream **wds);
+
+/*	A couple of routines not strictly part of the object methods,
+	but they do work with the object and pick stuff out of it.
+ */
+void wigPrintDataConstraint(struct wiggleDataStream *wds, FILE * fh);
+/*	output string to file handle fh indicating current data constraint */
+void statsPreamble(struct wiggleDataStream *wds, char *chrom,
+    int winStart, int winEnd, unsigned span, unsigned long long valuesMatched,
+	char *table2);
+/*	common beginning to wiggle stats displays	*/
+void wigStatsHeader(struct wiggleDataStream *wds, FILE * fh, boolean htmlOut);
+/*	begin wiggle stats table */
+void wigStatsTableHeading(FILE * fh, boolean htmlOut);
+/*	Print the single html (or text) table row for statistics
+	column headings */
 
 /*	verbose level guidelines	*/
 #define	VERBOSE_ALWAYS_ON	1
@@ -363,13 +383,10 @@ void wiggleDataStreamFree(struct wiggleDataStream **wds);
 /*	in lib/wiggleUtils.c	*/
 void printHistoGram(struct histoResult *histoResults, boolean html);
 
-void statsPreamble(struct wiggleDataStream *wds, char *chrom,
-    int winStart, int winEnd, unsigned span, unsigned long long valuesMatched,
-	char *table2);
-/*	common beginning to stats table display	*/
 
-/*	This function is being phased out, use the wiggleDataStream to
- *	do this business.
+/*	This function wigFetchData is being phased out, use the
+ *	wiggleDataStream to do this business.  There is one use of
+ *	this in hgText - itself to be phased out someday.
  */
 struct wiggleData *wigFetchData(char *db, char *table, char *chromName,
     int winStart, int winEnd, boolean summaryOnly, boolean freeData,
@@ -391,7 +408,7 @@ void wigFreeData(struct wiggleData **wigData);
 #define wiggleDataFreeList(a) wigFreeData(a)
 
 int minSpan(struct sqlConnection *conn, char *table, char *chrom,
-	int winStart, int winEnd, struct cart *cart);
+	int winStart, int winEnd, struct cart *cart, struct trackDb *tdb);
 /*	determine minimum span in this area	*/
 
 int spanInUse(struct sqlConnection *conn, char *table, char *chrom,

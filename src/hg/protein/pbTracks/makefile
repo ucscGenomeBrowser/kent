@@ -9,15 +9,19 @@ A = pbTracks
 O = $A.o
 
 my: compile
+	rm -f ${CGI_BIN}-${USER}/$A
 	mv $A ${CGI_BIN}-${USER}/$A
 
 alpha: compile
+	rm -f ${CGI_BIN}/$A
 	mv $A ${CGI_BIN}/$A
 
 beta: compile
+	rm -f ${CGI_BIN}-beta/$A
 	mv $A ${CGI_BIN}-beta/$A
 
 mgsc: compile
+	rm -f ${CGI_BIN}-mgsc/$A
 	mv $A ${CGI_BIN}-mgsc/$A
 
 compile: $O 

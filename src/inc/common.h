@@ -349,6 +349,9 @@ int slDoubleCmp(const void *va, const void *vb);
 double slDoubleMedian(struct slDouble *list);
 /* Return median value on list. */
 
+void intSort(int count, int *array);
+/* Sort an array of ints. */
+
 struct slName
 /* List of names. The name array is allocated to accommodate full name
  */

@@ -2,6 +2,11 @@
      o Dealing with out of order exons in a more sophisticated way
        so as to fix another problem introduced by last change
        in v29.
+     o Fixed problem in gfClient where it was only looking at top
+       three chains in a region as opposed to the top 16 chains that
+       standalone blat finds.  Gunnar at Decode found a case,
+       AK090418 on 8p23.1 where this caused two good alignments to
+       be dropped.
 
 31:
      o Fixed a pretty bad memory leak when doing blast type output.
