@@ -69,7 +69,7 @@ struct dbDb *db = NULL;
 int count = 0;
 for(db = dbList; db != NULL; db = db->next)
     {
-    if(sameString("Human", db->organism))
+    if(sameString("Human", db->organism) && !strstrNoCase(db->name, "zoo"))
 	count++;
     }
 return count;
@@ -93,7 +93,7 @@ AllocArray(array, count);
 i = 0;
 for (db=dbList; db != NULL; db=db->next)
     {
-    if(sameString("Human", db->organism))
+    if(sameString("Human", db->organism) && !strstrNoCase(db->name, "zoo"))
 	array[i++] = cloneString(db->description);
     }
 dbDbFreeList(&dbList);
