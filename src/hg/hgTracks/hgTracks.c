@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.614 2003/10/14 06:35:39 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.615 2003/10/15 03:40:20 angie Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -1088,6 +1088,12 @@ if (chainLines && (vis == tvSquish))
 lfColors(tg, lf, vg, &color, &bColor);
 tallStart = lf->tallStart;
 tallEnd = lf->tallEnd;
+if (tallStart == 0 && tallEnd == 0)
+    {
+    // sometimes a bed <8 will get passed off as a bed 8, tsk tsk
+    tallStart = lf->start;
+    tallEnd   = lf->end;
+    }
 if (!hideLine)
     {
     x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
