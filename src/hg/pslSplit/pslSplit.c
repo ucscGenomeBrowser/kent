@@ -8,7 +8,7 @@
 #include "psl.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: pslSplit.c,v 1.2 2003/08/04 07:16:47 baertsch Exp $";
+static char const rcsid[] = "$Id: pslSplit.c,v 1.3 2004/04/17 07:49:01 baertsch Exp $";
 
 int chunkSize = 120;	/* cut out this many unique qNames in each output file. */
 
@@ -208,6 +208,7 @@ for (i = 0; i<inFileCount; ++i)
 	slAddHead(&pslList, psl);
         if (!sameString(prev, psl->qName))
             {
+            prev = cloneString(psl->qName);
             if (--linesLeftInChunk <= 0)
                 {
                 outputChunk(&pslList, outDir, midFileCount++, noHead);
@@ -220,7 +221,6 @@ for (i = 0; i<inFileCount; ++i)
 	    fflush(stdout);
 	    }
         //freeMem(&prev);
-        prev = cloneString(psl->qName);
 	}
     printf("\n");
     lineFileClose(&lf);
