@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.142 2004/07/09 22:06:02 braney Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.143 2004/07/12 18:31:09 kate Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -824,8 +824,6 @@ else
     pslCount = slCount(pslList);
     if (pslCount <= 0)
         {
-	errAbort("%s %s doesn't align anywhere in the genome",
-		 type, acc);
         freez(type);
 	return FALSE;
 	}
@@ -1052,25 +1050,21 @@ for (el = accList; el != NULL; el = el->next)
     
     if (aligns)
         {
-        /* accession has link only if it aligns */
         dyStringPrintf(dy, "<A HREF=\"%s%cposition=%s",
 		       hgAppName, hgAppCombiner, acc);
-        if (ui != NULL)
-            dyStringPrintf(dy, "&%s", ui);
-        dyStringPrintf(dy, "%s\">", 
-                   hgp->extraCgi);
-        dyStringPrintf(dy, "%s</A>", acc);
         }
     else
         {
-        /* TODO: link to Genbank record */
-        //dyStringPrintf(dy, "%s ", acc);
-        dyStringPrintf(dy, 
-            "<A HREF=\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?"
-		       "cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank"
-		       "&tool=genome.ucsc.edu\" TARGET=_blank>%s</A>",
-		       acc, acc);
+        /* display mRNA details page */
+        dyStringPrintf(dy, "<A HREF=\"%s%cg=xenoMrna&i=%s",
+		       hgcName(), hgAppCombiner, acc);
         }
+    if (ui != NULL)
+        dyStringPrintf(dy, "&%s", ui);
+    dyStringPrintf(dy, "%s\">", 
+               hgp->extraCgi);
+    dyStringPrintf(dy, "%s</A>", acc);
+
     /* print description for item, or lacking that, the product name */
     sprintf(description, "n/a"); 
     sprintf(query, 
@@ -1120,9 +1114,9 @@ if (alignCount > 1)
     {
     char *organism = hOrganism(hgp->database);      /* dbDb organism column */
     slReverse(&table->posList);
-    sprintf(title, "%s %sAligned mRNA Search Results",
+    sprintf(title, "%s %sligned mRNA Search Results",
                             isXeno ? "Xeno" : organism, 
-                            aligns ?  "" : "Non");
+                            aligns ?  "A" : "Una");
     freeMem(organism);
     table->description = cloneString(title);
     table->name = isXeno ? cloneString("xenoMrna") : cloneString("mrna");

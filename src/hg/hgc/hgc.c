@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.683 2004/07/09 19:53:18 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.684 2004/07/12 18:31:09 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3745,6 +3745,15 @@ printRnaSpecs(tdb, acc);
 
 /* Get alignment info. */
 pslList = getAlignments(conn, table, acc);
+if (pslList == NULL)
+    {
+    /* this was not actually a click on an aligned item -- we just
+     * want to display RNA info, so leave here */
+    hFreeConn(&conn);
+    htmlHorizontalLine();
+    printf("No alignment available for mRNA %s.", acc);
+    return;
+    }
 htmlHorizontalLine();
 printf("<H3>%s/Genomic Alignments</H3>", type);
 if (sameString(tdb->tableName, "mrnaBlastz"))
