@@ -1406,5 +1406,54 @@ printf("%s\t%s\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\n",
        # 139456 gene predictions
     gzip *TCs *.gff
 
+#  GC 20K BASE WIGGLE TRACK (DONE - 2004-02-04 - Hiram)
+    #    working on kksilo, the fileserver for this data.
+    #    The grep in the pipeline below is "\tGC\t" but I
+    #    can't figure out what escaped character to use to represent
+    #    that ?
+    ssh kksilo
+    mkdir /cluster/data/galGal1/bed/gc20KBase
+    cd /cluster/data/galGal1/bed/gc20KBase
+    mkdir wigData dataLimits
+for n in ../../nib/*.nib
+do
+    c=`basename ${n} | sed -e "s/.nib//"`
+    C=`echo $c | sed -e "s/chr//"`
+    echo -n "working on ${c} - ${C} ... "
+    hgGcPercent -chr=${c} -doGaps \
+	-file=stdout -win=20000 galGal1 ../../nib | grep "	GC	" | \
+    awk '
+{
+    bases = $3 - $2
+    perCent = $5/10.0
+    printf "%d\t%.1f\n", $2+1, perCent
+}' | wigAsciiToBinary \
+        -dataSpan=20000 -chrom=${c} -wibFile=wigData/gc20KBase_${C} \
+        -name=${C} stdin > dataLimits/${c}
+echo "done ${c}"
+done
 
+    #	data is complete, load track on hgwdev
+    ssh hgwdev
+    cd /cluster/data/galGal1/bed/gc20KBase
+    hgLoadWiggle galGal1 gc20KBase wigData/*.wig
+    #	create symlinks for .wib files
+    mkdir /gbdb/galGal1/wib
+    ln -s `pwd`/wigData/*.wib /gbdb/galGal1/wib
+    #	the trackDb entry
+track gc20KBase
+shortLabel GC Counts
+longLabel GC Percent in 20,000 base windows
+group map
+priority 23.5
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+windowingFunction Mean
+color 0,128,255
+altColor 255,128,0
+defaultViewLimits 30:70
+type wig 0 100 
 
