@@ -623,11 +623,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (hti->strandField[0] != 0)
 	if (sameString("tStarts", hti->startsField))
 	    {
-	    // psl: use XOR of qStrand,tStrand
+	    // psl: use XOR of qStrand,tStrand if both are given.
 	    qStrand = row[4][0];
 	    tStrand = row[4][1];
-	    if ((qStrand == '-' && tStrand == '+') ||
-		(qStrand == '+' && tStrand == '-'))
+	    if ((tStrand != '+') && (tStrand != '-'))
+		bedItem->strand[0] = qStrand;
+	    else if ((qStrand == '-' && tStrand == '+') ||
+		     (qStrand == '+' && tStrand == '-'))
 		strncpy(bedItem->strand, "-", 2);
 	    else
 		strncpy(bedItem->strand, "+", 2);
