@@ -4,7 +4,10 @@
 #include "hash.h"
 #include "options.h"
 #include "net.h"
+#include "internet.h"
 #include "paraLib.h"
+#include "rudp.h"
+#include "paraMessage.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -23,55 +26,49 @@ void listJobsErr(char *name, int n)
 warn("%s: listJobs bad reponse %d", name, n);
 }
 
-void showLong(char *name, int sd, int *pRunning, int *pRecent)
+void showLong(char *name, struct rudp *ru, int *pRunning, int *pRecent)
 /* Fetch and display response to listJobs message.
  * Increment running and recent counts. */
 {
 char *line;
 int running, recent, i;
-if ((line = netGetLongString(sd)) == NULL)
+struct paraMessage pm;
+
+if (!pmReceive(&pm, ru))
     {
     warn("%s: no listJobs response", name);
     return;
     }
-running = atoi(line);
-freez(&line);
+running = atoi(pm.data);
 for (i=0; i<running; ++i)
     {
-    line = netGetLongString(sd);
-    if (line == NULL)
+    if (!pmReceive(&pm, ru))
         {
 	listJobsErr(name, 1);
 	return;
 	}
-    printf("%s %s %s\n", name, "running", line);
-    freez(&line);
+    printf("%s %s %s\n", name, "running", pm.data);
     }
-if ((line = netGetLongString(sd)) == NULL)
+if (!pmReceive(&pm, ru))
     {
     listJobsErr(name, 2);
     return;
     }
-recent = atoi(line);
-freez(&line);
+recent = atoi(pm.data);
 for (i=0; i<recent; ++i)
     {
-    line = netGetLongString(sd);
-    if (line == NULL)
+    if (!pmReceive(&pm, ru))
         {
 	listJobsErr(name, 3);
 	return;
 	}
-    printf("%s %s %s\n", name, "recent", line);
-    freez(&line);
-    line = netGetLongString(sd);
-    if (line == NULL)
+    printf("%s %s %s\n", name, "recent", pm.data);
+    if (!pmReceive(&pm, ru))
         {
 	listJobsErr(name, 4);
 	return;
 	}
-    printf("%s %s %s\n", name, "result", line);
-    freez(&line);
+    printf("%s %s %s\n", name, "result", pm.data);
     }
 printf("%s summary %d running %d recent\n", name, running, recent);
 printf("\n");
@@ -84,33 +81,35 @@ void paraNodeStatus(char *machineList)
 {
 struct lineFile *lf = lineFileOpen(machineList, FALSE);
 boolean longFormat = optionExists("long");
-int sd;
-char statCmd[256];
-char status[256];
+struct rudp *ru = rudpMustOpen();
 int size;
 char *row[1];
 int totalCpu = 0, totalBusy = 0, totalRecent = 0;
+struct sockaddr_in outAddress;
+bits32 hostIp;
 
 while (lineFileRow(lf, row))
     {
     char *name = row[0];
-    if ((sd = netConnect(name, paraPort)) >= 0)
+    struct paraMessage pm;
+
+    pmInitFromName(&pm, name, paraNodePort);
+    if (longFormat)
 	{
-	if (longFormat)
+	pmPrintf(&pm, "%s", "listJobs");
+	if (pmSend(&pm, ru))
+	    showLong(name, ru, &totalBusy, &totalRecent);
+	}
+    else
+	{
+	pmPrintf(&pm, "%s", "status");
+	if (pmSend(&pm, ru))
 	    {
-	    mustSendWithSig(sd, "listJobs");
-	    showLong(name, sd, &totalBusy, &totalRecent);
-	    }
-	else
-	    {
-	    mustSendWithSig(sd, "status");
-	    size = read(sd, status, sizeof(status)-1);
-	    if (size >= 0)
+	    if (pmReceive(&pm, ru))
 		{
 		char *row[3];
-		status[size] = 0;
-		printf("%s %s\n", name, status);
-		chopLine(status, row);
+		printf("%s %s\n", name, pm.data);
+		chopLine(pm.data, row);
 		totalBusy += atoi(row[0]);
 		if (!sameString(row[1], "of"))
 		    errAbort("paraNode status message format changed");
@@ -121,11 +120,6 @@ while (lineFileRow(lf, row))
 		printf("%s no status return: %s\n", name, strerror(errno));
 		}
 	    }
-	close(sd);
-	}
-    else
-	{
-	printf("%s - no node server\n", name);
 	}
     }
 if (longFormat)

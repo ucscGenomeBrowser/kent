@@ -12,6 +12,7 @@
 #include "portable.h"
 #include "net.h"
 #include "paraLib.h"
+#include "paraMessage.h"
 #include "jobDb.h"
 #include "jobResult.h"
 
@@ -406,19 +407,17 @@ char *hubSingleLineQuery(char *query)
 /* Send message to hub and get single line response.
  * This should be freeMem'd when done. */
 {
-int hubFd = netConnect("localhost", paraPort);
-char *result;
+struct rudp *ru = rudpMustOpen();
+struct paraMessage pm;
+char *result = NULL;
 
-if (hubFd < 0)
-    return NULL;
-if (!sendWithSig(hubFd, query))
-    {
-    close(hubFd);
-    return NULL;
-    }
-result = netRecieveLongString(hubFd);
-close(hubFd);
-return result;
+pmInitFromName(&pm, "localhost", paraHubPort);
+if (!pmSendString(&pm, ru, query))
+    noWarnAbort();
+if (!pmReceive(&pm, ru))
+    noWarnAbort();
+rudpClose(&ru);
+return cloneString(pm.data);
 }
 
 struct slRef *hubMultilineQuery(char *query)
@@ -427,21 +426,20 @@ struct slRef *hubMultilineQuery(char *query)
 {
 struct slRef *list = NULL, *el;
 char *line;
-int hubFd = netConnect("localhost", paraPort);
-if (hubFd > 0)
+struct rudp *ru = rudpMustOpen();
+struct paraMessage pm;
+pmInitFromName(&pm, "localhost", paraHubPort);
+if (!pmSendString(&pm, ru, query))
+    noWarnAbort();
+for (;;)
     {
-    if (sendWithSig(hubFd, query))
-        {
-	for (;;)
-	    {
-	    line = netRecieveLongString(hubFd);
-	    if (line == NULL || line[0] == 0)
-		break;
-	    refAdd(&list, line);
-	    }
-	}
-    close(hubFd);
+    if (!pmReceive(&pm, ru))
+	break;
+    if (pm.size == 0)
+	break;
+    refAdd(&list, cloneString(pm.data));
     }
+rudpClose(&ru);
 slReverse(&list);
 return list;
 }
@@ -935,34 +933,32 @@ for (job = db->jobList; job != NULL; job = job->next)
     }
 }
 
-void fetchOpenFile(int fd, char *fileName)
+void fetchOpenFile(struct paraMessage *pm, struct rudp *ru, char *fileName)
 /* Read everything you can from socket and output to file. */
 {
 FILE *f = mustOpen(fileName, "w");
-char buf[4*1024];
-int size;
-
-while ((size = read(fd, buf, sizeof(buf))) > 0)
-    mustWrite(f, buf, size);
-if (size < 0)
-    errnoAbort("Couldn't read all into %s", fileName);
-
+while (pmReceive(pm, ru))
+    {
+    if (pm->size == 0)
+	break;
+    mustWrite(f, pm->data, pm->size);
+    }
 carefulClose(&f);
 }
 
 void fetchFile(char *host, char *sourceName, char *destName)
 /* Fetch small file. */
 {
-struct dyString *dy = newDyString(1024);
-int sd = netConnect(host, paraPort);
-if (sd >= 0)
+struct rudp *ru = rudpOpen();
+struct paraMessage pm;
+if (ru != NULL)
     {
-    dyStringPrintf(dy, "fetch %s %s", getUser(), sourceName);
-    if (sendWithSig(sd, dy->string))
-	fetchOpenFile(sd, destName);
-    close(sd);
+    pmInitFromName(&pm, host, paraNodePort);
+    pmPrintf(&pm, "fetch %s %s", getUser(), sourceName);
+    if (pmSend(&pm, ru))
+	fetchOpenFile(&pm, ru, destName);
+    rudpClose(&ru);
     }
-dyStringFree(&dy);
 }
 
 void printErrFile(struct submission *sub, struct jobResult *jr)

@@ -43,6 +43,10 @@
 #ifndef RUDP_H
 #define RUDP_H
 
+#ifndef INTERNET_H
+#include "internet.h"
+#endif
+
 struct rudp
 /* A UDP socket and a little bit of stuff to help keep track
  * of how often we should resend unacknowledged messages. */
@@ -57,6 +61,7 @@ struct rudp
     int resendCount;	/* Number of resends. */
     int failCount;	/* Number of failures. */
     bits32 lastId;	/* Id number of last message sent. */
+    int maxRetries;	/* Maximum number of retries per message. */
     };
 
 enum rudpType
@@ -86,18 +91,48 @@ typedef bits32 rudpHost;  /* The IP address (in host order) of another computer.
 #define rudpMaxSize (udpEthMaxSize - sizeof(struct rudpHeader)  )
 
 struct rudp *rudpNew(int socket);
-/* Wrap a rudp around a socket. */
+/* Wrap a rudp around a socket. Call rudpFree when done, or
+ * rudpClose if you also want to close(socket). */
 
 void rudpFree(struct rudp **pRu);
 /* Free up rudp.  Note this does *not* close the associated socket. */
 
-int rudpSend(struct rudp *ru, rudpHost host, bits16 port, void *message, int size);
+struct rudp *rudpOpen();
+/* Open up an unbound rudp.   This is suitable for
+ * writing to and for reading responses.  However 
+ * you'll want to rudpOpenBound if you want to listen for
+ * incoming messages.   Call rudpClose() when done 
+ * with this one.  Warns and returns NULL if there is
+ * a problem. */
+
+struct rudp *rudpMustOpen();
+/* Open up unbound rudp.  Warn and die if there is a problem. */
+
+struct rudp *rudpOpenBound(struct sockaddr_in *sai);
+/* Open up a rudp socket bound to a particular port and address.
+ * Use this rather than rudpOpen if you want to wait for
+ * messages at a specific address in a server or the like. */
+
+struct rudp *rudpMustOpenBound(struct sockaddr_in *sai);
+/* Open up a rudp socket bound to a particular port and address
+ * or die trying. */
+
+void rudpClose(struct rudp **pRu);
+/* Close socket and free memory. */
+
+int rudpSend(struct rudp *ru, struct sockaddr_in *sai, void *message, int size);
 /* Send message of given size to port at host via rudp.  Prints a warning and
  * sets errno and returns -1 if there's a problem. */
 
 int rudpReceive(struct rudp *ru, void *messageBuf, int bufSize);
 /* Read message into buffer of given size.  Returns actual size read on
  * success. On failure prints a warning, sets errno, and returns -1. */
+
+int rudpReceiveFrom(struct rudp *ru, void *messageBuf, int bufSize, 
+	struct sockaddr_in *retFrom);
+/* Read message into buffer of given size.  Returns actual size read on
+ * success. On failure prints a warning, sets errno, and returns -1. 
+ * Also returns ip address of message source. */
 
 void rudpPrintStatus(struct rudp *ru);
 /* Print out status info. */

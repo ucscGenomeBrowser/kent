@@ -1,6 +1,16 @@
 #ifndef PARAHUB_H
 #define PARAHUB_H
 
+#include <pthread.h>
+
+#ifndef PARALIB_H
+#include "paraLib.h"
+#endif /* PARALIB_H */
+
+#ifndef PARAMESSAGE_H
+#include "paraMessage.h"
+#endif /* PARAMESSAGE_H */
+
 struct job
 /* A job .*/
     {
@@ -64,15 +74,14 @@ struct spoke
  * waiting on a remote host.  Parasol recieves all messages through it's
  * central socket though.  Typically hub server will have 10-100 spokes. */
     {
-    struct spoke *next;		/* Next spoke in master list. */
-    struct dlNode *node;	/* Node on doubly-linked list. */
-    int id;			/* ID of spoke. */
-    int socket;			/* Open socket to spoke. */
-    char *socketName;		/* File name of socket. */
-    int pid;			/* Process ID. */
-    char *machine;		/* Machine this spoke is communicating with or NULL */
-    time_t lastPinged;		/* Last time we pinged spoke. */
-    int pingCount;		/* Number of times we've pinged spoke. */
+    struct spoke *next;		  /* Next spoke in master list. */
+    struct dlNode *node;	  /* Node on doubly-linked list. */
+    char *name;		  	  /* Spoke name. */
+    char *machine;		  /* Machine this spoke is communicating with or NULL */
+    pthread_t thread;		  /* Concurrent thread data structure for spoke. */
+    struct paraMessage *message;  /* Message to send to spoke or NULL. */
+    pthread_mutex_t messageMutex; /* Mutex lock on message. */
+    pthread_cond_t messageReady;  /* Mutex condition on message. */
     };
 
 struct resultQueue
@@ -84,10 +93,9 @@ struct resultQueue
     time_t lastUsed;	/* Last time this was used. */
     };
 
-struct spoke *spokeNew(int *closeList);
-/* Get a new spoke.  Close list is an optional, -1 terminated array of file
- * handles to close. This will fork and create a process for spoke and a 
- * socket for communicating with it. */
+struct spoke *spokeNew();
+/* Get a new spoke.  This will create a thread for the spoke and
+ * initialize the message synchronization stuff. */
 
 void spokeFree(struct spoke **pSpoke);
 /* Free spoke.  Close socket and kill process associated with it. */
@@ -98,18 +106,37 @@ void spokeSendMessage(struct spoke *spoke, struct machine *machine, char *messag
 void spokeSendJob(struct spoke *spoke, struct machine *machine, struct job *job);
 /* Send a job to machine through spoke. */
 
-void spokePing(struct spoke *spoke);
-/* Send ping message to spoke.  It should eventually respond
- * with recycleSpoke message to hub socked.  */
-
 void startHeartbeat();
 /* Start heartbeat deamon. */
 
 void endHeartbeat();
 /* Kill heartbeat deamon. */
 
-int hubConnect();
-/* Return connection to hub socket - with paraSig already written. */
+void mutexLock(pthread_mutex_t *mutex);
+/* Lock a mutex or die trying. */
+
+void mutexUnlock(pthread_mutex_t *mutex);
+/* Lock a mutex or die trying. */
+
+void condSignal(pthread_cond_t *cond);
+/* Set conditional signal */
+
+void condWait(pthread_cond_t *cond, pthread_mutex_t *mutex);
+/* Wait for conditional signal. */
+
+struct paraMessage *hubMessageGet();  
+/* Get message from central queue, waiting if necessary for one to appear. 
+ * Do a paraMessageFree when you're done with this message. */
+
+void hubMessagePut(struct paraMessage *pm);
+/* Add message to central queue.  Message must be dynamically allocated. */
+     
+void hubMessageQueueInit();
+/* Setup stuff for hub message queue.  Must be called once
+ * at the beginning before spawning threads. */
+
+void sockSuckStart(struct rudp *ru);
+/* Start socket sucker deamon.  */
 
 extern char *hubHost;	/* Name of machine running this. */
 extern char hubHAddress[32]; /* Host address of machine running this. Not IP address. 

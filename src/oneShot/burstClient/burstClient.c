@@ -56,13 +56,11 @@ int sd, err;
 struct countMessage sendMessage, receiveMessage;
 struct timeval startTime, tv;
 struct sockaddr_in outAddress, inAddress;
-bits32 hostIp;
 struct rudp *ru;
 
 uglyf("udpCountClient %s %d %s\n", host, port, countString);
 if (!internetFillInAddress(host, port, &outAddress))
     errAbort("sorry, bye");
-hostIp = ntohl(outAddress.sin_addr.s_addr);
 sd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 ru = rudpNew(sd);
 gettimeofday(&startTime, NULL);
@@ -75,7 +73,7 @@ for (i=0; i<count; ++i)
     sendMessage.echoTime = 0;
     sendMessage.count = i;
     sendMessage.message = 1;
-    err = rudpSend(ru, hostIp, port, &sendMessage, sizeof(sendMessage));
+    err = rudpSend(ru, &outAddress, &sendMessage, sizeof(sendMessage));
     if (err < 0)
         errnoAbort("Couldn't sendto");
     }
@@ -87,7 +85,7 @@ if (count == 0)
     sendMessage.echoTime = 0;
     sendMessage.count = i;
     sendMessage.message = 0;
-    err = rudpSend(ru, hostIp, port, &sendMessage, sizeof(sendMessage));
+    err = rudpSend(ru, &outAddress, &sendMessage, sizeof(sendMessage));
     }
 rudpPrintStatus(ru);
 rudpFree(&ru);

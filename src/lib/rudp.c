@@ -47,6 +47,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <errno.h>
+#include "errAbort.h"
 #include "rudp.h"
 
 static int rudpCalcTimeOut(struct rudp *ru)
@@ -78,7 +79,8 @@ ru->timeOut <<=  1;   /* Back off exponentially. */
 }
 
 struct rudp *rudpNew(int socket)
-/* Wrap a rudp around a socket. */
+/* Wrap a rudp around a socket. Call rudpFree when done, or
+ * rudpClose if you also want to close(socket). */
 {
 struct rudp *ru;
 assert(socket >= 0);
@@ -86,6 +88,7 @@ AllocVar(ru);
 ru->socket = socket;
 ru->rttVary = 250;	/* Initial variance 250 microseconds. */
 ru->timeOut = rudpCalcTimeOut(ru);
+ru->maxRetries = 7;
 return ru;
 }
 
@@ -95,6 +98,69 @@ void rudpFree(struct rudp **pRu)
 freez(pRu);
 }
 
+struct rudp *rudpOpen()
+/* Open up an unbound rudp.   This is suitable for
+ * writing to and for reading responses.  However 
+ * you'll want to rudpBind if you want to listen for
+ * incoming messages.   Call rudpClose() when done 
+ * with this one.  Warns and returns NULL if there is
+ * a problem. */
+{
+int sd = socket(AF_INET,  SOCK_DGRAM, IPPROTO_UDP);
+if (sd < 0)
+    {
+    warn("Couldn't open socket in rudpOpen %s", strerror(errno));
+    return NULL;
+    }
+return rudpNew(sd);
+}
+
+struct rudp *rudpMustOpen()
+/* Open up unbound rudp.  Warn and die if there is a problem. */
+{
+struct rudp *ru = rudpOpen();
+if (ru == NULL)
+    noWarnAbort();
+return ru;
+}
+
+struct rudp *rudpOpenBound(struct sockaddr_in *sai)
+/* Open up a rudp socket bound to a particular port and address.
+ * Use this rather than rudpOpen if you want to wait for
+ * messages at a specific address in a server or the like. */
+{
+struct rudp *ru = rudpOpen();
+if (ru != NULL)
+    {
+    if (bind(ru->socket, (struct sockaddr *)sai, sizeof(*sai)) < 0)
+	{
+	warn("Couldn't bind rudp socket: %s", strerror(errno));
+	rudpClose(&ru);
+	}
+    }
+return ru;
+}
+
+struct rudp *rudpMustOpenBound(struct sockaddr_in *sai)
+/* Open up a rudp socket bound to a particular port and address
+ * or die trying. */
+{
+struct rudp *ru = rudpOpenBound(sai);
+if (ru == NULL)
+    noWarnAbort();
+return ru;
+}
+
+void rudpClose(struct rudp **pRu)
+/* Close socket and free memory. */
+{
+struct rudp *ru = *pRu;
+if (ru != NULL)
+    {
+    close(ru->socket);
+    freez(pRu);
+    }
+}
 
 static int timeDiff(struct timeval *t1, struct timeval *t2)
 /* Return difference in microseconds between t1 and t2.  t2 must be
@@ -159,17 +225,16 @@ for (;;)
     }
 }
 
-int rudpSend(struct rudp *ru, rudpHost host, bits16 port, void *message, int size)
+int rudpSend(struct rudp *ru, struct sockaddr_in *sai, void *message, int size)
 /* Send message of given size to port at host via rudp.  Prints a warning and
  * sets errno and returns -1 if there's a problem. */
 {
-struct sockaddr_in sai;	/* Internet address. */
 struct timeval sendTv;	/* Current time. */
 
 char outBuf[udpEthMaxSize];
 struct rudpHeader *head;
 int fullSize = size + sizeof(*head);
-int i, err = 0, maxRetry = 3;
+int i, err = 0, maxRetry = ru->maxRetries;
 
 /* Make buffer with header in front of message. 
  * At some point we might replace this with a scatter/gather
@@ -181,12 +246,6 @@ memcpy(head+1, message, size);
 head->id = ++ru->lastId;
 head->type = rudpData;
 
-/* Make up internet address for destination. */
-ZeroVar(&sai);
-sai.sin_addr.s_addr = htonl(host);
-sai.sin_family = AF_INET;
-sai.sin_port = htons(port);
-
 /* Go into send/wait for ack/retry loop. */
 for (i=0; i<maxRetry; ++i)
     {
@@ -194,12 +253,12 @@ for (i=0; i<maxRetry; ++i)
     head->sendSec = sendTv.tv_sec;
     head->sendMicro = sendTv.tv_usec;
     err =  sendto(ru->socket, outBuf, fullSize, 0, 
-	(struct sockaddr *)&sai, sizeof(sai));
+	(struct sockaddr *)sai, sizeof(*sai));
     if (err < 0) 
 	{
 	/* Warn, wait, and retry. */
 	struct timeval tv;
-	warn(" sendto problem on host %d:  %s", host, strerror(errno));
+	warn(" sendto problem %s", strerror(errno));
 	tv.tv_sec = 0;
 	tv.tv_usec = ru->timeOut;
 	select(0, NULL, NULL, NULL, &tv);
@@ -214,16 +273,21 @@ for (i=0; i<maxRetry; ++i)
     rudpTimedOut(ru);
     ru->resendCount += 1;
     }
-if (err == 0)
+if (err >= 0)
+    {
     err = ETIMEDOUT;
+    warn("rudpSend timed out");
+    }
 ru->failCount += 1;
 return err;
 }
 
 
-int rudpReceive(struct rudp *ru, void *messageBuf, int bufSize)
+int rudpReceiveFrom(struct rudp *ru, void *messageBuf, int bufSize, 
+	struct sockaddr_in *retFrom)
 /* Read message into buffer of given size.  Returns actual size read on
- * success. On failure prints a warning, sets errno, and returns -1. */
+ * success. On failure prints a warning, sets errno, and returns -1. 
+ * Also returns ip address of message source. */
 {
 char inBuf[udpEthMaxSize];
 struct rudpHeader *head = (struct rudpHeader *)inBuf;
@@ -237,10 +301,12 @@ for (;;)
     int saiSize = sizeof(sai);
     readSize = recvfrom(ru->socket, inBuf, sizeof(inBuf), 0, 
 	(struct sockaddr*)&sai, &saiSize);
-    if (readSize == EINTR)
-	continue;
+    if (retFrom != NULL)
+	*retFrom = sai;
     if (readSize < 0)
 	{
+	if (errno == EINTR)
+	    continue;
 	warn("recvfrom error: %s", strerror(errno));
 	ru->failCount += 1;
 	return readSize;
@@ -252,7 +318,7 @@ for (;;)
 	}
     if (head->type != rudpData)
 	{
-	warn("skipping non-data message in rudpReceive");
+	warn("skipping non-data message %d in rudpReceive", head->type);
 	continue;
 	}
     ackHead = *head;
@@ -273,6 +339,13 @@ for (;;)
     break;
     }
 return readSize;
+}
+
+int rudpReceive(struct rudp *ru, void *messageBuf, int bufSize)
+/* Read message into buffer of given size.  Returns actual size read on
+ * success. On failure prints a warning, sets errno, and returns -1. */
+{
+return rudpReceiveFrom(ru, messageBuf, bufSize, NULL);
 }
 
 void rudpPrintStatus(struct rudp *ru)

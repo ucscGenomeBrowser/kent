@@ -18,6 +18,9 @@
 #include "paraLib.h"
 #include "net.h"
 #include "portable.h"
+#include "rudp.h"
+#include "paraMessage.h"
+#include "internet.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -51,8 +54,8 @@ char *hostName;			/* Name of this machine. */
 in_addr_t hubIp;		/* Hub IP address. */
 in_addr_t localIp;		/* localhost IP address. */
 int busyProcs = 0;		/* Number of processers in use. */
-int socketHandle;		/* Main message queue socket. */
-int connectionHandle;		/* A connection accepted. */
+struct rudp *mainRudp;		/* Rudp wrapper around main socket. */ 
+struct paraMessage pmIn;	/* Input message */
 
 struct job
 /* Info on one job in this node. */
@@ -159,8 +162,11 @@ void randomSleep()
  * at once, and file server with file open requests
  * all at once. */
 {
-int sleepTime = randomNumber%randomDelay;
-sleep1000(sleepTime);
+if (randomDelay > 0)
+    {
+    int sleepTime = randomNumber%randomDelay;
+    sleep1000(sleepTime);
+    }
 }
 
 
@@ -291,8 +297,7 @@ if ((grandChildId = fork()) == 0)
      * open in/out/err in order so they have descriptors
      * 0,1,2. */
     logClose();
-    close(socketHandle);
-    close(connectionHandle);
+    close(mainRudp->socket);
     close(0);
     close(1);
     close(2);
@@ -318,21 +323,21 @@ else
     int status;
     int cid;
     int sd;
+    struct paraMessage pm;
+    struct rudp *ru = rudpOpen();
+    struct tms tms;
 
+    ru->maxRetries = 10;
     signal(SIGTERM, termHandler);
     cid = wait(&status);
-    sd = netConnect("localhost", paraPort);
-    if (sd >= 0)
-        {
-	char buf[256];
-	struct tms tms;
-
-	times(&tms);
-	snprintf(buf, sizeof(buf), 
-		"jobDone %s %s %d %lu %lu", managingHost, jobIdString, 
-		status, tms.tms_cutime, tms.tms_cstime);
-	sendWithSig(sd, buf);
-	close(sd);
+    times(&tms);
+    if (ru != NULL)
+	{
+	pmInit(&pm, localIp, paraNodePort);
+	pmPrintf(&pm, "jobDone %s %s %d %lu %lu", managingHost, 
+	    jobIdString, status, tms.tms_cutime, tms.tms_cstime);
+	pmSend(&pm, ru);
+	rudpClose(&ru);
 	}
     }
 }
@@ -348,27 +353,34 @@ for (;;)
     }
 }
 
+in_addr_t lookupIp(char *host)
+/* Return IP address of host. */
+{
+struct hostent *hostent = gethostbyname(host);
+struct sockaddr_in address;	
+static char *lastHost = NULL;
+static in_addr_t lastAddress;
+
+if (lastHost != NULL && sameString(lastHost, host))
+    return lastAddress;
+if (hostent == NULL)
+    errAbort("Couldn't find hub %s", host);
+memcpy(&address.sin_addr.s_addr, hostent->h_addr_list[0], 
+	sizeof(address.sin_addr.s_addr));
+freez(&lastHost);
+lastHost = cloneString(host);
+lastAddress = address.sin_addr.s_addr;
+return lastAddress;
+}
+
+
 void tellManagerJobIsDone(char *managingHost, char *jobIdString, char *line)
 /* Try and send message to host saying job is done. */
 {
-int sd = -1;
-int i;
-
-/* Keep trying every 5 seconds for a minute to connect.... */
-for (i=0; i<12; ++i)
-    {
-    if ((sd = netConnect(managingHost, paraPort)) >= 0)
-        break;
-    sleep(5);
-    }
-
-if (sd >= 0)
-    {
-    char buf[256];
-    snprintf(buf, sizeof(buf), "jobDone %s %s", jobIdString, line);
-    sendWithSig(sd, buf);
-    close(sd);
-    }
+struct paraMessage pm;
+pmInit(&pm, lookupIp(managingHost), paraHubPort);
+pmPrintf(&pm, "jobDone %s %s", jobIdString, line);
+pmSend(&pm, mainRudp);
 }
 
 void jobFree(struct job **pJob)
@@ -408,13 +420,7 @@ if (jobIdString != NULL && line != NULL && line[0] != 0)
 	dlAddHead(jobsFinished, job->node);
 	--busyProcs;
 	}
-
-    /* Tell managing host that job is done. */
-    if (fork() == 0)
-	{
-	tellManagerJobIsDone(managingHost, jobIdString, line);
-	exit(0);
-	}
+    tellManagerJobIsDone(managingHost, jobIdString, line);
     }
 }
 
@@ -428,23 +434,19 @@ if (jobIdString != NULL)
     {
     int jobId = atoi(jobIdString);
     struct job *job = findRunningJob(jobId);
-    int sd = netConnect(managingHost, paraPort);
-    if (sd >= 0)
+    struct paraMessage pm;
+    pmInit(&pm, lookupIp(managingHost), paraHubPort);
+    if (job != NULL)
+	pmPrintf(&pm, "checkIn %s %s running", hostName, jobIdString);
+    else
 	{
-	char buf[256];
-	if (job != NULL)
-	    snprintf(buf, sizeof(buf), "checkIn %s %s running", hostName, jobIdString);
+	struct job *job = findFinishedJob(jobId);
+	if (job == NULL)
+	    pmPrintf(&pm, "checkIn %s %s free", hostName, jobIdString);
 	else
-	    {
-	    struct job *job = findFinishedJob(jobId);
-	    if (job == NULL)
-		snprintf(buf, sizeof(buf), "checkIn %s %s free", hostName, jobIdString);
-	    else
-		snprintf(buf, sizeof(buf), "jobDone %s %s", jobIdString, job->doneMessage);
-	    }
-	sendWithSig(sd, buf);
-	close(sd);
+	    pmPrintf(&pm, "jobDone %s %s", jobIdString, job->doneMessage);
 	}
+    pmSend(&pm, mainRudp);
     }
 }
 
@@ -454,15 +456,15 @@ void doResurrect(char *line)
 char *managingHost = nextWord(&line);
 if (managingHost != NULL)
     {
-    int sd = netConnect(managingHost, paraPort);
-    struct dyString *dy = dyStringNew(512);
+    struct paraMessage pm;
     struct dlNode *node;
-    int jobsReported = 0;
-    dyStringPrintf(dy, "alive %s", hostName);
+    int jobsReported = TRUE;
+    pmInit(&pm, lookupIp(managingHost), paraHubPort);
+    pmPrintf(&pm, "alive %s", hostName);
     for (node = jobsRunning->head; !dlEnd(node); node = node->next)
         {
 	struct job *job = node->val;
-        dyStringPrintf(dy, " %d", job->jobId);
+        pmPrintf(&pm, " %d", job->jobId);
 	++jobsReported;
 	}
    for (node = jobsFinished->head; !dlEnd(node); node = node->next)
@@ -470,12 +472,10 @@ if (managingHost != NULL)
 	struct job *job = node->val;
 	if (jobsReported >= maxProcs)
 	    break;
-        dyStringPrintf(dy, " %d", job->jobId);
+        pmPrintf(&pm, " %d", job->jobId);
 	++jobsReported;
 	}
-    sendWithSig(sd, dy->string);
-    dyStringFree(&dy);
-    close(sd);
+    pmSend(&pm, mainRudp);
     }
 }
 
@@ -539,26 +539,41 @@ else
 }
 
 void doFetch(char *line)
-/* Fetch a file. */
+/* Fetch first part of file.  Protocol is to send the
+ * file one UDP packet at a time.  A zero length packet
+ * indicates end of file. */
 {
 char *user = nextWord(&line);
 char *fileName = nextWord(&line);
 if (fileName != NULL)
     {
-    if (fork() == 0)
-        {
-	FILE *f = fopen(fileName, "r");
-	if (f == NULL)
-	    warn("Couldn't open %s %s", fileName, strerror(errno));
-	else
+    FILE *f = fopen(fileName, "r");
+    pmClear(&pmIn);
+    if (f == NULL)
+	{
+	pmPrintf(&pmIn, "Couldn't open %s %s", fileName, strerror(errno));
+	warn("Couldn't open %s %s", fileName, strerror(errno));
+	pmSend(&pmIn, mainRudp);
+	pmClear(&pmIn);
+	pmSend(&pmIn, mainRudp);
+	}
+    else
+	{
+	int size;
+	for (;;)
 	    {
-	    char buf[4*1024];
-	    int size;
-	    while ((size = fread(buf, 1, sizeof(buf), f)) > 0)
-		write(connectionHandle, buf, size);
-	    fclose(f);
+	    size = fread(pmIn.data, sizeof(pmIn.data)-1, 1, f);
+	    if (size < 0)
+		{
+		size = 0;
+		warn("Couldn't read %s %s", fileName, strerror(errno));
+		}
+	    pmIn.size = size;
+	    pmSend(&pmIn, mainRudp);
+	    if (size == 0)
+		break;
 	    }
-	exit(0);
+	fclose(f);
 	}
     }
 }
@@ -589,140 +604,125 @@ else
 void doStatus()
 /* Report status. */
 {
-struct dyString *dy = newDyString(256);
-dyStringPrintf(dy, "%d of %d CPUs busy", busyProcs, maxProcs);
+pmClear(&pmIn);
+pmPrintf(&pmIn, "%d of %d CPUs busy", busyProcs, maxProcs);
 if (busyProcs > 0)
     {
     struct dlNode *node;
-    dyStringPrintf(dy, ". Jobs:");
+    pmPrintf(&pmIn, ". Jobs:");
     for (node = jobsRunning->head; !dlEnd(node); node = node->next)
         {
 	struct job *job = node->val;
-        dyStringPrintf(dy, " %d", job->jobId);
+        pmPrintf(&pmIn, " %d", job->jobId);
 	}
     }
-if (write(connectionHandle, dy->string, dy->stringSize) < 0)
-    logIt("doStatus write error: %s", strerror(errno));
-dyStringFree(&dy);
+pmSend(&pmIn, mainRudp);
 }
 
 void listJobs()
 /* Report jobs running and recently finished. */
 {
-char buf[64];
+struct paraMessage pm;
 struct job *job;
 struct dlNode *node;
 
-sprintf(buf, "%d running", dlCount(jobsRunning));
-netSendLongString(connectionHandle, buf);
+pmClear(&pmIn);
+pmPrintf(&pmIn, "%d running", dlCount(jobsRunning));
+pmSend(&pmIn, mainRudp);
 for (node = jobsRunning->head; !dlEnd(node); node=node->next)
     {
     job = node->val;
-    netSendLongString(connectionHandle, job->startMessage);
+    pmClear(&pmIn);
+    pmPrintf(&pmIn, "%s", job->startMessage);
+    pmSend(&pmIn, mainRudp);
     }
-sprintf(buf, "%d recent", dlCount(jobsFinished));
-netSendLongString(connectionHandle, buf);
+pmClear(&pmIn);
+pmPrintf(&pmIn, "%d recent", dlCount(jobsFinished));
+pmSend(&pmIn, mainRudp);
 for (node = jobsFinished->head; !dlEnd(node); node=node->next)
     {
     job = node->val;
-    netSendLongString(connectionHandle, job->startMessage);
-    netSendLongString(connectionHandle, job->doneMessage);
+    pmClear(&pmIn);
+    pmPrintf(&pmIn, "%s", job->startMessage);
+    pmSend(&pmIn, mainRudp);
+    pmPrintf(&pmIn, "%s", job->doneMessage);
+    pmSend(&pmIn, mainRudp);
     }
 }
 
 void paraNode()
 /* paraNode - a net server. */
 {
-char *buf = NULL, *line;
+char *line;
 int fromLen, readSize;
 char *command;
-char signature[20];
-int sigLen = strlen(paraSig);
+struct sockaddr_in sai;
 
 /* We have to know who we are... */
 hostName = getMachine();
 initRandom();
-
-/* Precompute some signature stuff. */
-assert(sigLen < sizeof(signature));
 
 /* Make job lists. */
 jobsRunning = newDlList();
 jobsFinished = newDlList();
 
 /* Set up socket and self to listen to it. */
-socketHandle = netAcceptingSocket(paraPort, maxProcs*4);
-if (socketHandle < 0)
-    errAbort("I'm dead without my socket, sorry");
+ZeroVar(&sai);
+sai.sin_family = AF_INET;
+sai.sin_port = htons(paraNodePort);
+sai.sin_addr.s_addr = INADDR_ANY;
+mainRudp = rudpMustOpenBound(&sai);
+mainRudp->maxRetries = 10;
 
 /* Event loop. */
+findNow();
+logIt("Node: starting\n");
 for (;;)
     {
-    /* Get next incoming connection and optionally check to make
+    /* Get next incoming message and optionally check to make
      * sure that it's from a host we trust, and check signature
      * on first bit of incoming data. */
-    struct sockaddr_in hubAddress;
-    int len_inet = sizeof(hubAddress);
-    connectionHandle = accept(socketHandle, 
-    	(struct sockaddr *)&hubAddress, &len_inet);
-    if (connectionHandle >= 0)
+    if (pmReceive(&pmIn, mainRudp))
 	{
 	findNow();
-	if (hubName == NULL || hubAddress.sin_addr.s_addr == hubIp
-	    || hubAddress.sin_addr.s_addr == localIp)
+	if (hubName == NULL || pmIn.ipAddress.sin_addr.s_addr == hubIp 
+		|| pmIn.ipAddress.sin_addr.s_addr == localIp)
 	    {
-	    if (netReadAll(connectionHandle, signature, sigLen) == sigLen)
+	    /* Host and signature look ok,  read a string and
+	     * parse out first word as command. */
+	    line = pmIn.data;
+	    logIt("node  %s: %s\n", hostName, line);
+	    command = nextWord(&line);
+	    if (command != NULL)
 		{
-		signature[sigLen] = 0;
-		if (sameString(paraSig, signature))
-		    {
-		    /* Host and signature look ok,  read a string and
-		     * parse out first word as command. */
-		    line = buf = netGetLongString(connectionHandle);
-		    if (line != NULL)
-			{
-			logIt("node  %s: %s\n", hostName, line);
-			command = nextWord(&line);
-			if (command != NULL)
-			    {
-			    if (sameString("quit", command))
-				break;
-			    else if (sameString("run", command))
-				doRun(line);
-			    else if (sameString("jobDone", command))
-				jobDone(line);
-			    else if (sameString("status", command))
-				doStatus();
-			    else if (sameString("kill", command))
-				doKill(line);
-			    else if (sameString("check", command))
-				doCheck(line);
-			    else if (sameString("resurrect", command))
-				doResurrect(line);
-			    else if (sameString("listJobs", command))
-			        listJobs();
-			    else if (sameString("fetch", command))
-			        doFetch(line);
-			    }
-			freez(&buf);
-			}
-		    logIt("node  %s: done command\n", hostName);
-		    }
+		if (sameString("quit", command))
+		    break;
+		else if (sameString("run", command))
+		    doRun(line);
+		else if (sameString("jobDone", command))
+		    jobDone(line);
+		else if (sameString("status", command))
+		    doStatus();
+		else if (sameString("kill", command))
+		    doKill(line);
+		else if (sameString("check", command))
+		    doCheck(line);
+		else if (sameString("resurrect", command))
+		    doResurrect(line);
+		else if (sameString("listJobs", command))
+		    listJobs();
+		else if (sameString("fetch", command))
+		    doFetch(line);
 		}
+	    logIt("node  %s: done command\n", hostName);
 	    }
-	if (connectionHandle != 0)
+	else
 	    {
-	    close(connectionHandle);
-	    connectionHandle = 0;
+	    logIt("command from unauthorized host %x", pmIn.ipAddress.sin_addr.s_addr);
 	    }
-	}
-    else
-        {
-	logIt("accept failed: %s\n", strerror(errno));
 	}
     }
-close(socketHandle);
-socketHandle = 0;
+rudpClose(&mainRudp);
 }
 
 void paraFork()
@@ -747,18 +747,6 @@ if (fork() == 0)
     /* Execute daemon. */
     paraNode();
     }
-}
-
-in_addr_t lookupIp(char *host)
-/* Return IP address of host. */
-{
-struct hostent *hostent = gethostbyname(host);
-struct sockaddr_in address;	
-if (hostent == NULL)
-    errAbort("Couldn't find hub %s", host);
-memcpy(&address.sin_addr.s_addr, hostent->h_addr_list[0], 
-	sizeof(address.sin_addr.s_addr));
-return address.sin_addr.s_addr;
 }
 
 int main(int argc, char *argv[])

@@ -1,9 +1,13 @@
+/* paraLib - some misc. routines used by multiple parasol 
+ * associated programs. */
+
 #ifndef PARALIB_H
+#define PARALIB_H
 
 extern char *cuserid(char *__s);  /* Linux should define this but... */
 
-extern char paraSig[];  /* Mild security measure. */
-extern int paraPort;		      /* Our port */
+extern int paraHubPort;		      /* Port for hub. */
+extern int paraNodePort;	      /* Port for nodes. */
 
 boolean sendWithSig(int fd, char *string);
 /* Send a string with the signature prepended.  Warn 

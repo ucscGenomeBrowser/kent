@@ -165,8 +165,9 @@ void freez(void *vpt)
  * to NULL. */
 {
 void **ppt = (void **)vpt;
-freeMem(*ppt);
+void *pt = *ppt;
 *ppt = NULL;
+freeMem(pt);
 }
 
 static int carefulAlignSize;    /* Alignment size for machine - 8 bytes for DEC alpha, 4 for Sparc. */

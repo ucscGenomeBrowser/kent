@@ -4,6 +4,8 @@
 #include "hash.h"
 #include "net.h"
 #include "paraLib.h"
+#include "rudp.h"
+#include "paraMessage.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -17,20 +19,18 @@ errAbort(
 void paraNodeStop(char *machineList)
 /* Stop node server on all machines in list. */
 {
-int sd;
 struct lineFile *lf = lineFileOpen(machineList, FALSE);
 char *row[1];
+struct rudp *ru = rudpMustOpen();
 
 while (lineFileRow(lf, row))
     {
     char *name = row[0];
+    struct paraMessage pm;
     printf("Telling %s to quit \n", name);
-    if ((sd = netConnect(name, paraPort)) >= 0)
-	{
-	write(sd, paraSig, strlen(paraSig));
-	netSendLongString(sd, "quit");
-	close(sd);
-	}
+    pmInitFromName(&pm, name, paraNodePort);
+    pmPrintf(&pm, "%s", "quit");
+    pmSend(&pm, ru);
     }
 }
 
