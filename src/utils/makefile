@@ -38,6 +38,7 @@ DIRS = \
 	faToNib \
 	faTrans \
 	fixCr \
+	gffPeek \
 	htmlPics \
 	jkUniq \
 	lineCount \
