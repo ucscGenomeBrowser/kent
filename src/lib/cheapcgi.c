@@ -290,6 +290,7 @@ return cgiInt(varName);
 }
 
 double cgiDouble(char *varName)
+/* Returns double value. */
 {
 char *data;
 double x;
@@ -298,6 +299,15 @@ data = mustFindVarData(varName);
 if (sscanf(data, "%lf", &x)<1) 
      errAbort("Expecting real number in %s, got \"%s\"\n", varName, data);
 return x;
+}
+
+double cgiOptionalDouble(char *varName, double defaultVal)
+/* Returns double value. */
+{
+char *s;
+if (!cgiVarExists(varName))
+    return defaultVal;
+return cgiDouble(varName);
 }
 
 boolean cgiVarExists(char *varName)

@@ -405,7 +405,7 @@ void mgText(struct memGfx *mg, int x, int y, Color color,
 	MgFont *font, char *text)
 /* Draw a line of text with upper left corner x,y. */
 {
-gfText(mg, font, text, x, y, color, mgTextBlit, MG_WHITE);
+gfText(mg, font, text, x, y-1, color, mgTextBlit, MG_WHITE);
 }
 
 void mgTextCentered(struct memGfx *mg, int x, int y, int width, int height, 
@@ -426,6 +426,24 @@ if (font == mgSmallFont())
 mgText(mg, xoff, yoff, color, font, text);
 }
 
+void mgTextRight(struct memGfx *mg, int x, int y, int width, int height, 
+	Color color, MgFont *font, char *text)
+/* Draw a line of text right justified in box defined by x/y/width/height */
+{
+int fWidth, fHeight;
+int xoff, yoff;
+fWidth = mgFontStringWidth(font, text);
+fHeight = mgFontPixelHeight(font);
+xoff = x + width - fWidth - 1;
+yoff = y + (height - fHeight)/2;
+if (font == mgSmallFont())
+    {
+    xoff += 1;
+    yoff += 1;
+    }
+mgText(mg, xoff, yoff, color, font, text);
+}
+
 int mgFontPixelHeight(MgFont *font)
 /* How high in pixels is font? */
 {
@@ -435,7 +453,8 @@ return font_cel_height(font);
 int mgFontLineHeight(MgFont *font)
 /* How many pixels to next line ideally? */
 {
-return font_cel_height(font) * 9/8 + 1;
+int celHeight = font_cel_height(font);
+return celHeight + 1 + (celHeight/5);
 }
 
 int mgFontWidth(MgFont *font, char *chars, int charCount)
