@@ -16,7 +16,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.44 2005/03/01 18:30:24 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.45 2005/03/04 19:09:05 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -336,8 +336,8 @@ if (totalCount > 0)
     	row = sqlNextRow(sr);
     	}
     hPrintf("<BR>");   
+    sqlFreeResult(&sr);
     }
-sqlFreeResult(&sr);
 }
 
 void printDescription(char *id, struct sqlConnection *conn)
