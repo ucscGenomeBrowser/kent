@@ -31,6 +31,7 @@ if (! -e $tablelist) then
 endif
 
 foreach table (`cat $tablelist`)
+  echo
   echo $table
   echo "============="
   set dev=`hgsql -N -e 'SHOW TABLE STATUS LIKE "'$table'"' $db \
@@ -41,6 +42,5 @@ foreach table (`cat $tablelist`)
   echo "."$beta
   echo
 end
-echo
 
 rm -f xxtablelistxx
