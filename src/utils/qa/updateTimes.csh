@@ -12,9 +12,8 @@ set db=""
 if ($2 == "") then
   echo
   echo "  gets update times from dev and beta for tables in list." 
-  echo "  if second argument is only a tablename, than a list of one value created."
   echo
-  echo "    usage:  database, tablelist"
+  echo "    usage:  database, tablelist (will accept single table)"
   echo
   exit
 else
@@ -24,8 +23,8 @@ endif
 # cat $tablelist
 
 if (! -e $tablelist) then
-  echo $2 > list
-  set tablelist="list"
+  echo $2 > xxtablelistxx
+  set tablelist="xxtablelistxx"
 endif
 
 echo
@@ -44,4 +43,4 @@ foreach table (`cat $tablelist`)
 end
 echo
 
-rm -f list
+rm -f xxtablelistxx
