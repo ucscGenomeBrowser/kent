@@ -76,7 +76,7 @@ if (motif != NULL)
     dnaMotifPrintProb(motif, stdout);
     hPrintf("</PRE><BR>\n");
     hPrintf("This data is from ");
-    hPrintf("<A HREF=\"%s\">", 
+    hPrintf("<A HREF=\"%s\" TARGET=_blank>", 
     	"http://www.nature.com/cgi-taf/DynaPage.taf?file=/nature/journal/v431/n7004/abs/nature02800_fs.html");
     hPrintf("Transcriptional regulatory code of a eukaryotic genome</A> ");
     hPrintf("by Harbison, Gordon, et al.");
