@@ -1,0 +1,251 @@
+#!/bin/csh -f # set emacs mode
+exit; # don't actually run this like a script :)
+
+# Drosophila pseudoobscura -- 
+# 
+# Baylor HGSC's Drosophila Genome Project Freeze 1 assembly (Aug. 2003)
+# http://www.hgsc.bcm.tmc.edu/projects/drosophila/
+#
+
+
+# DOWNLOAD SEQUENCE (DONE 10/8/03 angie)
+    ssh kksilo
+    mkdir /cluster/store6/dp1
+    cd /cluster/data
+    ln -s /cluster/store6/dp1 dp1
+    cd /cluster/data/dp1
+    mkdir downloads
+    cd downloads
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Dpseudoobscura/conditions_for_use
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Dpseudoobscura/freeze1_readme
+    # Freeze 1 is 759 scaffolds, 271 of which are assigned to chromosomes 
+    # in the .txt file:
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Dpseudoobscura/D_pseudo_freeze1_scaffolds_8_28_03.fa
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Dpseudoobscura/D_pseudo_freeze1_scaffold_to_chromosome_assignments_8_28_03.txt
+    # Unpack scaffolds into separate files in scaffolds/ dir:
+    cd /cluster/data/dp1
+    faSplit byname downloads/D_pseudo_freeze1_scaffolds_8_28_03.fa scaffolds/
+
+
+# CREATE UNORDERED CHROM FROM SCAFFOLDS (DONE 10/10/03 angie)
+# Note: scaffolds are separated by 1000 Bp gaps
+    ssh kksilo
+    cd /cluster/data/dp1
+    # DOH!  They omitted ">" at the beginning of 8 headers where they 
+    # were noting scaffolds that they split due to spanning multiple 
+    # chromosomes.  
+    # Edit downloads/D_pseudo_freeze1_scaffolds_8_28_03.fa to restore 
+    # the ">" at the beginning of the mangled headers.  
+    scaffoldFaToAgp downloads/D_pseudo_freeze1_scaffolds_8_28_03.fa
+    mkdir Un
+    mv downloads/D_pseudo_freeze1_scaffolds_8_28_03.agp Un/chrUn.agp
+    mv downloads/D_pseudo_freeze1_scaffolds_8_28_03.gap Un/chrUn.gap
+    mv downloads/D_pseudo_freeze1_scaffolds_8_28_03.lft Un/chrUn.lft
+    mkdir jkStuff
+    cp Un/chrUn.lft jkStuff/liftAll.lft
+    # Create chromosome FA file from AGP and file of masked scaffolds
+    agpToFa -simpleMultiMixed Un/chrUn.agp chrUn Un/chrUn.fa \
+      downloads/D_pseudo_freeze1_scaffolds_8_28_03.fa
+
+
+# CREATING DATABASE (DONE 10/10/03 angie)
+    # Create the database.
+    ssh hgwdev
+    echo 'create database dp1' | hgsql ''
+    # Make a semi-permanent read-only alias:
+    alias dp1 "mysql -u hguser -phguserstuff -A dp1"
+    # Make sure there is at least 5 gig free for the database
+    df -h /var/lib/mysql
+
+
+# RUN REPEAT MASKER (DONE 10/13/03 angie)
+    # Note: drosophila library ("drosophila.lib") is dated May 27 '03.
+    # Contigs (*/chr*_*/chr*_*.fa) are split into 500kb chunks to make 
+    # RepeatMasker runs manageable on the cluster ==> results need lifting.
+
+    # Split chrUn.fa by gap into 500kb chunks:
+    ssk kksilo
+    cd /cluster/data/dp1
+    mkdir chunks
+    faSplit -minGapSize=100 -lift=chunks/chunks.lft \
+      gap Un/chrUn.fa 500000 chunks/chunk_
+
+    # make the run directory, output directory, and job list
+    mkdir RMRun
+    cp /dev/null RMRun/RMJobs
+    foreach f ( chunks/*.fa )
+      set chunk = $f:t
+      echo /cluster/bin/scripts/RMDrosophila \
+           /cluster/data/dp1/chunks $chunk /cluster/data/dp1/chunks \
+         '{'check out line+ /cluster/data/dp1/chunks/$chunk.out'}' \
+      >> RMRun/RMJobs
+    end
+
+    # do the run
+    ssh kk
+    cd /cluster/data/dp1/RMRun
+    para create RMJobs
+    para try
+    para check
+    para push
+    para check,...
+#Completed: 305 of 305 jobs
+#Average job time:                5724s      95.41m     1.59h    0.07d
+#Longest job:                     6884s     114.73m     1.91h    0.08d
+#Submission to last job:         13989s     233.15m     3.89h    0.16d
+
+    # Lift up the split-contig .out's to chrUn .out
+    ssh kksilo
+    cd /cluster/data/dp1
+    liftUp Un/chrUn.fa.out chunks/chunks.lft warn chunks/chunk_*.fa.out \
+    > /dev/null
+
+    # soft-mask chunk .fa's with .out's
+    foreach chunk (chunks/chunk*.fa)
+      maskOutFa $chunk $chunk.out $chunk -soft
+    end
+
+    # Load the .out files into the database with:
+    ssh hgwdev
+    hgLoadOut dp1 /cluster/data/dp1/?{,?}/*.fa.out
+
+
+# SIMPLE REPEATS (TRF) (DONE 10/13/03 angie)
+    # TRF runs pretty quickly now... it takes a few hours total runtime, 
+    # so instead of binrsyncing and para-running, just do this on the
+    # local fileserver
+    ssh kksilo
+    mkdir -p /cluster/data/dp1/bed/simpleRepeat
+    cd /cluster/data/dp1/bed/simpleRepeat
+    mkdir trf
+    cp /dev/null jobs.csh
+    foreach f (/cluster/data/dp1/chunks/chunk*.fa)
+        set fout = $f:t:r.bed
+        echo $fout
+        echo "/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $f /dev/null -bedAt=trf/$fout -tempDir=/tmp" \
+        >> jobs.csh
+    end
+    tcsh jobs.csh >&! jobs.log &
+    # check on this with
+    tail -f jobs.log
+    wc -l jobs.csh
+    ls -1 trf | wc -l
+    # When job is done do:
+    liftUp simpleRepeat.bed /cluster/data/dp1/chunks/chunks.lft warn \
+      trf/*.bed
+
+    # Load this into the database as so
+    ssh hgwdev
+    hgLoadBed dp1 simpleRepeat \
+      /cluster/data/dp1/bed/simpleRepeat/simpleRepeat.bed \
+      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+
+
+# FILTER SIMPLE REPEATS (TRF) INTO MASK (DONE 10/13/03 angie)
+    # make a filtered version # of the trf output: 
+    # keep trf's with period <= 12:
+    ssh kksilo
+    cd /cluster/data/dp1/bed/simpleRepeat
+    mkdir -p trfMask
+    foreach f (trf/*.bed)
+        echo "filtering $f"
+        awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
+    end
+    # Lift up filtered trf output to chrom coords as well:
+    cd /cluster/data/dp1
+    mkdir bed/simpleRepeat/trfMaskChrom
+    set lft = chunks/chunks.lft
+    foreach c (?{,?})
+      liftUp bed/simpleRepeat/trfMaskChrom/chr$c.bed $lft warn \
+        `awk '{print "bed/simpleRepeat/trfMask/"$2".bed";}' $lft`
+    end
+
+
+# MASK FA USING REPEATMASKER AND FILTERED TRF FILES (TODO 10/13/03 angie)
+    ssh kksilo
+    cd /cluster/data/dp1
+    foreach c (?{,?})
+      echo repeat- and trf-masking chr$c.fa
+      /cluster/home/kent/bin/i386/maskOutFa -soft \
+        $c/chr$c.fa $c/chr$c.fa.out $c/chr$c.fa
+      /cluster/home/kent/bin/i386/maskOutFa -softAdd \
+        $c/chr$c.fa bed/simpleRepeat/trfMaskChrom/chr$c.bed $c/chr$c.fa
+    end
+    echo repeat- and trf-masking chunks
+    foreach chunk (chunks/chunk*.fa)
+      set trfMask=bed/simpleRepeat/trfMask/$chunk:t:r.bed
+      /cluster/home/kent/bin/i386/maskOutFa -soft $chunk $chunk.out $chunk
+      /cluster/home/kent/bin/i386/maskOutFa -softAdd $chunk $trfMask $chunk
+    end
+
+
+# STORE SEQUENCE AND ASSEMBLY INFORMATION (DONE 10/13/03 angie)
+
+    # Translate to nib
+    ssh kksilo
+    cd /cluster/data/dp1
+    mkdir nib
+    faToNib -softMask Un/chrUn.fa nib/chrUn.nib
+
+    # Make symbolic links from /gbdb/dp1/nib to the real nibs.
+    ssh hgwdev
+    mkdir -p /gbdb/dp1/nib
+    ln -s /cluster/data/dp1/nib/chrUn.nib  /gbdb/dp1/nib
+
+    # Load /gbdb/dp1/nib paths into database and save size info.
+    ssh hgwdev
+    hgsql dp1  < /cluster/data/src/hg/lib/chromInfo.sql
+    cd /cluster/data/dp1
+    hgNibSeq -preMadeNib dp1 /gbdb/dp1/nib chrUn.nib
+    echo "select chrom,size from chromInfo" | hgsql -N dp1 > chrom.sizes
+
+    # load gap track
+    ssh hgwdev
+    hgLoadGap dp1 /cluster/data/dp1
+
+
+# CREATING GRP TABLE FOR TRACK GROUPING (DONE 10/10/03 angie)
+    # Copy all the data from the table "grp" 
+    # in the existing database "rn1" to the new database
+    ssh hgwdev
+    echo "create table grp (PRIMARY KEY(NAME)) select * from rn1.grp" \
+      | hgsql dp1
+
+# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE (IN PROGRESS 10/10/03 angie)
+    # Warning: genome and organism fields must correspond
+    # with defaultDb values
+   
+    # setting active=0; this is just a skeleton browser so we can chain/net
+    echo 'INSERT INTO dbDb \
+        (name, description, nibPath, organism, \
+                defaultPos, active, orderKey, genome, scientificName, \
+                htmlPath, hgNearOk) values \
+        ("dp1", "Aug. 2003", "/gbdb/dp1/nib", "D.pseud.", \
+               "chrUn:827700-845800", 0, 56, "D.pseud.", \
+                "Drosophila pseudoobscura", "/gbdb/dp1/html/description.html", \
+                0);' \
+      | hgsql -h genome-testdb hgcentraltest
+    echo 'INSERT INTO defaultDb (genome, name) values ("D.pseud.", "dp1");' \
+      | hgsql -h genome-testdb hgcentraltest
+
+    # Make trackDb table so browser knows what tracks to expect:
+    ssh hgwdev
+    cd ~/src/hg/makeDb/trackDb
+    cvs up -d -P
+
+    # Edit that makefile to add dp1 in all the right places and do
+    make update
+
+TODO
+    # go public on genome-test
+    #make alpha
+    cvs commit makefile
+
+    # Add trackDb directories
+    mkdir drosophila
+    mkdir drosophila/dp1
+    cvs add drosophila
+    cvs add drosophila/dp1
+    cvs commit drosophila
+
+
