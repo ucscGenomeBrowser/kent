@@ -749,10 +749,44 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 
 - NM_005541 split into two pieces because it has a gap in an intron
        -human chr1 uses 362M for blat
-      - maybe allow small gaps in windows??
+      - allow for small in windows, since these can be in introns
       - windows don't really have to be a multiple of overlap, can
         have relatively large windows with small overalp.
 
 - include version number in download fasta.
 
 - add a weekly analyze table.
+
+- could the command line parsing be more integrated with genbank.conf?
+  so it becomes an override mechanism.
+
+- DDC  NM_000790.2 has definition line truncated (or maybe product line).
+
+- convert over to using pipeline module.  Hiram needed pipeline write 
+  from stdout, so add function do to this.  Also add unit test.
+
+- should TPA mrnas be included in genbank track.
+
+- why is this not aligned
+      U01833  ds-mRNA    linear   PRI 03-FEB-1995
+  
+- from gbAlignSetup: tmp job file exists: suggest course of action here.
+
+- current mondo job distribution runs longest jobs first.
+
+- if ignore.idx is modified between gbAlignGet and gbAlignFinish, gbAlignFinish
+  will get an error.
+
+- Daniela asks (2005/01/03):
+    P.S.  Are you planning to map the laevis clones against the tropicalis
+    genome as well?  The issues of paralogs as well as the fairly high
+    difference in sequence would make this a much more complicated, but I think
+    useful.
+
+- LocusLink to Entrez Gene link conversion.  Change refLink table, maybe
+  include both gene id and locus id:
+
+      /db_xref="GeneID:3952"
+      /db_xref="LocusID:3952"
+  drop old refseq build programs from tree.
+
