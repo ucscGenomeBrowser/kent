@@ -5,7 +5,7 @@
 #include "options.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netFilter.c,v 1.13 2003/12/04 21:15:45 kent Exp $";
+static char const rcsid[] = "$Id: netFilter.c,v 1.14 2004/05/24 18:32:12 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -26,6 +26,8 @@ errAbort(
   "   -maxScore=N - restrict to those scoring less than N\n"
   "   -minGap=N  - restrict to those with gap size (tSize) >= minSize\n"
   "   -minAli=N - restrict to those with at least given bases aligning\n"
+  "   -minSizeT=N - restrict to those at least this big on target\n"
+  "   -minSizeQ=N - restrict to those at least this big on query\n"
   "   -syn        - do filtering based on synteny.  \n"
   "   -nonsyn     - do inverse filtering based on synteny.  \n"
   "   -type=XXX - restrict to given type\n"
@@ -45,6 +47,8 @@ struct optionSpec options[] = {
    {"maxScore", OPTION_FLOAT},
    {"minGap", OPTION_INT},
    {"minAli", OPTION_INT},
+   {"minSizeT", OPTION_INT},
+   {"minSizeQ", OPTION_INT},
    {"syn", OPTION_BOOLEAN},
    {"chimpSyn", OPTION_BOOLEAN},
    {"nonsyn", OPTION_BOOLEAN},
@@ -103,6 +107,8 @@ double minSynAli = 10000;     /* Minimum alignment size. */
 double maxFar = 200000;  /* Maximum distance to allow synteny. */
 int minGap = 0;		      /* Minimum gap size. */
 int minAli = 0;			/* Minimum ali size. */
+int minSizeT = 0;		/* Minimum target size. */
+int minSizeQ = 0;		/* Minimum query size. */
 boolean fillOnly = FALSE;	/* Only pass fills? */
 boolean gapOnly = FALSE;	/* Only pass gaps? */
 char *type = NULL;		/* Only pass given type */
@@ -157,6 +163,10 @@ if (type != NULL)
     if (!sameString(type, fill->type))
         return FALSE;
     }
+if (fill->qSize < minSizeQ)
+    return FALSE;
+if (fill->tSize < minSizeT)
+    return FALSE;
 if (fill->chainId)
     {
     if (gapOnly)
@@ -265,6 +275,8 @@ doChimpSyn = optionExists("chimpSyn");
 doNonSyn = optionExists("nonsyn");
 minGap = optionInt("minGap", minGap);
 minAli = optionInt("minAli", minAli);
+minSizeT = optionInt("minSizeT", minSizeT);
+minSizeQ = optionInt("minSizeQ", minSizeQ);
 fillOnly = optionExists("fill");
 gapOnly = optionExists("gap");
 type = optionVal("type", type);
