@@ -7,7 +7,7 @@
 #include "dlist.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: growNet.c,v 1.4 2004/11/13 05:01:38 kent Exp $";
+static char const rcsid[] = "$Id: growNet.c,v 1.5 2004/11/13 05:31:25 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -295,8 +295,8 @@ assoc->score = 0.5;
 return assoc;
 }
 
-struct interleaver *interleaverNew(struct growNet *gn)
-/* Create new interleaver. */
+struct interleaver *interleaverNew(struct growNet *gn, boolean compressRuns)
+/* Create new interleaver not attached to anything. */
 {
 struct interleaver *il;
 int i;
@@ -306,6 +306,7 @@ if (gn != NULL)
 il->inList = dlListNew();
 il->inDone = dlListNew();
 il->subscriptions = dlListNew();
+il->compressRuns = compressRuns;
 for (i=0; i < ArraySize(il->history); ++i)
     il->history[i] = ' ';
 return il;
@@ -314,9 +315,13 @@ return il;
 void interleaverAddStream(struct interleaver *il, struct classifier *cl)
 /* Add classifier stream to interleaver. */
 {
-dlAddValTail(cl->subscriptions, il);
-dlAddValTail(il->inList, cl);
+struct classifierSubscription *sub;
+AllocVar(sub);
+sub->classNode = dlAddValTail(il->inList, cl);
+sub->interleaver = il;
+dlAddValTail(cl->subscriptions, sub);
 }
+
 
 struct growNet *growNetNew()
 /* Create new growNet structure */
@@ -328,7 +333,7 @@ gn->nextId = 0x100;
 gn->associators = dlListNew();
 gn->classifiers = dlListNew();
 gn->interleavers = dlListNew();
-gn->inputInterleaver = il = interleaverNew(gn);
+gn->inputInterleaver = il = interleaverNew(gn, FALSE);
 dlAddValTail(gn->interleavers, il);
 return gn;
 }
@@ -571,26 +576,32 @@ for (node = il->inList->head; !dlEnd(node); node = node->next)
     struct classifier *cl = node->val;
     if (roundCount >= ArraySize(symsThisRound))
         errAbort("Too many classifiers hooked up to interleaver");
-    symsThisRound[roundCount] = cl->output->id;
-    ++roundCount;
-    }
-if (il->compressRuns)
-    {
-    int *history = il->history;
-    copyOver = FALSE;
-    for (i=0; i<roundCount; ++i)
-        {
-	if (history[i] != symsThisRound[i])
-	    {
-	    copyOver = TRUE;
-	    break;
-	    }
+    if (cl->output != NULL)
+	{
+	symsThisRound[roundCount] = cl->output->id;
+	++roundCount;
 	}
     }
-if (copyOver)
+if (roundCount > 0)
     {
-    for (i=roundCount-1; i>=0; ++i)
-        interleaverRecordInput(il, symsThisRound[i]);
+    if (il->compressRuns)
+	{
+	int *history = il->history;
+	copyOver = FALSE;
+	for (i=0; i<roundCount; ++i)
+	    {
+	    if (history[i] != symsThisRound[i])
+		{
+		copyOver = TRUE;
+		break;
+		}
+	    }
+	}
+    if (copyOver)
+	{
+	for (i=roundCount-1; i>=0; --i)
+	    interleaverRecordInput(il, symsThisRound[i]);
+	}
     }
 }
 
@@ -719,10 +730,10 @@ propagateFromInterleaver(gn, gn->inputInterleaver);
 for (i=0; i<5; ++i)
     assoc = associatorNewRandom(gn, gn->inputInterleaver);
 cl = classifierNewRandom(gn, 3);
-#ifdef SOON
-il = interleaverNew(gn, cl, TRUE);
-il = interleaverNew(gn, cl, FALSE);
-#endif /* SOON */
+il = interleaverNew(gn, TRUE);
+interleaverAddStream(il, cl);
+il = interleaverNew(gn, FALSE);
+interleaverAddStream(il, cl);
 }
 
 void growNet(char *inFile)
