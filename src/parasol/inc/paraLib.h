@@ -51,5 +51,8 @@ extern time_t now;	/* Time when started processing current message */
 void findNow();
 /* Just set now to current time. */
 
+#define NORMAL_PRIORITY 10   /* 1 is highest priority */
+#define MAX_PRIORITY 10000   /* 10000 is the lowest priority */
+
 #endif /* PARALIB_H */
 
