@@ -16,7 +16,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.26 2004/02/05 13:25:26 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.27 2004/04/27 20:43:22 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -286,6 +286,12 @@ hPrintf("&nbsp&nbsp&nbsp");
 hPrintf("<B>Protein: ");
 hPrintf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank>%s</A></B>\n",
        getSwissProtAcc(conn, spConn, id), getSwissProtAcc(conn, spConn, id));
+
+/* show SWISS-PROT display ID if it is different than the accession ID */
+if (!sameWord(getSwissProtAcc(conn, spConn, id), spAccToId(spConn, getSwissProtAcc(conn, spConn, id)) ) )
+    {
+    hPrintf(" (%s)\n", spAccToId(spConn, getSwissProtAcc(conn, spConn, id)) );
+    }
 
 if (summaryTables != NULL)
     {
