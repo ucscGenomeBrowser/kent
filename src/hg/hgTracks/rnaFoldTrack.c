@@ -10,7 +10,7 @@
 #include "rnaSecStr.h"
 #include "rnautil.h"
 
-static char const rcsid[] = "$Id: rnaFoldTrack.c,v 1.2 2005/03/14 18:55:06 jsp Exp $";
+static char const rcsid[] = "$Id: rnaFoldTrack.c,v 1.3 2005/03/28 22:42:54 jsp Exp $";
 
 
 void bedLoadItemBySqlResult(struct track *tg, struct sqlResult *sr, int rowOffset, ItemLoader loader)
@@ -106,8 +106,8 @@ spreadAndColorString(vg, x, y, width, height, shadesOfGray+2, maxShade-2, font, 
 void spreadRnaFoldAnno(struct vGfx *vg, int x, int y, int width, int height, Color color, MgFont *font, struct rnaSecStr *item)
 /* Draw parenthesis structure which defines rna secondary structure. */
 {
-char * fold     = cloneString(item->secStr);
-double * scores = CloneArray(item->conf, item->size);
+char *fold     = cloneString(item->secStr);
+double *scores = CloneArray(item->conf, item->size);
 if (*item->strand == '-')
 {
     reverseFold(fold);
@@ -119,7 +119,7 @@ freeMem(scores);
 }
 
 
-void drawCharBox(struct vGfx *vg, int x, int y, int width, int height, Color color, char * s, char c)
+void drawCharBox(struct vGfx *vg, int x, int y, int width, int height, Color color, char *s, char c)
 /* s defines a string which spans width. Draw a box in intervals
  * corresponding to positions where s has letter c */
 {
@@ -149,7 +149,7 @@ for (;*s;s++,i++)
 
 void colorSingleStranded(struct vGfx *vg, int x, int y, int width, int height, Color color, struct rnaSecStr *item)
 {
-char * fold = cloneString(item->secStr);
+char *fold = cloneString(item->secStr);
 if (*item->strand == '-')
     reverseFold(fold);
 drawCharBox(vg, x, y, width, height, color, fold, '.');
@@ -205,7 +205,6 @@ if (color)
     }
     if (tg->drawName && vis != tvSquish)
 	{
-	/* Clip here so that text will tend to be more visible... */
 	char *s = tg->itemName(tg, rnaSecStr);
 	w = x2-x1;
 	if (w > mgFontStringWidth(font, s))
