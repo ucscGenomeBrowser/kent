@@ -156,5 +156,8 @@ float altGraphCassetteConfForEdge(struct altGraphX *ag, int eIx, float prior);
 struct bed *altGraphGetExonCassette(struct altGraphX *ag, int eIx);
 /* Get a bed which corresponds to the exons involved in a cassette exon. */
 
+struct bed *altGraphXToBed(struct altGraphX *ag);
+/* Merge all overlapping exons to form bed datatype. Free with bedFree().*/
+
 #endif /* ALTGRAPHX_H */
 

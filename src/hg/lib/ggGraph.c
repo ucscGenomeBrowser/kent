@@ -13,7 +13,9 @@
 #include "ggPrivate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: ggGraph.c,v 1.6 2003/05/20 23:34:16 sugnet Exp $";
+static char const rcsid[] = "$Id: ggGraph.c,v 1.7 2003/05/27 20:30:52 sugnet Exp $";
+
+static int maxEvidence = 50;
 
 enum{ softEndBleedLimit = 5};  /* For soft ends allow some bleeding into next intron */
 
@@ -31,6 +33,19 @@ for(ge = hayStack; ge != NULL; ge = ge->next)
 return -1;
 }
 
+void ggEvAddHeadWrapper(struct ggEvidence **list, struct ggEvidence **el)
+/* Wrapper to avoid getting more than 50 pieces of evidence on an
+   edge. 50 is enough that I believe it.*/
+{
+int count = slCount(*list);
+if(count < maxEvidence)
+    {
+    slAddHead(list, *el);
+    }
+else
+    ggEvidenceFree(el);
+}
+
 void moveEvidenceIfUnique(struct ggEvidence **currList, struct ggEvidence **newList)
 /* add the new evidence to the old if not currently in in */
 {
@@ -41,7 +56,7 @@ for(ge = *newList; ge != NULL; ge = geNext)
     geNext = ge->next;
     index = ggEvidenceIx(*currList, ge);
     if(index == -1)
-	slSafeAddHead(currList, ge);
+	ggEvAddHeadWrapper(currList, &ge);
     else
 	ggEvidenceFree(&ge);
     }
@@ -70,7 +85,7 @@ for(ge = geList; ge != NULL; ge = ge->next)
     {
     AllocVar(ret);
     ret->id = ge->id;
-    slAddHead(&retList, ret);
+    ggEvAddHeadWrapper(&retList, &ret);
     }
 slReverse(&retList);
 return retList;
@@ -176,7 +191,7 @@ for (da = mc->mrnaList; da != NULL; da = da->next)
 	ev->id = findMrnaIdByName(da->ma->qName, gg->mrnaRefs, gg->mrnaRefCount);
 	if(ev->id < 0)
 	    errAbort("ggGraph::makeInitialGraph() - Couldn't find %s in mrnalist.", da->ma->tName);
-	slAddHead(&evM[lastVix][vix], ev); 
+	ggEvAddHeadWrapper(&evM[lastVix][vix], &ev); 
 	}
     }
 freeMem(vAll);

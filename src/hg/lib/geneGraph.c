@@ -17,7 +17,7 @@
 #include "altGraphX.h"
 #include "geneGraph.h"
 
-static char const rcsid[] = "$Id: geneGraph.c,v 1.7 2003/05/20 23:34:16 sugnet Exp $";
+static char const rcsid[] = "$Id: geneGraph.c,v 1.8 2003/05/27 20:30:52 sugnet Exp $";
 
 void ggEvidenceFree(struct ggEvidence **pEl)
 /* Free a single dynamically allocated ggEvidence */
@@ -607,7 +607,7 @@ for(i=0; i < ag->edgeCount; i++)
 	struct ggEvidence *ge = NULL;
 	AllocVar(ge);
 	ge->id = e->mrnaIds[j];
-	slAddHead(&gg->evidence[x][y], ge);
+	ggEvAddHeadWrapper(&gg->evidence[x][y], &ge);
 	}
     slReverse(&gg->evidence[x][y]);
     }

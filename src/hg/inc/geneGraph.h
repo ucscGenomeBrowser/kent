@@ -69,6 +69,7 @@ struct ggEdge
     enum ggEdgeType type;      /* Type of vertex, ggExon, ggIntron, etc. */
 };
     
+
 struct ggAliInfo
 /* mRNA alignment info as it pertains to graph generator. */
     {
@@ -140,8 +141,14 @@ struct ggMrnaInput *ggGetMrnaForBac(char *bacAcc);
 struct ggMrnaCluster *ggClusterMrna(struct ggMrnaInput *ci);
 /* Make a list of clusters from ci. */
 
+
+
 struct geneGraph *ggGraphCluster(struct ggMrnaCluster *mc, struct ggMrnaInput *ci);
 /* Make up a gene transcript graph out of the ggMrnaCluster. */
+
+struct geneGraph *ggGraphConsensusCluster(struct ggMrnaCluster *mc, struct ggMrnaInput *ci, boolean fillInEvidence);
+/* Make up a gene transcript graph out of the ggMrnaCluster. Only
+ extending truncated exons to consensus splice sites. */
 
 void freeGgMrnaInput(struct ggMrnaInput **pCi);
 /* Free up a ggMrnaInput. */
@@ -205,6 +212,10 @@ struct ggEdge *ggCreateEdge(int v1, int v2, int type);
 boolean ggIsCassetteExonEdge(struct geneGraph *gg, int vertex1, int vertex2);
 /* Return TRUE if there is evidence that this exon is optional
  * or FALSE otherwise.  */
+
+void ggEvAddHeadWrapper(struct ggEvidence **list, struct ggEvidence **el);
+/* Wrapper to avoid getting more than maxEvidence pieces of evidence on an
+   edge. maxEvidence is enough that I believe it.*/
 
 #endif /* GENEGRAPH_H */
 

@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.8 2003/05/06 07:22:20 kate Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.9 2003/05/27 20:30:52 sugnet Exp $";
 
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
@@ -22,6 +22,8 @@ struct evidence *evidenceCommaIn(char **pS, struct evidence *ret)
 char *s = *pS;
 int i;
 
+if(s == NULL)
+    return NULL;
 if (ret == NULL)
     AllocVar(ret);
 ret->evCount = sqlSignedComma(&s);
@@ -352,7 +354,13 @@ freeMem(el->edgeTypes);
 /* it appears that the mrnaRefs are really one big string from loadAll function, so they can be free'd all at once */
 /* for(i=0;i<el->mrnaRefCount; i++) */
 /*     freez(&el->mrnaRefs[i]); */
-freez(&el->mrnaRefs);
+
+/* First free the first entry if exists, this frees all
+   of the rest of them. */
+if(el->mrnaRefs != NULL)
+    freeMem(el->mrnaRefs[0]);
+/* Now free the array that points to them. */
+freeMem(el->mrnaRefs);
 freeMem(el->mrnaTissues);
 freeMem(el->mrnaLibs);
 freez(pEl);
@@ -433,7 +441,7 @@ fputc(sep,f);
     {
     struct evidence *it = el->evidence;
     if (sep == ',') fputc('{',f);
-    for (i=0; i<el->edgeCount; ++i)
+    for (i=0; i<el->edgeCount && el->evidence != NULL; ++i)
         {
         fputc('{',f);
         evidenceCommaOut(it,f);
@@ -979,6 +987,98 @@ bed->expScores = AllocArray(bed->expScores, numBlocks);
 bed->expIds[0] = fpEdge;
 bed->expIds[1] = cassEdge;
 bed->expIds[2] = tpEdge;
+return bed;
+}
+
+static enum ggEdgeType altGraphXEdgeVertexType(struct altGraphX *ag, int v1, int v2)
+/* Return edge type. */
+{
+if( (ag->vTypes[v1] == ggHardStart || ag->vTypes[v1] == ggSoftStart)  
+    && (ag->vTypes[v2] == ggHardEnd || ag->vTypes[v2] == ggSoftEnd)) 
+    return ggExon;
+else if( (ag->vTypes[v1] == ggHardEnd || ag->vTypes[v1] == ggSoftEnd)  
+	 && (ag->vTypes[v2] == ggHardStart || ag->vTypes[v2] == ggSoftStart)) 
+    return ggSJ;
+else
+    return ggIntron;
+}
+
+enum ggEdgeType altGraphXEdgeType(struct altGraphX *ag, int edge)
+/* Return edge type. */
+{
+return altGraphXEdgeVertexType(ag, ag->edgeStarts[edge], ag->edgeEnds[edge]);
+}
+
+
+struct bed *altGraphXToBed(struct altGraphX *ag)
+/* Merge all overlapping exons to form bed datatype. Free with bedFree().*/
+{
+int *bases = NULL;
+int baseCount =  ag->tEnd - ag->tStart +1;
+struct bed *bed = NULL;
+int i=0, j=0, k=0;
+int offSet = ag->tStart;
+int vCount = ag->vertexCount;
+int *vPos = ag->vPositions;
+int start = 0;
+int width = 0;
+int currentStart = 0;
+boolean extending = FALSE;
+enum ggEdgeType eType;
+AllocArray(bases, baseCount);
+
+/* first paint the bases. */
+for(i=0; i<ag->edgeCount; i++)
+    {
+    eType = altGraphXEdgeType(ag, i);
+    if(eType == ggExon || eType == ggCassette)
+	{
+	width = vPos[ag->edgeEnds[i]] - vPos[ag->edgeStarts[i]];
+	start = vPos[ag->edgeStarts[i]]-offSet;
+	for(k=start; k<width+start;k++)
+	    {
+	    bases[k] = 1;
+	    }
+	}
+    }
+AllocVar(bed);
+AllocArray(bed->blockSizes, ag->edgeCount);
+AllocArray(bed->chromStarts, ag->edgeCount);
+bed->chrom = cloneString(ag->tName);
+bed->name = cloneString(ag->name);
+safef(bed->strand, sizeof(bed->strand), "%s", ag->strand);
+bed->thickStart = bed->chromStart = ag->tStart;
+bed->thickEnd = bed->chromEnd = ag->tEnd;
+for(i=0; i<baseCount; i++)
+    {
+    if(bases[i] == 1 && !extending)
+	{
+	currentStart = i;
+	extending = TRUE;
+	}
+    else if(bases[i] == 0 && extending)
+	{
+	bed->blockSizes[bed->blockCount] = i - currentStart;
+	bed->chromStarts[bed->blockCount] = currentStart;
+	bed->thickEnd = bed->chromEnd = max(bed->thickEnd, i+offSet);
+	bed->thickStart = bed->chromStart = min(bed->thickStart, (currentStart + offSet));
+	bed->blockCount++;
+	currentStart = BIGNUM;
+	extending = FALSE;
+	}
+    }
+/* Finish her off..*/
+if(extending)
+    {
+    bed->blockSizes[bed->blockCount] = i - currentStart;
+    bed->chromStarts[bed->blockCount] = currentStart;
+    bed->thickEnd = bed->chromEnd = max(bed->thickEnd, i+offSet);
+    bed->thickStart = bed->chromStart = min(bed->thickStart, currentStart+offSet);
+    bed->blockCount++;
+    currentStart = BIGNUM;
+    extending = FALSE;
+    }
+freez(&bases);
 return bed;
 }
 
