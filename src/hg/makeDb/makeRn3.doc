@@ -660,13 +660,23 @@ XXXXXXXXX  repeats business is now different.
 XXXXXXXXX  Trying to work the kinks out of that.
 PREPARE CLUSTER FOR BLASTZ RUN (NOT DONE - 2003-06-27 - Hiram)
     # This needs to be done after trf-masking and nib generation.
+
+    # NOTE: generated lineage-specific .out files
+    # using "old" script, for use vs. human 
+    # Will need species-specific version for mouse 
+    # 2003-07-09 kate
     ssh kkstore
     # Extract lineage-specific repeats using Arian Smit's script:
     mkdir -p ~/rn3/bed/linSpecRep
     cd ~/rn3/bed/linSpecRep
+    # foreach f (~/rn3/*/chr*.out)
+        # ln -sf $f .
+    # end
+    # don't step on existing .out's
     foreach f (~/rn3/*/chr*.out)
-        ln -sf $f .
+        cp $f .
     end
+    
     /cluster/bin/scripts/rodentSpecificRepeats.pl *.out
     /cluster/bin/scripts/perl-rename 's/(\.fa|\.nib)//' *.out.*spec
     /cluster/bin/scripts/perl-rename 's/\.(rod|prim)spec/.spec/' *.out.*spec
