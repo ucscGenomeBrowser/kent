@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.797 2004/09/03 19:51:59 kschneid Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.798 2004/09/08 16:04:59 heather Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -8287,7 +8287,7 @@ if (sameString(database, "hg16")
     printEnsemblAnchor(database);
     hPrintf("%s</A></TD>", wrapWhiteFont("Ensembl"));
     }
-if (sameString(database, "hg16"))
+if (sameString(database, "hg17"))
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?CHR=%s&BEG=%d&END=%d\" TARGET=_blank>",
     	skipChr(chromName), winStart+1, winEnd);
