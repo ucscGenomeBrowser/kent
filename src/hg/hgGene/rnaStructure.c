@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: rnaStructure.c,v 1.5 2004/03/01 06:18:23 kent Exp $";
+static char const rcsid[] = "$Id: rnaStructure.c,v 1.6 2004/09/27 16:15:55 kent Exp $";
 
 static boolean rnaStructureExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -127,8 +127,11 @@ struct section *rnaStructureSection(struct sqlConnection *conn,
 /* Create rnaStructure section. */
 {
 struct section *section = sectionNew(sectionRa, "rnaStructure");
-section->exists = rnaStructureExists;
-section->print = rnaStructurePrint;
+if (section != NULL)
+    {
+    section->exists = rnaStructureExists;
+    section->print = rnaStructurePrint;
+    }
 return section;
 }
 

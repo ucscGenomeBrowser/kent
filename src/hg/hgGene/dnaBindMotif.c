@@ -88,8 +88,11 @@ struct section *transRegCodeMotifSection(struct sqlConnection *conn,
 /* Create dnaBindMotif section. */
 {
 struct section *section = sectionNew(sectionRa, "transRegCodeMotif");
-section->exists = transRegCodeMotifExists;
-section->print = transRegCodeMotifPrint;
+if (section != NULL)
+    {
+    section->exists = transRegCodeMotifExists;
+    section->print = transRegCodeMotifPrint;
+    }
 return section;
 }
 
