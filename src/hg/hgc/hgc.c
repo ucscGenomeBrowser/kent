@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.688 2004/07/14 22:42:36 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.689 2004/07/15 16:35:22 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -952,7 +952,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                     tCoding=TRUE;
                     dyStringPrintf(exonTag, "exon%d",nextEndIndex+1);
                     addTag(dyT,exonTag);
-                    if (gp->exonFrames != NULL)
+                    if (gp->exonFrames != NULL && gp->exonFrames[nextEndIndex] != -1)
                         tCodonPos = gp->exonFrames[nextEndIndex]+1;
                     if (qStopCodon == FALSE) 
                         {
@@ -976,7 +976,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
 		if (qStopCodon == FALSE) 
 		    {
 		    qCoding=TRUE;
-                    if (gp->exonFrames != NULL)
+                    if (gp->exonFrames != NULL && gp->exonFrames[nextEndIndex] != -1)
                         tCodonPos = gp->exonFrames[nextEndIndex]+1;
 		    qCodonPos = tCodonPos; /* put translation back in sync */
 		    qFlip = tFlip;
@@ -1008,7 +1008,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                     nextEndIndex++;
                     nextStart = gp->exonStarts[nextEndIndex];
                     nextEnd = gp->exonEnds[nextEndIndex];
-                    if (gp->exonFrames != NULL)
+                    if (gp->exonFrames != NULL && gp->exonFrames[nextEndIndex] != -1)
                         tCodonPos = gp->exonFrames[nextEndIndex]+1;
                     }
                 }
@@ -1037,7 +1037,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                     qCoding=TRUE;
                     if (tPtr == tStart) 
                         {
-                        if (gp->exonFrames != NULL)
+                        if (gp->exonFrames != NULL && gp->exonFrames[nextEndIndex] != -1)
                             tCodonPos = gp->exonFrames[nextEndIndex]+1;
                         else
                             tCodonPos=1;
@@ -1064,7 +1064,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                     qCoding=TRUE;
                     if (tPtr == tStart) 
                         {
-                        if (gp->exonFrames != NULL)
+                        if (gp->exonFrames != NULL && gp->exonFrames[nextEndIndex] != -1)
                             tCodonPos = gp->exonFrames[nextEndIndex]+1;
                         else
                             tCodonPos=1;
@@ -1544,11 +1544,7 @@ hgcAnchorSomewhere(genomicClick, geneName, geneTable, seqName);
 printf("Genomic Sequence</A> from assembly\n");
 puts("</LI>\n");
 
-if (hTableExists("axtInfo")
-    && !sameString(tdb->tableName, "exoniphy") 
-    /* FIXME: remove this line when htcGenePsl is fixed so that it
-       uses frame when available */
-    )
+if (hTableExists("axtInfo"))
     {
     puts("<LI>\n");
     hgcAnchorGenePsl(geneName, geneTable, seqName, "startcodon");
@@ -8675,6 +8671,12 @@ gp = genePredReaderLoadQuery(conn, table, where);
 if (gp == NULL)
     errAbort("Could not locate gene prediction (db=%s, table=%s, name=%s, in range %s:%d-%d)",
 	     database, table, name, chrom, left+1, right);
+/* if there is no reading frame, default to txStart,End, not a great solution */
+if (gp->cdsStart == 0)
+    gp->cdsStart = gp->txStart;
+if (gp->cdsEnd == 0)
+    gp->cdsEnd = gp->txEnd;
+
 
 puts("<FORM ACTION=\"/cgi-bin/hgc\" NAME=\"orgForm\" METHOD=\"GET\">");
 cartSaveSession(cart);
