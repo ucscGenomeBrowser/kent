@@ -475,18 +475,50 @@ exit; # don't actually run this like a script :)
     hgsql dm1 < /cluster/data/dm1/bed/bdgpAnnotations/bdgpNonCodingInfo.sql
 
 
-# FLYBASE GENES (ABANDONED 10/6/03 angie)
-    ssh kksilo
+# FLYBASE GENES (REDONE 11/21/03 angie)
+    ssh hgwdev
     mkdir /cluster/data/dm1/bed/flyBase
     cd /cluster/data/dm1/bed/flyBase
-    ftp flybase.bio.indiana.edu
-    # log in as anonymous
-      cd flybase-data/xml
-      prompt
-      mget *
-      quit
-    # The XML is extremely complex and autoXml doesn't like the dtd.  
-    # Hmmm, looks like we better just get the names from SwissProt.
+    wget ftp://flybase.bio.indiana.edu/flybase/genes/genes.txt
+    # Note: this time around I had to edit out the first word of line 448798
+    #  uncertain *u FBan0017679; annotated data are available for this gene.
+    # so that it started with *u.  
+    # Lines 739149-739150 looked corrupted too -- edited out extra words:
+    #  $E Lewis, Cited in Lindsley and Grell, 19680561where symbol = ""wing
+    #  Cut wi
+    hgFlyBase dm1 genes.txt
+
+
+# FLYBASE TRANSPOSON INSERTIONS (SUSPENDED 11/25/03 angie)
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/flyBase
+    # well, let's see, they've got ti's mapped to genes:
+    wget ftp://flybase.bio.indiana.edu/flybase-data/acode/data/FBti.acode
+    # and sequences; maybe we can blat these?? if they have flanking seq?:
+    wget http://www.fruitfly.org/sequence/sequence_db/na_pe.dros.Z
+    wget http://www.fruitfly.org/sequence/sequence_db/na_dbP.dros
+    uncompress na_pe.dros.Z 
+    # they list all P insertion elements, but localized only to cytomap, here:
+    # ftp://flybase.net/flybase/maps/by-cytoloc/insertions/*
+    # OK, the real answer is that they'll be available when published.  
+    # Check back with bdgp@fruitfly.org Feb/Mar 04.  Meanwhile, a searchable 
+    # db is available: http://flypush.imgen.bcm.tmc.edu/pscreen/
+
+
+# FLYBASE IN SITU IMAGES / EXPRESSION (DONE 11/24/03 angie)
+    # FlyBase has downloadable in situ images for BACs:
+    # ftp://flybase.net/flybase/images/bac_insitu_pic/*
+    # and FBti's:
+    # ftp://flybase.net/flybase/images/in-situ-images/insitus.zip
+    # but what Jim is interested in is the insitus for expression data.
+    # Don't see that in the ftp listing, but they do make it easy to link in.
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/flyBase
+    wget -O summary.txt \
+    'http://www.fruitfly.org/cgi-bin/ex/bquery.pl?qpage=entry&qtype=summarytext'
+    hgsql dm1 < ~/kent/src/hg/lib/bdgpExprLink.sql
+    echo 'load data local infile "summary.txt" into table bdgpExprLink' \
+    | hgsql dm1
 
 
 # SWISSPROT-FLYBASE CROSS-REFERENCING  (DONE 10/7/03 angie)
@@ -645,10 +677,10 @@ dm1.downloadDir = dm1
     hgLoadSeq dm1 /gbdb/dm1/fuguSeq/fugu_v3_mask.fasta
 
 
-# BLASTZ D.PSEUDOOBSCURA (DONE 10/14/03 angie)
+# BLASTZ D.PSEUDOOBSCURA (DONE 11/14/03 angie)
     ssh kksilo
-    mkdir /cluster/data/dm1/bed/blastz.dp1.2003-10-14
-    cd /cluster/data/dm1/bed/blastz.dp1.2003-10-14
+    mkdir /cluster/data/dm1/bed/blastz.dp1.2003-11-14
+    cd /cluster/data/dm1/bed/blastz.dp1.2003-11-14
     cat << '_EOF_' > DEF
 # D.melanogaster vs. D.pseudoobscura
 export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/home/angie/schwartzbin:/cluster/bin/i386
@@ -661,7 +693,7 @@ BLASTZ_ABRIDGE_REPEATS=0
 
 # TARGET - D. melanogaster
 SEQ1_DIR=/cluster/bluearc/drosophila/dm1/nib
-SEQ1_RMSK=/cluster/bluearc/drosophila/dm1/rmsk
+# unused: SEQ1_RMSK=
 SEQ1_SMSK=
 SEQ1_FLAG=-drosophila
 SEQ1_IN_CONTIGS=0
@@ -669,15 +701,15 @@ SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
 
 # QUERY - D. pseudoobscura
-SEQ2_DIR=/cluster/bluearc/drosophila/dp1/nib
-SEQ2_RMSK=/cluster/bluearc/drosophila/dp1/rmsk
+SEQ2_DIR=/cluster/bluearc/drosophila/dp1/trfFa
+# unused: SEQ2_RMSK=
 SEQ2_SMSK=
 SEQ2_FLAG=-drosophila
 SEQ2_IN_CONTIGS=0
 SEQ2_CHUNK=10000000
 SEQ2_LAP=0
 
-BASE=/cluster/data/dm1/bed/blastz.dp1.2003-10-14
+BASE=/cluster/data/dm1/bed/blastz.dp1.2003-11-14
 
 DEF=$BASE/DEF
 RAW=$BASE/raw
@@ -701,75 +733,93 @@ SEQ2_LEN=$BASE/S2.len
     mv j2 j
     # cluster run
     ssh kk
-    cd /cluster/data/dm1/bed/blastz.dp1.2003-10-14/run
+    cd /cluster/data/dm1/bed/blastz.dp1.2003-11-14/run
     para create j
     para try, check, push, check, ....
-#Completed: 294 of 294 jobs
-#Average job time:                 266s       4.44m     0.07h    0.00d
-#Longest job:                      659s      10.98m     0.18h    0.01d
-#Submission to last job:           933s      15.55m     0.26h    0.01d
+#Completed: 15939 of 15939 jobs
+#Average job time:                  16s       0.27m     0.00h    0.00d
+#Longest job:                      287s       4.78m     0.08h    0.00d
+#Submission to last job:           829s      13.82m     0.23h    0.01d
 
     # back in the bash shell on kksilo...
-    mkdir /cluster/data/dm1/bed/blastz.dp1.2003-10-14/run.1
-    cd /cluster/data/dm1/bed/blastz.dp1.2003-10-14/run.1
+    mkdir /cluster/data/dm1/bed/blastz.dp1.2003-11-14/run.1
+    cd /cluster/data/dm1/bed/blastz.dp1.2003-11-14/run.1
     ~angie/hummus/do.out2lav $DEF > j
     # small cluster run
     ssh kkr1u00
-    cd /cluster/data/dm1/bed/blastz.dp1.2003-10-14/run.1
+    cd /cluster/data/dm1/bed/blastz.dp1.2003-11-14/run.1
     para create j
     para try, check, push, check, ....
 #Completed: 21 of 21 jobs
-#Average job time:                  20s       0.33m     0.01h    0.00d
-#Longest job:                       45s       0.75m     0.01h    0.00d
-#Submission to last job:          1893s      31.55m     0.53h    0.02d
+#Average job time:                  44s       0.73m     0.01h    0.00d
+#Longest job:                       71s       1.18m     0.02h    0.00d
+#Submission to last job:           111s       1.85m     0.03h    0.00d
     cd ..
     rm -r raw
 
-    # Translate .lav to axt:
+    # Translate .lav to axt, with dp1 in scaffold coords for collaborators:
     ssh kksilo
-    cd /cluster/data/dm1/bed/blastz.dp1.2003-10-14
-    mkdir axtChrom
+    # oops, lavToAxt relies on nib (not fa), so make dp1 scaffoldNib first:
+    mkdir /cluster/data/dp1/scaffoldsNib
+    foreach f (/cluster/data/dp1/scaffolds/*.fa)
+      faToNib -softMask $f /cluster/data/dp1/scaffoldsNib/$f:t:r.nib
+    end
+    cd /cluster/data/dm1/bed/blastz.dp1.2003-11-14
+    mkdir axtScaffold
     foreach c (lav/*)
       pushd $c
       set chr=$c:t
-      set out=axtChrom/$chr.axt
+      set out=axtScaffold/$chr.axt
       echo "Translating $chr lav to $out"
       cat `ls -1 *.lav | sort -g` \
-        | lavToAxt stdin /cluster/data/dm1/nib /cluster/data/dp1/nib stdout \
+        | lavToAxt stdin /cluster/data/dm1/nib /cluster/data/dp1/scaffoldsNib \
+            stdout \
         | axtSort stdin ../../$out
       popd
     end
+    # Lift query coords to chrom-level for browser display
+    mkdir axtChrom
+    foreach f (axtScaffold/chr*.axt)
+      liftUp -axtQ axtChrom/$f:t /cluster/data/dp1/jkStuff/liftAll.lft warn $f
+    end
 
-# CHAIN & NET DM1/DP1 BLASTZ ALIGNMENTS (DONE 10/14/03 angie)
+
+# CHAIN & NET DM1/DP1 BLASTZ ALIGNMENTS (DONE 11/24/03 angie)
     ssh kkr1u00
-    cd /cluster/data/dm1/bed/blastz.dp1.2003-10-14
-    mkdir -p axtChain/run1
-    cd axtChain/run1
-    ls -1S ../../axtChrom/*.axt > input.lst
+    cd /cluster/data/dm1/bed/blastz.dp1.2003-11-14
+    mkdir -p axtChainScaffoldQ/run1
+    cd axtChainScaffoldQ/run1
+    ls -1S ../../axtScaffold/*.axt > input.lst
     echo '#LOOP' > gsub
     echo 'doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}' >> gsub
     echo '#ENDLOOP' >> gsub
     gensub2 input.lst single gsub spec
     echo '#\!/bin/csh' > doChain
-    echo 'axtChain $1 /cluster/data/dm1/nib /cluster/data/dp1/nib $2 > $3' \
+    echo 'axtChain $1 /cluster/data/dm1/nib /cluster/data/dp1/scaffoldsNib $2 > $3' \
     >> doChain
     chmod a+x doChain
     mkdir chain out
     para create spec
     para try, check, push, check, ...
 #Completed: 11 of 11 jobs
-#Average job time:                  39s       0.64m     0.01h    0.00d
-#Longest job:                       73s       1.22m     0.02h    0.00d
-#Submission to last job:            73s       1.22m     0.02h    0.00d
+#Average job time:                  27s       0.45m     0.01h    0.00d
+#Longest job:                       49s       0.82m     0.01h    0.00d
+#Submission to last job:            49s       0.82m     0.01h    0.00d
 
     ssh kksilo
-    cd /cluster/data/dm1/bed/blastz.dp1.2003-10-14/axtChain
+    cd /cluster/data/dm1/bed/blastz.dp1.2003-11-14/axtChainScaffoldQ
     chainMergeSort run1/chain/*.chain > all.chain
     chainSplit chain all.chain
     rm run1/chain/*.chain
 
+    mkdir -p ../axtChainChrom/chain
+    foreach f (chain/chr*.chain)
+      liftUp -chainQ ../axtChainChrom/chain/$f:t \
+        /cluster/data/dp1/jkStuff/liftAll.lft warn $f
+    end
+
     ssh hgwdev
-    cd /cluster/data/dm1/bed/blastz.dp1.2003-10-14/axtChain/chain
+    cd /cluster/data/dm1/bed/blastz.dp1.2003-11-14/axtChainChrom/chain
     foreach i (*.chain)
       set c = $i:r
       hgLoadChain dm1 ${c}_chainDp1 $i
@@ -778,7 +828,13 @@ SEQ2_LEN=$BASE/S2.len
 
     # Create the nets.  You can do this while the database is loading
     ssh kksilo
-    cd /cluster/data/dm1/bed/blastz.dp1.2003-10-14/axtChain
+    cd /cluster/data/dm1/bed/blastz.dp1.2003-11-14/axtChainScaffoldQ
+    # Oops, need a dp1/scaffold.sizes
+    cp /dev/null /cluster/data/dp1/scaffold.sizes
+    foreach f (/cluster/data/dp1/scaffolds/*.fa)
+      set s = `faSize $f | awk '{print $1;}'`
+      echo "$f:t:r\t$s" >> /cluster/data/dp1/scaffold.sizes
+    end
     # First do a crude filter that eliminates many chains so the
     # real chainer has less work to do.
     mkdir preNet
@@ -786,7 +842,7 @@ SEQ2_LEN=$BASE/S2.len
     foreach i (*.chain)
       echo preNetting $i
       chainPreNet $i /cluster/data/dm1/chrom.sizes \
-        /cluster/data/dp1/chrom.sizes ../preNet/$i
+        /cluster/data/dp1/scaffold.sizes ../preNet/$i
     end
     cd ..
     # Run the main netter, putting the results in n1.
@@ -796,7 +852,7 @@ SEQ2_LEN=$BASE/S2.len
       set n = $i:r.net
       echo primary netting $i
       chainNet $i -minSpace=1 /cluster/data/dm1/chrom.sizes \
-        /cluster/data/dp1/chrom.sizes ../n1/$n /dev/null
+        /cluster/data/dp1/scaffold.sizes ../n1/$n /dev/null
     end
     cd ..
     # Classify parts of net as syntenic, nonsyntenic etc.
@@ -806,36 +862,39 @@ SEQ2_LEN=$BASE/S2.len
     # Best to wait for the database load to finish if it
     # hasn't already.
     ssh hgwdev
-    cd /cluster/data/dm1/bed/blastz.dp1.2003-10-14/axtChain
-    netClass -noAr noClass.net dm1 dp1 fruitfly.net
+    cd /cluster/data/dm1/bed/blastz.dp1.2003-11-14/axtChainScaffoldQ
+    netClass -liftQ=/cluster/data/dp1/jkStuff/liftAll.lft -noAr \
+      noClass.net dm1 dp1 fruitfly.net
     rm -r n1 noClass.net
-    # Load the net into the database as so:
-    netFilter -minGap=10 fruitfly.net |  hgLoadNet dm1 netDp1 stdin
-
+    netFilter -minGap=10 fruitfly.net > fruitflyFilt.net
+    liftUp -netQ ../axtChainChrom/fruitflyFiltChrom.net \
+      /cluster/data/dp1/jkStuff/liftAll.lft warn fruitflyFilt.net
+    hgLoadNet dm1 netDp1 ../axtChainChrom/fruitflyFiltChrom.net
     # Move back to the file server to create axt files corresponding
     # to the net.
     ssh kksilo
-    cd /cluster/data/dm1/bed/blastz.dp1.2003-10-14/axtChain
-    mkdir ../axtNet
-    netSplit fruitfly.net fruitflyNet
+    cd /cluster/data/dm1/bed/blastz.dp1.2003-11-14/axtChainChrom
+    mkdir ../axtNetChrom
+    netSplit fruitflyFiltChrom.net fruitflyNet
     cd fruitflyNet
     foreach i (*.net)
         set c = $i:r
         netToAxt -maxGap=300 $i ../chain/$c.chain /cluster/data/dm1/nib \
-          /cluster/data/dp1/nib ../../axtNet/$c.axt
+          /cluster/data/dp1/nib ../../axtNetChrom/$c.axt
         echo done ../axt/$c.axt
     end
     cd ..
     rm -r fruitflyNet
-    # Load up the net-axt per Jim's request
+    # Load up the axtNet (alignment score wiggle) track:
     ssh hgwdev
     mkdir /gbdb/dm1/axtNetDp1
-    cp -p /cluster/data/dm1/bed/blastz.dp1.2003-10-14/axtNet/chr*.axt \
-      /gbdb/dm1/axtNetDp1
+    foreach f (/cluster/data/dm1/bed/blastz.dp1.2003-11-14/axtNetChrom/chr*.axt)
+      ln -s $f /gbdb/dm1/axtNetDp1
+    end
     hgLoadAxt dm1 axtNetDp1
 
 
-PRODUCING GENSCAN PREDICTIONS (DONE 10/14/03 angie)
+PRODUCING GENSCAN PREDICTIONS (TODO 11/14/03 angie)
     # Run on small cluster -- genscan needs big mem.
     ssh kkr1u00
     mkdir /cluster/data/dm1/bed/genscan
@@ -1489,7 +1548,7 @@ end
     cp -p /cluster/data/dm1/zips/*.zip bigZips
 
 
-# ANOPHELES ECORES FROM GENOSCOPE (IN PROGRESS 11/10/03 angie)
+# ANOPHELES ECORES FROM GENOSCOPE (DONE 11/10/03 angie)
     ssh hgwdev
     mkdir /cluster/data/dm1/bed/anophelesEcores
     cd /cluster/data/dm1/bed/anophelesEcores
