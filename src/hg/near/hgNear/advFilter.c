@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.15 2003/09/27 01:37:20 kent Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.16 2003/09/27 02:24:52 kent Exp $";
 
 struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -26,7 +26,9 @@ if (gotAdvFilter())
     for (col = colList; col != NULL; col = col->next)
 	{
 	if (col->advFilter)
+	    {
 	    list = col->advFilter(col, conn, list);
+	    }
 	}
     }
 return list;
@@ -262,7 +264,7 @@ static void bigButtons()
 /* Put up the big clear/submit buttons. */
 {
 hPrintf("<TABLE><TR><TD>");
-cgiMakeButton(advFilterBrowseVarName, "Submit");
+cgiMakeButton("submit", "Submit");
 hPrintf("</TD><TD>");
 cgiMakeButton(advFilterClearVarName, "Clear Filter");
 hPrintf("</TD><TD>");
@@ -332,7 +334,7 @@ for (onOff = 1; onOff >= 0; --onOff)
 	    }
 	hPrintf("</TABLE>\n");
 	hPrintf("<BR>");
-	cgiMakeButton(advFilterBrowseVarName, "Submit");
+	cgiMakeButton("submit", "Submit");
 	}
     }
 hPrintf("</FORM>\n");
@@ -344,12 +346,6 @@ void doAdvFilterClear(struct sqlConnection *conn, struct column *colList)
 cartRemovePrefix(cart, advFilterPrefix);
 cartRemovePrefix(cart, advFilterPrefixI);
 doAdvFilter(conn, colList);
-}
-
-void doAdvFilterBrowse(struct sqlConnection *conn, struct column *colList)
-/* List gene names matching advanced filter. */
-{
-doSearch(conn, colList);
 }
 
 void doAdvFilterListCol(struct sqlConnection *conn, struct column *colList,

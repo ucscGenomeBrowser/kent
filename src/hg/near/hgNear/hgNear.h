@@ -182,12 +182,12 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 
 #define dbVarName "db"      /* Which assembly to use. */
 #define orgVarName "org"      /* Which organism to use. */
-#define confVarName "near.configure"	/* Configuration button */
+#define confVarName "near.do.configure"	/* Configuration button */
 #define countVarName "near.count"	/* How many items to display. */
-#define colInfoVarName "near.colInfo"	/* Display column info. */
+#define colInfoVarName "near.do.colInfo"	/* Display column info. */
 #define searchVarName "near_search"	
 	/* Search term - underbar for Javascript.  Hardcoded in Javascript. */
-#define idVarName "near.id"         	
+#define idVarName "near.do.id"         	
 	/* Overrides searchVarName if it exists */
 #define idPosVarName "near.idPos"      	
 	/* chrN:X-Y position of id, may be empty. */
@@ -197,7 +197,7 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define getGenomicSeqVarName "near.getGenomicSeq"	
 	/* Button to fetch genomic sequence. */
 #define getSeqHowVarName "near.getSeqHow" /* How to get sequence. */
-#define getSeqPageVarName "near.getSeqPage" /* Button go to getSequence page. */
+#define getSeqPageVarName "near.do.getSeqPage" /* Button go to getSequence page. */
 #define proUpSizeVarName "near.proUpSize" /* Promoter upstream size. */
 #define proDownSizeVarName "near.proDownSize" /* Promoter downstream size. */
 #define proIncludeFiveOnly "near.proIncludeFiveOnly" 
@@ -211,8 +211,6 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define advFilterVarName "near.do.advFilter"      /* Advanced filter */
 #define advFilterClearVarName "near.do.advFilterClear" 
 	/* Advanced filter clear all button. */
-#define advFilterBrowseVarName "near.do.advFilterBrowse" 
-	/* Advanced filter browse  button. */
 #define advFilterListVarName "near.do.advFilterList" 
 	/* Advanced filter submit list. */
 
@@ -239,13 +237,11 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 	/* Show all splice varients. */
 #define expRatioColorVarName "near.expRatioColors" 
 	/* Color scheme for expression ratios. */
-#define keyWordUploadPrefix "near.keyUp." /* Prefix for keyword uploads. */
-#define keyWordPastePrefix "near.keyPaste." /* Prefix for keyword paste-ins. */
-#define keyWordPastedPrefix "near.keyPasted." 
+#define keyWordUploadPrefix "near.do.keyUp." /* Prefix for keyword uploads. */
+#define keyWordPastePrefix "near.do.keyPaste." /* Prefix for keyword paste-ins. */
+#define keyWordPastedPrefix "near.do.keyPasted." 
 	/* Prefix for keyword paste-ins. */
-#define keyWordClearPrefix "near.keyClear." /* Prefix for keyword paste-ins. */
-#define keyWordClearedPrefix "near.keyCleared." 
-	/* Prefix for keyword paste-ins. */
+#define keyWordClearPrefix "near.do.keyClear." /* Prefix for keyword paste-ins. */
 
 /* ---- General purpose helper routines. ---- */
 
@@ -546,9 +542,6 @@ void doAdvFilter(struct sqlConnection *conn, struct column *colList);
 
 void doAdvFilterClear(struct sqlConnection *conn, struct column *colList);
 /* Clear variables in advanced filter page. */
-
-void doAdvFilterBrowse(struct sqlConnection *conn, struct column *colList);
-/* Put up family browser with advanced filter group by. */
 
 void doAdvFilterList(struct sqlConnection *conn, struct column *colList);
 /* List gene names matching advanced filter. */

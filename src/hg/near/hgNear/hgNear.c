@@ -17,14 +17,14 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.95 2003/09/26 21:23:39 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.96 2003/09/27 02:24:52 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
 	saveCurrentConfName, useSavedConfName, 
 	filSaveCurrentVarName, filUseSavedVarName,
 	getSeqVarName, getSeqPageVarName, getGenomicSeqVarName, getTextVarName, 
-	advFilterVarName, advFilterClearVarName, advFilterBrowseVarName,
+	advFilterVarName, advFilterClearVarName, 
 	advFilterListVarName, 
 	idVarName, idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. */
@@ -1630,15 +1630,15 @@ if (cartVarExists(cart, confVarName))
     doConfigure(conn, colList, NULL);
 else if (cartVarExists(cart, colInfoVarName))
     doColInfo(conn, colList, cartString(cart, colInfoVarName));
-else if ((var = cartFindFirstLike(cart, "near.up.*")) != NULL)
+else if ((var = cartFindFirstLike(cart, "near.do.up.*")) != NULL)
     {
     doConfigure(conn, colList, var);
-    cartRemovePrefix(cart, "near.up.");
+    cartRemovePrefix(cart, "near.do.up.");
     }
-else if ((var = cartFindFirstLike(cart, "near.down.*")) != NULL)
+else if ((var = cartFindFirstLike(cart, "near.do.down.*")) != NULL)
     {
     doConfigure(conn, colList, var);
-    cartRemovePrefix(cart, "near.down.");
+    cartRemovePrefix(cart, "near.do.down.");
     }
 else if (cartVarExists(cart, defaultConfName))
     doDefaultConfigure(conn, colList);
@@ -1665,8 +1665,6 @@ else if (cartVarExists(cart, advFilterVarName))
     doAdvFilter(conn, colList);
 else if (cartVarExists(cart, advFilterClearVarName))
     doAdvFilterClear(conn, colList);
-else if (cartVarExists(cart, advFilterBrowseVarName))
-    doAdvFilterBrowse(conn, colList);
 else if (cartVarExists(cart, advFilterListVarName))
     doAdvFilterList(conn, colList);
 else if (cartVarExists(cart, getSeqPageVarName))

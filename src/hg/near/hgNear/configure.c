@@ -12,7 +12,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.34 2003/09/26 05:54:17 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.35 2003/09/27 02:24:52 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -57,17 +57,15 @@ for (col = colList; col != NULL; col = col->next)
 
     /* Do left/right button */
     hPrintf("<TD ALIGN=CENTER>");
-    safef(varName, sizeof(varName), "near.up.%s", col->name);
+    safef(varName, sizeof(varName), "near.do.up.%s", col->name);
     if (col != colList)
 	{
-	// cgiMakeButton(varName, " up ");
 	hPrintf("<INPUT NAME=\"%s\" TYPE=\"IMAGE\" VALUE=\"up\" ", varName);
 	hPrintf("SRC=\"../images/up.gif\">");
 	}
-    safef(varName, sizeof(varName), "near.down.%s", col->name);
+    safef(varName, sizeof(varName), "near.do.down.%s", col->name);
     if (col->next != NULL)
 	{
-	// cgiMakeButton(varName, "down");
 	hPrintf("<INPUT NAME=\"%s\" TYPE=\"IMAGE\" VALUE=\"down\" ", varName);
 	hPrintf("SRC=\"../images/down.gif\">");
 	}
