@@ -7,7 +7,7 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: agpAllToFaFile.c,v 1.2 2003/11/20 22:02:35 kate Exp $";
+static char const rcsid[] = "$Id: agpAllToFaFile.c,v 1.3 2003/12/02 00:30:12 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -17,11 +17,12 @@ errAbort(
   "usage:\n"
   "   agpAllToFaFile in.agp in.fa out.fa\n"
   "   options:\n"
-  "   -sizes=out.sizes - save chrom sizes in named file\n"
+  "   -sizes=out - save chrom sizes in out.sizes and gap sizes in out.gaps\n"
   );
 }
 
 char *chromSizeFile = NULL;        /* file for chrom sizes */
+char *chromGapSizeFile = NULL;     /* file for chrom gap sizes */
 
 void agpAllToFaFile(char *agpFile, char *faIn, char *faOut)
 /* agpAllToFaFile - Convert a .agp file to a .fa file. */
@@ -29,18 +30,21 @@ void agpAllToFaFile(char *agpFile, char *faIn, char *faOut)
 struct lineFile *lf = lineFileOpen(agpFile, TRUE); /* input AGP file */
 FILE *fIn, *fOut;                     /* input and output fasta file */
 FILE *fSizes = NULL;                  /* output file w/ chrom sizes */
+FILE *fGapSizes = NULL;               /* output file w/ chrom gap sizes */
 char *line, *words[16];
 int lineSize, wordCount;
 int lastPos = 0;
 struct agpFrag *agpList = NULL, *agp;
 struct hash *chromHash = newHash(0);
 struct hash *chromSizeHash = newHash(0);
+struct hash *chromGapSizeHash = newHash(0);
 struct hash *fragHash = newHash(17);
 char *seqName = "";
 DNA *dna = NULL;
 struct dnaSeq *seq;
 struct hashCookie cookie;
 struct hashEl *hel;
+int gap;                /* count of gap bases for a chrom */
 
 /* read in AGP file, constructing hash of chrom agp lists */
 fprintf(stderr, "Reading %s\n", agpFile);
@@ -53,6 +57,7 @@ while (lineFileNext(lf, &line, &lineSize))
         errAbort("Bad line %d of %s\n", lf->lineIx, lf->fileName);
     if (words[4][0] != 'N')
 	{
+        /* not a gap */
 	lineFileExpectWords(lf, 9, wordCount);
         seqName = words[0];
         agp = agpFragLoad(words);
@@ -80,6 +85,14 @@ while (lineFileNext(lf, &line, &lineSize))
 	}
     else
         {
+        /* gap */
+        gap = lineFileNeedNum(lf, words, 5);
+        if (hashLookup(chromGapSizeHash, seqName) != NULL)
+            {
+            gap += hashIntVal(chromGapSizeHash, seqName);
+            hashRemove(chromGapSizeHash, seqName);
+            }
+        hashAddInt(chromGapSizeHash, seqName, gap);
 	lastPos = lineFileNeedNum(lf, words, 2);
 	}
     if (hashLookup(chromSizeHash, seqName) != NULL)
@@ -99,6 +112,7 @@ if (chromSizeFile != NULL)
     {
     fprintf(stderr, "Writing %s\n", chromSizeFile);
     fSizes = mustOpen(chromSizeFile, "w");
+    fGapSizes = mustOpen(chromGapSizeFile, "w");
     }
 
 /* traverse hash, writing out sequence records */
@@ -111,7 +125,14 @@ while ((hel = hashNext(&cookie)) != NULL)
     if (lastPos == 0)
         errAbort("%s not found\n", seqName);
     if (fSizes != NULL)
+        {
         fprintf(fSizes, "%s\t%d\n", seqName, lastPos);
+        if (hashLookup(chromGapSizeHash, seqName))
+            {
+            gap = hashIntVal(chromGapSizeHash, seqName);
+            fprintf(fGapSizes, "%s\t%d\n", seqName, gap);
+            }
+        }
     dna = needLargeMem(lastPos+1);
     memset(dna, 'n', lastPos);
     dna[lastPos] = 0;
@@ -136,10 +157,17 @@ while ((hel = hashNext(&cookie)) != NULL)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+char *sizeFileBase = NULL;
+
 optionHash(&argc, argv);
-chromSizeFile = optionVal("sizes", chromSizeFile);
 if (argc != 4)
     usage();
+sizeFileBase = optionVal("sizes", sizeFileBase);
+if (sizeFileBase != NULL)
+    {
+    chromSizeFile = addSuffix(cloneString(sizeFileBase), ".sizes");
+    chromGapSizeFile = addSuffix(cloneString(sizeFileBase), ".gaps");
+    }
 agpAllToFaFile(argv[1], argv[2], argv[3]);
 return 0;
 }
