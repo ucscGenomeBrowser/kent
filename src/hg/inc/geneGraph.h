@@ -113,5 +113,5 @@ void ggTabOut(struct geneGraph *gg, FILE *f);
 struct geneGraph *ggFromRow(char **row);
 /* Create a geneGraph from a row in altGraph table. */
 
-#endif GENEGRAPH_H
+#endif /* GENEGRAPH_H */
 
