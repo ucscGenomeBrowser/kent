@@ -8957,4 +8957,15 @@ XXX - running 2004-09-16 09:20
     ldHgGene -gtf -genePredExt hg17 sgpGene chr*.gtf
     hgPepPred hg17 generic sgpPep sgpPep.fa
 
+# LIFTOVER RNAGENE FROM HG16 (09/29/04, acs)
+    cd /cluster/data/hg17/bed
+    mkdir rnaGene
+    cd rnaGene
+    liftOver -gff /cluster/data/hg16/bed/rnaGene/all.gff \
+	/cluster/data/hg16/bed/liftOver/hg16ToHg17.over.chain \
+	rnaGeneLift.gff rnaGeneMiss.gff
+    # 7204 records passed, 16 failed
+    hgsql hg17 < ~/kent/src/hg/lib/rnaGene.sql
+    hgRnaGenes hg17 rnaGeneLift.gff
 
+    
