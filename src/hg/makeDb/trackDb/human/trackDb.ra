@@ -277,7 +277,7 @@ type psl .
 
 track affyGnf1h
 shortLabel Affy GNF1H
-longLabel Alignments of Probes from Affymetrix GNF1H Chip
+longLabel Alignments of Affymetrix Consensus/Exemplars from GNF1H
 group regulation
 priority 89.1
 visibility hide
