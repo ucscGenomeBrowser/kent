@@ -12,7 +12,7 @@ void usage()
 errAbort(
   "hgSuperfam - Generate supfamily table for the Superfamily track.\n"
   "usage:\n"
-  "   hgSuperfam gDb ensDb sfDb\n"
+  "   hgSuperfam gDb sfDb\n"
   "      gDb   is the genome database\n"
   "      sfDb  is the Superfamily database\n"
   "example: hgSuperfam hg16 supfam03\n");
@@ -20,7 +20,7 @@ errAbort(
 
 int main(int argc, char *argv[])
 {
-struct sqlConnection *conn, *conn2, *conn4;
+struct sqlConnection *conn, *connEnsGene, *connSf;
 char query[256], query2[256];
 struct sqlResult *sr, *sr2;
 char **row, **row2;
@@ -47,16 +47,16 @@ if (argc != 3) usage();
 genomeDb = argv[1];
 sfDb     = argv[2];
  
-o3 = fopen("j.dat", "w");
-o4 = fopen("jj.dat", "w");
+o3 = mustOpen("j.dat", "w");
+o4 = mustOpen("jj.dat", "w");
 
 conn = hAllocConn();
-conn2= hAllocConn();
-conn4= hAllocConn();
+connEnsGene= hAllocConn();
+connSf= hAllocConn();
 
 sprintf(query2,"select * from %s.ensGene;", genomeDb);
 
-sr2 = sqlMustGetResult(conn2, query2);
+sr2 = sqlMustGetResult(connEnsGene, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
     {
@@ -107,7 +107,7 @@ while (row2 != NULL)
  	    sfDesc	= row[6];	// 0302 and other supfam releases has an error here
 		
 	    sprintf(cond_str, "id=%s", sfID);
-	    sfDesc  = sqlGetField(conn4, sfDb, "des", "description", cond_str);
+	    sfDesc  = sqlGetField(connSf, sfDb, "des", "description", cond_str);
 
 	    E = atof(eValue);
 	    if (E > 0.02) continue;
@@ -128,8 +128,8 @@ while (row2 != NULL)
 sqlFreeResult(&sr2);
 
 hFreeConn(&conn);
-hFreeConn(&conn2);
-hFreeConn(&conn4);
+hFreeConn(&connEnsGene);
+hFreeConn(&connSf);
     
 fclose(o3);
 fclose(o4);
