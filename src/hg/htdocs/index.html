@@ -21,11 +21,19 @@ function initDb()
 {
   theDb = document.dbForm.genome.options[document.dbForm.genome.selectedIndex].value;
   var queryString = document.location.search.substring(1, document.location.search.length);
-  var dbIndex = queryString.indexOf('db=');
-
+  var dbIndex = queryString.indexOf('org=');
+  var ampIndex = queryString.indexOf('&');
+  
   if (dbIndex >= 0)
   {
-    theDb = queryString.substring(dbIndex + 3);
+    if (ampIndex > 0) {
+      theDb = queryString.substring(dbIndex + 4, ampIndex);
+  } else {
+      theDb = queryString.substring(dbIndex + 4);
+  }   
+
+alert(theDb);
+
     for (var items = 0; items < document.dbForm.genome.options.length; items++)
     {
       if(sameOrganism(theDb, document.dbForm.genome.options[items].value))
