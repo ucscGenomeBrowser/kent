@@ -1,0 +1,13 @@
+#
+# load database on hgwbeta server
+#
+
+SHELL=/bin/sh
+MAILTO=genbank@cse.ucsc.edu
+
+# poll every hour at half-past
+30 0-23 * * *	/scratch/genbank/etc/hgwbeta-dbload
+
+
+
+
