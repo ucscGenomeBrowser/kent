@@ -4318,18 +4318,16 @@ char *thisOrg = hOrganism(database);
 
 cartWebStart(cart, tdb->longLabel);
 
+   printf("<B>%s position:</B> <a target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
+        otherOrg, otherDb, psl->qName, psl->qStart+1, psl->qEnd,
+            psl->qName, psl->qStart+1, psl->qEnd);
 
-if( sameString( otherOrg, "Mouse" ) )
-{
-   printf("<B>%s position:</B> <a target=\"_blank\" href=\"/cgi-bin/hgTracks?db=mm2&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
-        otherOrg, psl->qName, psl->qStart+1, psl->qEnd, 
-	    psl->qName, psl->qStart+1, psl->qEnd);
-}
-else
-{
-    printf("<B>%s position:</B> %s:%d-%d<BR>\n", otherOrg,
-	    psl->qName, psl->qStart+1, psl->qEnd);
-}
+/*superceded by above code*/
+//    printf("<B>%s position:</B> %s:%d-%d<BR>\n", otherOrg,
+//          psl->qName, psl->qStart+1, psl->qEnd);
+
+
+
 printf("<B>%s size:</B> %d<BR>\n", otherOrg, psl->qEnd - psl->qStart);
 
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", thisOrg,
@@ -8298,7 +8296,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 
         sprintf(otherString, "%d&win=T", thisPsl->tStart );
-        hgcAnchorSomewhere("humMusL", cgiEncode(item), otherString, thisPsl->tName );
+	hgcAnchorSomewhere( tdb->tableName, cgiEncode(item), otherString, thisPsl->tName );
         printf("View individual alignment windows\n</a>");
         printf("<br><br>");
     }
@@ -8455,7 +8453,7 @@ if (wordCount > 0)
             "Mouse", "mm2", "blastzBestMouse", printWindowFlag );
     else
         humMusSampleClick( conn, tdb, item, start, num,
-            "Human", "hg12", "blastzBestHuman", printWindowFlag );
+            "Human", "hg12", "blastzBestHuman_08_30", printWindowFlag );
     }
 printTrackHtml(tdb);
 freez(&dupe);
