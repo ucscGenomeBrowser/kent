@@ -11,10 +11,11 @@
 #include "web.h"
 #include "trackDb.h"
 #include "asParse.h"
-#include "hgTables.h"
+#include "kxTok.h"
 #include "joiner.h"
+#include "hgTables.h"
 
-static char const rcsid[] = "$Id: fields.c,v 1.17 2004/07/18 23:52:56 kent Exp $";
+static char const rcsid[] = "$Id: fields.c,v 1.18 2004/07/19 02:15:36 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -408,6 +409,8 @@ doSelectFieldsMore();
 #define filterDdVar "dd"
 #define filterCmpVar "cmp"
 #define filterPatternVar "pat"
+#define filterRawLogicVar "rawLogic"
+#define filterRawQueryVar "rawQuery"
 
 static char *filterFieldVarName(char *db, char *table, char *field, char *type)
 /* Return variable name for filter page. */
@@ -471,16 +474,16 @@ void stringFilterOption(char *db, char *table, char *field, char *logOp)
 {
 char *name;
 
-printf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", field);
+hPrintf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", field);
 name = filterFieldVarName(db, table, field, filterDdVar);
 cgiMakeDropList(name, ddOpMenu, ddOpMenuSize,
 		cartUsualString(cart, name, ddOpMenu[0]));
-puts(" match </TD><TD>");
+hPrintf(" match </TD><TD>\n");
 name = filterPatternVarName(db, table, field);
 cgiMakeTextVar(name, cartUsualString(cart, name, "*"), 20);
 if (logOp == NULL)
     logOp = "";
-printf("</TD><TD> %s </TD></TR>\n", logOp);
+hPrintf("</TD><TD> %s </TD></TR>\n", logOp);
 }
 
 void numericFilterOption(char *db, char *table, char *field, char *label,
@@ -489,7 +492,7 @@ void numericFilterOption(char *db, char *table, char *field, char *label,
 {
 char *name;
 
-printf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", label);
+hPrintf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", label);
 puts(" is ");
 name = filterFieldVarName(db, table, field, filterCmpVar);
 cgiMakeDropList(name, cmpOpMenu, cmpOpMenuSize,
@@ -499,7 +502,7 @@ name = filterPatternVarName(db, table, field);
 cgiMakeTextVar(name, cartUsualString(cart, name, ""), 20);
 if (logOp == NULL)
     logOp = "";
-printf("</TD><TD>%s</TD></TR>\n", logOp);
+hPrintf("</TD><TD>%s</TD></TR>\n", logOp);
 }
 
 void eqFilterOption(char *db, char *table, char *field,
@@ -509,19 +512,19 @@ void eqFilterOption(char *db, char *table, char *field,
 {
 char *name;
 
-printf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", fieldLabel1);
+hPrintf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", fieldLabel1);
 puts(" is ");
 name = filterFieldVarName(db, table, field, filterCmpVar);
 cgiMakeDropList(name, eqOpMenu, eqOpMenuSize,
 		cgiUsualString(name, eqOpMenu[0]));
 /* make a dummy pat_ CGI var for consistency with other filter options */
 name = filterPatternVarName(db, table, field);
-cgiMakeHiddenVar(name, "0");
-puts("</TD><TD>\n");
-printf("%s\n", fieldLabel2);
+cgiMakeHiddenVar(name, "");
+hPrintf("</TD><TD>\n");
+hPrintf("%s\n", fieldLabel2);
 if (logOp == NULL)
     logOp = "";
-printf("<TD>%s</TD></TR>\n", logOp);
+hPrintf("<TD>%s</TD></TR>\n", logOp);
 }
 
 static void filterControlsForTable(char *db, char *rootTable)
@@ -559,7 +562,20 @@ while ((row = sqlNextRow(sr)) != NULL)
 	numericFilterOption(db, rootTable, field, field, logic);
 	}
     }
-hPrintf("</TABLE>");
+hPrintf("</TABLE>\n");
+
+/* Printf free-form query row. */
+    {
+    char *name;
+    hPrintf("<TABLE BORDER=0><TR><TD>\n");
+    name = filterFieldVarName(db, rootTable, "", filterRawLogicVar);
+    cgiMakeDropList(name, logOpMenu, logOpMenuSize,
+		cartUsualString(cart, name, logOpMenu[0]));
+    hPrintf(" Free-form query: ");
+    name = filterFieldVarName(db, rootTable, "", filterRawQueryVar);
+    cgiMakeTextVar(name, cartUsualString(cart, name, ""), 50);
+    hPrintf("</TD></TR></TABLE>\n");
+    }
 
 freez(&table);
 sqlDisconnect(&conn);
@@ -638,6 +654,134 @@ cartRemovePrefix(cart, hgtaFilterPrefix);
 cartSetBoolean(cart, hgtaFilterOn, FALSE);
 doMainPage(conn);
 }
+
+void constrainFreeForm(char *rawQuery, struct dyString *clause)
+/* Let the user type in an expression that may contain
+ * - field names
+ * - parentheses
+ * - comparison/arithmetic/logical operators
+ * - numbers
+ * - patterns with wildcards
+ * Make sure they don't use any SQL reserved words, ;'s, etc.
+ * Let SQL handle the actual parsing of nested expressions etc. - 
+ * this is just a token cop. */
+{
+struct kxTok *tokList, *tokPtr;
+char *ptr;
+int numLeftParen, numRightParen;
+
+if ((rawQuery == NULL) || (rawQuery[0] == 0))
+    return;
+
+/* tokenize (do allow wildcards, and include quotes.) */
+kxTokIncludeQuotes(TRUE);
+tokList = kxTokenizeFancy(rawQuery, TRUE, TRUE, TRUE);
+
+/* to be extra conservative, wrap the whole expression in parens. */
+dyStringAppend(clause, "(");
+numLeftParen = numRightParen = 0;
+for (tokPtr = tokList;  tokPtr != NULL;  tokPtr = tokPtr->next)
+    {
+    if ((tokPtr->type == kxtEquals) ||
+	(tokPtr->type == kxtGT) ||
+	(tokPtr->type == kxtGE) ||
+	(tokPtr->type == kxtLT) ||
+	(tokPtr->type == kxtLE) ||
+	(tokPtr->type == kxtAnd) ||
+	(tokPtr->type == kxtOr) ||
+	(tokPtr->type == kxtNot) ||
+	(tokPtr->type == kxtAdd) ||
+	(tokPtr->type == kxtSub) ||
+	(tokPtr->type == kxtDiv))
+	{
+	dyStringAppend(clause, tokPtr->string);
+	}
+    else if (tokPtr->type == kxtOpenParen)
+	{
+	dyStringAppend(clause, tokPtr->string);
+	numLeftParen++;
+	}
+    else if (tokPtr->type == kxtCloseParen)
+	{
+	dyStringAppend(clause, tokPtr->string);
+	numRightParen++;
+	}
+    else if ((tokPtr->type == kxtWildString) ||
+	     (tokPtr->type == kxtString))
+	{
+	char *word = cloneString(tokPtr->string);
+	toUpperN(word, strlen(word));
+	if (startsWith("SQL_", word) || 
+	    startsWith("MYSQL_", word) || 
+	    sameString("ALTER", word) || 
+	    sameString("BENCHMARK", word) || 
+	    sameString("CHANGE", word) || 
+	    sameString("CREATE", word) || 
+	    sameString("DELAY", word) || 
+	    sameString("DELETE", word) || 
+	    sameString("DROP", word) || 
+	    sameString("FLUSH", word) || 
+	    sameString("GET_LOCK", word) || 
+	    sameString("GRANT", word) || 
+	    sameString("INSERT", word) || 
+	    sameString("KILL", word) || 
+	    sameString("LOAD", word) || 
+	    sameString("LOAD_FILE", word) || 
+	    sameString("LOCK", word) || 
+	    sameString("MODIFY", word) || 
+	    sameString("PROCESS", word) || 
+	    sameString("QUIT", word) || 
+	    sameString("RELEASE_LOCK", word) || 
+	    sameString("RELOAD", word) || 
+	    sameString("REPLACE", word) || 
+	    sameString("REVOKE", word) || 
+	    sameString("SELECT", word) || 
+	    sameString("SESSION_USER", word) || 
+	    sameString("SHOW", word) || 
+	    sameString("SYSTEM_USER", word) || 
+	    sameString("UNLOCK", word) || 
+	    sameString("UPDATE", word) || 
+	    sameString("USE", word) || 
+	    sameString("USER", word) || 
+	    sameString("VERSION", word))
+	    {
+	    errAbort("Illegal SQL word \"%s\" in free-form query string",
+		     tokPtr->string);
+	    }
+	else if (sameString("*", tokPtr->string))
+	    {
+	    // special case for multiplication in a wildcard world
+	    dyStringPrintf(clause, " %s ", tokPtr->string);
+	    }
+	else
+	    {
+	    /* Replace normal wildcard characters with SQL: */
+	    while ((ptr = strchr(tokPtr->string, '?')) != NULL)
+		*ptr = '_';
+	    while ((ptr = strchr(tokPtr->string, '*')) != NULL)
+	    *ptr = '%';
+	    dyStringPrintf(clause, " %s ", tokPtr->string);
+	    }
+	}
+    else if (tokPtr->type == kxtEnd)
+	{
+	break;
+	}
+    else
+	{
+	errAbort("Unrecognized token \"%s\" in free-form query string",
+		 tokPtr->string);
+	}
+    }
+dyStringAppend(clause, ")");
+
+if (numLeftParen != numRightParen)
+    errAbort("Unequal number of left parentheses (%d) and right parentheses (%d) in free-form query expression",
+	     numLeftParen, numRightParen);
+
+slFreeList(&tokList);
+}
+
 
 char *filterClause(char *db, char *table)
 /* Get filter clause (something to put after 'where')
@@ -760,10 +904,23 @@ for (var = varList; var != NULL; var = var->next)
 	    }
 	}
     }
+/* Handle rawQuery if any */
+    {
+    char *varName;
+    char *logic, *query;
+    varName = filterFieldVarName(db, table, "", filterRawLogicVar);
+    logic = cartUsualString(cart, varName, logOpMenu[0]);
+    varName = filterFieldVarName(db, table, "", filterRawQueryVar);
+    query = trimSpaces(cartOptionalString(cart, varName));
+    if (query != NULL && query[0] != 0)
+        {
+	if (needAnd) dyStringPrintf(dy, " %s ", logic);
+	constrainFreeForm(query, dy);
+	}
+    }
 
 /* Clean up and return */
 hashElFreeList(&varList);
-uglyf("filter: %s\n", dy->string);
 if (dy->stringSize == 0)
     {
     dyStringFree(&dy);
