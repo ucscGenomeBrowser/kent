@@ -2031,6 +2031,13 @@ LOAD SANGER22 GENES  (TODO)
     set cmd="load data local infile '$table' into table jaxOrtholog;" 
     echo $cmd | hgsql hg15
 
+    # fixes by Heather and Bob (2003-07-02)
+    # filter.awk had order of columns wrong
+    # create HMD_Human4.rpt.noheadfoot
+    split.pl < HMD_Human4.rpt.noheadfoot > jaxOrtholog2.tab
+    set cmd="delete from jaxOrtholog;"
+    set cmd="load data local infile '$table' into table jaxOrtholog;" 
+
 
 LOAD RNAGENES
       ssh hgwdev
