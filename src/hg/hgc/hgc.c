@@ -165,7 +165,7 @@
 #include "gencodeIntron.h"
 
 
-static char const rcsid[] = "$Id: hgc.c,v 1.861 2005/03/29 00:02:28 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.862 2005/03/29 00:14:53 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2753,7 +2753,7 @@ else
 hgSeqOptionsHtiCart(hti,cart);
 puts("<P>");
 cgiMakeButton("submit", "get DNA");
-cgiMakeButton("submit", "extended case/color options");
+cgiMakeButton("submit", EXTENDED_DNA_BUTTON);
 puts("</FORM><P>");
 puts("Note: The \"Mask repeats\" option applies only to \"get DNA\", not to \"extended case/color options\". <P>");
 }
@@ -3168,7 +3168,7 @@ char *chrom = NULL;
 int start = 0;
 int end = 0;
 
-if (sameString(action, "extended case/color options"))
+if (sameString(action, EXTENDED_DNA_BUTTON))
     {
     doGetDnaExtended1();
     return;
