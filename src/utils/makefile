@@ -63,6 +63,7 @@ DIRS = \
 	faToTwoBit \
 	faTrans \
 	faTrimPolyA \
+	findMotif \
 	fixCr \
 	gffPeek \
 	htmlPics \
