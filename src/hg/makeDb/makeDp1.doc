@@ -236,16 +236,72 @@ exit; # don't actually run this like a script :)
     # Edit that makefile to add dp1 in all the right places and do
     make update
 
-TODO
     # go public on genome-test
     #make alpha
     cvs commit makefile
 
     # Add trackDb directories
+TODO
     mkdir drosophila
     mkdir drosophila/dp1
     cvs add drosophila
     cvs add drosophila/dp1
     cvs commit drosophila
+
+
+PRODUCING GENSCAN PREDICTIONS (DONE 10/14/03 angie)
+    # Run on small cluster -- genscan needs big mem.
+    ssh kkr1u00
+    mkdir /cluster/data/dp1/bed/genscan
+    cd /cluster/data/dp1/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    # Make hard-masked contigs
+    mkdir /cluster/data/dp1/scaffoldsMasked
+    foreach f (/cluster/data/dp1/scaffolds/*.fa)
+      maskOutFa $f hard /cluster/data/dp1/scaffoldsMasked/$f:t.masked
+    end
+    # Generate a list file, contigs.list, of all the hard-masked contigs that 
+    # *do not* consist of all-N's (which would cause genscan to blow up)
+    rm -f contigs.list
+    touch contigs.list
+    foreach f ( `ls -1S /cluster/data/dp1/scaffoldsMasked/*.fa.masked` )
+      egrep '[ACGT]' $f > /dev/null
+      if ($status == 0) echo $f >> contigs.list
+    end
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    gensub2 contigs.list single gsub jobList
+    para create jobList
+    para try
+    para check
+    para push
+#Completed: 759 of 759 jobs
+#Average job time:                  16s       0.27m     0.00h    0.00d
+#Longest job:                      424s       7.07m     0.12h    0.00d
+#Submission to last job:          1538s      25.63m     0.43h    0.02d
+
+    # If there are crashes, diagnose with "para problems".  
+    # If a job crashes due to genscan running out of memory, re-run it 
+    # manually with "-window=1200000" instead of "-window=2400000".
+    # chr14_21, chr16_4
+    
+    # Convert these to chromosome level files as so:
+    ssh kksilo
+    cd /cluster/data/dp1/bed/genscan
+    liftUp genscan.gtf ../../jkStuff/liftAll.lft warn gtf/*.gtf
+    liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft warn subopt/*.bed
+    cat pep/*.pep > genscan.pep
+
+    # Load into the database as so:
+    ssh hgwdev
+    cd /cluster/data/dp1/bed/genscan
+    ldHgGene dp1 genscan genscan.gtf
+    hgPepPred dp1 generic genscanPep genscan.pep
+    hgLoadBed dp1 genscanSubopt genscanSubopt.bed
 
 
