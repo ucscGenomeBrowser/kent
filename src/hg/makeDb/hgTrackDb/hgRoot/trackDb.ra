@@ -566,8 +566,8 @@ visibility dense
 type bed 15 +
 
 track affy
-shortLabel Affymetrix
-longLabel Affymetrix Gene Expression from Novartis Institute
+shortLabel GNF
+longLabel GNF Gene Expression Atlas using Affymetrix GeneChips
 priority 39
 visibility hide
 type bed 15 +
