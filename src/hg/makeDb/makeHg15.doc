@@ -3437,6 +3437,20 @@ hgLoadBed -noBin hg15 bacendsCow in.bed
 
 # add to kent/src/hg/makeDb/trackDb/human/hg15/trackDb.ra
 
+# COW BACENDS (Updated, Heather, Mar. 21, 2005)
+
+ssh hgwdev
+cd /cluster/data/hg15/bed/bacendsCow
+
+# Obtain GFF file from Denis; unzip into BACendhg15.gff
+
+# Convert into BED 6:
+
+  makebed.pl < BACendhg15.gff > BACendhg15.bed
+  hgLoadBed -noBin hg15 bacendsCow BACendhg15.bed
+  # 54262 warnings
+
+
 # RUN 3-WAY ALIGNMENTS HUMAN/RAT/MOUSE USING MULTIZ (DONE kate)
 
     set multizDir = /cluster/data/hg15/bed/multiz.rn3-mm3.2003-07-26-KRR
