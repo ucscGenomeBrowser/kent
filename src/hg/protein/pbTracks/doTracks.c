@@ -117,6 +117,7 @@ for (i=0; i<len; i++)
         }
     chp++;
     }
+
 for (j=0; j<20; j++)
     {
     aaResFreqDouble[j] = ((double)aaResCnt[j])/((double)len);
@@ -137,31 +138,22 @@ for (index=0; index < len; index++)
 	    break;
 	    }
 	}
+
     //skip non-standard AA alphabets
     if (ia == -1) break;
 
     calxy(index, *yOffp, &xx, &yy);
 
-    /*
-    sprintf(cond_str, "AA='%c'", res);
-    answer = sqlGetField(NULL, database, "pbAnomLimit", "pctLow", cond_str);
-    pctLow = (double)(atof(answer));
-    answer = sqlGetField(NULL, database, "pbAnomLimit", "pctHi", cond_str);
-    pctHi = (double)(atof(answer));
-    */
-
     abnormalColor = pbRed;
-    abnormal = chkAnomaly(aaResFreqDouble[ia], pctLow[res], pctHi[res]);
+    abnormal = chkAnomaly(aaResFreqDouble[ia], pctLow[ia], pctHi[ia]);
     if (abnormal > 0)
 	{
-	//vgBox(g_vg, xx, yy-5, 1*pbScale, 5, pbRed);
 	vgBox(g_vg, xx, yy-5, 1*pbScale, 5, abnormalColor);
 	}
     else
 	{
 	if (abnormal < 0)
 	    {
-	    //vgBox(g_vg, xx, yy, 1*pbScale, 5, pbBlue);
 	    vgBox(g_vg, xx, yy, 1*pbScale, 5, abnormalColor);
 	    }
 	}
