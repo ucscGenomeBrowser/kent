@@ -9,7 +9,7 @@
 #include "dnautil.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: getRnaPred.c,v 1.13 2004/09/30 06:46:18 markd Exp $";
+static char const rcsid[] = "$Id: getRnaPred.c,v 1.14 2004/12/25 03:02:02 jill Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -23,11 +23,12 @@ errAbort(
   "\n"
   "options:\n"
   "   -weird - only get ones with weird splice sites\n"
-  "   -cdsUpper - output CDS in update case\n"
+  "   -cdsUpper - output CDS in upper case\n"
   "   -cdsOnly - only output CDS\n"
   "   -cdsOut=file - write CDS to this tab-separated file, in the form\n"
   "      acc  start  end\n"
   "    where start..end are genbank style, one-based coordinates\n"
+  "   -keepMasking - un/masked in upper/lower case.\n"
   "   -pslOut=psl - output a PSLs for the virtual mRNAs.  Allows virtual\n"
   "    mRNA to be analyzed by tools that work on PSLs\n"
   "   -suffix=suf - append suffix to each id to avoid confusion with mRNAs\n"
@@ -45,8 +46,10 @@ errAbort(
 
 static struct optionSpec options[] = {
    {"weird", OPTION_BOOLEAN},
+   {"cdsUpper", OPTION_BOOLEAN},
    {"cdsOut", OPTION_STRING},
    {"cdsOnly", OPTION_BOOLEAN},
+   {"keepMasking", OPTION_BOOLEAN},
    {"pslOut", OPTION_STRING},
    {"suffix", OPTION_STRING},
    {"peptides", OPTION_BOOLEAN},
@@ -55,7 +58,7 @@ static struct optionSpec options[] = {
 
 
 /* parsed from command line */
-boolean weird, cdsUpper, cdsOnly, peptides;
+boolean weird, cdsUpper, cdsOnly, peptides, keepMasking;
 char *cdsOut = NULL;
 char *pslOut = NULL;
 char *suffix = "";
@@ -215,7 +218,7 @@ for (i=0; i<gp->exonCount; ++i)
         warn("%d sized exon in %s\n", size, gp->name);
     else
         {
-        struct dnaSeq *seq = hDnaFromSeq(gp->chrom, start, end, dnaLower);
+        struct dnaSeq *seq = hDnaFromSeq(gp->chrom, start, end, (keepMasking ? dnaMixed : dnaLower));
         dyStringAppendN(dnaBuf, seq->dna, size);
         freeDnaSeq(&seq);
         }
@@ -336,11 +339,14 @@ weird = optionExists("weird");
 cdsUpper = optionExists("cdsUpper");
 cdsOnly = optionExists("cdsOnly");
 cdsOut = optionVal("cdsOut", NULL); 
+keepMasking = optionExists("keepMasking"); 
 pslOut = optionVal("pslOut", NULL); 
 suffix = optionVal("suffix", suffix); 
 peptides = optionExists("peptides");
 if (cdsOnly && peptides)
     errAbort("can't specify both -cdsOnly and -peptides");
+if (cdsUpper && keepMasking)
+    errAbort("can't specify both -cdsUpper and -keepMasking");
 getRnaPred(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }

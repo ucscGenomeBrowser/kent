@@ -8,19 +8,22 @@ report an E-value statistic.</p>
 
 <p>
 Rankprop detects subtle protein sequence similarities by performing a
-diffusion across a protein similarity network in which the edges are
-defined and weighted by PSI-BLAST E-values.  The diffusion operation
-allows the algorithm to exploit non-local network structure in the
-identification of remote protein homologs.  Thus, two proteins that do
-not have a significant pairwise PSI-BLAST E-value may still receive a
-good score from Rankprop if they are connected by many short paths in
-the protein similarity network.  The Rankprop algorithm is described
-in Weston J <EM>et al.</EM>, 
+diffusion across a protein similarity network in which the edges are defined
+and weighted by PSI-BLAST E-values.  The diffusion operation allows the
+algorithm to exploit non-local network structure in the identification of
+remote protein homologs.  Thus, two proteins that do not have a significant
+pairwise PSI-BLAST E-value may still receive a good score from Rankprop if
+they are connected by many short paths in the protein similarity network.  The
+Rankprop algorithm is described in Weston J <EM>et al.</EM>,
 <A HREF="http://www.pnas.org/cgi/content/full/101/17/6559" TARGET=_blank>
-Protein ranking: From local to global structure in the protein similarity 
-network</A>, <EM> Proc. Natl. Acad. Sci</EM> <B>101</B>, 6559-6563 (2004).
-It is based upon the approach of Zhou et al, Ranking on Data Manifolds,
-Advances in Neural Information Processing Systems 16, 2003.
+Protein ranking: From local to global structure in the protein similarity
+network</A>,
+<EM>Proc. Natl. Acad. Sci</EM> <B>101</B>, 6559-6563 (2004).  
+It is based upon the approach of Zhou et al.,
+<A HREF="http://www.kyb.mpg.de/publication.html?publ=2334" TARGET=_blank>
+Ranking on Data Manifolds</A>,
+<EM>Advances in Neural Information Processing Systems 16</EM>, MIT
+Press, Cambridge, MA, (2004)
 </P>
 
 <h3>Methods</h3>

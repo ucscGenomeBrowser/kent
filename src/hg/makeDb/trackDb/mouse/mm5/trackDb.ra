@@ -96,7 +96,7 @@ type psl xeno danRer2
 otherDb danRer2
 
 track chainDanRer2
-shortLabel Zebrafish Chain
+shortLabel $o_Organism Chain
 longLabel Zebrafish ($o_date/$o_db) Chained Blastz Alignments
 group compGeno
 priority 175.1
@@ -108,7 +108,7 @@ type chain danRer2
 otherDb danRer2
 
 track netDanRer2
-shortLabel Zebrafish Net
+shortLabel $o_Organism Net
 longLabel Zebrafish ($o_date/$o_db) Alignment Net
 group compGeno
 priority 175.2

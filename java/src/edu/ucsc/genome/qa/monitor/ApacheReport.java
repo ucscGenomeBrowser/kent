@@ -18,7 +18,37 @@ import java.util.Calendar;
 public class ApacheReport {
 
     static String fileMonth;
+
+   /**
+    *  Get the proper digit for the 0-based month variable
+    *
+    *  @param month     The month; becomes part of file name.
+    *
+    *  @return          The two-character version of the month.
+    */
     static String getMonth(int month) {
+      if (month == 0) return "01";
+      if (month == 1) return "02";
+      if (month == 2) return "03";
+      if (month == 3) return "04";
+      if (month == 4) return "05";
+      if (month == 5) return "06";
+      if (month == 6) return "07";
+      if (month == 7) return "08";
+      if (month == 8) return "09";
+      if (month == 9) return "10";
+      if (month == 10) return "11";
+      return "12";
+    }
+
+   /**
+    *  Get the month name in text for the 0-based month variable
+    *
+    *  @param month     The month; becomes part of file name.
+    *
+    *  @return          The text 3-char name of the month.
+    */
+    static String getMonthText(int month) {
       if (month == 0) return "Jan";
       if (month == 1) return "Feb";
       if (month == 2) return "Mar";
@@ -46,15 +76,15 @@ public class ApacheReport {
     */
     static PrintWriter setDailyFile(String outpath, int year, int month, int day) throws Exception {
       DecimalFormat df2 = new DecimalFormat("#,#00");
-      String filename = outpath + year + getMonth(month) + df2.format(day)
-                        + ".html";
+      String filename = outpath + year + "-" + getMonth(month) + "-" 
+                        + df2.format(day) + ".html";
       System.out.println("\nWriting daily report to \n" + filename + "\n");
       String url = "/usr/local/apache/htdocs/";
       if (outpath.startsWith(url)) {
         String urlpath = outpath.replaceFirst(url, "http://hgwdev.cse.ucsc.edu/");
         System.out.println("Try the URL directly: \n" +
-                           urlpath + year + getMonth(month) + df2.format(day) 
-                           + ".html");
+                           urlpath + year + "-" + getMonth(month) + "-" 
+                           + df2.format(day) + ".html");
       }
       FileWriter fout = new FileWriter(filename);
       PrintWriter pw = new PrintWriter(fout);
@@ -63,7 +93,7 @@ public class ApacheReport {
 
    /**
     *  Name monthly file for yesterday for writing HTML output
-    *  and print the name of the file to the command line.
+    *  and print the name of the file to standard out.
     *  Create new file for next month if it is a new month.
     *
     *  @param outpath   The path; becomes part of file name.
@@ -81,7 +111,7 @@ public class ApacheReport {
       String yestMonth = getMonth(month);
 
       // make name of file for yesterday's data
-      fileMonth = outpath + year + getMonth(month) + ".html";
+      fileMonth = outpath + year + "-" + getMonth(month) + ".html";
       Calendar calToday = Calendar.getInstance();
       int nowMonth = calToday.get(Calendar.MONTH);
       int nowYear = calToday.get(Calendar.YEAR);
@@ -95,7 +125,7 @@ public class ApacheReport {
         if (outpath.startsWith(url)) {
           String urlpath = outpath.replaceFirst(url, "http://hgwdev.cse.ucsc.edu/");
           System.out.println("Try the URL directly: \n" +
-                             urlpath + year + getMonth(month) + ".html");
+                             urlpath + year + "-" + getMonth(month) + ".html");
         }
         // start new month file when month changes
 
@@ -125,19 +155,19 @@ public class ApacheReport {
       pw.print("<HTML>\n");
       pw.print("<HEAD>\n");
       if (fileFlag.equals("daily")) {
-        pw.print("<TITLE>Daily Apache Report -- " + getMonth(month) + " " 
-           + day + ", " + year + " </TITLE>\n");
+        pw.print("<TITLE>Daily Apache Report -- " + getMonthText(month) + " " +  
+           day + ", " + year + " </TITLE>\n");
       } else {
-        pw.print("<TITLE>Daily Apache Report -- " + getMonth(month) + " "  
+        pw.print("<TITLE>Daily Apache Report -- " + getMonthText(month) + ", "  
            + year + " </TITLE>\n");
       }
       pw.print("</HEAD>\n");
       pw.print("<BODY>\n");
       if (fileFlag.equals("daily")) {
-        pw.print("<H2>Daily Apache Report " + getMonth(month) + " " +
-               day + ", " + year + "</H2>\n");
+        pw.print("<H2>Daily Apache Report " + getMonthText(month) + " " +
+                  day + ", " + year + "</H2>\n");
       } else {
-        pw.print("<H2>Monthly Apache Report " + getMonth(month) + " " +
+        pw.print("<H2>Monthly Apache Report " + getMonthText(month) + ", " +
                year + "</H2>\n");
       }
       pw.print("<TABLE BORDER CELLSPACING=0 CELLPADDING=5>\n");
@@ -210,7 +240,7 @@ public class ApacheReport {
 
       "usage:\n" +
       "   java ApacheReport propertiesFile [-path=pathname] [-mode=verbose]\n" +
-      "where properties files may contain sourceMachine, sourceDB, sourceTable, " +
+      "where properties files may contain sourceMachine, sourceDB, \nsourceTable, " +
       "targetMachine, errorCodes, minutes.\n" +
       "and where path defaults to /usr/local/apache/htdocs/qa/test-results/apache " +
       "\n(use \"local\" for local directory).\n" +
@@ -321,7 +351,7 @@ public class ApacheReport {
       int secondsInHour = 60 * 60;
       int totalAccess = 0;
       int totalError = 0;
-      for (int reportHour = 0; reportHour <= 23; reportHour++) {
+       for (int reportHour = 0; reportHour <= 23; reportHour++) {
       // for (int reportHour = 0; reportHour <= 1; reportHour++) {
         pw.print("<TR>\n");
         pw.print("<TD>" + reportHour + "</TD>\n");

@@ -1085,6 +1085,14 @@ Submission to last job:          2042s      34.03m     0.57h    0.02d
     cd /cluster/data/hg17/bed/zb.hg17/axtChain
     netFilter -minGap=10 human.net |  hgLoadNet hg17 netXenTro1 stdin
 
+# MAKE NET MAFS FOR MULTIZ (2004-12-15 kate)
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/zb.hg17/axtNet
+    mkdir -p ../mafNet
+    cat *.axt | axtSort stdin stdout | axtToMaf -tSplit stdin \
+     -tPrefix=hg17. /cluster/data/hg17/chrom.sizes \
+     -qPrefix=xenTro1. /cluster/data/xenTro1/chrom.sizes ../mafNet
+
 # SWAP EVERYTHING AND REMAKE NET FROM XENOPUS REFERENCE
     ssh kksilo
     cd /cluster/data/xenTro1/bed

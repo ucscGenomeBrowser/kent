@@ -31,7 +31,7 @@ O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
     imageClone.o isochores.o itemAttr.o jalview.o jaxOrtholog.o jaxQTL.o jaxQTL3.o\
     jksql.o joiner.o \
     kgAlias.o kgProtAlias.o kgXref.o knownInfo.o knownMore.o knownToSuper.o \
-    lfs.o liftOver.o liftOverChain.o liftUp.o \
+    ld.o lfs.o liftOver.o liftOverChain.o liftUp.o \
     llaInfo.o mapSts.o mcnBreakpoints.o minGeneInfo.o \
     mouseOrtho.o mouseSyn.o mouseSynWhd.o mysqlTableStatus.o \
     netAlign.o ooUtils.o \
@@ -44,7 +44,7 @@ O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
     roughAli.o sage.o sageCounts.o sageExp.o sample.o tfbsCons.o tfbsConsSites.o \
     sanger22extra.o sangerGene.o sargassoSeaXra.o scopDes.o scoredRef.o sgdAbundance.o \
     sgdClone.o sgdDescription.o sgdOther.o simpleNucDiff.o simpleRepeat.o \
-    snp.o snpMap.o snpUi.o softPromoter.o softberryHom.o \
+    snp.o snpExceptions.o snpMap.o snpUi.o softPromoter.o softberryHom.o \
     spDb.o splignAlign.o stanMad.o stsAlias.o \
     stsInfo.o stsInfo2.o stsInfoMouse.o stsInfoMouseNew.o stsInfoRat.o \
     stsMap.o stsMapMouse.o stsMapMouseNew.o stsMapRat.o stsMarker.o \

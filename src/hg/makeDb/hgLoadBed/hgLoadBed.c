@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.31 2004/11/23 19:40:32 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.32 2004/12/16 21:23:43 jsp Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -152,7 +152,7 @@ for (bed = bedList; bed != NULL; bed = bed->next)
         {
 	/*	new definition for old "reserved" field, now itemRgb */
 	/*	and when itemRgb, it is a comma separated string r,g,b */
-	if (i == 8)
+	if (i == 8 && sqlTable == NULL)
 	    {
 	    char *comma;
 	    /*  Allow comma separated list of rgb values here   */

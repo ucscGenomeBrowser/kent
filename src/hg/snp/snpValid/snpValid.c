@@ -66,6 +66,52 @@ static struct optionSpec options[] = {
 
 /* ========================================================================== */
 
+#define BASE_SNP_EX_NUM 27   /* next avail number we can use */
+
+enum snpExceptionType {
+    snpExNotExact,
+    snpExMismatch,
+    snpExNoFlanks,
+    snpExWrongStrand,
+    snpExCount
+};
+
+static char *snpExDesc[] = {
+    "Not an exact match for locType=exact and size=1",
+    "Mismatch below threshold.",
+    "No flank data.",
+    "Wrong Strand reported."
+};
+
+FILE *exf[snpExCount];
+
+void openExOuts(char *db)
+{
+int i;
+char fname[256];
+for (i=0;i<snpExCount;i++)
+    {
+    safef(fname,sizeof(fname),"%ssnpException.%d.bed",db,i+BASE_SNP_EX_NUM);
+    if ((exf[i]=fopen(fname,"w"))==NULL)
+	{
+	errAbort("error opening output file %s.\n",fname);
+	}
+    fprintf(exf[i],"# exceptionId:  %d\n",i+BASE_SNP_EX_NUM);
+    fprintf(exf[i],"# query:        %s\n",snpExDesc[i]);
+    }
+}
+
+void closeExOuts()
+{
+int i;
+for (i=0;i<snpExCount;i++)
+    {
+    fclose(exf[i]);
+    }
+}
+
+
+
 
 /* --- save memory by defining just the fields needed from flank file  ---- */
 
@@ -340,6 +386,18 @@ if ((snp->chromStart - lf + ls)  > chromSeq->size)
 return cloneStringZ(chromSeq->dna + snp->chromStart - lf, ls);
 }
 
+void writeExOut(enum snpExceptionType i, struct snp *snp)
+{
+fprintf(exf[i],"%s\t%d\t%d\t%s\t%s\t%s\n",
+  snp->chrom,
+  snp->chromStart,
+  snp->chromEnd,
+  snp->name,
+  snp->strand,
+  snp->locType
+  );
+}
+
 
 /* ---------------------------------------------------------------- */
 
@@ -404,6 +462,7 @@ if (!cns)
     return;
     }
 
+openExOuts(db);  /* open separate files for each snp class of Exception of interest */
 
 printf("maxFlank = %d \n",maxFlank);
 printf("threshold = %d \n",threshold);
@@ -493,7 +552,9 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		    );
 		}
 		
+	    /*
 	    uglyf("%s: exactDna=%s obs=%s \n",snp->name,exactDna,snp->observed);
+	    */
 	    
 	    for(i=0; i<n; i++)
 		{
@@ -509,8 +570,11 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		    }
 		}
 	    if (found) { goodExact++; }
-	    else { badExact++; 
+	    else 
+	      { 
+	      badExact++; 
 	      uglyf("id: %s exact %s not found in observed %s \n",snp->name,exactDna,snp->observed); 
+	      writeExOut(snpExNotExact, snp);
 	      }
 	    freez(&obsvd);
 	    freez(&obs);
@@ -551,7 +615,7 @@ for (cn = cns; cn != NULL; cn = cn->next)
 	    int strand=1;
 	    char *rc = NULL;
 	    int m = 0;
-	    int lf = 0;  /* size of left flank context (lower case dna) (this was when dbSnpRs? may still be true for affy) */
+	    int lf = 0;  /* size of left  flank context (lower case dna)  */
 	    int rf = 0;  /* size of right flank context (lower case dna) */
 	    int ls = 0;  /* total size of assembly dna context plus actual region in dbSnpRs/affy */
 	    char *origSeq = NULL; /* use to display the original dnSnpRs.assembly seq */
@@ -621,7 +685,7 @@ for (cn = cns; cn != NULL; cn = cn->next)
             if (allNs(nibDna))
 		{
 		++gapNib;
-		++mismatch;
+		++mismatch; writeExOut(snpExMismatch, snp);
 		if (Verbose)
 		printf("(nib gap) rsId=%s chrom=%s %u %u \n assembly=%s \n  snpMap=%s \n\n",
 		  id,
@@ -708,11 +772,13 @@ for (cn = cns; cn != NULL; cn = cn->next)
        		    || ((strand == -1) && (!sameString(snp->strand,"-"))))
 			{
     			strandMismatch++;   /* reported strand differs from what we found */
+			writeExOut(snpExWrongStrand, snp);
 			}
 		    }
 		else
 		    {
     		    ++mismatch;
+		    writeExOut(snpExMismatch, snp);
 		    }
 		
 		if ((bestScore < threshold) || Verbose) 
@@ -756,6 +822,7 @@ for (cn = cns; cn != NULL; cn = cn->next)
 	    safef(snpLkup,sizeof(snpLkup),"flnk%s",snp->chrom); 
 	    if (Verbose)		    
     		printf("snp.name=%s is missing from %s (now at %s) \n\n",snp->name,snpLkup,id);
+	    writeExOut(snpExNoFlanks, snp);
 	    }
 	
 	
@@ -801,10 +868,12 @@ for (cn = cns; cn != NULL; cn = cn->next)
 
 slFreeList(&cns);
 
+closeExOuts();  /* close Exception class output files */
+
 axtScoreSchemeFree(&simpleDnaScheme);
 
 printf("\n\n\n Grand Totals:  \n ");
-printf("             matches: %u \n ",totalMatch);
+printf("             matches: %u \n",totalMatch);
 printf("          mismatches: %u \n",totalMismatch);
 printf(" missing from flanks: %u \n",totalMissing);
 printf("   rev compl matches: %u \n",totalGoodrc);

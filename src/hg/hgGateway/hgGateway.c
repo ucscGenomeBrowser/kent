@@ -13,7 +13,7 @@
 #include "hCommon.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.76 2004/12/15 00:35:52 angie Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.77 2005/01/03 19:45:03 hiram Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -84,7 +84,7 @@ puts(
 );
 
 puts(
-"<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"/images/DOT.gif\">\n"
+"<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"/images/DOT.gif\" WIDTH=1 HEIGHT=1 ALT=dot>\n"
 "<center>\n"
 "<table bgcolor=\"cccc99\" border=\"0\" CELLPADDING=1 CELLSPACING=0>\n"
 "<tr><td>\n"

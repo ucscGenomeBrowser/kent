@@ -40,7 +40,7 @@
 #include	"wiggle.h"
 
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.12 2004/11/02 20:46:16 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.13 2004/12/22 23:27:23 hiram Exp $";
 
 /*	This list of static variables is here because the several
  *	subroutines in this source file need access to all this business
@@ -90,6 +90,21 @@ static double overallUpperLimit = -1.0e+300; /* for the complete set of data */
 static double overallLowerLimit = 1.0e+300; /* for the complete set of data */
 static char *wibFileName = (char *)NULL;	/* for use in output_row() */
 
+#if defined(NOT)
+/*	not used at this time, perhaps in the future */
+static int isIntF(float x)
+    {
+    float y = floorf(x);
+    return (0.0 == (x - y));
+    }
+#endif
+
+static int isIntD(double x)
+    {
+    double y = floor(x);
+    return (0.0 == (x - y));
+    }
+
 /*
  *	The table rows need to be printed in a couple of different
  *	places in the code.
@@ -107,6 +122,7 @@ double sumData = 0.0;
 double sumSquares = 0.0;
 unsigned long long i;
 unsigned long long validCount = 0; /* number of valid data points */
+boolean allIntegers = TRUE;
 
 if (bincount)
     {
@@ -120,12 +136,27 @@ if (bincount)
 	    if (data_values[i] < lowerLimit) lowerLimit = data_values[i];
 	    sumData += data_values[i];
 	    sumSquares += data_values[i] * data_values[i];
+	    if (allIntegers && (! isIntD(data_values[i])))
+		allIntegers = FALSE;
 	    }
 	}
     if (validCount < 1) {
 	errAbort("wigAsciiToBinary internal error: empty row being produced at row: %d, line: %lu\n", rowCount, lineCount);
     }
+
     dataRange = upperLimit - lowerLimit;
+
+    /*	If all integer data and will fit in the 128 bins,
+     *	then do them as integer bins
+     */
+
+    if (allIntegers && isIntD(dataRange) && isIntD(upperLimit) &&
+	isIntD(lowerLimit) && (dataRange < (double)MAX_WIG_VALUE) &&
+	(dataRange > 0.0))
+	{
+	dataRange = MAX_WIG_VALUE;
+	}
+
     if (upperLimit > overallUpperLimit) overallUpperLimit = upperLimit;
     if (lowerLimit < overallLowerLimit) overallLowerLimit = lowerLimit;
     /*	With limits determined, can now scale and output the values

@@ -1501,6 +1501,8 @@ chainSome $(path1)
 # enrich 4.27x
 
 # CHAIN ZEBRAFISH (danRer2) BLASTZ (DONE, 2004-12-15, hartera)
+# APPLY chainAntiRepeat TO REMOVE CHAINS THAT ARE THE RESULTS OF REPEATS
+# AND DEGENERATE DNA (DONE, 2004-12-23, hartera)
     # Run axtChain on little cluster
     ssh kki
     cd /cluster/data/fr1/bed/blastz.danRer2.swap
@@ -1550,9 +1552,29 @@ axtChain $1 /cluster/bluearc/fugu/fr1/chromNib \
     chainFilter -minScore=5000 all.chain.unfiltered > all.chainFilt5k
     rm -r chain
     chainSplit chain all.chainFilt5k
+
+    # remove repeats from chains and reload into database
+    # (2004-12-23, hartera)
+    ssh kksilo
+    /cluster/data/fr1/bed/blastz.danRer2.swap/axtChain
+    gunzip chain/chr*.gz
+    mv chain chainRaw
+    mkdir chain
+    cd chainRaw
+    foreach f (*.chain)
+       set c = $f:r
+       echo $c
+       nice chainAntiRepeat /cluster/bluearc/fugu/fr1/chromNib \
+                       /cluster/bluearc/danRer2/nib $f \
+                       ../chain/$c.chain
+    end
+    cd ..
+    chainMergeSort ./chain/*.chain > all.chain.antirepeat
+    chainSplit chainAR all.chain.antirepeat
+
     # Load chains into database
     ssh hgwdev
-    cd /cluster/data/fr1/bed/blastz.danRer2.swap/axtChain/chain
+    cd /cluster/data/fr1/bed/blastz.danRer2.swap/axtChain/chainAR
     foreach i (*.chain)
         set c = $i:r
         hgLoadChain fr1 ${c}_chainDanRer2 $i
@@ -1562,12 +1584,18 @@ axtChain $1 /cluster/bluearc/fugu/fr1/chromNib \
 # featureBits fr1 all_mrna chrUn_chainDanRer2Link -enrichment
 # all_mrna 0.123%, chrUn_chainDanRer2Link 15.517%, both 0.089%, cover 72.00%, 
 # enrich 4.64x
+# after chainAntiRepeat:
+# featureBits fr1 all_mrna chrUn_chainDanRer2Link -enrichment
+# all_mrna 0.126%, chrUn_chainDanRer2Link 15.505%, both 0.091%, cover 72.03%, 
+# enrich 4.65x
 
 # NET ZEBRAFISH (danRer2) BLASTZ (DONE, 2004-12-15, hartera)
+# RE-DO NET WITH CHAINS FILTERED BY chainAntiRepeat (DONE, 2004-12-23,hartera)
     ssh kksilo
     cd /cluster/data/fr1/bed/blastz.danRer2.swap/axtChain
+    rm -r preNet
     mkdir preNet
-    cd chain
+    cd chainAR
     foreach i (*.chain)
        echo preNetting $i
        /cluster/bin/i386/chainPreNet $i ../../S1.len ../../S2.len \
@@ -1585,7 +1613,7 @@ axtChain $1 /cluster/bluearc/fugu/fr1/chromNib \
     end
     cd ..
     cat n1/*.net | /cluster/bin/i386/netSyntenic stdin noClass.net
-    # memory usage 77680640, utime 395 s/100, stime 150
+    # memory usage 77627392, utime 389 s/100, stime 103
 
     # Add classification info using db tables:
     ssh hgwdev
@@ -1599,11 +1627,37 @@ axtChain $1 /cluster/bluearc/fugu/fr1/chromNib \
     netFilter -minGap=10 zfishdanRer2.net | hgLoadNet fr1 netDanRer2 stdin
 # featureBits fr1 all_mrna netDanRer2 -enrichment
 # all_mrna 0.123%, netDanRer2 31.390%, both 0.096%, cover 77.94%, enrich 2.48x
+# featureBits fr1 all_mrna netDanRer2 -enrichment
+# all_mrna 0.126%, netDanRer2 31.379%, both 0.098%, cover 77.94%, enrich 2.48x
 
 # BLASTZ FR1 CLEANUP (DONE, 2004-12-15, hartera)
+# RE-DONE (DONE, 2004-12-23, hartera)
     ssh kksilo
     cd /cluster/data/fr1/bed/blastz.danRer2.swap
     nice rm axtChain/run1/chain/* &
     nice rm -fr axtChain/n1 axtChain/noClass.net axtChain/preNet &
     nice gzip axtChrom/* pslChrom/* axtChain/all.chainFilt5k axtChain/all.chain.unfiltered axtChain/*.net axtChain/chain/*.chain &
+    nice gzip axtChain/all.chain.antirepeat axtChain/chainAR/*.chain &
+    nice rm -fr axtChain/chain axtChain/chainRaw &
     
+# MAKE VSDANRER2 DOWNLOADABLES (DONE, 2004-12-23, hartera)
+    ssh hgwdev
+    cd /cluster/data/fr1/bed/blastz.danRer2.swap/axtChrom
+    set gp = /usr/local/apache/htdocs/goldenPath/fr1
+    mkdir -p $gp/vsDanRer2/axtChrom
+    gunzip chrUn.axt.gz
+    cp -p *.axt $gp/vsDanRer2/axtChrom
+    cd $gp/vsDanRer2/axtChrom
+    gzip *.axt
+    md5sum *.gz > md5sum.txt
+
+    # copy chains and nets to downloads area
+    cd /cluster/data/fr1/bed/blastz.danRer2.swap/axtChain
+    gzip -c all.chain.antirepeat > \
+            /cluster/data/fr1/zip/zebrafishDanRer2.chain.gz
+    gzip -c zfishdanRer2.net > /cluster/data/fr1/zip/zebrafishDanRer2.net.gz
+    cd $gp/vsDanRer2
+    mv /cluster/data/fr1/zip/zebrafish*.gz .
+    md5sum *.gz > md5sum.txt
+    # Copy over & edit README.txt w/pointers to chain, net formats.
+

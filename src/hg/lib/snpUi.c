@@ -126,7 +126,7 @@ char *snpColorSourceStrings[] = {
     "snpColorSourceBlack",
 };
 char *snpColorSourceDataName[] = {
-    "snpColor",
+    "snpColorSource",
 };
 char *snpColorSourceDefault[] = {
     "snpColorSourceFunc",

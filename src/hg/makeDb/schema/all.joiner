@@ -18,7 +18,7 @@ set sacCer sacCer1
 set panTro panTro1
 set galGal galGal2
 set ci ci1
-set danRer danRer1
+set danRer danRer1,danRer2
 set canFam canFam1
 set droYak droYak1
 set droMult droAna1,droMoj1,droVir1,droEre1
@@ -27,9 +27,11 @@ set apiMel apiMel1
 set cioSav cioSav1
 set tetNig tetNig1
 set xenTro xenTro1
+set monDom monDom1
+set bosTau bosTau1
 
 # Define all organism/assembly-specific databases.
-set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro
+set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau
 
 # Define organism databases based on whole-genome shotgun projects 
 # (Assembly based on WGS project contigs accessioned in Genbank)
@@ -1297,8 +1299,8 @@ identifier encodeRegion
     hgFixed.encodeRegionInfo.name
     $hg.encodeRegions.name 
 
- identifier blastDm1FBPepId
- "dm1 proteins"
+identifier blastDm1FBPepId
+"dm1 proteins"
      dm1.blastFBPep00.name
      $anoGam.blastDm1FB.qName
      $apiMel.blastDm1FB.qName
@@ -1306,18 +1308,34 @@ identifier encodeRegion
      $droYak.blastDm1FB.qName
      $droMult.blastDm1FB.qName
 
- identifier blastHg16KGPepId
- "hg16 proteins"
+identifier blastHg16KGPepId
+"hg16 proteins"
      hg16.blastKGPep00.name
-     sacCer1.blastHg16KG.qName
-     ce2.blastHg16KG.qName
-     ci1.blastHg16KG.qName
-     cioSav1.blastHg16KG.qName
-     danRer1.blastHg16KG.qName
-     dm1.blastHg16KG.qName
-     fr1.blastHg16KG.qName
-     galGal2.blastHg16KG.qName
+     $sacCer.blastHg16KG.qName
+     $ce.blastHg16KG.qName
+     $ci.blastHg16KG.qName
+     $cioSav.blastHg16KG.qName
+     $danRer.blastHg16KG.qName
+     $dm.blastHg16KG.qName
+     $fr.blastHg16KG.qName
+     $galGal.blastHg16KG.qName
 
+identifier blastHg17KGPep00Id 
+"hg17 proteins 00"
+     $hg.blastKGPep00.name
+     $xenTro.blastHg17KG.qName
+
+identifier blastHg17KGPep01Id 
+"hg17 proteins 01"
+     $hg.blastKGPep01.name
+     $monDom.blastHg17KG.qName
+     $danRer.blastHg17KG.qName
+     $bosTau.blastHg17KG.qName
+
+identifier tfbsCons
+"transcription factor binding sites"
+    $hg.tfbsConsSites.name dupeOk
+    $hg.tfbsConsFactors.name
 
 identifier esRegModule
 "Eran Segal's collection of motifs that appear together in a regulatory module"

@@ -23,7 +23,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.159 2004/12/07 18:00:42 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.163 2005/01/04 15:56:40 fanhsu Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -89,13 +89,14 @@ radioButton(filterTypeVar, filterTypeVal, "exclude");
 void snpColorFilterButtons(char *filterTypeVar, char *filterTypeVal)
 /* Put up some filter buttons. */
 {
-radioButton(filterTypeVar, filterTypeVal, "Source");
-radioButton(filterTypeVar, filterTypeVal, "Molecule Type");
-radioButton(filterTypeVar, filterTypeVal, "Variant Class");
-radioButton(filterTypeVar, filterTypeVal, "Validation Status");
-radioButton(filterTypeVar, filterTypeVal, "Functional Class");
-radioButton(filterTypeVar, filterTypeVal, "Location Type");
-radioButton(filterTypeVar, filterTypeVal, "Black");
+int i;
+for (i=0; i<snpColorSourceLabelsSize; i++)
+    {
+    cgiMakeRadioButton(filterTypeVar, snpColorSourceStrings[i], 
+		       sameString(snpColorSourceStrings[i], filterTypeVal));
+    printf("%s &nbsp;", snpColorSourceLabels[i]);
+    }
+printf("<BR>\n");
 }
 
 void snpFilterButtons(char *filterTypeVar, char *filterTypeVal)
@@ -157,8 +158,8 @@ printf("<BR>Variants can optionally be excluded based on their values in each of
 printf("<BR>\n");
 
 printf("<BR><B>Color Specification:</B><BR>\n");
-snpColorSourceCart[0] = cartUsualString(cart, "snpColor", "Source" );
-snpColorFilterButtons("snpColor", snpColorSourceCart[0]);
+snpColorSourceCart[0] = cartUsualString(cart, snpColorSourceDataName[0], snpColorSourceDefault[0]);
+snpColorFilterButtons(snpColorSourceDataName[0], snpColorSourceCart[0]);
 
 snpAvHetCutoff = atof(cartUsualString(cart, "snpAvHetCutoff", "0"));
 printf("<BR><BR><B>Minimum <A HREF=\"#AvHet\">Average Heterozygosity</A>:</B>&nbsp;");
@@ -588,7 +589,7 @@ snprintf(scoreVar, sizeof(scoreVar), "%s.scoreFilter", tdb->tableName);
 scoreSetting = cartUsualInt(cart,  scoreVar,  scoreVal);
 safef(tempScore, sizeof(tempScore), "%d",scoreSetting);
 cgiMakeTextVar( scoreVar, tempScore, 11);
-printf(" Data Range (0-20000000000)");
+printf(" Data Range (0-2000000000)");
 }
 
 void crossSpeciesUi(struct trackDb *tdb)
@@ -1275,8 +1276,14 @@ else if (tdb->type != NULL)
 	/* if bed has score then show optional filter based on score */
 	if (sameWord(words[0], "bed") && wordCount == 3)
 	    {
-	    /* Note: jaxQTL3 is a bed 8 format track because of thickStart/thickStart, but there is no valid score */
-	    if ((atoi(words[1]) > 4) && !sameString(track, "jaxQTL3"))
+	    /* Note: jaxQTL3 is a bed 8 format track because of thickStart/thickStart, 
+	      	     but there is no valid score.
+	             Similarly, the score field for wgRna track is no long used either.
+		     It originally was usd to depict different RNA types.  But the new 
+		     wgRna table has a new field 'type', which is used to store RNA type info
+		     and from which to determine the display color of each entry.
+	    */
+	    if ((atoi(words[1])>4) && !sameString(track,"jaxQTL3") && !sameString(track, "wgRna"))
 		scoreUi(tdb);
 	    }
 	else if (sameWord(words[0], "psl"))
@@ -1341,7 +1348,7 @@ struct trackDb *trackDbForRuler()
    It is not (yet?) a real track, so doesn't appear in trackDb */
 {
 return trackDbForPseudoTrack(RULER_TRACK_NAME,
-	RULER_TRACK_LABEL, RULER_TRACK_LONGLABEL, tvPack, FALSE);
+	RULER_TRACK_LABEL, RULER_TRACK_LONGLABEL, tvFull, FALSE);
 }
 
 struct trackDb *trackDbForOligoMatch()

@@ -505,7 +505,7 @@ if (ct->wiggle)
 	    struct bed *copy = lmCloneBed(bed, lm);
 	    slAddHead(&bedList, copy);
 	    }
-	bedFree(&wigBedList);
+	/*bedFree(&wigBedList); do not free local memory*/
 	}
     fieldCount = 4;
     }

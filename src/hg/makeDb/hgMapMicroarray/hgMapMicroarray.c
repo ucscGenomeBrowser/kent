@@ -10,11 +10,12 @@
 #include "hgRelate.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgMapMicroarray.c,v 1.1 2004/03/31 17:51:08 kent Exp $";
+static char const rcsid[] = "$Id: hgMapMicroarray.c,v 1.2 2005/01/04 23:09:17 angie Exp $";
 
 char *pslPrefix = NULL;
 char *pslSuffix = NULL;
 char *tempDir = ".";
+boolean bedIn = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -31,12 +32,15 @@ errAbort(
   "   -pslPrefix=XXX - Skip over given prefix in psl file qName field.\n"
   "   -pslSuffix=YYY - Skip over given suffix in psl file qName.\n"
   "   -tempDir=ZZZ - Place to put temp files.\n"
+  "   -bedIn - pslTable(s) are actually bed 12 not psl.\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"pslSuffix", OPTION_STRING},
    {"pslPrefix", OPTION_STRING},
+   {"tempDir", OPTION_STRING},
+   {"bedIn", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -44,7 +48,7 @@ struct hash *expDataHash(char *tableName)
 /* Load up expData table into a hash. */
 {
 struct sqlConnection *conn = sqlConnect("hgFixed");
-struct hash *hash = hashNew(16);
+struct hash *hash = hashNew(20);
 struct sqlResult *sr;
 char **row, query[256];
 int count = 0;
@@ -62,10 +66,9 @@ sqlDisconnect(&conn);
 return hash;
 }
 
-void writeMappedExp(FILE *f, struct expData *expData, struct psl *psl)
+void writeMappedExp(FILE *f, struct expData *expData, struct bed *bed)
 /* Write out mapped expression data to file. */
 {
-struct bed *bed = bedFromPsl(psl);
 int i;
 bed->expCount = expData->expCount;
 AllocArray(bed->expIds, bed->expCount);
@@ -76,7 +79,86 @@ for (i=0; i<bed->expCount; ++i)
     bed->expScores[i] = expData->expScores[i];
     }
 bedTabOutN(bed, 15, f);
-bedFree(&bed);
+}
+
+void mapPsl(char *pslName, FILE *f,
+	    struct hash *expHash, struct hash *uniqHash,
+	    int *retDupeMapCount, int *retMapCount, int *retMissCount)
+/* Map PSL to expression data. */
+{
+struct lineFile *lf = pslFileOpen(pslName);
+struct psl *psl;
+struct expData *expData;
+int prefixSize = 0;
+if (pslPrefix != NULL)
+    prefixSize += strlen(pslPrefix);
+while ((psl = pslNext(lf)) != NULL)
+    {
+    /* Chop off prefix and suffix. */
+    char *name = psl->qName;
+    if (pslPrefix != NULL && startsWith(pslPrefix, name))
+	name += prefixSize;
+    if (pslSuffix != NULL)
+	{
+	char *e = stringIn(pslSuffix, name);
+	if (e != NULL)
+	    *e = 0;
+	}
+    
+    /* Find in expression data hash and process. */
+    if ((expData = hashFindVal(expHash, name)) != NULL)
+	{
+	struct bed *bed = bedFromPsl(psl);
+	if (hashLookup(uniqHash, name))
+	    ++(*retDupeMapCount);
+	else
+	    {
+	    ++(*retMapCount);
+	    hashAdd(uniqHash, name, NULL);
+	    }
+	writeMappedExp(f, expData, bed);
+	bedFree(&bed);
+	}
+    else
+	{
+	++(*retMissCount);
+	verbose(2, "miss %s\n", name);
+	}
+    pslFree(&psl);
+    }
+lineFileClose(&lf);
+}
+
+void mapBed(char *bedName, FILE *f,
+	    struct hash *expHash, struct hash *uniqHash,
+	    int *retDupeMapCount, int *retMapCount, int *retMissCount)
+/* Map BED 12 to expression data. */
+{
+struct lineFile *lf = lineFileOpen(bedName, TRUE);
+char *words[13];
+while (lineFileNextRow(lf, words, 12))
+    {
+    struct bed *bed = bedLoad12(words);
+    struct expData *expData;
+    /* Find in expression data hash and process. */
+    if ((expData = hashFindVal(expHash, bed->name)) != NULL)
+	{
+	if (hashLookup(uniqHash, bed->name))
+	    ++(*retDupeMapCount);
+	else
+	    {
+	    ++(*retMapCount);
+	    hashAdd(uniqHash, bed->name, NULL);
+	    }
+	writeMappedExp(f, expData, bed);
+	}
+    else
+	{
+	++(*retMissCount);
+	verbose(2, "miss %s\n", bed->name);
+	}
+    bedFree(&bed);
+    }
 }
 
 void hgMapMicroarray(char *bedName, char *fixedTable, 
@@ -85,51 +167,16 @@ void hgMapMicroarray(char *bedName, char *fixedTable,
 {
 int i;
 struct hash *expHash = expDataHash(fixedTable);
-struct hash *uniqHash = hashNew(16);
+struct hash *uniqHash = hashNew(20);
 FILE *f = mustOpen(bedName, "w");
-struct expData *expData;
 int mapCount = 0, dupeMapCount = 0, missCount = 0, unmappedCount = 0;
-int prefixSize = 0;
-if (pslPrefix != NULL)
-    prefixSize += strlen(pslPrefix);
 for (i=0; i<pslCount; ++i)
     {
     char *pslName = psls[i];
-    struct lineFile *lf = pslFileOpen(pslName);
-    struct psl *psl;
-    while ((psl = pslNext(lf)) != NULL)
-        {
-	/* Chop off prefix and suffix. */
-	char *name = psl->qName;
-	if (pslPrefix != NULL && startsWith(pslPrefix, name))
-	     name += prefixSize;
-	if (pslSuffix != NULL)
-	    {
-	    char *e = stringIn(pslSuffix, name);
-	    if (e != NULL)
-	        *e = 0;
-	    }
-
-	/* Find in expression data hash and process. */
-	if ((expData = hashFindVal(expHash, name)) != NULL)
-	    {
-	    if (hashLookup(uniqHash, name))
-		++dupeMapCount;
-	    else
-		{
-		++mapCount;
-		hashAdd(uniqHash, name, NULL);
-		}
-	    writeMappedExp(f, expData, psl);
-	    }
-	else
-	    {
-	    ++missCount;
-	    verbose(2, "miss %s\n", name);
-	    }
-	pslFree(&psl);
-	}
-    lineFileClose(&lf);
+    if (bedIn)
+	mapBed(pslName, f, expHash, uniqHash, &dupeMapCount, &mapCount, &missCount);
+    else
+	mapPsl(pslName, f, expHash, uniqHash, &dupeMapCount, &mapCount, &missCount);
     }
 /* Look at ones that we don't have mapping data on. */
     {
@@ -137,7 +184,7 @@ for (i=0; i<pslCount; ++i)
     expList = hashElListHash(expHash);
     for (expEl = expList; expEl != NULL; expEl = expEl->next)
         {
-	expData = expEl->val;
+	struct expData *expData = expEl->val;
 	if (!hashLookup(uniqHash, expData->name))
 	    {
 	    ++unmappedCount;
@@ -158,6 +205,7 @@ optionInit(&argc, argv, options);
 pslPrefix = optionVal("pslPrefix", pslPrefix);
 pslSuffix = optionVal("pslSuffix", pslSuffix);
 tempDir = optionVal("tempDir", tempDir);
+bedIn = optionExists("bedIn");
 if (argc < 4)
     usage();
 hgMapMicroarray(argv[1], argv[2], argc-3, argv+3);

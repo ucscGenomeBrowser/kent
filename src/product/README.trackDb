@@ -6,6 +6,7 @@ A track needs two items to make it exist in the browser:
 
 1.  A database table with the track data
 2.  An entry in the database table: trackDb
+	(built from track specifications in a trackDb.ra file)
 
 Almost all of the database tables have specific loader
 programs to load the track data.  The loader programs
@@ -49,8 +50,6 @@ The hgTrackDb and hgFindSpec loaders are used to build the trackDb and
 hgFindSpec tables in the database.  These tables are built by running
 a make in the source tree in src/hg/makeDb/trackDb/
 
-See also, the README: src/hg/makeDb/trackDb/README
-
 To build the three loaders mentioned, go to the three directories:
 src/hg/makeDb/hgTrackDb/
 src/hg/makeDb/hgFindSpec/
@@ -65,6 +64,7 @@ and you have write permission to.
 With those three loader programs built, you can now load BED
 format tracks, and build the trackDb table from the hierarchy
 of trackDb.ra files in src/hg/makeDb/trackDb/
+as described in: src/hg/makeDb/trackDb/README
 
 Please note the different make targets in the trackDb/makefile.
 Specifically the two targets: 'update' and 'alpha'
@@ -116,5 +116,5 @@ binary every time, thus always picking up any potentially new
 library.
 
 ====================================================================
-This file last updated: $Date: 2004/12/15 22:05:07 $
+This file last updated: $Date: 2004/12/17 21:28:16 $
 

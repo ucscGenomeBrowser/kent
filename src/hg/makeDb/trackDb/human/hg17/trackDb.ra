@@ -142,12 +142,9 @@ priority 94
 group regulation
 visibility hide
 type bed 6+
+scoreMin 711
+scoreMax 1000
 spectrum on
-colorLo 0,0,0
-colorMid 255,255,0
-colorHigh 255,0,0
-scoreMid 1.93
-scoreHigh 2.47
 urlLabel Transfac matrix link:
 url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
 
@@ -1171,9 +1168,9 @@ altColor 255,240,200
 spectrum on
 type psl xeno 
 
-track blastzBestMonDom0
-shortLabel Possum Best
-longLabel Possum Blastz Best-in-Genome Alignments
+track blastzBestDasNov0
+shortLabel Armadillo Best
+longLabel Armadillo Blastz Best-in-Genome Alignments
 group compGeno
 priority 165
 visibility hide
@@ -1204,7 +1201,7 @@ searchPriority 10
 termRegex uc\.[0-9]+
 
 searchTable wgRna
-searchMethod exact
+searchMethod fuzzy
 searchType bed
 searchPriority 10
 

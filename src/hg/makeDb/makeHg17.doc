@@ -5941,6 +5941,7 @@ EOF
     rm files splitfiles* 
 
     hgLoadBed hg17 phastConsElements all.bed
+    hgLoadBed -chrom=chr1 hg17 phastConsElements all.bed
 
     # check coverage
     featureBits hg17 phastConsElements
@@ -6007,6 +6008,9 @@ EOF
     ln -s /cluster/data/hg17/bed/blastz.danRer1.swap/mafNet $mafDir/zebrafish_netBlastz
 
     # remove empty file, disliked by hgLoadMaf
+    # NOTE: these shouldn't be empty -- next time, make sure previous
+    # alignments are copied over to output maf (multiz won't if there's
+    # an empty input file).
     rm chicken/chr18_random.maf
     rm fugu/chr6_hla_hap1.maf
 
@@ -8121,7 +8125,7 @@ CREATE TABLE mitopred (
     cd var_multiz_source
     make
 
-    # NOTE (8/14): this version of the source is already out of date!
+     NOTE (8/14): this version of the source is already out of date!
     # Source is now checked in under hg3rdParty and updated binaries
     # are being kept under /cluster/bin/penn/var_multiz
 
@@ -9805,7 +9809,7 @@ line+ psl/$(root1)_$(root2).psl}
     rm j.tmp
 
     hgsql hg17 -e 'drop table kgSpAlias';
-    hgsql hg17 < ~/src/hg/lib/kgSpAlis.sql
+    hgsql hg17 < ~/src/hg/lib/kgSpAlias.sql
     hgsql hg17 -e 'load data local infile "hg17.kgSpAlias.tab" into table kgSpAlias'
 
 
@@ -10012,6 +10016,24 @@ hgsql kgHg17B -e 'load data local infile "chromInfo.tab" into table chromInfo ig
 
     delete from gdbPdb where genomeDb='hg17';
     insert into gdbPdb values('hg17', 'proteins041115');
+
+# UPDATE KGSPALIAS TABLE TO BE USED BY PB (Done 12/20/04)
+
+    cd /cluster/data/hg17/bed/pb
+    mkdir new
+    cd new
+    hgsql hg17 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgAlias where kgXref.kgID=kgAlias.kgID' >j.tmp
+    hgsql hg17 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgProtAlias where kgXref.kgID=kgProtAlias.kgID'\
+    >>j.tmp
+    cat j.tmp|sort -u |grep -v 'kgID' >hg17.kgSpAlias.tab
+    rm j.tmp
+
+    hgsql hg17 -e 'drop table kgSpAlias';
+    hgsql hg17 < ~/src/hg/lib/kgSpAlias.sql
+    hgsql hg17 -e 'load data local infile "hg17.kgSpAlias.tab" into table kgSpAlias'
+    gzip kgSpAlias.tab
 
 # Create hg17GeneList.html (to be used by Google).
 # This step was done 12/08/04.
@@ -10874,6 +10896,68 @@ end
 # Perform preliminary review of Proteome Browser for hg17, then
   notify QA for formal review.
 
+####  Blat knownGene proteins to determine exons  (braney DONE 12/11/04)
+    ssh hgwdev
+    cd /cluster/data/hg17/bed
+    mkdir blat.hg17KG.2004-12-08
+    rm blat.hg17KG
+    ln -s  blat.hg17KG.2014-12-08 blat.hg17KG
+    cd blat.hg17KG
+    pepPredToFa hg17 knownGenePep known.fa
+    hgPepPred hg17 generic blastKGPep01 known.fa
+    grep ">" known.fa | sed "s/>//" > kgName.lst
+    ssh kk
+    cd /cluster/data/hg17/bed/blat.hg17KG
+    cat << '_EOF_' > blatSome
+#!/bin/csh -fe
+/cluster/bin/i386/blat -t=dnax -q=prot -out=pslx $1 $2 $3
+'_EOF_'
+    cat << '_EOF_' > blatGsub
+#LOOP
+blatSome $(path1) {check in line $(path2)} {check out line psl/$(root1)/$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs happy
+    chmod +x blatSome
+    ls -1S /scratch/hg/gs.18/build35/bothMaskedNibs/*.nib > human.lst
+    mkdir kgfa
+    cd kgfa
+    faSplit sequence ../known.fa 3010 kg
+    cd ..
+    ls -1S kgfa/*.fa > kg.lst
+    gensub2 human.lst kg.lst blatGsub blatSpec
+    mkdir psl
+    cd psl
+    foreach i (`cat ../human.lst`)
+	mkdir `basename $i .nib`
+    end
+    cd ..
+    para create blatSpec
+    para push
+
+# Completed: 134130 of 134136 jobs
+# Crashed: 6 jobs
+# CPU time in finished jobs:   29801114s  496685.23m  8278.09h  344.92d  0.945 y
+# IO & Wait Time:               1983513s   33058.55m   550.98h   22.96d  0.063 y
+# Average job time:                 237s       3.95m     0.07h    0.00d
+# Longest job:                    63306s    1055.10m    17.59h    0.73d
+# Submission to last job:        169384s    2823.07m    47.05h    1.96d
+
+# did 6 crashed jobs on small cluster
+    ssh eieio
+    cd /cluster/data/hg17/bed/blat.hg17KG
+    pslSort dirs raw.psl /tmp psl/*
+    pslReps -nohead -minCover=0.9 -minAli=0.9 raw.psl cooked.psl /dev/null
+    pslUniq cooked.psl hg17KG.psl
+    pslxToFa hg17KG.psl hg17KG_ex.fa -liftTarget=genome.lft -liftQuery=protein.lft
+    kgName hg17 hg17KG.psl blastKGRef01
+
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blat.hg17KG
+    hgsql hg17 < ~/kent/src/hg/lib/blastRef.sql
+    echo "rename table blastRef to blastKGRef01" | hgsql hg17
+    echo "load data local infile 'blastKGRef01' into table blastKGRef01" | hgsql hg17
+
 #### TIGR GENE INDEX (DONE 2004-12-04 Fan)
     mkdir -p /cluster/data/hg17/bed/tigr
     cd /cluster/data/hg17/bed/tigr
@@ -11118,6 +11202,8 @@ cat `ls -1 *.lav | sort -g` \
 
 # CHAIN DANRER2 BLASTZ (DONE, 2004-12-09, hartera)
 # RELOAD CHAINS WIH FILTERING (DONE, 2004-12-10, hartera)
+# APPLY chainAntiRepeat TO REMOVE CHAINS THAT ARE THE RESULTS OF REPEATS
+# AND DEGENERATE DNA (DONE, 2004-12-22, hartera)
     # Run axtChain on little cluster
     ssh kki
     cd /cluster/data/hg17/bed/blastz.danRer2
@@ -11204,6 +11290,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     mv all.chain all.chain.unfiltered
     chainFilter -minScore=5000 all.chain.unfiltered > all.chain
     chainSplit chainFilt5k all.chain
+
     # load chr1 filtered chains and check
     ssh hgwdev
     cd /cluster/data/hg17/bed/blastz.danRer2/axtChain/chainFilt5k
@@ -11216,14 +11303,32 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 # enrich 2.52x
 # checked browser - when filtered on minScore=5000, the low scoring 
 # alignments removed are small and/or poor alignments so use this version.
-
+    
+    # remove repeats from filtered chains and reload into database
+    # (2004-12-22, hartera)
+    ssh kksilo
+    cd /cluster/data/hg17/bed/blastz.danRer2/axtChain
+    mv chainFilt5k chainRaw
+    mkdir chain
+    cd chainRaw
+    foreach f (*.chain)
+       set c = $f:r
+       echo $c
+       nice chainAntiRepeat /cluster/bluearc/hg17/bothMaskedNibs \
+                       /cluster/bluearc/danRer2/nib $f \
+                       ../chain/$c.chain
+    end
+    cd ..
+    chainMergeSort ./chain/*.chain > all.chain.antirepeat
+    chainSplit chainAR all.chain.antirepeat
+    # load filtered chains and check
     ssh hgwdev
     echo 'drop table chr1_chainDanRer2Filt5k;' | hgsql hg17
     echo 'drop table chr1_chainDanRer2Filt5kLink;' | hgsql hg17
     # reload filtered chains instead of unfiltered (2004-12-10, hartera)
+    # reload filtered chains with repeats removed (2004-12-22, hartera)
     cd /cluster/data/hg17/bed/blastz.danRer2/axtChain/
-    mv chainFilt5k chain
-    cd chain
+    cd chainAR
     foreach i (*.chain)
         set c = $i:r
         hgLoadChain hg17 ${c}_chainDanRer2 $i
@@ -11231,13 +11336,19 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     end
 # trackDb - change Zebrafish Chain to danRer1 Chain and display this track
 # for danRer2 as Zebrafish Chain.
+# after chainAntiRepeat
+# featureBits -chrom=chr1 hg17 refGene:cds chainDanRer2Link -enrichment
+# refGene:cds 1.304%, chainDanRer2Link 2.742%, both 0.872%, cover 66.81%, 
+# enrich 24.36x 
 
 # NET DANRER2 BLASTZ (DONE, 2004-12-09, hartera)
 # RE-CREATE NET WITH FILTERED CHAINS (DONE, 2004-12-10, hartera)
+# RE-DO NET WITH CHAINS FILTERED BY chainAntiRepeat (DONE, 2004-12-22, hartera) 
     ssh kksilo
     cd /cluster/data/hg17/bed/blastz.danRer2/axtChain
+    rm -r preNet
     mkdir preNet
-    cd chain
+    cd chainAR
     foreach i (*.chain)
        echo preNetting $i
        /cluster/bin/i386/chainPreNet $i ../../S1.len ../../S2.len \
@@ -11254,7 +11365,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     end
     cd ..
     cat n1/*.net | /cluster/bin/i386/netSyntenic stdin noClass.net
-    # memory usage 145051648, utime 1650 s/100, stime 142
+    # memory usage 133443584, utime 905 s/100, stime 139
                                                                                 
     # Add classification info using db tables:
     # netClass looks for ancient repeats in one of the databases
@@ -11269,12 +11380,16 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     time netClass noClass.net hg17 danRer2 zfishdanRer2.net \
          -tNewR=/cluster/bluearc/hg17/linSpecRep.notInZebrafish \
          -qNewR=/cluster/bluearc/danRer2/linSpecRep.notInHuman -noAr
-    # 90.250u 52.170s 4:39.47 50.9%   0+0k 0+0io 201pf+0w
+    # 97.230u 54.290s 5:37.50 44.8%   0+0k 0+0io 217pf+0w
     # load net into database
     cd /cluster/data/hg17/bed/blastz.danRer2/axtChain
     netFilter -minGap=10 zfishdanRer2.net |  hgLoadNet hg17 netDanRer2 stdin
 # trackDb - change Zebrafish Net to danRer1 Net and display this track
 # for danRer2 as Zebrafish Net.
+# after chainAntiRepeat:
+# featureBits hg17 refGene:cds netDanRer2 -enrichment
+# refGene:cds 1.015%, netDanRer2 22.898%, both 0.783%, cover 77.15%, 
+# enrich 3.37x
 
 # LOAD ACEMBLY TRACK (in progress, 2004-12-09, hartera)
     mkdir -p /cluster/data/hg17/bed/acembly
@@ -11289,7 +11404,78 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     tar xvzf acembly.ncbi_35.genes.gff.tar.gz
     tar xvzf acembly.ncbi_35.genes.proteins.fasta.tar.gz
     cd acembly.ncbi_35.genes.gff
+    # the acembly dataset for hg16 had problems with reverse blocks so
+    # check for these
+cat << '_EOF_' > checkReversedBlocks
+for i in x1*.gff
+do
+        echo -n "$i working ..."
+        awk -F"\t" '
+{
+if ($4 > $5) {
+    printf "reverse blocks problem for $1"
+        printf "\n"
+}
+}
+' $i > $i.fixed
+        echo " done"
+done
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod +x checkReversedBlocks
+    ./checkReversedBlocks  
+    ls -l *.fixed
+    # all *.fixed files are empty so remove - there is no reversing of blocks
+    rm *.fixed
 
+    foreach f (x1.acemblygenes.*.gff)
+      set c=$f:r:e
+      egrep '^[a-zA-Z0-9]+\|NT_[0-9][0-9][0-9][0-9][0-9][0-9]' $f | \
+        perl -wpe 's/^(\w+)\|(\w+)/$1\/$2/' > ctg-chr${c}_random.gff
+      if (-e ../../../$c/lift/random.lft) then
+        liftUp chr${c}_random.gff ../../../$c/lift/random.lft warn \
+          ctg-chr${c}_random.gff
+      endif
+      grep -v ^$c\| $f | grep -v ^Hs | perl -wpe 's/^/chr/;' | \
+        grep -v "^chr//" > chr$c.gff
+      echo "done $c"
+    end
+    # for entry with 28212470 instead of chr6 change to chr6
+    mv x1.acemblygenes.6.gff x1.acemblygenes.6.gff.broken
+    sed -e "s/^28212470/6/" x1.acemblygenes.6.gff.broken > x1.acemblygenes.6.gff
+    
+    #- Load into database - use extended genePred
+    ssh hgwdev
+    /cluster/data/hg17/bed/acembly
+    ldHgGene -genePredExt -gtf hg17 acembly acembly.ncbi_35.genes.gff/chr*.gff
+
+    # checkTableCoords and runGeneCheck to check data
+    # a number of errors so leave on hgwdev for the moment
+# checkTableCoords:
+# rah.acembly has 16 records with chrom not described in chromInfo.
+# rah.acembly item RPL10A.sNov04 chr6:35544172-35546520: end of last block (35546519) is not the same as chromEnd (35546520).
+# rah.acembly has 1 records with blockEnd[n-1] != end.
+# rah.acembly has 1 records with end > chromSize.
+
+# from runGeneCheck:
+# 5780   inFrameStop
+# 110664 noStart
+# 23085 badCdsSplice
+# 23848 noStop
+# 14957 badUtrSplice
+# 3661 gap
+# 4726 badFrame
+# 261066 lines in genePred.tab
+
+    # e-mailed authors of data (2004-12-21, hartera) 
+#  notiri.aNov04 - has ctg instead of atg at start. others have no start specified: sirora.nNov04
+# sirora.zmNov04 - chr1:19389-19392: 19391-19393 is ACT (-)
+# sirora.sNov04 - chr1:8925-8928 CAA (ttg) (-)
+# sirora.rNov04 - chr1:8925-8928 CAA (ttg) (-)
+    # for entry with 28212470 instead of chr6 change to chr6
+    mv x1.acemblygenes.6.gff x1.acemblygenes.6.gff.broken
+    sed -e "s/^28212470/6/" x1.acemblygenes.6.gff.broken > x1.acemblygenes.6.gff
+ 
 # BUILD WGRNA TRACK (DONE, 2004-12-13, Fan)
 
 # Grab data from original miRNA track and convert them into wgRna .tab format.
@@ -11304,6 +11490,376 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 # load into wgRna table
     hgLoadBed -sqlTable=/cluster/home/fanhsu/hg/lib/wgRna.sql hg17 wgRna wgRna.tab
 # create and edit wgRna.html under src/hg/makeDb/trackDb/human/hg17.
+
+
+# 11-WAY MULTIZ MULTIPLE ALIGNMENT (WORKING 2004-12-16 kate)
+    ssh eieio
+    cd /cluster/data/hg17/bed
+    mkdir -p multiz.2004-12-16
+    ln -s multiz.2004-12-16 multiz11way
+    cd multiz11way
+
+    # setup pairwise net mafs in subdirectories, by assembly
+    # assemblies with standard naming conventions
+    foreach d (panTro1 mm5 rn3 fr1)
+        ln -s /cluster/data/hg17/bed/blastz.$d/mafNet $d
+    end
+    # non-standard
+    ln -s /cluster/data/bosTau1/bed/blastz/mafNet bosTau1
+    ln -s /cluster/data/hg17/bed/blastz.danRer1.swap/mafNet danRer1
+    ln -s /cluster/data/xenTro1/bed/zb.hg17/mafNet xenTro1
+
+    # those with xtra in filenames
+    # rationalize filenames (chrom.*.maf -> chrom.maf)
+    foreach a (canFam1 galGal2 tetNig1)
+        mkdir -p $a
+        foreach f (/cluster/data/hg17/bed/blastz.$a/mafNet/*)
+            set c = $f:t:r:r
+            ln -s $f $a/$c.maf
+        end
+    end
+
+    # run on fileserver using multiz dispatcher "multizzy"
+    echo panTro1 bosTau1 canFam1 mm5 rn3 galGal2 xenTro1 tetNig1 fr1 danRer1 > dirList
+    cut -f 1 /cluster/data/hg17/chrom.sizes > chromList
+    # NOTE: use multiz.v8 (not multiz.v10 which is based on var_multiz,
+    #  so we can use multizzy.  Later, will redo with multiz.v10)
+    set path = (/cluster/bin/penn $path); rehash
+    multiz
+        # multiz.v8: args: [R=?] [M=?] (seq1+seqN).maf (seq1+seq2+...+seq(N-1)).maf (seqN+seq(N+1)+...+seqP).maf
+    multizzy dirList chromList maf >&! multizzy.log &
+
+    cat > tree.nh << 'EOF'
+((((((hg17,panTro1),(mm5,rn3)),(bosTau1,canFam1)),galGal2),xenTro1)((fr1,tetNig1),danRer1))
+'EOF'
+
+# CONSERVATION SCORING WITH PHASTCONS (WORKING 2004-12-16 kate)
+# 1. Partition multiple alignment into windows, using "msa_split"
+# 2. Create starting tree model, with branch lengths
+#       use "phyloFit" on alignments, or hand-craft from another tree
+# 3. Estimate GC avg. over all species, use "msa_view" on maf
+# 4. Estimate other model params, using phastCons (via doEstimate script)
+
+    # TODO: generate histogram of alignments to determine if filtering needed
+
+    ssh eieio
+    set path = ($path /cluster/bin/phast)
+    cd /cluster/data/hg17/bed/multiz11way
+    mkdir cons
+    cd cons
+
+    # start with chrom 1 to test procedure
+
+    #break up the genome-wide MAFs into pieces
+    # NOTE: chrom fasta files are already on the bluearc
+    # from previous run
+    mkdir /cluster/bluearc/hg17/chrom
+    cd /cluster/data/hg17
+    #foreach f (`cat chrom.lst`)
+    foreach f (1)
+        echo $f
+        cp $f/*.fa /cluster/bluearc/hg17/chrom
+    end
+
+    cd /cluster/data/hg17/bed/multiz11way/cons
+    mkdir run.split
+    cd run.split
+    set WINDOWS = /cluster/bluearc/hg17/multiz11way/cons/WINDOWS
+    rm -fr $WINDOWS
+    mkdir -p $WINDOWS
+    cat << 'EOF' > doSplit.sh
+#!/bin/sh
+
+PHAST=/cluster/bin/phast
+FA_SRC=/cluster/bluearc/hg17/chrom
+WINDOWS=/cluster/bluearc/hg17/multiz11way/cons/WINDOWS
+
+maf=$1
+c=`basename $maf .maf`
+echo $c
+mkdir -p /scratch/msa_split
+${PHAST}/msa_split $maf -i MAF -M ${FA_SRC}/$c.fa -O hg17,panTro1,mm5,rn3,bosTau1,canFam1,galGal2,xenTro1,fr1,tetNig1,danRer1 -w 1000000,0 -r /scratch/msa_split/$c -o SS -I 1000 -B 5000
+[ $? -eq 0 ] || exit 1
+echo "Copying..."
+cd /scratch/msa_split
+for file in $c.*.ss ; do gzip -c $file > ${WINDOWS}/$file.gz ; done
+[ $? -eq 0 ] || exit 1
+rm -f /scratch/msa_split/$c.*.ss
+echo "Done copying"
+echo "Done" >> ${WINDOWS}/$c.done
+'EOF'
+# << for emacs
+    chmod +x doSplit.sh
+    set file = /cluster/data/hg17/bed/multiz11way/maf/chr1.maf 
+    doSplit.sh $file $WINDOWS/chr1.done
+
+    # now generate conservation scores and predicted elements
+    cd /cluster/data/hg17/bed/multiz11way/cons
+    mkdir run.elements   
+    cd run.elements
+
+    # create starting tree model from file in WINDOWS dir.
+    gunzip -c /cluster/bluearc/hg17/multiz11way/cons/WINDOWS/chr1.998275-1998627.ss.gz > /tmp/phastCons.$$
+         phyloFit -i SS /tmp/phastCons.$$ --tree \
+        "((((((hg17,panTro1),(mm5,rn3)),(bosTau1,canFam1)),galGal2),xenTro1),((fr1,tetNig1),danRer1))" \
+        --out-root starting-tree
+    rm /tmp/phastCons.$$
+
+    # estimate model parameters
+    # estimate avg. cross-species avg. GC content from tree model
+    awk '$1 == "BACKGROUND:" {printf "%0.3f\n", $3 + $4}' starting-tree.mod
+    # 0.560
+    # Seems too high -- as this is from only a small partition
+    # Could use the value from 8-way alignment
+    awk '$1 == "BACKGROUND:" {printf "%0.3f\n", $3 + $4}' \
+        /cluster/data/hg17/bed/multiz8way/cons/run.elements/starting-tree.mod
+    # .410  -- probably OK, but...
+    # Instead, try computing from chr1 maf
+    msa_view --aggregate hg17,panTro1,rn3,mm5,bosTau1,canFam1,galGal2,xenTro1,danRer1,tetNig1,fr1 \
+        -i MAF \
+        --summary-only /cluster/data/hg17/bed/multiz11way/maf/chr1.maf\
+    	    > maf_summary.txt
+    awk '$1 == "[aggregate]" {printf "%0.3f\n", $3 + $4}' maf_summary.txt
+       # 0.424  -- use this...
+
+    cat << 'EOF' > doEstimate.sh
+#!/bin/sh
+zcat $1 | /cluster/bin/phast/phastCons - starting-tree.mod --gc 0.424 --nrates 1,1 --no-post-probs --ignore-missing --expected-lengths 12 --target-coverage 0.17 --quiet --log $2 --estimate-trees $3
+'EOF'
+    chmod u+x doEstimate.sh
+
+    rm -fr LOG TREES
+    mkdir -p LOG TREES
+    rm -f jobs.lst
+    foreach f (/cluster/bluearc/hg17/multiz11way/cons/WINDOWS/*.ss.gz)
+        set root = $f:t:r:r
+	echo doEstimate.sh $f LOG/$root.log TREES/$root >> jobs.lst
+    end
+
+    # run cluster job
+    ssh kk
+    cd /cluster/data/hg17/bed/multiz11way/cons/run.elements
+    para create jobs.lst
+       # 226 jobs written to batch
+    para try; para check
+    para push
+
+    # Avg job ~1hr, but stragglers > 3 hrs.  Probably OK to kill after
+    # an hour -- enough representatives to get reasonable models
+    # (Check with Adam).
+
+    ls TREES/*.cons.mod > cons.txt
+    phyloBoot --read-mods '*cons.txt' --output-average ave.cons.mod > cons_summary.txt
+    ls TREES/*.noncons.mod > noncons.txt
+    phyloBoot --read-mods '*noncons.txt' --output-average ave.noncons.mod > noncons_summary.txt
+
+    cat << 'EOF' > doPhastCons.sh
+#!/bin/sh
+
+mkdir -p /cluster/bluearc/hg17/multiz11way/phastCons/POSTPROBS /cluster/bluearc/hg17/multiz11way/phastCons/ELEMENTS
+pref=`basename $1 .ss.gz`
+chr=`echo $pref | awk -F\. '{print $1}'`
+tmpfile=/scratch/phastCons.$$
+zcat $1 | /cluster/bin/phast/phastCons - ave.cons.mod,ave.noncons.mod --expected-lengths 12 --target-coverage 0.17 --quiet --seqname $chr --idpref $pref --viterbi /cluster/bluearc/hg17/multiz11way/phastCons/ELEMENTS/$pref.bed --score --require-informative 0 > $tmpfile
+gzip -c $tmpfile > /cluster/bluearc/hg17/phastCons/POSTPROBS/$pref.pp.gz
+rm $tmpfile
+'EOF'
+    chmod u+x doPhastCons.sh
+
+    rm -fr /cluster/bluearc/hg17/multiz11way/phastCons/POSTPROBS /cluster/bluearc/hg17/multiz11way/phastCons/ELEMENTS
+    rm -f jobs2.lst
+    foreach f (/cluster/bluearc/hg17/multiz11way/cons/WINDOWS/*.ss.gz)
+        echo doPhastCons.sh $f >> jobs2.lst
+    end
+
+    # run cluster job
+    ssh kk
+    cd /cluster/data/hg17/bed/multiz11way/cons/run.elements
+    para create jobs2.lst
+        # 226 jobs
+    para try; para check
+    para push
+#CPU time in finished jobs:       3898s      64.97m     1.08h    0.05d  0.000 y
+# IO & Wait Time:                   651s      10.85m     0.18h    0.01d  0.000 y
+# Average job time:                  20s       0.34m     0.01h    0.00d
+# Longest job:                       26s       0.43m     0.01h    0.00d
+# Submission to last job:           161s       2.68m     0.04h    0.00d
+    # Too fast ?
+
+    # combine predictions and transform scores to be in 0-1000 interval
+    # do in a way that avoids limits on numbers of args
+    find /cluster/bluearc/hg17/multiz11way/phastCons/ELEMENTS -name "*.bed" > files
+    rm -f splitfiles* all.raw.bed
+    split files splitfiles
+    foreach s (splitfiles*)
+       awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' `cat $s` >> all.raw.bed
+    end
+    /cluster/bin/scripts/lodToBedScore all.raw.bed > all.bed
+    rm files splitfiles* 
+
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/multiz11way/cons/run.elements
+    hgLoadBed hg17 phastConsElements11way all.bed
+
+    # check coverage
+    featureBits -chrom=chr1 hg17 phastConsElements11way
+        # 13517501 bases of 222827847 (6.066%) in intersection
+        # A bit too much -- try for 5%
+    featureBits -chrom=chr1 hg17 phastConsElements
+        # 12180340 bases of 222827847 (5.466%) in intersection
+
+    consEntropy .265 12 ave.cons.mod ave.noncons.mod --NH 9.78
+    consEntropy .17 12 ave.cons.mod ave.noncons.mod --NH 9.78
+
+
+# 10-WAY VAR_MULTIZ -- 8-WAY PLUS FROG AND TETRA (WORKING 2004-12-17 kate)
+#       Progressive alignment up the tree w/o stager, 
+#       using multiz.v10 (var_multiz)
+#       Method: align internal subtrees (using 0 flag to var_multiz)
+#               Then, align these to human (using 1 flag to var_multiz)
+#       NOTE: must use maf_project after each multiz run, in order
+#       to order output.  Single-cov guaranteed by use of net MAF's,
+#       so it is not necessary to run single_cov2.
+
+    ssh eieio
+    cd /cluster/data/hg17/bed
+    mkdir multiz.2004-12-24
+    ln -s multiz.2004-12-24 multiz10way
+    cd multiz10way
+
+    cat > tree.nh << 'EOF'
+((((((hg17,panTro1),(rn3,mm5)),canFam1),galGal2),xenTro1)((fr1,tetNig1),danRer1))
+'EOF'
+
+    cd /cluster/bluearc/hg17
+    mkdir multiz10way
+
+    # setup pairwise MAF's on bluearc for cluster run
+    # use existing files from
+
+    foreach d (panTro1 mm5 rn3 canFam1 galGal2 fr1 danRer1)
+        echo $d
+        mv multiz8way/$d multiz10way
+    end
+    # NOTE: removed zero-length MAF's (shouldn't have created them),
+    # galGal2/chr18_random.maf and fr1/chr6_hla_hap1.maf)
+
+    # copy frog and tetra pairwise MAF's to bluearc
+    cd multiz10way
+    mkdir -p xenTro1
+    cp /cluster/data/xenTro1/bed/zb.hg17/mafNet/*.maf xenTro1
+
+    mkdir -p tetNig1
+    foreach f (/cluster/data/hg17/bed/blastz.tetNig1/mafNet/*)
+        set c = $f:t:r:r
+        echo $c
+        cp $f tetNig1/$c.maf
+    end
+
+    # Opossum (for 11-way)
+    mkdir -p monDom1
+    cp /cluster/data/xenTro1/bed/zb.hg17/mafNet/*.maf monDom1
+
+    # make output dir and run dir
+    ssh kk9
+    cd /cluster/data/hg17/bed/multiz10way
+    mkdir -p maf run
+    cd run
+
+    # create scripts to run var_multiz on cluster
+
+cat > oneMultiz.csh << 'EOF'
+    set c = $1
+    set multi = /scratch/multiz10way.$c
+    set pairs = /cluster/bluearc/hg17/multiz10way
+
+    # special mode --
+    # with 1 arg, cleanup
+    if ($#argv == 1) then
+        rm -fr $multi
+        exit
+    endif
+
+    # special mode --
+    # with 3 args, saves an alignment file
+    if ($#argv == 3) then
+        cp $multi/$2/$c.maf $3
+        exit
+    endif
+        
+    set s1 = $2
+    set s2 = $3
+    set flag = $4
+
+    # locate input files -- in pairwise dir, or multiple dir
+    set d1 = $multi
+    set d2 = $multi
+    if (-d $pairs/$s1) then
+        set d1 = $pairs
+    endif
+    if (-d $pairs/$s2) then
+        set d2 = $pairs
+    endif
+    set f1 = $d1/$s1/$c.maf
+    set f2 = $d2/$s2/$c.maf
+    # write to output dir
+    set out = $multi/${s1}${s2}
+    mkdir -p $out
+
+    # check for empty input file
+    if (-s $f1 && -s $f2) then
+        echo "Aligning $f1 $f2 $flag"
+        /cluster/bin/penn/multiz.v10 $f1 $f2 $flag > $out/$c.tmp.maf
+        echo "Ordering $c.maf"
+        /cluster/bin/penn/maf_project $out/$c.tmp.maf hg17.$c > $out/$c.maf
+    else if (-s $f1) then
+        cp $f1 $out
+    else if (-s $f2) then
+        cp $f2 $out
+    endif
+'EOF'
+# << for emacs
+chmod +x oneMultiz.csh
+
+cat > allMultiz.csh << 'EOF'
+    # multiple alignment steps:
+    # multiz.v10 mouse.maf rat.maf 0
+    # multiz.v10 fugu.maf tetra.maf 0
+    # multiz.v10 fugu-tetra.maf zfish.maf 0
+    # multiz.v10 chimp.maf mouse-rat.maf 1
+    # multiz.v10 chimp-mouse-rat.maf dog.maf 1
+    # multiz.v10 chimp-mouse-rat-dog.maf chicken.maf 1
+    # multiz.v10 chimp-mouse-rat-dog-chicken.maf frog.maf 1
+    # multiz.v10 chimp-mouse-rat-dog-chicken-frog.maf fugu-tetra-zfish.maf 1
+
+set c = $1
+oneMultiz.csh $c rn3 mm5  0
+oneMultiz.csh $c fr1 tetNig1 0
+oneMultiz.csh $c fr1TetNig1 danRer1 0
+oneMultiz.csh $c panTro1 rn3mm5 1
+oneMultiz.csh $c panTro1rn3mm5 canFam1 1
+oneMultiz.csh $c panTro1rn3mm5canFam1 galGal2 1
+oneMultiz.csh $c panTro1rn3mm5canFam1galGal2 xenTro1 1
+oneMultiz.csh $c panTro1rn3mm5canFam1galGal2xenTro1 fr1TetNig1danRer1 1
+# get final alignment file
+oneMultiz.csh $c panTro1rn3mm5canFam1galGal2xenTro1fr1TetNig1danRer1 /cluster/data/hg17/bed/multiz10way/maf/$c.maf
+#cleanup
+oneMultiz.csh $c
+'EOF'
+# << for emacs
+chmod +x allMultiz.csh
+
+cat > gsub << 'EOF'
+#LOOP
+allMultiz.csh $(root1) {check out line+ /cluster/data/hg17/bed/multiz10way/maf/$(root1).maf}
+#ENDLOOP
+'EOF'
+    cut -f 1 /cluster/data/hg17/chrom.sizes > chrom.lst
+    gensub2 chrom.lst single gsub jobList
+    para create jobList
+    para try; para check
+    para push
+
 
 # UPDATED WGRNA DATA PER EMAIL FROM WEBER (2004-12-14, Fan).
 
@@ -11360,6 +11916,8 @@ hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="mgU2-22/U4-8"'
 # Updated .../trackDb/human/hg17/wgRna.html.
 
 # MAKE VSDANRER2 DOWNLOADABLES (DONE, 2004-12-14, hartera)
+# REMAKE FOR CHAINS AND NET AFTER USING chainAntiRepeat
+# (DONE, 2004-12-22, hartera)
     ssh hgwdev
     cd /cluster/data/hg17/bed/blastz.danRer2/axtChrom
     set gp = /usr/local/apache/htdocs/goldenPath/hg17
@@ -11370,17 +11928,200 @@ hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="mgU2-22/U4-8"'
     md5sum *.gz > md5sum.txt
                                                                                 
     # copy chains and nets to downloads area
+    # re-make chains and net downloadables (2004-12-22, hartera)
+    rm $gp/vsDanRer2/zebrafish*.gz $gp/vsDanRer2/md5sum.txt
     cd /cluster/data/hg17/bed/blastz.danRer2/axtChain
-    gzip -c all.chain > /cluster/data/hg17/zip/zebrafish.chain.gz
-    gzip -c zfishdanRer2.net > /cluster/data/hg17/zip/zebrafish.net.gz
+    gzip -c all.chain.antirepeat > \
+            /cluster/data/hg17/zip/zebrafishDanRer2.chain.gz
+    gzip -c zfishdanRer2.net > /cluster/data/hg17/zip/zebrafishDanRer2.net.gz
     cd $gp/vsDanRer2
     mv /cluster/data/hg17/zip/zebrafish*.gz .
     md5sum *.gz > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
                                                                                 
 # CLEANUP DANRER2 BLASTZ (DONE, 2004-12-14, hartera)
+# RE-DONE (DONE, 2004-12-22, hartera)
     ssh kksilo
     cd /cluster/data/hg17/bed/blastz.danRer2
     nice rm axtChain/run1/chain/* &
     nice rm -fr axtChain/n1 axtChain/noClass.net &
+    nice gzip axtChrom/* pslChrom/* axtChain/all.chain axtChain/all.chain.unfiltered axtChain/*.net &
+    nice gzip axtChain/all.chain.antirepeat axtChain/chainAR/*.chain &
+    nice rm -fr axtChain/chain axtChain/chainRaw axtChain/preNet &
+
+# EXTRACT AXT'S AND MAF'S FROM TETRAODON (tetNig1) NET 
+# (DONE, 2004-12-15, hartera) 
+    ssh eieio
+    # create axts
+    cd /cluster/data/hg17/bed/blastz.tetNig1/axtChain
+    netSplit tetNig1.net tetraodonNet
+    mkdir -p ../axtNet
+cat > axtNet.csh << 'EOF'
+    foreach f (tetraodonNet/chr*.net)
+        set c = $f:t:r
+        echo "axtNet on $c"
+        netToAxt tetraodonNet/$c.net chain/$c.chain \
+        /cluster/data/hg17/nib /cluster/data/tetNig1/nib ../axtNet/$c.axt
+    echo "Complete: $c.net -> $c.axt"
+    end
+'EOF'
+
+    chmod +x axtNet.csh
+    csh axtNet.csh >&! axtNet.log &
+    tail -100f axtNet.log
+
+    # sort axts before making mafs - must be sorted for multiz
+    cd /cluster/data/hg17/bed/blastz.tetNig1
+    mv axtNet axtNet.unsorted
+    mkdir axtNet
+    foreach f (axtNet.unsorted/*.axt)
+        set c = $f:t:r
+        echo "Sorting $c"
+        axtSort $f axtNet/$c.axt
+    end
+
+    # create maf
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.tetNig1
+    cd axtNet
+    mkdir ../mafNet
+
+cat > makeMaf.csh << 'EOF'
+    foreach f (chr*.axt)
+      set maf = $f:t:r.tetNig1.maf
+      echo translating $f to $maf
+      axtToMaf $f \
+            /cluster/data/hg17/chrom.sizes /cluster/data/tetNig1/chrom.sizes \
+            ../mafNet/$maf -tPrefix=hg17. -qPrefix=tetNig1.
+    end
+'EOF'
+    csh makeMaf.csh >&! makeMaf.log &
+    tail -100f makeMaf.log
+
     nice gzip axtChrom/* pslChrom/* axtChain/all.chain axtChain/*.net &
+
+
+# 10-WAY MULTIZ -- 8-WAY PLUS FROG AND TETRA (WORKING 2004-12-22 kate)
+#       Use older multiz (not v10) till bugs fixed
+
+    ssh eieio
+    cd /cluster/data/hg17/bed
+    rm multiz10way
+    ln -s multiz.2004-12-17 multiz10way.v10
+    mkdir multiz.2004-12-22
+    ln -s multiz.2004-12-22 multiz10way
+    cd multiz10way
+
+    cat > tree.nh << 'EOF'
+((((((hg17,panTro1),(rn3,mm5)),canFam1),galGal2),xenTro1)((fr1,tetNig1),danRer1))
+'EOF'
+
+    mkdir /cluster/bluearc/hg17/multiz.2004-12-22
+    cd /cluster/bluearc/hg17
+    mkdir 2004-12-22
+    rm multiz10way
+    ln -s multiz.2004-12-17 multiz10way.v10
+    ln -s multiz.2004-12-22 multiz10way
+    # reuse pairwise MAF's on bluearc
+    mv multiz10way.v10/{canFam1,danRer1,fr1,galGal2,mm5,panTro1,rn3,tetNig1,xenTro1} multiz10way
+
+    # make output dir and run dir
+    ssh kk9
+    cd /cluster/data/hg17/bed
+    cd multiz10way
+    mkdir -p maf
+    mkdir -p run
+    cd run
+
+    # create scripts to run multiz on cluster
+cat > oneMultiz.csh << 'EOF'
+#!/bin/csh -fe
+    set c = $1
+    set multi = /scratch/$user/multiz10way.$c
+    set pairs = /cluster/bluearc/hg17/multiz10way
+
+    # special mode --
+    # with 1 arg, cleanup
+    if ($#argv == 1) then
+        rm -fr $multi
+        exit
+    endif
+
+    set s1 = $2
+    set s2 = $3
+
+    # locate input files -- in pairwise dir, or multiple dir
+    set d1 = $multi
+    set d2 = $multi
+    if (-d $pairs/$s1) then
+        set d1 = $pairs
+    endif
+    if (-d $pairs/$s2) then
+        set d2 = $pairs
+    endif
+    set f1 = $d1/$s1/$c.maf
+    set f2 = $d2/$s2/$c.maf
+    # write to output dir
+    set out = $multi/${s2}${s1}
+    mkdir -p $out
+
+    # check for empty input file
+    if (-s $f1 && -s $f2) then
+        echo "Aligning $f1 $f2"
+        /cluster/bin/penn/multiz $f1 $f2 - > $out/$c.maf
+    else if (-s $f1) then
+        cp $f1 $out
+    else if (-s $f2) then
+        cp $f2 $out
+    endif
+'EOF'
+# << for emacs
+chmod +x oneMultiz.csh
+
+cat > allMultiz.csh << 'EOF'
+#!/bin/csh -fe
+
+set c = $1
+oneMultiz.csh $c mm5 panTro1
+oneMultiz.csh $c rn3 panTro1mm5 
+oneMultiz.csh $c canFam1 panTro1mm5rn3 
+oneMultiz.csh $c galGal2 panTro1mm5rn3canFam1
+oneMultiz.csh $c xenTro1 panTro1mm5rn3canFam1galGal2
+oneMultiz.csh $c fr1 panTro1mm5rn3canFam1galGal2xenTro1
+oneMultiz.csh $c tetNig1 panTro1mm5rn3canFam1galGal2xenTro1fr1
+oneMultiz.csh $c danRer1 panTro1mm5rn3canFam1galGal2xenTro1fr1tetNig1
+# get final alignment file
+cp /scratch/$user/multiz10way.$c/panTro1mm5rn3canFam1galGal2xenTro1fr1tetNig1danRer1/$c.maf /cluster/data/hg17/bed/multiz10way/maf/$c.maf
+#cleanup
+oneMultiz.csh $c
+'EOF'
+# << for emacs
+chmod +x allMultiz.csh
+
+cat > gsub << 'EOF'
+#LOOP
+allMultiz.csh $(root1) {check out line+ /cluster/data/hg17/bed/multiz10way/maf/$(root1).maf}
+#ENDLOOP
+'EOF'
+    cut -f 1 /cluster/data/hg17/chrom.sizes > chrom.lst
+    gensub2 chrom.lst single gsub jobList
+    para create jobList
+    para try; para check
+    para push
+
+    # load table
+    ssh hgwdev
+    set mafDir = /gbdb/hg17
+    set table = multiz10way
+    mkdir -p $mafDir/$table
+    cd /cluster/data/hg17/bed/multiz.2004-12-22/maf
+    ln -s `pwd`/*.maf $mafDir/$table
+    hgLoadMaf hg17 -warn $table
+
+    set table = xenTro1_netBlastz
+    ln -s /cluster/data/xenTro1/bed/zb.hg17/mafNet $mafDir/$table
+    hgLoadMaf hg17 -warn $table -pathPrefix=$mafDir/$table
+
+    set table = tetNig1_netBlastz
+    ln -s /cluster/data/hg17/bed/blastz.tetNig1/mafNet $mafDir/$table
+    hgLoadMaf hg17 -warn $table -pathPrefix=$mafDir/$table

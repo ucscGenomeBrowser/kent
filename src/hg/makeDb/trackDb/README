@@ -8,7 +8,7 @@ contained in the trackDb.ra file.  Tracks are
 separated from each other in this file by 
 a blank line.  Each line begins with an
 attribute name and is followed by attribute
-value.
+value separated by white space.
 
 The html text about a track is in separate
 files named xxx.html where xxx is a
@@ -24,86 +24,100 @@ This allows you to customize a track for
 each version of the database.
 
 After editing a track definition here
-don't forget to run hgTrackDb to bring
-it into the MySQL database.  To update
+hgTrackDb to bring it into the MySQL database.  To update
 your personal copy (on hgwdev-userName) do
     make update
 to do it on genome-test do
     make alpha
 
 Most of the fields in the track.ra file should 
-be reasonably self explanitory.  A notable exception
-is the type field.  Currently there are six types:
-bed, psl, and genePred.  Here is the format of these
-type fields:
-For bed types it's always three words as follows:
-   1) bed (always)
-   2) fieldCount - the number of standard fields
-   3) extraInfo - either '.' meaning no non-standard fields
+be reasonably self explanatory.  A notable exception
+is the type field.  Currently there are fourteen types:
+axt, bed, chain, clonePos, ctgPos, expRatio, genePred,
+maf, netAlign, psl, rmsk, sample, wigMaf and wig
+
+	(notation: <angle brackets> indicate required field,
+		[square brackets] indicate optional field)
+
+The format of the type fields:
+
+1. type axt <otherDb>
+   <otherDb> - other database this organism is aligned to
+2. type bed <fieldCount> <extraInfo>
+   <fieldCount> - the number of standard fields
+   <extraInfo> - either '.' meaning no non-standard fields
        or '+' if there are additional non-standard fields.
-For psl types it's
-   1) psl
-   2) subtype, which is either
-        .  (just regular human mRNA)
-        est    (human displays a little differently in dense mode)
-        xeno (cross species)
-   3) Optional extra parameter for xeno subtype: database associated
-      with other organism.  If present the display can be colored by
-      chromosome and the chromosome and position in kilobases is shown
-      as the item label.
-For gene predictions; use `.' when a positional parameter must be skipped.
-    1) genePred
-    2) (optional) associated protein sequence table
-    3) (optional) associated mRNA table.
-For chains it's
-    1) chain
-    2) database for other organism 
-For nets it's
-    1) chain
-    2) database for other organism
-    3) associated chain track
-For sample
-    1) sample
-    2) minVal (optional, default 0).  Used just for label.
-    3) maxVal (optional, default 1000).  Used just for label.
-    4) scale - what to scale samples that
-       min and max values in database end up
-       0 and 1.
-    2) number of fields (currently always 9)
-For expRatio
+3. type chain <otherDb>
+   Alignment data
+   <otherDb> - other database this organism is aligned to
+4. type clonePos
+   unique for Clone Coverage track on human assemblies
+5. type ctgPos
+   unique for Physical Map Contigs track on human assemblies
+6. type expRatio
+    DNA chip expression data
     Nothing follows expRatio, but the following fields
-    must be defined elsewhere in the .ra record:
+    must be defined elsewhere in the trackDb.ra record:
        expTable - table in hgFixed with names of experiments etc.
        expScale - maximum expression value
        expStep - amount to step in visible expression scale.  Some
            round number close to expScale/8 is best
        expColorDense On - show avg. color in dense mode
        chip - Name of microarray chip.
-For wigMaf tracks:
-    o track name is table name of the multiple alignment maf table,
+7. type genePred [pep_table] [mrna_table]
+   Gene prediction data, use '.' when a positional parameter must be skipped
+   [pep_table] - optional associated protein sequence table
+   [mrna_table] - optional associated representative mRNA table
+   Optional field to be defined elsewhere in the trackDb.ra record:
+	itemAttrTbl - table used to color individual items in a track,
+		selected by name and locations.
+8. type maf
+   A type of multiple alignment track, becoming obsolete, to be replaced
+	by wigMaf
+9. type netAlign <otherDb> <otherDbChainTable>
+   <otherDb>
+   <otherDbChainTable>
+   Also requires an otherDb field to be defined in the trackDb.ra record
+10. type psl <subtype> [otherDb]
+   <subtype> - one of: est, mrna, protein, xeno or .
+      Where . means regular human mRNA
+   [otherDb] - optional xeno subtype, database associated
+      with other organism.  If present the display can be colored by
+      chromosome and the chromosome and position in kilobases is shown
+      as the item label.
+11. type rmsk
+   Unique type for Repeat Masker tracks
+12. type sample [min] [max]
+   A continuous value graphing type of track.
+   Becoming obsolete, replaced by the 'type wig' tracks.
+   [min] - optional minimum limit of data, default 0.  Used just for label.
+   [max] - optional maximum limit of data, default 1000. Used just for label.
+13. type wigMaf <minVal> <maxVal>
+   A composite type of track to graph multiple and pairwise alignments.
+   track name is table name of the multiple alignment maf table,
         with associated maf file in /gbdb (loaded with hgLoadMaf)
-    o type line includes data value range for conservation wiggle,
+   type line includes data value range for conservation wiggle,
          as for wig track 
-    o standard wig track settings may be included (e.g. 
+   standard wig track settings may be included (e.g. 
         maxHeightPixels, yLineOnOff, autoScaleDefault).  These
         apply to both conservation and pairwise wiggles
-    * Settings:
-     o wiggle - contains table name of conservation wiggle 
+   Settings in the trackDb.ra record:
+      wiggle - contains table name of conservation wiggle 
                           (loaded with hgLoadWiggle)
-     o speciesOrder - specifies the order of each pairwise items in the display
+      speciesOrder - specifies the order of each pairwise items in the display
         Each species is specified as in the MAF file
         Organism names with embedded dots and/or spaces,
         these are stripped and replaced with underscore.
         E.g. (C. elegans -> c_elegans).
-     o speciesGroup - list of "clades" to group the species
+      speciesGroup - list of "clades" to group the species
         This option is an alternative to speciesOrder, used when
         there are many species.  Each speciesGroup in the list must have it's
         own setting (sGroup_<group>), followed by a list of species,
         specified as for speciesOrder.
-     o treeImage - path from web server htdocs dir (normally /images)
+      treeImage - path from web server htdocs dir (normally /images)
             to a file containing a picture of the phylogenetic tree for
             this track
-     o pairwise - contains suffix of the pairwise maf tables.
+      pairwise - contains suffix of the pairwise maf tables.
             The prefix is generated from the species name, as specified above.
             An underscore is used to separate (e.g. chimp_hmrg if
             setting is "hmrg").  If there is a wig table named
@@ -112,6 +126,20 @@ For wigMaf tracks:
             be specified as the last word on this line.
             (e.g. pairwise CFTR 20, will have 20 pixel height of
             pairwise wiggle from tables named <species>_CFTR_wig).
+14. type wig [lower] [upper]
+   Continuous value graphing track.
+   [lower] - overall lower limit of the data, default 0.0
+   [upper] - overall upper limit of the data, default 127.0
+   trackDb record options:
+      autoScale         on|off               # default is off
+      gridDefault       on|off               # default is off (draw y=0.0 line)
+      maxHeightPixels   max:default:min      # default is 128:128:11
+      graphType         bar|points           # default is bar
+      viewLimits        lower:upper    # default is from the type line limits
+      yLineMark         real-value     # default is 0.0
+      yLineOnOff        on|off         # default is off (draw y=yLineMark line)
+      windowingFunction maximum|mean|minimum # default is maximum
+      smoothingWindow   off|[2-16]           # default is off
     
 If something lacks a type field it needs to have custom
 display routines.   You can remove a track from the
@@ -183,15 +211,3 @@ shortLabel 2-4hr
 longLabel Univ. Virginia Temporal Profiling of DNA Replication (0-2 hrs) in ENCODE Regions
 ---------------------
 
-======================================================================
-wiggle trackDb options:
-
-autoScale         on|off               # default is off
-gridDefault       on|off               # default is off (draw y=0.0 line)
-maxHeightPixels   max:default:min      # default is 128:128:11
-graphType         bar|points           # default is bar
-viewLimits        lower:upper          # default is from the type line limits
-yLineMark         real-value           # default is 0.0
-yLineOnOff        on|off               # default is off (draw y=yLineMark line)
-windowingFunction maximum|mean|minimum # default is maximum
-smoothingWindow   off|[2-16]           # default is off

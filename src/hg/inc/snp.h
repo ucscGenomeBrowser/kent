@@ -9,7 +9,7 @@
 #include "jksql.h"
 #endif
 
-#define SNP_NUM_COLS 15
+#define SNP_NUM_COLS 16
 
 struct snp
 /* Polymorphism data from dbSnp XML files or genotyping arrays */
@@ -30,6 +30,7 @@ struct snp
     char *func;	/* The functional category of the SNP */
     char *locType;	/* How the variant affects the reference sequence */
     char *source;	/* Source of the data - dbSnp, Affymetrix, ... */
+    char *exception;	/* List of exceptionIds for 'invariant' conditions */
     };
 
 void snpStaticLoad(char **row, struct snp *ret);

@@ -1,5 +1,5 @@
-table rightOrderFactors
-"rightOrderFactors Data"
+table tfbsConsFactors
+"tfbsConsFactors Data"
     (
     string name;       "Name of item"
     string ac;         "gene-regulation.com AC"

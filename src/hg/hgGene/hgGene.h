@@ -215,6 +215,9 @@ void doOtherProteinAli(struct sqlConnection *conn,
 void doRnaFoldDisplay(struct sqlConnection *conn, char *geneId, char *geneName);
 /* Display mRNA sequence folding. */
 
+void doSamT02(char *proteinId, char *database);
+/* show SAM-T02 sub-section */
+
 /* -------- CGI Data Variables ---------- */
 #define hggOrg "org"		/* Organism we're working on. */
 #define hggDb "db"		/* Database we're working on. */

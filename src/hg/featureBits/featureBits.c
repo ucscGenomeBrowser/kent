@@ -14,7 +14,7 @@
 #include "agpGap.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.28 2004/12/15 19:35:32 markd Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.29 2005/01/04 21:40:31 jill Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -93,7 +93,9 @@ bool inclChrom(struct slName *chrom)
 /* check if a chromosome should be included */
 {
 return  !((noRandom && (endsWith(chrom->name, "_random")
-                        || startsWith("chrUn", chrom->name)))
+                        || startsWith("chrUn", chrom->name)
+                        || sameWord("chrNA", chrom->name) /* danRer */
+                        || sameWord("chrU", chrom->name)))  /* dm */
           || (noHap && stringIn( "_hap", chrom->name)));
 }
 
@@ -401,6 +403,7 @@ for (i=0; i<tableCount; ++i)
 	   bitNot(bits, chromSize);
 	if (i == 1 && retSecondTableBits != NULL)
 	   *retSecondTableBits = bitCountRange(bits, 0, chromSize);
+	/* feature/bug - the above does not respect minSize */
 	if (orLogic)
 	    bitOr(acc, bits, chromSize);
 	else

@@ -25,6 +25,20 @@ visibility hide
 color 0,100,100
 type genePred twinscanPep
 
+track flyFeep
+shortLabel FEEP
+longLabel Full Euchromatic Expression Profile
+group regulation
+priority 79
+visibility dense
+color 0,60,120
+altColor 200,220,255
+type expRatio
+expTable flyFeepMedianExps
+expScale 3.0
+expStep 0.5
+chip placeHolderForHgc
+
 track flyreg
 shortLabel FlyReg
 longLabel FlyReg: Drosophila DNase I Footprint Database

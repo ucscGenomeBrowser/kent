@@ -156,3 +156,22 @@ cd ~/kent/src/hg/makeDb/hgMedianMicroarray
 hgMedianMicroarray hgFixed mouseRinnSex mouseRinnSexExps mouseRinnSex.ra mouseRinnSexMedian mouseRinnSexMedianExps
 hgMedianMicroarray hgFixed mouseRinnSexRatio mouseRinnSexExps mouseRinnSex.ra mouseRinnSexMedianRatio mouseRinnSexMedianExps
 
+# D. melanogaster full euchromatic expression profile (FEEP) -- 
+# Stolc et al. 2004.  
+# Loaded up absolute tables directly from files downloaded from 
+# http://genome.med.yale.edu/FEEP/FEEP.html --
+# see /projects/compbio/data/microarray/flyFEEP/README .
+# Extract ratio from absolute:
+hgRatioMicroarray flyFeepAll flyFeepAllRatio
+cd ~/kent/src/hg/makeDb/hgMedianMicroarray
+echo "select description,id from flyFeepAllExps" | hgsql -N hgFixed  \
+  | sort > flyFeepMed.ra
+# edit flyFeepMed.ra to collapse lines with the same initial character.
+# median absolute:
+hgMedianMicroarray hgFixed flyFeepAll flyFeepAllExps flyFeepMed.ra \
+  flyFeepMedian flyFeepMedianExps
+# median ratios:
+hgMedianMicroarray hgFixed flyFeepAllRatio flyFeepAllExps flyFeepMed.ra \
+  flyFeepMedianRatio flyFeepMedianExps
+# cvs add and check in flyFeepMed.ra
+

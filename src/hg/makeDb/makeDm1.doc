@@ -5669,7 +5669,11 @@ zcat `ls -1 /cluster/bluearc/dm1/phastCons/POSTPROBS/$chr.*.pp.gz \
     wget http://rana.lbl.gov/~dan/matrices/bergman2004/footprint_matrices.txt
     ./extractMatrices.pl footprint_matrices.txt > flyregMotif.tab
     ssh hgwdev
-    # Load it....
+    cd /cluster/data/dm1/bed/flyreg
+    sed -e 's/dnaMotif/flyregMotif/' $HOME/kent/src/hg/lib/dnaMotif.sql \
+    > flyregMotif.sql
+    hgsql dm1 < flyregMotif.sql
+    hgsql dm1 -e 'load data local infile "flyregMotif.tab" into table flyregMotif'
 
 
 # BLASTZ D.ERECTA (DONE 11/24/04 angie)
@@ -5903,5 +5907,23 @@ axtChain -verbose=0 $1 \
     featureBits -enrichment dm1 refGene twinscan
 #refGene 22.303%, twinscan 16.410%, both 15.755%, cover 70.64%, enrich 4.30x
 
+
+# FEEP EXPRESSION DATA (DONE 1/4/05 angie)
+    # Full Euchromatic Expression Profile data (Stolc et al. 2004, White lab)
+    # Raw data files from http://genome.med.yale.edu/FEEP/ downloaded to 
+    # /projects/compbio/data/microarray/flyFEEP/ .
+    # Used ad hoc perl scripts to massage the data files into hgFixed 
+    # expression tables -- see 
+    # /projects/compbio/data/microarray/flyFEEP/README .
+    # See makeHgFixed.doc for how *MedianRatio table was extracted.  
+    ssh hgwdev
+    mkdir /cluster/data/dm1/bed/flyFeep
+    cd /cluster/data/dm1/bed/flyFeep
+    # More perling to get bed coords; then hgMapMicroarray to make bed 15:
+    ./probes2bed.pl /projects/compbio/data/microarray/flyFEEP/probes3.1-* \
+      > flyFeepProbesBed12.bed
+    hgMapMicroarray -bedIn flyFeep.bed hgFixed.flyFeepMedianRatio \
+      flyFeepProbesBed12.bed
+    hgLoadBed dm1 flyFeep flyFeep.bed
 
 

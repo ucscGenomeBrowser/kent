@@ -769,3 +769,135 @@ SEQ2_LEN=$BASE/S2.len
     # Make a README.txt which explains the files & formats.
     md5sum *.gz */*.gz > md5sum.txt
 
+# MAKE Human Proteins track (hg17 DONE 2004-12-20 braney)
+    ssh kksilo
+    mkdir -p /cluster/data/bosTau1/blastDb
+    cd /cluster/data/bosTau1/blastDb
+    faSplit sequence ../downloads/linearScaffolds/Btau20040927-freeze-assembly.fa 500 x 
+    for i in x*
+    do
+	formatdb -i $i -p F
+    done
+    rm *.log *.fa
+
+    ssh kkr1u00
+    mkdir -p /iscratch/i/bosTau1/blastDb
+    cp /cluster/data/bosTau1/blastDb/* /iscratch/i/bosTau1/blastDb
+    (iSync) > sync.out
+
+    mkdir -p /cluster/data/bosTau1/bed/tblastn.hg17KG
+    cd /cluster/data/bosTau1/bed/tblastn.hg17KG
+    ls -1S /iscratch/i/bosTau1/blastDb/*.nsq | sed "s/\.nsq//" > query.lst
+    # back to kksilo
+    exit
+
+    # we want around 200000 jobs
+    cd /cluster/data/bosTau1/bed/tblastn.hg17KG
+    calc `wc /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl | awk "{print \\\$1}"`/\(200000/`wc query.lst | awk "{print \\\$1}"`\)
+    # 42156/(200000/494) = 104.125320
+    mkdir -p /cluster/bluearc/bosTau1/bed/tblastn.hg17KG/kgfa
+    split -l 104 /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl /cluster/bluearc/bosTau1/bed/tblastn.hg17KG/kgfa/kg
+    ln -s /cluster/bluearc/bosTau1/bed/tblastn.hg17KG/kgfa kgfa
+    cd kgfa
+    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    cd ..
+    ls -1S kgfa/*.fa > kg.lst
+    mkdir -p /cluster/bluearc/bosTau1/bed/tblastn.hg17KG/blastOut
+    ln -s /cluster/bluearc/bosTau1/bed/tblastn.hg17KG/blastOut
+    for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+    tcsh
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/iscratch/i/blast/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+if /cluster/bin/i386/blastToPsl $f.1 $f.2
+then
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg17/bed/blat.hg17KG/protein.lft warn $f.2
+	if pslCheck -prot $3.tmp
+	then
+	    mv $3.tmp $3
+	    rm -f $f.1 $f.2 
+	fi
+        exit 0
+    fi
+fi
+rm -f $f.1 $f.2 $3.tmp $f.8
+exit 1
+'_EOF_'
+
+    chmod +x blastSome
+    gensub2 query.lst kg.lst blastGsub blastSpec
+
+    ssh kk
+    cd /cluster/data/bosTau1/bed/tblastn.hg17KG
+    para create blastSpec
+    para push
+# Completed: 200564 of 200564 jobs
+# CPU time in finished jobs:   44956749s  749279.15m 12487.99h  520.33d  1.426 y
+# IO & Wait Time:               2159792s   35996.53m   599.94h   25.00d  0.068 y
+# Average job time:                 235s       3.92m     0.07h    0.00d
+# Longest job:                      843s      14.05m     0.23h    0.01d
+# Submission to last job:        102195s    1703.25m    28.39h    1.18d
+
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainSome $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainSome
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=150000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainSome
+
+    ls -1dS `pwd`/blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+
+    ssh kki
+    cd /cluster/data/bosTau1/bed/tblastn.hg17KG
+    para create chainSpec
+    para push
+# Completed: 406 of 406 jobs
+# CPU time in finished jobs:       1354s      22.57m     0.38h    0.02d  0.000 y
+# IO & Wait Time:                 18021s     300.35m     5.01h    0.21d  0.001 y
+# Average job time:                  48s       0.80m     0.01h    0.00d
+# Longest job:                      116s       1.93m     0.03h    0.00d
+
+    exit
+    # back to kksilo
+    cd /cluster/data/bosTau1/bed/tblastn.hg17KG/blastOut
+    for i in kg??
+    do 
+	awk "(\$13 - \$12)/\$11 > 0.6 {print}" c.$i.psl > c60.$i.psl
+	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+	echo $i
+    done
+
+    cat u.*.psl m60* | sort -T /tmp -k 14,14 -k 17,17n -k 17,17n  | uniq  > /cluster/data/bosTau1/bed/tblastn.hg17KG/blastHg17KG.psl
+    cd ..
+
+    ssh hgwdev
+    cd /cluster/data/bosTau1/bed/tblastn.hg17KG
+    hgLoadPsl bosTau1 blastHg17KG.psl
+
+    # back to kksilo
+    rm -rf blastOut
+# End tblastn

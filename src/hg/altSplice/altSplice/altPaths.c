@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: altPaths.c,v 1.9 2004/07/20 23:11:48 sugnet Exp $";
+static char const rcsid[] = "$Id: altPaths.c,v 1.10 2004/12/27 20:39:40 sugnet Exp $";
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -21,6 +21,7 @@ static struct optionSpec optionSpecs[] =
     {"db", OPTION_STRING},
     {"htmlPrefix", OPTION_STRING},
     {"browser", OPTION_STRING},
+    {"noSpoofEnds", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -34,7 +35,8 @@ static char *optionDescripts[] =
     "Use the older style of classifying events (like altAnalysis).",
     "Database version to link web pages to.",
     "Create a frame based web page to view splices.",
-    "Browser to point at when creating web page."
+    "Browser to point at when creating web page.",
+    "Don't add 1bp ends to paths in bed file.",
 };
 
 FILE *distMatrixFile = NULL; /* File to dump out distance matrixes to
@@ -499,6 +501,15 @@ bed->name = cloneString(buff->string);
 for(i = 0; i < bed->blockCount; i++)
     bed->chromStarts[i] -= bed->chromStart;
 
+if(splice->type == altCassette && path->vCount == 4) 
+    {
+    int incEdge1 = -1, incEdge2 = -1, skipEdge = -1;
+    skipEdge = altGraphXGetEdgeNum(ag, verts[0],verts[3]);
+    incEdge1 = altGraphXGetEdgeNum(ag, verts[0],verts[1]);
+    incEdge2 = altGraphXGetEdgeNum(ag, verts[2],verts[3]);
+    bed->thickStart = altGraphConfidenceForEdge(ag, skipEdge);
+    bed->thickEnd = max(altGraphConfidenceForEdge(ag, incEdge1), altGraphConfidenceForEdge(ag, incEdge2));
+    }
 /* If we don't have any blocks, quit now. */
 if(bed->blockCount == 0)
     bedFree(&bed);
@@ -1188,10 +1199,12 @@ int source = -1, sink = agx->vertexCount;
 int vC = agx->vertexCount + 2;
 int *vPos = agx->vPositions;
 int **distance = createDistanceMatrix(agx, em, source, sink);
+unsigned char *vTypes = agx->vTypes;
 int vertIx = 0;
 int numAltEvents = 0;
 struct splice *splice = NULL, *spliceList = NULL;
 struct path *path = NULL;
+boolean spoofEnds = !optionExists("noSpoofEnds");
 
 /* Initialize first splice. */
 splice = newSplice(agx, 0, sink, source);
@@ -1270,7 +1283,7 @@ for(splice = spliceList; splice != NULL; splice = splice->next)
 	/* If writing beds, create the bed and write it out. */
 	if(pathBedFile != NULL)
 	    {	
-	    struct bed *bed = bedForPath(path, splice, pathCount++, agx, source, sink, TRUE);
+	    struct bed *bed = bedForPath(path, splice, pathCount++, agx, source, sink, spoofEnds);
 	    if(bed != NULL)
 		bedTabOutN(bed, 12, pathBedFile);
 	    bedFree(&bed);
@@ -1408,6 +1421,7 @@ if(optionExists("oldClassification"))
     oldClassification = TRUE;
 if(optionExists("htmlPrefix"))
     initHtmlFiles();
+
 altPaths(argv[1], argv[2]);
 if(optionExists("htmlPrefix"))
     closeHtmlFiles();

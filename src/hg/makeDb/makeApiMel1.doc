@@ -147,6 +147,7 @@ popd
 
 
 # LOAD GAP & GOLD TABLES FROM AGP (DONE 11/8/04 angie)
+    # NOTE: RELOADED WITH FIX 12/17/04, SEE "MAKE CORRECTED SCAFFOLD AGP" BELOW
     ssh hgwdev
     hgGoldGapGl -noGl apiMel1 /cluster/data/apiMel1/downloads/scaffolds.agp
     # For some reason, the indices did not get built correctly --
@@ -667,3 +668,50 @@ chainSome $(path1)
     hgLoadPsl apiMel1 blastDm1FB.psl
 
 # End tblastn
+
+
+# EXTRACT GAP INFO TO COMPARE WITH PROVIDED AGP (DONE 12/13/04 angie)
+    # Doh!  b0b found that gaps/contigs in the AGP don't always correspond 
+    # to N's/real bases!  :(  Run hgFakeAgp and get some whopper examples 
+    # to send to Baylor.
+    ssh kksilo
+    mkdir /cluster/data/apiMel1/bed/fakeAgp
+    cd /cluster/data/apiMel1/bed/fakeAgp
+    # AGP has gaps all the way down to 1 base... follow suit:
+    hgFakeAgp -minContigGap=1 ../../downloads/scaffolds.fa fake.agp
+    awk '$5 == "N" {printf "%s\t%d\t%d\t%s\n", $1, $2-1, $3, $7}' fake.agp \
+    > extractedGaps.bed
+    ssh hgwdev
+    hgLoadBed apiMel1 extractedGaps \
+      /cluster/data/apiMel1/bed/fakeAgp/extractedGaps.bed
+    # Used featureBits to intersect gap \!extractedGaps, extracted 118 
+    # scaffolds with swapped coords --> apiMel1.diffGaps
+
+
+# MAKE CORRECTED SCAFFOLD AGP (DONE 12/17/04 angie)
+    ssh kksilo
+    cd /cluster/data/apiMel1/bed/fakeAgp
+    # Made a one-shot perl script to reverse the AGP coords for the 
+    # 118 affected scaffolds.  
+    ./fixApiMel1Agp.pl ../../downloads/scaffolds.agp > scaffolds.fixed.agp
+    # Reload gap & gold tables from fixed AGP:
+    ssh hgwdev
+    hgGoldGapGl -noGl apiMel1 \
+      /cluster/data/apiMel1/bed/fakeAgp/scaffolds.fixed.agp
+    # Now make sure they jive with extractedGaps:
+    featureBits apiMel1 gap \!extractedGaps
+#0 bases of 208434669 (0.000%) in intersection
+
+# Pick up photo from NHGRI (DONE - 2004-12-22 - Hiram)
+    ssh hgwdev
+    cd /tmp
+    wget \
+	'http://www.genome.gov/Pages/News/Photos/Science/honeybee_image.jpg' \
+	-O honeybee_image.jpg
+    #	view that image in 'display' to determine crop edges, then:
+    convert -crop 1760x2000+240+480 -quality 80 -sharpen 0 \
+	-normalize honeybee_image.jpg aam.jpg
+    convert -geometry 200x200 -quality 80 aam.jpg Apis_mellifera.jpg
+    rm -f aam.jpg honeybee_image.jpg
+    cp -p Apis_mellifera.jpg /usr/local/apache/htdocs/images
+    #	add links to this image in the description.html page, request push

@@ -5,6 +5,7 @@
 #  gets the names of all tables from an RR (or mgc) database
 #  using mark's genbank dumps.
 #
+#  Robert Kuhn
 ################################
 
 set database=""
@@ -18,6 +19,7 @@ if ($#argv != 2) then
   echo
   echo "  gets the names of all tables from an RR (or mgc) database"
   echo "  using mark's genbank dumps."
+  echo "    warning:  not in real time.  uses overnight dump."
   echo
   echo "    usage: RRmachine, database"
   echo

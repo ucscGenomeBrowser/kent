@@ -148,5 +148,6 @@ int  searchProteinsInSupportedGenomes(char *proteinID, char **gDatabase);
 int  searchProteinsInSwissProtByGene(char *queryGeneID);
 void presentProteinSelections(char *proteinID, int protCntInSwissByGene, int protCntInSupportedGenomeDb);
 char *hDbOrganism(char *database);
+void doSamT02(char *proteinId, char *database);
 
 #endif

@@ -8,7 +8,7 @@
 #include "hgGene.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.13 2004/04/06 17:05:13 baertsch Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.14 2005/01/04 23:21:06 fanhsu Exp $";
 
 static boolean domainsExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -135,6 +135,9 @@ if (list != NULL)
     slFreeList(&list);
     }
 
+/* Do SAM-T02 sub-section */
+doSamT02(swissProtAcc, database);
+
 /* Do modBase link. */
     {
     hPrintf("<B>ModBase Predicted Comparative 3D Structure on ");
@@ -144,13 +147,13 @@ if (list != NULL)
     hPrintf("<TABLE><TR>");
     hPrintf("<TD>");
     modBaseAnchor(swissProtAcc);
-    hPrintf("<IMG SRC=\"http://salilab.org/modbaseimages/image/modbase.jpg?database_id=%s\"></A></TD>", swissProtAcc);
+    hPrintf("\n<IMG SRC=\"http://salilab.org/modbaseimages/image/modbase.jpg?database_id=%s\"></A></TD>", swissProtAcc);
     hPrintf("<TD>");
     modBaseAnchor(swissProtAcc);
-    hPrintf("<IMG SRC=\"http://salilab.org/modbaseimages/image/modbase.jpg?database_id=%s&axis=x&degree=90\"></A></TD>", swissProtAcc);
+    hPrintf("\n<IMG SRC=\"http://salilab.org/modbaseimages/image/modbase.jpg?database_id=%s&axis=x&degree=90\"></A></TD>", swissProtAcc);
     hPrintf("<TD>");
     modBaseAnchor(swissProtAcc);
-    hPrintf("<IMG SRC=\"http://salilab.org/modbaseimages/image/modbase.jpg?database_id=%s&axis=y&degree=90\"></A></TD>", swissProtAcc);
+    hPrintf("\n<IMG SRC=\"http://salilab.org/modbaseimages/image/modbase.jpg?database_id=%s&axis=y&degree=90\"></A></TD>", swissProtAcc);
     hPrintf("</TR><TR>\n");
     hPrintf("<TD ALIGN=CENTER>Front</TD>");
     hPrintf("<TD ALIGN=CENTER>Top</TD>");

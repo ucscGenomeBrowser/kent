@@ -15,6 +15,7 @@ static struct optionSpec optionSpecs[] =
     {"db", OPTION_STRING},       /* Database to use. */
     {"fastaOut", OPTION_STRING}, /* File to print fasta records to. */
     {"bedIn", OPTION_STRING},    /* File to read bed records from. */
+    {"upCase", OPTION_BOOLEAN},  /* Upcase the file. */
     {NULL, 0}
 };
 
@@ -23,7 +24,10 @@ void usage()
 errAbort("sequenceForBed - Writes sequence for beds to a fasta\n"
 	 "file. Requires database access.\n"
 	 "usage:\n   "
-	 "sequenceForBed -db=hg15 -bedIn=someFile.bed -fastaOut=fileWithSeq.fa\n");
+	 "sequenceForBed -db=hg15 -bedIn=someFile.bed -fastaOut=fileWithSeq.fa\n"
+	 "\n"
+	 "optional args:\n"
+	 "   -upCase: output sequence as uppercase\n");
 }
 
 void sequenceForBed(char *db, char *bedFile, char *fastaFile)
@@ -32,7 +36,7 @@ void sequenceForBed(char *db, char *bedFile, char *fastaFile)
 struct bed *bedList = NULL, *bed = NULL;
 struct dnaSeq *seq = NULL;
 FILE *fasta = NULL;
-char nameBuff[256];
+char nameBuff[2056];
 assert(db);
 assert(bedFile);
 assert(fastaFile);
@@ -51,6 +55,9 @@ for(bed = bedList; bed != NULL; bed = bed->next)
     seq = hSeqForBed(bed);
     safef(nameBuff, sizeof(nameBuff), "%s.%s.%s:%d-%d", bed->name, bed->strand, 
 	  bed->chrom, bed->chromStart, bed->chromEnd);
+    if(optionExist
+s("upCase"))
+	touppers(seq->dna);
     faWriteNext(fasta, nameBuff, seq->dna, seq->size);
     dnaSeqFree(&seq);
     }

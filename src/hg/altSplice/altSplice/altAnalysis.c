@@ -9,7 +9,7 @@
 #include "sample.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: altAnalysis.c,v 1.15 2004/07/06 22:35:30 sugnet Exp $";
+static char const rcsid[] = "$Id: altAnalysis.c,v 1.16 2004/12/27 20:39:40 sugnet Exp $";
 static int alt5Flipped = 0;
 static int alt3Flipped = 0;
 static int minConfidence = 0;
@@ -1089,7 +1089,7 @@ struct evidence *ev = NULL;
 int edgeNum = 0;
 int altBpStart=0, altBpEnd=0;
 int i=0;
-int vMax = ag->vertexCount+ag->edgeCount;
+int vMax = 2*ag->vertexCount+ag->edgeCount;
 AllocVar(as);
 as->chrom = cloneString(ag->tName);
 as->chromStart = ag->vPositions[vs];

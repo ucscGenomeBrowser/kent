@@ -184,6 +184,7 @@ BEGIN { name="" }
     hgsql -e 'load data local infile "chromInfo.tab" into table chromInfo;' \
 	monDom1
     #	generate chrom.sizes list in order by size, biggest first
+    #	This listing is going to be used in a variety of procedures below
     twoBitInfo monDom1.2bit stdout | sort -rn +1 > chrom.sizes
 
     # Enter monDom1 into dbDb and defaultDb so test browser knows about it:
@@ -922,12 +923,14 @@ done
     ssh hgwdev
     cd /cluster/data/monDom1/bed/zb.hg17/pslChrom
     hgLoadPsl -table=blastzMonDom1 -noTNameIx hg17 chrM.psl
+    bash			#	if you are normally csh
     for I in `ls *.psl | grep -v chrM.psl`
     do
         /cluster/bin/i386/hgLoadPsl -table=blastzMonDom1 -append \
 		-noTNameIx hg17 ${I}
         echo "done: ${I}"
     done
+    exit			#	exit bash if you are normally csh
     #	Let's see what featureBits has to say about this data
     featureBits hg17 blastzMonDom1
     #	486216407 bases of 2866216770 (16.964%) in intersection
@@ -975,18 +978,20 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     chmod +x doChain
     ./doChain
 
-    # On the cluster server weed the chains for repeats
+    # On the file server weed the chains for repeats
     ssh eieio
     cd /cluster/data/monDom1/bed/zb.hg17/axtChain
     mkdir chain
     cd chainRaw
+    bash			#	if you are normally csh
     for i in *.chain
     do
         chainAntiRepeat /cluster/data/hg17/nib \
 		/cluster/data/monDom1/monDom1.2bit $i ../chain/$i
     done
+    exit			#	exit bash if you are normally csh
 
-    # now on the cluster server, sort chains.  The chainMergeSort and chainSplit
+    # now on the file server, sort chains.  The chainMergeSort and chainSplit
     # steps both take about 10 minutes
     ssh kksilo
     cd /cluster/data/monDom1/bed/zb.hg17/axtChain
@@ -1044,7 +1049,7 @@ done
 
     # Load the nets into database 
     ssh hgwdev
-    cd /cluster/data/hg17/bed/zb.hg17/axtChain
+    cd /cluster/data/monDom1/bed/zb.hg17/axtChain
     netFilter -minGap=10 human.net |  hgLoadNet hg17 netMonDom1 stdin
     #	4 minutes
     #	compare featureBits with some other assemblies
@@ -1054,6 +1059,15 @@ done
     #	2261085097 bases of 2866216770 (78.887%) in intersection
     featureBits hg17 netRn3
     #	2817656275 bases of 2866216770 (98.306%) in intersection
+
+# MAKE NET MAFS FOR MULTIZ (2004-12-24 kate)
+    ssh kksilo
+    cd /cluster/data/monDom1/bed/zb.hg17/axtNet
+    mkdir -p ../mafNet
+    cat *.axt | axtSort stdin stdout | axtToMaf -tSplit stdin \
+     -tPrefix=hg17. /cluster/data/hg17/chrom.sizes \
+     -qPrefix=monDom1. /cluster/data/monDom1/chrom.sizes ../mafNet
+
 
 # SWAP EVERYTHING AND REMAKE NET FROM OPOSSUM REFERENCE
 #	Create HUMAN TO OPOSSUM chain, net
@@ -1085,10 +1099,13 @@ done
 
     # Load chains into database (takes about 4 hours).
     hgLoadChain -tIndex monDom1 chainHg17 all.chain
-    #	nearly 4 hours
-    #	I wonder if this would go better if loaded without an index,
-    #	then create the index after ?
-    #	Examining the index, it doesn't look too good.
+    # if you do a 'show index' SQL reports Cardinality NULL for the tName
+    #	indexes although they are actually working.   To make the
+    #	cardinality show up:
+    hgsql monDom1 -e "analyze table chainHg17;"
+    hgsql monDom1 -e "analyze table chainHg17Link;"
+
+    #	check featureBits  (~ 30 minute commands)
     featureBits monDom1 chainHg17Link
     #	459086956 bases of 3492108230 (13.146%) in intersection
     featureBits monDom1 chainHg17
@@ -1299,12 +1316,14 @@ done
     cd /cluster/data/monDom1/bed/zb.galGal2/pslChrom
 
     hgLoadPsl -table=blastzMonDom1 -noTNameIx galGal2 chrM.psl
+    bash			#	if you are normally csh
     for I in `ls *.psl | grep -v chrM.psl`
     do
         /cluster/bin/i386/hgLoadPsl -table=blastzMonDom1 -append \
 		-noTNameIx galGal2 ${I}
         echo "done: ${I}"
     done
+    exit		#	exit bash if you are normally csh
     #	7 minutes
 
     #	Let's see what featureBits has to say about this data
@@ -1352,7 +1371,7 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     time ./doChain
     #	42 minutes
 
-    # On the cluster server weed the chains for repeats
+    # On the file server weed the chains for repeats
     ssh eieio
     cd /cluster/data/monDom1/bed/zb.galGal2/axtChain
     mkdir chain
@@ -1367,7 +1386,7 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     #	7 minutes
     exit			# exit bash if you are normally csh
 
-    # now on the cluster server, sort chains.  The chainMergeSort and
+    # now on the file server, sort chains.  The chainMergeSort and
     # chainSplit steps each take less than a minute
     ssh eieio
     cd /cluster/data/monDom1/bed/zb.galGal2/axtChain
@@ -1430,22 +1449,23 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     ssh hgwdev
     cd /cluster/data/monDom1/bed/zb.galGal2/axtChain
     netClass -noAr noClass.net galGal2 monDom1 chicken.net
-XXXX - RUNNING - 2004-12-15 15:57
-    #	41 minutes
+    #	56 minutes
     rm noClass.net
 
     # Load the nets into database 
     ssh hgwdev
-    cd /cluster/data/galGal2/bed/zb.galGal2/axtChain
+    cd /cluster/data/monDom1/bed/zb.galGal2/axtChain
     netFilter -minGap=10 chicken.net |  hgLoadNet galGal2 netMonDom1 stdin
     #	4 minutes
     #	compare featureBits with some other assemblies
     featureBits galGal2 netMonDom1
-    #	2595812636 bases of 2866216770 (90.566%) in intersection
-    featureBits galGal2 netBosTau1
-    #	2261085097 bases of 2866216770 (78.887%) in intersection
-    featureBits galGal2 netRn3
-    #	2817656275 bases of 2866216770 (98.306%) in intersection
+    #	771045333 bases of 1054197620 (73.140%) in intersection
+    featureBits galGal2 netHg17
+    #	908340945 bases of 1054197620 (86.164%) in intersection
+    featureBits galGal2 netMm5
+    #	835277984 bases of 1054197620 (79.234%) in intersection
+    featureBits galGal2 netXenTro1
+    #	674438463 bases of 1054197620 (63.976%) in intersection
 
 # SWAP EVERYTHING AND REMAKE NET FROM OPOSSUM REFERENCE
 #	Create CHICKEN TO OPOSSUM chain, net
@@ -1453,46 +1473,46 @@ XXXX - RUNNING - 2004-12-15 15:57
     cd /cluster/data/monDom1/bed
     mkdir -p bz.galGal2/axtChain
     chainSwap zb.galGal2/axtChain/all.chain bz.galGal2/axtChain/all.chain
-    #	4 minutes
+    #	1 minute
 
     cd bz.galGal2/axtChain
-    chainPreNet all.chain ../../zb.galGal2/S2.len ../../zb.galGal2/S1.len stdout \
+    chainPreNet all.chain ../../zb.galGal2/S2.len \
+		../../zb.galGal2/S1.len stdout \
 	| chainNet stdin -minSpace=1 ../../zb.galGal2/S2.len \
 		../../zb.galGal2/S1.len stdout /dev/null \
 	| netSyntenic stdin noClass.net
-    #	10 minutes
+    #	2 minutes
     mkdir ../axtNet
     netToAxt noClass.net all.chain /cluster/data/monDom1/monDom1.2bit \
 	/cluster/data/galGal2/nib ../axtNet/all.axt
-    #	23 minutes
+    #	6 minutes
 
     # Classify net and load into database
     ssh hgwdev
     cd /cluster/data/monDom1/bed/bz.galGal2/axtChain
     netClass -noAr noClass.net monDom1 galGal2 monDom1.net
-    #	16 minutes
+    #	31 minutes
     rm noClass.net
     netFilter -minGap=10 monDom1.net | hgLoadNet monDom1 netGalGal2 stdin
-    #	6 minutes
+    #	4 minutes
 
     # Load chains into database (takes about 4 hours).
     hgLoadChain -tIndex monDom1 chainGalGal2 all.chain
-    #	nearly 4 hours
-    #	I wonder if this would go better if loaded without an index,
-    #	then create the index after ?
-    #	Examining the index, it doesn't look too good.
-    featureBits monDom1 chainGalGal2Link
-    #	459086956 bases of 3492108230 (13.146%) in intersection
-    featureBits monDom1 chainGalGal2
-    #	3246158618 bases of 3492108230 (92.957%) in intersection
-    featureBits monDom1 netGalGal2
-    #	3223616544 bases of 3492108230 (92.311%) in intersection
+    # if you do a 'show index' SQL reports Cardinality NULL for the tName
+    #	indexes although they are actually working.   To make the
+    #	cardinality show up:
+    hgsql monDom1 -e "analyze table chainGalGal2;"
+    hgsql monDom1 -e "analyze table chainGalGal2Link;"
 
+    featureBits monDom1 chainGalGal2Link
+    #	110933245 bases of 3492108230 (3.177%) in intersection
+    featureBits monDom1 chainGalGal2
+    #	2437546469 bases of 3492108230 (69.802%) in intersection
 
 # BLASTZ CHICKEN CLEAN UP (TBD)
     rm chain.tab link.tab
 
-# ALIGN TO MOUSE (WORKING - 2004-12-14 - Hiram)
+# ALIGN TO MOUSE (DONE - 2004-12-16 - Hiram)
 #	NAMING CONVENTION: the zb.mm5 directory will be the Opossum
 #	aligned to the Mouse blastz result.
 #	The bz.mm5 directory will the swapped result, Mouse aligned
@@ -1554,13 +1574,14 @@ SEQ2_LEN=$BASE/S2.len
 
     cd run.0
     para try, push check, para push, para check....
-XXXX - RUNNING - 2004-12-14 15:52
 # Completed: 112871 of 112871 jobs
-# CPU time in finished jobs:   42061387s  701023.12m 11683.72h  486.82d  1.334 y
-# IO & Wait Time:                578862s    9647.70m   160.80h    6.70d  0.018 y
-# Average job time:                 378s       6.30m     0.10h    0.00d
-# Longest job:                     3157s      52.62m     0.88h    0.04d
-# Submission to last job:         81243s    1354.05m    22.57h    0.94d
+# CPU time in finished jobs:   36169619s  602826.99m 10047.12h  418.63d  1.147 y
+# IO & Wait Time:                452242s    7537.36m   125.62h    5.23d  0.014 y
+# Average job time:                 324s       5.41m     0.09h    0.00d
+# Longest job:                     2755s      45.92m     0.77h    0.03d
+# Submission to last job:        153519s    2558.65m    42.64h    1.78d
+    #	extra delay in this run due to disk problems in the middle and
+    #	thus being interrupted
 
     #	Second cluster run to convert the .out's to .lav's
     #	You do NOT want to run this on the big cluster.  It brings
@@ -1572,11 +1593,11 @@ XXXX - RUNNING - 2004-12-14 15:52
     cd run.1
     para try, check, push, etc ...
 # Completed: 341 of 341 jobs
-# CPU time in finished jobs:       3525s      58.75m     0.98h    0.04d  0.000 y
-# IO & Wait Time:                 11315s     188.58m     3.14h    0.13d  0.000 y
-# Average job time:                  44s       0.73m     0.01h    0.00d
-# Longest job:                      181s       3.02m     0.05h    0.00d
-# Submission to last job:          1524s      25.40m     0.42h    0.02d
+# CPU time in finished jobs:       3131s      52.19m     0.87h    0.04d  0.000 y
+# IO & Wait Time:                  9815s     163.58m     2.73h    0.11d  0.000 y
+# Average job time:                  38s       0.63m     0.01h    0.00d
+# Longest job:                      223s       3.72m     0.06h    0.00d
+# Submission to last job:          1267s      21.12m     0.35h    0.01d
 
     # third run: lav -> axt (an I/O bound process, run only on fileserver)
     #	Use the chunks.2bit so lavToAxt will work. Then lift the resulting axt
@@ -1594,7 +1615,7 @@ do
     echo -n "${L} -> ${chr}.axt working ... "
     cat `ls -1 *.lav | sort -g` \
 	| lavToAxt stdin \
-	/iscratch/i/mm5/bothMaskedNibs \
+	/scratch/mus/mm5/softNib \
 	/iscratch/i/monDom1/chunks.2bit stdout \
 	| axtSort stdin stdout | liftUp -axtQ ../../axtChrom/${chr}.axt \
 	    /iscratch/i/monDom1/chunkedScaffolds.lft warn stdin
@@ -1608,6 +1629,7 @@ done
 
     chmod +x lav2axt.sh
     ./lav2axt.sh
+    #	38 minutes
 
     #	load this blast result just to see how it looks
     #	It is not needed in the browser after the chains and nets are
@@ -1615,13 +1637,1052 @@ done
     ssh hgwdev
     cd /cluster/data/monDom1/bed/zb.mm5/pslChrom
     hgLoadPsl -table=blastzMonDom1 -noTNameIx mm5 chrM.psl
+    bash		#	if you are csh normally
     for I in `ls *.psl | grep -v chrM.psl`
     do
         /cluster/bin/i386/hgLoadPsl -table=blastzMonDom1 -append \
 		-noTNameIx mm5 ${I}
         echo "done: ${I}"
     done
+    #	12 minutes
+    exit		#	back to csh if you are csh normally
     #	Let's see what featureBits has to say about this data
     featureBits mm5 blastzMonDom1
-    # 486216407 bases of 2866216770 (16.964%) in intersection
+    263272041 bases of 2615483787 (10.066%) in intersection
 
+# CHAIN MOUSE BLASTZ  (TBD)
+    # Run axtChain on file server, job is mostly I/O, cluster does not help
+    ssh eieio
+    cd /cluster/data/monDom1/bed/zb.mm5
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chainRaw
+
+    ls -1S /cluster/data/monDom1/bed/zb.mm5/axtChrom/*.axt > input.lst
+    cat << '_EOF_' > doChain.sh
+#!/bin/sh
+for chrAxtFile in `cat input.lst`
+do
+    chr=`basename ${chrAxtFile}`
+    axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
+	-linearGap=../../opossumMouseTuned.gap \
+	-minScore=5000 ${chrAxtFile} \
+	/scratch/mus/mm5/softNib \
+	/cluster/data/monDom1/monDom1.2bit chainRaw/${chr}.chain > out/${chr}.out
+done
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    # Reuse gap penalties from mouse run.
+    cat << '_EOF_' | sed 's/  */\t/g' > ../../opossumMouseTuned.gap
+tablesize	11
+smallSize	111
+position	1	2	3	11	111	2111	12111	32111	72111	152111	252111
+qGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+tGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    chmod +x doChain
+    time ./doChain
+    #	95 minutes
+
+    # On the file server weed the chains for repeats
+    ssh eieio
+    cd /cluster/data/monDom1/bed/zb.mm5/axtChain
+    mkdir chain
+    cd run1/chainRaw
+    bash			# if you are normally csh
+    for i in *.chain
+    do
+        chainAntiRepeat /scratch/mus/mm5/softNib \
+		/cluster/data/monDom1/monDom1.2bit $i ../../chain/$i
+	echo "$i done"
+    done
+    #	34 minutes
+    exit			# exit bash if you are normally csh
+
+    # now on the file server, sort chains. 
+    # chainSplit steps each take less than a minute
+    ssh eieio
+    cd /cluster/data/monDom1/bed/zb.mm5/axtChain
+    chainMergeSort chain/*.chain > all.chain
+    #	3 minutes
+    mv chain chainBeforeMerge
+    chainSplit chain all.chain
+    #	3 minutes
+    rm run1/chain/*.chain
+
+    # Load chains into database.  This takes an hour
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/zb.mm5/axtChain/chain
+    bash		#	if you are csh normally
+    for i in *.chain
+    do
+	c=${i/.chain/}
+	echo "loading ${c}"
+	hgLoadChain mm5 ${c}_chainMonDom1 $i
+    done
+    #	20 minutes
+    exit		#	exit bash if you are csh normally
+
+    #	Compare to some other organisms
+    featureBits mm5 chainMonDom1
+    #	2121448151 bases of 2615483787 (81.111%) in intersection
+    featureBits -countGaps mm5 chainRn3
+    #	2646682349 bases of 3164952073 (83.625%) in intersection
+    featureBits mm5 chainRn3
+    #	2646682349 bases of 2615483787 (101.193%) in intersection
+    featureBits mm5 chainHg17
+    #	2507720521 bases of 2615483787 (95.880%) in intersection
+    featureBits mm5 chainXenTro1
+    #	1078618413 bases of 2615483787 (41.240%) in intersection
+
+# NET OPOSSUM TO MOUSE BLASTZ (TBD)
+    ssh eieio
+    cd /cluster/data/monDom1/bed/zb.mm5/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+	| chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+	| netSyntenic stdin noClass.net
+    #	6 minutes
+
+    # Create axt files for the net as so:
+    netSplit noClass.net noClass
+    #	1 minute
+    cd noClass
+    mkdir ../../axtNet
+    bash		#	if you are csh normally
+    for i in *.net
+    do
+	r=${i/.net/}
+	netToAxt $i ../chain/${r}.chain /scratch/mus/mm5/softNib \
+		/cluster/data/monDom1/monDom1.2bit ../../axtNet/${r}.axt
+    done
+    #	10 minutes
+    exit		#	back to csh if you are csh normally
+
+    cd ..
+    rm -r noClass
+    
+    # Add classification info using db tables: 
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/zb.mm5/axtChain
+    netClass -noAr noClass.net mm5 monDom1 mouse.net
+    #	41 minutes
+    rm noClass.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/zb.mm5/axtChain
+    netFilter -minGap=10 mouse.net |  hgLoadNet mm5 netMonDom1 stdin
+    #	3 minutes
+    #	compare featureBits with some other assemblies
+    featureBits mm5 netMonDom1
+    #	2094316044 bases of 2615483787 (80.074%) in intersection
+    featureBits mm5 netRn3
+    #	2638255333 bases of 2615483787 (100.871%) in intersection
+    featureBits -countgaps mm5 netRn3
+    #	2638255333 bases of 3164952073 (83.358%) in intersection
+    featureBits mm5 netHg17
+    #	2504056038 bases of 2615483787 (95.740%) in intersection
+    featureBits mm5 netCanFam1
+    #	2456773441 bases of 2615483787 (93.932%) in intersection
+    featureBits mm5 netGalGal2
+    #	1958796258 bases of 2615483787 (74.892%) in intersection
+    featureBits mm5 netXenTro1
+    #	1042210258 bases of 2615483787 (39.848%) in intersection
+    featureBits mm5 netTetNig1
+    #	618111072 bases of 2615483787 (23.633%) in intersection
+    featureBits mm5 netDanRer2
+    #	560950601 bases of 2615483787 (21.447%) in intersection
+
+
+# SWAP EVERYTHING AND REMAKE NET FROM OPOSSUM REFERENCE
+#	Create MOUSE TO OPOSSUM chain, net
+    ssh eieio
+    cd /cluster/data/monDom1/bed
+    mkdir -p bz.mm5/axtChain
+    chainSwap zb.mm5/axtChain/all.chain bz.mm5/axtChain/all.chain
+    #	2 minutes
+
+    cd bz.mm5/axtChain
+    chainPreNet all.chain ../../zb.mm5/S2.len \
+		../../zb.mm5/S1.len stdout \
+	| chainNet stdin -minSpace=1 ../../zb.mm5/S2.len \
+		../../zb.mm5/S1.len stdout /dev/null \
+	| netSyntenic stdin noClass.net
+    #	6 minutes
+    mkdir ../axtNet
+    netToAxt noClass.net all.chain /cluster/data/monDom1/monDom1.2bit \
+	/scratch/mus/mm5/softNib ../axtNet/all.axt
+    #	9 minutes
+
+    # Classify net and load into database
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/bz.mm5/axtChain
+    netClass -noAr noClass.net monDom1 mm5 monDom1.net
+    #	13 minutes
+    rm noClass.net
+    netFilter -minGap=10 monDom1.net | hgLoadNet monDom1 netMm5 stdin
+    #	3 minutes
+
+    # Load chains into database (takes about 4 hours).
+    hgLoadChain -tIndex monDom1 chainMm5 all.chain
+    # if you do a 'show index' SQL reports Cardinality NULL for the tName
+    #	indexes although they are actually working.   To make the
+    #	cardinality show up:
+    hgsql monDom1 -e "analyze table chainMm5;"
+    hgsql monDom1 -e "analyze table chainMm5Link;"
+
+    featureBits monDom1 chainMm5Link
+    #	249594220 bases of 3492108230 (7.147%) in intersection
+    featureBits monDom1 chainMm5
+    #	2913812625 bases of 3492108230 (83.440%) in intersection
+    featureBits monDom1 netMm5
+    #	2889580530 bases of 3492108230 (82.746%) in intersection
+
+# BLASTZ MOUSE CLEAN UP (TBD)
+    rm chain.tab link.tab
+
+# MAKE Human Proteins track (hg17 DONE 2004-12-15 braney)
+    ssh eieio
+    mkdir -p /cluster/data/monDom1/blastDb
+    cd /cluster/data/monDom1/blastDb
+    faSplit sequence ../broad.mit.edu/scaffolds.fa.unmasked 500 x 
+    for i in x*
+    do
+	formatdb -i $i -p F
+    done
+    rm *.log *.fa
+
+    ssh kkr1u00
+    mkdir -p /iscratch/i/monDom1/blastDb
+    cp /cluster/data/monDom1/blastDb/* /iscratch/i/monDom1/blastDb
+    (iSync) > sync.out
+    exit # back to eieio
+
+    mkdir -p /cluster/data/monDom1/bed/tblastn.hg17KG
+    cd /cluster/data/monDom1/bed/tblastn.hg17KG
+    ls -1S /iscratch/i/monDom1/blastDb/*.nsq | sed "s/\.nsq//" > query.lst
+
+    calc `wc /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl | awk "{print \\\$1}"`/\(350000/`wc query.lst | awk "{print \\\$1}"`\)
+    # 42156/(350000/499) = 60.102411
+    mkdir -p /cluster/bluearc/monDom1/bed/tblastn.hg17KG/kgfa
+    split -l 65 /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl /cluster/bluearc/monDom1/bed/tblastn.hg17KG/kgfa/kg
+    ln -s /cluster/bluearc/monDom1/bed/tblastn.hg17KG/kgfa kgfa
+    cd kgfa
+    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    cd ..
+    ls -1S kgfa/*.fa > kg.lst
+    mkdir blastOut
+    for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+    tcsh
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/iscratch/i/blast/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+if /cluster/bin/i386/blastToPsl $f.1 $f.2
+then
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg17/bed/blat.hg17KG/protein.lft warn $f.2
+	if pslCheck -prot $3.tmp
+	then
+	    mv $3.tmp $3
+	    rm -f $f.1 $f.2 
+	fi
+        exit 0
+    fi
+fi
+rm -f $f.1 $f.2 $3.tmp $f.8
+exit 1
+'_EOF_'
+
+    chmod +x blastSome
+    gensub2 query.lst kg.lst blastGsub blastSpec
+
+    ssh kk
+    cd /cluster/data/monDom1/bed/tblastn.hg17KG
+    para create blastSpec
+    para push
+# Completed: 323851 of 323851 jobs
+# CPU time in finished jobs:  113015986s 1883599.76m 31393.33h 1308.06d  3.584 y
+# IO & Wait Time:               2732896s   45548.27m   759.14h   31.63d  0.087 y
+# Average job time:                 357s       5.96m     0.10h    0.00d
+# Longest job:                     4911s      81.85m     1.36h    0.06d
+# Submission to last job:        274144s    4569.07m    76.15h    3.17d
+
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainSome $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainSome
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=150000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainSome
+
+    ls -1dS `pwd`/blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+
+    ssh kki
+    cd /cluster/data/monDom1/bed/tblastn.hg17KG
+    para create chainSpec
+    para push
+# Completed: 649 of 649 jobs
+# CPU time in finished jobs:       4726s      78.76m     1.31h    0.05d  0.000 y
+# IO & Wait Time:                 76824s    1280.41m    21.34h    0.89d  0.002 y
+# Average job time:                 126s       2.09m     0.03h    0.00d
+# Longest job:                      312s       5.20m     0.09h    0.00d
+# Submission to last job:          7487s     124.78m     2.08h    0.09d
+
+    exit
+    # back to eieio
+    cd /cluster/data/monDom1/bed/tblastn.hg17KG/blastOut
+    for i in kg??
+    do 
+	awk "(\$13 - \$12)/\$11 > 0.6 {print}" c.$i.psl > c60.$i.psl
+	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+	echo $i
+    done
+
+    cat u.*.psl m60* | sort -T /tmp -k 14,14 -k 17,17n -k 17,17n  | uniq  > /cluster/data/monDom1/bed/tblastn.hg17KG/blastHg17KG.psl
+    cd ..
+
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/tblastn.hg17KG
+    hgLoadPsl monDom1 blastHg17KG.psl
+
+    # back to eieio
+    rm -rf blastOut
+# End tblastn
+
+
+# ALIGN TO ZEBRAFISH (WORKING - 2004-12-17 - Hiram)
+#	NAMING CONVENTION: the zb.danRer2 directory will be the Opossum
+#	aligned to the Zebrafish blastz result.
+#	The bz.danRer2 directory will the swapped result, Zebrafish aligned
+#	to Opossum 
+  ssh kk
+  mkdir -p /cluster/data/monDom1/bed/zb.danRer2
+  cd /cluster/data/monDom1/bed/zb.danRer2
+
+  # Create DEF file for run of scaffolds vs. zebrafish chromosomes
+  cat << '_EOF_' > DEF
+# zebrafish vs. M.domestica
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+# Set up blastz parameters using parameters between (chicken and fish ?)
+# but not abridging repeats since can't do that with scaffolds, and
+# it's not very relevant at this evolutionary distance.
+# Specific settings for chicken (per Webb email to Brian Raney)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: zebrafish
+SEQ1_DIR=/iscratch/i/danRer2/nib
+SEQ1_RMSK=
+SEQ1_FLAG=
+SEQ1_SMSK=
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Opossum
+SEQ2_DIR=/iscratch/i/monDom1/chunks
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_SMSK=
+SEQ2_IN_CONTIGS=1
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/monDom1/bed/zb.danRer2
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+  # << this line keeps emacs coloring happy
+
+    cp -p /cluster/data/danRer2/chrom.sizes S1.len
+    cp -p /cluster/data/monDom1/chrom.sizes S2.len
+    # script copied over from /cluster/data/danRer2/jkStuff/BlastZ_run0.sh
+    /cluster/data/monDom1/jkStuff/BlastZ_run0.sh
+
+    cd run.0
+    para try, push check, para push, para check....
+# Completed: 57263 of 57263 jobs
+# CPU time in finished jobs:   20015224s  333587.07m  5559.78h  231.66d  0.635 y
+# IO & Wait Time:                364057s    6067.61m   101.13h    4.21d  0.012 y
+# Average job time:                 356s       5.93m     0.10h    0.00d
+# Longest job:                     2681s      44.68m     0.74h    0.03d
+# Submission to last job:        117505s    1958.42m    32.64h    1.36d
+
+    #	Second cluster run to convert the .out's to .lav's
+    #	You do NOT want to run this on the big cluster.  It brings
+    #	the file server to its knees.  Run this on the small cluster.
+    ssh kki
+    cd /cluster/data/monDom1/bed/zb.danRer2
+    # script copied over from /cluster/data/danRer2/jkStuff/BlastZ_run1.sh
+    /cluster/data/monDom1/jkStuff/BlastZ_run1.sh
+    cd run.1
+    para try, check, push, etc ...
+Completed: 173 of 173 jobs
+CPU time in finished jobs:       1228s      20.47m     0.34h    0.01d  0.000 y
+IO & Wait Time:                  4828s      80.46m     1.34h    0.06d  0.000 y
+Average job time:                  35s       0.58m     0.01h    0.00d
+Longest job:                       49s       0.82m     0.01h    0.00d
+Submission to last job:           393s       6.55m     0.11h    0.00d
+
+    # third run: lav -> axt (an I/O bound process, run only on fileserver)
+    #	Use the chunks.2bit so lavToAxt will work. Then lift the resulting axt
+
+    ssh eieio
+    cd /cluster/data/monDom1/bed/zb.danRer2
+    mkdir axtChrom pslChrom
+
+    cat << '_EOF_' > lav2axt.sh
+#!/bin/sh
+for L in lav/chr*
+do
+    chr=${L/lav\//}
+    cd ${L}
+    echo -n "${L} -> ${chr}.axt working ... "
+    cat `ls -1 *.lav | sort -g` \
+	| lavToAxt stdin \
+	/iscratch/i/danRer2/nib \
+	/iscratch/i/monDom1/chunks.2bit stdout \
+	| axtSort stdin stdout | liftUp -axtQ ../../axtChrom/${chr}.axt \
+	    /iscratch/i/monDom1/chunkedScaffolds.lft warn stdin
+    cd ../..
+    echo -n "${chr}.axt -> ${chr}.psl working ..."
+    axtToPsl axtChrom/${chr}.axt S1.len S2.len pslChrom/${chr}.psl
+    echo "DONE"
+done
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    chmod +x lav2axt.sh
+    ./lav2axt.sh
+    #	6 minutes
+
+    #	load this blast result just to see how it looks
+    #	It is not needed in the browser after the chains and nets are
+    #	made, drop it later.
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/zb.danRer2/pslChrom
+    hgLoadPsl -table=blastzMonDom1 -noTNameIx danRer2 chrM.psl
+    bash		#	if you are csh normally
+    for I in `ls *.psl | grep -v chrM.psl`
+    do
+        /cluster/bin/i386/hgLoadPsl -table=blastzMonDom1 -append \
+		-noTNameIx danRer2 ${I}
+        echo "done: ${I}"
+    done
+    #	2 minutes
+    exit		#	back to csh if you are csh normally
+    #	Let's see what featureBits has to say about this data
+    featureBits danRer2 blastzMonDom1
+    #	56615212 bases of 1560497282 (3.628%) in intersection
+
+# CHAIN ZEBRAFISH BLASTZ  (DONE - 2004-12-19 - Hiram))
+    # Run axtChain on file server, job is mostly I/O, cluster does not help
+    ssh eieio
+    cd /cluster/data/monDom1/bed/zb.danRer2
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chainRaw
+
+    ls -1S /cluster/data/monDom1/bed/zb.danRer2/axtChrom/*.axt > input.lst
+    cat << '_EOF_' > doChain.sh
+#!/bin/sh
+for chrAxtFile in `cat input.lst`
+do
+    chr=`basename ${chrAxtFile}`
+    axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
+	-linearGap=../../opossumZFishTuned.gap \
+	-minScore=5000 ${chrAxtFile} \
+	/iscratch/i/danRer2/nib \
+	/cluster/data/monDom1/monDom1.2bit chainRaw/${chr}.chain > out/${chr}.out
+done
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    # Reuse gap penalties from mouse run.
+    cat << '_EOF_' | sed 's/  */\t/g' > ../../opossumZFishTuned.gap
+tablesize	11
+smallSize	111
+position	1	2	3	11	111	2111	12111	32111	72111	152111	252111
+qGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+tGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    chmod +x doChain.sh
+    time ./doChain.sh
+    #	57 minutes
+
+    # On the file server weed the chains for repeats
+    ssh eieio
+    cd /cluster/data/monDom1/bed/zb.danRer2/axtChain
+    mkdir chain
+    cd run1/chainRaw
+    bash			# if you are normally csh
+    for i in *.chain
+    do
+        chainAntiRepeat /iscratch/i/danRer2/nib \
+		/cluster/data/monDom1/monDom1.2bit $i ../../chain/$i
+	echo "$i done"
+    done
+    #	4 minutes
+    exit			# exit bash if you are normally csh
+
+    # now on the file server, sort chains. 
+    # chainSplit steps each take less than a minute
+    ssh eieio
+    cd /cluster/data/monDom1/bed/zb.danRer2/axtChain
+    chainMergeSort chain/*.chain > all.chain
+    #	1 minute
+    mv chain chainBeforeMerge
+    chainSplit chain all.chain
+    #	1 minute
+    rm run1/chain/*.chain
+
+    # Load chains into database.  This takes an hour
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/zb.danRer2/axtChain/chain
+    bash		#	if you are csh normally
+    for i in *.chain
+    do
+	c=${i/.chain/}
+	echo "loading ${c}"
+	hgLoadChain danRer2 ${c}_chainMonDom1 $i
+    done
+    #	3 minutes
+    exit		#	exit bash if you are csh normally
+
+    #	Compare to some other organisms
+    featureBits danRer2 chainMonDom1
+    #	267969653 bases of 1560497282 (17.172%) in intersection
+    featureBits danRer2 chainHg17
+    #	510842993 bases of 1560497282 (32.736%) in intersection
+    featureBits danRer2 chainMm5
+    #	507912858 bases of 1560497282 (32.548%) in intersection
+    featureBits danRer2 chainFr1
+    #	309784483 bases of 1560497282 (19.852%) in intersection
+
+# NET OPOSSUM TO ZEBRAFISH BLASTZ (TBD)
+    ssh eieio
+    cd /cluster/data/monDom1/bed/zb.danRer2/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+	| chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+	| netSyntenic stdin noClass.net
+    #	1 minute
+
+    # Create axt files for the net as so:
+    netSplit noClass.net noClass
+    #	1 minute
+    cd noClass
+    mkdir ../../axtNet
+    bash		#	if you are csh normally
+    for i in *.net
+    do
+	r=${i/.net/}
+	netToAxt $i ../chain/${r}.chain /iscratch/i/danRer2/nib \
+		/cluster/data/monDom1/monDom1.2bit ../../axtNet/${r}.axt
+    done
+    #	4 minutes
+    exit		#	back to csh if you are csh normally
+
+    cd ..
+    rm -r noClass
+    
+    # Add classification info using db tables: 
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/zb.danRer2/axtChain
+    netClass -noAr noClass.net danRer2 monDom1 zfish.net
+    #	39 minutes
+    rm noClass.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/zb.danRer2/axtChain
+    netFilter -minGap=10 zfish.net |  hgLoadNet danRer2 netMonDom1 stdin
+    #	1 minute
+    #	compare featureBits with some other assemblies
+    featureBits danRer2 netMonDom1
+    #	251706312 bases of 1560497282 (16.130%) in intersection
+    featureBits danRer2 netRn3
+XXX - TBD - 2004-12-19 20:15
+    #	2638255333 bases of 2615483787 (100.871%) in intersection
+    featureBits -countgaps danRer2 netRn3
+    #	2638255333 bases of 3164952073 (83.358%) in intersection
+    featureBits danRer2 netHg17
+    #	2504056038 bases of 2615483787 (95.740%) in intersection
+    featureBits danRer2 netCanFam1
+    #	2456773441 bases of 2615483787 (93.932%) in intersection
+    featureBits danRer2 netGalGal2
+    #	1958796258 bases of 2615483787 (74.892%) in intersection
+    featureBits danRer2 netXenTro1
+    #	1042210258 bases of 2615483787 (39.848%) in intersection
+    featureBits danRer2 netTetNig1
+    #	618111072 bases of 2615483787 (23.633%) in intersection
+    featureBits danRer2 netDanRer2
+    #	560950601 bases of 2615483787 (21.447%) in intersection
+
+# SWAP EVERYTHING AND REMAKE NET FROM OPOSSUM REFERENCE
+#	Create ZEBRAFISH TO OPOSSUM chain, net
+    ssh eieio
+    cd /cluster/data/monDom1/bed
+    mkdir -p bz.danRer2/axtChain
+    chainSwap zb.danRer2/axtChain/all.chain bz.danRer2/axtChain/all.chain
+    #	1 minutes
+
+    cd bz.danRer2/axtChain
+    chainPreNet all.chain ../../zb.danRer2/S2.len \
+		../../zb.danRer2/S1.len stdout \
+	| chainNet stdin -minSpace=1 ../../zb.danRer2/S2.len \
+		../../zb.danRer2/S1.len stdout /dev/null \
+	| netSyntenic stdin noClass.net
+    #	6 minutes
+    mkdir ../axtNet
+    netToAxt noClass.net all.chain /cluster/data/monDom1/monDom1.2bit \
+	/iscratch/i/danRer2/nib ../axtNet/all.axt
+    #	5 minutes
+
+    # Classify net and load into database
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/bz.danRer2/axtChain
+    netClass -noAr noClass.net monDom1 danRer2 ZFish.net
+    #	12 minutes
+    rm noClass.net
+    netFilter -minGap=10 ZFish.net | hgLoadNet monDom1 netDanRer2 stdin
+    #	1 minute
+
+    # Load chains into database
+    hgLoadChain -tIndex monDom1 chainDanRer2 all.chain
+    #	10 minutes
+    # if you do a 'show index' SQL reports Cardinality NULL for the tName
+    #	indexes although they are actually working.   To make the
+    #	cardinality show up:
+    hgsql monDom1 -e "analyze table chainDanRer2;"
+    hgsql monDom1 -e "analyze table chainDanRer2Link;"
+
+    featureBits monDom1 chainDanRer2Link
+    #	66821827 bases of 3492108230 (1.914%) in intersection
+    featureBits monDom1 chainDanRer2
+    #	397007345 bases of 3492108230 (11.369%) in intersection
+    featureBits monDom1 chainGalGal2Link
+    #	110933245 bases of 3492108230 (3.177%) in intersection
+    featureBits monDom1 chainGalGal2
+    #	2437546469 bases of 3492108230 (69.802%) in intersection
+    featureBits monDom1 chainMm5Link
+
+# BLASTZ ZEBRAFISH CLEAN UP (TBD)
+    rm chain.tab link.tab
+
+# 5-WAY VAR_MULTIZ - ALIGNMENTS Hg17, Mm5, MonDom1, GalGal2, DanRer2
+#		DONE - 2005-01-04 - Hiram
+    ssh eieio
+    cd /cluster/data/monDom1/bed
+    mkdir multiz
+    bash		#	if you are csh normally
+    for A in danRer2 galGal2 mm5 hg17
+    do
+      axtSort bz.${A}/axtNet/all.axt stdout | axtToMaf -tSplit stdin \
+	 -tPrefix=monDom1. /cluster/data/monDom1/chrom.sizes \
+	 -qPrefix=${A}. /cluster/data/${A}/chrom.sizes \
+	 multiz/${A}
+    done
+    #	6 minutes
+    exit		#	back to csh if you are csh normally
+
+    #	Copy MAFs to Iservers for kluster run
+    ssh kkr1u00
+    mkdir /iscratch/i/monDom1/multiz
+    cd /iscratch/i/monDom1/multiz
+    rsync -a /cluster/data/monDom1/bed/multiz/ .
+    mkdir penn
+    cp -p /cluster/bin/penn/psuCVS/multiz-tba/multiz penn
+    cp -p /cluster/bin/penn/maf_project penn
+    /cluster/bin/iSync
+
+#       Progressive alignment up the tree w/o stager, 
+#       using multiz.v10 (var_multiz)
+#       Method: align internal subtrees (using 0 flag to var_multiz)
+#               Then, align these to human (using 1 flag to var_multiz)
+#       NOTE: must use maf_project after each multiz run, in order
+#       to order output.  Single-cov guaranteed by use of net MAF's,
+#       so it is not necessary to run single_cov2.
+
+    ssh eieio
+    cd /cluster/data/monDom1/bed/multiz
+
+    #	Not sure what this is used for.  Appears to be from something
+    #	that is no longer used.  Can find no reference to it in the
+    #	procedures.  Below in the parameter estimation for phastCons
+    #	there is a tree specified:
+    #	((((hg17,mm5),galGal2),monDom1),danRer2)
+    cat << '_EOF_' > tree.nh
+(((hg17,mm5),galGal2),danRer2)
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    # make output dir and run dir
+    ssh kk9
+    cd /cluster/data/monDom1/bed/multiz
+    mkdir -p maf
+    mkdir -p run
+    cd run
+
+    # create scripts to run var_multiz on cluster
+
+cat > oneMultiz.csh << 'EOF'
+#!/bin/csh -fe
+    set c = $1
+    set multi = /scratch/monDom1/multiz5way.$c
+    set pairs = /iscratch/i/monDom1/multiz
+
+    # special mode --
+    # with 1 arg, cleanup
+    if ($#argv == 1) then
+        rm -fr $multi
+        exit
+    endif
+
+    # special mode --
+    # with 3 args, saves an alignment file
+    if ($#argv == 3) then
+        cp $multi/$2/$c.maf $3
+        exit
+    endif
+        
+    set s1 = $2
+    set s2 = $3
+    set flag = $4
+
+    # locate input files -- in pairwise dir, or multiple dir
+    set d1 = $multi
+    set d2 = $multi
+    if (-d $pairs/$s1) then
+        set d1 = $pairs
+    endif
+    if (-d $pairs/$s2) then
+        set d2 = $pairs
+    endif
+    set f1 = $d1/$s1/$c.maf
+    set f2 = $d2/$s2/$c.maf
+    # write to output dir
+    set out = $multi/${s1}${s2}
+    mkdir -p $out
+
+    # check for empty input file
+    if (-s $f1 && -s $f2) then
+        echo "Aligning $f1 $f2 $flag"
+	/iscratch/i/monDom1/multiz/penn/multiz.v10 $f1 $f2 $flag $out/$c.unused1.maf $out/$c.unused2.maf > $out/$c.full.maf
+        cat $out/$c.full.maf $out/$c.unused1.maf $out/$c.unused2.maf > \
+                $out/$c.tmp.maf
+        echo "Ordering $c.maf"
+        /iscratch/i/monDom1/multiz/penn/maf_project $out/$c.tmp.maf monDom1.$c > $out/$c.maf
+    else if (-s $f1) then
+        cp $f1 $out
+    else if (-s $f2) then
+        cp $f2 $out
+    endif
+'EOF'
+# << keep emacs coloring happy
+chmod +x oneMultiz.csh
+
+    #	Copy this script to iscratch
+    ssh kkr1u00
+    cd /iscratch/i/monDom1/multiz/penn
+    cp -p /cluster/data/monDom1/bed/multiz/run/oneMultiz.csh .
+    /cluster/bin/iSync
+
+    #	back to run the job
+    ssh kki
+    cd /cluster/data/monDom1/bed/multiz/run
+
+
+cat > allMultiz.csh << 'EOF'
+#!/bin/csh -fe
+    # multiple alignment steps:
+    # multiz.v10 human.maf mouse.maf 1
+    # multiz.v10 human-mouse.maf chicken.maf 1
+    # multiz.v10 human-mouse-chicken.maf zfish.maf 1
+set c = $1
+/iscratch/i/monDom1/multiz/penn/oneMultiz.csh $c hg17 mm5  1
+/iscratch/i/monDom1/multiz/penn/oneMultiz.csh $c galGal2 hg17mm5 1
+/iscratch/i/monDom1/multiz/penn/oneMultiz.csh $c danRer2 galGal2hg17mm5 1
+# get final alignment file
+/iscratch/i/monDom1/multiz/penn/oneMultiz.csh $c danRer2galGal2hg17mm5 /cluster/data/monDom1/bed/multiz/maf/$c.maf
+#cleanup
+/iscratch/i/monDom1/multiz/penn/oneMultiz.csh $c
+'EOF'
+# << keep emacs coloring happy
+chmod +x allMultiz.csh
+
+cat  << 'EOF' > template
+#LOOP
+./allMultiz.csh $(root1) {check out line+ /cluster/data/monDom1/bed/multiz/maf/$(root1).maf}
+#ENDLOOP
+'EOF'
+
+    #	make a list of scaffolds that successfully had actual alignments
+    #	at least once somewhere.  Not every scaffold has an alignment.
+    cd /iscratch/i/monDom1/multiz
+    for D in danRer2 galGal2 hg17 mm5
+    do
+        cd $D
+        ls | sed -e "s/.maf//"
+        cd ..
+    done | sort -u >  /cluster/data/monDom1/bed/multiz/run/chrom.lst
+
+    cd /cluster/data/monDom1/bed/multiz/run
+
+    gensub2 chrom.lst single template jobList
+    para create jobList
+    para try; para check
+    para push
+# Completed: 5517 of 5517 jobs
+# CPU time in finished jobs:       8337s     138.95m     2.32h    0.10d  0.000 y
+# IO & Wait Time:                 15166s     252.77m     4.21h    0.18d  0.000 y
+# Average job time:                   4s       0.07m     0.00h    0.00d
+# Longest job:                       65s       1.08m     0.02h    0.00d
+# Submission to last job:          1495s      24.92m     0.42h    0.02d
+
+    #	combine results into a single file for loading
+    ssh eieio
+    cd /cluster/data/monDom1/bed/multiz
+    catDir maf | mafFilter stdin -minScore=500 > multiz5way.maf
+
+# Load into database  (DONE - 2005-01-04 - Hiram)
+  ssh hgwdev
+  cd /cluster/data/monDom1/bed/multiz
+  mkdir -p /gbdb/monDom1/multiz5way
+  ln -s /cluster/data/monDom1/bed/multiz/multiz5way.maf /gbdb/monDom1/multiz5way
+  hgLoadMaf monDom1 multiz5way
+    #	Loaded 988922 mafs in 1 files from /gbdb/monDom1/multiz5way
+    #	4 minutes to load
+
+# Create pairwise maf files (no longer split across scaffolds)
+   ssh eieio
+   cd /cluster/data/monDom1/bed/multiz
+   mkdir -p pairwise
+   catDir galGal2 > pairwise/galGal2.maf
+   catDir hg17 > pairwise/hg17.maf
+   catDir mm5 > pairwise/mm5.maf
+   catDir danRer2 > pairwise/danRer2.maf
+
+# Load pairwise mafs into database  (DONE - 2005-01-04 - Hiram)
+   ssh  hgwdev
+   set h = /cluster/data/monDom1/bed/multiz/pairwise
+   cd $h
+   foreach i (*.maf)
+      set o = $i:r
+      set t = ${o}_netBlastz
+      mkdir -p /gbdb/monDom1/multiz5way/$t
+      ln -s $h/$i /gbdb/monDom1/multiz5way/$t
+      hgLoadMaf monDom1 $t -pathPrefix=/gbdb/monDom1/multiz5way/$t
+   end
+
+# CREATE CONSERVATION WIGGLE WITH PHASTCONS (WORKING - 2005-01-04 - Hiram)
+
+# Estimate phastCons parameters
+  ssh eieio
+  mkdir /cluster/data/monDom1/bed/multiz/cons
+  cd /cluster/data/monDom1/bed/multiz/cons
+
+  # Create a starting-tree.mod based on scaffold_13303. (the largest one)
+  twoBitToFa ../../../monDom1.2bit -seq=scaffold_13303 scaffold_13303.fa
+  /cluster/bin/phast/msa_split ../maf/scaffold_13303.maf --refseq scaffold_13303.fa --in-format MAF --windows 100000000,1000 --out-format SS --between-blocks 5000 --out-root s1
+(((hg17,mm5),galGal2),danRer2)
+  /cluster/bin/phast/phyloFit -i SS s1.*.ss --tree "((((hg17,mm5),galGal2),monDom1),danRer2)" --out-root starting-tree
+  rm scaffold_13303.fa s1.*.ss
+
+  # Create directory full of sequence in individual scaffold files on bluearc.
+  ssh kksilo
+  mkdir -p /cluster/bluearc/monDom1/scaffoldFa
+  cd /cluster/bluearc/monDom1/scaffoldFa
+  twoBitToFa /cluster/data/monDom1/monDom1.2bit stdout | faSplit byname stdin foo
+
+  # Create big bad bloated SS files in bluearc (takes ~45 minutes)
+  mkdir -p /cluster/bluearc/monDom1/cons/ss
+  cd /cluster/bluearc/monDom1/cons/ss
+  foreach i (`awk '{print $1}' /cluster/data/monDom1/chrom.sizes`)
+      if (-e /cluster/data/monDom1/bed/multiz/maf/$i.maf) then
+	  echo msa_split $i
+	  /cluster/bin/phast/msa_split /cluster/data/monDom1/bed/multiz/maf/$i.maf \
+	     --refseq /cluster/bluearc/monDom1/scaffoldFa/$i.fa \
+	     --in-format MAF --windows 1000000,0 --between-blocks 5000 \
+	     --out-format SS --out-root $i
+      endif
+  end
+
+  # Create a random list of 50 1 mb regions 
+  ls -l | awk '$5 > 4000000 {print $9;}' | randomLines stdin 50 ../randomSs
+
+  # Set up parasol directory to calculate trees on these 50 regions
+  ssh kki
+  mkdir /cluster/bluearc/monDom1/cons/treeRun1
+  cd /cluster/bluearc/monDom1/cons/treeRun1
+  mkdir tree log
+
+  # Create little script that calls phastCons with right arguments
+  #	I wonder if target-coverage here has to go along with the
+  #	readjusted target-coverage below as it is tuned up ?
+  #	In that case, this would be 0.50 here.
+  cat > makeTree << '_EOF_'
+  /cluster/bin/phast/phastCons ../ss/$1.ss \
+      /cluster/data/monDom1/bed/multiz/cons/starting-tree.mod \
+      --gc 0.410 --nrates 1,1 --no-post-probs --ignore-missing \
+      --expected-lengths 12 --target-coverage 0.35 \
+      --quiet --log log/$1 --estimate-trees tree/$1
+'_EOF_'
+  chmod a+x makeTree
+
+  # Create gensub file
+  cat > template << '_EOF_'
+#LOOP
+makeTree $(root1)
+#ENDLOOP
+'_EOF_'
+
+  # Make cluster job and run it
+  gensub2 ../randomSs single template jobList
+  para create jobList
+  para try/push/check/etc
+# Completed: 50 of 50 jobs
+# CPU time in finished jobs:       1526s      25.43m     0.42h    0.02d  0.000 y
+# IO & Wait Time:                   650s      10.84m     0.18h    0.01d  0.000 y
+# Average job time:                  44s       0.73m     0.01h    0.00d
+# Longest job:                       84s       1.40m     0.02h    0.00d
+# Submission to last job:           168s       2.80m     0.05h    0.00d
+
+  # Now combine parameter estimates.  We can average the .mod files
+  # using phyloBoot.  This must be done separately for the conserved
+  # and nonconserved models
+  ls tree/*.cons.mod > cons.txt
+  /cluster/bin/phast/phyloBoot --read-mods '*cons.txt' --output-average ../ave.cons.mod > cons_summary.txt
+  ls tree/*.noncons.mod > noncons.txt
+  /cluster/bin/phast/phyloBoot --read-mods '*noncons.txt' --output-average ../ave.noncons.mod > noncons_summary.txt
+  cd ..
+  cp -p ave.*.mod /cluster/data/monDom1/bed/multiz/cons
+
+  ssh kk9
+  # Create cluster dir to do main phastCons run
+  mkdir  /cluster/bluearc/monDom1/cons/consRun1
+  cd  /cluster/bluearc/monDom1/cons/consRun1
+  mkdir ppRaw bed
+
+  # Create script to run phastCons with right parameters
+cat > doPhast << '_EOF_'
+mkdir -p ppRaw/$2
+/cluster/bin/phast/phastCons ../ss/$1.ss ../ave.cons.mod,../ave.noncons.mod \
+   --expected-lengths 12 --target-coverage 0.50 --quiet --seqname $2 \
+   --idpref $2 --viterbi bed/$1.bed --score --require-informative 0 > \
+   ppRaw/$2/$1.pp
+'_EOF_'
+  chmod a+x doPhast
+
+  # Create gsub file
+cat > template << '_EOF_'
+#LOOP
+doPhast $(file1) $(root1)
+#ENDLOOP
+'_EOF_'
+
+  # Create parasol batch and run it
+  ls -1 ../ss | sed 's/.ss//' > in.lst
+  gensub2 in.lst single template jobList
+  para create jobList
+  para try/check/push/etc.
+# Completed: 8171 of 8171 jobs
+# CPU time in finished jobs:      24641s     410.68m     6.84h    0.29d  0.001 y
+# IO & Wait Time:                 81696s    1361.60m    22.69h    0.95d  0.003 y
+# Average job time:                  13s       0.22m     0.00h    0.00d
+# Longest job:                       39s       0.65m     0.01h    0.00d
+# Submission to last job:          1128s      18.80m     0.31h    0.01d
+
+    # combine predictions and transform scores to be in 0-1000 interval
+    catDir bed | awk \
+    	'{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+        /cluster/bin/scripts/lodToBedScore /dev/stdin > \
+	/cluster/data/monDom1/bed/multiz/mostConserved.bed
+
+    # Figure out how much is actually covered by the bed files as so:
+    awk '{print $3 - $2;}' /cluster/data/monDom1/bed/multiz/mostConserved.bed | addCols stdin
+    at 0.35: 99792852.00
+    at 0.55: 169027762
+    at 0.50: 140230712.00
+    at 0.35: 99792852/3492108230 = .028576
+    at 0.55: 169027762/3492108230 = .048402 with two points claiming to
+	to be negative at 0.00000 changed to 0
+    at 0.50: 140230712.00/3492108230 = .040156 - no unusual points noted
+
+
+    # If the results of the this divided by the non-n genome size (1.5G) aren't
+    # around 4%, then do it again, adjusting the target-coverage phastCons
+    # parameter.  Beware of negative scores when too high.  The logToBedScore
+    # will output an error on any negative scores.
+
+    # Load most conserved track into database
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/multiz
+    hgLoadBed monDom1 mostConserved mostConserved.bed
+
+    # Create merged posterier probability file and wiggle track data files
+    ssh eieio
+    cd /cluster/bluearc/monDom1/cons/consRun1
+    find ./ppRaw -type f | xargs cat | \
+	wigEncode stdin phastCons5.wig phastCons5.wib
+    cp -p phastCons5.wi? /cluster/data/monDom1/bed/multiz/cons
+    
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/multiz/cons
+    ln -s `pwd`/phastCons5.wib /gbdb/monDom1/wib/phastCons5.wib
+    hgLoadWiggle monDom1 phastCons5 phastCons5.wig
+
+# Pick up photo from NHGRI (DONE - 2004-12-22 - Hiram)
+    ssh hgwdev
+    cd /tmp
+    wget \
+	'http://www.genome.gov/Pages/News/Photos/Science/opossum_image.jpg'
+	-O opossum_image.jpg
+    #	view that image in 'display' to determine crop edges, then:
+    convert -crop 1712x1240+560+360 -quality 80 -sharpen 0 \
+	-normalize opossum_image.jpg mmd.jpg
+    convert -geometry 300x200 -quality 80 mmd.jpg Monodelphis_domestica.jpg
+    rm -f mmd.jpg opossum_image.jpg
+
+    cp -p Monodelphis_domestica.jpg /usr/local/apache/htdocs/images
+    #	add links to this image in the description.html page, request push

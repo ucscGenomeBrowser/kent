@@ -3,7 +3,7 @@ include ../../../inc/common.mk
 
 L = -lm $(MYSQLLIBS)
 
-O = pbUtil.o doStamps.o doTracks.o domains.o spKgMap.o
+O = pbUtil.o doStamps.o doTracks.o domains.o spKgMap.o doSam.o
 
 
 ../../../lib/$(MACHTYPE)/jkpbap.a: $(O) 

@@ -6483,6 +6483,8 @@ cat `ls -1 *.lav | sort -g` \
 #   no need to reload
 
 # CHAIN ZEBRAFISH (danRer2) BLASTZ (DONE, 2004-12-13, hartera)
+# APPLY chainAntiRepeat TO REMOVE CHAINS THAT ARE THE PRIMARILY THE RESULTS OF 
+# REPEATS AND DEGENERATE DNA (DONE, 2004-12-22, hartera)
     # Make chains with rescored blastz danRer2
     # Run axtChain on little cluster
     ssh kki
@@ -6548,9 +6550,27 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     # remove old chains
     rm -r chain
     chainSplit chain all.chain.filt5k
-    
+   
+    # remove repeats from chains and reload into database
+    # (2004-12-22, hartera)
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blastz.danRer2/axtChain
+    mv chain chainRaw
+    mkdir chain
+    cd chainRaw
+    foreach f (*.chain)
+       set c = $f:r
+       echo $c
+       nice chainAntiRepeat /cluster/bluearc/scratch/mus/mm5/softNib \
+                            /cluster/bluearc/danRer2/nib $f \
+                            ../chain/$c.chain
+    end
+    cd ..
+    chainMergeSort ./chain/*.chain > all.chain.antirepeat
+    chainSplit chainAR all.chain.antirepeat
+    # load filtered chains with chains removed that are mostly due to repeats 
     ssh hgwdev
-    cd /cluster/data/mm5/bed/blastz.danRer2/axtChain/chain
+    cd /cluster/data/mm5/bed/blastz.danRer2/axtChain/chainAR
     foreach i (*.chain)
         set c = $i:r
         hgLoadChain mm5 ${c}_chainDanRer2 $i
@@ -6568,12 +6588,18 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 # featureBits -chrom=chr1 mm5 refGene:cds chainDanRer1Link -enrichment
 # refGene:cds 0.780%, chainDanRer1Link 2.022%, both 0.512%, cover 65.64%, 
 # enrich 32.47x
-
+# after chainAntiRepeat:
+# featureBits -chrom=chr1 mm5 refGene:cds chainDanRer2Link -enrichment
+# refGene:cds 0.785%, chainDanRer2Link 2.058%, both 0.530%, cover 67.53%, 
+# enrich 32.81x
+ 
 # NET ZEBRAFISH (danRer2) BLASTZ (DONE, 2004-12-13, hartera)
+# RE-DO NET WITH CHAINS FILTERED BY chainAntiRepeat (DONE, 2004-12-22,hartera)
     ssh kksilo
     cd /cluster/data/mm5/bed/blastz.danRer2/axtChain
+    rm -r preNet
     mkdir preNet
-    cd chain
+    cd chainAR
     foreach i (*.chain)
        echo preNetting $i
        /cluster/bin/i386/chainPreNet $i ../../S1.len ../../S2.len \
@@ -6590,8 +6616,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     end
     cd ..
     cat n1/*.net | /cluster/bin/i386/netSyntenic stdin noClass.net
-    # memory usage 110891008, utime 692 s/100, stime 87
-
+    # memory usage 105357312, utime 632 s/100, stime 117
 # Add classification info using db tables:
     cd /cluster/data/mm5/bed/blastz.danRer2/axtChain
     # netClass looks for ancient repeats in one of the databases
@@ -6605,20 +6630,24 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
        /cluster/bluearc/danRer2/linSpecRep.notInMouse
     ssh hgwdev
     cd /cluster/data/mm5/bed/blastz.danRer2/axtChain
-    time netClass noClass.net mm5 danRer2 danRer2.net \
+    time netClass noClass.net mm5 danRer2 zfishdanRer2.net \
          -tNewR=/cluster/bluearc/mm5/linSpecRep.notInZebrafish \
          -qNewR=/cluster/bluearc/danRer2/linSpecRep.notInMouse -noAr
-    # 88.050u 55.640s 3:49.74 62.5%   0+0k 0+0io 200pf+0w
-    netFilter -minGap=10 danRer2.net |  hgLoadNet mm5 netDanRer2 stdin
+    # 87.010u 56.100s 5:15.16 45.4%   0+0k 0+0io 207pf+0w
+    netFilter -minGap=10 zfishdanRer2.net |  hgLoadNet mm5 netDanRer2 stdin
 # featureBits mm5 refGene:cds netDanRer2 -enrichment
 # refGene:cds 0.938%, netDanRer2 21.447%, both 0.714%, cover 76.17%, 
 # enrich 3.55x
 # featureBits mm5 refGene:cds netDanRer1 -enrichment
 # refGene:cds 0.938%, netDanRer1 19.993%, both 0.702%, cover 74.87%, 
 # enrich 3.74x
+# after chainAntiRepeat:
+# featureBits mm5 refGene:cds netDanRer2 -enrichment
+# refGene:cds 0.942%, netDanRer2 21.161%, both 0.717%, cover 76.14%, 
+# enrich 3.60x
 # add trackDb.ra entries and html for details pages
 
-# TIGR GENE INDEX (DONE 2004-1213 Fan)
+# TIGR GENE INDEX (DONE 2004-12-13 Fan)
     mkdir -p /cluster/data/mm5/bed/tigr
     cd /cluster/data/mm5/bed/tigr
     wget ftp://ftp.tigr.org/pub/data/tgi/Mus_musculus/TGI_track_MouseGenome_mm5_05-2004.tgz
@@ -6656,7 +6685,158 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     
     gzip *.gff *TCs
 
+# TIGR GENE INDEX (RE-DONE 2004-12-21 Fan)
+# This track is re-done due to an error (no strand info) in the original files provided by TIGR.
+    cd /cluster/data/mm5/bed
+    mv tigr tigr_old_wrong
+    mkdir -p /cluster/data/mm5/bed/tigr
+    cd /cluster/data/mm5/bed/tigr
+    wget --timestamp ftp://ftp.tigr.org/pub/data/tgi/Mus_musculus/TGI_track_MouseGenome_mm5_12-2004.tgz 
+    tar xvzf TGI*.tgz
+
+    foreach f (*cattle*)
+      set f1 = `echo $f | sed -e 's/cattle/cow/g'`
+      mv $f $f1
+    end
+
+    foreach o (mouse cow human pig rat)
+      echo $o
+      setenv O $o
+      foreach f (chr*_$o*s)
+        tail +2 $f | perl -wpe 's /THC/TC/; s/(TH?C\d+)/$ENV{O}_$1/;' > $f.gff
+      end
+    end
+
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/tigr
+    hgsql mm5 -e "drop table tigrGeneIndex"
+    hgsql mm5 < ~/kent/src/hg/lib/tigrGeneIndex.sql
+
+    foreach f (*.gff)
+        echo Processing $f ...
+        /cluster/home/fanhsu/bin/i386/ldHgGene -oldTable -exon=TC mm5 tigrGeneIndex $f
+        hgsql mm5 -e "select count(*) from tigrGeneIndex"
+    end
+    # Total of 385814 entries created in tigrGeneIndex table.
+
+    hgsql mm5 -e "update tigrGeneIndex set cdsStart = txStart;"
+    hgsql mm5 -e "update tigrGeneIndex set cdsEnd = txEnd;"
+
+    checkTableCoords mm5 tigrGeneIndex
+    
+    gzip *.gff *TCs
+
+#### LOAD ENSEMBL GENES (DONE - 2004-12-17 Fan)
+#	needed for Gene Sorter procedure below
+#	Ensembl released Mouse build 33 the week of Dec 4 2004
+     mkdir /cluster/data/mm5/bed/ensembl
+     cd /cluster/data/mm5/bed/ensembl
+
+        Get the ensembl gene data from http://www.ensembl.org/
+        Go to the EnsMart link
+        Choose Mus musculus as the organism
+        Follow this sequence through the pages:
+        Page 1) Choose the Ensembl Genes choice. Hit next.
+        Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.        
+        Page 3) Choose the "Structures" tab. 
+        Page 4) Choose GTF as the ouput, choose gzip compression , name the
+	output file ensGeneMm5.gtf.gz and then hit Export
+
+# Ensembl handles random chromosomes differently than us, so we
+# strip this data.  Fortunately it just loses a couple of genes.
+     zcat ensGene.gtf.gz | grep -v ^6_DR51 | grep -v _NT_ > unrandom.gtf
+#	Let's see how much it loses:
+#  	None.
+
+# Add "chr" to front of each line in the gene data gtf file to make 
+# it compatible with ldHgGene 
+    sed -e "s/^/chr/" unrandom.gtf > ensGene.gtf
+    ldHgGene mm5 ensGene ensGene.gtf
+# Read 31035 transcripts in 551352 lines in 1 files
+#   31035 groups 22 seqs 1 sources 4 feature types
+# 31035 gene predictions
+#	save space, gzip them:
+    gzip unrandom.gtf
+    gzip ensGene.gtf
+
+# Load Ensembl peptides:
+        Get the ensembl protein data from http://www.ensembl.org/
+        Go to the EnsMart link
+        Choose Mus musculus as the organism
+        Follow this sequence through the pages:
+        Page 1) Choose the Ensembl Genes choice. Hit next.
+        Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
+        Page 3) Choose the "Sequences" tab. 
+        Page 4) Choose Transcripts/Proteins and peptide Only as the output,
+		choose text/fasta and gzip compression,
+		name the file ensGeneMm5.pep.gz and then hit export.
+
+#delete * at end of each protein
+     bash
+     zcat ensGeneMm5.pep.gz | sed "s/\*$//" > ensembl.pep
+    ~matt/bin/fixPep.pl ensembl.pep fixPep_ensembl.pep
+     hgPepPred mm5 generic ensPep fixPep_ensembl.pep
+
+# Load ensGtp table.
+    # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 
+    # hgKnownToSuper.  Use ensMart to create it as above, except:
+    # Page 3) Choose the "Features" tab. In "Ensembl Attributes", check 
+    # Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID.  
+    # Choose Text, tab-separated as the output format, gzip.
+    #  Result name file as ensGtpMm5.tab.gz
+    gunzip ensGtpMm5.tab.gz
+    hgsql mm5 < ~/kent/src/hg/lib/ensGtp.sql
+    hgsql -N -e 'load data local infile "ensGtpMm5.tab" into table ensGtp ignore 1 lines;' mm5
+
+# Create knownToEnsembl column
+    hgMapToGene mm5 ensGene knownGene knownToEnsembl
+# Compress everthing to save space
+    gzip *.tab
+    gzip *.pep
+
+#### RE-BUILD Ensembl cross-reference table, ensemblXref3 (DONE - 2004-11-17 - Fan)
+
+# PLEASE NOTE THAT THE ENSEMBLXREF3 TABLE IS RE-BUILT USING ENSMART DATA OF MOUSE BUILD 33.
+# THIS TABLE IS NEEDED TO SUPPORT SUPERFAMILY TRACK OF THE PROTEOME BROWSER.
+    # Get the ensembl gene/protein cross-reference data from
+    # http://www.ensembl.org/Multi/martview?species=Mus_musculus
+    # Follow this sequence through the pages:
+    # Page 1) Make sure that the Mus musculus choice is selected. Hit next.
+    # Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
+    # Page 3) Choose the "Feature" box, select Ensembl gene, transcript, and peptid IDs,
+	      SPTrEMBL ID, SWISSPROT ID, and SWISSPROT AC 
+    # Page 4) Choose "Text, tab separated".  choose gzip compression.  hit export.
+    # Save as ensXref
+
+    zcat ensXref.tsv.gz|sed -e 's/\./\t/g' > ensemblXref3.tab
+
+    hgsql mm5 -e "drop table ensemblXref3"
+    hgsql mm5 < ~/src/hg/lib/ensemblXref3.sql
+
+    hgsql mm5 -e 'load data local infile "ensemblXref3.tab" into table ensemblXref3 ignore 1 lines'
+
+# CREATE SUPERFAMILY TRACK (DONE 2004-12-17 - Fan)
+   mkdir /cluster/data/mm5/bed/superfamily
+   cd    /cluster/data/mm5/bed/superfamily
+   hgSuperfam mm5 superfam041128 > sf.log
+   wc *
+# It is normal that many proteins does not have corresponding Superfamily entries.
+
+# Load the sfDescription table.
+   hgsql mm5 < ~/src/hg/lib/sfDescription.sql
+   hgsql mm5 -e 'LOAD DATA local INFILE "sfDescription.tab"  into table mm5.sfDescription;'
+
+# Finally, load the superfamily table.
+   hgLoadBed mm5 superfamily superfamily.tab -tab
+
+# Create knownToSuperfamily table
+   
+   cat /cluster/data/superfamily/041128/ass_28-Nov-2004.tab | hgKnownToSuper mm5 mm stdin
+# created 21899 records output
+
 # MAKE VSDANRER2 DOWNLOADABLES (DONE, 2004-12-14, hartera)
+# REMAKE FOR CHAINS AND NET AFTER USING chainAntiRepeat
+# (DONE, 2004-12-22, hartera)
     ssh hgwdev
     cd /cluster/data/mm5/bed/blastz.danRer2/axtChrom
     set gp = /usr/local/apache/htdocs/goldenPath/mm5
@@ -6667,18 +6847,61 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     md5sum *.gz > md5sum.txt
                                                                                
     # copy chains and nets to downloads area
+    # re-make chains and net downloadables (2004-12-22, hartera)
+    rm $gp/vsDanRer2/zebrafish*.gz $gp/vsDanRer2/md5sum.txt
     cd /cluster/data/mm5/bed/blastz.danRer2/axtChain
-    gzip -c all.chain.filt5k > /cluster/data/mm5/zip/zebrafish.chain.gz
-    gzip -c danRer2.net > /cluster/data/mm5/zip/zebrafish.net.gz
+    gzip -c all.chain.antirepeat > \
+            /cluster/data/mm5/zip/zebrafishDanRer2.chain.gz
+    gzip -c zfishdanRer2.net > /cluster/data/mm5/zip/zebrafishDanRer2.net.gz
     cd $gp/vsDanRer2
     mv /cluster/data/mm5/zip/zebrafish*.gz .
     md5sum *.gz > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
 
 # BLASTZ DANRER2 CLEANUP (DONE, 2004-12-14, hartera)
+# RE-DONE (DONE, 2004-12-22, hartera)
     ssh kksilo
     cd /cluster/data/mm5/bed/blastz.danRer2
     nice rm axtChain/run1/chain/* &
     nice rm -fr axtChain/n1 axtChain/noClass.net &
     nice gzip axtChrom/* pslChrom/* axtChain/all.chain axtChain/all.chain.unfiltered axtChain/*.net &
+    nice gzip axtChain/all.chain.antirepeat axtChain/all.chain.filt5k axtChain/chainAR/*.chain &
+    nice rm -fr axtChain/chain axtChain/chainRaw axtChain/preNet &
 
+#  MOUSE PHOTOGRAPH added to gateway page
+#	Obtained from Jackson Labs press office via email:
+#
+#	Subject: Re: mouse press photographs
+#	Date: Wed, 29 Dec 2004 14:26:15 -0500
+#	From: Joyce Peterson <joyce@jax.org>
+#	To: Hiram Clawson <hiram@soe.ucsc.edu>
+#	References: <41D2FF0B.3090207@soe.ucsc.edu>
+
+#	Hi, Hiram. You may use the attached photo, noting credit to "The 
+#	Jackson Laboratory."
+#	
+#	Cheers,
+#	--Joyce
+#
+#	Joyce Peterson
+#	Public Information Manager
+#	The Jackson Laboratory
+#	610 Main Street, Mailbox 664
+#	Bar Harbor, ME 04609-1526
+#	Tel. 207-288-6058
+#	Mobile 207-266-5745
+#	E-mail joyce@jax.org
+#	http://www.jax.org/news
+#
+#  Original from this email placed into /cluster/data/mm5/html/C57BL_6J.JPG
+
+    ssh hgwdev
+    cd /cluster/data/mm5/html
+    #	view that image in 'display' to determine crop edges, then:
+    convert -crop 890x690+330+70 -quality 80 -sharpen 0 \
+	-normalize C57BL_6J.JPG mm.jpg
+    convert -geometry 300x200 -quality 80 mm.jpg Mus_musculus.jpg
+    rm -f mm.jpg
+
+    cp -p Mus_musculus.jpg /usr/local/apache/htdocs/images
+    #	add links to this image in the description.html page, request push

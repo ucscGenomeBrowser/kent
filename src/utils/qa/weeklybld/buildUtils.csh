@@ -1,11 +1,12 @@
 #!/bin/tcsh
 # Build utils into /cluster/bin/$MACHTYPE on beta or kolossus from branch or tip
+# specify "tip" as command line parm 1 to build from tip sandbox 
 
 cd $WEEKLYBLD
 
 if ( "$MACHTYPE" == "i386" ) then
     if ( "$HOST" != "hgwbeta" ) then
-	echo "error: you must run this script on dev!"
+	echo "error: you must run this script on beta!"
 	exit 1
     endif
 endif
@@ -20,8 +21,10 @@ set branch=v${BRANCHNN}_branch
 
 if ( "$1" == "tip" ) then
     set base=$WEEKLYBLD
+    echo "updating tip sandbox"
     cd $base/kent
-    cvs up -dP
+    cvs up -dP  >& /dev/null
+    echo "done updating tip sandbox"
     cd $WEEKLYBLD
 else
     set base=$BUILDDIR/$branch

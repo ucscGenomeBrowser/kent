@@ -49,7 +49,8 @@ MGC_DBS = \
 	hg16 hg17 \
 	mm3 mm4 mm5 \
 	rn3 \
-	danRer1
+	danRer1	danRer2 \
+	xenTro1
 
 update:
 	@for D in *; do \
@@ -112,7 +113,7 @@ alpha:
 	    fi ; \
 	done
 	cd zoo && ${MAKE} alpha
-	cmd="${HOME}/kent/src/hg/encode/encodeTrackDb.csh"; echo $$cmd; $$cmd
+	cmd="../../encode/encodeTrackDb.csh"; echo $$cmd; $$cmd
 
 strict:
 	cvs up -d -P .
@@ -153,14 +154,6 @@ beta: checkbeta strict
 # This target adds trackDbLocal to the mgc-specific server.  Also
 # loads the grpMgc table.
 mgc:
-	@for D in *; do \
-            if [ -d "$$D" ]; then \
-                if [ -e "$$D/makefile" ]; then \
-                    ( cd $$D && echo $$D && $(MAKE) ) ;\
-                    x=$$? ; if [ $$x -ne 0 ]; then exit $$x; fi \
-                fi; \
-            fi; \
-	done
 	@for DB in $(MGC_DBS) x; do \
 	    if test "$$DB" != "x" ; then \
 		dbpath=`ls -1 -d */$$DB 2> /dev/null` ; \
@@ -168,8 +161,6 @@ mgc:
 		    org=`echo $$dbpath | sed -e 's/\/.*//'` ; \
 		    vis="" ; \
 		    cmd="hgTrackDb -strict=yes -raName=trackDbMgc.ra $$vis $$org $$DB trackDbLocal ../../lib/trackDb.sql ." ; \
-		    echo $$cmd ;  $$cmd ; \
-		    cmd="hgFindSpec -strict $$org $$DB hgFindSpec ../../lib/hgFindSpec.sql ." ; \
 		    echo $$cmd ;  $$cmd ; \
 		    cmd="hgsql $$DB < grpMgc.sql" ; \
 		    echo $$cmd ;  $$cmd ; \
