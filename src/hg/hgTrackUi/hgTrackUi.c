@@ -21,7 +21,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.123 2004/07/21 19:47:12 sugnet Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.123.2.1 2004/07/26 16:21:12 galt Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -881,7 +881,7 @@ else if (sameString(track, "xenoEst"))
         mrnaUi(tdb, TRUE);
 else if (sameString(track, "rosetta"))
         rosettaUi(tdb);
-else if (sameString(track, "blastHg16KG"))
+else if (sameString(track, "blastHg16KG") || sameString(track, "tblastnHg16KGPep"))
         blastUi(tdb);
 else if (startsWith("wig", tdb->type))
         {
@@ -903,7 +903,7 @@ else if (sameString(track, "humMusL") ||
          sameString( track, "mm3Hg15L" ) ||
          sameString( track, "hg15Mm3L" ))
             humMusUi(tdb,7);
-else if (sameString(database,"hg17") && sameString(track, "XXX_chainRn3"))
+else if ( (sameString(database,"hg17") && sameString(track, "chainSelf")))
             chainColorUi(tdb);	/* under development */
 /* NOTE: type psl xeno <otherDb> tracks use crossSpeciesUi, so
  * add explicitly here only if track has another type (bed, chain).
