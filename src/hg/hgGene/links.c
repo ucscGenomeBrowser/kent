@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: links.c,v 1.18 2004/11/21 07:33:02 kent Exp $";
+static char const rcsid[] = "$Id: links.c,v 1.19 2005/03/21 23:43:15 angie Exp $";
 
 struct link
 /* A link to another web site. */
@@ -104,6 +104,19 @@ if (cutAt != NULL)
 return clone;
 }
 
+static void addLinkExtras(struct link *link, struct dyString *dy)
+/* Add extra identifiers if specified in the .ra. */
+{
+if (link->useHgsid)
+    dyStringPrintf(dy, "&%s", cartSidUrlString(cart));
+if (link->useDb)
+    {
+    dyStringPrintf(dy, "&db=%s", database);
+    if (stringIn("hgNear", link->url))
+	dyStringPrintf(dy, "&near.oldOrg=%s", genome);
+    }
+}
+
 char *linkGetUrl(struct link *link, struct sqlConnection *conn,
 	char *geneId)
 /* Return URL string if possible or NULL if not.  FreeMem this when done. */
@@ -125,6 +138,18 @@ if (sameString(link->name, "protBrowser"))
     if (!hgPbOk(database))
         return NULL;
     }
+if (sameString(link->name, "tbSchema"))
+    {
+    struct trackDb *tdb = hTrackDbForTrack(curGeneType);
+    struct dyString *dy = NULL;
+    if (tdb == NULL)
+	return NULL;
+    dy = newDyString(256);
+    dyStringPrintf(dy, link->url, tdb->grp, curGeneType, curGeneType);
+    trackDbFree(&tdb);
+    addLinkExtras(link, dy);
+    return dyStringCannibalize(&dy);
+    }
 geneId = cloneAndCut(geneId, link->preCutAt);
 safef(query, sizeof(query), link->idSql, geneId);
 sr = sqlGetResult(conn, query);
@@ -134,16 +159,8 @@ if (row != NULL)
     struct dyString *dy = newDyString(0);
     char *name = cloneAndCut(row[0], link->postCutAt);
     dyStringPrintf(dy, link->url, name, row[1], row[2]);
-    if (link->useHgsid)
-	dyStringPrintf(dy, "&%s", cartSidUrlString(cart));
-    if (link->useDb)
-	{
-        dyStringPrintf(dy, "&db=%s", database);
-	if (stringIn("hgNear", link->url))
-	    dyStringPrintf(dy, "&near.oldOrg=%s", genome);
-	}
-    url = cloneString(dy->string);
-    dyStringFree(&dy);
+    addLinkExtras(link, dy);
+    url = dyStringCannibalize(&dy);
     freez(&name);
     }
 sqlFreeResult(&sr);
