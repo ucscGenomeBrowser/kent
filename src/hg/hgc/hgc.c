@@ -2202,9 +2202,15 @@ else
 	bed->blockSizes  = needMem(bed->blockCount * sizeof(int));
 	for (i=0;  i < bed->blockCount;  i++)
 	    {
-	    bed->chromStarts[i] = psl->tStarts[i] - bed->chromStart;
+	    bed->chromStarts[i] = psl->tStarts[i];
 	    bed->blockSizes[i]  = psl->blockSizes[i];
 	    }
+	if (qt == gftProt)
+	    for (i=0;  i < bed->blockCount;  i++)
+		{
+		// If query is protein, blockSizes are in aa units; fix 'em.
+		bed->blockSizes[i] *= 3;
+		}
 	if (psl->strand[1] == '-')
 	    {
 	    // psl: if target strand is '-', flip the coords.
@@ -2218,6 +2224,12 @@ else
 	    reverseInts(bed->chromStarts, bed->blockCount);
 	    reverseInts(bed->blockSizes, bed->blockCount);
 	    assert(bed->chromStart == bed->chromStarts[0]);
+	    }
+	// translate absolute starts to relative starts (after handling 
+	// target-strand coord-flipping)
+	for (i=0;  i < bed->blockCount;  i++)
+	    {
+	    bed->chromStarts[i] -= bed->chromStart;
 	    }
 	slAddHead(&bedList, bed);
 	pslFree(&psl);
