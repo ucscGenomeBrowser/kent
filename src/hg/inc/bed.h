@@ -121,5 +121,76 @@ void bedOutputN(struct bed *el, int wordCount, FILE *f, char sep, char lastSep);
 struct bed *bedFromPsl(struct psl *psl);
 /* Convert a single psl to a bed structure */
 
+struct bed *cloneBed(struct bed *bed);
+/* Make an all-newly-allocated copy of a single bed record. */
+
+/* Constraints that can be placed on bed fields: */
+enum charFilterType
+    {
+    cftIgnore = 0,
+    cftSingleLiteral = 1,
+    cftMultiLiteral = 2,
+    };
+enum stringFilterType
+    {
+    sftIgnore = 0,
+    sftSingleLiteral = 1,
+    sftMultiLiteral = 2,
+    sftSingleRegexp = 3,
+    sftMultiRegexp = 4,
+    };
+enum numericFilterType
+    {
+    nftIgnore = 0,
+    nftLessThan = 1,
+    nftLTE = 2,
+    nftEqual = 3,
+    nftNotEqual = 4,
+    nftGTE = 5,
+    nftGreaterThan = 6,
+    nftInRange = 7,
+    nftNotInRange = 8,
+    };
+struct bedFilter
+    {
+    enum stringFilterType chromFilter;
+    char **chromVals;
+    boolean chromInvert;
+    enum numericFilterType chromStartFilter;
+    int *chromStartVals;
+    enum numericFilterType chromEndFilter;
+    int *chromEndVals;
+    enum stringFilterType nameFilter;
+    char **nameVals;
+    boolean nameInvert;
+    enum numericFilterType scoreFilter;
+    int *scoreVals;
+    enum charFilterType strandFilter;
+    char *strandVals;
+    boolean strandInvert;
+    enum numericFilterType thickStartFilter;
+    int *thickStartVals;
+    enum numericFilterType thickEndFilter;
+    int *thickEndVals;
+    enum numericFilterType blockCountFilter;
+    int *blockCountVals;
+    enum numericFilterType chromLengthFilter;
+    int *chromLengthVals;
+    enum numericFilterType thickLengthFilter;
+    int *thickLengthVals;
+    enum numericFilterType compareStartsFilter;
+    enum numericFilterType compareEndsFilter;
+    };
+
+struct bed *bedFilterListInRange(struct bed *bedListIn, struct bedFilter *bf,
+				 char *chrom, int winStart, int winEnd);
+/* Given a bed list, a position range, and a bedFilter which specifies
+ * constraints on bed fields, return the list of bed items that meet
+ * the constraints.  If chrom is NULL, position range is ignored. */
+
+struct bed *bedFilterList(struct bed *bedListIn, struct bedFilter *bf);
+/* Given a bed list and a bedFilter which specifies constraints on bed 
+ * fields, return the list of bed items that meet the constraints. */
+
 #endif /* BED_H */
 

@@ -497,3 +497,209 @@ for (i=0; i<blockCount; ++i)
     chromStarts[i] -= chromStart;
 return bed;
 }
+
+
+struct bed *cloneBed(struct bed *bed)
+/* Make an all-newly-allocated copy of a single bed record. */
+{
+struct bed *newBed;
+if (bed == NULL)
+    return NULL;
+AllocVar(newBed);
+newBed->chrom = cloneString(bed->chrom);
+newBed->chromStart = bed->chromStart;
+newBed->chromEnd = bed->chromEnd;
+newBed->name = cloneString(bed->name);
+newBed->score = bed->score;
+strcpy(newBed->strand, bed->strand);
+newBed->thickStart = bed->thickStart;
+newBed->thickEnd = bed->thickEnd;
+newBed->reserved = bed->reserved;
+newBed->blockCount = bed->blockCount;
+if (bed->blockCount > 0)
+    {
+    newBed->blockSizes = needMem(sizeof(int) * bed->blockCount);
+    memcpy(newBed->blockSizes, bed->blockSizes,
+	   sizeof(int) * bed->blockCount);
+    newBed->chromStarts = needMem(sizeof(int) * bed->blockCount);
+    memcpy(newBed->chromStarts, bed->chromStarts,
+	   sizeof(int) * bed->blockCount);
+    }
+newBed->expCount = bed->expCount;
+if (bed->expCount > 0)
+    {
+    newBed->expIds = needMem(sizeof(int) * bed->expCount);
+    memcpy(newBed->expIds, bed->expIds,
+	   sizeof(int) * bed->expCount);
+    newBed->expScores = needMem(sizeof(float) * bed->expCount);
+    memcpy(newBed->expScores, bed->expScores,
+	   sizeof(float) * bed->expCount);
+    }
+return(newBed);
+}
+
+
+static boolean filterChar(char value, enum charFilterType cft,
+			  char *filterValues, boolean invert)
+/* Return TRUE if value passes the filter. */
+{
+char thisVal;
+if (filterValues == NULL)
+    return(TRUE);
+switch (cft)
+    {
+    case (cftIgnore):
+	return(TRUE);
+	break;
+    case (cftSingleLiteral):
+	return((value == *filterValues) ^ invert);
+	break;
+    case (cftMultiLiteral):
+	while ((thisVal = *(filterValues++)) != 0)
+	    {
+	    if (value == thisVal)
+		return(TRUE ^ invert);
+	    }
+	break;
+    default:
+	errAbort("illegal charFilterType: %d", cft);
+	break;
+    }
+return(FALSE ^ invert);
+}
+
+static boolean filterString(char *value, enum stringFilterType sft,
+			    char **filterValues, boolean invert)
+/* Return TRUE if value passes the filter. */
+{
+char *thisVal;
+
+if (filterValues == NULL)
+    return(TRUE);
+switch (sft)
+    {
+    case (sftIgnore):
+	return(TRUE);
+	break;
+    case (sftSingleLiteral):
+	return(sameString(value, *filterValues) ^ invert);
+	break;
+    case (sftMultiLiteral):
+	while ((thisVal = *(filterValues++)) != NULL)
+	    if (sameString(value, thisVal))
+		return(TRUE ^ invert);
+	break;
+    case (sftSingleRegexp):
+	return(wildMatch(*filterValues, value) ^ invert);
+	break;
+    case (sftMultiRegexp):
+	while ((thisVal = *(filterValues++)) != NULL)
+	    if (wildMatch(thisVal, value))
+		return(TRUE ^ invert);
+	break;
+    default:
+	errAbort("illegal stringFilterType: %d", sft);
+	break;
+    }
+return(FALSE ^ invert);
+}
+
+static boolean filterInt(int value, enum numericFilterType nft,
+			 int *filterValues)
+/* Return TRUE if value passes the filter. */
+/* This could probably be turned into a macro if performance is bad. */
+{
+if (filterValues == NULL)
+    return(TRUE);
+switch (nft)
+    {
+    case (nftIgnore):
+	return(TRUE);
+	break;
+    case (nftLessThan):
+	return(value < *filterValues);
+	break;
+    case (nftLTE):
+	return(value <= *filterValues);
+	break;
+    case (nftEqual):
+	return(value == *filterValues);
+	break;
+    case (nftNotEqual):
+	return(value != *filterValues);
+	break;
+    case (nftGTE):
+	return(value >= *filterValues);
+	break;
+    case (nftGreaterThan):
+	return(value > *filterValues);
+	break;
+    case (nftInRange):
+	return((value >= *filterValues) && (value <= *(filterValues+1)));
+	break;
+    case (nftNotInRange):
+	return(! ((value >= *filterValues) && (value <= *(filterValues+1))));
+	break;
+    default:
+	errAbort("illegal numericFilterType: %d", nft);
+	break;
+    }
+return(FALSE);
+}
+
+struct bed *bedFilterListInRange(struct bed *bedListIn, struct bedFilter *bf,
+				 char *chrom, int winStart, int winEnd)
+/* Given a bed list, a position range, and a bedFilter which specifies
+ * constraints on bed fields, return the list of bed items that meet
+ * the constraints.  If chrom is NULL, position range is ignored. */
+{
+struct bed *bedListOut = NULL, *bed;
+int cmpValues[2];
+
+for (bed=bedListIn;  bed != NULL;  bed=bed->next)
+    {
+    boolean passes = TRUE;
+    if (chrom != NULL)
+	passes &= (sameString(bed->chrom, chrom) &&
+		   (bed->chromStart < winEnd) &&
+		   (bed->chromEnd   > winStart));
+    passes &= filterString(bed->chrom, bf->chromFilter, bf->chromVals,
+			   bf->chromInvert);
+    passes &= filterInt(bed->chromStart, bf->chromStartFilter,
+			bf->chromStartVals);
+    passes &= filterInt(bed->chromEnd, bf->chromEndFilter, bf->chromEndVals);
+    passes &= filterString(bed->name, bf->nameFilter, bf->nameVals,
+			   bf->nameInvert);
+    passes &= filterInt(bed->score, bf->scoreFilter, bf->scoreVals);
+    passes &= filterChar(bed->strand[0], bf->strandFilter, bf->strandVals,
+			 bf->strandInvert);
+    passes &= filterInt(bed->thickStart, bf->thickStartFilter,
+			bf->thickStartVals);
+    passes &= filterInt(bed->thickEnd, bf->thickEndFilter, bf->thickEndVals);
+    passes &= filterInt(bed->blockCount, bf->blockCountFilter,
+			bf->blockCountVals);
+    passes &= filterInt((bed->chromEnd - bed->chromStart),
+			bf->chromLengthFilter, bf->chromLengthVals);
+    passes &= filterInt((bed->thickEnd - bed->thickStart),
+			bf->thickLengthFilter, bf->thickLengthVals);
+    cmpValues[0] = cmpValues[1] = bed->thickStart;
+    passes &= filterInt(bed->chromStart, bf->compareStartsFilter, cmpValues);
+    cmpValues[0] = cmpValues[1] = bed->thickEnd;
+    passes &= filterInt(bed->chromEnd, bf->compareEndsFilter, cmpValues);
+    if (passes)
+	{
+	struct bed *newBed = cloneBed(bed);
+	slAddHead(&bedListOut, newBed);
+	}
+    }
+slReverse(&bedListOut);
+return(bedListOut);
+}
+
+struct bed *bedFilterList(struct bed *bedListIn, struct bedFilter *bf)
+/* Given a bed list and a bedFilter which specifies constraints on bed 
+ * fields, return the list of bed items that meet the constraints. */
+{
+return bedFilterListInRange(bedListIn, bf, NULL, 0, 0);
+}
+
