@@ -1086,7 +1086,7 @@ void procOneGbFile(char *inName,
                    FILE *faFile, char *faDir, 
                    FILE *raFile, char *raName, 
                    struct hash *uniqueNameHash, struct hash *estAuthorHash,
-                   struct hash *faHash, struct hash *orgHash, 
+                   struct hash *orgHash, 
                    struct filter *filter)
 /* Process one genBank file into fa and ra files. */
 {
@@ -1100,6 +1100,7 @@ char sizeString[16];
 char *oldOrg = NULL;
 struct dyString *ctgDs = newDyString(512);
 int modder = 100;  /* How often to print an I'm still alive dot. */
+char *origFaDir = faDir;
 
 if (formatType == ftBac)
     modder = 100;
@@ -1115,52 +1116,6 @@ while (readGbInfo(lf))
     char *org = organismField->val;
     struct keyVal *seqKey, *sizeKey;
     boolean doneSequence = FALSE;
-
-    if (gByOrganism) 
-        {
-        char *orgDir = NULL;
-        char command[PATH_LEN];
-        char path[PATH_LEN];
-
-        /* If we are on a new organism, open a new file,
-           other wise just reuse our old file handles. */
-        if (NULL == oldOrg || 0 != strcmp(oldOrg, org)) 
-            {
-            oldOrg = needMem(strlen(org) + 1);
-            strcpy(oldOrg, org);
-            fflush(raFile);
-            fflush(faFile);
-            carefulClose(&raFile);
-            carefulClose(&faFile);
-
-            if (NULL == org)
-                {
-                orgDir = "Unspecified";
-                }
-            else
-                {
-                /* Replace illegal directory chars */
-                orgDir = replaceChars(org, " ()'", ".###");
-                }
-            
-            if (!hashLookup(orgHash, org))
-                {
-                sprintf(command, "mkdir -p %s/%s", gOutputDir, orgDir);
-                system(command);
-                hashAdd(orgHash, org, orgDir);
-                printf("\n%s\n", command);
-                }
-
-            sprintf(path, "%s/%s/%s", gOutputDir, orgDir, raName); 
-            /*printf ("RA PATH: %s\n", path);*/
-            raFile = mustOpen(path, "ab");
-            sprintf(path, "%s/%s/%s", gOutputDir, orgDir, faDir); 
-            /*printf("FA PATH: %s\n", path);*/
-            faFile = mustOpen(path, "ab");
-                    
-            freez(&orgDir);
-            }
-        }
 
     if (++gbCount % modder == 0)
         {
@@ -1447,7 +1402,55 @@ while (readGbInfo(lf))
             seqKey->val = NULL; /* Don't write out sequence here. */
             if (commentKey != NULL)
                 commentKey->val = NULL;  /* Don't write out comment either. */
-//            printf("kvtWriteAll()\n");
+
+            if (gByOrganism) 
+                {
+                char *orgDir = NULL;
+                char command[PATH_LEN];
+                char raPath[PATH_LEN];
+                char faPath[PATH_LEN];
+                
+                /* If we are on a new organism, open a new file,
+                   otherwise just reuse our old file handles. */
+                if (NULL == oldOrg || 0 != strcmp(oldOrg, org)) 
+                    {
+                    oldOrg = needMem(strlen(org) + 1);
+                    strcpy(oldOrg, org);
+                    fflush(raFile);
+                    fflush(faFile);
+                    carefulClose(&raFile);
+                    carefulClose(&faFile);
+                    
+                    if (NULL == org)
+                        {
+                        orgDir = "Unspecified";
+                        }
+                    else
+                        {
+                        /* Replace illegal directory chars */
+                        orgDir = replaceChars(org, " ()'", ".###");
+                        }
+            
+                    if (!hashLookup(orgHash, org))
+                        {
+                        sprintf(command, "mkdir -p %s/%s", gOutputDir, orgDir);
+                        system(command);
+                        hashAdd(orgHash, org, orgDir);
+                        }
+
+                    sprintf(raPath, "%s/%s/%s", gOutputDir, orgDir, raName); 
+                    /*printf ("RA PATH: %s\n", raPath);*/
+                    raFile = mustOpen(raPath, "ab");
+
+                    sprintf(faPath, "%s/%s/%s", gOutputDir, orgDir, origFaDir); 
+                    /*printf("FA PATH: %s\n", path);*/
+                    faFile = mustOpen(faPath, "ab");
+
+                    faDir = faPath;
+                    freez(&orgDir);
+                    }
+                }
+
             kvtWriteAll(kvt, raFile, filter->hideKeys);
             if (formatType == ftBac)
                 {
@@ -1456,7 +1459,6 @@ while (readGbInfo(lf))
                 }
             else
 		{
-//                printf("faWriteNext()\n");
                 faWriteNext(faFile, accession, dna, dnaSize);
 		}
             }
@@ -1640,8 +1642,7 @@ int i = 0;
 int startIndex = 5;
 struct hash *uniqHash = NULL;
 struct hash *estAuthorHash = NULL;
-struct hash *faHash = NULL;
-struct hash *raHash = NULL;
+struct hash *orgHash = NULL;
 static char *byOrgOption = "-byOrganism=";
 char command[PATH_LEN];
 
@@ -1663,8 +1664,7 @@ estAuthorHash = newHash(10);
 kvt = newKvt(128);
 makeGbStruct();
 
-faHash = newHash(10);
-raHash = newHash(10);
+orgHash = newHash(20);
 ta = mustOpen(taName, "wb");
 
 if (gByOrganism) 
@@ -1687,7 +1687,7 @@ for (i = startIndex; i < argc; ++i)
     gbName = argv[i];
     printf("Processing %s into %s and %s\n", gbName, faName, raName);
     procOneGbFile(gbName, fa, faName, ra, raName, 
-                  uniqHash, estAuthorHash, faHash, raHash, filter);
+                  uniqHash, estAuthorHash, orgHash, filter);
     }
 
 printStats(ta, gbStruct);
