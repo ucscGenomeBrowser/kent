@@ -106,7 +106,7 @@
 #include "maf.h"
 #include "hgc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.407 2003/05/06 07:22:20 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.408 2003/05/08 16:39:45 booch Exp $";
 
 
 struct cart *cart;	/* User's settings. */
@@ -2964,7 +2964,7 @@ if (aliCount > 1)
     printf("The alignment you clicked on is first in the table below.<BR>\n");
 
 printf("<PRE><TT>");
-printf(" SIZE IDENTITY CHROMOSOME  STRAND    START     END            SWISS-PROT   START  END  TOTAL\n");
+printf(" SIZE IDENTITY CHROMOSOME  STRAND    START     END              QUERY      START  END  TOTAL\n");
 printf("--------------------------------------------------------------------------------------------\n");
 for (same = 1; same >= 0; same -= 1)
     {
@@ -5540,6 +5540,8 @@ char *sqlRnaName = rnaName;
 char *pepTbl;
 struct refLink *rl;
 struct genePred *gp;
+int start = cartInt(cart, "o");
+struct psl *pslList = NULL;
 
 /* Make sure to escape single quotes for DB parseability */
 if (strchr(rnaName, '\''))
@@ -5647,6 +5649,13 @@ if (startsWith("hg", hGetDb()))
     printf("%s</A><BR>\n", rl->name);
     }
 printStanSource(rl->mrnaAcc, "mrna");
+
+htmlHorizontalLine();
+
+/* print alignments that track was based on */
+pslList = getAlignments(conn, "refSeqAli", rl->mrnaAcc);
+printf("<H3>mRNA/Genomic Alignments</H3>");
+printAlignments(pslList, start, "htcCdnaAli", "refSeqAli", rl->mrnaAcc);
 
 htmlHorizontalLine();
 
