@@ -21,6 +21,7 @@ struct tempName gifTn;
 char *mapName = "map";
 char *trackTitle;
 int trackTitleLen;
+boolean showPrevGBPos = TRUE;
 
 void calxy(int xin, int yin, int *outxp, int *outyp)
 /* calxy() converts a logical drawing coordinate into an actual
@@ -477,7 +478,7 @@ exonGenomeStartPos = blockGenomeStartPositive[exonNumber-1];
 exonGenomeEndPos   = blockGenomeEndPositive[exonNumber-1];
 
 currentYoffset = *yOffp;
-
+    
 if (strand == '-')
     {
     for (i=0; i<(exonCount-2); i++)
@@ -579,7 +580,7 @@ int exonStartPos, exonEndPos;
 int exonGenomeStartPos, exonGenomeEndPos;
 int exonNumber;
 int printedExonNumber = -1;
-int exonColor[2];
+Color exonColor[2];
 int currentPos;
 int currentPBPos;
 int jPrevStart, jPrevEnd;
@@ -587,11 +588,8 @@ int jcnt = 0;
 int iPrevExon = -1;
 int jPrevExonPos = 0;
 
-int defaultColor;
+Color defaultColor;
 defaultColor = vgFindColorIx(g_vg, 170, 170, 170);
-
-pbRed    = vgFindColorIx(g_vg, 0xf9, 0x51, 0x59);
-pbBlue   = vgFindColorIx(g_vg, 0x00, 0x00, 0xd0);
 
 // The imaginary mRNA length is 3 times of aaLen
 mrnaLen = aaLen * 3;
@@ -774,9 +772,9 @@ int exonStartPos, exonEndPos;
 int exonGenomeStartPos, exonGenomeEndPos;
 int exonNumber;
 int printedExonNumber = -1;
-int exonColor[2];
+Color exonColor[2];
 
-int defaultColor;
+Color defaultColor;
 defaultColor = vgFindColorIx(g_vg, 170, 170, 170);
 
 // The imaginary mRNA length is 3 times of aaLen
@@ -1121,8 +1119,8 @@ int exonStartPos, exonEndPos;
 int exonGenomeStartPos, exonGenomeEndPos;
 int exonNumber;
 int printedExonNumber = -1;
-int exonColor[2];
-int color;
+Color exonColor[2];
+Color color;
 int k;
 struct dnaSeq *dna;
 
@@ -1133,7 +1131,7 @@ int iw = 5;
 float sum;
 int dnaLen;
 
-int defaultColor;
+Color defaultColor;
 defaultColor = vgFindColorIx(g_vg, 170, 170, 170);
 
 //exonColor[0] = pbBlue;
@@ -1200,12 +1198,11 @@ for (j = 0; j < mrnaLen; j++)
 
 	if (strand == '-') 
 	    {
-            vgTextRight(g_vg, xx-3+(j%3)*6, yy-3, 10, 10, MG_GRAY, g_font, base);
+            vgTextRight(g_vg, xx-3+(j%3)*6, yy-3, 10, 10, color, g_font, base);
 	    vgTextRight(g_vg, xx-3+(j%3)*6, yy+9, 10, 10, color, g_font, baseComp);
        	    }
 	else
 	    {
-	    //vgTextRight(g_vg, xx-3+(j%3)*6, yy, 10, 10, color, g_font, base);
 	    vgTextRight(g_vg, xx-3+(j%3)*6, yy-3, 10, 10, color, g_font, base);
             }
         }
@@ -1215,12 +1212,20 @@ for (j = 0; j < mrnaLen; j++)
 calxy0(0, *yOffp, &xx, &yy);
 vgBox(g_vg, 0, yy-10, xx, 30, bkgColor);
 
-trackTitle = cloneString("DNA Sequence");
+if (strand == '-') 
+    {
+    trackTitle = cloneString("Coding Sequence");
+    }
+else
+    {
+    trackTitle = cloneString("Genomic Sequence");
+    }
 vgTextRight(g_vg, xx-25, yy-4, 10, 10, MG_BLACK, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
 mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-6, trackTitleLen*6+12, 14, trackTitle, "dna");
 
-if (strand == '-') vgTextRight(g_vg, xx-25, yy+9, 10, 10, MG_GRAY, g_font, "& Complement");
+//if (strand == '-') vgTextRight(g_vg, xx-25, yy+9, 10, 10, MG_GRAY, g_font, "& Complement");
+if (strand == '-') vgTextRight(g_vg, xx-25, yy+9, 10, 10, MG_BLACK, g_font, "Genomic Sequence");
 
 if (strand == '-')
     {
@@ -1356,6 +1361,11 @@ if (mrnaID != NULL)
     	}
     }
 
+if ((prevGBStartPos <= blockGenomeStartPositive[exCount-1]) && (prevGBEndPos >= blockGenomeStartPositive[0]))
+    {
+    showPrevGBPos = FALSE;
+    }
+
 if ((cgiOptionalString("aaOrigOffset") != NULL) && scaleButtonPushed)
      {
      trackOrigOffset = atoi(cgiOptionalString("aaOrigOffset"))*pbScale;
@@ -1423,7 +1433,10 @@ hPrintf("<FONT SIZE=1><BR><BR></FONT>\n");
 
 g_vg = vg;
 
+pbRed    = vgFindColorIx(g_vg, 0xf9, 0x51, 0x59);
+pbBlue   = vgFindColorIx(g_vg, 0x00, 0x00, 0xd0);
 bkgColor = vgFindColorIx(vg, 255, 254, 232);
+
 vgBox(vg, 0, 0, insideWidth, pixHeight, bkgColor);
 
 /* Start up client side map. */
@@ -1439,7 +1452,7 @@ if (pbScale >= 6)  doResidues(aa, l, yOffp);
 
 if (pbScale >= 18) doDnaTrack(chrom, strand, exCount, l, yOffp);
 
-if (mrnaID != NULL)
+if ((mrnaID != NULL) && showPrevGBPos)
     {
     doPrevGB(exCount, chrom, strand, l, yOffp, proteinID, mrnaID);
     }
