@@ -10,6 +10,8 @@
 
 #define colHashFunc(r,g,b) (r+g+g+b)
 
+#define sign(a)((a>=0)?(1):(-1))
+
 struct colHashEl
 /* An element in a color hash. */
     {
