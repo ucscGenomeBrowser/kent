@@ -7432,32 +7432,34 @@ printf("\">here</a>");
 printf(" to see the data as a graph.\n");
 }
 
-void printSageReference(struct sage *sgList)
+void printSageReference(struct sage *sgList, struct trackDb *tdb)
 {
-puts(
-     "<table width=600 cellpadding=0 cellspacing=0><tr><td><p><b>Description: S</b>erial <b>A</b>nalysis of <b>G</b>ene <b>E</b>xpression (SAGE)"
-     "is a quantative measurement gene expression. Data is presented for every cluster contained "
-     "in the browser window and the selected cluster name is highlighted in red. All data is from "
-     "the repository at the <a href=\"http://www.ncbi.nlm.nih.gov/SAGE/\"> SageMap </a>"
-     "project downloaded Jul 26, 2002. Selecting the UniGene cluster name will display SageMap's page for that cluster.");
-printSageGraphUrl(sgList);
-puts(
-     "<p><b>Brief Methodology:</b> SAGE counts are produced "
-     "by sequencing small \"tags\" of DNA believed to be associated with a "
-     "gene. These tags are produced by attatching poly-A RNA to oligo-dT "
-     "beads. After synthesis of double stranded cDNA transcripts are "
-     "cleaved by an anchoring enzyme (usually NIaIII). Then small tags are "
-     "produced by ligation with a linker containing a type IIS restriction "
-     "enzyme site and cleavage with the tagging enzyme (usually BsmFI). The "
-     "tags are then concatenated together and sequenced. The frequency of each "
-     "tag is counted and used to infer expression level of transcripts that can "
-     "be matched to that tag. All SAGE data presented here was mapped to UniGene "
-     "transcripts by the <a href=\"http://www.ncbi.nlm.nih.gov/SAGE/\"> SageMap </a>"
-     "project at <a href=\"http://www.ncbi.nlm.nih.gov\"> NCBI </a>.</td></tr></table><br><br>"
-);
+printf("%s", tdb->html);
+
+/* puts( */
+/*      "<table width=600 cellpadding=0 cellspacing=0><tr><td><p><b>Description: S</b>erial <b>A</b>nalysis of <b>G</b>ene <b>E</b>xpression (SAGE)" */
+/*      "is a quantative measurement gene expression. Data is presented for every cluster contained " */
+/*      "in the browser window and the selected cluster name is highlighted in red. All data is from " */
+/*      "the repository at the <a href=\"http://www.ncbi.nlm.nih.gov/SAGE/\"> SageMap </a>" */
+/*      "project downloaded Jul 26, 2002. Selecting the UniGene cluster name will display SageMap's page for that cluster."); */
+/* printSageGraphUrl(sgList); */
+/* puts( */
+/*      "<p><b>Brief Methodology:</b> SAGE counts are produced " */
+/*      "by sequencing small \"tags\" of DNA believed to be associated with a " */
+/*      "gene. These tags are produced by attatching poly-A RNA to oligo-dT " */
+/*      "beads. After synthesis of double stranded cDNA transcripts are " */
+/*      "cleaved by an anchoring enzyme (usually NIaIII). Then small tags are " */
+/*      "produced by ligation with a linker containing a type IIS restriction " */
+/*      "enzyme site and cleavage with the tagging enzyme (usually BsmFI). The " */
+/*      "tags are then concatenated together and sequenced. The frequency of each " */
+/*      "tag is counted and used to infer expression level of transcripts that can " */
+/*      "be matched to that tag. All SAGE data presented here was mapped to UniGene " */
+/*      "transcripts by the <a href=\"http://www.ncbi.nlm.nih.gov/SAGE/\"> SageMap </a>" */
+/*      "project at <a href=\"http://www.ncbi.nlm.nih.gov\"> NCBI </a>.</td></tr></table><br><br>" */
+/* ); */
 }
 
-void sagePrintTable(struct bed *bedList, char *itemName) 
+void sagePrintTable(struct bed *bedList, char *itemName, struct trackDb *tdb) 
 /* load up the sage experiment data using bed->qNames and display it as a table */
 {
 struct sageExp *seList = NULL, *se =NULL;
@@ -7468,7 +7470,7 @@ seList=loadSageExps("sageExp",bedList);
 sgList = loadSageData("sage", bedList);
 slSort(&sgList,sortSageByBedOrder);
 
-printSageReference(sgList);
+printSageReference(sgList, tdb);
 printSageGraphUrl(sgList);
 printf("<BR>\n");
 for(sg=sgList; sg != NULL; sg = sg->next)
@@ -7544,7 +7546,7 @@ return bedWSList;
 }
 
 
-void doSageDataDisp(char *tableName, char *itemName)
+void doSageDataDisp(char *tableName, char *itemName, struct trackDb *tdb) 
 {
 struct bed *sgList = NULL;
 char buff[64];
@@ -7554,7 +7556,7 @@ chuckHtmlStart("Sage Data Requested");
 printf("<h2>Sage Data for: %s %d-%d</h2>\n", seqName, winStart, winEnd);
 puts("<table cellpadding=0 cellspacing=0><tr><td>\n");
 
-sgList = bedWScoreLoadByChrom("uniGene", seqName, winStart, winEnd);
+sgList = bedWScoreLoadByChrom(tableName, seqName, winStart, winEnd);
 
 sgCount = slCount(sgList);
 if(sgCount > 50)
@@ -7562,7 +7564,7 @@ if(sgCount > 50)
 else 
     {
     sageExpList = sgList;
-    sagePrintTable(sgList, itemName);
+    sagePrintTable(sgList, itemName, tdb);
     }
 printf("</td></tr></table>\n");
 /*zeroBytes(buff,64);
@@ -8342,9 +8344,9 @@ else if (sameWord(track, "snpTsc") || sameWord(track, "snpNih"))
     {
     doSnp(tdb, item);
     }
-else if (sameWord(track, "uniGene"))
+else if (sameWord(track, "uniGene_2"))
     {
-    doSageDataDisp(track, item);
+    doSageDataDisp(track, item, tdb);
     }
 else if (sameWord(track, "tigrGeneIndex"))
     {

@@ -1459,16 +1459,15 @@ o - cd /projects/cc/hg/sugnet/sage
     createSageSummary ../map/Hs/NlaIII/SAGEmap_ug_tag-rel_Hs tagExpArrays.tab sageSummary.sage
     # Create the uniGene alignments /cluster/store1/sugnet/gs.13/build30/uniGene/hg12.uniGene.lifted.pslReps.psl
     addAveMedScoreToPsls /cluster/store1/sugnet/gs.13/build30/uniGene/hg12.uniGene.lifted.pslReps.psl sageSummary.sage  uniGene.pslWScores.psl
-    /cluster/home/kent/bin/i386/hgLoadBed hg12 uniGene uniGene.wscores.bed 
+    /cluster/home/kent/bin/i386/hgLoadBed hg12 uniGene_2 uniGene.wscores.bed 
     hg12S -A < ~/kk/jk/hg/lib/sage.sql 
     echo "load data local infile 'sageSummary.sage' into table sage" | hg12S -A
     cd ../info
     ../../scripts/parseRecords.pl ../extr/expList.tab  > sageExp.tab
     hg12S -A < ~/kk/jk/hg/lib/sageExp.sql 
     echo "load data local infile 'sageExp.tab' into table sageExp" | hg12S -A
-    # This should be moved to a separate html file but that will be next freeze
-    # when Matt and Donna aren't on me...
-    modify hgc.c::printSageReference() to print the current date as date downloaded. 
+    update kent/src/hg/makeDb/hgTrackDb/hgRoot/uniGene_2.html with current uniGene date.	
+
     
 MAKE UNIGENE ALIGNMENTS (Done: Chuck Sugnet 7/26/02)
 o - cd /projects/cc/hg/sugnet/uniGene
