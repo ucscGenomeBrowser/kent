@@ -6,6 +6,7 @@
 #include "spliceGraph.h"
 #include "jksql.h"
 #include "dystring.h"
+#include "cheapcgi.h"
 
 void usage()
 {
@@ -13,12 +14,18 @@ errAbort("spliceWalk - uses altGraphX files to construct a splicing graph\n"
 	 "which is a combination of all the paths seen by RNA and EST evidence.\n"
 	 "The paths are joined where there are overlaps and the resulting super\n"
 	 "graph is walked to determine a set of transcripts which are not sub-paths\n"
-	 "of each other.\n"
+	 "of each other. Uses some heuristics to trim paths that contain rare nodes.\n"
+	 "options:\n"
+	 "\tminPercent - Minimum percentage of total transcripts that exon\n"
+	 "\t\tvertices must be seen in. (.05 default)\n"
+	 "\ttrumpSize - If unique portion of exon is >= trumpSize it will be kept\n"
+	 "\t\teven if it is below minPercent.(100 default)\n"
 	 "usage:\n\t"
 	 "spliceWalk <infile.altGraphX.tab> <outFile.bed>\n");
 }
 
-struct spliceGraph *currentGraph = NULL;
+struct spliceGraph *currentGraph = NULL; /* Pointer to current graph, useful for debugging. */
+boolean debug = FALSE; /* Turns on some debugging output. */
 
 void nodeSanityCheck(struct spliceGraph *sg)
 /* Loop through and make sure all the nodes have legit ids. */
@@ -31,11 +38,47 @@ for(i=0;i<sg->nodeCount; i++)
 	{
 	if(sn->edges[j] >= sg->nodeCount)
 	    errAbort("spliceWalk::nodeSanityCheck() - node with id %d when max is %d\n", sn->edges[j], sg->nodeCount);
-	if(sn->tStart > sg->nodes[sn->edges[j]]->tStart)
-	    errAbort("spliceWalk::nodeSanityCheck() -Node %-%u connects to %u-%u but that is the wrong direction.\n",  
+	if(sn->tStart > sg->nodes[sn->edges[j]]->tStart && sg->nodes[sn->edges[j]]->class != BIGNUM )
+	    errAbort("spliceWalk::nodeSanityCheck() -Node %u-%u connects to %u-%u but that is the wrong direction.\n",  
 		     sn->id, sn->tStart, sg->nodes[sn->edges[j]]->id, sg->nodes[sn->edges[j]]->tStart);
 	}
     }
+}
+
+boolean twoDifferentEnds(struct spliceNode *sn1, struct spliceNode *sn2)
+/* Return true if both spliceNodes are end types, but occur at different
+   loacations, otherwise return FALSE. */
+{
+if(sn1->type == ggSoftStart || sn1->type == ggHardStart || sn2->type == ggHardStart || sn2->type == ggSoftStart)
+    return FALSE;
+if(sn1->class == sn2->class)
+    return FALSE;
+assert(sn1->tStart != sn2->tStart);
+return TRUE;
+}
+
+struct spliceNode *initEndSpliceNode(struct altGraphX *agx, int edge)
+{
+struct spliceNode *e2 = NULL;
+AllocVar(e2);
+e2->tName = cloneString(agx->tName);
+snprintf(e2->strand,sizeof(e2->strand),"%s", agx->strand);
+e2->tStart = e2->tEnd = agx->vPositions[agx->edgeEnds[edge]];
+e2->type = agx->vTypes[agx->edgeEnds[edge]];
+e2->class = agx->edgeEnds[edge];
+return e2;
+}
+
+struct spliceNode *initStartSpliceNode(struct altGraphX *agx, int edge)
+{
+struct spliceNode *e1 = NULL;
+AllocVar(e1);
+e1->tName = cloneString(agx->tName);
+snprintf(e1->strand,sizeof(e1->strand),"%s", agx->strand);
+e1->tStart = e1->tEnd = agx->vPositions[agx->edgeStarts[edge]];
+e1->type = agx->vTypes[agx->edgeStarts[edge]];
+e1->class = agx->edgeStarts[edge];
+return e1;
 }
 
 void addNodeToPath(struct spliceGraph *sg, struct splicePath *sp, struct altGraphX *agx, int edge)
@@ -44,61 +87,56 @@ void addNodeToPath(struct spliceGraph *sg, struct splicePath *sp, struct altGrap
 {
 struct spliceNode *e1 = NULL, *e2 = NULL;
 struct spliceNode *tail = NULL;
-
-
-AllocVar(e2);
-
+unsigned int end = sp->tEnd;
+/* Create the second node as we'll need that no matter what. */
+e2 = initEndSpliceNode(agx, edge);
 tail = slLastEl(sp->nodes);
-
-if(sp->nodes == NULL)
+if(tail == NULL) /* Start new path with both nodes. */
     {
-/* Create the first node. */
-    AllocVar(e1);
-    e1->tName = cloneString(agx->tName);
-    snprintf(e1->strand,sizeof(e1->strand),"%s", agx->strand);
-    e1->tStart = e1->tEnd = agx->vPositions[agx->edgeStarts[edge]];
-    e1->type = agx->vTypes[agx->edgeStarts[edge]];
-    e1->class = agx->edgeStarts[edge];
+    /* Create the first node. */
+    e1 = initStartSpliceNode(agx, edge);
     spliceGraphAddNode(sg, e1);
     sp->tStart = e1->tStart;
-    }
-/* Create the second node. */
-e2->tName = cloneString(agx->tName);
-snprintf(e2->strand,sizeof(e2->strand),"%s", agx->strand);
-e2->tStart = e2->tEnd = agx->vPositions[agx->edgeEnds[edge]];
-e2->type = agx->vTypes[agx->edgeEnds[edge]];
-e2->class = agx->edgeEnds[edge];
-/* Register new nodes with the spliceGraph. */
-spliceGraphAddNode(sg, e2);
 
-/* Connect nodes to form path. */
-if(sp->nodes == NULL)
-    {
-//    spliceNodeConnect(tail, e1);
+    spliceGraphAddNode(sg, e2);
     spliceNodeConnect(e1, e2);
-    
-/* Add nodes to splicePath. */
+    /* Add nodes to splicePath. */
     slAddTail(&sp->nodes, e1);
     slAddTail(&sp->nodes, e2);
     sp->nodeCount += 2;
+    
+    end = e2->tEnd;
     }
-else 
+else if(twoDifferentEnds(tail, e2)) /* If this is a duplicate type, change tail to range. */
     {
+    tail->type = ggRangeEnd;
+    if(e2->tEnd < tail->tEnd)
+	warn("spliceWalk::addNodeToPath() - How can node at %s:%u-%u be greater than node at %s:%u-%u?", 
+	     tail->tName, tail->tStart, tail->tEnd, e2->tName, e2->tStart, e2->tEnd);
+    tail->tEnd = e2->tEnd;
+    tail->class = BIGNUM;
+    end = e2->tEnd;
+    spliceNodeFree(&e2);
+    }
+else /* Normal addition of a node. */
+    {
+    spliceGraphAddNode(sg, e2);
     spliceNodeConnect(tail, e2);
     slAddTail(&sp->nodes, e2);
     sp->nodeCount += 1;
+    end = e2->tEnd;
     }
 /* Expand the limits of the path as necessary. */
-if(e2->tEnd > sp->tEnd)
-    sp->tEnd = e2->tEnd;
-nodeSanityCheck(sg);
+if(end > sp->tEnd)
+    sp->tEnd = end;
+if(debug) { nodeSanityCheck(sg); }
 }
 
 boolean isExon(struct spliceNode *sn1, struct spliceNode *sn2)
 /* Return TRUE if edge between sn1 and sn2 is an exon, FALSE otherwise. */
 {
-if((sn1->type == ggHardStart || sn1->type == ggSoftStart)
-   && (sn2->type == ggHardEnd || sn2->type == ggSoftEnd))
+if((sn1->type == ggHardStart || sn1->type == ggSoftStart || sn1->type == ggRangeStart)
+   && (sn2->type == ggHardEnd || sn2->type == ggSoftEnd || sn2->type == ggRangeEnd))
     return TRUE;
 return FALSE;
 }
@@ -121,24 +159,34 @@ void splicePathBedOut(struct splicePath *sp, FILE *out)
 {
 int i=0;
 struct spliceNode *sn = NULL;
+int exonCount = 0;
 fprintf(out, "%s\t%u\t%u\t%s\t1000\t%s\t%u\t%u\t0\t", 
 	sp->tName, sp->tStart, sp->tEnd, sp->qName, sp->strand, sp->tStart, sp->tEnd);
 /* Only print out blocks that correspond to exons. */
-fprintf(out, "%d\t",  splicePathCountExons(sp));
-for(sn=sp->nodes; sn->next != NULL; sn = sn->next)
+exonCount = splicePathCountExons(sp);
+if(exonCount > 0)
     {
-    int size = sn->next->tStart - sn->tStart;
-    if(isExon(sn,sn->next))
-	fprintf(out, "%d,",size);
+    fprintf(out, "%d\t", exonCount );
+    for(sn=sp->nodes; sn->next != NULL; sn = sn->next)
+	{
+	int size = sn->next->tEnd - sn->tStart;
+	if(isExon(sn,sn->next))
+	    fprintf(out, "%d,",size);
+	}
+    fprintf(out, "\t");
+    for(sn=sp->nodes; sn->next != NULL; sn = sn->next)
+	{
+	int start = sn->tStart - sp->tStart;
+	if(isExon(sn,sn->next))
+	    fprintf(out, "%d,",start);
+	}
+    fprintf(out, "\n");
     }
-fprintf(out, "\t");
-for(sn=sp->nodes; sn->next != NULL; sn = sn->next)
-    {
-    int start = sn->tStart - sp->tStart;
-    if(isExon(sn,sn->next))
-	fprintf(out, "%d,",start);
+else
+    { 
+    struct spliceNode *tail = slLastEl(sp->nodes);
+    fprintf(out, "%d\t%d\t%d\n", 1, tail->tEnd-sp->nodes->tStart, sp->nodes->tStart);
     }
-fprintf(out, "\n");
 }
 
 void initSpliceGraphFromAgx(struct spliceGraph *sg, struct altGraphX *agx)
@@ -179,19 +227,18 @@ for(i=0; i < agx->mrnaRefCount; i++)
 	    if(sameString(acc, agx->mrnaRefs[ev->mrnaIds[k]]))
 		{
 		addNodeToPath(sg, sp, agx, slIxFromElement(agx->evidence,ev));
-
 		}
 	    }
 	}
 //    warn("%d nodes in %s.", slCount(sp->nodes), sp->qName);
-    nodeSanityCheck(sg);
+    if(debug) { nodeSanityCheck(sg); }
     slAddHead(&spList, sp);
     } 
 
 slReverse(&spList);
 sg->pathCount = slCount(spList);
 sg->paths =  spList;
-nodeSanityCheck(sg);
+if(debug) { nodeSanityCheck(sg); }
 return sg;
 }
 
@@ -200,11 +247,11 @@ void splicePathCreateStringRep(struct splicePath *sp)
 {
 struct dyString *dy = newDyString(256);
 struct spliceNode *sn = NULL;
+if(sp->path != NULL)
+    freez(&sp->path);
 for(sn = sp->nodes; sn != NULL; sn = sn->next)
     {
-//    if(isExon(sn,sn->next))
-	dyStringPrintf(dy, "%d-", sn->class);
-//	printf("%s\t%d\t%d\t%d-%d\n", sn->tName, sn->tStart, sn->tEnd, sn->class, sn->next->class);
+    dyStringPrintf(dy, "%d-", sn->class);
     }
 sp->path = cloneString(dy->string);
 freeDyString(&dy);
@@ -224,28 +271,37 @@ for(sp = sg->paths; sp != NULL; sp = sp->next)
     }
 }
 
-boolean restHardEnds(struct spliceNode *sn)
-/* Return true if this node and all the nodes after it
-   are hard ends. If possible partial exons are extended to
-   meet potential potential splice sites. */
+boolean compatibleTypes(enum ggVertexType t1, enum ggVertexType t2)
+/* Return TRUE if both starts, or both ends. FALSE otherwise. */
 {
-for(; sn != NULL; sn=sn->next)
-    if(sn->type != ggHardEnd && sn->type != ggSoftEnd)
-	return FALSE;
-return TRUE;
-}
-
-
-boolean matchInHardEnds(struct spliceNode *sn1, struct spliceNode *sn2)
-/* Try to find a match in sn1 list to sn2 node. */
-{
-for(; sn1 != NULL; sn1 = sn1->next)
-    for(; sn2 != NULL; sn2 = sn2->next)
-	if(sn1->class == sn2->class)
-	    return TRUE;
+if(t1 == ggSoftEnd || t1 == ggHardEnd || t1 == ggRangeEnd)
+    {
+    if(t2 == ggSoftEnd || t2 == ggHardEnd || t2 == ggRangeEnd)
+	return TRUE;
+    }
+if(t1 == ggSoftStart || t1 == ggHardStart || t1 == ggRangeStart)
+    {
+    if(t2 == ggSoftStart || t2 == ggHardStart || t2 == ggRangeStart)
+	return TRUE;
+    }
 return FALSE;
 }
 
+boolean compatibleNodes(struct spliceNode *sn1, struct spliceNode *sn2)
+/* Return TRUE if these two nodes are compatible (overlapping) with eachother
+   FALSE otherwise. */
+{
+assert(sameString(sn1->strand, sn2->strand));
+if(sn1->class == BIGNUM || sn2->class == BIGNUM)
+    {
+    if(compatibleTypes(sn1->type, sn2->type))
+	if(rangeIntersection(sn1->tStart, sn1->tEnd, sn2->tStart, sn2->tEnd) >= 0)
+	    return TRUE;
+    }
+else if(sn1->class == sn2->class)
+    return TRUE;
+return FALSE;
+}
 boolean extendsToEnd(struct spliceNode *sn1, struct spliceNode *sn2, boolean allSn2)
 /* See if the list of nodes starting at sn1 and sn2 are of identical
    classes until the end. If allSn2 then all of sn2 must be present
@@ -254,18 +310,11 @@ boolean extendsToEnd(struct spliceNode *sn1, struct spliceNode *sn2, boolean all
 boolean extends = TRUE;
 for(; sn1 != NULL && sn2 != NULL; sn1=sn1->next, sn2=sn2->next)
     {
-    if(sn1->class != sn2->class) 
-	{
-	struct spliceNode *test = NULL;
-	if(restHardEnds(sn1) || restHardEnds(sn2))
-	    extends = matchInHardEnds(sn1, sn2);
-	else
-	    extends = FALSE;
-	}
-
+    if(!compatibleNodes(sn1, sn2))
+	extends = FALSE;
     }
 if(extends && allSn2)
-    extends = restHardEnds(sn2);
+    extends = (sn2==NULL);
 return extends;
 }
 
@@ -274,45 +323,10 @@ void connectNodeList(struct spliceNode *sn1, struct spliceNode *sn2)
 {
 for(; sn1 != NULL && sn2 != NULL; sn1=sn1->next, sn2=sn2->next)
     {
-    if(sn1->class == sn2->class)
+    if(compatibleNodes(sn1, sn2))
 	spliceNodeConnect(sn1,sn2);
-    else if(restHardEnds(sn1) || restHardEnds(sn2))
-	{
-	struct spliceNode *fuzzy1 = sn1;
-	struct spliceNode *fuzzy2 = sn2;
-	boolean problem = FALSE;
-	for(; fuzzy1 != NULL; fuzzy1 = fuzzy1->next)
-	    {
-	    for(; fuzzy2 != NULL; fuzzy2 = fuzzy2->next)
-		{
-		if(fuzzy1->class == fuzzy2->class)
-		    {
-		    spliceNodeConnect(fuzzy1,fuzzy2);
-		    problem = FALSE;
-		    }
-		}
-	    }
-	if(problem)
-	    {
-	    char *mRna1 = NULL, *mRna2 = NULL;
-	    mRna1 = getRefForNode(currentGraph, sn1->id);
-	    mRna2 = getRefForNode(currentGraph, sn2->id);
-	    errAbort("spliceWalk::connectNodeList() - Having trouble finding match in mRna1: %s node %d and mRna2: %s node %d",
-		     mRna1, sn1->id, mRna2, sn2->id);
-	    }
-	}
-    else
-	{
-	char *mRna1 = NULL, *mRna2 = NULL;
-	mRna1 = getRefForNode(currentGraph, sn1->id);
-	mRna2 = getRefForNode(currentGraph, sn2->id);
-	errAbort("spliceWalk::connectNodeList() - Can't connect mRna1: %s node %d and mRna2: %s node %d",
-		 mRna1, sn1->id, mRna2, sn2->id);
-	}
     }
 }
-
-
 
 void splicePathConnectEquivalentNodes(struct splicePath *hayStack, struct splicePath *needle)
 /* Try to align one path to another and connect nodes that
@@ -321,8 +335,6 @@ void splicePathConnectEquivalentNodes(struct splicePath *hayStack, struct splice
 struct spliceNode *sn = NULL;
 struct spliceNode *mark = NULL;
 boolean keepGoing = TRUE;
-if(strstr(hayStack->qName, "AI635570") && strstr(needle->qName,"BI910851"))
-    uglyf("watchout...\n");
 for(sn = hayStack->nodes; sn != NULL && keepGoing; sn = sn->next)
     {
     if(needle->nodes->class == sn->class)
@@ -342,21 +354,17 @@ boolean isSubPath(struct splicePath *hayStack, struct splicePath *needle)
 struct spliceNode *sn = NULL;
 boolean subPath = FALSE;
 boolean keepGoing = TRUE;
-if(sameString(hayStack->path, "0-1-2-3-4-5-6-7-8-10-11-") && sameString(needle->path,"4-5-6-7-8-9-10-11-"))
-    warn("Why isn't this working");
 for(sn = hayStack->nodes; sn != NULL && keepGoing; sn = sn->next)
     {
-    if(needle->nodes->class == sn->class)
+    if(compatibleNodes(needle->nodes, sn))
 	{
 	if(extendsToEnd(sn, needle->nodes, TRUE))
 	    subPath = TRUE;
 	keepGoing = FALSE;
 	}
-
     }
 return subPath;
 }
-
 
 void spliceGraphConnectEquivalentNodes(struct spliceGraph *sg)
 /* Go through and find the equivalent nodes for each path by
@@ -370,13 +378,11 @@ for(sp = sg->paths; sp != NULL; sp = sp->next)
     splicePathCreateStringRep(sp);
 for(path1 = sg->paths; path1 != NULL; path1 = path1->next)
     {
-    if(sameString(path1->qName,"BE738125"))
-	warn("Get ready");
     for(path2 = path1->next; path2 != NULL; path2 = path2->next)
 	{
 	if(path1 != path2)
 	    splicePathConnectEquivalentNodes(path1, path2);
-	nodeSanityCheck(sg);
+	if(debug) { nodeSanityCheck(sg); }
 	}
     }
 }
@@ -388,7 +394,9 @@ struct splicePath *sp = NULL;
 struct spliceNode *sn = NULL, *snCopy = NULL;
 assert(orig);
 assert(orig->nodes);
+
 sp = CloneVar(orig);
+sp->next = NULL;
 sp->tName = cloneString(orig->nodes->tName);
 snprintf(sp->strand, sizeof(sp->strand), "%s", orig->nodes->strand);
 sp->qName = NULL;
@@ -398,8 +406,9 @@ sp->nodes = NULL;
 for(sn=orig->nodes; sn != NULL; sn = sn->next)
     {
     snCopy = CloneVar(sn);
-    snCopy->edgeCount =0;
-    snCopy->edges = NULL;
+    snCopy->tName = cloneString(sn->tName);
+    if(sn->edgeCount != 0)
+	snCopy->edges = CloneArray(sn->edges, sn->edgeCount);
     if(snCopy->tStart > sp->tEnd)
 	sp->tEnd = snCopy->tStart;
     if(snCopy->tStart < sp->tStart)
@@ -418,9 +427,6 @@ void checkForMaximalPath(struct spliceGraph *sg, struct splicePath **maximalPath
 struct splicePath *sp = NULL, *spNext = NULL;
 boolean maximal = TRUE;
 slReverse(&history->nodes);
-splicePathCreateStringRep(history);
-if(history->nodes != NULL && strstr(history->path, "-1-"))
-    uglyf("Checking path %s\n', history->path");
 for(sp = *maximalPaths; sp != NULL; sp = spNext)
     {
     spNext = sp->next;
@@ -432,8 +438,7 @@ for(sp = *maximalPaths; sp != NULL; sp = spNext)
     else if(isSubPath(history, sp))
 	{
 	slRemoveEl(maximalPaths, sp);
-//	splicePathFree(&sp);
-	freez(&sp);
+	splicePathFree(&sp);
 	}
     }
 if(maximal)
@@ -441,11 +446,8 @@ if(maximal)
     struct splicePath *copy = splicePathCopy(history);
     slAddHead(maximalPaths, copy);
     }
-freez(&history->path);
 slReverse(&history->nodes);
 }
-
-
 
 void spliceGraphPathDfs(struct spliceGraph *sg, struct spliceNode *sn, int nodeIndex, 
 			struct splicePath **maximalPaths, struct splicePath *history)
@@ -456,18 +458,25 @@ void spliceGraphPathDfs(struct spliceGraph *sg, struct spliceNode *sn, int nodeI
 int i;
 struct spliceNode *copy = CloneVar(sn);
 boolean pop = FALSE;
-nodeSanityCheck(sg);
+struct spliceNode *notCompat = NULL;
+boolean notCompatPush = FALSE;
+if(debug) { nodeSanityCheck(sg); }
 copy->next = NULL;
-copy->edges = NULL;
-copy->edgeCount = 0;
-if(history->nodes == NULL || history->nodes->class != sn->class)
+copy->tName = cloneString(sn->tName);
+if(sn->edgeCount != 0)
+    copy->edges = CloneArray(sn->edges, sn->edgeCount);
+//copy->edgeCount = 0;
+if(history->nodes == NULL || history->nodes->class != sn->class && sn->class != BIGNUM)
     {
+    if(history->nodes != NULL && compatibleTypes(history->nodes->type, sn->type))
+	{
+	notCompatPush = TRUE;
+	notCompat = slPopHead(&history->nodes);
+	}
     slAddHead(&history->nodes, copy);
     history->nodeCount++;
     pop =TRUE;
     }
-if(sn->class == 0)
-    printf("wow\n");
 sn->color = snGray;
 if(sn->type == ggSoftEnd || sn->type == ggSoftStart) /* It is a terminal node...*/
     {
@@ -486,8 +495,10 @@ if(pop)
     {
     slPopHead(&history->nodes);
     history->nodeCount--;
+    if(notCompatPush)
+	slSafeAddHead(&history->nodes, notCompat);
     }
-freez(&copy);
+spliceNodeFree(&copy);
 sn->color = snBlack;
 }
 
@@ -518,16 +529,7 @@ for(i=0; i<sg->nodeCount; i++)
 	freez(&history);
 	}
     }
-
-for(sp = maximalPaths; sp != NULL; sp = sp->next)
-    {
-    char buff[256];
-    snprintf(buff, sizeof(buff), "%d", index++);
-    sp->qName = cloneString(buff);
-    splicePathCreateStringRep(sp);
-    printf("%s\n", sp->path);
-    splicePathBedOut(sp, stdout);
-    }
+freez(&orderedNodes);
 return maximalPaths;
 }
 
@@ -541,38 +543,137 @@ for(i=0; i < agx->vertexCount; i++)
     }
 }
 
+int uniqueSize(struct spliceGraph *sg, struct splicePath *maximalPaths, struct splicePath *currentPath,
+	       struct spliceNode *sn1, struct spliceNode *sn2)
+/* Find out how much of the exon laid out by sn1 and s2 overlaps with other
+   exons in the maximal paths. */
+{
+int size = sn2->tEnd - sn1->tStart;
+int maxOverlap = 0;
+struct spliceNode *sn;
+struct splicePath *sp;
+for(sp = maximalPaths; sp != NULL; sp = sp->next)
+    {
+    if(currentPath != sp)
+	{
+	for(sn = sp->nodes; sn->next != NULL; sn = sn->next)
+	    {
+	    if(isExon(sn, sn->next) && (sn->class != sn1->class && sn->next->class != sn2->class))
+		{
+		int overlap = rangeIntersection(sn->tStart, sn->next->tEnd, sn1->tStart, sn2->tEnd);
+		if(overlap > maxOverlap)
+		    maxOverlap = overlap;
+		}
+	    }
+	}
+    }
+size = size - maxOverlap;
+assert(size >= 0);
+return size;
+}
+
+boolean confidentPath(struct spliceGraph *sg, struct splicePath *maximalPaths, struct splicePath *sp)
+/* Return TRUE if all edges in sp were seen in 5% or more
+   of the paths. */
+{
+double minPercent = cgiOptionalDouble("minPercent", .05);
+int trumpSize = cgiOptionalInt("trumpSize", 100);
+double minNum = minPercent * slCount(sg->paths) + 1;
+boolean exonPresent = FALSE;
+
+struct spliceNode *sn = NULL;
+for(sn = sp->nodes; sn->next != NULL; sn = sn->next)
+    {
+    if(isExon(sn, sn->next))
+	{
+	int count1 = sn->edgeCount;
+	int count2 = sn->next->edgeCount;
+	int size = uniqueSize(sg, maximalPaths, sp, sn, sn->next);
+	exonPresent = TRUE;
+	if(sn->next->next == NULL)
+	    count2++; 
+	if((count1 < minNum || count2 <minNum) && size < trumpSize  )
+	    return FALSE;
+	}
+    }
+return exonPresent;
+}
+
+void putTic()
+{
+	fprintf(stderr,".");
+	fflush(stderr);
+}
 void spliceWalk(char *inFile, char *bedOut)
 /* Starting routine. */
 {
 struct altGraphX *agx = NULL, *agxList = NULL;
 struct spliceGraph *sg = NULL, *sgList = NULL;
 FILE *f = NULL;
+FILE *spliceSites = NULL;
+FILE *cleanEsts = NULL;
+FILE *rejects = NULL;
+boolean diagnostics = cgiBoolean("diagnostics");
+int index = 0;
+int count = 0;
 struct splicePath *sp=NULL, *spList = NULL;
-warn("Loading file %s", inFile);
 agxList = altGraphXLoadAll(inFile);
 f = mustOpen(bedOut, "w");
+if(diagnostics) 
+    {
+    spliceSites = mustOpen("spliceSites.bed", "w");
+    cleanEsts = mustOpen("cleanEsts.bed", "w");
+    rejects = mustOpen("rejects.bed", "w");
+    fprintf(rejects, "track name=rejects description=\"spliceWalk rejects\"\n");
+    fprintf(spliceSites, "track name=spliceSites description=\"spliceWalk splice sites.\"\n");
+    fprintf(cleanEsts, "track name=cleanEsts description=\"spliceWalk cleaned ESTs\"\n");
+    }
+fprintf(f, "track name=spliceWalk description=\"spliceWalk Final Picks\"\n");
+warn("Creating splice graphs.");
 for(agx = agxList; agx != NULL; agx = agx->next)
     {
-    warn("Creating splice graph.");
-    fprintf(f, "track\n");
-    writeOutNodes(agx, f);
+    if(count++ % 100 == 0)
+	putTic();
+    if(diagnostics)
+	writeOutNodes(agx, spliceSites);
     sg = spliceGraphFromAgx(agx);
     currentGraph = sg;
-    fprintf(f, "track\n");
-    for(sp = sg->paths; sp != NULL; sp = sp->next)
-	splicePathBedOut(sp,f);
-    warn("Connecting Equivalent nodes.");
+    if(diagnostics)
+	for(sp = sg->paths; sp != NULL; sp = sp->next)
+	    splicePathBedOut(sp,cleanEsts);
     spliceGraphConnectEquivalentNodes(sg);
-    warn("Getting maximal paths.");
-    nodeSanityCheck(sg);
-    fprintf(f, "track\n");
+    if(debug) { nodeSanityCheck(sg); }
+    
     spList = spliceGraphMaximalPaths(sg);
     for(sp = spList; sp != NULL; sp = sp->next)
-	splicePathBedOut(sp,f);
-    slAddHead(&sgList, sg);
+	{
+	char buff[256];
+	snprintf(buff, sizeof(buff), "%d", index++);
+	sp->qName = cloneString(buff);
+	splicePathCreateStringRep(sp);
+	if(confidentPath(sg, spList, sp))
+	    {
+	    if(debug)
+		{
+		printf("%s\n", sp->path);
+		splicePathBedOut(sp, stdout);
+		}
+	    splicePathBedOut(sp,f);
+	    }
+	else if(diagnostics)
+	    splicePathBedOut(sp, rejects);
+	}
+    splicePathFree(&spList);
+    spliceGraphFree(&sg);
     currentGraph = NULL;
     }
-warn("Done.");
+warn("\tDone.");
+if(diagnostics)
+    {
+    carefulClose(&spliceSites);
+    carefulClose(&cleanEsts);
+    carefulClose(&rejects);
+    }
 carefulClose(&f);
 spliceGraphFreeList(&sgList);
 altGraphXFreeList(&agxList);
@@ -581,8 +682,10 @@ altGraphXFreeList(&agxList);
 
 int main(int argc, char *argv[])
 {
-if(argc != 3)
+if(argc < 3)
     usage();
+cgiSpoof(&argc, argv);
+debug = cgiBoolean("debug");
 spliceWalk(argv[1], argv[2]);
 return 0;
 }
