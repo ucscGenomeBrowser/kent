@@ -10,9 +10,10 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.21 2004/02/02 15:08:58 angie Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.22 2004/02/03 22:06:01 braney Exp $";
 
 /* Command line switches. */
+boolean noSort = FALSE;		/* don't sort */
 boolean noBin = FALSE;		/* Suppress bin field. */
 boolean hasBin = FALSE;		/* Input bed file includes bin. */
 boolean strictTab = FALSE;	/* Separate on tabs. */
@@ -28,6 +29,7 @@ errAbort(
   "usage:\n"
   "   hgLoadBed database track files(s).bed\n"
   "options:\n"
+  "   -noSort  don't sort (you better be sorting before this)\n"
   "   -noBin   suppress bin field\n"
   "   -oldTable add to existing table\n"
   "   -onServer This will speed things up if you're running in a directory that\n"
@@ -226,8 +228,13 @@ if (hasBin)
 for (i=0; i<bedCount; ++i)
     loadOneBed(bedFiles[i], bedSize, &bedList);
 printf("Loaded %d elements of size %d\n", slCount(bedList), bedSize);
-slSort(&bedList, bedStubCmp);
-printf("Sorted\n");
+if (!noSort)
+    {
+    slSort(&bedList, bedStubCmp);
+    printf("Sorted\n");
+    }
+else
+    printf("Not Sorting\n");
 loadDatabase(database, track, bedSize, bedList);
 }
 
@@ -238,6 +245,7 @@ cgiSpoof(&argc, argv);
 if (argc < 4)
     usage();
 noBin = cgiBoolean("noBin") || cgiBoolean("nobin");
+noSort = cgiBoolean("noSort");
 strictTab = cgiBoolean("tab");
 oldTable = cgiBoolean("oldTable");
 sqlTable = cgiOptionalString("sqlTable");
