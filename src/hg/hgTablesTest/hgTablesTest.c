@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.31 2005/02/10 23:38:31 angie Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.32 2005/02/12 00:40:08 angie Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -985,6 +985,9 @@ void hgTablesTest(char *url, char *logName)
 /* Get default page, and open log. */
 struct htmlPage *rootPage = htmlPageGet(url);
 logFile = mustOpen(logName, "w");
+if (! endsWith(url, "hgTables"))
+    warn("Warning: first argument should be a complete URL to hgTables, "
+	 "but doesn't look like one (%s)", url);
 htmlPageValidateOrAbort(rootPage);
 
 /* Go test what they've specified in command line. */
