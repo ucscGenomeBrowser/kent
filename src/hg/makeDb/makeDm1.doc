@@ -2797,10 +2797,9 @@ rm $TMP/$root.ss.gz
     ssh hgwdev
     cd /cluster/data/dm1/bed
     mkdir blat.dm1FB
+    cd blat.dm1FB
     pepPredToFa dm1 bdgpGenePep dm1FB.fa
     hgPepPred dm1 generic blastFBPep00 dm1FB.fa
-    grep ">" dm1FB.fa | sed "s/>//" > dm1FB.lst
-    fbName dm1 dm1FB.lst dm1FB.mapNames
     ssh kk
     cd /cluster/data/hg17/bed/blat.dm1FB
     cat << '_EOF_' > blatSome
@@ -2843,10 +2842,14 @@ Submission to last job:          3506s      58.43m     0.97h    0.04d
     cd /cluster/data/dm1/bed/blat.dm1FB
     pslSort dirs raw.psl /tmp psl/*
     pslReps -nohead -minCover=0.9 -minAli=0.9 raw.psl cov90.psl /dev/null
-    pslUniq cov90.psl dm1FB.psl
+    sort -rn cov90.psl | pslUniq stdin dm1FB.psl
     pslxToFa dm1FB.psl dm1FB_ex.fa -liftTarget=genome.lft -liftQuery=protein.lft
-    sed "s/>.*/&p/" dm1FB.fa > dm1FBp.fa
-
+    fbName dm1 dm1FB.psl blastFBRef00
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blat.dm1FB
+    hgsql dm1 < ~/kent/src/lib/hg/blastRef.sql
+    echo "rename table blastRef to blastFBRef00" | hgsql dm1
+    echo "load data local infile 'blastFBRef00' into table blastFBRef00" | hgsql dm1
 
 # MITOPRED DATA FOR HGGENE (DONE 8/10/04 angie)
     ssh hgwdev
