@@ -6,7 +6,7 @@ MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a 
 
 O = affyAtlas.o affyGenoDetails.o affy10KDetails.o affyOffset.o affyPairs.o \
-    agpFrag.o agpGap.o altGraph.o altGraphX.o ancientRref.o axtInfo.o \
+    agpFrag.o agpGap.o alignSeqSizes.o altGraph.o altGraphX.o ancientRref.o axtInfo.o \
     axtLib.o bactigPos.o bbRepMask.o bdgpExprLink.o bdgpGeneInfo.o bed.o \
     blastTab.o blastzNet.o blatServers.o borf.o borkPseudoHom.o \
     cart.o cartDb.o celeraCoverage.o celeraDupPositive.o cgh.o \
