@@ -162,7 +162,7 @@ visibility full
 type sample 9
 
 track mcs_p
-shortLabel MCS (Parsimony P-Value)
+shortLabel MCS (ParsPVal)
 longLabel Parsimony P_Value based MCSs
 priority 429
 visibility dense
