@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.20 2004/10/14 21:54:34 kent Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.21 2004/10/15 16:09:22 kent Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -385,11 +385,11 @@ else
     }
 if (doCt)
     {
-    cgiMakeButton(hgtaDoGetCustomTrackTb, "Custom Track in Table Browser");
+    cgiMakeButton(hgtaDoGetCustomTrackTb, "Get Custom Track in Table Browser");
     hPrintf(" ");
-    cgiMakeButton(hgtaDoGetCustomTrackGb, "Custom Track in Genome Browser");
-    hPrintf(" ");
-    cgiMakeButton(hgtaDoGetCustomTrackFile, "Custom Track File");
+    cgiMakeButton(hgtaDoGetCustomTrackFile, "Get Custom Track in File");
+    hPrintf("<BR>\n");
+    cgiMakeButton(hgtaDoGetCustomTrackGb, "Get Custom Track in Genome Browser");
     }
 else
     {
