@@ -11,6 +11,7 @@ char *psFile = NULL;
 boolean doLog = FALSE;
 int margin = 0;
 int psSize = 5*72;
+int labelStep = 1;
 
 void usage()
 /* Explain usage and exit. */
@@ -29,6 +30,7 @@ errAbort(
   "   -yMin=N - minimum y number to record\n"
   "   -ps=output.ps - make PostScript output\n"
   "   -psSize=N - Size in points (1/72th of inch)\n"
+  "   -labelStep=N - How many bins to skip between labels\n"
   "   -margin=N - Margin in points for PostScript output\n"
   "   -log    - Logarithmic output (only works with ps now)\n"
   );
@@ -148,6 +150,7 @@ psXyOut(ps, x, y+height);
 fprintf(ps->f, "fillBox\n");
 }
 
+
 void psMoveTo(struct psOutput *ps, int x, int y)
 /* Move PostScript position to given point. */
 {
@@ -226,6 +229,13 @@ for (i=0; i<bothBins; ++i)
 return maxVal;
 }
 
+void boxOut(struct psOutput *ps, int x, int y, int width, int height)
+/* Draw a filled box in current color. */
+{
+psDrawBox(ps, x, y, width+1, height+1);
+}
+
+
 void psOutput(int *hist, char *psFile)
 /* Output histogram in postscript format. */
 {
@@ -252,14 +262,14 @@ for (y=0; y<yBins; ++y)
 	both = y*xBins + x;
 	val = mightLog(hist[both]);
 	psSetGray(ps, 1.0 - val * grayScale);
-	psDrawBox(ps, xPos, yPos, xBinPts, yBinPts);
+	boxOut(ps, xPos, yPos, xBinPts, yBinPts);
 	}
     }
 
 /* Draw ticks and labels. */
 psSetGray(ps, 0);
 yPos = psInnerSize;
-for (x=1; x<xBins; ++x)
+for (x=labelStep; x<xBins; x += labelStep)
     {
     char buf[16];
     sprintf(buf, "%d", x*xBinSize+xMin);
@@ -268,7 +278,7 @@ for (x=1; x<xBins; ++x)
     psDrawBox(ps, xPos, yPos, 1, tickSize);
     psTextDown(ps, xPos, yPos+tickSize+2, buf);
     }
-for (y=1; y<yBins; ++y)
+for (y=labelStep; y<yBins; y += labelStep)
     {
     char buf[16];
     int yg = yBins-y;
@@ -363,6 +373,7 @@ psFile = optionVal("ps", NULL);
 psSize = optionInt("psSize", psSize);
 margin = optionInt("margin", margin);
 doLog = optionExists("log");
+labelStep = optionInt("labelStep", labelStep);
 textHist2(argv[1]);
 return 0;
 }
