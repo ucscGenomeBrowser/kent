@@ -164,7 +164,6 @@ CREATE TABLE extDbRef (
     extAcc1 varchar(255) not null,	# External accession
     extAcc2 varchar(255) not null,	# External accession
     extAcc3 varchar(255) not null,	# External accession
-    rank int not null,	# Which 1st, 2nd, etc accession - 1 is primary
               #Indices
     INDEX(acc),
     INDEX(extAcc1(10))
