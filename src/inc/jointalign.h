@@ -21,6 +21,10 @@ boolean ucaseMatch( char a, char b );
 void validateSeqs( char *seq1, char *seq2 );
 /*Make sure sequences are the same length*/
 
+void htmlPrintJointAlignmentLine( char *seq1, char *seq2, int start, int end);
+/* Prints one line of the joint alignment between seq1 and seq2,
+ * from seq[start] to seq[end-1].*/
+
 
 #endif /* JOINTALIGN */
 
