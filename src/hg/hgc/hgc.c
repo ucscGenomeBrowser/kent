@@ -1,6 +1,5 @@
 /* hgc - Human Genome Click processor - gets called when user clicks
  * on something in human tracks display. */
-
 #include "common.h"
 #include "hCommon.h"
 #include "hash.h"
@@ -64,7 +63,7 @@
 #include "web.h"
 #include "jaxOrtholog.h"
 #include "expRecord.h"
-//#include "dnaProbe.h"
+#include "dnaProbe.h"
 #include "ancientRref.h"
 #include "jointalign.h"
 
@@ -3853,11 +3852,10 @@ char buff[256];
  genericHeader(tdb, item); 
 snprintf(buff, sizeof(buff), "select * from dnaProbe where name='%s'",  item);
 
-/*
-
 dp = dnaProbeLoadByQuery(conn, buff);
 if(dp != NULL)
     {
+    printf("<h3>Probe details:</h3>\n");
     printf("<b>Name:</b> %s<br>\n",dp->name);
     printf("<b>Dna:</b> %s", dp->dna );
     printf("[<a href=\"hgBlat?type=DNA&genome=hg8&sort=&query,score&output=hyperlink&userSeq=%s\">blat</a>]<br>", dp->dna);
@@ -3875,11 +3873,8 @@ if(dp != NULL)
     printf("<b>Comparison:</b> %f<br>", dp->comparison);
     printf("<hr>\n");
     }
-
-*/
-    
+printf("<h3>Genomic Details:</h3>\n");
 genericBedClick(conn, tdb, item, start, 1);
-printf("<hr>");
 printTrackHtml(tdb);
 hFreeConn(&conn);
 webEnd();
@@ -4032,7 +4027,7 @@ sr = sqlGetResult( conn, query );
 while ((row = sqlNextRow(sr)) != NULL )
     {
     ar = ancientRrefLoad(row);
-    htmlPrintJointAlignment( ar->hseq, ar->mseq, 80, 
+    htmlPrintJointAlignment( ar->hseq, ar->mseq, 80,
             bed->chromStart, bed->chromEnd, bed->strand );
     }
 
