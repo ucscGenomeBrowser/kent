@@ -854,6 +854,16 @@ priority 119
 visibility full
 type sample 0 8
 
+track HMRConservation
+shortLabel HMRConservation
+longLabel Mouse/Human/Rat Evolutionary Conservation Score
+group compGeno
+color 100,50,0
+altColor 175,150,128
+priority 119.1
+visibility hide
+type sample 0 8
+
 track syntenyHuman
 shortLabel Human Synteny
 longLabel Human/Mouse Synteny using blastz single coverage (100k window)
