@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.23 2004/11/24 01:47:15 kent Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.24 2004/12/01 22:24:00 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -238,14 +238,17 @@ safef(buf, sizeof(buf), "%s%s.%s", setOrClearPrefix, db, table);
 return buf;
 }
 
-static void showTableLastButtons(char *db, char *table)
+static void showTableButtons(char *db, char *table, boolean withGetButton)
 /* Put up the last buttons in a showTable section. */
 {
 hPrintf("<BR>\n");
-cgiMakeButton(hgtaDoPrintSelectedFields, "Get Fields");
-hPrintf(" ");
-cgiMakeButton(hgtaDoMainPage, "Cancel");
-hPrintf(" ");
+if (withGetButton)
+    {
+    cgiMakeButton(hgtaDoPrintSelectedFields, "Get Fields");
+    hPrintf(" ");
+    cgiMakeButton(hgtaDoMainPage, "Cancel");
+    hPrintf(" ");
+    }
 cgiMakeButton(setClearAllVar(hgtaDoSetAllFieldPrefix,db,table), 
 	"Check All");
 hPrintf(" ");
@@ -253,7 +256,7 @@ cgiMakeButton(setClearAllVar(hgtaDoClearAllFieldPrefix,db,table),
 	"Clear All");
 }
 
-static void showTableFieldsDb(char *db, char *rootTable)
+static void showTableFieldsDb(char *db, char *rootTable, boolean withGetButton)
 /* Put up a little html table with a check box, name, and hopefully
  * a description for each field in SQL rootTable. */
 {
@@ -298,12 +301,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     hPrintf("</TR>");
     }
 hTableEnd();
-showTableLastButtons(db, rootTable);
+showTableButtons(db, rootTable, withGetButton);
 freez(&table);
 sqlDisconnect(&conn);
 }
 
-static void showTableFieldCt(char *db, char *table)
+static void showTableFieldCt(char *db, char *table, boolean withGetButton)
 /* Put up html table with a check box for each field of custom
  * track. */
 {
@@ -321,17 +324,17 @@ for (field = fieldList; field != NULL; field = field->next)
     hPrintf("</TD></TR>");
     }
 hTableEnd();
-showTableLastButtons(db, table);
+showTableButtons(db, table, withGetButton);
 }
 
-static void showTableFields(char *db, char *rootTable)
+static void showTableFields(char *db, char *rootTable, boolean withGetButton)
 /* Put up a little html table with a check box, name, and hopefully
  * a description for each field in SQL rootTable. */
 {
 if (isCustomTrack(rootTable))
-    showTableFieldCt(db, rootTable);
+    showTableFieldCt(db, rootTable, withGetButton);
 else
-    showTableFieldsDb(db, rootTable);
+    showTableFieldsDb(db, rootTable, withGetButton);
 }
 
 static void showLinkedFields(struct dbTable *dtList)
@@ -342,7 +345,7 @@ for (dt = dtList; dt != NULL; dt = dt->next)
     {
     /* Put it up in a new section. */
     webNewSection("%s.%s fields", dt->db, dt->table);
-    showTableFields(dt->db, dt->table);
+    showTableFields(dt->db, dt->table, FALSE);
     }
 }
 
@@ -363,7 +366,7 @@ cgiMakeHiddenVar(hgtaDatabase, db);
 cgiMakeHiddenVar(hgtaTable, table);
 dbOverrideFromTable(dbTableBuf, &db, &table);
 
-showTableFields(db, table);
+showTableFields(db, table, TRUE);
 dtList = extraTableList(selFieldLinkedTablePrefix());
 showLinkedFields(dtList);
 dt = dbTableNew(db, table);
