@@ -1278,7 +1278,7 @@ liftOver ../../../bedOverHg16/refGene2/hg16.refGene.gtf ../../humanTarget.chain 
 ldHgGene panTro1 mappedRefSeq new.gtf
 
 
-# HUMAN DELETIONS (kpollard, 2/19/04)
+# HUMAN DELETIONS (kpollard, finished 2/19/04)
 #  80-12000 bp indels in human/chimp alignments (from Tarjei's files)
 
     #data
@@ -1299,23 +1299,24 @@ ldHgGene panTro1 mappedRefSeq new.gtf
     cat  /cluster/data/panTro1/jkStuff/scaffolds.lft | gawk '{print $2"\t"$6}' > scaffStrand.txt
     R
     	#commands in R
-    	scaff<-read.table("chimp.scaff.txt")
-	scaff.info<-read.table("scaffStrand.txt")
-	all<-read.table("chimp.all.txt")
-	long<-as.character(all[,1])
-	longsplit<-matrix(unlist(strsplit(long,",")),nc=4,byrow=TRUE)
-	end<-cbind(as.numeric(longsplit[,4]),as.numeric(all[,2]))
-	both<-cbind(scaff,end)
-	sum(both[,2]!=both[,4])
-	dimnames(both)<-list(1:18395,c("scaff","size","start","stop"))
-	dimnames(scaff.info)<-list(1:37931,c("scaff","strand"))
-	both.strand<-merge(both,scaff.info,by="scaff",sort=FALSE)
-	attach(both.strand)
-	out<-both.strand
-	out[strand=="+","stop"]<-start[strand=="+"]+size[strand=="+"]
-	out[strand=="-","stop"]<-start[strand=="-"]-size[strand=="-"]
-	out[strand=="-",]<-out[strand=="-",c(1,2,4,3,5)]
-	out<-out[,c(1,3,4,2)]
+    	scaff<-read.table("chimp.scaff.txt") #read in scaffold and size
+	scaff.info<-read.table("scaffStrand.txt") #read in scaffold strand info
+	all<-read.table("chimp.all.txt") #read in full .fa header and size
+	long<-as.character(all[,1]) #extract full .fa header
+	longsplit<-matrix(unlist(strsplit(long,",")),nc=4,byrow=TRUE) #split
+	end<-cbind(as.numeric(longsplit[,4]),as.numeric(all[,2])) #end and size
+	both<-cbind(scaff,end) #concatenate scaff size end size
+	sum(both[,2]!=both[,4]) #check sizes agree
+	dimnames(both)<-list(1:18395,c("scaff","size","start","stop")) #name columns of both
+	dimnames(scaff.info)<-list(1:37931,c("scaff","strand")) #name rows and columns of scaff.info
+	both.strand<-merge(both,scaff.info,by="scaff",sort=FALSE) #merge scaff.info and both based on the column scaff
+	attach(both.strand) #attach dataframe
+	out<-both.strand #create data set out
+	out[strand=="+","stop"]<-start[strand=="+"]+size[strand=="+"] #stop for + strands
+	out[strand=="-","stop"]<-start[strand=="-"]-size[strand=="-"] #stop for - strands
+	out[strand=="-",]<-out[strand=="-",c(1,2,4,3,5)] #rearrange columns for - strands so start comes before stop
+	out<-out[,c(1,3,4,2)] #reorder columns: scaff start stop size
+	out[,4]<-paste("HD",1:length(out[,4]),"_",both[,4],sep="") #make name like HDN_size
 	write(t(out),"indels.chimp.new.bed",ncol=4)
         q()
     #back in shell: map to chromosomes
