@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.884 2005/02/03 00:34:33 daryl Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.885 2005/02/03 03:58:36 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -320,6 +320,8 @@ tl.font = font;
 tl.mWidth = mgFontStringWidth(font, "M");
 tl.nWidth = mgFontStringWidth(font, "n");
 tl.fontHeight = mgFontLineHeight(font);
+tl.barbHeight = tl.fontHeight/4;
+tl.barbSpacing = (tl.fontHeight+1)/2;
 tl.leftLabelWidth = 17*tl.nWidth + trackTabWidth;
 tl.picWidth = hgDefaultPixWidth;
 setPicWidth(cartOptionalString(cart, "pix"));
@@ -1303,7 +1305,7 @@ if (!hideLine)
     innerLine(vg, x1, midY, w, color);
     if ((intronGap == 0) && (vis == tvFull || vis == tvPack))
 	{
-	clippedBarbs(vg, x1, midY, w, 2, 5, 
+	clippedBarbs(vg, x1, midY, w, tl.barbHeight, tl.barbSpacing, 
 		 lf->orientation, bColor, FALSE);
 	}
     }
@@ -1353,8 +1355,9 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
                     x1 = round((double)((int)s-winStart)*scale) + xOff;
                     x2 = round((double)((int)e-winStart)*scale) + xOff;
                     w = x2-x1;
-                    clippedBarbs(vg, x1+1, midY, x2-x1-2, 2, 5, lf->orientation,
-                                 MG_WHITE, TRUE);
+                    clippedBarbs(vg, x1+1, midY, x2-x1-2, 
+		    		tl.barbHeight, tl.barbSpacing, lf->orientation,
+                                MG_WHITE, TRUE);
                     }
             }
 	}
@@ -1406,7 +1409,7 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	    w = x2-x1;
 	    qGap = sf->qStart - sf->next->qEnd;
 	    if ((qGap == 0) && (tGap >= intronGap))
-		clippedBarbs(vg, x1, midY, w, 2, 5, 
+		clippedBarbs(vg, x1, midY, w, tl.barbHeight, tl.barbSpacing, 
 			 lf->orientation, bColor, FALSE);
 	    }
 	}
@@ -1426,7 +1429,8 @@ if (start != -1 && !lfs->noLine)
     if (w > 0)
 	{
 	if (vis == tvFull || vis == tvPack) 
-	  clippedBarbs(vg, x1, midY, w, 2, 5, lfs->orientation, bColor, TRUE);
+	  clippedBarbs(vg, x1, midY, w, tl.barbHeight, tl.barbSpacing, 
+	  	lfs->orientation, bColor, TRUE);
 	vgLine(vg, x1, midY, x2, midY, color);
 	}
     }
@@ -2967,7 +2971,8 @@ if (tg->subType == lfWithBarbs)
 	{
 	int midY = y + (heightPer>>1);
 	Color textColor = contrastingColor(vg, color);
-	clippedBarbs(vg, x1, midY, w, 2, 5, dir, textColor, TRUE);
+	clippedBarbs(vg, x1, midY, w, tl.barbHeight, tl.barbSpacing, 	
+		dir, textColor, TRUE);
 	}
     }
 }
@@ -3768,7 +3773,8 @@ if (tg->subType == lfWithBarbs || tg->exonArrows)
 	{
 	int midY = y + (heightPer>>1);
 	Color textColor = contrastingColor(vg, color);
-	clippedBarbs(vg, x1, midY, w, 2, 5, dir, textColor, TRUE);
+	clippedBarbs(vg, x1, midY, w, tl.barbHeight, tl.barbSpacing, 
+		dir, textColor, TRUE);
 	}
     }
 }
@@ -8285,7 +8291,7 @@ innerLine(vg, x1, midY, w, color);
 /*
 if (vis == tvFull || vis == tvPack)
     {
-    clippedBarbs(vg, x1, midY, w, 2, 5, 
+    clippedBarbs(vg, x1, midY, w, tl.barbHeight, tl.barbSpacing, 
 		 lf->orientation, color, FALSE);
     }
     */
@@ -9695,12 +9701,14 @@ if (!hideControls)
     hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
     hButton("hgt.dinkRR", " > ");
     hPrintf("</TD></TR></TABLE>\n");
-    smallBreak();
+    // smallBreak();
 
     /* Display bottom control panel. */
     hButton("hgt.reset", "reset all");
     hPrintf(" ");
     hButton("hgt.hideAll", "hide all");
+
+#ifdef OLD
     if(ideogramAvail)
 	{
 	hPrintf(" Chromosome");
@@ -9714,7 +9722,13 @@ if (!hideControls)
     hPrintf("center ");
     hCheckBox("centerLabels", withCenterLabels);
     hPrintf(" ");
+#endif /* OLD */
+
+    hPrintf(" ");
+    hButton("hgTracksConfigPage", "configure");
+    hPrintf(" ");
     hButton("submit", "refresh");
+
     hPrintf("<BR>\n");
 
     /* Display viewing options for each track. */

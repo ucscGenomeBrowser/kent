@@ -226,6 +226,8 @@ struct trackLayout
     int mWidth;			/* Width of 'M' in font. */
     int nWidth;			/* Width of 'N' in font. */
     int fontHeight;		/* Height of font. */
+    int barbHeight;		/* Height of arrows on introns. */
+    int barbSpacing;		/* Space between arrows on introns. */
     };
 
 extern struct trackLayout tl;

@@ -71,6 +71,7 @@ for (group = groupList; group != NULL; group = group->next)
     hPrintf("<TR>");
     hPrintf("<TH align=LEFT colspan=3 BGCOLOR=#536ED3>");
     hPrintf("<B>&nbsp;%s</B> ", wrapWhiteFont(group->label));
+    hPrintf("&nbsp;&nbsp;&nbsp;");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
 	   "onClick=\"document.mainForm.%s.value='%s';\">", 
 	   configHideAll, "Hide All", configGroupTarget, group->name);
