@@ -42,6 +42,7 @@ if (dots > 0)
         {
 	dotMod = dots;
 	putc('.', stdout);
+	fflush(stdout);
 	}
     }
 }
