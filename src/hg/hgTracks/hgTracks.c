@@ -1105,7 +1105,7 @@ if(lf==NULL) return;
 snprintf( o1, sizeof(o1),"%s.linear.interp", tg->mapName);
 snprintf( o2, sizeof(o2), "%s.anti.alias", tg->mapName);
 snprintf( o3, sizeof(o3),"%s.fill", tg->mapName);
-interpolate = cartUsualString(cart, o1, "Linear Interpolation");
+interpolate = cartUsualString(cart, o1, "Only samples");
 wiggleType = wiggleStringToEnum(interpolate);
 aa = cartUsualString(cart, o2, "on");
 fill = atoi(cartUsualString(cart, o3, "1"));
@@ -7941,13 +7941,17 @@ struct sqlConnection *conn = hAllocConn();
 char *name;
 struct sqlResult *sr;
 char **row;
-char *query = "select tableName from trackDb";
+char *trackDb = hTrackDbName();
+char query[256];
+assert(trackDb);
+snprintf(query, sizeof(query), "select tableName from %s", trackDb);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     assert(row[0]);
     cartSetString(cart, row[0], "hide");
     }
+freez(&trackDb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
