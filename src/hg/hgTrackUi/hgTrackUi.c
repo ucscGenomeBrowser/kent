@@ -92,7 +92,7 @@ printf(" red/blue ");
 void affyUi(struct trackDb *tdb)
 /* put up UI for the affy track from stanford track */
 {
-char *affyMap = cartUsualString(cart, "affy.type", affyEnumToString(0));
+char *affyMap = cartUsualString(cart, "affy.type", affyEnumToString(affyTissue));
 printf("<p><b>Experiment Display: </b> ");
 affyDropDown("affy.type", affyMap);
 }

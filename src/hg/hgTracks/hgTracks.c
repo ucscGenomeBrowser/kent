@@ -5064,7 +5064,7 @@ filter type */
 struct linkedFeaturesSeries *lfsList = NULL, *lfs;
 struct linkedFeatures *lf;
 struct bed *bed = NULL, *bedList= NULL;
-char *affyMap = cartUsualString(cart, "affy.type", affyEnumToString(0));
+char *affyMap = cartUsualString(cart, "affy.type", affyEnumToString(affyTissue));
 enum affyOptEnum affyType = affyStringToEnum(affyMap);
 int i=0;
 bedList = tg->items;
