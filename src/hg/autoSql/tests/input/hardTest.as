@@ -21,4 +21,8 @@ table autoTest
     int[2] xy;  "2d coordinate"
     int valCount; "value count"
     string[valCount] vals; "list of values"
+    double dblVal; "double value"
+    float fltVal; "float value"
+    double[valCount] dblArray; "double array"
+    float[valCount] fltArray; "float array"
     )

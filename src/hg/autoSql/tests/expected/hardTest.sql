@@ -17,6 +17,10 @@ CREATE TABLE autoTest (
     xy longblob not null,	# 2d coordinate
     valCount int not null,	# value count
     vals longblob not null,	# list of values
+    dblVal double not null,	# double value
+    fltVal float not null,	# float value
+    dblArray longblob not null,	# double array
+    fltArray longblob not null,	# float array
               #Indices
     PRIMARY KEY(id)
 );

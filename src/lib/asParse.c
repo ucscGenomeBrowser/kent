@@ -5,11 +5,16 @@
 #include "tokenizer.h"
 #include "asParse.h"
 
-static char const rcsid[] = "$Id: asParse.c,v 1.3 2004/07/14 05:47:51 kent Exp $";
+static char const rcsid[] = "$Id: asParse.c,v 1.4 2004/08/31 00:50:18 markd Exp $";
 
+/* n.b. switched double/float from %f to %g to partially address losing
+ * precision.  Values like 2e-12 were being rounded to 0.0 with %f.  While %g
+ * doesn't match the precision of the database fields, specifying a larger
+ * precision with %g resulted in numbers like 1.9999999999999999597733e-12,
+ *  which might impact load time.  THis issue needs more investigation.*/
 struct asTypeInfo asTypes[] = {
-    {t_double,  "double",  FALSE, FALSE, "double",           "double",        "Double", "Double", "%f"},
-    {t_float,   "float",   FALSE, FALSE, "float",            "float",         "Float",  "Float",  "%f"},
+    {t_double,  "double",  FALSE, FALSE, "double",           "double",        "Double", "Double", "%g"},
+    {t_float,   "float",   FALSE, FALSE, "float",            "float",         "Float",  "Float",  "%g"},
     {t_char,    "char",    FALSE, FALSE, "char",             "char",          "Char",   "Char",   "%c"},
     {t_int,     "int",     FALSE, FALSE, "int",              "int",           "Signed", "Signed", "%d"},
     {t_uint,    "uint",    TRUE,  FALSE, "int unsigned",     "unsigned",      "Unsigned","Unsigned", "%u"},

@@ -98,6 +98,18 @@ int sizeOne;
 sqlStringDynamicArray(row[11], &ret->vals, &sizeOne);
 assert(sizeOne == ret->valCount);
 }
+ret->dblVal = atof(row[12]);
+ret->fltVal = atof(row[13]);
+{
+int sizeOne;
+sqlDoubleDynamicArray(row[14], &ret->dblArray, &sizeOne);
+assert(sizeOne == ret->valCount);
+}
+{
+int sizeOne;
+sqlFloatDynamicArray(row[15], &ret->fltArray, &sizeOne);
+assert(sizeOne == ret->valCount);
+}
 return ret;
 }
 
@@ -107,7 +119,7 @@ struct autoTest *autoTestLoadAll(char *fileName)
 {
 struct autoTest *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[12];
+char *row[16];
 
 while (lineFileRow(lf, row))
     {
@@ -125,7 +137,7 @@ struct autoTest *autoTestLoadAllByChar(char *fileName, char chopper)
 {
 struct autoTest *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[12];
+char *row[16];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -209,6 +221,30 @@ for (i=0; i<ret->valCount; ++i)
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
 }
+ret->dblVal = sqlDoubleComma(&s);
+ret->fltVal = sqlFloatComma(&s);
+{
+int i;
+s = sqlEatChar(s, '{');
+AllocArray(ret->dblArray, ret->valCount);
+for (i=0; i<ret->valCount; ++i)
+    {
+    ret->dblArray[i] = sqlDoubleComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+}
+{
+int i;
+s = sqlEatChar(s, '{');
+AllocArray(ret->fltArray, ret->valCount);
+for (i=0; i<ret->valCount; ++i)
+    {
+    ret->fltArray[i] = sqlFloatComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+}
 *pS = s;
 return ret;
 }
@@ -231,6 +267,8 @@ freeMem(el->difs);
 if (el->vals != NULL)
     freeMem(el->vals[0]);
 freeMem(el->vals);
+freeMem(el->dblArray);
+freeMem(el->fltArray);
 freez(pEl);
 }
 
@@ -324,6 +362,32 @@ for (i=0; i<el->valCount; ++i)
     if (sep == ',') fputc('"',f);
     fprintf(f, "%s", el->vals[i]);
     if (sep == ',') fputc('"',f);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+}
+fputc(sep,f);
+fprintf(f, "%g", el->dblVal);
+fputc(sep,f);
+fprintf(f, "%g", el->fltVal);
+fputc(sep,f);
+{
+int i;
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->valCount; ++i)
+    {
+    fprintf(f, "%g", el->dblArray[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+}
+fputc(sep,f);
+{
+int i;
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->valCount; ++i)
+    {
+    fprintf(f, "%g", el->fltArray[i]);
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);

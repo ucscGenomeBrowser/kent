@@ -37,7 +37,7 @@ void pointOutput(struct point *el, FILE *f, char sep, char lastSep);
 #define pointCommaOut(el,f) pointOutput(el,f,',',',');
 /* Print out point as a comma separated list including final comma. */
 
-#define AUTOTEST_NUM_COLS 12
+#define AUTOTEST_NUM_COLS 16
 
 struct autoTest
 /* Just a test table */
@@ -55,6 +55,10 @@ struct autoTest
     int xy[2];	/* 2d coordinate */
     int valCount;	/* value count */
     char **vals;	/* list of values */
+    double dblVal;	/* double value */
+    float fltVal;	/* float value */
+    double *dblArray;	/* double array */
+    float *fltArray;	/* float array */
     };
 
 struct autoTest *autoTestLoad(char **row);
