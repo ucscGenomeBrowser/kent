@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.58.4.1 2005/01/06 02:49:13 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.58.4.2 2005/01/06 08:10:36 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1376,7 +1376,7 @@ if (getcwd(curDir, sizeof(curDir)) == NULL)
 dyStringPrintf(dy, "setMaxNode %s %s/para.results %d", getUser(), curDir, maxNode);
 result = hubSingleLineQuery(dy->string);
 dyStringFree(&dy);
-if (result == NULL || sameString(result, "0"))
+if (result == NULL || sameString(result, "-2"))
     errAbort("Couldn't set maxNode for %s\n", curDir);
 freez(&result);
 verbose(1, "Told hub to set maxNode %d\n",maxNode);

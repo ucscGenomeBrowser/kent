@@ -67,7 +67,7 @@
 #include "machSpec.h"
 #include "log.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.79.24.3 2005/01/06 07:59:01 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.79.24.4 2005/01/06 08:12:27 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1139,8 +1139,8 @@ int setMaxNode(char *userName, char *dir, int maxNode)
 {
 struct user *user = findUser(userName);
 struct batch *batch = findBatch(user, dir, TRUE);
-if (user == NULL) return 0;
-if (batch == NULL) return 0;
+if (user == NULL) return -2;
+if (batch == NULL) return -2;
 batch->maxNode = maxNode;
 updateUserMaxNode(user);
 if (maxNode>=-1)
@@ -1156,18 +1156,18 @@ char *userName, *dir;
 int maxNode;
 
 if ((userName = nextWord(&line)) == NULL)
-    return 0;
+    return -2;
 if ((dir = nextWord(&line)) == NULL)
-    return 0;
+    return -2;
 if ((maxNode = atoi(nextWord(&line))) < 1)
-    return 0;
+    return -2;
 return setMaxNode(userName, dir, maxNode);
 }
 
 
 void setMaxNodeAcknowledge(char *line, struct paraMessage *pm)
 /* Set batch maxNode.  Line format is <user> <dir> <maxNode>
-* Returns new maxNode or 0 if a problem.  Send new maxNode back to client. */
+* Returns new maxNode or -2 if a problem.  Send new maxNode back to client. */
 {
 int id = setMaxNodeFromMessage(line);
 pmClear(pm);
