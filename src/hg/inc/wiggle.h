@@ -79,6 +79,11 @@ void wiggleOutput(struct wiggle *el, FILE *f, char sep, char lastSep);
 
 #include "hdb.h"
 
+/*	in hgTracks/wigTrack.c	*/
+void wigSetCart(struct track *track, char *dataID, void *dataValue);
+    /*	set one of the variables in the wigCart	*/
+
+/*	in lib/wiggleCart.c	*/
 extern void wigFetchMinMaxY(struct trackDb *tdb, double *min,
     double *max, double *tDbMin, double *tDbMax, int wordCount, char *words[]);
 /* return min,max Y ranges from trackDb or cart, in lib/wiggleCart.c */
