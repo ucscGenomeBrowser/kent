@@ -57,6 +57,8 @@ for (el = list; el != NULL; el = el->next)
     {
     if (!revOk && el->strand != '+')
         errAbort("Can't lift from minus strand contigs (like %s) on this file type", el->oldName);
+    if (hashLookup(hash, el->oldName))
+        errAbort("%s appears twice in .lft file\n", el->oldName);
     hashAdd(hash, el->oldName, el);
     }
 return hash;
