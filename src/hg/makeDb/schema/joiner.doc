@@ -104,6 +104,12 @@ Field Line Attributes:
   minCheck - used to allow some identifiers not to be in primary key.
      value: A number between 0.0 and 1.0 that indicates the minimum ratio of
             identifiers in the field that are in the primary key.
+  full - used to show that every key in the primary key should also occur in 
+         this field
+     value: n/a
+  unique - used to show that every key in the primary key occurs at most once
+           in this field
+     value: n/a
   splitPrefix - used to lump together tables that share a common prefix
                 into a single logical table.
      value: Prefix string that may include SQL wildcard characters.  A
