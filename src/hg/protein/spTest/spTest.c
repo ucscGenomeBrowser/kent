@@ -6,7 +6,7 @@
 #include "dystring.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: spTest.c,v 1.2 2003/10/01 04:44:54 kent Exp $";
+static char const rcsid[] = "$Id: spTest.c,v 1.3 2003/10/01 05:29:26 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -32,6 +32,27 @@ static struct optionSpec options[] = {
  * free'd when you are done. */
 
 typedef char SpAcc[9];	/* Enough space for accession and 0 terminator. */
+
+struct spFeature
+/* A swissProt feature. */
+    {
+    struct spFeature *next;
+    int start;	/* Start coordinate (zero-based) */
+    int end;	/* End coordinate (non-inclusive) */
+    int featureClass; /* ID of featureClass */
+    int featureType;  /* ID of featureType */
+    };
+
+struct spCitation
+/* A SwissProt citation of a reference.  Generally
+ * you'll need to do more processing on this. */
+    {
+    struct spCitation *next;
+    int id;	/* Database (not SwissProt) ID */
+    SpAcc acc;	/* SwissProt accession. */
+    int reference;	/* ID in reference table. */
+    int rp;	/* Id in rp table. */
+    };
 
 boolean spIsPrimaryAcc(struct sqlConnection *conn, char *acc)
 /* Return TRUE if this is a primary accession in database. */
@@ -386,16 +407,6 @@ safef(query, sizeof(query),
 return sqlQuickString(conn, query);
 }
 
-struct spFeature
-/* A swissProt feature. */
-    {
-    struct spFeature *next;
-    int start;	/* Start coordinate (zero-based) */
-    int end;	/* End coordinate (non-inclusive) */
-    int featureClass; /* ID of featureClass */
-    int featureType;  /* ID of featureType */
-    };
-
 struct spFeature *spFeatures(struct sqlConnection *conn, char *acc,
 	int classId, 	/* Feature class ID, 0 for all */
 	int typeId)	/* Feature type ID, 0 for all */
@@ -476,6 +487,77 @@ safef(query, sizeof(query),
 return sqlNeedQuickNum(conn, query);
 }
 
+struct spCitation *spCitations(struct sqlConnection *conn, char *acc)
+/* Get list of citations to references associated with this
+ * accession.  You can slFreeList this when done. */
+{
+struct sqlResult *sr;
+char query[256], **row;
+struct spCitation *list = NULL, *el;
+safef(query, sizeof(query),
+    "select id,acc,reference,rp from citation where acc='%s'", acc);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    AllocVar(el);
+    el->id = sqlUnsigned(row[0]);
+    memcpy(el->acc, row[1], sizeof(el->acc));
+    el->reference = sqlUnsigned(row[2]);
+    el->rp = sqlUnsigned(row[3]);
+    slAddHead(&list, el);
+    }
+sqlFreeResult(&sr);
+slReverse(&list);
+return list;
+}
+
+char *spRefTitle(struct sqlConnection *conn, int refId)
+/* Get title of reference. This can be NULL legitimately. */
+{
+char query[256];
+safef(query, sizeof(query), 
+	"select title from reference where id=%d", refId);
+return sqlQuickString(conn, query);
+}
+
+struct slName *spRefAuthors(struct sqlConnection *conn, int refId)
+/* Get list of authors associated with reference. */
+{
+char query[256];
+safef(query, sizeof(query),
+    "select author.val from referenceAuthors,author "
+    "where referenceAuthors.reference = %d "
+    "and referenceAuthors.author = author.id"
+    , refId);
+return sqlQuickList(conn, query);
+}
+
+char *spRefCite(struct sqlConnection *conn, int refId)
+/* Get journal/page/etc of reference. */
+{
+char query[256];
+safef(query, sizeof(query), 
+	"select cite from reference where id=%d", refId);
+return sqlNeedQuickString(conn, query);
+}
+
+char *spRefPubMed(struct sqlConnection *conn, int refId)
+/* Get PubMed id.  May be NULL legitimately. */
+{
+char query[256];
+safef(query, sizeof(query), 
+	"select pubMed from reference where id=%d", refId);
+return sqlQuickString(conn, query);
+}
+
+struct slName *spRefToAccs(struct sqlConnection *conn, int refId)
+/* Get list of accessions associated with reference. */
+{
+char query[256];
+safef(query, sizeof(query),
+    "select acc from citation where reference = %d", refId);
+return sqlQuickList(conn, query);
+}
 
 
 void printPartialList(char *title1, char *title2, 
@@ -511,9 +593,10 @@ char *acc, *id, *binomial, *common;
 struct slName *geneList, *gene, *accList, *n, *list;
 struct slName *nameList, *name, *keyList, *key, *typeList, *type;
 struct spFeature *featList, *feat;
+struct spCitation *citeList, *cite;
 boolean ok;
 int taxon;
-int classId = 0, typeId = 0;
+int classId = 0, typeId = 0, refId = 0;
 
 printf("input: %s\n", someAcc);
 acc = spLookupPrimaryAcc(conn, someAcc);
@@ -653,6 +736,27 @@ if (classId != 0 && typeId != 0)
 	spFeatureTypeId(conn, spFeatureTypeName(conn, typeId)));
     }
 
+citeList = spCitations(conn, acc);
+for (cite = citeList; cite != NULL; cite = cite->next)
+    {
+    refId = cite->reference;
+    printf("title: %s\n", spRefTitle(conn, refId));
+    printf("authors:");
+    list = spRefAuthors(conn, refId);
+    for (n = list; n != NULL; n = n->next)
+        printf(" %s, ", n->name);
+    printf("\n");
+    slFreeList(&list);
+    printf("location: %s\n", spRefCite(conn, refId));
+    printf("pubMed: %s\n", spRefPubMed(conn, refId));
+    }
+if (refId != 0)
+    {
+    printf("other accs associated with last reference:\n\t");
+    list = spRefToAccs(conn, refId);
+    printPartialList("", "", list, 6);
+    slFreeList(&list);
+    }
 sqlDisconnect(&conn);
 }
 
