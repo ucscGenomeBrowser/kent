@@ -9,7 +9,7 @@
 #include "options.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: faSplit.c,v 1.15 2004/02/04 16:41:43 markd Exp $";
+static char const rcsid[] = "$Id: faSplit.c,v 1.16 2004/02/12 06:57:29 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -49,7 +49,7 @@ errAbort(
   "    -lift=file.lft Put info on how to reconstruct sequence from\n"
   "                   pieces in file.lft.  Only used with size and gap.\n"
   "    -minGapSize=X Consider a block of Ns to be a gap if block size >= X.\n"
-  "                  Only used with gap."
+  "                  Only used with gap.\n"
   "    -outDirDepth=n Create n-levels of output directory under outRoot.\n"
   "                   This helps prevent NFS problems with a large number of\n"
   "                   file in a directory.  Using -outDirDepth=3 would\n"
