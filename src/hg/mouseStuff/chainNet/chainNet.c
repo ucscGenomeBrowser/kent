@@ -8,6 +8,7 @@
 #include "chainBlock.h"
 
 int minSpace = 25;	/* Minimum gap size to fill. */
+int minFill;		/* Minimum fill to record. */
 int minScore = 2000;	/* Minimum chain score to look at. */
 
 boolean uglier = FALSE;
@@ -21,6 +22,7 @@ errAbort(
   "   chainNet in.chain target.sizes query.sizes target.net query.net\n"
   "options:\n"
   "   -minSpace=N - minimum gap size to fill, default %d\n"
+  "   -minFill=N  - default half of minSpace\n"
   "   -minScore=N - minimum chain score to consider, default %d\n",
   minSpace, minScore);
 }
@@ -202,7 +204,7 @@ for (b = startBlock; b != NULL; b = b->next)
     if (start > s) start = s;
     if (end < e) end = e;
     }
-if (start > end)
+if (end - start < minFill)
     return FALSE;
 *retStart = start;
 *retEnd = end;
@@ -619,6 +621,7 @@ optionHash(&argc, argv);
 if (argc != 6)
     usage();
 minSpace = optionInt("minSpace", minSpace);
+minFill = optionInt("minFill", minSpace/2);
 minScore = optionInt("minScore", minScore);
 chainNet(argv[1], argv[2], argv[3], argv[4], argv[5]);
 return 0;
