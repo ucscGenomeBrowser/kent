@@ -655,6 +655,7 @@ int missing = 0;       /* unable to find rsId in dbSnpRs/affy */
 int goodrc = 0;        /* matches after reverse-complement */
 int assemblyDash = 0;  /* assembly context is just a single dash - (complex cases) */
 int gapNib = 0;        /* nib returns n's, we are in the gap */
+int strandMismatch = 0;   /* reported strand differs from what we found */
 
 int totalMatch = 0;
 int totalMismatch = 0;
@@ -662,6 +663,7 @@ int totalMissing = 0;
 int totalGoodrc = 0;
 int totalAssemblyDash = 0;
 int totalGapNib = 0;
+int totalStrandMismatch = 0; 
 
 boolean affy = FALSE;
 
@@ -797,17 +799,20 @@ for (cn = cns; cn != NULL; cn = cn->next)
 	if (!sameWord(chr,cn->name))
 	    continue;
 
-    // currently there are no flanks for chrN_random
-    if (endsWith(cn->name,"_random"))
+    uglyf("reading flanks %s \n",cn->name);
+    
+    flanks = readFlank(cn->name);
+    if (flanks == NULL)
+	{
+	printf("readFlank returned NULL for chrom %s.\n",cn->name);
 	continue;
-    // currently there are no flanks for 
-    if (endsWith(cn->name,"_hla_hap1"))
-	continue;
-    if (endsWith(cn->name,"_hla_hap2"))
-	continue;
-    // currently no flanks for chrM 
-    if (sameWord(cn->name,"chrM"))
-	continue;
+	}
+    printf("readFlank done for chrom %s \n",cn->name);
+    
+    printf("slCount(flanks)=%d for chrom %s \n",slCount(flanks),cn->name);
+
+    slSort(&flanks, slFlankCmp);
+    printf("slSort done for chrom %s \n",cn->name);
 
     uglyf("beginning chrom %s \n",cn->name);
    
@@ -821,19 +826,6 @@ for (cn = cns; cn != NULL; cn = cn->next)
     snps = readSnp(cn->name);
     printf("read %s.snp done for chrom=%s \n",db,cn->name);
         
-    flanks = readFlank(cn->name);
-    printf("readFlank done for chrom %s \n",cn->name);
-    if (flanks == NULL)
-	{
-	errAbort("readFlank returned NULL for chrom %s.\n",cn->name);
-	}
-    
-    printf("slCount(flanks)=%d for chrom %s \n",slCount(flanks),cn->name);
-
-    slSort(&flanks, slFlankCmp);
-    printf("slSort done for chrom %s \n",cn->name);
-
-    
     flank   = flanks; 
     //dbSnp   = dbSnps; 
     affy10  = affy10s;
@@ -969,8 +961,6 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		    flankSize = lf+1+rf;
 		    seq = needMem(flankSize+1);
 		    safef(seq,flankSize+1,"%s-%s",flank->leftFlank,flank->rightFlank);
-		    //debug
-		    //uglyf("flanks together=%s \n",seq);
 		    break;
 		case 3:
 		    seq = affy10->sequenceA; break; 
@@ -998,9 +988,6 @@ for (cn = cns; cn != NULL; cn = cn->next)
     		rf = rightFlank(origSeq);
 		}
 	    
-	    //debug
-	    //uglyf("flanks lf=%d, rf=%d \n",lf,rf);
-	    
 	    seq = cloneString(origSeq);
 	    /* remove dashes indicating insert to simplify and correct processing of nib data */
 	    stripDashes(seq);     
@@ -1008,9 +995,6 @@ for (cn = cns; cn != NULL; cn = cn->next)
             //oldway: ls = strlen(seq);      /* used to be: lengthOneDash(seq); */
 	    ls = lf + rf + (snp->chromEnd - snp->chromStart);
 	    
-	    //debug
-	    //uglyf("about to call checkandFetchNib origSeq=%s lf=%d, rf=%d ls=%d \n", origSeq, lf, rf, ls);
-	
 	    nibDna = checkAndFetchNib(chromSeq, snp, lf, ls);
 	    if (nibDna==NULL) 
 		{
@@ -1024,9 +1008,6 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		continue;
 		}
 	    
-	    //debug
-	    //uglyf("got past checkandFetchNib call: \n nibDna=%s  \n",nibDna);
-	
             if (allNs(nibDna))
 		{
 		++gapNib;
@@ -1047,9 +1028,6 @@ for (cn = cns; cn != NULL; cn = cn->next)
 	    if (m > 1)
 		{
 	    
-		//debug
-    		//uglyf("rc: about to call checkandFetchNib \n");
-	
 		rc = checkAndFetchNib(chromSeq, snp, rf, ls);
 		if (rc==NULL) 
 		    {
@@ -1063,9 +1041,6 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		    continue;
 		    }
 	    
-		//debug
-		//uglyf("rc: got past checkandFetchNib call: \n rc Dna=%s  \n",rc);
-	
 		reverseComplement(rc,strlen(rc));
 		int n = misses(seq, rc);
 		if (n < m) 
@@ -1119,6 +1094,11 @@ for (cn = cns; cn != NULL; cn = cn->next)
     		    ++match;
 		    if (strand < 1)
       			++goodrc;
+		    if (((strand == 1) && (!sameString(snp->strand,"+")))
+       		    || ((strand == -1) && (!sameString(snp->strand,"-"))))
+			{
+    			strandMismatch++;   /* reported strand differs from what we found */
+			}
 		    }
 		else
 		    {
@@ -1199,6 +1179,7 @@ for (cn = cns; cn != NULL; cn = cn->next)
     printf("          mismatches: %u \n",mismatch);
     printf(" missing from flanks: %u \n",missing);
     printf("   rev compl matches: %u \n",goodrc);
+    printf("    not rptd strand : %u \n",strandMismatch);
     printf("        assembly = -: %u \n",assemblyDash);
     printf("         nib in gap : %u \n",gapNib);
      
@@ -1208,7 +1189,8 @@ for (cn = cns; cn != NULL; cn = cn->next)
     totalMismatch += mismatch;
     totalMissing  += missing;
     totalGoodrc   += goodrc;
-    totalAssemblyDash += assemblyDash;
+    totalStrandMismatch  += strandMismatch;
+    totalAssemblyDash    += assemblyDash;
     totalGapNib   += gapNib;
     
     match        = 0;
@@ -1243,6 +1225,7 @@ printf("             matches: %u \n ",totalMatch);
 printf("          mismatches: %u \n",totalMismatch);
 printf(" missing from flanks: %u \n",totalMissing);
 printf("   rev compl matches: %u \n",totalGoodrc);
+printf("    not rptd strand : %u \n",totalStrandMismatch);
 printf("        assembly = -: %u \n",totalAssemblyDash);
 printf("         nib in gap : %u \n",totalGapNib);
 
