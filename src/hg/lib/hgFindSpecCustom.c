@@ -10,11 +10,14 @@
 #include "hui.h"
 #include "ra.h"
 #include "hash.h"
+#include "obscure.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.1 2004/03/31 07:29:54 angie Exp $";
+static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.2 2004/04/03 02:36:12 angie Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
+
+#define REGEX_OPTIONS (REG_NOSUB | REG_EXTENDED | REG_ICASE)
 
 boolean matchRegex(char *name, char *exp)
 /* Return TRUE if name matches the regular expression pattern
@@ -24,11 +27,221 @@ regex_t compiledExp;
 char *errStr;
 int errNum;
 
-if (errNum = regcomp(&compiledExp, exp, REG_NOSUB | REG_EXTENDED | REG_ICASE))
+if (errNum = regcomp(&compiledExp, exp, REGEX_OPTIONS))
     errAbort("Regular expression compilation error %d for expression \"%s\"",
 	     errNum, exp);
 
 return(regexec(&compiledExp, name, 0, NULL, 0) == 0);
+}
+
+static void anchorTermRegex(struct hgFindSpec *hfs)
+/* termRegex must match the whole term.  If it doesn't already start with 
+ * ^ and end in $, add those (no need to make the trackDb.ra file even 
+ * harder to read with those extra magic chars :). */
+{
+if (isNotEmpty(hfs->termRegex))
+    {
+    char *orig = hfs->termRegex;
+    char first = orig[0];
+    char last  = orig[strlen(orig)-1];
+    char buf[512];
+    safef(buf, sizeof(buf), "%s%s%s",
+	  (first == '^') ? "" : "^",
+	  orig,
+	  (last  == '$') ? "" : "$");
+    freeMem(hfs->termRegex);
+    hfs->termRegex = cloneString(buf);
+    }
+else if (hfs->termRegex == NULL)
+    hfs->termRegex = "";
+}
+
+
+static void checkTermRegex(struct hgFindSpec *hfs)
+/* Make sure termRegex compiles OK. */
+{
+if (isNotEmpty(hfs->termRegex))
+    {
+    regex_t compiledExp;
+    char *errStr;
+    int errNum;
+    
+    if (errNum = regcomp(&compiledExp, hfs->termRegex, REGEX_OPTIONS))
+	errAbort("hfsPolish: search %s: Regular expression compilation error %d for termRegex %s",
+		 hfs->searchName, errNum, hfs->termRegex);
+    }
+}
+
+static void escapeTermRegex(struct hgFindSpec *hfs)
+/* Escape any '\' characters in termRegex for sql storage. */
+{
+if (isNotEmpty(hfs->termRegex))
+    {
+    char *orig = hfs->termRegex;
+    hfs->termRegex = makeEscapedString(orig, '\\');
+    freeMem(orig);
+    }
+}
+
+
+static char *genePredDefaultFormat =
+	"select chrom,txStart,txEnd,name from %s where name like ";
+static char *bedDefaultFormat =
+	"select chrom,chromStart,chromEnd,name from %s where name like ";
+static char *pslDefaultFormat =
+	"select tName,tStart,tEnd,qName from %s where qName like ";
+static char *exactTermFormat = "'%s'";
+static char *prefixTermFormat = "'%s%%'";
+static char *fuzzyTermFormat = "'%%%s%%'";
+
+static char *getQueryFormat(struct hgFindSpec *hfs)
+/* Fill in query format from searchType if necessary. */
+{
+char *queryFormat = hfs->query;
+char buf[256];
+
+if (isEmpty(queryFormat))
+    {
+    char *baseFmt = "";
+    char *termFmt = "";
+    buf[0] = 0;
+    if (sameString(hfs->searchType, "genePred"))
+	baseFmt = genePredDefaultFormat;
+    else if (sameString(hfs->searchType, "bed"))
+	baseFmt = bedDefaultFormat;
+    else if (sameString(hfs->searchType, "psl"))
+	baseFmt = pslDefaultFormat;
+    if (isNotEmpty(baseFmt))
+	{
+	if (isNotEmpty(hfs->xrefQuery))
+	    termFmt = exactTermFormat;
+	else if (sameString(hfs->searchMethod, "fuzzy"))
+	    termFmt = fuzzyTermFormat;
+	else if (sameString(hfs->searchMethod, "prefix"))
+	    termFmt = prefixTermFormat;
+	else
+	    termFmt = exactTermFormat;
+	}
+    safef(buf, sizeof(buf), "%s%s", baseFmt, termFmt);
+    queryFormat = cloneString(buf);
+    }
+return(queryFormat);
+}
+
+static char *queryFormatRegex =
+    "select [[:alnum:]]+, ?[[:alnum:]]+, ?[[:alnum:]]+, ?[[:alnum:]]+ from %s where [[:alnum:]]+ (like|=) ['\"]?[%s]+['\"]?";
+static char *exactTermFormatRegex = "['\"]?%s[^%]*['\"]?$";
+
+static void checkQueryFormat(struct hgFindSpec *hfs)
+/* Make sure query looks right and jives with searchMethod. */
+{
+if (isNotEmpty(hfs->query))
+    {
+    if (! matchRegex(hfs->query, queryFormatRegex))
+	errAbort("hfsPolish: search %s: query needs to be of the format \"select field1,field2,field3,field4 from %%s where field4 like '%%s'\" (for prefix, '%%s%%%%'; for exact, '%%%%%%s%%%%'), but instead is this:\n%s",
+		 hfs->searchName, hfs->query);
+    if (isNotEmpty(hfs->xrefQuery))
+	{
+	if (!matchRegex(hfs->query, exactTermFormatRegex))
+	    errAbort("hfsPolish: search %s: there is an xrefQuery so query needs to end with %s (exact match to xref results).",
+		     hfs->searchName, exactTermFormat);
+	}
+    else
+	{
+	if (sameString(hfs->searchMethod, "fuzzy") &&
+	    !endsWith(hfs->query, fuzzyTermFormat))
+	    errAbort("hfsPolish: search %s: searchMethod is fuzzy so query needs to end with %s.",
+		     hfs->searchName, fuzzyTermFormat);
+	else if (sameString(hfs->searchMethod, "prefix") &&
+		 !endsWith(hfs->query, prefixTermFormat))
+	    errAbort("hfsPolish: search %s: searchMethod is prefix so query needs to end with %s.",
+		     hfs->searchName, prefixTermFormat);
+	
+	else if (sameString(hfs->searchMethod, "exact") &&
+		 !matchRegex(hfs->query, exactTermFormatRegex))
+	    errAbort("hfsPolish: search %s: searchMethod is exact so query needs to end with %s.",
+		     hfs->searchName, exactTermFormat);
+	}
+    }
+}
+
+static char *xrefQueryFormatRegex =
+    "select [[:alnum:]]+, ?[[:alnum:]]+ from %s where [[:alnum:]]+ (like|=) ['\"]?[%s]+['\"]?";
+
+static void checkXrefQueryFormat(struct hgFindSpec *hfs)
+/* Make sure xrefQuery looks right and jives with searchMethod. */
+{
+if (isNotEmpty(hfs->xrefQuery))
+    {
+    if (! matchRegex(hfs->xrefQuery, xrefQueryFormatRegex))
+	errAbort("hfsPolish: search %s: xrefQuery needs to be of the format \"select field1,field2 from %%s where field2 like '%%s'\" (for prefix, '%%s%%%%'; for exact, '%%%%%%s%%%%'), but instead is this:\n%s",
+		 hfs->searchName, hfs->xrefQuery);
+    if (sameString(hfs->searchMethod, "fuzzy") &&
+	!endsWith(hfs->xrefQuery, fuzzyTermFormat))
+	errAbort("hfsPolish: search %s: searchMethod is fuzzy so xrefQuery needs to end with %s.",
+		 hfs->searchName, fuzzyTermFormat);
+    else if (sameString(hfs->searchMethod, "prefix") &&
+	     !endsWith(hfs->xrefQuery, prefixTermFormat))
+	errAbort("hfsPolish: search %s: searchMethod is prefix so xrefQuery needs to end with %s.",
+		 hfs->searchName, prefixTermFormat);
+	
+    else if (sameString(hfs->searchMethod, "exact") &&
+	     !matchRegex(hfs->xrefQuery, exactTermFormatRegex))
+	errAbort("hfsPolish: search %s: searchMethod is exact so xrefQuery needs to end with %s.",
+		 hfs->searchName, exactTermFormat);
+    }
+}
+
+
+static void hgFindSpecPolish(struct hgFindSpec *hfs)
+/* Fill in missing values with defaults, check for consistency. */
+{
+/* At least one of {searchName, searchTable} must be defined. */
+if ((hfs->searchName == NULL) && (hfs->searchTable == NULL))
+    errAbort("hfsPolish: searchName or searchTable must be defined.\n");
+if (hfs->searchName == NULL)
+    hfs->searchName = cloneString(hfs->searchTable);
+if (hfs->searchTable == NULL)
+    hfs->searchTable = cloneString(hfs->searchName);
+/* If searchType is not defined, query must be defined. */
+if (hfs->searchType == NULL && hfs->query == NULL)
+    errAbort("hfsPolish: search %s: if searchType is not defined, then query must be defined.\n",
+	     hfs->searchName);
+/* If one of {xrefTable,xrefQuery} is defined, both must be. */
+if ((hfs->xrefTable == NULL) ^ (hfs->xrefQuery == NULL))
+    errAbort("hfsPolish: search %s: can't define xrefTable without xrefQuery or vice versa.\n",
+	     hfs->searchName);
+if (hfs->searchMethod == NULL)
+    hfs->searchMethod = cloneString("exact");
+if (hfs->searchType == NULL)
+    hfs->searchType = "";
+anchorTermRegex(hfs);
+checkTermRegex(hfs);
+escapeTermRegex(hfs);
+if (hfs->query == NULL)
+    hfs->query = getQueryFormat(hfs);
+checkQueryFormat(hfs);
+checkXrefQueryFormat(hfs);
+if (hfs->xrefTable == NULL)
+    hfs->xrefTable = "";
+if (hfs->xrefQuery == NULL)
+    hfs->xrefQuery = "";
+if (hfs->searchPriority == 0.0)
+    hfs->searchPriority = 1000.0;
+if (hfs->searchDescription == NULL)
+    {
+    char buf[512];
+    struct sqlConnection *conn = hAllocConn();
+    struct trackDb *tdb = hMaybeTrackInfo(conn, hfs->searchTable);
+    hFreeConn(&conn);
+    if (tdb != NULL)
+	safef(buf, sizeof(buf), "%s (%s)", tdb->longLabel, hfs->searchTable);
+    else
+	safef(buf, sizeof(buf), "%s", hfs->searchTable);
+    hfs->searchDescription = cloneString(buf);
+    }
+if (hfs->searchSettings == NULL)
+    hfs->searchSettings = cloneString("");
 }
 
 int hgFindSpecCmp(const void *va, const void *vb)
@@ -139,186 +352,6 @@ slReverse(&hfsList);
 return hfsList;
 }
 
-
-static void anchorTermRegex(struct hgFindSpec *hfs)
-/* termRegex must match the whole term.  If it doesn't already start with 
- * ^ and end in $, add those (no need to make the trackDb.ra file even 
- * harder to read with those extra magic chars :). */
-{
-if (isNotEmpty(hfs->termRegex))
-    {
-    char *orig = hfs->termRegex;
-    char first = orig[0];
-    char last  = orig[strlen(orig)-1];
-    char buf[512];
-    safef(buf, sizeof(buf), "%s%s%s",
-	  (first == '^') ? "" : "^",
-	  orig,
-	  (last  == '$') ? "" : "$");
-    freeMem(hfs->termRegex);
-    hfs->termRegex = cloneString(buf);
-    }
-else if (hfs->termRegex == NULL)
-    hfs->termRegex = "";
-}
-
-static char *genePredDefaultFormat =
-	"select chrom,txStart,txEnd,name from %s where name like ";
-static char *bedDefaultFormat =
-	"select chrom,chromStart,chromEnd,name from %s where name like ";
-static char *pslDefaultFormat =
-	"select tName,tStart,tEnd,qName from %s where qName like ";
-static char *exactTermFormat = "'%s'";
-static char *prefixTermFormat = "'%s%%'";
-static char *fuzzyTermFormat = "'%%%s%%'";
-
-static char *getQueryFormat(struct hgFindSpec *hfs)
-/* Fill in query format from searchType if necessary. */
-{
-char *queryFormat = hfs->query;
-char buf[256];
-
-if (isEmpty(queryFormat))
-    {
-    char *baseFmt = "";
-    char *termFmt = "";
-    buf[0] = 0;
-    if (sameString(hfs->searchType, "genePred"))
-	baseFmt = genePredDefaultFormat;
-    else if (sameString(hfs->searchType, "bed"))
-	baseFmt = bedDefaultFormat;
-    else if (sameString(hfs->searchType, "psl"))
-	baseFmt = pslDefaultFormat;
-    if (isNotEmpty(baseFmt))
-	{
-	if (isNotEmpty(hfs->xrefQuery))
-	    termFmt = exactTermFormat;
-	else if (sameString(hfs->searchMethod, "fuzzy"))
-	    termFmt = fuzzyTermFormat;
-	else if (sameString(hfs->searchMethod, "prefix"))
-	    termFmt = prefixTermFormat;
-	else
-	    termFmt = exactTermFormat;
-	}
-    safef(buf, sizeof(buf), "%s%s", baseFmt, termFmt);
-    queryFormat = cloneString(buf);
-    }
-return(queryFormat);
-}
-
-static char *queryFormatRegex =
-    "select [[:alnum:]]+,[[:alnum:]]+,[[:alnum:]]+,[[:alnum:]]+ from %s where [[:alnum:]]+ (like|=) ['\"]?[%s]+['\"]?";
-static char *exactTermFormatRegex = "['\"]?%s[^%]*['\"]?$";
-
-static void checkQueryFormat(struct hgFindSpec *hfs)
-/* Make sure query looks right and jives with searchMethod. */
-{
-if (isNotEmpty(hfs->query))
-    {
-    if (! matchRegex(hfs->query, queryFormatRegex))
-	errAbort("hfsPolish: search %s: query needs to be of the format \"select field1,field2,field3,field4 from %%s where field4 like '%%s'\" (for prefix, '%%s%%%%'; for exact, '%%%%%%s%%%%'), but instead is this:\n%s",
-		 hfs->searchName, hfs->query);
-    if (isNotEmpty(hfs->xrefQuery))
-	{
-	if (!matchRegex(hfs->query, exactTermFormatRegex))
-	    errAbort("hfsPolish: search %s: there is an xrefQuery so query needs to end with %s (exact match to xref results).",
-		     hfs->searchName, exactTermFormat);
-	}
-    else
-	{
-	if (sameString(hfs->searchMethod, "fuzzy") &&
-	    !endsWith(hfs->query, fuzzyTermFormat))
-	    errAbort("hfsPolish: search %s: searchMethod is fuzzy so query needs to end with %s.",
-		     hfs->searchName, fuzzyTermFormat);
-	else if (sameString(hfs->searchMethod, "prefix") &&
-		 !endsWith(hfs->query, prefixTermFormat))
-	    errAbort("hfsPolish: search %s: searchMethod is prefix so query needs to end with %s.",
-		     hfs->searchName, prefixTermFormat);
-	
-	else if (sameString(hfs->searchMethod, "exact") &&
-		 !matchRegex(hfs->query, exactTermFormatRegex))
-	    errAbort("hfsPolish: search %s: searchMethod is exact so query needs to end with %s.",
-		     hfs->searchName, exactTermFormat);
-	}
-    }
-}
-
-static char *xrefQueryFormatRegex =
-    "select [[:alnum:]]+ from %s where [[:alnum:]]+ (like|=) ['\"]?[%s]+['\"]?";
-
-static void checkXrefQueryFormat(struct hgFindSpec *hfs)
-/* Make sure xrefQuery looks right and jives with searchMethod. */
-{
-if (isNotEmpty(hfs->xrefQuery))
-    {
-    if (! matchRegex(hfs->xrefQuery, xrefQueryFormatRegex))
-	errAbort("hfsPolish: search %s: xrefQuery needs to be of the format \"select field1 from %%s where field2 like '%%s'\" (for prefix, '%%s%%%%'; for exact, '%%%%%%s%%%%'), but instead is this:\n%s",
-		 hfs->searchName, hfs->xrefQuery);
-    if (sameString(hfs->searchMethod, "fuzzy") &&
-	!endsWith(hfs->xrefQuery, fuzzyTermFormat))
-	errAbort("hfsPolish: search %s: searchMethod is fuzzy so xrefQuery needs to end with %s.",
-		 hfs->searchName, fuzzyTermFormat);
-    else if (sameString(hfs->searchMethod, "prefix") &&
-	     !endsWith(hfs->xrefQuery, prefixTermFormat))
-	errAbort("hfsPolish: search %s: searchMethod is prefix so xrefQuery needs to end with %s.",
-		 hfs->searchName, prefixTermFormat);
-	
-    else if (sameString(hfs->searchMethod, "exact") &&
-	     !matchRegex(hfs->xrefQuery, exactTermFormatRegex))
-	errAbort("hfsPolish: search %s: searchMethod is exact so xrefQuery needs to end with %s.",
-		 hfs->searchName, exactTermFormat);
-    }
-}
-
-
-void hgFindSpecPolish(struct hgFindSpec *hfs)
-/* Fill in missing values with defaults, check for consistency. */
-{
-/* At least one of {searchName, searchTable} must be defined. */
-if ((hfs->searchName == NULL) && (hfs->searchTable == NULL))
-    errAbort("hfsPolish: searchName or searchTable must be defined.\n");
-if (hfs->searchName == NULL)
-    hfs->searchName = cloneString(hfs->searchTable);
-if (hfs->searchTable == NULL)
-    hfs->searchTable = cloneString(hfs->searchName);
-/* If searchType is not defined, query must be defined. */
-if (hfs->searchType == NULL && hfs->query == NULL)
-    errAbort("hfsPolish: search %s: if searchType is not defined, then query must be defined.\n",
-	     hfs->searchName);
-/* If one of {xrefTable,xrefQuery} is defined, both must be. */
-if ((hfs->xrefTable == NULL) ^ (hfs->xrefQuery == NULL))
-    errAbort("hfsPolish: search %s: can't define xrefTable without xrefQuery or vice versa.\n",
-	     hfs->searchName);
-if (hfs->searchMethod == NULL)
-    hfs->searchMethod = cloneString("exact");
-if (hfs->searchType == NULL)
-    hfs->searchType = "";
-anchorTermRegex(hfs);
-if (hfs->query == NULL)
-    hfs->query = getQueryFormat(hfs);
-checkQueryFormat(hfs);
-checkXrefQueryFormat(hfs);
-if (hfs->xrefTable == NULL)
-    hfs->xrefTable = "";
-if (hfs->xrefQuery == NULL)
-    hfs->xrefQuery = "";
-if (hfs->searchPriority == 0.0)
-    hfs->searchPriority = 1000.0;
-if (hfs->searchDescription == NULL)
-    {
-    char buf[512];
-    struct sqlConnection *conn = hAllocConn();
-    struct trackDb *tdb = hMaybeTrackInfo(conn, hfs->searchTable);
-    hFreeConn(&conn);
-    if (tdb != NULL)
-	safef(buf, sizeof(buf), "%s (%s)", tdb->longLabel, hfs->searchTable);
-    else
-	safef(buf, sizeof(buf), "%s", hfs->searchTable);
-    hfs->searchDescription = cloneString(buf);
-    }
-if (hfs->searchSettings == NULL)
-    hfs->searchSettings = cloneString("");
-}
 
 char *hgFindSpecSetting(struct hgFindSpec *hfs, char *name)
 /* Return setting string or NULL if none exists. */

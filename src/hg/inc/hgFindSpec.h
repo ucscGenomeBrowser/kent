@@ -81,9 +81,6 @@ int hgFindSpecCmp(const void *va, const void *vb);
 struct hgFindSpec *hgFindSpecFromRa(char *raFile);
 /* Load track info from ra file into list. */
 
-void hgFindSpecPolish(struct hgFindSpec *hfs);
-/* Fill in missing values with defaults. */
-
 char *hgFindSpecSetting(struct hgFindSpec *hfs, char *name);
 /* Return setting string or NULL if none exists. */
 

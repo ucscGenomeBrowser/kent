@@ -396,6 +396,14 @@ termRegex HG-U95:.+
 searchPriority 15
 termPrefix HG-U95:
 
+searchTable affyU95
+searchMethod exact
+searchType psl
+shortCircuit 1
+termRegex HG-U95:.+
+searchPriority 15
+termPrefix HG-U95:
+
 searchTable affyUcla
 searchMethod exact
 searchType bed
@@ -406,5 +414,6 @@ termPrefix HG-U133:
 
 searchTable uniGene_2
 searchType bed
+termRegex Hs\.[0-9]+
 searchPriority 20
 
