@@ -50,7 +50,7 @@ echo "<HTML><HEAD><TITLE>trackDb Diffs $today</TITLLE></HEAD><BODY>\n<PRE> \
 
 echo "db      diffs"
 echo "-------------"
-foreach db ( $dbs testDummmy)
+foreach db ( $dbs )
   set outfile="$dirPath/$today/$db.$machine.trackDbAll"
   compareTrackDbAll.csh $db hgwbeta $machine >& $outfile
   if ( $status ) then
@@ -75,6 +75,7 @@ foreach db ( $dbs testDummmy)
   sleep 45
 end
 
+echo
 echo "\n</PRE></BODY></HTML>" >> $summaryFile
 echo $summaryUrl
 exit 0
