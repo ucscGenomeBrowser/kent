@@ -227,14 +227,19 @@ $regionCounter=0;
 
 while (<>) {
     chomp();
-    if (/^(.*)\s+(\d+)\s+(\d+)\s+(EN[mr]\d\d\d)/) {
-        if ($region eq $4) { 
-            $regionCounter++; 
-        } else { 
-        $region=$4; $regionCounter=1; 
-        }
-    printf("$1\t$2\t$3\t$4\t$regionCounter\n");
-    } else {
+    if (/^(.*)\s+(\d+)\s+(\d+)\s+(EN[mr]\d\d\d)/)
+    {
+        if ($region eq $4) { $regionCounter++; } else { $region=$4; $regionCounter=1; }
+        printf("$1\t$2\t$3\t$4\t$regionCounter\n");
+    }
+    elsif (/^(.*)\s+(\d+)\s+(\d+)\s+(MEN[mr]\d\d\d)/)
+    {
+    # regions with names that begin with 'M' have been manually marked for 
+    # removal and can be ignored.
+    next;
+    }
+    else
+    {
         die "Bad input line: $_";
     }
 }
@@ -246,20 +251,28 @@ mkdir -p $dir
 cd $dir
 
 foreach db (panTro1 rn3 galGal2 mm5 canFam1 monDom1 tetNig1 danRer2)
-    rm -f $db.log $db.*.bed*
+    rm -f $db.log $db.*.bed* $db.encodeRegionsConsensus*
     #           db table                  db table                        out file                               err file
     regionOrtho $db.encodeRegionsLiftOver $db.encodeRegionsMercatorMerged $db.encodeRegionsConsensusUnmerged.bed $db.regionOrtho.err >& $db.log
     sort -k4 -k1.4n -k2n $db.encodeRegionsConsensusUnmerged.bed | makeBed5.pl > $db.encodeRegionsConsensusUnmerged.bed5
-    liftOverMerge -mergeGap=20000 -verbose=2 $db.encodeRegionsConsensusUnmerged.bed5 $db.encodeRegionsConsensus.bed5 >>& $db.log
+    liftOverMerge -mergeGap=20000 -verbose=2 $db.encodeRegionsConsensusUnmerged.bed5 $db.encodeRegionsConsensus1.bed5 >>& $db.log
+    awk '{printf "%s\t%d\t%d\t%s_%s\n", $1, $2, $3, $4, $5}' $db.encodeRegionsConsensus1.bed5 > $db.encodeRegionsConsensus1.bed
+    hgLoadBed $db encodeRegionsConsensus -tab $db.encodeRegionsConsensus1.bed >>& $db.log
+    hgsql $db -e "select * from encodeRegionsConsensus where chromEnd-chromStart<2000" > $db.smallRegions.bed
+    hgsql $db -e "delete from encodeRegionsConsensus where chromEnd-chromStart<2000"
+    hgsql $db -e "select chrom, chromStart, chromEnd, name from encodeRegionsConsensus" > $db.encodeRegionsConsensus2.bed
+    sort -k4 -k1.4n -k2n $db.encodeRegionsConsensus2.bed | makeBed5.pl > $db.encodeRegionsConsensus.bed5
     awk '{printf "%s\t%d\t%d\t%s_%s\n", $1, $2, $3, $4, $5}' $db.encodeRegionsConsensus.bed5 > $db.encodeRegionsConsensus.bed
     hgLoadBed $db encodeRegionsConsensus -tab $db.encodeRegionsConsensus.bed >>& $db.log
-    rm -f $db.encodeRegionsConsensusUnmerged.bed $db.encodeRegionsConsensusUnmerged.bed5
 end
 
-# remove the regions that are smaller than 2 kb
+# remove the regions that are smaller than 2 kb and update the local file from the table
 foreach db (canFam1 danRer2 galGal2 mm5 monDom1 panTro1 rn3 tetNig1)
     hgsql $db -e "select * from encodeRegionsConsensus where chromEnd-chromStart<2000" > $db.smallRegions.bed
     hgsql $db -e "delete from encodeRegionsConsensus where chromEnd-chromStart<2000"
+    rm -f $db.encodeRegionsConsensus*
+    hgsql $db -e "select chrom, chromStart, chromEnd, name from encodeRegionsConsensus" > $db.encodeRegionsConsensus.bed
+    ./makeBed5.pl < $db.encodeRegionsConsensus.bed > $db.encodeRegionsConsensus.bed5
 end
 
 
@@ -271,6 +284,7 @@ set dir = /cluster/data/encode/ortho3/html
 mkdir -p $dir
 cd $dir
 
+rm -f positionFile
 hgsql -e "select chrom, chromStart+1, chromEnd, name from encodeRegions order by name" hg17 | tail +2 | awk '{printf "%s:%d-%d\t%s\n",$1,$2,$3,$4}' > positionFile
 
 cp -f ${HOME}/kent/src/hg/encode/regionOrtho/mkOrthologAllFrame.pl /cluster/bin/scripts/mkOrthologAllFrame.pl
@@ -287,6 +301,14 @@ set outDir = /usr/local/apache/htdocs/encode/ortho3
 cp -f *.html $outDir
 chmod o+r $outDir/*.html
 
+
+## prune excessively large mercator regions, recompute consensus, and remake html files.
+
+set dir = /cluster/data/encode/ortho3/mercatorPrune
+mkdir -p $dir
+cd $dir
+rm -f updateDatabase.sql ; grep -P "\d" *Regions.bed | awk '{printf "%s\t%d\t%d\t%s\t%d\n",$1,$2,$3,$4,$3-$2}' | updateDatabase.pl > updateDatabase.sql
+hgsql hg17 < updateDatabases.sql
 
 ########################################################################
 ###############  Write AGP files from consensus regions  ###############
