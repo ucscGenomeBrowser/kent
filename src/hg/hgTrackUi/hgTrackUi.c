@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
+#include "web.h"
 #include "cart.h"
 #include "jksql.h"
 #include "trackDb.h"
@@ -19,11 +20,11 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.104 2004/05/23 00:18:16 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.105 2004/05/28 21:27:30 angie Exp $";
 
-struct cart *cart;	/* Cookie cart with UI settings */
-char *database;		/* Current database. */
-char *chromosome;	/* Chromosome. */
+struct cart *cart = NULL;	/* Cookie cart with UI settings */
+char *database = NULL;		/* Current database. */
+char *chromosome = NULL;	/* Chromosome. */
 
 
 void radioButton(char *var, char *val, char *ourVal)
@@ -135,7 +136,6 @@ char *cbrWabaFilter = cartUsualString(cart, "cbrWaba.filter", "red");
 char *cbrWabaMap = cartUsualString(cart, "cbrWaba.type", fcoeEnumToString(0));
 int start = cartInt(cart, "cbrWaba.start");
 int end = cartInt(cart, "cbrWaba.end");
-chromosome = cartString(cart, "c");
 /*   This link is disabled in the external browser
 printf(
 "<P><A HREF=\"http://genome-test.cse.ucsc.edu/cgi-bin/tracks.exe?where=%s%%3A%d-%d\"> Temporary Intronerator link: %s:%d-%d</A> <I>for testing purposes only</I> \n</P>", chromosome+3, start, end, chromosome+3, start, end );
@@ -395,7 +395,6 @@ struct sqlResult *sr;
 char option[64];
 struct sqlConnection *conn = hAllocConn();
 
-char *chromName = cartString(cart, "c");
 char newRow = 0;
 
 snprintf( &options[0][0], 256, "%s.heightPer", tdb->tableName );
@@ -434,7 +433,7 @@ printf("&nbsp;&nbsp;&nbsp;&nbsp;max:");
 cgiMakeDoubleVar(&options[5][0], thisMaxYRange, 6 );
 
 printf("<p><b>Toggle Species on/off</b><br>" );
-sr = hRangeQuery(conn, tdb->tableName, chromName, 0, 1877426, NULL, &rowOffset);
+sr = hRangeQuery(conn, tdb->tableName, chromosome, 0, 1877426, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     sample = sampleLoad(row + rowOffset);
@@ -500,6 +499,8 @@ wigFetchMinMaxY(tdb, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
 (void) wigFetchYLineMark(tdb, &yLineMarkOnOff);
 wigFetchYLineMarkValue(tdb, &yLineMark);
 
+puts("<A HREF=\"/goldenPath/help/hgWiggleTrackHelp.html\">"
+     "Graph configuration help</A>");
 printf("<TABLE BORDER=0><TR><TD ALIGN=LEFT>\n");
 
 printf("<b>Type of graph:&nbsp;</b>");
@@ -549,10 +550,10 @@ int speciesCt = chopLine(speciesOrder, species);
 int i;
 char option[64];
 puts("<p><b>Pairwise alignments:</b><br>" );
-puts("<TABLE>");
+puts("<TABLE><TR>");
 for (i = 0; i < speciesCt; i++)
     {
-    if (i % 6 == 0)
+    if (i != 0 && (i % 6) == 0)
         puts("</TR><TR>");
     puts("<TD>");
     snprintf(option, sizeof(option), "%s.%s", tdb->tableName, species[i]);
@@ -887,18 +888,21 @@ cart = theCart;
 track = cartString(cart, "g");
 database = cartUsualString(cart, "db", hGetDb());
 hSetDb(database);
-chromosome = cartString(cart, "c");
+chromosome = cartUsualString(cart, "c", hDefaultChrom());
 if (sameWord(track, RULER_TRACK_NAME))
     /* special handling -- it's not a full-fledged track */
     tdb = trackDbForRuler();
 else
     tdb = hTrackDbForTrack(track);
 if (tdb == NULL)
-   errAbort("Can't find %s in track database %s chromosome %s", track, database, chromosome);
+   errAbort("Can't find %s in track database %s chromosome %s",
+	    track, database, chromosome);
+cartWebStart(cart, "%s Track Settings", tdb->shortLabel);
 printf("<FORM ACTION=\"%s\">\n\n", hgTracksName());
 cartSaveSession(cart);
 trackUi(tdb);
 printf("</FORM>");
+webEnd();
 }
 
 char *excludeVars[] = { "submit", "Submit", "g", NULL,};
@@ -908,6 +912,6 @@ int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
-cartHtmlShell("Track Settings", doMiddle, hUserCookie(), excludeVars, NULL);
+cartEmptyShell(doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }
