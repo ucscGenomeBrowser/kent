@@ -1575,6 +1575,36 @@ cgiMakeHiddenVar("g", "htcGetDna2");
 cgiMakeHiddenVar("table", tbl);
 puts("Position ");
 savePosInTextBox(seqName, winStart+1, winEnd);
+
+if (tbl[0] == 0)
+    {
+    puts("<P>"
+	 "Note: if you would prefer to get DNA for features of a particular "
+	 "track or table, try the ");
+    printf("<A HREF=\"%s?%s&db=%s&position=%s:%d-%d\" TARGET=_BLANK>",
+	   hgTextName(), cartSidUrlString(cart), database,
+	   seqName, winStart+1, winEnd);
+    puts("Table Browser</A>: select a positional table, "
+	 "perform an Advanced Query and select FASTA as the output format.");
+    }
+else
+    {
+    char hgTextTbl[128];
+    snprintf(hgTextTbl, sizeof(hgTextTbl), "chr1_%s", tbl);
+    if (hTableExists(hgTextTbl))
+	snprintf(hgTextTbl, sizeof(hgTextTbl), "%s.chrN_%s", database, tbl);
+    else
+	snprintf(hgTextTbl, sizeof(hgTextTbl), "%s.%s", database, tbl);
+    puts("<P>"
+	 "Note: if you would prefer to get DNA for more than one feature of "
+	 "this track at a time, try the ");
+    printf("<A HREF=\"%s?%s&db=%s&position=%s:%d-%d&table0=%s&phase=table\" TARGET=_BLANK>",
+	   hgTextName(), cartSidUrlString(cart), database,
+	   seqName, winStart+1, winEnd, hgTextTbl);
+    puts("Table Browser</A>: "
+	 "perform an Advanced Query and select FASTA as the output format.");
+    }
+
 hgSeqOptionsHti(hti);
 puts("<P>");
 cgiMakeButton("submit", "Get DNA");
@@ -4216,8 +4246,26 @@ void htcGeneInGenome(char *geneName)
 /* Put up page that lets user display genomic sequence
  * associated with gene. */
 {
+char *tbl = cgiString("o");
+char hgTextTbl[128];
+
 cartWebStart(cart, "Genomic Sequence Near Gene");
 printf("<H2>Get Genomic Sequence Near Gene</H2>");
+
+snprintf(hgTextTbl, sizeof(hgTextTbl), "chr1_%s", tbl);
+if (hTableExists(hgTextTbl))
+    snprintf(hgTextTbl, sizeof(hgTextTbl), "%s.chrN_%s", database, tbl);
+else
+    snprintf(hgTextTbl, sizeof(hgTextTbl), "%s.%s", database, tbl);
+puts("<P>"
+     "Note: if you would prefer to get DNA for more than one feature of "
+     "this track at a time, try the ");
+printf("<A HREF=\"%s?%s&db=%s&position=%s:%d-%d&table0=%s&phase=table\" TARGET=_BLANK>",
+       hgTextName(), cartSidUrlString(cart), database,
+       seqName, winStart+1, winEnd, hgTextTbl);
+puts("Table Browser</A>: "
+     "perform an Advanced Query and select FASTA as the output format.");
+
 printf("<FORM ACTION=\"%s\">\n\n", hgcPath());
 cartSaveSession(cart);
 cgiMakeHiddenVar("g", "htcDnaNearGene");
@@ -4235,7 +4283,7 @@ printf("\n");
 cgiContinueHiddenVar("o");
 printf("\n");
 
-hgSeqOptions(cgiString("o"));
+hgSeqOptions(tbl);
 cgiMakeButton("submit", "submit");
 printf("</FORM>");
 }
@@ -6900,7 +6948,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	   (el.chromEnd - el.chromStart), org);
     if (xenoDb != NULL)
 	{
-	printf("<A HREF=%s?%s&db=%s&position=%s:%d-%d TARGET=_BLANK>%s Genome Browser</A> at %s:%d-%d <BR>\n",
+	printf("<A HREF=\"%s?%s&db=%s&position=%s:%d-%d\" TARGET=_BLANK>%s Genome Browser</A> at %s:%d-%d <BR>\n",
 	       hgTracksName(), cartSidUrlString(cart),
 	       xenoDb, xenoChrom, el.xenoStart, el.xenoEnd,
 	       xenoOrg, xenoChrom, el.xenoStart, el.xenoEnd);
