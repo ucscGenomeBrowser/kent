@@ -5,15 +5,15 @@
 #include "options.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: hgWormLinks.c,v 1.1 2003/09/25 00:05:28 kent Exp $";
+static char const rcsid[] = "$Id: hgWormLinks.c,v 1.2 2003/10/10 21:15:54 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
   "hgWormLinks - Create table that links worm ORF name to description\n"
-  "and SwissProt.  This works on a couple of WormBase dumps in Ace format\n"
-  "I believe from Lincoln Stein.\n"
+  "and SwissProt.  This works on a couple of WormBase dumps, in Ace format\n"
+  "I believe, from Lincoln Stein.\n"
   "usage:\n"
   "   hgWormLinks swissProtWormPep.ace seqPepDesc.ace\n"
   "options:\n"
