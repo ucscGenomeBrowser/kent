@@ -6,6 +6,7 @@
 #include "memalloc.h"
 #include "portable.h"
 #include "errabort.h"
+#include "errCatch.h"
 #include "linefile.h"
 #include "sqlList.h"
 #include "jksql.h"
@@ -20,7 +21,7 @@
 #include "cheapcgi.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.49 2004/11/09 18:28:18 kent Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.50 2004/11/10 04:39:11 kent Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -956,14 +957,10 @@ char c = *s;
 return c != '_' && !isalnum(c);
 }
 
-struct customTrack *customTracksParseCart(struct cart *cart,
+static struct customTrack *customTracksParseCartOrDie(struct cart *cart,
 					  struct slName **retBrowserLines,
 					  char **retCtFileName)
-/* Figure out from cart variables where to get custom track text/file.
- * Parse text/file into a custom set of tracks.  Lift if necessary.  
- * If retBrowserLines is non-null then it will return a list of lines 
- * starting with the word "browser".  If retCtFileName is non-null then 
- * it will return the custom track filename. */
+/* Parse custom tracks or die trying. */
 {
 /* This was originally part of loadCustomTracks in hgTracks.  It was pulled
  * back here so that hgText could use it too. */
@@ -1049,6 +1046,38 @@ if (customTrackNeedsLift(ctList))
 if (retCtFileName != NULL)
     *retCtFileName = ctFileName;
 
+return ctList;
+}
+
+struct customTrack *customTracksParseCart(struct cart *cart,
+					  struct slName **retBrowserLines,
+					  char **retCtFileName)
+/* Figure out from cart variables where to get custom track text/file.
+ * Parse text/file into a custom set of tracks.  Lift if necessary.  
+ * If retBrowserLines is non-null then it will return a list of lines 
+ * starting with the word "browser".  If retCtFileName is non-null then  
+ * it will return the custom track filename. 
+ *
+ * If there is a syntax error in the custom track this will report the
+ * error, clear the custom track from the cart,  and return NULL.  It 
+ * will also leak memory. */
+{
+struct errCatch *errCatch = errCatchNew();
+struct customTrack *ctList;
+if (errCatchStart(errCatch))
+    {
+    ctList = customTracksParseCartOrDie(cart, retBrowserLines, retCtFileName);
+    }
+else
+    {
+    ctList = NULL;
+    cartRemove(cart, "hgt.customText");
+    cartRemove(cart, "ct");
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    warn("%s", errCatch->message->string);
+errCatchFree(&errCatch); 
 return ctList;
 }
 
