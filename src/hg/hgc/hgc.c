@@ -4629,25 +4629,56 @@ if (url != NULL && url[0] != 0)
     char supfamURL[512];
     char *organism;
     char genomeStr[10];
+    char genomeStrEnsembl[30];
 
     struct sqlConnection *conn = hAllocConn();
     char cond_str[256];
     char *proteinID;
+    char *geneID;
     char *ans;
 
     organism = hOrganism(database);
+    if (sameWord(organism, "human"))
+    {
+        strcpy(genomeStrEnsembl, "Homo_sapiens");
+    }
+    else
+    {
+        if (sameWord(organism, "mouse"))
+        {
+        strcpy(genomeStrEnsembl, "Mus_musculus");
+        }
+        else
+            {
+            if (sameWord(organism, "rat"))
+                {
+                strcpy(genomeStrEnsembl, "Rattus_norvegicus");
+                }
+            else
+                {
+                printf("<br>Organism %s not found!!!", organism); fflush(stdout);
+                return;
+                }
+            }
+    }
+        
 
-    printf("<B>Ensembl Link: </B>");
-    printf("<A HREF=\"%s%s\" target=_blank>", 
-	   "http://www.ensembl.org/perl/transview?transcript=",
-	   itemName);
-    printf("%s</A><BR>\n", itemName);
+    sprintf(cond_str, "gene='%s'", itemName);    
+    geneID = sqlGetField(conn, database, "ensMap", "transcript", cond_str);
+    printf("<B>Ensembl Gene Link: </B>");
+    printf("<A HREF=\"http://www.ensembl.org/%s/geneview?gene=%s\" target=_blank>", 
+	   genomeStrEnsembl,geneID);
+    printf("%s</A>", geneID);
 
     if (hTableExists("superfamily"))
 	{
     	sprintf(cond_str, "transcript_name='%s'", itemName);    
     	proteinID = sqlGetField(conn, protDbName, "ensemblXref", "translation_name", cond_str);
    
+        printf("<B>   Protein: </B>");
+        printf("<A HREF=\"http://www.ensembl.org/%s/protview?peptide=%s\" target=_blank>", 
+           genomeStrEnsembl,proteinID);
+        printf("%s</A><BR>\n", proteinID);
     	// get genomeStr to be used in Superfamily URL */ 
     	if (sameWord(organism, "human"))
 	    {
