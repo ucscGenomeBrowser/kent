@@ -1019,8 +1019,8 @@ TIGR GENE INDEX (REDONE 3/31/03)
 
     foreach o (mouse cow human pig rat)
       setenv O $o
-      foreach f (Chr*_$o*s)
-        tail +2 $f | perl -wpe 's /THC/TC/; s/(TH?C\d+)/$ENV{O}_$1/;' > $f.gff
+      foreach f ([Cc]hr*_$o*s)
+       tail +2 $f | perl -wpe 's /THC/TC/; s/(TH?C\d+)/$ENV{O}_$1/;' > $f.gff
       end
     end
     ldHgGene -exon=TC mm2 tigrGeneIndex *.gff
