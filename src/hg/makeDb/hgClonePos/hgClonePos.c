@@ -187,7 +187,7 @@ while (lineFileNext(lf, &line, &lineSize))
     wordCount = chopLine(line, words);
     if (wordCount == 0)
         continue;
-    if (wordCount != 8)
+    if (wordCount < 8)
         errAbort("Expecting 8 words line %d of %s", lf->lineIx, lf->fileName);
     gsSeqInfoStaticLoad(words, &gs);
     if (gs.phase != 0)
