@@ -12,6 +12,7 @@ double minAli = 0.93;
 double nearTop = 0.01;
 double minCover = 0.0;
 boolean ignoreSize = FALSE;
+boolean noIntrons = FALSE;
 boolean singleHit = FALSE;
 int minNearTopSize = 20;
 
@@ -28,6 +29,8 @@ errAbort(
     "and out.psr contains repeat info\n"
     "options:\n"
     "    -ignoreSize Will not weigh in favor of larger alignments so much\n"
+    "    -noIntrons Will not penalize for not having introns when calculating\n"
+    "              size factor\n"
     "    -singleHit  Takes single best hit, not splitting into parts\n"
     "    -minCover=0.N minimum coverage to output.  Default is 0.\n"
     "    -minAli=0.N minimum alignment ratio\n"
@@ -50,7 +53,7 @@ int sizeFactor(struct psl *psl)
 int score;
 if (ignoreSize) return 0;
 score = 4*round(sqrt(psl->match + psl->repMatch/4));
-if (psl->tNumInsert == 0) score -= 20;
+if ((psl->tNumInsert == 0) && (!noIntrons)) score -= 20;
 return score;
 }
 
@@ -289,6 +292,7 @@ nearTop = cgiOptionalDouble("nearTop", nearTop);
 minCover = cgiOptionalDouble("minCover", minCover);
 minNearTopSize = cgiOptionalInt("minNearTopSize", minNearTopSize);
 ignoreSize = cgiBoolean("ignoreSize");
+noIntrons = cgiBoolean("noIntrons");
 singleHit = cgiBoolean("singleHit");
 pslReps(argv[1], argv[2], argv[3]);
 return 0;
