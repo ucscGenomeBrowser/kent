@@ -1861,15 +1861,17 @@ for (mach = machineList; mach != NULL; mach = mach->next)
 for (mm = mmList; mm != NULL; mm = mm->next)
     {
     struct paraMessage pm;
+    struct rudp *ru = rudpNew(rudpOut->socket);	/* Get own resend timing */
     printf("%s\n", mm->name);
     pmInitFromName(&pm, mm->name, paraNodePort);
-    if (!pmSendString(&pm, rudpOut, "listJobs"))
+    if (!pmSendString(&pm, ru, "listJobs"))
         {
 	multiMachineDown(mm);
 	continue;
 	}
     if (!processListJobs(mm, &pm, rudpOut, erHash, &erList, &running, &finished))
 	multiMachineDown(mm);
+    rudpFree(&ru);
     }
 
 /* Clean up time. */
