@@ -55,7 +55,13 @@ sprintLongWithCommas(num1Buf, winEnd - winStart);
 printf ("<P><B> Total Bases in view: </B> %s </P>\n", num1Buf);
 if (valuesMatched == 0)
     {
-    puts ("<P><B> no data found in this region </B></P>\n");
+    if ( span < (3 * (winEnd - winStart)))
+	{
+	puts ("<P><B> Viewpoint has too few bases to calculate statistics </B></P>\n");
+	printf ("<P><B> Zoom out to at least %d bases to see statistics. </B></P>\n", 3 * span);
+	}
+    else
+	puts ("<P><B> No data found in this region. </B></P>\n");
     }
 else
     {
