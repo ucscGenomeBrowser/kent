@@ -10,4 +10,7 @@ hgKnownMore: $O ../../../lib/$(MACHTYPE)/jkweb.a
 	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgKnownMore $O $(MYLIBS) $L
 
 lib:
-	cd ../../../lib; make
+	cd ../../../lib && ${MAKE}
+
+clean::
+	rm -f ${O} hgKnownMore

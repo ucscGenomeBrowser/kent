@@ -1,16 +1,17 @@
 include ../../../inc/common.mk
 
-L = $(MYSQLLIBS) -lm
-BIN=$(HOME)/bin/$(MACHTYPE)
-MYLIBDIR = ../../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+L = ${MYSQLLIBS} -lm
+BIN=${HOME}/bin/${MACHTYPE}
+MYLIBDIR = ../../../lib/${MACHTYPE}
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 O = ldHgGene.o
+A = ldHgGene
 
-all: ${BIN}/ldHgGene ${BIN}/sanger22-gff-doctor
+all: ${BIN}/${A} ${BIN}/sanger22-gff-doctor
 
-${BIN}/ldHgGene: $O ${MYLIBS} makefile
-	${CC} ${COPT} ${CFLAGS} -o ${BIN}/ldHgGene $O $(MYLIBS) $L
+${BIN}/${A}: $O ${MYLIBS} makefile
+	${CC} ${COPT} ${CFLAGS} -o ${BIN}/${A} $O ${MYLIBS} $L
 
 ${BIN}/sanger22-gff-doctor: sanger22-gff-doctor
 	cp -f $< $@
@@ -18,4 +19,7 @@ ${BIN}/sanger22-gff-doctor: sanger22-gff-doctor
 
 
 lib:
-	cd ../../../lib; make
+	cd ../../../lib && ${MAKE}
+
+clean::
+	rm -f ${O} ${A}

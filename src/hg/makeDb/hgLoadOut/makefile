@@ -11,4 +11,7 @@ hgLoadOut: $O ../../../lib/$(MACHTYPE)/jkweb.a
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgLoadOut${EXE}
 
 lib:
-	cd ../../../lib; make
+	cd ../../../lib && ${MAKE}
+
+clean::
+	rm -f ${O} hgLoadOut

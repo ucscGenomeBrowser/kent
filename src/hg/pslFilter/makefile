@@ -12,4 +12,7 @@ pslFilter: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/pslFilter $O $(MYLIBS) $L
 
 lib:
-	cd ../../lib; make
+	cd ../../lib && ${MAKE}
+
+clean::
+	rm -f ${O} pslFilter

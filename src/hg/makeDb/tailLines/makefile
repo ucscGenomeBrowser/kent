@@ -5,9 +5,13 @@ MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = tailLines.o 
+A = tailLines
 
-tailLines: $O ../../../lib/$(MACHTYPE)/jkweb.a
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/tailLines $O $(MYLIBS) $L
+${A}: $O ../../../lib/$(MACHTYPE)/jkweb.a
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/${A} $O $(MYLIBS) $L
 
 lib:
-	cd ../../../lib; make
+	cd ../../../lib && ${MAKE}
+
+clean::
+	rm -f ${O} ${A}

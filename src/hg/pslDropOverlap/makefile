@@ -12,4 +12,7 @@ pslDropOverlap: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/pslDropOverlap $O $(MYLIBS) $L
 
 lib:
-	cd ../../lib; make
+	cd ../../lib && ${MAKE}
+
+clean::
+	rm -f ${O} pslDropOverlap

@@ -10,4 +10,7 @@ hgNibSeq: $O ../../../lib/$(MACHTYPE)/jkweb.a
 	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgNibSeq $O $(MYLIBS) $L
 
 lib:
-	cd ../../../lib; make
+	cd ../../../lib && ${MAKE}
+
+clean::
+	rm -f ${O} hgNibSeq

@@ -10,4 +10,7 @@ hgRnaGenes: $O ../../../lib/$(MACHTYPE)/jkweb.a
 	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgRnaGenes $O $(MYLIBS) $L
 
 lib:
-	cd ../../../lib; make
+	cd ../../../lib && ${MAKE}
+
+clean::
+	rm -f ${O} hgRnaGenes
