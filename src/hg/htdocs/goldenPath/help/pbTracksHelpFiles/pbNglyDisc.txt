@@ -37,26 +37,44 @@ protein, conservation across paralogs, and ESTs from additional genomes.
 <H4>Occurrences of N-glycosylation motifs, adjusted for chance occurrence
 (applicable to any asymmetric motif)</H4>
 <BLOCKQUOTE>
+<TABLE BORDER=1 BORDERCOLOR="#aaaaaa" CELLPADDING=4> 
+    <TR>
+	<TD nowrap><FONT color="#006666"><B>Motif</B></FONT></TD>
+        <TD nowrap><FONT color="#006666"><B>#Occurrences</B></FONT></TD>
+        <TD><FONT color="#006666"><B>#Legit T (N*T - NPT)</B></FONT></TD>
+        <TD><FONT color="#006666"><B>#Illegit T (T*N - TPN)</B></FONT></TD>
+        <TD><FONT color="#006666"><B>N*T excess (Legit - Illegit)</B></FONT></TD>
+    </TR>
+    <TR><TD>N*T</TD><TD ALIGN=RIGHT>19558</TD><TD ALIGN=RIGHT>18717</TD><TD
+ALIGN=RIGHT>14889</TD><TD ALIGN=RIGHT>3828</TD></TR>
+    <TR><TD>NPT</TD><TD ALIGN=RIGHT>841</TD><TD ALIGN=RIGHT>&nbsp;</TD><TD
+ALIGN=RIGHT>&nbsp</TD><TD ALIGN=RIGHT>&nbsp</TD></TR>
+    <TR><TD>T*N</TD><TD ALIGN=RIGHT>15687</TD><TD ALIGN=RIGHT>&nbsp;</TD><TD
+ALIGN=RIGHT>&nbsp</TD><TD ALIGN=RIGHT>&nbsp</TD></TR>
+    <TR><TD>TPN</TD><TD ALIGN=RIGHT>798</TD><TD ALIGN=RIGHT>&nbsp;</TD><TD
+ALIGN=RIGHT>&nbsp</TD><TD ALIGN=RIGHT>&nbsp</TD></TR>
+</TABLE>
+
+<BR><BR>
+<TABLE BORDER=1 BORDERCOLOR="#aaaaaa" CELLPADDING=4> 
+    <TR>
+	<TD nowrap><FONT color="#006666"><B>Motif</B></FONT></TD>
+        <TD nowrap><FONT color="#006666"><B>#Occurrences</B></FONT></TD>
+        <TD><FONT color="#006666"><B>#Legit S (N*S - NPS)</B></FONT></TD>
+        <TD><FONT color="#006666"><B>#Illegit S (S*N - SPN)</B></FONT></TD>
+        <TD><FONT color="#006666"><B>N*S excess (Legit - Illegit)</B></FONT></TD>
+    </TR>
+    <TR><TD>N*S</TD><TD ALIGN=RIGHT>24776</TD><TD ALIGN=RIGHT>23338</TD><TD
+ALIGN=RIGHT>21169</TD><TD ALIGN=RIGHT>2169</TD></TR>
+    <TR><TD>NPS</TD><TD ALIGN=RIGHT>1438</TD><TD ALIGN=RIGHT>&nbsp;</TD><TD
+ALIGN=RIGHT>&nbsp</TD><TD ALIGN=RIGHT>&nbsp</TD></TR>
+    <TR><TD>S*N</TD><TD ALIGN=RIGHT>22451</TD><TD ALIGN=RIGHT>&nbsp;</TD><TD
+ALIGN=RIGHT>&nbsp</TD><TD ALIGN=RIGHT>&nbsp</TD></TR>
+    <TR><TD>SPN</TD><TD ALIGN=RIGHT>1282</TD><TD ALIGN=RIGHT>&nbsp;</TD><TD
+ALIGN=RIGHT>&nbsp</TD><TD ALIGN=RIGHT>&nbsp</TD></TR>
+</TABLE>
+<P>
 <PRE>
-
-Motif   #Occurrences   	#Legit T	#Illegit T	N*T excess
-			(N*T - NPT)	(T*N - TPN)	(Legit - Illegit)
--------------------------------------------------------------------------
-N*T	19558		18717    	14889	       	3828	
-NPT	841				
-T*N	15687		     	        
-TPN	798				
-
-
-Motif   #Occurrences   	#Legit S	#Illegit S	N*S excess
-			(N*S - NPS)	(S*N - SPN)	(Legit - Illegit)
--------------------------------------------------------------------------
-N*S	24776		23338		21169		2169	
-NPS	1438			
-S*N	22451	
-SPN	1282				
-
-
 Total legit (T+S):		42055	  
 Total illegit (T+S):		36058	
 Total excess (N*T + N*S):	 5997	
