@@ -58,6 +58,10 @@ struct section *swissProtCommentsSection(struct sqlConnection *conn,
 	struct hash *sectionRa);
 /* Create SwissProt comments section. */
 
+struct section *flyBaseInfoSection(struct sqlConnection *conn,
+	struct hash *sectionRa);
+/* Create FlyBase info section. */
+
 struct section *goSection(struct sqlConnection *conn,
 	struct hash *sectionRa);
 /* Create GO annotations section. */
@@ -137,7 +141,7 @@ int gpRangeIntersection(struct genePred *gp, int start, int end);
 boolean checkDatabases(char *databases);
 /* Check all databases in space delimited string exist. */
 
-boolean checkTables(char *databases, struct sqlConnection *conn);
+boolean checkTables(char *tables, struct sqlConnection *conn);
 /* Check all tables in space delimited string exist. */
 
 

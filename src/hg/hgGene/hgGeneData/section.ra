@@ -3,14 +3,14 @@ shortLabel Quick Links
 longLabel Quick Links to Tools and Databases
 priority 10
 
-name sequence
-shortLabel Sequence
-longLabel Sequence
-priority 20
-
 name swissProtComments
 shortLabel SwissProt Comments
 longLabel Comments and Description Text from SwissProt
+priority 20
+
+name sequence
+shortLabel Sequence
+longLabel Sequence
 priority 30
 
 name microarray
