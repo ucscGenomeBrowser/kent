@@ -2745,7 +2745,8 @@ if (rl->omimId != 0)
     {
     printf("<B>OMIM:</B> ");
     printf(
-       "<A HREF = \"http://www.ncbi.nlm.nih.gov/entrez/dispomim.cgi?id=%d\" TARGET=_blank>%d</A><BR>\n", 
+       "<A HREF = \"http://www.ncbi.nlm.nih.gov/entrez/dispomim.cgi?id=%d\" TARGET=_blank>%d</A><BR>\n
+", 
 	rl->omimId, rl->omimId);
     }
 if (rl->locusLinkId != 0)
@@ -3774,8 +3775,12 @@ if (row != NULL)
 	printf("</TABLE>\n");
 	htmlHorizontalLine();
 	printf("<TABLE>\n");
-	printf("<TR><TH ALIGN=left>MGI Marker ID:</TH><TD>MGI:%d</TD></TR>\n", infoRow->MGIMarkerID);
-	printf("<TR><TH ALIGN=left>MGI Probe ID:</TH><TD>MGI:%d</TD></TR>\n", infoRow->MGIPrimerID);
+/*	printf("<TR><TH ALIGN=left>MGI Marker ID:</TH><TD>MGI:%d</TD></TR>\n", infoRow->MGIMarkerID);*/
+	printf("<TR><TH ALIGN=left>MGI Marker ID:</TH><TD><B>MGI:</B>");	
+	printf("<A HREF = \"http://www.informatics.jax.org/searches/accession_report.cgi?id=MGI:%d\" TARGET=_blank>%d</A></TD></TR>\n", infoRow->MGIMarkerID, infoRow->MGIMarkerID);
+	/*printf("<TR><TH ALIGN=left>MGI Probe ID:</TH><TD>MGI:%d</TD></TR>\n", infoRow->MGIPrimerID);*/
+	printf("<TR><TH ALIGN=left>MGI Probe ID:</TH><TD><B>MGI:</B>");	
+	printf("<A HREF = \"http://www.informatics.jax.org/searches/accession_report.cgi?id=MGI:%d\" TARGET=_blank>%d</A></TD></TR>\n", infoRow->MGIPrimerID, infoRow->MGIPrimerID);
 	printf("</TABLE>\n");
 	htmlHorizontalLine();
 	/* Print out primer information */
