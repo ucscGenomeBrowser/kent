@@ -29,6 +29,7 @@
 #include "agpGap.h"
 #include "ctgPos.h"
 #include "clonePos.h"
+#include "bactigPos.h"
 #include "rmskOut.h"
 #include "xenalign.h"
 #include "isochores.h"
@@ -2853,6 +2854,60 @@ void doHgClone(struct trackDb *tdb, char *fragName)
 char cloneName[128];
 fragToCloneVerName(fragName, cloneName);
 doHgCover(tdb, cloneName);
+}
+
+void doBactigPos(struct trackDb *tdb, char *bactigName)
+/* Click on a bactig. */
+{
+struct bactigPos *bactig;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char *track = tdb->tableName;
+char query[256];
+char goldTable[16];
+char ctgStartStr[16];
+int ctgStart;
+
+genericHeader(tdb, bactigName);
+sprintf(query, "select * from %s where name = '%s'", track, bactigName);
+selectOneRow(conn, track, query, &sr, &row);
+bactig = bactigPosLoad(row);
+sqlFreeResult(&sr);
+printf("<B>Name:</B> %s<BR>\n", bactigName);
+
+snprintf(goldTable, sizeof(goldTable), "%s_gold", seqName);
+
+puts("<B>First contig:</B>");
+if (hTableExists(goldTable))
+    {
+    snprintf(query, sizeof(query),
+	     "select chromStart from %s where frag = \"%s\"",
+	     goldTable, bactig->startContig);
+    ctgStart = sqlQuickNum(conn, query);
+    ctgStart -= 1;
+    snprintf(ctgStartStr, sizeof(ctgStartStr), "%d", ctgStart);
+    hgcAnchor("gold", bactig->startContig, ctgStartStr);
+    }
+printf("%s</A><BR>\n", bactig->startContig);
+
+puts("<B>Last contig:</B>");
+if (hTableExists(goldTable))
+    {
+    snprintf(query, sizeof(query),
+	     "select chromStart from %s where frag = \"%s\"",
+	     goldTable, bactig->endContig);
+    ctgStart = sqlQuickNum(conn, query);
+    ctgStart -= 1;
+    snprintf(ctgStartStr, sizeof(ctgStartStr), "%d", ctgStart);
+    hgcAnchor("gold", bactig->endContig, ctgStartStr);
+    }
+printf("%s</A><BR>\n", bactig->endContig);
+
+printPos(bactig->chrom, bactig->chromStart, bactig->chromEnd, NULL, FALSE);
+printTrackHtml(tdb);
+
+hFreeConn(&conn);
 }
 
 int showGfAlignment(struct psl *psl, bioSeq *oSeq, FILE *f, enum gfType qType, int qStart, 
@@ -9296,6 +9351,10 @@ else if (sameWord(track, "ctgPos"))
 else if (sameWord(track, "clonePos"))
     {
     doHgCover(tdb, item);
+    }
+else if (sameWord(track, "bactigPos"))
+    {
+    doBactigPos(tdb, item);
     }
 else if (sameWord(track, "hgClone"))
     {
