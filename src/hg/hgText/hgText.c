@@ -2685,7 +2685,7 @@ if ((i == startIndx) && (bed->strand[0] == '-'))
 
 
 struct gffLine *bedToGffLines(struct bed *bedList, struct hTableInfo *hti,
-			      char *source)
+			      char *source, boolean gtf2StopCodons)
 /* Translate a (list of) bed into list of gffLine elements. */
 {
 struct gffLine *gffList = NULL, *gff;
@@ -2738,23 +2738,23 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	    if ((s >= bed->thickStart) && (e <= bed->thickEnd))
 		{
 		addCdsStartStop(&gffList, bed, source, s, e, frames,
-				i, startIndx, stopIndx, FALSE);
+				i, startIndx, stopIndx, gtf2StopCodons);
 		}
 	    else if ((s < bed->thickStart) && (e > bed->thickEnd))
 		{
 		addCdsStartStop(&gffList, bed, source,
 				bed->thickStart, bed->thickEnd,
-				frames, i, startIndx, stopIndx, FALSE);
+				frames, i, startIndx, stopIndx, gtf2StopCodons);
 		}
 	    else if ((s < bed->thickStart) && (e > bed->thickStart))
 		{
 		addCdsStartStop(&gffList, bed, source, bed->thickStart, e,
-				frames, i, startIndx, stopIndx, FALSE);
+				frames, i, startIndx, stopIndx, gtf2StopCodons);
 		}
 	    else if ((s < bed->thickEnd) && (e > bed->thickEnd))
 		{
 		addCdsStartStop(&gffList, bed, source, s, bed->thickEnd,
-				frames, i, startIndx, stopIndx, FALSE);
+				frames, i, startIndx, stopIndx, gtf2StopCodons);
 		}
 	    addGffLineFromBed(&gffList, bed, source, "exon", s, e, '.');
 	    }
@@ -2803,6 +2803,10 @@ char source[64];
 char *db = getTableDb();
 char *track = getTrackName();
 int itemCount;
+// Would be nice to allow user to select this, but I don't want to 
+// make an options page for just one param... any others?  
+// ? exon / CDS ?
+boolean gtf2StopCodons = FALSE;
 
 saveOutputOptionsState();
 saveIntersectOptionsState();
@@ -2816,7 +2820,7 @@ if (sameString(customTrackPseudoDb, db))
 else
     snprintf(source, sizeof(source), "%s_%s", db, track);
 itemCount = 0;
-gffList = bedToGffLines(bedList, hti, source);
+gffList = bedToGffLines(bedList, hti, source, gtf2StopCodons);
 bedFreeList(&bedList);
 for (gffPtr = gffList;  gffPtr != NULL;  gffPtr = gffPtr->next)
     {
