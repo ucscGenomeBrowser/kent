@@ -887,6 +887,19 @@ altColor 255,128,0
 type wig 0.0 1.0
 autoScaleDefault Off
 
+track phastCons
+track phastConsElements
+shortLabel Cons Elements
+longLabel phastCons Conserved Elements, Human/Chimp/Mouse/Rat/Chicken
+group compGeno
+priority 100.11
+visibility hide
+spectrum on
+color 0,60,120
+altColor 200,220,255
+exonArrows off
+type bed 12 .
+
 track multizMm3Rn3GalGal2_phyloHMM
 shortLabel Hu/Mouse/Rat/Chick
 longLabel Human/Mouse/Rat/Chicken Multiz Alignments & PhyloHMM Cons 
@@ -924,6 +937,14 @@ priority 100.1
 group compGeno
 visibility hide
 type bed 5
+
+track cns
+shortLabel CNS
+longLabel Conserved non-coding (Cons elements minus predicted coding)
+priority 100.12
+group compGeno
+visibility hide
+type bed 4
 
 track pHMM_3_WayTop5
 shortLabel Most 3-Way Cons
