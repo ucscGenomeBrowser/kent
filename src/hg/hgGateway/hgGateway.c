@@ -364,7 +364,7 @@ if (cgiOptionalString("db"))
     removeCustomTrackData();
     }
 
-organism = cartUsualString(cart, orgCgiName, hOrganism(db));
+organism = cgiUsualString(orgCgiName, hOrganism(db));
 
 cartWebStart("%s Genome Browser Gateway \n", organism);
 hgGateway();
