@@ -884,7 +884,6 @@ SEQ2_LEN=$BASE/S2.len
 
     # Move back to the file server to create axt files corresponding
     # to the net.
-TODO
     ssh kksilo
     cd /cluster/data/dm1/bed/blastz.dp1.2003-10-14/axtChain
     mkdir ../axtNet
@@ -898,6 +897,12 @@ TODO
     end
     cd ..
     rm -r fruitflyNet
+    # Load up the net-axt per Jim's request
+    ssh hgwdev
+    mkdir /gbdb/dm1/axtNetDp1
+    cp -p /cluster/data/dm1/bed/blastz.dp1.2003-10-14/axtNet/chr*.axt \
+      /gbdb/dm1/axtNetDp1
+    hgLoadAxt dm1 axtNetDp1
 
 
 PRODUCING GENSCAN PREDICTIONS (DONE 10/14/03 angie)
