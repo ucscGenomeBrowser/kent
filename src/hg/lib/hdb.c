@@ -1258,9 +1258,9 @@ if (hti == NULL)
 if (retTableBuf != NULL)
     {
     if (hti->isSplit)
-	sprintf(retTableBuf, "%s_%s", chrom, rootName);
+	snprintf(retTableBuf, 64, "%s_%s", chrom, rootName);
     else
-	strcpy(retTableBuf, rootName);
+	strncpy(retTableBuf, rootName, 64);
     }
 if (hasBin != NULL)
     *hasBin = hti->hasBin;
@@ -1692,6 +1692,111 @@ slReverse(&dbList);
 return dbList;
 }
 
+
+struct dbDb *hGetAxtInfoDbs()
+/* Get list of db's where we have axt files listed in axtInfo . 
+ * The db's with the same organism as current db go last.
+ * Dispose of result with dbDbFreeList. */
+{
+struct dbDb *dbDbList = NULL, *dbDb;
+struct hash *hash = hashNew(7); // 2^^7 entries = 128
+struct slName *dbNames = NULL, *dbName;
+struct dyString *query = newDyString(256);
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+char *organism = hOrganism(hdbName);
+int count;
+
+if (! hTableExists("axtInfo"))
+    {
+    dyStringFree(&query);
+    hashFree(&hash);
+    hFreeConn(&conn);
+    return NULL;
+    }
+
+/* "species" is a misnomer, we're really looking up database names. */
+sr = sqlGetResult(conn, "select species from axtInfo");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    // uniquify database names
+    if (hashLookup(hash, row[0]) == NULL)
+	{
+	struct slName *sln = newSlName(cloneString(row[0]));
+	slAddHead(&dbNames, sln);
+	hashStoreName(hash, cloneString(row[0]));
+	}
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+
+/* Traverse the uniquified list of databases twice: first for db's with 
+ * a different organism, then for db's with this organism. */
+conn = hConnectCentral();
+dyStringClear(query);
+dyStringAppend(query, "SELECT * from dbDb");
+count = 0;
+for (dbName = dbNames;  dbName != NULL;  dbName = dbName->next)
+    {
+    char *dbOrg = hOrganism(dbName->name);
+    if (! sameString(dbOrg, organism))
+	{
+	count++;
+	if (count == 1)
+	    dyStringPrintf(query, " where active = 1 and (name = '%s'",
+			   dbName->name);
+	else
+	    dyStringPrintf(query, " or name = '%s'", dbName->name);
+	}
+    }
+dyStringPrintf(query, ") order by orderKey");
+if (count > 0)
+    {
+    sr = sqlGetResult(conn, query->string);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	dbDb = dbDbLoad(row);
+	slAddHead(&dbDbList, dbDb);
+	}
+    sqlFreeResult(&sr);
+    }
+dyStringClear(query);
+dyStringAppend(query, "SELECT * from dbDb");
+count = 0;
+for (dbName = dbNames;  dbName != NULL;  dbName = dbName->next)
+    {
+    char *dbOrg = hOrganism(dbName->name);
+    if (sameString(dbOrg, organism))
+	{
+	count++;
+	if (count == 1)
+	    dyStringPrintf(query, " where active = 1 and (name = '%s'",
+			   dbName->name);
+	else
+	    dyStringPrintf(query, " or name = '%s'", dbName->name);
+	}
+    }
+dyStringPrintf(query, ") order by orderKey");
+if (count > 0)
+    {
+    sr = sqlGetResult(conn, query->string);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	dbDb = dbDbLoad(row);
+	slAddHead(&dbDbList, dbDb);
+	}
+    sqlFreeResult(&sr);
+    }
+hDisconnectCentral(&conn);
+slFreeList(&dbNames);
+dyStringFree(&query);
+hashFree(&hash);
+
+slReverse(&dbDbList);
+return(dbDbList);
+}
+
 struct axtInfo *hGetAxtAlignments(char *db)
 /* Get list of alignments where we have axt files listed in axtInfo . 
  * Dispose of this with axtInfoFreeList. */
@@ -1711,7 +1816,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&aiList, ai);
     }
 sqlFreeResult(&sr);
-hDisconnectCentral(&conn);
+hFreeConn(&conn);
 slReverse(&aiList);
 return aiList;
 }
