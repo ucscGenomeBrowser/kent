@@ -159,30 +159,6 @@ struct track;
 void wigSetCart(struct track *track, char *dataID, void *dataValue);
     /*	set one of the variables in the wigCart	*/
 
-/*	in lib/wiggleUtils.c	*/
-struct wiggleData *wigFetchData(char *db, char *table, char *chromName,
-    int winStart, int winEnd, boolean summaryOnly, boolean freeData,
-	int tableId, boolean (*wiggleCompare)(int tableId, double value,
-	    boolean summaryOnly, struct wiggle *wiggle),
-		char *constraints, struct bed **bedList,
-		    unsigned maxBedElements, struct wiggleStats **wsList);
-/*  return linked list of wiggle data between winStart, winEnd
- *	summaryOnly TRUE will not look at all the data, just the
- *	summaries in the table rows
- */
-#define	WIG_SUMMARY_ONLY	TRUE
-#define	WIG_DATA_NOT_RETURNED	TRUE
-#define	WIG_RETURN_DATA	FALSE
-#define	WIG_ALL_DATA		FALSE
-void wigFreeData(struct wiggleData **wigData);
-/* free everything in the wiggleData structure */
-
-#define wiggleDataFreeList(a) wigFreeData(a)
-
-int spanInUse(struct sqlConnection *conn, char *table, char *chrom,
-	int winStart, int winEnd, struct cart *cart);
-/*	determine span used in drawing in hgTracks	*/
-
 /*	in lib/wiggleCart.c	*/
 
 extern void wigFetchMinMaxY(struct trackDb *tdb, double *min,
@@ -367,5 +343,35 @@ void destroyWigDataStream(struct wiggleDataStream **wDS);
 #define VERBOSE_SQL_ROW_LEVEL	3
 #define VERBOSE_PER_VALUE_LEVEL	4
 #define VERBOSE_HIGHEST		5
+
+/*	in lib/wiggleUtils.c	*/
+void statsPreamble(struct wiggleDataStream *wDS, char *chrom,
+    int winStart, int winEnd, unsigned span, unsigned long long valuesMatched);
+
+/*	This function is being phased out, use the wiggleDataStream to
+ *	do this business.
+ */
+struct wiggleData *wigFetchData(char *db, char *table, char *chromName,
+    int winStart, int winEnd, boolean summaryOnly, boolean freeData,
+	int tableId, boolean (*wiggleCompare)(int tableId, double value,
+	    boolean summaryOnly, struct wiggle *wiggle),
+		char *constraints, struct bed **bedList,
+		    unsigned maxBedElements, struct wiggleStats **wsList);
+/*  return linked list of wiggle data between winStart, winEnd
+ *	summaryOnly TRUE will not look at all the data, just the
+ *	summaries in the table rows
+ */
+#define	WIG_SUMMARY_ONLY	TRUE
+#define	WIG_DATA_NOT_RETURNED	TRUE
+#define	WIG_RETURN_DATA	FALSE
+#define	WIG_ALL_DATA		FALSE
+void wigFreeData(struct wiggleData **wigData);
+/* free everything in the wiggleData structure */
+
+#define wiggleDataFreeList(a) wigFreeData(a)
+
+int spanInUse(struct sqlConnection *conn, char *table, char *chrom,
+	int winStart, int winEnd, struct cart *cart);
+/*	determine span used in drawing in hgTracks	*/
 
 #endif /* WIGGLE_H */
