@@ -16,8 +16,11 @@ void gfxPolyFree(struct gfxPoly **pPoly)
 struct gfxPoly *poly = *pPoly;
 if (poly != NULL)
     {
-    poly->lastPoint->next = NULL;
-    slFreeList(&poly->ptList);
+    if (poly->lastPoint != NULL)
+	{
+	poly->lastPoint->next = NULL;
+	slFreeList(&poly->ptList);
+	}
     freez(pPoly);
     }
 }
