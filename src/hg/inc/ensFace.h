@@ -10,4 +10,7 @@ struct dyString *ensContigViewUrl(char *ensOrg, char *chrom, int chromSize,
 	int winStart, int winEnd);
 /* Return a URL that will take you to ensembl's contig view on a chrom. */
 
+char *ensOrgNameFromScientificName(char *scientificName);
+/* Convert from ucsc to Ensembl organism name. */
+
 #endif /* ENSFACE_H */
