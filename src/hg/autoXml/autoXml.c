@@ -537,9 +537,9 @@ else
 	        {
 		if (positiveOnly)
 		    {
-		    fprintf(f, "if (obj->%s >= 0)\n", att->name);
-		    fprintf(f, "    fprintf(f, \" %s=\\\"%%%c\\\"\", obj->%s);\n", att->name, fAttType(att->type), att->name);
+		    fprintf(f, "if (obj->%s >= 0)\n    ", att->name);
 		    }
+	        fprintf(f, "fprintf(f, \" %s=\\\"%%%c\\\"\", obj->%s);\n", att->name, fAttType(att->type), att->name);
 		}
 	    else
 		{
