@@ -90,6 +90,7 @@
 #include "jaxQTL.h"
 #include "hgSeq.h"
 #include "chain.h"
+#include "netAlign.h"
 
 char mousedb[] = "mm1";
 
@@ -1303,6 +1304,65 @@ if (tdb->html != NULL && tdb->html[0] != 0)
     }
 }
 
+void genericNetClick(struct sqlConnection *conn, struct trackDb *tdb, 
+	char *item, int start, char *otherDb)
+/* Generic click handler for net tracks. */
+{
+char table[64];
+int rowOffset;
+char query[256];
+struct sqlResult *sr;
+char **row;
+struct netAlign net;
+char *org = hOrganism(database);
+char *otherOrg = hOrganism(otherDb);
+int tSize, qSize;
+
+uglyf("GenericNetClick %s %s %d<BR>\n", tdb->tableName, item, start);
+hFindSplitTable(seqName, tdb->tableName, table, &rowOffset);
+snprintf(query, sizeof(query), 
+	"select * from %s where tName = '%s' and tStart <= %d and tEnd > %d and level = %s",
+	table, seqName, start, start, item);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("Couldn't find %s:%d in %s", seqName, start, table);
+netAlignStaticLoad(row+rowOffset, &net);
+tSize = net.tEnd - net.tStart;
+qSize = net.qEnd - net.qStart;
+printf("<B>type:</B> %s<BR>\n", net.type);
+printf("<B>level:</B> %d<BR>\n", net.level);
+printf("<B>%s position:</B> %s:%d-%d<BR>\n", 
+	org, net.tName, net.tStart+1, net.tEnd);
+printf("<B>%s position:</B> %s:%d-%d<BR>\n", 
+	otherOrg, net.qName, net.qStart+1, net.qEnd);
+printf("<B>strand:</B> %c<BR>\n", net.strand[0]);
+printf("<B>score:</B> %u<BR>\n", net.score);
+if (net.chainId)
+    printf("<B>chain ID:</B> %u<BR>\n", net.chainId);
+printf("<B>%s parent overlap:</B> %u<BR>\n", otherOrg, net.qOver);
+printf("<B>%s based duplicated:</B> %u<BR>\n", otherOrg, net.qDup);
+printf("<B>N's in %s:</B> %u (%1.1f%%)<BR>\n", org, net.tN, 100.0*net.tN/tSize);
+printf("<B>N's in %s:</B> %u (%1.1f%%)<BR>\n", otherOrg, net.qN, 100.0*net.qN/qSize);
+printf("<B>%s tandem repeat (trf) bases:</B> %u (%1.1f%%)<BR>\n", 
+	org, net.tTrf, 100.0*net.tTrf/tSize);
+printf("<B>%s tandem repeat (trf) bases:</B> %u (%1.1f%%)<BR>\n", 
+	otherOrg, net.qTrf, 100.0*net.qTrf/qSize);
+printf("<B>%s RepeatMasker bases:</B> %u (%1.1f%%)<BR>\n", 
+	org, net.tR, 100.0*net.tR/tSize);
+printf("<B>%s RepeatMasker bases:</B> %u (%1.1f%%)<BR>\n", 
+	otherOrg, net.qR, 100.0*net.qR/qSize);
+printf("<B>%s old repeat bases:</B> %u (%1.1f%%)<BR>\n", 
+	org, net.tOldR, 100.0*net.tOldR/tSize);
+printf("<B>%s old repeat bases:</B> %u (%1.1f%%)<BR>\n", 
+	otherOrg, net.qOldR, 100.0*net.qOldR/qSize);
+printf("<B>%s new repeat bases:</B> %u (%1.1f%%)<BR>\n", 
+	org, net.tNewR, 100.0*net.tNewR/tSize);
+printf("<B>%s new repeat bases:</B> %u (%1.1f%%)<BR>\n", 
+	otherOrg, net.qNewR, 100.0*net.qNewR/qSize);
+printf("<B>%s size:</B> %d<BR>\n", org, net.tEnd - net.tStart);
+printf("<B>%s size:</B> %d<BR>\n", otherOrg, net.qEnd - net.qStart);
+sqlFreeResult(&sr);
+}
 
 void genericClickHandler(struct trackDb *tdb, char *item, char *itemForUrl)
 /* Put up generic track info. */
@@ -1324,11 +1384,6 @@ printCustomUrl(tdb, itemForUrl, item == itemForUrl);
 if (wordCount > 0)
     {
     type = words[0];
-
-
-//errAbort( "%s,%s\n", type, tdb->shortLabel );
-
-
     if (sameString(type, "bed"))
 	{
 	int num = 0;
@@ -1361,6 +1416,13 @@ if (wordCount > 0)
 	    subType = words[1];
 	genericPslClick(conn, tdb, item, start, subType);
 	}
+    else if (sameString(type, "netAlign"))
+        {
+	if (wordCount < 2)
+	    errAbort("Missing other database field in netAlign track type field");
+	genericNetClick(conn, tdb, item, start, words[1]);
+	}
+
     }
 printTrackHtml(tdb);
 freez(&dupe);
@@ -4874,11 +4936,11 @@ char query[256];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-int binOffset;
+int rowOffset;
 struct chain chain;
 int qs, qe;
 
-if (!hFindSplitTable(seqName, tdb->tableName, table, &binOffset))
+if (!hFindSplitTable(seqName, tdb->tableName, table, &rowOffset))
     errAbort("No %s track in database", tdb->tableName);
 snprintf(query, sizeof(query), 
 	"select * from %s where id = %s", table, item);
@@ -4886,7 +4948,7 @@ sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL)
     errAbort("Can't find %s in %s", item, table);
-chainStaticLoad(row + binOffset, &chain);
+chainStaticLoad(row + rowOffset, &chain);
 printf("<B>%s position:</B> %s:%d-%d</a>  size: %d <BR>\n",
     thisOrg, chain.tName, chain.tStart+1, chain.tEnd, chain.tEnd-chain.tStart);
 printf("<B>strand:</B> %c<BR>\n", chain.qStrand);
@@ -9295,7 +9357,7 @@ else if (stringIn(track, "blastzChain"))
     {
     chainClickHandler(tdb, item);
     }
-else if (stringIn(track, "netAlign"))
+else if (sameString(tdb->type, "netAlign"))
     {
     netAlignClickHandler(tdb, item);
     }
