@@ -62,5 +62,6 @@ DIRS = \
 	regionPicker \
 	rikenBestInCluster \
 	splitSim \
+	subsetAxt \
 	subsetTraces \
 	whyConserved 
