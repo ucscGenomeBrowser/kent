@@ -25,6 +25,7 @@ update:
 	hgTrackDb rat rn1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb rat rn2 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb sars sc1 trackDb_$(USER) ../../lib/trackDb.sql .
+	hgTrackDb cIntestinalis ci1 trackDb_$(USER) ../../lib/trackDb.sql .
 	cd zoo; make update; cd ..
 
 old_update:
