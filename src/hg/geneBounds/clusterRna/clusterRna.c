@@ -450,7 +450,7 @@ return size;
 boolean goodDa(struct ggAliInfo *da)
 /* Return TRUE if da looks good. */
 {
-return daAliSize(da) > 0.8 * da->ma->baseCount;
+return daAliSize(da) > 0.4 * da->ma->baseCount;
 }
 
 int findStrandDistance(struct ggAliInfo *da, char strand, int start, int end)
