@@ -52,7 +52,7 @@ infileName  = argv[2];
 outfileName = argv[3];
   
 inf  = mustOpen(infileName, "r");
-outf = fopen(outfileName, "w");
+outf = mustOpen(outfileName, "w");
 conn2= hAllocConn();
 
 strcpy(oldInfo, "");
@@ -138,7 +138,8 @@ while (fgets(line_in, 500, inf) != NULL)
 	sqlFreeResult(&sr2);
 	}
     }
-    
+fclose(inf);
+fclose(outf);
 return(0);
 }
 
