@@ -15,38 +15,16 @@
 #include "rnaSecStr.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: rnaFoldClick.c,v 1.3 2005/03/14 18:52:10 jsp Exp $";
+static char const rcsid[] = "$Id: rnaFoldClick.c,v 1.4 2005/03/28 22:45:50 jsp Exp $";
 
 /* Taken from hgc.c (should probably be in hgc.h)*/
-#define INTRON 10 
-#define CODINGA 11 
-#define CODINGB 12 
-#define UTR5 13 
-#define UTR3 14
-#define STARTCODON 15
-#define STOPCODON 16
-#define SPLICESITE 17
-#define NONCONSPLICE 18
-#define INFRAMESTOP 19
-#define INTERGENIC 20
-#define REGULATORY 21
-#define LABEL 22
-
 #define RED 0xFF0000
 #define GREEN 0x00FF00
-#define LTGREEN 0x33FF33
 #define BLUE 0x0000FF
-#define MEDBLUE 0x6699FF
-#define PURPLE 0x9900cc
 #define BLACK 0x000000
 #define CYAN 0x00FFFF
-#define ORANGE 0xDD6600
-#define BROWN 0x663300
-#define YELLOW 0xFFFF00
-#define MAGENTA 0xFF00FF
 #define GRAY 0xcccccc
 #define LTGRAY 0x999999
-#define WHITE 0xFFFFFF
 
 #define LTPURPLE 0x9966CC
 #define SCORE_SHADES_COUNT 10
@@ -54,8 +32,8 @@ static char const rcsid[] = "$Id: rnaFoldClick.c,v 1.3 2005/03/14 18:52:10 jsp E
 void printRfamUrl(char *itemName)
 /* Print a link to the Rfam entry corresponding to the item. */
 {
-char * query = cloneString(itemName);
-char * end   = strchr(query, '.');
+char *query = cloneString(itemName);
+char *end   = strchr(query, '.');
 if (!end)
     return;
 else
@@ -66,7 +44,7 @@ printf("\" TARGET=_blank>%s</A></p>", itemName);
 freeMem(query);
 }
 
-void doubleArray2binArray(double * scores, int size, double minScore, double maxScore, int *binArray, int binCount)
+void doubleArray2binArray(double *scores, int size, double minScore, double maxScore, int *binArray, int binCount)
 /* Will assign a bin to each score in 'scores' and store it in 'binArray' */
 {
 int i;
@@ -74,7 +52,7 @@ for (i = 0; i < size; i++)
     binArray[i] = assignBin(scores[i], minScore, maxScore, binCount);
 }
 
-void htmlColorPrintString(FILE *f, char * s, int *colorFormat, int *colors, int L)
+void htmlColorPrintString(FILE *f, char *s, int *colorFormat, int *colors, int L)
 /* Prints s to f wrapping characters in html tags for coloring
  * according to colorFormat and colors. colorFormat must be of same
  * length as s. Each position of colorFormat defines which of the
@@ -103,36 +81,37 @@ void mafAndFoldHeader(FILE *f)
 fprintf(f, "<center><h2> Multiple alignment and RNA secondary structure annotation </h2></center>");
 }
 
-void mkPosString(char * s, int size)
-/* make a position string */
+void mkPosString(char *s, int size)
+/* Make a string-ruler with a decimal every tenth position */
 {
 int i, d;
 for (i = 0, d = 0; i < size; i++)
     if (i%10 == 0) 
 	{
-	s[i] = "0123456789"[d];
+	s[i] = '0' + d;
 	d++;
-	if (d == 10) d = 0;
+	if (d == 10) 
+	  d = 0;
 	}
     else
 	s[i] = ' ';
 s[size] = '\0';
 }
 
-char * mkScoreString(double * scores, int L, char * referenceText)
+char *mkScoreString(double *scores, int L, char *referenceText)
     /* allocate string of score symbols, adjust for gaps in reference sequene */
 {
-char * s = (char *) needMem(L+1);
-char * scoreString = NULL;
+char *s = (char *) needMem(L+1);
+char *scoreString = NULL;
 int i, n;
 for (i=0;i<L;i++) 
     {
-    n    = floor(10*scores[i]);
+    n    = floor(10 *scores[i]);
     if (n == 10) 
 	n = 9;
     if (n < 0 || n > 9)
 	errAbort( "Score not between 0 and 1\n" );
-    s[i] = "0123456789"[n];
+    s[i] = '0' + n;
     }
 s[L] = 0;
 scoreString = gapAdjustFold(s, referenceText);
@@ -140,12 +119,12 @@ freeMem(s);
 return scoreString;
 }
 
-int * mkScoreColorFormat(double * scores, int L, char * referenceText)
+int *mkScoreColorFormat(double *scores, int L, char *referenceText)
   /* allocate string of score colors (gray shades), adjust for gaps in reference sequene */
 {
-int * v = NULL;
-int * scoreColorFormat = NULL;
-v = (int *) needMem(L * sizeof(int) );
+int *v = NULL;
+int *scoreColorFormat = NULL;
+v = (int *) needMem(L *sizeof(int) );
 doubleArray2binArray(scores, L, 0.0, 1.0, v, SCORE_SHADES_COUNT);
 scoreColorFormat = gapIntArrayAdjust(v, referenceText);
 freeMem(v);
@@ -156,7 +135,7 @@ void defineMafSubstColors(int **p2mafColors)
 /* Defines the colors used for maf coloring. Must corrspsond to the
  * markCompensatoryMutations function.*/
 {
-int * mafColors;
+int *mafColors;
 AllocArray(*p2mafColors, 6);
 mafColors = *p2mafColors;
 mafColors[0]    = LTGRAY;   /* not pairing */
@@ -167,7 +146,7 @@ mafColors[4]    = GREEN;    /* compensatory change */
 mafColors[5]    = RED;      /* not compatible with fold */
 }
 
-void htmlPrintMafAndFold(FILE *f, struct mafAli *maf, char * fold, double * scores, int lineSize)
+void htmlPrintMafAndFold(FILE *f, struct mafAli *maf, char *fold, double *scores, int lineSize)
 /* HTML pretty print maf and fold to f. If scores is non-null then
  * scores are indicated below alignemnt.*/
 {
@@ -178,9 +157,9 @@ int  *mafColors = NULL;
 int  **mafColorFormats = NULL;
 int  *scoreColorFormat = NULL;
 int  scoreColors[]  = {0x999999,0x888888,0x777777,0x666666,0x555555,0x444444,0x333333,0x222222,0x111111,0x000000};
-char * scoreString = 0;
-char * pairSymbols;
-char * posString, * adjPosString;
+char *scoreString = 0;
+char *pairSymbols;
+char *posString, *adjPosString;
 char *adjFold;
 char foldTag[]       = "SS anno";
 char scoresTag[]     = "score  ";
@@ -189,25 +168,25 @@ char pairSymbolsTag[]= "pair symbol";
 char *referenceText  = maf->components->text; /* first sequence in the alignment */
 int  srcChars        = max( strlen(foldTag), strlen(pairSymbolsTag));
 int  refLength       = strlen(referenceText);
+int  foldLength      = strlen(fold);
+
 
 /* Adjust fold to gap structure in referenceText */
 adjFold = gapAdjustFold(fold, referenceText);
 
 /* make arrays for color formatting */
-for (mc = maf->components, N = 0; mc != NULL; mc = mc->next)
-    N++;
+N = slCount(maf->components);
 AllocArray(mafColorFormats, N);
 for (i = 0; i < N; i++)
     mafColorFormats[i] = AllocArray(mafColorFormats[i], refLength);
-AllocArray(pairList, refLength); 
-fold2pairingList(adjFold, pairList);
+fold2pairingList(adjFold, refLength, pairList);
 for (mc = maf->components, i = 0; mc != NULL; mc = mc->next, i++)
     markCompensatoryMutations(mc->text, referenceText, pairList, mafColorFormats[i]);
 defineMafSubstColors(&mafColors);
 
 /* Make pos string */
-posString = needMem(strlen(fold) + 1);
-mkPosString(posString, strlen(fold));
+posString = needMem(foldLength + 1);
+mkPosString(posString, foldLength);
 adjPosString = gapAdjustFold(posString, referenceText);
 
 /* Make a symbol string indicating pairing partner */
@@ -217,11 +196,11 @@ mkPairPartnerSymbols(pairList, pairSymbols, refLength);
 /* Make the score string and its colorFormat */
 if (scores)
      {
-     scoreString      = mkScoreString(scores, strlen(fold), referenceText);
-     scoreColorFormat = mkScoreColorFormat(scores, strlen(fold), referenceText);
+     scoreString      = mkScoreString(scores, foldLength, referenceText);
+     scoreColorFormat = mkScoreColorFormat(scores, foldLength, referenceText);
      }
 
-/* Find length of source (species) field. */
+/* Find max. length of source (species) field. */
 for (mc = maf->components; mc != NULL; mc = mc->next)
     {
     int len = strlen(mc->src);
@@ -293,7 +272,7 @@ htmlColorPrintString(f, s, colorFormat, colors, 0);
 fprintf(f, " max");
 }
 
-struct mafAli * mafFromRnaSecStrItem(char * mafTrack, struct rnaSecStr *item)
+struct mafAli *mafFromRnaSecStrItem(char *mafTrack, struct rnaSecStr *item)
 {
 struct mafAli *maf;
 hSetDb(database);
