@@ -14,7 +14,7 @@
 #include "cdsColors.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.89 2004/03/04 07:12:13 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.90 2004/03/11 15:40:03 hiram Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -478,7 +478,7 @@ printf("<b>Type of graph:&nbsp;</b>");
 wiggleGraphDropDown(&options[8][0], lineBar);
 printf("</TD><TD ALIGN=LEFT>\n");
 
-printf("<b>y=0.0 line:&nbsp;</b>");
+printf("<b>y&nbsp;=&nbsp;0.0 line:&nbsp;</b>");
 wiggleGridDropDown(&options[7][0], horizontalGrid);
 printf(" </TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>\n");
 
@@ -501,7 +501,7 @@ wiggleWindowingDropDown(&options[10][0], windowingFunction);
 printf("<BR>\n<b>Smoothing window:&nbsp;</b>");
 wiggleSmoothingDropDown(&options[11][0], smoothingWindow);
 printf("&nbsp;pixels");
-printf("<BR>\n<b>Draw indicator line at y=</b>&nbsp;\n");
+printf("<BR>\n<b>Draw indicator line at y&nbsp;=&nbsp;</b>&nbsp;\n");
 cgiMakeDoubleVar(&options[12][0], yLineMark, 6);
 printf("&nbsp;&nbsp;");
 wiggleYLineMarkDropDown(&options[13][0], yLineMarkOnOff);
