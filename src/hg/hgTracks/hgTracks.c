@@ -4103,7 +4103,6 @@ if (hTableExists("ctgPos")) slSafeAddHead(&tGroupList, contigTg());
 slSafeAddHead(&tGroupList, goldTrackGroup());
 slSafeAddHead(&tGroupList, gapTg());
 if (hTableExists("genomicDups")) slSafeAddHead(&tGroupList, genomicDupsTg());
-if (!sameString(database, "hg5"))  /* ~~~ Big Bad Bandaide. */
 slSafeAddHead(&tGroupList, coverageTrackGroup());
 if (hTableExists("genieKnown")) slSafeAddHead(&tGroupList, genieKnownTg());
 if (hTableExists("genieAlt")) slSafeAddHead(&tGroupList, genieAltTg());
