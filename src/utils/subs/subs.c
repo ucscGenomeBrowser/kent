@@ -462,6 +462,7 @@ Sub *sb;
 char *s, *d;
 int outdif = 0;
 Boolean ldirty = FALSE;
+int sizeLeft = sizeof(b1) - strlen(b1) - 1;
 
 s = b1;
 d = b2;
@@ -472,7 +473,7 @@ while (*s)
 		if (batch || query_sub(sb,b1))
 			{
 			outdif += (sb->outsize - sb->insize);
-			if (outdif > (int)(sizeof(b2) - sizeof(b1)))
+			if (outdif > sizeLeft) 
 				fatal("Line expansion too big");
 			s += sb->insize;
 			memcpy(d, sb->out, sb->outsize);
@@ -506,6 +507,7 @@ int outdif = 0;
 Boolean ldirty = FALSE;
 char c;
 int clen;
+int sizeLeft = sizeof(b1) - strlen(b1) - 1;
 
 s = b1;
 d = b2;
@@ -519,7 +521,7 @@ while ((c = *s) != 0)
 			if (batch || query_sub(sb,b1))
 				{
 				outdif += (sb->outsize - sb->insize);
-				if (outdif > (int)(sizeof(b2) - sizeof(b1)))
+				if (outdif > sizeLeft)
 					fatal("Line expansion too big");
 				s += sb->insize;
 				memcpy(d, sb->out, sb->outsize);
