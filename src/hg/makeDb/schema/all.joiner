@@ -1796,6 +1796,7 @@ tablesIgnored $sacCer
 
 tablesIgnored $tetNig
     gaze
+    ecoresHg17
 
 tablesIgnored mm3
     chr%_mm3Hg15L
@@ -1816,6 +1817,9 @@ tablesIgnored hg16
     mouse_hmrg
     syntenyMm3
     syntenyMm4
+
+tablesIgnored hg17
+    ecoresTetNig1
 
 tablesIgnored $danRer
     wz_ests
