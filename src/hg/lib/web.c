@@ -26,6 +26,23 @@ void softAbort()
 exit(0);
 }
 
+void webPushErrHandlers()
+/* Push warn and abort handler for errAbort(). */
+{
+if (webInTextMode)
+    pushWarnHandler(textVaWarn);
+else
+    pushWarnHandler(webVaWarn);
+pushAbortHandler(softAbort);
+}
+
+void webPopErrHandlers()
+/* Pop warn and abort handler for errAbort(). */
+{
+popWarnHandler();
+popAbortHandler();
+}
+
 void webStartText()
 /* output the head for a text page */
 {
@@ -33,14 +50,13 @@ void webStartText()
 
 webHeadAlreadyOutputed = TRUE;
 webInTextMode = TRUE;
-pushWarnHandler(textVaWarn);
-pushAbortHandler(softAbort);
+webPushErrHandlers();
 }
 
 void webStartWrapperGateway(struct cart *theCart, char *format, va_list args, boolean withHttpHeader, boolean withLogo, boolean skipSectionHeader)
 /* output a CGI and HTML header with the given title in printf format */
 {
-char *db = NULL;
+char uiState[256];
 
 /* don't output two headers */
 if(webHeadAlreadyOutputed)
@@ -52,6 +68,7 @@ dnaUtilOpen();
 if (withHttpHeader)
     puts("Content-type:text/html\n");
 
+puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
 puts(
     "<HTML>" "\n"
     "<HEAD>" "\n"
@@ -78,7 +95,20 @@ if (withLogo)
 
 if (NULL != theCart)
     {
-    db = cartUsualString(theCart, "db", hGetDb());
+    char *theDb = NULL;
+    char *theGenome = NULL;
+
+    getDbAndGenome(theCart, &theDb, &theGenome);
+
+    snprintf(uiState, sizeof(uiState), "?%s=%s&%s=%s&%s=%u", 
+	     orgCgiName, theGenome,
+	     dbCgiName, theDb,
+	     cartSessionVarName(), cartSessionId(theCart));
+    }
+else
+    {
+    uiState[0] = 0;
+    uiState[1] = 0;
     }
 
 puts(
@@ -90,21 +120,17 @@ puts(
        " 	<TD VALIGN=\"middle\"><font color=\"#89A1DE\">&nbsp;" "\n" 
        );
 
-if (NULL != db)
-    {
-    printf("&nbsp;<A HREF=\"/index.html?db=%s\" class=\"topbar\">" "\n", db);
-    }
-else
-    {
-    puts("&nbsp;<A HREF=\"/index.html\" class=\"topbar\">" "\n");
-    }
-puts(
-     "           Home</A> &nbsp; - &nbsp;" "\n"
-     "       <A HREF=\"/cgi-bin/hgGateway\" class=\"topbar\">" "\n"
-     "           Genome Browser</A> &nbsp; - &nbsp;" "\n"
-     "       <A HREF=\"/cgi-bin/hgBlat?command=start\" class=\"topbar\">" "\n"
-     "           Blat Search</A> &nbsp; - &nbsp;" "\n" 
-     "       <A HREF=\"/FAQ.html\" class=\"topbar\">" "\n"
+printf("&nbsp;<A HREF=\"/index.html%s\" class=\"topbar\">" "\n", uiState);
+puts("           Home</A> &nbsp; - &nbsp;");
+printf("       <A HREF=\"/cgi-bin/hgGateway%s\" class=\"topbar\">\n",
+       uiState);
+puts("           Genome Browser</A> &nbsp; - &nbsp;");
+printf("       <A HREF=\"/cgi-bin/hgBlat?command=start&%s\" class=\"topbar\">",
+       uiState+1);
+puts("           Blat Search</A> &nbsp; - &nbsp;");
+printf("       <A HREF=\"/cgi-bin/hgText%s\" class=\"topbar\">\n", uiState);
+puts("           Table Browser</A> &nbsp; - &nbsp;");
+puts("       <A HREF=\"/FAQ.html\" class=\"topbar\">" "\n"
      "           FAQ</A> &nbsp; - &nbsp;" "\n" 
      "       <A HREF=\"/goldenPath/help/hgTracksHelp.html\" class=\"topbar\">" "\n"
      "           User Guide</A> &nbsp;</font></TD>" "\n"
@@ -136,9 +162,7 @@ if(!skipSectionHeader)
     );
 };
 
-pushWarnHandler(webVaWarn);
-pushAbortHandler(softAbort);
-
+webPushErrHandlers();
 /* set the flag */
 webHeadAlreadyOutputed = TRUE;
 }
@@ -210,8 +234,7 @@ if(!webInTextMode)
 	    "</TD></TR></TABLE>" "\n"
 	    "</BODY></HTML>" "\n"
 	);
-	popWarnHandler();
-	popAbortHandler();
+	webPopErrHandlers();
 	}
 }
 
@@ -219,7 +242,11 @@ void webVaWarn(char *format, va_list args)
 /* Warning handler that closes out page and stuff in
  * the fancy form. */
 {
+if (! webHeadAlreadyOutputed)
+    webStart(NULL, "Error");
 htmlVaWarn(format, args);
+printf("\n<!-- HGERROR -->\n");
+printf("\n\n");
 webEnd();
 }
 
@@ -248,39 +275,37 @@ va_end(args);
 exit(0);
 }
 
-void printOrgListHtml(char *db, char *onChangeText)
+void printGenomeListHtml(char *db, char *onChangeText)
 /*
 Prints to stdout the HTML to render a dropdown list containing a list of the possible
-organisms to choose from.
+Genomes to choose from.
 
-param curOrganism - The organism to choose as selected. 
+param curGenome - The Genome to choose as selected. 
 If NULL, no default selection.
 
 param onChangeText - Optional (can be NULL) text to pass in any onChange javascript.
  */
 {
 char *orgList[128];
-int numOrganisms = 0;
+int numGenomes = 0;
 struct dbDb *dbList = hGetIndexedDatabases();
 struct dbDb *cur = NULL;
 struct hash *hash = hashNew(7); // 2^^7 entries = 128
-char *selOrganism = hOrganism(db);
+char *selGenome = hGenome(db);
 char *values [128];
 
 for (cur = dbList; cur != NULL; cur = cur->next)
     {
-    /* Only add mouse or human to menu */
-    if (!hashFindVal(hash, cur->organism) && 
-        (strstrNoCase(cur->organism, "mouse") || strstrNoCase(cur->organism, "human")))
+    if (!hashFindVal(hash, cur->genome))
         {
-        hashAdd(hash, cur->organism, cur);
-        orgList[numOrganisms] = cur->organism;
-        values[numOrganisms] = cur->organism;
-        numOrganisms++;
+        hashAdd(hash, cur->genome, cur);
+        orgList[numGenomes] = cur->genome;
+        values[numGenomes] = cur->genome;
+        numGenomes++;
         }
     }
 
-cgiMakeDropListFull(orgCgiName, orgList, values, numOrganisms, selOrganism, onChangeText);
+cgiMakeDropListFull(orgCgiName, orgList, values, numGenomes, selGenome, onChangeText);
 }
 
 void printSomeAssemblyListHtmlParm(char *db, struct dbDb *dbList, char *dbCgi, char *javascript)
@@ -298,23 +323,13 @@ char *values[128];
 int numAssemblies = 0;
 struct dbDb *cur = NULL;
 struct hash *hash = hashNew(7); // 2^^7 entries = 128
-char *organism = hOrganism(db);
-char *assembly = NULL;
+char *genome = hGenome(db);
+char *selAssembly = NULL;
 
 for (cur = dbList; cur != NULL; cur = cur->next)
     {
-    /* If we are looking at a zoo database then show the zoo database list */
-    if ((strstrNoCase(db, "zoo") || strstrNoCase(organism, "zoo")) &&
-        strstrNoCase(cur->name, "zoo"))
-        {
-        assemblyList[numAssemblies] = cur->description;
-        values[numAssemblies] = cur->name;
-        numAssemblies++;
-        }
-    else if (strstrNoCase(organism, cur->organism)
-             && !strstrNoCase(cur->name, "zoo")
-             && !strstrNoCase(db, "zoo")
-             && (cur->active || strstrNoCase(cur->name, db)))
+    if (strstrNoCase(genome, cur->genome)
+        && (cur->active || strstrNoCase(cur->name, db)))
         {
         assemblyList[numAssemblies] = cur->description;
         values[numAssemblies] = cur->name;
@@ -324,11 +339,11 @@ for (cur = dbList; cur != NULL; cur = cur->next)
     /* Save a pointer to the current assembly */
     if (strstrNoCase(db, cur->name))
        {
-       assembly = cur->description;
+       selAssembly = cur->description;
        }
     }
 
-    cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, assembly, javascript);
+    cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, selAssembly, javascript);
 }
 
 void printSomeAssemblyListHtml(char *db, struct dbDb *dbList)
@@ -349,6 +364,19 @@ struct dbDb *dbList = hGetIndexedDatabases();
 printSomeAssemblyListHtml(db, dbList);
 }
 
+void printAssemblyListHtmlExtra(char *db, char *javascript)
+{
+/* Find all the assemblies that pertain to the selected genome 
+Prints to stdout the HTML to render a dropdown list containing a list of the possible
+assemblies to choose from.
+
+param curDb - The assembly (the database name) to choose as selected. 
+If NULL, no default selection.
+ */
+struct dbDb *dbList = hGetIndexedDatabases();
+printSomeAssemblyListHtmlParm(db, dbList, dbCgiName, javascript);
+}
+
 void printBlatAssemblyListHtml(char *db)
 {
 /* Find all the assemblies that pertain to the selected genome 
@@ -362,77 +390,49 @@ struct dbDb *dbList = hGetBlatIndexedDatabases();
 printSomeAssemblyListHtml(db, dbList);
 }
 
-void printOrgAssemblyListHtmlParm(char *db, struct dbDb *dbList, char *dbCgi, char *javascript)
+void printOrgAssemblyListAxtInfo(char *dbCgi, char *javascript)
+/* Find all the organisms/assemblies that are referenced in axtInfo, 
+ * and print the dropdown list. */
 {
-/* Find all the organisms/assemblies and that have
-BLAT servers set up.
-Prints to stdout the HTML to render a dropdown list containing a list of the possible
-orgs/assemblies to choose from.
-
-param curDb - The assembly (the database name) to choose as selected. 
-If NULL, no default selection.
- */
+struct dbDb *dbList = hGetAxtInfoDbs();
 char *assemblyList[128];
 char *values[128];
 int numAssemblies = 0;
 struct dbDb *cur = NULL;
-struct hash *hash = hashNew(7); // 2^^7 entries = 128
+char *db = hGetDb();
 char *organism = hOrganism(db);
-char *assembly = NULL;
+char *assembly = cgiOptionalString(dbCgi);
 
-for (cur = dbList; cur != NULL; cur = cur->next)
+for (cur = dbList; ((cur != NULL) && (numAssemblies < 128)); cur = cur->next)
     {
-    /* If we are looking at a zoo database then show the zoo database list */
-    if ((strstrNoCase(db, "zoo") || strstrNoCase(organism, "zoo")) &&
-        strstrNoCase(cur->name, "zoo"))
-        {
-        assemblyList[numAssemblies] = cur->description;
-        values[numAssemblies] = cur->name;
-        numAssemblies++;
-        }
-    else if ( !strstrNoCase(cur->organism, "archae") &&
-                !strstrNoCase(cur->name, "zoo") &&
-                !strstrNoCase(cur->description, "Aug. 2001") &&
-                !strstrNoCase(cur->description, "April 2002") &&
-             (cur->active || strstrNoCase(cur->name, db)))
-        {
-        assemblyList[numAssemblies] = cur->description;
-        values[numAssemblies] = cur->name;
-        numAssemblies++;
-        }
-
-    /* Save a pointer to the current assembly */
-    if (strstrNoCase(db, cur->name))
-       {
-       assembly = cur->description;
-       }
+    assemblyList[numAssemblies] = cur->description;
+    values[numAssemblies] = cur->name;
+    numAssemblies++;
     }
 
-if (javascript == NULL)
-    cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, assembly, NULL);
-else
-    cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, assembly, javascript);
-}
-void printAlignmentListHtml(char *db)
-{
-/* Find all the alignments (from axtInfo) that pertain to the selected genome 
-Prints to stdout the HTML to render a dropdown list containing a list of the possible
-alignments to choose from.
+// Have to use the "menu" name, not the value, to mark selected:
+if (assembly != NULL)
+    assembly = hFreezeFromDb(assembly);
 
-param curDb - The alignment (the database name) to choose as selected. 
-If NULL, no default selection.
+cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, assembly,
+		    javascript);
+}
+
+void printAlignmentListHtml(char *db, char *alCgiName)
+{
+/* Find all the alignments (from axtInfo) that pertain to the selected
+ * genome.  Prints to stdout the HTML to render a dropdown list
+ * containing a list of the possible alignments to choose from.
  */
 char *alignmentList[128];
 char *values[128];
-char *dbCgiName = "alignment";
 int numAlignments = 0;
 struct axtInfo *alignList = hGetAxtAlignments(db);
 struct axtInfo *cur = NULL;
-struct hash *hash = hashNew(7); // 2^^7 entries = 128
 char *organism = hOrganism(db);
 char *alignment = NULL;
 
-for (cur = alignList; cur != NULL; cur = cur->next)
+for (cur = alignList; ((cur != NULL) && (numAlignments < 128)); cur = cur->next)
     {
     /* If we are looking at a zoo database then show the zoo database list */
     if ((strstrNoCase(db, "zoo") || strstrNoCase(organism, "zoo")) &&
@@ -457,66 +457,71 @@ for (cur = alignList; cur != NULL; cur = cur->next)
        alignment = cur->alignment;
        }
     }
-
-cgiMakeDropListFull(dbCgiName, alignmentList, values, numAlignments, alignment, NULL);
+cgiMakeDropListFull(alCgiName, alignmentList, values, numAlignments, alignment, NULL);
 }
 
-char *getDbForOrganism(char *organism, struct cart *cart)
+char *getDbForGenome(char *genome, struct cart *cart)
 {
 /*
-  Function to find the default database for the given organism.
-It looks in the cart first and then, if that database's organism matches the 
-passed-in organism, returns it. If the organism does not match, it returns the default
-database that does match that organism.
+  Function to find the default database for the given Genome.
+It looks in the cart first and then, if that database's Genome matches the 
+passed-in Genome, returns it. If the Genome does not match, it returns the default
+database that does match that Genome.
 
-param organism - The organism for which to find a database
+param Genome - The Genome for which to find a database
 param cart - The cart to use to first search for a suitable database name
-return - The database matching this organism type
+return - The database matching this Genome type
 */
 char *retDb = cartUsualString(cart, dbCgiName, hGetDb());
-char *queryOrganism = hOrganism(retDb);
+char *queryGenome = NULL;
 
-if (!strstrNoCase(organism, queryOrganism))
+if (!hDbExists(retDb))
     {
-    retDb = hDefaultDbForOrganism(organism);
+    retDb = hDefaultDb();
     }
-//uglyf("\n<BR>GETDB = %s", retDb);
+
+queryGenome = hGenome(retDb);
+if (!strstrNoCase(genome, queryGenome))
+    {
+    retDb = hDefaultDbForGenome(genome);
+    }
+
 return retDb;
 }
 
-void getDbAndOrganism(struct cart *cart, char **retDb, char **retOrganism)
+void getDbAndGenome(struct cart *cart, char **retDb, char **retGenome)
 /*
-  The order of preference here is as follows:
-If we got a request that explicitly names the db, that takes
-highest priority, and we synch the organism to that db.
-If we get a cgi request for a specific organism then we use that
-organism to choose the DB.
+ * The order of preference here is as follows:
+ * If we got a request that explicitly names the db, that takes
+ * highest priority, and we synch the organism to that db.
+ * If we get a cgi request for a specific organism then we use that
+ * organism to choose the DB.
 
-In the cart only, we use the same order of preference.
-If someone requests an organism we try to give them the same db as
-was in their cart, unless the organism doesn't match.
-*/
+ * In the cart only, we use the same order of preference.
+ * If someone requests an Genome we try to give them the same db as
+ * was in their cart, unless the Genome doesn't match.
+ */
 {
 *retDb = cgiOptionalString(dbCgiName);
-//uglyf("\n<BR>CGI DB = %s", *retDb);
-*retOrganism = cgiOptionalString(orgCgiName);
-//uglyf("\n<BR>CGI ORG = %s", *retOrganism);
+*retGenome = cgiOptionalString(orgCgiName);
 
 if (*retDb)
     {
-    *retOrganism = hOrganism(*retDb);
-//    uglyf("\n<BR>HORGANISM = %s", *retOrganism);
+    if (!hDbExists(*retDb))
+        {
+        *retDb = hDefaultDb();
+        }
+
+    *retGenome = hGenome(*retDb);
     }
-else if (*retOrganism)
+else if (*retGenome)
     {
-    *retDb = getDbForOrganism(*retOrganism, cart);
-//    uglyf("\n<BR>GETDB = %s", *retDb);
+    *retDb = getDbForGenome(*retGenome, cart);
+    *retGenome = hGenome(*retDb);
     }
 else
     {
     *retDb = cartUsualString(cart, dbCgiName, hGetDb());
-    *retOrganism = hOrganism(*retDb);
-//    uglyf("\n<BR>RET DB = %s", *retDb);
-//    uglyf("\n<BR>RET ORG = %s", *retOrganism);
+    *retGenome = hGenome(*retDb);
     }
 }

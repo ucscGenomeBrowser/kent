@@ -25,12 +25,16 @@ static struct sqlConnCache *hdbCc = NULL;  /* cache for primary database connect
 static struct sqlConnCache *hdbCc2 = NULL;  /* cache for second database connection (ortholog) */
 static struct sqlConnCache *centralCc = NULL;
 
-#define DEFAULT_HUMAN "hg12"
+#define DEFAULT_HUMAN "hg13"
 #define DEFAULT_MOUSE "mm2"
+#define DEFAULT_RAT   "rn1"
 #define DEFAULT_ZOO   "zooHuman3"
+#define DEFAULT_DB "hg13"
+#define DEFAULT_PROTEINS   "proteins"
 
 static char *defaultHuman = DEFAULT_HUMAN;
 static char *defaultMouse = DEFAULT_MOUSE;
+static char *defaultRat   = DEFAULT_RAT;
 static char *defaultZoo   = DEFAULT_ZOO;
 
 static char *hdbHost;
@@ -39,6 +43,8 @@ static char *hdbName2 = DEFAULT_MOUSE;
 static char *hdbUser;
 static char *hdbPassword;
 static char *hdbTrackDb = NULL;
+
+static char *protDbName = DEFAULT_PROTEINS;
 
 static char* getCfgValue(char* envName, char* cfgName)
 /* get a configuration value, from either the environment or the cfg file,
@@ -89,6 +95,21 @@ void hSetDbConnect2(char* host, char *db, char *user, char *password)
     hdbPassword = password;
 }
 
+boolean hDbExists(char *database)
+/*
+  Function to check if this is a valid db name
+*/
+{
+struct sqlConnection *conn = hConnectCentral();
+char buf[128];
+char query[256];
+boolean res = FALSE;
+sprintf(query, "select name from dbDb where name = '%s'", database);
+res = (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL);
+hDisconnectCentral(&conn);
+return res;
+}
+
 void hSetDb(char *dbName)
 /* Set the database name. */
 {
@@ -103,6 +124,12 @@ void hSetDb2(char *dbName)
 if (hdbCc2 != NULL)
     errAbort("Can't hgSetDb after an hgAllocConn2(), sorry.");
 hdbName2 = dbName;
+}
+
+char *hDefaultDb()
+/* Return the default db if all else fails */
+{
+return DEFAULT_DB;
 }
 
 char *hGetDb()
@@ -198,24 +225,40 @@ void hDisconnectCentral(struct sqlConnection **pConn)
 sqlFreeConnection(centralCc, pConn);
 }
 
+boolean hTableExistsDb(char *db, char *table)
+/* Return TRUE if a table exists in db. */
+{
+struct sqlConnection *conn;
+boolean exists;
+
+if (sameString(db, hGetDb()))
+    conn = hAllocConn();
+else if (sameString(db, hGetDb2()))
+    conn = hAllocConn2();
+else
+    {
+    hSetDb2(db);
+    conn = hAllocConn2();
+    }
+exists = sqlTableExists(conn, table);
+if (sameString(db, hGetDb()))
+    hFreeConn(&conn);
+else
+    hFreeConn2(&conn);
+return exists;
+}
+
 boolean hTableExists(char *table)
 /* Return TRUE if a table exists in database. */
 {
-struct sqlConnection *conn = hAllocConn();
-boolean exists = sqlTableExists(conn, table);
-hFreeConn(&conn);
-return exists;
+return(hTableExistsDb(hGetDb(), table));
 }
 
 boolean hTableExists2(char *table)
 /* Return TRUE if a table exists in secondary database. */
 {
-struct sqlConnection *conn = hAllocConn2();
-boolean exists = sqlTableExists(conn, table);
-hFreeConn2(&conn);
-return exists;
+return(hTableExistsDb(hGetDb2(), table));
 }
-
 
 void hParseTableName(char *table, char trackName[128], char chrom[32])
 /* Parse an actual table name like "chr17_random_blastzWhatever" into 
@@ -245,17 +288,26 @@ if (startsWith("chr", table))
     }
 }
 
+int hdbChromSize(struct sqlConnection *conn, char *chromName)
+/* Get chromosome size from given database connection. */
+{
+int size;
+char query[256];
+
+snprintf(query, sizeof(query), 	
+	"select size from chromInfo where chrom = '%s'", chromName);
+size = sqlQuickNum(conn, query);
+return size;
+}
+
 
 int hChromSize(char *chromName)
 /* Return size of chromosome. */
 {
-struct sqlConnection *conn;
-int size;
-char query[256];
-
-conn = hAllocConn();
-sprintf(query, "select size from chromInfo where chrom = '%s'", chromName);
-size = sqlQuickNum(conn, query);
+struct sqlConnection *conn = hAllocConn();
+int size = hdbChromSize(conn, chromName);
+if (size == 0)
+    errAbort("There is no chromosome %s in database %s.", chromName, hdbName);
 hFreeConn(&conn);
 return size;
 }
@@ -263,13 +315,10 @@ return size;
 int hChromSize2(char *chromName)
 /* Return size of chromosome. */
 {
-struct sqlConnection *conn;
-int size;
-char query[256];
-
-conn = hAllocConn2();
-sprintf(query, "select size from chromInfo where chrom = '%s'", chromName);
-size = sqlQuickNum(conn, query);
+struct sqlConnection *conn = hAllocConn2();
+int size = hdbChromSize(conn, chromName);
+if (size == 0)
+    errAbort("There is no chromosome %s in database %s.", chromName, hdbName2);
 hFreeConn2(&conn);
 return size;
 }
@@ -424,7 +473,7 @@ for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
     char query[256];
     struct sqlResult *sr;
     char **row;
-    long size;
+    off_t size;
     char *path;
 
     /* Query database to find full path name and size file should be. */
@@ -463,6 +512,47 @@ return buf;
 }
 
 
+
+int hRnaSeqAndIdx(char *acc, struct dnaSeq **retSeq, HGID *retId, char *gbdate, struct sqlConnection *conn)
+/* Return sequence for RNA and it's database ID. */
+{
+//struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int fd;
+HGID extId;
+size_t size;
+unsigned long offset;
+char *buf;
+struct dnaSeq *seq;
+struct largeSeqFile *lsf;
+
+char *gb_date;
+
+sprintf(query,
+   "select id,extFile,file_offset,file_size,gb_date from seq where seq.acc = '%s'",
+   acc);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row == NULL) return(-1);
+
+//    errAbort("No sequence for %s in database", acc);
+*retId = sqlUnsigned(row[0]);
+extId = sqlUnsigned(row[1]);
+offset = sqlUnsigned(row[2]);
+size = sqlUnsigned(row[3]);
+gb_date = row[4];
+
+strcpy(gbdate, gb_date);
+
+lsf = largeFileHandle(extId);
+buf = readOpenFileSection(lsf->fd, offset, size, lsf->path);
+*retSeq = seq = faFromMemText(buf);
+sqlFreeResult(&sr);
+//hFreeConn(&conn);
+return(0);
+}
 void hRnaSeqAndId(char *acc, struct dnaSeq **retSeq, HGID *retId)
 /* Return sequence for RNA and it's database ID. */
 {
@@ -621,11 +711,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (hti->strandField[0] != 0)
 	if (sameString("tStarts", hti->startsField))
 	    {
-	    // psl: use XOR of qStrand,tStrand
+	    // psl: use XOR of qStrand,tStrand if both are given.
 	    qStrand = row[4][0];
 	    tStrand = row[4][1];
-	    if ((qStrand == '-' && tStrand == '+') ||
-		(qStrand == '+' && tStrand == '-'))
+	    if ((tStrand != '+') && (tStrand != '-'))
+		bedItem->strand[0] = qStrand;
+	    else if ((qStrand == '-' && tStrand == '+') ||
+		     (qStrand == '+' && tStrand == '-'))
 		strncpy(bedItem->strand, "-", 2);
 	    else
 		strncpy(bedItem->strand, "+", 2);
@@ -723,6 +815,32 @@ return(hGetBedRangeDb(hGetDb(), table, chrom, chromStart, chromEnd,
 }
 
 
+// default protein database for older genome releases
+char DEFAULT_PROT_DB[20] = {"proteins1129"};
+char *hPdbFromGdb(char *genomeDb)
+/* Find proteome database name given genome database name */
+{
+struct sqlConnection *conn = hConnectCentral();
+struct sqlResult *sr;
+char **row;
+char *ret = NULL;
+struct dyString *dy = newDyString(128);
+
+if (genomeDb != NULL)
+    dyStringPrintf(dy, "select proteomeDb from gdbPdb where genomeDb = '%s'", genomeDb);
+else
+    internalErr();
+sr = sqlGetResult(conn, dy->string);
+if ((row = sqlNextRow(sr)) != NULL)
+    ret = cloneString(row[0]);
+else
+    ret = strdup(DEFAULT_PROT_DB);
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+freeDyString(&dy);
+return(ret);
+}
+
 static char *hFreezeDbConversion(char *database, char *freeze)
 /* Find freeze given database or vice versa.  Pass in NULL
  * for parameter that is unknown and it will be returned
@@ -795,6 +913,23 @@ if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
     res = cloneString(buf);
 else
     errAbort("Can't find organism for %s", database);
+hDisconnectCentral(&conn);
+return res;
+}
+
+char *hGenome(char *database)
+/* Return genome associated with database.   
+use freeMem on this when done. */
+{
+struct sqlConnection *conn = hConnectCentral();
+char buf[128];
+char query[256];
+char *res = NULL;
+sprintf(query, "select genome from dbDb where name = '%s'", database);
+if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
+    res = cloneString(buf);
+else
+    errAbort("Can't find genome for %s", database);
 hDisconnectCentral(&conn);
 return res;
 }
@@ -953,6 +1088,44 @@ hFreeConn(&conn);
 return binned;
 }
 
+int hFieldIndex(char *table, char *field)
+/* Return index of field in table or -1 if it doesn't exist. */
+{
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int result = -1;
+int index = 0;
+int cols = 0;
+
+/* Read table description into hash. */
+sprintf(query, "describe %s", table);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    cols = sqlCountColumns(sr);
+    while (index < cols)
+        {
+        if (sameString(row[index], field))
+            {
+            result = index;
+            break;
+            }
+        index++;
+        }
+    }
+
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return result;
+}
+
+boolean hHasField(char *table, char *field)
+/* Return TRUE if table has field */
+{
+return hFieldIndex(table, field) >= 0;
+}
 
 boolean hFindBed12FieldsAndBinDb(char *db, char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32],
@@ -1182,24 +1355,31 @@ return hFindBed12FieldsAndBinDb(db, table,
 struct hTableInfo *hFindTableInfoDb(char *db, char *chrom, char *rootName)
 /* Find table information.  Return NULL if no table. */
 {
-static struct hash *hash;
+static struct hash *dbHash;	/* Values are hashes of tables. */
+struct hash *hash;
 struct hTableInfo *hti;
 char fullName[64];
 boolean isSplit = FALSE;
 
 if (chrom == NULL)
     chrom = "chr1";
+if (dbHash == NULL)
+    dbHash = newHash(8);
+hash = hashFindVal(dbHash, db);
 if (hash == NULL)
-    hash = newHash(7);
+    {
+    hash = newHash(8);
+    hashAdd(dbHash, db, hash);
+    }
 if ((hti = hashFindVal(hash, rootName)) == NULL)
     {
     sprintf(fullName, "%s_%s", chrom, rootName);
-    if (hTableExists(fullName))
+    if (hTableExistsDb(db, fullName))
 	isSplit = TRUE;
     else
         {
 	strcpy(fullName, rootName);
-	if (!hTableExists(fullName))
+	if (!hTableExistsDb(db, fullName))
 	    return NULL;
 	}
     AllocVar(hti);
@@ -1247,24 +1427,32 @@ return hFindTableInfoDb(hGetDb(), chrom, rootName);
 }
 
 
-boolean hFindSplitTable(char *chrom, char *rootName, 
+boolean hFindSplitTableDb(char *db, char *chrom, char *rootName, 
 	char retTableBuf[64], boolean *hasBin)
-/* Find name of table that may or may not be split across chromosomes. 
- * Return FALSE if table doesn't exist.  */
+/* Find name of table in a given database that may or may not 
+ * be split across chromosomes. Return FALSE if table doesn't exist.  */
 {
-struct hTableInfo *hti = hFindTableInfo(chrom, rootName);
+struct hTableInfo *hti = hFindTableInfoDb(db, chrom, rootName);
 if (hti == NULL)
     return FALSE;
 if (retTableBuf != NULL)
     {
     if (hti->isSplit)
-	sprintf(retTableBuf, "%s_%s", chrom, rootName);
+	snprintf(retTableBuf, 64, "%s_%s", chrom, rootName);
     else
-	strcpy(retTableBuf, rootName);
+	strncpy(retTableBuf, rootName, 64);
     }
 if (hasBin != NULL)
     *hasBin = hti->hasBin;
 return TRUE;
+}
+
+boolean hFindSplitTable(char *chrom, char *rootName, 
+	char retTableBuf[64], boolean *hasBin)
+/* Find name of table that may or may not be split across chromosomes. 
+ * Return FALSE if table doesn't exist.  */
+{
+return hFindSplitTableDb(hGetDb(), chrom, rootName, retTableBuf, hasBin);
 }
 
 boolean hIsMgscHost()
@@ -1327,8 +1515,7 @@ int hFindBin(int start, int end)
 {
 return binFromRange(start, end);
 }
-
-void hAddBinToQuery(int start, int end, struct dyString *query)
+void hAddBinToQueryGeneral(char *binField, int start, int end, struct dyString *query)
 /* Add clause that will restrict to relevant bins to query. */
 {
 int bFirstShift = binFirstShift(), bNextShift = binNextShift();
@@ -1342,15 +1529,21 @@ for (i=0; i<levels; ++i)
     if (i != 0)
         dyStringAppend(query, " or ");
     if (startBin == endBin)
-        dyStringPrintf(query, "bin=%u", startBin + offset);
+        dyStringPrintf(query, "%s=%u", binField, startBin + offset);
     else
-        dyStringPrintf(query, "bin>=%u and bin<=%u", 
-		startBin + offset, endBin + offset);
+        dyStringPrintf(query, "%s>=%u and %s<=%u", 
+		binField, startBin + offset, binField, endBin + offset);
     startBin >>= bNextShift;
     endBin >>= bNextShift;
     }
 dyStringAppend(query, ")");
 dyStringAppend(query, " and ");
+}
+
+void hAddBinToQuery(int start, int end, struct dyString *query)
+/* Add clause that will restrict to relevant bins to query. */
+{
+hAddBinToQueryGeneral("bin", start, end, query);
 }
 
 static struct sqlResult *hExtendedRangeQuery(struct sqlConnection *conn,
@@ -1404,6 +1597,7 @@ if (table != NULL)
         dyStringPrintf(query, " and %s", extraWhere);
     if (order)
         dyStringPrintf(query, " order by %s", hti->startField);
+    //printf(" %s <p>",query->string);
     sr = sqlGetResult(conn, query->string);
     }
 freeDyString(&query);
@@ -1692,6 +1886,111 @@ slReverse(&dbList);
 return dbList;
 }
 
+
+struct dbDb *hGetAxtInfoDbs()
+/* Get list of db's where we have axt files listed in axtInfo . 
+ * The db's with the same organism as current db go last.
+ * Dispose of result with dbDbFreeList. */
+{
+struct dbDb *dbDbList = NULL, *dbDb;
+struct hash *hash = hashNew(7); // 2^^7 entries = 128
+struct slName *dbNames = NULL, *dbName;
+struct dyString *query = newDyString(256);
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+char *organism = hOrganism(hdbName);
+int count;
+
+if (! hTableExists("axtInfo"))
+    {
+    dyStringFree(&query);
+    hashFree(&hash);
+    hFreeConn(&conn);
+    return NULL;
+    }
+
+/* "species" is a misnomer, we're really looking up database names. */
+sr = sqlGetResult(conn, "select species from axtInfo");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    // uniquify database names
+    if (hashLookup(hash, row[0]) == NULL)
+	{
+	struct slName *sln = newSlName(cloneString(row[0]));
+	slAddHead(&dbNames, sln);
+	hashStoreName(hash, cloneString(row[0]));
+	}
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+
+/* Traverse the uniquified list of databases twice: first for db's with 
+ * a different organism, then for db's with this organism. */
+conn = hConnectCentral();
+dyStringClear(query);
+dyStringAppend(query, "SELECT * from dbDb");
+count = 0;
+for (dbName = dbNames;  dbName != NULL;  dbName = dbName->next)
+    {
+    char *dbOrg = hOrganism(dbName->name);
+    if (! sameString(dbOrg, organism))
+	{
+	count++;
+	if (count == 1)
+	    dyStringPrintf(query, " where active = 1 and (name = '%s'",
+			   dbName->name);
+	else
+	    dyStringPrintf(query, " or name = '%s'", dbName->name);
+	}
+    }
+dyStringPrintf(query, ") order by orderKey");
+if (count > 0)
+    {
+    sr = sqlGetResult(conn, query->string);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	dbDb = dbDbLoad(row);
+	slAddHead(&dbDbList, dbDb);
+	}
+    sqlFreeResult(&sr);
+    }
+dyStringClear(query);
+dyStringAppend(query, "SELECT * from dbDb");
+count = 0;
+for (dbName = dbNames;  dbName != NULL;  dbName = dbName->next)
+    {
+    char *dbOrg = hOrganism(dbName->name);
+    if (sameString(dbOrg, organism))
+	{
+	count++;
+	if (count == 1)
+	    dyStringPrintf(query, " where active = 1 and (name = '%s'",
+			   dbName->name);
+	else
+	    dyStringPrintf(query, " or name = '%s'", dbName->name);
+	}
+    }
+dyStringPrintf(query, ") order by orderKey");
+if (count > 0)
+    {
+    sr = sqlGetResult(conn, query->string);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	dbDb = dbDbLoad(row);
+	slAddHead(&dbDbList, dbDb);
+	}
+    sqlFreeResult(&sr);
+    }
+hDisconnectCentral(&conn);
+slFreeList(&dbNames);
+dyStringFree(&query);
+hashFree(&hash);
+
+slReverse(&dbDbList);
+return(dbDbList);
+}
+
 struct axtInfo *hGetAxtAlignments(char *db)
 /* Get list of alignments where we have axt files listed in axtInfo . 
  * Dispose of this with axtInfoFreeList. */
@@ -1711,7 +2010,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&aiList, ai);
     }
 sqlFreeResult(&sr);
-hDisconnectCentral(&conn);
+hFreeConn(&conn);
 slReverse(&aiList);
 return aiList;
 }
@@ -1810,29 +2109,74 @@ hDisconnectCentral(&conn);
 return &st;
 }
 
-char *hDefaultDbForOrganism(char *organism)
+char *hDefaultDbForGenome(char *genome)
 /*
-Purpose: Return the default database matching the organism.
+Purpose: Return the default database matching the Genome.
 
-param organism - The organism for which we are trying to get the 
+param Genome - The Genome for which we are trying to get the 
     default database.
-return - The default database name for this organism
+return - The default database name for this Genome
  */
 {
 char *result = hGetDb();
 
-if (strstrNoCase(organism, "mouse"))
+if (strstrNoCase(genome, "mouse"))
     {
     result = defaultMouse;
     }
-else if (strstrNoCase(organism, "zoo"))
+else if (strstrNoCase(genome, "rat"))
+    {
+    result = defaultRat;
+    }
+else if (strstrNoCase(genome, "zoo"))
     {
     result = defaultZoo;
     }
-else if (strstrNoCase(organism, "human"))
+else if (strstrNoCase(genome, "human"))
     {
     result = defaultHuman;
     }
 
 return result;
 }
+
+char *sqlGetField(struct sqlConnection *connIn, 
+   	          char *dbName, char *tblName, char *fldName, 
+  	          char *condition)
+/* get a single field from the database, given database name, 
+ * table name, field name, and a condition string */
+{
+struct sqlConnection *conn;
+char query[256];
+struct sqlResult *sr;
+char **row;
+char *answer;
+
+// allocate connection if given NULL
+if (connIn == NULL)
+    {
+    conn = hAllocConn();
+    }
+else
+    {
+    conn = connIn;
+    }
+
+answer = NULL;
+sprintf(query, "select %s from %s.%s  where %s;",
+	fldName, dbName, tblName, condition);
+//printf("<br>%s\n", query); fflush(stdout);
+sr  = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+	    
+if (row != NULL)
+    {
+    answer = strdup(row[0]);
+    }
+
+sqlFreeResult(&sr);
+if (connIn == NULL) hFreeConn(&conn);
+		    
+return(answer);
+}
+

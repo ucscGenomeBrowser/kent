@@ -46,7 +46,7 @@ char *onChangeText = "onchange=\"document.orgForm.org.value = document.mainForm.
    If databases were changed then use the new default position too.
 */
 oldDb = hashFindVal(oldVars, dbCgiName);
-if (!strstrNoCase(oldDb, db))
+if (NULL != oldDb && !strstrNoCase(oldDb, db))
     {
     position = defaultPosition;
     removeCustomTrackData();
@@ -57,9 +57,15 @@ puts(
 "Web tool created by "
 "<A HREF=\"http://www.soe.ucsc.edu/~kent\">Jim Kent</A>, "
 "<A HREF=\"http://www.soe.ucsc.edu/~sugnet\">Charles Sugnet</A>, "
-"<A HREF=\"http://www.soe.ucsc.edu/~booch\">Terry Furey</A> and "
-"<A HREF=\"http://www.soe.ucsc.edu/~haussler\">David Haussler</A> "
-"of UC Santa Cruz.<P></CENTER><P>\n");
+"<A HREF=\"http://www.soe.ucsc.edu/~booch\">Terry Furey</A>, "
+"<A HREF=\"http://www.soe.ucsc.edu/~haussler\">David Haussler</A>, "
+"<A HREF=\"mailto:matt@soe.ucsc.edu\">Matt Schwartz</A>, "
+"<A HREF=\"mailto:angie@soe.ucsc.edu\">Angie Hinrichs</A>, "
+"<A HREF=\"mailto:donnak@soe.ucsc.edu\">Donna Karolchik</A>, "
+"<A HREF=\"mailto:heather@soe.ucsc.edu\">Heather Trumbower</A>, "
+"and the Genome Bioinformatics Group of UC Santa Cruz.</CENTER>\n"
+"<P><CENTER>Copyright 2001 The Regents of the University of California. "
+"All rights reserved.<P></CENTER><P>\n");
 
 puts(
 "<center>\n"
@@ -83,7 +89,7 @@ puts(
 );
 
 puts("<tr><td align=center>\n");
-printOrgListHtml(db, onChangeText);
+printGenomeListHtml(db, onChangeText);
 puts("</td>\n");
 
 puts("<td align=center>\n");
@@ -121,11 +127,14 @@ hgPositionsHelpHtml(organism);
 webNewSection("Add Your Own Tracks");
 
 puts(
-"<P>You can add your own annotation tracks to the browser using \n"
+"<P>Display your own annotation tracks in the browser using \n"
 "the <A HREF=\"../goldenPath/help/customTrack.html\"> \n"
-"procedure described here</A>.  Annotations can be stored in files or\n"
-"pasted in. You can also paste in a URL or list of URLs which refer to \n"
+"procedure described here</A>.  Annotations may be stored in files or\n"
+"pasted in. You can also paste in a URL or a list of URLs which refer to \n"
 "files in one of the supported formats.</P>\n"
+"Click \n"
+"<A HREF=\"../goldenPath/customTracks/custTracks.html\" TARGET=_blank>here</A> \n"
+"to view a collection of custom annotation tracks submitted by Genome Browser users.</P> \n"
 "\n"
 "	Annotation File: <INPUT TYPE=FILE NAME=\"hgt.customFile\"><BR>\n"
 "	<TEXTAREA NAME=\"hgt.customText\" ROWS=14 COLS=80></TEXTAREA>\n"
@@ -146,7 +155,7 @@ void doMiddle(struct cart *theCart)
 {
 cart = theCart;
 
-getDbAndOrganism(cart, &db, &organism);
+getDbAndGenome(cart, &db, &organism);
 cartWebStart(theCart, "%s Genome Browser Gateway \n", organism);
 hgGateway();
 cartWebEnd();

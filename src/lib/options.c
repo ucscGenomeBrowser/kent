@@ -34,7 +34,7 @@ for (i=1; i<origArgc; ++i)
     else
         {
 	char *name = *rdPt++;
-	boolean startDash = (name[0] == '-');
+	boolean startDash = (name[0] == '-' && name[1] != 0);
 	char *eqPos = strchr(name, '=');
 	if (startDash || eqPos != NULL)
 	    {

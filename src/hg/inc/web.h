@@ -28,16 +28,21 @@ void webVaWarn(char *format, va_list args);
 void webAbort(char* title, char* format, ...);
 /* an abort function that outputs a error page */
 
-void printOrgListHtml(char *selOrganism, char *onChangeText);
+void printGenomeListHtml(char *selOrganism, char *onChangeText);
 /*
-Prints to stdout the HTML to render a dropdown list containing a list of the possible
-organisms to choose from.
+Prints to stdout the HTML to render a dropdown list containing a list of the possible genomes to choose from.
 
 param curOrganism - The organism to choose as selected. 
 If NULL, no default selection.
 
 param onChangeText - Optional (can be NULL) text to pass in any onChange javascript.
  */
+
+void webPushErrHandlers();
+/* Push warn and abort handler for errAbort(). */
+
+void webPopErrHandlers();
+/* Pop warn and abort handler for errAbort(). */
 
 void printAssemblyListHtml(char *curDb);
 /*
@@ -48,23 +53,24 @@ param curDb - The assembly (the database name) to choose as selected.
 If NULL, no default selection.
  */
 
-void printOrgAssemblyListHtmlParm(char *db, struct dbDb *dbList, char *dbCgi, char *javascript);
-/* Find all the organisms/assemblies and that have
-BLAT servers set up.
+void printAssemblyListHtmlExtra(char *curDb, char *javascript);
+/*
 Prints to stdout the HTML to render a dropdown list containing a list of the possible
-orgs/assemblies to choose from.
+assemblies to choose from.
 
 param curDb - The assembly (the database name) to choose as selected. 
 If NULL, no default selection.
+param javascript - The javascript text for the select box
  */
 
-void printAlignmentListHtml(char *db) ;
-/* Find all the alignments (from axtInfo) that pertain to the selected genome 
-Prints to stdout the HTML to render a dropdown list containing a list of the possible
-alignments to choose from.
+void printOrgAssemblyListAxtInfo(char *dbCgi, char *javascript);
+/* Find all the organisms/assemblies that are referenced in axtInfo, 
+ * and print the dropdown list. */
 
-param curDb - The alignment (the database name) to choose as selected. 
-If NULL, no default selection.
+void printAlignmentListHtml(char *db, char *alCgiName);
+/* Find all the alignments (from axtInfo) that pertain to the selected
+ * genome.  Prints to stdout the HTML to render a dropdown list
+ * containing a list of the possible alignments to choose from.
  */
 
 void printBlatAssemblyListHtml(char *curDb);
@@ -76,7 +82,7 @@ param curDb - The assembly (the database name) to choose as selected.
 If NULL, no default selection.
  */
 
-void getDbAndOrganism(struct cart *cart, char **retDb, char **retOrganism);
+void getDbAndGenome(struct cart *cart, char **retDb, char **retGenome);
 /*
   The order of preference here is as follows:
 If we got a request that explicitly names the db, that takes
@@ -88,4 +94,5 @@ In the cart only, we use the same order of preference.
 If someone requests an organism we try to give them the same db as
 was in their cart, unless the organism doesn't match.
 */
+
 #endif /* WEB_H */

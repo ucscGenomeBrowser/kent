@@ -1,8 +1,0 @@
-track genscan
-shortLabel Genscan Genes
-longLabel Genscan Gene Predictions
-priority 17.5
-visibility hide
-color 170,100,0
-type genePred genscanPep
-

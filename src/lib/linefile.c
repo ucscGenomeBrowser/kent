@@ -133,7 +133,23 @@ while (!gotLf)
 	memmove(buf, buf+oldEnd, sizeLeft);
     lf->bufOffsetInFile += oldEnd;
     readSize = lineFileLongNetRead(lf->fd, buf+sizeLeft, readSize);
-    if (readSize <= 0)
+    if ((readSize == 0) && (endIx > oldEnd))
+	{
+	/* If there is no newline at end of file, we will end up here. */
+	endIx++;
+	if (lf->zTerm)
+	    {
+	    buf[endIx-1] = 0;
+	    }
+	lf->lineStart = newStart = lf->lineEnd;
+	lf->lineEnd = endIx;
+	++lf->lineIx;
+	if (retSize != NULL)
+	    *retSize = endIx - newStart;
+	*retStart = buf + newStart;
+	return TRUE;
+	}
+    else if (readSize <= 0)
 	{
 	lf->bytesInBuf = lf->lineStart = lf->lineEnd = 0;
 	return FALSE;
@@ -153,7 +169,7 @@ while (!gotLf)
 	}
     if (!gotLf && bytesInBuf == lf->bufSize)
         {
-	if (bufSize > 1024*1024)
+	if (bufSize >= 64*1024*1024)
 	    {
 	    errAbort("Line too long (more than %d chars) line %d of %s",
 		lf->bufSize, lf->lineIx+1, lf->fileName);
@@ -208,6 +224,30 @@ if (expecting != got)
 	    expecting, lf->lineIx, lf->fileName, got);
 }
 
+void lineFileExpectAtLeast(struct lineFile *lf, int expecting, int got)
+/* Check line has right number of words. */
+{
+if (got < expecting)
+    errAbort("Expecting at least %d words line %d of %s got %d", 
+	    expecting, lf->lineIx, lf->fileName, got);
+}
+
+
+boolean lineFileNextReal(struct lineFile *lf, char **retStart)
+/* Fetch next line from file that is not blank and 
+ * does not start with a '#'. */
+{
+char *s, c;
+while (lineFileNext(lf, retStart, NULL))
+    {
+    s = skipLeadingSpaces(*retStart);
+    c = s[0];
+    if (c != 0 && c != '#')
+	return TRUE;
+    }
+return FALSE;
+}
+
 int lineFileChopNext(struct lineFile *lf, char *words[], int maxWords)
 /* Return next non-blank line that doesn't start with '#' chopped into words. */
 {
@@ -225,12 +265,43 @@ while (lineFileNext(lf, &line, &lineSize))
 return 0;
 }
 
+int lineFileChopNextTab(struct lineFile *lf, char *words[], int maxWords)
+/* Return next non-blank line that doesn't start with '#' chopped into words
+ * on tabs */
+{
+int lineSize, wordCount;
+char *line;
+
+while (lineFileNext(lf, &line, &lineSize))
+    {
+    if (line[0] == '#')
+        continue;
+    wordCount = chopByChar(line, '\t', words, maxWords);
+    if (wordCount != 0)
+        return wordCount;
+    }
+return 0;
+}
+
 boolean lineFileNextRow(struct lineFile *lf, char *words[], int wordCount)
 /* Return next non-blank line that doesn't start with '#' chopped into words.
  * Returns FALSE at EOF.  Aborts on error. */
 {
 int wordsRead;
 wordsRead = lineFileChopNext(lf, words, wordCount);
+if (wordsRead == 0)
+    return FALSE;
+if (wordsRead < wordCount)
+    lineFileExpectWords(lf, wordCount, wordsRead);
+return TRUE;
+}
+
+boolean lineFileNextRowTab(struct lineFile *lf, char *words[], int wordCount)
+/* Return next non-blank line that doesn't start with '#' chopped into words
+ * at tabs. Returns FALSE at EOF.  Aborts on error. */
+{
+int wordsRead;
+wordsRead = lineFileChopNextTab(lf, words, wordCount);
 if (wordsRead == 0)
     return FALSE;
 if (wordsRead < wordCount)

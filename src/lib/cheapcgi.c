@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "cheapcgi.h"
 #include "portable.h"
-
+#include "linefile.h"
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -523,8 +523,8 @@ int cgiOptionalInt(char *varName, int defaultVal)
 /* This returns integer value of varName if it exists in cgi environment
  * and it's not just the empty string otherwise it returns defaultVal. */
 {
-char *s;
-if (!cgiVarExists(varName))
+char *s = cgiOptionalString(varName);
+if ((s == NULL) || (s[0] == 0))
     return defaultVal;
 return cgiInt(varName);
 }
@@ -876,3 +876,52 @@ boolean cgiSpoof(int *pArgc, char *argv[])
 return cgiFromCommandLine(pArgc, argv, TRUE);
 }
 
+boolean cgiFromFile(char *fileName)
+/* Set up a cgi environment using parameters stored in a file.
+ * Takes file with arguments in the form:
+ *       argument1=someVal
+ *       # This is a comment
+ *       argument2=someOtherVal
+ *       ...
+ * and puts them into the cgi environment so that the usual
+ * cgiGetVar() commands can be used. Useful when a program 
+ * has a lot of possible parameters.
+ */
+{
+char **argv = NULL;
+int argc = 0; 
+int maxArgc = 10;
+int i;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line, *word;
+boolean spoof= FALSE;
+AllocArray(argv, maxArgc);
+/* Remember that first arg is program name.
+   Put filename there instead. */
+argc = 1; 
+argv[0] = cloneString(fileName);
+for(;;)
+    {
+    /* If we are at the end we're done. */
+    if(!lineFileNext(lf, &line, NULL))
+	break;
+    /* If it is a comment or blank line skip it. */
+    if (line[0] == '#' || sameString(line, ""))
+        continue;
+    /* If our argv array is full expand it. */
+    if((argc+1) >= maxArgc)
+	{
+	ExpandArray(argv, maxArgc, 2*maxArgc);
+	maxArgc *= 2;
+	}
+    /* Fill in another argument to our psuedo arguments. */
+    argv[argc++] = cloneString(line);
+    }
+spoof = cgiSpoof(&argc, argv);
+/* Cleanup. */
+lineFileClose(&lf);
+for(i=0; i<argc; i++)
+    freez(&argv[i]);
+freez(&argv);
+return spoof;
+}

@@ -199,7 +199,7 @@ struct gfOutput *gfOutputAxtMem(int goodPpt, boolean qIsProt,
 struct gfOutput *gfOutputBlast(int goodPpt, 
 	boolean qIsProt, boolean tIsProt, 
 	char *databaseName, int databaseSeqCount, double databaseLetters,
-	boolean isWu, FILE *f);
+	boolean isWu, boolean isXml, FILE *f);
 /* Setup output for blast/wublast format. */
 
 void gfOutputQuery(struct gfOutput *out, FILE *f);
@@ -237,7 +237,7 @@ struct genoFind *gfIndexNibs(int nibCount, char *nibNames[],
 void gfIndexTransNibs(struct genoFind *transGf[2][3], 
     int nibCount, char *nibNames[], 
     int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile,
-    boolean allowOneMismatch);
+    boolean allowOneMismatch, boolean mask);
 /* Make translated (6 frame) index for all nib files. */
 
 /* -------- Routines to scan index for homolgous areas ------------ */

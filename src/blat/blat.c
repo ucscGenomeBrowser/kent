@@ -19,7 +19,7 @@
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
-int version = 15;	/* Blat version number. */
+int version = 18;		/* Blat version number. */
 char *databaseName;		/* File name of database. */
 int databaseSeqCount = 0;	/* Number of sequences in database. */
 unsigned long databaseLetters = 0;	/* Number of bases in database. */
@@ -65,6 +65,11 @@ printf(
   "               and external file.  This will increase the speed\n"
   "               by a factor of 40 in many cases, but is not required\n"
   "   output.psl is where to put the output.\n"
+  "   Subranges of nib files may specified using the syntax:\n"
+  "      /path/file.nib:seqid:start-end\n"
+  "   or\n"
+  "      /path/file.nib:start-end\n"
+  "   With the second form, a sequence id of file:start-end will be used.\n"
   "options:\n"
   "   -t=type     Database type.  Type is one of:\n"
   "                 dna - DNA sequence\n"
@@ -96,7 +101,7 @@ printf(
   "   -maxGap=N   sets the size of maximum gap between tiles in a clump.  Usually\n"
   "               set from 0 to 3.  Default is 2. Only relevent for minMatch > 1.\n"
   "   -noHead     suppress .psl header (so it's just a tab-separated file)\n"
-  "   -makeOoc=N.ooc Make overused tile file\n"
+  "   -makeOoc=N.ooc Make overused tile file. Target needs to be complete genome.\n"
   "   -repMatch=N sets the number of repetitions of a tile allowed before\n"
   "               it is marked as overused.  Typically this is 256 for tileSize\n"
   "               12, 1024 for tile size 11, 4096 for tile size 10.\n"
@@ -139,7 +144,7 @@ boolean gotSingle = FALSE;
 char *buf;		/* This will leak memory but won't matter. */
 
 /* Detect nib files by suffix since that is standard. */
-if (isNib(fileName))
+if (isNib(fileName) || sameString(fileName, "stdin"))
     gotSingle = TRUE;
 /* Detect .fa files (where suffix is not standardized)
  * by first character being a '>'. */
@@ -162,35 +167,6 @@ if (gotSingle)
 else
     {
     readAllWords(fileName, retFiles, retFileCount, &buf);
-    }
-}
-
-void toggleCase(char *s, int size)
-/* toggle upper and lower case chars in string. */
-{
-char c;
-int i;
-for (i=0; i<size; ++i)
-    {
-    c = s[i];
-    if (isupper(c))
-        c = tolower(c);
-    else if (islower(c))
-        c = toupper(c);
-    s[i] = c;
-    }
-}
-
-void upperToN(char *s, int size)
-/* Turn upper case letters to N's. */
-{
-char c;
-int i;
-for (i=0; i<size; ++i)
-    {
-    c = s[i];
-    if (isupper(c))
-        s[i] = 'n';
     }
 }
 
@@ -302,7 +278,7 @@ if (hardMask)
 }
 
 bioSeq *getSeqList(int fileCount, char *files[], struct hash *hash, 
-	boolean isProt, boolean isTransDna, char *maskType)
+	boolean isProt, boolean isTransDna, char *maskType, boolean showStatus)
 /* From an array of .fa and .nib file names, create a
  * list of dnaSeqs. */
 {
@@ -311,7 +287,6 @@ char *fileName;
 bioSeq *seqList = NULL, *seq;
 int count = 0; 
 unsigned long totalSize = 0;
-boolean maskWarned = FALSE;
 boolean doMask = (maskType != NULL);
 
 for (i=0; i<fileCount; ++i)
@@ -321,22 +296,13 @@ for (i=0; i<fileCount; ++i)
     fileName = files[i];
     if (isNib(fileName))
         {
-	FILE *f;
-	int size;
-
-	if (maskType != NULL && !maskWarned)
-	    {
-	    if (sameWord(maskType, "lower") || sameWord(maskType, "upper"))
-	        warn("Warning: mask=lower and mask=upper don't work with .nib files.");
-	    }
-	nibOpenVerify(fileName, &f, &size);
-	seq = nibLdPart(fileName, f, size, 0, size);
-	seq->name = fileName;
-	carefulClose(&f);
+	seq = nibLoadAllMasked(NIB_MASK_MIXED|NIB_BASE_NAME, fileName);
 	slAddHead(&list, seq);
 	hashAddUnique(hash, seq->name, seq);
-	totalSize += size;
+	totalSize += seq->size;
 	count += 1;
+	if (!doMask)
+	    faToDna(seq->dna, seq->size);
 	}
     else
         {
@@ -357,6 +323,7 @@ for (i=0; i<fileCount; ++i)
 	    count += 1;
 	    }
 	faFreeFastBuf();
+	lineFileClose(&lf);
 	}
 
     /* If necessary mask sequence from file. */
@@ -370,7 +337,8 @@ for (i=0; i<fileCount; ++i)
     /* Move local list to head of bigger list. */
     seqList = slCat(list, seqList);
     }
-printf("Loaded %lu letters in %d sequences\n", totalSize, count);
+if (showStatus)
+    printf("Loaded %lu letters in %d sequences\n", totalSize, count);
 slReverse(&seqList);
 return seqList;
 }
@@ -476,7 +444,7 @@ if (trimA)
 }
 
 void searchOneIndex(int fileCount, char *files[], struct genoFind *gf, char *outName, 
-	boolean isProt, struct hash *maskHash, FILE *outFile)
+	boolean isProt, struct hash *maskHash, FILE *outFile, boolean showStatus)
 /* Search all sequences in all files against single genoFind index. */
 {
 int i;
@@ -497,18 +465,24 @@ for (i=0; i<fileCount; ++i)
         {
 	FILE *f;
 	struct dnaSeq *seq;
+	Bits *qMaskBits = NULL;
 
 	if (isProt)
 	    errAbort("%s: Can't use .nib files with -prot or d=prot option\n", fileName);
-	seq = nibLoadAll(fileName);
-	freez(&seq->name);
-	seq->name = cloneString(fileName);
+	seq = nibLoadAllMasked(NIB_MASK_MIXED, fileName);
+	if (maskQuery)
+	    {
+	    toggleCase(seq->dna, seq->size);
+	    qMaskBits = maskFromUpperCaseSeq(seq);
+	    }
+	faToDna(seq->dna, seq->size);
 	trimSeq(seq, &trimmedSeq);
 	carefulClose(&f);
-	searchOne(&trimmedSeq, gf, outFile, isProt, maskHash, NULL);
+	searchOne(&trimmedSeq, gf, outFile, isProt, maskHash, qMaskBits);
 	totalSize += seq->size;
 	freeDnaSeq(&seq);
 	count += 1;
+	bitFree(&qMaskBits);
 	}
     else
         {
@@ -543,7 +517,8 @@ for (i=0; i<fileCount; ++i)
 	}
     }
 carefulClose(&outFile);
-printf("Searched %lu bases in %d sequences\n", totalSize, count);
+if (showStatus)
+    printf("Searched %lu bases in %d sequences\n", totalSize, count);
 }
 
 struct trans3 *seqListToTrans3List(struct dnaSeq *seqList, aaSeq *transLists[3], struct hash **retHash)
@@ -594,7 +569,7 @@ for (qIsRc = 0; qIsRc <= qIsDna; qIsRc += 1)
     }
 }
 
-void bigBlat(struct dnaSeq *untransList, int queryCount, char *queryFiles[], char *outFile, boolean transQuery, boolean qIsDna, FILE *out)
+void bigBlat(struct dnaSeq *untransList, int queryCount, char *queryFiles[], char *outFile, boolean transQuery, boolean qIsDna, FILE *out, boolean showStatus)
 /* Run query against translated DNA database (3 frames on each strand). */
 {
 int frame, i;
@@ -611,7 +586,8 @@ boolean toggle = FALSE;
 boolean maskUpper = FALSE;
 
 ZeroVar(&trimmedSeq);
-printf("Blatx %d sequences in database, %d files in query\n", slCount(untransList), queryCount);
+if (showStatus)
+    printf("Blatx %d sequences in database, %d files in query\n", slCount(untransList), queryCount);
 
 /* Figure out how to manage query case.  Proteins want to be in
  * upper case, generally, nucleotides in lower case.  But there
@@ -712,17 +688,19 @@ boolean tIsProt = (tType == gftProt);
 boolean qIsProt = (qType == gftProt);
 boolean bothSimpleNuc = (tType == gftDna && (qType == gftDna || qType == gftRna));
 FILE *f = mustOpen(outName, "w");
+boolean showStatus = (f != stdout);
 
 databaseName = dbFile;
 getFileArray(dbFile, &dbFiles, &dbCount);
 if (makeOoc != NULL)
     {
     gfMakeOoc(makeOoc, dbFiles, dbCount, tileSize, repMatch, tType);
-    printf("Done making %s\n", makeOoc);
+    if (showStatus)
+	printf("Done making %s\n", makeOoc);
     exit(0);
     }
 getFileArray(queryFile, &queryFiles, &queryCount);
-dbSeqList = getSeqList(dbCount, dbFiles, dbHash, tIsProt, tType == gftDnaX, mask);
+dbSeqList = getSeqList(dbCount, dbFiles, dbHash, tIsProt, tType == gftDnaX, mask, showStatus);
 databaseSeqCount = slCount(dbSeqList);
 for (seq = dbSeqList; seq != NULL; seq = seq->next)
     databaseLetters += seq->size;
@@ -746,16 +724,16 @@ if (bothSimpleNuc || (tIsProt && qIsProt))
 		hashAdd(maskHash, source[i].seq->name, source[i].maskedBits);
         unmaskNucSeqList(dbSeqList);
 	}
-    searchOneIndex(queryCount, queryFiles, gf, outName, tIsProt, maskHash, f);
+    searchOneIndex(queryCount, queryFiles, gf, outName, tIsProt, maskHash, f, showStatus);
     freeHash(&maskHash);
     }
 else if (tType == gftDnaX && qType == gftProt)
     {
-    bigBlat(dbSeqList, queryCount, queryFiles, outName, FALSE, TRUE, f);
+    bigBlat(dbSeqList, queryCount, queryFiles, outName, FALSE, TRUE, f, showStatus);
     }
 else if (tType == gftDnaX && (qType == gftDnaX || qType == gftRnaX))
     {
-    bigBlat(dbSeqList, queryCount, queryFiles, outName, TRUE, qType == gftDnaX, f);
+    bigBlat(dbSeqList, queryCount, queryFiles, outName, TRUE, qType == gftDnaX, f, showStatus);
     }
 else
     {
@@ -846,7 +824,7 @@ if (dIsProtLike)
  * they are within range. */
 tileSize = cgiOptionalInt("tileSize", tileSize);
 minMatch = cgiOptionalInt("minMatch", minMatch);
-oneOff = cgiOptionalInt("oneOff", oneOff);
+oneOff = cgiVarExists("oneOff");
 minScore = cgiOptionalInt("minScore", minScore);
 maxGap = cgiOptionalInt("maxGap", maxGap);
 minRepDivergence = cgiUsualDouble("minRepDivergence", minRepDivergence);

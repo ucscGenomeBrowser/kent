@@ -29,6 +29,8 @@ void controlGridEndCell(struct controlGrid *cg);
 void endControlGrid(struct controlGrid **pCg);
 /* Finish up a control grid. */
 
+void controlGridEndRow(struct controlGrid *cg);
+/* Force end of row. */
 
 /******  Some stuff for hide/dense/full controls ******/
 enum trackVisibility 
@@ -36,17 +38,23 @@ enum trackVisibility
     {
     tvHide=0, 		/* Hide it. */
     tvDense=1,          /* Squish it together. */
-    tvFull=2            /* Expand it out. */
+    tvFull=2,           /* Expand it out. */
+    tvPack=3,           /* Zig zag it up and down. */
+    tvSquish=4,         /* Pack with thin boxes and no labels. */
     };  
 
 enum trackVisibility hTvFromString(char *s);
 /* Given a string representation of track visibility, return as
  * equivalent enum. */
 
+enum trackVisibility hTvFromStringNoAbort(char *s);
+/* Given a string representation of track visibility, return as
+ * equivalent enum. */
+
 char *hStringFromTv(enum trackVisibility vis);
 /* Given enum representation convert to string. */
 
-void hTvDropDown(char *varName, enum trackVisibility vis);
+void hTvDropDown(char *varName, enum trackVisibility vis, boolean canPack);
 /* Make track visibility drop down for varName */
 
 /****** Some stuff for stsMap related controls *******/

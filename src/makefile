@@ -14,4 +14,9 @@ libs:
 	cd hg/lib; make; cd ../..
 
 clean:
-	cd lib; make clean; cd ..; cd hg; make clean; cd ..;
+	cd lib; make clean; cd ..; 
+	cd hg; make clean; cd ..; 
+	cd jkOwnLib; make clean; cd ..
+
+tags:
+	ctags $(HOME)/src/lib/*.c $(HOME)/src/inc/*.h $(HOME)/src/hg/lib/*.c $(HOME)/src/jkOwnLib/*.c

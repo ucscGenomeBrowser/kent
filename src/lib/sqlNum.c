@@ -48,3 +48,27 @@ if (neg)
 return res;
 }
 
+off_t sqlOffset(char *s)
+/* Convert string to an off_t.  Unlike atol assumes all of string is
+ * number. */
+{
+off_t res = 0;
+boolean neg = FALSE;
+char c;
+
+if ((c = *s) == '-')
+    {
+    neg = TRUE;
+    c = *(++s);
+    }
+res = c - '0';
+while ((c = *(++s)) != 0)
+    {
+    res *= 10;
+    res += c - '0';
+    }
+if (neg)
+    res = -res;
+return res;
+}
+

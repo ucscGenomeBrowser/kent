@@ -8,6 +8,25 @@
 #include "jksql.h"
 #include "estOrientInfo.h"
 
+static char *createString = 
+    "CREATE TABLE %s (\n"
+    "    bin smallint unsigned not null,        # Bin for fast index\n"
+    "    chrom varchar(255) not null,	        # Human chromosome or FPC contig\n"
+    "    chromStart int unsigned not null,	# Start position in chromosome\n"
+    "    chromEnd int unsigned not null,	# End position in chromosome\n"
+    "    name varchar(255) not null,	        # Accession of EST\n"
+    "    intronOrientation smallint not null,	# Orientation of introns with respect to EST\n"
+    "    sizePolyA smallint not null,	        # Number of trailing A's\n"
+    "    revSizePolyA smallint not null,	# Number of trailing A's on reverse strand\n"
+    "    signalPos smallint not null,	        # Position of start of polyA signal relative to end of EST or 0 if no signal\n"
+    "    revSignalPos smallint not null,	# PolyA signal position on reverse strand if any\n"
+    "              #Indices\n"
+    "    INDEX(chrom(8),bin),\n"
+    "    INDEX(chrom(8),chromStart),\n"
+    "    INDEX(chrom(8),chromEnd),\n"
+    "    INDEX(name(20))\n"
+    ")\n";
+
 void estOrientInfoStaticLoad(char **row, struct estOrientInfo *ret)
 /* Load a row from estOrientInfo table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
@@ -164,5 +183,16 @@ fprintf(f, "%d", el->signalPos);
 fputc(sep,f);
 fprintf(f, "%d", el->revSignalPos);
 fputc(lastSep,f);
+}
+
+char *estOrientInfoGetCreateSql(char *table)
+/* Get SQL to create an estOrientInfo table.  */
+{
+struct dyString *sqlCmd = newDyString(2048);
+char *sqlCmdStr;
+dyStringPrintf(sqlCmd, createString, table);
+sqlCmdStr = cloneString(sqlCmd->string);
+dyStringFree(&sqlCmd);
+return sqlCmdStr;
 }
 

@@ -572,8 +572,8 @@ for (rl = recList; rl != NULL; rl = rl->next)
     writeOne(out, rl->rec.fileIx);
     mustWrite(out, rl->rec.name, maxNameSize);
     }
-fclose(out);
-
+if (fclose(out) != 0)
+    errnoAbort("fclose failed");
 /* Clean up. */
 lmCleanup(&localMem);
 }

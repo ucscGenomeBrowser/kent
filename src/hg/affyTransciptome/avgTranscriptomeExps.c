@@ -1,11 +1,16 @@
 #include "common.h"
 #include "sample.h"
+#include "cheapcgi.h"
 
+boolean doAll = FALSE;
+char *suffix = NULL;
 void usage()
 {
 errAbort("Averages together replicates of the affy transcriptome data set.\n"
+	 "Will skip certain experiments unless directed otherwise as they\n"
+	 "were not in the original data set.\n"
 	 "usage:\n\t"
-	 "avgTranscriptomeExps <go>\n");
+	 "avgTranscriptomeExps <go> <optional -doAll> <optional suffix=pairs.sample.norm>\n");
 }
 
 char *getNameForExp(int num)
@@ -85,14 +90,14 @@ for(i=1; i<12; i++)
 	char buff[2048];
 	int count;
 	struct sample *avgList = NULL, *avg;
-	if(i != 6 || j != 'a')
+	if((i != 6 || j != 'a') || doAll)
 	    {
-	    snprintf(buff, sizeof(buff), "%d.%c.1.pairs.sample.norm", i,j);
+	    snprintf(buff, sizeof(buff), "%d.%c.1.%s", i,j,suffix);
 	    printf("Averaging %s\n", buff);
 	    sList1 = sampleLoadAll(buff);
-	    snprintf(buff, sizeof(buff), "%d.%c.2.pairs.sample.norm", i,j);
+	    snprintf(buff, sizeof(buff), "%d.%c.2.%s", i,j,suffix);
 	    sList2 = sampleLoadAll(buff);
-	    snprintf(buff, sizeof(buff), "%d.%c.3.pairs.sample.norm", i,j);
+	    snprintf(buff, sizeof(buff), "%d.%c.3.%s", i,j,suffix);
 	    sList3 = sampleLoadAll(buff);
 	    count = slCount(sList1);
 	    AllocArray(sArray1,count);
@@ -110,7 +115,7 @@ for(i=1; i<12; i++)
 		slAddHead(&avgList, avg);
 		}
 	    slReverse(&avgList);
-	    snprintf(buff, sizeof(buff), "%d.%c.1.pairs.sample.norm.avg", i,j);
+	    snprintf(buff, sizeof(buff), "%d.%c.1.%s.avg", i,j,suffix);
 	    out = mustOpen(buff, "w");
 	    for(s = avgList; s != NULL; s = s->next)
 		sampleTabOut(s, out);
@@ -129,9 +134,14 @@ for(i=1; i<12; i++)
 
 int main(int argc, char *argv[])
 {
+cgiSpoof(&argc, argv);
 if(argc == 1)
     usage();
-else
+else 
+    {
+    suffix = cgiUsualString("suffix", "pairs.sample.norm");
+    doAll = cgiBoolean("doAll");
     avgTranscriptomeExps();
+    }
 return 0;
 }

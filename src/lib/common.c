@@ -549,6 +549,23 @@ while (--n >= 0)
     *s++ = tolower(*s);
 }
 
+void toggleCase(char *s, int size)
+/* toggle upper and lower case chars in string. */
+{
+char c;
+int i;
+for (i=0; i<size; ++i)
+    {
+    c = s[i];
+    if (isupper(c))
+        c = tolower(c);
+    else if (islower(c))
+        c = toupper(c);
+    s[i] = c;
+    }
+}
+
+
 void touppers(char *s)
 /* Convert entire string to upper case. */
 {
@@ -558,6 +575,54 @@ for (;;)
     if ((c = *s) == 0) break;
     *s++ = toupper(c);
     }
+}
+
+char *replaceChars(char *string, char *old, char *new)
+/*
+  Replaces the old with the new.
+ The old and new string need not be of equal size
+ Can take any length string.
+ Return value needs to be freeMem'd.
+*/
+{
+int numTimes = 0;
+int oldLen = strlen(old);
+int newLen = strlen(new);
+int strLen = 0;
+char *result = NULL;
+char *ptr = strstr(string, old);
+char *resultPtr = NULL;
+
+while(NULL != ptr)
+    {
+    numTimes++;
+    ptr += oldLen;
+    ptr = strstr(ptr, old);
+    }
+strLen = strlen(string) + (numTimes * (newLen - oldLen));
+result = needMem(strLen + 1);
+
+ptr = strstr(string, old);
+resultPtr = result;
+while(NULL != ptr)
+    {
+    fprintf(stderr, "RESULT: %s XXXXXXXXXXXXXXXXXXXXXXX<BR>\n", result);
+    strLen = ptr - string;
+    strcpy(resultPtr, string);
+    string = ptr + oldLen;
+
+    fprintf(stderr, "RESULT: %s XXXXXXXXXXXXXXXXXXXXXXX<BR>\n", result);
+    resultPtr += strLen;
+    fprintf(stderr, "RESULT: %s XXXXXXXXXXXXXXXXXXXXXXX<BR>\n", result);
+    strcpy(resultPtr, new);
+    fprintf(stderr, "RESULT: %s XXXXXXXXXXXXXXXXXXXXXXX<BR>\n", result);
+    resultPtr += newLen;
+    fprintf(stderr, "RESULT: %s XXXXXXXXXXXXXXXXXXXXXXX<BR>\n", result);
+    ptr = strstr(string, old);
+    }
+
+strcpy(resultPtr, string);
+return result;
 }
 
 void tolowers(char *s)
@@ -613,6 +678,14 @@ while ((a = *s++) != 0)
 return count;
 }
 
+int countLeadingChars(char *s, char c)
+/* Count number of characters c at start of string. */
+{
+int count = 0;
+while (*s++ == c)
+   ++count;
+return count;
+}
 
 /* int chopString(in, sep, outArray, outSize); */
 /* This chops up the input string (cannabilizing it)
@@ -790,6 +863,13 @@ if (s != NULL)
     eraseTrailingSpaces(s);
     }
 return s;
+}
+
+void spaceOut(FILE *f, int count)
+/* Put out some spaces to file. */
+{
+while (--count >= 0)
+    fputc(' ', f);
 }
 
 char *firstWordInLine(char *line)
@@ -1056,7 +1136,10 @@ FILE *f;
 if ((f = *pFile) != NULL)
     {
     if (f != stdin && f != stdout)
-	fclose(f);
+        {
+        if (fclose(f) != 0)
+            errnoAbort("fclose failed");
+        }
     *pFile = NULL;
     }
 }
@@ -1259,3 +1342,27 @@ needleCopy[needleLen] = 0; /* Null terminate */
 
 return strstr(haystackCopy, needleCopy);
 }
+
+int vasafef(char* buffer, int bufSize, char *format, va_list args)
+/* Format string to buffer, vsprintf style, only with buffer overflow
+ * checking.  The resulting string is always terminated with zero byte. */
+{
+int sz = vsnprintf(buffer, bufSize, format, args);
+/* note that some version return -1 if too small */
+if ((sz < 0) || (sz >= bufSize))
+    errAbort("buffer overflow, size %d, format: %s", bufSize, format);
+return sz;
+}
+
+int safef(char* buffer, int bufSize, char *format, ...)
+/* Format string to buffer, vsprintf style, only with buffer overflow
+ * checking.  The resulting string is always terminated with zero byte. */
+{
+int sz;
+va_list args;
+va_start(args, format);
+sz = vasafef(buffer, bufSize, format, args);
+va_end(args);
+return sz;
+}
+

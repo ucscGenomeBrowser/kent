@@ -12,19 +12,22 @@ L = -lm $(MYSQLLIBS)
 MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a 
 
-O = agpFrag.o agpGap.o axtInfo.o bbRepMask.o bed.o blatServers.o \
-    borf.o borkPseudoHom.o cart.o cartDb.o chromInfo.o chromInserts.o chr18deletions.o cgh.o \
+O = agpFrag.o agpGap.o axtInfo.o bbRepMask.o bed.o blatServers.o blastzNet.o \
+    borf.o borkPseudoHom.o cart.o cartDb.o cgh.o \
+    chainDb.o chainLink.o chainNet.o chainNetDbLoad.o \
+    chromInfo.o chromInserts.o chr18deletions.o \
     clonePos.o cpgIsland.o ctgPos.o customTrack.o cytoBand.o \
     dbDb.o dnaMotif.o est3.o estOrientInfo.o estPair.o exoFish.o \
     featureBits.o fishClones.o gcPercent.o geneBands.o geneGraph.o \
     genePred.o genomicDups.o \
     genomicSuperDups.o celeraDupPositive.o celeraCoverage.o\
     ggCluster.o altGraph.o ggDbIo.o \
-    ggGraph.o hCommon.o hdb.o hgConfig.o hgFind.o \
+    ggGraph.o grp.o hCommon.o hdb.o hgConfig.o hgFind.o \
     hgGene.o hgRelate.o hui.o humanParalog.o isochores.o jaxOrtholog.o jaxQTL.o\
     jksql.o knownInfo.o knownMore.o lfs.o stsMap.o stsMapMouse.o \
     jksql.o knownInfo.o knownMore.o lfs.o \
     mapSts.o mcnBreakpoints.o mouseSyn.o mouseSynWhd.o mouseOrtho.o \
+    ensPhusionBlast.o netAlign.o \
     ooUtils.o pepPred.o plasEndPairs.o pslWScore.o \
     qaSeq.o recombRate.o refLink.o riken.o rmskOut.o \
     rnaGene.o rnaGroup.o rikenBest.o rikenCluster.o roughAli.o \
@@ -38,11 +41,10 @@ O = agpFrag.o agpGap.o axtInfo.o bbRepMask.o bed.o blatServers.o \
     ancientRref.o ggMrnaAli.o \
     glDbRep.o ggDump.o altGraphX.o sample.o exprBed.o genMapDb.o \
     dbSnpRS.o synMap.o refSeqStatus.o web.o affyPairs.o affyOffset.o columnInfo.o \
-    affyAtlas.o imageClone.o stanMad.o jaxQTL.o hgSeq.o
+    affyAtlas.o imageClone.o stanMad.o jaxQTL.o hgSeq.o bactigPos.o 
 
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) 
-	ar rcu ../../lib/$(MACHTYPE)/jkhgap.a $(O)
-	ranlib ../../lib/$(MACHTYPE)/jkhgap.a
+	ar rcus ../../lib/$(MACHTYPE)/jkhgap.a $(O)
 
 clean:
 	rm -f $(O);

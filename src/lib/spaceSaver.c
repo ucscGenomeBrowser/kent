@@ -8,7 +8,7 @@
 #include "common.h"
 #include "spaceSaver.h"
 
-struct spaceSaver *spaceSaverNew(int winStart, int winEnd)
+struct spaceSaver *spaceSaverNew(int winStart, int winEnd, int maxRows)
 /* Create a new space saver around the given window.   */
 {
 struct spaceSaver *ss;
@@ -17,8 +17,11 @@ float winWidth;
 AllocVar(ss);
 ss->winStart = winStart;
 ss->winEnd = winEnd;
-ss->cellsInRow = 256;
+ss->maxRows = maxRows;
 winWidth = winEnd - winStart;
+ss->cellsInRow = winWidth;
+while (ss->cellsInRow > 800)
+    ss->cellsInRow /= 2;
 ss->scale = ss->cellsInRow/winWidth;
 return ss;
 }
@@ -48,13 +51,18 @@ for (i=0; i<count; ++i)
 return TRUE;
 }
 
-struct spaceNode *spaceSaverAdd(struct spaceSaver *ss, int start, int end, void *val)
-/* Add a new node to space saver. */
+struct spaceNode *spaceSaverAdd(struct spaceSaver *ss, 
+	int start, int end, void *val)
+/* Add a new node to space saver. Returns NULL if can't fit
+ * item in. */
 {
 int cellStart, cellEnd, cellWidth;
 struct spaceRowTracker *srt, *freeSrt = NULL;
 int rowIx = 0;
 struct spaceNode *sn;
+
+if (ss->isFull)
+    return NULL;
 
 if ((start -= ss->winStart) < 0)
     start = 0;
@@ -79,6 +87,11 @@ for (srt = ss->rowList; srt != NULL; srt = srt->next)
 /* If no free row make new row. */
 if (freeSrt == NULL)
     {
+    if (ss->rowCount >= ss->maxRows)
+	{
+	ss->isFull = TRUE;
+	return NULL;
+	}
     AllocVar(freeSrt);
     freeSrt->used = needMem(ss->cellsInRow);
     slAddTail(&ss->rowList, freeSrt);

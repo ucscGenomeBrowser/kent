@@ -95,6 +95,7 @@ char oLine[512];
 fiList = listDirX(chromDir, "*.agp", TRUE);
 for (fi = fiList; fi != NULL; fi = fi->next)
     {
+    char *ptr;
     char *words[16];
     int wordCount;
 
@@ -103,6 +104,8 @@ for (fi = fiList; fi != NULL; fi = fi->next)
     agpName = fi->name;
     printf("Processing %s\n", agpName);
     splitPath(agpName, dir, chrom, ext);
+    while ((ptr = strchr(chrom, '.')) != NULL)
+	*ptr = '_';
     sprintf(goldName, "%s_gold", chrom);
     sprintf(gapName, "%s_gap", chrom);
 

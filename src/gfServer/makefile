@@ -9,3 +9,4 @@ O = gfServer.o
 
 gfServer: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/gfServer $O $(MYLIBS) $L
+	strip $(HOME)/bin/$(MACHTYPE)/gfServer

@@ -17,6 +17,7 @@ int hubFd;
 for (;;)
     {
     sleep(MINUTE/2);
+    findNow();
     hubFd = hubConnect();
     if (hubFd > 0)
         {

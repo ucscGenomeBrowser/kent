@@ -1,0 +1,137 @@
+From ctsui2@learnlink.emory.edu Thu Oct 31 15:56:20 2002
+Date: Wed, 11 Sep 2002 13:25:24 -0400
+From: Circe Tsui <ctsui2@learnlink.emory.edu>
+To: daryl@soe.ucsc.edu
+Subject: Re: [Genome] TSC snp
+
+Hi Daryl,
+Thanks for your detailed answer. I am trying to solve this "puzzle" for
+long. It really helps a lot
+Circe
+
+----- Original Message -----
+From: <daryl@soe.ucsc.edu>; "Daryl Thomas" <daryl@soe.ucsc.edu>
+To: <ctsui2@LearnLink.Emory.Edu>
+Cc: <genome@soe.ucsc.edu>
+Sent: Tuesday, September 10, 2002 2:31 AM
+Subject: Re: [Genome] TSC snp
+
+
+
+Circe,
+
+I apologize for the delay - I was on vacation until today.  The short
+answer is that SNPs have varying degrees of reliability, and there is a
+filtering process that removes untrustworthy data.  Please see below for a
+more complete description of the filtering process.
+
+Initially, dbSNP contains all of the publicly available SNPs, including
+the TSC SNPs.  New builds of dbSNP are created either as new genomic
+assemblies become available or as newly deposited SNP data is mapped.
+
+The data from dbSNP is first filtered, then divided into one of two
+categories:
+
+Random Reads:  Shows locations of SNPs detected by aligning reads
+from random genomic clones from a diverse pool of human DNA
+against the genome.  (snpTsc table)
+
+Clone Overlaps:  Shows locations of SNPs detected primarily by
+looking at overlaps between clones that cover the same region of
+the genome.  (snpNih table)
+
+========================================================================
+Filtering of dbSNP data for UCSC SNP tracks.
+
+The SNPs on this page include all of the polymorphisms that can be mapped
+against the current assembly.  This includes known point mutations (Single
+Nucleotide Polymorphisms), insertions, deletions, and segmental mutations
+from the current build of dbSNP.  There are three major cases that are not
+mapped and/or annotated:
+
+  a. Submissions that are completely masked as repetitive
+elements. These are dropped from any further computations. This set of
+refSNPs are dumped in chromosome "rs_chMasked" on the dbSNP ftp site.
+
+b. Submissions that are defined in a cDNA context with extensive
+splicing. These SNPs are typically annotated on refseq mRNAs through a
+separate annotation process. Effort is being made to reverse map these
+variations back to contig coordinates, but that has not been
+implemented. For now, you can find this set of variations in
+"rs_chNotOn" on the dbSNP ftp site.
+
+c. Submissions with excessive hits to the genome. Variations with
+3+ hits to the genome are not included in the tracks, but are available in
+"rs_chMulti" on the dbSNP ftp site.
+
+The heuristics for the non-SNP variations (i.e. named elements and STRs)
+are quite conservative so some of these are probably lost. This approach
+was chosen to avoid false annotation of variation in inappropriate
+locations.
+
+The dbSNP ftp site can be found at <ftp://ftp.ncbi.nih.gov/snp/human/>.
+========================================================================
+
+The difference between the full TSC dataset and the subset we display on
+the genome browser is due to this filtering process.  SNPs that do not
+appear on the browser have been filtered out for one of the reasons listed
+here.  If you need to see the details of the remaining SNPs, the dbSNP FTP
+site is the best place to get the unprocessed data.
+
+It is true that the mapping can change slightly between NCBI and UCSC
+assemblies.  Sometimes there have been contigs that are oriented
+incorrectly in the NCBI build.  This is determined at UCSC by a consensus
+of cytogenetic markers, so we flip the contigs.  The annotations are also
+inverted, creating what we believe is a better approximation of the real
+genomic sequence.
+
+In summary, i) the highest quality TSC (random read) and NIH (clone
+overlap) SNPs are available in the SNP tracks on the UCSC genome browser.
+ii) SNPs that do not map well to the current assembly are withheld, as
+they are considered false positives, but they are still available from
+dbSNP.  iii) Some minor mapping differences exist between the UCSC and
+NCBI assemblies.
+
+I hope these are the answers you were seeking.  Please let me know if you
+have further SNP-related questions, or <genome@soe.ucsc.edu> for general
+browser questions.
+
+============================================================
+Daryl Thomas
+Graduate Student in Computer Science / Computational Biology
+School of Engineering, UC Santa Cruz
+daryl@soe.ucsc.edu
+============================================================
+
+>> From: "Circe Tsui" <ctsui2@learnlink.emory.edu>
+>> To: <genome@soe.ucsc.edu>
+>> Sent: Thursday, September 05, 2002 12:30 PM
+>> Subject: [Genome] TSC snp
+>>
+>> Dear USCS bioinformatics team,
+>>
+>> My question is about TSC snp track and the downloadable snpTSC table. The
+>> table contains about 1,095,496 records which is somewhat less than what I
+>> thought it should be from TSC. Do all the TSC snp get passed along to
+UCSC?
+>> Did you get your TSC data from dbsnp? I really want to use golden path
+>> mapping to continue with my snp analysis. But after several upgrade, TSC
+no
+>> longer provides "golden path" mapping on their website and they point me
+to
+>> dbSNP for downloads. But NCBI has warned me that their  mapping might be
+>> different from golden path mapping because of the differences in
+adjusting
+>> the gaps between the contigs. Is that true? Please help me to sort this
+out.
+>>
+>> Thanks so much
+>>
+>> Circe
+>> _______________________________________________
+>> Genome maillist  -  Genome@soe.ucsc.edu
+>> http://www.soe.ucsc.edu/mailman/listinfo/genome
+>
+>
+>
+

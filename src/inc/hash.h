@@ -22,6 +22,14 @@ struct hash
     struct lm *lm;
     };
 
+struct hashCookie
+/* used by hashFirst/hashNext in tracking location in traversing hash */
+    {
+    struct hash *hash;      /* hash we are associated with */
+    int idx;                /* current index in hash */
+    struct hashEl *nextEl;  /* current element in hash */
+    };
+
 bits32 hashCrc(char *string);
 /* Returns a CRC value on string. */
 
@@ -88,6 +96,14 @@ void hashElFree(struct hashEl **pEl);
 void hashElFreeList(struct hashEl **pList);
 /* Free hash el list returned from hashListAll.  (Don't use
  * this internally. */
+
+struct hashCookie hashFirst(struct hash *hash);
+/* Return an object to use by hashNext() to traverse the hash table.
+ * The first call to hashNext will return the first entry in the table. */
+
+struct hashEl* hashNext(struct hashCookie *cookie);
+/* Return the next entry in the hash table. Do not modify hash table
+ * while this is being used. (see note in code if you want to fix this) */
 
 struct hash *newHash(int powerOfTwoSize);
 /* Returns new hash table. */

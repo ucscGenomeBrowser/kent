@@ -102,6 +102,12 @@ static int blastzScoreToNcbiBits(int bzScore)
 return round(bzScore * 0.0205);
 }
 
+static int blastzScoreToNcbiScore(int bzScore)
+/* Conver blastz score to NCBI matrix score. */
+{
+return round(bzScore * 0.0529);
+}
+
 static double blastzScoreToNcbiExpectation(int bzScore)
 /* Convert blastz score to expectation in NCBI sense. */
 {
@@ -290,17 +296,17 @@ else
     return "Plus";
 }
 
-static char *progType(boolean isProt, struct axtBundle *ab)
+static char *progType(boolean isProt, struct axtBundle *ab, boolean isUpper)
 /* Return blast 'program' */
 {
 if (!isProt)
-    return "BLASTN";
+    return isUpper ? "BLASTN" : "blastn";
 else
     {
     if (ab->axtList->frame != 0)
-        return "TBLASTN";
+        return isUpper ? "TBLASTN" : "tblastn";
     else
-        return "BLASTP";
+        return isUpper ? "BLASTP" : "blastp";
     }
 }
 
@@ -320,7 +326,7 @@ int querySize = abList->qSize;
 /* Print out stuff that doesn't depend on query or database. */
 if (ourId == NULL)
     ourId = "axtBlastOut";
-fprintf(f, "%s 2.0MP-WashU [%s]\n", progType(isProt, abList), ourId);
+fprintf(f, "%s 2.0MP-WashU [%s]\n", progType(isProt, abList, TRUE), ourId);
 fprintf(f, "\n");
 fprintf(f, "Copyright (C) 2000-2002 Jim Kent\n");
 fprintf(f, "All Rights Reserved\n");
@@ -434,15 +440,16 @@ else
     fprintf(f, "%1.0e", e);
 }
 
+/* special global variable needed for Known Genes track building.  Fan 1/21/03 */
+int answer_for_kg;
 
 static void ncbiBlastOut(struct axtBundle *abList, int queryIx, boolean isProt, 
-	FILE *f, char *databaseName, int databaseSeqCount, double databaseLetterCount, 
-	char *ourId)
+	FILE *f, char *databaseName, int databaseSeqCount, 
+	double databaseLetterCount, char *ourId)
 /* Do ncbiblast-like output at end of processing query. */
 {
 char asciiNum[32];
 struct targetHits *targetList = NULL, *target;
-struct axtBundle *ab;
 char *queryName;
 int isRc;
 int querySize = abList->qSize;
@@ -450,7 +457,7 @@ int querySize = abList->qSize;
 /* Print out stuff that doesn't depend on query or database. */
 if (ourId == NULL)
     ourId = "axtBlastOut";
-fprintf(f, "%s 2.2.4 [%s]\n", progType(isProt, abList), ourId);
+fprintf(f, "%s 2.2.4 [%s]\n", progType(isProt, abList, TRUE), ourId);
 fprintf(f, "\n");
 fprintf(f, "Reference:  Kent, WJ. (2002) BLAT - The BLAST-like alignment tool\n");
 fprintf(f, "\n");
@@ -480,7 +487,6 @@ for (target = targetList; target != NULL; target = target->next)
     fprintf(f, "\n");
     }
 fprintf(f, "\n");
-fprintf(f, "ALIGNMENTS\n");
 
 /* Print out details on each target. */
 for (target = targetList; target != NULL; target = target->next)
@@ -494,8 +500,9 @@ for (target = targetList; target != NULL; target = target->next)
 	{
 	axt = ref->axt;
 	fprintf(f, "\n");
-	fprintf(f, " Score = %d bits, Expect = ",
-	     blastzScoreToNcbiBits(axt->score));
+	fprintf(f, " Score = %d bits (%d), Expect = ",
+	     blastzScoreToNcbiBits(axt->score),
+	     blastzScoreToNcbiScore(axt->score));
 	ncbiPrintE(f, blastzScoreToNcbiExpectation(axt->score));
 	fprintf(f, "\n");
 	matches = countMatches(axt->qSym, axt->tSym, axt->symCount);
@@ -509,10 +516,11 @@ for (target = targetList; target != NULL; target = target->next)
 		 positives, axt->symCount, round(100.0 * positives / axt->symCount));
 	    fprintf(f, " Gaps = %d/%d (%d%%)\n",
 		 gaps, axt->symCount, round(100.0 * gaps / axt->symCount));
-	    if (axt->frame != 0)
-	         {
-		 fprintf(f, " Frame = %c%d\n", axt->tStrand, axt->frame);
-		 }
+	    if (axt->frame != 0) 
+		fprintf(f, " Frame = %c%d\n", axt->tStrand, axt->frame);
+	    /* set the special global variable, answer_for_kg.  
+   	       This is needed for Known Genes track building.  Fan 1/21/03 */
+            answer_for_kg=axt->symCount - matches;
 	    }
 	else
 	    {
@@ -522,20 +530,105 @@ for (target = targetList; target != NULL; target = target->next)
 		nameForStrand(axt->tStrand));
 	    }
 	fprintf(f, "\n");
-	fprintf(f, "\n");
 	blastiodAxtOutput(f, axt, target->size, querySize, 60, isProt);
 	}
     }
+
+fprintf(f, "  Database: %s\n", databaseName);
 
 /* Cleanup time. */
 targetHitsFreeList(&targetList);
 }
 
+static void xmlBlastOut(struct axtBundle *abList, int queryIx, boolean isProt, 
+	FILE *f, char *databaseName, int databaseSeqCount, 
+	double databaseLetterCount, char *ourId)
+/* Do ncbi blast xml-like output at end of processing query. */
+{
+char *queryName = abList->axtList->qName;
+int querySize = abList->qSize;
+int hitNum = 0;
+struct targetHits *targetList = NULL, *target;
+
+if (ourId == NULL)
+    ourId = "axtBlastOut";
+fprintf(f, "<?xml version=\"1.0\"?>\n");
+fprintf(f, "<!DOCTYPE BlastOutput PUBLIC \"-//NCBI//NCBI BlastOutput/EN\" \"NCBI_BlastOutput.dtd\">\n");
+fprintf(f, "<BlastOutput>\n");
+fprintf(f, "  <BlastOutput_program>%s</BlastOutput_program>\n", 
+	progType(isProt, abList, FALSE));
+fprintf(f, "  <BlastOutput_version>%s 2.2.4 [%s]</BlastOutput_version>\n",
+	progType(isProt, abList, FALSE), ourId);
+fprintf(f, "  <BlastOutput_reference>~Reference: Kent, WJ. (2002) BLAT - The BLAST-like alignment tool</BlastOutput_reference>\n");
+fprintf(f, "  <BlastOutput_db>%s</BlastOutput_db>\n", databaseName);
+fprintf(f, "  <BlastOutput_query-ID>%d</BlastOutput_query-ID>\n", queryIx);
+fprintf(f, "  <BlastOutput_query-def>%s</BlastOutput_query-def>\n", queryName);
+fprintf(f, "  <BlastOutput_query-len>%d</BlastOutput_query-len>\n", querySize);
+
+if (isProt)
+    {
+    fprintf(f, "  <BlastOutput_param>\n");
+    fprintf(f, "    <Parameters_matrix>BLOSUM62</Parameters_matrix>\n");
+    fprintf(f, "    <Parameters_expect>0.001</Parameters_expect>\n");
+    fprintf(f, "    <Parameters_expect>10</Parameters_expect>\n");
+    fprintf(f, "    <Parameters_gap-extend>1</Parameters_gap-extend>\n");
+    fprintf(f, "  </BlastOutput_param>\n");
+    }
+
+fprintf(f, "  <BlastOutput_iterations>\n");
+fprintf(f, "    <Iteration>\n");
+fprintf(f, "      <Iteration_iter-num>1</Iteration_iter-num>\n");
+fprintf(f, "      <Iteration_hits>\n");
+
+/* Print out details on each target. */
+targetList = bundleIntoTargets(abList);
+for (target = targetList; target != NULL; target = target->next)
+    {
+    struct axtRef *ref;
+    fprintf(f, "      <hit>\n");
+    fprintf(f, "        <Hit_num>%d</Hit_num>\n", hitNum);
+    fprintf(f, "        <Hit_id>%s</Hit_id>\n", target->name);
+    fprintf(f, "        <Hit_accession>%s</Hit_accession>\n", target->name);
+    fprintf(f, "        <Hit_len>%d</Hit_len>\n", target->size);
+    fprintf(f, "        <Hit_hsps>\n");
+    for (ref = target->axtList; ref != NULL; ref = ref->next)
+        {
+	struct axt *axt = ref->axt;
+	int matches, gaps;
+	int hspIx = 0;
+	fprintf(f, "        <Hsp>\n");
+	fprintf(f, "          <Hsp_num>%d</Hsp_num>\n", ++hspIx);
+	fprintf(f, "          <Hsp_bit-score>%d</Hsp_bit-score>\n", 
+		blastzScoreToNcbiBits(axt->score));
+	fprintf(f, "          <Hsp_score>%d</Hsp_score>\n",
+		blastzScoreToNcbiScore(axt->score));
+	fprintf(f, "          <Hsp_evalue>%f</Hsp_evalue>\n",
+	        blastzScoreToNcbiExpectation(axt->score));
+	fprintf(f, "          <Hsp_query-from>%d</Hsp_query-from>\n", 
+		axt->qStart+1);
+	fprintf(f, "          <Hsp_query-to>%d</Hsp_query-to>\n", axt->qEnd);
+	fprintf(f, "          <Hsp_hit-from>%d</Hsp_hit-from>\n", 
+		axt->tStart+1);
+	fprintf(f, "          <Hsp_hit-to>%d</Hsp_hit-to>\n", axt->tEnd);
+	fprintf(f, "        </Hsp>\n");
+	}
+
+    fprintf(f, "        </Hit_hsps>\n");
+    }
+
+fprintf(f, "      </Iteration_hits>\n");
+fprintf(f, "    </Iteration>\n");
+fprintf(f, "  </BlastOutput_iterations>\n");
+
+
+
+fprintf(f, "</BlastOutput>\n");
+}
 
 void axtBlastOut(struct axtBundle *abList, 
 	int queryIx, boolean isProt, FILE *f, 
 	char *databaseName, int databaseSeqCount, double databaseLetterCount, 
-	boolean isWu, char *ourId)
+	boolean isWu, boolean isXml, char *ourId)
 /* Output a bundle of axt's on the same query sequence in blast format.
  * The parameters in detail are:
  *   ab - the list of bundles of axt's. 
@@ -551,6 +644,9 @@ if (abList == NULL)
 if (isWu)
     wuBlastOut(abList, queryIx, isProt, f, databaseName,
    	databaseSeqCount, databaseLetterCount, ourId);
+else if (isXml)
+    xmlBlastOut(abList, queryIx, isProt, f, databaseName,
+        databaseSeqCount, databaseLetterCount, ourId);
 else
     ncbiBlastOut(abList, queryIx, isProt, f, databaseName,
         databaseSeqCount, databaseLetterCount, ourId);

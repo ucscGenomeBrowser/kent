@@ -12,39 +12,12 @@
 #include "common.h"
 #include "dnautil.h"
 #include "fuzzyFind.h"
+#include "localmem.h"
 #include "patSpace.h"
 #include "trans3.h"
 #include "supStitch.h"
+#include "chainBlock.h"
 
-struct ssNode
-/* Node of superStitch graph. */
-    {
-    struct ssEdge *waysIn;	/* Edges leading into this node. */
-    struct ffAli *ff;           /* Alignment block associated with node. */
-    struct ssEdge *bestWayIn;   /* Dynamic programming best edge in. */
-    int cumScore;               /* Dynamic programming score of edge. */
-    int nodeScore;              /* Score of this node. */
-    };
-
-struct ssEdge
-/* Edge of superStitch graph. */
-    {
-    struct ssEdge *next;         /* Next edge in waysIn list. */
-    struct ssNode *nodeIn;       /* The node that leads to this edge. */
-    int score;                   /* Score you get taking this edge. */
-    int overlap;                 /* Overlap between two nodes. */
-    int crossover;               /* Offset from overlap where crossover occurs. */
-    };
-
-struct ssGraph
-/* Super stitcher graph for dynamic programming to find best
- * way through. */
-    {
-    int nodeCount;		/* Number of nodes. */
-    struct ssNode *nodes;       /* Array of nodes. */
-    int edgeCount;              /* Number of edges. */
-    struct ssEdge *edges;       /* Array of edges. */
-    };
 
 void ssFfItemFree(struct ssFfItem **pEl)
 /* Free a single ssFfItem. */
@@ -90,18 +63,6 @@ for (el = *pList; el != NULL; el = next)
     ssBundleFree(&el);
     }
 *pList = NULL;
-}
-
-static void ssGraphFree(struct ssGraph **pGraph)
-/* Free graph. */
-{
-struct ssGraph *graph;
-if ((graph = *pGraph) != NULL)
-    {
-    freeMem(graph->nodes);
-    freeMem(graph->edges);
-    freez(pGraph);
-    }
 }
 
 void dumpNearCrossover(char *what, DNA *n, DNA *h, int size)
@@ -159,6 +120,7 @@ else
     return dnaOrAaScoreMatch(a, b, size, 1, -1, 'n');
     }
 }
+
 
 static int findCrossover(struct ffAli *left, struct ffAli *right, int overlap, boolean isProt)
 /* Find ideal crossover point of overlapping blocks.  That is
@@ -225,6 +187,128 @@ for (t3 = t3List; t3 != NULL; t3 = t3->next)
 internalErr();
 }
 
+static struct ffAli *ffMergeExactly(struct ffAli *aliList)
+/* Remove overlapping areas needle in alignment. Assumes ali is sorted on
+ * ascending nStart field. Also merge perfectly abutting neighbors.*/
+{
+struct ffAli *mid, *ali;
+
+for (mid = aliList->right; mid != NULL; mid = mid->right)
+    {
+    for (ali = aliList; ali != mid; ali = ali->right)
+	{
+	DNA *nStart, *nEnd;
+	int nOverlap, diag;
+	nStart = max(ali->nStart, mid->nStart);
+	nEnd = min(ali->nEnd, mid->nStart);
+	nOverlap = nEnd - nStart;
+	/* Overlap or perfectly abut in needle, and needle/hay
+	 * offset the same. */
+	if (nOverlap >= 0)
+	    {
+	    int diag = ali->nStart - ali->hStart;
+	    if (diag == mid->nStart - mid->hStart)
+		{
+		/* Make mid encompass both, and make ali empty. */
+		mid->nStart = min(ali->nStart, mid->nStart);
+		mid->nEnd = max(ali->nEnd, mid->nEnd);
+		mid->hStart = mid->nStart-diag;
+		mid->hEnd = mid->nEnd-diag;
+		ali->hEnd = mid->hStart;
+		ali->nEnd = mid->nStart;
+		}
+	    }
+	}
+    }
+aliList = ffRemoveEmptyAlis(aliList, TRUE);
+return aliList;
+}
+
+struct ffAli *smallMiddleExons(struct ffAli *aliList, struct ssBundle *bundle, 
+	enum ffStringency stringency)
+/* Look for small exons in the middle. */
+{
+if (bundle->t3List != NULL)
+    return aliList;	/* Can't handle intense translated stuff. */
+else
+    {
+    struct dnaSeq *qSeq =  bundle->qSeq;
+    struct dnaSeq *genoSeq = bundle->genoSeq;
+    struct ffAli *right, *left = NULL, *newLeft, *newRight;
+
+    left = aliList;
+    for (right = aliList->right; right != NULL; right = right->right)
+        {
+	if (right->hStart - left->hEnd >= 3 && right->nStart - left->nEnd >= 3)
+	    {
+	    newLeft = ffFind(left->nEnd, right->nStart, left->hEnd, right->hStart, stringency);
+	    if (newLeft != NULL)
+	        {
+		newRight = ffRightmost(newLeft);
+                if (left != NULL)
+                    {
+                    left->right = newLeft;
+                    newLeft->left = left;
+                    }
+                else
+                    {
+                    aliList = newLeft;
+                    }
+                if (right != NULL)
+                    {
+                    right->left = newRight;
+                    newRight->right = right;
+                    }
+		}
+	    }
+	left = right;
+	}
+    }
+return aliList;
+}
+
+struct ssNode
+/* Node of superStitch graph. */
+    {
+    struct ssEdge *waysIn;	/* Edges leading into this node. */
+    struct ffAli *ff;           /* Alignment block associated with node. */
+    struct ssEdge *bestWayIn;   /* Dynamic programming best edge in. */
+    int cumScore;               /* Dynamic programming score of edge. */
+    int nodeScore;              /* Score of this node. */
+    };
+
+struct ssEdge
+/* Edge of superStitch graph. */
+    {
+    struct ssEdge *next;         /* Next edge in waysIn list. */
+    struct ssNode *nodeIn;       /* The node that leads to this edge. */
+    int score;                   /* Score you get taking this edge. */
+    int overlap;                 /* Overlap between two nodes. */
+    int crossover;               /* Offset from overlap where crossover occurs. */
+    };
+
+struct ssGraph
+/* Super stitcher graph for dynamic programming to find best
+ * way through. */
+    {
+    int nodeCount;		/* Number of nodes. */
+    struct ssNode *nodes;       /* Array of nodes. */
+    int edgeCount;              /* Number of edges. */
+    struct ssEdge *edges;       /* Array of edges. */
+    };
+
+static void ssGraphFree(struct ssGraph **pGraph)
+/* Free graph. */
+{
+struct ssGraph *graph;
+if ((graph = *pGraph) != NULL)
+    {
+    freeMem(graph->nodes);
+    freeMem(graph->edges);
+    freez(pGraph);
+    }
+}
+
 boolean tripleCanFollow(struct ffAli *a, struct ffAli *b, aaSeq *qSeq, struct trans3 *t3List)
 /* Figure out if a can follow b in any one of three reading frames of haystack. */
 {
@@ -233,6 +317,7 @@ trans3Offsets(t3List, a->hStart, a->hEnd, &ahStart, &ahEnd);
 trans3Offsets(t3List, b->hStart, b->hEnd, &bhStart, &bhEnd);
 return  (a->nStart < b->nStart && a->nEnd < b->nEnd && ahStart < bhStart && ahEnd < bhEnd);
 }
+
 
 static struct ssGraph *ssGraphMake(struct ffAli *ffList, bioSeq *qSeq,
 	enum ffStringency stringency, boolean isProt, struct trans3 *t3List)
@@ -433,129 +518,197 @@ leftovers = ffMakeRightLinks(leftovers);
 *retLeftovers = leftovers;
 }
 
-static struct ffAli *ffMergeExactly(struct ffAli *aliList)
-/* Remove overlapping areas needle in alignment. Assumes ali is sorted on
- * ascending nStart field. Also merge perfectly abutting neighbors.*/
+static void ssFindBestSmall(struct ffAli *ffList, bioSeq *qSeq, bioSeq *tSeq,
+	enum ffStringency stringency, boolean isProt, struct trans3 *t3List,
+	struct ffAli **retBestAli, int *retScore, struct ffAli **retLeftovers)
+/* Build a graph and do a dynamic program on it to find best chains. 
+ * For small ffLists this is faster than the stuff in chainBlock. */
 {
-struct ffAli *mid, *ali;
+struct ssGraph *graph = ssGraphMake(ffList, qSeq, stringency, isProt, t3List);
+ssGraphFindBest(graph, retBestAli, retScore, retLeftovers);
+ssGraphFree(&graph);
+}
 
-for (mid = aliList->right; mid != NULL; mid = mid->right)
+
+
+static enum ffStringency ssStringency;
+static boolean ssIsProt;
+
+static int ssGapCost(int dq, int dt)
+/* Return gap penalty. */
+{
+if (dt < 0) dt = 0;
+if (dq < 0) dq = 0;
+return ffCalcGapPenalty(dt, dq, ssStringency);
+}
+
+
+static int findOverlap(struct boxIn *a, struct boxIn *b)
+/* Figure out how much a and b overlap on either sequence. */
+{
+int dq = b->qStart - a->qEnd;
+int dt = b->tStart - a->tEnd;
+return -min(dq, dt);
+}
+
+static int ssConnectCost(struct boxIn *a, struct boxIn *b)
+/* Calculate connection cost - including gap score
+ * and overlap adjustments if any. */
+{
+struct ffAli *aFf = a->data, *bFf = b->data;
+int overlapAdjustment = 0;
+int overlap = findOverlap(a, b);
+int dq = b->qStart - a->qEnd;
+int dt = b->tStart - a->tEnd;
+
+if (overlap > 0)
     {
-    for (ali = aliList; ali != mid; ali = ali->right)
+    int aSize = aFf->hEnd - aFf->hStart;
+    int bSize = bFf->hEnd - bFf->hStart;
+    if (overlap >= bSize || overlap >= aSize)
 	{
-	DNA *nStart, *nEnd;
-	int nOverlap, diag;
-	nStart = max(ali->nStart, mid->nStart);
-	nEnd = min(ali->nEnd, mid->nStart);
-	nOverlap = nEnd - nStart;
-	/* Overlap or perfectly abut in needle, and needle/hay
-	 * offset the same. */
-	if (nOverlap >= 0)
-	    {
-	    int diag = ali->nStart - ali->hStart;
-	    if (diag == mid->nStart - mid->hStart)
-		{
-		/* Make mid encompass both, and make ali empty. */
-		mid->nStart = min(ali->nStart, mid->nStart);
-		mid->nEnd = max(ali->nEnd, mid->nEnd);
-		mid->hStart = mid->nStart-diag;
-		mid->hEnd = mid->nEnd-diag;
-		ali->hEnd = mid->hStart;
-		ali->nEnd = mid->nStart;
-		}
-	    }
+	/* Give stiff overlap adjustment for case where
+	 * one block completely enclosed in the other on
+	 * either sequence. This will make it never happen. */
+	overlapAdjustment = a->score + b->score;
 	}
-    }
-aliList = ffRemoveEmptyAlis(aliList, TRUE);
-return aliList;
-}
-
-int cmpFflTrimScore(const void *va, const void *vb)
-/* Compare to sort based on query. */
-{
-const struct ssFfItem *a = *((struct ssFfItem **)va);
-const struct ssFfItem *b = *((struct ssFfItem **)vb);
-return b->trimScore - a->trimScore;
-}
-
-static boolean trimBundle(struct ssBundle *bundle, int maxFfCount,
-	enum ffStringency stringency)
-/* Trim out the relatively insignificant alignments from bundle. */
-{
-struct ssFfItem *ffl, *newFflList = NULL, *lastFfl = NULL;
-int ffCountAll = 0;
-int ffCountOne;
-
-for (ffl = bundle->ffList; ffl != NULL; ffl = ffl->next)
-    ffl->trimScore = ffScoreSomething(ffl->ff, stringency, bundle->isProt);
-slSort(&bundle->ffList, cmpFflTrimScore);
-
-for (ffl = bundle->ffList; ffl != NULL; ffl = ffl->next)
-    {
-    ffCountOne = ffAliCount(ffl->ff);
-    if (ffCountOne + ffCountAll <= maxFfCount)
-	ffCountAll += ffCountOne;
     else
-	{
-	if (lastFfl == NULL)
-	    {
-	    warn("Can't stitch, single alignment more than %d blocks", maxFfCount);
-	    return FALSE;
-	    }
-	lastFfl->next = NULL;
-	ssFfItemFreeList(&ffl);
-	break;
-	}
-    lastFfl = ffl;
-    }
-return TRUE;
-}
-
-struct ffAli *smallMiddleExons(struct ffAli *aliList, struct ssBundle *bundle, 
-	enum ffStringency stringency)
-/* Look for small exons in the middle. */
-{
-if (bundle->t3List != NULL)
-    return aliList;	/* Can't handle intense translated stuff. */
-else
-    {
-    struct dnaSeq *qSeq =  bundle->qSeq;
-    struct dnaSeq *genoSeq = bundle->genoSeq;
-    struct ffAli *right, *left = NULL, *newLeft, *newRight;
-
-    left = aliList;
-    for (right = aliList->right; right != NULL; right = right->right)
         {
-	if (right->hStart - left->hEnd >= 3 && right->nStart - left->nEnd >= 3)
-	    {
-	    newLeft = ffFind(left->nEnd, right->nStart, left->hEnd, right->hStart, stringency);
-	    if (newLeft != NULL)
-	        {
-		newRight = ffRightmost(newLeft);
-                if (left != NULL)
-                    {
-                    left->right = newLeft;
-                    newLeft->left = left;
-                    }
-                else
-                    {
-                    aliList = newLeft;
-                    }
-                if (right != NULL)
-                    {
-                    right->left = newRight;
-                    newRight->right = right;
-                    }
-		}
-	    }
-	left = right;
+	/* More normal case - partial overlap on one or both strands. */
+	int crossover = findCrossover(aFf, bFf, overlap, ssIsProt);
+	int remain = overlap - crossover;
+	overlapAdjustment =
+	    bioScoreMatch(ssIsProt, aFf->nEnd - remain, aFf->hEnd - remain, 
+	    	remain)
+	  + bioScoreMatch(ssIsProt, bFf->nStart, bFf->hStart, 
+	  	crossover);
+	dq -= overlap;
+	dt -= overlap;
 	}
     }
-return aliList;
+return overlapAdjustment + ssGapCost(dq, dt);
 }
 
 
-int ssStitch(struct ssBundle *bundle, enum ffStringency stringency)
+static void ssFindBestBig(struct ffAli *ffList, bioSeq *qSeq, bioSeq *tSeq,
+	enum ffStringency stringency, boolean isProt, struct trans3 *t3List,
+	struct ffAli **retBestAli, int *retScore, struct ffAli **retLeftovers)
+/* Go set up things to call chainBlocks to find best way to string together
+ * blocks in alignment. */
+{
+struct boxIn *boxList = NULL, *box, *prevBox;
+struct ffAli *ff;
+struct lm *lm = lmInit(0);
+int boxSize;
+DNA *firstH = tSeq->dna;
+struct chain *chainList, *chain, *bestChain;
+int tMin = BIGNUM, tMax = -BIGNUM;
+struct ffAli **newList;
+
+
+/* Make up box list for chainer. */
+for (ff = ffList; ff != NULL; ff = ff->right)
+    {
+    lmAllocVar(lm, box);
+    boxSize = ff->nEnd - ff->nStart;
+    box->qStart = ff->nStart - qSeq->dna;
+    box->qEnd = box->qStart + boxSize;
+    if (t3List)
+        {
+	trans3Offsets(t3List, ff->hStart, ff->hEnd, &box->tStart, &box->tEnd);
+	}
+    else
+        {
+	box->tStart = ff->hStart - firstH;
+	box->tEnd = box->tStart + boxSize;
+	}
+    box->data = ff;
+    box->score = bioScoreMatch(isProt, ff->nStart, ff->hStart, boxSize);
+    if (tMin > box->tStart) tMin = box->tStart;
+    if (tMax < box->tEnd) tMax = box->tEnd;
+    slAddHead(&boxList, box);
+    }
+
+/* Adjust boxes so that tMin is always 0. */
+for (box = boxList; box != NULL; box = box->next)
+    {
+    box->tStart -= tMin;
+    box->tEnd -= tMin;
+    }
+tMax -= tMin;
+
+ssStringency = stringency;
+ssIsProt = isProt;
+chainList = chainBlocks(qSeq->name, qSeq->size, '+', "tSeq", tMax, &boxList,
+	ssConnectCost, ssGapCost, NULL);
+
+/* Fixup crossovers on best (first) chain. */
+bestChain = chainList;
+prevBox = bestChain->blockList;
+for (box = prevBox->next; box != NULL; box = box->next)
+    {
+    int dq = box->qStart - prevBox->qEnd;
+    int dt = box->tStart - prevBox->tEnd;
+    int overlap = findOverlap(prevBox, box);
+    if (overlap > 0)
+        {
+	struct ffAli *left = prevBox->data;
+	struct ffAli *right = box->data;
+	int crossover = findCrossover(left, right, overlap, isProt);
+        int remain = overlap - crossover;
+	left->nEnd -= remain;
+	left->hEnd -= remain;
+	right->nStart += crossover;
+	right->hStart += crossover;
+	}
+    prevBox = box;
+    }
+
+/* Copy stuff from first chain to bestAli, and from rest of
+ * chains to leftovers. */
+*retBestAli = NULL;
+*retLeftovers = NULL;
+newList = retBestAli;
+for (chain = chainList; chain != NULL; chain = chain->next)
+    {
+    struct ffAli *farRight = NULL;
+    for (box = chain->blockList; box != NULL; box = box->next)
+        {
+	ff = box->data;
+	ff->left = farRight;
+	farRight = ff;
+	}
+    for (ff = farRight; ff != NULL; ff = ff->left)
+        {
+	ff->right = *newList;
+	*newList = ff;
+	}
+    newList = retLeftovers;
+    chain->blockList = NULL;	/* Don't want to free this, it's local. */
+    }
+
+*retScore = bestChain->score;
+chainFreeList(&chainList);
+lmCleanup(&lm);
+}
+
+static void ssFindBest(struct ffAli *ffList, bioSeq *qSeq, bioSeq *tSeq,
+	enum ffStringency stringency, boolean isProt, struct trans3 *t3List,
+	struct ffAli **retBestAli, int *retScore, struct ffAli **retLeftovers)
+/* String together blocks in alignment into chains. */
+{
+int count = ffAliCount(ffList);
+if (count >= 10)
+    return ssFindBestBig(ffList, qSeq, tSeq, stringency, isProt, t3List,
+    	retBestAli, retScore, retLeftovers);
+else
+    return ssFindBestSmall(ffList, qSeq, tSeq, stringency, isProt, t3List,
+    	retBestAli, retScore, retLeftovers);
+}
+
+
+int ssStitch(struct ssBundle *bundle, enum ffStringency stringency, 
+	int minScore)
 /* Glue together mrnas in bundle as much as possible. Returns number of
  * alignments after stitching. Updates bundle->ffList with stitched
  * together version. */
@@ -565,7 +718,6 @@ struct dnaSeq *genoSeq = bundle->genoSeq;
 struct ffAli *ff, *ffList = NULL;
 struct ssFfItem *ffl;
 struct ffAli *bestPath, *leftovers;
-struct ssGraph *graph;
 int score;
 int newAliCount = 0;
 int totalFfCount = 0;
@@ -575,24 +727,10 @@ boolean firstTime = TRUE;
 if (bundle->ffList == NULL)
     return 0;
 
-for (ffl = bundle->ffList; ffl != NULL; ffl = ffl->next)
-    totalFfCount += ffAliCount(ffl->ff);
-
-/* In certain repeat situations the number of blocks can explode.  If so
- * try to recover by taking only a fairly large section of the best looking
- * blocks. */
-if (trimCount > 7000)	/* This is all the memory we can spare, sorry. */
-    trimCount = 7000;
-if (totalFfCount > trimCount)
-    {
-    if (totalFfCount > trimCount)
-	warn("In %s vs. %s trimming from %d to %d blocks", qSeq->name, genoSeq->name, totalFfCount, trimCount);
-    if (!trimBundle(bundle, trimCount, stringency))
-	{
-	warn("Skipping %s vs. %s\n", qSeq->name, genoSeq->name);
-        return 0;
-	}
-    }
+/* The score may improve when we stitch together more alignments,
+ * so don't let minScore be too harsh at this stage. */
+if (minScore > 20)
+    minScore = 20;
 
 /* Create ffAlis for all in bundle and move to one big list. */
 for (ffl = bundle->ffList; ffl != NULL; ffl = ffl->next)
@@ -602,13 +740,12 @@ slFreeList(&bundle->ffList);
 ffAliSort(&ffList, ffCmpHitsNeedleFirst);
 ffList = ffMergeExactly(ffList);
 
-
 while (ffList != NULL)
     {
-    graph = ssGraphMake(ffList, qSeq, stringency, bundle->isProt, bundle->t3List);
-    if (graph == NULL)
-        continue;
-    ssGraphFindBest(graph, &bestPath, &score, &ffList);
+    ssFindBest(ffList, qSeq, genoSeq, stringency, 
+    	bundle->isProt, bundle->t3List,
+    	&bestPath, &score, &ffList);
+
     bestPath = ffMergeNeedleAlis(bestPath, TRUE);
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
     bestPath = ffMergeHayOverlaps(bestPath);
@@ -623,7 +760,7 @@ while (ffList != NULL)
 	ffSlideIntrons(bestPath);
     bestPath = ffMergeNeedleAlis(bestPath, TRUE);
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
-    if (score > 20)
+    if (score >= minScore)
 	{
 	AllocVar(ffl);
 	ffl->ff = bestPath;
@@ -634,16 +771,16 @@ while (ffList != NULL)
 	{
 	ffFreeAli(&bestPath);
 	}
-    ssGraphFree(&graph);
     firstTime = FALSE;
     }
 slReverse(&bundle->ffList);
 return newAliCount;
 }
 
-static struct ssBundle *findBundle(struct ssBundle *list,  struct dnaSeq *genoSeq)
+static struct ssBundle *findBundle(struct ssBundle *list,  
+	struct dnaSeq *genoSeq)
 /* Find bundle in list that has matching genoSeq pointer, or NULL
- * if none such. */
+ * if none such.  This routine is used by psLayout but not blat. */
 {
 struct ssBundle *el;
 for (el = list; el != NULL; el = el->next)
@@ -654,7 +791,7 @@ return NULL;
 
 struct ssBundle *ssFindBundles(struct patSpace *ps, struct dnaSeq *cSeq, 
 	char *cName, enum ffStringency stringency, boolean avoidSelfSelf)
-/* Find patSpace alignments. */
+/* Find patSpace alignments.  This routine is used by psLayout but not blat. */
 {
 struct patClump *clumpList, *clump;
 struct ssBundle *bundleList = NULL, *bun = NULL;
@@ -713,7 +850,7 @@ cdna = cSeq->dna;
 
 for (bun = bundleList; bun != NULL; bun = bun->next)
     {
-    ssStitch(bun, stringency);
+    ssStitch(bun, stringency, 20);
     }
 return bundleList;
 }

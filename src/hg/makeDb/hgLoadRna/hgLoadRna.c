@@ -27,6 +27,7 @@
 
 /* Command line options and defaults. */
 char *abbr = NULL;
+boolean ignore = FALSE;
 
 char historyTable[] =	
 /* This contains a row for each update made to database.
@@ -69,6 +70,7 @@ char mrnaTable[] =
 "create table mrna ("
   "id int unsigned not null primary key,"          /* Id, same as seq ID. */
   "acc char(12) not null,"		  /* Genbank accession. */
+  "version char(12) not null,"		  /* Genbank version. */
   "type enum('EST','mRNA') not null,"	  /* Full length or EST. */
   "direction enum('5','3','0') not null," /* Read direction. */
   "source int unsigned not null,"	 	  /* Ref in source table. */
@@ -87,6 +89,7 @@ char mrnaTable[] =
   "author int unsigned not null,"                 /* Ref in author table. */
 	   /* Extra indices. */
   "unique (acc),"
+  "unique (acc, version),"
   "index (type),"
   "index (library),"
   "index (mrnaClone),"
@@ -104,7 +107,7 @@ char *uniqueTableNames[] =
     {
     "development", "cell", "cds", "geneName", "productName",
     "source", "organism", "library", "mrnaClone", "sex", "tissue",
-    "center", "bacClone", "cytoMap", "chromosome", "author", "keyword", "description",
+    "author", "keyword", "description",
     };
 
 struct uniqueTable
@@ -151,7 +154,7 @@ for (uni = uniqueTableList; uni != NULL; uni = uni->next)
     {
     carefulClose(&uni->tabFile);
     table = uni->tableName;
-    hgLoadTabFile(conn, table);
+    hgLoadTabFile(conn, ".", table, NULL);
     freeHash(&uni->hash);
     }
 }
@@ -189,7 +192,7 @@ if (sr != NULL)
     }
 sqlFreeResult(&sr);
 slAddHead(&uniqueTableList, uni);
-uni->tabFile = hgCreateTabFile(tableName);
+uni->tabFile = hgCreateTabFile(".", tableName);
 return uni;
 }
 
@@ -234,6 +237,7 @@ char **row;
 char *name;
 char lastChar;
 int len;
+unsigned long gotSize = 0;
 
 if (extFilesHash == NULL)
     {
@@ -249,9 +253,17 @@ if (extFilesHash == NULL)
 	ex->size = sqlUnsigned(row[3]);
 	len = strlen(name);
 	lastChar = name[len-1];
-	if (lastChar != '/' && ex->size != fileSize(ex->path))
+        gotSize = fileSize(ex->path);
+	if (lastChar != '/' && ex->size != gotSize)
 	    {
-	    errAbort("External file %s out of sync", ex->path);
+            if(ignore) 
+                {
+                fprintf(stderr, "WARNING: External file %s out of sync.\n Expected size: %ul, got size %ul\n", ex->path, ex->size, gotSize);
+                }
+            else 
+                {
+                errAbort("ERROR: External file %s out of sync.\n Expected size: %ul, got size %ul\n", ex->path, ex->size, gotSize);
+                }
 	    }
 	}
     sqlFreeResult(&sr);
@@ -332,14 +344,17 @@ errAbort(
   "usage:\n"
   "   hgLoadRna new database\n"
   "This creates freshly the RNA part of the database\n"
-  "   hgLoadRna add [-type=type] database /full/path/mrna.fa mrna.ra\n"
+  "   hgLoadRna add [-type=type] database /full/path/mrna.fa mrna.ra [-ignore]\n"
   "      type can be mRNA or EST or whatever goes into extFile.name\n"
   "This adds mrna info to the database\n"
   "   hgLoadRna drop database\n"
   "This drops the tables created by hgLoadRna from database.\n"
-  "   hgLoadRna addSeq [-abbr=junk] database file(s).fa\n"
+  "   hgLoadRna addSeq [-abbr=junk] database file(s).fa [-ignore]\n"
   "This loads sequence files only, no auxiliarry info.  Typically\n"
   "these are more likely to be mouse reads than rna actually....\n"
+  "The -ignore flag tells hgLoadRna not to validate the contents of the extFile table.\n"
+  "It is only to be used if a normal load fails.\n"
+  "Please notify someone responsible if an error is flagged.\n"
   );
 }
 
@@ -365,8 +380,8 @@ int mod = maxMod;
 int lineMaxMod = 50;
 int lineMod = lineMaxMod;
 int count = 0;
-FILE *mrnaTab = hgCreateTabFile("mrna");
-FILE *seqTab = hgCreateTabFile("seq");
+FILE *mrnaTab = hgCreateTabFile(".", "mrna");
+FILE *seqTab = hgCreateTabFile(".", "seq");
 struct uniqueTable *uniSrc, *uniOrg, *uniLib, *uniClo, *uniSex,
                    *uniTis, *uniDev, *uniCel, *uniCds, *uniGen,
 		   *uniPro, *uniAut, *uniKey, *uniDef;
@@ -412,6 +427,7 @@ for (;;)
     int faNameSize;
     char sqlDate[32];
     int dnaSize = 0;
+    char version [32] = "X"; // Init to obvious value
 
     ++count;
     if (--mod == 0)
@@ -447,7 +463,8 @@ for (;;)
     clearUniqueIds();
     for (;;)
 	{
-	struct hashEl *hel;
+	struct hashEl *hel = NULL;
+
 	if (!lineFileNext(raLf, &raTag, &raLineSize))
 	    errAbort("Unexpected eof in %s", raName);
 	if (raTag[0] == 0)
@@ -482,6 +499,10 @@ for (;;)
 	    {
 	    dnaSize = sqlUnsigned(raVal);
 	    }
+	else if (sameString(raTag, "ver"))
+	    {	    
+            strcpy(version, firstWordInLine(raVal));
+            }
 	}
 
     /* Do a little error checking and then write out to tables. */
@@ -495,11 +516,11 @@ for (;;)
 
     fprintf(seqTab, "%lu\t%s\t%d\t%s\t%lu\t%lu\t%d\n",
 	id, faAcc, dnaSize, sqlDate, extFileId, faOffset, faSize);
-    fprintf(mrnaTab, "%lu\t%s\t%s\t%c\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\n",
-	id, faAcc, type, dir,
-	uniSrc->curId, uniOrg->curId, uniLib->curId, uniClo->curId,
-	uniSex->curId, uniTis->curId, uniDev->curId, uniCel->curId,
-	uniCds->curId, uniKey->curId, uniDef->curId, uniGen->curId, uniPro->curId, uniAut->curId);
+    fprintf(mrnaTab, "%lu\t%s\t%s\t%s\t%c\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\n",
+            id, faAcc, version, type, dir,
+            uniSrc->curId, uniOrg->curId, uniLib->curId, uniClo->curId,
+            uniSex->curId, uniTis->curId, uniDev->curId, uniCel->curId,
+            uniCds->curId, uniKey->curId, uniDef->curId, uniGen->curId, uniPro->curId, uniAut->curId);
     }
 printf("%d\n", count);
 printf("Updating tissue, lib, etc. values\n");
@@ -509,9 +530,9 @@ lineFileClose(&raLf);
 fclose(mrnaTab);
 fclose(seqTab);
 printf("Updating mrna table\n");
-hgLoadTabFile(conn, "mrna");
+hgLoadTabFile(conn, ".", "mrna", NULL);
 printf("Updating seq table\n");
-hgLoadTabFile(conn, "seq");
+hgLoadTabFile(conn, ".", "seq", NULL);
 hgEndUpdate(&conn, "Add mRNA from %s,%s", faName, raName);
 printf("All done\n");
 }
@@ -577,7 +598,7 @@ char faAcc[64];
 
 hgSetDb(database);
 conn = hgStartUpdate();
-seqTab = hgCreateTabFile("seq");
+seqTab = hgCreateTabFile(".", "seq");
 for (i=0; i<fileCount; ++i)
     {
     fileName = fileNames[i];
@@ -644,7 +665,7 @@ for (i=0; i<fileCount; ++i)
     }
 printf("Updating seq table\n");
 fclose(seqTab);
-hgLoadTabFile(conn, "seq");
+hgLoadTabFile(conn, ".", "seq", NULL);
 hgEndUpdate(&conn, "Add sequences");
 printf("All done\n");
 }
@@ -700,9 +721,14 @@ char *command;
 
 cgiSpoof(&argc, argv);
 if (argc < 2)
+    {
     usage();
+    }
+
 abbr = cgiOptionalString("abbr");
+ignore = (NULL != cgiOptionalString("ignore"));
 command = argv[1];
+
 if (sameString(command, "new"))
     {
     if (argc != 3)

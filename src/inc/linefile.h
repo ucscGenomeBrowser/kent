@@ -15,7 +15,7 @@ struct lineFile
     char *fileName;		/* Name of file. */
     int fd;			/* File handle. */
     int bufSize;		/* Size of buffer. */
-    int bufOffsetInFile;	/* Offset in file of first buffer byte. */
+    off_t bufOffsetInFile;	/* Offset in file of first buffer byte. */
     int bytesInBuf;		/* Bytes read into buffer. */
     int lastReadSize;		/* Size of last read. */
     int lineIx;			/* Current line. */
@@ -45,6 +45,10 @@ void lineFileClose(struct lineFile **pLf);
 boolean lineFileNext(struct lineFile *lf, char **retStart, int *retSize);
 /* Fetch next line from file. */
 
+boolean lineFileNextReal(struct lineFile *lf, char **retStart);
+/* Fetch next line from file that is not blank and 
+ * does not start with a '#'. */
+
 void lineFileNeedNext(struct lineFile *lf, char **retStart, int *retSize);
 /* Fetch next line from file.  Squawk and die if it's not there. */
 
@@ -63,6 +67,9 @@ void lineFileSeek(struct lineFile *lf, off_t offset, int whence);
 void lineFileExpectWords(struct lineFile *lf, int expecting, int got);
 /* Check line has right number of words. */
 
+void lineFileExpectAtLeast(struct lineFile *lf, int expecting, int got);
+/* Check line has right number of words. */
+
 boolean lineFileNextRow(struct lineFile *lf, char *words[], int wordCount);
 /* Return next non-blank line that doesn't start with '#' chopped into words.
  * Returns FALSE at EOF.  Aborts on error. */
@@ -70,11 +77,19 @@ boolean lineFileNextRow(struct lineFile *lf, char *words[], int wordCount);
 #define lineFileRow(lf, words) lineFileNextRow(lf, words, ArraySize(words))
 /* Read in line chopped into fixed size word array. */
 
+boolean lineFileNextRowTab(struct lineFile *lf, char *words[], int wordCount);
+/* Return next non-blank line that doesn't start with '#' chopped into words
+ * at tabs. Returns FALSE at EOF.  Aborts on error. */
+
 int lineFileChopNext(struct lineFile *lf, char *words[], int maxWords);
 /* Return next non-blank line that doesn't start with '#' chopped into words. */
 
 #define lineFileChop(lf, words) lineFileChopNext(lf, words, ArraySize(words))
 /* Ease-of-usef macro for lineFileChopNext above. */
+
+int lineFileChopNextTab(struct lineFile *lf, char *words[], int maxWords);
+/* Return next non-blank line that doesn't start with '#' chopped into words
+ * on tabs */
 
 int lineFileNeedNum(struct lineFile *lf, char *words[], int wordIx);
 /* Make sure that words[wordIx] is an ascii integer, and return

@@ -27,14 +27,18 @@ cg->align = cloneString(align);
 return cg;
 }
 
+void controlGridEndRow(struct controlGrid *cg)
+/* Force end of row. */
+{
+printf("</tr>\n<tr>");
+cg->columnIx = 0;
+}
+
 void controlGridStartCell(struct controlGrid *cg)
 /* Start a new cell in control grid. */
 {
 if (cg->columnIx == cg->columns)
-    {
-    printf("</tr>\n<tr>");
-    cg->columnIx = 0;
-    }
+    controlGridEndRow(cg);
 if (cg->align)
     printf("<td align=%s>", cg->align);
 else
@@ -72,13 +76,22 @@ static char *hTvStrings[] =
     "hide",
     "dense",
     "full",
+    "pack",
+    "squish"
     };
+
+enum trackVisibility hTvFromStringNoAbort(char *s)
+/* Given a string representation of track visibility, return as
+ * equivalent enum. */
+{
+return stringArrayIx(s, hTvStrings, ArraySize(hTvStrings));
+}
 
 enum trackVisibility hTvFromString(char *s)
 /* Given a string representation of track visibility, return as
  * equivalent enum. */
 {
-enum trackVisibility vis = stringArrayIx(s, hTvStrings, ArraySize(hTvStrings));
+enum trackVisibility vis = hTvFromStringNoAbort(s);
 if (vis < 0)
    errAbort("Unknown visibility %s", s);
 return vis;
@@ -90,10 +103,28 @@ char *hStringFromTv(enum trackVisibility vis)
 return hTvStrings[vis];
 }
 
-void hTvDropDown(char *varName, enum trackVisibility vis)
+void hTvDropDown(char *varName, enum trackVisibility vis, boolean canPack)
 /* Make track visibility drop down for varName */
 {
-cgiMakeDropList(varName, hTvStrings, ArraySize(hTvStrings), hTvStrings[vis]);
+static char *noPack[] = 
+    {
+    "hide",
+    "dense",
+    "full",
+    };
+static char *pack[] = 
+    {
+    "hide",
+    "dense",
+    "squish",
+    "pack",
+    "full",
+    };
+static int packIx[] = {tvHide,tvDense,tvSquish,tvPack,tvFull};
+if (canPack)
+    cgiMakeDropList(varName, pack, ArraySize(pack), pack[packIx[vis]]);
+else
+    cgiMakeDropList(varName, noPack, ArraySize(noPack), noPack[vis]);
 }
 
 /****** Some stuff for stsMap related controls *******/

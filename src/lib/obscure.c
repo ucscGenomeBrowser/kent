@@ -3,6 +3,7 @@
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
 
+#include <unistd.h>
 #include "common.h"
 #include "portable.h"
 #include "hash.h"
@@ -27,7 +28,8 @@ else
 if (f != NULL)
     {
     fwrite(&val, sizeof(val), 1, f);
-    fclose(f);
+    if (fclose(f) != 0)
+        errnoAbort("fclose failed");
     }
 return val;
 }
@@ -135,7 +137,8 @@ while ((bytesRead = read(s, buf, bufSize)) > 0)
         errAbort("Write error on %s. %s\n", dest, strerror(errno));
     }
 close(s);
-close(d);
+if (close(d) != 0)
+    errnoAbort("close failed");
 freeMem(buf);
 }
 
@@ -289,4 +292,51 @@ void printLongWithCommas(FILE *f, long l)
 char ascii[32];
 sprintLongWithCommas(ascii, l);
 fprintf(f, "%s", ascii);
+}
+
+void shuffleArrayOfPointers(void *pointerArray, int arraySize, int shuffleCount)
+/* Shuffle array of pointers of given size given number of times. */
+{
+void **array = pointerArray, *pt;
+int i, randIx;
+
+for (i=0; i<arraySize; ++i)
+    {
+    randIx = rand() % arraySize;
+    pt = array[i];
+    array[i] = array[randIx];
+    array[randIx] = pt;
+    }
+}
+
+void shuffleList(void *pList, int shuffleCount)
+/* Randomize order of slList.  Usage:
+ *     randomizeList(&list)
+ * where list is a pointer to a structure that
+ * begins with a next field. */
+{
+struct slList **pL = (struct slList **)pList;
+struct slList *list = *pL;
+int count;
+count = slCount(list);
+if (count > 1)
+    {
+    struct slList *el;
+    struct slList **array;
+    int i;
+    array = needLargeMem(count * sizeof(*array));
+    for (el = list, i=0; el != NULL; el = el->next, i++)
+        array[i] = el;
+    for (i=0; i<4; ++i)
+        shuffleArrayOfPointers(array, count, shuffleCount);
+    list = NULL;
+    for (i=0; i<count; ++i)
+        {
+        array[i]->next = list;
+        list = array[i];
+        }
+    freeMem(array);
+    slReverse(&list);
+    *pL = list;       
+    }
 }

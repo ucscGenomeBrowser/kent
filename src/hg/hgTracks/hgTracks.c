@@ -4,17 +4,21 @@
 #include "linefile.h"
 #include "portable.h"
 #include "memalloc.h"
+#include "localmem.h"
 #include "obscure.h"
 #include "dystring.h"
 #include "hash.h"
 #include "jksql.h"
 #include "memgfx.h"
+#include "vGfx.h"
+#include "browserGfx.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
 #include "cart.h"
 #include "hdb.h"
 #include "hui.h"
 #include "hgFind.h"
+#include "hgTracks.h"
 #include "spaceSaver.h" 
 #include "wormdna.h"
 #include "aliType.h"
@@ -24,6 +28,7 @@
 #include "cgh.h"
 #include "ctgPos.h"
 #include "clonePos.h"
+#include "bactigPos.h"
 #include "genePred.h"
 #include "glDbRep.h"
 #include "rmskOut.h"
@@ -50,10 +55,10 @@
 #include "synteny100000.h"
 #include "mouseSyn.h"
 #include "mouseSynWhd.h"
+#include "ensPhusionBlast.h"
 #include "syntenyBerk.h"
 #include "syntenySanger.h"
 #include "knownMore.h"
-#include "estPair.h"
 #include "customTrack.h"
 #include "trackDb.h"
 #include "pslWScore.h"
@@ -69,17 +74,18 @@
 #include "celeraDupPositive.h"
 #include "celeraCoverage.h"
 #include "web.h"
+#include "grp.h"
 
 #define MAX_CONTROL_COLUMNS 5
-#define NAME_LEN 256
 #define EXPR_DATA_SHADES 16
 #define CHROMOSOME_SHADES 4
 #define LOW 1
 #define MEDIUM 2
 #define BRIGHT 3
 #define MAXPIXELS 14000
+#define MAXCHAINS 50000000
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
-
+int imagePixelHeight = 0;
 int colorBin[MAXPIXELS][256]; /* count of colors for each pixel for each color */
 /* Declare our color gradients and the the number of colors in them */
 Color shadesOfGreen[EXPR_DATA_SHADES];
@@ -88,16 +94,19 @@ Color shadesOfBlue[EXPR_DATA_SHADES];
 boolean exprBedColorsMade = FALSE; /* Have the shades of Green, Red, and Blue been allocated? */
 int maxRGBShade = EXPR_DATA_SHADES - 1;
 
-/* Declare colors for chromosome coloring 8 colors * 3 shades = 24 colors allocated */
-boolean chromosomeColorsMade = FALSE; /* Have the 3 shades of 8 chromosome colors been allocated? */
-
 Color chromColor[CHROMOSOME_SHADES * 8];
+/* Declare colors for chromosome coloring 8 colors * 3 shades = 24 
+ * colors allocated */
+
+/* Have the 3 shades of 8 chromosome colors been allocated? */
+boolean chromosomeColorsMade = FALSE; 
+
 
 int z;
-int maxCount ;
+int maxCount;
 int bestColor;
 int maxChromShade = CHROMOSOME_SHADES - 1;
-int maxItemsInFullTrack = 300;  /* Maximum number of items displayed in full */
+int maxItemsInFullTrack = 250;  /* Maximum number of items displayed in full */
 int guidelineSpacing = 10;	/* Pixels between guidelines. */
 
 struct cart *cart;	/* The cart where we keep persistent variables. */
@@ -107,42 +116,133 @@ struct cart *cart;	/* The cart where we keep persistent variables. */
 char *chromName;		/* Name of chromosome sequence . */
 char *database;			/* Name of database we're using. */
 char *organism;			/* Name of organism we're working on. */
-char *position = NULL; 		/* Name of position. */
 int winStart;			/* Start of window in sequence. */
 int winEnd;			/* End of window in sequence. */
-char *userSeqString = NULL;	/* User sequence .fa/.psl file. */
-char *ctFileName = NULL;	/* Custom track file. */
+static char *position = NULL; 		/* Name of position. */
+static char *userSeqString = NULL;	/* User sequence .fa/.psl file. */
+static char *ctFileName = NULL;	/* Custom track file. */
+
+int gfxBorder = 1;		/* Width of graphics border. */
+int insideX;			/* Start of area to draw track in in pixels. */
+int insideWidth;		/* Width of area to draw tracks in in pixels. */
+int leftLabelX;			/* Start of area to draw left labels on. */
+int leftLabelWidth;		/* Width of area to draw left labels on. */
+
+char *protDbName;               /* Name of proteome database for this genome. */
+
+/* These variables are set by getPositionFromCustomTracks() at the very 
+ * beginning of tracksDisplay(), and then used by loadCustomTracks(). */
+struct customTrack *ctList = NULL;  /* Custom tracks. */
+struct slName *browserLines = NULL; /* Custom track "browser" lines. */
 
 boolean withLeftLabels = TRUE;		/* Display left labels? */
 boolean withCenterLabels = TRUE;	/* Display center labels? */
 boolean withGuidelines = TRUE;		/* Display guidelines? */
+#ifdef ROBERTS_EXPERIMENT
+boolean withPopUps = TRUE;		/* Display PopUps? */
+#endif /* ROBERTS_EXPERIMENT */
 boolean withRuler = TRUE;		/* Display ruler? */
 boolean hideControls = FALSE;		/* Hide all controls? */
 
 /* Structure returned from findGenomePos. 
-We use this to to expand any tracks to full
- that were found to contain the searched-upon
-position string */
+ * We use this to to expand any tracks to full
+ * that were found to contain the searched-upon
+ * position string */
 struct hgPositions *hgp = NULL;
 
-struct trackLayout
-/* This structure controls the basic dimensions of display. */
-    {
-    MgFont *font;		/* What font to use. */
-    int leftLabelWidth;		/* Width of left labels. */
-    int trackWidth;		/* Width of tracks. */
-    int picWidth;		/* Width of entire picture. */
-    } tl;
+struct hash *zooSpeciesHash = NULL;
 
-void printHtmlComment(char *comment)
-/*
- Function to print output as a comment so it is not seen in the HTML
- output but only in the HTML source
-param comment _ The comment to be printed
-*/
+struct trackLayout tl;
+
+boolean suppressHtml = FALSE;	
+	/* If doing PostScript output we'll suppress most
+         * of HTML output. */
+
+void hvPrintf(char *format, va_list args)
+/* Suppressable variable args printf. */
 {
-printf("\n<!-- DEBUG: %s -->\n", comment);
+if (!suppressHtml)
+    vprintf(format, args);
+}
+
+void hPrintf(char *format, ...)
+/* Printf that can be suppressed if not making
+ * html. */
+{
+va_list(args);
+va_start(args, format);
+hvPrintf(format, args);
+va_end(args);
+}
+
+void hPuts(char *string)
+/* Puts that can be suppressed if not making
+ * html. */
+{
+if (!suppressHtml)
+    puts(string);
+}
+
+void hPutc(char c)
+/* putc than can be suppressed if not makeing html. */
+{
+if (!suppressHtml)
+    fputc(c, stdout);
+}
+
+void hWrites(char *string)
+/* Write string with no '\n' if not suppressed. */
+{
+if (!suppressHtml)
+    fputs(string, stdout);
+}
+
+void hButton(char *name, char *label)
+/* Write out button if not suppressed. */
+{
+if (!suppressHtml)
+    cgiMakeButton(name, label);
+}
+
+void hTextVar(char *varName, char *initialVal, int charSize)
+/* Write out text entry field if not suppressed. */
+{
+if (!suppressHtml)
+    cgiMakeTextVar(varName, initialVal, charSize);
+}
+
+void hIntVar(char *varName, int initialVal, int maxDigits)
+/* Write out numerical entry field if not supressed. */
+{
+if (!suppressHtml)
+    cgiMakeIntVar(varName, initialVal, maxDigits);
+}
+
+void hCheckBox(char *varName, boolean checked)
+/* Make check box if not suppressed. */
+{
+if (!suppressHtml)
+    cgiMakeCheckBox(varName, checked);
+}
+
+void hDropList(char *name, char *menu[], int menuSize, char *checked)
+/* Make a drop-down list with names if not suppressed. */
+{
+if (!suppressHtml)
+    cgiMakeDropList(name, menu, menuSize, checked);
+}
+
+void printHtmlComment(char *format, ...)
+/* Function to print output as a comment so it is not seen in the HTML
+ * output but only in the HTML source. */
+{
+va_list(args);
+va_start(args, format);
+hWrites("\n<!-- DEBUG: ");
+hvPrintf(format, args);
+hWrites(" -->\n");
 //fflush(stdout); /* USED ONLY FOR DEBUGGING BECAUSE THIS IS SLOW - MATT */
+va_end(args);
 }
 
 void setPicWidth(char *s)
@@ -167,7 +267,10 @@ MgFont *font;
 char *s;
 
 font = tl.font = mgSmallFont();
-tl.leftLabelWidth = 110;
+tl.mWidth = mgFontStringWidth(font, "M");
+tl.nWidth = mgFontStringWidth(font, "N");
+tl.fontHeight = mgFontLineHeight(font);
+tl.leftLabelWidth = 120;
 tl.picWidth = 620;
 setPicWidth(cartOptionalString(cart, "pix"));
 }
@@ -188,107 +291,39 @@ int maxShade = 9;	/* Highest shade in a color gradient. */
 Color shadesOfGray[10+1];	/* 10 shades of gray from white to black
                                  * Red is put at end to alert overflow. */
 Color shadesOfBrown[10+1];	/* 10 shades of brown from tan to tar. */
-static struct rgbColor brownColor = {100, 50, 0};
-static struct rgbColor tanColor = {255, 240, 200};
+struct rgbColor brownColor = {100, 50, 0};
+struct rgbColor tanColor = {255, 240, 200};
+struct rgbColor guidelineColor = { 220, 220, 255};
 
 Color shadesOfSea[10+1];       /* Ten sea shades. */
-static struct rgbColor darkSeaColor = {0, 60, 120};
-static struct rgbColor lightSeaColor = {200, 220, 255};
+struct rgbColor darkSeaColor = {0, 60, 120};
+struct rgbColor lightSeaColor = {200, 220, 255};
 
-struct trackGroup
-/* Structure that displays a group of tracks. */
-{
-    struct trackGroup *next;   /* Next on list. */
-    char *mapName;             /* Name on image map and for ui buttons. */
-    enum trackVisibility visibility; /* How much of this to see if possible. */
-    enum trackVisibility limitedVis; /* How much of this actually see. */
-    boolean limitedVisSet;	     /* Is limited visibility set? */
+void loadSampleIntoLinkedFeature(struct track *tg);
+void loadSampleZoo(struct track *tg);
 
-    char *longLabel;           /* Long label to put in center. */
-    char *shortLabel;          /* Short label to put on side. */
-
-    bool mapsSelf;          /* True if system doesn't need to do map box. */
-    bool drawName;          /* True if BED wants name drawn in box. */
-
-    Color *colorShades;	       /* Color scale (if any) to use. */
-    struct rgbColor color;     /* Main color. */
-    Color ixColor;             /* Index of main color. */
-    struct rgbColor altColor;  /* Secondary color. */
-    Color ixAltColor;
-
-    void (*loadItems)(struct trackGroup *tg);
-    /* loadItems loads up items for the chromosome range indicated.  It also usually sets the
-     * following variables.  */ 
-    void *items;               /* Some type of slList of items. */
-
-    char *(*itemName)(struct trackGroup *tg, void *item);
-    /* Return name of one of a member of items above to display on left side. */
-
-    char *(*mapItemName)(struct trackGroup *tg, void *item);
-    /* Return name to associate on map. */
-
-    int (*totalHeight)(struct trackGroup *tg, enum trackVisibility vis);
-        /* Return total height. Called before and after drawItems. 
-         * Must set the following variables. */
-    int height;                /* Total height - must be set by above call. */
-    int lineHeight;            /* Height per track including border. */
-    int heightPer;             /* Height per track minus border. */
-
-    int (*itemHeight)(struct trackGroup *tg, void *item);
-    /* Return height of one item. */
-
-    void (*drawItems)(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis);
-    /* Draw item list, one per track. */
-
-    int (*itemStart)(struct trackGroup *tg, void *item);
-    /* Return start of item in base pairs. */
-
-    int (*itemEnd)(struct trackGroup *tg, void *item);
-    /* Return start of item in base pairs. */
-
-    void (*freeItems)(struct trackGroup *tg);
-    /* Free item list. */
-
-    Color (*itemColor)(struct trackGroup *tg, void *item, struct memGfx *mg);
-    /* Get color of item (optional). */
+struct track *trackList = NULL;    /* List of all tracks. */
+struct group *groupList = NULL;    /* List of all tracks. */
 
 
-    void (*mapItem)(struct trackGroup *tg, void *item, char *itemName, int start, int end, 
-		    int x, int y, int width, int height); 
-    /* Write out image mapping for a given item */
 
-    boolean hasUi;		/* True if has an extended UI page. */
-    void *extraUiData;		/* Pointer for track specific filter etc. data. */
-    void (*trackFilter)(struct trackGroup *tg);	
-    /* Stuff to handle user interface parts. */
-
-    void *customPt;            /* Misc pointer variable unique to group. */
-    int customInt;             /* Misc int variable unique to group. */
-    int subType;               /* Variable to say what subtype this is for similar groups
-                                * to share code. */
-    unsigned short private;	/* True(1) if private, false(0) otherwise. */
-    int bedSize;		/* Number of fields if a bed file. */
-    float priority;	/* Priority to load tracks in, i.e. order to load tracks in. */
-};
-
-void loadSampleIntoLinkedFeature(struct trackGroup *tg);
-
-struct trackGroup *tGroupList = NULL;  /* List of all tracks. */
-
-struct trackGroup *sortGroupList = NULL; /* Used temporarily for sample sorting. */
-static boolean tgLoadNothing(){return TRUE;}
-static void tgDrawNothing(){}
-static void tgFreeNothing(){}
-static char *tgNoName(){return"";}
+/* Some little functional stubs to fill in track group
+ * function pointers with if we have nothing to do. */
+boolean tgLoadNothing(struct track *tg){return TRUE;}
+void tgDrawNothing(struct track *tg){}
+void tgFreeNothing(struct track *tg){}
+int tgItemNoStart(struct track *tg, void *item) {return -1;}
+int tgItemNoEnd(struct track *tg, void *item) {return -1;}
 
 int tgCmpPriority(const void *va, const void *vb)
 /* Compare to sort based on priority. */
 {
-const struct trackGroup *a = *((struct trackGroup **)va);
-const struct trackGroup *b = *((struct trackGroup **)vb);
-float dif = a->priority - b->priority;
+const struct track *a = *((struct track **)va);
+const struct track *b = *((struct track **)vb);
+float dif = a->group->priority - b->group->priority;
+
+if (dif == 0)
+    dif = a->priority - b->priority;
 if (dif < 0)
    return -1;
 else if (dif == 0.0)
@@ -297,26 +332,75 @@ else
    return 1;
 }
 
-static int tgFixedItemHeight(struct trackGroup *tg, void *item)
+int tgFixedItemHeight(struct track *tg, void *item)
 /* Return item height for fixed height track. */
 {
 return tg->lineHeight;
 }
 
-static int tgFixedTotalHeight(struct trackGroup *tg, enum trackVisibility vis)
-/* Most fixed height track groups will use this to figure out the height they use. */
+int packCountRows(struct track *tg, int maxCount, boolean withLabels)
+/* Return packed height. */
 {
-tg->lineHeight = mgFontLineHeight(tl.font)+1;
-tg->heightPer = tg->lineHeight - 1;
+struct spaceSaver *ss;
+struct slList *item;
+MgFont *font = tl.font;
+int extraWidth = tl.mWidth * 2;
+int start, end, height;
+double scale = (double)insideWidth/(winEnd - winStart);
+spaceSaverFree(&tg->ss);
+ss = tg->ss = spaceSaverNew(0, insideWidth, maxCount);
+for (item = tg->items; item != NULL; item = item->next)
+    {
+    int baseStart = tg->itemStart(tg, item);
+    int baseEnd = tg->itemEnd(tg, item);
+    start = round((double)(baseStart - winStart)*scale);
+    if (!tg->drawName && withLabels)
+	start -= mgFontStringWidth(font, tg->itemName(tg, item)) + extraWidth;
+    end = round((baseEnd - winStart)*scale);
+    if (start < insideWidth && end > 0)
+        {
+	if (start < 0) start = 0;
+	if (end > insideWidth) end = insideWidth;
+	if (spaceSaverAdd(ss, start, end, item) == NULL)
+	    break;
+	}
+    }
+spaceSaverFinish(ss);
+return ss->rowCount;
+}
+
+int tgFixedTotalHeight(struct track *tg, enum trackVisibility vis)
+/* Most fixed height track groups will use this to figure out the height 
+ * they use. */
+{
+int rows;
+tg->heightPer = tl.fontHeight;
+tg->lineHeight = tl.fontHeight+1;
 switch (vis)
     {
     case tvFull:
-	tg->height = slCount(tg->items) * tg->lineHeight;
+	rows = slCount(tg->items);
 	break;
+    case tvPack:
+	{
+	rows = packCountRows(tg, maxItemsInFullTrack+1, TRUE);
+	break;
+	}
+    case tvSquish:
+        {
+	tg->heightPer = tl.fontHeight/2;
+	if ((tg->heightPer & 1) == 0)
+	    tg->heightPer -= 1;
+	tg->lineHeight = tg->heightPer + 1;
+	rows = packCountRows(tg, 3*maxItemsInFullTrack+1, FALSE);
+	break;
+	}
     case tvDense:
-	tg->height = tg->lineHeight;
+    default:
+        rows = 1;
 	break;
     }
+tg->height = rows * tg->lineHeight;
 return tg->height;
 }
 
@@ -352,58 +436,53 @@ freeMem(tempstr2);
 return(ret);
 }
 
-static int tgUserDefinedTotalHeight(struct trackGroup *tg, enum trackVisibility vis)
-/* Wiggle track groups will use this to figure out the height they use
+static int sampleTotalHeight(struct track *tg, 
+	enum trackVisibility vis)
+/* Wiggle track will use this to figure out the height they use
 as defined in the cart */
 {
-
 struct slList *item;
-int start, lines;
+int start, lines = 0;
 
 int heightFromCart;
 char o1[128];
 
 snprintf( o1, 128, "%s.heightPer", tg->mapName);
 
-if( vis == tvDense )
-    heightFromCart = 10;
-else
-    heightFromCart = atoi(cartUsualString(cart, o1, "75"));
+heightFromCart = atoi(cartUsualString(cart, o1, "50"));
 
-tg->lineHeight = max(mgFontLineHeight(tl.font)+1, heightFromCart);
+tg->lineHeight = max(tl.fontHeight+1, heightFromCart);
 tg->heightPer = tg->lineHeight - 1;
 switch (vis)
     {
     case tvFull:
-
-    lines = 1;
-    for (item = tg->items; item != NULL; item = item->next)
-	{
-        if( item->next != NULL )
-            if( updateY( tg->itemName(tg, item), tg->itemName(tg, item->next), 1 ))
-                lines++;
-    }
+	lines = 1;
+	for (item = tg->items; item != NULL; item = item->next)
+	    {
+	    if( item->next != NULL )
+		if( updateY( tg->itemName(tg, item), tg->itemName(tg, item->next), 1 ))
+		    lines++;
+	    }
 	tg->height = lines * tg->lineHeight;
 	break;
-
+    case tvPack:
+    case tvSquish:
+        errAbort("Sorry can't handle pack in sampleTotalHeight (%s)", tg->mapName);
+	break;
     case tvDense:
 	tg->height = tg->lineHeight;
 	break;
-
     }
 return tg->height;
 }
 
-int tgWeirdItemStart(struct trackGroup *tg, void *item)
-/* Space filler function for tracks without regular items. */
+int consTotalHeight(struct track *tg, enum trackVisibility vis)
+/* Human/mouse conservation total height. */
 {
-return -1;
-}
-
-int tgWeirdItemEnd(struct trackGroup *tg, void *item)
-/* Space filler function for tracks without regular items. */
-{
-return -1;
+if( vis == tvDense )
+    return tg->height = tg->lineHeight = 10;
+else
+    return sampleTotalHeight(tg, vis); 
 }
 
 int orientFromChar(char c)
@@ -424,40 +503,66 @@ else
     return '+';
 }
 
-enum trackVisibility limitVisibility(struct trackGroup *tg, void *items)
-/* Return default visibility limited by number of items. */
+
+enum trackVisibility limitVisibility(struct track *tg)
+/* Return default visibility limited by number of items. 
+ * This also sets tg->height. */
 {
 if (!tg->limitedVisSet)
     {
     enum trackVisibility vis = tg->visibility;
+    int h;
+    int maxHeight = maxItemsInFullTrack * tl.fontHeight;
     tg->limitedVisSet = TRUE;
-    if (vis == tvFull)
-	{
-	if (slCount(items) > maxItemsInFullTrack)
+    h = tg->totalHeight(tg, vis);
+    if (h > maxHeight)
+        {
+	if (vis == tvFull && tg->canPack)
+	    vis = tvPack;
+	else if (vis == tvPack)
+	    vis = tvSquish;
+	else
 	    vis = tvDense;
+	h = tg->totalHeight(tg, vis);
+	if (h > maxHeight && vis == tvPack)
+	    {
+	    vis = tvSquish;
+	    h = tg->totalHeight(tg, vis);
+	    }
+	if (h > maxHeight)
+	    {
+	    vis = tvDense;
+	    h = tg->totalHeight(tg, vis);
+	    }
 	}
+    tg->height = h;
     tg->limitedVis = vis;
     }
 return tg->limitedVis;
 }
 
-static struct dyString *uiStateUrlPart(struct trackGroup *toggleGroup)
+static struct dyString *uiStateUrlPart(struct track *toggleGroup)
 /* Return a string that contains all the UI state in CGI var
  * format.  If toggleGroup is non-null the visibility of that
- * group will be toggled in the string. */
+ * track will be toggled in the string. */
 {
 struct dyString *dy = newDyString(512);
-struct trackGroup *tg;
+struct track *tg;
 
 dyStringPrintf(dy, "%s=%u", cartSessionVarName(), cartSessionId(cart));
-for (tg = tGroupList; tg != NULL; tg = tg->next)
+for (tg = trackList; tg != NULL; tg = tg->next)
     {
     int vis = tg->visibility;
     if (tg == toggleGroup)
 	{
 	if (vis == tvDense)
-	    vis = tvFull;
-	else if (vis == tvFull)
+	    {
+	    if (tg->canPack)
+	        vis = tvPack;
+	    else
+		vis = tvFull;
+	    }
+	else if (vis == tvFull || vis == tvPack)
 	    vis = tvDense;
 	dyStringPrintf(dy, "&%s=%s", tg->mapName, hStringFromTv(vis));
 	}
@@ -465,20 +570,49 @@ for (tg = tGroupList; tg != NULL; tg = tg->next)
 return dy;
 }
 
+#ifdef ROBERTS_EXPERIMENT
+void mapStatusMessage(char *format, ...)
+/* Write out stuff that will cause a status message to
+ * appear when the mouse is over this box. */
+{
+if( withPopUps ) 
+    {
+    va_list(args);
+    va_start(args, format);
+    hPrintf(" onMouseover=\"javascript:popup('");
+    hvPrintf(format, args);
+    hPrintf("');\" onMouseOut=\"javascript:popupoff();\"");
+    va_end(args);
+    }
+}
+#endif /* ROBERTS_EXPERIMENT */
 
-void mapBoxTrackUi(int x, int y, int width, int height, struct trackGroup *tg)
+void mapStatusMessage(char *format, ...)
+/* Write out stuff that will cause a status message to
+ * appear when the mouse is over this box. */
+{
+va_list(args);
+va_start(args, format);
+hPrintf(" ALT=\"");
+hvPrintf(format, args);
+hPutc('"');
+va_end(args);
+}
+
+void mapBoxTrackUi(int x, int y, int width, int height, struct track *tg)
 /* Print out image map rectangle that invokes hgTrackUi. */
 {
 char *track = tg->mapName;
-printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-printf("HREF=\"%s?%s=%u&c=%s&g=%s\"", hgTrackUiName(), 
+hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
+hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s\"", hgTrackUiName(), 
 	    cartSessionVarName(), cartSessionId(cart),
 	    chromName, tg->mapName);
-printf(" ALT=\"%s controls\">\n", tg->shortLabel);
+mapStatusMessage("%s controls", tg->shortLabel);
+hPrintf(">\n");
 }
 
 void mapBoxReinvoke(int x, int y, int width, int height, 
-	struct trackGroup *toggleGroup, char *chrom,
+	struct track *toggleGroup, char *chrom,
 	int start, int end, char *message)
 /* Print out image map rectangle that would invoke this program again.
  * If toggleGroup is non-NULL then toggle that track between full and dense.
@@ -486,34 +620,36 @@ void mapBoxReinvoke(int x, int y, int width, int height,
 {
 struct dyString *ui = uiStateUrlPart(toggleGroup);
 
-printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
+hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
 if (chrom == NULL)
     {
     chrom = chromName;
     start = winStart;
     end = winEnd;
     }
-printf("HREF=\"%s?position=%s:%d-%d",
+hPrintf("HREF=\"%s?position=%s:%d-%d",
 	hgTracksName(), chrom, start+1, end);
-printf("&%s\"", ui->string);
+hPrintf("&%s\"", ui->string);
 freeDyString(&ui);
-
-if (toggleGroup)
-    printf(" ALT=\"Change between dense and full view of %s track\">\n", 
-           toggleGroup->shortLabel);
-else
-    printf(" ALT=\"jump to %s\">\n", message);
+if (message != NULL)
+    mapStatusMessage("%s", message);
+hPrintf(">\n");
 }
 
 
-void mapBoxToggleVis(int x, int y, int width, int height, struct trackGroup *curGroup)
+void mapBoxToggleVis(int x, int y, int width, int height, 
+	struct track *curGroup)
 /* Print out image map rectangle that would invoke this program again.
  * program with the current track expanded. */
 {
-mapBoxReinvoke(x, y, width, height, curGroup, NULL, 0, 0, NULL);
+char buf[256];
+snprintf(buf, sizeof(buf), 
+	"Change between dense and full view of %s", curGroup->shortLabel);
+mapBoxReinvoke(x, y, width, height, curGroup, NULL, 0, 0, buf);
 }
 
-void mapBoxJumpTo(int x, int y, int width, int height, char *newChrom, int newStart, int newEnd, char *message)
+void mapBoxJumpTo(int x, int y, int width, int height, 
+	char *newChrom, int newStart, int newEnd, char *message)
 /* Print out image map rectangle that would invoke this program again
  * at a different window. */
 {
@@ -534,17 +670,28 @@ return dy->string;
 }
 
 void mapBoxHc(int start, int end, int x, int y, int width, int height, 
-	char *group, char *item, char *statusLine)
+	char *track, char *item, char *statusLine)
 /* Print out image map rectangle that would invoke the htc (human track click)
  * program. */
 {
-char *encodedItem = cgiEncode(item);
-printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-printf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
-    hgcNameAndSettings(), start, end, group, encodedItem, chromName, winStart, winEnd, 
-    database, tl.picWidth);
-printf("ALT=\"%s\">\n", statusLine); 
-freeMem(encodedItem);
+int xEnd = x+width;
+int yEnd = y+height;
+if (x < 0) x = 0;
+if (xEnd > tl.picWidth) xEnd = tl.picWidth;
+if (x < xEnd)
+    {
+    char *encodedItem = cgiEncode(item);
+    hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, xEnd, yEnd);
+    hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
+	hgcNameAndSettings(), start, end, track, encodedItem, 
+	chromName, winStart, winEnd, 
+	database, tl.picWidth);
+    /*if (start !=-1)*/
+    if (statusLine != NULL)
+	mapStatusMessage("%s", statusLine);
+    hPrintf(">\n");
+    freeMem(encodedItem);
+    }
 }
 
 boolean chromTableExists(char *tabSuffix)
@@ -555,19 +702,28 @@ sprintf(table, "%s%s", chromName, tabSuffix);
 return hTableExists(table);
 }
 
-void drawScaledBox(struct memGfx *mg, int chromStart, int chromEnd, double scale, 
-	int xOff, int y, int height, Color color)
-/* Draw a box scaled from chromosome to window coordinates. */
+double scaleForPixels(double pixelWidth)
+/* Return what you need to multiply bases by to
+ * get to scale of pixel coordinates. */
+{
+return pixelWidth / (winEnd - winStart);
+}
+
+void drawScaledBox(struct vGfx *vg, int chromStart, int chromEnd, 
+	double scale, int xOff, int y, int height, Color color)
+/* Draw a box scaled from chromosome to window coordinates. 
+ * Get scale first with scaleForPixels. */
 {
 int x1 = round((double)(chromStart-winStart)*scale) + xOff;
 int x2 = round((double)(chromEnd-winStart)*scale) + xOff;
 int w = x2-x1;
 if (w < 1)
     w = 1;
-mgDrawBox(mg, x1, y, w, height, color);
+vgBox(vg, x1, y, w, height, color);
 }
 
-void drawScaledBoxSample(struct memGfx *mg, int chromStart, int chromEnd, double scale, 
+void drawScaledBoxSample(struct vGfx *vg, 
+	int chromStart, int chromEnd, double scale, 
 	int xOff, int y, int height, Color color, int score)
 /* Draw a box scaled from chromosome to window coordinates. */
 {
@@ -582,7 +738,7 @@ w = x2-x1;
 
 if (w < 1)
     w = 1;
-mgDrawBox(mg, x1, y, w, height, color);
+vgBox(vg, x1, y, w, height, color);
 if ((x1 >= 0) && (x1 < MAXPIXELS) && (chromEnd >= winStart) && (chromStart <= winEnd))
     {
     for (i = x1 ; i < x1+w; i++)
@@ -595,26 +751,28 @@ if ((x1 >= 0) && (x1 < MAXPIXELS) && (chromEnd >= winStart) && (chromStart <= wi
 }
 
 
-void filterItems(struct trackGroup *tg, 
-    boolean (*filter)(struct trackGroup *tg, void *item),
+void filterItems(struct track *tg, 
+    boolean (*filter)(struct track *tg, void *item),
     char *filterType)
-/* Filter out items from trackGroup->itemList. */
+/* Filter out items from track->itemList. */
 {
 struct slList *newList = NULL, *oldList = NULL, *el, *next;
 boolean exclude = FALSE;
 boolean color = FALSE;
-boolean isFull;
+enum trackVisibility vis = 0;	/* suppress compiler warning. */
 
 if (sameWord(filterType, "none"))
     return;
 
-isFull = (limitVisibility(tg, tg->items) == tvFull);
 if (sameWord(filterType, "include"))
     exclude = FALSE;
 else if (sameWord(filterType, "exclude"))
     exclude = TRUE;
 else
+    {
     color = TRUE;
+    vis = limitVisibility(tg);
+    }
 
 for (el = tg->items; el != NULL; el = next)
     {
@@ -633,10 +791,10 @@ if (color)
    {
    slReverse(&oldList);
    /* Draw stuff that passes filter first in full mode, last in dense. */
-   if (isFull)
-       newList = slCat(newList, oldList);
-   else
+   if (vis == tvDense)
        newList = slCat(oldList, newList);
+   else
+       newList = slCat(newList, oldList);
    }
 tg->items = newList;
 }
@@ -654,39 +812,13 @@ else if (sameString(type, "blue"))
 return colorIx;
 }
 
-struct simpleFeature
-/* Minimal feature - just stores position in browser coordinates. */
-    {
-    struct simpleFeature *next;
-    int start, end;			/* Start/end in browser coordinates. */
-    int grayIx;                         /* Level of gray usually. */
-    };
-
-enum {lfSubXeno = 1};
-enum {lfSubSample = 2};
-enum {lfWithBarbs = 3}; /* turn on barbs to show direction based on strand field */
-
-struct linkedFeatures
+struct track *trackNew()
+/* Allocate track . */
 {
-    struct linkedFeatures *next;
-    int start, end;			/* Start/end in browser coordinates. */
-    int tallStart, tallEnd;		/* Start/end of fat display. */
-    int grayIx;				/* Average of components. */
-    int filterColor;			/* Filter color (-1 for none) */
-    float score;                        /* score for this feature */
-    char name[NAME_LEN];		/* Accession of query seq. */
-    int orientation;                    /* Orientation. */
-    struct simpleFeature *components;   /* List of component simple features. */
-    void *extra;			/* Extra info that varies with type. */
-    };
-
-struct linkedFeaturesPair
-    {
-      struct linkedFeaturesPair *next;
-      char *cloneName;                /*clone name for est pair */
-      struct linkedFeatures *lf5prime;   /*linked features for 5 prime est */
-      struct linkedFeatures *lf3prime;   /*linked features for 5 prime est */
-    };
+struct track *tg;
+AllocVar(tg);
+return tg;
+}
 
 int linkedFeaturesCmp(const void *va, const void *vb)
 /* Compare to sort based on chrom,chromStart. */
@@ -697,14 +829,14 @@ return a->start - b->start;
 }
 
 
-char *linkedFeaturesName(struct trackGroup *tg, void *item)
+char *linkedFeaturesName(struct track *tg, void *item)
 /* Return name of item. */
 {
 struct linkedFeatures *lf = item;
 return lf->name;
 }
 
-void freeLinkedFeatures(struct linkedFeatures **pList)
+void linkedFeaturesFreeList(struct linkedFeatures **pList)
 /* Free up a linked features list. */
 {
 struct linkedFeatures *lf;
@@ -713,10 +845,10 @@ for (lf = *pList; lf != NULL; lf = lf->next)
 slFreeList(pList);
 }
 
-void freeLinkedFeaturesItems(struct trackGroup *tg)
+void linkedFeaturesFreeItems(struct track *tg)
 /* Free up linkedFeaturesTrack items. */
 {
-freeLinkedFeatures((struct linkedFeatures**)(&tg->items));
+linkedFeaturesFreeList((struct linkedFeatures**)(&tg->items));
 }
 
 enum {blackShadeIx=9,whiteShadeIx=0};
@@ -734,7 +866,7 @@ struct linkedFeaturesSeries
     struct linkedFeatures *features;    /* linked features for a series */
 };
 
-char *linkedFeaturesSeriesName(struct trackGroup *tg, void *item)
+char *linkedFeaturesSeriesName(struct track *tg, void *item)
 /* Return name of item */
 {
 struct linkedFeaturesSeries *lfs = item;
@@ -747,17 +879,17 @@ void freeLinkedFeaturesSeries(struct linkedFeaturesSeries **pList)
 struct linkedFeaturesSeries *lfs;
 
 for (lfs = *pList; lfs != NULL; lfs = lfs->next)
-    freeLinkedFeatures(&lfs->features);
+    linkedFeaturesFreeList(&lfs->features);
 slFreeList(pList);
 }
 
-void freeLinkedFeaturesSeriesItems(struct trackGroup *tg)
+void freeLinkedFeaturesSeriesItems(struct track *tg)
 /* Free up linkedFeaturesSeriesTrack items. */
 {
 freeLinkedFeaturesSeries((struct linkedFeaturesSeries**)(&tg->items));
 }
 
-void linkedFeaturesToLinkedFeaturesSeries(struct trackGroup *tg)
+void linkedFeaturesToLinkedFeaturesSeries(struct track *tg)
 /* Convert a linked features struct to a linked features series struct */
 {
 struct linkedFeaturesSeries *lfsList = NULL, *lfs;
@@ -770,7 +902,7 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
     lfs->grayIx = lf->grayIx;
     lfs->start = lf->start;
     lfs->end = lf->end;
-    slAddHead(&lfsList, lfs)
+    slAddHead(&lfsList, lfs);
     }
 slReverse(&lfsList);
 for (lfs = lfsList; lfs != NULL; lfs = lfs->next) 
@@ -778,7 +910,7 @@ for (lfs = lfsList; lfs != NULL; lfs = lfs->next)
 tg->items = lfsList;
 }
 
-void linkedFeaturesSeriesToLinkedFeatures(struct trackGroup *tg)
+void linkedFeaturesSeriesToLinkedFeatures(struct track *tg)
 /* Convert a linked features series struct to a linked features struct */
 {
 struct linkedFeaturesSeries *lfs;
@@ -786,7 +918,7 @@ struct linkedFeatures *lfList = NULL, *lf;
 
 for (lfs = tg->items; lfs != NULL; lfs = lfs->next) 
     {
-    slAddHead(&lfList, lfs->features)
+    slAddHead(&lfList, lfs->features);
     lfs->features = NULL;
     }
 slReverse(&lfList);
@@ -819,7 +951,13 @@ Color lightGrayIndex()
 return shadesOfGray[3];
 }
 
-void makeGrayShades(struct memGfx *mg)
+int vgFindRgb(struct vGfx *vg, struct rgbColor *rgb)
+/* Find color index corresponding to rgb color. */
+{
+return vgFindColorIx(vg, rgb->r, rgb->g, rgb->b);
+}
+
+void makeGrayShades(struct vGfx *vg)
 /* Make eight shades of gray in display. */
 {
 int i;
@@ -829,12 +967,12 @@ for (i=0; i<=maxShade; ++i)
     int level = 255 - (255*i/maxShade);
     if (level < 0) level = 0;
     rgb.r = rgb.g = rgb.b = level;
-    shadesOfGray[i] = mgFindColor(mg, rgb.r, rgb.g, rgb.b);
+    shadesOfGray[i] = vgFindRgb(vg, &rgb);
     }
 shadesOfGray[maxShade+1] = MG_RED;
 }
 
-void mgMakeColorGradient(struct memGfx *mg, 
+void vgMakeColorGradient(struct vGfx *vg, 
     struct rgbColor *start, struct rgbColor *end,
     int steps, Color *colorIxs)
 /* Make a color gradient that goes smoothly from start
@@ -854,37 +992,37 @@ for (i=0; i<=steps; ++i)
     r = invScale * start->r + scale * end->r;
     g = invScale * start->g + scale * end->g;
     b = invScale * start->b + scale * end->b;
-    colorIxs[i] = mgFindColor(mg, r, g, b);
+    colorIxs[i] = vgFindColorIx(vg, r, g, b);
     scale += invStep;
     }
 }
 
-void makeBrownShades(struct memGfx *mg)
+void makeBrownShades(struct vGfx *vg)
 /* Make some shades of brown in display. */
 {
-mgMakeColorGradient(mg, &tanColor, &brownColor, maxShade+1, shadesOfBrown);
+vgMakeColorGradient(vg, &tanColor, &brownColor, maxShade+1, shadesOfBrown);
 }
 
-void makeSeaShades(struct memGfx *mg)
+void makeSeaShades(struct vGfx *vg)
 /* Make some shades of blue in display. */
 {
-mgMakeColorGradient(mg, &lightSeaColor, &darkSeaColor, maxShade+1, shadesOfSea);
+vgMakeColorGradient(vg, &lightSeaColor, &darkSeaColor, maxShade+1, shadesOfSea);
 }
 
-void makeRedGreenShades(struct memGfx *mg) 
+void makeRedGreenShades(struct vGfx *vg) 
 /* Allocate the  shades of Red, Green and Blue */
 {
 static struct rgbColor black = {0, 0, 0};
 static struct rgbColor red = {255, 0, 0};
 static struct rgbColor green = {0, 255, 0};
 static struct rgbColor blue = {0, 0, 255};
-mgMakeColorGradient(mg, &black, &blue, EXPR_DATA_SHADES, shadesOfBlue);
-mgMakeColorGradient(mg, &black, &red, EXPR_DATA_SHADES, shadesOfRed);
-mgMakeColorGradient(mg, &black, &green, EXPR_DATA_SHADES, shadesOfGreen);
+vgMakeColorGradient(vg, &black, &blue, EXPR_DATA_SHADES, shadesOfBlue);
+vgMakeColorGradient(vg, &black, &red, EXPR_DATA_SHADES, shadesOfRed);
+vgMakeColorGradient(vg, &black, &green, EXPR_DATA_SHADES, shadesOfGreen);
 exprBedColorsMade = TRUE;
 }
 
-void makeChromosomeShades(struct memGfx *mg) 
+void makeChromosomeShades(struct vGfx *vg) 
 /* Allocate the  shades of 8 colors in 3 shades to cover 24 chromosomes  */
 {
 static struct rgbColor blk = {0, 0, 0};
@@ -898,49 +1036,49 @@ static struct rgbColor chrom6 = {0, 0, 255}; /* blue */
 static struct rgbColor chrom7 = {255, 0, 255}; /* magenta aka purple */
 static struct rgbColor chrom8 = {102, 51, 0}; /* brown */
 
-chromColor[0] = mgFindColor(mg, 0,0, 0); /*black*/
-chromColor[1] = mgFindColor(mg, 0xff,0xcc, 0xcc);  /* light red */
-chromColor[2] = mgFindColor(mg, 0xcc,0, 0);      /* med red */
-chromColor[3] = mgFindColor(mg, 0xff,0, 0);      /* bright red */
+chromColor[0] = vgFindColorIx(vg, 0,0, 0); /*black*/
+chromColor[1] = vgFindColorIx(vg, 0xff,0xcc, 0xcc);  /* light red */
+chromColor[2] = vgFindColorIx(vg, 0xcc,0, 0);      /* med red */
+chromColor[3] = vgFindColorIx(vg, 0xff,0, 0);      /* bright red */
 
-chromColor[4] = mgFindColor(mg, 0xff,0x66,0);     /* bright orange */
-chromColor[5] = mgFindColor(mg, 0xff,0x99,0);
-chromColor[6] = mgFindColor(mg, 0xff,0,0xcc);     /* magenta */
+chromColor[4] = vgFindColorIx(vg, 0xff,0x66,0);     /* bright orange */
+chromColor[5] = vgFindColorIx(vg, 0xff,0x99,0);
+chromColor[6] = vgFindColorIx(vg, 0xff,0,0xcc);     /* magenta */
 
-chromColor[7] = mgFindColor(mg, 0xff,0xff,0x0);     /* bright yellow  */
-chromColor[8] = mgFindColor(mg, 0xcc,0xcc,0x99);     /* olive green*/
-chromColor[9] = mgFindColor(mg, 0x99,0x66,0x0);   /* brown */
+chromColor[7] = vgFindColorIx(vg, 0xff,0xff,0x0);     /* bright yellow  */
+chromColor[8] = vgFindColorIx(vg, 0xcc,0xcc,0x99);     /* olive green*/
+chromColor[9] = vgFindColorIx(vg, 0x99,0x66,0x0);   /* brown */
 
-chromColor[10] = mgFindColor(mg, 0,0xff,0);      /*bt gr*/
-chromColor[11] = mgFindColor(mg, 0xcc,0xff,0);    /* yellow green */
-chromColor[12] = mgFindColor(mg, 0x66,0x66,0);  /* dark  green*/
+chromColor[10] = vgFindColorIx(vg, 0,0xff,0);      /*bt gr*/
+chromColor[11] = vgFindColorIx(vg, 0xcc,0xff,0);    /* yellow green */
+chromColor[12] = vgFindColorIx(vg, 0x66,0x66,0);  /* dark  green*/
 
-chromColor[13] = mgFindColor(mg, 0xcc,0xff,0xff);  /*lt cyan*/
-chromColor[14] = mgFindColor(mg, 0,0xff,0xff);    /*med cyan*/
-chromColor[15] = mgFindColor(mg, 0x0,0x0,0x0); /* black */
+chromColor[13] = vgFindColorIx(vg, 0xcc,0xff,0xff);  /*lt cyan*/
+chromColor[14] = vgFindColorIx(vg, 0,0xff,0xff);    /*med cyan*/
+chromColor[15] = vgFindColorIx(vg, 0x0,0x0,0x0); /* black */
 
-chromColor[16] = mgFindColor(mg, 0x99,0xcc,0xff);  /*light med blue */
-chromColor[17] = mgFindColor(mg, 0x66,0x99,0xff);  /* med blue */
-chromColor[18] = mgFindColor(mg, 0,0 ,0xcc);     /* deep blue */
+chromColor[16] = vgFindColorIx(vg, 0x99,0xcc,0xff);  /*light med blue */
+chromColor[17] = vgFindColorIx(vg, 0x66,0x99,0xff);  /* med blue */
+chromColor[18] = vgFindColorIx(vg, 0,0 ,0xcc);     /* deep blue */
 
-chromColor[19] = mgFindColor(mg, 0xcc,0x99,0xff);  /*lt violet*/
-chromColor[20] = mgFindColor(mg, 0xcc,0x33,0xff);  /* med violet */
-chromColor[21] = mgFindColor(mg, 0x99,0,0xcc);    /* dark violet */
+chromColor[19] = vgFindColorIx(vg, 0xcc,0x99,0xff);  /*lt violet*/
+chromColor[20] = vgFindColorIx(vg, 0xcc,0x33,0xff);  /* med violet */
+chromColor[21] = vgFindColorIx(vg, 0x99,0,0xcc);    /* dark violet */
 
-chromColor[22] = mgFindColor(mg, 0xcc,0xcc,0xcc); /* light gray */
-chromColor[23] = mgFindColor(mg, 0x99,0x99,0x99); /* med gray */
-chromColor[24] = mgFindColor(mg, 0x66,0x66,0x66);  /* med gray */
+chromColor[22] = vgFindColorIx(vg, 0xcc,0xcc,0xcc); /* light gray */
+chromColor[23] = vgFindColorIx(vg, 0x99,0x99,0x99); /* med gray */
+chromColor[24] = vgFindColorIx(vg, 0x66,0x66,0x66);  /* med gray */
 
-chromColor[25] = mgFindColor(mg, 0x0,0x0,0x0); /* black */
+chromColor[25] = vgFindColorIx(vg, 0x0,0x0,0x0); /* black */
 /*
-mgMakeColorGradient(mg, &white, &chrom1, CHROMOSOME_SHADES, shadesOfChrom1);
-mgMakeColorGradient(mg, &white, &chrom2, CHROMOSOME_SHADES, shadesOfChrom2);
-mgMakeColorGradient(mg, &white, &chrom3, CHROMOSOME_SHADES, shadesOfChrom3);
-mgMakeColorGradient(mg, &white, &chrom4, CHROMOSOME_SHADES, shadesOfChrom4);
-mgMakeColorGradient(mg, &white, &chrom5, CHROMOSOME_SHADES, shadesOfChrom5);
-mgMakeColorGradient(mg, &white, &chrom6, CHROMOSOME_SHADES, shadesOfChrom6);
-mgMakeColorGradient(mg, &white, &chrom7, CHROMOSOME_SHADES, shadesOfChrom7);
-mgMakeColorGradient(mg, &white, &chrom8, CHROMOSOME_SHADES, shadesOfChrom8);
+vgMakeColorGradient(vg, &white, &chrom1, CHROMOSOME_SHADES, shadesOfChrom1);
+vgMakeColorGradient(vg, &white, &chrom2, CHROMOSOME_SHADES, shadesOfChrom2);
+vgMakeColorGradient(vg, &white, &chrom3, CHROMOSOME_SHADES, shadesOfChrom3);
+vgMakeColorGradient(vg, &white, &chrom4, CHROMOSOME_SHADES, shadesOfChrom4);
+vgMakeColorGradient(vg, &white, &chrom5, CHROMOSOME_SHADES, shadesOfChrom5);
+vgMakeColorGradient(vg, &white, &chrom6, CHROMOSOME_SHADES, shadesOfChrom6);
+vgMakeColorGradient(vg, &white, &chrom7, CHROMOSOME_SHADES, shadesOfChrom7);
+vgMakeColorGradient(vg, &white, &chrom8, CHROMOSOME_SHADES, shadesOfChrom8);
 chromColor[0] = kshadesOfChrom1[LOW];
 chromColor[1] = shadesOfChrom1[MEDIUM];
 chromColor[2] = shadesOfChrom1[BRIGHT];
@@ -1012,7 +1150,7 @@ return res;
 }
 
 
-static int cmpLfWhiteToBlack(const void *va, const void *vb)
+static int cmpLfsWhiteToBlack(const void *va, const void *vb)
 /* Help sort from white to black. */
 {
 const struct linkedFeaturesSeries *a = *((struct linkedFeaturesSeries **)va);
@@ -1020,15 +1158,18 @@ const struct linkedFeaturesSeries *b = *((struct linkedFeaturesSeries **)vb);
 return a->grayIx - b->grayIx;
 }
 
-static int cmpLfBlackToWhite(const void *va, const void *vb)
+static int cmpLfWhiteToBlack(const void *va, const void *vb)
 /* Help sort from white to black. */
 {
-const struct linkedFeaturesSeries *a = *((struct linkedFeaturesSeries **)va);
-const struct linkedFeaturesSeries *b = *((struct linkedFeaturesSeries **)vb);
-return b->grayIx - a->grayIx;
+const struct linkedFeatures *a = *((struct linkedFeatures **)va);
+const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
+int diff = a->filterColor - b->filterColor;
+if (diff == 0)
+    diff = a->grayIx - b->grayIx;
+return diff;
 }
 
-static int linkedFeaturesCmpStart(const void *va, const void *vb)
+int linkedFeaturesCmpStart(const void *va, const void *vb)
 /* Help sort linkedFeatures by starting pos. */
 {
 const struct linkedFeatures *a = *((struct linkedFeatures **)va);
@@ -1036,193 +1177,311 @@ const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
 return a->start - b->start;
 }
 
+void clippedBarbs(struct vGfx *vg, int x, int y, 
+	int width, int barbHeight, int barbSpacing, int barbDir, Color color,
+	boolean needDrawMiddle)
+/* Draw barbed line.  Clip it to fit the window first though since
+ * some barbed lines will span almost the whole chromosome, and the
+ * clipping at the lower level is not efficient since we added
+ * PostScript output support. */
+{
+int x2 = x + width;
+if (x < 0) x = 0;
+if (x2 > vg->width) x2 = vg->width;
+vgBarbedHorizontalLine(vg, x, y, x2 - x, barbHeight, barbSpacing, barbDir,
+	color, needDrawMiddle);
+}
 
-static void linkedFeaturesSeriesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+void innerLine(struct vGfx *vg, int x, int y, int w, Color color)
+/* Draw a horizontal line of given width minus a pixel on either
+ * end.  This pixel is needed for PostScript only, but doesn't
+ * hurt elsewhere. */
+{
+if (w > 1)
+   vgLine(vg, x+1, y, x+w-1, y, color);
+}
+
+static void lfColors(struct track *tg, struct linkedFeatures *lf, 
+        struct vGfx *vg, Color *retColor, Color *retBarbColor)
+/* Figure out color to draw linked feature in. */
+{
+if (lf->filterColor > 0)
+    {
+    *retColor = *retBarbColor = lf->filterColor;
+    }
+else if (tg->itemColor)
+    {
+    *retColor = tg->itemColor(tg, lf, vg);
+    *retBarbColor = tg->ixAltColor;
+    }
+else if (tg->colorShades) 
+    {
+    boolean isXeno = (tg->subType == lfSubXeno);
+    *retColor =  tg->colorShades[lf->grayIx+isXeno];
+    *retBarbColor =  tg->colorShades[(lf->grayIx>>1)];
+    }
+else
+    {
+    *retColor = tg->ixColor;
+    *retBarbColor = tg->ixAltColor;
+    }
+}
+
+static void linkedFeaturesDrawAt(struct track *tg, void *item,
+	struct vGfx *vg, int xOff, int y, double scale, 
+	MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a single simple bed item at position. */
+{
+struct linkedFeatures *lf = item; 
+struct simpleFeature *sf;
+int heightPer = tg->heightPer;
+int x1,x2;
+int shortOff = 2, shortHeight = heightPer-4;
+int tallStart, tallEnd, s, e, e2, s2;
+Color bColor;
+boolean hideLine = (vis == tvDense && tg->subType == lfSubXeno);
+int midY = y + (heightPer>>1);
+int w;
+
+lfColors(tg, lf, vg, &color, &bColor);
+tallStart = lf->tallStart;
+tallEnd = lf->tallEnd;
+if (!hideLine)
+    {
+    x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
+    x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
+    w = x2-x1;
+    if (vis == tvFull || vis == tvPack)
+	{
+	clippedBarbs(vg, x1, midY, w, 2, 5, 
+		 lf->orientation, bColor, FALSE);
+	}
+    innerLine(vg, x1, midY, w, color);
+    }
+for (sf = lf->components; sf != NULL; sf = sf->next)
+    {
+    s = sf->start; e = sf->end;
+
+    if (s < tallStart)
+	{
+	e2 = e;
+	if (e2 > tallStart) e2 = tallStart;
+	drawScaledBoxSample(vg, s, e2, scale, xOff, y+shortOff, shortHeight, color , lf->score);
+	s = e2;
+	}
+    if (e > tallEnd)
+	{
+	s2 = s;
+	if (s2 < tallEnd) s2 = tallEnd;
+	drawScaledBoxSample(vg, s2, e, scale, xOff, y+shortOff, shortHeight, color , lf->score);
+	e = s2;
+	}
+    if (e > s)
+	{
+	drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, color, lf->score);
+	}
+    }
+}
+
+static void lfSeriesDrawConnecter(struct linkedFeaturesSeries *lfs, 
+	struct vGfx *vg, int start, int end, double scale, int xOff, int midY,
+	Color color, Color bColor, enum trackVisibility vis)
+/* Draw connection between two sets of linked features. */
+{
+if (start != -1 && !lfs->noLine)
+    {
+    int x1 = round((double)((int)start-winStart)*scale) + xOff;
+    int x2 = round((double)((int)end-winStart)*scale) + xOff;
+    int w = x2-x1;
+    if (w > 0)
+	{
+	if (vis == tvFull || vis == tvPack) 
+	  clippedBarbs(vg, x1, midY, w, 2, 5, lfs->orientation, bColor, TRUE);
+	vgLine(vg, x1, midY, x2, midY, color);
+	}
+    }
+}
+	
+
+static void linkedFeaturesSeriesDrawAt(struct track *tg, void *item, struct vGfx *vg, 
+	int xOff, int y, double scale,
+	MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a linked features series item at position. */
+{
+struct linkedFeaturesSeries *lfs = item;
+struct linkedFeatures *lf;
+Color bColor;
+int midY = y + (tg->heightPer>>1);
+int prevEnd = lfs->start;
+
+if ((lf = lfs->features) == NULL)
+    return;
+lfColors(tg, lf, vg, &color, &bColor);
+for (lf = lfs->features; lf != NULL; lf = lf->next)
+    {
+    lfSeriesDrawConnecter(lfs, vg, prevEnd, lf->start, scale, xOff, midY,
+        color, bColor, vis);
+    prevEnd = lf->end;
+    linkedFeaturesDrawAt(tg, lf, vg, xOff, y, scale, font, color, vis);
+    if(tg->mapsSelf) 
+	{
+	int x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
+	int x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
+	int w = x2-x1;
+	tg->mapItem(tg, lf, lf->name, lf->start, lf->end, x1, y, w, tg->heightPer);
+	}
+    }
+lfSeriesDrawConnecter(lfs, vg, prevEnd, lfs->end, scale, xOff, midY, 
+	color, bColor, vis);
+}
+
+static void clearColorBin()
+/* Clear structure which keeps track of color of highest scoring
+ * structure at each pixel. */
+{
+memset(colorBin, 0, MAXPIXELS * sizeof(colorBin[0]));
+}
+
+void itemPixelPos(struct track *tg, void *item, int xOff, double scale, 
+     int *retS, int *retE, int *retX1, int *retX2)
+/* Figure out pixel position of item. */
+{
+int s = tg->itemStart(tg, item);
+int e = tg->itemEnd(tg, item);
+*retS = s;
+*retE = e;
+*retX1 = round((s - winStart)*scale) + xOff;
+*retX2 = round((e - winStart)*scale) + xOff;
+}
+
+static void genericDrawItems(struct track *tg, 
+	int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw generic item list.  Features must be fixed height
+ * and tg->drawItemAt has to be filled in. */
+{
+double scale = scaleForPixels(width);
+int lineHeight = tg->lineHeight;
+int heightPer = tg->heightPer;
+int s, e;
+int y, x1, x2, w;
+boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
+
+if (vis == tvPack || vis == tvSquish)
+    {
+    struct spaceSaver *ss = tg->ss;
+    struct spaceNode *sn;
+    vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
+    for (sn = ss->nodeList; sn != NULL; sn = sn->next)
+        {
+	struct slList *item = sn->val;
+	int s = tg->itemStart(tg, item);
+	int e = tg->itemEnd(tg, item);
+	int x1 = round((s - winStart)*scale) + xOff;
+	int x2 = round((e - winStart)*scale) + xOff;
+	int textX = x1;
+	char *name = tg->itemName(tg, item);
+	
+
+	y = yOff + lineHeight * sn->row;
+	tg->drawItemAt(tg, item, vg, xOff, y, scale, font, color, vis);
+	if (withLabels)
+	    {
+	    int nameWidth = mgFontStringWidth(font, name);
+	    int dotWidth = tl.nWidth/2;
+	    textX -= nameWidth + dotWidth;
+	    if (textX < insideX)	/* Snap label to the left. */
+	         {
+		 textX = leftLabelX;
+		 vgUnclip(vg);
+		 vgSetClip(vg, leftLabelX, yOff, insideWidth, tg->height);
+		 vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, heightPer,
+		 	color, font, name);
+		 vgUnclip(vg);
+		 vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
+		 }
+	    else
+		 vgTextRight(vg, textX, y, nameWidth, heightPer, color, font, name);
+	    }
+	if (!tg->mapsSelf)
+	    {
+	    int w = x2-textX;
+	    if (w > 0)
+		{
+		mapBoxHc(s, e, textX, y, w, heightPer, tg->mapName, 
+			tg->mapItemName(tg, item), name);
+		}
+	    }
+	}
+    vgUnclip(vg);
+    }
+else
+    {
+    boolean isFull = (vis == tvFull);
+    struct slList *item;
+    y = yOff;
+    for (item = tg->items; item != NULL; item = item->next)
+	{
+	tg->drawItemAt(tg, item, vg, xOff, y, scale, font, color, vis);
+	if (isFull) y += lineHeight;
+	} 
+    }
+}
+
+static void linkedFeaturesSeriesDraw(struct track *tg, 
+	int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw linked features items. */
 {
-int baseWidth = seqEnd - seqStart;
-struct linkedFeaturesSeries *lfs;
-struct linkedFeatures *lf;
-struct simpleFeature *sf;
-int y = yOff;
-int heightPer = tg->heightPer;
-int lineHeight = tg->lineHeight;
-int x1,x2;
-int midLineOff = heightPer/2;
-int shortOff = 2, shortHeight = heightPer-4;
-int tallStart, tallEnd, s, e, e2, s2;
-int itemOff, itemHeight;
-boolean isFull = (vis == tvFull);
-Color *shades = tg->colorShades;
-Color bColor = tg->ixAltColor;
-double scale = width/(double)baseWidth;
-boolean isXeno = tg->subType == lfSubXeno;
-boolean hideLine = (vis == tvDense && tg->subType == lfSubXeno);
-
-memset(colorBin, 0, MAXPIXELS * sizeof(colorBin[0]));
-
-if (tg->itemColor)	/* Item color overrides spectrum processing. */
-    {
-    shades = NULL;
-    }
-
-if (vis == tvDense && shades)
-    {
-    slSort(&tg->items, cmpLfWhiteToBlack);
-    }
-
-for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
-    {
-    int midY = y + midLineOff;
-    int compCount = 0;
-    int w;
-    int prevEnd = -1;
-
-    for (lf = lfs->features; lf != NULL; lf = lf->next)
-        {
-        if (lf->filterColor > 0)
-            color = lf->filterColor;
-        else if (tg->itemColor)
-            color = tg->itemColor(tg, lf, mg);
-        else if (shades) 
-            color =  shades[lf->grayIx+isXeno];
-        tallStart = lf->tallStart;
-        tallEnd = lf->tallEnd;
-
-        x1 = round((double)((int)prevEnd-winStart)*scale) + xOff;
-        x2 = round((double)((int)lf->start-winStart)*scale) + xOff;
-        w = x2-x1;
-        if ((isFull) && (prevEnd != -1) && !lfs->noLine) 
-              {
-              mgBarbedHorizontalLine(mg, x1, midY, w, 2, 5, 
-                           lfs->orientation, bColor, TRUE);
-              }
-        if (prevEnd != -1 && !lfs->noLine) 
-              {
-              mgDrawBox(mg, x1, midY, w, 1, color);
-              }
-        prevEnd = lf->end;
-      
-        if (lf->components != NULL && !hideLine)
-            {
-            x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
-            x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
-            w = x2-x1;
-            if(tg->mapsSelf && tg->mapItem)
-            tg->mapItem(tg, lfs, lf->name, lf->start, lf->end, x1, y, (x1 == x2 ? 1 : x2-x1), lineHeight);
-            if (isFull)
-                {
-                if (shades) bColor =  shades[(lf->grayIx>>1)];
-                mgBarbedHorizontalLine(mg, x1, midY, x2-x1, 2, 5, 
-                         lf->orientation, bColor, FALSE);
-                }
-            mgDrawBox(mg, x1, midY, w, 1, color);
-            }
-        for (sf = lf->components; sf != NULL; sf = sf->next)
-            {
-            s = sf->start; e = sf->end;
-
-            if (s < tallStart)
-                {
-                e2 = e;
-                if (e2 > tallStart) e2 = tallStart;
-                drawScaledBoxSample(mg, s, e2, scale, xOff, y+shortOff, shortHeight, color , lf->score);
-                s = e2;
-                }
-            if (e > tallEnd)
-                {
-                s2 = s;
-                if (s2 < tallEnd) s2 = tallEnd;
-                drawScaledBoxSample(mg, s2, e, scale, xOff, y+shortOff, shortHeight, color , lf->score);
-                e = s2;
-                }
-            if (e > s)
-                {
-                drawScaledBoxSample(mg, s, e, scale, xOff, y, heightPer, color, lf->score);
-                ++compCount;
-                }
-            if(hgDebug)
-                {
-                char buff[16];
-                int textWidth;
-                int sx1 = roundingScale(sf->start-winStart, width, baseWidth)+xOff;
-                int sx2 = roundingScale(sf->end-winStart, width, baseWidth)+xOff;
-                int sw = sx2 - sx1;
-                snprintf(buff, sizeof(buff), "%.2f", lf->score);
-                textWidth = mgFontStringWidth(font, buff);
-                if (textWidth <= sw )
-                    mgTextCentered(mg, sx1, y, sw, heightPer, MG_WHITE, font, buff);
-                }
-            }
-        }
-    if (isFull) y += lineHeight;
-    } 
+clearColorBin();
+if (vis == tvDense && tg->colorShades)
+    slSort(&tg->items, cmpLfsWhiteToBlack);
+genericDrawItems(tg, seqStart, seqEnd, vg, xOff, yOff, width, 
+	font, color, vis);
 }
 
 
-boolean sameRgbColor( struct rgbColor *c1, struct rgbColor *c2 )
+
+int whichSampleBin( double num, double thisMin, double thisMax, 
+	double binCount )
+/* Get bin value from num. */
 {
-    if( c1->r == c2->r  &&
-        c1->g == c2->g  &&
-        c1->b == c2->b )
-        return(TRUE);
-    return(FALSE);
+return (num - thisMin) * binCount / (thisMax - thisMin);
 }
 
-Color *shadesFromBaseColor( struct rgbColor *rgb )
+double whichSampleNum( double bin, double thisMin, double thisMax, 
+	double binCount )
+/* gets range nums. from bin values*/
 {
-   if( sameRgbColor( rgb, &darkSeaColor ))
-        return( shadesOfSea );
-   if( sameRgbColor( rgb, &brownColor ))
-        return( shadesOfBrown );
-   else         
-        return( shadesOfGray );
-}
-
-
-int whichBin( double tmp, double thisMin, double thisMax, int n )
-{
-    double atmp = tmp - thisMin;
-    double amax = thisMax - thisMin;
-    double ret = (double)atmp * (double)n / (double)amax;
-    return( ret );
-}
-
-/*gets range nums. from bin values*/
-double whichNum( double tmp, double min0, double max0, int n )
-{
-    return( (max0 - min0)/(double)n * tmp + min0 );
+return( (thisMax - thisMin) / binCount * bin + thisMin );
 }
 
 
 int basePositionToXAxis( int base, int seqStart, int seqEnd, int
                 width, int xOff  ) 
 {
-    int baseWidth = seqEnd - seqStart;
-    double scale = width/(double)baseWidth;
-    double x1 = round((double)((int)base-seqStart)*scale) + xOff; 
-    return(x1);
+int baseWidth = seqEnd - seqStart;
+double scale = scaleForPixels(width);
+double x1 = round((double)((int)base-seqStart)*scale) + xOff; 
+return(x1);
 }
 
 int humMusZoomLevel( void )
 {
-    int zoom1 = 80000, zoom2 = 5000, zoom3 = 300; /* bp per data point */      
-    int pixPerBase = (winEnd - winStart)/ tl.picWidth;
-    if(pixPerBase >= zoom1)
-        return(1);
-    else if( pixPerBase >= zoom2 ) 
-        return(2);
-    else if(pixPerBase >= zoom3)
-        return(3);
-    else    
-        return(0);
+int zoom1 = 80000, zoom2 = 5000, zoom3 = 300; /* bp per data point */      
+int pixPerBase = (winEnd - winStart)/ tl.picWidth;
+if(pixPerBase >= zoom1)
+    return(1);
+else if( pixPerBase >= zoom2 ) 
+    return(2);
+else if(pixPerBase >= zoom3)
+    return(3);
+else    
+    return(0);
 }
 
-            
-
-int gfxBorder = 1;
 
 int trackOffsetX()
 /* Return x offset where track display proper begins. */
@@ -1233,24 +1492,29 @@ if (withLeftLabels)
 return x;
 }
 
-static void mgDrawWiggleHorizontalLine( struct memGfx *mg, double where, double min0, double max0, int binNum, int y, double hFactor, int heightPer, Color lineColor )
-/*draws a blue horizontal line on a wiggle track at a specified
- *    * location based on the range and number of bins*/
+static void drawWiggleHorizontalLine( struct vGfx *vg, 
+	double where, double min0, double max0, 
+	int binCount, int y, double hFactor, int heightPer, 
+	Color lineColor )
+/* Draws a blue horizontal line on a wiggle track at a specified
+ * location based on the range and number of bins*/
 {
-        int tmp;
-        double y1;
-        tmp = -whichBin( where, min0, max0, binNum);
-        y1 = (int)((double)y+((double)tmp)*hFactor+(double)heightPer);
-        mgDrawHorizontalLine( mg, y1, lineColor );
+int bin;
+double y1;
+bin = -whichSampleBin( where, min0, max0, binCount);
+y1 = (int)((double)y+((double)bin)*hFactor+(double)heightPer);
+vgBox( vg, 0, y1, vg->width, 1, lineColor );
 }
 
-static void wiggleLinkedFeaturesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-/* currently this routine is adapted from Terry's linkedFeatureSeriesDraw() routine.
-   It is called for 'sample 9' tracks as specified in the trackDb.ra.
-   and it looks at the cart to decide whether to interpolate, fill blocks,
-   and use anti-aliasing.*/
+static void wiggleLinkedFeaturesDraw(struct track *tg, 
+    int seqStart, int seqEnd,
+    struct vGfx *vg, int xOff, int yOff, int width, 
+    MgFont *font, Color color, enum trackVisibility vis)
+/* Currently this routine is adapted from Terry's 
+ * linkedFeatureSeriesDraw() routine.
+ * It is called for 'sample' tracks as specified in the trackDb.ra.
+ * and it looks at the cart to decide whether to interpolate, fill blocks,
+ * and use anti-aliasing.*/
 {
 int i;
 int baseWidth = seqEnd - seqStart;
@@ -1260,26 +1524,26 @@ int y = yOff;
 int heightPer = tg->heightPer;
 int lineHeight = tg->lineHeight;
 int x1,x2;
-double y1, y2;
-int s;
-double e;
 boolean isFull = (vis == tvFull);
-Color *shades = tg->colorShades;
 Color bColor = tg->ixAltColor;
-double scale = width/(double)baseWidth;
-int prevEnd = -1;
-int prevEndSave = -1;
+double scale = scaleForPixels(width);
+int prevX = -1;
+int gapPrevX = -1;
 double prevY = -1;
+double y1 = -1, y2;
 int ybase;
-int tmp;
+int sampleX, sampleY; /* A sample in sample coordinates. 
+                       * Sample X coordinate is chromosome coordinate.
+		       * Sample Y coordinate is usually 0-1000 */
+int binCount = 1000;   /* Maximum sample Y coordinate. */
+int bin;	      /* Sample Y coordinates are first converted to
+                       * bin coordinates, and then to pixels.  I'm not
+		       * totally sure why.  */
 
-int binNum = 999;
 
 int currentX, currentXEnd, currentWidth;
 
 int leftSide, rightSide;
-
-int insideX = trackOffsetX();
 int trackTabWidth = 11;
 int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
 int trackPastTabWidth = tl.picWidth - trackPastTabX;
@@ -1288,6 +1552,7 @@ int noZoom = 1;
 enum wiggleOptEnum wiggleType;
 char *interpolate = NULL;
 char *aa = NULL; 
+boolean antiAlias = FALSE;
 int fill; 
 char *lineGapStr = NULL;
 int lineGapSize;
@@ -1296,18 +1561,15 @@ double min0, max0;
 char o1[128]; /* Option 1 - linear interp */
 char o2[128]; /* Option 2 - anti alias */
 char o3[128]; /* Option 3 - fill */
-char o4[128]; /* Option 4 - max gap where interpolation is still done */
+char o4[128]; /* Option 4 - minimum vertical range cutoff of plot */	
+char o5[128]; /* Option 5 - maximum vertical range cutoff of plot */
+char o6[128]; /* Option 6 - max gap where interpolation is still done */
 
 double hFactor, hFactor2;
 double minRange, maxRange;
+double minRangeCutoff, maxRangeCutoff;
 
-int gapPrevEnd = -1;
-
-Color lineColor = mgFindColor(mg, 220, 220, 255); /*for horizontal lines*/
-
-tg->colorShades = shadesFromBaseColor( &tg->color );
-shades = tg->colorShades;
-
+Color gridColor = vgFindRgb(vg, &guidelineColor); /* for horizontal lines*/
 
 lf=tg->items;    
 if(lf==NULL) return;
@@ -1316,163 +1578,118 @@ if(lf==NULL) return;
 snprintf( o1, sizeof(o1),"%s.linear.interp", tg->mapName);
 snprintf( o2, sizeof(o2), "%s.anti.alias", tg->mapName);
 snprintf( o3, sizeof(o3),"%s.fill", tg->mapName);
-snprintf( o4, sizeof(o4),"%s.interp.gap", tg->mapName);
+snprintf( o4, sizeof(o5),"%s.min.cutoff", tg->mapName);
+snprintf( o5, sizeof(o6),"%s.max.cutoff", tg->mapName);
+snprintf( o6, sizeof(o4),"%s.interp.gap", tg->mapName);
+
 interpolate = cartUsualString(cart, o1, "Linear Interpolation");
 wiggleType = wiggleStringToEnum(interpolate);
 aa = cartUsualString(cart, o2, "on");
+antiAlias = sameString(aa, "on");
 fill = atoi(cartUsualString(cart, o3, "1"));
-lineGapSize = atoi(cartUsualString(cart, o4, "200"));
 
+//the 0.1 is so the label doesn't get truncated with integer valued user input min
+//display range.
+minRangeCutoff = max( atof(cartUsualString(cart,o4,"0.0"))-0.1, tg->minRange );
+maxRangeCutoff = min( atof(cartUsualString(cart,o5,"1000.0")), tg->maxRange);
+
+lineGapSize = atoi(cartUsualString(cart, o6, "200"));
 cartSetString( cart, "win", "F" );
 
 heightPer = tg->heightPer+1;
 hFactor = (double)heightPer/1000.0;
 
-//this information should be moved to the trackDb.ra
-if( sameString( tg->mapName, "humMus" ) )
-    {
-    minRange = 300.0;
-    maxRange = 1000.0;
+//errAbort( "min=%g, max=%g\n", minRangeCutoff, maxRangeCutoff );
 
-    min0 = whichNum( minRange, -7.99515, 6.54171, 1000 );
-    max0 = whichNum( maxRange, -7.99515, 6.54171, 1000 );
+minRange = whichSampleBin( minRangeCutoff, tg->minRange, tg->maxRange, binCount );
+maxRange = whichSampleBin( maxRangeCutoff, tg->minRange, tg->maxRange, binCount );
 
-    /*draw horizontal line across track at 0.0, 2.0, and 5.0*/
-    if( !isFull )
-    {
-        mgDrawWiggleHorizontalLine( mg, 0.0, min0, max0, binNum,
-                y, hFactor, heightPer, lineColor );
-        mgDrawWiggleHorizontalLine( mg, 2.0, min0, max0, binNum,
-                y, hFactor, heightPer, lineColor );
-        mgDrawWiggleHorizontalLine( mg, 5.0, min0, max0, binNum,
-                y, hFactor, heightPer, lineColor );
-    }
-    
-    }
-    else if( sameString( tg->mapName, "humMusL" ) || 
-       sameString( tg->mapName, "musHumL" )  )
+//errAbort( "(%g,%g) cutoff=(%g,%g)\n", tg->minRange, tg->maxRange, minRangeCutoff, maxRangeCutoff );
+
+if( sameString( tg->mapName, "humMusL" ) 
+	|| sameString( tg->mapName, "musHumL" )  )
     {
 
-    minRange = 0.0;
-    maxRange = whichBin( 6.0, 0.0, 8.0 ,binNum );
-    min0 = whichNum( minRange, 0.0, 8.0, binNum );
-    max0 = whichNum( maxRange, 0.0, 8.0, binNum );
 
-    //errAbort( "whichBin=%g\n", maxRange );
+    min0 = whichSampleNum( minRange, tg->minRange, tg->maxRange, binCount );
+    max0 = whichSampleNum( maxRange, tg->minRange, tg->maxRange,  binCount );
 
     if( isFull )
-        {
-        for( i=1; i<=6; i++ )
-            mgDrawWiggleHorizontalLine( mg, (double)i, min0, max0,
-                    binNum, y, hFactor, heightPer, lineColor );
-        }
+	{
+	for( i=1; i<=6; i++ )
+	    drawWiggleHorizontalLine( vg, (double)i, min0, max0,
+		binCount, y, hFactor, heightPer, gridColor );
+	}
     }
-
-    else if( sameString( tg->mapName, "zoo" ) )
+else if( sameString( tg->mapName, "zoo" ) )
     {
     /*Always interpolate zoo track (since gaps are explicitly defined*/
     lineGapSize = -1;
-    minRange = 500.0;
-    maxRange = 1000.0;
     }
-    else if( sameString( tg->mapName, "zooCons" ) )
-    {
-    minRange = 0.0;
-    maxRange = 1000.0;
-    }
-    else if( sameString( tg->mapName, "binomialCons2" ) )
-    {
-    minRange = 0.0;
-    maxRange = 300.0;
-    }
-    else if( sameString( tg->mapName, "binomialCons3" ) )
-    {
-    minRange = 0.0;
-    maxRange = 200.0;
-    }
-    else if( sameString( tg->mapName, "binomialCons" ) )
-    {
-    minRange = 0.0;
-    maxRange = 500.0;
-    }
-    else
-    {
-    minRange = 1.0;
-    maxRange = 1000.0;
-    }
-
-
 
 for(lf = tg->items; lf != NULL; lf = lf->next) 
     {
-    gapPrevEnd = -1;
-    prevEnd = -1;
-    
-    for (sf = lf->components; sf != NULL; sf = sf->next)
-	    {
-	    s = sf->start;
-	    e = sf->end;
+    gapPrevX = -1;
+    prevX = -1;
+    ybase = (int)((double)y+hFactor+(double)heightPer);
 
-        /*mapping or sequencing gap*/
-        if( (sf->start - sf->end) == 0 ) 
-	        {
-            tmp = -whichBin( (int)((maxRange - minRange)/5.0+minRange), minRange, maxRange, binNum );
-            y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
-            if( gapPrevEnd >= 0 )
-	            drawScaledBox(mg, s, gapPrevEnd, scale, xOff, (int)y1, (int)(.10*heightPer), shadesOfGray[2]);
-            gapPrevEnd = s;
-            prevEnd = -5; /*connect next point with gray bar too*/
-            continue;
-	        }
-	
-        if( -(sf->start - sf->end) > maxRange )
-            {
-            tmp = 1-binNum; 
-            }
-        else if( -(sf->start - sf->end) < minRange )
-	        {
-            prevEnd = -1;  /*set so no interpolation where no data*/
-            gapPrevEnd = -1;
-            continue;
-	        }
-        else
-            {
-            tmp = -whichBin( sf->end - sf->start, minRange, maxRange, binNum );
-            }
-        
-        x1 = round((double)((int)s+1-winStart)*scale) + xOff;
-        y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
-        ybase = (int)((double)y+hFactor+(double)heightPer);
-	
-        if (prevEnd > 0)
-	        {
-            y2 = prevY;
-	        x2 = round((double)((int)prevEnd-winStart)*scale) + xOff;
-	    
-            if( (x2-x1) > 0)
-                {
-                if( wiggleType == wiggleLinearInterpolation ) /*connect samples*/
-                    {
-                    if( lineGapSize < 0 || prevEnd - s <= lineGapSize )     /*don't interpolate over large gaps*/
-                        {
-                        if( sameString( aa, "on" )) /*use anti-aliasing*/
-                            mgConnectingLine( mg, x1, y1, x2, y2, shades, ybase, 1, fill );
-                        else
-                            mgConnectingLine( mg, x1, y1, x2, y2, shades, ybase, 0, fill );
-                        }
-                    }
-                }
-	        }
-	
-        /*draw the points themselves*/
-	    drawScaledBox(mg, s, s+1, scale, xOff, (int)y1-1, 3, bColor);
-        if( fill )
-	        drawScaledBox(mg, s, s+1, scale, xOff, (int)y1+2, ybase-y1-2, shades[3]);
-        prevEnd = s;
-        gapPrevEnd = prevEnd;
-        prevY = y1;
-	
+    for (sf = lf->components; sf != NULL; sf = sf->next)
+	{
+	sampleX = sf->start;
+	sampleY = sf->end - sampleX;	// Stange encoding but so it is. 
+
+	/*mapping or sequencing gap*/
+	if (sampleY == 0)
+	    {
+	    bin = -whichSampleBin( (int)((maxRange - minRange)/5.0+minRange), 
+	    	minRange, maxRange, binCount );
+	    y1 = (int)((double)y+((double)bin)* hFactor+(double)heightPer);
+	    if( gapPrevX >= 0 )
+		drawScaledBox(vg, sampleX, gapPrevX, scale, 
+			xOff, (int)y1, (int)(.10*heightPer), shadesOfGray[2]);
+	    gapPrevX = sampleX;
+	    prevX = -1; /*connect next point with gray bar too*/
+	    continue;
 	    }
+	if (sampleY > maxRange)
+	    sampleY = maxRange;
+	if (sampleY < minRange)
+	    sampleY = minRange;
+	bin = -whichSampleBin( sampleY, minRange, maxRange, binCount );
+
+	x1 = round((double)(sampleX-winStart)*scale) + xOff;
+	y1 = (int)((double)y+((double)bin)* hFactor+(double)heightPer);
+
+	if (prevX > 0)
+	    {
+	    y2 = prevY;
+	    x2 = round((double)(prevX-winStart)*scale) + xOff;
+	    if( wiggleType == wiggleLinearInterpolation ) 
+	    /*connect samples*/
+		{
+		if( lineGapSize < 0 || sampleX - prevX <= lineGapSize )   
+		    /*don't interpolate over large gaps*/
+		    {
+		    if (fill)
+			vgFillUnder(vg, x1,y1, x2,y2, ybase, bColor);
+		    else
+			vgLine(vg, x1,y1, x2,y2, color);
+		    }
+		}
+	    }
+
+	/* Draw the points themselves*/
+	if (wiggleType != wiggleLinearInterpolation)
+	    {
+	    drawScaledBox(vg, sampleX, sampleX+1, scale, 
+	    	xOff, (int)y1-1, 3, color);
+	    if( fill )
+		drawScaledBox(vg, sampleX, sampleX+1, scale, xOff, (int)y1+2, 
+		    ybase-y1-2, bColor);
+	    }
+	prevX = gapPrevX = sampleX;
+	prevY = y1;
+	}
 
     leftSide = max( tg->itemStart(tg,lf), winStart );
     rightSide = min(  tg->itemEnd(tg,lf), winEnd );
@@ -1482,32 +1699,28 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
     currentWidth = currentXEnd - currentX;
 
     if( noZoom && isFull )
-    {
-        mapBoxHc(lf->start, lf->end, currentX ,y, currentWidth,
-            heightPer, tg->mapName, tg->mapItemName(tg, lf), tg->itemName(tg, lf));
+	{
+	mapBoxHc(lf->start, lf->end, currentX ,y, currentWidth,
+	    heightPer, tg->mapName, tg->mapItemName(tg, lf), tg->itemName(tg, lf));
 
-     if( lf->next != NULL )
-            y += updateY( lf->name, lf->next->name, lineHeight );
-        else
-            y += lineHeight;
-    }
-
+	if( lf->next != NULL )
+	    y += updateY( lf->name, lf->next->name, lineHeight );
+	else
+	    y += lineHeight;
+	}
     }
 }
 
-
-static void linkedFeaturesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+void linkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw linked features items. */
-/* Integrated with linkedFeaturesSeriesDraw */
 {
-/* Convert to a linked features series object */
-linkedFeaturesToLinkedFeaturesSeries(tg);
-/* Draw items */
-linkedFeaturesSeriesDraw(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
-/* Convert Back */
-linkedFeaturesSeriesToLinkedFeatures(tg);
+clearColorBin();
+if (vis == tvDense && tg->colorShades)
+    slSort(&tg->items, cmpLfWhiteToBlack);
+genericDrawItems(tg, seqStart, seqEnd, vg, xOff, yOff, width, 
+	font, color, vis);
 }
 
 void incRange(UBYTE *start, int size)
@@ -1624,269 +1837,56 @@ for (i=0; i<count; ++i)
 }
 
 
-static void linkedFeaturesSeriesDrawAverage(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+static void linkedFeaturesDrawAverage(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw dense clone items. */
 {
 int baseWidth = seqEnd - seqStart;
-double scale = width/(double)baseWidth;
+double scale = scaleForPixels(width);
 UBYTE *useCounts;
 int i;
 int lineHeight = mgFontLineHeight(font);
-struct simpleFeature *sf;
 struct linkedFeatures *lf;
-struct linkedFeaturesSeries *lfs;
+struct simpleFeature *sf;
 int x1, x2, w;
 
 AllocArray(useCounts, width);
 memset(useCounts, 0, width * sizeof(useCounts[0]));
-for (lfs = tg->items; lfs != NULL; lfs = lfs->next) 
+for (lf = tg->items; lf != NULL; lf = lf->next)
     {
-    int prevEnd = -1;
-    for (lf = lfs->features; lf != NULL; lf = lf->next)
-        {
-	if (prevEnd != -1)
-	    {
-	    x1 = round((double)((int)prevEnd-winStart)*scale) + xOff;
-	    x2 = round((double)((int)lf->start-winStart)*scale) + xOff;
-            w = x2 - x1;
-            if (w > 0)
-	        mgDrawBox(mg, x1, yOff + tg->heightPer/2, w, 1, mgFindColor(mg,0,0,0));
-            }
-        prevEnd = lf->end;
-        for (sf = lf->components; sf != NULL; sf = sf->next)
-	    {
-	    x1 = roundingScale(sf->start-winStart, width, baseWidth);
-	    if (x1 < 0)
-	      x1 = 0;
-	    x2 = roundingScale(sf->end-winStart, width, baseWidth);
-	    if (x2 >= width)
-	      x2 = width-1;
-	    w = x2-x1;
-	    if (w >= 0)
-	      {
-		if (w == 0)
-		  w = 1;
-		incRange(useCounts+x1, w); 
-	      }
-	    }
-	}
-    }
-grayThreshold(useCounts, width);
-for (i=0; i<lineHeight; ++i)
-    mgPutSegZeroClear(mg, xOff, yOff+i, width, useCounts);
-freeMem(useCounts);
-}
-
-static void linkedFeaturesDrawAverage(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw dense clone items. */
-{
-/* Convert to a linked features series object */
-linkedFeaturesToLinkedFeaturesSeries(tg);
-/* Draw items */
-linkedFeaturesSeriesDrawAverage(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
-/* Convert Back */
-linkedFeaturesSeriesToLinkedFeatures(tg);
-}
-
-static void linkedFeaturesAverageDense(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw dense linked features items. */
-{
-/* Draw items */
-if (vis == tvFull)
-    {
-    linkedFeaturesDraw(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
-    }
-else if (vis == tvDense)
-    {
-    linkedFeaturesDrawAverage(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
-    }
-}
-
-static void linkedFeaturesSeriesAverageDense(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw dense linked features series items. */
-{
-  /*if (vis == tvFull)
-    {*/
-    linkedFeaturesSeriesDraw(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
-    /*    }
-else if (vis == tvDense)
-    {
-    linkedFeaturesSeriesDrawAverage(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
-    }*/
-}
-
-
-static void linkedFeaturesDrawPair(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw linked features items for EST pairs. */
-{
-int baseWidth = seqEnd - seqStart;
-struct linkedFeaturesPair *lfPair;
-struct linkedFeatures *lf;
-struct simpleFeature *sf;
-int y = yOff;
-int heightPer = tg->heightPer;
-int lineHeight = tg->lineHeight;
-int x1,x2;
-int midLineOff = heightPer/2;
-int shortOff = 2, shortHeight = heightPer-4;
-int tallStart, tallEnd, s, e, e2, s2;
-int itemOff, itemHeight;
-boolean isFull = (vis == tvFull);
-Color *shades = tg->colorShades;
-Color bColor = tg->ixAltColor;
-double scale = width/(double)baseWidth;
-boolean isXeno = tg->subType == lfSubXeno;
-boolean hideLine = (vis == tvDense && tg->subType == lfSubXeno);
- 
-struct rgbColor color5prime = tg->color;
-struct rgbColor color3prime = tg->altColor;
-shades = NULL;
-
-for (lfPair = tg->items; lfPair != NULL; lfPair = lfPair->next)
-    {   
-    int midY = y + midLineOff;
-    int compCount = 0;
-    int w, i;
-    
-    for(i=1;i<=2;++i){/*  drawing has to be done twice for each pair */
-      if(i==1){
-	lf = lfPair->lf5prime;
-	color = mgFindColor(mg,color5prime.r,color5prime.g,color5prime.b);
-	bColor = color;
-      }
-      else{
-	lf = lfPair->lf3prime;
-	lf->orientation = -lf->orientation;
-	color = mgFindColor(mg,color3prime.r,color3prime.g,color3prime.b);
-	bColor = color;
-      } 
-      if(lf != NULL) 
+    for (sf = lf->components; sf != NULL; sf = sf->next)
+	{
+	x1 = roundingScale(sf->start-winStart, width, baseWidth);
+	if (x1 < 0)
+	  x1 = 0;
+	x2 = roundingScale(sf->end-winStart, width, baseWidth);
+	if (x2 >= width)
+	  x2 = width-1;
+	w = x2-x1;
+	if (w >= 0)
 	  {
-	  if (tg->itemColor && shades == NULL)
-	      color = tg->itemColor(tg, lf, mg);
-	  tallStart = lf->tallStart;
-	  tallEnd = lf->tallEnd;
-	  if (lf->components != NULL && !hideLine)
-	      {
-	      x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
-	      x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
-	      w = x2-x1;
-	      if (isFull)
-		  {
-		  if (shades) bColor =  shades[(lf->grayIx>>1)];
-		  mgBarbedHorizontalLine(mg, x1, midY, x2-x1, 2, 5, 
-					 lf->orientation, bColor, FALSE);
-		  }
-	      if (shades) color =  shades[lf->grayIx+isXeno];
-	      mgDrawBox(mg, x1, midY, w, 1, color);
-	      }
-	  for (sf = lf->components; sf != NULL; sf = sf->next)
-	      {
-	      if (shades) color =  shades[lf->grayIx+isXeno];
-	      s = sf->start;
-	      e = sf->end;
-	      if (s < tallStart)
-		  {
-		  e2 = e;
-		  if (e2 > tallStart) e2 = tallStart;
-		  drawScaledBox(mg, s, e2, scale, xOff, y+shortOff, shortHeight, color);
-		  s = e2;
-		  }
-	      if (e > tallEnd)
-		  {
-		  s2 = s;
-		  if (s2 < tallEnd) s2 = tallEnd;
-		  drawScaledBox(mg, s2, e, scale, xOff, y+shortOff, shortHeight, color);
-		  e = s2;
-		  }
-	      if (e > s)
-		  {
-		  drawScaledBox(mg, s, e, scale, xOff, y, heightPer, color);
-		  ++compCount;
-		  }
-	      }
+	  if (w == 0)
+	     w = 1;
+	  incRange(useCounts+x1, w); 
 	  }
-    }
-    if (isFull)
-	y += lineHeight;
-    }
-}
-static void linkedFeaturesDrawAveragePair(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw dense clone items for EST pairs. */
-{
-int baseWidth = seqEnd - seqStart;
-UBYTE *useCounts;
-int i, j;
-int lineHeight = mgFontLineHeight(font);
-struct simpleFeature *sf;
-struct linkedFeaturesPair *lfPair;
-struct linkedFeatures *lf;
-int x1, x2, w, allCount;
- 
-AllocArray(useCounts, width);
-memset(useCounts, 0, width * sizeof(useCounts[0]));
-for (lfPair = tg->items; lfPair != NULL; lfPair = lfPair->next)
-    {
-     
-      for(j=1;j<=2;++j)
-	{  /* drawing has to be done twice for each pair */
-	  if(j==1){
-	    lf = lfPair->lf5prime;
-	  }
-	  else{
-	    lf = lfPair->lf3prime;
-	  }
-	  if(lf != NULL) 
-	      {
-	      for (sf = lf->components; sf != NULL; sf = sf->next)
-		  {
-		  x1 = roundingScale(sf->start-winStart, width, baseWidth);
-		  if (x1 < 0)
-		      x1 = 0;
-		  x2 = roundingScale(sf->end-winStart, width, baseWidth);
-		  if (x2 >= width)
-		      x2 = width-1;
-		  w = x2-x1;
-		  if (w >= 0)
-		      {
-		      if (w == 0)
-			  w = 1;
-		      incRange(useCounts+x1, w); 
-		      }
-		  }
-	      }
 	}
     }
 grayThreshold(useCounts, width);
-for (i=0; i<lineHeight; ++i)
-    mgPutSegZeroClear(mg, xOff, yOff+i, width, useCounts);
+vgVerticalSmear(vg,xOff,yOff,width,lineHeight,useCounts,TRUE);
 freeMem(useCounts);
 }
-static void linkedFeaturesAverageDensePair(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+
+static void linkedFeaturesAverageDense(struct track *tg, 
+	int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw dense linked features items. */
 {
-  if (vis == tvFull)
-    {
-      linkedFeaturesDrawPair(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
-    }
-  else if (vis == tvDense)
-    {
-      linkedFeaturesDrawAveragePair(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
-    }
+if (vis == tvDense)
+    linkedFeaturesDrawAverage(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
+else
+    linkedFeaturesDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
 }
 
 int lfCalcGrayIx(struct linkedFeatures *lf)
@@ -1906,7 +1906,7 @@ if (count == 0)
 return (total+(count>>1))/count;
 }
 
-void finishLf(struct linkedFeatures *lf)
+void linkedFeaturesBoundsAndGrays(struct linkedFeatures *lf)
 /* Calculate beginning and end of lf from components, etc. */
 {
 struct simpleFeature *sf;
@@ -1930,25 +1930,26 @@ if ((sf = lf->components) != NULL)
 lf->grayIx = lfCalcGrayIx(lf);
 }
 
-int linkedFeaturesItemStart(struct trackGroup *tg, void *item)
+int linkedFeaturesItemStart(struct track *tg, void *item)
 /* Return start chromosome coordinate of item. */
 {
 struct linkedFeatures *lf = item;
 return lf->start;
 }
 
-int linkedFeaturesItemEnd(struct trackGroup *tg, void *item)
+int linkedFeaturesItemEnd(struct track *tg, void *item)
 /* Return end chromosome coordinate of item. */
 {
 struct linkedFeatures *lf = item;
 return lf->end;
 }
 
-void linkedFeaturesMethods(struct trackGroup *tg)
-/* Fill in track group methods for linked features. */
+void linkedFeaturesMethods(struct track *tg)
+/* Fill in track methods for linked features. */
 {
-tg->freeItems = freeLinkedFeaturesItems;
+tg->freeItems = linkedFeaturesFreeItems;
 tg->drawItems = linkedFeaturesDraw;
+tg->drawItemAt = linkedFeaturesDrawAt;
 tg->itemName = linkedFeaturesName;
 tg->mapItemName = linkedFeaturesName;
 tg->totalHeight = tgFixedTotalHeight;
@@ -1957,38 +1958,39 @@ tg->itemStart = linkedFeaturesItemStart;
 tg->itemEnd = linkedFeaturesItemEnd;
 }
 
-void sampleLinkedFeaturesMethods(struct trackGroup *tg)
-/* Fill in track group methods for 'sample' tracks. */
+void sampleLinkedFeaturesMethods(struct track *tg)
+/* Fill in track methods for 'sample' tracks. */
 {
-tg->freeItems = freeLinkedFeaturesItems;
+tg->freeItems = linkedFeaturesFreeItems;
 tg->drawItems = wiggleLinkedFeaturesDraw;
 tg->itemName = linkedFeaturesName;
 tg->mapItemName = linkedFeaturesName;
-tg->totalHeight = tgUserDefinedTotalHeight;
+tg->totalHeight = sampleTotalHeight;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = linkedFeaturesItemStart;
 tg->itemEnd = linkedFeaturesItemEnd;
 }
 
-int linkedFeaturesSeriesItemStart(struct trackGroup *tg, void *item)
+int linkedFeaturesSeriesItemStart(struct track *tg, void *item)
 /* Return start chromosome coordinate of item. */
 {
 struct linkedFeaturesSeries *lfs = item;
 return lfs->start;
 }
 
-int linkedFeaturesSeriesItemEnd(struct trackGroup *tg, void *item)
+int linkedFeaturesSeriesItemEnd(struct track *tg, void *item)
 /* Return end chromosome coordinate of item. */
 {
 struct linkedFeaturesSeries *lfs = item;
 return lfs->end;
 }
 
-void linkedFeaturesSeriesMethods(struct trackGroup *tg)
-/* Fill in track group methods for linked features.series */
+void linkedFeaturesSeriesMethods(struct track *tg)
+/* Fill in track methods for linked features.series */
 {
 tg->freeItems = freeLinkedFeaturesSeriesItems;
-tg->drawItems = linkedFeaturesSeriesAverageDense;
+tg->drawItems = linkedFeaturesSeriesDraw;
+tg->drawItemAt = linkedFeaturesSeriesDrawAt;
 tg->itemName = linkedFeaturesSeriesName;
 tg->mapItemName = linkedFeaturesSeriesName;
 tg->totalHeight = tgFixedTotalHeight;
@@ -1997,11 +1999,10 @@ tg->itemStart = linkedFeaturesSeriesItemStart;
 tg->itemEnd = linkedFeaturesSeriesItemEnd;
 }
 
-struct trackGroup *linkedFeaturesTg()
-/* Return generic track group for linked features. */
+struct track *linkedFeaturesTg()
+/* Return generic track for linked features. */
 {
-struct trackGroup *tg = NULL;
-AllocVar(tg);
+struct track *tg = trackNew();
 linkedFeaturesMethods(tg);
 tg->colorShades = shadesOfGray;
 return tg;
@@ -2033,7 +2034,7 @@ for (i=0; i<blockCount; ++i)
     }
 slReverse(&sfList);
 lf->components = sfList;
-finishLf(lf);
+linkedFeaturesBoundsAndGrays(lf);
 lf->tallStart = bed->thickStart;
 lf->tallEnd = bed->thickEnd;
 return lf;
@@ -2061,9 +2062,8 @@ for (i=0; i<sampleCount; ++i)
     AllocVar(sf);
     start = X[i] + sample->chromStart;
     sf->start = start;
-    //errAbort( "Y[%d] = %d", i, Y[i]  );
 
-    if( Y[i] == -29 )           /*hack for negative values not loading correctly*/
+    if( Y[i] == -29 )      /*hack for negative values not loading correctly*/
         sf->end = start;
     else if( Y[i] == 0 )
         sf->end = start + 1;
@@ -2075,14 +2075,14 @@ for (i=0; i<sampleCount; ++i)
     }
 slReverse(&sfList);
 lf->components = sfList;
-finishLf(lf);
+linkedFeaturesBoundsAndGrays(lf);
 lf->end = sample->chromEnd;
 return lf;
 }
 
 
-void setTgDarkLightColors(struct trackGroup *tg, int r, int g, int b)
-/* Set track group color to r,g,b.  Set altColor to a lighter version
+void setTgDarkLightColors(struct track *tg, int r, int g, int b)
+/* Set track color to r,g,b.  Set altColor to a lighter version
  * of the same. */
 {
 tg->colorShades = NULL;
@@ -2116,7 +2116,8 @@ if (nameGetsPos)
     snprintf(buf, sizeof(buf), "%s:%d-%d %s:%d-%d", psl->qName, psl->qStart, psl->qEnd,
     	psl->tName, psl->tStart, psl->tEnd);
     lf->extra = cloneString(buf);
-    snprintf(lf->name, sizeof(lf->name), "%s %dk", psl->qName, psl->qStart/1000);
+    snprintf(lf->name, sizeof(lf->name), "%s %s %dk", psl->qName, psl->strand, psl->qStart/1000);
+    snprintf(lf->popUp, sizeof(lf->popUp), "%s:%d-%d score %9.0f", psl->qName, psl->qStart, psl->qEnd, lf->score);
     }
 else
     strncpy(lf->name, psl->qName, sizeof(lf->name));
@@ -2141,7 +2142,7 @@ for (i=0; i<blockCount; ++i)
     }
 slReverse(&sfList);
 lf->components = sfList;
-finishLf(lf);
+linkedFeaturesBoundsAndGrays(lf);
 lf->start = psl->tStart;	/* Correct for rounding errors... */
 lf->end = psl->tEnd;
 return lf;
@@ -2153,7 +2154,7 @@ struct linkedFeatures *lfFromPsl(struct psl *psl, boolean isXeno)
 return lfFromPslx(psl, 1, isXeno, FALSE);
 }
 
-void filterMrna(struct trackGroup *tg, struct linkedFeatures **pLfList)
+void filterMrna(struct track *tg, struct linkedFeatures **pLfList)
 /* Apply filters if any to mRNA linked features. */
 {
 struct linkedFeatures *lf, *next, *newList = NULL, *oldList = NULL;
@@ -2169,7 +2170,7 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 struct sqlConnection *conn = NULL;
-boolean isFull;
+boolean isDense;
 
 if (*pLfList == NULL || mud == NULL)
     return;
@@ -2185,7 +2186,6 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 if (!anyFilter)
     return;
 
-isFull = (limitVisibility(tg, tg->items) == tvFull);
 
 type = cartUsualString(cart, mud->filterTypeVar, "red");
 if (sameString(type, "exclude"))
@@ -2302,16 +2302,17 @@ slReverse(&oldList);
 if (colorIx > 0)
    {
    /* Draw stuff that passes filter first in full mode, last in dense. */
-   if (isFull)
-       {
-       newList = slCat(newList, oldList);
-       }
-   else
+   if (tg->visibility == tvDense)
        {
        newList = slCat(oldList, newList);
        }
+   else
+       {
+       newList = slCat(newList, oldList);
+       }
    }
 *pLfList = newList;
+tg->limitedVisSet = FALSE;	/* Need to recalculate this after filtering. */
 
 /* Free up hashes, etc. */
 for (fil = mud->filterList; fil != NULL; fil = fil->next)
@@ -2322,7 +2323,7 @@ hFreeConn(&conn);
 }
 
 void connectedLfFromPslsInRange(struct sqlConnection *conn,
-    struct trackGroup *tg, int start, int end, char *chromName,
+    struct track *tg, int start, int end, char *chromName,
     boolean isXeno, boolean nameGetsPos)
 /* Return linked features from range of table after have
  * already connected to database.. */
@@ -2331,9 +2332,27 @@ char *track = tg->mapName;
 struct sqlResult *sr = NULL;
 char **row;
 int rowOffset;
+char *optionChrStr;
 struct linkedFeatures *lfList = NULL, *lf;
+char optionChr[128]; /* Option -  chromosome filter */
+char extraWhere[128] ;
 
-sr = hRangeQuery(conn, track, chromName, start, end, NULL, &rowOffset);
+snprintf( optionChr, sizeof(optionChr), "%s.chromFilter", tg->mapName);
+optionChrStr = cartUsualString(cart, optionChr, "All");
+if (startsWith("chr",optionChrStr)) 
+    {
+    snprintf(extraWhere, sizeof(extraWhere), "qName = \"%s\"",optionChrStr);
+    sr = hRangeQuery(conn, track, chromName, start, end, extraWhere, &rowOffset);
+    }
+else
+    {
+    snprintf(extraWhere, sizeof(extraWhere), " ");
+    sr = hRangeQuery(conn, track, chromName, start, end, NULL, &rowOffset);
+    }
+
+if (sqlCountColumns(sr) < 21+rowOffset)
+    errAbort("trackDb has incorrect table type for table \"%s\"",
+	     tg->mapName);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct psl *psl = pslLoad(row+rowOffset);
@@ -2342,15 +2361,26 @@ while ((row = sqlNextRow(sr)) != NULL)
     pslFree(&psl);
     }
 slReverse(&lfList);
-if (limitVisibility(tg, lfList) == tvFull)
+tg->items = lfList;	/* Do this twice for benefit of limit visibility */
+if (limitVisibility(tg) != tvDense)
     slSort(&lfList, linkedFeaturesCmpStart);
 if (tg->extraUiData)
     filterMrna(tg, &lfList);
-sqlFreeResult(&sr);
 tg->items = lfList;
+sqlFreeResult(&sr);
 }
 
-void lfFromPslsInRange(struct trackGroup *tg, int start, int end, 
+void lfFromPslsInRange(struct track *tg, int start, int end, 
+	char *chromName, boolean isXeno, boolean nameGetsPos)
+/* Return linked features from range of table. */
+{
+struct sqlConnection *conn = hAllocConn();
+connectedLfFromPslsInRange(conn, tg, start, end, chromName, 
+	isXeno, nameGetsPos);
+hFreeConn(&conn);
+}
+
+void lfFromPslsInRangeAndFilter(struct track *tg, int start, int end, 
 	char *chromName, boolean isXeno, boolean nameGetsPos)
 /* Return linked features from range of table. */
 {
@@ -2379,19 +2409,20 @@ lfs->orientation = orientFromChar(lfsbed->strand[0]);
 
 /* Get linked features */
 for (i = 0; i < lfsbed->lfCount; i++)  
-{
-  AllocVar(lf);
-  sprintf(rest, "qName = '%s'", lfsbed->lfNames[i]);
-  sr = hRangeQuery(conn, lfsbed->pslTable, lfsbed->chrom, lfsbed->lfStarts[i], lfsbed->lfStarts[i] + lfsbed->lfSizes[i], rest, &rowOffset);
-  if ((row = sqlNextRow(sr)) != NULL)
-  {
-    struct psl *psl = pslLoad(row);
-    lf = lfFromPsl(psl, FALSE);
-    slAddHead(&lfList, lf);
-    pslFree(&psl);
-  }
-  sqlFreeResult(&sr);
-}
+    {
+    AllocVar(lf);
+    sprintf(rest, "qName = '%s'", lfsbed->lfNames[i]);
+    sr = hRangeQuery(conn, lfsbed->pslTable, lfsbed->chrom, 
+    	lfsbed->lfStarts[i], lfsbed->lfStarts[i] + lfsbed->lfSizes[i], rest, &rowOffset);
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+	struct psl *psl = pslLoad(row);
+	lf = lfFromPsl(psl, FALSE);
+	slAddHead(&lfList, lf);
+	pslFree(&psl);
+	}
+    sqlFreeResult(&sr);
+    }
 slReverse(&lfList);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -2422,127 +2453,91 @@ hFreeConn(&conn);
 return lfsList;
 }
 
-void loadBacEndPairs(struct trackGroup *tg)
-/* Load up bac end pairs from table into trackGroup items. */
+void loadBacEndPairs(struct track *tg)
+/* Load up bac end pairs from table into track items. */
 {
 tg->items = lfsFromBedsInRange("bacEndPairs", winStart, winEnd, chromName);
 }
 
-void bacEndPairsMethods(struct trackGroup *tg)
-/* Fill in track group methods for linked features.series */
+void bacEndPairsMethods(struct track *tg)
+/* Fill in track methods for linked features.series */
 {
 linkedFeaturesSeriesMethods(tg);
 tg->loadItems = loadBacEndPairs;
 }
 
 
-struct linkedFeaturesPair *lfFromPslsInRangeForEstPair(char *table, char *chrom, int start, int end, boolean isXeno)
-/* Return a linked list of structures that have a pair of linked features for 5' and 3' ESTs from range of table. */
+void loadBacEndPairsBad(struct track *tg)
+/* Load up fosmid end pairs from table into track items. */
 {
-  char query[256], query1[256], query2[256];
-  struct sqlConnection *conn = hAllocConn();
-  struct sqlConnection *conn1 = hAllocConn();
-  struct sqlResult *sr = NULL, *sr1 = NULL;
-  char **row, **row1, **row2;
-  struct linkedFeaturesPair *lfListPair = NULL, *lf=NULL;
-  struct estPair *ep = NULL;
-  char mytable[64];
-  boolean hasBin;
-  int rowOffset;
-
-  hFindSplitTable(chrom, "all_est", mytable, &hasBin);
-  sprintf(query, "select * from %s where chrom='%s' and chromStart<%u and chromEnd>%u",
-	  table, chrom, winEnd, winStart);
-
-  sr = sqlGetResult(conn, query); 
-  while ((row = sqlNextRow(sr)) != NULL)
-    {
-      AllocVar(lf);
-      ep = estPairLoad(row);
-      lf->cloneName = ep->mrnaClone;
-          sprintf(query1, "select * from all_est where qName='%s' and tStart=%u and tEnd=%u",
-	      ep->acc5, ep->start5, ep->end5);
-      sr1 = sqlGetResult(conn1, query1);
-      if((row1 = sqlNextRow(sr1)) != NULL)
-	{
-	  struct psl *psl;
-	  if (hasBin) {
-	    psl = pslLoad(row1 + 1);
-	  } else {
-	    psl = pslLoad(row1);
-	  }
-	  lf->lf5prime = lfFromPsl(psl, isXeno);
-	  pslFree(&psl);
-	}
-	sqlFreeResult(&sr1);
-     
-        sprintf(query2, "select * from all_est where qName = '%s' and tStart=%u and tEnd=%u", 
-  	      ep->acc3, ep->start3, ep->end3); 
-        sr1 = sqlGetResult(conn1, query2); 
-        if((row2 = sqlNextRow(sr1)) != NULL) 
-  	{ 
-	  struct psl *psl;
-	  if (hasBin) {
-	    psl = pslLoad(row2 + 1);
-	  } else {
-	    psl = pslLoad(row2);
-	  }
-  	  lf->lf3prime = lfFromPsl(psl, isXeno); 
-  	  pslFree(&psl); 
-	} 
-      sqlFreeResult(&sr1);
-      slSafeAddHead(&lfListPair, lf);
-    }
-  hFreeConn(&conn1);
-  slReverse(&lfListPair);
-  sqlFreeResult(&sr);
-  hFreeConn(&conn);
-  return lfListPair;
-}
-
-void loadEstPairAli(struct trackGroup *tg)
-/* Load up est pairs from table into trackGroup items. */
-{
-  tg->items = lfFromPslsInRangeForEstPair("estPair", chromName, winStart, winEnd, FALSE);
-}
-
-void freeLinkedFeaturesPair(struct linkedFeaturesPair **pList)
-/* Free up a linked features pair list. */
-{
-  struct linkedFeaturesPair *lf;
-  for (lf = *pList; lf != NULL; lf = lf->next){
-    slFreeList(&lf->lf5prime->components);
-    slFreeList(&lf->lf3prime->components);
-  }
-  slFreeList(pList);
-}
-
-void estFreePair(struct trackGroup *tg)
-/* Free up linkedFeaturesPairTrack items. */
-{
-//  freeLinkedFeaturesPair((struct linkedFeaturesPair**)(&tg->items)); 
-}
-
-char *getEstPairName(struct trackGroup *tg, void *item)
-{
-  struct linkedFeaturesPair *lf = item;
-  return lf->cloneName;
-}
-
-void estPairMethods(struct trackGroup *tg)
-/* Make track group of est pairs. */
-{
-linkedFeaturesMethods(tg);
-tg->freeItems = estFreePair;
-tg->itemName = getEstPairName;
-tg->mapItemName = getEstPairName;
-tg->loadItems = loadEstPairAli;
-tg->drawItems = linkedFeaturesAverageDensePair;
+tg->items = lfsFromBedsInRange("bacEndPairsBad", winStart, winEnd, chromName);
 }
 
 
-char *mapNameFromLfExtra(struct trackGroup *tg, void *item)
-/* Return name of item. */
+void bacEndPairsBadMethods(struct track *tg)
+/* Fill in track methods for linked features.series */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->loadItems = loadBacEndPairsBad;
+}
+
+void loadBacEndPairsLong(struct track *tg)
+/* Load up BAC end pairs from table into track items. */
+{
+tg->items = lfsFromBedsInRange("bacEndPairsLong", winStart, winEnd, chromName);
+}
+
+
+void bacEndPairsLongMethods(struct track *tg)
+/* Fill in track methods for linked features.series */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->loadItems = loadBacEndPairsLong;
+}
+
+void loadFosEndPairs(struct track *tg)
+/* Load up fosmid end pairs from table into track items. */
+{
+tg->items = lfsFromBedsInRange("fosEndPairs", winStart, winEnd, chromName);
+}
+
+void fosEndPairsMethods(struct track *tg)
+/* Fill in track methods for linked features.series */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->loadItems = loadFosEndPairs;
+}
+
+void loadFosEndPairsBad(struct track *tg)
+/* Load up fosmid end pairs from table into track items. */
+{
+tg->items = lfsFromBedsInRange("fosEndPairsBad", winStart, winEnd, chromName);
+}
+
+
+void fosEndPairsBadMethods(struct track *tg)
+/* Fill in track methods for linked features.series */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->loadItems = loadFosEndPairsBad;
+}
+
+void loadFosEndPairsLong(struct track *tg)
+/* Load up fosmid end pairs from table into track items. */
+{
+tg->items = lfsFromBedsInRange("fosEndPairsLong", winStart, winEnd, chromName);
+}
+
+
+void fosEndPairsLongMethods(struct track *tg)
+/* Fill in track methods for linked features.series */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->loadItems = loadFosEndPairsLong;
+}
+
+char *lfMapNameFromExtra(struct track *tg, void *item)
+/* Return map name of item from extra field. */
 {
 struct linkedFeatures *lf = item;
 return lf->extra;
@@ -2571,8 +2566,8 @@ parseSs(ss, &pslFileName, &faFileName);
 return fileExists(pslFileName) && fileExists(faFileName);
 }
 
-void loadUserPsl(struct trackGroup *tg)
-/* Load up rnas from table into trackGroup items. */
+void loadUserPsl(struct track *tg)
+/* Load up rnas from table into track items. */
 {
 char *ss = userSeqString;
 char buf2[3*512];
@@ -2603,27 +2598,25 @@ while ((psl = pslNext(f)) != NULL)
 	}
     pslFree(&psl);
     }
-slReverse(&lfList);
+slSort(&lfList, linkedFeaturesCmpStart);
 lineFileClose(&f);
 tg->items = lfList;
 }
 
-
-struct trackGroup *userPslTg()
-/* Make track group of user pasted sequence. */
+struct track *userPslTg()
+/* Make track of user pasted sequence. */
 {
-struct trackGroup *tg = linkedFeaturesTg();
+struct track *tg = linkedFeaturesTg();
 tg->mapName = "hgUserPsl";
 tg->visibility = tvFull;
 tg->longLabel = "Your Sequence from BLAT Search";
 tg->shortLabel = "BLAT Sequence";
 tg->loadItems = loadUserPsl;
-tg->mapItemName = mapNameFromLfExtra;
-tg->priority = 11;
+tg->mapItemName = lfMapNameFromExtra;
+tg->priority = 100;
+tg->groupName = "map";
 return tg;
 }
-
-
 
 struct linkedFeatures *connectedLfFromGenePredInRange(
         struct sqlConnection *conn, char *table, 
@@ -2660,7 +2653,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     slReverse(&sfList);
     lf->components = sfList;
-    finishLf(lf);
+    linkedFeaturesBoundsAndGrays(lf);
     lf->tallStart = gp->cdsStart;
     lf->tallEnd = gp->cdsEnd;
     slAddHead(&lfList, lf);
@@ -2694,7 +2687,7 @@ if (s != NULL)
    }
 }
 
-char *genieName(struct trackGroup *tg, void *item)
+char *genieName(struct track *tg, void *item)
 /* Return abbreviated genie name. */
 {
 struct linkedFeatures *lf = item;
@@ -2710,8 +2703,8 @@ abbr(abbrev, "Affy.");
 return abbrev;
 }
 
-void genieAltMethods(struct trackGroup *tg)
-/* Make track group of full length mRNAs. */
+void genieAltMethods(struct track *tg)
+/* Make track of full length mRNAs. */
 {
 tg->itemName = genieName;
 }
@@ -2757,17 +2750,17 @@ else if (hTableExists("knownInfo"))
 hFreeConn(&conn);
 }
 
-void loadGenieKnown(struct trackGroup *tg)
+void loadGenieKnown(struct track *tg)
 /* Load up Genie known genes. */
 {
 tg->items = lfFromGenePredInRange("genieKnown", chromName, winStart, winEnd);
-if (limitVisibility(tg, tg->items) == tvFull)
+if (limitVisibility(tg) == tvFull)
     {
     lookupKnownNames(tg->items);
     }
 }
 
-Color genieKnownColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color genieKnownColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color to draw known gene in. */
 {
 struct linkedFeatures *lf = item;
@@ -2776,46 +2769,399 @@ if (startsWith("AK.", lf->name))
     {
     static int colIx = 0;
     if (!colIx)
-	colIx = mgFindColor(mg, 0, 120, 200);
+	colIx = vgFindColorIx(vg, 0, 120, 200);
     return colIx;
     }
-#ifdef SOMETIMES
-else if (lf->extra)
-    {
-    static int colIx = 0;
-    if (!colIx)
-	colIx = mgFindColor(mg, 200, 0, 0);
-    return colIx;
-    }
-#endif /* SOMETIMES */
 else
     {
     return tg->ixColor;
     }
 }
 
-void genieKnownMethods(struct trackGroup *tg)
-/* Make track group of known genes. */
+void genieKnownMethods(struct track *tg)
+/* Make track of known genes. */
 {
 tg->loadItems = loadGenieKnown;
 tg->itemName = genieName;
 tg->itemColor = genieKnownColor;
 }
 
-char *refGeneName(struct trackGroup *tg, void *item)
-/* Return abbreviated genie name. */
+char *knownGeneName(struct track *tg, void *item)
 {
-    static char cat[128];
+static char cat[128];
 struct linkedFeatures *lf = item;
 if (lf->extra != NULL) 
     {
-    sprintf(cat,"%s %s",(char *)lf->extra, lf->name);
+    sprintf(cat,"%s",(char *)lf->extra);
     return cat;
     }
-else return lf->name;
+else 
+    return lf->name;
 }
 
-char *refGeneMapName(struct trackGroup *tg, void *item)
+char *knownGeneMapName(struct track *tg, void *item)
+/* Return un-abbreviated gene name. */
+{
+struct linkedFeatures *lf = item;
+return lf->name;
+}
+
+void lookupKnownGeneNames(struct linkedFeatures *lfList)
+/* This converts the known gene name to a gene name where possible via refLink. */
+{
+struct linkedFeatures *lf;
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+char *newName;
+
+char *proteinID;
+char *hugoID;
+char cond_str[256];
+
+if (hTableExists("refLink"))
+    {
+    struct sqlResult *sr;
+    char **row;
+
+    for (lf = lfList; lf != NULL; lf = lf->next)
+	{
+	sprintf(cond_str, "mrnaID='%s'", lf->name);
+	proteinID = sqlGetField(conn, database, "spMrna", "spID", cond_str);
+ 
+        sprintf(cond_str, "displayID = '%s'", proteinID);
+	hugoID = sqlGetField(conn, protDbName, "spXref3", "hugoSymbol", cond_str);
+	if (!((hugoID == NULL) || (*hugoID == '\0')) )
+		{
+		lf->extra = cloneString(hugoID);
+		}
+	else
+	    {
+	    sprintf(query, "select refseq from %s.mrnaRefseq where mrna = '%s';",  
+		    database, lf->name);
+
+	    sr = sqlGetResult(conn, query);
+	    row = sqlNextRow(sr);
+	    if (row != NULL)
+    	    	{
+    	    	sprintf(query, "select * from refLink where mrnaAcc = '%s'", row[0]);
+    	    	sqlFreeResult(&sr);
+    	    	sr = sqlGetResult(conn, query); 
+    	    	if ((row = sqlNextRow(sr)) != NULL)
+        	    {
+		    lf->extra = cloneString(row[0]);
+		    }
+            	sqlFreeResult(&sr);
+	    	}
+	    else
+            	{
+	    	sqlFreeResult(&sr);
+	    	}
+	    }
+	}
+    } 
+hFreeConn(&conn);
+}
+
+void loadknownGene(struct track *tg)
+/* Load up known genes. */
+{
+tg->items = lfFromGenePredInRange("knownGene", chromName, winStart, winEnd);
+if (limitVisibility(tg) == tvFull)
+    {
+    lookupKnownGeneNames(tg->items);
+    }
+}
+
+Color knownGeneColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color to draw known gene in. */
+{
+struct linkedFeatures *lf = item;
+int col = tg->ixColor;
+struct rgbColor *normal = &(tg->color);
+struct rgbColor lighter, lightest;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+char cond_str[256];
+char *proteinID;
+char *pdbID;
+char *ans;
+char *refAcc;
+
+/* color scheme:
+
+	Black: 		If the gene has a corresponding PDB entry
+	Dark blue: 	If the gene has a corresponding SWISS-PROT entry
+			or has a corresponding "reviewed" RefSeq entry
+	Lighter blue:  	If the gene has a corresponding "provisional" RefSeq entry
+	Lightest blue: 	Eveything else
+*/
+
+// set default to the lightest color
+lightest.r = (1*normal->r + 2*255) / 3;
+lightest.g = (1*normal->g + 2*255) / 3;
+lightest.b = (1*normal->b + 2*255) / 3;
+col = vgFindColorIx(vg, lightest.r, lightest.g, lightest.b);
+
+// set color first according to RefSeq status (if there is a corresponding RefSeq)
+sprintf(cond_str, "mrna='%s' ", lf->name);
+refAcc = sqlGetField(conn, database, "mrnaRefseq", "refseq", cond_str);
+if (refAcc != NULL)
+    {
+    if (hTableExists("refSeqStatus"))
+    	{
+    	sprintf(query, "select status from refSeqStatus where mrnaAcc = '%s'", refAcc);
+    	sr = sqlGetResult(conn, query);
+    	if ((row = sqlNextRow(sr)) != NULL)
+            {
+	    if (startsWith("Reviewed", row[0]))
+	    	{
+	    	/* Use the usual color */
+	    	col = tg->ixColor;
+	    	}
+	    else
+		{ 
+	    	if (startsWith("Provisional", row[0]))
+	    	    {
+	    	    lighter.r = (6*normal->r + 4*255) / 10;
+	    	    lighter.g = (6*normal->g + 4*255) / 10;
+	    	    lighter.b = (6*normal->b + 4*255) / 10;
+	    	    col = vgFindColorIx(vg, lighter.r, lighter.g, lighter.b);
+	    	    }
+		}	   
+	    }
+	sqlFreeResult(&sr);
+	}
+    }
+
+/* if a corresponding SWISS-PROT entry exists, set it to dark blue */
+sprintf(cond_str, "name='%s'", (char *)(lf->name));
+proteinID= sqlGetField(conn, database, "knownGene", "proteinID", cond_str);
+if (proteinID != NULL)
+    {
+    sprintf(cond_str, "displayID='%s' AND biodatabaseID=1 ", proteinID);
+    ans= sqlGetField(conn, protDbName, "spXref2", "displayID", cond_str);
+    if (ans != NULL) 
+    	{
+    	col = tg->ixColor;
+    	}
+    }
+
+/* if a corresponding PDB entry exists, set it to black */
+sprintf(cond_str, "sp='%s'", proteinID);
+pdbID= sqlGetField(conn, protDbName, "pdbSP", "pdb", cond_str);
+if (pdbID != NULL) 
+    {
+    col = MG_BLACK;
+    }
+
+hFreeConn(&conn);
+return(col);
+}
+
+void knownGeneMethods(struct track *tg)
+/* Make track of known genes. */
+{
+tg->loadItems 	= loadknownGene;
+tg->itemName 	= knownGeneName;
+tg->mapItemName = knownGeneMapName;
+tg->itemColor 	= knownGeneColor;
+}
+
+char *superfamilyMapName(struct track *tg, void *item)
+/* Return map name of the track item (used by hgc). */
+{
+char *name;
+char *proteinName;
+char *genomeName;
+struct sqlConnection *conn = hAllocConn();
+char conditionStr[256];
+
+struct bed *sw = item;
+
+sprintf(conditionStr, "transcript_name='%s'", sw->name);
+proteinName = sqlGetField(conn, database, "ensemblXref", "translation_name", conditionStr);
+name = strdup(proteinName);
+hFreeConn(&conn);
+
+return(name);
+}
+
+// assuming no more than 100 domains in a protein
+char sfDesc[100][256];
+char sfBuffer[25600];
+
+char *superfamilyNameLong(struct track *tg, void *item)
+/* Return domain names of an entry of a Superfamily track item, 
+   each item may have multiple names 
+   due to possibility of multiple domains. */
+{
+struct bed *sw = item;
+struct sqlConnection *conn;
+struct linkedFeatures *lf = item;
+int sfCnt;
+char *desc;
+char query[256];
+struct sqlResult *sr, *sr2;
+char **row;
+char *chp;
+int i;
+
+conn = hAllocConn();
+sprintf(query, 
+	"select description from sfDescription where name='%s';", 
+	sw->name);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+
+sfCnt = 0;
+while (row != NULL)
+    {      
+    desc = row[0];
+    sprintf(sfDesc[sfCnt], "%s", desc);
+    
+    row = sqlNextRow(sr);
+    sfCnt++;
+    if (sfCnt >= 100) break;
+    }
+
+chp = sfBuffer;
+for (i=0; i<sfCnt; i++)
+    {
+    if (i != 0)
+	{
+	sprintf(chp, "; ");
+	chp++;chp++;
+	}
+    sprintf(chp, "%s", sfDesc[i]);
+    chp = chp+strlen(sfDesc[i]);
+    }
+
+hFreeConn(&conn);
+sqlFreeResult(&sr);
+    
+return(sfBuffer);
+}
+
+int superfamilyItemStart(struct track *tg, void *item)
+/* Return start position of item. */
+{
+struct bed *bed = item;
+return bed->chromStart;
+}
+
+int superfamilyItemEnd(struct track *tg, void *item)
+/* Return end position of item. */
+{
+struct bed *bed = item;
+return bed->chromEnd;
+}
+
+static void superfamilyDrawAt(struct track *tg, void *item, 
+	struct vGfx *vg, int xOff, int y, 
+	double scale, MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a single superfamily item at position. */
+{
+struct bed *bed = item;
+int heightPer = tg->heightPer;
+int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
+int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
+int w;
+
+if (tg->itemColor != NULL)
+    color = tg->itemColor(tg, bed, vg);
+else
+    {
+    if (tg->colorShades)
+	color = tg->colorShades[grayInRange(bed->score, 0, 1000)];
+    }
+w = x2-x1;
+if (w < 1)
+    w = 1;
+if (color)
+    {
+    vgBox(vg, x1, y, w, heightPer, color);
+    
+    // special label processing for superfamily track, because long names provide
+    // important info on structures and functions
+    if (vis == tvFull)
+        {
+    	char *s = superfamilyNameLong(tg, item);
+        vgTextRight(vg, x1-mgFontStringWidth(font, s)-2, y, mgFontStringWidth(font, s),
+                heightPer, MG_BLACK, font, s);
+        }
+
+    if (tg->drawName && vis != tvSquish)
+	{
+	/* Clip here so that text will tend to be more visible... */
+	char *s = tg->itemName(tg, bed);
+	w = x2-x1;
+	if (w > mgFontStringWidth(font, s))
+	    {
+	    Color textColor = contrastingColor(vg, color);
+	    vgTextCentered(vg, x1, y, w, heightPer, textColor, font, s);
+	    }
+	mapBoxHc(bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
+		tg->mapName, tg->mapItemName(tg, bed), NULL);
+	}
+    }
+if (tg->subType == lfWithBarbs)
+    {
+    int dir = 0;
+    if (bed->strand[0] == '+')
+	dir = 1;
+    else if(bed->strand[0] == '-') 
+	dir = -1;
+    if (dir != 0 && w > 2)
+	{
+	int midY = y + (heightPer>>1);
+	Color textColor = contrastingColor(vg, color);
+	clippedBarbs(vg, x1, midY, w, 2, 5, dir, textColor, TRUE);
+	}
+    }
+}
+
+static void superfamilyDraw(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw superfamily items. */
+{
+if (!tg->drawItemAt)
+    errAbort("missing drawItemAt in track %s", tg->mapName);
+genericDrawItems(tg, seqStart, seqEnd, vg, xOff, yOff, width, 
+	font, color, vis);
+}
+
+void superfamilyMethods(struct track *tg)
+/* Fill in methods for (simple) bed tracks. */
+{
+tg->drawItems 	= superfamilyDraw;
+tg->drawItemAt 	= superfamilyDrawAt;
+tg->itemName 	= superfamilyMapName;
+tg->mapItemName = superfamilyMapName;
+tg->totalHeight = tgFixedTotalHeight;
+tg->itemHeight 	= tgFixedItemHeight;
+tg->itemStart 	= superfamilyItemStart;
+tg->itemEnd 	= superfamilyItemEnd;
+tg->drawName 	= FALSE;
+}
+
+char *refGeneName(struct track *tg, void *item)
+/* Return abbreviated genie name. */
+{
+static char cat[128];
+struct linkedFeatures *lf = item;
+if (lf->extra != NULL) 
+    {
+    sprintf(cat,"%s",(char *)lf->extra);
+    return cat;
+    }
+else 
+    return lf->name;
+}
+
+char *refGeneMapName(struct track *tg, void *item)
 /* Return un-abbreviated genie name. */
 {
 struct linkedFeatures *lf = item;
@@ -2851,11 +3197,13 @@ hFreeConn(&conn);
 }
 
 
-void loadRefGene(struct trackGroup *tg)
+void loadRefGene(struct track *tg)
 /* Load up RefSeq known genes. */
 {
+enum trackVisibility vis;
 tg->items = lfFromGenePredInRange("refGene", chromName, winStart, winEnd);
-if (limitVisibility(tg, tg->items) == tvFull)
+vis = limitVisibility(tg);
+if (vis != tvDense)
     {
     lookupRefNames(tg->items);
     slSort(&tg->items, linkedFeaturesCmpStart);
@@ -2863,7 +3211,7 @@ if (limitVisibility(tg, tg->items) == tvFull)
 }
 
 
-Color refGeneColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color refGeneColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color to draw refseq gene in. */
 {
 struct linkedFeatures *lf = item;
@@ -2895,14 +3243,14 @@ if (hTableExists("refSeqStatus"))
 	    lighter.r = (6*normal->r + 4*255) / 10;
 	    lighter.g = (6*normal->g + 4*255) / 10;
 	    lighter.b = (6*normal->b + 4*255) / 10;
-	    col = mgFindColor(mg, lighter.r, lighter.g, lighter.b);
+	    col = vgFindRgb(vg, &lighter);
 	    }
 	else
 	    {
 	    lightest.r = (1*normal->r + 2*255) / 3;
 	    lightest.g = (1*normal->g + 2*255) / 3;
 	    lightest.b = (1*normal->b + 2*255) / 3;
-	    col = mgFindColor(mg, lightest.r, lightest.g, lightest.b);
+	    col = vgFindRgb(vg, &lightest);
 	    }
 	}
     sqlFreeResult(&sr);
@@ -2912,8 +3260,8 @@ return(col);
 }
 
 
-void refGeneMethods(struct trackGroup *tg)
-/* Make track group of known genes from refSeq. */
+void refGeneMethods(struct track *tg)
+/* Make track of known genes from refSeq. */
 {
 tg->loadItems = loadRefGene;
 tg->itemName = refGeneName;
@@ -2921,8 +3269,7 @@ tg->mapItemName = refGeneMapName;
 tg->itemColor = refGeneColor;
 }
 
-
-char *ensGeneName(struct trackGroup *tg, void *item)
+char *ensGeneName(struct track *tg, void *item)
 /* Return abbreviated ensemble gene name. */
 {
 struct linkedFeatures *lf = item;
@@ -2934,13 +3281,13 @@ abbr(abbrev, "SEPT20T.");
 return abbrev;
 }
 
-void ensGeneMethods(struct trackGroup *tg)
-/* Make track group of Ensembl predictions. */
+void ensGeneMethods(struct track *tg)
+/* Make track of Ensembl predictions. */
 {
 tg->itemName = ensGeneName;
 }
 
-Color intronEstColorAndOrient(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color intronEstColorAndOrient(struct track *tg, void *item, struct vGfx *vg)
 /* Always returns MG_BLACK, attempts to orient ests using data in estOrientInfo table. */
 {
 struct linkedFeatures *lf = item;
@@ -2976,7 +3323,7 @@ hFreeConn(&conn);
 return col;
 }
 
-Color estColorAndOrient(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color estColorAndOrient(struct track *tg, void *item, struct vGfx *vg)
 /* Always returns MG_BLACK, also tries to orient them using genbank info. */
 {
 struct linkedFeatures *lf = item;
@@ -2998,28 +3345,28 @@ hFreeConn(&conn);
 return col;
 }
 
-void intronEstMethods(struct trackGroup *tg)
-/* Make track group of EST methods - overrides color handler. */
+void intronEstMethods(struct track *tg)
+/* Make track of EST methods - overrides color handler. */
 {
 tg->itemColor = intronEstColorAndOrient;
 tg->extraUiData = newMrnaUiData(tg->mapName, FALSE);
 }
 
-void estMethods(struct trackGroup *tg)
-/* Make track group of EST methods - overrides color handler. */
+void estMethods(struct track *tg)
+/* Make track of EST methods - overrides color handler. */
 {
 tg->itemColor = estColorAndOrient;
 tg->extraUiData = newMrnaUiData(tg->mapName, FALSE);
 }
 
-void mrnaMethods(struct trackGroup *tg)
-/* Make track group of mRNA methods. */
+void mrnaMethods(struct track *tg)
+/* Make track of mRNA methods. */
 {
 tg->extraUiData = newMrnaUiData(tg->mapName, FALSE);
 }
 
 
-char *sanger22Name(struct trackGroup *tg, void *item)
+char *sanger22Name(struct track *tg, void *item)
 /* Return Sanger22 name. */
 {
 struct linkedFeatures *lf = item;
@@ -3034,138 +3381,12 @@ return abbrev;
 }
 
 
-void sanger22Methods(struct trackGroup *tg)
-/* Make track group of Sanger's chromosome 22 gene annotations. */
+void sanger22Methods(struct track *tg)
+/* Make track of Sanger's chromosome 22 gene annotations. */
 {
 tg->itemName = sanger22Name;
 }
 
-
-int cmpAgpFrag(const void *va, const void *vb)
-/* Compare two agpFrags by chromStart. */
-{
-const struct agpFrag *a = *((struct agpFrag **)va);
-const struct agpFrag *b = *((struct agpFrag **)vb);
-return a->chromStart - b->chromStart;
-}
-
-
-void goldLoad(struct trackGroup *tg)
-/* Load up golden path from database table to trackGroup items. */
-{
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-char **row;
-struct agpFrag *fragList = NULL, *frag;
-struct agpGap *gapList = NULL, *gap;
-int rowOffset;
-
-/* Get the frags and load into tg->items. */
-sr = hRangeQuery(conn, "gold", chromName, winStart, winEnd, NULL, &rowOffset);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    frag = agpFragLoad(row+rowOffset);
-    slAddHead(&fragList, frag);
-    }
-slSort(&fragList, cmpAgpFrag);
-sqlFreeResult(&sr);
-tg->items = fragList;
-
-/* Get the gaps into tg->customPt. */
-sr = hRangeQuery(conn, "gap", chromName, winStart, winEnd, NULL, &rowOffset);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    gap = agpGapLoad(row+rowOffset);
-    slAddHead(&gapList, gap);
-    }
-slReverse(&gapList);
-sqlFreeResult(&sr);
-tg->customPt = gapList;
-hFreeConn(&conn);
-}
-
-void goldFree(struct trackGroup *tg)
-/* Free up goldTrackGroup items. */
-{
-agpFragFreeList((struct agpFrag**)&tg->items);
-agpGapFreeList((struct agpGap**)&tg->customPt);
-}
-
-char *goldName(struct trackGroup *tg, void *item)
-/* Return name of gold track item. */
-{
-struct agpFrag *frag = item;
-return frag->frag;
-}
-
-static void goldDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw golden path items. */
-{
-int baseWidth = seqEnd - seqStart;
-struct agpFrag *frag;
-struct agpGap *gap;
-int y = yOff;
-int heightPer = tg->heightPer;
-int lineHeight = tg->lineHeight;
-int x1,x2,w;
-int midLineOff = heightPer/2;
-boolean isFull = (vis == tvFull);
-Color brown = color;
-Color gold = tg->ixAltColor;
-Color col;
-int ix = 0;
-double scale = (double)width/(double)baseWidth;
-
-/* Draw gaps if any. */
-if (!isFull)
-    {
-    int midY = y + midLineOff;
-    for (gap = tg->customPt; gap != NULL; gap = gap->next)
-	{
-	if (!sameWord(gap->bridge, "no"))
-	    {
-	    drawScaledBox(mg, gap->chromStart, gap->chromEnd, scale, xOff, midY, 1, brown);
-	    }
-	}
-    }
-
-for (frag = tg->items; frag != NULL; frag = frag->next)
-    {
-    x1 = round((double)((int)frag->chromStart-winStart)*scale) + xOff;
-    x2 = round((double)((int)frag->chromEnd-winStart)*scale) + xOff;
-    w = x2-x1;
-    color =  ((ix&1) ? gold : brown);
-    if (w < 1)
-	w = 1;
-    mgDrawBox(mg, x1, y, w, heightPer, color);
-    if (isFull)
-	y += lineHeight;
-    else if (baseWidth < 10000000)
-	{
-	char status[256];
-	sprintf(status, "%s:%d-%d %s %s:%d-%d", 
-	    frag->frag, frag->fragStart, frag->fragEnd,
-	    frag->strand,
-	    frag->chrom, frag->chromStart, frag->chromEnd);
-
-	mapBoxHc(frag->chromStart, frag->chromEnd, x1,y,w,heightPer, tg->mapName, 
-	    frag->frag, status);
-	}
-    ++ix;
-    }
-}
-
-void goldMethods(struct trackGroup *tg)
-/* Make track group for golden path */
-{
-tg->loadItems = goldLoad;
-tg->freeItems = goldFree;
-tg->drawItems = goldDraw;
-tg->itemName = goldName;
-tg->mapItemName = goldName;
-}
 
 /* Repeat items.  Since there are so many of these, to avoid 
  * memory problems we don't query the database and store the results
@@ -3207,27 +3428,27 @@ slReverse(&riList);
 return riList;
 }
 
-void repeatLoad(struct trackGroup *tg)
+void repeatLoad(struct track *tg)
 /* Load up repeat tracks.  (Will query database during drawing for a change.) */
 {
 tg->items = makeRepeatItems();
 }
 
-void repeatFree(struct trackGroup *tg)
+void repeatFree(struct track *tg)
 /* Free up goldTrackGroup items. */
 {
 slFreeList(&tg->items);
 }
 
-char *repeatName(struct trackGroup *tg, void *item)
+char *repeatName(struct track *tg, void *item)
 /* Return name of repeat item track. */
 {
 struct repeatItem *ri = item;
 return ri->className;
 }
 
-static void repeatDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+static void repeatDraw(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 {
 int baseWidth = seqEnd - seqStart;
@@ -3274,7 +3495,7 @@ if (isFull)
 	w = x2-x1;
 	if (w <= 0)
 	    w = 1;
-	mgDrawBox(mg, x1, ri->yOffset, w, heightPer, col);
+	vgBox(vg, x1, ri->yOffset, w, heightPer, col);
 	if (baseWidth <= 100000)
 	    {
 	    if (ri == otherRepeatItem)
@@ -3315,7 +3536,7 @@ else
 	    w = x2-x1;
 	    if (w <= 0)
 		w = 1;
-	    mgDrawBox(mg, x1, yOff, w, heightPer, MG_BLACK);
+	    vgBox(vg, x1, yOff, w, heightPer, MG_BLACK);
 	    }
 	}
     dyStringFree(&query);
@@ -3324,8 +3545,8 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void repeatMethods(struct trackGroup *tg)
-/* Make track group for repeats. */
+void repeatMethods(struct track *tg)
+/* Make track for repeats. */
 {
 tg->loadItems = repeatLoad;
 tg->freeItems = repeatFree;
@@ -3335,13 +3556,13 @@ tg->itemName = repeatName;
 tg->mapItemName = repeatName;
 tg->totalHeight = tgFixedTotalHeight;
 tg->itemHeight = tgFixedItemHeight;
-tg->itemStart = tgWeirdItemStart;
-tg->itemEnd = tgWeirdItemEnd;
+tg->itemStart = tgItemNoStart;
+tg->itemEnd = tgItemNoEnd;
 }
 
 typedef struct slList *(*ItemLoader)(char **row);
 
-void bedLoadItem(struct trackGroup *tg, char *table, ItemLoader loader)
+void bedLoadItem(struct track *tg, char *table, ItemLoader loader)
 /* Generic tg->item loader. */
 {
 struct sqlConnection *conn = hAllocConn();
@@ -3356,80 +3577,90 @@ while ((row = sqlNextRow(sr)) != NULL)
     item = loader(row + rowOffset);
     slAddHead(&itemList, item);
     }
-
-slReverse(&itemList);
 slSort(&itemList, bedCmp);
 sqlFreeResult(&sr);
 tg->items = itemList;
 hFreeConn(&conn);
 }
 
-static void bedDrawSimple(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw simple Bed items. */
+Color contrastingColor(struct vGfx *vg, int backgroundIx)
+/* Return black or white whichever would be more visible over
+ * background. */
 {
-int baseWidth = seqEnd - seqStart;
-struct bed *item;
-int y = yOff;
-int heightPer = tg->heightPer;
-int lineHeight = tg->lineHeight;
-int x1,x2,w;
-boolean isFull = (vis == tvFull);
-double scale = width/(double)baseWidth;
-int invPpt;
-int midLineOff = heightPer/2;
-int midY = y + midLineOff;
-int dir;
-Color *shades = tg->colorShades;
+struct rgbColor c = vgColorIxToRgb(vg, backgroundIx);
+int val = (int)c.r + c.g + c.g + c.b;
+if (val > 512)
+    return MG_BLACK;
+else
+    return MG_WHITE;
+}
 
-for (item = tg->items; item != NULL; item = item->next)
+static void bedDrawSimpleAt(struct track *tg, void *item, 
+	struct vGfx *vg, int xOff, int y, 
+	double scale, MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a single simple bed item at position. */
+{
+struct bed *bed = item;
+int heightPer = tg->heightPer;
+int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
+int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
+int w;
+
+if (tg->itemColor != NULL)
+    color = tg->itemColor(tg, bed, vg);
+else
     {
-    x1 = round((double)((int)item->chromStart-winStart)*scale) + xOff;
-    x2 = round((double)((int)item->chromEnd-winStart)*scale) + xOff;
-    w = x2-x1;
-    if (tg->itemColor != NULL)
-        color = tg->itemColor(tg, item, mg);
-    else
+    if (tg->colorShades)
+	color = tg->colorShades[grayInRange(bed->score, 0, 1000)];
+    }
+w = x2-x1;
+if (w < 1)
+    w = 1;
+if (color)
+    {
+    vgBox(vg, x1, y, w, heightPer, color);
+    if (tg->drawName && vis != tvSquish)
 	{
-	if (shades)
-	    color = shades[grayInRange(item->score, 0, 1000)];
-	}
-    if (w < 1)
-	w = 1;
-    if (color)
-	{
-	mgDrawBox(mg, x1, y, w, heightPer, color);
-	if (tg->drawName)
+	/* Clip here so that text will tend to be more visible... */
+	char *s = tg->itemName(tg, bed);
+	w = x2-x1;
+	if (w > mgFontStringWidth(font, s))
 	    {
-	    /* Clip here so that text will tend to be more visible... */
-	    char *s = tg->itemName(tg, item);
-	    if (x1 < xOff)
-		x1 = xOff;
-	    if (x2 > xOff + width)
-		x2 = xOff + width;
-	    w = x2-x1;
-	    if (w > mgFontStringWidth(font, s))
-		mgTextCentered(mg, x1, y, w, heightPer, MG_WHITE, font, s);
+	    Color textColor = contrastingColor(vg, color);
+	    vgTextCentered(vg, x1, y, w, heightPer, textColor, font, s);
 	    }
+	mapBoxHc(bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
+		tg->mapName, tg->mapItemName(tg, bed), NULL);
 	}
-    if (tg->subType == lfWithBarbs)
-        {
-        dir = 0;
-        if(sameString(item->strand , "+")) 
-            dir = 1;
-        if(sameString(item->strand , "-")) 
-            dir = -1;
-	    w = x2-x1;
-        if (dir != 0)
-        mgBarbedHorizontalLine(mg, x1, midY, w, 2, 5, dir, MG_WHITE, TRUE);
-        }
-    if (isFull)
-	y += lineHeight;
+    }
+if (tg->subType == lfWithBarbs)
+    {
+    int dir = 0;
+    if (bed->strand[0] == '+')
+	dir = 1;
+    else if(bed->strand[0] == '-') 
+	dir = -1;
+    if (dir != 0 && w > 2)
+	{
+	int midY = y + (heightPer>>1);
+	Color textColor = contrastingColor(vg, color);
+	clippedBarbs(vg, x1, midY, w, 2, 5, dir, textColor, TRUE);
+	}
     }
 }
 
-char *bedName(struct trackGroup *tg, void *item)
+static void bedDrawSimple(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw simple Bed items. */
+{
+if (!tg->drawItemAt)
+    errAbort("missing drawItemAt in track %s", tg->mapName);
+genericDrawItems(tg, seqStart, seqEnd, vg, xOff, yOff, width, 
+	font, color, vis);
+}
+
+char *bedName(struct track *tg, void *item)
 /* Return name of bed track item. */
 {
 struct bed *bed = item;
@@ -3438,15 +3669,14 @@ if (bed->name == NULL)
 return bed->name;
 }
 
-
-int bedItemStart(struct trackGroup *tg, void *item)
+int bedItemStart(struct track *tg, void *item)
 /* Return start position of item. */
 {
 struct bed *bed = item;
 return bed->chromStart;
 }
 
-int bedItemEnd(struct trackGroup *tg, void *item)
+int bedItemEnd(struct track *tg, void *item)
 /* Return end position of item. */
 {
 struct bed *bed = item;
@@ -3454,10 +3684,11 @@ return bed->chromEnd;
 }
 
 
-void bedMethods(struct trackGroup *tg)
+void bedMethods(struct track *tg)
 /* Fill in methods for (simple) bed tracks. */
 {
 tg->drawItems = bedDrawSimple;
+tg->drawItemAt = bedDrawSimpleAt;
 tg->itemName = bedName;
 tg->mapItemName = bedName;
 tg->totalHeight = tgFixedTotalHeight;
@@ -3466,28 +3697,160 @@ tg->itemStart = bedItemStart;
 tg->itemEnd = bedItemEnd;
 }
 
-struct trackGroup *bedTg()
-/* Get track group loaded with generic bed values. */
+int cmpAgpFrag(const void *va, const void *vb)
+/* Compare two agpFrags by chromStart. */
 {
-struct trackGroup *tg;
-AllocVar(tg);
-bedMethods(tg);
-return tg;
+const struct agpFrag *a = *((struct agpFrag **)va);
+const struct agpFrag *b = *((struct agpFrag **)vb);
+return a->chromStart - b->chromStart;
 }
 
-void isochoreLoad(struct trackGroup *tg)
-/* Load up isochores from database table to trackGroup items. */
+
+void goldLoad(struct track *tg)
+/* Load up golden path from database table to track items. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+struct agpFrag *fragList = NULL, *frag;
+struct agpGap *gapList = NULL, *gap;
+int rowOffset;
+
+/* Get the frags and load into tg->items. */
+sr = hRangeQuery(conn, "gold", chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    frag = agpFragLoad(row+rowOffset);
+    slAddHead(&fragList, frag);
+    }
+slSort(&fragList, cmpAgpFrag);
+sqlFreeResult(&sr);
+tg->items = fragList;
+
+/* Get the gaps into tg->customPt. */
+sr = hRangeQuery(conn, "gap", chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    gap = agpGapLoad(row+rowOffset);
+    slAddHead(&gapList, gap);
+    }
+slReverse(&gapList);
+sqlFreeResult(&sr);
+tg->customPt = gapList;
+hFreeConn(&conn);
+}
+
+void goldFree(struct track *tg)
+/* Free up goldTrackGroup items. */
+{
+agpFragFreeList((struct agpFrag**)&tg->items);
+agpGapFreeList((struct agpGap**)&tg->customPt);
+}
+
+char *goldName(struct track *tg, void *item)
+/* Return name of gold track item. */
+{
+struct agpFrag *frag = item;
+return frag->frag;
+}
+
+static void goldDrawDense(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw golden path items. */
+{
+int baseWidth = seqEnd - seqStart;
+struct agpFrag *frag;
+struct agpGap *gap;
+int y = yOff;
+int heightPer = tg->heightPer;
+int lineHeight = tg->lineHeight;
+int x1,x2,w;
+int midLineOff = heightPer/2;
+boolean isFull = (vis == tvFull);
+Color brown = color;
+Color gold = tg->ixAltColor;
+Color col;
+int ix = 0;
+double scale = scaleForPixels(width);
+
+/* Draw gaps if any. */
+if (!isFull)
+    {
+    int midY = y + midLineOff;
+    for (gap = tg->customPt; gap != NULL; gap = gap->next)
+	{
+	if (!sameWord(gap->bridge, "no"))
+	    {
+	    drawScaledBox(vg, gap->chromStart, gap->chromEnd, scale, xOff, midY, 1, brown);
+	    }
+	}
+    }
+
+for (frag = tg->items; frag != NULL; frag = frag->next)
+    {
+    x1 = round((double)((int)frag->chromStart-winStart)*scale) + xOff;
+    x2 = round((double)((int)frag->chromEnd-winStart)*scale) + xOff;
+    w = x2-x1;
+    color =  ((ix&1) ? gold : brown);
+    if (w < 1)
+	w = 1;
+    vgBox(vg, x1, y, w, heightPer, color);
+    if (isFull)
+	y += lineHeight;
+    else if (baseWidth < 10000000)
+	{
+	char status[256];
+	sprintf(status, "%s:%d-%d %s %s:%d-%d", 
+	    frag->frag, frag->fragStart, frag->fragEnd,
+	    frag->strand,
+	    frag->chrom, frag->chromStart, frag->chromEnd);
+
+	mapBoxHc(frag->chromStart, frag->chromEnd, x1,y,w,heightPer, tg->mapName, 
+	    frag->frag, status);
+	}
+    ++ix;
+    }
+}
+
+static void goldDraw(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw golden path items. */
+{
+if (vis == tvDense)
+    goldDrawDense(tg, seqStart, seqEnd, vg, xOff, yOff, width,
+    	font, color, vis);
+else
+    genericDrawItems(tg, seqStart, seqEnd, vg, xOff, yOff, width,
+    	font, color, vis);
+}
+
+void goldMethods(struct track *tg)
+/* Make track for golden path */
+{
+tg->loadItems = goldLoad;
+tg->freeItems = goldFree;
+tg->drawItems = goldDraw;
+tg->drawItemAt = bedDrawSimpleAt;
+tg->itemName = goldName;
+tg->mapItemName = goldName;
+}
+
+
+void isochoreLoad(struct track *tg)
+/* Load up isochores from database table to track items. */
 {
 bedLoadItem(tg, "isochores", (ItemLoader)isochoresLoad);
 }
 
-void isochoreFree(struct trackGroup *tg)
+void isochoreFree(struct track *tg)
 /* Free up isochore items. */
 {
 isochoresFreeList((struct isochores**)&tg->items);
 }
 
-char *isochoreName(struct trackGroup *tg, void *item)
+char *isochoreName(struct track *tg, void *item)
 /* Return name of gold track item. */
 {
 struct isochores *iso = item;
@@ -3496,8 +3859,8 @@ sprintf(buf, "%3.1f%% GC", 0.1*iso->gcPpt);
 return buf;
 }
 
-static void isochoreDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+static void isochoreDraw(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw isochore items. */
 {
@@ -3508,8 +3871,7 @@ int heightPer = tg->heightPer;
 int lineHeight = tg->lineHeight;
 int x1,x2,w;
 boolean isFull = (vis == tvFull);
-double scale = width/(double)baseWidth;
-int invPpt;
+double scale = scaleForPixels(width);
 
 for (item = tg->items; item != NULL; item = item->next)
     {
@@ -3519,7 +3881,7 @@ for (item = tg->items; item != NULL; item = item->next)
     color = shadesOfGray[grayInRange(item->gcPpt, 340, 617)];
     if (w < 1)
 	w = 1;
-    mgDrawBox(mg, x1, y, w, heightPer, color);
+    vgBox(vg, x1, y, w, heightPer, color);
     mapBoxHc(item->chromStart, item->chromEnd, x1, y, w, heightPer, tg->mapName,
 	item->name, item->name);
     if (isFull)
@@ -3527,8 +3889,8 @@ for (item = tg->items; item != NULL; item = item->next)
     }
 }
 
-void isochoresMethods(struct trackGroup *tg)
-/* Make track group for isochores. */
+void isochoresMethods(struct track *tg)
+/* Make track for isochores. */
 {
 tg->loadItems = isochoreLoad;
 tg->freeItems = isochoreFree;
@@ -3537,39 +3899,13 @@ tg->colorShades = shadesOfGray;
 tg->itemName = isochoreName;
 }
 
-/*Ewan's stuff */
+/* Ewan's stuff */
 /******************************************************************/
 					/*Royden fun test code*/
 /******************************************************************/
 
-#ifdef OLD2
-struct celeraDupPositive *filterOldDupes(struct celeraDupPositive *oldList)
-/* Get rid of all but recent/artifact dupes. */
-{
-struct celeraDupPositive *newList = NULL, *dup, *next;
-for (dup = oldList; dup != NULL; dup = next)
-    {
-    next = dup->next;
-
-    /*if (dup->score > 980) */
-    /*    {  */
-    	slAddHead(&newList, dup);
-    /*	} */
-    /*else */
-    /*    { */
-    /*	celeraDupPositiveFree(&dup); */
-    /* } */
-
-
-    }
-slReverse(&newList);
-return newList;
-}
-
-#endif /* OLD2 */
-
-void loadCeleraDupPositive(struct trackGroup *tg)
-/* Load up simpleRepeats from database table to trackGroup items. */
+void loadCeleraDupPositive(struct track *tg)
+/* Load up simpleRepeats from database table to track items. */
 {
 bedLoadItem(tg, "celeraDupPositive", (ItemLoader)celeraDupPositiveLoad);
 if (tg->visibility == tvDense && slCount(tg->items) <= maxItemsInFullTrack)
@@ -3578,13 +3914,13 @@ else
     slSort(&tg->items, bedCmp);
 }
 
-void freeCeleraDupPositive(struct trackGroup *tg)
+void freeCeleraDupPositive(struct track *tg)
 /* Free up isochore items. */
 {
 celeraDupPositiveFreeList((struct celeraDupPositive**)&tg->items);
 }
 
-Color celeraDupPositiveColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color celeraDupPositiveColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return name of gcPercent track item. */
 {
 struct celeraDupPositive *dup = item;
@@ -3601,7 +3937,7 @@ grayLevel=grayInRange(990,900,1000);
 return shadesOfGray[grayLevel];
 }
 
-char *celeraDupPositiveName(struct trackGroup *tg, void *item)
+char *celeraDupPositiveName(struct track *tg, void *item)
 /* Return full genie name. */
 {
 struct celeraDupPositive *gd = item;
@@ -3614,8 +3950,8 @@ return abbrev;
 }
 
 
-void celeraDupPositiveMethods(struct trackGroup *tg)
-/* Make track group for simple repeats. */
+void celeraDupPositiveMethods(struct track *tg)
+/* Make track for simple repeats. */
 {
 tg->loadItems = loadCeleraDupPositive;
 tg->freeItems = freeCeleraDupPositive;
@@ -3629,37 +3965,9 @@ tg->itemColor = celeraDupPositiveColor;
 			/*Royden fun test code CeleraCoverage*/
 /******************************************************************/
 
-#ifdef OLD3
 
-
-
-struct celeraCoverage *filterOldCoverage(struct celeraCoverage *oldList)
-/* Get rid of all but recent/artifact dupes. */
-{
-struct celeraCoverage *newList = NULL, *dup, *next;
-for (dup = oldList; dup != NULL; dup = next)
-    {
-    next = dup->next;
-
-    /*if (dup->score > 980) */
-    /*    {  */
-    	slAddHead(&newList, dup);
-    /*	} */
-    /*else */
-    /*    { */
-    /*	celeraDupPositiveFree(&dup); */
-    /* } */
-
-
-    }
-slReverse(&newList);
-return newList;
-}
-
-#endif /* OLD3 */
-
-void loadCeleraCoverage(struct trackGroup *tg)
-/* Load up simpleRepeats from database table to trackGroup items. */
+void loadCeleraCoverage(struct track *tg)
+/* Load up simpleRepeats from database table to track items. */
 {
 bedLoadItem(tg, "celeraCoverage", (ItemLoader)celeraCoverageLoad);
 if (tg->visibility == tvDense && slCount(tg->items) <= maxItemsInFullTrack)
@@ -3668,13 +3976,13 @@ else
     slSort(&tg->items, bedCmp);
 }
 
-void freeCeleraCoverage(struct trackGroup *tg)
+void freeCeleraCoverage(struct track *tg)
 /* Free up isochore items. */
 {
 celeraCoverageFreeList((struct celeraCoverage**)&tg->items);
 }
 
-Color celeraCoverageColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color celeraCoverageColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return name of gcPercent track item. */
 {
 struct celeraDupPositive *dup = item;
@@ -3691,7 +3999,7 @@ grayLevel=grayInRange(990,900,1000);
 return shadesOfGray[grayLevel];
 }
 
-char *celeraCoverageName(struct trackGroup *tg, void *item)
+char *celeraCoverageName(struct track *tg, void *item)
 /* Return full genie name. */
 {
 struct celeraCoverage *gd = item;
@@ -3704,8 +4012,8 @@ return abbrev;
 }
 
 
-void celeraCoverageMethods(struct trackGroup *tg)
-/* Make track group for simple repeats. */
+void celeraCoverageMethods(struct track *tg)
+/* Make track for simple repeats. */
 {
 tg->loadItems = loadCeleraCoverage;
 tg->freeItems = freeCeleraCoverage;
@@ -3715,36 +4023,9 @@ tg->itemColor = celeraCoverageColor;
 /******************************************************************/
 		/*end of Royden test Code celeraCoverage */
 /******************************************************************/
-#ifdef OLD4
 
-
-struct genomicSuperDups *filterOldCoverage(struct genomicSuperDups *oldList)
-/* Get rid of all but recent/artifact dupes. */
-{
-struct genomicSuperDups *newList = NULL, *dup, *next;
-for (dup = oldList; dup != NULL; dup = next)
-    {
-    next = dup->next;
-
-    /*if (dup->score > 980) */
-    /*    {  */
-    	slAddHead(&newList, dup);
-    /*	} */
-    /*else */
-    /*    { */
-    /*	celeraDupPositiveFree(&dup); */
-    /* } */
-
-
-    }
-slReverse(&newList);
-return newList;
-}
-
-#endif /* OLD4 */
-
-void loadGenomicSuperDups(struct trackGroup *tg)
-/* Load up simpleRepeats from database table to trackGroup items. */
+void loadGenomicSuperDups(struct track *tg)
+/* Load up simpleRepeats from database table to track items. */
 {
 bedLoadItem(tg, "genomicSuperDups", (ItemLoader)genomicSuperDupsLoad);
 if (tg->visibility == tvDense && slCount(tg->items) <= maxItemsInFullTrack)
@@ -3753,13 +4034,13 @@ else
     slSort(&tg->items, bedCmp);
 }
 
-void freeGenomicSuperDups(struct trackGroup *tg)
+void freeGenomicSuperDups(struct track *tg)
 /* Free up isochore items. */
 {
 genomicSuperDupsFreeList((struct genomicSuperDups**)&tg->items);
 }
 
-Color genomicSuperDupsColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color genomicSuperDupsColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return name of gcPercent track item. */
 {
 struct genomicSuperDups *dup = item;
@@ -3769,7 +4050,7 @@ char *verdict=dup->verdict;
 
 
 if ((verdict[0]=='B')&&(verdict[1]=='A')&&(verdict[2]=='D'))
-    return mgClosestColor(mg, 255,51,51);
+    return vgFindColorIx(vg, 255,51,51);
 
 
 else if (ppt > 990)
@@ -3780,7 +4061,7 @@ grayLevel = grayInRange(ppt, 900, 1000);
 return shadesOfGray[grayLevel];
 }
 
-char *genomicSuperDupsName(struct trackGroup *tg, void *item)
+char *genomicSuperDupsName(struct track *tg, void *item)
 /* Return full genie name. */
 {
 struct genomicSuperDups *gd = item;
@@ -3793,8 +4074,8 @@ return abbrev;
 }
 
 
-void genomicSuperDupsMethods(struct trackGroup *tg)
-/* Make track group for simple repeats. */
+void genomicSuperDupsMethods(struct track *tg)
+/* Make track for simple repeats. */
 {
 tg->loadItems = loadGenomicSuperDups;
 tg->freeItems = freeGenomicSuperDups;
@@ -3806,7 +4087,7 @@ tg->itemColor = genomicSuperDupsColor;
 /******************************************************************/
 /*end Ewan's*/
 
-char *simpleRepeatName(struct trackGroup *tg, void *item)
+char *simpleRepeatName(struct track *tg, void *item)
 /* Return name of simpleRepeats track item. */
 {
 struct simpleRepeat *rep = item;
@@ -3827,54 +4108,54 @@ else
     }
 }
 
-void loadSimpleRepeats(struct trackGroup *tg)
-/* Load up simpleRepeats from database table to trackGroup items. */
+void loadSimpleRepeats(struct track *tg)
+/* Load up simpleRepeats from database table to track items. */
 {
 bedLoadItem(tg, "simpleRepeat", (ItemLoader)simpleRepeatLoad);
 }
 
-void freeSimpleRepeats(struct trackGroup *tg)
+void freeSimpleRepeats(struct track *tg)
 /* Free up isochore items. */
 {
 simpleRepeatFreeList((struct simpleRepeat**)&tg->items);
 }
 
-void simpleRepeatMethods(struct trackGroup *tg)
-/* Make track group for simple repeats. */
+void simpleRepeatMethods(struct track *tg)
+/* Make track for simple repeats. */
 {
 tg->loadItems = loadSimpleRepeats;
 tg->freeItems = freeSimpleRepeats;
 tg->itemName = simpleRepeatName;
 }
 
-Color cpgIslandColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color cpgIslandColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of cpgIsland track item. */
 {
 struct cpgIsland *el = item;
 return (el->length < 300 ? tg->ixAltColor : tg->ixColor);
 }
 
-void loadCpgIsland(struct trackGroup *tg)
-/* Load up simpleRepeats from database table to trackGroup items. */
+void loadCpgIsland(struct track *tg)
+/* Load up simpleRepeats from database table to track items. */
 {
 bedLoadItem(tg, "cpgIsland", (ItemLoader)cpgIslandLoad);
 }
 
-void freeCpgIsland(struct trackGroup *tg)
+void freeCpgIsland(struct track *tg)
 /* Free up isochore items. */
 {
 cpgIslandFreeList((struct cpgIsland**)&tg->items);
 }
 
-void cpgIslandMethods(struct trackGroup *tg)
-/* Make track group for simple repeats. */
+void cpgIslandMethods(struct track *tg)
+/* Make track for simple repeats. */
 {
 tg->loadItems = loadCpgIsland;
 tg->freeItems = freeCpgIsland;
 tg->itemColor = cpgIslandColor;
 }
 
-char *cytoBandName(struct trackGroup *tg, void *item)
+char *cytoBandName(struct track *tg, void *item)
 /* Return name of cytoBand track item. */
 {
 struct cytoBand *band = item;
@@ -3885,7 +4166,7 @@ sprintf(buf, "%s%s", skipChr(band->chrom), band->name);
 return buf;
 }
 
-char *abbreviatedBandName(struct trackGroup *tg, struct cytoBand *band, MgFont *font, int width)
+char *abbreviatedBandName(struct track *tg, struct cytoBand *band, MgFont *font, int width)
 /* Return a string abbreviated enough to fit into space. */
 {
 int textWidth;
@@ -3912,14 +4193,14 @@ if (textWidth <= width)
 return NULL;
 }
 
-void cytoBandColor(struct cytoBand *band, Color cenColor, Color *retBoxColor, Color *retTextColor)
+Color cytoBandColor(struct track *tg, void *item, struct vGfx *vg)
 /* Figure out color of band. */
 {
+struct cytoBand *band = item;
 char *stain = band->gieStain;
 if (startsWith("gneg", stain))
     {
-    *retBoxColor = shadesOfGray[1];
-    *retTextColor = MG_BLACK;
+    return shadesOfGray[1];
     }
 else if (startsWith("gpos", stain))
     {
@@ -3927,225 +4208,80 @@ else if (startsWith("gpos", stain))
     stain += 4;	
     if (isdigit(stain[0]))
         percentage = atoi(stain);
-    *retBoxColor = shadesOfGray[grayInRange(percentage, -30, 100)];
-    *retTextColor = MG_WHITE;
+    return shadesOfGray[grayInRange(percentage, -30, 100)];
     }
 else if (startsWith("gvar", stain))
     {
-    *retBoxColor = shadesOfGray[maxShade];
-    *retTextColor = MG_WHITE;
+    return shadesOfGray[maxShade];
     }
 else 
     {
-    *retBoxColor = cenColor;
-    *retTextColor = MG_WHITE;
+    return tg->ixAltColor;
     }
 }
 
-static void cytoBandDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
+static void cytoBandDrawAt(struct track *tg, void *item,
+	struct vGfx *vg, int xOff, int y, double scale, 
+	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw cytoBand items. */
 {
-int baseWidth = seqEnd - seqStart;
-struct cytoBand *band;
-int y = yOff;
+struct cytoBand *band = item;
 int heightPer = tg->heightPer;
-int lineHeight = tg->lineHeight;
 int x1,x2,w;
 int midLineOff = heightPer/2;
-boolean isFull = (vis == tvFull);
 Color col, textCol;
-int ix = 0;
 char *s;
-double scale = width/(double)baseWidth;
-for (band = tg->items; band != NULL; band = band->next)
+
+x1 = round((double)((int)band->chromStart-winStart)*scale) + xOff;
+x2 = round((double)((int)band->chromEnd-winStart)*scale) + xOff;
+/* Clip here so that text will tend to be more visible... */
+if (x1 < xOff)
+    x1 = xOff;
+if (x2 > insideX + insideWidth)
+    x2 = insideX + insideWidth;
+w = x2-x1;
+if (w < 1)
+    w = 1;
+col = cytoBandColor(tg, band, vg);
+vgBox(vg, x1, y, w, heightPer, col);
+if (vis != tvSquish)
     {
-    x1 = round((double)((int)band->chromStart-winStart)*scale) + xOff;
-    x2 = round((double)((int)band->chromEnd-winStart)*scale) + xOff;
-    /* Clip here so that text will tend to be more visible... */
-    if (x1 < xOff)
-	x1 = xOff;
-    if (x2 > xOff + width)
-	x2 = xOff + width;
-    w = x2-x1;
-    if (w < 1)
-	w = 1;
-    cytoBandColor(band, tg->ixAltColor, &col, &textCol);
-    mgDrawBox(mg, x1, y, w, heightPer, col);
-    s = abbreviatedBandName(tg, band, tl.font, w);
+    textCol = contrastingColor(vg, col);
+    s = abbreviatedBandName(tg, band, font, w);
     if (s != NULL)
-	mgTextCentered(mg, x1, y, w, heightPer, textCol, tl.font, s);
-    mapBoxHc(band->chromStart, band->chromEnd, x1,y,w,heightPer, tg->mapName, 
-	band->name, band->name);
-    if (isFull)
-	y += lineHeight;
-    ++ix;
+	vgTextCentered(vg, x1, y, w, heightPer, textCol, font, s);
     }
+mapBoxHc(band->chromStart, band->chromEnd, x1,y,w,heightPer, tg->mapName, 
+    band->name, band->name);
 }
 
 
-void loadCytoBands(struct trackGroup *tg)
-/* Load up simpleRepeats from database table to trackGroup items. */
+void loadCytoBands(struct track *tg)
+/* Load up simpleRepeats from database table to track items. */
 {
 bedLoadItem(tg, "cytoBand", (ItemLoader)cytoBandLoad);
 }
 
-void freeCytoBands(struct trackGroup *tg)
+void freeCytoBands(struct track *tg)
 /* Free up isochore items. */
 {
 cytoBandFreeList((struct cytoBand**)&tg->items);
 }
 
-void cytoBandMethods(struct trackGroup *tg)
-/* Make track group for simple repeats. */
+void cytoBandMethods(struct track *tg)
+/* Make track for simple repeats. */
 {
 tg->loadItems = loadCytoBands;
 tg->freeItems = freeCytoBands;
-tg->drawItems = cytoBandDraw;
+tg->drawItems = genericDrawItems;
+tg->drawItemAt = cytoBandDrawAt;
+tg->itemColor = cytoBandColor;
 tg->itemName = cytoBandName;
+tg->drawName = TRUE;
 }
 
-static void swissDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw simple Bed items for protein track of SWISS-PROT, etc. */
-{
-int baseWidth = seqEnd - seqStart;
-struct bed *item;
-int y = yOff;
-int heightPer = tg->heightPer;
-int lineHeight = tg->lineHeight;
-int x1,x2,w;
-boolean isFull = (vis == tvFull);
-double scale = width/(double)baseWidth;
-int invPpt;
-int midLineOff = heightPer/2;
-int midY = y + midLineOff;
-int dir;
-Color *shades = tg->colorShades;
-
-for (item = tg->items; item != NULL; item = item->next)
-    {
-    x1 = round((double)((int)item->chromStart-winStart)*scale) + xOff;
-    x2 = round((double)((int)item->chromEnd-winStart)*scale) + xOff;
-    w = x2-x1;
-    if (tg->itemColor != NULL)
-        color = tg->itemColor(tg, item, mg);
-    else
-	{
-	if (shades)
-	    {
-	    color = shades[grayInRange(item->score, 0, 1000)];
-	    }
-	}
-    if (w < 1)
-	w = 1;
-    if (color)
-	{
-	if (strstr(item->name, "PDB")     != NULL) color = MG_BLACK;
-        if (strstr(item->name, "SWISS")  != NULL) 
-		{
-		color = mgFindColor(mg, 150, 0, 0);
-		}
-        if (strstr(item->name, "TrEMBL")  != NULL) 
-		{
-		color = mgFindColor(mg, 190, 100, 100);
-		}
-	
-	mgDrawBox(mg, x1, y, w, heightPer, color);
-	if (tg->drawName)
-	    {
-	    /* Clip here so that text will tend to be more visible... */
-	    char *s = tg->itemName(tg, item);
-	    if (x1 < xOff)
-		x1 = xOff;
-	    if (x2 > xOff + width)
-		x2 = xOff + width;
-	    w = x2-x1;
-	    if (w > mgFontStringWidth(font, s))
-		mgTextCentered(mg, x1, y, w, heightPer, MG_WHITE, font, s);
-	    }
-	}
-    if (tg->subType == lfWithBarbs)
-        {
-        dir = 0;
-        if(sameString(item->strand , "+")) 
-            dir = 1;
-        if(sameString(item->strand , "-")) 
-            dir = -1;
-	    w = x2-x1;
-        if (dir != 0)
-        mgBarbedHorizontalLine(mg, x1, midY, w, 2, 5, dir, MG_WHITE, TRUE);
-        }
-    if (isFull)
-	y += lineHeight;
-    }
-}
-
-static int swissMin = 320;
-static int swissMax = 600;
-
-Color swissColor(struct trackGroup *tg, void *item, struct memGfx *mg)
-/* Return name of protein track item. */
-{
-int l;
-char *chp;
-struct bed *bed = item;
-
-l = strlen(bed->name);
-if (l > 6)
-    {
-    return(tg->ixColor);
-    }
-else return(MG_GRAY);
-}
-
-char *swissName(struct trackGroup *tg, void *item)
-/* Return name of xxx track item. */
-{
-struct bed *sw = item;
-static char buf[32];
-char *chp;
-
-sprintf(buf, "%s",  sw->name);
-
-chp = strstr(buf, "(SWISS)");
-if (chp != NULL)
-	{
-	chp = buf+strlen(buf)-strlen("(SWISS)");
-	*chp = '\0';
-	}
-			
-chp = strstr(buf, "(PDB)");
-if (chp != NULL)
-        {
-	chp = buf+strlen(buf)-strlen("(PDB)");
-	*chp = '\0';
-	}
-
-chp = strstr(buf, "(TrEMBL)");
-if (chp != NULL)
-        {
-	chp = buf+strlen(buf)-strlen("(TrEMBL)");
-	*chp = '\0';
-	}
-			
-return(buf);
-}
-
-void swissMethods(struct trackGroup *tg)
-/* Make track group for simple repeats. */
-{
-tg->drawItems = swissDraw;
-tg->itemName  = swissName;
-tg->itemColor = swissColor;
-tg->drawName  = TRUE;
-}
-
-
-void loadGcPercent(struct trackGroup *tg)
-/* Load up simpleRepeats from database table to trackGroup items. */
+void loadGcPercent(struct track *tg)
+/* Load up simpleRepeats from database table to track items. */
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
@@ -4174,14 +4310,14 @@ tg->items = itemList;
 hFreeConn(&conn);
 }
 
-void freeGcPercent(struct trackGroup *tg)
+void freeGcPercent(struct track *tg)
 /* Free up isochore items. */
 {
 gcPercentFreeList((struct gcPercent**)&tg->items);
 }
 
 
-char *gcPercentName(struct trackGroup *tg, void *item)
+char *gcPercentName(struct track *tg, void *item)
 /* Return name of gcPercent track item. */
 {
 struct gcPercent *gc = item;
@@ -4194,7 +4330,7 @@ return buf;
 static int gcPercentMin = 320;
 static int gcPercentMax = 600;
 
-Color gcPercentColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color gcPercentColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return name of gcPercent track item. */
 {
 struct gcPercent *gc = item;
@@ -4205,8 +4341,8 @@ grayLevel = grayInRange(ppt, gcPercentMin, gcPercentMax);
 return shadesOfGray[grayLevel];
 }
 
-static void gcPercentDenseDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+static void gcPercentDenseDraw(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw gcPercent items. */
 {
@@ -4239,26 +4375,25 @@ for (gc = tg->items; gc != NULL; gc = gc->next)
     }
 resampleBytes(useCounts, sampleWidth, aveCounts, width);
 grayThreshold(aveCounts, width);
-for (i=0; i<lineHeight; ++i)
-    mgPutSegZeroClear(mg, xOff, yOff+i, width, aveCounts);
+vgVerticalSmear(vg,xOff,yOff,width,lineHeight,aveCounts,TRUE);
 freeMem(useCounts);
 freeMem(aveCounts);
 }
 
-static void gcPercentDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+static void gcPercentDraw(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw gcPercent items. */
 {
 if (vis == tvDense)
-   gcPercentDenseDraw(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
+   gcPercentDenseDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
 else
-   bedDrawSimple(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
+   bedDrawSimple(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
 }
 
 
-void gcPercentMethods(struct trackGroup *tg)
-/* Make track group for simple repeats. */
+void gcPercentMethods(struct track *tg)
+/* Make track for simple repeats. */
 {
 tg->loadItems = loadGcPercent;
 tg->freeItems = freeGcPercent;
@@ -4270,7 +4405,7 @@ tg->itemColor = gcPercentColor;
 char *recombRateMap;
 enum recombRateOptEnum recombRateType;
 
-boolean recombRateSetRate(struct trackGroup *tg, void *item)
+boolean recombRateSetRate(struct track *tg, void *item)
 /* Change the recombRate value to the one chosen */
 {
 struct recombRate *el = item;
@@ -4317,8 +4452,8 @@ switch (recombRateType)
     }
 }
 
-void loadRecombRate(struct trackGroup *tg)
-/* Load up recombRate from database table to trackGroup items. */
+void loadRecombRate(struct track *tg)
+/* Load up recombRate from database table to track items. */
 {
 recombRateMap = cartUsualString(cart, "recombRate.type", rroeEnumToString(0));
 recombRateType = rroeStringToEnum(recombRateMap);
@@ -4326,13 +4461,13 @@ bedLoadItem(tg, "recombRate", (ItemLoader)recombRateLoad);
 filterItems(tg, recombRateSetRate, "include");
 }
 
-void freeRecombRate(struct trackGroup *tg)
+void freeRecombRate(struct track *tg)
 /* Free up recombRate items. */
 {
 recombRateFreeList((struct recombRate**)&tg->items);
 }
 
-char *recombRateName(struct trackGroup *tg, void *item)
+char *recombRateName(struct track *tg, void *item)
 /* Return name of recombRate track item. */
 {
 struct recombRate *rr = item;
@@ -4359,7 +4494,7 @@ return buf;
 static int recombRateMin = 320;
 static int recombRateMax = 600;
 
-Color recombRateColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color recombRateColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color for item in recombRate track item. */
 {
 struct recombRate *rr = item;
@@ -4372,8 +4507,8 @@ grayLevel = grayInRange(rcr, recombRateMin, recombRateMax);
 return shadesOfGray[grayLevel];
 }
 
-void recombRateMethods(struct trackGroup *tg)
-/* Make track group for recombination rates. */
+void recombRateMethods(struct track *tg)
+/* Make track for recombination rates. */
 {
 tg->loadItems = loadRecombRate;
 tg->freeItems = freeRecombRate;
@@ -4384,20 +4519,20 @@ tg->itemColor = recombRateColor;
 
 
 /* Chromosome 18 deletions track */
-void loadChr18deletions(struct trackGroup *tg)
-/* Load up chr18deletions from database table to trackGroup items. */
+void loadChr18deletions(struct track *tg)
+/* Load up chr18deletions from database table to track items. */
 {
 bedLoadItem(tg, "chr18deletions", (ItemLoader)chr18deletionsLoad);
 }
 
-void freeChr18deletions(struct trackGroup *tg)
+void freeChr18deletions(struct track *tg)
 /* Free up chr18deletions items. */
 {
 chr18deletionsFreeList((struct chr18deletions**)&tg->items);
 }
 
-static void drawChr18deletions(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+static void drawChr18deletions(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw chr18deletions items. */
 {
@@ -4409,15 +4544,14 @@ int lineHeight = tg->lineHeight;
 int midLineOff = heightPer/2;
 int shortOff = 2, shortHeight = heightPer-4;
 int tallStart, tallEnd, shortStart, shortEnd;
-int itemOff, itemHeight;
 boolean isFull = (vis == tvFull);
-double scale = width/(double)baseWidth;
+double scale = scaleForPixels(width);
 
 memset(colorBin, 0, MAXPIXELS * sizeof(colorBin[0]));
 
 if (vis == tvDense)
     {
-    slSort(&tg->items, cmpLfWhiteToBlack);
+    slSort(&tg->items, cmpLfsWhiteToBlack);
     }
 
 for (cds = tg->items; cds != NULL; cds = cds->next)
@@ -4437,71 +4571,49 @@ for (cds = tg->items; cds != NULL; cds = cds->next)
 	if (shortStart < tallStart)
 	    {
 	    end = tallStart;
-	    drawScaledBoxSample(mg, shortStart, end, scale, xOff, y+shortOff, shortHeight, color , cds->score);
+	    drawScaledBoxSample(vg, shortStart, end, scale, xOff, y+shortOff, shortHeight, color , cds->score);
 	    }
 	if (shortEnd > tallEnd)
 	    {
 	    start = tallEnd;
-	    drawScaledBoxSample(mg, start, shortEnd, scale, xOff, y+shortOff, shortHeight, color , cds->score);
+	    drawScaledBoxSample(vg, start, shortEnd, scale, xOff, y+shortOff, shortHeight, color , cds->score);
 	    }
 	if (tallEnd > tallStart)
 	    {
-	    drawScaledBoxSample(mg, tallStart, tallEnd, scale, xOff, y, heightPer, color, cds->score);
+	    drawScaledBoxSample(vg, tallStart, tallEnd, scale, xOff, y, heightPer, color, cds->score);
 	    }
 	}
     if (isFull) y += lineHeight;
     }
 }
 
-void chr18deletionsMethods(struct trackGroup *tg)
-/* Make track group for recombination rates. */
+void chr18deletionsMethods(struct track *tg)
+/* Make track for recombination rates. */
 {
 tg->loadItems = loadChr18deletions;
 tg->freeItems = freeChr18deletions;
 tg->drawItems = drawChr18deletions;
 }
 
-/* Make track group for simple repeats. */
+/* Make track for simple repeats. */
 
-#ifdef OLD
-struct genomicDups *filterOldDupes(struct genomicDups *oldList)
-/* Get rid of all but recent/artifact dupes. */
-{
-struct genomicDups *newList = NULL, *dup, *next;
-for (dup = oldList; dup != NULL; dup = next)
-    {
-    next = dup->next;
-    if (dup->score > 980)
-        {
-	slAddHead(&newList, dup);
-	}
-    else
-        {
-	genomicDupsFree(&dup);
-	}
-    }
-slReverse(&newList);
-return newList;
-}
-#endif /* OLD */
-
-void loadGenomicDups(struct trackGroup *tg)
-/* Load up simpleRepeats from database table to trackGroup items. */
+void loadGenomicDups(struct track *tg)
+/* Load up simpleRepeats from database table to track items. */
 {
 bedLoadItem(tg, "genomicDups", (ItemLoader)genomicDupsLoad);
-if (limitVisibility(tg, tg->items) == tvFull)
+if (limitVisibility(tg) == tvFull)
     slSort(&tg->items, bedCmpScore);
 else
     slSort(&tg->items, bedCmp);
 }
 
-void freeGenomicDups(struct trackGroup *tg)
+void freeGenomicDups(struct track *tg)
 /* Free up isochore items. */
 {
 genomicDupsFreeList((struct genomicDups**)&tg->items);
 }
 
-Color genomicDupsColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color genomicDupsColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return name of gcPercent track item. */
 {
 struct genomicDups *dup = item;
@@ -4516,7 +4628,7 @@ grayLevel = grayInRange(ppt, 900, 1000);
 return shadesOfGray[grayLevel];
 }
 
-char *genomicDupsName(struct trackGroup *tg, void *item)
+char *genomicDupsName(struct track *tg, void *item)
 /* Return full genie name. */
 {
 struct genomicDups *gd = item;
@@ -4529,8 +4641,8 @@ return abbrev;
 }
 
 
-void genomicDupsMethods(struct trackGroup *tg)
-/* Make track group for simple repeats. */
+void genomicDupsMethods(struct track *tg)
+/* Make track for simple repeats. */
 {
 tg->loadItems = loadGenomicDups;
 tg->freeItems = freeGenomicDups;
@@ -4538,26 +4650,26 @@ tg->itemName = genomicDupsName;
 tg->itemColor = genomicDupsColor;
 }
 
-void loadGenethon(struct trackGroup *tg)
-/* Load up simpleRepeats from database table to trackGroup items. */
+void loadGenethon(struct track *tg)
+/* Load up simpleRepeats from database table to track items. */
 {
 bedLoadItem(tg, "mapGenethon", (ItemLoader)mapStsLoad);
 }
 
-void freeGenethon(struct trackGroup *tg)
+void freeGenethon(struct track *tg)
 /* Free up isochore items. */
 {
 mapStsFreeList((struct mapSts**)&tg->items);
 }
 
-void genethonMethods(struct trackGroup *tg)
-/* Make track group for simple repeats. */
+void genethonMethods(struct track *tg)
+/* Make track for simple repeats. */
 {
 tg->loadItems = loadGenethon;
 tg->freeItems = freeGenethon;
 }
 
-Color exoFishColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color exoFishColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of exofish track item. */
 {
 struct exoFish *el = item;
@@ -4568,14 +4680,14 @@ grayLevel = grayInRange(ppt, -500, 1000);
 return shadesOfSea[grayLevel];
 }
 
-void exoFishMethods(struct trackGroup *tg)
-/* Make track group for exoFish. */
+void exoFishMethods(struct track *tg)
+/* Make track for exoFish. */
 {
 tg->itemColor = exoFishColor;
 }
 
-void loadExoMouse(struct trackGroup *tg)
-/* Load up exoMouse from database table to trackGroup items. */
+void loadExoMouse(struct track *tg)
+/* Load up exoMouse from database table to track items. */
 {
 bedLoadItem(tg, "exoMouse", (ItemLoader)roughAliLoad);
 if (tg->visibility == tvDense && slCount(tg->items) < 1000)
@@ -4584,13 +4696,13 @@ if (tg->visibility == tvDense && slCount(tg->items) < 1000)
     }
 }
 
-void freeExoMouse(struct trackGroup *tg)
+void freeExoMouse(struct track *tg)
 /* Free up isochore items. */
 {
 roughAliFreeList((struct roughAli**)&tg->items);
 }
 
-char *exoMouseName(struct trackGroup *tg, void *item)
+char *exoMouseName(struct track *tg, void *item)
 /* Return what to display on left column of open track. */
 {
 struct roughAli *exo = item;
@@ -4601,7 +4713,7 @@ return name;
 }
 
 
-Color exoMouseColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color exoMouseColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of exoMouse track item. */
 {
 struct roughAli *el = item;
@@ -4613,8 +4725,8 @@ return shadesOfBrown[grayLevel];
 }
 
 
-void exoMouseMethods(struct trackGroup *tg)
-/* Make track group for exoMouse. */
+void exoMouseMethods(struct track *tg)
+/* Make track for exoMouse. */
 {
 if (sameString(chromName, "chr22") && hIsPrivateHost())
     tg->visibility = tvDense;
@@ -4626,7 +4738,7 @@ tg->itemName = exoMouseName;
 tg->itemColor = exoMouseColor;
 }
 
-char *xenoMrnaName(struct trackGroup *tg, void *item)
+char *xenoMrnaName(struct track *tg, void *item)
 /* Return what to display on left column of open track:
  * In this case display 6 letters of organism name followed
  * by mRNA accession. */
@@ -4657,78 +4769,95 @@ else
 return name;
 }
 
-void xenoMrnaMethods(struct trackGroup *tg)
+void xenoMrnaMethods(struct track *tg)
 /* Fill in custom parts of xeno mrna alignments. */
 {
 tg->itemName = xenoMrnaName;
 tg->extraUiData = newMrnaUiData(tg->mapName, TRUE);
 }
 
-Color getChromColor(char *name, struct memGfx *mg)
+Color getChromColor(char *name, struct vGfx *vg)
+/* Return color index corresponding to chromosome name. */
 {
-    int chromNum = 0;
-    Color colorNum = 0;
-    if(!chromosomeColorsMade)
-        makeChromosomeShades(mg);
-    if (atoi(name) != 0)
-        chromNum =  atoi(name);
-    else if (!strcmp(name,"X"))
-        chromNum = 23;
-    else if (!strcmp(name,"X "))
-        chromNum = 23;
-    else if (!strcmp(name,"Y"))
-        chromNum = 24;
-    else if (!strcmp(name,"Y "))
-        chromNum = 24;
-    if (chromNum > 24) chromNum = 0;
-    colorNum = chromColor[chromNum];
-    return colorNum;
+int chromNum = 0;
+Color colorNum = 0;
+if(!chromosomeColorsMade)
+    makeChromosomeShades(vg);
+if (atoi(name) != 0)
+    chromNum =  atoi(name);
+else if (!strcmp(name,"X"))
+    chromNum = 23;
+else if (!strcmp(name,"X "))
+    chromNum = 23;
+else if (!strcmp(name,"Y"))
+    chromNum = 24;
+else if (!strcmp(name,"Y "))
+    chromNum = 24;
+if (chromNum > 24) chromNum = 0;
+colorNum = chromColor[chromNum];
+return colorNum;
 }
-Color pslItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
-/* Return color of mouseOrtho track item. */
+
+Color lfChromColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color of chromosome for linked feature type items
+ * where the chromosome is listed somewhere in the lf->name. */
 {
-char chromStr[20];     
-char *chptr;
 struct linkedFeatures *lf = item;
-chptr = strstr(lf->name,"chr");
-strncpy(chromStr,(char *)(chptr+3),2);
-chromStr[2] = '\0';
-return ((Color)getChromColor(chromStr, mg));
+char *chptr = strstr(lf->name, "chr");
+
+if (chptr == NULL)
+    {
+    return(tg->ixColor);
+    }
+else
+    {
+    char chromStr[3];
+    Color c;
+    strncpy(chromStr, (char *)(chptr+3), 2);
+    chromStr[2] = '\0';
+    c = getChromColor(chromStr, vg);
+    tg->ixAltColor = c;
+    return c;
+    }
 }
-void loadXenoPslWithPos(struct trackGroup *tg)
+
+void loadXenoPslWithPos(struct track *tg)
 /* load up all of the psls from correct table into tg->items item list*/
 {
 lfFromPslsInRange(tg, winStart,winEnd, chromName, TRUE, TRUE);
 }
 
-void longXenoPslMethods(struct trackGroup *tg)
+void longXenoPslMethods(struct track *tg)
 /* Fill in custom parts of blatMus - assembled mouse genome blat vs. human. */
 {
 char option[128]; /* Option -  rainbow chromosome color */
-char *optionStr;
-tg->loadItems = loadXenoPslWithPos;
-tg->mapItemName = mapNameFromLfExtra;
+char optionChr[128]; /* Option -  chromosome filter */
+char *optionChrStr; 
+char *optionStr ;
 snprintf( option, sizeof(option), "%s.color", tg->mapName);
-optionStr = cartUsualString(cart, option, "off");
+optionStr = cartUsualString(cart, option, "on");
+tg->mapItemName = lfMapNameFromExtra;
 if( sameString( optionStr, "on" )) /*use chromosome coloring*/
-    tg->itemColor = pslItemColor;
+    tg->itemColor = lfChromColor;
 else
     tg->itemColor = NULL;
+tg->loadItems = loadXenoPslWithPos;
 }
 
-void loadRnaGene(struct trackGroup *tg)
-/* Load up rnaGene from database table to trackGroup items. */
+
+void loadRnaGene(struct track *tg)
+/* Load up rnaGene from database table to track items. */
 {
 bedLoadItem(tg, "rnaGene", (ItemLoader)rnaGeneLoad);
 }
 
-void freeRnaGene(struct trackGroup *tg)
+void freeRnaGene(struct track *tg)
 /* Free up rnaGene items. */
 {
 rnaGeneFreeList((struct rnaGene**)&tg->items);
 }
 
-Color rnaGeneColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color rnaGeneColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of rnaGene track item. */
 {
 struct rnaGene *el = item;
@@ -4736,7 +4865,7 @@ struct rnaGene *el = item;
 return (el->isPsuedo ? tg->ixAltColor : tg->ixColor);
 }
 
-char *rnaGeneName(struct trackGroup *tg, void *item)
+char *rnaGeneName(struct track *tg, void *item)
 /* Return RNA gene name. */
 {
 struct rnaGene *el = item;
@@ -4753,8 +4882,8 @@ if ((e = strstr(abbrev, "-related")) != NULL)
 return abbrev;
 }
 
-void rnaGeneMethods(struct trackGroup *tg)
-/* Make track group for rna genes . */
+void rnaGeneMethods(struct track *tg)
+/* Make track for rna genes . */
 {
 tg->loadItems = loadRnaGene;
 tg->freeItems = freeRnaGene;
@@ -4763,7 +4892,7 @@ tg->itemColor = rnaGeneColor;
 }
 
 
-Color stsColor(struct memGfx *mg, int altColor, 
+Color stsColor(struct vGfx *vg, int altColor, 
 	char *genethonChrom, char *marshfieldChrom, 
 	char *fishChrom, int ppt)
 /* Return color given info about marker. */
@@ -4779,7 +4908,7 @@ else if (fishChrom[0] != '0')
     {
     static int greenIx = -1;
     if (greenIx < 0)
-        greenIx = mgFindColor(mg, 0, 200, 0);
+        greenIx = vgFindColorIx(vg, 0, 200, 0);
     return greenIx;
     }
 else
@@ -4791,28 +4920,28 @@ else
     }
 }
 
-void loadStsMarker(struct trackGroup *tg)
-/* Load up stsMarkers from database table to trackGroup items. */
+void loadStsMarker(struct track *tg)
+/* Load up stsMarkers from database table to track items. */
 {
 bedLoadItem(tg, "stsMarker", (ItemLoader)stsMarkerLoad);
 }
 
-void freeStsMarker(struct trackGroup *tg)
+void freeStsMarker(struct track *tg)
 /* Free up stsMarker items. */
 {
 stsMarkerFreeList((struct stsMarker**)&tg->items);
 }
 
-Color stsMarkerColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color stsMarkerColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of stsMarker track item. */
 {
 struct stsMarker *el = item;
-return stsColor(mg, tg->ixAltColor, el->genethonChrom, el->marshfieldChrom,
+return stsColor(vg, tg->ixAltColor, el->genethonChrom, el->marshfieldChrom,
     el->fishChrom, el->score);
 }
 
-void stsMarkerMethods(struct trackGroup *tg)
-/* Make track group for sts markers. */
+void stsMarkerMethods(struct track *tg)
+/* Make track for sts markers. */
 {
 tg->loadItems = loadStsMarker;
 tg->freeItems = freeStsMarker;
@@ -4824,7 +4953,7 @@ char *stsMapMap;
 enum stsMapOptEnum stsMapType;
 int stsMapFilterColor = MG_BLACK;
 
-boolean stsMapFilterItem(struct trackGroup *tg, void *item)
+boolean stsMapFilterItem(struct track *tg, void *item)
 /* Return TRUE if item passes filter. */
 {
 struct stsMap *el = item;
@@ -4862,8 +4991,8 @@ switch (stsMapType)
 }
 
 
-void loadStsMap(struct trackGroup *tg)
-/* Load up stsMarkers from database table to trackGroup items. */
+void loadStsMap(struct track *tg)
+/* Load up stsMarkers from database table to track items. */
 {
 stsMapFilter = cartUsualString(cart, "stsMap.filter", "blue");
 stsMapMap = cartUsualString(cart, "stsMap.type", smoeEnumToString(0));
@@ -4873,8 +5002,8 @@ filterItems(tg, stsMapFilterItem, stsMapFilter);
 stsMapFilterColor = getFilterColor(stsMapFilter, MG_BLACK);
 }
 
-void loadStsMap28(struct trackGroup *tg)
-/* Load up stsMarkers from database table to trackGroup items. */
+void loadStsMap28(struct track *tg)
+/* Load up stsMarkers from database table to track items. */
 {
 stsMapFilter = cartUsualString(cart, "stsMap.filter", "blue");
 stsMapMap = cartUsualString(cart, "stsMap.type", smoeEnumToString(0));
@@ -4884,13 +5013,13 @@ filterItems(tg, stsMapFilterItem, stsMapFilter);
 stsMapFilterColor = getFilterColor(stsMapFilter, MG_BLACK);
 }
 
-void freeStsMap(struct trackGroup *tg)
+void freeStsMap(struct track *tg)
 /* Free up stsMap items. */
 {
 stsMapFreeList((struct stsMap**)&tg->items);
 }
 
-Color stsMapColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color stsMapColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of stsMap track item. */
 {
 if (stsMapFilterItem(tg, item))
@@ -4906,8 +5035,8 @@ else
 }
 
 
-void stsMapMethods(struct trackGroup *tg)
-/* Make track group for sts markers. */
+void stsMapMethods(struct track *tg)
+/* Make track for sts markers. */
 {
 struct sqlConnection *conn = hAllocConn();
 if (sqlCountRows(conn, "stsMap") == 26) 
@@ -4923,20 +5052,20 @@ tg->freeItems = freeStsMap;
 tg->itemColor = stsMapColor;
 }
 
-void loadGenMapDb(struct trackGroup *tg)
-/* Load up genMapDb from database table to trackGroup items. */
+void loadGenMapDb(struct track *tg)
+/* Load up genMapDb from database table to track items. */
 {
 bedLoadItem(tg, "genMapDb", (ItemLoader)genMapDbLoad);
 }
 
-void freeGenMapDb(struct trackGroup *tg)
+void freeGenMapDb(struct track *tg)
 /* Free up genMapDb items. */
 {
 genMapDbFreeList((struct genMapDb**)&tg->items);
 }
 
-void genMapDbMethods(struct trackGroup *tg)
-/* Make track group for GenMapDb Clones */
+void genMapDbMethods(struct track *tg)
+/* Make track for GenMapDb Clones */
 {
 tg->loadItems = loadGenMapDb;
 tg->freeItems = freeGenMapDb;
@@ -4947,7 +5076,7 @@ char *fishClonesMap;
 enum fishClonesOptEnum fishClonesType;
 int fishClonesFilterColor = MG_GREEN;
 
-boolean fishClonesFilterItem(struct trackGroup *tg, void *item)
+boolean fishClonesFilterItem(struct track *tg, void *item)
 /* Return TRUE if item passes filter. */
 {
 struct fishClones *el = item;
@@ -5002,8 +5131,8 @@ switch (fishClonesType)
     }
 }
 
-void loadFishClones(struct trackGroup *tg)
-/* Load up fishClones from database table to trackGroup items. */
+void loadFishClones(struct track *tg)
+/* Load up fishClones from database table to track items. */
 {
 fishClonesFilter = cartUsualString(cart, "fishClones.filter", "green");
 fishClonesMap = cartUsualString(cart, "fishClones.type", fcoeEnumToString(0));
@@ -5014,13 +5143,13 @@ fishClonesFilterColor = getFilterColor(fishClonesFilter, 0);
 }
 
 
-void freeFishClones(struct trackGroup *tg)
+void freeFishClones(struct track *tg)
 /* Free up fishClones items. */
 {
 fishClonesFreeList((struct fishClones**)&tg->items);
 }
 
-Color fishClonesColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color fishClonesColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of fishClones track item. */
 {
 if ((fishClonesFilterItem(tg, item)) && (fishClonesFilterColor))
@@ -5029,8 +5158,8 @@ else
     return tg->ixColor;
 }
 
-void fishClonesMethods(struct trackGroup *tg)
-/* Make track group for FISH clones. */
+void fishClonesMethods(struct track *tg)
+/* Make track for FISH clones. */
 {
 tg->loadItems = loadFishClones;
 tg->freeItems = freeFishClones;
@@ -5038,51 +5167,63 @@ tg->itemColor = fishClonesColor;
 }
 
 
-void loadSyntenyBerk(struct trackGroup *tg)
+void loadSyntenyBerk(struct track *tg)
 {
 bedLoadItem(tg, "syntenyBerk", (ItemLoader)syntenyBerkLoad);
 slSort(&tg->items, bedCmp);
 }
 
-void freeSyntenyBerk(struct trackGroup *tg)
+void freeSyntenyBerk(struct track *tg)
 {
 syntenyBerkFreeList((struct syntenyBerk**)&tg->items);
 }
 
-void loadSyntenySanger(struct trackGroup *tg)
+void loadSyntenySanger(struct track *tg)
 {
 bedLoadItem(tg, "syntenySanger", (ItemLoader)syntenySangerLoad);
 slSort(&tg->items, bedCmp);
 }
 
-void freeSyntenySanger(struct trackGroup *tg)
+void freeSyntenySanger(struct track *tg)
 {
 syntenySangerFreeList((struct syntenySanger**)&tg->items);
 }
 
-void loadSynteny100000(struct trackGroup *tg)
+void loadSyntenyMouse(struct track *tg)
+{
+bedLoadItem(tg, "syntenyMouse", (ItemLoader)synteny100000Load);
+slSort(&tg->items, bedCmp);
+}
+
+void loadSynteny100000(struct track *tg)
 {
 bedLoadItem(tg, "synteny100000", (ItemLoader)synteny100000Load);
 slSort(&tg->items, bedCmp);
 }
 
-void freeSynteny100000(struct trackGroup *tg)
+void loadSyntenyRat(struct track *tg)
+{
+bedLoadItem(tg, "syntenyRat", (ItemLoader)synteny100000Load);
+slSort(&tg->items, bedCmp);
+}
+
+void freeSynteny100000(struct track *tg)
 {
 synteny100000FreeList((struct synteny100000**)&tg->items);
 }
 
-void loadMouseOrtho(struct trackGroup *tg)
+void loadMouseOrtho(struct track *tg)
 {
 bedLoadItem(tg, "mouseOrtho", (ItemLoader)mouseOrthoLoad);
 slSort(&tg->items, bedCmpPlusScore);
 }
 
-void freeMouseOrtho(struct trackGroup *tg)
+void freeMouseOrtho(struct track *tg)
 {
 mouseOrthoFreeList((struct mouseOrtho**)&tg->items);
 }
 
-Color mouseOrthoItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color mouseOrthoItemColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of psl track item based on chromsome. */
 {
 char chromStr[20];     
@@ -5099,21 +5240,21 @@ else if (strlen(ms->name) == 9)
 }
 else
     strncpy(chromStr,ms->name,2);
-return ((Color)getChromColor(chromStr, mg));
+return ((Color)getChromColor(chromStr, vg));
 }
 
-void loadHumanParalog(struct trackGroup *tg)
+void loadHumanParalog(struct track *tg)
 {
 bedLoadItem(tg, "humanParalog", (ItemLoader)humanParalogLoad);
 slSort(&tg->items, bedCmpPlusScore);
 }
 
-void freeHumanParalog(struct trackGroup *tg)
+void freeHumanParalog(struct track *tg)
 {
 humanParalogFreeList((struct humanParalog**)&tg->items);
 }
 
-Color humanParalogItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color humanParalogItemColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of psl track item based on chromsome. */
 {
 char chromStr[20];     
@@ -5130,32 +5271,32 @@ else if (strlen(ms->name) == 9)
 }
 else
     strncpy(chromStr,ms->name,2);
-return ((Color)getChromColor(chromStr, mg));
+return ((Color)getChromColor(chromStr, vg));
 }
-Color syntenyItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color syntenyItemColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of psl track item based on chromsome. */
 {
 char chromStr[20];     
-struct synteny100000 *ms = item;
-if (strlen(ms->mouseChrom) == 8)
+struct bed *ms = item;
+if (strlen(ms->name) == 8)
     {
-    strncpy(chromStr,(char *)(ms->mouseChrom+1),1);
+    strncpy(chromStr,(char *)(ms->name+1),1);
     chromStr[1] = '\0';
     }
-else if (strlen(ms->mouseChrom) == 9)
+else if (strlen(ms->name) == 9)
     {
-    strncpy(chromStr,(char *)(ms->mouseChrom+1),2);
+    strncpy(chromStr,(char *)(ms->name+1),2);
     chromStr[2] = '\0';
     }
 else
     {
-    strncpy(chromStr,ms->mouseChrom+3,2);
+    strncpy(chromStr,ms->name+3,2);
     chromStr[2] = '\0';
     }
-return ((Color)getChromColor(chromStr, mg));
+return ((Color)getChromColor(chromStr, vg));
 }
 
-Color syntenyBerkItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color syntenyBerkItemColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of psl track item based on chromsome. */
 {
 char chromStr[20];     
@@ -5177,10 +5318,10 @@ else
     strncpy(chromStr,(char *)(chptr+3),2);
     chromStr[2] = '\0';
     }
-return ((Color)getChromColor(chromStr, mg));
+return ((Color)getChromColor(chromStr, vg));
 }
 
-Color syntenySangerItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color syntenySangerItemColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of psl track item based on chromsome. */
 {
 char chromStr[20];     
@@ -5202,25 +5343,43 @@ else
     strncpy(chromStr,(char *)(chptr+3),2);
     chromStr[2] = '\0';
     }
-return ((Color)getChromColor(chromStr, mg));
+return ((Color)getChromColor(chromStr, vg));
 }
 
-void loadMouseSyn(struct trackGroup *tg)
-/* Load up mouseSyn from database table to trackGroup items. */
+void loadMouseSyn(struct track *tg)
+/* Load up mouseSyn from database table to track items. */
 {
 bedLoadItem(tg, "mouseSyn", (ItemLoader)mouseSynLoad);
 }
 
-void synteny100000Methods(struct trackGroup *tg)
+void syntenyMouseMethods(struct track *tg)
+{
+tg->loadItems = loadSyntenyMouse;
+tg->freeItems = freeSynteny100000;
+tg->itemColor = syntenyItemColor;
+tg->drawName = FALSE;
+tg->subType = lfWithBarbs ;
+}
+
+void synteny100000Methods(struct track *tg)
 {
 tg->loadItems = loadSynteny100000;
 tg->freeItems = freeSynteny100000;
 tg->itemColor = syntenyItemColor;
 tg->drawName = FALSE;
 tg->subType = lfWithBarbs ;
-
 }
-void syntenyBerkMethods(struct trackGroup *tg)
+
+void syntenyRatMethods(struct track *tg)
+{
+tg->loadItems = loadSyntenyRat;
+tg->freeItems = freeSynteny100000;
+tg->itemColor = syntenyItemColor;
+tg->drawName = FALSE;
+tg->subType = lfWithBarbs ;
+}
+
+void syntenyBerkMethods(struct track *tg)
 {
 tg->loadItems = loadSyntenyBerk;
 tg->freeItems = freeSyntenyBerk;
@@ -5228,7 +5387,8 @@ tg->itemColor = syntenyBerkItemColor;
 tg->drawName = FALSE;
 tg->subType = lfWithBarbs ;
 }
-void syntenySangerMethods(struct trackGroup *tg)
+
+void syntenySangerMethods(struct track *tg)
 {
 tg->loadItems = loadSyntenySanger;
 tg->freeItems = freeSyntenySanger;
@@ -5236,7 +5396,8 @@ tg->itemColor = syntenySangerItemColor;
 tg->drawName = FALSE;
 tg->subType = lfWithBarbs ;
 }
-void mouseOrthoMethods(struct trackGroup *tg)
+
+void mouseOrthoMethods(struct track *tg)
 {
 char option[128];
 char *optionStr ;
@@ -5251,7 +5412,8 @@ else
     tg->itemColor = NULL;
 tg->drawName = TRUE;
 }
-void humanParalogMethods(struct trackGroup *tg)
+
+void humanParalogMethods(struct track *tg)
 {
 char option[128];
 char *optionStr ;
@@ -5267,13 +5429,13 @@ else
 tg->drawName = TRUE;
 }
 
-void freeMouseSyn(struct trackGroup *tg)
+void freeMouseSyn(struct track *tg)
 /* Free up mouseSyn items. */
 {
 mouseSynFreeList((struct mouseSyn**)&tg->items);
 }
 
-Color mouseSynItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color mouseSynItemColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of mouseSyn track item. */
 {
 char chromStr[20];     
@@ -5281,11 +5443,11 @@ struct mouseSyn *ms = item;
 
 strncpy(chromStr, ms->name+strlen("mouse "), 2);
 chromStr[2] = '\0';
-return ((Color)getChromColor(chromStr, mg));
+return ((Color)getChromColor(chromStr, vg));
 }
 
-void mouseSynMethods(struct trackGroup *tg)
-/* Make track group for mouseSyn. */
+void mouseSynMethods(struct track *tg)
+/* Make track for mouseSyn. */
 {
 tg->loadItems = loadMouseSyn;
 tg->freeItems = freeMouseSyn;
@@ -5293,31 +5455,38 @@ tg->itemColor = mouseSynItemColor;
 tg->drawName = TRUE;
 }
 
-void loadMouseSynWhd(struct trackGroup *tg)
-/* Load up mouseSynWhd from database table to trackGroup items. */
+void loadMouseSynWhd(struct track *tg)
+/* Load up mouseSynWhd from database table to track items. */
 {
 bedLoadItem(tg, "mouseSynWhd", (ItemLoader)mouseSynWhdLoad);
 }
 
-void freeMouseSynWhd(struct trackGroup *tg)
+void freeMouseSynWhd(struct track *tg)
 /* Free up mouseSynWhd items. */
 {
 mouseSynWhdFreeList((struct mouseSynWhd**)&tg->items);
 }
 
-Color mouseSynWhdItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color mouseSynWhdItemColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of mouseSynWhd track item. */
 {
 char chromStr[20];
 struct mouseSynWhd *ms = item;
 
-strncpy(chromStr, ms->name+strlen("chr"), 2);
-chromStr[2] = '\0';
-return ((Color)getChromColor(chromStr, mg));
+if (startsWith("chr", ms->name))
+    {
+    strncpy(chromStr, ms->name+strlen("chr"), 2);
+    chromStr[2] = '\0';
+    return((Color)getChromColor(chromStr, vg));
+    }
+else
+    {
+    return(tg->ixColor);
+    }
 }
 
-void mouseSynWhdMethods(struct trackGroup *tg)
-/* Make track group for mouseSyn. */
+void mouseSynWhdMethods(struct track *tg)
+/* Make track for mouseSyn. */
 {
 tg->loadItems = loadMouseSynWhd;
 tg->freeItems = freeMouseSynWhd;
@@ -5325,33 +5494,61 @@ tg->itemColor = mouseSynWhdItemColor;
 tg->subType = lfWithBarbs;
 }
 
-#ifdef EXAMPLE
-void loadXyz(struct trackGroup *tg)
-/* Load up xyz from database table to trackGroup items. */
+void loadEnsPhusionBlast(struct track *tg)
+/* Load up ensPhusionBlast from database table to track items. */
 {
-bedLoadItem(tg, "xyz", (ItemLoader)xyzLoad);
+struct ensPhusionBlast *epb;
+char *ptr;
+char buf[16];
+
+bedLoadItem(tg, tg->mapName, (ItemLoader)ensPhusionBlastLoad);
+// for name, append abbreviated starting position to the xeno chrom:
+for (epb=tg->items;  epb != NULL;  epb=epb->next)
+    {
+    ptr = strchr(epb->name, '.');
+    if (ptr == NULL)
+	ptr = epb->name;
+    else
+	ptr++;
+    snprintf(buf, sizeof(buf), "%s %dk", ptr, (int)(epb->xenoStart/1000));
+    free(epb->name);
+    epb->name = cloneString(buf);
+    }
 }
 
-void freeXyz(struct trackGroup *tg)
-/* Free up xyz items. */
+void freeEnsPhusionBlast(struct track *tg)
+/* Free up ensPhusionBlast items. */
 {
-xyzFreeList((struct xyz**)&tg->items);
+ensPhusionBlastFreeList((struct ensPhusionBlast**)&tg->items);
 }
 
-struct trackGroup *xyzTg()
-/* Make track group for xyz. */
+Color ensPhusionBlastItemColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color of ensPhusionBlast track item. */
 {
-struct trackGroup *tg = bedTg();
+struct ensPhusionBlast *epb = item;
+char *ptr;
+char chromStr[20];
 
-tg->mapName = "hgXyz";
-tg->visibility = tvDense;
-tg->longLabel = "xyz";
-tg->shortLabel = "xyz";
-tg->loadItems = loadXyz;
-tg->freeItems = freeXyz;
-return tg;
+if ((ptr = strstr(epb->name, "chr")) != NULL)
+    {
+    strncpy(chromStr, ptr+strlen("chr"), 2);
+    chromStr[2] = '\0';
+    return((Color)getChromColor(chromStr, vg));
+    }
+else
+    {
+    return(tg->ixColor);
+    }
 }
-#endif /* EXAMPLE */
+
+void ensPhusionBlastMethods(struct track *tg)
+/* Make track for mouseSyn. */
+{
+tg->loadItems = loadEnsPhusionBlast;
+tg->freeItems = freeEnsPhusionBlast;
+tg->itemColor = ensPhusionBlastItemColor;
+tg->subType = lfWithBarbs;
+}
 
 struct wabaChromHit
 /* Records where waba alignment hits chromosome. */
@@ -5411,7 +5608,7 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-void wabaLoad(struct trackGroup *tg)
+void wabaLoad(struct track *tg)
 /* Load up waba items intersecting window. */
 {
 char table[64];
@@ -5439,14 +5636,14 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void wabaFree(struct trackGroup *tg)
+void wabaFree(struct track *tg)
 /* Free up wabaTrackGroup items. */
 {
 wchFreeList((struct wabaChromHit**)&tg->items);
 }
 
 
-void makeSymColors(struct trackGroup *tg, enum trackVisibility vis,
+void makeSymColors(struct track *tg, enum trackVisibility vis,
 	Color symColor[128])
 /* Fill in array with color for each symbol value. */
 {
@@ -5470,8 +5667,8 @@ return ix;
 }
 
 
-static void wabaDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+static void wabaDraw(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw waba alignment items. */
 {
@@ -5505,7 +5702,7 @@ for (wch = tg->items; wch != NULL; wch = wch->next)
 	    w = x2-x1;
 	    if (w < 1)
 		w = 1;
-	    mgDrawBox(mg, x1, y, w, heightPer, color);
+	    vgBox(vg, x1, y, w, heightPer, color);
 	    }
 	}
     if (isFull)
@@ -5513,28 +5710,28 @@ for (wch = tg->items; wch != NULL; wch = wch->next)
     }
 }
 
-char *wabaName(struct trackGroup *tg, void *item)
+char *wabaName(struct track *tg, void *item)
 /* Return name of waba track item. */
 {
 struct wabaChromHit *wch = item;
 return wch->query;
 }
 
-int wabaItemStart(struct trackGroup *tg, void *item)
+int wabaItemStart(struct track *tg, void *item)
 /* Return starting position of waba item. */
 {
 struct wabaChromHit *wch = item;
 return wch->chromStart;
 }
 
-int wabaItemEnd(struct trackGroup *tg, void *item)
+int wabaItemEnd(struct track *tg, void *item)
 /* Return ending position of waba item. */
 {
 struct wabaChromHit *wch = item;
 return wch->chromEnd;
 }
 
-void wabaMethods(struct trackGroup *tg)
+void wabaMethods(struct track *tg)
 /* Return track with fields shared by waba-based 
  * alignment tracks filled in. */
 {
@@ -5549,15 +5746,15 @@ tg->itemStart = wabaItemStart;
 tg->itemEnd = wabaItemEnd;
 }
 
-void tetWabaMethods(struct trackGroup *tg)
-/* Make track group for Tetraodon alignments. */
+void tetWabaMethods(struct track *tg)
+/* Make track for Tetraodon alignments. */
 {
 wabaMethods(tg);
 tg->customPt = "_tet_waba";
 }
 
-void contigLoad(struct trackGroup *tg)
-/* Load up contigs from database table to trackGroup items. */
+void contigLoad(struct track *tg)
+/* Load up contigs from database table to track items. */
 {
 char query[256];
 struct sqlConnection *conn = hAllocConn();
@@ -5598,8 +5795,8 @@ if (textWidth <= width)
 return NULL;
 }
 
-static void contigDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+static void contigDraw(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw contig items. */
 {
@@ -5614,7 +5811,7 @@ boolean isFull = (vis == tvFull);
 Color col;
 int ix = 0;
 char *s;
-double scale = width/(double)baseWidth;
+double scale = scaleForPixels(width);
 for (ctg = tg->items; ctg != NULL; ctg = ctg->next)
     {
     x1 = round((double)((int)ctg->chromStart-winStart)*scale) + xOff;
@@ -5627,10 +5824,10 @@ for (ctg = tg->items; ctg != NULL; ctg = ctg->next)
     w = x2-x1;
     if (w < 1)
 	w = 1;
-    mgDrawBox(mg, x1, y, w, heightPer, color);
+    vgBox(vg, x1, y, w, heightPer, color);
     s = abbreviateContig(ctg->contig, tl.font, w);
     if (s != NULL)
-	mgTextCentered(mg, x1, y, w, heightPer, MG_WHITE, tl.font, s);
+	vgTextCentered(vg, x1, y, w, heightPer, MG_WHITE, tl.font, s);
     if (isFull)
 	y += lineHeight;
     else 
@@ -5644,36 +5841,36 @@ for (ctg = tg->items; ctg != NULL; ctg = ctg->next)
 }
 
 
-void contigFree(struct trackGroup *tg)
+void contigFree(struct track *tg)
 /* Free up contigTrackGroup items. */
 {
 ctgPosFreeList((struct ctgPos**)&tg->items);
 }
 
 
-char *contigName(struct trackGroup *tg, void *item)
+char *contigName(struct track *tg, void *item)
 /* Return name of contig track item. */
 {
 struct ctgPos *ctg = item;
 return ctg->contig;
 }
 
-int contigItemStart(struct trackGroup *tg, void *item)
+int contigItemStart(struct track *tg, void *item)
 /* Return start of contig track item. */
 {
 struct ctgPos *ctg = item;
 return ctg->chromStart;
 }
 
-int contigItemEnd(struct trackGroup *tg, void *item)
+int contigItemEnd(struct track *tg, void *item)
 /* Return end of contig track item. */
 {
 struct ctgPos *ctg = item;
 return ctg->chromEnd;
 }
 
-void contigMethods(struct trackGroup *tg)
-/* Make track group for contig */
+void contigMethods(struct track *tg)
+/* Make track for contig */
 {
 tg->loadItems = contigLoad;
 tg->freeItems = contigFree;
@@ -5684,6 +5881,100 @@ tg->totalHeight = tgFixedTotalHeight;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = contigItemStart;
 tg->itemEnd = contigItemEnd;
+}
+
+void bactigLoad(struct track *tg)
+/* Load up bactigs from database table to track items. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+struct bactigPos *bactigList = NULL, *bactig;
+int rowOffset;
+
+/* Get the bactigs and load into tg->items. */
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
+		 NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    bactig = bactigPosLoad(row+rowOffset);
+    slAddHead(&bactigList, bactig);
+    }
+slReverse(&bactigList);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+tg->items = bactigList;
+}
+
+void bactigFree(struct track *tg)
+/* Free up bactigTrackGroup items. */
+{
+bactigPosFreeList((struct bactigPos**)&tg->items);
+}
+
+char *abbreviateBactig(char *string, MgFont *font, int width)
+/* Return a string abbreviated enough to fit into space. */
+{
+int textWidth;
+
+/* There's no abbreviating to do for bactig names; just return the name 
+ * if it fits, NULL if it doesn't fit. */
+textWidth = mgFontStringWidth(font, string);
+if (textWidth <= width)
+    return string;
+return NULL;
+}
+
+static void bactigDraw(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw bactig items. */
+{
+int baseWidth = seqEnd - seqStart;
+struct bactigPos *bactig;
+int y = yOff;
+int heightPer = tg->heightPer;
+int lineHeight = tg->lineHeight;
+int x1,x2,w;
+int midLineOff = heightPer/2;
+boolean isFull = (vis == tvFull);
+Color col;
+int ix = 0;
+char *s;
+double scale = scaleForPixels(width);
+for (bactig = tg->items; bactig != NULL; bactig = bactig->next)
+    {
+    x1 = round((double)((int)bactig->chromStart-winStart)*scale) + xOff;
+    x2 = round((double)((int)bactig->chromEnd-winStart)*scale) + xOff;
+    /* Clip here so that text will tend to be more visible... */
+    if (x1 < xOff)
+	x1 = xOff;
+    if (x2 > xOff + width)
+	x2 = xOff + width;
+    w = x2-x1;
+    if (w < 1)
+	w = 1;
+    vgBox(vg, x1, y, w, heightPer, color);
+    s = abbreviateBactig(bactig->name, tl.font, w);
+    if (s != NULL)
+	vgTextCentered(vg, x1, y, w, heightPer, MG_WHITE, tl.font, s);
+    if (isFull)
+	y += lineHeight;
+    else 
+	{
+	mapBoxHc(bactig->chromStart, bactig->chromEnd, x1,y,w,heightPer,
+		 tg->mapName, bactig->name, bactig->name);
+	}
+    ++ix;
+    }
+}
+
+void bactigMethods(struct track *tg)
+/* Make track for bactigPos */
+{
+tg->loadItems = bactigLoad;
+tg->freeItems = bactigFree;
+tg->drawItems = bactigDraw;
 }
 
 struct cloneFrag
@@ -5777,7 +6068,7 @@ struct cloneFragPos *cfa;
 int start = 0x3fffffff;
 int end = 0;
 
-ss = ci->ss = spaceSaverNew(winStart, winEnd);
+ss = ci->ss = spaceSaverNew(winStart, winEnd, 100);
 for (cfa = ci->cfaList; cfa != NULL; cfa = cfa->next)
     {
     spaceSaverAdd(ss, cfa->start, cfa->end, cfa);
@@ -5785,7 +6076,7 @@ for (cfa = ci->cfaList; cfa != NULL; cfa = cfa->next)
 spaceSaverFinish(ss);
 }
 
-char *cloneName(struct trackGroup *tg, void *item)
+char *cloneName(struct track *tg, void *item)
 /* Return name of gold track item. */
 {
 struct cloneInfo *ci = item;
@@ -5802,25 +6093,25 @@ if (rowCount < 1) rowCount = 1;
 return rowCount;
 }
 
-static int cloneItemHeight(struct trackGroup *tg, void *item)
+static int cloneItemHeight(struct track *tg, void *item)
 /* Return item height for fixed height track. */
 {
 struct cloneInfo *ci = item;
-int height1 = mgFontLineHeight(tl.font)+1;
+int height1 = tl.fontHeight+1;
 if (winBaseCount <= cloneFragMaxWin)
     return height1*oneOrRowCount(ci)+2;
 else
     return height1;
 }
 
-static int cloneItemStart(struct trackGroup *tg, void *item)
+static int cloneItemStart(struct track *tg, void *item)
 /* Return start of item on clone track. */
 {
 struct cloneInfo *ci = item;
 return ci->cloneStart;
 }
 
-static int cloneItemEnd(struct trackGroup *tg, void *item)
+static int cloneItemEnd(struct track *tg, void *item)
 /* Return end of item on clone track. */
 {
 struct cloneInfo *ci = item;
@@ -5829,7 +6120,7 @@ return ci->cloneEnd;
 
 
 
-static int cloneTotalHeight(struct trackGroup *tg, enum trackVisibility vis)
+static int cloneTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Height of a clone track. */
 {
 switch (vis)
@@ -5846,7 +6137,7 @@ switch (vis)
 	break;
 	}
     case tvDense:
-	tg->lineHeight = mgFontLineHeight(tl.font)+1;
+	tg->lineHeight = tl.fontHeight+1;
 	tg->heightPer = tg->lineHeight - 1;
 	tg->height = tg->lineHeight;
 	break;
@@ -5855,7 +6146,7 @@ return tg->height;
 }
 
 static void drawOneClone(struct cloneInfo *ci, int seqStart, int seqEnd,
-    struct memGfx *mg, int xOff, int yOff, int width,
+    struct vGfx *vg, int xOff, int yOff, int width,
     MgFont *font, int lineHeight, Color color, boolean stagger, 
     boolean hiliteDupes)
 /* Draw a single clone item - using space saver layout on fragments. */
@@ -5937,10 +6228,10 @@ for (sn = ss->nodeList; sn != NULL; sn = sn->next)
 		col = MG_BLUE;
 	    }
 	}
-    mgDrawBox(mg, x1, y, w, heightPer, col);
+    vgBox(vg, x1, y, w, heightPer, col);
     textWidth = mgFontStringWidth(font, s);
     if (textWidth <= w)
-	mgTextCentered(mg, x1, y, w, heightPer, MG_WHITE, font, s);
+	vgTextCentered(vg, x1, y, w, heightPer, MG_WHITE, font, s);
     if (baseWidth <= 2000000)
 	{
 	psl = cfa->psl;
@@ -5990,8 +6281,8 @@ for (i=0; i<width; ++i)
    b[i] = inc[b[i]];
 }
 
-static void cloneDenseDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+static void cloneDenseDraw(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw dense clone items. */
 {
@@ -6029,14 +6320,13 @@ for (ci = tg->items; ci != NULL; ci = ci->next)
     }
 resampleBytes(useCounts, sampleWidth, aveCounts, width);
 grayThreshold(aveCounts, width);
-for (i=0; i<lineHeight; ++i)
-    mgPutSegZeroClear(mg, xOff, yOff+i, width, aveCounts);
+vgVerticalSmear(vg,xOff,yOff,width,lineHeight,aveCounts,TRUE);
 freeMem(useCounts);
 freeMem(aveCounts);
 }
 
-static void cloneFullDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+static void cloneFullDraw(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw full  clone items. */
 {
@@ -6076,27 +6366,27 @@ for (ci = tg->items; ci != NULL; ci = ci->next)
     x1 = roundingScale(ci->cloneStart-winStart, width, baseWidth)+xOff;
     x2 = roundingScale(ci->cloneEnd-winStart, width, baseWidth)+xOff;
     w = x2-x1;
-    mgDrawBox(mg, x1, y, w, oneHeight-1, bgColor);
+    vgBox(vg, x1, y, w, oneHeight-1, bgColor);
     if (!tooBig)
-	drawOneClone(ci, seqStart, seqEnd, mg, xOff, y+1, width, font, lineHeight, 
+	drawOneClone(ci, seqStart, seqEnd, vg, xOff, y+1, width, font, lineHeight, 
 		color, TRUE, tg->subType);
     else
-	drawOneClone(ci, seqStart, seqEnd, mg, xOff, y, width, font, oneHeight-1, 
+	drawOneClone(ci, seqStart, seqEnd, vg, xOff, y, width, font, oneHeight-1, 
 		color, FALSE, tg->subType);
     y += oneHeight;
     }
 hFreeConn(&conn);
 }
 
-static void cloneDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+static void cloneDraw(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw clone items. */
 {
 if (vis == tvFull)
-    cloneFullDraw(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
+    cloneFullDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
 else
-    cloneDenseDraw(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
+    cloneDenseDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
 }
 
 
@@ -6187,7 +6477,7 @@ if (realiCloneList == NULL)
 
 
 struct hash *glCloneHash;
-struct cloneInfo *glCloneList;
+struct cloneInfo *glCloneList = NULL;
 
 void glLoadInWindow()
 /* Load up glCloneHash and glCloneList with the clones in the window. */
@@ -6273,22 +6563,22 @@ if (glCloneList == NULL)
     }
 }
 
-void coverageLoad(struct trackGroup *tg)
+void coverageLoad(struct track *tg)
 /* Load up clone alignments from database tables and organize. */
 {
 glLoadInWindow();
 tg->items = glCloneList;
 }
 
-void coverageFree(struct trackGroup *tg)
-/* Free up clone track group items. */
+void coverageFree(struct track *tg)
+/* Free up clone track items. */
 {
 cloneInfoFreeList(&glCloneList);
 freeHash(&glCloneHash);
 }
 
-void coverageMethods(struct trackGroup *tg)
-/* Make track group for golden path positions of all frags. */
+void coverageMethods(struct track *tg)
+/* Make track for golden path positions of all frags. */
 {
 tg->loadItems = coverageLoad;
 tg->freeItems = coverageFree;
@@ -6302,19 +6592,19 @@ tg->itemEnd = cloneItemEnd;
 }
 
 
-void gapLoad(struct trackGroup *tg)
+void gapLoad(struct track *tg)
 /* Load up clone alignments from database tables and organize. */
 {
 bedLoadItem(tg, "gap", (ItemLoader)agpGapLoad);
 }
 
-void gapFree(struct trackGroup *tg)
+void gapFree(struct track *tg)
 /* Free up gap items. */
 {
 agpGapFreeList((struct agpGap**)&tg->items);
 }
 
-char *gapName(struct trackGroup *tg, void *item)
+char *gapName(struct track *tg, void *item)
 /* Return name of gap track item. */
 {
 static char buf[24];
@@ -6323,53 +6613,38 @@ sprintf(buf, "%s %s", gap->type, gap->bridge);
 return buf;
 }
 
-static void gapDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
+static void gapDrawAt(struct track *tg, void *item,
+	struct vGfx *vg, int xOff, int y, double scale, 
+	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw gap items. */
 {
-int baseWidth = seqEnd - seqStart;
-struct agpGap *item;
-int y = yOff;
+struct agpGap *gap = item;
 int heightPer = tg->heightPer;
-int lineHeight = tg->lineHeight;
 int x1,x2,w;
-boolean isFull = (vis == tvFull);
-double scale = width/(double)baseWidth;
 int halfSize = heightPer/2;
 
-for (item = tg->items; item != NULL; item = item->next)
+x1 = round((double)((int)gap->chromStart-winStart)*scale) + xOff;
+x2 = round((double)((int)gap->chromEnd-winStart)*scale) + xOff;
+w = x2-x1;
+if (w < 1)
+    w = 1;
+if (sameString(gap->bridge, "no"))
+    vgBox(vg, x1, y, w, heightPer, color);
+else  /* Leave white line in middle of bridged gaps. */
     {
-    x1 = round((double)((int)item->chromStart-winStart)*scale) + xOff;
-    x2 = round((double)((int)item->chromEnd-winStart)*scale) + xOff;
-    w = x2-x1;
-    if (w < 1)
-	w = 1;
-    if (sameString(item->bridge, "no"))
-	mgDrawBox(mg, x1, y, w, heightPer, color);
-    else  /* Leave white line in middle of bridged gaps. */
-        {
-	mgDrawBox(mg, x1, y, w, halfSize, color);
-	mgDrawBox(mg, x1, y+heightPer-halfSize, w, halfSize, color);
-	}
-    if (isFull)
-	{
-	char name[32];
-	sprintf(name, "%s", item->type);
-	mapBoxHc(item->chromStart, item->chromEnd, x1, y, w, heightPer, tg->mapName,
-	    name, name);
-	y += lineHeight;
-	}
+    vgBox(vg, x1, y, w, halfSize, color);
+    vgBox(vg, x1, y+heightPer-halfSize, w, halfSize, color);
     }
 }
 
 
-void gapMethods(struct trackGroup *tg)
-/* Make track group for positions of all gaps. */
+void gapMethods(struct track *tg)
+/* Make track for positions of all gaps. */
 {
 tg->loadItems = gapLoad;
 tg->freeItems = gapFree;
-tg->drawItems = gapDraw;
+tg->drawItemAt = gapDrawAt;
+tg->drawItems = genericDrawItems;
 tg->itemName = gapName;
 tg->mapItemName = gapName;
 }
@@ -6421,7 +6696,7 @@ for (i=0; i<blockCount; ++i)
     }
 slReverse(&sfList);
 lf->components = sfList;
-finishLf(lf);
+linkedFeaturesBoundsAndGrays(lf);
 lf->start = psl->tStart;	/* Correct for rounding errors... */
 lf->end = psl->tEnd;
 return lf;
@@ -6450,19 +6725,22 @@ hFreeConn(&conn);
 return lfList;
 }
 
-void loadUniGeneAli(struct trackGroup *tg)
+void loadUniGeneAli(struct track *tg)
 {
-tg->items = lfFromPslsWScoresInRange("uniGene", winStart, winEnd, chromName,FALSE, 1.0);
+tg->items = lfFromPslsWScoresInRange("uniGene", winStart, winEnd, 
+	chromName,FALSE, 1.0);
 }
 
-void uniGeneMethods(struct trackGroup *tg)
+void uniGeneMethods(struct track *tg)
+/* Load up uniGene methods - a slight specialization of
+ * linked features. */
 {
 linkedFeaturesMethods(tg);
 tg->loadItems = loadUniGeneAli;
 tg->colorShades = shadesOfGray;
 }
 
-char *perlegenName(struct trackGroup *tg, void *item)
+char *perlegenName(struct track *tg, void *item)
 /* return the actual perlegen name, in form xx/yyyy cut off xx/ return yyyy */
 {
 char * name;
@@ -6475,7 +6753,7 @@ else
     return "unknown";
 }
 
-Color perlegenColor(struct trackGroup *tg, struct linkedFeatures *lf, struct simpleFeature *sf, struct memGfx *mg)
+Color perlegenColor(struct track *tg, struct linkedFeatures *lf, struct simpleFeature *sf, struct vGfx *vg)
 /* if it is the start or stop blocks make the color the shades
  * otherwise use black */
 {
@@ -6485,7 +6763,7 @@ else
     return blackIndex();
 }
 
-int perlegenHeight(struct trackGroup *tg, struct linkedFeatures *lf, struct simpleFeature *sf) 
+int perlegenHeight(struct track *tg, struct linkedFeatures *lf, struct simpleFeature *sf) 
 /* if the item isn't the first or the last make it smaller */
 {
 if(sf == lf->components || sf->next == NULL)
@@ -6494,8 +6772,8 @@ else
     return (tg->heightPer-4);
 }
 
-static void perlegenLinkedFeaturesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+static void perlegenLinkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* currently this routine is adapted from Terry's linkedFeatureSeriesDraw() routine.
  * it could be cleaned up some but more importantly it should be integrated back 
@@ -6511,11 +6789,10 @@ int x1,x2;
 int midLineOff = heightPer/2;
 int shortOff = 2, shortHeight = heightPer-4;
 int s, e, e2, s2;
-int itemOff, itemHeight;
 boolean isFull = (vis == tvFull);
 Color *shades = tg->colorShades;
 Color bColor = tg->ixAltColor;
-double scale = width/(double)baseWidth;
+double scale = scaleForPixels(width);
 boolean isXeno = tg->subType == lfSubXeno;
 boolean hideLine = (vis == tvDense && tg->subType == lfSubXeno);
 int midY = y + midLineOff;
@@ -6533,176 +6810,27 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	w = x2-x1;
 	color =  shades[lf->grayIx+isXeno];
 	/* draw perlgen thick line ... */
-	mgDrawBox(mg, x1, y+shortOff+1, w, shortHeight-2, color);
+	vgBox(vg, x1, y+shortOff+1, w, shortHeight-2, color);
 	}
     for (sf = lf->components; sf != NULL; sf = sf->next)
 	{
-	color = perlegenColor(tg, lf, sf, mg);
+	color = perlegenColor(tg, lf, sf, vg);
 	heightPer = perlegenHeight(tg, lf, sf);
 	s = sf->start;
 	e = sf->end;
-	drawScaledBox(mg, s, e, scale, xOff, y+((tg->heightPer - heightPer)/2), heightPer, color);
+	drawScaledBox(vg, s, e, scale, xOff, y+((tg->heightPer - heightPer)/2), heightPer, color);
 	/* if we're at the stop or start of a linked feature add a black tick for the snp 
 	 * in addtion to the larger tic of shaded color */
 	if(heightPer == tg->heightPer)
-	    drawScaledBox(mg, s, e, scale, xOff, y+((tg->heightPer - heightPer - 4)/2), (heightPer -4), blackIndex());
+	    drawScaledBox(vg, s, e, scale, xOff, y+((tg->heightPer - heightPer - 4)/2), (heightPer -4), blackIndex());
 	}
     if (isFull)
 	y += lineHeight;
     }
 }
 
-void altGraphMapItem(struct trackGroup *tg, void *item, char *itemName, int start, int end, 
-		    int x, int y, int width, int height)
-/* create a link for each altGraph that centers it on browser with 
-   known genes, human mrnas, and intron est tracks open */
-{
-struct altGraph *ag = item;
-if(tg->visibility == tvFull)
-    {
-    printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-    printf("HREF=\"%s?position=%s:%d-%d&mrna=full&intronEst=full&refGene=full&altGraph=full&%s\"",
-	   hgTracksName(), ag->tName, ag->tStart, ag->tEnd, cartSidUrlString(cart));
-    printf(" ALT=\"Zoom to browser coordinates of altGraph\">\n");
-    }
-}
 
-static void altGraphDraw(struct trackGroup *tg, int seqStart, int seqEnd,         
-			 struct memGfx *mg, int xOff, int yOff, int width, 
-			 MgFont *font, Color color, enum trackVisibility vis)
-/* Draws the blocks for an alt-spliced gene and the connections */
-{
-int baseWidth = seqEnd - seqStart;
-int y = yOff;
-int heightPer = tg->heightPer;
-int lineHeight = tg->lineHeight;
-int x1,x2;
-boolean isFull = (vis == tvFull);
-double scale = width/(double)baseWidth;
-int i;
-double y1, y2;
-int midLineOff = heightPer/2;
-struct altGraph *ag=NULL, *agList = NULL;
-int s =0, e=0;
-agList = tg->items;
-for(ag = agList; ag != NULL; ag = ag->next)
-    {	   
-    x1 = round((double)((int)ag->tStart-winStart)*scale) + xOff;
-    x2 = round((double)((int)ag->tEnd-winStart)*scale) + xOff;
-    if(tg->mapsSelf && tg->mapItem)
-	{
-	tg->mapItem(tg, ag, "notUsed", ag->tStart, ag->tEnd, xOff, y, width, heightPer);
-	}
-    if(!isFull && (x2-x1 > 0))
-	{
-	mgDrawBox(mg, x1, yOff+tg->heightPer/2, x2-x1, 1, MG_BLACK);
-	}
-    for(i=0; i< ag->edgeCount; i++)
-	{
-        /* draw exons as boxes */
-	if( (ag->vTypes[ag->edgeStarts[i]] == ggHardStart || ag->vTypes[ag->edgeStarts[i]] == ggSoftStart)  
-	    && (ag->vTypes[ag->edgeEnds[i]] == ggHardEnd || ag->vTypes[ag->edgeEnds[i]] == ggSoftEnd)) 
-	    {
-	    s = ag->vPositions[ag->edgeStarts[i]] + ag->tStart;
-	    e = ag->vPositions[ag->edgeEnds[i]] + ag->tStart;
-	    if(isFull)
-		drawScaledBox(mg, s, e, scale, xOff, y+(heightPer/2), heightPer/2, MG_BLACK);
-	    else
-		drawScaledBox(mg, s, e, scale, xOff, y, heightPer, MG_BLACK);
-	    }
-	if(isFull)
-	    {
-	    /* draw introns as arcs */
-	    if( (ag->vTypes[ag->edgeStarts[i]] == ggHardEnd || ag->vTypes[ag->edgeStarts[i]] == ggSoftEnd) 
-		&& (ag->vTypes[ag->edgeEnds[i]] == ggHardStart || ag->vTypes[ag->edgeEnds[i]] == ggSoftStart))
-		{
-		int x1, x2;
-		int midX;   
-		int midY = y + heightPer/2;
-		s = ag->vPositions[ag->edgeStarts[i]] + ag->tStart;
-		e = ag->vPositions[ag->edgeEnds[i]] + ag->tStart;
-		x1 = round((double)((int) s - winStart)*scale) + xOff;
-		x2 = round((double)((int) e - winStart)*scale) + xOff;
-		midX = (x1+x2)/2;
-		mgDrawLine(mg, x1, midY, midX, y, MG_BLACK);
-		mgDrawLine(mg, midX, y, x2, midY, MG_BLACK);
-		}
-	    }
-	}
-    if(isFull)
-	y += lineHeight;
-    }
-}
-
-
-void altGraphLoadItems(struct trackGroup *tg)
-/* load the altGraph data to a trackGroup */
-{
-struct sqlConnection *conn = hAllocConn();
-int rowOffSet;
-char **row;
-struct altGraph *ag=NULL, *agList=NULL;
-struct sqlResult *sr = hRangeQuery(conn, tg->mapName, chromName,
-				   winStart, winEnd, NULL, &rowOffSet);
-while((row = sqlNextRow(sr)) != NULL)
-    {
-    ag = altGraphLoad(row + rowOffSet);
-    slAddHead(&agList, ag);
-    }
-slReverse(&agList);
-sqlFreeResult(&sr);
-tg->items = agList;
-}
-
-void altGraphFreeItems(struct trackGroup *tg)
-/* free up tha altGraph items in tg->items */
-{
-altGraphFreeList((struct altGraph**)(&tg->items));
-}
-
-static int altGraphFixedTotalHeight(struct trackGroup *tg, enum trackVisibility vis)
-/* set track height to 2 * font size if full , 1 * if dense
-*/
-{
-switch (vis)
-    {
-    case tvFull:
-	tg->lineHeight  = 2 * mgFontLineHeight(tl.font)+1;
-	tg->heightPer = tg->lineHeight -1;
-	tg->height = slCount(tg->items) * tg->lineHeight;
-	break;
-    case tvDense:
-	tg->lineHeight  = mgFontLineHeight(tl.font)+1;
-	tg->heightPer = tg->lineHeight -1;
-	tg->height = tg->lineHeight;
-	break;
-    }
-return tg->height;
-}
-
-char *altGraphItemName(struct trackGroup *tg, void *item)
-/* returns the number of alternative splice paths as a string name */
-{
-char buff[32];
-struct altGraph *ag = item;
-int numSplicings = altGraphNumAltSplices(ag);
-snprintf(buff, sizeof(buff), "%d", numSplicings );
-return (cloneString(buff));
-}
-
-void altGraphMethods(struct trackGroup *tg)
-/* setup special methods for altGraph track */
-{
-tg->drawItems = altGraphDraw;
-tg->loadItems = altGraphLoadItems;
-tg->freeItems = altGraphFreeItems;
-tg->totalHeight = altGraphFixedTotalHeight;
-tg->itemName = altGraphItemName;
-tg->mapsSelf = TRUE;
-tg->mapItem = altGraphMapItem;
-}
-
-void altGraphXMapItem(struct trackGroup *tg, void *item, char *itemName, int start, int end, 
+void altGraphXMapItem(struct track *tg, void *item, char *itemName, int start, int end, 
 		    int x, int y, int width, int height)
 /* create a link for each altGraphX that centers it on browser with 
    known genes, human mrnas, and intron est tracks open */
@@ -6763,7 +6891,7 @@ for(e = edges; e != NULL; e = e->next)
 return FALSE;
 }
 
-Color altGraphXColorForEdge(struct memGfx *mg, struct altGraphX *ag, int eIx)
+Color altGraphXColorForEdge(struct vGfx *vg, struct altGraphX *ag, int eIx)
 /* Return the color of an edge given by confidence */
 {
 int confidence = altGraphConfidenceForEdge(ag, eIx);
@@ -6774,7 +6902,7 @@ struct ggEdge *edges = NULL;
 if(ag->edgeTypes[eIx] == ggCassette)
     {
     if(!exprBedColorsMade)
-	makeRedGreenShades(mg);
+	makeRedGreenShades(vg);
     if(confidence == 1) c = shadesOfRed[(maxRGBShade - 6 > 0) ? maxRGBShade - 6 : 0];
     else if(confidence == 2) c = shadesOfRed[(maxRGBShade - 4 > 0) ? maxRGBShade - 4: 0];
     else if(confidence >= 3) c = shadesOfRed[(maxRGBShade - 4 > 0) ? maxRGBShade - 1: 0];
@@ -6788,8 +6916,8 @@ else
 return c;
 }
 
-static void altGraphXDraw(struct trackGroup *tg, int seqStart, int seqEnd,         
-			 struct memGfx *mg, int xOff, int yOff, int width, 
+static void altGraphXDraw(struct track *tg, int seqStart, int seqEnd,         
+			 struct vGfx *vg, int xOff, int yOff, int width, 
 			 MgFont *font, Color color, enum trackVisibility vis)
 /* Draws the blocks for an alt-spliced gene and the connections */
 {
@@ -6799,7 +6927,7 @@ int heightPer = tg->heightPer;
 int lineHeight = tg->lineHeight;
 int x1,x2;
 boolean isFull = (vis == tvFull);
-double scale = width/(double)baseWidth;
+double scale = scaleForPixels(width);
 int i;
 double y1, y2;
 int midLineOff = heightPer/2;
@@ -6816,7 +6944,7 @@ for(ag = agList; ag != NULL; ag = ag->next)
 	}
     if(!isFull && (x2-x1 > 0))
 	{
-	mgDrawBox(mg, x1, yOff+tg->heightPer/2, x2-x1, 1, MG_BLACK);
+	vgBox(vg, x1, yOff+tg->heightPer/2, x2-x1, 1, MG_BLACK);
 	}
     for(i= ag->edgeCount -1; i >= 0; i--)   // for(i=0; i< ag->edgeCount; i++)
 	{
@@ -6834,16 +6962,16 @@ for(ag = agList; ag != NULL; ag = ag->next)
 	if( (ag->vTypes[ag->edgeStarts[i]] == ggHardStart || ag->vTypes[ag->edgeStarts[i]] == ggSoftStart)  
 	    && (ag->vTypes[ag->edgeEnds[i]] == ggHardEnd || ag->vTypes[ag->edgeEnds[i]] == ggSoftEnd)) 
 	    {
-	    Color color2 = altGraphXColorForEdge(mg, ag, i);
+	    Color color2 = altGraphXColorForEdge(vg, ag, i);
 	    if(isFull)
 		{
-		drawScaledBox(mg, s, e, scale, xOff, y+(heightPer/2), heightPer/2, color2);
+		drawScaledBox(vg, s, e, scale, xOff, y+(heightPer/2), heightPer/2, color2);
 		textWidth = mgFontStringWidth(font, buff);
 		if (textWidth <= sw + 2 && hgDebug )
-		    mgTextCentered(mg, sx2-textWidth-2, y+(heightPer/2), textWidth+2, heightPer/2, MG_WHITE, font, buff);
+		    vgTextCentered(vg, sx2-textWidth-2, y+(heightPer/2), textWidth+2, heightPer/2, MG_WHITE, font, buff);
 		}
 	    else
-		drawScaledBox(mg, s, e, scale, xOff, y, heightPer, color2);
+		drawScaledBox(vg, s, e, scale, xOff, y, heightPer, color2);
 
 	    }
 	if(isFull)
@@ -6853,7 +6981,7 @@ for(ag = agList; ag != NULL; ag = ag->next)
 	    if( (ag->vTypes[ag->edgeStarts[i]] == ggHardEnd || ag->vTypes[ag->edgeStarts[i]] == ggSoftEnd) 
 		&& (ag->vTypes[ag->edgeEnds[i]] == ggHardStart || ag->vTypes[ag->edgeEnds[i]] == ggSoftStart))
 		{
-		Color color2 = altGraphXColorForEdge(mg, ag, i);
+		Color color2 = altGraphXColorForEdge(vg, ag, i);
 		int x1, x2;
 		int midX;   
 		int midY = y + heightPer/2;
@@ -6862,11 +6990,11 @@ for(ag = agList; ag != NULL; ag = ag->next)
 		x1 = round((double)((int) s - winStart)*scale) + xOff;
 		x2 = round((double)((int) e - winStart)*scale) + xOff;
 		midX = (x1+x2)/2;
-		mgDrawLine(mg, x1, midY, midX, y, color2);
-		mgDrawLine(mg, midX, y, x2, midY, color2);
+		vgLine(vg, x1, midY, midX, y, color2);
+		vgLine(vg, midX, y, x2, midY, color2);
 		textWidth = mgFontStringWidth(font, buff);
 		if (textWidth <= sw && hgDebug )
-		    mgTextCentered(mg, sx1, y+(heightPer/2), sw, heightPer/2, MG_BLACK, font, buff);
+		    vgTextCentered(vg, sx1, y+(heightPer/2), sw, heightPer/2, MG_BLACK, font, buff);
 		}
 	    }
 	}
@@ -6876,8 +7004,8 @@ for(ag = agList; ag != NULL; ag = ag->next)
 }
 
 
-void altGraphXLoadItems(struct trackGroup *tg)
-/* load the altGraphX data to a trackGroup */
+void altGraphXLoadItems(struct track *tg)
+/* load the altGraphX data to a track */
 {
 struct sqlConnection *conn = hAllocConn();
 int rowOffSet;
@@ -6895,25 +7023,25 @@ sqlFreeResult(&sr);
 tg->items = agList;
 }
 
-void altGraphXFreeItems(struct trackGroup *tg)
+void altGraphXFreeItems(struct track *tg)
 /* free up tha altGraphX items in tg->items */
 {
 altGraphXFreeList((struct altGraphX**)(&tg->items));
 }
 
-static int altGraphXFixedTotalHeight(struct trackGroup *tg, enum trackVisibility vis)
+static int altGraphXFixedTotalHeight(struct track *tg, enum trackVisibility vis)
 /* set track height to 2 * font size if full , 1 * if dense
 */
 {
 switch (vis)
     {
     case tvFull:
-	tg->lineHeight  = 2 * mgFontLineHeight(tl.font)+1;
+	tg->lineHeight  = 2 * tl.fontHeight+1;
 	tg->heightPer = tg->lineHeight -1;
 	tg->height = slCount(tg->items) * tg->lineHeight;
 	break;
     case tvDense:
-	tg->lineHeight  = mgFontLineHeight(tl.font)+1;
+	tg->lineHeight  = tl.fontHeight+1;
 	tg->heightPer = tg->lineHeight -1;
 	tg->height = tg->lineHeight;
 	break;
@@ -6921,7 +7049,7 @@ switch (vis)
 return tg->height;
 }
 
-char *altGraphXItemName(struct trackGroup *tg, void *item)
+char *altGraphXItemName(struct track *tg, void *item)
 /* returns the number of alternative splice paths as a string name */
 {
 char buff[32];
@@ -6934,7 +7062,7 @@ snprintf(buff, sizeof(buff), "%d", count );
 return (cloneString(buff));
 }
 
-void altGraphXMethods(struct trackGroup *tg)
+void altGraphXMethods(struct track *tg)
 /* setup special methods for altGraphX track */
 {
 tg->drawItems = altGraphXDraw;
@@ -6945,6 +7073,8 @@ tg->itemName = altGraphXItemName;
 tg->mapsSelf = TRUE;
 tg->mapItem = altGraphXMapItem;
 }
+
+struct track *sortGroupList = NULL; /* Used temporarily for sample sorting. */
 
 int lfNamePositionCmp(const void *va, const void *vb)
 /* Compare based on name, then chromStart, used for
@@ -6969,98 +7099,160 @@ if (dif == 0)
 return dif;
 }
 
-void loadHumMusL(struct trackGroup *tg)
-    /* Load humMusL track with 2 zoom levels and one normal level. */
+void zooSpeciesHashInit()
+/* Function to init list of zoo species */
 {
-    struct sqlConnection *conn = hAllocConn();
-    struct sqlResult *sr;
-    char **row;
-    int rowOffset;
-    struct sample *sample;
-    struct linkedFeatures *lfList = NULL, *lf;
-    char *hasDense = NULL;
-    char *where = NULL;
-    char query[256];
-    unsigned int chromSize = hChromSize(chromName);
-    int resolution = 0;
-    char tableName[256];
-    int z;
-    float pixPerBase = 0;
+char *name = NULL;
+char *val = NULL;
 
-    if(tl.picWidth == 0)
-            errAbort("hgTracks.c::loadHumMusL() - can't have pixel
-                    width of 0");
-    pixPerBase = (winEnd - winStart)/ tl.picWidth;
+zooSpeciesHash = hashNew(6);
 
-
-    /* Determine zoom level. */
-    z = humMusZoomLevel();
-    if(z == 1 )
-            snprintf(tableName, sizeof(tableName), "%s_%s", "zoom1",
-                    tg->mapName);
-    else if( z == 2)
-            snprintf(tableName, sizeof(tableName), "%s_%s", "zoom50",
-                    tg->mapName);
-    else if(z == 3)
-            snprintf(tableName, sizeof(tableName), "%s_%s",
-                    "zoom2500", tg->mapName);
-    else
-            snprintf(tableName, sizeof(tableName), "%s", tg->mapName);
-
-    //printf("<br>%s &nbsp;&nbsp; (%g)<br>\n", tableName, pixPerBase
-    //);
-
-    sr = hRangeQuery(conn, tableName, chromName, winStart, winEnd,
-            where, &rowOffset);
-    while ((row = sqlNextRow(sr)) != NULL)
-            {
-                    sample = sampleLoad(row+rowOffset);
-                        lf = lfFromSample(sample);
-                            slAddHead(&lfList, lf);
-                                sampleFree(&sample);
-                                    }
-    if(where != NULL)
-            freez(&where);
-    sqlFreeResult(&sr);
-    hFreeConn(&conn);
-    slReverse(&lfList);
-
-    /* sort to bring items with common names to the same line
-       but only for tracks with a summary table (with name=shortLabel)
-       in
-       dense mode*/
-    if( hasDense != NULL )
-            {
-                    sortGroupList = tg; /* used to put track name at
-                                           top of sorted list. */
-                        slSort(&lfList, lfNamePositionCmp);
-                            sortGroupList = NULL;
-                                }
-    tg->items = lfList;
-
-    /* Since we've taken care of loading too many things using the
-          zoom tables, take care of limiting visibility here. */
-    tg->limitedVis = tg->visibility;
-    tg->limitedVisSet = TRUE;
+name = cloneString("Human");
+val = cloneString("1");
+hashAdd(zooSpeciesHash, name, val);
+name = cloneString("Chimpanzee");
+val = cloneString("2");
+hashAdd(zooSpeciesHash, name, val);
+name = cloneString("Baboon");
+val = cloneString("3");
+hashAdd(zooSpeciesHash, name, val);
+name = cloneString("Cat");
+val = cloneString("4");
+hashAdd(zooSpeciesHash, name, val);
+name = cloneString("Dog");
+val = cloneString("5");
+hashAdd(zooSpeciesHash, name, val);
+name = cloneString("Cow");
+val = cloneString("6");
+hashAdd(zooSpeciesHash, name, val);
+name = cloneString("Pig");
+val = cloneString("7");
+hashAdd(zooSpeciesHash, name, val);
+name = cloneString("Rat");
+val = cloneString("8");
+hashAdd(zooSpeciesHash, name, val);
+name = cloneString("Mouse");
+val = cloneString("9");
+hashAdd(zooSpeciesHash, name, val);
+name = cloneString("Chicken");
+val = cloneString("10");
+hashAdd(zooSpeciesHash, name, val);
+name = cloneString("Fugu");
+val = cloneString("11");
+hashAdd(zooSpeciesHash, name, val);
+name = cloneString("Tetraodon");
+val = cloneString("12");
+hashAdd(zooSpeciesHash, name, val);
+name = cloneString("Zebrafish");
+val = cloneString("13");
+hashAdd(zooSpeciesHash, name, val);
 }
 
+int lfZooCmp(const void *va, const void *vb)
+/* Compare based on name, then chromStart, used for
+   sorting sample based tracks. */
+{
+struct linkedFeatures *a = *((struct linkedFeatures **)va);
+struct linkedFeatures *b = *((struct linkedFeatures **)vb);
+char *aVal =  hashFindVal(zooSpeciesHash, a->name);
+char *bVal =  hashFindVal(zooSpeciesHash, b->name);
+int aV = atoi(aVal);
+int bV = atoi(bVal);
+return aV - bV;
+}
+
+void loadHumMusL(struct track *tg)
+/* Load humMusL track with 2 zoom levels and one normal level. 
+ * Also used for loading the musHumL track (called Human Cons) 
+ * on the mm2 mouse browser. It decides which of 4 tables to
+ * load based on how large of a window the user is looking at*/
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+struct sample *sample;
+struct linkedFeatures *lfList = NULL, *lf;
+char *hasDense = NULL;
+char *where = NULL;
+char query[256];
+unsigned int chromSize = hChromSize(chromName);
+int resolution = 0;
+char tableName[256];
+int z;
+float pixPerBase = 0;
+
+if(tl.picWidth == 0)
+    errAbort("hgTracks.c::loadHumMusL() - can't have pixel
+	    width of 0");
+pixPerBase = (winEnd - winStart)/ tl.picWidth;
 
 
+/* Determine zoom level. */
+z = humMusZoomLevel();
+if(z == 1 )
+    snprintf(tableName, sizeof(tableName), "%s_%s", "zoom1",
+	    tg->mapName);
+else if( z == 2)
+    snprintf(tableName, sizeof(tableName), "%s_%s", "zoom50",
+	    tg->mapName);
+else if(z == 3)
+    snprintf(tableName, sizeof(tableName), "%s_%s",
+	    "zoom2500", tg->mapName);
+else
+    snprintf(tableName, sizeof(tableName), "%s", tg->mapName);
 
-void humMusLMethods( struct trackGroup *tg )
+sr = hRangeQuery(conn, tableName, chromName, winStart, winEnd,
+    where, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    sample = sampleLoad(row+rowOffset);
+    lf = lfFromSample(sample);
+    slAddHead(&lfList, lf);
+    sampleFree(&sample);
+    }
+if(where != NULL)
+    freez(&where);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&lfList);
+
+/* sort to bring items with common names to the same line
+   but only for tracks with a summary table (with name=shortLabel)
+   in
+   dense mode*/
+if( hasDense != NULL )
+    {
+    sortGroupList = tg; /* used to put track name at
+	                 * top of sorted list. */
+    slSort(&lfList, lfNamePositionCmp);
+    sortGroupList = NULL;
+    }
+tg->items = lfList;
+}
+
+void zooMethods( struct track *tg )
+/* Overide the zoo sample type load function to look for zoomed out tracks. */
+{
+tg->loadItems = loadSampleZoo;
+}
+
+void humMusLMethods( struct track *tg )
 /* Overide the humMusL load function to look for zoomed out tracks. */
 {
-   tg->loadItems = loadHumMusL;
+tg->loadItems = loadHumMusL;
+tg->totalHeight = consTotalHeight;
 }
 
-void musHumLMethods( struct trackGroup *tg )
+void musHumLMethods( struct track *tg )
 /* Overide the musHumL load function to look for zoomed out tracks. */
 {
-   tg->loadItems = loadHumMusL;
+tg->loadItems = loadHumMusL;
+tg->totalHeight = consTotalHeight;
 }
 
 
-void loadAffyTranscriptome(struct trackGroup *tg)
+void loadAffyTranscriptome(struct track *tg)
 /* Convert sample info in window to linked feature. */
 {
 struct sqlConnection *conn = hAllocConn();
@@ -7140,45 +7332,39 @@ if( hasDense != NULL )
     sortGroupList = NULL;
     }
 tg->items = lfList;
-
-/* Since we've taken care of loading too many things using the 
-   zoom tables, take care of limiting visibility here. */
-tg->limitedVis = tg->visibility;
-tg->limitedVisSet = TRUE;
 }
 
 
-void affyTranscriptomeMethods(struct trackGroup *tg)
+void affyTranscriptomeMethods(struct track *tg)
 /* Overide the load function to look for zoomed out tracks. */
 {
-
 tg->loadItems = loadAffyTranscriptome;
 }
 
 void mapBoxHcTwoItems(int start, int end, int x, int y, int width, int height, 
-	char *group, char *item1, char *item2, char *statusLine)
+	char *track, char *item1, char *item2, char *statusLine)
 /* Print out image map rectangle that would invoke the htc (human track click)
  * program. */
 {
 char *encodedItem1 = cgiEncode(item1);
 char *encodedItem2 = cgiEncode(item2);
-printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-printf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&i2=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
-       hgcNameAndSettings(), start, end, group, encodedItem1, encodedItem2,chromName, winStart, winEnd, 
+hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
+hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&i2=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
+       hgcNameAndSettings(), start, end, track, encodedItem1, encodedItem2,chromName, winStart, winEnd, 
        database, tl.picWidth);
-printf("ALT=\"%s\">\n", statusLine); 
+hPrintf("ALT=\"%s\">\n", statusLine); 
 freeMem(encodedItem1);
 freeMem(encodedItem2);
 }
 
 
-void lfsMapItemName(struct trackGroup *tg, void *item, char *itemName, int start, int end, 
+void lfsMapItemName(struct track *tg, void *item, char *itemName, int start, int end, 
 		    int x, int y, int width, int height)
 {
 struct linkedFeaturesSeries *lfs = tg->items;
 struct linkedFeaturesSeries *lfsItem = item;
-if(tg->visibility == tvFull)
-    mapBoxHcTwoItems(start, end, x,y, width, height, tg->mapName, lfsItem->name, itemName, itemName);
+if(tg->visibility != tvDense && tg->visibility != tvHide)
+    mapBoxHcTwoItems(start, end, x,y, width, height, tg->mapName, itemName, itemName, itemName);
 }
 
 
@@ -7435,7 +7621,7 @@ return lfsList;
 }
 
 
-void lfsFromAffyBed(struct trackGroup *tg)
+void lfsFromAffyBed(struct track *tg)
 /* filters the bedList stored at tg->items
 into a linkedFeaturesSeries as determined by
 filter type */
@@ -7473,7 +7659,7 @@ else
 bedFreeList(&bedList);
 }
 
-void lfsFromNci60Bed(struct trackGroup *tg)
+void lfsFromNci60Bed(struct track *tg)
 /* filters the bedList stored at tg->items
 into a linkedFeaturesSeries as determined by
 filter type */
@@ -7544,7 +7730,7 @@ slReverse(&tmpList);
 return tmpList;
 }
 
-void lfsFromRosettaBed(struct trackGroup *tg)
+void lfsFromRosettaBed(struct track *tg)
 /* filters the bedList stored at tg->items
 into a linkedFeaturesSeries as determined by
 filter type */
@@ -7585,7 +7771,7 @@ bedFreeList(&bedList);
 
 
 
-void lfFromAncientRBed(struct trackGroup *tg)
+void lfFromAncientRBed(struct track *tg)
 /* filters the bedList stored at tg->items
 into a linkedFeaturesSeries as determined by
 minimum munber of aligned bases cutoff */
@@ -7599,7 +7785,7 @@ bedFreeList(&bedList);
 
 
 
-void lfsFromCghNci60Bed(struct trackGroup *tg)
+void lfsFromCghNci60Bed(struct track *tg)
 {
 struct linkedFeaturesSeries *lfsList = NULL, *lfs;
 struct linkedFeatures *lf;
@@ -7629,7 +7815,7 @@ else
 bedFreeList(&bedList);
 }
 
-struct linkedFeaturesSeries *lfsFromMsBed(struct trackGroup *tg, struct bed *bedList)
+struct linkedFeaturesSeries *lfsFromMsBed(struct track *tg, struct bed *bedList)
 /* create a linkedFeatureSeries from a bed list making each
    experiment a different linkedFeaturesSeries */
 {
@@ -7672,7 +7858,7 @@ return lfsList;
 }
 
 
-Color cghNci60Color(struct trackGroup *tg, void *item, struct memGfx *mg ) 
+Color cghNci60Color(struct track *tg, void *item, struct vGfx *vg ) 
 {
 struct linkedFeatures *lf = item;
 float val = lf->score;
@@ -7684,7 +7870,7 @@ char *colorScheme = cartUsualString(cart, "cghNci60.color", "gr");
 
 /* Make sure colors available */
 if(!exprBedColorsMade)
-    makeRedGreenShades(mg);
+    makeRedGreenShades(vg);
 if(val == -10000)
     return shadesOfGray[5];
 
@@ -7729,7 +7915,7 @@ else
 
 
 
-Color expressionColor(struct trackGroup *tg, void *item, struct memGfx *mg,
+Color expressionColor(struct track *tg, void *item, struct vGfx *vg,
 		 float denseMax, float fullMax) 
 /* Does the score->color conversion for various microarray tracks */
 {
@@ -7759,7 +7945,7 @@ if(tg->limitedVis == tvDense)
     absVal = absVal/1000;
 
 if(!exprBedColorsMade)
-    makeRedGreenShades(mg);
+    makeRedGreenShades(vg);
 
 /* cap the value to be less than or equal to maxDeviation */
 if (tg->limitedVis == tvFull)
@@ -7787,10 +7973,10 @@ else
     }
 }
 
-Color nci60Color(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color nci60Color(struct track *tg, void *item, struct vGfx *vg)
 /* Does the score->color conversion for various microarray tracks */
 {
-return expressionColor(tg, item, mg, 1.0, 2.6);
+return expressionColor(tg, item, vg, 1.0, 2.6);
 }
 
 Color getColorForAffyExpssn(float val, float max)
@@ -7829,7 +8015,7 @@ colorIndex = (int)(val * maxShade/max);
 return shadesOfSea[colorIndex];
 }
 
-Color affyColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color affyColor(struct track *tg, void *item, struct vGfx *vg)
 /* Does the score->color conversion for affymetrix arrays */
 {
 struct linkedFeatures *lf = item;
@@ -7837,11 +8023,11 @@ float score = lf->score;
 if(tg->visibility == tvDense)
     score = score/10;
 if(!exprBedColorsMade)
-    makeRedGreenShades(mg);
+    makeRedGreenShades(vg);
 return getColorForAffyExpssn(score, 262144/16); /* 262144 == 2^18 */
 }
 
-Color affyRatioColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color affyRatioColor(struct track *tg, void *item, struct vGfx *vg)
 /* Does the score->color conversion for affymetrix arrays using ratios,
  * if dense do an intensity color in blue based on score value otherwise do
  * red/green display from expScores */
@@ -7849,7 +8035,7 @@ Color affyRatioColor(struct trackGroup *tg, void *item, struct memGfx *mg)
 struct linkedFeatures *lf = item;
 float score = lf->score;
 if(!exprBedColorsMade)
-    makeRedGreenShades(mg);
+    makeRedGreenShades(vg);
 if(tg->visibility == tvDense)
     {
     score = score/10;
@@ -7857,11 +8043,11 @@ if(tg->visibility == tvDense)
     }
 else
     {
-    return expressionColor(tg, item, mg, 1.0, 3.0);
+    return expressionColor(tg, item, vg, 1.0, 3.0);
     }
 }
 
-void loadMultScoresBed(struct trackGroup *tg)
+void loadMultScoresBed(struct track *tg)
 /* Convert bed info in window to linked feature. */
 {
 struct sqlConnection *conn = hAllocConn();
@@ -7872,6 +8058,7 @@ int itemCount =0;
 struct bed *bedList = NULL, *bed;
 struct linkedFeatures *lfList = NULL, *lf;
 struct linkedFeaturesSeries *lfsList = NULL, *lfs;
+enum trackVisibility vis = tg->visibility;
 
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -7888,17 +8075,14 @@ slReverse(&bedList);
    two or three, this can be computationally expensive.
    use the maxItemsInFullTrack as a cap on the number that
    will be computed */
-if(!tg->limitedVisSet)
+
+if(vis == tvFull)
     {
-    enum trackVisibility vis = tg->visibility;
-    tg->limitedVisSet = TRUE;
-    if(vis == tvFull)
-	{
-	if(itemCount > maxItemsInFullTrack) 
-	    vis = tvDense;
-	}
-    tg->limitedVis = vis;
+    if(itemCount > maxItemsInFullTrack) 
+	vis = tvDense;
     }
+tg->visibility = vis;
+
 
 /* run the filter if it exists, otherwise use default */
 if(tg->trackFilter != NULL)
@@ -7913,9 +8097,23 @@ else
     tg->items = lfsFromMsBed(tg, bedList);
     bedFreeList(&bedList);
     }
+
+for(lfs = tg->items; lfs != NULL; lfs = lfs->next) 
+    /* Set the beginning and end of each linkedFeaturesSeries. */
+    {
+    lfs->start = BIGNUM;
+    lfs->end = 0;
+    for(lf = lfs->features; lf != NULL; lf = lf->next) 
+	{
+	if(lf->start < lfs->start)
+	    lfs->start = lf->start;
+	if(lf->end > lfs->end)
+	    lfs->end = lf->end;
+	}
+    }
 }
 
-char *rosettaName(struct trackGroup *tg, void *item)
+char *rosettaName(struct track *tg, void *item)
 /* Return Abbreviated rosetta experiment name */
 {
 struct linkedFeaturesSeries *lfs = item;
@@ -7943,7 +8141,7 @@ else
 return abbrev;
 }
 
-void loadMaScoresBed(struct trackGroup *tg)
+void loadMaScoresBed(struct track *tg)
 /* load up bed15 data types into linkedFeaturesSeries and then set the noLines
    flag on each one */
 {
@@ -7956,7 +8154,7 @@ for(lfs = tg->items; lfs != NULL; lfs = lfs->next)
 }
 
 
-void rosettaMethods(struct trackGroup *tg)
+void rosettaMethods(struct track *tg)
 /* methods for Rosetta track using bed track */
 {
 linkedFeaturesSeriesMethods(tg);
@@ -7968,7 +8166,7 @@ tg->mapItem = lfsMapItemName;
 tg->mapsSelf = TRUE;
 }
 
-void nci60Methods(struct trackGroup *tg)
+void nci60Methods(struct track *tg)
 /* set up special methods for NCI60 track and tracks with multiple
    scores in general */
 {
@@ -7981,7 +8179,7 @@ tg->mapsSelf = TRUE;
 }
 
 
-void affyMethods(struct trackGroup *tg)
+void affyMethods(struct track *tg)
 /* set up special methods for NCI60 track and tracks with multiple
    scores in general */
 {
@@ -7993,7 +8191,7 @@ tg->mapItem = lfsMapItemName;
 tg->mapsSelf = TRUE;
 }
 
-void affyRatioMethods(struct trackGroup *tg)
+void affyRatioMethods(struct track *tg)
 /* set up special methods for NCI60 track and tracks with multiple
    scores in general */
 {
@@ -8005,7 +8203,7 @@ tg->mapItem = lfsMapItemName;
 tg->mapsSelf = TRUE;
 }
 
-void cghNci60Methods(struct trackGroup *tg)
+void cghNci60Methods(struct track *tg)
 /* set up special methods for CGH NCI60 track */
 {
 linkedFeaturesSeriesMethods(tg);
@@ -8014,7 +8212,7 @@ tg->loadItems = loadMultScoresBed;
 tg->trackFilter = lfsFromCghNci60Bed;
 }
 
-void perlegenMethods(struct trackGroup *tg)
+void perlegenMethods(struct track *tg)
 /* setup special methods for haplotype track */
 {
 tg->drawItems = perlegenLinkedFeaturesDraw;
@@ -8022,8 +8220,8 @@ tg->itemName = perlegenName;
 tg->colorShades = shadesOfSea;
 }
 
-void loadAncientR(struct trackGroup *tg)
-/* Load up ancient repeats from database table to trackGroup items
+void loadAncientR(struct track *tg)
+/* Load up ancient repeats from database table to track items
  * filtering out those below a certain length threshold,
    in number of aligned bases. */
 {
@@ -8032,7 +8230,7 @@ lfFromAncientRBed(tg);
 }
 
 
-void ancientRMethods(struct trackGroup *tg)
+void ancientRMethods(struct track *tg)
 /* setup special methods for ancientR track */
 {
 tg->loadItems = loadAncientR;
@@ -8081,20 +8279,20 @@ else
 }
 
 void mapBoxHcWTarget(int start, int end, int x, int y, int width, int height, 
-	char *group, char *item, char *statusLine, boolean target, char *otherFrame)
+	char *track, char *item, char *statusLine, boolean target, char *otherFrame)
 /* Print out image map rectangle that would invoke the htc (human track click)
  * program. */
 {
 char *encodedItem = cgiEncode(item);
-printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-printf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
-    hgcNameAndSettings(), start, end, group, encodedItem, chromName, winStart, winEnd, 
+hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
+hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
+    hgcNameAndSettings(), start, end, track, encodedItem, chromName, winStart, winEnd, 
     database, tl.picWidth);
 if(target) 
     {
-    printf(" target=\"%s\" ", otherFrame);
+    hPrintf(" target=\"%s\" ", otherFrame);
     } 
-printf("ALT=\"%s\" TITLE=\"%s\">\n", statusLine, statusLine); 
+hPrintf("ALT=\"%s\" TITLE=\"%s\">\n", statusLine, statusLine); 
 freeMem(encodedItem);
 }
 
@@ -8131,14 +8329,14 @@ slReverse(&riList);
 return riList;
 }
 
-void cghLoadTrack(struct trackGroup *tg)
+void cghLoadTrack(struct track *tg)
 /* Load up CGH tracks.  (Will query database during drawing for a change.) */
 {
 tg->items = makeCghItems();
 }
 
-static void cghDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+static void cghDraw(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 {
 int baseWidth = seqEnd - seqStart;
@@ -8158,7 +8356,7 @@ struct cgh cghRecord;
 
 /* Set up the shades of colors */
 if (!exprBedColorsMade)
-    makeRedGreenShades(mg);
+    makeRedGreenShades(vg);
 
 if (isFull)
     {
@@ -8187,7 +8385,7 @@ if (isFull)
 	w = x2-x1;
 	if (w <= 0)
 	    w = 1;
-	mgDrawBox(mg, x1, cghi->yOffset, w, heightPer, col);
+	vgBox(vg, x1, cghi->yOffset, w, heightPer, col);
         }
     freeHash(&hash);
     }
@@ -8203,15 +8401,15 @@ else
 	w = x2-x1;
 	if (w <= 0)
 	  w = 1;
-	mgDrawBox(mg, x1, yOff, w, heightPer, col);
+	vgBox(vg, x1, yOff, w, heightPer, col);
         }
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void cghMethods(struct trackGroup *tg)
-/* Make track group for CGH experiments. */
+void cghMethods(struct track *tg)
+/* Make track for CGH experiments. */
 {
 tg->loadItems = cghLoadTrack;
 tg->freeItems = repeatFree;
@@ -8221,33 +8419,33 @@ tg->itemName = repeatName;
 tg->mapItemName = repeatName;
 tg->totalHeight = tgFixedTotalHeight;
 tg->itemHeight = tgFixedItemHeight;
-tg->itemStart = tgWeirdItemStart;
-tg->itemEnd = tgWeirdItemEnd;
+tg->itemStart = tgItemNoStart;
+tg->itemEnd = tgItemNoEnd;
 }
 
 
-void loadMcnBreakpoints(struct trackGroup *tg)
-/* Load up MCN breakpoints from database table to trackGroup items. */
+void loadMcnBreakpoints(struct track *tg)
+/* Load up MCN breakpoints from database table to track items. */
 {
 bedLoadItem(tg, "mcnBreakpoints", (ItemLoader)mcnBreakpointsLoad);
 }
 
-void freeMcnBreakpoints(struct trackGroup *tg)
+void freeMcnBreakpoints(struct track *tg)
 /* Free up MCN Breakpoints items. */
 {
 mcnBreakpointsFreeList((struct mcnBreakpoints**)&tg->items);
 }
 
-void mcnBreakpointsMethods(struct trackGroup *tg)
-/* Make track group for mcnBreakpoints. */
+void mcnBreakpointsMethods(struct track *tg)
+/* Make track for mcnBreakpoints. */
 {
 tg->loadItems = loadMcnBreakpoints;
 tg->freeItems = freeMcnBreakpoints;
 }
 
 
-static void drawTriangle(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+static void drawTriangle(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw triangle items.   Relies mostly on bedDrawSimple, but does put
  * a horizontal box connecting items in full mode. */
@@ -8258,16 +8456,16 @@ if (vis == tvDense)
     if (hTableExists("rnaCluster"))
         {
 	int heightPer = tg->heightPer;
-	Color gold = mgFindColor(mg, 250,190,60);
+	Color gold = vgFindColorIx(vg, 250,190,60);
 	int promoSize = 1000;
 	int rowOffset;
 	int baseWidth = seqEnd - seqStart;
-	double scale = width/(double)baseWidth;
+	double scale = scaleForPixels(width);
 	struct sqlConnection *conn = hAllocConn();
 	struct sqlResult *sr = hRangeQuery(conn, "rnaCluster", chromName, 
 		winStart - promoSize, winEnd + promoSize, NULL, &rowOffset);
 	char **row;
-	// mgDrawBox(mg, xOff, yOff, width, heightPer, gold);
+	// vgBox(vg, xOff, yOff, width, heightPer, gold);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    int start, end;
@@ -8282,16 +8480,16 @@ if (vis == tvDense)
 		end = atoi(row[1]);
 		start = end - promoSize;
 		}
-	    drawScaledBox(mg, start, end, scale, xOff, yOff, heightPer, gold);
+	    drawScaledBox(vg, start, end, scale, xOff, yOff, heightPer, gold);
 	    }
 
 	hFreeConn(&conn);
 	}
     }
-bedDrawSimple(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
+bedDrawSimple(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
 }
 
-void triangleMethods(struct trackGroup *tg)
+void triangleMethods(struct track *tg)
 /* Register custom methods for regulatory triangle track. */
 {
 tg->drawItems = drawTriangle;
@@ -8300,29 +8498,29 @@ tg->drawItems = drawTriangle;
 void smallBreak()
 /* Draw small horizontal break */
 {
-printf("<FONT SIZE=1><BR></FONT>\n");
+hPrintf("<FONT SIZE=1><BR></FONT>\n");
 }
 
-void drawButtonBox(struct memGfx *mg, int x, int y, int w, int h, int enabled)
+void drawButtonBox(struct vGfx *vg, int x, int y, int w, int h, int enabled)
 /* Draw a min-raised looking button. */
 {
 int light = shadesOfGray[1], mid = shadesOfGray[2], dark = shadesOfGray[4];
 if (enabled) 
     {
-    mgDrawBox(mg, x, y, w, 1, light);
-    mgDrawBox(mg, x, y+1, 1, h-1, light);
-    mgDrawBox(mg, x+1, y+1, w-2, h-2, mid);
-    mgDrawBox(mg, x+1, y+h-1, w-1, 1, dark);
-    mgDrawBox(mg, x+w-1, y+1, 1, h-1, dark);
+    vgBox(vg, x, y, w, 1, light);
+    vgBox(vg, x, y+1, 1, h-1, light);
+    vgBox(vg, x+1, y+1, w-2, h-2, mid);
+    vgBox(vg, x+1, y+h-1, w-1, 1, dark);
+    vgBox(vg, x+w-1, y+1, 1, h-1, dark);
     }
 else				/* try to make the button look as if
 				 * it is already depressed */
     {
-    mgDrawBox(mg, x, y, w, 1, dark);
-    mgDrawBox(mg, x, y+1, 1, h-1, dark);
-    mgDrawBox(mg, x+1, y+1, w-2, h-2, light);
-    mgDrawBox(mg, x+1, y+h-1, w-1, 1, light);
-    mgDrawBox(mg, x+w-1, y+1, 1, h-1, light);
+    vgBox(vg, x, y, w, 1, dark);
+    vgBox(vg, x, y+1, 1, h-1, dark);
+    vgBox(vg, x+1, y+1, w-2, h-2, light);
+    vgBox(vg, x+1, y+h-1, w-1, 1, light);
+    vgBox(vg, x+w-1, y+1, 1, h-1, light);
     }
 }
 
@@ -8337,277 +8535,269 @@ else
     str[strlen(str) - strlen(t)] = '\0';
 }
 
-void printYAxisLabel( struct memGfx *mg, int y, struct trackGroup *group, char *labelString,
+void printYAxisLabel( struct vGfx *vg, int y, struct track *track, char *labelString,
         double min0, double max0 )
 /*print a label for a horizontal y-axis line*/
 {
     double tmp;
-    int fontHeight = mgFontLineHeight(tl.font);
-    double ymin = y - (group->heightPer / 2) + fontHeight;
-    int itemHeight0 = group->itemHeight(group, group->items);
-    int inWid = trackOffsetX()-gfxBorder*3;
+    int fontHeight = tl.fontHeight;
+    double ymin = y - (track->heightPer / 2) + fontHeight;
+    int itemHeight0 = track->itemHeight(track, track->items);
+    int inWid = insideX-gfxBorder*3;
     
-    tmp = -whichBin( atof(labelString), min0, max0, 999 );
-    tmp = (int)((double)ymin+((double)tmp)*(double)group->heightPer/1000.0+(double)group->heightPer)-fontHeight/2.0;
+    tmp = -whichSampleBin( atof(labelString), min0, max0, 1000 );
+    tmp = (int)((double)ymin+((double)tmp)*(double)track->heightPer/1000.0+(double)track->heightPer)-fontHeight/2.0;
     if( !withCenterLabels ) tmp -= fontHeight;
-    mgTextRight(mg, gfxBorder, tmp, inWid-1, itemHeight0, group->ixAltColor, tl.font, labelString );
+    vgTextRight(vg, gfxBorder, tmp, inWid-1, itemHeight0, track->ixColor, tl.font, labelString );
 }
 
-void makeActiveImage(struct trackGroup *groupList)
+void makeActiveImage(struct track *trackList, char *psOutput)
 /* Make image and image map. */
 {
-struct trackGroup *group;
+struct track *track;
 MgFont *font = tl.font;
-struct memGfx *mg;
+struct vGfx *vg;
 struct tempName gifTn;
 char *mapName = "map";
 int fontHeight = mgFontLineHeight(font);
 int insideHeight = fontHeight-1;
-int insideX = trackOffsetX();
 int trackTabX = gfxBorder;
 int trackTabWidth = 11;
 int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
 int trackPastTabWidth = tl.picWidth - trackPastTabX;
 int pixWidth, pixHeight;
-int insideWidth;
 int y;
-int typeCount = slCount(groupList);
-int leftLabelWidth = 0;
+int typeCount = slCount(trackList);
 int rulerHeight = fontHeight;
 int yAfterRuler = gfxBorder;
 int relNumOff;
 int i;
-
 int ymin, ymax;
 int scaledHeightPer;
 double minRange, maxRange;
-int binNum = 999;
+int binCount = 1000;
 char minRangeStr[32];
 char maxRangeStr[32];
-
 struct slList *prev = NULL;
 int start;
 int newy;
 
 /* Figure out dimensions and allocate drawing space. */
 pixWidth = tl.picWidth;
-insideWidth = pixWidth-gfxBorder-insideX;
+
+/* Figure out height of each visible track. */
 pixHeight = gfxBorder;
 if (withRuler)
     {
     yAfterRuler += rulerHeight;
     pixHeight += rulerHeight;
     }
-for (group = groupList; group != NULL; group = group->next)
+for (track = trackList; track != NULL; track = track->next)
     {
-    if (group->visibility != tvHide)
+    if (track->visibility != tvHide)
 	{
-	pixHeight += group->totalHeight(group, group->limitedVis);
+	int h;
 	if (withCenterLabels)
 	    pixHeight += fontHeight;
+	limitVisibility(track);
+	h = track->height;
+	pixHeight += h;
 	}
+    else
+        track->limitedVis = tvHide;
     }
-mg = mgNew(pixWidth, pixHeight);
-mgClearPixels(mg);
-makeGrayShades(mg);
-makeBrownShades(mg);
-makeSeaShades(mg);
+
+imagePixelHeight = pixHeight;
+if (psOutput)
+    vg = vgOpenPostScript(pixWidth, pixHeight, psOutput);
+else
+    {
+    makeTempName(&gifTn, "hgt", ".gif");
+    vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi);
+    }
+makeGrayShades(vg);
+makeBrownShades(vg);
+makeSeaShades(vg);
 
 /* Start up client side map. */
-printf("<MAP Name=%s>\n", mapName);
+hPrintf("<MAP Name=%s>\n", mapName);
+
 /* Find colors to draw in. */
-for (group = groupList; group != NULL; group = group->next)
+for (track = trackList; track != NULL; track = track->next)
     {
-    if (group->limitedVis != tvHide)
+    if (track->limitedVis != tvHide)
 	{
-	group->ixColor = mgFindColor(mg, 
-		group->color.r, group->color.g, group->color.b);
-	group->ixAltColor = mgFindColor(mg, 
-		group->altColor.r, group->altColor.g, group->altColor.b);
+	track->ixColor = vgFindRgb(vg, &track->color);
+	track->ixAltColor = vgFindRgb(vg, &track->altColor);
 	}
     }
 
-/* Draw left labels. */
+leftLabelX = gfxBorder;
+leftLabelWidth = insideX - gfxBorder*3;
+/* Draw mini-buttons. */
 if (withLeftLabels)
     {
-    int inWid = insideX-gfxBorder*3;
-    int nextY, lastY, trackIx = 0;
-    double min0, max0;
+    int butOff;
+    y = gfxBorder;
+    if (withRuler)
+        y += rulerHeight;
+    for (track = trackList; track != NULL; track = track->next)
+        {
+	int h, yStart = y, yEnd;
+	if (track->limitedVis != tvHide)
+	    {
+	    if (withCenterLabels)
+		y += fontHeight;
+	    y += track->height;
+	    yEnd = y;
+	    h = yEnd - yStart - 1;
+	    drawButtonBox(vg, trackTabX, yStart, trackTabWidth, 
+	    	h, track->hasUi); 
+	    if (track->hasUi)
+		mapBoxTrackUi(trackTabX, yStart, trackTabWidth, h, track);
+	    }
+	}
+    butOff = trackTabX + trackTabWidth;
+    leftLabelX += butOff;
+    leftLabelWidth -= butOff;
+    }
 
-    mgDrawBox(mg, insideX-gfxBorder*2, 0, gfxBorder, pixHeight, mgFindColor(mg, 0, 0, 200));
-    mgSetClip(mg, gfxBorder, gfxBorder, inWid, pixHeight-2*gfxBorder);
+if (withLeftLabels)
+    {
+    double min0, max0;
+    Color lightRed = vgFindColorIx(vg, 255, 180, 180);
+
+    vgBox(vg, leftLabelX + leftLabelWidth, 0, 
+    	gfxBorder, pixHeight, lightRed);
     y = gfxBorder;
     if (withRuler)
 	{
-	mgTextRight(mg, gfxBorder, y, inWid-1, rulerHeight, 
+	vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, rulerHeight, 
 	    MG_BLACK, font, "Base Position");
 	y += rulerHeight;
 	}
-    for (group = groupList; group != NULL; group = group->next)
+    for (track = trackList; track != NULL; track = track->next)
         {
 	struct slList *item;
-	int h;
-    double tmp;
-	lastY = y;
-	if (group->limitedVis != tvHide)
+	enum trackVisibility vis = track->limitedVis;
+	int tHeight;
+	if (vis == tvHide)
+	    continue;
+	tHeight = track->height;
+	if (withCenterLabels)
+	    tHeight += fontHeight;
+	vgSetClip(vg, leftLabelX, y, leftLabelWidth, tHeight);
+	
+    	if( sameString( track->mapName, "humMusL" ) ||
+		 sameString( track->mapName, "musHumL" ))
 	    {
-	    nextY = lastY + group->totalHeight(group, group->limitedVis);
-	    if (withCenterLabels)
-		nextY += fontHeight;
-	    h = nextY - lastY - 1;
- 	    drawButtonBox(mg, trackTabX, lastY, trackTabWidth, h, group->hasUi); 
-	    if (group->hasUi)
-		mapBoxTrackUi(trackTabX, lastY, trackTabWidth, h, group);
+	    double minRangeCutoff, maxRangeCutoff;
+	    char o4[128];
+	    char o5[128];
+	    minRange = 0.0;
+	    snprintf( o4, sizeof(o4),"%s.min.cutoff", track->mapName);
+	    snprintf( o5, sizeof(o5),"%s.max.cutoff", track->mapName);
+
+            minRangeCutoff = max( atof(cartUsualString(cart,o4,"0.0"))-0.1, track->minRange );
+   	    maxRangeCutoff = min( atof(cartUsualString(cart,o5,"1000.0")), track->maxRange);
+	    minRange = whichSampleBin( minRangeCutoff, track->minRange, track->maxRange, binCount );
+	    maxRange = whichSampleBin( maxRangeCutoff, track->minRange, track->maxRange ,binCount ); 
+	    min0 = whichSampleNum( minRange, track->minRange,track->maxRange, binCount );
+	    max0 = whichSampleNum( maxRange, track->minRange, track->maxRange, binCount );
+
+	//errAbort( "%g,%g\n", minRangeCutoff, maxRangeCutoff );
+
+
+	    sprintf( minRangeStr, " "  );
+	    sprintf( maxRangeStr, " " );
+
+	    if( vis == tvFull && track->heightPer >= 74  )
+		{
+		printYAxisLabel( vg, y+5, track, "1.0", min0, max0 );
+		printYAxisLabel( vg, y+5, track, "2.0", min0, max0 );
+		printYAxisLabel( vg, y+5, track, "3.0", min0, max0 );
+		printYAxisLabel( vg, y+5, track, "4.0", min0, max0 );
+		printYAxisLabel( vg, y+5, track, "5.0", min0, max0 );
+		printYAxisLabel( vg, y+5, track, "6.0", min0, max0 );
+		}
+
+	    }
+	else
+	    {
+	    sprintf( minRangeStr, "%d", (int)track->minRange);
+	    sprintf( maxRangeStr, "%d", (int)track->maxRange);
 	    }
 
-   if( sameString( group->mapName, "humMus" ) )
-        {
-
-        min0 = whichNum( 300.0, -7.99515, 6.54171, binNum );
-        max0 =  whichNum( 1000.0, -7.99515, 6.54171, binNum );
-        sprintf( minRangeStr, "%0.2g", min0  );
-        sprintf( maxRangeStr, "%0.2g", max0 );
-
-
-        if( group->limitedVis == tvDense )
-        {
-        printYAxisLabel( mg, y, group, "0.0", min0, max0 );
-        printYAxisLabel( mg, y, group, "2.0", min0, max0 );
-        printYAxisLabel( mg, y, group, "5.0", min0, max0 );
-        }
-
-        }
-    else if( sameString( group->mapName, "humMusL" ) ||
-             sameString( group->mapName, "musHumL" ))
-    {
-
-        minRange = 0.0;
-        maxRange = whichBin( 6.0, 0.0, 8.0 ,binNum ); 
-        min0 = whichNum( minRange, 0.0, 8.0, binNum );
-        max0 = whichNum( maxRange, 0.0, 8.0, binNum );
-
-
-        sprintf( minRangeStr, " "  );
-        sprintf( maxRangeStr, " " );
-
-        if( group->limitedVis == tvFull && group->heightPer >= 74  )
-        {
-        printYAxisLabel( mg, y+5, group, "1.0", min0, max0 );
-        printYAxisLabel( mg, y+5, group, "2.0", min0, max0 );
-        printYAxisLabel( mg, y+5, group, "3.0", min0, max0 );
-        printYAxisLabel( mg, y+5, group, "4.0", min0, max0 );
-        printYAxisLabel( mg, y+5, group, "5.0", min0, max0 );
-        printYAxisLabel( mg, y+5, group, "6.0", min0, max0 );
-        //printYAxisLabel( mg, y+5, group, "7.0", min0, max0 );
-        //printYAxisLabel( mg, y+5, group, "8.0", min0, max0 );
-        }
-
-    }
-
-    else if( sameString( group->mapName, "zoo" ) )
-        {
-        sprintf( minRangeStr, "%d", (int)whichNum( 500.0, 1.0, 100.0, 1000 ));
-        sprintf( maxRangeStr, "%d", (int)whichNum( 1000.0, 1.0, 100.0, 1000 ));
-        }
-    else if( sameString( group->mapName, "zooCons" ) )
-        {
-        sprintf( minRangeStr, "%d", (int)whichNum( 0.0, 0.0, 5.0, 1000 ));
-        sprintf( maxRangeStr, "%d", (int)whichNum( 1000.0, 0.0, 5.0, 1000 ));
-        }
-         else if( sameString( group->mapName, "binomialCons2" ) )
-        {
-        sprintf( minRangeStr, "%d", (int)0.0 );
-        sprintf( maxRangeStr, "%d", (int)300.0);
-        }
-     else if( sameString( group->mapName, "binomialCons3" ) )
-        {
-        sprintf( minRangeStr, "%d", (int)0.0);
-        sprintf( maxRangeStr, "%d", (int)200.0);
-        }
-    else if( sameString( group->mapName, "binomialCons" ) )
-        {
-        sprintf( minRangeStr, "%d", (int)0.0);
-        sprintf( maxRangeStr, "%d", (int)500.0);
-        }
-    else
-        {
-        sprintf( minRangeStr, "%d", 1); //whichNum( 1.0, 0.0, 100.0, 1000 ));
-        sprintf( maxRangeStr, "%d", 100);// whichNum( 1000.0, 0.0, 100.0, 1000 ));
-        }
-
 	
-	switch (group->limitedVis)
+	switch (vis)
 	    {
 	    case tvHide:
 		break;	/* Do nothing; */
+	    case tvPack:
+	    case tvSquish:
+		if (withCenterLabels)
+		    y += fontHeight;
+	        y += track->height;
+		break;
 	    case tvFull:
 		if (withCenterLabels)
 		    y += fontHeight;
 		start = 1;
 
-       if( group->subType == lfSubSample && group->items == NULL )
-             y += group->height;
+		if( track->subType == lfSubSample && track->items == NULL )
+		    y += track->height;
 
-
-	for (item = group->items; item != NULL; item = item->next)
+		for (item = track->items; item != NULL; item = item->next)
 		    {
 	            char *rootName;
-		    char *name = group->itemName(group, item);
-		    int itemHeight = group->itemHeight(group, item);
+		    char *name = track->itemName(track, item);
+		    int itemHeight = track->itemHeight(track, item);
 		    newy = y;
 		    
 		    
-		    /* Do some fancy stuff for sample tracks. Draw y-value limits for 'sample' tracks. */
-		    if(group->subType == lfSubSample )
+		    /* Do some fancy stuff for sample tracks. 
+		     * Draw y-value limits for 'sample' tracks. */
+		    if(track->subType == lfSubSample )
 			{
 
-            if( prev == NULL )
-                newy += itemHeight;
-            else
-                newy += updateY( name, group->itemName(group, prev), itemHeight );
-                if( newy == y )
-                    continue;
+			if( prev == NULL )
+			    newy += itemHeight;
+			else
+			    newy += updateY( name, track->itemName(track, prev), itemHeight );
+			if( newy == y )
+			    continue;
 
-                if( group->heightPer > (3 * fontHeight ) )
-                {
-                    ymax = y - (group->heightPer / 2) + (fontHeight / 2);
-                    ymin = y + (group->heightPer / 2) - (fontHeight / 2);
-                    mgTextRight(mg, gfxBorder, ymin, inWid-1, itemHeight,
-                        group->ixAltColor, font, minRangeStr );
-                    mgTextRight(mg, gfxBorder, ymax, inWid-1, itemHeight,
-                        group->ixAltColor, font, maxRangeStr );
-                }
-            prev = item;
+			if( track->heightPer > (3 * fontHeight ) )
+			    {
+			    ymax = y - (track->heightPer / 2) + (fontHeight / 2);
+			    ymin = y + (track->heightPer / 2) - (fontHeight / 2);
+			    vgTextRight(vg, leftLabelX, ymin, leftLabelWidth-1, itemHeight,
+					track->ixAltColor, font, minRangeStr );
+			    vgTextRight(vg, leftLabelX, ymax, leftLabelWidth-1, itemHeight,
+					track->ixAltColor, font, maxRangeStr );
+			    }
+			prev = item;
 
-            rootName = cloneString( name );
-            beforeFirstPeriod( rootName );
-            if( sameString( group->mapName, "humMusL" ))
-                mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight,
-                    group->ixColor, font, "Mouse Cons    ");
-            else if( sameString( group->mapName, "musHumL" ))
-                mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight,
-                    group->ixColor, font, "Human Cons    ");
-            else
-                mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight,
-                    group->ixColor, font, rootName );
+			rootName = cloneString( name );
+			beforeFirstPeriod( rootName );
+			if( sameString( track->mapName, "humMusL" ))
+			    vgTextRight(vg, leftLabelX-30, y, leftLabelWidth - 1, itemHeight,
+					track->ixColor, font, "Mouse Cons");
+			else if( sameString( track->mapName, "musHumL" ))
+			    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, itemHeight,
+					track->ixColor, font, "Human Cons");
+			else
+			    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, itemHeight,
+					track->ixColor, font, rootName );
 
-            freeMem( rootName );
-
-
-			/* Reset the clipping rectangle to its original proportions */
-			mgSetClip(mg, gfxBorder, gfxBorder, inWid, pixHeight - (2 * gfxBorder));
+			freeMem( rootName );
 			start = 0;
 			y = newy;
 			}
 		    else
 			{
-
-		    /* Set the clipping rectangle to account for the buttons */
-		    mgSetClip(mg, gfxBorder + trackTabWidth, gfxBorder, inWid - (trackTabWidth), pixHeight - (2 * gfxBorder));
-		    
-			mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight, group->ixColor, font, name);
-                        /* Reset the clipping rectangle to its original proportions */
-			mgSetClip(mg, gfxBorder, gfxBorder, inWid, pixHeight - (2 * gfxBorder));
+			vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, 
+				itemHeight, track->ixColor, font, name);
 			y += itemHeight;
 			}
 		    }
@@ -8618,21 +8808,26 @@ if (withLeftLabels)
 		    y += fontHeight;
 		
 		/*draw y-value limits for 'sample' tracks. (always puts 0-100% range)*/
-		if( group->subType == lfSubSample && group->heightPer > (3 * fontHeight ) )
+		if( track->subType == lfSubSample && track->heightPer > (3 * fontHeight ) )
 		    {
-		    ymax = y - (group->heightPer / 2) + (fontHeight / 2);
-		    ymin = y + (group->heightPer / 2) - (fontHeight / 2);
-		    mgTextRight(mg, gfxBorder, ymin, inWid-1, group->lineHeight, 
-				group->ixAltColor, font, minRangeStr );
-		    mgTextRight(mg, gfxBorder, ymax, inWid-1, group->lineHeight, 
-				group->ixAltColor, font, maxRangeStr );
+		    ymax = y - (track->heightPer / 2) + (fontHeight / 2);
+		    ymin = y + (track->heightPer / 2) - (fontHeight / 2);
+		    vgTextRight(vg, leftLabelX, ymin, leftLabelWidth-1, track->lineHeight, 
+				track->ixAltColor, font, minRangeStr );
+		    vgTextRight(vg, leftLabelX, ymax, leftLabelWidth-1, track->lineHeight, 
+				track->ixAltColor, font, maxRangeStr );
 		    }
-		mgTextRight(mg, gfxBorder, y, inWid-1, group->lineHeight, 
-			    group->ixColor, font, group->shortLabel);
-		y += group->lineHeight;
+		vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, track->lineHeight, 
+			    track->ixColor, font, track->shortLabel);
+		y += track->height;
 		break;
 	    }
+	vgUnclip(vg);
         }
+    }
+else
+    {
+    leftLabelX = leftLabelWidth = 0;
     }
 
 /* Draw guidelines. */
@@ -8642,24 +8837,26 @@ if (withGuidelines)
     int ochXoff = insideX + clWidth;
     int height = pixHeight - 2*gfxBorder;
     int x;
-    Color color = mgFindColor(mg, 220, 220, 255);
-    int lineHeight = mgFontLineHeight(tl.font)+1;
+    int lineHeight = tl.fontHeight+1;
+    Color lightBlue = vgFindRgb(vg, &guidelineColor);
 
-    mgSetClip(mg, insideX, gfxBorder, insideWidth, height);
+    vgSetClip(vg, insideX, gfxBorder, insideWidth, height);
     y = gfxBorder;
 
     for (x = insideX+guidelineSpacing-1; x<pixWidth; x += guidelineSpacing)
-	mgDrawBox(mg, x, y, 1, height, color);
+	vgBox(vg, x, y, 1, height, lightBlue);
+    vgUnclip(vg);
     }
 
 /* Show ruler at top. */
 if (withRuler)
     {
     y = 0;
-    mgSetClip(mg, insideX, y, insideWidth, rulerHeight);
+    vgSetClip(vg, insideX, y, insideWidth, rulerHeight);
     relNumOff = winStart;
-    mgDrawRulerBumpText(mg, insideX, y, rulerHeight, insideWidth, MG_BLACK, font,
-	relNumOff, winBaseCount, 0, 1);
+    vgDrawRulerBumpText(vg, insideX, y, rulerHeight, insideWidth, MG_BLACK, font,
+			relNumOff, winBaseCount, 0, 1);
+    vgUnclip(vg);
 
     /* Make hit boxes that will zoom program around ruler. */
 	{
@@ -8680,17 +8877,17 @@ if (withRuler)
 	    ns = mid-newWinWidth/2;
 	    ne = ns + newWinWidth;
 	    if (ns < 0)
-	        {
+		{
 		ns = 0;
 		ne -= ns;
 		}
 	    if (ne > seqBaseCount)
-	        {
+		{
 		ns -= (ne - seqBaseCount);
 		ne = seqBaseCount;
 		}
 	    mapBoxJumpTo(ps+insideX,y,pe-ps,rulerHeight,
-		chromName, ns, ne, "3x zoom");
+			 chromName, ns, ne, "3x zoom");
 	    }
 	}
     }
@@ -8701,136 +8898,133 @@ if (withCenterLabels)
     {
     int clWidth = insideWidth;
     int ochXoff = insideX + clWidth;
-    mgSetClip(mg, insideX, gfxBorder, insideWidth, pixHeight - 2*gfxBorder);
+    vgSetClip(vg, insideX, gfxBorder, insideWidth, pixHeight - 2*gfxBorder);
     y = yAfterRuler;
-    for (group = groupList; group != NULL; group = group->next)
+    for (track = trackList; track != NULL; track = track->next)
         {
-	if (group->limitedVis != tvHide)
+	if (track->limitedVis != tvHide)
 	    {
-	    Color color = group->ixColor;
-	    mgTextCentered(mg, insideX, y+1, 
-	    	clWidth, insideHeight, color, font, group->longLabel);
+	    Color color = track->ixColor;
+	    vgTextCentered(vg, insideX, y+1, 
+			   clWidth, insideHeight, color, font, track->longLabel);
 	    mapBoxToggleVis(trackPastTabX, y+1, 
-	    	trackPastTabWidth, insideHeight, group);
+			    trackPastTabWidth, insideHeight, track);
 	    y += fontHeight;
-	    y += group->height;
+	    y += track->height;
 	    }
         }
+    vgUnclip(vg);
     }
 
+
 /* Draw tracks. */
-y = yAfterRuler;
-for (group = groupList; group != NULL; group = group->next)
     {
-    if (group->limitedVis != tvHide)
+    y = yAfterRuler;
+    for (track = trackList; track != NULL; track = track->next)
 	{
-	if (withCenterLabels)
-	    y += fontHeight;
-	mgSetClip(mg, insideX, y, insideWidth, group->height);
-	group->drawItems(group, winStart, winEnd,
-	    mg, insideX, y, insideWidth, 
-	    font, group->ixColor, group->limitedVis);
-	y += group->height;
+	if (track->limitedVis != tvHide)
+	    {
+	    if (withCenterLabels)
+		y += fontHeight;
+	    if (track->limitedVis == tvPack)
+		{
+		vgSetClip(vg, gfxBorder+trackTabWidth+1, y, 
+		    pixWidth-2*gfxBorder-trackTabWidth-1, track->height);
+		}
+	    else
+		vgSetClip(vg, insideX, y, insideWidth, track->height);
+	    track->drawItems(track, winStart, winEnd,
+			     vg, insideX, y, insideWidth, 
+			     font, track->ixColor, track->limitedVis);
+	    vgUnclip(vg);
+	    y += track->height;
+	    }
 	}
     }
 
 /* Make map background. */
+{
+int currentX, currentXEnd, currentWidth;
+int leftSide, rightSide;
+
+y = yAfterRuler;
+for (track = trackList; track != NULL; track = track->next)
     {
+    struct slList *item;
+    switch (track->limitedVis)
+	{
+	case tvHide:
+	    break;	/* Do nothing; */
+	case tvPack:
+	case tvSquish:
+	    if (withCenterLabels)
+		y += fontHeight;
+	    y += track->height;
+	    break;
+	case tvFull:
+	    if (withCenterLabels)
+		y += fontHeight;
+	    start = 1;
+	    if( track->subType == lfSubSample && track->items == NULL )
+		y += track->lineHeight;
 
-    int currentX, currentXEnd, currentWidth;
-    int leftSide, rightSide;
-
-    y = yAfterRuler;
-    for (group = groupList; group != NULL; group = group->next)
-        {
-	struct slList *item;
-	switch (group->limitedVis)
-	    {
-	    case tvHide:
-		break;	/* Do nothing; */
-	    case tvFull:
-		if (withCenterLabels)
-		    y += fontHeight;
-		start = 1;
-	        if( group->subType == lfSubSample && group->items == NULL )
-        	     y += group->lineHeight;
-
-		for (item = group->items; item != NULL; item = item->next)
-		    {
-		    int height = group->itemHeight(group, item);
+	    for (item = track->items; item != NULL; item = item->next)
+		{
+		int height = track->itemHeight(track, item);
 
             
 
-		    /*wiggle tracks don't always increment height (y-value) here*/
-            if( group->subType == lfSubSample )
-            {
-
-                newy = y;
-
-
-                if( !start && item->next != NULL  )
-                {
-                    newy += updateY( group->itemName(group, item),
-                             group->itemName(group, item->next), height );
-                }
-                else if( item->next != NULL || start )
-                    newy += height;
-
-
-
-                /*
-                if ( newy != y && !group->mapsSelf)
-                {
-                        mapBoxHc(group->itemStart(group, item), group->itemEnd(group, item),
-                         trackPastTabX,y,trackPastTabWidth, height, group->mapName,
-                         group->mapItemName(group, item),
-                         group->itemName(group, item));
-                }
-                */
-
-
-                start = 0;
-                y = newy;
-
-            }
-	    else
-	    {
-
-               if (!group->mapsSelf)
-                {
-                        mapBoxHc(group->itemStart(group, item), group->itemEnd(group, item),
-                         trackPastTabX,y,trackPastTabWidth,height, group->mapName,
-                         group->mapItemName(group, item),
-                         group->itemName(group, item));
-                }
-                y += height;
-            }
-            }
-        break;
-	    case tvDense:
-		if (withCenterLabels)
-		    y += fontHeight;
-		mapBoxToggleVis(trackPastTabX,y,trackPastTabWidth,group->lineHeight,group);
-		y += group->lineHeight;
+		/*wiggle tracks don't always increment height (y-value) here*/
+		if( track->subType == lfSubSample )
+		    {
+		    newy = y;
+		    if( !start && item->next != NULL  )
+			{
+			newy += updateY( track->itemName(track, item),
+					 track->itemName(track, item->next),
+					 height );
+			}
+		    else if( item->next != NULL || start )
+			newy += height;
+		    start = 0;
+		    y = newy;
+		    }
+		else
+		    {
+		    if (!track->mapsSelf)
+			{
+                        mapBoxHc(track->itemStart(track, item), track->itemEnd(track, item),
+				 trackPastTabX,y,trackPastTabWidth,height, track->mapName,
+				 track->mapItemName(track, item),
+				 track->itemName(track, item));
+			}
+		    y += height;
+		    }
+		}
+	    break;
+	case tvDense:
+	    if (withCenterLabels)
+		y += fontHeight;
+	    mapBoxToggleVis(trackPastTabX,y,trackPastTabWidth,track->lineHeight,track);
+	    y += track->height;
     
-		break;
-	    }
-        }
+	    break;
+	}
     }
-
+}
 /* Finish map. */
-printf("</MAP>\n");
+hPrintf("</MAP>\n");
 
 /* Save out picture and tell html file about it. */
-makeTempName(&gifTn, "hgt", ".gif");
-mgSaveGif(mg, gifTn.forCgi);
+vgClose(&vg);
 smallBreak();
 smallBreak();
-printf(
-    "<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s><BR>\n",
+hPrintf("<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s ",
     gifTn.forHtml, pixWidth, pixHeight, mapName);
-
-mgFree(&mg);
+#ifdef ROBERTS_EXPERIMENT
+hPrintf("onMouseOut=\"javascript:popupoff();\"");
+#endif /* ROBERTS_EXPERIMENT */
+hPrintf("><BR>\n");
 }
 
 
@@ -8849,19 +9043,19 @@ if (ucscSize < 1000000)
     if (bigStart < 0) bigStart = 0;
     bigEnd += 500000;
     if (bigEnd > seqBaseCount) bigEnd = seqBaseCount;
-    printf("<A HREF=\"http://www.ensembl.org/perl/contigview"
+    hPrintf("<A HREF=\"http://www.ensembl.org/perl/contigview"
 	   "?chr=%s&vc_start=%d&vc_end=%d&wvc_start=%d&wvc_end=%d\" TARGET=_blank>",
 	    chromName, bigStart, bigEnd, smallStart, smallEnd);
     }
 else
     {
-    printf("<A HREF=\"http://www.ensembl.org/perl/contigview"
+    hPrintf("<A HREF=\"http://www.ensembl.org/perl/contigview"
 	   "?chr=%s&vc_start=%d&vc_end=%d\" TARGET=_blank>",
 	    chromName, bigStart, bigEnd);
     }
 }
 
-typedef void (*TrackHandler)(struct trackGroup *tg);
+typedef void (*TrackHandler)(struct track *tg);
 
 struct hash *handlerHash;
 
@@ -8893,7 +9087,7 @@ boolean colorsSame(struct rgbColor *a, struct rgbColor *b)
 return a->r == b->r && a->g == b->g && a->b == b->b;
 }
 
-void loadSimpleBed(struct trackGroup *tg)
+void loadSimpleBed(struct track *tg)
 /* Load the items in one custom track - just move beds in
  * window... */
 {
@@ -8922,7 +9116,47 @@ slReverse(&list);
 tg->items = list;
 }
 
-void loadGappedBed(struct trackGroup *tg)
+void loadBed8(struct track *tg)
+/* Convert bed 8 info in window to linked feature. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+struct bed *bed;
+struct linkedFeatures *lfList = NULL, *lf;
+
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    bed = bedLoadN(row+rowOffset, 8);
+    // Make up a block: the whole thing.
+    bed->blockCount  = 1;
+    bed->blockSizes  = needMem(bed->blockCount * sizeof(int));
+    bed->chromStarts = needMem(bed->blockCount * sizeof(int));
+    bed->blockSizes[0]  = bed->chromEnd - bed->chromStart;
+    bed->chromStarts[0] = 0;
+    // Some tracks overload thickStart and thickEnd -- catch garbage here.
+    if ((bed->thickStart != 0) &&
+	((bed->thickStart < bed->chromStart) ||
+	 (bed->thickStart > bed->chromEnd)))
+	bed->thickStart = bed->chromStart;
+    if ((bed->thickEnd != 0) &&
+	((bed->thickEnd < bed->chromStart) ||
+	 (bed->thickEnd > bed->chromEnd)))
+	bed->thickEnd = bed->chromEnd;
+    lf = lfFromBed(bed);
+    slAddHead(&lfList, lf);
+    bedFree(&bed);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&lfList);
+slSort(&lfList, linkedFeaturesCmp);
+tg->items = lfList;
+}
+
+void loadGappedBed(struct track *tg)
 /* Convert bed info in window to linked feature. */
 {
 struct sqlConnection *conn = hAllocConn();
@@ -8947,8 +9181,7 @@ slSort(&lfList, linkedFeaturesCmp);
 tg->items = lfList;
 }
 
-
-void loadSampleIntoLinkedFeature(struct trackGroup *tg)
+void loadSampleIntoLinkedFeature(struct track *tg)
 /* Convert sample info in window to linked feature. */
 {
 int maxWiggleTrackHeight = 2500;
@@ -8962,10 +9195,10 @@ char *hasDense = NULL;
 char *where = NULL;
 char query[256];
 
-
-
 /*see if we have a summary table*/
-snprintf(query, sizeof(query), "select name from %s where name = '%s' limit 1", tg->mapName, tg->shortLabel);
+snprintf(query, sizeof(query), 
+	"select name from %s where name = '%s' limit 1", 
+	tg->mapName, tg->shortLabel);
 //errAbort( "%s", query );
 hasDense = sqlQuickQuery(conn, query, query, sizeof(query));
 
@@ -8982,7 +9215,7 @@ if(tg->visibility == tvDense)
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, where, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    sample = sampleLoad(row+rowOffset);
+    sample = sampleLoad(row + rowOffset);
     lf = lfFromSample(sample);
     slAddHead(&lfList, lf);
     sampleFree(&sample);
@@ -9008,41 +9241,122 @@ tg->items = lfList;
 /*turn off full mode if there are too many rows or each row is too
  * large. A total of maxWiggleTrackHeight is allowed for number of
  * rows times the rowHeight*/
-if( tg->visibility == tvFull && tgUserDefinedTotalHeight( tg, tvFull ) > maxWiggleTrackHeight  )
+if( tg->visibility == tvFull && sampleTotalHeight( tg, tvFull ) > maxWiggleTrackHeight  )
     {
     tg->limitedVisSet = TRUE;
     tg->limitedVis = tvDense;
     }
-
-
 }
 
+void loadSampleZoo(struct track *tg)
+/* Convert sample info in window to linked feature. */
+{
+int maxWiggleTrackHeight = 2500;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+struct sample *sample;
+struct linkedFeatures *lfList = NULL, *lf;
+char *hasDense = NULL;
+char *where = NULL;
+char query[256];
 
-void loadGenePred(struct trackGroup *tg)
+/*see if we have a summary table*/
+snprintf(query, sizeof(query), "select name from %s where name = '%s' limit 1", tg->mapName, tg->shortLabel);
+//errAbort( "%s", query );
+hasDense = sqlQuickQuery(conn, query, query, sizeof(query));
+
+/* If we're in dense mode and have a summary table load it. */
+if(tg->visibility == tvDense)
+    {
+    if(hasDense != NULL)
+	{
+	snprintf(query, sizeof(query), " name = '%s' ", tg->shortLabel);
+	where = cloneString(query);
+	}
+    }
+
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, where, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    sample = sampleLoad(row + rowOffset);
+    lf = lfFromSample(sample);
+    slAddHead(&lfList, lf);
+    sampleFree(&sample);
+    }
+if(where != NULL)
+    freez(&where);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&lfList);
+
+/* sort to bring items with common names to the same line
+ * but only for tracks with a summary table 
+ * (with name=shortLabel) in dense mode */
+if( hasDense != NULL )
+    {
+    sortGroupList = tg; /* used to put track name at top of sorted list. */
+    slSort(&lfList, lfNamePositionCmp);
+    sortGroupList = NULL;
+    }
+
+/* Sort in species phylogenetic order */
+slSort(&lfList, lfZooCmp);
+
+tg->items = lfList;
+
+/*turn off full mode if there are too many rows or each row is too
+ * large. A total of maxWiggleTrackHeight is allowed for number of
+ * rows times the rowHeight*/
+if( tg->visibility == tvFull && sampleTotalHeight( tg, tvFull ) > maxWiggleTrackHeight  )
+    {
+    tg->limitedVisSet = TRUE;
+    tg->limitedVis = tvDense;
+    }
+}
+
+void loadGenePred(struct track *tg)
 /* Convert bed info in window to linked feature. */
 {
 tg->items = lfFromGenePredInRange(tg->mapName, chromName, winStart, winEnd);
 }
 
-void loadPsl(struct trackGroup *tg)
+void loadPsl(struct track *tg)
 /* load up all of the psls from correct table into tg->items item list*/
 {
 lfFromPslsInRange(tg, winStart,winEnd, chromName, FALSE, FALSE);
 }
 
-void loadXenoPsl(struct trackGroup *tg)
+void loadXenoPsl(struct track *tg)
 /* load up all of the psls from correct table into tg->items item list*/
 {
 lfFromPslsInRange(tg, winStart,winEnd, chromName, TRUE, FALSE);
 }
 
+void drawColorMethods(struct track *tg)
+/* Fill in color track items based on chrom  */
+{
+char option[128]; /* Option -  rainbow chromosome color */
+char optionChr[128]; /* Option -  chromosome filter */
+char *optionChrStr; 
+char *optionStr ;
+snprintf( option, sizeof(option), "%s.color", tg->mapName);
+optionStr = cartUsualString(cart, option, "off");
+tg->mapItemName = lfMapNameFromExtra;
+if( sameString( optionStr, "on" )) /*use chromosome coloring*/
+    tg->itemColor = lfChromColor;
+else
+    tg->itemColor = NULL;
+linkedFeaturesMethods(tg);
+tg->loadItems = loadGenePred;
+}
 
-void fillInFromType(struct trackGroup *group, struct trackDb *tdb)
-/* Fill in various function pointers in group from type field of tdb. */
+void fillInFromType(struct track *track, struct trackDb *tdb)
+/* Fill in various function pointers in track from type field of tdb. */
 {
 char *typeLine = tdb->type, *words[8], *type;
 int wordCount;
-
 if (typeLine == NULL)
     return;
 wordCount = chopLine(typeLine, words);
@@ -9054,119 +9368,137 @@ if (sameWord(type, "bed"))
     int fieldCount = 3;
     if (wordCount > 1)
         fieldCount = atoi(words[1]);
-    group->bedSize = fieldCount;
-    if (fieldCount < 12)
+    track->bedSize = fieldCount;
+    if (fieldCount < 8)
 	{
-	bedMethods(group);
-	group->loadItems = loadSimpleBed;
+	bedMethods(track);
+	track->loadItems = loadSimpleBed;
+	}
+    else if (fieldCount < 12)
+	{
+	linkedFeaturesMethods(track);
+	track->loadItems = loadBed8;
 	}
     else 
 	{
-	linkedFeaturesMethods(group);
-	group->loadItems = loadGappedBed;
+	linkedFeaturesMethods(track);
+	track->loadItems = loadGappedBed;
 	}
     }
 else if (sameWord(type, "sample"))
     {
     int fieldCount = 9;
 
-    if (wordCount > 1)
-        fieldCount = atoi(words[1]);
-    group->bedSize = fieldCount;
-    if (fieldCount == 9)
-	{
-    group->subType = lfSubSample;     /*make subType be "sample" (=2)*/
-	sampleLinkedFeaturesMethods(group);
-	group->loadItems = loadSampleIntoLinkedFeature;
-	}
-    else
-	{
-	errAbort("A 'sample' track must have exactly 9 fields.(%d)", fieldCount);
-	}
+    if (wordCount > 1)     /*sample minRange maxRange*/
+    {
+        track->minRange = atof(words[1]);
+        track->maxRange = atof(words[2]);
+    }
+    else                    /*default range settings*/
+    {
+        track->minRange = 0.0;
+        track->maxRange = 1000.0;
+    }
+
+    track->bedSize = 9;
+	track->subType = lfSubSample;     /*make subType be "sample" (=2)*/
+	sampleLinkedFeaturesMethods(track);
+	track->loadItems = loadSampleIntoLinkedFeature;
     }
 else if (sameWord(type, "genePred"))
     {
-    linkedFeaturesMethods(group);
-    group->loadItems = loadGenePred;
-    group->colorShades = NULL;
+    linkedFeaturesMethods(track);
+    track->loadItems = loadGenePred;
+    track->colorShades = NULL;
     }
 else if (sameWord(type, "psl"))
     {
     char *subType = ".";
     if (wordCount >= 2)
        subType = words[1];
-    linkedFeaturesMethods(group);
+    linkedFeaturesMethods(track);
     if (!tdb->useScore)
-        group->colorShades = NULL;
+        track->colorShades = NULL;
     if (sameString(subType, "xeno"))
 	{
-	group->loadItems = loadXenoPsl;
-	group->subType = lfSubXeno;
+	track->loadItems = loadXenoPsl;
+	track->subType = lfSubXeno;
 	}
     else
-	group->loadItems = loadPsl;
+	track->loadItems = loadPsl;
     if (sameString(subType, "est"))
-	group->drawItems = linkedFeaturesAverageDense;
+	track->drawItems = linkedFeaturesAverageDense;
+    }
+else if (sameWord(type, "chain"))
+    {
+    chainMethods(track);
+    }
+else if (sameWord(type, "netAlign"))
+    {
+    netMethods(track);
     }
 }
 
-struct trackGroup *trackGroupFromTrackDb(struct trackDb *tdb)
-/* Create a track group based on the tdb. */
+struct track *trackFromTrackDb(struct trackDb *tdb)
+/* Create a track based on the tdb. */
 {
-struct trackGroup *group;
-AllocVar(group);
-group->mapName = cloneString(tdb->tableName);
-group->visibility = tdb->visibility;
-group->shortLabel = tdb->shortLabel;
-group->longLabel = tdb->longLabel;
-group->color.r = tdb->colorR;
-group->color.g = tdb->colorG;
-group->color.b = tdb->colorB;
-group->altColor.r = tdb->altColorR;
-group->altColor.g = tdb->altColorG;
-group->altColor.b = tdb->altColorB;
-group->lineHeight = mgFontLineHeight(tl.font)+1;
-group->heightPer = group->lineHeight - 1;
-group->private = tdb->private;
-group->priority = tdb->priority;
+struct track *track = trackNew();
+track->mapName = cloneString(tdb->tableName);
+track->visibility = tdb->visibility;
+track->shortLabel = tdb->shortLabel;
+track->longLabel = tdb->longLabel;
+track->color.r = tdb->colorR;
+track->color.g = tdb->colorG;
+track->color.b = tdb->colorB;
+track->altColor.r = tdb->altColorR;
+track->altColor.g = tdb->altColorG;
+track->altColor.b = tdb->altColorB;
+track->lineHeight = tl.fontHeight+1;
+track->heightPer = track->lineHeight - 1;
+track->private = tdb->private;
+track->priority = tdb->priority;
+track->groupName = tdb->grp;
+track->canPack = tdb->canPack;
 if (tdb->useScore)
     {
     /* Todo: expand spectrum opportunities. */
-    if (colorsSame(&brownColor, &group->color))
-        group->colorShades = shadesOfBrown;
-    else if (colorsSame(&darkSeaColor, &group->color))
-        group->colorShades = shadesOfSea;
+    if (colorsSame(&brownColor, &track->color))
+        track->colorShades = shadesOfBrown;
+    else if (colorsSame(&darkSeaColor, &track->color))
+        track->colorShades = shadesOfSea;
     else
-	group->colorShades = shadesOfGray;
+	track->colorShades = shadesOfGray;
     }
-fillInFromType(group, tdb);
-return group;
+fillInFromType(track, tdb);
+return track;
 }
 
-void loadFromTrackDb(struct trackGroup **pTrackList)
+void loadFromTrackDb(struct track **pTrackList)
 /* Load tracks from database, consulting handler list. */
 {
 struct trackDb *tdb, *tdbList = hTrackDb(chromName);
-struct trackGroup *group;
+struct track *track;
 TrackHandler handler;
 
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    group = trackGroupFromTrackDb(tdb);
-    group->hasUi = TRUE;
+    track = trackFromTrackDb(tdb);
+    track->hasUi = TRUE;
     handler = lookupTrackHandler(tdb->tableName);
     if (handler != NULL)
-	handler(group);
-    if (group->drawItems == NULL || group->loadItems == NULL)
-	warn("No handler for %s", tdb->tableName);
+	handler(track);
+    if (track->loadItems == NULL)
+        warn("No load handler for %s", tdb->tableName);
+    else if (track->drawItems == NULL)
+        warn("No draw handler for %s", tdb->tableName);
     else
 	{
-	slAddHead(pTrackList, group);
+	slAddHead(pTrackList, track);
 	}
     }
 }
 
-void rikenMrnaLoadItems(struct trackGroup *tg)
+void rikenMrnaLoadItems(struct track *tg)
 /* Load riken mrna's  - have to get them from special secret database. */
 {
 struct sqlConnection *conn = sqlConnect("mgsc");
@@ -9174,13 +9506,13 @@ connectedLfFromPslsInRange(conn, tg, winStart, winEnd, chromName, FALSE, FALSE);
 sqlDisconnect(&conn);
 }
 
-void rikenMethods(struct trackGroup *tg)
+void rikenMethods(struct track *tg)
 /* Load up riken mRNA specific methods. */
 {
 tg->loadItems = rikenMrnaLoadItems;
 }
 
-void ensRikenLoadItems(struct trackGroup *tg)
+void ensRikenLoadItems(struct track *tg)
 /* Load ensRiken genepreds  - have to get them from special secret database. */
 {
 struct sqlConnection *conn = sqlConnect("mgsc");
@@ -9189,13 +9521,13 @@ tg->items = connectedLfFromGenePredInRange(conn, tg->mapName, chromName,
 sqlDisconnect(&conn);
 }
 
-void ensRikenMethods(struct trackGroup *tg)
+void ensRikenMethods(struct track *tg)
 /* Load up ensRiken specific methods. */
 {
 tg->loadItems = ensRikenLoadItems;
 }
 
-void ensMergeLoadItems(struct trackGroup *tg)
+void ensMergeLoadItems(struct track *tg)
 /* Load ensMerge genepreds  - have to get them from special secret database. */
 {
 struct sqlConnection *conn = sqlConnect("mgsc");
@@ -9204,18 +9536,18 @@ tg->items = connectedLfFromGenePredInRange(conn, tg->mapName, chromName,
 sqlDisconnect(&conn);
 }
 
-void ensMergeMethods(struct trackGroup *tg)
+void ensMergeMethods(struct track *tg)
 /* Load up ensMerge specific methods. */
 {
 tg->loadItems = ensMergeLoadItems;
 }
 
-void secretRikenTracks(struct trackGroup **pTrackList)
+void secretRikenTracks(struct track **pTrackList)
 /* If not on right host remove Riken tracks. */
 {
 if (!hIsMgscHost())
     {
-    struct trackGroup *tg;
+    struct track *tg;
     for (tg = *pTrackList; tg != NULL; tg = tg->next)
         {
 	  if (sameString(tg->mapName, "rikenMrna") ||
@@ -9231,7 +9563,7 @@ if (!hIsMgscHost())
 }
 
 
-void ctLoadSimpleBed(struct trackGroup *tg)
+void ctLoadSimpleBed(struct track *tg)
 /* Load the items in one custom track - just move beds in
  * window... */
 {
@@ -9250,7 +9582,7 @@ slSort(&list, bedCmp);
 tg->items = list;
 }
 
-void ctLoadGappedBed(struct trackGroup *tg)
+void ctLoadGappedBed(struct track *tg)
 /* Convert bed info in window to linked feature. */
 {
 struct customTrack *ct = tg->customPt;
@@ -9271,7 +9603,7 @@ slSort(&lfList, linkedFeaturesCmp);
 tg->items = lfList;
 }
 
-char *ctMapItemName(struct trackGroup *tg, void *item)
+char *ctMapItemName(struct track *tg, void *item)
 /* Return composite item name for custom tracks. */
 {
   char *itemName = tg->itemName(tg, item);
@@ -9280,12 +9612,12 @@ char *ctMapItemName(struct trackGroup *tg, void *item)
   return buf;
 }
 
-struct trackGroup *newCustomTrack(struct customTrack *ct)
+struct track *newCustomTrack(struct customTrack *ct)
 /* Make up a new custom track. */
 {
-struct trackGroup *tg;
+struct track *tg;
 char buf[64];
-tg = trackGroupFromTrackDb(ct->tdb);
+tg = trackFromTrackDb(ct->tdb);
 if (ct->fieldCount < 12)
     {
     tg->loadItems = ctLoadSimpleBed;
@@ -9296,50 +9628,19 @@ else
     }
 tg->customPt = ct;
 tg->mapItemName = ctMapItemName;
+tg->canPack = TRUE;
 return tg;
 }
 
-boolean bogusMacEmptyChars(char *s)
-/* Return TRUE if it looks like this is just a buggy
- * Mac browser putting in bogus chars into empty text box. */
-{
-char c = *s;
-return c != '_' && !isalnum(c);
-}
-
 char *getPositionFromCustomTracks()
-/*
-  Parses custom track data to get the position variable
-return - The first chromosome position variable found in the 
- custom track data.
- */
+/* Parses custom track data to get the position variable
+ * return - The first chromosome position variable found in the 
+ * custom track data.  */
 {
 char *pos = NULL;
-char *customText = cloneString(cgiOptionalString("hgt.customText"));
-char *fileName = cloneString(cgiOptionalString("ct"));
-struct slName *browserLines = NULL;
 struct slName *bl = NULL;
-struct customTrack *ctList = NULL;
 
-customText = skipLeadingSpaces(customText);
-if (NULL != customText && bogusMacEmptyChars(customText))
-    {
-    customText = NULL;
-    }
-
-if (NULL == customText || 0 == customText[0])
-    {
-    customText = cloneString(cgiOptionalString("hgt.customFile"));
-    }
-
-if (NULL != customText && 0 != customText[0])
-    {
-    ctList = customTracksParse(customText, FALSE, &browserLines);
-    }
-else if (fileName != NULL && fileExists(fileName))
-    {
-    ctList = customTracksParse(fileName, TRUE, &browserLines);
-    }
+ctList = customTracksParseCart(cart, &browserLines, &ctFileName);
 
 for (bl = browserLines; bl != NULL; bl = bl->next)
     {
@@ -9358,73 +9659,17 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
             }
         }
     }
-
-freez(&fileName);
-freez(&customText);
-
 return pos;
 }
 
-void loadCustomTracks(struct trackGroup **pGroupList)
+void loadCustomTracks(struct track **pGroupList)
 /* Load up custom tracks and append to list. */
 {
-struct customTrack *ctList = NULL, *ct;
-struct trackGroup *tg;
-char *customText = cartOptionalString(cart, "hgt.customText");
-char *fileName = cartOptionalString(cart, "ct");
-struct slName *browserLines = NULL, *bl;
+struct customTrack *ct;
+struct track *tg;
+struct slName *bl;
 
-customText = skipLeadingSpaces(customText);
-if (customText != NULL && bogusMacEmptyChars(customText))
-    customText = NULL;
-if (customText == NULL || customText[0] == 0)
-    customText = cartOptionalString(cart, "hgt.customFile");
-customText = skipLeadingSpaces(customText);
-if (customText != NULL && customText[0] != 0)
-    {
-    static struct tempName tn;
-    makeTempName(&tn, "ct", ".bed");
-    ctList = customTracksParse(customText, FALSE, &browserLines);
-    ctFileName = tn.forCgi;
-    customTrackSave(ctList, tn.forCgi);
-    cartSetString(cart, "ct", tn.forCgi);
-    cartRemove(cart, "hgt.customText");
-    cartRemove(cart, "hgt.customFile");
-    }
-else if (fileName != NULL)
-    {
-    if (!fileExists(fileName))	/* Cope with expired tracks. */
-        {
-	fileName = NULL;
-	cartRemove(cart, "ct");
-	}
-    else
-        {
-	ctList = customTracksParse(fileName, TRUE, &browserLines);
-	ctFileName = fileName;
-	}
-    }
-
-if (customTrackNeedsLift(ctList))
-    {
-    /* Load up hash of contigs and lift up tracks. */
-    struct hash *ctgHash = newHash(0);
-    struct ctgPos *ctg, *ctgList = NULL;
-    struct sqlConnection *conn = hAllocConn();
-    struct sqlResult *sr = sqlGetResult(conn, "select * from ctgPos");
-    char **row;
-    while ((row = sqlNextRow(sr)) != NULL)
-       {
-       ctg = ctgPosLoad(row);
-       slAddHead(&ctgList, ctg);
-       hashAdd(ctgHash, ctg->contig, ctg);
-       }
-    customTrackLift(ctList, ctgHash);
-    ctgPosFreeList(&ctgList);
-    hashFree(&ctgHash);
-    }
-
-
+/* The loading is now handled by getPositionFromCustomTracks(). */
 /* Process browser commands in custom track. */
 for (bl = browserLines; bl != NULL; bl = bl->next)
     {
@@ -9437,6 +9682,8 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 	char *command = words[1];
 	if (sameString(command, "hide") 
             || sameString(command, "dense") 
+            || sameString(command, "pack") 
+            || sameString(command, "squish") 
             || sameString(command, "full"))
 	    {
 	    if (wordCount > 2)
@@ -9445,7 +9692,7 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 		for (i=2; i<wordCount; ++i)
 		    {
 		    char *s = words[i];
-		    struct trackGroup *tg;
+		    struct track *tg;
 		    boolean toAll = sameWord(s, "all");
 		    for (tg = *pGroupList; tg != NULL; tg = tg->next)
 		        {
@@ -9493,7 +9740,6 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 	tg->visibility = hTvFromString(vis);
     slAddHead(pGroupList, tg);
     }
-
 }
 
 char *wrapWhiteFont(char *s)
@@ -9504,7 +9750,7 @@ sprintf(buf, "<FONT COLOR=\"#FFFFFF\">%s</FONT>", s);
 return buf;
 }
 
-void hideAllTracks(struct trackGroup *tGroupList)
+void hideAllTracks(struct track *trackList)
 /* hide all the tracks (and any in trackDb too) */
 {
 struct sqlConnection *conn = hAllocConn();
@@ -9533,49 +9779,136 @@ void hotLinks()
 boolean gotBlat = hIsBlatIndexedDatabase(database);
 struct dyString *uiVars = uiStateUrlPart(NULL);
 
-printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
-printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#536ED3\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
-printf("<TD ALIGN=CENTER><A HREF=\"/index.html?db=%s\">%s</A></TD>", database, wrapWhiteFont("Home"));
+hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
+hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#536ED3\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
+hPrintf("<TD ALIGN=CENTER><A HREF=\"/index.html?org=%s\">%s</A></TD>", organism, wrapWhiteFont("Home"));
 
 if (gotBlat)
     {
-    fprintf(stdout, "<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?%s\">%s</A></TD>", uiVars->string, wrapWhiteFont("BLAT"));
+    hPrintf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?%s\">%s</A></TD>", uiVars->string, wrapWhiteFont("BLAT"));
     }
-printf("<TD ALIGN=CENTER><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s\">"
+hPrintf("<TD ALIGN=CENTER><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s\">"
       " %s </A></TD>",  hgcNameAndSettings(),
       winStart, chromName, winStart, winEnd, database, uiVars->string, wrapWhiteFont(" DNA "));
-printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgText?db=%s&position=%s:%d-%d&phase=table\">%s</A></TD>", database, chromName, winStart+1, winEnd, wrapWhiteFont("Tables"));
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgText?db=%s&position=%s:%d-%d&phase=table&%s=%u\">%s</A></TD>",
+       database, chromName, winStart+1, winEnd, cartSessionVarName(),
+       cartSessionId(cart), wrapWhiteFont("Tables"));
 
 if (gotBlat)
     {
-    printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgCoordConv?origDb=%s&position=%s:%d-%d&phase=table&%s\">%s</A></TD>", database, chromName, winStart+1, winEnd, uiVars->string, wrapWhiteFont("Convert"));
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgCoordConv?origDb=%s&position=%s:%d-%d&phase=table&%s\">%s</A></TD>", database, chromName, winStart+1, winEnd, uiVars->string, wrapWhiteFont("Convert"));
     }
 if (sameString(database, "hg12"))
     {
-    fputs("<TD ALIGN=CENTER>", stdout);
+    hPuts("<TD ALIGN=CENTER>");
     printEnsemblAnchor();
-    printf("%s</A></TD>", wrapWhiteFont("Ensembl"));
-    printf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/maps.cgi?CHR=%s&BEG=%d&END=%d\" TARGET=_blank>",
+    hPrintf("%s</A></TD>", wrapWhiteFont("Ensembl"));
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/maps.cgi?CHR=%s&BEG=%d&END=%d\" TARGET=_blank>",
     	skipChr(chromName), winStart+1, winEnd);
-    printf("%s</A></TD>", wrapWhiteFont("Map View"));
+    hPrintf("%s</A></TD>", wrapWhiteFont("Map View"));
     }
-printf("<TD ALIGN=CENTER><A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank>%s</A></TD>\n", wrapWhiteFont("Guide"));
-fputs("</TR></TABLE>", stdout);
-fputs("</TD></TR></TABLE>\n", stdout);
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTracks?%s=%u&hgt.psOutput=on\">%s</A></TD>\n",cartSessionVarName(),
+       cartSessionId(cart), wrapWhiteFont("PDF/PS"));
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank>%s</A></TD>\n", wrapWhiteFont("Guide"));
+hPuts("</TR></TABLE>");
+hPuts("</TD></TR></TABLE>\n");
 }
 
-void doTrackForm()
+void groupTracks(struct track **pTrackList, struct group **pGroupList)
+/* Make up groups and assign tracks to groups. */
+{
+struct group *unknown = NULL;
+struct group *group, *list = NULL;
+struct hash *hash = newHash(8);
+struct track *track;
+struct trackRef *tr;
+boolean gotUserTracks = FALSE;
+
+/* Get list of groups from database. */
+if (hTableExists("grp"))
+    {
+    struct sqlConnection *conn = hAllocConn();
+    struct sqlResult *sr;
+    char **row;
+    sr = sqlGetResult(conn, "select * from grp");
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	struct grp grp;
+	grpStaticLoad(row, &grp);
+	AllocVar(group);
+	slAddHead(&list, group);
+	hashAdd(hash, grp.name, group);
+	group->name = cloneString(grp.name);
+	group->label = cloneString(grp.label);
+	group->priority = grp.priority;
+	}
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+
+/* Loop through tracks and fill in their groups. 
+ * If necessary make up an unknown group. */
+for (track = *pTrackList; track != NULL; track = track->next)
+    {
+    if (track->groupName == NULL)
+        group = NULL;
+    else
+	{
+	group = hashFindVal(hash, track->groupName);
+	}
+    if (group == NULL)
+        {
+	if (unknown == NULL)
+	    {
+	    AllocVar(unknown);
+	    unknown->name = cloneString("other");
+	    unknown->label = cloneString("other");
+	    unknown->priority = 1000000;
+	    slAddHead(&list, unknown);
+	    }
+	group = unknown;
+	}
+    track->group = group;
+    }
+slReverse(&list);  /* Postpone this til here so unknown will be last. */
+
+/* Sort tracks by combined group/track priority, and
+ * then add references to track to group. */
+slSort(pTrackList, tgCmpPriority);
+for (track = *pTrackList; track != NULL; track = track->next)
+    {
+    AllocVar(tr);
+    tr->track = track;
+    slAddHead(&track->group->trackList, tr);
+    }
+
+/* Straighten things out, clean up, and go home. */
+for (group = list; group != NULL; group = group->next)
+    slReverse(&group->trackList);
+hashFree(&hash);
+*pGroupList = list;
+}
+
+void doTrackForm(char *psOutput)
 /* Make the tracks display form with the zoom/scroll
  * buttons and the active image. */
 {
-struct trackGroup *group;
+struct group *group;
+struct track *track;
 char *freezeName = NULL;
 int controlColNum=0;
 char *s;
 boolean hideAll = cgiVarExists("hgt.hideAll");
+boolean showedRuler = FALSE;
+
+if (psOutput != NULL)
+   {
+   suppressHtml = TRUE;
+   hideControls = TRUE;
+   }
 
 /* Tell browser where to go when they click on image. */
-printf("<FORM ACTION=\"%s\" NAME=\"TrackForm\">\n\n", hgTracksName());
+hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\">\n\n", hgTracksName());
 cartSaveSession(cart);
 
 
@@ -9586,17 +9919,25 @@ if (userSeqString && !ssFilesExist(userSeqString))
     userSeqString = NULL;
     cartRemove(cart, "ss");
     }
-
-hideControls = cartUsualBoolean(cart, "hideControls", FALSE);
+if (!hideControls)
+    hideControls = cartUsualBoolean(cart, "hideControls", FALSE);
 withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE);
 withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE);
 withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
+#ifdef ROBERTS_EXPERIMENT
+withPopUps = cartUsualBoolean(cart, "popUps", TRUE);
+#endif /* ROBERTS_EXPERIMENT */
 s = cartUsualString(cart, "ruler", "on");
 withRuler = sameWord(s, "on");
 
 /* Register tracks that include some non-standard methods. */
 registerTrackHandler("cytoBand", cytoBandMethods);
 registerTrackHandler("bacEndPairs", bacEndPairsMethods);
+registerTrackHandler("bacEndPairsBad", bacEndPairsBadMethods);
+registerTrackHandler("bacEndPairsLong", bacEndPairsLongMethods);
+registerTrackHandler("fosEndPairs", fosEndPairsMethods);
+registerTrackHandler("fosEndPairsBad", fosEndPairsBadMethods);
+registerTrackHandler("fosEndPairsLong", fosEndPairsLongMethods);
 registerTrackHandler("genMapDb", genMapDbMethods);
 registerTrackHandler("cgh", cghMethods);
 registerTrackHandler("mcnBreakpoints", mcnBreakpointsMethods);
@@ -9608,25 +9949,32 @@ registerTrackHandler("recombRate", recombRateMethods);
 registerTrackHandler("chr18deletions", chr18deletionsMethods);
 registerTrackHandler("mouseSyn", mouseSynMethods);
 registerTrackHandler("mouseSynWhd", mouseSynWhdMethods);
+registerTrackHandler("ensRatMusHom", ensPhusionBlastMethods);
+registerTrackHandler("syntenyMouse", syntenyMouseMethods);
+registerTrackHandler("syntenyRat", syntenyRatMethods);
 registerTrackHandler("synteny100000", synteny100000Methods);
 registerTrackHandler("syntenyBuild30", synteny100000Methods);
 registerTrackHandler("syntenyBerk", syntenyBerkMethods);
 registerTrackHandler("syntenySanger", syntenySangerMethods);
 registerTrackHandler("mouseOrtho", mouseOrthoMethods);
 registerTrackHandler("mouseOrthoSeed", mouseOrthoMethods);
+//registerTrackHandler("orthoTop4", drawColorMethods);
 registerTrackHandler("humanParalog", humanParalogMethods);
 registerTrackHandler("isochores", isochoresMethods);
 registerTrackHandler("gcPercent", gcPercentMethods);
 registerTrackHandler("gcPercentSmall", gcPercentMethods);
-registerTrackHandler("swiss", swissMethods);
 registerTrackHandler("ctgPos", contigMethods);
+registerTrackHandler("bactigPos", bactigMethods);
 registerTrackHandler("gold", goldMethods);
 registerTrackHandler("gap", gapMethods);
 registerTrackHandler("genomicDups", genomicDupsMethods);
 registerTrackHandler("clonePos", coverageMethods);
 registerTrackHandler("genieKnown", genieKnownMethods);
+registerTrackHandler("knownGene", knownGeneMethods);
+registerTrackHandler("superfamily", superfamilyMethods);
 registerTrackHandler("refGene", refGeneMethods);
 registerTrackHandler("sanger22", sanger22Methods);
+registerTrackHandler("sanger22pseudo", sanger22Methods);
 registerTrackHandler("genieAlt", genieAltMethods);
 registerTrackHandler("ensGene", ensGeneMethods);
 registerTrackHandler("mrna", mrnaMethods);
@@ -9634,7 +9982,6 @@ registerTrackHandler("intronEst", intronEstMethods);
 registerTrackHandler("est", estMethods);
 registerTrackHandler("tightMrna", mrnaMethods);
 registerTrackHandler("tightEst", mrnaMethods);
-registerTrackHandler("estPair", estPairMethods);
 registerTrackHandler("cpgIsland", cpgIslandMethods);
 registerTrackHandler("exoMouse", exoMouseMethods);
 registerTrackHandler("blatHuman", longXenoPslMethods);
@@ -9652,9 +9999,10 @@ registerTrackHandler("multAlignWebbpig", longXenoPslMethods);
 registerTrackHandler("multAlignWebbrat", longXenoPslMethods);
 registerTrackHandler("multAlignWebbzebrafish", longXenoPslMethods);
 registerTrackHandler("aarMm2", longXenoPslMethods);
+registerTrackHandler("blastzRn1", longXenoPslMethods);
+registerTrackHandler("blastzBestRat", longXenoPslMethods);
+registerTrackHandler("blastzTightRat", longXenoPslMethods);
 registerTrackHandler("blastzMm2", longXenoPslMethods);
-registerTrackHandler("blastzMm2_0817", longXenoPslMethods);
-registerTrackHandler("blastzMm2_0824", longXenoPslMethods);
 registerTrackHandler("blastzMm2Sc", longXenoPslMethods);
 registerTrackHandler("blastzMm2Ref", longXenoPslMethods);
 registerTrackHandler("blastzRecipBest", longXenoPslMethods);
@@ -9671,23 +10019,25 @@ registerTrackHandler("blastzStrictChainPig", longXenoPslMethods);
 registerTrackHandler("blastzStrictChainRat", longXenoPslMethods);
 registerTrackHandler("blastzStrictChainTetra", longXenoPslMethods);
 registerTrackHandler("blastzStrictChainZebrafish", longXenoPslMethods);
-registerTrackHandler("chimpBlat", longXenoPslMethods);
+registerTrackHandler("blatChimp", longXenoPslMethods);
 registerTrackHandler("chimpBac", longXenoPslMethods);
 registerTrackHandler("blastzMouse", longXenoPslMethods);
 registerTrackHandler("blastzBestMouse", longXenoPslMethods);
-registerTrackHandler("blastzBestMouse_0824", longXenoPslMethods);
+registerTrackHandler("blastzTightMouse", longXenoPslMethods);
 registerTrackHandler("blastzHg", longXenoPslMethods);
 registerTrackHandler("blastzHgRef", longXenoPslMethods);
 registerTrackHandler("blastzHgTop", longXenoPslMethods);
 registerTrackHandler("blastzMmHg", longXenoPslMethods);
 registerTrackHandler("blastzMmHgRef", longXenoPslMethods);
 registerTrackHandler("blastzMmHg12", longXenoPslMethods);
+registerTrackHandler("blastzMmHg12Best", longXenoPslMethods);
+registerTrackHandler("blastzHuman", longXenoPslMethods);
 registerTrackHandler("blastzBestHuman", longXenoPslMethods);
 registerTrackHandler("blastBestHuman_75", longXenoPslMethods);
-registerTrackHandler("blastBestHuman_08_30", longXenoPslMethods);
 registerTrackHandler("blastBestHuman", longXenoPslMethods);
-registerTrackHandler("blastzBestHuman12", longXenoPslMethods);
 registerTrackHandler("blastzAllHuman", longXenoPslMethods);
+registerTrackHandler("blastzTightHuman", longXenoPslMethods);
+registerTrackHandler("blastzMouseSyn", longXenoPslMethods);
 registerTrackHandler("xenoBestMrna", xenoMrnaMethods);
 registerTrackHandler("xenoMrna", xenoMrnaMethods);
 registerTrackHandler("xenoEst", xenoMrnaMethods);
@@ -9705,7 +10055,6 @@ registerTrackHandler("rosetta", rosettaMethods);
 registerTrackHandler("affy", affyMethods);
 registerTrackHandler("affyRatio", affyRatioMethods);
 registerTrackHandler("ancientR", ancientRMethods );
-registerTrackHandler("altGraph", altGraphMethods );
 registerTrackHandler("altGraphX", altGraphXMethods );
 registerTrackHandler("triangle", triangleMethods );
 registerTrackHandler("triangleSelf", triangleMethods );
@@ -9715,6 +10064,7 @@ registerTrackHandler("mgcNcbiPicks", estMethods);
 registerTrackHandler("mgcNcbiSplicedPicks", intronEstMethods);
 registerTrackHandler("mgcUcscPicks", intronEstMethods);
 registerTrackHandler("humMusL", humMusLMethods);
+registerTrackHandler("zoo", zooMethods);
 registerTrackHandler("musHumL", musHumLMethods);
 registerTrackHandler("affyTranscriptome", affyTranscriptomeMethods);
 registerTrackHandler("rikenMrna", rikenMethods);
@@ -9728,44 +10078,48 @@ registerTrackHandler("celeraCoverage", celeraCoverageMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
-loadFromTrackDb(&tGroupList);
-secretRikenTracks(&tGroupList);
-if (userSeqString != NULL) slSafeAddHead(&tGroupList, userPslTg());
-loadCustomTracks(&tGroupList);
+loadFromTrackDb(&trackList);
+secretRikenTracks(&trackList);
+if (userSeqString != NULL) slSafeAddHead(&trackList, userPslTg());
+loadCustomTracks(&trackList);
 
-
-slSort(&tGroupList, tgCmpPriority);
+groupTracks(&trackList, &groupList);
 
 /* Get visibility values if any from ui. */
-for (group = tGroupList; group != NULL; group = group->next)
+for (track = trackList; track != NULL; track = track->next)
     {
-    char *s = cartOptionalString(cart, group->mapName);
+    char *s = cartOptionalString(cart, track->mapName);
     if (s != NULL)
-	group->visibility = hTvFromString(s);
+	track->visibility = hTvFromString(s);
     }
 
 /* If hideAll flag set, make all tracks hidden */
 if(hideAll)
     {
-    for (group = tGroupList; group != NULL; group = group->next)
+    for (track = trackList; track != NULL; track = track->next)
 	{
-	group->visibility = tvHide;
+	track->visibility = tvHide;
 	}
-    hideAllTracks(tGroupList);
+    hideAllTracks(trackList);
     }
 
-/* Tell groups to load their items. */
-for (group = tGroupList; group != NULL; group = group->next)
+/* Figure out basic dimensions of display.  Loaders
+ * as well as drawers want to know this, so that
+ * they don't have to load too much detail. */
+insideX = trackOffsetX();
+insideWidth = tl.picWidth-gfxBorder-insideX;
+
+/* Tell tracks to load their items. */
+for (track = trackList; track != NULL; track = track->next)
     {
-    if (group->visibility != tvHide)
+    if (track->visibility != tvHide)
 	{
-	group->loadItems(group); 
-	limitVisibility(group, group->items);
+	track->loadItems(track); 
 	}
     }
 
 /* Center everything from now on. */
-printf("<CENTER>\n");
+hPrintf("<CENTER>\n");
 
 if (!hideControls)
     {
@@ -9774,135 +10128,183 @@ if (!hideControls)
     freezeName = hFreezeFromDb(database);
     if(freezeName == NULL)
 	freezeName = "Unknown";
-    printf("<FONT SIZE=5><B>UCSC Genome Browser on %s Freeze</B></FONT><BR>\n",freezeName); 
+    hPrintf("<FONT SIZE=5><B>UCSC Genome Browser on %s Freeze</B></FONT><BR>\n",freezeName); 
     /* This is a clear submit button that browsers will use by default when enter is pressed in position box. */
-    printf("<INPUT TYPE=IMAGE BORDER=0 NAME=\"hgt.dummyEnterButton\" src=\"../images/DOT.gif\">");
+    hPrintf("<INPUT TYPE=IMAGE BORDER=0 NAME=\"hgt.dummyEnterButton\" src=\"../images/DOT.gif\">");
     /* Put up scroll and zoom controls. */
-    fputs("move ", stdout);
-    cgiMakeButton("hgt.left3", "<<<");
-    cgiMakeButton("hgt.left2", " <<");
-    cgiMakeButton("hgt.left1", " < ");
-    cgiMakeButton("hgt.right1", " > ");
-    cgiMakeButton("hgt.right2", ">> ");
-    cgiMakeButton("hgt.right3", ">>>");
-    fputs(" zoom in ", stdout);
-    cgiMakeButton("hgt.in1", "1.5x");
-    cgiMakeButton("hgt.in2", " 3x ");
-    cgiMakeButton("hgt.in3", "10x");
-    fputs(" zoom out ", stdout);
-    cgiMakeButton("hgt.out1", "1.5x");
-    cgiMakeButton("hgt.out2", " 3x ");
-    cgiMakeButton("hgt.out3", "10x");
-    fputs("<BR>\n", stdout);
+    hWrites("move ");
+    hButton("hgt.left3", "<<<");
+    hButton("hgt.left2", " <<");
+    hButton("hgt.left1", " < ");
+    hButton("hgt.right1", " > ");
+    hButton("hgt.right2", ">> ");
+    hButton("hgt.right3", ">>>");
+    hWrites(" zoom in ");
+    hButton("hgt.in1", "1.5x");
+    hButton("hgt.in2", " 3x ");
+    hButton("hgt.in3", "10x");
+    hWrites(" zoom out ");
+    hButton("hgt.out1", "1.5x");
+    hButton("hgt.out2", " 3x ");
+    hButton("hgt.out3", "10x");
+    hWrites("<BR>\n");
 
     /* Make line that says position. */
 	{
 	char buf[256];
+        char *javascript = "onchange=\"document.location = '/cgi-bin/hgTracks?db=' + document.TrackForm.db.options[document.TrackForm.db.selectedIndex].value;\"";
+
+        if (containsStringNoCase(database, "zoo"))
+            {
+            hPuts("Organism ");
+            printAssemblyListHtmlExtra(database, javascript);
+            }
+
 	sprintf(buf, "%s:%d-%d", chromName, winStart+1, winEnd);
 	position = cloneString(buf);
-	fputs("position ", stdout);
-	cgiMakeTextVar("position", position, 30);
-	printf("  size %d, ", winEnd-winStart);
-	fputs(" image width ", stdout);
-	cgiMakeIntVar("pix", tl.picWidth, 4);
-	fputs(" ", stdout);
-	cgiMakeButton("submit", "jump");
-	fputc('\n', stdout);
+	hWrites("position ");
+	hTextVar("position", position, 30);
+	sprintLongWithCommas(buf, winEnd - winStart);
+	hPrintf(" size %s ", buf);
+	hWrites(" image width ");
+	hIntVar("pix", tl.picWidth, 4);
+	hWrites(" ");
+	hButton("submit", "jump");
+	hPutc('\n');
 	}
     }
 
 /* Make clickable image and map. */
-makeActiveImage(tGroupList);
+makeActiveImage(trackList, psOutput);
 
 if (!hideControls)
     {
     struct controlGrid *cg = NULL;
 
-    printf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1 WIDTH=%d COLS=%d><TR>\n", 
+    hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1 WIDTH=%d COLS=%d><TR>\n", 
     	tl.picWidth, 27);
-    printf("<TD COLSPAN=6 ALIGN=CENTER NOWRAP>");
-    printf("move start<BR>");
-    cgiMakeButton("hgt.dinkLL", " < ");
-    cgiMakeTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
-    cgiMakeButton("hgt.dinkLR", " > ");
-    printf("<TD COLSPAN=15>");
-    fputs("Click on a feature for details. "
+    hPrintf("<TD COLSPAN=6 ALIGN=CENTER NOWRAP>");
+    hPrintf("move start<BR>");
+    hButton("hgt.dinkLL", " < ");
+    hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
+    hButton("hgt.dinkLR", " > ");
+    hPrintf("<TD COLSPAN=15>");
+    hWrites("Click on a feature for details. "
 	  "Click on base position to zoom in around cursor. "
-	  "Click on left mini-buttons for track-specific options" 
-	  , stdout);
-    printf("<TD COLSPAN=6 ALIGN=CENTER NOWRAP>");
-    printf("move end<BR>");
-    cgiMakeButton("hgt.dinkRL", " < ");
-    cgiMakeTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
-    cgiMakeButton("hgt.dinkRR", " > ");
-    printf("<TR></TABLE>\n");
+	  "Click on left mini-buttons for track-specific options" );
+    hPrintf("<TD COLSPAN=6 ALIGN=CENTER NOWRAP>");
+    hPrintf("move end<BR>");
+    hButton("hgt.dinkRL", " < ");
+    hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
+    hButton("hgt.dinkRR", " > ");
+    hPrintf("<TR></TABLE>\n");
     smallBreak();
 
     /* Display bottom control panel. */
-    cgiMakeButton("hgt.reset", "reset all");
-    printf(" ");
-    cgiMakeButton("hgt.hideAll", "hide all");
-    printf(" Guidelines ");
-    cgiMakeCheckBox("guidelines", withGuidelines);
-    printf(" <B>Labels:</B> ");
-    printf("left ");
-    cgiMakeCheckBox("leftLabels", withLeftLabels);
-    printf("center ");
-    cgiMakeCheckBox("centerLabels", withCenterLabels);
-    printf(" ");
-    cgiMakeButton("submit", "refresh");
-    printf("<BR>\n");
+    hButton("hgt.reset", "reset all");
+    hPrintf(" ");
+    hButton("hgt.hideAll", "hide all");
+    hPrintf(" Guidelines ");
+    hCheckBox("guidelines", withGuidelines);
+    hPrintf(" <B>Labels:</B> ");
+    hPrintf("left ");
+    hCheckBox("leftLabels", withLeftLabels);
+    hPrintf("center ");
+    hCheckBox("centerLabels", withCenterLabels);
+#ifdef ROBERTS_EXPERIMENT
+    hPrintf("popUp ");
+    hCheckBox("popUps", withPopUps);
+#endif /* ROBERTS_EXPERIMENT */
+    hPrintf(" ");
+    hButton("submit", "refresh");
+    hPrintf("<BR>\n");
 
-    /* Display viewing options for each group. */
+    /* Display viewing options for each track. */
     /* Chuck: This is going to be wrapped in a table so that
      * the controls don't wrap around randomly
      */
     if( chromosomeColorsMade )
         {
-        printf("<B>Chromosome Color Key:</B><BR> ");
-        printf("<IMG SRC = \"../images/colorchrom.gif\" BORDER=1 WIDTH=610 HEIGHT=19 ><BR>\n");
+        hPrintf("<B>Chromosome Color Key:</B><BR> ");
+        hPrintf("<IMG SRC = \"../images/colorchrom.gif\" BORDER=1 WIDTH=551 HEIGHT=18 ><BR>\n");
         }
-    printf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
-    printf("<tr><th colspan=%d>\n", MAX_CONTROL_COLUMNS);
-    smallBreak();
-    printf("<B>Track Controls:</B>");
-    printf("</th></tr>\n");
-    printf("<tr>\n");
-    printf("<tr><td colspan='5' align='middle'>Note: Tracks with more than %d items are always displayed in "
-           "dense mode.</td></tr>\n", maxItemsInFullTrack);
-
+    hPrintf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
+    // hPrintf("<tr><th colspan=%d>\n", MAX_CONTROL_COLUMNS);
+    // smallBreak();
+    // hPrintf("<B>Track Controls:</B>");
+    // hPrintf("</th></tr>\n");
+    hPrintf("<tr><td colspan='5' align='middle' nowrap>Note: "
+	   "Tracks with lots of items will automatically be displayed in "
+	   "more compact modes.</td></tr>\n");
     cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
-    controlGridStartCell(cg);
-    printf(" Base Position <BR>");
-    cgiMakeDropList("ruler", offOn, 2, offOn[withRuler]);
-    controlGridEndCell(cg);
-    for (group = tGroupList; group != NULL; group = group->next)
-	{
-	controlGridStartCell(cg);
-	if (group->hasUi)
-	    printf("<A HREF=\"%s?%s=%u&c=%s&g=%s\">", hgTrackUiName(),
-		cartSessionVarName(), cartSessionId(cart),
-		chromName, group->mapName);
-	printf(" %s<BR> ", group->shortLabel);
-	if (group->hasUi)
-	    printf("</A>");
-	hTvDropDown(group->mapName, group->visibility);
-	controlGridEndCell(cg);
-	}
-    /* now finish out the table */
-    endControlGrid(&cg);
-    printf("</CENTER>\n");
-    }
+    for (group = groupList; group != NULL; group = group->next)
+        {
+	struct trackRef *tr;
 
+	if (group->trackList == NULL)
+	    continue;
+
+	/* Print group label on left. */
+	hPrintf("<th colspan=%d BGCOLOR=#536ED3>", 
+		MAX_CONTROL_COLUMNS);
+	hPrintf("<B>%s</B>", wrapWhiteFont(group->label));
+	hPrintf("</th>\n", MAX_CONTROL_COLUMNS);
+	controlGridEndRow(cg);
+
+	/* First group gets ruler. */
+	if (!showedRuler)
+	    {
+	    showedRuler = TRUE;
+	    controlGridStartCell(cg);
+	    hPrintf(" Base Position <BR>");
+	    hDropList("ruler", offOn, 2, offOn[withRuler]);
+	    controlGridEndCell(cg);
+	    }
+
+	for (tr = group->trackList; tr != NULL; tr = tr->next)
+	    {
+	    track = tr->track;
+	    controlGridStartCell(cg);
+	    if (track->hasUi)
+		hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s\">", hgTrackUiName(),
+		    cartSessionVarName(), cartSessionId(cart),
+		    chromName, track->mapName);
+	    hPrintf(" %s<BR> ", track->shortLabel);
+	    if (track->hasUi)
+		hPrintf("</A>");
+	    hTvDropDown(track->mapName, track->visibility, track->canPack);
+	    controlGridEndCell(cg);
+	    }
+	/* now finish out the table */
+	controlGridEndRow(cg);
+	}
+    endControlGrid(&cg);
+    }
+hPrintf("</CENTER>\n");
+
+
+#ifdef SLOW
+/* We'll rely on the end of program to do the cleanup.
+ * It turns out that the 'free' routine on Linux is
+ * quite slow.  For chromosome level views the browser
+ * spends about 1/3 of it's time doing the cleanup
+ * below if it's enabled.  Since we really don't
+ * need to reclaim this memory at this point I'm
+ * taking this out.  Please don't delete the code though.
+ * I'll like to keep it for testing now and then. -jk. */
 
 /* Clean up. */
-for (group = tGroupList; group != NULL; group = group->next)
+for (track = trackList; track != NULL; track = track->next)
     {
-    if (group->visibility != tvHide)
-	if (group->freeItems != NULL)
-		group->freeItems(group);
+    if (track->visibility != tvHide)
+	{
+	if (track->freeItems != NULL)
+	    track->freeItems(track);
+	lmCleanup(&track->lm);
+	}
     }
-printf("</FORM>");
+#endif /* SLOW */
+hPrintf("</FORM>");
 }
 
 
@@ -9910,7 +10312,14 @@ void zoomAroundCenter(double amount)
 /* Set ends so as to zoom around center by scaling amount. */
 {
 int center = (winStart + winEnd)/2;
-int newCount = (int)(winBaseCount*amount + 0.5);
+double newCountDbl = (winBaseCount*amount + 0.5);
+int newCount;
+if (newCountDbl > seqBaseCount)
+    newCount = seqBaseCount;
+else if (newCountDbl < 0)
+    newCount = 0;
+else
+    newCount = (int)newCountDbl;
 if (newCount < 30) newCount = 30;
 if (newCount > seqBaseCount)
     newCount = seqBaseCount;
@@ -9975,8 +10384,10 @@ int dinkSize(char *var)
 {
 char *stringVal = cartOptionalString(cart, var);
 double x;
+int insideX = trackOffsetX(); /* The global versions of these are not yet set */
+int insideWidth = tl.picWidth-gfxBorder-insideX;
 double guideBases = (double)guidelineSpacing * (double)(winEnd - winStart) 
-	/ ((double)tl.picWidth - trackOffsetX());
+	/ ((double)insideWidth);
 
 if (stringVal == NULL || !isdigit(stringVal[0]))
     {
@@ -9985,6 +10396,70 @@ if (stringVal == NULL || !isdigit(stringVal[0]))
     }
 x = atof(stringVal);
 return round(x*guideBases);
+}
+
+char * convertEpsToPdf(char *epsFile) 
+/* Convert EPS to PDF and return filename, or NULL if failure. */
+{
+char *pdfTmpName = NULL, *pdfName=NULL;
+char cmdBuffer[2048];
+int sysVal = 0;
+struct lineFile *lf = NULL;
+char *line;
+int lineSize=0;
+float width=0, height=0;
+pdfTmpName = cloneString(epsFile);
+
+/* Get the dimensions of bounding box. */
+lf = lineFileOpen(epsFile, TRUE);
+while(lineFileNext(lf, &line, &lineSize)) 
+    {
+    if(strstr( line, "BoundingBox:")) 
+	{
+	char *words[5];
+	chopLine(line, words);
+	width = atof(words[3]);
+	height = atof(words[4]);
+	break;
+	}
+    }
+lineFileClose(&lf);
+	
+/* Do conversion. */
+chopSuffix(pdfTmpName);
+pdfName = addSuffix(pdfTmpName, ".pdf");
+safef(cmdBuffer, sizeof(cmdBuffer), "ps2pdf -dDEVICEWIDTHPOINTS=%d -dDEVICEHEIGHTPOINTS=%d %s %s", 
+      round(width), round(height), epsFile, pdfName);
+sysVal = system(cmdBuffer);
+if(sysVal != 0)
+    freez(&pdfName);
+freez(&pdfTmpName);
+return pdfName;
+}
+
+void handlePostscript()
+/* Deal with Postscript output. */
+{
+struct tempName psTn;
+char *pdfFile = NULL;
+makeTempName(&psTn, "hgt", ".eps");
+printf("<H1>PostScript/PDF Output</H1>\n");
+printf("PostScript images can be printed at high resolution "
+       "and edited by many drawing programs such as Adobe "
+       "Illustrator.<BR>");
+doTrackForm(psTn.forCgi);
+printf("<A HREF=\"%s\">Click here to download</A> "
+       "the current browser graphic in PostScript.  ", psTn.forCgi);
+pdfFile = convertEpsToPdf(psTn.forCgi);
+if(pdfFile != NULL) 
+    {
+    printf("<BR><BR>PDF can be viewed with Adobe Acrobat Reader.<BR>\n");
+    printf("<A HREF=\"%s\">Click here to download</A> "
+	   "the current browser graphic in PDF", pdfFile);
+    }
+else
+    printf("<BR><BR>PDF format not available");
+freez(&pdfFile);
 }
 
 void tracksDisplay()
@@ -10005,12 +10480,10 @@ if(sameString(position, ""))
 chromName = NULL;
 hgp = findGenomePos(position, &chromName, &winStart, &winEnd, cart);
 
-//fprintf(stderr, "XXXXXXXXXX TABLE NAME: %s\n", chromName);
 
 if (NULL != hgp && NULL != hgp->tableList && NULL != hgp->tableList->name)
     {
     cartSetString(cart, hgp->tableList->name, "full");
-    fprintf(stderr, "XXXXXXXXXX TABLE NAME: %s\n", hgp->tableList->name);
     }
 
 /* This means that no single result was found 
@@ -10069,10 +10542,22 @@ else if (winStart == winEnd)
     winStart -= 1000;
     winEnd += 1000;
     }
+
 if (winStart < 0)
+    {
     winStart = 0;
-if (winEnd > seqBaseCount)
+    }
+
+if (winEnd > seqBaseCount) 
+    {
     winEnd = seqBaseCount;
+    }
+
+if (winStart > seqBaseCount)
+    {
+    winStart = seqBaseCount - 1000;
+    }
+
 winBaseCount = winEnd - winStart;
 if (winBaseCount <= 0)
     errAbort("Window out of range on %s", chromName);
@@ -10080,8 +10565,10 @@ if (winBaseCount <= 0)
 /* Save computed position in cart. */
 sprintf(newPos, "%s:%d-%d", chromName, winStart+1, winEnd);
 cartSetString(cart, "position", newPos);
-
-doTrackForm();
+if (cgiVarExists("hgt.psOutput"))
+    handlePostscript();
+else
+    doTrackForm(NULL);
 }
 
 
@@ -10092,8 +10579,10 @@ char *debugTmp = NULL;
 /* Initialize layout and database. */
 cart = theCart;
 
-getDbAndOrganism(cart, &database, &organism);
+getDbAndGenome(cart, &database, &organism);
 hSetDb(database);
+
+protDbName = hPdbFromGdb(database);
 
 debugTmp = cartUsualString(cart, "hgDebug", "off");
 if(sameString(debugTmp, "on"))
@@ -10127,7 +10616,7 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
 			"hgt.left1", "hgt.left2", "hgt.left3", 
 			"hgt.right1", "hgt.right2", "hgt.right3", 
 			"hgt.dinkLL", "hgt.dinkLR", "hgt.dinkRL", "hgt.dinkRR",
-			"hgt.tui", "hgt.hideAll",
+			"hgt.tui", "hgt.hideAll", "hgt.psOutput", "hideControls",
 			NULL };
 
 void resetVars()
@@ -10152,6 +10641,8 @@ htmlSetBackground("../images/floret.jpg");
 if (cgiVarExists("hgt.reset"))
     resetVars();
 
-cartHtmlShell("UCSC Genome Browser v15", doMiddle, hUserCookie(), excludeVars, NULL);
+zooSpeciesHashInit();
+
+cartHtmlShell("UCSC Genome Browser v16", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }

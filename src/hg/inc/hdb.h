@@ -60,17 +60,26 @@ void hDefaultConnect();
 char *hTrackDbName();
 /* return the name of the track database from the config file. Freez when done */
 
+char *hPdbFromGdb(char *genomeDb);
+/* return the name of the proteome database given the genome database name */
+
 void hSetDbConnect(char* host, char *db, char *user, char *password);
 /* set the connection information for the database */
 
 void hSetDbConnect2(char* host, char *db, char *user, char *password);
 /* set the connection information for the database */
 
+boolean hDbExists(char *database);
+/* Function to check if this is a valid db name */
+
 void hSetDb(char *dbName);
 /* Set the database name. */
 
 void hSetDb2(char *dbName);
 /* Set the database name. */
+
+char *hDefaultDb();
+/* Return the default db if all else fails */
 
 char *hGetDb();
 /* Return the current database name. */
@@ -116,9 +125,15 @@ boolean hTableExists(char *table);
 boolean hTableExists2(char *table);
 /* Return TRUE if a table exists in secondary database. */
 
+boolean hTableExistsDb(char *db, char *table);
+/* Return TRUE if a table exists in db. */
+
 void hParseTableName(char *table, char trackName[128], char chrom[32]);
 /* Parse an actual table name like "chr17_random_blastzWhatever" into 
  * the track name (blastzWhatever) and chrom (chr17_random). */
+
+int hdbChromSize(struct sqlConnection *conn, char *chromName);
+/* Get chromosome size from given database connection. */
 
 int hChromSize(char *chromName);
 /* Return size of chromosome. */
@@ -222,6 +237,12 @@ boolean hFindChromStartEndFieldsDb(char *db, char *table,
 boolean hIsBinned(char *table);
 /* Return TRUE if a table is binned. */
 
+int hFieldIndex(char *table, char *field)
+/* Return index of field in table or -1 if it doesn't exist. */;
+
+boolean hHasField(char *table, char *field);
+/* Return TRUE if table has field */
+
 boolean hFindFieldsAndBin(char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32],
 	boolean *retBinned);
@@ -232,6 +253,11 @@ boolean hFindSplitTable(char *chrom, char *rootName,
 	char retTableBuf[64], boolean *hasBin);
 /* Find name of table that may or may not be split across chromosomes. 
  * Return FALSE if table doesn't exist.  */
+
+boolean hFindSplitTableDb(char *db, char *chrom, char *rootName, 
+	char retTableBuf[64], boolean *hasBin);
+/* Find name of table in a given database that may or may not 
+ * be split across chromosomes. Return FALSE if table doesn't exist.  */
 
 int hBinLevels();
 /* Return number of levels to bins. */
@@ -248,6 +274,9 @@ int hFindBin(int start, int end);
  * 1M segment, for each 8M segment, for each 64M segment,
  * and for each chromosome (which is assumed to be less than
  * 512M.)  A range goes into the smallest bin it will fit in. */
+
+void hAddBinToQueryGeneral(char *binField, int start, int end, struct dyString *query);
+/* Add clause that will restrict to relevant bins to query. allow bin field name to be specified */
 
 void hAddBinToQuery(int start, int end, struct dyString *query);
 /* Add clause that will restrict to relevant bins to query. */
@@ -293,6 +322,11 @@ struct dbDb *hGetIndexedDatabases();
 /* Get list of databases for which there is a nib dir. 
  * Dispose of this with dbDbFreeList. */
 
+struct dbDb *hGetAxtInfoDbs();
+/* Get list of db's where we have axt files listed in axtInfo . 
+ * The db's with the same organism as organism go last.
+ * Dispose of this with dbDbFreeList. */
+
 struct axtInfo *hGetAxtAlignments(char *db);
 /* Get list of alignments where we have axt files listed in axtInfo . 
  * Dispose of this with axtInfoFreeList. */
@@ -319,13 +353,17 @@ char *hOrganism(char *database);
 /* Return organism associated with database.   Use freeMem on
  * return value when done. */
 
+char *hGenome(char *database);
+/* Return genome associated with database.   Use freeMem on
+ * return value when done. */
+
 char *hLookupStringVars(char *in, char *database);
 /* Expand $ORGANISM and other variables in input. */
 
 void hLookupStringsInTdb(struct trackDb *tdb, char *database);
 /* Lookup strings in track database. */
 
-char *hDefaultDbForOrganism(char *organism);
+char *hDefaultDbForGenome(char *genome);
 /*
 Purpose: Return the default database matching the organism.
 
@@ -333,5 +371,11 @@ param organism - The organism for which we are trying to get the
     default database.
 return - The default database name for this organism
  */
+
+char *sqlGetField(struct sqlConnection *connIn, 
+   	          char *dbName, char *tblName, char *fldName, 
+  	          char *condition);
+/* Return a single field from the database, given database name, 
+   table name, field name, and a condition string */
 
 #endif /* HDB_H */

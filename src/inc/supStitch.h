@@ -29,7 +29,6 @@ struct ssFfItem
     {
     struct ssFfItem *next;      /* Next in list. */
     struct ffAli *ff;		/* Alignment (owned by ssFfItem) */
-    int trimScore;              /* Alignment score during trimming. */
     };
 
 void ssFfItemFree(struct ssFfItem **pEl);
@@ -60,7 +59,8 @@ void ssBundleFreeList(struct ssBundle **pList);
 /* Free up list of ssBundles */
 
 
-int ssStitch(struct ssBundle *bundle, enum ffStringency stringency);
+int ssStitch(struct ssBundle *bundle, enum ffStringency stringency, 
+	int minScore);
 /* Glue together mrnas in bundle as much as possible. Returns number of
  * alignments after stitching. Updates bundle->ffList with stitched
  * together version. */

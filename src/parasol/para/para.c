@@ -866,7 +866,12 @@ if (submitError > 0)
 if (queueError > 0)
    printf("queue errors: %d\n", queueError);
 if (trackingError > 0)
-   printf("tracking errors: %d\n", trackingError);
+   {
+   if (!fileExists(resultsName))
+       printf("para.results: file not found.  paraHub can't write to this dir?\n");
+   else
+       printf("tracking errors: %d\n", trackingError);
+   }
 if (inQueue > 0)
    printf("queued and waiting: %d\n", inQueue);
 if (crashed > 0)
@@ -1343,7 +1348,12 @@ if (runningCount > 0)
 if (crashCount > 0)
     printf("Crashed: %d jobs\n", crashCount);
 if (otherCount > 0)
-    printf("Other count: %d jobs\n", otherCount);
+    {
+    if (!fileExists(resultsName))
+	printf("Other count: %d jobs\n", otherCount);
+    else
+        printf("para.results: file not found.  paraHub can't write to this dir?\n");
+    }
 if (queueCount > 0)
     printf("In queue waiting: %d jobs\n", queueCount);
 printTimes("CPU time in finished jobs:", totalCpu, TRUE);

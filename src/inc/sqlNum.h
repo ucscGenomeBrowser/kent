@@ -7,6 +7,9 @@
 #ifndef SQLNUM_H
 #define SQLNUM_H
 
+/* get off_t */
+#include <sys/types.h>
+
 unsigned sqlUnsigned(char *s);
 /* Convert series of digits to unsigned integer about
  * twice as fast as atoi (by not having to skip white 
@@ -16,6 +19,9 @@ int sqlSigned(char *s);
 /* Convert string to signed integer.  Unlike atol assumes 
  * all of string is number. */
 
+off_t sqlOffset(char *s);
+/* Convert string to an off_t.  Unlike atol assumes all of string is
+ * number. */
 
 #endif /* SQLNUM_H */
  

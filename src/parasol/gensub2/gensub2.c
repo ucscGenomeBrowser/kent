@@ -30,14 +30,16 @@ errAbort(
   "       $(file2)  - name without dir of second file\n"
   "       $(num1)   - index of first file in list\n"
   "       $(num2)   - index of second file in list\n"
-  "The <file list 2> parameter can be 'single' if there is only one\n"
-  "file list.\n"
-  "By default the order is Aa Ba aB Bb if the first list is AB and the\n"
-  "second list is ab.  This tends to put the largest jobs first if the\n"
-  "file lists are both sorted by size. The following options can change this\n"
-  "Options:\n"
-  "       -group1 - write elements in order Aa Ab Ba Bb\n"
-  "       -group2 - write elements in order Aa Ba Ab Bb\n");
+  "The <file list 2> parameter can be 'single' if there is only \n"
+  "one file list.  By default the order is diagonal, meaning if \n"
+  "the first list is ABC and the secon list is abc the combined \n"
+  "order is Aa Ba Ab Ca Bb Ac  Cb Bc Cc.  This tends to put the \n"
+  "largest jobs first if the file lists are both sorted by size. \n"
+  "The following options can change this:\n"
+  "    -group1 - write elements in order Aa Ab Ac Ba Bb Bc Ca Cb Cc\n"
+  "    -group2 - write elements in order Aa Ba Ca Ab Bb Cb Ac Bc Cc\n"
+  );
+	      
 }
 
 void getLastDir(char *retDir, char *pathToParse)

@@ -13,6 +13,10 @@
 int winSize = 1010000;
 int overlapSize = 10000;
 boolean noDieMissing = FALSE;
+char *hPrefix = "";
+char *mPrefix = "";
+boolean verbose = FALSE;
+char *rPrefix = "";
 
 void usage()
 /* Explain usage and exit. */
@@ -32,15 +36,31 @@ errAbort(
   "               for each window on the human chromosome\n"
   "options:\n"
   "   -winSize=N Human bases in each directory.  Default %d\n"
-  "   -overlapSize=N Amount to overlap each window. Default %d\n",
-  "   -noDieMissing Don't die over missing mouse/rat alignments\n",
+  "   -overlapSize=N Amount to overlap each window. Default %d\n"
+  "   -noDieMissing Don't die over missing mouse/rat alignments\n"
+  "   -verbose - If set be more verbose with diagnostic output\n"
+  "   -hPrefix=hgN. - Prefix hgN. to each human sequence name in output\n"
+  "   -mPrefix=mmN. - Prefix for mouse sequence names\n"
+  "   -rPrefix=ratN. - Prefix for rat sequence\n",
   winSize, overlapSize
   );
 }
 
 int maxChromSize = 500*1024*1024;	/* Largest size a binRange can handle */
 
-struct binKeeper *loadAxtsIntoRange(char *fileName)
+void prefixAxt(struct axt *axt, char *qPrefix, char *tPrefix)
+/* Add prefixes to axt->qName and ->tName */
+{
+char tName[256], qName[256];
+snprintf(tName, sizeof(tName), "%s%s", tPrefix, axt->tName);
+freeMem(axt->tName);
+axt->tName = cloneString(tName);
+snprintf(qName, sizeof(qName), "%s%s", qPrefix, axt->qName);
+freeMem(axt->qName);
+axt->qName = cloneString(qName);
+}
+
+struct binKeeper *loadAxtsIntoRange(char *fileName, char *tPrefix, char *qPrefix)
 /* Read in an axt file and shove it into a bin-keeper. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
@@ -48,19 +68,63 @@ struct binKeeper *bk = binKeeperNew(0, maxChromSize);
 struct axt *axt;
 
 while ((axt = axtRead(lf)) != NULL)
+    {
     binKeeperAdd(bk, axt->tStart, axt->tEnd, axt);
+    }
 lineFileClose(&lf);
 return bk;
 }
 
+boolean allDash(char *s)
+/* Return TRUE if string is all '-'. */
+{
+char c;
+
+while ((c = *s++) != 0)
+    {
+    if (c != '-')
+        return FALSE;
+    }
+return TRUE;
+}
+
+boolean mafAllDash(struct mafAli *maf)
+/* Return TRUE if maf has a row which is all dashes. */
+{
+struct mafComp *comp;
+
+for (comp = maf->components; comp != NULL; comp = comp->next)
+    {
+    if (allDash(comp->text))
+	return TRUE;
+    }
+return FALSE;
+}
+
+void mafWriteGood(FILE *f, struct mafAli *maf)
+/* Write out maf if it's not all dash. */
+{
+if (!mafAllDash(maf))
+    mafWrite(f, maf);
+}
+
 void outputAxtAsMaf(FILE *f, struct axt *axt, 
-	struct hash *tSizeHash, struct hash *qSizeHash)
+	struct hash *tSizeHash, char *tPrefix, struct hash *qSizeHash, char *qPrefix)
 /* Write out an axt in maf format. */
 {
 struct mafAli temp;
-mafFromAxtTemp(axt, hashIntVal(tSizeHash, axt->tName),
-	hashIntVal(qSizeHash, axt->qName), &temp);
-mafWrite(f, &temp);
+char *oldQ = axt->qName;
+char *oldT = axt->tName;
+char tName[256], qName[256];
+snprintf(tName, sizeof(tName), "%s%s", tPrefix, axt->tName);
+axt->tName = tName;
+snprintf(qName, sizeof(qName), "%s%s", qPrefix, axt->qName);
+axt->qName = qName;
+mafFromAxtTemp(axt, hashIntVal(tSizeHash, oldT),
+	hashIntVal(qSizeHash, oldQ), &temp);
+axt->qName = oldQ;
+axt->tName = oldT;
+mafWriteGood(f, &temp);
 }
 
 struct hash *loadSizeHash(char *fileName)
@@ -71,7 +135,9 @@ char *row[2];
 struct hash *hash = hashNew(0);
 
 while (lineFileRow(lf, row))
+    {
     hashAddInt(hash, row[0], lineFileNeedNum(lf, row, 1));
+    }
 return hash;
 }
 
@@ -118,7 +184,8 @@ if (lf == NULL)
 sprintf(fileName, "%s/%s.axt.ix", ratMouseDir, chrom);
 mcc->bk = binKeeperNew(0, chromSize);
 lf = lineFileOpen(fileName, TRUE);
-printf("Reading %s\n", fileName);
+if (verbose)
+    printf("Reading %s\n", fileName);
 while (lineFileRow(lf, row))
     {
     start = lineFileNeedNum(lf, row, 0);
@@ -171,12 +238,14 @@ for (el = list; el != NULL; el = el->next)
     sprintf(aliName, "%s.%lld", mouseChrom, pos);
     if (!hashLookup(dupeHash, aliName))
 	{
+	int rChromSize;
 	hashAdd(dupeHash, aliName, NULL);
 	lineFileSeek(mcc->lf, pos, SEEK_SET);
 	axt = axtRead(mcc->lf);
-	mafFromAxtTemp(axt, mouseChromSize, hashIntVal(rSizeHash, axt->qName),
-	    &temp);
-	mafWrite(f, &temp);
+	rChromSize = hashIntVal(rSizeHash, axt->qName);
+	prefixAxt(axt, rPrefix, mPrefix);
+	mafFromAxtTemp(axt, mouseChromSize, rChromSize, &temp);
+	mafWriteGood(f, &temp);
 	axtFree(&axt);
 	}
     }
@@ -187,7 +256,7 @@ void stageMultiz(char *hSizeFile, char *mSizeFile, char *rSizeFile,
 	char *humanAxtFile, char *ratMouseDir, char *outputDir)
 /* stageMultiz - Stage input directory for Webb's multiple aligner. */
 {
-struct binKeeper *humanBk = loadAxtsIntoRange(humanAxtFile);
+struct binKeeper *humanBk = loadAxtsIntoRange(humanAxtFile, hPrefix, mPrefix);
 struct hash *mouseHash = newHash(0);
 struct hash *hSizeHash = loadSizeHash(hSizeFile);
 struct hash *mSizeHash = loadSizeHash(mSizeFile);
@@ -211,7 +280,8 @@ for (hStart = 0; hStart<maxChromSize - winSize; hStart += winSize - overlapSize)
 	{
 	/* Make output directory and create output file names. */
 	sprintf(dirName, "%s/%s.%d", outputDir, humanChromName, hStart);
-	printf("Making %s\n", dirName);
+	if (verbose)
+	    printf("Making %s\n", dirName);
 	makeDir(dirName);
 	sprintf(hmName, "%s/hm.maf", dirName);
 	sprintf(mrName, "%s/mr.maf", dirName);
@@ -222,7 +292,7 @@ for (hStart = 0; hStart<maxChromSize - winSize; hStart += winSize - overlapSize)
 	for (humanEl = humanList; humanEl != NULL; humanEl = humanEl->next)
 	    {
 	    struct axt *axt = humanEl->val;
-	    outputAxtAsMaf(f, axt, hSizeHash, mSizeHash);
+	    outputAxtAsMaf(f, axt, hSizeHash, hPrefix, mSizeHash, mPrefix);
 	    }
 	mafWriteEnd(f);
 	carefulClose(&f);
@@ -258,6 +328,11 @@ if (argc != 7)
 winSize = optionInt("winSize", winSize);
 overlapSize = optionInt("overlapSize", overlapSize);
 noDieMissing = optionExists("noDieMissing");
+verbose = optionExists("verbose");
+hPrefix = optionVal("hPrefix", hPrefix);
+mPrefix = optionVal("mPrefix", mPrefix);
+rPrefix = optionVal("rPrefix", rPrefix);
+
 stageMultiz(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
 return 0;
 }

@@ -20,7 +20,6 @@
 #include "hash.h"
 
 struct cart *cart;	/* The user's ui state. */
-char *defaultDatabase;	/* Default database. */
 struct hash *oldVars = NULL;
 
 struct serverTable
@@ -184,30 +183,8 @@ if (diff == 0)
 return diff;
 }
 
-#ifdef OLD
-static void earlyWarning(char *format, va_list args)
-/* Write an error message so user can see it before page is really started. */
-{
-static boolean initted = FALSE;
-if (!initted)
-    {
-    htmlStart("HTC Error");
-    initted = TRUE;
-    }
-htmlVaParagraph(format,args);
-}
-
-static void enterHtml(char *title)
-/* Print out header of web page with title.  Set
- * error handler to normal html error handler. */
-{
-htmlStart(title);
-pushWarnHandler(htmlVaParagraph);
-}
-#endif /* OLD */
-
-
-void showAliPlaces(char *pslName, char *faName, char *database)
+void showAliPlaces(char *pslName, char *faName, char *database, 
+	enum gfType qType, enum gfType tType)
 /* Show all the places that align. */
 {
 struct lineFile *lf = pslFileOpen(pslName);
@@ -267,7 +244,7 @@ if (pslOut)
     {
     printf("<TT><PRE>");
     if (!sameString(output, "psl no header"))
-	pslWriteHead(stdout);
+	pslxWriteHead(stdout, qType, tType);
     for (psl = pslList; psl != NULL; psl = psl->next)
 	pslTabOut(psl, stdout);
     }
@@ -312,13 +289,23 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	char *abbrv = NULL;
 	char *words[32];
 	int wordCount;
+	boolean isEns = (stringIn("ENSEMBL:", seq->name) != NULL);
 
 	nameClone = cloneString(seq->name);
 	wordCount = chopString(nameClone, "|", words, ArraySize(words));
-	if (wordCount > 2)	/* Looks like it's an NCBI long name alright. */
+	if (wordCount > 1)	/* Looks like it's an Ensembl/NCBI 
+		                 * long name alright. */
 	    {
-	    abbrv = words[wordCount-1];
-	    if (abbrv[0] == 0) abbrv = words[wordCount-2];
+	    if (isEns)
+		{
+	        abbrv = words[0];
+		if (abbrv[0] == 0) abbrv = words[1];
+		}
+	    else
+		{
+		abbrv = words[wordCount-1];
+		if (abbrv[0] == 0) abbrv = words[wordCount-2];
+		}
 	    if (hashLookup(hash, abbrv) == NULL)
 	        {
 		freeMem(seq->name);
@@ -362,6 +349,7 @@ boolean isTxTx = FALSE;
 boolean txTxBoth = FALSE;
 struct gfOutput *gvo;
 boolean qIsProt = FALSE;
+enum gfType qType, tType;
 
 /* Load user sequence and figure out if it is DNA or protein. */
 if (sameWord(type, "DNA"))
@@ -414,21 +402,26 @@ makeTempName(&pslTn, "hgSs", ".pslx");
 f = mustOpen(pslTn.forCgi, "w");
 gvo = gfOutputPsl(0, qIsProt, FALSE, f, FALSE, TRUE);
 serve = findServer(genome, isTx);
+/* Write header for extended (possibly protein) psl file. */
 if (isTx)
     {
     if (isTxTx)
         {
-	pslxWriteHead(f, gftDnaX, gftDnaX);
+	qType = gftDnaX;
+	tType = gftDnaX;
 	}
     else
         {
-	pslxWriteHead(f, gftProt, gftDnaX);
+	qType = gftProt;
+	tType = gftDnaX;
 	}
     }
 else
     {
-    pslxWriteHead(f, gftDna, gftDna);
+    qType = gftDna;
+    tType = gftDna;
     }
+pslxWriteHead(f, qType, tType);
 
 /* Loop through each sequence. */
 for (seq = seqList; seq != NULL; seq = seq->next)
@@ -476,18 +469,18 @@ for (seq = seqList; seq != NULL; seq = seq->next)
     gfOutputQuery(gvo, f);
     }
 carefulClose(&f);
-showAliPlaces(pslTn.forCgi, faTn.forCgi, serve->db);
+showAliPlaces(pslTn.forCgi, faTn.forCgi, serve->db, qType, tType);
 }
 
 void askForSeq()
 /* Put up a little form that asks for sequence.
  * Call self.... */
 {
-char *db = NULL; //cartUsualString(cart, "db", defaultDatabase);
+char *db = NULL; 
 struct serverTable *serve = NULL; //findServer(db, FALSE);
 char **genomeList;
 int genomeCount;
-char *organism = NULL; //hOrganism(db);
+char *organism = NULL; 
 char *assemblyList[128];
 char *values[128];
 int numAssemblies = 0;
@@ -498,22 +491,28 @@ char *assembly = NULL;
 /* JavaScript to copy input data on the change genome button to a hidden form
 This was done in order to be able to flexibly arrange the UI HTML
 */
-char *onChangeText = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.submit();\"";
+char *onChangeText = "onchange=\"document.orgForm.org.value = "
+    " document.mainForm.org.options[document.mainForm.org.selectedIndex].value; "
+    " document.orgForm.seqFile.value = document.mainForm.seqFile.value; "
+    " document.orgForm.userSeq.value = document.mainForm.userSeq.value; "
+    " document.orgForm.submit();\"";
+char *userSeq = NULL;
 
-getDbAndOrganism(cart, &db, &organism);
+getDbAndGenome(cart, &db, &organism);
 serve = findServer(db, FALSE);
 
 printf( 
 "<FORM ACTION=\"../cgi-bin/hgBlat\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n"
 "<H1 ALIGN=CENTER>BLAT Search Genome</H1>\n"
 "<P>\n"
-"<TABLE BORDER=0 WIDTH=\"96%%\">\n"
+"<TABLE BORDER=0 WIDTH=\"96%%\" COLS=6>\n"
 "<TR>\n");
 cartSaveSession(cart);
 
+
 printf("%s", "<TD><CENTER>\n");
 printf("Genome:<BR>");
-printOrgListHtml(db, onChangeText);
+printGenomeListHtml(db, onChangeText);
 printf("%s", "</TD><TD><CENTER>\n");
 printf("Assembly:<BR>");
 printBlatAssemblyListHtml(db);
@@ -529,20 +528,37 @@ printf("Output type:<BR>");
 cgiMakeDropList("output", outputList, ArraySize(outputList), cartOptionalString(cart, "output"));
 puts("</TD>\n");
 
-puts("<TD><CENTER>&nbsp;<BR><INPUT TYPE=SUBMIT NAME=Submit VALUE=Submit Align=\"bottom\">\n"
+puts("<TD><CENTER>&nbsp;<BR>\n"
+    "<INPUT TYPE=SUBMIT NAME=Submit VALUE=Submit Align=\"bottom\">\n"
+    "</TD>\n"
+    "</TR>\n"
+    "<TR>\n"
+    "<TD COLSPAN=5>\n"
+    "Please paste in a query sequence to see where it is located in the\n"
+    "the genome.  Multiple sequences can be searched \n"
+    "at once if separated by a line starting with > and the sequence name.\n"
+    "</TD>\n"
+    "<TD>\n"
+    "<INPUT TYPE=RESET NAME=Reset VALUE=Reset Align=\"bottom\">\n"
     "</TD>\n"
     "</TR>\n"
     "</TABLE>\n"
 );
 
-puts("Please paste in a query sequence to see where it is located in the ");
-printf("the genome.  Multiple sequences can be searched\n");
-puts("at once if separated by a line starting with > and the sequence name.\n");
 puts("<P>");
 
-puts("<TEXTAREA NAME=userSeq ROWS=14 COLS=80></TEXTAREA>\n");
-puts("<P>");
+userSeq = cartOptionalString(cart, "userSeq");
+if (NULL == userSeq || userSeq[0] == '\0')
+    {
+    puts("<TEXTAREA NAME=userSeq ROWS=14 COLS=80></TEXTAREA>\n");
+    }
+else 
+    {
+    printf("<TEXTAREA NAME=userSeq ROWS=14 COLS=80>%s</TEXTAREA>\n", userSeq);
+    }
 
+
+puts("<P>");
 puts("Rather than pasting a sequence, you can choose to upload a text file containing "
 	 "the sequence.<BR>");
 puts("Upload sequence: <INPUT TYPE=FILE NAME=\"seqFile\">");
@@ -577,7 +593,11 @@ printf("%s",
 "\n"
 "</FORM>\n");
 
-printf("<FORM ACTION=\"/cgi-bin/hgBlat\" METHOD=\"GET\" NAME=\"orgForm\"><input type=\"hidden\" name=\"org\" value=\"%s\">\n", organism);
+printf("<FORM ACTION=\"/cgi-bin/hgBlat\" METHOD=\"POST\" NAME=\"orgForm\">"
+       "<input type=\"hidden\" name=\"org\" value=\"%s\">\n"
+       "<input type=\"hidden\" name=\"userSeq\" value=\"\">\n"
+       "<input type=\"hidden\" name=\"showPage\" value=\"true\">\n"
+       "<input type=\"hidden\" name=\"seqFile\" value=\"\">\n", organism);
 cartSaveSession(cart);
 puts("</FORM>");
 }
@@ -585,24 +605,29 @@ puts("</FORM>");
 void doMiddle(struct cart *theCart)
 {
 char *userSeq;
+char *db, *organism;
+char *showPage = FALSE;
 
 cart = theCart;
 dnaUtilOpen();
-
-cartWebStart(theCart, "BLAT Search");
+getDbAndGenome(cart, &db, &organism);
 
 /* Get sequence - from userSeq variable, or if 
  * that is empty from a file. */
 userSeq = cartOptionalString(cart, "userSeq");
 if(userSeq != 0 && userSeq[0] == '\0')
-    userSeq = cartOptionalString(cart, "seqFile");
-
-if(userSeq == NULL || userSeq[0] == '\0')
     {
+    userSeq = cartOptionalString(cart, "seqFile");
+    }
+showPage = cartOptionalString(cart, "showPage");
+if(userSeq == NULL || userSeq[0] == '\0' || showPage)
+    {
+    cartWebStart(theCart, "%s BLAT Search", organism);
     askForSeq();
     }
 else
     {
+    cartWebStart(theCart, "%s BLAT Results", organism);
     blatSeq(skipLeadingSpaces(userSeq));
     }
 cartWebEnd();
@@ -610,14 +635,13 @@ cartWebEnd();
 
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
-char *excludeVars[] = {"Submit", "submit", "type", "genome", "userSeq", "seqFile", NULL};
+char *excludeVars[] = {"Submit", "submit", "type", "genome", "userSeq", "seqFile", "showPage", NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 oldVars = hashNew(8);
 cgiSpoof(&argc, argv);
-defaultDatabase = hGetDb();
 htmlSetBackground("../images/floret.jpg");
 cartEmptyShell(doMiddle, "hguid", excludeVars, oldVars);
 return 0;

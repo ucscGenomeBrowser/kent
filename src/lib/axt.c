@@ -69,11 +69,9 @@ axt->qStrand = words[7][0];
 axt->tName = cloneString(words[1]);
 axt->tStart = lineFileNeedNum(lf, words, 2) - 1;
 axt->tEnd = lineFileNeedNum(lf, words, 3);
-axt->tStrand = words[7][1];
+axt->tStrand = '+';
 if (wordCount > 8)
     axt->score = lineFileNeedNum(lf, words, 8);
-if (axt->tStrand == 0)
-    axt->tStrand = '+';
 lineFileNeedNext(lf, &line, NULL);
 axt->symCount = symCount = strlen(line);
 axt->tSym = cloneMem(line, symCount+1);
@@ -91,10 +89,8 @@ void axtWrite(struct axt *axt, FILE *f)
 {
 static int ix = 0;
 fprintf(f, "%d %s %d %d %s %d %d %c",
-	++ix, axt->tName, axt->tStart+1, axt->tEnd, 
+	ix++, axt->tName, axt->tStart+1, axt->tEnd, 
 	axt->qName, axt->qStart+1, axt->qEnd, axt->qStrand);
-if (axt->tStrand == '-')
-    fprintf(f, "%c", axt->tStrand);
 fprintf(f, " %d", axt->score);
 fputc('\n', f);
 mustWrite(f, axt->tSym, axt->symCount);
@@ -181,6 +177,16 @@ if (qSize != axt->qEnd - axt->qStart)
     return FALSE;
     }
 return TRUE;
+}
+
+int axtScoreUngapped(struct axtScoreScheme *ss, char *q, char *t, int size)
+/* Score ungapped alignment. */
+{
+int score = 0;
+int i;
+for (i=0; i<size; ++i)
+    score += ss->matrix[q[i]][t[i]];
+return score;
 }
 
 
@@ -293,7 +299,7 @@ struct axtScoreScheme *axtScoreSchemeDefault()
  * this. */
 {
 static struct axtScoreScheme *ss;
-static int twoCase[2][4] = {{'a', 'g', 'c', 't'},{'A','C','G','T'},};
+static int twoCase[2][4] = {{'a', 'c', 'g', 't'},{'A','C','G','T'},};
 int i1,i2,j1,j2;
 
 if (ss != NULL)
@@ -322,8 +328,8 @@ ss->matrix['t']['g'] = -114;
 ss->matrix['t']['t'] = 91;
 
 /* Propagate to other case combinations. */
-for (i1=0; i1<0; ++i1)
-    for (i2=0; i2<0; ++i2)
+for (i1=0; i1<=1; ++i1)
+    for (i2=0; i2<=1; ++i2)
        {
        if (i1 == 0 && i2 == 0)
            continue;
@@ -512,6 +518,37 @@ if (!gotO || !gotE)
 if (ss->gapOpen <= 0 || ss->gapExtend <= 0)
     errAbort("Must have positive gap scores");
 return ss;
+}
+
+void axtSwap(struct axt *axt, int tSize, int qSize)
+/* Flip target and query on one axt. */
+{
+struct axt old = *axt;
+
+/* Copy non-strand dependent stuff */
+axt->qName = old.tName;
+axt->tName = old.qName;
+axt->qSym = old.tSym;
+axt->tSym = old.qSym;
+axt->qStart = old.tStart;
+axt->qEnd = old.tEnd;
+axt->tStart = old.qStart;
+axt->tEnd = old.qEnd;
+
+/* Copy strand dependent stuff. */
+assert(axt->tStrand != '-');
+
+if (axt->qStrand == '-')
+    {
+    /* axt's are really set up so that the target is on the
+     * + strand and the query is on the minus strand.
+     * Therefore we need to reverse complement both 
+     * strands while swapping to preserve this. */
+    reverseIntRange(&axt->tStart, &axt->tEnd, qSize);
+    reverseIntRange(&axt->qStart, &axt->qEnd, tSize);
+    reverseComplement(axt->qSym, axt->symCount);
+    reverseComplement(axt->tSym, axt->symCount);
+    }
 }
 
 void axtBundleFree(struct axtBundle **pObj)

@@ -15,6 +15,8 @@
 #include "gff.h"
 #include "genePred.h"
 #include "net.h"
+#include "hdb.h"
+#include "hui.h"
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -41,6 +43,7 @@ tdb->shortLabel = cloneString("User Track");
 sprintf(buf, "ct_%d", ++count);
 tdb->tableName = cloneString(buf);
 tdb->visibility = 1;
+tdb->grp = cloneString("user");
 return tdb;
 }
 
@@ -89,10 +92,19 @@ if ((val = hashFindVal(hash, "url")) != NULL)
     tdb->url = cloneString(val);
 if ((val = hashFindVal(hash, "visibility")) != NULL)
     {
-    tdb->visibility = needNum(val, lineIx, -1);
-    if (tdb->visibility > 2)
-        errAbort("line %d of custom input: Expecting visibility 0,1, or 2 got %s", lineIx, val);
+    if (isdigit(val[0]))
+	{
+	tdb->visibility = atoi(val);
+	if (tdb->visibility > 4)
+	    errAbort("line %d of custom input: Expecting visibility 0 to 4 got %s", lineIx, val);
+	}
+    else
+        {
+	tdb->visibility = hTvFromString(val);
+	}
     }
+if ((val = hashFindVal(hash, "group")) != NULL)
+    tdb->grp = cloneString(val);
 if ((val = hashFindVal(hash, "useScore")) != NULL)
     tdb->useScore = !sameString(val, "0");
 if ((val = hashFindVal(hash, "priority")) != NULL)
@@ -135,7 +147,7 @@ row[12] = "";
 static boolean isChromName(char *word)
 /* Return TRUE if it's a contig or chromosome */
 {
-return startsWith("chr", word)  || startsWith("ctg", word) || startsWith("NT_", word);
+return startsWith("chr", word)  || startsWith("ctg", word) || startsWith("NT_", word) || startsWith("target", word);
 }
 
 static boolean checkChromName(char *word, int lineIx)
@@ -146,7 +158,8 @@ if (!isChromName(word))
     	lineIx, word, word[0]);
 }
 
-struct bed *customTrackBed(char *row[13], int wordCount, struct hash *chromHash, int lineIx)
+struct bed *customTrackBed(char *row[13], int wordCount, 
+	struct hash *chromHash, int lineIx)
 /* Convert a row of strings to a bed. */
 {
 struct bed * bed;
@@ -169,14 +182,26 @@ if (wordCount > 5)
      {
      strncpy(bed->strand, row[5], sizeof(bed->strand));
      if (bed->strand[0] != '+' && bed->strand[0] != '-' && bed->strand[0] != '.')
-	  errAbort("line %d of custrom input: Expecting + or - in strand", lineIx);
+	  errAbort("line %d of custom input: Expecting + or - in strand", lineIx);
      }
 if (wordCount > 6)
      bed->thickStart = needNum(row[6], lineIx, 6);
 else
      bed->thickStart = bed->chromStart;
 if (wordCount > 7)
+     {
      bed->thickEnd = needNum(row[7], lineIx, 7);
+     if (bed->thickEnd < bed->thickStart)
+	 errAbort("line %d of custom input: thickStart after thickEnd", lineIx);
+     if ((bed->thickStart != 0) &&
+	 ((bed->thickStart < bed->chromStart) ||
+	  (bed->thickStart > bed->chromEnd)))
+	 errAbort("line %d of custom input: thickStart out of range (chromStart to chromEnd, or 0 if no CDS)", lineIx);
+     if ((bed->thickEnd != 0) &&
+	 ((bed->thickEnd < bed->chromStart) ||
+	  (bed->thickEnd > bed->chromEnd)))
+	 errAbort("line %d of custom input: thickEnd out of range (chromStart to chromEnd, or 0 if no CDS)", lineIx);
+     }
 else
      bed->thickEnd = bed->chromEnd;
 if (wordCount > 8)
@@ -193,19 +218,53 @@ if (wordCount > 10)
     }
 if (wordCount > 11)
     {
+    int i;
+    int lastEnd, lastStart;
     sqlSignedDynamicArray(row[11], &bed->chromStarts, &count);
     if (count != bed->blockCount)
-	errAbort("line %d of custom input: expecting %d elements in array", lineIx);
+	errAbort("line %d of custom input: expecting %d elements in array",
+		 lineIx);
+    // tell the user if they appear to be using absolute starts rather than 
+    // relative... easy to forget!  Also check block order, coord ranges...
+    lastStart = -1;
+    lastEnd = 0;
+    for (i=0;  i < bed->blockCount;  i++)
+	{
+	if (bed->chromStarts[i]+bed->chromStart >= bed->chromEnd)
+	    if (bed->chromStarts[i] >= bed->chromStart)
+		errAbort("line %d of custom input: BED chromStarts offsets must be relative to chromStart, not absolute.  Try subtracting chromStart from each offset in chromStarts.",
+			 lineIx);
+	    else
+		errAbort("line %d of custom input: BED chromStarts[i]+chromStart must be less than chromEnd.",
+			 lineIx);
+	if (bed->chromStarts[i] <= lastStart)
+	    errAbort("line %d of custom input: BED chromStarts[i] must be in ascending order.",
+		     lineIx);
+	lastStart = bed->chromStarts[i];
+	if (bed->chromStart + bed->chromStarts[i] < lastEnd)
+	    errAbort("line %d of custom input: BED blocks must not overlap, i.e. the end of block i should be less than or equal to the start of block i+1.",
+		     lineIx);
+	lastEnd = bed->chromStart + bed->chromStarts[i] + bed->blockSizes[i];
+	}
+    if (bed->chromStarts[0] != 0)
+	errAbort("line %d of custom input: BED blocks must span chromStart to chromEnd.  BED chromStarts[0] must be 0 so that (chromStart + chromStarts[0]) equals chromStart.",
+		 lineIx);
+    i = bed->blockCount-1;
+    if ((bed->chromStart + bed->chromStarts[i] + bed->blockSizes[i]) !=
+	bed->chromEnd)
+	errAbort("line %d of custom input: BED blocks must span chromStart to chromEnd.  (chromStart + chromStarts[last] + blockSizes[last]) must equal chromEnd.",
+		 lineIx);
     }
 return bed;
 }
 
-struct bed *customTrackPsl(char **row, int wordCount, struct hash *chromHash, int lineIx)
+struct bed *customTrackPsl(boolean isProt, char **row, int wordCount, 
+	struct hash *chromHash, int lineIx)
 /* Convert a psl format row of strings to a bed. */
 {
 struct psl *psl = pslLoad(row);
 struct bed *bed;
-int i, blockCount, *chromStarts, chromStart;
+int i, blockCount, *chromStarts, chromStart, *blockSizes;
 
 /* A tiny bit of error checking on the psl. */
 if (psl->qStart >= psl->qEnd || psl->qEnd > psl->qSize 
@@ -218,19 +277,34 @@ checkChromName(psl->tName, lineIx);
 /* Allocate bed and fill in from psl. */
 AllocVar(bed);
 bed->chrom = hashStoreName(chromHash, psl->tName);
-bed->chromStart = chromStart = psl->tStart;
-bed->chromEnd = psl->tEnd;
 
 bed->score = 1000 - 2*pslCalcMilliBad(psl, TRUE);
 if (bed->score < 0) bed->score = 0;
 strncpy(bed->strand,  psl->strand, sizeof(bed->strand));
 bed->blockCount = blockCount = psl->blockCount;
-bed->blockSizes = (int *)psl->blockSizes;
+bed->blockSizes = blockSizes = (int *)psl->blockSizes;
 psl->blockSizes = NULL;
 bed->chromStarts = chromStarts = (int *)psl->tStarts;
 psl->tStarts = NULL;
 bed->name = psl->qName;
 psl->qName = NULL;
+
+if (isProt)
+    {
+    for (i=0; i<blockCount; ++i)
+        {
+	blockSizes[i] *= 3;
+	}
+    /* Do a little trimming here.  Arguably blat should do it 
+     * instead. */
+    for (i=1; i<blockCount; ++i)
+	{
+	int lastEnd = blockSizes[i-1] + chromStarts[i-1];
+	if (chromStarts[i] < lastEnd)
+	    chromStarts[i] = lastEnd;
+	}
+    }
+
 
 /* Switch minus target strand to plus strand. */
 if (psl->strand[1] == '-')
@@ -239,11 +313,13 @@ if (psl->strand[1] == '-')
     reverseInts(bed->blockSizes, blockCount);
     reverseInts(chromStarts, blockCount);
     for (i=0; i<blockCount; ++i)
-	chromStarts[i] = chromSize - chromStarts[i];
+	{
+	chromStarts[i] = chromSize - chromStarts[i] - blockSizes[i];
+	}
     }
 
-bed->thickStart = bed->chromStart;
-bed->thickEnd = bed->chromEnd;
+bed->thickStart = bed->chromStart = chromStart = chromStarts[0];
+bed->thickEnd = bed->chromEnd = chromStarts[blockCount-1] + blockSizes[blockCount-1];
 
 /* Convert coordinates to relative. */
 for (i=0; i<blockCount; ++i)
@@ -524,6 +600,7 @@ struct bed *bed = NULL;
 struct hash *chromHash = newHash(8);
 struct lineFile *lf = NULL;
 float prio = 0.0;
+boolean pslIsProt = FALSE;
 
 customDefaultRows(row);
 if (isFile)
@@ -564,6 +641,7 @@ for (;;)
     if (startsWith("psLayout version", line))
         {
 	int i;
+	pslIsProt = (stringIn("protein", line) != NULL);
 	for (i=0; i<4; ++i)
 	    getNextLine(&lf, &line, &nextLine);
 	continue;
@@ -624,10 +702,10 @@ for (;;)
 	    }
 	/* Create bed data structure from row and hang on list in track. */
 	if (track->fromPsl)
-	    bed = customTrackPsl(row, wordCount, chromHash, lineIx);
+	    bed = customTrackPsl(pslIsProt, row, wordCount, chromHash, lineIx);
 	else
 	    bed = customTrackBed(row, wordCount, chromHash, lineIx);
-	if (!startsWith("chr", bed->chrom))
+	if (!startsWith("chr", bed->chrom) && !startsWith("target", bed->chrom))
 	    track->needsLift = TRUE;
 	slAddHead(&track->bedList, bed);
 	}
@@ -665,6 +743,7 @@ if (retBrowserLines != NULL)
     slReverse(retBrowserLines);
 return trackList;
 }
+
 struct customTrack *customTracksFromText(char *text)
 /* Parse text into a custom set of tracks. */
 {
@@ -675,6 +754,85 @@ struct customTrack *customTracksFromFile(char *text)
 /* Parse file into a custom set of tracks. */
 {
 return customTracksParse(text, TRUE, NULL);
+}
+
+boolean bogusMacEmptyChars(char *s)
+/* Return TRUE if it looks like this is just a buggy
+ * Mac browser putting in bogus chars into empty text box. */
+{
+char c = *s;
+return c != '_' && !isalnum(c);
+}
+
+struct customTrack *customTracksParseCart(struct cart *cart,
+					  struct slName **retBrowserLines,
+					  char **retCtFileName)
+/* Figure out from cart variables where to get custom track text/file.
+ * Parse text/file into a custom set of tracks.  Lift if necessary.  
+ * If retBrowserLines is non-null then it will return a list of lines 
+ * starting with the word "browser".  If retCtFileName is non-null then 
+ * it will return the custom track filename. */
+{
+/* This was originally part of loadCustomTracks in hgTracks.  It was pulled
+ * back here so that hgText could use it too. */
+struct customTrack *ctList = NULL;
+char *customText = cartOptionalString(cart, "hgt.customText");
+char *fileName = cartOptionalString(cart, "ct");
+char *ctFileName = NULL;
+
+customText = skipLeadingSpaces(customText);
+if (customText != NULL && bogusMacEmptyChars(customText))
+    customText = NULL;
+if (customText == NULL || customText[0] == 0)
+    customText = cartOptionalString(cart, "hgt.customFile");
+customText = skipLeadingSpaces(customText);
+if (customText != NULL && customText[0] != 0)
+    {
+    static struct tempName tn;
+    makeTempName(&tn, "ct", ".bed");
+    ctList = customTracksParse(customText, FALSE, retBrowserLines);
+    ctFileName = tn.forCgi;
+    customTrackSave(ctList, tn.forCgi);
+    cartSetString(cart, "ct", tn.forCgi);
+    cartRemove(cart, "hgt.customText");
+    cartRemove(cart, "hgt.customFile");
+    }
+else if (fileName != NULL)
+    {
+    if (!fileExists(fileName))	/* Cope with expired tracks. */
+        {
+	fileName = NULL;
+	cartRemove(cart, "ct");
+	}
+    else
+        {
+	ctList = customTracksParse(fileName, TRUE, retBrowserLines);
+	ctFileName = fileName;
+	}
+    }
+
+if (customTrackNeedsLift(ctList))
+    {
+    /* Load up hash of contigs and lift up tracks. */
+    struct hash *ctgHash = newHash(0);
+    struct ctgPos *ctg, *ctgList = NULL;
+    struct sqlConnection *conn = hAllocConn();
+    struct sqlResult *sr = sqlGetResult(conn, "select * from ctgPos");
+    char **row;
+    while ((row = sqlNextRow(sr)) != NULL)
+       {
+       ctg = ctgPosLoad(row);
+       slAddHead(&ctgList, ctg);
+       hashAdd(ctgHash, ctg->contig, ctg);
+       }
+    customTrackLift(ctList, ctgHash);
+    ctgPosFreeList(&ctgList);
+    hashFree(&ctgHash);
+    }
+
+if (retCtFileName != NULL)
+    *retCtFileName = ctFileName;
+return ctList;
 }
 
 static void saveTdbLine(FILE *f, char *fileName, struct trackDb *tdb)

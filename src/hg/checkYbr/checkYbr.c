@@ -112,20 +112,28 @@ int flagFa(char *fileName, struct hash *hash)
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char comment[512];
-int size;
+int size, i;
 struct contig *contig;
 int problemCount= 0;
-char *name;
+/* char *name; */
+char name[16];
 unsigned totSize = 0;
 
 while (faSizeNext(lf, comment, &size))
     {
-    name = lastWordInLine(comment);
+    /* Name no longer last word in line - TSF */
+    /* name = lastWordInLine(comment); */
+    for (i = 0; i < 9; i++) 
+	{
+	name[i] = comment[i+5];
+	}
+    name[9] = '\0';
     totSize += size;
     if (name == NULL || !startsWith("NT_", name))
 	{
 	++problemCount;
-        printf("%s has an entry which doesn't have NT_ as a last word\n", fileName);
+        /* printf("%s has an entry which doesn't have NT_ as a last word\n", fileName); */
+        printf("%s has an entry which doesn't have NT_ as name of contig\n", fileName);
 	}
     else
         {

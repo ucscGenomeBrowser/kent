@@ -24,7 +24,9 @@ void logIt(char *format, ...);
 /* Print message to log file. */
 
 void flushLog();
-/* Flush log file */
+/* Flush log file. */
+
+extern boolean logFlush; /* Set this to true to flush log after every logIt */
 
 void setupDaemonLog(char *fileName);
 /* Setup log file, and warning handler that goes to this
@@ -53,6 +55,11 @@ boolean parseRunJobMessage(char *line, struct runJobMessage *rjm);
 
 void fillInErrFile(char errFile[512], int jobId, char *tempDir);
 /* Fill in error file name */
+
+extern time_t now;	/* Time when started processing current message */
+
+void findNow();
+/* Just set now to current time. */
 
 #endif /* PARALIB_H */
 

@@ -244,6 +244,48 @@ void hashElFreeList(struct hashEl **pList)
 slFreeList(pList);
 }
 
+struct hashCookie hashFirst(struct hash *hash)
+/* Return an object to use by hashNext() to traverse the hash table.
+ * The first call to hashNext will return the first entry in the table. */
+{
+struct hashCookie cookie;
+cookie.hash = hash;
+cookie.idx = 0;
+cookie.nextEl = NULL;
+
+/* find first entry */
+for (cookie.idx = 0;
+     (cookie.idx < hash->size) && (hash->table[cookie.idx] == NULL);
+     cookie.idx++)
+    continue;  /* empty body */
+if (cookie.idx < hash->size)
+    cookie.nextEl = hash->table[cookie.idx];
+return cookie;
+}
+
+struct hashEl* hashNext(struct hashCookie *cookie)
+/* Return the next entry in the hash table. Do not modify hash table
+ * while this is being used. */
+{
+/* NOTE: if hashRemove were coded to track the previous entry during the
+ * search and then use it to do the remove, it would be possible to
+ * remove the entry returned by this method */
+struct hashEl *retEl = cookie->nextEl;
+if (retEl == NULL)
+    return NULL;  /* no more */
+
+/* find next entry */
+cookie->nextEl = retEl->next;
+if (cookie->nextEl == NULL)
+    {
+    for (cookie->idx++; (cookie->idx < cookie->hash->size)
+             && (cookie->hash->table[cookie->idx] == NULL); cookie->idx++)
+        continue;  /* empty body */
+    if (cookie->idx < cookie->hash->size)
+        cookie->nextEl = cookie->hash->table[cookie->idx];
+    }
+return retEl;
+}
 
 void freeHash(struct hash **pHash)
 /* Free up hash table. */

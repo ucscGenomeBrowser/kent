@@ -5,6 +5,7 @@
 #include "cheapcgi.h"
 #include "psl.h"
 #include "fa.h"
+#include "nib.h"
 #include "jksql.h"
 #include "estOrientInfo.h"
 
@@ -14,7 +15,14 @@ void usage()
 errAbort(
   "polyInfo - Collect info on polyAdenylation signals etc\n"
   "usage:\n"
-  "   polyInfo contig.psl contig.fa est.fa output.tab\n"
+  "   polyInfo contig.psl genoFile est.fa output.tab\n"
+  "\n"
+  "The genoFile can be a fasta file or a nib.\n"
+  "Subranges of nib files may specified using the syntax:\n"
+  "   /path/file.nib:seqid:start-end\n"
+  "or\n"
+  "   /path/file.nib:start-end\n"
+  "With the second form, a sequence id of file:start-end will be used.\n"
   );
 }
 
@@ -194,8 +202,13 @@ static struct dnaSeq est;
 struct lineFile *lf = NULL;
 FILE *f = NULL;
 
+if (isNib(genoFile))
+    geno = nibLoadAllMasked(NIB_MASK_MIXED|NIB_BASE_NAME, genoFile);
+else
+    geno = faReadDna(genoFile);
+tolowers(geno->dna);
+
 pslHash = pslIntoHash(pslFile);
-geno = faReadDna(genoFile);
 lf = lineFileOpen(estFile, TRUE);
 f = mustOpen(outputFile, "w");
 

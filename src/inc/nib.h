@@ -19,6 +19,8 @@
                                 * uses mask to set mask bases.  Note: the
                                 * bit map indicates which bases are not repeats
                                 */
+#define NIB_BASE_NAME     0x04 /* Return a sequence name that is the base name
+                                * the file. */
 
 void nibOpenVerify(char *fileName, FILE **retFile, int *retSize);
 /* Open file and verify it's in good nibble format. */
@@ -40,8 +42,15 @@ struct dnaSeq *nibLoadAll(char *fileName);
 /* Load all of a nib file. */
 
 struct dnaSeq *nibLoadAllMasked(int options, char *fileName);
-/* Load part of an .nib file, with control over handling of masked
- * positions. */
+/* Load part of a .nib file, with control over handling of masked
+ * positions. Subranges of nib files may specified in the file name
+ * using the syntax:
+ *    /path/file.nib:seqid:start-end
+ * or\n"
+ *    /path/file.nib:start-end
+ * With the first form, seqid becomes the id of the subrange, with the second
+ * form, a sequence id of file:start-end will be used.
+ */
 
 void nibWrite(struct dnaSeq *seq, char *fileName);
 /* Write out file in format of four bits per nucleotide. */
@@ -52,6 +61,9 @@ void nibWriteMasked(int options, struct dnaSeq *seq, char *fileName);
 
 boolean isNib(char *fileName);
 /* Return TRUE if file is a nib file. */
+
+boolean isNibSubrange(char *fileName);
+/* Return TRUE if file specifies a subrange of a nib file. */
 
 struct nibStream *nibStreamOpen(char *fileName);
 /* Create a new nib stream.  Open file and stuff. */

@@ -134,18 +134,26 @@ void _htmStart(FILE *f, char *title)
  * and CGI returned .htmls need. */
 {
 fputs("<HTML>", f);
-fprintf(f,"<HEAD>\n<TITLE>%s</TITLE>\n</HEAD>\n\n", title);
+fprintf(f,"<HEAD>\n<TITLE>%s</TITLE>\n", title);
+#ifdef ROBERTS_EXPERIMENT
+fprintf(f,"<script language=\"javascript\" src=\"/js/popUp.js\"></script>");
+#endif /* ROBERTS_EXPERIMENT */
+fputs("</HEAD>\n\n",f);
 fputs("<BODY",f);
 if (htmlBackground != NULL )
     fprintf(f, " BACKGROUND=\"%s\"", htmlBackground);
 if (htmlBgColor != NULL)
     fprintf(f, " BGCOLOR=\"%X\"", *htmlBgColor);
 fputs(">\n",f);
+#ifdef ROBERTS_EXPERIMENT
+fprintf(f,"<div id=\"jstooldiv\" style=\"position: absolute;visibility: hidden;\"></div>");
+#endif /* ROBERTS_EXPERIMENT */
 }
 
-/* Write the start of an html from CGI */
 void htmlStart(char *title)
+/* Write the start of an html from CGI */
 {
+puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
 puts("Content-Type:text/html");
 puts("\n");
 

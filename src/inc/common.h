@@ -10,7 +10,12 @@
 #define COMMON_H
 
 /* Some stuff to support large files in Linux. */
+#ifndef _LARGEFILE_SOURCE
 #define _LARGEFILE_SOURCE 1
+#endif
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif
 
 #ifndef _FILE_OFFSET_BITS
 #define _FILE_OFFSET_BITS 64
@@ -121,6 +126,9 @@ void freez(void *ppt);
 void errAbort(char *format, ...);
 /* Abort function, with optional (printf formatted) error message. */
 
+void errnoAbort(char *format, ...);
+/* Prints error message from UNIX errno first, then does errAbort. */
+
 #define internalErr()  errAbort("Internal error %s %d", __FILE__, __LINE__)
 /* Generic internal error message */
 
@@ -169,17 +177,11 @@ void slSafeAddHead(void *listPt, void *node);
  * that begin with a next pointer. 
  */
 
-/* The macro below is faster.  For some reason under
- * GNU C the braces below are ignored.  This leads
- * to problems if slAddHead is a single statement
- * after an if/for/while.  Either use slSafeAddHead
- * or enclose the slAddHead line in braces in these
- * situations. */
+/* Add new node to start of list, this macro is faster
+ * than slSafeAddHead, but has standard macro restriction
+ * on what can be safely passed as arguments. */
 #define slAddHead(listPt, node) \
-    { \
-    (node)->next = *(listPt); \
-    *(listPt) = (node); \
-    }
+    ((node)->next = *(listPt), *(listPt) = (node))
 
 void slAddTail(void *listPt, void *node);
 /* Add new node to tail of list.
@@ -203,6 +205,7 @@ void *slCat(void *a, void *b);
  *   struct slName *a = getNames("a");
  *   struct slName *b = getNames("b");
  *   struct slName *ab = slCat(a,b)
+ * After this it is no longer safe to use a or b. 
  */
 
 void *slLastEl(void *list);
@@ -334,11 +337,22 @@ void toUpperN(char *s, int n);
 void toLowerN(char *s, int n);
 /* Convert a section of memory to lower case. */
 
+void toggleCase(char *s, int size);
+/* toggle upper and lower case chars in string. */
+
 void touppers(char *s);
 /* Convert entire string to upper case. */
 
 void tolowers(char *s);
 /* Convert entire string to lower case */
+
+char *replaceChars(char *string, char *oldStr, char *newStr);
+/*
+  Replaces the old with the new.
+ The old and new string need not be of equal size
+ Can take any lenght string.
+ Return value needs to be freeMem'd.
+*/
 
 void subChar(char *s, char oldChar, char newChar);
 /* Substitute newChar for oldChar throughout string s. */
@@ -348,6 +362,9 @@ void stripChar(char *s, char c);
 
 int countChars(char *s, char c);
 /* Return number of characters c in string s. */
+
+int countLeadingChars(char *s, char c);
+/* Count number of characters c at start of string. */
 
 int chopString(char *in, char *sep, char *outArray[], int outSize);
 /* int chopString(in, sep, outArray, outSize); */
@@ -392,6 +409,9 @@ void eraseWhiteSpace(char *s);
 
 char *trimSpaces(char *s);
 /* Remove leading and trailing white space. */
+
+void spaceOut(FILE *f, int count);
+/* Put out some spaces to file. */
 
 char *firstWordInLine(char *line);
 /* Returns first word in line if any (white space separated).
@@ -514,7 +534,7 @@ int  rangeIntersection(int start1, int end1, int start2, int end2);
  * intersection. */
 
 int  positiveRangeIntersection(int start1, int end1, int start2, int end2);
-/* Return amount of bases two ranges intersect over, 0 or negative if no
+/* Return amount of bases two ranges intersect over, 0 if no
  * intersection. */
 
 bits32 byteSwap32(bits32 a);
@@ -536,7 +556,7 @@ double doubleExp(char *text);
 char* readLine(FILE* fh);
 /* Read a line of any size into dynamic memory, return null on EOF */
 
-long fileSize(char *fileName);
+off_t fileSize(char *fileName);
 /* The size of a file. */
 
 boolean fileExists(char *fileName);
@@ -549,5 +569,18 @@ char *containsStringNoCase(char *haystack, char *needle);
 
 char *strstrNoCase(char *haystack, char *needle);
 /* A case-insensitive strstr */
+
+int vasafef(char* buffer, int bufSize, char *format, va_list args);
+/* Format string to buffer, vsprintf style, only with buffer overflow
+ * checking.  The resulting string is always terminated with zero byte. */
+
+int safef(char* buffer, int bufSize, char *format, ...)
+/* Format string to buffer, vsprintf style, only with buffer overflow
+ * checking.  The resulting string is always terminated with zero byte. */
+#ifdef __GNUC__
+__attribute__((format(printf, 3, 4)))
+#endif
+;
+
 
 #endif /* COMMON_H */

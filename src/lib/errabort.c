@@ -22,6 +22,7 @@ static void defaultVaWarn(char *format, va_list args)
 /* Default error message handler. */
 {
 if (format != NULL) {
+    fflush(stdout);
     vfprintf(stderr, format, args);
     fprintf(stderr, "\n");
     }

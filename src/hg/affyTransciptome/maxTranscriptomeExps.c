@@ -7,7 +7,7 @@ void usage()
 errAbort("maxTranscriptomeExps - cycle through a list of of affy transcriptome\n"
 	 "experiments and select the max for each position.\n"
 	 "usage:\n\t"
-	 "maxTranscriptomeExps <outputfile> <list of input files>\n");
+	 "maxTranscriptomeExps <outputfile> <trackName> <list of input files>\n");
 }
 
 
@@ -29,7 +29,7 @@ for(i=0;i<sampCount; i++)
 }
 
 
-void maxTranscriptomeExps(char *files[], int numFiles, char *outputFile)
+void maxTranscriptomeExps(char *files[], int numFiles, char *outputFile, char *trackName)
 {
 struct sample **pSampList = NULL;
 struct sample *s1;
@@ -54,7 +54,7 @@ for(i=0;i<count;i++)
     maxSamp->chrom = cloneString(s1->chrom);
     maxSamp->chromStart = s1->chromStart;
     maxSamp->chromEnd = s1->chromEnd;
-    maxSamp->name = cloneString(s1->name);
+    maxSamp->name = cloneString(trackName);
     snprintf(maxSamp->strand, sizeof(maxSamp->strand), "%s", s1->strand);
     maxSamp->sampleCount = s1->sampleCount;
     maxSamp->samplePosition = CloneArray(s1->samplePosition, maxSamp->sampleCount);
@@ -80,10 +80,10 @@ warn("Done.");
 
 int main(int argc, char *argv[])
 {
-if(argc < 3)
+if(argc < 4)
     usage();
 else
-    maxTranscriptomeExps(argv+2, argc-2, argv[1]);
+    maxTranscriptomeExps(argv+3, argc-3, argv[1], argv[2]);
 return 0;
 }
 

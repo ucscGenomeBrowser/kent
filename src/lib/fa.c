@@ -4,6 +4,7 @@
  * granted for all use - public, private or commercial. */
 
 #include "common.h"
+#include "errabort.h"
 #include "portable.h"
 #include "dnautil.h"
 #include "dnaseq.h"
@@ -15,11 +16,11 @@ boolean faReadNext(FILE *f, char *defaultName, boolean mustStartWithComment,
 /* Read next sequence from .fa file. Return sequence in retSeq.  If retCommentLine is non-null
  * return the '>' line in retCommentLine.   The whole thing returns FALSE at end of file. */
 {
-char lineBuf[512];
+char lineBuf[1024];
 int lineSize;
 char *words[1];
 int c;
-long offset = ftell(f);
+off_t offset = ftello(f);
 size_t dnaSize = 0;
 DNA *dna, *sequence, b;
 int bogusChars = 0;
@@ -37,6 +38,8 @@ for (;;)
     {
     if(fgets(lineBuf, sizeof(lineBuf), f) == NULL)
         {
+        if (ferror(f))
+            errnoAbort("read of fasta file failed");
         return FALSE;
         }
     lineSize = strlen(lineBuf);
@@ -44,14 +47,15 @@ for (;;)
         {
 	if (retCommentLine != NULL)
             *retCommentLine = cloneString(lineBuf);
-        offset = ftell(f);
+        offset = ftello(f);
         chopByWhite(lineBuf, words, ArraySize(words));
         name = words[0]+1;
         break;
         }
     else if (!mustStartWithComment)
         {
-        fseek(f, offset, SEEK_SET);
+        if (fseeko(f, offset, SEEK_SET) < 0)
+            errnoAbort("fseek on fasta file failed");
         break;
         }
     else
@@ -71,7 +75,8 @@ for (;;)
 
 /* Allocate DNA and fill it up from file. */
 dna = sequence = needHugeMem(dnaSize+1);
-fseek(f, offset, SEEK_SET);
+if (fseeko(f, offset, SEEK_SET) < 0)
+    errnoAbort("fseek on fasta file failed");
 for (;;)
     {
     c = fgetc(f);
@@ -91,6 +96,8 @@ if (c == '>')
 *dna = 0;
 
 *retSeq = newDnaSeq(sequence, dnaSize, name);
+if (ferror(f))
+    errnoAbort("read of fasta file failed");
 return TRUE;
 }
 
@@ -236,18 +243,22 @@ return faReadSeq(fileName, FALSE);
 static int faFastBufSize = 0;
 static DNA *faFastBuf;
 
-static void expandFaFastBuf(int bufPos)
+static void expandFaFastBuf(int bufPos, int minExp)
 /* Make faFastBuf bigger. */
 {
 if (faFastBufSize == 0)
     {
     faFastBufSize = 64 * 1024;
+    while (minExp > faFastBufSize)
+        faFastBufSize <<= 1;
     faFastBuf = needHugeMem(faFastBufSize);
     }
 else
     {
     DNA *newBuf;
     int newBufSize = faFastBufSize + faFastBufSize;
+    while (newBufSize < minExp)
+        newBufSize <<= 1;
     newBuf = needHugeMem(newBufSize);
     memcpy(newBuf, faFastBuf, bufPos);
     freeMem(faFastBuf);
@@ -313,7 +324,7 @@ for (;;)
 	if (c == 0) c = 'n';
 	}
     if (bufIx >= faFastBufSize)
-	expandFaFastBuf(bufIx);
+	expandFaFastBuf(bufIx, 0);
     faFastBuf[bufIx++] = c;
     if (c == 0)
         {
@@ -351,7 +362,8 @@ void faWrite(char *fileName, char *startLine, DNA *dna, int dnaSize)
 {
 FILE *f = mustOpen(fileName, "w");
 faWriteNext(f, startLine, dna, dnaSize);
-fclose(f);
+if (fclose(f) != 0)
+    errnoAbort("fclose failed");
 }
 
 void faWriteAll(char *fileName, bioSeq *seqList)
@@ -362,7 +374,8 @@ bioSeq *seq;
 
 for (seq=seqList; seq != NULL; seq = seq->next)
     faWriteNext(f, seq->name, seq->dna, seq->size);
-fclose(f);
+if (fclose(f) != 0)
+    errnoAbort("fclose failed");
 }
 
 boolean faMixedSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, char **retName)
@@ -410,7 +423,7 @@ for (;;)
 	break;
 	}
     if (bufIx + lineSize >= faFastBufSize)
-	expandFaFastBuf(bufIx);
+	expandFaFastBuf(bufIx, lineSize);
     for (i=0; i<lineSize; ++i)
         {
 	c = line[i];
@@ -419,7 +432,7 @@ for (;;)
 	}
     }
 if (bufIx >= faFastBufSize)
-    expandFaFastBuf(bufIx);
+    expandFaFastBuf(bufIx, 0);
 faFastBuf[bufIx] = 0;
 *retDna = faFastBuf;
 *retSize = bufIx;

@@ -165,13 +165,14 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 endControlGrid(&cg);
 }
 
-
 void colorCrossSpeciesUi(struct trackDb *tdb, boolean colorDefaultOn)
 /* Put up UI for selecting rainbow chromosome color or intensity score. */
 {
 char colorVar[256];
-char *aa;
+char filterVar[256];
+char *aa, *bb;
 char *colorVal = (colorDefaultOn ? "on" : "off");
+char *filterVal = "";
 
 printf("<p><b>Color track based on chromosome</b>: ");
 snprintf(colorVar, sizeof(colorVar), "%s.color", tdb->tableName);
@@ -181,36 +182,38 @@ printf(" on ");
 cgiMakeRadioButton(colorVar, "off", sameString(aa, "off"));
 printf(" off ");
 printf("<br><br>");
+printf("<p><b>Filter by chromosome (eg. chr10) </b>: ");
+snprintf(filterVar, sizeof(filterVar), "%s.chromFilter", tdb->tableName);
+bb = cartUsualString(cart, filterVar, filterVal);
+cgiMakeTextVar(filterVar, cartUsualString(cart, filterVar, ""), 5);
 }
 
 void genericWiggleUi(struct trackDb *tdb, int optionNum )
 /* put up UI for any standard wiggle track (a.k.a. sample track)*/
 {
 
-char options[5][256];
-int thisHeightPer, thisLineGap;
-char *interpolate, *aa, *fill;
+	char options[7][256];
+	int thisHeightPer, thisLineGap;
+	float thisMinYRange, thisMaxYRange;
+	char *interpolate, *aa, *fill;
 
 snprintf( &options[0][0], 256, "%s.heightPer", tdb->tableName );
 snprintf( &options[1][0], 256, "%s.linear.interp", tdb->tableName );
-snprintf( &options[2][0], 256, "%s.anti.alias", tdb->tableName );
 snprintf( &options[3][0], 256, "%s.fill", tdb->tableName );
-snprintf( &options[4][0], 256, "%s.interp.gap", tdb->tableName );
-    
-thisHeightPer = atoi(cartUsualString(cart, &options[0][0], "100"));
+snprintf( &options[4][0], 256, "%s.min.cutoff", tdb->tableName );
+snprintf( &options[5][0], 256, "%s.max.cutoff", tdb->tableName );
+snprintf( &options[6][0], 256, "%s.interp.gap", tdb->tableName );
+
+thisHeightPer = atoi(cartUsualString(cart, &options[0][0], "50"));
 interpolate = cartUsualString(cart, &options[1][0], "Linear Interpolation");
-aa = cartUsualString(cart, &options[2][0], "on");
 fill = cartUsualString(cart, &options[3][0], "1");
-thisLineGap = atoi(cartUsualString(cart, &options[4][0], "200"));
+thisMinYRange = atof(cartUsualString(cart, &options[4][0], "0.0"));
+thisMaxYRange = atof(cartUsualString(cart, &options[5][0], "1000.0"));
+thisLineGap = atoi(cartUsualString(cart, &options[6][0], "200"));
 
 printf("<p><b>Interpolation: </b> ");
 wiggleDropDown(&options[1][0], interpolate );
 printf(" ");
-printf(" <b>Anti-Aliasing</b>: ");
-cgiMakeRadioButton(&options[2][0], "on", sameString(aa, "on"));
-printf(" on ");
-cgiMakeRadioButton(&options[2][0], "off", sameString(aa, "off"));
-printf(" off ");
 
 printf("<br><br>");
 printf(" <b>Fill Blocks</b>: ");
@@ -224,151 +227,157 @@ printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
 cgiMakeIntVar(&options[0][0], thisHeightPer, 5 );
 printf("&nbsp;pixels");
 
-if( optionNum >= 5 )
+printf("<p><b>Vertical Range</b>:&nbsp;&nbsp;\nmin:");
+cgiMakeDoubleVar(&options[4][0], thisMinYRange, 6 );
+printf("&nbsp;&nbsp;&nbsp;&nbsp;max:");
+cgiMakeDoubleVar(&options[5][0], thisMaxYRange, 6 );
+
+if( optionNum >= 7 )
     {
     printf("<p><b>Maximum Interval to Interpolate Across</b>:&nbsp;&nbsp;");
-    cgiMakeIntVar(&options[4][0], thisLineGap, 10 );
+    cgiMakeIntVar(&options[6][0], thisLineGap, 10 );
     printf("&nbsp;bases");
     }
-
-
 }
 
-
-void affyTranscriptomeUi(struct trackDb *tdb)
-/* put up UI for the GC percent track (a sample track)*/
+void humMusUi(struct trackDb *tdb, int optionNum )
+/* put up UI for human/mouse conservation sample tracks (humMusL and musHumL)*/
 {
-int affyTranscriptomeHeightPer = atoi(cartUsualString(cart, "affyTranscriptome.heightPer", "100"));
-char *interpolate = cartUsualString(cart, "affyTranscriptome.linear.interp", "Only samples");
-char *aa = cartUsualString(cart, "affyTranscriptome.anti.alias", "on");
-char *fill = cartUsualString(cart, "affyTranscriptome.fill", "1");
+
+	char options[7][256];
+	int thisHeightPer, thisLineGap;
+	float thisMinYRange, thisMaxYRange;
+	char *interpolate, *aa, *fill;
+
+snprintf( &options[0][0], 256, "%s.heightPer", tdb->tableName );
+snprintf( &options[1][0], 256, "%s.linear.interp", tdb->tableName );
+snprintf( &options[3][0], 256, "%s.fill", tdb->tableName );
+snprintf( &options[4][0], 256, "%s.min.cutoff", tdb->tableName );
+snprintf( &options[5][0], 256, "%s.max.cutoff", tdb->tableName );
+snprintf( &options[6][0], 256, "%s.interp.gap", tdb->tableName );
+
+thisHeightPer = atoi(cartUsualString(cart, &options[0][0], "50"));
+interpolate = cartUsualString(cart, &options[1][0], "Linear Interpolation");
+fill = cartUsualString(cart, &options[3][0], "1");
+thisMinYRange = atof(cartUsualString(cart, &options[4][0], "0.0"));
+thisMaxYRange = atof(cartUsualString(cart, &options[5][0], "8.0"));
+thisLineGap = atoi(cartUsualString(cart, &options[6][0], "200"));
+
+printf("<p><b>Interpolation: </b> ");
+wiggleDropDown(&options[1][0], interpolate );
+printf(" ");
 
 printf("<br><br>");
 printf(" <b>Fill Blocks</b>: ");
-cgiMakeRadioButton("affyTranscriptome.fill", "1", sameString(fill, "1"));
+cgiMakeRadioButton(&options[3][0], "1", sameString(fill, "1"));
 printf(" on ");
 
-cgiMakeRadioButton("affyTranscriptome.fill", "0", sameString(fill, "0"));
+cgiMakeRadioButton(&options[3][0], "0", sameString(fill, "0"));
 printf(" off ");
 
 printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
-cgiMakeIntVar("affyTranscriptome.heightPer", affyTranscriptomeHeightPer, 5 );
+cgiMakeIntVar(&options[0][0], thisHeightPer, 5 );
 printf("&nbsp;pixels");
+
+printf("<p><b>Vertical Range</b>:&nbsp;&nbsp;\nmin:");
+cgiMakeDoubleVar(&options[4][0], thisMinYRange, 6 );
+printf("&nbsp;&nbsp;&nbsp;&nbsp;max:");
+cgiMakeDoubleVar(&options[5][0], thisMaxYRange, 6 );
+
+if( optionNum >= 7 )
+{
+	printf("<p><b>Maximum Interval to Interpolate Across</b>:&nbsp;&nbsp;");
+	cgiMakeIntVar(&options[6][0], thisLineGap, 10 );
+	printf("&nbsp;bases");
+}
+}
+
+
+
+
+void affyTranscriptomeUi(struct trackDb *tdb)
+	/* put up UI for the GC percent track (a sample track)*/
+{
+	int affyTranscriptomeHeightPer = atoi(cartUsualString(cart, "affyTranscriptome.heightPer", "100"));
+	char *interpolate = cartUsualString(cart, "affyTranscriptome.linear.interp", "Only samples");
+	char *aa = cartUsualString(cart, "affyTranscriptome.anti.alias", "on");
+	char *fill = cartUsualString(cart, "affyTranscriptome.fill", "1");
+
+	printf("<br><br>");
+	printf(" <b>Fill Blocks</b>: ");
+	cgiMakeRadioButton("affyTranscriptome.fill", "1", sameString(fill, "1"));
+	printf(" on ");
+
+	cgiMakeRadioButton("affyTranscriptome.fill", "0", sameString(fill, "0"));
+	printf(" off ");
+
+	printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
+	cgiMakeIntVar("affyTranscriptome.heightPer", affyTranscriptomeHeightPer, 5 );
+	printf("&nbsp;pixels");
 
 }
 
 
 void ancientRUi(struct trackDb *tdb)
-/* put up UI for the ancient repeats track to let user enter an
- * integer to filter out those repeats with less aligned bases.*/
+	/* put up UI for the ancient repeats track to let user enter an
+	 * integer to filter out those repeats with less aligned bases.*/
 {
-int ancientRMinLength = atoi(cartUsualString(cart, "ancientR.minLength", "50"));
-printf("<p><b>Length Filter</b><br>Exclude aligned repeats with less than ");
-cgiMakeIntVar("ancientR.minLength", ancientRMinLength, 4 );
-printf("aligned bases (not necessarily identical). Enter 0 for no filtering.");
+	int ancientRMinLength = atoi(cartUsualString(cart, "ancientR.minLength", "50"));
+	printf("<p><b>Length Filter</b><br>Exclude aligned repeats with less than ");
+	cgiMakeIntVar("ancientR.minLength", ancientRMinLength, 4 );
+	printf("aligned bases (not necessarily identical). Enter 0 for no filtering.");
 }
 
 
 
 void specificUi(struct trackDb *tdb)
-/* Draw track specific parts of UI. */
+	/* Draw track specific parts of UI. */
 {
-char *track = tdb->tableName;
+	char *track = tdb->tableName;
 
-if (sameString(track, "stsMap"))
-    stsMapUi(tdb);
-else if (sameString(track, "fishClones"))
-    fishClonesUi(tdb);
-else if (sameString(track, "recombRate"))
-    recombRateUi(tdb);
-else if (sameString(track, "nci60"))
-    nci60Ui(tdb);
-else if (sameString(track, "cghNci60"))
-    cghNci60Ui(tdb);
-else if (sameString(track, "mrna"))
-    mrnaUi(tdb, FALSE);
-else if (sameString(track, "est"))
-    mrnaUi(tdb, FALSE);
-else if (sameString(track, "tightMrna"))
-    mrnaUi(tdb, FALSE);
-else if (sameString(track, "tightEst"))
-    mrnaUi(tdb, FALSE);
-else if (sameString(track, "intronEst"))
-    mrnaUi(tdb, FALSE);
-else if (sameString(track, "xenoMrna"))
-    mrnaUi(tdb, TRUE);
-else if (sameString(track, "xenoBestMrna"))
-    mrnaUi(tdb, TRUE);
-else if (sameString(track, "xenoEst"))
-    mrnaUi(tdb, TRUE);
-else if (sameString(track, "rosetta"))
-    rosettaUi(tdb);
-else if (sameString(track, "affyRatio"))
-    affyUi(tdb);
-else if (sameString(track, "ancientR"))
-    ancientRUi(tdb);
-else if (sameString(track, "wiggle"))
-    genericWiggleUi(tdb,5);
-else if (sameString(track, "chimp"))
-    genericWiggleUi(tdb,5);
-else if (sameString(track, "GCwiggle"))
-    genericWiggleUi(tdb,5);
-else if (sameString(track, "pGCwiggle"))
-    genericWiggleUi(tdb,5);
-else if (sameString(track, "zoo"))
-    genericWiggleUi(tdb,4);
-else if (sameString(track, "binomialCons"))
-    genericWiggleUi(tdb,5);
-else if (sameString(track, "binomialCons2"))
-    genericWiggleUi(tdb,5);
-else if (sameString(track, "binomialCons3"))
-    genericWiggleUi(tdb,5);
-else if (sameString(track, "footPrinter"))
-    genericWiggleUi(tdb,5);
-else if (sameString(track, "footPrinterHMR"))
-    genericWiggleUi(tdb,5);
-else if (sameString(track, "humMus"))
-    genericWiggleUi(tdb,5);
-else if (sameString(track, "humMusL"))
-    genericWiggleUi(tdb,5);
-else if (sameString(track, "zooCons"))
-    genericWiggleUi(tdb,5);
-else if (sameString(track, "blastzMm2"))
-    colorCrossSpeciesUi(tdb, FALSE);
-else if (sameString(track, "blastzMm2_0817"))
-    colorCrossSpeciesUi(tdb, FALSE);
-else if (sameString(track, "blastzMm2_0824"))
-    colorCrossSpeciesUi(tdb, FALSE);
-else if (sameString(track, "blastzMm2Sc"))
-    colorCrossSpeciesUi(tdb, FALSE);
-else if (sameString(track, "blastzMm2Ref"))
-    colorCrossSpeciesUi(tdb, FALSE);
-else if (sameString(track, "blastzHgRef"))
-    colorCrossSpeciesUi(tdb, FALSE);
-else if (sameString(track, "blastzRecipBest"))
-    colorCrossSpeciesUi(tdb, FALSE);
-else if (sameString(track, "blastzHg"))
-    colorCrossSpeciesUi(tdb, FALSE);
-else if (sameString(track, "blastzBestMouse"))
-    colorCrossSpeciesUi(tdb, FALSE);
-else if (sameString(track, "blastzBestMouse_0824"))
-    colorCrossSpeciesUi(tdb, FALSE);
-else if (sameString(track, "blastzMouse"))
-    colorCrossSpeciesUi(tdb, FALSE);
-else if (sameString(track, "blastzBestHuman"))
-    colorCrossSpeciesUi(tdb, FALSE);
-else if (sameString(track, "blastzBestHuman12"))
-    colorCrossSpeciesUi(tdb, FALSE);
-else if (sameString(track, "blastzMmHg"))
-    colorCrossSpeciesUi(tdb, FALSE);
-else if (sameString(track, "blastzMmHg12"))
-    colorCrossSpeciesUi(tdb, FALSE);
-else if (sameString(track, "blastzMmHgRef"))
-    colorCrossSpeciesUi(tdb, FALSE);
-else if (sameString(track, "blastzAllHuman"))
+	if (sameString(track, "stsMap"))
+		stsMapUi(tdb);
+	else if (sameString(track, "fishClones"))
+		fishClonesUi(tdb);
+	else if (sameString(track, "recombRate"))
+		recombRateUi(tdb);
+	else if (sameString(track, "nci60"))
+		nci60Ui(tdb);
+	else if (sameString(track, "cghNci60"))
+		cghNci60Ui(tdb);
+	else if (sameString(track, "mrna"))
+		mrnaUi(tdb, FALSE);
+	else if (sameString(track, "est"))
+		mrnaUi(tdb, FALSE);
+	else if (sameString(track, "tightMrna"))
+		mrnaUi(tdb, FALSE);
+	else if (sameString(track, "tightEst"))
+		mrnaUi(tdb, FALSE);
+	else if (sameString(track, "intronEst"))
+		mrnaUi(tdb, FALSE);
+	else if (sameString(track, "xenoMrna"))
+		mrnaUi(tdb, TRUE);
+	else if (sameString(track, "xenoBestMrna"))
+		mrnaUi(tdb, TRUE);
+	else if (sameString(track, "xenoEst"))
+		mrnaUi(tdb, TRUE);
+	else if (sameString(track, "rosetta"))
+		rosettaUi(tdb);
+	else if (sameString(track, "affyRatio"))
+		affyUi(tdb);
+	else if (sameString(track, "ancientR"))
+		ancientRUi(tdb);
+	else if (sameString(track, "zoo"))
+		genericWiggleUi(tdb,6);
+	else if (sameString(track, "humMusL") ||
+		 sameString( track, "musHumL" ))
+		humMusUi(tdb,7);
+else if (startsWith("blastz", track))
     colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "aarMm2"))
     colorCrossSpeciesUi(tdb, FALSE);
+else if (sameString(track, "orthoTop4"))
+    colorCrossSpeciesUi(tdb, TRUE);
 else if (sameString(track, "mouseOrtho"))
     colorCrossSpeciesUi(tdb, TRUE);
 else if (sameString(track, "mouseSyn"))
@@ -379,8 +388,8 @@ else if (sameString(track, "blatHuman"))
     colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "affyTranscriptome"))
     affyTranscriptomeUi(tdb);
-else if (sameString(tdb->type, "sample 9"))
-    genericWiggleUi(tdb,5);
+else if (startsWith("sample", tdb->type))
+    genericWiggleUi(tdb,7);
 }
 
 void trackUi(struct trackDb *tdb)
@@ -389,7 +398,8 @@ void trackUi(struct trackDb *tdb)
 char *vis = hStringFromTv(tdb->visibility);
 printf("<H1>%s</H1>\n", tdb->longLabel);
 printf("<B>Display mode:</B>");
-hTvDropDown(tdb->tableName, hTvFromString(cartUsualString(cart, tdb->tableName, vis)));
+hTvDropDown(tdb->tableName, hTvFromString(cartUsualString(cart, tdb->tableName, vis)),
+	tdb->canPack);
 printf(" ");
 cgiMakeButton("Submit", "Submit");
 printf("<BR>\n");

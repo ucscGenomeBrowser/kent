@@ -11,7 +11,7 @@ if($#argv != 2) then
     echo "Athersys RAGE Library so we can feed that list into clusterRna"
     echo "for exclusion."
     echo "Usage:"
-    echo "\tgenerateRageAccList.csh <db {hg10,hg11,hgN> <outputFile>"
+    echo "   generateRageAccList.csh <db {hg10,hg11,hgN> <outputFile>"
     exit 0
 endif
 set db = $1

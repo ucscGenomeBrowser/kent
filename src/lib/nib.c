@@ -9,6 +9,72 @@
 #include "nib.h"
 #include "sig.h"
 
+static char *findNibSubrange(char *fileName)
+/* find the colon starting a nib seq name/subrange in a nib file name, or NULL
+ * if none */
+{
+char *baseName = strrchr(fileName, '/');
+baseName = (baseName == NULL) ? fileName : baseName+1;
+return strchr(baseName, ':');
+}
+
+static void parseSubrange(char *subrange, char *name, int *start,int *end)
+/* parse the subrange specification */
+{
+char *rangePart = strchr(subrange+1, ':');
+if (rangePart != NULL)
+    {
+    /* :seqId:start-end form */
+    *rangePart = '\0';
+    strcpy(name, subrange+1);
+    *rangePart = ':';
+    rangePart++;
+    }
+else
+    {
+    /* :start-end form */
+    rangePart = subrange+1;
+    strcpy(name, ""); 
+    }
+if ((sscanf(rangePart, "%u-%u", start, end) != 2) || (*start > *end))
+    errAbort("can't parse nib file subsequence specification: %s",
+             subrange);
+}
+
+static void parseNibName(unsigned options, char *fileName, char *filePath,
+                         char *name, unsigned *start,unsigned *end)
+/* parse the nib name, getting the file name, seq name to use, and
+ * optionally the start and end positions. Zero is return for start
+ * and end if they are not specified. */
+{
+char *subrange = findNibSubrange(fileName);
+if (subrange != NULL)
+    {
+    *subrange = '\0';
+    parseSubrange(subrange, name, start, end);
+    strcpy(filePath, fileName);
+    *subrange = ':';
+    if (strlen(name) == 0)
+        {
+        /* no name in spec */
+        if (options & NIB_BASE_NAME)
+            splitPath(fileName, NULL, name, NULL);
+        else
+            strcpy(name, fileName);
+        sprintf(name+strlen(name), ":%u-%u", *start, *end);
+        }
+    }
+else
+    {
+    *start = 0;
+    *end = 0;
+    if (options & NIB_BASE_NAME)
+        splitPath(fileName, NULL, name, NULL);
+    else
+        strcpy(name, fileName);
+    }
+}
+
 void nibOpenVerify(char *fileName, FILE **retFile, int *retSize)
 /* Open file and verify it's in good nibble format. */
 {
@@ -45,6 +111,7 @@ int maskIdx = 0;
 
 assert(start >= 0);
 assert(size >= 0);
+
 end = start+size;
 if (end > seqSize)
     errAbort("nib read past end of file (%d %d) in file: %s", 
@@ -198,14 +265,28 @@ return nibLoadPartMasked(0, fileName, start, size);
 }
 
 struct dnaSeq *nibLoadAllMasked(int options, char *fileName)
-/* Load part of an .nib file, with control over handling of masked
- * positions. */
+/* Load part of a .nib file, with control over handling of masked
+ * positions. Subranges of nib files may specified in the file name
+ * using the syntax:
+ *    /path/file.nib:seqid:start-end
+ * or\n"
+ *    /path/file.nib:start-end
+ * With the first form, seqid becomes the id of the subrange, with the second
+ * form, a sequence id of file:start-end will be used.
+ */
 {
 struct dnaSeq *seq;
 FILE *f;
 int seqSize;
-nibOpenVerify(fileName, &f, &seqSize);
-seq = nibInput(options, fileName, fileName, f, seqSize, 0, seqSize);
+char filePath[PATH_LEN];
+char name[PATH_LEN];
+int start, end;
+
+parseNibName(options, fileName, filePath, name, &start, &end);
+nibOpenVerify(filePath, &f, &seqSize);
+if (end == 0)
+    end = seqSize;
+seq = nibInput(options, fileName, name, f, seqSize, start, end-start);
 fclose(f);
 return seq;
 }
@@ -305,6 +386,26 @@ for (i=0; i<size; ++i)
 boolean isNib(char *fileName)
 /* Return TRUE if file is a nib file. */
 {
-return endsWith(fileName, ".nib") || endsWith(fileName, ".NIB");
+boolean isANib;
+char *subrange = findNibSubrange(fileName);
+if (subrange != NULL)
+    *subrange = '\0';
+isANib = endsWith(fileName, ".nib") || endsWith(fileName, ".NIB");
+if (subrange != NULL)
+    *subrange = ':';
+return isANib;
+}
+
+boolean isNibSubrange(char *fileName)
+/* Return TRUE if file specifies a subrange of a nib file. */
+{
+boolean isANib;
+char *subrange = findNibSubrange(fileName);;
+if (subrange == NULL)
+    return FALSE;
+*subrange = '\0';
+isANib = endsWith(fileName, ".nib") || endsWith(fileName, ".NIB");
+*subrange = ':';
+return isANib;
 }
 

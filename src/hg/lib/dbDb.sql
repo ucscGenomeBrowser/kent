@@ -10,7 +10,9 @@ CREATE TABLE dbDb (
     nibPath longblob not null,	# Path to packed sequence files
     organism varchar(255) not null,	# Common name of organism - first letter capitalized
     defaultPos varchar(255) not null,	# Default starting position
+    orderKey int not null,	# Int used to control display order within a genome
     active int not null,	# Flag indicating whether this db is in active use
+    genome varchar(255) not null,	# Unifying genome collection to which an assembly belongs
               #Indices
     PRIMARY KEY(name)
 );

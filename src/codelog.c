@@ -754,3 +754,11 @@
 446 - Blat v. 15 - saving in blast, axt, maf format.  Start of
       stuff for three way alignments rat/mouse/human.  hgText is
       improved.
+447 - Blat v. 16 - misc fixes.  Ranlib removed from makefiles for
+      SGI compatibility.  Mouse wiggle track now in production 
+      (actually probably was back in 446).
+448 - New version (V16) of the genome browser.
+449 - Blat v. 18.  Alpha version of browser with PostScript and
+      some other stuff.
+450 - Still blat v. 18. Alpha version of browser with mouse nets
+      and chains, squished and packed display modes, and grouping.

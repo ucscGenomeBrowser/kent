@@ -42,7 +42,7 @@ char *words[16],*parts[64];
 int partCount, wordCount;
 char *table = "stsAlias";
 struct sqlConnection *conn = sqlConnect(database);
-FILE *f = hgCreateTabFile(table);
+FILE *f = hgCreateTabFile(".", table);
 struct hash *trueHash = makeTrueHash(conn);
 int i;
 char *alias, *trueName;
@@ -94,9 +94,8 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
 	}
     }
 lineFileClose(&lf);
-carefulClose(&f);
 printf("Found %d aliases in %s\n", aliasCount, inFile);
-hgLoadTabFile(conn, table);
+hgLoadTabFile(conn, ".", table, &f);
 sqlDisconnect(&conn);
 printf("Loaded table %s in database %s\n", table, database);
 }

@@ -69,7 +69,7 @@ INSTALL INSTRUCTIONS FOR CODE USING THE BROWSER DATABASE
    system they are at /usr/include/mysql.)
    While you're at it set the MYSQLLIBS
    variable to point to something like
-   /usr/lib/mysql/libmysqlclient.a
+   /usr/lib/mysql/libmysqlclient.a -lz
 3. Execute make in jksrc/hg/lib
 4. Execute make in the directory containing the
    application you wish to build.

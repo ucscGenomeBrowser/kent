@@ -35,6 +35,7 @@ while ((axt = axtRead(lf)) != NULL)
 	hashAdd(outHash, axt->tName, f);
 	}
     axtWrite(axt, f);
+    axtFree(&axt);
     }
 }
 

@@ -3,6 +3,7 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "bits.h"
+#include "cart.h"
 #include "cheapcgi.h"
 #include "trackDb.h"
 #include "bed.h"
@@ -213,17 +214,12 @@ if (wordCount < 1)
 *retExtra = words[2];
 }
 
-void fbOptionsDb(char *db, char *track)
-/* Print out an HTML table with radio buttons for featureBits options. */
+void fbOptionsHtiCart(struct hTableInfo *hti, struct cart *cart)
+/* Print out an HTML table with radio buttons for featureBits options. 
+ * Use defaults from CGI and cart. */
 {
-struct sqlConnection *conn;
-struct trackDb *tdb;
-struct hTableInfo *hti;
 boolean isGene;
-
-hti = hFindTableInfoDb(db, NULL, track);
-if (hti == NULL)
-    errAbort("Could not find table info for table %s", track);
+char *setting, *fbQual;
 
 if (sameString("psl", hti->type))
     isGene = FALSE;
@@ -231,61 +227,83 @@ else
     isGene = TRUE;
 
 puts("<TABLE><TR><TD>\n");
-cgiMakeRadioButton("fbQual", "whole", TRUE);
+fbQual = cartCgiUsualString(cart, "fbQual", "whole");
+cgiMakeRadioButton("fbQual", "whole", sameString(fbQual, "whole"));
 if (isGene)
     puts(" Whole Gene </TD><TD> ");
 else
     puts(" Whole Alignment </TD><TD> ");
 puts(" </TD></TR><TR><TD>\n");
-cgiMakeRadioButton("fbQual", "upstreamAll", FALSE);
+cgiMakeRadioButton("fbQual", "upstreamAll", sameString(fbQual, "upstreamAll"));
 puts(" Upstream by </TD><TD> ");
-cgiMakeTextVar("fbUpBases", "200", 8);
+setting = cartCgiUsualString(cart, "fbUpBases", "200");
+cgiMakeTextVar("fbUpBases", setting, 8);
 puts(" bases </TD></TR><TR><TD>\n");
 if (hti->hasBlocks)
     {
-    cgiMakeRadioButton("fbQual", "exon", FALSE);
+    cgiMakeRadioButton("fbQual", "exon", sameString(fbQual, "exon"));
     if (isGene)
 	puts(" Exons plus </TD><TD> ");
     else
 	puts(" Blocks plus </TD><TD> ");
-    cgiMakeTextVar("fbExonBases", "0", 8);
+    setting = cartCgiUsualString(cart, "fbExonBases", "0");
+    cgiMakeTextVar("fbExonBases", setting, 8);
     puts(" bases at each end </TD></TR><TR><TD>\n");
-    cgiMakeRadioButton("fbQual", "intron", FALSE);
+    cgiMakeRadioButton("fbQual", "intron", sameString(fbQual, "intron"));
     if (isGene)
 	puts(" Introns plus </TD><TD> ");
     else
 	puts(" Regions between blocks plus </TD><TD> ");
-    cgiMakeTextVar("fbIntronBases", "0", 8);
+    setting = cartCgiUsualString(cart, "fbIntronBases", "0");
+    cgiMakeTextVar("fbIntronBases", setting, 8);
     puts(" bases at each end </TD></TR><TR><TD>\n");
     }
 if (hti->hasBlocks && hti->hasCDS)
     {
-    cgiMakeRadioButton("fbQual", "utr5", FALSE);
+    cgiMakeRadioButton("fbQual", "utr5", sameString(fbQual, "utr5"));
     puts(" 5' UTR Exons </TD><TD> ");
     puts(" </TD></TR><TR><TD>\n");
-    cgiMakeRadioButton("fbQual", "cds", FALSE);
+    cgiMakeRadioButton("fbQual", "cds", sameString(fbQual, "cds"));
     puts(" Coding Exons </TD><TD> ");
     puts(" </TD></TR><TR><TD>\n");
-    cgiMakeRadioButton("fbQual", "utr3", FALSE);
+    cgiMakeRadioButton("fbQual", "utr3", sameString(fbQual, "utr3"));
     puts(" 3' UTR Exons </TD><TD> ");
     puts(" </TD></TR><TR><TD>\n");
     }
 else if (hti->hasCDS)
     {
-    cgiMakeRadioButton("fbQual", "utr5", FALSE);
+    cgiMakeRadioButton("fbQual", "utr5", sameString(fbQual, "utr5"));
     puts(" 5' UTR  </TD><TD> ");
     puts(" </TD></TR><TR><TD>\n");
-    cgiMakeRadioButton("fbQual", "cds", FALSE);
+    cgiMakeRadioButton("fbQual", "cds", sameString(fbQual, "cds"));
     puts(" CDS </TD><TD> ");
     puts(" </TD></TR><TR><TD>\n");
-    cgiMakeRadioButton("fbQual", "utr3", FALSE);
+    cgiMakeRadioButton("fbQual", "utr3", sameString(fbQual, "utr3"));
     puts(" 3' UTR </TD><TD> ");
     puts(" </TD></TR><TR><TD>\n");
     }
-cgiMakeRadioButton("fbQual", "endAll", FALSE);
+cgiMakeRadioButton("fbQual", "endAll", sameString(fbQual, "endAll"));
 puts(" Downstream by </TD><TD> ");
-cgiMakeTextVar("fbDownBases", "200", 8);
+setting = cartCgiUsualString(cart, "fbDownBases", "200");
+cgiMakeTextVar("fbDownBases", setting, 8);
 puts(" bases </TD></TR></TABLE>");
+}
+
+void fbOptionsHti(struct hTableInfo *hti)
+/* Print out an HTML table with radio buttons for featureBits options.
+ * Use defaults from CGI. */
+{
+fbOptionsHtiCart(hti, NULL);
+}
+
+void fbOptionsDb(char *db, char *track)
+/* Print out an HTML table with radio buttons for featureBits options. */
+{
+struct hTableInfo *hti = hFindTableInfoDb(db, NULL, track);
+if (hti == NULL)
+    errAbort("Could not find table info for table %s in database %s",
+	     track, db);
+fbOptionsHti(hti);
 }
 
 void fbOptions(char *track)
@@ -323,13 +341,12 @@ else
 return(cloneString(qual));
 }
 
-struct featureBits *fbGetRangeQueryDb(char *db, char *trackQualifier,
-	char *chrom, int chromStart, int chromEnd, char *sqlConstraints,
+struct featureBits *fbFromBed(char *trackQualifier, struct hTableInfo *hti,
+	struct bed *bedList, int chromStart, int chromEnd,
 	boolean clipToWindow, boolean filterOutNoUTR)
-/* Get features in range that match sqlConstraints. */
+/* Translate a list of bed items into featureBits. */
 {
-struct hTableInfo *hti;
-struct bed *bedList = NULL, *bed;
+struct bed *bed;
 struct featureBits *fbList = NULL, *fbItem;
 char itemName[128];
 char nameBuf[512];
@@ -348,9 +365,6 @@ clipToWin = clipToWindow;
 
 trackQualifier = cloneString(trackQualifier);
 parseTrackQualifier(trackQualifier, &track, &qualifier, &extra);
-hti = hFindTableInfoDb(db, chrom, track);
-if (hti == NULL)
-    errAbort("Could not find table info for table %s", track);
 canDoUTR = hti->hasCDS;
 canDoIntrons = hti->hasBlocks;
 canDoScore = (hti->scoreField[0] != 0);
@@ -402,8 +416,6 @@ else if ((doUtr5 = utr5Qualifier(qualifier, extra, &extraSize)) != FALSE)
 if (doUpAll || doEndAll)
     filterOutNoUTR = FALSE;
 
-bedList = hGetBedRangeDb(db, track, chrom, chromStart, chromEnd,
-			 sqlConstraints);
 for (bed = bedList;  bed != NULL;  bed = bed->next)
     {
     if (doUp || doUpAll)
@@ -586,10 +598,34 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	}
     }
 clipToWin = oldClipToWin;
-bedFreeList(&bedList);
 freeMem(trackQualifier);
 slReverse(&fbList);
 return fbList;
+}
+
+
+struct featureBits *fbGetRangeQueryDb(char *db, char *trackQualifier,
+	char *chrom, int chromStart, int chromEnd, char *sqlConstraints,
+	boolean clipToWindow, boolean filterOutNoUTR)
+/* Get features in range that match sqlConstraints. */
+{
+struct hTableInfo *hti;
+struct bed *bedList;
+struct featureBits *fbList;
+char *tQ, *track, *qualifier, *extra;
+
+tQ = cloneString(trackQualifier);
+parseTrackQualifier(tQ, &track, &qualifier, &extra);
+hti = hFindTableInfoDb(db, NULL, track);
+if (hti == NULL)
+    errAbort("Could not find table info for table %s in database %s",
+	     track, db);
+bedList = hGetBedRangeDb(db, track, chrom, chromStart, chromEnd,
+			 sqlConstraints);
+fbList = fbFromBed(trackQualifier, hti, bedList, chromStart, chromEnd,
+		   clipToWindow, filterOutNoUTR);
+bedFreeList(&bedList);
+return(fbList);
 }
 
 
@@ -633,9 +669,41 @@ for (fb = fbList; fb != NULL; fb = fb->next)
 
 void fbOrTableBits(Bits *bits, char *trackQualifier, char *chrom, 
 	int chromSize, struct sqlConnection *conn)
+/* Ors in features in track on chromosome into bits.  */
 {
 struct featureBits *fbList = fbGetRange(trackQualifier, chrom, 0, chromSize);
 fbOrBits(bits, chromSize, fbList, 0);
 featureBitsFreeList(&fbList);
+}
+
+void fbOrTableBitsQuery(Bits *bits, char *trackQualifier, char *chrom, 
+	int chromSize, struct sqlConnection *conn, char *sqlConstraints,
+	boolean clipToWindow, boolean filterOutNoUTR)
+/* Ors in features matching sqlConstraints in track on chromosome into bits. */
+{
+struct featureBits *fbList = fbGetRangeQuery(trackQualifier, chrom, 0,
+					     chromSize, sqlConstraints,
+					     clipToWindow, filterOutNoUTR);
+fbOrBits(bits, chromSize, fbList, 0);
+featureBitsFreeList(&fbList);
+}
+
+struct bed *fbToBed(struct featureBits *fbList)
+/* Translate a list of featureBits items into (scoreless) bed 6. */
+{
+struct bed *bedList = NULL, *bed;
+struct featureBits *fb;
+
+for (fb=fbList;  fb != NULL;  fb=fb->next)
+    {
+    AllocVar(bed);
+    bed->chrom = fb->chrom;
+    bed->chromStart = fb->start;
+    bed->chromEnd = fb->end;
+    bed->name = fb->name;
+    bed->strand[0] = fb->strand;
+    slAddHead(&bedList, bed);
+    }
+return(bedList);
 }
 

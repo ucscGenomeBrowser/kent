@@ -5,6 +5,11 @@
 #ifndef ESTORIENTINFO_H
 #define ESTORIENTINFO_H
 
+struct lm;
+struct sqlConnection;
+
+#define EST_ORIENT_INFO_NUM_COLS 9
+
 struct estOrientInfo
 /* Extra information on ESTs - calculated by polyInfo program */
     {
@@ -57,6 +62,14 @@ void estOrientInfoOutput(struct estOrientInfo *el, FILE *f, char sep, char lastS
 
 #define estOrientInfoCommaOut(el,f) estOrientInfoOutput(el,f,',',',');
 /* Print out estOrientInfo as a comma separated list including final comma. */
+
+/* ----- end autoSql generated part --------------- */
+
+struct estOrientInfo *estOrientInfoLoadLm(char **row, struct lm *lm);
+/* Load a estOrientInfo row into local memory struct. */
+
+char *estOrientInfoGetCreateSql(char *table);
+/* Get SQL to create an estOrientInfo table.  */
 
 #endif /* ESTORIENTINFO_H */
 

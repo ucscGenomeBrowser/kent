@@ -1,0 +1,61 @@
+Hello - I think I've created a file only those obsessed with comparative
+genomics could like.  This is the classified net file.   Here's a short
+sample from near the beginning of human chromosome 1.  If your
+mailer word wraps it it will look even uglier than it is.  See below 
+for an explanation of fields.
+
+I *do* like it though.  I think from this it will be pretty easy to get
+most of the statistics I want to report.   Perhaps we can put this
+information in an easier to view format on the browser details
+page eventually. 
+
+
+ fill 58159 3681 chr7 + 17527587 9297 id 43830 score 143688 qDup 8727 type top tN 0 qN 0 tR 309 qR 345 tNewR 309 qNewR 246 tOldR 0 qOldR 0 tTrf 29 qTrf 0
+  gap 59899 104 chr7 + 17531210 4178 tN 0 qN 0 tR 0 qR 246 tNewR 0 qNewR 246 tOldR 0 qOldR 0 tTrf 0 qTrf 0
+  gap 60324 117 chr7 + 17535966 0 tN 0 qN 0 tR 0 qR 0 tNewR 0 qNewR 0 tOldR 0 qOldR 0 tTrf 0 qTrf 0
+   fill 60325 101 chr7 + 17536081 101 id 5137619 score 6111 qOver 0 qFar 115 qDup 101 type syn tN 0 qN 0 tR 0 qR 0 tNewR 0 qNewR 0 tOldR 0 qOldR 0 tTrf 0 qTrf 0
+  gap 60558 106 chr7 + 17536066 0 tN 0 qN 0 tR 0 qR 0 tNewR 0 qNewR 0 tOldR 0 qOldR 0 tTrf 0 qTrf 0
+   fill 60558 106 chr7 - 17531782 4202 id 1670092 score 15263 qOver 0 qFar 82 qDup 4202 type inv tN 0 qN 0 tR 0 qR 246 tNewR 0 qNewR 246 tOldR 0 qOldR 0 tTrf 0 qTrf 0
+  gap 60671 63 chr7 + 17536073 0 tN 0 qN 0 tR 0 qR 0 tNewR 0 qNewR 0 tOldR 0 qOldR 0 tTrf 0 qTrf 0
+   fill 60671 26 chr7 - 17531815 26 id 1670092 score 15263 qOver 0 qFar 4232 qDup 26 type inv tN 0 qN 0 tR 0 qR 0 tNewR 0 qNewR 0 tOldR 0 qOldR 0 tTrf 0 qTrf 0
+  gap 61069 320 chr7 + 17536433 0 tN 0 qN 0 tR 309 qR 0 tNewR 309 qNewR 0 tOldR 0 qOldR 0 tTrf 29 qTrf 0
+
+The first seven fields are fixed, then it goes to optional name/value pairs.
+The fixed fields are:
+1.  class.   Either 'fill' or 'gap'.  Fill represents a portion of a chain.
+2.  start in target (reference) chromosome.
+3.  size in target.
+4.  name of chromosome in query (other) species.
+5.  relative orientation between target and query.
+6.  start in query
+7.  size in query
+
+The name/value pairs are
+
+id - ID of associated chain (gapped alignment) if any.
+score - Score of associated chain
+ali   - Number of bases in alignments in chain.
+qFar - For fill that is on the same chromosome as parent, how far fill is
+       from position predicted by parent.   This let's you tell if a
+       rearrangement is local or if a duplication is tandem.
+qOver - Number of bases overlapping with parent gap on query side.
+        Generally this will be near zero except for inverts. 
+qDup - Number of bases in query region that are used twice or more in net.
+       This lets you distinguish between a rearrangement and a duplication.
+type - One of the following values:
+   top - Chain is top-level, not a gap filler
+   syn - Chain is on same chromosome and in same direction as parent
+   inv - Chain is on same chromosome on opposite direction from parent
+   nonSyn - Chain is on a different chromosome than parent
+tN - the number of unsequenced bases (N's) in target side
+qN - the number of unsequenced bases in query side
+tR - the number of bases in RepeatMasker masked repeats on target.
+qR - the number of bases in RepeatMasker masked repeats on query.
+tNewR - bases in lineage specific repeats on target.
+qNewR - bases in lineage specific repeats on query.
+tOldR - bases in repeats predating split on target.
+qOldR - bases in repeats predating split on query.
+tTrf - bases in trf (Tandem Repeat Finder) repeats on target.
+qTrf - bases in trf repeats on query.
+
+

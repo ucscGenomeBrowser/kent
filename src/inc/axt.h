@@ -99,6 +99,9 @@ struct axtScoreScheme *axtScoreSchemeRead(char *fileName);
 int axtScore(struct axt *axt, struct axtScoreScheme *ss);
 /* Return calculated score of axt. */
 
+int axtScoreUngapped(struct axtScoreScheme *ss, char *q, char *t, int size);
+/* Score ungapped alignment. */
+
 int axtScoreDnaDefault(struct axt *axt);
 /* Score DNA-based axt using default scheme. */
 
@@ -112,6 +115,9 @@ void axtSubsetOnT(struct axt *axt, int newStart, int newEnd,
 
 int axtTransPosToQ(struct axt *axt, int tPos);
 /* Convert from t to q coordinates */
+
+void axtSwap(struct axt *axt, int tSize, int qSize);
+/* Flip target and query on one axt. */
 
 struct axtBundle
 /* A bunch of axt's on the same query/target sequence. */
@@ -131,7 +137,7 @@ void axtBundleFreeList(struct axtBundle **pList);
 void axtBlastOut(struct axtBundle *abList, 
 	int queryIx, boolean isProt, FILE *f, 
 	char *databaseName, int databaseSeqCount, double databaseLetterCount, 
-	boolean isWu, char *ourId);
+	boolean isWu, boolean isXml, char *ourId);
 /* Output a bundle of axt's on the same query sequence in blast format.
  * The parameters in detail are:
  *   ab - the list of bundles of axt's. 
@@ -139,6 +145,7 @@ void axtBlastOut(struct axtBundle *abList,
  *   databaseSeqCount - number of sequences in database
  *   databaseLetterCount - number of bases or aa's in database
  *   isWu - TRUE if want wu-blast rather than blastall format
+ *   isXml - TRUE if want xml format
  *   ourId - optional (may be NULL) thing to put in header
  */
 

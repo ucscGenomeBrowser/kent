@@ -99,10 +99,15 @@ return d;
 char *lmCloneString(struct lm *lm, char *string)
 /* Return local mem copy of string. */
 {
-int size = strlen(string)+1;
-char *s = lmAlloc(lm, size);
-memcpy(s, string, size);
-return s;
+if (string == NULL)
+    return NULL;
+else
+    {
+    int size = strlen(string)+1;
+    char *s = lmAlloc(lm, size);
+    memcpy(s, string, size);
+    return s;
+    }
 }
 
 

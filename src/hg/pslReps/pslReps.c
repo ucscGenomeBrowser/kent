@@ -14,6 +14,8 @@ double minCover = 0.0;
 boolean ignoreSize = FALSE;
 boolean noIntrons = FALSE;
 boolean singleHit = FALSE;
+boolean noHead = FALSE;
+boolean quiet = FALSE;
 int minNearTopSize = 20;
 
 void usage()
@@ -28,6 +30,7 @@ errAbort(
     "sorted by pslSort, out.psl is the best alignment output\n"
     "and out.psr contains repeat info\n"
     "options:\n"
+    "    -nohead don't add PSL header\n"
     "    -ignoreSize Will not weigh in favor of larger alignments so much\n"
     "    -noIntrons Will not penalize for not having introns when calculating\n"
     "              size factor\n"
@@ -250,13 +253,16 @@ int wordCount;
 struct psl *pslList = NULL, *psl;
 char lastName[256];
 int aliCount = 0;
+quiet = sameString(bestAliName, "stdout") || sameString(repName, "stdout");
 
-printf("Processing %s to %s and %s\n", inName, bestAliName, repName);
-pslWriteHead(bestFile);
+if (!quiet)
+    printf("Processing %s to %s and %s\n", inName, bestAliName, repName);
+ if (!noHead)
+     pslWriteHead(bestFile);
 strcpy(lastName, "");
 while (lineFileNext(in, &line, &lineSize))
     {
-    if ((++aliCount & 0x1ffff) == 0)
+    if (((++aliCount & 0x1ffff) == 0) && !quiet)
         {
 	printf(".");
 	fflush(stdout);
@@ -278,7 +284,8 @@ pslFreeList(&pslList);
 lineFileClose(&in);
 fclose(bestFile);
 fclose(repFile);
-printf("Processed %d alignments\n", aliCount);
+if (!quiet)
+    printf("Processed %d alignments\n", aliCount);
 }
 
 int main(int argc, char *argv[])
@@ -294,6 +301,7 @@ minNearTopSize = cgiOptionalInt("minNearTopSize", minNearTopSize);
 ignoreSize = cgiBoolean("ignoreSize");
 noIntrons = cgiBoolean("noIntrons");
 singleHit = cgiBoolean("singleHit");
+noHead = cgiBoolean("nohead");
 pslReps(argv[1], argv[2], argv[3]);
 return 0;
 }

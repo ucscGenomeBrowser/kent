@@ -2,7 +2,7 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
-#include "cheapcgi.h"
+#include "options.h"
 #include "jksql.h"
 #include "hdb.h"
 #include "fa.h"
@@ -11,9 +11,15 @@
 #include "psl.h"
 #include "portable.h"
 #include "featureBits.h"
+#include "agpGap.h"
+#include "chain.h"
 
 int minSize = 1;	/* Minimum size of feature. */
 char *clChrom = "all";	/* Which chromosome. */
+boolean orLogic = FALSE;  /* Do ors instead of ands? */
+char *where = NULL;		/* Extra selection info. */
+boolean countGaps = FALSE;	/* Count gaps in denominator? */
+boolean noRandom = FALSE;	/* Exclude _random chromosomes? */
 
 void usage()
 /* Explain usage and exit. */
@@ -29,6 +35,10 @@ errAbort(
   "   -faMerge          For fa output merge overlapping features.\n"
   "   -minSize=N        Minimum size to output (default 1)\n"
   "   -chrom=chrN       Restrict to one chromosome\n"
+  "   -or               Or tables together instead of anding them\n"
+  "   -countGaps        Count gaps in denominator\n"
+  "   -noRandom         Don't include _random chromosomes\n"
+  "   '-where=some sql pattern'  restrict to features matching some sql pattern\n"
   "You can include a '!' before a table name to negate it.\n"
   "Some table names can be followed by modifiers such as:\n"
   "    :exon:N  Break into exons and add N to each end of each exon\n"
@@ -41,6 +51,10 @@ errAbort(
   "                   have txStart==cdsStart or txEnd==cdsEnd\n"
   "    :endAll:N      Like end, but doesn't filter out genes that \n"
   "                   have txStart==cdsStart or txEnd==cdsEnd\n"
+  "The tables can be bed, psl, or chain files, or a directory full of\n"
+  "such files as well as actual database tables.  To count the bits\n"
+  "used in dir/chrN_something*.bed you'd do:\n"
+  "   featureBits dir/something.bed\n"
   );
 }
 
@@ -114,14 +128,16 @@ if (fileExists(track))
 else
     {
     char dir[256], root[128], ext[65];
+    int len;
     splitPath(track, dir, root, ext);
-    sprintf(fileName, "%s%s/%s%s", dir, root, chrom, ext);
+    /* Chop trailing / off of dir. */
+    len = strlen(dir);
+    if (len > 0 && dir[len-1] == '/')
+        dir[len-1] = 0;
+    sprintf(fileName, "%s/%s%s%s", dir, chrom, root, ext);
     if (!fileExists(fileName))
 	{
         warn("Couldn't find %s or %s", track, fileName);
-	}
-    else
-	{
 	strcpy(fileName, track);
 	}
     }
@@ -131,7 +147,7 @@ return fileName;
 void outOfRange(struct lineFile *lf, char *chrom, int chromSize)
 /* Complain that coordinate is out of range. */
 {
-errAbort("Coordinate out of allowed range [%d,%d) for %s line %d of %s",
+errAbort("Coordinate out of allowed range [%d,%d) for %s near line %d of %s",
 	0, chromSize, chrom, lf->lineIx, lf->fileName);
 }
 
@@ -209,6 +225,31 @@ while (lineFileRow(lf, row))
 lineFileClose(&lf);
 }
 
+void fbOrChain(Bits *acc, char *track, char *chrom, int chromSize)
+/* Or in a chain file. */
+{
+struct lineFile *lf;
+char fileName[512];
+struct chain *chain;
+struct boxIn *b;
+
+chromFileName(track, chrom, fileName);
+if (!fileExists(fileName))
+    return;
+lf = lineFileOpen(fileName, TRUE);
+while ((chain = chainRead(lf)) != NULL)
+    {
+    for (b = chain->blockList; b != NULL; b = b->next)
+        {
+	int s = b->tStart, e = b->tEnd;
+	if (s < 0) outOfRange(lf, chrom, chromSize);
+	if (e > chromSize) outOfRange(lf, chrom, chromSize);
+	bitSetRange(acc, b->tStart, b->tEnd - b->tStart);
+	}
+    chainFree(&chain);
+    }
+}
+
 
 void isolateTrackPartOfSpec(char *spec, char track[512])
 /* Convert something like track:exon to just track */
@@ -219,6 +260,26 @@ s = strchr(track, ':');
 if (s != NULL) *s = 0;
 }
 
+void orFile(Bits *acc, char *track, char *chrom, int chromSize)
+/* Or some sort of file into bits. */
+{
+char *suffix = strrchr(track, '.');
+if (suffix == NULL)
+    errAbort("Unknown file type %s", track);
+if (sameString(suffix, ".psl"))
+    {
+    fbOrPsl(acc, track, chrom, chromSize);
+    }
+else if (sameString(suffix, ".bed"))
+    {
+    fbOrBed(acc, track, chrom, chromSize);
+    }
+else if (sameString(suffix, ".chain"))
+    {
+    fbOrChain(acc, track, chrom, chromSize);
+    }
+}
+
 void orTable(Bits *acc, char *track, char *chrom, 
 	int chromSize, struct sqlConnection *conn)
 /* Or in table if it exists.  Else do nothing. */
@@ -227,24 +288,19 @@ boolean hasBin;
 char t[512], *s;
 char table[512];
 boolean isSplit;
+
 isolateTrackPartOfSpec(track, t);
 s = strrchr(t, '.');
 if (s != NULL)
     {
-    if (sameString(s, ".psl"))
-        {
-	fbOrPsl(acc, track, chrom, chromSize);
-	}
-    else if (sameString(s, ".bed"))
-        {
-	fbOrBed(acc, track, chrom, chromSize);
-	}
+    orFile(acc, track, chrom, chromSize);
     }
 else
     {
     isSplit = hFindSplitTable(chrom, t, table, &hasBin);
     if (hTableExists(table))
-	fbOrTableBits(acc, track, chrom, chromSize, conn);
+	fbOrTableBitsQuery(acc, track, chrom, chromSize, conn, where,
+			   TRUE, TRUE);
     }
 }
 
@@ -285,13 +341,16 @@ for (i=0; i<tableCount; ++i)
 	orTable(bits, table, chrom, chromSize, conn);
 	if (not)
 	   bitNot(bits, chromSize);
-	bitAnd(acc, bits, chromSize);
+	if (orLogic)
+	    bitOr(acc, bits, chromSize);
+	else
+	    bitAnd(acc, bits, chromSize);
 	}
     }
 *retChromBits = bitCountRange(acc, 0, chromSize);
 if (bedFile != NULL || faFile != NULL)
     {
-    minSize = cgiUsualInt("minSize", minSize);
+    minSize = optionInt("minSize", minSize);
     bitsToBed(acc, chrom, chromSize, bedFile, faFile, minSize);
     }
 bitFree(&acc);
@@ -320,7 +379,8 @@ if (s != NULL)
     errAbort("Sorry, only database (not file) tracks allowed with "
              "fa output unless you use faMerge");
 isSplit = hFindSplitTable(chrom, t, table, &hasBin);
-fbList = fbGetRange(trackSpec, chrom, 0, hChromSize(chrom));
+fbList = fbGetRangeQuery(trackSpec, chrom, 0, hChromSize(chrom),
+			 where, TRUE, TRUE);
 for (fb = fbList; fb != NULL; fb = fb->next)
     {
     int s = fb->start, e = fb->end;
@@ -344,12 +404,33 @@ for (fb = fbList; fb != NULL; fb = fb->next)
 featureBitsFreeList(&fbList);
 }
 
+int countBases(struct sqlConnection *conn, char *chrom, int chromSize)
+/* Count bases, generally not including gaps, in chromosome. */
+{
+int size, totalGaps = 0;
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+
+if (countGaps)
+    return chromSize;
+sr = hChromQuery(conn, "gap", chrom, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct agpGap gap;
+    agpGapStaticLoad(row+rowOffset, &gap);
+    size = gap.chromEnd - gap.chromStart;
+    totalGaps += size;
+    }
+sqlFreeResult(&sr);
+return chromSize - totalGaps;
+}
 
 void featureBits(char *database, int tableCount, char *tables[])
 /* featureBits - Correlate tables via bitmap projections and booleans. */
 {
 struct sqlConnection *conn = NULL;
-char *bedName = cgiOptionalString("bed"), *faName = cgiOptionalString("fa");
+char *bedName = optionVal("bed", NULL), *faName = optionVal("fa", NULL);
 FILE *bedFile = NULL, *faFile = NULL;
 struct slName *allChroms = NULL, *chrom = NULL;
 boolean faIndependent = FALSE;
@@ -359,7 +440,7 @@ if (bedName)
     bedFile = mustOpen(bedName, "w");
 if (faName)
     {
-    boolean faMerge = cgiBoolean("faMerge");
+    boolean faMerge = optionExists("faMerge");
     faFile = mustOpen(faName, "w");
     if (tableCount > 1)
         {
@@ -370,7 +451,6 @@ if (faName)
     faIndependent = (!faMerge);
     }
 
-clChrom = cgiUsualString("chrom", clChrom);
 if (sameWord(clChrom, "all"))
     allChroms = hAllChromNames();
 else
@@ -381,11 +461,14 @@ if (!faIndependent)
     double totalBases = 0, totalBits = 0;
     for (chrom = allChroms; chrom != NULL; chrom = chrom->next)
 	{
-	int chromSize, chromBitSize;
-	chromFeatureBits(conn, chrom->name, tableCount, tables,
-	    bedFile, faFile, &chromSize, &chromBitSize);
-	totalBases += chromSize;
-	totalBits += chromBitSize;
+	if (!noRandom || !endsWith(chrom->name, "_random"))
+	    {
+	    int chromSize, chromBitSize;
+	    chromFeatureBits(conn, chrom->name, tableCount, tables,
+		bedFile, faFile, &chromSize, &chromBitSize);
+	    totalBases += countBases(conn, chrom->name, chromSize);
+	    totalBits += chromBitSize;
+	    }
 	}
     printf("%1.0f bases of %1.0f (%4.3f%%) in intersection\n",
 	totalBits, totalBases, 100.0*totalBits/totalBases);
@@ -397,10 +480,13 @@ else
     int itemCount, baseCount;
     for (chrom = allChroms; chrom != NULL; chrom = chrom->next)
         {
-	chromFeatureSeq(conn, chrom->name, tables[0],
-		bedFile, faFile, &itemCount, &baseCount);
-	totalBases += baseCount;
-	totalItems += itemCount;
+	if (!noRandom || !endsWith(chrom->name, "_random"))
+	    {
+	    chromFeatureSeq(conn, chrom->name, tables[0],
+		    bedFile, faFile, &itemCount, &baseCount);
+	    totalBases += countBases(conn, chrom->name, baseCount);
+	    totalItems += itemCount;
+	    }
 	}
     }
 hFreeConn(&conn);
@@ -410,9 +496,14 @@ hFreeConn(&conn);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
+optionHash(&argc, argv);
+clChrom = optionVal("chrom", clChrom);
+orLogic = optionExists("or");
+countGaps = optionExists("countGaps");
+noRandom = optionExists("noRandom");
 if (argc < 3)
     usage();
+where = optionVal("where", NULL);
 featureBits(argv[1], argc-2, argv+2);
 return 0;
 }

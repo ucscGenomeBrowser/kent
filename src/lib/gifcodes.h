@@ -45,3 +45,4 @@ struct gif_image
 #define TOO_HIGH	-5
 
 short gif_compress_data(int min_code_size, unsigned char *pt, long size, FILE *out);
+int gif_decoder(int linewidth);

@@ -6,6 +6,7 @@
 #ifndef SQLLIST_H
 #define SQLLIST_H
 
+int sqlDoubleArray(char *s, double *array, int maxArraySize);
 int sqlFloatArray(char *s, float *array, int maxArraySize);
 int sqlUnsignedArray(char *s, unsigned *array, int maxArraySize);
 int sqlSignedArray(char *s, int *array, int maxArraySize);
@@ -16,6 +17,7 @@ int sqlUbyteArray(char *s, unsigned char *array, int arraySize);
 /* Convert comma separated list of numbers to an array.  Pass in 
  * array and max size of array.  Returns actual array size.*/
 
+void sqlDoubleStaticArray(char *s, double **retArray, int *retSize);
 void sqlFloatStaticArray(char *s, float **retArray, int *retSize);
 void sqlUnsignedStaticArray(char *s, unsigned **retArray, int *retSize);
 void sqlSignedStaticArray(char *s, int **retArray, int *retSize);
@@ -27,6 +29,7 @@ void sqlUbyteStaticArray(char *s, unsigned char **retArray, int *retSize);
  * overwritten next call to this function or to sqlXxxxxxDynamicArray,
  * but need not be freed. */
 
+void sqlDoubleDynamicArray(char *s, double **retArray, int *retSize);
 void sqlFloatDynamicArray(char *s, float **retArray, int *retSize);
 void sqlUnsignedDynamicArray(char *s, unsigned **retArray, int *retSize);
 void sqlSignedDynamicArray(char *s, int **retArray, int *retSize);
@@ -56,6 +59,7 @@ void sqlStringDynamicArray(char *s, char ***retArray, int *retSize);
 void sqlStringFreeDynamicArray(char ***pArray);
 /* Free up a dynamic array (ends up freeing array and first string on it.) */
 
+char *sqlDoubleArrayToString( double *array, int arraySize);
 char *sqlFloatArrayToString( float *array, int arraySize);
 char *sqlUnsignedArrayToString( unsigned *array, int arraySize);
 char *sqlSignedArrayToString( int *array, int arraySize);
@@ -82,6 +86,9 @@ int sqlUnsignedComma(char **pS);
 
 int sqlSignedComma(char **pS);
 /* Return signed number at *pS.  Advance *pS past comma at end */
+
+double sqlDoubleComma(char **pS);
+/* Return double floating number at *pS.  Advance *pS past comma at end */
 
 float sqlFloatComma(char **pS);
 /* Return floating point number at *pS.  Advance *pS past comma at end */
