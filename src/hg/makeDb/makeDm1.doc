@@ -537,7 +537,7 @@ exit; # don't actually run this like a script :)
     # This time around, Markd handled adding the new species to gbGenome.c 
     # because it's not yet in the kent tree.  
 
-    # Edit /cluster/store5/genebank/etc/genbank.conf and add:
+    # Edit /cluster/data/genebank/etc/genbank.conf and add:
 # dm1
 dm1.genome = /cluster/bluearc/drosophila/dm1/nib/chr*.nib
 dm1.lift = /cluster/data/dm1/jkStuff/liftAll.lft
@@ -546,14 +546,14 @@ dm1.genbank.est.xeno.load = no
 dm1.downloadDir = dm1
 
     ssh eieio
-    cd /cluster/store5/genbank
+    cd /cluster/data/genbank
     # This is an -initial run, mRNA only:
     nice bin/gbAlignStep -iserver=no -clusterRootDir=/cluster/bluearc/genbank \
       -srcDb=genbank -type=mrna -verbose=1 -initial dm1
 
     # Load the results from the above
     ssh hgwdev
-    cd /cluster/store5/genbank
+    cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad dm1
 
     ssh eieio
@@ -561,12 +561,12 @@ dm1.downloadDir = dm1
     # needs to be moved out of the way.  
     rm -r /cluster/bluearc/genbank/work/initial.dm1
     # Now align refseqs:
-    cd /cluster/store5/genbank
+    cd /cluster/data/genbank
     nice bin/gbAlignStep -iserver=no -clusterRootDir=/cluster/bluearc/genbank \
       -srcDb=refseq -type=mrna -verbose=1 -initial dm1
     # Load results:
     ssh hgwdev
-    cd /cluster/store5/genbank
+    cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 dm1
 
     ssh eieio
@@ -578,7 +578,7 @@ dm1.downloadDir = dm1
       -srcDb=genbank -type=est -verbose=1 -initial dm1
     # Load results:
     ssh hgwdev
-    cd /cluster/store5/genbank
+    cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 dm1
     # Clean up:
     rm -r /cluster/bluearc/genbank/work/initial.dm1
@@ -1455,7 +1455,57 @@ end
     ./bin/gbDbLoadStep -type=mrna dm1
 
 
-# MASKED-QUERY XENO RNA ALIGNMENTS (DONE 10/21/03 angie)
+# MAKE DOWNLOADABLE FILES (DONE 10/29/03 angie)
+    ssh kksilo
+    cd /cluster/data/dm1
+    mkdir zips
+    zip -j zips/chromOut.zip ?{,?}/chr?{,?}.fa.out
+    zip -j zips/chromFa.zip ?{,?}/chr?{,?}.fa
+    foreach f (?{,?}/chr?{,?}.fa)
+      maskOutFa $f hard $f.masked
+    end
+    zip -j zips/chromFaMasked.zip ?{,?}/chr?{,?}.fa.masked
+    cd bed/simpleRepeat
+    zip ../../zips/chromTrf.zip trfMaskChrom/chr*.bed
+    zip ../../zips/contigTrf.zip trfMask/N{T,G}*.bed
+    cd ../..
+    # Make a starter mrna.zip -- it will get updated regularly on the RR. 
+    /cluster/data/genbank/bin/i386/gbGetSeqs -gbRoot=/cluster/data/genbank \
+      -db=dm1 -native genbank mrna mrna.fa
+    zip zips/mrna.zip mrna.fa
+    rm mrna.fa
+    foreach f (zips/*.zip)
+      echo $f
+      unzip -t $f | tail -1
+    end
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/dm1
+    cd /usr/local/apache/htdocs/goldenPath/dm1
+    mkdir bigZips database
+    # Create README.txt files in bigZips/ and database/ to explain the files.
+    cp -p /cluster/data/dm1/zips/*.zip bigZips
+
+
+# ANOPHELES ECORES FROM GENOSCOPE (IN PROGRESS 11/10/03 angie)
+    ssh hgwdev
+    mkdir /cluster/data/dm1/bed/anophelesEcores
+    cd /cluster/data/dm1/bed/anophelesEcores
+    # save attachment from Olivier Jaillon's email 11/10/03 to 
+    # ecotig.6.4ucsc
+    perl -wpe 'if (/^(\w+)\:\d+ (\d+) (\d+) (\w+)\:\d+ (\d+) (\d+)$/) { \
+                 if ($1 ne $4) { die "diff chr: $1 $4"; } \
+                 $name = "chr$1:$2-$6";  $start = $2 - 1; \
+                 $sz1 = $3 - $start;  $sz2 = $6 - ($5 - 1);   $st2 = $5 - $2; \
+                 $_ = "chr$1\t$start\t$6\t$name\t0\t+\t$start\t$6\t0\t2\t$sz1,$sz2,\t0,$st2,\n"; \
+               } elsif (/^(\w+)\:\d+ (\d+) (\d+)\s*$/) { \
+                 $name = "chr$1:$2-$3";  $start = $2 - 1;  $sz1 = $3 - $start; \
+                 $_ = "chr$1\t$start\t$3\t$name\t0\t+\t$start\t$3\t0\t1\t$sz1,\t0,\n"; \
+               } else { chop; die "cant parse line $.:\n|$_|"; }' \
+    < ecotig.6.4ucsc > anophelesEcores.bed
+    hgLoadBed -tab dm1 anophelesEcores anophelesEcores.bed
+
+
+# MASKED-QUERY XENO RNA ALIGNMENTS (DONE 10/22/03 angie)
     # Experimental track... if this TRF-masking works out, then find out 
     # what it would take to add it as an option to Mark's genbank stuff.
     ssh kksilo
@@ -1465,10 +1515,10 @@ end
     # .version suffixes so we can use accessions from mrna.gbidx to 
     # pick out the non-D.mel. mrnas.  
     perl -wpe 's/^>(\w+).\d+/>$1/' \
-      /cluster/store5/genbank/data/processed/genbank.137.0/full/mrna.fa \
+      /cluster/data/genbank/data/processed/genbank.137.0/full/mrna.fa \
       > allMrna.fa
     grep -v "Drosophila melanogaster" \
-      /cluster/store5/genbank/data/processed/genbank.137.0/full/mrna.gbidx \
+      /cluster/data/genbank/data/processed/genbank.137.0/full/mrna.gbidx \
         | awk '{print $1;}' | grep -v "^#" \
     > xenoAcc.lst
     faSomeRecords allMrna.fa xenoAcc.lst flyXenoRna.fa
@@ -1496,22 +1546,24 @@ end
     ls -1S /iscratch/i/dm1/nib/chr*.nib > fly.lst
     ls -1S /cluster/bluearc/dm1/mrna.137/xenoRna*.fa > mrna.lst
     echo '#LOOP \
-/cluster/bin/i386/blat $(path1) {check in line+ $(path2)} -q=rnax -t=dnax -mask=lower {check out line+ psl/$(root1)_$(root2).psl} \
+/cluster/bin/i386/blat -maxIntron=50000 $(path1) {check in line+ $(path2)} -q=rnax -t=dnax -mask=lower {check out line+ psl/$(root1)_$(root2).psl} \
 #ENDLOOP' > gsub
     gensub2 fly.lst mrna.lst gsub spec
     para create spec
     para try, check, push, check, ...
 #Completed: 814 of 814 jobs
-#Average job time:                 403s       6.71m     0.11h    0.00d
-#Longest job:                     1405s      23.42m     0.39h    0.02d
-#Submission to last job:          2430s      40.50m     0.68h    0.03d
+#Average job time:                 459s       7.65m     0.13h    0.01d
+#Longest job:                     1756s      29.27m     0.49h    0.02d
+#Submission to last job:          2145s      35.75m     0.60h    0.02d
     ssh kksilo
     cd /cluster/data/dm1/bed/xenoMrnaMasked
     pslSort dirs raw.psl /cluster/store2/temp psl
     pslReps raw.psl cooked.psl /dev/null -minAli=0.25
-    pslSortAcc nohead chrom /cluster/store2/temp cooked.psl
+    # pslFilter -minMatch=60 -gapSizeLogMod=2 -minScore=30 cooked.psl filt.psl
+    pslFilter -minAli=250 -minUniqueMatch=15 cooked.psl filt.psl
+    pslSortAcc nohead chrom /cluster/store2/temp filt.psl
     pslCat -dir chrom > xenoMrnaMasked.psl
-    rm -r chrom raw.psl cooked.psl 
+    rm -r chrom raw.psl cooked.psl filt.psl
     # Load into database as so:
     ssh hgwdev
     cd /cluster/data/dm1/bed/xenoMrnaMasked
