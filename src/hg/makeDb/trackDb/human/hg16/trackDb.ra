@@ -1534,7 +1534,7 @@ expStep 100
 expColorDense On
 chip x
 
-track encode_NHGRI_DNaseHS
+track encode_NHGRI_DNAseHS
 shortLabel DNaseI-HS/NHGRI
 longLabel NHGRI DNaseI-Hypersensitive Sites in ENCODE Regions
 group encode
