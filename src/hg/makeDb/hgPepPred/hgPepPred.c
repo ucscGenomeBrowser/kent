@@ -7,7 +7,7 @@
 #include "jksql.h"
 #include "pepPred.h"
 
-static char const rcsid[] = "$Id: hgPepPred.c,v 1.7 2003/05/06 07:22:25 kate Exp $";
+static char const rcsid[] = "$Id: hgPepPred.c,v 1.8 2003/06/06 17:08:42 heather Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -62,7 +62,7 @@ char *createString =
 "    name varchar(255) not null,	# Name of gene - same as in genePred\n"
 "    seq longblob not null,	# Peptide sequence\n"
 "              #Indices\n"
-"    PRIMARY KEY(name(32))\n"
+"    PRIMARY KEY(name(64))\n"
 ")\n";
 
 char *findEnsTrans(struct lineFile *lf, char *line)
