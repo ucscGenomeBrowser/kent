@@ -5,7 +5,7 @@
 #include "options.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: nibFrag.c,v 1.14 2004/10/19 20:22:12 kate Exp $";
+static char const rcsid[] = "$Id: nibFrag.c,v 1.15 2005/01/31 00:46:13 daryl Exp $";
 
 static struct optionSpec optionSpecs[] = {
     {"masked", OPTION_BOOLEAN},
@@ -34,7 +34,8 @@ errAbort(
   );
 }
 
-void nibFrag(int options, char *nibFile, int start, int end, char strand, char *faFile, int optUpper, boolean hardMask)
+void nibFrag(int options, char *nibFile, int start, int end, char strand, 
+	     char *faFile, int optUpper, boolean hardMask)
 /* nibFrag - Extract part of a nib file as .fa. */
 {
 struct dnaSeq *seq;
