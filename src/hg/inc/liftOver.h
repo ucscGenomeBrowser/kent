@@ -18,6 +18,12 @@ int liftOverBed(char *fileName, struct hash *chainHash,
 /* Open up file, decide what type of bed it is, and lift it. 
  * Return the number of records successfully converted */
 
+int liftOverPositions(char *fileName, struct hash *chainHash, 
+                        double minMatch,  double minBlocks, bool fudgeThick,
+                                FILE *f, FILE *unmapped, int *errCt);
+/* Create bed file from positions (chrom:start-end) and lift.
+ * Return the number of records successfully converted */
+
 void liftOverGff(char *fileName, struct hash *chainHash, 
                     double minMatch, double minBlocks, 
                     FILE *mapped, FILE *unmapped);

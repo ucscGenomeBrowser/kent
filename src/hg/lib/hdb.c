@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.177 2004/04/14 16:40:04 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.178 2004/04/15 00:49:59 kate Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -518,11 +518,10 @@ struct sqlConnection *hConnectArchiveCentral()
 {
 if (centralArchiveCc == NULL)
     {
-    char *database = cfgOption("central.db");
-    char *host = cfgOption("genome-archive.cse.ucsc.edu");
-    char *user = cfgOption("central.user");
-    char *password = cfgOption("central.password");;
-
+    char *database = cfgOption("archivecentral.db");
+    char *host = cfgOption("archivecentral.host");
+    char *user = cfgOption("archivecentral.user");
+    char *password = cfgOption("archivecentral.password");;
     if (database == NULL || host == NULL || user == NULL || password == NULL)
 	errAbort("Please set central options in the hg.conf file.");
     centralArchiveCc = sqlNewRemoteConnCache(database, host, user, password);
@@ -1774,31 +1773,27 @@ return dbList;
 }
 
 struct dbDb *hArchiveDbDbList()
-/* Return list of databases that are actually online. 
- * The list includes the name, description, and where to
- * find the nib-formatted DNA files. Free this with dbDbFree. */
+/* Return list of databases in archive central dbDb.
+ * Free this with dbDbFree. */
 {
-struct sqlConnection *conn = hConnectArchiveCentral();
+struct sqlConnection *conn;
 struct sqlResult *sr;
 char **row;
 struct dbDb *dbList = NULL, *db;
-struct hash *hash = sqlHashOfDatabases();
 
-sr = sqlGetResult(conn, "select * from dbDb order by orderKey,name desc");
-while ((row = sqlNextRow(sr)) != NULL)
+conn = hConnectArchiveCentral();
+if (conn)
     {
-    db = dbDbLoad(row);
-    if (hashLookup(hash, db->name))
+    sr = sqlGetResult(conn, "select * from dbDb order by orderKey,name desc");
+    while ((row = sqlNextRow(sr)) != NULL)
         {
-	slAddHead(&dbList, db);
-	}
-    else
-        dbDbFree(&db);
+        db = dbDbLoad(row);
+        slAddHead(&dbList, db);
+        }
+    sqlFreeResult(&sr);
+    hDisconnectArchiveCentral(&conn);
+    slReverse(&dbList);
     }
-sqlFreeResult(&sr);
-hashFree(&hash);
-hDisconnectArchiveCentral(&conn);
-slReverse(&dbList);
 return dbList;
 }
 
@@ -2879,11 +2874,12 @@ for (chain = chainList; chain != NULL; chain = chain->next)
 /* Get list of all current databases */
 currentDbList = hDbDbList();
 /* Get list of all archived databases */
-//archiveDbList = hArchiveDbDbList();
+archiveDbList = hArchiveDbDbList();
 
 /* Create a new dbDb list of all entries in the liftOver hash */
 for (dbDb = currentDbList; dbDb != NULL; dbDb = nextDbDb)
     {
+    /* current dbDb entries */
     nextDbDb = dbDb->next;
     if (hashFindVal(hash, dbDb->name))
         slAddHead(&liftOverDbList, dbDb);
@@ -2892,6 +2888,7 @@ for (dbDb = currentDbList; dbDb != NULL; dbDb = nextDbDb)
     }
 for (dbDb = archiveDbList; dbDb != NULL; dbDb = nextDbDb)
     {
+    /* archived dbDb entries */
     nextDbDb = dbDb->next;
     if (hashFindVal(hash, dbDb->name))
         slAddHead(&liftOverDbList, dbDb);

@@ -10,8 +10,9 @@
 #include "sample.h"
 #include "hdb.h"
 #include "liftOverChain.h"
+#include "portable.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.6 2004/04/14 05:24:42 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.7 2004/04/15 00:49:59 kate Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -750,7 +751,7 @@ return ct;
 }
 
 int liftOverBed(char *fileName, struct hash *chainHash, 
-                                double minMatch,  double minBlocks, bool fudgeThick,
+                        double minMatch,  double minBlocks, bool fudgeThick,
                                 FILE *f, FILE *unmapped, int *errCt)
 /* Open up file, decide what type of bed it is, and lift it. 
  * Return the number of records successfully converted */
@@ -776,6 +777,78 @@ if (lineFileNextReal(lf, &line))
 	 ct = bedOverBig(lf, wordCount, chainHash, minMatch, minBlocks, 
                                 fudgeThick, f, unmapped, errCt);
     }
+lineFileClose(&lf);
+return ct;
+}
+
+#define LIFTOVER_FILE_PREFIX    "liftOver"
+
+int liftOverPositions(char *fileName, struct hash *chainHash, 
+                        double minMatch,  double minBlocks, bool fudgeThick,
+                                FILE *mapped, FILE *unmapped, int *errCt)
+/* Create bed file from positions (chrom:start-end) and lift.
+ * Then convert back to positions.  (TODO: line-by-line instead of by file)
+ * Return the number of records successfully converted */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line;
+char *words[16];
+int ct = 0;
+struct tempName bedTn, mappedBedTn, unmappedBedTn;
+FILE *bedFile;
+char *chrom;
+int start, end;
+FILE *mappedBed, *unmappedBed;
+
+/* OK to use forCgi here ?? What if used from command-line ? */
+makeTempName(&bedTn, LIFTOVER_FILE_PREFIX, ".bed");
+bedFile = mustOpen(bedTn.forCgi, "w");
+
+/* Convert input to bed file */
+while (lineFileNextReal(lf, &line))
+    {
+    if (hgParseChromRangeDb(line, &chrom, &start, &end, FALSE))
+        fprintf(bedFile, "%s\t%d\t%d\n", chrom, start, end);
+    }
+carefulClose(&bedFile);
+chmod(bedTn.forCgi, 0666);
+lineFileClose(&lf);
+
+/* Set up temp bed files for output, and lift to those */
+lf = lineFileOpen(bedTn.forCgi, TRUE);
+makeTempName(&mappedBedTn, LIFTOVER_FILE_PREFIX, ".bedmapped");
+makeTempName(&unmappedBedTn, LIFTOVER_FILE_PREFIX, ".bedunmapped");
+mappedBed = mustOpen(mappedBedTn.forCgi, "w");
+unmappedBed = mustOpen(unmappedBedTn.forCgi, "w");
+ct = bedOverSmall(lf, 3, chainHash, minMatch, mappedBed, unmappedBed, errCt);
+carefulClose(&mappedBed);
+chmod(mappedBedTn.forCgi, 0666);
+carefulClose(&unmappedBed);
+chmod(unmappedBedTn.forCgi, 0666);
+lineFileClose(&lf);
+
+/* Convert output files back to positions */
+lf = lineFileOpen(mappedBedTn.forCgi, TRUE);
+while (lineFileNextReal(lf, &line))
+    {
+    sscanf(line, "%s\t%d\t%d", chrom, &start, &end);
+    fprintf(mapped, "%s:%d-%d\n", chrom, start, end);
+    }
+carefulClose(&mapped);
+lineFileClose(&lf);
+
+lf = lineFileOpen(unmappedBedTn.forCgi, TRUE);
+while (lineFileNext(lf, &line, NULL))
+    {
+    if (line[0] == '#')
+        fprintf(unmapped, "%s\n", line);
+    else
+        {
+        sscanf(line, "%s\t%d\t%d", chrom, &start, &end);
+        fprintf(unmapped, "%s:%d-%d\n", chrom, start, end);
+        }
+    }
+carefulClose(&unmapped);
 lineFileClose(&lf);
 return ct;
 }
