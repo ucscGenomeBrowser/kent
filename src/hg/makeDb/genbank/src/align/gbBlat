@@ -27,7 +27,7 @@
 # is still produced.  This script is very careful to exit non-zero if an error
 # occurs.
 #
-# $Id: gbBlat,v 1.7 2003/08/14 04:01:59 markd Exp $
+# $Id: gbBlat,v 1.8 2003/08/15 04:48:18 markd Exp $
 #
 set -e
 
@@ -146,11 +146,9 @@ case "$orgCat" in
         case "$type" in
             mrna)
                 if [ "$srcDb" = "refseq" ] ; then
-                    #blatParams="-q=rna -fine -trimHardA $oocOpt"
-                    blatParams="-q=rna -fine -mask=lower $oocOpt"
+                    blatParams="-q=rna -fine -trimHardA $oocOpt"
                 else
-                    #blatParams="-q=rna -fine $oocOpt"
-                    blatParams="-q=rna -fine -mask=lower $oocOpt"
+                    blatParams="-q=rna -fine $oocOpt"
                 fi
                 ;;
             est)
