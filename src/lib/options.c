@@ -12,7 +12,7 @@
 #include "verbose.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: options.c,v 1.18 2004/08/04 01:10:33 krish Exp $";
+static char const rcsid[] = "$Id: options.c,v 1.19 2004/08/04 21:31:20 krish Exp $";
 
 #ifdef MACHTYPE_alpha
     #define strtoll strtol
@@ -142,7 +142,7 @@ if(optionSpecs == NULL) {
     hashAdd(hash, name, val);
 } else {
     struct optionSpec *spec = matchingOption(name, optionSpecs);
-    if(spec->flags & OPTION_MULTI) {    /* process multiple instances of option */
+    if(spec != NULL && (spec->flags & OPTION_MULTI)) {    /* process multiple instances of option */
         parseMultiOption(hash, name, val, spec);
     } else {
         hashAdd(hash, name, val);
