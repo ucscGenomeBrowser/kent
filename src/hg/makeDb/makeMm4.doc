@@ -2538,6 +2538,11 @@ XXX  This is an unusual increase ?
 XXXX 2002-12-23 This is missing something.  Can not click through to the
 	alignments
 
+# load primer sequences	
+    mkdir /gbdb/mm4/stsMarker
+    ln -s <primer.fa> /gbdb/mm4/stsMarker/<primer.fa>
+    hgLoadSeq mm4 /gbdb/mm4/stsMarker/<primer.fa>
+
 
 #  STS Markers plots - needs to wait until stsMarkers_pos_all.rdb
 #	is created correctly from above, also needs the three maps files
