@@ -1,0 +1,3 @@
+#cluster	chrom	start	end	track1	track2
+8	chr4	71212002	71236831	ncbiRefSeq	ncbiRefSeq
+8	chr4	71212002	71236831	blatRefSeq	ncbiRefSeq

@@ -1,7 +1,6 @@
 /* clusterGenes - Cluster genes from genePred tracks. */
 #include "common.h"
 #include "linefile.h"
-#include "hash.h"
 #include "options.h"
 #include "dlist.h"
 #include "jksql.h"
@@ -9,7 +8,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.7 2004/01/25 20:26:15 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.8 2004/01/26 04:55:08 markd Exp $";
 
 /* Command line driven variables. */
 int verbose = 0;
@@ -29,39 +28,111 @@ errAbort(
   "options:\n"
   "   -verbose=N - Print copious debugging info. 0 for none, 3 for loads\n"
   "   -chrom=chrN - Just work on one chromosome\n"
+  "   -chromFile=file - Just work on chromosomes listed in this file\n"
   "   -cds - cluster only on CDS exons\n"
+  "   -conflicts=file - Output information clusters where there are genes\n"
+  "    that don't share exons.  This indicates case where clusters maybe.\n"
+  "    incorrectly merged or split. Conflicts maybe either internal to \n"
+  "    a table or between tables.\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"verbose", OPTION_INT},
    {"chrom", OPTION_STRING},
+   {"chromFile", OPTION_STRING},
    {"cds", OPTION_BOOLEAN},
+   {"conflicts", OPTION_STRING},
    {NULL, 0},
 };
 
 /* from command line  */
 boolean useCds;
 
+struct track
+/*  Object representing a track. Only one object is allocated for a track,
+ *  pointers can be compared */
+{
+    struct track *next;
+    char *name;
+};
+
+/* Global list of tracks (tables) in use. */
+struct track* allTracks = NULL;
+
+struct track* getTrack(char* name)
+/* find the track object for name, creating if needed */
+{
+struct track* track;
+for (track = allTracks; track != NULL; track = track->next)
+    {
+    if (sameString(track->name, name))
+        return track;
+    }
+AllocVar(track);
+track->name = cloneString(name);
+slAddTail(&allTracks, track);
+return track;
+}
+
+boolean gpGetExon(struct genePred* gp, int exonIx, int *exonStartRet, int *exonEndRet)
+/* Get the start and end of an exon, adjusting if we are only examining CDS.
+ * Return false if exon should not be used.  */
+{
+int exonStart = gp->exonStarts[exonIx];
+int exonEnd = gp->exonEnds[exonIx];
+if (useCds)
+    {
+    if (exonStart < gp->cdsStart)
+        exonStart = gp->cdsStart;
+    if (exonEnd > gp->cdsEnd)
+        exonEnd = gp->cdsEnd;
+    }
+*exonStartRet = exonStart;
+*exonEndRet = exonEnd;
+return exonStart < exonEnd;
+}
+
+struct clusterGene
+/* A gene in a cluster */
+{
+    struct clusterGene* next;
+    struct track* track;       /* aka table for gene */
+    struct genePred* gp;
+};
+
+struct clusterGene* clusterGeneNew(struct track* track, struct genePred* gp)
+/* create a new clusterGene. */
+{
+struct clusterGene* cg;
+AllocVar(cg);
+cg->track = track;
+cg->gp = gp;
+return cg;
+}
+
+void clusterGeneFree(struct clusterGene** cgp)
+/* Free a clusterGene. */
+{
+freez(cgp);
+}
+
 struct cluster
 /* A cluster of overlapping genes. */
     {
     struct cluster *next;	/* Next in list. */
-    struct hash *geneHash;	/* Associated genes. */
+    int id;                     /* id assigned to cluster */
+    struct clusterGene *genes;  /* Associated genes. */
     int start,end;		/* Range covered by cluster. */
     };
 
 void clusterDump(struct cluster *cluster)
 /* Dump contents of cluster to stdout. */
 {
-struct hashEl *helList = hashElListHash(cluster->geneHash);
-struct hashEl *hel;
+struct clusterGene *gene;
 printf("%d-%d", cluster->start, cluster->end);
-for (hel = helList; hel != NULL; hel = hel->next)
-    {
-    struct genePred *gp = hel->val;
-    printf(" %s", gp->name);
-    }
+for (gene = cluster->genes; gene != NULL; gene = gene->next)
+    printf(" %s", gene->gp->name);
 printf("\n");
 }
 
@@ -70,7 +141,6 @@ struct cluster *clusterNew()
 {
 struct cluster *cluster;
 AllocVar(cluster);
-cluster->geneHash = hashNew(5);
 return cluster;
 }
 
@@ -78,10 +148,16 @@ void clusterFree(struct cluster **pCluster)
 /* Free up a cluster. */
 {
 struct cluster *cluster = *pCluster;
-if (cluster == NULL)
-    return;
-hashFree(&cluster->geneHash);
-freez(pCluster);
+if (cluster != NULL)
+    {
+    while (cluster->genes != NULL)
+        {
+        struct clusterGene *cg = cluster->genes;
+        cluster->genes = cluster->genes->next;
+        clusterGeneFree(&cg);
+        }
+    freez(pCluster);
+    }
 }
 
 void clusterFreeList(struct cluster **pList)
@@ -105,14 +181,29 @@ const struct cluster *b = *((struct cluster **)vb);
 return a->start - b->start;
 }
 
+struct clusterGene *clusterFindGene(struct cluster *cluster, struct track *track, struct genePred *gp)
+/* search for a gene in a cluster.  */
+{
+struct clusterGene *cg;
+
+for (cg = cluster->genes; cg != NULL; cg = cg->next)
+    {
+    if ((cg->gp == gp) && (cg->track == track))
+        return cg;
+    }
+return NULL;
+}
+
 void clusterAddExon(struct cluster *cluster,
-	int start, int end, char *table, struct genePred *gp)
+	int start, int end, struct track *track, struct genePred *gp)
 /* Add exon to cluster. */
 {
-char tableGeneName[256];
-safef(tableGeneName, sizeof(tableGeneName), "%s\t%s", table, gp->name);
-if (!hashLookup(cluster->geneHash, tableGeneName))
-    hashAdd(cluster->geneHash, tableGeneName, gp);
+struct clusterGene *cg = clusterFindGene(cluster, track, gp);
+if (cg == NULL)
+    {
+    cg = clusterGeneNew(track, gp);
+    slSafeAddHead(&cluster->genes, cg);
+    }
 if (cluster->start == cluster->end)
     {
     cluster->start = start;
@@ -126,10 +217,10 @@ else
 }
 
 void addExon(struct binKeeper *bk, struct dlNode *clusterNode,
-	int start, int end, char *table, struct genePred *gp)
+	int start, int end, struct track *track, struct genePred *gp)
 /* Add exon to cluster and binKeeper. */
 {
-clusterAddExon(clusterNode->val, start, end, table, gp);
+clusterAddExon(clusterNode->val, start, end, track, gp);
 binKeeperAdd(bk, start, end, clusterNode);
 }
 
@@ -140,7 +231,6 @@ void mergeClusters(struct binKeeper *bk, struct binElement *bkRest,
 struct cluster *aCluster = aNode->val;
 struct cluster *bCluster = bNode->val;
 struct binElement *bkEl;
-struct hashEl *hEl, *hList;
 
 if (verbose >= 3) 
     {
@@ -157,9 +247,13 @@ for (bkEl = bkRest; bkEl != NULL; bkEl = bkEl->next)
         bkEl->val = aNode;
 
 /* Add b's genes to a. */
-hList = hashElListHash(bCluster->geneHash);
-for (hEl = hList; hEl != NULL; hEl = hEl->next)
-    hashAdd(aCluster->geneHash, hEl->name, hEl->val);
+while (bCluster->genes != NULL)
+    {
+    struct clusterGene *cg = bCluster->genes;
+    bCluster->genes = bCluster->genes->next;
+    cg->next = NULL;
+    slSafeAddHead(&aCluster->genes, cg);
+    }
 
 /* Adjust start/end. */
 if (bCluster->start < aCluster->start) 
@@ -175,6 +269,89 @@ if (verbose >= 3)
     printf(" ab: ");
     clusterDump(aCluster);
     }
+}
+
+
+boolean shareExons(struct genePred *gp1, struct genePred *gp2)
+/* determine if two genes share exons (maybe restricted to CDS */
+{
+int exonIx1, exonStart1, exonEnd1;
+
+for (exonIx1 = 0; exonIx1 < gp1->exonCount; exonIx1++)
+    {
+    if (gpGetExon(gp1, exonIx1, &exonStart1, &exonEnd1))
+        {
+        /* exonStart2 >= exon1End indicates there can't be overlap on this
+         * exon */
+        int exonIx2, exonStart2 = 0, exonEnd2;
+        for (exonIx2 = 0; (exonIx2 < gp2->exonCount) && (exonStart2 < exonEnd1);
+             exonIx2++)
+            {
+            if (gpGetExon(gp2, exonIx2, &exonStart2, &exonEnd2))
+                {
+                if ((exonStart2 < exonEnd1) && (exonEnd2 > exonStart1))
+                    return TRUE; /* overlaps */
+                }
+            }
+        }
+    }
+return FALSE;
+}
+
+struct conflict
+/* object to store conflicting tracks in a cluster */
+{
+    struct conflict *next;
+    struct track *track1;  /* conflicting pair of tracks */
+    struct track *track2;
+};
+
+
+void addConflict(struct conflict **conflicts, struct track *track1,
+                 struct track *track2)
+/* add a pair of conflicting tracks to a list if not already there.
+ * order of tracks is not important */
+{
+struct conflict *con;
+for (con = *conflicts; con != NULL; con = con->next)
+    {
+    if (((con->track1 == track1) && (con->track2 == track2))
+        || ((con->track2 == track1) && (con->track1 == track2)))
+        break; /* got it */
+    }
+if (con == NULL)
+    {
+    AllocVar(con);
+    con->track1 = track1;
+    con->track2 = track2;
+    slAddHead(conflicts, con);
+    }
+}
+
+void findGeneConflicts(struct cluster *cluster, struct conflict **conflicts,
+                       struct clusterGene *gene)
+/* find conflicts for a gene in cluster */
+{
+struct clusterGene *cg;
+
+/* check all other genes */
+for (cg = cluster->genes; cg != NULL; cg = cg->next)
+    {
+    if ((cg != gene) && !shareExons(cg->gp, gene->gp))
+        addConflict(conflicts, gene->track, cg->track);
+    }
+}
+
+struct conflict *findClusterConflicts(struct cluster *cluster)
+/* Get a list of tracks that conflict for a cluster. free with slFreeList */
+{
+struct conflict *conflicts = NULL;
+struct clusterGene *cg;
+
+for (cg = cluster->genes; cg != NULL; cg = cg->next)
+    findGeneConflicts(cluster, &conflicts, cg);
+
+return conflicts;
 }
 
 int totalGeneCount = 0;
@@ -198,6 +375,8 @@ cm->clusters = dlListNew();
 return cm;
 }
 
+int nextClusterId = 1;  /* next cluster id to assign */
+
 struct cluster *clusterMakerFinish(struct clusterMaker **pCm)
 /* Finish up cluster - free up and return singly-linked list of clusters. */
 {
@@ -219,6 +398,10 @@ for (node = cm->clusters->tail; !dlStart(node); node=node->prev)
     }
 slSort(&clusterList, clusterCmp);
 
+/* assign ids */
+for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
+    cluster->id = nextClusterId++;
+
 /* Clean up and go home. */
 binKeeperFree(&cm->bk);
 dlListFree(&cm->clusters);
@@ -226,7 +409,7 @@ freez(pCm);
 return clusterList;
 }
 
-void clusterMakerAddExon(struct clusterMaker *cm, char *table, struct genePred *gp,
+void clusterMakerAddExon(struct clusterMaker *cm, struct track *track, struct genePred *gp,
                          int exonStart, int exonEnd, struct dlNode **oldNodePtr)
 /* Add a gene exon to clusterMaker. */
 {
@@ -239,7 +422,7 @@ if (bList == NULL)
         struct cluster *cluster = clusterNew();
         oldNode = dlAddValTail(cm->clusters, cluster);
         }
-    addExon(cm->bk, oldNode, exonStart, exonEnd, table, gp);
+    addExon(cm->bk, oldNode, exonStart, exonEnd, track, gp);
     }
 else
     {
@@ -262,13 +445,13 @@ else
                 }
             }
         }
-    addExon(cm->bk, oldNode, exonStart, exonEnd, table, gp);
+    addExon(cm->bk, oldNode, exonStart, exonEnd, track, gp);
     slFreeList(&bList);
     }
 *oldNodePtr = oldNode;
 }
 
-void clusterMakerAdd(struct clusterMaker *cm, char *table, struct genePred *gp)
+void clusterMakerAdd(struct clusterMaker *cm, struct track *track, struct genePred *gp)
 /* Add gene to clusterMaker. */
 {
 int exonIx;
@@ -288,20 +471,12 @@ if (verbose >= 2)
 
 for (exonIx = 0; exonIx < gp->exonCount; ++exonIx)
     {
-    int exonStart = gp->exonStarts[exonIx];
-    int exonEnd = gp->exonEnds[exonIx];
-    if (useCds)
-        {
-        if (exonStart < gp->cdsStart)
-            exonStart = gp->cdsStart;
-        if (exonEnd > gp->cdsEnd)
-            exonEnd = gp->cdsEnd;
-        }
-    if (exonStart < exonEnd)
+    int exonStart, exonEnd;
+    if (gpGetExon(gp, exonIx, &exonStart, &exonEnd))
         {
         if (verbose >= 4)
             printf("  %d %d\n", exonIx, exonStart);
-        clusterMakerAddExon(cm, table, gp, exonStart, exonEnd, &oldNode);
+        clusterMakerAddExon(cm, track, gp, exonStart, exonEnd, &oldNode);
         }
     }
 }
@@ -315,6 +490,7 @@ char extraWhere[64];
 struct sqlResult *sr;
 char **row;
 int rowOffset;
+struct track *track = getTrack(table);
 
 safef(extraWhere, sizeof(extraWhere), "strand = '%c'", strand);
 sr = hChromQuery(conn, table, chrom, extraWhere, &rowOffset);
@@ -322,7 +498,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     struct genePred *gp = genePredLoad(row + rowOffset);
     slAddHead(gpList, gp);
-    clusterMakerAdd(cm, table, gp);
+    clusterMakerAdd(cm, track, gp);
     ++totalGeneCount;
     }
 sqlFreeResult(&sr);
@@ -334,8 +510,10 @@ void loadGenesFromFile(struct clusterMaker *cm, char *gpFile, char *chrom,
 {
 struct lineFile *lf = lineFileOpen(gpFile, TRUE);
 char *row[GENEPRED_NUM_COLS];
-char table[PATH_LEN];
-splitPath(gpFile, NULL, table, NULL);
+char trackName[PATH_LEN];
+struct track *track;
+splitPath(gpFile, NULL, trackName, NULL);
+track = getTrack(trackName);
 
 
 while (lineFileNextRowTab(lf, row, GENEPRED_NUM_COLS))
@@ -344,7 +522,7 @@ while (lineFileNextRowTab(lf, row, GENEPRED_NUM_COLS))
     if ((gp->strand[0] == strand) && sameString(gp->chrom, chrom))
         {
         slAddHead(gpList, gp);
-        clusterMakerAdd(cm, table, gp);
+        clusterMakerAdd(cm, track, gp);
         ++totalGeneCount;
         }
     else
@@ -370,11 +548,22 @@ else
     errAbort("Table or file %s doesn't exist in %s", table, hGetDb());
 }
 
-int clusterId = 0;	/* Assign a unique id to each cluster. */
+void reportConflicts(FILE* conflictFh, char* chrom, struct cluster* cluster)
+/* look for conflicts in an cluster and report any found. */
+{
+struct conflict *conflicts = findClusterConflicts(cluster);
+struct conflict *con;
+for (con = conflicts; con != NULL; con = con->next)
+    fprintf(conflictFh, "%d\t%s\t%d\t%d\t%s\t%s\n", cluster->id,
+            chrom, cluster->start, cluster->end,
+            con->track1->name, con->track2->name);
+
+slFreeList(&conflicts);
+}
 
 void clusterGenesOnStrand(struct sqlConnection *conn,
 	int tableCount, char *tables[], char *chrom, char strand, 
-	FILE *f)
+	FILE *f, FILE* conflictFh)
 /* Scan through genes on this strand, cluster, and write clusters to file. */
 {
 struct genePred *gpList = NULL;
@@ -388,19 +577,37 @@ for (tableIx = 0; tableIx < tableCount; ++tableIx)
 clusterList = clusterMakerFinish(&cm);
 for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
     {
-    struct hashEl *helList = hashElListHash(cluster->geneHash);
-    struct hashEl *hel;
-    ++clusterId;
-    for (hel = helList; hel != NULL; hel = hel->next)
-	{
-	struct genePred *gp = hel->val;
-	fprintf(f, "%d\t%s\t%s\t%d\t%d\n", clusterId, hel->name, gp->chrom, gp->txStart, gp->txEnd);
-	}
+    struct clusterGene *cg;
+    for (cg = cluster->genes; cg != NULL; cg = cg->next)
+	fprintf(f, "%d\t%s\t%s\t%s\t%d\t%d\n", cluster->id, cg->track->name, cg->gp->name, cg->gp->chrom, cg->gp->txStart, cg->gp->txEnd);
     ++totalClusterCount;
     }
+
+if (conflictFh != NULL)
+    {
+    for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
+        reportConflicts(conflictFh, chrom, cluster);
+    }
+
 genePredFreeList(&gpList);
 }
 
+struct slName* readChromFile(char* chromFile)
+/* read chromosomes from a file */
+{
+struct lineFile *lf = lineFileOpen(chromFile, TRUE);
+char *row[1];
+struct slName* chroms = NULL;
+
+while (lineFileNextRow(lf, row, ArraySize(row)))
+    {
+    slSafeAddHead(&chroms, slNameNew(row[0]));
+    }
+
+lineFileClose(&lf);
+slReverse(&chroms);
+return chroms;
+}
 
 void clusterGenes(char *outFile, char *database, int tableCount, char *tables[])
 /* clusterGenes - Cluster genes from genePred tracks. */
@@ -408,6 +615,8 @@ void clusterGenes(char *outFile, char *database, int tableCount, char *tables[])
 struct slName *chromList, *chrom;
 struct sqlConnection *conn;
 FILE *f = mustOpen(outFile, "w");
+char* conflictFile = optionVal("conflicts", NULL);
+FILE* conflictFh = NULL;
 fprintf(f, "#");
 fprintf(f, "cluster\t");
 fprintf(f, "table\t");
@@ -416,16 +625,25 @@ fprintf(f, "chrom\t");
 fprintf(f, "txStart\t");
 fprintf(f, "txEnd\n");
 
+if (conflictFile != NULL)
+    {
+    conflictFh = mustOpen(conflictFile, "w");
+    fprintf(conflictFh, "#cluster\tchrom\tstart\tend\ttrack1\ttrack2\n");
+    }
+    
+
 hSetDb(database);
 if (optionExists("chrom"))
     chromList = slNameNew(optionVal("chrom", NULL));
+else if (optionExists("chromFile"))
+    chromList = readChromFile(optionVal("chromFile", NULL));
 else
     chromList = hAllChromNames();
 conn = hAllocConn();
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
-    clusterGenesOnStrand(conn, tableCount, tables, chrom->name, '+', f);
-    clusterGenesOnStrand(conn, tableCount, tables, chrom->name, '-', f);
+    clusterGenesOnStrand(conn, tableCount, tables, chrom->name, '+', f, conflictFh);
+    clusterGenesOnStrand(conn, tableCount, tables, chrom->name, '-', f, conflictFh);
     }
 }
 
