@@ -62,12 +62,19 @@ while (lineFileNext(lf, &line, NULL))
 	    int wordCount, i;
 	    char *accession = NULL;
 	    wordCount = chopString(line+1, "|", words, ArraySize(words));
-	    for (i=0; i<wordCount-1; ++i)
-	        {
-		if (sameString(words[i], "gb"))
+	    if (sameString(words[0], "ri"))
+		{
+		accession = words[2];
+		}
+	    else
+		{
+		for (i=0; i<wordCount-1; ++i)
 		    {
-		    accession = words[i+1];
-		    break;
+		    if (sameString(words[i], "gb"))
+			{
+			accession = words[i+1];
+			break;
+			}
 		    }
 		}
 	    if (accession == NULL)
