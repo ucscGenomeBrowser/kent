@@ -109,6 +109,7 @@ UTIL_DIRS = \
 	bedSort \
 	blastToPsl \
 	borfBig \
+	checkHgFindSpec \
 	checkTableCoords \
 	ctgFaToFa \
 	ctgToChromFa \
