@@ -16,7 +16,10 @@ scripts:
 	    echo cp $$F $(BIN_DIR); \
 	    cp $$F $(BIN_DIR); \
 	 done
-        
+
+clean:
+	- find . -name \*.o -print | xargs --no-run-if-empty rm
+
 SCRIPTS = \
         iSync
 
