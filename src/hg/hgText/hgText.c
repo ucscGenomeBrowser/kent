@@ -21,6 +21,8 @@
 #include "kxTok.h"
 #include "featureBits.h"
 
+static char * hgFixed = "hgFixed";
+
 /* main() sets this and calls hSetDb() before calling execute(): */
 char *database = NULL;		/* Which database? */
 
@@ -310,7 +312,7 @@ freeDyString(&ui);
 }
 
 
-static void printSelectOptions(struct hashEl *optList, char *name)
+static void printSelectOptions(struct hashEl *optList, char *name, char *valPrefix)
 /* this function is used to iterates over a hash el list and prints out
  * the name in a select input form */
 {
@@ -318,9 +320,9 @@ struct hashEl *cur;
 for (cur = optList;  cur != NULL;  cur = cur->next)
 	{
 	if(existsAndEqual(name, cur->name))
-		printf("<OPTION SELECTED>%s</OPTION>\n", cur->name);
+		printf("<OPTION SELECTED VALUE=\"%s.%s\">%s</OPTION>\n", valPrefix, cur->name, cur->name);
 	else
-		printf("<OPTION>%s</OPTION>\n", cur->name);
+		printf("<OPTION VALUE=\"%s.%s\">%s</OPTION>\n", valPrefix, cur->name, cur->name);
 	}
 }
 
@@ -360,18 +362,18 @@ while((row = sqlNextRow(sr)) != NULL)
 		if(sscanf(row[0], "chr%32[^_]_random_%32s", chrom, post) == 2 ||
 			sscanf(row[0], "chr%32[^_]_%32s", chrom, post) == 2)
 			{
-			snprintf(name, sizeof(name), "%s.chrN_%s", dbName, post);
+			snprintf(name, sizeof(name), "chrN_%s", post);
 			hashStoreName(posTableHash, cloneString(name));
 			}
 		else
 		    {
-			snprintf(name, sizeof(name), "%s.%s", dbName, row[0]);
+			snprintf(name, sizeof(name), "%s", row[0]);
 			hashStoreName(posTableHash, cloneString(name));
 			}
 		}
 	else
 		{
-		snprintf(name, sizeof(name), "%s.%s", dbName, row[0]);
+		snprintf(name, sizeof(name), "%s", row[0]);
 		hashStoreName(nonposTableHash, cloneString(name));
 		}
 	}
@@ -466,14 +468,14 @@ puts("Choose a table:");
 puts("</TD><TD>");
 puts("<SELECT NAME=table0 SIZE=1>");
 printf("<OPTION VALUE=\"Choose table\">Positional tables</OPTION>\n");
-printSelectOptions(posTableList, "table0");
-printSelectOptions(fixedPosTableList, "table0");
+printSelectOptions(posTableList, "table0", database);
+printSelectOptions(fixedPosTableList, "table0", hgFixed);
 puts("</SELECT>");
 
 puts("<SELECT NAME=table1 SIZE=1>");
 printf("<OPTION VALUE=\"Choose table\">Non-positional tables</OPTION>\n");
-printSelectOptions(nonposTableList, "table1");
-printSelectOptions(fixedNonposTableList, "table1");
+printSelectOptions(nonposTableList, "table1", database);
+printSelectOptions(fixedNonposTableList, "table1", hgFixed);
 puts("</SELECT>");
 
 puts("</TD></TR>");
