@@ -578,7 +578,7 @@ dm2.downloadDir = dm2
     # Load into the database as so:
     ssh hgwdev
     cd /cluster/data/dm2/bed/genscan
-    ldHgGene -gtf -genePredExt dm2 genscan genscan.gtf
+    ldHgGene -gtf dm2 genscan genscan.gtf
     hgPepPred dm2 generic genscanPep genscan.pep
     hgLoadBed dm2 genscanSubopt genscanSubopt.bed
     featureBits dm2 genscan
@@ -1589,7 +1589,7 @@ rm $tmpfile
     hgLoadBed dm2 phastConsElements all.bed
 
     # Create wiggle on the small cluster
-    ssk kki
+    ssh kki
     mkdir /cluster/data/dm2/bed/multiz.droYak1dp2anoGam1/phastCons/run.wib
     cd /cluster/data/dm2/bed/multiz.droYak1dp2anoGam1/phastCons/run.wib
     rm -rf /cluster/bluearc/dm2/phastCons/wib
@@ -1680,5 +1680,59 @@ zcat `ls -1 /cluster/bluearc/dm2/phastCons/POSTPROBS/$chr.*.pp.gz \
     # Copy over the gene info tables
     hgsql dm2 -e 'create table bdgpLiftGeneInfo (PRIMARY KEY(bdgpName(7)), INDEX(flyBaseId(11))) select * from dm1.bdgpGeneInfo'
     hgsql dm2 -e 'create table bdgpLiftNonCodingInfo (INDEX(bdgpName(16)), INDEX(flyBaseId(11))) select * from dm1.bdgpNonCodingInfo'
+
+
+# FLYBASE ANNOTATIONS (DONE 1/12/05 angie)
+    ssh kksilo
+    mkdir /cluster/data/dm2/bed/flybase
+    cd /cluster/data/dm2/bed/flybase
+    foreach c (2L 2R 3L 3R 4 X)
+      wget ftp://flybase.net/genomes/Drosophila_melanogaster/current/gff/dmel-$c-r4.0.gff.gz
+    end
+    zcat *.gff.gz > flybase.gff3
+    # What data sources are represented in this file?
+    grep -v '^#' flybase.gff3 | awk '{print $2 "\t" $3;}' | sort | uniq -c
+    # excerpt (many other sources, including blastx:... , sim4:... and 
+    # tblastx:...; also various other types for source "."):
+  18747 .       CDS
+  62629 .       exon
+  13472 .       gene
+  19301 .       mRNA
+     70 .       ncRNA
+     40 .       pseudogene
+     96 .       rRNA
+     28 .       snRNA
+     28 .       snoRNA
+    288 .       tRNA
+  36921 .       transcription_start_site
+   1571 .       transposable_element
+   4680 .       transposable_element_insertion_site
+
+    # What keywords are defined in the 9th field?
+    grep -v '^#' flybase.gff3 \
+    | awk '{print $9;}' | perl -wpe 's/=[^;]+;/\n/g; s/=.*$//;' \
+    | sort | uniq -c
+    # This incarnation of gff3 looks similar to the one encountered in 
+    # dp3, but still uses slightly different keywords and there are different 
+    # data sources of interest.  So one-shot perl-script again:
+    extractGenes.pl flybase.gff3
+
+    # Get predicted proteins (for main annotations only)
+    wget ftp://flybase.net/genomes/Drosophila_melanogaster/current/fasta/dmel-all-translation-r4.0.fasta.gz
+    zcat dmel-all-translation-r4.0.fasta.gz \
+    | perl -wpe 's/^(>\w+)-P(\w)/$1-R$2/' > flybasePep.fa
+
+    ssh hgwdev
+    cd /cluster/data/dm2/bed/flybase
+    # Protein-coding genes:
+    ldHgGene -gtf dm2 flyBaseGene flybase.gtf
+    hgPepPred dm2 generic flyBasePep flybasePep.fa
+    # Noncoding genes:
+    hgLoadBed dm2 flyBaseNoncoding flyBaseNoncoding.bed
+    # Cross-referencing info for both coding and noncoding:
+    hgsql dm2 < $HOME/kent/src/hg/lib/flyBase2004Xref.sql
+    hgsql dm2 -e 'load data local infile "flyBase2004Xref.tab" \
+      into table flyBase2004Xref'
+
 
 

@@ -234,13 +234,13 @@ popd
     # Make chromInfo.tab.
     mkdir bed/chromInfo
     twoBitInfo dp3.2bit stdout \
-    | awk '{printf "%s\t%s\t/gbdb/dp3/nib/dp3.2bit\n", $1, $2;}' \
+    | awk '{printf "%s\t%s\t/gbdb/dp3/dp3.2bit\n", $1, $2;}' \
     > bed/chromInfo/chromInfo.tab
 
-    # Make symbolic links from /gbdb/dp3/nib to the 2bit.
+    # Make symbolic links from /gbdb/dp3 to the 2bit.
     ssh hgwdev
-    mkdir -p /gbdb/dp3/nib
-    ln -s /cluster/data/dp3/dp3.2bit /gbdb/dp3/nib
+    mkdir -p /gbdb/dp3
+    ln -s /cluster/data/dp3/dp3.2bit /gbdb/dp3/
     # Load up chromInfo table
     hgsql dp3 < $HOME/kent/src/hg/lib/chromInfo.sql
     hgsql dp3 -e 'load data local infile \
@@ -258,8 +258,8 @@ popd
         (name, description, nibPath, organism, \
              defaultPos, active, orderKey, genome, scientificName, \
              htmlPath, hgNearOk, hgPbOk, sourceName) values \
-        ("dp3", "Nov. 2004", "/gbdb/dp3/nib", "D. pseudoobscura", \
-             "chr2:363975-378814", 1, 56, \
+        ("dp3", "Nov. 2004", "/gbdb/dp3", "D. pseudoobscura", \
+             "chr4_group3:5603001-5614000", 1, 56, \
              "D. pseudoobscura", \
              "Drosophila pseudoobscura", "/gbdb/dp3/html/description.html", \
              0, 0, "FlyBase Release 1.03");' \
@@ -360,7 +360,7 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     # Load into the database as so:
     ssh hgwdev
     cd /cluster/data/dp3/bed/genscan
-    ldHgGene -gtf -genePredExt dp3 genscan genscan.gtf
+    ldHgGene -gtf dp3 genscan genscan.gtf
     hgPepPred dp3 generic genscanPep genscan.pep
     hgLoadBed dp3 genscanSubopt genscanSubopt.bed
 
@@ -597,9 +597,9 @@ dp3.downloadDir = dp3
     rm -rf work/initial.dp3
 
     # This is an -initial run, mRNA only:
-#TODO
     nice bin/gbAlignStep -srcDb=genbank -type=mrna -initial dp3 &
     tail -f [its logfile]
+#TODO
     # Load results:
     ssh hgwdev
     cd /cluster/data/genbank
@@ -767,3 +767,83 @@ chainSome $(path1)
     hgLoadPsl dp3 blastDm1FB.psl
 
 # End tblastn
+
+
+# FLYBASE ANNOTATIONS (DONE 1/12/05 angie)
+    ssh kksilo
+    mkdir /cluster/data/dp3/bed/flybase
+    cd /cluster/data/dp3/bed/flybase
+    foreach f (../../?{,?}/chr*.fa)
+      set c = `echo $f:t:r | sed -e 's/^chr//'`
+      wget ftp://flybase.net/genomes/Drosophila_pseudoobscura/current/gff/dpse-$c-r1.03.gff.gz
+    end
+    zcat *.gff.gz > flybase.gff3
+    # What data sources are represented in this file?
+    grep -v '^#' flybase.gff3 | awk '{print $2 "\t" $3;}' | sort | uniq -c
+#   9946 .       CDS
+#     17 .       chromosome
+#      2 .       chromosome_arm
+# 120844 .       exon
+#  12197 .       gene
+#     15 .       golden_path
+#   2650 .       golden_path_fragment
+#  30310 .       intron
+#   9946 .       mRNA
+#  12101 .       orthologous_region
+#   2905 .       scaffold
+#   1170 .       syntenic_region
+#  27838 blastn:na_dbEST.dpse    match
+#  34576 blastz  match
+#  18179 genewise        gene
+#  18179 genewise        mRNA
+#  67141 genewise        match
+#   8327 genewise        match_part
+#  17182 genscan gene
+#  17182 genscan mRNA
+#  46479 genscan match
+#   4847 genscan match_part
+#  18330 twinscan        gene
+#  18330 twinscan        mRNA
+#  45317 twinscan        match
+#   4603 twinscan        match_part
+    # What keywords are defined in the 9th field?
+    grep -v '^#' flybase.gff3 \
+    | awk '{print $9;}' | perl -wpe 's/=[^;]+;/\n/g; s/=.*$//;' \
+    | sort | uniq -c
+#  39402 Dbxref		[gene, mRNA, CDS, intron only]
+# 548613 ID		[everybody has this one.]
+#  76012 Name		[gene, intron only]
+# 412944 Parent		[gene, mRNA, CDS, exon, intron, match, match_part only]
+# 116103 object_oid	[gene, match only]
+#   2666 species	[chromosome*, golden_path* only]
+#  11493 to_name	[orthologous_region only]
+#  13271 to_species	[orthologous_region, syntenic_region only]
+
+    # Supposedly this will be the stable standard, but for now I wrote 
+    # a one-shot perl script:
+    extractGenes.pl flybase.gff3
+
+    # Get predicted proteins (for main annotations only)
+    wget ftp://flybase.net/genomes/Drosophila_pseudoobscura/current/fasta/dpse-all-translation-r1.03.fasta.gz
+    zcat dpse-all-translation-r1.03.fasta.gz \
+    | perl -wpe 's/^(>\w+)-PA/$1-RA/' > flybasePep.fa
+
+    ssh hgwdev
+    cd /cluster/data/dp3/bed/flybase
+    ldHgGene -gtf dp3 flyBaseGene flyBase.gtf
+    hgPepPred dp3 generic flyBasePep flybasePep.fa
+    ldHgGene -gtf dp3 twinscan twinscan.gtf
+    ldHgGene -gtf dp3 genewise genewise.gtf
+    ldHgGene -gtf dp3 fbGenscan genscan.gtf
+    featureBits dp3 -enrichment fbGenscan genscan
+#fbGenscan 18.578%, genscan 18.793%, both 17.662%, cover 95.07%, enrich 5.06x
+    # Their genscan and ours are similar enough that we should drop one.  
+    # In featureBits -enrichment flyBaseGene, ours does a hair better so 
+    # drop FlyBase's.
+    hgsql dp3 -e 'drop table fbGenscan'
+    # Cross-referencing info for both coding and noncoding:
+    hgsql dp3 < $HOME/kent/src/hg/lib/flyBase2004Xref.sql
+    hgsql dp3 -e 'load data local infile "flyBase2004Xref.tab" \
+      into table flyBase2004Xref'
+
+
