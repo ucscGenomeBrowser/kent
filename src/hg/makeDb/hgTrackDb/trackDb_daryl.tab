@@ -1,0 +1,105 @@
+cytoBand	Chromosome Band	bed 4 +	Chromosome Bands Localized by FISH Mapping Clones	1	1.000000	0	0	0	150	50	50	0	0	0			
+mapGenethon	STS Markers	bed 5 +	Various STS Markers	1	2.000000	0	0	0	127	127	127	0	0	0			
+fishClones	FISH Clones	bed 5 +	Clones placed on Cytogenetic Map using FISH	0	2.500000	0	150	0	127	202	127	0	0	0			
+stsMapMouse	STS Markers	bed 5 +	STS Markers on Genetic Maps	1	3.000000	0	0	0	128	128	255	0	0	0			
+stsMap	STS Markers	bed 5 +	STS Markers on Genetic (blue) and Radiation Hybrid (black) Maps	1	3.000000	0	0	0	128	128	255	0	0	0			
+stsMarker	STS Markers	bed 5 +	STS Markers on Genetic (blue), FISH (green) and RH (black) Maps	1	3.000000	0	0	0	128	128	255	0	0	0			
+mouseSyn	NCBI Synteny	bed 4+	Corresponding Chromosome in Mouse	0	4.000000	120	70	30	187	162	142	0	0	0			
+mouseOrthoSeed	Tight Ortholog	bed 5+	Tight Mouse Orthology using Fgenesh++ Gene Predictions (only reciprocal best)	1	4.100000	0	100	0	255	240	200	1	0	0			
+mouseOrtho	Mouse Ortholog	bed 5+	Mouse Orthology using Fgenesh++ Gene Predictions (top 4 reciprocal best)	1	4.100000	0	100	0	255	240	200	1	0	0			
+humanParalog	Human Paralog	bed 5+	Human Paralogs using Fgenesh++ Gene Predictions	0	4.200000	0	100	0	255	240	200	1	0	0			
+synteny100000	UCSC Synteny	bed 4 .	Mouse Synteny using blastz single coverage with 100,000 base window	0	4.300000	0	100	0	255	240	200	0	0	0			
+syntenySanger	Sanger Synteny	bed 4+	Sanger Corresponding Chromosome in Mouse (100k window)	0	4.400000	120	70	30	187	162	142	0	0	0			
+isochores	Isochores	bed 4 +	GC-rich (dark) and AT-rich (light) Isochores	0	5.000000	0	0	0	127	127	127	1	0	0			
+gcPercent	GC Percent	bed 4 +	Percentage GC in 20,000 Base Windows	0	6.000000	0	0	0	127	127	127	1	0	0			
+GCwiggle	GC Samples	sample 9	GC Percent Sample Track (every 20,000 bases)	0	6.100000	0	0	0	127	127	127	0	0	1	chr22,		
+ctgPos	Map Contigs		Physical Map Contigs	0	7.000000	150	0	0	202	127	127	0	0	0			
+gold	Assembly	bed 3 +	Assembly from Fragments	0	8.000000	150	100	30	230	170	40	0	0	0			
+gap	Gap	bed 3 +	Gap Locations	1	9.000000	0	0	0	127	127	127	0	0	0			
+clonePos	Coverage		Clone Coverage/Fragment Position	0	9.500000	0	0	0	180	180	180	0	0	0			
+bacEndPairs	BAC End Pairs		BAC End Pairs	0	10.000000	0	0	0	127	127	127	0	0	0			
+uPennClones	U Penn Clones	bed 6 +	Univ of Penn Clones	0	10.100000	0	0	0	127	127	127	0	0	0			
+genomicDups	Duplications	bed 6 +	Duplications of >1000 Bases Sequence	0	10.500000	170	0	0	160	150	0	0	0	0			
+dupes	Duplications	bed 6 .	Duplications of >98% Identity >1kb	1	11.000000	0	0	0	127	127	127	0	0	0			
+cgh	UCSF CGH	bed 4 +	UCSF Comparative Genomic Hybridizations	0	11.500000	0	0	0	127	127	127	0	0	0			
+mcnBreakpoints	MCN Breakpoints	bed 4 +	MCN breakpoints	0	11.700000	0	0	0	127	127	127	0	0	0			
+refGene	Known Genes	genePred refPep refMrna	Known Genes (from RefSeq)	2	12.000000	20	20	170	137	137	212	0	0	0			
+genieKnown	Known Genes	genePred	Known Genes (from full length mRNAs)	0	12.000000	20	20	170	137	137	212	0	0	0			
+loweProbes	Lowe's Probes	bed 6	3 Olidogs selected per exon on Chr22	0	12.990000	0	0	0	127	127	127	0	0	1	chr22,		
+sanger22	Sanger 22	genePred	Sanger Institute Chromosome 22 Genes	2	13.000000	0	100	180	127	177	217	0	0	1	chr22,		
+sanger20	Sanger 20	genePred	Sanger Institute Chromosome 20 Genes	2	13.000000	0	100	180	127	177	217	0	0	1	chr20,		
+freen	Pet Freen	psl .	Jims Pet Freen	0	13.010000	100	0	100	177	127	177	0	0	1	chr22,		
+sanger22pseudo	Sanger 22 Pseudo	genePred	Sanger Center Chromosome 22 Pseudogenes	0	13.100000	30	130	210	142	192	232	0	0	1	chr22,		
+genieAlt	Affy Genes	genePred geniePep	Affymetrix Gene Predictions	1	14.000000	125	0	150	190	127	202	0	0	0			
+acembly	Acembly Genes	genePred acemblyPep acemblyMrna	Acembly Gene Predictions With Alt-splicing	1	14.500000	155	0	125	205	127	190	0	0	0		http://www.ncbi.nlm.nih.gov/AceView/av.cgi?db=28&l=$$	
+aceTest	Acembly Test	genePred	Acembly Test Predictions	2	14.510000	195	50	165	225	152	210	0	0	0		http://www.ncbi.nlm.nih.gov/AceView/av.cgi?db=GP&l=$$	
+ensGene	Ensembl Genes	genePred ensPep	Ensembl Gene Predictions	1	15.000000	150	0	0	202	127	127	0	0	0		http://www.ensembl.org/perl/transview?transcript=$$	
+sgpGene	SGP Genes	genePred sgpPep	SGP Gene Predictions Using Mouse Genome Homology	1	15.500000	0	90	100	127	172	177	0	0	0			
+softberryGene	Fgenesh++ Genes	genePred softberryPep	Fgenesh++ Gene Predictions	1	16.000000	0	100	0	127	177	127	0	0	0			
+softPromoter	TSSW Promoters	bed 5 +	TSSW Promoter Predictions	1	17.000000	0	100	0	127	177	127	0	0	0			
+geneid	Geneid Genes	genePred geneidPep	Geneid Gene Predictions	0	17.100000	0	90	100	127	172	177	0	0	0			
+genscan	Genscan Genes	genePred genscanPep	Genscan Gene Predictions	1	17.500000	170	100	0	212	177	127	0	0	0			
+genscanExtra	Genscan Extra	bed 6	Genscan Extra (Suboptimal) Exon Predictions	0	17.600000	180	90	0	217	172	127	0	0	1	chr22,		
+npredGene	NCBI Prediction	genePred npredPep	NCBI Gene Predictions	0	17.799999	170	100	0	212	177	127	0	0	0		http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=nucleotide&cmd=search&term=$$	
+mrna	$Organism mRNAs	psl .	$Organism mRNAs from Genbank	2	18.000000	0	0	0	127	127	127	1	0	0			
+rikenMrna	Riken mRNA	psl .	Riken Full Length Mouse mRNAs	2	18.000000	0	60	120	200	220	255	1	0	0			
+tightMrna	Tight mRNAS	psl .	Tightly Filtered $Organism mRNAs from Genbank	0	18.100000	0	0	0	127	127	127	1	0	0			
+rnaCluster	Gene Bounds	bed 12	Gene Boundaries as Defined by RNA and Spliced EST Clusters	0	18.200001	200	0	50	227	127	152	0	0	0			
+transfacHit	Transfac Hits	bed 6	Transfac Transcription Factor Binding Sites Near Transcription Start	0	18.280001	0	0	0	127	127	127	1	0	0			
+triangleSelf	Golden Triangle	bed 6	Golden Triangle Possible Transcription Factor Binding Sites	0	18.290001	0	0	0	127	127	127	1	0	0			
+triangle	Golden Extra	bed 6	Golden Triangle Motif Matching Sites Near Transcription Start	0	18.299999	0	0	0	127	127	127	1	0	0			
+intronEst	Spliced ESTs	psl est	$Organism ESTs That Have Been Spliced	1	18.500000	0	0	0	127	127	127	1	0	0			
+est	$Organism ESTs	psl est	$Organism ESTs Including Unspliced	0	19.000000	0	0	0	127	127	127	1	0	0			
+tightEst	Tight ESTs	psl est	Tightly Filtered $Organism ESTs Including Unspliced	0	19.100000	0	0	0	127	127	127	1	0	0			
+estPair	EST Pairs		5'(blue) and 3'(red) EST Pairs	0	20.000000	0	0	180	170	0	0	0	0	0			
+tigrGeneIndex	TIGR Gene Index	genePred	Alignment of TIGR Gene Index TCs Against the $Organism Genome	1	20.200001	100	0	0	177	127	127	0	0	0		http://www.tigr.org/tigr-scripts/nhgi_scripts/tc_report.pl?$$	
+uniGene	UniGene	psl .	UniGene Alignments and SAGE Info	0	20.500000	0	0	0	127	127	127	0	0	0			
+mgc_mrna	MGC mRNAs	psl .	Mammalian Gene Collection mRNAs	0	21.000000	0	0	0	127	127	127	1	0	0			
+cpgIsland	CpG Islands	bed 4 +	CpG Islands (Islands < 400 Bases are Light Green)	0	22.000000	0	100	0	128	228	128	0	0	0			
+xenoMrna	Non$organism mRNA	psl xeno	Non$organism mRNAs from Genbank	1	23.000000	0	0	0	127	127	127	1	0	0			
+xenoBestMrna	Other Best mRNAs	psl xeno	Non$organism mRNAs from Genbank Best in Genome Alignments	0	23.100000	0	0	0	127	127	127	1	0	0			
+xenoEst	Non$organism EST	psl xeno	Non$organism ESTs from Genbank	0	23.200001	0	0	0	127	127	127	1	0	0		http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$	
+blatHuman	Human Blat	psl xeno	Human Translated Blat Alignments	1	23.900000	100	50	0	255	240	200	1	0	0			
+blatMus	Mouse Blat	psl xeno	Mouse Translated Blat Alignments	1	24.000000	100	50	0	255	240	200	1	0	0			
+blatMouse	Mouse Blat	psl xeno	Mouse Translated Blat Alignments	1	24.010000	100	50	0	255	240	200	1	0	0			
+bestMouse	Mouse Best Blat	psl xeno	Mouse Best Translated Blat Alignments	0	24.100000	100	50	0	255	240	200	1	0	0			
+exoMouse	Exonerate Mouse	bed 6 +	Mouse/Human Evolutionarily Conserved Regions (Exonerate)	0	25.000000	100	50	0	255	240	200	1	0	0			
+phMouseAli	PH Mouse Align	bed 5 +	Pattern Hunter Human/Mouse Alignments	0	25.299999	100	50	0	255	240	200	1	0	1	chr22,		
+phMouse	PH Mouse Ecores	bed 6	Pattern Hunter Mouse/Human Evolutionarily Conserved Regions	1	25.500000	100	50	0	255	240	200	1	0	0			
+humMus	Mouse Evolution	sample 9	Human/Mouse Evolutionary Mutual Information	0	25.600000	0	0	0	10	50	100	0	0	0			
+fiberMouse	Fiberglass Mouse	bed 4 .	Mouse/Human Evolutionarily Conserved Regions (Fiberglass)	0	25.600000	100	50	0	177	152	127	0	0	0			
+blastzMm2	Blastz Mouse	psl xeno	Merged Blastz Mouse Alignments	1	25.799999	100	50	0	255	240	200	1	0	0			
+blastzMouse	Blastz Mouse	bed 5 +	Merged Blastz Mouse Alignments	0	25.799999	100	50	0	255	240	200	1	0	0			
+mouseRefHCons	HighCon MouseRef	bed 5 +	Highly Conserved Reference Mouse Alignments	1	25.809999	100	50	0	255	240	200	1	0	1	chr22,		
+blastzMm2Sc	Blastz Mouse SC	psl xeno	Merged Blastz Mouse Single Coverage Alignments	0	25.809999	100	50	0	255	240	200	1	0	0			
+mouseRefMDup	ModDup MouseRef	bed 5 +	Moderately Duplicated Reference Mouse Alignments	1	25.820000	100	50	0	255	240	200	1	0	1	chr22,		
+aarMm2	Ancient Repeats	psl .	Aligned Human/Mouse Ancient Repeats	0	25.820000	100	50	0	255	240	200	1	0	0			
+blastzMm2Ref	Blastz Mouse Ref	psl xeno	Blastz Mouse + Ancient Repeats Reference Alignment	0	25.830000	100	50	0	255	240	200	1	0	0			
+blastzHg	Blastz Human	psl xeno	Blastz Human Human	0	25.850000	100	50	0	255	240	200	1	0	0			
+blastzHgRef	Blastz Human Ref	psl xeno	Blastz Human Human Reference Alignment	0	25.860001	100	50	0	255	240	200	1	0	0			
+blastzHgTop	Blastz Human Top	psl xeno	Blastz Human Human Top Scoring Alignments	0	25.870001	100	50	0	255	240	200	1	0	0			
+avidRepeat	AVID Rep Mouse	bed 5 .	Repeating Regions Conserved in AVID Mouse/Human Alignments	0	25.900000	100	50	0	255	240	200	1	0	0			
+avidUnique	AVID Mouse	bed 5 .	Regions Conserved in AVID Mouse/Human Alignments	1	25.900000	100	50	0	255	240	200	1	0	0		http://pipeline.lbl.gov/cgi-bin/zBrowser.pl?chrom=$s&from=$[&to=$]&hg=$D&dGenome=dGenome2	
+exoFish	Exofish Ecores	bed 5 .	Exofish Tetraodon/Human Evolutionarily Conserved Regions	1	27.000000	0	60	120	200	220	255	1	0	0		http://www.genoscope.cns.fr/proxy/cgi-bin/exofish.cgi?Id=$$&Mode=Id	
+blatFish	Fish Blat	psl xeno	Tetraodon nigroviridis Translated Blat Alignments	1	28.000000	0	60	120	200	220	255	1	0	0			
+tet_waba	Tetraodon		Tetraodon nigroviridis Homologies	1	29.000000	50	100	200	85	170	225	0	0	0			
+rnaGene	RNA Genes	bed 6 +	Non-coding RNA Genes (dark) and Pseudogenes (light)	0	30.000000	170	80	0	230	180	130	0	0	0			
+snpNih	Overlap SNPs	bed 4 .	Single Nucleotide Polymorphisms (SNPs) from Clone Overlaps	1	31.000000	0	0	0	127	127	127	0	0	0			
+snpTsc	Random SNPs	bed 4 .	Single Nucleotide Polymorphisms (SNPs) from Random Reads	1	32.000000	0	0	0	127	127	127	0	0	0			
+perlegen	Haplotype Blocks	bed 12	Perlegen Common High-Resolution Haplotype Blocks.	1	33.000000	0	0	0	127	127	127	1	0	1	chr21,	http://www.perlegen.com/haplotype/blk/$$.html	
+ancientR	Ancient Repeats	bed 12	Human/Mouse Ancient Repeats	0	33.500000	0	0	0	127	127	127	1	0	0			
+rmsk	RepeatMasker	rmsk	Repeating Elements by RepeatMasker	1	34.000000	0	0	0	127	127	127	1	0	0			
+simpleRepeat	Simple Repeats	bed 4 +	Simple Tandem Repeats by TRF	0	35.000000	0	0	0	127	127	127	0	0	0			
+nci60	NCI60	bed 15 +	Microarray Experiments for NCI 60 Cell Lines	1	38.000000	0	0	0	127	127	127	0	0	0			
+affy	GNF	bed 15 +	GNF Gene Expression Atlas using Affymetrix GeneChips	0	39.000000	0	0	0	127	127	127	0	0	0			
+affyRatio	GNF Ratio	bed 15 +	GNF Gene Expression Atlas Ratios using Affymetrix GeneChips	0	39.099998	0	0	0	127	127	127	0	0	0			
+cghNci60	CGH NCI60	bed 15 +	Comparative Genomic Hybridization Experiments for NCI 60 Cell Lines	0	40.000000	0	0	0	127	127	127	0	0	0			
+wiggle	Wiggle	sample 9	Wiggle Test Track	0	41.000000	0	0	0	127	127	127	0	0	1	chr21,		
+rosetta	Rosetta	bed 15 +	Rosetta Experimental Confirmation of Chr22 Exons	1	41.000000	0	0	0	127	127	127	0	0	1	chr22,		
+zoo	ZooSeq	sample 9	ZooSeq Conservation Data	0	41.099998	0	60	120	0	128	0	0	0	0			
+chimp	Chimp	sample 9	Chimp Sample Track	0	41.099998	100	50	0	0	0	255	0	0	1	chr7,		
+altGraph	altGraph	psl	altGraph	0	42.000000	0	0	0	127	127	127	0	0	0			
+altGraphX	altGraphX	bed 3	altGraphX	0	42.099998	0	0	0	127	127	127	0	0	0			
+mgcNcbiPicks	NCBI MGC Picks	psl est	NCBI Clone Picks for the Mammalian Gene Collection	0	45.000000	0	0	0	127	127	127	1	1	0			
+mgcNcbiSplicedPicks	NCBI Spliced Picks	psl est	NCBI Clone Picks for the Mammalian Gene Collection That Have Been Spliced	0	45.200001	0	0	0	127	127	127	1	1	0			
+mgcUcscPicks	UCSC MGC Picks	psl est	UCSC Clone Picks for the Mammalian Gene Collection	0	45.299999	0	0	0	127	127	127	1	1	0			
