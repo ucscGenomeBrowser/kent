@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.81 2004/07/26 17:29:58 kent Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.82 2004/07/26 18:02:50 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -40,6 +40,7 @@ char *typeList[] = {"BLAT's guess", "DNA", "protein", "translated RNA", "transla
 char *sortList[] = {"query,score", "query,start", "chrom,score", "chrom,start", "score"};
 char *outputList[] = {"hyperlink", "psl", "psl no header"};
 
+int minMatchShown = 22;
 
 struct serverTable *findServer(char *db, boolean isTrans)
 /* Return server for given database.  Db can either be
@@ -177,6 +178,8 @@ char unhideTrack[64];
 char *sort = cartUsualString(cart, "sort", sortList[0]);
 char *output = cartUsualString(cart, "output", outputList[0]);
 boolean pslOut = startsWith("psl", output);
+boolean isStraightNuc = (qType == gftRna || qType == gftDna);
+int  minThreshold = (isStraightNuc ? minMatchShown : 0);
 
 sprintf(uiState, "%s=%u", cartSessionVarName(), cartSessionId(cart));
 
@@ -190,7 +193,8 @@ else
 
 while ((psl = pslNext(lf)) != NULL)
     {
-    slAddHead(&pslList, psl);
+    if (psl->match >= minThreshold)
+	slAddHead(&pslList, psl);
     }
 lineFileClose(&lf);
 if (pslList == NULL)
@@ -595,14 +599,15 @@ cartSetString(cart, "db", db);
 puts("</FORM>");
 
 webNewSection("About BLAT");
-printf("%s", 
+printf( 
 "<P>BLAT on DNA is designed to\n"
-"quickly find sequences of 95% and greater similarity of length 40 bases or\n"
+"quickly find sequences of 95%% and greater similarity of length 40 bases or\n"
 "more.  It may miss more divergent or shorter sequence alignments.  It will find\n"
-"perfect sequence matches of 33 bases, and sometimes find them down to 22 bases.\n"
-"BLAT on proteins finds sequences of 80% and greater similarity of length 20 amino\n"
+"perfect sequence matches of 33 bases, and sometimes find them down to %d bases.\n"
+"BLAT on proteins finds sequences of 80%% and greater similarity of length 20 amino\n"
 "acids or more.  In practice DNA BLAT works well on primates, and protein\n"
-"blat on land vertebrates."
+"blat on land vertebrates.",
+   minMatchShown
 );
 printf("%s",
 "\n</P><P>BLAT is not BLAST.  DNA BLAT works by keeping an index of the entire genome\n"
