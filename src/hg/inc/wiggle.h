@@ -255,38 +255,8 @@ enum wigDataFetchType
 struct wiggleDataStream
 /*	object definition to access wiggle data, in DB or from file	*/
     {
-    char *db;			/*	database name	*/
-    char *tblName;		/*	the table or file name	*/
-    boolean isFile;		/*	TRUE == it is a file, FALSE == DB */
-    struct lineFile *lf;	/*	file handle in case of file	*/
-    struct wigAsciiData *ascii;	/*	list of wiggle data values */
-    struct bed *bed;		/*	data in bed format	*/
-    struct wiggleStats *stats;	/*	list of wiggle stats	*/
-    unsigned long long maxOutput;	/*	maximum items fetched	*/
-    boolean useDataConstraint;	/*	to simplify checking if it is on */
-    enum wigCompare wigCmpSwitch;	/*	for compare function switch */
-    char *dataConstraint;	/*	one of < = >= <= == != 'in range' */
-    double limit_0;		/*	for constraint comparison	*/
-    double limit_1;		/*	for constraint comparison	*/
-    unsigned char ucLowerLimit;	/*	for comparison direct to bytes	*/
-    unsigned char ucUpperLimit;	/*	for comparison direct to bytes	*/
-    char *sqlConstraint;	/*	extra SQL constraints	*/
-    unsigned int currentSpan;	/*	for use during reading	*/
-    char *currentChrom;		/*	for use during reading	*/
-    char *wibFile;		/*	for use during reading	*/
-    int wibFH;			/*	wibFile handle	*/
-    struct sqlConnection *conn;	/*	SQL connection when talking to db */
-    struct sqlResult *sr;	/*	SQL result when talking to db	*/
-    char *chrName;		/*	for chrom==chrName on file reads */
-    unsigned spanLimit;		/*	for span==spanLimit on file reads */
-    int winStart;		/*	for fetches between winStart, winEnd */
-    int winEnd;			/*	for fetches between winStart, winEnd */
-    unsigned long long rowsRead;     /*	reading stats, SQL rows read */
-    unsigned long long validPoints;  /*	reading stats, number of data bytes */
-    unsigned long long noDataPoints; /* reading stats, NO_DATA bytes	*/
-    unsigned long long bytesRead;    /* reading stats, total wib bytes */
-    unsigned long long bytesSkipped; /* reading stats, bytes not examined */
-    unsigned long long valuesMatched;  /* reading stats, number of data bytes */
+    unsigned long long maxOutput;  /*	maximum items fetched (TBD)	*/
+    /********************	public methods	*****************/
     void (*freeAscii)(struct wiggleDataStream *wDS);
 			/*	free the ascii list results 	*/
     void (*freeBed)(struct wiggleDataStream *wDS);
@@ -319,8 +289,39 @@ struct wiggleDataStream
     void (*getData)(struct wiggleDataStream *wDS, char *db, char *table,
 	int operations);
 			/*	fetch data from db.table */
-    /*	PRIVATE attributes, for internal use only	*/
+    /***** PRIVATE attributes, for internal use only, look, don't touch	*/
+    char *db;			/*	database name	*/
+    char *tblName;		/*	the table or file name	*/
+    struct lineFile *lf;	/*	file handle in case of file	*/
+    struct wigAsciiData *ascii;	/*	list of wiggle data values */
+    struct bed *bed;		/*	data in bed format	*/
+    struct wiggleStats *stats;	/*	list of wiggle stats	*/
+    boolean isFile;		/*	TRUE == it is a file, FALSE == DB */
     boolean bedConstrained;	/*	signal to output routines */
+    boolean useDataConstraint;	/*	to simplify checking if it is on */
+    enum wigCompare wigCmpSwitch;	/*	for compare function switch */
+    char *dataConstraint;	/*	one of < = >= <= == != 'in range' */
+    double limit_0;		/*	for constraint comparison	*/
+    double limit_1;		/*	for constraint comparison	*/
+    unsigned char ucLowerLimit;	/*	for comparison direct to bytes	*/
+    unsigned char ucUpperLimit;	/*	for comparison direct to bytes	*/
+    char *sqlConstraint;	/*	extra SQL constraints	*/
+    unsigned int currentSpan;	/*	for use during reading	*/
+    char *currentChrom;		/*	for use during reading	*/
+    char *wibFile;		/*	for use during reading	*/
+    int wibFH;			/*	wibFile handle	*/
+    struct sqlConnection *conn;	/*	SQL connection when talking to db */
+    struct sqlResult *sr;	/*	SQL result when talking to db	*/
+    char *chrName;		/*	for chrom==chrName on file reads */
+    unsigned spanLimit;		/*	for span==spanLimit on file reads */
+    int winStart;		/*	for fetches between winStart, winEnd */
+    int winEnd;			/*	for fetches between winStart, winEnd */
+    unsigned long long rowsRead;     /*	reading stats, SQL rows read */
+    unsigned long long validPoints;  /*	reading stats, number of data bytes */
+    unsigned long long noDataPoints; /* reading stats, NO_DATA bytes	*/
+    unsigned long long bytesRead;    /* reading stats, total wib bytes */
+    unsigned long long bytesSkipped; /* reading stats, bytes not examined */
+    unsigned long long valuesMatched;  /* reading stats, number of data bytes */
     };
 
 /*	in lib/wigDataStream.c	*/
