@@ -3,11 +3,15 @@
 #include "common.h"
 #include "hash.h"
 #include "obscure.h"
+#include "portable.h"
 #include "errabort.h"
 #include "linefile.h"
 #include "sqlList.h"
 #include "customTrack.h"
 #include "ctgPos.h"
+#include "psl.h"
+#include "gff.h"
+#include "genePred.h"
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -20,6 +24,18 @@
  *  altColor = R,G,B secondary color.
  *  priority = number.
  */
+
+static int countChars(char *s, char c)
+/* Return number of characters c in string s. */
+{
+char a;
+int count = 0;
+while ((a = *s++) != 0)
+    if (a == c)
+        ++count;
+return count;
+}
+
 
 static struct browserTable *btDefault()
 /* Return default custom table: black, dense, etc. */
@@ -87,7 +103,17 @@ if ((val = hashFindVal(hash, "useScore")) != NULL)
 if ((val = hashFindVal(hash, "priority")) != NULL)
     bt->priority = needNum(val, lineIx);
 if ((val = hashFindVal(hash, "color")) != NULL)
+    {
     parseRgb(val, lineIx, &bt->colorR, &bt->colorG, &bt->colorB);
+    /* If they don't explicitly set the alt color make it a lighter version
+     * of color. */
+    if (!hashFindVal(hash, "altColor"))
+        {
+	bt->altColorR = (bt->colorR + 255)/2;
+	bt->altColorG = (bt->colorG + 255)/2;
+	bt->altColorB = (bt->colorB + 255)/2;
+	}
+    }
 if ((val = hashFindVal(hash, "altColor")) != NULL)
     parseRgb(val, lineIx, &bt->altColorR, &bt->altColorG, &bt->altColorB);
 freeHashAndVals(&hash);
@@ -111,6 +137,19 @@ row[11] = "";
 row[12] = "";
 }
 
+boolean isChromName(char *word)
+/* Return TRUE if it's a contig or chromosome */
+{
+return startsWith("chr", word)  || startsWith("ctg", word);
+}
+
+static boolean checkChromName(char *word, int lineIx)
+/* Make sure it's a chromosome or a contig. */
+{
+if (!isChromName(word))
+    errAbort("line %d of custom input: not a chromosome", lineIx);
+}
+
 struct bed *customTrackBed(char *row[13], int wordCount, struct hash *chromHash, int lineIx)
 /* Convert a row of strings to a bed. */
 {
@@ -119,8 +158,7 @@ int count;
 
 AllocVar(bed);
 bed->chrom = hashStoreName(chromHash, row[0]);
-if (!startsWith("chr", bed->chrom) && !startsWith("ctg", bed->chrom))
-    errAbort("line %d of custom input: not a chromosome", lineIx);
+checkChromName(bed->chrom, lineIx);
 
 bed->chromStart = needNum(row[1], lineIx);
 bed->chromEnd = needNum(row[2], lineIx);
@@ -164,6 +202,55 @@ if (wordCount > 11)
 return bed;
 }
 
+struct bed *customTrackPsl(char **row, int wordCount, struct hash *chromHash, int lineIx)
+/* Convert a psl format row of strings to a bed. */
+{
+struct psl *psl = pslLoad(row);
+struct bed *bed;
+int i, blockCount, *chromStarts, chromStart;
+
+/* A tiny bit of error checking on the psl. */
+if (psl->qStart >= psl->qEnd || psl->qEnd > psl->qSize 
+    || psl->tStart >= psl->tEnd || psl->tEnd > psl->tSize)
+    {
+    errAbort("line %d of custom input: mangled psl format", lineIx);
+    }
+checkChromName(psl->tName, lineIx);
+
+/* Allocate bed and fill in from psl. */
+AllocVar(bed);
+bed->chrom = hashStoreName(chromHash, psl->tName);
+bed->chromStart = chromStart = psl->tStart;
+bed->chromEnd = psl->tEnd;
+bed->score = 1000 - 2*pslCalcMilliBad(psl, TRUE);
+if (bed->score < 0) bed->score = 0;
+strncpy(bed->strand,  psl->strand, sizeof(bed->strand));
+bed->blockCount = blockCount = psl->blockCount;
+bed->blockSizes = (int *)psl->blockSizes;
+psl->blockSizes = NULL;
+bed->chromStarts = chromStarts = (int *)psl->tStarts;
+psl->tStarts = NULL;
+bed->name = psl->qName;
+psl->qName = NULL;
+
+/* Switch minus target strand to plus strand. */
+if (psl->strand[1] == '-')
+    {
+    int chromSize = psl->tSize;
+    reverseInts(bed->blockSizes, blockCount);
+    reverseInts(chromStarts, blockCount);
+    for (i=0; i<blockCount; ++i)
+	chromStarts[i] = chromSize - chromStarts[i];
+    }
+
+/* Convert coordinates to relative. */
+for (i=0; i<blockCount; ++i)
+    chromStarts[i] -= chromStart;
+pslFree(&psl);
+return bed;
+}
+
+
 static boolean parseTrackLine(char *line, int lineIx, struct customTrack **retTrack)
 /* If line is a track line, parse it.  Otherwise return false. */
 {
@@ -183,15 +270,153 @@ else
     return FALSE;
 }
 
+static boolean checkStartEnd(char *sSize, char *sStart, char *sEnd)
+/* Make sure start < end <= size */
+{
+int start, end, size;
+start = atoi(sStart);
+end = atoi(sEnd);
+size = atoi(sSize);
+return start < end && end <= size;
+}
+
+static boolean rowIsPsl(char **row, int wordCount)
+/* Return TRUE if format of this row is consistent with being a .psl */
+{
+int i, len;
+char *s, c;
+int blockCount,start,end,size;
+if (wordCount != 21)
+    return FALSE;
+for (i=0; i<=7; ++i)
+   if (!isdigit(row[i][0]))
+       return FALSE;
+s = row[8];
+len = strlen(s);
+if (len < 1 || len > 2)
+    return FALSE;
+for (i=0; i<len; ++i)
+    {
+    c = s[i];
+    if (c != '+' && c != '-')
+        return FALSE;
+    }
+if (!checkStartEnd(row[10], row[11], row[12]))
+    return FALSE;
+if (!checkStartEnd(row[14], row[15], row[16]))
+    return FALSE;
+if (!isdigit(row[17][0]))
+   return FALSE;
+blockCount = atoi(row[17]);
+for (i=18; i<=20; ++i)
+    if (countChars(row[i], ',') != blockCount)
+        return FALSE;
+return TRUE;
+}
+
+static boolean lineIsGff(char *line)
+/* Return TRUE if format of this row is consistent with being a GFF */
+{
+char *dupe = strdup(line);
+char *words[10], *strand;
+int wordCount;
+boolean isGff = FALSE;
+char c;
+
+wordCount = chopTabs(dupe, words);
+if (wordCount >= 8 && wordCount <= 9)
+    {
+    /* Check that strand is + - or . */
+    strand = words[6];
+    c = strand[0];
+    if (c == '.' || c == '+' || c == '-')
+        {
+	if (strand[1] == 0)
+	    {
+	    if (isChromName(words[0]))
+	        {
+		if (isdigit(words[3][0]) && isdigit(words[4][0]))
+		    isGff = TRUE;
+		}
+	    }
+	}
+    }
+freeMem(dupe);
+return isGff;
+}
+
+
+static boolean getNextLine(struct lineFile *lf, char **pLine, char **pNextLine)
+/* Helper routine to get next line of input from lf if non-null, or
+ * from memory using pLine/pNextLine to aide parsing. */
+{
+char *nextLine;
+if (lf != NULL)
+    return lineFileNext(lf, pLine, NULL);
+if ((*pLine = nextLine = *pNextLine) == NULL)
+    return FALSE;
+if (nextLine[0] == 0)
+    return FALSE;
+if ((nextLine = strchr(nextLine, '\n')) != NULL)
+    *nextLine++ = 0;
+*pNextLine = nextLine;
+return TRUE;
+} 
+
+
+static struct bed *gffHelperFinish(struct gffFile *gff, struct hash *chromHash)
+/* Create bedList from gffHelper. */
+{
+struct genePred *gp;
+struct bed *bedList = NULL, *bed;
+struct gffGroup *group;
+int i, blockCount, chromStart, exonStart;
+char *exonSelectWord = (gff->isGtf ? "exon" : NULL);
+
+uglyf("%d lines before grouping<BR>\n", slCount(gff->lineList));
+gffGroupLines(gff);
+uglyf("%d groups<BR>\n", slCount(gff->groupList));
+
+for (group = gff->groupList; group != NULL; group = group->next)
+    {
+    /* First convert to gene-predictions since this is almost what we want. */
+    gp = genePredFromGroupedGff(gff, group, group->name, exonSelectWord);
+    uglyf("gp = %p<BR>\n", gp);
+    if (gp != NULL)
+        {
+	/* Make a bed out of the gp. */
+	AllocVar(bed);
+	bed->chrom = hashStoreName(chromHash, gp->name);
+	bed->chromStart = chromStart = gp->txStart;
+	bed->chromEnd = gp->txEnd;
+	bed->name = cloneString(gp->name);
+	bed->score = 1000;
+	bed->strand[0] = gp->strand[0];
+	bed->blockCount = blockCount = gp->exonCount;
+	AllocArray(bed->blockSizes, blockCount);
+	AllocArray(bed->chromStarts, blockCount);
+	for (i=0; i<blockCount; ++i)
+	    {
+	    exonStart = gp->exonStarts[i];
+	    bed->chromStarts[i] = exonStart - chromStart;
+	    bed->blockSizes[i] = exonStart - gp->exonEnds[i];
+	    }
+	genePredFree(&gp);
+	slAddHead(&bedList, bed);
+	}
+    }
+slReverse(&bedList);
+return bedList;
+}
 
 struct customTrack *customTracksParse(char *text, boolean isFile)
 /* Parse text into a custom set of tracks.  Text parameter is a
  * file name if 'isFile' is set.*/
 {
 struct customTrack *trackList = NULL, *track = NULL;
-int lineIx = 0, lineSize, wordCount;
+int lineIx = 0, wordCount;
 char *line = NULL, *nextLine = NULL;
-char *row[13];
+char *row[32];
 struct bed *bed = NULL;
 struct hash *chromHash = newHash(8);
 struct lineFile *lf = NULL;
@@ -203,26 +428,23 @@ else
     nextLine = text;
 for (;;)
     {
-    /* Get next line. */
-    if (isFile)
-        {
-	if (!lineFileNext(lf, &line, &lineSize))
-	    break;
-	}
-    else
-        {
-	if ((line = nextLine) == NULL)
-	    break;
-	if (line[0] == 0)
-	    break;
-	if ((nextLine = strchr(line, '\n')) != NULL)
-	    *nextLine++ = 0;
-	}
+    if (!getNextLine(lf, &line, &nextLine))
+        break;
 
-    /* Skip lines that start with '#' */
+    /* Skip lines that start with '#' or are blank*/
     ++lineIx;
-    if (line[0] == '#')
+    line = skipLeadingSpaces(line);
+    if (line[0] == '#' || line[0] == 0)
         continue;
+
+    /* Skip lines that are psl header. */
+    if (startsWith("psLayout version", line))
+        {
+	int i;
+	for (i=0; i<4; ++i)
+	    getNextLine(lf, &line, &nextLine);
+	continue;
+	}
 
     /* Deal with line that defines new track. */
     if (parseTrackLine(line, lineIx, &track))
@@ -230,11 +452,6 @@ for (;;)
 	slAddTail(&trackList, track);
 	continue;
 	}
-
-    /* Chop up line and skip empty lines. */
-    wordCount = chopLine(line, row);
-    if (wordCount == 0)
-        continue;
 
     /* Deal with ordinary line.   First make track if one doesn't exist. */
     if (track == NULL)
@@ -244,27 +461,67 @@ for (;;)
 	slAddTail(&trackList, track);
 	}
 
-    /* Chop up line.  Make sure all lines in track have the same number of words. */
+    /* Classify track based on first line of track.   Chop line
+     * into words and make sure all lines have same number of words. */
     if (track->fieldCount == 0)
         {
-	if (wordCount < 3)
-	    errAbort("line %d of custom input: Bed files need at least three fields", lineIx);
+	if (lineIsGff(line))
+	    {
+	    uglyf("It's a GFF file!<BR>\n");
+	    wordCount = chopTabs(line, row);
+	    track->gffHelper = gffFileNew("custom input");
+	    }
+	else
+	    {
+	    wordCount = chopLine(line, row);
+	    track->fromPsl = rowIsPsl(row, wordCount);
+	    }
 	track->fieldCount = wordCount;
 	}
-    if (wordCount != track->fieldCount)
+    else
         {
-	errAbort("line %d of custom input: Track has %d fields in one place and %d another", 
-		lineIx, track->fieldCount, wordCount);
+	/* Chop up line and skip empty lines. */
+	if (track->gffHelper != NULL)
+	    wordCount = chopTabs(line, row);
+	else
+	    wordCount = chopLine(line, row);
 	}
 
-    /* Create bed data structure from row and hang on list in track. */
-    bed = customTrackBed(row, wordCount, chromHash, lineIx);
-    if (!startsWith("chr", bed->chrom))
-        track->needsLift = TRUE;
-    slAddHead(&track->bedList, bed);
+    /* Save away this line of data. */
+    if (track->gffHelper)
+	{
+	checkChromName(row[0], lineIx);
+        gffFileAddRow(track->gffHelper, 0, row, wordCount, "custom input", lineIx);
+	}
+    else 
+	{
+	if (wordCount != track->fieldCount)
+	    {
+	    errAbort("line %d of custom input: Track has %d fields in one place and %d another", 
+		    lineIx, track->fieldCount, wordCount);
+	    }
+	/* Create bed data structure from row and hang on list in track. */
+	if (track->fromPsl)
+	    bed = customTrackPsl(row, wordCount, chromHash, lineIx);
+	else
+	    bed = customTrackBed(row, wordCount, chromHash, lineIx);
+	if (!startsWith("chr", bed->chrom))
+	    track->needsLift = TRUE;
+	slAddHead(&track->bedList, bed);
+	}
     }
 for (track = trackList; track != NULL; track = track->next)
+     {
      slReverse(&track->bedList);
+     if (track->fromPsl)
+         track->fieldCount = 12;
+     if (track->gffHelper)
+	 {
+         track->bedList = gffHelperFinish(track->gffHelper, chromHash);
+	 gffFileFree(&track->gffHelper);
+         track->fieldCount = 12;
+	 }
+     }
 return trackList;
 }
 
@@ -299,8 +556,6 @@ for (track = trackList; track != NULL; track = track->next)
     track->needsLift = FALSE;
     }
 }
-
-
 
 struct customTrack *customTracksFromText(char *text)
 /* Parse text into a custom set of tracks. */

@@ -4,6 +4,7 @@
 
 #include "common.h"
 #include "jksql.h"
+#include "gff.h"
 #include "genePred.h"
 
 struct genePred *genePredLoad(char **row)
@@ -137,5 +138,79 @@ for (i=0; i<el->exonCount; ++i)
     }
 if (sep == ',') fputc('}',f);
 fputc(lastSep,f);
+}
+
+/* ---------  Start of hand generated code. ---------------------------- */
+
+int genePredCmp(const void *va, const void *vb)
+/* Compare to sort based on chromosome, txStart. */
+{
+const struct genePred *a = *((struct genePred **)va);
+const struct genePred *b = *((struct genePred **)vb);
+int dif;
+dif = strcmp(a->chrom, b->chrom);
+if (dif == 0)
+    dif = a->txStart - b->txStart;
+return dif;
+}
+
+
+struct genePred *genePredFromGroupedGff(struct gffFile *gff, struct gffGroup *group, char *name,
+	char *exonSelectWord)
+/* Convert gff->groupList to genePred list. */
+{
+struct genePred *gp;
+int cdsStart = BIGNUM, cdsEnd = -BIGNUM;
+int exonCount = 0;
+struct gffLine *gl;
+unsigned *eStarts, *eEnds;
+int i;
+
+/* Count up exons and figure out cdsStart and cdsEnd. */
+for (gl = group->lineList; gl != NULL; gl = gl->next)
+    {
+    char *feat = gl->feature;
+    if (exonSelectWord == NULL || sameWord(feat, exonSelectWord))
+        {
+	++exonCount;
+	}
+    else if (sameWord(feat, "CDS") || sameWord(feat, "start_codon") 
+        || sameWord(feat, "stop_codon"))
+	{
+	if (gl->start < cdsStart) cdsStart = gl->start;
+	if (gl->end > cdsEnd) cdsEnd = gl->end;
+	}
+    }
+if (cdsStart > cdsEnd)
+    {
+    cdsStart = group->start;
+    cdsEnd = group->end;
+    }
+if (exonCount == 0)
+    return NULL;
+
+/* Allocate genePred and fill in values. */
+AllocVar(gp);
+gp->name = cloneString(name);
+gp->chrom = cloneString(group->seq);
+gp->strand[0] = group->strand;
+gp->txStart = group->start;
+gp->txEnd = group->end;
+gp->cdsStart = cdsStart;
+gp->cdsEnd = cdsEnd;
+gp->exonCount = exonCount;
+gp->exonStarts = AllocArray(eStarts, exonCount);
+gp->exonEnds = AllocArray(eEnds, exonCount);
+i = 0;
+for (gl = group->lineList; gl != NULL; gl = gl->next)
+    {
+    if (exonSelectWord == NULL || sameWord(gl->feature, exonSelectWord))
+        {
+	eStarts[i] = gl->start;
+	eEnds[i] = gl->end;
+	++i;
+	}
+    }
+return gp;
 }
 
