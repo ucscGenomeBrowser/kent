@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.18 2004/01/24 15:41:17 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.19 2004/01/24 22:26:26 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -97,8 +97,8 @@ boolean initialWindow = TRUE;
 struct vGfx *vg, *vg2;
 Color bkgColor;
 
-int abnormalColor = MG_BLUE;
-int normalColor   = MG_BLACK;
+int abnormalColor = MG_RED;
+int normalColor   = MG_BLUE;
 
 void dvPrintf(char *format, va_list args)
 /* Suppressable variable args hPrintf. */
