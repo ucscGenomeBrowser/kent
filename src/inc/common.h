@@ -367,7 +367,6 @@ char *slNameStore(struct slName **pList, char *string);
 /* Put string into list if it's not there already.  
  * Return the version of string stored in list. */
 
-
 struct slRef
 /* Singly linked list of generic references. */
     {
@@ -383,6 +382,39 @@ void refAdd(struct slRef **pRefList, void *val);
 
 void refAddUnique(struct slRef **pRefList, void *val);
 /* Add reference to list if not already on list. */
+
+struct slPair
+/* A name/value pair. */
+    {
+    struct slPair *next;	/* Next in list. */
+    char *name;			/* Name of item. */
+    void *val;			/* Pointer to item data. */
+    };
+
+struct slPair *slPairNew(char *name, void *val);
+/* Allocate new name/value pair. */
+
+void slPairAdd(struct slPair **pList, char *name, void *val);
+/* Add new slPair to head of list. */
+
+void slPairFree(struct slPair **pEl);
+/* Free up struct and name.  (Don't free up values.) */
+
+void slPairFreeList(struct slPair **pList);
+/* Free up list.  (Don't free up values.) */
+
+void slPairFreeVals(struct slPair *list);
+/* Free up all values on list. */
+
+void slPairFreeValsAndList(struct slPair **pList);
+/* Free up all values on list and list itself */
+
+struct slPair *slPairFind(struct slPair *list, char *name);
+/* Return list element of given name, or NULL if not found. */
+
+void *slPairFindVal(struct slPair *list, char *name);
+/* Return value associated with name in list, or NULL if not found. */
+
 
 void gentleFree(void *pt);
 /* check pointer for NULL before freeing. 
@@ -710,5 +742,8 @@ int safef(char* buffer, int bufSize, char *format, ...)
 __attribute__((format(printf, 3, 4)))
 #endif
 ;
+
+char *naForNull(char *s);
+/* Return 'n/a' if s is NULL, otherwise s. */
 
 #endif /* COMMON_H */

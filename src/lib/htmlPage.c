@@ -831,6 +831,28 @@ if (page == NULL)
 return page;
 }
 
+void htmlFormVarPrint(struct htmlFormVar *var, FILE *f, char *prefix)
+/* Print out variable to file, prepending prefix. */
+{
+struct htmlTag *tag = var->tags->val;
+struct slName *val;
+fprintf(f, "%s%s\t%s\t%s\t%s\n", prefix, var->name, var->tagName, 
+	naForNull(var->type), 
+	naForNull(var->curVal));
+for (val = var->values; val != NULL; val = val->next)
+     fprintf(f, "%s\t%s\n", prefix, val->name);
+}
+
+void htmlFormPrint(struct htmlForm *form, FILE *f)
+/* Print out form structure. */
+{
+struct htmlFormVar *var;
+fprintf(f, "%s\t%s\t%s\n", form->name, form->method, form->action);
+for (var = form->vars; var != NULL; var = var->next)
+    htmlFormVarPrint(var, f, "\t");
+}
+
+
 char *htmlExpandUrl(char *base, char *url)
 /* Expand URL that is relative to base to stand on it's own. 
  * Return NULL if it's not http or https. */
@@ -1367,6 +1389,5 @@ tag = validateBody(page, tag->next);
 if (tag == NULL || !sameWord(tag->name, "/HTML"))
     errAbort("Missing </HTML>");
 validateCgiUrls(page);
-verbose(1, "ok\n");
 }
 

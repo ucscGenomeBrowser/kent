@@ -131,6 +131,9 @@ struct lineFile *netLineFileMayOpen(char *url);
 /* Same as netLineFileOpen, but warns and returns
  * null rather than aborting on problems. */
 
+struct dyString *netSlurpFile(int sd);
+/* Slurp file into dynamic string and return. */
+
 struct dyString *netSlurpUrl(char *url);
 /* Go grab all of URL and return it as dynamic string. */
 
@@ -140,6 +143,10 @@ struct lineFile *netHttpLineFileMayOpen(char *url, struct netParsedUrl **npu);
 void netHttpGet(struct lineFile *lf, struct netParsedUrl *npu,
 		boolean keepAlive);
 /* Send a GET request, possibly with Keep-Alive. */
+
+int netOpenHttpExt(char *url, char *method, boolean end);
+/* Return a file handle that will read the url.  If end is not
+ * set then can send cookies and other info to returned file 
 
 int netHttpGetMultiple(char *url, struct slName *queries, void *userData,
 		       void (*responseCB)(void *userData, char *req,

@@ -7,7 +7,7 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.51 2004/03/03 07:23:51 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.52 2004/03/03 08:00:25 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1536,6 +1536,14 @@ va_start(args, format);
 sz = vasafef(buffer, bufSize, format, args);
 va_end(args);
 return sz;
+}
+
+char *naForNull(char *s)
+/* Return 'n/a' if s is NULL, otherwise s. */
+{
+if (s == NULL) 
+   s = "n/a";
+return s;
 }
 
 int chromToInt(char *s)
