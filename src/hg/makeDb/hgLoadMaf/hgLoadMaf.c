@@ -12,7 +12,7 @@
 #include "scoredRef.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.14 2004/02/23 09:07:21 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.15 2004/07/21 19:45:15 kate Exp $";
 
 /* Command line options */
 
@@ -21,10 +21,19 @@ static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.14 2004/02/23 09:07:21 kent Ex
  * be ignored, and he intends to remove them from multiz output.
  * When/if this happens, the -warn option should not be used.
  */
+
+/* command line option specifications */
+static struct optionSpec optionSpecs[] = {
+    {"warn", OPTION_BOOLEAN},
+    {"WARN", OPTION_BOOLEAN},
+    {"test", OPTION_STRING},
+    {"pathPrefix", OPTION_STRING},
+    {NULL, 0}
+};
 boolean warnOption = FALSE;
 boolean warnVerboseOption = FALSE;     /* print warning detail */
-boolean test = FALSE;                   /* suppress loading .tab file in db */
-char *testFile = "";                    /* maf filename if testing */
+char *testFile = NULL;                    /* maf filename if testing */
+char *pathPrefix = NULL;               /* extFile directory */
 
 void usage()
 /* Explain usage and exit. */
@@ -39,8 +48,8 @@ errAbort(
     "   -WARN   warn instead of error, with detail for the warning\n" 
     "   -test=infile  use infile as input, and suppress loading\n"
 "                     the database. Just create .tab file in current dir.\n" 
-  "The maf files need to already exist in chromosome coordinates\n"
-  "in the directory /gbdb/database/table, unless -test option is used.\n"
+    "   -pathPrefix=dir  load files from specified directory (default /gbdb/database/table.\n"
+  "The maf files need to already exist in chromosome coordinates.\n"
   );
 }
 
@@ -61,32 +70,37 @@ void hgLoadMaf(char *database, char *table)
 /* hgLoadMaf - Load a maf file index into the database. */
 {
 int i;
-char extFileDir[512];
 struct fileInfo *fileList = NULL, *fileEl;
 struct sqlConnection *conn;
 long mafCount = 0;
 FILE *f = hgCreateTabFile(".", table);
+char extFileDir[512];
 char ext[10];
 char file[100];
 
-if (test)
+if (testFile != NULL)
     {
     if (!fileExists(testFile))
         errAbort("Test file %s doesn't exist\n", testFile);
     splitPath(testFile, extFileDir, file, ext);
     strcat(file, ext);
     fileList = listDirX(extFileDir, file, TRUE);
+    pathPrefix = extFileDir;
     }
 else
     {
     hSetDb(database);
-    safef(extFileDir, sizeof(extFileDir), "/gbdb/%s/%s", database, table);
-    fileList = listDirX(extFileDir, "*.maf", TRUE);
+    if (pathPrefix == NULL)
+        {
+        safef(extFileDir, sizeof(extFileDir), "/gbdb/%s/%s", database, table);
+        pathPrefix = extFileDir;
+        }
+    fileList = listDirX(pathPrefix, "*.maf", TRUE);
     conn = hgStartUpdate();
     scoredRefTableCreate(conn, table);
     }
 if (fileList == NULL)
-    errAbort("%s doesn't exist or doesn't have any maf files", extFileDir);
+    errAbort("%s doesn't exist or doesn't have any maf files", pathPrefix);
 for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
     {
     char *fileName = fileEl->name;
@@ -98,7 +112,7 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
     int warnCount = 0;
     int dbNameLen = strlen(database);
     HGID extId;
-    if (test)
+    if (testFile != NULL)
         extId = 0;
     else
         extId = hgAddToExtFile(fileName, conn);
@@ -191,24 +205,24 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
     if (warnCount)
         verbose(1, "%d warnings\n", warnCount);
     }
-if (test)
+if (testFile != NULL)
     return;
 verbose(1, "Loading %s into database\n", table);
 hgLoadTabFile(conn, ".", table, &f);
-verbose(1, "Loaded %ld mafs in %d files from %s\n", mafCount, slCount(fileList), extFileDir);
-hgEndUpdate(&conn, "Add %ld mafs in %d files from %s\n", mafCount, slCount(fileList), extFileDir);
+verbose(1, "Loaded %ld mafs in %d files from %s\n", mafCount, slCount(fileList), pathPrefix);
+hgEndUpdate(&conn, "Add %ld mafs in %d files from %s\n", mafCount, slCount(fileList), pathPrefix);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
+warnOption = optionExists("warn");
+warnVerboseOption = optionExists("WARN");
+testFile = optionVal("test", NULL);
+pathPrefix = optionVal("pathPrefix", NULL);
 if (argc != 3)
     usage();
-warnOption = cgiBoolean("warn");
-warnVerboseOption = cgiBoolean("WARN");
-test = cgiVarExists("test");
-testFile = cgiOptionalString("test");
 hgLoadMaf(argv[1], argv[2]);
 return 0;
 }
