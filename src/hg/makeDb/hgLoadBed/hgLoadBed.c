@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.29 2004/11/23 00:13:05 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.30 2004/11/23 00:51:49 hiram Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -147,6 +147,24 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 	wordCount = chopLine(bed->line, words);
     for (i=0; i<wordCount; ++i)
         {
+	/*	new definition for old "reserved" field, now itemRgb */
+	/*	and when itemRgb, it is a comma separated string r,g,b */
+	if (i == 8)
+	    {
+	    char *comma;
+	    /*  Allow comma separated list of rgb values here   */
+	    comma = strchr(words[8], ',');
+	    if (comma)
+		{
+		int itemRgb = 0;
+		if (-1 == (itemRgb = bedParseRgb(words[8])))
+		    errAbort("ERROR: expecting r,g,b specification, "
+				"found: '%s'", words[8]);
+		else
+		    fprintf(f,"%d", itemRgb);
+		}
+
+	    }
 	fputs(words[i], f);
 	if (i == wordCount-1)
 	    fputc('\n', f);
@@ -247,7 +265,7 @@ void hgLoadBed(char *database, char *track, int bedCount, char *bedFiles[])
 {
 struct lineFile *lf = NULL;
 int bedSize = findBedSize(bedFiles[0], &lf);
-struct bedStub *bedList = NULL, *bed;
+struct bedStub *bedList = NULL;
 int i;
 
 if (hasBin)
