@@ -435,3 +435,23 @@ spectrum on
 type psl .
 url http://lgsun.grc.nia.nih.gov/geneindex4/bin/giT.cgi?genename=$$
 
+
+
+searchTable bacEndPairs
+searchMethod exact
+searchType bed
+termRegex ([[:alnum:]]+(-[0-9]+)?|((RP|CT|GS|CH|TAM)[[:alnum:]]+)?(-[[:alnum:]_]+)+)
+searchPriority 8
+
+searchName stsMapAlias
+searchTable stsMap
+searchType bed
+xrefTable stsAlias
+xrefQuery select trueName,alias from %s where alias like '%s'
+searchBoth on
+termRegex [^[:space:]]+
+dontCheck ()
+searchDescription Alias of STS Marker
+searchPriority 11
+padding 100000
+
