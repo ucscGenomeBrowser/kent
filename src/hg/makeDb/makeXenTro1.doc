@@ -591,7 +591,11 @@ psl/$(root1)_$(root2).psl}
     # Sort alignments:
     ssh kksilo
     cd /cluster/data/xenTro1/bed/blatFr1
+    
+# added the liftUp step, and reloaded blatFr1 table.  11/16/04 Fan.    
     pslCat -dir psl \
+    | liftUp -type=.psl -pslQ stdout /cluster/data/fr1/jkStuff/liftAll.lft \
+          warn stdin \
     | pslSortAcc nohead chrom /tmp stdin
 
     # load psl into database:
