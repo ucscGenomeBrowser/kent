@@ -134,6 +134,16 @@ popd
                   create index bin       on rmsk (genoName(11), bin); \
                   create index genoStart on rmsk (genoName(11), genoStart); \
                   create index genoEnd   on rmsk (genoName(11), genoEnd);'
+    # THIS APPLIES ONLY WHEN REPEATMASKER IS RUN MULTIPLE TIMES PER SEQUENCE:
+    # 11/29/04: Need to remove duplicate Simple/Low Complexity repeats 
+    # caused by the two separate RepeatMasker invocations.  Unfortunately 
+    # whitespace is different in the .out files, so sort & uniq the .tab:
+    ssh hgwdev
+    cd /cluster/data/apiMel1/RMOut
+    hgLoadOut -tabFile=hgLoadOut.tab apiMel1 -nosplit scaffolds.fa.out 
+    sort -k 6,6 -k7n,7n hgLoadOut.tab | uniq > hgLoadOutUniq.tab 
+    hgsql apiMel1 -e 'delete from rmsk'
+    hgsql apiMel1 -e 'load data local infile "hgLoadOutUniq.tab" into table rmsk'
 
 
 # LOAD GAP & GOLD TABLES FROM AGP (DONE 11/8/04 angie)
@@ -189,13 +199,13 @@ popd
     # Make chromInfo.tab.
     mkdir bed/chromInfo
     twoBitInfo apiMel1.2bit stdout \
-    | awk '{printf "%s\t%s\t/gbdb/apiMel1/nib/apiMel1.2bit\n", $1, $2;}' \
+    | awk '{printf "%s\t%s\t/gbdb/apiMel1/apiMel1.2bit\n", $1, $2;}' \
     > bed/chromInfo/chromInfo.tab
 
-    # Make symbolic a link from /gbdb/apiMel1/nib to the 2bit.
+    # Make symbolic a link from /gbdb/apiMel1/ to the 2bit.
     ssh hgwdev
-    mkdir -p /gbdb/apiMel1/nib
-    ln -s /cluster/data/apiMel1/apiMel1.2bit /gbdb/apiMel1/nib
+    mkdir -p /gbdb/apiMel1
+    ln -s /cluster/data/apiMel1/apiMel1.2bit /gbdb/apiMel1/
     # Load chromInfo table.
     hgsql apiMel1 < $HOME/kent/src/hg/lib/chromInfo.sql
     hgsql apiMel1 -e 'load data local infile \
@@ -221,8 +231,8 @@ popd
         (name, description, nibPath, organism, \
              defaultPos, active, orderKey, genome, scientificName, \
              htmlPath, hgNearOk, hgPbOk, sourceName) values \
-        ("apiMel1", "Jul. 2004", "/gbdb/apiMel1/nib", "A. mellifera", \
-             "Group6.15:687852-740591", 1, 57, \
+        ("apiMel1", "Jul. 2004", "/gbdb/apiMel1", "A. mellifera", \
+             "GroupUn.5651:1001-6000", 1, 57, \
              "A. mellifera", \
              "Apis mellifera", "/gbdb/apiMel1/html/description.html", \
              0, 0, "Baylor HGSC Amel_1.2");' \
@@ -457,7 +467,7 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     # Not so bad!
 
 
-# AUTO UPDATE GENBANK MRNA RUN  (TODO 11/?/04 angie)
+# AUTO UPDATE GENBANK MRNA RUN  (DONE 11/23/04 angie)
     ssh hgwdev
     # Update genbank config and source in CVS:
     cd ~/kent/src/hg/makeDb/genbank
@@ -469,8 +479,6 @@ apiMel1.genome = /iscratch/i/apiMel1/apiMel1.2bit
 apiMel1.mondoTwoBitParts = 1000
 apiMel1.lift = no
 apiMel1.refseq.mrna.native.load = no
-apiMel1.refseq.mrna.xeno.load = yes
-apiMel1.refseq.mrna.xeno.pslReps = -minCover=0.15 -minAli=0.75 -nearTop=0.005
 apiMel1.genbank.mrna.xeno.load = yes
 apiMel1.genbank.est.xeno.load = no
 apiMel1.downloadDir = apiMel1
@@ -492,18 +500,6 @@ apiMel1.perChromTables = no
 
     ssh `fileServer /cluster/data/genbank/`
     cd /cluster/data/genbank
-    # This is an -initial run, (xeno) RefSeq only:
-    nice bin/gbAlignStep -srcDb=refseq -type=mrna -initial apiMel1 &
-    tail -f [its logfile]
-    # Load results:
-    ssh hgwdev
-    cd /cluster/data/genbank
-    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad apiMel1
-    featureBits apiMel1 xenoRefGene
-#14616774 bases of 135845121 (10.760%) in intersection
-    # Clean up:
-    rm -rf work/initial.apiMel1
-
     # This is an -initial run, mRNA only:
     nice bin/gbAlignStep -srcDb=genbank -type=mrna -initial apiMel1 &
     tail -f [its logfile]
@@ -512,7 +508,9 @@ apiMel1.perChromTables = no
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad apiMel1
     featureBits apiMel1 all_mrna
+#157831 bases of 208434669 (0.076%) in intersection
     featureBits apiMel1 xenoMrna
+#7164827 bases of 208434669 (3.437%) in intersection
     # Clean up:
     rm -rf work/initial.apiMel1
 
@@ -523,11 +521,15 @@ apiMel1.perChromTables = no
     ssh hgwdev
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 apiMel1 &
+    featureBits apiMel1 all_est
+#5563769 bases of 208434669 (2.669%) in intersection
     # Clean up:
     rm -rf work/initial.apiMel1
 
 
-# MAKE GCPERCENT (DONE 11/8/04 angie)
+# MAKE GCPERCENT (REDONE 11/28/04 angie)
+    # b0b found that the gcPercent table was empty -- don't know how that 
+    # happened!  no errors & full table after rerunning.  
     ssh hgwdev
     mkdir /cluster/data/apiMel1/bed/gcPercent
     cd /cluster/data/apiMel1/bed/gcPercent
