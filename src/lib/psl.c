@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.29 2003/09/19 19:17:27 baertsch Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.30 2003/09/29 19:38:15 braney Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -53,6 +53,17 @@ static char *indexString =
     "INDEX(%stEnd)\n"
 ")\n";
 
+
+struct psl *pslxLoad(char **row)
+/* Load a psl from row fetched with select * from psl
+ * from database.  Dispose of this with pslFree(). */
+{
+struct psl *ret = pslLoad(row);
+int retSize;
+sqlStringDynamicArray(row[21],&ret->qSequence, &retSize);
+sqlStringDynamicArray(row[22],&ret->tSequence, &retSize);
+return ret;
+}
 
 struct psl *pslLoad(char **row)
 /* Load a psl from row fetched with select * from psl
@@ -171,6 +182,16 @@ freeMem(el->tName);
 freeMem(el->blockSizes);
 freeMem(el->qStarts);
 freeMem(el->tStarts);
+if (el->qSequence)
+    {
+    freeMem(el->qSequence[0]);
+    freeMem(el->qSequence);
+    }
+if (el->tSequence)
+    {
+    freeMem(el->tSequence[0]);
+    freeMem(el->tSequence);
+    }
 freez(pEl);
 }
 
@@ -256,6 +277,26 @@ for (i=0; i<el->blockCount; ++i)
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);
+if (el->qSequence)
+    {
+    fputc(sep,f);
+    if (sep == ',') fputc('{',f);
+    for (i=0; i<el->blockCount; ++i)
+	{
+	fprintf(f, "%s", el->qSequence[i]);
+	fputc(',', f);
+	}
+    if (sep == ',') fputc('}',f);
+    fputc(sep,f);
+    if (sep == ',') fputc('{',f);
+    for (i=0; i<el->blockCount; ++i)
+	{
+	fprintf(f, "%s", el->tSequence[i]);
+	fputc(',', f);
+	}
+    if (sep == ',') fputc('}',f);
+    }
+
 fputc(lastSep,f);
 if (ferror(f))
     {
@@ -507,15 +548,30 @@ if (lineSize >= lineAlloc)
     }
 memcpy(chopBuf, line, lineSize+1);
 wordCount = chopLine(chopBuf, words);
-if (wordCount >= 21)
+if (wordCount == 21)
     {
     return pslLoad(words);
+    }
+if (wordCount == 23)
+    {
+    return pslxLoad(words);
     }
 else
     {
     errAbort("Bad line %d of %s", lf->lineIx, lf->fileName);
     return NULL;
     }
+}
+
+struct psl *pslxLoadLm(char **row, struct lm *lm)
+/* Load row into local memory pslx. */
+{
+struct psl *ret = pslLoadLm(row, lm);
+ret->qSequence = lmAlloc(lm, sizeof(ret->qSequence[0]) * ret->blockCount);
+sqlStringArray(row[21],ret->qSequence, ret->blockCount);
+ret->tSequence = lmAlloc(lm, sizeof(ret->tSequence[0]) * ret->blockCount);
+sqlStringArray(row[22],ret->tSequence, ret->blockCount);
+return ret;
 }
 
 struct psl *pslLoadLm(char **row, struct lm *lm)
