@@ -11,7 +11,7 @@
 #include "ra.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.16 2004/03/31 20:26:43 kent Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.17 2004/04/03 01:26:59 angie Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -223,18 +223,23 @@ if (bt->settings == NULL)
     bt->settings = cloneString("");
 }
 
-void trackDbOverrideVisbility(struct hash *tdHash, char *visibilityRa)
-/* override visbility settings using a ra file */
+void trackDbOverrideVisbility(struct hash *tdHash, char *visibilityRa,
+			      boolean hideFirst)
+/* Override visbility settings using a ra file.  If hideFirst, set all 
+ * visibilities to hide before applying visibilityRa. */
 {
-struct hashEl *hel;
-struct hashCookie cookie;
 struct lineFile *lf;
 struct hash *raRecord;
 
-/* Set visibility to hide on all entries */
-cookie = hashFirst(tdHash);
-while ((hel = hashNext(&cookie)) != NULL)
-    ((struct trackDb *)hel->val)->visibility = tvHide;
+if (hideFirst)
+    {
+    /* Set visibility to hide on all entries */
+    struct hashEl *hel;
+    struct hashCookie cookie;
+    cookie = hashFirst(tdHash);
+    while ((hel = hashNext(&cookie)) != NULL)
+	((struct trackDb *)hel->val)->visibility = tvHide;
+    }
 
 /* Parse the ra file, adjusting visibility accordingly */
 lf = lineFileOpen(visibilityRa, TRUE);
