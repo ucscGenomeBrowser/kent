@@ -288,6 +288,16 @@ identifier gnfMouseAtlas2
     $mm.gnfAtlas2.name
     $mm.affyGnf1m.qName
 
+identifier gnfRatAtlas2
+"Novartis GNF Rat gene probe ID"
+    hgFixed.gnfRatAtlas2All.name
+    hgFixed.gnfRatAtlas2AllRatio.name unique
+    hgFixed.gnfRatAtlas2Median.name full unique
+    hgFixed.gnfRatAtlas2MedianRatio.name unique
+    $rn.knownToU34A.value
+    $rn.gnfAtlas2.name
+    $rn.affyU34A.qName
+
 identifier affyU95
 "Affymetrix Human U95 chip identifiers"
     $hg.affyU95.qName dupeOk
@@ -309,12 +319,13 @@ identifier affyU74
 
 identifier affyRAE230
 "Affymetrix Rat RAE230 chip identifiers"
-    $mm.affyU34A.qName dupeOk
+    $rn.affyRAE230.qName dupeOk
+    $rn.knownToRAE230.value
 
 identifier affyU34A
 "Affymetrix Rat U34A chip identifiers"
-    $mm.affyU34A.qName dupeOk
-    $mm.knownToU34A.value
+    $rn.affyU34A.qName dupeOk
+    $rn.knownToU34A.value
 
 identifier kimWormGeneId
 "Identifiers for Kim-lab worm genes"
@@ -358,6 +369,19 @@ identifier gnfMouseAtlas2MedianSampleId
      hgFixed.gnfMouseAtlas2Median.expScores comma indexOf full
      hgFixed.gnfMouseAtlas2MedianRatio.expScores comma indexOf full
      $mm.gnfAtlas2.expScores comma indexOf full
+
+identifier gnfRatAtlas2SampleId
+"Identifiers of RNA samples used in GNF Rat Expression Atlas 2"
+     hgFixed.gnfRatAtlas2AllExps.id
+     hgFixed.gnfRatAtlas2All.expScores comma indexOf full
+     hgFixed.gnfRatAtlas2AllRatio.expScores comma indexOf full
+
+identifier gnfRatAtlas2MedianSampleId
+"Identifiers of pooled RNA samples used in GNF Rat Expression Atlas 2"
+     hgFixed.gnfRatAtlas2MedianExps.id
+     hgFixed.gnfRatAtlas2Median.expScores comma indexOf full
+     hgFixed.gnfRatAtlas2MedianRatio.expScores comma indexOf full
+     $rn.gnfAtlas2.expScores comma indexOf full
 
 identifier gnfU95SampleIdV0
 "Identifiers of RNA samples used early version of GNF Human Expression Atlas 1"
@@ -1253,6 +1277,7 @@ type exprBed
     $mm.affyGnfU74B
     $mm.affyGnfU74C
     $hg.nci60
+    $rn.gnfAtlas2
     # hgFixed.rosChr22Dat
 
 type expDistance
