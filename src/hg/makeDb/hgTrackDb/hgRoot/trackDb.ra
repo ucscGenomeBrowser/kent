@@ -406,6 +406,14 @@ visibility hide
 color 200,0,50
 type bed 12
 
+track genieBounds
+shortLabel Affy Clone Bounds 
+longLabel Affymetrix/Genie Clone Boundaries from EST Mate Pairs
+priority 18.2
+visibility hide
+color 178,34,34
+type bed 9
+
 track transfacHit
 shortLabel Transfac Hits 
 longLabel Transfac Transcription Factor Binding Sites Near Transcription Start
