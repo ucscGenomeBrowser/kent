@@ -1,18 +1,20 @@
 GBROOT = ../..
 include ${GBROOT}/common.mk
 
-O = ccdsAccessions.o
+PROGS = ${BINARCH}/ccdsImport \
+	${BINARCH}/ccdsMkTables
 
-PROGS = ${BINARCH}/ccdsImport
+O = ccdsLocationsJoin.o
 
 all: ${PROGS}
 
-test:
-	(cd tests && ${MAKE} test)
-
 clean:
-	rm -f ${O} ${PROGS} $O ccdsImport.o
+	rm -f ${O} ${PROGS} ccdsImport.o
 
-${BINARCH}/ccdsImport:  ccdsImport.o ${O} ${LIBGENBANK}
+${BINARCH}/ccdsImport:  ccdsImport.o ${LIBGENBANK}
 	@${MKDIR} ${BINARCH}
-	${CC} ${COPT} ${CFLAGS} ${CFLAGS} ${LDFLAGS} -o ${BINARCH}/ccdsImport ccdsImport.o ${O} $(LIBS)
+	${CC} ${COPT} ${CFLAGS} ${CFLAGS} ${LDFLAGS} -o ${BINARCH}/ccdsImport ccdsImport.o $(LIBS)
+
+${BINARCH}/ccdsMkTables:  ccdsMkTables.o ${O} ${LIBGENBANK}
+	@${MKDIR} ${BINARCH}
+	${CC} ${COPT} ${CFLAGS} ${CFLAGS} ${LDFLAGS} -o ${BINARCH}/ccdsMkTables ccdsMkTables.o ${O} $(LIBS)
