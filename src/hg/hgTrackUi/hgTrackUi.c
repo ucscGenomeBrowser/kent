@@ -23,7 +23,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.155 2004/12/01 01:33:52 daryl Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.156 2004/12/01 06:11:30 daryl Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -102,8 +102,8 @@ void snpFilterButtons(char *filterTypeVar, char *filterTypeVal)
 /* Put up some filter buttons. */
 {
 printf("&nbsp;&nbsp;&nbsp;&nbsp;");
-radioButton(filterTypeVar, filterTypeVal, "&nbsp;");
-printf("&nbsp;&nbsp;&nbsp;&nbsp;<B>|</B>&nbsp;&nbsp;");
+cgiMakeRadioButton(filterTypeVar, "exclude", sameString("exclude", filterTypeVal));
+printf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>|</B>&nbsp;&nbsp;");
 radioButton(filterTypeVar, filterTypeVal, "red");
 radioButton(filterTypeVar, filterTypeVal, "green");
 radioButton(filterTypeVar, filterTypeVal, "blue");
