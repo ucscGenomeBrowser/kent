@@ -297,8 +297,6 @@ shortLabel Nonhuman mRNA
 longLabel Non-Human mRNAs from Genbank
 priority 23
 visibility dense
-color 0,60,120
-altColor 200,220,255
 spectrum on
 type psl xeno
 
@@ -307,8 +305,6 @@ shortLabel Other Best mRNAs
 longLabel Non-Human mRNAs from Genbank Best in Genome Alignments
 priority 23.1
 visibility hide
-color 0,60,120
-altColor 200,220,255
 spectrum on
 type psl xeno
 private on
@@ -318,8 +314,6 @@ shortLabel Nonhuman EST
 longLabel Non-Human ESTs from Genbank Near Best in Genome Alignments
 priority 23.2
 visibility hide
-color 0,60,120
-altColor 200,220,255
 spectrum on
 type psl xeno
 url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
