@@ -377,7 +377,7 @@ altColor 230,170,40
 type bed 12 .
 
 track pjt_genscan
-shortLabel Genscan Annotations
+shortLabel Genscan 
 longLabel Genscan Annotations
 priority 550
 visibility hide
