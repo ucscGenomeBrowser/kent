@@ -8,15 +8,16 @@
 #include "hgColors.h"
 #include "obscure.h"
 #include "histogram.h"
+#include "customTrack.h"
 
 void genericWiggleClick(struct sqlConnection *conn, struct trackDb *tdb, 
 	char *item, int start)
-/* Display details for MAF tracks. */
+/* Display details for Wiggle data tracks.   conn is NULL for custom tracks */
 {
 char *chrom = cartString(cart, "c");
 char table[64];
 boolean hasBin;
-int span = 0;
+unsigned span = 0;
 struct wiggleDataStream *wDS = newWigDataStream();
 unsigned long long valuesMatched = 0;
 struct histoResult *histoGramResult;
@@ -24,11 +25,31 @@ float *valuesArray = NULL;
 float *fptr = NULL;
 size_t valueCount = 0;
 struct wigAsciiData *asciiData = NULL;
-char num1Buf[64], num2Buf[64]; /* big enough for 2^64 (and then some) */
+struct customTrack *ct;
+boolean isCustom = FALSE;
 
-hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
-
-span = spanInUse(conn, table, chrom, winStart, winEnd, cart);
+if (startsWith("ct_", tdb->tableName))
+    {
+    ct = lookupCt(tdb->tableName);
+    if (!ct)
+        {
+        warn("<P>wiggleClick: can not find custom wiggle track '%s'</P>", tdb->tableName);
+        return;
+        }
+    if (! ct->wiggle)
+        {
+        warn("<P>wiggleClick: called to do stats on a custom track that isn't wiggle data ?</P>");
+        return;
+        }
+    safef(table,ArraySize(table), "%s", ct->wigFile);
+    isCustom = TRUE;
+    span = 0;	/*	cause all spans to be examined	*/
+    }
+else
+    {
+    hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+    span = spanInUse(conn, table, chrom, winStart, winEnd, cart);
+    }
 
 /*	if for some reason we don't have a chrom and win positions, this
  *	should be run in a loop that does one chrom at a time.  In the
@@ -47,27 +68,7 @@ wDS->setPositionConstraint(wDS, winStart, winEnd);
 valuesMatched = wDS->getData(wDS, database, table,
 			wigFetchStats | wigFetchAscii );
 
-sprintLongWithCommas(num1Buf, winStart + 1);
-sprintLongWithCommas(num2Buf, winEnd);
-
-printf ("<P><B> Position: </B> %s:%s-%s</P>\n", chrom, num1Buf, num2Buf );
-sprintLongWithCommas(num1Buf, winEnd - winStart);
-printf ("<P><B> Total Bases in view: </B> %s </P>\n", num1Buf);
-if (valuesMatched == 0)
-    {
-    if ( span < (3 * (winEnd - winStart)))
-	{
-	puts ("<P><B> Viewpoint has too few bases to calculate statistics </B></P>\n");
-	printf ("<P><B> Zoom out to at least %d bases to see statistics. </B></P>\n", 3 * span);
-	}
-    else
-	puts ("<P><B> No data found in this region. </B></P>\n");
-    }
-else
-    {
-sprintLongWithCommas(num1Buf, wDS->stats->count * wDS->stats->span);
-printf ("<P><B> Statistics on: </B> %s <B> bases </B> (%% %.4f coverage)</P>\n",
-    num1Buf, 100.0*(wDS->stats->count * wDS->stats->span)/(winEnd - winStart));
+statsPreamble(wDS, chrom, winStart, winEnd, span, valuesMatched);
 
 /* For some reason BORDER=1 does not work in our web.c nested table
  * scheme.
@@ -188,6 +189,5 @@ puts ("</TD></TR></TABLE></P>\n");
 
 freeHistoGram(&histoGramResult);
 freeMem(valuesArray);
-    }
 destroyWigDataStream(&wDS);
 }
