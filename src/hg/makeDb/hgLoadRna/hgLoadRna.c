@@ -49,7 +49,7 @@ char extFileTable[] =
   "path varchar(255) not null,"   /* Full path. Ends in '/' if a dir. */
   "size int unsigned not null,"            /* Size of file (checked) */
                    /* Extra indices. */
-  "unique (name))";
+  "index (name))";
 
 char seqTable[] =
 /* This keeps track of a sequence. */
@@ -332,7 +332,8 @@ errAbort(
   "usage:\n"
   "   hgLoadRna new database\n"
   "This creates freshly the RNA part of the database\n"
-  "   hgLoadRna add database /full/path/mrna.fa mrna.ra\n"
+  "   hgLoadRna add [-type=type] database /full/path/mrna.fa mrna.ra\n"
+  "      type can be mRNA or EST or whatever goes into extFile.name\n"
   "This adds mrna info to the database\n"
   "   hgLoadRna drop database\n"
   "This drops the tables created by hgLoadRna from database.\n"
@@ -521,14 +522,19 @@ void hgLoadRna(char *database, char *faPath, char *raFile)
 {
 char *type, *symName;
 hgSetDb(database);
-if (strstr(raFile, "xenoRna.ra"))
-    type = "xenoRna";
-else if (strstr(raFile, "xenoEst"))
-    type = raFile;
-else if (strstr(raFile, "est.ra"))
-    type = "EST";
-else
-    type = "mRNA";
+
+type = cgiOptionalString("type");
+if (type == NULL)
+    {
+    if (strstr(raFile, "xenoRna.ra"))
+	type = "xenoRna";
+    else if (strstr(raFile, "xenoEst"))
+	type = raFile;
+    else if (strstr(raFile, "est.ra"))
+	type = "EST";
+    else
+	type = "mRNA";
+    }
 addRna(faPath, type, raFile, type);
 }
 
