@@ -1606,7 +1606,7 @@ o - Rescuing STS track:
      - mv chrom.psl ../convert.psl
 
 
-LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 8/05/02)
+LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 8/18/02)
 
     - loading both blastz alignments and reference (single coverage) alignments
     - in xAli format, which includes sequence
@@ -1615,38 +1615,32 @@ LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 8/05/02)
     - create psl files for each per-contig lav file
 
        ssh kkstore
-       cd /cluster/store1/gs.13/build30/blastz.mm2.2002-08-01
-       set sc=""
+       set base="/cluster/store1/gs.13/build30/blastz.mm2.2002-08-15-ASH"
+       cd $base
        set tbl="blastzMm2"
-       foreach chrdir (/cluster/store1/gs.13/build30/blastz.mm2.2002-08-01/lav/chr*)
+       foreach chrdir ($base/lav/chr*)
          set chr=$chrdir:t
-         set outdir=lav-psl${sc}/$chr
+         set outdir=lav-psl/$chr
          mkdir -p $outdir
-         foreach lav ($chrdir/*.lav${sc})
+         foreach lav ($chrdir/*.lav)
            lavToPsl -target-strand=+ $lav $outdir/$lav:t:r.psl
          end
        end
 
     - Substitute scratch/... path with chrom name:
-       foreach f (lav-psl${sc}/*/*.psl)
-         perl -wpi -e 's@scratch/hg/gs.13/build30/chromMixedNib.0729/(chr.+)\.nib:\d+-\d+@$1@' $f
+       foreach f (lav-psl/*/*.psl)
+         perl -wpi -e 's@/?scratch/hg/gs.13/build30/chromMixedNib.0729/(chr.+)\.nib:\d+-\d+@$1@; s@/?scratch/hg/mm2/mixedNib.0730/(chr.+)\.nib:\d+-\d+@$1@' $f
        end
 
     - Convert to per-chromsome files, sort, and add sequence
-       mkdir -p lav-xa${sc}
-       foreach chrdir (lav-psl${sc}/*)
+    - kkstore's /tmp might not have enough space; try kk, kkr1u00 etc.
+       mkdir -p lav-xa
+       foreach chrdir (lav-psl/*)
          set chr=$chrdir:t
-         pslCat -check -nohead -ext=.psl -dir lav-psl${sc}/$chr \
-          | liftUp -type=.psl -pslQ -nohead stdout \
-            /cluster/store2/mm.2002.02/mm2/jkStuff/liftAll.lft warn stdin \
+         pslCat -check -nohead -ext=.psl -dir lav-psl/$chr \
           | sort -k 15n -k 16n \
-          | pslToXa stdin lav-xa${sc}/${chr}_${tbl}.xa /cluster/store2/mm.2002.02/mm2/nib /cluster/store1/gs.13/build30/nib
+          > lav-xa/${chr}_${tbl}.psl
        end
-
-    - repeat those loops, this time doing the single-coverage alignment:
-        set sc=".sc"
-        set tbl="blastzMm2Sc"
-        <above loops>
 
     - Until hgc is fixed to connect to mm2 for mm2 chrom info, create 
       the hg12.mouseChrom table:
@@ -1657,12 +1651,10 @@ LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 8/05/02)
 
     - Load tables
         ssh hgwdev
-        cd /cluster/store1/gs.13/build30/blastz.mm2.2002-08-01/lav-xa
-        hgLoadPsl -xa hg12 *.xa
-        cd /cluster/store1/gs.13/build30/blastz.mm2.2002-08-01/lav-xa.sc
-        hgLoadPsl -xa hg12 *.xa
+        cd $base/lav-xa
+        hgLoadPsl hg12 *.psl
 
-MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM2 AXT FILES (DONE 8/8/02)
+MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM2 AXT FILES (DONE 8/18/02)
     - When Scott Schwartz is done generating .axt's for the blastz mm2 
       alignments (takes longer than the .lav used for blastxMm2 above):
 
@@ -1677,30 +1669,31 @@ MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM2 AXT FILES (DONE 8/8/02)
 
     - Consolidate AXT files to chrom level, sort, pick best, make psl.
     ssh kkstore
-    cd ~/oo/blastz.mm2.2002-08-01
+    set base="/cluster/store1/gs.13/build30/blastz.mm2.2002-08-15-ASH"
+    cd $base
     mkdir -p axtChrom axtBest pslBest
     foreach chrdir (lav/chr*)
       set chr=$chrdir:t
-      gunzip -c $chrdir/*.axt.gz > axtChrom/$chr.raw.axt
-      liftUp -type=.axt -axtQ axtChrom/$chr.lifted.axt \
-        /cluster/store2/mm.2002.02/mm2/jkStuff/liftAll.lft warn \
-        axtChrom/$chr.raw.axt
-      axtSort axtChrom/$chr.lifted.axt axtChrom/$chr.sorted.axt
-      axtBest axtChrom/$chr.sorted.axt $chr axtBest/$chr.axt
+      gunzip -c $chrdir/*.axt.gz | \
+        liftUp -type=.axt -axtQ axtChrom/$chr.lifted.axt \
+        /cluster/store2/mm.2002.02/mm2/jkStuff/liftAll.lft warn stdin
+      axtBest axtChrom/$chr.lifted.axt $chr axtBest/$chr.axt
       axtToPsl axtBest/$chr.axt tSizes qSizes pslBest/${chr}_blastzBestMouse.psl
       echo Done with $chr.
     end
-    rm axtChrom/*.{raw,lifted}.axt
+TODO    - If a chromosome's axts are too large for gunzip to unpack into 1 file,
+      individually lift, cat, sort...?
 
     - Load tables
      ssh hgwdev
-     cd ~/oo/blastz.mm2.2002-08-01/pslBest
+     set base="/cluster/store1/gs.13/build30/blastz.mm2.2002-08-15-ASH"
+     cd $base/pslBest
      hgLoadPsl hg12 *.psl
      rm -f ~/kent/src/hg/lib/axtInfoFillHg12.sql
      touch ~/kent/src/hg/lib/axtInfoFillHg12.sql
-     foreach f (/cluster/store3/gs.13/build30/blastz.mm2.2002-08-01/axtBest/chr*.axt)
+     foreach f ($base/axtBest/chr*.axt)
        set chr=$f:t:r
-       echo 'insert into axtInfo values ("Mouse Feb 2002","Blastz Best in Genome","'$chr'","'$f'");' \
+       echo 'insert into axtInfo values ("mm2","Blastz Best in Genome","'$chr'","'$f'");' \
          >> ~/kent/src/hg/lib/axtInfoFillHg12.sql
      end
      hgsql hg12 < ~/kent/src/hg/lib/axtInfo.sql
@@ -1711,9 +1704,9 @@ MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM2 AXT FILES (DONE 8/8/02)
 ALIGNED ANCIENT REPEATS FROM MOUSE BLASTZ (TODO)
 
    - Load aligned ancient repeats, from
-       /cluster/store1/gs.13/build30/blastz.mm2.2002-08-01/aar
+       $base/aar
      Ryan create:
-       /cluster/store1/gs.13/build30/blastz.mm2.2002-08-01/aar/xali
+       $base/aar/xali
      - Loaded into aarMm2
 
 
