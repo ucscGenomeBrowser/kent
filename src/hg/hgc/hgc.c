@@ -1771,7 +1771,6 @@ enum gfType tt, qt;
 boolean isProt;
 
 /* Print start of HTML. */
-puts("Content-Type:text/html\n");
 printf("<HEAD>\n<TITLE>User Sequence vs Genomic</TITLE>\n</HEAD>\n\n");
 puts("<HTML>");
 
