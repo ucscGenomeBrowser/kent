@@ -3,8 +3,9 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "psl.h"
 
-static char const rcsid[] = "$Id: pslUniq.c,v 1.1 2003/10/30 13:32:47 braney Exp $";
+static char const rcsid[] = "$Id: pslUniq.c,v 1.2 2003/11/05 05:03:50 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -14,10 +15,8 @@ errAbort("usage: pslUniq in.psl out.psl\n");
 
 void pslUniq( char *pslName, char *outName)
 {
-struct dnaSeq *seq, *seqList = NULL;
 int size;
 char *name;
-DNA *dna;
 struct psl *psl;
 struct hash *pslHash = newHash(0);
 char *start;

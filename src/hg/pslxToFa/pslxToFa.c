@@ -9,11 +9,11 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "pslxToFa - convert pslx to fasta file\n"
+  "pslxToFa - convert pslx (with sequence) to fasta file\n"
   "usage:\n"
-  "   pslxToFa XXX\n"
+  "   pslxToFa in.psl out.fa\n"
   "options:\n"
-  "   -liftOut=liftFile.lft\n"
+  "   -liftFile=liftOut.lft\n"
   );
 }
 

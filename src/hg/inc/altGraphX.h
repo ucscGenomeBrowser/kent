@@ -70,8 +70,13 @@ struct altGraphX
     unsigned edgeCount;	/* Number of edges in graph. */
     int *edgeStarts;	/* Array with start vertex of edges. */
     int *edgeEnds;	/* Array with end vertex of edges. */
-    struct evidence *evidence;	/* array of evidence tables containing references to mRNAs that support a particular edge. */
-    int *edgeTypes;	/* Type for each edge, ggExon, ggIntron, etc. */
+    struct evidence *evidence;	/* array of evidence tables containing
+				 * references to mRNAs that support a
+				 * particular edge. */
+    int *edgeTypes;	/* Type for each edge, ggExon, ggIntron,
+			 etc. Watch out, sometimes other things are put
+			 in here. for example: conservation,
+			 transcript specific, etc. */
     int mrnaRefCount;	/* Number of supporting mRNAs. */
     char **mrnaRefs;	/* Ids of mrnas supporting this. */
     int *mrnaTissues;	/* Ids of tissues that mrnas come from, indexes into tissue table */
@@ -142,11 +147,16 @@ struct spliceEdge
     int type;                   /* Type of edge: ggExon, ggIntron, ggSJ, ggCassette. */
     int start;                  /* Chrom start. */
     int end;                    /* End. */
+    int mid;                    /* Midpoint for splice junctions. */
     int v1;                     /* Vertex 1 in graph. */
     int v2;                     /* Vertex 2 in graph. */
     int itemNumber;             /* Number of altGraphX record derived from in list. */
     int row;                    /* Row that exon is stored in. */
     double conf;                /* Confidence. */
+    int rowCount;
+    int *rowStarts;
+    int *rowEnds; 
+    void *data;                 /* Associated Data. */
 };
 
 int spliceEdgeTypeConfCmp(const void *va, const void *vb);
@@ -180,8 +190,6 @@ bool **altGraphXCreateEdgeMatrix(struct altGraphX *ag);
 void altGraphXFreeEdgeMatrix(bool ***pEm, int vertCount);
 /* Free an edge matrix. */
 
-
-
 float altGraphCassetteConfForEdge(struct altGraphX *ag, int eIx, float prior);
 /* Return the score for this cassette exon. Want to have cassette exons
    that are present in multiple transcripts and that are not present in multiple
@@ -200,19 +208,23 @@ int altGraphConfidenceForEdge(struct altGraphX *ag, int eIx);
 struct bed *altGraphXToBed(struct altGraphX *ag);
 /* Merge all overlapping exons to form bed datatype. Free with bedFree().*/
 
-void altGraphXLayout(struct altGraphX *agList, int regionStart, int regionEnd, 
-		     int regionWidth, double scale, int maxRows,
-		     struct spaceSaver **ssList, struct hash **heightHash, 
-		     int *rowCount);
-/** Layout a list of altGraphX's in a space width wide. Return a list
-    of one spaceSaver per altGraphX record, a hash with the row layout
-    offset of the exons, and the number of rows required to layout. */
+void altGraphXLayoutEdges(struct spliceEdge *egList, struct altGraphX *ag, int seqStart, int seqEnd,
+			  int xOff, double scale, int maxRows, int agIx,
+			  struct spaceSaver **ssList, struct hash **heightHash, int *rowCount);
+/* Layout a list of edges to minimize overlap.  */
+
+void altGraphXLayout(struct altGraphX *agList, int seqStart, int seqEnd, 
+		     double scale, int maxRows, struct spaceSaver **ssList, 
+		     struct hash **heightHash, int *rowCount);
+/** Layout a list of altGraphX's in a space (seqEnd-seqStart) * scale
+    wide. Return a list of one spaceSaver per altGraphX record, a hash
+    with the row layout offset of the exons, and the number of rows
+    required to layout. */
 
 void altGraphXDrawPack(struct altGraphX *agList, struct spaceSaver *ssList, 
-		       int xOff, int yOff, int width,  int heightPer, int lineHeight,
-		       int regionStart, int regionEnd,
-		       double scale, int baseWidth, 
-		       struct vGfx *vg, MgFont *font, Color color, Color *shades, char *drawName,
+		       struct vGfx *vg, int xOff, int yOff, int width, 
+		       int heightPer, int lineHeight, int seqStart, int seqEnd, double scale, 
+		       MgFont *font, Color color, Color *shades, char *drawName,
 		       void (*mapItem)(char *tableName, struct altGraphX *ag, int start, int end,
 				       int x, int y, int width, int height));
 /** Draw a splicing graph for each altGraphX in the agList where the

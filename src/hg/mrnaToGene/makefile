@@ -1,5 +1,4 @@
 include ../../inc/common.mk
-COPT=-ggdb
 
 L = $(MYSQLLIBS) -lm 
 MYLIBDIR = ../../lib/$(MACHTYPE)

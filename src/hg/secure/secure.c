@@ -9,10 +9,12 @@
 #include "hdb.h"
 #include "dbDb.h"
 #include "web.h"
+#include "hui.h"
 #include "hgFind.h"
+#include "hui.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: secure.c,v 1.4 2003/06/23 00:13:55 markd Exp $";
+static char const rcsid[] = "$Id: secure.c,v 1.6 2003/11/03 16:25:17 angie Exp $";
 
 
 /* GLOBAL DECLARATIONS */

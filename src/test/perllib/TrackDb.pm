@@ -66,5 +66,23 @@ sub getTrackNames {
 } # end getTrackNames
 
 
+#
+# getTrackNamesTypes
+# Mandatory argument: <none>
+#
+sub getTrackNamesTypes {
+    my $this = shift;
+    confess "Too many arguments" if (defined shift);
+    my $results = 
+	$this->{'dbh'}->selectall_arrayref("SELECT tableName,type from trackDb;");
+    my %namesTypes = ();
+    foreach my $row (@{$results}) {
+      my ($name,$type) = @{$row};
+      $namesTypes{$name} = $type;
+    }
+    return %namesTypes;
+} # end getTrackNames
+
+
 # perl packages need to end by returning a positive value:
 1;

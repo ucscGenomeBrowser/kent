@@ -40,6 +40,7 @@ int rowCount = 0;
 double scale = (double)insideWidth/(winEnd - winStart);
 spaceSaverFree(&tg->ss);
 for(ag = tg->items; ag != NULL; ag = ag->next)
+
     {
     maxDiff = max(maxDiff, (ag->tEnd-ag->tStart));
     minStart = min(minStart, ag->tStart);
@@ -54,7 +55,7 @@ if(maxDiff*scale < .3*insideWidth)
    even if they aren't visable still want to have links to them. */
 extendedWidth = (maxEnd - minStart) * scale;
 winStartOffset = max(0,winStart - minStart);
-altGraphXLayout(tg->items, minStart, extendedWidth, extendedWidth, scale, maxRows,
+altGraphXLayout(tg->items, winStart, winEnd, scale, maxRows,
 		&ssList, &heightHash, &rowCount);
 tg->ss = ssList;
 tg->customPt = heightHash;
@@ -96,8 +97,8 @@ int maxLevels = 0;
 if(vis == tvFull) 
     {
     vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
-    altGraphXDrawPack(tg->items, tg->ss, xOff, yOff, width, heightPer, lineHeight,
-		      winStart, winEnd, scale, baseWidth, vg, font, color, shadesOfGray,
+    altGraphXDrawPack(tg->items, tg->ss, vg, xOff, yOff, width, heightPer, lineHeight,
+		      winStart, winEnd, scale, font, color, shadesOfGray,
 		      tg->mapName, altGraphXMap);
     vgUnclip(vg);
     }
@@ -351,8 +352,7 @@ else if(tg->limitedVis == tvFull)
     char key[128];
     struct spliceEdge *se = NULL;
     safef(key, sizeof(key), "%d", slIxFromElement(tg->items, item));
-    se = hashMustFindVal((struct hash*)tg->customPt, key);
-    return ((se->row+1) * tg->lineHeight);
+    return (hashIntVal((struct hash*)tg->customPt, key)) * tg->lineHeight;
     }
 else
     return tg->heightPer;

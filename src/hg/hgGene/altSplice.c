@@ -92,16 +92,16 @@ int maxShade = ArraySize(shadesOfGray)-1;
 
 scale = (double)pixWidth/(ag->tEnd - ag->tStart);
 lineHeight = 2 * fontHeight +1;
-altGraphXLayout(ag, ag->tStart, pixWidth, pixWidth, scale, 100, &ssList, &heightHash, &rowCount);
+altGraphXLayout(ag, ag->tStart, ag->tEnd, scale, 100, &ssList, &heightHash, &rowCount);
 hashFree(&heightHash);
 pixHeight = rowCount * lineHeight;
 makeTempName(&gifTn, "hgc", ".gif");
 vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi);
 makeGrayShades(vg, maxShade, shadesOfGray);
 vgSetClip(vg, 0, 0, pixWidth, pixHeight);
-altGraphXDrawPack(ag, ssList, 0, 0, pixWidth, lineHeight, lineHeight-1,
-		  ag->tStart, ag->tEnd, scale, ag->tEnd-ag->tStart, 
-		  vg, font, MG_BLACK, shadesOfGray, "Dummy", NULL);
+altGraphXDrawPack(ag, ssList, vg, 0, 0, pixWidth, lineHeight, lineHeight-1,
+		  ag->tStart, ag->tEnd, scale, 
+		  font, MG_BLACK, shadesOfGray, "Dummy", NULL);
 vgUnclip(vg);
 vgClose(&vg);
 printf(

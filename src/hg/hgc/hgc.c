@@ -116,7 +116,7 @@
 #include "encodeRegionInfo.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.507 2003/10/29 19:03:59 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.513 2003/11/05 21:22:17 sugnet Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2398,7 +2398,7 @@ puts("<H3>Further Details and Ideas</H3>");
 puts("<P>Copying and pasting the web page output to a text editor such as Word "
      "will retain upper case but lose colors and other formatting. That's still "
      "useful because other web tools such as "
-     "<A HREF=\"http://www.ncbi.nlm.nih.gov/blast/index.nojs.cgi\">NCBI Blast</A> "
+     "<A HREF=\"http://www.ncbi.nlm.nih.gov/blast/index.nojs.cgi\" TARGET=_BLANK>NCBI Blast</A> "
      "can be set to ignore lower case.  To fully capture formatting such as color "
      "and underlining, view the output as \"source\" in your web browser, or download "
      "it, or copy the output page into an html editor.</P>");
@@ -6239,7 +6239,8 @@ if (hasMedical)
 			printf("<B>Mouse Genome Informatics:</B> ");
 			mgiID = strdup(row[0]);
 			printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?");
-			printf("id=%s\">%s</A><BR>\n",mgiID, mgiID);
+			printf("id=%s\" TARGET=_BLANK>%s</A><BR>\n",
+			       mgiID, mgiID);
 			}
 		    else
 			{
@@ -6571,7 +6572,7 @@ if (rl->locusLinkId != 0)
 	    printf("<B>Mouse Genome Informatics:</B> ");
 	    mgiID = strdup(row[0]);
 		
-	    printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?id=%s\">%s</A><BR>\n",mgiID, mgiID);
+	    printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?id=%s\" TARGET=_BLANK>%s</A><BR>\n",mgiID, mgiID);
 	    }
 	else
 	    {
@@ -6945,20 +6946,23 @@ printf("<B>%s PseudoGene:</B> %s:%d-%d   %d bp<BR>\n", hOrganism(database),  bed
 printf("Strand: %c",bed->strand[0]);
 printf("<p>");
 }
-void pseudoPrintPos(char *chrom, int chromStart, int chromEnd, struct pseudoGeneLink *pg)
+void pseudoPrintPos(char *chrom, int chromStart, int chromEnd, struct pseudoGeneLink *pg, char *alignTable)
 /*    print details of pseudogene record */ 
 {
 char *tbl = cgiUsualString("table", cgiString("g"));
 char chainStr[32];
 char query[256];
 char chainTable[64];
+char chainTable_chrom[64];
 struct sqlResult *sr;
 char **row;
-struct psl *pslList ;
+struct psl *pslList = NULL;
 struct sqlConnection *conn = hAllocConn();
 
 if (sameString(pg->assembly , database))
     safef(chainTable,sizeof(chainTable), "selfChain");
+    if (!hTableExists(chainTable) )
+        safef(chainTable,sizeof(chainTable), "chainSelf");
 else
     {
     char *org = hOrganism(pg->assembly);
@@ -6973,53 +6977,61 @@ linkToOtherBrowser(pg->assembly, pg->chrom, pg->gStart, pg->gEnd);
 printf("%s:%d-%d \n", pg->chrom, pg->gStart, pg->gEnd);
 printf("</A>");
 
-pslList = loadPslRangeT("mrnaBlastz", pg->name, pg->chrom, pg->gStart, pg->gEnd);
-if (pslList != NULL)
-    printAlignments(pslList, chromStart, "htcCdnaAli", "mrnaBlastz", pg->name);
-htmlHorizontalLine();
-/* lookup chain if not stored */
-if (pg->chainId == 0 && pg->strand != NULL)
+
+if (hTableExists(alignTable))
     {
-    if (sameString(pg->strand,pg->pStrand))
-        safef(query,sizeof(query),
-            "select id, score from %s_%s where tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d order by score desc",
-            chrom, chainTable,chromStart,chromEnd, pg->chrom, pg->gStart, pg->gEnd);
+    pslList = loadPslRangeT(alignTable, pg->name, pg->chrom, pg->gStart, pg->gEnd);
+    if (pslList != NULL)
+        printAlignments(pslList, chromStart, "htcCdnaAli", alignTable, pg->name);
+    }
+htmlHorizontalLine();
+safef(chainTable_chrom,sizeof(chainTable_chrom), "%s_chainSelf",chrom);
+if (hTableExists(chainTable_chrom) )
+    {
+    /* lookup chain if not stored */
+    if (pg->chainId == 0 && pg->strand != NULL)
+        {
+        if (sameString(pg->strand,pg->pStrand))
+            safef(query,sizeof(query),
+                "select id, score from %s_%s where tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d order by score desc",
+                chrom, chainTable,chromStart,chromEnd, pg->chrom, pg->gStart, pg->gEnd);
+        else
+            {
+            safef(query,sizeof(query),
+                "select id, score from %s_%s where tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d order by score desc",
+                chrom, chainTable,chromStart,chromEnd, pg->chrom, hChromSize(pg->chrom)-(pg->gEnd), hChromSize(pg->chrom)-(pg->gStart));
+            }
+        sr = sqlGetResult(conn, query);
+        while ((row = sqlNextRow(sr)) != NULL)
+            {
+            int chainId, score;
+            chainId = sqlUnsigned(row[0]);
+            score = sqlUnsigned(row[1]);
+            if (pg->chainId == 0) pg->chainId = chainId;
+            puts("<LI>\n");
+            printf("<B>Chain:</B> %d  \n",chainId);
+            hgcAnchorTranslatedChain(chainId, chainTable, chrom, pg->gStart, pg->gEnd);
+            printf("View details of parts of chain within browser window</A>. score %d %s:%d-%d<BR>\n",score, pg->chrom,pg->gStart,pg->gEnd);
+            puts("</LI>\n");
+            }
+        sqlFreeResult(&sr);
+        }
     else
         {
-        safef(query,sizeof(query),
-            "select id, score from %s_%s where tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d order by score desc",
-            chrom, chainTable,chromStart,chromEnd, pg->chrom, hChromSize(pg->chrom)-(pg->gEnd), hChromSize(pg->chrom)-(pg->gStart));
-        }
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-        int chainId, score;
-        chainId = sqlUnsigned(row[0]);
-        score = sqlUnsigned(row[1]);
-        if (pg->chainId == 0) pg->chainId = chainId;
         puts("<LI>\n");
-        printf("<B>Chain:</B> %d  \n",chainId);
-        hgcAnchorTranslatedChain(chainId, chainTable, chrom, pg->gStart, pg->gEnd);
-        printf("View details of parts of chain within browser window</A>. score %d %s:%d-%d<BR>\n",score, pg->chrom,pg->gStart,pg->gEnd);
+        printf("<B>Chain:</B> %d  \n",pg->chainId);
+        hgcAnchorTranslatedChain(pg->chainId, chainTable, chrom, pg->gStart, pg->gEnd);
+        printf("View details of parts of chain within browser window</A>.<BR>\n");
         puts("</LI>\n");
         }
-    sqlFreeResult(&sr);
-    }
-else
-    {
-    puts("<LI>\n");
-    printf("<B>Chain:</B> %d  \n",pg->chainId);
-    hgcAnchorTranslatedChain(pg->chainId, chainTable, chrom, pg->gStart, pg->gEnd);
-    printf("View details of parts of chain within browser window</A>.<BR>\n");
-    puts("</LI>\n");
-    }
-//printf("<p>");
-if (pg->chainId > 0)
-    {
-    puts("<LI>\n");
-    hgcAnchorPseudoGene(pg->gene, pg->geneTable, chrom, "startcodon", chromStart, chromEnd, pg->chrom, pg->gStart, pg->gEnd, pg->chainId, pg->assembly);
-    printf("Show %s %s aligned to pseudogene</A>  to see frameshifts and in frame stops <BR>\n",hOrganism(pg->assembly), pg->geneTable);
-    puts("</LI>\n");
+    //printf("<p>");
+    if (pg->chainId > 0)
+        {
+        puts("<LI>\n");
+        hgcAnchorPseudoGene(pg->gene, pg->geneTable, chrom, "startcodon", chromStart, chromEnd, pg->chrom, pg->gStart, pg->gEnd, pg->chainId, pg->assembly);
+        printf("Show %s %s aligned to pseudogene</A>  to see frameshifts and in frame stops <BR>\n",hOrganism(pg->assembly), pg->geneTable);
+        puts("</LI>\n");
+        }
     }
 puts("<LI>\n");
 linkToOtherBrowser(pg->assembly, pg->chrom, pg->gStart, pg->gEnd);
@@ -7036,7 +7048,7 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row;
 char *type;
-char *table = NULL;
+char table[256];
 boolean hasBin;
 struct pseudoGeneLink *pg;
 int start = cartInt(cart, "o");
@@ -7056,12 +7068,18 @@ genericHeader(tdb, acc);
 if (startsWith(track,"pseudoMrna"))
     {
     type = "mRNA";
-    table = "mrnaBlastz";
+    if (hTableExists("mrnaBlastz") )
+        safef(table, sizeof(table), "mrnaBlastz");
+    else
+        {
+        if (hTableExists("mrnaBlat") )
+            safef(table, sizeof(table), "mrnaBlat");
+        }
     }
 else 
     {
     type = "mRNA";
-    table = "all_mrna";
+    safef(table, sizeof(table), "all_mrna");
     }
 
 /* Print non-sequence info. */
@@ -7077,7 +7095,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     pg = pseudoGeneLinkLoad(row);
     if (hTableExists("axtInfo") && pslList != NULL)
         {
-        pseudoPrintPos(pslList->tName, pslList->tStart, pslList->tEnd, pg);
+        pseudoPrintPos(pslList->tName, pslList->tStart, pslList->tEnd, pg, table);
         }
     }
 //htmlHorizontalLine();
@@ -7120,7 +7138,7 @@ if (sqlTableExists(conn, tdb->tableName))
         pseudoGeneLinkStaticLoad(row, &pg);
         if (hTableExists("axtInfo") && bed != NULL)
             {
-            pseudoPrintPos(bed->chrom, bed->chromStart, bed->chromEnd, &pg);
+            pseudoPrintPos(bed->chrom, bed->chromStart, bed->chromEnd, &pg, "mrnaBlat");
             }
         }
     }
@@ -8105,11 +8123,17 @@ if (tChrom->size != net->size)
 
 /* load chain */
 if (sameString(database,db2))
+    {
     strcpy(track, "selfChain");
+    if (!hTableExists("chr1_selfChain"))
+        strcpy(track, "chainSelf");
+    }
 else
+    {
     sprintf(track, "%sChain",hOrganism(db2));
+    }
 track[0] = tolower(track[0]);
-if (chainId > 0)
+if (chainId > 0 )
     {
     chain = chainDbLoad(conn, database, track, chrom, chainId);
 
@@ -8194,8 +8218,8 @@ printf("<HEAD>\n<TITLE>%s %dk</TITLE>\n</HEAD>\n\n", name, psl->qStart/1000);
 showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, 0, 0);
 }
 
-void doBlatCompGeno(struct trackDb *tdb, char *itemName, char *otherGenome)
-    /* Handle click on blat track in a generic fashion */
+void doAlignCompGeno(struct trackDb *tdb, char *itemName, char *otherGenome)
+    /* Handle click on blat or blastz track in a generic fashion */
     /* otherGenome is the text to display for genome name on details page */
 {
 char *track = tdb->tableName;
@@ -8460,7 +8484,7 @@ if (row != NULL)
 	printf("<TR><TH ALIGN=left>UCSC STS id:</TH><TD>%d</TD></TR>\n", stsRow.identNo);
 	printf("<TR><TH ALIGN=left>UniSTS id:</TH><TD><A HREF=");
 	printUnistsUrl(stdout, infoRow->dbSTSid);
-	printf(">%d</A></TD></TR>\n", infoRow->dbSTSid);
+	printf(" TARGET=_BLANK>%d</A></TD></TR>\n", infoRow->dbSTSid);
 	if (infoRow->otherDbstsCount > 0) 
 	    {
 	    printf("<TR><TH ALIGN=left>Related UniSTS ids:</TH>");
@@ -8468,7 +8492,7 @@ if (row != NULL)
 		{
 		printf("<TD><A HREF=");
 		printUnistsUrl(stdout, infoRow->otherDbSTS[i]);
-		printf(">%d</A></TD>", infoRow->otherDbSTS[i]);
+		printf(" TARGET=_BLANK>%d</A></TD>", infoRow->otherDbSTS[i]);
 		}
 	    printf("</TR>\n");
 	    } 
@@ -8479,7 +8503,7 @@ if (row != NULL)
 		{
 		printf("<TD><A HREF=\"");
 		printEntrezNucleotideUrl(stdout, infoRow->genbank[i]);
-		printf("\">%s</A></TD>", infoRow->genbank[i]);
+		printf("\" TARGET=_BLANK>%s</A></TD>", infoRow->genbank[i]);
 		}
 	    printf("</TR>\n");
 	    } 
@@ -8490,7 +8514,7 @@ if (row != NULL)
 		{
 		printf("<TD><A HREF=");
 		printGdbUrl(stdout, infoRow->gdb[i]);
-		printf(">%s</A></TD>", infoRow->gdb[i]);
+		printf(" TARGET=_BLANK>%s</A></TD>", infoRow->gdb[i]);
 		}
 	    printf("</TR>\n");
 	    } 
@@ -8879,7 +8903,7 @@ int pslStart;
 /* Print out non-sequence info */
 
 sprintf(title, "STS Marker %s\n", marker);
-/* sprintf(title, "STS Marker <A HREF=\"http://www.informatics.jax.org/searches/marker_report.cgi?string\%%3AmousemarkerID=%s\">%s</A>\n", marker, marker); */
+/* sprintf(title, "STS Marker <A HREF=\"http://www.informatics.jax.org/searches/marker_report.cgi?string\%%3AmousemarkerID=%s\" TARGET=_BLANK>%s</A>\n", marker, marker); */
 cartWebStart(cart, title);
 
 /* Find the instance of the object in the bed table */ 
@@ -8910,11 +8934,11 @@ if (row != NULL)
 	printf("<TR><TH ALIGN=left>UCSC STS Marker ID:</TH><TD>%d</TD></TR>\n", infoRow->identNo);
 	if( infoRow->UiStsId != 0)
 	    {
-	    printf("<TR><TH ALIGN=left>UniSts Marker ID:</TH><TD><A HREF=\"http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=%d\">%d</A></TD></TR>\n", infoRow->UiStsId, infoRow->UiStsId);
+	    printf("<TR><TH ALIGN=left>UniSts Marker ID:</TH><TD><A HREF=\"http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=%d\" TARGET=_BLANK>%d</A></TD></TR>\n", infoRow->UiStsId, infoRow->UiStsId);
 	    }
 	if( infoRow->MGIId != 0)
 	    {
-	      printf("<TR><TH ALIGN=left>MGI Marker ID:</TH><TD><B><A HREF=\"http://www.informatics.jax.org/searches/marker_report.cgi?accID=MGI%c3A%d\">%d</A></TD></TR>\n",sChar,infoRow->MGIId,infoRow->MGIId ); 
+	      printf("<TR><TH ALIGN=left>MGI Marker ID:</TH><TD><B><A HREF=\"http://www.informatics.jax.org/searches/marker_report.cgi?accID=MGI%c3A%d\" TARGET=_BLANK>%d</A></TD></TR>\n",sChar,infoRow->MGIId,infoRow->MGIId ); 
 	    }
 	if( strcmp(infoRow->MGIName, "") )
 	    {
@@ -9105,11 +9129,11 @@ if (row != NULL)
 	printf("<TR><TH ALIGN=left>UCSC STS Marker ID:</TH><TD>%d</TD></TR>\n", infoRow->identNo);
 	if( infoRow->UiStsId != 0)
 	    {
-	    printf("<TR><TH ALIGN=left>UniSts Marker ID:</TH><TD><A HREF=\"http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=%d\">%d</A></TD></TR>\n", infoRow->UiStsId, infoRow->UiStsId);
+	    printf("<TR><TH ALIGN=left>UniSts Marker ID:</TH><TD><A HREF=\"http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=%d\" TARGET=_BLANK>%d</A></TD></TR>\n", infoRow->UiStsId, infoRow->UiStsId);
 	    }
 	if( infoRow->RGDId != 0)
 	    {
-	      printf("<TR><TH ALIGN=left>RGD Marker ID:</TH><TD><B><A HREF=\"http://rgd.mcw.edu/tools/query/query.cgi?id=%d\">%d</A></TD></TR>\n",infoRow->RGDId,infoRow->RGDId ); 
+	      printf("<TR><TH ALIGN=left>RGD Marker ID:</TH><TD><B><A HREF=\"http://rgd.mcw.edu/tools/query/query.cgi?id=%d\" TARGET=_BLANK>%d</A></TD></TR>\n",infoRow->RGDId,infoRow->RGDId ); 
 	    }
 	if( strcmp(infoRow->RGDName, "") )
 	    {
@@ -9277,7 +9301,7 @@ if (row != NULL)
     /* Print out general sequence positional information */
     printf("<H2><A HREF=");
     printCloneRegUrl(stdout, clone);
-    printf(">%s</A></H2>\n", clone);
+    printf(" TARGET=_BLANK>%s</A></H2>\n", clone);
     htmlHorizontalLine();
     printf("<TABLE>\n");
     printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
@@ -9310,7 +9334,7 @@ if (row != NULL)
 	    {
 	    printf("<TD><A HREF=\"");
 	    printEntrezNucleotideUrl(stdout, fc->accNames[i]);
-	    printf("\">%s</A></TD>", fc->accNames[i]);	  
+	    printf("\" TARGET=_BLANK>%s</A></TD>", fc->accNames[i]);	  
 	    }
 	printf("</TR>\n");
 	}
@@ -9330,7 +9354,7 @@ if (row != NULL)
 	    {
 	    printf("<TD><A HREF=\"");
 	    printEntrezNucleotideUrl(stdout, fc->beNames[i]);
-	    printf("\">%s</A></TD>", fc->beNames[i]);
+	    printf("\" TARGET=_BLANK>%s</A></TD>", fc->beNames[i]);
 	    }
 	printf("</TR>\n");
 	} 
@@ -9457,7 +9481,7 @@ if (row != NULL)
     /* Print out general sequence positional information */
     printf("<H2><A HREF=");
     printGenMapDbUrl(stdout, clone);
-    printf(">%s</A></H2>\n", clone);
+    printf(" TARGET=_BLANK>%s</A></H2>\n", clone);
     htmlHorizontalLine();
     printf("<TABLE>\n");
     printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
@@ -9489,7 +9513,7 @@ if (row != NULL)
 	printf("<TR><TH ALIGN=left>T7 end sequence:</TH>");
 	printf("<TD><A HREF=\"");
 	printEntrezNucleotideUrl(stdout, upc->accT7);
-	printf("\">%s</A></TD>", upc->accT7);
+	printf("\" TARGET=_BLANK>%s</A></TD>", upc->accT7);
 	printf("<TD>%s:</TD><TD ALIGN=right>%d</TD><TD ALIGN=LEFT> - %d</TD>", 
 	       seqName, upc->startT7, upc->endT7);
 	printf("</TR>\n");
@@ -9499,7 +9523,7 @@ if (row != NULL)
 	printf("<TR><TH ALIGN=left>SP6 end sequence:</TH>");
 	printf("<TD><A HREF=\"");
 	printEntrezNucleotideUrl(stdout, upc->accSP6);
-	printf("\">%s</A></TD>", upc->accSP6);
+	printf("\" TARGET=_BLANK>%s</A></TD>", upc->accSP6);
 	printf("<TD>%s:</TD><TD ALIGN=right>%d</TD><TD ALIGN=LEFT> - %d</TD>", 
 	       seqName, upc->startSP6, upc->endSP6);
 	printf("</TR>\n");
@@ -9509,7 +9533,7 @@ if (row != NULL)
 	printf("<TR><TH ALIGN=left>STS Marker:</TH>");
 	printf("<TD><A HREF=\"");
 	printEntrezUniSTSUrl(stdout, upc->stsMarker);
-	printf("\">%s</A></TD>", upc->stsMarker);
+	printf("\" TARGET=_BLANK>%s</A></TD>", upc->stsMarker);
 	printf("<TD>%s:</TD><TD ALIGN=right>%d</TD><TD ALIGN=LEFT> - %d</TD>", 
 	       seqName, upc->stsStart, upc->stsEnd);
 	printf("</TR>\n");
@@ -10178,7 +10202,7 @@ if (row != NULL)
 	{
 	printf("<H2><A HREF=");
 	printCloneRegUrl(stdout, clone);
-	printf(">%s</A></H2>\n", clone);
+	printf(" TARGET=_BLANK>%s</A></H2>\n", clone);
 	}
     else 
 	{
@@ -10234,7 +10258,7 @@ if (row != NULL)
 	    {
 	    printf("<H3><A HREF=");
 	    printEntrezNucleotideUrl(stdout, lfs->lfNames[i]);
-	    printf(">%s</A></H3>\n",lfs->lfNames[i]);
+	    printf(" TARGET=_BLANK>%s</A></H3>\n",lfs->lfNames[i]);
 	    }
 	else 
 	    {
@@ -10624,7 +10648,7 @@ printEntrezNucleotideUrl(stdout, acc);
 puts("');"); 
 printf("</SCRIPT> <NOSCRIPT> No JavaScript support. Click <B><A HREF=\"");
 printEntrezNucleotideUrl(stdout, acc);
-puts("\">continue</A></B> for the requested GenBank report. </NOSCRIPT>");}
+puts("\" TARGET=_BLANK>continue</A></B> for the requested GenBank report. </NOSCRIPT>");}
 
 void doProbeDetails(struct trackDb *tdb, char *item)
 {
@@ -11036,7 +11060,7 @@ for(i = 0; i < length; i++)
 	
 	/* if we have a url, create a reference */
 	if(differentString(url,""))
-	    printf("<a href=\"%s\">%c</a>", url, header[i]);
+	    printf("<a href=\"%s\" TARGET=_BLANK>%c</a>", url, header[i]);
 	else
 	    printf("%c", header[i]);
 
@@ -11160,8 +11184,10 @@ void printSageGraphUrl(struct sage *sgList)
 /* print out a url to a cgi script which will graph the results */
 {
 struct sage *sg = NULL;
+if (sgList == NULL)
+    return;
 printf("Please click ");
-printf("<a target=other href=\"../cgi-bin/sageVisCGI?");
+printf("<a target=_blank href=\"../cgi-bin/sageVisCGI?");
 for(sg = sgList; sg != NULL; sg = sg->next)
     {
     if(sg->next == NULL)
@@ -11178,28 +11204,6 @@ printf(" to see the data as a graph.\n");
 void printSageReference(struct sage *sgList, struct trackDb *tdb)
 {
 printf("%s", tdb->html);
-
-/* puts( */
-/*      "<table width=600 cellpadding=0 cellspacing=0><tr><td><p><b>Description: S</b>erial <b>A</b>nalysis of <b>G</b>ene <b>E</b>xpression (SAGE)" */
-/*      "is a quantative measurement gene expression. Data is presented for every cluster contained " */
-/*      "in the browser window and the selected cluster name is highlighted in red. All data is from " */
-/*      "the repository at the <a href=\"http://www.ncbi.nlm.nih.gov/SAGE/\"> SageMap </a>" */
-/*      "project downloaded Jul 26, 2002. Selecting the UniGene cluster name will display SageMap's page for that cluster."); */
-/* printSageGraphUrl(sgList); */
-/* puts( */
-/*      "<p><b>Brief Methodology:</b> SAGE counts are produced " */
-/*      "by sequencing small \"tags\" of DNA believed to be associated with a " */
-/*      "gene. These tags are produced by attatching poly-A RNA to oligo-dT " */
-/*      "beads. After synthesis of double stranded cDNA transcripts are " */
-/*      "cleaved by an anchoring enzyme (usually NIaIII). Then small tags are " */
-/*      "produced by ligation with a linker containing a type IIS restriction " */
-/*      "enzyme site and cleavage with the tagging enzyme (usually BsmFI). The " */
-/*      "tags are then concatenated together and sequenced. The frequency of each " */
-/*      "tag is counted and used to infer expression level of transcripts that can " */
-/*      "be matched to that tag. All SAGE data presented here was mapped to UniGene " */
-/*      "transcripts by the <a href=\"http://www.ncbi.nlm.nih.gov/SAGE/\"> SageMap </a>" */
-/*      "project at <a href=\"http://www.ncbi.nlm.nih.gov\"> NCBI </a>.</td></tr></table><br><br>" */
-/* ); */
 }
 
 void sagePrintTable(struct bed *bedList, char *itemName, struct trackDb *tdb) 
@@ -11652,16 +11656,16 @@ double scale = 0;
 
 scale = (double)pixWidth/(ag->tEnd - ag->tStart);
 lineHeight = 2 * fontHeight +1;
-altGraphXLayout(ag, ag->tStart, pixWidth, pixWidth, scale, 100, &ssList, &heightHash, &rowCount);
+altGraphXLayout(ag, ag->tStart, ag->tEnd, scale, 100, &ssList, &heightHash, &rowCount);
 pixHeight = rowCount * lineHeight;
 makeTempName(&gifTn, "hgc", ".gif");
 vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi);
 makeGrayShades(vg);
 vgSetClip(vg, 0, 0, pixWidth, pixHeight);
-altGraphXDrawPack(ag, ssList, 0, 0, pixWidth, lineHeight, lineHeight-1,
-		  ag->tStart, ag->tEnd, scale, ag->tEnd-ag->tStart, vg, font, MG_BLACK, shadesOfGray, "Dummy", NULL);
+altGraphXDrawPack(ag, ssList, vg, 0, 0, pixWidth, lineHeight, lineHeight-1,
+		  ag->tStart, ag->tEnd, scale, font, MG_BLACK, shadesOfGray, "Dummy", NULL);
 vgUnclip(vg);
-vgClose(&vg);
+vgClose(&vg); 
 printf(
        "<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d><BR>\n",
        gifTn.forHtml, pixWidth, pixHeight);
@@ -11793,7 +11797,7 @@ for(i=0; i<ag->edgeCount; i++)
     {
     struct evidence *e =  slElementFromIx(ag->evidence, i);
     printf("<tr><td>%d</td><td>%d</td>", 	   ag->edgeStarts[i], ag->edgeEnds[i]);
-    printf("<td><a href=%s?position=%s:%d-%d&mrna=full&intronEst=full&refGene=full&altGraphX=full\">%s</a></td><td>", 
+    printf("<td><a href=\"%s?position=%s:%d-%d&mrna=full&intronEst=full&refGene=full&altGraphX=full\">%s</a></td><td>", 
 	   hgTracksName(), 
 	   ag->tName, 
 	   ag->vPositions[ag->edgeStarts[i]], 
@@ -12233,8 +12237,9 @@ psl = pslLoad(row+hasBin);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 seq = hPepSeq(itemName);
-showSomeAlignment(psl, seq, gftProtChes, 0, seq->size, NULL, 0, 0);
-//showSomeAlignment(psl, seq, gftProt, psl->qStart, psl->qEnd, NULL, 0, 0);
+showSomeAlignment(psl, seq, gftProt, 0, seq->size, NULL, 0, 0);
+//showSomeAlignment(psl, seq, gftProtChes, 0, seq->size, NULL, 0, 0);
+//showSomeAlignment(psl, seq, gftProt, psl->qStart, psl->qEnd, psl->qName, 0, 0);
 }
 
 void doMiddle()
@@ -12474,6 +12479,14 @@ else if (sameWord(track, "chesChordataBlat"))
     {
     chesProtein(tdb, item);
     }
+else if ( sameWord(track, "blastHg15KG") )
+    {
+    chesProtein(tdb, item);
+    }
+else if ( sameWord(track, "blast22Br") )
+    {
+    chesProtein(tdb, item);
+    }
 else if ( sameWord(track, "chesMammalBlat") )
     {
     chesProtein(tdb, item);
@@ -12489,30 +12502,34 @@ else if (sameWord(track, "hg15PepPsl") )
     }
 else if (sameWord(track, "hg15repeats") )
     {
-    doBlatCompGeno(tdb, item, "Human");
+    doAlignCompGeno(tdb, item, "Human");
     }
-/* generic handling of blat tracks */ 
-else if (startsWith("blat", track))
+/* This is a catch-all for blastz/blat tracks -- any special cases must be 
+ * above this point! */
+else if (startsWith("blastz", track) || startsWith("blat", track) || endsWith(track, "Blastz"))
     {
-    char *blatLabel = &track[4];
-    if (hDbExists(blatLabel))
+    char *genome = "Unknown";
+    if (startsWith("blat", track))
+        genome = &track[4];
+    if (startsWith("blastz", track))
+        genome = &track[6];
+    else if (endsWith(track,"Blastz"))
+        {
+        genome = track;
+        *strstr(genome, "Blastz") = 0;
+        }
+    if (hDbExists(genome))
         {
         /* handle tracks that include other database name 
          * in trackname; e.g. blatCe1, blatCb1, blatCi1, blatHg15, blatMm3... 
          * Uses genome column from database table as display text */
-        blatLabel = hGenome(blatLabel);
+        genome = hGenome(genome);
         }
-    doBlatCompGeno(tdb, item, blatLabel);
+    doAlignCompGeno(tdb, item, genome);
     }
 else if (sameWord(track, "humanKnownGene")) 
     {
     doKnownGene(tdb, item);
-    }
-/* This is a catch-all for blastz/blat tracks -- any special cases must be 
- * above this point! */
-else if (startsWith("blastz", track) || startsWith("blat", track) || (endsWith(track, "Blastz")))
-    {
-    doAlignmentOtherDb(tdb, item);
     }
 else if (sameWord(track, "rnaGene"))
     {
@@ -12723,7 +12740,8 @@ else if( sameWord(track, "gcPercent"))
     {
     doGcDetails(tdb, item);
     }
-else if( sameWord(track, "altGraphX") || sameWord(track, "altGraphXCon"))
+else if( sameWord(track, "altGraphX") || sameWord(track, "altGraphXCon") 
+	 || sameWord(track, "altGraphXT6Con") || sameWord(track, "altGraphXOrtho"))
     {
     doAltGraphXDetails(tdb,item);
     }

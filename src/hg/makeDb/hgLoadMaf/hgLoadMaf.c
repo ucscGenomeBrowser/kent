@@ -12,7 +12,7 @@
 #include "scoredRef.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.11 2003/10/21 03:09:11 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.12 2003/11/05 19:49:05 kate Exp $";
 
 /* Command line options */
 
@@ -195,7 +195,7 @@ if (test)
     return;
 printf("Loading %s into database\n", table);
 hgLoadTabFile(conn, ".", table, &f);
-printf("Loaded %ld mafs in %d files from %s", mafCount, slCount(fileList), extFileDir);
+printf("Loaded %ld mafs in %d files from %s\n", mafCount, slCount(fileList), extFileDir);
 hgEndUpdate(&conn, "Add %ld mafs in %d files from %s\n", mafCount, slCount(fileList), extFileDir);
 }
 

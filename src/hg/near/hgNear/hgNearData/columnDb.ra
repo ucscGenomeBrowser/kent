@@ -113,7 +113,7 @@ itemUrl ../cgi-bin/hgTracks?org=mouse&position=%s
 
 name zebrafishOrthologs
 shortLabel Zebrafish
-longLabel <em>Danio rario</em> Ortholog (Best Blastp Hit to Ensembl)
+longLabel <em>Danio rerio</em> Ortholog (Best Blastp Hit to Ensembl)
 priority 8.1
 visibility off
 type lookup drBlastTab query target

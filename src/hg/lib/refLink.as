@@ -5,8 +5,8 @@ table refLink
     string product;	"Name of protein product"
     string mrnaAcc;	"mRNA accession"
     string protAcc;	"protein accession"
-    uint geneId;	"pointer to geneName table"
-    uint prodId;	"pointer to prodName table"
+    uint geneName;	"pointer to geneName table"
+    uint prodName;	"pointer to prodName table"
     uint locusLinkId;	"Locus Link ID"
     uint omimId;	"OMIM ID"
     )

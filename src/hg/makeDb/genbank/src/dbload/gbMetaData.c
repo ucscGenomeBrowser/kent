@@ -5,6 +5,7 @@
  */
 
 #include "gbMetaData.h"
+#include "gbMDParse.h"
 #include "common.h"
 #include "hash.h"
 #include "portable.h"
@@ -25,13 +26,12 @@
 #include "extFileTbl.h"
 #include "gbFileOps.h"
 #include "gbStatusTbl.h"
-#include "uniqueStrTbl.h"
 #include "gbBuildState.h"
 #include "sqlDeleter.h"
 #include "genbank.h"
 #include "gbSql.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.15 2003/10/16 20:27:17 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.16 2003/11/05 07:37:04 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -152,168 +152,6 @@ static struct sqlUpdater* refLinkUpd = NULL;
 static struct extFileTbl* extFiles = NULL;
 
 
-/* Globals containing ra field info for current record that are not stored
- * in unique string tables.  */
-static char raAcc[GB_ACC_BUFSZ];
-static char raDir;  /* direction */
-static unsigned raDnaSize;
-static off_t raFaOff;
-static unsigned raFaSize;
-static time_t raModDate;
-static short raVersion;
-static char *raRefSeqStatus;
-static char *raRefSeqCompleteness;
-static struct dyString* raRefSeqSummary = NULL;
-static unsigned raLocusLinkId;
-static unsigned raOmimId;
-static char raCds[8192];  /* Big due to join() specification.  FIXME: make dstring */
-static char raProtAcc[GB_ACC_BUFSZ];
-static short raProtVersion;
-static unsigned raProtSize;
-static off_t raProtFaOff;
-static unsigned raProtFaSize;
-static struct dyString* raLocusTag = NULL;
-
-struct raField
-/* Entry for a ra field.  New values are buffered until we decide that
- * the entry is going to be kept, then they are added to a unique string
- * table. */
-{
-    struct raField *next;
-    char *raName;                 /* field name */
-    HGID curId;                   /* current id  */
-    char *curVal;                 /* current val, or null if not set. */
-    struct dyString* valBuf;      /* buffer for values */
-    struct uniqueStrTbl *ust;     /* table of strings to ids */
-};
-static struct raField *gRaFieldTableList = NULL;
-static struct hash *gRaFields = NULL;
-
-static void raFieldDefine(struct sqlConnection *conn, char *table,
-                           char *raName, int hashPow2Size)
-/* Define a ra field, setting the unique table associated with it */
-{
-struct hashEl *hel;
-struct raField *raf;
-AllocVar(raf);
-
-if (hashPow2Size == 0)
-    hashPow2Size = 14; /* 16kb */
-
-hel = hashAdd(gRaFields, raName, raf);
-raf->raName = hel->name;
-raf->valBuf = dyStringNew(0);
-raf->ust = uniqueStrTblNew(conn, table, hashPow2Size,
-                           ((gOptions->flags & DBLOAD_GO_FASTER) != 0),
-                           gTmpDir, (verbose >= 2));
-raf->next = gRaFieldTableList;
-gRaFieldTableList = raf;
-}
-
-static void raFieldFree(struct raField *raf)
-/* Free data associated with a ra field */
-{
-dyStringFree(&raf->valBuf);
-uniqueStrTblFree(&raf->ust);
-freeMem(raf);
-}
-
-static void raFieldsInit(struct sqlConnection *conn)
-/* initialize global table of ra fields */
-{
-assert(gRaFieldTableList == NULL);
-
-gRaFields = hashNew(8);
-/* default is 16kb */
-raFieldDefine(conn, "source", "src", 0);
-raFieldDefine(conn, "organism", "org", 0);
-raFieldDefine(conn, "library", "lib", 0);
-raFieldDefine(conn, "mrnaClone", "clo", 21);    /* 2mb */
-raFieldDefine(conn, "sex", "sex", 9);           /* 512k */
-raFieldDefine(conn, "tissue", "tis", 0);
-raFieldDefine(conn, "development", "dev", 0);
-raFieldDefine(conn, "cell", "cel", 14);
-raFieldDefine(conn, "cds", "cds", 0);
-raFieldDefine(conn, "geneName", "gen", 0);
-raFieldDefine(conn, "productName", "pro", 19);   /* 256k */
-raFieldDefine(conn, "author", "aut", 0);
-raFieldDefine(conn, "keyword", "key", 0);
-raFieldDefine(conn, "description", "def", 19);   /* 512k */
-}
-
-static void raFieldsFree()
-/* Free ra field data */
-{
-struct raField* raf;
-while ((raf = gRaFieldTableList) != NULL)
-    {
-    gRaFieldTableList = gRaFieldTableList->next;
-    raFieldFree(raf);
-    }
-hashFree(&gRaFields);
-}
-
-static void raFieldClearLastIds()
-/* Clear lastId from all ra field tables, so that undefined fields
- * in the next record parsed get a zero id */
-{
-struct raField *raf;
-for (raf = gRaFieldTableList; raf != NULL; raf = raf->next)
-    {
-    raf->curId = 0;
-    raf->curVal = NULL;
-    dyStringClear(raf->valBuf);
-    }
-}
-
-static void raFieldSet(char *raField, char *val)
-/* Set a RA field value for later use.  This does not load the unique string
- * table. A value of NULL clears the value */
-{
-/* ignore if not tracking field */
-struct raField *raf = hashFindVal(gRaFields, raField);
-if (raf != NULL)
-    {
-    /* never append to an existing value, replace or clear */
-    dyStringClear(raf->valBuf);
-    raf->curId = 0;
-    raf->curVal = NULL;
-    if (val != NULL)
-        {
-        dyStringAppend(raf->valBuf, val);
-        raf->curVal = raf->valBuf->string;
-        }
-    }
-}
-
-static void raFieldStore(struct raField *raf, struct sqlConnection *conn)
-/* store a RA field value in the unique string table */
-{
-assert(raf->curId == 0);
-raf->curId = uniqueStrTblGet(raf->ust, conn, raf->curVal, NULL);
-}
-
-static HGID raFieldCurId(char *raField, struct sqlConnection *conn)
-/* get the last id that was stored for a raField */
-{
-struct raField *raf = hashFindVal(gRaFields, raField);
-if (raf == NULL)
-    return 0;  /* not tracking field */
-if ((raf->curId == 0) && (raf->curVal != NULL))
-    raFieldStore(raf, conn);
-return raf->curId;
-}
-
-static char* raFieldCurVal(char *raField)
-/* get the last string that was stored for a raField */
-{
-struct raField *raf = hashFindVal(gRaFields, raField);
-if (raf == NULL)
-    return NULL;  /* not tracking field */
-else
-    return raf->curVal;
-}
-
 static void gbWarn(char *format, ...)
 /* issue a warning */
 {
@@ -344,9 +182,6 @@ if (gbdbGenBank != NULL)
     strcpy(gGbdbGenBank, gbdbGenBank);
 strcpy(gTmpDir, tmpDir);
 
-/* field table is cached in goFaster mode */
-if (gRaFieldTableList == NULL)
-    raFieldsInit(conn);
 if (seqTbl == NULL)
     seqTbl = seqTblNew(conn, gTmpDir, (verbose >= 2));
 if (imageCloneTbl == NULL)
@@ -397,175 +232,6 @@ if (extFiles == NULL)
 return extFileTblGet(extFiles, conn, path);
 }
 
-static char *parseRefSeqStatus(char *rss)
-/* parse the refseq status field */
-{
-if ((rss == NULL) || sameString(rss, "unk"))
-    return "Unknown";
-else if (sameString(rss, "rev"))
-    return "Reviewed";
-else if (sameString(rss, "val"))
-    return "Validated";
-else if (sameString(rss, "pro"))
-    return "Provisional";
-else if (sameString(rss, "pre"))
-    return "Predicted";
-else if (sameString(rss, "inf"))
-    return "Inferred";
-else
-    errAbort("invalid value for ra rss field \"%s\"", rss);
-return NULL; /* don't make it here */
-}
-
-static char *parseRefSeqCompletness(char *rsc)
-/* parse the refseq completeness field */
-{
-if ((rsc == NULL) || sameString(rsc, "unk"))
-    return "Unknown";
-else if (sameString(rsc, "cmpl5"))
-    return "Complete5End";
-else if (sameString(rsc, "cmpl3"))
-    return "Complete3End";
-else if (sameString(rsc, "full"))
-    return "FullLength";
-else if (sameString(rsc, "incmpl"))
-    return "IncompleteBothEnds";
-else if (sameString(rsc, "incmpl5"))
-    return "Incomplete5End";
-else if (sameString(rsc, "incmpl3"))
-    return "Incomplete3End";
-else if (sameString(rsc, "part"))
-    return "Partial";
-else
-    errAbort("invalid value for ra rsc field \"%s\"", rsc);
-return NULL; /* don't make it here */
-}
-
-static char* parseEntry(struct sqlConnection *conn,
-                        unsigned type, struct lineFile *raLf)
-/* Parse the next record from a ra file into current metadata state.
- * Returns accession or NULL on EOF. */
-{
-int lineCnt = 0;
-char *tag, *val;
-
-/* reset globals for new record */
-raFieldClearLastIds();
-raAcc[0] = '\0';
-raDir = '0';
-raDnaSize = 0;
-raFaOff = NULL_OFFSET;
-raFaSize = 0;
-raModDate = NULL_DATE;
-raVersion = NULL_VERSION;
-raRefSeqStatus = NULL;
-raRefSeqCompleteness = NULL;
-if (raRefSeqSummary == NULL)
-    raRefSeqSummary = dyStringNew(1024);
-dyStringClear(raRefSeqSummary);
-raLocusLinkId = 0;
-raOmimId = 0;
-raCds[0] = '\0';
-raProtAcc[0] = '\0';
-raProtVersion = -1;
-raProtSize = 0;
-raProtFaOff = -1;
-raProtFaSize = 0;
-if (raLocusTag == NULL)
-    raLocusTag = dyStringNew(128);
-dyStringClear(raLocusTag);
-
-for (;;)
-    {
-    if (!lineFileNext(raLf, &tag, NULL))
-        {
-        if (lineCnt > 0)
-            errAbort("Unexpected eof in %s", raLf->fileName);
-        return NULL;
-        }
-    if (tag[0] == 0)
-        break;
-    val = strchr(tag, ' ');
-    if (val == NULL)
-        errAbort("Badly formatted tag %s:%d", raLf->fileName, raLf->lineIx);
-    *val++ = 0;
-    if (sameString(tag, "acc"))
-        {
-        char *s = firstWordInLine(val);
-        strncpy(raAcc, s, GB_ACC_BUFSZ);
-        }
-    else if (sameString(tag, "dir"))
-        raDir = val[0];
-    else if (sameString(tag, "dat"))
-        raModDate = gbParseDate(raLf, val);
-    else if (sameString(tag, "ver"))
-        raVersion = gbParseInt(raLf, firstWordInLine(val));
-    else if (sameString(tag, "siz"))
-        raDnaSize = gbParseUnsigned(raLf, val);
-    else if (sameString(tag, "fao"))
-        raFaOff = gbParseFileOff(raLf, val);
-    else if (sameString(tag, "fas"))
-        raFaSize = gbParseUnsigned(raLf, val);
-    else if (sameString(tag, "prt"))
-        {
-        /* version is optional, remove it if it exists  */
-        if (strchr(val, '.') != NULL)
-            raProtVersion = gbSplitAccVer(val, raProtAcc);
-        else
-            safef(raProtAcc, sizeof(raProtAcc), "%s", val);
-        }
-    else if (sameString(tag, "prs"))
-        raProtSize = gbParseUnsigned(raLf, val);
-    else if (sameString(tag, "pfo"))
-        raProtFaOff = gbParseFileOff(raLf, val);
-    else if (sameString(tag, "pfs"))
-        raProtFaSize = gbParseUnsigned(raLf, val);
-    else if (sameString(tag, "rss"))
-        raRefSeqStatus = parseRefSeqStatus(val);
-    else if (sameString(tag, "rsc"))
-        raRefSeqCompleteness = parseRefSeqCompletness(val);
-    else if (sameString(tag, "rsu"))
-        dyStringAppend(raRefSeqSummary, val);
-    else if (sameString(tag, "loc"))
-        raLocusLinkId = gbParseUnsigned(raLf, val);
-    else if (sameString(tag, "lot"))
-        dyStringAppend(raLocusTag, val);
-    else if (sameString(tag, "mim"))
-        {
-        /* might have multiple values, just use first */
-        raOmimId = gbParseUnsigned(raLf, firstWordInLine(val));
-        }
-    else
-        {
-        /* save under hashed name */
-        if (sameString(tag, "cds"))
-            safef(raCds, sizeof(raCds), "%s", val);
-        raFieldSet(tag, val);
-        }
-    }
-
-/* If we didn't get the gene name, substitute the locus tag if available.
- * This is needed by Drosophila, others */
-if ((raFieldCurId("gen", conn) == 0) && (raLocusTag->stringSize > 0))
-    raFieldSet("gen", raLocusTag->string);
-
-/* do a little error checking. */
-if (strlen(raAcc) == 0)
-    errAbort("No accession in %s\n", raLf->fileName);
-if (raModDate == NULL_DATE)
-    errAbort("No date for %s in %s\n", raAcc, raLf->fileName);
-if (raVersion == NULL_VERSION)
-    errAbort("No version for %s in %s\n", raAcc, raLf->fileName);
-if (raDnaSize == 0)
-    errAbort("No size for %s in %s\n", raAcc, raLf->fileName);
-if (raFaOff == NULL_OFFSET)
-    errAbort("No fasta offset for %s in %s\n", raAcc, raLf->fileName);
-if (raFaSize == 0)
-    errAbort("No fasta size for %s in %s\n", raAcc, raLf->fileName);
-
-return raAcc;
-}
-
 static void seqUpdate(struct gbStatus* status, HGID faFileId)
 /* Update the seq table for the current entry */
 {
@@ -599,13 +265,13 @@ if (status->stateChg & GB_NEW)
     sqlUpdaterAddRow(mrnaUpd, "%u\t%s\t%u\t%s\t%s\t%c\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u",
                      status->gbSeqId, raAcc, raVersion, gbFormatDate(raModDate),
                      ((status->type == GB_MRNA) ? "mRNA" : "EST"), raDir,
-                     raFieldCurId("src", conn), raFieldCurId("org", conn),
-                     raFieldCurId("lib", conn), raFieldCurId("clo", conn),
-                     raFieldCurId("sex", conn), raFieldCurId("tis", conn),
-                     raFieldCurId("dev", conn), raFieldCurId("cel", conn),
-                     raFieldCurId("cds", conn), raFieldCurId("key", conn),
-                     raFieldCurId("def", conn), raFieldCurId("gen", conn),
-                     raFieldCurId("pro", conn), raFieldCurId("aut", conn));
+                     raFieldCurId("src"), raFieldCurId("org"),
+                     raFieldCurId("lib"), raFieldCurId("clo"),
+                     raFieldCurId("sex"), raFieldCurId("tis"),
+                     raFieldCurId("dev"), raFieldCurId("cel"),
+                     raFieldCurId("cds"), raFieldCurId("key"),
+                     raFieldCurId("def"), raFieldCurId("gen"),
+                     raFieldCurId("pro"), raFieldCurId("aut"));
     }
 else if (status->stateChg & GB_META_CHG)
     {
@@ -615,13 +281,13 @@ else if (status->stateChg & GB_META_CHG)
                      "description=%u, geneName=%u, productName=%u, author=%u "
                      "WHERE id=%u",
                      raVersion, gbFormatDate(raModDate), raDir,
-                     raFieldCurId("src", conn), raFieldCurId("org", conn),
-                     raFieldCurId("lib", conn), raFieldCurId("clo", conn),
-                     raFieldCurId("sex", conn), raFieldCurId("tis", conn),
-                     raFieldCurId("dev", conn), raFieldCurId("cel", conn),
-                     raFieldCurId("cds", conn), raFieldCurId("key", conn),
-                     raFieldCurId("def", conn), raFieldCurId("gen", conn),
-                     raFieldCurId("pro", conn), raFieldCurId("aut", conn),
+                     raFieldCurId("src"), raFieldCurId("org"),
+                     raFieldCurId("lib"), raFieldCurId("clo"),
+                     raFieldCurId("sex"), raFieldCurId("tis"),
+                     raFieldCurId("dev"), raFieldCurId("cel"),
+                     raFieldCurId("cds"), raFieldCurId("key"),
+                     raFieldCurId("def"), raFieldCurId("gen"),
+                     raFieldCurId("pro"), raFieldCurId("aut"),
                      status->gbSeqId);
     }
 }
@@ -710,14 +376,14 @@ pro = sqlEscapeString2(alloca(2*strlen(pro)+1), pro);
 
 if (status->stateChg & GB_NEW)
     sqlUpdaterAddRow(refLinkUpd, "%s\t%s\t%s\t%s\t%u\t%u\t%u\t%u",
-                     gen, pro, raAcc, raProtAcc, raFieldCurId("gen", conn),
-                     raFieldCurId("pro", conn), raLocusLinkId, raOmimId);
+                     gen, pro, raAcc, raProtAcc, raFieldCurId("gen"),
+                     raFieldCurId("pro"), raLocusLinkId, raOmimId);
 else if (status->stateChg & GB_META_CHG)
     sqlUpdaterModRow(refLinkUpd, 1, "name='%s', product='%s', protAcc='%s', "
                      "geneName=%u, prodName=%u, locusLinkId=%u, "
                      "omimId=%u where mrnaAcc='%s'",
-                     gen, pro, raProtAcc, raFieldCurId("gen", conn),
-                     raFieldCurId("pro", conn), raLocusLinkId, raOmimId, raAcc);
+                     gen, pro, raProtAcc, raFieldCurId("gen"),
+                     raFieldCurId("pro"), raLocusLinkId, raOmimId, raAcc);
 }
 
 static void refSeqPepUpdate(struct sqlConnection *conn, HGID pepFaId)
@@ -753,7 +419,7 @@ char *geneName;
 
 /* clear description if we are not keeping it */
 if (!keepDesc(status))
-    raFieldSet("def", NULL);
+    raFieldClear("def");
 
 seqUpdate(status, faFileId);  /* must be first to get status->gbSeqId */
 mrnaUpdate(status, conn);
@@ -791,7 +457,6 @@ status->metaDone = TRUE;
 
 static boolean processEntry(struct sqlConnection *conn,
                             struct gbStatusTbl* statusTbl,
-                            unsigned type, struct lineFile *raLf,
                             HGID faFileId, HGID pepFaId)
 /* Parse and process the next ra entry, check to see if it is selected
  * for update. */
@@ -799,7 +464,7 @@ static boolean processEntry(struct sqlConnection *conn,
 char* acc;
 struct gbStatus* status;
 
-if ((acc = parseEntry(conn, type, raLf)) == NULL)
+if ((acc = gbMDParseEntry()) == NULL)
     return FALSE;
 
 status = gbStatusTblFind(statusTbl, acc);
@@ -811,19 +476,17 @@ return TRUE;
 
 static void metaDataProcess(struct sqlConnection *conn,
                             struct gbStatusTbl* statusTbl,
-                            char* raPath, unsigned type,
+                            char* raPath,
                             HGID faFileId, HGID pepFaId)
 /* Parse a ra file looking for accessions to add to the database.  If the
  * ra entry matches the status->selectProc object, it will be saved for
  * loading. */
 {
-struct lineFile *raLf;
-
 /* parse and save all ra records, in assending file offset order */
-raLf = gzLineFileOpen(raPath);
-while (processEntry(conn, statusTbl, type, raLf, faFileId, pepFaId))
+gbMDParseOpen(raPath, conn, gOptions, gTmpDir);
+while (processEntry(conn, statusTbl, faFileId, pepFaId))
     continue; /* loop filler */
-gzLineFileClose(&raLf);
+gbMDParseClose();
 }
 
 static HGID getPeptideFaId(struct sqlConnection *conn, struct gbSelect* select)
@@ -862,13 +525,12 @@ if (select->release->srcDb == GB_REFSEQ)
 
 /* parse and save for loading metadata from this update */
 gbProcessedGetPath(select, "ra.gz", raPath);
-metaDataProcess(conn, statusTbl, raPath, select->type, faFileId, pepFaId);
+metaDataProcess(conn, statusTbl, raPath, faFileId, pepFaId);
 }
 
 void gbMetaDataDbLoad(struct sqlConnection *conn)
 /* load the metadata changes into the database */
 {
-struct raField *nextRa;
 struct sqlUpdater *nextUpd;
 
 /* this should never have been called if these tables not set up */
@@ -880,8 +542,7 @@ seqTblCommit(seqTbl, conn);
 seqTblFree(&seqTbl);
 
 /* unique string tables next, before mrna */
-for (nextRa = gRaFieldTableList; nextRa != NULL; nextRa = nextRa->next)
-    uniqueStrTblCommit(nextRa->ust, conn);
+gbMDParseCommit(conn);
 
 /* image ids are loaded next */
 imageCloneTblCommit(imageCloneTbl, conn);
@@ -897,13 +558,13 @@ refSeqStatusUpd = NULL;
 refLinkUpd = NULL;
 /* cache unique string tables in goFaster mode */
 if ((gOptions->flags & DBLOAD_GO_FASTER) == 0)
-    raFieldsFree();
+    gbMDParseFree();
 }
 
 void gbMetaDataFree()
 /* Free data structures */
 {
-raFieldsFree();
+gbMDParseFree();
 extFileTblFree(&extFiles);
 }
 

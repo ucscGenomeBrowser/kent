@@ -58,7 +58,8 @@ for(psl = pslList; psl != NULL; psl = psl->next)
     dyStringClear(ds);
     dyStringPrintf(ds, "%s%c%s-%d-%d-%d-%d",psl->tName, psl->strand[1],
 	    psl->qName, psl->tStart, psl->tEnd, psl->qStart, psl->qEnd);
-    hashAddUnique(pslHash, ds->string, psl);
+    // hashAddUnique(pslHash, ds->string, psl);
+    hashAdd(pslHash, ds->string, psl);
     }
 
 while (lineFileRow(lf, words))

@@ -5,7 +5,7 @@
 #include "options.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: chainFilter.c,v 1.9 2003/08/12 20:48:31 kent Exp $";
+static char const rcsid[] = "$Id: chainFilter.c,v 1.10 2003/11/01 05:57:37 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -24,8 +24,12 @@ errAbort(
   "   -maxScore=N - restrict to those scoring less than N\n"
   "   -qStartMin=N - restrict to those with qStart at least N\n"
   "   -qStartMax=N - restrict to those with qStart less than N\n"
+  "   -qEndMin=N - restrict to those with qEnd at least N\n"
+  "   -qEndMax=N - restrict to those with qEnd less than N\n"
   "   -tStartMin=N - restrict to those with tStart at least N\n"
   "   -tStartMax=N - restrict to those with tStart less than N\n"
+  "   -tEndMin=N - restrict to those with tEnd at least N\n"
+  "   -tEndMax=N - restrict to those with tEnd less than N\n"
   "   -strand=?    -restrict strand (to + or -)\n"
   "   -long        -output in long format\n"
   "   -zeroGap     -get rid of gaps of length zero\n"
@@ -48,8 +52,12 @@ struct optionSpec options[] = {
    {"maxScore", OPTION_FLOAT},
    {"qStartMin", OPTION_INT},
    {"qStartMax", OPTION_INT},
+   {"qEndMin", OPTION_INT},
+   {"qEndMax", OPTION_INT},
    {"tStartMin", OPTION_INT},
    {"tStartMax", OPTION_INT},
+   {"tEndMin", OPTION_INT},
+   {"tEndMax", OPTION_INT},
    {"strand", OPTION_STRING},
    {"long", OPTION_BOOLEAN},
    {"zeroGap", OPTION_BOOLEAN},
@@ -171,8 +179,12 @@ double minScore = optionFloat("minScore", -BIGNUM);
 double maxScore = optionFloat("maxScore", 1.0e20);
 int qStartMin = optionInt("qStartMin", -BIGNUM);
 int qStartMax = optionInt("qStartMax", BIGNUM);
+int qEndMin = optionInt("qEndMin", -BIGNUM);
+int qEndMax = optionInt("qEndMax", BIGNUM);
 int tStartMin = optionInt("tStartMin", -BIGNUM);
 int tStartMax = optionInt("tStartMax", BIGNUM);
+int tEndMin = optionInt("tEndMin", -BIGNUM);
+int tEndMax = optionInt("tEndMax", BIGNUM);
 int minGapless = optionInt("minGapless", 0);
 int qMinGap = optionInt("qMinGap", 0);
 int tMinGap = optionInt("tMinGap", 0);
@@ -207,7 +219,11 @@ for (i=0; i<inCount; ++i)
 	    writeIt = FALSE;
 	if (chain->qStart < qStartMin || chain->qStart >= qStartMax)
 	    writeIt = FALSE;
+	if (chain->qEnd < qEndMin || chain->qEnd >= qEndMax)
+	    writeIt = FALSE;
 	if (chain->tStart < tStartMin || chain->tStart >= tStartMax)
+	    writeIt = FALSE;
+	if (chain->tEnd < tEndMin || chain->tEnd >= tEndMax)
 	    writeIt = FALSE;
 	if (chain->qSize < qMinSize || chain->tSize < tMinSize)
 	    writeIt = FALSE;

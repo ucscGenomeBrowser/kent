@@ -8,7 +8,7 @@
 #include "fa.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.3 2003/07/07 17:56:22 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.4 2003/11/04 15:48:37 kate Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -106,7 +106,7 @@ HGID extFileId = hgAddToExtFile(faFile, conn);
 struct lineFile *faLf = lineFileOpen(faFile, TRUE);
 unsigned count = 0;
 
-printf("Adding %s)\n", faFile);
+printf("Adding %s\n", faFile);
 
 /* Seek to first line starting with '>' in line file. */
 if (!faSeekNextRecord(faLf))
