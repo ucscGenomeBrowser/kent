@@ -4466,6 +4466,7 @@ cat > multiz5way/loadMaf.csh << 'EOF'
         hgLoadMaf mm5 -warn ${o}_netBlastz -pathPrefix=$mafDir/$table
     end
 'EOF'
+    # <<EOF for emacs
     csh multiz5way/loadMaf.csh >&! multiz5way/loadMaf.log &
     
 # track multiz5way
@@ -4501,6 +4502,29 @@ cat > multiz5way/loadMaf.csh << 'EOF'
     rmdir /cluster/data/mm5/bed/multiz5way/gzMaf
     md5sum *.gz > md5sum.txt
     # make a README.txt file
+
+
+# PHASTCONS SCORES DOWNLOADABLES (DONE 10/11/04 angie)
+    ssh kksilo
+    mkdir /cluster/data/mm5/zip/mzRn3Hg17Cf1Gg2
+    cd /cluster/data/mm5/bed/multiz5way/cons/run.cons/POSTPROBS
+    foreach chr (`awk '{print $1;}' /cluster/data/mm5/chrom.sizes`)
+      echo $chr
+      zcat `ls -1 $chr.*.pp.gz | sort -t\. -k2,2n` \
+      | gzip -c \
+      > /cluster/data/mm5/zip/mzRn3Hg17Cf1Gg2/$chr.gz
+    end
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/mm5/phastCons
+    # Doh!  /cluster/data/mm5/zip/mzRn3Hg17Cf1Gg2 is 8.6G now -- too much 
+    # to dump on hgwdev's / which is at 94%.  Instead of doing this:
+    #mv /cluster/data/mm5/zip/mzRn3Hg17Cf1Gg2 .
+    # make symbolic links:
+    mkdir /usr/local/apache/htdocs/goldenPath/mm5/phastCons/mzRn3Hg17Cf1Gg2
+    cd /usr/local/apache/htdocs/goldenPath/mm5/phastCons/mzRn3Hg17Cf1Gg2
+    ln -s /cluster/data/mm5/zip/mzRn3Hg17Cf1Gg2/* .
+    md5sum *.gz > md5sum.txt
+    # make a README.txt.
 
 
 # PREP FOR LIFTOVER CHAINS TO THIS ASSEMBLY (2004-08-02 kate)
