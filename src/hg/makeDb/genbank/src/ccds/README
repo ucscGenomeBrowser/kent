@@ -1,22 +1,39 @@
-
 Import of CCDS (Consensus CDS) into browser database.
 
-A simplified dump of the CCDS dataset is available:
-
-      ftp://ftp.ncbi.nlm.nih.gov/pub/hcds/Hs35.1/MatchData/
-
-This is currently used to build the UCSC tracks.  A full dump of the 
-CCDS database is at:
+Dumps of the CCDS database are in at:
 
      ftp://ftp.ncbi.nlm.nih.gov/pub/hcds/Hs35.1/CDSTrackDB/
 
-Initially, import is done manually, later this maybe be automated to
-be part of the genbank updates.
+named in the form:
+        CCDS.20050303.tar.gz
 
-Primary file of interest is NcbiHinxtonAllAccessions.txt.
+Initially, import is done manually, later this maybe be
+automated to be part of the genbank updates.
 
-Tables created from this file:
+
+Import database:
+
+The CCDS schema from NCBI, which I believe is Sybase, is
+converted to MySQL in a semi-manual fashion.  The directory
+ncbiSql contains the last NCBI sql files imported:
+
+   createTables.sql
+   createKeys.sql
+
+The script ncbiSql/convertCreateTables, converts createTables.sql to
+MySQL.  The file createKeys.sql is not currently converted,
+since we don't setup foreign key constraints and all required
+indices will come out of the createTables conversion.  The
+result of the conversion is checked-in as createTables.sql
+in this directory.  If the schema changes, it will need
+to be converted by hand.
+
+
+The program ccdsImport imports the table dumps into a database ccds,
+which is then used to generate the tables that are loaded into
+the hgdb..
+
+
+hgdb tables created are:
        ccdsGene - genePred track for CCDS
        ccdsInfo - cross-reference information for CCDS.
-
-
