@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: textHistogram.c,v 1.18 2004/09/15 19:33:19 hiram Exp $";
+static char const rcsid[] = "$Id: textHistogram.c,v 1.19 2005/01/05 22:57:18 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -17,6 +17,7 @@ static struct optionSpec optionSpecs[] = {
     {"aveCol", OPTION_INT},
     {"real", OPTION_BOOLEAN},
     {"autoscale", OPTION_INT},
+    {"autoScale", OPTION_INT},
     {"pValues", OPTION_BOOLEAN},
     {NULL, 0}
 };
@@ -53,7 +54,7 @@ errAbort(
   "   -aveCol=N - A second column to average over. The averages\n"
   "             will be output in place of counts of primary column.\n"
   "   -real - Data input are real values (default is integer)\n"
-  "   -autoscale=N - autoscale to N # of bins\n"
+  "   -autoScale=N - autoscale to N # of bins\n"
   "   -pValues - show p-Values as well as counts (sets -noStar too)\n"
   );
 }
@@ -363,6 +364,8 @@ col = optionInt("col", 1) - 1;
 aveCol = optionInt("aveCol", 0) - 1;
 real = optionExists("real");
 autoscale = optionInt("autoscale", 0);
+if (autoscale == 0)
+    autoscale = optionInt("autoScale", 0);
 
 /*	pValues turns on noStar too	*/
 if (pValues) noStar = TRUE;
