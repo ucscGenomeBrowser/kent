@@ -1,5 +1,4 @@
 /* para - para - manage a batch of jobs in parallel on a compute cluster.. */
-#include <time.h>
 #include <sys/wait.h>
 #include <signal.h>
 #include "common.h"
@@ -646,7 +645,7 @@ return WIFEXITED(status) && (WEXITSTATUS(status) == 0);
 double jrCpuTime(struct jobResult *jr)
 /* Get CPU time in seconds for job. */
 {
-return 1.0/(double)CLK_TCK * (jr->usrTicks + jr->sysTicks);
+return 1.0/(double)CLOCKS_PER_SEC * (jr->usrTicks + jr->sysTicks);
 }
 
 struct hash *markRunJobStatus(struct jobDb *db)
