@@ -11,7 +11,7 @@ webPcr: $O ${MYLIBS}
 	${STRIP} webPcr${EXE}
 
 clean:
-	rm -f $O
+	rm -f $O webPcr
 
 installOsX: webPcr
 	cp webPcr /Library/WebServer/CGI-Executables
