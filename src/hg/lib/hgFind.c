@@ -40,7 +40,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.105 2003/09/03 21:57:10 hiram Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.106 2003/09/08 20:51:18 hiram Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -3040,10 +3040,9 @@ if (useWeb)
 void hgPositionsHelpHtml(char *organism, char *database)
 /* Explain the position box usage, give some organism-specific examples. */
 {
-    FILE* file = (FILE *) NULL;
     char *htmlPath = (char *) NULL;
     char *htmlString = (char *) NULL;
-    long htmlStrLength = 0;
+    size_t htmlStrLength = 0;
 
     /*	fetch /gbdb path name from dbDb database */
     htmlPath= hHtmlPath(database);
@@ -3051,24 +3050,7 @@ void hgPositionsHelpHtml(char *organism, char *database)
     /*  If that is OK, try opening the file */
     if( (char *) NULL != htmlPath ) {
 	if( fileExists(htmlPath) ) {
-	    file = mustOpen(htmlPath,"r");
-	    /*	find out how long the file is	*/
-	    (void) fseek( file, (long) 0, SEEK_END );
-	    htmlStrLength = ftell(file);
-	    /*	if file actually has something, read it in.
-	     *	htmlStrLength + 1 to allow for a NULL terminator
-	     *	Do not care about read errors.  Display whatever we get.
-	     */
-	    if( htmlStrLength ) {
-		size_t read_len;
-		htmlString = needMem( htmlStrLength + 1 );
-		rewind(file);
-		read_len= fread(htmlString, 1, htmlStrLength, file );
-		/* htmlString buffer is allocated NULL so this string
-		 * is already properly terminated
-		 */
-	    }
-	    fclose(file);
+	    readInGulp(htmlPath, & htmlString, & htmlStrLength );
 /***********   Optionally, we can describe what is missing:
 	} else {
     printf("<P><H4> HTML description file does not exist: '%s'</H4></P><BR>\n", htmlPath );
@@ -3079,6 +3061,8 @@ void hgPositionsHelpHtml(char *organism, char *database)
     }
     if( htmlStrLength ) {
 	puts(htmlString);
+	freeMem(htmlString);
+	freeMem(htmlPath);
     } else {
 if (strstrNoCase(organism, "human"))
     {
