@@ -134,7 +134,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.601 2004/04/01 01:00:10 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.602 2004/04/02 06:35:10 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -10552,8 +10552,11 @@ char *doDbSnpRs(char *name)
            new rsId if it is found in the affy tables, or 
            0 if no valid rsId is found */
 {
-struct sqlConnection *conn = sqlConnect("hgFixed");
-char  *rsId = validateOrGetRsId(name, conn);
+struct sqlConnection *hgFixed = sqlConnect("hgFixed");
+char  *rsId = validateOrGetRsId(name, hgFixed);
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
 char   query[512];
 struct dbSnpRs *snp = NULL;
 char  *dbOrg = cloneStringZ(database,2);
@@ -10563,44 +10566,59 @@ if (rsId) /* a valid rsId exists */
     {
     if (!strcmp(rsId, "valid"))
 	safef(query, sizeof(query),
-	      "select rsId, avHet, avHetSE, valid, allele1, allele2, "
-	      "       assembly, alternate "
+	      "select * "
 	      "from   dbSnpRs%s "
 	      "where  rsId = '%s'", dbOrg, name);
     else
 	safef(query, sizeof(query),
-	      "select rsId, avHet, avHetSE, valid, allele1, allele2, "
-	      "       assembly, alternate "
+	      "select * "
 	      "from   dbSnpRs%s "
 	      "where  rsId = '%s'", dbOrg, rsId);
-    snp = dbSnpRsLoadByQuery(conn, query);
+    snp = dbSnpRsLoadByQuery(hgFixed, query);
     if (snp != NULL)
 	{
+	printf("<BR>\n");
 	if(snp->avHetSE>0)
 	    {
-	    printf("<BR>\n<B>Average Heterozygosity:</B> %f<BR>\n",snp->avHet);
-	    printf("<B>Standard Error of Avg. Het.: </B> %f<BR>\n", snp->avHetSE);
+	    printf("<B><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/Hetfreq.html\" target=\"_blank\">");
+	    printf("Average Heterozygosity</A>:</B> %f<BR>\n",snp->avHet);
+	    printf("<B><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/Hetfreq.html\" target=\"_blank\">");
+	    printf("Standard Error of Avg. Het.</A>: </B> %f<BR>\n", snp->avHetSE);
 	    }
 	else
 	    {
-	    printf("<BR>\n<B>Average Heterozygosity:</B> Not Known<BR>\n");
-	    printf("<B>Standard Error of Avg. Het.: </B> Not Known<BR>\n");
+	    printf("<B><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/Hetfreq.html\" target=\"_blank\">");
+	    printf("Average Heterozygosity</A>:</B> Not Known<BR>\n");
+	    printf("<B><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/Hetfreq.html\" target=\"_blank\">");
+	    printf("Standard Error of Avg. Het.</A>: </B> Not Known<BR>\n");
 	    }
-/*	printf("<B>Functional Status:</B> <font face=\"Courier\">%s<BR></font>\n",
-	snp->func); */
-	printf("<B>Validation Status:</B> <font face=\"Courier\">%s<BR></font>\n",
-	       snp->valid);
-	printf("<B>Allele1:          </B> <font face=\"Courier\">%s<BR></font>\n",
-	       snp->allele1);
-	printf("<B>Allele2:          </B> <font face=\"Courier\">%s<BR>\n",
-	       snp->allele2);
-	printf("Sequence in Assembly:&nbsp;%s<BR>\n",snp->assembly);
-	printf("Alternate Sequence:&nbsp;&nbsp;&nbsp;%s<BR></font>\n",
-	       snp->alternate);
+/*	printf("<B><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_legend.cgi?legend=snpFxnColor\" target=\"_blank\">");
+	printf("Functional Status</A>:</B> <font face=\"Courier\">%s<BR></font>\n", snp->func); 
+*/	printf("<B>Functional Status:</B> <font face=\"Courier\">%s<BR></font>\n", snp->func); 
+	printf("<B><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_legend.cgi?legend=validation\" target=\"_blank\">");
+	printf("Validation Status</A>:</B> <font face=\"Courier\">%s<BR></font>\n", snp->valid);
+/*	printf("<B>Validation Status:</B> <font face=\"Courier\">%s<BR></font>\n", snp->valid);*/
+	printf("<B>Allele1:          </B> <font face=\"Courier\">%s<BR></font>\n", snp->allele1);
+	printf("<B>Allele2:          </B> <font face=\"Courier\">%s<BR>\n", snp->allele2);
+	printf("<B>Sequence in Assembly</B>:&nbsp;%s<BR>\n", snp->assembly);
+	printf("<B>Alternate Sequence</B>:&nbsp;&nbsp;&nbsp;%s<BR></font>\n", snp->alternate);
 	}
     dbSnpRsFree(&snp);
     }
-sqlDisconnect(&conn);
+sqlDisconnect(&hgFixed);
+if (!strcmp(dbOrg,"Hg"))
+    {
+    safef(query, sizeof(query),
+	  "select source, type from snpMap where  name = '%s'", name);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	printf("<B><A HREF=\"#source\">Variant Source</A></B>: &nbsp;%s<BR>\n",row[0]);
+	printf("<B><A HREF=\"#type\">Variant Type</A></B>: &nbsp;%s\n",row[1]);
+	}
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
 return rsId;
 }
 
