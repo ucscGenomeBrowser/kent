@@ -495,7 +495,6 @@ o - Produce refGene, refPep, refMrna, and refLink tables as so:
        ssh hgwdev
        cd ~/oo/bed/refSeq
        ln -s /cluster/store1/mrna.130 mrna
-TODO:
 #
 # NOTE: If hgRefSeqMrna is losing refLink's protAcc field, I think it's due to 
 # a format-change issue with .-suffixes in mrna acc's
