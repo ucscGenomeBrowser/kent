@@ -1,3 +1,4 @@
+/* kgGetPep generates FASTA format protein sequence file to be used for Known Genes track build */
 #include "common.h"
 #include "hCommon.h"
 #include "hdb.h"
@@ -6,7 +7,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "kgGetPep - generate FASTA format protein sequence file to be used for Knonw Genes track build.\n"
+  "kgGetPep - generate FASTA format protein sequence file to be used for Known Genes track build.\n"
   "usage:\n"
   "   kgGetPep xxxx\n"
   "            xxxx is the release date of bioSql database\n");
