@@ -33,7 +33,7 @@
 #include "web.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.86 2003/06/19 22:53:18 donnak Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.87 2003/06/19 22:58:10 donnak Exp $";
 
 char *MrnaIDforGeneName(char *geneName)
 /* return mRNA ID for a gene name */
@@ -2954,7 +2954,7 @@ else if (strstrNoCase(organism, "C. briggsae"))
 "this whole genome shotgun assembly achieved 98% coverage of the genome.\n"
 "</P>" 
 "<P>"
-"This data carries <A HREF=\"http://genome-test.cse.ucsc.edu/goldenPath/credits.html#cbr_use\">"
+"This data carries <A HREF=\"../goldenPath/credits.html#cbr_use\">"
 "specific conditions for use</A>.\n"
 "</P>"
 );
