@@ -65,6 +65,13 @@ struct track
 	MgFont *font, Color color, enum trackVisibility vis);
     /* Draw item list, one per track. */
 
+    void (*drawItemAt)(struct track *tg, void *item, struct vGfx *vg, 
+        int xOff, int yOff, double scale, 
+	MgFont *font, Color color, enum trackVisibility vis);
+    /* Draw a single option.  This is optional, but if it's here
+     * then you can plug in genericDrawItems into the drawItems,
+     * which takes care of all sorts of things. */
+
     int (*itemStart)(struct track *tg, void *item);
     /* Return start of item in base pairs. */
 

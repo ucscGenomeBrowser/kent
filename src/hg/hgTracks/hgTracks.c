@@ -343,7 +343,8 @@ for (item = tg->items; item != NULL; item = item->next)
     int baseStart = tg->itemStart(tg, item);
     int baseEnd = tg->itemEnd(tg, item);
     start = round((double)(baseStart - winStart)*scale);
-    start -= mgFontStringWidth(font, tg->itemName(tg, item)) + extraWidth;
+    if (!tg->drawName)
+	start -= mgFontStringWidth(font, tg->itemName(tg, item)) + extraWidth;
     end = round((baseEnd - winStart)*scale);
     if (start < insideWidth && end > 0)
         {
@@ -699,12 +700,12 @@ void filterItems(struct track *tg,
 struct slList *newList = NULL, *oldList = NULL, *el, *next;
 boolean exclude = FALSE;
 boolean color = FALSE;
-boolean isFull;
+enum trackVisibility vis;
 
 if (sameWord(filterType, "none"))
     return;
 
-isFull = (limitVisibility(tg, tg->items) == tvFull);
+vis = limitVisibility(tg, tg->items);
 if (sameWord(filterType, "include"))
     exclude = FALSE;
 else if (sameWord(filterType, "exclude"))
@@ -729,7 +730,7 @@ if (color)
    {
    slReverse(&oldList);
    /* Draw stuff that passes filter first in full mode, last in dense. */
-   if (isFull)
+   if (vis == tvPack || vis == tvFull)
        newList = slCat(newList, oldList);
    else
        newList = slCat(oldList, newList);
@@ -1080,7 +1081,7 @@ return res;
 }
 
 
-static int cmpLfWhiteToBlack(const void *va, const void *vb)
+static int cmpLfsWhiteToBlack(const void *va, const void *vb)
 /* Help sort from white to black. */
 {
 const struct linkedFeaturesSeries *a = *((struct linkedFeaturesSeries **)va);
@@ -1088,12 +1089,12 @@ const struct linkedFeaturesSeries *b = *((struct linkedFeaturesSeries **)vb);
 return a->grayIx - b->grayIx;
 }
 
-static int cmpLfBlackToWhite(const void *va, const void *vb)
+static int cmpLfWhiteToBlack(const void *va, const void *vb)
 /* Help sort from white to black. */
 {
-const struct linkedFeaturesSeries *a = *((struct linkedFeaturesSeries **)va);
-const struct linkedFeaturesSeries *b = *((struct linkedFeaturesSeries **)vb);
-return b->grayIx - a->grayIx;
+const struct linkedFeatures *a = *((struct linkedFeatures **)va);
+const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
+return a->grayIx - b->grayIx;
 }
 
 int linkedFeaturesCmpStart(const void *va, const void *vb)
@@ -1128,141 +1129,219 @@ if (w > 1)
    vgLine(vg, x+1, y, x+w-1, y, color);
 }
 
+static void lfColors(struct track *tg, struct linkedFeatures *lf, 
+        struct vGfx *vg, Color *retColor, Color *retBarbColor)
+/* Figure out color to draw linked feature in. */
+{
+if (lf->filterColor > 0)
+    {
+    *retColor = *retBarbColor = lf->filterColor;
+    }
+else if (tg->itemColor)
+    {
+    *retColor = tg->itemColor(tg, lf, vg);
+    *retBarbColor = tg->ixAltColor;
+    }
+else if (tg->colorShades) 
+    {
+    boolean isXeno = (tg->subType == lfSubXeno);
+    *retColor =  tg->colorShades[lf->grayIx+isXeno];
+    *retBarbColor =  tg->colorShades[(lf->grayIx>>1)];
+    }
+else
+    {
+    *retColor = tg->ixColor;
+    *retBarbColor = tg->ixAltColor;
+    }
+}
+
+static void linkedFeaturesDrawAt(struct track *tg, void *item,
+	struct vGfx *vg, int xOff, int y, double scale, 
+	MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a single simple bed item at position. */
+{
+struct linkedFeatures *lf = item; 
+struct simpleFeature *sf;
+int heightPer = tg->heightPer;
+int x1,x2;
+int shortOff = 2, shortHeight = heightPer-4;
+int tallStart, tallEnd, s, e, e2, s2;
+Color bColor;
+boolean hideLine = (vis == tvDense && tg->subType == lfSubXeno);
+int midY = y + (heightPer>>1);
+int w;
+
+lfColors(tg, lf, vg, &color, &bColor);
+tallStart = lf->tallStart;
+tallEnd = lf->tallEnd;
+if (!hideLine)
+    {
+    x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
+    x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
+    w = x2-x1;
+    if (vis != tvDense)
+	{
+	clippedBarbs(vg, x1, midY, x2-x1, 2, 5, 
+		 lf->orientation, bColor, FALSE);
+	}
+    innerLine(vg, x1, midY, w, color);
+    }
+for (sf = lf->components; sf != NULL; sf = sf->next)
+    {
+    s = sf->start; e = sf->end;
+
+    if (s < tallStart)
+	{
+	e2 = e;
+	if (e2 > tallStart) e2 = tallStart;
+	drawScaledBoxSample(vg, s, e2, scale, xOff, y+shortOff, shortHeight, color , lf->score);
+	s = e2;
+	}
+    if (e > tallEnd)
+	{
+	s2 = s;
+	if (s2 < tallEnd) s2 = tallEnd;
+	drawScaledBoxSample(vg, s2, e, scale, xOff, y+shortOff, shortHeight, color , lf->score);
+	e = s2;
+	}
+    if (e > s)
+	{
+	drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, color, lf->score);
+	}
+    }
+}
+
+static void lfSeriesDrawConnecter(struct linkedFeaturesSeries *lfs, 
+	struct vGfx *vg, int start, int end, double scale, int xOff, int midY,
+	Color color, Color bColor, enum trackVisibility vis)
+/* Draw connection between two sets of linked features. */
+{
+if (start != -1 && !lfs->noLine)
+    {
+    int x1 = round((double)((int)start-winStart)*scale) + xOff;
+    int x2 = round((double)((int)end-winStart)*scale) + xOff;
+    int w = x2-x1;
+    if (w > 0)
+	{
+	if (vis != tvDense) 
+	  clippedBarbs(vg, x1, midY, w, 2, 5, lfs->orientation, bColor, TRUE);
+	innerLine(vg, x1, midY, w, color);
+	}
+    }
+}
+	
+
+static void linkedFeaturesSeriesDrawAt(struct track *tg, void *item, struct vGfx *vg, 
+	int xOff, int y, double scale,
+	MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a linked features series item at position. */
+{
+struct linkedFeaturesSeries *lfs = item;
+struct linkedFeatures *lf;
+Color bColor;
+int midY = y + (tg->heightPer>>1);
+int prevEnd = lfs->start;
+
+if ((lf = lfs->features) == NULL)
+    return;
+lfColors(tg, lf, vg, &color, &bColor);
+for (lf = lfs->features; lf != NULL; lf = lf->next)
+    {
+    lfSeriesDrawConnecter(lfs, vg, prevEnd, lf->start, scale, xOff, midY,
+        color, bColor, vis);
+    prevEnd = lf->end;
+    linkedFeaturesDrawAt(tg, lf, vg, xOff, y, scale, font, color, vis);
+    }
+lfSeriesDrawConnecter(lfs, vg, prevEnd, lfs->end, scale, xOff, midY, 
+	color, bColor, vis);
+}
+
+static void clearColorBin()
+/* Clear structure which keeps track of color of highest scoring
+ * structure at each pixel. */
+{
+memset(colorBin, 0, MAXPIXELS * sizeof(colorBin[0]));
+}
+
+void itemPixelPos(struct track *tg, void *item, int xOff, double scale, 
+     int *retS, int *retE, int *retX1, int *retX2)
+/* Figure out pixel position of item. */
+{
+int s = tg->itemStart(tg, item);
+int e = tg->itemEnd(tg, item);
+*retS = s;
+*retE = e;
+*retX1 = round((s - winStart)*scale) + xOff;
+*retX2 = round((e - winStart)*scale) + xOff;
+}
+
+static void genericDrawItems(struct track *tg, 
+	int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw generic item list.  Features must be fixed height
+ * and tg->drawItemAt has to be filled in. */
+{
+double scale = scaleForPixels(width);
+int lineHeight = tg->lineHeight;
+int heightPer = tg->heightPer;
+int s, e;
+int y, x1, x2, w;
+
+if (vis == tvPack)
+    {
+    struct spaceSaver *ss = tg->ss;
+    struct spaceNode *sn;
+    for (sn = ss->nodeList; sn != NULL; sn = sn->next)
+        {
+	struct slList *item = sn->val;
+	int s = tg->itemStart(tg, item);
+	int e = tg->itemEnd(tg, item);
+	int x1 = round((s - winStart)*scale) + xOff;
+	int x2 = round((e - winStart)*scale) + xOff;
+	char *name = tg->itemName(tg, item);
+	int nameWidth = mgFontStringWidth(font, name);
+	int dotWidth = tl.nWidth/2;
+	int textX = x1 - nameWidth - dotWidth;
+
+	y = yOff + lineHeight * sn->row;
+	tg->drawItemAt(tg, item, vg, xOff, y, scale, font, color, vis);
+	vgTextRight(vg, textX, y, nameWidth, heightPer, color, font, name);
+	if (!tg->mapsSelf)
+	    {
+	    int w = x2-textX;
+	    if (w > 0)
+		{
+		mapBoxHc(s, e, textX, y, w, heightPer, tg->mapName, 
+			tg->mapItemName(tg, item), NULL);
+		}
+	    }
+	}
+    }
+else
+    {
+    boolean isFull = (vis == tvFull);
+    struct slList *item;
+    y = yOff;
+    for (item = tg->items; item != NULL; item = item->next)
+	{
+	tg->drawItemAt(tg, item, vg, xOff, y, scale, font, color, vis);
+	if (isFull) y += lineHeight;
+	} 
+    }
+}
+
 static void linkedFeaturesSeriesDraw(struct track *tg, 
 	int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw linked features items. */
 {
-int baseWidth = seqEnd - seqStart;
-struct linkedFeaturesSeries *lfs;
-struct linkedFeatures *lf;
-struct simpleFeature *sf;
-int y = yOff;
-int heightPer = tg->heightPer;
-int lineHeight = tg->lineHeight;
-int x1,x2;
-int midLineOff = heightPer/2;
-int shortOff = 2, shortHeight = heightPer-4;
-int tallStart, tallEnd, s, e, e2, s2;
-int itemOff, itemHeight;
-boolean isFull = (vis == tvFull);
-Color *shades = tg->colorShades;
-Color bColor = tg->ixAltColor;
-double scale = scaleForPixels(width);
-boolean isXeno = tg->subType == lfSubXeno;
-boolean hideLine = (vis == tvDense && tg->subType == lfSubXeno);
-
-memset(colorBin, 0, MAXPIXELS * sizeof(colorBin[0]));
-
-if (tg->itemColor)	/* Item color overrides spectrum processing. */
-    {
-    shades = NULL;
-    }
-
-if (vis == tvDense && shades)
-    {
-    slSort(&tg->items, cmpLfWhiteToBlack);
-    }
-
-for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
-    {
-    int midY = y + midLineOff;
-    int compCount = 0;
-    int w;
-    /* int prevEnd = -1; */
-    int prevEnd = lfs->start;
-
-    for (lf = lfs->features; lf != NULL; lf = lf->next)
-        {
-        if (lf->filterColor > 0)
-            color = lf->filterColor;
-        else if (tg->itemColor)
-	    {
-            color = tg->itemColor(tg, lf, vg);
-	    bColor = tg->ixAltColor;
-	    }
-        else if (shades) 
-            color =  shades[lf->grayIx+isXeno];
-        tallStart = lf->tallStart;
-        tallEnd = lf->tallEnd;
-
-        x1 = round((double)((int)prevEnd-winStart)*scale) + xOff;
-        x2 = round((double)((int)lf->start-winStart)*scale) + xOff;
-        w = x2-x1;
-        if ((isFull) && (prevEnd != -1) && !lfs->noLine) 
-              {
-              clippedBarbs(vg, x1, midY, w, 2, 5, 
-                           lfs->orientation, bColor, TRUE);
-              }
-        if (prevEnd != -1 && !lfs->noLine) 
-	    innerLine(vg, x1, midY, w, color);
-        prevEnd = lf->end;
-      
-        if (!hideLine)
-            {
-            x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
-            x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
-            w = x2-x1;
-            if(tg->mapsSelf && tg->mapItem)
-            tg->mapItem(tg, lfs, lf->name, lf->start, lf->end, x1, y, (x1 == x2 ? 1 : x2-x1), lineHeight);
-            if (isFull)
-                {
-                if (shades) bColor =  shades[(lf->grayIx>>1)];
-                clippedBarbs(vg, x1, midY, x2-x1, 2, 5, 
-                         lf->orientation, bColor, FALSE);
-                }
-	    innerLine(vg, x1, midY, w, color);
-            }
-        for (sf = lf->components; sf != NULL; sf = sf->next)
-            {
-            s = sf->start; e = sf->end;
-
-            if (s < tallStart)
-                {
-                e2 = e;
-                if (e2 > tallStart) e2 = tallStart;
-                drawScaledBoxSample(vg, s, e2, scale, xOff, y+shortOff, shortHeight, color , lf->score);
-                s = e2;
-                }
-            if (e > tallEnd)
-                {
-                s2 = s;
-                if (s2 < tallEnd) s2 = tallEnd;
-                drawScaledBoxSample(vg, s2, e, scale, xOff, y+shortOff, shortHeight, color , lf->score);
-                e = s2;
-                }
-            if (e > s)
-                {
-                drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, color, lf->score);
-                ++compCount;
-                }
-            if(hgDebug)
-                {
-                char buff[16];
-                int textWidth;
-                int sx1 = roundingScale(sf->start-winStart, width, baseWidth)+xOff;
-                int sx2 = roundingScale(sf->end-winStart, width, baseWidth)+xOff;
-                int sw = sx2 - sx1;
-                snprintf(buff, sizeof(buff), "%.2f", lf->score);
-                textWidth = mgFontStringWidth(font, buff);
-                if (textWidth <= sw )
-                    vgTextCentered(vg, sx1, y, sw, heightPer, MG_WHITE, font, buff);
-                }
-            }
-        }
-    if ((isFull) && (prevEnd != -1) && !lfs->noLine && (prevEnd < lfs->end)) 
-	{
-        x1 = round((double)((int)prevEnd-winStart)*scale) + xOff;
-        x2 = round((double)((int)lfs->end-winStart)*scale) + xOff;
-        w = x2-x1;
-	clippedBarbs(vg, x1, midY, w, 2, 5, 
-			       lfs->orientation, bColor, TRUE);
-	innerLine(vg, x1, midY, w, color);
-	}
-
-    if (isFull) y += lineHeight;
-    } 
+clearColorBin();
+if (vis == tvDense && tg->colorShades)
+    slSort(&tg->items, cmpLfsWhiteToBlack);
+genericDrawItems(tg, seqStart, seqEnd, vg, xOff, yOff, width, 
+	font, color, vis);
 }
 
 
@@ -1576,12 +1655,11 @@ void linkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw linked features items. */
 {
-/* Convert to a linked features series object */
-linkedFeaturesToLinkedFeaturesSeries(tg);
-/* Draw items */
-linkedFeaturesSeriesDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
-/* Convert Back */
-linkedFeaturesSeriesToLinkedFeatures(tg);
+clearColorBin();
+if (vis == tvDense && tg->colorShades)
+    slSort(&tg->items, cmpLfWhiteToBlack);
+genericDrawItems(tg, seqStart, seqEnd, vg, xOff, yOff, width, 
+	font, color, vis);
 }
 
 void incRange(UBYTE *start, int size)
@@ -1858,6 +1936,7 @@ void linkedFeaturesMethods(struct track *tg)
 {
 tg->freeItems = linkedFeaturesFreeItems;
 tg->drawItems = linkedFeaturesDraw;
+tg->drawItemAt = linkedFeaturesDrawAt;
 tg->itemName = linkedFeaturesName;
 tg->mapItemName = linkedFeaturesName;
 tg->totalHeight = tgFixedTotalHeight;
@@ -1898,6 +1977,7 @@ void linkedFeaturesSeriesMethods(struct track *tg)
 {
 tg->freeItems = freeLinkedFeaturesSeriesItems;
 tg->drawItems = linkedFeaturesSeriesAverageDense;
+tg->drawItemAt = linkedFeaturesSeriesDrawAt;
 tg->itemName = linkedFeaturesSeriesName;
 tg->mapItemName = linkedFeaturesSeriesName;
 tg->totalHeight = tgFixedTotalHeight;
@@ -3015,14 +3095,15 @@ tg->drawName  	= TRUE;
 char *refGeneName(struct track *tg, void *item)
 /* Return abbreviated genie name. */
 {
-    static char cat[128];
+static char cat[128];
 struct linkedFeatures *lf = item;
 if (lf->extra != NULL) 
     {
     sprintf(cat,"%s",(char *)lf->extra);
     return cat;
     }
-else return lf->name;
+else 
+    return lf->name;
 }
 
 char *refGeneMapName(struct track *tg, void *item)
@@ -3064,8 +3145,9 @@ hFreeConn(&conn);
 void loadRefGene(struct track *tg)
 /* Load up RefSeq known genes. */
 {
+enum trackVisibility vis = limitVisibility(tg, tg->items);
 tg->items = lfFromGenePredInRange("refGene", chromName, winStart, winEnd);
-if (limitVisibility(tg, tg->items) == tvFull)
+if (vis != tvDense)
     {
     lookupRefNames(tg->items);
     slSort(&tg->items, linkedFeaturesCmpStart);
@@ -3566,8 +3648,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     item = loader(row + rowOffset);
     slAddHead(&itemList, item);
     }
-
-slReverse(&itemList);
 slSort(&itemList, bedCmp);
 sqlFreeResult(&sr);
 tg->items = itemList;
@@ -3580,21 +3660,26 @@ Color contrastingColor(struct vGfx *vg, int backgroundIx)
 {
 struct rgbColor c = vgColorIxToRgb(vg, backgroundIx);
 int val = (int)c.r + c.g + c.g + c.b;
-if (val >= 256)
+if (val > 300)
     return MG_BLACK;
 else
     return MG_WHITE;
 }
 
 static void bedDrawSimpleAt(struct track *tg, struct bed *item, 
-	struct vGfx *vg, int xStart, int xEnd, int y, int midLineOff,
+	struct vGfx *vg, int xOff, int y, int width, 
 	double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single simple bed item at position. */
 {
 int heightPer = tg->heightPer;
-int x1 = round((double)((int)item->chromStart-winStart)*scale) + xStart;
-int x2 = round((double)((int)item->chromEnd-winStart)*scale) + xStart;
-int w = x2-x1;
+int xEnd = xOff + width;
+int x1 = round((double)((int)item->chromStart-winStart)*scale) + xOff;
+int x2 = round((double)((int)item->chromEnd-winStart)*scale) + xOff;
+int w;
+
+if (x1 < xOff) x1 = xOff;
+if (x2 > xEnd) x2 = xEnd;
+w = x2-x1;
 if (tg->itemColor != NULL)
     color = tg->itemColor(tg, item, vg);
 else
@@ -3611,16 +3696,14 @@ if (color)
 	{
 	/* Clip here so that text will tend to be more visible... */
 	char *s = tg->itemName(tg, item);
-	if (x1 < xStart)
-	    x1 = xStart;
-	if (x2 > xEnd)
-	    x2 = xEnd;
 	w = x2-x1;
 	if (w > mgFontStringWidth(font, s))
 	    {
 	    Color textColor = contrastingColor(vg, color);
 	    vgTextCentered(vg, x1, y, w, heightPer, textColor, font, s);
 	    }
+	mapBoxHc(item->chromStart, item->chromEnd, x1, y, x2 - x1, heightPer,
+		tg->mapName, tg->mapItemName(tg, item), NULL);
 	}
     else if (vis == tvPack)
         {
@@ -3643,7 +3726,7 @@ if (tg->subType == lfWithBarbs)
     w = x2-x1;
     if (dir != 0)
 	{
-	int midY = y + midLineOff;
+	int midY = y + (heightPer>>1);
 	Color textColor = contrastingColor(vg, color);
 	clippedBarbs(vg, x1, midY, w, 2, 5, dir, textColor, TRUE);
 	}
@@ -3670,14 +3753,14 @@ if (vis == tvPack)
         {
 	y = yOff + lineHeight * sn->row;
 	item = sn->val;
-	bedDrawSimpleAt(tg, item, vg, xOff, xOff + width, y, midLineOff, scale, font, color, vis);
+	bedDrawSimpleAt(tg, item, vg, xOff, y, width, scale, font, color, vis);
 	}
     }
 else
     {
     for (item = tg->items; item != NULL; item = item->next)
 	{
-	bedDrawSimpleAt(tg, item, vg, xOff, xOff + width, y, midLineOff, scale, font, color, vis);
+	bedDrawSimpleAt(tg, item, vg, xOff, y, width, scale, font, color, vis);
 	if (isFull)
 	    y += lineHeight;
 	}
@@ -4085,14 +4168,14 @@ if (textWidth <= width)
 return NULL;
 }
 
-void cytoBandColor(struct cytoBand *band, Color cenColor, Color *retBoxColor, Color *retTextColor)
+Color cytoBandColor(struct track *tg, void *item, struct vGfx *vg)
 /* Figure out color of band. */
 {
+struct cytoBand *band = item;
 char *stain = band->gieStain;
 if (startsWith("gneg", stain))
     {
-    *retBoxColor = shadesOfGray[1];
-    *retTextColor = MG_BLACK;
+    return shadesOfGray[1];
     }
 else if (startsWith("gpos", stain))
     {
@@ -4100,18 +4183,15 @@ else if (startsWith("gpos", stain))
     stain += 4;	
     if (isdigit(stain[0]))
         percentage = atoi(stain);
-    *retBoxColor = shadesOfGray[grayInRange(percentage, -30, 100)];
-    *retTextColor = MG_WHITE;
+    return shadesOfGray[grayInRange(percentage, -30, 100)];
     }
 else if (startsWith("gvar", stain))
     {
-    *retBoxColor = shadesOfGray[maxShade];
-    *retTextColor = MG_WHITE;
+    return shadesOfGray[maxShade];
     }
 else 
     {
-    *retBoxColor = cenColor;
-    *retTextColor = MG_WHITE;
+    return tg->ixAltColor;
     }
 }
 
@@ -4144,7 +4224,8 @@ for (band = tg->items; band != NULL; band = band->next)
     w = x2-x1;
     if (w < 1)
 	w = 1;
-    cytoBandColor(band, tg->ixAltColor, &col, &textCol);
+    col = cytoBandColor(tg, band, vg);
+    textCol = contrastingColor(vg, col);
     vgBox(vg, x1, y, w, heightPer, col);
     s = abbreviatedBandName(tg, band, tl.font, w);
     if (s != NULL)
@@ -4176,7 +4257,9 @@ void cytoBandMethods(struct track *tg)
 tg->loadItems = loadCytoBands;
 tg->freeItems = freeCytoBands;
 tg->drawItems = cytoBandDraw;
+tg->itemColor = cytoBandColor;
 tg->itemName = cytoBandName;
+tg->drawName = TRUE;
 }
 
 static void swissDraw(struct track *tg, int seqStart, int seqEnd,
@@ -4582,7 +4665,6 @@ int lineHeight = tg->lineHeight;
 int midLineOff = heightPer/2;
 int shortOff = 2, shortHeight = heightPer-4;
 int tallStart, tallEnd, shortStart, shortEnd;
-int itemOff, itemHeight;
 boolean isFull = (vis == tvFull);
 double scale = scaleForPixels(width);
 
@@ -4590,7 +4672,7 @@ memset(colorBin, 0, MAXPIXELS * sizeof(colorBin[0]));
 
 if (vis == tvDense)
     {
-    slSort(&tg->items, cmpLfWhiteToBlack);
+    slSort(&tg->items, cmpLfsWhiteToBlack);
     }
 
 for (cds = tg->items; cds != NULL; cds = cds->next)
@@ -6841,7 +6923,6 @@ int x1,x2;
 int midLineOff = heightPer/2;
 int shortOff = 2, shortHeight = heightPer-4;
 int s, e, e2, s2;
-int itemOff, itemHeight;
 boolean isFull = (vis == tvFull);
 Color *shades = tg->colorShades;
 Color bColor = tg->ixAltColor;
@@ -8704,7 +8785,6 @@ void drawButtonBox(struct vGfx *vg, int x, int y, int w, int h, int enabled)
 /* Draw a min-raised looking button. */
 {
 int light = shadesOfGray[1], mid = shadesOfGray[2], dark = shadesOfGray[4];
-uglyh("drawButtonBox(x %d, y %d, w %d, h %d", x, y, w, h);
 if (enabled) 
     {
     vgBox(vg, x, y, w, 1, light);
@@ -8835,11 +8915,10 @@ if (withLeftLabels)
     int inWid = insideX-gfxBorder*3;
     int nextY, lastY, trackIx = 0;
     double min0, max0;
-    Color mediumBlue = vgFindColorIx(vg, 150, 150, 250);
+    Color lightRed = vgFindColorIx(vg, 255, 180, 180);
 
-    vgBox(vg, insideX-gfxBorder*2, 0, gfxBorder, pixHeight, mediumBlue);
+    vgBox(vg, insideX-gfxBorder*2, 0, gfxBorder, pixHeight, lightRed);
     vgSetClip(vg, gfxBorder, gfxBorder, inWid, pixHeight-2*gfxBorder);
-    uglyh("setClip %d %d %d %d", gfxBorder, gfxBorder, inWid, pixHeight-2*gfxBorder);
     y = gfxBorder;
     if (withRuler)
 	{
@@ -9130,7 +9209,8 @@ for (track = trackList; track != NULL; track = track->next)
 	if (withCenterLabels)
 	    y += fontHeight;
 	if (track->limitedVis == tvPack)
-	    vgSetClip(vg, gfxBorder, y, pixWidth-2*gfxBorder, track->height);
+	    vgSetClip(vg, gfxBorder+trackTabWidth+1, y, 
+	    	pixWidth-2*gfxBorder-trackTabWidth-1, track->height);
 	else
 	    vgSetClip(vg, insideX, y, insideWidth, track->height);
 	track->drawItems(track, winStart, winEnd,

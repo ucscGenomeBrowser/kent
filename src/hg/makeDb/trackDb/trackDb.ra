@@ -116,6 +116,7 @@ longLabel BAC End Pairs
 group map
 priority 15
 visibility hide
+type bed 6 +
 
 track bacEndPairsBad
 shortLabel Orphan BAC End Pairs
@@ -267,7 +268,7 @@ shortLabel Known Genes
 longLabel Known Genes (from full length mRNAs)
 group genes
 priority 33
-visibility hide
+visibility pack
 color 20,20,170
 type genePred
 
@@ -276,7 +277,7 @@ shortLabel Known Genes
 longLabel Known Genes based on SWISS-PROT, TrEMBL, and mRNA
 group genes
 priority 34
-visibility full
+visibility pack
 color 12,12,120
 type genePred refPep refMrna
 
@@ -285,7 +286,7 @@ shortLabel RefSeq Genes
 longLabel RefSeq Genes
 group genes
 priority 35
-visibility full
+visibility pack
 color 12,12,120
 type genePred refPep refMrna
 
@@ -433,7 +434,7 @@ shortLabel $Organism mRNAs
 longLabel $Organism mRNAs from Genbank 
 group rna
 priority 54
-visibility full
+visibility pack
 spectrum on
 type psl .
 
@@ -670,7 +671,7 @@ shortLabel Transfac Hits
 longLabel Transfac Hits
 group regulation
 priority 80
-visibility full
+visibility hide
 color 12,12,120
 type genePred refPep refMrna
 
@@ -679,7 +680,7 @@ shortLabel Transfac Ratios
 longLabel Transfac Likelihood Ratios
 group regulation
 priority 81
-visibility full
+visibility hide
 color 12,12,120
 type bed 6
 
