@@ -7,4 +7,5 @@ visibility pack
 colorChromDefault off
 type psl protein
 pred dm1.blastFBPep00
+blastRef dm1.blastFBRef00
 url http://flybase.bio.indiana.edu/.bin/fbidq.html?
