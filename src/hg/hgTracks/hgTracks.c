@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.883 2005/02/02 22:48:06 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.884 2005/02/03 00:34:33 daryl Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -4019,14 +4019,14 @@ tg->items = list;
 
 void tfbsConsSitesMethods(struct track *tg)
 {
-    bedMethods(tg);
-    tg->loadItems = loadTfbsConsSites;
+bedMethods(tg);
+tg->loadItems = loadTfbsConsSites;
 }
 
 void tfbsConsMethods(struct track *tg)
 {
-    bedMethods(tg);
-    tg->loadItems = loadTfbsCons;
+bedMethods(tg);
+tg->loadItems = loadTfbsCons;
 }
 
 void isochoreLoad(struct track *tg)
