@@ -54,6 +54,7 @@
 #include "expRecord.h"
 #include "altGraph.h"
 #include "geneGraph.h"
+#include "sample.h"
 
 #define ROGIC_CODE 1	/* Please take these out.  It's *everyone's* code now. -jk */
 #define FUREY_CODE 1
@@ -145,7 +146,6 @@ Color shadesOfGray[10+1];	/* 10 shades of gray from white to black
 Color shadesOfBrown[10+1];	/* 10 shades of brown from tan to tar. */
 static struct rgbColor brownColor = {100, 50, 0};
 static struct rgbColor tanColor = {255, 240, 200};
-
 
 Color shadesOfSea[10+1];       /* Ten sea shades. */
 static struct rgbColor darkSeaColor = {0, 60, 120};
@@ -278,7 +278,13 @@ static int tgUserDefinedTotalHeight(struct trackGroup *tg, enum trackVisibility 
 /* Wiggle track groups will use this to figure out the height they use
 as defined in the cart */
 {
-int heightFromCart = atoi(cartUsualString(cart, "wiggle.heightPer", "10"));
+
+int heightFromCart;
+char o1[128];
+
+sprintf( o1, "%s.heightPer", tg->mapName);
+heightFromCart = atoi(cartUsualString(cart, o1, "10"));
+
 tg->lineHeight = max(mgFontLineHeight(tl.font)+1, heightFromCart);
 tg->heightPer = tg->lineHeight - 1;
 switch (vis)
@@ -933,6 +939,26 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
 }
 
 
+boolean sameRgbColor( struct rgbColor *c1, struct rgbColor *c2 )
+{
+    if( c1->r == c2->r  &&
+        c1->g == c2->g  &&
+        c1->b == c2->b )
+        return(TRUE);
+    return(FALSE);
+}
+
+Color *shadesFromBaseColor( struct rgbColor *rgb )
+{
+   if( sameRgbColor( rgb, &darkSeaColor ))
+        return( shadesOfSea );
+   if( sameRgbColor( rgb, &brownColor ))
+        return( shadesOfBrown );
+   else         
+        return( shadesOfGray );
+}
+
+
 static void wiggleLinkedFeaturesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
         struct memGfx *mg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
@@ -969,12 +995,31 @@ int ybase;
 
 /*process cart options*/
 
-char *interpolate = cartUsualString(cart, "linear.interp", "Linear Interpolation");
-enum wiggleOptEnum wiggleType = wiggleStringToEnum(interpolate);
-char *aa = cartUsualString(cart, "wiggle.anti.alias", "on");
-int fill = atoi(cartUsualString(cart, "wiggle.fill", "0"));
+enum wiggleOptEnum wiggleType;
+char *interpolate;
+char *aa; 
+int fill; 
+
+char o1[128];
+char o2[128];
+char o3[128];
+
+tg->colorShades = shadesFromBaseColor( &tg->color );
+shades = tg->colorShades;
 
 lf=tg->items;    
+if(lf==NULL) return;
+sprintf( o1, "%s.linear.interp", strtok(lf->name,"._-\n"));
+sprintf( o2, "%s.anti.alias", strtok(lf->name,"._-\n"));
+sprintf( o3, "%s.fill", strtok(lf->name,"._-\n"));
+
+interpolate = cartUsualString(cart, o1, "Linear Interpolation");
+wiggleType = wiggleStringToEnum(interpolate);
+aa = cartUsualString(cart, o2, "on");
+fill = atoi(cartUsualString(cart, o3, "0"));
+
+
+//errAbort( "(%s)", lf->name );
 for(lf = tg->items; lf != NULL; lf = lf->next) 
     {
     
@@ -986,9 +1031,9 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 
         //errAbort( "heightPer = %d\n", heightPer );
         x1 = round((double)((int)s+1-winStart)*scale) + xOff;
-        y1 = (int)((double)y+((double)s-e)*(double)heightPer/100.0+(double)heightPer);
+        y1 = (int)((double)y+((double)s-e)*(double)heightPer/1000.0+(double)heightPer);
 
-        ybase = (int)((double)y+(double)heightPer/100.0+(double)heightPer);
+        ybase = (int)((double)y+(double)heightPer/1000.0+(double)heightPer);
 
         if (prevEnd > 0)
 	        {
@@ -1001,10 +1046,10 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
                     {
                     if( sameString( aa, "on" )) /*use anti-aliasing*/
                         mgConnectingLine( mg, x1, y1, x2, y2,
-                            shadesOfGray, ybase, 1, fill );
+                            shades, ybase, 1, fill );
                     else
                         mgConnectingLine( mg, x1, y1, x2, y2,
-                            shadesOfGray, ybase, 0, fill );
+                            shades, ybase, 0, fill );
                     }
                 else if( wiggleType == wiggleNoInterpolation )
                     {
@@ -1017,9 +1062,9 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 
     /*draw the points themselves*/
     //mgDrawPointAntiAlias( mg, x1, y1, shadesOfGray );
-	drawScaledBox(mg, s, s+1, scale, xOff, (int)y1-1, 3, blackIndex());
+	drawScaledBox(mg, s, s+1, scale, xOff, (int)y1-1, 3, bColor);
     if( fill )
-	    drawScaledBox(mg, s, s+1, scale, xOff, (int)y1+2, ybase, shadesOfGray[3]);
+	    drawScaledBox(mg, s, s+1, scale, xOff, (int)y1+2, ybase, shades[3]);
 
     prevEnd = s;
     prevY = y1;
@@ -1583,6 +1628,36 @@ lf->tallEnd = bed->thickEnd;
 return lf;
 }
 
+
+struct linkedFeatures *lfFromSample(struct sample *sample)
+/* Return a linked feature from a full sample (wiggle) track. */
+{
+struct linkedFeatures *lf;
+struct simpleFeature *sf, *sfList = NULL;
+int grayIx = grayInRange(sample->score, 0, 1000);
+int *X = sample->samplePosition, start;
+int *Y = sample->sampleHeight;
+int sampleCount = sample->sampleCount, i;
+
+assert(X != NULL && Y != NULL && sampleCount > 0);
+AllocVar(lf);
+lf->grayIx = grayIx;
+strncpy(lf->name, sample->name, sizeof(lf->name));
+lf->orientation = orientFromChar(sample->strand[0]);
+for (i=0; i<sampleCount; ++i)
+    {
+    AllocVar(sf);
+    start = X[i] + sample->chromStart;
+    sf->start = start;
+    sf->end = start + Y[i];
+    sf->grayIx = grayIx;
+    slAddHead(&sfList, sf);
+    }
+slReverse(&sfList);
+lf->components = sfList;
+finishLf(lf);
+return lf;
+}
 
 
 void setTgDarkLightColors(struct trackGroup *tg, int r, int g, int b)
@@ -6650,6 +6725,32 @@ slReverse(&lfList);
 tg->items = lfList;
 }
 
+
+void loadSampleIntoLinkedFeature(struct trackGroup *tg)
+/* Convert sample info in window to linked feature. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+struct sample *sample;
+struct linkedFeatures *lfList = NULL, *lf;
+
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    sample = sampleLoad(row+rowOffset);
+    lf = lfFromSample(sample);
+    slAddHead(&lfList, lf);
+    sampleFree(&sample);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&lfList);
+tg->items = lfList;
+}
+
+
 void loadGenePred(struct trackGroup *tg)
 /* Convert bed info in window to linked feature. */
 {
@@ -6699,18 +6800,18 @@ if (sameWord(type, "bed"))
     }
 else if (sameWord(type, "sample"))
     {
-    int fieldCount = 12;
+    int fieldCount = 9;
     if (wordCount > 1)
         fieldCount = atoi(words[1]);
     group->bedSize = fieldCount;
-    if (fieldCount == 12)
+    if (fieldCount == 9)
 	{
 	sampleLinkedFeaturesMethods(group);
-	group->loadItems = loadGappedBed;
+	group->loadItems = loadSampleIntoLinkedFeature;
 	}
     else
     {
-    errAbort("A 'sample' track must have eactly 12 fields.");
+    errAbort("A 'sample' track must have exactly 9 fields.(%d)", fieldCount);
     }
     }
 else if (sameWord(type, "genePred"))
