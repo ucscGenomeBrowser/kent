@@ -190,6 +190,7 @@ int pixWidth, pixHeight;
 char *answer;
 char cond_str[255];
 struct sqlConnection *conn; 
+struct sqlConnection *connCentral;
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -197,6 +198,7 @@ char *chp;
 int  i,l;
 int  ii = 0;
 int  iypos;
+char *blatGbDb;
 char *sciName, *commonName;
 
 hPrintf("<br><font size=4>Protein ");
@@ -305,22 +307,54 @@ hPrintf("<P>");
 histDone:
 
 hPrintf("<P>");
+fflush(stdout);
 
-/* Do GB links only if the protein belongs to a supported genome */
-if (proteinInSupportedGenome)
+/* See if a UCSC Genome Browser exist for this organism.  If so, display BLAT link. */
+connCentral = hConnectCentral();
+safef(query, sizeof(query), 
+      "select defaultDb.name from dbDb, defaultDb where dbDb.scientificName='%s' and dbDb.name=defaultDb.name",
+      sciName);
+sr = sqlGetResult(connCentral, query);
+row = sqlNextRow(sr);
+if (row != NULL)
     {
-    doGenomeBrowserLink(protDisplayID, mrnaID, hgsidStr);
-    doGeneDetailsLink(protDisplayID, mrnaID, hgsidStr);
+    blatGbDb = strdup(row[0]);
+    }
+else
+    {
+    blatGbDb = NULL;
+    }
+sqlFreeResult(&sr);
+hDisconnectCentral(&connCentral);
+
+if (proteinInSupportedGenome || (blatGbDb != NULL))
+    {
+    hPrintf("\n<B>UCSC links:</B><BR>\n ");
+    hPrintf("<UL>\n");
+
+    /* Show GB links only if the protein belongs to a supported genome */
+    if (proteinInSupportedGenome)
+    	{
+    	doGenomeBrowserLink(protDisplayID, mrnaID, hgsidStr);
+    	doGeneDetailsLink(protDisplayID, mrnaID, hgsidStr);
+    	}
+
+    /* Show Gene Sorter link only if it is valid for this genome */
+    if (hgNearOk(database))
+    	{
+    	doGeneSorterLink(protDisplayID, mrnaID, hgsidStr);
+    	}
+	
+    /* Show BLAT link if we have UCSC Genome Browser for it */
+    if (blatGbDb != NULL)
+    	{
+    	doBlatLink(blatGbDb, sciName, commonName);
+    	}
+	
+    hPrintf("</UL><P>");
     }
 
-/* show Gene Sorter link only if it is valid for this genome */
-if (hgNearOk(database))
-    {
-    doGeneSorterLink(protDisplayID, mrnaID, hgsidStr);
-    }
-
-hPrintf("</UL><P>");
-;
+/* This section shows various types of  domains */
 conn = sqlConnect("swissProt");
 domainsPrint(conn, proteinID);
 
