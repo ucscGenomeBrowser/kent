@@ -115,11 +115,11 @@ done after repeat masking and distributing to cluster nodes)
         rm -f RMRun/RMJobs
         touch RMRun/RMJobs
         foreach d ( ?{,?}/NT_* )
-          foreach f ( /cluster/store3/gs.13/build30/$d/NT_*_*.fa )
+          foreach f ( /cluster/store3/gs.12/build29/$d/NT_*_*.fa )
             set f = $f:t
             echo /cluster/bin/scripts/RMLocalSens \
-                 /cluster/store3/gs.13/build30/$d $f \
-                '{'check out line+ /cluster/store3/gs.13/build30/$d/$f.out'}' \
+                 /cluster/store3/gs.12/build29/$d $f \
+                '{'check out line+ /cluster/store3/gs.12/build29/$d/$f.out'}' \
               >> RMRun/RMJobs
           end
         end
@@ -228,7 +228,7 @@ Load chromosome sequence info into database
      cd ~/oo
      hgNibSeq -preMadeNib hg12 /cluster/store1/gs.13/build30/nib ?{,?}/chr*.fa
 
-Store o+o info in database. DONE 7/26/02
+Store o+o info in database. DONE 8/13/02
 Note: for build30, Terry specially requested these files from NCBI:
   finished.finf
   draft.finf
@@ -291,10 +291,11 @@ format.
            mget hs.*.gz
   o - Unpack this into fa files and get extra info with:
       cd /cluster/store1/mrna.130/refSeq
-      gunzip -c hs.gbff.gz hs.faa.gz | \
+      gunzip -c hs.gbff.gz  | \
         gbToFaRa ~kent/hg/h/mrna.fil ../refSeq.fa ../refSeq.ra ../refSeq.ta \
         stdin
-  o - Log onto server and change to yo gunzip -c gbpri*.gz gbmam*.gz gbrod*.gz gbv*.gz gbinv*.gz | \
+  o - Log onto server and change to yo 
+gunzip -c gbpri*.gz gbmam*.gz gbrod*.gz gbv*.gz gbinv*.gz | \
         gbToFaRa ~kent/hg/h/xenoRna.fil ../mrna.130/xenoRna.fa \
         ../mrna.130/xenoRna.ra ../mrna.130/xenoRna.ta stdiur genbank directory.
       mkdir -p /cluster/store1/mrna.130
@@ -322,7 +323,7 @@ o - Store the mRNA (non-alignment) info in database.
     The est line will take quite some time to complete.
 
 
-MAKING AND STORING mRNA AND EST ALIGNMENTS (IN PROGRESS)
+MAKING AND STORING mRNA AND EST ALIGNMENTS (DONE w/ mrna.130)
 
 o - Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
     Copy the above 3 files from /cluster/store1/mrna.130 into 
@@ -398,7 +399,7 @@ In tcsh:
       hgLoadPsl hg12 *.psl
       cd ..
       hgLoadPsl hg12 all_mrna.psl -nobin
-DONE TO HERE 8/3/02
+
 o - Load EST alignments into database.
       ssh hgwdev
       cd /cluster/store1/gs.13/build30/bed/est/chrom
@@ -473,6 +474,7 @@ o - Create rnaCluster table (depends on {est,mrna}OrientInfo above)
    end
    cd bed/rnaCluster
    hgLoadBed hg12 rnaCluster chrom/*.bed > /dev/null
+
 
 PRODUCING KNOWN GENES (DONE for 130)
 
