@@ -74,7 +74,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.505 2003/05/06 14:38:15 booch Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.506 2003/05/07 01:05:14 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -3331,7 +3331,7 @@ void ensGeneMethods(struct track *tg)
 tg->itemName = ensGeneName;
 }
 
-Color intronEstColorAndOrient(struct track *tg, void *item, struct vGfx *vg)
+Color estColorAndOrient(struct track *tg, void *item, struct vGfx *vg)
 /* Always returns MG_BLACK, attempts to orient ests using data in estOrientInfo table. */
 {
 struct linkedFeatures *lf = item;
@@ -3365,35 +3365,6 @@ else /* if can't find in estOrientInfo table */
     }
 hFreeConn(&conn);
 return col;
-}
-
-Color estColorAndOrient(struct track *tg, void *item, struct vGfx *vg)
-/* Always returns MG_BLACK, also tries to orient them using genbank info. */
-{
-struct linkedFeatures *lf = item;
-char query[512];
-char buf[64], *s;
-struct sqlConnection *conn = hAllocConn();
-int col = MG_BLACK;
-int estOrient = 0;
-
-sprintf(query, "select direction from mrna where acc='%s'", lf->name);
-if ((s = sqlQuickQuery(conn, query, buf, sizeof(buf))) != NULL)
-    {
-    if (s[0] == '3')
-	{
-	lf->orientation = -lf->orientation;	/* Not the best place for this but... */
-	}
-    }
-hFreeConn(&conn);
-return col;
-}
-
-void intronEstMethods(struct track *tg)
-/* Make track of EST methods - overrides color handler. */
-{
-tg->itemColor = intronEstColorAndOrient;
-tg->extraUiData = newMrnaUiData(tg->mapName, FALSE);
 }
 
 void estMethods(struct track *tg)
@@ -10011,7 +9982,7 @@ registerTrackHandler("sanger22pseudo", sanger22Methods);
 registerTrackHandler("genieAlt", genieAltMethods);
 registerTrackHandler("ensGene", ensGeneMethods);
 registerTrackHandler("mrna", mrnaMethods);
-registerTrackHandler("intronEst", intronEstMethods);
+registerTrackHandler("intronEst", estMethods);
 registerTrackHandler("est", estMethods);
 registerTrackHandler("tightMrna", mrnaMethods);
 registerTrackHandler("tightEst", mrnaMethods);
@@ -10099,8 +10070,8 @@ registerTrackHandler("triangleSelf", triangleMethods );
 registerTrackHandler("transfacHit", triangleMethods );
 /* MGC related */
 registerTrackHandler("mgcNcbiPicks", estMethods);
-registerTrackHandler("mgcNcbiSplicedPicks", intronEstMethods);
-registerTrackHandler("mgcUcscPicks", intronEstMethods);
+registerTrackHandler("mgcNcbiSplicedPicks", estMethods);
+registerTrackHandler("mgcUcscPicks", estMethods);
 registerTrackHandler("humMusL", humMusLMethods);
 registerTrackHandler("regpotent", humMusLMethods);
 registerTrackHandler("mm3Rn2L", humMusLMethods);
