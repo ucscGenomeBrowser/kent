@@ -1,10 +1,10 @@
 /* hgGoldGapGl - Put chromosome .agp and .gl files into browser database.. */
 #include "common.h"
-#include "cheapcgi.h"
 #include "portable.h"
 #include "linefile.h"
 #include "dystring.h"
 #include "hash.h"
+#include "options.h"
 #include "agpFrag.h"
 #include "agpGap.h"
 #include "jksql.h"
@@ -20,6 +20,8 @@ errAbort(
   "hgGoldGapGl - Put chromosome .agp and .gl files into browser database.\n"
   "usage:\n"
   "   hgGoldGapGl database gsDir ooSubDir\n"
+  "options:\n"
+  "   -noGl  - don't do gl bits\n"
   "example:\n"
   "   hgGoldGapGl hg5 /projects/hg/gs.5 oo.21\n");
 }
@@ -249,7 +251,7 @@ while (lineFileRow(lf, row))
 lineFileClose(&lf);
 }
 
-void hgGoldGapGl(char *database, char *gsDir, char *ooSubDir)
+void hgGoldGapGl(char *database, char *gsDir, char *ooSubDir, boolean doGl)
 /* hgGoldGapGl - Put chromosome .agp and .gl files into browser database.. */
 { 
 struct fileInfo *chrFiList, *chrFi; 
@@ -261,17 +263,21 @@ boolean gotAny = FALSE;
 
 sprintf(ooDir, "%s/%s", gsDir, ooSubDir);
 
-sprintf(pathName, "%s/ffa/sequence.inf", gsDir);
-makeCloneVerHash(pathName, cloneVerHash);
+if (doGl)
+    {
+    sprintf(pathName, "%s/ffa/sequence.inf", gsDir);
+    makeCloneVerHash(pathName, cloneVerHash);
+    }
 
 chrFiList = listDirX(ooDir, "*", FALSE);
 for (chrFi = chrFiList; chrFi != NULL; chrFi = chrFi->next)
     {
-    if (chrFi->isDir && strlen(chrFi->name) <= 2)
+    if (chrFi->isDir && (strlen(chrFi->name) <= 2) || startsWith("NA_", chrFi->name))
         {
 	sprintf(pathName, "%s/%s", ooDir, chrFi->name);
 	makeGoldAndGap(conn, pathName);
-	makeGl(conn, pathName, cloneVerHash);
+	if (doGl)
+	    makeGl(conn, pathName, cloneVerHash);
 	gotAny = TRUE;
 	uglyf("done %s\n", chrFi->name);
         }
@@ -285,9 +291,11 @@ if (!gotAny)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
+boolean doGl;
+optionHash(&argc, argv);
 if (argc != 4)
     usage();
-hgGoldGapGl(argv[1], argv[2], argv[3]);
+doGl = !(optionExists("noGl") || optionExists("nogl"));
+hgGoldGapGl(argv[1], argv[2], argv[3], doGl);
 return 0;
 }

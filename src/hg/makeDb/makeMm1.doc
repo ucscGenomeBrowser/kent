@@ -2,7 +2,7 @@ This file describes how we made the browser database on the mouse
 genome,November 2001 build.
 
 
-PROCESSING MOUSE MRNA FROM GENBANK INTO DATABASE.
+PROCESSING MOUSE MRNA FROM GENBANK INTO DATABASE. (done)
 
 o - Create the mouseRNA and mouseEST fasta files.
     ssh kkstore
@@ -84,14 +84,14 @@ Then load the .out files into the database with:
     cd ~/mm
     hgLoadOut mm1 ?/*.fa.out ??/*.fa.out
 
-STORING O+O SEQUENCE AND ASSEMBLY INFORMATION 
+STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (done)
 
 Create packed chromosome sequence files 
      ssh kkstore
      cd ~/oo
      tcsh jkStuff/makeNib.sh
 
-Load chromosome sequence info into database (done)
+Load chromosome sequence info into database 
      ssh hgwdev
      mysql -A -u hgcat -pbigsecret mm1  < ~/src/hg/lib/chromInfo.sql
      cd ~/mm
@@ -99,12 +99,7 @@ Load chromosome sequence info into database (done)
 
 Store o+o info in database.
      cd /cluster/store2/mm.2001.11/mm1
-     jkStuff/liftGl.sh contig.gl
-     hgGoldGapGl mm1 /cluster/store2/mm.2001.11 mm1 
-     cd /cluster/store2/mm.2001.11
-     hgClonePos mm1 mm1 ffa/sequence.inf /cluster/store2/mm.2001.11
-(Ignore warnings about missing clones - these are in chromosomes 21 and 22)
-     # hgCtgPos mm1 mm1  - NCBI has no physical map.
+     hgGoldGapGl mm1 /cluster/store2/mm.2001.11 mm1 -noGl
 
 Make and load GC percent table
      ssh hgwdev
