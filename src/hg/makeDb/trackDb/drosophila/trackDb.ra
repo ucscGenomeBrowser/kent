@@ -28,8 +28,8 @@ type psl xeno
 colorChromDefault off
 
 track bdgpGene
-shortLabel BDGP Genes
-longLabel Protein-Coding Genes from Berkeley Drosophila Genome Project
+shortLabel FlyBase Genes
+longLabel Protein-Coding Genes from FlyBase
 group genes
 priority 45.5
 visibility pack
@@ -38,8 +38,8 @@ type genePred bdgpGenePep
 hgGene on
 
 track bdgpNonCoding
-shortLabel BDGP Non-coding
-longLabel Non-Coding Genes from Berkeley Drosophila Genome Project
+shortLabel FlyBase Non-coding
+longLabel Non-Coding Genes from FlyBase
 group genes
 priority 46
 visibility pack
