@@ -265,7 +265,6 @@ struct fileStatus *basicFileCheck(char *file, struct hash *hash)
 {
 struct fileStatus *fi = hashFindVal(hash, file);
 struct stat statBuf;
-FILE *f;
 if (fi != NULL)
     return fi;
 lmAllocVar(hash->lm, fi);
@@ -506,7 +505,6 @@ char *hubSingleLineQuery(char *query)
 {
 struct rudp *ru = rudpMustOpen();
 struct paraMessage pm;
-char *result = NULL;
 
 pmInitFromName(&pm, "localhost", paraHubPort);
 if (!pmSendString(&pm, ru, query))
@@ -521,8 +519,7 @@ struct slRef *hubMultilineQuery(char *query)
 /* Send a command with a multiline response to hub,
  * and return response as a list of strings. */
 {
-struct slRef *list = NULL, *el;
-char *line;
+struct slRef *list = NULL;
 struct rudp *ru = rudpMustOpen();
 struct paraMessage pm;
 pmInitFromName(&pm, "localhost", paraHubPort);
@@ -583,7 +580,6 @@ struct jobDb *parseJobList(char *jobList)
 {
 struct lineFile *lf = lineFileOpen(jobList, TRUE);
 char *line;
-int jobCount = 0;
 struct jobDb *db;
 struct job *job;
 AllocVar(db);
@@ -708,8 +704,7 @@ for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
 	errAbort("Expecting at least 6 words in pstat output. paraHub and para out of sync");
     else
 	{
-	char *state = row[0], *jobId = row[1], *user = row[2],
-	     *exe = row[3], *ticks = row[4], *host = row[5];
+	char *state = row[0], *jobId = row[1], *ticks = row[4], *host = row[5];
 	time_t t = atol(ticks);
 	if ((sub = hashFindVal(hash, jobId)) != NULL)
 	    {
@@ -783,16 +778,8 @@ struct hash *markRunJobStatus(struct jobDb *db)
 {
 struct job *job;
 struct submission *sub;
-char *line, *words[11];
-int wordCount;
-long killSeconds = killTime*60;
-long warnSeconds = warnTime*60;
-long duration;
- int numChecked = 0;
 struct hash *checkHash = newHash(0);
 struct hash *resultsHash = hashResults(resultsName);
-char host[128];
-time_t now = time(NULL);
 
 verbose(1, "Checking finished jobs\n");
 beginHappy();
@@ -968,7 +955,7 @@ void reportOnJobs(struct jobDb *db)
 /* Report on status of jobs. */
 {
 int submitError = 0, inQueue = 0, queueError = 0, trackingError = 0, running = 0, crashed = 0,
-    slow = 0, hung = 0, ranOk = 0, jobCount = 0, unsubmitted = 0, total = 0, failed = 0;
+    slow = 0, hung = 0, ranOk = 0, unsubmitted = 0, total = 0, failed = 0;
 struct job *job;
 struct submission *sub;
 
@@ -985,7 +972,7 @@ for (job = db->jobList; job != NULL; job = job->next)
 	if (sub->hung) ++hung;
 	if (sub->running) ++running;
 	if (sub->ranOk) ++ranOk;
-	if (job->submissionCount >= retries && needsRerun(sub) || hung)
+	if ((job->submissionCount >= retries && needsRerun(sub)) || hung)
 	     ++failed;
 	}
     else
@@ -1195,7 +1182,6 @@ printf("%d problems total\n", problemCount);
 void runningReport(struct job *job, struct submission *sub)
 /* Print report on one running job. */
 {
-struct check *check;
 time_t startTime = sub->startTime;
 int duration = time(NULL) - startTime;
 
@@ -1441,7 +1427,7 @@ for (job = db->jobList; job != NULL; job = job->next)
 	   {
 	   int oneTime = now - sub->startTime;
 	   if (oneTime < 0)
-	       warn("Strange start time in %s: %s", sub->startTime);
+	       warn("Strange start time in %s: %u", batch, sub->startTime);
 	   else
 	       runTime += oneTime;
 	   ++runningCount;
@@ -1468,7 +1454,7 @@ for (job = db->jobList; job != NULL; job = job->next)
 	       if (oneWall < 0)	/* Protect against clock reset. */
 		   {
 		   warn("End before start job %s host %s", sub->id, jr->host);
-		   warn("Start %lu,  End %lu", jr->startTime, jr->endTime);
+		   warn("Start %u,  End %u", jr->startTime, jr->endTime);
 	           oneWall = totalCpu;	
 		   }
 	       totalWall += oneWall;

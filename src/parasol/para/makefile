@@ -1,6 +1,6 @@
 include ../../inc/common.mk
 
-
+HG_WARN = ${HG_WARN_ERR}
 L = -lm
 MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkweb.a
@@ -11,3 +11,6 @@ O = para.o jobDb.o jobResult.o
 	@${MKDIR} ../bin
 	gcc -o ../bin/para $O ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a
 	strip ../bin/para
+
+clean::
+	rm -f ../bin/para $O

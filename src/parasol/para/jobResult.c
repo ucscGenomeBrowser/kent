@@ -13,9 +13,6 @@ void jobResultStaticLoad(char **row, struct jobResult *ret)
 /* Load a row from jobResult table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
-
 ret->status = sqlSigned(row[0]);
 ret->host = row[1];
 ret->jobId = row[2];
@@ -34,8 +31,6 @@ struct jobResult *jobResultLoad(char **row)
  * from database.  Dispose of this with jobResultFree(). */
 {
 struct jobResult *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->status = sqlSigned(row[0]);
@@ -113,7 +108,6 @@ struct jobResult *jobResultCommaIn(char **pS, struct jobResult *ret)
  * return a new jobResult */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -163,7 +157,6 @@ for (el = *pList; el != NULL; el = next)
 void jobResultOutput(struct jobResult *el, FILE *f, char sep, char lastSep) 
 /* Print out jobResult.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 fprintf(f, "%d", el->status);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);

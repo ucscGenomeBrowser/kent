@@ -14,7 +14,6 @@ struct submission *submissionCommaIn(char **pS, struct submission *ret)
  * return a new submission */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -67,7 +66,6 @@ for (el = *pList; el != NULL; el = next)
 void submissionOutput(struct submission *el, FILE *f, char sep, char lastSep) 
 /* Print out submission.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->id);
 if (sep == ',') fputc('"',f);
@@ -113,7 +111,6 @@ struct check *checkCommaIn(char **pS, struct check *ret)
  * return a new check */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -153,7 +150,6 @@ for (el = *pList; el != NULL; el = next)
 void checkOutput(struct check *el, FILE *f, char sep, char lastSep) 
 /* Print out check.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->when);
 if (sep == ',') fputc('"',f);
