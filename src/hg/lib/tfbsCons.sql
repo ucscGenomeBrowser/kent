@@ -5,6 +5,7 @@
 
 #tfbsCons Data
 CREATE TABLE tfbsCons (
+    bin smallint unsigned not null,   # Bin for fast index
     chrom varchar(255) not null,	# Human chromosome
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
@@ -15,5 +16,6 @@ CREATE TABLE tfbsCons (
     factor char(64) not null,	# factor 
     id char(10) not null,	# id
               #Indices
-    PRIMARY KEY(chrom)
+    INDEX(chrom(8),bin),
+    INDEX(name(8))
 );

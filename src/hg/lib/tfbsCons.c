@@ -8,7 +8,25 @@
 #include "jksql.h"
 #include "tfbsCons.h"
 
-static char const rcsid[] = "$Id: tfbsCons.c,v 1.1 2004/01/21 19:16:47 braney Exp $";
+static char const rcsid[] = "$Id: tfbsCons.c,v 1.2 2004/01/21 23:13:41 braney Exp $";
+
+void tfbsConsStaticLoadWBin(char **row, struct tfbsCons *ret)
+/* Load a row from tfbsCons table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+int sizeOne,i;
+char *s;
+
+ret->chrom = row[1];
+ret->chromStart = sqlUnsigned(row[2]);
+ret->chromEnd = sqlUnsigned(row[3]);
+ret->name = row[4];
+ret->score = sqlUnsigned(row[5]);
+strcpy(ret->strand, row[6]);
+strcpy(ret->species, row[7]);
+strcpy(ret->factor, row[8]);
+strcpy(ret->id, row[9]);
+}
 
 void tfbsConsStaticLoad(char **row, struct tfbsCons *ret)
 /* Load a row from tfbsCons table into ret.  The contents of ret will
