@@ -1,6 +1,10 @@
 16 - Fixed case where program would abort with 'Negative gap size'
      message on some legitimate protein/translated alignments in modes
-     using blast, wublast, axt, or maf output.
+     using blast, wublast, axt, or maf output.   Fixed bug where
+     nibFrag on minus strand would return usage message rather than running.
+     Made blat store 'chr1' rather than '/long/path/to/chr1.nib' in
+     name fields when input is a nib file.   Made pslPretty handle
+     record separator lines of up to 1023 characters rather than 511.
 15 - Blast output seems to work.  Also wublast, axt and maf output.
 14 - Starting to hack in blast output format. Added -trimHardA flag.
 13 - Made things so that BLAT could find perfect 21mer matches

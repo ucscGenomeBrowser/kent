@@ -19,7 +19,7 @@
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
-int version = 15;	/* Blat version number. */
+int version = 16;	/* Blat version number. */
 char *databaseName;		/* File name of database. */
 int databaseSeqCount = 0;	/* Number of sequences in database. */
 unsigned long databaseLetters = 0;	/* Number of bases in database. */
@@ -323,6 +323,7 @@ for (i=0; i<fileCount; ++i)
         {
 	FILE *f;
 	int size;
+	char root[128];
 
 	if (maskType != NULL && !maskWarned)
 	    {
@@ -331,7 +332,8 @@ for (i=0; i<fileCount; ++i)
 	    }
 	nibOpenVerify(fileName, &f, &size);
 	seq = nibLdPart(fileName, f, size, 0, size);
-	seq->name = fileName;
+	splitPath(fileName, NULL, root, NULL);
+	seq->name = cloneString(root);
 	carefulClose(&f);
 	slAddHead(&list, seq);
 	hashAddUnique(hash, seq->name, seq);
