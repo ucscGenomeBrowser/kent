@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.20 2004/03/17 02:20:35 kent Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.21 2004/03/19 16:46:39 hiram Exp $";
 
 /* Variable that are set from command line. */
 boolean parseOnly; 
@@ -90,7 +90,7 @@ if (sqlWildcardIn(tableToCheck))
 if (slNameInList(dep->table->dbList, dbName) 
 	&& sqlTableExists(conn, tableToCheck))
     {
-    int tableTime = sqlTableUpdateTime(conn, tableToCheck);
+    time_t tableTime = sqlTableUpdateTime(conn, tableToCheck);
     struct joinerTable *dependsOn;
     for (dependsOn = dep->dependsOnList; dependsOn != NULL; 
 	dependsOn = dependsOn->next)
@@ -105,12 +105,18 @@ if (slNameInList(dep->table->dbList, dbName)
 		}
 	    else
 		{
-		int depTime = sqlTableUpdateTime(conn, dependsOn->table);
+		time_t depTime = sqlTableUpdateTime(conn, dependsOn->table);
 		if (depTime > tableTime)
 		    {
+		    char *depStr = sqlUnixTimeToDate(&depTime, FALSE);
+		    char *tableStr = sqlUnixTimeToDate(&tableTime, FALSE);
+		
 		    warn("Error: %s.%s updated after %s.%s line %d of %s",
 			dbName, dependsOn->table, dbName, tableToCheck,
 			dep->lineIx, joiner->fileName);
+		    warn("\t%s vs. %s", depStr, tableStr);
+		    freeMem(depStr);
+		    freeMem(tableStr);
 		    }
 		}
 	    }
