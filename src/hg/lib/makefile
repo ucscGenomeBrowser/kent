@@ -31,7 +31,7 @@ O = affyAtlas.o agpFrag.o agpGap.o altGraph.o altGraphX.o ancientRref.o \
     refLink.o riken.o rmskOut.o rnaFold.o \
     rnaGene.o rnaGroup.o rikenBest.o rikenCluster.o roughAli.o \
     sage.o sageCounts.o sageExp.o sanger22extra.o \
-    scoredRef.o simpleRepeat.o snp.o softberryHom.o \
+    scopDes.o scoredRef.o simpleRepeat.o snp.o softberryHom.o \
     softPromoter.o spDb.o stsAlias.o stsInfo.o stsInfo2.o stsInfoRat.o\
     stsMap.o stsMapMouse.o  stsMarker.o stsInfoMouse.o synteny100000.o\
     stsMapMouseNew.o stsInfoMouseNew.o\

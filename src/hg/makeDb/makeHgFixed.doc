@@ -75,3 +75,10 @@ hgMedianMicroarray hgFixed arbFlyLifeAllRatio arbFlyLifeAllExps arbMed.ra \
   arbFlyLifeMedianRatio arbFlyLifeMedianExps
 # cvs add and check in arbMed.ra
 
+# The scopDes table, which is used by the SuperFamily column in hgNear.
+mkdir /cluster/store1/scop
+cd /cluster/store1/scop
+wget http://scop.mrc-lmb.cam.ac.uk/scop/parse/dir.des.scop.txt_1.63
+grep -v '^#' dir.des.scop.txt* > scopDes.txt
+hgsql hgFixed < ~/kent/src/hg/lib/scopDes.sql
+echo "load data local infile 'scopDes.txt' into table scopDes;" | hgsql hgFixed

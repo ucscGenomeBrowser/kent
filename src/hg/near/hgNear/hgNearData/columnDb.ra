@@ -161,10 +161,10 @@ shortLabel Superfamily
 longLabel Protein Superfamily Assignments
 priority 9.1
 visibility off
-type association knownToSuper
-queryFull select gene,superfamily from knownToSuper
-queryOne select superfamily,superfamily from knownToSuper where gene = '%s'
-invQueryOne select gene from knownToSuper where superfamily = %s
+type association knownToSuper hgFixed.scopDes
+queryFull select gene,description from knownToSuper,hgFixed.scopDes where superfamily=sunid
+queryOne select description,superfamily from knownToSuper,hgFixed.scopDes where gene ='%s' and superfamily=sunid
+invQueryOne select gene from knownToSuper,hgFixed.scopDes where superfamily=sunid and description='%s'
 itemUrl http://supfam.mrc-lmb.cam.ac.uk/SUPERFAMILY/cgi-bin/scop.cgi?sunid=%s
 weedDupes on
 
