@@ -19,8 +19,9 @@ idSql select target from mmBlastTab where query = '%s'
 pepTable knownGenePep
 genomeUrl ../cgi-bin/hgTracks?org=Mouse&position=%s
 sorterUrl ../cgi-bin/hgNear?org=Mouse&near.oldOrg=Mouse&db=0&near_search=%s
-otherUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
-otherName GenBank
+otherName Jackson Labs
+otherUrl http://www.informatics.jax.org/searches/accession_report.cgi?id=%s
+otherIdSql select swissProt.extDbRef.extAcc1 from swissProt.extDbRef,swissProt.extDb,kgXref where swissProt.extDb.val = 'MGD' and swissProt.extDb.id = swissProt.extDbRef.extDb and swissProt.extDbRef.acc = kgXref.spID and kgXref.kgID = '%s' 
 priority 20
 
 name rat
@@ -30,8 +31,9 @@ idSql select target from rnBlastTab where query = '%s'
 pepTable knownGenePep
 genomeUrl ../cgi-bin/hgTracks?org=Rat&position=%s
 sorterUrl ../cgi-bin/hgNear?org=Rat&near.oldOrg=Rat&db=0&near_search=%s
-otherUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
-otherName GenBank
+otherName RGD
+otherUrl http://rgd.mcw.edu/tools/genes/genes_view.cgi?id=%s
+otherIdSql select swissProt.extDbRef.extAcc1 from swissProt.extDbRef,swissProt.extDb,kgXref where swissProt.extDb.val = 'RGD' and swissProt.extDb.id = swissProt.extDbRef.extDb and swissProt.extDbRef.acc = kgXref.spID and kgXref.kgID = '%s' 
 priority 25
 
 name zebrafish
