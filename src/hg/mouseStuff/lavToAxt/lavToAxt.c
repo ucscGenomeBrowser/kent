@@ -11,7 +11,7 @@
 #include "fa.h"
 
 struct dnaSeq *faList;
-static char const rcsid[] = "$Id: lavToAxt.c,v 1.12 2003/11/11 19:48:35 baertsch Exp $";
+static char const rcsid[] = "$Id: lavToAxt.c,v 1.13 2003/11/12 18:49:03 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -156,9 +156,10 @@ if (isRc)
     }
 else
     {    
-if (optionExists("fa"))
+    if (optionExists("fa"))
         {
         for (seq = faList ; seq != NULL ; seq = seq->next)
+	    {
             if (sameString(qName, seq->name))
                 break;
             if (seq != NULL)
@@ -170,6 +171,7 @@ if (optionExists("fa"))
                 }
             else
                 errAbort("sequence not found %d\n",qName);
+	    }
         }
     else
         qSeq = readFromCache(qCache, qNibDir, qName, qStart, qEnd - qStart, qSize);
