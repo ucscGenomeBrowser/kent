@@ -13,7 +13,6 @@
 char *hostName;			/* Name of this host. */
 int busyProcs = 0;		/* Number of processers in use. */
 int maxProcs = 1;		/* Number of processers allowed to use. */
-FILE *logFile = NULL;		/* Where to write messages. */
 int socketHandle;		/* Main message queue socket. */
 int connectionHandle;		/* A connection accepted. */
 
@@ -48,28 +47,6 @@ errAbort("paraNode - parasol node serve.\n"
 }
 
 
-void vLogIt(char *format, va_list args)
-/* Virtual logit. */
-{
-if (logFile != NULL)
-    {
-    vfprintf(logFile, format, args);
-    fflush(logFile);
-    }
-}
-
-void logIt(char *format, ...)
-/* Print message to log file. */
-{
-if (logFile != NULL)
-    {
-    va_list args;
-    va_start(args, format);
-    vLogIt(format, args);
-    va_end(args);
-    }
-}
-
 void execProc(char *managingHost, char *jobIdString, char *user,
 	char *dir, char *in, char *out, char *err,
 	char *exe, char **params)
@@ -82,13 +59,16 @@ close(connectionHandle);
 if (fork() == 0)
     {
     int newStdin, newStdout, newStderr;
-    close(socketHandle);
 
     /* Change to given dir. */
     chdir(dir);
 
-    /* Redirect standard io.  You'd think there'd be a less
-     * cryptic way to do this. */
+    /* Redirect standard io.  There has to  be a less
+     * cryptic way to do this. Close all open files, then
+     * open/dupe so they fall into first three file
+     * descriptors. */
+    close(socketHandle);
+    logClose();
     newStdin = open(in, O_RDONLY);
     close(0);
     dup(newStdin);
@@ -358,9 +338,7 @@ if (fork() == 0)
     {
     /* Set up log handler. */
     char *log = optionVal("log", NULL);
-    if (log != NULL)
-        logFile = mustOpen(log, "w");
-    pushWarnHandler(vLogIt);
+    setupDaemonLog(log);
 
     /* Close standard file handles. */
     close(0);

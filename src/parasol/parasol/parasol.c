@@ -217,10 +217,8 @@ return job;
 void reopenHub()
 /* Close hub if it's already open.  Then reopen it. */
 {
-char portName[16];
 closeHubFd();
-sprintf(portName, "%d", paraPort);
-hubFd = netMustConnect(getHost(), portName);
+hubFd = netMustConnect(getHost(), paraPort);
 }
 
 struct jobInfo *getJobList()

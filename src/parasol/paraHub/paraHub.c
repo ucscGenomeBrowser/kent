@@ -29,32 +29,8 @@ errAbort("paraHub - parasol hub server.\n"
 	 "    machineCheckPeriod=N Seconds between checking on machine - default %d\n"
 	 "    log=logFile Write a log to logFile. Use 'stdout' here for console\n"
 	               ,
-	 jobCheckPeriod, machineCheckPeriod, initialSpokes
+	 initialSpokes, jobCheckPeriod, machineCheckPeriod
 	 );
-}
-
-FILE *logFile = NULL;
-
-void vLogIt(char *format, va_list args)
-/* Virtual logit. */
-{
-if (logFile != NULL)
-    {
-    vfprintf(logFile, format, args);
-    fflush(logFile);
-    }
-}
-
-void logIt(char *format, ...)
-/* Print message to log file. */
-{
-if (logFile != NULL)
-    {
-    va_list args;
-    va_start(args, format);
-    vLogIt(format, args);
-    va_end(args);
-    }
 }
 
 struct spoke *spokeList;	/* List of all spokes. */
@@ -824,17 +800,13 @@ close(socketHandle);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-char *command, *log;
 optionHash(&argc, argv);
 if (argc < 2)
     usage();
-log = optionVal("log", NULL);
-if (log != NULL)
-    logFile = mustOpen(log, "w");
 jobCheckPeriod = optionInt("jobCheckPeriod", jobCheckPeriod);
 machineCheckPeriod = optionInt("machineCheckPeriod", machineCheckPeriod);
 initialSpokes = optionInt("spokes",  initialSpokes);
-pushWarnHandler(vLogIt);
+setupDaemonLog(optionVal("log", NULL));
 startHub(argv[1]);
 return 0;
 }
