@@ -20,6 +20,7 @@ ret->description = row[1];
 ret->nibPath = row[2];
 ret->organism = row[3];
 ret->defaultPos = row[4];
+ret->active = sqlSigned(row[5]);
 }
 
 struct dbDb *dbDbLoad(char **row)
@@ -36,6 +37,7 @@ ret->description = cloneString(row[1]);
 ret->nibPath = cloneString(row[2]);
 ret->organism = cloneString(row[3]);
 ret->defaultPos = cloneString(row[4]);
+ret->active = sqlSigned(row[5]);
 return ret;
 }
 
@@ -45,7 +47,7 @@ struct dbDb *dbDbLoadAll(char *fileName)
 {
 struct dbDb *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[5];
+char *row[6];
 
 while (lineFileRow(lf, row))
     {
@@ -97,6 +99,7 @@ ret->description = sqlStringComma(&s);
 ret->nibPath = sqlStringComma(&s);
 ret->organism = sqlStringComma(&s);
 ret->defaultPos = sqlStringComma(&s);
+ret->active = sqlSignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -152,6 +155,8 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->defaultPos);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%d", el->active);
 fputc(lastSep,f);
 }
 
