@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: altPaths.c,v 1.8 2004/07/20 22:25:47 sugnet Exp $";
+static char const rcsid[] = "$Id: altPaths.c,v 1.9 2004/07/20 23:11:48 sugnet Exp $";
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -18,6 +18,7 @@ static struct optionSpec optionSpecs[] =
     {"pathBeds", OPTION_STRING},
     {"dumpDistMatrix", OPTION_STRING},
     {"oldClassification", OPTION_BOOLEAN},
+    {"db", OPTION_STRING},
     {"htmlPrefix", OPTION_STRING},
     {"browser", OPTION_STRING},
     {NULL, 0}
@@ -31,6 +32,9 @@ static char *optionDescripts[] =
     "Print all of the paths to a file in bed form.",
     "Dump out the distance matrix to this file (for debugging and testing)",
     "Use the older style of classifying events (like altAnalysis).",
+    "Database version to link web pages to.",
+    "Create a frame based web page to view splices.",
+    "Browser to point at when creating web page."
 };
 
 FILE *distMatrixFile = NULL; /* File to dump out distance matrixes to
@@ -40,6 +44,10 @@ FILE *pathBedFile = NULL;    /* File to dump out paths in bed form for
 				debugging and testing. */
 boolean oldClassification = FALSE; /* Use altAnalysis style of classification. */
 
+FILE *htmlTableOut = NULL;  /* File to use for printing web table to. */
+FILE *htmlFrameOut = NULL;  /* File to print frames for web page to. */
+char *browserName = NULL;   /* Name of browser to link to. Something like 'hgwdev.cse.ucsc.edu' */
+char *db = NULL;            /* Database used when linking via web pages. */
 /* Keep track of how many of each event are occuring. */
 static int alt5Flipped = 0;
 static int alt3Flipped = 0;
@@ -1109,6 +1117,68 @@ for(splice = spliceList; splice != NULL; splice = splice->next)
 return altCount;
 }
 
+char * nameForType(int type)
+/* Log the different types of splicing. */
+{
+switch (type) 
+    {
+    case alt5Prime:
+	return "alt5Prime";
+	break;
+    case alt3Prime: 
+	return "alt3Prime";
+	break;
+    case altCassette:
+	return "altCassette";
+	break;
+    case altRetInt:
+	return "altRetInt";
+	break;
+    case altOther:
+	return "altOther";
+	break;
+    case altControl:
+	return "altControl";
+	break;
+    case altMutExclusive:
+	return "altMutEx";
+	break;
+    case alt5PrimeSoft:
+	return "altTxStart";
+	break;
+    case alt3PrimeSoft:
+	return "altTxEnd";
+	break;
+    default:
+	errAbort("nameForType() - Don't recognize type %d", type);
+    }
+return "error";
+}
+
+void printLinks(struct splice *spliceList)
+/* Loop through and print each splicing event to web page. */
+{
+struct splice *s = NULL;
+for(s = spliceList; s != NULL; s = s->next)
+    {
+    struct path *lastPath = NULL;
+    int diff = -1;
+    if(s->paths == NULL || s->type == altControl)
+	continue;
+    lastPath = slLastEl(s->paths);
+    if(slCount(s->paths) == 2)
+	diff = abs(s->paths->bpCount - s->paths->next->bpCount);
+    else
+	diff = lastPath->bpCount;
+    fprintf(htmlTableOut, "<tr><td><a target=\"browser\" "
+	    "href=\"http://%s/cgi-bin/hgTracks?db=%s&position=%s:%d-%d\">", browserName,
+	    db, s->tName, s->tStart-50, s->tEnd+50);
+    fprintf(htmlTableOut,"%s </a></td>", s->name);
+    fprintf(htmlTableOut,"<td>%s</td>", nameForType(s->type));
+    fprintf(htmlTableOut,"<td>%d</td></tr>\n", diff);
+    }
+}
+
 int doAltPathsAnalysis(struct altGraphX *agx, FILE *spliceOut)
 /* Examine each altGraphX record for splicing events. Return number
  of alt events in graph. */
@@ -1189,6 +1259,9 @@ numAltEvents = countAltSplices(spliceList);
 
 /* Output the alternative splicing events. */
 slSort(&spliceList, spliceCmp);
+if(htmlTableOut)
+    printLinks(spliceList);
+
 for(splice = spliceList; splice != NULL; splice = splice->next)
     {
     for(path = splice->paths; path != NULL; path = path->next)
@@ -1268,6 +1341,49 @@ assert(dumpName);
 distMatrixFile = mustOpen(dumpName, "w");
 }
 
+void writeOutFrames(FILE *htmlOut, char *fileName, char *db, char *browserName)
+/* Write out the frames. */
+{
+fprintf(htmlOut, "<html><head><title>Alt-Splicing Paths</title></head>\n"
+     "<frameset cols=\"18%,82%\">\n"
+     "<frame name=\"_list\" src=\"./%s\">\n"
+     "<frame name=\"browser\" src=\"http://%s/cgi-bin/hgTracks?db=%s\">\n"
+     "</frameset>\n"
+     "</html>\n", fileName, browserName, db);
+}
+
+void initHtmlFiles()
+/* Open and setup html files. */
+{
+struct dyString *tableFile = newDyString(256);
+struct dyString *frameFile = newDyString(256);
+char *htmlPrefix = optionVal("htmlPrefix", NULL);
+db = optionVal("db", NULL);
+browserName = optionVal("browser", "genome.ucsc.edu");
+assert(htmlPrefix);
+if(db == NULL)
+    errAbort("Must specify database when doing html files.");
+
+dyStringPrintf(tableFile, "%s.table.html", htmlPrefix);
+dyStringPrintf(frameFile, "%s.frame.html", htmlPrefix);
+htmlFrameOut = mustOpen(frameFile->string, "w");
+htmlTableOut = mustOpen(tableFile->string, "w");
+writeOutFrames(htmlFrameOut, tableFile->string, db, browserName);
+carefulClose(&htmlFrameOut);
+fprintf(htmlTableOut, "<html>\n<body bgcolor=\"#FFF9D2\"><b>Alt-Splice List</b>\n"
+	"<table border=1><tr><th>Name</th><th>Type</th><th>Size</th></tr>\n");
+dyStringFree(&tableFile);
+dyStringFree(&frameFile);
+}
+
+void closeHtmlFiles()
+/* Clean up and close html files. */
+{
+assert(htmlTableOut);
+fprintf(htmlTableOut, "</table></body></html>\n");
+carefulClose(&htmlTableOut);
+}
+
 void initPathBeds()
 /* Set up a file handle to dump paths in bed form to. */
 {
@@ -1290,7 +1406,11 @@ if(optionExists("pathBeds"))
     initPathBeds();
 if(optionExists("oldClassification"))
     oldClassification = TRUE;
+if(optionExists("htmlPrefix"))
+    initHtmlFiles();
 altPaths(argv[1], argv[2]);
+if(optionExists("htmlPrefix"))
+    closeHtmlFiles();
 carefulClose(&distMatrixFile);
 carefulClose(&pathBedFile);
 return 0;
