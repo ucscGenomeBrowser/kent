@@ -19,7 +19,7 @@
 #include "web.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.64 2003/06/23 00:13:55 markd Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.65 2003/06/23 05:25:54 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -40,6 +40,7 @@ char *sortList[] = {"query,score", "query,start", "chrom,score", "chrom,start", 
 char *outputList[] = {"hyperlink", "psl", "psl no header"};
 
 
+#ifdef UNUSED
 void getIndexedGenomeDescriptions(char ***retArray, int *retCount)
 /* Find out the list of genomes that have blat servers on them. */
 {
@@ -58,6 +59,7 @@ dbDbFreeList(&dbList);
 *retArray = array;
 *retCount = count;
 }
+#endif /* UNUSED */
 
 struct serverTable *findServer(char *db, boolean isTrans)
 /* Return server for given database.  Db can either be
@@ -506,6 +508,7 @@ char *onChangeText = "onchange=\"document.orgForm.org.value = "
     " document.mainForm.org.options[document.mainForm.org.selectedIndex].value; "
     " document.orgForm.seqFile.value = document.mainForm.seqFile.value; "
     " document.orgForm.userSeq.value = document.mainForm.userSeq.value; "
+    " document.orgForm.db.value = 0; "
     " document.orgForm.submit();\"";
 char *userSeq = NULL;
 
@@ -605,11 +608,13 @@ printf("%s",
 "</FORM>\n");
 
 printf("<FORM ACTION=\"/cgi-bin/hgBlat\" METHOD=\"POST\" NAME=\"orgForm\">"
+       "<input type=\"hidden\" name=\"db\" value=\"%s\">\n"
        "<input type=\"hidden\" name=\"org\" value=\"%s\">\n"
        "<input type=\"hidden\" name=\"userSeq\" value=\"\">\n"
        "<input type=\"hidden\" name=\"showPage\" value=\"true\">\n"
-       "<input type=\"hidden\" name=\"seqFile\" value=\"\">\n", organism);
+       "<input type=\"hidden\" name=\"seqFile\" value=\"\">\n", db, organism);
 cartSaveSession(cart);
+cartSetString(cart, "db", db);
 puts("</FORM>");
 }
 
