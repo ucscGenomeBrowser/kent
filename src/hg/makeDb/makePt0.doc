@@ -949,8 +949,10 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     ln -s human.best.filtered.chain human.chain
     netChainSubset chimp.best.filtered.net all.swap.chain \
         chimp.best.filtered.chain
-    rm -f chimp.chain
     ln -s chimp.best.filtered.chain chimp.chain
+    cp human.chain chimp.chain /usr/local/apache/htdocs/kate/chimp
+    cd /usr/local/apache/htdocs/kate/chimp
+    gzip human.chain chimp.chain
 
     ssh hgwdev
     cd /cluster/data/pt0
@@ -960,9 +962,13 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     #hgLoadChain hg16 chainRxBestPt0 humanGap10Sorted.swap.chain
     #chainSwap humanGap10Sorted.jk2.chain humanGap10Sorted.jk2.swap.chain
     #hgLoadChain hg16 chainRxBestPt0 humanGap10Sorted.swap.chain
-    chainSwap humanGap10Sorted.jk2.chain stdout | \
-        hgLoadChain hg16 chainRxBestPt0 stdin
+    # Best-on-chimp chains
+    #chainSwap humanGap10Sorted.jk2.chain stdout | \
+        #hgLoadChain hg16 chainRxBestPt0 stdin
             #Loading 100160 chains into hg16.chainRxBestPt0
+    # Reciprocal best chains
+    chainSwap chimp.chain stdout | \
+        hgLoadChain hg16 chainRxBestPt0 stdin
 
     # NOTE: need to remake scaffolds.msk.fa for Nov13 assembly
     # and reload seq table
