@@ -181,7 +181,7 @@ void logPrintf(int verbosity, char *format, ...)
  * default is stdout) if global verbose variable
  * is set to verbosity or higher. */
 #if defined(__GNUC__) && defined(JK_WARN)
-__attribute__((format(logPrintf, 2, 3)))
+__attribute__((format(printf, 2, 3)))
 #endif
     ;
 
