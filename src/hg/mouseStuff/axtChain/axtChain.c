@@ -8,6 +8,7 @@
 #include "nib.h"
 #include "fa.h"
 #include "axt.h"
+#include "psl.h"
 #include "boxClump.h"
 #include "chainBlock.h"
 #include "portable.h"
@@ -23,6 +24,7 @@ errAbort(
   "usage:\n"
   "   axtChain in.axt tNibDir qNibDir out.chain\n"
   "options:\n"
+  "   -psl Use psl instead of axt format for input\n"
   "   -minScore=N  Minimum score for chain, default %d\n"
   "   -details=fileName Output some additional chain details\n"
   , minScore
@@ -83,6 +85,24 @@ for (i=0; i<=axt->symCount; ++i)
     lastIn = thisIn;
     qPos += advanceQ;
     tPos += advanceT;
+    }
+}
+
+void addPslBlocks(struct boxIn **pList, struct psl *psl)
+/* Add blocks (gapless subalignments) from psl to block list. */
+{
+int i;
+for (i=0; i<psl->blockCount; ++i)
+    {
+    struct boxIn *b;
+    int size;
+    AllocVar(b);
+    size = psl->blockSizes[i];
+    b->qStart = b->qEnd = psl->qStarts[i];
+    b->qEnd += size;
+    b->tStart = b->tEnd = psl->tStarts[i];
+    b->tEnd += size;
+    slAddHead(pList, b);
     }
 }
 
@@ -495,12 +515,14 @@ for (b = chain->blockList; b != NULL; b = next)
     if (last == NULL || last->qEnd != b->qStart || last->tEnd != b->tStart)
 	{
 	slAddHead(&newList, b);
+	last = b;
 	}
     else
         {
+	last->qEnd = b->qEnd;
+	last->tEnd = b->tEnd;
 	freeMem(b);
 	}
-    last = b;
     }
 slReverse(&newList);
 chain->blockList = newList;
@@ -653,27 +675,15 @@ for (chain = chainList; chain != NULL; chain = next)
     }
 }
 
-void axtChain(char *axtIn, char *tNibDir, char *qNibDir, char *chainOut)
-/* axtChain - Chain together axt alignments.. */
+struct seqPair *readAxtBlocks(char *fileName, struct hash *pairHash)
+/* Read in axt file and parse blocks into pairHash */
 {
-struct hash *pairHash = newHash(0);  /* Hash keyed by qSeq<strand>tSeq */
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct dyString *dy = newDyString(512);
-struct lineFile *lf = lineFileOpen(axtIn, TRUE);
 struct axt *axt;
 struct seqPair *spList = NULL, *sp;
-FILE *f = mustOpen(chainOut, "w");
-char *qName = "",  *tName = "";
-struct dnaSeq *qSeq = NULL, *tSeq = NULL;
-char qStrand = 0, tStrand = 0;
-struct chain *chainList = NULL, *chain;
-FILE *details = NULL;
-
-if (detailsName != NULL)
-    details = mustOpen(detailsName, "w");
-/* Read input file and divide alignments into various parts. */
 while ((axt = axtRead(lf)) != NULL)
     {
-    struct boxIn *block;
     dyStringClear(dy);
     dyStringPrintf(dy, "%s%c%s", axt->qName, axt->qStrand, axt->tName);
     sp = hashFindVal(pairHash, dy->string);
@@ -690,6 +700,62 @@ while ((axt = axtRead(lf)) != NULL)
     sp->axtCount += 1;
     axtFree(&axt);
     }
+lineFileClose(&lf);
+dyStringFree(&dy);
+return spList;
+}
+
+struct seqPair *readPslBlocks(char *fileName, struct hash *pairHash)
+/* Read in psl file and parse blocks into pairHash */
+{
+struct seqPair *spList = NULL, *sp;
+struct lineFile *lf = pslFileOpen(fileName);
+struct dyString *dy = newDyString(512);
+struct psl *psl;
+
+while ((psl = pslNext(lf)) != NULL)
+    {
+    dyStringClear(dy);
+    dyStringPrintf(dy, "%s%s%s", psl->qName, psl->strand, psl->tName);
+    sp = hashFindVal(pairHash, dy->string);
+    if (sp == NULL)
+        {
+	AllocVar(sp);
+	slAddHead(&spList, sp);
+	hashAddSaveName(pairHash, dy->string, sp, &sp->name);
+	sp->qName = cloneString(psl->qName);
+	sp->tName = cloneString(psl->tName);
+	sp->qStrand = psl->strand[0];
+	}
+    addPslBlocks(&sp->blockList, psl);
+    sp->axtCount += 1;
+    pslFree(&psl);
+    }
+
+lineFileClose(&lf);
+dyStringFree(&dy);
+return spList;
+}
+
+void axtChain(char *axtIn, char *tNibDir, char *qNibDir, char *chainOut)
+/* axtChain - Chain together axt alignments.. */
+{
+struct hash *pairHash = newHash(0);  /* Hash keyed by qSeq<strand>tSeq */
+struct seqPair *spList = NULL, *sp;
+FILE *f = mustOpen(chainOut, "w");
+char *qName = "",  *tName = "";
+struct dnaSeq *qSeq = NULL, *tSeq = NULL;
+char qStrand = 0, tStrand = 0;
+struct chain *chainList = NULL, *chain;
+FILE *details = NULL;
+
+if (detailsName != NULL)
+    details = mustOpen(detailsName, "w");
+/* Read input file and divide alignments into various parts. */
+if (optionExists("psl"))
+    spList = readPslBlocks(axtIn, pairHash);
+else
+    spList = readAxtBlocks(axtIn, pairHash);
 for (sp = spList; sp != NULL; sp = sp->next)
     {
     slReverse(&sp->blockList);
@@ -708,7 +774,7 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     chainWrite(chain, f);
     }
 
-dyStringFree(&dy);
+carefulClose(&f);
 }
 
 void testGaps()
