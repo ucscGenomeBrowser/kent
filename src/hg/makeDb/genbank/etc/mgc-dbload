@@ -8,9 +8,7 @@
 opts="$*"
 
 # databases to update
-databases="hg15 mm3 hg16 rn3 fr1"
-#databases="mm3"
-
+databases="hg15 mm4 mm3 hg16 rn3 fr1"
 
 # gbRoot on hgnfs1
 gbRoot=/genbank
