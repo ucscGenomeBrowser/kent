@@ -266,7 +266,8 @@ struct hash *cloneVerHash = newHash(0);
 boolean gotAny = FALSE;
 
 sprintf(ooDir, "%s/%s", gsDir, ooSubDir);
-if (oneChrom != NULL && startsWith("chr", oneChrom))
+/* target prefix is used in zoo browser */
+if (oneChrom != NULL && (startsWith("chr", oneChrom) || startsWith("target", oneChrom)))
     oneChrom += 3;
     
 
