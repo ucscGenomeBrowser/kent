@@ -47,12 +47,10 @@ char *onChangeText = "onchange=\"document.orgForm.org.value = document.mainForm.
    If databases were changed then use the new default position too.
 */
 
-fprintf(stderr, "Position 1 = %s\n", position);
 oldDb = hashFindVal(oldVars, dbCgiName);
 if (!containsStringNoCase(oldDb, db))
     {
     position = defaultPosition;
-    fprintf(stderr, "Position 2 = %s\n", position);
     removeCustomTrackData();
     }
 
