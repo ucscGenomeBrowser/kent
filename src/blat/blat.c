@@ -303,6 +303,7 @@ boolean doMask = (maskType != NULL);
 for (i=0; i<fileCount; ++i)
     {
     struct dnaSeq *list = NULL, sseq;
+    ZeroVar(&sseq);
     fileName = files[i];
     if (isNib(fileName))
         {
@@ -615,6 +616,7 @@ boolean forceLower = FALSE;
 boolean toggle = FALSE;
 boolean maskUpper = FALSE;
 
+ZeroVar(&trimmedSeq);
 printf("Blatx %d sequences in database, %d files in query\n", slCount(untransList), queryCount);
 
 /* Figure out how to manage query case. */
