@@ -24,7 +24,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.174 2005/02/08 16:41:54 donnak Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.175 2005/02/08 21:22:57 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -615,24 +615,51 @@ cgiMakeTextVar(filterVar, cartUsualString(cart, filterVar, ""), 5);
 }
 
 void scoreUi(struct trackDb *tdb)
-/* Put up UI for filtering bed track based on a score threshold */
+/* Put up UI for filtering bed track based on a score */
 {
-char scoreVar[256];
+char option[256];
+
+char *scoreValString = trackDbSetting(tdb, "scoreFilter");
 int scoreSetting;
 int scoreVal = 0;
-char *scoreValString = trackDbSetting(tdb, "scoreFilter");
 char tempScore[256];
+char *words[2];
+
+/* filter top-scoring N items in track */ 
+char *scoreCtString = trackDbSetting(tdb, "filterTopScorers");
+char *scoreFilterCt = NULL;
+bool doScoreCtFilter = FALSE;
 
 /* initial value of score theshold is 0, unless
  * overridden by the scoreFilter setting in the track */
 if (scoreValString != NULL)
     scoreVal = atoi(scoreValString);
 printf("<p><b>Show only items with unnormalized score at or above:</b> ");
-snprintf(scoreVar, sizeof(scoreVar), "%s.scoreFilter", tdb->tableName);
-scoreSetting = cartUsualInt(cart,  scoreVar,  scoreVal);
+snprintf(option, sizeof(option), "%s.scoreFilter", tdb->tableName);
+scoreSetting = cartUsualInt(cart,  option,  scoreVal);
 safef(tempScore, sizeof(tempScore), "%d",scoreSetting);
-cgiMakeTextVar( scoreVar, tempScore, 11);
+cgiMakeTextVar( option, tempScore, 11);
 printf("&nbsp;&nbsp;(range: 0&nbsp;to&nbsp;2000000000)");
+
+if (scoreCtString != NULL)
+    {
+    /* show only top-scoring items. This option only displayed if trackDb
+     * setting exists.  Format:  filterTopScorers <on|off> <count> */
+    chopLine(cloneString(scoreCtString), words);
+    safef(option, sizeof(option), "%s.filterTopScorersOn", tdb->tableName);
+    doScoreCtFilter = 
+        cartCgiUsualBoolean(cart, option, sameString(words[0], "on"));
+    puts("<P>");
+    cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, doScoreCtFilter));
+
+    safef(option, sizeof(option), "%s.filterTopScorersCt", tdb->tableName);
+    scoreFilterCt = cartCgiUsualString(cart, option, words[1]);
+
+    puts("&nbsp; <B> Show only items in top-scoring </B>");
+    cgiMakeTextVar(option, scoreFilterCt, 5);
+    printf("&nbsp; (range: 1 to 100000, total items: %d)", 
+                getTableSize(tdb->tableName));
+    }
 }
 
 void crossSpeciesUi(struct trackDb *tdb)

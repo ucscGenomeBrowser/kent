@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.893 2005/02/06 04:18:31 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.894 2005/02/08 21:22:57 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7876,10 +7876,11 @@ char **row;
 int rowOffset;
 char option[128]; /* Option -  score filter */
 char *words[3];
+int wordCt;
 char *optionScoreVal;
 int optionScore = 0;
 char query[128] ;
-char *scoreCtString = NULL;
+char *setting = NULL;
 bool doScoreCtFilter = FALSE;
 int scoreFilterCt = 0;
 char *topTable = NULL;
@@ -7895,15 +7896,18 @@ else
 
 /* limit to a specified count of top scoring items.
  * If this is selected, it overrides selecting item by specified score */
-scoreCtString = trackDbSetting(tg->tdb, "filterTopScorers");
-if (scoreCtString != NULL)
+if ((setting = trackDbSetting(tg->tdb, "filterTopScorers")) != NULL)
     {
-    safef(option, sizeof(option), "%s.filterTopScorersOn", tg->mapName);
-    doScoreCtFilter = 
-        cartCgiUsualBoolean(cart, option, sameString(words[0], "on"));
-    safef(option, sizeof(option), "%s.filterTopScorersCt", tg->mapName);
-    scoreFilterCt = cartCgiUsualInt(cart, option, atoi(words[1]));
-    topTable = words[2];
+    wordCt = chopLine(cloneString(setting), words);
+    if (wordCt >= 3)
+        {
+        safef(option, sizeof(option), "%s.filterTopScorersOn", tg->mapName);
+        doScoreCtFilter = 
+            cartCgiUsualBoolean(cart, option, sameString(words[0], "on"));
+        safef(option, sizeof(option), "%s.filterTopScorersCt", tg->mapName);
+        scoreFilterCt = cartCgiUsualInt(cart, option, atoi(words[1]));
+        topTable = words[2];
+        }
     }
 
 /* limit to items above a specified score */
