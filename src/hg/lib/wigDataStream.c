@@ -8,7 +8,7 @@
 #include "hgColors.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.68 2004/11/29 00:22:08 sugnet Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.69 2005/01/18 16:20:54 hiram Exp $";
 
 /*	Routines that are not strictly part of the wigDataStream object,
 	but they are used to do things with the object.
@@ -462,9 +462,9 @@ static void showResolution(double resolution, FILE *fh)
 if (resolution > 0.0)
     fprintf (fh, "#\tThis data has been compressed with a minor "
 	"loss in resolution.\n" );
-    fprintf (fh, "#\t(Worst case: %g)  The original data before compression\n",
+    fprintf (fh, "#\t(Worst case: %g)  The original source data \n",
 	resolution);
-    fprintf (fh, "#\tis available at "
+    fprintf (fh, "#\t(before querying and compression) is available at "
 	"http://hgdownload.cse.ucsc.edu/downloads.html\n");
 }
 
