@@ -45,13 +45,16 @@ public class ApacheReport {
     *  @return          The PrintWriter object for daily file report.
     */
     static PrintWriter setDailyFile(String outpath, int year, int month, int day) throws Exception {
-      String filename = outpath + year + getMonth(month) + day + ".html";
+      DecimalFormat df2 = new DecimalFormat("#,#00");
+      String filename = outpath + year + getMonth(month) + df2.format(day)
+                        + ".html";
       System.out.println("\nWriting daily report to \n" + filename + "\n");
       String url = "/usr/local/apache/htdocs/";
       if (outpath.startsWith(url)) {
         String urlpath = outpath.replaceFirst(url, "http://hgwdev.cse.ucsc.edu/");
         System.out.println("Try the URL directly: \n" +
-                           urlpath + year + getMonth(month) + day + ".html");
+                           urlpath + year + getMonth(month) + df2.format(day) 
+                           + ".html");
       }
       FileWriter fout = new FileWriter(filename);
       PrintWriter pw = new PrintWriter(fout);
