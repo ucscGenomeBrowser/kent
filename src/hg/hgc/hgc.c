@@ -164,7 +164,7 @@
 #include "putaInfo.h"
 
 
-static char const rcsid[] = "$Id: hgc.c,v 1.853 2005/03/21 22:43:30 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.854 2005/03/21 23:56:16 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1930,8 +1930,14 @@ pslFreeList(&pslList);
 }
 
 void printTrackHtml(struct trackDb *tdb)
-/* If there's some html associated with track print it out. */
+/* If there's some html associated with track print it out. Also make a link 
+ * to the TB table schema page for this table. */
 {
+printf("<P><A HREF=\"/cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
+       "&hgta_table=%s&hgta_doSchema=describe+table+schema\" "
+       "TARGET=_BLANK>"
+       "View table schema</A></P>\n",
+       database, tdb->grp, tdb->tableName, tdb->tableName);
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
     htmlHorizontalLine();
