@@ -15,6 +15,6 @@ create table affyGnfU74C (
     expCount int,
     expIds blob,
     expScores blob,
-    index(bin,chrom(8)),
+    index(chrom(8),bin),
     index(name(10))
 );

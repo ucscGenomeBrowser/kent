@@ -15,6 +15,6 @@ create table affyRatio (
     expCount int,
     expIds blob,
     expScores blob,
-    index(chrom(12),bin),
+    index(chrom(8),bin),
     index(name(10))
 );

@@ -15,6 +15,6 @@ create table affyUcla (
     expCount int,
     expIds blob,
     expScores blob,
-    index(bin,chrom(12)),
+    index(chrom(8),bin),
     index(name(10))
 );
