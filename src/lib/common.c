@@ -1383,7 +1383,7 @@ void itoa (int n, char *buf)
         {
         k /= 10;
         *(buf++) = (n / k) + '0'; 
-        n %= %k; 
+        n %= k; 
         } while (k > 1);
     } *buf = '\0';
 }

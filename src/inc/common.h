@@ -586,16 +586,14 @@ int vasafef(char* buffer, int bufSize, char *format, va_list args);
 int safef(char* buffer, int bufSize, char *format, ...)
 /* Format string to buffer, vsprintf style, only with buffer overflow
  * checking.  The resulting string is always terminated with zero byte. */
-
-void itoa (int n, char *buf)
-/* converts an integer to a string. Requres memory be allocated for
- * buf and doesn' check for overflow. */    
-    
- 
 #ifdef __GNUC__
 __attribute__((format(printf, 3, 4)))
 #endif
 ;
 
+void itoa (int n, char *buf);
+/* converts an integer to a string. Requres memory be allocated for
+ * buf and doesn' check for overflow. */    
+ 
 
 #endif /* COMMON_H */
