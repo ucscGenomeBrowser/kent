@@ -56,6 +56,8 @@ int  isDuplicate;
 char *genomeDBname;
 char *proteinDataDate;
 char proteinsDB[40];
+char spDB[40];
+char *acc;
 
 #define MAX_EXON 1000
 int exStart[MAX_EXON], exEnd[MAX_EXON];
@@ -74,6 +76,7 @@ if (argc != 3) usage();
 proteinDataDate = argv[1];
 genomeDBname    = argv[2];
   
+sprintf(spDB, "sp%s", proteinDataDate);
 sprintf(proteinsDB, "proteins%s", proteinDataDate);
  
 o3 = fopen("j.dat", "w");
@@ -229,8 +232,11 @@ while (fgets(line_in, 10000, inf) != NULL)
 		
 	    cdsLen = aalen;
 
-            sprintf(cond_str, "display_id='%s'", proteinID);
-            aaStr=sqlGetField(conn3, proteinsDB, "pepSequence", "bioSequence_str", cond_str);
+            sprintf(cond_str, "val='%s'", proteinID);
+            acc = sqlGetField(conn3, spDB, "displayId", "acc", cond_str);
+
+            sprintf(cond_str, "acc='%s'", acc);
+            aaStr=sqlGetField(conn3, spDB, "protein", "val", cond_str);
     	    aaLen = strlen(aaStr);
 
             if ((cdsLen >  50) || ((cdsLen * 100)/aaLen > 50))
