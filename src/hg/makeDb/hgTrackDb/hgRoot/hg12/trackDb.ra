@@ -1,13 +1,3 @@
-track blatFish
-shortLabel Fugu Blat
-longLabel Fugu rubripes Translated Blat Alignments
-priority 28
-visibility dense
-color 0,60,120
-altColor 200,220,255
-spectrum on
-type psl xeno
-
 track blastzMm2
 shortLabel Blastz Mouse
 longLabel Merged Blastz Mouse Alignments
