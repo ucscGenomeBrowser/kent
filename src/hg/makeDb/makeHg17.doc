@@ -13492,3 +13492,19 @@ SEQ2_LEN=$BASE/S2.len
     add to /cluster/data/genbank/genbank.con
     hg17.refseq.mrna.xeno.load  = yes
     hg17.refseq.mrna.xeno.loadDesc = yes
+
+# BUILD refSeqKg TABLE TO SUPPORT CCDS GENES (DONE, Fan 2/25/05)
+
+    hgsql hg17 -N -e "select * from knownGene" >kg.gp
+    hgsql hg17 -N -e "select * from refGene"   >ref.gp
+
+    overlapSelect -inCds -strand  -idOutput -fraction=fraction.out -selectCds -overlapThreshold=0.90 -selectFmt=genePred -inFmt=genePred kg.gp ref.gp refSeqKg.90.tab
+    cat fraction.out|sort -u >refSeqKg.tab
+
+    hgsql hg17 -e 'drop table refSeqKg'
+    hgsql hg17 < ~/src/hg/lib/refSeqKg.sql
+    hgsql hg17 -e 'load data local infile "refSeqKg.tab" into table refSeqKg'
+
+   rm fraction.out
+
+
