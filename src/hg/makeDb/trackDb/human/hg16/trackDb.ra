@@ -845,3 +845,11 @@ visibility hide
 spectrum on
 type netAlign mm4 chainMm4
 otherDb mm4
+
+track blast22Br
+shortLabel chr22 protein blast
+longLabel chr22 protein blast
+group x
+priority 1101
+visibility hide
+type psl protein
