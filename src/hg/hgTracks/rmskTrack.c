@@ -16,10 +16,10 @@
 
 static struct repeatItem *otherRepeatItem = NULL;
 static char *repeatClassNames[] =  {
-    "SINE", "LINE", "LTR", "DNA", "Simple", "Low Complexity", "Satellite", "tRNA", "Other",
+    "SINE", "LINE", "LTR", "DNA", "Simple", "Low Complexity", "Satellite", "tRNA", "Other", "Unknown",
 };
 static char *repeatClasses[] = {
-    "SINE", "LINE", "LTR", "DNA", "Simple_repeat", "Low_complexity", "Satellite", "tRNA", "Other",
+    "SINE", "LINE", "LTR", "DNA", "Simple_repeat", "Low_complexity", "Satellite", "tRNA", "Other", "Unknown",
 };
 
 static struct repeatItem *makeRepeatItems()
