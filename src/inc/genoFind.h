@@ -139,7 +139,8 @@ struct gfClump *gfFindClumps(struct genoFind *gf, struct dnaSeq *seq,
 	struct lm *lm, int *retHitCount);
 /* Find clumps associated with one sequence. */
 
-struct gfClump *gfFindClumpsWithQmask(struct genoFind *gf, bioSeq *seq, Bits *qMaskBits, 
+struct gfClump *gfFindClumpsWithQmask(struct genoFind *gf, bioSeq *seq, 
+        Bits *qMaskBits, int qMaskOffset,
 	struct lm *lm, int *retHitCount);
 /* Find clumps associated with one sequence soft-masking seq according to qMaskBits */
 

@@ -1535,7 +1535,7 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     endPos = &subQuery.dna[subSize];
     saveEnd = *endPos;
     *endPos = 0;
-    clumpList = gfFindClumpsWithQmask(gf, &subQuery, qMaskBits, lm, &hitCount);
+    clumpList = gfFindClumpsWithQmask(gf, &subQuery, qMaskBits, subOffset, lm, &hitCount);
     oneBunList = gfClumpsToBundles(clumpList, &subQuery, isRc, &rangeList);
     addToBigBundleList(&oneBunList, bunHash, &bigBunList, query);
     gfClumpFreeList(&clumpList);
