@@ -10,6 +10,7 @@
 #include "dnautil.h"
 #include "dbDb.h"
 #include "axtInfo.h"
+#include "obscure.h"
 #include "hgGene.h"
 
 static void printGenomicAnchor(char *table, char *itemName,
@@ -31,7 +32,11 @@ static void genomicLink(struct sqlConnection *conn, char *geneId,
 char *table = genomeSetting("knownGene");
 hPrintLinkCellStart();
 printGenomicAnchor(table, geneId, chrom, start, end);
-hPrintf("Genomic (%s:%d-%d)</A>", chrom, start+1, end);
+hPrintf("Genomic (%s:", chrom);
+printLongWithCommas(stdout, start);
+hPrintf("-");
+printLongWithCommas(stdout, end);
+hPrintf(")</A>");
 hPrintLinkCellEnd();
 }
 
