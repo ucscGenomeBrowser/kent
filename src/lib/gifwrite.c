@@ -4,7 +4,7 @@
 #include "memgfx.h"
 #include "gifcodes.h"
 
-static char const rcsid[] = "$Id: gifwrite.c,v 1.5 2003/05/06 07:33:42 kate Exp $";
+static char const rcsid[] = "$Id: gifwrite.c,v 1.6 2003/05/21 21:02:22 kent Exp $";
 
 static char gifsig[] = "GIF87a";
 
@@ -40,13 +40,16 @@ fflush(gif_file);
 i = gif_compress_data(8, screen->pixels, gif_wcount, gif_file);
 switch (i)
     {
+    case 0:
+        break;
     case -2:
 	warn("Out of memory writing GIF");
 	goto BADOUT;
     case -3:
 	goto TRUNCOUT;
     default:
-	break;
+	warn("Error code %d writing gif", i);
+	goto BADOUT;
     }
 fputc(';', gif_file); /* end of file for gif */
 return(TRUE);
