@@ -1410,6 +1410,8 @@ o - refer to the script at src/hg/sampleTracks/makeMm2Hg12.doc
     cd /cluster/data/mm2/bed/NIAGene
     wget --timestamping \
 	http://lgsun.grc.nia.nih.gov/geneindex/blatNAP-genome.txt
+    wget --timestamping \
+	"http://lgsun.grc.nia.nih.gov/Supplemental-Information/NAP.fasta"
     #	This file seems to have an extra field at the end ?
     #	It is always a 1 except for two entries that do not have
     #	this extra field.
@@ -1418,3 +1420,8 @@ o - refer to the script at src/hg/sampleTracks/makeMm2Hg12.doc
     hgLoadPsl mm2 -table=NIAGene blatNAP-genome.psl
 # load of NIAGene did not go as planned: 114560 record(s), 0 row(s) skipped,
 #	12 warning(s) loading psl.tab
+
+    mkdir /gbdb/mm2/NIAGene
+    ln -s /cluster/data/mm2/bed/NIAGene/NAP.fasta \
+	/gbdb/mm2/NIAGene/NAP.fa
+    hgLoadSeq mm2 /gbdb/mm2/NIAGene/NAP.fa
