@@ -9,6 +9,7 @@
 #include "dystring.h"
 #include "errabort.h"
 #include "linefile.h"
+#include <sys/vfs.h>
 
 struct lineFile *lineFileAttatch(char *fileName, bool zTerm, int fd)
 /* Wrap a line file around an open'd file. */
@@ -51,10 +52,34 @@ if (fd == -1)
 return lineFileAttatch(fileName, zTerm, fd);
 }
 
+struct lineFile *lineFileMayOpenLocal(char *fileName, bool zTerm)
+/* Try and open up a lineFile only if it is not nfs mounted. */
+{
+int fd;
+int type;
+struct statfs buf;
+
+if (sameString(fileName, "stdin"))
+    return lineFileStdin(zTerm);
+type = statfs(fileName, &buf);
+if (buf.f_type == 0x6969)
+    errAbort("Couldn't open %s , it is NFS mounted. This program requires this file to be on a local disk.", fileName);
+return lineFileMayOpen(fileName, zTerm);
+}
+
 struct lineFile *lineFileOpen(char *fileName, bool zTerm)
 /* Open up a lineFile or die trying. */
 {
 struct lineFile *lf = lineFileMayOpen(fileName, zTerm);
+if (lf == NULL)
+    errAbort("Couldn't open %s , %s", fileName, strerror(errno));
+return lf;
+}
+
+struct lineFile *lineFileOpenLocal(char *fileName, bool zTerm)
+/* Open up a lineFile or die trying. */
+{
+struct lineFile *lf = lineFileMayOpenLocal(fileName, zTerm);
 if (lf == NULL)
     errAbort("Couldn't open %s , %s", fileName, strerror(errno));
 return lf;
