@@ -138,6 +138,8 @@
 #include "sgdClone.h"
 #include "tfbsCons.h"
 #include "tfbsConsMap.h"
+#include "tfbsConsSites.h"
+#include "tfbsConsFactors.h"
 #include "simpleNucDiff.h"
 #include "bgiGeneInfo.h"
 #include "bgiSnp.h"
@@ -151,7 +153,7 @@
 #include "jalview.h"
 #include "flyreg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.794 2004/12/05 16:17:10 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.795 2004/12/06 18:11:16 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2186,6 +2188,116 @@ if (net->qEnd >= 0)
     printLabeledNumber(otherOrg, "size", net->qEnd - net->qStart);
 printf("<BR>Fields above refer to entire chain or gap, not just the part inside the window.<BR>\n");
 netAlignFree(&net);
+}
+
+void tfbsConsSites(struct trackDb *tdb, char *item)
+/* detail page for tfbsConsSites track */
+{
+boolean printFactors = FALSE;
+boolean printedPlus = FALSE;
+boolean printedMinus = FALSE;
+char *dupe, *words[16];
+int wordCount;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+char table[64];
+boolean hasBin;
+char query[512];
+struct sqlResult *sr;
+char **row;
+struct tfbsConsSites *tfbsConsSites;
+struct tfbsConsSites *tfbsConsSitesList = NULL;
+struct tfbsConsFactors *tfbsConsFactor;
+struct tfbsConsFactors *tfbsConsFactorList = NULL;
+boolean firstTime = TRUE;
+char *mappedId = NULL;
+boolean haveProtMap = hTableExists("kgProtMap");
+
+dupe = cloneString(tdb->type);
+genericHeader(tdb, item);
+wordCount = chopLine(dupe, words);
+
+hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
+	    table, item, seqName, start);
+sr = sqlGetResult(conn, query);
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    tfbsConsSites = tfbsConsSitesLoad(row+hasBin);
+    slAddHead(&tfbsConsSitesList, tfbsConsSites);
+    }
+sqlFreeResult(&sr); 
+slReverse(&tfbsConsSitesList);
+
+hFindSplitTable(seqName, "tfbsConsFactors", table, &hasBin);
+sprintf(query, "select * from %s where name = '%s' ", table, item);
+sr = sqlGetResult(conn, query);
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    tfbsConsFactor = tfbsConsFactorsLoad(row+hasBin);
+    slAddHead(&tfbsConsFactorList, tfbsConsFactor);
+    }
+sqlFreeResult(&sr); 
+slReverse(&tfbsConsFactorList);
+
+if (tfbsConsFactorList)
+    mappedId = cloneString(tfbsConsFactorList->ac);
+
+printf("<B><font size=\"5\">Transcription Factor Binding Site information:</font></B><BR><BR><BR>");
+for(tfbsConsSites=tfbsConsSitesList ; tfbsConsSites != NULL ; tfbsConsSites = tfbsConsSites->next)
+    {
+    /* print each strand only once */
+    if ((printedMinus && (tfbsConsSites->strand[0] == '-')) || (printedPlus && (tfbsConsSites->strand[0] == '+')))
+	continue;
+
+    if (!firstTime)
+	htmlHorizontalLine(); 
+    else
+	firstTime = FALSE;
+
+    printf("<B>Item:</B> %s<BR>\n", tfbsConsSites->name);
+    if (mappedId != NULL)
+	printCustomUrl(tdb, mappedId, FALSE);
+    printf("<B>Score:</B> %d<BR>\n", tfbsConsSites->score );
+    printf("<B>zScore:</B> %.2f<BR>\n", tfbsConsSites->zScore );
+    printf("<B>Strand:</B> %s<BR>\n", tfbsConsSites->strand);
+    printPos(tfbsConsSites->chrom, tfbsConsSites->chromStart, tfbsConsSites->chromEnd, NULL, TRUE, tfbsConsSites->name);
+    printedPlus = printedPlus || (tfbsConsSites->strand[0] == '+');
+    printedMinus = printedMinus || (tfbsConsSites->strand[0] == '-');
+    }
+
+if (tfbsConsFactorList)
+    {
+    htmlHorizontalLine(); 
+    printf("<B><font size=\"5\">Transcription Factors known to bind to this site:</font></B><BR><BR>");
+    for(tfbsConsFactor =tfbsConsFactorList ; tfbsConsFactor  != NULL ; tfbsConsFactor  = tfbsConsFactor ->next)
+	{
+	if (!sameString(tfbsConsFactor->species, "N"))
+	    {
+	    printf("<BR><B>Factor:</B> %s<BR>\n", tfbsConsFactor->factor);
+	    printf("<B>Species:</B> %s<BR>\n", tfbsConsFactor->species);
+	    printf("<B>SwissProt ID:</B> %s<BR>\n", sameString(tfbsConsFactor->id, "N")? "unknown": tfbsConsFactor->id);
+
+	    /* Only display link if entry exists in protein browser */
+	    if (haveProtMap)
+		{
+		sprintf(query, "select * from kgProtMap where qName = '%s';", tfbsConsFactor->id );
+		sr = sqlGetResult(conn, query); 
+		if ((row = sqlNextRow(sr)) != NULL)                                                         
+		    {
+		    printf("<A HREF=\"/cgi-bin/pbTracks?proteinID=%s\" target=_blank><B>Protein Browser Entry</B></A><BR>",  tfbsConsFactor->id);
+		    sqlFreeResult(&sr); 
+		    }
+		}
+	    }
+	}
+    }
+
+printTrackHtml(tdb);
+freez(&dupe);
+hFreeConn(&conn);
 }
 
 void tfbsCons(struct trackDb *tdb, char *item)
@@ -14858,6 +14970,10 @@ else if (sameWord(track, "htcGenePsl"))
 else if (sameWord(track, "htcPseudoGene"))
     {
     htcPseudoGene(track, item);
+    }
+else if (stringIn(track, "tfbsConsSites"))
+    {
+    tfbsConsSites(tdb, item);
     }
 else if (stringIn(track, "tfbsCons"))
     {
