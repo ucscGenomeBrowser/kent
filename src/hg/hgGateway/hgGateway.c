@@ -12,7 +12,7 @@
 #include "hgFind.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.48 2003/06/21 02:41:14 kent Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.49 2003/06/21 02:45:50 kent Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -56,7 +56,7 @@ if (db == NULL)
  * old position. */
 if (oldDb != NULL && !sameString(oldDb, db))
     {
-    cartRemove(cart, "ct");
+    removeCustomTrackData();
     freez(&position);
     }
 
