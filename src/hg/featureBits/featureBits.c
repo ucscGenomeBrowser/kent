@@ -14,7 +14,7 @@
 #include "agpGap.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.22 2004/04/04 04:02:25 sugnet Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.23 2004/04/09 02:11:51 daryl Exp $";
 
 int minSize = 1;	/* Minimum size of feature. */
 char *clChrom = "all";	/* Which chromosome. */
@@ -30,7 +30,7 @@ errAbort(
   "featureBits - Correlate tables via bitmap projections. \n"
   "usage:\n"
   "   featureBits database table(s)\n"
-  "This will return the number of bits in all the tables anded together"
+  "This will return the number of bits in all the tables anded together\n"
   "Options:\n"
   "   -bed=output.bed   Put intersection into bed format\n"
   "   -fa=output.fa     Put sequence in intersection into .fa file\n"
