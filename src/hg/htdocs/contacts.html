@@ -50,17 +50,18 @@
 	Messages sent to this address will be posted automatically on the genome 
 	mailing list.  
 	<P>
-	<A HREF="http://www.soe.ucsc.edu/mailman/listinfo/genome">Subscribe</A> 
-	to the Genome mailing list.
-<FORM name=googleForm method=GET action=http://www.google.com/search>
-Search the Genome mailing list 
-<A HREF ="https://www.soe.ucsc.edu/pipermail/genome/" TARGET=_blank>Archives</A>: &nbsp;
+    <A HREF ="https://www.soe.ucsc.edu/pipermail/genome/" TARGET=_blank>Browse</A>
+    the Genome mailing list archives (indexed by thread, subject, author and date).
+<FORM name="googleForm" method="GET" action="http://www.google.com/search" onSubmit="document.googleForm.q.value=document.googleForm.qq.value+'   inurl:www.cse.ucsc.edu/pipermail/genome';">
+Search the Genome mailing list archives: &nbsp;
 <input type="hidden" name="q" value="">
 <input type="hidden" name="num" value="15">
 <input type="hidden" name="filter" value="0">
 <INPUT TYPE=text name=qq size=30 maxlength=255 value="">
-<input TYPE="submit" VALUE="Submit" onClick="document.googleForm.q.value=document.googleForm.qq.value+'   inurl:www.cse.ucsc.edu/pipermail/genome' ; document.googleForm.submit();">
+<input TYPE="submit" VALUE="Submit">
 </FORM>
+	<A HREF="http://www.soe.ucsc.edu/mailman/listinfo/genome">Subscribe</A> 
+	to the Genome mailing list.
 	<HR>
 	Server errors or other problems accessing the UCSC Genome Browser or 
 	BLAT server: 
@@ -73,7 +74,7 @@ Search the Genome mailing list
 	<HR>
 	Questions about commercial licensing of the Genome Browser:
 	<A HREF="mailto:genome-www@soe.ucsc.edu">genome-www@soe.ucsc.edu</A>.
-	Questions regarding commerical licensing of Blat: <A HREF="mailto:jim_kent@pacbell.net">jim_kent@pacbell.net</A>.
+	Questions regarding commercial licensing of Blat: <A HREF="mailto:jim_kent@pacbell.net">jim_kent@pacbell.net</A>.
 	<P>
 	Read information on Genome Browser 
 	<A HREF="http://hgwdev.cse.ucsc.edu/license/">software licensing requirements</A>. 
