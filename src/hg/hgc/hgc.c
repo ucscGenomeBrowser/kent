@@ -2772,7 +2772,10 @@ char *version = NULL;
  * the pure relational approach wins for pure search speed,
  * and these RNA fields are searched.  So it looks like
  * the code below stays.  Be really careful when you modify
- * it. */
+ * it.
+ *
+ * Uses the gbSeq table if available, otherwise use seq for older databases. 
+ */
 dyStringAppend(dy,
                "select mrna.type,mrna.direction,"
                "source.name,organism.name,library.name,mrnaClone.name,"
@@ -2780,7 +2783,7 @@ dyStringAppend(dy,
                "description.name,author.name,geneName.name,productName.name,");
 if (haveGbSeq)
     dyStringAppend(dy,
-                   "gbSeq.size,gbSeq.gb_date,gbSeq.gbExtFile,gbSeq.file_offset,gbSeq.file_size ");
+                   "gbSeq.size,mrna.moddate,gbSeq.gbExtFile,gbSeq.file_offset,gbSeq.file_size ");
 else
     dyStringAppend(dy,
 		   "seq.size,seq.gb_date,seq.extFile,seq.file_offset,seq.file_size ");
