@@ -4781,8 +4781,6 @@ o - Load genomic dupes
     hgsql -e \
 	'update genomicDups set name = concat(otherChrom,":",otherStart);' \
 	hg16
->>>>>>> 1.74
-
 
 # UPDATE WOODY BINARIES (see PHYLOHMM CONSERVATION entries below)
 # done, acs, 2003-11-19
