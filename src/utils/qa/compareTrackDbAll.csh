@@ -11,7 +11,7 @@
 if ($#argv < 1 || $#argv > 4) then
  echo ""
  echo "  checks all fields (except html) in trackDb"
- echo "  this will break when hgText is replaced by hgTables."
+ echo "  this will break when hgText is removed."
  echo
  echo "    usage: database, machine1, machine2"
  echo ""
