@@ -22,6 +22,9 @@
 #include "fa.h"
 #include "keys.h"
 
+/* Default size of directory path string buffers */
+#define PATH_LEN 256
+
 enum formatType
 /* Are we working on genomic sequence or mRNA?  Need to write
  * one big .fa file, or a separate one for each sequence. */
@@ -106,6 +109,12 @@ struct gbField *devStageField;
 struct gbField *cloneField;
 struct gbField *chromosomeField;
 struct gbField *mapField;
+
+/* Flag indicating whether we are separating the output by organism */
+static boolean gByOrganism = FALSE;
+
+/* If the above flag is TRUE then this is our output dir */
+static char *gOutputDir = NULL;
 
 void makeGbStruct()
 /* Create a heirarchical structure for parsing genBank fields. */
@@ -1027,8 +1036,57 @@ if (dir == NULL)
 return dir;
 }
 
-void procOneGbFile(char *inName, FILE *faFile, char *faDir, FILE *raFile, 
-    struct hash *uniqueNameHash, struct hash *estAuthorHash, struct filter *filter)
+static char * replaceChars(const char *src, char orig, char new)
+/*
+Utility function to replace all occurrences of the 
+original char with a new one in a string
+
+param src - The string to operate on.
+param orig - The char in the string to replace.
+param new - The new char to place in the string.
+
+return - A newly allocated string containing the 
+         chars that have been morphed.
+ */
+{
+char *subStr = NULL;
+char *retStr = NULL;
+int strIndex = 0;
+int strLen = 0;
+
+if (NULL != src && 0 != strlen(src))
+    {
+    strLen = strlen(src);
+    retStr = needMem(strLen + 1);
+    }
+
+for (strIndex = 0; strIndex < strLen; strIndex++)
+    {
+    if (src[strIndex] == orig) 
+        {
+        retStr[strIndex] = new;
+        }
+    else
+        {
+        retStr[strIndex] = src[strIndex];
+        }
+    } while(NULL != subStr);
+
+/* Null terminate the string */
+if (NULL != retStr) 
+    {
+    retStr[strIndex] = 0;
+    }
+
+return retStr;
+}
+
+void procOneGbFile(char *inName, 
+                   FILE *faFile, char *faDir, 
+                   FILE *raFile, char *raName, 
+                   struct hash *uniqueNameHash, struct hash *estAuthorHash,
+                   struct hash *faHash, struct hash *raHash, 
+                   struct filter *filter)
 /* Process one genBank file into fa and ra files. */
 {
 struct lineFile *lf = lineFileOpen(inName, TRUE);
@@ -1055,6 +1113,62 @@ while (readGbInfo(lf))
     char *org = organismField->val;
     struct keyVal *seqKey, *sizeKey;
     boolean doneSequence = FALSE;
+
+    printf ("ORGANISM: %s\n", org);
+
+    if (gByOrganism) 
+        {
+        if (!hashLookup(raHash, org))
+            {
+            char *orgDir = NULL;
+            char command[PATH_LEN];
+            char path[PATH_LEN];
+
+            if (NULL == org)
+                {
+                orgDir = "Unspecified";
+                }
+            else
+                {
+                orgDir = replaceChars(org, ' ', '.');
+                }
+
+            sprintf(command, "mkdir -p %s/%s", gOutputDir, orgDir);
+            system(command);
+
+            printf("OUTPUT DIR: %s\n", gOutputDir);
+            printf("ORG DIR: %s\n", orgDir);
+            printf("RA FILE: %s\n", raName);
+
+            sprintf(path, "%s/%s/%s", gOutputDir, orgDir, raName); 
+            printf ("RA PATH: %s\n", path);
+            fflush(stdout);
+            raFile = mustOpen(path, "wb");
+
+            printf("OUTPUT DIR: %s\n", gOutputDir);
+            printf("ORG DIR: %s\n", orgDir);
+            printf("FA FILE: %s\n", faDir);
+
+            sprintf(path, "%s/%s/%s", gOutputDir, orgDir, faDir); 
+            printf ("FA PATH: %s\n", path);
+            fflush(stdout);
+            faFile = mustOpen(path, "wb");
+
+            hashAdd(raHash, org, raFile);   
+            hashAdd(faHash, org, faFile);   
+            }
+
+        if (NULL == raFile) 
+            {
+            raFile = (FILE*) hashMustFindVal(raHash, org);
+            }
+
+        if (NULL == faFile) 
+            {
+            faFile = (FILE*) hashMustFindVal(faHash, org);
+            }
+        }
+
     if (++gbCount % modder == 0)
         {
         printf(".");
@@ -1452,7 +1566,7 @@ errAbort("gbToFaRa - Convert GenBank flat format file to an fa file containing\n
          "the sequence data, an ra file containing other relevant info and\n"
          "a ta file containing summary statistics.\n"
          "usage:\n"
-         "   gbToFaRa filterFile faFile raFile taFile genBankFile(s)\n"
+         "   gbToFaRa filterFile faFile raFile taFile [-byOrganism=<outputDir>] genBankFile(s)\n"
          "where filterFile is definition of which records and fields\n"
          "to use or the word null if you want no filtering.");
 }
@@ -1520,35 +1634,74 @@ int main(int argc, char *argv[])
 char *filterName;
 struct filter *filter;
 char *faName, *raName, *taName, *gbName;
-FILE *fa=NULL, *ra, *ta;
-int i;
-struct hash *uniqHash, *estAuthorHash;
+FILE *fa = NULL;
+FILE *ra = NULL;
+FILE *ta = NULL;
+int i = 0;
+int startIndex = 5;
+struct hash *uniqHash = NULL;
+struct hash *estAuthorHash = NULL;
+struct hash *faHash = NULL;
+struct hash *raHash = NULL;
+static char *byOrgOption = "-byOrganism=";
+char command[PATH_LEN];
 
 if (argc < 6)
     {
     usage();
     }
+
+gByOrganism = (NULL != strstr(argv[5], byOrgOption));
+if (gByOrganism && argc < 7)
+    {
+    usage();
+    }
+
 filterName = argv[1];
 faName = argv[2];
 raName = argv[3];
 taName = argv[4];
+if(gByOrganism)
+    {
+    gOutputDir = strstr(argv[5], "=");
+    /* Move the pointer one past the '=' sign */
+    gOutputDir++;
+    startIndex = 6;
+    }
 
 filter  = makeFilter(filterName);
-
-if (formatType != ftBac)
-    fa = mustOpen(faName, "wb");
-ra = mustOpen(raName, "wb");
-ta = mustOpen(taName, "wb");
 uniqHash = newHash(16);
 estAuthorHash = newHash(10);
 kvt = newKvt(128);
 makeGbStruct();
-for (i=5; i<argc; ++i)
+
+faHash = newHash(10);
+raHash = newHash(10);
+
+if (gByOrganism) 
+    {
+    printf("Processing output by organism into directory: %s\n", gOutputDir);
+    sprintf(command, "mkdir -p %s", gOutputDir);
+    system(command);
+    }
+else
+    {
+    ra = mustOpen(raName, "wb");
+    ta = mustOpen(taName, "wb");
+    if (formatType != ftBac)
+        {
+        fa = mustOpen(faName, "wb");
+        }
+    }
+
+for (i = startIndex; i < argc; ++i)
     {
     gbName = argv[i];
     printf("Processing %s into %s and %s\n", gbName, faName, raName);
-    procOneGbFile(gbName, fa, faName, ra, uniqHash, estAuthorHash, filter);
+    procOneGbFile(gbName, fa, faName, ra, raName, 
+                  uniqHash, estAuthorHash, faHash, raHash, filter);
     }
+
 printStats(ta, gbStruct);
 return 0;
 }
