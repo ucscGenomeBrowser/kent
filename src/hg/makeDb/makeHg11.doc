@@ -1007,11 +1007,12 @@ hgLoadRna addSeq hg11 /projects/hg3/fish/tet6/tet*.fa
 DONE
 
 
-TIGR GENE INDEX (done 7/1/02)
+TIGR GENE INDEX (done 7/1/02, re-load w/new data 7/30/02)
     mkdir -p ~/hg11/bed/tigr
     cd ~/hg11/bed/tigr
-    wget ftp://ftp.tigr.org/private/HGI_ren/TGI_track_HumanGenome_build29.tgz
-    gunzip -c TGI_track_HumanGenome_build29.tgz | tar xvf -
+    # wget ftp://ftp.tigr.org/private/HGI_ren/TGI_track_HumanGenome_build29.tgz
+    wget ftp://ftp.tigr.org/private/HGI_ren/TGI_track_HumanGenome_build29_corrected.tgz
+    gunzip -c TGI*.tgz | tar xvf -
     foreach f (*cattle*)
       set f1 = `echo $f | sed -e 's/cattle/cow/g'`
       mv $f $f1
