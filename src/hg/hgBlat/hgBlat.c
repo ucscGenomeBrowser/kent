@@ -23,15 +23,17 @@ struct serverTable
    char *nibDir;	/* Directory of sequence files. */
    };
 
-char *genomeList[] = {"Oct. 7, 2000", "Dec. 12, 2000"};
+char *genomeList[] = {/* "Oct. 7, 2000", */ "Dec. 12, 2000", "April 1, 2001"};
 char *typeList[] = {"BLAT's guess", "DNA", "protein", "translated RNA", "translated DNA"};
 char *sortList[] = {"query,score", "query,start", "chrom,score", "chrom,start", "score"};
 
 struct serverTable serverTable[] =  {
-{"hg5", "Oct. 7, 2000", TRUE, "kks00.cse.ucsc.edu", "17776", "/projects/cc/hg/oo.23/nib"},
-{"hg5", "Oct. 7, 2000", FALSE, "kks00.cse.ucsc.edu", "17777", "/projects/cc/hg/oo.23/nib"},
-{"hg6", "Dec. 12, 2000", TRUE,  "cc.cse.ucsc.edu", "17778", "/projects/hg2/gs.6/oo.27/nib"},
-{"hg6", "Dec. 12, 2000", FALSE, "cc.cse.ucsc.edu", "17779", "/projects/hg2/gs.6/oo.27/nib"},
+// {"hg5", "Oct. 7, 2000", TRUE, "kks00", "17776", "/projects/cc/hg/oo.23/nib"},
+// {"hg5", "Oct. 7, 2000", FALSE, "kks00", "17777", "/projects/cc/hg/oo.23/nib"},
+{"hg6", "Dec. 12, 2000", TRUE,  "cc", "17778", "/projects/hg2/gs.6/oo.27/nib"},
+{"hg6", "Dec. 12, 2000", FALSE, "cc", "17779", "/projects/hg2/gs.6/oo.27/nib"},
+{"hg7", "April 1, 2001", TRUE, "blat1", "17778", "/projects/hg3/gs.7/oo.29/nib"},
+{"hg7", "April 1, 2001", FALSE, "blat1", "17779", "/projects/hg3/gs.7/oo.29/nib"},
 };
 
 struct serverTable *findServer(char *db, boolean isTrans)
@@ -42,6 +44,10 @@ struct serverTable *serve;
 
 if (db == NULL)
     db = defaultDatabase;
+if (sameWord(db, "hg5"))
+    errAbort("Sorry, the October 2000 BLAT server was taken down to make room "
+             "for April 2001.  Hopefully we'll get an additional machine and "
+	     "restore this service in a week or two.");
 for (i=0; i<ArraySize(serverTable); ++i)
     {
     serve = &serverTable[i];
