@@ -13,9 +13,9 @@
 #include "vGfxPrivate.h"
 #include "colHash.h"
 
-static char const rcsid[] = "$Id: memgfx.c,v 1.36 2004/06/08 16:41:27 angie Exp $";
+static char const rcsid[] = "$Id: memgfx.c,v 1.37 2005/01/20 00:50:41 daryl Exp $";
 
-static void mgSetDefaultColorMap(struct memGfx *mg)
+void mgSetDefaultColorMap(struct memGfx *mg)
 /* Set up default color map for a memGfx. */
 {
 /* Note dependency in order here and in MG_WHITE, MG_BLACK, etc. */
@@ -296,7 +296,7 @@ else
     {
     int duty_cycle;
     int incy;
-    int   delta_x, delta_y;
+    int delta_x, delta_y;
     int dots;
     delta_y = y2-y1;
     delta_x = x2-x1;
@@ -362,6 +362,220 @@ else
     }
 }
 
+void mgInvertedBrezy(struct memGfx *mg, int x1, int y1, int x2, int y2, Color color,
+	int yCeil, boolean fillFromCeil)
+/* Brezenham line algorithm.  Optionally fill in below line. */
+{
+if (x1 == x2)
+    {
+    int y,height;
+    if (y1 > y2)
+	{
+	y = y2;
+	height = y1-y2+1;
+	}
+    else
+        {
+	y = y1;
+	height = y2-y1+1;
+	}
+    if (fillFromCeil)
+        {
+	if (y > yCeil)
+	    mgDrawBox(mg, x1, y, 1, y-yCeil, color);
+	}
+    else
+        mgDrawBox(mg, x1, y, 1, height, color);
+    }
+else if (y1 == y2 && FALSE)
+    {
+    int x,width;
+    if (x1 > x2)
+        {
+	x = x2;
+	width = x1-x2+1;
+	}
+    else
+        {
+	x = x1;
+	width = x2-x1+1;
+	}
+    if (fillFromCeil)
+        {
+	if (y1 > yCeil)
+	    mgDrawBox(mg, x, y1, width, y1 - yCeil, color);
+	}
+    else
+        {
+	mgDrawBox(mg, x, y1, width, 1, color);
+	}
+    }
+else
+    {
+    int duty_cycle;
+    int incy;
+    int delta_x, delta_y;
+    int dots;
+    delta_y = y2-y1;
+    delta_x = x2-x1;
+    if (delta_y < 0) 
+	{
+	delta_y = -delta_y;
+	incy = -1;
+	}
+    else
+	{
+	incy = 1;
+	}
+    if (delta_x < 0) 
+	{
+	delta_x = -delta_x;
+	incy = -incy;
+	x1 = x2;
+	y1 = y2;
+	}
+    duty_cycle = (delta_x - delta_y)/2;
+    if (delta_x >= delta_y)
+	{
+	dots = delta_x+1;
+	while (--dots >= 0)
+	    {
+	    if (fillFromCeil)
+		{
+		if (y1 > yCeil)
+		    mgDrawBox(mg,x1,yCeil,1,y1-yCeil,color);
+		}
+	    else
+		mgPutDot(mg,x1,y1,color);
+	    duty_cycle -= delta_y;
+	    x1 += 1;
+	    if (duty_cycle < 0)
+		{
+		duty_cycle += delta_x;	  /* update duty cycle */
+		y1+=incy;
+		}
+	    }
+	}
+    else
+	{
+	dots = delta_y+1;
+	while (--dots >= 0)
+	    {
+	    if (fillFromCeil)
+		{
+		if (y1 > yCeil)
+		    mgDrawBox(mg,x1,yCeil,1,y1-yCeil,color);
+		}
+	    else
+		mgPutDot(mg,x1,y1,color);
+	    duty_cycle += delta_x;
+	    y1+=incy;
+	    if (duty_cycle > 0)
+		{
+		duty_cycle -= delta_y;	  /* update duty cycle */
+		x1 += 1;
+		}
+	    }
+	}
+    }
+}
+
+void mgBrezyTrapezoid(struct memGfx *mg, int x1, int y1, int x2, int y2, 
+		      int trapHeight, Color color, boolean fill)
+/* Brezenham line algorithm.  Vertical trapezoid with two sets of parallel 
+ * sides. Optionally fill in under line. (Used for drawing diamonds) */
+{
+if (x1 == x2)
+    {
+    int y;
+    if (y1 > y2)
+	y = y2;
+    else
+	y = y1;
+    mgDrawBox(mg, x1, y-trapHeight, 1, trapHeight, color);
+    }
+else if (y1 == y2-trapHeight)
+    {
+    int x,width;
+    if (x1 > x2)
+        {
+	x = x2;
+	width = x1-x2+1;
+	}
+    else
+        {
+	x = x1;
+	width = x2-x1+1;
+	}
+    mgDrawBox(mg, x, y1, width, 1, color);
+    }
+else
+    {
+    int duty_cycle;
+    int incy = 1;
+    int delta_x = x2-x1;
+    int delta_y = y2-y1;
+    int dots;
+    /* printf("<BR>(x1,y1):(%d,%d) (x2,y2):(%d,%d) trapHeight:%d color:%d fill:%d",
+       x1,y1,x2,y2,trapHeight,color,fill); */
+    if (delta_y < 0) 
+	{
+	delta_y = -delta_y;
+	incy = -1;
+	}
+    if (delta_x < 0) 
+	{
+	delta_x = -delta_x;
+	incy = -incy;
+	x1 = x2;
+	y1 = y2;
+	}
+    duty_cycle = (delta_x - delta_y)/2;
+    if (delta_x >= delta_y)
+	{
+	dots = delta_x+1;
+	while (--dots >= 0)
+	    {
+	    if (fill)
+		mgDrawBox(mg,x1,y1-trapHeight,1,trapHeight,color);
+	    else
+		{
+		mgPutDot(mg,x1,y1,color);
+		mgPutDot(mg,x1,y1,color);
+		}
+	    duty_cycle -= delta_y;
+	    x1 += 1;
+	    if (duty_cycle < 0)
+		{
+		duty_cycle += delta_x;	  /* update duty cycle */
+		y1+=incy;
+		}
+	    }
+	}
+    else
+	{
+	dots = delta_y+1;
+	while (--dots >= 0)
+	    {
+	    if (fill)
+		mgDrawBox(mg,x1,y1-trapHeight,1,trapHeight,color);
+	    else
+		{
+		mgPutDot(mg,x1,y1,color);
+		mgPutDot(mg,x1,y1-trapHeight,color);
+		}
+	    duty_cycle += delta_x;
+	    y1+=incy;
+	    if (duty_cycle > 0)
+		{
+		duty_cycle -= delta_y;	  /* update duty cycle */
+		x1 += 1;
+		}
+	    }
+	}
+    }
+}
+
 void mgDrawLine(struct memGfx *mg, int x1, int y1, int x2, int y2, Color color)
 /* Draw a line from one point to another. */
 {
@@ -371,11 +585,104 @@ mgBrezy(mg, x1, y1, x2, y2, color, 0, FALSE);
 void mgFillUnder(struct memGfx *mg, int x1, int y1, int x2, int y2, 
 	int bottom, Color color)
 /* Draw a 4 sided filled figure that has line x1/y1 to x2/y2 at
- * it's top, a horizontal line at bottom at it's bottom,  and
+ * it's top, a horizontal line at bottom as it's bottom, and
  * vertical lines from the bottom to y1 on the left and bottom to
  * y2 on the right. */
 {
 mgBrezy(mg, x1, y1, x2, y2, color, bottom, TRUE);
+}
+
+void mgFillOver(struct memGfx *mg, int x1, int y1, int x2, int y2, 
+	int top, Color color)
+/* Draw a 4 sided filled figure that has line x1/y1 to x2/y2 at
+ * it's bottom, a horizontal line at top as it's top, and
+ * vertical lines from the top to y1 on the left and top to
+ * y2 on the right. */
+{
+mgInvertedBrezy(mg, x1, y1, x2, y2, color, top, TRUE);
+}
+
+void mgBrezyDiamond(struct memGfx *mg, 
+		    int xl, int yl, /* top */
+		    int xr, int yr, /* bottom */
+		    int xt, int yt, /* left */
+		    int xb, int yb, /* right */
+		    Color color, boolean drawOutline, Color outlineColor)
+/* Extension of Brezenham line algorithm. */
+{
+if(xl>xt) errAbort("<BR>Diamond coordinates are out of order (xl>xt)<BR>");
+if(xt>xr) errAbort("<BR>Diamond coordinates are out of order (xt>xr)<BR>");
+if(xl>xb) errAbort("<BR>Diamond coordinates are out of order (xl>xb)<BR>");
+if(xb>xr) errAbort("<BR>Diamond coordinates are out of order (xb>xr)<BR>");
+if(yb>yl) errAbort("<BR>Diamond coordinates are out of order (yb>yl)<BR>");
+if(yl>yt) errAbort("<BR>Diamond coordinates are out of order (yl>yt)<BR>");
+if(yb>yr) errAbort("<BR>Diamond coordinates are out of order (yb>yr)<BR>");
+if(yr>yt) errAbort("<BR>Diamond coordinates are out of order (yr>yt)<BR>");
+
+if (xl == xr || yt == yb)
+    mgDrawLine(mg, xl, yt, xr, yb, color);
+else
+    {
+    double m;  /* slope */
+    int xa,ya,xc,yc; /* internal points on line */
+    /* Split diamond into 5 pieces.  Vertical lines at xb and xt, 
+       a line from (xr,yr) to the greater of xb,xt, and
+       a line from (xl,yl) to the lesser of xb,xt.  Then draw four 
+       diamonds and a vertical trapezoid with two sets of parallel 
+       sides. */
+    if (xt<xb)
+	{
+	/* Draw left triangles */
+	m  = ((yb-yl)*1.0/(xb-xl));
+	xa = xt;
+	ya = yl + round(m*(xt-xl));
+	mgBrezy(mg, xl, yl, xa, ya, color, yl, TRUE);
+	mgFillOver(mg, xl, yl, xt, yt, yl, color);
+	
+	/* Draw right triangles */
+	xc = xb;
+	yc = yr - round(m*(xr-xb));
+	mgBrezy(mg, xr, yr, xb, yb, color, yr, TRUE);
+	mgFillOver(mg, xr, yr, xc, yc, yr, color);
+	/* m  = ((yt-yl)*1.0/(xt-xl)); */
+	mgBrezyTrapezoid(mg, xt,yt,xc,yc,yt-ya,color,TRUE);
+	}
+    else
+	{
+	/* Draw left triangles */
+	m  = ((yt-yl)*1.0/(xt-xl)); 
+	xa = xb;
+	ya = yl + round(m*(xb-xl));
+	mgFillOver(mg, xl, yl, xa, ya, yl, color);
+	mgBrezy(mg, xl, yl, xb, yb, color, yl, TRUE);
+	
+	/* Draw right triangles */
+	xc = xt;
+	yc = yr - round(m*(xr-xt));
+	mgFillOver(mg, xr, yr, xt, yt, yr, color);
+	mgBrezy(mg, xr, yr, xc, yc, color, yr, TRUE);
+	/* m  = ((yb-yl)*1.0/(xb-xl)); */
+	mgBrezyTrapezoid(mg, xt,yt,xa,ya,yt-yc,color,TRUE);
+	}
+    if (drawOutline && outlineColor)
+	{
+	mgDrawLine(mg, xl, yl, xt, yt, outlineColor);
+	mgDrawLine(mg, xt, yt, xr, yr, outlineColor);
+	mgDrawLine(mg, xr, yr, xb, yb, outlineColor);
+	mgDrawLine(mg, xb, yb, xl, yl, outlineColor);
+	}
+    }
+}
+
+void mgDrawDiamond(struct memGfx *mg, 
+       int xl, int yl, int xr, int yr, 
+       int xt, int yt, int xb, int yb, 
+       Color color, boolean drawOutline, Color outlineColor)
+/* Draw a filled diamond between four points, 
+ * with or without a colored outline */
+{
+mgBrezyDiamond(mg, xl, yl, xr, yr, xt, yt, xb, yb, 
+	       color, drawOutline, outlineColor);
 }
 
 void mgPutSeg(struct memGfx *mg, int x, int y, int width, Color *dots)
@@ -607,8 +914,8 @@ return out;
 
 
 void mgTriLeft(struct memGfx *mg, int x1, int y1, int y2, int color)
-/* Draw a triangle pointing left with straight edge along x1+((y2-y1)/2) 
- * from y1 to y2 (point at x1). */
+/* Draw a right (90 deg) isosceles triangle pointing left with straight edge 
+ * along x1+((y2-y1)/2) from y1 to y2 (point at x1). */
 {
 int height = y2 - y1;
 int halfHeight = height >> 1;
@@ -635,7 +942,8 @@ for (; y < y2; y++)
 
 
 void mgTriRight(struct memGfx *mg, int x1, int y1, int y2, int color)
-/* Draw a triangle pointing right with straight edge along x1 from y1 to y2 */
+/* Draw a right (90 deg) isosceles triangle pointing right with straight edge 
+ * along x1 from y1 to y2 */
 {
 int height = y2 - y1;
 int halfHeight = height >> 1;
@@ -669,6 +977,7 @@ vg->close = (vg_close)mgFree;
 vg->dot = (vg_dot)mgSlowDot;
 vg->box = (vg_box)mgDrawBox;
 vg->line = (vg_line)mgDrawLine;
+vg->diamond = (vg_diamond)mgDrawDiamond;
 vg->text = (vg_text)mgText;
 vg->textRight = (vg_textRight)mgTextRight;
 vg->textCentered = (vg_textCentered)mgTextCentered;
