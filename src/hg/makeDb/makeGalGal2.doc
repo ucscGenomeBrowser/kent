@@ -1448,8 +1448,10 @@ galGal2.downloadDir = galGal2
 
     ssh eieio
     cd /cluster/data/genbank
-    # This is an -initial run, mRNA only (with bluearc which was working):
-    nice bin/gbAlignStep -iserver=no -clusterRootDir=/cluster/bluearc/genbank \
+    # This is an -initial run, mRNA only:
+    nice bin/gbAlignStep -clusterRootDir=/cluster/bluearc/genbank \
+      -iserver=kkr1u00 -iserver=kkr2u00 -iserver=kkr3u00 -iserver=kkr4u00 \
+      -iserver=kkr5u00 -iserver=kkr6u00 -iserver=kkr7u00 -iserver=kkr8u00 \
       -srcDb=genbank -type=mrna -verbose=1 -initial galGal2
     # Load results:
     ssh hgwdev
@@ -1948,5 +1950,86 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
     ldHgGene galGal2 bgiGene -predTab bgiGene.tab
     hgLoadBed galGal2 bgiSnp -tab -sqlTable=$HOME/kent/src/hg/lib/bgiSnp.sql \
       bgiSnp.bed
+
+
+# LOAD PRELIM ENSEMBL GENE BUILD (DONE 3/28/04 angie)
+    ssh kksilo
+    mkdir /cluster/data/galGal2/bed/ensembl
+    cd /cluster/data/galGal2/bed/ensembl
+    wget ftp://ftp.sanger.ac.uk/pub/searle/chicken/chicken_midbuild.pep.gz
+    wget ftp://ftp.sanger.ac.uk/pub/searle/chicken/chicken_midbuild.gtf.gz
+    gunzip *.gz
+    sed -e 's/^/chr/' chicken_midbuild.gtf \
+      > chicken_midbuild.fixed.gtf
+    sed -e 's/midbuild_chicken_trans/midbuild_chicken_cdna/' \
+      chicken_midbuild.pep > chicken_midbuild.fixed.pep
+    ssh hgwdev
+    cd /cluster/data/galGal2/bed/ensembl
+    hgPepPred galGal2 generic ensPep chicken_midbuild.fixed.pep
+    ldHgGene -gtf galGal2 ensGene chicken_midbuild.fixed.gtf
+
+
+# MAKE KNOWN REGULATORY REGIONS (DONE 3/29/04 angie)
+    # Adam got several text files from Webb (and/or Laura Elnitski?), 
+    # translated them to bed 3, and loaded.  I tweaked -> bed 4.  
+    # (this does both hg16 and galGal2)
+    ssh hgwdev
+    cd /cluster/home/acs/webb-launcher
+    make -f Makefile.angie munge
+    make -f Makefile.angie track
+
+
+# RUN GENE-CHECK ON MRNA W/CDS, ENSEMBL (DONE 3/29/04 markd)
+    # get mrna data from hgwbeta, which is most current:
+    ssh hgwbeta
+    mkdir /cluster/store7/markd/galGal2
+    cd /cluster/store7/markd/galGal2
+    mkdir data
+    hgsql -N -e 'select * from all_mrna' galGal2 |cut -f 2-30 \
+      > data/all_mrna.psl
+    hgsql -N -e 'select mrna.acc,cds.name from mrna,cds,all_mrna where all_mrna.qName=mrna.acc and mrna.cds = cds.id' galGal2 \
+      > data/cds.tab
+    nice mrnaToGene -cdsFile=data/cds.tab data/all_mrna.psl data/all_mrna.gp \
+      >& data/all_mrna.log
+
+    # get ensGene data from hgwdev:
+    ssh hgwdev
+    cd /cluster/store7/markd/galGal2
+    hgsql -N -e 'select * from ensGene ' galGal2 >data/ensGene.gp
+
+    # run gene-check and gene-extract
+    ssh kksilo
+    cd /cluster/store7/markd/galGal2
+    mkdir results
+    ~markd/bin/gene-check -incl-ok -nib-dir /cluster/data/galGal2/nib \
+      -details-out results/all_mrna.details data/all_mrna.gp \
+      results/all_mrna.chk >& all_mrna.log
+    ~markd/bin/gene-check -incl-ok -nib-dir /cluster/data/galGal2/nib \
+      -details-out results/ensGene.details data/ensGene.gp \
+      results/ensGene.chk >& ensGene.log
+    ~markd/bin/gene-extract -nib-dir  /cluster/data/galGal2/nib \
+      -all-cds-fa results/all_mrna.cds.fa  data/all_mrna.gp >& all_mrna.log
+    ~markd/bin/gene-extract -nib-dir  /cluster/data/galGal2/nib \
+      -all-cds-fa results/ensGene.cds.fa  data/ensGene.gp >&ensGene.log
+    # Files in results/
+    #     *.chk - output of the gene-check program, rdb format
+    #     *.details - details of problems detected 
+    #     *.cds.fa - fasta of CDS taken from genome
+    # Columns in *.chk file are
+    #     acc - name field from genePred
+    #     chr  - genome location from genePred
+    #     chrStart
+    #     chrEnd
+    #     strand
+    #     stat - overall status based on other data: ok or err
+    #     frame - is the frame annotation sane (mult of 3): ok, bad, or noCDS
+    #             if noCDS, other CDS checks are not done.
+    #     start - Is there a valid start codon: ok or no
+    #     stop - Is there a valid stop codon: ok or no
+    #     orfStop - Number of in-frame stop codons
+    #     smallGap - Number of small gaps, too small to be introns
+    #     unknownSplice - Number of introns with unknown splicing patterns 
+    #          (considers the three most common splicing patterns as valid)
+    #     causes - list of symbolic names summarizing the failures 
 
 
