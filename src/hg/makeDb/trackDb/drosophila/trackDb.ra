@@ -35,6 +35,7 @@ priority 45.5
 visibility pack
 color 0,100,180
 type genePred bdgpGenePep
+hgGene on
 
 track bdgpNonCoding
 shortLabel BDGP Non-coding

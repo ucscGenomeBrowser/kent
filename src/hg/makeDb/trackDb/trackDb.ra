@@ -280,6 +280,7 @@ priority 34
 visibility pack
 color 12,12,120
 type genePred refPep refMrna
+hgGene on
 
 track refGene
 shortLabel RefSeq Genes
