@@ -4356,12 +4356,14 @@ numColumns = maxVal/stepSize *2+1;
 printf("<TABLE  BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
 printf("<TABLE  BGCOLOR=\"#fffee8\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR>");
 printf("<th colspan=%d>False Color Key, all values log base 2</th></tr><tr>\n",numColumns);
-for(currentVal = minVal; currentVal <= maxVal + stepSize; currentVal += stepSize)
+/* have to add the stepSize/2 to account for the ability to 
+   absolutely represent some numbers as floating points */
+for(currentVal = minVal; currentVal <= maxVal + (stepSize/2); currentVal += stepSize)
     {
     printf("<th><b>%.2f</b></th>", currentVal);
     }
 printf("</tr><tr>\n");
-for(currentVal = minVal; currentVal <= maxVal + stepSize; currentVal += stepSize)
+for(currentVal = minVal; currentVal <= maxVal + (stepSize/2); currentVal += stepSize)
     {
     struct rgbColor rgb = getColor(currentVal, maxVal);
     printf("<td bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", rgb.r, rgb.g, rgb.b);
@@ -4700,7 +4702,7 @@ char *itemName = cgiUsualString("i2","none");
 char *nameTmp=NULL;
 char buff[256];
 char *plotType = NULL;
-float maxScore = 1.6;
+float maxScore = 2.0;
 char *maxIntensity[] = { "100", "20", "15", "10", "5" ,"4","3","2","1" };
 char *exonTypes = cartUsualString(cart, "rosetta.et", rosettaExonEnumToString(0));
 enum rosettaExonOptEnum et = rosettaStringToExonEnum(exonTypes);
@@ -4767,7 +4769,7 @@ struct expRecord *erList = NULL, *er;
 char buff[32];
 struct hash *erHash;
 float stepSize = 0.2;
-float maxScore = 1.6;
+float maxScore = 2.0;
 bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
 genericHeader(tdb, itemName);
 
@@ -4816,7 +4818,7 @@ if(name != NULL)
 }
 
 void affyDetails(struct trackDb *tdb, char *expName) 
-/* print out a page for the affy data from stanford */
+/* print out a page for the affy data from gnf */
 {
 struct bed *bedList;
 char *tableName = "affyExps";
@@ -4853,6 +4855,47 @@ else
     }
 webEnd();
 }
+
+void affyRatioDetails(struct trackDb *tdb, char *expName) 
+/* print out a page for the affy data from gnf based on ratio of
+* measurements to the median of the measurements. */
+{
+struct bed *bedList;
+char *tableName = "affyExps";
+char *itemName = cgiUsualString("i2","none");
+struct expRecord *erList = NULL, *er;
+char buff[32];
+struct hash *erHash;
+float stepSize = 0.5;
+float maxScore = 3.0;
+
+bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
+genericHeader(tdb, itemName);
+printf("<h2></h2><p>\n");
+printf("%s", tdb->html);
+
+printAffyLinks(itemName);
+if(bedList == NULL)
+    printf("<b>No Expression Data in this Range.</b>\n");
+else 
+    {
+    erHash = newHash(2);
+    erList = loadExpRecord(tableName, "hgFixed");
+    for(er = erList; er != NULL; er=er->next)
+	{
+	snprintf(buff, sizeof(buff), "%d", er->id);
+	hashAddUnique(erHash, buff, er);
+	}
+    printf("<h2></h2><p>\n");
+    msBedPrintTable(bedList, erHash, itemName, expName, -1*maxScore, maxScore, stepSize,
+		    msBedDefaultPrintHeader, msBedExpressionPrintRow, printExprssnColorKey, getColorForExprBed);
+    expRecordFreeList(&erList);
+    hashFree(&erHash);
+    bedFreeList(&bedList);
+    }
+webEnd();
+}
+
 
 struct rgbColor getColorForCghBed(float val, float max)
 /* Return the correct color for a given score */
@@ -5541,6 +5584,10 @@ else if(sameWord(track, "rosetta"))
 else if(sameWord(track, "affy"))
     {
     affyDetails(tdb, item);
+    }
+else if(sameWord(track, "affyRatio"))
+    {
+    affyRatioDetails(tdb, item);
     }
 else if(sameWord(track, "loweProbes"))
     {
