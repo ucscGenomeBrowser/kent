@@ -28,7 +28,6 @@
 #include "knownInfo.h"
 #include "cart.h"
 #include "hgFind.h"
-#include "hdb.h"
 #include "refLink.h"
 #include "kgAlias.h"
 #include "cheapcgi.h"
@@ -41,7 +40,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.112 2003/10/02 05:25:30 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.113 2003/10/09 20:50:24 daryl Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -1557,7 +1556,7 @@ static boolean findGenePredLike(char *spec, struct hgPositions *hgp, char *table
 
 
 static boolean findSnpPos(char *spec, struct hgPositions *hgp, char *tableName)
-/* Look for position in stsMarker table. */
+/* Look for position in snpNih/snpTsc table. */
 {
 struct sqlConnection *conn = NULL;
 struct sqlResult *sr = NULL;
@@ -1573,6 +1572,63 @@ int rowOffset = 0;
 /* Make sure it starts with 'rs'.  Then skip over it. */
 if (!startsWith("rs", spec))
     return FALSE;
+if (!hTableExists(tableName))
+    return FALSE;
+rowOffset = hOffsetPastBin(NULL, tableName);
+conn = hAllocConn();
+query = newDyString(256);
+dyStringPrintf(query, "select * from %s where name = '%s'", tableName, spec);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (ok == FALSE)
+        {
+	ok = TRUE;
+	AllocVar(table);
+	dyStringClear(query);
+	dyStringPrintf(query, "SNP %s Position", spec);
+	table->description = cloneString(query->string);
+	table->name = cloneString(tableName);
+	slAddHead(&hgp->tableList, table);
+	}
+    snpStaticLoad(row+rowOffset, &snp);
+    if ((chrom = hgOfficialChromName(snp.chrom)) == NULL)
+	errAbort("Internal Database error: Odd chromosome name '%s' in %s",
+		 snp.chrom, tableName); 
+    AllocVar(pos);
+    pos->chrom = chrom;
+    pos->chromStart = snp.chromStart - 5000;
+    pos->chromEnd = snp.chromEnd + 5000;
+    pos->name = cloneString(spec);
+    slAddHead(&table->posList, pos);
+    }
+if (table != NULL)
+    slReverse(&table->posList);
+freeDyString(&query);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return ok;
+}
+
+static boolean findAffySnpPos(char *spec, struct hgPositions *hgp, char *tableName)
+/* Look for position in affyGeno table. */
+{
+struct sqlConnection *conn = NULL;
+struct sqlResult *sr = NULL;
+struct dyString *query = NULL;
+char **row = NULL;
+boolean ok = FALSE;
+char *chrom = NULL;
+struct snp snp;
+struct hgPosTable *table = NULL;
+struct hgPos *pos = NULL;
+int rowOffset = 0;
+
+/* Make sure it starts with 'rs'.  Then skip over it. */
+/*
+if (!startsWith("rs", spec))
+    return FALSE;
+*/
 if (!hTableExists(tableName))
     return FALSE;
 rowOffset = hOffsetPastBin(NULL, tableName);
@@ -2909,6 +2965,7 @@ else
     findRgdGenes(query, hgp);
     findSnpPos(query, hgp, "snpTsc");
     findSnpPos(query, hgp, "snpNih");
+    findAffySnpPos(query, hgp, "affyGeno");
     findGenePred(query, hgp, "sanger22");
     findGenePred(query, hgp, "sanger20");
     findGenePred(query, hgp, "ensGene");
