@@ -16,7 +16,7 @@
 #include "portable.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.9 2004/02/10 20:33:08 markd Exp $";
+static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.10 2004/02/23 07:39:56 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -468,4 +468,3 @@ return 0;
  * c-file-style: "jkent-c"
  * End:
  */
-

@@ -42,8 +42,10 @@ short version = gbSplitAccVer(inFa->id, acc);
 /* will return NULL on ignored sequences */
 struct gbEntry* entry = gbReleaseFindEntry(select->release, acc);
 
+#if 0 // FIXME:
 fprintf(stderr, "DEBUG: fa %s.%d  entry=%s\n", acc, version,
         ((entry != NULL)?"YES":"NO"));
+#endif
 
 if ((entry != NULL) && (version == entry->selectVer) && !entry->clientFlags)
     {
