@@ -8,7 +8,7 @@
 #include "hgGene.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.12 2004/03/31 21:02:22 kent Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.13 2004/04/06 17:05:13 baertsch Exp $";
 
 static boolean domainsExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -46,8 +46,29 @@ if (list != NULL)
     sr = sqlGetResult(spConn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
-	hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/IEntry?ac=%s\" TARGET=_blank>", row[0]);
-	hPrintf("%s</A> - %s<BR>\n", row[0], row[1]);
+	//hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/IEntry?ac=%s\" TARGET=_blank>", row[0]);
+	//hPrintf("%s</A> - %s<BR>\n", row[0], row[1]);
+        char interPro[256];
+        char *pdb = hPdbFromGdb(hGetDb());
+        safef(interPro, 128, "%s.interProXref", pdb);
+            if (hTableExists(interPro))
+                {
+                safef(query, sizeof(query),
+                        "select description from %s where accession = '%s' and interProId = '%s'",
+                        interPro, swissProtAcc, row[0]);
+                sr2 = sqlGetResult(conn, query);
+                if ((row2 = sqlNextRow(sr2)) != NULL)
+                    {
+                    hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/IEntry?ac=%s\" TARGET=_blank>", row[0]);
+                    hPrintf("%s</A> - %s <BR>\n", row[0], row2[0]);
+                    }
+                sqlFreeResult(&sr2);
+                }
+            else
+                {
+                hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/IEntry?ac=%s\" TARGET=_blank>", row[0]);
+                hPrintf("%s</A> - %s<BR>\n", row[0], row[1]);
+                }
 	}
     hPrintf("<BR>\n");
     slFreeList(&list);
