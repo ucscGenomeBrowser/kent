@@ -22,7 +22,9 @@ struct customTrack
     boolean needsLift;		/* True if coordinates need lifting. */
     boolean fromPsl;		/* Track was derived from psl file. */
     boolean wiggle;		/* This is a wiggle track */
-    char *wigData;		/* and this is the wiggle ascii data */
+    char *wigFile;		/* name of .wig file in trash */
+    char *wibFile;		/* name of .wib file in trash */
+    char *wigAscii;		/* wiggle ascii data file name in trash .wia */
     struct gffFile *gffHelper;	/* Used while processing GFF files. */
     int offset;			/* Base offset. */
     char *groupName;		/* Group name if any. */
