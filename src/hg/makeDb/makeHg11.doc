@@ -182,7 +182,7 @@ Then load the .out files into the database with:
     hgLoadOut hg11 ?/*.fa.out ??/*.fa.out DONE BY MATT
 
 
-MAKING AND STORING mRNA AND EST ALIGNMENTS (IN PROGRESS)
+MAKING AND STORING mRNA AND EST ALIGNMENTS (DONE)
 
 o - Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
     Copy the above 3 files from /cluster/store1/mrna.129 into /scratch/hg/h/mrna
@@ -268,7 +268,7 @@ o - Create subset of ESTs with introns and load into database. DONE
       cd ~/oo/bed/est/intronEst
       hgLoadPsl hg11 *.psl
 
-o - Put orientation info on ESTs into database: IN PROGRESS
+o - Put orientation info on ESTs into database:
      ssh kkstore
      cd ~/oo/bed/est
      pslSortAcc nohead contig /cluster/fast1/temp contig.psl
@@ -287,8 +287,9 @@ o - Put orientation info on ESTs into database: IN PROGRESS
      gensub2 psl.lst single gsub spec
      para create spec
      para try 
-     para push IN PROGRESS
+     para push
    check until done, or use 'para shove'
+DONE - BUT WHEN DOES THIS GO INTO THE DB???
 
 o - Create rnaCluster table
    ssh hgwdev
@@ -305,7 +306,7 @@ o - Create rnaCluster table
    end
    cd bed/rnaCluster
    hgLoadBed hg11 rnaCluster chrom/*.bed
-
+DONE
 
 PRODUCING KNOWN GENES (DONE)
 
@@ -564,9 +565,9 @@ stage).  Also make sure /scratch/hg/mrna.129 is loaded with xenoRna.fa Then do:
        cp ~kent/lastOo/bed/xenoMrna/gsub .
        gensub2 human.lst mrna.lst gsub spec
        para create spec
-       para try IN PROGRESS
+       para try
        para check
-       para push
+       para push 
 Do para check until the run is done, doing para push if
 necessary on occassion.
 
@@ -579,26 +580,26 @@ Sort xeno mRNA alignments as so:
        pslSortAcc nohead chrom /cluster/store2/temp chrom.psl
        pslCat -dir chrom > xenoMrna.psl
        rm -r chrom raw.psl cooked.psl chrom.psl
-
+DONE
 Load into database as so:
        ssh hgwdev
        cd ~/oo/bed/xenoMrna
        hgLoadPsl hg11 xenoMrna.psl -tNameIx
        cd /cluster/store1/mrna.129
        hgLoadRna add hg11 /cluster/store1/mrna.129/xenoRna.fa xenoRna.ra
-
+DONE
 Similarly do xenoEst aligments:
        ssh kkstore
        cd /cluster/store1/gs.8/build29/oo/bed
        mkdir xenoEst
        cd xenoEst
        mkdir psl
-       ls -1S /scratch/hg/gs.12/build29/trfFa/*.fa > human.lst
+       ls -1S /scratch/hg/gs.12/build29/trfFa/*.fa.trf > human.lst
        ls -1S /scratch/hg/mrna.129/xenoEst?*.fa > mrna.lst
-       cp ~/lastOo/bed/xenoEst/gsub .
+       cp ~kent/lastOo/bed/xenoEst/gsub .IN PROGRESS - making xenoEST.fa /.ra
        gensub2 human.lst mrna.lst gsub spec
-       jabba make hut spec
-       jabba shove hut
+       para create spec
+       para push
 
 Sort xenoEst alignments:
        ssh kkstore
@@ -621,25 +622,25 @@ Load into database as so:
        end
 
 
-PRODUCING FISH ALIGNMENTS (todo)
+PRODUCING FISH ALIGNMENTS (IN PROGRESS)
 
 o - Do fish/human alignments.
        ssh kk
-       cd ~/mm/bed
+       cd ~/oo/bed
        mkdir blatFish
        cd blatFish
        mkdir psl
-       ls -1S /scratch/hg/fish > fish.lst
-       ls -1S /scratch/hg/build29/trfFa > human.lst
+       ls -1S /scratch/hg/fish/*.fa > fish.lst
+       ls -1S /scratch/hg/gs.12/build29/trfFa/*.fa.trf > human.lst
      Copy over gsub from previous version and edit paths to
      point to current assembly.
        gensub2 human.lst fish.lst gsub spec
-       para create spec
+       para create spec DONE
        para try
      Make sure jobs are going ok with para check.  Then
        para push
      wait about 2 hours and do another
-       para push
+       para push IN PROGRESS
      do para checks and if necessary para pushes until done
      or use para shove.
 o - Sort alignments as so 
