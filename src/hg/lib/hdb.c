@@ -213,6 +213,45 @@ hNibForChrom(chrom, fileName);
 return nibLoadPart(fileName, start, end-start);
 }
 
+boolean hChromBandConn(struct sqlConnection *conn, 
+	char *chrom, int pos, char retBand[64])
+/* Return text string that says what band pos is on. 
+ * Return FALSE if not on any band, or table missing. */
+{
+char query[256];
+char buf[64];
+char *s;
+boolean ok = TRUE;
+
+sprintf(query, 
+	"select name from cytoBand where chrom = '%s' and chromStart <= %d and chromEnd > %d", 
+	chrom, pos, pos);
+buf[0] = 0;
+s = sqlQuickQuery(conn, query, buf, sizeof(buf));
+if (s == NULL)
+   {
+   s = "";
+   ok = FALSE;
+   }
+sprintf(retBand, "%s%s", skipChr(chrom), buf);
+return ok;
+}
+
+boolean hChromBand(char *chrom, int pos, char retBand[64])
+/* Return text string that says what band pos is on. 
+ * Return FALSE if not on any band, or table missing. */
+{
+if (!hTableExists("cytoBand"))
+    return FALSE;
+else
+    {
+    struct sqlConnection *conn = hAllocConn();
+    boolean ok = hChromBandConn(conn, chrom, pos, retBand);
+    hFreeConn(&conn);
+    return ok;
+    }
+}
+
 
 struct dnaSeq *hDnaFromSeq(char *seqName, int start, int end, enum dnaCase dnaCase)
 /* Fetch DNA */

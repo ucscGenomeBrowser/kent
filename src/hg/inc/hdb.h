@@ -93,6 +93,19 @@ int hChromSize(char *chromName);
 struct dnaSeq *hChromSeq(char *chrom, int start, int end);
 /* Return lower case DNA from chromosome. */
 
+boolean hChromBand(char *chrom, int pos, char retBand[64]);
+/* Fill in text string that says what band pos is on. 
+ * Return FALSE if not on any band, or table missing. */
+
+boolean hChromBandConn(struct sqlConnection *conn, 
+	char *chrom, int pos, char retBand[64]);
+/* Fill in text string that says what band pos is on. 
+ * Return FALSE if not on any band, or table missing. */
+
+boolean hChromBand(char *chrom, int pos, char retBand[64]);
+/* Fill in text string that says what band pos is on. 
+ * Return FALSE if not on any band, or table missing. */
+
 struct dnaSeq *hDnaFromSeq(char *seqName, 
 	int start, int end, enum dnaCase dnaCase);
 /* Fetch DNA in a variety of cases.  */
