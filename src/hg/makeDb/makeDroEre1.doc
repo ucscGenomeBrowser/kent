@@ -1,0 +1,493 @@
+#!/bin/csh -f # set emacs mode
+exit; # don't actually run this like a script :)
+
+# Drosophila erecta -- 
+# 
+# Agencourt's 28 Oct 2004 assembly
+# 
+#
+
+
+# DOWNLOAD SEQUENCE (DONE 11/23/04 angie)
+    ssh kksilo
+    mkdir /cluster/store8/droEre1
+    cd /cluster/data
+    ln -s /cluster/store8/droEre1 droEre1
+    cd /cluster/data/droEre1
+    mkdir jkStuff bed
+    mkdir downloads
+    cd downloads
+    wget http://rana.lbl.gov/drosophila/assemblies/dere_agencourt_arachne_28oct04.tar.gz
+    tar xvzf dere_agencourt_arachne_28oct04.tar.gz
+    gunzip dere/assembly.bases.gz
+    faSize dere/assembly.bases
+#133575709 bases (0 N's 133575709 real) in 18915 sequences in 1 files
+#Total size: mean 7061.9 sd 12960.1 min 335 (contig_4960) max 196364 (contig_985) median 1698
+#N count: mean 0.0 sd 0.0
+
+
+# PARTITION SCAFFOLDS FOR REPEATMASKER RUN (DONE 11/23/04 angie)
+    # Max scaffold size is 196k, so no splitting/lifting req'd!
+    # Agglomerate the small scaffolds up into ~500k collections.
+    ssh kksilo
+    cd /cluster/data/droEre1
+    mkdir chunks
+    faSplit about downloads/dere/assembly.bases 500000 chunks/chunk_
+
+
+# CREATING DATABASE (DONE 11/23/04 angie)
+    # Create the database.
+    ssh hgwdev
+    # Make sure there is at least 5 gig free for the database
+    df -h /var/lib/mysql
+#/dev/sdc1             1.8T  659G 1002G  40% /var/lib/mysql
+    hgsql '' -e 'create database droEre1'
+    # Copy all the data from the table "grp" 
+    # in an existing database to the new database
+    hgsql droEre1 -e 'create table grp (PRIMARY KEY(NAME)) select * from hg17.grp'
+
+
+# RUN REPEAT MASKER (DONE 11/23/04 angie)
+    # January ("March") '04 version of RepeatMasker and libs.
+    # make the run directory, output directory, and job list
+    ssh kksilo
+    cd /cluster/data/droEre1
+    cat << '_EOF_' > jkStuff/RMDrosophila
+#!/bin/csh -fe
+
+cd $1
+/bin/mkdir -p /tmp/droEre1/$2
+/bin/cp ../chunks/$2 /tmp/droEre1/$2/
+pushd /tmp/droEre1/$2
+/cluster/bluearc/RepeatMasker/RepeatMasker -s -spec drosophila $2
+popd
+/bin/cp /tmp/droEre1/$2/$2.out ./
+/bin/rm -fr /tmp/droEre1/$2/*
+/bin/rmdir --ignore-fail-on-non-empty /tmp/droEre1/$2
+/bin/rmdir --ignore-fail-on-non-empty /tmp/droEre1
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod +x jkStuff/RMDrosophila
+    mkdir RMRun RMOut
+    cp /dev/null RMRun/RMJobs
+    foreach f ( chunks/*.fa )
+      set chunk = $f:t
+      echo ../jkStuff/RMDrosophila \
+           /cluster/data/droEre1/RMOut $chunk \
+           '{'check in line+ /cluster/data/droEre1/$f'}' \
+         '{'check out line+ /cluster/data/droEre1/RMOut/$chunk.out'}' \
+      >> RMRun/RMJobs
+    end
+
+    # This is the first time that the new RepeatMasker version has been 
+    # run on drosophila, so do a little test run to make it unpack the 
+    # drosophila lib files into the installation dir, before kicking off 
+    # the cluster run.
+    mkdir /tmp/RMtest
+    cd /tmp/RMtest
+    cp /cluster/data/droEre1/chunks/chunk_259.fa .
+    /cluster/bluearc/RepeatMasker/RepeatMasker -qq -species drosophila \
+      chunk_259.fa
+#Building general libraries in: /cluster/bluearc/RepeatMasker/Libraries/20040702/general
+#Building species libraries in: /cluster/bluearc/RepeatMasker/Libraries/20040702/drosophila_genus
+#...
+    cd ..; rm -r RMtest
+
+    # do the run
+    ssh kk9
+    cd /cluster/data/droEre1/RMRun
+    para create RMJobs
+    para try, check, push, check,...
+#Completed: 260 of 260 jobs
+#Average job time:                3178s      52.97m     0.88h    0.04d
+#Longest job:                     4212s      70.20m     1.17h    0.05d
+#Submission to last job:         10360s     172.67m     2.88h    0.12d
+
+    # Make a consolidated scaffold .out file too:
+    head -3 RMOut/chunk_00.fa.out > RMOut/scaffolds.fa.out
+    foreach f (RMOut/chunk*.fa.out)
+      tail +4 $f >> RMOut/scaffolds.fa.out 
+    end
+    # Load the .out files into the database with:
+    ssh hgwdev
+    hgLoadOut droEre1 /cluster/data/droEre1/RMOut/scaffolds.fa.out
+    # hgLoadOut made a "scaffolds_rmsk" table even with -table=rmsk, 
+    # but we want a non-split with no prefix table:
+    hgsql droEre1 -e 'rename table scaffolds_rmsk to rmsk'
+    # Fix up the indices too:
+    hgsql droEre1 -e 'drop index bin       on rmsk; \
+                  drop index genoStart on rmsk; \
+                  drop index genoEnd   on rmsk; \
+                  create index bin       on rmsk (genoName(12), bin); \
+                  create index genoStart on rmsk (genoName(12), genoStart); \
+                  create index genoEnd   on rmsk (genoName(12), genoEnd);'
+
+
+# EXTRACTING GAP INFO FROM BLOCKS OF NS (DONE 11/23/04 angie)
+    # faSize told us there were no N's at all!
+    # No need to run hgFakeAgp here -- just create an empty gap table.
+    ssh hgwdev
+    hgLoadGap -unsplit droEre1 /dev/null
+
+
+# SIMPLE REPEATS (TRF) (DONE 11/23/04 angie)
+    ssh kksilo
+    mkdir /cluster/data/droEre1/bed/simpleRepeat
+    cd /cluster/data/droEre1/bed/simpleRepeat
+    nice trfBig -trf=/cluster/bin/i386/trf \
+      ../../downloads/dere/assembly.bases \
+      /dev/null -bedAt=simpleRepeat.bed -tempDir=/tmp \
+    |& egrep -v '^(Removed|Tandem|Copyright|Loading|Allocating|Initializing|Computing|Scanning|Freeing)' \
+    > trf.log &
+    # check on this with
+    tail -f trf.log
+
+    # Load this into the database as so
+    ssh hgwdev
+    hgLoadBed droEre1 simpleRepeat \
+      /cluster/data/droEre1/bed/simpleRepeat/simpleRepeat.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+
+
+# FILTER SIMPLE REPEATS (TRF) INTO MASK (DONE 11/23/04 angie)
+    # make a filtered version of the trf output: 
+    # keep trf's with period <= 12:
+    ssh kksilo
+    cd /cluster/data/droEre1/bed/simpleRepeat
+    awk '{if ($5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
+
+
+# MASK FA USING REPEATMASKER AND FILTERED TRF FILES (DONE 11/23/04 angie)
+    ssh kksilo
+    cd /cluster/data/droEre1
+    maskOutFa -soft downloads/dere/assembly.bases \
+      bed/simpleRepeat/trfMask.bed scaffolds.fa
+    maskOutFa -softAdd scaffolds.fa RMOut/scaffolds.fa.out scaffolds.fa
+    # Now clean up the unmasked chunks to avoid confusion later.
+    rm -r chunks
+
+
+# MAKE GCPERCENT (DONE 11/23/04 angie)
+    ssh hgwdev
+    mkdir /cluster/data/droEre1/bed/gcPercent
+    cd /cluster/data/droEre1/bed/gcPercent
+    hgGcPercent droEre1 /cluster/data/droEre1
+
+
+# STORE SEQUENCE AND ASSEMBLY INFORMATION (DONE 11/23/04 angie)
+    # Translate to 2bit
+    ssh kksilo
+    cd /cluster/data/droEre1
+    faToTwoBit scaffolds.fa droEre1.2bit
+    # Make chromInfo.tab.
+    mkdir bed/chromInfo
+    twoBitInfo droEre1.2bit stdout \
+    | awk '{printf "%s\t%s\t/gbdb/droEre1/droEre1.2bit\n", $1, $2;}' \
+    > bed/chromInfo/chromInfo.tab
+
+    # Make symbolic a link from /gbdb/droEre1/ to the 2bit.
+    ssh hgwdev
+    mkdir -p /gbdb/droEre1
+    ln -s /cluster/data/droEre1/droEre1.2bit /gbdb/droEre1/
+    # Load chromInfo table.
+    hgsql droEre1 < $HOME/kent/src/hg/lib/chromInfo.sql
+    hgsql droEre1 -e 'load data local infile \
+      "/cluster/data/droEre1/bed/chromInfo/chromInfo.tab" into table chromInfo'
+    # Make chrom.sizes from chromInfo contents and check scaffold count.
+    hgsql droEre1 -N -e 'select chrom,size from chromInfo' \
+    > /cluster/data/droEre1/chrom.sizes
+    wc -l /cluster/data/droEre1/chrom.sizes
+#  18915 /cluster/data/droEre1/chrom.sizes
+
+
+# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE (DONE 11/24/04 angie)
+    # Warning: genome and organism fields must correspond
+    # with defaultDb values
+    echo 'INSERT INTO dbDb \
+        (name, description, nibPath, organism, \
+             defaultPos, active, orderKey, genome, scientificName, \
+             htmlPath, hgNearOk, hgPbOk, sourceName) values \
+        ("droEre1", "Oct. 2004", "/gbdb/droEre1", "D. erecta", \
+             "contig_985:30001-44626", 1, 53, \
+             "D. erecta", \
+             "Drosophila erecta", "/gbdb/droEre1/html/description.html", \
+             0, 0, "Agencourt 28 Oct 2004");' \
+      | hgsql -h genome-testdb hgcentraltest
+    echo 'INSERT INTO defaultDb (genome, name) values ("D. erecta", "droEre1");' \
+      | hgsql -h genome-testdb hgcentraltest
+
+    # Make trackDb table so browser knows what tracks to expect:
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/trackDb
+    cvsup
+
+    # Edit trackDb/makefile to add droEre1 to the DBS variable.
+    mkdir drosophila/droEre1
+    # Create a simple drosophila/droEre1/description.html file.
+    cvs add drosophila/droEre1
+    cvs add drosophila/droEre1/description.html
+    make update DBS=droEre1 ZOO_DBS=
+
+    # go public on genome-test
+    cvs ci makefile
+    cvs ci drosophila/droEre1
+    mkdir /gbdb/droEre1/html
+    # in a clean, updated tree's kent/src/hg/makeDb/trackDb:
+    make alpha
+
+    # Also edit makeDb/schema/all.joiner, add new db.
+
+
+# PUT SEQUENCE ON /ISCRATCH FOR BLASTZ (DONE 11/24/04 angie)
+    # First, agglomerate small scaffolds into chunks of ~500k median:
+    ssh kksilo
+    cd /cluster/data/droEre1
+    mkdir chunks
+    faSplit about scaffolds.fa 500000 chunks/chunk_
+    ssh kkr1u00
+    mkdir /iscratch/i/droEre1
+    cp -pR /cluster/data/droEre1/chunks /iscratch/i/droEre1/
+    cp -p /cluster/data/droEre1/droEre1.2bit /iscratch/i/droEre1/
+    iSync
+
+
+# PRODUCING GENSCAN PREDICTIONS (DONE 11/23/04 angie)
+    ssh kksilo
+    # Make hard-masked scaffolds and split up for processing:
+    cd /cluster/data/droEre1
+    maskOutFa scaffolds.fa hard scaffolds.fa.masked
+    mkdir chunksHardMasked
+    faSplit about scaffolds.fa.masked 500000 chunksHardMasked/chunk_
+    mkdir /cluster/data/droEre1/bed/genscan
+    cd /cluster/data/droEre1/bed/genscan
+    # Check out hg3rdParty/genscanlinux to get latest genscan:
+    cvs co hg3rdParty/genscanlinux
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    ls -1S ../../chunksHardMasked/chunk*.fa > chunks.list
+    cat << '_EOF_' > gsub
+#LOOP
+gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    gensub2 chunks.list single gsub jobList
+    ssh kki
+    cd /cluster/data/droEre1/bed/genscan
+    para create jobList
+    para try, check, push, check, ...
+#Completed: 260 of 260 jobs
+#Average job time:                  15s       0.25m     0.00h    0.00d
+#Longest job:                       27s       0.45m     0.01h    0.00d
+#Submission to last job:           366s       6.10m     0.10h    0.00d
+
+    # If there are crashes, diagnose with "para problems".  
+    # If a job crashes due to genscan running out of memory, re-run it 
+    # manually with "-window=1200000" instead of "-window=2400000".
+    
+    # Concatenate scaffold-level results:
+    ssh kksilo
+    cd /cluster/data/droEre1/bed/genscan
+    cat gtf/*.gtf > genscan.gtf
+    cat subopt/*.bed > genscanSubopt.bed
+    cat pep/*.pep > genscan.pep
+    # Clean up:
+    rm -r /cluster/data/droEre1/chunksHardMasked
+
+    # Load into the database as so:
+    ssh hgwdev
+    cd /cluster/data/droEre1/bed/genscan
+    ldHgGene -gtf -genePredExt droEre1 genscan genscan.gtf
+    hgPepPred droEre1 generic genscanPep genscan.pep
+    hgLoadBed droEre1 genscanSubopt genscanSubopt.bed
+
+
+# MAKE DOWNLOADABLE FILES (DONE 11/24/04 angie)
+    ssh kksilo
+    mkdir /cluster/data/droEre1/zips
+    cd /cluster/data/droEre1
+    zip -j zips/scaffoldOut.zip RMOut/scaffolds.fa.out
+    zip -j zips/scaffoldFa.zip scaffolds.fa
+    zip -j zips/scaffoldFaMasked.zip scaffolds.fa.masked
+    zip -j zips/scaffoldTrf.zip bed/simpleRepeat/trfMask.bed
+    foreach f (zips/*.zip)
+      echo $f
+      unzip -t $f | tail -1
+    end
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/droEre1
+    cd /usr/local/apache/htdocs/goldenPath/droEre1
+    mkdir bigZips database
+    # Create README.txt files in bigZips/ and database/ to explain the files.
+    cd bigZips
+    cp -p /cluster/data/droEre1/zips/*.zip .
+    md5sum *.zip > md5sum.txt
+
+
+# SWAP DM1-DROERE1 BLASTZ (DONE 11/24/04 angie)
+    ssh kksilo
+    mkdir -p /cluster/data/droEre1/bed/blastz.dm1.swap.2004-11-24/axtScaffold
+    ln -s blastz.dm1.swap.2004-11-24 /cluster/data/droEre1/bed/blastz.dm1
+    cd /cluster/data/droEre1/bed/blastz.dm1
+    set aliDir = /cluster/data/dm1/bed/blastz.droEre1
+    cp $aliDir/S1.len S2.len
+    cp $aliDir/S2.len S1.len
+    # With 19k scaffolds, we don't want a directory with one file per 
+    # scaffold.  So just make one .axt with everything -- not too huge 
+    # anyway, given these little insect genomes.
+    zcat $aliDir/axtChrom/chr*.axt.gz \
+    | axtSwap stdin $aliDir/S1.len $aliDir/S2.len stdout \
+    | axtSort stdin dm1.axt
+
+
+# CHAIN MELANOGASTER BLASTZ (DONE 12/1/04 angie)
+    # Run axtChain on kolossus (one big dm1.axt input)
+    ssh kolossus
+    mkdir /cluster/data/droEre1/bed/blastz.dm1/axtChain
+    cd /cluster/data/droEre1/bed/blastz.dm1/axtChain
+    axtChain -verbose=0 ../dm1.axt /cluster/data/droEre1/droEre1.2bit \
+      /cluster/data/dm1/nib stdout \
+    | chainAntiRepeat /cluster/data/droEre1/droEre1.2bit \
+      /cluster/data/dm1/nib stdin stdout \
+    | chainMergeSort stdin > all.chain
+    # Load chains into database
+    ssh hgwdev
+    cd /cluster/data/droEre1/bed/blastz.dm1/axtChain
+    hgLoadChain -tIndex droEre1 chainDm1 all.chain
+
+
+# NET MELANOGASTER BLASTZ (DONE 12/1/04 angie)
+    ssh kksilo
+    cd /cluster/data/droEre1/bed/blastz.dm1/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+
+    # Add classification info using db tables:
+    ssh hgwdev
+    cd /cluster/data/droEre1/bed/blastz.dm1/axtChain
+    netClass -noAr noClass.net droEre1 dm1 melanogaster.net
+
+    # Make a 'syntenic' subset:
+    ssh kksilo
+    cd /cluster/data/droEre1/bed/blastz.dm1/axtChain
+    rm noClass.net
+    netFilter -syn melanogaster.net > melanogasterSyn.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/droEre1/bed/blastz.dm1/axtChain
+    netFilter -minGap=10 melanogaster.net |  hgLoadNet droEre1 netDm1 stdin
+    netFilter -minGap=10 melanogasterSyn.net \
+    | hgLoadNet droEre1 netSyntenyDm1 stdin
+
+
+# MAKE AXTNET (DONE 12/1/04 angie)
+    ssh kksilo
+    cd /cluster/data/droEre1/bed/blastz.dm1/axtChain
+    netToAxt melanogaster.net all.chain /cluster/data/droEre1/droEre1.2bit \
+        /cluster/data/dm1/nib stdout \
+      | axtSort stdin melanogasterNet.axt
+
+
+# MAKE VSDM1 DOWNLOADABLES (TODO 12/1/04 angie)
+    ssh kksilo
+    cd /cluster/data/droEre1/bed/blastz.dm1/axtChain
+    nice gzip *.{chain,net,axt}
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/droEre1/vsDm1
+    cd /usr/local/apache/htdocs/goldenPath/droEre1/vsDm1
+    cp -p /cluster/data/droEre1/bed/blastz.dm1/axtChain/all.chain.gz \
+      melanogaster.chain.gz
+    cp -p /cluster/data/droEre1/bed/blastz.dm1/axtChain/melanogaster.net.gz .
+    cp -p /cluster/data/droEre1/bed/blastz.dm1/axtChain/melanogasterNet.axt.gz .
+    # Make a README.txt which explains the files & formats.
+    md5sum *.gz */*.gz > md5sum.txt
+
+
+# MAKE 11.OOC FILE FOR BLAT (DONE 11/24/04 angie)
+    # Use -repMatch=100 (based on size -- for human we use 1024, and 
+    # fly size is ~4.4% of human judging by gapless dm1 genome size from 
+    # featureBits -- we would use 45, but bump that up a bit to be more 
+    # conservative).
+    ssh kkr1u00
+    mkdir /cluster/bluearc/droEre1
+    blat /cluster/data/droEre1/droEre1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=/cluster/bluearc/droEre1/11.ooc -repMatch=100
+#Wrote 4293 overused 11-mers to /cluster/bluearc/droEre1/11.ooc
+    cp -p /cluster/bluearc/droEre1/*.ooc /iscratch/i/droEre1/
+    iSync
+
+
+# AUTO UPDATE GENBANK MRNA RUN (IN PROGRESS 11/24/04 angie)
+    ssh hgwdev
+    # Update genbank config and source in CVS:
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup .
+
+    # Edit etc/genbank.conf and add these lines (note scaffold-browser settings):
+# droEre1 (D. erecta)
+droEre1.genome = /iscratch/i/droEre1/droEre1.2bit
+droEre1.mondoTwoBitParts = 1000
+droEre1.lift = no
+droEre1.refseq.mrna.native.load = no
+droEre1.refseq.mrna.xeno.load = yes
+droEre1.refseq.mrna.xeno.pslReps = -minCover=0.15 -minAli=0.75 -nearTop=0.005
+droEre1.genbank.mrna.xeno.load = yes
+# GenBank has no D. erecta ESTs at this point... that may change.
+droEre1.genbank.est.native.load = no
+droEre1.genbank.est.xeno.load = no
+droEre1.downloadDir = droEre1
+droEre1.perChromTables = no
+
+    cvs ci etc/genbank.conf
+    # Since D. erecta is a new species for us, edit src/lib/gbGenome.c.  
+    # Pick some other browser species, & monkey-see monkey-do.  
+    cvs diff src/lib/gbGenome.c
+    make
+    cvs ci src/lib/gbGenome.c
+    # Edit src/align/gbBlat to add /iscratch/i/droEre1/11.ooc
+    cvs diff src/align/gbBlat
+    make
+    cvs ci src/align/gbBlat
+
+    # Install to /cluster/data/genbank:
+    make install-server
+
+    ssh eieio
+    cd /cluster/data/genbank
+    # This is an -initial run, (xeno) RefSeq only:
+    nice bin/gbAlignStep -srcDb=refseq -type=mrna -initial droEre1 &
+    tail -f [its logfile]
+    # Load results:
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad droEre1
+    featureBits droEre1 xenoRefGene
+#25095898 bases of 133575709 (18.788%) in intersection
+
+    # Clean up:
+#TODO
+    rm -rf work/initial.droEre1
+
+    # This is an -initial run, mRNA only:
+    nice bin/gbAlignStep -srcDb=genbank -type=mrna -initial droEre1 &
+    tail -f [its logfile]
+    # Load results:
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad droEre1
+    featureBits droEre1 all_mrna
+#245 bases of 189814987 (0.000%) in intersection
+    featureBits droEre1 xenoMrna
+#14690077 bases of 189814987 (7.739%) in intersection
+    # Clean up:
+    rm -rf work/initial.droEre1
+
+
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY (TODO 12/?/04 angie)
+    ssh hgwdev
+    echo 'insert into blatServers values("droEre1", "blat?", "177??", 1, 0); \
+          insert into blatServers values("droEre1", "blat?", "177??", 0, 1);' \
+      | hgsql -h genome-testdb hgcentraltest
+
