@@ -153,10 +153,11 @@ struct genePred *genePredFromPsl2(struct psl *psl, unsigned optFields,
                                   struct genbankCds* cds, int insertMergeSize);
 /* Convert a PSL of an RNA alignment to a genePred, converting a genbank CDS
  * specification string to genomic coordinates. Small inserts, no more than
- * insertMergeSize, will be dropped and the blocks merged.  optFields are a
- * set from genePredFields, indicated what fields to create.  Zero-length CDS,
- * or null cds, creates without CDS annotation.  If cds is null, it will set
- * status fields to cdsNone. */
+ * insertMergeSize, will be dropped and the blocks merged. A negative
+ * insertMergeSize disables merging of blocks. optFields is a set from
+ * genePredFields, indicated what fields to create.  Zero-length CDS, or null
+ * cds, creates without CDS annotation.  If cds is null, it will set status
+ * fields to cdsNone.  */
 
 struct genePred *genePredFromPsl(struct psl *psl, int cdsStart, int cdsEnd,
                                  int insertMergeSize);

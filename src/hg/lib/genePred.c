@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.33 2004/02/24 03:42:02 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.34 2004/02/24 22:04:43 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -776,7 +776,8 @@ for (iBlk = startIdx; iBlk != stopIdx; iBlk += idxIncr)
     unsigned tEnd = tStart + psl->blockSizes[iBlk];
     if (psl->strand[1] == '-')
         reverseIntRange(&tStart, &tEnd, psl->tSize);
-    if ((iExon < 0) || ((tStart - gene->exonEnds[iExon]) > insertMergeSize))
+    if ((iExon < 0) || (insertMergeSize < 0)
+        || ((tStart - gene->exonEnds[iExon]) > insertMergeSize))
         {
         iExon++;
         gene->exonStarts[iExon] = tStart;
@@ -793,10 +794,11 @@ struct genePred *genePredFromPsl2(struct psl *psl, unsigned optFields,
                                   struct genbankCds* cds, int insertMergeSize)
 /* Convert a PSL of an RNA alignment to a genePred, converting a genbank CDS
  * specification string to genomic coordinates. Small inserts, no more than
- * insertMergeSize, will be dropped and the blocks merged.  optFields are a
- * set from genePredFields, indicated what fields to create.  Zero-length CDS,
- * or null cds, creates without CDS annotation.  If cds is null, it will set
- * status fields to cdsNone. */
+ * insertMergeSize, will be dropped and the blocks merged. A negative
+ * insertMergeSize disables merging of blocks. optFields is a set from
+ * genePredFields, indicated what fields to create.  Zero-length CDS, or null
+ * cds, creates without CDS annotation.  If cds is null, it will set status
+ * fields to cdsNone.  */
 {
 struct genePred *gene;
 AllocVar(gene);
