@@ -25,9 +25,9 @@ static boolean readRaRecord(struct lineFile* inLf, char acc[GB_ACC_BUFSZ],
 /* read the next ra record */
 {
 int startLineIx = inLf->lineIx;
-acc[0] = '\0';
 short version = -1;
 char* line;
+acc[0] = '\0';
 dyStringClear(gRaRecBuf);
 
 while (lineFileNext(inLf, &line, NULL) && (strlen(line) > 0))
