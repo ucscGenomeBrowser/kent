@@ -111,10 +111,14 @@ identifier goDbXrefId external=GO
 identifier UniProtId external=UniProt
 "UniProt(Swiss-Prot/TrEMBL) display ID."
      uniProt.displayId.val 
+     proteome.uniProtAlias.alias minCheck=0.2
+     proteome.spOldNew.newDisplayId minCheck=0.3
+     proteome.spOldNew.oldDisplayId minCheck=0.3
      go.goaPart.dbObjectSymbol minCheck=0.95
      $gbd.dupSpMrna.proteinID minCheck=0.80
      $gbd.dupSpMrna.dupProteinID minCheck=0.50
      $kgDb.kgProtAlias.displayID minCheck=0.80
+     $kgDb.kgSpAlias.alias minCheck=0.20
      $kgDb.kgXref.spDisplayID minCheck=0.80
      $kgDb.knownCanonical.protein minCheck=0.80
      $kgDb.knownGene.proteinID minCheck=0.80
@@ -137,7 +141,10 @@ identifier UniProtAccession external=UniProt
      uniProt.info.acc unique full
      uniProt.otherAcc.acc
      uniProt.protein.acc unique full
+     proteome.spOldNew.acc minCheck=0.8
+     proteome.uniProtAlias.acc minCheck=0.9
      $kgDb.kgProtAlias.alias  minCheck=0.2
+     $kgDb.kgSpAlias.spId  minCheck=0.2
      $kgDb.kgProtMap.qName minCheck=0.9
      $kgDb.kgXref.spID minCheck=0.9
      $gbd.pepMwAa.accession minCheck=0.9
@@ -647,6 +654,7 @@ identifier wgsContigName
 identifier proteinAccession typeOf=genbankAccession fuzzy
 "Genbank protein accession."
     $kgDb.kgProtAlias.alias
+    $kgDb.kgSpAlias.alias minCheck=0.1
     $kgDb.kgXref.protAcc
     $gbd.refLink.protAcc 
 
@@ -745,6 +753,7 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.keggPathway.kgID
     $kgDb.kgAlias.kgID
     $kgDb.kgProtAlias.kgID
+    $kgDb.kgSpAlias.kgID
     $kgDb.kgXref.kgID full
     $kgDb.knownBlastTab.query
     $kgDb.knownBlastTab.target
@@ -931,6 +940,7 @@ identifier hugoName external=HUGO fuzzy
     $hg.refLink.name
     $hg.atlasOncoGene.locusSymbol
     $hg.kgAlias.alias 
+    $hg.kgSpAlias.alias minCheck=0.1 
     $hg.kgXref.geneSymbol
     $hg.refFlat.geneName
     $hg.jaxOrtholog.humanSymbol
