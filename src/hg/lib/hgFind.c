@@ -29,11 +29,16 @@
 #include "hgFind.h"
 #include "hdb.h"
 #include "refLink.h"
+#include "kgAlias.h"
 #include "cheapcgi.h"
 #include "web.h"
+#include "kgAlias.h"
+#include "kgProtAlias.h"
+#include "findKGAlias.h"
+#include "findKGProtAlias.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.88 2003/06/24 21:27:18 donnak Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.89 2003/06/25 22:32:27 fanhsu Exp $";
 
 char *MrnaIDforGeneName(char *geneName)
 /* return mRNA ID for a gene name */
@@ -96,7 +101,7 @@ hFreeConn(&conn);
 return result;
 }
 
-static boolean findKnownGeneExact(char *spec, struct hgPositions *hgp, char *tableName)
+static boolean findKnownGeneExact(char *spec, char *geneSymbol, struct hgPositions *hgp, char *tableName)
 /* Look for position in Known Genes table. */
 {
 struct sqlConnection *conn;
@@ -138,7 +143,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     pos->chrom = hgOfficialChromName(row[0]);
     pos->chromStart = atoi(row[1]);
     pos->chromEnd = atoi(row[2]);
-    pos->name = cloneString(row[3]);
+    //pos->name = cloneString(row[3]);
+    pos->name = cloneString(geneSymbol);
     slAddHead(&table->posList, pos);
     }
 if (table != NULL) 
@@ -171,7 +177,7 @@ if (!hTableExists(tableName))
 rowOffset = hOffsetPastBin(NULL, tableName);
 conn = hAllocConn();
 query = newDyString(256);
-dyStringPrintf(query, "SELECT chrom, txStart, txEnd, name FROM %s WHERE name LIKE '%s'", tableName, localName);
+dyStringPrintf(query, "SELECT chrom, txStart, txEnd, name FROM %s WHERE name LIKE '%%%s%%'", tableName, localName);
 sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -220,24 +226,28 @@ char *mrnaID;
 if (! hTableExists("knownGene"))
     return FALSE;
 
-if (findKnownGeneExact(spec, hgp, tableName))
+if (findKnownGeneExact(spec, spec, hgp, tableName))
     {    
     return(TRUE);
     }
 else
     {
     mrnaID = MrnaIDforProtein(spec);
-	
+
+    if (mrnaID == NULL)
+	{
+    	mrnaID = MrnaIDforProtein(spec);
+	}
     if (mrnaID != NULL)
 	{
-	return(findKnownGeneExact(mrnaID, hgp, tableName));
+	return(findKnownGeneExact(mrnaID, spec, hgp, tableName));
 	}
     else
 	{
 	mrnaID = MrnaIDforGeneName(spec);
 	if (mrnaID != NULL)
 	    {
-	    return(findKnownGeneExact(mrnaID, hgp, tableName));
+	    return(findKnownGeneExact(mrnaID, spec, hgp, tableName));
 	    }
 	else
 	    {
@@ -1844,6 +1854,173 @@ static void findAffyProbe(char *spec, struct hgPositions *hgp)
 {
 }
 
+int findKgGenesByAlias(char *spec, struct hgPositions *hgp)
+/* Look up Known Genes using the gene Alias table, kgAlias. */
+{
+struct sqlConnection *conn  = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn();
+struct sqlResult *sr 	    = NULL;
+struct dyString *ds 	    = newDyString(256);
+char **row;
+boolean gotOne 		    = FALSE;
+struct hgPosTable *table    = NULL;
+struct hgPos *pos;
+struct genePred *gp;
+char *answer, cond_str[256];
+char *desc;
+struct kgAlias *kaList 	    = NULL, *kl;
+boolean gotKgAlias 	    = sqlTableExists(conn, "kgAlias");
+int kgFound 		    = 0;
+
+if (gotKgAlias)
+    {
+    /* get a link list of kgAlias (kgID/alias pair) nodes that match the spec using "Fuzzy" mode*/
+    kaList = findKGAlias(hGetDb(), spec, "F");
+    }
+
+if (kaList != NULL)
+    {
+    struct hash *hash = newHash(8);
+    kgFound = 1;
+    AllocVar(table);
+    slAddHead(&hgp->tableList, table);
+    table->description = cloneString("Known Genes");
+    table->name = cloneString("knownGene");
+    
+    for (kl = kaList; kl != NULL; kl = kl->next)
+        {
+        /* Don't return duplicate mrna accessions */
+        if (hashFindVal(hash, kl->kgID))
+            {            
+            hashAdd(hash, kl->kgID, kl);
+            continue;
+            }
+
+        hashAdd(hash, kl->kgID, kl);
+	dyStringClear(ds);
+	dyStringPrintf(ds, "select * from knownGene where name = '%s'", kl->kgID);
+	sr = sqlGetResult(conn, ds->string);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    gp = genePredLoad(row);
+	    AllocVar(pos);
+	    slAddHead(&table->posList, pos);
+	    pos->name = cloneString(kl->alias);
+
+	    sprintf(cond_str, "kgID = '%s'", kl->kgID);
+	    answer = sqlGetField(conn2, hGetDb(), "kgXref", "description", cond_str);
+	    if (answer != NULL) 
+		{
+		desc = answer;
+		}
+	    else
+		{
+		desc = kl->alias;
+		}
+
+	    dyStringClear(ds);
+	    dyStringPrintf(ds, "(%s) %s", kl->kgID, desc);
+	    pos->description = cloneString(ds->string);
+	    pos->chrom = hgOfficialChromName(gp->chrom);
+	    pos->chromStart = gp->txStart;
+	    pos->chromEnd = gp->txEnd;
+	    genePredFree(&gp);
+	    }
+	sqlFreeResult(&sr);
+	}
+    kgAliasFreeList(&kaList);
+    freeHash(&hash);
+    }
+freeDyString(&ds);
+hFreeConn(&conn);
+hFreeConn(&conn2);
+return(kgFound);
+}
+
+int findKgGenesByProtAlias(char *spec, struct hgPositions *hgp)
+/* Look up Known Genes using the protein alias table, kgProtAlias. */
+{
+struct sqlConnection *conn  = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn();
+struct sqlResult *sr 	    = NULL;
+struct dyString *ds 	    = newDyString(256);
+char **row;
+boolean gotOne 		    = FALSE;
+struct hgPosTable *table    = NULL;
+struct hgPos *pos;
+struct genePred *gp;
+char *answer, cond_str[256];
+char *desc;
+struct kgProtAlias *kpaList = NULL, *kl;
+boolean gotKgProtAlias 	    = sqlTableExists(conn, "kgProtAlias");
+int kgFound 		    = 0;
+
+if (gotKgProtAlias)
+    {
+    /* get a link list of kgProtAlias (kgID, displayID, and alias) nodes that 
+       match the query spec using "Fuzzy" search mode*/
+    kpaList = findKGProtAlias(hGetDb(), spec, "F");
+    }
+
+if (kpaList != NULL)
+    {
+    struct hash *hash = newHash(8);
+    kgFound = 1;
+    AllocVar(table);
+    slAddHead(&hgp->tableList, table);
+    table->description = cloneString("Known Genes");
+    table->name = cloneString("knownGene");
+    
+    for (kl = kpaList; kl != NULL; kl = kl->next)
+        {
+        /* Don't return duplicate mrna accessions */
+        if (hashFindVal(hash, kl->kgID))
+            {            
+            hashAdd(hash, kl->kgID, kl);
+            continue;
+            }
+
+        hashAdd(hash, kl->kgID, kl);
+	dyStringClear(ds);
+	dyStringPrintf(ds, "select * from knownGene where name = '%s'", kl->kgID);
+	sr = sqlGetResult(conn, ds->string);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    gp = genePredLoad(row);
+	    AllocVar(pos);
+	    slAddHead(&table->posList, pos);
+	    pos->name = cloneString(kl->alias);
+
+	    sprintf(cond_str, "kgID = '%s'", kl->kgID);
+	    answer = sqlGetField(conn2, hGetDb(), "kgXref", "description", cond_str);
+	    if (answer != NULL) 
+		{
+		desc = answer;
+		}
+	    else
+		{
+		desc = kl->alias;
+		}
+
+	    dyStringClear(ds);
+	    dyStringPrintf(ds, "(%s) %s", kl->displayID, desc);
+	    pos->description = cloneString(ds->string);
+	    pos->chrom = hgOfficialChromName(gp->chrom);
+	    pos->chromStart = gp->txStart;
+	    pos->chromEnd = gp->txEnd;
+	    genePredFree(&gp);
+	    }
+	sqlFreeResult(&sr);
+	}
+    kgProtAliasFreeList(&kpaList);
+    freeHash(&hash);
+    }
+freeDyString(&ds);
+hFreeConn(&conn);
+hFreeConn(&conn2);
+return(kgFound);
+}
+
 static void findRefGenes(char *spec, struct hgPositions *hgp)
 /* Look up refSeq genes in table. */
 {
@@ -2210,6 +2387,7 @@ boolean relativeFlag;
 char buf[256];
 char *startOffset,*endOffset;
 int iStart = 0, iEnd = 0;
+int kgFound;
 
 AllocVar(hgp);
 hgp->useAlias = FALSE;
@@ -2305,9 +2483,26 @@ else if (isRatContigName(query) && findRatContigPos(query, &chrom, &start, &end)
     }
 else 
     {
+    kgFound = 0;
+    if (hTableExists("kgAlias"))
+	{
+	// invoke new Known Genes gene alias search if kgAlias table exists */ 
+	kgFound = findKgGenesByAlias(query, hgp);
+	}
+
+    if (!kgFound && hTableExists("kgProtAlias"))
+	{
+	// invoke new Known Genes protein alias search if kgProtAlias table exists 
+	kgFound = findKgGenesByProtAlias(query, hgp);
+	}
+
+    if (!kgFound)
+	{
+    	findKnownGene(query, hgp, "knownGene");
+	}
+
     findKnownGenes(query, hgp);
     findRefGenes(query, hgp);
-    findKnownGene(query, hgp, "knownGene");
     if (hTableExists("superfamily")) findSuperfamily(query, hgp);
     findFishClones(query, hgp);
     findBacEndPairs(query, hgp);
