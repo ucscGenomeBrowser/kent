@@ -245,7 +245,7 @@ rsync --progress -avz  \
 </PRE>
 
 
-<li>Get Human July, 2003 full data set (hg16: 6.5 GB) by doing:
+<li>Get Human July, 2003 full data set (hg16: 8.6 GB) by doing:
 <p> 
 <PRE>
 rsync --progress -avz \
@@ -328,7 +328,6 @@ assembly:
 <TR><TD> hg16 </TD><TD></TD><TD> hg16         </TD></TR>
 <TR><TD> 10april2003 </TD><TD></TD><TD> hg15         </TD></TR>
 <TR><TD> 14nov2002   </TD><TD></TD><TD> hg13         </TD></TR>
-<TR><TD> 28jun2002   </TD><TD></TD><TD> hg12         </TD></TR>
 </TABLE>
 </ul>
 
@@ -484,8 +483,10 @@ rsync --progress -avz  \
 rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/proteins0111/ \
 $WEBROOT/goldenPath/proteins0111/database/
 rsync --progress -avz  \
-rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/proteins1129/ \
-$WEBROOT/goldenPath/proteins1129/database/
+rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/proteins070403/ \
+$WEBROOT/goldenPath/proteins070403/database/
+rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/proteins072003/ \
+$WEBROOT/goldenPath/proteins072003/database/
 rsync --progress -avz  \
 rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/proteins0305/ \
 $WEBROOT/goldenPath/proteins0305/database/
@@ -497,7 +498,8 @@ $WEBROOT/goldenPath/proteins0405/database/
 <PRE>
 mysql> create database proteins
 mysql> create database proteins0111
-mysql> create database proteins1129
+mysql> create database proteins072003
+mysql> create database proteins070403
 mysql> create database proteins0305
 mysql> create database proteins0405
 </PRE>
@@ -506,9 +508,8 @@ mysql> create database proteins0405
 <hr WIDTH="100%">
 <br><i>Should you have any comments, inquires or questions, please contact
 <a href="mailto:genome-mirror@cse.ucsc.edu">genome-mirror@cse.ucsc.edu</a></i>.
-<br><i>Last Modified: July 24, 2003</i>
+<br><i>Last Modified: 2003-10-16 - 16 October 2003</i>
 <br>
-	
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	<br></TD></TR></TABLE>
 <!-- END SECOND SECTION ---------------------------------------------------------->
