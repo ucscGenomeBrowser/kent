@@ -11,6 +11,7 @@
 #define colHashFunc(r,g,b) (r+g+g+b)
 
 #define sign(a)((a>=0)?(1):(-1))
+#define Min(a,b)((a<=b)?(a):(b))
 
 struct colHashEl
 /* An element in a color hash. */
@@ -643,21 +644,22 @@ if ((x2 - x1) <= 0)
 minY = mg->clipMinY;
 maxY = mg->clipMaxY;
 pt1Home = pt1 = _mgPixAdr(mg,x1,y1);
-pt2Home = pt2 = _mgPixAdr(mg,x2,y2);
+//pt2Home = pt2 = _mgPixAdr(mg,x2,y2);
 offset = 0;
 
-slope = (double)(y2 - y1)/(double)(x2-x1);
+slope = (double)(y2 + sign(y2-y1) - y1)/(double)(x2-x1);
 sum = 0.0;
 
-if (minY <= y1 && y1 < maxY)
+if (minY <= y1 && y1 < maxY
+     && minY <= y2 && y2 < maxY)
     {
     if( fabs( slope ) >= 1.0 )  /*y-dominated movement (or equal)*/
         {
-        for (j=offset; j<(y2-y1); j += 1)
+        for (j=offset; j<abs(y2-y1); j += 1)
             {
             sum += 1.0 / slope;
             pt1 += bpr * sign(slope);
-            pt1[(int)sum] = color;
+            pt1[min(abs((int)sum),x2-x1)] = color;
             }
         }
     else                    /*x-dominated movement*/
@@ -665,7 +667,7 @@ if (minY <= y1 && y1 < maxY)
         for (j=offset; j<(x2-x1); j += 1)
             {
             sum += slope;
-            pt1 = (bpr * (int)sum * sign(slope)) + pt1Home;
+            pt1 = (bpr * min(abs((int)sum),abs(y2-y1)) * sign(slope) ) + pt1Home;
             pt1[j] = color;
             }
         }
