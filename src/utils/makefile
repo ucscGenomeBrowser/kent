@@ -67,6 +67,7 @@ DIRS = \
 	fixCr \
 	gffPeek \
 	htmlPics \
+	htmlCheck \
 	jkUniq \
 	lineCount \
 	newProg \
