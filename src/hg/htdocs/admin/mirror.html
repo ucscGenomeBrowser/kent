@@ -85,6 +85,8 @@ It has only been tested on Redhat Linux 7.2 systems, but you may find it useful.
 <LI><a href="#step4">Set up database</a>
 <LI><a href="#step5">Get executable files</a>
 <li><a href="#step6">Setup Hgcentral session preference table</a>
+<li><a href="#step7">Create a $WEBROOT/trash apache user writable directory for temp files.</a>
+<li><a href="#step8">Setup HgFixed database.</a>
 </UL>
 <br><br>
 <hr>
@@ -293,7 +295,7 @@ shell script for this step.)
 <ul><br>
 for file in *.sql  <br>
 do <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	mysql -options $DBVERSION < $file  <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	mysql -youraccountoptions $DBVERSION < $file  <br>
 done <br>
 <br></ul>
 <p> 
@@ -303,7 +305,7 @@ shell script for this step.)
 for file in *.txt.gz  <br>
 do <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	gunzip $file  <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	mysqlimport -options $DBVERSION $file  <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	mysqlimport -youraccountoptions $DBVERSION $file  <br>
 done <br>
 <br></ul>
 
@@ -361,15 +363,35 @@ the files.
 <h4><a NAME="step6"></a>6. Setup the "hgcentral" tables </h4>
 <ol type="a">
 <li>Download the schema for the hgcentral database <a href="hgcentral.sql"> Here </a>
-<li>Create a hgcentral database
+<li>Create a hgcentral database <P>
+   mysql> create database hgcentral
+<P>
 <li>Add the tables
 <li>Create a user/password with the ability to update and insert
 <li>Add that user to the hg.conf
 <li>test
 </ol>
 
+<h4><a NAME="step7"></a>7. Create a "trash" directory </h4>
+The cgi programs use a temporary area to create and store images
+used by the browser. This directory is by default looked for in
+$WEBROOT/trash. You should make this directory and allow the user
+that runs the web server write access to it.
 
+<h4><a NAME="step8"></a>8. Create the hgFixed database</h4>
 
+i) Download a copy of the dumped hgFixed tables.
+<P>
+&nbsp;&nbsp;   rsync --progress -avz  &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/hgFixed/ &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+$WEBROOT/goldenPath/hgFixed/database/.
+<P>
+ii) Create a hgFixed database
+<P>   mysql> create database hgFixed
+<p>
+iii) Import the data in a similar fashion as listed above.
 <p>
 <hr WIDTH="100%">
 <br><i>Should you have any comments, inquires or questions, please contact
