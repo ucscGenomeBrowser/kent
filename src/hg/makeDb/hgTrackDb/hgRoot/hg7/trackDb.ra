@@ -1,6 +1,6 @@
 track sangerUrl
-shortLabel Sanger 22 URLs
-longLabel Sanger Center Chromosome 22 URL Annotations
+shortLabel Sanger 22 UTRs
+longLabel Sanger Center Chromosome 22 UTR Annotations
 priority 13.1
 visibility hide
 chromosomes chr22,
@@ -59,21 +59,21 @@ track snpNih
 shortLabel Overlap SNPs
 longLabel Single Nucleotide Polymorphisms (SNPs) from Clone Overlaps
 priority 31
-visibility dense
+visibility hide
 type bed 4 .
 
 track snpTsc
 shortLabel Random SNPs
 longLabel Single Nucleotide Polymorphisms (SNPs) from Random Reads
 priority 32
-visibility dense
+visibility hide
 type bed 4 .
 
 track psu
 shortLabel All mRNA  
 longLabel All mRNA Alignments (Human & Non-human not just best matches)
 priority 23.5
-visibility dense
+visibility hide
 spectrum on
 type psl xeno
 

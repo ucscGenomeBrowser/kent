@@ -110,7 +110,7 @@ track genieKnown
 shortLabel Known Genes
 longLabel Known Genes (from full length mRNAs)
 priority 12
-visibility full
+visibility hide
 color 20,20,170
 type genePred
 
@@ -138,6 +138,15 @@ priority 14
 visibility dense
 color 125,0,150
 type genePred geniePep
+
+track acembly
+shortLabel Acembly Genes
+longLabel Acembly Gene Predictions
+priority 14.5
+visibility full
+color 155,0,125
+type genePred
+url http://www.ncbi.nlm.nih.gov/AceView/av.cgi?db=GP&l=$$
 
 track ensGene
 shortLabel Ensembl Genes
@@ -169,7 +178,7 @@ shortLabel Genscan Genes
 longLabel Genscan Gene Predictions
 priority 17.5
 visibility dense
-color 180,90,0
+color 170,100,0
 type genePred genscanPep
 
 track genscanExtra
@@ -214,6 +223,14 @@ color 67,57,206
 altColor 204,20,35
 private on
 
+track uniGene
+shortLabel UniGene
+longLabel UniGene Alignments and SAGE Info
+priority 20.5
+visibility dense
+type psl .
+
+
 track mgc_mrna
 shortLabel MGC mRNAs
 longLabel Mammalian Gene Collection mRNAs
@@ -233,7 +250,7 @@ altColor 128,228,128
 type bed 4 +
 
 track xenoMrna
-shortLabel Other mRNAs
+shortLabel Nonhuman mRNA
 longLabel Non-Human mRNAs from Genbank
 priority 23
 visibility dense
@@ -254,10 +271,10 @@ type psl xeno
 private on
 
 track xenoEst
-shortLabel Other ESTs
+shortLabel Nonhuman EST
 longLabel Non-Human ESTs from Genbank Near Best in Genome Alignments
 priority 23.2
-visibility dense
+visibility hide
 color 0,60,120
 altColor 200,220,255
 spectrum on
@@ -375,7 +392,7 @@ track blatFish
 shortLabel Fish Blat
 longLabel Tetraodon nigroviridis Translated Blat Alignments
 priority 28
-visibility dense
+visibility hide
 color 0,60,120
 altColor 200,220,255
 spectrum on
@@ -394,7 +411,7 @@ track rnaGene
 shortLabel RNA Genes
 longLabel Non-coding RNA Genes (dark) and Pseudogenes (light)
 priority 30
-visibility dense
+visibility hide
 color 170,80,0
 altColor 230,180,130
 type bed 6 +
@@ -403,14 +420,14 @@ track snpNih
 shortLabel Overlap SNPs
 longLabel Single Nucleotide Polymorphisms (SNPs) from Clone Overlaps
 priority 31
-visibility hide
+visibility dense
 type bed 4 .
 
 track snpTsc
 shortLabel Random SNPs
 longLabel Single Nucleotide Polymorphisms (SNPs) from Random Reads
 priority 32
-visibility hide
+visibility dense
 type bed 4 .
 
 track rmsk
@@ -445,11 +462,4 @@ visibility dense
 chromosomes chr22,
 type bed 4 +
 private on
-
-track uniGene
-shortLabel UniGene
-longLabel UniGene Alignments and SAGE Info
-priority 38
-visibility dense
-type psl .
 
