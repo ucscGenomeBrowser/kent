@@ -543,7 +543,7 @@ longLabel ExonWalk Alt-Splicing Transcripts
 color 23,58,58
 group genes
 priority 72
-visibility hide
+visibility dense
 type genePred
 
 track mrna
