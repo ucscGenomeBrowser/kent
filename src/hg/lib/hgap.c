@@ -591,7 +591,6 @@ for (contig = bac->contigs; contig != NULL; contig = contig->next)
     if (contig->next == NULL)
 	totalSize = contig->submitOffset + contig->size;
     }
-uglyf("Total size of %s is %d in %d contigs\n", acc, totalSize, slCount(bac->contigs));
 AllocVar(res);
 res->name = cloneString(acc);
 res->size = totalSize;

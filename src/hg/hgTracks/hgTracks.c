@@ -5656,13 +5656,17 @@ if (withLeftLabels)
 	    case tvDense:
 		if (withCenterLabels)
 		    y += fontHeight;
-		mgTextRight(mg, gfxBorder, y, inWid-1, group->lineHeight, group->ixColor, font, group->shortLabel);
+		mgTextRight(mg, gfxBorder, y, inWid-1, group->lineHeight, 
+			group->ixColor, font, group->shortLabel);
 		y += group->lineHeight;
 		break;
 	    }
-	h = y - lastY;
-	if (h > 0)
-	    mapBoxTrackUi(0, lastY, inWid, h,  group);
+	if (group->hasUi)
+	    {
+	    h = y - lastY;
+	    if (h > 0)
+		mapBoxTrackUi(0, lastY, inWid, h,  group);
+	    }
         }
     }
 
@@ -5681,10 +5685,6 @@ if (withGuidelines)
 
     for (x = xOff+guidelineSpacing-1; x<pixWidth; x += guidelineSpacing)
 	mgDrawBox(mg, x, y, 1, height, color);
-#ifdef SOMETIMES
-    for (y= yAfterRuler + lineHeight/2 - 1; y<pixHeight; y += lineHeight)
-        mgDrawBox(mg, xOff, y, insideWidth, 1, color);
-#endif /* SOMETIMES */
     }
 
 /* Show ruler at top. */
@@ -6023,7 +6023,6 @@ group->lineHeight = mgFontLineHeight(tl.font)+1;
 group->heightPer = group->lineHeight - 1;
 group->private = tdb->private;
 group->priority = tdb->priority;
-group->hasUi = TRUE;
 if (tdb->useScore)
     {
     /* Todo: expand spectrum opportunities. */
@@ -6048,6 +6047,7 @@ TrackHandler handler;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     group = trackGroupFromTrackDb(tdb);
+    group->hasUi = TRUE;
     handler = lookupTrackHandler(tdb->tableName);
     if (handler != NULL)
 	handler(group);

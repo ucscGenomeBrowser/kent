@@ -42,6 +42,10 @@ struct sqlConnCache *sqlNewConnCache(char *database);
  * doing lots of different queries in different routines
  * to same database - reduces connection overhead.) */
 
+struct sqlConnCache *sqlNewRemoteConnCache(char *database, 
+	char *host, char *user, char *password);
+/* Set up a cache on a remote database. */
+
 void sqlFreeConnCache(struct sqlConnCache **pCache);
 /* Dispose of a connection cache. */
 

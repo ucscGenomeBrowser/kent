@@ -37,7 +37,6 @@ static char *hdbHost;
 static char *hdbName = "hg8";
 static char *hdbUser;
 static char *hdbPassword;
-static char *centralHost;
 
 void hDefaultConnect()
 /* read in the connection options from config file */
@@ -47,17 +46,17 @@ hdbUser 	= cfgOption("db.user");
 hdbPassword	= cfgOption("db.password");
 
 if(hdbHost == NULL || hdbUser == NULL || hdbPassword == NULL)
-	errAbort("cannot read in connection setting from configuration file.");
+    errAbort("cannot read in connection setting from configuration file.");
 }
 
 
 void hSetDbConnect(char* host, char *db, char *user, char *password)
 /* set the connection information for the database */
 {
-	hdbHost = host;
-	hdbName = db;
-	hdbUser = user;
-	hdbPassword = password;
+    hdbHost = host;
+    hdbName = db;
+    hdbUser = user;
+    hdbPassword = password;
 }
 
 void hSetDb(char *dbName)
@@ -119,11 +118,14 @@ struct sqlConnection *hConnectCentral()
 {
 if (centralCc == NULL)
     {
-    if (centralHost == NULL)
-	centralHost = cfgOption("central.host");
-    if (centralHost == NULL)
-	errAbort("Please set central.host in the hg.conf file.");
-    centralCc = sqlNewConnCache("hgcentral");
+    char *database = "hgcentral";
+    char *host = cfgOption("central.host");
+    char *user = cfgOption("central.user");
+    char *password = cfgOption("central.password");;
+
+    if (host == NULL || user == NULL || password == NULL)
+	errAbort("Please set central options in the hg.conf file.");
+    centralCc = sqlNewRemoteConnCache("hgcentral", host, user, password);
     }
 return sqlAllocConnection(centralCc);
 }

@@ -435,18 +435,36 @@ enum {maxConn = 16};
 struct sqlConnCache
     {
     char *database;				/* SQL database. */
+    char *host;					/* Host machine of database. */
+    char *user;					/* Database user name */
+    char *password;				/* Password. */
     int connAlloced;                            /* # open connections. */
     struct sqlConnection *connArray[maxConn];   /* Open connections. */
     boolean connUsed[maxConn];                  /* Tracks used conns. */
     };
 
-struct sqlConnCache *sqlNewConnCache(char *database)
-/* Return a new connection cache. */
+struct sqlConnCache *sqlNewRemoteConnCache(char *database, 
+	char *host, char *user, char *password)
+/* Set up a cache on a remote database. */
 {
 struct sqlConnCache *cache;
 AllocVar(cache);
 cache->database = cloneString(database);
+cache->host = cloneString(host);
+cache->user = cloneString(user);
+cache->password = cloneString(password);
 return cache;
+}
+
+struct sqlConnCache *sqlNewConnCache(char *database)
+/* Return a new connection cache. */
+{
+char* host = cfgOption("db.host");
+char* user = cfgOption("db.user");
+char* password = cfgOption("db.password");
+if (password == NULL || user == NULL || host == NULL)
+    errAbort("Could not read hostname, user, or password to the database from configuration file.");
+return sqlNewRemoteConnCache(database, host, user, password);
 }
 
 void sqlFreeConnCache(struct sqlConnCache **pCache)
@@ -459,6 +477,9 @@ if ((cache = *pCache) != NULL)
     for (i=0; i<cache->connAlloced; ++i)
 	sqlDisconnect(&cache->connArray[i]);
     freeMem(cache->database);
+    freeMem(cache->host);
+    freeMem(cache->user);
+    freeMem(cache->password);
     freez(pCache);
     }
 }
@@ -479,7 +500,8 @@ for (i=0; i<connAlloced; ++i)
     }
 if (connAlloced >= maxConn)
    errAbort("Too many open sqlConnections to %s for cache", cache->database);
-cache->connArray[connAlloced] = sqlConnect(cache->database);
+cache->connArray[connAlloced] = sqlConnectRemote(cache->host, 
+	cache->user, cache->password, cache->database);
 connUsed[connAlloced] = TRUE;
 ++cache->connAlloced;
 return cache->connArray[connAlloced];

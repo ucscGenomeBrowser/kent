@@ -159,7 +159,7 @@ dyStringFree(&dy);
 static void saveState(struct cart *cart)
 /* Save out state to permanent storage in both user and session db. */
 {
-struct sqlConnection *conn = sqlConnect("hgcentral");
+struct sqlConnection *conn = hConnectCentral();
 struct dyString *encoded = newDyString(4096);
 struct hashEl *el, *elList = hashElListHash(cart->hash);
 boolean firstTime = TRUE;
