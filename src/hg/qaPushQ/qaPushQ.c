@@ -22,7 +22,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.12 2004/05/10 21:03:45 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.13 2004/05/10 21:57:50 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -377,11 +377,11 @@ while (TRUE)
 	    j++;
 	    }
 	buf[bufsize-1] = 0;  /* add term in case */
-	return;
+	return TRUE;
 	}
     while (s[i] != delim)
 	{
-	if (i > l)
+	if (i >= l)
 	    {
 	    buf[0] = 0;
 	    return FALSE;
@@ -427,17 +427,14 @@ void initColsFromString(char *s)
 {
 int i = 0;
 char tempVal[256];
-while(TRUE)
-    { 
-    parseList(s,',',i,tempVal,sizeof(tempVal));
-    if (tempVal[0]==0) 
-	{
-	break;
-	}
+
+while(parseList(s,',',i,tempVal,sizeof(tempVal)))
+    {
     colOrder[i] = mapFieldToEnum(tempVal);
     i++;
     }
 numColumns=i;
+
 }
 
 
