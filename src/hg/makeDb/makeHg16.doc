@@ -9005,8 +9005,52 @@ java -jar ./eponine-scan.jar -threshold 0.999 -seq $1 > $2
    cat /cluster/store1/superFamily/040516/ass_16-May-2004.tab| hgKnownToSuper hg16 hs stdin
 # creates 32542 rows in knownToSuper
 
+# seq table acc field is too small; up the max to match new hgLoadSeq 
+# schema (2004/05/22 markd)
 
-<<<<<<< makeHg16.doc
+    alter table modify column `acc` varchar(128) NOT NULL default '';
+
+####  Blat knownGene proteins to determine exons (braney 2004-06-02)
+    ssh kk
+    mkdir blat.hg16KG.2004-05-27
+    rm blat.hg16KG
+    ln -s  blat.hg16KG.2004-05-27 blat.hg16KG
+    pepPredToFa hg16 knownGenePep known.fa
+    grep ">" known.fa | sed "s/>//" > kgName.lst
+    kgName hg16 kgName.lst kg.mapNames
+    cat << '_EOF_' > blatSome
+#!/bin/csh -fe
+/cluster/bin/i386/blat -t=dnax -q=prot -out=pslx $1 $2 $3
+'_EOF_'
+    ls -1S /scratch/hg/gs.17/build34/bothMaskedNibs/*.nib > human.lst
+    mkdir kgfa
+    cd kgfa
+    faSplit sequence ../known.fa 300 kg
+    ls -1S kgfa/*.fa > kg.lst
+    cat << '_EOF_' > blatGsub
+#LOOP
+blatSome $(path1) {check in line $(path2)} {check out line psl/$(root1)/$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    gensub2 human.lst kg.lst blatGsub blatSpec
+    mkdir psl
+    cd psl
+    foreach i (`cat ../human.lst`)
+	mkdir `basename $i .nib`
+    end
+    para create blatSpec
+    para push
+# Completed: 12222 of 12222 jobs
+# CPU time in finished jobs:   23286365s  388106.09m  6468.43h  269.52d  0.738 y
+# IO & Wait Time:                710342s   11839.03m   197.32h    8.22d  0.023 y
+# Average job time:                1963s      32.72m     0.55h    0.02d
+# Longest job:                   106239s    1770.65m    29.51h    1.23d
+# Submission to last job:        106248s    1770.80m    29.51h    1.23d
+
+    pslSort dirs raw.psl /tmp psl/*
+    pslReps -nohead -minCover=0.9 -minAli=0.9 raw.psl cooked.psl /dev/null
+    pslxToFa uniq.psl uniq_ex.fa -liftTarget=genome.lft -liftQuery=protein.lft
+
 # RUN BLASTZ VS. MACACA MULATTA
 
 #get sequence from trace repository
@@ -9159,54 +9203,3 @@ echo "Ready for cluster run.  para try, check, push, etc ..."
     end
     para create jobList
     para try, check, push, check
-=======
-# seq table acc field is too small; up the max to match new hgLoadSeq 
-# schema (2004/05/22 markd)
-
-    alter table modify column `acc` varchar(128) NOT NULL default '';
-<<<<<<< makeHg16.doc
->>>>>>> 1.167
-=======
-
-####  Blat knownGene proteins to determine exons (braney 2004-06-02)
-    ssh kk
-    mkdir blat.hg16KG.2004-05-27
-    rm blat.hg16KG
-    ln -s  blat.hg16KG.2004-05-27 blat.hg16KG
-    pepPredToFa hg16 knownGenePep known.fa
-    grep ">" known.fa | sed "s/>//" > kgName.lst
-    kgName hg16 kgName.lst kg.mapNames
-    cat << '_EOF_' > blatSome
-#!/bin/csh -fe
-/cluster/bin/i386/blat -t=dnax -q=prot -out=pslx $1 $2 $3
-'_EOF_'
-    ls -1S /scratch/hg/gs.17/build34/bothMaskedNibs/*.nib > human.lst
-    mkdir kgfa
-    cd kgfa
-    faSplit sequence ../known.fa 300 kg
-    ls -1S kgfa/*.fa > kg.lst
-    cat << '_EOF_' > blatGsub
-#LOOP
-blatSome $(path1) {check in line $(path2)} {check out line psl/$(root1)/$(root2).psl}
-#ENDLOOP
-'_EOF_'
-    gensub2 human.lst kg.lst blatGsub blatSpec
-    mkdir psl
-    cd psl
-    foreach i (`cat ../human.lst`)
-	mkdir `basename $i .nib`
-    end
-    para create blatSpec
-    para push
-# Completed: 12222 of 12222 jobs
-# CPU time in finished jobs:   23286365s  388106.09m  6468.43h  269.52d  0.738 y
-# IO & Wait Time:                710342s   11839.03m   197.32h    8.22d  0.023 y
-# Average job time:                1963s      32.72m     0.55h    0.02d
-# Longest job:                   106239s    1770.65m    29.51h    1.23d
-# Submission to last job:        106248s    1770.80m    29.51h    1.23d
-
-    pslSort dirs raw.psl /tmp psl/*
-    pslReps -nohead -minCover=0.9 -minAli=0.9 raw.psl cooked.psl /dev/null
-    pslxToFa uniq.psl uniq_ex.fa -liftTarget=genome.lft -liftQuery=protein.lft
-
->>>>>>> 1.171
