@@ -56,6 +56,7 @@ longLabel Recombination Rate from deCODE, Marshfield, or Genethon Maps (deCODE d
 group map
 priority 8
 visibility hide
+exonArrows off
 type bed 4 +
 
 track ctgPos

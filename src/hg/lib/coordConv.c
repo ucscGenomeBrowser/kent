@@ -13,7 +13,7 @@
 #include "hdb.h"
 #include "dbDb.h"
 
-static char const rcsid[] = "$Id: coordConv.c,v 1.11 2004/02/25 16:38:07 kent Exp $";
+static char const rcsid[] = "$Id: coordConv.c,v 1.12 2004/07/23 13:51:57 braney Exp $";
 
 /* #define DEBUG */
 
@@ -216,6 +216,7 @@ if(querySize < 6000)
 
     /* Middle seq */
     nibStart = midPos - (ccr->seqSize/2);
+    if(nibStart < 0) nibStart =0;
     if(nibStart > (chromSize - ccr->seqSize)) nibStart = chromSize- ccr->seqSize;
     ccr->midSeq = nibLdPart(nibFileName, nib, chromSize,nibStart, ccr->seqSize);
     ccr->midStart = nibStart;
@@ -236,6 +237,7 @@ else
 
     /* Middle seq */
     nibStart = midPos - (ccr->seqSize/2);
+    if(nibStart < 0) nibStart =0;
     if(nibStart > (chromSize - ccr->seqSize)) nibStart = chromSize- ccr->seqSize;
     ccr->midSeq = nibLdPart(nibFileName, nib, chromSize,nibStart, ccr->seqSize);
     ccr->midStart = nibStart;

@@ -11,7 +11,7 @@
 #include "fa.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: fa.c,v 1.29 2004/07/22 00:45:10 braney Exp $";
+static char const rcsid[] = "$Id: fa.c,v 1.30 2004/07/23 23:59:32 braney Exp $";
 
 boolean faReadNext(FILE *f, char *defaultName, boolean mustStartWithComment,
                          char **retCommentLine, struct dnaSeq **retSeq) 
@@ -361,7 +361,7 @@ for (;;)
 void faWriteNext(FILE *f, char *startLine, DNA *dna, int dnaSize)
 /* Write next sequence to fa file. */
 {
-if ((dnaSize == 0) || (startLine == NULL))
+if (dnaSize == 0)
     return;
 if (startLine != NULL)
     fprintf(f, ">%s\n", startLine);

@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.199 2004/07/21 16:55:27 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.200 2004/07/22 23:09:54 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1786,6 +1786,15 @@ sub = subTextNew(fullName, value);
 slAddHead(pList, sub);
 }
 
+static boolean isAbbrevScientificName(char *name)
+/* Return true if name looks like an abbreviated scientific name 
+* (e.g. D. yakuba). */
+{
+return (name != NULL && strlen(name) > 4 &&
+	isalpha(name[0]) &&
+	name[1] == '.' && name[2] == ' ' &&
+	isalpha(name[3]));
+}
 
 void hAddDbSubVars(char *prefix, char *database, struct subText **pList)
 /* Add substitution variables associated with database to list. */
@@ -1796,7 +1805,8 @@ if (organism != NULL)
     char *lcOrg = cloneString(organism);
     char *ucOrg = cloneString(organism);
     char *date = hFreezeDate(database);
-    tolowers(lcOrg);
+    if (! isAbbrevScientificName(organism))
+	tolowers(lcOrg);
     touppers(ucOrg);
     addSubVar(prefix, "Organism", organism, pList);
     addSubVar(prefix, "ORGANISM", ucOrg, pList);

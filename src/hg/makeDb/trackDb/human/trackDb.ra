@@ -498,8 +498,8 @@ searchPriority 20
 track affyTranscription
 shortLabel Transcription
 longLabel Affy. SK-N-AS Transcript Abundance
-group x
-priority 164
+group regulation
+priority 100
 visibility hide
 autoScaleDefault Off
 color 175,150,128
@@ -514,8 +514,8 @@ type wig 0 4396.07
 track affyTransfrags
 shortLabel Transfrags
 longLabel Affy. SK-N-AS Transfrags
-group x
-priority 165
+group regulation
+priority 100.1
 visibility hide
 color 35,35,175
 altColor 160,160,188

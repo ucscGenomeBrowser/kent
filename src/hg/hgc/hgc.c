@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.694 2004/07/20 19:44:55 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.697 2004/07/23 06:44:12 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11496,8 +11496,8 @@ void doLinkedFeaturesSeries(char *track, char *clone, struct trackDb *tdb)
 char query[256];
 char title[256];
 struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL, *sr1 = NULL;
-char **row, **row1;
+struct sqlResult *sr = NULL, *sr1 = NULL, *sr2 = NULL;
+char **row, **row1, **row2;
 char *type = NULL, *lfLabel = NULL;
 char *table = NULL;
 int start = cartInt(cart, "o");
@@ -11517,6 +11517,12 @@ if (sameString("bacEndPairs", track))
     lfLabel = "BAC ends";
     table = track;
     }
+if (sameString("bacEndSingles", track)) 
+     {
+     sprintf(title, "Location of %s using BAC end sequences", clone);
+     lfLabel = "BAC ends";
+     table = track;
+     }
 if (sameString("bacEndPairsBad", track)) 
     {
     sprintf(title, "Location of %s using BAC end sequences", clone);
@@ -11630,13 +11636,37 @@ if (row != NULL)
 	    slAddHead(&pslList, psl);
 	    }
 	slReverse(&pslList);
+        
 	if ((!sameString("fosEndPairs", track)) 
 	    && (!sameString("earlyRep", track)) 
 	    && (!sameString("earlyRepBad", track))) 
 	    {
-	    printf("<H3><A HREF=");
-	    printEntrezNucleotideUrl(stdout, lfs->lfNames[i]);
-	    printf(" TARGET=_BLANK>%s</A></H3>\n",lfs->lfNames[i]);
+            if (sameWord(organism, "Zebrafish") ) 
+                {
+                /* query to bacEndAlias table to get Genbank accession */      
+                sprintf(query, "SELECT * FROM bacEndAlias WHERE alias = '%s' ",
+                        lfs->lfNames[i]);  
+
+                sr2 = sqlMustGetResult(conn, query);
+                row2 = sqlNextRow(sr2);
+                if (row2 != NULL)
+                    {
+                    printf("<H3>%s\tAccession: <A HREF=", lfs->lfNames[i]);
+                    printEntrezNucleotideUrl(stdout, row2[2]);
+                    printf(" TARGET=_BLANK>%s</A></H3>\n", row2[2]);
+                    }
+                else 
+                    {
+                    printf("<B>%s</B>\n",lfs->lfNames[i]);
+                    }
+                sqlFreeResult(&sr2);
+                } 
+            else
+                {
+	        printf("<H3><A HREF=");
+	        printEntrezNucleotideUrl(stdout, lfs->lfNames[i]);
+	        printf(" TARGET=_BLANK>%s</A></H3>\n",lfs->lfNames[i]);
+                }
 	    }
 	else 
 	    {
@@ -14243,7 +14273,8 @@ else if (sameWord(track, "firstEF"))
     {
     firstEF(tdb, item);
     }
-else if ( sameWord(track, "blastHg16KG") )
+else if ( sameWord(track, "blastHg16KG") ||  sameWord(track, "blatHg16KG" ) ||
+        sameWord(track, "tblastnHg16KGPep") )
     {
     blastProtein(tdb, item);
     }
@@ -14376,7 +14407,7 @@ else if (sameWord(track, "mgc_mrna"))
     {
     doMgcMrna(track, item);
     }
-else if ((sameWord(track, "bacEndPairs")) || (sameWord(track, "bacEndPairsBad")) || (sameWord(track, "bacEndPairsLong")))
+else if ((sameWord(track, "bacEndPairs")) || (sameWord(track, "bacEndPairsBad")) || (sameWord(track, "bacEndPairsLong")) || (sameWord(track, "bacEndSingles")))
     {
     doLinkedFeaturesSeries(track, item, tdb);
     }

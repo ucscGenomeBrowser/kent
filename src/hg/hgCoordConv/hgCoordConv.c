@@ -8,6 +8,7 @@
    Note: Troubleshooting features have not been fully implemented for Zoo conversions.
 */
 #include "common.h"
+#include "obscure.h"
 #include "errabort.h"
 #include "htmshell.h"
 #include "jksql.h"
@@ -26,7 +27,7 @@
 #include "hdb.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgCoordConv.c,v 1.24 2003/07/31 19:25:18 kate Exp $";
+static char const rcsid[] = "$Id: hgCoordConv.c,v 1.25 2004/07/23 04:22:06 braney Exp $";
 
 /* these variables are used for testing mode */
 boolean hgTest = FALSE;          /* are we in testing mode ? */
@@ -232,8 +233,8 @@ if(tmp2 == NULL)
     posAbort(origPos);
 *tmp2 = '\0';
 tmp2++;
-*s = atoi(tmp);
-*e = atoi(tmp2);
+*s = atoi(stripCommas(tmp));
+*e = atoi(stripCommas(tmp2));
 }
 
 static char *ccFreezeDbConversion(char *database, char *freeze, char *org)
@@ -683,10 +684,12 @@ coordConvRepFreeList(&ccr);
 return success;
 }
 
-void doConvertCoordinates()
+void doConvertCoordinates(struct cart *theCart)
 /* tries to convert the coordinates given */
 {
 /* Seperate zoo conversions from non-zoo conversions... */
+
+cart = theCart;
 
 if(strstr(origGenome, "zoo")){
     convertCoordinatesZoo(stdout, stdout, doGoodReportZoo, doBadReportZoo);
