@@ -11,12 +11,13 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.28 2004/09/11 16:16:03 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.29 2004/09/14 23:45:07 hiram Exp $";
 
 /* Command line switches. */
 static boolean noAscii = FALSE;	/*	do not output ascii data */
 static boolean doStats = FALSE;	/*	perform stats measurement */
 static boolean doBed = FALSE;	/*	output bed format */
+static boolean doHistogram = FALSE;	/*	output histogram of the data */
 static boolean silent = FALSE;	/*	no data points output */
 static boolean fetchNothing = FALSE;	/*  no ascii, bed, or stats returned */
 static boolean timing = FALSE;	/*	turn timing on	*/
@@ -31,6 +32,11 @@ static char *position = NULL;	/*	to specify a range on a chrom */
 static char *bedFile = NULL;	/*	to constrain via bedFile */
 static unsigned winStart = 0;	/*	from the position specification */
 static unsigned winEnd = 0;	/*	from the position specification */
+static float hBinSize = 1.0;	/*	histoGram bin size	*/
+static unsigned hBinCount = 26;	/*	histoGram bin count	*/
+static float hMinVal = 0.0;	/*	histoGram minimum value	*/
+static float hRange = 0.0;	/*	hRange = hBinSize * (hBinCount - 1); */
+static float hMax = 0.0;	/*	hMax = hMinVal + hRange;	*/
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -43,6 +49,7 @@ static struct optionSpec optionSpecs[] = {
     {"noAscii", OPTION_BOOLEAN},
     {"doStats", OPTION_BOOLEAN},
     {"doBed", OPTION_BOOLEAN},
+    {"doHistogram", OPTION_BOOLEAN},
     {"silent", OPTION_BOOLEAN},
     {"fetchNothing", OPTION_BOOLEAN},
     {"timing", OPTION_BOOLEAN},
@@ -53,6 +60,9 @@ static struct optionSpec optionSpecs[] = {
     {"span", OPTION_INT},
     {"ll", OPTION_FLOAT},
     {"ul", OPTION_FLOAT},
+    {"hBinSize", OPTION_STRING},
+    {"hBinCount", OPTION_INT},
+    {"hMinVal", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -106,6 +116,10 @@ if (moreHelp)
   "\thgWiggle -span=5 -rawDataOut -chr=chrM -db=hg17 gc5Base | \\\n"
   "\t\ttextHistogram -real -binSize=20 -maxBinCount=13 -pValues stdin\n"
 /*"   -skipDataRead - do not read the .wib data (for no-read speed check)\n"*/
+  "   -doHistogram - perform histogram on data, turns off all other outputs\n"
+  "   -hBinSize=<F> - sets histogram bin size to <F> (float, default 1.0)\n"
+  "   -hBinCount=<D> - sets histogram bin count to <D> (int, default 26)\n"
+  "   -hMinVal=<F> - sets histogram minimum value to <F> (float, default 0.0)\n"
   "   -timing - display timing statistics to stderr\n"
   "   -silent - no output, scanning data only and prepares result (timing check)\n"
   "   -fetchNothing - scanning data only, *NOT* preparing result (timing check)\n"
@@ -126,6 +140,9 @@ int i;
 long startClock;
 long endClock;
 unsigned long long totalMatched = 0;
+struct histoResult *histoGramResult = NULL;
+float *valuesArray = NULL;
+size_t valueCount = 0;
 
 if (chromLst)
     {
@@ -190,16 +207,34 @@ for (i=0; i<trackCount; ++i)
 		operations |= wigFetchBed;
 	if (fetchNothing)
 		operations |= wigFetchNoOp;
+	if (doHistogram)
+		operations |= wigFetchAscii;
 
 	if (bedFile)
 	    {
-	    struct bed *bedList = bedLoadNAllChrom(bedFile, 3, wds->chrName);
+	    struct bed *bedList=bedLoadNAllChrom(bedFile, 3, wds->chrName);
 	    valuesMatched = wds->getDataViaBed(wds, db, tracks[i],
 		operations, &bedList);
 	    bedFreeList(&bedList);
 	    }
 	else
 	    valuesMatched = wds->getData(wds, db, tracks[i], operations);
+
+	if (doHistogram && (valuesMatched > 0))
+	    {
+	    /*  convert the ascii data listings to one giant float array */
+	    valuesArray=wds->asciiToDataArray(wds, valuesMatched, &valueCount);
+	    /* first time starts the histogram, next times accumulate into it */
+	    if (histoGramResult == NULL)
+		histoGramResult = histoGram(valuesArray, valueCount,
+		    hBinSize, hBinCount, hMinVal, hMinVal, hMax,
+			(struct histoResult *)NULL);
+	    else
+		(void) histoGram(valuesArray, valueCount,
+		    hBinSize, hBinCount, hMinVal, hMinVal, hMax,
+			histoGramResult);
+	    freeMem(valuesArray);
+	    }
 
 	totalMatched += valuesMatched;
 
@@ -251,6 +286,13 @@ for (i=0; i<trackCount; ++i)
 	    chromPtr = chromPtr->next;
 	}
     }
+
+if (doHistogram)
+    {
+    printHistoGram(histoGramResult);
+    freeHistoGram(&histoGramResult);
+    }
+
 /* when working through a chrom list, or track list, stats only at the end */
 if (doStats && (chromList || (trackCount > 1)))
     {
@@ -304,6 +346,7 @@ dataConstraint = optionVal("dataConstraint", NULL);
 noAscii = optionExists("noAscii");
 doStats = optionExists("doStats");
 doBed = optionExists("doBed");
+doHistogram = optionExists("doHistogram");
 silent = optionExists("silent");
 fetchNothing = optionExists("fetchNothing");
 timing = optionExists("timing");
@@ -314,9 +357,25 @@ help = optionExists("help");
 span = optionInt("span", 0);
 lowerLimit = optionFloat("ll", -1 * INFINITY);
 upperLimit = optionFloat("ul", INFINITY);
+hBinSize = optionFloat("hBinSize", 1.0);
+hMinVal = optionFloat("hMinVal", 0.0);
+hBinCount = optionInt("hBinCount", 26);
 
 if (help)
     usage(TRUE);
+
+if (doHistogram)	/*	histogram turns off everything else */
+    {
+    noAscii = TRUE;
+    doBed = FALSE;
+    doStats = FALSE;
+    rawDataOut = FALSE;
+    statsHTML = FALSE;
+    hRange = hBinSize * (hBinCount - 1);
+    if ( !(hRange > 0.0))
+	errAbort("ERROR: histogram range is not > 0.0. binSize: %g, binCount: %u, range: %g", hBinSize, hBinCount, hRange);
+    hMax = hMinVal + hRange;
+    }
 
 if (statsHTML)
     doStats = TRUE;
@@ -374,6 +433,9 @@ if (position)
     }
 if (noAscii)
     verbose(VERBOSE_CHR_LEVEL, "#\tnoAscii option on, do not perform the default ascii output\n");
+if (doHistogram)
+    verbose(VERBOSE_CHR_LEVEL, "#\tdoHistogram: min,max: %g:%g, range: %g, binCount: %u, binSize: %g\n", hMinVal, hMax, hRange, hBinCount, hBinSize);
+
 if (doBed)
     verbose(VERBOSE_CHR_LEVEL, "#\tdoBed option on, output bed format\n");
 if (doStats)
