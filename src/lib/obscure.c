@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.34 2004/07/20 20:50:02 kent Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.35 2004/09/10 17:54:43 hiram Exp $";
 static int _dotForUserMod = 100; /* How often does dotForUser() output a dot. */
 
 long incCounterFile(char *fileName)
@@ -317,7 +317,6 @@ char *makeQuotedString(char *in, char quoteChar)
 {
 int newSize = 2 + strlen(in) + countChars(in, quoteChar);
 char *out = needMem(newSize+1);
-char c;
 out[0] = quoteChar;
 escCopy(in, out+1, quoteChar, '\\');
 out[newSize-1] = quoteChar;
@@ -531,7 +530,7 @@ char *nPtr = newPos;
 
 if (position == NULL)
     return NULL;
-while(*nPtr = *position++) 
+while((*nPtr = *position++))
     if (*nPtr != ',')
 	nPtr++;
 
@@ -571,4 +570,43 @@ while ((c = *s) != 0)
         *s = '_';
     ++s;
     }
+}
+
+int chrStrippedCmp(char *chrA, char *chrB)
+/*	compare chrom names after stripping chr, Scaffold_ or ps_ prefix
+ *	database ci1 has the Scaffold_ prefix, cioSav1 has the ps_
+ *	prefix, dp2 has an unusual ContigN_ContigN pattern
+ *	all the rest are prefixed chr
+ *	This can be used in sort compare functions to order the chroms
+ *	by number  (the _random's come out conveniently after everything
+ *	else)
+ */
+{
+int dif;
+int lenA = 0;
+int lenB = 0;
+
+if (startsWith("chr", chrA))
+    chrA += strlen("chr");
+else if (startsWith("Scaffold_",chrA))
+    chrA += strlen("Scaffold_");
+else if (startsWith("ps_",chrA))
+    chrA += strlen("ps_");
+
+if (startsWith("chr",chrB))
+    chrB += strlen("chr");
+else if (startsWith("Scaffold_",chrB))
+    chrB += strlen("Scaffold_");
+else if (startsWith("ps_",chrB))
+    chrB += strlen("ps_");
+
+lenA = strlen(chrA);
+lenB = strlen(chrB);
+
+dif = lenA - lenB;
+
+if (dif == 0)
+    dif = strcmp(chrA, chrB);
+
+return dif;
 }
