@@ -17,12 +17,16 @@ color 160,140,50
 type bed 6 .
 
 track llaPaePrintA
-shortLabel Pae-print-A
-longLabel Full-genome Pyrobaculum aerophilum microarray experiments 
-group x
-priority 3
+shortLabel LL microarray A
+longLabel Lowe lab full-genome P. aerophilum microarray experiments
+group regulation
+priority 85.0
 visibility dense
-type bed 15 +
+type expRatio
+expScale 4.0
+expStep 0.5
+expTable llaPaePrintAExps
+chip printA
 canPack off
 
 track blastpPfu
