@@ -644,7 +644,7 @@ void mapBoxToggleVis(int x, int y, int width, int height,
 {
 char buf[256];
 snprintf(buf, sizeof(buf), 
-	"Change between dense and full view of %s", curGroup->shortLabel);
+	"Toggle the display density of %s", curGroup->shortLabel);
 mapBoxReinvoke(x, y, width, height, curGroup, NULL, 0, 0, buf);
 }
 
