@@ -3878,11 +3878,9 @@ showSomeAlignment(psl, oSeq, qt, 0, oSeq->size, NULL);
 }
 
 void htcProteinAli(char *readName, char *table)
-/* Show alignment for accession. */
+/* Show protein to translated dna alignment for accession. */
 {
-//char *pslName, *faName, *qName;
 struct lineFile *lf;
-//bioSeq *oSeqList = NULL, *oSeq = NULL;
 struct psl *psl;
 int start;
 enum gfType tt = gftDnaX, qt = gftProt;
@@ -3897,7 +3895,7 @@ boolean hasBin;
 /* Print start of HTML. */
 writeFramesetType();
 puts("<HTML>");
-printf("<HEAD>\n<TITLE>User Sequence vs Genomic</TITLE>\n</HEAD>\n\n");
+printf("<HEAD>\n<TITLE>Protein Sequence vs Genomic</TITLE>\n</HEAD>\n\n");
 
 start = cartInt(cart, "o");
 hFindSplitTable(seqName, table, fullTable, &hasBin);
@@ -3910,24 +3908,6 @@ psl = pslLoad(row+hasBin);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 seq = hPepSeq(readName);
-//parseSs(fileNames, &pslName, &faName, &qName);
-//pslxFileOpen(pslName, &qt, &tt, &lf);
-//while ((psl = pslNext(lf)) != NULL)
-//    {
-//    if (sameString(psl->tName, seqName) && psl->tStart == start && sameString(psl->qName, qName))
-//        break;
-//    pslFree(&psl);
-//    }
-//lineFileClose(&lf);
-//if (psl == NULL)
-//    errAbort("Couldn't find alignment at %s:%d", seqName, start);
-//oSeqList = faReadAllSeq(faName, !isProt);
-//for (oSeq = oSeqList; oSeq != NULL; oSeq = oSeq->next)
-//    {
-//    if (sameString(oSeq->name, qName))
-//         break;
-//    }
-//if (oSeq == NULL)  errAbort("%s is in %s but not in %s. Internal error.", qName, pslName, faName);
 showSomeAlignment(psl, seq, qt, 0, seq->size, NULL);
 }
 
@@ -4905,7 +4885,6 @@ printf("<H2>Viral Gene %s</H2>\n", geneName);
 pslList = getAlignments(conn, "chr1_viralProt", geneName);
 htmlHorizontalLine();
 printf("<H3>Protein Alignments</H3>");
-//printAlignments(pslList, start, "htcBlatXeno", "chr1_viralProt", geneName);
 printAlignments(pslList, start, "htcProteinAli", "chr1_viralProt", geneName);
 
 if (hTableExists("knownMore"))
