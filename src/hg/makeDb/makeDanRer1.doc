@@ -794,7 +794,7 @@ danRer1.downloadDir = danRer1
     cvs commit -m "Added danRer1" etc/genbank.conf
     make
 
-    # Edit src/align/gbBlat to add /iscratch/i/worms/Celegans2/11.ooc
+    # Edit src/align/gbBlat to add /iscratch/i/danRer1/11.ooc
     # Add line:  DANRER_OOC=/iscratch/i/danRer1/11.ooc
     cvs diff src/align/gbBlat
     make
