@@ -165,7 +165,7 @@
 #include "gencodeIntron.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.864 2005/03/29 15:57:32 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.865 2005/04/04 21:55:18 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1934,11 +1934,13 @@ void printTrackHtml(struct trackDb *tdb)
 /* If there's some html associated with track print it out. Also make a link 
  * to the TB table schema page for this table. */
 {
-printf("<P><A HREF=\"/cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
-       "&hgta_table=%s&hgta_doSchema=describe+table+schema\" "
-       "TARGET=_BLANK>"
-       "View table schema</A></P>\n",
-       database, tdb->grp, tdb->tableName, tdb->tableName);
+/* Make link to TB schema -- unless this is an on-the-fly (tableless) track. */
+if (hTableOrSplitExists(tdb->tableName))
+    printf("<P><A HREF=\"/cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
+	   "&hgta_table=%s&hgta_doSchema=describe+table+schema\" "
+	   "TARGET=_BLANK>"
+	   "View table schema</A></P>\n",
+	   database, tdb->grp, tdb->tableName, tdb->tableName);
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
     htmlHorizontalLine();

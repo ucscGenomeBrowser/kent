@@ -25,7 +25,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.186 2005/03/24 05:31:56 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.187 2005/04/04 21:55:18 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1447,11 +1447,13 @@ printf("<BR>\n");
 
 specificUi(tdb);
 
-printf("<P><A HREF=\"/cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
-       "&hgta_table=%s&hgta_doSchema=describe+table+schema\" "
-       "TARGET=_BLANK>"
-       "View table schema</A></P>\n",
-       database, tdb->grp, tdb->tableName, tdb->tableName);
+/* Make link to TB schema -- unless this is an on-the-fly (tableless) track. */
+if (hTableOrSplitExists(tdb->tableName))
+    printf("<P><A HREF=\"/cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
+	   "&hgta_table=%s&hgta_doSchema=describe+table+schema\" "
+	   "TARGET=_BLANK>"
+	   "View table schema</A></P>\n",
+	   database, tdb->grp, tdb->tableName, tdb->tableName);
 
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
