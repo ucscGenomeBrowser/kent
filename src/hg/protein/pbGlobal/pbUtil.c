@@ -930,7 +930,19 @@ if (protCntInSwissByGene > protCntInSupportedGenomeDb)
 	        {
 	        hPrintf("</UL>\n");
 		}
-	    if (!skipIt) hPrintf("<FONT SIZE=3><B>%s:</B></FONT>\n", protOrg);
+	    if (!skipIt) 
+	    	{
+    		safef(cond_str, sizeof(cond_str), "id=%s and nameType='genbank common name'", taxonId);
+    		answer = sqlGetField(conn, "proteins", "taxonNames", "name", cond_str);
+		if (answer != NULL)
+		    {
+		    hPrintf("<FONT SIZE=3><B>%s (%s):</B></FONT>\n", protOrg, answer);
+		    }
+		else
+		    {
+		    hPrintf("<FONT SIZE=3><B>%s:</B></FONT>\n", protOrg);
+		    }
+		}
             hPrintf("<UL>\n");
 	    }
 		
