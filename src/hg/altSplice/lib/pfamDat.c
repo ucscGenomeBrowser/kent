@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "pfamDat.h"
 
-static char const rcsid[] = "$Id: pfamDat.c,v 1.1 2003/07/21 04:56:49 sugnet Exp $";
+static char const rcsid[] = "$Id: pfamDat.c,v 1.2 2004/03/31 19:22:19 sugnet Exp $";
 
 void pfamHitStaticLoad(char **row, struct pfamHit *ret)
 /* Load a row from pfamHit table into ret.  The contents of ret will
@@ -400,6 +400,7 @@ void pfamDatFree(struct pfamDat **pEl)
 struct pfamDat *el;
 
 if ((el = *pEl) == NULL) return;
+freez(&el->header);
 freeMem(el->seqName);
 freeMem(el->sequence);
 pfamHitFreeList(&el->pfamHitList);
@@ -445,31 +446,60 @@ fputc(lastSep,f);
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 
-static void addHitTabs(char *line)
+static void addHitTabs(char *line, int *offsets, int offsetCount)
 /* Add a tab at the correct offsets for a pfam file. */
 {
-int offSets[] = {15,54,62,72};
 int i;
-for(i=0;i<ArraySize(offSets); i++)
+int tmpOffset = 0;
+int maxFuzzy =2;
+for(i=0; i < offsetCount; i++)
     {
-    if(line[offSets[i]] != ' ')
+    maxFuzzy = 2;
+    tmpOffset = offsets[i];
+    /* Sometimes we have to back up a space or two. */
+    while(line[tmpOffset] != ' ' && maxFuzzy >= 0)
+	{
+	tmpOffset--;
+	maxFuzzy--;
+	}
+    if(line[tmpOffset] != ' ')
 	errAbort("pfamDat::addHitTabs() - Found a '%c' where expecting a ' ' at position %d in line %s",
-		 line[offSets[i]], offSets[i], line);
-    line[offSets[i]] = '\t';
+		 line[tmpOffset], tmpOffset, line);
+    line[tmpOffset] = '\t';
     }
 }
 
-static void addDHitTabs(char *line)
+static void addDHitTabs(char *line, int *offsets, int offsetCount)
 /* Add a tab at the correct offsets for a pfam file. */
 {
-int offSets[] = {15,19,23,29,35,38,44,50,54,61};
+
 int i;
-for(i=0;i<ArraySize(offSets); i++)
+for(i=0;i < offsetCount; i++)
     {
-    if(line[offSets[i]] != ' ' && line[offSets[i]] != '/')
-	errAbort("pfamDat::addHitTabs() - Found a '%c' where expecting a ' ' or '/' at position %d in line %s",
-		 line[offSets[i]], offSets[i], line);
-    line[offSets[i]] = '\t';
+    if(line[offsets[i]] != ' ' && line[offsets[i]] != '/')
+	errAbort("pfamDat::addDHitTabs() - Found a '%c' where expecting a ' ' or '/' at position %d in line %s",
+		 line[offsets[i]], offsets[i], line);
+    line[offsets[i]] = '\t';
+    }
+}
+
+void determineOffsets(char *line, int **offsets, int *offsetCount)
+/* Take the pfam line with the underlines '-----   ------' and 
+   determine their field starting positions from it. Free offsets
+   with freez(). */
+{
+int numBlocks = chopByWhite(line, NULL, 0);
+int i = 0, length = strlen(line); //  int offSets[] = {15,54,62,72}; int offSets[] = {15,19,23,29,35,38,44,50,54,61};
+AllocArray(*offsets, numBlocks - 1);
+*offsetCount = 0;
+for(i = 0; i < length -1; i++)
+    {
+    if(line[i] != '-' && line[i+1] == '-') 
+	{
+	if(*offsetCount > numBlocks -1)
+	    errAbort("pfamDat::determineOffsets() - Found too many offset.");
+	(*offsets)[(*offsetCount)++] = i;
+	}
     }
 }
 
@@ -486,11 +516,16 @@ char *domainToken = "Parsed for domains:";
 char *noResToken = "[no hits above thresholds]";
 char *alignmentToken = "Alignments";
 int numStrings=0;
+struct dyString *header = newDyString(512);
 struct pfamHit *pfamHit = NULL;
 struct pfamDHit *pfamDHit = NULL;
 struct dyString *alignment = newDyString(1024);
+char *slash = NULL;
 int i;
 char **row;
+int *offsets = NULL;
+int offsetCount = 0;
+
 AllocArray(row, 15);
 
 lf = lineFileOpen(fileName, TRUE);
@@ -502,9 +537,14 @@ if(startsWith(pfamToken, line) == FALSE)
 	     "Probably not a hmmpfam generated file.", fileName, pfamToken);
 
 /* Find end of headers. */
+dyStringPrintf(header, "%s\n",line);
 while(lineFileNextReal(lf, &line))
+    {
     if(startsWith(startToken, line))
 	break;
+    else
+	dyStringPrintf(header, "%s\n",line);
+    }
 
 /* Parse out seq name. */
 mark = line+strlen(startToken);
@@ -516,11 +556,12 @@ pfamDat->sequence = cloneString("NA");
 while(lineFileNextReal(lf, &line))
     if(startsWith("--------",line))
 	break;
+determineOffsets(line, &offsets, &offsetCount);
 while(lineFileNextReal(lf, &line))
     {
     if(strlen(line) < 2 || strstr(line,noResToken) || startsWith(domainToken,line))
 	break;
-    addHitTabs(line);
+    addHitTabs(line, offsets, offsetCount);
     numStrings = chopByChar(line, '\t', row, 15);
     for(i=0;i<numStrings;i++)
 	row[i] = trimSpaces(row[i]);
@@ -528,23 +569,31 @@ while(lineFileNextReal(lf, &line))
     slAddHead(&pfamDat->pfamHitList, pfamHit);
     }
 slReverse(&pfamDat->pfamHitList);
-
+freez(&offsets);
+offsetCount = 0;
 /* Get the domain hits. */
 while(lineFileNextReal(lf, &line))
     if(startsWith("--------",line))
 	break;
+determineOffsets(line, &offsets, &offsetCount);
 while(lineFileNextReal(lf, &line))
     {
     if(strlen(line) < 2 || strstr(line,noResToken) || startsWith(alignmentToken,line))
 	break;
-    addDHitTabs(line);
-    numStrings = chopByChar(line, '\t', row, 15);
+//    addDHitTabs(line, offsets, offsetCount);
+    /* Change the slash in the first field to a space. */
+    slash = strchr(line+offsets[0], '/');
+    if(slash != NULL)
+	slash[0] = ' ';
+    numStrings = chopByWhite(line, row, 15);
     for(i=0;i<numStrings;i++)
 	row[i] = trimSpaces(row[i]);
     pfamDHit = pfamDHitLoad(row);
     slAddHead(&pfamDat->pfamDHitList, pfamDHit);
     }
 slReverse(&pfamDat->pfamDHitList);
+freez(&offsets);
+offsetCount = 0;
 
 /* Get the domain hits. */
 lineFileNextReal(lf, &line);
@@ -566,6 +615,8 @@ for(pfamDHit = pfamDat->pfamDHitList; pfamDHit != NULL; pfamDHit=pfamDHit->next)
 lineFileClose(&lf);
 dyStringFree(&alignment);
 freez(&row);
+pfamDat->header = cloneString(header->string);
+dyStringFree(&header);
 return pfamDat;
 }
 
@@ -575,13 +626,17 @@ void pfamDatWritePfamFile(struct pfamDat *pfamDat, char *fileName)
 
 FILE *out = mustOpen(fileName,"w");
 int i;
-int nameWidth = 15, descWidth=37;
+int nameWidth = 15, descWidth=38;
 struct pfamHit *pHit = NULL;
 struct pfamDHit *pDHit = NULL;
-fputs("hmmpfam - search one or more sequences against HMM database\n"
+
+if(pfamDat->header == NULL)
+    fputs("hmmpfam - search one or more sequences against HMM database\n"
       "Freely distributed under the GNU General Public License (GPL)\n"
       "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n"
       "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n\nQuery sequence: ", out);
+else
+    fprintf(out, "%s\nQuery sequence: ", pfamDat->header);
 fprintf(out,"%s\n", pfamDat->seqName);
 fputs("Accession:      [none]\n"
       "Description:    [none]\n"
