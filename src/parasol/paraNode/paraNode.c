@@ -136,7 +136,6 @@ void initRandom()
 {
 /* Set up random number generator with seed depending on host name. */
 unsigned seed = hashCrc(hostName)&0xfffff;
-logIt("initRandom seed %u\n", seed);
 srand(seed);
 }
 
@@ -160,7 +159,6 @@ while (clock1000() < doneSpin)
     ;
 if (sleepTime > 0)
     sleep(sleepTime);
-logIt("randomSleep %d %d\n", sleepTime, spinTime);
 }
 
 
@@ -307,10 +305,11 @@ else
     /* Wait on executed job and send jobID and status back to 
      * main process. */
     int status;
+    int cid;
     int sd;
 
     signal(SIGTERM, termHandler);
-    wait(&status);
+    cid = wait(&status);
     randomSleep();
     sd = netConnect("localhost", paraPort);
     if (sd >= 0)
@@ -560,6 +559,30 @@ write(connectionHandle, dy->string, dy->stringSize);
 dyStringFree(&dy);
 }
 
+void listJobs()
+/* Report jobs running and recently finished. */
+{
+char buf[64];
+struct job *job;
+struct dlNode *node;
+
+sprintf(buf, "%d running", dlCount(jobsRunning));
+netSendLongString(connectionHandle, buf);
+for (node = jobsRunning->head; !dlEnd(node); node=node->next)
+    {
+    job = node->val;
+    netSendLongString(connectionHandle, job->startMessage);
+    }
+sprintf(buf, "%d recent", dlCount(jobsFinished));
+netSendLongString(connectionHandle, buf);
+for (node = jobsFinished->head; !dlEnd(node); node=node->next)
+    {
+    job = node->val;
+    netSendLongString(connectionHandle, job->startMessage);
+    netSendLongString(connectionHandle, job->doneMessage);
+    }
+}
+
 void paraNode()
 /* paraNode - a net server. */
 {
@@ -623,6 +646,8 @@ for (;;)
 				doCheck(line);
 			    else if (sameString("resurrect", command))
 				doResurrect(line);
+			    else if (sameString("listJobs", command))
+			        listJobs();
 			    }
 			freez(&buf);
 			}

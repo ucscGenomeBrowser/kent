@@ -122,12 +122,13 @@ struct dlList *runningJobs;     /* Jobs that are running. */
 
 struct hash *userHash;		/* Hash of all users. */
 struct user *userList;		/* List of all users. */
+struct batch *batchList;	/* List of all batches. */
 struct dlList *queuedUsers;	/* Users with jobs in queue. */
 struct dlList *unqueuedUsers;   /* Users with no jobs in queue. */
 
 struct hash *stringHash;	/* Unique strings throughout system go here
                                  * including directory names and results file
-				 * names. */
+				 * names/batch names. */
 
 struct resultQueue *resultQueues; /* Result files. */
 int finishedJobCount = 0;		/* Number of finished jobs. */
@@ -158,6 +159,52 @@ unqueuedUsers = newDlList();
 userHash = newHash(6);
 }
 
+struct batch *findBatchInList(struct dlList *list,  char *nameString)
+/* Find a batch of jobs in list or return NULL. 
+ * nameString must be from stringHash. */
+{
+struct dlNode *node;
+for (node = list->head; !dlEnd(node); node = node->next)
+    {
+    struct batch *batch = node->val;
+    if (nameString == batch->name)
+        return batch;
+    }
+return NULL;
+}
+
+struct batch *newBatch(char *nameString, struct user *user)
+/* Make new batch.  NameString must be in stringHash already */
+{
+struct batch *batch;
+AllocVar(batch);
+slAddHead(&batchList, batch);
+AllocVar(batch->node);
+batch->node->val = batch;
+batch->name = nameString;
+batch->user = user;
+batch->jobQueue = newDlList();
+return batch;
+}
+
+struct batch *findBatch(struct user *user, char *name)
+/* Find batch of jobs.  If no such batch yet make it. */
+{
+struct batch *batch;
+name = hashStoreName(stringHash, name);
+batch = findBatchInList(user->curBatches, name);
+if (batch == NULL)
+     {
+     batch = findBatchInList(user->oldBatches, name);
+     if (batch != NULL)
+	 dlRemove(batch->node);
+     else
+	 batch = newBatch(name, user);
+     dlAddTail(user->curBatches, batch->node);
+     }
+return batch;
+}
+
 struct user *findUser(char *name)
 /* Find user.  If it's the first time we've seen this
  * user then make up a user object and put it on the
@@ -172,10 +219,40 @@ if (user == NULL)
     AllocVar(user->node);
     user->node->val = user;
     dlAddTail(unqueuedUsers, user->node);
-    user->jobQueue = newDlList();
+    user->curBatches = newDlList();
+    user->oldBatches = newDlList();
     }
 return user;
 }
+
+int userRunningCount(struct user *user)
+/* Count up jobs user has running. */
+{
+struct dlNode *node;
+struct batch *batch;
+int count = 0;
+for (node = user->curBatches->head; !dlEnd(node); node = node->next)
+    {
+    batch = node->val;
+    count += batch->runningCount;
+    }
+return count;
+}
+
+int userQueuedCount(struct user *user)
+/* Count up jobs user has waiting */
+{
+struct dlNode *node;
+struct batch *batch;
+int count = 0;
+for (node = user->curBatches->head; !dlEnd(node); node = node->next)
+    {
+    batch = node->val;
+    count += dlCount(batch->jobQueue);
+    }
+return count;
+}
+
 
 struct user *findLuckyUser()
 /* Find lucky user who gets to run a job. */
@@ -186,49 +263,79 @@ struct dlNode *node;
 for (node = queuedUsers->head; !dlEnd(node); node = node->next)
     {
     struct user *user = node->val;
-    if (user->runningCount < minCount && !dlEmpty(user->jobQueue))
+    int runningCount = userRunningCount(user);
+    if (!dlEmpty(user->curBatches) && runningCount < minCount)
         {
-	minCount = user->runningCount;
+	minCount = runningCount;
 	minUser = user;
 	}
     }
 return minUser;
 }
 
+struct batch *findLuckyBatch(struct user *user)
+/* Find the batch that gets to run a job. */
+{
+struct batch *minBatch = NULL;
+int minCount = BIGNUM;
+struct dlNode *node;
+for (node = user->curBatches->head; !dlEnd(node); node = node->next)
+    {
+    struct batch *batch = node->val;
+    if (batch->runningCount < minCount)
+        {
+	minCount = batch->runningCount;
+	minBatch = batch;
+	}
+    }
+return minBatch;
+}
+
 
 boolean runNextJob()
 /* Assign next job in pending queue if any to a machine. */
 {
-struct user *user = findLuckyUser();
+struct user *user;
+user = findLuckyUser();
 if (user != NULL && !dlEmpty(freeMachines) && !dlEmpty(freeSpokes))
     {
     struct dlNode *mNode, *jNode, *sNode;
     struct spoke *spoke;
+    struct batch *batch = findLuckyBatch(user);
     struct job *job;
     struct machine *machine;
     time_t now = time(NULL);
 
-    /* Get free resources from free lists and move them to busy lists. */
+    /* Get free machine and spoke and move them to busy lists. */
     mNode = dlPopHead(freeMachines);
     dlAddTail(busyMachines, mNode);
     machine = mNode->val;
     machine->lastChecked = now;
-    jNode = dlPopHead(user->jobQueue);
-    dlAddTail(runningJobs, jNode);
-    job = jNode->val;
     sNode = dlPopHead(freeSpokes);
     dlAddTail(busySpokes, sNode);
     spoke = sNode->val;
     spoke->lastPinged = now;
     spoke->pingCount = 0;
 
-    /* Update user and if this is the last job take them off queue. */
-    ++user->runningCount;
-    if (dlEmpty(user->jobQueue))
+    /* Get active batch from user and take job off of it.
+     * If it's the last job in the batch move batch to
+     * finished list. */
+    jNode = dlPopHead(batch->jobQueue);
+    dlAddTail(runningJobs, jNode);
+    job = jNode->val;
+    ++batch->runningCount;
+    if (dlEmpty(batch->jobQueue))
         {
-	dlRemove(user->node);
-	dlAddTail(unqueuedUsers, user->node);
+	dlRemove(batch->node);
+	dlAddTail(user->oldBatches, batch->node);
+	/* Check if it's last user batch and if so take them off queue */
+	if (dlEmpty(user->curBatches))
+	    {
+	    dlRemove(user->node);
+	    dlAddTail(unqueuedUsers, user->node);
+	    }
 	}
+
 
     /* Tell machine, job, and spoke about each other. */
     machine->job = job;
@@ -361,16 +468,19 @@ void requeueJob(struct job *job)
  * queue.  This happens when a node is down or when
  * it missed the message about a job. */
 {
-struct user *user = job->user;
+struct batch *batch = job->batch;
+struct user *user = batch->user;
 struct machine *mach = job->machine;
 if (mach != NULL)
     mach->job = NULL;
 job->machine = NULL;
 dlRemove(job->node);
-dlAddHead(user->jobQueue, job->node);
+dlAddHead(batch->jobQueue, job->node);
+batch->runningCount -= 1;
+dlRemove(batch->node);
+dlAddHead(user->curBatches, batch->node);
 dlRemove(user->node);
-user->runningCount -= 1;
-dlAddTail(queuedUsers, user->node);
+dlAddHead(queuedUsers, user->node);
 }
 
 void nodeDown(char *line)
@@ -431,21 +541,23 @@ exe[size] = 0;
 return exe;
 }
 
-struct job *jobNew(char *cmd, char *user, char *dir, char *in, char *out, char *results)
+struct job *jobNew(char *cmd, char *userName, char *dir, char *in, char *out, char *results)
 /* Create a new job structure */
 {
 struct job *job;
+struct user *user = findUser(userName);
+struct batch *batch = findBatch(user, results);
+
 AllocVar(job);
 AllocVar(job->node);
 job->node->val = job;
 job->id = ++nextJobId;
 job->exe = cloneString(exeFromCommand(cmd));
 job->cmd = cloneString(cmd);
-job->user = findUser(user);
+job->batch = batch;
 job->dir = hashStoreName(stringHash, dir);
 job->in = cloneString(in);
 job->out = cloneString(out);
-job->results = hashStoreName(stringHash, results);
 return job;
 }
 
@@ -591,13 +703,13 @@ void writeJobResults(struct job *job, time_t now, char *status,
 {
 struct resultQueue *rq;
 for (rq = resultQueues; rq != NULL; rq = rq->next)
-    if (sameString(job->results, rq->name))
+    if (sameString(job->batch->name, rq->name))
         break;
 if (rq == NULL)
     {
     AllocVar(rq);
     slAddHead(&resultQueues, rq);
-    rq->name = cloneString(job->results);
+    rq->name = job->batch->name;
     rq->f = fopen(rq->name, "a");
     if (rq->f == NULL)
         warn("hub: couldn't open results file %s", rq->name);
@@ -614,11 +726,17 @@ if (rq->f != NULL)
         status, machName, job->id, job->exe, 
 	uTime, sTime, 
 	job->submitTime, job->startTime, now,
-	job->user->name, job->err, job->cmd);
+	job->batch->user->name, job->err, job->cmd);
     if (sameString(status, "0"))
+	{
         ++finishedJobCount;
+	++job->batch->doneCount;
+	}
     else
+	{
         ++crashedJobCount;
+	++job->batch->crashCount;
+	}
     rq->lastUsed = now;
     }
 }
@@ -630,7 +748,6 @@ struct resultQueue *rq = *pRq;
 if (rq != NULL)
     {
     carefulClose(&rq->f);
-    freeMem(rq->name);
     freez(pRq);
     }
 }
@@ -756,7 +873,7 @@ if (status != NULL)
     if (sameString(status, "free"))
 	{
 	struct job *job = jobFind(runningJobs, jobId);
-	struct user *user = job->user;
+	struct user *user = job->batch->user;
 	if (job != NULL)
 	    {
 	    struct machine *mach = job->machine;
@@ -809,6 +926,7 @@ int addJob(char *line)
 char *userName, *dir, *in, *out, *results, *command;
 struct job *job;
 struct user *user;
+struct batch *batch;
 
 if ((userName = nextWord(&line)) == NULL)
     return 0;
@@ -824,8 +942,9 @@ if (line == NULL || line[0] == 0)
     return 0;
 command = line;
 job = jobNew(command, userName, dir, in, out, results);
-user = job->user;
-dlAddTail(user->jobQueue, job->node);
+batch = job->batch;
+dlAddTail(batch->jobQueue, job->node);
+user = batch->user;
 dlRemove(user->node);
 dlAddTail(queuedUsers, user->node);
 job->submitTime = time(NULL);
@@ -868,11 +987,11 @@ void finishJob(struct job *job)
 /* Recycle job memory and the machine it's running on. */
 {
 struct machine *mach = job->machine;
-struct user *user = job->user;
+struct batch *batch = job->batch;
 if (mach != NULL)
     {
     recycleMachine(mach);
-    user->runningCount -= 1;
+    batch->runningCount -= 1;
     }
 recycleJob(job);
 }
@@ -897,14 +1016,21 @@ if (job == NULL)
     struct user *user;
     for (user = userList; user != NULL; user = user->next)
         {
-	if ((job = jobFind(user->jobQueue, id)) != NULL)
+	struct dlNode *node;
+	for (node = user->curBatches->head; !dlEnd(node); node = node->next)
+	    {
+	    struct batch *batch = node->val;
+	    if ((job = jobFind(batch->jobQueue, id)) != NULL)
+		break;
+	    }
+	if (job != NULL)
 	    break;
 	}
     logIt("Pending job %x\n", job);
     }
 if (job != NULL)
     {
-    logIt("Removing %s's %s\n", job->user, job->cmd);
+    logIt("Removing %s's %s\n", job->batch->user, job->cmd);
     if (!removeJob(job))
         return FALSE;
     }
@@ -937,23 +1063,29 @@ void chillBatch(char *line, int connectionHandle)
  * running jobs. */
 {
 char *userName = nextWord(&line);
-char *batch = nextWord(&line);
+char *batchName = nextWord(&line);
 char *res = "err";
-if (batch != NULL)
+if (batchName != NULL)
     {
     struct user *user = hashFindVal(userHash, userName);
-    batch = hashStoreName(stringHash, batch);
     if (user != NULL)
 	{
-	struct dlNode *el, *next;
-	for (el = user->jobQueue->head; !dlEnd(el); el = next)
+	struct batch *batch;
+	batchName = hashStoreName(stringHash, batchName);
+	batch = findBatchInList(user->curBatches, batchName);
+	if (batch != NULL)
 	    {
-	    struct job *job = el->val;
-	    next = el->next;
-	    if (job->results == batch)
+	    struct dlNode *el, *next;
+	    for (el = batch->jobQueue->head; !dlEnd(el); el = next)
+		{
+		struct job *job = el->val;
+		next = el->next;
 		recycleJob(job);	/* This free's el too! */
+		}
+	    res = "ok";
+	    dlRemove(batch->node);
+	    dlAddTail(user->oldBatches, batch->node);
 	    }
-	res = "ok";
 	}
     }
 netSendLongString(connectionHandle, res);
@@ -997,7 +1129,7 @@ for (mach = machineList; mach != NULL; mach = mach->next)
     dyStringPrintf(dy, "%-10s ", mach->name);
     job = mach->job;
     if (job != NULL)
-        dyStringPrintf(dy, "%-10s %s", job->user->name, job->cmd);
+        dyStringPrintf(dy, "%-10s %s", job->batch->user->name, job->cmd);
     else
 	{
 	if (mach->isDead)
@@ -1019,11 +1151,41 @@ struct dyString *dy = newDyString(256);
 struct user *user;
 for (user = userList; user != NULL; user = user->next)
     {
+    int activeBatch = dlCount(user->curBatches);
     dyStringClear(dy);
     dyStringPrintf(dy, "%s ", user->name);
-    dyStringPrintf(dy, "%d running, %d waiting", 
-    	user->runningCount, dlCount(user->jobQueue));
+    dyStringPrintf(dy, 
+    	"%d jobs running, %d jobs waiting, %d of %d batches active", 
+	userRunningCount(user),  userQueuedCount(user),
+	activeBatch, activeBatch + dlCount(user->oldBatches));
     netSendLongString(fd, dy->string);
+    }
+netSendLongString(fd, "");
+freeDyString(&dy);
+}
+
+void listBatches(int fd)
+/* Write list of batches to fd.  Format is one batch per
+ * line followed by a blank line. */
+{
+struct dyString *dy = newDyString(256);
+struct user *user;
+netSendLongString(fd, "#user     run   wait   done crash batch");
+for (user = userList; user != NULL; user = user->next)
+    {
+    struct dlNode *bNode;
+    for (bNode = user->curBatches->head; !dlEnd(bNode); bNode = bNode->next)
+        {
+	struct batch *batch = bNode->val;
+	char shortBatchName[512];
+	splitPath(batch->name, shortBatchName, NULL, NULL);
+	dyStringClear(dy);
+	dyStringPrintf(dy, "%-8s %4d %6d %6d %5d %s",
+		user->name, batch->runningCount, 
+		dlCount(batch->jobQueue), batch->doneCount,
+		batch->crashCount, shortBatchName);
+	netSendLongString(fd, dy->string);
+	}
     }
 netSendLongString(fd, "");
 freeDyString(&dy);
@@ -1057,7 +1219,8 @@ if (dotQ)
 return ret;
 }
 
-void oneJobList(int fd, struct dlList *list, struct dyString *dy, boolean sinceStart)
+void oneJobList(int fd, struct dlList *list, struct dyString *dy, 
+	boolean sinceStart)
 /* Write out one job list. */
 {
 struct dlNode *el;
@@ -1071,7 +1234,7 @@ for (el = list->head; !dlEnd(el); el = el->next)
     else
 	machName = "none";
     dyStringClear(dy);
-    dyStringPrintf(dy, "%-4d %-10s %-10s ", job->id, machName, job->user->name);
+    dyStringPrintf(dy, "%-4d %-10s %-10s ", job->id, machName, job->batch->user->name);
     if (sinceStart)
         appendLocalTime(dy, job->startTime);
     else
@@ -1087,9 +1250,18 @@ void listJobs(int fd)
 {
 struct dyString *dy = newDyString(256);
 struct user *user;
+struct dlNode *bNode;
+struct batch *batch;
+
 oneJobList(fd, runningJobs, dy, TRUE);
 for (user = userList; user != NULL; user = user->next)
-    oneJobList(fd, user->jobQueue, dy, FALSE);
+    {
+    for (bNode = user->curBatches->head; !dlEnd(bNode); bNode = bNode->next)
+        {
+	batch = bNode->val;
+	oneJobList(fd, batch->jobQueue, dy, FALSE);
+	}
+    }
 netSendLongString(fd, "");
 freeDyString(&dy);
 }
@@ -1118,7 +1290,7 @@ for (node = list->head; !dlEnd(node); node = node->next)
         t = job->submitTime;
     dyStringClear(dy);
     dyStringPrintf(dy, "%s %d %s %s %lu %s", 
-        state, job->id, job->user->name, job->exe, t, machName);
+        state, job->id, job->batch->user->name, job->exe, t, machName);
     netSendLongString(fd, dy->string);
     }
 }
@@ -1128,9 +1300,17 @@ void pstat(int fd)
 {
 struct dyString *dy = newDyString(0);
 struct user *user;
+struct dlNode *bNode;
+struct batch *batch;
 onePstatList(fd, runningJobs, TRUE, dy);
 for (user = userList; user != NULL; user = user->next)
-    onePstatList(fd, user->jobQueue, FALSE, dy);
+    {
+    for (bNode = user->curBatches->head; !dlEnd(bNode); bNode = bNode->next)
+        {
+	batch = bNode->val;
+	onePstatList(fd, batch->jobQueue, FALSE, dy);
+	}
+    }
 netSendLongString(fd, "");
 freeDyString(&dy);
 }
@@ -1142,7 +1322,9 @@ struct user *user;
 int count = 0;
 
 for (user = userList; user != NULL; user = user->next)
-    count += dlCount(user->jobQueue);
+    {
+    count += userQueuedCount(user);
+    }
 return count;
 }
 
@@ -1154,9 +1336,20 @@ int count = 0;
 
 for (user = userList; user != NULL; user = user->next)
     {
-    if (user->runningCount > 0 || !dlEmpty(user->jobQueue))
+    if (userRunningCount(user) > 0 || !dlEmpty(user->curBatches))
         ++count;
     }
+return count;
+}
+
+int countActiveBatches()
+/* Return count of active batches */
+{
+int count = 0;
+struct user *user;
+
+for (user = userList; user != NULL; user = user->next)
+    count += dlCount(user->curBatches);
 return count;
 }
 
@@ -1184,6 +1377,10 @@ netSendLongString(fd, buf);
 sprintf(buf, "Spokes busy: %d", dlCount(busySpokes));
 netSendLongString(fd, buf);
 sprintf(buf, "Spokes dead: %d", dlCount(deadSpokes));
+netSendLongString(fd, buf);
+sprintf(buf, "Active batches: %d", countActiveBatches());
+netSendLongString(fd, buf);
+sprintf(buf, "Total batches: %d", slCount(batchList));
 netSendLongString(fd, buf);
 sprintf(buf, "Active users: %d", countActiveUsers());
 netSendLongString(fd, buf);
@@ -1371,6 +1568,8 @@ for (;;)
 	     listMachines(connectionHandle);
 	else if (sameWord(command, "listUsers"))
 	     listUsers(connectionHandle);
+	else if (sameWord(command, "listBatches"))
+	     listBatches(connectionHandle);
 	else if (sameWord(command, "status"))
 	     status(connectionHandle);
 	else if (sameWord(command, "pstat"))
