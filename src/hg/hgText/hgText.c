@@ -35,7 +35,7 @@
 #include "hgText.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.158 2004/10/12 00:52:07 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.159 2004/10/12 21:06:06 fanhsu Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -721,7 +721,7 @@ puts(
 );
 
 printf("To reset <B>all</B> user cart settings (including custom tracks), \n"
-       "<A HREF=\"../cgi-bin/cartReset?destination=%s\">click here</A>.\n",
+       "<A HREF=\"/cgi-bin/cartReset?destination=%s\">click here</A>.\n",
        hgTextName());
 
 printf("<FORM ACTION=\"%s\" METHOD=\"%s\" NAME=\"orgForm\">\n", hgTextName(),
