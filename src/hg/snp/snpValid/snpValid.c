@@ -476,6 +476,10 @@ for (cn = cns; cn != NULL; cn = cn->next)
 	    char *exactDna = checkAndFetchNib(chromSeq, snp, 0, 1);
 	    int i=0;
 	    boolean found = FALSE;
+	    if (sameString(snp->strand,"-"))
+		{
+		reverseComplement(exactDna,strlen(exactDna));
+		}
 	    chopString(obs, "/", obsvd, n);
 	    if (exactDna==NULL) 
 		{
