@@ -10,16 +10,16 @@ A = tracks.exe
 O = tracks.o 
 
 my: compile
-	mv $A /usr/local/apache/cgi-bin-$(USER)/$A
+	mv $A ${CGI_BIN}-$(USER)/$A
 
 mgsc: compile
-	mv $A /usr/local/apache/cgi-bin-mgsc/$A
+	mv $A ${CGI_BIN}-mgsc/$A
 
 alpha: compile
-	mv $A /usr/local/apache/cgi-bin/$A
+	mv $A ${CGI_BIN}/$A
 
 beta: compile
-	mv $A /usr/local/apache/cgi-bin-beta/$A
+	mv $A ${CGI_BIN}-beta/$A
 
 
 compile: $O 
@@ -29,8 +29,8 @@ compile: $O
 	chmod a+rx $A
 
 install:	compile
-	mkdir -p ${DESTDIR}/usr/local/apache/cgi-bin
-	mv $A ${DESTDIR}/usr/local/apache/cgi-bin/$A
+	mkdir -p ${DESTDIR}${CGI_BIN}
+	mv $A ${DESTDIR}${CGI_BIN}/$A
 
 debug: $O
 	${CC} $O $(MYLIBS) $(L) 
