@@ -67,7 +67,7 @@ struct slName *sqlListFields(struct sqlConnection *conn, char *table);
 /* Return list of fields in table. */
 
 struct hash *sqlAllFields();
-/* Get hash of all database.table.field on default host. */
+/* Get hash of all fields in database.table.field format.  */
 
 struct sqlConnCache *sqlNewConnCache(char *database);
 /* Return a new connection cache. (Useful if going to be

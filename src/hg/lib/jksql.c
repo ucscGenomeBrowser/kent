@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.69 2004/11/07 00:53:34 kent Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.70 2004/12/02 01:11:40 kent Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -299,39 +299,40 @@ slReverse(&list);
 return list;
 }
 
+static void addDatabaseFields(char *database, struct hash *hash)
+/* Add fields from the one database to hash. */
+{
+struct sqlConnection *conn = sqlConnect(database);
+struct slName *table, *tableList = sqlListTables(conn);
+struct sqlResult *sr;
+char query[256];
+char **row;
+char fullName[512];
+for (table = tableList; table != NULL; table = table->next)
+    {
+    safef(query, sizeof(query), "describe %s", table->name);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	safef(fullName, sizeof(fullName), "%s.%s.%s", 
+	    database, table->name, row[0]);
+	hashAdd(hash, fullName, NULL);
+	}
+    sqlFreeResult(&sr);
+    }
+slFreeList(&tableList);
+sqlDisconnect(&conn);
+}
+
 struct hash *sqlAllFields()
-/* Get hash of all database.table.field. */
+/* Get hash of all fields in database.table.field format.  */
 {
 struct hash *fullHash = hashNew(18);
 struct hash *dbHash = sqlHashOfDatabases();
 struct hashEl *dbList, *db;
-char fullName[512];
-int count = 0;
-
 dbList = hashElListHash(dbHash);
 for (db = dbList; db != NULL; db = db->next)
-    {
-    struct sqlConnection *conn = sqlConnect(db->name);
-    struct slName *table, *tableList = sqlListTables(conn);
-    struct sqlResult *sr;
-    char query[256];
-    char **row;
-    for (table = tableList; table != NULL; table = table->next)
-        {
-	safef(query, sizeof(query), "describe %s", table->name);
-	sr = sqlGetResult(conn, query);
-	while ((row = sqlNextRow(sr)) != NULL)
-	    {
-	    safef(fullName, sizeof(fullName), "%s.%s.%s", 
-	    	db->name, table->name, row[0]);
-	    hashAdd(fullHash, fullName, NULL);
-	    ++count;
-	    }
-	sqlFreeResult(&sr);
-	}
-    slFreeList(&tableList);
-    sqlDisconnect(&conn);
-    }
+    addDatabaseFields(db->name, fullHash);
 slFreeList(&dbList);
 hashFree(&dbHash);
 return fullHash;
