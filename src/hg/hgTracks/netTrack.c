@@ -11,7 +11,7 @@
 #include "chainNet.h"
 #include "chainNetDbLoad.h"
 
-static char const rcsid[] = "$Id: netTrack.c,v 1.7 2003/05/06 07:22:20 kate Exp $";
+static char const rcsid[] = "$Id: netTrack.c,v 1.8 2003/05/21 22:01:37 kent Exp $";
 
 struct netItem
 /* A net track item. */
@@ -87,9 +87,18 @@ static void rNetBox(struct cnFill *fill, int start, int end, int y, int level,
 	Color color, Color barbColor, int orientation)
 /* Draw a scaled box. */
 {
-int x1 = round((double)(start-winStart)*rScale) + rX;
-int x2 = round((double)(end-winStart)*rScale) + rX;
-int w = x2-x1;
+int x1,x2,w;
+
+/* Do clipping before scaling because scaling may cause
+ * integer overflow. */
+if (start < winStart) start = winStart;
+if (end > winEnd) end = winEnd;
+if (start >= end)
+    return;
+
+x1 = round((double)(start-winStart)*rScale) + rX;
+x2 = round((double)(end-winStart)*rScale) + rX;
+w = x2-x1;
 
 if (w < 1)
     w = 1;
@@ -116,9 +125,17 @@ static void rNetLine(struct cnFill *gap, int y, int level, Color color,
 {
 int start = gap->tStart;
 int end = start + gap->tSize;
-int x1 = round((double)(start-winStart)*rScale) + rX;
-int x2 = round((double)(end-winStart)*rScale) + rX;
-int w = x2-x1;
+int x1,x2,w;
+
+/* Do clipping before scaling because scaling may cause
+ * integer overflow. */
+if (start < winStart) start = winStart;
+if (end > winEnd) end = winEnd;
+if (start >= end)
+    return;
+x1 = round((double)(start-winStart)*rScale) + rX;
+x2 = round((double)(end-winStart)*rScale) + rX;
+w = x2-x1;
 
 if (w >= 1)
     {
