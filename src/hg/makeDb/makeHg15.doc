@@ -1943,49 +1943,57 @@ LOAD SNPS (Done.  Daryl Thomas; April 14, 2003)
 LOAD SNP DETAILS (TODO)
     Daryl will add this.
 
-LOAD ENSEMBL GENES (TODO)
+LOAD ENSEMBL GENES (IN PROGRESS 2003-07-03 kate)
      cd ~/hg15/bed
      mkdir ensembl
      cd ensembl
+     # Get the ensembl protein data from http://www.ensembl.org/Homo_sapiens/martview
+        # Follow this sequence through the pages:
+        # Page 1) Make sure that the Homo_sapiens choice is selected. Hit next.
+        # Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
+        # Page 3) Choose the "Structures" box. 
 
-        Get the ensembl gene data as below:
-        GET http://www.ebi.ac.uk/~stabenau/human_8_30.gtf.gz > ensGene.gz
-        (The above may only be a temproary location)
+        # Page 4) Choose GTF as the ouput
+        #  choose gzip compression and then hit export.
+        # Save as ensemblGene.gtf.gz
 
-        Get the ensembl protein data from http://www.ensembl.org/Homo_sapiens/martview
-        Follow this sequence through the pages:
-        Page 1) Make sure that the Homo_sapiens choice is selected. Hit next.
-        Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
-        Page 3) Choose the "Structures" box. 
-        Page 4) Choose Transcripts/Proteins and GTF as the ouput, choose gzip compression and then hit export.
+     gunzip ensemblGene.gtf.gz
 
-        gunzip the file and name to ensembl.gtf
+    # Ensembl handles random chromosomes differently than us, so we
+    # strip this data.  Fortunately it just loses a couple of genes.
+     grep -v ^6_DR51 ensemblGene.gtf | grep -v _NT_ > unrandom.gtf
 
+    # Add "chr" to front of each line in the gene data gtf file to make 
+    # it compatible with ldHgGene 
+    # Note: these scripts copied out of ~matt/bin  7/3/03 KRR
+     ../../jkStuff/ensemblAddChr.pl unrandom.gtf ensGene.gtf
+     # Not necessary for this build
+     #../../jkStuff/ensemblFixEns.pl ensGene.gtf ensFixed.gtf 
+     /cluster/bin/i386/ldHgGene hg15 ensGene ensGene.gtf
 
-# Ensembl handles random chromosomes differently than us, so we
-# strip this data.  Fortunately it just loses a couple of genes.
-     grep -v ^6_DR51 ensembl.gtf | grep -v _NT_ > unrandom.gtf
+    # Load Ensembl peptides:
+     # Get them from ensembl as above in the gene section except for
+     # Page 3) Choose the "Sequences" box. 
+     # Page 4) Transcripts/Proteins. 
+     # Save file as ensemblePep.fa.gz
 
-# Add "chr" to front of each line in the gene data gtf file to make 
-# it compatible with ldHgGene 
-     ~matt/bin/addchr.pl unrandom.gtf ensGene.gtf
-     ./fixEns.pl ensGene.gtf ensFixed.gtf 
-     ldHgGene hg15 ensGene ensGene.gtf
+     # Here is FTP access
+     wget ftp://ftp.ensembl.org/pub/human-15.33/data/fasta/pep/Homo_sapiens.NCBI33.pep.fa.gz
+     gunzip Homo_sapiens.NCBI33.pep.fa.gz
+     cp Homo_sapiens.NCBI33.pep.fa ensemblPep.fa
 
-o - Load Ensembl peptides:
-     Get them from ensembl as above in the gene section except for
-     Page 3) Choose the "Sequences" box. 
-     Page 4) Choose GTF as the ouput, choose gzip compression and then hit export.
+     # munge fasta header to be >ENST<number>
+     sed 's/Translation:ENSP/ENST/g' < ensemblPep.fa > ensemblPep.fixed.fa
 
-     Substitute ENST for ENSP in ensPep with the program called subs
-     edit subs.in to read: ENSP|ENST
-     subs -e ensPep.fa > /dev/null
+     ../../jkStuff/ensemblFixPep.pl ensemblPep.fa ensembl.pep
+        # Processing ensemblPep.fa into ensembl.pep
+        # 294245 total lines read
+        # 32035 comment lines processed
 
-     Run fixPep.pl ensPep.fa ensembl.pep
      hgPepPred hg15 generic ensPep ensembl.pep
+     # NOTE: this stuff looks problematic
 
-
-    LOAD SANGER 22 Pseudogenes 
+    # LOAD SANGER 22 Pseudogenes  (TODO)
     cd ~/hg15/bed/sanger22
     cp ~/hg10/bed/sanger22/cChr22.3.lx.pseudogene.gff .
     replace ^chr22 with hg10:chr22 in Chr22.3.lx.pseudogene.gff
@@ -2548,6 +2556,87 @@ o - [hgwdev:hg15> cd /cluster/store1/sugnet/hg15/build33
     cd /cluster/store5/gs.16/build33/bed/blastz.rn2.2003-05-06/pslTight
     hgLoadPsl hg15 chr*_blastzTightRn2.psl
 
+
+# RUNNING RN3 BLASTZ  (IN PROGRESS 2003-07-09 kate)
+
+    ssh eieio
+    cd /cluster/data/hg15/bed/blastz.rn3
+    cat << '_EOF_' > DEF
+# human vs. rat
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET
+SEQ1_DIR=/iscratch/i/gs.16/build33/chromTrfMixedNib/
+SEQ1_RMSK=/iscratch/i/gs.16/build33/rmsk/
+SEQ1_SMSK=/iscratch/i/gs.16/build33/linSpecRep/
+SEQ1_FLAG=-primate
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY
+SEQ2_DIR=/cluster/bluearc/rat/rn3/softNib/
+# not currently used
+SEQ2_RMSK=/cluster/bluearc/rat/rn3/rmsk/
+SEQ2_SMSK=/cluster/bluearc/rat/rn3/linSpecRep/
+SEQ2_FLAG=-rodent
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/store5/gs.16/build33/bed/blastz.rn3
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+                                                
+    # save the DEF file in the current standard place
+    chmod +x DEF
+    cp DEF ~angie/hummus/DEF.hg15-rn3.2003-07-09
+
+    ssh kk
+    cd ~/hg15/bed/blastz.rn3
+    
+    # source the DEF file
+    bash
+    . ./DEF
+
+    # follow the next set of directions slavishly
+    mkdir -p $BASE/run
+    # give up on avoiding angie's directories
+    # tcl script
+    # creates xdir.sh and joblist run/j
+    ~angie/hummus/make-joblist $DEF > $BASE/run/j
+    
+    # xdir.sh makes a bunch of result directories in $BASE/raw/
+    # based on chrom name and CHUNK size
+    sh $BASE/xdir.sh
+    cd $BASE/run
+    
+    # now edit j to prefix path to executable name
+    # NOTE: we should have a controlled version of schwartz bin executables
+    sed -e 's#^#/cluster/home/angie/schwartzbin/#' j > j2
+    wc -l j*
+    head j2
+
+    # make sure the j2 edits are OK, then use it:
+    mv j2 j
+
+    # para create will create the file: 'batch' for the cluster run
+    para create j
+        # 1400 jobs written to batch
+    para try
+    para check
+    para push
+    # ... etc ...
 # XXX END OF RAT BLASTZ
 
 # BEGINNING OF HUMAN BLASTZ
