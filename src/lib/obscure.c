@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.23 2003/10/20 21:47:38 braney Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.24 2003/10/21 17:15:57 angie Exp $";
 
 long incCounterFile(char *fileName)
 /* Increment a 32 bit value on disk. */
@@ -456,18 +456,20 @@ if (count > 1)
 static void commaNumberStr(char **number, char **out)
 /* add commas to a char * pointing at digits */
 {
-    int count;
-    char *iptr;
+int count;
+char *iptr;
 
-    for(iptr = *number; isdigit(*iptr); iptr++)
-	;
-    count = iptr - *number;
-    while(count--)
-	{
-	*(*out)++ = *(*number)++;
-	if (count && (count % 3) == 0)
-	    *(*out)++ = ',';
-	}
+if (*number == NULL)
+    return;
+for(iptr = *number; isdigit(*iptr); iptr++)
+    ;
+count = iptr - *number;
+while(count--)
+    {
+    *(*out)++ = *(*number)++;
+    if (count && (count % 3) == 0)
+	*(*out)++ = ',';
+    }
 }
 
 char *addCommasToPos(char *position)
@@ -475,16 +477,18 @@ char *addCommasToPos(char *position)
  * returns pointer to static */
 {
 static    char buffer[1000];
-    char *optr = buffer;
+char *optr = buffer;
 
-    while((*optr++ = *position++) != ':')
-	;
-    commaNumberStr(&position, &optr);
-    position++; /*  - */
-    *optr++ = '-';
-    commaNumberStr(&position, &optr);
+if (position == NULL)
+    return NULL;
+while((*optr++ = *position++) != ':')
+    ;
+commaNumberStr(&position, &optr);
+position++; /*  - */
+*optr++ = '-';
+commaNumberStr(&position, &optr);
 
-    return buffer;
+return buffer;
 }
 
 char *stripCommas(char *position)
@@ -493,6 +497,8 @@ char *stripCommas(char *position)
 char *newPos = cloneString(position);
 char *nPtr = newPos;
 
+if (position == NULL)
+    return NULL;
 while(*nPtr = *position++) 
     if (*nPtr != ',')
 	nPtr++;
