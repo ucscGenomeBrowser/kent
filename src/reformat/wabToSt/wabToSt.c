@@ -113,6 +113,8 @@ for (i=0; i<inCount; ++i)
 	    ++s;
 	else
 	    s = parts[0];
+	if (sameString(s, "MTCE"))
+	    s = "m";
 	tolowers(s);
 	fprintf(out, "%s:%s-%s ", s, parts[1], parts[2]);
 
