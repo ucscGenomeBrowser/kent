@@ -545,6 +545,7 @@ struct joinerTable *table;
 int count = 0;
 char *word;
 AllocVar(dep);
+dep->lineIx = lf->lineIx;
 word = nextWord(&line);
 if (word == NULL)
     dependencySyntaxErr(lf);
@@ -852,6 +853,7 @@ for (js = joiner->jsList; js != NULL; js = js->next)
 	    {
 	    struct joinerDependency *dep;
 	    AllocVar(dep);
+	    dep->lineIx = jf->lineIx;
 	    dep->table = tableFromField(jf);
 	    dep->dependsOnList = tableFromField(primary);
 	    slAddHead(&joiner->dependencyList, dep);

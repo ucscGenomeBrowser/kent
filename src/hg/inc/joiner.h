@@ -64,7 +64,8 @@ struct joinerDependency
     {
     struct joinerDependency *next;	/* Next in list. */
     struct joinerTable *table;		/* A table. */
-    struct joinerTable *dependsOnList;	/* LIst of tables it depends on. */
+    struct joinerTable *dependsOnList;	/* List of tables it depends on. */
+    int lineIx;				/* Line of dependency. */
     };
 
 struct joinerIgnore
