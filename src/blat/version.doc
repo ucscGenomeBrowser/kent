@@ -1,3 +1,8 @@
+22:
+     Fixed bug in jiggle-small exons that had reverse strand
+     consensus as ca/ct rather than ac/ct.  Thanks to Par
+     Engstrom for finding this.
+
 21:
      Added -fine parameter.  This will result in improved alignments
      for high quality mRNA sequences.  When -fine is used a banded
