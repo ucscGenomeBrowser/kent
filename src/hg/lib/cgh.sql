@@ -15,8 +15,7 @@ CREATE TABLE cgh (
     clone varchar(255) not null,	# Name of clone
     spot int unsigned not null,	# Spot number on array
               #Indices
-    INDEX(chrom)
-    INDEX(chromStart)
+    INDEX(chrom,chromStart)
     INDEX(type)
     INDEX(tissue)
 );

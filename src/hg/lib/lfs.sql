@@ -19,6 +19,5 @@ CREATE TABLE lfs (
     lfNames longblob not null,	# Comma separated list of names of linked features
               #Indices
     INDEX(bin)
-    INDEX(chrom)
-    INDEX(chromStart)
+    INDEX(chrom,chromStart)
 );
