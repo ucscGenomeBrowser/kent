@@ -5,6 +5,11 @@
 #ifndef GENEPRED_H
 #define GENEPRED_H
 
+#ifndef GFF_H
+#include "gff.h"
+#endif
+
+
 struct genePred
 /* A gene prediction. */
     {
