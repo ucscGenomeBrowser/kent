@@ -2752,14 +2752,12 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     # 41 jobs
     para try
     para push # ... etc ...
-XXXX WORKING 2003-09-05
-# Completed: 41 of 42 jobs
-# Crashed: 1 jobs
-# CPU time in finished jobs:      39851s     664.19m    11.07h    0.46d  0.001 y
-# IO & Wait Time:                 25735s     428.91m     7.15h    0.30d  0.001 y
-# Average job time:                1600s      26.66m     0.44h    0.02d
-# Longest job:                     7146s     119.10m     1.99h    0.08d
-# Submission to last job:          7146s     119.10m     1.99h    0.08d
+# Completed: 41 of 41 jobs
+# CPU time in finished jobs:      27107s     451.78m     7.53h    0.31d  0.001 y
+# IO & Wait Time:                 16236s     270.60m     4.51h    0.19d  0.001 y
+# Average job time:                1057s      17.62m     0.29h    0.01d
+# Longest job:                     4989s      83.15m     1.39h    0.06d
+# Submission to last job:        240988s    4016.47m    66.94h    2.79d
 
     #  The chr19 recovery process:
     ssh kk
@@ -2778,6 +2776,7 @@ doChainQ.sh $(path2) $(path1) {check out line+ chain/$(root1).$(path2).chain} {c
 	/cluster/store4/gs.17/build34/nib $3 > $4
 '_EOF_'
     chmod +x doChainQ.sh
+    #  This is a mistake, this should have been chr19.axt only
   ls -1S /cluster/bluearc/hg16/bed/blastzSelf/axtChromDropped/*.axt > input.lst
     pushd /cluster/data/hg16
     ls -d ?{,?} | sed -e "s/^/chr/" | grep -v chr19 \
@@ -2791,6 +2790,18 @@ doChainQ.sh $(path2) $(path1) {check out line+ chain/$(root1).$(path2).chain} {c
     para check
     para push
     ... etc ...
+Completed: 948 of 1050 jobs
+Crashed: 102 jobs
+CPU time in finished jobs:      45918s     765.30m    12.75h    0.53d  0.001 y
+IO & Wait Time:               1700328s   28338.80m   472.31h   19.68d  0.054 y
+Average job time:                1842s      30.70m     0.51h    0.02d
+Longest job:                    13247s     220.78m     3.68h    0.15d
+Submission to last job:         13268s     221.13m     3.69h    0.15d
+    # the "crashed 102" jobs are empty chains.
+    # This mistakenly did them all, the input.lst should have been
+    #	chr19 only.
+# So, copy the chr19 results to the ../run1/chain result location
+cp -p chain/chr19*.chain ../run1/chain
 
     # now on the cluster server, sort chains
     ssh eieio
@@ -2812,7 +2823,7 @@ doChainQ.sh $(path2) $(path1) {check out line+ chain/$(root1).$(path2).chain} {c
     end
 
 
-# NET SELF BLASTZ (DONE - 2003-08-27 - Hiram)
+# NET SELF BLASTZ (RE-DONE 2003-09-08 - DONE - 2003-08-27 - Hiram)
 
     ssh eieio
     cd /cluster/data/hg16/bed/blastzSelf/axtChain
@@ -2836,13 +2847,14 @@ doChainQ.sh $(path2) $(path1) {check out line+ chain/$(root1).$(path2).chain} {c
       /cluster/bin/i386/chainNet $i -minSpace=10 \
 			/cluster/data/hg16/chrom.sizes \
                         /cluster/data/hg16/chrom.sizes ../n1/$n /dev/null
-			end
+    end
     #  The above takes about 5 minutes
 
     cd ..
     cat n1/*.net | /cluster/bin/i386/netSyntenic stdin hNoClass.net
-    # memory usage 531062784, utime 4416 s/100, stime 542
+    #	memory usage 200167424, utime 2489 s/100, stime 161
 
+XXXX WORKING 2003-09-05
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastzSelf/axtChain
     ~/bin/i386/netClass hNoClass.net hg16 hg16 human.net \
