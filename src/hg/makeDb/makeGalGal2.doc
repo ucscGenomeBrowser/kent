@@ -3125,3 +3125,17 @@ chainSome $(path1)
     hgsql galGal2 -e "SELECT COUNT(*) FROM contigAcc"
         # 111864
 
+# Pick up photo from NHGRI (DONE - 2004-12-22 - Hiram)
+    ssh hgwdev
+    cd /tmp
+    wget \
+	'http://www.genome.gov/Pages/News/Photos/Science/redfowl_image.jpg'
+	-O redfowl_image.jpg
+    #	view that image in 'display' to determine crop edges, then:
+    convert -crop 600x488+80+32 -quality 80 -sharpen 0 \
+	-normalize redfowl_image.jpg ggg.jpg
+    convert -geometry 300x200 -quality 80 ggg.jpg Gallus_gallus.jpg
+
+    rm -f ggg.jpg redfowl_image.jpg
+    cp -p Gallus_gallus.jpg /usr/local/apache/htdocs/images
+    #	add links to this image in the description.html page, request push

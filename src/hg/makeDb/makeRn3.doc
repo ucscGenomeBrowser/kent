@@ -4899,3 +4899,17 @@ mkdir -p $3:h
     
     gzip *.gff *TCs
 
+
+# Pick up photo from NHGRI (DONE - 2004-12-22 - Hiram)
+    ssh hgwdev
+    cd /tmp
+    wget \
+	'http://www.genome.gov/Pages/News/Photos/Science/rat_image.jpg'
+	-O rat_image.jpg
+    #	view that image in 'display' to determine crop edges, then:
+    convert -crop 1536x1040+0+560 -quality 80 -sharpen 0 \
+	-normalize -gamma 1.7 rat_image.jpg rrn.jpg
+    convert -geometry 300x300 -quality 80 rrn.jpg Rattus_norvegicus.jpg
+    rm -f rrn.jpg rat_image.jpg
+    cp -p Rattus_norvegicus.jpg /usr/local/apache/htdocs/images
+    #	add links to this image in the description.html page, request push
