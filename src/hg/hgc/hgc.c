@@ -6496,6 +6496,18 @@ if (sameString("bacEndPairs", track))
     lfLabel = "BAC ends";
     table = track;
     }
+if (sameString("bacEndPairsBad", track)) 
+    {
+    sprintf(title, "Location of %s using BAC end sequences", clone);
+    lfLabel = "BAC ends";
+    table = track;
+    }
+if (sameString("bacEndPairsLong", track)) 
+    {
+    sprintf(title, "Location of %s using BAC end sequences", clone);
+    lfLabel = "BAC ends";
+    table = track;
+    }
 if (sameString("fosEndPairs", track)) 
     {
     sprintf(title, "Location of %s using fosmid end sequences", clone);
@@ -9514,7 +9526,7 @@ else if (sameWord(track, "tigrGeneIndex"))
    {
      doMgcMrna(track, item);
    }
- else if (sameWord(track, "bacEndPairs"))
+ else if ((sameWord(track, "bacEndPairs")) || (sameWord(track, "bacEndPairsBad")) || (sameWord(track, "bacEndPairsLong")))
    {
      doLinkedFeaturesSeries(track, item, tdb);
    }

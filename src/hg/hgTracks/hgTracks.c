@@ -2579,6 +2579,34 @@ tg->loadItems = loadBacEndPairs;
 }
 
 
+void loadBacEndPairsBad(struct trackGroup *tg)
+/* Load up fosmid end pairs from table into trackGroup items. */
+{
+tg->items = lfsFromBedsInRange("bacEndPairsBad", winStart, winEnd, chromName);
+}
+
+
+void bacEndPairsBadMethods(struct trackGroup *tg)
+/* Fill in track group methods for linked features.series */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->loadItems = loadBacEndPairsBad;
+}
+
+void loadBacEndPairsLong(struct trackGroup *tg)
+/* Load up BAC end pairs from table into trackGroup items. */
+{
+tg->items = lfsFromBedsInRange("bacEndPairsLong", winStart, winEnd, chromName);
+}
+
+
+void bacEndPairsLongMethods(struct trackGroup *tg)
+/* Fill in track group methods for linked features.series */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->loadItems = loadBacEndPairsLong;
+}
+
 void loadFosEndPairs(struct trackGroup *tg)
 /* Load up fosmid end pairs from table into trackGroup items. */
 {
@@ -10388,6 +10416,8 @@ withRuler = sameWord(s, "on");
 /* Register tracks that include some non-standard methods. */
 registerTrackHandler("cytoBand", cytoBandMethods);
 registerTrackHandler("bacEndPairs", bacEndPairsMethods);
+registerTrackHandler("bacEndPairsBad", bacEndPairsBadMethods);
+registerTrackHandler("bacEndPairsLong", bacEndPairsLongMethods);
 registerTrackHandler("fosEndPairs", fosEndPairsMethods);
 registerTrackHandler("fosEndPairsBad", fosEndPairsBadMethods);
 registerTrackHandler("fosEndPairsLong", fosEndPairsLongMethods);
