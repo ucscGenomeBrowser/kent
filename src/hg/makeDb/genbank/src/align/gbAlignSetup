@@ -47,7 +47,7 @@
 #    the failed jobs is the way to recover.
 #  - create a list of all expected PSL files.
 #
-# $Id: gbAlignSetup,v 1.9.28.3 2004/10/12 06:36:27 markd Exp $
+# $Id: gbAlignSetup,v 1.9.28.4 2004/10/13 14:31:09 markd Exp $
 #
 use strict;
 use warnings;
@@ -91,35 +91,34 @@ sub getNibChrom($) {
     return $chrom;
 }
 
+# get the size of a chromosome from a nib
+sub getNibSize($) {
+    my($nibFile) = @_;
+    my $nibSizeOut = callProg("nibSize $nibFile", 1);
+    chomp($nibSizeOut);
+    my @nibSizeInfo = split(/\t/, $nibSizeOut);
+    return $nibSizeInfo[2];
+}
+
 # determine if a file is a 2bit file.
 sub isTwoBitFile($) {
     my($genomeFile) = @_;
     return ($genomeFile =~ /\.2bit$/);
 }
 
-# get chroms in a twobit file
-sub getTwoBitChroms($) {
+# get chroms and size in a twobit file.  This is does in one
+# pass because there can be a lot of scaffolds in a twobit
+# These are return in pairs because perl is such a pain.
+sub getTwoBitChromsSizes($) {
     my($genomeFile) = @_;
-    my @chroms;
+    my @chromsSizes;
     my $twoBitOut = callProg("twoBitInfo $genomeFile stdout");
     foreach my $line (split(/\n/, $twoBitOut)) {
         my @row = split(/\t/, $line);
-        push(@chroms, $row[0]);
+        push(@chromsSizes, $row[0]);
+        push(@chromsSizes, $row[1]);
     }
-    return @chroms;
-}
-
-
-# get the chroms defined in a nib or 2bit file
-sub getFileChroms($) {
-    my($genomeFile) = @_;
-    my @chroms;
-    if (isNibFile($genomeFile)) {
-        push(@chroms, getNibChrom($genomeFile));
-    } else {
-        push(@chroms, getTwoBitChroms($genomeFile));
-    }
-    return @chroms;
+    return @chromsSizes;
 }
 
 # split unaligned string into it's component names
@@ -243,10 +242,54 @@ sub extractMRnaFastas($) {
     return ($numAlign, @mrnaFas);
 }
 
+# parse NIB subrange file references for getOutPslPath
+sub parseNibSubrangePath($) {
+    my($nibBase) = @_;
+
+    # build33/chromTrfMixedNib/chr1.nib:50000-217280
+    #   dir1 is chrom
+    #   dir2 is first digit of start
+    #   base is chr:start-end
+    my($chrom, $range) = ($nibBase =~ /^(.+)\.nib:(.+)$/);
+
+    return ($chrom, substr($range, 0, 1), $chrom . ":" . $range);
+}
+
+# parse twobit subrange file references for getOutPslPath
+sub parseTwoBitSubrangePath($) {
+    my($twoBitBase) = @_;
+
+    # build33/hg15.2bit:chr1:50000-217280
+    #   dir1 is chrom
+    #   dir2 is first digit of start
+    #   base is chr:start-end
+    my($chrom, $range) = ($twoBitBase =~ /^.+.2bit:(.+):(.+)$/);
+
+    return ($chrom, substr($range, 0, 1), $chrom . ":" . $range);
+}
+
+# parse a fasta or full nib file path for getOutPslPath
+sub parseFullFilePath($) {
+    my($filePath) = @_;
+    my($dir1, $dir2);
+
+    my $fileBase = basename($filePath, ("\.fa\.trf", "\.fa", "\.nib", "\.2bit"));
+    if ($dir1 =~ /.+_.+/) {
+        # form dirs from name part
+        ($dir1, $dir2) = split(/_/, $dir1);
+    } else {
+        # use first and last char
+        $dir1 = substr($fileBase, 0, 1);
+        $dir2 = substr($fileBase, -1, 1);
+    }
+    return ($dir1, $dir2, $fileBase);
+}
+
 # Create the path to the PSL (or other) output file.  This will output the
 # files into subdirectories of a directory psl.  A multi-level tree is created
 # to avoid too many files in a single directory, which drives NFS nuts.
-# care muyst also be take to generate unique names.
+# care is also be take to generate unique names (which is sanity checked
+# later).
 #
 # An alignment of .../mrna.0.fa and  .../NT_035745.fa.trf will end up in:
 #
@@ -266,33 +309,18 @@ sub extractMRnaFastas($) {
 sub getOutPslPath($$$) {
     my($genomeFile, $rnaFa, $pslBaseDir) = @_;
     my $rnaBase = basename($rnaFa, "\.fa");
+    my $genomeBase = basename($genomeFile);
 
-    my($genomeBase, $dir1, $dir2);
-    if ($genomeFile =~ /\/[^\/]+\.(nib|2bit):.+-.+$/) {
-        # nib/2bit subrange
-        $genomeBase = basename($genomeFile);
-        $dir1 = $genomeBase;
-        $dir2 = $genomeBase;
-        # dir1 is chrom
-        $dir1 =~ s/\.(nib|2bit).+$//;
-        # dir2 is first digit of start
-        $dir2 =~ s/^.+://;
-        $dir2 = substr($dir2, 0, 1);
-        # base is chr:start-end
-        $genomeBase =~ s/\.(nib|2bit):/:/;
+    my($dir1, $dir2, $base);
+
+    if ($genomeBase =~ /^.+\.nib:.+$/) {
+        ($dir1, $dir2, $base) = parseNibSubrangePath($genomeBase);
+    } elsif ($genomeBase =~ /^.+\.2bit:.+$/) {
+        ($dir1, $dir2, $base) = parseTwoBitSubrangePath($genomeBase);
     } else {
-        # fasta, full nib, or full 2bit
-        $genomeBase = basename($genomeFile, ("\.fa\.trf", "\.fa", "\.nib", "\.2bit"));
-        if ($dir1 =~ /.+_.+/) {
-            # form dirs from name part
-            my($dir1, $dir2) = split(/_/, $dir1);
-        } else {
-            # use first and last char
-            $dir1 = substr($genomeBase, 0, 1);
-            $dir2 = substr($genomeBase, -1, 1);
-        }
+        ($dir1, $dir2, $base) = parseFullFilePath($genomeFile);
     }
-    return "$pslBaseDir/$rnaBase/$dir1/$dir2/$genomeBase.psl";
+    return "$pslBaseDir/$rnaBase/$dir1/$dir2/$base.psl";
 }
 
 # load a lift file into a list of hash-refs
@@ -347,26 +375,6 @@ sub getChromLifts($@) {
     return @chromLifts;
 }
 
-# get the size of a chromosome from a genome file
-sub getChromSize($$) {
-    my($chrom, $genomeFile) = @_;
-    my $chromSize;
-    if ($genomeFile =~ /\.nib$/) {
-        my $nibSizeOut = callProg("nibSize $genomeFile", 1);
-        chomp($nibSizeOut);
-        my @nibSizeInfo = split(/\t/, $nibSizeOut);
-        $chromSize = $nibSizeInfo[2];
-    } elsif ($genomeFile =~ /\.2bit$/) {
-        my $twoBitOut = callProg("twoBitInfo $genomeFile:$chrom stdout");
-        chomp($twoBitOut);
-        my @twoBitInfo = split(/\t/, $twoBitOut);
-        $chromSize = $twoBitInfo[1];
-    } else {
-        gbError("don't know how to get chrom size from: $genomeFile");
-    }
-    return $chromSize;
-}
-
 # Partition part or all of a genome file into overlaping (or non-overlapping)
 # ranges.  This maybe called on an entire chromosome on an ungapped range.
 sub partitionRange($$$$$$$) {
@@ -404,9 +412,8 @@ sub partitionRange($$$$$$$) {
 }
 
 # Partition a genome file and chromosome using lifts to skip gaps.
-sub partitionWithLift($$$@) {
-    my($db, $genomeFile, $chrom, @lifts) = @_;
-    my $chromSize = getChromSize($chrom, $genomeFile);
+sub partitionWithLift($$$$@) {
+    my($db, $genomeFile, $chrom, $chromSize, @lifts) = @_;
     my $winSize = getDbConf($db, "align.window");
     if ($winSize <= 0) {
         $winSize = $chromSize;
@@ -425,26 +432,67 @@ sub partitionWithLift($$$@) {
 
 
 # Partition a genome file by windows across a whole chromosome
-sub partitionByWindows($$$) {
-    my($db, $genomeFile, $chrom) = @_;
-    my $chromSize = getChromSize($chrom, $genomeFile);
+sub partitionByWindows($$$$) {
+    my($db, $genomeFile, $chrom, $chromSize) = @_;
     my $winSize = getDbConf($db, "align.window");
-    if ($winSize > 0) {
-        die("align.window not debugged, must be zero");
-    }
     if ($winSize <= 0) {
         $winSize = $chromSize;
     }
     my $winOverlap = getDbConf($db, "align.overlap");
-    if ($winOverlap != 0) {
-        die("align.overlap not debugged, must be zero");
-    }
-
     return partitionRange($db, $genomeFile, $chrom, 0, $chromSize,
                           $winSize, $winOverlap);
 }
 
-# is this a file format that can use a sub
+# partition a nib file into a list of fileSepces
+sub partitionNibFile($$@) {
+    my($db, $nibFile, @lifts) = @_;
+    my @fileSpecs;
+    foreach my $chrom (getNibChrom($nibFile)) {
+        if ($#lifts >= 0) {
+            push(@fileSpecs,
+                 partitionWithLift($db, $nibFile, $chrom, getNibSize($nibFile), @lifts));
+        } else {
+            push(@fileSpecs,
+                 partitionByWindows($db, $nibFile, $chrom, getNibSize($nibFile)));
+        }
+    }
+    return @fileSpecs;
+}
+
+# partition a 2bit file into a list of fileSepces
+sub partitionTwoBitFile($$@) {
+    my($db, $twoBitFile, @lifts) = @_;
+    my @fileSpecs;
+    # gets a list of pairs
+    my @chromsSizes = getTwoBitChromsSizes($twoBitFile);
+    for (my $i = 0; $i <= $#chromsSizes; $i += 2) {
+        my $chrom = $chromsSizes[$i];
+        my $chromSize = $chromsSizes[$i+1];
+        if ($#lifts >= 0) {
+            push(@fileSpecs,
+                 partitionWithLift($db, $twoBitFile, $chrom, $chromSize, @lifts));
+        } else {
+            push(@fileSpecs,
+                 partitionByWindows($db, $twoBitFile, $chrom, $chromSize));
+        }
+    }
+    return @fileSpecs;
+}
+
+# partition a single genome file into a list of fileSepces
+sub partitionGenomeFile($$@) {
+    my($db, $genomeFile, @lifts) = @_;
+    my @fileSpecs;
+    # partition if we have a file format that supprot subrange spec.
+    if (isNibFile($genomeFile)) {
+        push(@fileSpecs, partitionNibFile($db, $genomeFile, @lifts));
+    } elsif (isTwoBitFile($genomeFile)) {
+        push(@fileSpecs, partitionTwoBitFile($db, $genomeFile, @lifts));
+    } else {
+        push(@fileSpecs, $genomeFile);
+    }
+    return @fileSpecs;
+}
 
 # Generate the list of genome target files.  For fasta files, this is a
 # simple glob, for nib files, we use the lift file to generate subsequence
@@ -466,20 +514,7 @@ sub getGenomeFileSpecs($) {
     # genrate specs, validating that none are generated twice.
     my @fileSpecs;
     foreach my $genomeFile (@gfiles) {
-        # partition if we have a file format that supprot subrange spec.
-        if (isNibFile($genomeFile) || isTwoBitFile($genomeFile)) {
-            foreach my $chrom (getFileChroms($genomeFile)) {
-                if ($#lifts >= 0) {
-                    push(@fileSpecs,
-                         partitionWithLift($db, $genomeFile, $chrom, @lifts));
-                } else {
-                    push(@fileSpecs,
-                         partitionByWindows($db, $genomeFile, $chrom));
-                }
-            }
-        } else {
-            push(@fileSpecs, $genomeFile);
-        }
+        push(@fileSpecs, partitionGenomeFile($db, $genomeFile, @lifts));
     }
     return @fileSpecs;
 }
@@ -619,6 +654,16 @@ if ($#srcDbs < 0) {
 }
 if ($#types < 0) {
     @types = ("mrna", "est");
+}
+
+# for now, make sure windows are not in use.
+for my $db (@databases) {
+    if (getDbConf($db, "align.window") > 0) {
+        die("align.window not debugged, must be zero");
+    }
+    if (getDbConf($db, "align.overlap") > 0) {
+        die("align.overlap not debugged, must be zero");
+    }
 }
 
 # Get last releases, allow one to be missing for testing

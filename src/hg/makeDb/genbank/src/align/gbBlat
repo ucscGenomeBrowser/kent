@@ -29,7 +29,7 @@
 # is still produced.  This script is very careful to exit non-zero if an error
 # occurs.
 #
-# $Id: gbBlat,v 1.23.2.2 2004/07/19 07:14:53 markd Exp $
+# $Id: gbBlat,v 1.23.2.3 2004/10/13 14:31:09 markd Exp $
 #
 set -e
 
@@ -203,32 +203,45 @@ else
 fi
 
 # If we have a subsequence`chrom spec, lift the results back to the full chrom
+isNib=no
+isTwoBit=no
+liftFile=""
 case "$genomeFile" in
     */*.nib:*-*)
-        liftFile="$tmpDir/chr.lift"
-        # parse the nib spec into various components and get size
-        #    /scratch/hg/gs.18/build35/bothMaskedNibs/chr22.nib:1000000-2000000
-        nibDir=`dirname $genomeFile`
-        nibBase=`basename $genomeFile`
-
-        set -- `echo $nibBase | gawk '
-                {match($0, "^(.+)\\\..+:([0-9]+)-([0-9]+)$", a);
-                 print a[1],a[2],a[3]}'`
-        nibChr=$1
-        nibStart=$2
-        nibEnd=$3
-        nibFile=$nibDir/$nibChr.nib
-        nibSize=`nibSize ${nibFile} | cut -f 3`
-        nibSubName="${nibChr}:${nibStart}-${nibEnd}"
-        nibSubSize=`expr ${nibEnd} - ${nibStart}`
-        # make lift file:
-        #  offset oldName oldSize newName newSize
-        echo "${nibStart}	${nibSubName}	${nibSubSize}	${nibChr}	${nibSize}" >$liftFile
+        isNib=yes
         ;;
-    *)
-        liftFile=""
+    */*.2bit:*-*)
+        isTwoBit=yes
         ;;
 esac
+
+if [ $isNib = "yes" -o $isTwoBit = "yes" ] ; then
+    liftFile="$tmpDir/chr.lift"
+    # parse the nib/2bit spec into various components and get size
+    #    /scratch/hg/gs.18/build35/bothMaskedNibs/chr22.nib:1000000-2000000
+    #    /scratch/hg/gs.18/build35/hg16.2bit:chr22:1000000-2000000
+    dir=`dirname $genomeFile`
+    base=`basename $genomeFile`
+
+    # parse into chr start end
+    if [ $isNib = "yes" ] ; then
+        nibFile=$dir/`echo $base | sed -e 's/:.*//'`
+        chrSize=`nibSize ${nibFile} | cut -f 3`
+        set -- `echo $base | sed -e 's/\.nib//' -e 's/[-.:]/ /g'`
+    else
+        chrSize=`twoBitInfo ${genomeFile} stdout | cut -f 2`
+        set -- `echo $base | sed -e 's/^[^:]*://' -e 's/[-.:]/ /g'`
+    fi
+    chr=$1
+    start=$2
+    end=$3
+    subName="${chr}:${start}-${end}"
+    subSize=`expr ${end} - ${start}`
+
+    # make lift file:
+    #  offset oldName oldSize newName newSize
+    echo "${start}	${subName}	${subSize}	${chr}	${chrSize}" >$liftFile
+fi
 
 # function to install a result file, if liftFile is defined, it is lifted,
 # otherwise copied
