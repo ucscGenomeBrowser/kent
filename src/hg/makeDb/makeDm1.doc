@@ -2487,7 +2487,7 @@ root=`basename $file .ss`
 chrom=`echo $root | awk -F\. '{print $1}'`
 
 mkdir -p $TMP
-$PHAST/phastCons $file rev-dg.mod --rates-cut 2 --nrates 10 --suppress-missing --cut-params 0.030,0.015 --quiet > ${TMP}/$root.pp
+$PHAST/phastCons $file rev-dg.mod --cut-at 2 --nrates 10 --suppress-missing --transitions 0.030,0.015 --quiet > ${TMP}/$root.pp
 mkdir -p POSTPROBS/$chrom
 gzip -c $TMP/$root.pp > POSTPROBS/$chrom/$root.pp.gz
 rm $TMP/$root.pp
@@ -2569,7 +2569,7 @@ root=`basename $file .ss`
 chrom=`echo $root | awk -F\. '{print $1}'`
 
 mkdir -p PREDICTIONS/$chrom
-$PHAST/phastCons $file rev-dg.mod --rates-cut 1 --nrates 10 --viterbi PREDICTIONS/$chrom/$root.bed --score --no-post-probs --cut-params 0.030,0.015 --quiet --seqname $chrom
+$PHAST/phastCons $file rev-dg.mod --nrates 10 --viterbi PREDICTIONS/$chrom/$root.bed --score --no-post-probs --transitions 0.030,0.015 --quiet --seqname $chrom
 '_EOF_'
     # << this line makes emacs coloring happy
     chmod 775 doViterbi
@@ -2709,7 +2709,7 @@ root=`basename $file .ss`
 chrom=`echo $root | awk -F\. '{print $1}'`
 
 mkdir -p $TMP
-$PHAST/phastCons $file rev-dg.mod --rates-cut 2 --nrates 10 --suppress-missing --cut-params 0.030,0.015 --quiet > ${TMP}/$root.pp
+$PHAST/phastCons $file rev-dg.mod --cut-at 2 --nrates 10 --suppress-missing --transitions 0.030,0.015 --quiet > ${TMP}/$root.pp
 mkdir -p POSTPROBS/$chrom
 gzip -c $TMP/$root.pp > POSTPROBS/$chrom/$root.pp.gz
 rm $TMP/$root.pp
@@ -2773,7 +2773,7 @@ root=`basename $file .ss`
 chrom=`echo $root | awk -F\. '{print $1}'`
 
 mkdir -p PREDICTIONS/$chrom
-$PHAST/phastCons $file rev-dg.mod --rates-cut 1 --nrates 10 --viterbi PREDICTIONS/$chrom/$root.bed --score --no-post-probs --cut-params 0.030,0.015 --quiet --seqname $chrom
+$PHAST/phastCons $file rev-dg.mod --nrates 10 --viterbi PREDICTIONS/$chrom/$root.bed --score --no-post-probs --transitions 0.030,0.015 --quiet --seqname $chrom
 '_EOF_'
     # << this line makes emacs coloring happy
     chmod 775 doViterbi
