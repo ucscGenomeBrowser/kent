@@ -4403,9 +4403,6 @@ EOF
     # (people sometimes want the raw scores)
     rm -r /cluster/bluearc/mm5/phastCons/ELEMENTS /cluster/bluearc/mm5/phastCons/POSTPROBS /cluster/bluearc/mm5/phastCons/wib
 
-    # (The steps below assume a wiggle track called multiz5wayCons, as
-    # originally used by Kate, instead of phastCons, as above.)
-
     # load data for track name "multiz5way"    
 
     # load multiz maf tables 
@@ -4448,7 +4445,7 @@ cat > multiz5way/loadMaf.csh << 'EOF'
 #color 0, 10, 100
 # type wigMaf 0.0 1.0
 # maxHeightPixels 100:40:11
-# wiggle multiz5wayCons
+# wiggle phastCons
 # yLineOnOff Off
 # autoScaleDefault Off
 # pairwise netBlastz
