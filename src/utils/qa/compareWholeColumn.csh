@@ -15,7 +15,7 @@ set column=""
 if ($#argv != 3) then
   # no command line args
   echo
-  echo "  gets a column from a table on dev and beta and check diffs."
+  echo "  gets a column from a table on dev and beta and checks diffs."
   echo "  writes files of everything."
   echo
   echo "    usage:  database, table, column "
