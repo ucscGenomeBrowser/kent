@@ -6,15 +6,25 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 A = blastToPsl
 O = $A.o 
+BINDIR = $(HOME)/bin/$(MACHTYPE)
+
+all: ${BINDIR}/blastToPsl
+
+${BINDIR}/blastToPsl: blastToPsl
+	cp -f blastToPsl $(BINDIR)
+	strip $(BINDIR)/blastToPsl
+blastToPsl: ${O}
+	${CC} -o blastToPsl ${O} ${MYLIBS} ${L} 
 
 my: compile scoreSort blast0To8 pslUniq pslChain
-	cp -f blastToPsl $(HOME)/bin/$(MACHTYPE)
-	mv scoreSort $(HOME)/bin/$(MACHTYPE)
-	mv blast0To8 $(HOME)/bin/$(MACHTYPE)
-#	mv smashTab $(HOME)/bin/$(MACHTYPE)
-	mv pslUniq $(HOME)/bin/$(MACHTYPE)
-#	mv vegaBuildInfo $(HOME)/bin/$(MACHTYPE)
-	mv pslChain $(HOME)/bin/$(MACHTYPE)
+	cp -f blastToPsl $(BINDIR)
+	strip $(BINDIR)/blastToPsl
+	mv scoreSort $(BINDIR)
+	mv blast0To8 $(BINDIR)
+#	mv smashTab $(BINDIR)
+	mv pslUniq $(BINDIR)
+#	mv vegaBuildInfo $(BINDIR)
+	mv pslChain $(BINDIR)
 
 pslChain: pslChain.o
 	${CC} -static pslChain.o ${F64} ${MYLIBS} ${L} 

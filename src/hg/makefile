@@ -88,6 +88,7 @@ DIRS = \
 	autoXml \
 	bedIntersect \
 	bedSort \
+	blastToPsl \
 	borfBig \
 	cartDump \
 	cartReset \
@@ -141,6 +142,7 @@ DIRS = \
 	pslGlue \
 	pslHitPercent \
 	pslIntronsOnly \
+	pslMap \
 	pslPretty \
 	pslReps \
 	pslSimp \
