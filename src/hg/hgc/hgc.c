@@ -116,7 +116,7 @@
 #include "encodeRegionInfo.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.509 2003/11/04 02:00:10 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.510 2003/11/04 17:46:44 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -8217,8 +8217,8 @@ printf("<HEAD>\n<TITLE>%s %dk</TITLE>\n</HEAD>\n\n", name, psl->qStart/1000);
 showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, 0, 0);
 }
 
-void doBlatCompGeno(struct trackDb *tdb, char *itemName, char *otherGenome)
-    /* Handle click on blat track in a generic fashion */
+void doAlignCompGeno(struct trackDb *tdb, char *itemName, char *otherGenome)
+    /* Handle click on blat or blastz track in a generic fashion */
     /* otherGenome is the text to display for genome name on details page */
 {
 char *track = tdb->tableName;
@@ -12514,30 +12514,34 @@ else if (sameWord(track, "hg15PepPsl") )
     }
 else if (sameWord(track, "hg15repeats") )
     {
-    doBlatCompGeno(tdb, item, "Human");
+    doAlignCompGeno(tdb, item, "Human");
     }
-/* generic handling of blat tracks */ 
-else if (startsWith("blat", track))
+/* This is a catch-all for blastz/blat tracks -- any special cases must be 
+ * above this point! */
+else if (startsWith("blastz", track) || startsWith("blat", track) || endsWith(track, "Blastz"))
     {
-    char *blatLabel = &track[4];
-    if (hDbExists(blatLabel))
+    char *genome = "Unknown";
+    if (startsWith("blat", track))
+        genome = &track[4];
+    if (startsWith("blastz", track))
+        genome = &track[6];
+    else if (endsWith(track,"Blastz"))
+        {
+        genome = track;
+        *strstr(genome, "Blastz") = 0;
+        }
+    if (hDbExists(genome))
         {
         /* handle tracks that include other database name 
          * in trackname; e.g. blatCe1, blatCb1, blatCi1, blatHg15, blatMm3... 
          * Uses genome column from database table as display text */
-        blatLabel = hGenome(blatLabel);
+        genome = hGenome(genome);
         }
-    doBlatCompGeno(tdb, item, blatLabel);
+    doAlignCompGeno(tdb, item, genome);
     }
 else if (sameWord(track, "humanKnownGene")) 
     {
     doKnownGene(tdb, item);
-    }
-/* This is a catch-all for blastz/blat tracks -- any special cases must be 
- * above this point! */
-else if (startsWith("blastz", track) || startsWith("blat", track) || (endsWith(track, "Blastz")))
-    {
-    doAlignmentOtherDb(tdb, item);
     }
 else if (sameWord(track, "rnaGene"))
     {
