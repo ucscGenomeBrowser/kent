@@ -4041,7 +4041,6 @@ hFreeConn(&conn);
 webEnd();
 }
 
-
 void chuckHtmlStart(char *title) 
 /* Prints the header appropriate for the title
  * passed in. Links html to chucks stylesheet for 
