@@ -47,6 +47,25 @@ param curDb - The assembly (the database name) to choose as selected.
 If NULL, no default selection.
  */
 
+void printOrgAssemblyListHtmlParm(char *db, struct dbDb *dbList, char *dbCgi, char *javascript);
+/* Find all the organisms/assemblies and that have
+BLAT servers set up.
+Prints to stdout the HTML to render a dropdown list containing a list of the possible
+orgs/assemblies to choose from.
+
+param curDb - The assembly (the database name) to choose as selected. 
+If NULL, no default selection.
+ */
+
+void printAlignmentListHtml(char *db) ;
+/* Find all the alignments (from axtInfo) that pertain to the selected genome 
+Prints to stdout the HTML to render a dropdown list containing a list of the possible
+alignments to choose from.
+
+param curDb - The alignment (the database name) to choose as selected. 
+If NULL, no default selection.
+ */
+
 void printBlatAssemblyListHtml(char *curDb);
 /*
 Prints to stdout the HTML to render a dropdown list containing a list of the possible
