@@ -564,7 +564,7 @@ SEQ2_LEN=$BASE/S2.len
 # run in stages to avoid memory problems
   ssh kolossus
   cd /cluster/data/bosTau1/bed/blastz/axtChain
-  /cluster/bin/x86_64/chainPreNet all.chain ../S1.len ../S2.len chainPreNet.out
+  /cluster/bin/x86_64/chainPreNet all.chain ../zb.hg17/S2.len ../zb.hg17/S1.len chainPreNet.out
   /cluster/home/heather/bin/x86_64/chainNet chainPreNet.out \
     -minSpace=1 ../S1.len ../S2.len hg17.net bosTau1.net
   /cluster/home/heather/bin/x86_64/netSyntenic hg17.net noClass.net
@@ -1040,6 +1040,7 @@ chainSome $(path1)
   # split
   ssh kksilo
   cd /cluster/data/bosTau1/bed/zb.hg17/axtChain
+  mkdir net
   /cluster/bin/i386/netSplit bosTau1.net.syn net
 
   # generate axts
@@ -1055,7 +1056,7 @@ chainSome $(path1)
   cd /cluster/data/bosTau1/bed/zb.hg17/axtChain
   /cluster/bin/i386/netClass -noAr bosTau1.net.syn hg17 bosTau1 bosTau1.net
 
-  # backups/compres
+  # backups/compress
   ssh kksilo
   gzip bosTau1.net.syn
   cp bosTau1.net bosTau1.net.backup
