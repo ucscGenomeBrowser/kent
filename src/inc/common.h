@@ -542,6 +542,11 @@ long fileSize(char *fileName);
 boolean fileExists(char *fileName);
 /* Does a file exist? */
 
+/*
+ Friendly name for strstrNoCase
+*/
+char *containsStringNoCase(char *haystack, char *needle);
+
 char *strstrNoCase(char *haystack, char *needle);
 /* A case-insensitive strstr */
 

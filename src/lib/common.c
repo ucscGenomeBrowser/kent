@@ -1200,6 +1200,14 @@ close(fd);
 return TRUE;
 }
 
+/*
+ Friendly name for strstrNoCase
+*/
+char *containsStringNoCase(char *haystack, char *needle)
+{
+return strstrNoCase(haystack, needle);
+}
+
 char *strstrNoCase(char *haystack, char *needle)
 /*
   A case-insensitive strstr function
