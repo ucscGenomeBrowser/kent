@@ -158,6 +158,9 @@ clTableName = optionVal("table", NULL);
 xaFormat = optionExists("xa");
 if (argc < 3)
     usage();
+/* force progress message out immediatly */
+setlinebuf(stdout);
+setlinebuf(stderr);
 hgLoadPsl(argv[1], argc-2, argv+2);
 return 0;
 }
