@@ -4,8 +4,9 @@
 #include "common.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.3 2004/08/05 20:56:51 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.4 2004/08/06 22:47:55 hiram Exp $";
 
+/*	PRIVATE	METHODS	*/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
 {
 struct dyString *constrain = dyStringNew(256);
@@ -19,15 +20,25 @@ wDS->sqlConstraint = cloneString(constrain->string);
 dyStringFree(&constrain);
 }
 
+/*	PUBLIC	METHODS	*/
 static void setPositionConstraint(struct wiggleDataStream *wDS,
 	int winStart, int winEnd)
+/*	both 0 means no constraint	*/
 {
+if ((!wDS->isFile) && wDS->conn)
+    {
+    errAbort("setPositionConstraint: need to openWigConn() before setting winStart, winEnd");
+    }
 /*	keep them in proper order	*/
 if (winStart > winEnd)
     {
     wDS->winStart = winEnd;
     wDS->winEnd = winStart;
     }
+else if ((winEnd > 0) && (winStart == winEnd))
+    errAbort(
+	"setPositionConstraint: can not have winStart == winEnd (%d == %d)",
+	    winStart, winEnd);
 else
     {
     wDS->winStart = winStart;
@@ -37,18 +48,63 @@ else
 
 static void setChromConstraint(struct wiggleDataStream *wDS, char *chr)
 {
-addConstraint(wDS, "chrom =", chr);
 freeMem(wDS->chrName);
 wDS->chrName = cloneString(chr);
 }
 
 static void setSpanConstraint(struct wiggleDataStream *wDS, unsigned span)
 {
-struct dyString *dyTmp = dyStringNew(256);
-dyStringPrintf(dyTmp, "%u", span);
-addConstraint(wDS, "span =", dyTmp->string);
 wDS->spanLimit = span;
-dyStringFree(&dyTmp);
+}
+
+static void freeConstraints(struct wiggleDataStream *wDS)
+{
+wDS->spanLimit = 0;
+wDS->setPositionConstraint(wDS, 0, 0);
+freez(&wDS->chrName);
+freez(&wDS->dataConstraint);
+wDS->limit_0 = wDS->limit_1 = 0.0;
+wDS->ucLowerLimit = wDS->ucUpperLimit = 0;
+freez(&wDS->sqlConstraint);
+wDS->useDataConstraint = FALSE;
+}
+
+static void freeAscii(struct wiggleDataStream *wDS)
+{
+if (wDS->ascii)
+    {
+    struct wigAsciiData *el, *next;
+
+    for (el = wDS->ascii; el != NULL; el = next)
+	{
+	next = el->next;
+	freeMem(el->chrom);
+	freeMem(el->data);
+	freeMem(el);
+	}
+    }
+wDS->ascii = NULL;
+}
+
+static void freeBed(struct wiggleDataStream *wDS)
+{
+bedFreeList(&wDS->bed);
+}
+
+static void freeStats(struct wiggleDataStream *wDS)
+{
+if (wDS->stats)
+    {
+    struct wiggleStats *el, *next;
+
+    for (el = wDS->stats; el != NULL; el = next)
+	{
+	next = el->next;
+	freeMem(el->chrom);
+	freeMem(el);
+	}
+    }
+wDS->stats = NULL;
 }
 
 /*	the double comparison functions
@@ -206,7 +262,7 @@ if (lowerLimit < upperLimit)
     wDS->limit_1 = upperLimit;
     }
 else if (!(upperLimit < lowerLimit))
-  errAbort("wigSetDataConstraint: upper and lower limits are equal: %.g == %.g",
+  errAbort("wigSetDataConstraint: upper and lower limits are equal: %g == %g",
 	lowerLimit, upperLimit);
 else
     {
@@ -297,12 +353,14 @@ else
 
 static void closeWigConn(struct wiggleDataStream *wDS)
 {
+lineFileClose(&wDS->lf);
 closeWibFile(wDS);	/*	closes only if it is open	*/
 if (wDS->conn)
     {
     sqlFreeResult(&wDS->sr);
     sqlDisconnect(&wDS->conn);
     }
+freez(&wDS->sqlConstraint);
 }
 
 static void openWigConn(struct wiggleDataStream *wDS, char *tableName)
@@ -320,6 +378,15 @@ else
     {
     struct dyString *query = dyStringNew(256);
     dyStringPrintf(query, "select * from %s", tableName);
+    if (wDS->chrName)
+	addConstraint(wDS, "chrom =", wDS->chrName);
+    if (wDS->spanLimit)
+	{
+	struct dyString *dyTmp = dyStringNew(256);
+	dyStringPrintf(dyTmp, "%u", wDS->spanLimit);
+	addConstraint(wDS, "span =", dyTmp->string);
+	dyStringFree(&dyTmp);
+	}
     if (wDS->sqlConstraint)
 	dyStringPrintf(query, " where (%s) order by chromStart",
 	    wDS->sqlConstraint);
@@ -327,6 +394,28 @@ else
     if (!wDS->conn)
 	wDS->conn = sqlConnect(wDS->db);
     wDS->sr = sqlGetResult(wDS->conn,query->string);
+    }
+freeMem(wDS->tblName);
+wDS->tblName = cloneString(tableName);
+}
+
+void destroyWigDataStream(struct wiggleDataStream **wDS)
+/*	free all structures and zero the callers' structure pointer	*/
+{
+if (wDS)
+    {
+    struct wiggleDataStream *wds;
+    wds=*wDS;
+    if (wds)
+	{
+	wds->closeWigConn(wds);
+	wds->freeAscii(wds);
+	wds->freeBed(wds);
+	wds->freeStats(wds);
+	wds->freeConstraints(wds);
+	freeMem(wds->currentChrom);
+	}
+    freez(wDS);
     }
 }
 
@@ -344,6 +433,10 @@ wds->wibFH = -1;
 wds->limit_0 = -1 * INFINITY;
 wds->limit_1 = INFINITY;
 /*	Set method pointers	*/
+wds->freeConstraints = freeConstraints;
+wds->freeAscii = freeAscii;
+wds->freeBed = freeBed;
+wds->freeStats = freeStats;
 wds->setPositionConstraint = setPositionConstraint;
 wds->setChromConstraint = setChromConstraint;
 wds->setSpanConstraint = setSpanConstraint;
