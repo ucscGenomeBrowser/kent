@@ -572,6 +572,10 @@ int  positiveRangeIntersection(int start1, int end1, int start2, int end2);
 /* Return amount of bases two ranges intersect over, 0 if no
  * intersection. */
 
+int chromToInt(char *s);
+/* converts a chrom name chrXX into an integer from 1 to 54. 
+ *  X = 23 Y = 24 Un = 25 M = 26 random = chr + 26;*/
+
 bits32 byteSwap32(bits32 a);
 /* Swap from intel to sparc order of a 32 bit quantity. */
 
