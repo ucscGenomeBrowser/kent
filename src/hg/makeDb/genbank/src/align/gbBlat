@@ -27,7 +27,7 @@
 # is still produced.  This script is very careful to exit non-zero if an error
 # occurs.
 #
-# $Id: gbBlat,v 1.15 2004/02/10 20:33:08 markd Exp $
+# $Id: gbBlat,v 1.16 2004/02/19 19:19:56 markd Exp $
 #
 set -e
 
@@ -173,11 +173,12 @@ case "$database" in
         # until we have more orgCats, use special blatParams for human refseqs
         case "$srcDb-$orgCat" in
             refseq-xeno)
+                # override defaults above
                 blatParams="-fine -mask=lower" ;;
-        esac
+        esac ;;
     sacCer*) 
         # limit intron size on yeast 
-        blatParams="-maxIntron=5000" ;;
+        blatParams="${blatParams} -maxIntron=5000" ;;
 esac
 
 
