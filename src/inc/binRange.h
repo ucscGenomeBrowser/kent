@@ -17,7 +17,7 @@ int binFirstShift();
 /* Return amount to shift a number to get to finest bin. */
 
 int binNextShift();
-/* Return amount to shift a numbe to get to next coarser bin. */
+/* Return amount to shift a number to get to next coarser bin. */
 
 int binOffset(int level);
 /* Return offset for bins of a given level. */
@@ -72,8 +72,11 @@ struct binElement *binKeeperFind(struct binKeeper *bk, int start, int end);
 struct binElement *binKeeperFindSorted(struct binKeeper *bk, int start, int end);
 /* Like binKeeperFind, but sort list on start coordinates. */
 
+
+struct binElement *binKeeperFindLowest(struct binKeeper *bk, int start, int end);
+/* Find the lowest overlapping range. Quick even in search range large */
+
 void binKeeperRemove(struct binKeeper *bk, int start, int end, void *val);
 /* Remove item from binKeeper. */ 
-
 #endif /* BINRANGE_H */
 

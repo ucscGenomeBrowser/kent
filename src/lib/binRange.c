@@ -29,7 +29,7 @@ return _binFirstShift;
 }
 
 int binNextShift()
-/* Return amount to shift a numbe to get to next coarser bin. */
+/* Return amount to shift a number to get to next coarser bin. */
 {
 return _binNextShift;
 }
@@ -155,6 +155,40 @@ slSort(&list, binElementCmpStart);
 return list;
 }
 
+struct binElement *binKeeperFindLowest(struct binKeeper *bk, int start, int end)
+/* Find the lowest overlapping range. Quick even in search range large */
+{
+struct binElement *first = NULL, *el;
+int startBin = (start>>_binFirstShift), endBin = ((end-1)>>_binFirstShift);
+int i,j;
+
+/* Search the possible range of bins at each level, looking for lowest.  Once
+ * an overlaping range is found at a level, continue with next level, however
+ * must search an entire bin as they are not ordered. */
+for (i=0; i<ArraySize(binOffsets); ++i)
+    {
+    int offset = binOffsets[i];
+    boolean foundOne = FALSE;
+    for (j=startBin+offset; (j<=endBin+offset) && (!foundOne); ++j)
+        {
+	for (el=bk->binLists[j]; el != NULL; el = el->next)
+	    {
+            if ((rangeIntersection(el->start, el->end, start, end) > 0)
+                && ((first == NULL) || (el->start < first->start)
+                    || ((el->start == first->start)
+                        && (el->end < first->end))))
+                {
+                first = el;
+                foundOne = TRUE;
+		}
+	    }
+	}
+    startBin >>= _binNextShift;
+    endBin >>= _binNextShift;
+    }
+return first;
+}
+
 
 void binKeeperRemove(struct binKeeper *bk, int start, int end, void *val)
 /* Remove item from binKeeper. */ 
@@ -176,4 +210,3 @@ for (el = *pList; el != NULL; el = next)
 slReverse(&newList);
 *pList = newList;
 }
-
