@@ -1,4 +1,4 @@
-table genePred
+table genePredName
 "A gene prediction."
     (
     string geneName;	"Name of gene"

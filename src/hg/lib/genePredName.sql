@@ -4,7 +4,7 @@
 # automatic way.
 
 #A gene prediction.
-CREATE TABLE genePred (
+CREATE TABLE genePredName (
     geneName varchar(255) not null,	# Name of gene
     name varchar(255) not null,	# Name of gene
     chrom varchar(255) not null,	# Chromosome name
