@@ -56,7 +56,7 @@ disk partitions and sizes:
 <li>MySQL Table spaces: ~ 50GB
 <li>Apache web pages area: ~ 40GB
 <li>"/projects" area for the browser: ~ 60GB
-<li>"/cluster" area for the browser: ~ 15GB
+<li>"/cluster" area for the browser: ~ 60GB
 </ul>
 
 <br><p><a NAME="script"></a><b>Sample Automated Script:</b>
@@ -156,6 +156,7 @@ assembly:
 <TR><TD> --------------- </TD><TD></TD><TD> ---------------  </TD></TR>
 <TR><TD> mmFeb2002   </TD><TD></TD><TD> mm2         </TD></TR>
 <TR><TD> mmNov2001   </TD><TD></TD><TD> mm1         </TD></TR>
+<TR><TD> 28jun2002   </TD><TD></TD><TD> hg12         </TD></TR>
 <TR><TD> 05apr2002   </TD><TD></TD><TD> hg11         </TD></TR>
 <TR><TD> 22dec2001   </TD><TD></TD><TD> hg10         </TD></TR>
 <TR><TD> Not Released</TD><TD></TD><TD> hg9         </TD></TR>
@@ -169,7 +170,7 @@ assembly:
 </ul>
 <ol type="a">
 
-<li>Get Mouse February, 2002 full data set (3.4 GB) by doing:
+<li>Get Mouse February, 2002 full data set (4.8 GB) by doing:
 <p> 
 i)&nbsp;&nbsp;&nbsp;&nbsp;  rsync --progress -avz &nbsp;&nbsp;\
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -190,7 +191,7 @@ rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/mmFeb2002/database/ &nbsp;&n
 $WEBROOT/goldenPath/mmFeb2002/database/.
 <br><br>
 
-<li>Get Mouse November, 2001 full data set (2.1 GB) by doing:
+<li>Get Mouse November, 2001 full data set (2.7 GB) by doing:
 <p> 
 i)&nbsp;&nbsp;&nbsp;&nbsp;  rsync --progress -avz &nbsp;&nbsp;\
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -211,7 +212,28 @@ rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/mmNov2001/database/ &nbsp;&n
 $WEBROOT/goldenPath/mmNov2001/database/.
 <br><br>
 
-<li>Get Human April 5, 2002 full data set (9.8 GB) by doing:
+<li>Get Human June 28, 2002 full data set (6.2 GB) by doing:
+<p> 
+i)&nbsp;&nbsp;&nbsp;&nbsp;  rsync --progress -avz &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/28jun2002/bigZips/&nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+$WEBROOT/goldenPath/28jun2002/bigZips/.
+<p> 
+ii)&nbsp;&nbsp;&nbsp;  rsync --progress -avz &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/28jun2002/chromosomes/ &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+$WEBROOT/goldenPath/28jun2002/chromosomes/.
+<p> 
+iii)&nbsp;&nbsp;   rsync --progress -avz  &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/28jun2002/database/ &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+$WEBROOT/goldenPath/28jun2002/database/.
+<br><br>
+
+<li>Get Human April 5, 2002 full data set (6.5 GB) by doing:
 <p> 
 i)&nbsp;&nbsp;&nbsp;&nbsp;  rsync --progress -avz &nbsp;&nbsp;\
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -232,7 +254,7 @@ rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/05apr2002/database/ &nbsp;&n
 $WEBROOT/goldenPath/05apr2002/database/.
 <br><br>
 
-<li>Get Human December 22, 2001 full data set (4.9 GB) by doing:
+<li>Get Human December 22, 2001 full data set (5.5 GB) by doing:
 <p> 
 i)&nbsp;&nbsp;&nbsp;&nbsp;  rsync --progress -avz &nbsp;&nbsp;\
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -253,7 +275,7 @@ rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/22dec2001/database/ &nbsp;&n
 $WEBROOT/goldenPath/22dec2001/database/.
 <br><br>
 
-<li>Get August 6, 2001 full data set (5.2 GB) by doing:
+<li>Get August 6, 2001 full data set (6.6 GB) by doing:
 
 <p> 
 i)&nbsp;&nbsp;&nbsp;&nbsp;  rsync --progress -avz &nbsp;&nbsp;\
