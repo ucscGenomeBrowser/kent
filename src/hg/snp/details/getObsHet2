@@ -7,6 +7,7 @@ $chromEnd=$rsId=$score=$het=$hetSE=0;
 
 $source="dbSnp";
 
+die "\nFix the chromosome issue - like the pseudoautosomal errors.  \nExtend this to the whole genome by getting the chromosome \nfrom within NSE-rs_contig-mapset rather than from the header\n\n";
 do
 {
     $line = <>;
