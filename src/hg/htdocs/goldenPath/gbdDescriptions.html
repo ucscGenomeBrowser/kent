@@ -320,8 +320,14 @@ TrEMBL-NEW and their corresponding mRNAs from Genbank
   - Links to other databases: GenBank, OMIN, HUGO, RefSeq, GBD
   (Oct. 2000 and earlier known (RefSeq) gene track) 
   <LI><A 
+  href="#PslInfo">mgcFullMrna</A> 
+  - Mammalian Gene Collection (MGC) full ORF mRNAs
+  <LI><A 
+  href="#MGCFullStatus">mgcFullStatus</A> 
+  - Status of MGC clones
+  <LI><A 
   href="#GenePredictions">mgcGenes</A> 
-  - Mammalian Gene Collection (MGC) Full ORF mRNAs
+  - MGC full ORF mRNAs
   <LI><A 
   href="#MGIid">MGI ID</A> 
   - Links MGI ID to Locus Link ID (Mouse)
@@ -1189,6 +1195,22 @@ Last used Oct. 2000
     string pgi;          "Genbank gi of protein seq."
     )                                                                           
 </PRE>
+
+<H4><A name=MGCFullStatus></A>MGC Full Status</H4>
+<PRE>table mgcFullStatus
+"Status of MGC clone"
+    (
+    uint imageId;    	"Image ID for clone"
+    enum status;	"MGC status code: unpicked, picked, notBack, noDecision,
+			 fullLength, incomplete, chimeric, frameShift, contaminated,
+			 retainedIntron, mixedWells, noGrowth, noInsert, no5est,
+			 microDel, artifact, noPolyATail, or cantSequence. Status will
+			 always be fullLength on main databases."
+    char acc;		"Genbank accession"
+    char organism;    	"Two letter MGC organism" 
+    )
+</PRE>
+
 <H4><A name=MGIid></A>MGI ID</H4>
 <PRE>table MIGIid
 "Links MGI ID to Locus Link ID (Mouse)"
