@@ -3,9 +3,9 @@
 #include "hdb.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: doSam.c,v 1.1 2005/01/04 23:19:32 fanhsu Exp $";
+static char const rcsid[] = "$Id: doSam.c,v 1.2 2005/01/05 01:00:43 fanhsu Exp $";
 
-char *getSgdId(char *protId)
+char *getSgdId(char *protId, char *database)
 /* Get SGD gene ID from a Swiss-Prot ID */
 {
 struct sqlConnection *conn2 = hAllocConn();
@@ -55,13 +55,13 @@ if (sameWord(database, "sacCer1"))
     samHttpStr = strdup("http://www.soe.ucsc.edu/research/compbio/yeast-protein-predictions");
     
     /* SAM analysis of SGD proteins uses SGD ID, not Swiss-Prot AC */
-    itemName = getSgdId(proteinId);
+    itemName = getSgdId(proteinId, database);
     }
     
 if (itemName == NULL) return;
 
 sprintf(condStr, "proteinId='%s'", itemName);
-samSubDir = sqlGetField(conn2, database, "samSubdir", "samdir", condStr);
+samSubDir = sqlGetField(conn2, database, "samSubdir", "subdir", condStr);
 if (samSubDir == NULL) return;
 
 hPrintf("<B>UCSC ");
@@ -97,7 +97,6 @@ while (row2 != NULL)
     sscanf(row2[1], "%e", &eValue);
     if (first)
 	{
-	first = 0;
 	bestEVal = eValue;
 	bestEValStr = strdup(row2[1]);
 	}
@@ -123,12 +122,15 @@ while (row2 != NULL)
 	    if (eValue > 0.1) goto skip;
 	    }
 	}
-    
-    if (!first)
-	{
-	hPrintf(", ");
+    if (first)
+    	{
+	first = 0;
 	}
-    
+    else
+        {
+        printf(", ");
+	}
+					   
     hPrintf("\n<A HREF=\"http://www.rcsb.org/pdb/cgi/explore.cgi?job=graphics&pdbId=%s", homologID);
     if (strlen(chain) >= 1) 
 	{
