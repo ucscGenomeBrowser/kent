@@ -241,3 +241,72 @@ es/xt3_JGI.lib $2
   cp -p /cluster/bluearc/xenTro1/11.ooc /iscratch/i/xenTro1/
   iSync
 
+# GENBANK (DONE, 10/26/04, Fan)
+  ssh hgwdev
+  cd /cluster/home/fanhsu/kent/src/hg/makeDb/genbank
+  # check for missing commits
+  diff /cluster/data/genbank/etc/genbank.conf etc/genbank.conf
+  # edit etc/genbank.conf and add these lines, starting with the comment:
+  # xenTro1 (X. tropicalis)
+  # could get rid of the nib in this path, 2bit isn't a nib (4bit) ???
+
+# xenTro1 (X. tropicalis) 27064 scaffolds!
+# This uses the mondo 2bit file functionality, where multiple
+# sequences from a two bit are alignmed from a single jobs.
+# Genbank X. tropicalis
+#     5365 mRNAs
+#   423107 ESTs
+# partation 2bit into 5000 parts for initial build
+xenTro1.genome = /iscratch/i/xenTro1/nib/xenTro1.2bit
+xenTro1.mondoTwoBitParts = 5000
+xenTro1.lift = no
+xenTro1.refseq.mrna.native.load = no
+xenTro1.genbank.mrna.xeno.load = no
+xenTro1.genbank.est.xeno.load = no
+xenTro1.downloadDir = xenTro1
+xenTro1.perChromTables = no
+
+cvs update etc/genbank.conf
+cvs commit etc/genbank.conf
+# revision: 1.64
+
+  # edit src/lib/gbGenome.c
+  make
+  cvs commit -m "added frog" src/lib/gbGenome.c
+  # revision 1.21
+
+  # edit src/align/gbBlat
+  make
+  cvs commit -m "added frog" src/align/gbBlat
+  # revision 1.33
+
+  make install-server
+
+  ssh eieio
+  cd /cluster/data/genbank
+  bin/gbAlignStep -srcDb=genbank -type=mrna -initial -verbose=1 xenTro1 &
+  # logged to 
+  # /cluster/data/genbank/var/build/logs/YYMMDDHHMMSS.xenTro1.initalign.log
+  # load
+  ssh hgwdev
+  cd /cluster/data/genbank
+  nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad xenTro1
+  # logged to /cluster/data/genbank/var/dbload/hgwdev/logs/YYMMDDHHMMSS.dbload.log
+
+  # ESTs required modification to the build process to deal with the huge
+  # number of scaffolds.  Once completed, the following line was
+  # added to genbank.conf to enable it's uses:
+    xenTro1.mondoTwoBitParts = 5000
+  ssh eieio
+  cd /cluster/data/genbank
+  bin/gbAlignStep -initial -srcDb=genbank -type=est xenTro1
+  
+  # load the ESTs, reloading mRNAs as well
+  ssh hgwdev
+  cd /cluster/data/genbank
+  nice bin/gbDbLoadStep -drop -initialLoad xenTro1
+
+  # add xenTro1 to list of databases to align in
+  # ~/src/hg/makeDb/genbank/etc/align-genbank
+  # CVS update and check in the file.
+
