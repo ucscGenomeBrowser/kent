@@ -38,7 +38,7 @@
 #include "binRange.h"
 
 
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.18 2003/12/08 18:45:16 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.19 2003/12/10 04:05:13 sugnet Exp $";
 static struct binKeeper *netBins = NULL;  /* Global bin keeper structure to find cnFills. */
 static struct rbTree *netTree = NULL;  /* Global red-black tree to store cnfills in for quick searching. */
 static struct rbTree *orthoAgxTree = NULL; /* Global red-black tree to store agx's so don't need db. */
@@ -1263,6 +1263,43 @@ if(chain != NULL)
 *orthoAgListRet = orthoAgList;
 }
 
+void pruneUnusedVertexes(struct altGraphX *ag)
+/** Remove unused vertexes in the graph. */
+{
+boolean *used = NULL;
+int *vPos = ag->vPositions;
+int *starts = ag->edgeStarts;
+int *ends = ag->edgeEnds;
+int vC = ag->vertexCount, eC = ag->edgeCount;
+int i = 0, j = 0;
+int count = 0;
+assert(vC);
+AllocArray(used, vC);
+for(i = 0; i < eC; i++) 
+    {
+    used[starts[i]] = TRUE;
+    used[ends[i]] = TRUE;
+    }
+
+for(i = 0; i < vC; i++)
+    {
+    if(used[i])
+	{
+	vPos[count] = vPos[i];
+	ag->vTypes[count] = ag->vTypes[i];
+	for(j = 0; j < eC; j++)
+	    {
+	    if(starts[j] == i)
+		starts[j] = count;
+	    if(ends[j] == i)
+		ends[j] = count;
+	    }
+	count++;
+	}
+    }
+ag->vertexCount = count;
+}
+
 struct altGraphX *makeCommonAltGraphX(struct altGraphX *ag, struct chain *chain)
 /** For each edge in ag see if there is a similar edge in the
     orthologus altGraphX structure and output it if there. */
@@ -1294,7 +1331,8 @@ for(i=0;i<ag->vertexCount; i++)
     (vertexMap)[i] = -1;
 agRep->agName = cloneString(ag->name);
 agRep->chrom = cloneString(ag->tName);
-/* If can't find an orthologous graph, can still find stuff if trumpNum is 
+
+/* Even if there isn't an orthologous graph, can still find stuff if trumpNum is 
    used. */
 if(orthoAgList == NULL)
     agRep->orthoAgName = cloneString("NA");
@@ -1377,11 +1415,23 @@ altGraphXFreeEdgeMatrix(&agEm, ag->vertexCount);
 altGraphXFreeEdgeMatrix(&commonEm, commonAg->vertexCount);
 for(i=0, oAg=orthoAgList; i<slCount(orthoAgList); i++, oAg=oAg->next)
  altGraphXFreeEdgeMatrix(&orthoEmP[i], oAg->vertexCount);
+
+/* Fix the start and end. */
+pruneUnusedVertexes(commonAg);
+commonAg->tStart = BIGNUM;
+commonAg->tEnd = -1;
+for(i = 0; i < commonAg->edgeCount; i++) 
+    {
+    commonAg->tStart = min(commonAg->vPositions[commonAg->edgeStarts[i]], commonAg->tStart);
+    commonAg->tEnd = max(commonAg->vPositions[commonAg->edgeEnds[i]], commonAg->tEnd);
+    }
+
 if(commonAg->edgeCount == 0)
     freeCommonAg(&commonAg);
 freez(&vertexMap);
 altGraphXFreeList(&agxToFree);
 slFreeList(&seList);
+
 return commonAg;
 }
 
