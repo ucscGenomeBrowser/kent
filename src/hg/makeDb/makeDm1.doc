@@ -1845,20 +1845,27 @@ axtFilter -notQ=chrUn_random $1 \
     end
 
 
-# GENERATE DP2 MAF FOR MULTIZ FROM NET (TODO 8/3/04 angie)
-    ssh kolossus
-    cd /cluster/data/dm1/bed/blastz.dp2.2004-08-03
+# GENERATE DP2 MAF FOR MULTIZ FROM NET (DONE 8/9/04 angie)
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.dp2.2004-08-03/axtChain
+    netSplit pseudoobscura.net net
+    cd ..
+    mkdir axtNet
+    foreach f (axtChain/net/chr*.net)
+      netToAxt $f axtChain/chain/$f:t:r.chain \
+        /cluster/data/dm1/nib /cluster/data/dp2/nib stdout \
+      | axtSort stdin axtNet/$f:t:r.axt
+    end
     mkdir mafNet
-    foreach f (axtNetChrom/chr*.axt)
-      set maf = mafNet/$f:t:r.mp.maf
-      axtSort $f stdout \
-      | axtToMaf stdin \
+    foreach f (axtNet/chr*.axt)
+      set maf = mafNet/$f:t:r.maf
+      axtToMaf $f \
             /cluster/data/dm1/chrom.sizes /cluster/data/dp2/chrom.sizes \
             $maf -tPrefix=dm1. -qPrefix=dp2.
     end
 
 
-# MULTIZ MELANOGASTER/YAKUBA/PSEUDOOBSCURA (TODO 8/3/04 angie)
+# MULTIZ MELANOGASTER/YAKUBA/PSEUDOOBSCURA (DONE 8/9/04 angie)
     # put the MAFs on bluearc
     ssh kksilo
     mkdir -p /cluster/bluearc/multiz.fly/my
@@ -1868,14 +1875,13 @@ axtFilter -notQ=chrUn_random $1 \
     cp /cluster/data/dm1/bed/blastz.dp2.2004-08-03/mafNet/*.maf \
       /cluster/bluearc/multiz.fly/mp
 
-
     ssh kki
     mkdir /cluster/data/dm1/bed/multiz.dm1droYak1dp2
     cd /cluster/data/dm1/bed/multiz.dm1droYak1dp2
     mkdir myp
     # Wrapper script required because of stdout redirect:
     cat << '_EOF_' > doMultiz
-#!/bin/csh
+#!/bin/csh -ef
 /cluster/bin/penn/multiz $1 $2 - > $3
 '_EOF_'
     # << this line makes emacs coloring happy
@@ -1883,33 +1889,19 @@ axtFilter -notQ=chrUn_random $1 \
     rm -f jobList
     foreach file (/cluster/bluearc/multiz.fly/my/*.maf) 
       set root=$file:t:r:r
-      echo "doMultiz /cluster/bluearc/multiz.fly/mp/${root}.mp.maf $file /cluster/data/dm1/bed/multiz.dm1droYak1dp2/myp/${root}.maf" >> jobList
+      echo "doMultiz /cluster/bluearc/multiz.fly/mp/${root}.maf $file /cluster/data/dm1/bed/multiz.dm1droYak1dp2/myp/${root}.maf" >> jobList
     end
     para create jobList
     para try, check, push, check
 #Completed: 11 of 11 jobs
-#Average job time:                  53s       0.88m     0.01h    0.00d
-#Longest job:                      141s       2.35m     0.04h    0.00d
-#Submission to last job:           141s       2.35m     0.04h    0.00d
+#Average job time:                  52s       0.87m     0.01h    0.00d
+#Longest job:                      144s       2.40m     0.04h    0.00d
+#Submission to last job:           144s       2.40m     0.04h    0.00d
 
     # clean up bluearc (these are big files!)
     rm -r /cluster/bluearc/multiz.fly
 
-    # zip it for download
-    zip -j /cluster/data/dm1/zips/multizDm1DroYak1Dp2.zip myp/*.maf
-
-    # setup external files for database reference
-    ssh hgwdev
-    mkdir -p /gbdb/dm1/multizDroYak1Dp2
-    ln -s /cluster/data/dm1/bed/multiz.dm1droYak1dp2/myp/*.maf \
-      /gbdb/dm1/multizDroYak1Dp2
-    # load into database
-    hgLoadMaf -warn dm1 multizDroYak1Dp2
-    # put it out for download
-    mkdir /usr/local/apache/htdocs/goldenPath/dm1/multizDroYak1Dp2
-    cd /usr/local/apache/htdocs/goldenPath/dm1/multizDroYak1Dp2
-    mv /cluster/data/dm1/zips/multizDm1DroYak1Dp2.zip .
-    md5sum *.zip > md5sum.txt
+    # no downloadables/db-loading -- just go on and do the 4-way multiz.
 
 
 # BDGP 3.2 ANNOTATIONS (DONE 6/18/04 angie)
@@ -2270,7 +2262,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     end
 
 
-# MULTIZ MELANOGASTER/YAKUBA/PSEUDOOBSCURA/ANOPHELES (TODO 8/3/04 angie)
+# MULTIZ MELANOGASTER/YAKUBA/PSEUDOOBSCURA/ANOPHELES (DONE 8/9/04 angie)
     # put the MAFs on bluearc
     ssh kksilo
     mkdir -p /cluster/bluearc/multiz.flymo/myp
@@ -2286,7 +2278,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     mkdir mypa
     # Wrapper script required because of stdout redirect:
     cat << '_EOF_' > doMultiz
-#!/bin/csh
+#!/bin/csh -fe
 /cluster/bin/penn/multiz $1 $2 - > $3
 '_EOF_'
     # << this line makes emacs coloring happy
@@ -2299,16 +2291,18 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     para create jobList
     para try, check, push, check
 #Completed: 11 of 11 jobs
-#Average job time:                  25s       0.42m     0.01h    0.00d
-#Longest job:                       55s       0.92m     0.02h    0.00d
-#Submission to last job:            55s       0.92m     0.02h    0.00d
+#Average job time:                  27s       0.45m     0.01h    0.00d
+#Longest job:                       74s       1.23m     0.02h    0.00d
+#Submission to last job:            74s       1.23m     0.02h    0.00d
     du -sh mypa
-#410M    mypa
+#415M    mypa
 
     # clean up bluearc
     rm -r /cluster/bluearc/multiz.flymo
 
     # zip it for download
+    ssh kksilo
+    cd /cluster/data/dm1/bed/multiz.dm1droYak1dp2anoGam1
     zip -j /cluster/data/dm1/zips/multizDm1DroYak1Dp2AnoGam1.zip mypa/*.maf
 
     # setup external files for database reference
@@ -2318,19 +2312,14 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
       /gbdb/dm1/mzDy1Dp2Ag1_phast/
     # load into database
     hgLoadMaf -warn dm1 mzDy1Dp2Ag1_phast
-    # load pairwise mafs for wigMaf track
+    # replace dp1 pairwise mafs with dp2 for wigMaf track
     cd /gbdb/dm1
-    mkdir -p d_yakuba_mypa d_pseudoobscura_mypa a_gambiae_mypa
+    rm -r d_pseudoobscura_mypa
+    mkdir d_pseudoobscura_mypa
     cd /tmp
-    ln -s /cluster/data/dm1/bed/blastz.droYak1.2004-05-22/mafNet/*.maf \
-      /gbdb/dm1/d_yakuba_mypa
-    hgLoadMaf -WARN dm1 d_yakuba_mypa
     ln -s /cluster/data/dm1/bed/blastz.dp2.2004-08-03/mafNet/*.maf \
       /gbdb/dm1/d_pseudoobscura_mypa
     hgLoadMaf -WARN dm1 d_pseudoobscura_mypa
-    ln -s /cluster/data/dm1/bed/blastz.anoGam1.2004-06-10/mafNet/*.maf \
-      /gbdb/dm1/a_gambiae_mypa
-    hgLoadMaf -WARN dm1 a_gambiae_mypa
 
     # put it out for download
     mkdir /usr/local/apache/htdocs/goldenPath/dm1/multizDroYak1Dp2AnoGam1
@@ -2569,7 +2558,7 @@ $PHAST/phastCons $file rev-dg.mod --nrates 10 --viterbi PREDICTIONS/$chrom/$root
     # should gzip or even delete contents of SS directory when done
 
 
-# PHASTCONS MELANOGASTER/YAKUBA/PSEUDOOBSCURA/ANOPHELES (TODO 8/3/04 angie)
+# PHASTCONS MELANOGASTER/YAKUBA/PSEUDOOBSCURA/ANOPHELES (DONE 8/10/04 angie)
     # step 1: fit phylogenetic model, with rate variation (discrete
     # gamma model) first we need to extract the sufficient stats for
     # the phylogenetic model from the MAFs.  In this case, we don't
@@ -2590,24 +2579,24 @@ $PHAST/phastCons $file rev-dg.mod --nrates 10 --viterbi PREDICTIONS/$chrom/$root
       --aggregate dm1,droYak1,dp2,anoGam1 -o SS --unordered-ss \
       > all.ss
     # estimate parameters; should be very fast in this case
-    /cluster/bin/phast/phyloFit --msa all.ss --tree "(((1,2),3),4)" \
-      --msa-format SS --subst-mod REV --nrates 10 --out-root rev-dg \
-      --output-tree
+    /cluster/bin/phast/phyloFit --msa all.ss \
+      --tree "(((dm1,droYak1),dp2),anoGam1)" \
+      --msa-format SS --subst-mod REV --nrates 10 --out-root rev-dg
     # make sure model looks reasonable
     cat rev-dg.mod
 #ALPHABET: A C G T 
 #ORDER: 0
 #SUBST_MOD: REV
 #NRATECATS: 10
-#ALPHA: 1.342554
-#TRAINING_LNL: -311913607.826812
-#BACKGROUND: 0.276944 0.223186 0.223135 0.276735 
+#ALPHA: 1.343144
+#TRAINING_LNL: -311520966.123671
+#BACKGROUND: 0.276938 0.223190 0.223142 0.276730 
 #RATE_MAT:
-#  -0.926228    0.197669    0.496394    0.232165 
-#   0.245281   -1.090732    0.230621    0.614830 
-#   0.616100    0.230674   -1.092338    0.245564 
-#   0.232341    0.495858    0.198001   -0.926200 
-#TREE: (((1:0.056495,2:0.074413):0.111244,3:0.219007):0.288671,4:0.288671);
+#  -0.926281    0.197688    0.496369    0.232223 
+#   0.245294   -1.090671    0.230605    0.614772 
+#   0.616038    0.230655   -1.092265    0.245573 
+#   0.232398    0.495831    0.198018   -0.926247 
+#TREE: (((dm1:0.056418,droYak1:0.074515):0.111186,dp2:0.219098):0.288564,anoGam1:0.288564);
 
     # Since anopheles is at such a large distance (est. divergence of 
     # branches that became drosophila & anopheles: ~250mya, as opposed to 
@@ -2615,7 +2604,17 @@ $PHAST/phastCons $file rev-dg.mod --nrates 10 --viterbi PREDICTIONS/$chrom/$root
     # between anopheles and pseudoobscura is underestimated above.  Adam 
     # scaled the lengths according to the published est. mya's, so 
     # edit rev-dg.mod's TREE line to this:
-#TREE: (((1:0.058,2:0.074):0.133,3:0.200):0,4:2.66);
+#TREE: (((dm1:0.058,droYak1:0.074):0.133,dp2:0.200):0,anoGam1:2.66);
+    # A new way to arrive at that: put Mya estimates in 4way.nh, and 
+    # merge with the (more reliable) 3-way estimated tree:
+    echo "(((dm1:10,droYak1:10):30,dp2:40):210,anoGam1:250);" \
+    > 4wayMya.nh
+    /cluster/bin/phast/tree_doctor /cluster/data/dm1/bed/phastCons/rev-dg.mod \
+      --rename '1->dm1; 2->droYak1; 3->dp2; 4->anoGam1' \
+    | /cluster/bin/phast/tree_doctor - --merge 4wayMya.nh
+#TREE: (((dm1:0.057640,droYak1:0.073631):0.142750,dp2:0.190334):1.083495,anoGam1:1.28987
+    # Very similar to Adam's tree with a little manual redistribution of 
+    # weights from ancestors to outgroups at the outermost 2 nodes.
 
     # beware of zero branch lengths (indicates bad topology) or very
     # large branch lengths (much greater than one; indicates
@@ -2642,24 +2641,30 @@ $PHAST/phastCons $file rev-dg.mod --nrates 10 --viterbi PREDICTIONS/$chrom/$root
         -O dm1,droYak1,dp2,anoGam1 -M /cluster/data/dm1/$c/$chr.fa \
         -w ${WINSIZE},${WINOVERLAP} -r SS/$c/$chr -I 1000 -d 1 -B 5000
     end
-
+    # save some space and I/O time:
+    gzip SS/*/*.ss
     ssh kk
     cd /cluster/data/dm1/bed/phastCons4way
     cat << '_EOF_' > doPostProbs
-#!/bin/sh
+#!/bin/csh -ef
 
-PHAST=/cluster/bin/phast
-TMP=/scratch/phastCons
+set PHAST=/cluster/bin/phast
+set TMP=/scratch/phastCons
 
-file=$1
-root=`basename $file .ss`
-chrom=`echo $root | awk -F\. '{print $1}'`
+set file=$1
+set root = $file:t:r:r
+set chrom = $root:r
 
 mkdir -p $TMP
-$PHAST/phastCons $file rev-dg.mod --cut-at 2 --nrates 10 --suppress-missing --transitions 0.030,0.015 --quiet > ${TMP}/$root.pp
+cp $file $TMP/$root.ss.gz
+zcat $TMP/$root.ss.gz \
+| $PHAST/phastCons - rev-dg.mod --cut-at 2 --nrates 10 \
+  --suppress-missing --transitions 0.030,0.015 --quiet \
+  > ${TMP}/$root.pp
 mkdir -p POSTPROBS/$chrom
 gzip -c $TMP/$root.pp > POSTPROBS/$chrom/$root.pp.gz
 rm $TMP/$root.pp
+rm $TMP/$root.ss.gz
 '_EOF_'
     # << this line makes emacs coloring happy
     chmod 775 doPostProbs
@@ -2671,16 +2676,16 @@ rm $TMP/$root.pp
     # is a little unstable.  Be sure to create a log file and monitor
     # for convergence.
     rm -f jobs.lst
-    foreach f (`ls -1S SS/*/*.ss`)
-      echo './doPostProbs {check in line+ '$f'}' \
+    foreach f (`ls -1S SS/*/*.ss.gz`)
+      echo './doPostProbs {check in exists+ '$f'}' \
       >> jobs.lst
     end
     para create jobs.lst 
     para try ; para push ; etc....
 #Completed: 134 of 134 jobs
-#Average job time:                  31s       0.51m     0.01h    0.00d
-#Longest job:                       50s       0.83m     0.01h    0.00d
-#Submission to last job:            87s       1.45m     0.02h    0.00d
+#Average job time:                  23s       0.38m     0.01h    0.00d
+#Longest job:                       30s       0.50m     0.01h    0.00d
+#Submission to last job:           187s       3.12m     0.05h    0.00d
 
     # now create wiggle track
     # NOTE: might want to integrate with the multiz track instead of
@@ -2709,68 +2714,69 @@ rm $TMP/$root.pp
     # different --rates-cut params)
     ssh kk
     cd /cluster/data/dm1/bed/phastCons4way
-    cat << '_EOF_' > doViterbi
-#!/bin/sh
+    cat << '_EOF_' > doElements
+#!/bin/csh -fe
 
-PHAST=/cluster/home/acs/phast/bin
-TMP=/scratch/phastCons
+set PHAST=/cluster/home/acs/phast/bin
+set TMP=/scratch/phastCons
 
-file=$1
-root=`basename $file .ss`
-chrom=`echo $root | awk -F\. '{print $1}'`
+set file=$1
+set root = $file:t:r:r
+set chrom = $root:r
 
+mkdir -p $TMP
 mkdir -p PREDICTIONS/$chrom
-$PHAST/phastCons $file rev-dg.mod --nrates 10 --viterbi PREDICTIONS/$chrom/$root.bed --score --no-post-probs --transitions 0.030,0.015 --quiet --seqname $chrom
+cp $file $TMP/$root.ss.gz
+zcat $TMP/$root.ss.gz \
+| $PHAST/phastCons - rev-dg.mod --nrates 10 \
+  --viterbi PREDICTIONS/$chrom/$root.bed --score --no-post-probs \
+  --transitions 0.030,0.015 --quiet --seqname $chrom
+rm $TMP/$root.ss.gz
 '_EOF_'
     # << this line makes emacs coloring happy
-    chmod 775 doViterbi
-    rm -f jobs.viterbi.lst
-    foreach f (SS/*/*.ss)
-      echo 'doViterbi {check in line+ '$f'}' >> jobs.viterbi.lst
+    chmod 775 doElements
+    rm -f jobs.els.lst
+    foreach f (SS/*/*.ss.gz)
+      echo 'doElements {check in exists+ '$f'}' >> jobs.els.lst
     end
-    para create jobs.viterbi.lst
+    para create jobs.els.lst
     para try ; para push ; etc....
 #Completed: 134 of 134 jobs
 #Average job time:                   5s       0.09m     0.00h    0.00d
 #Longest job:                        9s       0.15m     0.00h    0.00d
-#Submission to last job:            39s       0.65m     0.01h    0.00d
+#Submission to last job:           287s       4.78m     0.08h    0.00d
 
     # Create bed track; we want to tweak the scores and the names.
     # Scores are transformed as follows, for a reasonable-looking 
     # bed 0-1000 "spectrum".  Let x_max be the maximum (believable) score 
-    # (here x_max  = 1827) and let x_med be the median score (here x_med =
+    # (here x_max  = 1819) and let x_med be the median score (here x_med =
     # 20).  The  scores are transformed via the function f(x) = a *
     # log x + b, s.t. f(x_med) = 300 and f(x_max) = 1000.  Solving
     # for a and b, you obtain  b = (300 log x_max - 1000 log x_med) /
     # (log x_max - log x_med), a = (1000 - b) / log x_max.  Here a =
-    # 232.024, b = -742.603.
+    # 232.335, b = -743.92.
     # better done on kksilo:
     # get max:
-    set max = `awk '{print $6;}' PREDICTIONS/*/*.bed | sort -n | tail -1`
-#1827
+    cat PREDICTIONS/*/*.bed > raw.bed
+    set max = `awk '{print $5;}' raw.bed | sort -n | tail -1`
+#1819
     # get median:
-    set lineCount = `cat PREDICTIONS/*/*.bed | wc -l`
+    set lineCount = `cat raw.bed | wc -l`
     set medOffset = `expr '(' $lineCount / 2 ')' + 1`
-    set med = `awk '{print $6;}' PREDICTIONS/*/*.bed | sort -n \
+    set med = `awk '{print $5;}' raw.bed | sort -n \
                | tail +$medOffset | head -1`
 #20
     # b and a:
     set b = `awk 'BEGIN {print ((300 * log('$max')) - (1000 * log('$med')));}'`
-#-742.603
+#-743.92
     set a = `awk 'BEGIN {print (1000 - '$b') / log('$max');}'`
-#232.024
-    sed 's/id //' PREDICTIONS/*/*.bed | \
-        awk '{printf "%s\t%s\t%s\tlod=%d\t%d\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", \
-            $1, $2, $3, $5, '$a' * log($5) + '$b', $6, $7, $8, $9, \
-            $10, $11, $12}' > all.bed
+#232.335
+    awk '{printf "%s\t%s\t%s\tlod=%d\t%d\n", \
+            $1, $2, $3, $5, '$a' * log($5) + '$b';}' raw.bed > all.bed
     hgLoadBed dm1 phastCons4wayElements all.bed
 
-    # should gzip or even delete contents of SS directory when done
-    nice gzip SS/*/*.ss &
-
     # make top-5000 list and launcher on Adam's home page:
-    sed 's/id //' PREDICTIONS/*/*.bed | sort -k5,5nr | head -5000 \
-    > top5000.bed
+    sort -k5,5nr raw.bed | head -5000 > top5000.bed
     /cluster/home/acs/bin/make-launcher-with-scores.sh top5000.bed \
       /cse/grads/acs/public_html/dm-top5000-4way \
       "top 5000 conserved elements (4way)" dm1
@@ -2831,4 +2837,25 @@ Submission to last job:          3506s      58.43m     0.97h    0.04d
     pslUniq cov90.psl dm1FB.psl
     pslxToFa dm1FB.psl dm1FB_ex.fa -liftTarget=genome.lft -liftQuery=protein.lft
     sed "s/>.*/&p/" dm1FB.fa > dm1FBp.fa
+
+
+# MITOPRED DATA FOR HGGENE (DONE 8/10/04 angie)
+    ssh hgwdev
+    mkdir /cluster/data/dm1/bed/mitopred
+    cd /cluster/data/dm1/bed/mitopred
+    wget http://mitopred.sdsc.edu/data/fly_30.out
+    perl -wpe 's/^(\S+)\s+\S+\s+(.*)/$1\t$2/' fly_30.out > mitopred.tab
+    cat > mitopred.sql << '_EOF_'
+# Prediction of nuclear-encoded mito. proteins from http://mitopred.sdsc.edu/
+CREATE TABLE mitopred (
+    name varchar(10) not null,      # SwissProt ID
+    confidence varchar(8) not null, # Confidence level
+              #Indices
+    PRIMARY KEY(name(6))
+);
+'_EOF_'
+    # << this line makes emacs coloring happy
+    hgsql dm1 < mitopred.sql
+    hgsql dm1 -e 'load data local infile "mitopred.tab" into table mitopred'
+
 
