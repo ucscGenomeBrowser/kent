@@ -12,6 +12,7 @@
 #include "dbDb.h"
 #include "web.h"
 #include "hui.h"
+#include "hgFind.h"
 
 #define hgTextPhase  "Advanced query..."
 char *db;	/* Current database. */
@@ -73,10 +74,18 @@ char *onChangeOrg = "onchange=\"document.orgForm.org.value = document.mainForm.o
 
 webStart(cart, "Table Browser: Batch Download Database Info");
 puts("<FORM ACTION=\"/cgi-bin/hgBatch\" NAME=\"mainForm\" METHOD=\"GET\">\n");
-printf("Use this form when you want to grab many items from the database "
-       "all at once.  This is most frequently used with GenBank accession "
-       "numbers as the keys.<BR>\n");
-printf("<BR>");
+puts("The Table Browser allows you to download portions of the Genome \n"
+     "Browser database in several output formats.  \n"
+     "You may choose to enter a position or search term, or to \n"
+     "paste/upload a set of keys (item names) from the chosen track \n"
+     "(for example, GenBank accessions for mRNAs).  \n"
+     "When pasting a small number of keys, you may include \n"
+     "wildcard characters ('*' or '?') in the keys. \n"
+     "When uploading a large number of keys, wildcards are not supported. \n"
+     "<P>"
+     );
+puts("See the <A HREF=\"/goldenPath/help/hgTextHelp.html\">Table Browser "
+     "User Guide</A> for more information.<P>\n");
 
 printf("<CENTER>");
 printf("organism: ");
@@ -85,12 +94,15 @@ printf("assembly: ");
 printAssemblyListHtmlExtra(db, autoSubmit);
 printf("track: ");
 printTrackDropList(db, autoSubmit);
-printf("<BR>");
-printf("<BR>");
+puts("</CENTER>");
+printf("<P>");
+puts("<CENTER>");
+cgiMakeButton("hgb.enterPos", "Enter Position/Search Term");
+printf(" ");
 cgiMakeButton("hgb.pasteKeys", "Paste in Keywords");
 printf(" ");
 cgiMakeButton("hgb.uploadKeys", "Upload Keyword File");
-printf("</CENTER>");
+puts("</CENTER>");
 cartSaveSession(cart);
 printf("</FORM>");
 
@@ -100,6 +112,41 @@ printf("<FORM ACTION=\"/cgi-bin/hgBatch\" METHOD=\"GET\" NAME=\"orgForm\">");
 printf("<input type=\"hidden\" name=\"org\" value=\"%s\">", organism);
 cartSaveSession(cart);
 printf("</FORM>\n");
+}
+
+void posForm()
+/* Put up form that lets them enter a position. */
+{
+char tbl[256];
+char *track = cgiString("hgbTrack");
+char *organism = cgiString("org");
+char *database = cgiString("db");
+char *position = cartCgiUsualString(cart, "position", hDefaultPos(database));
+char chrN_track[256];
+safef(chrN_track, sizeof(chrN_track), "chr1_%s", track);
+if (hTableExists(chrN_track))
+    safef(tbl, sizeof(tbl), "%s.chrN_%s", cgiString("db"), track);
+else
+    safef(tbl, sizeof(tbl), "%s.%s", cgiString("db"), track);
+webStart(cart, "Table Browser: Enter a Position or Search Term");
+puts("Enter a genome position (or enter \"genome\" to "
+     "search all chromosomes), then press the Submit button.\n");
+printf("Use <A HREF=\"/cgi-bin/hgBlat?db=%s&hgsid=%d\">BLAT Search</A> to "
+       "locate a particular sequence in the genome.\n",
+       database, cartSessionId(cart));
+puts("See the <A HREF=\"/goldenPath/help/hgTextHelp.html\">Table Browser "
+     "User Guide</A> for more information.<P>\n");
+printf("<FORM ACTION=\"/cgi-bin/hgText\" METHOD=\"GET\">");
+cartSaveSession(cart);
+cgiContinueHiddenVar("org");
+cgiContinueHiddenVar("db");
+cgiMakeHiddenVar("table", tbl);
+cgiMakeHiddenVar("phase", hgTextPhase);
+cgiMakeTextVar("position", position, 30);
+cgiMakeButton("submit", "Submit");
+printf("</FORM>\n");
+
+hgPositionsHelpHtml(organism);
 }
 
 void pasteForm()
@@ -350,7 +397,9 @@ getDbAndGenome(cart, &db, &organism);
 hSetDb(db);
 track = cartUsualString(cart, "hgbTrack", "mrna");
 keyField = cgiOptionalString("hgbKeyField");
-if (cgiVarExists("hgb.pasteKeys"))
+if (cgiVarExists("hgb.enterPos"))
+    posForm();
+else if (cgiVarExists("hgb.pasteKeys"))
     pasteForm();
 else if (cgiVarExists("hgb.uploadKeys"))
     uploadForm();
