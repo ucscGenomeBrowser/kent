@@ -135,6 +135,11 @@ void cgiContinueAllVars();
 void cgiVarExclude(char *varName);
 /* If varName exists, remove it. */
 
+void cgiVarExcludeExcept(char **varNames);
+/* Exclude all variables except for those in NULL
+ * terminated array varNames.  varNames may be NULL
+ * in which case nothing is excluded. */
+
 void cgiVarSet(char *varName, char *val);
 /* Set a cgi variable to a particular value. */
 

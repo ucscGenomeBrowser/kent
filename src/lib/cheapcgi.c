@@ -690,6 +690,35 @@ if (cgiVarExists(varName))
     }
 }
 
+void cgiVarExcludeExcept(char **varNames)
+/* Exclude all variables except for those in NULL
+ * terminated array varNames.  varNames may be NULL
+ * in which case nothing is excluded. */
+{
+struct hashEl *list, *el;
+struct hash *exclude = newHash(8);
+char *s;
+
+/* Build up hash of things to exclude */
+if (varNames != NULL)
+   {
+   while ((s = *varNames++) != NULL)
+       hashAdd(exclude, s, NULL);
+   }
+
+/* Step through variable list and remove them if not
+ * excluded. */
+initCgiInput();
+list = hashElListHash(inputHash);
+for (el = list; el != NULL; el = el->next)
+    {
+    if (!hashLookup(exclude, el->name))
+        cgiVarExclude(el->name);
+    }
+hashElFreeList(&list);
+freeHash(&exclude);
+}
+
 void cgiVarSet(char *varName, char *val)
 /* Set a cgi variable to a particular value. */
 {
