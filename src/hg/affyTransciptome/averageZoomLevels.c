@@ -109,13 +109,16 @@ for(i = 0; i < binCount; i++)
 	b->pinStart = (b->chromEnd - b->chromStart)/2 + b->chromStart;
 	b->pinEnd = b->pinStart +1;
 	}
+    if(differentString(name, "Empty")) 
+	{
 	fprintf(out, "%s\t%d\t%d\t%s\t%d\t+\t1\t0,\t%d\n",
 		b->chrom,
 		b->pinStart, 
 		b->pinEnd,
 		name,
-		(int)b->aveScore,
+		0,
 		(int)b->aveScore);
+	}
     }
 }
 		
