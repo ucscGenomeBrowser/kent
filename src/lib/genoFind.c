@@ -100,20 +100,39 @@ if (gf != NULL)
     }
 }
 
+int gfPowerOf20(int n)
+/* Return a 20 to the n */
+{
+int res = 20;
+while (--n > 0)
+    res *= 20;
+return res;
+}
+
 static struct genoFind *gfNewEmpty(int minMatch, int maxGap, int tileSize, int maxPat,
-	char *oocFile)
+	char *oocFile, boolean isPep)
 /* Return an empty pattern space. oocFile parameter may be NULL*/
 {
 struct genoFind *gf;
-int seedBitSize = tileSize*2;
 int tileSpaceSize;
 
-if (tileSize < 8 || tileSize > 14)
-    errAbort("Seed size must be between 8 and 14");
+if (isPep)
+    if (tileSize < 3 || tileSize > 6)
+	errAbort("Seed size must be between 3 and 6");
+else
+    if (tileSize < 8 || tileSize > 14)
+	errAbort("Seed size must be between 8 and 14");
 AllocVar(gf);
 gf->tileSize = tileSize;
-tileSpaceSize = gf->tileSpaceSize = (1<<seedBitSize);
-gf->tileMask = tileSpaceSize-1;
+gf->isPep = isPep;
+if (isPep)
+    tileSpaceSize = gf->tileSpaceSize = gfPowerOf20(tileSize);
+else
+    {
+    int seedBitSize = tileSize*2;
+    tileSpaceSize = gf->tileSpaceSize = (1<<seedBitSize);
+    gf->tileMask = tileSpaceSize-1;
+    }
 gf->lists = needHugeZeroedMem(tileSpaceSize * sizeof(gf->lists[0]));
 gf->listSizes = needHugeZeroedMem(tileSpaceSize * sizeof(gf->listSizes[0]));
 gf->minMatch = minMatch;
@@ -127,61 +146,56 @@ if (oocFile != NULL)
 return gf;
 }
 
-int gfPowerOf20(int n)
-/* Return a 20 to the n */
+int gfDnaTile(DNA *dna, int n)
+/* Make a packed DNA n-mer. */
 {
-int res = 20;
-while (--n > 0)
-    res *= 20;
-return res;
-}
-
-static struct genoFind *gfPepNewEmpty(int minMatch, int maxGap, int tileSize, int maxPat)
-/* Return an empty peptide pattern space. */
-{
-struct genoFind *gf;
-int seedBitSize = tileSize*2;
-int tileSpaceSize;
-
-if (tileSize < 3 || tileSize > 6)
-    errAbort("Seed size must be between 3 and 6");
-AllocVar(gf);
-gf->tileSize = tileSize;
-tileSpaceSize = gf->tileSpaceSize = gfPowerOf20(tileSize);
-gf->lists = needHugeZeroedMem(tileSpaceSize * sizeof(gf->lists[0]));
-gf->listSizes = needHugeZeroedMem(tileSpaceSize * sizeof(gf->listSizes[0]));
-gf->minMatch = minMatch;
-gf->maxGap = maxGap;
-gf->maxPat = maxPat;
-return gf;
-}
-
-
-void gfCountTile(struct genoFind *gf, DNA *dna)
-/* Add N-mer to count. */
-{
-bits32 tile = 0;
-int i, n = gf->tileSize;
+int tile = 0;
+int i;
 for (i=0; i<n; ++i)
     {
     tile <<= 2;
     tile += ntValNoN[dna[i]];
     }
-if (gf->listSizes[tile] < gf->maxPat)
-    ++gf->listSizes[tile];
+return tile;
 }
 
-static void gfCountSeq(struct genoFind *gf, struct dnaSeq *seq)
+int gfPepTile(AA *pep, int n)
+/* Make up packed representation of translated protein. */
+{
+int tile = 0;
+int aa;
+while (--n >= 0)
+    {
+    tile *= 20;
+    aa = aaVal[*pep++];
+    if (aa < 0)
+        return -1;
+    tile += aa;
+    }
+return tile;
+}
+
+static void gfCountSeq(struct genoFind *gf, bioSeq *seq)
 /* Add all N-mers in seq. */
 {
-DNA *dna = seq->dna;
+char *poly = seq->dna;
 int tileSize = gf->tileSize;
+int maxPat = gf->maxPat;
+int tile;
+bits32 *listSizes = gf->listSizes;
 int i, lastTile = seq->size - tileSize;
+int (*makeTile)(char *poly, int n) = (gf->isPep ? gfPepTile : gfDnaTile);
 
 for (i=0; i<=lastTile; i += tileSize)
     {
-    gfCountTile(gf, dna);
-    dna += tileSize;
+    if ((tile = makeTile(poly, tileSize)) >= 0)
+	{
+        if (listSizes[tile] < maxPat)
+	    {
+	    listSizes[tile] += 1;
+	    }
+	}
+    poly += tileSize;
     }
 }
 
@@ -208,95 +222,6 @@ for (i=0; i < nibSize; i = endBuf)
     }
 fclose(f);
 }
-
-
-int gfTransPepTile(DNA *dna, int n)
-/* Make up packed representation of translated protein. */
-{
-int tile = 0;
-int aa;
-while (--n >= 0)
-    {
-    tile *= 20;
-    aa = lookupCodon(dna);
-    if (aa == 0 || aa == 'X')
-        return -1;
-    tile += aaVal[aa];
-    dna += 3;
-    }
-return tile;
-}
-
-int gfPepTile(AA *pep, int n)
-/* Make up packed representation of translated protein. */
-{
-int tile = 0;
-int aa;
-while (--n >= 0)
-    {
-    tile *= 20;
-    aa = aaVal[*pep++];
-    if (aa < 0)
-        return -1;
-    tile += aa;
-    }
-return tile;
-}
-
-
-void gfPepCountTile(struct genoFind *gf, DNA *dna)
-/* Add peptide N-mer to count. */
-{
-int tile = gfTransPepTile(dna, gf->tileSize);
-
-if (tile >= 0 && gf->listSizes[tile] < gf->maxPat)
-    ++gf->listSizes[tile];
-}
-
-
-static void gfPepCountSeq(struct genoFind *gf, struct dnaSeq *seq)
-/* Add all N-mers in seq. */
-{
-DNA *dna = seq->dna;
-int ntTileSize = gf->tileSize*3;
-int i, lastTile = seq->size - ntTileSize;
-
-for (i=0; i<=lastTile; i += ntTileSize)
-    {
-    gfPepCountTile(gf, dna);
-    dna += ntTileSize;
-    }
-}
-
-
-static void gfPepCountTilesInNib(struct genoFind *gf, char *nibName)
-/* Count all peptide tiles in nib file. */
-{
-FILE *f;
-int tileSize = gf->tileSize;
-int bufSize = tileSize * 3 * 8 * 1024;
-int nibSize, i;
-int endBuf, basesInBuf;
-struct dnaSeq *seq;
-int frame;
-
-printf("Counting tiles in %s\n", nibName);
-nibOpenVerify(nibName, &f, &nibSize);
-for (frame = 0; frame < 3; ++frame)
-    {
-    for (i=frame; i < nibSize; i = endBuf)
-	{
-	endBuf = i + bufSize;
-	if (endBuf >= nibSize) endBuf = nibSize;
-	basesInBuf = endBuf - i;
-	seq = nibLdPart(nibName, f, nibSize, i, basesInBuf);
-	gfPepCountSeq(gf, seq);
-	freeDnaSeq(&seq);
-	}
-    }
-fclose(f);
-}
-
 
 static int gfAllocLists(struct genoFind *gf)
 /* Allocate pat space lists and set up list pointers. 
@@ -339,6 +264,7 @@ for (i=0; i<tileSpaceSize; ++i)
 return count;
 }
 
+#ifdef OLD
 void gfAddTile(struct genoFind *gf, DNA *dna, int offset)
 /* Add N-mer to tile index. */
 {
@@ -352,47 +278,36 @@ for (i=0; i<n; ++i)
 if (gf->listSizes[tile] < gf->maxPat)
     gf->lists[tile][gf->listSizes[tile]++] = offset;
 }
+#endif
 
-void gfPepAddTile(struct genoFind *gf, DNA *dna, int offset)
-/* Add peptide N-mer to tile index. */
-{
-int tile = gfTransPepTile(dna, gf->tileSize);
-if (tile >= 0)
-    {
-    if (gf->listSizes[tile] < gf->maxPat)
-	gf->lists[tile][gf->listSizes[tile]++] = offset;
-    }
-}
-
-void gfAddSeq(struct genoFind *gf, struct dnaSeq *seq, bits32 offset)
+static void gfAddSeq(struct genoFind *gf, bioSeq *seq, bits32 offset)
 /* Add all N-mers in seq. */
 {
-DNA *dna = seq->dna;
+char *poly = seq->dna;
 int tileSize = gf->tileSize;
 int i, lastTile = seq->size - tileSize;
+int (*makeTile)(char *poly, int n) = (gf->isPep ? gfPepTile : gfDnaTile);
+int maxPat = gf->maxPat;
+int tile;
+bits32 *listSizes = gf->listSizes;
+bits32 **lists = gf->lists;
+int patCount;
 
 for (i=0; i<=lastTile; i += tileSize)
     {
-    gfAddTile(gf, dna, offset);
+    tile = makeTile(poly, tileSize);
+    if (tile >= 0)
+        {
+	if (listSizes[tile] < maxPat)
+	    {
+	    lists[tile][listSizes[tile]++] = offset;
+	    }
+	}
     offset += tileSize;
-    dna += tileSize;
+    poly += tileSize;
     }
 }
 
-void gfPepAddSeq(struct genoFind *gf, struct dnaSeq *seq, bits32 offset)
-/* Add all N-mers in seq. */
-{
-DNA *dna = seq->dna;
-int ntTileSize = gf->tileSize*3;
-int i, lastTile = seq->size - ntTileSize;
-
-for (i=0; i<=lastTile; i += ntTileSize)
-    {
-    gfPepAddTile(gf, dna, offset);
-    offset += ntTileSize;
-    dna += ntTileSize;
-    }
-}
 
 static int gfAddTilesInNib(struct genoFind *gf, char *nibName, bits32 offset)
 /* Add all tiles in nib file.  Returns size of nib file. */
@@ -419,39 +334,8 @@ fclose(f);
 return nibSize;
 }
 
-static int gfPepAddTilesInNib(struct genoFind *gf, char *nibName, bits32 offset)
-/* Add all peptide tiles in nib file. ~~~ Untested! */
-{
-FILE *f;
-int tileSize = gf->tileSize;
-int bufSize = tileSize * 3 * 8 * 1024;
-int nibSize, i;
-int endBuf, basesInBuf;
-struct dnaSeq *seq;
-int frame;
 
-printf("Adding tiles in %s\n", nibName);
-nibOpenVerify(nibName, &f, &nibSize);
-for (frame = 0; frame < 3; ++frame)
-    {
-    for (i=frame; i < nibSize; i = endBuf)
-	{
-	endBuf = i + bufSize;
-	if (endBuf >= nibSize) endBuf = nibSize;
-	basesInBuf = endBuf - i;
-	seq = nibLdPart(nibName, f, nibSize, i, basesInBuf);
-	gfPepAddSeq(gf, seq, i+offset);
-	freeDnaSeq(&seq);
-	}
-    }
-fclose(f);
-printf("Done adding\n");
-return nibSize;
-}
-
-
-
-void gfZeroOverused(struct genoFind *gf)
+static void gfZeroOverused(struct genoFind *gf)
 /* Zero out counts of overused tiles. */
 {
 bits32 *sizes = gf->listSizes;
@@ -498,7 +382,7 @@ struct genoFind *gfIndexNibs(int nibCount, char *nibNames[],
  *      maxPat   - maximum use of tile to not be considered a repeat
  *      oocFile  - .ooc format file that lists repeat tiles.  May be NULL. */
 {
-struct genoFind *gf = gfNewEmpty(minMatch, maxGap, tileSize, maxPat, oocFile);
+struct genoFind *gf = gfNewEmpty(minMatch, maxGap, tileSize, maxPat, oocFile, FALSE);
 int i;
 bits32 offset = 0, nibSize;
 char *nibName;
@@ -525,13 +409,13 @@ gfZeroOverused(gf);
 return gf;
 }
 
-struct genoFind *gfIndexSeq(struct dnaSeq *seqList,
-	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile)
+struct genoFind *gfIndexSeq(bioSeq *seqList,
+	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile, boolean isPep)
 /* Make index for all seqs in list. */
 {
-struct genoFind *gf = gfNewEmpty(minMatch, maxGap, tileSize, maxPat, oocFile);
+struct genoFind *gf = gfNewEmpty(minMatch, maxGap, tileSize, maxPat, oocFile, isPep);
 int seqCount = slCount(seqList);
-struct dnaSeq *seq;
+bioSeq *seq;
 int i;
 bits32 offset = 0, nibSize;
 char *nibName;
@@ -559,38 +443,6 @@ printf("Done indexing %d-mers\n", tileSize);
 gfZeroOverused(gf);
 return gf;
 }
-
-
-struct genoFind *gfPepIndexNibs(int nibCount, char *nibNames[],
-	int minMatch, int maxGap, int tileSize, int maxPat)
-/* Make index for all nib files. */
-{
-struct genoFind *gf = gfPepNewEmpty(minMatch, maxGap, tileSize, maxPat);
-int i;
-bits32 offset = 0, nibSize;
-char *nibName;
-struct gfSeqSource *ss;
-
-for (i=0; i<nibCount; ++i)
-    gfPepCountTilesInNib(gf, nibNames[i]);
-gfAllocLists(gf);
-gfZeroNonOverused(gf);
-AllocArray(gf->sources, nibCount);
-gf->sourceCount = nibCount;
-for (i=0; i<nibCount; ++i)
-    {
-    nibName = nibNames[i];
-    nibSize = gfPepAddTilesInNib(gf, nibName, offset);
-    ss = gf->sources+i;
-    ss->fileName = nibName;
-    ss->start = offset;
-    offset += nibSize;
-    ss->end = offset;
-    }
-gfZeroOverused(gf);
-return gf;
-}
-
 
 static int bCmpSeqSource(const void *vTarget, const void *vRange)
 /* Compare function for binary search of gfSeqSource. */
@@ -636,7 +488,6 @@ for (el = *pList; el != NULL; el = next)
     }
 *pList = NULL;
 }
-
 
 void gfClumpDump(struct genoFind *gf, struct gfClump *clump, FILE *f)
 /* Print out info on clump */
@@ -805,11 +656,18 @@ for (hit = hitList; ; hit = nextHit)
     lastHit = hit;
     }
 slSort(&clumpList, gfClumpCmpHitCount);
+#ifdef DEBUG
+uglyf("Dumping clumps\n");
+for (clump = clumpList; clump != NULL; clump = clump->next)	/* uglyf */
+    {
+    uglyf(" %d %d %s %d %d (%d hits)\n", clump->qStart, clump->qEnd, clump->target->seq->name,   clump->tStart, clump->tEnd, clump->hitCount);
+    }
+#endif /* DEBUG */
 return clumpList;
 }
 
 
-struct gfClump *gfFindClumps(struct genoFind *gf, struct dnaSeq *seq)
+struct gfClump *gfFindDnaClumps(struct genoFind *gf, struct dnaSeq *seq)
 /* Find clumps associated with one sequence. */
 {
 struct gfHit *hitList = NULL, *hit;
@@ -859,7 +717,7 @@ slSort(&hitList, gfHitCmpDiagonal);
 return clumpHits(gf, hitList, minMatch);
 }
 
-struct gfClump *gfPepFindClumps(struct genoFind *gf, struct dnaSeq *seq)
+struct gfClump *gfFindPepClumps(struct genoFind *gf, aaSeq *seq)
 /* Find clumps associated with one sequence. */
 {
 struct gfHit *hitList = NULL, *hit;
@@ -882,7 +740,6 @@ for (i=0; i<=lastStart; ++i)
     if (tile < 0)
         continue;
     listSize = gf->listSizes[tile];
-    qStart = i*3;
     tList = gf->lists[tile];
     for (j=0; j<listSize; ++j)
         {
@@ -897,5 +754,13 @@ for (i=0; i<=lastStart; ++i)
 cmpQuerySize = seq->size;
 slSort(&hitList, gfHitCmpDiagonal);
 return clumpHits(gf, hitList, minMatch);
+}
+
+struct gfClump *gfFindClumps(struct genoFind *gf, bioSeq *seq)
+{
+if (gf->isPep)
+    return gfFindPepClumps(gf, seq);
+else
+    return gfFindDnaClumps(gf, seq);
 }
 
