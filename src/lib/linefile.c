@@ -10,7 +10,7 @@
 #include "errabort.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: linefile.c,v 1.28 2004/03/11 07:03:05 kent Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.29 2004/04/15 07:28:29 kent Exp $";
 
 struct lineFile *lineFileAttatch(char *fileName, bool zTerm, int fd)
 /* Wrap a line file around an open'd file. */
@@ -22,6 +22,21 @@ lf->fd = fd;
 lf->bufSize = 64*1024;
 lf->zTerm = zTerm;
 lf->buf = needMem(lf->bufSize+1);
+return lf;
+}
+
+struct lineFile *lineFileOnString(char *name, bool zTerm, char *s)
+/* Wrap a line file object around string in memory. This buffer
+ * have zeroes written into it and be freed when the line file
+ * is closed. */
+{
+struct lineFile *lf;
+AllocVar(lf);
+lf->fileName = cloneString(name);
+lf->fd = -1;
+lf->bufSize = lf->bytesInBuf = strlen(s);
+lf->zTerm = zTerm;
+lf->buf = s;
 return lf;
 }
 
@@ -143,7 +158,10 @@ while (!gotLf)
     if (oldEnd > 0 && sizeLeft > 0)
 	memmove(buf, buf+oldEnd, sizeLeft);
     lf->bufOffsetInFile += oldEnd;
-    readSize = lineFileLongNetRead(lf->fd, buf+sizeLeft, readSize);
+    if (lf->fd)
+	readSize = lineFileLongNetRead(lf->fd, buf+sizeLeft, readSize);
+    else
+        readSize = 0;
     if ((readSize == 0) && (endIx > oldEnd))
 	{
 	/* If there is no newline at end of file, we will end up here. */

@@ -13,11 +13,11 @@ struct lineFile
     {
     struct lineFile *next;	/* Might need to be on a list. */
     char *fileName;		/* Name of file. */
-    int fd;			/* File handle. */
+    int fd;			/* File handle.  -1 for 'memory' files. */
     int bufSize;		/* Size of buffer. */
     off_t bufOffsetInFile;	/* Offset in file of first buffer byte. */
     int bytesInBuf;		/* Bytes read into buffer. */
-    int lastReadSize;		/* Size of last read. */
+    int reserved;		/* Reserved (zero for now). */
     int lineIx;			/* Current line. */
     int lineStart;		/* Offset of line in buffer. */
     int lineEnd;		/* End of line in buffer. */
@@ -38,6 +38,11 @@ struct lineFile *lineFileAttatch(char *fileName, bool zTerm, int fd);
 
 struct lineFile *lineFileStdin(bool zTerm);
 /* Wrap a line file around stdin. */
+
+struct lineFile *lineFileOnString(char *name, bool zTerm, char *s);
+/* Wrap a line file object around string in memory. This buffer
+ * have zeroes written into it if zTerm is non-zero.  It will
+ * be freed when the line file is closed. */
 
 void lineFileClose(struct lineFile **pLf);
 /* Close up a line file. */
