@@ -238,9 +238,11 @@ done >> seq_contig.md
     # contig_overlaps.agp - 2004-06-18 - this is beginning to come
     # together and there is now a contig_overlaps.agp file
 
-    /cluster/bin/i386/agpToGl contig_overlaps.agp . -md=seq_contig.md
+    #	This is properly done below with a combination of psLayout
+    #	alignments to create the contig_overlaps.agp file
+    # /cluster/bin/i386/agpToGl contig_overlaps.agp . -md=seq_contig.md
     # Create chromosome gl files
-    jkStuff/liftGl.csh contig.gl
+    # jkStuff/liftGl.csh contig.gl
 
 # CREATING DATABASE  (DONE - 2004-05-20 - Hiram)
     #	RE-DONE for new NIBS - 2004-06-03
@@ -2546,6 +2548,8 @@ Submission to last job:        169197s    2819.95m    47.00h    1.96d
     #	1013003285 bases of 2866216770 (35.343%) in intersection
 
 # CHAIN RN3 BLASTZ (DONE - 2004-06-14 - Hiram)
+#  re-worked with no 'axtFilter -notQ_random' on the axtChain step - 2004-06-23
+    axtFilter -notQ_random $1 | axtChain stdin \
 
 # The axtChain is best run on the small kluster, or the kk9 kluster
     ssh kki
@@ -2563,7 +2567,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} out/$(
 
     cat << '_EOF_' > doChain
 #!/bin/csh
-    axtFilter -notQ_random $1 | axtChain stdin \
+    axtChain $1 \
 	/iscratch/i/gs.18/build35/bothMaskedNibs \
 	/iscratch/i/rn3/bothMaskedNibs $2 > $3
 '_EOF_'
@@ -2576,26 +2580,26 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} out/$(
     para try
     para push # ... etc ...
 # Completed: 46 of 46 jobs
-# CPU time in finished jobs:       4675s      77.91m     1.30h    0.05d  0.000 y
-# IO & Wait Time:                  5429s      90.49m     1.51h    0.06d  0.000 y
-# Average job time:                 220s       3.66m     0.06h    0.00d
-# Longest job:                      989s      16.48m     0.27h    0.01d
-# Submission to last job:           989s      16.48m     0.27h    0.01d
+# CPU time in finished jobs:       4645s      77.41m     1.29h    0.05d  0.000 y
+# IO & Wait Time:                  6840s     114.00m     1.90h    0.08d  0.000 y
+# Average job time:                 250s       4.16m     0.07h    0.00d
+# Longest job:                     1539s      25.65m     0.43h    0.02d
+# Submission to last job:          3761s      62.68m     1.04h    0.04d
+
 
     # now on the file server, sort chains
     ssh eieio
     cd /cluster/data/hg17/bed/blastz.rn3/axtChain
     time chainMergeSort run1/chain/*.chain > all.chain
-    #	real    6m7.931s
-    #	user    4m50.430s
-    #	sys     0m52.590s
+    #	real    36m42.170s
+    #	user    4m55.970s
+    #	sys     1m49.840s
 
     time chainSplit chain all.chain
-    #	real    5m39.214s
-    #	user    4m42.800s
-    #	sys     0m19.550s
+    #	real    13m54.860s
+    #	user    4m50.370s
+    #	sys     1m3.260s
 
-    # these steps take ~20 minutes
     # optionally: rm run1/chain/*.chain
 
     # Load chains into database
@@ -2608,11 +2612,13 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} out/$(
         echo done $c
     end
     #	featureBits hg17 chainRn3
-    #	2826192649 bases of 2866216770 (98.604%) in intersection
+    #	2827052992 bases of 2866216770 (98.634%) in intersection
+    #	(with filter:) 2826192649 bases of 2866216770 (98.604%) in intersection
     #	featureBits hg16 chainRn3
     #	2830563493 bases of 2865248791 (98.789%) in intersection
 
 # NET RN3 (DONE - 2004-06-15 - Hiram)
+#	Re-done due to Chain being re-done 2004-06-23
 
     ssh eieio
     cd /cluster/data/hg17/bed/blastz.rn3/axtChain
@@ -2636,16 +2642,16 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} out/$(
 
     cd ..
     cat n1/*.net | /cluster/bin/i386/netSyntenic stdin hNoClass.net
-    #	memory usage 2494730240, utime 19278 s/100, stime 4508
+    #	memory usage 2510467072, utime 19307 s/100, stime 3181
 
     ssh hgwdev
     cd /cluster/data/hg17/bed/blastz.rn3/axtChain
     time netClass hNoClass.net hg17 rn3 rat.net \
 	-tNewR=/cluster/bluearc/scratch/hg/gs.18/build35/linSpecRep.notInRat \
 	-qNewR=/cluster/bluearc/rat/rn3/linSpecRep.notInHuman
-    #	real    19m33.421s
-    #	user    10m37.130s
-    #	sys     1m45.630s
+    #	real    34m29.829s
+    #	user    11m30.440s
+    #	sys     1m52.730s
 
     # If things look good do
     ssh eieio
@@ -2653,26 +2659,29 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} out/$(
     rm -r n1 hNoClass.net
     # Make a 'syntenic' subset of these with
     time netFilter -syn rat.net > ratSyn.net
-    #	real    13m24.885s
-    #	user    7m37.100s
-    #	sys     1m5.760s
+    #	real    16m25.640s
+    #	user    7m41.330s
+    #	sys     1m1.150s
 
     # Load the nets into database
     ssh hgwdev
     cd /cluster/data/hg17/bed/blastz.rn3/axtChain
     netFilter -minGap=10 rat.net |  hgLoadNet hg17 netRn3 stdin
     netFilter -minGap=10 ratSyn.net | hgLoadNet hg17 syntenyNetRn3 stdin
-#   real    12m53.070s
-#   user    6m6.540s
-#   sys     0m50.580s
+    #	real    37m0.199s
+    #	user    15m13.770s
+    #	sys     1m41.540s
+
     # check results
     # featureBits hg17 netRn3
-    # 2816623107 bases of 2866216770 (98.270%) in intersection
+    # 2817656275 bases of 2866216770 (98.306%) in intersection
+    # (with axtFilter) 2816623107 bases of 2866216770 (98.270%) in intersection
     # featureBits hg16 netRn3
     # 2820958389 bases of 2865248791 (98.454%) in intersection
 
     # featureBits hg17 syntenyNetRn3
-    # 2780883450 bases of 2866216770 (97.023%) in intersection
+    # 2781748096 bases of 2866216770 (97.053%) in intersection
+    # (with axtFilter) 2780883450 bases of 2866216770 (97.023%) in intersection
     # featureBits hg16 syntenyNetRn3
     # 2784011730 bases of 2865248791 (97.165%) in intersection
 
@@ -2698,6 +2707,20 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} out/$(
 		../axtNet/$c.axt
 	echo "Complete: $c.net -> axtNet/$c.axt"
     end
+
+    #	convert axt to maf
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.rn3/axtNet
+    mkdir ../mafNet
+
+    foreach f (chr*.axt)
+      set maf = $f:t:r.fr1.maf
+      echo translating $f to $maf
+      axtToMaf $f \
+            /cluster/data/hg17/chrom.sizes /cluster/data/rn3/chrom.sizes \
+            ../mafNet/$maf -tPrefix=hg17. -qPrefix=rn3.
+    end
+XXX - running 2004-06-23 16:10
 
     ssh hgwdev
     mkdir -p /cluster/data/hg17/bed/blastz.rn3/axtBest
@@ -3800,9 +3823,10 @@ SEQ2_LEN=$BASE/S2.len
     # 1056201417 bases of 2866216770 (36.850%) in intersection
 
 # CHAIN MM4 BLASTZ (WORKING - 2004-06-22 - Hiram)
+# redone with the 'axtFilter -notQ_random' removed - 2004-06-23
 
 # The axtChain is best run on the small kluster, or the kk9 kluster
-    ssh kki
+    ssh kk9
     mkdir -p /cluster/data/hg17/bed/blastz.mm4/axtChain/run1
     cd /cluster/data/hg17/bed/blastz.mm4/axtChain/run1
     mkdir out chain
@@ -3817,8 +3841,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} out/$(
 
     cat << '_EOF_' > doChain
 #!/bin/csh
-    axtFilter -notQ_random $1 | axtChain stdin \
-	/iscratch/i/gs.18/build35/bothMaskedNibs \
+axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
 	/iscratch/i/mm4/softNib $2 > $3
 '_EOF_'
     # << this line makes emacs coloring happy
@@ -3829,6 +3852,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} out/$(
     para create jobList
     para try
     para push # ... etc ...
+XXXX - running 2004-06-23 10:30
 # Completed: 45 of 46 jobs
 # CPU time in finished jobs:       6575s     109.58m     1.83h    0.08d  0.000 y
 # IO & Wait Time:                  9274s     154.57m     2.58h    0.11d  0.000 y
