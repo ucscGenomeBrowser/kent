@@ -14,7 +14,7 @@ if ($#argv < 1 || $#argv > 4) then
   echo "  this will break when hgText is replaced by hgTables."
   echo
   echo "    usage: database, [machine1], [machine2] (defaults to hgw1 and hgwbeta)"
-  echo "                     [mode] (terse or verbose for html field, defaults to terse)"
+  echo "                     [mode = terse|verbose for html field] (defaults to terse)"
   echo ""
   exit 1
 endif
@@ -41,25 +41,22 @@ endif
 if ( $mode != "verbose" && $mode != "terse" ) then
   echo
   echo "  mode not terse or verbose.\n"
-  echo "    usage: database, [machine1], [machine2] (defaults to hgw1 and hgwbeta)"
-  echo "                     [mode] (terse or verbose for html field, defaults to terse)"
-  echo
+  echo "${0}:"
+  $0
   exit 1
 endif
 
 checkMachineName.csh $machine1
 if ( $status ) then
-  echo "    usage: database, [machine1], [machine2] (defaults to hgw1 and hgwbeta)"
-  echo "                     [mode] (terse or verbose for html field, defaults to terse)"
-  echo
+  echo "${0}:"
+  $0
   exit 1
 endif
 
 checkMachineName.csh $machine2
 if ( $status ) then
-  echo "    usage: database, [machine1], [machine2] (defaults to hgw1 and hgwbeta)"
-  echo "                     [mode] (terse or verbose for html field, defaults to terse)"
-  echo
+  echo "${0}:"
+  $0
   exit 1
 endif
 
@@ -68,6 +65,9 @@ set fields=`hgsql -N -e "DESC $table" $db | gawk '{print $1}' | grep -vw "html"`
 
 foreach field ( $fields )
   compareTrackDbs.csh $machine1 $machine2 $db $field
+  if ( $status ) then
+    exit 1
+  endif
 end
 
 set field="html"
