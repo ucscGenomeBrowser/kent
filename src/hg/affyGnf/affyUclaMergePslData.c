@@ -7,7 +7,7 @@
 #include "bed.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: affyUclaMergePslData.c,v 1.1 2003/06/18 20:58:38 sugnet Exp $";
+static char const rcsid[] = "$Id: affyUclaMergePslData.c,v 1.2 2003/09/14 23:04:43 sugnet Exp $";
 static boolean doHappyDots;   /* output activity dots? */
 char *prefix = ":";  /* Prefext to our affymetrix names. */
 
@@ -20,6 +20,7 @@ static struct optionSpec optionSpecs[] =
     {"bedOut", OPTION_STRING},
     {"expRecordOut", OPTION_STRING},
     {"expFile", OPTION_STRING},
+    {"toDiffFile", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -31,7 +32,8 @@ static char *optionDescripts[] =
     "File from Allen at UCLA",
     "File to output beds to.",
     "File to output experiment descriptions to.",
-    "File with list of experiment names, one per line."
+    "File with list of experiment names, one per line.",
+    "Output resulting beds in format close to Allen's file (for diff sanity check)"
 };
 
 void usage()
@@ -53,9 +55,9 @@ for(i=0; i<ArraySize(optionSpecs) -1; i++)
     fprintf(stderr, "  -%s -- %s\n", optionSpecs[i].name, optionDescripts[i]);
 errAbort("\nusage:\n"
 	 "   affyUclaMergePslData "
-	 "affyUclaMergePslData -pslFile=hg15.affyU133AB_all.lifted.pslReps.psl  \\n"
-	 "   -affyFile=/projects/compbio/data/microarray/affyUcla/data/030602_ucla_normal_human_tissue_snapshot.txt \\n"
-	 "   -bedOut=hg15.affyUcla.bed -expRecordOut=hg15.affyUcla.expRecords -expFile=expNames.txt\\n");
+	 "affyUclaMergePslData -pslFile=hg15.affyU133AB_all.lifted.pslReps.psl  \\\n"
+	 "   -affyFile=/projects/compbio/data/microarray/affyUcla/data/030602_ucla_normal_human_tissue_snapshot.txt \\\n"
+	 "   -bedOut=hg15.affyUcla.bed -expRecordOut=hg15.affyUcla.expRecords -expFile=expNames.txt -toDiffFile=toDiff.txt\\\n");
 }
 
 
@@ -151,6 +153,30 @@ for(i=0; i<expCount; i++)
     }
 }
 
+void outputToDiffRecord(struct bed *bed, struct slName *expNames, FILE *out)
+/** Write out a bed in the original format, good for diffing 
+    to make sure things are getting matched. */
+{
+static struct hash *unique = NULL;
+char key[256];
+char *tmp = "placeHolder";
+int i;
+struct slName *name = NULL;
+if(unique == NULL)
+    unique = newHash(15);
+safef(key, sizeof(key), "%s", bed->name);
+if(hashFindVal(unique, key) != NULL)
+    return;
+for(i=0; i<bed->expCount; i++)
+    {
+    if(bed->expScores[i] == -10000)
+	continue;
+    name = slElementFromIx(expNames,bed->expIds[i]);
+    fprintf(out, "%s\t%s\t%f\n", bed->name, name->name, bed->expScores[i]);
+    }
+hashAdd(unique, key, tmp);
+}
+
 void outputBedsFromPsls(struct hash *pslHash,char *bedOutName, char *expRecordOutName, 
 			char *affyFileName, char *expFileName)
 /** For each set of entries in affyFile find matching psl and create a bed. */
@@ -167,10 +193,14 @@ char key[128];
 struct slName *expNames = NULL, *name = NULL;
 FILE *bedOut = NULL;
 FILE *expRecordOut = NULL;
+char *toDiffFileName = optionVal("toDiffFile", NULL);
+FILE *toDiffOut = NULL;
 struct lineFile *lf = NULL;
 fillInExpHash(expFileName, &expHash, &expNames, &expCount);
 lf = lineFileOpen(affyFileName, TRUE);
 bedOut = mustOpen(bedOutName, "w");
+if(toDiffFileName != NULL)
+    toDiffOut = mustOpen(toDiffFileName, "w");
 
 /* Loop through either adding experiments to beds or if new
    probeset create bed from psl and start over. */
@@ -187,6 +217,8 @@ while(lineFileChopNextTab(lf, row, sizeof(row)))
 	    for(b = bed; b != NULL; b = b->next)
 		{
 		bedTabOutN(b, 15, bedOut);
+		if(toDiffOut != NULL)
+		    outputToDiffRecord(b, expNames, toDiffOut);
 		}
 	    }
 	bedFreeList(&bed);
