@@ -8,6 +8,16 @@ color 99,66,20
 altColor 199,147,35
 type bed 4 .
 
+track gold
+shortLabel Assembly 
+longLabel Assembly from Fragments 
+group map
+priority 10
+visibility hide
+color 150,100,30
+altColor 230,170,40
+type bed 3 +
+
 track chainDm2
 shortLabel D. mel. Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
