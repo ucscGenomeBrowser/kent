@@ -10,3 +10,7 @@ O = paraNodeStatus.o
 paraNodeStatus: $O $(MYLIBS)
 	gcc -o $(HOME)/bin/$(MACHTYPE)/paraNodeStatus $O ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a
 	strip $(HOME)/bin/$(MACHTYPE)/paraNodeStatus
+
+paraStat: paraStat.o
+	gcc -o $(HOME)/bin/$(MACHTYPE)/paraStat paraStat.o ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a
+	strip $(HOME)/bin/$(MACHTYPE)/paraStat
