@@ -61,14 +61,14 @@ exit; # don't actually run this like a script :)
     mkdir /cluster/data/pyrAer1/bed/gc20Base
     cd /cluster/data/pyrAer1/bed/gc20Base
     mkdir wigData20 dataLimits20
-    hgGcPercent -chr=chr1 -file=stdout -win=20 pyrAer1 ../../nib | grep -w GC | \
+    hgGcPercent -chr=chr -file=stdout -win=20 -overlap=19 pyrAer1 ../../nib | grep -w GC | \
     awk '
 {
     bases = $3 - $2
     perCent = $5/10.0
     printf "%d\t%.1f\n", $2+1, perCent
-}' | wigAsciiToBinary -dataSpan=20 -chrom=chr1 \
-	-wibFile=wigData20/gc20Base_1 -name=1 stdin > dataLimits20/chr1
+}' | wigAsciiToBinary -dataSpan=1 -chrom=chr \
+	-wibFile=wigData20/gc20Base_1 -name=1 stdin > dataLimits20/chr
     hgLoadWiggle pyrAer1 gc20Base wigData20/*.wig
     mkdir /gbdb/pyrAer1/wib
     ln -s `pwd`/wigData20/*.wib /gbdb/pyrAer1/wib
