@@ -175,3 +175,15 @@ boolean cgiFromCommandLine(int *pArgc, char *argv[], boolean preferWeb);
 
 void useTempFile();
 /* tell cheapcgi to use temp files */
+
+boolean cgiFromFile(char *fileName);
+/* Set up a cgi environment using parameters stored in a file.
+ * Takes file with arguments in the form:
+ *       argument1=someVal
+ *       # This is a comment
+ *       argument2=someOtherVal
+ *       ...
+ * and puts them into the cgi environment so that the usual
+ * cgiGetVar() commands can be used. Useful when a program 
+ * has a lot of possible parameters.
+ */
