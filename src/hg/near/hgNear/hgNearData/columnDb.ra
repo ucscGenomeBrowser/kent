@@ -78,9 +78,9 @@ longLabel Eran Segal's Transcriptional Regulatory Motif
 priority 3.71
 visibility off
 type association esRegGeneToMotif 
-queryFull select gene,motif from esRegGeneToMotif
-queryOne select motif,motif from esRegGeneToMotif where gene = '%s'
-invQueryOne select gene from esRegGeneToMotif where motif = '%s'
+queryFull select gene,name from esRegGeneToMotif
+queryOne select name,name from esRegGeneToMotif where gene = '%s'
+invQueryOne select gene from esRegGeneToMotif where name = '%s'
 
 name bitScore
 shortLabel Bits
