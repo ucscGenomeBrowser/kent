@@ -57,11 +57,19 @@
                classpath="${build.classes}">
            <arg value="${test.quickProps}"/>
         </java>
+        <java classname="edu.ucsc.genome.qa.cgiCheck.HGGeneCheck"
+               classpath="${build.classes}">
+           <arg value="${test.quickProps}"/>
+        </java>
     </target>
 
     <target name="fullTest" depends="init"
 	   description="Full automated test of site.">
         <java classname="edu.ucsc.genome.qa.cgiCheck.TrackCheck"
+               classpath="${build.classes}">
+           <arg value="${test.fullProps}"/>
+        </java>
+        <java classname="edu.ucsc.genome.qa.cgiCheck.HGGeneCheck"
                classpath="${build.classes}">
            <arg value="${test.fullProps}"/>
         </java>

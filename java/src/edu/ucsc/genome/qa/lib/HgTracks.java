@@ -4,6 +4,7 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.regex.*;
+import java.util.Random;
 
 import com.meterware.httpunit.*;
 
@@ -188,12 +189,17 @@ public class HgTracks {
    * @param assembly the genome to check
    * @param table    the table to check
    */
-   public static void hggene(HGDBInfo dbinfo, String machine, String assembly,                            String table) {
+   public static void hggene(HGDBInfo dbinfo, String machine, String assembly,                            String table, boolean quickOn) {
 
     WebConversation wc = new WebConversation();
+    Random random = new Random();
 
     boolean pb = false;
     ArrayList kglist = QADBLibrary.getGenes(dbinfo, table, pb);
+    if (quickOn)
+       kglist = QALibrary.randomSubArray(kglist, random, 5, true);
+    else
+       kglist = QALibrary.randomSubArray(kglist, random, 1000, true);
 
     Iterator kgiter  = kglist.iterator();
 

@@ -129,4 +129,23 @@ public class QALibrary {
     }
     return (inputlen);
   }
+
+  /**
+   * Select a random sample out of ArrayList, optionally forcing ends to be used.
+   */
+  public static ArrayList randomSubArray(ArrayList full, Random random,
+  	int sampleCount, boolean useEnds) {
+    int size = full.size();
+    if (size <= sampleCount)
+        return full;
+    ArrayList samples = new ArrayList();
+    if (useEnds) {
+        samples.add(full.get(0));
+	samples.add(full.get(size-1));
+	sampleCount -= 2;
+    }
+    for (int i=0; i<sampleCount; ++i)
+	samples.add(full.get(random.nextInt(size)));
+    return samples;
+  }
 }

@@ -40,9 +40,9 @@ public class TestTarget {
   }
     
   public void setDefaults() {
-    machine = "hgwbeta.cse.ucsc.edu";
+    machine = "localhost";
     dbSpec = "hg16";
-    table = "knownGene";
+    table = "refGene";
     quickOn = false;
     zoomCount = 1;
  }

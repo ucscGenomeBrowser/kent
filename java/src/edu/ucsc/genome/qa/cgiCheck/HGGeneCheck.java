@@ -32,6 +32,21 @@ public class HGGeneCheck {
     System.exit(1);
  }
 
+ /**
+  * Return true if track has hgGene details page.
+  */
+ static boolean trackHasHgGene(String track) {
+   if (track.equals("knownGene"))
+     return true;
+   if (track.equals("sangerGene"))
+     return true;
+   if (track.equals("bdgpGene"))
+     return true;
+   if (track.equals("sgdGene"))
+     return true;
+   return false;
+ }
+
  /** 
   *  Runs the program to check all Known Genes,
   *  looping over all assemblies, looking for non-200 return code.
@@ -59,20 +74,18 @@ public class HGGeneCheck {
     }
     if (!metadbinfo.validate()) return;
 
-    ArrayList assemblyList = 
-      QADBLibrary.getColumn(metadbinfo, "dbDb", "name", debug);
+    ArrayList assemblyList = QADBLibrary.getDatabaseOrAll(metadbinfo, target.dbSpec);
 
     // iterate over assembly list
     // System.out.println("iterate over assembly list");
     Iterator assemblyIter = assemblyList.iterator();
     while (assemblyIter.hasNext()) {
       String assembly = (String) assemblyIter.next();
-      if (!assembly.equals("mm4")) continue;
       // System.out.println("Assembly = " + assembly);
 
       // create HGDBInfo for this assembly
       try {
-	HGDBInfo dbinfo = new HGDBInfo("localhost", assembly);
+	HGDBInfo dbinfo = new HGDBInfo(target.machine, assembly);
 	if (!dbinfo.validate()) {
 	  System.out.println("Cannot connect to database for " + assembly);
 	  continue;
@@ -94,10 +107,11 @@ public class HGGeneCheck {
         Iterator trackIter = trackList.iterator();
         while (trackIter.hasNext()) {
           String track = (String) trackIter.next();
-          if (!track.equals(target.table)) continue;
+	  if (!trackHasHgGene(track))
+	    continue;
           System.out.println(track);
           HgTracks.hggene(dbinfo, target.machine, assembly, track, 
-                          target.table, target.quickOn);
+                          target.quickOn);
           System.out.println();
         }
       } catch (Exception e) {

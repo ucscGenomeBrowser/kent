@@ -1,5 +1,5 @@
 machine hgwbeta.cse.ucsc.edu
-quick on
+quick true
 dbSpec ce1
 table refGene
 zoomCount 1
