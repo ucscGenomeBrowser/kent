@@ -384,7 +384,7 @@ if (c == '>')
     }
 else
     {
-    readAllWordsOrFa(fileName, retFiles, retFileCount, retBuf);
+    readAllWords(fileName, retFiles, retFileCount, retBuf);
     }
 }
 
