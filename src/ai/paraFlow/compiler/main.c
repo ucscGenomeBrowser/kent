@@ -1260,6 +1260,18 @@ for (tok = tokList; tok->type != pftEnd; tok = tok->next)
     }
 }
 
+static void addBuiltInTypes(struct pfScope *scope)
+/* Add built in types . */
+{
+static char *basic[] = { "var" , "string" , "bit" , "byte" , "short" , "int" , "long", "float"};
+static char *collections[] = { "array", "list", "tree", "dir" };
+int i;
+for (i=0; i<ArraySize(basic); ++i)
+    pfScopeAddType(scope, basic[i], FALSE, NULL);
+for (i=0; i<ArraySize(collections); ++i)
+    pfScopeAddType(scope, collections[i], TRUE, NULL);
+}
+
 void paraFlowOnFile(char *fileName, struct pfScope *scope)
 /* Execute paraFlow on single file. */
 {
@@ -1269,6 +1281,7 @@ struct pfToken *tokList = NULL, *tok;
 struct pfParse *program;
 int endCount = 3;
 
+addBuiltInTypes(scope);
 scope = pfScopeNew(scope, 12);
 
 /* Read tokens, add scoping info, and add to list. */
@@ -1304,17 +1317,6 @@ program = pfParseProgram(tokList, scope);
 pfParseDump(program, 0, stdout);
 }
 
-static void addBuiltInTypes(struct pfScope *scope)
-/* Add built in types . */
-{
-static char *basic[] = { "var" , "string" , "bit" , "byte" , "short" , "int" , "long", "float"};
-static char *collections[] = { "array", "list", "tree", "dir" };
-int i;
-for (i=0; i<ArraySize(basic); ++i)
-    pfScopeAddType(scope, basic[i], FALSE, NULL);
-for (i=0; i<ArraySize(collections); ++i)
-    pfScopeAddType(scope, collections[i], TRUE, NULL);
-}
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -1324,11 +1326,7 @@ optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
 scope = pfScopeNew(NULL, 14);
-addBuiltInTypes(scope);
 paraFlowOnFile(argv[1], scope);
-#ifdef SOON
-paraFlowOnFile("../testProg/easy/stringInit.pf");
-#endif /* SOON */
 return 0;
 }
 
