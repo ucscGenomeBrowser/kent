@@ -2034,6 +2034,7 @@ LOAD SANGER22 GENES  (TODO)
     # fixes by Heather and Bob (2003-07-02)
     # filter.awk had order of columns wrong
     # create HMD_Human4.rpt.noheadfoot
+    # changed 2 humanSymbols from " - " to "-"
     split.pl < HMD_Human4.rpt.noheadfoot > jaxOrtholog2.tab
     set cmd="delete from jaxOrtholog;"
     set cmd="load data local infile '$table' into table jaxOrtholog;" 
