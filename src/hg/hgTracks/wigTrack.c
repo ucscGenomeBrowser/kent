@@ -12,7 +12,7 @@
 #include "scoredRef.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.55 2004/08/24 21:04:14 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.56 2004/08/25 16:52:37 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -1019,8 +1019,9 @@ if ((vis == tvFull) && (yLineOnOff == wiggleYLineMarkOn))
 
     }	/*	drawing y= line marker	*/
 
-/*	Map this wiggle area	*/
-mapBoxHc(seqStart, seqEnd, xOff, yOff, width, tg->height, tg->mapName, 
+/*	Map this wiggle area if we are self mapping	*/
+if (tg->mapsSelf)
+    mapBoxHc(seqStart, seqEnd, xOff, yOff, width, tg->height, tg->mapName, 
             tg->mapName, NULL);
 
 freez(&colorArray);
@@ -1210,6 +1211,7 @@ track->itemHeight = tgFixedItemHeight;
 
 track->itemStart = tgItemNoStart;
 track->itemEnd = tgItemNoEnd;
+/*	the wigMaf parent will turn mapsSelf off	*/
 track->mapsSelf = TRUE;
 track->extraUiData = (void *) wigCart;
 track->colorShades = shadesOfGray;

@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.31 2004/08/18 04:34:42 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.32 2004/08/25 16:52:37 hiram Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -930,6 +930,7 @@ if ((wigTable = trackDbSetting(tdb, "wiggle")) != NULL)
         // setup wiggle methods in subtrack
         wigMethods(wigTrack, tdb, wordCount, words);
 
+        wigTrack->mapsSelf = FALSE;
         wigTrack->drawLeftLabels = NULL;
         track->subtracks = wigTrack;
         track->subtracks->next = NULL;
