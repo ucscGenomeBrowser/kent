@@ -69,9 +69,8 @@
   		<LI><A CLASS="toc" HREF="#IndivTracks">
 			Annotation track descriptions</A>
 	</B></UL></TD></TR></TABLE>
-<P>
-The Genome Browser User's Guide was last updated on 23 Mar. 2004. 
-<A HREF="mailto:&#103;&#101;&#110;&#111;&#109;e&#64;&#115;&#111;&#101;.&#117;&#99;sc.e&#100;&#117;">Questions and feedback are welcome</A>.
+<em>Last updated on 1 Apr. 2004. 
+<A HREF="mailto:&#103;&#101;&#110;&#111;&#109;e&#64;&#115;&#111;&#101;.&#117;&#99;sc.e&#100;&#117;">Questions and feedback welcome</A></em>.
 		</TD><TD WIDTH=15></TD></TR></TABLE>
 	<BR></TD></TR></TABLE>
 </TD></TR></TABLE>
@@ -90,7 +89,7 @@ The Genome Browser User's Guide was last updated on 23 Mar. 2004.
 <P>
 As vertebrate genome sequences near completion and research re-focuses on 
 their analysis, the issue of effective sequence display becomes critical: it is not 
-helpful to have 3 billion letters of genomic DNA shown as plain text. As an 
+helpful to have 3 billion letters of genomic DNA shown as plain text! As an 
 alternative, the UCSC Genome Browser provides a rapid and reliable display of any 
 requested portion of genomes at any scale, together with dozens of 
 aligned annotation tracks (known genes, predicted genes, ESTs, mRNAs, CpG islands, 
@@ -141,6 +140,24 @@ other major roles include building genome assemblies, creating the Genome Browse
 environment, and serving it online. The majority of the sequence data, annotation tracks, and even 
 software are in the public domain and are available for anyone
 to <A HREF="#Download">download</A>. 
+<P>
+In addition to the Genome Browser, the UCSC Genome Bioinformatics group provides 
+several other tools for viewing and interpreting genome data: 
+<UL>
+<LI><A HREF="http://genome.ucsc.edu/cgi-bin/hgBlat?command=start">BLAT<A> - a 
+fast sequence-alignment tool similar to BLAST. <A HREF="#BLATAlign">Read more</A>.
+<LI><A HREF="http://genome.ucsc.edu/cgi-bin/hgText">Table Browser</A> - 
+convenient text-based access to the database underlying the Genome Browser. 
+<A HREF="http://genome.ucsc.edu/goldenPath/help/hgTextHelp.html">Read
+more</A>.
+<LI><A HREF="http://genome.ucsc.edu/cgi-bin/hgNear">Gene Family Browser</A> - 
+expression, homology, and other information on groups of genes that can
+be related in many ways. 
+<A HREF="http://genome.ucsc.edu/goldenPath/help/hgNearHelp.html">Read more</A>.
+<LI>Proteome Browser (accessible from Known Genes details pages) - 
+protein property data and links to a wealth of related information. 
+<A HREF="http://genome.ucsc.edu/goldenPath/help/pbTracksHelpFiles/pbTracksHelp.shtml">Read more</A>.
+</UL>
 		</TD><TD WIDTH=15></TD></TR></TABLE>
 	<br></TD></TR></TABLE>
 </TD></TR></TABLE>
@@ -290,16 +307,14 @@ To facilitate your return to regions of interest within the Genome
 Browser, save the coordinate range or bookmark the page of displays that you plan to 
 revisit or wish to share with others. 
 <P>
-It is usually best to work with the most recently released assembly even though a full 
+It is usually best to work with the most recent assembly even though a full 
 set of tracks might not yet be ready. Be aware that the coordinates of a given feature 
 on an unfinished chromosome may change from one assembly to the next as
 gaps are filled, artifactual duplications are reduced, and strand orientations
-are corrected.  The Genome Browser offers a tool that can correctly 
-convert coordinates between different assembly releases. To access the <A
-HREF="http://genome.ucsc.edu/cgi-bin/hgCoordConv" TARGET=_blank>conversion
-tool</A>, click the Convert link on the top menu bar
-on the Genome Browser window. NOTE: The conversion tool is available only on
-human genome assemblies at the present time.
+are corrected.  The Genome Browser offers multiple tools that can correctly 
+convert coordinates between different assembly releases. For more information
+on conversion tools,
+see the section <A HREF="#Convert">Converting data between assemblies</A>.
 <P>
 To ensure uninterrupted browser services for your research during UCSC server 
 maintenance and power outages, bookmark a geographically convenient 
@@ -330,8 +345,8 @@ misleading matches in genome coordinates found by alignment.
 <p>
 The Genome Browser page displays a genome location specified
 through a Gateway position search, a BLAT search, or an uploaded custom annotation track.
-There are three sets features on this page: the annotations tracks
-image, navigation controls, and display controls. 
+There are three main features on this page: the annotations tracks
+image, a set of navigation controls, and a set of display controls. 
 <P>
 The first time you open the
 Genome Browser, it will use the application default values to configure the
@@ -408,11 +423,14 @@ display conventions:<BR>
 	chromosomal location of the sequence in the organism's genome, as shown by the
 	Chromosome Color Key below the annotation track window.</TD></TR>
 
-	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>&quot;Wiggle&quot; tracks:</B> 
+	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>&quot;Wiggle&quot; tracks 
+	(Cross-species conservation):</B> 
 	These tracks plot a continuous function along a chromosome. Data is 
 	displayed in windows of a set number of base pairs in width. 
-	The score for each window is given on a logarithmic scale, called the 
-	<I>L-score</I>.  The L-scores display as "mountain ranges".</TD></TR>
+	The score for each window is given on a logarithmic scale, which 
+	displays as "mountain ranges". The display characteristics vary among
+	the tracks in this group. See the individual track descriptions for more
+	information on interpreting the display.</TD></TR>
 </TABLE> 
 <P>
 <B>Changing the display mode of an individual annotation track</B><BR>
@@ -651,7 +669,20 @@ Header lines may be included in the input text if they are preceded by > and
 contain unique names. 
 Multiple sequences may be submitted at the same time if they are of the
 same type and are preceded by unique header lines. Numbers, spaces, and extraneous 
-characters are ignored. 
+characters are ignored: 
+<P>
+<PRE>
+>sequence_1
+ATGCAGAGCAAGGTGCTGCTGGCCGTCGCCCTGTGGCTCTGCGTGGAGAC
+CCGGGCCGCCTCTGTGGGTTTGCCTAGTGTTTCTCTTGATCTGCCCAGGC
+>sequence_2
+ATGTTGTTTACCGTAAGCTGTAGTAAAATGAGCTCGATTGTTGACAGAGA
+TGACAGTAGTATTTTTGATGGGTTGGTGGAAGAAGATGACAAGGACAAAG
+>sequence_3
+ATGCTGCGAACAGAGAGCTGCCGCCCCAGGTCGCCCGCCGGACAGGTGGC
+CGCGGCGTCCCCGCTCCTGCTGCTGCTGCTGCTGCTCGCCTGGTGCGCGG
+</PRE>
+
 <P><B>BLAT limitations</B><BR>
 DNA input sequences are limited to a maximum length of 25,000 bases. Protein or
 translated input sequences must not exceed 5000 letters. As many as 25 multiple 
@@ -697,14 +728,14 @@ For large batch jobs or internal parameter changes, it is best to install
 command line BLAT on your own Linux server. Sources and executables are free for
 academic, personal, and non-profit purposes. BLAT source may be downloaded from 
 <A HREF="http://www.soe.ucsc.edu/~kent/src" 
-TARGET=_blank>http://www.soe.ucsc.edu/~kent</A> (look for the blatSrc* zip file 
+TARGET=_blank>http://www.soe.ucsc.edu/~kent</A> (look for the <em>blatSrc*.zip</em> file 
 with the most recent date). For BLAT executables, go to 
 <A HREF="http://www.soe.ucsc.edu/~kent/exe/" 
 TARGET=_blank>http://www.soe.ucsc.edu/~kent/exe/</A>; binaries are sorted by 
 platform. 
 Non-exclusive commercial licenses are available from the 
 <A HREF="http://www.genomeblat.com/genomeblat/index.asp" TARGET=_blank>Genome
-Blat</A> website. 
+BLAT</A> website. 
 <P><B>BLAT documentation</B><BR>
 For more information on the BLAT suite of programs, see the 
 <A HREF="http://genome.ucsc.edu/goldenPath/help/blatSpec.html">BLAT
@@ -809,12 +840,13 @@ formatted by the tool is approximately 10 Mbp.
 
 <P>Coordinates of features frequently
 change from one assembly to the next as gaps are closed, strand orientations are
-corrected, and duplications are reduced. Occasionally, a chunk of sequence will
-even get moved from one chromosome to another as the map is
+corrected, and duplications are reduced. Occasionally, a chunk of sequence may
+be moved to an entirely different chromosome as the map is
 refined. There are 3 different methods available for migrating data from one 
 assembly to another: BLAT alignment, coordinate conversion, and lifting of
-coordinates.
-<P>
+coordinates. The BLAT alignment tool is described in the section 
+<A HREF="#BLATAlign">Using BLAT alignments</A>.
+<P><B>Coordinate conversion</B><BR>
 The Genome Browser Convert tool is useful for 
 locating the position of a feature of interest in a newer release of a genome.
 During the conversion process, portions of the genome in the coordinate range of
@@ -823,7 +855,7 @@ orientation. In general, it is easier to achieve successful conversions with sho
 sequences. NOTE: At the present time, this tool may be used only on human
 genome assemblies.
 <P>
-The Conversion tool works by performing a BLAT search on the first 1000, last 1000, and middle
+The conversion tool works by performing a BLAT search on the first 1000, last 1000, and middle
 1000 bases
 in the current window. If all three searches land uniquely in the same order on
 the other version, the program announces a successful
@@ -851,6 +883,15 @@ common sense when evaluating the results.
 <P>
 If the conversion is unsuccessful, the Genome Browser returns a failure message
 and a possible explanation for the failure.
+<P><B>Lifting coordinates</B><BR>
+The liftOver tool is useful for converting a large number of coordinates to a 
+different assembly. This command-line utility requires access to a Linux platform.
+The executable file can be downloaded from 
+<A HREF="http://www.soe.ucsc.edu/~kent/exe/linux/liftOver.gz">www.soe.ucsc.edu/~kent/exe/linux/liftOver.gz</A>.
+LiftOver requires a UCSC-generated <em>over.chain</em> file as input. Pre-generated files 
+for a given assembly are located in the liftOver subdirectory of the assembly's 
+downloads directory. If the desired conversion file is not available, one can be obtained by sending a 
+request to the <A HREF="mailto:genome@cse.ucsc.edu">genome mailing list</A>. 
 
 		</TD><TD WIDTH=15></TD></TR></TABLE>
 	<br></TD></TR></TABLE>
