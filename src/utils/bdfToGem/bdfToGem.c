@@ -7,12 +7,14 @@
 #include	"linefile.h"
 #include	"gemfont.h"
 
-static char const rcsid[] = "$Id: bdfToGem.c,v 1.7 2005/02/19 08:13:52 hiram Exp $";
+static char const rcsid[] = "$Id: bdfToGem.c,v 1.8 2005/02/22 18:49:39 hiram Exp $";
 
 static char *name = (char *)NULL;	/* to name the font in the .c file */
+static boolean noHeader = FALSE;  /* do not output the C header, data only */
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
+    {"noHeader", OPTION_BOOLEAN},
     {"name", OPTION_STRING},
     {NULL, 0}
 };
@@ -31,8 +33,9 @@ errAbort(
 }
 
 /*	lower and upper limit of character values to accept	*/
-#define LO_LMT	((int)' ')
-#define HI_LMT	(127)
+#define LO_LMT	0
+#define HI_LMT	(255)
+#define FILL_CHAR	((int)' ')
 /*	given w pixels, round up to number of bytes needed	*/
 #define BYTEWIDTH(w)	(((w) + 7)/8)
 #define DEFAULT_FONT	"Small"
@@ -111,12 +114,13 @@ return (a->encoding - b->encoding);
 }
 
 static void outputGem(char *out, struct font_hdr *font,
-    struct bdfGlyph *glyphs)
+    struct bdfGlyph *glyphs, char *inputFileName)
 /*	all input is done, now do the output file	*/
 {
 unsigned char **bitmap = (unsigned char **)NULL; /* all glyphs together */
 FILE *f = mustOpen(out,"w");
-struct bdfGlyph *glyph;
+struct bdfGlyph *glyph = (struct bdfGlyph *)NULL;
+struct bdfGlyph *fillChar = (struct bdfGlyph *)NULL;
 int glyphCount = 0;
 int maxGlyphCount = HI_LMT - LO_LMT + 1;
 int encoding = 0;
@@ -142,15 +146,6 @@ int minYcoord = BIGNUM;
 
 slSort(&glyphs, encodeCmp);	/*	order glyphs by encoding value */
 
-/*	for our purposes here, the lowest limit must exist (space)
- *	which will also be used to fill missing glyphs
- */
-if (glyphs->encoding != LO_LMT)
-    errAbort("first character is not space: %d, we need a space\n",
-	glyphs->encoding);
-
-widthSpace = glyphs->dWidth;	/*	first one is space (LO_LMT) */
-
 /*	Survey the individual glyph bounding boxes, find max,min extents
  *	Sanity check against given maximums for the whole bitmap
  *	as it will be put together.
@@ -166,6 +161,8 @@ for (glyph = glyphs; glyph; glyph=glyph->next)
 	missing += glyph->encoding - encoding - 1;
 	}
     encoding = glyph->encoding;
+    if (encoding == FILL_CHAR)
+	fillChar = glyph;
     if (glyph->xOff < minXoff) minXoff = glyph->xOff;
     if (glyph->xOff > maxXoff) maxXoff = glyph->xOff;
     if (glyph->yOff < minYoff) minYoff = glyph->yOff;
@@ -187,8 +184,16 @@ for (glyph = glyphs; glyph; glyph=glyph->next)
     combinedWidth += BYTEWIDTH(glyph->dWidth) * 8;
     ++glyphCount;
     }
-
 lastEncoding = encoding;
+
+/*	for our purposes here, we must have the fillChar (space)
+ *	which will also be used to fill missing glyphs
+ */
+if ((struct bdfGlyph *)NULL == fillChar)
+    errAbort("can not find fill character: %d '%c', we need a space\n",
+	FILL_CHAR, FILL_CHAR);
+
+widthSpace = fillChar->dWidth;	/*	we use space (FILL_CHAR) */
 
 verbose(2, "#\thave %d glyphs to merge, missing: %d (maxGlyphCount: %d)\n",
 	glyphCount, missing, maxGlyphCount);
@@ -209,7 +214,11 @@ if (font->frm_hgt != maxYextent)
 combinedWidth += BYTEWIDTH(missing * widthSpace)*8;
 font->frm_wdt = BYTEWIDTH(combinedWidth);
 
-offsets = (int *)needMem((sizeof(int) * maxGlyphCount));
+/*	The plus one is for the last offset which would be the glyph at
+ *	maxGlyphCount+1 - so that the size of the last glyph can be
+ *	properly computed by the font code.
+ */
+offsets = (int *)needMem((sizeof(int) * (maxGlyphCount + 1)));
 verbose(2,"#\tallocated int offsets[%d]\n", maxGlyphCount);
 
 bitmap = allocRows(font->frm_wdt * 8, font->frm_hgt);
@@ -232,7 +241,7 @@ verbose(2,"#\tallocated bitmap: %d x %d pixels = %d x %d bytes\n",
 offset = 0;		/*  offset=bit (pixel) position in global bitmap */
 bitmapColumn = 0;		/*  offset in bytes == column in bitmap[][] */
 glyphCount = 0;
-glyph = glyphs;		/*	the first one is space (LO_LMT)	*/
+glyph = glyphs;		/*	the first one is (LO_LMT)	*/
 for (encoding = glyphs->encoding; encoding <= lastEncoding ; ++encoding)
     {
     int byteWidth;
@@ -247,8 +256,9 @@ for (encoding = glyphs->encoding; encoding <= lastEncoding ; ++encoding)
 
     if (encoding != glyph->encoding)	/*	missing glyph ?	*/
 	{
-	glyphToUse = glyphs;	/*	use space (LO_LMT	*/
-verbose(2,"#\tmissing glyph at encoding %d '%c'\n", encoding, (char)encoding);
+	glyphToUse = fillChar;	/*	use FILL_CHAR (space)	*/
+verbose(2,"#\tmissing glyph at encoding %d '%c'\n", encoding,
+	isprint((char)encoding) ? (char)encoding : ' ');
 	}
     else
 	glyph = glyph->next;	/*	not missing, OK to go to next */
@@ -275,15 +285,21 @@ verbose(4,"#\tchar %d '%c' w,h bytes: %d, %d, h,yOff: %d, %d, startRow: %d\n",
     ++glyphCount;
     }
 
+offsets[glyphCount] = offset;
+
 if ((char *)NULL == name)
 	name = cloneString(DEFAULT_FONT);	/*	default name of font */
 
-fprintf(f, "\n/* %s.c - compiled data for font %s */\n\n", name,font->facename);
+fprintf(f, "\n/* %s.c - compiled data for font %s */\n", name,font->facename);
 fprintf(f, "/* generated source code by utils/bdfToGem, do not edit */\n");
+fprintf(f, "/* BDF data file input: %s */\n\n", inputFileName);
 
-fprintf(f, "#include \"common.h\"\n");
-fprintf(f, "#include \"memgfx.h\"\n");
-fprintf(f, "#include \"gemfont.h\"\n\n");
+if (! noHeader)
+    {
+    fprintf(f, "#include \"common.h\"\n");
+    fprintf(f, "#include \"memgfx.h\"\n");
+    fprintf(f, "#include \"gemfont.h\"\n\n");
+    }
 
 fprintf(f, "static UBYTE %s_data[%d] = {\n", name,
 	font->frm_hgt * font->frm_wdt);
@@ -306,9 +322,9 @@ if (0 != (bytesOut % 10))  /* if not already a new line for the last one */
 
 fprintf(f, "};\n\n");
 
-fprintf(f, "static WORD %s_ch_ofst[%d] = {\n", name, maxGlyphCount);
+fprintf(f, "static WORD %s_ch_ofst[%d] = {\n", name, maxGlyphCount+1);
 
-for (glyphCount = 0; glyphCount < maxGlyphCount; ++glyphCount)
+for (glyphCount = 0; glyphCount < maxGlyphCount+1; ++glyphCount)
     {
     fprintf(f,"%d,",offsets[glyphCount]);
     if (0 == (glyphCount % 8))	/*	every eight produces new line */
@@ -316,27 +332,6 @@ for (glyphCount = 0; glyphCount < maxGlyphCount; ++glyphCount)
     }
 if (0 != (glyphCount % 8))	/* if not already a new line for the last one */
     fprintf(f,"\n");
-
-/***************************   DEBUG   *****************************/
-/*	I want to see this in byte terms too	*/
-for (glyphCount = 0; glyphCount < maxGlyphCount; ++glyphCount)
-    {
-    verbose(2,"%d,",BYTEWIDTH(offsets[glyphCount]));
-    if (0 == (glyphCount % 8))	/*	every eight produces new line */
-	verbose(2,"\n");
-    }
-verbose(2,"\n");
-for (glyphCount = 0; glyphCount < 5; ++glyphCount)
-{
-int row;
-for (row = 0; row < font->frm_hgt; ++row)
-    {
-    int col = glyphCount;
-verbose(4,"bitmap[%d][%d]: %02X at offset: %d\n", row, col, bitmap[row][col], offsets[glyphCount]);
-    }
-    verbose(4,"\n");
-}
-/***************************   DEBUG   *****************************/
 
 font->top_dist = font->frm_hgt;
 font->asc_dist = font->frm_hgt + minYoff;
@@ -640,7 +635,7 @@ fontHeader.ADE_lo = asciiLo;
 fontHeader.ADE_hi = asciiHi;
 
 
-outputGem(outputFile, &fontHeader, glyphList);
+outputGem(outputFile, &fontHeader, glyphList, bdfFile);
 }
 
 int main( int argc, char *argv[] )
@@ -650,6 +645,7 @@ optionInit(&argc, argv, optionSpecs);
 if (argc < 3)
     usage();
 
+noHeader = optionExists("noHeader");
 name = optionVal("name", NULL);
 
 bedToGem(argv[1], argv[2]);
