@@ -151,7 +151,7 @@
 #include "jalview.h"
 #include "flyreg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.787 2004/11/23 18:13:05 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.788 2004/11/23 18:43:28 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11586,19 +11586,19 @@ if ((row = sqlNextRow(sr)) != NULL)
     if (!sameWord("", jaxQTL->flank1)) 
     	{
 	printf("<B>Flank Marker 1: </B>");
-	printf("<a href=\"http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=searchTool&query=%s", jaxQTL->flank1);
+	printf("<a TARGET=\"_blank\" href=\"http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=searchTool&query=%s", jaxQTL->flank1);
 	printf("+&selectedQuery=Genes+and+Markers\">%s</a><BR>\n", jaxQTL->flank1);
 	}	
     if (!sameWord("", jaxQTL->marker)) 
     	{
 	printf("<B>Peak Marker: </B>");
-	printf("<a href=\"http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=searchTool&query=%s", jaxQTL->marker);
+	printf("<a TARGET=\"_blank\" href=\"http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=searchTool&query=%s", jaxQTL->marker);
 	printf("+&selectedQuery=Genes+and+Markers\">%s</a><BR>\n", jaxQTL->marker);
 	}	
     if (!sameWord("", jaxQTL->flank2)) 
     	{
 	printf("<B>Flank Marker 2: </B>");
-	printf("<a href=\"http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=searchTool&query=%s", jaxQTL->flank2);
+	printf("<a TARGET=\"_blank\" href=\"http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=searchTool&query=%s", jaxQTL->flank2);
 	printf("+&selectedQuery=Genes+and+Markers\">%s</a><BR>\n", jaxQTL->flank2);
 	}	
     
