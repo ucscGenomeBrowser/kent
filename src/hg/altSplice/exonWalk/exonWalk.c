@@ -13,7 +13,7 @@
 #include "errabort.h"
 #include "malloc.h"
 
-static char const rcsid[] = "$Id: exonWalk.c,v 1.10 2005/01/02 01:26:17 sugnet Exp $";
+static char const rcsid[] = "$Id: exonWalk.c,v 1.11 2005/01/02 03:50:51 sugnet Exp $";
 
 void usage()
 {
@@ -50,6 +50,49 @@ struct exonNodeWrap
     struct exonNodeWrap *next;   /* Next in list. */
     struct exonNode *en;         /* Pointer to exon node. */
 };
+
+
+
+void smallPathFree(struct smallPath **pEl)
+/* Free a single smallPath. */
+{
+struct smallPath *el;
+if((el = *pEl) == NULL) return;
+freeMem(el->path);
+freez(pEl);
+}
+
+void smallPathFreeList(struct smallPath **pList)
+/* Free a list of dynamically allocated smallPath's */
+{
+struct smallPath *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    smallPathFree(&el);
+    }
+*pList = NULL;
+}
+
+struct smallPath *smallPathCopy(struct smallPath *sp)
+/* Create a copy of the smallPath variable. */
+{
+struct smallPath *new = CloneVar(sp);
+new->path = CloneArray(sp->path, sp->maxCount);
+return new;
+}
+
+void appendToSmallPath(struct smallPath *sp, int id)
+/* Append the id to the current path. */
+{
+if(sp->currCount + 1 >= sp->maxCount)
+    {
+    ExpandArray(sp->path, sp->maxCount, sp->maxCount+10);
+    sp->maxCount += 10;
+    }
+sp->path[sp->currCount++] = id;
+}
 
 /* if we abort return with non-zero status */
 static void exonWalkAbort()
@@ -965,7 +1008,7 @@ boolean compatibleNodes(struct exonNode *en1, struct exonNode *en2)
 /** Return TRUE if these two nodes are compatible (overlapping) with eachother
    FALSE otherwise. */
 {
-assert(sameString(en1->strand, en2->strand));
+//assert(sameString(en1->strand, en2->strand));
 if(en1->class == BIGNUM || en2->class == BIGNUM)
     {
     if(compatibleExons(en1, en2))
@@ -991,6 +1034,26 @@ if(extends && allEn2)
     extends = (en2==NULL);
 return extends;
 }
+
+boolean extendsToEndSmall(struct exonGraph *eg, struct smallPath *smHayStack, int offSet, 
+			  struct smallPath *smNeedle, boolean allEn2)
+/** See if the list of nodes starting at en1 and en2 are of identical
+   classes until the end. If allEn2 then all of en2 must be present
+   in en1 to return TRUE.*/
+{
+boolean extends = TRUE;
+int i = 0;
+for(i = 0; i < smHayStack->currCount - offSet && i < smNeedle->currCount; i++)
+    {
+    if(!compatibleNodes(eg->nodes[smHayStack->path[i+offSet]],
+			eg->nodes[smNeedle->path[i]]))
+	extends = FALSE;
+    }
+if(extends && allEn2)
+    extends = (i == smNeedle->currCount);
+return extends;
+}
+
 
 void connectNodeList(struct exonNode *en1, struct exonNode *en2)
 /** Connect each pair of nodes in the list togther. */
@@ -1031,11 +1094,42 @@ boolean isSubPath(struct exonPath *hayStack, struct exonPath *needle)
 struct exonNode *en = NULL;
 boolean subPath = FALSE;
 boolean keepGoing = TRUE;
+/* Quick check...*/
+if(needle->tStart < hayStack->tStart || needle->tEnd > hayStack->tEnd)
+    return FALSE;
+
+/* Ok on to more thorough checks. */
 for(en = hayStack->nodes; en != NULL && keepGoing; en = en->next)
     {
     if(compatibleNodes(needle->nodes, en))
 	{
 	if(extendsToEnd(en, needle->nodes, TRUE))
+	    subPath = TRUE;
+	keepGoing = FALSE;
+	}
+    }
+return subPath;
+}
+
+boolean isSmallSubPath(struct exonGraph *eg, struct smallPath  *smHayStack, struct smallPath *smNeedle)
+/** Return TRUE if the needle is a subpath of the haystack, FALSE otherwise. */
+{
+struct exonNode *en = NULL;
+boolean subPath = FALSE;
+boolean keepGoing = TRUE;
+struct exonNode **n = eg->nodes;
+int i = 0;
+/* Quick check...*/
+if(n[smNeedle->path[0]]->tStart < n[smHayStack->path[0]]->tStart || 
+   n[smNeedle->path[smNeedle->currCount-1]]->tEnd > n[smHayStack->path[smHayStack->currCount-1]]->tEnd)
+    return FALSE;
+
+/* Ok on to more thorough checks. */
+for(i = 0; i < smHayStack->currCount && keepGoing; i++)
+    {
+    if(compatibleNodes(n[smNeedle->path[0]], n[smHayStack->path[i]]))
+	{
+	if(extendsToEndSmall(eg, smHayStack, i, smNeedle, TRUE))
 	    subPath = TRUE;
 	keepGoing = FALSE;
 	}
@@ -1155,6 +1249,64 @@ for(history = epList; history != NULL; history = history->next)
     }
 }
 
+struct exonPath *exonPathFromSmallPath(struct exonGraph *eg, struct smallPath *sp)
+/* Create an exon path from the small path provided. */
+{
+struct exonNode *en = NULL;
+int i = 0;
+struct exonPath *ep = NULL;
+AllocVar(ep);
+ep->next = NULL;
+ep->tName = cloneString(eg->tName);
+snprintf(ep->strand, sizeof(ep->strand), "%s", eg->strand);
+ep->qName = NULL;
+ep->tStart = BIGNUM;
+ep->tEnd = 0;
+ep->nodes = NULL;
+for(i = 0; i < sp->currCount; i++) 
+    {
+    en = exonNodeCopy(eg->nodes[sp->path[i]]);
+    slAddHead(&ep->nodes, en);
+    ep->tStart = min(en->tStart, ep->tStart);
+    ep->tEnd = max(ep->tEnd, en->tEnd);
+    }
+exonPathCreateStringRep(ep);
+slReverse(&ep->nodes);
+return ep;
+}
+
+void checkForMaximalSmallPath(struct exonGraph *eg, struct smallPath **maximalPaths, struct smallPath *spList)
+/** Look to see if the history path is a subpath of any of the 
+   maximalPaths or vice versa. */
+{
+struct smallPath *sp = NULL, *spNext = NULL;
+boolean maximal = TRUE;
+struct smallPath *history = NULL;
+for(history = spList; history != NULL; history = history->next)
+    {
+    maximal = TRUE;
+    for(sp = *maximalPaths; sp != NULL; sp = spNext)
+	{
+	spNext = sp->next;
+	if(isSmallSubPath(eg, sp, history))
+	    {
+	    maximal = FALSE;
+	    break;
+	    }
+	else if(isSmallSubPath(eg, history, sp))
+	    {
+	    slRemoveEl(maximalPaths, sp);
+	    smallPathFree(&sp);
+	    }
+	}
+    if(maximal)
+	{
+	struct smallPath *copy = smallPathCopy(history);
+	slAddHead(maximalPaths, copy);
+	}
+    }
+}
+
 boolean heapContainsNode(struct heap *h, struct exonNode *en)
 /** Return TRUE if node with same id as en->id, FALSE otherwise. */
 {
@@ -1179,23 +1331,23 @@ if(ep->nodes->class != en->class)
 return TRUE;
 }
 
-boolean doSanityCheck(struct exonGraph *eg)
-{
-struct exonPath *ep = NULL;
-struct exonNode *en = NULL;
-int i;
-for(i=0; i< eg->nodeCount; i++) 
-    {
-    en = eg->nodes[i];
-    for(ep = en->paths; ep != NULL; ep = ep->next)
-	if(ep->nodes->class != en->class)
-	    {
-	    warn("exonWalk.c::doSanityCheck() - Can't have a path to a node that doesn't include that node. Problem at %s:%d-%d", en->tName, en->tStart, en->tEnd);
-	    return FALSE;
-	    }
-    }
-return TRUE;
-}
+/* boolean doSanityCheck(struct exonGraph *eg) */
+/* { */
+/* struct exonPath *ep = NULL; */
+/* struct exonNode *en = NULL; */
+/* int i; */
+/* for(i=0; i< eg->nodeCount; i++)  */
+/*     { */
+/*     en = eg->nodes[i]; */
+/*     for(ep = en->paths; ep != NULL; ep = ep->next) */
+/* 	if(ep->nodes->class != en->class) */
+/* 	    { */
+/* 	    warn("exonWalk.c::doSanityCheck() - Can't have a path to a node that doesn't include that node. Problem at %s:%d-%d", en->tName, en->tStart, en->tEnd); */
+/* 	    return FALSE; */
+/* 	    } */
+/*     } */
+/* return TRUE; */
+/* } */
 
 boolean noOutEdges(struct exonGraph *eg, struct exonNode *en)
 /* Return TRUE if there is no path out of this node that isn't
@@ -1212,7 +1364,7 @@ for(i=0; i < en->edgeOutCount; i++)
 return TRUE;
 }
 
-void exonGraphBfs(struct exonGraph *eg, struct exonPath **maximalPaths, struct heap *queue )
+void exonGraphBfs(struct exonGraph *eg, struct smallPath **maximalPaths, struct heap *queue )
 /** A modified breadth first search of the graph. Nodes are investigated not
 only in the order of distance in nodes but also in order of distance from
 transcription start. All paths to nodes are kept track of as search is made. */
@@ -1236,8 +1388,7 @@ if(status == 0)
 	{
 	int i =0;
 	struct exonNode *en = heapExtractMin(queue);
-	struct exonPath *ep = NULL;
-	struct exonPath *epCopy = NULL;
+	struct smallPath *sp = NULL, *spCopy = NULL;
 	struct exonNode *enCopy = NULL;
 	for(i=0; i<en->edgeOutCount; i++)
 	    {
@@ -1245,34 +1396,25 @@ if(status == 0)
 	    if(target->class == inActive)
 		warn("exonGraphBfs() - %s:%d-%d, target %d (%s:%d-%d) is inactive!, en = %d", 
 		     eg->tName, eg->tStart, eg->tEnd, target->id, target->tName, target->tStart, target->tEnd, en->id);
-	    for(ep = en->paths; ep != NULL; ep = ep->next)
+	    for(sp = en->paths; sp != NULL; sp = sp->next)
 		{
 		struct mallinfo mem = mallinfo();
 		if((mem.uordblks - baseLineMem) > maxMem)
 		    errAbort("exonGraphBfs() - %s:%d-%d exceeded maximum memory usage %d for breadth first search, used %d.",
 			     eg->tName, eg->tStart, eg->tEnd, maxMem, (mem.uordblks - baseLineMem));
 		if(debug) { nodeSanityCheck(eg); }
-		epCopy = exonPathCopy(eg, ep);
+		spCopy = smallPathCopy(sp);
 		/* If we're making a move to another exon then include that exon in the path... */
 		if(target->class != en->class && en->class != BIGNUM)
 		    {
-		    enCopy = exonNodeCopy(target);
-		    slAddHead(&epCopy->nodes, enCopy);
-		    epCopy->nodeCount++;
+		    appendToSmallPath(spCopy, target->id);
 		    }
-		slAddHead(&target->paths, epCopy);
+		slAddHead(&target->paths, spCopy);
 		
 		/* Some debugging stuff. */
 		if(debug) 
 		    { 
 		    nodeSanityCheck(eg); 
-		    if( !checkForCurrentNode(target->paths, target))
-			warn("Why didn't this work at %s:%d-%d", target->tName, target->tStart, target->tEnd);
-		    for(epCopy = target->paths; epCopy->next != NULL; epCopy = epCopy->next)
-			{
-			if(epCopy->nodes == epCopy->next->nodes)
-			    warn("How can I have two paths with the same nodes?");
-			}
 		    }
 		}
 	    
@@ -1287,9 +1429,9 @@ if(status == 0)
 	
 	if(noOutEdges(eg,en) && en->class != BIGNUM) /* It is a terminal node...*/
 	    {
-	    checkForMaximalPath(eg, maximalPaths, en->paths);
+	    checkForMaximalSmallPath(eg, maximalPaths, en->paths);
 	    }
-	exonPathFreeList(&en->paths);
+	smallPathFreeList(&en->paths);
 	en->color = enBlack;
 	}
     }
@@ -1297,7 +1439,7 @@ else
     {
     freez(&memSavings);
     warn("exonGraphBfs() - %s:%d-%d, caught error, something aborted (tried to use too much memory?). Skipping.", eg->tName, eg->tStart, eg->tEnd);
-    exonPathFreeList(maximalPaths);
+    smallPathFreeList(maximalPaths);
     }
 freez(&memSavings);
 popAbortHandler();
@@ -1392,6 +1534,17 @@ const struct exonNode *b = vb;
 return a->tStart - b->tStart;
 }
 
+struct smallPath *newSmallPath(struct exonNode *en)
+/* Allocate a new small exon path. */
+{
+struct smallPath *sp = NULL;
+AllocVar(sp);
+sp->maxCount = 10;
+AllocArray(sp->path, sp->maxCount);
+sp->path[sp->currCount++] = en->id;
+return sp;
+}
+
 struct exonPath *newExonPath(struct exonNode *en)
 /* Construct a path with only one node. */
 {
@@ -1447,7 +1600,8 @@ struct exonPath *exonGraphBreadthFirstMaxPaths(struct exonGraph *eg)
 int i =0, x = 0;
 int index = 0;
 struct heap *queue = newHeap(8, nodeStartHeapCmp);
-struct exonPath *maximalPaths = NULL, *ep = NULL;
+struct smallPath *maximalPaths = NULL, *smallPath = NULL;
+struct exonPath *ep = NULL, *epList = NULL;
 struct exonNode **orderedNodes = CloneArray(eg->nodes, eg->nodeCount);
 boolean skipTrimGraph = cgiBoolean("notrim");
 int activeNodes, activeEdges;
@@ -1480,9 +1634,11 @@ for(i=0; i<eg->nodeCount; i++)
     {
     if(noIncomingEdges(eg, orderedNodes[i]) && orderedNodes[i]->class != inActive)
 	{
-	struct exonPath *ep = newExonPath(orderedNodes[i]);
-	ep->nodeCount++;
-	slAddHead(&orderedNodes[i]->paths, ep);
+/* 	struct exonPath *ep = newExonPath(orderedNodes[i]); */
+	struct smallPath *sp = newSmallPath(orderedNodes[i]);
+	slAddHead(&orderedNodes[i]->paths, sp);
+/* 	ep->nodeCount++; */
+/* 	slAddHead(&orderedNodes[i]->paths, ep); */
 	heapMinInsert(queue, orderedNodes[i]);
 //	warn("%s\t%d\t%d", orderedNodes[i]->tName, orderedNodes[i]->tStart, orderedNodes[i]->tEnd);
 	}
@@ -1498,7 +1654,8 @@ for(i=0; i<eg->nodeCount; i++)
     struct exonNode *target = eg->nodes[i];
     if(target->class != inActive)
 	{
-	exonPathFreeList(&target->paths);
+/* 	exonPathFreeList(&target->paths); */
+	smallPathFreeList(&target->paths);
 	if(diagnostics)
 	    {
 	    if(target->color == enWhite)
@@ -1530,7 +1687,14 @@ if(diagnostics)
 
 heapFree(&queue);
 freez(&orderedNodes);
-return maximalPaths;
+for(smallPath = maximalPaths; smallPath != NULL; smallPath = smallPath->next)
+    {
+    ep = exonPathFromSmallPath(eg, smallPath);
+    slAddHead(&epList, ep);
+    }
+slReverse(&epList);
+smallPathFreeList(&maximalPaths);
+return epList;
 }
 
 struct exonPath *exonGraphMaximalPaths(struct exonGraph *eg)
