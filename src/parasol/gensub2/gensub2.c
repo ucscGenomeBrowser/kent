@@ -18,6 +18,8 @@ errAbort(
   "       $(path1)  - full path name of second file\n"
   "       $(dir1)   - first directory. Includes trailing slash if any.\n"
   "       $(dir2)   - second directory\n"
+  "       $(lastDir1) - The last directory in the first path. Includes trailing slash if any.\n"
+  "       $(lastDir2) - The last directory in the second path. Includes trailing slash if any.\n"
   "       $(root1)  - first file name without directory or extension\n"
   "       $(root2)  - second file name without directory or extension\n"
   "       $(ext1)   - first file extension\n"
@@ -28,6 +30,66 @@ errAbort(
   "       $(num2)   - index of second file in list\n"
   "The <file list 2> parameter can be 'single' if there is only one\n"
   "file list.\n");
+}
+
+void getLastDir(char *retDir, char *pathToParse)
+/*
+Function to get the last directory in a path
+
+param retDir - The directory buffer in which to return the last directory
+in the path.
+param pathToParse - The path to parse the last directory out of. This function
+assumes that the end of the directory path ends with a '/' character.
+That is, if there is no filename specified, then the path will end with a slash.
+The algorithm drops all content after the last slash it finds.
+return - The last directory in the path with all slashes removed.
+ */
+{
+char *lastSlash = strrchr(pathToParse, '/');
+char *slash = strchr(pathToParse,'/');
+char *result = pathToParse;
+
+printf("Path to parse = %s\n", pathToParse);
+
+if (NULL == slash)   /** Do a little coping with MS-DOS style paths. */
+    {
+    char *dosSlash = strchr(pathToParse, '\\');
+    if (dosSlash != NULL)
+        {
+        subChar(pathToParse, '\\', '/');
+        slash = dosSlash;
+        }
+    }
+
+if (NULL == lastSlash)
+    {
+    strcpy(retDir, pathToParse);
+    return;
+    }
+
+lastSlash = strrchr(pathToParse,'/');
+while (slash != lastSlash)
+    {
+    result = slash;
+    slash = strchr(result + 1, '/');
+    }
+
+/* If result has a leading slash, move the string pointer past it */
+if (strchr(result, '/') == result ) 
+    {
+    result += 1;
+    }
+
+/* Null terminate before any trailing slash */
+lastSlash = strrchr(result, '/');
+if (NULL != lastSlash)
+    {
+    lastSlash[0] = 0;
+    }
+
+strcpy(retDir, result);
+printf("RETURNING: %s\n", retDir);
+return;
 }
 
 void writeSubbed(char *string, struct subText *subList, FILE *f)
@@ -52,6 +114,8 @@ struct subText *subList = NULL, *sub;
 char numBuf1[16], numBuf2[16];
 char dir1[256], root1[128], ext1[64], file1[265];
 char dir2[256], root2[128], ext2[64], file2[265];
+char lastDir1[128];
+char lastDir2[128];
 boolean twoLists = !sameWord(list2Name, "single");
 
 /* Print up to #LOOP. */
@@ -91,6 +155,7 @@ while (lineFileNext(lf1, &path1, &lineSize))
     path1 = trimSpaces(path1);
     splitPath(path1, dir1, root1, ext1);
     sprintf(file1, "%s%s", root1, ext1);
+    getLastDir(lastDir1, dir1);
 
     j=1;
     if (twoLists)
@@ -104,9 +169,12 @@ while (lineFileNext(lf1, &path1, &lineSize))
 	    path2 = trimSpaces(path2);
 	    splitPath(path2, dir2, root2, ext2);
 	    sprintf(file2, "%s%s", root2, ext2);
+            getLastDir(lastDir2, dir2);
 	    sub = subTextNew("$(path2)", path2);
 	    slAddHead(&subList, sub);
 	    sub = subTextNew("$(dir2)", dir2);
+	    slAddHead(&subList, sub);
+	    sub = subTextNew("$(lastDir2)", lastDir2);
 	    slAddHead(&subList, sub);
 	    sub = subTextNew("$(root2)", root2);
 	    slAddHead(&subList, sub);
@@ -122,6 +190,8 @@ while (lineFileNext(lf1, &path1, &lineSize))
 	slAddHead(&subList, sub);
 	sub = subTextNew("$(dir1)", dir1);
 	slAddHead(&subList, sub);
+	sub = subTextNew("$(lastDir1)", lastDir1);
+        slAddHead(&subList, sub);
 	sub = subTextNew("$(root1)", root1);
 	slAddHead(&subList, sub);
 	sub = subTextNew("$(ext1)", ext1);
