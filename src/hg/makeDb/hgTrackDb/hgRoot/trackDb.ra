@@ -63,7 +63,7 @@ type bed 4+
 
 track mouseSynWhd
 shortLabel Whitehead Synteny
-longLabel Corresponding Chromosome in Mouse (Whitehead)
+longLabel Whitehead Corresponding Chromosome in Mouse (300k window)
 priority 4 
 visibility hide
 color 120,70,30
