@@ -44,6 +44,7 @@
 #include "browserTable.h"
 #include "estPair.h"
 #include "customTrack.h"
+#include "softPromoter.h"
 
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
@@ -2075,6 +2076,7 @@ setTgDarkLightColors(tg, 0, 100, 0);
 return tg;
 }
 
+
 void loadSanger22Gene(struct trackGroup *tg)
 /* Load up Softberry genes. */
 {
@@ -2580,6 +2582,33 @@ tg->itemStart = bedItemStart;
 tg->itemEnd = bedItemEnd;
 return tg;
 }
+
+void loadSoftPromoter(struct trackGroup *tg)
+/* Load up softPromoter from database table to trackGroup items. */
+{
+bedLoadItem(tg, "softPromoter", (ItemLoader)softPromoterLoad);
+}
+
+void freeSoftPromoter(struct trackGroup *tg)
+/* Free up xyz items. */
+{
+softPromoterFreeList((struct softPromoter**)&tg->items);
+}
+
+struct trackGroup *softPromoterTg()
+/* Make track group of Softberry Promoter Predictions. */
+{
+struct trackGroup *tg = bedTg();
+tg->mapName = "hgSoftPromoter";
+tg->visibility = tvDense;
+tg->longLabel = "TSSW Promoter Predictions";
+tg->shortLabel = "TSSW Promoters";
+tg->loadItems = loadSoftPromoter;
+tg->freeItems = freeSoftPromoter;
+setTgDarkLightColors(tg, 0, 100, 0);
+return tg;
+}
+
 
 
 void isochoreLoad(struct trackGroup *tg)
@@ -5774,6 +5803,7 @@ if (sameString(chromName, "chr22") && hTableExists("sanger22")) slSafeAddHead(&t
 if (hTableExists("genieAlt")) slSafeAddHead(&tGroupList, genieAltTg());
 if (hTableExists("ensGene")) slSafeAddHead(&tGroupList, ensemblGeneTg());
 if (hTableExists("softberryGene")) slSafeAddHead(&tGroupList, softberryGeneTg());
+if (hTableExists("softPromoter")) slSafeAddHead(&tGroupList, softPromoterTg());
 if (chromTableExists("_mrna")) slSafeAddHead(&tGroupList, fullMrnaTg());
 if (chromTableExists("_intronEst")) slSafeAddHead(&tGroupList, intronEstTg());
 if (chromTableExists("_est")) slSafeAddHead(&tGroupList, estTg());
