@@ -21,7 +21,7 @@ extern double wigDataConstraint[2][2];
 /*	to select one of the two tables	*/
 #define WIG_TABLE_1	0
 #define WIG_TABLE_2	1
-#define MAX_LINES_OUTPUT	150000
+#define MAX_LINES_OUT	100000
 
 extern boolean (*wiggleCompare[2])(int tableId, double value,
     boolean summaryOnly, struct wiggle *wiggle);
@@ -66,6 +66,16 @@ static char *ctWigVisMenu[] =
     "full",
 };
 static int ctWigVisMenuSize = sizeof(ctWigVisMenu)/sizeof(char *);
+
+/* Droplist menu for custom track data count: */
+static char *ctWigCountMenu[] =
+{
+    "10000",
+    "100000",
+    "1000000",
+};
+static int ctWigCountMenuSize = sizeof(ctWigCountMenu)/sizeof(char *);
+
 
 /*********   wiggle compare functions   ***********************************/
 static boolean wigInRange(int tableId, double value, boolean summaryOnly,
@@ -435,10 +445,19 @@ puts("</TD></TR><TR><TD></TD><TD>visibility=");
 setting = cartCgiUsualString(cart, "tbCtVis", ctWigVisMenu[2]);
 cgiMakeDropList("tbCtVis", ctWigVisMenu, ctWigVisMenuSize, setting);
 puts("</TD></TR><TR><TD></TD></TR></TABLE>");
+
+puts("<P> <B> Limit output to: </B>");
+setting = cartCgiUsualString(cart, "tbWigCount", ctWigCountMenu[1]);
+cgiMakeDropList("tbWigCount", ctWigCountMenu, ctWigCountMenuSize, setting);
+puts("<B> data values </B> (to avoid browser overload)</P>\n");
+
 if (doCt)
     {
     /*cgiMakeButton("phase", getCtPhase);*/
     cgiMakeButton("phase", getCtWigglePhase);
+    puts("<P>This type of data custom track is under development.<BR>\n"
+	"Expected to be in operation April 2004<BR>\n"
+	"Currently only the data values are available.</P>\n");
     }
 else
     {
@@ -460,6 +479,8 @@ char *track = getTrackName();
 unsigned linesOutput = 0;
 boolean doCtHdr = (cgiBoolean("tbDoCustomTrack") || doCt);
 char *constraints;
+char *setting = cartCgiUsualString(cart, "tbWigCount", ctWigCountMenu[1]);
+unsigned maxLinesOut = MAX_LINES_OUT;
 
 if (! sameString(customTrackPseudoDb, db))
     {
@@ -467,6 +488,9 @@ if (! sameString(customTrackPseudoDb, db))
     tdb = hMaybeTrackInfo(conn, track);
     hFreeOrDisconnect(&conn);
     }
+
+if (setting != (char *) NULL)
+    maxLinesOut = sqlUnsigned(setting);
 
 saveOutputOptionsState();
 saveIntersectOptionsState();
@@ -489,20 +513,17 @@ if (wigData)
     char *chrom = (char *) NULL;
     char *longLabel;
     char tableName[128];
-    unsigned char visibility;
+    char *visibility;
     unsigned char colorR, colorG, colorB;
     unsigned char altColorR, altColorG, altColorB;
     float priority;
     int wordCount;
     char *words[128];
     char *trackType = (char *) NULL;
-    char *visibilities[] = {
-	"hide",
-	"dense",
-	"full",
-	"pack",
-	"squish",
-    };
+    char *ctName = cgiUsualString("tbCtName", table);
+    char *ctDesc = cgiUsualString("tbCtDesc", table);
+    char *ctVis  = cgiUsualString("tbCtVis", "full");
+
     if (tdb && tdb->type)
 	{
 	char *typeLine = cloneString(tdb->type);
@@ -514,8 +535,19 @@ if (wigData)
 	colorR = tdb->colorR; colorG = tdb->colorG; colorB = tdb->colorB;
 	altColorR = tdb->altColorR; altColorG = tdb->altColorG;
 	altColorB = tdb->altColorB;
-	visibility = tdb->visibility;
-	snprintf(tableName, sizeof(tableName), "tb_%s", table);
+	if (ctVis != (char *)NULL)
+	    visibility = cloneString(ctVis);
+	else
+	    visibility = cloneString("full");
+	if (differentWord(ctName,table) )
+	    snprintf(tableName, sizeof(tableName), "%s", ctName);
+	else
+	    snprintf(tableName, sizeof(tableName), "tb_%s", table);
+	if (ctDesc != (char *)NULL)
+	    {
+	    freeMem(longLabel);
+	    longLabel = cloneString(ctDesc);
+	    }
 	}
     else
 	{
@@ -523,15 +555,17 @@ if (wigData)
 	longLabel = cloneString("User Supplied Track");
 	colorR = colorG = colorB = 255;
 	altColorR = altColorG = altColorB = 128;
-	visibility = 2;
+	visibility = cloneString("full");
 	snprintf(tableName, sizeof(tableName), "User Track");
 	}
 
     if (doCtHdr)
+	{
 	printf("track type=wiggle_0 name=%s description=\"%s\" "
 	    "visibility=%s color=%d,%d,%d altColor=%d,%d,%d "
-	    "priority=%g\n", tableName, longLabel, visibilities[visibility],
+	    "priority=%g\n", tableName, longLabel, visibility,
 	    colorR, colorG, colorB, altColorR, altColorG, altColorB, priority);
+	}
     if (constraints)
 	    printf("#\tSQL query constraint: %s\n", constraints);
     if (wigConstraint[0])
@@ -545,7 +579,7 @@ if (wigData)
 		wigConstraint[0], wigDataConstraint[0][0]);
 	}
 
-    for (wdPtr = wigData; (linesOutput < MAX_LINES_OUTPUT) &&
+    for (wdPtr = wigData; (linesOutput < maxLinesOut) &&
 	    (wdPtr != (struct wiggleData *) NULL); wdPtr= wdPtr->next)
 	{
 	int i;
@@ -568,7 +602,7 @@ if (wigData)
 	    span = wdPtr->span;
 	    }
 	wd = wdPtr->data;
-	for (i = 0; (linesOutput < MAX_LINES_OUTPUT) && (i < wdPtr->count); ++i)
+	for (i = 0; (linesOutput < maxLinesOut) && (i < wdPtr->count); ++i)
 	    {
 	    printf("%u\t%g\n", wd->chromStart, wd->value);
 	    ++wd;
@@ -580,8 +614,8 @@ if (wigData)
 else
     printf("#\tthis data fetch function is under development, expected early April 2004\n");
 
-if (linesOutput >= MAX_LINES_OUTPUT)
-    printf("#\tmaximum data output of %u lines reached\n", MAX_LINES_OUTPUT);
+if (linesOutput >= maxLinesOut)
+    printf("#\tmaximum data output of %u lines reached\n", maxLinesOut);
 
 webEnd();
 }	/*	void doGetWiggleData(boolean doCt)	*/
