@@ -3552,6 +3552,20 @@ void doBlatMus(struct trackDb *tdb, char *item)
 longXenoPsl1(tdb, item, "Mouse", "mouseChrom");
 }
 
+
+void doMultAlign(struct trackDb *tdb, char *item, char *otherName )
+/* Put up cross-species alignment when the second species
+ * sequence is in a nib file. */
+{
+//errAbort("(%s)\n", item );
+char chromStr[64];
+sprintf( chromStr, "%sChrom" , otherName );
+longXenoPsl1(tdb, item, otherName, chromStr );
+freeString( temp );
+}
+
+
+
 void doBlatHuman(struct trackDb *tdb, char *item)
 /* Put up cross-species alignment when the second species
  * sequence is in a nib file. */
@@ -6791,6 +6805,10 @@ else if (sameWord("blastzMm2", track)
          || (sameWord("aarMm2", track)))
     {
     doBlatMus(tdb, item);
+    }
+else if (startsWith("multAlignWebb", track))
+    {
+    doBlatMultAlign(tdb, item, &track[13] );
     }
 else if (sameWord(track, "blatHuman"))
     {
