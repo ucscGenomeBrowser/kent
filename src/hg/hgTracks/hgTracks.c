@@ -3908,7 +3908,7 @@ char *optionStr;
 tg->loadItems = loadXenoPslWithPos;
 tg->mapItemName = mapNameFromLfExtra;
 snprintf( option, sizeof(option), "%s.color", tg->mapName);
-optionStr = cartUsualString(cart, option, "on");
+optionStr = cartUsualString(cart, option, "off");
 if( sameString( optionStr, "on" )) /*use chromosome coloring*/
     tg->itemColor = pslItemColor;
 else
