@@ -51,6 +51,7 @@ DIRS = \
 	lavToPsl \
 	libScan \
 	mafCoverage \
+	mafRanges \
 	mafToAxt \
 	mmUnmix \
 	mousePoster \
