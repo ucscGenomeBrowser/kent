@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.182 2004/05/25 18:05:51 fanhsu Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.183 2004/05/29 23:24:26 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1066,7 +1066,7 @@ static char* mustGetSeqAndId(struct sqlConnection *conn, char *acc,
 {
 char *buf= getSeqAndId(conn, acc, retId, NULL);
 if (buf == NULL)
-    errAbort("No sequence for %s in database", acc);
+    errAbort("No sequence for %s in seq or gbSeq tables", acc);
 return buf;
 }
 
