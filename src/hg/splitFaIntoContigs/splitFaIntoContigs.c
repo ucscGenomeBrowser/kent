@@ -48,6 +48,9 @@ struct agpData
 /* Pointer to next in doubly-linked list */
     struct agpData *next;
 
+/* Name of the contig that this agp entry starts */
+    char contigName[BUF_SIZE];
+
 /* Union to hold either and agpGap or agpFrag, depending on isGap flag. */
     union
     {
@@ -70,17 +73,56 @@ fflush(stdout);
     exit(-1);
 }
 
-void writeChromLiftFiles(char *chromName, struct agpData *startAgpData, char *destDir)
+void writeAgpLiftData(struct agpData *startData, struct agpData *endData, int chromSize, int contigSize, FILE *fp, char sep, char lastSep)
+{
+fprintf(fp, "%d%c", startData->data.pGap->chromStart, sep);
+fprintf(fp, "%s/%s%c", &(startData->data.pGap->chrom[3]), startData->contigName, sep);
+fprintf(fp, "%d%c", contigSize, sep);
+fprintf(fp, "%s%c", startData->data.pGap->chrom, sep);
+fprintf(fp, "%d%c", chromSize, lastSep);
+}
+
+void writeChromLiftFiles(char *chromName, int chromSize, struct agpData *startAgpData, char *destDir)
 /*
 Writes the lift and list files out for a single chromsome
 
 param chromName - The name of the chromsome.
+param chromSize - The number of bases in this chromosome.
 param startGap - Pointer to the dna gap or fragment at which we are starting to
  write data. The data will include the contents of this gap/frag.
 param destDir - The destination dir to which to write the agp file.
  */
 {
+char command[DEFAULT_PATH_SIZE];
+char filename[DEFAULT_PATH_SIZE];
+struct agpData *loopStartData = NULL;
+struct agpData *curData = NULL;
+FILE *fp = NULL;
+int contigSize = 0;
 
+sprintf(command, "mkdir -p %s/lift", destDir);
+system(command);
+sprintf(filename, "%s/lift/ordered.lft", destDir);
+
+fp = fopen(filename, "w");
+curData = startAgpData;
+while (NULL != curData) 
+    {
+    if (NULL == loopStartData)
+	{
+	loopStartData = curData;
+	}
+
+    if (curData->endOfContig)
+	{
+	writeAgpLiftData(loopStartData, curData, chromSize, contigSize, fp, '\t', '\n');
+	loopStartData = NULL;
+	}
+
+    curData = curData->next;
+    }
+
+fclose(fp);
 }
 
 void writeAgpFile(char *chromName, struct agpData *startAgpData, char *filename)
@@ -97,26 +139,21 @@ struct agpData *curData = NULL;
 FILE *fp = NULL;
 
 fp = fopen(filename, "w");
-
 printf("Writing agp file %s for chromo %s\n", filename, startAgpData->data.pGap->chrom);
-
 
 curData = startAgpData;
 while (NULL != curData) 
     {
     if (curData->isGap)
 	{
-	if (0 == curData->data.pGap->chromStart)
-	    {
-	    /* Undo the decrement we did earlier 
-	       This was done in nextAgpEntryToSplitOn() in order
-	       to be compatible with the 0-based frag addressing scheme 
-	    */
-
-	    curData->data.pGap->chromStart++;
-	    }
-
+	 /* Undo the decrement we did earlier.
+	    This was done in nextAgpEntryToSplitOn() in order
+	    to be compatible with the 0-based frag addressing scheme.
+	  */
+	curData->data.pGap->chromStart++;
 	agpGapOutput(curData->data.pGap, fp, '\t', '\n');
+	/* Redo the above decrement - don't want to create side effects */
+	curData->data.pGap->chromStart--;
 	}
     else
 	{
@@ -243,18 +280,22 @@ if (line[0] == '#' || line[0] == '\n')
     }
 
 curAgpData = AllocVar(curAgpData);
+curAgpData->endOfContig = FALSE;
+curAgpData->prev = NULL;
+curAgpData->next = NULL;
 
 chopLine(line, words);
 if ('N' == words[4][0])
     {
     agpGap = agpGapLoad(words);
+    /* 
+      Decrement the chromStart index since that's how the agpFrags do it
+       and we want to use 0-based addressing
+    */
+    --(agpGap->chromStart);
+
     if (0 == startIndex)
-        {
-        /* 
-          Decrement this chromStart index since that's how the agpFrags do it
-           and we want to use 0-based addressing
-	*/
-        --(agpGap->chromStart);
+	{
         startIndex = agpGap->chromStart;
         }
 
@@ -290,11 +331,6 @@ else
     }
 
 prevAgpData = curAgpData;
-
-curAgpData->endOfContig = FALSE;
-curAgpData->prev = NULL;
-curAgpData->next = NULL;
-
 numBasesRead = curAgpData->data.pGap->chromEnd - startIndex;
 } while ((numBasesRead < splitSize || !splitPointFound)
              && curAgpData->data.pGap->chromEnd < dnaSize);
@@ -345,6 +381,8 @@ do
     sprintf(contigDir, "%s/%s_%d", destDir, startAgpData->data.pGap->chrom, sequenceNum);
     sprintf(command, "mkdir -p %s", contigDir);
     system(command);
+
+    sprintf(startAgpData->contigName, "%s_%d", startAgpData->data.pGap->chrom, sequenceNum);
 
     sprintf(filename, "%s/%s_%d.fa", contigDir, startAgpData->data.pGap->chrom, sequenceNum);
     writeSuperContigFaFile(dna, startAgpData, endAgpData, filename, sequenceNum);
@@ -407,7 +445,7 @@ while (faSpeedReadNext(lfFa, &dna, &dnaSize, &chromName))
 
     writeChromFaFile(chromName, dna, dnaSize, destDir);
     writeChromAgpFile(chromName, startAgpData, destDir);
-    writeChromLiftFiles(chromName, startAgpData, destDir);
+    writeChromLiftFiles(chromName, dnaSize, startAgpData, destDir);
 
     printf("Done processing chromosome %s\n", chromName);
     }
