@@ -287,4 +287,8 @@ char *sqlUnixTimeToDate(time_t *timep, boolean gmTime);
 int sqlTableUpdateTime(struct sqlConnection *conn, char *table);
 /* Get last update time for table (in Unix terms). */
 
+char** sqlGetEnumDef(struct sqlConnection *conn, char* table, char* colName);
+/* Get the definitions of a enum column in a table, returning a
+ * null-terminated array of enum values.  Free array when finished.  */
+
 #endif /* JKSQL_H */
