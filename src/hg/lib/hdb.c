@@ -27,7 +27,7 @@
 #include "maf.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.163 2004/02/06 09:41:32 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.164 2004/02/06 18:25:49 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2447,7 +2447,7 @@ static struct trackDb* loadTrackDb(struct sqlConnection *conn, char* where)
 /* load list of trackDb objects, with optional where */
 {
 char *trackDb = hTrackDbName();
-struct trackDb *tdbList = trackDbLoadWhere(conn, trackDb, NULL);
+struct trackDb *tdbList = trackDbLoadWhere(conn, trackDb, where);
 freez(&trackDb);
 return tdbList;
 }
@@ -2458,7 +2458,7 @@ static struct trackDb* loadTrackDbLocal(struct sqlConnection *conn, char* where)
 char *trackDbLocal = hTrackDbLocalName();
 struct trackDb *tdbList = NULL;
 if ((trackDbLocal != NULL) && sqlTableExists(conn, trackDbLocal))
-    tdbList = trackDbLoadWhere(conn, trackDbLocal, NULL);
+    tdbList = trackDbLoadWhere(conn, trackDbLocal, where);
 freez(&trackDbLocal);
 return tdbList;
 }
