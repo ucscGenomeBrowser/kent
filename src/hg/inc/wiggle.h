@@ -25,8 +25,8 @@ struct wiggle
     double lowerLimit;	/* lowest data value in this block */
     double dataRange;	/* lowerLimit + dataRange = upperLimit */
     unsigned validCount;	/* number of valid data values in this block */
-    double average;	/* average of the data valeus, we may need this later */
-    double stddev;	/* standard deviation, we may need this later */
+    double sumData;	/* sum of the data points, for average and stddev calc */
+    double sumSquares;	/* sum of data points squared, for stddev calc */
     };
 
 void wiggleStaticLoad(char **row, struct wiggle *ret);
