@@ -1053,8 +1053,8 @@ altColor 255,128,0
 type wig -600 2000
 
 track RegPotential3X
-shortLabel 3x Reg Potential
-longLabel 3-way Regulatory Potential, Human, Mouse, Rat (hg16,mm3,rn3)
+shortLabel 3x Reg Filtered
+longLabel 3-way Regulatory Potential, Filtered View, Human, Mouse, Rat (hg16,mm3,rn3)
 group compGeno
 priority 146.1
 visibility hide
@@ -1065,8 +1065,8 @@ altColor 255,128,0
 type wig 0.0 0.01
 
 track RegPotential2X
-shortLabel 2x Reg Potential
-longLabel 2-way Regulatory Potential, Human, Mouse (hg16,mm4)
+shortLabel 2x Reg Filtered
+longLabel 2-way Regulatory Potential, Filtered View, Human, Mouse (hg16,mm4)
 group compGeno
 priority 146.2
 visibility hide
@@ -1077,8 +1077,8 @@ altColor 255,128,0
 type wig 0.0 0.01
 
 track RegPotential3XData
-shortLabel 3x Reg Data
-longLabel 3-way Regulatory Potential Unfiltered Data, Human, Mouse, Rat (hg16,mm3,rn3)
+shortLabel 3x Reg Potential
+longLabel 3-way Regulatory Potential, Human, Mouse, Rat (hg16,mm3,rn3)
 group compGeno
 priority 146.15
 visibility hide
@@ -1086,11 +1086,12 @@ autoScaleDefault Off
 maxHeightPixels 128
 color 0,128,255
 altColor 255,128,0
+defaultViewLimits 0.0:0.01
 type wig -0.1 0.21
 
 track RegPotential2XData
-shortLabel 2x Reg Data
-longLabel 2-way Regulatory Potential Unfiltered Data, Human, Mouse (hg16,mm4)
+shortLabel 2x Reg Potential
+longLabel 2-way Regulatory Potential, Human, Mouse (hg16,mm4)
 group compGeno
 priority 146.25
 visibility hide
@@ -1098,4 +1099,5 @@ autoScaleDefault Off
 maxHeightPixels 128
 color 0,128,255
 altColor 255,128,0
+defaultViewLimits 0.0:0.01
 type wig -0.074 0.153
