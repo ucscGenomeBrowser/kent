@@ -8,12 +8,13 @@ O = twoBitToFa.o
 
 twoBitToFa: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/twoBitToFa $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/twoBitToFa
+	#strip ${HOME}/bin/${MACHTYPE}/twoBitToFa
 
 clean:
 	rm -f $O
 
 test:
+	rm -fr tests/output
 	${MKDIR} tests/output
 	twoBitToFa tests/input/testN.2bit tests/output/testN.fa
 	twoBitToFa tests/input/testMask.2bit tests/output/testMask.fa
@@ -26,5 +27,7 @@ test:
 	twoBitToFa tests/input/testMask.2bit -seq=manyLower -start=6 -end=7 tests/output/ml_6_7.fa
 	twoBitToFa tests/input/testMask.2bit -seq=manyLower -start=7 -end=8 tests/output/ml_7_8.fa
 	twoBitToFa tests/input/testMask.2bit -seq=manyLower -start=8 -end=9 tests/output/ml_8_9.fa
+	twoBitToFa tests/input/testMask.2bit:manyLower tests/output/spec_ml.fa
+	twoBitToFa tests/input/testMask.2bit:manyLower:2-10 tests/output/spec_ml_2_10.fa
 	diff -r -x CVS tests/expected tests/output
 	rm -r tests/output

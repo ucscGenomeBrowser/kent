@@ -7,7 +7,7 @@
 #include "fa.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: twoBitToFa.c,v 1.4 2004/02/24 22:12:09 kent Exp $";
+static char const rcsid[] = "$Id: twoBitToFa.c,v 1.5 2004/07/18 19:51:08 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -20,6 +20,12 @@ errAbort(
   "   -seq=name - restrict this to just one sequence\n"
   "   -start=X  - start at given position in sequence (zero-based)\n"
   "   -end=X - end at given position in sequence (non-inclusive)\n"
+  "\n"
+  "Sequence and range may also be specified as part of the input\n"
+  "file name using the syntax:\n"
+  "      /path/input.2bit:name\n"
+  "   or\n"
+  "      /path/input.2bit:name:start-end\n"
   );
 }
 
@@ -47,8 +53,13 @@ void twoBitToFa(char *inName, char *outName)
 /* twoBitToFa - Convert all or part of twoBit file to fasta. */
 {
 FILE *outFile = mustOpen(outName, "w");
-struct twoBitFile *tbf = twoBitOpen(inName);
+struct twoBitFile *tbf;
 struct twoBitIndex *index;
+
+/* check for sequence/range in path */
+if (twoBitIsRange(inName))
+    twoBitParseRange(inName, &inName, &clSeq, &clStart, &clEnd);
+tbf = twoBitOpen(inName);
 
 if (clSeq == NULL)
     {
