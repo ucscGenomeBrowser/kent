@@ -6,22 +6,22 @@
 #define MOUSEORTHO_H
 
 struct mouseOrtho
-/* Synteny between mouse and human chromosomes. */
+/* Human Mouse Orthologs */
     {
     struct mouseOrtho *next;  /* Next in singly linked list. */
-    char *chrom;	/* Name of chromosome */
-    unsigned chromStart;	/* Start in chromosome */
-    unsigned chromEnd;	/* End in chromosome */
-    char *name;	/* Name of gene  */
-    unsigned score;	/* alignment score blat */
-    char strand[2];	/* + or - for strand */
-    unsigned thickStart;	/* Coding region start */
-    unsigned thickEnd;	/* Coding region end */
-    unsigned exonCount;	/* Number of exons */
-    unsigned *exonStarts;	/* Exon start positions */
-    unsigned *exonEnds;	/* Exon end positions */
-    int segment;	/* Number of segment */
+    char *chrom;	/* Human Chrom */
+    unsigned chromStart;	/* Start on Human */
+    unsigned chromEnd;	/* End on Human */
+    char *mouseGene;	/* Mouse Gene Prediction */
+    unsigned score;	/* Human mouse aligment score using Blat */
+    char *strand;	/* Strand on Human */
+    unsigned thickStart;	/* Start on Human */
+    unsigned thickEnd;	/* End on Human */
     };
+
+void mouseOrthoStaticLoad(char **row, struct mouseOrtho *ret);
+/* Load a row from mouseOrtho table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
 
 struct mouseOrtho *mouseOrthoLoad(char **row);
 /* Load a mouseOrtho from row fetched with select * from mouseOrtho
