@@ -76,7 +76,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.551 2003/07/07 21:05:02 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.552 2003/07/07 23:49:15 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -1300,7 +1300,7 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	w++; /* innerLine subtracts 1 from the width */
 	x1--; /* this causes some line to overwrite one
 		 pixel of the box */
-#define GAPFACTOR 10
+#define GAPFACTOR 5
 	if (tGap > GAPFACTOR * qGap)
 	    innerLine(vg, x1, midY, w, color);
 	else
