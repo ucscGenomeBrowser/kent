@@ -17,10 +17,11 @@
 #include "trackDb.h"
 #include "grp.h"
 #include "customTrack.h"
+#include "pipeline.h"
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.67 2004/09/22 07:59:11 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.68 2004/09/22 19:43:26 kent Exp $";
 
 
 void usage()
@@ -120,6 +121,33 @@ else
     return curTable;
 }
 
+/* --------------- Compression on the fly stuff ------ */
+
+#ifdef MIGHT_WORK_SOMEDAY
+struct pipeline *gzipPipe = NULL;
+
+void gzipPipeOpen()
+/* Redirect stdout to go through a pipe to gzip. */
+{
+static char *gzip[] = {"gzip", "-c", "-f", NULL};
+gzipPipe = pipelineCreateWrite1(gzip, pipelineInheritFd, NULL);
+if (dup2(pipelineFd(gzipPipe), 1) < 0)
+   errnoAbort("dup2 to stdout failed");
+}
+
+
+void gzipPipeClose()
+/* Finish up gzip pipeline. */
+{
+if (gzipPipe != NULL)
+    {
+    fclose(stdout);  /* must close first or pipe will hang */
+    pipelineWait(&gzipPipe);
+    }
+}
+#endif /* MIGHT_WORK_SOMEDAY */
+
+   
 /* --------------- Text Mode Helpers ----------------- */
 
 static void textWarnHandler(char *format, va_list args)
@@ -149,6 +177,15 @@ char *fileName = cartUsualString(cart, hgtaOutFileName, "");
 trimSpaces(fileName);
 if (fileName[0] == 0)
     printf("Content-Type: text/plain\n\n");
+#ifdef MIGHT_WORK_SOMEDAY
+else if (endsWith(fileName, ".gz") || endsWith(fileName, ".GZ"))
+    {
+    printf("Content-Disposition: attachment; filename=%s\n", fileName);
+    printf("Content-Type: application/x-gzip\n");
+    printf("\n");
+    gzipPipeOpen();
+    }
+#endif /* MIGHT_WORK_SOMEDAY */
 else
     {
     printf("Content-Disposition: attachment; filename=%s\n", fileName);
@@ -997,6 +1034,9 @@ dispatch(conn);
 
 /* Save variables. */
 cartCheckout(&cart);
+#ifdef MIGHT_WORK_SOMEDAY
+gzipPipeClose();
+#endif /* MIGHT_WORK_SOMEDAY */
 }
 
 int main(int argc, char *argv[])
