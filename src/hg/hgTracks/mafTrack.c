@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.26 2004/12/07 01:32:29 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.27 2005/02/08 01:03:59 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -630,7 +630,7 @@ static void mafDrawBases(struct track *tg, int seqStart, int seqEnd,
 /* Draw base-by-base view. */
 {
 struct mafItem *miList = tg->items, *mi;
-struct mafAli *mafList = NULL, *maf, *sub;
+struct mafAli *mafList = tg->customPt, *maf, *sub;
 int lineCount = slCount(miList);
 char **lines = NULL, *selfLine, *insertLine;
 double *scores;  /* per base scores */
