@@ -154,6 +154,9 @@ stored in a single table rather than one table per chromosome:</P>
   - Translations of Acembly gene predictions into corresponding amino acid
     sequences </LI>
   <LI><A 
+  href="#wiggleTrack">affyTranscriptome</A> 
+  - Transcriptome data for chr21 and chr22 from Affymetrix </LI>
+  <LI><A 
   href="#LFS">affyRatio</A> 
   - Expression data from GNF using Affymetrix GeneChips</LI>
   <LI><A 
@@ -264,6 +267,9 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#JaxOrtholog">jaxOrtholog</A> 
   - Jackson Labs Mouse Orthologs </LI>
+  <LI><A 
+  href="#JaxQTL">jaxQTL</A> 
+  - Jackson Labs Mouse Quantitative Trait Loci </LI>
   <LI><A 
   href="#OtherKnown">knownInfo</A> 
   - Other information about known genes (Oct. 2000 and earlier known gene 
@@ -529,7 +535,6 @@ stored in a single table rather than one table per chromosome:</P>
 
 This section describes the format of each table field by field in 
 <a href=" http://www.soe.ucsc.edu/~kent/exe/doc/">  AutoSql</a> format.
-
 
 <H4><A name=BED></A>Browser Extensible Data</H4>
 The following definition is used for the 
@@ -880,6 +885,23 @@ The following definition is used for tables that link a predicted peptide to a p
     string mouseChr; "Mouse chromosome"
     string mouseCm; "Mouse genetic map positionin centimorgans"
     string mouseBand; "Mouse chromosome band if any"
+    )
+</PRE>
+
+<H4><A name=JaxQTL></A>Jackson Labs Quantitative Trait Loci</H4>
+<PRE>table jaxQTL
+"Quantitative Trait Loci from Jackson Labs / Mouse Genome Informatics"
+    (
+    string chrom;       "Human chromosome or FPC contig"
+    uint   chromStart;  "Start position in chromosome"
+    uint   chromEnd;    "End position in chromosome"
+    string name;        "Name of item"
+    uint   score;       "Score from 0-1000 (bed6 compat.)"
+    char[1] strand;     "+ or - (bed6 compat.)"
+    string marker;      "MIT SSLP Marker w/highest correlation"
+    string mgiID;       "MGI ID"
+    string description; "MGI description"
+    float  cMscore;     "cM position of marker associated with peak LOD score"
     )
 </PRE>
 
@@ -1253,7 +1275,7 @@ Last used Apr. 2001.
 
 <H4><A name=wiggleTrack></A>Sample Tracks for Plotting Real-valued Data</H4>
 The following definition is used for: chrN_humMusL, chrN_zoom2500_humMusL, 
-chrN_zoom50_humMusL, chrN_zoom1_humMusL.
+chrN_zoom50_humMusL, chrN_zoom1_humMusL, affyTranscriptome.
 Each table entry in the chrN_humMusL is displayed as a "mountain range" on
 the browser and corresponds to one blastz alignment. The zoom tables
 chrN_zoom2500_humMusL, chrN_zoom50_humMusL, and chrN_zoom1_humMusL are
