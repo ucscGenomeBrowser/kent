@@ -15,7 +15,7 @@
 #include "common.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: dnautil.c,v 1.22 2004/02/22 01:09:47 jill Exp $";
+static char const rcsid[] = "$Id: dnautil.c,v 1.23 2004/02/23 06:47:30 kent Exp $";
 
 struct codonTable
 /* The dread codon table. */
@@ -549,8 +549,7 @@ int count = 16;
 int bVal;
 while (--count >= 0)
     {
-    if ((bVal = ntVal[*in++]) < 0)
-        bVal = T_BASE_VAL;
+    bVal = ntValNoN[*in++];
     out <<= 2;
     out += bVal;
     }
@@ -565,8 +564,22 @@ int count = 8;
 int bVal;
 while (--count >= 0)
     {
-    if ((bVal = ntVal[*in++]) < 0)
-        bVal = T_BASE_VAL;
+    bVal = ntValNoN[*in++];
+    out <<= 2;
+    out += bVal;
+    }
+return out;
+}
+
+UBYTE packDna4(DNA *in)
+/* Pack 4 bases into a UBYTE */
+{
+UBYTE out = 0;
+int count = 4;
+int bVal;
+while (--count >= 0)
+    {
+    bVal = ntValNoN[*in++];
     out <<= 2;
     out += bVal;
     }
@@ -590,6 +603,26 @@ for (i=0; i<tileCount; ++i)
     out += 16;
     }
 }
+
+void unpackDna4(UBYTE *tiles, int byteCount, DNA *out)
+/* Unpack DNA. Expands to 4x byteCount in output. */
+{
+int i, j;
+UBYTE tile;
+
+for (i=0; i<byteCount; ++i)
+    {
+    tile = tiles[i];
+    for (j=3; j>=0; --j)
+        {
+        out[j] = valToNt[tile & 0x3];
+        tile >>= 2;
+        }
+    out += 4;
+    }
+}
+
+
 
 
 static void checkSizeTypes()

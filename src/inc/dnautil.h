@@ -157,8 +157,14 @@ bits32 packDna16(DNA *in);
 bits16 packDna8(DNA *in);
 /* Pack 8 bases into a short word */
 
+UBYTE packDna4(DNA *in);
+/* Pack 4 bases into a UBYTE */
+
 void unpackDna(bits32 *tiles, int tileCount, DNA *out);
 /* Unpack DNA. Expands to 16x tileCount in output. */
+
+void unpackDna4(UBYTE *tiles, int byteCount, DNA *out);
+/* Unpack DNA. Expands to 4x byteCount in output. */
 
 void unalignedUnpackDna(bits32 *tiles, int start, int size, DNA *unpacked);
 /* Unpack into out, even though not starting/stopping on tile 
