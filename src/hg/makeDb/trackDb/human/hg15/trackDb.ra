@@ -72,7 +72,7 @@ type maf
 
 track axtBestMm3
 shortLabel Human/Mouse
-longLabel blastz Score Based Mouse/Human Wiggle Track
+longLabel Blastz Score Based Mouse/Human Wiggle Track
 group compGeno
 priority 125.99
 visibility full
@@ -93,7 +93,7 @@ type sample 0 8
 
 track blastzBestMm3
 shortLabel Best Mouse
-longLabel blastz Mouse (Feb. 03) Best in Genome Alignments
+longLabel Blastz Mouse (Feb. 03) Best in Genome Alignments
 group compGeno
 priority 126
 visibility dense
@@ -104,7 +104,7 @@ type psl xeno mm3
 
 track blastzTightMm3
 shortLabel Tight Mouse
-longLabel blastz Mouse (Feb. 03), Tight Subset of Best Alignments
+longLabel Blastz Mouse (Feb. 03), Tight Subset of Best Alignments
 group compGeno
 priority 123
 visibility hide
@@ -114,8 +114,8 @@ spectrum on
 type psl xeno mm3
 
 track blastzMm3
-shortLabel Mouse blastz
-longLabel blastz All Mouse (Feb. 03) Alignments
+shortLabel Mouse Blastz
+longLabel Blastz All Mouse (Feb. 03) Alignments
 group compGeno
 priority 130
 visibility hide
@@ -126,7 +126,7 @@ type psl xeno mm3
 
 track mouseChain
 shortLabel Mouse Chain 
-longLabel Chained blastz Mouse/$Organism Alignments
+longLabel Chained Blastz Mouse/$Organism Alignments
 group compGeno
 priority 133
 visibility hide
@@ -156,7 +156,7 @@ type bed 4 .
 
 track blastzTightRn2
 shortLabel Tight Rat 
-longLabel Rat blastz (Jan. 03), Tight Subset of Best Alignments
+longLabel Rat Blastz (Jan. 03), Tight Subset of Best Alignments
 group compGeno
 priority 140
 visibility hide
@@ -177,7 +177,7 @@ type bed 4 +
 
 track blastzBestRn2
 shortLabel Best Rat
-longLabel Rat blastz (Jan. 03) Best in Genome Alignments
+longLabel Rat Blastz (Jan. 03) Best in Genome Alignments
 group compGeno
 priority 141
 visibility hide
@@ -187,8 +187,8 @@ spectrum on
 type psl xeno rn2
 
 track blastzRn2
-shortLabel Rat blastz
-longLabel Merged blastz Rat (Jan. 03) Alignments
+shortLabel Rat Blastz
+longLabel Merged Blastz Rat (Jan. 03) Alignments
 group compGeno
 priority 142
 visibility dense
@@ -210,7 +210,7 @@ type psl xeno hg15
 
 track humanChain
 shortLabel Human Chain 
-longLabel Chained blastz Human/$Organism Alignments
+longLabel Chained Blastz Human/$Organism Alignments
 group varRep
 priority 146
 visibility hide
@@ -229,7 +229,7 @@ spectrum on
 type bed 12 
 
 track blastzCe1
-shortLabel Worm blastz
+shortLabel Worm Blastz
 longLabel C elegans Blastz Alignments
 group compGeno
 priority 109
@@ -241,7 +241,7 @@ type psl xeno ce1
 
 track wormChain
 shortLabel Worm Chain 
-longLabel Chained blastz C. elegans/$Organism Alignments
+longLabel Chained Blastz C. elegans/$Organism Alignments
 group compGeno
 priority 109.5
 visibility hide
