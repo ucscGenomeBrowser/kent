@@ -33,6 +33,8 @@ my %autoSqlIgnore = ( "hg/lib/bed.as" => "",
 		      "hg/makeDb/schema/joinerGraph/swissProt.as" => "",
 		      "hg/protein/spToDb/spDbTables.as" => "",
 		      "hg/ultras/ultraDb/as/udHistory.as" => "",
+		      "hg/bioImage/bioImage.as" => "",
+		      "hg/bioImage/loadMahoney/mahoney.as" => "",
 		      "lib/pslWScore.as" => "",
 		    );
 
