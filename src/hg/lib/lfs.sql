@@ -18,5 +18,7 @@ CREATE TABLE lfs (
     lfSizes longblob not null,	# Comma separated list of sizes of each linked feature in genomic
     lfNames longblob not null,	# Comma separated list of names of linked features
               #Indices
-    INDEX(bin,chrom, chromStart)
+    INDEX(bin)
+    INDEX(chrom)
+    INDEX(chromStart)
 );
