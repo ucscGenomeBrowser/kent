@@ -7,6 +7,7 @@
 #include "cheapcgi.h"
 #include "portable.h"
 #include "jalview.h"
+#include "web.h"
 
 void getSequenceInRange(struct dnaSeq **seqList, struct hash *hash, char *table, char *type, char *tName, int tStart, int tEnd)
 /* Load a list of fasta sequences given tName tStart tEnd */
@@ -49,14 +50,18 @@ int main(int argc, char *argv[])
 cgiSpoof(&argc,argv);
 struct dnaSeq *seqList = NULL, *seq;
 struct hash *faHash = hashNew(0);
-char *db=cgiString("db");
-char *faIn=cgiString("fa");
+// char *db=cgiString("db");
+char *faIn=cgiOptionalString("fa");
+// not used?
 char *g=cgiOptionalString("g");
 struct tempName faTn, alnTn;
 struct lineFile *lf;
 char *line = NULL;
 char clustal[512];
 int ret;
+
+if (faIn == NULL)
+    webAbort("Error", "Requires input fa file");
 
 //hSetDb(db);
 printf("\n");
