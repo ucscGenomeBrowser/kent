@@ -17,10 +17,13 @@ the MySQL database to be around.
 
 GENERAL INSTALL INSTRUCTIONS
 
-1. Create a directory named "jksrc" and go to it.
-2. Unzip jksrcXXX.zip, where XXX is the latest version,
-   currently 446.
-3. Check that the environment variable MACHTYPE
+1. Get the code.  The best way to do this now for
+   Unix users is via CVS following the instructions at:
+     http://genome.ucsc.edu/admin/cvs.html
+   For Windows users download the latest jksrcXXX.zip
+   from www.soe.ucsc.edu/~kent/src and put it in a
+   directory named kent/src, and unzip it.
+2. Check that the environment variable MACHTYPE
    exists on your system.  It should on Unix.  
    (And making this on non-Unix systems is beyond
    the scope of this README).  For a Linux 
@@ -28,17 +31,17 @@ GENERAL INSTALL INSTRUCTIONS
    and Alpha it will be 'alpha', for a Sun
    probably 'sparc'.  If necessary set up
    this environment variable.
-4. Make the directory ~/bin/$MACHTYPE which is
+3. Make the directory ~/bin/$MACHTYPE which is
    where the (non-web) executables will go.
    Add this directory to your path.
-5. Go to the jksrc/lib directory.  If it doesn't
+4. Go to the jksrc/lib directory.  If it doesn't
    already exist do a mkdir $MACHTYPE.
-6. Type make.  On Alphas there will be 
+5. Type make.  On Alphas there will be 
    some warning messages about "crudeAli.c"
    otherwise it should compile cleanly.
    It's using gcc.
-7. Go to jksrc/jkOwnLib and type make.
-8. Go to the application you want to make and type 
+6. Go to jksrc/jkOwnLib and type make.
+7. Go to the application you want to make and type 
    make.  (If you're not sure, as a simple test
    go to jksrc/utils/fixcr and type make,
    then 'rehash' if necessary so your shell
@@ -48,6 +51,7 @@ GENERAL INSTALL INSTRUCTIONS
    <LF> terminations.  Look at the "gotCr.c"
    file in the fixCr directory, and then
    do a "fixcr gotCr.c" on it.
+
 
 INSTALL INSTRUCTIONS FOR BLAT
 
