@@ -863,19 +863,21 @@ Set up cluster run more or less as so:
       mkdir xenoMrna
       cd xenoMrna
       mkdir psl
-      ls -1S /scratch/hg/rn2/trfFa/* > genome.lst
+      ls -1S /mnt/scratch/hg/rn2/trfFa/* > genome.lst
       # If it hasn't been done already do:
-      # cp -r /cluster/store2/mrna.133/orgFa /scratch/hg/mrna.133/org
-      find /scratch/hg/mrna.133/org/ -name mrna.fa | xargs ls -lS | awk {'print $5 " " $9'} \
-        | sort -nr | awk {'print $2'} > xenoRna.lst
+      cp -r /cluster/store2/mrna.133/org /mnt/scratch/hg/mrna.133/org
+      find /mnt/scratch/hg/mrna.133/org -name mrna.fa | \
+         xargs ls -l | awk '{print $5,$9}' | sort -gr | \
+         awk '{print $2}' >  allMrna.lst
+DONE TO HERE
 This produces a size-sorted file of all organisms mrna.
 Then edit xenoRna.lst removing the Rattus_norvegicus line, and writing
 the first line into 1.org, the second line into 2.org,  and
 so forth.  After the 6th line just leave the rest in 7.org.
 Then
       ls -1 *.org > ratXenoRna.lst
-      cp ~/rn2/bed/xenoMrna/gsub .
-      gensub2 genome.lst ratZenoRna.lst gsub spec
+      cp ~/rn1/bed/xenoMrna/gsub .
+      gensub2 genome.lst ratXenoRna.lst gsub spec
       para create spec
       para try
       para check

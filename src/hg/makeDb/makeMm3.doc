@@ -917,31 +917,41 @@ DONE TO HERE
 # Make the nonhuman ESTs
         gunzip -c /cluster/store2/genbank.133/gbest*.gz | \
         gbToFaRa humanXenoRna.fil humanXenoEst.fa humanXenoEst.ra humanXenoEst.ta stdin
+IN PROGRESS
 
-
-PRODUCING CROSS_SPECIES mRNA ALIGMENTS (TODO)
+PRODUCING CROSS_SPECIES mRNA ALIGMENTS (IN PROGRESS - 2/10/02 -MATT)
 
 Here you align vertebrate mRNAs against the masked genome on the
 cluster you set up during the previous step.
 
 Make sure that gbpri, gbmam, gbrod, and gbvert are downloaded from Genbank into
-/cluster/store1/genbank.133 and unpacked by organism into /cluster/store1/mrna.133/org. 
+/cluster/store2/genbank.133 and unpacked by organism into /cluster/store2/mrna.133/org. 
 
 Set up cluster run more or less as so:
       ssh kk
-      cd ~/mm/bed
+      cd ~/mm3/bed
       mkdir xenoMrna
       cd xenoMrna
-      ls -1S /scratch/hg/mm3/mContigs/* > genome.lst
-      ls -1S /scratch/hg/mrna.133/org/*/mrna.fa > allMrna
+      ls -1S /mnt/scratch/hg/mm3/trfFa/* > genome.lst
+      cp -R /cluster/store2/mrna.133/org /mnt/scratch/hg/mrna.133
+# The below command fails when you have too many files so skip it and instead
+# run the command after it.
+#      ls -1S /mnt/scratch/hg/mrna.133/org/*/mrna.fa > allMrna.lst
+
+        find /mnt/scratch/hg/mrna.133/org -name mrna.fa | \
+         xargs ls -l | awk '{print $5,$9}' | sort -gr | \
+         awk '{print $2}' >  allMrna.lst
+
 Then edit allMrna removing the Mus.musculus line,  and writing
 the first line into 1.org, the second line into 2.org,  and
 so forth.  After the 6th line just leave the rest in 7.org.
 Then
       ls -1 *.org > rna.lst
       cp ~/mm/bed/xenoMrna/gsub .
-      gensub2 genome.lst rna.lst gsub spec
-      para create
+      mkdir psl
+      gensub2 genome.lst mrna.lst gsub spec
+      para create spec
+DONE TO HERE - WAITING FOR TERRY TO GET OFF CLUSTER
       para try
       para check
 If all looks well do
