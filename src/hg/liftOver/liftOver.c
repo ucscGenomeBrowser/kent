@@ -311,6 +311,7 @@ struct range
      struct range *next;
      int start;		/* Start 0 based */
      int end;		/* End, non-inclusive. */
+     int val;		/* Some value (optional). */
      };
 
 struct range *bedToRangeList(struct bed *bed)
@@ -530,6 +531,16 @@ for (i=0; i<bed->blockCount; ++i)
 return total;
 }
 
+struct range *reverseRangeList(struct range *rangeList, int chromSize)
+/* Return reverse-complemented rangeList. */
+{
+struct range *range;
+slReverse(&rangeList);
+for (range = rangeList; range != NULL; range = range->next)
+    reverseIntRange(&range->start, &range->end, chromSize);
+return rangeList;
+}
+
 char *remapBlockedBed(struct hash *chainHash, struct bed *bed)
 /* Remap blocks in bed, and also chromStart/chromEnd.  
  * Return NULL on success, an error string on failure. */
@@ -584,10 +595,7 @@ if (error == NULL)
     {
     if (chain->qStrand == '-')
 	{
-	struct range *range;
-	slReverse(&rangeList);
-	for (range = rangeList; range != NULL; range = range->next)
-	    reverseIntRange(&range->start, &range->end, chain->qSize);
+	rangeList = reverseRangeList(rangeList, chain->qSize);
 	reverseIntRange(&thickStart, &thickEnd, chain->qSize);
 	bed->strand[0] = otherStrand(bed->strand[0]);
 	}
@@ -744,57 +752,196 @@ while (lineFileRow(lf, row))
     }
 }
 
+#ifdef example
+char *remapBlockedBed(struct hash *chainHash, struct bed *bed)
+/* Remap blocks in bed, and also chromStart/chromEnd.  
+ * Return NULL on success, an error string on failure. */
+{
+struct chain *chainList = NULL,  *chain, *subChain, *freeChain;
+int bedSize = sumBedBlocks(bed);
+struct binElement *binList, *el;
+struct range *rangeList, *badRanges = NULL, *range;
+char *error = NULL;
+int i, start, end = 0;
+int thickStart = bed->thickStart;
+int thickEnd = bed->thickEnd;
+
+binList = findRange(chainHash, bed->chrom, bed->chromStart, bed->chromEnd);
+if (binList == NULL)
+    return "Deleted in new";
+
+/* Convert bed blocks to range list. */
+rangeList = bedToRangeList(bed);
+
+/* Evaluate all intersecting chains and sort so best is on top. */
+for (el = binList; el != NULL; el = el->next)
+    {
+    chain = el->val;
+    chain->score = chainRangeIntersection(chain, rangeList);
+    slAddHead(&chainList, chain);
+    }
+slSort(&chainList, chainCmpScore);
+
+/* See if duplicated. */
+chain = chainList->next;
+if (chain != NULL && chain->score == chainList->score)
+    error = "Duplicated in new";
+chain = chainList;
+
+/* See if best one is good enough. */
+if (chain->score  < minMatch * bedSize)
+    error = "Partially deleted in new";
+
+
+/* Call subroutine to remap range list. */
+if (error == NULL)
+    {
+    remapRangeList(chain, &rangeList, &thickStart, &thickEnd, 
+    	&rangeList, &badRanges, &error);
+    }
+
+/* Convert rangeList back to bed blocks.  Also calculate start and end. */
+if (error == NULL)
+    {
+    if (chain->qStrand == '-')
+	{
+	struct range *range;
+	slReverse(&rangeList);
+	for (range = rangeList; range != NULL; range = range->next)
+	    reverseIntRange(&range->start, &range->end, chain->qSize);
+	reverseIntRange(&thickStart, &thickEnd, chain->qSize);
+	bed->strand[0] = otherStrand(bed->strand[0]);
+	}
+    bed->chromStart = start = rangeList->start;
+    for (i=0, range = rangeList; range != NULL; range = range->next, ++i)
+	{
+	end = range->end;
+	bed->blockSizes[i] = end - range->start;
+	bed->chromStarts[i] = range->start - start;
+	}
+    if (!sameString(chain->qName, chain->tName))
+	{
+	freeMem(bed->chrom);
+	bed->chrom = cloneString(chain->qName);
+	}
+    bed->chromEnd = end;
+    bed->thickStart = thickStart;
+    bed->thickEnd = thickEnd;
+    }
+slFreeList(&rangeList);
+slFreeList(&badRanges);
+slFreeList(&binList);
+return error;
+}
+#endif
+
+struct range *sampleToRangeList(struct sample *sample, int sizeOne)
+/* Make a range list corresponding to sample. */
+{
+int i;
+struct range *rangeList = NULL, *range;
+for (i=0; i<sample->sampleCount; ++i)
+    {
+    AllocVar(range);
+    range->start = range->end = sample->chromStart + sample->samplePosition[i];
+    range->end += sizeOne;
+    range->val = sample->sampleHeight[i];
+    slAddHead(&rangeList, range);
+    }
+slReverse(&rangeList);
+return rangeList;
+}
+
+struct sample *rangeListToSample(struct range *rangeList, char *chrom, char *name,
+	unsigned score, char strand[3])
+/* Make sample based on range list and other parameters. */
+{
+struct range *range;
+struct sample *sample;
+int sampleCount = slCount(rangeList);
+int  i, chromStart, chromEnd;
+
+if (sampleCount == 0)
+    return NULL;
+chromStart = rangeList->start;
+chromEnd = rangeList->end;
+for (range = rangeList->next; range != NULL; range = range->next)
+    chromEnd = rangeList->end;
+
+AllocVar(sample);
+sample->chrom = cloneString(chrom);
+sample->chromStart = chromStart;
+sample->chromEnd = chromEnd;
+sample->name = cloneString(name);
+sample->score = score;
+strncpy(sample->strand, strand, sizeof(sample->strand));
+sample->sampleCount = sampleCount;
+AllocArray(sample->samplePosition, sampleCount);
+AllocArray(sample->sampleHeight, sampleCount);
+sample->sampleCount = sampleCount;
+
+for (range = rangeList, i=0; range != NULL; range = range->next, ++i)
+    {
+    sample->samplePosition[i] = range->start - chromStart;
+    sample->sampleHeight[i] = range->val;
+    }
+return sample;
+}
+
+void remapSample(struct hash *chainHash, struct sample *sample, FILE *mapped,
+	FILE *unmapped)
+/* Remap a single sample and output it. */
+{
+struct binElement *binList, *el;
+struct range *rangeList, *goodList = NULL, *range;
+struct chain *chain;
+struct sample *ns;
+char *error = NULL;
+int thick = 0;
+
+binList = findRange(chainHash, sample->chrom, sample->chromStart, sample->chromEnd);
+rangeList = sampleToRangeList(sample, 1);
+for (el = binList; el != NULL && rangeList != NULL; el = el->next)
+    {
+    chain = el->val;
+    remapRangeList(chain, &rangeList, &thick, &thick, 
+    	&goodList, &rangeList, &error);
+    if (goodList != NULL)
+        {
+	if (chain->qStrand == '-')
+	     goodList = reverseRangeList(goodList, chain->qSize);
+	ns = rangeListToSample(goodList, chain->qName, sample->name, 
+		sample->score, sample->strand);
+	sampleTabOut(ns, mapped);
+	sampleFree(&ns);
+	slFreeList(&goodList);
+	}
+    }
+if (rangeList != NULL)
+    {
+    ns = rangeListToSample(rangeList, sample->chrom, sample->name,
+    	sample->score, sample->strand);
+    fprintf(unmapped, "# Leftover %d of %d\n", ns->sampleCount, sample->sampleCount);
+    sampleTabOut(ns, unmapped);
+    sampleFree(&ns);
+    slFreeList(&rangeList);
+    }
+slFreeList(&binList);
+}
+
 void liftOverSample(char *fileName, struct hash *chainHash, FILE *mapped, 
 	FILE *unmapped)
 /* Open up file, decide what type of bed it is, and lift it. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-int wordCount;
-char *line;
 char *row[9];
-struct bed *bed;
 struct sample *sample;
-int i;
-FILE *f;
-char *error;
 
 while (lineFileRow(lf, row))
     {
     sample = sampleLoad(row);
-    AllocVar(bed);
-    bed->chrom = cloneString(sample->chrom);
-    bed->chromStart = bed->thickStart = sample->chromStart;
-    bed->chromEnd = bed->thickEnd = sample->chromEnd;
-    bed->name = cloneString(sample->name);
-    bed->score = sample->score;
-    bed->blockCount = sample->sampleCount;
-    AllocArray(bed->blockSizes, bed->blockCount);
-    AllocArray(bed->chromStarts, bed->blockCount);
-    for (i=0; i<bed->blockCount; ++i)
-        {
-	bed->blockSizes[i] = 1;
-	bed->chromStarts[i] = sample->samplePosition[i];
-	}
-    f = mapped;
-    error = remapBlockedBed(chainHash, bed);
-    if (error == NULL)
-        {
-	freeMem(sample->chrom);
-	sample->chrom = cloneString(bed->chrom);
-	sample->chromStart = bed->chromStart;
-	sample->chromEnd = bed->chromEnd;
-	sample->strand[0] = bed->strand[0];
-	for (i=0; i<bed->blockCount; ++i)
-	    sample->samplePosition[i] = bed->chromStarts[i];
-	}
-    else
-        {
-	fprintf(unmapped, "# %s\n", error);
-	f = unmapped;
-	}
-    sampleTabOut(sample, f);
+    remapSample(chainHash, sample, mapped, unmapped);
     sampleFree(&sample);
-    bedFree(&bed);
     }
 lineFileClose(&lf);
 }
