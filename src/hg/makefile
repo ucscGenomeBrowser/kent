@@ -2,6 +2,7 @@
 cgi:
 	cd lib; make; cd ..
 	cd cartReset; make; cd ..
+	cd das; make; cd ..
 	cd hgBlat; make; cd ..
 	cd hgCoordConv; make; cd ..
 	cd hgGateway; make; cd ..
@@ -13,6 +14,7 @@ cgi:
 alpha:
 	cd lib; make; cd ..
 	cd cartReset; make alpha; cd ..
+	cd das; make alpha; cd ..
 	cd hgBlat; make alpha; cd ..
 	cd hgCoordConv; make alpha; cd ..
 	cd hgGateway; make alpha; cd ..
@@ -24,6 +26,7 @@ alpha:
 beta:
 	cd lib; make; cd ..
 	cd cartReset; make beta; cd ..
+	cd das; make beta; cd ..
 	cd hgBlat; make beta; cd ..
 	cd hgCoordConv; make beta; cd ..
 	cd hgGateway; make beta; cd ..
