@@ -20,3 +20,6 @@ O = aliType.o bits.o blastParse.o cda.o cheapcgi.o codebias.o common.o crudeali.
 $(MACHTYPE)/jkweb.a: $(O) 
 	ar rcu $(MACHTYPE)/jkweb.a $(O)
 	ranlib $(MACHTYPE)/jkweb.a
+
+clean:
+	rm -f ${O} $(MACHTYPE)/jkweb.a
