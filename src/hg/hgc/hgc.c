@@ -4473,17 +4473,15 @@ char *thisOrg = hOrganism(database);
 cartWebStart(cart, tdb->longLabel);
 
 
-if( sameString( otherOrg, "Mouse" ) )
-{
-   printf("<B>%s position:</B> <a target=\"_blank\" href=\"/cgi-bin/hgTracks?db=mm2&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
-        otherOrg, psl->qName, psl->qStart+1, psl->qEnd, 
-	    psl->qName, psl->qStart+1, psl->qEnd);
-}
-else
-{
-    printf("<B>%s position:</B> %s:%d-%d<BR>\n", otherOrg,
-	    psl->qName, psl->qStart+1, psl->qEnd);
-}
+   printf("<B>%s position:</B> <a target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
+        otherOrg, otherDb, psl->qName, psl->qStart+1, psl->qEnd, 
+            psl->qName, psl->qStart+1, psl->qEnd);
+
+/*superceded by above code*/
+//    printf("<B>%s position:</B> %s:%d-%d<BR>\n", otherOrg,
+//	    psl->qName, psl->qStart+1, psl->qEnd);
+
+
 printf("<B>%s size:</B> %d<BR>\n", otherOrg, psl->qEnd - psl->qStart);
 
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", thisOrg,
