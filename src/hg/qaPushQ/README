@@ -8,12 +8,9 @@ Plus provide a way for people to select
 and change between databases.  
 Then would they still be able to see all at once?
 
-cron job to backup hgsqldump the qapushq database on beta.
-dev will have just a testing version for the new stuff.
-
 add &cacheDefeat=random to URL and db to suppress back-button problems if any.
 
-just give in and use the cart
+give in and use the cart?
 
 monthly reports in easy-to-use format
 add ability to query old logs more fully (later)

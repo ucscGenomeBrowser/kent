@@ -1,6 +1,6 @@
 char formQ[] =
 "\n"
-"<h1> Push Queue Form\n"
+"<h1> Push Queue Form </h1>\n"
 "\n"
 "<form ACTION=\"/cgi-bin/qaPushQ\" NAME=\"mainForm\" METHOD=\"POST\">\n"
 "\n"
@@ -23,6 +23,7 @@ char formQ[] =
 "</select>\n"
 "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Queue Id: <!qid> \n"
 "&nbsp;&nbsp;<a href=\"/cgi-bin/qaPushQ\">CANCEL</a>\n"
+"&nbsp;&nbsp;<a href=\"/cgi-bin/qaPushQ?action=showEditHelp&qid=<!qid>\">HELP</a>\n"
 "</td></tr>\n"
 "\n"
 "<tr><td align=\"right\">\n"

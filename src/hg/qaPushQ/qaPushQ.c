@@ -22,7 +22,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.11 2004/05/10 17:43:04 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.12 2004/05/10 21:03:45 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -736,7 +736,7 @@ slCount(kiList)
 
 if (sameString(utsName.nodename,"hgwdev"))
     {
-    printf("<p style=\"color:red\">Machine: %s THIS IS NOT THE REAL PUSHQ- GO TO HGWBETA </p>\n",utsName.nodename);
+    printf("<p style=\"color:red\">Machine: %s THIS IS NOT THE REAL PUSHQ- GO TO <a href=http://hgwbeta.cse.ucsc.edu/cgi-bin/qaPushQ>HGWBETA</a> </p>\n",utsName.nodename);
     }
 
 if (sameString(month,""))
@@ -751,6 +751,7 @@ printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=reset>Logout</A>\n");
 printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showAllCol>All Columns</A>\n");
 printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showDefaultCol>Default Columns</A>\n");
 printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showMonths>Log by Month</A>\n");
+printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showDisplayHelp>Help</A>\n");
 
 /* draw table header */
 
@@ -1375,7 +1376,7 @@ void doEdit()
 {
 
 struct pushQ q;
-char tempSizeMB[sizeof(q.sizeMB)];
+char tempSizeMB[10];
 
 ZeroVar(&q);
 
@@ -1469,7 +1470,15 @@ printf("<TD align=right>\n");
 printf("Password:\n");
 printf("</TD>\n");
 printf("<TD>\n");
-printf("<INPUT TYPE=password NAME=password size=8 value=\"\" >\n");
+printf("<INPUT TYPE=password NAME=password size=8 value=\"\" > <br>\n");
+printf("</TD>\n");
+printf("</TR>\n");
+
+printf("<TR>\n");
+printf("<TD>\n");
+printf("</TD>\n");
+printf("<TD>\n");
+printf("Password must be at least 6 characters.");
 printf("</TD>\n");
 printf("</TR>\n");
 
@@ -2127,6 +2136,8 @@ safef(newQid, sizeof(newQid), cgiString("qid"));
 printf("<H2>Show File Sizes </H2>\n");
 
 loadPushQ(newQid, &q, FALSE); 
+
+printf("<a href=\"/cgi-bin/qaPushQ?action=showSizesHelp&qid=%s\">HELP</a> <br>\n",q.qid);
 printf("Location: %s <br>\n",q.currLoc);
 printf("Database: %s <br>\n",q.dbs    );
 printf("  Tables: %s <br>\n",q.tbls   );
@@ -2295,14 +2306,107 @@ sprintLongWithCommas(nicenumber, totalsize / (1024 * 1024) );
 printf("<p style=\"color:red\">Total: %s MB</p>\n",nicenumber);
 
 printf(" <br>\n");
-printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s&sizeMB=%s\">"
-       "Set Size as %s MB</a> <br>\n",newQid,nicenumber,nicenumber);
+printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s&sizeMB=%d\">"
+       "Set Size as %s MB</a> <br>\n",newQid,(int)(totalsize/(1024*1024)),nicenumber);
 printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s\">RETURN</a> <br>\n",newQid);
 cleanUp();
 }
 
 
+void doShowDisplayHelp()
+/* show the sizes of all the track tables, cgis, and general files in separate window target= _blank  */
+{
+printf("<h4>Display Help</h4>\n");
+printf("ADD - add a new Push Queue record.<br>\n");
+printf("Logout - clears your cookie and logs out.<br>\n");
+printf("All Columns - allows you to bring back hidden columns.<br>\n");
+printf("Default Columns - reset your column preferences to default columns and order.<br>\n");
+printf("Log by Month - view old log records by month<br>\n");
+printf("HELP - click to see this help.<br>\n");
+printf("<br>\n");
+printf("! - click to hide a column you do not wish to see.<br>\n");
+printf("< - click to move the column to the left.<br>\n");
+printf("> - click to move the column to the right.<br>\n");
+printf("<br>\n");
+printf("^ - click to raise the priority of the record higher within the priority-class.<br>\n");
+printf("v - click to lower the  priority.<br>\n");
+printf("<br>\n");
+printf("Queue Id - click to edit or see the details page for the record.<br>\n");
+printf("<br>\n");
+printf("<a href=\"/cgi-bin/qaPushQ\">RETURN</a> <br>\n");
+cleanUp();
+}
 
+
+
+void doShowEditHelp()
+/* show the sizes of all the track tables, cgis, and general files in separate window target= _blank  */
+{
+struct pushQ q;
+ZeroVar(&q);
+safef(q.qid,sizeof(q.qid),cgiString("qid"));
+printf("<h4>Details/Edit Help</h4>\n");
+printf("<br>\n");
+printf("CANCEL - click to return to main display without saving changes.<br>\n");
+printf("HELP - click to see this help.<br>\n");
+printf("<br>\n");
+printf("Initial submission - displays date automatically generated when push queue record is created.<br>\n");
+printf("Date Opened - date QA (re)opened. (YYYY-MM-DD) Defaults originally to current date to save typing.<br>\n");
+printf("New track? - choose Y if this is a new track.<br>\n");
+printf("Track - enter the track name as it will appear in the genome browser.<br>\n");
+printf("Databases - enter db name. May be comma-separated list if more than one organism, etc.<br>\n");
+printf("Tables - enter as comma-separated list all tables that apply. They must exist in the database specified. Wildcard * supported. (Put comments in parentheses).<br>\n");
+printf("CGIs - enter names of any new cgis that are applicable. Must be found on hgwbeta.<br>\n");
+printf("Files - enter pathnames of any additional files if needed.<br>\n");
+printf("Size(MB) - enter the size of the total push in megabytes (MB).<br>\n");
+printf("Show Sizes button - click to see a complete list of sizes of all tables and cgis.  Tables are relative to Current Location specified.<br>\n");
+printf("Current Location - chooose the current location of the files.  Should default to hgwdev at start, after sudo mypush to hgwbeta, change this to hgwbeta.<br>\n");
+printf("Makedoc verified? - choose Y if you have verified the MakeAssembly.doc in kent/src/hg/makeDb.<br>\n");
+printf("Online help - enter status of online help. Verify <a href=http://hgwbeta.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html#IndivTracks>hgTracksHelp</a><br>\n");
+printf("Index verified? - choose Y if the index has been verified. Use the ShowSizes button for a quick view.<br>\n");
+printf("All.joiner verified? - choose Y if the all.joiner in /hg/makeDb/schema has been verified.<br>\n");
+printf("Status - enter current status (255 char max). Put long notes in Open Issues or Notes.<br>\n");
+printf("Sponsor - usually the developer.<br>\n");
+printf("Reviewer - usually the QA person handling the push queue for the track.<br>\n");
+printf("External Source or Collaborator - external contact outside our staff that may be involved. <br>\n");
+printf("Open Issues - Record any remaining open issues that are not completely resolved (no size limit here).<br>\n");
+printf("Notes - Any other notes you would like to make (no size limit here).<br>\n");
+printf("<br>\n");
+printf("Submit button - save changes and return to main display.<br>\n");
+printf("delete button - delete this push queue record and return to main display.<br>\n");
+printf("push requested button - press only if you are QA staff and about to submit the push-request. It will try to verify that required entries are present.<br>\n");
+printf("clone button - press if you wish to split the original push queue record into multiple parts. Saves typing, used rarely.<br>\n");
+printf("<br>\n");
+printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s\">RETURN</a> <br>\n",q.qid);
+cleanUp();
+}
+
+
+void doShowSizesHelp()
+/* show the sizes of all the track tables, cgis, and general files in separate window target= _blank  */
+{
+struct pushQ q;
+ZeroVar(&q);
+safef(q.qid,sizeof(q.qid),cgiString("qid"));
+printf("<h4>Show File Sizes Help</h4>\n");
+printf("<br>\n");
+printf("Tables: Shows sizes of database data and indexes.<br>\n");
+printf("Expands wildcard * in table names list. <br>\n");
+printf("Shows total index size, and the key expression of each index.<br>\n");
+printf("Location of tables is relative to the Current Location setting in the record.<br>\n");
+printf("<br>\n");
+printf("CGIs: shows files specified. Currently limited to checking localhost (hgwbeta in this case).<br>\n");
+printf("<br>\n");
+printf("Total size of all:  total size of all files found in bytes.<br>\n");
+printf("Total: size in megabytes(MB) which is what should be entered into the size(MB) field of the push queue record.<br>\n");
+printf("<br>\n");
+printf("RETURN - click to return to the details/edit page.<br>\n");
+printf("Set Size As - click to set size to that found, and return to the details/edit page. Saves typing. Be sure to press submit to save changes.<br>\n");
+printf("<br>\n");
+printf("<br>\n");
+printf("<a href=\"/cgi-bin/qaPushQ?action=showSizes&qid=%s\">RETURN</a> <br>\n",q.qid);
+cleanUp();
+}
 
 /* ------------------------------------------------------- */
 
@@ -2477,6 +2581,21 @@ else if (sameString(action,"showMonths" ))
 else if (sameString(action,"showSizes" )) 
     {
     htmShell(TITLE, doShowSizes, NULL);
+    }
+
+else if (sameString(action,"showDisplayHelp" )) 
+    {
+    htmShell(TITLE, doShowDisplayHelp, NULL);
+    }
+
+else if (sameString(action,"showEditHelp" )) 
+    {
+    htmShell(TITLE, doShowEditHelp, NULL);
+    }
+
+else if (sameString(action,"showSizesHelp" )) 
+    {
+    htmShell(TITLE, doShowSizesHelp, NULL);
     }
 
 else
