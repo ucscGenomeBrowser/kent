@@ -31,7 +31,7 @@
 #include "grp.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.211 2004/10/14 00:00:18 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.212 2004/10/19 18:31:49 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -793,7 +793,7 @@ hFreeConn(&conn);
 return hash;
 }
 
-struct dnaSeq *fetchSeq(char *fileName, char *seqName, int start, int end)
+struct dnaSeq *hFetchSeq(char *fileName, char *seqName, int start, int end)
 /* Fetch sequence from file.  If it is a .2bit file then fetch the named sequence.
    If it is .nib then just ignore seqName. */
 {
@@ -814,7 +814,7 @@ struct dnaSeq *hChromSeq(char *chrom, int start, int end)
 {
 char fileName[512];
 hNibForChrom(chrom, fileName);
-return fetchSeq(fileName, chrom, start, end);
+return hFetchSeq(fileName, chrom, start, end);
 }
 
 struct dnaSeq *hChromSeq2(char *chrom, int start, int end)
@@ -822,7 +822,7 @@ struct dnaSeq *hChromSeq2(char *chrom, int start, int end)
 {
 char fileName[512];
 hNibForChrom2(chrom, fileName);
-return fetchSeq(fileName, chrom, start, end);
+return hFetchSeq(fileName, chrom, start, end);
 }
 
 struct dnaSeq *hSeqForBed(struct bed *bed)
@@ -847,7 +847,8 @@ else
     hNibForChrom(bed->chrom, fileName);
     for(i=0; i<bed->blockCount; i++)
 	{
-	block = fetchSeq(fileName, bed->chrom, offSet+bed->chromStarts[i], bed->blockSizes[i]);
+	block = hFetchSeq(fileName, bed->chrom,
+			  offSet+bed->chromStarts[i], bed->blockSizes[i]);
 	dyStringAppendN(currentSeq, block->dna, block->size);
 	dnaSeqFree(&block);
 	}

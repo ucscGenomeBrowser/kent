@@ -149,7 +149,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.773 2004/10/13 17:49:30 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.774 2004/10/19 18:31:49 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2001,7 +2001,7 @@ struct dnaSeq *loadGenomePart(char *db,
 {
 char nibFile[512];
 findNib(db, chrom, nibFile);
-return fetchSeq(nibFile, chrom, start, end);
+return hFetchSeq(nibFile, chrom, start, end);
 }
 
 void printLabeledNumber(char *org, char *label, long long number)
