@@ -45,7 +45,7 @@ test::
 	cd utils && ${MAKE} test
 
 tags:
-	ctags ${HOME}/src/lib/*.c ${HOME}/src/inc/*.h ${HOME}/src/hg/lib/*.c ${HOME}/src/hg/inc/*.h ${HOME}/src/jkOwnLib/*.c
+	ctags ${HOME}/kent/src/lib/*.c ${HOME}/kent/src/inc/*.h ${HOME}/kent/src/hg/lib/*.c ${HOME}/kent/src/hg/inc/*.h ${HOME}/kent/src/jkOwnLib/*.c
 
 utils: libs
 	@for D in $(DIRS) x; do \
