@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.36 2005/03/09 21:24:18 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.37 2005/03/09 22:23:39 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -478,7 +478,7 @@ else
     {
     hPrintf("%s seems to be an outdated protein ID.", proteinID);
     printf("<BR><BR>Please try ");
-    hPrintf("<A HREF=\"http://hgwdev-fanhsu.cse.ucsc.edu/cgi-bin/pbGlobal?proteinID=%s\">  %s</A> instead.\n",
+    hPrintf("<A HREF=\"../cgi-bin/pbGlobal?proteinID=%s\">  %s</A> instead.\n",
 	     spFindAcc(spConn, proteinID), spFindAcc(spConn, proteinID));fflush(stdout);
     errAbort(" ");
     }
