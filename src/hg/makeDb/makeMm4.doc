@@ -1797,6 +1797,10 @@ done
     # Load the bed file
     hgLoadBed -noBin -sqlTable=/cluster/home/kent/src/hg/lib/cytoBand.sql mm4 cytoBand cytoBand.bed
 
+# Make cytoBandIdeo track for ideogram gif on hgTracks page.
+    # For mouse cytoBandIdeo is just a replicate of the cytoBand track.
+    # Make the cytoBand track (above) and then:
+    echo "create table cytoBandIdeo (index(chrom(10),chromStart)) as select * from cytoBand;" | hgsql mm4
 
 # UPDATE BACEND SEQUENCES (DONE - 2003-10-27 - Hiram)
 

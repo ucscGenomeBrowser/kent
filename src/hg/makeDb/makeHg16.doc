@@ -551,6 +551,10 @@ exit; # don't actually run this like a script :)
 	cd /projects/hg2/booch/psl/gs.17/build34/cytobands/
 	echo 'load data local infile "cytobands.bed" into table cytoBand;' | hgsql hg16
 
+# Make cytoBandIdeo track for ideogram gif on hgTracks page.
+    # For human cytoBandIdeo is just a replicate of the cytoBand track.
+    # Make the cytoBand track (above) and then:
+    echo "create table cytoBandIdeo (index(chrom(10),chromStart)) as select * from cytoBand;" | hgsql hg16
 
 # CREATING DATABASE  (DONE - 2003-07-26 - Hiram)
     ssh hgwdev
