@@ -1142,18 +1142,13 @@ axtFilter -notQ=chrUn_random $1 \
     # Copy over & edit README.txt w/pointers to chain, net formats.
 
 
-# BLASTZ SELF (IN PROGRESS 3/2/04 angie)
+# BLASTZ SELF (DONE 3/3/04 angie)
     ssh kk
-    mkdir -p /cluster/data/galGal2/bed/blastz.galGal2.2004-03-02
-    cd /cluster/data/galGal2/bed/blastz.galGal2.2004-03-02
-    # Jim asked to try a different slice size in order to give blastz's 
-    # dynamic masking better input.  Instead of 10M x 10M, use 500k x 
-    # whole chrom (up to 200M).  This is a departure from the usual 
-    # practice of running self al's with square chunks, but we end up 
-    # stripping out alignments on the diagonal anyway so this shouldn't 
-    # be a big deal (?).  
-    # So that we're only varying one param at a time, I won't use 
-    # ABRIDGE_REPEATS or BLASTZ_M (threshold) for now.  
+    mkdir -p /cluster/data/galGal2/bed/blastz.galGal2.2004-03-03
+    cd /cluster/data/galGal2/bed/blastz.galGal2.2004-03-03
+    # OK, the 500k x whole chrom 03-02 run was taking FOREVER (18hrs, ~63%)
+    # and multiple folks are asking me to dig up pileups for Arian.  So, 
+    # just do a vanilla run as a baseline; return to the experiments later.
     cat << '_EOF_' > DEF
 # chicken vs. chicken
 export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
@@ -1170,7 +1165,7 @@ SEQ1_RMSK=
 SEQ1_FLAG=
 SEQ1_SMSK=
 SEQ1_IN_CONTIGS=0
-SEQ1_CHUNK=500000
+SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
 
 # QUERY
@@ -1180,10 +1175,10 @@ SEQ2_RMSK=
 SEQ2_FLAG=
 SEQ2_SMSK=
 SEQ2_IN_CONTIGS=0
-SEQ2_CHUNK=500000000
+SEQ2_CHUNK=10000000
 SEQ2_LAP=10000
 
-BASE=/cluster/data/galGal2/bed/blastz.galGal2.2004-03-02
+BASE=/cluster/data/galGal2/bed/blastz.galGal2.2004-03-03
 
 DEF=$BASE/DEF
 RAW=$BASE/raw
@@ -1212,15 +1207,14 @@ SEQ2_LEN=$BASE/S2.len
     mv j2 j
     para create j
     para try, check, push, check, ...
-TODO
-#Completed: 21025 of 21025 jobs
-#Average job time:                 400s       6.67m     0.11h    0.00d
-#Longest job:                     1473s      24.55m     0.41h    0.02d
-#Submission to last job:          9966s     166.10m     2.77h    0.12d
+#Completed: 22801 of 22801 jobs
+#Average job time:                 257s       4.29m     0.07h    0.00d
+#Longest job:                     1238s      20.63m     0.34h    0.01d
+#Submission to last job:          6939s     115.65m     1.93h    0.08d
 
     # --- normalize (PennSpeak for lift)
     ssh kki
-    cd /cluster/data/galGal2/bed/blastz.galGal2.2004-03-02
+    cd /cluster/data/galGal2/bed/blastz.galGal2.2004-03-03
     # run bash shell if not running it already
     source DEF
     mkdir -p $BASE/run.1
@@ -1234,68 +1228,60 @@ TODO
     # make sure the job list is OK
     para create jobList
     para push
-#Completed: 145 of 145 jobs
-#Average job time:                  46s       0.77m     0.01h    0.00d
-#Longest job:                      328s       5.47m     0.09h    0.00d
-#Submission to last job:          1192s      19.87m     0.33h    0.01d
+#Completed: 151 of 151 jobs
+#Average job time:                  24s       0.41m     0.01h    0.00d
+#Longest job:                      127s       2.12m     0.04h    0.00d
+#Submission to last job:           246s       4.10m     0.07h    0.00d
 
     # convert lav files to axt
     ssh kki
-    cd /cluster/data/galGal2/bed/blastz.galGal2.2004-03-02
+    cd /cluster/data/galGal2/bed/blastz.galGal2.2004-03-03
     mkdir axtChrom
     # a new run directory
     mkdir run.2
     cd run.2
 # lavToAxt has a new -dropSelf option that *will* replace axtDropOverlap,
-# once I fix a bug in it...
-    # Use blastz-self-chromlav2axt, which includes axtDropOverlap in 
-    # the pipe (that helps to keep axtSort from barfing).
-    # usage:  blastz-self-chromlav2axt lav-dir axt-file seq1-dir seq2-dir
+# once /cluster/bin/i386/lavToAxt is rebuilt...  Meanwhile it's built 
+# for x86_64.
+    cat << '_EOF_' > do.csh
+#!/bin/csh
+cd $1
+cat `ls -1 *.lav | sort -g` \
+| lavToAxt -dropSelf stdin /iscratch/i/galGal2/nib /iscratch/i/galGal2/nib \
+    stdout \
+| axtSort stdin $2
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x do.csh
     cat << '_EOF_' > gsub
 #LOOP
-/cluster/bin/scripts/blastz-self-chromlav2axt /cluster/data/galGal2/bed/blastz.galGal2.2004-03-02/lav/$(root1) {check out line+ /cluster/data/galGal2/bed/blastz.galGal2.2004-03-02/axtChrom/$(root1).axt} /iscratch/i/galGal2/nib /iscratch/i/galGal2/nib /cluster/data/galGal2/bed/blastz.galGal2.2004-03-02/S1.len /cluster/data/galGal2/bed/blastz.galGal2.2004-03-02/S2.len
+./do.csh {check in exists $(path1)} {check out line+ /cluster/data/galGal2/bed/blastz.galGal2.2004-03-03/axtChrom/$(root1).axt}
 #ENDLOOP
 '_EOF_'
     # << this line makes emacs coloring happy
-    \ls -1S /cluster/data/galGal2/bed/blastz.galGal2.2004-03-02/lav > chrom.list
+    \ls -1Sd ../lav/chr* > chrom.list
     gensub2 chrom.list single gsub jobList
     wc -l jobList
     head jobList
     para create jobList
     para try, check, push, check,...
-#Completed: 46 of 47 jobs
+#Completed: 53 of 54 jobs
 #Crashed: 1 jobs
-#Average job time:                  34s       0.56m     0.01h    0.00d
-#Longest job:                      294s       4.90m     0.08h    0.00d
-#Submission to last job:           668s      11.13m     0.19h    0.01d
-    # chrUn crashed -- run on kolossus, in two passes!
-    # actually, it was a segv in lavToAxt (fixed), but this works anyway:
-    ssh kolossus
-    cd /cluster/data/galGal2/bed/blastz.galGal2.2004-03-02
-    set base=`pwd`
-    set seq1_dir=/cluster/data/galGal2/nib
-    set seq2_dir=/cluster/data/galGal2/nib
-    foreach chr (chrUn)
-      set out=axtChrom/$chr.axt
-      echo "Translating $chr lav to $out"
-      foreach d (lav/$chr/*.lav)
-        set smallout=$d.axt
-        echo $smallout
-        ~/bin/$MACHTYPE/lavToAxt -dropSelf $d $seq1_dir $seq2_dir stdout \
-        | axtSort stdin $smallout
-      end
-      cat `ls -1 lav/$chr/*.lav.axt | sort -g` | axtSort stdin $out
-    end
+#Average job time:                  30s       0.51m     0.01h    0.00d
+#Longest job:                      541s       9.02m     0.15h    0.01d
+#Submission to last job:           576s       9.60m     0.16h    0.01d
+    # The crash was not a memory problem -- it was that chr8_random's lav 
+    # contained only 1 alignment, to itself (dropped), so its .axt is empty.  
 
 
-# CHAIN SELF BLASTZ (TODO 3//04 angie)
+# CHAIN SELF BLASTZ (DONE 3/3/04 angie)
     # Run axtChain on little cluster
     ssh kki
-    cd /cluster/data/galGal2/bed/blastz.galGal2.2004-03-02
+    cd /cluster/data/galGal2/bed/blastz.galGal2.2004-03-03
     mkdir -p axtChain/run1
     cd axtChain/run1
     mkdir out chain
-    ls -1S /cluster/data/galGal2/bed/blastz.galGal2.2004-03-02/axtChrom/*.axt \
+    ls -1S /cluster/data/galGal2/bed/blastz.galGal2.2004-03-03/axtChrom/*.axt \
       > input.lst
     cat << '_EOF_' > gsub
 #LOOP
@@ -1307,27 +1293,37 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     cat << '_EOF_' > doChain
 #!/bin/csh
 axtFilter -notQ=chrUn $1 \
-| ~/bin/i386/axtChain stdin \
-  /iscratch/i/galGal2/nib \
-  /iscratch/i/galGal2/nib $2 > $3
+| axtChain stdin /iscratch/i/galGal2/nib /iscratch/i/galGal2/nib $2 \
+  > $3
 '_EOF_'
     # << this line makes emacs coloring happy
     chmod a+x doChain
     gensub2 input.lst single gsub jobList
     para create jobList
     para try, check, push, check...
-#Completed: 47 of 47 jobs
-#Average job time:                 140s       2.33m     0.04h    0.00d
-#Longest job:                      766s      12.77m     0.21h    0.01d
-#Submission to last job:           766s      12.77m     0.21h    0.01d
+    # oops -- empty chr8_random strikes again:
+#Completed: 53 of 54 jobs
+#Crashed: 1 jobs
+#Average job time:                  53s       0.89m     0.01h    0.00d
+#Longest job:                      514s       8.57m     0.14h    0.01d
+#Submission to last job:           514s       8.57m     0.14h    0.01d
 
     # now on the cluster server, sort chains
-    ssh kksilo
-    cd /cluster/data/galGal2/bed/blastz.galGal2.2004-03-02/axtChain
+    ssh kolossus
+    cd /cluster/data/galGal2/bed/blastz.galGal2.2004-03-03/axtChain
     chainMergeSort run1/chain/*.chain > all.chain
     chainSplit chain all.chain
     rm run1/chain/*.chain
-    # trim to minScore=20000
+
+    # take a look at score distr's
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r
+      textHistogram -binSize=10000 /tmp/score.$f:t:r
+      echo ""
+    end
+
+    # trim to minScore=20000 to cut some of the fluff
     mkdir chainFilt
     foreach f (chain/*.chain)
       chainFilter -minScore=20000 $f > chainFilt/$f:t
@@ -1335,7 +1331,7 @@ axtFilter -notQ=chrUn $1 \
 
     # Load chains into database
     ssh hgwdev
-    cd /cluster/data/galGal2/bed/blastz.galGal2.2004-03-02/axtChain/chainFilt
+    cd /cluster/data/galGal2/bed/blastz.galGal2.2004-03-03/axtChain/chainFilt
     foreach i (*.chain)
         set c = $i:r
         echo loading $c
@@ -1343,27 +1339,27 @@ axtFilter -notQ=chrUn $1 \
     end
 
 
-# NET SELF BLASTZ (TODO 3//04 angie)
-    ssh kksilo
-    cd /cluster/data/galGal2/bed/blastz.galGal2.2004-03-02/axtChain
+# NET SELF BLASTZ (DONE 3/3/04 angie)
+    ssh kolossus
+    cd /cluster/data/galGal2/bed/blastz.galGal2.2004-03-03/axtChain
     chainPreNet all.chain ../S1.len ../S2.len stdout \
     | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
     | netSyntenic stdin noClass.net
 
     # Add classification info using db tables:
     ssh hgwdev
-    cd /cluster/data/galGal2/bed/blastz.galGal2.2004-03-02/axtChain
+    cd /cluster/data/galGal2/bed/blastz.galGal2.2004-03-03/axtChain
     netClass -noAr noClass.net galGal2 galGal2 self.net
 
     # Make a 'syntenic' subset:
-    ssh kksilo
-    cd /cluster/data/galGal2/bed/blastz.galGal2.2004-03-02/axtChain
+    ssh kolossus
+    cd /cluster/data/galGal2/bed/blastz.galGal2.2004-03-03/axtChain
     rm noClass.net
     netFilter -syn self.net > selfSyn.net
 
     # Load the nets into database 
     ssh hgwdev
-    cd /cluster/data/galGal2/bed/blastz.galGal2.2004-03-02/axtChain
+    cd /cluster/data/galGal2/bed/blastz.galGal2.2004-03-03/axtChain
     netFilter -minGap=10 self.net |  hgLoadNet galGal2 netSelf stdin
     netFilter -minGap=10 selfSyn.net | hgLoadNet galGal2 netSyntenySelf stdin
     # Add entries for chainSelf, netSelf, netSyntenySelf to 
@@ -1371,9 +1367,8 @@ axtFilter -notQ=chrUn $1 \
 
 
 # RUN AXTBEST ON SELF (TODO 3//04 angie)
-    # chain/net seem kinda sparse, let's try axtBest...
     ssh kolossus
-    cd /cluster/data/galGal2/bed/blastz.galGal2.2004-03-02
+    cd /cluster/data/galGal2/bed/blastz.galGal2.2004-03-03
     mkdir axtBest pslBest
     foreach f (axtChrom/chr*.axt)
       set chr=$f:t:r
@@ -1381,6 +1376,49 @@ axtFilter -notQ=chrUn $1 \
       axtBest $f $chr axtBest/$chr.axt -minScore=300
       axtToPsl axtBest/$chr.axt S1.len S2.len pslBest/$chr.psl
     end
+
+
+# MAKE VSSELF DOWNLOADABLES (DONE 3/3/04 angie)
+    ssh kolossus
+    cd /cluster/data/galGal2/bed/blastz.galGal2.2004-03-03
+    # Webb asked for axtChrom/chr22.axt... since axtChrom is rel. small 
+    # this time, just put it all out there.
+    zip /cluster/data/galGal2/zip/GGaxtChrom.zip axtChrom/chr*.axt
+    cd /cluster/data/galGal2/bed/blastz.galGal2.2004-03-03/axtChain
+    cp all.chain self.chain
+    zip /cluster/data/galGal2/zip/self.chain.zip self.chain
+    rm self.chain
+    zip /cluster/data/galGal2/zip/self.net.zip self.net
+    zip /cluster/data/galGal2/zip/selfSyn.net.zip selfSyn.net
+
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/galGal2/vsSelf
+    cd /usr/local/apache/htdocs/goldenPath/galGal2/vsSelf
+    mv /cluster/data/galGal2/zip/GGaxtChrom.zip axtChrom.zip
+    mv /cluster/data/galGal2/zip/self*.zip .
+    md5sum *.zip > md5sum.txt
+    # Copy over & edit README.txt w/pointers to chain, net formats.
+
+
+# EXTRACT PILEUPS FROM SELF ALIGNMENTS (DONE 3/9/04 angie)
+    ssh kolossus
+    cd /cluster/data/galGal2/bed/blastz.galGal2.2004-03-03
+    mkdir pslChrom
+    foreach f (axtChrom/chr*.axt)
+      echo $f:t:r
+      axtToPsl $f S1.len S2.len pslChrom/$f:t:r.psl
+    end
+    mkdir pileups
+    foreach f (pslChrom/chr*.psl)
+      echo extracting pileups from $f:t:r
+      pslToPileup $f S1.len pileups/$f:t:r.bed
+    end
+    ssh hgwdev
+    cd /cluster/data/galGal2/bed/blastz.galGal2.2004-03-03
+    hgLoadBed -noBin -sqlTable=$HOME/kent/src/hg/lib/pileups.sql galGal2 \
+      pileups pileups/chr*.bed
+    # Used table browser to intersect pileups w/>=50% overlap with rmsk,
+    # save BED to pileups50PctRmsk.bed .
 
 
 # AUTO UPDATE GENBANK MRNA RUN  (DONE 2/26/04 angie)
@@ -1545,7 +1583,7 @@ blat -mask=lower -q=dnax -t=dnax {check in exists $(path1)} {check in line+ $(pa
     foreach f (../../*/chr*.fa.masked)
       set fout=$f:t:r:r.cpg
       echo running cpglh on $f to $fout
-      ./cpglh.exe $f > $fout.cpg
+      ./cpglh.exe $f > $fout
     end
     # Transform cpglh output to bed +
     cat << '_EOF_' > filter.awk
@@ -1566,6 +1604,24 @@ printf("%s\t%s\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\n",
     hgLoadBed galGal2 cpgIsland -tab -noBin \
       -sqlTable=$HOME/kent/src/hg/lib/cpgIsland.sql cpgIsland.bed
 
+
+# LOAD GENEID GENES (DONE 3/4/04 angie)
+    mkdir -p /cluster/data/galGal2/bed/geneid/download
+    cd /cluster/data/galGal2/bed/geneid/download
+    foreach f (/cluster/data/galGal2/*/chr*.fa)
+      set chr = $f:t:r
+      wget \
+http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$chr.gtf
+      wget \
+http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$chr.prot
+    end
+    # Add missing .1 to protein id's
+    foreach f (*.prot)
+      perl -wpe 's/^(>chr\w+)$/$1.1/' $f > $f:r-fixed.prot
+    end
+    cd ..
+    ldHgGene galGal2 geneid download/*.gtf -exon=CDS
+    hgPepPred galGal2 generic geneidPep download/*-fixed.prot
 
 # LOAD SOFTBERRY GENES (TODO)
      cd /cluster/data/galGal2/bed
