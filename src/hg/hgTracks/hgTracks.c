@@ -1009,9 +1009,9 @@ shades = tg->colorShades;
 
 lf=tg->items;    
 if(lf==NULL) return;
-sprintf( o1, "%s.linear.interp", strtok(lf->name,"._-\n"));
-sprintf( o2, "%s.anti.alias", strtok(lf->name,"._-\n"));
-sprintf( o3, "%s.fill", strtok(lf->name,"._-\n"));
+sprintf( o1, "%s.linear.interp", tg->mapName);
+sprintf( o2, "%s.anti.alias", tg->mapName);
+sprintf( o3, "%s.fill", tg->mapName);
 
 interpolate = cartUsualString(cart, o1, "Linear Interpolation");
 wiggleType = wiggleStringToEnum(interpolate);
