@@ -322,3 +322,19 @@ priority 1101
 visibility hide
 type psl xeno
 
+track chesMammalBlat
+shortLabel chesMammalBlat
+longLabel Blat of mammalNotHuman
+group x
+priority 1102
+visibility hide
+type psl xeno
+
+track chesChordataBlat
+shortLabel chesChordataBlat
+longLabel Blat of chordataNotMammal
+group x
+priority 1102
+visibility hide
+type psl xeno
+
