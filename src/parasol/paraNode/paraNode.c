@@ -49,7 +49,7 @@ errAbort("paraNode - parasol node server.\n"
 	 "    -cpu=N  Number of CPUs to use - default 1.\n");
 }
 
-static char const rcsid[] = "$Id: paraNode.c,v 1.66 2004/09/23 00:29:14 galt Exp $";
+static char const rcsid[] = "$Id: paraNode.c,v 1.67 2004/09/24 16:12:33 markd Exp $";
 
 /* Command line overwriteable variables. */
 char *hubName;			/* Name of hub machine, may be NULL. */
@@ -611,8 +611,12 @@ if ((user == NULL) || (fileName != NULL))
     pmClear(&pmIn);
     if (f == NULL)
 	{
-	pmPrintf(&pmIn, "Couldn't open fetch file %s %s", fileName, strerror(errno));
-	warn("Couldn't open fetch file %s %s", fileName, strerror(errno));
+        if (user == NULL)
+            user = "<null>";
+	pmPrintf(&pmIn, "Couldn't open fetch file: \"%s\" %s for user %s",
+                 fileName, strerror(errno), user);
+	warn("Couldn't open fetch file: \"%s\" %s for user %s",
+             fileName, strerror(errno), user);
 	pmSend(&pmIn, mainRudp);
 	pmClear(&pmIn);
 	pmSend(&pmIn, mainRudp);
@@ -777,8 +781,10 @@ for (;;)
 		    listJobs();
 		else if (sameString("fetch", command))
 		    doFetch(line);
+                else
+                    logDebug("invalid command: \"%s\"", command);
 		}
-	    logDebug("done command\n");
+	    logDebug("done command");
 	    }
 	else
 	    {
