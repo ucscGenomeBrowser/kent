@@ -202,6 +202,79 @@ cgiMakeDropList(var, cghNci60Options, ArraySize(cghNci60Options),
 	curVal);
 }
 
+/****** Some stuff for nci60 related controls *******/
+
+static char *nci60Options[] = {
+    "Tissue Averages",
+    "All Cell Lines",
+    "BREAST",
+    "CNS",
+    "COLON",
+    "LEUKEMIA",
+    "LUNG",
+    "MELANOMA",
+    "OVARY",
+    "PROSTATE",
+    "RENAL",
+    "NSCLC",
+    "DUPLICATES",
+    "UNKNOWN"
+    };
+
+enum nci60OptEnum nci60StringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, nci60Options);
+if (x < 0)
+   errAbort("Unknown option %s", string);
+return x;
+}
+
+char *nci60EnumToString(enum nci60OptEnum x)
+/* Convert from enum to string representation. */
+{
+return nci60Options[x];
+}
+
+void nci60DropDown(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropList(var, nci60Options, ArraySize(nci60Options), 
+	curVal);
+}
+
+/****** Some stuff for Rosetta related controls *******/
+
+static char *rosettaOptions[] = {
+    "All Experiments",
+    "Common Pool and Other",
+    "Common Pool",
+    "Other Exps"
+};
+
+enum rosettaOptEnum rosettaStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, rosettaOptions);
+if (x < 0)
+   errAbort("hui::rosettaStringToEnum() - Unknown option %s", string);
+return x;
+}
+
+char *rosettaEnumToString(enum rosettaOptEnum x)
+/* Convert from enum to string representation. */
+{
+return rosettaOptions[x];
+}
+
+void rosettaDropDown(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropList(var, rosettaOptions, ArraySize(rosettaOptions), 
+	curVal);
+}
+
+
 /****** Some stuff for mRNA and EST related controls *******/
 
 static void addMrnaFilter(struct mrnaUiData *mud, char *track, char *label, char *key, char *table)

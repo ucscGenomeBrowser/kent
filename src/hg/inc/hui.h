@@ -113,6 +113,63 @@ char *cghoeEnumToString(enum cghNci60OptEnum x);
 void cghoeDropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
+/****** Some stuff for Expression Data tracks in general *******/
+
+struct expdFilter
+/* Info on one type of expression data filter. */
+{
+    struct expdFilter *next;  /* Next in list. */
+    char *filterInclude;         /* Identifier associated with items to include, NULL indicates include all. */
+    char *filterExclude;         /* Identifier associated with items to exclude, NULL indicates exclude none. */
+    boolean redGreen;         /* True if red/green color scheme, Otherwise blue/red color scheme. */
+};
+
+/*** Some Stuff for the NCI60 track ***/
+
+enum nci60OptEnum {
+   nci60Tissue = 0,
+   nci60All = 1,
+   nci60Breast = 2,
+   nci60Cns = 3,
+   nci60Colon = 4,
+   nci60Leukemia = 5,
+   nci60Lung = 6,
+   nci60Melanoma = 7,
+   nci60Ovary = 8,
+   nci60Prostate = 9,
+   nci60Renal = 10,
+   nci60Nsclc = 11,
+   nci60Duplicates = 12,
+   nci60Unknown = 13
+};
+
+enum cghNci60OptEnum nci60StringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *nci60EnumToString(enum cghNci60OptEnum x);
+/* Convert from enum to string representation. */
+
+void nci60DropDown(char *var, char *curVal);
+/* Make drop down of options. */
+
+/****** Some stuff for Rosetta related controls *******/
+
+enum rosettaOptEnum {
+    rosettaAll =0,
+    rosettaPoolOther=1,
+    rosettaPool=2,
+    rosettaOther=3
+};
+
+enum rosettaOptEnum rosettaStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *rosettaEnumToString(enum rosettaOptEnum x);
+/* Convert from enum to string representation. */
+
+void rosettaDropDown(char *var, char *curVal);
+/* Make drop down of options. */
+
 /****** Some stuff for mRNA and EST related controls *******/
 
 struct mrnaFilter
