@@ -73,6 +73,7 @@ struct slName *list, *el;
 
 splitPath(pat, dir, fn, ext);
 sprintf(wild, "%s%s", fn, ext);
+if (dir[0] == 0) strcpy(dir, ".");
 
 list = listDir(dir, wild);
 for (el = list; el != NULL; el = el->next)
@@ -92,9 +93,10 @@ sprintf(trfRootName, "%s.2.7.7.80.10.50.500", faFile);
 void trfSysCall(char *faFile)
 /* Invoke trf program on file. */
 {
-char command[512];
+char command[1024];
 sprintf(command, "%s %s 2 7 7 80 10 50 500 -m %s", 
 	trfExe, faFile, doBed ? "-d" : "");
+uglyf("faFile %s, command %s\n", faFile, command);
 system(command);
 }
 
@@ -132,6 +134,7 @@ if (doBed)
     }
 makeTempName(&tn, "trf", ".fa");
 tempFile = tn.forCgi;
+tempFile = "trfBigTemp.fa";
 if (endsWith(input, ".nib") && endsWith(output, ".nib"))
     {
     int nibSize;
@@ -182,6 +185,7 @@ else if (!endsWith(input, ".nib") && !endsWith(output, ".nib"))
 	    {
 	    end = start + maxSize;
 	    if (end > seq.size) end = seq.size;
+	    uglyf(">>> start %d, end %d\n", start, end);
 	    faWrite(tempFile, seq.name, seq.dna+start, end - start);
 	    trfSysCall(tempFile);
 	    makeTrfRootName(trfRootName, tempFile);
