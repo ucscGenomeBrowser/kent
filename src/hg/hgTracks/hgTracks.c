@@ -4855,22 +4855,23 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	drawScaledBox(mg, s, s+1, scale, xOff, y-e+s+10, 1, blackIndex());
 
 
-    if (sf->next != NULL)
+    if (prevEnd > 0)
 	{
 	x1 = round((double)((int)sf->end-winStart)*scale) + xOff;
 	x2 = round((double)((int)sf->next->start-winStart)*scale) + xOff;
-    y1 =  y - sf->end + sf->start + 10;
-    y2 =  y - sf->next->end + sf->next->start + 10;
+//    y1 =  y - sf->end + sf->start + 10;
+//    y2 =  y - sf->next->end + sf->next->start + 10;
 	//mgDrawBox(mg, x1, y+shortOff+1, w, shortHeight-2, blackIndex());
     //mgConnectingLine( mg, x1, y1, x2, y2, blackIndex());
 
  //   if( (x2-x1) > 0 && (y2-y1) > 0 )
  //   mgDrawBox(mg, x1, y1, x2-x1, y2-y1, color);
     //
-	drawScaledBox(mg, s+1, sf->next->start, scale, xOff, y, 1, blackIndex());
+	drawScaledBox(mg, s+1, prevEnd, scale, xOff, y, 1, shadesOfSea[3]);
 
 	}
 
+    prevEnd = s;
 
 
 	}
