@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.53 2004/03/17 02:17:38 kent Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.54 2004/03/17 04:22:14 angie Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -255,6 +255,7 @@ char query[256];
 safef(query, sizeof(query), "describe %s", table);
 char **row;
 struct slName *list = NULL, *el;
+struct sqlResult *sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     el = slNameNew(row[0]);
