@@ -138,7 +138,7 @@
 #include "zdobnovSynt.h"
 #include "HInv.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.632 2004/05/18 22:35:09 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.633 2004/05/19 15:04:22 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1504,7 +1504,7 @@ if (!foundPep)
     printf("Translated Protein</A> from ");
     if (sameString(geneTable, "refGene") ) 
         {
-        printf("from genomic DNA\n");
+        printf("genomic DNA\n");
         } 
     else
         {
