@@ -1646,3 +1646,19 @@ LOAD SOFTBERRY GENES (TODO)
      hgPepPred mm3 softberry *.protein
      hgSoftberryHom mm3 *.protein
 
+MAKING MOUSE AND RAT SYNTENY
+#
+syntenicBest.pl -db=mm3 -table=blastzBestHuman
+smooth.pl
+joinsmallgaps.pl
+fillgap.pl -db=mm3 -table=blastzBestHuman
+synteny2bed.pl
+hgLoadBed mm3 syntenyHuman ucsc100k.bed
+
+syntenicBest.pl -db=mm3 -table=blastzBestRat
+smooth.pl
+joinsmallgaps.pl
+fillgap.pl -db=mm3 -table=blastzBestRat
+synteny2bed.pl
+hgLoadBed mm3 syntenyRat ucsc100k.bed
+
