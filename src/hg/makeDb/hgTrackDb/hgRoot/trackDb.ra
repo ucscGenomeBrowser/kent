@@ -607,6 +607,14 @@ visibility hide
 spectrum on
 type bed 12
 
+track humMus
+shortLabel Mouse Evolution
+longLabel Human/Mouse Evolutionary Mutual Information
+altColor 10,50,100
+priority 33.6
+visibility hide
+type sample 9 
+
 track rmsk
 shortLabel RepeatMasker
 longLabel Repeating Elements by RepeatMasker
