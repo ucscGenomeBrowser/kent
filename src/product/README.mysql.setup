@@ -125,6 +125,22 @@ central.user=readwrite
 central.password=update
 central.domain=.cse.ucsc.edu
 
+#	in case of failure of the above central.host machine,
+#	the following settings will be used to access a secondary
+#	mirror of the database
+backupcentral.db=hgcentral
+backupcentral.host=localhost
+backupcentral.user=readwrite
+backupcentral.password=update
+backupcentral.domain=.cse.ucsc.edu
+
+#	archivecentral settings are used for archived assemblies
+#	that have been moved to a different machine.
+archivecentral.db=hgcentral
+archivecentral.host=localhost
+archivecentral.user=readwrite
+archivecentral.password=update
+
 ============================================================
 
 Developers can access the browser databases via the 'hgsql'
