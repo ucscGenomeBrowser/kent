@@ -1,11 +1,8 @@
 /* t - Test expat. */
 #include "common.h"
-#include "linefile.h"
-#include "hash.h"
-#include "cheapcgi.h"
+#include "xap.h"
 #include "t.h"
-#include "errabort.h"
-#include <expat.h>
+#include "memalloc.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -19,123 +16,12 @@ errAbort(
   );
 }
 
-struct parseStack
-/* An element of parse stack. */
-   {
-   void *object;	/* Object being parsed. */
-   char *elName;	/* Name of element.  Mostly useful for debugging. */
-   };
-
-struct xmlParser
-/* A parsing stack frame. */
-   {
-   struct parseStack stackBuf[128];
-   struct parseStack *endStack;
-   struct parseStack *startStack;
-   struct parseStack *stack;
-   int stackDepth;
-   void *(*startHandler)(struct xmlParser *xp, char *name, char **atts);
-   void (*endHandler)(struct xmlParser *xp, char *name);
-   XML_Parser *parser;
-   char *fileName;
-   };
-
-static void xpError(struct xmlParser *xp, char *format, ...)
-/* Issue a warning message. */
-{
-va_list args;
-va_start(args, format);
-vaWarn(format, args);
-errAbort("line %d of %s", XML_GetCurrentLineNumber(xp->parser), xp->fileName);
-va_end(args);
-}
-
-static void xmlParserStartElement(void *userData, const char *name, const char **atts)
-/* Handle beginning of a tag. */
-{
-struct xmlParser *xp = userData;
-void *object;
-
-if (xp->stack < xp->startStack)
-    xpError(xp, "xmlParser stack overflow");
-xp->stack -= 1;
-++xp->stackDepth;
-xp->stack->elName = (char*)name;
-xp->stack->object = xp->startHandler(xp, (char*)name, (char**)atts);
-}
-
-static void xmlParserEndElement(void *userData, const char *name)
-/* Handle end of tag. */
-{
-struct xmlParser *xp = userData;
-
-if (xp->endHandler != NULL)
-    xp->endHandler(xp, (char*)name);
-xp->stack += 1;
---xp->stackDepth;
-if (xp->stack > xp->endStack)
-    xpError(xp, "xmlParser stack underflow");
-}
-
-
-struct xmlParser *xmlParserNew(void *(*startHandler)(struct xmlParser *xp, char *name, char **atts),
-	void (*endHandler)(struct xmlParser *xp, char *name) )
-/* Create a new parse stack. */
-{
-struct xmlParser *xp;
-AllocVar(xp);
-xp->endStack = xp->stack = xp->stackBuf + ArraySize(xp->stackBuf);
-xp->startStack = xp->stackBuf;
-xp->startHandler = startHandler;
-xp->endHandler = endHandler;
-xp->parser = XML_ParserCreate(NULL);
-XML_SetUserData(xp->parser, xp);
-XML_SetElementHandler(xp->parser, xmlParserStartElement, xmlParserEndElement);
-return xp;
-}
-
-void xmlParserFree(struct xmlParser **pXp)
-/* Free up a parse stack. */
-{
-struct xmlParser *xp = *pXp;
-if (xp != NULL)
-    {
-    if (xp->parser != NULL)
-	XML_ParserFree(xp->parser);
-    freez(pXp);
-    }
-}
-
-void xmlParse(struct xmlParser *xp, char *fileName)
-/* Open up file and parse it all. */
-{
-FILE *f = mustOpen(fileName, "r");
-char buf[BUFSIZ];
-int done;
-xp->fileName = fileName;
-do 
-    {
-    size_t len = fread(buf, 1, sizeof(buf), f);
-    done = len < sizeof(buf);
-    if (!XML_Parse(xp->parser, buf, len, done)) 
-	{
-	errAbort("%s at line %d of %s\n",
-	      XML_ErrorString(XML_GetErrorCode(xp->parser)),
-	      XML_GetCurrentLineNumber(xp->parser), fileName);
-	}
-    } while (!done);
-}
-
-void *testStartHandler(struct xmlParser *xp, char *name, char **atts)
+void *testStartHandler(struct xap *xp, char *name, char **atts)
 /* Test handler - ultimately will be generated computationally. */
 {
-struct parseStack *st;
+struct xapStack *st;
 int depth = xp->stackDepth;
 int i;
-
-for (st = xp->endStack; --st >= xp->stack; )
-    printf("%s ", st->elName);
-printf("\n");
 
 st = xp->stack+1;
 if (sameString(name, "DASDSN"))
@@ -157,7 +43,7 @@ else if (sameString(name, "DSN"))
 	    }
 	else
 	    {
-	    xpError(xp, "%s misplaced", name);
+	    xapError(xp, "%s misplaced", name);
 	    }
 	}
     return obj;
@@ -168,14 +54,14 @@ else if (sameString(name, "SOURCE"))
     AllocVar(obj);
     for (i=0; atts[i] != NULL; i += 2)
         {
-	char *name = atts[0], *val = atts[1];
+	char *name = atts[i], *val = atts[i+1];
 	if (sameString(name, "id"))
 	    obj->id = cloneString(val);
 	else if (sameString(name, "version"))
 	    obj->version = cloneString(val);
 	}
     if (obj->id == NULL)
-        xpError(xp, "missing id");
+        xapError(xp, "missing id");
     if (depth > 1)
         {
 	if (sameString(st->elName, "DSN"))
@@ -185,7 +71,7 @@ else if (sameString(name, "SOURCE"))
 	    }
 	else
 	    {
-	    xpError(xp, "%s misplaced", name);
+	    xapError(xp, "%s misplaced", name);
 	    }
 	}
     return obj;
@@ -203,7 +89,7 @@ else if (sameString(name, "MAPMASTER"))
 	    }
 	else
 	    {
-	    xpError(xp, "%s misplaced", name);
+	    xapError(xp, "%s misplaced", name);
 	    }
         }
     return obj;
@@ -214,7 +100,7 @@ else if (sameString(name, "DESCRIPTION"))
     AllocVar(obj);
     for (i=0; atts[i] != NULL; i += 2)
         {
-	char *name = atts[0], *val = atts[1];
+	char *name = atts[i], *val = atts[i+1];
 	if (sameString(name, "href"))
 	    obj->href = cloneString(val);
 	}
@@ -227,69 +113,141 @@ else if (sameString(name, "DESCRIPTION"))
 	    }
 	else
 	    {
-	    xpError(xp, "%s misplaced", name);
+	    xapError(xp, "%s misplaced", name);
 	    }
         }
+    return obj;
     }
 else
     {
-    xpError(xp, "Unknown type %s\n", name);
+    xapError(xp, "Unknown type %s\n", name);
     }
 return NULL;
 }
 
-void testEndHandler(struct xmlParser *xp, char *name)
+void testEndHandler(struct xap *xp, char *name)
 /* Test end handler - makes sure that all required fields are
  * there. Ultimately will be generated computationally. */
 {
+struct xapStack *stack = xp->stack;
 if (sameString(name, "DASDSN"))
     {
-    struct dasdsn *obj = xp->stack->object;
+    struct dasdsn *obj = stack->object;
     if (obj->dsn == NULL)
-        xpError(xp, "Missing DSN");
+        xapError(xp, "Missing DSN");
+    slReverse(&obj->dsn);
     }
 else if (sameString(name, "DSN"))
     {
-    struct dsn *obj = xp->stack->object;
+    struct dsn *obj = stack->object;
     if (obj->source == NULL)
-        xpError(xp, "Missing SOURCE");
+        xapError(xp, "Missing SOURCE");
     else if (obj->source->next != NULL)
-        xpError(xp, "Multiple SOURCE");
+        xapError(xp, "Multiple SOURCE");
     if (obj->mapmaster == NULL)
-        xpError(xp, "Missing MAPMASTER");
+        xapError(xp, "Missing MAPMASTER");
     else if (obj->mapmaster->next != NULL)
-        xpError(xp, "Multiple MAPMASTER");
+        xapError(xp, "Multiple MAPMASTER");
     }
 else if (sameString(name, "SOURCE"))
     {
-    struct source *obj = xp->stack->object;
+    struct source *obj = stack->object;
+    obj->text = cloneString(stack->text->string);
     }
 else if (sameString(name, "MAPMASTER"))
     {
-    struct mapmaster *obj = xp->stack->object;
+    struct mapmaster *obj = stack->object;
+    obj->text = cloneString(stack->text->string);
     }
 else if (sameString(name, "DESCRIPTION"))
     {
-    struct description *obj = xp->stack->object;
+    struct description *obj = stack->object;
+    obj->text = cloneString(stack->text->string);
     }
+}
+
+void sourceSave(struct source *obj, int indent, FILE *f)
+/* Save a source. */
+{
+if (obj == NULL) return;
+xapIndent(indent, f);
+fprintf(f, "<SOURCE");
+fprintf(f, " id=\"%s\"", obj->id);
+if (obj->version != NULL)
+    fprintf(f, " version=\"%s\"", obj->version);
+fprintf(f, ">%s</SOURCE>\n", obj->text);
+}
+
+void descriptionSave(struct description *obj, int indent, FILE *f)
+/* Save a description. */
+{
+if (obj == NULL) return;
+xapIndent(indent, f);
+fprintf(f, "<DESCRIPTION");
+if (obj->href != NULL)
+    fprintf(f, " href=\"%s\"", obj->href);
+fprintf(f, ">%s</DESCRIPTION>\n", obj->text);
+}
+
+void mapmasterSave(struct mapmaster *obj, int indent, FILE *f)
+/* Save a mapmaster. */
+{
+if (obj == NULL) return;
+xapIndent(indent, f);
+fprintf(f, "<MAPMASTER");
+fprintf(f, ">%s</MAPMASTER>\n", obj->text);
+}
+
+
+void dsnSave(struct dsn *obj, int indent, FILE *f)
+/* Save a das. */
+{
+struct source *source;
+struct description *description;
+struct mapmaster mapmaster;
+if (obj == NULL) return;
+xapIndent(indent, f);
+fprintf(f, "<DSN");
+fprintf(f, ">\n");
+sourceSave(obj->source, indent+2, f);
+descriptionSave(obj->description, indent+2, f);
+mapmasterSave(obj->mapmaster, indent+2, f);
+xapIndent(indent, f);
+fprintf(f, "</DSN>\n");
+}
+
+void dasdsnSave(struct dasdsn *obj, int indent, FILE *f)
+/* Save a dasdsn. */
+{
+struct dsn *dsn;
+if (obj == NULL) return;
+xapIndent(indent, f);
+fprintf(f, "<DASDSN");
+fprintf(f, ">\n");
+for (dsn=obj->dsn; dsn != NULL; dsn = dsn->next)
+   dsnSave(dsn, indent+2, f);
+xapIndent(indent, f);
+fprintf(f, "</DASDSN>\n");
 }
 
 void testExpas(char *fileName)
 /* Test out parse. */
 {
 int depth = 0;
-struct xmlParser *xp = xmlParserNew(testStartHandler, testEndHandler);
-xmlParse(xp, fileName);
-xmlParserFree(&xp);
+struct xap *xp = xapNew(testStartHandler, testEndHandler);
+xapParse(xp, fileName);
+dasdsnSave(xp->topObject, 0, stdout);
+xapFree(&xp);
 }
 
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
 if (argc != 2)
     usage();
+pushCarefulMemHandler(1000000);
 testExpas(argv[1]);
+carefulCheckHeap();
 return 0;
 }
