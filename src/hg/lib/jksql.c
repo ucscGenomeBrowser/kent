@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.59 2004/05/12 22:03:20 angie Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.60 2004/05/22 19:43:10 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -353,7 +353,10 @@ if (monitorFlags & JKSQL_TRACE)
             traceIndent, indentStr, host, user, database);
 
 if ((sc->conn = conn = mysql_init(NULL)) == NULL)
+    {
+    monitorLeave();
     errAbort("Couldn't connect to mySQL.");
+    }
 if (mysql_real_connect(
 	conn,
 	host, /* host */
@@ -364,12 +367,10 @@ if (mysql_real_connect(
 	NULL,	/* socket */
 	0)	/* flags */  == NULL)
     {
+    monitorLeave();
     if (abort)
-	{
 	errAbort("Couldn't connect to database %s on %s as %s.\n%s", 
 	    database, host, user, mysql_error(conn));
-        }
-    monitorLeave();
     return NULL;
     }
 monitorLeave();
@@ -472,7 +473,10 @@ if (monitorFlags & JKSQL_TRACE)
 if (mysql_real_query(conn, query, strlen(query)) != 0)
     {
     if (abort)
+        {
+        monitorLeave();
 	sqlAbort(sc, "Can't start query:\n%s\n", query);
+        }
     }
 else
     {
@@ -481,6 +485,7 @@ else
 	{
 	if (mysql_errno(conn) != 0)
 	    {
+            monitorLeave();
 	    sqlAbort(sc, "Can't use query:\n%s", query);
 	    }
 	}
@@ -729,8 +734,8 @@ if (options & SQL_TAB_REPLACE)
 else
     dupOpt = "";
 
-safef(query, sizeof(query),  "LOAD DATA %s %s %s INFILE '%s' INTO TABLE %s",
-      concurrentOpt, localOpt, dupOpt, tabPath, table);
+safef(query, sizeof(query),  "LOAD DATA %s %s INFILE '%s' %s INTO TABLE %s",
+      concurrentOpt, localOpt, tabPath, dupOpt, table);
 sr = sqlGetResult(conn, query);
 monitorEnter();
 info = mysql_info(conn->conn);
@@ -817,11 +822,9 @@ if (sr != NULL)
     {
     monitorEnter();
     row = mysql_fetch_row(sr->result);
-    if (mysql_errno(sr->conn->conn) != 0)
-        {
-        sqlAbort(sr->conn, "nextRow failed");
-        }
     monitorLeave();
+    if (mysql_errno(sr->conn->conn) != 0)
+        sqlAbort(sr->conn, "nextRow failed");
     }
 return row;
 }

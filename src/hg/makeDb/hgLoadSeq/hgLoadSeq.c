@@ -8,7 +8,7 @@
 #include "fa.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.10 2004/02/24 03:42:01 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.11 2004/05/22 19:43:10 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -162,8 +162,11 @@ for (i=0; i<fileCount; ++i)
     }
 if (!test)
     {
+    unsigned opts = SQL_TAB_FILE_WARN_ON_ERROR;
+    if (replace)
+        opts |= SQL_TAB_REPLACE;
     verbose(1, "Updating seq table\n");
-    hgLoadTabFile(conn, ".", "seq", &seqTab);
+    hgLoadTabFileOpts(conn, ".", "seq", opts, &seqTab);
     hgEndUpdate(&conn, "Add sequences");
     verbose(1, "All done\n");
     }
@@ -181,7 +184,7 @@ errAbort(
   "Options:\n"
   "  -abbr=junk - remove junk from the start of each seq accession\n"
   "  -prefix=xxx - prepend \"xxx-\" to each seq accession\n"
-  "  -replace - replace existing sequences with the same id (SLOW!!)\n"
+  "  -replace - replace existing sequences with the same id\n"
   "  -test - do not load databse table\n"
   );
 }
