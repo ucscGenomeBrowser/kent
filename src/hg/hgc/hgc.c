@@ -157,7 +157,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.820 2005/01/17 21:59:18 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.821 2005/01/20 01:28:48 markd Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3823,7 +3823,7 @@ struct mgcDb
 /* information about an MGC databases */
 {
     char *name;       /* collection name */
-    char *organism;   /* organism name */
+    char *organism;   /* organism name for URL, case-sensitive */
     char *server;     /* MGC server */
 };
 
@@ -3833,6 +3833,7 @@ struct mgcDb getMgcDb()
 struct mgcDb mgcDb;
 mgcDb.name = "MGC";
 mgcDb.server = "mgc";
+/* NOTE: mgc server likes first letter of organism capitalized */
 if (startsWith("hg", database))
     mgcDb.organism = "Hs";
 else if (startsWith("mm", database))
@@ -3848,7 +3849,7 @@ else if (startsWith("danRer", database))
 else if (startsWith("xenTro", database))
     {
     mgcDb.name = "XGC";
-    mgcDb.organism = "xt";
+    mgcDb.organism = "Xt";
     mgcDb.server = "xgc";
     }
 else
