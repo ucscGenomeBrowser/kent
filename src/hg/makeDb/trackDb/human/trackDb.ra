@@ -184,6 +184,14 @@ priority 76
 visibility hide
 type bed 12 .
 
+track omim
+shortLabel OMIM
+longLabel Online Mendelian Inheritance in Man
+group varRep
+priority 146
+visibility hide
+type bed 4 .
+
 track orthoMrna
 shortLabel Mouse mRNAs
 longLabel Mouse mRNAs Mapped from mm3 via nets/chains
