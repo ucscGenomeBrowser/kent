@@ -10,7 +10,7 @@
 #include "gff.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: gff.c,v 1.11 2003/05/06 07:33:42 kate Exp $";
+static char const rcsid[] = "$Id: gff.c,v 1.12 2003/08/05 18:01:59 genbank Exp $";
 
 void gffGroupFree(struct gffGroup **pGroup)
 /* Free up a gffGroup including lineList. */
@@ -304,7 +304,8 @@ while (lineFileNext(lf, &line, &lineSize))
     if (line[0] != '#')
 	{
 	wordCount = chopTabs(line, words);
-	gffFileAddRow(gff, baseOffset, words, wordCount, lf->fileName, lf->lineIx);
+        if (wordCount > 0)
+            gffFileAddRow(gff, baseOffset, words, wordCount, lf->fileName, lf->lineIx);
 	}
     }
 slReverse(&gff->lineList);
