@@ -3,6 +3,58 @@
 #
 # NB - This instructions are not tested yet.  It's best to
 # run them one at a time and check results for now. 
+
+# Here are some general guidelines for creating and using 
+# liftOver chain files ("over.chain"). Note that the "old" assembly
+# is also the "from", "target", and "reference" assembly.
+# Most of the work will happen in the "old" assembly build area.
+# and be doc'ed in its make doc.
+#
+#-------------------------------------------------------------------------
+* Name liftOver chain files:
+        <OLD assembly>To<New assembly>.over.chain
+            e.g.  hg15ToHg16.over.chain
+
+* Name liftOver chain tables:
+        chainTo<New assembly> in the OLD assembly database
+                e.g.  hg15: chainToHg16
+
+* Same organism lifts
+    - Split the NEW assembly (query) into 3K chunks (faSplit -oneFile)
+        and save on cluster disks (or iservers, or bluearc), along with
+        lift files.  Doc this in the make doc for the NEW assembly.
+    - BLAT the NEW assembly (query) against the OLD assembly (target),
+        then chain (axtChain), net (chainNet), and 
+        extract single-coverage chains from the net (chainNetSubset)
+        Do this in the OLD assembly build area, in the directory
+        bed/blat.<NEW-assembly>.date
+    - For convenience link the chain file into the OLD assembly
+        directory bed/bedOver
+    - Save gzipped files in the "liftOver" download directory for the 
+        OLD assembly:
+            e.g. goldenPath/hg13/liftOver/hg13ToHg16.over.chain.gz
+    - When lifting annotations, distinguish from "native" annotations
+        by naming the build dir and table:
+              <track>Lift      e.g.   ensemblGeneLift 
+        Do this in the NEW assembly build directory and make doc.
+    - NOTE: When loading a new genome, create a liftOver chain for each 
+            earlier assembly that is still public.
+
+* Other organism lifts (homology mapping)
+    - Create liftOver chain by extracting single-coverage chains
+        from the blastz-based net (chainNetSubset).
+        Do this in the the OLD assembly bed/blastz.<assembly> directory.
+    - Save files in the vs<NEW assembly> download directory for the 
+        OLD assembly:
+                e.g. goldenPath/hg16/vsMm4/hg16ToMm4.over.chain.gz
+    - CAVEAT: cross-species liftOver chains are not adequate for homology
+        mapping -- judicious use of other tools (e.g. orthoMap) and
+        human intervention will generally be required.
+        (This should be mentioned in the download directory README)
+    - NOTE: Create a liftOver chain for each blastz-based net that is built
+
+
+#-------------------------------------------------------------------------
 #
 # I. Preliminaries.  Set up some environment variables to point to
 # data sources and a temporary dir with lots of space:
