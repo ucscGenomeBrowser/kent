@@ -1,4 +1,4 @@
-
+include ../../../../inc/common.mk
 
 all:
 
@@ -19,7 +19,7 @@ refSeqCdsTest: mkout
 	diff -u expected/refSeqCdsTest.gl output/refSeqCdsTest.gl
 
 mkout:
-	mkdir -p output
+	${MKDIR} output
 
 clean:
 	rm -rf output
