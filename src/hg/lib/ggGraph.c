@@ -13,7 +13,7 @@
 #include "ggPrivate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: ggGraph.c,v 1.5 2003/05/06 07:22:22 kate Exp $";
+static char const rcsid[] = "$Id: ggGraph.c,v 1.6 2003/05/20 23:34:16 sugnet Exp $";
 
 enum{ softEndBleedLimit = 5};  /* For soft ends allow some bleeding into next intron */
 
@@ -31,11 +31,11 @@ for(ge = hayStack; ge != NULL; ge = ge->next)
 return -1;
 }
 
-void addEvidenceIfUnique(struct ggEvidence **currList, struct ggEvidence *newList)
+void moveEvidenceIfUnique(struct ggEvidence **currList, struct ggEvidence **newList)
 /* add the new evidence to the old if not currently in in */
 {
 struct ggEvidence *ge = NULL, *geNext = NULL;
-for(ge = newList; ge != NULL; ge = geNext)
+for(ge = *newList; ge != NULL; ge = geNext)
     {
     int index = -1;
     geNext = ge->next;
@@ -45,6 +45,7 @@ for(ge = newList; ge != NULL; ge = geNext)
     else
 	ggEvidenceFree(&ge);
     }
+*newList = NULL;
 }
 
 static int vertexIx(struct ggVertex *array, int arraySize, int pos, int type)
@@ -230,8 +231,7 @@ for (endIx=0; endIx < vCount; ++endIx)
 	    {
 	    anyTrim = TRUE;
 	    edgesOut[endIx] = FALSE;
-	    addEvidenceIfUnique(&gg->evidence[bestStart][endIx], gg->evidence[softIx][endIx]);
-//	    ggEvidenceFreeList(&gg->evidence[softIx][endIx]);
+	    moveEvidenceIfUnique(&gg->evidence[bestStart][endIx], &gg->evidence[softIx][endIx]);
 	    }
 	else
 	    {
@@ -292,8 +292,7 @@ for (startIx=0; startIx < vCount; ++startIx)
 	    {
 	    anyTrim = TRUE;
 	    em[startIx][softIx] = FALSE; // update evidence
-	    addEvidenceIfUnique(&gg->evidence[startIx][bestEnd], gg->evidence[startIx][softIx]);
-//	    ggEvidenceFreeList(&gg->evidence[startIx][softIx]);
+	    moveEvidenceIfUnique(&gg->evidence[startIx][bestEnd], &gg->evidence[startIx][softIx]);
 	    }
 	else
 	    {
@@ -370,7 +369,7 @@ for (eIx = 0; eIx < vCount; ++eIx)
 			struct ggEvidence *ge = NULL;
 			ge = ggEvidenceClone(gg->evidence[softStartIx][endIx]);
 			em[sIx][endIx] = TRUE; 
-			addEvidenceIfUnique(&gg->evidence[sIx][endIx], ge);
+			moveEvidenceIfUnique(&gg->evidence[sIx][endIx], &ge);
 			result = TRUE;  
 			}
 		    }
@@ -381,7 +380,271 @@ for (eIx = 0; eIx < vCount; ++eIx)
 return result;
 }
 
+boolean blockSubsumed(struct ggMrnaBlock *block1, struct ggMrnaBlock *block2)
+/** Return TRUE if blocks overlap on target sequence. */
+{
+if(block1->tStart >= block2->tStart && block1->tEnd <= block2->tEnd)
+    return TRUE;
+return FALSE;
+}
 
+boolean ggAliInfoOverlap(struct ggVertex *v, struct ggAliInfo *ai1, struct ggAliInfo *ai2, 
+			 int startIx, int endIx, int start2Ix, int end2Ix)
+/** Return TRUE if the two alignmens have an overlap in the area
+ * defined by starts and ends, return FALSE otherwise. */
+{
+struct ggMrnaBlock *blocks1 = NULL, *blocks2 = NULL;
+int i=0,j=0;
+blocks1 = ai1->ma->blocks; 
+blocks2 = ai2->ma->blocks;
+for(i=0; i<ai1->ma->blockCount; i++)
+    {
+    /* If this block is the reason for startIx and endIx. Can't do
+       exact match as the edges may have been extended. */
+    if(v[startIx].position <= blocks1[i].tStart && v[endIx].position >= blocks1[i].tEnd)
+	{
+	/* Find the matchin block in the other mRna. */
+	for(j=0; j<ai2->ma->blockCount; j++)
+	    {
+	    /* If this block is the reason for start2Ix and end2Ix. Can't do
+	       exact match as the edges may have been extended. */
+	    if(v[start2Ix].position <= blocks2[j].tStart && v[end2Ix].position >= blocks2[j].tEnd)
+		{
+		if(blockSubsumed(&blocks1[i], &blocks2[j]))
+		    {
+		    return TRUE;
+		    }
+		}
+	    }
+	}
+    }
+return FALSE;
+}
+
+boolean overlappingMRnas(struct geneGraph *gg, struct hash *aliHash, 
+			 int startIx, int endIx, int start2Ix, int end2Ix)
+/** Check to see if the mRNAs contained in the edges defined by
+    these vertexes overlap. */
+{
+struct ggEvidence *edge1 = gg->evidence[startIx][endIx];
+struct ggEvidence *edge2 = gg->evidence[start2Ix][end2Ix];
+struct ggEvidence *ev1 = NULL, *ev2 = NULL;
+struct ggAliInfo *ai1 = NULL;
+struct ggAliInfo *ai2 = NULL;
+char buff[256];
+boolean overlap = FALSE;
+for(ev1 = edge1; ev1 != NULL; ev1 = ev1->next)
+    {
+    safef(buff, sizeof(buff), "%s", gg->mrnaRefs[ev1->id]);
+    ai1 = hashMustFindVal(aliHash, buff);
+    ai1 = ai1;
+    for(ev2 = edge2; ev2 != NULL; ev2 = ev2->next)
+	{
+	safef(buff, sizeof(buff), "%s", gg->mrnaRefs[ev2->id]);
+	ai2 = hashMustFindVal(aliHash, buff);
+	if(ggAliInfoOverlap(gg->vertices, ai1, ai2, startIx, endIx, start2Ix, end2Ix ))
+	    return TRUE;
+	}
+    }
+return overlap;
+}
+
+
+void getStartEdgesOverlapping(struct geneGraph *gg, struct hash *mRnaAli, int softStartIx, 
+				       int endIx, enum ggVertexType startType, int **oIndex, int *oCount)
+/** Loop through all the edges looking for ones that overlap
+    em[softStartIx][endIx], start with hard edge, and have an mRNA that
+    actually overlaps with the softStartix edge. */
+{
+bool **em = gg->edgeMatrix;
+struct ggVertex *v = gg->vertices;
+int i=0;
+*oIndex =  needMem(sizeof(int)*gg->vertexCount);
+for(i=0; i<gg->vertexCount; i++)
+    {
+    if(em[i][endIx] && i != softStartIx && v[i].type == startType) 
+	{
+	if(overlappingMRnas(gg, mRnaAli, softStartIx, endIx, i, endIx))
+	    {
+	    (*oIndex)[*oCount] = i;
+	    (*oCount)++;
+	    }
+	}
+    }
+}
+
+void getEndEdgesOverlapping(struct geneGraph *gg, struct hash *mRnaAli, int hardStartIx, 
+				       int softEndIx, enum ggVertexType endType, int **oIndex, int *oCount)
+/** Loop through all the edges looking for ones that overlap
+    em[hardStartIx][softEndIx], end with hard vertex, and have an mRNA that
+    actually overlaps with the softEndIx vertex. */
+{
+bool **em = gg->edgeMatrix;
+struct ggVertex *v = gg->vertices;
+int i=0;
+*oIndex =  needMem(sizeof(int)*gg->vertexCount);
+for(i=0; i<gg->vertexCount; i++)
+    {
+    if(em[hardStartIx][i] && i != softEndIx && v[i].type == endType) 
+	{
+	if(overlappingMRnas(gg, mRnaAli, hardStartIx, softEndIx, hardStartIx, i))
+	    {
+	    (*oIndex)[*oCount] = i;
+	    (*oCount)++;
+	    }
+	}
+    }
+}
+
+struct hash *newAlignmentHash(struct ggMrnaCluster *mc)
+/** Hash the ggAliInfo's by the qName. */
+{
+struct hash *hash = newHash(4);
+struct ggAliInfo *ai = NULL;
+char buff[256];
+for(ai=mc->mrnaList; ai != NULL; ai = ai->next)
+    {
+    safef(buff, sizeof(buff), "%s", ai->ma->qName);
+    hashAdd(hash, buff, ai);
+    }
+return hash;
+}
+
+int consensusSoftStartVertex(struct geneGraph *gg, int softStartIx, int hardEndIx, 
+			     int *oIndex, int oCount)
+/** Pick the best hard start out of oIndex. Return index of best hard start
+    into gg->vertices, -1 if no vertex found.
+    Best is defined by:
+    - Number of other alignments that support it.
+    - Distance from softStartIx. */
+{
+int bestVertex = -1;
+struct ggVertex *v = gg->vertices;
+struct ggEvidence ***e = gg->evidence;
+int i=0; 
+int bestCount = 0;
+int bestDist = BIGNUM;
+for(i=0; i<oCount; i++)
+    {
+    int curCount = slCount(e[oIndex[i]][hardEndIx]);
+    int curDist = abs(v[softStartIx].position - v[oIndex[i]].position);
+    if( curCount > bestCount || (curCount == bestCount && curDist < bestDist) )
+	{
+	bestVertex = oIndex[i];
+	bestCount = curCount;
+	bestDist = curDist;
+	}
+    }
+return bestVertex;
+}
+
+
+int consensusSoftEndVertex(struct geneGraph *gg, int hardStartIx, int softEndIx, 
+			     int *oIndex, int oCount)
+/** Pick the best hard end out of oIndex. Return index of best hard end index
+    into gg->vertices, -1 if no vertex found.
+    Best is defined by:
+    - Number of other alignments that support it.
+    - Distance from softStartIx. */
+{
+int bestVertex = -1;
+struct ggVertex *v = gg->vertices;
+struct ggEvidence ***e = gg->evidence;
+int i=0; 
+int bestCount = 0;
+int bestDist = BIGNUM;
+for(i=0; i<oCount; i++)
+    {
+    int curCount = slCount(e[hardStartIx][oIndex[i]]);
+    int curDist = abs(v[softEndIx].position - v[oIndex[i]].position);
+    if( curCount > bestCount || (curCount == bestCount && curDist < bestDist) )
+	{
+	bestVertex = oIndex[i];
+	bestCount = curCount;
+	bestDist = curDist;
+	}
+    }
+return bestVertex;
+}
+
+
+static boolean softStartOverlapConsensusArcs(struct geneGraph *gg, struct hash *aliHash, 
+					     int softStartIx, enum ggVertexType startType)
+/** For each edge that contains softStartIx see if there are overlapping
+    edges that have a hard start. If there are, find the consensus hard start
+    and extend original edge to it. */
+{
+struct ggVertex *overlapping = NULL; /* Array of vertexes that could replace softStartIx. */
+int *oIndex = NULL;                  /* Index into gg->vertexes array for overlapping. */
+int oCount = 0;                      /* Number of items in oIndex and overlapping arrays. */
+int bestEdge = -1;
+bool **em = gg->edgeMatrix;
+int vCount = gg->vertexCount;
+int i;
+int bestStart = -1;
+boolean changed = FALSE;
+for (i=0; i<vCount; ++i)
+    {
+    if (em[softStartIx][i])
+	{
+	oCount = 0;
+	getStartEdgesOverlapping(gg, aliHash, softStartIx, i,  startType, &oIndex, &oCount);
+	bestStart = consensusSoftStartVertex(gg, softStartIx, i, oIndex, oCount);
+	if(bestStart >= 0 && bestStart != softStartIx)
+	    {
+	    struct ggEvidence *ge = NULL;
+	    em[softStartIx][i] = FALSE;
+//	    ge = ggEvidenceClone(gg->evidence[softStartIx][i]);
+	    moveEvidenceIfUnique(&gg->evidence[bestStart][i], &gg->evidence[softStartIx][i]);
+	    em[bestStart][i] = TRUE; 
+	    changed=TRUE;
+	    }
+	freez(&oIndex);
+	bestStart = -1;
+	}
+    }
+return changed;
+}
+
+static boolean softEndOverlapConsensusArcs(struct geneGraph *gg, struct hash *aliHash, 
+					   int softEndIx, enum ggVertexType endType)
+/** For each edge that contains softEndIx see if there are overlapping
+    edges that have a hard end. If there are, find the consensus hard start
+    and extend original edge to it. */
+{
+struct ggVertex *overlapping = NULL; /* Array of vertexes that could replace softEndIx. */
+int *oIndex = NULL;                  /* Index into gg->vertexes array for overlapping. */
+int oCount = 0;                      /* Number of items in oIndex and overlapping arrays. */
+int bestEdge = -1;
+bool **em = gg->edgeMatrix;
+int vCount = gg->vertexCount;
+int i;
+int bestEnd = -1;
+boolean changed = FALSE;
+for (i=0; i<vCount; ++i)
+    {
+    if (em[i][softEndIx])
+	{
+	oCount = 0;
+	getEndEdgesOverlapping(gg, aliHash, i, softEndIx, endType, &oIndex, &oCount);
+	bestEnd = consensusSoftEndVertex(gg, i, softEndIx, oIndex, oCount);
+	if(bestEnd >= 0 && bestEnd != softEndIx)
+	    {
+	    struct ggEvidence *ge = NULL;
+	    em[i][softEndIx] = FALSE;
+//	    ge = ggEvidenceClone(gg->evidence[i][softEndIx]);
+	    moveEvidenceIfUnique(&gg->evidence[i][bestEnd], &gg->evidence[i][softEndIx]);
+//	    ggEvidenceFreeList(&gg->evidence[i][softEndIx]);
+	    em[i][bestEnd] = TRUE; 
+	    changed=TRUE;
+	    }
+	freez(&oIndex);
+	bestEnd = -1;
+	}
+    }
+return changed;
+}
+    
 static boolean softStartArcs(struct geneGraph *gg, int softStartIx)
 /* Replace a soft start with all hard starts of overlapping,
  * but not conflicting exons. */
@@ -451,7 +714,7 @@ for (sIx = 0; sIx < vCount; ++sIx)
 			struct ggEvidence *ge = NULL;
 			ge = ggEvidenceClone(gg->evidence[startIx][softEndIx]);
 			em[startIx][eIx] = TRUE; 
-			addEvidenceIfUnique(&gg->evidence[startIx][eIx], ge);
+			moveEvidenceIfUnique(&gg->evidence[startIx][eIx], &ge);
 			result = TRUE;
 			}
 		    }
@@ -608,6 +871,65 @@ altGraphXVertPosSort(ag);
 altGraphXTabOut(ag, stdout);
 altGraphXFree(&ag);
 }
+
+boolean softlyTrimConsensus(struct geneGraph *gg, struct hash *aliHash)
+/** Extend soft starts and ends to a consensus start or end if it
+    exists. */
+{
+int i;
+int vCount = gg->vertexCount;
+struct ggVertex *vertices = gg->vertices;
+boolean result = FALSE;
+for (i=0; i<vCount; ++i)
+    {
+    switch (vertices[i].type)
+	{
+	case ggSoftStart:
+	    result |= softStartOverlapConsensusArcs(gg, aliHash, i, ggSoftStart);
+	    break;
+	case ggSoftEnd:
+	    result |= softEndOverlapConsensusArcs(gg, aliHash, i, ggSoftEnd);
+	    break;
+	}
+    }
+return result;
+}
+
+struct geneGraph *ggGraphConsensusCluster(struct ggMrnaCluster *mc, struct ggMrnaInput *ci, boolean fillInEvidence)
+/* Make up a gene transcript graph out of the ggMrnaCluster. Only
+ extending truncated exons to consensus splice sites. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct geneGraph *gg = makeInitialGraph(mc, ci);
+struct hash *aliHash = newAlignmentHash(mc);
+int i;
+//arcsForOverlaps(gg);
+for(i=0; i<gg->vertexCount; i++)
+    {
+    if(gg->vertices[i].type == ggSoftStart)
+	{
+	softStartOverlapConsensusArcs(gg, aliHash, i, ggHardStart);
+	}
+    else if(gg->vertices[i].type == ggSoftEnd)
+	{
+	softEndOverlapConsensusArcs(gg, aliHash, i, ggHardEnd);
+	}
+    }
+//softlyTrim(gg);
+softlyTrimConsensus(gg, aliHash);
+hideLittleOrphans(gg);
+if(fillInEvidence)
+    ggFillInTissuesAndLibraries(gg, conn);
+else
+    {
+    AllocArray(gg->mrnaTissues, gg->mrnaRefCount);
+    AllocArray(gg->mrnaLibs, gg->mrnaRefCount);
+    }
+hFreeConn(&conn);
+hashFree(&aliHash);
+return gg;
+}
+
 
 struct geneGraph *ggGraphCluster(struct ggMrnaCluster *mc, struct ggMrnaInput *ci)
 /* Make up a gene transcript graph out of the ggMrnaCluster. */
