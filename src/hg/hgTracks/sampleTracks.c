@@ -280,7 +280,18 @@ interpolate = cartUsualString(cart, o1, "Linear Interpolation");
 wiggleType = wiggleStringToEnum(interpolate);
 aa = cartUsualString(cart, o2, "on");
 antiAlias = sameString(aa, "on");
-fill = atoi(cartUsualString(cart, o3, "1"));
+
+//don't fill gcPercent track by default (but fill others)
+if(sameString( tg->mapName, "pGC") && sameString(database,"zooHuman3"))
+{
+    fill = atoi(cartUsualString(cart, o3, "0"));
+    cartSetString(cart, o3, "0" );
+}
+else
+{
+    fill = atoi(cartUsualString(cart, o3, "1"));
+    cartSetString(cart, o3, "1" );
+}
 
 //the 0.1 is so the label doesn't get truncated with integer valued user input min
 //display range.
