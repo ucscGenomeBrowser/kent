@@ -106,14 +106,13 @@ struct fileInfo *chrFiList = NULL, *chrFi;
 struct fileInfo *glFiList = NULL, *glFi;
 char pathName[512];
 
-uglyf("readClonesFromOoDir %s\n", ooDir);
 chrFiList = listDirX(ooDir, "*", FALSE);
 for (chrFi = chrFiList; chrFi != NULL; chrFi = chrFi->next)
     {
     if (chrFi->isDir && strlen(chrFi->name) <= 2)
         {
 	sprintf(pathName, "%s/%s", ooDir, chrFi->name);
-	glFiList = listDirX(pathName, "*.gl2", TRUE);
+	glFiList = listDirX(pathName, "*.gl", TRUE);
 	for (glFi = glFiList; glFi != NULL; glFi = glFi->next)
 	    addCloneInfo(glFi->name, cloneHash, &cloneList);
 	slFreeList(&glFiList);
@@ -123,7 +122,8 @@ slFreeList(&chrFiList);
 slReverse(&cloneList);
 slSort(&cloneList, cmpClonePos);
 if (slCount(cloneList) < 0)
-   errAbort("No .gl2 files in %s\n", ooDir);
+   errAbort("No .gl files in %s\n", ooDir);
+printf("Got %d clones\n", slCount(cloneList));
 return cloneList;
 }
 
@@ -148,7 +148,7 @@ for (i=0; i<numStages; ++i)
    sprintf(pathName, "%s/%s", gsDir, subDir);
    printf("Processing %s\n", pathName);
    dirList = listDir(pathName, "*.fa");
-   uglyf("Got %d fa files in %s\n", slCount(dirList), pathName);
+   printf("Got %d fa files in %s\n", slCount(dirList), pathName);
    for (dirEl = dirList; dirEl != NULL; dirEl = dirEl->next)
        {
        strcpy(cloneName, dirEl->name);
