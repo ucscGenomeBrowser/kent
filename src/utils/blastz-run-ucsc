@@ -7,7 +7,7 @@
 # rewritten in perl and extended to handle .2bit inputs and 
 # multi-record fasta for target as well as query by Angie Hinrichs.
 
-# $Id: blastz-run-ucsc,v 1.2 2005/01/28 17:44:33 angie Exp $
+# $Id: blastz-run-ucsc,v 1.3 2005/01/28 23:35:05 angie Exp $
 
 use Getopt::Long;
 use strict;
@@ -360,7 +360,7 @@ sub liftLav {
   # Run blastz-normalizeLav to lift up chunk coords to sequence level.
   my ($raw, $out, $tSeq, $qSeq) = @_;
   my $tLen = $tSizes{$tSeq};
-  my $qLen = $qSizes{$qSeq};
+  my $qLen = $qSeq ? $qSizes{$qSeq} : "0";
   &run("blastz-normalizeLav $tLen $qLen < $raw > $out");
 }
 
@@ -426,13 +426,13 @@ foreach my $tSpec (@tFileSpecs) {
       &plainBlastz($tLocal, $qLocal, $blastzOptions, $littleRaw);
     }
     if ($collapsed) {
-      # No lifting required (or possible, can only lift one seq at a time):
-      &run("cat $littleRaw >> $localOut");
+      # Lift target side only:
+      &liftLav($littleRaw, $littleOut, $tSeq, undef);
     } else {
       &liftLav($littleRaw, $littleOut, $tSeq, $qSeq);
-      &run("cat $littleOut >> $localOut");
       &run("rm $qLocal") if ($qLocal =~ /^$TMP/);
     }
+    &run("cat $littleOut >> $localOut");
   }
   &run("rm $tLocal") if ($tLocal =~ /^$TMP/);
 }
