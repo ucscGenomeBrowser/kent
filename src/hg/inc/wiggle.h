@@ -148,7 +148,8 @@ struct wiggleData *wigFetchData(char *db, char *table, char *chromName,
 void wigFreeData(struct wiggleData **wigData);
 /* free everything in the wiggleData structure */
 
-/*	in lib/wiggleCart.c	*/
+#define wiggleDataFreeList(a) wigFreeData(a)
+
 extern void wigFetchMinMaxY(struct trackDb *tdb, double *min,
     double *max, double *tDbMin, double *tDbMax, int wordCount, char *words[]);
 /* return min,max Y ranges from trackDb or cart, in lib/wiggleCart.c */
