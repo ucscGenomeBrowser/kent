@@ -10,7 +10,7 @@
 #
 #	Thu Nov 20 11:31:51 PST 2003 - Created - Hiram
 #
-#	"$Id: mkSwissProtDB.sh,v 1.3 2004/03/22 20:31:49 fanhsu Exp $"
+#	"$Id: mkSwissProtDB.sh,v 1.4 2004/03/23 21:50:57 fanhsu Exp $"
 
 TOP=/cluster/data/swissprot
 export TOP
@@ -65,6 +65,11 @@ if [ ${MACHINE} = "eieio" ]; then
 			ftp://us.expasy.org/databases/uniprot/knowledgebase/${db}.dat.gz
 	fi
     done
+    
+    mv uniprot_sprot.dat.gz sprot.dat.gz
+    mv uniprot_trembl.dat.gz trembl.dat.gz
+    mv uniprot_trembl_new.dat.gz trembl_new.dat.gz
+
     zcat *.dat.gz | spToDb stdin ../tabFiles
 
 else
