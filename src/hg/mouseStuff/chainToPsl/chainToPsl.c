@@ -14,7 +14,7 @@
 #include "dystring.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: chainToPsl.c,v 1.6 2003/05/23 09:12:20 baertsch Exp $";
+static char const rcsid[] = "$Id: chainToPsl.c,v 1.7 2003/06/18 03:19:41 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -388,10 +388,20 @@ for (b = chain->blockList; b != NULL; b = nextB)
 	    tStarts[blockIx] = b->tStart;
 	    blocks[blockIx] = b->tEnd - b->tStart;
             j = b->tStart-tStart;
-            for (i = b->qStart ; i < b->qStart+(b->tEnd - b->tStart); i++)
+            for (i = (b->qStart)-qStart ; i < b->qStart+(b->tEnd - b->tStart)-qStart; i++)
                 {
-                char qq = qSeq->dna[i];
-                char tt = tSeq->dna[j++];
+                char qq ;
+                char tt ;
+                if (j > tSeq->size || i > qSeq->size)
+                    {
+                    break;
+                    printf("tStart %d b->tStart %d tEnd %d size %d block %d\n",tStart, b->tStart,  tEnd,tSeq->size, b->tEnd-b->tStart);
+                    printf("qStart %d b->qStart %d qEnd %d size %d qend-qstart %d loop start %d loopend %d\n",qStart, b->qStart,  qEnd, qSeq->size, qEnd-qStart, (b->qStart)-qStart, b->qStart+(b->tEnd - b->tStart)-qStart);
+                    assert(j <= tSeq->size);
+                    assert(i <= qSeq->size);
+                    }
+                qq = qSeq->dna[i];
+                tt = tSeq->dna[j++];
                 //printf("qs ts %d %d %c %c %d %d %s\n",i,j,qq,tt, match, misMatch, qName);
                 if (toupper(qq) == toupper(tt))
                     ++match;
