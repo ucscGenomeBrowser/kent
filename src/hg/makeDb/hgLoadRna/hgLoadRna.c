@@ -234,6 +234,7 @@ char **row;
 char *name;
 char lastChar;
 int len;
+unsigned long gotSize = 0;
 
 if (extFilesHash == NULL)
     {
@@ -249,9 +250,10 @@ if (extFilesHash == NULL)
 	ex->size = sqlUnsigned(row[3]);
 	len = strlen(name);
 	lastChar = name[len-1];
-	if (lastChar != '/' && ex->size != fileSize(ex->path))
+        gotSize = fileSize(ex->path);
+	if (lastChar != '/' && ex->size != gotSize)
 	    {
-	    errAbort("External file %s out of sync", ex->path);
+	    errAbort("External file %s out of sync.\n Expected size: %ul, got size %ul\n", ex->path, ex->size, gotSize);
 	    }
 	}
     sqlFreeResult(&sr);
