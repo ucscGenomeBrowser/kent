@@ -65,6 +65,7 @@
 #include "genomicSuperDups.h"
 #include "celeraDupPositive.h"
 #include "celeraCoverage.h"
+#include "web.h"
 
 #define ROGIC_CODE 1	/* Please take these out.  It's *everyone's* code now. -jk */
 #define FUREY_CODE 1
@@ -9594,16 +9595,19 @@ void doMiddle(struct cart *theCart)
 char *debugTmp = NULL;
 /* Initialize layout and database. */
 cart = theCart;
-database = cartOptionalString(cart, "db");
+getDbAndOrganism(cart, &database, &organism);
+
 debugTmp = cartUsualString(cart, "hgDebug", "off");
 if(sameString(debugTmp, "on"))
     hgDebug = TRUE;
 else
     hgDebug = FALSE;
-if (database == NULL)
-    database = hGetDb();
+
+//database = cartOptionalString(cart, "db");
+//if (database == NULL)
+//    database = hGetDb();
 hSetDb(database);
-organism = hOrganism(database);
+//organism = hOrganism(database);
 hDefaultConnect();
 initTl();
 
