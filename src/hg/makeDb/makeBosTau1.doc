@@ -259,6 +259,10 @@ exit; # don't actually run this like a script :)
   # Saving bed.tab
   # Loading bosTau1
 
+  create index chrom_2 on simpleRepeat (chrom(16), chromStart);
+  create index chrom_3 on simpleRepeat (chrom(16), chromEnd);
+
+
 # CREATE MASKED FA USING REPEATMASKER AND FILTERED TRF FILES (DONE Oct. 10, 2004, Heather) 
 
   ssh kksilo
