@@ -16,6 +16,15 @@ visibility dense
 color 160,140,50
 type bed 6 .
 
+track primAORF
+shortLabel AORFs
+longLabel Alternative ORFs noted by Sorel Fitz-Gibbon
+group genes
+priority 2.6
+visibility dense
+color 13,124,115
+type bed 6 .
+                                                                                                                       
 track llaPaePrintA
 shortLabel LL microarray A
 longLabel Lowe lab full-genome P. aerophilum microarray experiments
