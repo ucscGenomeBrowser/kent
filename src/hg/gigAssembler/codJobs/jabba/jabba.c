@@ -56,7 +56,7 @@ char *runJobCommand = "/cluster/bin/scripts/runJob";
 char *checkWhens[] = {"in", "out"};
 
 /* Types of checks. */
-char *checkTypes[] = {"exists", "nonzero", "line", "line+"};
+char *checkTypes[] = {"exists", "exists+", "line", "line+"};
 
 struct job *jobFromLine(struct lineFile *lf, char *line)
 /* Parse out the beginnings of a job from input line. 
@@ -69,6 +69,7 @@ struct dyString *dy = dyStringNew(1024);
 struct job *job;
 
 AllocVar(job);
+job->spec = cloneString(line);
 s = line;
 for (;;)
     {
@@ -146,82 +147,90 @@ if ((f = fopen(file, "rb")) != NULL)
 return fi;
 }
 
+int checkOne(struct job *job, char *when, struct hash *hash)
+/* Perform checks on one job if checks not already in hash. 
+ * Returns number of errors. */
+{
+int errCount = 0;
+struct check *check;
+struct fileStatus *fi;
+
+for (check = job->checkList; check != NULL; check = check->next)
+    {
+    if (sameWord(when, check->when))
+	{
+	char *file = check->file;
+	char *what = check->what;
+	if ((fi = hashFindVal(hash, file)) == NULL)
+	    {
+	    fi = getFileStatus(file);
+	    hashAdd(hash, file, fi);
+	    }
+	if (!fi->reported)
+	    {
+	    if (!fi->exists)
+		{
+		warn("%s does not exist", file);
+		fi->reported = TRUE;
+		++errCount;
+		continue;
+		}
+	    if (sameWord(what, "exists+"))
+		{
+		if (!fi->hasData)
+		    {
+		    warn("%s is empty", file);
+		    fi->reported = TRUE;
+		    ++errCount;
+		    }
+		}
+	    else if (sameWord(what, "line"))
+		{
+		if (fi->hasData && !fi->completeLastLine)
+		    {
+		    warn("%s has an incomplete last line", file);
+		    fi->reported = TRUE;
+		    ++errCount;
+		    }
+		}
+	    else if (sameWord(what, "line+"))
+		{
+		if (!fi->hasData)
+		    {
+		    warn("%s is empty", file);
+		    fi->reported = TRUE;
+		    ++errCount;
+		    }
+		else if (!fi->completeLastLine)
+		    {
+		    warn("%s has an incomplete last line", file);
+		    fi->reported = TRUE;
+		    ++errCount;
+		    }
+		}
+	    else if (sameString(what, "exists"))
+		{
+		/* Check already made. */
+		}
+	    else
+		{
+		warn("Unknown check '%s'", what);
+		}
+	    }
+	}
+    }
+return errCount;
+}
+
 void doChecks(struct jobDb *db, char *when)
 /* Do checks on files where check->when matches when. */
 {
 int errCount = 0;
 struct job *job;
-struct check *check;
 struct hash *hash = newHash(0);
-struct fileStatus *fi;
 
 for (job = db->jobList; job != NULL; job = job->next)
-    {
-    for (check = job->checkList; check != NULL; check = check->next)
-        {
-	if (sameWord(when, check->when))
-	    {
-	    char *file = check->file;
-	    char *what = check->what;
-	    if ((fi = hashFindVal(hash, file)) == NULL)
-	        {
-		fi = getFileStatus(file);
-		hashAdd(hash, file, fi);
-		}
-	    if (!fi->reported)
-	        {
-		if (!fi->exists)
-		    {
-		    warn("%s does not exist", file);
-		    fi->reported = TRUE;
-		    ++errCount;
-		    continue;
-		    }
-		if (sameWord(what, "nonzero"))
-		    {
-		    if (!fi->hasData)
-		        {
-			warn("%s is empty", file);
-			fi->reported = TRUE;
-			++errCount;
-			}
-		    }
-		else if (sameWord(what, "line"))
-		    {
-		    if (fi->hasData && !fi->completeLastLine)
-		        {
-			warn("%s has an incomplete last line", file);
-			fi->reported = TRUE;
-			++errCount;
-			}
-		    }
-		else if (sameWord(what, "line+"))
-		    {
-		    if (!fi->hasData)
-		        {
-			warn("%s is empty", file);
-			fi->reported = TRUE;
-			++errCount;
-			}
-		    else if (!fi->completeLastLine)
-		        {
-			warn("%s has an incomplete last line", file);
-			fi->reported = TRUE;
-			++errCount;
-			}
-		    }
-		else if (sameString(what, "exists"))
-		    {
-		    /* Check already made. */
-		    }
-		else
-		    {
-		    warn("Unknown check '%s'", what);
-		    }
-		}
-	    }
-	}
-    }
+    errCount += checkOne(job, when, hash);
 if (errCount > 0)
     errAbort("%d total errors in file check", errCount);
 freeHashAndVals(&hash);
@@ -440,14 +449,21 @@ int x;
 int leapCount;
 long secondsInDay = 24*60*60;
 int year, month, day, hour, minute, second;
+char *yearString;
 long dayCount;
 long result;
 
 /* Parse string into various integer variables. */
 wordCount = chopLine(dupe, words);
-if (wordCount < 6)
+if (wordCount < 5)
     errAbort("Badly formated date '%s'", date);
-year = atoi(words[5]);
+if (wordCount == 5)
+    yearString = words[4];
+else
+    yearString = words[5];
+if (!isdigit(yearString[0]))
+    errAbort("Badly formated date '%s'", date);
+year = atoi(yearString);
 if ((month = stringIx(words[1], months)) < 0)
     errAbort("Unrecognized month '%s'", date);
 day = atoi(words[2]);
@@ -559,6 +575,7 @@ boolean gotRet, trackingError;
 long killSeconds = killTime*60;
 long warnSeconds = warnTime*60;
 long duration;
+struct hash *checkHash = newHash(0);
 
 for (job=db->jobList; job != NULL; job = job->next)
     {
@@ -574,7 +591,7 @@ for (job=db->jobList; job != NULL; job = job->next)
 	    sub->trackingError = trackingError;
 	    if (gotRet)
 	        {
-		if (sub->retVal == 0)	/* Put checks on output here. */
+		if (sub->retVal == 0 && checkOne(job, "out", checkHash) == 0)
 		    sub->ranOk = TRUE;
 		else
 		    sub->crashed = TRUE;
@@ -584,6 +601,7 @@ for (job=db->jobList; job != NULL; job = job->next)
 		if (!sub->trackingError)
 		    {
 		    duration = nowInSeconds() - sub->startTime;
+		    uglyf("now %ld, start %d, diff %ld\n", nowInSeconds(), sub->startTime, duration);
 		    if (duration >= killSeconds)
 		        sub->hung = TRUE;
 		    else if (duration >= warnSeconds)
@@ -593,13 +611,22 @@ for (job=db->jobList; job != NULL; job = job->next)
 	    }
 	}
     }
+freeHash(&checkHash);
+}
+
+boolean needsRerun(struct submission *sub)
+/* Return TRUE if submission needs to be rerun. */
+{
+if (sub == NULL)
+    return TRUE;
+return sub->submitError || sub->queueError || sub->crashed || sub->trackingError;
 }
 
 void reportOnJobs(struct jobDb *db)
 /* Report on status of jobs. */
 {
 int submitError = 0, inQueue = 0, queueError = 0, trackingError = 0, running = 0, crashed = 0,
-    slow = 0, hung = 0, ranOk = 0, jobCount = 0, unsubmitted = 0, total = 0;
+    slow = 0, hung = 0, ranOk = 0, jobCount = 0, unsubmitted = 0, total = 0, failed = 0;
 struct job *job;
 struct submission *sub;
 
@@ -616,6 +643,8 @@ for (job = db->jobList; job != NULL; job = job->next)
 	if (sub->hung) ++hung;
 	if (sub->running) ++running;
 	if (sub->ranOk) ++ranOk;
+	if (job->submissionCount >= retries && needsRerun(sub) || hung)
+	     ++failed;
 	}
     else
         ++unsubmitted;
@@ -641,6 +670,8 @@ if (running > 0)
    printf("running: %d\n", running);
 if (ranOk > 0)
    printf("ranOk: %d\n", ranOk);
+if (failed > 0)
+   printf("failed: %d\n", failed);
 printf("total jobs in batch: %d\n", total);
 }
 
@@ -650,18 +681,44 @@ void jabbaPush(char *batch)
 struct jobDb *db = readBatch(batch);
 struct job *job;
 int queueSize;
+int pushCount = 0, retryCount = 0;
+int tryCount;
+boolean finished = FALSE;
 
 makeDir("err");
 makeDir("out");
-if ((job = db->jobList) != NULL)
-    submitJob(job);    
-
 queueSize = markQueuedJobs(db);
-printf("jobs (everybody's) in Codine queue: %d\n", queueSize);
+printf("jobs already in Codine queue: %d\n", queueSize);
 markRunJobStatus(db);
-reportOnJobs(db);
 
+for (tryCount=1; tryCount<=retries && !finished; ++tryCount)
+    {
+    for (job = db->jobList; job != NULL; job = job->next)
+        {
+	if (job->submissionCount < tryCount && 
+	   (job->submissionList == NULL || needsRerun(job->submissionList)))
+	    {
+	    submitJob(job);    
+	    ++pushCount;
+	    if (tryCount > 1)
+	        ++retryCount;
+	    if (pushCount >= maxPush)
+	        {
+		finished = TRUE;
+		break;
+		}
+	    if (pushCount + queueSize >= maxQueue && pushCount >= maxPush)
+	        {
+		finished = TRUE;
+		break;
+		}
+	    }
+	}
+    }
 writeBatch(db, batch);
+printf("Pushed Jobs: %d\n", pushCount);
+if (retryCount > 0)
+    printf("Retried jobs: %d\n", retryCount);
 }
 
 void jabbaCheck(char *batch)
@@ -696,6 +753,8 @@ retries = cgiUsualInt("retries",  retries);
 maxQueue = cgiUsualInt("maxQueue",  maxQueue);
 minPush = cgiUsualInt("minPush",  minPush);
 maxPush = cgiUsualInt("maxPush",  maxPush);
+warnTime = cgiUsualInt("warnTime", warnTime);
+killTime = cgiUsualInt("killTime", killTime);
 command = argv[1];
 batch = argv[2];
 if (sameString(command, "make"))

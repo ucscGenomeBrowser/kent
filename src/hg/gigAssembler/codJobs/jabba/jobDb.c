@@ -207,6 +207,7 @@ for (i=0; i<ret->submissionCount; ++i)
 slReverse(&ret->submissionList);
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
+ret->spec = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -221,6 +222,7 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->command);
 checkFreeList(&el->checkList);
 submissionFreeList(&el->submissionList);
+freeMem(el->spec);
 freez(pEl);
 }
 
@@ -278,6 +280,10 @@ fputc(sep,f);
         }
     if (sep == ',') fputc('}',f);
     }
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->spec);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 

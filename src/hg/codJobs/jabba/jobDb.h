@@ -88,6 +88,7 @@ struct job
     struct check *checkList;	/* Ways to check success of job. */
     int submissionCount;	/* The number of times submitted */
     struct submission *submissionList;	/* List of submissions */
+    char *spec;	/* Specification for job */
     };
 
 struct job *jobCommaIn(char **pS, struct job *ret);
