@@ -3207,6 +3207,8 @@ cat << 'EOF' > makeMaf.csh
     mkdir /usr/local/apache/htdocs/goldenPath/mm5/vsRn3
     cd /usr/local/apache/htdocs/goldenPath/mm5/vsRn3
     mv /cluster/data/mm5/bed/blastz.rn3/axtChain/rat*.gz .
+    cp -p /cluster/data/mm5/bed/blastz.rn3/axtChain/all.chain.gz \
+          /usr/local/apache/htdocs/goldenPath/mm5/vsRn3/rat.chain.gz
     md5sum *.gz > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
     # Not for pushing -- handle separately.
