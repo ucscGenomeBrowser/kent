@@ -1,5 +1,5 @@
 <!------------Description---------->
-This histogram shows amino acid anomalies within the selected 
+This histogram shows the abundance of amino acids within the selected 
 protein relative to their average occurrence genome-wide. The bars of the 
 graph indicate the genome-wide average frequencies of the amino acids,
 and the blue vertical lines indicate the abundance of the amino acids 
