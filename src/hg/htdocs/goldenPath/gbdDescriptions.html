@@ -272,7 +272,7 @@ stored in a single table rather than one table per chromosome:</P>
   href="#GenMapDb">genMapDb</A> 
   - BAC clones from GenMapDB placed on the assembly by U Penn (V. Cheung)</LI>
   <LI><A 
-  href="#GenomicDups">genomicDups</A> 
+  href="#GenomicSuperDups">genomicSuperDups</A> 
   - Duplications of >1000 Bases Sequence </LI>
   <LI><A 
   href="#GenePredictions">geneid</A> 
@@ -1078,27 +1078,6 @@ The following definition is used for tables that link a predicted peptide to a p
    )                                                                            
 </PRE>
 
-<H4><A name=GenomicDups></A>Genomic Duplications</H4>
-<PRE>table genomicDups
-"Summary of large genomic Duplications (>1KB >90% similar)"
-  (
-  string   chrom;       "Human chromosome"
-  uint    chromStart;   "Start position in chromosome"
-  uint    chromEnd;     "End position in chromosome"
-  string  name;         "Other FPC contig involved"
-  uint    score;        "Score from 900-1000.  1000 is best"
-  char[1] strand;       "Value should be + or -"
-  string  otherChrom;   "Human chromosome"
-  uint    otherStart;   "Start in other sequence"
-  uint    otherEnd;     "End in other sequence"
-  uint    alignB;       "bases Aligned"
-  uint    matchB;       "aligned bases that match"
-  uint    mismatchB;    "aligned bases that do not match"
-  float   fracMatch;    "fraction of matching bases"
-  float   jcK;          "K-value calculated with Jukes-Cantor"
-  )
-</PRE>
-
 <H4><A name=GpInfo></A>Golden Path Construction</H4>
 <PRE>table chrN_gold
 "How to get through chromosome based on fragments"
@@ -1721,6 +1700,40 @@ L-scores with the formula: L = 8.0 * X / 1000.0 for sampleHeight X.
     string geneType;	  "Type field from Sanger gene GFFs"
     string cdsType;	  "Type field from Sanger CDS GFFs"
     )
+</PRE>
+
+<H4><A name=GenomicSuperDups></A>Segmental Duplications</H4>
+<PRE>table genomicSuperDups
+"Summary of large genomic Duplications (>1KB >90% similar)"
+  (
+  string chrom;       	"Human chromosome or FPC contig"
+  uint chromStart;   	"Start position in chromosome"
+  uint chromEnd;     	"End position in chromosome"
+  string name;         	"Other chromosome involved"
+  uint score;        	"Score from 900-1000.  1000 is best"
+  char[1] strand;       "Value should be + or -"
+  string otherChrom;   	"Other Human chromosome or FPC contig"
+  uint otherStart;   	"Start in other  sequence"
+  uint otherEnd;     	"End in other  sequence"
+  uint otherSize;    	"Total size of other sequence"
+  uint uid;       	"Unique ID"
+  uint posBasesHit;     "HitPositive UnCovered"
+  string testResult;    "HitPositive (yes or no) UnCovered (covered=0)"
+  string verdict;       "Real or Allele"
+  string alignfile;     "Alignment file path"
+  uint alignL;      	"Spaces/positions in alignment"
+  uint indelN;       	"Number of indels"
+  uint indelS;      	"Indel spaces"
+  uint alignB;       	"Bases Aligned"
+  uint matchB;      	"Aligned bases that match"
+  uint mismatchB;    	"Aligned bases that do not match"
+  uint transitionsB;    "Number of transitions"
+  uint transversionsB;  "Number of transversions"
+  float fracMatch;    	"Fraction of matching bases"
+  float fracMatchIndel; "Fraction of matching bases with indels"
+  float jcK;          	"K-value calculated with Jukes-Cantor"
+  float k2K;          	"Kimura K"
+  )
 </PRE>
 
 <H4><A name=Seq></A>Seq</H4>
