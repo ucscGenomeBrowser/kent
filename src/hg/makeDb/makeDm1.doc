@@ -351,7 +351,7 @@ exit; # don't actually run this like a script :)
       | hgsql -h genome-testdb hgcentraltest
 
 
-# LOAD UP BDGP ANNOTATIONS (DONE 10/8/03 angie)
+# LOAD UP BDGP 3.1 ANNOTATIONS (DONE 10/8/03 angie)
     # fruitfly.org is the Berkeley Drosophila Genome Project.  
     # Their GFF annotations contain FlyBase IDs useful for cross-linking.
     ssh kksilo
@@ -475,18 +475,20 @@ exit; # don't actually run this like a script :)
     hgsql dm1 < /cluster/data/dm1/bed/bdgpAnnotations/bdgpNonCodingInfo.sql
 
 
-# FLYBASE GENES (REDONE 11/21/03 angie)
+# FLYBASE GENES (REDONE 6/17/04 angie)
     ssh hgwdev
     mkdir /cluster/data/dm1/bed/flyBase
     cd /cluster/data/dm1/bed/flyBase
-    wget ftp://flybase.bio.indiana.edu/flybase/genes/genes.txt
-    # Note: this time around I had to edit out the first word of line 448798
-    #  uncertain *u FBan0017679; annotated data are available for this gene.
-    # so that it started with *u.  
-    # Lines 739149-739150 looked corrupted too -- edited out extra words:
-    #  $E Lewis, Cited in Lindsley and Grell, 19680561where symbol = ""wing
-    #  Cut wi
-    hgFlyBase dm1 genes.txt
+    wget -O genes.txt.040617 \
+      ftp://flybase.bio.indiana.edu/flybase/genes/genes.txt
+    # Had to edit genes.txt.040617 to get around these two lines that didn't 
+    # start with acode symbols:
+    #line 258894
+#Allele class: hypom
+    #line 459025 (459026 of original)
+#uncertain *u FBan0017679; annotated data are available for this gene.
+    hgFlyBase dm1 genes.txt.040617
+#Warning: load of fbTranscript did not go as planned: 18810 record(s), 2 row(s) skipped, 0 warning(s) loading ./fbTranscript.tab
 
 
 # BDGP GENE DISRUPTION PROJECT/PSCREEN (DONE 5/18/04 angie)
@@ -506,7 +508,8 @@ exit; # don't actually run this like a script :)
     hgLoadBed dm1 pscreen -sqlTable=$HOME/kent/src/hg/lib/pscreen.sql -tab \
       pscreen.bed
 
-# FLYBASE IN SITU IMAGES / EXPRESSION (DONE 11/24/03 angie)
+
+# FLYBASE IN SITU IMAGES / EXPRESSION (REDONE 6/17/04 angie)
     # FlyBase has downloadable in situ images for BACs:
     # ftp://flybase.net/flybase/images/bac_insitu_pic/*
     # and FBti's:
@@ -515,19 +518,19 @@ exit; # don't actually run this like a script :)
     # Don't see that in the ftp listing, but they do make it easy to link in.
     ssh hgwdev
     cd /cluster/data/dm1/bed/flyBase
-    wget -O summary.txt \
+    wget -O summary.txt.040617 \
     'http://www.fruitfly.org/cgi-bin/ex/bquery.pl?qpage=entry&qtype=summarytext'
     hgsql dm1 < ~/kent/src/hg/lib/bdgpExprLink.sql
-    echo 'load data local infile "summary.txt" into table bdgpExprLink' \
-    | hgsql dm1
+    hgsql dm1 -e \
+      'load data local infile "summary.txt.040617" into table bdgpExprLink'
 
 
-# SWISSPROT-FLYBASE CROSS-REFERENCING  (DONE 10/7/03 angie)
+# SWISSPROT-FLYBASE CROSS-REFERENCING  (REDONE 6/17/04 angie)
     ssh hgwdev
     mkdir /cluster/data/dm1/bed/flyBaseSwissProt
     cd /cluster/data/dm1/bed/flyBaseSwissProt
     echo "select extAcc1,acc from extDbRef,extDb where extDbRef.extDb = extDb.id and extDb.val = 'flybase'" \
-    | hgsql -N sp092903 \
+    | hgsql -N sp040515 \
     > fbSpAcc.tab
     ssh kksilo
     cd /cluster/data/dm1/bed/flyBaseSwissProt
@@ -617,13 +620,11 @@ dm1.downloadDir = dm1
     rm -r /cluster/bluearc/genbank/work/initial.dm1
 
 
-# PUT NIBS ON ISCRATCH (IN PROGRESS 10/9/03 angie)
+# PUT NIBS ON ISCRATCH (DONE 10/9/03 angie)
     ssh kkr1u00
     cd /iscratch/i/dm1
     cp -pR /cluster/data/dm1/nib .
     iSync
-    # kkr3u00 and kkr4u00 are down, so iSync should be run again when 
-    # they're back up.
 
 
 # PRODUCING FUGU FISH ALIGNMENTS  (DONE 10/9/03 angie)
@@ -964,9 +965,9 @@ PRODUCING GENSCAN PREDICTIONS (TODO 11/14/03 angie)
     hgLoadBed dm1 genscanSubopt genscanSubopt.bed
 
 
-# EXTEND BDGPGENE AND CREATE BDGPNEAR FOR HGNEAR (DONE 10/15/03 angie)
+# EXTEND BDGPGENE AND CREATE BDGPNEAR FOR HGNEAR (REDONE 6/18/04 angie)
     ssh hgwdev
-    cd /cluster/data/dm1/bed/bdgpAnnotations
+    cd /cluster/data/dm1/bed/bdgpAnnotations.3.2
     cp ~/kent/src/hg/lib/bdgpSwissProt.sql .
     perl -we '%bName2all = (); \
               %bName2fb = (); \
@@ -993,6 +994,8 @@ PRODUCING GENSCAN PREDICTIONS (TODO 11/14/03 angie)
                   print "INSERT INTO bdgpSwissProt VALUES ( \"$name\", \"$fbID\", \"$go\", \"$symbol\", \"$cyto\", \"$spID\", \"$spDesc\", \"$spSymb\");\n"; \
                 } elsif (exists($bName2fb{$bName})) { \
                   ($bName, $fbID, $go, $symbol, $cyto, undef) = @{$bName2fb{$bName}}; \
+                  $go = "" if (not defined $go); \
+                  $cyto = "" if (not defined $cyto); \
                   print "INSERT INTO bdgpSwissProt VALUES ( \"$name\", \"$fbID\", \"$go\", \"$symbol\", \"$cyto\", \"n/a\", \"n/a\", \"n/a\");\n"; \
                 } else { die "No info for $name."; } \
               } \
@@ -1000,68 +1003,24 @@ PRODUCING GENSCAN PREDICTIONS (TODO 11/14/03 angie)
     >> bdgpSwissProt.sql
     hgsql dm1 < bdgpSwissProt.sql
 
-    # Next time around -- use the above table to add a proteinID field 
-    # to bdgpGene.  Here's what I did this time, before doing the above:
+    # Use the above table to add a proteinID field to bdgpGene.  
+    hgsql dm1 -e 'create table bdgpGene2 \
+                  select bdgpGene.*, bdgpSwissProt.swissProtId as proteinID \
+                  from bdgpGene, bdgpSwissProt \
+                  where bdgpGene.name = bdgpSwissProt.bdgpName'
 
-    # Create a table bdgpGene2, which is just like bdgpGene but with 
-    # a proteinID field.  The create statement is from 
-    # mysqldump -u hguser -phguserstuff dm1 bdgpGene 
-    # but edited to change the table name to bdgpGene2 and 
-    # to include the proteinId field.  The insert statement copies 
-    # the bdgpGene data into bdgpGene2.  
-    cat << '_EOF_' > bdgpGene2.sql
-CREATE TABLE bdgpGene2 (
-  name varchar(255) NOT NULL default '',
-  chrom varchar(255) NOT NULL default '',
-  strand char(1) NOT NULL default '',
-  txStart int(10) unsigned NOT NULL default '0',
-  txEnd int(10) unsigned NOT NULL default '0',
-  cdsStart int(10) unsigned NOT NULL default '0',
-  cdsEnd int(10) unsigned NOT NULL default '0',
-  exonCount int(10) unsigned NOT NULL default '0',
-  exonStarts longblob NOT NULL,
-  exonEnds longblob NOT NULL,
-  proteinID varchar(255) NOT NULL default 'n/a',
-  KEY name (name(16)),
-  KEY chrom (chrom(8),txStart),
-  KEY chrom_2 (chrom(8),txEnd)
-) TYPE=MyISAM;
-insert into bdgpGene2 select *,'n/a' from bdgpGene;
-'_EOF_'
-    # << this line keeps emacs coloring happy
-    # The update statements populate the proteinID fields with SwissProt IDs 
-    # where possible:
-    perl -we '%bName2id = (); \
-              open(P, "echo select bdgpGeneInfo.bdgpName,flyBaseSwissProt.swissProtId from bdgpGeneInfo,flyBaseSwissProt where bdgpGeneInfo.flyBaseId = flyBaseSwissProt.flyBaseId | hgsql -N dm1|") || die; \
-              while (<P>) { \
-                chop; @words = split("\t"); \
-                $bName2id{$words[0]} = $words[1]; \
-              } \
-              close(P); \
-              open(P, "echo select name from bdgpGene | hgsql -N dm1|") ||die; \
-              while (<P>) { \
-                chop; $name = $_; \
-                $bName = $name;  $bName =~ s/-R.*//; \
-                $id = $bName2id{$bName}; \
-                print "update bdgpGene2 set proteinID = \"$id\" where name = \"$name\";\n" if (defined $id); \
-                 \
-              } \
-              close(P); ' \
-      >> bdgpGene2.sql
-    # Create bdgpGene2:
-    hgsql dm1 < bdgpGene2.sql
     # Now examine bdgpGene2 vs. bdgpGene manually, carefully.  
     # Do they have the same # rows?  
-    #   select count(*) from bdgpGene;
-    #   select count(*) from bdgpGene2;
+    hgsql dm1 -N -e 'select count(*) from bdgpGene'
+    hgsql dm1 -N -e 'select count(*) from bdgpGene2'
     # Are most proteinID fields non-"n/a"? 
-    #   select count(*) from bdgpGene2 where proteinID = "n/a";
+    hgsql dm1 -N -e 'select count(*) from bdgpGene2 where proteinID = "n/a"'
     # Spot-check some genes... are the fields of bdgpGene2 identical to 
     # the fields of bdgpGene, except for the new proteinIDs?  
-    #  select * from bdgpGene limit 3;
-    #  select * from bdgpGene2 limit 3;
+    hgsql dm1 -N -e 'select * from bdgpGene limit 3'
+    hgsql dm1 -N -e 'select * from bdgpGene2 limit 3'
     # If so, then go ahead:
-    echo "drop table bdgpGene; rename table bdgpGene2 to bdgpGene;" | hgsql dm1
+    hgsql dm1 -e 'drop table bdgpGene; rename table bdgpGene2 to bdgpGene;'
     # and check the new bdgpGene manually.
 
 
@@ -1071,7 +1030,7 @@ insert into bdgpGene2 select *,'n/a' from bdgpGene;
 # for how Arbeitman et al's fly lifecycle expression data were loaded into 
 # hgFixed.  
 
-# BLASTP SELF, CLUSTER GENES, MAP TO EXP.DATA FOR HGNEAR (DONE 10/17/03 angie)
+# BLASTP SELF, CLUSTER GENES, MAP TO EXP.DATA FOR HGNEAR (REDONE 6/18/04 angie)
     ssh hgwdev
     # Now that bdgpGene has proteinID, use hgClusterGenes to cluster
     # together various alt-splicing isoforms, creating the tables
@@ -1079,18 +1038,13 @@ insert into bdgpGene2 select *,'n/a' from bdgpGene;
     hgClusterGenes dm1 bdgpGene bdgpIsoforms bdgpCanonical
     # Extract peptides from bdgpGenes into fasta file
     # and create a blast database out of them.
-    mkdir -p /cluster/data/dm1/bed/blastp
+    mkdir /cluster/data/dm1/bed/blastp
     cd /cluster/data/dm1/bed/blastp
     pepPredToFa dm1 bdgpGenePep bdgp.faa
     formatdb -i bdgp.faa -t bdgp -n bdgp
-    cd ..
 
     # Copy over database to iscratch/i
     ssh kkr1u00
-    if (-e /iscratch/i/dm1/blastp) then
-      rm -r /iscratch/i/dm1/blastp
-    endif
-    mkdir -p /iscratch/i/dm1/blastp
     if (-e /iscratch/i/dm1/blastp) then
       rm -r /iscratch/i/dm1/blastp
     endif
@@ -1135,10 +1089,10 @@ end
     gensub2 split.lst single gsub spec
     para create spec
     para try, check, push, check, ...
-#Completed: 5817 of 5817 jobs
-#Average job time:                   9s       0.15m     0.00h    0.00d
-#Longest job:                      312s       5.20m     0.09h    0.00d
-#Submission to last job:           312s       5.20m     0.09h    0.00d
+#Completed: 5821 of 5821 jobs
+#Average job time:                  10s       0.16m     0.00h    0.00d
+#Longest job:                      326s       5.43m     0.09h    0.00d
+#Submission to last job:           655s      10.92m     0.18h    0.01d
 
     # Load into database.  This took only ~3 minutes for dm1.
     ssh hgwdev
@@ -1148,7 +1102,9 @@ end
     hgMapToGene dm1 refGene bdgpGene bdgpToRefSeq
     # Create table that maps between bdgp genes and LocusLink
     echo "select mrnaAcc,locusLinkId from refLink" | hgsql -N dm1 > refToLl.txt
+### NOT DONE (LocusLink info temporarily missing from genbank)
     hgMapToGene dm1 refGene bdgpGene bdgpToLocusLink -lookup=refToLl.txt
+###
     # Create table that maps between known genes and Pfam domains
     hgMapViaSwissProt dm1 bdgpGene name proteinID Pfam bdgpToPfam
 
@@ -1179,33 +1135,35 @@ end
     See README in /cluster/store1/geneOntology.
 
 
-# C.ELEGANS BLASTP FOR HGNEAR (DONE 10/15/03 angie)
+# C.ELEGANS BLASTP FOR HGNEAR (REDONE 6/17/04 angie)
     # Make C. elegans ortholog column using blastp on wormpep.
     # First make C. elegans protein database and copy it to iscratch/i
     # if it doesn't exist already:
-    cd /cluster/data/ce1/bed
-    mkdir blastp
-    cd blastp
-    wget ftp://ftp.sanger.ac.uk/pub/databases/wormpep/wormpep
-    mv wormpep wormPep.faa
-    formatdb -i wormPep.faa -t wormPep -n wormPep
+    ssh eieio
+    mkdir /cluster/data/ce2/bed/blastp
+    cd /cluster/data/ce2/bed/blastp
+    # Point a web browser at ftp://ftp.sanger.ac.uk/pub/databases/wormpep/
+    # to find out the latest version.  Then use that in place of 126 below.
+    wget -O wormPep126.faa \
+      ftp://ftp.sanger.ac.uk/pub/databases/wormpep/wormpep126/wormpep
+    formatdb -i wormPep126.faa -t wormPep126 -n wormPep126
     ssh kkr1u00
-    if (-e /iscratch/i/ce1/blastp) then
-    rm -r /iscratch/i/ce1/blastp
+    if (-e /iscratch/i/ce2/blastp) then
+      rm -r /iscratch/i/ce2/blastp
     endif
-    mkdir -p /iscratch/i/ce1/blastp
-    cp /cluster/data/ce1/bed/blastp/wormPep.p?? /iscratch/i/ce1/blastp
+    mkdir -p /iscratch/i/ce2/blastp
+    cp /cluster/data/ce2/bed/blastp/wormPep126.p?? /iscratch/i/ce2/blastp
     iSync
 
     # Make parasol run directory 
     ssh kk
-    mkdir -p /cluster/data/dm1/bed/blastp/ce1/run/out
-    cd /cluster/data/dm1/bed/blastp/ce1/run
+    mkdir -p /cluster/data/dm1/bed/blastp/ce2/run/out
+    cd /cluster/data/dm1/bed/blastp/ce2/run
     # Make blast script
     cat > blastSome <<end
 #!/bin/csh
 setenv BLASTMAT /iscratch/i/blast/data
-/iscratch/i/blast/blastall -p blastp -d /iscratch/i/ce1/blastp/wormPep -i \$1 -o \$2 -e 0.01 -m 8 -b 1
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/ce2/blastp/wormPep126 -i \$1 -o \$2 -e 0.01 -m 8 -b 1
 end
     chmod a+x blastSome
     # Make gensub2 file
@@ -1219,43 +1177,43 @@ end
     gensub2 split.lst single gsub spec
     para create spec
     para try, check, push, check, ...
-#Completed: 5817 of 5817 jobs
-#Average job time:                   9s       0.15m     0.00h    0.00d
-#Longest job:                      152s       2.53m     0.04h    0.00d
-#Submission to last job:           152s       2.53m     0.04h    0.00d
+#Completed: 5821 of 5821 jobs
+#Average job time:                   8s       0.14m     0.00h    0.00d
+#Longest job:                      156s       2.60m     0.04h    0.00d
+#Submission to last job:           156s       2.60m     0.04h    0.00d
 
     # Load into database.  
     ssh hgwdev
-    cd /cluster/data/dm1/bed/blastp/ce1/run/out
+    cd /cluster/data/dm1/bed/blastp/ce2/run/out
     hgLoadBlastTab dm1 ceBlastTab -maxPer=1 *.tab
 
 
-# MOUSE BLASTP FOR HGNEAR (DONE 10/15/03 angie)
+# MOUSE BLASTP FOR HGNEAR (REDONE 6/17/04 angie)
     # Make mouse ortholog column using blastp on mouse known genes.
     # First make mouse protein database and copy it to iscratch/i
     # if it doesn't exist already:
-    cd /cluster/data/mm3/bed
-    mkdir blastp
-    cd blastp
-    pepPredToFa mm3 knownGenePep known.faa
+    ssh hgwdev
+    mkdir /cluster/data/mm4/bed/blastp
+    cd /cluster/data/mm4/bed/blastp
+    pepPredToFa mm4 knownGenePep known.faa
     formatdb -i known.faa -t known -n known
     ssh kkr1u00
-    if (-e /iscratch/i/mm3/blastp) then
-      rm -r /iscratch/i/mm3/blastp
+    if (-e /iscratch/i/mm4/blastp) then
+      rm -r /iscratch/i/mm4/blastp
     endif
-    mkdir -p /iscratch/i/mm3/blastp
-    cp /cluster/data/mm3/bed/blastp/known.p?? /iscratch/i/mm3/blastp
+    mkdir -p /iscratch/i/mm4/blastp
+    cp -p /cluster/data/mm4/bed/blastp/known.p?? /iscratch/i/mm4/blastp
     iSync
 
     # Make parasol run directory 
     ssh kk
-    mkdir -p /cluster/data/dm1/bed/blastp/mm3/run/out
-    cd /cluster/data/dm1/bed/blastp/mm3/run
+    mkdir -p /cluster/data/dm1/bed/blastp/mm4/run/out
+    cd /cluster/data/dm1/bed/blastp/mm4/run
     # Make blast script
     cat > blastSome <<end
 #!/bin/csh
 setenv BLASTMAT /iscratch/i/blast/data
-/iscratch/i/blast/blastall -p blastp -d /iscratch/i/mm3/blastp/known -i \$1 -o \$2 -e 0.001 -m 8 -b 1
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/mm4/blastp/known -i \$1 -o \$2 -e 0.001 -m 8 -b 1
 end
     chmod a+x blastSome
     # Make gensub2 file
@@ -1269,24 +1227,23 @@ end
     gensub2 split.lst single gsub spec
     para create spec
     para try, check, push, check, ...
-#Completed: 5817 of 5817 jobs
-#Average job time:                  17s       0.28m     0.00h    0.00d
-#Longest job:                      354s       5.90m     0.10h    0.00d
-#Submission to last job:           354s       5.90m     0.10h    0.00d
+#Completed: 5821 of 5821 jobs
+#Average job time:                  12s       0.20m     0.00h    0.00d
+#Longest job:                      267s       4.45m     0.07h    0.00d
+#Submission to last job:           267s       4.45m     0.07h    0.00d
 
     # Load into database.  
     ssh hgwdev
-    cd /cluster/data/dm1/bed/blastp/mm3/run/out
+    cd /cluster/data/dm1/bed/blastp/mm4/run/out
     hgLoadBlastTab dm1 mmBlastTab -maxPer=1 *.tab
 
 
-# HUMAN BLASTP FOR HGNEAR (IN DONE 10/15/03 angie)
+# HUMAN BLASTP FOR HGNEAR (REDONE 6/17/04 angie)
     # Make human ortholog column using blastp on human known genes.
     # First make human protein database and copy it to iscratch/i
     # if it doesn't exist already:
-    cd /cluster/data/hg16/bed
-    mkdir blastp
-    cd blastp
+    mkdir /cluster/data/hg16/bed/blastp
+    cd /cluster/data/hg16/bed/blastp
     pepPredToFa hg16 knownGenePep known.faa
     formatdb -i known.faa -t known -n known
     ssh kkr1u00
@@ -1319,10 +1276,10 @@ end
     gensub2 split.lst single gsub spec
     para create spec
     para try, check, push, check, ...
-#Completed: 5817 of 5817 jobs
-#Average job time:                  14s       0.23m     0.00h    0.00d
-#Longest job:                      305s       5.08m     0.08h    0.00d
-#Submission to last job:           305s       5.08m     0.08h    0.00d
+#Completed: 5821 of 5821 jobs
+#Average job time:                  14s       0.24m     0.00h    0.00d
+#Longest job:                      327s       5.45m     0.09h    0.00d
+#Submission to last job:           327s       5.45m     0.09h    0.00d
 
     # Load into database.  
     ssh hgwdev
@@ -1330,35 +1287,33 @@ end
     hgLoadBlastTab dm1 hgBlastTab -maxPer=1 *.tab
 
 
-# ZEBRAFISH BLASTP FOR HGNEAR (DONE 10/15/03 angie)
+# ZEBRAFISH BLASTP FOR HGNEAR (REDONE 6/17/04 angie)
     # Make Danio rerio (zebrafish) ortholog column using blastp on Ensembl.
     # First make protein database and copy it to iscratch/i
     # if it doesn't exist already:
-    cd /cluster/data/dm1/bed
-    mkdir blastp
-    cd blastp
-    wget ftp://ftp.ensembl.org/pub/current_zebrafish/data/fasta/pep/Danio_rerio.ZFISH2.pep.fa.gz 
+    ssh kkstore
+    mkdir /cluster/data/danRer1/bed/blastp
+    cd /cluster/data/danRer1/bed/blastp
+    wget ftp://ftp.ensembl.org/pub/current_zebrafish/data/fasta/pep/Danio_rerio.ZFISH3.may.pep.fa.gz 
     zcat Dan*.pep.fa.gz > ensembl.faa
-    echo "Translation:" > subs.in
-    subs -e ensembl.faa > /dev/null
     formatdb -i ensembl.faa -t ensembl -n ensembl
     ssh kkr1u00
-    if (-e /iscratch/i/dr1/blastp) then
-    rm -r /iscratch/i/dr1/blastp
+    if (-e /iscratch/i/danRer1/blastp) then
+      rm -r /iscratch/i/danRer1/blastp
     endif
-    mkdir -p /iscratch/i/dr1/blastp
-    cp /cluster/data/dr1/bed/blastp/ensembl.p?? /iscratch/i/dr1/blastp
+    mkdir -p /iscratch/i/danRer1/blastp
+    cp /cluster/data/danRer1/bed/blastp/ensembl.p?? /iscratch/i/danRer1/blastp
     iSync
 
     # Make parasol run directory 
     ssh kk
-    mkdir -p /cluster/data/dm1/bed/blastp/dr1/run/out
-    cd /cluster/data/dm1/bed/blastp/dr1/run
+    mkdir -p /cluster/data/dm1/bed/blastp/danRer1/run/out
+    cd /cluster/data/dm1/bed/blastp/danRer1/run
     # Make blast script
     cat > blastSome <<end
 #!/bin/csh
 setenv BLASTMAT /iscratch/i/blast/data
-/iscratch/i/blast/blastall -p blastp -d /iscratch/i/dr1/blastp/ensembl -i \$1 -o \$2 -e 0.005 -m 8 -b 1
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/danRer1/blastp/ensembl -i \$1 -o \$2 -e 0.005 -m 8 -b 1
 end
     chmod a+x blastSome
     # Make gensub2 file
@@ -1372,48 +1327,45 @@ end
     gensub2 split.lst single gsub spec
     para create spec
     para try, check, push, check, ...
-#Completed: 5817 of 5817 jobs
-#Average job time:                  10s       0.16m     0.00h    0.00d
-#Longest job:                      225s       3.75m     0.06h    0.00d
-#Submission to last job:           353s       5.88m     0.10h    0.00d
+#Completed: 5821 of 5821 jobs
+#Average job time:                  12s       0.20m     0.00h    0.00d
+#Longest job:                      273s       4.55m     0.08h    0.00d
+#Submission to last job:           273s       4.55m     0.08h    0.00d
 
     # Load into database.  
     ssh hgwdev
-    cd /cluster/data/dm1/bed/blastp/dr1/run/out
+    cd /cluster/data/dm1/bed/blastp/danRer1/run/out
     hgLoadBlastTab dm1 drBlastTab -maxPer=1 *.tab
 
 
-# YEAST BLASTP FOR HGNEAR (DONE 10/15/03 angie)
+# YEAST BLASTP FOR HGNEAR (REDONE 6/17/04 angie)
     # Make Saccharomyces cerevisiae (yeast) ortholog column using blastp on 
     # RefSeq.  First make protein database and copy it to iscratch/i
     # if it doesn't exist already:
-    cd /cluster/data/sc1/bed
-    mkdir blastp
-    cd blastp
+    mkdir /cluster/data/sacCer1/bed/blastp
+    cd /cluster/data/sacCer1/bed/blastp
     wget ftp://genome-ftp.stanford.edu/pub/yeast/data_download/sequence/genomic_sequence/orf_protein/orf_trans.fasta.gz
-    zcat orf_trans.fasta.gz > sgd.faa
-    echo "ORFP:|" > subs.in
-    subs -e sgd.faa > /dev/null
-    formatdb -i sgd.faa -t sgd -n sgd
+    zcat orf_trans.fasta.gz > sgdPep.faa
+    formatdb -i sgdPep.faa -t sgdPep -n sgdPep
     ssh kkr1u00
-    # Note: sc1 is a name conflict with SARS coronavirus... oh well, 
+    # Note: sacCer1 is a name conflict with SARS coronavirus... oh well, 
     # fortunately we won't be looking for homologs there.  :)
-    if (-e /iscratch/i/sc1/blastp) then
-      rm -r /iscratch/i/sc1/blastp
+    if (-e /iscratch/i/sacCer1/blastp) then
+      rm -r /iscratch/i/sacCer1/blastp
     endif
-    mkdir -p /iscratch/i/sc1/blastp
-    cp /cluster/data/sc1/bed/blastp/sgd.p?? /iscratch/i/sc1/blastp
+    mkdir -p /iscratch/i/sacCer1/blastp
+    cp /cluster/data/sacCer1/bed/blastp/sgdPep.p?? /iscratch/i/sacCer1/blastp
     iSync
 
     # Make parasol run directory 
     ssh kk
-    mkdir -p /cluster/data/dm1/bed/blastp/sc1/run/out
-    cd /cluster/data/dm1/bed/blastp/sc1/run
+    mkdir -p /cluster/data/dm1/bed/blastp/sacCer1/run/out
+    cd /cluster/data/dm1/bed/blastp/sacCer1/run
     # Make blast script
     cat > blastSome <<end
 #!/bin/csh
 setenv BLASTMAT /iscratch/i/blast/data
-/iscratch/i/blast/blastall -p blastp -d /iscratch/i/sc1/blastp/sgd -i \$1 -o \$2 -e 0.01 -m 8 -b 1
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/sacCer1/blastp/sgdPep -i \$1 -o \$2 -e 0.01 -m 8 -b 1
 end
     chmod a+x blastSome
     # Make gensub2 file
@@ -1427,14 +1379,14 @@ end
     gensub2 split.lst single gsub spec
     para create spec
     para try, check, push, check, ...
-#Completed: 5817 of 5817 jobs
+#Completed: 5821 of 5821 jobs
 #Average job time:                   4s       0.07m     0.00h    0.00d
-#Longest job:                       41s       0.68m     0.01h    0.00d
-#Submission to last job:            77s       1.28m     0.02h    0.00d
+#Longest job:                       37s       0.62m     0.01h    0.00d
+#Submission to last job:            42s       0.70m     0.01h    0.00d
 
     # Load into database.  
     ssh hgwdev
-    cd /cluster/data/dm1/bed/blastp/sc1/run/out
+    cd /cluster/data/dm1/bed/blastp/sacCer1/run/out
     hgLoadBlastTab dm1 scBlastTab -maxPer=1 *.tab
 
 
@@ -1442,13 +1394,13 @@ end
     cd ~/kent/src/hg/near/hgNear/hgNearData
     # The directory name is the dbDb.genome field, processed by 
     # hdb.c's hgDirForOrg():
-    mkdir Fruitfly
-    cp C_elegans/*.{html,ra} Fruitfly/
-    cd Fruitfly
+    mkdir D_melanogaster
+    cp C_elegans/*.{html,ra} D_melanogaster/
+    cd D_melanogaster
     mv kimLifeCycleFull.html arbLifeCycleFull.html
     mv kimLifeCycleMedian.html arbLifeCycleMedian.html
     # edit all .ra and .html files as appropriate for D. melanogaster/dm1...
-    # cvs add and check in Fruitfly/ and all .ra and .html files.
+    # cvs add and check in D_melanogaster/ and all .ra and .html files.
     # The "representatives" lines in columnDb.ra are tricky.  
     # For the median reps, I used this, edited to include an extra "-1," 
     # at each boundary between evelopmental stages (embryo -> larva, etc):
@@ -1796,7 +1748,7 @@ SEQ2_LEN=$BASE/S2.len
 
     # third run: lav -> axt
     ssh kki
-    cd /cluster/data/hg16/bed/blastz.droYak1.2004-05-22
+    cd /cluster/data/dm1/bed/blastz.droYak1.2004-05-22
     mkdir axtChrom pslChrom run.2
     cd run.2
     cat << '_EOF_' > do.csh
@@ -2011,6 +1963,420 @@ axtFilter -notQ=chrUn_random $1 \
     mv /cluster/data/dm1/zips/multizDm1DroYak1Dp1.zip .
     md5sum *.zip > md5sum.txt
 
+
+# BDGP 3.2 ANNOTATIONS (DONE 6/18/04 angie)
+    ss kksilo
+    cd /cluster/data/dm1/bed
+    mv bdgpAnnotations bdgpAnnotations.3.1
+    mkdir bdgpAnnotations.3.2
+    cd /cluster/data/dm1/bed/bdgpAnnotations.3.2
+    # No annotations for chrU or h's!  probably better that way...
+    foreach c (2L 2R 3L 3R 4 X)
+      set f = dmel_${c}_translation_r3.2.0.fasta.gz
+      wget ftp://flybase.net/genomes/Drosophila_melanogaster/current/fasta/$f
+      set f = dmel_${c}_r3.2.0.gff.gz
+      wget ftp://flybase.net/genomes/Drosophila_melanogaster/current/gff/$f
+    end
+    gunzip dmel*.gff.gz
+    # This new set is almost-but-not-quite GFF3, and all features (genes,
+    # pseudogenes, ESTs, regulatory regions, kitchen sink) are included 
+    # in one /gff file.  Perl the gene and non-coding gene parts of it into 
+    # bdgp{Gene,NonCoding}.gtf and bdgp{Gene,NonCoding}Info.tab.
+    chmod a+x ./extractGenes.pl
+    ./extractGenes.pl *.gff
+    # Sort GTF by position.
+    sort -k1,1 -k4n,5n bdgpGene.gtf > tmp
+    mv tmp bdgpGene.gtf
+    sort -k1,1 -k4n,5n bdgpNonCoding.gtf > tmp
+    mv tmp bdgpNonCoding.gtf
+
+    # Proteins:
+    zcat dmel*trans*.gz | perl -wpe 's/^>(CG\d+)(-\S+)?-P(\w)\s.*/>$1-R$3/' \
+    > bdgpGenePep.fa
+
+    # Load into test table for now -- don't want to mess up Gene Sorter 
+    # stuff that depends on bdgpGene* tables.
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/bdgpAnnotations.3.2
+    ldHgGene -gtf -genePredExt dm1 bdgpGene2 bdgpGene.gtf
+    featureBits dm1 bdgpGene
+#28262131 bases of 126527731 (22.337%) in intersection
+    featureBits dm1 bdgpGene2
+#28178241 bases of 126527731 (22.270%) in intersection
+    featureBits dm1 bdgpGene bdgpGene2
+#27813359 bases of 126527731 (21.982%) in intersection
+    # OK, looks OK.  Replace bdgpGene with bdgpGene2, reload bdgpGeneInfo,
+    # then go back up and quickly rebuild all the hgNear (Gene Sorter) 
+    # tables that depend on bdgpGene.  
+    hgsql dm1 -e 'drop table bdgpGene; alter table bdgpGene2 rename bdgpGene'
+    hgsql dm1 -e 'delete from bdgpGeneInfo'
+    hgsql dm1 -e 'load data local infile "bdgpGeneInfo.tab" into table bdgpGeneInfo'
+    # load bdgpNonCoding*
+    ldHgGene -gtf -genePredExt dm1 bdgpNonCoding bdgpNonCoding.gtf
+    hgsql dm1 -e 'delete from bdgpNonCodingInfo'
+    hgsql dm1 -e 'load data local infile "bdgpNonCodingInfo.tab" into table bdgpNonCodingInfo'
+    # load proteins
+    hgPepPred dm1 generic bdgpGenePep bdgpGenePep.fa
+
+
+# CYTOBANDS (DONE 6/15/04 angie)
+    ssh hgwdev
+    mkdir /cluster/data/dm1/bed/cytoband
+    cd /cluster/data/dm1/bed/cytoband
+    foreach c (2L 2R 3L 3R 4 X)
+      wget ftp://flybase.net/genomes/Drosophila_melanogaster/current/gnomap/cytomap-$c.tsv
+    end
+    cp /dev/null cytoBand.tab
+    foreach c (2L 2R 3L 3R 4 X)
+      grep -v '^#' cytomap-$c.tsv \
+      | awk '$3 > 0 && $2 != $3 {print "chr'$c'\t" $2 "\t" $3 "\t" $1 "\t";}' \
+      >> cytoBand.tab
+    end
+    hgsql dm1 < ~/kent/src/hg/lib/cytoBand.sql
+    hgsql dm1 -e 'load data local infile "cytoBand.tab" into table cytoBand'
+    # Normally we would just create cytoBandIdeo by select * from cytoBand --
+    # but that gives too high of a resolution for any bands to be visible!  
+    # So make a boiled-down cytoBandIdeo that just has {number, letter} 
+    # instead of {number, letter, number}.
+    perl -we 'while (<>) { \
+                chomp; @w=split(" "); \
+                if ($w[3] =~ /(\d+[A-Z]+)\d+/) { \
+                  $b = $1; \
+                } else { die "doh!" } \
+                if (! defined $lastB) { \
+                  $start = $w[1]; \
+                } elsif ($lastB ne $b) { \
+                  print "$chrom\t$start\t$end\t$lastB\n"; \
+                  $start = $w[1]; \
+                } \
+                ($chrom, $end, $lastB) = ($w[0], $w[2], $b); \
+              } \
+              print "$chrom\t$start\t$end\t$lastB\n";' cytoBand.tab \
+     > cytoBandIdeo.tab
+    hgsql dm1 -e 'create table cytoBandIdeo select * from cytoBand where 0'
+    hgsql dm1 -e 'load data local infile "cytoBandIdeo.tab" into table \
+                  cytoBandIdeo'
+    # 6/23/04: trim the entries that fall off the ends of their respective 
+    # chromosomes.
+    foreach c (`echo select chrom from chromInfo | hgsql -N dm1`)
+      set size = `echo select size from chromInfo where chrom = '"'$c'"' \
+                  | hgsql -N dm1`
+      echo $c $size
+      foreach table (cytoBand cytoBandIdeo)
+        echo delete from $table where chrom = \"$c\" and chromStart \> $size \
+        | hgsql -N dm1
+        echo update $table set chromEnd = $size where chrom = \"$c\" and \
+             chromEnd \> $size \
+        | hgsql -N dm1
+      end
+    end
+
+
+# BLASTZ ANOPHELES (DONE 6/10/04 angie)
+    # Will give human-fugu params a try... but without abridging repeats 
+    # since I don't know which are lin-spec for fly vs. mosquito, and don't 
+    # want to bother Arian or speculate.
+    ssh kksilo
+    mkdir /cluster/data/dm1/bed/blastz.anoGam1.2004-06-10
+    cd /cluster/data/dm1/bed/blastz.anoGam1.2004-06-10
+    cat << '_EOF_' > DEF
+# D.melanogaster vs. A. gambiae
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET - D. melanogaster
+SEQ1_DIR=/cluster/bluearc/drosophila/dm1/nib
+# unused: SEQ1_RMSK=
+SEQ1_SMSK=
+SEQ1_FLAG=-drosophila
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY - A. gambiae
+SEQ2_DIR=/cluster/bluearc/anoGam1/nib
+# unused: SEQ2_RMSK=
+SEQ2_SMSK=
+SEQ2_FLAG=-anopheles
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/dm1/bed/blastz.anoGam1.2004-06-10
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+
+#DEBUG=1
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    # run bash shell if you don't already:
+    bash
+    source DEF
+    mkdir run
+    ~angie/hummus/make-joblist $DEF > $BASE/run/j
+    sh ./xdir.sh
+    cd run
+    sed -e 's#^#/cluster/bin/penn/#' j > j2
+    wc -l j*
+    head j2
+    mv j2 j
+    # cluster run -- use rack 9 to avoid getting in the way of hg17.
+    ssh kk9
+    cd /cluster/data/dm1/bed/blastz.anoGam1.2004-06-10/run
+    para create j
+    para try, check, push, check, ....
+#Completed: 693 of 693 jobs
+#Average job time:                 208s       3.47m     0.06h    0.00d
+#Longest job:                      675s      11.25m     0.19h    0.01d
+#Submission to last job:          1884s      31.40m     0.52h    0.02d
+
+    # back on kksilo...
+    mkdir /cluster/data/dm1/bed/blastz.anoGam1.2004-06-10/run.1
+    cd /cluster/data/dm1/bed/blastz.anoGam1.2004-06-10/run.1
+    ~angie/hummus/do.out2lav ../DEF > j
+    # small cluster run
+    ssh kki
+    cd /cluster/data/dm1/bed/blastz.anoGam1.2004-06-10/run.1
+    para create j
+    para try, check, push, check, ....
+#Completed: 21 of 21 jobs
+#Average job time:                   5s       0.09m     0.00h    0.00d
+#Longest job:                       12s       0.20m     0.00h    0.00d
+#Submission to last job:            14s       0.23m     0.00h    0.00d
+    cd ..
+    rm -r raw
+
+    # third run: lav -> axt
+    ssh kki
+    cd /cluster/data/dm1/bed/blastz.anoGam1.2004-06-10
+    mkdir axtChrom pslChrom run.2
+    cd run.2
+    cat << '_EOF_' > do.csh
+#!/bin/csh -ef
+cd $1
+set chr = $1:t
+cat `ls -1 *.lav | sort -g` \
+| $HOME/bin/x86_64/lavToAxt stdin \
+    /cluster/bluearc/drosophila/dm1/nib /iscratch/i/anoGam1/nib stdout \
+| $HOME/bin/x86_64/axtSort stdin ../../axtChrom/$chr.axt 
+$HOME/bin/x86_64/axtToPsl ../../axtChrom/$chr.axt ../../S1.len ../../S2.len \
+  ../../pslChrom/$chr.psl
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    chmod a+x do.csh
+    cp /dev/null jobList
+    foreach d (../lav/chr*)
+      echo "do.csh $d" >> jobList
+    end
+    para create jobList
+    para try, check, push, check
+#Completed: 11 of 11 jobs
+#Average job time:                   9s       0.16m     0.00h    0.00d
+#Longest job:                       18s       0.30m     0.01h    0.00d
+#Submission to last job:            18s       0.30m     0.01h    0.00d
+
+
+# CHAIN ANOPHELES BLASTZ (DONE 6/10/04 angie)
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/dm1/bed/blastz.anoGam1.2004-06-10
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S /cluster/data/dm1/bed/blastz.anoGam1.2004-06-10/axtChrom/*.axt \
+      > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out exists out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    # Make our own linear gap file with reduced gap penalties:
+    cat << '_EOF_' > ../../chickenHumanTuned.gap
+tablesize	11
+smallSize	111
+position	1	2	3	11	111	2111	12111	32111	72111	152111	252111
+qGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+tGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
+         -linearGap=../../chickenHumanTuned.gap \
+         -verbose=0 $1 \
+  /cluster/bluearc/drosophila/dm1/nib \
+  /iscratch/i/anoGam1/nib $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+#Completed: 11 of 11 jobs
+#Average job time:                  13s       0.22m     0.00h    0.00d
+#Longest job:                       19s       0.32m     0.01h    0.00d
+#Submission to last job:            19s       0.32m     0.01h    0.00d
+
+    # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.anoGam1.2004-06-10/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    rm run1/chain/*.chain
+
+    # take a look at score distr's
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r
+      textHistogram -binSize=10000 /tmp/score.$f:t:r
+      echo ""
+    end
+
+    # Load chains into database
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blastz.anoGam1.2004-06-10/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        echo loading $c
+        hgLoadChain dm1 ${c}_chainAnoGam1 $i
+    end
+
+
+# NET ANOPHELES BLASTZ (DONE 6/10/04 angie)
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.anoGam1.2004-06-10/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+
+    # Add classification info using db tables:
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blastz.anoGam1.2004-06-10/axtChain
+    netClass -noAr noClass.net dm1 anoGam1 anopheles.net
+
+    # Make a 'syntenic' subset:
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.anoGam1.2004-06-10/axtChain
+    rm noClass.net
+    netFilter -syn anopheles.net > anophelesSyn.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blastz.anoGam1.2004-06-10/axtChain
+    netFilter -minGap=10 anopheles.net |  hgLoadNet dm1 netAnoGam1 stdin
+    netFilter -minGap=10 anophelesSyn.net | hgLoadNet dm1 netSyntenyAnoGam1 stdin
+
+
+# MAKE VSANOGAM1 DOWNLOADABLES (DONE 6/17/04 angie)
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.anoGam1.2004-06-10/axtChain
+    cp all.chain anopheles.chain
+    zip /cluster/data/dm1/zips/anopheles.chain.zip anopheles.chain
+    rm anopheles.chain
+    zip /cluster/data/dm1/zips/anopheles.net.zip anopheles.net
+
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/dm1/vsAnoGam1
+    cd /usr/local/apache/htdocs/goldenPath/dm1/vsAnoGam1
+    mv /cluster/data/dm1/zips/anopheles*.zip .
+    md5sum *.zip > md5sum.txt
+    # Copy over & edit README.txt w/pointers to chain, net formats.
+
+
+# GENERATE ANOGAM1 MAF FOR MULTIZ FROM NET (DONE 6/10/04 angie)
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.anoGam1.2004-06-10/axtChain
+    netSplit anopheles.net net
+    ssh kolossus
+    cd /cluster/data/dm1/bed/blastz.anoGam1.2004-06-10
+    mkdir axtNet
+    foreach f (axtChain/net/*)
+      set chr = $f:t:r
+      netToAxt $f axtChain/chain/$chr.chain /cluster/data/dm1/nib \
+        /cluster/data/anoGam1/nib stdout \
+      | axtSort stdin axtNet/$chr.axt
+    end
+
+    mkdir mafNet
+    foreach f (axtNet/chr*.axt)
+      set maf = mafNet/$f:t:r.ma.maf
+      axtToMaf $f \
+            /cluster/data/dm1/chrom.sizes /cluster/data/anoGam1/chrom.sizes \
+            $maf -tPrefix=dm1. -qPrefix=anoGam1.
+    end
+
+
+# MULTIZ MELANOGASTER/YAKUBA/PSEUDOOBSCURA/ANOPHELES (DONE 6/12/04 angie)
+    # put the MAFs on bluearc
+    ssh kksilo
+    mkdir -p /cluster/bluearc/multiz.flymo/myp
+    cp /cluster/data/dm1/bed/multiz.dm1droYak1dp1/myp/*.maf \
+      /cluster/bluearc/multiz.flymo/myp
+    mkdir -p /cluster/bluearc/multiz.flymo/ma
+    cp /cluster/data/dm1/bed/blastz.anoGam1.2004-06-10/mafNet/*.maf \
+      /cluster/bluearc/multiz.flymo/ma
+
+    ssh kki
+    mkdir /cluster/data/dm1/bed/multiz.dm1droYak1dp1anoGam1
+    cd /cluster/data/dm1/bed/multiz.dm1droYak1dp1anoGam1
+    mkdir mypa
+    # Wrapper script required because of stdout redirect:
+    cat << '_EOF_' > doMultiz
+#!/bin/csh
+/cluster/bin/penn/multiz $1 $2 - > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doMultiz
+    rm -f jobList
+    foreach file (/cluster/bluearc/multiz.flymo/myp/*.maf) 
+      set root=$file:t:r:r
+      echo "doMultiz /cluster/bluearc/multiz.flymo/ma/${root}.ma.maf $file /cluster/data/dm1/bed/multiz.dm1droYak1dp1anoGam1/mypa/${root}.maf" >> jobList
+    end
+    para create jobList
+    para try, check, push, check
+#Completed: 11 of 11 jobs
+#Average job time:                  25s       0.42m     0.01h    0.00d
+#Longest job:                       55s       0.92m     0.02h    0.00d
+#Submission to last job:            55s       0.92m     0.02h    0.00d
+    du -sh mypa
+#410M    mypa
+
+    # clean up bluearc
+    rm -r /cluster/bluearc/multiz.flymo
+
+    # zip it for download
+    zip -j /cluster/data/dm1/zips/multizDm1DroYak1Dp1AnoGam1.zip mypa/*.maf
+
+    # setup external files for database reference
+    ssh hgwdev
+    mkdir -p /gbdb/dm1/multizDroYak1Dp1AnoGam1
+    ln -s /cluster/data/dm1/bed/multiz.dm1droYak1dp1anoGam1/mypa/*.maf \
+      /gbdb/dm1/multizDroYak1Dp1AnoGam1
+    # load into database
+    hgLoadMaf -warn dm1 multizDroYak1Dp1AnoGam1
+    # put it out for download
+    mkdir /usr/local/apache/htdocs/goldenPath/dm1/multizDroYak1Dp1AnoGam1
+    cd /usr/local/apache/htdocs/goldenPath/dm1/multizDroYak1Dp1AnoGam1
+    mv /cluster/data/dm1/zips/multizDm1DroYak1Dp1AnoGam1.zip .
+    md5sum *.zip > md5sum.txt
+
+
 # PHASTCONS MELANOGASTER/YAKUBA/PSEUDOOBSCURA (first cut 6/1/04 acs)
 
     # make sure /cluster/bin/phast is in your path
@@ -2111,6 +2477,7 @@ mkdir -p POSTPROBS/$chrom
 gzip -c $TMP/$root.pp > POSTPROBS/$chrom/$root.pp.gz
 rm $TMP/$root.pp
 '_EOF_'
+    # << this line makes emacs coloring happy
     chmod 775 doPostProbs
 
     # Note: the --cut-params arguments above are approximate
@@ -2183,6 +2550,7 @@ chrom=`echo $root | awk -F\. '{print $1}'`
 mkdir -p PREDICTIONS/$chrom
 $PHAST/phastCons $file rev-dg.mod --rates-cut 1 --nrates 10 --viterbi PREDICTIONS/$chrom/$root.bed --score --no-post-probs --cut-params 0.030,0.015 --quiet --seqname $chrom
 '_EOF_'
+    # << this line makes emacs coloring happy
     chmod 775 doViterbi
 
     rm -f jobs.viterbi.lst
@@ -2229,3 +2597,208 @@ $PHAST/phastCons $file rev-dg.mod --rates-cut 1 --nrates 10 --viterbi PREDICTION
 #type bed 12 .
 
     # should gzip or even delete contents of SS directory when done
+
+
+# PHASTCONS MELANOGASTER/YAKUBA/PSEUDOOBSCURA/ANOPHELES (DONE 6/15/04 angie)
+    # step 1: fit phylogenetic model, with rate variation (discrete
+    # gamma model) first we need to extract the sufficient stats for
+    # the phylogenetic model from the MAFs.  In this case, we don't
+    # care about the order of the tuples (allows for much more compact
+    # representation)
+    ssh kksilo
+    mkdir /cluster/data/dm1/bed/phastCons4way
+    cd /cluster/data/dm1/bed/phastCons4way
+    mkdir unordered
+    foreach f (/cluster/data/dm1/bed/multiz.dm1droYak1dp1anoGam1/mypa/chr*.maf)
+      /cluster/bin/phast/msa_view $f --in-format MAF --out-format SS \
+            --order dm1,droYak1,dp1,anoGam1 \
+            --unordered-ss  > unordered/$f:t:r.ss
+    end
+    # aggregate for whole genome
+    ls unordered/chr*.ss > fnames
+    /cluster/bin/phast/msa_view "*fnames" -i SS \
+      --aggregate dm1,droYak1,dp1,anoGam1 -o SS --unordered-ss \
+      > all.ss
+    # estimate parameters; should be very fast in this case
+    /cluster/bin/phast/phyloFit --msa all.ss --tree "(((1,2),3),4)" \
+      --msa-format SS --subst-mod REV --nrates 10 --out-root rev-dg \
+      --output-tree
+    # make sure model looks reasonable
+    cat rev-dg.mod
+#ALPHABET: A C G T 
+#ORDER: 0
+#SUBST_MOD: REV
+#NRATECATS: 10
+#ALPHA: 1.342554
+#TRAINING_LNL: -311913607.826812
+#BACKGROUND: 0.276944 0.223186 0.223135 0.276735 
+#RATE_MAT:
+#  -0.926228    0.197669    0.496394    0.232165 
+#   0.245281   -1.090732    0.230621    0.614830 
+#   0.616100    0.230674   -1.092338    0.245564 
+#   0.232341    0.495858    0.198001   -0.926200 
+#TREE: (((1:0.056495,2:0.074413):0.111244,3:0.219007):0.288671,4:0.288671);
+
+    # Since anopheles is at such a large distance (est. divergence of 
+    # branches that became drosophila & anopheles: ~250mya, as opposed to 
+    # 35-40mya for mel-pseudo and 10-15mya for mel-yakuba), the branch length
+    # between anopheles and pseudoobscura is underestimated above.  Adam 
+    # scaled the lengths according to the published est. mya's, so 
+    # edit rev-dg.mod's TREE line to this:
+#TREE: (((1:0.058,2:0.074):0.133,3:0.200):0,4:2.66);
+
+    # beware of zero branch lengths (indicates bad topology) or very
+    # large branch lengths (much greater than one; indicates
+    # convergence problems).  Can try without --nrates or with
+    # --subst-mod HKY85 to double check (parameter estimates should be
+    # in the same ballpark, REV + dG likelihood should be a bit
+    # better).  Also can write a log file to monitor convergence
+    # (--log).  Also watch out for alpha much less than one.
+    # Sometimes it's helpful to produce a rendering of the tree using
+    # draw_tree (run on the *.nh file)
+
+    # step 2: run phastCons.  First partition the alignments into
+    # bite-sized chunks.  This time we need the ordered version of the
+    # SS format.
+    set WINSIZE=1000000
+    set WINOVERLAP=0
+    mkdir SS
+    foreach f (/cluster/data/dm1/bed/multiz.dm1droYak1dp1anoGam1/mypa/*.maf)
+      set chr=$f:t:r
+      set c=`echo $chr | sed 's/chr//'`
+      echo $f $chr $c
+      mkdir SS/$c
+      /cluster/bin/phast/msa_split $f -i MAF -o SS \
+        -O dm1,droYak1,dp1,anoGam1 -M /cluster/data/dm1/$c/$chr.fa \
+        -w ${WINSIZE},${WINOVERLAP} -r SS/$c/$chr -I 1000 -d 1 -B 5000
+    end
+
+    ssh kk
+    cd /cluster/data/dm1/bed/phastCons4way
+    cat << '_EOF_' > doPostProbs
+#!/bin/sh
+
+PHAST=/cluster/bin/phast
+TMP=/scratch/phastCons
+
+file=$1
+root=`basename $file .ss`
+chrom=`echo $root | awk -F\. '{print $1}'`
+
+mkdir -p $TMP
+$PHAST/phastCons $file rev-dg.mod --rates-cut 2 --nrates 10 --suppress-missing --cut-params 0.030,0.015 --quiet > ${TMP}/$root.pp
+mkdir -p POSTPROBS/$chrom
+gzip -c $TMP/$root.pp > POSTPROBS/$chrom/$root.pp.gz
+rm $TMP/$root.pp
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod 775 doPostProbs
+    # Note: the --cut-params arguments above are approximate
+    # likelihood estimates obtained by running phastCons *without* the
+    # --cut-params argument on four or five different windows (all
+    # gave similar results).  They may need to change for different
+    # data sets.  Careful, though: the parameter estimation procedure
+    # is a little unstable.  Be sure to create a log file and monitor
+    # for convergence.
+    rm -f jobs.lst
+    foreach f (`ls -1S SS/*/*.ss`)
+      echo './doPostProbs {check in line+ '$f'}' \
+      >> jobs.lst
+    end
+    para create jobs.lst 
+    para try ; para push ; etc....
+#Completed: 134 of 134 jobs
+#Average job time:                  31s       0.51m     0.01h    0.00d
+#Longest job:                       50s       0.83m     0.01h    0.00d
+#Submission to last job:            87s       1.45m     0.02h    0.00d
+
+    # now create wiggle track
+    # NOTE: might want to integrate with the multiz track instead of
+    # keeping separate
+    ssh kksilo
+    cd /cluster/data/dm1/bed/phastCons4way
+    mkdir wib
+    foreach dir (POSTPROBS/*)
+        echo $dir
+        set chr=$dir:t
+        zcat `ls -1 $dir/*.pp.gz | sort -t\. -k2,2n` | \
+            wigAsciiToBinary -chrom=$chr \
+            -wibFile=wib/${chr}_phastCons4way stdin
+    end
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/phastCons4way
+    hgLoadWiggle dm1 phastCons4way wib/chr*_phastCons4way.wig
+    mkdir -p /gbdb/dm1/wib
+    rm -f /gbdb/dm1/wib/*phastCons4way.wib
+    ln -s `pwd`/wib/*.wib /gbdb/dm1/wib
+    chmod 775 . wib
+    chmod 664 wib/*.wib
+
+    # step 3:  predictions of conserved elements
+    # (could do these at the same time as step 2, but we want to use
+    # different --rates-cut params)
+    ssh kk
+    cd /cluster/data/dm1/bed/phastCons4way
+    cat << '_EOF_' > doViterbi
+#!/bin/sh
+
+PHAST=/cluster/home/acs/phast/bin
+TMP=/scratch/phastCons
+
+file=$1
+root=`basename $file .ss`
+chrom=`echo $root | awk -F\. '{print $1}'`
+
+mkdir -p PREDICTIONS/$chrom
+$PHAST/phastCons $file rev-dg.mod --rates-cut 1 --nrates 10 --viterbi PREDICTIONS/$chrom/$root.bed --score --no-post-probs --cut-params 0.030,0.015 --quiet --seqname $chrom
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod 775 doViterbi
+    rm -f jobs.viterbi.lst
+    foreach f (SS/*/*.ss)
+      echo 'doViterbi {check in line+ '$f'}' >> jobs.viterbi.lst
+    end
+    para create jobs.viterbi.lst
+    para try ; para push ; etc....
+#Completed: 134 of 134 jobs
+#Average job time:                   5s       0.09m     0.00h    0.00d
+#Longest job:                        9s       0.15m     0.00h    0.00d
+#Submission to last job:            39s       0.65m     0.01h    0.00d
+
+    # Create bed track; we want to tweak the scores and the names.
+    # Scores are transformed as follows, for a reasonable-looking 
+    # bed 0-1000 "spectrum".  Let x_max be the maximum (believable) score 
+    # (here x_max  = 1827) and let x_med be the median score (here x_med =
+    # 20).  The  scores are transformed via the function f(x) = a *
+    # log x + b, s.t. f(x_med) = 300 and f(x_max) = 1000.  Solving
+    # for a and b, you obtain  b = (300 log x_max - 1000 log x_med) /
+    # (log x_max - log x_med), a = (1000 - b) / log x_max.  Here a =
+    # 232.024, b = -742.603.
+    # better done on kksilo:
+    # get max:
+    set max = `awk '{print $6;}' PREDICTIONS/*/*.bed | sort -n | tail -1`
+#1827
+    # get median:
+    set lineCount = `cat PREDICTIONS/*/*.bed | wc -l`
+    set medOffset = `expr '(' $lineCount / 2 ')' + 1`
+    set med = `awk '{print $6;}' PREDICTIONS/*/*.bed | sort -n \
+               | tail +$medOffset | head -1`
+#20
+    # b and a:
+    set b = `awk 'BEGIN {print ((300 * log('$max')) - (1000 * log('$med')));}'`
+#-742.603
+    set a = `awk 'BEGIN {print (1000 - '$b') / log('$max');}'`
+#232.024
+    sed 's/id //' PREDICTIONS/*/*.bed | \
+        awk '{printf "%s\t%s\t%s\tlod=%d\t%d\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", \
+            $1, $2, $3, $5, '$a' * log($5) + '$b', $6, $7, $8, $9, \
+            $10, $11, $12}' > all.bed
+    hgLoadBed dm1 phastCons4wayElements all.bed
+
+    # should gzip or even delete contents of SS directory when done
+
+
+# LOAD ENSEMBL GENES (NEVER MIND 6/16/04 angie)
+    # OK, never mind, Ensembl just imported the BDGP / Flybase genes.
+
+
