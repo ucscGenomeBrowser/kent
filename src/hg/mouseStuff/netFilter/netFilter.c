@@ -64,7 +64,12 @@ struct hash *tHash, *notTHash;	/* Target chromosomes. */
 struct hash *qHash, *notQHash;	/* Query chromosomes. */
 double minScore, maxScore;	/* Min/max score. */
 boolean doSyn;		/* Do synteny based filtering. */
-double minSynScore = 200000;  /* Minimum score for block to be syntenic regardless. */
+double minSynScore = 200000;  /* Minimum score for block to be syntenic 
+                               * regardless.  On average in the human/mouse
+			       * net a score of 200,000 will cover 27000 
+			       * bases including 9000 aligning bases - more
+			       * than all but the heartiest of processed
+			       * pseudogenes. */
 double minSynSize = 20000;    /* Minimum size for syntenic block. */
 double minSynAli = 10000;     /* Minimum alignment size. */
 double maxFar = 200000;  /* Maximum distance to allow synteny. */
