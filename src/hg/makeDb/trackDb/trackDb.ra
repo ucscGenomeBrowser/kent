@@ -309,6 +309,15 @@ visibility hide
 color 34,139,34
 type genePred
 
+track ncbiGeneSet
+shortLabel NCBI gene set
+longLabel NCBI $Organism 34.3 gene set.
+group x
+priority 30.10
+visibility pack
+color 10,100,15
+type genePred
+
 track genieAlt
 shortLabel AltGenie
 longLabel Genie Gene Predictions from Affymetrix
