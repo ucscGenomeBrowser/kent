@@ -670,7 +670,7 @@ if (hti == NULL)
     }
 else
     {
-    int rowOffset = hti->hasBin;
+    rowOffset = hti->hasBin;
     if (hti->isSplit)
         dyStringPrintf(query, "select * from %s_%s", chrom, rootTable);
     else
