@@ -33,7 +33,7 @@
 #include "botDelay.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.113 2004/03/17 23:02:16 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.114 2004/03/17 23:15:45 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -2910,14 +2910,21 @@ char button[64];
 char query[256];
 struct trackDb *tdb;
 char *track = getTrackName();
-int wordCount;
+int wordCount = 0;
 char *words[128];
 char *trackType = (char *) NULL;
 
 tdb = hMaybeTrackInfo(conn, track);
-wordCount = chopLine(tdb->type,words);
-if (wordCount > 0)
+/*	for some reason on Kates wigMaf tables, it doesn't return
+ *	anything ?
+ */
+if (tdb)
+    {
+    if (tdb->type)
+	wordCount = chopLine(tdb->type,words);
+    if (wordCount > 0)
 	trackType = words[0];
+}
 
 safef(query, sizeof(query), "desc %s", fullTableName);
 sr = sqlGetResult(conn, query);
