@@ -52,7 +52,8 @@
 #include "lfs.h"
 #include "mcnBreakpoints.h"
 #include "expRecord.h"
-
+#include "altGraph.h"
+#include "geneGraph.h"
 
 #define ROGIC_CODE 1	/* Please take these out.  It's *everyone's* code now. -jk */
 #define FUREY_CODE 1
@@ -860,7 +861,7 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
 	    x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
 	    w = x2-x1;
 	    if(tg->mapsSelf && tg->mapItem)
-		tg->mapItem(tg, lfs, lf->name, lf->start, lf->end, x1, y, x2-x1, lineHeight);
+		tg->mapItem(tg, lfs, lf->name, lf->start, lf->end, x1, y, (x1 == x2 ? 1 : x2-x1), lineHeight);
 	    if (isFull)
 	        {
 	        if (shades) bColor =  shades[(lf->grayIx>>1)];
@@ -4821,6 +4822,142 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
     }
 }
 
+void altGraphMapItem(struct trackGroup *tg, void *item, char *itemName, int start, int end, 
+		    int x, int y, int width, int height)
+/* create a link for each altGraph that centers it on browser with 
+   known genes, human mrnas, and intron est tracks open */
+{
+struct altGraph *ag = item;
+if(tg->visibility == tvFull)
+    {
+    printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
+    printf("HREF=\"%s?position=%s:%d-%d&mrna=full&intronEst=full&refGene=full&altGraph=full&%s\"",
+	   hgTracksName(), ag->tName, ag->tStart, ag->tEnd, cartSidUrlString(cart));
+    printf(" ALT=\"Zoom to browser coordinates of altGraph\">\n");
+    }
+}
+
+static void altGraphDraw(struct trackGroup *tg, int seqStart, int seqEnd,         
+			 struct memGfx *mg, int xOff, int yOff, int width, 
+			 MgFont *font, Color color, enum trackVisibility vis)
+/* Draws the blocks for an alt-spliced gene and the connections */
+{
+int baseWidth = seqEnd - seqStart;
+int y = yOff;
+int heightPer = tg->heightPer;
+int lineHeight = tg->lineHeight;
+int x1,x2;
+boolean isFull = (vis == tvFull);
+double scale = width/(double)baseWidth;
+int i;
+double y1, y2;
+int midLineOff = heightPer/2;
+struct altGraph *ag=NULL, *agList = NULL;
+int s =0, e=0;
+agList = tg->items;
+for(ag = agList; ag != NULL; ag = ag->next)
+    {	   
+    x1 = round((double)((int)ag->tStart-winStart)*scale) + xOff;
+    x2 = round((double)((int)ag->tEnd-winStart)*scale) + xOff;
+    if(tg->mapsSelf && tg->mapItem)
+	{
+	tg->mapItem(tg, ag, "notUsed", ag->tStart, ag->tEnd, xOff, y, width, heightPer);
+	}
+    for(i=0; i< ag->edgeCount; i++)
+	{
+        /* draw exons as boxes */
+	if( (ag->vTypes[ag->edgeStarts[i]] == ggHardStart || ag->vTypes[ag->edgeStarts[i]] == ggSoftStart)  
+	    && (ag->vTypes[ag->edgeEnds[i]] == ggHardEnd || ag->vTypes[ag->edgeEnds[i]] == ggSoftEnd)) 
+	    {
+	    s = ag->vPositions[ag->edgeStarts[i]] + ag->tStart;
+	    e = ag->vPositions[ag->edgeEnds[i]] + ag->tStart;
+	    drawScaledBox(mg, s, e, scale, xOff, y+(heightPer/2), heightPer/2, MG_BLACK);
+	    }
+	/* draw introns as arcs */
+	if( (ag->vTypes[ag->edgeStarts[i]] == ggHardEnd || ag->vTypes[ag->edgeStarts[i]] == ggSoftEnd) 
+	    && (ag->vTypes[ag->edgeEnds[i]] == ggHardStart || ag->vTypes[ag->edgeEnds[i]] == ggSoftStart))
+	    {
+	    int x1, x2;
+	    int midX;   
+	    int midY = y + heightPer/2;
+	    s = ag->vPositions[ag->edgeStarts[i]] + ag->tStart;
+	    e = ag->vPositions[ag->edgeEnds[i]] + ag->tStart;
+	    x1 = round((double)((int) s - winStart)*scale) + xOff;
+	    x2 = round((double)((int) e - winStart)*scale) + xOff;
+	    midX = (x1+x2)/2;
+	    mgDrawLine(mg, x1, midY, midX, y, MG_BLACK);
+	    mgDrawLine(mg, midX, y, x2, midY, MG_BLACK);
+	    }
+	}
+    if(isFull)
+	y += lineHeight;
+    }
+}
+
+
+void altGraphLoadItems(struct trackGroup *tg)
+/* load the altGraph data to a trackGroup */
+{
+struct sqlConnection *conn = hAllocConn();
+int rowOffSet;
+char **row;
+struct altGraph *ag=NULL, *agList=NULL;
+struct sqlResult *sr = hRangeQuery(conn, tg->mapName, chromName,
+				   winStart, winEnd, NULL, &rowOffSet);
+while((row = sqlNextRow(sr)) != NULL)
+    {
+    ag = altGraphLoad(row + rowOffSet);
+    slAddHead(&agList, ag);
+    }
+slReverse(&agList);
+sqlFreeResult(&sr);
+tg->items = agList;
+}
+
+void altGraphFreeItems(struct trackGroup *tg)
+/* free up tha altGraph items in tg->items */
+{
+altGraphFreeList(tg->items);
+}
+
+static int altGraphFixedTotalHeight(struct trackGroup *tg, enum trackVisibility vis)
+/* set track height to 2 * font size */
+{
+tg->lineHeight  = 2 * mgFontLineHeight(tl.font)+1;
+tg->heightPer = tg->lineHeight -1;
+switch (vis)
+    {
+    case tvFull:
+	tg->height = slCount(tg->items) * tg->lineHeight;
+	break;
+    case tvDense:
+	tg->height = tg->lineHeight;
+	break;
+    }
+return tg->height;
+}
+
+char *altGraphItemName(struct trackGroup *tg, void *item)
+/* returns the number of alternative splice paths as a string name */
+{
+char buff[32];
+struct altGraph *ag = item;
+int numSplicings = altGraphNumAltSplices(ag);
+snprintf(buff, sizeof(buff), "%d", numSplicings );
+return (cloneString(buff));
+}
+
+void altGraphMethods(struct trackGroup *tg)
+/* setup special methods for altGraph track */
+{
+tg->drawItems = altGraphDraw;
+tg->loadItems = altGraphLoadItems;
+tg->freeItems = altGraphFreeItems;
+tg->totalHeight = altGraphFixedTotalHeight;
+tg->itemName = altGraphItemName;
+tg->mapsSelf = TRUE;
+tg->mapItem = altGraphMapItem;
+}
 
 static void wiggleLinkedFeaturesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
         struct memGfx *mg, int xOff, int yOff, int width, 
@@ -6869,7 +7006,7 @@ registerTrackHandler("rosetta", rosettaMethods);
 registerTrackHandler("affy", affyMethods);
 registerTrackHandler("wiggle", wiggleMethods );
 registerTrackHandler("ancientR", ancientRMethods );
-
+registerTrackHandler("altGraph", altGraphMethods );
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
 loadFromTrackDb(&tGroupList);
@@ -7268,4 +7405,5 @@ if (cgiVarExists("hgt.reset"))
 cartHtmlShell("UCSC Human Genome Browser v8", doMiddle, hUserCookie(), excludeVars);
 return 0;
 }
+
 
