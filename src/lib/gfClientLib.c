@@ -623,7 +623,7 @@ for (frame=0; frame<3; ++frame)
     {
     for (clump = clumps[frame]; clump != NULL; clump = clump->next)
 	{
-	gfClumpDump(gfs[frame], clump, uglyOut);
+	// gfClumpDump(gfs[frame], clump, uglyOut);
 	clumpToHspRange(clump, qSeq, tileSize, frame, &rangeList);
 	}
     }
@@ -689,6 +689,10 @@ if (t3Hash != NULL)
 return pt - seq->dna;
 }
 
+int t3Frame(char *pt, struct hash *t3Hash)
+{
+}
+
 void gfSavePslOrPslx(char *chromName, int chromSize, int chromOffset,
 	struct ffAli *ali, struct dnaSeq *genoSeq, struct dnaSeq *otherSeq, 
 	boolean isRc, enum ffStringency stringency, int minMatch, FILE *out,
@@ -705,10 +709,8 @@ DNA *needle = otherSeq->dna;
 DNA *hay = genoSeq->dna;
 int nStart = ali->nStart - needle;
 int nEnd = right->nEnd - needle;
-int hStart = ali->hStart - hay + chromOffset;
-int hEnd = right->hEnd - hay + chromOffset;
-int nSize = nEnd - nStart;
-int hSize = hEnd - hStart;
+int hStart = t3Offset(ali->hStart, genoSeq, t3Hash);
+int hEnd = t3Offset(right->hEnd, genoSeq, t3Hash);
 int nInsertBaseCount = 0;
 int nInsertCount = 0;
 int hInsertBaseCount = 0;
@@ -728,12 +730,10 @@ struct trans3 *t3 = NULL;
 /* Count up matches, mismatches, inserts, etc. */
 for (ff = ali; ff != NULL; ff = nextFf)
     {
-    int hStart;
     nextFf = ff->right;
     blockSize = ff->nEnd - ff->nStart;
     np = ff->nStart;
     hp = ff->hStart;
-    hStart = hp - hay;
     for (i=0; i<blockSize; ++i)
 	{
 	n = np[i];
@@ -764,7 +764,8 @@ for (ff = ali; ff != NULL; ff = nextFf)
     }
 
 /* See if it looks good enough to output. */
-milliBad = calcMilliBad(nEnd - nStart, hEnd - hStart, nInsertCount, hInsertCount, 
+milliBad = calcMilliBad(nEnd - nStart, hEnd - hStart,
+	nInsertCount, hInsertCount, 
 	matchCount, repMatch, mismatchCount, stringency == ffCdna);
 passIt = (milliBad < 100 && matchCount >= minMatch);
 if (passIt)
@@ -794,6 +795,16 @@ if (passIt)
     fprintf(out, "\t");
     for (ff = ali; ff != NULL; ff = ff->right)
 	fprintf(out, "%d,", t3Offset(ff->hStart, genoSeq, t3Hash) + chromOffset);
+    if (t3Hash != NULL)
+        {
+	struct trans3 *t3 = hashMustFindVal(t3Hash, genoSeq->name);
+	fprintf(out, "\t");
+	for (ff = ali; ff != NULL; ff = ff->right)
+	    {
+	    aaSeq *seq = whichSeqIn(t3->trans, 3, ff->hStart);
+	    fprintf(out, "%d,", ptArrayIx(seq, t3->trans, 3));
+	    }
+	}
     fprintf(out, "\n");
     if (ferror(out))
 	{

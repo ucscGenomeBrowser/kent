@@ -284,7 +284,6 @@ struct gfSavePslxData data;
 
 data.f = f;
 data.t3Hash = t3Hash;
-uglyf("\nTriple search %s on %c strand\n", qSeq->name, (isRc ? '-' : '+'));
 gfFindAlignAaTrans3Clumps(gfs, qSeq, t3Hash, isRc, ffCdna, minBases, gfSavePslx, &data);
 }
 
@@ -304,6 +303,9 @@ struct hash *t3Hash = NULL;
 
 uglyf("Blatx %d sequences in database, %d files in query\n", slCount(untransList), queryCount);
 
+if (!noHead)
+    pslWriteHead(pslOut);
+
 for (isRc = FALSE; isRc <= 1; ++isRc)
     {
     /* Initialize local pointer arrays to NULL to prevent surprises. */
@@ -314,12 +316,10 @@ for (isRc = FALSE; isRc <= 1; ++isRc)
 	}
 
     t3List = seqListToTrans3List(untransList, dbSeqLists, &t3Hash);
-    uglyf("Translated database.\n");
     for (frame = 0; frame < 3; ++frame)
 	{
 	gfs[frame] = gfIndexSeq(dbSeqLists[frame], minMatch, maxGap, tileSize, repMatch, ooc, TRUE);
 	}
-    uglyf("indexed database.\n");
 
     for (i=0; i<queryCount; ++i)
         {
