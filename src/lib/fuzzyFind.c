@@ -106,6 +106,7 @@ int i;
 
 dnaBaseHistogram(dna, dnaSize, histo);
 total = histo[0] + histo[1] + histo[2] + histo[3];
+if (total == 0) total = 1;
 for (i=0; i<4; ++i)
     freq[i] = (double)histo[i] / total;
 }
@@ -267,6 +268,12 @@ int ffCalcCdnaGapPenalty(int hGap, int nGap)
 /* Return gap penalty for given h and n gaps. */
 {
 int acc = 2;
+if (hGap > 100000)	/* Discourage really long introns. */
+    {
+    acc += (hGap - 100000)/3000;
+    if (hGap > 500000)
+        acc += (hGap - 500000)/2000;
+    }
 if (hGap < 0)   /* Discourage jumping back in haystack. */
     {
     hGap = -8*hGap;
@@ -281,8 +288,8 @@ if (nGap < 0)   /* Jumping back in needle gets rid of previous alignment. */
 return acc + digitsBaseTwo(hGap+nGap);
 }
 
-static int calcNormalGap(int hGap, int nGap)
-/* Figure out gap penalty */
+static int calcTightGap(int hGap, int nGap)
+/* Figure out gap penalty using tight model (gaps bad!) */
 {
 if (hGap == 0 && nGap == 0)
     return 0;
@@ -302,6 +309,28 @@ else
     }
 }
 
+static int calcLooseGap(int hGap, int nGap)
+/* Figure out gap penalty using loose model (gaps not so bad) */
+{
+if (hGap == 0 && nGap == 0)
+    return 0;
+else
+    {
+    int overlap = min(hGap, nGap);
+    int penalty = 8;
+    if (overlap < 0)
+	overlap = 0;
+
+    if (hGap < 0)
+	hGap = -8*hGap;
+    if (nGap < 0)
+	nGap = -2*nGap;
+    penalty += log(hGap-overlap+1) + log(nGap-overlap+1);
+    return penalty;
+    }
+}
+
+
 int ffCalcGapPenalty(int hGap, int nGap, enum ffStringency stringency)
 /* Return gap penalty for given h and n gaps. */
 {
@@ -310,8 +339,12 @@ switch (stringency)
     case ffCdna:
 	return ffCalcCdnaGapPenalty(hGap, nGap);
     case ffTight:
+	return calcTightGap(hGap,nGap);
     case ffLoose:
-	return calcNormalGap(hGap,nGap);
+	return calcLooseGap(hGap,nGap);
+    default:
+        errAbort("Unknown stringency type %d", stringency);
+	return 0;
     }
 }
 
@@ -342,7 +375,7 @@ while (--count >= 0)
     {
     int len = ali->hEnd - ali->hStart;
     struct ffAli *right = ali->right;
-    oneScore = ffScoreMatch(ali->hStart, ali->nStart, len);
+    oneScore = dnaScoreMatch(ali->hStart, ali->nStart, len);
     score += oneScore;
     if (count > 0)  /* Calculate gap penalty */
         score -= ffGapPenalty(ali, right,stringency);
@@ -351,20 +384,23 @@ while (--count >= 0)
 return score;
 }
 
-int ffScore(struct ffAli *ali, enum ffStringency stringency)
+int ffScoreSomething(struct ffAli *ali, enum ffStringency stringency,
+   boolean isProt)
 /* Score alignment. */
 {
 int score = 0;
 int oneScore;
+int (*scoreMatch)(char *a, char *b, int size);
 
 if (ali == NULL)
     return -0x7FFFFFFF;
+scoreMatch = (isProt ? aaScoreMatch : dnaScoreMatch );
 while (ali->left != NULL) ali = ali->left;
 while (ali != NULL)
     {
     int len = ali->hEnd - ali->hStart;
     struct ffAli *right = ali->right;
-    oneScore = ffScoreMatch(ali->hStart, ali->nStart, len);
+    oneScore = scoreMatch(ali->hStart, ali->nStart, len);
     score += oneScore;
     if (right)  /* Calculate gap penalty */
         {
@@ -375,6 +411,12 @@ while (ali != NULL)
 return score;
 }
 
+int ffScore(struct ffAli *ali, enum ffStringency stringency)
+/* Score alignment. */
+{
+return ffScoreSomething(ali, stringency, FALSE);
+}
+
 int ffScoreCdna(struct ffAli *ali)
 /* Figure out overall score of this alignment. 
  * Perfect match is number of bases in needle. */
@@ -382,6 +424,11 @@ int ffScoreCdna(struct ffAli *ali)
 return ffScore(ali, ffCdna);
 }
 
+int ffScoreProtein(struct ffAli *ali, enum ffStringency stringency)
+/* Figure out overall score of protein alignment. */
+{
+return ffScoreSomething(ali, stringency, TRUE);
+}
 
 static boolean leftNextMatch(struct ffAli *ali, DNA *ns, DNA *ne, DNA *hs, DNA *he, 
     int gapPenalty, int maxSkip)
@@ -521,7 +568,7 @@ for (;;)
         if (windowSize > nSize) windowSize = nSize;
         if (windowSize > hSize) windowSize = hSize;
         if (windowSize > 0)
-            score = ffScoreMatch(ns-windowSize, hs-windowSize, windowSize); 
+            score = dnaScoreMatch(ns-windowSize, hs-windowSize, windowSize); 
         else
             score = -1;
 
@@ -594,7 +641,7 @@ for (;;)
         if (windowSize > nSize) windowSize = nSize;
         if (windowSize > hSize) windowSize = hSize;
         if (windowSize > 0)
-            score = ffScoreMatch(ne, he, windowSize); 
+            score = dnaScoreMatch(ne, he, windowSize); 
         else
             score = -1;
 
@@ -783,7 +830,7 @@ for (;;)
         int gapScore;
         int matchScore;
         gapScore = -ffCdnaGapPenalty(left, a);
-        matchScore = ffScoreMatch(left->nEnd, left->hEnd, gapSize);
+        matchScore = dnaScoreMatch(left->nEnd, left->hEnd, gapSize);
         if (matchScore > gapScore)
             {
             /* Make current cover left. RemoveEmpty will take
@@ -920,6 +967,7 @@ return aliList;
 
 boolean expandThroughNRight(struct ffAli *ali, DNA *needleStart, DNA *needleEnd,
     DNA *hayStart, DNA *hayEnd)
+/* Expand through up to three N's to the left. */
 {
 DNA *nEnd = ali->nEnd;
 DNA *hEnd = ali->hEnd;
@@ -929,7 +977,9 @@ while (nEnd < needleEnd && hEnd < hayEnd)
     {
     n = *nEnd;
     h = *hEnd;
-    if (n == h || n == 'n' || h == 'n')
+    if ((n == h) ||
+	(n == 'n' && (nEnd + 3 >= needleEnd || nEnd[1] != 'n' || nEnd[2] != 'n' || nEnd[3] != 'n')) ||
+	(h == 'n' && (hEnd + 3 >= hayEnd || hEnd[1] != 'n' || hEnd[2] != 'n' || hEnd[3] != 'n')))
         {
         nEnd += 1;
         hEnd += 1;
@@ -945,6 +995,7 @@ return expanded;
 
 boolean expandThroughNLeft(struct ffAli *ali, DNA *needleStart, DNA *needleEnd,
     DNA *hayStart, DNA *hayEnd)
+/* Expand through up to three N's to the left. */
 {
 DNA *nStart = ali->nStart-1;
 DNA *hStart = ali->hStart-1;
@@ -954,7 +1005,9 @@ while (nStart >= needleStart && hStart >= hayStart)
     {
     n = *nStart;
     h = *hStart;
-    if (n == h || n == 'n' || h == 'n')
+    if ((n == h) ||
+	(n == 'n' && (nStart - 3 < needleStart || nStart[-1] != 'n' || nStart[-2] != 'n' || nStart[-3] != 'n')) ||
+	(h == 'n' && (hStart - 3 < hayStart || hStart[-1] != 'n' || hStart[-2] != 'n' || hStart[-3] != 'n')))
         {
         nStart -= 1;
         hStart -= 1;
@@ -1371,11 +1424,6 @@ void lumpProtoGenes(struct protoGene **pList,
 {
 struct protoGene *a, *b;
 
-    {
-    int count = 0;
-    for (a = *pList; a != NULL; a = a->right)
-	++count;
-    }
 while (bestMerger(*pList, stringency, ns, hs, &a, &b))
     {
     mergeProtoGenes(pList, a, b);
@@ -1516,7 +1564,9 @@ while ((proto = lumpHits(&hitList, ns, hs)) != NULL)
     ++protoCount;
     }
 if (protoCount > 200)
+    {
     thinProtoList(&protoList, 200);
+    }
 protoList = (struct protoGene *)ffMakeRightLinks((struct ffAli*)protoList);
 
 
@@ -1543,10 +1593,10 @@ static double rwFreq[4];
 static boolean rwIsCdna;
 static boolean rwCheckGoodEnough;
 
-static struct ffAli *rwFindTilesBetween(DNA *ns, DNA *ne, DNA *hs, DNA *he, double stringency)
+static struct ffAli *rwFindTilesBetween(DNA *ns, DNA *ne, DNA *hs, DNA *he, 
+    enum ffStringency stringency, double probMax)
 /* Search for more or less regularly spaced exact matches that are
- * in the right order. If rwCheckAbort is set and alignment is 
- * bad return NULL, otherwise return best alignment. */
+ * in the right order. */
 {
 int searchOffset;
 int endTileOffset;
@@ -1563,7 +1613,7 @@ double tileProbOne;
 
 possibleTiles = (haySize - nextPowerOfFour(needleSize));
 if (possibleTiles < 1) possibleTiles = 1;
-tileProbOne = stringency/possibleTiles;
+tileProbOne = probMax/possibleTiles;
 
 searchOffset = 0;
 endTileOffset = 0;
@@ -1620,19 +1670,45 @@ if (rwCheckGoodEnough)
 return bestAli;
 }
 
+static struct ffAli *exactAli(DNA *ns, DNA *ne, DNA *hs, DNA *he)
+/* Return alignment based on exact match. */
+{
+int exactOffset;
+if (exactFind(ns, ne-ns, hs, he-hs, &exactOffset))
+    {
+    struct ffAli *ali = ffNeedMem(sizeof(*ali));
+    ali->nStart = ns;
+    ali->nEnd = ne;
+    ali->hStart = hs + exactOffset;
+    ali->hEnd = ali->hStart + (ne - ns);
+    if (ali->hEnd > he)
+        ali->hEnd = he;
+    return ali;
+    }
+else
+    return NULL;
+}
+
 static struct ffAli *recursiveWeave(DNA *ns, DNA *ne, DNA *hs, DNA *he, 
-    double stringency, int level)
+    enum ffStringency stringency, double probMax, int level, int orientation)
 /* Find a set of tiles, then recurse to find set of tiles between the tiles
  * at somewhat lower stringency. */
 {
 struct ffAli *left = NULL, *right = NULL, *aliList;
 
-aliList = rwFindTilesBetween(ns, ne, hs, he, stringency);
+if ((left = exactAli(ns, ne, hs, he)) != NULL)
+    return left;
+if (stringency == ffExact)
+    return NULL;
+
+aliList = rwFindTilesBetween(ns, ne, hs, he, stringency, probMax);
 if (aliList != NULL)
     {
     DNA *lne, *rns, *lhe, *rhs;
     int ndif, hdif;
     right = aliList;
+    if (orientation == 0)
+        orientation = ffIntronOrientation(aliList);
     for (;;)
         {
         /* Figure out the end points to recurse to. */
@@ -1661,8 +1737,85 @@ if (aliList != NULL)
         /* If a big enough gap left recurse. */
         if (ndif >= 5 && hdif >= 5)
             {
-            struct ffAli *newLeft, *newRight;
-            newLeft = recursiveWeave(lne, rns, lhe, rhs, stringency*2, level+1);
+            struct ffAli *newLeft = NULL, *newRight;
+
+#ifdef NICE_TRY_BUT
+	    /* On short exons first try to find exact match that includes 
+	     * cannonical splice sites, or part of cannonical splice sites. */
+	    if (ndif <= 10)
+	        {
+		DNA l1=0,l2=0,r1=0,r2=0;
+		int creep;
+		for (creep=2; creep <= 1 && newLeft == NULL; --creep)
+		    {
+		    if (left)
+			{
+			l1 = lne[-2];
+			l2 = lne[-1];
+			if (orientation >= 0)
+			    {
+			    if (creep > 1)
+				lne[-2] = 'a';
+			    lne[-1] = 'g';
+			    }
+			else
+			    {
+			    if (creep > 1)
+				lne[-2] = 'a';
+			    lne[-1] = 'c';
+			    }
+			lne -= creep;
+			}
+		    if (right)
+			{
+			r1 = rns[0];
+			r2 = rns[1];
+			if (orientation >= 0)
+			    {
+			    rns[0] = 'g';
+			    if (creep > 1)
+				rns[1] = 't';
+			    }
+			else
+			    {
+			    rns[0] = 'c';
+			    if (creep > 1)
+				rns[1] = 't';
+			    }
+			rns += creep;
+			}
+		    if ((newLeft = exactAli(lne, rhs, lhe, rhs)) != NULL)
+			{
+			if (left)
+			    {
+			    newLeft->nStart += creep;
+			    newLeft->hStart += creep;
+			    }
+			if (right)
+			    {
+			    newLeft->nEnd -= creep;
+			    newLeft->hEnd -= creep;
+			    }
+			}
+		    if (left)
+			{
+			lne[0] = l1;
+			lne[1] = l2;
+			lne += creep;
+			}
+		    if (right)
+			{
+			rns -= creep;
+			rns[0] = r1;
+			rns[1] = r2;
+			}
+		    }
+		}
+	    if (newLeft == NULL && ndif >= 5)
+#endif /* NICE_TRY_BUT */
+
+	    newLeft = recursiveWeave(lne, rns, lhe, rhs, stringency, probMax*2, level+1, 
+		orientation);
             if (newLeft != NULL)
                 {
                 /* Insert new tiles between left and right. */
@@ -1703,7 +1856,7 @@ static struct ffAli *findWovenTiles(DNA *ns, DNA *ne, DNA *hs, DNA *he, enum ffS
 struct ffAli *bestAli;
 int haySize = he - hs;
 int needleSize = ne - ns;
-static double tileStrinProbMult[] = { 0.0001, 0.001, 0.001, 0.5, };
+static double tileStrinProbMult[] = { 0.0001, 0.0005, 0.0005, 0.5, };
                                     /* exact  cDNA        tight    loose */
 if (needleSize < 2 || haySize < 2)  /* Be serious man! */
     return NULL;
@@ -1714,32 +1867,39 @@ makeFreqTable(hs, haySize, rwFreq);
 rwIsCdna = (stringency == ffCdna);
 rwCheckGoodEnough = (stringency == ffTight || stringency == ffCdna);
 
-bestAli = recursiveWeave(ns, ne, hs, he, tileStrinProbMult[stringency], 1);
+bestAli = recursiveWeave(ns, ne, hs, he, stringency, tileStrinProbMult[stringency], 1, 0);
 
 return bestAli;
 }
 
-static int scoreIntron(DNA a, DNA b, DNA y, DNA z)
+static int scoreIntron(DNA a, DNA b, DNA y, DNA z, int orientation)
 /* Return a better score the closer an intron is to
  * consensus. */
 {
 int score = 0;
 int revScore = 0;
 
-if (a == 'g') ++score;
-if (b == 't') ++score;
-if (y == 'a') ++score;
-if (z == 'g') ++score;
+if (orientation >= 0)
+    {
+    if (a == 'g') ++score;
+    if (b == 't') ++score;
+    if (y == 'a') ++score;
+    if (z == 'g') ++score;
+    }
 
-if (a == 'c') ++revScore;
-if (b == 't') ++revScore;
-if (y == 'a') ++revScore;
-if (z == 'c') ++revScore;
+if (orientation <= 0)
+    {
+    if (a == 'c') ++revScore;
+    if (b == 't') ++revScore;
+    if (y == 'a') ++revScore;
+    if (z == 'c') ++revScore;
+    }
 
 return score > revScore ? score : revScore;
 }
 
-static int slideIntron(struct ffAli *left, struct ffAli *right)
+
+static int slideIntron(struct ffAli *left, struct ffAli *right, int orientation)
 /* Slides space between alignments if possible to match
  * intron consensus better.  Returns how much it slid intron. */
 {
@@ -1781,7 +1941,7 @@ while (nLeft > nLeftEnd)
    intron score as you go. */
 while (nRight < nRightEnd)
     {
-    curScore = scoreIntron(hLeft[0], hLeft[1], hRight[-2], hRight[-1]);
+    curScore = scoreIntron(hLeft[0], hLeft[1], hRight[-2], hRight[-1], orientation);
     if (curScore > bestScore)
         {
         bestScore = curScore;
@@ -1821,12 +1981,13 @@ void ffSlideIntrons(struct ffAli *ali)
 {
 struct ffAli *left = ali, *right;
 int slid;
+boolean orient = ffIntronOrientation(ali);
 
 if (left == NULL)
     return;
 while((right = left->right) != NULL)
     {
-    slid = slideIntron(left, right);
+    slid = slideIntron(left, right, orient);
     left = right;
     }
 }
@@ -1841,21 +2002,6 @@ struct ffAli *bestAli;
 int matchSize;
 int exactOffset;
 int needleSize = ne-ns;
-
-/* First check for an exact match and quickly return it if it exists. */
-if (exactFind(ns, ne-ns, hs, he-hs, &exactOffset))
-    {
-    struct ffAli *ali = ffNeedMem(sizeof(*ali));
-    ali->nStart = ns;
-    ali->nEnd = ne;
-    ali->hStart = hs + exactOffset;
-    ali->hEnd = ali->hStart + needleSize;
-    if (ali->hEnd > he)
-        ali->hEnd = he;
-    return ali;
-    }
-if (stringency == ffExact)
-    return NULL;
 
 matchSize = nextPowerOfFour(he-hs)+1;
 if (matchSize < midTileMinSize[stringency])
@@ -1931,6 +2077,9 @@ struct ffAli *ffFind(DNA *needleStart, DNA *needleEnd, DNA *hayStart, DNA *hayEn
 {
 struct ffAli *bestAli;
 int status;
+
+assert(needleStart <= needleEnd);
+assert(hayStart <= hayEnd);
 
 ffMemInit();
 dnaUtilOpen();

@@ -60,7 +60,7 @@ if (wordCount == 21)
     }
 else
     {
-    errAbort("Bad line %d of %s", lf->lineIx, lf->fileName);
+    errAbort("Bad line %d of %s, %d words expecting %d", lf->lineIx, lf->fileName, wordCount, 21);
     return NULL;
     }
 }

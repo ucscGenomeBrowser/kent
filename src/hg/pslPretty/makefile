@@ -9,4 +9,4 @@ O = pslPretty.o
 
 pslPretty: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/pslPretty $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/pslPretty
+#	strip $(HOME)/bin/$(MACHTYPE)/pslPretty

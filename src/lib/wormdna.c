@@ -13,6 +13,7 @@
 #include "wormdna.h"
 #include "cda.h"
 #include "sig.h"
+#include "dystring.h"
 
 static char *jkwebDir = NULL;
 
@@ -698,6 +699,56 @@ gdfFreeGene(g);
 return TRUE;
 }
 
+boolean getWormGeneExonDna(char *name, DNA **retDna)
+/* Get the DNA associated with a gene, without introns.  */
+{
+struct gdfGene *g;
+struct slName *syn = NULL;
+long lstart, lend;
+int start, end;
+int dnaSize;
+DNA *dna;
+int i;
+struct gdfDataPoint *pt = NULL;
+struct wormGdfCache *gdfCache;
+struct dyString *dy = newDyString(1000);
+/* Translate biologist type name to cosmid.N name */
+if (wormIsGeneName(name))
+    {
+    syn = wormGeneToOrfNames(name);
+    if (syn != NULL)
+        name = syn->name;
+    }
+if (strncmp(name, "g-", 2) == 0)
+    gdfCache = &wormGenieGdfCache;
+else
+    gdfCache = &wormSangerGdfCache;
+if ((g = wormGetSomeGdfGene(name, gdfCache)) == NULL)
+    return FALSE;
+gdfGeneExtents(g, &lstart, &lend);
+start = lstart;
+end = lend;
+/*wormClipRangeToChrom(chromIds[g->chromIx], &start, &end);*/
+dnaSize = end-start;
+dna = wormChromPart(chromIds[g->chromIx], start, dnaSize);
+
+gdfOffsetGene(g, -start);
+if (g->strand == '-')
+    {
+    reverseComplement(dna, dnaSize);
+    gdfRcGene(g, dnaSize);
+    }
+pt = g->dataPoints;
+for (i=0; i<g->dataCount; i += 2)
+    {
+    dyStringAppendN(dy, (dna+pt[i].start), (pt[i+1].start - pt[i].start));
+    }
+*retDna = cloneString(dy->string);
+dyStringFree(&dy);
+gdfFreeGene(g);
+return TRUE;
+}
+
 static void makeChromFileName(char *chromId, char *buf)
 {
 getDirs();
@@ -858,7 +909,7 @@ char *dot = strrchr(name, '.');
 if (dot == NULL)
     return FALSE;
 toUpperN(name, dot-name);   /* First part always upper case. */
-if (dot[1] == 'N')          /* Nameless cluster - just leave following digits be. */
+if (!isdigit(dot[1]))          /* Nameless cluster - just leave following digits be. */
     return TRUE;
 else
     tolowers(dot+1);        /* Suffix is lower case. */
@@ -956,7 +1007,9 @@ if (wormIsGeneName(name))
     {
     syn = wormGeneToOrfNames(name);
     if (syn != NULL)
+	{
         name = syn->name;
+	}
     }
 if (wormFixupOrfName(name)) /* See if ORF, and if so make nice. */
     {
@@ -1125,7 +1178,7 @@ struct gdfGene *wormGdfGenesInRange(char *chrom, int start, int end,
     struct wormGdfCache *geneFinder)
 /* Get list of genes in range according to given gene finder. */
 {
-char *dir;
+char *dir = NULL;
 struct gdfGene *gdfList = NULL, *gdf;
 struct wormFeature *nameList, *name;
 

@@ -3,14 +3,15 @@
 #include "common.h"
 #include "sig.h"
 #include "wormdna.h"
+#include "hash.h"
 
 static char *inNames[] = {
-    "i.gff",
-    "ii.gff",
-    "iii.gff",
-    "iv.gff",
-    "v.gff",
-    "x.gff",
+    "CHROMOSOME_I.gff",
+    "CHROMOSOME_II.gff",
+    "CHROMOSOME_III.gff",
+    "CHROMOSOME_IV.gff",
+    "CHROMOSOME_V.gff",
+    "CHROMOSOME_X.gff",
 };
 
 static char *chromNames[] = {
@@ -23,6 +24,18 @@ struct exon
     int start, end;
     };
 
+int cmpExons(const void *va, const void *vb)
+/* Compare two exons to sort by where they first start. */
+{
+const struct exon *a = *((struct exon **)va);
+const struct exon *b = *((struct exon **)vb);
+int dif = a->start - b->start;
+if (a == 0)
+    dif = a->end - b->end;
+return dif;
+}
+
+
 struct gene
     {
     struct gene *next;
@@ -34,6 +47,7 @@ struct gene
     };
 
 int cmpGenes(const void *va, const void *vb)
+/* Compare two genes to sort by where they first start. */
 {
 const struct gene *a = *((struct gene **)va);
 const struct gene *b = *((struct gene **)vb);
@@ -96,16 +110,26 @@ for (exon = gene->exons; exon != NULL; exon = exon->next)
     }
 }
 
-char *unquote(char *s)
+char *unquote(char *s, int lineCount, char *fileName)
 /* Remove opening and closing quotes from string s. */
 {
 int len =strlen(s);
 if (s[0] != '"')
-    errAbort("Expecting begin quote on %s\n", s);
+    errAbort("Expecting begin quote on %s line %d of %s\n", s, lineCount, fileName);
 if (s[len-1] != '"')
-    errAbort("Expecting end quote on %s\n", s);
+    errAbort("Expecting end quote on %s line %d of %s\n", s, lineCount, fileName);
 s[len-1] = 0;
 return s+1;
+}
+
+char *unquoteSequence(char *s, int lineCount, char *fileName)
+/* Remove quotes and preceding 'Sequence' from string. */
+{
+char *header = "Sequence ";
+s = trimSpaces(s);
+if (!startsWith(header, s))
+    errAbort("Expecting Sequence before gene name line %d of %s", lineCount, fileName);
+return unquote(s + strlen(header), lineCount, fileName);
 }
 
 void procOne(char *inName, UBYTE chromIx, FILE *c2g, FILE *gl)
@@ -115,63 +139,62 @@ struct gene *geneList = NULL, *g = NULL;
 struct exon *exon;
 char line[1024];
 int lineCount = 0;
-char *words[256];
+char *words[128];
 int wordCount;
+int exonCount = 0;
 char *type;
+char *source;
 char *geneName;
+struct hash *geneHash = newHash(15);
 
 printf("Processing %s\n", inName);
 while (fgets(line, sizeof(line), in))
     {
     ++lineCount;
-    wordCount = chopLine(line, words);
+    if (line[0] == '#')
+        continue;
+    wordCount = chopTabs(line, words);
     if (wordCount > 0)
         {
-        if (wordCount < 10)
-            errAbort("Short line %d of %s\n", lineCount, inName);
+        if (wordCount < 9)
+	    continue;
+	source = words[1];
         type = words[2];
-        geneName = unquote(words[9]);
-        if (sameString(type, "sequence"))
+	if (sameString(source, "Genomic_cannonical") || sameString(source, "Link"))
+	    continue;
+        if (sameString(type, "exon"))
             {
-            if (g != NULL)
-                {
-                slAddHead(&geneList, g);
-                }
-            AllocVar(g);
-            g->name = cloneString(geneName);
-            g->start = atoi(words[3]);
-            g->end = atoi(words[4]);
-            g->strand = words[6][0];
-            g->chromIx = chromIx;
-            g->exons = NULL;
-            }
-        else if (sameString(type, "exon"))
-            {
-            if (!sameString(g->name, geneName) )
-                {
-                errAbort("exon of %s follows sequence of %s line %d of %s",
-                    words[8], g->name, lineCount, inName);
-                }
+	    ++exonCount;
+	    geneName = unquoteSequence(words[8], lineCount, inName);
+	    if ((g = hashFindVal(geneHash, geneName)) == NULL)
+	        {
+		AllocVar(g);
+		slAddHead(&geneList, g);
+		hashAddSaveName(geneHash, geneName, g, &g->name);
+		g->start = atoi(words[3]);
+		g->end = atoi(words[4]);
+		g->strand = words[6][0];
+		g->chromIx = chromIx;
+		g->exons = NULL;
+		}
             AllocVar(exon);
             exon->start = atoi(words[3]);
+	    if (exon->start < g->start)
+	        g->start = exon->start;
             exon->end = atoi(words[4]);
+	    if (exon->end > g->end)
+	        g->end = exon->end;
             slAddTail(&g->exons, exon);
-            }
-        else if (sameString(type, "intron"))
-            {
-            }
-        else
-            {
-            errAbort("Unexpected type %s line %d of %s", type, lineCount, inName);
             }
         }
     }
-if (g != NULL)
-    slAddHead(&geneList, g);
-slReverse(&geneList);
 slSort(&geneList, cmpGenes);
+printf("Read %d genes (%d exons) in %s\n", slCount(geneList), exonCount, inName);
 for (g = geneList; g != NULL; g=g->next)
+    {
+    slSort(&g->exons, cmpExons);
     writeGene(g, c2g, gl);
+    }
 fclose(in);
 }
 

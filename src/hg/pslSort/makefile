@@ -1,9 +1,9 @@
 .c.o:
 	gcc -ggdb -O -Wimplicit -I../inc -I../../inc -c $*.c
 
-L = $(MYSQLLIBS) -lm
+L = -lm
 MYLIBDIR = ../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+MYLIBS =  $(MYLIBDIR)/jkweb.a
 
 O = pslSort.o
 

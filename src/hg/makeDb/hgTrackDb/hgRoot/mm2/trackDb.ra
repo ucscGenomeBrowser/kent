@@ -1,3 +1,12 @@
+track ensGene
+shortLabel Ensembl Genes
+longLabel Ensembl Gene Predictions
+priority 15
+visibility dense
+color 150,0,0
+type genePred ensPep
+url http://www.ensembl.org/Mus_musculus/transview?transcript=$$
+
 track rikenMrna
 shortLabel Riken mRNA
 longLabel Riken Full Length Mouse mRNAs
@@ -8,3 +17,27 @@ altColor 200,220,255
 spectrum on
 type psl .
 
+track ensRiken
+shortLabel Ensembl/Riken
+longLabel Ensembl/Riken Gene Predictions
+priority 18
+visibility dense
+color 0,120,60
+altColor 200,255,220
+type genePred
+
+track softberryGene
+shortLabel Fgenesh++ Genes
+longLabel Fgenesh++ Gene Predictions
+priority 16
+visibility dense
+color 0,100,0
+type genePred softberryPep
+
+track genieAlt
+shortLabel AltGenie
+longLabel Genie Gene Predictions from Affymetrix
+priority 14
+visibility dense
+color 125,0,150
+type genePred genieAltPep

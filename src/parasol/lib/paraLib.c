@@ -1,5 +1,6 @@
 #include <sys/utsname.h>
 #include "common.h"
+#include "options.h"
 #include "errabort.h"
 #include "net.h"
 #include "paraLib.h"
@@ -30,7 +31,7 @@ if (!sendWithSig(fd, string))
     noWarnAbort();
 }
 
-char *getHost()
+char *getMachine()
 /* Return host name. */
 {
 static char *host = NULL;
@@ -50,6 +51,7 @@ return host;
 }
 
 static FILE *logFile = NULL;  /* Log file - if NULL no logging. */
+static boolean logFlush;
 
 void vLogIt(char *format, va_list args)
 /* Variable args logit. */
@@ -57,7 +59,8 @@ void vLogIt(char *format, va_list args)
 if (logFile != NULL)
     {
     vfprintf(logFile, format, args);
-    fflush(logFile);
+    if (logFlush)
+	fflush(logFile);
     }
 }
 
@@ -81,8 +84,16 @@ if (logFile != NULL)
     fputs("warn: ", logFile);
     vfprintf(logFile, format, args);
     fputs("\n", logFile);
-    fflush(logFile);
+    if (logFlush)
+	fflush(logFile);
     }
+}
+
+void flushLog()
+/* Flush log file */
+{
+if (logFile != NULL)
+   fflush(logFile);
 }
 
 void setupDaemonLog(char *fileName)
@@ -92,6 +103,8 @@ void setupDaemonLog(char *fileName)
 {
 if (fileName != NULL)
     logFile = mustOpen(fileName, "w");
+// logFlush = optionExists("logFlush");
+logFlush = TRUE;
 pushWarnHandler(warnToLog);
 }
 

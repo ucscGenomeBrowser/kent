@@ -594,7 +594,7 @@ matchOff = qSlipOff + tSlipOff;
 
 for (tIx = 1; tIx < a.tDim; tIx += 1)
     {
-    UBYTE mommy;
+    UBYTE mommy = 0;
     int score, tempScore;
 
 /* Macros to make me less mixed up when accessing scores from row arrays.*/

@@ -1,0 +1,68 @@
+
+<h2>Candidate Oligos for every exon on sanger 22 track</h2>
+
+Oligos were chosen for every exon described by the Sanger 
+annotation of chromosome 22 larger than 70 base pairs. For this
+purpose exons are defined to include 3' and 5' UTRs. Oligos
+were chosen using the following algorithm:
+<ul>
+<li> Step through each exon at a step size proportional to the
+size of the exon examining possible oligos. </li>
+<li> Score each oligos for: Tm difference, distance from 3' end,
+secondary structure, and an Affymetrix heuristic. </li>
+<li> Look through  candidate probes remembering the maximum
+score for each score. </li>
+<li> Each score is then normalized by dividing by the maximum
+and then the normalized scores are combined as an average and oligos
+are sorted to find the best overall score.</li>
+<li> Oligos with the best combined normalized scores are BLATed 
+until one is found that has a BLAT score below a given 
+threshold. </li>
+<li> As oligos are chosen, candidate oligos that overlap those
+already chosen are discarded. </li>
+<li> If no scores pass the BLAT score or not enough oligos have been
+chosen just pick oligos that have the best combined score. </li>
+</ul>
+
+<hr>
+
+<h2> About the scores:</h2>
+<ul> 
+<li><b>Tm:</b> Formulas for calculating Tm taken from: "A unified
+    view of polymer, dumbbell, and oligonucleotide DNA
+    nearest-neighbor thermodynamics" John SantaLucia, Jr.  PNAS, Vol
+    95, pp 1460-1465 February 1998</li>
+<li><b>Secondary Structure:</b> Calculates the Gibbs free energy of the
+    best secondary structure using libraries from the <a
+    href="http://rna.chem.rochester.edu/RNAstructure.html
+    ">RNAstructure</a> program. </li>
+<li><b>Affy Heuristic:</b> 1 if oligo passes heuristics published by Affymetrix 
+"Nature Biotechnology" vol. 14, Dec, '96) are satisfied, 0 otherwise. The heuristic
+is as follows:
+<pre>
+   no more than 9 A's in window of 20 
+   no more than 9 T's in window of 20
+   no more than 8 C's in window of 20
+   no more than 8 G's in window of 20
+  
+   no more than 6 A's in window of  8
+   no more than 6 T's in window of  8
+   no more than 5 C's in window of  8 
+   no more than 5 G's in window of  8
+</pre>
+</li>
+<li><b>3' Dist:</b> Distance from end of oligo to 3' end of target
+sequence.</li>
+<li><b>Blat Score:</b> BLAT score of second most homologous region
+in the genome. If no inserts this is approximately the number of
+base pairs that match.</li>
+</ul>    
+
+
+<p>Please note that all coordinates are relative to the '+' strand
+while all oligo sequences are 5'->3'. This means that all sequences
+displayed are part of the sense strand. So if the oligo is represented
+in the database as being on the '-' strand and starts at 1 and ends at
+5 of 'atgcatgc' the '+' sequence of the probe would be 'tgcat' but
+that is 3'->5' on the '-' strand so the sequence in the sequence would
+be the reverse complement 'atgct'. 

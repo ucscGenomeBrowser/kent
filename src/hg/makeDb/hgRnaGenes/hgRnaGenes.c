@@ -33,6 +33,7 @@ errAbort("Bad line %d of %s:\n%s",
 
 void parseEnd(struct lineFile *lf, char *s, 
 	char **retRnaName, UBYTE *retIsPsuedo)
+/* Parse last field in a GFF file. */
 {
 char *type, *val;
 bool gotGene = FALSE;

@@ -1,5 +1,5 @@
 .c.o:
-	gcc -O -Wimplicit -I../../inc -c $*.c
+	gcc -O -Wformat -Wimplicit -Wuninitialized -I../../inc -c $*.c
 
 L =
 MYLIBDIR = ../../lib/$(MACHTYPE)

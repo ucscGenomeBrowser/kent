@@ -7,6 +7,7 @@
 #include "linefile.h"
 #include "agpFrag.h"
 #include "rmskOut.h"
+#include "psl.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -16,7 +17,8 @@ errAbort(
   "to FPC contig coordinates\n"
   "usage:\n"
   "   liftFrags destFile gold.N geno.lst sourceDir\n"
-  "Currently this only handles RepeatMasker .out files\n");
+  "Currently this only handles RepeatMasker .out files\n"
+  "or psLayout .psl files\n");
 }
 
 struct agpFrag *readGold(char *fileName, struct hash *fragHash, int *retSize)
@@ -89,7 +91,6 @@ const struct rmskOut *b = *((struct rmskOut **)vb);
 return a->genoStart - b->genoStart;
 }
 
-
 void liftOut(char *destFile, struct hash *fragHash, int destSize, 
 	char *genoLst, char *sourceDir)
 /* Lift all .out files from genoLst.  Only lift fragments that are in fragHash.  */
@@ -129,6 +130,83 @@ slSort(&outList, rmskOutCmpGenoStart);
 rmskOutWriteAllOut(destFile, outList);
 }
 
+boolean changePslCoordinates(struct psl *psl, struct agpFrag *frag, int destSize)
+/* Change coordinates of psl from frag to contig or chromosome level. */
+{
+int s, e, start, end, offset;
+int blockCount, j;
+unsigned *tStarts;
+
+start = psl->tStart;
+end = psl->tEnd;
+if (start >= end)
+    return FALSE;
+if (frag->strand[0] == '+')
+    {
+    offset = frag->chromStart - frag->fragStart;
+    s = start + offset;
+    e = end + offset;
+    }
+else
+    {
+    offset = frag->chromStart;
+    s = offset + frag->fragEnd - end;
+    e = offset + frag->fragEnd - start;
+    if (psl->strand[0] == '+') psl->strand[0] = '-';
+    else psl->strand[0] = '+';
+    }
+freeMem(psl->tName);
+psl->tName = cloneString(frag->chrom);
+psl->tStart = s;
+psl->tEnd = e;
+psl->tSize = destSize - e;
+blockCount = psl->blockCount;
+tStarts = psl->tStarts;
+for (j=0; j<blockCount; ++j) 
+   tStarts[j] += offset;
+
+return TRUE;
+}
+
+void liftPsl(char *destFile, struct hash *fragHash, int destSize, 
+	char *genoLst, char *sourceDir)
+/* Lift all .psl files from genoLst.  Only lift fragments that are in fragHash.  */
+{
+struct psl *inList, *outList = NULL, *psl, *pslNext;
+char *buf, **genoFiles, pslFile[512];
+int genoCount, i;
+struct agpFrag *frag;
+int totalCount = 0, liftedCount = 0;
+
+readAllWords(genoLst, &genoFiles, &genoCount, &buf);
+for (i = 0; i<genoCount; ++i)
+    {
+    sprintf(pslFile, "%s", genoFiles[i]);
+    inList = pslLoadAll(pslFile);
+    for (psl = inList; psl != NULL; psl = pslNext)
+        {
+	pslNext = psl->next;
+	++totalCount;
+	frag = hashFindVal(fragHash, psl->tName);
+	if (frag != NULL)
+	    {
+	    if (changePslCoordinates(psl, frag, destSize))
+		{
+		++liftedCount;
+		slAddHead(&outList, psl);
+		}
+	    else
+	        pslFree(&psl);
+	    }
+	else
+	    pslFree(&psl);
+	}
+    }
+printf("Writing %d psl records (of %d) to %s\n", liftedCount, totalCount, destFile);
+slSort(&outList, pslCmpTarget);
+pslWriteAll(outList, destFile, TRUE);
+}
+
 void liftFrags(char *destFile, char *goldFile, char *genoLst, char *sourceDir)
 /* liftFrags - This program lifts annotations on fragments to FPC contig 
  * coordinates. */
@@ -141,6 +219,8 @@ fragList = readGold(goldFile, fragHash, &goldSize);
 printf("%d frags in %d bases in %s\n", slCount(fragList), goldSize, goldFile);
 if (endsWith(destFile, ".out"))
     liftOut(destFile, fragHash, goldSize, genoLst, sourceDir);
+else if (endsWith(destFile, ".psl"))
+    liftPsl(destFile, fragHash, goldSize, genoLst, sourceDir);
 else
     errAbort("Unrecognized suffix on %s", destFile);
 }

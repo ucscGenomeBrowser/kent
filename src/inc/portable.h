@@ -1,8 +1,3 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
 /* portable.h - wrappers around things that vary from server
  * to server and operating system to operating system. */
 
@@ -11,12 +6,6 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
-
-/* The size of a file. */
-long fileSize(char *fileName);
-
-/* Does a file exist? */
-boolean fileExists(char *fileName);
 
 /* Return an alphabetized list of all files that match 
  * the wildcard pattern in directory. */
@@ -54,6 +43,12 @@ boolean makeDir(char *dirName);
 /* 1000 hz clock */
 long clock1000();
 
+/* A 1 hz clock. */
+long clock1();
+
+/* Make a temp name that's almost certainly unique. */
+char *rTempName(char *dir, char *base, char *suffix);
+
 /* This structure helps us generate temp names and use
  * them.  Since different servers locate where the cgi
  * runs from differently, and where the generated html
@@ -78,6 +73,9 @@ double machineSpeed();
 
 /* Return host computer on network for mySQL database. */
 char *mysqlHost();
+
+/* Get name of this machine. */
+char *getHost();
 
 /* Invoke the debugger. */
 void uglyfBreak();

@@ -4,29 +4,63 @@
 #include "hash.h"
 #include "cheapcgi.h"
 
+boolean zeroOk = FALSE;
+
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
   "endsInLf - Check that last letter in files is end of line\n"
   "usage:\n"
-  "   endsInLf XXX\n"
+  "   endsInLf file(s)\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -zeroOk\n"
   );
 }
 
-void endsInLf(char *XXX)
+int endsInLf(int fileCount, char *fileNames[])
 /* endsInLf - Check that last letter in files is end of line. */
 {
+int retStatus = 0;
+char *fileName;
+FILE *f;
+int i;
+char c;
+int size;
+
+for (i=0; i<fileCount; ++i)
+    {
+    fileName = fileNames[i];
+    f = mustOpen(fileName, "r");
+    size = fseek(f, -1, SEEK_END);
+    if (size < 0)
+        {
+	if (!zeroOk)
+	    {
+	    retStatus = -1;
+	    warn("%s zero length", fileName);
+	    }
+	}
+    else
+	{
+	c = fgetc(f);
+	carefulClose(&f);
+	if (c != '\n')
+	    {
+	    retStatus = -1;
+	    warn("%s incomplete last line", fileName);
+	    }
+	}
+    }
+return retStatus;
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
-if (argc != 2)
+zeroOk = cgiBoolean("zeroOk");
+if (argc < 2)
     usage();
-endsInLf(argv[1]);
-return 0;
+return endsInLf(argc-1, argv+1);
 }

@@ -49,6 +49,15 @@ int byteCount = ((bitCount+7)>>3);
 return needLargeZeroedMem(byteCount);
 }
 
+Bits *bitClone(Bits* orig, int bitCount)
+/* Clone bits. */
+{
+int byteCount = ((bitCount+7)>>3);
+Bits* bits = needLargeZeroedMem(byteCount);
+memcpy(bits, orig, byteCount);
+return bits;
+}
+
 void bitFree(Bits **pB)
 /* Free bits. */
 {
@@ -109,5 +118,38 @@ for (i = startByte+1; i<endByte; ++i)
     count += bitsInByte[b[i]];
 count += bitsInByte[b[endByte] & rightMask[endBits]];
 return count;
+}
+
+void bitClear(Bits *b, int bitCount)
+/* Clear many bits. */
+{
+int byteCount = ((bitCount+7)>>3);
+zeroBytes(b, byteCount);
+}
+
+void bitAnd(Bits *a, Bits *b, int bitCount)
+/* And two bitmaps.  Put result in a. */
+{
+int byteCount = ((bitCount+7)>>3);
+while (--byteCount >= 0)
+    *a++ = (*a & *b++);
+}
+
+void bitOr(Bits *a, Bits *b, int bitCount)
+/* Or two bitmaps.  Put result in a. */
+{
+int byteCount = ((bitCount+7)>>3);
+while (--byteCount >= 0)
+    *a++ = (*a | *b++);
+}
+
+void bitNot(Bits *a, int bitCount)
+/* Flip all bits in a. */
+{
+int byteCount = ((bitCount+7)>>3);
+while (--byteCount >= 0)
+    {
+    *a++ = ~*a;
+    }
 }
 

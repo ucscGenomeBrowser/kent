@@ -30,6 +30,9 @@ struct chromInserts *chromInsertsRead(char *fileName, struct hash *insertsHash);
 int chromInsertsGapSize(struct chromInserts *chromInserts, char *contig, boolean isFirst);
 /* Return size of gap before next contig. */
 
+boolean chromInsertsSetDefaultGapSize(int size);
+/* Set default gap size. */
+
 struct bigInsert *bigInsertBeforeContig(struct chromInserts *chromInserts, 
 	char *contig);
 /* Return the big insert (if any) before contig) */

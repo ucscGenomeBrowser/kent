@@ -5,6 +5,11 @@
 #ifndef GENEPRED_H
 #define GENEPRED_H
 
+#ifndef GFF_H
+#include "gff.h"
+#endif
+
+
 struct genePred
 /* A gene prediction. */
     {
@@ -45,6 +50,20 @@ void genePredOutput(struct genePred *el, FILE *f, char sep, char lastSep);
 
 #define genePredCommaOut(el,f) genePredOutput(el,f,',',',');
 /* Print out genePred as a comma separated list including final comma. */
+
+/* ---------  Start of hand generated code. ---------------------------- */
+
+struct genePred *genePredLoadAll(char *fileName);
+/* Load all genePred from a tab-separated file.
+ * Dispose of this with genePredFreeList(). */
+
+int genePredCmp(const void *va, const void *vb);
+/* Compare to sort based on chromosome, txStart. */
+
+struct genePred *genePredFromGroupedGff(struct gffFile *gff, struct gffGroup *group, 
+	char *name, char *exonSelectWord);
+/* Convert gff->groupList to genePred list.   Only put lines where feature type  matches
+ * exonSelectWord into the gene.  (If exonSelectWord is NULL, all go in) */
 
 #endif /* GENEPRED_H */
 

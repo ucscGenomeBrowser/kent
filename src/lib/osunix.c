@@ -1,13 +1,12 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
+/* Some wrappers around operating-system specific stuff. */
+
 #include <unistd.h>
 #include <time.h>
 #include <dirent.h>
+#include <sys/utsname.h>
 #include "common.h"
 #include "portable.h"
+#include "portimpl.h"
 
 
 /* Return how long the named file is in bytes. 
@@ -32,6 +31,11 @@ static double scale = 1000.0/CLOCKS_PER_SEC;
 return round(scale*clock());
 }
 
+long clock1()
+/* A seconds clock. */
+{
+return clock()/CLOCKS_PER_SEC;
+}
 
 void uglyfBreak()
 /* Go into debugger. */
@@ -79,7 +83,7 @@ while ((de = readdir(d)) != NULL)
     char *fileName = de->d_name;
     if (differentString(fileName, ".") && differentString(fileName, ".."))
 	{
-	if (wildMatch(pattern, fileName))
+	if (pattern == NULL || wildMatch(pattern, fileName))
 	    {
 	    name = newSlName(fileName);
 	    slAddHead(&list, name);
@@ -123,7 +127,9 @@ if ((err = mkdir(dirName, 0777)) < 0)
 	perror("");
 	errAbort("Couldn't make directory %s", dirName);
 	}
+    return FALSE;
     }
+return TRUE;
 }
 
 
@@ -149,7 +155,7 @@ while ((de = readdir(d)) != NULL)
     char *fileName = de->d_name;
     if (differentString(fileName, ".") && differentString(fileName, ".."))
 	{
-	if (wildMatch(pattern, fileName))
+	if (pattern == NULL || wildMatch(pattern, fileName))
 	    {
 	    struct stat st;
 	    bool isDir = FALSE;
@@ -169,3 +175,78 @@ closedir(d);
 slSort(&list, cmpFileInfo);
 return list;
 }
+
+char *getHost()
+/* Return host name. */
+{
+static char *hostName = NULL;
+static char buf[128];
+if (hostName == NULL)
+    {
+    hostName = getenv("HTTP_HOST");
+    if (hostName == NULL)
+        {
+	hostName = getenv("HOST");
+	if (hostName == NULL)
+	    {
+	    if (hostName == NULL)
+		{
+		static struct utsname unamebuf;
+		if (uname(&unamebuf) >= 0)
+		    hostName = unamebuf.nodename;
+		else
+		    hostName = "unknown";
+		}
+	    }
+        }
+    strncpy(buf, hostName, sizeof(buf));
+    chopSuffix(buf);
+    hostName = buf;
+    }
+return hostName;
+}
+
+char *mysqlHost()
+/* Return host computer on network for mySQL database. */
+{
+boolean gotIt = FALSE;
+static char *host = NULL;
+if (!gotIt)
+    {
+    static char hostBuf[128];
+    gotIt = TRUE;
+    if (fileExists("mysqlHost"))
+	{
+	return (host = firstWordInFile("mysqlHost", hostBuf, sizeof(hostBuf)));
+	}
+    else
+	return (host = getenv("MYSQLHOST"));
+    }
+return host;
+}
+
+char *rTempName(char *dir, char *base, char *suffix)
+/* Make a temp name that's almost certainly unique. */
+{
+char midder[256];
+int pid = getpid();
+int num = time(NULL);
+static char fileName[512];
+char host[512];
+char *s;
+
+strcpy(host, getHost());
+s = strchr(host, '.');
+if (s != NULL)
+     *s = 0;
+for (;;)
+   {
+   sprintf(fileName, "%s/%s_%s_%d_%d%s", dir, base, host, pid, num, suffix);
+   if (!fileExists(fileName))
+       break;
+   num += 1;
+   }
+return fileName;
+}
+
+

@@ -98,26 +98,26 @@ void cpgIslandOutput(struct cpgIsland *el, FILE *f, char sep, char lastSep)
 {
 int i;
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->chrom, sep);
+fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->chromStart, sep);
+fprintf(f, "%u", el->chromStart);
 fputc(sep,f);
-fprintf(f, "%u", el->chromEnd, sep);
+fprintf(f, "%u", el->chromEnd);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->name, sep);
+fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->length, sep);
+fprintf(f, "%u", el->length);
 fputc(sep,f);
-fprintf(f, "%u", el->cpgNum, sep);
+fprintf(f, "%u", el->cpgNum);
 fputc(sep,f);
-fprintf(f, "%u", el->gcNum, sep);
+fprintf(f, "%u", el->gcNum);
 fputc(sep,f);
-fprintf(f, "%f", el->perCpg, sep);
+fprintf(f, "%f", el->perCpg);
 fputc(sep,f);
-fprintf(f, "%f", el->perGc, lastSep);
+fprintf(f, "%f", el->perGc);
 fputc(lastSep,f);
 }
 

@@ -1,6 +1,7 @@
 table stsAlias
-"List of aliases for STS files"
+"STS marker aliases and associated identification numbers"
     (
-    string alias;	"This specific alias"
-    string trueName;	"True in our stsMarker table"
+    string alias;       "STS marker name"
+    uint identNo;       "Identification number of STS marker"
+    string trueName;        "Official UCSC name for marker"
     )

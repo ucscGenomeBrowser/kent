@@ -1,8 +1,3 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
 /* LocalMem.h - local memory routines. 
  * 
  * These routines are meant for the sort of scenario where
@@ -27,3 +22,7 @@ char *lmCloneString(struct lm *lm, char *string);
 
 void *lmCloneMem(struct lm *lm, void *pt, size_t size);
 /* Return a local mem copy of memory block. */
+
+#define lmAllocVar(lm, pt) (pt = lmAlloc(lm, sizeof(*pt)));
+/* Shortcut to allocating a single variable in local mem
+ * assigning pointer to it. */

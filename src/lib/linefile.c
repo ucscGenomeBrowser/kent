@@ -1,8 +1,3 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
 /* lineFile - stuff to rapidly read text files and parse them into
  * lines. */
 
@@ -22,6 +17,15 @@ lf->zTerm = zTerm;
 lf->buf = needMem(lf->bufSize+1);
 return lf;
 }
+
+void lineFileExpandBuf(struct lineFile *lf, int newSize)
+/* Expand line file buffer. */
+{
+assert(newSize > lf->bufSize);
+lf->buf = needMoreMem(lf->buf, lf->bytesInBuf, newSize);
+lf->bufSize = newSize;
+}
+
 
 struct lineFile *lineFileStdin(bool zTerm)
 /* Wrap a line file around stdin. */
@@ -57,6 +61,24 @@ void lineFileReuse(struct lineFile *lf)
 lf->reuse = TRUE;
 }
 
+int lineFileLongNetRead(int fd, char *buf, int size)
+/* Keep reading until either get no new characters or
+ * have read size */
+{
+int oneSize, totalRead = 0;
+
+while (size > 0)
+    {
+    oneSize = read(fd, buf, size);
+    if (oneSize <= 0)
+        break;
+    totalRead += oneSize;
+    buf += oneSize;
+    size -= oneSize;
+    }
+return totalRead;
+}
+
 boolean lineFileNext(struct lineFile *lf, char **retStart, int *retSize)
 /* Fetch next line from file. */
 {
@@ -69,7 +91,8 @@ int newStart;
 if (lf->reuse)
     {
     lf->reuse = FALSE;
-    *retSize = lf->lineEnd - lf->lineStart;
+    if (retSize != NULL)
+	*retSize = lf->lineEnd - lf->lineStart;
     *retStart = buf + lf->lineStart;
     return TRUE;
     }
@@ -83,17 +106,19 @@ for (endIx = lf->lineEnd; endIx < bytesInBuf; ++endIx)
 	break;
 	}
     }
+
 /* If not in buffer read in a new buffer's worth. */
-if (!gotLf)
+while (!gotLf)
     {
     int oldEnd = lf->lineEnd;
     int sizeLeft = bytesInBuf - oldEnd;
     int bufSize = lf->bufSize;
     int readSize = bufSize - sizeLeft;
 
-    memmove(buf, buf+oldEnd, sizeLeft);
+    if (oldEnd > 0 && sizeLeft > 0)
+	memmove(buf, buf+oldEnd, sizeLeft);
     lf->bufOffsetInFile += oldEnd;
-    readSize = read(lf->fd, buf+sizeLeft, readSize);
+    readSize = lineFileLongNetRead(lf->fd, buf+sizeLeft, readSize);
     if (readSize + sizeLeft <= 0)
 	{
 	lf->bytesInBuf = lf->lineStart = lf->lineEnd = 0;
@@ -102,8 +127,7 @@ if (!gotLf)
     bytesInBuf = lf->bytesInBuf = readSize + sizeLeft;
     lf->lineEnd = 0;
 
-    /* Look for next end of line.  If can't find it
-     * squawk and die. */
+    /* Look for next end of line.  */
     for (endIx = sizeLeft; endIx <bytesInBuf; ++endIx)
 	{
 	if (buf[endIx] == '\n')
@@ -115,21 +139,28 @@ if (!gotLf)
 	}
     if (!gotLf && bytesInBuf == lf->bufSize)
         {
-	errAbort("Line too long (more than %d chars) line %d of %s",
-	    lf->bufSize, lf->lineIx+1, lf->fileName);
+	if (bufSize > 1024*1024)
+	    {
+	    errAbort("Line too long (more than %d chars) line %d of %s",
+		lf->bufSize, lf->lineIx+1, lf->fileName);
+	    }
+	else
+	    {
+	    lineFileExpandBuf(lf, bufSize*2);
+	    buf = lf->buf;
+	    }
 	}
-		
     }
 
 if (lf->zTerm)
     {
     buf[endIx-1] = 0;
-    //uglyf("%03d: %s\n", lf->lineIx, buf+lf->lineEnd);
     }
 lf->lineStart = newStart = lf->lineEnd;
 lf->lineEnd = endIx;
 ++lf->lineIx;
-*retSize = endIx - newStart;
+if (retSize != NULL)
+    *retSize = endIx - newStart;
 *retStart = buf + newStart;
 return TRUE;
 }

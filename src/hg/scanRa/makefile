@@ -1,7 +1,7 @@
 .c.o:
 	gcc -ggdb -I../inc -I../../inc -c $*.c
 
-L = /usr/lib/mysql/libmysqlclient.a -lm
+L = 
 MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 

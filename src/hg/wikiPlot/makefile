@@ -1,12 +1,15 @@
 .c.o:
 	gcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -I../../inc -I../../../inc -c $*.c
 
-L = -lm
+L = $(MYSQLLIBS) -lm 
 MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = wikiPlot.o
 
 wikiPlot: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/wikiPlot $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/wikiPlot
+	gcc $O $(MYLIBS) $L
+	mv a.out wikiPlot
+	strip wikiPlot
+	chmod a+rx wikiPlot
+	mv wikiPlot $(HGCGI)

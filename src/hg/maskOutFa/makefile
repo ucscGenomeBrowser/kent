@@ -9,3 +9,4 @@ O = maskOutFa.o
 
 maskOutFa: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/maskOutFa $O $(MYLIBS) $L
+	strip $(HOME)/bin/$(MACHTYPE)/maskOutFa

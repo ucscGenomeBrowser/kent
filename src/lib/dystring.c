@@ -28,6 +28,18 @@ if ((ds = *pDs) != NULL)
     }
 }
 
+void freeDyStringList(struct dyString **pDs)
+/* free up a list of dyStrings */
+{
+struct dyString *ds, *next;
+for(ds = *pDs; ds != NULL; ds = next)
+    {
+    next = ds->next;
+    freeDyString(&ds);
+    }
+*pDs = NULL;
+}
+
 static void dyStringExpandBuf(struct dyString *ds, int newSize)
 /* Expand buffer to new size. */
 {
@@ -50,6 +62,34 @@ ds->stringSize = newSize;
 buf[newSize] = 0;
 }
 
+char dyStringAppendC(struct dyString *ds, char c)
+/* Append char to end of string. */
+{
+char *s;
+if (ds->stringSize >= ds->bufSize)
+     dyStringExpandBuf(ds, ds->bufSize+256);
+s = ds->string + ds->stringSize++;
+*s++ = c;
+*s = 0;
+return c;
+}
+
+void dyStringAppendMultiC(struct dyString *ds, char c, int n)
+/* Append N copies of char to end of string. */ 
+{
+int oldSize = ds->stringSize;
+int newSize = oldSize + n;
+int newAllocSize = newSize + oldSize;
+char *buf;
+if (newSize > ds->bufSize)
+    dyStringExpandBuf(ds,newAllocSize);
+buf = ds->string;
+memset(buf+oldSize, c, n);
+ds->stringSize = newSize;
+buf[newSize] = 0;
+}
+
+void dyStringVaPrintf(struct dyString *ds, char *format, va_list args);
 void dyStringAppend(struct dyString *ds, char *string)
 /* Append zero terminated string to end of dyString. */
 {
@@ -62,17 +102,47 @@ void dyStringVaPrintf(struct dyString *ds, char *format, va_list args)
 char string[4*1024];	/* Sprintf buffer */
 int size;
 
-size = vsprintf(string, format, args);
-if (size >= sizeof(string))
+size = vsnprintf(string, sizeof(string), format, args);
+if (size >= sizeof(string)-1)
     errAbort("Sprintf size too long in dyStringVaPrintf");	/* If we're still alive... */
 dyStringAppendN(ds, string, size);
 }
 
 void dyStringPrintf(struct dyString *ds, char *format, ...)
-/*  Printf to end of dyString.  Don't do more than 1000 characters this way... */
+/*  Printf to end of dyString.  Don't do more than 4000 characters this way... */
 {
 va_list args;
 va_start(args, format);
 dyStringVaPrintf(ds, format, args);
 va_end(args);
 }
+
+struct dyString * dyStringSub(char *orig, char *in, char *out)
+/* Make up a duplicate of orig with all occurences of in substituted
+ * with out. */
+{
+int inLen = strlen(in), outLen = strlen(out), origLen = strlen(orig);
+struct dyString *dy = newDyString(origLen + 2*outLen);
+char *s, *e;
+
+if (orig == NULL) return NULL;
+for (s = orig; ;)
+    {
+    e = stringIn(in, s);
+    if (e == NULL) 
+	{
+        e = orig + origLen;
+	dyStringAppendN(dy, s, e - s);
+	break;
+	}
+    else
+        {
+	dyStringAppendN(dy, s, e - s);
+	dyStringAppendN(dy, out, outLen);
+	s = e + inLen;
+	}
+    }
+return dy;
+}
+
+

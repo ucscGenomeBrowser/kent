@@ -299,6 +299,7 @@ while (genoIx < genoCount)
 	char *mrnaFile = mrnaFiles[i];
 	struct dnaSeq mrna;
 	FILE *f = mustOpen(mrnaFile, "rb");
+        ZeroVar(&seq);
 
 	while (faFastReadNext(f, &mrna.dna, &mrna.size, &mrna.name))
 	    {
@@ -314,7 +315,7 @@ while (genoIx < genoCount)
 		    }
 		if (isRc)
 		    reverseComplement(mrna.dna, mrna.size);
-		bunList = ssFindBundles(ps, &mrna, mrna.name, ffCdna);
+		bunList = ssFindBundles(ps, &mrna, mrna.name, ffCdna, FALSE);
 		for (bun = bunList; bun != NULL; bun = bun->next)
 		    {
 		    struct ssFfItem *ffi;

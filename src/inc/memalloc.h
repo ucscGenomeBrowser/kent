@@ -1,8 +1,6 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
+/* Let the user redirect where memory allocation/deallocation
+ * happens.  'careful' routines help debug scrambled heaps. */
+
 #ifndef MEMALLOC_H
 #define MEMALLOC_H
 
@@ -35,6 +33,9 @@ void carefulCheckHeap();
 int carefulCountBlocksAllocated();
 /* How many memory items are allocated? (Since called
  * pushCarefulMemHandler(). */
+
+void setMaxAlloc(size_t s);
+/* Set large allocation limit. */
 
 #endif /* MEMALLOC_H */
 

@@ -8,11 +8,11 @@
 struct snp
 /* Single nucleotide polymorphisms */
     {
-    struct snp *next;  /* Next in singly linked list. */
-    char *chrom;	/* Human chromosome or FPC contig */
-    unsigned chromStart;	/* Start position in chromosome */
-    unsigned chromEnd;	/* End position in chromosome */
-    char *name;	/* Name of SNP */
+    struct snp *next;    /* Next in singly linked list. */
+    char *chrom;         /* Human chromosome or FPC contig */
+    unsigned chromStart; /* Start position in chromosome */
+    unsigned chromEnd;   /* End position in chromosome */
+    char *name;          /* Name of SNP */
     };
 
 void snpStaticLoad(char **row, struct snp *ret);

@@ -18,11 +18,15 @@
  * reference these values in the larger records. */
 
 #include "common.h"
+#include "cheapcgi.h"
 #include "portable.h"
 #include "linefile.h"
 #include "hash.h"
 #include "fa.h"
 #include "hgRelate.h"
+
+/* Command line options and defaults. */
+char *abbr = NULL;
 
 char historyTable[] =	
 /* This contains a row for each update made to database.
@@ -35,7 +39,7 @@ char historyTable[] =
   "endId int unsigned not null,"                /* First id for next session. */
   "who varchar(255) not null,"         /* User who updated. */
   "what varchar(255) not null,"        /* What they did. */
-  "when timestamp not null)";	       /* When they did it. */
+  "modTime timestamp not null)";        /* Modification time. */
 
 char extFileTable[] =
 /* This keeps track of external files and directories. */
@@ -45,13 +49,13 @@ char extFileTable[] =
   "path varchar(255) not null,"   /* Full path. Ends in '/' if a dir. */
   "size int unsigned not null,"            /* Size of file (checked) */
                    /* Extra indices. */
-  "unique (name))";
+  "index (name))";
 
 char seqTable[] =
 /* This keeps track of a sequence. */
 "create table seq ("
   "id int unsigned not null primary key," /* Unique ID across all tables. */
-  "acc char(12) not null ,"	 /* GenBank accession number. */
+  "acc varchar(24) not null ,"	 /* GenBank accession number or other ID. */
   "size int unsigned not null,"           /* Size of sequence in bases. */
   "gb_date date not null,"       /* GenBank last modified date. */
   "extFile int unsigned not null,"       /* File it is in. */
@@ -121,7 +125,7 @@ char query[256];
 sprintf(query,
     "create table %s (" 
        "id int not null primary key,"
-       "name varchar(255) not null,"
+       "name longtext not null,"
        "index (name(16)))",
     tableName); 
 sqlUpdate(conn, query);
@@ -328,10 +332,14 @@ errAbort(
   "usage:\n"
   "   hgLoadRna new database\n"
   "This creates freshly the RNA part of the database\n"
-  "   hgLoadRna add database /full/path/mrna.fa mrna.ra\n"
+  "   hgLoadRna add [-type=type] database /full/path/mrna.fa mrna.ra\n"
+  "      type can be mRNA or EST or whatever goes into extFile.name\n"
   "This adds mrna info to the database\n"
   "   hgLoadRna drop database\n"
   "This drops the tables created by hgLoadRna from database.\n"
+  "   hgLoadRna addSeq [-abbr=junk] database file(s).fa\n"
+  "This loads sequence files only, no auxiliarry info.  Typically\n"
+  "these are more likely to be mouse reads than rna actually....\n"
   );
 }
 
@@ -400,7 +408,6 @@ for (;;)
     HGID id;
     unsigned long faOffset, faEndOffset;
     int faSize;
-    boolean atEof;
     char *s;
     int faNameSize;
     char sqlDate[32];
@@ -515,11 +522,131 @@ void hgLoadRna(char *database, char *faPath, char *raFile)
 {
 char *type, *symName;
 hgSetDb(database);
-if (strstr(raFile, "est.ra"))
-    type = "EST";
-else
-    type = "mRNA";
+
+type = cgiOptionalString("type");
+if (type == NULL)
+    {
+    if (strstrNoCase(raFile, "xenoRna"))
+	type = "xenoRna";
+    else if (strstrNoCase(raFile, "xenoEst"))
+	type = raFile;
+    else if (strstrNoCase(raFile, "est"))
+	type = "EST";
+    else
+	type = "mRNA";
+    }
+printf("Adding data of type: %s\n", type);
 addRna(faPath, type, raFile, type);
+}
+
+void abbreviate(char *s, char *fluff)
+/* Cut out fluff from s. */
+{
+int len;
+if (s != NULL && fluff != NULL)
+    {
+    s = strstr(s, fluff);
+    if (s != NULL)
+       {
+       len = strlen(fluff);
+       strcpy(s, s+len);
+       }
+    }
+}
+
+void hgLoadSeq(char *database, int fileCount, char *fileNames[])
+/* Add a bunch of FA files to sequence and extFile tables of
+ * database. */
+{
+struct sqlConnection *conn;
+char *fileName;
+int i, count=0;
+DNA *faDna;
+int faSize;
+char *faLine;
+int faLineSize;
+FILE *seqTab;
+struct lineFile *faLf;
+int maxMod = 2000;
+int mod = maxMod;
+int lineMaxMod = 50;
+int lineMod = lineMaxMod;
+char symFaName[256+64], ext[64];
+long extFileId;
+char faAcc[64];
+
+hgSetDb(database);
+conn = hgStartUpdate();
+seqTab = hgCreateTabFile("seq");
+for (i=0; i<fileCount; ++i)
+    {
+    fileName = fileNames[i];
+    splitPath(fileName, NULL, symFaName, ext);
+    strcat(symFaName, ext);
+    printf("Adding %s (%s)\n", fileName, symFaName);
+    faLf = lineFileOpen(fileName, TRUE);
+    extFileId = storeExtFilesTable(conn, symFaName, fileName);
+
+
+    /* Seek to first line starting with '>' in line file. */
+    if (!faSeekNextRecord(faLf))
+	errAbort("%s doesn't appear to be an .fa file\n", faLf->fileName);
+    lineFileReuse(faLf);
+
+    /* Loop around for each record of FA */
+    for (;;)
+	{
+	HGID id;
+	unsigned long faOffset, faEndOffset;
+	int faSize;
+	char *s;
+	int faNameSize;
+	static char sqlDate[32];
+	int dnaSize = 0;
+
+	++count;
+	if (--mod == 0)
+	    {
+	    printf(".");
+	    fflush(stdout);
+	    mod = maxMod;
+	    if (--lineMod == 0)
+		{
+		printf("%d\n", count);
+		lineMod = lineMaxMod;
+		}
+	    }
+	/* Get Next FA record. */
+	if (!lineFileNext(faLf, &faLine, &faLineSize))
+	    break;
+	if (faLine[0] != '>')
+	    internalErr();
+	faOffset = faLf->bufOffsetInFile + faLf->lineStart;
+	s = firstWordInLine(faLine+1);
+	abbreviate(s, abbr);
+	faNameSize = strlen(s);
+	if (faNameSize == 0)
+	    errAbort("Missing accession line %d of %s", faLf->lineIx, faLf->fileName);
+	if (strlen(faLine+1) >= sizeof(faAcc))
+	    errAbort("FA name too long line %d of %s", faLf->lineIx, faLf->fileName);
+	strcpy(faAcc, s);
+	if (faSeekNextRecord(faLf))
+	    lineFileReuse(faLf);
+	faEndOffset = faLf->bufOffsetInFile + faLf->lineStart;
+	faSize = (int)(faEndOffset - faOffset); 
+	id = hgNextId();
+
+	fprintf(seqTab, "%lu\t%s\t%d\t%s\t%lu\t%lu\t%d\n",
+	    id, faAcc, dnaSize, sqlDate, extFileId, faOffset, faSize);
+	}
+    printf("%d\n", count);
+    lineFileClose(&faLf);
+    }
+printf("Updating seq table\n");
+fclose(seqTab);
+hgLoadTabFile(conn, "seq");
+hgEndUpdate(&conn, "Add sequences");
+printf("All done\n");
 }
 
 void createAll(char *database)
@@ -571,8 +698,10 @@ int main(int argc, char *argv[])
 {
 char *command;
 
+cgiSpoof(&argc, argv);
 if (argc < 2)
     usage();
+abbr = cgiOptionalString("abbr");
 command = argv[1];
 if (sameString(command, "new"))
     {
@@ -591,6 +720,10 @@ else if (sameString(command, "add"))
     if (argc != 5)
         usage();
     hgLoadRna(argv[2], argv[3], argv[4]);
+    }
+else if (sameString(command, "addSeq"))
+    {
+    hgLoadSeq(argv[2], argc-3, argv+3);
     }
 else
     usage();

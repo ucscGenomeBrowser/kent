@@ -40,6 +40,10 @@
 #include "dnautil.h"
 #endif
 
+#ifndef ALITYPE_H
+#include "aliType.h"
+#endif
+
 struct ffAli
 /* Node of a doubly linked list that will contain one
  * allignment. Contains information on a matching
@@ -50,15 +54,6 @@ struct ffAli
     char *nStart, *nEnd;          /* Needle start and end. (1/2 open interval) */
     char *hStart, *hEnd;          /* Haystack start and end. */
     int startGood, endGood; /* Number that match perfectly on ends. */
-    };
-
-enum ffStringency
-/* How tight of a match is required. */
-    {
-    ffExact = 0,
-    ffCdna = 1,
-    ffTight = 2,
-    ffLoose = 3,
     };
 
 /************* Functions that client modules are likely to use ****************/
@@ -94,13 +89,17 @@ int ffScoreCdna(struct ffAli *ali);
  * be the number of bases in needle. */
 
 int ffScore(struct ffAli *ali, enum ffStringency stringency);
-/* Score alignment. */
+/* Score DNA based alignment. */
+
+int ffScoreProtein(struct ffAli *ali, enum ffStringency stringency);
+/* Figure out overall score of protein alignment. */
+
+int ffScoreSomething(struct ffAli *ali, enum ffStringency stringency,
+   boolean isProt);
+/* Score any alignment. */
 
 int ffScoreSomeAlis(struct ffAli *ali, int count, enum ffStringency stringency);
 /* Figure out score of count consecutive alis. */
-
-int ffScoreMatch(DNA *a, DNA *b, int len);
-/* Return scoring of a stretch of DNA (no insertions considered) */
 
 int ffCalcGapPenalty(int hGap, int nGap, enum ffStringency stringency);
 /* Return gap penalty for given h and n gaps. */
@@ -120,7 +119,7 @@ int ffShAliPart(FILE *f, struct ffAli *aliList,
     int blockMaxGap, boolean rcNeedle, boolean rcHaystack,
     boolean showJumpTable, 
     boolean showNeedle, boolean showHaystack,
-    boolean showSideBySide);
+    boolean showSideBySide, boolean upcMatch);
 /* Display parts of alignment on html page.  Returns number of blocks (after
  * merging blocks separated by blockMaxGap or less). */
 
@@ -142,10 +141,9 @@ int ffOneIntronOrientation(struct ffAli *left, struct ffAli *right);
 /* Return 1 for GT/AG intron between left and right, -1 for CT/AC, 0 for no
  * intron. */
 
-int ffIntronOrientation(struct ffAli *ff);
-/* Return 1 if introns make it look like alignment is on + strand,
- *       -1 if introns make it look like alignment is on - strand,
- *        0 if can't tell. */
+int ffIntronOrientation(struct ffAli *ali);
+/* Return + for positive orientation overall, - for negative,
+ * 0 if can't tell. */
 
 
 /************* Functions other alignment modules might use ****************/
@@ -180,10 +178,6 @@ struct ffAli *ffMergeHayOverlaps(struct ffAli *ali);
  * that have a gap in the needle. */
 
 struct ffAli *ffMergeNeedleAlis(struct ffAli *ali, boolean doFree);
-/* Remove overlapping areas needle in alignment. Assumes ali is sorted on
- * ascending nStart field. Also merge perfectly abutting neighbors.*/
-
-struct ffAli *ffMergeExactly(struct ffAli *aliList, DNA *needle, DNA *haystack);
 /* Remove overlapping areas needle in alignment. Assumes ali is sorted on
  * ascending nStart field. Also merge perfectly abutting neighbors.*/
 

@@ -7,6 +7,7 @@
  * evaluate expressions on it. */
 #include "common.h"
 #include "keys.h"
+#include "kxTok.h"
 
 struct kvt
 /* Key/value table. */
@@ -296,6 +297,11 @@ switch (exp->type)
         {
         return rkeyEval(kvt, exp->left) ^ rkeyEval(kvt, exp->right);
         }
+    default:
+        {
+	errAbort("unknown expression type %d", exp->type);
+	return 0;
+	}
     }
 }
 
@@ -303,167 +309,6 @@ boolean keyExpEval(struct keyExp *keyExp, struct kvt *kvt)
 /* Evaluate key expression. */
 {
 return rkeyEval(kvt, keyExp->rootExp);
-}
-
-/* Tokenizer for expressions. */
-
-enum kxTokType
-    {
-    kxtEnd,
-    kxtString,
-    kxtWildString,
-    kxtEquals,
-    kxtGT,      /* Greater Than */
-    kxtGE,      /* Greater Than or Equal */
-    kxtLT,      /* Less Than */
-    kxtLE,      /* Less Than or Equal */
-    kxtAnd,
-    kxtOr,
-    kxtXor,
-    kxtNot,
-    kxtOpenParen,
-    kxtCloseParen,
-    };
-
-struct kxTok
-/* A key expression token. */
-    {
-    struct kxTok *next;
-    enum kxTokType type;
-    char string[1];  /* Allocated at run time */
-    };
-
-static struct kxTok *newTok(enum kxTokType type, char *string, int stringSize)
-/* Allocate and initialize a new token. */
-{
-struct kxTok *tok;
-int totalSize = stringSize + sizeof(*tok);
-tok = needMem(totalSize);
-tok->type = type;
-memcpy(tok->string, string, stringSize);
-return tok;
-}
-
-static struct kxTok *tokenize(char *text)
-/* Convert text to stream of tokens. */
-{
-struct kxTok *tokList = NULL, *tok;
-char c, *s, *start = NULL, *end = NULL;
-enum kxTokType type;
-
-s = text;
-for (;;)
-    {
-    if ((c = *s) == 0)
-        break;
-    start = s++;
-    if (isspace(c))
-        {
-        continue;
-        }
-    else if (isalnum(c) || c == '?' || c == '*')
-        {
-        if (c == '?' || c == '*')
-            type = kxtWildString;
-        else
-            type = kxtString;
-        for (;;)
-            {
-            c = *s;
-            if (isalnum(c))
-                ++s;
-            else if (c == '?' || c == '*')
-                {
-                type = kxtWildString;
-                ++s;
-                }
-            else
-                break;
-            }
-        end = s;
-        }
-    else if (c == '"')
-        {
-        type = kxtString;
-        start = s;
-        for (;;)
-            {
-            c = *s++;
-            if (c == '"')
-                break;
-            if (c == '*' || c == '?')
-                type = kxtWildString;
-            }
-        end = s-1;
-        }
-    else if (c == '=')
-        {
-        type = kxtEquals;
-        end = s;
-        }
-    else if (c == '&')
-        {
-        type = kxtAnd;
-        end = s;
-        }
-    else if (c == '|')
-        {
-        type = kxtOr;
-        end = s;
-        }
-    else if (c == '^')
-        {
-        type = kxtXor;
-        end = s;
-        }
-    else if (c == '(')
-        {
-        type = kxtOpenParen;
-        end = s;
-        }
-    else if (c == ')')
-        {
-        type = kxtCloseParen;
-        end = s;
-        }
-    else if (c == '!')
-        {
-        type = kxtNot;
-        end = s;
-        }
-    else if (c == '>')
-        {
-        if (*s == '=')
-            {
-            ++s;
-            type = kxtGE;
-            }
-        else
-            type = kxtGT;
-        end = s;
-        }
-    else if (c == '<')
-        {
-        if (*s == '=')
-            {
-            ++s;
-            type = kxtLE;
-            }
-        else
-            type = kxtLT;
-        end = s;
-        }
-    else
-        {
-        errAbort("Unrecognized character %c", c);
-        }
-    tok = newTok(type, start, end-start);
-    slAddHead(&tokList, tok);
-    }
-tok = newTok(kxtEnd, "end", 3);
-slAddHead(&tokList, tok);
-slReverse(&tokList);
-return tokList;
 }
 
 /***** A little recursive descent parser. *****/
@@ -533,6 +378,7 @@ else if (token->type == kxtGT || token->type == kxtGE || token->type == kxtLT ||
     }
 else
     errAbort("Expecting = got %s", token->string);
+return NULL;
 }
 
 static struct exp *parseParenthesized()
@@ -664,7 +510,7 @@ struct keyExp *keyExpParse(char *text)
 struct keyExp *ke;
 struct kxTok *tok;
 AllocVar(ke);
-ke->tokenList = tok = tokenize(text);
+ke->tokenList = tok = kxTokenize(text, TRUE);
 ke->rootExp = parseExp(tok);
 
 return ke;

@@ -1,5 +1,7 @@
 #ifndef PARALIB_H
 
+extern char *cuserid(char *__s);  /* Linux should define this but... */
+
 extern char paraSig[];  /* Mild security measure. */
 extern int paraPort;		      /* Our port */
 
@@ -12,14 +14,17 @@ void mustSendWithSig(int fd, char *string);
 /* Send a string with the signature prepended. 
  * Abort on failure. */
 
-char *getHost();
-/* Return host name. */
+char *getMachine();
+/* Return host machine name. */
 
 void vLogIt(char *format, va_list args);
 /* Variable args logit. */
 
 void logIt(char *format, ...);
 /* Print message to log file. */
+
+void flushLog();
+/* Flush log file */
 
 void setupDaemonLog(char *fileName);
 /* Setup log file, and warning handler that goes to this

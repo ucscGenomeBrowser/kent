@@ -1,5 +1,5 @@
 .c.o:
-	gcc -I../inc -c $*.c
+	gcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -c $*.c
 
 O = protDust.o 
 

@@ -103,34 +103,34 @@ void rnaGeneOutput(struct rnaGene *el, FILE *f, char sep, char lastSep)
 {
 int i;
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->chrom, sep);
+fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->chromStart, sep);
+fprintf(f, "%u", el->chromStart);
 fputc(sep,f);
-fprintf(f, "%u", el->chromEnd, sep);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->name, sep);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-fprintf(f, "%u", el->score, sep);
+fprintf(f, "%u", el->chromEnd);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->strand, sep);
+fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
+fprintf(f, "%u", el->score);
+fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->source, sep);
+fprintf(f, "%s", el->strand);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->type, sep);
+fprintf(f, "%s", el->source);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%f", el->fullScore, sep);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->type);
+if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->isPsuedo, lastSep);
+fprintf(f, "%f", el->fullScore);
+fputc(sep,f);
+fprintf(f, "%u", el->isPsuedo);
 fputc(lastSep,f);
 }
 

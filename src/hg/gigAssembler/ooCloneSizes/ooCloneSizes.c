@@ -25,6 +25,7 @@ struct dnaSeq seq;
 struct lineFile *lf;
 char sDir[256], sFile[128], sExt[64];
 char firstFrag[128], lastFrag[128];
+ZeroVar(&seq);
 
 for (i=0; i<dirCount; ++i)
     {

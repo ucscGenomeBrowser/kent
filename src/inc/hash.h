@@ -1,8 +1,3 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
 /* Hash - a simple hash table that provides name/value pairs */
 #ifndef HASH_H
 #define HASH_H
@@ -32,6 +27,10 @@ struct hashEl *hashLookup(struct hash *hash, char *name);
 
 struct hashEl *hashAdd(struct hash *hash, char *name, void *val);
 /* Add new element to hash table. */
+
+void *hashRemove(struct hash *hash, char *name);
+/* Remove item of the given name from hash table. 
+ * Returns value of removed item. */
 
 struct hashEl *hashAddUnique(struct hash *hash, char *name, void *val);
 /* Add new element to hash table. Squawk and die if is already in table. */
@@ -66,11 +65,26 @@ void hashTraverseEls(struct hash *hash, void (*func)(struct hashEl *hel));
 void hashTraverseVals(struct hash *hash, void (*func)(void *val));
 /* Apply func to every element of hash with hashEl->val as parameter. */
 
+struct hashEl *hashElListHash(struct hash *hash);
+/* Return a list of all elements of hash.   Free return with hashElFreeList. */
+
+int hashElCmp(const void *va, const void *vb);
+/* Compare two hashEl by name. */
+
+void hashElFree(struct hashEl **pEl);
+/* Free hash el list returned from hashListAll.  */
+
+void hashElFreeList(struct hashEl **pList);
+/* Free hash el list returned from hashListAll.  (Don't use
+ * this internally. */
+
 struct hash *newHash(int powerOfTwoSize);
 /* Returns new hash table. */
+#define hashNew(a) newHash(a)	/* Synonym */
 
 void freeHash(struct hash **pHash);
 /* Free up hash table. */
+#define hashFree(a) freeHash(a)	/* Synonym */
 
 void freeHashAndVals(struct hash **pHash);
 /* Free up hash table and all values associated with it.

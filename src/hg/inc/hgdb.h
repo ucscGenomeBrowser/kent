@@ -3,7 +3,7 @@
  * for personal, academic, and non-profit purposes.  Commercial use          *
  * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
  *****************************************************************************/
-/* hgdb - Stuff to access human genome database. */
+/* hgdb - Stuff to access human genome database.  This is obsolete. */
 #ifndef HGDB_H
 #define HGDB_H
 

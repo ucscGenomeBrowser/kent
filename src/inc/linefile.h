@@ -1,8 +1,3 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
 /* lineFile - stuff to rapidly read text files and parse them into
  * lines. */
 #ifndef LINEFILE_H
@@ -35,6 +30,7 @@ struct lineFile *lineFileOpen(char *fileName, bool zTerm);
 
 struct lineFile *lineFileAttatch(char *fileName, bool zTerm, int fd);
 /* Wrap a line file around an open'd file. */
+#define lineFileAttach lineFileAttatch  /* I'm a bad speller, oops. */
 
 struct lineFile *lineFileStdin(bool zTerm);
 /* Wrap a line file around stdin. */
@@ -53,6 +49,9 @@ void lineFileReuse(struct lineFile *lf);
 
 #define lineFileString(lf) ((lf)->buf + (lf)->lineStart)
 /* Current string in line file. */
+
+#define lineFileTell(lf) ((lf)->bufOffsetInFile + (lf)->lineStart)
+/* Current offset (of string start) in file. */
 
 void lineFileExpectWords(struct lineFile *lf, int expecting, int got);
 /* Check line has right number of words. */

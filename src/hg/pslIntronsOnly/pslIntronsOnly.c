@@ -53,7 +53,7 @@ FILE *nibFile = NULL, *outFile = NULL;
 struct psl *psl;
 int count = 0, intronCount = 0;
 
-lf = lineFileOpen(inPslName, TRUE);
+lf = pslFileOpen(inPslName);
 nibOpenVerify(inNibName, &nibFile, &nibSize);
 outFile = mustOpen(outPslName, "w");
 while ((psl = pslNext(lf)) != NULL)

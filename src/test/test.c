@@ -112,4 +112,6 @@ else
     {
     htmShell("Test Output", doMiddle, "QUERY");
     }
+return 0;
 }
+

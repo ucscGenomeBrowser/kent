@@ -1,8 +1,3 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
 /* memalloc.c - Routines to allocate and deallocate dynamic memory. 
  * This lets you have a stack of memory handlers.  The default
  * memory handler is a thin shell around malloc/free.  You can
@@ -62,13 +57,20 @@ void setDefaultMemHandler()
 mhStack = &defaultMemHandler;
 }
 
+static size_t maxAlloc = 128*4*1024*1024;
+
+void setMaxAlloc(size_t s)
+/* Set large allocation limit. */
+{
+maxAlloc = s;
+}
 
 void *needLargeMem(size_t size)
 /* This calls abort if the memory allocation fails. The memory is
  * not initialized to zero. */
 {
 void *pt;
-if (size == 0 || size >= 128*4*1024*1024)
+if (size == 0 || size >= maxAlloc)
     {
     warn("Program error: trying to allocate %d bytes in needLargeMem", size);
     assert(FALSE);
@@ -86,6 +88,31 @@ v = needLargeMem(size);
 memset(v, 0, size);
 return v;
 }
+
+void *needHugeMem(size_t size)
+/* No checking on size.  Memory not initted. */
+{
+void *pt;
+if (size == 0)
+    {
+    warn("Program error: trying to allocate 0 bytes in needHugeMem");
+    assert(FALSE);
+    }
+if ((pt = mhStack->alloc(size)) == NULL)
+    errAbort("Out of memory - request size %d bytes\n", size);
+return pt;
+}
+
+
+void *needHugeZeroedMem(long size)
+/* Request a large block of memory and zero it. */
+{
+void *v;
+v = needHugeMem(size);
+memset(v, 0, size);
+return v;
+}
+
 
 void *needMem(size_t size)
 /* Need mem calls abort if the memory allocation fails. The memory
@@ -106,8 +133,11 @@ return pt;
 void *needMoreMem(void *old, size_t copySize, size_t newSize)
 /* Allocate a new buffer, copy old buffer to it, free old buffer. */
 {
-void *newBuf = needLargeMem(newSize);
+char *newBuf = needLargeMem(newSize);
+if (copySize > newSize)
+    internalErr();
 memcpy(newBuf, old, copySize);
+memset(newBuf+copySize, 0, newSize - copySize);
 freeMem(old);
 return newBuf;
 }

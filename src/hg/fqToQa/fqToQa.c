@@ -36,6 +36,15 @@ errAbort(
  "from the .fq file will be stored in the qaInfo file");
 }
 
+void faRecNameToQaFileName(char *outDir, char *ucscName, char *path)
+/* Convert fa record name to qa file name. */
+{
+char *dup = cloneString(ucscName);
+chopSuffix(dup);
+sprintf(path, "%s/%s.qa", outDir, dup);
+freeMem(dup);
+}
+
 void fqToQa(char *inFile, char *outDir, char *outTabName)
 /* fqToQa - convert from fq format with one big file to
  * format with one file per clone. */

@@ -6,6 +6,25 @@
 /* Cheapcgi.h - turns variables passed from the web form into 
  * something that C understands. */
 
+#ifndef DYSTRING_H
+#include "dystring.h"
+#endif 
+
+struct cgiVar
+/* Info on one cgi variable. */
+    {
+    struct cgiVar *next;	/* Next in list. */
+    char *name;			/* Name - allocated in hash. */
+    char *val;  		/* Value - also not allocated here. */
+    boolean saved;		/* True if saved. */
+    };
+
+/* return the list of cgiVar's */
+struct cgiVar* cgiVarList();
+
+/* Get the string associated with varName from the cookie string. */
+char *findCookieData(char *varName);
+
 /* Return TRUE if looks like we're being run as a CGI. */
 boolean cgiIsOnWeb();
 
@@ -14,14 +33,47 @@ boolean cgiIsOnWeb();
 char *cgiString(char *varName);
 int cgiInt(char *varName);
 double cgiDouble(char *varName);
+
 boolean cgiBoolean(char *varName);
+/* The cgiBoolean is a little problematic.  If the variable
+ * is TRUE it exists, but if it is false it is simply not
+ * defined.   cgiBoolean() thus returns FALSE if the CGI
+ * variable doesn't exist or if it is set to FALSE.  To
+ * work around this when need be use cgiBooleanDefined(),
+ * which relies on the fact that when we define a boolean
+ * variable we also define a hidden variable. */
+
+boolean cgiBooleanDefined(char *name);
+/* Return TRUE if boolean variable is defined (by
+ * checking for shadow). */
+
+char *cgiBooleanShadowPrefix();
+/* Prefix for shadow variable set with boolean variables. */
+
+int cgiIntExp(char *varName);
+/* Evaluate an integer expression in varName and
+ * return value. */
 
 char *cgiOptionalString(char *varName);
 /* Return value of string if it exists in cgi environment, else NULL */
 
+char *cgiUsualString(char *varName, char *usual);
+/* Return value of string if it exists in cgi environment.  
+ * Otherwiser return 'usual' */
+
+struct slName *cgiStringList(char *varName);
+/* Find list of cgi variables with given name.  This
+ * may be empty.  Free result with slFreeList(). */
+
 int cgiOptionalInt(char *varName, int defaultVal);
 /* This returns value of varName if it exists in cgi environment, 
  * otherwise it returns defaultVal. */
+
+double cgiOptionalDouble(char *varName, double defaultVal);
+/* Returns double value. */
+
+#define cgiUsualInt cgiOptionalInt
+#define cgiUsualDouble cgiOptionalDouble
 
 struct cgiChoice
 /* Choice table */
@@ -49,12 +101,53 @@ char *cgiEncode(char *inString);
  * and all other characters translated to %hexVal. 
  * You can free return value with freeMem(). */
 
+void cgiMakeButton(char *name, char *value);
+/* Make 'submit' type button. */
+
+void cgiMakeRadioButton(char *name, char *value, boolean checked);
+/* Make radio type button.  A group of radio buttons should have the
+ * same name but different values.   The default selection should be
+ * sent with checked on. */
+
+void cgiMakeCheckBox(char *name, boolean checked);
+/* Make check box. */
+
+void cgiMakeTextVar(char *varName, char *initialVal, int charSize);
+/* Make a text control filled with initial value.  If charSize
+ * is zero it's calculated from initialVal size. */
+
+void cgiMakeIntVar(char *varName, int initialVal, int maxDigits);
+/* Make a text control filled with initial value.  */
+
+void cgiMakeDropList(char *name, char *menu[], int menuSize, char *checked);
+/* Make a drop-down list with names. */
+
+void cgiMakeDropListFull(char *name, char *menu[], char *values[], int menuSize, char *checked, char *extraAttribs);
+/* Make a drop-down list with names and values. */
+
 void cgiMakeHiddenVar(char *varName, char *string);
 /* Store string in hidden input for next time around. */
 
 void cgiContinueHiddenVar(char *varName);
 /* Write CGI var back to hidden input for next time around. 
  * (if it exists). */
+
+void cgiContinueAllVars();
+/* Write back all CGI vars as hidden input for next time around. */
+
+void cgiVarExclude(char *varName);
+/* If varName exists, remove it. */
+
+void cgiVarExcludeExcept(char **varNames);
+/* Exclude all variables except for those in NULL
+ * terminated array varNames.  varNames may be NULL
+ * in which case nothing is excluded. */
+
+void cgiVarSet(char *varName, char *val);
+/* Set a cgi variable to a particular value. */
+
+struct dyString *cgiUrlString();
+/* Get URL-formatted that expresses current CGI variable state. */
 
 boolean cgiSpoof(int *pArgc, char *argv[]);
 /* Use the command line to set up things as if we were a CGI program. 
@@ -67,3 +160,8 @@ boolean cgiSpoof(int *pArgc, char *argv[]);
  * the character '=') are erased from argc/argv.  Normally you call this
  *        cgiSpoof(&argc, argv);
  */
+
+boolean cgiFromCommandLine(int *pArgc, char *argv[], boolean preferWeb);
+/* Use the command line to set up things as if we were a CGI program. 
+ * If preferWeb is TRUE will choose real CGI variables over command
+ * line ones. */

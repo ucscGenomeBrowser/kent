@@ -4,6 +4,8 @@
 
 #include "common.h"
 #include "jksql.h"
+#include "gff.h"
+#include "linefile.h"
 #include "genePred.h"
 
 struct genePred *genePredLoad(char **row)
@@ -100,26 +102,26 @@ void genePredOutput(struct genePred *el, FILE *f, char sep, char lastSep)
 {
 int i;
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->name, sep);
+fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->chrom, sep);
+fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->strand, sep);
+fprintf(f, "%s", el->strand);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->txStart, sep);
+fprintf(f, "%u", el->txStart);
 fputc(sep,f);
-fprintf(f, "%u", el->txEnd, sep);
+fprintf(f, "%u", el->txEnd);
 fputc(sep,f);
-fprintf(f, "%u", el->cdsStart, sep);
+fprintf(f, "%u", el->cdsStart);
 fputc(sep,f);
-fprintf(f, "%u", el->cdsEnd, sep);
+fprintf(f, "%u", el->cdsEnd);
 fputc(sep,f);
-fprintf(f, "%u", el->exonCount, sep);
+fprintf(f, "%u", el->exonCount);
 fputc(sep,f);
 if (sep == ',') fputc('{',f);
 for (i=0; i<el->exonCount; ++i)
@@ -137,5 +139,116 @@ for (i=0; i<el->exonCount; ++i)
     }
 if (sep == ',') fputc('}',f);
 fputc(lastSep,f);
+}
+
+/* ---------  Start of hand generated code. ---------------------------- */
+
+struct genePred *genePredLoadAll(char *fileName) 
+/* Load all genePred from a tab-separated file.
+ * Dispose of this with genePredFreeList(). */
+{
+struct genePred *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[10];
+
+while (lineFileRow(lf, row))
+    {
+    el = genePredLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+int genePredCmp(const void *va, const void *vb)
+/* Compare to sort based on chromosome, txStart. */
+{
+const struct genePred *a = *((struct genePred **)va);
+const struct genePred *b = *((struct genePred **)vb);
+int dif;
+dif = strcmp(a->chrom, b->chrom);
+if (dif == 0)
+    dif = a->txStart - b->txStart;
+return dif;
+}
+
+
+struct genePred *genePredFromGroupedGff(struct gffFile *gff, struct gffGroup *group, char *name,
+	char *exonSelectWord)
+/* Convert gff->groupList to genePred list. */
+{
+struct genePred *gp;
+int cdsStart = BIGNUM, cdsEnd = -BIGNUM;
+int exonCount = 0;
+struct gffLine *gl;
+unsigned *eStarts, *eEnds;
+int i;
+boolean anyExon = FALSE;
+
+/* Look to see if any exons.  If not allow CDS to be
+ * used instead. */
+if (exonSelectWord)
+    {
+    for (gl = group->lineList; gl != NULL; gl = gl->next)
+	{
+	if (sameWord(gl->feature, exonSelectWord))
+	    {
+	    anyExon = TRUE;
+	    break;
+	    }
+	}
+    }
+else
+    anyExon = TRUE;
+if (!anyExon)
+    exonSelectWord = "CDS";
+
+/* Count up exons and figure out cdsStart and cdsEnd. */
+for (gl = group->lineList; gl != NULL; gl = gl->next)
+    {
+    char *feat = gl->feature;
+    if (exonSelectWord == NULL || sameWord(feat, exonSelectWord))
+        {
+	++exonCount;
+	}
+    if (sameWord(feat, "CDS") || sameWord(feat, "start_codon") 
+        || sameWord(feat, "stop_codon"))
+	{
+	if (gl->start < cdsStart) cdsStart = gl->start;
+	if (gl->end > cdsEnd) cdsEnd = gl->end;
+	}
+    }
+if (cdsStart > cdsEnd)
+    {
+    cdsStart = group->start;
+    cdsEnd = group->end;
+    }
+if (exonCount == 0)
+    return NULL;
+
+/* Allocate genePred and fill in values. */
+AllocVar(gp);
+gp->name = cloneString(name);
+gp->chrom = cloneString(group->seq);
+gp->strand[0] = group->strand;
+gp->txStart = group->start;
+gp->txEnd = group->end;
+gp->cdsStart = cdsStart;
+gp->cdsEnd = cdsEnd;
+gp->exonCount = exonCount;
+gp->exonStarts = AllocArray(eStarts, exonCount);
+gp->exonEnds = AllocArray(eEnds, exonCount);
+i = 0;
+for (gl = group->lineList; gl != NULL; gl = gl->next)
+    {
+    if (exonSelectWord == NULL || sameWord(gl->feature, exonSelectWord))
+        {
+	eStarts[i] = gl->start;
+	eEnds[i] = gl->end;
+	++i;
+	}
+    }
+return gp;
 }
 

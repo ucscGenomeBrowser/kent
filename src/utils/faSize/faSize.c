@@ -92,8 +92,8 @@ unsigned long baseCount = 0;
 unsigned long nCount = 0;
 struct lineFile *lf;
 struct faInfo *fiList = NULL, *fi;
-// boolean detailed = cgiBoolean("detailed");
-boolean detailed = FALSE;
+boolean detailed = cgiBoolean("detailed");
+ZeroVar(&seq);
 
 dnaUtilOpen();
 for (i = 0; i<faCount; ++i)
@@ -137,7 +137,7 @@ if (!detailed)
 int main(int argc, char *argv[])
 /* Process command line . */
 {
-//cgiSpoof(&argc, argv);
+cgiSpoof(&argc, argv);
 if (argc < 2)
     usage();
 faSize(argv+1, argc-1);

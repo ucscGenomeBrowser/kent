@@ -2,11 +2,14 @@
 #include "common.h"
 #include "linefile.h"
 #include "dystring.h"
+#include "cheapcgi.h"
 #include "hCommon.h"
+#include "hdb.h"
 #include "jksql.h"
 #include "rmskOut.h"
 
 char *createRmskOut = "CREATE TABLE %s (\n"
+"%s"				/* Optional bin */
 "   swScore int unsigned not null,	# Smith Waterman alignment score\n"
 "   milliDiv int unsigned not null,	# Base mismatches in parts per thousand\n"
 "   milliDel int unsigned not null,	# Bases deleted in parts per thousand\n"
@@ -24,9 +27,14 @@ char *createRmskOut = "CREATE TABLE %s (\n"
 "   repLeft int not null,	# Size of repeat sequence\n"
 "   id char(1) not null,	# '*' or ' '.  I don't know what this means\n"
 "             #Indices\n"
+"%s"                            /* Optional bin. */
 "   INDEX(genoStart),\n"
 "   INDEX(genoEnd)\n"
 ")\n";
+
+boolean noBin = FALSE;
+char *tabFileName = NULL;
+FILE *tabFile = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -36,7 +44,10 @@ errAbort(
   "usage:\n"
   "   hgLoadOut database file(s).out\n"
   "For each table chrN.out this will create the table\n"
-  "chrN_rmsk in the database\n");
+  "chrN_rmsk in the database\n"
+  "options:\n"
+  "   -nobin - don't introduce bin fields\n"
+  "   -tabFile=text.tab - don't actually load database, just create tab file");
 }
 
 void badFormat(struct lineFile *lf, int id)
@@ -85,8 +96,13 @@ struct dyString *query = newDyString(1024);
 printf("Processing %s\n", rmskFile);
 
 /* Make temporary tab delimited file. */
-tmpnam(tempName);
-f = mustOpen(tempName, "w");
+if (tabFile != NULL)
+    f = tabFile;
+else
+    {
+    tmpnam(tempName);
+    f = mustOpen(tempName, "w");
+    }
 
 /* Open .out file and process header. */
 lf = lineFileOpen(rmskFile, TRUE);
@@ -130,40 +146,48 @@ while (lineFileNext(lf, &line, &lineSize))
     r.repEnd = atoi(words[12]);
     r.repLeft = parenSignInt(words[13], lf);
     r.id[0] = ((wordCount > 14) ? words[14][0] : ' ');
+    if (!noBin)
+       fprintf(f, "%u\t", hFindBin(r.genoStart, r.genoEnd));
     rmskOutTabOut(&r, f);
     }
-fclose(f);
 
-/* Load database table. */
-splitPath(rmskFile, dir, base, extension);
-chopSuffix(base);
-sprintf(tableName, "%s_rmsk", base);
-printf("Loading up table %s\n", tableName);
+/* Create database table. */
+if (tabFile == NULL)
+    {
+    carefulClose(&f);
+    splitPath(rmskFile, dir, base, extension);
+    chopSuffix(base);
+    sprintf(tableName, "%s_rmsk", base);
+    printf("Loading up table %s\n", tableName);
+    if (sqlTableExists(conn, tableName))
+	{
+	dyStringPrintf(query, "DROP table %s", tableName);
+	sqlUpdate(conn, query->string);
+	}
+    dyStringClear(query);
+    dyStringPrintf(query, createRmskOut, tableName,
+       (noBin ? "" : "  bin smallint unsigned not null,\n"),
+       (noBin ? "" : "   INDEX(bin),\n") );
+    sqlUpdate(conn, query->string);
 
-#ifdef SOMETIMES
-dyStringPrintf(query, "DROP table %s", tableName);
-sqlUpdate(conn, query->string);
-#endif /* SOMETIMES */
-
-dyStringClear(query);
-dyStringPrintf(query, createRmskOut, tableName);
-sqlMaybeMakeTable(conn, tableName, query->string);
-dyStringClear(query);
-dyStringPrintf(query, "DELETE from %s", tableName);
-sqlUpdate(conn, query->string);
-dyStringClear(query);
-dyStringPrintf(query, 
-   "LOAD data local infile '%s' into table %s", tempName, tableName);
-sqlUpdate(conn, query->string);
-remove(tempName);
+    /* Load database from tab-file. */
+    dyStringClear(query);
+    dyStringPrintf(query, 
+	"LOAD data local infile '%s' into table %s", tempName, tableName);
+    sqlUpdate(conn, query->string);
+    remove(tempName);
+    }
 }
+
 
 void hgLoadOut(char *database, int rmskCount, char *rmskFileNames[])
 /* hgLoadOut - load RepeatMasker .out files into database. */
 {
-struct sqlConnection *conn = sqlConnect(database);
+struct sqlConnection *conn = NULL;
 int i;
 
+if (tabFile == NULL)
+    conn = sqlConnect(database);
 for (i=0; i<rmskCount; ++i)
     {
     loadOneOut(conn, rmskFileNames[i]);
@@ -174,8 +198,14 @@ sqlDisconnect(&conn);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+cgiSpoof(&argc, argv);
 if (argc < 3)
     usage();
+noBin = (cgiBoolean("nobin") || cgiBoolean("noBin"));
+tabFileName = cgiOptionalString("tabFile");
+if (tabFileName == NULL) tabFileName = cgiOptionalString("tabfile");
+if (tabFileName != NULL)
+    tabFile = mustOpen(tabFileName, "w");
 hgLoadOut(argv[1], argc-2, argv+2);
 return 0;
 }

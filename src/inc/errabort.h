@@ -1,8 +1,3 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
 /* ErrAbort.h - our error handler. 
  *
  * This maintains two stacks - a warning message printer
@@ -18,12 +13,16 @@
  * if they run out of memory.  
  */
 
-
+#ifndef ERRABORT_H
+#define ERRABORT_H
 void errAbort(char *format, ...);
 /* Abort function, with optional (printf formatted) error message. */
 
 void vaErrAbort(char *format, va_list args);
 /* Abort function, with optional (vprintf formatted) error message. */
+
+void errnoAbort(char *format, ...);
+/* Prints error message from UNIX errno first, then does errAbort. */
 
 typedef void (*AbortHandler)();
 /* Function that can abort. */
@@ -55,3 +54,4 @@ void pushWarnHandler(WarnHandler handler);
 void popWarnHandler();
 /* Revert to old warn handler. */
 
+#endif /* ERRABORT_H */

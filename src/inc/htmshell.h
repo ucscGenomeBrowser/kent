@@ -17,8 +17,14 @@
  * then terminate your CGI program, so this works fine.
  */
 
+/* create a cookie with the given stats */
+void htmlSetCookie(char* name, char* value, char* expires, char* path, char* domain, boolean isSecure);
+
 /* Print a line in it's own paragraph. */
 void htmlParagraph(char *line, ...);
+
+void htmlVaParagraph(char *line, va_list args);
+/* Print a line in it's own paragraph. */
 
 /* Center a line in it's own paragraph. */
 void htmlCenterParagraph(char *line, ...);
@@ -44,6 +50,10 @@ void htmlEnd();
 /* Write the end of a stand-alone html file */
 void htmEnd(FILE *f);
 
+void htmlSetBackground(char *imageFile);
+/* Set background - needs to be called before htmlStart
+ * or htmShell. */
+
 /* Echo the input string to the output. */
 void htmlEchoInput();
 
@@ -52,6 +62,15 @@ void htmlBadVar(char *varName);
 
 /* Display centered image file. */
 void htmlImage(char *fileName, int width, int height); 
+
+jmp_buf htmlRecover;  /* Error recovery jump. Exposed for cart's use. */
+
+void htmlVaWarn(char *format, va_list args);
+/* Write an error message.  (Generally you just call warn() or errAbort().
+ * This is exposed mostly for the benefit of the cart.) */
+
+void htmlAbort();
+/* Terminate HTML file.  Exposed for cart's use. */
 
 /* Wrap error recovery around call to doMiddle. */
 void htmErrOnlyShell(void (*doMiddle)());
@@ -65,3 +84,14 @@ void htmEmptyShell(void (*doMiddle)(), char *method);
  * Method should be "query" or "get" or "post".
  */
 void htmShell( char *title, void (*doMiddle)(), char *method); 
+
+/* Wrap an html file around the passed in function.
+ * The passed in function is already in the body. It
+ * should just make paragraphs and return. 
+ * Method should be "query" or "get" or "post".
+param title - The HTML page title
+param head - The head text: can be a refresh directive or javascript
+param method - The function pointer to execute in the middle
+param method - The browser request method to use
+ */
+void htmShellWithHead( char *title, char *head, void (*doMiddle)(), char *method); 
