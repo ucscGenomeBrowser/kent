@@ -6238,7 +6238,7 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     
         kent/src/hg/makeDb/trackDb/mouse/mm5
 
-# CREATE jaxQTL3 (MOUSE QTL) TRACK (DONE - 2004-22-18 Fan)
+# CREATE jaxQTL3 (MOUSE QTL) TRACK (DONE - 2004-11-18 Fan)
 
     cd /cluster/data/mm5/bed
     mkdir qtl.2004-11-08
