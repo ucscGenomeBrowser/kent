@@ -9,7 +9,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.6 2004/01/15 18:56:19 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.7 2004/01/25 20:26:15 markd Exp $";
 
 /* Command line driven variables. */
 int verbose = 0;
@@ -29,14 +29,19 @@ errAbort(
   "options:\n"
   "   -verbose=N - Print copious debugging info. 0 for none, 3 for loads\n"
   "   -chrom=chrN - Just work on one chromosome\n"
+  "   -cds - cluster only on CDS exons\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"verbose", OPTION_INT},
    {"chrom", OPTION_STRING},
+   {"cds", OPTION_BOOLEAN},
    {NULL, 0},
 };
+
+/* from command line  */
+boolean useCds;
 
 struct cluster
 /* A cluster of overlapping genes. */
@@ -221,6 +226,47 @@ freez(pCm);
 return clusterList;
 }
 
+void clusterMakerAddExon(struct clusterMaker *cm, char *table, struct genePred *gp,
+                         int exonStart, int exonEnd, struct dlNode **oldNodePtr)
+/* Add a gene exon to clusterMaker. */
+{
+struct dlNode *oldNode = *oldNodePtr;
+struct binElement *bEl, *bList = binKeeperFind(cm->bk, exonStart, exonEnd);
+if (bList == NULL)
+    {
+    if (oldNode == NULL)
+        {
+        struct cluster *cluster = clusterNew();
+        oldNode = dlAddValTail(cm->clusters, cluster);
+        }
+    addExon(cm->bk, oldNode, exonStart, exonEnd, table, gp);
+    }
+else
+    {
+    for (bEl = bList; bEl != NULL; bEl = bEl->next)
+        {
+        struct dlNode *newNode = bEl->val;
+        if (newNode != oldNode)
+            {
+            if (oldNode == NULL)
+                {
+                /* Add to existing cluster. */
+                oldNode = newNode;
+                }
+            else
+                {
+                /* Merge new cluster into old one. */
+                if (verbose >= 3)
+                    printf("Merging %p %p\n", oldNode, newNode);
+                mergeClusters(cm->bk, bEl->next, oldNode, newNode);
+                }
+            }
+        }
+    addExon(cm->bk, oldNode, exonStart, exonEnd, table, gp);
+    slFreeList(&bList);
+    }
+*oldNodePtr = oldNode;
+}
 
 void clusterMakerAdd(struct clusterMaker *cm, char *table, struct genePred *gp)
 /* Add gene to clusterMaker. */
@@ -239,46 +285,24 @@ struct dlNode *oldNode = NULL;
 
 if (verbose >= 2)
     printf("%s %d-%d\n", gp->name, gp->txStart, gp->txEnd);
+
 for (exonIx = 0; exonIx < gp->exonCount; ++exonIx)
     {
     int exonStart = gp->exonStarts[exonIx];
     int exonEnd = gp->exonEnds[exonIx];
-    struct binElement *bEl, *bList = binKeeperFind(cm->bk, exonStart, exonEnd);
-    if (verbose >= 4)
-	printf("  %d %d\n", exonIx, exonStart);
-    if (bList == NULL)
-	{
-	if (oldNode == NULL)
-	    {
-	    struct cluster *cluster = clusterNew();
-	    oldNode = dlAddValTail(cm->clusters, cluster);
-	    }
-	addExon(cm->bk, oldNode, exonStart, exonEnd, table, gp);
-	}
-    else
-	{
-	for (bEl = bList; bEl != NULL; bEl = bEl->next)
-	    {
-	    struct dlNode *newNode = bEl->val;
-	    if (newNode != oldNode)
-		{
-		if (oldNode == NULL)
-		    {
-		    /* Add to existing cluster. */
-		    oldNode = newNode;
-		    }
-		else
-		    {
-		    /* Merge new cluster into old one. */
-		    if (verbose >= 3)
-			printf("Merging %p %p\n", oldNode, newNode);
-		    mergeClusters(cm->bk, bEl->next, oldNode, newNode);
-		    }
-		}
-	    }
-	addExon(cm->bk, oldNode, exonStart, exonEnd, table, gp);
-	slFreeList(&bList);
-	}
+    if (useCds)
+        {
+        if (exonStart < gp->cdsStart)
+            exonStart = gp->cdsStart;
+        if (exonEnd > gp->cdsEnd)
+            exonEnd = gp->cdsEnd;
+        }
+    if (exonStart < exonEnd)
+        {
+        if (verbose >= 4)
+            printf("  %d %d\n", exonIx, exonStart);
+        clusterMakerAddExon(cm, table, gp, exonStart, exonEnd, &oldNode);
+        }
     }
 }
 
@@ -412,6 +436,7 @@ optionInit(&argc, argv, options);
 verbose = optionInt("verbose", verbose);
 if (argc < 4)
     usage();
+useCds = optionExists("cds");
 clusterGenes(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }
