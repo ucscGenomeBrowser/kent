@@ -12,7 +12,7 @@
 #include "hgFind.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.42 2003/05/06 07:22:19 kate Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.43 2003/06/17 23:06:57 braney Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -41,7 +41,8 @@ char *position = cartUsualString(cart, "position", defaultPosition);
 /* JavaScript to copy input data on the change genome button to a hidden form
 This was done in order to be able to flexibly arrange the UI HTML
 */
-char *onChangeText = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.submit();\"";
+char *onChangeDB = "onchange=\"document.orgForm.db.value = document.mainForm.db.options[document.mainForm.db.selectedIndex].value; document.orgForm.submit();\"";
+char *onChangeOrg = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.db.value = 0; document.orgForm.submit();\"";
 
 /* 
    If we are changing databases via explicit cgi request,
@@ -51,7 +52,7 @@ char *onChangeText = "onchange=\"document.orgForm.org.value = document.mainForm.
 */
 
 oldDb = hashFindVal(oldVars, dbCgiName);
-if (!containsStringNoCase(oldDb, db))
+if (oldDb && !containsStringNoCase(oldDb, db))
     {
     position = defaultPosition;
     removeCustomTrackData();
@@ -96,11 +97,11 @@ puts(
 );
 
 puts("<tr><td align=center>\n");
-printGenomeListHtml(db, onChangeText);
+printGenomeListHtml(db, onChangeOrg);
 puts("</td>\n");
 
 puts("<td align=center>\n");
-printAssemblyListHtml(db);
+printAssemblyListHtml(db, onChangeDB);
 puts("</td>\n");
 
 puts("<td align=center>\n");
@@ -149,6 +150,7 @@ puts(
 );
 
 printf("<FORM ACTION=\"/cgi-bin/hgGateway\" METHOD=\"GET\" NAME=\"orgForm\"><input type=\"hidden\" name=\"org\" value=\"%s\">\n", organism);
+printf("<input type=\"hidden\" name=\"db\" value=\"%s\">\n", db);
 cartSaveSession(cart);
 puts("</FORM>"
 "	<BR></TD><TD WIDTH=15>&nbsp;</TD></TR></TABLE>\n"
