@@ -8,7 +8,7 @@
 #include "xenalign.h"
 #include "pairHmm.h"
 
-static char const rcsid[] = "$Id: xensmall.c,v 1.7 2004/06/30 16:32:45 kent Exp $";
+static char const rcsid[] = "$Id: xensmall.c,v 1.8 2004/06/30 21:51:23 kent Exp $";
 
 static double calcGcRatio(DNA *a, int aSize, DNA *b, int bSize)
 /* Figure out percentage of g/c in a and b. */
@@ -386,6 +386,7 @@ for (tIx = 1; tIx < a->tDim; tIx += 1)
             qSlipState(c1, insertFromCodingCost);
             qSlipState(c2, insertFromCodingCost);
             qSlipState(c3, insertFromCodingCost);
+	    qSlipState(it, 0);	/* Allow double gaps, T first always. */
             shortEndState(iq);
             }
         
@@ -504,7 +505,7 @@ if ((double)targetSize * querySize > 1.1E7)
     errAbort("Can't align %d x %d, too big\n", querySize, targetSize);
 
 setupMatchTable(matchTable, 100, -50);
-gapStart = -200;
+gapStart = -100;
 halfGapStart = gapStart/2;
 gapExt = -20;
 
@@ -625,6 +626,7 @@ for (tIx = 1; tIx < a->tDim; tIx += 1)
             startState(iq);
             qSlipState(iq, gapExt);
             qSlipState(hf, halfGapStart);            
+	    qSlipState(it, 0);	/* Allow double gaps, T first always. */
             shortEndState(iq);
             }
         
