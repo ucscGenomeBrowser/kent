@@ -2,9 +2,17 @@ join ECgeneName
     gbd.ECgene.name
     gbd.ECgenePep.name
 
+join geneidName
+    gbd.geneid.name
+    gbd.geneidPep.name
+
+join genscanName
+    gbd.genscan.name
+    gbd.genscan.pep
+
 join affyU95
     human.affyRatio.name
-    human affyRatioNew.name
+    human.affyRatioNew.name
     human.affyU95.qName
 
 join affyU133
@@ -15,34 +23,61 @@ join chainPt0Id
     hg16.chainPt0.id
     ht16.chainPt0Link.chainId
 
+join bacCloneName 
+    gbd.fishClones.name
+    gbd.bacEndPairs.name
+
 join bacEndAccession external genbank
     gbd.all_bacends.qName
     gbd.seq.name subset
     gbd.mrna.acc subset
-    lfNames comma
+    gbd.bacEndPairs.lfNames comma
+    human.fishClones.beNames comma
+
+join stsNames
+    human.fishClones.stsNames comma
 
 join estAccession external genbank
     gbd.all_est.qName
     gbd.seq.name subset
+    gbd.gbSeq.acc subset
+    gbd.gbStatus.acc subset
     gbd.mrna.acc subset
     gbd.est.qName
     gbd.intronEst.qName
+    gbd.estOrientInfo.name
+    gbd.imageClone.acc subset
 
 join mrnaAccession external genbank
     gbd.all_mrna.qName
     gbd.seq.name subset
+    gbd.gbSeq.acc subset
+    gbd.gbStatus.acc subset
     gbd.mrna.acc subset
     gbd.chr*_mrna.qName
+    gbd.dupSpMrna.mrnaID
+    gbd.dupSpMrna.dupMrnaID
+    gbd.imageClone.acc subset
+
+join proteinAcc external genbank
+    gbd.kgProtAlias.alias subset 
+    gbd.kgXref.protAcc
 
 join humanFosmidId
+    human.fosEndPairs.name
+
+join humanFosmidReadId
     human.all_fosend.qName
+    human.fosEndPairs.lfNames comma
 
 join dbStsId external dbSts
     gbd.all_sts_primer.qName prepend=dbSTS_
     gbd.all_sts_seq.qName
 
 join hugoName external hugo
-    human.atlastOncoGene.locasSymbol
+    human.atlasOncoGene.locusSymbol
+    human.kgAlias.alias subset
+    human.kgXref.geneSymbol
 
 join genBankAuthor
     gbd.mrna.author
@@ -64,20 +99,97 @@ join genBankDescription
     gbd.mrna.description
     gbd.description.id
     
+join genBankGeneName
+    gbd.mrna.geneName
+    gbd.geneName.id
+
+join genBankKeyword
+    gbd.mrna.keyword
+    gbd.keyword.id
+
 join bioCycMapId external bioCyc
     gbd.bioCycMapDesc.mapID
     gbd.bioCycPathway.mapID
 
+join keggMapId external kegg
+    gbd.keggMapDesc.mapID
+    gbd.keggPathway.mapID
+
 join refSeqId external genbank
     gbd.bioCycPathway.geneId
-    cgapAlias.alias
+    gbd.cgapAlias.alias
+    gbd.imageClone.acc subset
+    human.kgAlias.alias subset
+    gbd.kgXref.refseq
+
+join locusLinkId external locusLink
+    gbd.keggPathway.mapID
+
+join knownAlignId
+    gbd.knownGene.alignId
+
+join knownClusterId
+    gbd.knownCanonical.clusterId
 
 join knownGeneId external genbank
     gbd.bioCycPathway.kgID
     human&mouse.ceBlastTab.query
+    human&mouse.dmBlastTab.query
+    human&mouse.drBlastTab.query
+    gbd.dupSpMrna.mrnaID
+    gbd.mrna.acc subset
+    gbd.seq.acc subset
+    gbd.foldUtr3.name
+    gbd.foldUtr5.name
+    human.gnfU95Distance.query
+    human.gnfU95Distance.target
+    gbd.keggPathway.kgID
+    gbd.kgAlias.kgID
+    gbd.kgProtAlias.kgID
+    gbd.kgXref.kgID
+    gbd.kgXref.mRNA
+    gbd.knownBlastTab.query
+    gbd.knownBlastTab.target
+    gbd.knownCanonical.transcript
+    gbd.knownGene.name
+
+join swissProtId external SwissProt
+    gbd.dupSpMrna.proteinID
+    gbd.dupSpMrna.dupProteinID
+    gbd.kgProtAlias.displayID
+    gbd.kgXref.spDisplayID
+    gbd.knownCanonical.protein
+    gbd.knownGene.proteinId
+
+join swissProtAccession external SwissProt
+    gbd.kgProtAlias.alias part
+    gbd.kgProtMap.qName
+    gbd.kgXref.spID
 
 join wormBaseId
     gbd.ceBlastTab.target
+
+join flyBaseId
+    gbd.dmBlastTab.target
+
+join ensemblTranscriptId
+    gbd.ensGene.name
+    gbd.ensGeneXref.transcript_name
+    gbd.ensGtp.transcript chop=.
+    gbd.ensPep.name
+    gbd.ensTranscript.transcript_name
+
+join ensemblGeneId
+    gbd.ensGeneXref.gene_name
+    gbd.ensGtp.gene chop=.
+    gbd.ensTranscript.gene_name
+
+join ensemblProteinId
+    gbd.ensGtp.protein chop=.
+    gbd.ensTranscript.translation_name
+
+join ensemblDanioRerioTranslationId
+    gbd.drBlastTab.target
 
 join humanBacAccession
     human.certificate.accession1
@@ -85,6 +197,7 @@ join humanBacAccession
     human.gl.frag chop=.
     human.gold.frag chop=.
     human.clonePos.name chop=.
+    human.fishClones.accNames chop=. comma
 
 join humanBacAccessionVersion
     human.gl.frag chop=_
