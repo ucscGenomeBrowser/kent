@@ -1534,11 +1534,11 @@ void checkTitle()
 if (ti.title == NULL)
     {
     if( cgiVarExists("jump_to"))
-        snprintf(titleBuf, 80, "position: %s:%d-%d size %d strand %c", ti.chrom, ti.chromStart, ti.chromEnd, ti.chromEnd - ti.chromStart, ti.strand );
+        snprintf(titleBuf, sizeof(titleBuf), "WS120 position: %s:%d-%d size %d strand %c", ti.chrom, ti.chromStart, ti.chromEnd, ti.chromEnd - ti.chromStart, ti.strand );
     else if (ti.locus && 0 < strlen(ti.locus))
-        snprintf(titleBuf, 80, "Region Near: %s", ti.locus );
+        snprintf(titleBuf, sizeof(titleBuf), "WS120 Region Near: %s", ti.locus );
     else
-        snprintf(titleBuf, 80, "Tracks Display");
+        snprintf(titleBuf, sizeof(titleBuf), "WS120 Tracks Display");
     ti.title = titleBuf;
     }
 }
@@ -1661,7 +1661,7 @@ if (!gotMap)
     }
 
 /* Tell browser where to go when they click on image. */
-printf("<FORM ACTION=\"%stracks.exe\">\n\n", cgiDir());
+printf("<FORM ACTION=\"%stracksWS120.exe\">\n\n", cgiDir());
 
 /* Perpetuate some hidden variables. */
 ti.whereHid = trimSpaces(cgiString("where"));
@@ -1748,10 +1748,10 @@ fputs(" ", stdout);
 makeSubmitButton("go_to_where", "jump");
 fputs("</P>\n", stdout);
 
-fputs("<P>Return to <A HREF=\"../Intronerator/index.html\">Intronerator Gateway</A></P>\n", stdout);
+fputs("<P>Return to <A HREF=\"../IntronWS120/index.html\">Intronerator Gateway WS120</A></P>\n", stdout);
 browserChr = strndup(ti.chrom,5);
 touppers(browserChr);
-printf("<P>Link to Genome Browser <A HREF=\"http://genome.ucsc.edu/cgi-bin/hgTracks?db=ce1&org=C.+elegans&position=chr%s:%d-%d\" target=_blank> chr%s:%d-%d </A><BR>\n", browserChr, ti.chromStart, ti.chromEnd, browserChr, ti.chromStart, ti.chromEnd);
+printf("<P>Link to Genome Browser <A HREF=\"http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?db=ce2&org=C.+elegans&position=chr%s:%d-%d\" target=_blank> chr%s:%d-%d </A><BR>\n", browserChr, ti.chromStart, ti.chromEnd, browserChr, ti.chromStart, ti.chromEnd);
 free(browserChr);
 
 for (group = groupList; group != NULL; group = group->next)
@@ -1985,7 +1985,7 @@ if (cgiVarExists("map"))
 
 if( resetTitle )
     {
-        snprintf(titleBuf, 80, "position: %s:%d-%d size %d strand %c", ti.chrom, ti.chromStart, ti.chromEnd, ti.chromEnd - ti.chromStart, ti.strand );
+        snprintf(titleBuf, sizeof(titleBuf), "WS120 position: %s:%d-%d size %d strand %c", ti.chrom, ti.chromStart, ti.chromEnd, ti.chromEnd - ti.chromStart, ti.strand );
 	ti.title = titleBuf;
     }
 else
@@ -2005,6 +2005,7 @@ if (argc == 2 && strcmp(argv[1], "test") == 0)
     {
     putenv("QUERY_STRING=where=unc-52");
     }
+putenv("JKWEB=../htdocs/IntronWS120/");
 dnaUtilOpen();
 htmEmptyShell(dispatcher, "QUERY");
 return 0;
