@@ -14,6 +14,8 @@
 # Note: rsh does not return the exit code of the remove process, thus
 # ssh is used.
 #
+# $Id: gbAlignRun,v 1.5 2003/07/29 04:44:49 markd Exp $
+#
 use strict;
 use warnings;
 use File::Basename;

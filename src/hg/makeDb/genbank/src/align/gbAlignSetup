@@ -41,6 +41,8 @@
 #    the failed jobs is the way to recover.
 #  - create a list of all expected PSL files.
 #
+# $Id: gbAlignSetup,v 1.5 2003/07/29 04:44:49 markd Exp $
+#
 use strict;
 use warnings;
 use File::Basename;

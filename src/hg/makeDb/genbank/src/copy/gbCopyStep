@@ -18,6 +18,8 @@
 #   - buildRoot - gbRoot directory on buildServer
 #   - db1 - List of databses to update
 #
+# $Id: gbCopyStep,v 1.7 2003/07/29 04:44:49 markd Exp $
+#
 use strict;
 use warnings;
 use File::Basename;

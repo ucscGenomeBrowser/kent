@@ -17,6 +17,8 @@
 # -genbank - only update genbank
 # -refseq - only update refseq
 #
+# $Id: gbDownloadStep,v 1.5 2003/07/29 04:44:49 markd Exp $
+#
 
 use strict;
 use warnings;

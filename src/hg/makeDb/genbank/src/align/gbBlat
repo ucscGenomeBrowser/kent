@@ -21,6 +21,8 @@
 # is still produced.  This script is very careful to exit non-zero if an error
 # occurs.
 #
+# $Id: gbBlat,v 1.5 2003/07/29 04:44:49 markd Exp $
+#
 set -e
 
 # tools are relative to current directory.  Use path to this script to find

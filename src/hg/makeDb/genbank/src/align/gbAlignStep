@@ -54,6 +54,8 @@
 #    checking results.
 #  - gbAlignFinish - Process PSL files and install in data directory
 #
+# $Id: gbAlignStep,v 1.9 2003/07/29 04:44:49 markd Exp $
+#
 use strict;
 use warnings;
 use File::Basename;

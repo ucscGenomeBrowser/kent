@@ -14,6 +14,8 @@
 #
 # Obtains other parameters from etc/genbank.conf
 #
+# $Id: gbAlignFinish,v 1.6 2003/07/29 04:44:49 markd Exp $
+#
 use strict;
 use warnings;
 use File::Basename;

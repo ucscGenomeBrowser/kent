@@ -15,6 +15,7 @@
 # Arguments:
 #   o iserverdir - directory on iservers, must be under /scratch/genbank.
 #
+# $Id: gbAlignIServerClean,v 1.2 2003/07/29 04:44:49 markd Exp $
 #
 use strict;
 use warnings;
