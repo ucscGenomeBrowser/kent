@@ -1206,7 +1206,7 @@ dupe->identifier = jp->identifier;
 return dupe;
 }
 
-static boolean joinerDtfSameTable(struct joinerDtf *a, struct joinerDtf *b)
+boolean joinerDtfSameTable(struct joinerDtf *a, struct joinerDtf *b)
 /* Return TRUE if they are in the same database and table. */
 {
 return sameString(a->database, b->database) && sameString(a->table, b->table);

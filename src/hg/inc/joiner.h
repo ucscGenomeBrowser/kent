@@ -163,6 +163,9 @@ struct slRef *joinerSetInheritanceChain(struct joinerSet *js);
 /* Return list of self, children, and parents (but not siblings).
  * slFreeList result when done. */
 
+boolean joinerDtfSameTable(struct joinerDtf *a, struct joinerDtf *b);
+/* Return TRUE if they are in the same database and table. */
+
 boolean joinerDtfAllSameTable(struct joinerDtf *fieldList);
 /* Return TRUE if all joinerPairs refer to same table. */
 
