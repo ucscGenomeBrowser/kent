@@ -1,5 +1,0 @@
-testCommaOutputInput() - PASSED.
-testTabOutputInput() - PASSED.
-testRegularInsertion() - PASSED.
-testEscapedInsertion() - PASSED.
-dbLinkTest: PASSED. All 4 tests passed
