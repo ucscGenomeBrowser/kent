@@ -1,6 +1,6 @@
 track gc5Base
 shortLabel GC% 5 base
-longLabel GC Percent in 5 base windows
+longLabel GC Percent in 5-Base windows
 group map
 priority 23.5
 visibility hide

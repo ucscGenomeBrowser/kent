@@ -9,7 +9,7 @@ type ctgPos
 
 track gcPercent
 shortLabel GC% 20K
-longLabel Percentage GC in 20,000 Base Windows
+longLabel Percentage GC in 20,000-Base Windows
 group map
 priority 23
 visibility hide
@@ -18,7 +18,7 @@ type bed 4 +
 
 track gc5Base
 shortLabel GC Percent
-longLabel Percentage GC in 5 base windows
+longLabel Percentage GC in 5-Base Windows
 group map
 priority 23.5
 visibility hide

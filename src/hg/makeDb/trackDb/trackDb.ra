@@ -186,7 +186,7 @@ type bed 4 +
 
 track gcPercent
 shortLabel GC Percent
-longLabel Percentage GC in 20,000 Base Windows
+longLabel Percentage GC in 20,000-Base Windows
 group map
 priority 23
 visibility hide
@@ -195,7 +195,7 @@ type bed 4 +
 
 track gcPercentSmall
 shortLabel GC % 100b
-longLabel Percentage GC in 100 Base Windows
+longLabel Percentage GC in 100-Base Windows
 group map
 priority 24
 visibility hide
@@ -997,7 +997,7 @@ altColor 0,0,0
 type bed 4 +
 
 shortLabel Rat Synteny
-longLabel Human/Rat Synteny Using Blastz Single Coverage (100,000 base window)
+longLabel Human/Rat Synteny Using Blastz Single Coverage (100,000-base window)
 group compGeno
 priority 138
 visibility hide
@@ -1219,7 +1219,7 @@ type wig 0 100
 
 track gc5Base
 shortLabel GC Percent
-longLabel GC Percent in 5 base windows
+longLabel GC Percent in 5-Base Windows
 group map
 priority 23.5
 visibility hide

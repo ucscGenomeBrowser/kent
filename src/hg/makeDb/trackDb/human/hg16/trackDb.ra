@@ -17,7 +17,7 @@ type clonePos
 
 track gcPercent
 shortLabel GC% 20K
-longLabel Percentage GC in 20,000 Base Windows
+longLabel Percentage GC in 20,000-Base Windows
 group map
 priority 23
 visibility hide
@@ -1283,7 +1283,7 @@ autoScaleDefault Off
 
 track gc5Base
 shortLabel GC Percent
-longLabel Percentage GC in 5 base windows
+longLabel Percentage GC in 5-Base Windows
 group map
 priority 23.5
 visibility hide
@@ -1299,7 +1299,7 @@ type wig 0 100
 
 track gc5Win20K
 shortLabel GC% Win20K
-longLabel GC Percent in 5 Bases Smoothed to 20,000 Base Windows
+longLabel GC Percent in 5 Bases Smoothed to 20,000-Base Windows
 group map
 priority 23.6
 visibility hide
@@ -1315,7 +1315,7 @@ type wig 0 100
 
 track gc5Win100K
 shortLabel GC% Win100K
-longLabel GC Percent in 5 Bases Smoothed to 100,000 Base Windows
+longLabel GC Percent in 5 Bases Smoothed to 100,000-Base Windows
 group map
 priority 23.7
 visibility hide

@@ -24,7 +24,7 @@ otherDb ce1
 
 track gc5Base
 shortLabel GC % 5 base
-longLabel GC Percent in 5 Base Windows
+longLabel GC Percent in 5-Base Windows
 group map
 priority 23.5
 visibility hide
