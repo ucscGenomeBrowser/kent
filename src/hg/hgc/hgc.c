@@ -7862,6 +7862,54 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
+void haplotypeDetails(struct trackDb *tdb, char *item)
+{
+char *dupe, *type, *words[16];
+char title[256];
+int wordCount;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+char table[64];
+boolean hasBin;
+struct bed *bed;
+char query[512];
+struct sqlResult *sr;
+char **row;
+boolean firstTime = TRUE;
+char *itemForUrl = item;
+int numSnpsReq = -1;
+if(tdb == NULL)
+    errAbort("TrackDb entry null for haplotype, item=%s\n", item);
+
+dupe = cloneString(tdb->type);
+genericHeader(tdb, item);
+wordCount = chopLine(dupe, words);
+printCustomUrl(tdb, item, TRUE);
+hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
+    	table, item, seqName, start);
+sr = sqlGetResult(conn, query);
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    /* set up for first time */
+    if (firstTime)
+	firstTime = FALSE;
+    else
+	htmlHorizontalLine();
+    bed = bedLoadN(row+hasBin, 12);
+
+    /* finish off report ... */
+    printf("<B>Block:</B> %s<BR>\n", bed->name);
+    printf("<B>Number of SNPs in block:</B> %d<BR>\n", bed->blockCount);
+    /*    printf("<B>Number of SNPs to represent block:</B> %d<BR>\n",numSnpsReq);*/
+    printf("<B>Strand:</B> %s<BR>\n", bed->strand);
+    bedPrintPos(bed, 3);
+    }
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
+
 void mitoDetails(struct trackDb *tdb, char *item)
 {
 char *dupe, *type, *words[16];
@@ -7879,7 +7927,7 @@ boolean firstTime = TRUE;
 char *itemForUrl = item;
 int numSnpsReq = -1;
 if(tdb == NULL)
-    errAbort("TrackDb entry null for perlegen, item=%s\n", item);
+    errAbort("TrackDb entry null for mitoSnps, item=%s\n", item);
 
 dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
@@ -10340,6 +10388,10 @@ else if (sameWord(track, "nci60"))
 else if (sameWord(track, "perlegen"))
     {
     perlegenDetails(tdb, item);
+    }
+else if (sameWord(track, "haplotype"))
+    {
+    haplotypeDetails(tdb, item);
     }
 else if (sameWord(track, "mitoSnps"))
     {
