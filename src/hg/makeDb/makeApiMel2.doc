@@ -551,4 +551,15 @@ apiMel2.perChromTables = no
     # Make a README.txt which explains the files & formats.
     md5sum *.gz > md5sum.txt
 
+# MAKE GC5BASE WIGGLE TRACK (DONE 2/17/2005 Andy)
+    ssh hgwdev 
+    mkdir /cluster/data/apiMel2/bed/gc5Base
+    cp /cluster/data/apiMel2/bed/gc5Base
+    hgGcPercent -wigOut -doGaps -file=stdout -win=5 -verbose=2 apiMel2 \
+       /cluster/data/apiMel2 | wigEncode stdin gc5Base.wig gc5Base.wib
+    mkdir /gbdb/apiMel2/wib
+    ln -s `pwd`/gc5Base.wib /gbdb/apiMel2/wib
+    hgLoadWiggle -pathPrefix=/gbdb/apiMel2/wib apiMel2 gc5Base gc5Base.wig
+ 
+
 # MAKE MELANOGASTER PROTEINS TRACK (TODO)
