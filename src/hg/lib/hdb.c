@@ -257,7 +257,6 @@ int hdbChromSize(struct sqlConnection *conn, char *chromName)
 int size;
 char query[256];
 
-conn = hAllocConn();
 snprintf(query, sizeof(query), 	
 	"select size from chromInfo where chrom = '%s'", chromName);
 size = sqlQuickNum(conn, query);
