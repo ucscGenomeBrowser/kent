@@ -368,8 +368,8 @@ void printBed(FILE *out, struct pslPair *ppList, struct clone *clone, char *pslT
 	strand = "+";
       else 
 	strand = "-";
-      d1 = pp->f->psl->tEnd - pp->f->psl->tStart + 1;
-      d2 = pp->r->psl->tEnd - pp->r->psl->tStart + 1;
+      d1 = pp->f->psl->tEnd - pp->f->psl->tStart;
+      d2 = pp->r->psl->tEnd - pp->r->psl->tStart;
       
       if (!NOBIN) 
 	fprintf(out, "%d\t",bin);
@@ -416,7 +416,7 @@ void printOrphan(FILE *out, struct pslAli *paList, struct clone *clone, char *ps
 	  genStart = 0;
 	genEnd = pa->psl->tEnd;
 	}
-      d1 = pa->psl->tEnd - pa->psl->tStart + 1;
+      d1 = pa->psl->tEnd - pa->psl->tStart;
 
       if (!NOBIN) 
 	fprintf(out, "%d\t",bin);
