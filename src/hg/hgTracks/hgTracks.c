@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.626 2003/11/06 19:01:57 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.627 2003/11/11 17:59:59 hiram Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -5277,7 +5277,6 @@ int scaledHeightPer;
 double minRange, maxRange;
 char minRangeStr[32];
 char maxRangeStr[32];
-struct slList *prev = NULL;
 int start;
 int newy;
 
@@ -5390,6 +5389,7 @@ if (withLeftLabels)
 	}
     for (track = trackList; track != NULL; track = track->next)
         {
+	struct slList *prev = NULL;
 	double minRangeCutoff, maxRangeCutoff;
 	char o4[128];
 	char o5[128];
