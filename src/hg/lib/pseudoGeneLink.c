@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "pseudoGeneLink.h"
 
-static char const rcsid[] = "$Id: pseudoGeneLink.c,v 1.15 2004/04/19 02:21:02 baertsch Exp $";
+static char const rcsid[] = "$Id: pseudoGeneLink.c,v 1.16 2004/04/23 06:33:44 baertsch Exp $";
 
 struct pseudoGeneLink *pseudoGeneLinkLoad(char **row)
 /* Load a pseudoGeneLink from row fetched with select * from pseudoGeneLink
@@ -60,17 +60,20 @@ ret->oldScore = sqlUnsigned(row[35]);
 ret->oldIntronCount = sqlSigned(row[36]);
 ret->conservedIntrons = sqlSigned(row[37]);
 ret->intronScores = cloneString(row[38]);
-ret->axtScore = sqlSigned(row[39]);
-ret->refSeq = cloneString(row[40]);
-ret->rStart = sqlSigned(row[41]);
-ret->rEnd = sqlSigned(row[42]);
-ret->mgc = cloneString(row[43]);
-ret->mStart = sqlSigned(row[44]);
-ret->mEnd = sqlSigned(row[45]);
-ret->kgName = cloneString(row[46]);
-ret->kStart = sqlSigned(row[47]);
-ret->kEnd = sqlSigned(row[48]);
-ret->kgId = sqlSigned(row[49]);
+ret->chainId = sqlSigned(row[39]);
+ret->axtScore = sqlSigned(row[40]);
+ret->refSeq = cloneString(row[41]);
+ret->rStart = sqlSigned(row[42]);
+ret->rEnd = sqlSigned(row[43]);
+ret->mgc = cloneString(row[44]);
+ret->mStart = sqlSigned(row[45]);
+ret->mEnd = sqlSigned(row[46]);
+ret->kgName = cloneString(row[47]);
+ret->kStart = sqlSigned(row[48]);
+ret->kEnd = sqlSigned(row[49]);
+ret->adaBoost = sqlSigned(row[50]);
+ret->posConf = atof(row[51]);
+ret->negConf = atof(row[52]);
 return ret;
 }
 
@@ -80,7 +83,7 @@ struct pseudoGeneLink *pseudoGeneLinkLoadAll(char *fileName)
 {
 struct pseudoGeneLink *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[50];
+char *row[53];
 
 while (lineFileRow(lf, row))
     {
@@ -98,7 +101,7 @@ struct pseudoGeneLink *pseudoGeneLinkLoadAllByChar(char *fileName, char chopper)
 {
 struct pseudoGeneLink *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[50];
+char *row[53];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -173,6 +176,7 @@ ret->oldScore = sqlUnsignedComma(&s);
 ret->oldIntronCount = sqlSignedComma(&s);
 ret->conservedIntrons = sqlSignedComma(&s);
 ret->intronScores = sqlStringComma(&s);
+ret->chainId = sqlSignedComma(&s);
 ret->axtScore = sqlSignedComma(&s);
 ret->refSeq = sqlStringComma(&s);
 ret->rStart = sqlSignedComma(&s);
@@ -183,7 +187,9 @@ ret->mEnd = sqlSignedComma(&s);
 ret->kgName = sqlStringComma(&s);
 ret->kStart = sqlSignedComma(&s);
 ret->kEnd = sqlSignedComma(&s);
-ret->kgId = sqlSignedComma(&s);
+ret->adaBoost = sqlSignedComma(&s);
+ret->posConf = sqlFloatComma(&s);
+ret->negConf = sqlFloatComma(&s);
 *pS = s;
 return ret;
 }
@@ -337,6 +343,8 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->intronScores);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
+fprintf(f, "%d", el->chainId);
+fputc(sep,f);
 fprintf(f, "%d", el->axtScore);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
@@ -363,7 +371,11 @@ fprintf(f, "%d", el->kStart);
 fputc(sep,f);
 fprintf(f, "%d", el->kEnd);
 fputc(sep,f);
-fprintf(f, "%d", el->kgId);
+fprintf(f, "%d", el->adaBoost);
+fputc(sep,f);
+fprintf(f, "%f", el->posConf);
+fputc(sep,f);
+fprintf(f, "%f", el->negConf);
 fputc(lastSep,f);
 }
 

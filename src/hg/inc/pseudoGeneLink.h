@@ -5,7 +5,7 @@
 #ifndef PSEUDOGENELINK_H
 #define PSEUDOGENELINK_H
 
-#define PSEUDOGENELINK_NUM_COLS 50
+#define PSEUDOGENELINK_NUM_COLS 53
 
 struct pseudoGeneLink
 /* links a gene/pseudogene prediction to an ortholog or paralog. */
@@ -50,6 +50,7 @@ struct pseudoGeneLink
     int oldIntronCount;	/* old simple intron count */
     int conservedIntrons;	/* conserved intron count */
     char *intronScores;	/* Intron sizes in gene/pseudogene */
+    int chainId;	/*  reserved */
     int axtScore;	/* blastz score, gene mrna aligned to pseudogene */
     char *refSeq;	/* Name of closest regSeq to gene */
     int rStart;	/* refSeq alignment start position */
@@ -60,7 +61,9 @@ struct pseudoGeneLink
     char *kgName;	/* Name of closest knownGene to gene */
     int kStart;	/* kg alignment start position */
     int kEnd;	/* kg alignment end position */
-    int kgId;	/* kg id */
+    int adaBoost;	/* adaBoost label */
+    float posConf;	/* pvalue for positive */
+    float negConf;	/* pvalue for positive */
     };
 
 struct pseudoGeneLink *pseudoGeneLinkLoad(char **row);
