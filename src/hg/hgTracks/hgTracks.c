@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.765 2004/07/16 18:46:36 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.766 2004/07/20 20:10:16 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -8022,7 +8022,7 @@ char *s;
 boolean hideAll = cgiVarExists("hgt.hideAll");
 boolean showedRuler = FALSE;
 
-zoomedToBaseLevel = (winBaseCount * tl.mWidth) <= insideWidth;
+zoomedToBaseLevel = (winBaseCount <= insideWidth / tl.mWidth);
 zoomedToCodonLevel = (ceil(winBaseCount/3) * tl.mWidth) <= insideWidth;
 zoomedToCdsColorLevel = (winBaseCount <= insideWidth*3);
 
@@ -8053,7 +8053,6 @@ registerTrackHandler("cytoBandIdeo", cytoBandIdeoMethods);
 registerTrackHandler("bacEndPairs", bacEndPairsMethods);
 registerTrackHandler("bacEndPairsBad", bacEndPairsBadMethods);
 registerTrackHandler("bacEndPairsLong", bacEndPairsLongMethods);
-zoomedToBaseLevel = (winBaseCount * tl.mWidth) <= insideWidth;
 registerTrackHandler("fosEndPairs", fosEndPairsMethods);
 registerTrackHandler("fosEndPairsBad", fosEndPairsBadMethods);
 registerTrackHandler("fosEndPairsLong", fosEndPairsLongMethods);
