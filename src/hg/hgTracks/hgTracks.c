@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.890 2005/02/04 21:39:09 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.891 2005/02/05 22:19:28 braney Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9565,6 +9565,7 @@ char *freezeName = NULL;
 boolean hideAll = cgiVarExists("hgt.hideAll");
 boolean showedRuler = FALSE;
 long thisTime = 0, lastTime = 0;
+char *clade = cartUsualString(cart, "clade", "");
 
 zoomedToBaseLevel = (winBaseCount <= insideWidth / tl.mWidth);
 zoomedToCodonLevel = (ceil(winBaseCount/3) * tl.mWidth) <= insideWidth;
@@ -9656,7 +9657,9 @@ if (!hideControls)
 	    }
 	else
 	    {
-	    if (sameString(organism, "Archaea"))
+	    if (sameString(clade, "ancestor"))
+                hPrintf("UCSC Genome Browser on %s Ancestor %s Assembly", organism, freezeName);
+	    else if (sameString(organism, "Archaea"))
                 hPrintf("UCSC Genome Browser on Archaeon %s Assembly", freezeName);
 	    else
                 hPrintf("UCSC Genome Browser on %s %s Assembly", organism, freezeName); 
