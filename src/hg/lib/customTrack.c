@@ -150,7 +150,7 @@ static boolean isChromName(char *word)
 return startsWith("chr", word)  || startsWith("ctg", word) || startsWith("NT_", word) || startsWith("target", word);
 }
 
-static boolean checkChromName(char *word, int lineIx)
+static void checkChromName(char *word, int lineIx)
 /* Make sure it's a chromosome or a contig. */
 {
 if (!isChromName(word))
