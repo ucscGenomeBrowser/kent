@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: altPaths.c,v 1.7 2004/07/20 21:45:50 sugnet Exp $";
+static char const rcsid[] = "$Id: altPaths.c,v 1.8 2004/07/20 22:25:47 sugnet Exp $";
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -18,6 +18,8 @@ static struct optionSpec optionSpecs[] =
     {"pathBeds", OPTION_STRING},
     {"dumpDistMatrix", OPTION_STRING},
     {"oldClassification", OPTION_BOOLEAN},
+    {"htmlPrefix", OPTION_STRING},
+    {"browser", OPTION_STRING},
     {NULL, 0}
 };
 
