@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.10 2004/06/04 19:46:24 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.11 2004/06/08 20:33:36 galt Exp $";
 
 /* Command line switches. */
 static boolean noBin = FALSE;		/* Suppress bin field. */
@@ -61,7 +61,7 @@ sr = sqlGetResult(conn, "select * from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     el = chromInfoLoad(row);
-    verbose(4, "Add hash %s value %u (%#x)\n", el->chrom, el->size, (unsigned)&el->size);
+    verbose(4, "Add hash %s value %u (%#lx)\n", el->chrom, el->size, (unsigned long)&el->size);
     hashAdd(ret, el->chrom, (void *)(& el->size));
     }
 sqlFreeResult(&sr);
