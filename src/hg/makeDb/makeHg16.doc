@@ -3436,8 +3436,45 @@ XXXX - Running 2003-08-27 21:32
 hgLoadBed hg16 syntenySelf ucsc100k.bed
 
 
+# SGP GENE PREDICTIONS vs Mm4 (DONE - 2003-12-30 - Hiram)
+    mkdir -p /cluster/data/hg16/bed/sgp_mm4/download
+    cd /cluster/data/hg16/bed/sgp_mm4/download
+    foreach f (/cluster/data/hg16/?{,?}/chr?{,?}{,_random}.fa)
+      set chr = $f:t:r
+      wget --timestamping \
+	http://genome.imim.es/genepredictions/H.sapiens/golden_path_200307_x_mm4/SGP/$chr.gtf
+      wget --timestamping \
+	http://genome.imim.es/genepredictions/H.sapiens/golden_path_200307_x_mm4/SGP/$chr.prot
+    end
+    wget --timestamping \
+http://genome.imim.es/genepredictions/H.sapiens/golden_path_200307_x_mm4/SGP/chrUn.gtf -O chrUn_random.gtf
+    wget --timestamping \
+http://genome.imim.es/genepredictions/H.sapiens/golden_path_200307_x_mm4/SGP/chrUn.prot -O chrUn_random.prot
+    wget --timestamping \
+http://genome.imim.es/genepredictions/H.sapiens/golden_path_200307_x_mm4/SGP/readme
+    # Add missing .1 to protein id's
+    foreach f (*.prot)
+      perl -wpe 's/^(>chr\w+)$/$1.1/' $f > $f:r-fixed.prot
+    end
+    cd ..
+    # since this is a relolad of this table updating the data
+    #	from Mm3 to Mm4.  First check what is there:
+#  featureBits hg16 sgpGene
+#  39781330 bases of 2865248791 (1.388%) in intersection
+    #	now drop that table, and reload
+    hgsql -e "drop table sgpGene;" hg16
+    ldHgGene hg16 sgpGene download/*.gtf -exon=CDS
+#	Read 42880 transcripts in 322086 lines in 39 files
+#	  42880 groups 39 seqs 1 sources 3 feature types
+#	42880 gene predictions
+    hgsql -e "drop table sgpPep;" hg16
+    hgPepPred hg16 generic sgpPep download/*-fixed.prot
+#  featureBits hg16 sgpGene
+#  39569702 bases of 2865248791 (1.381%) in intersection
+#  featureBits hg15 sgpGene
+#  40395614 bases of 2866466359 (1.409%) in intersection
 
-# SGP GENE PREDICTIONS (DONE - 2003-09-14 - Hiram - to be verified)
+# SGP GENE PREDICTIONS - Mm3 (DONE - 2003-09-14 - Hiram - to be verified)
     mkdir -p /cluster/data/hg16/bed/sgp/download
     cd /cluster/data/hg16/bed/sgp/download
     foreach f (/cluster/data/hg16/?{,?}/chr?{,?}{,_random}.fa)
