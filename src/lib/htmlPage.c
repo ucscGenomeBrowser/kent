@@ -12,6 +12,8 @@
 #include "net.h"
 #include "htmlPage.h"
 
+static char const rcsid[] = "$Id: htmlPage.c,v 1.4 2004/03/03 20:52:52 kent Exp $";
+
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
 {
@@ -785,12 +787,6 @@ char *contentType;
 
 if (status == NULL)
     return NULL;
-if (status->status != 200)
-   {
-   warn("%s returned with status code %d", url, status->status);
-   htmlStatusFree(&status);
-   return NULL;
-   }
 
 AllocVar(page);
 page->url = cloneString(url);
@@ -828,6 +824,8 @@ struct htmlPage *htmlPageParseOk(char *url, char *fullText)
 struct htmlPage *page = htmlPageParse(url, fullText);
 if (page == NULL)
    noWarnAbort();
+if (page->status->status != 200)
+   errAbort("%s returned with status code %d", url, page->status->status);
 return page;
 }
 
@@ -869,6 +867,59 @@ for (var = form->vars; var != NULL; var = var->next)
     htmlFormVarPrint(var, f, "\t");
 }
 
+struct htmlForm *htmlFormGet(struct htmlPage *page, char *name)
+/* Get named form. */
+{
+struct htmlForm *form;
+for (form = page->forms; form != NULL; form = form->next)
+    if (sameWord(form->name, name))
+        break;
+return form;
+}
+
+struct htmlFormVar *htmlFormVarGet(struct htmlForm *form, char *name)
+/* Get named variable. */
+{
+struct htmlFormVar *var;
+for (var = form->vars; var != NULL; var = var->next)
+    if (sameWord(var->name, name))
+	break;
+return var;
+}
+
+void htmlFormVarSet(struct htmlForm *form, char *name, char *val)
+/* Set variable to given value. Create it if it doesn't exist*/
+{
+struct htmlFormVar *var;
+var = htmlFormVarGet(form, name);
+if (var == NULL)
+    {
+    AllocVar(var);
+    var->type = "TEXT";
+    var->tagName = "INPUT";
+    var->name = name;
+    slAddHead(&form->vars, var);
+    }
+freez(&var->curVal);
+var->curVal = cloneString(val);
+}
+
+
+struct htmlFormVar *htmlGetVar(struct htmlPage *page, struct htmlForm *form, char *name)
+/* Get named variable.  If form is NULL, first form in page is used. */
+{
+if (form == NULL)
+    form = page->forms;
+return htmlFormVarGet(form, name);
+}
+
+void htmlSetVar(struct htmlPage *page, struct htmlForm *form, char *name, char *val)
+/* Set variable to given value.  If form is NULL, first form in page is used. */
+{
+if (form == NULL)
+    form = page->forms;
+htmlFormVarSet(form, name, val);
+}
 
 char *htmlExpandUrl(char *base, char *url)
 /* Expand URL that is relative to base to stand on it's own. 

@@ -134,6 +134,21 @@ void htmlFormFreeList(struct htmlForm **pList);
 void htmlFormPrint(struct htmlForm *form, FILE *f);
 /* Print out form structure. */
 
+struct htmlForm *htmlFormGet(struct htmlPage *page, char *name);
+/* Get named form. */
+
+struct htmlFormVar *htmlFormVarGet(struct htmlForm *form, char *name);
+/* Get named variable. */
+
+void htmlFormVarSet(struct htmlForm *form, char *name, char *val);
+/* Set variable to given value.  */
+
+struct htmlFormVar *htmlGetVar(struct htmlPage *page, struct htmlForm *form, char *name);
+/* Get named variable.  If form is NULL, first form in page is used. */
+
+void htmlSetVar(struct htmlPage *page, struct htmlForm *form, char *name, char *val);
+/* Set variable to given value.  If form is NULL, first form in page is used. */
+
 void htmlPageFree(struct htmlPage **pPage);
 /* Free up resources associated with htmlPage. */
 
@@ -157,6 +172,9 @@ struct slName *htmlPageScanAttribute(struct htmlPage *page,
 struct slName *htmlPageLinks(struct htmlPage *page);
 /* Scan through tags list and pull out HREF attributes. */
 
+void htmlPageValidateOrAbort(struct htmlPage *page);
+/* Do some basic validations.  Aborts if there is a problem. */
+
 struct htmlPage *htmlPageParse(char *url, char *fullText);
 /* Parse out page and return.  Warn and return NULL if problem. */
 
@@ -171,8 +189,8 @@ struct htmlPage *htmlPageFromForm(struct htmlPage *origPage, struct htmlForm *fo
 /* Return a new htmlPage based on response to pressing indicated button
  * on indicated form in origPage. */
 
-void htmlPageValidateOrAbort(struct htmlPage *page);
-/* Do some basic validations.  Aborts if there is a problem. */
+struct htmlPage *htmlPageGet(char *url);
+/* Get page from URL (may be a file). */
 
 #endif /* HTMLPAGE_H */
 
