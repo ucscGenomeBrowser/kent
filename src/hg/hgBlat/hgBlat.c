@@ -34,8 +34,8 @@ struct serverTable serverTable[] =  {
 {"hg6", "Dec. 12, 2000", FALSE, "blat2", "17779", "/projects/hg2/gs.6/oo.27/nib"},
 {"hg7", "April 1, 2001", TRUE, "blat1", "17778", "/projects/hg3/gs.7/oo.29/nib"},
 {"hg7", "April 1, 2001", FALSE, "blat1", "17779", "/projects/hg3/gs.7/oo.29/nib"},
-{"hg8", "Aug. 6, 2001", TRUE, "cc", "17778", "/projects/hg3/gs.8/oo.31/nib"},
-{"hg8", "Aug. 6, 2001", FALSE, "cc", "17779", "/projects/hg3/gs.8/oo.31/nib"},
+{"hg8", "Aug. 6, 2001", TRUE, "blat3", "17778", "/projects/hg3/gs.8/oo.33/nib"},
+{"hg8", "Aug. 6, 2001", FALSE, "blat3", "17779", "/projects/hg3/gs.8/oo.33/nib"},
 };
 
 struct serverTable *findServer(char *db, boolean isTrans)
