@@ -1373,6 +1373,10 @@ o - Load Ensembl peptides:
 
      hgPepPred hg12 generic ensPep ensembl.pep
 
+    LOAD SANGER 22 Pseudogenes (from hg10)
+    liftUp -type=.gff pseudo.gff hg12.lft ~/hg10/bed/sanger22/Chr22.3.lx.pseudogene.gff
+    ldHgGene hg12 sanger22pseudo pseudo.gff
+
 LOAD SANGER22 GENES 
       cd ~/oo/bed
       mkdir sanger22
@@ -1389,7 +1393,8 @@ LOAD SANGER22 GENES
 
       hgPepPred hg12 generic sanger22pep *.pep
 
-LOAD SANGER 20 GENES (todo)
+              
+              LOAD SANGER 20 GENES (todo)
      # First download files from James Gilbert's email to ~/oo/bed/sanger20 and
      # go to that directory while logged onto hgwdev.  Then:
         grep -v Pseudogene chr_20*.gtf | ldHgGene hg12 sanger20 stdin

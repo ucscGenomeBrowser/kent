@@ -2,6 +2,7 @@
 #include "common.h"
 #include "linefile.h"
 #include "dystring.h"
+#include "options.h"
 #include "cheapcgi.h"
 #include "hCommon.h"
 #include "hdb.h"
@@ -34,6 +35,7 @@ char *createRmskOut = "CREATE TABLE %s (\n"
 
 boolean noBin = FALSE;
 char *tabFileName = NULL;
+char *suffix = NULL;
 FILE *tabFile = NULL;
 
 void usage()
@@ -47,7 +49,8 @@ errAbort(
   "chrN_rmsk in the database\n"
   "options:\n"
   "   -nobin - don't introduce bin fields\n"
-  "   -tabFile=text.tab - don't actually load database, just create tab file");
+  "   -tabFile=text.tab - don't actually load database, just create tab file\n"
+  "   -table=name - use a different suffix other than the default (rmsk)\n");
 }
 
 void badFormat(struct lineFile *lf, int id)
@@ -81,7 +84,7 @@ else
     return atoi(s);
 }
 
-void loadOneOut(struct sqlConnection *conn, char *rmskFile)
+void loadOneOut(struct sqlConnection *conn, char *rmskFile, char *suffix)
 /* Load one RepeatMasker .out file into database. */
 {
 char dir[256], base[128], extension[64];
@@ -157,7 +160,7 @@ if (tabFile == NULL)
     carefulClose(&f);
     splitPath(rmskFile, dir, base, extension);
     chopSuffix(base);
-    sprintf(tableName, "%s_rmsk", base);
+    sprintf(tableName, "%s_%s", base,suffix);
     printf("Loading up table %s\n", tableName);
     if (sqlTableExists(conn, tableName))
 	{
@@ -180,7 +183,7 @@ if (tabFile == NULL)
 }
 
 
-void hgLoadOut(char *database, int rmskCount, char *rmskFileNames[])
+void hgLoadOut(char *database, int rmskCount, char *rmskFileNames[], char *suffix)
 /* hgLoadOut - load RepeatMasker .out files into database. */
 {
 struct sqlConnection *conn = NULL;
@@ -190,7 +193,7 @@ if (tabFile == NULL)
     conn = sqlConnect(database);
 for (i=0; i<rmskCount; ++i)
     {
-    loadOneOut(conn, rmskFileNames[i]);
+    loadOneOut(conn, rmskFileNames[i], suffix);
     }
 sqlDisconnect(&conn);
 }
@@ -202,10 +205,13 @@ cgiSpoof(&argc, argv);
 if (argc < 3)
     usage();
 noBin = (cgiBoolean("nobin") || cgiBoolean("noBin"));
+suffix = cgiOptionalString("table");
+if (suffix == NULL) 
+    strcpy(suffix,"rmsk");
 tabFileName = cgiOptionalString("tabFile");
 if (tabFileName == NULL) tabFileName = cgiOptionalString("tabfile");
 if (tabFileName != NULL)
     tabFile = mustOpen(tabFileName, "w");
-hgLoadOut(argv[1], argc-2, argv+2);
+hgLoadOut(argv[1], argc-2, argv+2, suffix) ;
 return 0;
 }

@@ -9,6 +9,7 @@
 
 boolean tNameIx = FALSE;
 boolean noBin = FALSE;
+boolean append = FALSE;
 boolean xaFormat = FALSE;
 boolean exportOutput = FALSE;
 char *clTableName = NULL;
@@ -31,6 +32,7 @@ errAbort(
   "      Useful when a psl is to be loaded in multiple databases or to avoid\n"
   "      writing an intermediate PSL file when used in a pipeline. The database is\n"
   "      is not loaded and db parameter is ignored\n"
+  "   -append append data - don't drop table before loading\n"
   "   -nobin Repress binning");
 }
 
@@ -162,7 +164,8 @@ for (i = 0; i<pslCount; ++i)
 	    }
 	carefulClose(&f);
         }
-    createTable(conn, table);
+    if (!append)
+        createTable(conn, table);
     if (!exportOutput)
         {
         dyStringClear(ds);
@@ -182,6 +185,7 @@ optionHash(&argc, argv);
 tNameIx = optionExists("tNameIx");
 clTableName = optionVal("table", NULL);
 xaFormat = optionExists("xa");
+append = optionExists("append");
 exportOutput = optionExists("export");
 if (noBin && exportOutput)
     errAbort("-nobin not supported with -export\n");
