@@ -1,7 +1,7 @@
 <H2>Description</H2>
 <P>
-This track displays the 2-way Regulatory Potential (RP) Score, computed 
-from alignments of human (hg16, Oct 03) and mouse (mm4, Oct 03).
+This track displays the 2-way regulatory potential (RP) score computed 
+from alignments of human (hg16, Jul. '03) and mouse (mm4, Oct. '03).
 RP scores compare frequencies of short alignment patterns between 
 regulatory elements and neutral DNA. 
 <P>
@@ -22,7 +22,6 @@ is also available on this browser).
 </P>
 
 <H2>Methods</H2>
-
 <P>
 The comparison employs log-ratios of transitions probabilities from two 
 Markov models. Training the score entails selecting appropriate alphabet
@@ -37,8 +36,29 @@ Log-ratios are added over positions in a window, and the sum normalized
 for length. 
 </P>
 
-<H2>Credits</H2>
+<H2>Using the Filter</H2>
+<P>The track filter can be used to configure display attributes of the track's graph. 
+<UL>
+<LI><B>Type of graph</B>: The default &quot;Bar&quot; setting depicts the graph data using filled-in 
+bars. To switch to a view in which the data are represented by points or lines, select the 
+&quot;Points&quot; setting. 
+<LI><B>Show y=-0.0 line</B>: Select the &quot;ON&quot; setting to display a line marking the 0.0
+position on the graph (default is &quot;OFF&quot;).
+<LI><B>Track height</B>: To change the default display height of the graph in pixels, type in a different
+value between 11 and 128 (the default display height is 128 pixels).
+<LI><B>Vertical viewing range</B>: By default, the viewing range is set to the values of the minimum and 
+maximum data points viewable at this position. Type in a different value to reduce the range of data
+values displayed. 
+<LI><B>Data view scaling</B>: The default &quot;Use Vertical Viewing Range Setting" displays the
+data using the parameters specified in the Vertical viewing range setting. To configure the graph 
+to automatically scale to a range defined by the minimum and maximum data points in the current 
+view, select the &quot;Auto-Scale to data view&quot; option. 
+</UL></P>
+<P>
+When you have finished configuring the filter, click the <em>Submit</em> button.
+</P>
 
+<H2>Credits</H2>
 <P>
 Work on RP scores is performed by members of the
 <A HREF="http://www.bx.psu.edu/" TARGET=_blank>
@@ -53,13 +73,13 @@ group.
 </P>
 
 <H2>References</H2>
-
 <P>
 Elnitski L., Hardison R., Li J., Yang S., Kolbe D., Eswara P., O'Connor M., 
-Schwartz S., Miller W. and Chiaromonte F. (2003) Distinguishing regulatory 
-DNA from neutral sites. <em>Genome Research</em>, 13(1):64-72.
+Schwartz S., Miller W. and Chiaromonte F. (2003) 
+<A HREF="http://www.genome.org/cgi/content/abstract/13/1/64" TARGET=_blank>Distinguishing 
+regulatory DNA from neutral sites</A>. <em>Genome Research</em>, 13(1):64-72.
 </P>
 Schwartz S, Kent WJ, Smit A, Zhang Z, Baertsch R, Hardison R, Haussler H, and 
 Miller W. (2003) 
-<A HREF="http://bio.cse.psu.edu/dist/blastz.pdf" TARGET=_blank>Human-Mouse 
+<A HREF="http://www.genome.org/cgi/content/abstract/13/1/103" TARGET=_blank>Human-Mouse 
 Alignments with BLASTZ</A>. <em>Genome Research</em>, 13(1):103-7.</P>
