@@ -1281,6 +1281,49 @@ SEQ2_LEN=$BASE/S2.len
     # add html for details pages to this directory:
     # ecoresMm3.html, ecoresRn3.html and ecoresHg16.html
 
+# SWAP ZEBRAFISH-FUGU BLASTZ TO FUGU-ZEBRAFISH (danRer1) 
+# (DONE, 2004-06-16, hartera)
+    ssh kolossus
+    mkdir /cluster/data/fr1/bed/blastz.danRer1.swap.2004-06-16
+    cd /cluster/data/fr1/bed/blastz.danRer1.swap.2004-06-16
+    set aliDir = /cluster/data/danRer1/bed/blastz.fr1
+    cp $aliDir/S1.len S2.len
+    cp $aliDir/S2.len S1.len
+    mkdir unsorted axtChrom
+    cat $aliDir/axtChrom/chr*.axt \
+    | axtSwap stdin $aliDir/S1.len $aliDir/S2.len stdout \
+    | axtSplitByTarget stdin unsorted
+    # Sort the shuffled .axt files.
+    foreach f (unsorted/*.axt)
+      echo sorting $f:t:r
+      axtSort $f axtChrom/$f:t
+    end
+    du -sh $aliDir/axtChrom unsorted axtChrom
+# 1.6G    /cluster/data/danRer1/bed/blastz.fr1/axtChrom
+# 1.6G    unsorted
+# 1.6G    axtChrom
+    rm -r unsorted
+
+    # translate sorted axt files into psl
+    ssh kolossus
+    cd /cluster/data/fr1/bed/blastz.danRer1.swap.2004-06-16
+    mkdir -p pslChrom
+    set tbl = "blastzDanRer1"
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+
+    # Load database table
+    ssh hgwdev
+    cd /cluster/data/fr1/bed/blastz.danRer1.swap.2004-06-16/pslChrom
+                                                                                
+    foreach f (./*.psl)
+      /cluster/bin/i386/hgLoadPsl fr1 $f
+      echo "$f Done"
+    end
+
 # MAKE Human Proteins track
     ssh eieio
     mkdir -p /cluster/data/fr1/blastDb
@@ -1409,3 +1452,158 @@ chainSome $(path1)
     rm -rf blastOut
 
 # End tblastn
+
+# BLASTZ SWAP FOR danRer2 vs. fr1 BLASTZ TO CREATE fr1 vs. danRer2
+# (DONE, 2004-12-15, hartera)
+    ssh kolossus
+    mkdir -p /cluster/data/fr1/bed/blastz.danRer2.swap
+    cd /cluster/data/fr1/bed/blastz.danRer2.swap
+    # use axtChrom from blastzFr1 on danRer2
+    set aliDir = /cluster/data/danRer2/bed/blastz.fr1
+    cp $aliDir/S1.len S2.len
+    cp $aliDir/S2.len S1.len
+    mkdir unsorted axtChrom
+    cat $aliDir/axtChrom/chr*.axt \
+    | axtSwap stdin $aliDir/S1.len $aliDir/S2.len stdout \
+    | axtSplitByTarget stdin unsorted
+    # Sort the shuffled .axt files.
+    foreach f (unsorted/*.axt)
+      echo sorting $f:t:r
+      axtSort $f axtChrom/$f:t
+    end
+    du -sh $aliDir/axtChrom unsorted axtChrom
+    # 867M    /cluster/data/danRer2/bed/blastz.fr1/axtChrom
+    # 868M    unsorted
+    # 868M    axtChrom
+
+    rm -r unsorted
+    # translate sorted axt files into psl
+    cd /cluster/data/fr1/bed/blastz.danRer2.swap
+    mkdir -p pslChrom
+    set tbl = "blastzDanRer2"
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+    # Load database tables
+    ssh hgwdev
+    cd /cluster/data/fr1/bed/blastz.danRer2.swap/pslChrom
+    foreach f (./*.psl)
+      /cluster/bin/i386/hgLoadPsl fr1 $f
+      echo "$f Done"
+    end
+# featureBits fr1 all_mrna chrUn_blastzDanRer2 -enrichment
+# all_mrna 0.123%, chrUn_blastzDanRer2 17.731%, both 0.092%, cover 74.45%, 
+# enrich 4.20x
+# featureBits fr1 all_mrna chrUn_blastzDanRer1 -enrichment
+# all_mrna 0.123%, chrUn_blastzDanRer1 17.372%, both 0.091%, cover 74.21%, 
+# enrich 4.27x
+
+# CHAIN ZEBRAFISH (danRer2) BLASTZ (DONE, 2004-12-15, hartera)
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/fr1/bed/blastz.danRer2.swap
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S /cluster/data/fr1/bed/blastz.danRer2.swap/axtChrom/*.axt \
+        > input.lst
+ cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+                                                                                
+    cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain $1 /cluster/bluearc/fugu/fr1/chromNib \
+           /iscratch/i/danRer2/nib $2 >& $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+                                                                                
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check ...
+# para time
+# CPU time in finished jobs:        158s       2.63m     0.04h    0.00d  0.000 y
+# IO & Wait Time:                    11s       0.19m     0.00h    0.00d  0.000 y
+# Average job time:                 169s       2.82m     0.05h    0.00d
+# Longest job:                      169s       2.82m     0.05h    0.00d
+# Submission to last job:           169s       2.82m     0.05h    0.00d
+    # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/fr1/bed/blastz.danRer2.swap/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    # take a look at score distr's
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r >> hist5000.out
+      textHistogram -binSize=5000 /tmp/score.$f:t:r >> hist5000.out
+      echo ""
+    end
+    # filter with minScore=5000
+    mv all.chain all.chain.unfiltered
+    chainFilter -minScore=5000 all.chain.unfiltered > all.chainFilt5k
+    rm -r chain
+    chainSplit chain all.chainFilt5k
+    # Load chains into database
+    ssh hgwdev
+    cd /cluster/data/fr1/bed/blastz.danRer2.swap/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain fr1 ${c}_chainDanRer2 $i
+        echo done $c
+    end
+
+# featureBits fr1 all_mrna chrUn_chainDanRer2Link -enrichment
+# all_mrna 0.123%, chrUn_chainDanRer2Link 15.517%, both 0.089%, cover 72.00%, 
+# enrich 4.64x
+
+# NET ZEBRAFISH (danRer2) BLASTZ (DONE, 2004-12-15, hartera)
+    ssh kksilo
+    cd /cluster/data/fr1/bed/blastz.danRer2.swap/axtChain
+    mkdir preNet
+    cd chain
+    foreach i (*.chain)
+       echo preNetting $i
+       /cluster/bin/i386/chainPreNet $i ../../S1.len ../../S2.len \
+                                     ../preNet/$i
+    end
+                                                                                
+    cd ..
+    mkdir n1
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      /cluster/bin/i386/chainNet $i -minSpace=1 ../../S1.len ../../S2.len \
+                                 ../n1/$n /dev/null
+    end
+    cd ..
+    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin noClass.net
+    # memory usage 77680640, utime 395 s/100, stime 150
+
+    # Add classification info using db tables:
+    ssh hgwdev
+    cd /cluster/data/fr1/bed/blastz.danRer2.swap/axtChain
+    # use -noAr option - don't look for ancient repeats
+    netClass -noAr noClass.net fr1 danRer2 zfishdanRer2.net
+                                                                                
+    # Load the nets into database
+    ssh hgwdev
+    cd /cluster/data/fr1/bed/blastz.danRer2.swap/axtChain
+    netFilter -minGap=10 zfishdanRer2.net | hgLoadNet fr1 netDanRer2 stdin
+# featureBits fr1 all_mrna netDanRer2 -enrichment
+# all_mrna 0.123%, netDanRer2 31.390%, both 0.096%, cover 77.94%, enrich 2.48x
+
+# BLASTZ FR1 CLEANUP (DONE, 2004-12-15, hartera)
+    ssh kksilo
+    cd /cluster/data/fr1/bed/blastz.danRer2.swap
+    nice rm axtChain/run1/chain/* &
+    nice rm -fr axtChain/n1 axtChain/noClass.net axtChain/preNet &
+    nice gzip axtChrom/* pslChrom/* axtChain/all.chainFilt5k axtChain/all.chain.unfiltered axtChain/*.net axtChain/chain/*.chain &
+    
