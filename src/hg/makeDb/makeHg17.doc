@@ -13836,3 +13836,21 @@ SEQ2_LEN=$BASE/S2.len
     hgsql hg17 -e 'load data local infile "refSeqKg.tab" into table refSeqKg'
     cd ..
     rm -r ccds
+
+
+# COW BACENDS (Done, Heather, Mar. 21, 2005)
+ 
+ssh hgwdev
+cd /cluster/data/hg17/bed
+mkdir bacendsCow
+cd bacendsCow
+ 
+# Obtain GFF file from Denis; unzip into BACendhg15.gff
+
+# Convert into BED 6:
+ 
+  makebed.pl < BACendhg17.gff > BACendhg17.bed
+  hgLoadBed -noBin hg17 bacendsCow BACendhg17.bed
+  # 53403 warnings
+ 
+# add to kent/src/hg/makeDb/trackDb/human/hg17/trackDb.ra
