@@ -27,7 +27,7 @@ O = affyAtlas.o agpFrag.o agpGap.o altGraph.o altGraphX.o ancientRref.o \
     ensPhusionBlast.o netAlign.o pseudoGeneLink.o \
     ooUtils.o pepPred.o plasEndPairs.o pslWScore.o \
     qaSeq.o recombRate.o kgAlias.o kgProtAlias.o findKGAlias.o findKGProtAlias.o \
-    refLink.o riken.o rmskOut.o \
+    refLink.o riken.o rmskOut.o rnaFold.o \
     rnaGene.o rnaGroup.o rikenBest.o rikenCluster.o roughAli.o \
     sage.o sageCounts.o sageExp.o sanger22extra.o \
     scoredRef.o simpleRepeat.o snp.o softberryHom.o \
