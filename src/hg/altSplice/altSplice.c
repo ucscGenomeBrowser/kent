@@ -32,7 +32,6 @@
     2) -------------##########-----#######------########--------- est1 alignment 
     3) --#####-----------------------------####-------------##### est2 alignment
     </pre>
-
     est1 alignment would be kept but est2 would be removed from
     consideration.  Thus the 5' and '3 UTRs can grow using est/mrna
     evidence but not the number of exons.
