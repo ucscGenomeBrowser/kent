@@ -242,7 +242,8 @@ else
     a.qSym = qSymStart;
     a.tSym = tSymStart;
     a.score = axtScore(&a, ss);
-    axtWrite(&a, f);
+    if (a.qStart < a.qEnd && a.tStart < a.tEnd)
+	axtWrite(&a, f);
     }
 }
 
