@@ -315,7 +315,7 @@ int x2 = round((double)((int)s->chromEnd-winStart)*scale) + xOff;
 int w = x2-x1;
 Color itemColor = tg->itemColor(tg, s, vg);
 
-if ( w<1 || sameString(s->locType,"between") )
+if ( w<1 )
     w=1;
 vgBox(vg, x1, y, w, heightPer, itemColor);
 /* Clip here so that text will tend to be more visible... */
