@@ -261,15 +261,21 @@ i)&nbsp;&nbsp;&nbsp;  Move to $WEBROOT/goldenPath/$FREEZEDATE/database/ director
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 All the files for creating the "$DBVERSION" database are in this directory.
 <p> 
-ii)&nbsp;&nbsp;  Create tables:
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-% mysql -options $DBVERSION &lt; *.sql
+ii)&nbsp;&nbsp;  Create tables: (You may have to use the following 
+shell script for this step.)
+<ul><br>
+for file in `find . -name '*.sql'`  <br>
+do <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	mysql -options $DBVERSION < $file  <br>
+done <br>
+<br></ul>
 <p> 
 iii)&nbsp;&nbsp;   Load data into the tables: (You may have to use the following 
 shell script for this step.)
 <ul><br>
-for file in *  <br>
+for file in `find . -name '*.txt.gz'`  <br>
 do <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	gunzip $file  <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	mysqlimport -options $DBVERSION $file  <br>
 done <br>
 <br></ul>
