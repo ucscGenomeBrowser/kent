@@ -1,0 +1,35 @@
+<H3>Description</H3>
+<P>This column shows data from the GNF Expression Atlas on the Affymetrix U95 chip.
+It shows the expression of genes in
+<A HREF="http://expression.gnf.org/human_annot.html">specific tissues</A>.
+This track can be configured a number of ways. </P>
+<P>The track initially shows the ratio of expression in a specific tissue 
+to expression of the gene overall.  By default if a gene is more highly expressed 
+in a tissue it will be colored red, and if it is less expressed in the tissue it 
+will be green.  This coloring is standard, but the opposite of what a naive user 
+might think.  In this case red means go, and green means stop!  Color blind users can
+switch from red/green to yellow/blue coloring in the configuration page. The track
+can also be configured to show absolute expression values as shades of gray with
+higher expression levels shown in lighter shades.   Both the ratio and absolute
+expressions are colored on a logarithmic scale.</P>
+<P>The 'tissue' drop-down in the configuration page controls the level of detail
+displayed. If 'all replicas' is selected then the value of each individual experimental
+relica of each tissue is shown.  If median of replicas is selected then just a single
+value for each tissue is shown.  The default 'selected' mode just shows median values
+for selected tissues.</P>
+
+<H3>Methods</H3>
+<P>For detailed information about the experiments, see Su et al., 
+<A HREF="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=11904358&dopt=Abstract"
+TARGET=_blank>"Large-scale analysis of the human and mouse transcriptomes."</A>, 
+<I>PNAS</I>, Mar 19, 2002. </P>
+<P>When calculating expression ratios, the overall expression level in the
+denominator is calculated by first taking the median of replicants for
+each non-cancerous tissue,  and then taking the median of these medians.
+</P>
+
+<H3>Credits</H3>
+The data for this column was kindly provided by the
+<A HREF="http://web.gnf.org/">Genomics Institute of the Novartis Research Foundation (GNF)</A>
+as part of the <A HREF="http://expression.gnf.org/">GNF Expression Atlas</A>.
+

@@ -12,7 +12,7 @@
 #include "hgNear.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.22 2003/10/08 18:37:48 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.23 2003/10/08 20:40:25 kent Exp $";
 
 
 static boolean loadExpVals(struct sqlConnection *lookupConn,
@@ -805,7 +805,7 @@ static void expEmdControl(struct column *col)
 /* Show selected/median/all control. */
 {
 struct expMultiData *emd;
-hPrintf("samples: ");
+hPrintf("tissues: ");
 hPrintf("<SELECT NAME=\"%s\">", configVarName(col, "emd"));
 for (emd = col->emdList; emd != NULL; emd = emd->next)
     {
@@ -851,7 +851,7 @@ safef(retPrefix, maxPrefixSize, "%s.%s.", absRel, col->emd->name);
 static void explainAbsolute(char *maxVal)
 /* Explain a little about absolutes. */
 {
-hPrintf("Note: the values here range up to %s.<BR>\n", maxVal);
+hPrintf("Note: the values here range up to about %s.<BR>\n", maxVal);
 hPrintf("Values of 20 or less indicate unmeasurable expression.<BR>\n");
 }
 
@@ -904,7 +904,7 @@ void setupColumnExpMulti(struct column *col, char *parameters)
  * short or long. */
 {
 struct expMultiData *emdList = NULL;
-struct expMultiData *allEmd = makeEmd(col, "all", "all experiments", &emdList);
+struct expMultiData *allEmd = makeEmd(col, "all", "all replicas", &emdList);
 struct expMultiData *medianEmd = makeEmd(col, "median", "median of replicas", &emdList);
 struct expMultiData *selectedEmd = makeEmd(col, "selected", "selected", &emdList);
 struct expMultiData *curEmd = NULL;
