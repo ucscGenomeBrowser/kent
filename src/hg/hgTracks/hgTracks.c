@@ -3772,7 +3772,9 @@ if (glCloneList == NULL)
 	gl = glLoad(row+rowOffset);
 	fragName = gl->frag;
 	strcpy(cloneName, fragName);
-	s = strchr(cloneName, '_');
+	s = strchr(cloneName, '.');
+	if (s != NULL)
+	    s = strchr(s, '_');
 	if (s != NULL)
 	    *s = 0;
 	if ((hel = hashLookup(glCloneHash, cloneName)) == NULL)
@@ -5130,7 +5132,7 @@ if (!hideControls)
 	printEnsemblAnchor();
 	fputs("Visit Ensembl</A></TD>", stdout);
 	}
-    if (sameString(database, "hg5") || sameString(database, "hg6") || sameString(database, "hg7") || sameString(database, "hg8"))
+    if (sameString(database, "hg6") || sameString(database, "hg7") || sameString(database, "hg8"))
 	{
 	struct dyString *uiVars = uiStateUrlPart(NULL);
 	fprintf(stdout, "<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?%s\">BLAT Search</A></TD>", uiVars->string);
