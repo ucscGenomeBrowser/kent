@@ -104,9 +104,12 @@
 #include "scoredRef.h"
 #include "hgc.h"
 #include "genbank.h"
+#include "pseudoGeneLink.h"
+#include "axtLib.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.421 2003/05/24 05:19:35 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.422 2003/05/25 23:20:32 baertsch Exp $";
 
+#define LINESIZE 70  /* size of lines in comp seq feature */
 
 struct cart *cart;	/* User's settings. */
 char *seqName;		/* Name of sequence we're working on. */
@@ -116,7 +119,7 @@ char *database;		/* Name of mySQL database. */
 char *protDbName;	/* Name of proteome database */
 struct hash *trackHash;	/* A hash of all tracks - trackDb valued */
 
-char mousedb[] = "mm1";
+char mousedb[] = "mm3";
 
 /* JavaScript to automatically submit the form when certain values are
  * changed. */
@@ -260,15 +263,33 @@ void hgcAnchorGenePsl(char *item, char *other, char *chrom, char *tag)
 /* Generate an anchor to htcGenePsl. */
 {
 struct dbDb *dbList = hGetAxtInfoDbs();
+struct axtInfo *aiList = NULL;
 char *db2;
 char *encodedItem = cgiEncode(item);
 if (dbList != NULL)
     db2 = dbList->name;
 else
-    db2 = "mm2";
-printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&db2=%s&xyzzy=xyzzy#%s\">",
+    db2 = mousedb;
+aiList = hGetAxtAlignments(db2);
+printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&alignment=%s&db2=%s&xyzzy=xyzzy#%s\">",
        hgcPathAndSettings(), "htcGenePsl", encodedItem, chrom, winStart, winEnd,
-       other, db2, tag);
+       other, aiList->alignment, db2, tag);
+dbDbFreeList(&dbList);
+}
+
+void hgcAnchorPseudoGene(char *item, char *other, char *chrom, char *tag, int start, int end, char *qChrom, int qStart, int qEnd, int chainId)
+/* Generate an anchor to htcPseudoGene. */
+{
+struct dbDb *dbList = hGetAxtInfoDbs();
+char *db2;
+char *encodedItem = cgiEncode(item);
+//if (dbList != NULL)
+//    db2 = dbList->name;
+//else
+    db2 = "mm3";
+printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&db2=%s&ci=%d&qc=%s&qs=%d&qe=%d&xyzzy=xyzzy#%s\">",
+       hgcPathAndSettings(), "htcPseudoGene", encodedItem, chrom, start, end,
+       other, db2, chainId, qChrom, qStart, qEnd, tag);
 dbDbFreeList(&dbList);
 }
 
@@ -383,7 +404,7 @@ if (bedSize > 3)
 if (bedSize > 4)
     printf("<B>Score:</B> %d<BR>\n", bed->score);
 if (bedSize > 5)
-    printf("<B>Strand:</B> %s<BR>\n", bed->strand);
+   printf("<B>Strand:</B> %s<BR>\n", bed->strand);
 printPos(bed->chrom, bed->chromStart, bed->chromEnd, NULL, TRUE);
 }
 
@@ -616,6 +637,14 @@ void resetClassStr(struct dyString *dy, int track)
 stopColorStr(dy,track);
 }
 
+boolean isColor(char *s)
+/* check for <a href name=class</a> to see if this is a colored coding region*/
+{
+    if (strstr(s,"6699FF") == NULL)
+        return FALSE;
+    else
+        return TRUE;
+}
 int numberOfGaps(char *q,int size) 
 /* count number of gaps in a string array */
 {
@@ -626,8 +655,38 @@ for (i = 0 ; i<size ; i++)
 return (count);
 }
 
+void pseudoGeneClick(struct sqlConnection *conn, struct trackDb *tdb, 
+		     char *item, int start, int bedSize)
+/* Handle click in track. */
+{
+char table[64];
+boolean hasBin;
+struct bed *bed;
+char query[512];
+struct sqlResult *sr;
+char **row;
+boolean firstTime = TRUE;
+
+hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+if (bedSize <= 3)
+    sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d", table, seqName, start);
+else
+    sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
+	    table, item, seqName, start);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (firstTime)
+	firstTime = FALSE;
+    else
+	htmlHorizontalLine();
+    bed = bedLoadN(row+hasBin, bedSize);
+    bedPrintPos(bed, bedSize);
+    }
+}
+
 void axtOneGeneOut(struct axt *axtList, int lineSize, 
-		   FILE *f, struct genePred *gp)
+		   FILE *f, struct genePred *gp, char *nibFile)
 /* Output axt and orf in pretty format. */
 {
 struct axt *axt;
@@ -690,6 +749,29 @@ else
     exit(0);
     }
 
+/* if no alignment , make a bad one */
+if (axtList == NULL)
+    axtList = createAxtGap(nibFile,gp->chrom,tStart,tEnd ,gp->strand[0]);
+
+/* append unaligned coding region to list */ 
+if (posStrand)
+    {
+    if ((axtList->tStart)-1 > tStart)
+        {
+        struct axt *axtGap = createAxtGap(nibFile,gp->chrom,tStart,axtList->tStart-1,gp->strand[0]);
+        slAddHead(&axtList, axtGap);
+        tPtr = axtList->tStart;
+        }
+    }
+else
+    {
+    if (axtList->tEnd < tStart)
+        {
+        struct axt *axtGap = createAxtGap(nibFile,gp->chrom,axtList->tEnd, tStart+1,gp->strand[0]);
+        slAddHead(&axtList, axtGap);
+        tPtr = axtList->tEnd;
+        }
+    }
 
 for (axt = axtList; axt != NULL; axt = axt->next)
     {
@@ -707,13 +789,29 @@ for (axt = axtList; axt != NULL; axt = axt->next)
     if (!posStrand)
         {
         qPtr = axt->qEnd;
-        if (tPtr < nextEnd)
+        /* skip to next exon fi we are starting in the middle of a gene  - should not happen */
+        while ((tPtr < nextEnd) && (nextEndIndex > 0))
             {
             nextEndIndex--;
             nextStart = (gp->exonEnds[nextEndIndex]);
             nextEnd = (gp->exonStarts[nextEndIndex]);
+            if (nextStart > tStart)
+                tClass = INTRON;
             }
         }
+    else
+        {
+        /* skip to next exon if we are starting in the middle of a gene  - should not happen */
+        while ((tPtr > nextEnd) && (nextEndIndex < gp->exonCount-2))
+            {
+            nextEndIndex++;
+            nextStart = gp->exonStarts[nextEndIndex];
+            nextEnd = gp->exonEnds[nextEndIndex];
+            if (nextStart > tStart)
+                tClass = INTRON;
+            }
+        }
+    /* loop thru one base at a time */
     while (sizeLeft > 0)
         {
         struct dyString *dyT = newDyString(1024);
@@ -726,10 +824,12 @@ for (axt = axtList; axt != NULL; axt = axt->next)
             oneSize = lineSize;
         setClassStr(dyT,tClass, 0);
         setClassStr(dyQ,qClass, 1);
+
+        /* break up into linesize chunks */
         for (i=0; i<oneSize; ++i)
             {
             if (posStrand)
-                {/*start of exon on positive strand*/
+                {/*look for start of exon on positive strand*/
                 if ((tClass==INTRON) && (tPtr >= nextStart) && (tPtr >= tStart) && (tPtr < tEnd))
                     {
                     tCoding=TRUE;
@@ -749,7 +849,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 }
             else{
 	    if ((tClass==INTRON) && (tPtr <= nextStart) && (tPtr <= tStart) && (tPtr > tEnd))
-		{ /*start of exon on neg strand */
+		{ /*look for start of exon on neg strand */
 		tCoding=TRUE;
 		dyStringPrintf(exonTag, "exon%d",nextEndIndex+1);
 		addTag(dyT,exonTag);
@@ -766,6 +866,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
 		tClass=UTR5; qClass=UTR5;
 		}
 	    }
+            /* toggle between blue / purple color for exons */
             if (tCoding && tFlip )
                 tClass=CODINGA;
             if (tCoding && (tFlip == FALSE) )
@@ -776,6 +877,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 qClass=CODINGB;
             if (posStrand)
                 {
+                /* look for end of exon */
                 if (tPtr == nextEnd)
                     {
                     tCoding=FALSE;
@@ -789,6 +891,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 }
             else
                 {
+                /* look for end of exon  negative strand */
                 if (tPtr == nextEnd)
                     {
                     tCoding=FALSE;
@@ -802,6 +905,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 }
             if (posStrand)
                 {
+                /* look for start codon and color it green*/
                 if ((tPtr >= (tStart)) && (tPtr <=(tStart+2)))
                     {
                     tClass=STARTCODON;
@@ -814,6 +918,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                         qCodonPos=1;
                         }
                     }
+                /* look for stop codon and color it red */
                 if ((tPtr >= tEnd) && (tPtr <= (tEnd+2)))
                     {
                     tClass=STOPCODON;
@@ -824,6 +929,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 }
             else
                 {
+                /* look for start codon and color it green negative strand case*/
                 if ((tPtr <= (tStart)+1) && (tPtr >=(tStart-1)))
                     {
                     tClass=STARTCODON;
@@ -836,6 +942,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                         qCodonPos=1;
                         }
                     }
+                /* look for stop codon and color it red - negative strand*/
                 if ((tPtr <= tEnd+3) && (tPtr >= (tEnd+1)))
                     {
                     tClass=STOPCODON;
@@ -846,6 +953,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 }
             if (posStrand)
                 {
+                /* look for 3' utr and color it dk grey */
                 if (tPtr == (tEnd +3) )
                     {
                     tClass = UTR3;
@@ -854,18 +962,36 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 }
             else 
                 {
+                /* look for 3' utr and color it dk grey negative strand case*/
                 if (tPtr == (tEnd ) )
                     {
                     tClass = UTR3;
                     qClass = UTR3;
                     }
                 }
+
+            if (qCoding && qCodonPos == 3)
+                {
+                /* look for in frame stop codon and color it magenta */
+                qCodon[qCodonPos-1] = q[i];
+                qCodon[3] = 0;
+                qProt = lookupCodon(qCodon);
+                if (qProt == 'X') qProt = ' ';
+                if (qProt == 0) 
+                    {
+                    qProt = '*'; /* stop codon is * */
+                    qClass = INFRAMESTOP;
+                    }
+                }
+
+            /* write html to change color for all above cases t strand */
             if (tClass != prevTclass)
                 {
                 setClassStr(dyT,tClass,0);
                 prevTclass = tClass;
                 }
             dyStringAppendC(dyT,t[i]);
+            /* write html to change color for all above cases q strand */
             if (qClass != prevQclass)
                 {
                 setClassStr(dyQ,qClass,0);
@@ -888,6 +1014,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 {
                 qFlip=TRUE;
                 }
+            /* translate dna to protein and append html */
             if (tCoding && tCodonPos == 3)
                 {
                 tCodon[tCodonPos-1] = t[i];
@@ -910,7 +1037,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 if (qProt == 0) 
                     {
                     qProt = '*'; /* stop codon is * */
-                    qClass = INFRAMESTOP;
+                    //qClass = INFRAMESTOP;
                     qStopCodon = FALSE;
                     qCoding = TRUE;
                     }
@@ -921,6 +1048,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 {
                 dyStringAppendC(dyQprot,' ');
                 }
+            /* move to next base and update reading frame */
             if (t[i] != '-')
                 {
                 if (posStrand)
@@ -944,6 +1072,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
 	      {
 	      tClass=INTRON;
 	      }*/
+            /* update reading frame on other species */
             if (q[i] != '-')
                 {
                 if (qCoding) 
@@ -958,6 +1087,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
 	      qClass=INTRON;
 	      }*/
             }
+        /* write labels in black */
         resetClassStr(dyT,0);
         setClassStr(dyT,LABEL,0);
         if (posStrand)
@@ -996,7 +1126,9 @@ for (axt = axtList; axt != NULL; axt = axt->next)
         resetClassStr(dyQ,1);
         dyStringAppendC(dyQprot,'\n');
         dyStringAppendC(dyTprot,'\n');
-        if (numberOfGaps(q,oneSize) < oneSize)
+
+        /* skip regions with no alignment and no colored coding regions */
+        if ( numberOfGaps(q,oneSize) < oneSize || isColor(dyT->string)) 
             {
             fputs(dyTprot->string,f);
             fputs(dyT->string,f);
@@ -1014,16 +1146,9 @@ for (axt = axtList; axt != NULL; axt = axt->next)
             fputs(dyQprot->string,f);
             fputc('\n', f);
             }
+        /* look for end of line */
         if (oneSize > lineSize)
             oneSize = lineSize;
-        /*
-	  for (i=0; i<oneSize; ++i)
-	  {
-	  fputc(q[i], f);
-
-	  }
-	  fputc('\n', f);
-        */
         sizeLeft -= oneSize;
         q += oneSize;
         t += oneSize;
@@ -1035,72 +1160,18 @@ for (axt = axtList; axt != NULL; axt = axt->next)
     }
 }
 
-struct axt *createAxtGap(char *nibFile, char *chrom, 	
-			 int start, int end, char strand)
-/* return an axt alignment with the query all deletes - null aligment */
-{
-struct axt *axt;
-int size = end-start+1;
-char *gapPt = needLargeMem(size+1);
-char *p;
-struct dnaSeq *seq = NULL;
-
-for (p=gapPt;p<=gapPt+size;p++)
-    *p = '-';
-AllocVar(axt);
-axt->tName = chrom;
-axt->tStart = start;
-axt->tEnd = end;
-axt->tStrand = strand;
-axt->qName = "gap";
-axt->qStart = 1;
-axt->qEnd = size;
-axt->qStrand = ' ';
-axt->symCount = size;
-axt->score = 0;
-seq = nibLoadPart(nibFile, start,size);
-axt->tSym = cloneMem(seq->dna, size+1);
-axt->qSym = cloneMem(gapPt, size+1);
-return axt;
-}
-
-void axtGenePrettyHtml(struct genePred *gp, char *table, char *nib, char *db,
+struct axt *getAxtListForGene(struct genePred *gp, char *nib, char *fromDb, char *toDb,
 		       char *alignment)
-/* axtPretty - Convert axt to more human readable format.. */
+/* get all axts for a gene */
 {
 struct lineFile *lf ;
 struct axt *axt, *axtGap;
 struct axt *axtList = NULL;
-struct axtInfo *ai = NULL;
-int lineSize = 70;
 int prevEnd = gp->txStart;
 int prevStart = gp->txEnd;
-char query[256];
-struct sqlResult *sr;
-struct sqlConnection *conn = hAllocConn();
-char **row;
 int tmp;
 
-if (alignment != NULL)
-    snprintf(query, sizeof(query),
-	     "select * from %s where chrom = '%s' and species = '%s' and alignment = '%s'",
-	     table, gp->chrom, db, alignment);
-else
-    snprintf(query, sizeof(query),
-	     "select * from %s where chrom = '%s' and species = '%s'",
-	     table, gp->chrom, db);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    {
-    ai = axtInfoLoad(row );
-    }
-if (ai == NULL)
-    {
-    printf("\nNo alignments available for %s (database %s).\n\n",
-	   hFreezeFromDb(db), db);
-    return;
-    }
-lf = lineFileOpen(ai->fileName, TRUE);
+lf = lineFileOpen(getAxtFileName(gp->chrom, toDb, alignment, fromDb), TRUE);
 while ((axt = axtRead(lf)) != NULL)
     {
     if (sameString(gp->chrom , axt->tName) && 
@@ -1149,13 +1220,80 @@ while ((axt = axtRead(lf)) != NULL)
         break;
         }
     }
-axtInfoFree(&ai);
 if (gp->strand[0] == '+')
     slReverse(&axtList);
-axtOneGeneOut(axtList, lineSize, stdout , gp);
-//axtFree(&axtList);
+return axtList ;
 }
 
+struct axt *getAxtListForRange(struct genePred *gp, char *nib, char *fromDb, char *toDb,
+		       char *alignment, char *qChrom, int qStart, int qEnd)
+/* get all axts for a chain */
+{
+struct lineFile *lf ;
+struct axt *axt, *axtGap;
+struct axt *axtList = NULL;
+int prevEnd = gp->txStart;
+int prevStart = gp->txEnd;
+int tmp;
+
+lf = lineFileOpen(getAxtFileName(gp->chrom, toDb, alignment, fromDb), TRUE);
+printf("file %s\n",lf->fileName);
+while ((axt = axtRead(lf)) != NULL)
+    {
+//    if (sameString(gp->chrom , axt->tName))
+ //           printf("axt %s qstart %d axt tStart %d\n",axt->qName, axt->qStart,axt->tStart);
+    if (sameString(gp->chrom , axt->tName) && 
+         (sameString(qChrom, axt->qName) && positiveRangeIntersection(qStart, qEnd, axt->qStart, axt->qEnd) )&&
+         positiveRangeIntersection(gp->txStart, gp->txEnd, axt->tStart, axt->tEnd) 
+         /* (
+         (((axt->tStart <= gp->cdsStart) && (axt->tEnd >= gp->cdsStart)) || ((axt->tStart <= gp->cdsEnd) && (axt->tEnd >= gp->cdsEnd)))
+	 || (axt->tStart < gp->cdsEnd && axt->tEnd > gp->cdsStart)
+	 ) */
+	)
+        {
+        if (gp->strand[0] == '-')
+            {
+            reverseComplement(axt->qSym, axt->symCount);
+            reverseComplement(axt->tSym, axt->symCount);
+            tmp = hChromSize2(axt->qName) - axt->qStart;
+            axt->qStart = hChromSize2(axt->qName) - axt->qEnd;
+            axt->qEnd = tmp;
+            if (prevEnd < (axt->tStart)-1)
+                {
+                axtGap = createAxtGap(nib,gp->chrom,prevEnd,(axt->tStart)-1,gp->strand[0]);
+                reverseComplement(axtGap->qSym, axtGap->symCount);
+                reverseComplement(axtGap->tSym, axtGap->symCount);
+                slAddHead(&axtList, axtGap);
+                }
+            }
+        else if (prevEnd < (axt->tStart)-1)
+            {
+            axtGap = createAxtGap(nib,gp->chrom,prevEnd,(axt->tStart)-1,gp->strand[0]);
+            slAddHead(&axtList, axtGap);
+            }
+        slAddHead(&axtList, axt);
+        prevEnd = axt->tEnd;
+        prevStart = axt->tStart;
+        }
+    if (sameString(gp->chrom, axt->tName) && (axt->tStart > gp->txEnd+20000)) 
+        {
+        if (axt->tStart > prevEnd)
+            {
+            axtGap = createAxtGap(nib,gp->chrom,prevEnd+1,(axt->tStart)-1,gp->strand[0]);
+            if (gp->strand[0] == '-')
+                {
+                reverseComplement(axtGap->qSym, axtGap->symCount);
+                reverseComplement(axtGap->tSym, axtGap->symCount);
+                }
+            slAddHead(&axtList, axtGap);
+            }
+        break;
+        }
+    }
+if (gp->strand[0] == '+')
+    slReverse(&axtList);
+return axtList ;
+}
 void showGenePos(char *name, struct trackDb *tdb)
 /* Show gene prediction position and other info. */
 {
@@ -1391,7 +1529,7 @@ else
     }
 }
 
-struct chain *chainDbLoad(struct sqlConnection *conn, char *track,
+struct chain *chainDbLoad(struct sqlConnection *conn, char *db, char *track,
 			  char *chrom, int id)
 /* Load chain. */
 {
@@ -1402,7 +1540,7 @@ char **row;
 int rowOffset;
 struct chain *chain;
 
-if (!hFindSplitTable(seqName, track, table, &rowOffset))
+if (!hFindSplitTableDb(db, seqName, track, table, &rowOffset))
     errAbort("No %s track in database", track);
 snprintf(query, sizeof(query), 
 	 "select * from %s where id = %d", table, id);
@@ -1455,7 +1593,7 @@ if (! sameWord(otherDb, "seq"))
     otherOrg = hOrganism(otherDb);
     }
 
-chain = chainDbLoad(conn, track, seqName, atoi(item));
+chain = chainDbLoad(conn, database, track, seqName, atoi(item));
 printf("<B>%s position:</B> %s:%d-%d</a>  size: %d <BR>\n",
        thisOrg, chain->tName, chain->tStart+1, chain->tEnd, chain->tEnd-chain->tStart);
 printf("<B>strand:</B> %c<BR>\n", chain->qStrand);
@@ -1583,7 +1721,7 @@ if (net->chainId != 0)
 	{
 	printf("Too see alignment details zoom so that the browser window covers 1,000,000 bases or less.<BR>\n");
 	}
-    chain = chainDbLoad(conn, chainTrack, seqName, net->chainId);
+    chain = chainDbLoad(conn, database, chainTrack, seqName, net->chainId);
     if (chain != NULL)
         {
 	chainToOtherBrowser(chain, otherDb, otherOrg);
@@ -5922,6 +6060,80 @@ if (gotAny)
     htmlHorizontalLine();
 hFreeConn(&conn);
 }
+void pseudoPrintPosHeader(struct bed *bed)
+/*    print header of pseudogene record */ 
+{
+char *tbl = cgiUsualString("table", cgiString("g"));
+
+printf("<p>");
+printf("<B>%s PseudoGene:</B> %s:%d-%d<BR>\n", hOrganism(database),  bed->chrom, bed->chromStart, bed->chromEnd);
+printf("<p>");
+}
+void pseudoPrintPos(struct bed *bed, struct pseudoGeneLink *pg)
+/*    print details of pseudogene record */ 
+{
+char *tbl = cgiUsualString("table", cgiString("g"));
+
+printf("<p>");
+printf("<B>%s Gene:</B> %s %s in %s \n", hOrganism(pg->assembly), pg->gene, pg->geneTable, pg->assembly);
+linkToOtherBrowser(pg->assembly, pg->chrom, pg->gStart, pg->gEnd);
+printf("%s:%d-%d \n", pg->chrom, pg->gStart, pg->gEnd);
+printf("</A>");
+printf("<B>Score:</B> %d Gap Ration: %d Intron Ratio: %d<BR>\n", pg->score, pg->score2, pg->score3);
+printf("<B>Chain:</B> %d  <BR>\n",pg->chainId);
+printf("<p>");
+puts("<LI>\n");
+hgcAnchorPseudoGene(pg->gene, pg->geneTable, pg->chrom, "startcodon", pg->gStart, pg->gEnd, bed->chrom, bed->chromStart, bed->chromEnd, pg->chainId);
+printf("Show %s gene aligned to pseudogene</A>  to see frameshifts and in frame stops <BR>\n",hOrganism(pg->assembly));
+puts("</LI>\n");
+puts("<LI>\n");
+linkToOtherBrowser(pg->assembly, pg->chrom, pg->gStart, pg->gEnd);
+printf("Open %s browser </A> at position corresponding to the Gene.<BR>\n",hOrganism(pg->assembly) );
+puts("</LI>\n");
+}
+
+void doPseudoGene(struct trackDb *tdb, char *geneName)
+/* Handle click on ucsc pseudogene gene track. */
+{
+char query[256];
+struct sqlResult *sr;
+char **row;
+boolean isFirst = TRUE, gotAny = FALSE;
+char *gi;
+struct bed *bed = NULL;
+struct pseudoGeneLink pg;
+struct sqlConnection *conn = hAllocConn();
+char *tbl = cgiUsualString("table", cgiString("g"));
+
+genericHeader(tdb, geneName);
+if (sqlTableExists(conn, tdb->tableName))
+    {
+    sprintf(query, "select * from pseudoUcsc where name = '%s'", geneName);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+        bed = bedLoadN(row+1, 5);
+        }
+//    sqlFreeResult(&sr);
+    pseudoPrintPosHeader(bed);
+    sprintf(query, "select * from pseudoGeneLink where name = '%s'", geneName);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+        pseudoGeneLinkStaticLoad(row, &pg);
+        if (hTableExists("axtInfo") && bed != NULL)
+            {
+            pseudoPrintPos(bed, &pg);
+            }
+        }
+    }
+//showHomologies(geneName, "softberryHom");
+//geneShowCommon(geneName, tdb, NULL);
+printf("<p><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
+	   "View DNA for this feature</A><BR>\n",  hgcPathAndSettings(),
+	   bed->chromStart, bed->chrom, bed->chromStart, bed->chromEnd, "+", tbl);
+printTrackHtml(tdb);
+}
 void doSoftberryPred(struct trackDb *tdb, char *geneName)
 /* Handle click on Softberry gene track. */
 {
@@ -6549,6 +6761,7 @@ void htcGenePsl(char *htcCommand, char *item)
 {
 struct genePred *gp = NULL;
 struct axtInfo *aiList = NULL, *ai;
+struct axt *axtList = NULL;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
@@ -6565,8 +6778,8 @@ char nibFile[512];
 boolean hasBin; 
 boolean alignmentOK;
 
-cartWebStart(cart, "Alignment of %s in %s to %s",
-	     name, hOrganism(database), hOrganism(db2));
+cartWebStart(cart, "Alignment of %s in %s to %s using %s.",
+	     name, hOrganism(database), hOrganism(db2), alignment);
 hSetDb2(db2);
 
 // get nibFile
@@ -6637,10 +6850,139 @@ if ((alignment == NULL) && (aiList != NULL))
     }
 
 puts("<PRE><TT>");
-axtGenePrettyHtml(gp, "axtInfo", nibFile, db2, alignment);
+axtList = getAxtListForGene(gp, nibFile, database, db2, alignment);
+axtOneGeneOut(axtList, LINESIZE, stdout , gp, nibFile);
 puts("</TT></PRE>");
 axtInfoFreeList(&aiList);
 webEnd();
+}
+
+void htcPseudoGene(char *htcCommand, char *item)
+/* Interface for selecting & displaying alignments from axtInfo 
+ * for an item from a genePred table. */
+{
+struct genePred *gp = NULL;
+struct axtInfo *aiList = NULL, *ai;
+struct axt *axtList = NULL;
+//struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char *track = cartString(cart, "o");
+char *chrom = cartString(cart, "c");
+char *name = cartOptionalString(cart, "i");
+char *alignment = cgiOptionalString("alignment");
+char *db2 = cartString(cart, "db2");
+int tStart = cgiInt("l");
+int tEnd = cgiInt("r");
+char *qChrom = cgiOptionalString("qc");
+int chainId = cgiInt("ci");
+int qStart = cgiInt("qs");
+int qEnd = cgiInt("qe");
+char table[64];
+char query[512];
+char nibFile[512];
+char qNibFile[512];
+char qNibDir[512];
+char tNibDir[512];
+char path[512];
+boolean hasBin; 
+boolean alignmentOK;
+struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn2;
+struct hash *qChromHash = hashNew(0);
+struct cnFill *fill;
+struct chain *chain;
+struct dnaSeq *tChrom = NULL;
+
+
+cartWebStart(cart, "Alignment of %s in %s to pseudogene in %s",
+	     name, hOrganism(db2), hOrganism(database));
+hSetDb2(db2); 
+conn2 = hAllocConn2();
+
+// get nibFile
+sprintf(query, "select fileName from chromInfo where chrom = '%s'",  chrom);
+if (sqlQuickQuery(conn2, query, nibFile, sizeof(nibFile)) == NULL)
+    errAbort("Sequence %s isn't in chromInfo", chrom);
+
+sprintf(query, "select fileName from chromInfo where chrom = 'chr1'");
+if (sqlQuickQuery(conn, query, qNibFile, sizeof(qNibFile)) == NULL)
+    errAbort("Sequence chr1 isn't in chromInfo");
+// get gp
+//hFindSplitTable(chrom, track, table, &hasBin);
+hFindSplitTableDb(db2, chrom, track, table, &hasBin);
+snprintf(query, sizeof(query),
+	 "select * from %s where name = '%s' and chrom = '%s' and txStart < %d and txEnd > %d",
+	 table, name, chrom, tEnd, tStart);
+sr = sqlGetResult(conn2, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    gp = genePredLoad(row + hasBin);
+    }
+sqlFreeResult(&sr);
+if (gp == NULL)
+    errAbort("Could not locate gene prediction (db=%s, table=%s, name=%s, in range %s:%d-%d)",
+	     db2, table, name, chrom, tStart+1, tEnd);
+
+/* extract nib directory from nibfile */
+if (strrchr(nibFile,'/') != NULL)
+    strncpy(tNibDir, nibFile, strlen(nibFile)-strlen(strrchr(nibFile,'/')));
+else
+    errAbort("Cannot find nib directory for %s\n",nibFile);
+tNibDir[strlen(nibFile)-strlen(strrchr(nibFile,'/'))] = '\0';
+
+if (strrchr(qNibFile,'/') != NULL)
+    strncpy(qNibDir, qNibFile, strlen(qNibFile)-strlen(strrchr(qNibFile,'/')));
+else
+    errAbort("Cannot find nib directory for %s\n",qNibFile);
+qNibDir[strlen(qNibFile)-strlen(strrchr(qNibFile,'/'))] = '\0';
+
+sprintf(path, "%s/%s.nib", tNibDir, chrom);
+
+/*
+if (tChrom->size != net->size)
+    errAbort("Size mismatch on %s.  Net/nib out of sync or possibly nib dirs swapped?",
+        tChrom->name);
+*/
+
+
+/* load chain */
+sprintf(track, "%sChain",hOrganism(database));
+track[0] = tolower(track[0]);
+chain = chainDbLoad(conn2, db2, track, chrom, chainId);
+
+/* get list of axts for a chain */
+AllocVar(fill);
+fill->qName = cloneString(qChrom);
+fill->qSize = tEnd-tStart;
+fill->qStart = qStart;
+fill->chainId = chainId;
+fill->tSize = gp->cdsEnd - gp->cdsStart;
+fill->tStart = tStart;
+fill->children = NULL;
+fill->next = NULL;
+fill->qStrand = chain->qStrand;
+
+tChrom = nibLoadPartMasked(NIB_MASK_MIXED, nibFile, 
+    	fill->tStart, fill->tSize);
+
+axtList = convertFill(fill, tChrom, qChromHash, qNibDir, chain, NULL);
+
+/* fill in gaps between axt blocks */
+/* allows display of aligned coding regions */
+axtFillGap(&axtList,nibFile);
+
+if (gp->strand[0] == '-')
+    axtListReverse(&axtList, database);
+
+/* output fancy formatted alignment */
+puts("<PRE><TT>");
+axtOneGeneOut(axtList, LINESIZE, stdout , gp, nibFile);
+puts("</TT></PRE>");
+
+axtInfoFreeList(&aiList);
+webEnd();
+hFreeConn2(&conn2);
 }
 
 void htcLongXenoPsl2(char *htcCommand, char *item)
@@ -11411,6 +11753,10 @@ else if (sameWord(track, "softberryGene"))
     {
     doSoftberryPred(tdb, item);
     }
+else if (sameWord(track, "pseudoUcsc"))
+    {
+    doPseudoGene(tdb, item);
+    }
 else if (sameWord(track, "borkPseudo"))
     {
     doPseudoPred(tdb, item);
@@ -11471,6 +11817,10 @@ else if (sameWord(track, "htcLongXenoPsl2"))
 else if (sameWord(track, "htcGenePsl"))
     {
     htcGenePsl(track, item);
+    }
+else if (sameWord(track, "htcPseudoGene"))
+    {
+    htcPseudoGene(track, item);
     }
 else if (sameWord(track, "blatFish"))
     {
