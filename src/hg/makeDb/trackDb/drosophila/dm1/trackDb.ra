@@ -93,3 +93,23 @@ altColor 200,220,255
 type bed 12 .
 url http://www.genoscope.cns.fr/comparative?premier=Drosophila&deuxieme=Anopheles&position=$$
 
+track phastCons
+shortLabel phastCons 
+longLabel phastCons Conservation Score, melanogaster/yakuba/pseudoobscura
+group compGeno
+priority 103
+visibility hide
+color 0,10,100
+maxHeightPixels 40
+type wig 0.0 1.0
+autoScaleDefault off
+
+track phastConsElements
+shortLabel phastConsElements
+longLabel phastCons Conserved Elements, melanogaster/yakuba/pseudoobscura
+group compGeno
+priority 105
+visibility hide
+color 0,10,100
+exonArrows off
+type bed 12 .
