@@ -1,3 +1,12 @@
+track contigs
+shortLabel Contigs
+longLabel Contigs sequenced
+group map
+priority 1.5
+visibility hide
+url http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=nucleotide&val=$$
+type bed 4 .
+ 
 track loweTrnaGene
 shortLabel Lowe tRNA
 longLabel tRNA genes found by Todd Lowe

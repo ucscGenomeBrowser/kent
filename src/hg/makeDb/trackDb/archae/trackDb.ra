@@ -1,8 +1,8 @@
-track gc5Base
+track gc20Base
 shortLabel GC Percent
-longLabel GC Percent in 5 base windows
+longLabel GC Percent in 20 base windows
 group map
-priority 23.5
+priority 1.7
 visibility hide
 autoScaleDefault Off
 maxHeightPixels 128:36:16
