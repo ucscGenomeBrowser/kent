@@ -80,7 +80,8 @@ exit; # don't actually run this like a script :)
 # MAKE 2BIT NIB FILE
 
   ssh kksilo
-  cd /cluster/data/bosTau1/scaffolds
+  cd /cluster/data/bosTau1/linearScaffolds
+  /cluster/bin/i386/faToTwoBit Btau20040927-freeze-assembly.fa bosTau1.2bit
 
 
   
