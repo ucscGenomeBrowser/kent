@@ -754,7 +754,7 @@ while (ffList != NULL)
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
     bestPath = ffMergeHayOverlaps(bestPath);
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
-    if (firstTime && stringency == ffCdna)
+    if (firstTime && stringency == ffCdna && bundle->avoidFuzzyFindKludge == FALSE)
 	{
 	/* Only look for middle exons the first time.  Next times
 	 * this might regenerate most of the first alignment... */

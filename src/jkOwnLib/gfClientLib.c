@@ -10,36 +10,12 @@
 #include "fuzzyFind.h"
 #include "supStitch.h"
 #include "genoFind.h"
+#include "gfInternal.h"
 #include "errabort.h"
 #include "nib.h"
 #include "trans3.h"
 
-void dumpBuns(struct ssBundle *bunList);  /* uglyf */
-void dumpFf(struct ffAli *left, DNA *needle, DNA *hay);/* uglyf */
-
-struct gfRange
-/* A range of bases found by genoFind.  Recursive
- * data structure.  Lowest level roughly corresponds
- * to an exon. */
-    {
-    struct gfRange *next;  /* Next in singly linked list. */
-    int qStart;	/* Start in query */
-    int qEnd;	/* End in query */
-    char *tName;	/* Target name. Not allocated here. */
-    struct dnaSeq *tSeq;	/* Target sequence. (May be NULL if in .nib.  Not allocated here.) */
-    int tStart;	/* Start in target */
-    int tEnd;	/* End in target */
-    struct gfRange *components;	/* Components of range. */
-    int hitCount;	/* Number of hits. */
-    int frame;		/* Reading frame (just for translated alignments) */
-    struct trans3 *t3;	/* Translated frame or NULL. */
-    int tTotalSize;	/* Size of entire target sequence, not just loaded parts.  Not set until late in the game. */
-    };
-
-static void gfRangeFreeList(struct gfRange **pList);
-/* Free a list of dynamically allocated gfRange's */
-
-static void gfRangeFree(struct gfRange **pEl)
+void gfRangeFree(struct gfRange **pEl)
 /* Free a single dynamically allocated gfRange such as created
  * with gfRangeLoad(). */
 {
@@ -52,7 +28,7 @@ if (el->components != NULL)
 freez(pEl);
 }
 
-static void gfRangeFreeList(struct gfRange **pList)
+void gfRangeFreeList(struct gfRange **pList)
 /* Free a list of dynamically allocated gfRange's */
 {
 struct gfRange *el, *next;
@@ -83,7 +59,7 @@ ret->hitCount = atoi(row[5]);
 return ret;
 }
 
-static int gfRangeCmpTarget(const void *va, const void *vb)
+int gfRangeCmpTarget(const void *va, const void *vb)
 /* Compare to sort based on target position. */
 {
 const struct gfRange *a = *((struct gfRange **)va);
@@ -314,7 +290,7 @@ for (isRc = 0; isRc <= 1; ++isRc)
 
 
 
-static struct gfRange *gfRangesBundle(struct gfRange *exonList, int maxIntron)
+struct gfRange *gfRangesBundle(struct gfRange *exonList, int maxIntron)
 /* Bundle a bunch of 'exons' into plausable 'genes'.  It's
  * not necessary to be precise here.  The main thing is to
  * group together exons that are close to each other in the
@@ -593,7 +569,7 @@ for (range = rangeList; range != NULL; range = range->next)
 #endif /* DEBUG */
 
 static struct ssBundle *gfClumpsToBundles(struct gfClump *clumpList, 
-    struct dnaSeq *seq, boolean isRc, int minScore,  struct gfRange **retRangeList)
+    struct dnaSeq *seq, int minScore,  struct gfRange **retRangeList)
 /* Convert gfClumps to an actual alignments (ssBundles) */ 
 {
 struct ssBundle *bun, *bunList = NULL;
@@ -788,7 +764,7 @@ for (hit = clump->hitList; ; hit = hit->next)
     }
 }
 
-static struct ssFfItem *rangesToFfItem(struct gfRange *rangeList, aaSeq *qSeq)
+struct ssFfItem *gfRangesToFfItem(struct gfRange *rangeList, aaSeq *qSeq)
 /* Convert ranges to ssFfItem's. */
 {
 AA *q = qSeq->dna;
@@ -835,7 +811,7 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->qSeq = qSeq;
     bun->genoSeq = targetSeq;
     bun->data = range;
-    bun->ffList = rangesToFfItem(range->components, qSeq);
+    bun->ffList = gfRangesToFfItem(range->components, qSeq);
     bun->isProt = FALSE;
     slAddHead(&bunList, bun);
     }
@@ -871,7 +847,7 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->qSeq = seq;
     bun->genoSeq = targetSeq;
     bun->data = range;
-    bun->ffList = rangesToFfItem(range->components, seq);
+    bun->ffList = gfRangesToFfItem(range->components, seq);
     bun->isProt = isProt;
     ssStitch(bun, stringency, minMatch);
     saveAlignments(targetSeq->name, targetSeq->size, 0, 
@@ -941,7 +917,7 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->qSeq = qSeq;
     bun->genoSeq = targetSeq;
     bun->data = range;
-    bun->ffList = rangesToFfItem(range->components, qSeq);
+    bun->ffList = gfRangesToFfItem(range->components, qSeq);
     bun->isProt = TRUE;
     bun->t3List = t3;
     ssStitch(bun, ffCdna, minMatch);
@@ -1080,7 +1056,7 @@ for (isRc = 0; isRc <= 1;  ++isRc)
 	bun->qSeq = seq;
 	bun->genoSeq = targetSeq;
 	bun->data = range;
-	bun->ffList = rangesToFfItem(range->components, seq);
+	bun->ffList = gfRangesToFfItem(range->components, seq);
 	bun->isProt = TRUE;
 	t3 = hashMustFindVal(t3Hash, range->tName);
 	bun->t3List = t3;
@@ -1211,7 +1187,7 @@ for (tIsRc=0; tIsRc <= 1; ++tIsRc)
 	bun->qSeq = qSeq;
 	bun->genoSeq = targetSeq;
 	bun->data = range;
-	bun->ffList = rangesToFfItem(range->components, qSeq);
+	bun->ffList = gfRangesToFfItem(range->components, qSeq);
 	ssStitch(bun, stringency, minMatch);
 	splitPath(range->tName, dir, chromName, ext);
 	t3 = range->t3;
@@ -1279,7 +1255,7 @@ for (range = rangeList; range != NULL; range = range->next)
     AllocVar(bun);
     bun->qSeq = qSeq;
     bun->genoSeq = targetSeq;
-    bun->ffList = rangesToFfItem(range->components, qSeq);
+    bun->ffList = gfRangesToFfItem(range->components, qSeq);
     ssStitch(bun, stringency, minMatch);
     slAddHead(&bunList, bun);
     }
@@ -1418,9 +1394,13 @@ static void gfAlignSomeClumps(struct genoFind *gf,  struct gfClump *clumpList,
     bioSeq *seq, boolean isRc,  int minMatch, 
     struct gfOutput *out, boolean isProt, enum ffStringency stringency);
 
+struct ssBundle *gfSeedExtInMem(struct genoFind *gf, struct dnaSeq *qSeq, Bits *qMaskBits, 
+	int qOffset, struct lm *lm, int minScore);
+/* Do seed and extend type alignment */
+
 void gfLongDnaInMem(struct dnaSeq *query, struct genoFind *gf, 
    boolean isRc, int minScore, Bits *qMaskBits, 
-   struct gfOutput *out, boolean fastMap)
+   struct gfOutput *out, boolean fastMap, boolean band)
 /* Chop up query into pieces, align each, and stitch back
  * together again. */
 {
@@ -1464,31 +1444,31 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     endPos = &subQuery.dna[subSize];
     saveEnd = *endPos;
     *endPos = 0;
-    clumpList = gfFindClumpsWithQmask(gf, &subQuery, qMaskBits, subOffset, lm, &hitCount);
-#ifdef DEBUG
-        {
-	struct gfClump *clump;
-	for (clump = clumpList; clump != NULL; clump = clump->next)
-	    gfClumpDump(gf, clump, uglyOut);
-	}
-#endif /* DEBUG */
-    if (fastMap)
+    if (band)
 	{
-	oneBunList = fastMapClumpsToBundles(gf, clumpList, query, subOffset);
+	oneBunList = gfSeedExtInMem(gf, &subQuery, qMaskBits, subOffset, lm, minScore);
 	}
     else
 	{
-	oneBunList = gfClumpsToBundles(clumpList, &subQuery, isRc, minScore, &rangeList);
-	gfRangeFreeList(&rangeList);
+	clumpList = gfFindClumpsWithQmask(gf, &subQuery, qMaskBits, subOffset, lm, &hitCount);
+	if (fastMap)
+	    {
+	    oneBunList = fastMapClumpsToBundles(gf, clumpList, query, subOffset);
+	    }
+	else
+	    {
+	    oneBunList = gfClumpsToBundles(clumpList, &subQuery, minScore, &rangeList);
+	    gfRangeFreeList(&rangeList);
+	    }
+	gfClumpFreeList(&clumpList);
 	}
     addToBigBundleList(&oneBunList, bunHash, &bigBunList, query);
-    gfClumpFreeList(&clumpList);
     *endPos = saveEnd;
     }
 for (bun = bigBunList; bun != NULL; bun = bun->next)
     {
     ssStitch(bun, ffCdna, minScore);
-    if (!fastMap)
+    if (!fastMap && !band)
 	refineSmallExonsInBundle(bun);
     saveAlignments(bun->genoSeq->name, bun->genoSeq->size, 0, 
 	bun, NULL, isRc, FALSE, ffCdna, minScore, out);

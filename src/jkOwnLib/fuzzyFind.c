@@ -704,8 +704,7 @@ for (i = 0; i<=endIx; ++i)
 return FALSE;
 }
 
-static void expandExactRight(struct ffAli *ali, DNA *needleStart, DNA *needleEnd,
-    DNA *hayStart, DNA *hayEnd)
+void ffExpandExactRight(struct ffAli *ali, DNA *needleEnd, DNA *hayEnd)
 /* Expand aligned segment to right as far as can exactly. */
 {
 DNA *nEnd = ali->nEnd;
@@ -722,8 +721,7 @@ ali->hEnd = hEnd;
 return;
 }
 
-static void expandExactLeft(struct ffAli *ali, DNA *needleStart, DNA *needleEnd,
-    DNA *hayStart, DNA *hayEnd)
+void ffExpandExactLeft(struct ffAli *ali, DNA *needleStart, DNA *hayStart)
 /* Expand aligned segment to left as far as can exactly. */
 {
 DNA *nStart = ali->nStart-1;
@@ -1153,8 +1151,8 @@ for (;;)
         ali->nEnd = tileEnd;
         ali->hStart = match;
         ali->hEnd = match + (tileEnd-tile);
-        expandExactLeft(ali, ns, ne, hs, he);
-        expandExactRight(ali, ns, ne, hs, he);
+        ffExpandExactLeft(ali, ns, hs);
+        ffExpandExactRight(ali, ne, he);
         return ali;
         }
 
@@ -1643,8 +1641,8 @@ if (hitList == NULL)
 hitList = ffMakeRightLinks(hitList);
 for (ali = hitList; ali != NULL; ali = ali->right)
     {
-    expandExactLeft(ali, ns, ne, hs, he);
-    expandExactRight(ali, ns, ne, hs, he);
+    ffExpandExactLeft(ali, ns, hs);
+    ffExpandExactRight(ali, ne, he);
     }
 bestAli = weaveAli(hitList, ns, ne, hs, he, rwFreq, &bestWeaveVal, stringency);
 if (rwCheckGoodEnough)

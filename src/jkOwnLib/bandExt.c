@@ -389,7 +389,6 @@ else
 
 gotExt = bandExt(ss, maxInsert, ns, nSize, hs, hSize, dir,
 	symAlloc, &symCount, nBuf, hBuf, &nExt, &hExt);
-uglyf("nExt %d, hExt %d\n", nExt, hExt);
 if (gotExt)
     {
     char *nExtStart, *hExtStart;
