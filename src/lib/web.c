@@ -45,6 +45,10 @@ vprintf(format, args);
 puts(
     "</TITLE>" "\n"
     "	<LINK REL=\"STYLESHEET\" HREF=\"/style/HGStyle.css\">" "\n"
+    "	<STYLE TYPE=\"text/css\">" "\n"
+    "	    p    {  text-align: left; font-family: times new roman, arial, helvetica, verdana, serif; color: black; margin-left: 0px }" "\n"
+    "       p.justify    {  text-align: justify; font-family: times new roman, arial, helvetica, verdana, serif; color: black; margin-left: 0px }" "\n"
+    "   </STYLE>" "\n"
     "</HEAD>" "\n"
     "<BODY BGCOLOR=\"FFF9D2\" LINK=\"0000CC\" VLINK=\"#330066\" ALINK=\"#6600FF\">" "\n"
     "<A NAME=\"TOP\"></A>" "\n"
@@ -119,7 +123,7 @@ puts(
     "" "\n"
     "  	<!--outer table is for border purposes-->" "\n"
     "  	<TABLE WIDTH=\"100%\" HEIGHT=\"100%\" BGCOLOR=\"#888888\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>	" "\n"
-    "    <TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\"  BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR><TD>	" "\n"
+    "   <TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\"  BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR><TD>	" "\n"
     "	<TABLE BGCOLOR=\"D9E4F8\" BACKGROUND=\"/images/hr.gif\" WIDTH=100%><TR><TD>" "\n"
     "		<FONT SIZE=\"4\"><b>&nbsp;  "
 );
@@ -128,7 +132,7 @@ vprintf(format, args);
 
 puts(
     "</b></FONT>" "\n"
-    "	</TD></TR></TABLE>" "\n"
+    "	</P></TD></TR></TABLE>" "\n"
     "	<TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>" "\n"
     "	<TR><TD WIDTH=10>&nbsp;</TD><TD>" "\n"
     "" "\n"
