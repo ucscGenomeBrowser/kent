@@ -100,14 +100,14 @@ searchTable miRNA
 searchMethod prefix
 searchType bed
 shortCircuit 1
-termRegex dme-(mir|let)-[0-9]+[a-z]?
-dontCheck dme-(mir|let)-[0-9]+[a-z]?(-[0-9]+)?
+termRegex dme-(mir|let|mir-iab|bantam)(-[0-9]+[a-z]?)?
+dontCheck dme-(mir|let|mir-iab|bantam)(-[0-9]+[a-z]?(-[0-9]+)?)?
 searchPriority 21
 
 searchTable miRNA
 searchMethod exact
 searchType bed
 shortCircuit 1
-termRegex dme-(mir|let)-.+
+termRegex dme-(mir|let|mir-iab|bantam)(-.+)?
 searchPriority 21.5
 
