@@ -9,7 +9,7 @@
 #include "dystring.h"
 #include "expRecord.h"
 
-static char const rcsid[] = "$Id: affyPslAndAtlasToBed.c,v 1.7 2003/10/04 02:00:55 kent Exp $";
+static char const rcsid[] = "$Id: affyPslAndAtlasToBed.c,v 1.8 2003/10/06 23:12:13 kent Exp $";
 
 
 #define DEBUG 0
@@ -532,20 +532,6 @@ carefulClose(&f);
 return wordCount;
 }
 
-int doubleCmp(const void *va, const void *vb)
-/* Compare two ints. */
-{
-double *a = (double *)va;
-double *b = (double *)vb;
-double diff = *a - *b;
-if (diff < 0)
-    return -1;
-else if (diff > 0)
-    return 1;
-else
-    return 0;
-}
-
 int findPositiveMedian(double *data, int count, double minVal)
 /* Find median of positive numbers in data. */
 {
@@ -628,7 +614,11 @@ while (lineFileNextReal(lf, &line))
 	}
     AllocArray(data, expCount);
     for (i=0; i<expCount; ++i)
+	{
         data[i] = atof(row[i]);
+	if (data[i] < minExpVal)
+	    data[i] = minExpVal;
+	}
     median = findPositiveMedian(data, expCount, minExpVal);
     if (median >= 0)
 	{
@@ -636,10 +626,7 @@ while (lineFileNextReal(lf, &line))
 	for (i=0; i<expCount; ++i)
 	    {
 	    double val = data[i];
-	    if (val >= minExpVal)
-		val = safeLog2(invMedian*val);
-	    else
-		val = missingVal;
+	    val = safeLog2(invMedian*val);
 	    data[i] = val;
 	    }
 	if (shortOut)
