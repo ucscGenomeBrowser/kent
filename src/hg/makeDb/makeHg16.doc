@@ -2867,3 +2867,30 @@ XXXX - Running 2003-08-27 21:32
 ../syntenyMm3/synteny2bed.pl
 #    Load results
 hgLoadBed hg16 syntenySelf ucsc100k.bed
+
+
+# LOAD GENEID GENES (TBD)
+    mkdir -p /cluster/data/hg16/bed/geneid/download
+    cd /cluster/data/hg16/bed/geneid/download
+
+    # Now download *.gtf and *.prot from 
+    set dir = genome.imim.es/genepredictions/H.sapiens/golden_path_200307/geneid_v1.1/
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y Un)
+      wget http://$dir/chr$c.gtf
+      wget http://$dir/chr${c}_random.gtf
+      wget http://$dir/chr$c.prot
+      wget http://$dir/chr${c}_random.prot
+    end
+    wget http://$dir/readme
+    # Add missing .1 to protein id's
+    foreach f (*.prot)
+      perl -wpe 's/^(>chr\w+)$/$1.1/' $f > $f:r-fixed.prot
+      echo "done $f"
+    end
+    cd ..
+    ldHgGene hg16 geneid download/*.gtf -exon=CDS
+#	Read 32255 transcripts in 281180 lines in 40 files
+#	  32255 groups 40 seqs 1 sources 3 feature types
+#	32255 gene predictions
+    hgPepPred hg16 generic geneidPep download/*-fixed.prot
+
