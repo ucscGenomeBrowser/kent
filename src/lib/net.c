@@ -377,12 +377,13 @@ boolean netSendHugeString(int sd, char *s)
 /* Send a long string down socket: four bytes for length. */
 {
 unsigned long length = strlen(s);
+unsigned long l = length;
 UBYTE b[4];
 int i;
 for (i=3; i>=0; --i)
     {
-    b[i] = length & 0xff;
-    length >>= 8;
+    b[i] = l & 0xff;
+    l >>= 8;
     }
 if (write(sd, b, 4) < 0)
     {
