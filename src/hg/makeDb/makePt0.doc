@@ -3,9 +3,7 @@
 # Downloaded files from Whitehead:
 
 #ftp-genome.wi.mit.edu
-#Dir: Assembly.Nov1.2003
-# NOTE: for browser, use Nov13 assembly (same sequence, different AGP)
-
+# Dir: Assembly.Nov1.2003
 #unzip
 #The scaffold count is 37927.
 
@@ -679,8 +677,9 @@ SEQ2_LEN=$BASE/S2.len
 
 # LOAD CHIMP SEQUENCE INTO HUMAN BROWSER
     mkdir -p /gbdb/hg16/pt0
+    ln -s /cluster/data/pt0/scaffolds.msk.fa /gbdb/hg16/pt0
     cd /cluster/data/pt0
-    hgLoadSeq hg16 /cluster/data/pt0/scaffolds.msk.fa
+    hgLoadSeq -prefix=pt0 hg16 /gbdb/hg16/pt0/scaffolds.msk.fa
 
 
 # BLAT UNPLACED UNMASKED CHIMP VS. UNMASKED HUMAN 
@@ -820,7 +819,6 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
         > all.blastz.chain
     chainMergeSort all.blastz.chain \
         blatHg16.scaffolds/pslChain/run1/chain/*.chain > all.chain
-
     chainSplit chain all.chain
 
     ssh hgwdev
@@ -883,7 +881,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     cd ../
 
     netChainSubset chimpGap10.filtered.net all.chain \
-                        chimpGap10.filtered.chain
+                    chimpGap10.filtered.chain
 
     # REVERSED CHAIN FILES FROM NET
     chainSwap all.chain all.swap.chain
@@ -919,23 +917,41 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     netChainSubset humanGap10.net all.swap.chain humanGap10.jk2.chain
     chainSort humanGap10.jk2.chain humanGap10Sorted.jk2.chain
     # note: jim ran these, and switched conventions
-    chainNet humanGap10Sorted.chain /cluster/data/pt0/scaffold.sizes \
+    chainNet humanGap10Sorted.jk2.chain /cluster/data/pt0/scaffold.sizes \
         /cluster/data/hg16/chrom.sizes chimp.jk2.net human.jk2.net \
                  -minScore=0 -minSpace=1
+
+    # detour to redo reciprocal best chimp chain
+    netChainSubset chimpGap10.net all.chain chimpGap10.jk2.chain
+    chainSort chimpGap10.jk2.chain chimpGap10Sorted.jk2.chain
+    chainNet chimpGap10Sorted.jk2.chain /cluster/data/hg16/chrom.sizes \
+        /cluster/data/pt0/scaffold.sizes human.jk3.net chimp.jk3.net \
+                 -minScore=0 -minSpace=1
+    /cluster/bin/i386/netSyntenic chimp.jk3.net chimp.best.net
+    ~/bin/i386/netFilter -chimpSyn chimp.best.net > chimp.best.filtered.net
+    netChainSubset chimp.best.filtered.net all.swap.chain \
+        chimp.best.filtered.chain
+    ln -s chimp.best.filtered.chain chimp.chain
+    cp chimp.chain /usr/local/apache/htdocs/kate/chimp
+    cd /usr/local/apache/htdocs/kate/chimp
+    gzip chimp.chain
+
     ##netFilter -minGap=10 chimp.net |  hgLoadNet hg16 netPt0 stdin
     #/cluster/bin/i386/netSyntenic human.jk.net human.best.net
     #~/bin/i386/hgLoadNet -warn hg16 netRxBestPt0 human.best.net
+
+    # back to best human chain
     mv human.best.net human.best.net.old
     /cluster/bin/i386/netSyntenic human.jk2.net human.best.net
     ~/bin/i386/netFilter -chimpSyn human.best.net > human.best.filtered.net
-    mv chimp.best.net chimp.best.net.old
-    /cluster/bin/i386/netSyntenic chimp.jk2.net chimp.best.net
-    ~/bin/i386/netFilter -chimpSyn chimp.best.net > chimp.best.filtered.net
+    #mv chimp.best.net chimp.best.net.old
+    #/cluster/bin/i386/netSyntenic chimp.jk2.net chimp.best.net
+    #~/bin/i386/netFilter -chimpSyn chimp.best.net > chimp.best.filtered.net
     #~/bin/i386/hgLoadNet -warn hg16 netRxBestPt0 human.best.net
     ln -s human.best.filtered.net human.net
     ssh hgwdev
     cd /cluster/data/pt0/bed/blastz-blatHg16
-    ~/bin/i386/hgLoadNet -warn hg16 netRxBestPt0 human.net
+    /bin/i386/hgLoadNet -qPrefix=pt0- -warn hg16 netRxBestPt0 human.net
 
     #netStats chimp.jk.stats chimp.jk.net
     #netStats human.jk.stats human.jk.net
@@ -947,34 +963,208 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     #netChainSubset human.jk2.net all.chain human.jk2.chain
     netChainSubset human.best.filtered.net all.chain human.best.filtered.chain
     ln -s human.best.filtered.chain human.chain
-    netChainSubset chimp.best.filtered.net all.swap.chain \
-        chimp.best.filtered.chain
-    ln -s chimp.best.filtered.chain chimp.chain
-    cp human.chain chimp.chain /usr/local/apache/htdocs/kate/chimp
+    #netChainSubset chimp.best.filtered.net all.swap.chain \
+        #chimp.best.filtered.chain
+    #ln -s chimp.best.filtered.chain chimp.chain
+    cp human.chain /usr/local/apache/htdocs/kate/chimp
     cd /usr/local/apache/htdocs/kate/chimp
-    gzip human.chain chimp.chain
+    gzip human.chain 
+    #hgLoadChain -qPrefix=pt0- hg16 chainAllPt0 all.chain
 
     ssh hgwdev
     cd /cluster/data/pt0
     cd bed/blastz-blatHg16
-    hgLoadChain hg16 chainAllPt0 all.chain
-    #chainSwap humanGap10Sorted.chain humanGap10Sorted.swap.chain
-    #hgLoadChain hg16 chainRxBestPt0 humanGap10Sorted.swap.chain
-    #chainSwap humanGap10Sorted.jk2.chain humanGap10Sorted.jk2.swap.chain
-    #hgLoadChain hg16 chainRxBestPt0 humanGap10Sorted.swap.chain
-    # Best-on-chimp chains
-    #chainSwap humanGap10Sorted.jk2.chain stdout | \
-        #hgLoadChain hg16 chainRxBestPt0 stdin
-            #Loading 100160 chains into hg16.chainRxBestPt0
-    # Reciprocal best chains
-    chainSwap chimp.chain stdout | \
-        hgLoadChain hg16 chainRxBestPt0 stdin
+    chainSort -target all.chain | chainSplit chain stdin
+    cd chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain -qPrefix=pt0 hg16 ${c}_chainPt0 $i
+        echo done $c
+    end
+    # reloaded these tables on genome-test on 4/29/04
+    # as they somehow were wrong (kate)
 
     # NOTE: need to remake scaffolds.msk.fa for Nov13 assembly
     # and reload seq table
-    hgLoadSeq hg16 /cluster/data/pt0/scaffolds.msk.fa
-        #Adding /cluster/data/pt0/scaffolds.msk.fa)
+    cd /cluster/data/pt0
+    hgLoadSeq -prefix=pt0 hg16 /gbdb/hg16/pt0/scaffolds.msk.fa
         #37928 sequences
+
+
+# DOWNLOADS 
+
+    # copy chain files to download area
+    cd /usr/local/apache/htdocs/goldenPath/hg16
+    mkdir -p vsPt0
+    cp /cluster/data/pt0/bed/blastz-blatHg16/{human,chimp}.chain .
+    gzip human.chain chimp.chain
+    md5sum *.gz > md5sum.txt
+    # add README.txt file to dir, if needed
+
+# CREATE RECIPROCAL BEST NET AXT'S
+
+    # split scaffolds into files and create nibs for netToAxt
+    ssh kksilo
+    cd /cluster/data/pt0
+    mkdir scaffolds
+    faSplit byname scaffolds.msk.fa scaffolds/
+
+    # add 3 scaffolds, change 1 from Nov13 assembly
+    cd scaffolds
+    mv scaffold_28690.fa scaffold_28690.fa.nov1
+    cd ../Assembly.Nov13.2003
+    echo "scaffold_28690\nscaffold_37928\nscaffold_37929\nscaffold_37930" \
+        > newscaffolds.lst
+    faSomeRecords scaffolds.fa newscaffolds.lst newscaffolds.fa
+    mkdir newscaffolds
+    faSplit byname newscaffolds.fa newscaffolds/
+    cd newscaffolds
+    foreach i (scaffold*.fa)
+        echo $i
+        cp $i ../../scaffolds/$i.nov13
+        ln -s /cluster/data/pt0/scaffolds/$i.nov13 ../../scaffolds/$i
+    end
+    cd /cluster/data/pt0
+    mkdir nib
+    cd scaffolds
+    foreach f (scaffold*.fa)
+        set i = $f:r
+        echo $i
+        faToNib -softMask $i.fa ../nib/$i.nib
+    end
+
+    cd /cluster/data/pt0/bed/blastz-blatHg16
+    mkdir humanBestNet
+
+    netSplit human.net humanBestNet
+    mkdir humanBestAxt
+    cd humanBestNet
+cat > makeAxt.csh << 'EOF'
+    foreach f (*.net)
+        set i = $f:r
+        echo $i.net
+        netToAxt $i.net ../all.chain \
+                /cluster/data/hg16/nib /cluster/data/pt0/nib \
+                ../humanBestAxt/$i.axt
+    end
+'EOF'
+    csh -f makeAxt.csh >&! makeAxt.log &
+    tail -100f makeAxt.log
+
+# CHIMP SEQUENCE FOR DOWNLOAD (2003-12-10 kate)
+#   Re-extract scaffolds using Nov13 AGP
+    ssh kksilo
+    cd /cluster/data/pt0
+    mkdir Assembly.Nov1.2003
+    mv supercontigs* assembly.agp assembly.format scaffold.sizes.Nov1 scaffolds.msk.fa Assembly.Nov1.2003
+    ln -s Assembly.Nov13.2003/assembly.agp .
+    agpAllToFaFile assembly.agp contigs.bases.msk scaffolds.msk.fa
+    cp scaffolds.msk.fa /usr/local/apache/htdocs/goldenPath/hg16/vsPt0
+    cd /usr/local/apache/htdocs/goldenPath/hg16/vsPt0
+    gzip scaffolds.msk.fa
+    md5sum scaffolds.msk.fa >> md5sum.txt
+    # Update README
+
+# REDO NETTING WITH FIX  (2003-12-11)
+    ssh kolossus
+    cd /cluster/data/pt0/bed/blastz-blatHg16
+    /cluster/home/kate/bin/x86_64/chainNet all.chain -minSpace=10 \
+        /cluster/data/hg16/chrom.sizes /cluster/data/pt0/scaffold.sizes \
+        chimpGap10.2.net humanGap10.2.net
+    ssh kksilo
+    cd /cluster/data/pt0/bed/blastz-blatHg16
+    ~/bin/i386/netChainSubset humanGap10.2.net all.swap.chain stdout | \
+        chainSort stdin humanGap10.2.chain
+    # NOTE: this chain file has duplicated chain ID's -- chains
+    # must have been split up from net
+
+    # note: switched conventions here (like jk, above)
+    ssh kolossus
+    cd /cluster/data/pt0/bed/blastz-blatHg16
+    /cluster/home/kate/bin/x86_64/chainNet humanGap10.2.chain \
+        /cluster/data/pt0/scaffold.sizes /cluster/data/hg16/chrom.sizes \
+        chimp.2.net human.2.net -minScore=0 -minSpace=1
+    ssh kksilo
+    cd /cluster/data/pt0/bed/blastz-blatHg16
+    netSyntenic human.2.net human.2.syn.net
+    ~/bin/i386/netFilter -chimpSyn human.2.syn.net > human.best.2.net
+
+    ssh hgwdev
+    cd /cluster/data/pt0/bed/blastz-blatHg16
+    ~/bin/i386/hgLoadNet -qPrefix=pt0 -warn hg16 netRxBestPt0 human.best.2.net
+
+    # get axt's from net
+    ssh kksilo
+    cd /cluster/data/pt0/bed/blastz-blatHg16
+    netSplit human.best.2.net humanBestNet.2
+    mkdir humanBestAxt.2
+    cd humanBestNet.2
+cat > makeAxt.csh << 'EOF'
+    foreach f (*.net)
+        set i = $f:r
+        echo $i.net
+        netToAxt -nocache $i.net ../all.chain \
+                /cluster/data/hg16/nib /cluster/data/pt0/nib \
+                ../humanBestAxt.2/$i.axt
+    end
+'EOF'
+    csh -f makeAxt.csh >&! makeAxt.log &
+    tail -100f makeAxt.log
+    cd ..
+    ln -s humanBestAxt.2 axtBest
+    
+    # convert to PSL and load into browser
+    ssh kksilo
+    cd /cluster/data/pt0/bed/blastz-blatHg16
+    mkdir pslBest
+cat > makePsl.csh << 'EOF'
+    foreach a (axtBest/chr*.axt)
+	set c=$a:t:r
+	echo "processing $c.axt"
+        axtToPsl axtBest/${c}.axt \
+        /cluster/data/hg16/chrom.sizes \
+                /cluster/data/pt0/scaffold.sizes \
+                        pslBest/${c}_blastzBestPt0.psl
+    end
+'EOF'
+    csh makePsl.csh >&! makePsl.log &
+    tail -100f makePsl.log
+
+    # Load tables
+    ssh hgwdev
+    #cd /cluster/data/pt0/bed/blastz-blatHg16/pslBest
+    #~/bin/i386/hgLoadPsl -qPrefix=p0- hg16 chr*_blastzBestPt0.psl
+
+    cd /gbdb/hg16
+    set table = axtBestPt0
+    mkdir -p $table
+    cd $table
+    foreach p (/cluster/data/pt0/bed/blastz-blatHg16/axtBest/*.axt)
+        echo $p
+        set f = $p:t
+        ln -s $p $f
+    end
+    cd /cluster/data/pt0/bed/blastz-blatHg16/axtBest
+    hgLoadAxt hg16 axtBestPt0
+
+    # extract chains and copy to download area
+    ssh kksilo
+    cd /cluster/data/pt0/bed/blastz-blatHg16
+    ~/bin/i386/netChainSubset human.best.2.net all.chain human.best.2.chain
+    #cp chimp.chain /usr/local/apache/htdocs/kate/chimp
+    #cd /usr/local/apache/htdocs/kate/chimp
+    #gzip chimp.chain
+
+    # chimp reference chains
+    /cluster/bin/i386/netSyntenic chimp.2.net chimp.2.syn.net
+    ~/bin/i386/netFilter -chimpSyn chimp.2.syn.net > chimp.best.2.net
+    ~/bin/i386/netChainSubset chimp.best.2.net all.swap.chain chimp.best.2.chain
+    #cp chimp.chain /usr/local/apache/htdocs/kate/chimp
+    #cd /usr/local/apache/htdocs/kate/chimp
+    #gzip chimp.chain
+
+    #gzip --fast *.chain
+
 
 # CREATING SCAFFOLD LEVEL COMPRESSED QUALITY SCORES AND HI QUALITY DIFFERENCE FILES
 
