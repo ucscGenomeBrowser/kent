@@ -46,7 +46,7 @@ void webPushErrHandlers();
 void webPopErrHandlers();
 /* Pop warn and abort handler for errAbort(). */
 
-void printAssemblyListHtml(char *curDb);
+void printAssemblyListHtml(char *curDb, char *onChangeText);
 /*
 Prints to stdout the HTML to render a dropdown list containing a list of the possible
 assemblies to choose from.
