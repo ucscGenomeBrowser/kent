@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.20 2004/03/12 23:09:25 kent Exp $";
+static char const rcsid[] = "$Id: hash.c,v 1.21 2004/03/15 17:22:07 kent Exp $";
 
 bits32 hashCrc(char *string)
 /* Returns a CRC value on string. */
@@ -338,6 +338,7 @@ lmCleanup(&hash->lm);
 freez(pHash);
 }
 
+
 void freeHashAndVals(struct hash **pHash)
 /* Free up hash table and all values associated with it.
  * (Just calls freeMem on each hel->val) */
@@ -348,5 +349,18 @@ if ((hash = *pHash) != NULL)
     hashTraverseVals(hash, freeMem);
     freeHash(pHash);
     }
+}
+
+void hashFreeList(struct hash **pList)
+/* Free up a list of hashes. */
+{
+struct hash *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    hashFree(&el);
+    }
+*pList = NULL;
 }
 

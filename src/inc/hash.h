@@ -135,5 +135,8 @@ void freeHashAndVals(struct hash **pHash);
 /* Free up hash table and all values associated with it.
  * (Just calls freeMem on each hel->val) */
 
+void hashFreeList(struct hash **pList);
+/* Free up a list of hashes. */
+
 #endif /* HASH_H */
 
