@@ -1,9 +1,7 @@
 #
 #	product/makefile - create image for product CD-ROM
 #
-#	This makefile expects to be used on hgwdev so it can have
-#	access to common html files from apache root to copy into
-#	this hierarchy, as well as access also to /gbdb links.
+#	$Id: makefile,v 1.18 2005/03/07 21:04:26 hiram Exp $
 #
 include ../inc/common.mk
 
