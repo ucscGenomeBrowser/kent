@@ -19,7 +19,7 @@
 #include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.143 2004/04/15 07:29:50 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.144 2004/04/16 05:41:49 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1122,7 +1122,12 @@ hPrintf("</TD></TR>\n<TR><TD>");
     {
     struct order *ord;
 
-    hPrintf("sort by ");
+    hPrintf("<A HREF=\"");
+    hPrintf("../cgi-bin/hgNear?%s=on&%s", 
+    	orderInfoDoName, cartSidUrlString(cart));
+    hPrintf("\">");
+    hPrintf("sort by");
+    hPrintf("</A> ");
     hPrintf("<SELECT NAME=\"%s\">\n", orderVarName);
     for (ord = ordList; ord != NULL; ord = ord->next)
         {
@@ -1891,6 +1896,8 @@ else if (cartVarExists(cart, customUploadDoName))
     doCustomUpload(conn, colList); 
 else if (cartVarExists(cart, customFromUrlDoName))
     doCustomFromUrl(conn, colList);
+else if (cartVarExists(cart, orderInfoDoName))
+    doOrderInfo(conn);
 else if (cartNonemptyString(cart, searchVarName))
     doSearch(conn, colList);
 else

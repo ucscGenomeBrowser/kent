@@ -15,6 +15,7 @@
 #include "hui.h"
 #include "web.h"
 #include "ra.h"
+#include "hgColors.h"
 #include "hgNear.h"
 
 
@@ -184,6 +185,7 @@ struct sqlResult *sr;
 char **row;
 char query[512];
 char curName[128];
+int sameLen, nameLen;
 
 safef(query, sizeof(query), 
 	"select %s from %s where %s = '%s'", 
@@ -194,6 +196,7 @@ if (!sqlQuickQuery(conn, query, curName, sizeof(curName)))
     warn("Couldn't find name for %s", curGeneId->name);
     return;
     }
+nameLen = strlen(curName);
 
 /* Scan table for names and sort by similarity. */
 safef(query, sizeof(query), "select %s,%s from %s", 
@@ -205,7 +208,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     while (hel != NULL)
         {
 	struct genePos *gp = hel->val;
-	gp->distance = 1000 - countStartSame(curName,row[1]);	
+	sameLen = countStartSame(curName, row[1]);
+	gp->distance = 1000 - sameLen;
+	if (sameLen == nameLen && strlen(row[1]) == nameLen)
+	    gp->distance -= 1;
 	hel = hashLookupNext(hel);
 	}
     }
@@ -379,5 +385,41 @@ for (ra = raList; ra != NULL; ra = ra->next)
     }
 slSort(&ordList, orderCmpPriority);
 return ordList;
+}
+
+void doOrderInfo(struct sqlConnection *conn)
+/* Put up page with ordering info. */
+{
+struct order *ordList, *ord;
+
+hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\">\n");
+cartSaveSession(cart);
+makeTitle("Info Sorting Types for Family Browser", 
+	"hgNearHelp.html");
+controlPanelStart();
+
+hPrintf("<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=1 BGCOLOR=\"#"HG_COL_INSIDE"\">\n");
+
+/* Write out first row - labels. */
+hPrintf("<TR BGCOLOR=\"#"HG_COL_HEADER"\">");
+hPrintf("<TH ALIGN=left>Type</TH>");
+hPrintf("<TH ALIGN=left>Description</TH>");
+hPrintf("</TR>\n");
+
+/* Write out other rows. */
+ordList = orderGetAll(conn);
+for (ord = ordList; ord != NULL; ord = ord->next)
+    {
+    hPrintf("<TR>");
+    hPrintf("<TD>%s</TD>", ord->shortLabel);
+    hPrintf("<TD>%s</TD>\n", ord->longLabel);
+    hPrintf("</TR>\n");
+    }
+
+hPrintf("<CENTER>");
+cgiMakeButton("submit", "Return to Main Page");
+hPrintf("</CENTER>");
+controlPanelEnd();
+hPrintf("</FORM>");
 }
 

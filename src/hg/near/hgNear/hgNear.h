@@ -226,6 +226,7 @@ extern struct hash *columnHash;		  /* Hash of active columns keyed by name. */
 #define oldOrgVarName "near.oldOrg"	/* Which organism last saw. */
 #define confVarName "near.do.configure"	/* Configuration button */
 #define detailsVarName "near.do.details" /* Do details page. */
+#define orderInfoDoName "near.do.orderInfo" /* Put up order info page */
 #define countVarName "near.count"	/* How many items to display. */
 #define colInfoVarName "near.do.colInfo"	/* Display column info. */
 #define searchVarName "near_search"	
@@ -718,6 +719,10 @@ void doGetGenomicSeq(struct sqlConnection *conn, struct column *colList,
 void doExamples(struct sqlConnection *conn, struct column *colList);
 /* Put up controls and then some helpful text and examples.
  * Called when search box is empty. */
+
+void doOrderInfo(struct sqlConnection *conn);
+/* Put up page with ordering info. */
+
 
 /* ---- User settings stuff - soon to be moved to library I hope. */
 

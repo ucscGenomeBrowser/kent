@@ -74,7 +74,7 @@ queryOne select goId from go.goaPart where dbObjectSymbol='%s'
 queryAll select dbObjectSymbol,goId from go.goaPart
 
 name abc
-shortLabel Name
+shortLabel Alphabetical
 longLabel Alphabetical Order of Name
 type abc kgXref kgID geneSymbol
 priority 7
