@@ -111,7 +111,7 @@ table probe
     int probeType;	"Type of probe - antibody, RNA, etc.."
     string fPrimer;	"Forward PCR primer if any"
     string rPrimer;	"Reverse PCR primer if any"
-    lString seq;	"Associated sequence if any"
+    lstring seq;	"Associated sequence if any"
     )
 
 table probeColor

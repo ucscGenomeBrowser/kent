@@ -61,7 +61,7 @@ struct hashEl *hel = hashLookup(rowHash, fieldName);
 if (hel != NULL)
     {
     int rowIx = ptToInt(hel->val);
-    val = row[rowIx];
+    val = trimSpaces(row[rowIx]);
     }
 else
     {
@@ -277,6 +277,7 @@ int bestScore = 0;
 struct sqlResult *sr;
 char **row;
 
+verbose(3, "doGene %s %s %s %s %s %s\n", gene, locusLink, refSeq, uniProt, genbank, taxon);
 /* Make sure that at least one field specifying gene is
  * specified. */
 if (gene[0] == 0 && locusLink[0] == 0 && refSeq[0] == 0
@@ -292,8 +293,8 @@ needOr = optionallyAddOr(dy, "locusLink", locusLink, needOr);
 needOr = optionallyAddOr(dy, "refSeq", refSeq, needOr);
 needOr = optionallyAddOr(dy, "uniProt", uniProt, needOr);
 needOr = optionallyAddOr(dy, "genbank", genbank, needOr);
+verbose(2, "gene query: %s\n", dy->string);
 dyStringPrintf(dy, ")");
-verbose(2, "query %s\n", dy->string);
 
 /* Loop through query results finding ID that best matches us.
  * The locusLink/refSeq ID's are worth 8,  the genbank 4, the
@@ -311,14 +312,18 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *genbankOne = row[4];
     char *uniProtOne = row[5];
 
+    verbose(3, "id %d, nameOne %s, locusLinkOne %s, refSeqOne %s, genbankOne %s, uniProtOne %s\n", id, nameOne, locusLinkOne, refSeqOne, genbankOne, uniProtOne);
     /* If disagree on locusLink, or refSeq ID, then this is not the
      * gene for us */
+    verbose(3, "test locusLink '%s' & locusLinkOne '%s'\n", locusLink, locusLinkOne);
     if (locusLink[0] != 0 && locusLinkOne[0] != 0 
 	&& differentString(locusLink, locusLinkOne))
 	continue;
+    verbose(3, "test refSeq '%s' & refSeqOne '%s'\n", refSeq, refSeqOne);
     if (refSeq[0] != 0 && refSeqOne[0] != 0 
 	&& differentString(refSeq, refSeqOne))
 	continue;
+    verbose(3, "past continues\n");
 
     /* If we've agreed on locusLink or refSeq ID, then this is the
      * gene for us. */
@@ -334,6 +339,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (gene[0] != 0 && nameOne[0] != 0
 	&& sameString(gene, nameOne))
 	score += 1;
+    verbose(3, "score %d, bestScore %d\n", score, bestScore);
     if (score > bestScore)
 	{
 	bestScore = score;
@@ -511,6 +517,7 @@ struct dyString *dy = dyStringNew(0);
 char *probeType = "RNA";
 boolean gotPrimers = (rPrimer[0] != 0 && fPrimer[0] != 0);
 
+verbose(3, "doProbe %d %d %s %s %s\n", geneId, antibodyId, fPrimer, rPrimer, seq);
 touppers(fPrimer);
 touppers(rPrimer);
 touppers(seq);
@@ -539,9 +546,10 @@ if (probeTypeId == 0)
     }
 
 dyStringClear(dy);
-dyStringAppend(dy, "select id,gene,antibody,probeType,fPrimer,rPrimer,seq ");
+dyStringAppend(dy, "select id,gene,antibody,fPrimer,rPrimer,seq ");
 dyStringAppend(dy, "from probe ");
 dyStringPrintf(dy, "where gene=%d and antibody=%d", geneId, antibodyId);
+verbose(2, "query: %s\n", dy->string);
 sr = sqlGetResult(conn, dy->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -552,6 +560,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *rPrimerOne = row[4];
     char *seqOne = row[5];
     int score = 1;
+    verbose(3, "idOne %d, geneOne %d, antibodyOne %d, fPrimerOne %s, rPrimerOne %s\n", idOne, geneOne, antibodyOne, fPrimerOne, rPrimerOne);
     if (antibodyId != 0)
         {
 	if (antibodyOne == antibodyId)
@@ -579,6 +588,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	else
 	    continue;
 	}
+    verbose(3, "score = %d, bestScore %d\n", score, bestScore);
     if (score > bestScore)
 	{
         probeId = idOne;
@@ -812,10 +822,9 @@ while (lineFileNextRowTab(lf, words, rowSize))
     int imageFileId = 0;
     int imageId = 0;
 
+    verbose(3, "line %d of %s: gene %s, fileName %s\n", lf->lineIx, lf->fileName, gene, fileName);
     sectionId = doSectionSet(conn, sectionSetHash, sectionSet);
-    verbose(2, "ok 1\n");
     geneId = doGene(lf, conn, gene, locusLink, refSeq, uniProt, genbank, taxon);
-    verbose(2, "ok 2\n");
     antibodyId = doAntibody(conn, abName, abDescription, abTaxon);
     probeId = doProbe(lf, conn, geneId, antibodyId, fPrimer, rPrimer, seq);
     imageFileId = doImageFile(lf, conn, fileName, fullDir, screenDir, thumbDir,

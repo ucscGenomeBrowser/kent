@@ -77,13 +77,34 @@ raCommon(f);
 carefulClose(&f);
 }
 
+char *trim(char *s)
+/* Trim spaces and leading question marks. */
+{
+s = trimSpaces(s);
+while (*s == '?')
+   ++s;
+return s;
+}
+
+boolean anyGeneId(struct mahoney *m)
+/* Return true if any gene ID */
+{
+m->geneName = trim(m->geneName);
+m->genbank = trim(m->genbank);
+m->locusId = trim(m->locusId);
+if (m->geneName[0] == 0 && m->genbank[0] == 0)
+    return FALSE;
+else
+    return TRUE;
+}
+
 void wholeMountTab(struct slName *inList, struct hash *mahoneyHash,
 	char *outFile)
 /* Output tab-delimited info on each item in inList. */
 {
 struct slName *in;
 FILE *f = mustOpen(outFile, "w");
-fprintf(f, "#fileName\tsubmitId\tgene\tlocusLink\trefSeq\tgenbank\ttreatment\n");
+fprintf(f, "#fileName\tsubmitId\tgene\tlocusLink\trefSeq\tgenbank\tfPrimer\trPrimer\ttreatment\n");
 for (in = inList; in != NULL; in = in->next)
     {
     char hex[8];
@@ -101,24 +122,34 @@ for (in = inList; in != NULL; in = in->next)
         warn("Can't find %d (%s) in hash while processing %s", id, mtf, in->name);
     else
 	{
-	fprintf(f, "%s\t%d\t", in->name, id);
-	fprintf(f, "%s\t", m->geneName);
-	fprintf(f, "%s\t", m->locusId);
-	if (startsWith("NM_", m->genbank))
-	    fprintf(f, "%s\t%s\t", m->genbank, m->genbank);
-	else
-	    fprintf(f, "\t%s\t", m->genbank);
-	if (treatment == 'a')
-	    fprintf(f, "3 min proteinase K");
-	else if (treatment == 'b')
-	    fprintf(f, "30 min proteinase K");
-	else if (treatment == 'd')
-	    fprintf(f, "3 min proteinase K/30 min proteinase K");
-	else if (treatment == 'c' || treatment == '.')
-	    /* do nothing*/ ;
-	else
-	    errAbort("Unrecognized treatment %c in %s", treatment, in->name);
-	fprintf(f, "\n");
+	if (anyGeneId(m))
+	    {
+	    fprintf(f, "%s\t%d\t", in->name, id);
+	    fprintf(f, "%s\t", m->geneName);
+	    if (startsWith("NM_", m->genbank))
+		{
+		fprintf(f, "%s\t", m->locusId);
+		fprintf(f, "%s\t%s\t", m->genbank, m->genbank);
+		}
+	    else
+		{
+		fprintf(f, "\t");
+		fprintf(f, "\t%s\t", m->genbank);
+		}
+	    fprintf(f, "%s\t", m->fPrimer);
+	    fprintf(f, "%s\t", m->rPrimer);
+	    if (treatment == 'a')
+		fprintf(f, "3 min proteinase K");
+	    else if (treatment == 'b')
+		fprintf(f, "30 min proteinase K");
+	    else if (treatment == 'd')
+		fprintf(f, "3 min proteinase K/30 min proteinase K");
+	    else if (treatment == 'c' || treatment == '.')
+		/* do nothing*/ ;
+	    else
+		errAbort("Unrecognized treatment %c in %s", treatment, in->name);
+	    fprintf(f, "\n");
+	    }
 	}
     }
 carefulClose(&f);
@@ -145,7 +176,7 @@ void slicesTab(struct slName *inList, struct hash *mahoneyHash,
 struct slName *in;
 FILE *f = mustOpen(outFile, "w");
 char lastStage = 0;
-fprintf(f, "#fileName\tsubmitId\tgene\tlocusLink\trefSeq\tgenbank\tisEmbryo\tage\tsectionSet\tsectionIx\n");
+fprintf(f, "#fileName\tsubmitId\tgene\tlocusLink\trefSeq\tgenbank\tfPrimer\trPrimer\tisEmbryo\tage\tsectionSet\tsectionIx\n");
 for (in = inList; in != NULL; in = in->next)
     {
     char hex[8];
@@ -162,22 +193,32 @@ for (in = inList; in != NULL; in = in->next)
         warn("Can't find %d (%s) in hash while processing %s", id, mtf, in->name);
     else
         {
-	stage = in->name[5];
-	sliceNo = in->name[6];
-	fprintf(f, "%s\t%d\t", in->name, id);
-	fprintf(f, "%s\t", m->geneName);
-	fprintf(f, "%s\t", m->locusId);
-	if (startsWith("NM_", m->genbank))
-	    fprintf(f, "%s\t%s\t", m->genbank, m->genbank);
-	else
-	    fprintf(f, "\t%s\t", m->genbank);
-	if (stage == '1')
-	    fprintf(f, "1\t13.5\t");
-	else if (stage == '2')
-	    fprintf(f, "0\t0\t");
-	else
-	    errAbort("Unrecognized stage %c in %s", stage, in->name);
-	fprintf(f, "0\t0\n");
+	if (anyGeneId(m))
+	    {
+	    stage = in->name[5];
+	    sliceNo = in->name[6];
+	    fprintf(f, "%s\t%d\t", in->name, id);
+	    fprintf(f, "%s\t", m->geneName);
+	    if (startsWith("NM_", m->genbank))
+		{
+		fprintf(f, "%s\t", m->locusId);
+		fprintf(f, "%s\t%s\t", m->genbank, m->genbank);
+		}
+	    else
+		{
+		fprintf(f, "\t");
+		fprintf(f, "\t%s\t", m->genbank);
+		}
+	    fprintf(f, "%s\t", m->fPrimer);
+	    fprintf(f, "%s\t", m->rPrimer);
+	    if (stage == '1')
+		fprintf(f, "1\t13.5\t");
+	    else if (stage == '2')
+		fprintf(f, "0\t0\t");
+	    else
+		errAbort("Unrecognized stage %c in %s", stage, in->name);
+	    fprintf(f, "0\t0\n");
+	    }
 	}
     }
 carefulClose(&f);
