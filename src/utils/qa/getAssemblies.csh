@@ -14,6 +14,7 @@ set machine="hgwdev"
 set host=""
 set found=0
 set dbs=""
+set rr="false"
 
 if ($#argv < 1 || $#argv > 2) then
   echo
@@ -101,6 +102,7 @@ if ( $machine == hgwdev || $machine == hgwbeta ) then
     endif
   end
 else   # not dev or beta
+  set rr="true"
   foreach db ( $dbs )
   # foreach db ( rn3 hg17 )
     echo "checking "$db
@@ -150,7 +152,13 @@ endif
 if ( $ok != 1 ) then
   echo "neither $tablename nor split_$tablename are found on $machine"
 endif
+
+if ( $rr == "true" ) then
+  echo "  as of last TABLE STATUS dump"
+  echo 
+endif
 echo
+
 
 # cleanup
 rm -f $machine.$tablename.foundIn
