@@ -11,7 +11,7 @@
 #include "hgNear.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.18 2003/09/06 18:55:09 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.19 2003/09/13 19:00:26 kent Exp $";
 
 
 static boolean loadExpVals(struct sqlConnection *conn,
@@ -239,7 +239,8 @@ else
     }
 }
 
-static char **getExperimentNames(char *database, char *table, int expCount, int *expIds)
+static char **getExperimentNames(char *database, char *table, 
+	int expCount, int *expIds, int skipSize)
 /* Create array filled with experiment names. */
 {
 char **names, *name;
@@ -261,6 +262,8 @@ for (i=0; i<expCount; ++i)
 	    table, expIds[i]);
 	if ((name = sqlQuickQuery(conn, query, nameBuf, sizeof(nameBuf))) == NULL)
 	    name = "unknown";
+	else
+	    name += skipSize;
 	names[i] = cloneString(name);
 	len = strlen(name);
 	if (len > maxLen) maxLen = len;
@@ -301,9 +304,12 @@ int i, numExpts = col->representativeCount;
 boolean doGreen = FALSE;
 int groupSize, gifCount = 0;
 char gifName[128];
+int skipName = atoi(columnSetting(col, "skipName", "0"));
 char **experiments = getExperimentNames("hgFixed", 
-	col->experimentTable, numExpts, col->representatives);
+	col->experimentTable, numExpts, col->representatives, skipName);
 int height = gifLabelMaxWidth(experiments, numExpts);
+
+
 
 for (i=0; i<numExpts; i += groupSize+1)
     {
@@ -344,8 +350,9 @@ void expRatioFilterControls(struct column *col, struct sqlConnection *conn)
 {
 char lVarName[16];
 int i, numExpts = col->representativeCount;
+int skipName = atoi(columnSetting(col, "skipName", "0"));
 char **experiments = getExperimentNames("hgFixed", col->experimentTable, numExpts,
-	col->representatives);
+	col->representatives, skipName);
 
 hPrintf("Note: expression ratio values are scaled from -1 to 1");
 hPrintf("<TABLE BORDER=1 CELLSPACING=1 CELLPADDING=1>\n");
