@@ -108,7 +108,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.446 2003/06/25 23:48:00 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.447 2003/06/27 21:44:51 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11820,7 +11820,7 @@ else if (sameWord(track, "htcPseudoGene"))
     {
     htcPseudoGene(track, item);
     }
-else if (sameWord(track, "humanRefSeq") )
+else if (sameWord(track, "hg15repeats") )
     {
     doBlatCompGeno(tdb, item, "Human");
     }
