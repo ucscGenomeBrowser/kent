@@ -8,7 +8,7 @@
 #include "hgColors.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.70 2005/01/19 00:28:24 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.71 2005/01/27 22:35:20 hiram Exp $";
 
 /*	Routines that are not strictly part of the wigDataStream object,
 	but they are used to do things with the object.
@@ -416,7 +416,7 @@ else
     dyStringPrintf(fileName, "%s.wig", table);
 
 /*	file present ignores db specification	*/
-if (fileExists(fileName->string))
+if ((db == (char *)NULL) && fileExists(fileName->string))
     wds->isFile = TRUE;
 else
     {
