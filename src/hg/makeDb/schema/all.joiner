@@ -579,7 +579,7 @@ identifier bacEndAccession typeOf=genbankAccession
     $gbd.all_bacends.qName dupeOk
     $gbd.bacEndPairs.lfNames comma
     $danRer.bacEndSingles.lfNames comma
-    $danRer.bacEndAlias.alias minCheck = 0.55
+    $danRer.bacEndAlias.alias minCheck=0.55
     $hg.fishClones.beNames comma minCheck=0.70
 
 identifier bacExtName
