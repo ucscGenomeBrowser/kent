@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.23 2004/02/24 03:42:01 markd Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.24 2004/02/24 18:48:30 baertsch Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
 boolean requireCDS = FALSE;     /* should genes with CDS be dropped */
@@ -27,6 +27,8 @@ static struct optionSpec optionSpecs[] = {
     {"predTab", OPTION_BOOLEAN},
     {"requireCDS", OPTION_BOOLEAN},
     {"frame", OPTION_BOOLEAN},
+    {"geneName", OPTION_BOOLEAN},
+    {"id", OPTION_BOOLEAN},
     {"out", OPTION_STRING},
     {NULL, 0}
 };
@@ -46,7 +48,9 @@ errAbort(
     "     -requireCDS  discard genes that don't have CDS annotation\n"
     "     -out=gpfile  write output, in genePred format, instead of loading\n"
     "                  table. Database is ignored.\n"
-    "     -frame       load frame information\n");
+    "     -frame       load frame information\n"
+    "     -geneName    load gene name from gene_id in GTF\n"
+    "     -id          generate unique id and store in optional field\n");
 }
 
 boolean gOptFields = 0;  /* optional fields from cmdline */
@@ -152,6 +156,7 @@ for (group = gff->groupList; group != NULL; group = group->next)
         {
 	name = convertSoftberryName(name);
 	}
+    printf("is gtf %d opt %x\n",isGtf,gOptFields);
     if (isGtf)
         gp = genePredFromGroupedGtf(gff, group, name, gOptFields);
     else
@@ -197,6 +202,8 @@ outFile = optionVal("out", NULL);
 requireCDS = optionExists("requireCDS");
  if (optionExists("frame"))
      gOptFields |= (genePredCdsStatFld|genePredExonFramesFld);
+ if (optionExists("geneName"))
+     gOptFields |= genePredName2Fld;
 
 if (optionExists("predTab"))
     ldHgGenePred(argv[1], argv[2], argc-3, argv+3);
