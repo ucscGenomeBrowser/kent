@@ -248,6 +248,14 @@ MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR RN1 (DONE 11/26/02)
     cvs commit makefile
 
 
+MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR RN1 (DONE 12/4/02)
+    ssh hgwdev
+    mysql -h genome-testdb -u hgcat -pBIGSECRET -A hgcentraltest
+      insert into blatServers values("rn1", "blat7", "17778", "1");
+      insert into blatServers values("rn1", "blat7", "17779", "0");
+      quit
+
+
 COPY GENBANK MRNA DATA TO THE CLUSTER (DONE for mrna.132)
    ssh kkstore
    # Copy the rna data to the cluster if it isn't there already:
