@@ -1553,7 +1553,7 @@ cat chrom/*.psl > affyU74.psl
 hgLoadPsl mm5 affyU74.psl -tNameIx
 rm -fr chrom temp run
 
-##   MAKE THE affyGnfU74 TRACKs (TO_BE_DONE - 2004-07-16 - Fan)
+##   MAKE THE affyGnfU74 TRACKs (DONE - 2004-07-18 - Fan)
 # Make bed files and load consensus sequences for Affy U74 chip set.
 ----------------------------------
 #This needs to be done after affyU74 is already made.
@@ -1638,6 +1638,96 @@ hgLoadBed mm5 affyGnfU74C affyGnfU74C.bed
     	affyGnf1m.psl
     # Note that the unmapped 5000 records are from all-N sequences.
     hgLoadBed mm5 gnfAtlas2 gnfAtlas2.bed
+
+# MOUSE AFFYMETRIX MOE430 TRACK (DONE, 2004-07-19, Fan)
+    mkdir -p /projects/compbio/data/microarray/affyMouse
+    # Download MOE430A and MOE430B consensus sequences from Affymetrix web site
+    # http://www.affymetrix.com/support/technical/byproduct.affx?product=moe430
+    unzip MOE430*_consensus.zip
+
+    # check for duplicate probes: there are none, all have unique names
+    # check for duplicate probes: 100 from 136745_at to 1367551_a_at
+    # remove "consensus:" and ";" from FASTA headers to shorten probeset
+    # names for database
+
+    sed -e 's/consensus://' MOE430A_consensus | sed -e 's/;/ /' > MOE430_all.fa
+    sed -e 's/consensus://' MOE430B_consensus | sed -e 's/;/ /' >> MOE430_all.fa
+ 
+    cp /projects/compbio/data/microarray/affyMouse/MOE430_all.fa \
+       /cluster/bluearc/affy/
+
+    # THE ABOVE WAS ALREADY DONE BY RACHEL 4/16/04.
+
+    # Set up cluster job to align MOE430 consensus sequences to mm5
+    ssh kkr1u00
+    cd /cluster/data/mm5/bed
+    mkdir -p affyMOE430
+    cd affyMOE430
+    mkdir -p /iscratch/i/affy
+    cp /cluster/bluearc/affy/MOE430_all.fa /iscratch/i/affy
+    iSync
+
+    ssh kk
+    cd /cluster/data/mm5/bed/affyMOE430
+    ls -1 /iscratch/i/affy/MOE430_all.fa > affy.lst
+    ls -1 /scratch/mus/mm5/maskedContigs/ > allctg.lst
+
+    echo '#LOOP\n/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -
+ooc=/scratch/hg/h/mouse11.ooc  /scratch/mus/mm5/maskedContigs/$(path1) $(path2) 
+{check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+
+    gensub2 allctg.lst affy.lst template.sub para.spec
+    mkdir psl
+    para create para.spec
+    # Actually do the job with usual para try/check/push/time etc.
+# para time
+# Completed: 639 of 639 jobs
+# CPU time in finished jobs:      24369s     406.14m     6.77h    0.28d  0.001 y
+# IO & Wait Time:                  2263s      37.72m     0.63h    0.03d  0.000 y
+# Average job time:                  42s       0.69m     0.01h    0.00d
+# Longest job:                       63s       1.05m     0.02h    0.00d
+# Submission to last job:           671s      11.18m     0.19h    0.01d
+
+
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create affyRAE230.psl
+    pslSort dirs raw.psl tmp psl
+
+    # only use alignments that cover 30% of sequence and have at least
+    # 95% identity in aligned region. 
+    # low minCover as a lot of n's in these sequences
+    pslReps -minCover=0.3 -sizeMatters -minAli=0.95 -nearTop=0.005 raw.psl 
+contig.psl /dev/null
+    liftUp affyMOE430.psl ../../jkStuff/liftAll.lft warn contig.psl
+
+    # Load alignments and sequences into database
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/affyMOE430
+    # shorten names in psl file
+    sed -e 's/MOE430//' affyMOE430.psl > affyMOE430.psl.bak
+    mv affyMOE430.psl.bak affyMOE430.psl
+
+    # load track into database
+
+    hgLoadPsl mm5 affyMOE430.psl
+    # 1 warning on loading: Blat error so that 1449824_at has a 
+    # negative entry (-195) in the qBaseInsert field. 
+    # Loading into the database forces this to 0.
+ 
+    # Add consensus sequences for MOE430
+    # Copy sequences to gbdb is they are not there already
+    mkdir -p /gbdb/hgFixed/affyProbes
+    ln -s /projects/compbio/data/microarray/affyMouse/MOE430_all.fa \ 
+       /gbdb/hgFixed/affyProbes
+
+    hgLoadSeq -abbr=MOE430 mm5 /gbdb/hgFixed/affyProbes/MOE430_all.fa
+    
+    # Clean up
+    rm batch.bak contig.psl raw.psl 
+    
+    # BELOW TWO THINGS WERE DONE BY RACHEL ALREDAY FOR MM4
+    # add entry to trackDb.ra in ~kent/src/hg/makeDb/trackDb/mouse/
+    # add affyMOE430.html file and then do make alpha to add to trackDb table
 
 ######## MAKING GENE SORTER TABLES #######  (STARTED - 2004-07-15 - Hiram)
 # These are instructions for building the
