@@ -2341,6 +2341,7 @@ ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
     # 4263983 89543582 440456942 primers.psl
     # Mm4 wc primers.psl /cluster/data/mm4/bed/STSmarkers/primer/primers.psl
     # 5933518 124603817 610451872 primers.psl
+XXX This is quite an increase, I wonder if it is reasonable ?
 
     # another kluster run
     ssh kk
@@ -2376,6 +2377,7 @@ ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
     #  24627   98508 1329559 all.epcr
     # Mm4 wc all.epcr	/cluster/data/mm4/bed/STSmarkers/ePCR/all.epcr
     #  75381  301524 4005978 all.epcr
+XXX  This is an unusual increase
 
     cd /cluster/data/mm4/bed/STSmarkers/primer
 
@@ -2398,6 +2400,11 @@ ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
     #
     # Mm4:  wc primers.psl.filter.blat
     # 1505909 31624089 158065611 primers.psl.filter.blat
+    # Checking vs. Mm3 on on kks00:
+    # /projects/hg2/booch/psl/mm.2003.02/mm3/primers/primers.psl.filter.blat
+    # wc of that shows:
+    # 26088  547848 2612720 primers.psl.filter.blat
+XXXX We have a problem here.  This is too much for Mm4
 
     # create accession_info.rdb  (chrM added to Terry's script for mouse)
     touch empty_sequence.inf
