@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.33 2005/01/26 11:55:20 aamp Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.34 2005/01/26 22:17:14 aamp Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -268,7 +268,6 @@ if (sameWord(toOrg,"0"))
 if (sameWord(toDb,"0"))
     toDb = NULL;
 choice = findLiftOverChain(chainList,fromDb,toDb);
-
 if (!choice)
     {
     /* Check the validness of the stuff first. */
@@ -317,7 +316,7 @@ if (!choice)
 	for (choice = chainList; choice != NULL; choice = choice->next)
 	    {
 	    char *org = hArchiveOrganism(choice->toDb);
-	    if (sameString(org,toOrg))
+	    if (sameString(choice->fromDb,fromDb) && sameString(org,toOrg))
 		{
 		freeMem(org);
 		break;
