@@ -40,7 +40,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.114 2003/10/10 17:33:29 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.115 2003/10/14 07:13:04 kate Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -1972,12 +1972,12 @@ if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
 return FALSE;
 }
 
-static void addMrnaPositionTable(struct hgPositions *hgp, 
+static int addMrnaPositionTable(struct hgPositions *hgp, 
                                 struct slName *accList, struct cart *cart,
                                 struct sqlConnection *conn, char *hgAppName,
                                 boolean aligns, boolean isXeno)
 /* Generate table of positions that match criteria.
- * Add to hgp if any found */
+ * Add to hgp if any found. Return number found */
 {
 char title[256];
 struct hgPosTable *table;
@@ -1987,12 +1987,15 @@ struct dyString *dy = newDyString(256);
 char **row;
 char query[256];
 char description[512];
+char product[256];
+char organism[128];
 char *ui = getUiUrl(cart);
 char *acc = NULL;
 boolean isXenoItem;
 char *mrnaType;
 int itemOrganismID;
 int organismID = hOrganismID(hgp->database);   /* id from mrna organism table */
+int alignCount = 0;
 char hgAppCombiner = (strchr(hgAppName, '?')) ? '&' : '?';
 
 AllocVar(table);
@@ -2037,16 +2040,42 @@ for (el = accList; el != NULL; el = el->next)
         dyStringPrintf(dy, "%s</A>", acc);
         }
     else
+        {
         /* TODO: link to Genbank record */
         //dyStringPrintf(dy, "%s ", acc);
         dyStringPrintf(dy, 
-            "<A HREF=\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu\" TARGET=_blank>%s</A>", 
-                        acc, acc);
+            "<A HREF=\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu\" TARGET=_blank>%s</A>", acc, acc);
+        }
+    /* print description for item, or lacking that, the product name */
+    sprintf(description, "n/a"); 
     sprintf(query, 
-                "select description.name from mrna,description"
-                " where mrna.acc = '%s' and mrna.description = description.id",
-                acc);
-    if (sqlQuickQuery(conn, query, description, sizeof(description)))
+        "select description.name from mrna,description"
+        " where mrna.acc = '%s' and mrna.description = description.id", acc);
+    sqlQuickQuery(conn, query, description, sizeof(description));
+    if (sameString(description, "n/a"))
+        {
+        /* look for product name */
+        sprintf(query, 
+            "select productName.name from mrna,productName"
+            " where mrna.acc = '%s' and mrna.productName = productName.id",
+                 acc);
+        sqlQuickQuery(conn, query, product, sizeof(product));
+        if (!sameString(product, "n/a"))
+            {
+            /* get organism name */
+            sprintf(query, 
+                "select organism.name from mrna,organism"
+                " where mrna.acc = '%s' and mrna.organism = organism.id", acc);
+            *organism = 0;
+            sqlQuickQuery(conn, query, organism, sizeof(organism));
+            safef(description, sizeof(description), "%s%s%s",
+                    *organism ? organism : "",
+                    *organism ? ", " : "",
+                    product);
+            }
+        }
+    if (!sameString(description, "n/a"))
+        /* print description if it has been loaded */
         dyStringPrintf(dy, " - %s", description);
     dyStringPrintf(dy, "\n");
     pos->description = cloneString(dy->string);
@@ -2061,10 +2090,8 @@ for (el = accList; el != NULL; el = el->next)
 /* fill in table and add to hgp only if it contains results */
 // TODO: figure out why list always has 1 element
 //if (slLastEl(&table->posList) != NULL)
-#ifdef DEBUG
-printf("table size = %d\n", slCount(&table->posList));
-#endif
-if (slCount(&table->posList) > 1)
+alignCount = slCount(&table->posList);
+if (alignCount > 1)
     {
     char *organism = hOrganism(hgp->database);      /* dbDb organism column */
     slReverse(&table->posList);
@@ -2079,6 +2106,7 @@ if (slCount(&table->posList) > 1)
     slAddHead(&hgp->tableList, table);
     }
 freeDyString(&dy);
+return alignCount;
 }
 
 static void findMrnaKeys(char *keys, struct hgPositions *hgp,
@@ -2088,6 +2116,7 @@ static void findMrnaKeys(char *keys, struct hgPositions *hgp,
 char *words[32];
 char buf[512];
 int wordCount;
+int alignCount;
 static char *tables[] = {
 	"productName", "geneName",
 	"author", "tissue", "cell", "description", "development", 
@@ -2133,12 +2162,16 @@ if (allKeysList == NULL)
 
 /* generate position lists and add to hgp */
 /* organism aligning */
-addMrnaPositionTable(hgp, allKeysList, cart, conn, hgAppName, TRUE, FALSE);
+alignCount = addMrnaPositionTable(hgp, allKeysList, cart, conn, hgAppName, TRUE, FALSE);
 /* organism non-aligning */
 addMrnaPositionTable(hgp, allKeysList, cart, conn, hgAppName, FALSE, FALSE);
 /* xeno aligning */
-addMrnaPositionTable(hgp, allKeysList, cart, conn, hgAppName, TRUE, TRUE);
-
+/* NOTE: to suppress display of xeno mrna's in non-model organisms
+ * (RT 801 and 687), uncommented the following...
+/* add to display list only if there is a scarcity of items
+ * already listed as aligning (low number of own mRna's for this organism) */
+if (alignCount < 20)
+    addMrnaPositionTable(hgp, allKeysList, cart, conn, hgAppName, TRUE, TRUE);
 hFreeConn(&conn);
 }
 
@@ -2990,6 +3023,10 @@ if (startOffset != NULL)
 	}
     }
 
+
+if (startsWith("chr", query) && strlen(query) < 6)
+    if (hgOfficialChromName(query) == NULL)
+	return NULL;
 if (hgIsChromRange(query))
     {
     hgParseChromRange(query, &chrom, &start, &end);
