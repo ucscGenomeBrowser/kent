@@ -76,7 +76,7 @@
 #include "paraHub.h"
 #include "machSpec.h"
 
-int version = 3;	/* Version number. */
+int version = 4;	/* Version number. */
 
 /* Some command-line configurable quantities and their defaults. */
 int jobCheckPeriod = 10;	/* Minutes between checking running jobs. */
@@ -330,7 +330,7 @@ if (user != NULL && !dlEmpty(freeMachines) && !dlEmpty(freeSpokes))
     /* Tell machine, job, and spoke about each other. */
     machine->job = job;
     job->machine = machine;
-    job->startTime = now;
+    job->startTime = job->lastClockIn = now;
     spokeSendJob(spoke, machine, job);
     return TRUE;
     }
@@ -649,6 +649,7 @@ for (i=0; i<spokesToUse; ++i)
         {
 	if (now - job->lastClockIn >= MINUTE * assumeDeadPeriod)
 	    {
+	    logIt("hub: node %s running %d looks dead, burying\n", machine->name, job->id);
 	    buryMachine(machine);
 	    }
 	else
@@ -894,7 +895,9 @@ if (status != NULL)
     {
     struct job *job = jobFind(runningJobs, jobId);
     if (job != NULL)
+	{
         job->lastClockIn = now;
+	}
     if (sameString(status, "free"))
 	{
 	/* Node thinks it's free, we think it has a job.  Node
