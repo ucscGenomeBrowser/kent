@@ -73,7 +73,7 @@ extern struct vGfx *g_vg;
 extern MgFont *g_font;
 extern int currentYoffset;
 extern int pbScale;
-extern char pbScaleStr[];
+extern char pbScaleStr[5];
 extern boolean initialWindow;
 
 extern int *yOffp;
@@ -100,8 +100,8 @@ extern int blockStart[], blockStartPositive[];
 extern int blockEnd[], blockEndPositive[];
 extern int blockGenomeStart[], blockGenomeStartPositive[];
 extern int blockGenomeEnd[], blockGenomeEndPositive[];
-extern int trackOrigOffset;        //current track display origin offset
-extern int aaOrigOffset;           //current track AA base origin offset
+extern int trackOrigOffset;        /* current track display origin offset */
+extern int aaOrigOffset;           /* current track AA base origin offset */
 extern boolean scaleButtonPushed;
 
 extern struct vGfx *vg, *vg2;
