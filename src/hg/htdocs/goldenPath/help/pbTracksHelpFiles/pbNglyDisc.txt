@@ -1,19 +1,20 @@
 The existence of disulfide and glycosylation sites within the protein predicts 
-subcellular location -- cytoplasmic proteins are not 
+subcellular location: cytoplasmic proteins are not 
 glycosylated and only rarely have disulfides (the intracellular milieu is too 
 reducing). Glycosylation affects protein folding, trafficking, solubility, 
 antigenicity, half-life, localization, and cell-to-cell interactions. Disulfides 
-are important to structural stability, and provide the link for some oligomeric proteins. 
+are important to structural stability and provide the link for some oligomeric proteins. 
 <P>
-Potential N-glycosylation sites are fairly reliably 
-predicted by a tripeptide motif, NXT or NXS, where X is not proline, and P seldom follows. 
+Potential N-glycosylation sites are somewhat reliably 
+predicted by a tripeptide motif, NXT or NXS, where X is not proline and P seldom follows. 
 Multiple motifs in mature regions 
 of the same protein and conservation in homologs provide strong additional support. 
 Glycoproteins are likely targeted to the cell exterior, lysosome or similar 
 compartment, or extra-cellular space, and not to the cytoplasm, nucleus, or 
 mitochondria. Predictions can sometimes be reinforced by the presence of a signal 
-peptide or a 	
-<A HREF="http://mendel.imp.univie.ac.at/gpi/gpi_server.html" TARGET=_blank>GPI 
+peptide or a glycosylphosphatidylinositol 
+<A HREF="http://mendel.imp.univie.ac.at/gpi/gpi_server.html"
+TARGET=_blank>(GPI) 
 membrane anchor</A>. 
 <P>
 Actual occupancy of N-glycosylation sites <em>in vivo</em> is uneven. Specific sites 
@@ -23,18 +24,11 @@ fully built-out. The three amino acids involved are very common; therefore, many
 chance occurrences will happen. 
 Taking the occurrence of the reversed motif as an estimate of the 
 frequency of these motifs to be expected randomly, the number that are 
-used genome-wide can be estimated (table), but it does not speak to glycosylation of specific 
+used genome-wide can be estimated (see Table 1), but it does not speak to glycosylation of specific 
 occurrences. Some glycosylation sites are quite ancient, but others have been 
 gained or lost over moderate time scales in homologs. 
 <P>
-The mouse/human conservation of a potential motif provides only weak support for 
-its utilization. Because overall protein conservation is 85%, the 2 amino acid 
-motif would be invariant 72% of the time regardless. Even observed conservation 
-between pufferfish and human is not persuasive (50% chance). However, a persuasive 
-case can sometimes be made by considering the multiple motifs within a single 
-protein, conservation across paralogs, and ESTs from additional genomes. 
-<P>
-<H4>Occurrences of N-glycosylation motifs, adjusted for chance occurrence
+<H4>Table 1. Occurrences of N-glycosylation motifs, adjusted for chance occurrence
 (applicable to any asymmetric motif)</H4>
 <BLOCKQUOTE>
 <TABLE BORDER=1 BORDERCOLOR="#aaaaaa" CELLPADDING=4> 
@@ -82,3 +76,10 @@ Legit per 1000 aa:		 0.75
 Fraction legit:			 0.14
 </PRE>
 </BLOCKQUOTE>
+<P>
+The mouse/human conservation of a potential motif provides only weak support for 
+its utilization. Because overall protein conservation is 85%, the 2 amino acid 
+motif would be invariant 72% of the time regardless. Even observed conservation 
+between pufferfish and human is not persuasive (50% chance). However, a persuasive 
+case can sometimes be made by considering the multiple motifs within a single 
+protein, conservation across paralogs, and ESTs from additional genomes. 
