@@ -1,12 +1,24 @@
 # Build all directories in utils
 
-all:
+BIN_DIR = $(HOME)/bin
+
+all:    scripts
 	@for D in $(USE_DIRS) x; do \
 	  if test "$$D" != "x" ; then \
 	    ( cd $$D && echo $$D && $(MAKE) ) ;\
 	    x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
 	    fi ;\
-	    done
+	done
+
+scripts:
+	@for F in $(SCRIPTS); do \
+	    chmod +x $$F; \
+	    echo cp $$F $(BIN_DIR); \
+	    cp $$F $(BIN_DIR); \
+	 done
+        
+SCRIPTS = \
+        iSync
 
 # List of directories to build
 USE_DIRS = $(DIRS)
