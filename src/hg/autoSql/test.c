@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "test.h"
 
-static char const rcsid[] = "$Id: test.c,v 1.7 2003/05/06 07:22:14 kate Exp $";
+static char const rcsid[] = "$Id: test.c,v 1.8 2003/06/11 03:24:01 kent Exp $";
 
 struct pt *ptCommaIn(char **pS, struct pt *ret)
 /* Create a pt out of a comma separated string. 
@@ -51,7 +51,7 @@ ret->x = sqlSignedComma(&s);
 ret->y = sqlSignedComma(&s);
 ret->z = sqlSignedComma(&s);
 s = sqlEatChar(s, '{');
-ptCommaIn(&s, &ret->pt);
+if(s[0] != '}')    ptCommaIn(&s, &ret->pt);
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
 *pS = s;
@@ -96,7 +96,7 @@ fputc(sep,f);
 fprintf(f, "%d", el->z);
 fputc(sep,f);
 if (sep == ',') fputc('{',f);
-ptCommaOut(&el->pt,f);
+if(el->pt != NULL)    ptCommaOut(&el->pt,f);
 if (sep == ',') fputc('}',f);
 fputc(lastSep,f);
 }
@@ -151,6 +151,24 @@ slReverse(&list);
 return list;
 }
 
+struct polygon *polygonLoadAllByChar(char *fileName, char chopper) 
+/* Load all polygon from a chopper separated file.
+ * Dispose of this with polygonFreeList(). */
+{
+struct polygon *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[4];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = polygonLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
 struct polygon *polygonCommaIn(char **pS, struct polygon *ret)
 /* Create a polygon out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
@@ -167,7 +185,7 @@ s = sqlEatChar(s, '{');
 for (i=0; i<ret->pointCount; ++i)
     {
     s = sqlEatChar(s, '{');
-    slSafeAddHead(&ret->points, pointCommaIn(&s,NULL));
+    if(s[0] != '}')        slSafeAddHead(&ret->points, pointCommaIn(&s,NULL));
     s = sqlEatChar(s, '}');
     s = sqlEatChar(s, ',');
     }
@@ -179,7 +197,7 @@ AllocArray(ret->persp, ret->pointCount);
 for (i=0; i<ret->pointCount; ++i)
     {
     s = sqlEatChar(s, '{');
-    ptCommaIn(&s, &ret->persp[i]);
+    if(s[0] != '}')        ptCommaIn(&s, &ret->persp[i]);
     s = sqlEatChar(s, '}');
     s = sqlEatChar(s, ',');
     }
@@ -304,6 +322,24 @@ slReverse(&list);
 return list;
 }
 
+struct polyhedron *polyhedronLoadAllByChar(char *fileName, char chopper) 
+/* Load all polyhedron from a chopper separated file.
+ * Dispose of this with polyhedronFreeList(). */
+{
+struct polyhedron *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[5];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = polyhedronLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
 struct polyhedron *polyhedronCommaIn(char **pS, struct polyhedron *ret)
 /* Create a polyhedron out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
@@ -327,7 +363,7 @@ s = sqlEatChar(s, '{');
 for (i=0; i<ret->polygonCount; ++i)
     {
     s = sqlEatChar(s, '{');
-    slSafeAddHead(&ret->polygons, polygonCommaIn(&s,NULL));
+    if(s[0] != '}')        slSafeAddHead(&ret->polygons, polygonCommaIn(&s,NULL));
     s = sqlEatChar(s, '}');
     s = sqlEatChar(s, ',');
     }
@@ -338,7 +374,7 @@ s = sqlEatChar(s, '{');
 for (i=0; i<2; ++i)
     {
     s = sqlEatChar(s, '{');
-    ptCommaIn(&s, &ret->screenBox[i]);
+    if(s[0] != '}')        ptCommaIn(&s, &ret->screenBox[i]);
     s = sqlEatChar(s, '}');
     s = sqlEatChar(s, ',');
     }
@@ -436,18 +472,18 @@ if (ret == NULL)
     AllocVar(ret);
 sqlFixedStringComma(&s, ret->name, sizeof(ret->name));
 s = sqlEatChar(s, '{');
-ptCommaIn(&s, &ret->a);
+if(s[0] != '}')    ptCommaIn(&s, &ret->a);
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
 s = sqlEatChar(s, '{');
-ptCommaIn(&s, &ret->b);
+if(s[0] != '}')    ptCommaIn(&s, &ret->b);
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
 s = sqlEatChar(s, '{');
 for (i=0; i<2; ++i)
     {
     s = sqlEatChar(s, '{');
-    ptCommaIn(&s, &ret->points[i]);
+    if(s[0] != '}')        ptCommaIn(&s, &ret->points[i]);
     s = sqlEatChar(s, '}');
     s = sqlEatChar(s, ',');
     }
@@ -466,11 +502,11 @@ fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('{',f);
-ptCommaOut(&el->a,f);
+if(el->a != NULL)    ptCommaOut(&el->a,f);
 if (sep == ',') fputc('}',f);
 fputc(sep,f);
 if (sep == ',') fputc('{',f);
-ptCommaOut(&el->b,f);
+if(el->b != NULL)    ptCommaOut(&el->b,f);
 if (sep == ',') fputc('}',f);
 fputc(sep,f);
 /* Loading pt list. */
@@ -513,6 +549,24 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[2];
 
 while (lineFileRow(lf, row))
+    {
+    el = stringArrayLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct stringArray *stringArrayLoadAllByChar(char *fileName, char chopper) 
+/* Load all stringArray from a chopper separated file.
+ * Dispose of this with stringArrayFreeList(). */
+{
+struct stringArray *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
     el = stringArrayLoad(row);
     slAddHead(&list, el);

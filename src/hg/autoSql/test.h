@@ -82,6 +82,14 @@ struct polygon *polygonLoadAll(char *fileName);
 /* Load all polygon from whitespace-separated file.
  * Dispose of this with polygonFreeList(). */
 
+struct polygon *polygonLoadAllByChar(char *fileName, char chopper);
+/* Load all polygon from chopper separated file.
+ * Dispose of this with polygonFreeList(). */
+
+#define polygonLoadAllByTab(a) polygonLoadAllByChar(a, '\t');
+/* Load all polygon from tab separated file.
+ * Dispose of this with polygonFreeList(). */
+
 struct polygon *polygonCommaIn(char **pS, struct polygon *ret);
 /* Create a polygon out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
@@ -122,6 +130,14 @@ struct polyhedron *polyhedronLoad(char **row);
 
 struct polyhedron *polyhedronLoadAll(char *fileName);
 /* Load all polyhedron from whitespace-separated file.
+ * Dispose of this with polyhedronFreeList(). */
+
+struct polyhedron *polyhedronLoadAllByChar(char *fileName, char chopper);
+/* Load all polyhedron from chopper separated file.
+ * Dispose of this with polyhedronFreeList(). */
+
+#define polyhedronLoadAllByTab(a) polyhedronLoadAllByChar(a, '\t');
+/* Load all polyhedron from tab separated file.
  * Dispose of this with polyhedronFreeList(). */
 
 struct polyhedron *polyhedronCommaIn(char **pS, struct polyhedron *ret);
@@ -186,6 +202,14 @@ struct stringArray *stringArrayLoad(char **row);
 
 struct stringArray *stringArrayLoadAll(char *fileName);
 /* Load all stringArray from whitespace-separated file.
+ * Dispose of this with stringArrayFreeList(). */
+
+struct stringArray *stringArrayLoadAllByChar(char *fileName, char chopper);
+/* Load all stringArray from chopper separated file.
+ * Dispose of this with stringArrayFreeList(). */
+
+#define stringArrayLoadAllByTab(a) stringArrayLoadAllByChar(a, '\t');
+/* Load all stringArray from tab separated file.
  * Dispose of this with stringArrayFreeList(). */
 
 struct stringArray *stringArrayCommaIn(char **pS, struct stringArray *ret);
