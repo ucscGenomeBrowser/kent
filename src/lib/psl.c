@@ -224,6 +224,78 @@ if (ferror(f))
 
 /* ----- end autoSql generated part --------------- */
 
+void pslOutputShort(struct psl *el, FILE *f, char sep, char lastSep) 
+/* Print out psl.  Separate fields with sep. Follow last field with lastSep. */
+{
+int i;
+fprintf(f, "%u", el->match);
+fputc(sep,f);
+fprintf(f, "%u", el->misMatch);
+fputc(sep,f);
+fprintf(f, "%u", el->repMatch);
+fputc(sep,f);
+fprintf(f, "%u", el->qNumInsert);
+fputc(sep,f);
+fprintf(f, "%d", el->qBaseInsert);
+fputc(sep,f);
+fprintf(f, "%u", el->tNumInsert);
+fputc(sep,f);
+fprintf(f, "%d", el->tBaseInsert);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->strand);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->qName);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->qStart);
+fputc(sep,f);
+fprintf(f, "%u", abs(el->qEnd - el->qStart));
+fputc(sep,f);
+//fprintf(f, "%u", el->qEnd);
+//fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->tName);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->tStart);
+fputc(sep,f);
+fprintf(f, "%u", abs(el->tEnd - el->tStart));
+fputc(sep,f);
+fprintf(f, "%u", el->blockCount);
+fputc(sep,f);
+if (sep == ',') fputc('{',f);
+//for (i=0; i<el->blockCount; ++i)
+//    {
+//    fprintf(f, "%u", el->blockSizes[i]);
+    //fputc(',', f);
+//    }
+//if (sep == ',') fputc('}',f);
+//fputc(sep,f);
+//if (sep == ',') fputc('{',f);
+//for (i=0; i<el->blockCount; ++i)
+    //{
+    //fprintf(f, "%u", el->qStarts[i]);
+    //fputc(',', f);
+    //}
+//if (sep == ',') fputc('}',f);
+//fputc(sep,f);
+//if (sep == ',') fputc('{',f);
+//for (i=0; i<el->blockCount; ++i)
+    //{
+    //fprintf(f, "%u", el->tStarts[i]);
+    //fputc(',', f);
+    //}
+//if (sep == ',') fputc('}',f);
+fputc(lastSep,f);
+if (ferror(f))
+    {
+    perror("Error writing psl file\n");
+    errAbort("\n");
+    }
+}
 struct psl *pslLoadAll(char *fileName)
 /* Load all psl's in file. */
 {
