@@ -18,10 +18,14 @@ O = agpFrag.o agpGap.o bbRepMask.o bed.o blatServers.o \
     dbDb.o dnaMotif.o est3.o estOrientInfo.o estPair.o exoFish.o \
     featureBits.o fishClones.o gcPercent.o geneGraph.o \
     genePred.o genomicDups.o \
+    genomicSuperDups.o celeraDupPositive.o celeraCoverage.o\
     ggCluster.o altGraph.o ggDbIo.o \
     ggGraph.o hCommon.o hdb.o hgConfig.o hgFind.o \
     hgGene.o hgRelate.o hui.o humanParalog.o isochores.o jaxOrtholog.o \
+#<<<<<<< makefile
+    jksql.o knownInfo.o knownMore.o lfs.o stsMap.o stsMapMouse.o \
     jksql.o knownInfo.o knownMore.o lfs.o \
+#>>>>>>> 1.70
     mapSts.o mcnBreakpoints.o mouseSyn.o mouseOrtho.o \
     ooUtils.o pepPred.o plasEndPairs.o pslWScore.o \
     qaSeq.o refLink.o riken.o rmskOut.o \
