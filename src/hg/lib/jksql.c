@@ -12,7 +12,7 @@
 #include "jksql.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.43 2003/11/12 18:44:43 kent Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.44 2003/12/17 22:20:26 baertsch Exp $";
 
 boolean sqlTrace = FALSE;  /* setting to true prints each query */
 int sqlTraceIndent = 0;    /* number of spaces to indent traces */
@@ -476,7 +476,7 @@ else
     }
 
 safef(query, sizeof(query),  "LOAD DATA %s %s INFILE '%s' INTO TABLE %s",
-      localOpt, concurrentOpt, tabPath, table);
+      concurrentOpt, localOpt, tabPath, table);
 sr = sqlGetResult(conn, query);
 info = mysql_info(conn->conn);
 if (info == NULL)
@@ -598,6 +598,14 @@ if (sr == NULL)
 return mysql_field_count(sr->result);
 }
 #endif /* SOMETIMES */
+
+int sqlFieldCount(struct sqlResult *sr)
+/* Return number of fields in a row of result. */
+{
+if (sr == NULL)
+    return 0;
+return mysql_num_fields(sr->result);
+}
 
 int sqlCountRows(struct sqlConnection *sc, char *table)
 /* Return the number of fields in a table */
