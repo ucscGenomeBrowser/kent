@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.10 2004/03/24 23:15:10 kate Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.11 2004/03/25 00:46:39 kate Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft.userData"     /* typed/pasted in data */
@@ -223,7 +223,7 @@ else
         cgiParagraph("");
         printf("Successfully converted %d record", ct);
         printf("%s: ", ct > 1 ? "s" : "");
-        printf("<A HREF=%s TARGET=_blank>View File</A>\n", mappedTn.forCgi);
+        printf("<A HREF=%s TARGET=_blank>View Conversions</A>\n", mappedTn.forCgi);
         }
     if (errCt)
         {
@@ -231,7 +231,7 @@ else
         cgiParagraph("");
         printf("Conversion failed on %d record", errCt);
         printf("%s: &nbsp;&nbsp;&nbsp;", errCt > 1 ? "s" : "");
-        printf("<A HREF=%s TARGET=_blank>View File</A>\n",
+        printf("<A HREF=%s TARGET=_blank>View Failure File</A>\n",
                          unmappedTn.forCgi);
         fclose(unmapped);
         errFile = lineFileOpen(unmappedTn.forCgi, TRUE);
