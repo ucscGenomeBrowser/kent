@@ -10319,7 +10319,8 @@ if (sameString(database, "hg12"))
     	skipChr(chromName), winStart+1, winEnd);
     hPrintf("%s</A></TD>", wrapWhiteFont("Map View"));
     }
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTracks?hgsid=%d&hgt.psOutput=on\">%s</A></TD>\n", cart->sessionId, wrapWhiteFont("PDF/PS"));
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTracks?%s=%u&hgt.psOutput=on\">%s</A></TD>\n",cartSessionVarName(),
+       cartSessionId(cart), wrapWhiteFont("PDF/PS"));
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank>%s</A></TD>\n", wrapWhiteFont("Guide"));
 hPuts("</TR></TABLE>");
 hPuts("</TD></TR></TABLE>\n");
