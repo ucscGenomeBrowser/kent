@@ -1,4 +1,4 @@
-/* hgBlatTest - Test hgBlat web page. - was cloned from hgblatTest */
+/* snpValid - Test validity of snpMap, dbSnpRsXx, and affy120KDetails, affy10KDetails. */
 #include "common.h"
 #include "memalloc.h"
 #include "linefile.h"
@@ -57,45 +57,6 @@ static struct optionSpec options[] = {
 
 
 // ==========================================================================
-
-
-// testing mods to hdb.c:  (hopefully compiler will resolve at linktime)
-//struct dnaSeq *hGenBankGetMrnaC(struct sqlConnection *conn, char *acc, char *compatTable);
-//aaSeq *hGenBankGetPepC(struct sqlConnection *conn, char *acc, char *compatTable);
-
-
-
-struct hash *findRaSection(struct hash *raList, char *name)
-/* find section in ra with this name */
-{
-struct hash *raHash,*result=NULL;
-char *section = NULL;
-char *targ = cloneString(name);
-eraseWhiteSpace(targ);  /* name entry at top of each group cannot have whitespace */
-for (raHash = raList; raHash != NULL; raHash = raHash->next)
-    {
-    section = hashFindVal(raHash, "name");
-    if (section)
-	{
-	if (sameWord(section,targ))
-	    {
-    	    result=raHash;
-	    }
-	}
-    }
-freez(&targ);
-return result;
-}
-
-void inheritRa(char **pvar, struct hash *ra, char *name)
-/* override previous value if non-null value found */
-{
-char *temp=NULL;
-if (temp = hashFindVal(ra, name))
-    {
-    *pvar = temp;
-    }
-}
 
 
 struct snpMap *readSnps(char *chrom)
@@ -174,12 +135,10 @@ struct dbSnpRs *readDbSnps(char *tbl)
 {
 struct dbSnpRs *list=NULL, *el;
 char query[512];
-struct sqlConnection *conn = hConnectCentral();
+struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof(query), "use hgFixed;");
-sqlUpdate(conn, query);
-safef(query, sizeof(query), "select rsId, assembly from %s order by rsId", tbl);
+safef(query, sizeof(query), "select rsId, assembly from hgFixed.%s order by rsId", tbl);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -187,7 +146,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&list,el);
     }
 sqlFreeResult(&sr);
-hDisconnectCentral(&conn);
+hFreeConn(&conn);
 slReverse(&list);  /* could possibly skip if it made much difference in speed. */
 return list;
 }
@@ -253,12 +212,10 @@ struct affy10KDetails *readAffy10()
 {
 struct affy10KDetails *list=NULL, *el;
 char query[512];
-struct sqlConnection *conn = hConnectCentral();
+struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof(query), "use hgFixed;");
-sqlUpdate(conn, query);
-safef(query, sizeof(query), "select affyId, rsId, sequenceA from affy10KDetails order by affyId");
+safef(query, sizeof(query), "select affyId, rsId, sequenceA from hgFixed.affy10KDetails order by affyId");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -266,7 +223,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&list,el);
     }
 sqlFreeResult(&sr);
-hDisconnectCentral(&conn);
+hFreeConn(&conn);
 slReverse(&list);  /* could possibly skip if it made much difference in speed. */
 return list;
 }
@@ -328,13 +285,11 @@ struct affy120KDetails *readAffy120()
 {
 struct affy120KDetails *list=NULL, *el;
 char query[512];
-struct sqlConnection *conn = hConnectCentral();
+struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof(query), "use hgFixed;");
-sqlUpdate(conn, query);
 /* added cast in order by clause because we must match the sort order of snpMap.name which is a string */
-safef(query, sizeof(query), "select affyId, rsId, sequenceA from affy120KDetails order by cast(affyId as char)");
+safef(query, sizeof(query), "select affyId, rsId, sequenceA from hgFixed.affy120KDetails order by cast(affyId as char)");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -342,7 +297,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&list,el);
     }
 sqlFreeResult(&sr);
-hDisconnectCentral(&conn);
+hFreeConn(&conn);
 slReverse(&list);  /* could possibly skip if it made much difference in speed. */
 return list;
 }
@@ -377,6 +332,36 @@ while ((*s1!=0) && (toupper(*s1)!=*s1))
 return (s1 - s2);
 }
 
+int rightFlank(char *s1)
+/* look for length of lowercase right flank */
+{
+char *st = s1;
+char *se = st+strlen(st)-1;  /* position at last actual char before zero term */
+s1 = se;
+while ((s1>=st) && (toupper(*s1)!=*s1))
+    {
+    --s1;
+    }
+return (se - s1);
+}
+
+void stripDashes(char *s1)
+/* remove all Dashes from string inplace */
+{
+char *s2 = s1;
+while (*s1!=0)
+    {
+    if (*s1 != '-')
+	{
+	*s2++ = *s1;
+	}
+    ++s1;
+    }
+*s2 = 0;
+}
+
+
+// NOT USED. this function is now probably not needed can remove
 int lengthOneDash(char *s1)
 /* get length, count at most one dash */
 {
@@ -415,7 +400,7 @@ if (len2 < len)
 //toUpperN(dna1, len1);
 //toUpperN(dna2, len2);
 
-for(i=0;i<len;i++)
+for(i=0;i<len;++i)
     {
     if (toupper(dna1[i]) != toupper(dna2[i]))
 	{
@@ -426,7 +411,34 @@ misscnt += abs(len2-len1);
 return misscnt;
 }
 
+char *checkAndFetchNib(struct dnaSeq *chromSeq, struct snpMap *snp, int lf, int ls)
+/* fetch nib return string to be freed later. Reports if segment exceends ends of chromosome. */
+{
+if ((snp->chromStart - lf) < 0) 
+    {
+    printf("snpMap error (chromStart - offset) < 0 : %s %s %u %u %d \n",
+	snp->name,
+	snp->chrom,
+	snp->chromStart,
+	snp->chromEnd,
+	lf
+	);
+    return NULL;
+    }
+if ((snp->chromStart - lf + ls)  > chromSeq->size) 
+    {
+    printf("bed error chromStart - leftFlank + seqlen > chromSeq->size : %s %s %u %u  chr-size: %u \n",
+	snp->name,
+	snp->chrom,
+	snp->chromStart,
+	snp->chromEnd,
+	chromSeq->size
+	);
+    return NULL;
+    }
 
+return cloneStringZ(chromSeq->dna + snp->chromStart - lf, ls);
+}
 
 void snpValid()
 /* Test snpMap --> dbSnpRs/affy for one assembly. */
@@ -472,7 +484,10 @@ char affy120id[12];
 int matchScore = 100;
 int misMatchScore = 100;
 int gapOpenPenalty = 400;
-int gapExtendPenalty = 1; // 50;
+int gapExtendPenalty = 50;
+
+int noDna = 0;
+int snpMapRows = 0;
 
 
 /* controls whether affy120k, affy10k, or dbSnpRs is used 
@@ -597,6 +612,11 @@ for (cn = cns; cn != NULL; cn = cn->next)
 	{
 	int cmp = -1;
 	char *nibDna=NULL;
+	char *nibDnaRc=NULL;
+
+	++snpMapRows;
+
+	
 	/* 
     	printf("%s %s %u %u %s\n",
 	  snp->name,
@@ -676,7 +696,9 @@ for (cn = cns; cn != NULL; cn = cn->next)
 	    char *rc = NULL;
 	    int m = 0;
 	    int lf = 0;  /* size of left flank context (lower case dna) */
+	    int rf = 0;  /* size of right flank context (lower case dna) */
 	    int ls = 0;  /* total size of assembly dna context plus actual region in dbSnpRs/affy */
+	    char *origSeq = NULL; /* use to display the original dnSnpRs.assembly seq */
 	    
 	    switch (mode)
 		{
@@ -702,37 +724,37 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		continue;
 		}
 	
-            ls = lengthOneDash(seq);
-	    lf = leftFlank(seq);
+	    origSeq = seq;
+	    lf = leftFlank(origSeq);
+	    rf = rightFlank(origSeq);
+	    seq = cloneString(origSeq);
+	    stripDashes(seq);      /* remove dashes indicating insert to simplify and correct processing of nib data */
+            ls = strlen(seq);      /* used to be: lengthOneDash(seq); */
 	    
-	    if ((snp->chromStart - lf) < 0) 
-		{
-		printf("snpMap error (chromStart - leftFlank) < 0 : %s %s %u %u %d \n",
-		    snp->name,
-		    snp->chrom,
-		    snp->chromStart,
-		    snp->chromEnd,
-		    lf
-		    );
-		continue;
-		}
-	    if ((snp->chromStart - lf + ls)  > chromSeq->size) 
-		{
-		printf("bed error chromStart - leftFlank + seqlen > chromSeq->size : %s %s %u %u  chr-size: %u \n",
-		    snp->name,
-		    snp->chrom,
-		    snp->chromStart,
-		    snp->chromEnd,
-		    chromSeq->size
-		    );
-		continue;
-		}
+	    
+	    //debug
+	    //uglyf("about to call checkandFetchNib origSeq=%s lf=%d, rf=%d ls=%d \n", origSeq, lf, rf, ls);
 	
-	    nibDna=cloneStringZ(chromSeq->dna + snp->chromStart - lf, ls);
+	    nibDna = checkAndFetchNib(chromSeq, snp, lf, ls);
+	    if (nibDna==NULL) 
+		{
+		++noDna;
+		printf("no dna for %s %s %u %u \n",
+		    snp->name,
+	  	    snp->chrom,
+		    snp->chromStart,
+	  	    snp->chromEnd
+		    );
+		continue;
+		}
+	    
+	    //debug
+	    //uglyf("got past checkandFetchNib call: \n nibDna=%s  \n",nibDna);
 	
             if (allNs(nibDna))
 		{
 		++gapNib;
+		++mismatch;
 		if (Verbose)
 		printf("(nib gap) rsId=%s chrom=%s %u %u \n assembly=%s \n  snpMap=%s \n\n",
 		  id,
@@ -748,7 +770,26 @@ for (cn = cns; cn != NULL; cn = cn->next)
 	    m = misses(seq,nibDna);
 	    if (m > 1)
 		{
-		rc = cloneString(nibDna);
+	    
+		//debug
+    		//uglyf("rc: about to call checkandFetchNib \n");
+	
+		rc = checkAndFetchNib(chromSeq, snp, rf, ls);
+		if (rc==NULL) 
+		    {
+		    ++noDna;
+		    printf("no dna for %s %s %u %u \n",
+			snp->name,
+			snp->chrom,
+			snp->chromStart,
+			snp->chromEnd
+			);
+		    continue;
+		    }
+	    
+		//debug
+		//uglyf("rc: got past checkandFetchNib call: \n rc Dna=%s  \n",rc);
+	
 		reverseComplement(rc,strlen(rc));
 		int n = misses(seq, rc);
 		if (n < m) 
@@ -759,7 +800,7 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		}
 	    if (m <= 1)
 		{
-		match++;
+		++match;
 		if (strand < 1)
 		  ++goodrc;
 		}
@@ -797,9 +838,15 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		    axtFree(&axtAln);
 		    }
 		
-		if (bestScore < threshold)
+		if (bestScore >= threshold)
 		    {
-    		    mismatch++;
+    		    ++match;
+		    if (strand < 1)
+      			++goodrc;
+		    }
+		else
+		    {
+    		    ++mismatch;
 		    }
 		
 		if ((bestScore < threshold) || Verbose) 
@@ -826,13 +873,27 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		     } 
 		
 		}
+		
 	    freez(&rc);
+	    freez(&seq);
+	
 	    }
 	else
 	    {
+	    char snpLkup[10] = "";
 	    /* this id is missing from dbSnpRs/affy! */
-	    missing++;
-	    printf("snpMap.name=%s is missing from dbSnpRs/affy (now at %s) \n\n",snp->name,id);
+	    ++missing;
+	    switch (mode)
+		{
+		case 1:
+		    safef(snpLkup,sizeof(snpLkup),"%s","affy120"); break;
+		case 2:
+		    safef(snpLkup,sizeof(snpLkup),"%s",dbSnpTbl); break;
+		case 3:
+		    safef(snpLkup,sizeof(snpLkup),"%s","affy10"); break;
+		}
+	    if (Verbose)		    
+    		printf("snpMap.name=%s is missing from %s (now at %s) \n\n",snp->name,snpLkup,id);
 	    }
 	
 	
@@ -863,10 +924,12 @@ for (cn = cns; cn != NULL; cn = cn->next)
     totalAssemblyDash += assemblyDash;
     totalGapNib   += gapNib;
     
-    match = 0;
-    mismatch = 0;
-    missing = 0;
-    goodrc = 0;
+    match        = 0;
+    mismatch     = 0;
+    missing      = 0;
+    goodrc       = 0;
+    assemblyDash = 0;
+    gapNib       = 0;
     // debug: cut it to just one or two chrom for testing
     //if (++bogus > 1)
     //    break;
@@ -895,7 +958,11 @@ printf("missing from dbSnpRs: %u \n",totalMissing);
 printf("   rev compl matches: %u \n",totalGoodrc);
 printf("        assembly = -: %u \n",totalAssemblyDash);
 printf("         nib in gap : %u \n",totalGapNib);
-    
+
+
+printf("\n       Total rows in snpMap: %u \n ",snpMapRows);
+printf("\n        # no dna found for : %u \n ",noDna);
+
 printf("\n\n=========================================\n");
 
 }
@@ -904,7 +971,6 @@ printf("\n\n=========================================\n");
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-
 
 //pushCarefulMemHandler(200000000);
 
