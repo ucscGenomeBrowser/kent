@@ -533,8 +533,9 @@ targetHitsFreeList(&targetList);
 }
 
 
-void axtBlastOut(struct axtBundle *abList, int queryIx, boolean isProt, 
-	FILE *f, char *databaseName, int databaseSeqCount, double databaseLetterCount, 
+void axtBlastOut(struct axtBundle *abList, 
+	int queryIx, boolean isProt, FILE *f, 
+	char *databaseName, int databaseSeqCount, double databaseLetterCount, 
 	boolean isWu, char *ourId)
 /* Output a bundle of axt's on the same query sequence in blast format.
  * The parameters in detail are:

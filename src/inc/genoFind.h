@@ -151,44 +151,58 @@ struct gfOutput
      * output, and partly from trying not to have the entire target sequence in
      * memory.
      */
-    void (*queryOut)(FILE *f, struct gfOutput *out);  /* Called for each query. */
-    void (*fileHead)(FILE *f);	/* Write file header if any */
+    void (*queryOut)(struct gfOutput *out, FILE *f); 
+    /* Called for each query */
+
+    void (*fileHead)(struct gfOutput *out, FILE *f);
+    /* Write file header if any */
+
     boolean reportTargetStrand; /* Report target as well as query strand? */
-    struct hash *maskHash;	/* Hash to associate target sequence name and mask. */
-    int minGood;		/* Minimum sequence identity in parts per thousand. */
+    struct hash *maskHash;	/* associates target sequence name and mask. */
+    int minGood;		/* Minimum sequence identity in thousandths. */
     boolean qIsProt;		/* Query is peptide. */
     boolean tIsProt;		/* Target is peptide. */
     int queryIx;		/* Index of query */
     };
 
-struct gfSavePslxData
-/* This is the data structure put in gfOutput.data for psl/pslx output. */
-    {
-    FILE *f;			/* Output file. */
-    boolean saveSeq;		/* Save sequence too? */
-    };
+struct gfOutput *gfOutputAny(char *format, 
+	int goodPpt, boolean qIsProt, boolean tIsProt, 
+	boolean noHead, char *databaseName,
+	int databaseSeqCount, double databaseLetters,
+	FILE *f);
+/* Initialize output in a variety of formats in file or memory. 
+ * Parameters:
+ *    format - either 'psl', 'pslx', 'blast', 'wublast', 'axt'
+ *    goodPpt - minimum identity of alignments to output in parts per thousand
+ *    qIsProt - true if query side is a protein.
+ *    tIsProt - true if target (database) side is a protein.
+ *    noHead - if true suppress header in psl/pslx output.
+ *    databaseName - name of database.  Only used for blast output
+ *    databaseSeq - number of sequences in database - only for blast
+ *    databaseLetters - number of bases/aas in database - only blast
+ *    FILE *f - file.  
+ */
 
-void gfSavePslx(char *chromName, int chromSize, int chromOffset,
-	struct ffAli *ali, 
-	struct dnaSeq *tSeq, struct hash *t3Hash, struct dnaSeq *qSeq, 
-	boolean qIsRc, boolean tIsRc, 
-	enum ffStringency stringency, int minMatch, struct gfOutput *out);
-/* Analyse one alignment and if it looks good enough write it out to file in
- * pslx format.  This is meant for translated alignments. */
+struct gfOutput *gfOutputPsl(int goodPpt, 
+	boolean qIsProt, boolean tIsProt, FILE *f, 
+	boolean saveSeq, boolean noHead);
+/* Set up psl/pslx output */
 
-struct gfSaveAxtData
-/* This is the data structure put in gfOutput.data for axt/blast output. */
-    {
-    struct gfSaveAxtData *next;
-    struct axtBundle *bundleList;	/* List of bundles. */
-    };
+struct gfOutput *gfOutputAxt(int goodPpt, boolean qIsProt, 
+	boolean tIsProt, FILE *f);
+/* Setup output for axt format. */
 
-void gfSaveAxtBundle(char *chromName, int chromSize, int chromOffset,
-	struct ffAli *ali, 
-	struct dnaSeq *tSeq, struct hash *t3Hash, struct dnaSeq *qSeq, 
-	boolean qIsRc, boolean tIsRc, 
-	enum ffStringency stringency, int minMatch, struct gfOutput *out);
-/* Analyse one alignment and if it looks good enough save it in axtBundle. */
+struct gfOutput *gfOutputBlast(int goodPpt, 
+	boolean qIsProt, boolean tIsProt, 
+	char *databaseName, int databaseSeqCount, double databaseLetters,
+	boolean isWu, FILE *f);
+/* Setup output for blast/wublast format. */
+
+void gfOutputQuery(struct gfOutput *out, FILE *f);
+/* Finish writing out results for a query to file. */
+
+void gfOutputHead(struct gfOutput *out, FILE *f);
+/* Write out header if any. */
 
 /* -------- Routines to build up index ------------ */
 
@@ -213,7 +227,8 @@ struct genoFind *gfIndexNibs(int nibCount, char *nibNames[],
 	boolean allowOneMismatch);
 /* Make index for all nib files. */
 
-void gfIndexTransNibs(struct genoFind *transGf[2][3], int nibCount, char *nibNames[], 
+void gfIndexTransNibs(struct genoFind *transGf[2][3], 
+    int nibCount, char *nibNames[], 
     int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile,
     boolean allowOneMismatch);
 /* Make translated (6 frame) index for all nib files. */
@@ -228,10 +243,6 @@ struct gfClump *gfFindClumpsWithQmask(struct genoFind *gf, bioSeq *seq,
         Bits *qMaskBits, int qMaskOffset,
 	struct lm *lm, int *retHitCount);
 /* Find clumps associated with one sequence soft-masking seq according to qMaskBits */
-
-struct gfClump *gfPepFindClumps(struct genoFind *gf, aaSeq *seq, 
-	struct lm *lm, int *retHitCount);
-/* Find clumps associated with one sequence. */
 
 void gfTransFindClumps(struct genoFind *gfs[3], aaSeq *seq, struct gfClump *clumps[3], struct lm *lm, int *retHitCount);
 /* Find clumps associated with one sequence in three translated reading frames. */
