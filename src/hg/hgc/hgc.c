@@ -145,7 +145,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.740 2004/09/08 05:15:37 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.741 2004/09/08 22:49:53 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14270,7 +14270,7 @@ for (same = 1; same >= 0; same -= 1)
 		psl->tStart, psl->tEnd, database,tdb->tableName, uiState);
 	    printf("peptide</A> ");
 	    printf("%5.1f%%    %5.1f%% %5d %5d %5.1f%%    %c   ",
-		100.0 * psl->match / psl->qSize,
+		100.0 * (psl->match + psl->repMatch + psl->misMatch) / psl->qSize,
 		100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
 		psl->qStart+1, psl->qEnd, 
 		100.0 * (psl->qEnd - psl->qStart) / psl->qSize, psl->strand[1]);
