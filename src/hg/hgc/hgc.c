@@ -134,8 +134,9 @@
 #include "bgiSnp.h"
 #include "bgiGeneSnp.h"
 #include "botDelay.h"
+#include "zdobnovSynt.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.611 2004/04/20 22:06:13 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.612 2004/04/21 20:35:44 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -13689,6 +13690,93 @@ hFreeConn(&conn);
 printTrackHtml(tdb);
 }
 
+static void doZdobnovSynt(struct trackDb *tdb, char *item)
+/* Gene homology-based synteny blocks from Zdobnov, Bork et al. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+char query[256];
+int start = cartInt(cart, "o");
+char fullTable[64];
+boolean hasBin = FALSE;
+
+genericHeader(tdb, item);
+genericBedClick(conn, tdb, item, start, 4);
+hFindSplitTable(seqName, tdb->tableName, fullTable, &hasBin);
+safef(query, sizeof(query), "select * from %s where name = '%s'",
+      fullTable, item);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct zdobnovSynt *zd = zdobnovSyntLoad(row + hasBin);
+    int l = cgiInt("l");
+    int r = cgiInt("r");
+    int i = 0;
+    puts("<B>Homologous gene names in window:</B>");
+    for (i=0;  i < zd->blockCount;  i++)
+	{
+	int bStart = zd->chromStarts[i] + zd->chromStart;
+	int bEnd = bStart + zd->blockSizes[i];
+	if (bStart <= r && bEnd >= l)
+	    {
+	    printf(" %s", zd->geneNames[i]);
+	    }
+	}
+    puts("");
+    zdobnovSyntFree(&zd);
+    }
+else
+    errAbort("query returned no results: \"%s\"", query);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+printTrackHtml(tdb);
+}
+
+
+static void doDeweySynt(struct trackDb *tdb, char *item)
+/* Gene homology-based synteny blocks from Dewey, Pachter. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+int start = cartInt(cart, "o");
+char fullTable[64];
+boolean hasBin = FALSE;
+struct bed *bed = NULL;
+char query[512];
+
+genericHeader(tdb, item);
+hFindSplitTable(seqName, tdb->tableName, fullTable, &hasBin);
+safef(query, sizeof(query),
+      "select * from %s where chrom = '%s' and chromStart = %d",
+      fullTable, seqName, start);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *words[4];
+    int wordCount = 0;
+    bed = bedLoad6(row+hasBin);
+    bedPrintPos(bed, 4);
+    printf("<B>Strand:</B> %s<BR>\n", bed->strand);
+    wordCount = chopByChar(bed->name, '.', words, ArraySize(words));
+    if (wordCount == 3 && hDbExists(words[1]))
+	{
+	char *otherOrg = hOrganism(words[1]);
+	printf("<A TARGET=\"_blank\" HREF=\"%s?db=%s&position=%s\">",
+	       hgTracksName(), words[1], cgiEncode(words[2]));
+	printf("Open %s browser</A> at %s.<BR>\n", otherOrg, words[2]);
+	}
+    bedFree(&bed);
+    }
+else
+    errAbort("query returned no results: \"%s\"", query);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+printTrackHtml(tdb);
+}
+
+
 void doMiddle()
 /* Generate body of HTML. */
 {
@@ -14355,6 +14443,14 @@ else if(sameWord(track, "sgdClone"))
 else if (sameWord(track, "sgdOther"))
     {
     doSgdOther(tdb, item);
+    }
+else if (startsWith("zdobnov", track))
+    {
+    doZdobnovSynt(tdb, item);
+    }
+else if (startsWith("deweySynt", track))
+    {
+    doDeweySynt(tdb, item);
     }
 else if (tdb != NULL)
     {
