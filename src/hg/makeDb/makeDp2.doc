@@ -783,12 +783,17 @@ chainSome $(path1)
 	echo $i
     done
 
-    cat u.*.psl m60* |  sort -T /tmp -k 14,14 -k 16,16n -k 17,17n  | uniq  > ../preblastDm1FB.psl
-    cd ..
-    blatDir=/cluster/data/dm1/bed/blat.dm1FB
-    protDat -fb preblastDm1FB.psl $blatDir/dm1FB.psl $blatDir/dm1FB.mapNames blastDm1FB.psl
+    cat u.*.psl m60* |  sort -T /tmp -k 14,14 -k 16,16n -k 17,17n  | uniq  > ../blastDm1FB.psl
 
     ssh hgwdev
-    cd /cluster/data/dp2/bed/tblastn.dm1FB/blastOut
+    cd /cluster/data/dp2/bed/tblastn.dm1FB
+
     hgLoadPsl dp2 blastDm1FB.psl
+    echo "drop index tName on blastDm1FB ;" | hgsql dp2
+    echo "drop index tName_2 on blastDm1FB ;" | hgsql dp2
+    echo "drop index tName_3 on blastDm1FB ;" | hgsql dp2
+    echo "create index tName on blastDm1FB (tName(9), bin) ;" | hgsql dp2
+    echo "create index tName_2 on blastDm1FB  (tName(9), tStart);" | hgsql dp2
+    echo "create index tName_3 on blastDm1FB  (tName(9), tEnd);" | hgsql dp2
+
 # End tblastn
