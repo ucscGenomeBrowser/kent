@@ -11,9 +11,9 @@ the alignment having the highest base identity is found.
 Alignments must also have at least 60% base identity to be kept.
 The resulting alignments are converted into axt format and the 
 resulting axts are fed into axtChain. AxtChain organizes all the 
-alignments between a single viral mrna and the sars genome, into a group, 
+alignments between a single viral mrna and the SARS genome into a group, 
 and makes a kd-tree out of all the gapless subsections (blocks) of the alignments. 
-Next maximally scoring chains of these blocks are found by running 
+Next, maximally scoring chains of these blocks are found by running 
 a dynamic program over the kd-tree. Chains scoring below a threshold 
 are discarded, and the remaining chains are displayed here.
 
