@@ -128,14 +128,12 @@ uglyf("rbTreeTraverse(%d %d)\n", s.start, s.end);
 rbTreeTraverseRange(tree, &s, &s, doSpace);
 }
 
-struct gap *addGap(struct chrom *chrom, char strand,
+struct gap *addGap(struct chrom *chrom, 
 	int minStart, int maxEnd, int start, int end)
 /* Add gap to chromosome. */
 {
 struct gap *gap;
 struct space *space;
-if (strand == '-')
-    reverseIntRange(&start, &end, chrom->size);
 if (start <= minStart) return NULL;
 if (end >= maxEnd) return NULL;
 if (end - start < minSpace) return NULL;
@@ -166,7 +164,7 @@ while (lineFileRow(lf, row))
     hashAddSaveName(hash, name, chrom, &chrom->name);
     chrom->size = lineFileNeedNum(lf, row, 1);
     chrom->spaces = rbTreeNew(spaceCmp);
-    chrom->root = addGap(chrom, '+', -1, chrom->size+1, 0, chrom->size);
+    chrom->root = addGap(chrom, -1, chrom->size+1, 0, chrom->size);
     }
 lineFileClose(&lf);
 slReverse(&chromList);
@@ -174,18 +172,14 @@ slReverse(&chromList);
 *retList = chromList;
 }
 
-boolean innerBounds(struct chain *chain, struct boxIn *startBlock,
-	boolean isQ, boolean isRev,
-	int inStart, int inEnd, int *retStart, int *retEnd)
+boolean innerBounds(struct boxIn *startBlock,
+	boolean isQ, int inStart, int inEnd, int *retStart, int *retEnd)
 /* Return the portion of chain which is between inStart and
  * inEnd.  Only considers blocks inbetween inStart and inEnd.  
  * Return NULL if chain has no blocks between these. */
 {
 struct boxIn *b;
 int start = BIGNUM, end = -BIGNUM;
-char strand = (isQ ? chain->qStrand : '+');
-if (isRev)
-    reverseIntRange(&inStart, &inEnd, chain->qSize);
 for (b = startBlock; b != NULL; b = b->next)
     {
     int s, e;
@@ -210,8 +204,6 @@ for (b = startBlock; b != NULL; b = b->next)
     }
 if (start > end)
     return FALSE;
-if (isRev)
-    reverseIntRange(&start, &end, chain->qSize);
 *retStart = start;
 *retEnd = end;
 return TRUE;
@@ -219,7 +211,7 @@ return TRUE;
 
 struct fill *fillSpace(struct chrom *chrom, struct space *space, 
 	struct chain *chain, struct boxIn *startBlock, 
-	boolean isQ, boolean isRev)
+	boolean isQ)
 /* Fill in space with chain, remove existing space from chrom,
  * and add smaller spaces on either side if big enough. */
 {
@@ -227,7 +219,7 @@ struct fill *fill;
 int s, e;
 struct space *lSpace, *rSpace;
 
-if (!innerBounds(chain, startBlock, isQ, isRev, space->start, space->end, &s, &e))
+if (!innerBounds(startBlock, isQ, space->start, space->end, &s, &e))
     return NULL;
 assert(s < e);
 AllocVar(fill);
@@ -315,7 +307,7 @@ for (ref = spaceList; ref != NULL; ref = ref->next)
 	    break;
 	startBlock = nextBlock;
 	}
-    if ((fill = fillSpace(chrom, space, chain, startBlock, FALSE, FALSE)) != NULL)
+    if ((fill = fillSpace(chrom, space, chain, startBlock, FALSE)) != NULL)
 	{
 	for (block = startBlock; ; block = nextBlock)
 	    {
@@ -324,7 +316,7 @@ for (ref = spaceList; ref != NULL; ref = ref->next)
 		break;
 	    gapStart = block->tEnd;
 	    gapEnd = nextBlock->tStart;
-	    if ((gap = addGap(chrom, '+', space->start, space->end, gapStart, gapEnd)) != NULL)
+	    if ((gap = addGap(chrom, space->start, space->end, gapStart, gapEnd)) != NULL)
 		{
 		slAddHead(&fill->gapList, gap);
 		}
@@ -335,35 +327,54 @@ for (ref = spaceList; ref != NULL; ref = ref->next)
 slFreeList(&spaceList);
 }
 
-void addChain(struct chrom *qChrom, struct chrom *tChrom, struct chain *chain)
-/* Add as much of chain as possible to chromosomes. */
+void addChainQ(struct chrom *chrom, struct chain *chain)
+/* Add Q side of chain to fill/gap tree of chromosome. 
+ * For this side we have to cope with reverse strand
+ * issues. */
 {
 struct slRef *spaceList;
 struct slRef *ref;
-struct boxIn *block, *nextBlock;
+struct boxIn *startBlock, *block, *nextBlock;
+int gapStart, gapEnd;
 struct gap *gap;
 struct fill *fill = NULL;
 boolean isRev = (chain->qStrand == '-'); 
 int qStart = chain->qStart, qEnd = chain->qEnd;
 
 if (isRev)
+    {
     reverseIntRange(&qStart, &qEnd, chain->qSize);
-spaceList = findSpaces(qChrom->spaces,qStart,qEnd);
+    reverseBlocksQ(&chain->blockList, chain->qSize);
+    }
+spaceList = findSpaces(chrom->spaces,qStart,qEnd);
+startBlock = chain->blockList;
+
 uglyf("Got %d qSpaces\n", slCount(spaceList));
-
-
 for (ref = spaceList; ref != NULL; ref = ref->next)
     {
     struct space *space = ref->val;
     struct fill *fill;
-    if ((fill = fillSpace(qChrom, space, chain, chain->blockList, TRUE, isRev)) != NULL)
+    for (;;)
+        {
+	nextBlock = startBlock->next;
+	if (nextBlock == NULL)
+	    break;
+	gapEnd = nextBlock->qStart;
+	if (gapEnd > space->start)
+	    break;
+	startBlock = nextBlock;
+	}
+    if ((fill = fillSpace(chrom, space, chain, startBlock, TRUE)) 
+    	!= NULL)
 	{
-	for (block = chain->blockList; ; block = nextBlock)
+	for (block = startBlock; ; block = nextBlock)
 	    {
 	    nextBlock = block->next;
 	    if (nextBlock == NULL)
 		break;
-	    if ((gap = addGap(qChrom, chain->qStrand, space->start, space->end, block->qEnd, nextBlock->qStart)) != NULL)
+	    gapStart = block->qEnd;
+	    gapEnd = nextBlock->qStart;
+	    if ((gap = addGap(chrom, space->start, space->end, gapStart, gapEnd)) != NULL)
 		{
 		slAddHead(&fill->gapList, gap);
 		}
@@ -372,7 +383,14 @@ for (ref = spaceList; ref != NULL; ref = ref->next)
 	}
     }
 slFreeList(&spaceList);
+if (isRev)
+    reverseBlocksQ(&chain->blockList, chain->qSize);
+}
 
+void addChain(struct chrom *qChrom, struct chrom *tChrom, struct chain *chain)
+/* Add as much of chain as possible to chromosomes. */
+{
+addChainQ(qChrom, chain);
 addChainT(tChrom, chain);
 }
 
@@ -543,7 +561,8 @@ if (lineFileNext(lf, &line, NULL))
     {
     wordCount = chopLine(line, words);
     if (wordCount >= 23)
-        printf("memory usage %s, utime %s s/100, stime %s\n", words[22], words[13], words[14]);
+        printf("memory usage %s, utime %s s/100, stime %s\n", 
+		words[22], words[13], words[14]);
     }
 lineFileClose(&lf);
 }
