@@ -20,7 +20,7 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: sumStats.c,v 1.13 2004/11/07 16:43:01 kent Exp $";
+static char const rcsid[] = "$Id: sumStats.c,v 1.14 2004/11/07 16:49:09 kent Exp $";
 
 long long basesInRegion(struct region *regionList)
 /* Count up all bases in regions. */
@@ -314,7 +314,7 @@ if (hti->hasBlocks && itemCount > 0)
     cov = covStatsSum(blockCovList);
     hPrintf("<TR><TD>block count</TD><TD ALIGN=RIGHT>");
     printLongWithCommas(stdout, cov->itemCount);
-    hPrintf("</TD><TR>\n");
+    hPrintf("</TD></TR>\n");
     percentStatRow("block bases", cov->basesCovered, realSize);
     percentStatRow("block total", cov->sumBases, realSize);
     numberStatRow("smallest block", cov->minBases);
