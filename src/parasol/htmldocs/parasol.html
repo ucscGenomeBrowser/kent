@@ -187,7 +187,7 @@ Once you decide things are going well you can issue a "para shove" command,
 which will will check on your jobs every few minutes, restarting jobs if necessary, 
 until the jobs are all done or one of the jobs has failed (crashed repeatedly).   
 If you want to go back to interactive monitoring of your jobs after a "para shove", 
-just hit &lt;control C&gt; to stop the shoving.
+just hit [control-C]; to stop the shoving.
 <br>
 <br>
  
@@ -196,6 +196,7 @@ Typically there are three types of problems you encounter with a big batch of jo
 The most common problem is a new bug in the program you're running, 
 which causes all or most of your jobs to crash.  
 Doing a "para try" will usually find these problems without wasting a lot of cluster time.  
+<br>
 Another common problem is when one of the machines in the cluster is acting flaky for some reason 
 - often because it is having an i/o problem of some sort.   
 When a "para check" shows that some jobs are crashing this is the first thing to check.  
@@ -204,6 +205,7 @@ and see if they are all on the same host.
 If so tell the system administrators about the problem.  
 They can use the "parasol remove machine" command to remove the machine from parasol service 
 until the problem can be fixed.  
+<br>
 The third common problem is due to rarely-manifesting bugs in your code.  
 The symptom of this is the same job crashing repeatedly on different machines.  
 There's no cure for this except doing some debugging 
@@ -236,6 +238,8 @@ INSTALLING PARASOL
 
 To install parasol you'll need to create a list of the machines in your cluster, 
 and then run the 'paraNodeStart' which will launch a 'paraNode' server on each machine.  
+<i>rsh</i> is used to start the paraNode daemons by default. 
+To specify ssh instead use paraNodeStart rsh=/somepath/ssh.
 Next pick a machine, preferably one without much else going on in it to launch a 'paraHub' server.  
 Parasol users will then log onto this machine to launch jobs either 
 using the 'para' or the 'parasol' commands.    
@@ -243,8 +247,6 @@ You can bring down the paraNode servers with the 'paraNodeStop' command.
 You can bring down the paraHub with 'paraHubStop'.
 <br>
 <br>
-
- 
 
 Here's a list of the user programs in the Parasol package:
 <pre>
@@ -309,6 +311,13 @@ Here is a small example:
 
 </pre>
  
+Each cluster machine, as well as the hub, must be set up properly for rsh (or ssh) and 
+syslog system logging. Please refer to your system documentation for information on 
+rsh and syslog configuration.  RSH or SSH or equivalent is required for paraNodeStart 
+to start paraNode daemons on cluster machines.  
+<br>
+<br>
+	     
 
 To start up the Parasol system do the following:
 <pre>
@@ -325,22 +334,26 @@ To start up the Parasol system do the following:
 
   paraNodeStart machineList hub=parasolHost 
     userPath=bin sysPath=/share/bin:/usr/local/bin 
-    log=/tmp/log
 
-  paraHub machineList -log=log &
+  paraHub machineList &
 
 </pre>
 You may well want to customize the userPath and sysPath according to 
-the conventions used at your own installation.   
-The hub log will create a log that averages about 500 bytes per job, 
+the conventions used at your own installation.
+<br>
+<br>
+
+Messages are sent to syslog which in Linux goes to /var/log/messages by default.
+The hub log messages average about 500 bytes per job, 
 which can be useful for debugging.  
-Omit the -log parameter for no log (not even syslog).  
-For further security use the -subnet parameter to paraHub which will restrict 
-incoming messages to the hub to a particular subnet.   
+<br>
+<br>
+
+For further security use the -subnet parameter to paraHub which will restrict incoming messages to the hub to a particular subnet.   
 A common example of this would be
 <pre>
 
-  paraHub machineList -log=log -subnet=124.168 &
+  paraHub machineList -subnet=124.168 &
 
 </pre>
  
@@ -358,12 +371,13 @@ It's possible to add new machines without bringing down the daemon using
 <h2>
 ARCHITECTURE
 </h2>
-The Parasol system consists primarily of a scheduling server and two clients: parasol and para.  
+The Parasol system consists primarily of the scheduling server paraHub and two clients, parasol and para.  
 The parasol scheduling system consists of a hub daemon, a heartbeat daemon, 
 and number of spoke daemons running on the server system, 
 and a node daemon running on each compute node.  
+The heartbeat and spoke daemons are pthreads inside paraHub.
 The parasol and para clients both communicate only with the hub daemon.  
-The parasol client is quite lightwieght doing little more than forwarding 
+The parasol client is quite lightweight doing little more than forwarding 
 messages from the command line to the parasol hub and printing the replies.  
 The para client is more substantial.  
 It creates a database around a batch of jobs submitted by the user and 
@@ -372,12 +386,24 @@ Para does not expect the scheduler or the compute nodes to be completely reliabl
 and will resubmit jobs as necessary.
 <br>
 <br>
+Para creates the batch file originally from the spec file with the create or make command.
+Para then reads the batch file in the batch directory and sends udp messages
+to paraHub to request jobs be scheduled. 
+ParaHub identifies batches by the directory they are run from.
+It only writes to the results file in the batch directory.
+Para reads the results file written by paraHub to determine 
+which jobs have finished or failed.
+<br>
+<br>
 <img src="./parasol_files/image002.gif"><br>
 <br>
 
-Figure 1.  Parasol processes (circles) and message flow (arrows).  
-All processes reside on the scheduling machine except for the node processes.    
-A spoke process can send messages to any node.  
+Figure 1.  
+Parasol processes/threads (circles) and udp-message flow (arrows).  
+All processes/threads reside on the scheduling machine except for the node processes.    
+A spoke thread sends messages to a node. A special thread sucks incoming udp messages
+from the kernel queue and places them into a somewhat larger internal queue for 
+processing by the main thread.
 <br>
 
 <h3>
@@ -385,14 +411,17 @@ The Scheduling System
 </h3>
 
 <h4>
-The Hub Daemon and Its Spokes and Pulse
+The Hub Daemon and Its Spokes and Heartbeat
 </h4>
 The hub daemon is the heart of the parasol scheduling system. 
-The hub daemon spawns the heartbeat daemon and the spoke deamons on startup. 
+The hub daemon spawns the heartbeat daemon and the spoke daemons on startup. 
 The hub daemon then goes into a loop processing messages it recieves on the hub TCP/IP socket.  
 The hub daemon does not do anything time consuming in this loop.   
 The main thing the hub daemon does is put jobs on the job list,  
 move machines from the busy list to the free list,  and call the 'runner' routine.
+There is also a thread that just sucks messages from the udp socket queue
+and places them on a more spacious queue for the main message thread to pick up.
+This ensures that no incoming message from the paraNode daemons are missed.
 <br>
 <br>
 
@@ -433,9 +462,10 @@ When the hub gets a heartbeat message it does a few things:
 (Runner is also called at the end of processing 
 a recycleSpoke, jobDone, addJob or addMachine message.  
 Typically runner won't find anything new to run in the heartbeat, 
-but this is put here mostly just in case of unforseen issues.)
+but this is put here mostly just in case of unforeseen issues.)
 
-<li>    It calls a routine to see if machines on the dead list have come back to life.
+<li>    It calls a routine to see if machines on the dead list have been fixed 
+and come back to life.
 
 <li>    It calls a routine to see if jobs the system thinks have been running for a 
 long time are still running on the machine they have been assigned to. 
@@ -448,8 +478,9 @@ and check back on the job five or ten minutes later.
 </ul>
 This whole system depends on the hub daemon being able to 
 finish processing messages fast enough to keep the connection queue 
-on the hub socket from overflowing.  
-Each job involves 3 messages to the hub socket:
+on the hub socket from overflowing.  The socketSucker thread 
+ensures this won't happen.
+Each job involves 3 udp messages to the hub socket:
 <pre>
 
     addJob - from a client to add the job to the system
@@ -469,17 +500,18 @@ On the kilokluster with a more modern kernal this has been less of a problem
 (The shorter the job the more stressful it is on the scheduler).  
 Should overflow occur the heartbeat processing will gradually rescue 
 the system in any case, but the throughput will be greatly reduced.
+SocketSucker has basically fixed this problem.
 <br>
 <br>
 
 When the hub daemon first comes up it queries each node daemon 
 for running and recently finished jobs.  
+So the hub can reconnect to running jobs.   
 If the hub is brought down for maintenance or crashes due to a program error,  
 CPU time already invested in running jobs on nodes is usually recovered.  
 Currently jobs that have not yet been sent to nodes will be lost,  
 though if they are submitted via the 'para' client below,  
 the para client will resubmit these jobs after noting 'tracking errors.'  
-This feature of reconnecting to running jobs is new as of paraHub version 2.   
 <br>
 
 <h4>
@@ -492,6 +524,9 @@ It sends a "jobDone" message to the hub with the return status code and
 user and system run times when a job finishes.  
 It keeps a count of CPUs free, and refuses to start a job unless a CPU is free.   
 It also will kill a job in response to a "kill" message from the hub.  
+Because a machine may have multiple CPUs and therefore be running
+multiple jobs, the hub specifies both machine and jobid to the node
+when communicating.
 <br>
 <br>
 
@@ -503,7 +538,11 @@ the job is running, finished or has never been seen.
 <br>
 <br>
 
-The node daemon needs to be run as root, so that it can setuid to run jobs as any particular user.
+The paraNode node daemon normally needs to be run as root, 
+so that it can setuid (SU) to run jobs as the actual user.
+But for standalone testing, a developer can run an instance of parasol
+on a machine without needing root priveleges. In that case, the node daemon
+cannot SU to any other user.
 <br>
 <br>
 
@@ -539,7 +578,7 @@ In general this summary will be more up to date than the descriptions here.
 <h3>para</h3>
     Manage a batch of jobs in parallel on a compute cluster.
     Normal usage is to do a 'para create' followed by 'para push' until job is done.  
-    Use 'para check' to check status
+    Use 'para check' to check status.
 
 <h4>Command Line</h4>
     usage:
@@ -549,32 +588,44 @@ The commands are:
  
 
 para create jobList
-   This makes the job-tracking database from a text file with the
+   This makes the job-tracking database. jobList is a text file with a
    command line for each job on a separate line.  See below for 
    further description of the jobList.  The 'in' checks in the
-   jobList will be performed at this time.
+   jobList will be performed at this time. The output is a file
+   called "batch" that para uses to schedule the jobs.
 
 para push
    This pushes forward the batch of jobs, submitting jobs to parasol.
    It will limit parasol queue size to something not too big and
-   retry failed jobs
+   retry failed jobs.
    options:
-      -retries=N   Number of retries per job - default 4.
-      -maxQueue=N  Number of jobs to allow on parasol queue
-                   -  default 200000
+      -retries=N  Number of retries per job - default 4.
+      -maxQueue=N  Number of jobs to allow on parasol queue.
+                  Default 200000.
       -minPush=N  Minimum number of jobs to queue - default 1.  
-                  Overrides maxQueue
-      -maxPush=N  Maximum number of jobs to queue - default 100000
-      -warnTime=N Number of minutes job runs before hang warning 
-                  - default 4320 (3 days)
-      -killTime=N Number of minutes job runs before push kills it 
-                  - default 20160 (2 weeks)
-
+                  Overrides maxQueue.
+      -maxPush=N  Maximum number of jobs to queue - default 100000.
+      -warnTime=N  Number of minutes job runs before hang warning.
+                  Default 4320 (3 days).
+      -killTime=N  Number of minutes job runs before push kills it 
+                  Default 20160 (2 weeks).
+      -delayTime=N  Number of seconds to delay before submitting next job
+               to minimize i/o load at startup - default 0.
+      -priority=x  Set batch priority to high, medium, or low.
+                  Default medium (use high only with approval).
+                  If needed, use with make, push, create, shove, or try.
+                  Or, set batch priority to a specific numeric value - default 10.
+                  1 is emergency high priority,
+	          10 is normal medium,
+	          100 is low for bottomfeeders.
+	          Setting priority higher than normal (1-9) will be logged.
+		  Please keep low priority jobs short, they won't be pre-empted.
+											     
 para try
-   This is like para push, but only submits up to 10 jobs
+   This is like para push, but only submits up to 10 jobs.
 
 para shove
-   Push jobs in this database until all are done or one fails after N retries
+   Push jobs in this database until all are done or one fails after N retries.
 
 para make jobList
    Create database and run all jobs in it if possible.  If one job
@@ -585,17 +636,17 @@ para check
    This checks on the progress of the jobs.
 
 para stop
-   This stops all the jobs in the batch
+   This stops all the jobs in the batch.
 
 para chill
    Tells system to not launch more jobs in this batch, but
    does not stop jobs that are already running.
 
 para finished
-   List jobs that have finished
+   List jobs that have finished.
 
 para hung
-   List hung jobs in the batch
+   List hung jobs in the batch.
 
 para crashed
    List jobs that crashed or failed output checks the last time they were run.
@@ -605,14 +656,22 @@ para failed
 
 para problems
    List jobs that had problems (even if successfully rerun). 
-   Includes host info
+   Includes host info.
 
 para running
-   Print info on currently running jobs
+   Print info on currently running jobs.
 
 para time
-      List timing information
+   List timing information.
+      
+para recover jobList newJobList
+   Generate a job list by selecting jobs from an existing list where
+   the `check out' tests fail.
 
+para priority 999
+   Set batch priority. Values explained under 'push' options above.
+
+	 
 <h4>
 Para Job Lists
 </h4>
@@ -651,6 +710,11 @@ Here's an example of a blat job spec:
   blat {check in line+ human.fa} {check in line+ mouse2.fa} {check out line+ hm2.psl}
 
 Currently it's not possible to redirect input or output in a job list.
+But you may be able to run a shell so as to pass it a delimited command-line that has redirection.
+Of course suitable delimiters that survive the various layers of software may be required.
+You may need to specify the full path to the shell you want to run.
+The paraNode daemon runs the commandline specified in the job,
+but it has no shell features of its own.
 
 
 <h3>
@@ -667,13 +731,13 @@ and $(path2)in the template between #LOOP and #ENDLOOP, and write
 
 the results to the output.  Other substitution variables are:
 
-       $(path1)  - full path name of first file
+       $(path1)  - Full path name of first file.
 
-       $(path1)  - full path name of second file
+       $(path1)  - Full path name of second file.
 
-       $(dir1)   - first directory. Includes trailing slash if any.
+       $(dir1)   - First directory. Includes trailing slash if any.
 
-       $(dir2)   - second directory
+       $(dir2)   - Second directory.
 
        $(lastDir1) - The last directory in the first path. 
                      Includes trailing slash if any.
@@ -681,23 +745,23 @@ the results to the output.  Other substitution variables are:
        $(lastDir2) - The last directory in the second path. 
                      Includes trailing slash if any.
 
-       $(root1)  - first file name without directory or extension
+       $(root1)  - First file name without directory or extension.
 
-       $(root2)  - second file name without directory or extension
+       $(root2)  - Second file name without directory or extension.
 
-       $(ext1)   - first file extension
+       $(ext1)   - First file extension.
 
-       $(ext2)   - second file extension
+       $(ext2)   - Second file extension.
 
-       $(file1)  - name without dir of first file
+       $(file1)  - Name without dir of first file.
 
-       $(file2)  - name without dir of second file
+       $(file2)  - Name without dir of second file.
 
-       $(num1)   - index of first file in list
+       $(num1)   - Index of first file in list.
 
-       $(num2)   - index of second file in list
+       $(num2)   - Index of second file in list.
 
-The <file list 2> parameter can be 'single' if there is only one file list.  
+The [file list 2] parameter can be 'single' if there is only one file list.  
 By default the order is diagonal, 
 meaning if the first list is ABC and the second list is abc, 
 the combined order is Aa Ba Ab Ca Bb Ac  Cb Bc Cc.  
@@ -719,33 +783,39 @@ can only be used if logged in as root.  Regular users can do a 'parasol status',
 or any of the 'parasol list' commands though, 
 and may find these useful to find out how busy the computer cluster is.
 
-   parasol add machine machineName tempDir  - add new machine to pool
+   parasol add machine machineName tempDir  - Add new machine to pool.
 
-   parasol remove machine machineName   - remove machine from pool
+   parasol remove machine machineName   - Remove machine from pool.
 
-   parasol add spoke - add a new spoke daemon
+   parasol add spoke  - Add a new spoke daemon.
 
-   parasol [options] add job command-line  - add job to list
+   parasol [options] add job command-line  - Add job to list
          options: -out=out -in=in -dir=dir -results=file -verbose
+	 The path of the results file serves as the batch-identifier
+	 and the results will be written there.
+	 Normally you would not submit individual jobs this way.
+	 Instead, create a batch subdirectory, a jobList input file,
+	 and run para create jobList or para make jobList.
 
-   parasol remove job id - remove job of given ID
+   parasol remove job id  - Remove job of given ID.
 
-   parasol ping [count] - ping hub server to make sure it's alive.
+   parasol ping [count]  - Ping hub server to make sure it's alive.
 
-   parasol remove jobs userName [jobPattern] - remove jobs submitted
+   parasol remove jobs userName [jobPattern]  - Remove jobs submitted
          by user that match jobPattern.  The jobPattern may include
          the wildcards ? and *, though these will need to be preceded
          by escapes (`\') if run from most shells.
 
-   parasol list machines - list machines in pool
+   parasol list machines  - List machines in pool.
 
-   parasol list jobs - list jobs one per line
+   parasol list jobs  - List jobs one per line.
 
-   parasol list users - list users one per line
+   parasol list users  - List users one per line.  
+          Monitor user priorities and see how many jobs each user has running.
 
-   parasol list batches - list batches one per line
+   parasol list batches  - List batches one per line.
 
-   parasol status - print status of machines, jobs, and spokes. 
+   parasol status  - Print status of machines, jobs, and spokes. 
 
  
 </pre>
@@ -771,25 +841,23 @@ This file may include additional columns as well.
 
 options:
 
-    spokes=N Number of processes that feed jobs to nodes - default 30
+    spokes=N  Number of processes that feed jobs to nodes - default 30.
 
-    jobCheckPeriod=N  Minutes between checking on job - default 10
+    jobCheckPeriod=N  Minutes between checking on job - default 10.
 
-    machineCheckPeriod=N Seconds between checking on machine - default 20
+    machineCheckPeriod=N  Seconds between checking on machine - default 20.
 
-    subnet=XXX.YYY.ZZZ Only accept connections from subnet 
-
+    subnet=XXX.YYY.ZZZ  Only accept connections from subnet.
            (example subnet=192.168)
 
-    nextJobId=N Starting job ID number, by default 100,000 past 
-                last job number used in previous run.
+    nextJobId=N  Starting job ID number, by default 100,000 past 
+          last job number used in previous run.
+		
+    logFacility=facility  Log to the specified syslog facility - default local0.
+          See syslog documentation. On linux, output by default appears 
+          in /var/log/messages.
 
-    log=logFile Write a log to logFile. Use 'stdout' here for console
-
-    logFlush    Flush log with every write.  This will slow down the
-                system somewhat, but can be useful in debugging.
-
-    noResume    Don't attempt to reconnect with jobs still running
+    noResume  Don't attempt to reconnect with jobs still running
                 or recently finished on nodes.  Used for debugging.
 
  
@@ -797,7 +865,7 @@ options:
 <h3>
 paraHubStop
 </h3>
-paraHubStop - Shut down paraHub daemon
+paraHubStop - Shut down paraHub daemon.
 
 usage:
    paraHubStop now
@@ -812,57 +880,70 @@ usage:
 
 options:
 
-    log=file - file may be 'stdout' to go to console
+    logFacility=facility  Log to the specified syslog facility - default local0.
+            See syslog documentation. On linux, output by default appears 
+            in /var/log/messages.
 
-    umask=022 - file creation mask, defaults to 002
-          so that files are world readable and group writable.
+    hub=host  Restrict access to connections from hub.
 
-    userPath=bin:bin/i386 User dirs to add to path
+    umask=000  Set umask to run under - default 002.
+          Makes files world readable and group writable.
 
-    sysPath=/sbin:/local/bin System dirs to add to path
+    userPath=bin:bin/i386  User dirs to add to path.
 
-    hub=host - restict access to connections from hub
-
-    cpu=N - Number of CPUs to use.  Default 1
+    sysPath=/sbin:/local/bin  System dirs to add to path.
+    
+    randomDelay=N  Up to this many milliseconds of random delay before
+            starting a job.  This is mostly to avoid swamping NFS with
+            file opens when loading up an idle cluster.  Also it limits
+            the impact on the hub of very short jobs. Default is 5000.
+			     
+    cpu=N  Number of CPUs to use - default 1.
 
  
 
 <h3>
 paraNodeStart
 </h3>
-paraNodeStart - Start up parasol node daemons on a list of machines
+paraNodeStart - Start up parasol node daemons on a list of machines.
 
 usage:
     paraNodeStart machineList
 
-where machineList is a file containing a list of hosts
+where machineList is a file containing a list of hosts.
 
 A machine list contains the following columns:
 
      [name] [number of cpus]
 
-It may have other columns as well
+It may have other columns as well.
 
 options:
 
     exe=/path/to/paranode    
 
-    umask=022 - file creation mask, defaults to 002
+    logFacility=facility  Log to the specified syslog facility - default local0.
+            See syslog documentation. On linux, output by default appears 
+            in /var/log/messages.
 
-    userPath=bin:bin/i386 User dirs to add to path
+    umask=000  Set umask to run under - defaults 002.
 
-    sysPath=/sbin:/local/bin System dirs to add to path
+    userPath=bin:bin/i386  User dirs to add to path.
 
-    log=/path/to/log/file - this is best on a local disk of node
+    sysPath=/sbin:/local/bin  System dirs to add to path.
 
-    hub=machineHostingParaHub - nodes will ignore messages from elsewhere
+    log=/path/to/log/file  This is best on a local disk of node.
 
-    rsh=/path/to/rsh/like/command
+    hub=machineHostingParaHub  Nodes will ignore messages from elsewhere.
+
+    rsh=/path/to/rsh/like/command.  
+             For example ssh. Default rsh.
+	     
 
 <h3>
 paraNodeStop
 </h3>
-paraNodeStop - Shut down parasol node daemons on a list of machines
+paraNodeStop - Shut down parasol node daemons on a list of machines.
 
 usage:
     paraNodeStop machineList
@@ -870,13 +951,18 @@ usage:
 <h3>
 paraNodeStatus
 </h3>
-paraNodeStatus - Check status of paraNode on a list of machines
+paraNodeStatus - Check status of paraNode on a list of machines.
 
 usage:
     paraStat machineList
 
 options:
-
+    -retries=N  Number of retries to get in touch with machine.
+        The first retry is after 1/100th of a second.
+        Each retry after that takes twice as long up to a maximum
+        of 1 second per retry.  Default is 7 retries and takes
+        about a second.
+				      
     -long  List details of recent and current jobs.
 
 </pre>
