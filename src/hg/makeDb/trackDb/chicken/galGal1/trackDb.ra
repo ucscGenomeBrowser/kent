@@ -59,7 +59,7 @@ altColor 255,240,200
 spectrum on
 type psl xeno hg16
 
-track gc20KBase
+track gc5Base
 shortLabel GC Percent
 longLabel GC Percent in 5 base windows
 group map
