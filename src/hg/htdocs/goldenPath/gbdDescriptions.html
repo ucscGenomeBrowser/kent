@@ -557,28 +557,28 @@ stored in a single table rather than one table per chromosome:</P>
   href="#BactigPos">bactigPos</A> 
   - Bactig positions in chromosome coordinates
   <LI><A 
-  href="#BlastTab">bgdbBlastTab</A> 
+  href="#BlastTab">bdgpBlastTab</A> 
   - Blastp results of known genes vs. one another (<em>D. melanogaster</em>)
   <LI><A 
-  href="#KnownCanonical">bdgbCanonical</A> 
+  href="#KnownCanonical">bdgpCanonical</A> 
   - Describes the canonical splice variant of a gene (Drosophila)
   <LI><A 
-  href="#GenePredictions">bgdbGene</A> 
+  href="#GenePredExt">bdgpGene</A> 
   - Berkeley Drosophila Genome Project genes (<em>D. melanogaster</em>)
   <LI><A 
-  href="#GenePredictions">bgdbNonCoding</A> 
+  href="#GenePredExt">bdgpNonCoding</A> 
   - Berkeley Drosophila Genome Project non-coding genes (<em>D. melanogaster</em>)
   <LI><A 
-  href="#KnownIsoforms">bdgbIsoforms</A> 
+  href="#KnownIsoforms">bdgpIsoforms</A> 
   - Links together various transcripts of a gene into a cluster (Drosophila)
   <LI><A 
-  href="#KnownTo">bdgbToLocusLink</A> 
+  href="#KnownTo">bdgpToLocusLink</A> 
   - Associates known gene and LocusLink accession (Drosophila)
   <LI><A 
-  href="#KnownTo">bdgbToPfam</A> 
+  href="#KnownTo">bdgpToPfam</A> 
   - Associates known gene and Pfam ID (Drosophila)
   <LI><A 
-  href="#KnownTo">bdgbToRefSeq</A> 
+  href="#KnownTo">bdgpToRefSeq</A> 
   - Associates known gene and RefSeq accession (Drosophila)
   <LI><A 
   href="#BED">bgiCov</A> 
@@ -1362,6 +1362,12 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   <LI><A 
   href="#BED">pjt_genscan</A> 
   - Genscan gene predictions for Zoo</LI>
+  <LI><A 
+  href="#PseudoGeneLink">pseudoGeneLink</A> 
+  - Links between predicted gene/pseudogene and ortholog/paralog information</LI>
+  <LI><A 
+  href="#PslInfo">pseudoMrna</A> 
+  - Predicted pseudogene alignment information</LI>
   <LI><A 
   href="#WiggleTrack2">quality</A> 
   - Genome quality scores</LI>
@@ -2737,23 +2743,26 @@ The following definition is used for tables that link a predicted peptide to a p
 <PRE>table hgFindSpec
 "Defines a search to be performed by hgFind"
     (
-    string searchName;          "Unique name for this search. Defaults to searchTable if not 
-				 specified in .ra"
+    string searchName;          "Unique name for this search. Defaults to searchTable 
+				 if not specified in .ra"
     string searchTable;         "(Non-unique!) Table to be searched. (Like trackDb.tableName: 
 				 if split, omit chr*_ prefix)"
     string searchMethod;        "Type of search (exact, prefix, fuzzy)"
     string searchType;          "Type of search (bed, genePred, knownGene etc)"
-    ubyte shortCircuit;         "If nonzero and there is a result from this search, jump to 
-				 the result instead of performing other searches"
-    string termRegex;           "Regular expression (see man 7 regex) to eval on search term: 
-				 if it matches, perform search query"
-    string query;               "sprintf format string for SQL query on a given table and value"
-    string xrefTable;           "If search is xref, perform xrefQuery on search term, then 
-				 query with that result"
-    string xrefQuery;           "sprintf format string for SQL query on a given (xref) table 
+    ubyte shortCircuit;         "If nonzero and there is a result from this search, jump 
+				 to the result instead of performing other searches"
+    string termRegex;           "Regular expression (see man 7 regex) to eval on search 
+				 term: if it matches, perform search query"
+    string query;               "sprintf format string for SQL query on a given table 
 				 and value"
-    float searchPriority;       "0-1000 - relative order/importance of this search.  0 is top"
-    string searchDescription;   "Description of table/search (default: trackDb {longLabel,tableName})"
+    string xrefTable;           "If search is xref, perform xrefQuery on search term, 
+				 then query with that result"
+    string xrefQuery;           "sprintf format string for SQL query on a given (xref) 
+				 table and value"
+    float searchPriority;       "0-1000 - relative order/importance of this search.  
+				 0 is top"
+    string searchDescription;   "Description of table/search (default: trackDb 
+				 {longLabel,tableName})"
     lstring searchSettings;     "Name/value pairs for searchType-specific stuff"
 )
 </PRE>
@@ -3380,6 +3389,70 @@ table pbStamp
     float  ymin;        	"y minimum"
     float  ymax;        	"y maximum"
     string stampDesc;   	"Description of the stamp"
+    )
+</PRE>
+
+<H4><A name=PseudoGeneLink></A>Pseudogene Link to Ortholog/Paralog</H4>
+<PRE>
+table pseudoGeneLink
+"Links a gene/pseudogene prediction to an ortholog or paralog."
+    (
+    string chrom;       	 "Chromosome name for pseudogene"
+    uint chromStart;    	 "Pseudogene alignment start position"
+    uint chromEnd;      	 "Pseudogene alignment end position"
+    string name;        	 "Name of pseudogene"
+    uint score;         	 "Score of pseudogene with gene"
+    char[2] strand;     	 "+ or -"
+    uint thickStart;    	 "Start of where display should be thick (start codon)"
+    uint thickEnd;      	 "End of where display should be thick (stop codon)"
+    uint reserved;      	 "Always zero for now"
+    int blockCount;     	 "Number of blocks"
+    int[blockCount] blockSizes;  "Comma-separated list of block sizes"
+    int[blockCount] chromStarts; "Start positions relative to chromStart"
+    float trfRatio;     	 "Ratio of tandem repeats"
+    string type;        	 "Type of evidence"
+    int axtScore;       	 "Blastz score, gene mRNA aligned to pseudogene"
+    string gChrom;      	 "Chromosome name"
+    int gStart;         	 "Gene alignment start position"
+    int gEnd;           	 "Gene alignment end position"
+    char[2] gStrand;    	 "Strand of gene"
+    uint exonCount;     	 "# of exons in gene "
+    uint geneOverlap;   	 "Bases overlapping"
+    uint polyA;         	 "Length of polyA"
+    int polyAstart;     	 "Start of polyA relative to end of pseudogene"
+    uint exonCover;     	 "Number of exons in gene covered"
+    uint intronCount;   	 "Number of introns in pseudogene"
+    uint bestAliCount;  	 "Number of good mRNAs aligning"
+    uint matches;       	 "Matches + repMatches"
+    uint qSize;         	 "Aligning bases in pseudogene"
+    uint qEnd;          	 "End of cDNA alignment"
+    uint tReps;         	 "Repeats in gene"
+    uint qReps;         	 "Repeats in pseudogene"
+    uint overlapDiag;   	 "Bases on the diagonal to mouse"
+    uint coverage;      	 "Bases on the diagonal to mouse"
+    int label;          	 "1=pseudogene,-1 not pseudogene"
+    uint milliBad;      	 "MilliBad score, pseudogene aligned to genome"
+    uint oldScore;      	 "Another heuristic"
+    int oldIntronCount; 	 "Old simple intron count"
+    int conservedIntrons; 	 "Conserved intron count"
+    string intronScores; 	 "Intron sizes in gene/pseudogene"
+    int maxOverlap ;    	 "Largest overlap with another mRNA"
+    string refSeq;      	 "Name of closest RefSeq to gene"
+    int rStart;         	 "RefSeq alignment start position"
+    int rEnd;           	 "RefSeq alignment end position"
+    string mgc;         	 "Name of closest MGC to gene"
+    int mStart;         	 "MGC alignment start position"
+    int mEnd;           	 "MGC alignment end position"
+    string kgName;      	 "Name of closest Known Gene to gene"
+    int kStart;         	 "Known Gene alignment start position"
+    int kEnd;           	 "Known Gene alignment end position"
+    string overName;    	 "Name of overlapping mrna"
+    int overStart;      	 "Overlapping mRNA start position"
+    int overEnd;       		 "Overlapping mRNA end position"
+    char[2] overStrand;  	 "Strand of overlapping mRNA"
+    int adaBoost;       	 "AdaBoost label"
+    float posConf;      	 "P-value for positive"
+    float negConf;      	 "P-value for positive"
     )
 </PRE>
 
