@@ -23,7 +23,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.102 2005/03/14 22:27:04 angie Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.103 2005/04/02 02:20:34 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -901,7 +901,8 @@ else
 boolean htiIsPositional(struct hTableInfo *hti)
 /* Return TRUE if hti looks like it's from a positional table. */
 {
-return hti->chromField[0] && hti->startField[0] && hti->endField[0];
+return ((hti->startField[0] && hti->endField[0]) &&
+	(hti->chromField[0] || sameString(hti->rootName, "gl")));
 }
 
 char *getIdField(char *db, struct trackDb *track, char *table, 
