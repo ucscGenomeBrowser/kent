@@ -6,10 +6,12 @@
 #include "portable.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtSplitByTarget.c,v 1.5 2004/02/02 20:30:40 angie Exp $";
+static char const rcsid[] = "$Id: axtSplitByTarget.c,v 1.6 2005/02/24 18:56:36 braney Exp $";
 
 int tStartSize = 0;
 double tSS = 0.0;
+int chunkSize = 0;
+int totalWritten = 0;
 
 void usage()
 /* Explain usage and exit. */
@@ -22,18 +24,33 @@ errAbort(
   "   -tStartSize=N - Split into multiple files per target, with each file\n"
   "                   outDir/tName.M.axt containing records whose tStart is\n"
   "                   between M*N and ((M+1)*N)-1, i.e. M = floor(tStart/N).\n"
+  "   -chunkSize=N - split input into files of size N (multiple targets per file)\n"
+  " Only one of chunkSize and tStartSize can be set.\n"
   );
 }
 
 static FILE *getSplitFile(struct hash *outHash, char *outDir, char *tName,
 			  int tStart)
 {
-char outName[1024];
+static char lastName[1024];
+static char outName[1024];
+static int fileCount = 0;
 FILE *f;
 if (tStartSize > 0)
     {
     int fNum = (int)floor((double)tStart / tSS);
     safef(outName, sizeof(outName), "%s/%s.%d.axt", outDir, tName, fNum);
+    }
+else if (chunkSize > 0)
+    {
+    if ((outName[0] == 0) || ((totalWritten > chunkSize) && !sameString(lastName, tName)))
+	{
+	if (f = hashFindVal(outHash, outName))
+	    fclose(f);
+	safef(outName, sizeof(outName), "%s/chunk%d.axt",outDir,fileCount++);
+	totalWritten = 0;
+	}
+    strcpy(lastName, tName);
     }
 else
     {
@@ -60,6 +77,7 @@ while ((axt = axtRead(lf)) != NULL)
     {
     FILE *f = getSplitFile(outHash, outDir, axt->tName, axt->tStart);
     axtWrite(axt, f);
+    totalWritten += strlen(axt->tName) + strlen(axt->qName) + 40 + strlen(axt->qSym)+ strlen(axt->tSym);
     axtFree(&axt);
     }
 }
@@ -71,6 +89,9 @@ optionHash(&argc, argv);
 if (argc != 3)
     usage();
 tStartSize = optionInt("tStartSize", 0);
+chunkSize = optionInt("chunkSize", 0);
+if (chunkSize && tStartSize)
+    usage();
 tSS = (double)tStartSize;
 axtSplitByTarget(argv[1], argv[2]);
 return 0;
