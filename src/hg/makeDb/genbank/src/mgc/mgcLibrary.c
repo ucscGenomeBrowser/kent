@@ -6,10 +6,11 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "gbSql.h"
 #include "mgcLibrary.h"
 #include "gbFileOps.h"
 
-static char const rcsid[] = "$Id: mgcLibrary.c,v 1.1 2003/06/03 01:27:48 markd Exp $";
+static char const rcsid[] = "$Id: mgcLibrary.c,v 1.2 2004/02/16 19:30:06 markd Exp $";
 
 void mgcLibraryStaticLoad(char **row, struct mgcLibrary *ret)
 /* Load a row from mgcLibrary table into ret.  The contents of ret will
@@ -18,9 +19,9 @@ void mgcLibraryStaticLoad(char **row, struct mgcLibrary *ret)
 ret->id_lib = sqlSigned(row[0]);
 ret->flc_id = row[1];
 ret->id_rna = row[2];
-ret->id_vendor = sqlSigned(row[3]);
-ret->id_method = sqlSigned(row[4]);
-ret->normal = sqlSigned(row[5]);
+ret->id_vendor = gbSqlSignedNull(row[3]);
+ret->id_method = gbSqlSignedNull(row[4]);
+ret->normal = gbSqlSignedNull(row[5]);
 ret->commnt = row[6];
 ret->rate_success = atof(row[7]);
 ret->human_repeats = atof(row[8]);
@@ -30,15 +31,15 @@ ret->yeast = atof(row[11]);
 ret->mouse = atof(row[12]);
 ret->diversity = atof(row[13]);
 ret->uniqueness = atof(row[14]);
-ret->genes = sqlSigned(row[15]);
-ret->discover = sqlSigned(row[16]);
-ret->flc_disc = sqlSigned(row[17]);
-ret->novel = sqlSigned(row[18]);
+ret->genes = gbSqlSignedNull(row[15]);
+ret->discover = gbSqlSignedNull(row[16]);
+ret->flc_disc = gbSqlSignedNull(row[17]);
+ret->novel = gbSqlSignedNull(row[18]);
 ret->future = atof(row[19]);
 ret->internal_primed = atof(row[20]);
 ret->full_length = atof(row[21]);
 ret->priority = atof(row[22]);
-ret->id_unigene = sqlSigned(row[23]);
+ret->id_unigene = gbSqlSignedNull(row[23]);
 ret->organism = row[24];
 ret->vector = row[25];
 ret->host = row[26];
@@ -57,9 +58,9 @@ AllocVar(ret);
 ret->id_lib = sqlSigned(row[0]);
 ret->flc_id = cloneString(row[1]);
 ret->id_rna = cloneString(row[2]);
-ret->id_vendor = sqlSigned(row[3]);
-ret->id_method = sqlSigned(row[4]);
-ret->normal = sqlSigned(row[5]);
+ret->id_vendor = gbSqlSignedNull(row[3]);
+ret->id_method = gbSqlSignedNull(row[4]);
+ret->normal = gbSqlSignedNull(row[5]);
 ret->commnt = cloneString(row[6]);
 ret->rate_success = atof(row[7]);
 ret->human_repeats = atof(row[8]);
@@ -69,15 +70,15 @@ ret->yeast = atof(row[11]);
 ret->mouse = atof(row[12]);
 ret->diversity = atof(row[13]);
 ret->uniqueness = atof(row[14]);
-ret->genes = sqlSigned(row[15]);
-ret->discover = sqlSigned(row[16]);
-ret->flc_disc = sqlSigned(row[17]);
-ret->novel = sqlSigned(row[18]);
+ret->genes = gbSqlSignedNull(row[15]);
+ret->discover = gbSqlSignedNull(row[16]);
+ret->flc_disc = gbSqlSignedNull(row[17]);
+ret->novel = gbSqlSignedNull(row[18]);
 ret->future = atof(row[19]);
 ret->internal_primed = atof(row[20]);
 ret->full_length = atof(row[21]);
 ret->priority = atof(row[22]);
-ret->id_unigene = sqlSigned(row[23]);
+ret->id_unigene = gbSqlSignedNull(row[23]);
 ret->organism = cloneString(row[24]);
 ret->vector = cloneString(row[25]);
 ret->host = cloneString(row[26]);

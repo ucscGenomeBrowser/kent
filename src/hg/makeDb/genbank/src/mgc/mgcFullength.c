@@ -6,9 +6,10 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "gbSql.h"
 #include "mgcFullength.h"
 
-static char const rcsid[] = "$Id: mgcFullength.c,v 1.1 2003/06/03 01:27:47 markd Exp $";
+static char const rcsid[] = "$Id: mgcFullength.c,v 1.2 2004/02/16 19:30:06 markd Exp $";
 
 void mgcFullengthStaticLoad(char **row, struct mgcFullength *ret)
 /* Load a row from mgcFullength table into ret.  The contents of ret will
@@ -18,31 +19,31 @@ ret->id_clone = sqlSigned(row[0]);
 ret->id_vendor = sqlSigned(row[1]);
 ret->plate = row[2];
 ret->row = row[3];
-ret->col = sqlSigned(row[4]);
+ret->col = gbSqlSignedNull(row[4]);
 ret->id_parent = sqlSigned(row[5]);
 ret->clone_sent = row[6];
 ret->seq_back = row[7];
 ret->id_sequencer = sqlSigned(row[8]);
-ret->seq_verified = sqlSigned(row[9]);
-ret->colony_pure = sqlSigned(row[10]);
-ret->id_purif = sqlSigned(row[11]);
-ret->full_length = sqlSigned(row[12]);
+ret->seq_verified = gbSqlSignedNull(row[9]);
+ret->colony_pure = gbSqlSignedNull(row[10]);
+ret->id_purif = gbSqlSignedNull(row[11]);
+ret->full_length = gbSqlSignedNull(row[12]);
 ret->gb_acc = row[13];
 ret->why_full = row[14];
-ret->known = sqlSigned(row[15]);
-ret->cdstart = sqlSigned(row[16]);
-ret->cdstop = sqlSigned(row[17]);
+ret->known = gbSqlSignedNull(row[15]);
+ret->cdstart = gbSqlSignedNull(row[16]);
+ret->cdstop = gbSqlSignedNull(row[17]);
 ret->pr_acc = row[18];
-ret->dump_seq = sqlSigned(row[19]);
+ret->dump_seq = gbSqlSignedNull(row[19]);
 ret->series = row[20];
 ret->organism = row[21];
-ret->orient = sqlSigned(row[22]);
+ret->orient = gbSqlSignedNull(row[22]);
 ret->defline = row[23];
-ret->locuslink = sqlSigned(row[24]);
-ret->commnt = sqlSigned(row[25]);
-ret->pass = sqlSigned(row[26]);
+ret->locuslink = gbSqlSignedNull(row[24]);
+ret->commnt = gbSqlSignedNull(row[25]);
+ret->pass = gbSqlSignedNull(row[26]);
 ret->genesymbol = row[27];
-ret->by_indexer = sqlSigned(row[28]);
+ret->by_indexer = gbSqlSignedNull(row[28]);
 }
 
 struct mgcFullength *mgcFullengthLoad(char **row)
@@ -56,31 +57,31 @@ ret->id_clone = sqlSigned(row[0]);
 ret->id_vendor = sqlSigned(row[1]);
 ret->plate = cloneString(row[2]);
 ret->row = cloneString(row[3]);
-ret->col = sqlSigned(row[4]);
+ret->col = gbSqlSignedNull(row[4]);
 ret->id_parent = sqlSigned(row[5]);
 ret->clone_sent = cloneString(row[6]);
 ret->seq_back = cloneString(row[7]);
 ret->id_sequencer = sqlSigned(row[8]);
-ret->seq_verified = sqlSigned(row[9]);
-ret->colony_pure = sqlSigned(row[10]);
-ret->id_purif = sqlSigned(row[11]);
-ret->full_length = sqlSigned(row[12]);
+ret->seq_verified = gbSqlSignedNull(row[9]);
+ret->colony_pure = gbSqlSignedNull(row[10]);
+ret->id_purif = gbSqlSignedNull(row[11]);
+ret->full_length = gbSqlSignedNull(row[12]);
 ret->gb_acc = cloneString(row[13]);
 ret->why_full = cloneString(row[14]);
-ret->known = sqlSigned(row[15]);
-ret->cdstart = sqlSigned(row[16]);
-ret->cdstop = sqlSigned(row[17]);
+ret->known = gbSqlSignedNull(row[15]);
+ret->cdstart = gbSqlSignedNull(row[16]);
+ret->cdstop = gbSqlSignedNull(row[17]);
 ret->pr_acc = cloneString(row[18]);
-ret->dump_seq = sqlSigned(row[19]);
+ret->dump_seq = gbSqlSignedNull(row[19]);
 ret->series = cloneString(row[20]);
 ret->organism = cloneString(row[21]);
-ret->orient = sqlSigned(row[22]);
+ret->orient = gbSqlSignedNull(row[22]);
 ret->defline = cloneString(row[23]);
-ret->locuslink = sqlSigned(row[24]);
-ret->commnt = sqlSigned(row[25]);
-ret->pass = sqlSigned(row[26]);
+ret->locuslink = gbSqlSignedNull(row[24]);
+ret->commnt = gbSqlSignedNull(row[25]);
+ret->pass = gbSqlSignedNull(row[26]);
 ret->genesymbol = cloneString(row[27]);
-ret->by_indexer = sqlSigned(row[28]);
+ret->by_indexer = gbSqlSignedNull(row[28]);
 return ret;
 }
 

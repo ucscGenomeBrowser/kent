@@ -36,6 +36,24 @@ if (sqlTableExists(conn, table))
     slSafeAddHead(tableList, slNameNew(table));
 }
 
+unsigned gbSqlUnsignedNull(char *s)
+/* parse an unsigned, allowing empty string to return zero */
+{
+if (s[0] == '\0')
+    return 0;
+else
+    return sqlUnsigned(s);
+}
+
+int gbSqlSignedNull(char *s)
+/* parse an int, allowing empty string to return zero */
+{
+if (s[0] == '\0')
+    return 0;
+else
+    return sqlSigned(s);
+}
+
 
 /*
  * Local Variables:

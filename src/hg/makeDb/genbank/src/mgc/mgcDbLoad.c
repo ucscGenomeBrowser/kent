@@ -14,7 +14,7 @@
 #include "gbFileOps.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.6 2004/02/02 01:32:30 markd Exp $";
+static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.7 2004/02/16 19:30:06 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -268,7 +268,7 @@ FILE *tabFh;
 gbVerbEnter(2, "loading %s", MGC_GENES_TMP);
 
 /* create the tmp table */
-sql = genePredGetCreateSql(MGC_GENES_TMP, 0);
+sql = genePredGetCreateSql(MGC_GENES_TMP, 0, 0);
 sqlRemakeTable(conn, MGC_GENES_TMP, sql);
 freez(&sql);
 

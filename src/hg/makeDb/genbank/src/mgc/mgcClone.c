@@ -6,9 +6,10 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "gbSql.h"
 #include "mgcClone.h"
 
-static char const rcsid[] = "$Id: mgcClone.c,v 1.1 2003/06/03 01:27:47 markd Exp $";
+static char const rcsid[] = "$Id: mgcClone.c,v 1.2 2004/02/16 19:30:06 markd Exp $";
 
 void mgcCloneStaticLoad(char **row, struct mgcClone *ret)
 /* Load a row from mgcClone table into ret.  The contents of ret will
@@ -17,13 +18,13 @@ void mgcCloneStaticLoad(char **row, struct mgcClone *ret)
 ret->id_clone = sqlSigned(row[0]);
 ret->id_vendor = sqlSigned(row[1]);
 ret->id_lib = sqlSigned(row[2]);
-ret->flc_id = sqlSigned(row[3]);
+ret->flc_id = gbSqlSignedNull(row[3]);
 ret->plate = sqlSigned(row[4]);
 ret->row = row[5];
 ret->col = sqlSigned(row[6]);
 ret->create_date = row[7];
 ret->series = row[8];
-ret->id_sequencer = sqlSigned(row[9]);
+ret->id_sequencer = gbSqlSignedNull(row[9]);
 }
 
 struct mgcClone *mgcCloneLoad(char **row)
@@ -33,7 +34,7 @@ struct mgcClone *mgcCloneLoad(char **row)
 struct mgcClone *ret;
 
 AllocVar(ret);
-ret->id_clone = sqlSigned(row[0]);
+ret->id_clone = gbSqlSignedNull(row[0]);
 ret->id_vendor = sqlSigned(row[1]);
 ret->id_lib = sqlSigned(row[2]);
 ret->flc_id = sqlSigned(row[3]);
@@ -42,7 +43,7 @@ ret->row = cloneString(row[5]);
 ret->col = sqlSigned(row[6]);
 ret->create_date = cloneString(row[7]);
 ret->series = cloneString(row[8]);
-ret->id_sequencer = sqlSigned(row[9]);
+ret->id_sequencer = gbSqlSignedNull(row[9]);
 return ret;
 }
 

@@ -11,6 +11,11 @@ void gbAddTableIfExists(struct sqlConnection *conn, char* table,
                         struct slName** tableList);
 /* Add a table to a list, if it exists */
 
+unsigned gbSqlUnsignedNull(char *s);
+/* parse an unsigned, allowing empty string to return zero */
+
+int gbSqlSignedNull(char *s);
+/* parse an int, allowing empty string to return zero */
 
 #endif
 

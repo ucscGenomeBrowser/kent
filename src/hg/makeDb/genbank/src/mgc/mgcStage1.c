@@ -6,9 +6,10 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "gbSql.h"
 #include "mgcStage1.h"
 
-static char const rcsid[] = "$Id: mgcStage1.c,v 1.1 2003/06/03 01:27:48 markd Exp $";
+static char const rcsid[] = "$Id: mgcStage1.c,v 1.2 2004/02/16 19:30:07 markd Exp $";
 
 void mgcStage1StaticLoad(char **row, struct mgcStage1 *ret)
 /* Load a row from mgcStage1 table into ret.  The contents of ret will
@@ -27,7 +28,7 @@ ret->picked = sqlSigned(row[9]);
 ret->pdate = row[10];
 ret->suppress = sqlSigned(row[11]);
 ret->organism = row[12];
-ret->currpick = sqlSigned(row[13]);
+ret->currpick = gbSqlSignedNull(row[13]);
 }
 
 struct mgcStage1 *mgcStage1Load(char **row)
@@ -50,7 +51,7 @@ ret->picked = sqlSigned(row[9]);
 ret->pdate = cloneString(row[10]);
 ret->suppress = sqlSigned(row[11]);
 ret->organism = cloneString(row[12]);
-ret->currpick = sqlSigned(row[13]);
+ret->currpick = gbSqlSignedNull(row[13]);
 return ret;
 }
 
