@@ -151,7 +151,7 @@
 #include "jalview.h"
 #include "flyreg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.793 2004/12/02 17:53:57 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.794 2004/12/05 16:17:10 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -10999,20 +10999,24 @@ while ((row = sqlNextRow(sr)) != NULL)
 	printf("<BR>\n");
 	firstOne=0; /* rs5886636 is good to test this */
 	}
-    if (strcmp((&snp)->strand,"?")) {printf("<B>Strand: </B>%s\n", (&snp)->strand);}
-    printf("<BR><B>Observed: </B>%s\n",          (&snp)->observed);
-    printf("<BR><B>Source: </B>%s\n",            (&snp)->source);
-    printf("<BR><B>Molecule Type: </B>%s\n",     (&snp)->molType);
-    printf("<BR><B>Variant Class: </B>%s\n",     (&snp)->class);
-    printf("<BR><B>Validation Status: </B>%s\n", (&snp)->valid);
-    printf("<BR><B>Function: </B>%s\n",          (&snp)->func);
-    if ((&snp)->avHet>0) {printf("<BR><B>Average Heterozygosity: </B>%.3f +/- %.3f", (&snp)->avHet, (&snp)->avHetSE);}
-    printf("<BR><B>Location Type: </B>%s\n",     (&snp)->locType);
-/*   printf("<BR><B>Hit Quality: </B>%s\n",       (&snp)->hitQuality);
- *   if ((&snp)->mapWeight>0)  {printf("<BR><B>Map Weight: </B>%d", (&snp)->mapWeight);}
- *   if ((&snp)->chromHits>0)  {printf("<BR><B>Chromosome Hits: </B>%d", (&snp)->chromHits);}
- *   if ((&snp)->contigHits>0) {printf("<BR><B>Contig Hits: </B>%d", (&snp)->contigHits);}
- *   if ((&snp)->seqHits>0)    {printf("<BR><B>Sequence Hits: </B>%d", (&snp)->seqHits);} */
+    if (strcmp(snp.strand,"?")) {printf("<B>Strand: </B>%s\n",          snp.strand);}
+    printf("<BR><B>Observed: </B>%s\n",                                 snp.observed);
+    printf("<BR><B><A HREF=\"#Source\">Source</A>: </B>%s\n",           snp.source);
+    printf("<BR><B><A HREF=\"#MolType\">Molecule Type</A>: </B>%s\n",   snp.molType);
+    printf("<BR><B><A HREF=\"#Class\">Variant Class</A>: </B>%s\n",     snp.class);
+    printf("<BR><B><A HREF=\"#Valid\">Validation Status</A>: </B>%s\n", snp.valid);
+    printf("<BR><B><A HREF=\"#Func\">Function</A>: </B>%s\n",           snp.func);
+    printf("<BR><B><A HREF=\"#LocType\">Location Type</A>: </B>%s\n",   snp.locType);
+    if (snp.avHet>0)
+	printf("<BR><B><A HREF=\"#AvHet\">Average Heterozygosity</A>: </B>%.3f +/- %.3f", snp.avHet, snp.avHetSE);
+/*    printf("<BR><B><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_legend.cgi?legend=validation\" target=\"_blank\">Validation Status</A>: </B>%s\n", snp.valid);
+ *    printf("<BR><B><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_legend.cgi?legend=snpFxnColor\" target=\"_blank\">Function</A>: </B>%s\n",          snp.func);
+ *    if (snp.avHet>0) {printf("<BR><B><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/Hetfreq.html\" target=\"_blank\">Average Heterozygosity</A>: </B>%.3f +/- %.3f", snp.avHet, snp.avHetSE);} */
+/*   printf("<BR><B>Hit Quality: </B>%s\n",       snp.hitQuality);
+ *   if (snp.mapWeight>0)  {printf("<BR><B>Map Weight: </B>%d", snp.mapWeight);}
+ *   if (snp.chromHits>0)  {printf("<BR><B>Chromosome Hits: </B>%d", snp.chromHits);}
+ *   if (snp.contigHits>0) {printf("<BR><B>Contig Hits: </B>%d", snp.contigHits);}
+ *   if (snp.seqHits>0)    {printf("<BR><B>Sequence Hits: </B>%d", snp.seqHits);} */
     printf("<P>\n");
     }
 printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
@@ -11202,11 +11206,9 @@ if (snp!=NULL)
 	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link for rs%s</A></P>\n", 
 	       snp->rsId, snp->rsId);
 	}
-
     printf("<P><A HREF=\"http://snp.cshl.org/cgi-bin/snp?name=");
     printf("%s\" TARGET=_blank>TSC link for %s</A></P>\n",
 	   snp->tscId, snp->tscId);
-
     doSnpLocusLink(tdb, name);
     }
 /* else errAbort("<BR>Error in Query:\n%s<BR>\n",query); */

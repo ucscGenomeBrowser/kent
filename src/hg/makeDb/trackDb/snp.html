@@ -18,7 +18,7 @@
   Variants can be drawn in color based on their source, molecule type,
   variant class, validation status, or functional classification.
   Variants can also be excluded from the list based on these same
-  categories.
+  categories, or if they are below a minimum <A name="AvHet"><A HREF="http://www.ncbi.nlm.nih.gov/SNP/Hetfreq.html" target="_blank">average heterozygosity</A>.
 </P>
 <P>
   These definitions are taken from the DTD that describes the dbSnp
@@ -26,6 +26,7 @@
   HREF="ftp://ftp.ncbi.nih.gov/snp/human/XML/00readme">here</A>.  
   <UL>
     <LI>
+      <a name="Source">
       <B>Source</B>: Contributor of this data<BR>
       <UL>
         <LI><B>dbSnp</B> - From the current build of dbSnp
@@ -36,6 +37,7 @@
       </UL>
     </LI>
     <LI> 
+      <a name="MolType">
       <B>Molecule Type</B>: Sample used to find this variant<BR>
       <UL>
         <LI><B>Unknown</B> - sample type not known
@@ -46,6 +48,7 @@
       </UL>
     </LI>
     <LI> 
+      <a name="Class">    
       <B>Variant Class</B>: Variant classification<BR>
       <UL>
         <LI><B>Unknown</B> - no classification provided by data contributor
@@ -56,11 +59,12 @@
         <LI><B>Named</B> - insertion/deletion of named object (length unknown)
         <LI><B>No Variation</B> - no variation asserted for sequence
         <LI><B>Mixed</B> - mixed class
-        <LI><B>Multiple Nucleotide Polymorphism</B> - multiple nucleotide variation: alleles of length=1 and from set of {A,T,C,G}
+        <LI><B>Multiple Nucleotide Polymorphism</B> - alleles of the same length and length>1 and from set of {A,T,C,G}
       </UL>
     </LI>
     <LI> 
-      <B>Validation Status</B>: How the variant has been validated (<I>each variant may be validated by more than one method</I>)<BR>
+      <a name="Valid">
+      <B><A HREF="http://www.ncbi.nlm.nih.gov/SNP/snp_legend.cgi?legend=validation" target="_blank">Validation Status</A></B>: How the variant has been validated (<I>each variant may be validated by more than one method</I>)<BR>
         <UL>
         <LI><B>Unknown</B> - no validation has been reported for this refSNP
         <LI><B>Other Population</B> - at least one ss in cluster was validated by independent assay
@@ -72,7 +76,8 @@
       </UL>
     </LI>
     <LI> 
-      <B>Functional Class</B>: Predicted functional role (<I>each variant may have more than one functional role</I>)<BR>
+      <a name="Func">
+      <B><A HREF="http://www.ncbi.nlm.nih.gov/SNP/snp_legend.cgi?legend=snpFxnColor" target="_blank">Function</A></B>: Predicted functional role (<I>each variant may have more than one functional role</I>)<BR>
       <UL>
         <LI><B>Unknown</B> - no known functional classification
         <LI><B>Locus Region</B> - variation in region of gene, but not in transcript
@@ -91,6 +96,7 @@
       </UL>
     </LI>
     <LI> 
+      <a name="LocType">
       <B>Location Type</B>: Defines how the variant fits in the reference assembly<BR>
       <UL>
         <LI><B>Unknown</B> - undefined or error
@@ -102,7 +108,7 @@
   </UL>
 </P>
 
-<H2>Filtering</H2>
+<H2>Data Filtering</H2>
 <P>
   The SNPs in this track include all known polymorphisms that can be
   mapped against the current assembly that are available in the

@@ -1044,7 +1044,7 @@ longLabel Simple Nucleotide Polymorphisms (SNPs)
 group varRep
 priority 143
 visibility dense
-type bed 6+ .
+type bed 6 +
 
 track snpMap
 shortLabel SNPs
