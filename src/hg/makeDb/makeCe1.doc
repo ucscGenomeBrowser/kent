@@ -11,6 +11,7 @@ DOWNLOAD SEQUENCE (DONE 2003-05-12 - Hiram)
     # next machine
     ssh eieio
     mkdir -p /cluster/store5/worm/ce1/sanger
+    mkdir -p /cluster/store5/worm/ce1/tmp
     cd /cluster/store5/worm/ce1/sanger
     wget -o ce1.fetch.log -r -l1 --no-directories \
 	ftp://ftp.sanger.ac.uk/pub/wormbase/current_release/CHROMOSOMES/
@@ -274,6 +275,7 @@ STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE 2003-05-12 - Hiram)
     foreach f (/cluster/store5/worm/ce1/nib/*.nib)
       ln -s $f /gbdb/ce1/nib
     end
+    cd ~/ce1/tmp
     # Load /gbdb/ce1/nib paths into database and save size info.
     hgsql ce1  < ~/kent/src/hg/lib/chromInfo.sql
     # if you need to delete that table:   !!! DELETES ALL DATA IN TABLE !!!
@@ -304,13 +306,7 @@ chrX    17705013
     # Set up relational mrna tables.
     hgLoadRna new ce1
     # that created a bunch of tables.  If you need to delete them:
-	echo 'drop table author; \
-drop table cds; drop table cell; drop table description; \
-drop table development; drop table extFile; drop table geneName; \
-drop table history; drop table keyword; drop table library; drop table mrna; \
-drop table mrnaClone; drop table organism; drop table productName; \
-drop table seq; drop table sex; drop table source; drop table tissue;' \
-	| hgsql ce1
+	hgLoadRna drop ce1
 
 MAKE GCPERCENT AND GAP tracks (DONE 2003-05-12 - Hiram)
     # next machine
@@ -321,10 +317,16 @@ MAKE GCPERCENT AND GAP tracks (DONE 2003-05-12 - Hiram)
     #  If you need to delete that table created
 	echo 'drop table gcPercent;' | hgsql ce1;
      hgGcPercent ce1 ../../nib
+    # hgGoldGap does not handle dir names over 2 characters
+    #	directory III has been moved to 3 when all this was created above
      hgGoldGapGl -noGl ce1 /cluster/store5/worm/ce1 sangerFa
     # there are no gaps in these chromosomes.  They are all making
     # empty tables
     # nothing gets created for chrM - make one manually:
+    #	HACK ALERT - code below was taken from hgGoldGapGl.c
+	# there should be a way to do this in the same manner as the
+	# grp table was created above by copying from one of the other
+	# existing tables.  This is not the right way to do this.
     cat << '_EOF_' | hgsql ce1
 CREATE TABLE chrM_gap (
     bin smallint not null,
@@ -340,7 +342,6 @@ CREATE TABLE chrM_gap (
     UNIQUE(chromEnd)
 );
 '_EOF_'
-    #  HACK ALERT - code above was taken from hgGoldGapGl.c
 
 MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR CE1 (DONE 2002-05-12 - Hiram)
     # next machine
@@ -428,7 +429,7 @@ MAKE SANGER GENE TRACK (DONE - 2003-05-19 - Hiram)
     ls -1S /iscratch/i/worms/Celegans/mRNA/m*.fa > mrna.lst
     cat << '_EOF_' > gsub
 #LOOP
-/cluster/bin/i386/blat -q=dnax -t=dnax -mask=lower {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
+/cluster/bin/i386/blat -fine -q=rna -mask=lower {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
 #ENDLOOP
 '_EOF_'
 
@@ -440,8 +441,9 @@ MAKE SANGER GENE TRACK (DONE - 2003-05-19 - Hiram)
     ... etc ...
     #  These jobs are a bit on the short side.  I wonder if the mrna
     #  fa's could be put together in larger chunks ?
-# Average job time:                  13s       0.22m     0.00h    0.00d
-# Longest job:                      109s       1.82m     0.03h    0.00d
+# Average job time:                   8s       0.13m     0.00h    0.00d
+# Longest job:                       63s       1.05m     0.02h    0.00d
+
 
     # cluster run done
     pslSort dirs raw.psl /tmp psl
@@ -463,6 +465,7 @@ MAKE SANGER GENE TRACK (DONE - 2003-05-19 - Hiram)
     mkdir /gbdb/ce1/mrna.134
     ln -s /cluster/store5/mrna.134/org/Caenorhabditis_elegans/mrna.fa \
 	/gbdb/ce1/mrna.134
+    # ! ! !  DO NOT RUN hgLoadRna in /gbdb - it leaves .tab files
     hgLoadRna add -type=mRNA ce1 /gbdb/ce1/mrna.134/mrna.fa \
 	/cluster/store5/mrna.134/org/Caenorhabditis_elegans/mrna.ra
     hgLoadPsl ce1 all_mrna.psl
@@ -486,7 +489,7 @@ MAKE SANGER GENE TRACK (DONE - 2003-05-19 - Hiram)
     ls -1S /iscratch/i/worms/Celegans/EST/e*.fa > est.lst
     cat << '_EOF_' > gsub
 #LOOP
-/cluster/bin/i386/blat -q=dnax -t=dnax -mask=lower {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
+/cluster/bin/i386/blat -mask=lower {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
 #ENDLOOP
 '_EOF_'
 
@@ -518,6 +521,7 @@ MAKE SANGER GENE TRACK (DONE - 2003-05-19 - Hiram)
 
     ln -s /cluster/store5/mrna.134/org/Caenorhabditis_elegans/est.fa \
 	/gbdb/ce1/mrna.134
+    # ! ! !  DO NOT RUN hgLoadRna in /gbdb - it leaves .tab files
     hgLoadRna add -mrnaType=EST -type=EST ce1 /gbdb/ce1/mrna.134/est.fa \
 	/cluster/store5/mrna.134/org/Caenorhabditis_elegans/est.ra
     hgLoadPsl ce1 all_est.psl -nobin
@@ -582,6 +586,7 @@ PRODUCING FUGU FISH ALIGNMENTS  (DONE 2003-06-05 - Hiram)
     # Make fugu /gbdb/ symlink and load Fugu sequence data.
     mkdir /gbdb/ce1/fuguSeq
     ln -s /cluster/store3/fuguSeq/fugu_v3_mask.fasta /gbdb/ce1/fuguSeq
+    # ! ! !  DO NOT RUN hgLoadRna in /gbdb - it leaves .tab files
     hgLoadRna addSeq ce1 /gbdb/ce1/fuguSeq/fugu_v3_mask.fasta
 
 # RUN Waba alignment with briggsae  (DONE - 2003-06-02 - Hiram)
@@ -694,7 +699,7 @@ exit 0
 # color 140,0,200
 # altColor 210,140,250
 
-# BEGINNING OF Cbriggsae BLASTZ
+# BEGINNING OF Cb1 BLASTZ
 
     # next machine
     ssh kkr1u00
@@ -724,25 +729,16 @@ exit 0
 #	SEQ1_SMSK=/dev/null
 #	    This requires:
 #	BLASTZ_ABRIDGE_REPEATS=0
-#	    The QUERY sequence are the repeat and trf soft masked *.fa
-#	    files from the briggsae processing:
-#	SEQ2_DIR=/iscratch/i/worms/Cbriggsae/trfFa
+#	    The QUERY sequence are the repeat and trf soft masked chrUn.fa
+#	    nib file from the briggsae processing:
+#	SEQ2_DIR=/iscratch/i/worms/Cbriggsae/bothMasksNib
 #	    And the repeat masker run from the briggsae processing:
 #	SEQ2_RMSK=/iscratch/i/worms/Cbriggsae/rmsk
 #	    No lineage specific repeats:
 #	SEQ2_SMSK=/dev/null
-#	    Despite the meaning of this, would not operate when = 1
-#	SEQ2_IN_CONTIGS=0
-#	    That should be =1 according to Scott, but the comment in
-#	    blastz-run belies that:
-#	case $SEQ2_IN_CONTIGS in 
-#	1) echo "seq2 must not be in contigs!" 1>&2 ; exit 14;;
-#	*) ;;
-#	esac
-#	    We will see this problem again in lavToAxt
 #
 #	    Our base of operations:
-#	BASE=/cluster/store5/worm/ce1/bed/blastzBriggsae
+#	BASE=/cluster/store5/worm/ce1/bed/blastzCb1
 #
 
 #	Reproduced here are the instructions as specified in the
@@ -753,7 +749,7 @@ exit 0
 #	this seems to make any sense.
 	# next machine
 	ssh kk
-	cd ~/ce1/bed/blastzBriggsae
+	cd ~/ce1/bed/blastzCb1
 #	source the DEF file which was carefully written as above.
 	. ./DEF
 	mkdir -p $BASE/run
@@ -775,13 +771,13 @@ exit 0
 	para check
 	para push
 	... etc ...
-Average job time:                  34s       0.57m     0.01h    0.00d
-Longest job:                     1394s      23.23m     0.39h    0.02d
+Average job time:                1222s      20.36m     0.34h    0.01d
+Longest job:                     3772s      62.87m     1.05h    0.04d
 
 	# When that cluster run is done, results are in $BASE/raw/chr*/*
 	# continuing with ~angie/hummus/Notes:
 	# --- normalize and single_cov
-	cd ~/ce1/bed/blastzBriggsae
+	cd ~/ce1/bed/blastzCb1
 	#   source the DEF file again in case you are coming back to this
 	. ./DEF
 	# a new run directory
@@ -798,15 +794,17 @@ Longest job:                     1394s      23.23m     0.39h    0.02d
  	para create j
  	para try
 	para push;para check; ... etc ...
-	
+Average job time:                  65s       1.08m     0.02h    0.00d
+Longest job:                      136s       2.27m     0.04h    0.00d
+
 
     # Translate the .lav files created by the end of ~angie/hummus Notes
     # into axt files
     ssh eieio
-    set base="/cluster/store5/worm/ce1/bed/blastzBriggsae"
+    set base="/cluster/store5/worm/ce1/bed/blastzCb1"
     set seq1_dir="/cluster/store5/worm/ce1/nib"
-    set seq2_dir="/cluster/store5/worm/cb1/softMaskNibs"
-    set tbl="blastzBriggsae"
+    set seq2_dir="/cluster/store5/worm/cb1/nib"
+    set tbl="blastzCb1"
     cd $base
     mkdir -p axtChrom
     foreach c (lav/*)
@@ -831,10 +829,10 @@ Longest job:                     1394s      23.23m     0.39h    0.02d
     # load these blastz results
     # next machine
     ssh hgwdev
-    cd ~/ce1/bed/blastzBriggsae/pslChrom
+    cd ~/ce1/bed/blastzCb1/pslChrom
     /cluster/bin/i386/hgLoadPsl ce1 chr*_*.psl
     # trackDb/worm/ce1/trackDb.ra entry:
-# track blastzBriggsae
+# track blastzCb1
 # shortLabel C. Briggsae
 # longLabel BLASTZ C. Briggsae
 # group compGeno
@@ -846,7 +844,7 @@ Longest job:                     1394s      23.23m     0.39h    0.02d
 # CHAINING Briggsae blastz
     # next machine, small cluster is good for these tiny jobs
     ssh kkr1u00
-    cd /cluster/store5/worm/ce1/bed/blastzBriggsae
+    cd /cluster/store5/worm/ce1/bed/blastzCb1
     mkdir axtChain
     cd axtChain
     mkdir run1
@@ -859,7 +857,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
 '_EOF_'
     cat << '_EOF_' > doChain
 #!/bin/csh
-    axtChain $1  /cluster/store5/worm/ce1/nib /cluster/store5/worm/cb1/softMaskNibs $2 > $3
+    axtChain $1  /cluster/store5/worm/ce1/nib /cluster/store5/worm/cb1/nib $2 > $3
 '_EOF_'
     chmod a+x doChain
 
@@ -867,13 +865,13 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     gensub2 input.lst single gsub spec
     para create spec
     para try
-# Average job time:                  92s       1.54m     0.03h    0.00d
-# Longest job:                      139s       2.32m     0.04h    0.00d
+Average job time:                 303s       5.04m     0.08h    0.00d
+Longest job:                     1006s      16.77m     0.28h    0.01d
 
     # now on the cluster server, sort chains
     # next machine
     ssh eieio
-    cd ~/ce1/bed/blastzBriggsae/axtChain
+    cd ~/ce1/bed/blastzCb1/axtChain
     chainMergeSort run1/chain/*.chain > all.chain
     chainSplit chain all.chain
     # optionally: rm run1/chain/*.chain
@@ -881,17 +879,17 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     # Load chains into database
     # next machine
     ssh hgwdev
-    cd ~/ce1/bed/blastzBriggsae/axtChain/chain
+    cd ~/ce1/bed/blastzCb1/axtChain/chain
     foreach i (*.chain)
         set c = $i:r
         hgLoadChain ce1 ${c}_cb1Chain $i
         echo done $c
     end
 
-    # Create the nets
+    # Create the nets  XXXX STOPPED HERE 2003-06-11
     # next machine
     ssh eieio
-    cd ~/ce1/bed/blastzBriggsae/axtChain
+    cd ~/ce1/bed/blastzCb1/axtChain
     mkdir preNet
     cd chain
     
@@ -920,7 +918,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     ls -1S /iscratch/i/worms/Celegans/refSeq/r*.fa > refSeq.lst
     cat << '_EOF_' > gsub
 #LOOP
-/cluster/bin/i386/blat -q=dnax -t=dnax -mask=lower {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
+/cluster/bin/i386/blat -q=rna -mask=lower {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
 #ENDLOOP
 '_EOF_'
 
@@ -948,15 +946,13 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     ssh hgwdev
     cd ~/ce1/bed/refSeq
     hgLoadPsl ce1 -tNameIx refSeqAli.psl
-    cd /gbdb/ce1/mrna.134
     ln -s \
- /cluster/store5/mrna.134/refSeq/041003/org/Caenorhabditis_elegans/refSeq.fa .
-    cd /cluster/store2/tmp
+ /cluster/store5/mrna.134/refSeq/041003/org/Caenorhabditis_elegans/refSeq.fa \
+	/gbdb/ce1/mrna.134
+    # ! ! DO NOT RUN hgLoadRna in /gbdb - it leaves .tab files
+    cd ~/ce1/bed/refSeq
     hgLoadRna add -type=refSeq ce1 /gbdb/ce1/mrna.134/refSeq.fa \
  /cluster/store5/mrna.134/refSeq/041003/org/Caenorhabditis_elegans/refSeq.ra
-    # to be nice to this tmp directory, remove your tmp files:
-    rm *.tab
-    cd ~/ce1/bed/refSeq
     hgRefSeqMrna ce1 /gbdb/ce1/mrna.134/refSeq.fa \
  /cluster/store5/mrna.134/refSeq/041003/org/Caenorhabditis_elegans/refSeq.ra \
       all_refSeq.psl \
@@ -971,8 +967,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
 
     # Create precomputed join of refFlat and refGene:
     echo 'CREATE TABLE refFlat \
-          (KEY geneName (geneName), KEY name (name), KEY chrom (chrom))
-\
+          (KEY geneName (geneName), KEY name (name), KEY chrom (chrom)) \
           SELECT refLink.name as geneName, refGene.* \
           FROM refLink,refGene \
           WHERE refLink.mrnaAcc = refGene.name' \
