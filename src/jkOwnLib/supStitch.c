@@ -15,7 +15,11 @@
 #include "supStitch.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: supStitch.c,v 1.24 2004/10/30 04:55:54 kent Exp $";
+static char const rcsid[] = "$Id: supStitch.c,v 1.25 2004/11/06 02:07:26 kent Exp $";
+
+static void ssFindBestBig(struct ffAli *ffList, bioSeq *qSeq, bioSeq *tSeq,
+	enum ffStringency stringency, boolean isProt, struct trans3 *t3List,
+	struct ffAli **retBestAli, int *retScore, struct ffAli **retLeftovers);
 
 void ssFfItemFree(struct ssFfItem **pEl)
 /* Free a single ssFfItem. */
@@ -185,28 +189,40 @@ for (t3 = t3List; t3 != NULL; t3 = t3->next)
 internalErr();
 }
 
-static void forceMonotonic(struct ffAli *left)
-/* Remove any blocks that violate strictly increasing order in both coordinates. 
- * This is not optimal, but it turns out to be very rarely used. */
+static boolean isMonotonic(struct ffAli *left)
+/* Return TRUE if this is monotonic on both query and target */
 {
 struct ffAli *right;
 
 while ((right = left->right) != NULL)
     {
     if (left->nEnd <= right->nStart && left->hEnd <= right->hStart)
-        {
 	left = right;
-	}
     else
-        {
-	struct ffAli *nextRight = right->right;
-	verbose(2, "forcing monotonic\n");
-	left->right = nextRight;
-	if (nextRight != NULL)
-	    nextRight->left = left;
-	freez(&right);
+	{
+	verbose(2, "not monotonic dn %d, dh %d\n", right->nStart - left->nEnd, 
+		right->hStart - right->hEnd);
+        return FALSE;
 	}
     }
+return TRUE;
+}
+
+static struct ffAli *forceMonotonic(struct ffAli *aliList,
+	struct dnaSeq *qSeq, struct dnaSeq *tSeq, enum ffStringency stringency,
+	boolean isProt, struct trans3 *t3List)
+/* Remove any blocks that violate strictly increasing order in both coordinates. 
+ * This is not optimal, but it turns out to be very rarely used. */
+{
+if (!isMonotonic(aliList))
+    {
+    struct ffAli *leftovers = NULL;
+    int score;
+    ssFindBestBig(aliList, qSeq, tSeq, stringency, isProt, t3List, &aliList, &score,
+       &leftovers);
+    ffFreeAli(&leftovers);
+    }
+return aliList;
 }
 
 struct ffAli *smallMiddleExons(struct ffAli *aliList, 
@@ -231,7 +247,8 @@ else
 	    if (newLeft != NULL)
 	        {
 		if (!bundle->isProt)
-		    forceMonotonic(newLeft);
+		    newLeft = forceMonotonic(newLeft, qSeq, genoSeq, 
+		    	stringency, bundle->isProt, bundle->t3List );
 		newRight = ffRightmost(newLeft);
                 if (left != NULL)
                     {
@@ -515,7 +532,7 @@ static void ssFindBestSmall(struct ffAli *ffList, bioSeq *qSeq, bioSeq *tSeq,
 struct ssGraph *graph = ssGraphMake(ffList, qSeq, stringency, isProt, t3List);
 ssGraphFindBest(graph, retBestAli, retScore, retLeftovers);
 if (!isProt)
-    forceMonotonic(*retBestAli);
+    *retBestAli = forceMonotonic(*retBestAli, qSeq, tSeq, stringency, isProt, t3List);
 ssGraphFree(&graph);
 }
 
