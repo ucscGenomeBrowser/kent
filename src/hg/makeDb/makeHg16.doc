@@ -2960,22 +2960,69 @@ hgLoadBed hg16 syntenySelf ucsc100k.bed
         netToAxt -maxGap=300 $c.net ../chain/$c.chain /cluster/data/hg16/nib /cluster/data/rn3/nib ../../axtNet300/$c.axt
     end
 
-    # run "humor"
+    # create 2-way maf files
     set multizDir = /cluster/data/hg16/bed/humor.2003-09-02
-    mkdir -p $multizDir
+    mkdir -p $multizDir/maf
     cd /cluster/data/hg16
-    foreach c (?[,?})
-        echo "humor on $c"
-        axtToMaf blastz.mm3/axtNet300 /cluster/data/hg16/chrom.sizes /cluster/data/mm3/chrom.sizes axtNet300/$c.mm3.maf -tPrefix=hg16. -qPrefix=mm3.
-        axtToMaf blastz.rn3/axtNet300 /cluster/data/hg16/chrom.sizes /cluster/data/mm3/chrom.sizes axtNet300/$c.rn3.maf -tPrefix=hg16. -qPrefix=rn3.
-        /cluster/bin/penn/humor.v4 axtNet300/$c.mm3.maf axtNet300/$c.rn3.maf $multizDir/$c.hmr.axtNet300.maf
+    foreach c (`cut -f 1 chrom.sizes`)
+        echo "making mafs on $c"
+        axtToMaf bed/blastz.mm3/axtNet300/$c.axt /cluster/data/hg16/chrom.sizes /cluster/data/mm3/chrom.sizes $multizDir/maf/$c.mm3.maf.unfixed -tPrefix=hg16. -qPrefix=mm3.
+        /cluster/bin/scripts/fixmaf.pl \
+                < $multizDir/maf/$c.mm3.maf.unfixed > $multiDir/maf/$c.mm3.maf
+        axtToMaf bed/blastz.rn3/axtNet300/$c.axt /cluster/data/hg16/chrom.sizes /cluster/data/rn3/chrom.sizes $multizDir/maf/$c.rn3.maf.unfixed -tPrefix=hg16. -qPrefix=rn3.
+        /cluster/bin/scripts/fixmaf.pl \
+                < $multizDir/maf/$c.rn3.maf.unfixed > $multiDir/maf/$c.rn3.maf
+        rm $multizDir/maf/*.unfixed
     end
 
+
+    # copy maf files to bluearc for cluster run
+    set clusterDir = /cluster/bluearc/hg16/bed
+    mkdir $clusterDir/blastz.mm3/mafNet300
+    cp $multizDir/maf/*.mm3.maf $clusterDir/blastz.mm3/mafNet300
+    mkdir /cluster/bluearc/hg16/bed/blastz.rn3/mafNet300
+    cp $multizDir/maf/*.rn3.maf $clusterDir/blastz.rn3/mafNet300
+
+    # create scripts to run on cluster
+    # run "humor"
+    cd $multizDir
+    mkdir hmr
+    mkdir run
+    cd run
+cat << EOF > doHumor.kk
+/cluster/bin/penn/humor.v4 $clusterDir/blastz.mm3/mafNet300/\$1.mm3.maf $clusterDir/blastz.rn3/mafNet300/\$1.rn3.maf > $multizDir/hmr/\$1.hmr.maf
+EOF
+    chmod +x doHumor.kk
+    
+cat << EOF > gsub 
+#LOOP
+doHumor.kk \$(root1) {check out line+ $multizDir/hmr/\$(root1).hmr.maf}
+#ENDLOOP
+EOF
+    cd $clusterDir/blastz.mm3/mafNet300
+    # NOTE: probably want a better way to make the chrom list 
+    ls *.maf | awk -F. '{print $1}' > $multizDir/run/chrom.list
+    cd $multizDir/run
+    gensub2 chrom.list single gsub jobList
+
+    # run jobs
+    ssh kkr9u01
+    set multizDir = /cluster/data/hg16/bed/humor.2003-09-02
+    cd $multizDir/run
+    para create jobList
+    para try
+    para check
+    para push
+    # longest job 27 minutes
+
+    # setup external files for database reference
+    ssh hgwdev
     mkdir -p /gbdb/hg16/humorMm3Rn3
     cd /gbdb/hg16/humorMm3Rn3
-    foreach f ($multizDir/*.maf)
+    foreach f ($multizDir/hmr/*.maf)
         ln -s $f .
     end
+
     # load into database
     /cluster/bin/i386/hgLoadMaf -warn hg16 humorMm3Rn3
 
