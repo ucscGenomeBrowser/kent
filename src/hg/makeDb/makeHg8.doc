@@ -546,9 +546,9 @@ o - Load Sanger22 genes:
       cd ~/oo/bed
       mkdir sanger22
       cd sanger22
-      wget http://www.cs.columbia.edu/~vic/sanger2gbd/data/All_genes_plus.gene+cds.frameV2.noPseudogenes.GBD.gtf.txt
-      wget http://www.cs.columbia.edu/~vic/sanger2gbd/data/All_genes_plus.gene+cds.frameV2.GBD.gtf.txt
-      ldHgGene hg8 sanger22 *.gtf.txt
+      # not sure where these came from...
+      sanger22-gff-doctor Chr22.3.1x.cds.gff Chr22.3.1x.exons.gff \
+        | ldHgGene hg8 sanger22 stdin
 
 o - Load rnaGene table
       - login to cc94
