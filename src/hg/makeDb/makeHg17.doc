@@ -1412,6 +1412,7 @@ cat > gsub << 'EOF'
 
 
 # BAC END PAIRS TRACK (DONE - 2004-06-09 kate)
+    # Re-ran pslPairs with updated pairs file (2004-10-04 booch)
 
     # Use latest BAC ends data from NCBI
     # Checked  ftp.ncbi.nih.gov/genomes/BACENDS/homo_sapiens,
@@ -1535,8 +1536,9 @@ cat > gsub << 'EOF'
     hgLoadSeq hg17 /gbdb/hg17/bacends/BACends.fa
         # 158588 sequences
 
-    # Re-ran pslPairs with updated pairs file to take advantage of new feature of
-    # allowing comma separated lists of end accessions for each end for a clone
+    # Re-ran pslPairs with updated pairs file to take advantage of new 
+    # feature of # allowing comma separated lists of end accessions for each
+    #  end for a clone
     
     # First, create new pairs file (bacEndPairs.txt, bacEndSingles.txt)
     mkdir /cluster/data/ncbi/bacends/human/bacends.5
@@ -2645,6 +2647,8 @@ cat > template << 'EOF'
 	   
 
 # FISH CLONES (DONE 2004-07-22 Kate)
+#  Reloaded 2004-09-36 after Terry Furey reworked fishClones.c
+#       to improve scoring
 
 # The STS Marker, Coverage, and BAC End Pairs tracks must be completed prior to 
 # creating this track
@@ -3224,6 +3228,30 @@ cat > makeMaf.csh << 'EOF'
 'EOF'
     csh makeMaf.csh >&! makeMaf.log &
     tail -100f makeMaf.log
+
+
+# FUGU FR1 DOWNLOADS (WORKING 2004-09-17 kate)
+    ssh kksilo
+    cd /cluster/data/hg17/bed/blastz.fr1/axtChain
+    ln -s all.chain fugu.chain
+    mkdir gz
+    gzip -c fugu.chain > gz/fugu.chain.gz
+    gzip -c human.net > gz/fugu.net.gz
+    cd ../axtNet
+    gzip *.axt
+
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/hg17
+    mkdir -p vsFr1
+    cd vsFr1
+    cp /cluster/data/hg17/bed/blastz.fr1/axtChain/gz/*.gz .
+    md5sum *.gz > md5sum.txt
+    mkdir axtNet
+    cd axtNet
+    cp /cluster/data/hg17/bed/blastz.fr1/axtNet/*.axt.gz .
+    md5sum *.gz > md5sum.txt
+    # Copy and edit README
+
 
 # PRODUCE FUGU BLAT ALIGNMENT (DONE - 2004-07-07 - Hiram)
 
@@ -3876,71 +3904,6 @@ Submission to last job:        169197s    2819.95m    47.00h    1.96d
         echo "done: ${I}"
     done   
 
-
-    # CHIMP ALIGNMENTS (2004-06-15, 2004-06-21 kate)
-
-    # Align with nucleotide blat, unmasked (same method as liftOver chains
-    # Use 1K split of panTro1 doc'ed in makePanTro1.doc
-    ssh kk
-    cd /cluster/data/hg17
-    mkdir -p bed/blat.panTro1.2004-06-23
-    cd bed/blat.panTro1.2004-06-23
-    mkdir run raw
-    cd run
-cat > gsub << 'EOF'
-#LOOP
-do.csh $(path1) $(path2) $(root1) $(root2) {check out line+ ../raw/$(root1)/$(root1)_$(root2).psl}
-#ENDLOOP
-'EOF'
-cat > do.csh << 'EOF'
-#!/bin/csh -fe
-set c = $3
-set f = ${c}_${4}.psl
-blat $1 $2 /tmp/$f -tileSize=11 -ooc=/cluster/bluearc/hg/h/11.ooc \
-                -minScore=100 -minIdentity=93 -fastMap
-set ret = $status
-mv -f /tmp/$f $5
-exit $ret
-'EOF'
-    chmod +x do.csh
-    ls -1S /scratch/hg/hg17/bothMaskedNibs/*.nib > human.lst
-    ls -1S /cluster/bluearc/panTro1/blatSplit/splitChrom.3K/*.fa > chimp.lst
-    gensub2 human.lst chimp.lst gsub spec
-    foreach f (`cat human.lst`)
-        set d = $f:t:r
-        echo $d
-        mkdir ../raw/$d
-    end
-    para create spec
-        # 2438 jobs
-    para try 
-    para check
-    para push
-
-    ssh kksilo
-    cd /cluster/data/hg17
-    cd bed/blat.panTro1/raw
-
-    # lift results to chrom coordinates
-    # takes about an hour -- might want to
-    # run this on the minicluster
-    ssh eieio
-    cd /cluster/bluearc/panTro1/blatSplit/liftChrom.3K
-    cat chr*.lft > all.lft
-    cd /cluster/data/hg17
-    cd bed/blat.panTro1.2004-06-23/raw
-    mkdir -p ../psl
-cat << 'EOF' > liftup.csh
-    foreach c (chr*)
-        echo $c
-        pslCat $c/*.psl | \
-            liftUp -pslQ ../psl/$c.psl \
-                /cluster/bluearc/panTro1/blatSplit/liftChrom.3K/all.lft warn stdin
-    end
-'EOF'
-    csh liftup.csh >&! liftup.log &
-    tail -100f liftup.log
-    rm -r raw
 
 # GNF ATLAS 2 (DONE - 2004-07-14 - Hiram
     # Align probes from GNF1H chip.
@@ -5016,7 +4979,7 @@ hgLoadBed hg17 ensRatMm4Hom ucsc100k.bed -sqlTable=ensRatMm4Hom.sql
     nice gzip axtChrom/* pslChrom/* lav/*/* axtChain/all.chain axtChain/*.net &
 
 
-# BLASTZ CHIMP panTro1 (2004-06-21 kate)
+# BLASTZ CHIMP panTro1 (DONE 2004-06-22 kate)
 # NOTE: Ran with abridge repeats=0, although SMSK was set
 # Looked better than running with abridge=1, which had very
 # chopped-up alignments
@@ -5248,11 +5211,11 @@ exit $status
     cd /cluster/data/hg17/bed/blastz.panTro1.2004-06-22/axtChain
     netFilter -minGap=10 human.net |  hgLoadNet hg17 netPanTro1 stdin
     netFilter -minGap=10 humanSyn.net | hgLoadNet hg17 netSyntenyPanTro1 stdin
-    # Add entries for chainPanTro1, netPanTro1, syntenyPanTro1 to 
+    # Add entries for chainPanTro1, netPanTro1 to
     # human/hg17 trackDb
 
 
-# GENERATE CHIMP MAF FOR MULTIZ FROM NET (IN PROGRESS 2004-06-24 kate)
+# GENERATE CHIMP MAF FOR MULTIZ FROM NET (DONE 2004-06-24 kate)
     ssh eieio
     cd /cluster/data/hg17/bed/blastz.panTro1.2004-06-22/axtChain
     netSplit human.net net
@@ -5273,7 +5236,34 @@ foreach f (axtChain/net/*.net)
 # << for emacs
     csh makeMaf.csh >&! makeMaf.log &
     tail -100f makeMaf.log
-    # TODO
+
+
+# MAKE PANTRO1 DOWNLOADABLES (DONE 2004-09-14 kate)
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.panTro1
+    # gzip chains and nets
+    mkdir gz
+    cd gz
+    nice gzip -c ../axtChain/all.chain  > panTro1.chain.gz
+    nice gzip -c ../axtChain/chimp.net > panTro1.net.gz
+    cd ../axtNet
+    time nice gzip *.axt
+        # 46 mins.
+   
+    ssh hgwdev
+    # copy chains and nets to downloads area
+    cd /usr/local/apache/htdocs/goldenPath/hg17
+    mkdir -p vsPanTro1
+    cd vsPanTro1
+    mv /cluster/data/hg17/bed/blastz.panTro1/gz/*.gz .
+    md5sum *.gz > md5sum.txt
+    rmdir /cluster/data/hg17/bed/blastz.panTro1/gz
+    mkdir -p axtNet
+    cd axtNet
+    cp /cluster/data/hg17/bed/blastz.panTro1/axtNet/*.axt.gz .
+    md5sum *.gz axtNet/*.gz > md5sum.txt
+    md5sum *.gz > md5sum.txt
+    # copy in README and edit
 
 
 # RESCORE CHICKEN BLASTZ (DONE 6/23/04 angie)
@@ -5580,6 +5570,33 @@ mkdir -p $3:h
     cd /cluster/data/hg17/bed/multiz.2004-07-13
     mkdir maf
     cp $workingDir/maf/*.maf maf
+
+    # copy to download area (2004-07-27 angie)
+    cd /usr/local/apache/htdocs/goldenPath/hg17
+    mkdir -p mzPt1Mm5Rn3Cf1Gg2Fr1Dr1
+    # gzipped & copied maf files from /cluster/data/hg17/bed/multiz8way/maf
+
+    # Create upstream files for download (2004-09-13 kate)
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/multiz8way
+    echo hg17 panTro1 mm5 rn3 canFam1 galGal2 fr1 danRer1 > org.txt
+    # mafFrags takes a while
+    foreach i (1000 2000 5000)
+        echo "making upstream$i.maf"
+        featureBits hg17 refGene:upstream:$i -fa=/dev/null -bed=up.bad
+        awk -F '\t' '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4, 0, 9), 0, $5)}' up.bad > up.bed
+        rm up.bad
+        mafFrags hg17 multiz8way up.bed upstream$i.maf -orgs=org.txt
+        rm up.bed
+    end
+    ssh eieio
+    cd /cluster/data/hg17/bed/multiz8way
+    nice gzip upstream{1000,2000,5000}.maf
+        # 6 mins.
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/hg17
+    ln -s mzPt1Mm5Rn3Cf1Gg2Fr1Dr1 multiz8way
+    mv /cluster/data/hg17/bed/multiz8way/upstream*.maf.gz multiz8way
 
 
 # PHYLO-HMM (PHASTCONS) CONSERVATION FOR 8-WAY WITH MM5 (DONE 2004-07-20 kate)
@@ -6321,24 +6338,34 @@ axtChain $1 \
     # Add entries for chainCanFam1, netCanFam1 to human/hg17 trackDb
 
 
-# MAKE VSCANFAM1 DOWNLOADABLES (TODO 7/9/04 angie)
+# MAKE VSCANFAM1 DOWNLOADABLES (DONE 9/17/04 kate)
     ssh kksilo
     cd /cluster/data/hg17/bed/blastz.canFam1.2004-07-08/axtChain
-    ln all.chain dog.chain
-    zip /cluster/data/hg17/zip/dog.chain.zip dog.chain
-    rm dog.chain
-    zip /cluster/data/hg17/zip/dog.net.zip dog.net
-    zip /cluster/data/hg17/zip/dogSyn.net.zip dogSyn.net
+    ln -s all.chain dog.chain
+    mkdir gz
+    cd gz
+    gzip -c ../dog.chain > dog.chain.gz
+    gzip -c ../dog.net > dog.net.gz
+    gzip ../dogSyn.net > dogSyn.net.gz
+    # Angie's notes...
     # Mike Zody asked for raw blastz in chain format, so figure out some 
     # way to translate axt or psl to chain and put it out there.  
     # Actually, it's probably just hg16-canFam1 that he wants for now -- ?
     # Ask when we get to this point.
 
+    cd ../axtNet
+    time gzip *.axt
+
     ssh hgwdev
-    mkdir /usr/local/apache/htdocs/goldenPath/hg17/vsCanFam1
-    cd /usr/local/apache/htdocs/goldenPath/hg17/vsCanFam1
-    mv /cluster/data/hg17/zip/dog*.zip .
-    md5sum *.zip > md5sum.txt
+    cd /usr/local/apache/htdocs/goldenPath/hg17
+    mkdir -p vsCanFam1
+    cd vsCanFam1
+    mv /cluster/data/hg17/bed/blastz.canFam1/axtChain/gz/*.gz .
+    md5sum *.gz > md5sum.txt
+    mkdir -p axtNet
+    cd axtNet
+    cp /cluster/data/hg17/bed/blastz.canFam1/axtNet/*.axt.gz .
+    md5sum *.gz > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
 
 
@@ -7019,12 +7046,32 @@ cat > makeMaf.csh << 'EOF'
     tail -100f makeMaf.log
 
 # BLASTZ ZEBRAFISH (danRer1) CLEAN UP (DONE, 2004-07-19, hartera)
-
      ssh eieio
      cd /cluster/data/hg17/bed/blastz.danRer1.swap
      nice rm axtChain/run1/chain/* &
      nice rm -fr axtChain/n1 axtChain/hNoClass.net &
      nice gzip axtChrom/* pslChrom/* axtChain/all.chain axtChain/*.net &
+
+
+# ZEBRAFISH DANRER1 DOWNLOADS (WORKING 2004-09-17 kate)
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.danRer1.swap/axtNet
+    gzip *.axt
+
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/hg17
+    mkdir -p vsDanRer1
+    cd vsDanRer1
+    cp /cluster/data/hg17/bed/blastz.danRer1.swap/axtChain/all.chain.gz zebrafish.chain.gz
+    cp /cluster/data/hg17/bed/blastz.danRer1.swap/axtChain/zebrafish.net.gz .
+    md5sum *.gz > md5sum.txt
+    mkdir -p axtNet
+    cd axtNet
+    cp /cluster/data/hg17/bed/blastz.danRer1.swap/axtNet/*.axt.gz .
+    md5sum *.gz > md5sum.txt
+    # Copy and edit README.txt
+
+      
  
 # MAKING MOUSE SYNTENY (DONE - 2004-07-03 - Hiram)
 
@@ -8442,6 +8489,7 @@ mkdir -p $3:h
     mkdir maf
     cp $workingDir/maf/*.maf maf
 
+
 # BLASTZ TETRAODON (tetNig1) (DONE, 2004-08-26, hartera)
     # blastz requires lineage-specific repeats
     # Treat all repeats as lineage-specific.
@@ -8828,6 +8876,7 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     hgPepPred hg17 generic twinscanPep chr_ptx/chr*-fixed.fa
 
 # MAKE VSTETNIG1 DOWNLOADABLES (DONE, 2004-09-08, hartera)
+#    Replace with gzipped versions (DONE 2004-09-14 kate)
     ssh kksilo
     # zip chains and nets
     cd /cluster/data/hg17/bed/blastz.tetNig1/axtChain
