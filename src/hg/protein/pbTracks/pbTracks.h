@@ -38,6 +38,7 @@ extern boolean suppressHtml;	/* If doing PostScript output we'll suppress most
 extern char *protDbName;
 extern char *proteinID;
 extern char *protDisplayID;
+extern char *description;
 
 extern char *positionStr;
 extern char *prevGBChrom;              /* chrom          previously chosen by Genome Browser */
@@ -111,5 +112,6 @@ void doStamps(char *proteinID, char *mrnaID, char *aa, struct vGfx *vg, int *yOf
 
 void domainsPrint(struct sqlConnection *conn, char *swissProtAcc);
 void aaPropertyInit(int *hasResFreq);
+void printFASTA(char *proteinID, char *aa);
 
 #endif
