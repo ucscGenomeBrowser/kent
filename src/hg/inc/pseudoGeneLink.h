@@ -5,7 +5,7 @@
 #ifndef PSEUDOGENELINK_H
 #define PSEUDOGENELINK_H
 
-#define PSEUDOGENELINK_NUM_COLS 27
+#define PSEUDOGENELINK_NUM_COLS 33
 
 struct pseudoGeneLink
 /* links a gene/pseudogene prediction to an ortholog or paralog. */
@@ -18,6 +18,12 @@ struct pseudoGeneLink
     char *name;	/* Name of pseudogene */
     unsigned score;	/* score of pseudogene with gene */
     char *strand;	/* strand of pseudoegene */
+    unsigned thickStart;	/* Start of where display should be thick (start codon) */
+    unsigned thickEnd;	/* End of where display should be thick (stop codon) */
+    unsigned reserved;	/* Always zero for now */
+    int blockCount;	/* Number of blocks */
+    int *blockSizes;	/* Comma separated list of block sizes */
+    int *chromStarts;	/* Start positions relative to chromStart */
     char *assembly;	/* assembly for gene */
     char *geneTable;	/* mysql table of gene */
     char *gene;	/* Name of gene */
@@ -39,10 +45,6 @@ struct pseudoGeneLink
     unsigned qReps;	/* repeats in pseudogene */
     unsigned overlapDiag;	/* bases on the diagonal to mouse */
     };
-
-void pseudoGeneLinkStaticLoad(char **row, struct pseudoGeneLink *ret);
-/* Load a row from pseudoGeneLink table into ret.  The contents of ret will
- * be replaced at the next call to this function. */
 
 struct pseudoGeneLink *pseudoGeneLinkLoad(char **row);
 /* Load a pseudoGeneLink from row fetched with select * from pseudoGeneLink
