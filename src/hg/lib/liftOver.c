@@ -11,8 +11,9 @@
 #include "hdb.h"
 #include "liftOverChain.h"
 #include "portable.h"
+#include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.10 2004/04/20 23:41:27 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.11 2004/04/22 02:28:15 kate Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -204,8 +205,8 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
     {
     FILE *f = mapped;
     chrom = words[0];
-    s = lineFileNeedNum(lf, words, 1);
-    e = lineFileNeedNum(lf, words, 2);
+    s = lineFileNeedFullNum(lf, words, 1);
+    e = lineFileNeedFullNum(lf, words, 2);
     if (s > e)
 	errAbort("Start after end line %d of %s", lf->lineIx, lf->fileName);
     if (wordCount >= 6)
@@ -797,6 +798,7 @@ int liftOverPositions(char *fileName, struct hash *chainHash,
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line;
 char *words[16];
+int wordCount;
 int ct = 0;
 struct tempName bedTn, mappedBedTn, unmappedBedTn;
 FILE *bedFile;
@@ -811,20 +813,28 @@ bedFile = mustOpen(bedTn.forCgi, "w");
 /* Convert input to bed file */
 while (lineFileNextReal(lf, &line))
     {
+    line = stripCommas(line);
     if (hgParseChromRangeDb(line, &chrom, &start, &end, FALSE))
         fprintf(bedFile, "%s\t%d\t%d\n", chrom, start, end);
+    else
+        {
+        /* let the bed parser worry about it */
+        // line = trimSpaces(line);
+        fprintf(bedFile, "%s\n", line);
+        }
+    freez(&line);
     }
 carefulClose(&bedFile);
 chmod(bedTn.forCgi, 0666);
 lineFileClose(&lf);
 
 /* Set up temp bed files for output, and lift to those */
-lf = lineFileOpen(bedTn.forCgi, TRUE);
 makeTempName(&mappedBedTn, LIFTOVER_FILE_PREFIX, ".bedmapped");
 makeTempName(&unmappedBedTn, LIFTOVER_FILE_PREFIX, ".bedunmapped");
 mappedBed = mustOpen(mappedBedTn.forCgi, "w");
 unmappedBed = mustOpen(unmappedBedTn.forCgi, "w");
-ct = bedOverSmall(lf, 3, chainHash, minMatch, mappedBed, unmappedBed, errCt);
+ct = liftOverBed(bedTn.forCgi, chainHash, 
+                        minMatch,  0, FALSE, mappedBed, unmappedBed, errCt);
 carefulClose(&mappedBed);
 chmod(mappedBedTn.forCgi, 0666);
 carefulClose(&unmappedBed);
@@ -833,9 +843,11 @@ lineFileClose(&lf);
 
 /* Convert output files back to positions */
 lf = lineFileOpen(mappedBedTn.forCgi, TRUE);
-while (lineFileNextReal(lf, &line))
+while ((wordCount = lineFileChop(lf, words)) != 0)
     {
-    sscanf(line, "%s\t%d\t%d", chrom, &start, &end);
+    chrom = words[0];
+    start = lineFileNeedNum(lf, words, 1);
+    end = lineFileNeedNum(lf, words, 2);
     fprintf(mapped, "%s:%d-%d\n", chrom, BEDSTART_TO_POSITION(start), end);
     }
 carefulClose(&mapped);
@@ -848,7 +860,10 @@ while (lineFileNext(lf, &line, NULL))
         fprintf(unmapped, "%s\n", line);
     else
         {
-        sscanf(line, "%s\t%d\t%d", chrom, &start, &end);
+        wordCount = chopLine(line, words);
+        chrom = words[0];
+        start = lineFileNeedNum(lf, words, 1);
+        end = lineFileNeedNum(lf, words, 2);
         fprintf(unmapped, "%s:%d-%d\n", chrom, 
                         BEDSTART_TO_POSITION(start), end);
         }
