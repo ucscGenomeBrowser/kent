@@ -55,41 +55,6 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-static void indent(FILE *f, int count)
-/* Print given number of spaces. */
-{
-while (--count >= 0)
-    fprintf(f, "  ");
-}
-
-static void rBranchDump(struct kdBranch *branch, int depth, FILE *f)
-/* Dump branches. */
-{
-int i;
-if (branch->leaf)
-    {
-    struct chainBlock *cb = branch->leaf->cb;
-    indent(f, depth+1);
-    fprintf(f, "[%d] %d (q), %d (t)\n", 
-    	branch->maxScore, cb->qStart, cb->tStart);
-    }
-else
-    {
-    rBranchDump(branch->lo, depth+1, f);
-    indent(f, depth+1);
-    fprintf(f, "%c [%d] %d\n", ((depth&1) == 0 ? 'q' : 't'), 
-    	branch->maxScore, branch->cutCoord);
-    rBranchDump(branch->hi, depth+1, f);
-    }
-}
-
-static void kdTreeDump(struct kdTree *tree, FILE *f)
-/* Dump out tree to file. */
-{
-fprintf(f, "treeDump\n");
-rBranchDump(tree->root, 0, f);
-}
-
 static int kdLeafCmpQ(const void *va, const void *vb)
 /* Compare to sort based on target start. */
 {
@@ -121,7 +86,6 @@ const struct chain *a = *((struct chain **)va);
 const struct chain *b = *((struct chain **)vb);
 return b->score - a->score;
 }
-
 
 static int medianVal(struct dlList *list, int medianIx, int dim)
 /* Return value of median block in list on given dimension 
@@ -172,31 +136,13 @@ for (node = list->head; !dlEnd(node); node = node->next)
     }
 }
 
-static void dumpList(char *name, struct dlList *list)
-/* Dump list of blocks. */
-{
-struct dlNode *node;
-uglyf("%s\n", name);
-for (node = list->head; !dlEnd(node); node = node->next)
-    {
-    struct kdLeaf *leaf = node->val;
-    uglyf("  %d,%d  %d,%d\n", leaf->cb->qStart,leaf->cb->qEnd, leaf->cb->tStart,leaf->cb->tEnd);
-    }
-}
 
-static struct lm *rlm; /* Local memory pool for branches etc.  Here just
-                       * to avoid passing it through recursion to kdBuild. */
-
-static struct kdBranch *kdBuild(int nodeCount, struct dlList *lists[2], int dim)
+static struct kdBranch *kdBuild(int nodeCount, struct dlList *lists[2], int dim,
+	struct lm *lm)
 /* Build up kd-tree recursively. */
 {
 struct kdBranch *branch;
-
-// uglyf("kdBuild nodeCount %d\n", nodeCount);
-// dumpList(" qList", lists[0]);
-// dumpList(" tList", lists[1]);
-assert(nodeCount > 0);
-lmAllocVar(rlm, branch);
+lmAllocVar(lm, branch);
 if (nodeCount == 1)
     {
     struct kdLeaf *leaf = lists[0]->head->val;
@@ -218,12 +164,11 @@ else
     splitList(lists[1], newLists[1]);
 
     /* Recurse on each side. */
-    branch->lo = kdBuild(nodeCount - newCount, lists, nextDim);
-    branch->hi = kdBuild(newCount, newLists, nextDim);
+    branch->lo = kdBuild(nodeCount - newCount, lists, nextDim, lm);
+    branch->hi = kdBuild(newCount, newLists, nextDim, lm);
     }
 return branch;
 }
-
 
 static struct kdTree *kdTreeMake(struct kdLeaf *leafList, struct lm *lm)
 /* Make a kd-tree containing leafList. */
@@ -254,8 +199,7 @@ lists[1] = &tList;
 
 /* Allocate master data structure and call recursive builder. */
 lmAllocVar(lm, tree);
-rlm = lm;
-tree->root = kdBuild(nodeCount, lists, 0);
+tree->root = kdBuild(nodeCount, lists, 0, lm);
 
 /* Clean up and go home. */
 freeMem(qNodes);
@@ -270,12 +214,9 @@ struct predScore
     int score;			/* Score of us plus predecessor. */
     };
 
-/* These next two are parameters for bestPredecessor that
- * do not change during recursion. */
-static ConnectCost cCost;	/* Connection cost used by bestPredecessor. */
-static struct kdLeaf *lonely;   /* Leaf who's predecessor we look for. */
-
 static struct predScore bestPredecessor(
+	struct kdLeaf *lonely,	    /* We're finding this leaf's predecessor */
+	ConnectCost connectCost,    /* Cost to connect two leafs. */
 	int dim,		    /* Dimension level of tree splits on. */
 	struct kdBranch *branch,    /* Subtree to explore */
 	struct predScore bestSoFar) /* Best predecessor so far. */
@@ -295,7 +236,7 @@ else if ((leaf = branch->leaf) != NULL)
      && leaf->cb->tStart < lonely->cb->tStart)
 	{
 	int score = leaf->totalScore + lonely->cb->score - 
-		cCost(leaf->cb, lonely->cb);
+		connectCost(leaf->cb, lonely->cb);
 	if (score > bestSoFar.score)
 	   {
 	   bestSoFar.score = score;
@@ -315,8 +256,10 @@ else
      * scores.  However only explore it if it can have things starting
      * before us. */
     if (dimCoord > branch->cutCoord)
-         bestSoFar = bestPredecessor(newDim, branch->hi, bestSoFar);
-    bestSoFar = bestPredecessor(newDim, branch->lo, bestSoFar);
+         bestSoFar = bestPredecessor(lonely, connectCost, newDim, 
+	 	branch->hi, bestSoFar);
+    bestSoFar = bestPredecessor(lonely, connectCost, newDim, 
+    	branch->lo, bestSoFar);
     return bestSoFar;
     }
 }
@@ -337,10 +280,9 @@ if (branch->leaf == NULL)
     }
 }
 
-
-static void connectLeaves(struct kdTree *tree, struct kdLeaf *leafList, 
+static void findBestPredecessors(struct kdTree *tree, struct kdLeaf *leafList, 
 	ConnectCost connectCost)
-/* Find highest scoring chains in tree. */
+/* Find best predecessor for each block. */
 {
 static struct predScore noBest;
 struct kdLeaf *leaf;
@@ -350,10 +292,7 @@ int bestScore = 0;
 for (leaf = leafList; leaf != NULL; leaf = leaf->next)
     {
     struct predScore best;
-    
-    lonely = leaf;
-    cCost = connectCost;
-    best = bestPredecessor(0, tree->root, noBest);
+    best = bestPredecessor(leaf, connectCost, 0, tree->root, noBest);
     if (best.score > leaf->totalScore)
         {
 	leaf->totalScore = best.score;
@@ -415,15 +354,21 @@ return chainList;
 
 struct chain *chainBlocks(struct chainBlock **pBlockList, ConnectCost connectCost)
 /* Create list of chains from list of blocks.  The blockList will get
- * eaten up as the blocks are moved from the list to the chain. */
+ * eaten up as the blocks are moved from the list to the chain. 
+ * The chain returned is sorted by score. */
 {
 struct kdTree *tree;
 struct kdLeaf *leafList = NULL, *leaf;
 struct chainBlock *block;
 struct chain *chainList = NULL, *chain;
-struct lm *lm = lmInit(0);  /* Memory for tree, branches and leaves. */
+struct lm *lm;
+
+/* Empty lists will be problematic later, so deal with them here. */
+if (*pBlockList == NULL)
+   return NULL;
 
 /* Make a leaf for each block. */
+lm = lmInit(0);  /* Memory for tree, branches and leaves. */
 for (block = *pBlockList; block != NULL; block = block->next)
     {
     lmAllocVar(lm, leaf);
@@ -435,7 +380,7 @@ for (block = *pBlockList; block != NULL; block = block->next)
 /* Figure out chains. */
 slSort(&leafList, kdLeafCmpT);
 tree = kdTreeMake(leafList, lm);
-connectLeaves(tree, leafList, connectCost);
+findBestPredecessors(tree, leafList, connectCost);
 slSort(&leafList, kdLeafCmpTotal);
 chainList = peelChains(leafList);
 
