@@ -10,23 +10,27 @@ void usage()
 errAbort(
   "venn - Do venn diagram calculations\n"
   "usage:\n"
-  "   venn XXX\n"
+  "   venn aSize abSize bSize\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
 }
 
-void venn(char *XXX)
+void venn(double a, double ab, double b)
 /* venn - Do venn diagram calculations. */
 {
+double total = a + b - ab;
+printf("A only  %4.1f%%\n", 100*(a-ab)/total);
+printf("A and B %4.1f%%\n", 100*ab/total);
+printf("B only  %4.1f%%\n", 100*(b-ab)/total);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionHash(&argc, argv);
-if (argc != 2)
+if (argc != 4)
     usage();
-venn(argv[1]);
+venn(atof(argv[1]), atof(argv[2]), atof(argv[3]));
 return 0;
 }
