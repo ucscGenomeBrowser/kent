@@ -24,7 +24,7 @@
 #include "twoBit.h"
 #include "chainToAxt.h"
 
-static char const rcsid[] = "$Id: checkExp.c,v 1.3 2004/11/25 20:43:36 baertsch Exp $";
+static char const rcsid[] = "$Id: checkExp.c,v 1.4 2004/11/27 03:17:26 baertsch Exp $";
 struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
 struct dnaSeq *mrnaList = NULL; /* list of all input mrna sequences */
 struct hash *pseudoHash = NULL, *mrnaHash = NULL, *chainHash = NULL, *faHash = NULL, *tHash = NULL;
@@ -509,20 +509,18 @@ while (lineFileNextRow(bf, row, ArraySize(row)))
     struct binElement *el, *elist = NULL;
     struct psl *mPsl = NULL, *gPsl = NULL, *rPsl = NULL, *pPsl = NULL, *psl ;
     struct misMatch *mf = NULL;
-    struct dyString *parentMatch = newDyString(16*1024);
-    struct dyString *retroMatch = newDyString(16*1024);
     ps = pseudoGeneLinkLoad(row);
     tmpName[0] = cloneString(ps->name);
     chopByChar(tmpName[0], '.', tmpName, sizeof(tmpName));
     verbose(2,"name %s %s:%d-%d\n",
             ps->name, ps->chrom, ps->chromStart,ps->chromEnd);
-    /* get pseudoGene from hash */
+    /* get expressed retro from hash */
     bk = hashFindVal(mrnaHash, ps->chrom);
     elist = binKeeperFindSorted(bk, ps->chromStart, ps->chromEnd ) ;
     for (el = elist; el != NULL ; el = el->next)
         {
         rPsl = el->val;
-        verbose(2,"retroGene %s %d\n",rPsl->qName, ps->chromStart);
+        verbose(2,"retroGene %s %s:%d-%d\n",rPsl->qName, ps->chrom, ps->chromStart,ps->chromEnd);
         }
     /* find mrnas that overlap parent gene */
     bk = hashFindVal(mrnaHash, ps->gChrom);
@@ -597,7 +595,8 @@ while (lineFileNextRow(bf, row, ArraySize(row)))
         chainFree(&retChainToFree2);
         break;
         }
-    /* get mrna from hash */
+    /* create axt of each expressed retroGene to parent gene */
+        /* get alignment for each mrna overlapping retroGene */
     bk = hashFindVal(mrnaHash, ps->chrom);
     elist = binKeeperFindSorted(bk, ps->chromStart , ps->chromEnd ) ;
     {
@@ -633,9 +632,12 @@ while (lineFileNextRow(bf, row, ArraySize(row)))
     lineFileClose(&af);
     }
     slReverse(&mAxt);
+    /* for each parent/retro pair, count bases matching retro and parent better */
     for (el = elist; el != NULL ; el = el->next)
         {
         int i, scoreRetro=0, scoreParent=0, scoreNeither=0;
+        struct dyString *parentMatch = newDyString(16*1024);
+        struct dyString *retroMatch = newDyString(16*1024);
         mPsl = el->val;
 
         if (mAxt != NULL)
@@ -682,9 +684,9 @@ while (lineFileNextRow(bf, row, ArraySize(row)))
                     scoreParent, scoreRetro, scoreNeither, parentMatch->string, retroMatch->string);
             mAxt = mAxt->next;
             }
+        dyStringFree(&parentMatch);
+        dyStringFree(&retroMatch);
         }
-    dyStringFree(&parentMatch);
-    dyStringFree(&retroMatch);
     }
 }
 
