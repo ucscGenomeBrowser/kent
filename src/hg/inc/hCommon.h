@@ -3,6 +3,10 @@
 #ifndef HCOMMON_H
 #define HCOMMON_H
 
+#ifndef HGCOLORS_H
+#include "hgColors.h"
+#endif
+
 char *hgcName();
 /* Relative URL to click processing program. */
 
@@ -56,6 +60,12 @@ int chromToInt(char *s);
 boolean hIsMgcServer();
 /* Is this the MGC-customized server? Change for config variable
  * mgc.server=yes */
+
+void hTableStart();
+/* Output a table with solid borders. */
+
+void hTableEnd();
+/* Close out table started with hTableStart() */
 
 #define hgDefaultPixWidth 620
 #define DEFAULT_PIX_WIDTH "620"

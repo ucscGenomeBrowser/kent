@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hCommon.c,v 1.22 2004/07/07 18:41:25 braney Exp $";
+static char const rcsid[] = "$Id: hCommon.c,v 1.23 2004/08/28 00:37:20 angie Exp $";
 
 static char *_hgcName = "../cgi-bin/hgc";	/* Path to click processing program. */
 static char *_hgTracksName = "../cgi-bin/hgTracks"; /* Path back to self. */
@@ -232,5 +232,22 @@ if (!haveChecked)
     haveChecked = TRUE;
     }
 return mgcHost;
+}
+
+void hTableStart()
+/* Output a table with solid borders. */
+/* For some reason BORDER=1 does not work in our web.c nested table scheme.
+ * So use web.c's trick of using an enclosing table to provide a border.   */
+{
+puts("<!--outer table is for border purposes-->" "\n"
+     "<TABLE BGCOLOR=\"#"HG_COL_BORDER"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
+puts("<TABLE BORDER=\"1\" BGCOLOR=\""HG_COL_INSIDE"\" CELLSPACING=\"0\">");
+}
+
+void hTableEnd()
+/* Close out table started with hTableStart() */
+{
+puts("</TABLE>");
+puts("</TR></TD></TABLE>");
 }
 
