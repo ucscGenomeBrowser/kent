@@ -308,6 +308,12 @@ else if (sameString(track, "binomialCons"))
     genericWiggleUi(tdb,5);
 else if (sameString(track, "binomialCons2"))
     genericWiggleUi(tdb,5);
+else if (sameString(track, "binomialCons3"))
+    genericWiggleUi(tdb,5);
+else if (sameString(track, "footPrinter"))
+    genericWiggleUi(tdb,5);
+else if (sameString(track, "footPrinterHMR"))
+    genericWiggleUi(tdb,5);
 else if (sameString(track, "humMus"))
     genericWiggleUi(tdb,5);
 else if (sameString(track, "humMusL"))
