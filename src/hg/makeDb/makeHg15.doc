@@ -769,9 +769,9 @@ mrna is done against unmasked 041203
     # Put orientation info on ESTs and mRNAs into database:
     ssh eieio
     cd ~/hg15/bed/est
-    pslSortAcc nohead contig /cluster/store3/tmp contig.psl
+    pslSortAcc nohead contig /tmp/psl contig.psl
     cd ~/hg15/bed/mrna
-    pslSortAcc nohead contig /cluster/store3/tmp contig.psl
+    pslSortAcc nohead contig /tmp/psl contig.psl
     # Distribute the est and mrna psl files to /iscratch/i
     ssh kkr1u00
     rm -rf /iscratch/i/gs.16/build33/bed
