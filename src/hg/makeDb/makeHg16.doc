@@ -2549,7 +2549,7 @@ cat << 'EOF' > gsub
     para check
 
 
-# MAKE BLASTZ BEST SELF (TO BE RE-DONE - 2003-08-28 - Hiram)
+# MAKE BLASTZ BEST SELF (RE-DONE - 2003-08-28 - Hiram)
 
     #	Pick up on this process below after chain and nets have been
     #	done.  This run.3 business is obsolete
@@ -2629,15 +2629,16 @@ Out of memory - request size 973662824 bytes
     #	this manner:
     ssh eieio
     cd /cluster/data/hg16/bed/blastzSelf/axtChain
-    mkdir mouseNet
-    netSplit mouse.net mouseNet
-    foreach n (mouseNet/chr*.net)
+    mkdir humanNet
+    mkdir ../axtNet
+    netSplit human.net humanNet
+    foreach n (humanNet/chr*.net)
 	set c=$n:t:r
 	echo "netToAxt: $c.net -> $c.axt"
 	rm -f ../axtNet/$c.axt
-	netToAxt mouseNet/$c.net chain/$c.chain \
+	netToAxt humanNet/$c.net chain/$c.chain \
 		/cluster/bluearc/scratch/hg/gs.17/build34/bothMaskedNibs \
-		/cluster/data/mm3.RM030619/mixedNib \
+		/cluster/bluearc/scratch/hg/gs.17/build34/bothMaskedNibs \
 		../axtNet/$c.axt
 	echo "Complete: $c.net -> $c.axt"
     end
@@ -2652,32 +2653,29 @@ Out of memory - request size 973662824 bytes
     mkdir pslBest
     foreach a (axtBest/chr*.axt)
 	set c=$a:t:r
-	echo "processing $c.axt -> ${c}_blastzBestMm3.psl"
+	echo "processing $c.axt -> ${c}_blastzBestSelf.psl"
     /cluster/bin/i386/axtToPsl axtBest/${c}.axt \
-	S1.len S2.len pslBest/${c}_blastzBestMm3.psl
-	echo "Done: ${c}_blastzBestMm3.psl"
+	S1.len S2.len pslBest/${c}_blastzBestSelf.psl
+	echo "Done: ${c}_blastzBestSelf.psl"
     end
 
     # Load tables
      ssh hgwdev
      set base="/cluster/data/hg16/bed/blastzSelf"
-     set tbl="blastzBestMm3"
+     set tbl="blastzBestSelf"
      cd $base/pslBest
      /cluster/bin/i386/hgLoadPsl hg16 chr*_${tbl}.psl
 
-     # check results
-     # the original axtBest stuff from the axtBest operation:
-#  featureBits hg16 blastzBestMm3
-#  1027438291 bases of 2865248791 (35.859%) in intersection
-     #  After going through the chain->net->axt operation:
-#  featureBits hg16 blastzBestMm3
-#   991468768 bases of 2865248791 (34.603%) in intersection
+    # check results
+    #  After going through the chain->net->axt operation:
+    #	featureBits hg16 blastzBestSelf
+    #	1388295977 bases of 2865248791 (48.453%) in intersection
 
+    # Hg15 doesn't have a BestSelf, gave this a try with the following
+    # result:
+    #	featureBits hg15 blastzSelf
+    #	Out of memory - request size 6 bytes
 
-#  featureBits hg15 blastzBestMm3
-#  1035090465 bases of 2866466359 (36.110%) in intersection
-
-XXXX  Need nets for this
     # Make /gbdb links and add them to the axtInfo table:
      mkdir -p /gbdb/hg16/axtBestSelf
      cd /gbdb/hg16/axtBestSelf
@@ -2686,63 +2684,13 @@ XXXX  Need nets for this
      cd /cluster/data/hg16/bed/blastzSelf/axtNet
      rm -f axtInfoInserts.sql
      touch axtInfoInserts.sql
-     foreach f (/gbdb/hg16/axtBestMm3/chr*.axt)
+     foreach f (/gbdb/hg16/axtBestSelf/chr*.axt)
        set chr=$f:t:r
        echo "INSERT INTO axtInfo (species, alignment, chrom, fileName) \
-                VALUES ('mm3','Blastz Best in Genome','$chr','$f');" \
+                VALUES ('hg16','Blastz Best in Genome','$chr','$f');" \
          >> axtInfoInserts.sql
      end
-     hgsql hg16 < ~/kent/src/hg/lib/axtInfo.sql
-     hgsql hg16 < axtInfoInserts.sql
-
-    # 75 minutes.  Almost all of which is I/O time:
-    ssh kkr1u00
-    # remove the two empty results:
-    cd /cluster/data/hg16/bed/blastzSelf/axtBest
-    rm chr2.axt
-    cd /cluster/data/hg16/bed/blastzSelf/pslBest
-    rm chr2.psl
-    cd /cluster/data/hg16/bed/blastzSelf/run.3
-    ./doBestAxt chr2 /cluster/bluearc/hg16/bed/blastzSelf/axtChrom/chr2.axt \
-	/cluster/data/hg16/bed/blastzSelf/axtBest/chr2.axt \
-	/cluster/data/hg16/bed/blastzSelf/pslBest/chr2_blastzBestMm3.psl
-#Read 381426 elements from \
-#	/cluster/bluearc/hg16/bed/blastzSelf/axtChrom/chr2.axt
-#Allocated 243394390 elements in array
-#144159 elements in after soft filter.
-#Output 141446 alignments including 0 trimmed from overlaps
-#Bases in 210613471, bases out 103187961 (48.99%)
-
-
-    # Load tables
-     ssh hgwdev
-     set base="/cluster/data/hg16/bed/blastzSelf"
-     set tbl="blastzBestMm3"
-     cd $base/pslBest
-     /cluster/bin/i386/hgLoadPsl hg16 chr*_${tbl}.psl
-
-     # check results
-     featureBits hg16 blastzBestMm3
-        # 1667035238 bases of 2571104688 (64.837%) in intersection
-     featureBits hg16 blastzMm3
-        # 1669090687 bases of 2571104688 (64.917%) in intersection
-
-    # Make /gbdb links and add them to the axtInfo table:
-     mkdir -p /gbdb/hg16/axtBestMm3
-     cd /gbdb/hg16/axtBestMm3
-     foreach f ($base/axtBest/chr*.axt)
-       ln -s $f .
-     end
-     cd $base/axtBest
-     rm -f axtInfoInserts.sql
-     touch axtInfoInserts.sql
-     foreach f (/gbdb/hg16/axtBestMm3/chr*.axt)
-       set chr=$f:t:r
-       echo "INSERT INTO axtInfo (species, alignment, chrom, fileName) \
-                VALUES ('mm3','Blastz Best in Genome','$chr','$f');" \
-         >> axtInfoInserts.sql
-     end
-     # already done, above
+     #  This table has already been created above
      # hgsql hg16 < ~/kent/src/hg/lib/axtInfo.sql
      hgsql hg16 < axtInfoInserts.sql
 
@@ -2878,3 +2826,31 @@ axtFilter -q=$1 $2 | axtChain stdin \
     netFilter -minGap=10 humanSyn.net | hgLoadNet hg16 syntenySelfNet stdin
 
     # Add entries for net and chain to human/hg16 trackDb
+
+# MAKING SELF AXTTIGHT FROM AXTBEST (DONE - 2003-08-26 - Hiram)
+    # After creating axtBest alignments above, use subsetAxt to get axtTight:
+
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastzSelf/axtNet
+    mkdir -p ../axtTight
+    tcsh
+    foreach i (*.axt)
+      echo $i
+      subsetAxt  $i ../axtTight/$i \
+        ~kent/src/hg/mouseStuff/subsetAxt/coding.mat 3400
+    end
+
+    # translate to psl
+    cd ../axtTight
+    mkdir -p ../pslTight
+    foreach i (*.axt)
+      set c = $i:r
+      axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightRn3.psl
+      echo "Done: $i"
+    end
+
+    # Load tables into database
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blastz.rn3/pslTight
+    hgLoadPsl hg16 chr*_blastzTightRn3.psl
+
