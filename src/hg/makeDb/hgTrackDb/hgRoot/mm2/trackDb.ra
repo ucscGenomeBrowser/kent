@@ -68,3 +68,13 @@ color 0,60,120
 altColor 200,220,255
 spectrum on
 type psl xeno
+
+track blatFugu
+shortLabel Fugu Blat
+longLabel Takifugu rubripes Translated Blat Alignments
+priority 29
+visibility dense
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno
