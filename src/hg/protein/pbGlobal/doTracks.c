@@ -61,7 +61,14 @@ cgiMakeHiddenVar("pbScaleStr", pbScaleStr);
 void mapBoxTrackTitle(int x, int y, int width, int height, char *title, char *tagName)
 {
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x-1, y-1, x+width+1, y+height+1);
-hPrintf("HREF=\"../goldenPath/help/pbTracksHelpFiles/pb%s.shtml\"", tagName);
+if (proteinInSupportedGenome)
+    {
+    hPrintf("HREF=\"../goldenPath/help/pbTracksHelpFiles/pb%s.shtml\"", tagName);
+    }
+else
+    {
+    hPrintf("HREF=\"../goldenPath/help/pbTracksHelpFiles/pbGlobal/pb%s.shtml\"", tagName);
+    }
 hPrintf(" target=_blank ALT=\"Click here for explanation of %c%s%c\">\n", '\'', title, '\'');
 }
 
@@ -1669,7 +1676,15 @@ hPrintf(
 "\n<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s><BR>",
         gifTn.forCgi, pixWidth, pixHeight, mapName);
 
-hPrintf("<A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbTracksHelp.shtml#tracks\" TARGET=_blank>");
+if (proteinInSupportedGenome)
+    {
+    hPrintf("<A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbTracksHelp.shtml#tracks\" TARGET=_blank>");
+    }
+else
+    {
+    hPrintf("<A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbGlobal/pbTracksHelp.shtml#tracks\" TARGET=_blank>");
+    }
+
 hPrintf("Explanation of Protein Tracks</A><br>");
 
 safef(trackOffset, sizeof(trackOffset), "%d", trackOrigOffset);
@@ -1684,5 +1699,6 @@ cgiMakeHiddenVar("aaOrigOffset", aaOrigOffsetStr);
 cartSetString(cart,"pbt.pbScaleStr", pbScaleStr);
 cartSetString(cart,"pbt.trackOffset", trackOffset);
 cartSaveSession(cart);
+fflush(stdout);
 }
 
