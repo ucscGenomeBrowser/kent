@@ -31,9 +31,9 @@
            <CODE>lib/gbGenome.c</CODE> and rebuilding the programs.  It maybe
            necessary to define multiple species name mappings.  The list of 
            species used by GenBank can be obtained by using a command in the form:<BR>
-           <CODE>
+           <PRE>
            awk 'BEGIN{FS=&quot;\t&quot;}{print $4}' processed/genbank.135.0/full/*.gbidx |sort -u &gt;species.txt
-           </CODE>
+           </PRE>
            on the latest GenBank release. 
       <LI> Edit <CODE>align/gbBlat</CODE> to add the <EM><CODE>ooc</CODE></EM> file.
            If there is no <EM><CODE>ooc</CODE></EM>, this script still needs to be
@@ -140,6 +140,10 @@
            most likely be <B>much</B> faster to drop all of the GenBank
            tables and load with the <CODE>-initialLoad</CODE> option
            when loading the ESTs.
+      <LI> If the genome does not have assembled chromosomes, as is the
+           case with a large number of scaffolds, use the 
+           <CODE>-noPerChrom=$db</CODE> option to avoid creating the 
+           per-chromsome alignment tables.
       </UL>
 
     </OL>

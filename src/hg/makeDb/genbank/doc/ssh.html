@@ -17,10 +17,10 @@
     <OL>
       <LI> Generate a key without a passphrase.
       <PRE>
-      ssh-keygen -t dsa -f ~/.ssh/nokey-dsa -N ''
+      ssh-keygen -t dsa -f ~/.ssh/nokey_dsa -N ''
       </PRE>
 
-      <LI>Copy the contents on <CODE>.ssh/nokey-dsa.pub</CODE> to
+      <LI>Copy the contents on <CODE>.ssh/nokey_dsa.pub</CODE> to
          <CODE>.ssh/authorized_keys</CODE>.
 
       <LI>Modify <CODE>.ssh/config</CODE> to specify using this identity
