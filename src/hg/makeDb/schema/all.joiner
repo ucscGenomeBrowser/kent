@@ -257,6 +257,24 @@ identifier vegaPseudogeneName typeOf=vegaName
 
 # Microarray stuff.
 
+identifier gnfHumanAtlas2
+"Novartis GNF Human gene probe ID"
+    hgFixed.gnfHumanAtlas2All.name
+    hgFixed.gnfHumanAtlas2AllRatio.name unique
+    hgFixed.gnfHumanAtlas2Median.name full unique
+    hgFixed.gnfHumanAtlas2MedianRatio.name unique
+    $hg.knownToGnfAtlas2.value
+    $hg.gnfAtlas2.name
+
+identifier gnfMouseAtlas2
+"Novartis GNF Mouse gene probe ID"
+    hgFixed.gnfMouseAtlas2All.name
+    hgFixed.gnfMouseAtlas2AllRatio.name unique
+    hgFixed.gnfMouseAtlas2Median.name full unique
+    hgFixed.gnfMouseAtlas2MedianRatio.name unique
+    $mm.knownToGnf1m.value
+    $mm.gnfAtlas2.name
+
 identifier affyU95
 "Affymetrix Human U95 chip identifiers"
     $hg.affyU95.qName dupeOk
@@ -292,6 +310,32 @@ identifier rosettaChr22SampleId
 "Identifiers for samples used in Rosetta chromosome 22 public experiments"
     hgFixed.rosettaExps.name
     hgFixed.rosChr22Dat.expName
+
+identifier gnfHumanAtlas2SampleId
+"Identifiers of RNA samples used in GNF Human Expression Atlas 2"
+     hgFixed.gnfHumanAtlas2AllExps.id
+     hgFixed.gnfHumanAtlas2All.expScores comma indexOf full
+     hgFixed.gnfHumanAtlas2AllRatio.expScores comma indexOf full
+
+identifier gnfHumanAtlas2MedianSampleId
+"Identifiers of pooled RNA samples used in GNF Human Expression Atlas 2"
+     hgFixed.gnfHumanAtlas2MedianExps.id
+     hgFixed.gnfHumanAtlas2Median.expScores comma indexOf full
+     hgFixed.gnfHumanAtlas2MedianRatio.expScores comma indexOf full
+     $hg.gnfAtlas2.expScores comma indexOf full
+
+identifier gnfMouseAtlas2SampleId
+"Identifiers of RNA samples used in GNF Mouse Expression Atlas 2"
+     hgFixed.gnfMouseAtlas2AllExps.id
+     hgFixed.gnfMouseAtlas2All.expScores comma indexOf full
+     hgFixed.gnfMouseAtlas2AllRatio.expScores comma indexOf full
+
+identifier gnfMouseAtlas2MedianSampleId
+"Identifiers of pooled RNA samples used in GNF Mouse Expression Atlas 2"
+     hgFixed.gnfMouseAtlas2MedianExps.id
+     hgFixed.gnfMouseAtlas2Median.expScores comma indexOf full
+     hgFixed.gnfMouseAtlas2MedianRatio.expScores comma indexOf full
+     $mm.gnfAtlas2.expScores comma indexOf full
 
 identifier gnfU95SampleIdV0
 "Identifiers of RNA samples used early version of GNF Human Expression Atlas 1"
@@ -560,6 +604,8 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.foldUtr5.name
     $kgDb.gnfU95Distance.query
     $kgDb.gnfU95Distance.target
+    $kgDb.gnfAtlas2Distance.query
+    $kgDb.gnfAtlas2Distance.target
     $kgDb.affyGnfU74ADistance.query
     $kgDb.affyGnfU74ADistance.target
     $kgDb.affyGnfU74BDistance.query
@@ -1043,6 +1089,7 @@ dependency $mm.affyGnfU74ADistance $mm.knownToU74  hgFixed.gnfMouseU74aMedianRat
 dependency $mm.affyGnfU74BDistance $mm.knownToU74  hgFixed.gnfMouseU74bMedianRatio
 dependency $mm.affyGnfU74CDistance $mm.knownToU74  hgFixed.gnfMouseU74cMedianRatio
 dependency $hg.gnfU95Distance $hg.knownToU95 hgFixed.gnfHumanU95MedianRatio
+dependency $hg.gnfAtlasDistance $hg.knownToGnfAtlas2 hgFixed.gnfHumanAtlas2MedianRatio
 dependency $ce.kimExpDistance hgFixed.kimWormLifeMedianRatio
 dependency $dm.arbExpDistance $dm.bdgpToCanonical hgFixed.arbFlyLifeMedianRatio 
 dependency $sacCer.choExpDistance hgFixed.yeastChoCellCycle
@@ -1150,7 +1197,7 @@ type exprBed
     # hgFixed.rosChr22Dat
 
 type expDistance
-    $hg.gnfU95Distance
+    $hg.gnfAtlas2Distance
     $hg.gnfU95Distance
     $mm.affyGnfU74ADistance
     $mm.affyGnfU74BDistance
