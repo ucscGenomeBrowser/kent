@@ -28,7 +28,7 @@
         <property name="httpunit.jar" value="/usr/share/java/httpunit.jar"/>
         <property name="jtidy.jar" value="/usr/share/java/jtidy.jar"/>
         <property name="rhino.jar" value="/usr/share/java/rhino.jar"/>
-        <property name="mysql.jar" value="/usr/java/jdbc/mysql-connector-java-3.0.8-stable-bin.jar"/>
+        <property name="mysql.jar" value="/usr/java/jdbc/mysql-connector-java-3.0.16-ga-bin.jar"/>
 
         <path id="qa.classpath">
             <pathelement location="${classes.dir}"/>
