@@ -24,7 +24,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.114 2003/06/20 18:01:11 sugnet Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.115 2003/06/24 03:48:56 markd Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -871,6 +871,94 @@ struct sqlConnection *conn = hAllocConn();
 char *buf = mustGetSeqAndId(conn, acc, NULL);
 hFreeConn(&conn);
 return faSeqFromMemText(buf, FALSE);
+}
+
+static boolean checkIfInTable(struct sqlConnection *conn, char *acc,
+                              char *column, char *table)
+/* check if a table exists and sequence is in the table */
+{
+boolean inTable = FALSE;
+if (hTableExists(table))
+    {
+    char query[256];
+    struct sqlResult *sr;
+    char **row;
+    safef(query, sizeof(query), "select 0 from %s where %s = '%s'",
+          table, column, acc);
+    sr = sqlGetResult(conn, query);
+    inTable = ((row = sqlNextRow(sr)) != NULL);
+    sqlFreeResult(&sr);
+    }
+return inTable;
+}
+
+boolean hGenBankHaveSeq(char *acc, char *compatTable)
+/* Check if GenBank or RefSeq mRNA or peptide sequence is in the database.
+ * This handles compatibility between pre-incremental genbank databases that
+ * keep sequences in a table and the newer ones that keep all sequences as
+ * external.
+ */
+{
+struct sqlConnection *conn = hAllocConn();
+boolean haveSeq = checkIfInTable(conn, acc, "acc", "gbSeq")
+    || checkIfInTable(conn, acc, "name", compatTable);
+hFreeConn(&conn);
+return haveSeq;
+}
+
+static struct dnaSeq *loadSeqFromTable(char *acc, char *table)
+/* load a sequence from table. */
+{
+struct dnaSeq *seq = NULL;
+struct sqlResult *sr;
+char **row;
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+
+safef(query, sizeof(query), "select name,seq from %s where name = '%s'",
+      table, acc);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    seq = newDnaSeq(cloneString(row[1]), strlen(row[1]), row[0]);
+
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return seq;
+}
+
+struct dnaSeq *hGenBankGetMrna(char *acc, char *compatTable)
+/* Get a GenBank or RefSeq mRNA or EST sequence This handles compatibility
+ * between pre-incremental genbank databases that keep sequences in a table
+ * and the newer ones that keep all sequences as external.  Returns NULL if
+ * not found.
+ */
+{
+struct dnaSeq *seq = NULL;
+if (hTableExists("gbSeq"))
+    seq = hRnaSeq(acc);
+
+/* try the old table, even on new databases, this helps migration to the new
+ * scheme. */
+if ((seq == NULL) && hTableExists(compatTable))
+    seq = loadSeqFromTable(acc, compatTable);
+return seq;
+}
+
+aaSeq *hGenBankGetPep(char *acc, char *compatTable)
+/* Get a RefSeq mRNA peptide sequence This handles compatibility between
+ * pre-incremental genbank databases that keep sequences in a table and the
+ * newer ones that keep all sequences as external.  Returns NULL if not found.
+ */
+{
+struct dnaSeq *seq = NULL;
+if (hTableExists("gbSeq"))
+    seq = hPepSeq(acc);
+
+/* try the old table, even on new databases, this helps migration to the new
+ * scheme. */
+if ((seq == NULL) && hTableExists(compatTable))
+    seq = loadSeqFromTable(acc, compatTable);
+return seq;
 }
 
 struct bed *hGetBedRangeDb(char *db, char *table, char *chrom, int chromStart,

@@ -223,6 +223,26 @@ struct dnaSeq *hRnaSeq(char *acc);
 aaSeq *hPepSeq(char *acc);
 /* Return sequence for a peptide. */
 
+boolean hGenBankHaveSeq(char *acc, char *compatTable);
+/* Check if GenBank or RefSeq mRNA or peptide sequence is in the database.
+ * This handles compatibility between pre-incremental genbank databases that
+ * keep sequences in a table and the newer ones that keep all sequences as
+ * external.
+ */
+
+struct dnaSeq *hGenBankGetMrna(char *acc, char *compatTable);
+/* Get a GenBank or RefSeq mRNA or EST sequence This handles compatibility
+ * between pre-incremental genbank databases that keep sequences in a table
+ * and the newer ones that keep all sequences as external.  Returns NULL if
+ * not found.
+ */
+
+aaSeq *hGenBankGetPep(char *acc, char *compatTable);
+/* Get a RefSeq mRNA peptide sequence This handles compatibility between
+ * pre-incremental genbank databases that keep sequences in a table and the
+ * newer ones that keep all sequences as external.  Returns NULL if not found.
+ */
+
 struct bed *hGetBedRange(char *table, char *chrom, int chromStart,
 			 int chromEnd, char *sqlConstraints);
 /* Return a bed list of all items (that match sqlConstraints, if nonNULL) 
