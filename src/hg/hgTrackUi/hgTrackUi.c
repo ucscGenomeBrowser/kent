@@ -302,6 +302,8 @@ else if (sameString(track, "chimp"))
     genericWiggleUi(tdb,5);
 else if (sameString(track, "GCwiggle"))
     genericWiggleUi(tdb,5);
+else if (sameString(track, "pGCwiggle"))
+    genericWiggleUi(tdb,5);
 else if (sameString(track, "zoo"))
     genericWiggleUi(tdb,4);
 else if (sameString(track, "binomialCons"))
