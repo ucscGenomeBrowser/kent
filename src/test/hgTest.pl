@@ -7,7 +7,6 @@
 # Figure out path of executable so we can add perllib to the path.
 use FindBin qw($Bin);
 use lib "$Bin/perllib";
-use lib "$Bin/perllib/site_perl"; #*** temporary until HTTP packages installed
 use TrackDb;
 use WebTest;
 
@@ -53,7 +52,7 @@ if ($nasty) {
     # This breaks at 100:
     push @hgTsearchBad, &bufferAttack(100);
     # I went up to 65536 on this one and it just wouldn't die:
-    push @hgTwidthsBad, &bufferAttack(65537);
+    push @hgTwidthsBad, &bufferAttack(1024);
 }
 my $tests = 'hgTracks:hgTrackUi:hgGateway:hgc:hgBlat:hgConvCoords:hgText';
 
@@ -68,9 +67,9 @@ $basename  [-webserv h]  [-db d]  [-cookies y/n]  [-sid y/n]  [-rand N]  [-sleep
     -db d:		Use db as the genome database.  Default: $db.
 			[d can be a colon-separated list.]
     -cookies y/n:	Whether to use cookies.  Default: $cookies.
-    -sid y/n:		Whether to use session ID.  Default: $sid.
-    -rand N:            Generate N randomized queries.  Default: $rand.
     -sleep N:		Sleep N seconds between queries.  Default: $sleep.
+    -sid y/n:		Whether to use session ID.  Default: $sid.  Not implemented!
+    -rand N:            Generate N randomized queries.  Default: $rand.  Not implemented!
     -help:		Print this message.
     -verbose:		Print lots of debugging output.
 ";
@@ -127,11 +126,16 @@ $basename parameters:
 webservs: @webservs
 dbs:      @dbs
 cookies?: $cookies
+sleep:    $sleep
 sid?:     $sid
 rand:     $rand
-sleep:    $sleep
 
 " if ($verbose);
+
+# booleanize $cookies and $sid for convenience
+$cookies = ($cookies =~ m/^[yt]/i) ? 1 : 0;
+$sid     = ($sid     =~ m/^[yt]/i) ? 1 : 0;
+
 
 ###########################################################################
 #
@@ -139,18 +143,18 @@ sleep:    $sleep
 #
 # Create HTTP UserAgent, init cookies if specified.
 my $ua = LWP::UserAgent->new;
-if ($cookies =~ m/^[yt]/i) {
+if ($cookies) {
     $ua->cookie_jar(HTTP::Cookies->new(file     => $cookieFile,
 				       autosave => 1));
-    print "\nSet up cookie jar $ua->{cookie_jar} in $cookieFile\n\n" if ($verbose);
+    print "\nSet up cookie jar in $cookieFile\n\n" if ($verbose);
 }
 # Pass the UserAgent handle to our web tester.  
-my $webTest = new WebTest($ua, $verbose, $debug);
+my $webTest = new WebTest($ua, $sleep, $verbose, $debug);
 # Make some configs for the webTester.
 my $expectFail = {'mustMatch'    => ['(sorry|error|can\'t)']};
 my $expectPass = {'mustNotMatch' => ['(sorry|error|can\'t)']};
 my $expectHgTU = {'mustNotMatch' => ['not found']};
-my $expectHgG  = {'mustMatch'    => ['UCSC Genome Browser Gateway']};
+# this isn't used, but I'll leave it here as an example of using mult. pat's:
 my $expectHgTr = {'mustNotMatch' => ['(sorry|error|can\'t)'],
 		  'mustMatch'    => ['UCSC Genome Browser on .* Freeze'],
 	         };
@@ -218,7 +222,7 @@ sub hgGateway {
 
     my $page  = "http://$webserv/cgi-bin/hgGateway";
     my $query = "db=$db";
-    $webTest->configure($expectHgG);
+    $webTest->configure($expectPass);
     my $ok = $webTest->checkPage($page, $query);
     $ok ? return(1, 0) : return(0, 1);
 } # end hgGateway
@@ -241,6 +245,13 @@ sub hgTracks {
     my $page  = "http://$webserv/cgi-bin/hgTracks";
 
     #
+    # If using cookies, do a cartReset here so we get consistent 
+    # results from run to run!  (All the button-clicking below 
+    # was causing some runs to start with hideAll...)
+    #
+    &cartReset($webserv) if ($cookies);
+
+    #
     # some bounds-checking on position and width inputs:
     #
     # expect to find matches for all these items:
@@ -260,7 +271,7 @@ sub hgTracks {
 	$ok ? $good++ : $bad++;
     }
     # expect good and bad widths to return OK:
-    $webTest->configure($expectHgTr);
+    $webTest->configure($expectPass);
     my $search = 'chr1:1-10';
     foreach my $width (@hgTwidths, @hgTwidthsBad) {
 	my $query = "db=$db&position=$search&pix=$width";
@@ -277,9 +288,14 @@ sub hgTracks {
     my $html  = $webTest->getPage($page, $query);
     $webTest->configure($expectPass);
     if (defined $html) {
+	if (open(OUT, ">/tmp/vanilla.out")) {
+	    print OUT $html;
+	    close(OUT);
+	}
 	# click every submit button on this page.
 	my $form  = HTML::Form->parse($html, $page);
 	my @inputs = $form->inputs();
+	print "hgTracks: Checking " . scalar(@inputs) . " form inputs.\n" if ($verbose);
 	foreach my $i (@inputs) {
 	    print $i->type() . ' -> ' . $i->name()  . "\n" if ($debug);
 	    if ($i->type() eq 'submit') {
@@ -290,6 +306,7 @@ sub hgTracks {
 	}
 	# follow every link on this page.
 	my @links = &getLinks($html);
+	print "hgTracks: Checking " . scalar(@links) . " links.\n" if ($verbose);
 	foreach my $l (@links) {
 	    # hacky way to split up the link, but it'll have to do for now.
 	    my ($page, $query);
@@ -306,6 +323,9 @@ sub hgTracks {
 	    my $ok = $webTest->checkPage($page, $query);
 	    $ok ? $good++ : $bad++;
 	}
+
+	# do another cartReset before starting this test:
+	&cartReset($webserv) if ($cookies);
 	#
 	# Jim's recommended sequece:
 	# - click hideAll.
@@ -314,32 +334,44 @@ sub hgTracks {
 	#     - select dense, then click submit
 	#     - select full,  then click submit
 	# click every submit button on this page.
-if (0) {
-	my $i = $form->find_input('hgt.hideall');
+	my $i = $form->find_input('hgt.hideAll');
+	if (! defined $i) {
+	    print "DOH! Couldn't find hgt.hideAll in this:\n$html\n";
+	    return ($good, $bad);
+	}
 	my $req = $form->click($i->name());
 	my $newhtml = $webTest->getRequest($req);
 	if (defined $newhtml) {
+	    if (open(OUT, ">/tmp/hideall.out")) {
+		print OUT $newhtml;
+		close(OUT);
+	    }
 	    my $newform  = HTML::Form->parse($newhtml, $page);
 	    my @newinputs = $newform->inputs();
 	    foreach my $n (@newinputs) {
 		if ($n->type() eq 'option') {
 		    # dense check
-		    $newform->value($n->name(), 'dense');
-		    my $req = $form->click('submit');
-		    my $ok = $webTest->checkRequest($req);
-		    $ok ? $good++ : $bad++;
+		    if (grep /dense/, $n->possible_values()) {
+			$newform->value($n->name(), 'dense');
+			my $req = $newform->click('submit');
+			my $ok = $webTest->checkRequest($req);
+			$ok ? $good++ : $bad++;
+		    }
 		    # full check
-		    $newform->value($n->name(), 'full');
-		    my $req = $form->click('submit');
-		    my $ok = $webTest->checkRequest($req);
-		    $ok ? $good++ : $bad++;
+		    if (grep /full/, $n->possible_values()) {
+			$newform->value($n->name(), 'full');
+			$req = $newform->click('submit');
+			$ok = $webTest->checkRequest($req);
+			$ok ? $good++ : $bad++;
+		    }
 		}
 	    }
 	} else {
+	    print "Couldn't get html for vanilla+hideAll page?!\n" if ($verbose);
 	    $bad++;
 	}
-} #***
     } else {
+	print "Couldn't get html for vanilla starting page?!\n" if ($verbose);
 	$bad++;
     }
 
@@ -350,7 +382,19 @@ if (0) {
 
 ###########################################################################
 #
+# hgBlat
 #
+
+
+###########################################################################
+#
+# hgConvCoords
+#
+
+
+###########################################################################
+#
+# hgText
 #
 
 
@@ -360,6 +404,8 @@ if (0) {
 #
 sub bufferAttack {
     my $length = shift;
+    confess "too few args" if (! defined $length);
+    confess "too many args" if (defined shift);
 
     my $str = 'b';
     while (length($str) < $length) {
@@ -375,6 +421,8 @@ sub bufferAttack {
 #
 sub getLinks {
     my $html = shift;
+    confess "too few args" if (! defined $html);
+    confess "too many args" if (defined shift);
     my $copy = $html;
     my @links = ();
     while ($copy =~ s/[hH][rR][eE][fF]\s*=\s*[\"\']([^\"\']+)[\"\']//) {
@@ -382,4 +430,16 @@ sub getLinks {
     }
     return @links;
 } # end getLinks
+
+
+#
+# cartReset: run cgi-bin/cartReset to clean the user-interface slate.
+#
+sub cartReset {
+    my $webserv = shift;
+    confess "too few args" if (! defined $webserv);
+    confess "too many args" if (defined shift);
+    my $p = "http://$webserv/cgi-bin/cartReset";
+    $webTest->getPage($p);
+}
 
