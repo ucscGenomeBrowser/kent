@@ -1,0 +1,9 @@
+track chimpBlat
+shortLabel Chimp Blat
+longLabel Pan troglodytes Blat Alignments
+priority 28
+visibility dense
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno
