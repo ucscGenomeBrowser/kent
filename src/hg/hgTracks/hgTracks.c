@@ -1269,8 +1269,8 @@ if( sameString( tg->mapName, "humMus" ) )
     minRange = 300.0;
     maxRange = 1000.0;
 
-    min0 = whichNum( minRange, -7.98567, 6.53263, 1000 );
-    max0 = whichNum( maxRange, -7.98567, 6.53263, 1000 );
+    min0 = whichNum( minRange, -7.99515, 6.54171, 1000 );
+    max0 = whichNum( maxRange, -7.99515, 6.54171, 1000 );
 
     /*draw horizontal line across track at 0.0, 2.0, and 5.0*/
     tmp = -whichBin( 0.0, min0, max0, 1000 );
@@ -1285,6 +1285,28 @@ if( sameString( tg->mapName, "humMus" ) )
     y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
     mgDrawHorizontalLine( mg, y1, lineColor );
     
+    }
+    else if( sameString( tg->mapName, "humMusL" ) )
+    {
+
+    minRange = 0.0;
+    maxRange = 1000.0;
+
+    min0 = whichNum( minRange, 0.0, 3.66958, 1000 );
+    max0 = whichNum( maxRange, 0.0, 3.66958, 1000 );
+
+    tmp = -whichBin( 1.0, min0, max0, 1000 );
+    y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
+    mgDrawHorizontalLine( mg, y1, lineColor );
+
+    tmp = -whichBin( 2.0, min0, max0, 1000 );
+    y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
+    mgDrawHorizontalLine( mg, y1, lineColor );
+
+    tmp = -whichBin( 3.0, min0, max0, 1000 );
+    y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
+    mgDrawHorizontalLine( mg, y1, lineColor );
+
     }
     else if( sameString( tg->mapName, "zoo" ) )
     {
@@ -7712,7 +7734,8 @@ else
     str[strlen(str) - strlen(t)] = '\0';
 }
 
-void printYAxisLabel( struct memGfx *mg, int y, struct trackGroup *group, char *labelString )
+void printYAxisLabel( struct memGfx *mg, int y, struct trackGroup *group, char *labelString,
+        double min0, double max0 )
 /*print a label for a horizontal y-axis line*/
 {
     double tmp;
@@ -7721,7 +7744,7 @@ void printYAxisLabel( struct memGfx *mg, int y, struct trackGroup *group, char *
     int itemHeight0 = group->itemHeight(group, group->items);
     int inWid = trackOffsetX()-gfxBorder*3;
     
-    tmp = -whichBin( atof(labelString), -1.535, 9.49389, 1000 );
+    tmp = -whichBin( atof(labelString), min0, max0, 1000 );
     tmp = (int)((double)ymin+((double)tmp)*(double)group->heightPer/1000.0+(double)group->heightPer);
     mgTextRight(mg, gfxBorder, tmp, inWid-1, itemHeight0, group->ixAltColor, tl.font, labelString );
 }
@@ -7803,6 +7826,7 @@ if (withLeftLabels)
     {
     int inWid = insideX-gfxBorder*3;
     int nextY, lastY, trackIx = 0;
+    double min0, max0;
 
     mgDrawBox(mg, insideX-gfxBorder*2, 0, gfxBorder, pixHeight, mgFindColor(mg, 0, 0, 200));
     mgSetClip(mg, gfxBorder, gfxBorder, inWid, pixHeight-2*gfxBorder);
@@ -7833,14 +7857,33 @@ if (withLeftLabels)
 	if( sameString( group->mapName, "humMus" ) )
 	    {
 
-	    sprintf( minRangeStr, "%0.2g", whichNum( 300.0, -7.98567, 6.53263, 1000 )  );
-	    sprintf( maxRangeStr, "%0.2g", whichNum( 1000.0, -7.98567, 6.53263, 1000 )  );
+	    //sprintf( minRangeStr, "%0.2g", whichNum( 300.0, -7.98567, 6.53263, 1000 )  );
+	    //sprintf( maxRangeStr, "%0.2g", whichNum( 1000.0, -7.98567, 6.53263, 1000 )  );
+       
+        min0 = whichNum( 300.0, -7.99515, 6.54171, 1000 );
+        max0 =  whichNum( 1000.0, -7.99515, 6.54171, 1000 );
+        sprintf( minRangeStr, "%0.2g", min0  );
+	    sprintf( maxRangeStr, "%0.2g", max0 );
 
-        printYAxisLabel( mg, y, group, "0.0" );
-        printYAxisLabel( mg, y, group, "2.0" );
-        printYAxisLabel( mg, y, group, "5.0" );
+
+        printYAxisLabel( mg, y, group, "0.0", min0, max0 );
+        printYAxisLabel( mg, y, group, "2.0", min0, max0 );
+        printYAxisLabel( mg, y, group, "5.0", min0, max0 );
 
 	    }
+    else if( sameString( group->mapName, "humMusL" ) )
+    {
+        min0 = whichNum( 0.0, 0.0, 3.66958, 1000 );
+        max0 =  whichNum( 1000.0, 0.0, 3.66958, 1000 );
+        sprintf( minRangeStr, "%0.2g", min0  );
+        sprintf( maxRangeStr, "%0.2g", max0 );
+
+
+        printYAxisLabel( mg, y, group, "1.0", min0, max0 );
+        printYAxisLabel( mg, y, group, "2.0", min0, max0 );
+        printYAxisLabel( mg, y, group, "3.0", min0, max0 );
+        
+    }
 	else if( sameString( group->mapName, "zoo" ) )
 	    {
 	    sprintf( minRangeStr, "%d", 60); //whichNum( 1.0, 1.0, 100.0, 1000 ));
