@@ -18,7 +18,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.25 2004/10/31 04:25:35 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.26 2004/11/07 05:26:53 kent Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -276,6 +276,8 @@ if (!sameString(splitTable, table))
 hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Row Count:</B> ");
 printLongWithCommas(stdout, sqlTableSize(conn, splitTable));
 hPrintf("<BR>\n");
+if (asObj != NULL)
+    hPrintf("<B>Description:</B> %s<BR>", asObj->comment);
 describeFields(db, splitTable, asObj, conn);
 
 jpList = joinerRelate(joiner, db, table);
