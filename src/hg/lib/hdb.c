@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.178 2004/04/15 00:49:59 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.179 2004/04/20 19:23:34 kate Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1780,14 +1780,26 @@ struct sqlConnection *conn;
 struct sqlResult *sr;
 char **row;
 struct dbDb *dbList = NULL, *db;
+char *assembly;
+char *next;
 
 conn = hConnectArchiveCentral();
 if (conn)
     {
-    sr = sqlGetResult(conn, "select * from dbDb order by orderKey,name desc");
+    /* NOTE: archive orderKey convention is opposite of production server! */
+    sr = sqlGetResult(conn, "select * from dbDb order by orderKey desc,name desc");
     while ((row = sqlNextRow(sr)) != NULL)
         {
         db = dbDbLoad(row);
+        /* strip organism out of assembly description if it's there
+         * (true in hg6-hg11 entries) */
+        next = assembly = cloneString(db->description);
+        if (sameString(nextWord(&next), db->genome))
+            {
+            freez(&db->description);
+            db->description = cloneString(next);
+            }
+        freez(&assembly);
         slAddHead(&dbList, db);
         }
     sqlFreeResult(&sr);
@@ -2866,9 +2878,7 @@ chainList = liftOverChainList();
 for (chain = chainList; chain != NULL; chain = chain->next)
     {
     if (!hashFindVal(hash, chain->fromDb))
-        {
         hashAdd(hash, chain->fromDb, chain->fromDb);
-        }
     }
 
 /* Get list of all current databases */
@@ -2937,11 +2947,6 @@ liftOverChainFreeList(&chainList);
 slReverse(&liftOverDbList);
 return liftOverDbList;
 }
-
-struct dbDb *hGetAxtInfoDbs()
-/* Get list of db's where we have axt files listed in axtInfo . 
- * The db's with the same organism as current db go last.
-
 
 struct dbDb *hGetAxtInfoDbs()
 /* Get list of db's where we have axt files listed in axtInfo . 
