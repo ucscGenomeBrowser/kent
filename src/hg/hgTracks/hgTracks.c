@@ -4056,24 +4056,6 @@ mgFree(&mg);
 }
 
 
-void makeNumText(char *name, int num, int digits)
-/* Make a text control filled with a number. */
-{
-printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%d>", name, digits, num);
-}
-
-void makeText(char *name, char *initialVal, int chars)
-/* Make a text control filled with initial value. */
-{
-printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%s>", name, chars, initialVal);
-}
-
-void makeSubmitButton(char *name, char *value)
-/* Make a submit button. */
-{
-printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\">", name, value);
-}
-
 void makeDropList(char *name, char *menu[], int menuSize, char *checked)
 /* Make a drop-down list. */
 {
@@ -4182,30 +4164,30 @@ printf("<H2>Chromosome %s, Bases %d-%d, Size %d</H2>", skipChr(chromName),
 
 /* Put up scroll and zoom controls. */
 fputs("move ", stdout);
-makeSubmitButton("left3", "<<<");
-makeSubmitButton("left2", " <<");
-makeSubmitButton("left1", " < ");
-makeSubmitButton("right1", " > ");
-makeSubmitButton("right2", ">> ");
-makeSubmitButton("right3", ">>>");
+cgiMakeButton("left3", "<<<");
+cgiMakeButton("left2", " <<");
+cgiMakeButton("left1", " < ");
+cgiMakeButton("right1", " > ");
+cgiMakeButton("right2", ">> ");
+cgiMakeButton("right3", ">>>");
 fputs(" zoom in ", stdout);
-makeSubmitButton("in1", "1.5x");
-makeSubmitButton("in2", " 3x ");
-makeSubmitButton("in3", "10x");
+cgiMakeButton("in1", "1.5x");
+cgiMakeButton("in2", " 3x ");
+cgiMakeButton("in3", "10x");
 fputs(" zoom out ", stdout);
-makeSubmitButton("out1", "1.5x");
-makeSubmitButton("out2", " 3x ");
-makeSubmitButton("out3", "10x");
+cgiMakeButton("out1", "1.5x");
+cgiMakeButton("out2", " 3x ");
+cgiMakeButton("out3", "10x");
 fputs("<BR>\n", stdout);
 
 /* Make line that says position. */
     {
     fputs("position ", stdout);
-    makeText("position", position, 30);
+    cgiMakeTextVar("position", position, 30);
     fputs(" pixel width ", stdout);
-    makeNumText("pix", tl.picWidth, 4);
+    cgiMakeIntVar("pix", tl.picWidth, 4);
     fputs(" ", stdout);
-    makeSubmitButton("submit", "jump");
+    cgiMakeButton("submit", "jump");
     printf(" <A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank>User's Guide</A>");
     fputs("<BR>\n", stdout);
     }
@@ -4256,9 +4238,9 @@ fputs("<HR><CENTER>", stdout);
 fputs("Chromosome ", stdout);
 makeDropList("seqName", hgChromNames, 24, chromName);
 fputs(" bases ",stdout);
-makeNumText("winStart", winStart, 12);
+cgiMakeIntVar("winStart", winStart, 12);
 fputs(" - ", stdout);
-makeNumText("winEnd", winEnd, 12);
+cgiMakeIntVar("winEnd", winEnd, 12);
 printf(" Guidelines ");
 makeCheckBox("guidelines", withGuidelines);
 printf(" <B>Labels:</B> ");
@@ -4267,7 +4249,7 @@ makeCheckBox("leftLabels", withLeftLabels);
 printf("center ");
 makeCheckBox("centerLabels", withCenterLabels);
 printf(" ");
-makeSubmitButton("submit", "refresh");
+cgiMakeButton("submit", "refresh");
 printf("<BR>\n");
 
 
@@ -4522,6 +4504,6 @@ printf("new tracks, including some gene predictions.  Please try again tomorrow.
 
 int main(int argc, char *argv[])
 {
-htmShell("Draft Genome Browser v3", doMiddle, NULL);
+htmShell("Draft Genome Browser v4", doMiddle, NULL);
 //htmShell("Browser Being Updated", doDown, NULL);
 }
