@@ -476,6 +476,8 @@ void doOutMaf(struct trackDb *track, char *table, struct sqlConnection *conn);
 
 /* ----------- Wiggle business in wiggle.c -------------------- */
 
+#define	MAX_REGION_DISPLAY	100
+
 boolean isWiggle(char *db, char *table);
 /* Return TRUE if db.table is a wiggle. */
 
