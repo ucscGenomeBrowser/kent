@@ -15,14 +15,12 @@
 #include "chainDb.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: chainDb.c,v 1.6 2003/07/02 18:54:02 braney Exp $";
+static char const rcsid[] = "$Id: chainDb.c,v 1.7 2004/07/23 22:57:21 hiram Exp $";
 
 void chainHeadStaticLoad(char **row, struct chain *ret)
 /* Load a row from chain table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->score = atof(row[0]);
 ret->tName = row[1];
@@ -42,8 +40,6 @@ struct chain *chainHeadLoad(char **row)
  * from database.  Dispose of this with chainFree(). */
 {
 struct chain *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->score = atof(row[0]);
@@ -84,7 +80,6 @@ struct chain *chainHeadCommaIn(char **pS, struct chain *ret)
  * return a new chain */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -106,7 +101,6 @@ return ret;
 void chainHeadOutput(struct chain *el, FILE *f, char sep, char lastSep) 
 /* Print out chain.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 fprintf(f, "%f", el->score);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
@@ -169,3 +163,28 @@ sqlFreeResult(&sr);
 dyStringFree(&query);
 }
 
+boolean chainDbNormScoreAvailable(char *chromName, char *mapName)
+/*	check if normScore column is available in this table	*/
+{
+boolean normScoreAvailable = FALSE;
+char tableName[128];
+
+/*      find out if the optional normScore column exists */
+/*      Check for mapName or chr*_mapName - don't know if it is split */
+safef(tableName, ArraySize(tableName), "%s", mapName);
+
+if (!hTableExistsDb(hGetDb(), tableName))
+    {
+    safef(tableName, ArraySize(tableName), "%s_%s", chromName, mapName);
+    if (!hTableExistsDb(hGetDb(), tableName))
+        tableName[0] = (char) NULL;
+    }
+if (tableName[0])
+    {
+    struct sqlConnection *conn = hAllocOrConnect(hGetDb());
+    int tblIx = sqlFieldIndex(conn, tableName, "normScore");
+    normScoreAvailable = (tblIx > -1) ? TRUE : FALSE;
+    hFreeConn(&conn);
+    }   
+return normScoreAvailable;
+}
