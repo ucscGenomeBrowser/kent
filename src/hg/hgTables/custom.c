@@ -474,6 +474,10 @@ if (!gotResults)
 	hPrintf(" matching identifier list");
     if (bf != NULL)
         hPrintf(" passing filter");
+    if (!fullGenomeRegion())
+	{
+        hPrintf(" in given region");
+	}
     hPrintf(".");
     }
 }
