@@ -11,6 +11,7 @@
 #include "memgfx.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
+#include "cart.h"
 #include "hdb.h"
 #include "hgFind.h"
 #include "spaceSaver.h" 
@@ -51,6 +52,8 @@
 #include "lfs.h"
 #include "mcnBreakpoints.h"
 
+#define hgTracksName() "../cgi-bin/jkTracks"
+
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
 #define FUREY_CODE 1
@@ -73,6 +76,9 @@ char *thisFrame = NULL;
 
 int maxItemsInFullTrack = 300;
 
+struct cart *cart;	/* The cart where we keep persistent variables. */
+char *selfName = "hgTracks";	/* Symbolic name of program */
+
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in hidden variables. */
 char *chromName;		/* Name of chromosome sequence . */
@@ -80,7 +86,6 @@ char *database;			/* Name of database we're using. */
 char *position; 		/* Name of position. */
 int winStart;			/* Start of window in sequence. */
 int winEnd;			/* End of window in sequence. */
-boolean seqReverse;		/* Look at reverse strand. */
 char *userSeqString = NULL;	/* User sequence .fa/.psl file. */
 char *eUserSeqString = NULL;    /* CGI encoded user seq. string. */
 char *ctFileName = NULL;	/* Custom track file. */
@@ -326,7 +331,6 @@ void saveHiddenVars()
 char buf[16];
 putchar('\n');
 makeHiddenVar("old", chromName);    /* Variable set when calling ourselves. */
-makeHiddenBoolean("seqReverse", seqReverse);
 makeHiddenBoolean("hideControls", hideControls);
 makeHiddenVar("db", database);
 if(otherFrame != NULL)
@@ -5341,8 +5345,6 @@ if (withRuler)
     y = 0;
     mgSetClip(mg, xOff, y, insideWidth, rulerHeight);
     relNumOff = winStart;
-    if (seqReverse)
-	relNumOff = -relNumOff;
     mgDrawRulerBumpText(mg, xOff, y, rulerHeight, insideWidth, MG_BLACK, font,
 	relNumOff, winBaseCount, 0, 1);
 
@@ -5922,6 +5924,7 @@ int controlColNum=0;
 
 /* Tell browser where to go when they click on image. */
 printf("<FORM ACTION=\"%s\">\n\n", hgTracksName());
+cartSaveSession(cart, selfName);
 
 
 /* See if want to include sequence search results. */
@@ -6186,8 +6189,6 @@ void relativeScroll(double amount)
 int offset;
 int newStart, newEnd;
 
-if (seqReverse)
-    amount = -amount;
 offset = (int)(amount * winBaseCount + 0.5);
 /* Make sure don't scroll of ends. */
 newStart = winStart + offset;
@@ -6234,7 +6235,7 @@ freeDyString(&ui);
 }
 
 
-void doMiddle()
+void doMiddle(struct cart *theCart)
 /* Print the body of an html file.  This routine handles zooming and
  * scrolling. */
 {
@@ -6243,6 +6244,7 @@ char *submitVal;
 boolean testing = FALSE;
 
 /* Initialize layout and database. */
+cart = theCart;
 database = cgiOptionalString("db");
 if (database == NULL)
     database = hGetDb();
@@ -6274,7 +6276,6 @@ if (chromName == NULL)
 
 /* Clip chromosomal position to fit. */
 seqBaseCount = hChromSize(chromName);
-seqReverse = cgiBoolean("seqReverse");
 if (winEnd < winStart)
     {
     int temp = winEnd;
@@ -6331,7 +6332,7 @@ thisFrame = cgiOptionalString("tf");
 doForm();
 }
 
-void doDown()
+void doDown(struct cart *cart)
 {
 printf("<H2>The Browser is Being Updated</H2>\n");
 printf("The browser is currently unavailable.  We are in the process of\n");
@@ -6339,12 +6340,14 @@ printf("updating the database and the display software with a number of\n");
 printf("new tracks, including some gene predictions.  Please try again tomorrow.\n");
 }
 
+char *excludeVars[] = { "old", "submit", "in1", "in2", "in3", "out1", "out2", "out3",
+	"left1", "left2", "left3", "right1", "right2", "right3", NULL };
+
 int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
-htmShell("UCSC Human Genome Browser v8", doMiddle, NULL);
-//htmShell("Browser Being Updated", doDown, NULL);
+cartHtmlShell("UCSC Human Genome Browser v8", doMiddle, "hguid", excludeVars);
 return 0;
 }
 
