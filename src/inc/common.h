@@ -49,6 +49,7 @@
 #define bits32 unsigned       /* Wants to be unsigned 32 bits. */
 #define bits16 unsigned short /* Wants to be unsigned 16 bits. */
 #define signed32 int	      /* Wants to be signed 32 bits. */
+#define bits8 unsigned char   /* Wants to be unsigned 8 bits. */
 
 #define BIGNUM 0x3fffffff	/* A really big number */
 
