@@ -10,7 +10,7 @@
 #include "filePath.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.19 2004/03/01 06:31:42 kent Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.20 2004/03/01 17:19:46 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -605,7 +605,7 @@ for (tag = form->startTag->next; tag != form->endTag; tag = tag->next)
 	if (varName == NULL)
 	    {
 	    if (!sameWord(type, "SUBMIT") && !sameWord(type, "CLEAR")
-	    	&& !sameWord(type, "BUTTON"))
+	    	&& !sameWord(type, "BUTTON") && !sameWord(type, "RESET"))
 		tagWarn(page, tag, "Missing NAME attribute");
 	    varName = "n/a";
 	    }
@@ -614,7 +614,8 @@ for (tag = form->startTag->next; tag != form->endTag; tag = tag->next)
 	    tagWarn(page, tag, "Mixing input types %s and %s", var->type, type);
 	var->type = type;
 	if (sameWord(type, "TEXT") || sameWord(type, "PASSWORD") 
-		|| sameWord(type, "FILE") || sameWord(type, "HIDDEN"))
+		|| sameWord(type, "FILE") || sameWord(type, "HIDDEN")
+		|| sameWord(type, "IMAGE"))
 	    {
 	    var->curVal = cloneString(value);
 	    }
