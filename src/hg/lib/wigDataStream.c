@@ -4,7 +4,7 @@
 #include "common.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.14 2004/08/12 18:34:22 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.15 2004/08/12 20:22:13 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -253,6 +253,14 @@ freeMem(wDS->tblName);		/*	potentially previously existing */
 wDS->tblName = cloneString(table);
 }
 
+static void outputIdentification(struct wiggleDataStream *wDS, FILE *fh)
+{
+if (wDS->db)
+    fprintf (fh, "#\tdb: '%s', track: '%s'\n", wDS->db, wDS->tblName);
+if (wDS->isFile)
+    fprintf (fh, "#\tfrom file input, track: '%s'\n", wDS->tblName);
+}
+
 static void showConstraints(struct wiggleDataStream *wDS, FILE *fh)
 {
 if (wDS->chrName)
@@ -285,11 +293,19 @@ const struct wigAsciiData *a = *((struct wigAsciiData **)va);
 const struct wigAsciiData *b = *((struct wigAsciiData **)vb);
 int dif;
 dif = strcmp(a->chrom, b->chrom);
+verbose(2, "asciiDataCmp: %d = strcmp(%s,%s)\n",
+		dif, a->chrom, b->chrom);
 if (dif == 0)
     {
     dif = a->span - b->span;
+    verbose(2, "asciiDataCmp: %d = %u - %u\n",
+		dif, a->span, b->span);
     if (dif == 0)
+	{
 	dif = a->data->chromStart - b->data->chromStart;
+	verbose(2, "asciiDataCmp: %d = %u - %u\n",
+		dif, a->data->chromStart, b->data->chromStart);
+	}
     }
 return dif;
 }
@@ -623,6 +639,8 @@ verbose(2, "#\tnew chrom, span: %s, %u\n", wDS->currentChrom, wDS->currentSpan )
 	wigAscii->data = (struct asciiDatum *) needMem((size_t)
 	    (sizeof(struct asciiDatum) * wiggle->validCount));
 	asciiOut = wigAscii->data;
+	verbose(3, "slAddHead chr %s span %u\n",
+		wigAscii->chrom, wigAscii->span);
 	slAddHead(&wDS->ascii,wigAscii);
 	}
 
@@ -981,9 +999,9 @@ static void sortResults(struct wiggleDataStream *wDS)
 if (wDS->bed)
     slSort(&wDS->bed, bedCmp);
 if (wDS->ascii)
-    slSort(wDS->ascii, asciiDataCmp);
+    slSort(&wDS->ascii, asciiDataCmp);
 if (wDS->stats)
-    slSort(wDS->stats, statsDataCmp);
+    slSort(&wDS->stats, statsDataCmp);
 }
 
 static void bedOut(struct wiggleDataStream *wDS, char *fileName, boolean sort)
@@ -995,7 +1013,11 @@ if (wDS->bed)
     {
     struct bed *bedEl, *next;
 
-    slSort(&wDS->bed, bedCmp);
+    outputIdentification(wDS, fh);
+    showConstraints(wDS, fh);
+
+    if (sort)
+	slSort(&wDS->bed, bedCmp);
 
     for (bedEl = wDS->bed; bedEl; bedEl = next )
 	{
@@ -1022,7 +1044,14 @@ if (wDS->stats)
     struct wiggleStats *stats, *next;
     int itemsDisplayed = 0;
 
-    slSort(wDS->stats, statsDataCmp);
+    if (sort)
+	slSort(&wDS->stats, statsDataCmp);
+
+    fprintf (fh, "<TABLE COLS=12 ALIGN=CENTER HSPACE=0><TR><TH COLSPAN=6 ALIGN=CENTER> ");
+    if (wDS->db)
+	fprintf(fh, "Database: %s </TH><TH COLSPAN=6 ALIGN=CENTER> Table: %s </TH></TR></TABLE>\n", wDS->db, wDS->tblName);
+    if (wDS->isFile)
+	fprintf(fh, "from file </TH><TH COLSPAN=6 ALIGN=CENTER> Table: %s </TH></TR></TABLE>\n", wDS->tblName);
 
     fprintf(fh,"<TABLE COLS=12 ALIGN=CENTER HSPACE=0>\n");
     fprintf(fh,"<TR><TH> Chrom </TH><TH> Data <BR> start </TH>");
@@ -1071,13 +1100,14 @@ FILE * fh;
 fh = mustOpen(fileName, "w");
 if (wDS->ascii)
     {
-    struct wigAsciiData *asciiData, *next;
+    struct wigAsciiData *asciiData;
     char *chrom = NULL;
     unsigned span = 0;
 
-    slSort(wDS->ascii, asciiDataCmp);
+    if (sort)
+	slSort(&wDS->ascii, asciiDataCmp);
 
-    for (asciiData = wDS->ascii; asciiData; asciiData = next )
+    for (asciiData = wDS->ascii; asciiData; asciiData = asciiData->next)
 	{
 	unsigned i;
 	struct asciiDatum *data;
@@ -1103,7 +1133,6 @@ if (wDS->ascii)
 		++data;
 		}
 	    }
-	next = asciiData->next;
 	}
     }
 else
