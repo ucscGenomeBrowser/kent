@@ -14,7 +14,7 @@
 #include "hdb.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: joining.c,v 1.13 2004/07/17 19:35:13 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.14 2004/07/18 01:09:10 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -43,6 +43,7 @@ void joinedTablesTabOut(struct joinedTables *joined)
 {
 struct joinedRow *jr;
 struct joinerDtf *field;
+int outCount = 0;
 hPrintf("#");
 for (field = joined->fieldList; field != NULL; field = field->next)
     {
@@ -66,6 +67,7 @@ for (jr = joined->rowList; jr != NULL; jr = jr->next)
         hPrintf("%s", s);
 	}
     hPrintf("\n");
+    ++outCount;
     }
 }
 
@@ -290,7 +292,7 @@ for (dtf = dtfList; dtf != NULL; dtf = dtf->next)
 	slAddHead(&tjList, tj);
 	}
     dupe = joinerDtfClone(dtf);
-    slAddHead(&tj->fieldList, dupe);
+    slAddTail(&tj->fieldList, dupe);
     }
 slReverse(&tjList);
 return tjList;
@@ -387,7 +389,6 @@ for (route = routeList; route != NULL; route = route->next)
     tj = hashFindVal(tableHash, fullName);
     if (tj == NULL)
         {
-	uglyf("Adding empty fielded table %s for joining", fullName);
 	AllocVar(tj);
 	tj->database = a->database;
 	tj->table = a->table;
@@ -413,7 +414,7 @@ void tjLoadSome(struct region *regionList,
     struct joinedTables *joined, int fieldOffset, int keyOffset,
     char *idField, struct hash *idHash, 
     struct slName *chopBefore, struct slName *chopAfter,
-    struct tableJoiner *tj, struct hTableInfo *hti, boolean isFirst)
+    struct tableJoiner *tj, boolean isPositional, boolean isFirst)
 /* Load up rows. */
 {
 struct region *region;
@@ -423,14 +424,10 @@ struct slRef *ref;
 struct joinerPair *jp;
 int fieldCount = 0, keyCount = 0;
 int idFieldIx = -1;
-boolean isPositional = htiIsPositional(hti);
 struct sqlConnection *conn = sqlConnect(tj->database);
 
-uglyf("tjLoadSome %s.%s keyOffset %d\n", tj->database, tj->table, keyOffset);
 /* Create field spec for sql - first fields user will see, and
  * second keys if any. */
-if (chopBefore != NULL) uglyf("chopBefore %s\n", chopBefore->name);
-if (chopAfter != NULL) uglyf("chopAfter %s\n", chopAfter->name);
 for (dtf = tj->fieldList; dtf != NULL; dtf = dtf->next)
     {
     struct joinerDtf *dupe = joinerDtfClone(dtf);
@@ -451,8 +448,8 @@ if (idHash != NULL)
     {
     if (idField == NULL)
         internalErr();
-    dyStringAddList(sqlFields, idField);
     idFieldIx = fieldCount + keyCount;
+    dyStringAddList(sqlFields, idField);
     }
 
 for (region = regionList; region != NULL; region = region->next)
@@ -482,11 +479,15 @@ for (region = regionList; region != NULL; region = region->next)
 	    else
 		{
 		struct joinedRow *jr;
+		struct hashEl *bucket;
 		id = chopKey(chopBefore, chopAfter, id);
-		jr = hashFindVal(idHash, id);
-		if (jr != NULL)
-		    jrRowExpand(joined, jr, row, 
+		for (bucket = hashLookup(idHash, id); bucket != NULL;
+		     bucket = hashLookupNext(bucket))
+		     {
+		     jr = bucket->val;
+		     jrRowExpand(joined, jr, row, 
 		    	fieldOffset, fieldCount, keyOffset, keyCount);
+		     }
 		}
 	    }
 	}
@@ -517,7 +518,7 @@ if (hti->nameField[0] != 0)
     idField = hti->nameField;
     }
 tjLoadSome(regionList, joined, 0, 0, 
-	idField, idHash, NULL, NULL, tj, hti, TRUE);
+	idField, idHash, NULL, NULL, tj, htiIsPositional(hti), TRUE);
 hashFree(&idHash);
 return joined;
 }
@@ -545,11 +546,8 @@ int hashSize = digitsBaseTwo(joined->rowCount);
 struct hash *hash = NULL;
 struct joinedRow *jr;
 
-uglyf("hashKeyField keyIx %d\n", keyIx);
 if (hashSize > 20)
     hashSize = 20;
-if (chopAfter != NULL) uglyf("chopAfter %s\n", chopAfter->name);
-if (chopBefore != NULL) uglyf("chopBefore %s\n", chopBefore->name);
 hash = newHash(hashSize);
 for (jr = joined->rowList; jr != NULL; jr = jr->next)
     {
@@ -598,8 +596,8 @@ struct joinedTables *joinedTablesCreate( struct joiner *joiner,
 /* Create joinedTables structure from fields. */
 {
 struct tableJoiner *tj, *tjList = bundleFieldsIntoTables(fieldList);
-struct joinerPair *routeList, *route, *lastRoute;
-struct joinerDtf *tableDtfs;
+struct joinerPair *routeList = NULL, *route;
+struct joinerDtf *tableDtfs = NULL;
 struct joinedTables *joined = NULL;
 struct hash *tableHash = newHash(8);
 struct sqlConnection *conn = sqlConnect(primaryDb);
@@ -623,25 +621,7 @@ for (tj = tjList; tj != NULL; tj = tj->next)
     {
     totalKeyCount += slCount(tj->keysOut);
     totalFieldCount += slCount(tj->fieldList);
-	{
-	struct slRef *ref;
-	uglyf("keys for %s:", tj->table);
-	for (ref = tj->keysOut; ref != NULL; ref = ref->next)
-	    {
-	    struct joinerPair *jp = ref->val;
-	    uglyf(" %s", jp->a->field);
-	    }
-	uglyf("\n");
-	}
     }
-
-uglyf("Got %d hops in route\n", slCount(routeList));
-uglyf("%d total keys, %d total fields\n", totalKeyCount, totalFieldCount);
-for (route = routeList; route != NULL; route = route->next)
-    uglyf("%s.%s.%s -> %s.%s.%s\n", route->a->database, route->a->table, route->a->field, route->b->database, route->b->table, route->b->field);
-
-uglyf("\n");
-uglyf("got %d tables\n", slCount(tjList));
 
 /* Do first table.  This one uses identifier hash if any. */
     {
@@ -649,7 +629,6 @@ uglyf("got %d tables\n", slCount(tjList));
 	    tjList, totalFieldCount, totalKeyCount, maxRowCount);
     curKeyCount = slCount(tjList->keysOut);
     curFieldCount = slCount(tjList->fieldList);
-    uglyf("After load first %d rows, %d fields, %d keys\n", joined->rowCount, slCount(joined->fieldList), slCount(joined->keyList));
     }
 
 /* Follow routing list for rest. */
@@ -661,7 +640,7 @@ for (route = routeList; route != NULL; route = route->next)
     {
     struct tableJoiner *tj = findTableJoiner(tjList, 
 	    route->b->database, route->b->table);
-    struct joinerField *jfA, *jfB;
+    struct joinerField *jfA = NULL, *jfB = NULL;
     if (tj == NULL)
 	internalErr();
     jfA = findJoinerField(route->identifier, route->a);
@@ -672,21 +651,20 @@ for (route = routeList; route != NULL; route = route->next)
 	internalErr();
     if (!tj->loaded)
 	{
-	struct hTableInfo *hti = getHti(tj->database, tj->table);
-	int keyIx = findDtfIndex(joined->keyList, route->a);
+	struct hTableInfo *hti;
+	int keyIx;
 	struct hash *keyHash = NULL;
+	keyIx = findDtfIndex(joined->keyList, route->a);
 	if (keyIx < 0)
 	    internalErr();
-	uglyf("keyIx for %s.%s.%s = %d\n", route->a->database, route->a->table, route->a->field, keyIx);
 	keyHash = hashKeyField(joined, keyIx, 
 	    jfA->chopBefore, jfA->chopAfter);
 	tjLoadSome(regionList, joined, curFieldCount, curKeyCount,
 	    route->b->field, keyHash, 
 	    jfB->chopBefore, jfB->chopAfter, 
-	    tj, hti, FALSE);
+	    tj, isPositional(tj->database, tj->table),  FALSE);
 	curKeyCount += slCount(tj->keysOut);
 	curFieldCount += slCount(tj->fieldList);
-	uglyf("After load next %d rows, %d fields, %d keys\n", joined->rowCount, slCount(joined->fieldList), slCount(joined->keyList));
 	hashFree(&keyHash);
 	}
     }
@@ -729,32 +707,33 @@ void doTest(struct sqlConnection *conn)
 /* Put up a page to see what happens. */
 {
 struct slName *fieldList = NULL, *field;
-#ifdef SOON
-field = slNameNew("hg16.softberryGene.name");
-slAddTail(&fieldList, field);
-field = slNameNew("hg16.softberryHom.description");
-slAddTail(&fieldList, field);
-field = slNameNew("hg16.softberryPep.seq");
-slAddTail(&fieldList, field);
-field = slNameNew("hg16.knownGene.name");
-slAddTail(&fieldList, field);
-field = slNameNew("hg16.kgXref.geneSymbol");
-slAddTail(&fieldList, field);
-field = slNameNew("hg16.bioCycPathway.geneID");
-slAddTail(&fieldList, field);
-field = slNameNew("hg16.bioCycPathway.mapID");
-slAddTail(&fieldList, field);
-#endif
 
+#ifdef OLD
 field = slNameNew("hg16.ensGene.name");
 slAddTail(&fieldList, field);
 field = slNameNew("hg16.kgXref.description");
 slAddTail(&fieldList, field);
-// field = slNameNew("hg16.ensGtp.gene");
-// slAddTail(&fieldList, field);
-
 textOpen();
 tabOutSelectedFields("hg16", "ensGene", fieldList);
+#endif /* OLD */
+
+field = slNameNew("hg16.knownGene.name");
+slAddTail(&fieldList, field);
+field = slNameNew("hg16.knownGene.proteinID");
+slAddTail(&fieldList, field);
+field = slNameNew("swissProt.displayId.acc");
+slAddTail(&fieldList, field);
+field = slNameNew("swissProt.geneLogic.val");
+slAddTail(&fieldList, field);
+
+textOpen();
+hPrintf("doTest on ");
+for (field = fieldList; field != NULL; field = field->next)
+    hPrintf(" %s", field->name);
+hPrintf("\n");
+tabOutSelectedFields("hg16", "knownGene", fieldList);
+
+
 }
 
 

@@ -16,7 +16,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.23 2004/07/17 20:05:25 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.24 2004/07/18 01:09:10 kent Exp $";
 
 
 void usage()
@@ -205,7 +205,6 @@ else
     char query[256];
     safef(query, sizeof(query), 
 	    "select %s from %s", fields, table);
-    uglyf("query: %s\n", query);
     sr = sqlGetResult(conn, query);
     }
 return sr;
@@ -365,9 +364,32 @@ struct hTableInfo *getHti(char *db, char *table)
 struct hTableInfo *hti = maybeGetHti(db, table);
 
 if (hti == NULL)
-    webAbort("Error", "Could not find table info for table %s in db %s",
+    {
+    errAbort("Error", "Could not find table info for table %s in db %s",
 	     table, db);
+    }
 return(hti);
+}
+
+boolean isPositional(char *db, char *table)
+/* Return TRUE if it looks to be a positional table. */
+{
+boolean result = FALSE;
+struct sqlConnection *conn = sqlConnect(db);
+if (sqlTableExists(conn, "chromInfo"))
+    {
+    char chromName[64];
+    struct hTableInfo *hti;
+    sqlQuickQuery(conn, "select chrom from chromInfo limit 1", 
+    	chromName, sizeof(chromName));
+    hti = hFindTableInfoDb(db, chromName, table);
+    if (hti != NULL)
+        {
+	result = htiIsPositional(hti);
+	}
+    }
+sqlDisconnect(&conn);
+return result;
 }
 
 struct trackDb *findTrackInGroup(char *name, struct trackDb *trackList,
@@ -571,7 +593,7 @@ void doIntersect(struct sqlConnection *conn)
 /* Respond to intersection button. */
 {
 htmlOpen("Table Browser Intersect");
-uglyf("Processing intersect button... too stupid to do anything real...");
+uglyf("Processing intersect button... not yet doing anything real...");
 htmlClose();
 }
 

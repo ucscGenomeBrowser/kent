@@ -102,6 +102,9 @@ struct hTableInfo *getHti(char *db, char *table);
 boolean htiIsPositional(struct hTableInfo *hti);
 /* Return TRUE if hti looks like it's from a positional table. */
 
+boolean isPositional(char *db, char *table);
+/* Return TRUE if it looks to be a positional table. */
+
 /* ------------- Functions related to joining ------------*/
 void tabOutSelectedFields(
 	char *primaryDb,		/* The primary database. */

@@ -329,7 +329,6 @@ for (var = varList; var != NULL; var = var->next)
     if (!sameString(var->val, "0"))
 	{
 	field = slNameNew(var->name + varPrefixSize);
-	uglyf("field: %s\n", field->name);
 	slAddHead(&fieldList, field);
 	}
     }
