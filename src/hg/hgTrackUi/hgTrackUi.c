@@ -14,7 +14,7 @@
 #include "cdsColors.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.88 2004/03/03 17:52:35 sugnet Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.89 2004/03/04 07:12:13 kate Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -425,6 +425,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 }
 
+
 void wigUi(struct trackDb *tdb)
 /* UI for the wiggle track */
 {
@@ -508,6 +509,32 @@ printf("</TD></TR></TABLE>\n");
 
 freeMem(typeLine);
 
+}
+
+void wigMafUi(struct trackDb *tdb)
+/* UI for maf/wiggle track
+ * NOTE: calls wigUi */
+{
+char *speciesOrder = trackDbRequiredSetting(tdb, "speciesOrder");
+char *species[100];
+int speciesCt = chopLine(speciesOrder, species);
+int i;
+char option[64];
+printf("<p><b>Pairwise alignments:</b><br>" );
+printf("<TABLE>");
+for (i = 0; i < speciesCt; i++)
+    {
+    if (i % 6 == 0)
+        printf("</TR><TR>");
+    printf("<TD>");
+    snprintf(option, sizeof(option), "%s.%s", tdb->tableName, species[i]);
+    cgiMakeCheckBox(option, cartUsualBoolean(cart, option, TRUE));
+    printf ("%s<br>", species[i]);
+    printf("</TD>");
+    }
+printf("</TR></TABLE><P>");
+printf("<p><b>Multiple alignment:</b><br>" );
+wigUi(tdb);
 }
 
 void genericWiggleUi(struct trackDb *tdb, int optionNum )
@@ -707,7 +734,12 @@ else if (sameString(track, "xenoEst"))
 else if (sameString(track, "rosetta"))
         rosettaUi(tdb);
 else if (startsWith("wig", tdb->type))
-        wigUi(tdb);
+        {
+        if (startsWith("wigMaf", tdb->type))
+            wigMafUi(tdb);
+        else
+            wigUi(tdb);
+        }
 else if (sameString(track, "affyRatio"))
         affyUi(tdb);
 else if (sameString(track, "ancientR"))
@@ -764,8 +796,8 @@ void trackUi(struct trackDb *tdb)
 char *vis = hStringFromTv(tdb->visibility);
 printf("<H1>%s</H1>\n", tdb->longLabel);
 printf("<B>Display mode:</B>");
-hTvDropDown(tdb->tableName, hTvFromString(cartUsualString(cart, tdb->tableName, vis)),
-	tdb->canPack);
+hTvDropDown(tdb->tableName, hTvFromString(cartUsualString(cart,
+                                        tdb->tableName, vis)), tdb->canPack);
 printf(" ");
 cgiMakeButton("Submit", "Submit");
 printf("<BR>\n");
