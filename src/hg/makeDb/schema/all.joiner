@@ -36,6 +36,9 @@ set kgDb $hg,$mm,$rn
 # Define databases that support family browser
 set familyDb $hg,$mm,$ce,$sacCer,$dm
 
+# Magic for tables split between chromosomes
+set split splitPrefix=chr%_
+
 # Define the shared identifiers and the fields they appear in.
 
 
@@ -351,26 +354,26 @@ identifier yeastChoCellCycleSampleId
 
 # Stuff to link together alignment chains and nets
 
+identifier mouseChainId 
+"Link together chain/net on hg13,hg15 for mouse"
+    hg13,hg15.mouseChain.id $split
+    hg13,hg15.mouseChainLink.chainId $split
+    hg13,hg15.mouseNet.chainId exclude=0
+
 identifier chain[${chainDest}]Id
 "Link together chain info"
-    $gbd.chain[].id
-    $gbd.chain[]Link.chainId
+    $gbd.chain[].id $split
+    $gbd.chain[]Link.chainId $split
     $gbd.allChain[].id
-    $gbd.netRxBest[].chainId
-    $gbd.net[]NonGap.chainId
-    $gbd.netSynteny[].chainId
+    $gbd.netRxBest[].chainId exclude=0
+    $gbd.net[]NonGap.chainId exclude=0
+    $gbd.netSynteny[].chainId exclude=0
 
 identifier chainSelf
 "Link together self chain info"
-    $gbd.chainSelf.id
-    $gbd.chainSelfLink.chainId
-    $gbd.netSelf.chainId
-
-identifier mouseChainId 
-"Link together chain/net on hg13,hg15 for mouse"
-    hg13,hg15.mouseChain.id
-    hg13,hg15.mouseChainLink.chainId
-    hg13,hg15.mouseNet.chainId
+    $gbd.chainSelf.id $split
+    $gbd.chainSelfLink.chainId $split
+    $gbd.netSelf.chainId exclude=0
 
 # Genbank/trEMBL Accessions and meaningful subsets thereof
 
@@ -384,7 +387,7 @@ identifier stsAccession external=genbank typeOf=genbankAccession
 
 identifier bacEndAccession typeOf=genbankAccession
 "Genbank accession of a BAC end read."
-    $gbd.all_bacends.qName
+    $gbd.all_bacends.qName dupeOk
     $gbd.bacEndPairs.lfNames comma
     $hg.fishClones.beNames comma
 
@@ -394,10 +397,10 @@ identifier bacAccession typeOf=genbankAccession
 identifier $hg.acAccession typeOf=bacAccession
 "Genbank accession of a sequenced $hg.BAC (~150kb of genomic sequence)."
     $hg.clonePos.name chopAfter=.
-    $hg.gold.frag chopAfter=.
+    $hg.gold.frag chopAfter=. $split
     $hg.certificate.accession1
     $hg.certificate.accession2
-    $hg.gl.frag chopAfter=.
+    $hg.gl.frag chopAfter=. $split
     $hg.fishClones.accNames chopAfter=. comma
 
 identifier $hg.acAccessionVersion typeOf=bacAccession
@@ -425,8 +428,8 @@ identifier estAccession typeOf=estOrMrnaAccession
 identifier nativeEstAccession typeOf=estAccession
 "Genbank Native (same organism as database) EST accession"
     $gbd.all_est.qName dupeOk
-    $gbd.est.qName
-    $gbd.intronEst.qName
+    $gbd.est.qName $split
+    $gbd.intronEst.qName $split
     $gbd.estOrientInfo.name
 
 identifier xenoEstAccession typeOf=estAccession
@@ -443,6 +446,7 @@ identifier xenoMrnaAccession typeOf=mrnaAccession
 identifier nativeMrnaAccession typeOf=mrnaAccession
 "Genbank Native (same organism as database) mRNA accession"
     $gbd.all_mrna.qName dupeOk
+    $gbd.mrna.qName $split
     $gbd.dupSpMrna.mrnaID
     $gbd.dupSpMrna.dupMrnaID
     $gbd.mrnaOrientInfo.name
