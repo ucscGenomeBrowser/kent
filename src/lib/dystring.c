@@ -28,6 +28,18 @@ if ((ds = *pDs) != NULL)
     }
 }
 
+void freeDyStringList(struct dyString **pDs)
+/* free up a list of dyStrings */
+{
+struct dyString *ds, *next;
+for(ds = *pDs; ds != NULL; ds = next)
+    {
+    next = ds->next;
+    freeDyString(&ds);
+    }
+*pDs = NULL;
+}
+
 static void dyStringExpandBuf(struct dyString *ds, int newSize)
 /* Expand buffer to new size. */
 {

@@ -4,7 +4,9 @@
  * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
  *****************************************************************************/
 /* dystring - dynamically resizing string. */
-#ifndef DYSTRING_H
+
+
+#ifndef DYSTRING_H	/* Wrapper to avoid including this twice. */
 #define DYSTRING_H
 
 struct dyString
@@ -26,6 +28,11 @@ void freeDyString(struct dyString **pDs);
 /* Free up dynamic string. */
 
 #define dyStringFree(a) freeDyString(a);
+
+void freeDyStringList(struct dyString **pDs);
+/* Free up a list of dynamic strings */
+
+#define dyStringFreeList(a) freeDyStringList(a);
 
 void dyStringAppend(struct dyString *ds, char *string);
 /* Append zero terminated string to end of dyString. */
