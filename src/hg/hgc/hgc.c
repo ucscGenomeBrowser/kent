@@ -531,28 +531,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 printf("</PRE></TT>\n");
 }
 
-void doBlastzPslClick(struct sqlConnection *conn, struct trackDb *tdb, 
-	char *item, int start, char *subType)
-/* Handle click in generic psl track. */
-{
-char table[64];
-boolean hasBin;
-char query[512];
-struct sqlResult *sr;
-char **row;
-hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
-sprintf(query, "select * from %s where qName = '%s'", table, item);
-sr = sqlGetResult(conn, query);
-printf("<PRE><TT>\n");
-printf("#match\tmisMatches\trepMatches\tnCount\tqNumInsert\tqBaseInsert\ttNumInsert\tBaseInsert\tstrand\tqName\tqSize\tqStart\tqEnd\ttName\ttSize\ttStart\ttEnd\tblockCount\tblockSizes\tqStarts\ttStarts\n");
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct psl *psl = pslLoad(row+hasBin);
-    pslTabOut(psl, stdout);
-    }
-printf("</PRE></TT>\n");
-}
-
 void printTrackHtml(struct trackDb *tdb)
 /* If there's some html associated with track print it out. */
 {
@@ -1420,73 +1398,6 @@ struct sqlConnection *conn = sqlConnect("mgsc");
 
 genericHeader(tdb, item);
 sprintf(query, "select * from rikenMrna where qName = '%s'", item);
-sr = sqlGetResult(conn, query);
-printf("<PRE><TT>\n");
-printf("#match\tmisMatches\trepMatches\tnCount\tqNumInsert\tqBaseInsert\ttNumInsert\tBaseInsert\tstrand\tqName\tqSize\tqStart\tqEnd\ttName\ttSize\ttStart\ttEnd\tblockCount\tblockSizes\tqStarts\ttStarts\n");
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct psl *psl = pslLoad(row+1);
-    pslTabOut(psl, stdout);
-    }
-printf("</PRE></TT>\n");
-sqlDisconnect(&conn);
-
-printTrackHtml(tdb);
-}
-
-void doBlastzHgPsl(struct trackDb *tdb, char *item, char *table)
-/* display Human Human alignment  */
-{
-char query[512];
-boolean hasBin;
-char splitTable[64];
-struct sqlResult *sr;
-char qStart[25];
-char qName[25] ;
-char qEnd[25] ;
-char tStart[25];
-char tName[25] ;
-char tEnd[25] ;
-char *cp, *dp;
-char **row;
-struct sqlConnection *conn = hAllocConn();
-
-
-genericHeader(tdb, item);
-hFindSplitTable(seqName, table, splitTable, &hasBin);
-dp = qName ;
-for (cp=item;cp<=item+strlen(item)-1; cp++)
-    {
-    *dp++ = *cp; 
-    if (*cp ==':')
-        {
-        *dp++ == 0;
-        dp = qStart;
-        }
-    if (*cp =='-')
-        {
-        *dp++ == 0;
-        dp = qEnd;
-        }
-    if (*cp ==' ')
-        {
-        *dp++ == 0;
-        dp = tStart;
-        }
-    }
-strcpy (tStart, strrchr(item,':')+1);
-strcpy (tEnd, strrchr(item,'-')+1);
-/*
-printf("%s\n",strrchr(item,':'));
-strncpy(qName,item, 5);
-qName[5] = 0;
-strncpy(qStart,index(item,':')+1, 10);
-qStart[9] = 0;
-strncpy(qEnd,index(item,'-')+1, strlen(index(item,' ')));
-qEnd[9] = 0;
-*/
-sprintf(query, "select * from  %s where qName = '%s' and qStart >= %s and qEnd <= %s and tStart >= %s and tEnd <= %s ",splitTable, qName, qStart, qEnd, tStart, tEnd);
-printf("query = %s\n",query);
 sr = sqlGetResult(conn, query);
 printf("<PRE><TT>\n");
 printf("#match\tmisMatches\trepMatches\tnCount\tqNumInsert\tqBaseInsert\ttNumInsert\tBaseInsert\tstrand\tqName\tqSize\tqStart\tqEnd\ttName\ttSize\ttStart\ttEnd\tblockCount\tblockSizes\tqStarts\ttStarts\n");
@@ -6777,11 +6688,11 @@ else if (sameWord(track, "blatHuman"))
     }
 else if (sameWord(track, "blastzHg"))
     {
-    doBlastzHgPsl(tdb, item, track);
+    doBlatHumanSelf(tdb, item);
     }
 else if (sameWord(track, "blastzHgRef"))
     {
-    doBlastzHgPsl(tdb, item, track);
+    doBlatHumanSelf(tdb, item);
     }
 else if (sameWord(track, "htcLongXenoPsl2"))
     {
