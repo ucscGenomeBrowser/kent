@@ -250,7 +250,7 @@ if (extFilesHash == NULL)
 	hel = hashAdd(hash, row[1], ex);
 	ex->name = name = hel->name;
 	ex->path = cloneString(row[2]);
-	ex->size = sqlOffset(row[3]);
+	ex->size = sqlLongLong(row[3]);
 	len = strlen(name);
 	lastChar = name[len-1];
         gotSize = fileSize(ex->path);
@@ -270,7 +270,7 @@ if (extFilesHash == NULL)
     }
 }
 
-HGID storeExtFilesTable(struct sqlConnection *conn, char *name, char *path)
+HGID hgStoreExtFilesTable(struct sqlConnection *conn, char *name, char *path)
 /* Store name/path in external files table. */
 {
 struct hashEl *hel;
@@ -288,14 +288,14 @@ else
     {
     char query[512];
     HGID id;
-    unsigned long size = fileSize(path);
+    long long size = fileSize(path);
     AllocVar(ex);
     ex->id = id = hgNextId();
     hel = hashAdd(extFilesHash, name, ex);
     ex->name = hel->name;
     ex->path = cloneString(path);
     ex->size = size;
-    sprintf(query, "INSERT into extFile VALUES(%u,'%s','%s',%lu)",
+    sprintf(query, "INSERT into extFile VALUES(%u,'%s','%s',%lld)",
 	id, name, path, size);
     sqlUpdate(conn,query);
     return id;
@@ -371,7 +371,7 @@ int faLineSize;
 char faAcc[32];
 char nameBuf[512];
 DNA *faDna;
-long extFileId = storeExtFilesTable(conn, symFaName, faName);
+long extFileId = hgStoreExtFilesTable(conn, symFaName, faName);
 boolean gotFaStart = FALSE;
 char *raTag;
 char *raVal;
@@ -619,7 +619,7 @@ for (i=0; i<fileCount; ++i)
     strcat(symFaName, ext);
     printf("Adding %s (%s)\n", fileName, symFaName);
     faLf = lineFileOpen(fileName, TRUE);
-    extFileId = storeExtFilesTable(conn, symFaName, fileName);
+    extFileId = hgStoreExtFilesTable(conn, symFaName, fileName);
 
 
     /* Seek to first line starting with '>' in line file. */
