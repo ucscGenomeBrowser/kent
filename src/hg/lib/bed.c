@@ -8,7 +8,7 @@
 #include "bed.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.21 2003/08/20 22:04:03 krish Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.22 2003/08/21 16:58:11 kent Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -574,10 +574,10 @@ bed->name = cloneString(genePred->name);
 
 /* Convert coordinates to relative and exnosEnds to blockSizes. */
 for (i=0; i<blockCount; ++i)
-{
+    {
     blockSizes[i] -= chromStarts[i];
     chromStarts[i] -= chromStart;
-}
+    }
 return bed;
 }
 
