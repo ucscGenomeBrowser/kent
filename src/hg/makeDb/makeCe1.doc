@@ -198,7 +198,24 @@ MAKE SANGER GENE TRACK (DONE - 2003-05-19 - Hiram)
     # if you need to delete that table:
 	echo 'drop table sangerGene' | hgsql ce1
 
-# Run RepeatMasker on the chromosomes
+PREPARE Split contigs into 1,000,000 bp chunks for cluster runs
+    ssh eieio
+    cd ~/ce1
+    mkdir split
+    foreach f (I II III IV V X M)
+	mkdir split/$f
+        faSplit size chr${f}.fa 1000000 split/$f/c -lift=split/chr${f}.lft
+    end
+    # copy them to /scratch for cluster rsync
+    ssh kk
+    cd ~ce1/split
+    foreach f (I II III IV V X M)
+	mkdir -p /scratch/hiram/Celegans/${f}
+        cp -p ${f}/c*.fa /scratch/hiram/Celegans/${f}
+    end
+    # request rsync this directory via email to cluster-admin
+
+Run RepeatMasker on the chromosomes
     ssh kk
     cd ~/ce1
     mkdir RMRun

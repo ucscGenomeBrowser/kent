@@ -3,14 +3,14 @@ exit; # don't actually run this like a script :)
 
 # This file describes how to make the browser database for the
 # worm C. briggsae
-# Currently 2003-05-12 this file is in a state of flux as it is being
+# Currently 2003-05-20 this file is in a HIGH state of flux as it is being
 # worked out.
 
-DOWNLOAD SEQUENCE (NOT DONE 2003-05-12 - Hiram)
+DOWNLOAD SEQUENCE (DONE 2003-05-20 - Hiram)
 
     ssh eieio
-    mkdir -p /projects/compbio/experiments/worm/cb1/sanger
-    cd /projects/compbio/experiments/worm/cb1/sanger
+    mkdir -p /cluster/store4/worm/cb1/sanger
+    cd /cluster/store4/worm/cb1/sanger
     wget -o cb1.fetch.log -r -l1 --no-directories \
 	ftp://ftp.sanger.ac.uk/pub/wormbase/cbriggsae/cb25.agp8/
 #   Takes about eight minutes
@@ -26,365 +26,174 @@ DOWNLOAD SEQUENCE (NOT DONE 2003-05-12 - Hiram)
 #   get out of this download data directory, and create your home symlink
 #	shortcut
     cd ..
-    ln -s /projects/compbio/experiments/worm/cb1 ~/cb1
+    ln -s /cluster/store4/worm/cb1 ~/cb1
     cd ~/cb1
-
-#   STOP HERE - MUST DECIDE WHAT TO DO WITH THE CONTIG DATA 2002-05-12
-
+    # unzip the ultra contig file
+    zcat sanger/cb25.agp8.fasta.gz > cb25.agp8.ultra.fa
+    # create an artifical chrUn agp file:  (does 1000 N gaps
+    scaffoldFaToAgp cb25.agp8.ultra.fa
+    # and create the artifical chrUn.fa file:  (does 1000 N gaps)
+    ~hiram/bin/fa2chrUn.pl cb25.agp8.ultra.fa > chrUn.fa
+    # create nib file:
     mkdir nib
-#   translate to unzipped .fa and to nib
-	zcat sanger/cb25.agp8.supercontigs.fasta.gz > supercontigs.fa
-	zcat sanger/cb25.agp8.contigs.fasta.gz > contigs.fa
-	faToNib chr${f}.fa nib/chr${f}.nib
-    end
-#   Typical output:
-#	I Writing 15080473 bases in 7540245 bytes
-#	II Writing 15279303 bases in 7639660 bytes
-#	III Writing 13783268 bases in 6891642 bytes
-#	IV Writing 17493790 bases in 8746903 bytes
-#	V Writing 20922238 bases in 10461127 bytes
-#	X Writing 17705013 bases in 8852515 bytes
-#	M Writing 13794 bases in 6905 bytes
+    faToNib chrUn.fa nib/chrUn.nib
+# Writing 109024926 bases in 54512471 bytes
 
-
-CREATING DATABASE (DONE 2003-05-12 - Hiram)
+CREATING DATABASE (DONE 2003-05-20 - Hiram)
 
     # Create the database.
     ssh hgwdev
     echo 'create database cb1' | hgsql ''
-    # if you need to delete that database:
-	echo 'drop database cb1' | hgsql cb1
-    # make a semi-permanent read-only alias:
-    alias cb1 "mysql -u hguser -phguserstuff -A cb1"
-    # Use df to ake sure there is at least 5 gig free on 
+    # if you need to delete that database:  !!! WILL DELETE EVERYTHING
+    # !!!
+        echo 'drop database cb1' | hgsql cb1
+    # Use df to make sure there is at least 5 gig free on
     df -h /var/lib/mysql
-# Before loading data:
-# Filesystem            Size  Used Avail Use% Mounted on
-# /dev/sda1             472G  389G   58G  87% /var/lib/mysql
 
-
-CREATING GRP TABLE FOR TRACK GROUPING (DONE 2003-05-12 - Hiram)
+CREATING GRP TABLE FOR TRACK GROUPING (DONE 2003-05-20 - Hiram)
     ssh hgwdev
     #  the following command copies all the data from the table
-    #	grp in the database rn1 to our new database cb1
+    #   grp in the database rn1 to our new database cb1
     echo "create table grp (PRIMARY KEY(NAME)) select * from rn1.grp" \
       | hgsql cb1
-    # if you need to delete that table:
-	echo 'drop table grp;' | hgsql cb1
+    # if you need to delete that table:   !!! WILL DELETE ALL grp data
+    # !!!
+        echo 'drop table grp;' | hgsql cb1
 
-STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE 2003-05-12 - Hiram)
+STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE 2003-05-20 - Hiram)
 
     # Make symbolic links from /gbdb/cb1/nib to the real nibs.
     ssh hgwdev
     mkdir -p /gbdb/cb1/nib
-    foreach f (/projects/compbio/experiments/worm/cb1/nib/*.nib)
+    foreach f (/cluster/store4/worm/cb1/nib/*.nib)
       ln -s $f /gbdb/cb1/nib
     end
     # Load /gbdb/cb1/nib paths into database and save size info.
     hgsql cb1  < ~/kent/src/hg/lib/chromInfo.sql
-    # if you need to delete that table:
-	echo 'drop table chromInfo;' | hgsql cb1
+    # if you need to delete that table:   !!! DELETES ALL DATA IN TABLE
+    # !!!
+        echo 'drop table chromInfo;' | hgsql cb1
     cd ~/cb1
-    hgNibSeq -preMadeNib cb1 /gbdb/cb1/nib chr*.fa
-# Typical output:
-# Processing chrI.fa to /gbdb/cb1/nib/chrI.nib
-# Processing chrII.fa to /gbdb/cb1/nib/chrII.nib
-# Processing chrIII.fa to /gbdb/cb1/nib/chrIII.nib
-# Processing chrIV.fa to /gbdb/cb1/nib/chrIV.nib
-# Processing chrM.fa to /gbdb/cb1/nib/chrM.nib
-# Processing chrV.fa to /gbdb/cb1/nib/chrV.nib
-# Processing chrX.fa to /gbdb/cb1/nib/chrX.nib
-# 100277879 total bases
-
-#   Verify the hgNibSeq load functioned OK:
+    hgNibSeq -preMadeNib cb1 /gbdb/cb1/nib chrUn.fa
+# Processing chrUn.fa to /gbdb/cb1/nib/chrUn.nib
+# 109024926 total bases
+#   Verify the hgNibSeq load functioned OK: 
     echo "select chrom,size from chromInfo" | hgsql -N cb1 > chrom.sizes
     cat chrom.sizes
 #   Typical contents of chrom.sizes:
-chrI    15080473
-chrII   15279303
-chrIII  13783268
-chrIV   17493790
-chrM    13794
-chrV    20922238
-chrX    17705013
+# chrUn   109024926
 
-    # Set up relational mrna tables.
+# Set up relational mrna tables.
     hgLoadRna new cb1
     # that created a bunch of tables.  If you need to delete them:
-	echo 'drop table author; \
+        echo 'drop table author; \
 drop table cds; drop table cell; drop table description; \
 drop table development; drop table extFile; drop table geneName; \
-drop table history; drop table keyword; drop table library; drop table mrna; \
+drop table history; drop table keyword; drop table library; drop table
+mrna; \
 drop table mrnaClone; drop table organism; drop table productName; \
 drop table seq; drop table sex; drop table source; drop table tissue;' \
-	| hgsql cb1
+        | hgsql cb1
 
 
-MAKE GCPERCENT (DONE 2003-05-12 - Hiram)
+MAKE GCPERCENT (DONE 2003-05-20 14:30 - Hiram)
      ssh hgwdev
-     mkdir -p /projects/compbio/experiments/worm/cb1/bed/gcPercent
-     cd /projects/compbio/experiments/worm/cb1/bed/gcPercent
+     mkdir -p /cluster/store4/worm/cb1/bed/gcPercent
+     cd /cluster/store4/worm/cb1/bed/gcPercent
      hgsql cb1  < ~/kent/src/hg/lib/gcPercent.sql
     #  If you need to delete that table created
-	echo 'drop table gcPercent;' | hgsql cb1;
+        echo 'drop table gcPercent;' | hgsql cb1;
      hgGcPercent cb1 ../../nib
 
-MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR SC1 (DONE 2002-05-12 - Hiram)
+
+MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR CB1 (DONE 2002-05-20 - Hiram)
      ssh hgwdev
-    echo 'insert into defaultDb values("Caenorhabditis elegans", "cb1");' \
+    echo 'insert into defaultDb values("Caenorhabditis briggsae",
+"cb1");' \
       | hgsql -h genome-testdb hgcentraltest
     #  If you need to delete that entry:
-	echo 'delete from defaultDb where name="cb1";' \
+        echo 'delete from defaultDb where name="cb1";' \
         | hgsql -h genome-testdb hgcentraltest
-    echo 'insert into dbDb values("cb1", "May 2003", \
-	"/gbdb/cb1/nib", "worm", "chrII:14646858-14667232", 1, 10, \
-	"Caenorhabditis elegans");' \
-	| hgsql -h genome-testdb hgcentraltest
+    echo 'insert into dbDb values("cb1", "July 2002", \
+        "/gbdb/cb1/nib", "worm", "chrUn", 1, 10, \
+        "Caenorhabditis briggsae");' \
+        | hgsql -h genome-testdb hgcentraltest
     #  If you need to delete that entry:
-	echo 'delete from dbDb where name="cb1";' \
-	| hgsql -h genome-testdb hgcentraltest
+        echo 'delete from dbDb where name="cb1";' \
+        | hgsql -h genome-testdb hgcentraltest
     # Make trackDb table so browser knows what tracks to expect:
     cd ~/kent/src/hg/makeDb/trackDb
     cvs up -d -P
     # Edit that makefile to add cb1 in all the right places and do
     make update
-    make alpha
+    # before you make alpha you must commit your trackDb/makefile
+    # and any other trackDb/worm files
     cvs commit makefile
+    make alpha
 
-# *****************   END HERE 2003-05-12 10:50 - Hiram  ***************
-
-MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR SC1 (TODO)
-    ssh hgwdev
-    echo 'insert into blatServers values("cb1", "blat10", "17778", "1"); \
-          insert into blatServers values("cb1", "blat10", "17779", "0");' \
-      | hgsql -h genome-testdb hgcentraltest
-
-
-SIMPLE REPEAT TRACK (DONE 04/15/03)
-    # TRF runs pretty quickly now... it takes a few hours total runtime, 
+SIMPLE REPEAT TRACK (DONE 2003-05-20 - 15:46 - Hiram)
+    # This TRF run takes about an hour on eieio
     # so instead of binrsyncing and para-running, just do this on eieio:
     ssh eieio
-    mkdir ~/sc1/bed/simpleRepeat
-    cd ~/sc1/bed/simpleRepeat
+    mkdir ~/cb1/bed/simpleRepeat
+    cd ~/cb1/bed/simpleRepeat
     mkdir trf
     rm -f jobs.csh
     touch jobs.csh
-    foreach f (/cluster/store5/SARS_Coronavirus_TOR2/*.fa)
+    foreach f (/cluster/store4/worm/cb1/chrUn.fa)
       set fout = $f:t:r.bed
-      echo "/cluster/home/kent/bin/i386/trfBig -trf=/cluster/home/kent/bin/i386/trf $f /dev/null -bedAt=trf/$fout -tempDir=/tmp" \
+      echo "/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf ${f} /dev/null -bedAt=trf/${fout} -tempDir=/tmp" \
         >> jobs.csh
+     echo ${f} ${fout}
     end
     tcsh jobs.csh |& tee jobs.log
     wc -l jobs.csh
     ls -1 trf | wc -l
-# STOPPED HERE -- no simple repeats found.
 
-    # When job is done do:
-    liftUp simpleRepeat.bed ~/sc1/jkStuff/liftAll.lft warn trf/*.bed
-
-    # Load this into the database as so
+    # When jobs are done,
+    # To Load this into the database as so
     ssh hgwdev
-    cd ~/sc1/bed/simpleRepeat
-    hgLoadBed sc1 simpleRepeat simpleRepeat.bed \
+    cd ~/cb1/bed/simpleRepeat
+    cat trf/chr*.bed > simpleRepeat.bed
+    hgLoadBed cb1 simpleRepeat simpleRepeat.bed \
       -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
 
-
-MAKING VIRAL mRNA FILES (DONE 04/15/03)
-    cd /cluster/store5/mrna.134
-    gunzip -c \
-      /cluster/store5/genbank.134/gbvrl* \
-    | gbToFaRa anyRna.fil viralRna.{fa,ra,ta} stdin
-    mkdir /gbdb/sc1/mrna.134
-    ln -s  /cluster/store5/mrna.134/viralRna.fa /gbdb/sc1/mrna.134/
-    hgLoadRna add -type=mrna sc1 /gbdb/sc1/mrna.134/viralRna.fa \
-      /cluster/store5/mrna.134/viralRna.ra
-    # distribute to /iscratch/i/
-    ssh kkr1u00
-    mkdir -p /iscratch/i/mrna.134
-    cp -p /cluster/store5/mrna.134/viralRna.fa  /iscratch/i/mrna.134
-    ~kent/bin/iSync
-
-
-ALIGNING VIRAL RNA (DONE 04/16/03)
-    ssh kkr1u00
-    mkdir -p ~/sc1/bed/mrna
-    cd ~/sc1/bed/mrna
-    ls -1S /cluster/store5/SARS_Coronavirus_TOR2/*.fa > genome.lst
-    ls -1 /iscratch/i/mrna.134/viralRna.fa > mrna.lst
-    cp ~/lastRn/bed/mrna/gsub .
-    # edited gsub to remove -ooc and add query options for translated.
-    mkdir psl
-    gensub2 genome.lst mrna.lst gsub spec
-    para create spec
-    para try, para check, para push, para check....
-    para time > time
-      
-    # Process alignments into near best in genome.
+Split into contigs for RepeatMasker, BLAT, and other cluster jobs
     ssh eieio
-    cd ~/sc1/bed/mrna
-    pslSort dirs raw.psl /cluster/store2/temp psl
-    # Skip the pslReps -- need the sensitivity!
-    cat raw.psl \
-    | sed -e 's/TOR2_draft_genome_assembly_140403/chr1/' \
-    > all_mrna.psl
-    pslSortAcc nohead chrom /cluster/store2/temp all_mrna.psl
+    cd ~cb1
+    mkdir split
+    # it is a little over 100,000,000 bases, thus 100,000 sized chunks
+    # produces about 1000 files  (1091 precisely)
+    faSplit size chrUn.fa 100000 split/c -lift=split.lft
 
-    # Load mRNA alignments into database.
-    ssh hgwdev
-    cd ~/sc1/bed/mrna/chrom
-    foreach i (chr?{,?}{,_random}.psl)
-        mv $i $i:r_mrna.psl
+    # copy those to scratch
+    ssh kk
+    mkdir -p /scratch/hiram/Cbriggsae
+    cd /scratch/hiram/Cbriggsae
+    cp -p ~/cb1/split/c*.fa .
+    # request push
+    
+RepeatMasker run
+    ssh kk
+    cd ~/cb1
+    mkdir RMRun
+    cd RMRun
+    rm -fr RMJobs
+    touch RMJobs
+    foreach d ( ../split/c*.fa )
+      set bname = `basename $d`
+      echo /cluster/bin/scripts/RMWorm $d \
+	'{'check out line+ $bname.out'}' >> RMJobs
     end
-    hgLoadPsl sc1 *.psl
-    cd ..
-    hgLoadPsl sc1 all_mrna.psl -nobin
-
-
-LOAD SWISS PROT CORONAVIRUS PROTEINS
-    cd ~/sc1/bed/swissprot
-    download all ORGANISM=coronavirus proteins from SRS into file viralProt.fa
-    ssh kkr1u00
-    mkdir psl
-    para create spec
+    para create RMJobs
+    para try
+    para check
     para push
-    cd psl
-    mv chr1_viralProt.psl chr1_viralProtLoose.psl
-    pslReps -minAli=0.67 chr1_viralProtLoose.psl chr1_viralProt.psl    
-    hgLoadPsl sc1 chr1_viralProt.psl chr1_viralProtLoose.psl
 
+#   STOP HERE - 2003-05-20
 
-LOAD CPGISSLANDS (DONE 04/15/03)
-    ssh eieio
-    mkdir -p ~/sc1/bed/cpgIsland
-    cd ~/sc1/bed/cpgIsland
-    # Build software emailed from Asif Chinwalla (achinwal@watson.wustl.edu)
-    # copy the tar file to the current directory
-    cp ~/lastRn/bed/cpgIsland/cpg_dist.tar .
-    tar xvf cpg_dist.tar 
-    cd cpg_dist
-    gcc readseq.c cpg_lh.c -o cpglh.exe
-    cd ..
-    foreach f (../../*.fa)
-      set fout=$f:t:r:r.cpg
-      echo running cpglh on $f to $fout
-      ./cpg_dist/cpglh.exe $f > $fout.cpg
-    end
-    # copy filter.awk from a previous release
-    cp ~/lastRn/bed/cpgIsland/filter.awk .
-    awk -f filter.awk chr*.cpg > cpgIsland.bed
-# STOPPED HERE -- NO CPG ISLANDS FOUND
-    # load into database:
+MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR CB1 (TODO)
     ssh hgwdev
-    cd ~/sc1/bed/cpgIsland
-    hgLoadBed sc1 cpgIsland -tab -noBin \
-      -sqlTable=$HOME/kent/src/hg/lib/cpgIsland.sql cpgIsland.bed
-
-
-LOAD SOFTBERRY GENES 
-     mkdir -p ~/sc1/bed/softberry
-     cd ~/sc1/bed/softberry
-  # Copy in email attachment Soft_genes_SARS_Tor2.tar.gz
-  # from Victor Solovyev
-     gtar -zxvf Soft_gene*.gz
-  # Substitute chr1 for subs in the gff file 
-     ldHgGene sc1 softberryGene SARS.gff
-     hgPepPred sc1 softberry *.protein
-     hgSoftberryHom sc1 *.protein
-
-
-LOAD GENBANK ANNOTATED PROTEINS (DONE 04/23/03)
-    mkdir -p ~/sc1/bed/gbProtAnn
-    cd ~/sc1/bed/gbProtAnn
-    # go to http://www.ncbi.nlm.nih.gov/ -- search Protein for NP_828849
-    # Save the displayed genbank record to NP_828849.gbff
-    #
-    # Used emacs macros (and judgment about what the short names should be) 
-    # to edit the mat_peptide elements to a bed 4 + tab file like this:
-    #  chrom	start	end	name	product	note	proteinId	giId
-    # called NP_828849.pbed -- pbed because it's in protein coordinates.  
-    #
-    # Now translate the protein coordinates into genomic coords:
-    #  /coded_by="join(NC_004718.1:250..13383, NC_004718.1:13383..21470)"
-    #  /note="putative -1 frameshift"
-    # and strip the "gi:" from genbank id numbers:
-    # OK, also use the proteinId as the name instead of my short names so 
-    # that others can link in more easily as Fan suggested:
-    perl -wpe '@w = split(/\t/); \
-               if ($w[1] < 4379) { \
-                 $w[1] = (($w[1] - 1) * 3) + 250 - 1; \
-                 $w[2] = (($w[2] - 1) * 3) + 250 + 2; \
-               } else { \
-                 $w[1] = (($w[1] - 4379) * 3) + 13383 - 1; \
-                 $w[2] = (($w[2] - 4379) * 3) + 13383 + 2; \
-               } \
-               $w[7] =~ s/gi://i; \
-               $w[3] = $w[6]; \
-               $_ = join("\t", @w); \
-              ' NP_828849.pbed \
-    > NP_828849.bed
-    # Make sure it looks right:
-    sdiff NP_828849.pbed NP_828849.bed
-    hgLoadBed sc1 gbProtAnn NP_828849.bed \
-      -tab -noBin -sqlTable=$HOME/src/hg/lib/gbProtAnn.sql
-
-
-PRODUCING GENSCAN PREDICTIONS (DONE 4/23/03)
-    ssh kkr1u00
-    mkdir -p ~/sc1/bed/genscan
-    cd ~/sc1/bed/genscan
-    # No cluster run (or liftUp) required -- just run it:
-    /cluster/home/kent/bin/i386/gsBig ~/sc1/chr1.fa genscan.gtf \
-      -trans=genscan.pep -subopt=genscanSubopt.bed \
-      -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan \
-      -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat \
-      -tmp=/tmp -window=2400000
-    # Load into the database as so:
-    ssh hgwdev
-    cd ~/sc1/bed/genscan
-    ldHgGene sc1 genscan genscan.gtf
-    hgPepPred sc1 generic genscanPep genscan.pep
-    hgLoadBed sc1 genscanSubopt genscanSubopt.bed
-
-
-BLATTING OTHER SARS WHOLE GENOMES AGAINST TOR2 (DONE 04/25/03)
-    ssh eieio
-    mkdir -p ~/sc1/bed/otherSARS
-    cd ~/sc1/bed/otherSARS
-    # Went to http://www.ncbi.nlm.nih.gov/ , did a search in Nucleotide 
-    # for SARS Coronavirus, viewed results as FASTA, and saved results to 
-    # <accession>.fa files:
-    # AY278554.2 (CUHK-W1)
-    # AY278741.1 (Urbani)
-    # AY278491.2 (HKU-39849)
-    # AY279354.1 (BJ04 partial)
-    # AY278490.1 (BJ03 partial)
-    # AY278489.1 (GZ01 partial)
-    # AY278488.1 (BJ01 partial)
-    # AY278487.1 (BJ02 partial)
-    # AY268049.1 (Taiwan partial cds)
-    # AY269391.1 (Vietnam partial)
-    cat A*.fa > otherSARS.fa
-    # Now blat (sensitive is OK because these are same organism):
-    /cluster/home/kent/bin/i386/blat -noHead ~/sc1/chr1.fa otherSARS.fa \
-      otherSARS.psl
-    # Now put the sequence in /gbdb and index it into extFile/seq:
-    ssh hgwdev
-    mkdir -p /gbdb/sc1/otherSARS/
-    ln -s `pwd`/otherSARS.fa /gbdb/sc1/otherSARS/
-    hgLoadRna addSeq sc1 /gbdb/sc1/otherSARS/otherSARS.fa -type=otherSARS.fa
-    # And load the alignments:
-    hgLoadPsl sc1 otherSARS.psl
-
-LOADING VIRAL mrna for blastz track (done 4/30/03)
-
-cd ~/sars/genbank
-gunzip -c /cluster/store5/genbank/data/download/genbank.135.0/gb{phg,vrl,vrt}*.seq.gz | gbToFaRa any.fil viralany.fa viralany.ra viralany.ta stdin
-gunzip -c /cluster/store5/genbank/data/download/refseq.135.0/cumulative/rscu.gbff.Z | gbToFaRa refseq.fil refseqviral.fa refseqviral.ra refseqviral.ta stdin
-cat viralany.fa refseqviral.fa > viral.fa
-cat viralany.ra refseqviral.ra > viral.ra
-mv viral.fa viralany.fa
-mv viral.ra viralany.ra
-hgLoadRna new sc1
-hgLoadRna add -type=mRNA sc1 /gbdb/sc1/mrnaViral/viralany.fa viralany.ra
-hgLoadRna addSeq -abbr=prot sc1 /gbdb/sc1/swissprot/viralProt.fa
-hgLoadRna addSeq sc1 /gbdb/sc1/otherSARS/otherSARS.fa -type=otherSARS.fa
+    echo 'insert into blatServers values("cb1", "blat10", "17778", "1"); \
+          insert into blatServers values("cb1", "blat10", "17779", "0");' \
+      | hgsql -h genome-testdb hgcentraltest
