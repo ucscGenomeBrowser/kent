@@ -16,7 +16,7 @@ altColor 180,180,180
 
 track vegaGene
 shortLabel Vega Genes
-longLabel Vega Annotations from Sanger, Genoscope
+longLabel Vega Annotations 
 group genes
 priority 37
 visibility hide
