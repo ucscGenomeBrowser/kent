@@ -27,7 +27,7 @@
 #include "hCommon.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: finPoster.c,v 1.9 2003/10/07 05:55:00 kent Exp $";
+static char const rcsid[] = "$Id: finPoster.c,v 1.10 2003/10/08 07:39:09 kent Exp $";
 
 /* Which database to use */
 char *database = "hg16";
@@ -1284,12 +1284,15 @@ double scale = 1.0/(wc->maxVal-minVal);
 struct binKeeper *bk = gapBinKeeper(conn, chrom, chromSize);
 
 slReverse(&wc->posList);
+scale *= 1.2;
 for (wig = wc->posList; wig != NULL; wig = wig->next)
     {
     struct binElement *gapList = binKeeperFind(bk, wig->start, wig->end);
     if (gapList == NULL)
 	{
 	double val = (wig->val - minVal) * scale;
+	if (val < 0) val = 0;
+	if (val > 1) val = 1;
 	printTabNum(f, cg, chrom, wig->start, wig->end, 
 		"mutation", "wiggle", 0, 128, 0, val);
 	}
