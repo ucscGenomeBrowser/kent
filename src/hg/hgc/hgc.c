@@ -1144,6 +1144,7 @@ void geneShowPosAndLinks(char *geneName, char *pepName, struct trackDb *tdb,
 {
 char *geneTable = tdb->tableName;
 char other[256];
+
 showGenePos(geneName, tdb);
 printf("<H3>Links to sequence:</H3>\n");
 printf("<UL>\n");
@@ -1153,6 +1154,7 @@ if (pepTable != NULL && hTableExists(pepTable))
     printf("<LI>Predicted Protein</A> \n"); 
     }
 hgcAnchorSomewhere(mrnaClick, geneName, geneTable, seqName);
+
 printf("<LI>%s</A> may be different from the assembly\n", mrnaDescription);
 hgcAnchorSomewhere(genomicClick, geneName, geneTable, seqName);
 printf("<LI>Genomic Sequence</A> from assembly\n");
@@ -3627,7 +3629,7 @@ char faLine[256];
 int rowOffset = hOffsetPastBin(seqName, table);
 
 hgcStart("Predicted mRNA");
-sprintf(query, "select * from %s where name = '%s'", table, geneName);
+sprintf(query, "select * from %s where name = '%s' and txEnd > %u and txStart < %u and chrom='%s'", table, geneName, winStart, winEnd, seqName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
