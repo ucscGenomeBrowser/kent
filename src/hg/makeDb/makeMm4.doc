@@ -4632,6 +4632,7 @@ o Create pbAaDistX tables
 
   use mm4;
 
+load data local infile "pbAaDistW.tab" into table mm4.pbAaDistW;
 load data local infile "pbAaDistC.tab" into table mm4.pbAaDistC;
 load data local infile "pbAaDistM.tab" into table mm4.pbAaDistM;
 load data local infile "pbAaDistH.tab" into table mm4.pbAaDistH;
@@ -4649,8 +4650,8 @@ load data local infile "pbAaDistP.tab" into table mm4.pbAaDistP;
 load data local infile "pbAaDistG.tab" into table mm4.pbAaDistG;
 load data local infile "pbAaDistE.tab" into table mm4.pbAaDistE;
 load data local infile "pbAaDistA.tab" into table mm4.pbAaDistA;
-load data local infile "pbAaDistA.tab" into table mm4.pbAaDistL;
-load data local infile "pbAaDistA.tab" into table mm4.pbAaDistS;
+load data local infile "pbAaDistL.tab" into table mm4.pbAaDistL;
+load data local infile "pbAaDistS.tab" into table mm4.pbAaDistS;
 
 o Create pbAnomLimit and pbResAvgStd tables
 
