@@ -2996,7 +2996,6 @@ tg->mapItemName = knownGeneMapName;
 tg->itemColor 	= knownGeneColor;
 }
 
-
 char *superfamilyMapName(struct track *tg, void *item)
 /* Return map name of the track item (used by hgc). */
 {
@@ -3072,71 +3071,107 @@ sqlFreeResult(&sr);
 return(sfBuffer);
 }
 
+int superfamilyItemStart(struct track *tg, void *item)
+/* Return start position of item. */
+{
+struct bed *bed = item;
+return bed->chromStart;
+}
+
+int superfamilyItemEnd(struct track *tg, void *item)
+/* Return end position of item. */
+{
+struct bed *bed = item;
+return bed->chromEnd;
+}
+
+static void superfamilyDrawAt(struct track *tg, void *item, 
+	struct vGfx *vg, int xOff, int y, 
+	double scale, MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a single superfamily item at position. */
+{
+struct bed *bed = item;
+int heightPer = tg->heightPer;
+int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
+int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
+int w;
+
+if (tg->itemColor != NULL)
+    color = tg->itemColor(tg, bed, vg);
+else
+    {
+    if (tg->colorShades)
+	color = tg->colorShades[grayInRange(bed->score, 0, 1000)];
+    }
+w = x2-x1;
+if (w < 1)
+    w = 1;
+if (color)
+    {
+    vgBox(vg, x1, y, w, heightPer, color);
+    
+    // special label processing for superfamily track, because long names provide
+    // important info on structures and functions
+    if (vis == tvFull)
+        {
+    	char *s = superfamilyNameLong(tg, item);
+        vgTextRight(vg, x1-mgFontStringWidth(font, s)-2, y, mgFontStringWidth(font, s),
+                heightPer, MG_BLACK, font, s);
+        }
+
+    if (tg->drawName && vis != tvSquish)
+	{
+	/* Clip here so that text will tend to be more visible... */
+	char *s = tg->itemName(tg, bed);
+	w = x2-x1;
+	if (w > mgFontStringWidth(font, s))
+	    {
+	    Color textColor = contrastingColor(vg, color);
+	    vgTextCentered(vg, x1, y, w, heightPer, textColor, font, s);
+	    }
+	mapBoxHc(bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
+		tg->mapName, tg->mapItemName(tg, bed), NULL);
+	}
+    }
+if (tg->subType == lfWithBarbs)
+    {
+    int dir = 0;
+    if (bed->strand[0] == '+')
+	dir = 1;
+    else if(bed->strand[0] == '-') 
+	dir = -1;
+    if (dir != 0 && w > 2)
+	{
+	int midY = y + (heightPer>>1);
+	Color textColor = contrastingColor(vg, color);
+	clippedBarbs(vg, x1, midY, w, 2, 5, dir, textColor, TRUE);
+	}
+    }
+}
+
 static void superfamilyDraw(struct track *tg, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
-/* Draw simple Bed items for superfamily track */
+/* Draw superfamily items. */
 {
-int baseWidth = seqEnd - seqStart;
-struct bed *item;
-int y = yOff;
-int heightPer = tg->heightPer;
-int lineHeight = tg->lineHeight;
-int x1,x2,w;
-boolean isFull = (vis == tvFull);
-double scale = width/(double)baseWidth;
-int midLineOff = heightPer/2;
-int midY = y + midLineOff;
-int dir;
-Color *shades = tg->colorShades;
-
-for (item = tg->items; item != NULL; item = item->next)
-    {
-    char *s = superfamilyNameLong(tg, item);
-    x1 = round((double)((int)item->chromStart-winStart)*scale) + xOff;
-    x2 = round((double)((int)item->chromEnd-winStart)*scale) + xOff;
-    w = x2-x1;
-    if (tg->itemColor != NULL)
-        color = tg->itemColor(tg, item, vg);
-    else
-	{
-        if (shades)
-            {
-            color = shades[grayInRange(item->score, 0, 1000)];
-            }
-	}
-
-    if (w < 1)
-	w = 1;
-    vgBox(vg, x1, y, w, heightPer, color);
-    if (vis == tvFull)
-	{
-    	vgTextRight(vg, x1-mgFontStringWidth(font, s)-2, y, mgFontStringWidth(font, s), 
-		heightPer, MG_BLACK, font, s);
-	}
-    if (tg->drawName)
-	{
-	/* Clip here so that text will tend to be more visible... */
-	if (x1 < xOff)
-	    x1 = xOff;
-	if (x2 > xOff + width)
-	    x2 = xOff + width;
-	w = x2-x1;
-	if (w > mgFontStringWidth(font, s))
-	    vgTextCentered(vg, x1, y, w, heightPer, MG_WHITE, font, s);
-	}
-    if (isFull)
-	y += lineHeight;
-    }
+if (!tg->drawItemAt)
+    errAbort("missing drawItemAt in track %s", tg->mapName);
+genericDrawItems(tg, seqStart, seqEnd, vg, xOff, yOff, width, 
+	font, color, vis);
 }
+
 void superfamilyMethods(struct track *tg)
-/* Make track for simple repeats. */
+/* Fill in methods for (simple) bed tracks. */
 {
 tg->drawItems 	= superfamilyDraw;
-tg->totalHeight = tgFixedTotalHeight;
-tg->itemName    = superfamilyMapName;
+tg->drawItemAt 	= superfamilyDrawAt;
+tg->itemName 	= superfamilyMapName;
 tg->mapItemName = superfamilyMapName;
-tg->drawName  	= FALSE;
+tg->totalHeight = tgFixedTotalHeight;
+tg->itemHeight 	= tgFixedItemHeight;
+tg->itemStart 	= superfamilyItemStart;
+tg->itemEnd 	= superfamilyItemEnd;
+tg->drawName 	= FALSE;
 }
 
 char *refGeneName(struct track *tg, void *item)
