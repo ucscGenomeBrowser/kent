@@ -43,8 +43,7 @@ echo "new branch and tag v$BRANCHNN created."
 
 echo
 echo "moving tag beta..."
-cvs -d hgwdev:$CVSROOT rtag -dF beta kent >& /dev/null
-cvs -d hgwdev:$CVSROOT rtag -rv${BRANCHNN}_branch beta kent >& /dev/null
+cvs -d hgwdev:$CVSROOT rtag -F -rv${BRANCHNN}_branch beta kent >& /dev/null
 echo "beta regular tag moved to the new branch v$BRANCHNN."
 
 exit 0

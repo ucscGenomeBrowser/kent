@@ -1,6 +1,7 @@
-setenv BRANCHNN 99
-setenv TODAY 2005-02-09
-setenv LASTWEEK 2005-02-02
+setenv BRANCHNN 100
+setenv REVIEWDAY 2005-02-18
+setenv TODAY 2005-02-16
+setenv LASTWEEK 2005-02-09
 setenv WEEKLYBLD /cluster/bin/build/scripts
 
 setenv CVSROOT /projects/compbio/cvsroot

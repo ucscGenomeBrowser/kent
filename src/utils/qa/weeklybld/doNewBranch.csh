@@ -65,7 +65,7 @@ echo "tagNewBranch.csh done on $HOST"
 echo "new branch v$BRANCHNN created."
 
 #echo debug: disabled buildCvsReports
-./buildCvsReports.csh real
+./buildCvsReports.csh branch real
 
 if ( $status ) then
  echo "buildCvsReports.csh  failed on $HOST"
