@@ -9,10 +9,21 @@ errAbort(
   "gensub2 - Generate condor submission file from template and two file lists\n"
   "usage:\n"
   "   gensub2 <file list 1> <file list 2> <template file> <output file>\n"
-  "This will substitute each file in the file lists for $(file1) and $(file2)\n"
+  "This will substitute each file in the file lists for $(path1) and $(path2)\n"
   "in the template between #LOOP and #ENDLOOP, and write the results to\n"
-  "the output.");
-
+  "the output.  Other substitution variables are:\n"
+  "       $(path1)  - full path name of first file\n"
+  "       $(path1)  - full path name of second file\n"
+  "       $(dir1)   - first directory. Includes trailing slash if any.\n"
+  "       $(dir2)   - second directory\n"
+  "       $(root1)  - first file name without directory or extension\n"
+  "       $(root2)  - second file name without directory or extension\n"
+  "       $(ext1)   - first file extension\n"
+  "       $(ext2)   - second file extension\n"
+  "       $(file1)  - name without dir of first file\n"
+  "       $(file2)  - name without dir of second file\n"
+  "       $(num1)   - index of first file in list\n"
+  "       $(num2)   - index of second file in list\n");
 }
 
 struct sub
@@ -102,11 +113,14 @@ void gensub2(char *list1Name, char *list2Name, char *templateName, char *conName
 struct lineFile *lfT = lineFileOpen(templateName, TRUE);
 struct lineFile *lf1 = lineFileOpen(list1Name, TRUE);
 FILE *f = mustOpen(conName, "w");
-char *lineT, *line1, *line2;
-int lineSize;
+char *lineT, *path1, *path2;
+int lineSize, i, j;
 struct slName *loopList = NULL, *loopEl;
 bool gotLoop = FALSE, gotEndLoop = FALSE;
 struct sub *subList = NULL, *sub;
+char numBuf1[16], numBuf2[16];
+char dir1[256], root1[128], ext1[64], file1[265];
+char dir2[256], root2[128], ext2[64], file2[265];
 
 /* Print up to #LOOP. */
 while (lineFileNext(lfT, &lineT, &lineSize))
@@ -138,22 +152,55 @@ slReverse(&loopList);
 
 /* Substitute $(file1) and $(file2) in each line of loop for
  * each pair of files in two lists. */
-while (lineFileNext(lf1, &line1, &lineSize))
+i=1;
+while (lineFileNext(lf1, &path1, &lineSize))
     {
     struct lineFile *lf2 = lineFileOpen(list2Name, TRUE);
-    line1 = trimSpaces(line1);
-    while (lineFileNext(lf2, &line2, &lineSize))
+    path1 = trimSpaces(path1);
+    j=1;
+    while (lineFileNext(lf2, &path2, &lineSize))
         {
-	line2 = trimSpaces(line2);
-	sub = subNew("$(file1)", line1);
+	path2 = trimSpaces(path2);
+
+	splitPath(path1, dir1, root1, ext1);
+	sprintf(file1, "%s%s", root1, ext1);
+	sub = subNew("$(path1)", path1);
 	slAddHead(&subList, sub);
-	sub = subNew("$(file2)", line2);
+	sub = subNew("$(dir1)", dir1);
 	slAddHead(&subList, sub);
+	sub = subNew("$(root1)", root1);
+	slAddHead(&subList, sub);
+	sub = subNew("$(ext1)", ext1);
+	slAddHead(&subList, sub);
+	sub = subNew("$(file1)", file1);
+	slAddHead(&subList, sub);
+	sprintf(numBuf1, "%d", i);
+	sub = subNew("$(num1)", numBuf1);
+	slAddHead(&subList, sub);
+
+	splitPath(path2, dir2, root2, ext2);
+	sprintf(file2, "%s%s", root2, ext2);
+	sub = subNew("$(path2)", path2);
+	slAddHead(&subList, sub);
+	sub = subNew("$(dir2)", dir2);
+	slAddHead(&subList, sub);
+	sub = subNew("$(root2)", root2);
+	slAddHead(&subList, sub);
+	sub = subNew("$(ext2)", ext2);
+	slAddHead(&subList, sub);
+	sub = subNew("$(file2)", file2);
+	slAddHead(&subList, sub);
+	sprintf(numBuf2, "%d", j);
+	sub = subNew("$(num2)", numBuf2);
+	slAddHead(&subList, sub);
+
 	for (loopEl = loopList; loopEl != NULL; loopEl = loopEl->next)
 	    writeSubbed(loopEl->name, subList, f);
 	slFreeList(&subList);
+	++j;
 	}
     lineFileClose(&lf2);
+    ++i;
     }
 
 /* Write after #ENDLOOP */
