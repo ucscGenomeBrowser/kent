@@ -9,7 +9,7 @@
 #include "genePred.h"
 #include "sample.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.2 2004/03/25 01:00:28 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.3 2004/03/25 01:06:58 kate Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -80,7 +80,9 @@ static struct binElement *findRange(struct hash *chainHash,
                                 char *chrom, int start, int end)
 /* Find elements that intersect range. */
 {
-struct chromMap *map = hashMustFindVal(chainHash, chrom);
+struct chromMap *map = hashFindVal(chainHash, chrom);
+if (map == NULL)
+    return NULL;
 return binKeeperFind(map->bk, start, end);
 }
 
