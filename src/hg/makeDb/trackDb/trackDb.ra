@@ -534,6 +534,15 @@ visibility pack
 spectrum on
 type psl .
 
+track celeraMrna
+shortLabel Celera mRNAs
+longLabel $Organism mRNAs from celera assembly 
+group rna
+priority 54
+visibility hide
+spectrum on
+type psl .
+
 track mrnaBlastz
 shortLabel $Organism mRNAs Blastz
 longLabel $Organism mRNAs from GenBank Aligned with Blastz
