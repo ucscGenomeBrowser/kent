@@ -1,13 +1,13 @@
 include ../inc/common.mk
 
 L = -lm
-MYLIBDIR = ../../lib/$(MACHTYPE)
+MYLIBDIR = ../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = sortFilt.o
 
-sortFilt: $O ../../lib/$(MACHTYPE)/jkweb.a
+sortFilt: $O lib
 	${CC} ${COPT} ${CFLAGS} -O -o $(HOME)/bin/$(MACHTYPE)/sortFilt $O $(MYLIBS) $L
 
 lib:
-	cd ../../lib; make
+	cd ../lib && ${MAKE}
