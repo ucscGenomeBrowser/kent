@@ -27,7 +27,7 @@
 # is still produced.  This script is very careful to exit non-zero if an error
 # occurs.
 #
-# $Id: gbBlat,v 1.17 2004/02/23 07:37:36 markd Exp $
+# $Id: gbBlat,v 1.18 2004/02/26 18:12:00 angie Exp $
 #
 set -e
 
@@ -47,7 +47,7 @@ HG_OOC=/scratch/hg/h/11.ooc
 MM_OOC=/scratch/hg/h/mouse11.ooc
 RN_OOC=/scratch/hg/h/rat11.ooc
 PANTRO_OOC=/cluster/bluearc/hg/h/chimp11.ooc
-GALGAL_OOC=/cluster/bluearc/galGal1/11.ooc
+GALGAL_OOC=/iscratch/i/galGal2/11.ooc
 
 
 # entry, parse arguments
