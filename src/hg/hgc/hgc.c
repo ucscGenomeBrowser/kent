@@ -159,7 +159,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.840 2005/02/28 23:08:47 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.841 2005/03/01 19:47:35 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2376,7 +2376,7 @@ if (tfbsConsFactorList)
 		sr = sqlGetResult(conn, query); 
 		if ((row = sqlNextRow(sr)) != NULL)                                                         
 		    {
-		    printf("<A HREF=\"/cgi-bin/pbTracks?proteinID=%s&db=%s\" target=_blank><B>Protein Browser Entry</B></A><BR>",  tfbsConsFactor->id,factorDb);
+		    printf("<A HREF=\"/cgi-bin/pbTracks?proteinID=%s&db=%s\" target=_blank><B>Proteome Browser Entry</B></A><BR>",  tfbsConsFactor->id,factorDb);
 		    sqlFreeResult(&sr); 
 		    }
 		}
@@ -2409,7 +2409,6 @@ struct tfbsCons *tfbsConsList = NULL;
 struct tfbsConsMap tfbsConsMap;
 boolean firstTime = TRUE;
 char *mappedId = NULL;
-boolean haveProtMap = hTableExists("kgProtMap");
 
 dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
@@ -2467,6 +2466,9 @@ for(tfbs=tfbsConsList ; tfbs != NULL ; tfbs = tfbs->next)
 
 if (printFactors)
     {
+    char protMapTable[256];
+    char *factorDb;
+
     htmlHorizontalLine(); 
     printf("<B><font size=\"5\">Transcription Factors known to bind to this site:</font></B><BR><BR>");
     for(tfbs=tfbsConsList ; tfbs != NULL ; tfbs = tfbs->next)
@@ -2481,14 +2483,17 @@ if (printFactors)
 	    printf("<B>Species:</B> %s<BR>\n", tfbs->species);
 	    printf("<B>SwissProt ID:</B> %s<BR>\n", sameString(tfbs->id, "N")? "unknown": tfbs->id);
 
+	    factorDb = hDefaultDbForGenome(tfbs->species);
+	    safef(protMapTable, sizeof(protMapTable), "%s.kgProtMap", factorDb);
+
 	    /* Only display link if entry exists in protein browser */
-	    if (haveProtMap)
+	    if (hTableExists(protMapTable))
 		{
-		sprintf(query, "select * from kgProtMap where qName = '%s';", tfbs->id );
+		sprintf(query, "select * from %s where qName = '%s';", protMapTable, tfbs->id );
 		sr = sqlGetResult(conn, query); 
 		if ((row = sqlNextRow(sr)) != NULL)                                                         
 		    {
-		    printf("<A HREF=\"/cgi-bin/pbTracks?proteinID=%s\" target=_blank><B>Protein Browser Entry</B></A><BR><BR>",  tfbs->id);
+		    printf("<A HREF=\"/cgi-bin/pbTracks?proteinID=%s\" target=_blank><B>Proteome Browser</B></A><BR><BR>",  tfbs->id);
 		    sqlFreeResult(&sr); 
 		    }
 		}
