@@ -436,14 +436,30 @@ enum cdsColorOptEnum {
    cdsColorLinearInterpolation = 1,
 };
 
+enum cdsColorPlusOptEnum {
+    cdsColorOff = 0,
+    cdsGenomicOn = 1,
+    cdsGenomicPlusOn = 2,
+};
+
 enum cdsColorOptEnum cdsColorStringToEnum(char *string);
 /* Convert from string to enum representation. */
+
+enum cdsColorPlusOptEnum cdsColorPlusStringToEnum(char *string);
+/* Convert from string to enum representation with extra info.*/
 
 char *cdsColorEnumToString(enum cdsColorOptEnum x);
 /* Convert from enum to string representation. */
 
+char *cdsColorPlusEnumToString(enum cdsColorPlusOptEnum x);
+/* Convert from enum to string representation with extra info. */
+
 void cdsColorDropDown(char *var, char *curVal, int size);
 /* Make drop down of options.*/
+
+void cdsColorPlusDropDown(char *var, char *curVal, int size);
+/* Make drop down of options with extra info.*/
+
 
 /*** Some Stuff for the wiggle track ***/
 
