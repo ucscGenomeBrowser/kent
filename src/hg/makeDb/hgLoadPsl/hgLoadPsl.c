@@ -7,7 +7,7 @@
 #include "xAli.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadPsl.c,v 1.17 2003/12/17 22:23:51 baertsch Exp $";
+static char const rcsid[] = "$Id: hgLoadPsl.c,v 1.18 2003/12/17 22:53:02 baertsch Exp $";
 
 unsigned pslCreateOpts = 0;
 unsigned pslLoadOpts = 0;
@@ -28,7 +28,7 @@ errAbort(
   "   -table=tableName  Explicitly set tableName.  (Defaults to file name)\n"
   "   -tNameIx    add target name index\n"
   "   -xa         Include sequence info\n"
-  "   -concurrent Browser will not lock up if someone opens this table during loading\n"
+  "   -fastLoad   Browser will lock up if someone opens this table during loading\n"
   "   -onServer   This will speed things up if you're running in a directory that\n"
   "               the mysql server can access.\n"
   "   -export     create output in a manner similar to mysqlexport -T.\n"
@@ -137,7 +137,7 @@ if (!optionExists("nobin"))
     pslCreateOpts |= PSL_WITH_BIN;
 if (optionExists("xa"))
     pslCreateOpts |= PSL_XA_FORMAT;
-if (optionExists("concurrent"))
+if (!optionExists("fastLoad"))
     pslLoadOpts |= SQL_TAB_FILE_CONCURRENT;
 if (optionExists("onServer"))
     pslLoadOpts |= SQL_TAB_FILE_ON_SERVER;
