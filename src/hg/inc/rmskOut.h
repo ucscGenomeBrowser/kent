@@ -81,6 +81,11 @@ void rmskOutWriteOneOut(struct rmskOut *rmsk, FILE *f);
 void rmskOutWriteAllOut(char *fileName, struct rmskOut *rmskList);
 /* Write .out format file containing all in rmskList. */
 
+struct binKeeper *readRepeats(char *chrom, char *rmskFileName, struct hash *tSizeHash);
+/* read all repeats for a chromosome of size size, returns results in binKeeper structure for fast query*/
+
+struct hash *readRepeatsAll(char *sizeFileName, char *rmskDir);
+/* read all repeats for a all chromosomes getting sizes from sizeFileNmae , returns results in hash of binKeeper structure for fast query*/
 #endif /* RMSKOUT_H */
 
 

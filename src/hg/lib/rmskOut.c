@@ -4,10 +4,12 @@
 
 #include "common.h"
 #include "jksql.h"
+#include "obscure.h"
 #include "linefile.h"
 #include "rmskOut.h"
+#include "binRange.h"
 
-static char const rcsid[] = "$Id: rmskOut.c,v 1.5 2003/05/06 07:22:23 kate Exp $";
+static char const rcsid[] = "$Id: rmskOut.c,v 1.6 2003/07/01 22:42:43 baertsch Exp $";
 
 void rmskOutStaticLoad(char **row, struct rmskOut *ret)
 /* Load a row from rmskOut table into ret.  The contents of ret will
@@ -339,3 +341,61 @@ for (rmsk = rmskList; rmsk != NULL; rmsk = rmsk->next)
 fclose(f);
 }
 
+struct binKeeper *readRepeats(char *chrom, char *rmskFileName, struct hash *tSizeHash)
+/* read all repeats for a chromosome of size size, returns results in binKeeper structure for fast query*/
+{
+    boolean rmskRet;
+    struct lineFile *rmskF = NULL;
+    struct rmskOut *rmsk;
+    struct binKeeper *bk; 
+    int size;
+
+    size = hashIntVal(tSizeHash, chrom);
+    bk = binKeeperNew(0, size);
+    assert(size > 1);
+    rmskOutOpenVerify(rmskFileName ,&rmskF , &rmskRet);
+    while ((rmsk = rmskOutReadNext(rmskF)) != NULL)
+        {
+        binKeeperAdd(bk, rmsk->genoStart, rmsk->genoEnd, rmsk);
+        }
+    lineFileClose(&rmskF);
+    return bk;
+}
+
+struct hash *readRepeatsAll(char *sizeFileName, char *rmskDir)
+/* read all repeats for a all chromosomes getting sizes from sizeFileNmae , returns results in hash of binKeeper structure for fast query*/
+{
+boolean rmskRet;
+struct binKeeper *bk; 
+int size;
+struct lineFile *rmskF = NULL;
+struct rmskOut *rmsk;
+struct lineFile *lf = lineFileOpen(sizeFileName, TRUE);
+struct hash *hash = newHash(0);
+char *row[2];
+char rmskFileName[256];
+
+while (lineFileRow(lf, row))
+    {
+    char *name = row[0];
+    int size = lineFileNeedNum(lf, row, 1);
+
+    if (hashLookup(hash, name) != NULL)
+        warn("Duplicate %s, ignoring all but first\n", name);
+    else
+        {
+        bk = binKeeperNew(0, size);
+        assert(size > 1);
+        sprintf(rmskFileName, "%s/%s.fa.out",rmskDir,name);
+        rmskOutOpenVerify(rmskFileName ,&rmskF , &rmskRet);
+        while ((rmsk = rmskOutReadNext(rmskF)) != NULL)
+            {
+            binKeeperAdd(bk, rmsk->genoStart, rmsk->genoEnd, rmsk);
+            }
+        lineFileClose(&rmskF);
+	hashAdd(hash, name, bk);
+        }
+    }
+lineFileClose(&lf);
+return hash;
+}
