@@ -47,3 +47,23 @@ color 30,130,210
 altColor 200,220,255
 spectrum on
 type bed 5 
+
+track twinscan
+shortLabel Twinscan
+longLabel Twinscan Gene Predictions Using Rat/Human Homology
+group genes
+priority 45
+visibility dense
+color 0,100,100
+altColor 0,50,50
+type genePred twinscanPep
+
+track sgpGene
+shortLabel SGP Genes
+longLabel SGP Gene Predictions Using Rat/Human Homology
+group genes
+priority 47
+visibility dense
+color 0,90,100
+type genePred sgpPep
+
