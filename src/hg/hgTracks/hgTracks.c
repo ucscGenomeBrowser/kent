@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.738 2004/05/19 21:51:05 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.739 2004/05/19 22:44:46 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6487,6 +6487,38 @@ if (rulerMode != RULER_MODE_OFF)
     relNumOff = winStart;
     vgDrawRulerBumpText(vg, insideX, y, rulerHeight, insideWidth, MG_BLACK, 
                         font, relNumOff, winBaseCount, 0, 1);
+    {
+    /* Make hit boxes that will zoom program around ruler. */
+    int boxes = 30;
+    int winWidth = winEnd - winStart;
+    int newWinWidth = winWidth/3;
+    int i, ws, we = 0, ps, pe = 0;
+    int mid, ns, ne;
+    double wScale = (double)winWidth/boxes;
+    double pScale = (double)insideWidth/boxes;
+    for (i=1; i<=boxes; ++i)
+	{
+	ps = pe;
+	ws = we;
+	pe = round(pScale*i);
+	we = round(wScale*i);
+	mid = (ws + we)/2 + winStart;
+	ns = mid-newWinWidth/2;
+	ne = ns + newWinWidth;
+	if (ns < 0)
+	    {
+	    ns = 0;
+	    ne -= ns;
+	    }
+	if (ne > seqBaseCount)
+	    {
+	    ns -= (ne - seqBaseCount);
+	    ne = seqBaseCount;
+	    }
+	mapBoxJumpTo(ps+insideX,y,pe-ps,rulerHeight,
+		     chromName, ns, ne, "3x zoom");
+	}
+    }
     if (zoomedToBaseLevel)
         {
         Color baseColor = MG_BLACK;
@@ -6532,39 +6564,6 @@ if (rulerMode != RULER_MODE_OFF)
             }
         }
     vgUnclip(vg);
-    
-    /* Make hit boxes that will zoom program around ruler. */
-    {
-    int boxes = 30;
-    int winWidth = winEnd - winStart;
-    int newWinWidth = winWidth/3;
-    int i, ws, we = 0, ps, pe = 0;
-    int mid, ns, ne;
-    double wScale = (double)winWidth/boxes;
-    double pScale = (double)insideWidth/boxes;
-    for (i=1; i<=boxes; ++i)
-	{
-	ps = pe;
-	ws = we;
-	pe = round(pScale*i);
-	we = round(wScale*i);
-	mid = (ws + we)/2 + winStart;
-	ns = mid-newWinWidth/2;
-	ne = ns + newWinWidth;
-	if (ns < 0)
-	    {
-	    ns = 0;
-	    ne -= ns;
-	    }
-	if (ne > seqBaseCount)
-	    {
-	    ns -= (ne - seqBaseCount);
-	    ne = seqBaseCount;
-	    }
-	mapBoxJumpTo(ps+insideX,y,pe-ps,rulerHeight,
-		     chromName, ns, ne, "3x zoom");
-	}
-    }
     }
 
 
