@@ -1305,6 +1305,53 @@ if (tdb->html != NULL && tdb->html[0] != 0)
     }
 }
 
+void genericChainClick(struct sqlConnection *conn, struct trackDb *tdb, 
+	char *item, int start, char *otherDb)
+/* Handle click in chain track, at least the basics. */
+{
+char chrom[128]  ="xxxxxx";
+char *thisOrg = hOrganism(database);
+char *otherOrg = hOrganism(otherDb);
+char table[64];
+char query[256];
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+struct chain chain;
+int qs, qe;
+
+if (!hFindSplitTable(seqName, tdb->tableName, table, &rowOffset))
+    errAbort("No %s track in database", tdb->tableName);
+snprintf(query, sizeof(query), 
+	"select * from %s where id = %s", table, item);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row == NULL)
+    errAbort("Can't find %s in %s", item, table);
+chainStaticLoad(row + rowOffset, &chain);
+printf("<B>%s position:</B> %s:%d-%d</a>  size: %d <BR>\n",
+    thisOrg, chain.tName, chain.tStart+1, chain.tEnd, chain.tEnd-chain.tStart);
+printf("<B>strand:</B> %c<BR>\n", chain.qStrand);
+if (chain.qStrand == '-')
+    {
+    qs = chain.qSize - chain.qEnd+1;
+    qe = chain.qSize - chain.qStart;
+    }
+else
+    {
+    qs = chain.qStart+1;
+    qe = chain.qEnd;
+    }
+printf("<B>%s position:</B> <a target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a>  size: %d<BR>\n",
+    otherOrg, otherDb, chain.qName, qs, qe, chain.qName, 
+    qs, qe, chain.qEnd - chain.qStart);
+printf("<B>chain id:</B> %s<BR>\n", item);
+printf("<B>score:</B> %1.0f<BR>\n", chain.score);
+
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+}
+
 void genericNetClick(struct sqlConnection *conn, struct trackDb *tdb, 
 	char *item, int start, char *otherDb)
 /* Generic click handler for net tracks. */
@@ -1364,6 +1411,7 @@ printf("<B>%s size:</B> %d<BR>\n", otherOrg, net.qEnd - net.qStart);
 sqlFreeResult(&sr);
 }
 
+
 void genericClickHandler(struct trackDb *tdb, char *item, char *itemForUrl)
 /* Put up generic track info. */
 {
@@ -1421,6 +1469,12 @@ if (wordCount > 0)
 	if (wordCount < 2)
 	    errAbort("Missing other database field in netAlign track type field");
 	genericNetClick(conn, tdb, item, start, words[1]);
+	}
+    else if (sameString(type, "chain"))
+        {
+	if (wordCount < 2)
+	    errAbort("Missing other database field in chain track type field");
+	genericChainClick(conn, tdb, item, start, words[1]);
 	}
 
     }
@@ -4976,69 +5030,6 @@ printTrackHtml(tdb);
 freez(&cgiItem);
 }
 
-void chainClick(struct trackDb *tdb, char *item, 
-	char *otherOrg, char *otherChromTable, char *otherDb)
-{
-int left = cartIntExp( cart, "l" );   /* This is in the global winStart. */
-int right = cartIntExp( cart, "r" );  /* This is in the global winEnd. */
-int start = cartIntExp( cart, "o" );
-int end = cartIntExp( cart, "t" );
-char *cgiItem = cgiEncode(item);	
-char chrom[128]  ="xxxxxx";
-char *thisOrg = hOrganism(database);
-char table[64];
-char query[256];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-int rowOffset;
-struct chain chain;
-int qs, qe;
-
-if (!hFindSplitTable(seqName, tdb->tableName, table, &rowOffset))
-    errAbort("No %s track in database", tdb->tableName);
-snprintf(query, sizeof(query), 
-	"select * from %s where id = %s", table, item);
-sr = sqlGetResult(conn, query);
-row = sqlNextRow(sr);
-if (row == NULL)
-    errAbort("Can't find %s in %s", item, table);
-chainStaticLoad(row + rowOffset, &chain);
-printf("<B>%s position:</B> %s:%d-%d</a>  size: %d <BR>\n",
-    thisOrg, chain.tName, chain.tStart+1, chain.tEnd, chain.tEnd-chain.tStart);
-printf("<B>strand:</B> %c<BR>\n", chain.qStrand);
-if (chain.qStrand == '-')
-    {
-    qs = chain.qSize - chain.qEnd+1;
-    qe = chain.qSize - chain.qStart;
-    }
-else
-    {
-    qs = chain.qStart+1;
-    qe = chain.qEnd;
-    }
-printf("<B>%s position:</B> <a target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a>  size: %d<BR>\n",
-    otherOrg, otherDb, chain.qName, qs, qe, chain.qName, 
-    qs, qe, chain.qEnd - chain.qStart);
-printf("<B>chain id:</B> %s<BR>\n", item);
-printf("<B>score:</B> %1.0f<BR>\n", chain.score);
-
-/*
-if (hTableExists("axtInfo"))
-    {
-    puts("<LI>\n");
-    hgcAnchorGenePsl(geneName, geneTable, seqName, "startcodon");
-    printf("Comparative Sequence</A> Annotated codons and translated protein with alignment to another species <BR>\n");
-    puts("</LI>\n");
-    }
-printf("</UL>\n");
-*/
-printTrackHtml(tdb);
-freez(&cgiItem);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-}
-
 void doBlatMus(struct trackDb *tdb, char *item)
 /* Put up cross-species alignment when the second species
  * sequence is in a nib file. */
@@ -5052,53 +5043,6 @@ void doBlastzRn1(struct trackDb *tdb, char *item)
 {
 longXenoPsl1(tdb, item, "Rat", "chromInfo", "rn1");
 }
-
-#ifdef UNUSED
-void netAlignClick(struct trackDb *tdb, char *item, 
-	char *otherOrg, char *otherChromTable, char *otherDb)
-/* Put up cross-species alignment when the second species
- * sequence is in a nib file. */
-{
-struct psl *psl = NULL, *trimmedPsl = NULL;
-char otherString[256];
-char *cgiItem = cgiEncode(item);
-char *thisOrg = hOrganism(database);
-
-cartWebStart(cart, tdb->longLabel);
-psl = loadPslFromRangePair(tdb->tableName, item);
-printf("<B>%s position:</B> %s:%d-%d<BR>\n", otherOrg,
-	psl->qName, psl->qStart+1, psl->qEnd);
-printf("<B>%s size:</B> %d<BR>\n", otherOrg, psl->qEnd - psl->qStart);
-printf("<B>%s position:</B> %s:%d-%d<BR>\n", thisOrg,
-	psl->tName, psl->tStart+1, psl->tEnd);
-printf("<B>%s size:</B> %d<BR>\n", thisOrg,
-	psl->tEnd - psl->tStart);
-printf("<B>Identical Bases:</B> %d<BR>\n", psl->match + psl->repMatch);
-printf("<B>Number of Gapless Aligning Blocks:</B> %d<BR>\n", psl->blockCount );
-printf("<B>Percent identity within gapless aligning blocks:</B> %3.1f%%<BR>\n", 0.1*(1000 - pslCalcMilliBad(psl, FALSE)));
-printf("<B>Strand:</B> %s<BR>\n",psl->strand);
-printf("<B>Browser window position:</B> %s:%d-%d<BR>\n", seqName, winStart+1, winEnd);
-printf("<B>Browser window size:</B> %d<BR>\n", winEnd - winStart);
-/*sprintf(otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s&otherDb=%s", psl->tStart, 
-	tdb->tableName, otherOrg, otherChromTable, otherDb);*/
-
-printTrackHtml(tdb);
-freez(&cgiItem);
-}
-#endif /* UNUSED */
-
-void chainClickHandler(struct trackDb *tdb, char *item)
-{
-chainClick(tdb, item, "Mouse", "chromInfo", "mm2");
-}
-
-#ifdef UNUSED
-void netAlignClickHandler(struct trackDb *tdb, char *item)
-/* Put up details of one netted alignment */
-{
-netAlignClick(tdb, item, "Mouse", "chromInfo", "mm2");
-}
-#endif /* UNUSED */
 
 void doMultAlignZoo(struct trackDb *tdb, char *item, char *otherName )
 /* Put up cross-species alignment when the second species
@@ -9446,10 +9390,6 @@ else if (startsWith("blastz", track) &&
 	 (stringIn("Rn", track) || stringIn("Rat", track)))
     {
     doBlastzRn1(tdb, item);
-    }
-else if (stringIn(track, "blastzChain"))
-    {
-    chainClickHandler(tdb, item);
     }
 else if (startsWith("multAlignWebb", track))
     {
