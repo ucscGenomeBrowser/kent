@@ -428,7 +428,7 @@ if (jobIdString != NULL && line != NULL && line[0] != 0)
     }
 }
 
-void doCheck(char *line)
+void doCheck(char *line, struct sockaddr_in *hubIp)
 /* Send back check result - either a check in message or
  * jobDone. */
 {
@@ -439,7 +439,7 @@ if (jobIdString != NULL)
     int jobId = atoi(jobIdString);
     struct job *job = findRunningJob(jobId);
     struct paraMessage pm;
-    pmInit(&pm, lookupIp(managingHost), paraHubPort);
+    pmInit(&pm, ntohl(hubIp->sin_addr.s_addr), paraHubPort);
     if (job != NULL)
 	pmPrintf(&pm, "checkIn %s %s running", hostName, jobIdString);
     else
@@ -454,45 +454,45 @@ if (jobIdString != NULL)
     }
 }
 
-void doResurrect(char *line)
+void doResurrect(char *line, struct sockaddr_in *hubIp)
 /* Send back I'm alive message */
 {
-char *managingHost = nextWord(&line);
-if (managingHost != NULL)
+struct paraMessage pm;
+struct dlNode *node;
+int jobsReported = 0;
+pmInit(&pm, ntohl(hubIp->sin_addr.s_addr), paraHubPort);
+pmPrintf(&pm, "alive %s", hostName);
+for (node = jobsRunning->head; !dlEnd(node); node = node->next)
     {
-    struct paraMessage pm;
-    struct dlNode *node;
-    int jobsReported = 0;
-    pmInit(&pm, lookupIp(managingHost), paraHubPort);
-    pmPrintf(&pm, "alive %s", hostName);
-    for (node = jobsRunning->head; !dlEnd(node); node = node->next)
-        {
-	struct job *job = node->val;
-        pmPrintf(&pm, " %d", job->jobId);
-	++jobsReported;
-	}
-   for (node = jobsFinished->head; !dlEnd(node); node = node->next)
-        {
-	struct job *job = node->val;
-	if (jobsReported >= maxProcs)
-	    break;
-        pmPrintf(&pm, " %d", job->jobId);
-	++jobsReported;
-	}
-    pmSend(&pm, mainRudp);
+    struct job *job = node->val;
+    pmPrintf(&pm, " %d", job->jobId);
+    ++jobsReported;
     }
+for (node = jobsFinished->head; !dlEnd(node); node = node->next)
+    {
+    struct job *job = node->val;
+    if (jobsReported >= maxProcs)
+	break;
+    pmPrintf(&pm, " %d", job->jobId);
+    ++jobsReported;
+    }
+pmSend(&pm, mainRudp);
 }
 
-void doRun(char *line)
+void doRun(char *line, struct sockaddr_in *hubIp)
 /* Execute command. */
 {
 char *jobMessage = cloneString(line);
 static char *args[1024];
 int argCount;
+char hubDottedQuad[17];
+
 nextRandom();
 if (line == NULL)
     warn("Executing nothing...");
-else 
+else if (!internetIpToDottedQuad(ntohl(hubIp->sin_addr.s_addr), hubDottedQuad))
+    warn("Can't convert ipToDottedQuad");
+else
     {
     struct runJobMessage rjm;
     if (parseRunJobMessage(line, &rjm))
@@ -521,7 +521,7 @@ else
 			for (i=0; i<argCount; ++i)
 			    args[i] = subTextString(st, args[i]);
 
-			execProc(rjm.managingHost, rjm.jobIdString, rjm.reserved,
+			execProc(hubDottedQuad, rjm.jobIdString, rjm.reserved,
 			    rjm.user, rjm.dir, rjm.in, rjm.out, rjm.err, args[0], args);
 			exit(0);
 			}
@@ -718,7 +718,7 @@ for (;;)
 		if (sameString("quit", command))
 		    break;
 		else if (sameString("run", command))
-		    doRun(line);
+		    doRun(line, &pmIn.ipAddress);
 		else if (sameString("jobDone", command))
 		    jobDone(line);
 		else if (sameString("status", command))
@@ -726,9 +726,9 @@ for (;;)
 		else if (sameString("kill", command))
 		    doKill(line);
 		else if (sameString("check", command))
-		    doCheck(line);
+		    doCheck(line, &pmIn.ipAddress);
 		else if (sameString("resurrect", command))
-		    doResurrect(line);
+		    doResurrect(line, &pmIn.ipAddress);
 		else if (sameString("listJobs", command))
 		    listJobs();
 		else if (sameString("fetch", command))
