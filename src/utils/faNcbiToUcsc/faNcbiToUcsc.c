@@ -6,7 +6,7 @@
 #include "fa.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: faNcbiToUcsc.c,v 1.10 2004/05/19 23:15:49 hiram Exp $";
+static char const rcsid[] = "$Id: faNcbiToUcsc.c,v 1.11 2004/05/24 17:06:10 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -20,6 +20,7 @@ errAbort(
   "   -ntLast - look for NT_ on last bit\n"
   "   -wordBefore=xx The word before the accession, default 'gb'\n"
   "   -wordIx=N The word (starting at zero) the accession is in\n"
+  "   -encode  - use ENCODE region name as fasta sequence name\n"
   );
 }
 
@@ -32,6 +33,7 @@ char outName[512];
 char *line;
 boolean split = cgiBoolean("split");
 boolean ntLast = cgiBoolean("ntLast");
+boolean encode = cgiBoolean("encode");
 struct dnaSeq seq;
 FILE *f = NULL;
 char *wordBefore = cgiUsualString("wordBefore", "gb");
@@ -46,20 +48,32 @@ while (lineFileNext(lf, &line, NULL))
     {
     if (line[0] == '>')
 	{
-	if (ntLast)
+	if (ntLast || encode)
 	    {
-	    char *nt = stringIn("NT_", line);
-	    char *e;
-	    if (nt == NULL)
-		nt = stringIn("NG_", line);
-	    if (nt == NULL)
-		nt = stringIn("NC_", line);
-	    if (nt == NULL)
-		errAbort("Expecting NT_ NG_ or NC_in '%s'", line);
-	    e = strchr(nt, '|');
-	    if (e != NULL) *e = 0;
-	    e = strchr(nt, ' ');
-	    if (e != NULL) *e = 0;
+            char *nt;
+            if (ntLast)
+                {
+                nt = stringIn("NT_", line);
+                char *e;
+                if (nt == NULL)
+                    nt = stringIn("NG_", line);
+                if (nt == NULL)
+                    nt = stringIn("NC_", line);
+                if (nt == NULL)
+                    errAbort("Expecting NT_ NG_ or NC_in '%s'", line);
+                e = strchr(nt, '|');
+                if (e != NULL) *e = 0;
+                e = strchr(nt, ' ');
+                if (e != NULL) *e = 0;
+                }
+            else 
+                {
+                nt = stringIn("|EN", line);
+                if (nt == NULL)
+                    errAbort("Expecting EN in %s", line);
+                nt++;
+                nt = firstWordInLine(nt);
+                }
 	    if (split)
 		{
 		sprintf(outName, "%s/%s.fa", out, nt);
@@ -68,7 +82,8 @@ while (lineFileNext(lf, &line, NULL))
 		}
 	    fprintf(f, ">%s\n", nt);
 	    }
-	else
+
+        else
 	    {
 	    char *words[8];
 	    int wordCount, i;
