@@ -1,0 +1,491 @@
+#!/bin/bash  # set emacs mode
+exit; # don't actually run this like a script :)
+
+# Apis mellifera -- 
+# 
+# Baylor HGSC's January 20, 2005 (Amel_2.0) assembly
+# http://www.hgsc.bcm.tmc.edu/projects/honeybee/
+#
+
+# DOWNLOAD SEQUENCE (DONE 2/1/05 Andy)
+    ssh kksilo
+    mkdir /cluster/store10/apiMel2
+    cd /cluster/data
+    ln -s /cluster/store10/apiMel2 apiMel2
+    cd /cluster/data/apiMel2
+    mkdir -p jkStuff bed downloads/fa downloads/contigs
+    cd downloads
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Amellifera/fasta/Amel20050120-freeze/README_Amel_2.0_20050120.TXT
+    cd contigs
+    for grp in `seq 1 16` Un; do
+      file=Group${grp}
+      wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Amellifera/fasta/Amel20050120-freeze/contigs/${file}_20050120.agp
+      wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Amellifera/fasta/Amel20050120-freeze/contigs/${file}_20050120.fa.gz
+      mv ${file}_20050120.agp $file.agp
+      mv ${file}_20050120.fa.gz $file.fa.gz     
+      zcat $file.fa.gz  | egrep -v '^>\?[0-9]+$' | sed -e \
+         's/gnl|Amel_2.0|//; s/Amel_2.0_Contig/Contig/' | awk '{print $1}' > $file.contigs.fa
+      cat $file.contigs.fa >> allContigs.fa
+      sed -e 's/gnl|Amel_2.0|//g; s/Amel_2.0_Contig/Contig/' $file.agp > new.agp
+      mv new.agp $file.agp
+      agpToFa -simpleMultiMixed $file.agp $file $file.fa $file.contigs.fa
+      cat $file.fa >> all.fa
+      mv $file.fa ../fa
+      gzip $file.contigs.fa
+    done
+    rm *.fa.gz
+    faSize allContigs.fa
+#224752160 bases (1637 N's 224750523 real 224750523 upper 0 lower) in 16028 sequences in 1 files
+#Total size: mean 14022.5 sd 22045.0 min 607 (Contig11541) max 314907 (Contig661) median 5126
+#N count: mean 0.1 sd 0.8
+#U count: mean 14022.4 sd 22044.9
+#L count: mean 0.0 sd 0.0
+    faSize all.fa
+#502497597 bases (277747074 N's 224750523 real 224750523 upper 0 lower) in 17 seq uences in 1 files
+#Total size: mean 29558682.2 sd 75264208.4 min 5608962 (Group16) max 321143811 (G roupUn) median 10665743
+#N count: mean 16338063.2 sd 60963796.3
+#U count: mean 13220619.0 sd 14657764.0
+#L count: mean 0.0 sd 0.0
+    
+# CREATING DATABASE (DONE 1/27/05 Andy)
+    # Create the database.
+    ssh hgwdev
+    # Make sure there is at least 5 gig free for the database
+    df -h /var/lib/mysql
+#/dev/sdc1             1.8T  641G 1019G  39% /var/lib/mysql
+    hgsql '' -e 'create database apiMel2'
+
+# PARTITION SCAFFOLDS FOR REPEATMASKER RUN (DONE 2/2/05 Andy)
+    ssh kksilo
+    cd /cluster/data/apiMel2
+    mkdir faSplits
+    for fa in downloads/fa/*.fa; do
+        c=${fa#*Group}; c=Group${c%*.fa}
+        mkdir faSplits/$c
+        faSplit -lift=faSplits/$c.lft gap $fa 500000 faSplits/$c/${c}_
+    done
+
+# RUN REPEAT MASKER (DONE 2/3/05 Andy)
+    # January '05 version of RepeatMasker and libs.
+    ssh kksilo
+    cd /cluster/data/apiMel2
+    # Check the library for apis repeats.
+    /cluster/bluearc/RepeatMasker050112/util/queryRepeatDatabase.pl -species apis -stat
+#>IS1#ARTEFACT  Length = 768 bp
+#>IS2#ARTEFACT  Length = 1331 bp
+#>IS3#ARTEFACT  Length = 1258 bp
+#>IS5#ARTEFACT  Length = 1195 bp
+#>IS10#ARTEFACT  Length = 1329 bp
+# .....
+#>Mariner_AM#DNA/Mariner  Length = 937 bp
+#>MARINA#DNA/Mariner  Length = 1267 bp
+#
+#Total Sequence Length = 47828 bp
+
+    # So there's honeybee in the library now, so just run repeat mask with that
+cat << "_EOF_" > jkStuff/RMApis
+#!/bin/bash 
+
+file=`basename $1`
+grp=${file%_*}
+chunk=${file%.fa}
+
+cd /cluster/data/apiMel2/RMOut
+mkdir -p /tmp/apiMel2/$chunk
+cp ../faSplits/$grp/$file /tmp/apiMel2/$chunk/
+pushd /tmp/apiMel2/$chunk
+/cluster/bluearc/RepeatMasker/RepeatMasker -s -spec apis $file
+popd
+mkdir -p $grp
+cp /tmp/apiMel2/$chunk/$file.out ./$grp/$chunk.out
+rm -fr /tmp/apiMel2/$chunk/*
+rmdir --ignore-fail-on-non-empty /tmp/apiMel2/$chunk
+rmdir --ignore-fail-on-non-empty /tmp/apiMel2
+_EOF_
+    # << this line makes emacs coloring happy
+    chmod +x jkStuff/RMApis
+    mkdir RMRun RMOut
+    cd RMRun/
+    find ../faSplits/ -name '*.fa' > input.lst
+    cat << "_EOF_" > gsub
+#LOOP
+../jkStuff/RMApis $(path1) {check in line+ $(path1)} {check out line+ ../RMOut/$(lastDir1)/$(root1).out}
+#ENDLOOP
+_EOF_
+    gensub2 input.lst single gsub RMJobs
+    # Do the cluster run
+    ssh kk
+    cd /cluster/data/apiMel2/RMRun
+    para create RMJobs
+    para try
+    para push
+    para time
+#1077 jobs in batch
+#44332 jobs (including everybody's) in Parasol queue.
+#Checking finished jobs
+#Completed: 1077 of 1077 jobs
+#CPU time in finished jobs:     120949s    2015.82m    33.60h    1.40d  0.004 y
+#IO & Wait Time:                  5901s      98.34m     1.64h    0.07d  0.000 y
+#Average job time:                 118s       1.96m     0.03h    0.00d
+#Longest job:                      262s       4.37m     0.07h    0.00d
+#Submission to last job:          2609s      43.48m     0.72h    0.03d
+    # lift and load results 
+    ssh kksilo
+    cd /cluster/data/apiMel1/RMOut
+    for grp in *; do
+      cd $grp
+      for out in *; do
+         lifted=${out%.out}.lifted.out
+         liftUp $lifted ../../faSplits/$grp.lft warn $out
+         if [ -e ../$grp.out ]; then 
+            tail +4 $lifted >> ../$grp.out
+         else
+            cp $lifted ../$grp.out
+         fi         
+      done
+      cd ../
+      if [ -e all.out ]; then 
+         tail +4 $grp.out
+      else
+         cp $grp.out all.out
+      fi
+    done
+    ssh hgwdev
+    cd /cluster/data/apiMel1/RMOut
+    hgLoadOut apiMel2 all.out
+    hgsql apiMel2 -e 'rename table all_rmsk to rmsk'
+    hgsql apiMel2 -e 'drop index bin       on rmsk; \
+                  drop index genoStart on rmsk; \
+                  drop index genoEnd   on rmsk; \
+                  create index bin       on rmsk (genoName(11), bin); \
+                  create index genoStart on rmsk (genoName(11), genoStart); \
+                  create index genoEnd   on rmsk (genoName(11), genoEnd);' 
+
+# LOAD GAP & GOLD TABLES FROM AGP (DONE 2/3/2005 Andy)
+    ssh hgwdev
+    cd /cluster/data/apiMel2/downloads/contigs
+    for agp in *.agp; do
+      chr=${agp%.agp}
+      hgGoldGapGl -noGl -chrom=$chr apiMel2 $agp
+    done
+    # For some reason, the indices did not get built correctly --
+    # "show index from gap/gold" shows NULL cardinalities for chrom.  
+    # Rebuild indices with "analyze table".
+    # *** Andy's note: the same thing happened in this assembly too.
+    hgsql apiMel2 -e 'analyze table gold; analyze table gap;'
+
+
+# SIMPLE REPEATS (TRF) (DONE 2/3/2005 Andy)
+    ssh kksilo
+    mkdir -p /cluster/data/apiMel2/bed/simpleRepeat
+    cd /cluster/data/apiMel2/bed/simpleRepeat
+    for f in ../../downloads/fa/*; do
+      grp=${f##*\/}; grp=${grp%.fa}
+      echo nice /cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $f /dev/null -bedAt=simpleRepeat.$grp.bed -tempDir=/tmp >> jobs.sh
+    done
+    chmod +x jobs.sh
+    ./jobs.sh | egrep -v '^(Removed|Tandem|Copyright|Loading|Allocating|Initializing|Computing|Scanning|Freeing)' \
+      > jobs.log 2> jobs.errors.log &
+    # check on this with
+    tail -f jobs.log
+    for bed in *.bed; do 
+       cat $bed >> simpleRepeat.bed
+    done
+    rm *Group*.bed
+    # Load this into the database as so
+    ssh hgwdev
+    cd /cluster/data/apiMel2/bed/simpleRepeat
+    hgLoadBed -sqlTable=/cluster/home/aamp/kent/src/hg/lib/simpleRepeat.sql \
+       apiMel2 simpleRepeat simpleRepeat.bed
+
+
+# FILTER SIMPLE REPEATS (TRF) INTO MASK (DONE 2/3/2005 Andy)
+    # make a filtered version of the trf output: 
+    # keep trf's with period <= 12:
+    ssh kksilo
+    cd /cluster/data/apiMel/bed/simpleRepeat
+    awk '{if ($5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
+
+
+# MASK FA USING REPEATMASKER AND FILTERED TRF FILES (DONE 2/3/2005 Andy)
+    ssh kksilo
+    cd /cluster/data/apiMel2
+    mkdir maskedFa
+    cd maskedFa 
+    cp ../downloads/fa/*.fa .
+    for fa in *; do
+       grp=${fa%.fa}
+       egrep "^${grp}\>" ../bed/simpleRepeat/trfMask.bed > $grp.trf.bed
+       maskOutFa -soft $fa $grp.trf.bed $grp.masked.fa
+       maskOutFa -softAdd $grp.masked.fa ../RMOut/$grp.out $grp.masked.fa  
+       rm $fa
+       mv $grp.masked.fa $fa
+    done
+    rm *.bed
+
+# STORE SEQUENCE AND ASSEMBLY INFORMATION (DONE 2/4/05 Andy)
+    # Translate to nib
+    ssh kksilo
+    cd /cluster/data/apiMel2
+    mkdir nib
+    for fa in maskedFa/*; do
+       nib=${fa##*\/}; nib=nib/${nib%.fa}.nib
+       faToNib -softMask $fa $nib
+    done
+    faToTwoBit maskedFa/Group?{,?}.fa apiMel2.2bit
+    # Make links in /gbdb   
+    ssh hgwdev
+    mkdir -p /gbdb/apiMel2/nib
+    cd /cluster/data/apiMel2/nib
+    for nib in *; do 
+       ln -s /cluster/data/apiMel2/nib/$nib /gbdb/apiMel2/nib/$nib
+    done
+    ln -s /cluster/data/apiMel2/apiMel2.2bit /gbdb/apiMel2/apiMel2.2bit
+    # Load into database
+    hgsql apiMel2 < ~/kent/src/hg/lib/chromInfo.sql
+    cd ../
+    hgNibSeq -preMadeNib apiMel2 /gbdb/apiMel2/nib /cluster/data/apiMel2/maskedFa/Group?{,?}.fa
+    echo "select chrom,size from chromInfo" | hgsql apiMel2 | tail +2 \
+      > /cluster/data/apiMel2/chrom.sizes
+
+# CREATING GRP TABLE FOR TRACK GROUPING (DONE 2/4/2005 Andy)
+    # Copy all the data from the table "grp" 
+    # in an existing database to the new database
+    ssh hgwdev
+    hgsql apiMel2 -e 'create table grp (PRIMARY KEY(NAME)) select * from hg17.grp'
+
+# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE (DONE 2/4/2005 Andy)
+    # Warning: genome and organism fields must correspond
+    # with defaultDb values
+    echo 'INSERT INTO dbDb \
+        (name, description, nibPath, organism, \
+             defaultPos, active, orderKey, genome, scientificName, \
+             htmlPath, hgNearOk, hgPbOk, sourceName) values \
+        ("apiMel2", "Jan. 2005", "/gbdb/apiMel2", "A. mellifera", \
+             "Group10:100001-130000", 1, 57, \
+             "A. mellifera", \
+             "Apis mellifera", "/gbdb/apiMel2/html/description.html", \
+             0, 0, "Baylor HGSC Amel_2.0");' \
+      | hgsql -N hgcentraltest
+    echo 'update defaultDb set name="apiMel2" where genome="A. mellifera"' \
+      | hgsql -N hgcentraltest
+
+    # Make trackDb table so browser knows what tracks to expect:
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/trackDb
+    cvs update
+    # Edit trackDb/makefile to add apiMel1 to the DBS variable.
+    mkdir apis/apiMel2
+    # Create a simple apis/apiMel2/description.html file.
+    cvs add apis/apiMel2
+    cvs add apis/apiMel2/description.html
+    make update DBS=apiMel2 ZOO_DBS=
+    # go public on genome-test
+    cvs ci -m "Added apiMel2 (Apis mellifera, honeybee)." makefile
+    cvs ci -m "First-cut trackDb.ra and description.html for apiMel2 (Apis mellifera, honeybee)." apis
+    mkdir /gbdb/apiMel1/html
+    # in a clean, updated tree's kent/src/hg/makeDb/trackDb:
+    make alpha
+
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY (DONE 1/29/2005 Andy)
+    ssh hgwdev
+    echo 'insert into blatServers values("apiMel2", "blat14", "17792", 1, 0); \
+          insert into blatServers values("apiMel2", "blat14", "17793", 0, 1);' \
+      | hgsql -N hgcentraltest
+
+# MAKE GCPERCENT (DONE 2/4/2005 Andy)
+    ssh hgwdev
+    mkdir /cluster/data/apiMel2/bed/gcPercent
+    cd /cluster/data/apiMel2/bed/gcPercent
+    # create and load gcPercent table
+    hgGcPercent apiMel2 /gbdb/apiMel2/nib
+
+# MAKE DOWNLOADABLE FILES (DONE 2/6/2005 Andy)
+    ssh kksilo
+    cd /cluster/data/apiMel2
+    mkdir zips
+    zip -j zips/chromOut.zip RMOut/Group?{,?}.out
+    zip -j zips/chromFa.zip maskedFa/Group?{,?}.fa
+    for fa in maskedFa/Group?{,?}.fa; do
+      maskOutFa $fa hard $fa.hardMasked
+    done
+    zip -j zips/chromFaMasked.zip maskedFa/Group?{,?}.fa.hardMasked
+    cd /usr/local/apache/htdocs/goldenPath/apiMel2
+    mkdir bigZips database
+    # Create README.txt files in bigZips/ and database/ to explain the files.
+    cp -p /cluster/data/dm2/zips/*.zip bigZips
+
+# MAKE 11.OOC FILE FOR BLAT (DONE 2/8/2005 Andy)
+    # Use -repMatch=100 (based on size -- for human we use 1024, and 
+    # fly size is ~4.4% of human judging by gapless dm1 genome size from 
+    # featureBits -- we would use 45, but bump that up a bit to be more 
+    # conservative).
+    ssh kkr1u00
+    mkdir /cluster/bluearc/apiMel2
+    blat /cluster/data/apiMel2/apiMel2.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=/cluster/bluearc/apiMel2/11.ooc -repMatch=100
+#Wrote 39886 overused 11-mers to /cluster/bluearc/apiMel2/11.ooc
+    cp -p /cluster/bluearc/apiMel2/*.ooc /iscratch/i/apiMel2/
+    iSync
+
+# PUT SEQUENCE ON /ISCRATCH FOR BLASTZ (DONE 2/8/2005 Andy)
+    # First, agglomerate small scaffolds into chunks of ~500k median 
+    # (many scaffolds are larger than that) so we don't have too many 
+    # files for one dir, but keep a reasonably low job run time:
+    ssh kksilo
+    cd /cluster/data/apiMel2
+    ssh kkr1u00
+    cp -pR /cluster/data/apiMel2/faSplits /iscratch/i/apiMel2/
+    cp -p /cluster/data/apiMel2/apiMel2.2bit /iscratch/i/apiMel2/
+    cp -pR /cluster/data/apiMel2/nib /iscratch/i/apiMel2
+    iSync
+
+# PRODUCING GENSCAN PREDICTIONS (DONE 1/28/2005 Andy)
+    ssh kksilo
+    # Make hard-masked scaffolds and split up for processing:
+    cd /cluster/data/apiMel2
+    mkdir hardMaskedFaSplits
+    cd maskedFa/
+    for fa in *.hardMasked; do
+      grp=${fa%.fa.hardMasked}
+      faSplit -lift=../hardMaskedFaSplits/${grp}.lft gap $fa 1000000 ../hardMaskedFaSplits/${grp}_
+    done
+    cd ../hardMaskedFaSplits
+    cat Group?{,?}.lft > all.lft
+    mkdir /cluster/data/apiMel2/bed/genscan
+    cd /cluster/data/apiMel2/bed/genscan
+    # Check out hg3rdParty/genscanlinux to get latest genscan:
+    cvs co hg3rdParty/genscanlinux
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    ls -1S ../../hardMaskedFaSplits/*.fa > chunks.list
+    cat << _EOF_ > gsub
+#LOOP
+gsBig {check in line+ \$(path1)} {check out line gtf/\$(root1).gtf} -trans={check out line pep/\$(root1).pep} -subopt={check out line subopt/\$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+_EOF_
+    # << this line keeps emacs coloring happy
+    gensub2 chunks.list single gsub jobList
+    ssh kk
+    cd /cluster/data/apiMel2/bed/genscan
+    para create jobList
+    para try
+    para check
+    para push 
+#538 jobs in batch
+#0 jobs (including everybody's) in Parasol queue.
+#Checking finished jobs
+#Completed: 537 of 538 jobs
+#Crashed: 1 jobs
+#CPU time in finished jobs:     113471s    1891.18m    31.52h    1.31d  0.004 y
+#IO & Wait Time:                  7324s     122.07m     2.03h    0.08d  0.000 y
+#Average job time:                 225s       3.75m     0.06h    0.00d
+#Longest job:                    32966s     549.43m     9.16h    0.38d
+#Submission to last job:         34674s     577.90m     9.63h    0.40d
+
+    # If there are crashes, diagnose with "para problems".  
+    # If a job crashes due to genscan running out of memory, re-run it 
+    # manually with "-window=1200000" instead of "-window=2400000".
+    # Wow, 1.2M and 1M crashed too.  Dropped down to .6M:
+    ssh kolossus
+    cd /cluster/data/apiMel2/bed/genscan
+    gsBig ../../hardMaskedFaSplits/Group9_05.fa gtf/Group9_05.gtf \
+        -trans=pep/Group9_05.pep -subopt=subopt/Group9_05.bed \
+        -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat \
+        -tmp=/tmp -window=600000
+    # Concatenate scaffold-level results:
+    ssh kksilo
+    cd /cluster/data/apiMel2/bed/genscan
+
+    # Lift and cat things
+    cat gtf/*.gtf > /tmp/genscan.gtf
+    liftUp genscan.gtf ../../hardMaskedFaSplits/all.lft warn /tmp/genscan.gtf
+    cat subopt/*.bed > /tmp/genscanSubopt.bed
+    liftUp genscanSubopt.bed ../../hardMaskedFaSplits/all.lft warn /tmp/genscanSubopt.bed
+    cat pep/*.pep > genscan.pep
+    # Clean up
+    rm -r /cluster/data/apiMel2/hardMaskedFaSplits 
+    # Change gene names around a little (errored on loading with this)
+    #sed 's/\_[0-9Un]\{1,2\}//g' < genscan.gtf > /tmp/genscan.gtf 
+    #cp /tmp/genscan.gtf .
+    #sed 's/\_[0-9Un]\{1,2\}//g' < genscan.pep > /tmp/genscan.pep 
+    #cp /tmp/genscan.pep .
+    #sed 's/\_[0-9Un]\{1,2\}//g' < genscanSubopt.bed > /tmp/genscanSubopt.bed
+    #cp /tmp/genscanSubopt.bed .
+
+    # Load into the database as so:
+    ssh hgwdev
+    cd /cluster/data/apiMel2/bed/genscan
+    ldHgGene -gtf apiMel2 genscan genscan.gtf
+    hgPepPred apiMel2 generic genscanPep genscan.pep
+    hgLoadBed apiMel2 genscanSubopt genscanSubopt.bed
+
+# MAKE Drosophila Proteins track  (DONE braney 11/17/04)
+# GET GENBANK mRNA AND EST COUNTS (DONE 11/8/04 angie)
+# AUTO UPDATE GENBANK MRNA RUN  (DONE 2/8/2005 Andy)
+    ssh hgwdev
+    # Update genbank config and source in CVS:
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup .
+
+# apiMel2 (A. mellifera)
+apiMel2.genome = /iscratch/i/apiMel2/nib/*.nib
+apiMel2.lift = no
+apiMel2.refseq.mrna.native.load = no
+apiMel2.genbank.mrna.xeno.load = yes
+apiMel2.genbank.est.xeno.load = no
+apiMel2.downloadDir = apiMel2
+apiMel2.perChromTables = no
+
+    cvs commit -m 'apiMel2 added to genbank update.' etc/genbank.conf 
+    # Edit src/align/gbBlat to add /iscratch/i/apiMel2/11.ooc
+    cvs commit -m '' src/align/gbBlat
+    # Install to /cluster/data/genbank:
+    make install-server
+    ssh `fileServer /cluster/data/genbank/`
+    cd /cluster/data/genbank
+    # This is an -initial run, mRNA only:
+    nice bin/gbAlignStep -srcDb=genbank -type=mrna -initial apiMel2 &
+    tail -f [its logfile]
+    # Load results:
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad apiMel2 &
+    featureBits apiMel2 all_mrna
+#171268 bases of 249601222 (0.069%) in intersection
+    featureBits apiMel2 xenoMrna
+#7237381 bases of 249601222 (2.900%) in intersection
+    # Clean up:
+    rm -rf work/initial.apiMel2
+
+    # -initial for ESTs
+    ssh kksilo
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -srcDb=genbank -type=est -initial apiMel2 &
+    tail -f [its logfile]
+    # Load results:
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 apiMel2 &
+    featureBits apiMel2 all_est
+#5563769 bases of 208434669 (2.669%) in intersection
+    # Clean up:
+    rm -rf work/initial.apiMel2
+
+# SWAP DM2-APIMEL2 BLASTZ (DONE 2/9/2005 Andy)
+    ssh kksilo
+    mkdir /cluster/data/apiMel2/bed/blastz.dm2.swap.2005-02-08
+    ln -s blastz.dm2.swap.2005-02-08 /cluster/data/apiMel2/bed/blastz.dm2
+    cd /cluster/data/apiMel2/bed/blastz.dm2
+    aliDir=/cluster/data/dm2/bed/blastz.apiMel2.2005-02-08
+    cp $aliDir/S1.len S2.len
+    cp $aliDir/S2.len S1.len
+    # I get errors with this:
+    #zcat $aliDir/axtChrom/chr*.axt.gz \
+    #| axtSwap stdin $aliDir/S1.len $aliDir/S2.len stdout \
+    #| axtSort stdin dm2.axt
+
+# CHAIN MELANOGASTER BLASTZ (TODO)
+# MAKE AXTNET (TODO)
+# MAKE VSDM1 DOWNLOADABLES (TODO)
+# MAKE MELANOGASTER PROTEINS TRACK (TODO)
