@@ -378,7 +378,7 @@ type bed 12 .
 
 track pjt_genscan
 shortLabel Genscan 
-longLabel Genscan Annotations
+longLabel Genscan Gene Predictions
 priority 550
 visibility hide
 color 150,100,30
