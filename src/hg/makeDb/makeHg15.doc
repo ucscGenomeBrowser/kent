@@ -3435,6 +3435,8 @@ rm -rf out
     mkdir $multizDir
     cd /cluster/data/hg15
     forEachChrom
+        axtSort blastz.mm3/axtNet300/ tmp
+        mv tmp blastz.mm3/axtNet300
         axtToMaf blastz.mm3/axtNet300 /cluster/data/hg15/chrom.sizes /cluster/data/mm3/chrom.sizes axtNet300/$i.mm3.maf -tPrefix=hg15. -qPrefix=mm3. 
         axtToMaf blastz.rn3/axtNet300 /cluster/data/hg15/chrom.sizes /cluster/data/mm3/chrom.sizes axtNet300/$i.rn3.maf -tPrefix=hg15. -qPrefix=rn3. 
         /cluster/bin/penn/humor.v4 axtNet300/$i.mm3.maf axtNet300/$i.rn3.maf $multizDir/$i.hmr.axtNet300.maf
