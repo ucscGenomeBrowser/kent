@@ -8,7 +8,7 @@
 #include "errabort.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.74 2004/11/16 22:08:53 hiram Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.75 2004/11/26 16:49:48 daryl Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1301,10 +1301,8 @@ int stringArrayIx(char *string, char *array[], int arraySize)
 {
 int i;
 for (i=0; i<arraySize; ++i)
-    {
     if (!differentWord(array[i], string))
         return i;
-    }
 return -1;
 }
 
@@ -1656,7 +1654,7 @@ char *strstrNoCase(char *haystack, char *needle)
   A case-insensitive strstr function
 Will also robustly handle null strings
 param haystack - The string to be searched
-param needle - The string to llok for in the haystack string
+param needle - The string to look for in the haystack string
 
 return - The position of the first occurence of the desired substring
 or -1 if it is not found
