@@ -673,3 +673,22 @@ fbOrBits(bits, chromSize, fbList, 0);
 featureBitsFreeList(&fbList);
 }
 
+struct bed *fbToBed(struct featureBits *fbList)
+/* Translate a list of featureBits items into (scoreless) bed 6. */
+{
+struct bed *bedList = NULL, *bed;
+struct featureBits *fb;
+
+for (fb=fbList;  fb != NULL;  fb=fb->next)
+    {
+    AllocVar(bed);
+    bed->chrom = fb->chrom;
+    bed->chromStart = fb->start;
+    bed->chromEnd = fb->end;
+    bed->name = fb->name;
+    bed->strand[0] = fb->strand;
+    slAddHead(&bedList, bed);
+    }
+return(bedList);
+}
+

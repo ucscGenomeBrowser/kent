@@ -72,5 +72,8 @@ struct featureBits *fbFromBed(char *trackQualifier, struct hTableInfo *hti,
 	boolean clipToWindow, boolean filterOutNoUTR);
 /* Translate a list of bed items into featureBits. */
 
+struct bed *fbToBed(struct featureBits *fbList);
+/* Translate a list of featureBits items into (scoreless) bed 6. */
+
 #endif /* FEATUREBITS_H */
 
