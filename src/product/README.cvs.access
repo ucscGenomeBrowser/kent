@@ -41,3 +41,17 @@ cp -Rp /mnt/cdrom/source_tree_built/kent/* <kent>	# copy from CD-ROM
 cd <kent>		# to the directory where you work on the source
 cvs update -A -d -P	# the -A will reset the release version tags
 			# that are in the source tree on the CD-ROM
+
+You will want to keep your source tree up to date with the
+UCSC version.  Browser development continues and many new features
+and bug fixes are added weekly.  Since a CVS update can make
+it difficult to recover from changes to source in the same area,
+it would be best to perform this update on a test source tree
+to see if it will have any source change clashes that need to be
+resolved.  A daily update and test build is recommended.
+Please note, when the source code is updated to include operations
+on new columns that have been added to database tables, the
+CGI binaries will fail to operate until the new columns are added
+to your database tables.  This is especially important for any
+tables in the hgcentral database.  UCSC will keep any product sites
+informed of database changes.

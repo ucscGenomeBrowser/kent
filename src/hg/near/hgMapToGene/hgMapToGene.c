@@ -3,12 +3,13 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "dystring.h"
 #include "jksql.h"
 #include "bed.h"
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgMapToGene.c,v 1.2 2003/09/13 04:17:23 kent Exp $";
+static char const rcsid[] = "$Id: hgMapToGene.c,v 1.4 2003/09/24 11:27:17 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -193,6 +194,22 @@ else if (startsWith("genePred", otherType))
 	gp = genePredLoad(row + rowOffset);
 	bed = bedFromGenePred(gp);
 	genePredFree(&gp);
+	slAddHead(&bedList, bed);
+	binKeeperAdd(bk, bed->chromStart, bed->chromEnd, bed);
+	}
+    }
+else if (startsWith("psl", otherType))
+    {
+    struct psl *psl;
+    bedNum = 12;
+    safef(extraBuf, sizeof(extraBuf), "strand = '%c'", strand);
+    extra = extraBuf;
+    sr = hChromQuery(conn, otherTable, chrom, extra, &rowOffset);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	psl = pslLoad(row + rowOffset);
+	bed = bedFromPsl(psl);
+	pslFree(&psl);
 	slAddHead(&bedList, bed);
 	binKeeperAdd(bk, bed->chromStart, bed->chromEnd, bed);
 	}

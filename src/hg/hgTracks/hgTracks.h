@@ -114,6 +114,11 @@ struct track
     struct group *group;  /* Group this track is associated with. */
     boolean canPack;	/* Can we pack the display for this track? */
     struct spaceSaver *ss;  /* Layout when packed. */
+
+    struct trackDb *tdb; /*todo:change visibility, etc. to use this */
+
+    float expScale;	/* What to scale expression tracks by. */
+    char *expTable;	/* Expression table in hgFixed. */
     };
 
 struct trackRef 
@@ -365,6 +370,9 @@ typedef struct slList *(*ItemLoader)(char **row);
 void bedLoadItem(struct track *tg, char *table, ItemLoader loader);
 /* Generic tg->item loader. */
 
+struct linkedFeatures *lfFromBedExtra(struct bed *bed, int scoreMin, int scoreMax);
+/* Return a linked feature from a (full) bed. */
+
 struct linkedFeatures *lfFromBed(struct bed *bed);
 /* Return a linked feature from a (full) bed. */
 
@@ -462,6 +470,9 @@ struct linkedFeatures *lfFromPslx(struct psl *psl,
 struct linkedFeatures *lfFromPsl(struct psl *psl, boolean isXeno);
 /* Create a linked feature item from psl. */
 
+void wigMethods(struct track *track, struct trackDb *tdb, int wordCount, char *words[]);
+/* Make track group for wig - wiggle tracks. */
+
 void sampleMethods(struct track *track, struct trackDb *tdb, int wordCount, char *words[]);
 /* Load up methods for a generic sample type track. */
 
@@ -488,6 +499,9 @@ void humMusLMethods( struct track *tg );
 
 void zooMethods( struct track *tg );
 /* Overide the zoo sample type load function to look for zoomed out tracks. */
+
+void expRatioMethods(struct track *tg);
+/* Set up methods for expRatio type tracks in general. */
 
 void affyTranscriptomeMethods(struct track *tg);
 /* Overide the load function to look for zoomed out tracks. */

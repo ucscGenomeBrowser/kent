@@ -817,6 +817,11 @@ group regulation
 priority 86
 visibility hide
 type bed 15 +
+expScale 3.0
+expStep 0.5
+expTable affyExps
+chip U95
+canPack off
 
 track cghNci60
 shortLabel CGH NCI60
@@ -1304,4 +1309,6 @@ priority 50
 visibility hide
 spectrum on
 type bed 6
+scoreMin 500
+scoreMax 1000
 url http://rulai.cshl.org/tools/FirstEF/Readme/README.html

@@ -96,7 +96,8 @@ exit; # don't actually run this like a script :)
     mkdir superscaffolds
 
     faSplit about $ordered_file 500000 superscaffolds/ss_
-    
+
+
 
 # RUN REPEAT MASKER ON THE SUPER-SCAFFOLDS (6/2/03 KRR)
     # note: fugu library ("puffer.lib") is dated 7/9/2002
@@ -592,64 +593,150 @@ hide mol
          $datadir/$mrnadir/fuguXenoRna.ra
 
 
-# PRODUCE HUMAN BLAT ALIGNMENT (6/19/03 KRR)
+# HUMAN HG16 BLAT ALIGNMENT (DONE 2003-09-09 kate)
     ssh kk
-    mkdir ~/hg15/bed/blatHg15.new
-    cd ~/hg15/bed/blatHg15.new
-    mkdir -p psl/chrUn
-    ls -1S /cluster/bluearc/fugu/fr1/trfFa/*.fa > fugu.lst
-    # 7 files of 50MB
-    ls -1S /scratch/hg/gs.16/build33/trfFa/*.fa > human.lst
+    mkdir /cluster/data/fr1/bed/blatHg16
+    cd /cluster/data/fr1/bed/blatHg16
+    # create output dir and subdirs (prevent directory overload)
+    mkdir psl
+    foreach f (/iscratch/i/fugu/trfFa/*.fa)
+      set c=$f:t:r
+      echo $c
+      mkdir -p psl/$c
+    end
+    mkdir run
+    cd run
+    ls -1S /iscratch/i/fugu/trfFa/*.fa > fugu.lst
+        # 578 files
+    ls -1S /scratch/hg/gs.17/build34/trfFa/*.fa > human.lst
+        # 491 files
     cat << 'EOF' > gsub
 #LOOP
-/cluster/bin/i386/blat -mask=lower -q=dnax -t=dnax {check in line+ $(path1)} {check in line+ $(path2)} {check out line+ /cluster/store5/Fugu_Rubripes_V3/bed/blatHg15.new/psl/$(root1)_$(root2).psl}
+/cluster/bin/i386/blat -mask=lower -qMask=lower -q=dnax -t=dnax {check in line+ $(path1)} {check in line+ $(path2)} {check out line+ /cluster/data/fr1/bed/blatHg16/psl/$(root1)/$(root1)_$(root2).psl}
 #ENDLOOP
 'EOF'
 
     gensub2 fugu.lst human.lst gsub spec
+        # 283798 lines
     para create spec
     para try
     para check
     para push
     para check
 
-# PRODUCE HUMAN BLAT ALIGNMENT (6/11/03 KRR)
-    # For this build, use the Fugu BLAT to human (hg15),
-    # and reverse the alignment
-
-    # use local fileserver
-    ssh eieio
-
-    mkdir ~/fr1/bed/blatHg15/psl
-    set hg15dir = ~/hg15/bed/blatFugu
-    set fr1dir = ~/fr1/bed/blatHg15
-    mkdir -p $fr1dir/{psl,chrom}
-
-    # swap alignments (for each human chrom)
-    cd $hg15dir/chrom
-    foreach f (chr?{,?}{,_random}_blatFugu.psl)
-        pslSwap $f $fr1dir/psl/$f
-    end
-
     # merge to single Fugu chrUn chrom
-    cd $fr1dir/psl
-    # pslCat -out=$fr1dir/chrom/chrUn_blatHg15.psl chr?{,?}{,_random}_blatFugu.psl
-    pslCat chr?{,?}{,_random}_blatFugu.psl > \
-                $fr1dir/chrom/scaffolds.psl 
-
-    # lift target side (fugu) to chrom coordinates
-    cd $fr1dir/chrom
-    liftUp chrUn_blatHg15.psl ~/fr1/Un/chrUn.lft warn scaffolds.psl
+    ssh eieio
+    cd /cluster/data/fr1/bed/blastHg16
+    pslCat -dir psl/ss_* | \
+        liftUp -type=.psl stdout \
+                /cluster/data/fr1/Un/chrUn.lft warn stdin | \
+        pslSortAcc nohead chrom temp stdin
+        # 15 minutes ?
     
     # load into database
     cd $fr1dir/chrom
     hgLoadPsl fr1 chrUn_blatHg15.psl
 
-    # make hg15 symlink in /gbdb and load human sequence data
-    set gbdbdir=/gbdb/fr1/hg15
+
+# TETRAODON BLAT ALIGNMENT (IN PROGRESS 2003-09-11 kate)
+# NOTE: too many alignments -- must repeat/trf-mask tetra sequence
+    ssh kk
+    mkdir /cluster/data/fr1/bed/blatTetra
+    cd /cluster/data/fr1/bed/blatTetra
+    # create output dir and subdirs (prevent directory overload)
+    mkdir psl
+    foreach f (/iscratch/i/fugu/trfFa/*.fa)
+      set c=$f:t:r
+      echo $c
+      mkdir -p psl/$c
+    end
+    mkdir run
+    cd run
+    ls -1S /iscratch/i/fugu/trfFa/*.fa > fugu.lst
+        # 578 files
+    cp -rp /cluster/data/tetra /cluster/bluearc
+    ls -1S /cluster/bluearc/tetra/*.fa > tetra.lst
+        # 36 files
+    cat << 'EOF' > gsub
+#LOOP
+/cluster/bin/i386/blat -mask=lower -q=dnax -t=dnax {check in line+ $(path1)} {check in line+ $(path2)} {check out line+ /cluster/data/fr1/bed/blatTetra/psl/$(root1)/$(root1)_$(root2).psl}
+#ENDLOOP
+'EOF'
+
+    gensub2 fugu.lst tetra.lst gsub spec
+        # 23120 jobs
+    para create spec
+    para try
+    para check
+    para push
+    para check
+
+    # merge to single Fugu chrUn chrom
+    ssh eieio
+    cd /cluster/data/fr1/bed/blatTetra
+    pslCat -dir psl/ss_* | \
+        liftUp -type=.psl stdout \
+                /cluster/data/fr1/Un/chrUn.lft warn stdin | \
+        pslSortAcc nohead chrom temp stdin
+        # 15 minutes ?
+    
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/fr1/bed/blatTetra/chrom
+    mv chrUn.psl chrUn_blatTetra.psl
+    hgLoadPsl fr1 chrUn_blatTetra.psl
+
+    # Add entry to trackDb.ra
+
+    # make hg16 symlink in /gbdb and load human sequence data
+    set gbdbdir=/gbdb/fr1/tetra
     mkdir $gbdbdir
     cd $gbdbdir
-    foreach f (/cluster/store5/gs.16/build33/?{,?})
+    foreach f (/cluster/data/tetra/*)
+        ln -s $f .
+    end
+
+    # load human sequences into database
+    ssh hgwdev
+    cd /cluster/data/fr1/bed/blatTetra
+    hgLoadSeq fr1 /gbdb/fr1/tetra/*.fa
+
+
+# HUMAN HG16 BLAT SWAPPED FROM HUMAN BROWSER
+
+    ssh eieio
+    set hg16dir = /cluster/data/hg16/bed/blatFr1
+    set fr1dir = /cluster/data/fr1/bed/blatHg16.swp
+    mkdir -p $fr1dir/{psl,chrom}
+
+    # swap alignments (for each human chrom)
+    cd $hg16dir/chrom
+    foreach f (chr?{,?}{,_random}_blatFr1.psl)
+        pslSwap $f $fr1dir/psl/$f
+    end 
+    # merge to single Fugu chrUn chrom
+    cd $fr1dir/psl
+    pslCat chr?{,?}{,_random}_blatFr1.psl > \
+                $fr1dir/chrom/scaffolds.psl 
+
+    # lift target side (fugu) to chrom coordinates
+    cd $fr1dir/chrom
+    liftUp chrUn_blatHg16.psl /cluster/data/fr1/Un/chrUn.lft \
+                                        warn scaffolds.psl
+        # Got 40758 lifts
+    
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/fr1/bed/blatHg16.swp/chrom
+    hgLoadPsl fr1 chrUn_blatHg16.psl
+
+    # Add entry to trackDb.ra
+
+    # make hg16 symlink in /gbdb and load human sequence data
+    set gbdbdir=/gbdb/fr1/hg16
+    mkdir $gbdbdir
+    cd $gbdbdir
+    foreach f (/cluster/data/hg16/?{,?})
         set c = $f:t
         if (-e $f/chr${c}.fa) then
             ln -s $f/chr${c}.fa
@@ -661,10 +748,10 @@ hide mol
 
     # load human sequences into database
     ssh hgwdev
-    cd ~/fr1/bed/blatHg15
-    hgLoadRna addSeq fr1 /gbdb/fr1/hg15/*.fa
-    unset fr1dir hg15dir
-        
+    cd /cluster/data/fr1/bed/blatHg16.swp
+    hgLoadSeq fr1 /gbdb/fr1/hg16/*.fa
+
+
 
 # PRODUCE TETRAODON BLASTZ (6/13/03 IN PROGRESS KRR)
 # NOTE: the tetra sequence wasn't repeatmasked -> must be redone
@@ -965,15 +1052,14 @@ SEQ2_LEN=$BASE/S2.len
 
 # CPGISLANDS (6/17/03 KRR)
     ssh eieio
-    mkdir -p ~/fr1/bed/cpgIsland
-    cd ~/fr1/bed/cpgIsland
+    mkdir -p /cluster/data/fr1/bed/cpgIsland
+    cd /cluster/data/fr1/bed/cpgIsland
 
     # Build software emailed from Asif Chinwalla (achinwal@watson.wustl.edu)
     # NOTE: we should keep this centrally
-    # tar xvf cpg_dist.tar 
-    # cd cpg_dist
+    cp -rp /cluster/data/mm3/bed/cpgIsland/cpg_dist .
+    cd cpg_dist
     # gcc readseq.c cpg_lh.c -o cpglh.exe
-    cp ~kent/mm3/bed/cpgIsland/cpg_dist/cpglh.exe .
 
     # hard-mask the chrom fa 
     # cpglh.exe requires hard-masked (N) .fa's.  
@@ -1002,7 +1088,7 @@ SEQ2_LEN=$BASE/S2.len
         # Saving bed.tab
         # Loading fr1
 
-# LOAD ENSEMBL GENE PREDICTIONS (IN PROGRESS 2003-08-11 kate)
+# LOAD ENSEMBL GENE PREDICTIONS (DONE 2003-08-11 kate)
 # The downloads were provided by Shawn Hoon (shawnh@fugu-sg.org)
 # of the Singapore Institute of Molecular and Cell Biology (IMCB)
 # Fugu genome project, part of the international Fugu Genome Consortium
@@ -1029,10 +1115,13 @@ SEQ2_LEN=$BASE/S2.len
       # 38510 gene predictions
 
     # download and load predicted peptides
-    wget http://www.fugu-sg.org/~shawnh/fugu_download/Fugu_rubripes.FUGU2.pep.fa.gz
-    gunzip Fugu_rubripes.FUGU2.pep.fa.gz
+    # NOTE: can't use these till we have
+    # correspondence between Ensembl "transcript ID"
+    # and "protein ID" 
+    #wget http://www.fugu-sg.org/~shawnh/fugu_download/Fugu_rubripes.FUGU2.pep.fa.gz
+    #gunzip Fugu_rubripes.FUGU2.pep.fa.gz
     hgPepPred hg15 generic ensPep *.fa
-
+#
 
 # MAKE DOWNLOADABLE SEQUENCE FILES (IN PROGRESS 2003-08-29 kate)
     ssh eieio

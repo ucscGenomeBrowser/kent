@@ -1,20 +1,22 @@
+#This file contains definitions of columns common to all genomes.
+#
 name debug
 shortLabel debug
-longLabel debugging column on hgwdev
+longLabel Debugging Column on Hgwdev
 priority 0.5
 visibility off
 type debug
 
 name num
 shortLabel #
-longLabel item number in displayed list/select gene
+longLabel Item Number in Displayed List/Select Gene
 priority 1
 visibility on
 type num
 
 name name
 shortLabel Name
-longLabel gene name/select gene
+longLabel Gene Name/Select Gene
 priority 2
 visibility on
 type knownName kgXref kgID geneSymbol
@@ -22,8 +24,8 @@ search fuzzy
 searchLabel Known Gene Names
 
 name proteinName
-shortLabel SwissProt
-longLabel SwissProt protein display ID
+shortLabel Swiss-Prot
+longLabel Swiss-Prot Protein Display ID
 priority 2.1
 visibility off
 type lookup kgXref kgID spDisplayID
@@ -36,12 +38,11 @@ longLabel NCBI RefSeq Gene Accession
 priority 2.2
 visibility off
 type lookup knownToRefSeq name value
-itemUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
 itemUrl http://www.ncbi.nlm.nih.gov/LocusLink/list.cgi?V=0&Q=%s
 
 name acc
 shortLabel GenBank
-longLabel GenBank mRNA accession
+longLabel GenBank mRNA Accession
 priority 2.3
 visibility off
 type acc
@@ -49,110 +50,43 @@ itemUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&t
 
 name ensembl
 shortLabel Ensembl
-longLabel Ensembl transcript ID
+longLabel Ensembl Transcript ID
 priority 2.5
 visibility off
 type lookup knownToEnsembl name value
 search prefix
-itemUrl http://www.ensembl.org/Homo_sapiens/geneview?transcript=%s
-
-name expId
-shortLabel U133 ID
-longLabel ID of Associated Affymetrix U133 expression data 
-priority 2.61
-visibility off
-type lookup knownToU133 name value
-
-name u95Id
-shortLabel U95 ID
-longLabel ID of Associated Affymetrix U95 expression data 
-priority 2.62
-visibility off
-type lookup knownToU95 name value
-
-name expDense
-shortLabel Short Expression
-longLabel Selected UCLA expression data.
-priority 2.7
-visibility on
-type expRatio knownToU133 affyUcla hgFixed.affyUclaExps
-max 1.0
-representatives 9,37,24,17,34,12,19,21,22,35,
-
-name expAll
-shortLabel Long Expression
-longLabel All UCLA expression data from normal tissues on U133 chip.
-priority 2.8
-visibility off
-type expRatio knownToU133 affyUcla hgFixed.affyUclaExps
-max 1.0
-representatives 3,4,9,2,8,36,5,6,-1,37,1,33,23,25,20,-1,24,0,29,38,-1,17,7,31,41,-1,30,34,18,32,10,-1,11,12,13,39,26,-1,14,19,15,21,16,22,-1,35,27,28,40,
-
-name expDistance
-shortLabel Exp Delta
-longLabel Normalized difference in expression from selected gene.
-priority 2.9
-visibility off
-type distance knownExpDistance query target distance
-
-name gnfDense
-shortLabel Short GNF
-longLabel Selected GNF expression data from normal tissues on U95 chip.
-priority 3.0
-visibility off
-type expRatio knownToU95 affyRatio hgFixed.affyExps
-max 5.0
-representatives 30,6,29,10,53,35,11,12,13,4,
-skipName 7
-
-name gnfAll
-shortLabel Long GNF
-longLabel All GNF expression data from normal tissues on U95 chip.
-priority 3.1
-visibility off
-type expRatio knownToU95 affyRatio hgFixed.affyExps
-max 5.0
-representatives 9,18,64,76,1,30,31,-1,66,67,68,77,78,62,65,55,-1,0,79,60,33,36,69,70,-1,16,39,6,7,20,22,21,38,-1,71,61,74,56,59,82,57,72,-1,8,23,29,17,-1,10,37,34,52,19,-1,28,15,53,26,-1,35,54,11,24,3,13,-1,12,25,63,75,-1,4,5,32,51,48,49,50,14,27,-1,2,81,84,58,73,83,-1,40,44,42,43,41,45,46,47,
-skipName 7
-
-name gnfDistance
-shortLabel GNF Delta
-longLabel Normalized difference in GNF expression from selected gene.
-priority 3.2
-visibility off
-type distance knownGnfDistance query target distance
 
 name bitScore
 shortLabel Bits
-longLabel NCBI BLASTP bit score
+longLabel NCBI Blastp Bit Score
 priority 4
 visibility off
 type distance knownBlastTab query target bitScore
 
 name eVal
-shortLabel E Value
-longLabel NCBI BLASTP E value
+shortLabel E-Value
+longLabel NCBI Blastp E-Value
 priority 5
 visibility on
 type distance knownBlastTab query target eValue
 
 name percentId
 shortLabel %ID
-longLabel NCBI BLASTP percent identity
+longLabel NCBI Blastp Percent Identity
 priority 6
 visibility off
 type distance knownBlastTab query target identity
 
 name knownPos
 shortLabel Genome Position
-longLabel Genome position/link to Genome Browser
+longLabel Genome Position/Link to Genome Browser
 priority 7
 visibility on
 type knownPos 
 
 name codingSnps
 shortLabel Coding SNPs
-longLabel Simple nucleotide polymorphisms in coding regions
+longLabel Simple Nucleotide Polymorphisms in Coding Regions
 priority 7.5
 visibility off
 type association knownToCdsSnp
@@ -161,9 +95,17 @@ queryOne select value,value from knownToCdsSnp where name = '%s'
 invQueryOne select name from knownToCdsSnp where value = '%s'
 itemUrl http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s
 
+name humanOrthologs
+shortLabel Human
+longLabel Human Ortholog (Best Blastp Hit to UCSC Known hg16)
+priority 7.9
+visibility off
+type lookup hgBlastTab query target
+itemUrl http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&position=%s
+
 name mouseOrthologs
 shortLabel Mouse
-longLabel Mouse ortholog (best blastp hit to UCSC Known MM3)
+longLabel Mouse Ortholog (Best Blastp Hit to UCSC Known mm3)
 priority 8.0
 visibility off
 type lookup mmBlastTab query target
@@ -171,7 +113,7 @@ itemUrl http://genome.ucsc.edu/cgi-bin/hgTracks?org=mouse&position=%s
 
 name zebrafishOrthologs
 shortLabel Zebrafish
-longLabel Danio rario ortholog (best blastp hit to Ensembl)
+longLabel <em>Danio rario</em> Ortholog (Best Blastp Hit to Ensembl)
 priority 8.1
 visibility off
 type lookup drBlastTab query target
@@ -179,15 +121,15 @@ itemUrl http://www.ensembl.org/Danio_rerio/protview?peptide=%s
 
 name flyOrthologs
 shortLabel Drosophila
-longLabel D. melanogaster ortholog (best blastp hit to SwissProt Drosophila)
+longLabel <em>D. melanogaster</em> Ortholog (Best Blastp Hit to FlyBase Proteins)
 priority 8.3
 visibility off
 type lookup dmBlastTab query target
-itemUrl http://us.expasy.org/cgi-bin/niceprot.pl?%s
+itemUrl http://flybase.bio.indiana.edu/.bin/fbidq.html?%s
 
 name wormOrthologs
 shortLabel C. elegans
-longLabel C. elegans ortholog (best blastp hit to wormpep)
+longLabel <em>C. elegans</em> Ortholog (Best Blastp Hit to WormPep)
 priority 8.4
 visibility off
 type lookup ceBlastTab query target
@@ -195,7 +137,7 @@ itemUrl http://www.wormbase.org/db/gene/gene?name=%s
 
 name yeastOrthologs
 shortLabel Yeast
-longLabel Saccharomyces cerevisiae ortholog (best blastp hit to RefSeq)
+longLabel <em>Saccharomyces cerevisiae</em> Ortholog (Best Blastp Hit to RefSeq)
 priority 8.5
 visibility off
 type lookup scBlastTab query target
@@ -203,10 +145,10 @@ itemUrl http://db.yeastgenome.org/cgi-bin/SGD/locus.pl?locus=%s
 
 name pfamDomains
 shortLabel Pfam Domains
-longLabel Protein family domain structure.
+longLabel Protein Family Domain Structure
 priority 9
 visibility off
-type association proteins072003.pfamXref proteins072003.pfamDesc
+type pfam proteins072003.pfamXref proteins072003.pfamDesc
 queryFull select swissDisplayID,description from proteins072003.pfamXref,proteins072003.pfamDesc where pfamXref.pfamAC = pfamDesc.pfamAC
 queryOne select description,proteins072003.pfamDesc.pfamAC from proteins072003.pfamXref,proteins072003.pfamDesc where swissDisplayID = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC order by description
 invQueryOne select swissDisplayID from proteins072003.pfamXref,proteins072003.pfamDesc where description = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC
@@ -216,7 +158,7 @@ protDb proteins072003
 
 name go
 shortLabel Gene Ontology
-longLabel Gene Ontology (GO) terms associated with gene.
+longLabel Gene Ontology (GO) Terms Associated with Gene
 priority 10
 visibility off
 type go
@@ -224,7 +166,7 @@ colWidth 50
 
 name description
 shortLabel Description
-longLabel Short description line/link to details page
+longLabel Short description Line/Link to Details Page
 priority 20
 visibility on
 type knownDetails kgXref kgID description

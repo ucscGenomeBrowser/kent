@@ -2,8 +2,11 @@
 #include "common.h"
 #include "linefile.h"
 #include "axt.h"
+#include "obscure.h"
+#include "hash.h"
+#include "dnautil.h"
 
-static char const rcsid[] = "$Id: axtDropOverlap.c,v 1.3 2003/07/22 16:29:43 kent Exp $";
+static char const rcsid[] = "$Id: axtDropOverlap.c,v 1.4 2003/09/18 19:12:55 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -11,12 +14,44 @@ void usage()
 errAbort(
 "axtDropOverlap - deletes all overlapping self alignments. \n"
 "usage:\n"
-"    axtDropOverlap in.axt out.axt\n");
+"    axtDropOverlap in.axt tSizes qSizes out.axt\n"
+"Where tSizes and qSizes are tab-delimited files with \n"
+"       <seqName><size>\n"
+);
 }
 
-
-void axtDropOverlap(char *inName, char *outName)
+struct hash *readSizes(char *fileName)
+/* Read tab-separated file into hash with
+ * name key size value. */
 {
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct hash *hash = newHash(0);
+char *row[2];
+while (lineFileRow(lf, row))
+    {
+    char *name = row[0];
+    int size = lineFileNeedNum(lf, row, 1);
+    if (hashLookup(hash, name) != NULL)
+        warn("Duplicate %s, ignoring all but first\n", name);
+    else
+	hashAdd(hash, name, intToPt(size));
+    }
+lineFileClose(&lf);
+return hash;
+}
+
+int findSize(struct hash *hash, char *name)
+/* Find size of name in hash or die trying. */
+{
+void *val = hashMustFindVal(hash, name);
+return ptToInt(val);
+}
+
+void axtDropOverlap(char *inName, char *tSizeFile, char *qSizeFile, char *outName)
+/* used for cleaning up self alignments - deletes all overlapping self alignments */
+{
+struct hash *tSizeHash = readSizes(tSizeFile);
+struct hash *qSizeHash = readSizes(qSizeFile);
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 FILE *f = mustOpen(outName, "w");
 struct axt *axt;
@@ -33,15 +68,17 @@ boolean anyFilter = TRUE;
 boolean passFilter;
 
 
-/*if (!lineFileNext(lf, &line, &lineSize))
-    errAbort("%s is empty\n", inName);*/
 while ((axt = axtRead(lf)) != NULL)
     {
     totLines++;
     totMatch += axt->score;
 	if (sameString(axt->qName, axt->tName))
         {
-        if (rangeIntersection(axt->qStart, axt->qEnd, axt->tStart, axt->tEnd) > 0)
+        int qs = axt->qStart;
+        int qe = axt->qEnd;
+        if (axt->qStrand == '-')
+            reverseIntRange(&qs, &qe, findSize(qSizeHash, axt->qName));
+        if (axt->tStart == qs && axt->tEnd == qe) 
             {
             /*
             printf( "skip %c\t%s\t%d\t%d\t%d\t%s\t%d\t%d\t%d\n",
@@ -51,37 +88,13 @@ while ((axt = axtRead(lf)) != NULL)
               );
               */
             totSkip++;
-/*            skipMatch += axt->match;
-            skipMis += axt->misMatch;
-            skipIns += axt->blockCount-1;
-            skipRepMatch += axt->repMatch;*/
             continue;
             }
         }
-    /*
-            printf( "read %c\t%s\t%d\t%d\t%d\t%s\t%d\t%d\t%d\n",
-              axt->qStrand,
-              axt->qName, axt->symCount, axt->qStart, axt->qEnd,
-              axt->tName, axt->symCount, axt->tStart, axt->tEnd
-              );
-              */
-    /* fprintf(f, "%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%d\t%s\t%d\t%d\t%d\t%d\n",
-	  axt->match, axt->misMatch, axt->repMatch, axt->nCount, 
-      axt->qNumInsert, axt->qBaseInsert, axt->tNumInsert, axt->tBaseInsert,
-      axt->strand,
-	  axt->qName, axt->qSize, axt->qStart, axt->qEnd,
-	  axt->tName, axt->tSize, axt->tStart, axt->tEnd,
-      axt->blockCount-1 );
-      */
-
     axtWrite(axt, f);
 
     axtFree(&axt);
     }
-/*
-printf( "Total skipped %d out of %d match %d out of %d, mismatch %d, rep match %d, insert %d in %s\n",
-	totSkip, totLines, skipMatch, totMatch,  totMis, totRepMatch, totIns,outName );
-    */
 fclose(f);
 lineFileClose(&lf);
 }
@@ -89,8 +102,8 @@ lineFileClose(&lf);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-if (argc != 3)
+if (argc != 5)
     usage();
-axtDropOverlap(argv[1], argv[2]);
+axtDropOverlap(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }

@@ -2,10 +2,10 @@
 # neighborhood browser.  Don't start these until
 # there is a knownGene track.
 
-# Set up some variables and make working directory
+# Set up db variable (you'll actually need to redo this
+# after each ssh until we work out a better system.)
 ssh hgwdev
 set db = hg16
-set dbDir = /cluster/data/$db
 
 # Cluster together various alt-splicing isoforms.
 hgClusterGenes $db knownGene knownIsoforms knownCannonical
@@ -20,10 +20,10 @@ cd ..
 
 # Copy over database to iscratch/i
 ssh kkr1u00
-if (-e /iscratch/i/$db/known) then
-   rm -r /iscratch/i/$db/known
+if (-e /iscratch/i/$db/blastp) then
+   rm -r /iscratch/i/$db/blastp
 endif
-mkdir -p /iscratch/i/$db/known
+mkdir -p /iscratch/i/$db/blastp
 if (-e /iscratch/i/$db/blastp) then
    rm -r /iscratch/i/$db/blastp
 endif
@@ -69,7 +69,7 @@ blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
 end
 
 # Create parasol batch
-ls -1 ../../split/*.fa > split.lst
+echo ../../split/*.fa | wordLine stdin > split.lst
 gensub2 split.lst single gsub spec
 para create spec
 para try
@@ -90,7 +90,6 @@ para push
 ssh hgwdev
 cd /cluster/data/$db/bed/blastp/self/run/out
 hgLoadBlastTab $db knownBlastTab *.tab
-#### DONE TO HERE FOR HG16 ####
 
 # Create table that maps between known genes and RefSeq
 hgMapToGene $db refGene knownGene knownToRefSeq
@@ -101,7 +100,7 @@ hgMapToGene "-type=bed 12" $db affyUcla knownGene knownToU133
 
 # Create expression distance table.  This will take about an hour.
 cd ~/src/hg/near/hgExpDistance
-hgExpDistance $db affyUcla affyUclaExp knownExpDistance -weights=affyUcla.weight -lookup=knownToAffyUcla
+hgExpDistance $db affyUcla affyUclaExp knownExpDistance -weights=affyUcla.weight -lookup=knownToU133
 
 # Create table that maps between known genes and 
 # the GNF data.
@@ -109,12 +108,6 @@ hgMapToGene $db affyRatio knownGene knownToU95
 cd ~/src/hg/near/hgExpDistance
 hgExpDistance $db affyRatio affyExp knownGnfDistance -lookup=knownToU95
 
-
-# New Column domains
-# Add the domain structure of SWISSPROT and TrEMBL proteins according to Pfam
-mkdir -p ~/hg15/bed/nearDomain
-cd ~/hg15/bed/nearDomain
-wget ftp://ftp.genetics.wustl.edu/pub/Pfam/swisspfam.gz
 
 # Make sure that GO database is up to date.
 See README in /cluster/store1/geneOntology.
@@ -175,7 +168,7 @@ blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
 end
 
 # Create parasol batch
-ls -1 ../../split/*.fa > split.lst
+echo ../../split/*.fa | wordLine stdin > split.lst
 gensub2 split.lst single gsub spec
 para create spec
 para try
@@ -238,7 +231,7 @@ blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
 end
 
 # Create parasol batch
-ls -1 ../../split/*.fa > split.lst
+echo ../../split/*.fa | wordLine stdin > split.lst
 gensub2 split.lst single gsub spec
 para create spec
 para try
@@ -251,69 +244,6 @@ para push
 ssh hgwdev
 cd /cluster/data/$db/bed/blastp/mm3/run/out
 hgLoadBlastTab $db mmBlastTab -maxPer=1 *.tab
-
-# Make Drosophila melanagaster ortholog column using blastp on SwissProt.
-# First make SwissProt protein database and copy it to iscratch/i
-# if it doesn't exist already
-cd /cluster/data/dm1/bed
-mkdir blastp
-cd blastp
-wget ftp://ftp.ebi.ac.uk/pub/databases/SPproteomes/fasta_files/proteomes/7227.FASTAC
-mv 7337.FASTAC swissProt.faa
-formatdb -i swissProt.faa -t swissProt -n swissProt
-ssh kkr1u00
-if (-e /iscratch/i/dm1/blastp) then
-   rm -r /iscratch/i/dm1/blastp
-endif
-mkdir -p /iscratch/i/dm1/blastp
-cp /cluster/data/dm1/bed/blastp/swissProt.p?? /iscratch/i/dm1/blastp
-iSync
-
-# Make parasol run directory 
-ssh kk
-mkdir -p /cluster/data/$db/bed/blastp/dm1
-cd /cluster/data/$db/bed/blastp/dm1
-mkdir run
-cd run
-mkdir out
-
-# Make blast script
-cat > blastSome <<end
-#!/bin/csh
-setenv BLASTMAT /iscratch/i/blast/data
-/iscratch/i/blast/blastall -p blastp -d /iscratch/i/dm1/blastp/swissProt -i \$1 -o \$2 -e 0.01 -m 8 -b 1
-end
-chmod a+x blastSome
-
-# Make gensub2 file
-cat > gsub <<end
-#LOOP
-blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
-#ENDLOOP
-end
-
-# Create parasol batch
-ls -1 ../../split/*.fa > split.lst
-gensub2 split.lst single gsub spec
-para create spec
-para try
-
-# Wait a couple of minutes, and do a para check,  if all is good
-# then do a
-para push
-
-#Results of this:
-#Completed: 5814 of 5814 jobs
-#CPU time in finished jobs:      55053s     917.55m    15.29h    0.64d  0.002 y
-#IO & Wait Time:                 17299s     288.31m     4.81h    0.20d  0.001 y
-#Average job time:                  12s       0.21m     0.00h    0.00d
-#Longest job:                      137s       2.28m     0.04h    0.00d
-#Submission to last job:           270s       4.50m     0.07h    0.00d
-
-# Load into database.  
-ssh hgwdev
-cd /cluster/data/$db/bed/blastp/dm1/run/out
-hgLoadBlastTab $db dmBlastTab -maxPer=1 *.tab
 
 # Make Danio rerio (zebrafish) ortholog column using blastp on Ensembl.
 # First make protein database and copy it to iscratch/i
@@ -358,7 +288,7 @@ blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
 end
 
 # Create parasol batch
-ls -1 ../../split/*.fa > split.lst
+echo ../../split/*.fa | wordLine stdin > split.lst
 gensub2 split.lst single gsub spec
 para create spec
 para try
@@ -415,7 +345,7 @@ blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
 end
 
 # Create parasol batch
-ls -1 ../../split/*.fa > split.lst
+echo ../../split/*.fa | wordLine stdin > split.lst
 gensub2 split.lst single gsub spec
 para create spec
 para try
@@ -428,4 +358,68 @@ para push
 ssh hgwdev
 cd /cluster/data/$db/bed/blastp/sc1/run/out
 hgLoadBlastTab $db scBlastTab -maxPer=1 *.tab
+
+# Make Drosophila melanagaster ortholog column using blastp on FlyBase.
+# First make SwissProt protein database and copy it to iscratch/i
+# if it doesn't exist already
+cd /cluster/data/dm1/bed
+mkdir blastp
+cd blastp
+wget ftp://ftp.fruitfly.org/pub/download/dmel_RELEASE3-1/FASTA/whole_genome_translation_dmel_RELEASE3-1.FASTA.gz
+zcat whole_ge*.gz | faFlyBaseToUcsc stdin flyBase.faa
+formatdb -i flyBase.faa -t flyBase -n flyBase
+ssh kkr1u00
+if (-e /iscratch/i/dm1/blastp) then
+   rm -r /iscratch/i/dm1/blastp
+endif
+mkdir -p /iscratch/i/dm1/blastp
+cp /cluster/data/dm1/bed/blastp/flyBase.p?? /iscratch/i/dm1/blastp
+iSync
+
+# Make parasol run directory 
+ssh kk
+mkdir -p /cluster/data/$db/bed/blastp/dm1
+cd /cluster/data/$db/bed/blastp/dm1
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/dm1/blastp/flyBase -i \$1 -o \$2 -e 0.01 -m 8 -b 1
+end
+chmod a+x blastSome
+
+# Make gensub2 file
+cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+
+# Create parasol batch
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub spec
+para create spec
+para try
+
+# Wait a couple of minutes, and do a para check,  if all is good
+# then do a
+para push
+
+#Results of this:
+#Completed: 5814 of 5814 jobs
+#CPU time in finished jobs:      62285s    1038.09m    17.30h    0.72d  0.002 y
+#IO & Wait Time:                 23056s     384.26m     6.40h    0.27d  0.001 y
+#Average job time:                  15s       0.24m     0.00h    0.00d
+#Longest job:                      152s       2.53m     0.04h    0.00d
+#Submission to last job:           290s       4.83m     0.08h    0.00d
+
+
+# Load into database.  
+ssh hgwdev
+cd /cluster/data/$db/bed/blastp/dm1/run/out
+hgLoadBlastTab $db dmBlastTab -maxPer=1 *.tab
 

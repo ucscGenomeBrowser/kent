@@ -1,3 +1,6 @@
+#!/bin/csh -f # set emacs mode
+exit; # don't actually run this like a script :)
+
 # This file describes how we made the browser database on the Rattus 
 # Norvegicus genome, June 2003 update.
 #
@@ -283,6 +286,7 @@ if (-e /tmp/rn3/$2/$2.cat) /bin/cp /tmp/rn3/$2/$2.cat ./
 /bin/rmdir --ignore-fail-on-non-empty /tmp/rn3/$2
 /bin/rmdir --ignore-fail-on-non-empty /tmp/rn3
 '_EOF_'
+    # << this line makes emacs coloring happy
     chmod +x jkStuff/RMRat
     mkdir RMRun
     rm -f RMRun/RMJobs
@@ -517,6 +521,7 @@ cp -p /tmp/$outputFN/$outputFN $outpath
 rm -fr /tmp/$outputFN/*
 rmdir --ignore-fail-on-non-empty /tmp/$outputFN
 '_EOF_'
+    # << this line makes emacs coloring happy
     chmod +x runTrf
 
     cat << '_EOF_' > gsub
@@ -524,6 +529,7 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
 ./runTrf {check in line+ $(path1)}  {check out line trf/$(root1).bed}
 #ENDLOOP
 '_EOF_'
+    # << this line makes emacs coloring happy
 
     gensub2 genome.lst single gsub spec
     para create spec
@@ -780,6 +786,7 @@ CDBDIR=$BASE
 SEQ1_LEN=$BASE/S1.len
 SEQ2_LEN=$BASE/S2.len
 '_EOF_'
+    # << this line makes emacs coloring happy
 
 
 # Save the DEF file in the current standard place
@@ -874,6 +881,7 @@ SEQ2_LEN=$BASE/S2.len
 /cluster/bin/scripts/blastz-chromlav2axt /cluster/bluearc/hg/rn3/bed/blastz.mm3/lav/$(root1) {check out line+ /cluster/data/rn3/bed/blastz.mm3/axtChrom/$(root1).axt} /cluster/bluearc/rat/rn3/softNib /iscratch/i/mm3.RM030619/mixedNib
 #ENDLOOP
 '_EOF_'
+    # << this line makes emacs coloring happy
     ls -1S /cluster/bluearc/hg/rn3/bed/blastz.mm3/lav > chrom.list
     gensub2 chrom.list single gsub jobList
     wc -l jobList
@@ -946,6 +954,7 @@ SEQ2_LEN=$BASE/S2.len
 sleep 1
 /cluster/bin/i386/axtToPsl $3 /cluster/data/rn3/bed/blastz.mm3/S1.len /cluster/data/rn3/bed/blastz.mm3/S2.len $4
 '_EOF_'
+    # << this line makes emacs coloring happy
     chmod +x doBestAxt
     cd axtChrom
     ls -1S | sed 's/.axt$//' > ../run.3/chrom.list
@@ -957,6 +966,7 @@ sleep 1
 doBestAxt $(root1) /cluster/bluearc/hg/rn3/bed/blastz.mm3/axtChrom/$(root1).axt {check out line+ /cluster/data/rn3/bed/blastz.mm3/axtBest/$(root1).axt} {check out line+  /cluster/data/rn3/bed/blastz.mm3/pslBest/$(root1)_blastzBestMm3.psl}
 #ENDLOOP
 '_EOF_'
+    # << this line makes emacs coloring happy
     gensub2 chrom.list single gsub jobList
     wc -l jobList
         # 44 jobs
@@ -1046,11 +1056,13 @@ doBestAxt $(root1) /cluster/bluearc/hg/rn3/bed/blastz.mm3/axtChrom/$(root1).axt 
 doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
 #ENDLOOP
 '_EOF_'
+    # << this line makes emacs coloring happy
 
     cat << '_EOF_' > doChain
 #!/bin/csh
     axtFilter -notQ=chrUn_random $1 | axtChain stdin /iscratch/i/rn3/bothMaskedNibs /iscratch/i/mm3.RM030619/mixedNib $2 > $3
 '_EOF_'
+    # << this line makes emacs coloring happy
     chmod a+x doChain
     mkdir out chain
     gensub2 input.lst single gsub jobList
@@ -1122,7 +1134,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     # Add entries for net and chain to rat/rn3 trackDb
 
 
-# BLASTZ Self (IN PROGRESS 2003-07-18 kate) 
+# BLASTZ Self (DONE 2003-09-22 angie) 
 
     ssh kkstore
     mkdir -p /cluster/data/rn3/bed/blastz.rn3
@@ -1169,6 +1181,7 @@ CDBDIR=$BASE
 SEQ1_LEN=$BASE/S1.len
 SEQ2_LEN=$BASE/S2.len
 '_EOF_'
+    # << this line makes emacs coloring happy
 
 
 # Save the DEF file in the current standard place
@@ -1212,7 +1225,111 @@ SEQ2_LEN=$BASE/S2.len
     # ... etc ...
        # 1.3 hr longest job
 
+    # make tSizes, qSizes files
+    ssh hgwdev
+    cd /cluster/store3/rn3/bed/blastz.rn3
+    echo 'select chrom,size from chromInfo' | hgsql -A -N rn3 \
+      > tSizes
+    echo 'select chrom,size from chromInfo' | hgsql -A -N rn3 \
+      > qSizes
+
     # post-process blastz
+    # --- normalize (PennSpeak for lift)
+    ssh kk
+    cd /cluster/store3/rn3/bed/blastz.rn3
+    # run bash shell if not running it already
+    source DEF
+    mkdir -p $BASE/run.1
+    mkdir -p $BASE/lav
+    
+    # create a new job list to convert out files to lav
+    /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE \
+                        > run.1/jobList
+    cd run.1
+
+    # make sure the job list is OK
+    wc -l jobList
+       # 312 jobList
+    head jobList
+
+    para create jobList
+    para push
+#Completed: 312 of 312 jobs
+#CPU time in finished jobs:      42835s     713.92m    11.90h    0.50d  0.001 y
+#IO & Wait Time:                940201s   15670.02m   261.17h   10.88d  0.030 y
+#Average job time:                3151s      52.51m     0.88h    0.04d
+#Longest job:                     4794s      79.90m     1.33h    0.06d
+#Submission to last job:          4795s      79.92m     1.33h    0.06d
+
+    # convert lav files to axt
+    ssh kk
+    cd /cluster/store3/rn3/bed/blastz.rn3
+    mkdir axtChrom
+    
+    # a new run directory
+    mkdir run.2
+    cd run.2
+
+    # create template file for gensub2
+    # Use blastz-self-chromlav2axt, which includes axtDropOverlap in 
+    # the pipe (that helps to keep axtSort from barfing).
+    # usage:  blastz-self-chromlav2axt lav-dir axt-file seq1-dir seq2-dir
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/scripts/blastz-self-chromlav2axt /cluster/store3/rn3/bed/blastz.rn3/lav/$(root1) {check out line+ /cluster/store3/rn3/bed/blastz.rn3/axtChrom/$(root1).axt} /iscratch/rat/rn3/softNib /iscratch/rat/rn3/softNib /cluster/store3/rn3/bed/blastz.rn3/tSizes /cluster/store3/rn3/bed/blastz.rn3/qSizes
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    \ls -1S /cluster/store3/rn3/bed/blastz.rn3/lav > chrom.list
+    gensub2 chrom.list single gsub jobList
+    wc -l jobList
+        # 44 jobs
+    head jobList
+
+    cd /cluster/data/rn3/bed/blastz.rn3/run.2
+    para create jobList
+    para try
+    para check
+    para push
+#Completed: 38 of 44 jobs
+#Crashed: 6 jobs
+#CPU time in finished jobs:      11390s     189.83m     3.16h    0.13d  0.000 y
+#IO & Wait Time:                179130s    2985.51m    49.76h    2.07d  0.006 y
+#Average job time:                5014s      83.56m     1.39h    0.06d
+#Longest job:                    22358s     372.63m     6.21h    0.26d
+#Submission to last job:         22377s     372.95m     6.22h    0.26d
+    # Chroms 1,2,3,4,Un,X crashed... run in 2 passes:
+    ssh kkstore
+    cd /cluster/data/rn3/bed/blastz.rn3
+    set base=/cluster/data/rn3/bed/blastz.rn3
+    set seq1_dir=/cluster/data/rn3/softNib
+    set seq2_dir=/cluster/data/rn3/softNib
+    foreach c (lav/chr1 lav/chr2 lav/chr3 lav/chr4 lav/chrX lav/chrUn)
+      pushd $c
+      set chr=$c:t
+      set out=$base/axtChrom/$chr.axt
+      echo "Translating $chr lav to $out"
+      foreach d (*.lav)
+        set smallout=$d.axt
+        lavToAxt $d $seq1_dir $seq2_dir stdout \
+        | axtDropOverlap stdin /cluster/data/rn3/bed/blastz.rn3/tSizes \
+          /cluster/data/rn3/bed/blastz.rn3/qSizes stdout \
+        | axtSort stdin $smallout
+      end
+      cat `ls -1 *.lav.axt | sort -g` > $out
+      popd
+    end
+    foreach f (axtChrom/chr*.axt)
+      echo gzipping $f...
+      gzip $f
+    end
+
+    # Make the axt's available on genome-test:
+    ssh hgwdev
+    mkdir -p /usr/local/apache/htdocs/goldenPath/rnJun2003/alignments/vsRn3
+    cd /usr/local/apache/htdocs/goldenPath/rnJun2003/alignments/vsRn3
+    cp -p /cluster/data/rn3/bed/blastz.rn3/axtChrom/*.axt.gz .
+	
 
 # BLASTZ Human hg15 (IN PROGRESS 2003-07-20 kate) 
 
@@ -1268,6 +1385,7 @@ CDBDIR=$BASE
 SEQ1_LEN=$BASE/S1.len
 SEQ2_LEN=$BASE/S2.len
 '_EOF_'
+    # << this line makes emacs coloring happy
 
 
 # Save the DEF file in the current standard place
@@ -1385,6 +1503,7 @@ SEQ2_LEN=$BASE/S2.len
 #!/bin/csh
     axtFilter -notQ=chrUn_random $1 | axtChain stdin /cluster/bluearc/rn3/softNib /cluster/data/hg15/nib $2 > $3
 '_EOF_'
+    # << this line makes emacs coloring happy
     chmod a+x doChain
     csh serialJobList &
     # this took 8.5 hours on kkstore
@@ -1619,6 +1738,7 @@ cat << "EOF" > doMultiz
                                  > ../../multiz.hg15-mm3/maf/${c}.rmh.maf
     end
 "EOF"
+    # << this line makes emacs coloring happy
     csh doMultiz >&! doMultiz.log &
     tail -100f doMultiz.log
     # 3 hours ? 
@@ -1638,6 +1758,7 @@ cat << "EOF" > doMultiz.kk
 /cluster/bin/penn/multiz /cluster/bluearc/hg/rn3/bed/blastz.hg15.2003-07-09/maf/$1.rh.maf /cluster/bluearc/hg/rn3/bed/blastz.mm3/maf/$1.rm.maf - > /cluster/data/rn3/bed/multiz.hg15-mm3/maf/$1.rmh.maf
 #ENDLOOP
 "EOF"
+    # << this line makes emacs coloring happy
     chmod +x doMultiz.kk
 
 cat << "EOF" > gsub
@@ -1645,6 +1766,7 @@ cat << "EOF" > gsub
 doMultiz.kk $(root1) {check out line+ /cluster/data/rn3/bed/multiz.hg15-mm3/maf/$(root1).rmh.maf}
 #ENDLOOP
 "EOF"
+    # << this line makes emacs coloring happy
     cd /cluster/bluearc/hg/rn3/bed/blastz.hg15.2003-07-09/maf
     ls *.maf | awk -F. '{print $1}' > $multizDir/run/chrom.list
     gensub2 chrom.list single gsub jobList
@@ -1778,6 +1900,7 @@ PRODUCING GENSCAN PREDICTIONS (DONE - 2003-07-09 - Hiram)
 /cluster/home/hiram/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=2400000
 #ENDLOOP
 '_EOF_'
+    # << this line makes emacs coloring happy
     gensub2 genome.list single gsub jobList
     para create jobList
     para try

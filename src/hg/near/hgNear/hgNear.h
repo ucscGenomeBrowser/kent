@@ -53,7 +53,7 @@ struct column
 /* A column in the big table. The central data structure for
  * hgNear. */
    {
-   /* Data set during initializatio that is guaranteed to be in each track.  */
+   /* Data set during initialization that is guaranteed to be in each track.  */
    struct column *next;		/* Next column. */
    char *name;			/* Column name, not allocated here. */
    char *shortLabel;		/* Column label. */
@@ -103,12 +103,15 @@ struct column
    /* Return list of positions for advanced filter. */
 
    /* -- Data that may be column-specific. -- */
-      /* Most columns that need any data at all use the next few fields. */
+      /* Most columns that need any extra data at all use the next few fields. */
    char *table;			/* Name of associated table. */
    char *keyField;		/* GeneId field in associated table. */
    char *valField;		/* Value field in associated table. */
+   boolean selfLink;		/* Put in link to self. */
+
       /* The distance type columns like homology need this field too. */
    char *curGeneField;		/* curGeneId field in associated table.  Used by distance columns*/
+
       /* The expression ratio type columns use the next bunch of fields as well as
        * the table/key/val fields above. */
    char *experimentTable;	/* Experiment table in hgFixed if any. */
@@ -129,17 +132,18 @@ struct column
    boolean protKey;	/* Use protein rather than geneId for key. */
 
    /* Pfam uses this. */
-   char *pfamProtDb; /* Which protein database pfam tables are in. */
+   char *protDb; /* Which protein database pfam tables are in. */
    };
 
 struct order
-/* An row order of the big table. */
+/* A row order of the big table. */
     {
     struct order *next;	/* Next in list. */
     char *name;			/* Symbolic name, not allocated here. */
     char *shortLabel;		/* Short readable label. */
     char *longLabel;		/* Longer description. */
     char *type;			/* Type - encodes which methods to used etc. */
+    float priority;		/* Order to display in. */
     struct hash *settings;	/* Settings from ra file. */
 
     boolean (*exists)(struct order *ord, struct sqlConnection *conn);
@@ -178,12 +182,12 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 
 #define dbVarName "db"      /* Which assembly to use. */
 #define orgVarName "org"      /* Which organism to use. */
-#define confVarName "near.configure"	/* Configuration button */
+#define confVarName "near.do.configure"	/* Configuration button */
 #define countVarName "near.count"	/* How many items to display. */
-#define colInfoVarName "near.colInfo"	/* Display column info. */
+#define colInfoVarName "near.do.colInfo"	/* Display column info. */
 #define searchVarName "near_search"	
 	/* Search term - underbar for Javascript.  Hardcoded in Javascript. */
-#define idVarName "near.id"         	
+#define idVarName "near.do.id"         	
 	/* Overrides searchVarName if it exists */
 #define idPosVarName "near.idPos"      	
 	/* chrN:X-Y position of id, may be empty. */
@@ -193,7 +197,7 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define getGenomicSeqVarName "near.getGenomicSeq"	
 	/* Button to fetch genomic sequence. */
 #define getSeqHowVarName "near.getSeqHow" /* How to get sequence. */
-#define getSeqPageVarName "near.getSeqPage" /* Button go to getSequence page. */
+#define getSeqPageVarName "near.do.getSeqPage" /* Button go to getSequence page. */
 #define proUpSizeVarName "near.proUpSize" /* Promoter upstream size. */
 #define proDownSizeVarName "near.proDownSize" /* Promoter downstream size. */
 #define proIncludeFiveOnly "near.proIncludeFiveOnly" 
@@ -207,16 +211,8 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define advFilterVarName "near.do.advFilter"      /* Advanced filter */
 #define advFilterClearVarName "near.do.advFilterClear" 
 	/* Advanced filter clear all button. */
-#define advFilterBrowseVarName "near.do.advFilterBrowse" 
-	/* Advanced filter browse  button. */
 #define advFilterListVarName "near.do.advFilterList" 
 	/* Advanced filter submit list. */
-#ifdef OLD
-#define advFilterListProtVarName "near.do.advFilterListProt" 
-	/* Advanced filter submit protein list. */
-#define advFilterListAccVarName "near.do.advFilterListAcc" 
-	/* Advanced filter submit accession list. */
-#endif /* OLD */
 
 #define filSaveSettingsPrefix "near_filUserSet_" /* Prefix for filter sets. */
     /* Underbars on this one for sake of javascript. */
@@ -241,13 +237,11 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 	/* Show all splice varients. */
 #define expRatioColorVarName "near.expRatioColors" 
 	/* Color scheme for expression ratios. */
-#define keyWordUploadPrefix "near.keyUp." /* Prefix for keyword uploads. */
-#define keyWordPastePrefix "near.keyPaste." /* Prefix for keyword paste-ins. */
-#define keyWordPastedPrefix "near.keyPasted." 
+#define keyWordUploadPrefix "near.do.keyUp." /* Prefix for keyword uploads. */
+#define keyWordPastePrefix "near.do.keyPaste." /* Prefix for keyword paste-ins. */
+#define keyWordPastedPrefix "near.do.keyPasted." 
 	/* Prefix for keyword paste-ins. */
-#define keyWordClearPrefix "near.keyClear." /* Prefix for keyword paste-ins. */
-#define keyWordClearedPrefix "near.keyCleared." 
-	/* Prefix for keyword paste-ins. */
+#define keyWordClearPrefix "near.do.keyClear." /* Prefix for keyword paste-ins. */
 
 /* ---- General purpose helper routines. ---- */
 
@@ -266,8 +260,14 @@ boolean wildMatchAll(char *word, struct slName *wildList);
 boolean wildMatchList(char *word, struct slName *wildList, boolean orLogic);
 /* Return TRUE if word matches things in wildList. */
 
-char *mustFindInRaHash(struct lineFile *lf, struct hash *raHash, char *name);
+struct hash *readRas(char *rootName);
+/* Read in ra in root, root/org, and root/org/database. */
+
+char *mustFindInRaHash(char *fileName, struct hash *raHash, char *name);
 /* Look up in ra hash or die trying. */
+
+char *genomeSetting(char *name);
+/* Return genome setting value.   Aborts if setting not found. */
 
 /* ---- Some html helper routines. ---- */
 
@@ -300,6 +300,9 @@ void selfAnchorSearch(struct genePos *gp);
 
 int columnCmpPriority(const void *va, const void *vb);
 /* Compare to sort columns based on priority. */
+
+void refinePriorities(struct column *colList);
+/* Consult colOrderVar if it exists to reorder priorities. */
 
 struct hash *hashColumns(struct column *colList);
 /* Return a hash of columns keyed by name. */
@@ -354,11 +357,6 @@ struct searchResult *knownGeneSearchResult(struct sqlConnection *conn,
 
 struct genePos *knownPosAll(struct sqlConnection *conn);
 /* Get all positions in knownGene table. */
-
-#ifdef OLD 
-struct hash *knownCannonicalHash(struct sqlConnection *conn);
-/* Get all cannonical gene names in hash. */
-#endif /* OLD */
 
 void fillInKnownPos(struct genePos *gp, struct sqlConnection *conn);
 /* If gp->chrom is not filled in go look it up. */
@@ -514,15 +512,18 @@ void setupColumnExpRatio(struct column *col, char *parameters);
 void setupColumnGo(struct column *col, char *parameters);
 /* Set up gene ontology column. */
 
+void setupColumnPfam(struct column *col, char *parameters);
+/* Setup Pfam column. */
+
 void goSimilarityMethods(struct order *ord, char *parameters);
 /* Set up go similarity ordering. */
 
 /* ---- Get config options ---- */
-boolean showOnlyCannonical();
-/* Return TRUE if we only show cannonical splicing varients. */
+boolean showOnlyCanonical();
+/* Return TRUE if we only show canonical splicing varients. */
 
-struct hash *cannonicalHash();
-/* Get cannonicalHash if necessary, otherwise return NULL. */
+struct hash *canonicalHash();
+/* Get canonicalHash if necessary, otherwise return NULL. */
 
 boolean expRatioUseBlue();
 /* Return TRUE if should use blue instead of red
@@ -541,9 +542,6 @@ void doAdvFilter(struct sqlConnection *conn, struct column *colList);
 
 void doAdvFilterClear(struct sqlConnection *conn, struct column *colList);
 /* Clear variables in advanced filter page. */
-
-void doAdvFilterBrowse(struct sqlConnection *conn, struct column *colList);
-/* Put up family browser with advanced filter group by. */
 
 void doAdvFilterList(struct sqlConnection *conn, struct column *colList);
 /* List gene names matching advanced filter. */
@@ -593,6 +591,10 @@ void doGetSeq(struct sqlConnection *conn, struct column *colList,
 void doGetGenomicSeq(struct sqlConnection *conn, struct column *colList,
 	struct genePos *geneList);
 /* Retrieve genomic sequence sequence according to options. */
+
+void doExamples(struct sqlConnection *conn, struct column *colList);
+/* Put up controls and then some helpful text and examples.
+ * Called when search box is empty. */
 
 /* ---- User settings stuff - soon to be moved to library I hope. */
 

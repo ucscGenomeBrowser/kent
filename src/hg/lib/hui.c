@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.23 2003/06/23 00:13:55 markd Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.24 2003/09/20 01:39:14 braney Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -119,7 +119,14 @@ return hTvStrings[vis];
 }
 
 void hTvDropDown(char *varName, enum trackVisibility vis, boolean canPack)
-/* Make track visibility drop down for varName */
+/* Make track visibility drop down for varName 
+ * uses style "normalText" */
+{
+    hTvDropDownClass(varName, vis, canPack, "normalText");
+}
+
+void hTvDropDownClass(char *varName, enum trackVisibility vis, boolean canPack, char *class)
+/* Make track visibility drop down for varName with style class */
 {
 static char *noPack[] = 
     {
@@ -137,9 +144,9 @@ static char *pack[] =
     };
 static int packIx[] = {tvHide,tvDense,tvSquish,tvPack,tvFull};
 if (canPack)
-    cgiMakeDropList(varName, pack, ArraySize(pack), pack[packIx[vis]]);
+    cgiMakeDropListClass(varName, pack, ArraySize(pack), pack[packIx[vis]], class);
 else
-    cgiMakeDropList(varName, noPack, ArraySize(noPack), noPack[vis]);
+    cgiMakeDropListClass(varName, noPack, ArraySize(noPack), noPack[vis], class);
 }
 
 /****** Some stuff for stsMap related controls *******/

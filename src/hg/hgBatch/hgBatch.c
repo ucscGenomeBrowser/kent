@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgBatch.c,v 1.10 2003/09/03 21:59:07 hiram Exp $";
+static char const rcsid[] = "$Id: hgBatch.c,v 1.11 2003/09/23 19:10:58 angie Exp $";
 
 #define hgTextPhase  "Advanced query..."
 char *db;	/* Current database. */
@@ -114,6 +114,7 @@ printf("<FORM ACTION=\"/cgi-bin/hgBatch\" METHOD=\"GET\" NAME=\"orgForm\">");
 printf("<input type=\"hidden\" name=\"org\" value=\"%s\">", organism);
 cartSaveSession(cart);
 printf("</FORM>\n");
+webEnd();
 }
 
 void posForm()
@@ -149,6 +150,7 @@ cgiMakeButton("submit", "Submit");
 printf("</FORM>\n");
 
 hgPositionsHelpHtml(organism, db);
+webEnd();
 }
 
 void pasteForm()
@@ -177,6 +179,7 @@ puts(" <INPUT TYPE=SUBMIT Name=hgb.showPasteResults VALUE=\"Submit\"><P>\n");
 puts("</CENTER>");
 cartSaveSession(cart);
 printf("</FORM>\n");
+webEnd();
 }
 
 void uploadForm()
@@ -204,6 +207,7 @@ puts("Upload sequence: <INPUT TYPE=FILE NAME=\"hgb.userKeys\">");
 puts("<INPUT TYPE=SUBMIT Name=hgb.showUploadResults VALUE=\"Submit File\"><P>\n");
 cartSaveSession(cart);
 puts("</FORM>\n");
+webEnd();
 }
 
 boolean anyWildMatch(char *s, struct slName *wildList)

@@ -107,6 +107,9 @@ char *cgiEncode(char *inString);
 void cgiMakeButton(char *name, char *value);
 /* Make 'submit' type button. */
 
+void cgiMakeOptionalButton(char *name, char *value, boolean disabled);
+/* Make 'submit' type button that can be disabled. */
+
 void cgiMakeRadioButton(char *name, char *value, boolean checked);
 /* Make radio type button.  A group of radio buttons should have the
  * same name but different values.   The default selection should be
@@ -128,8 +131,12 @@ void cgiMakeIntVar(char *varName, int initialVal, int maxDigits);
 void cgiMakeDoubleVar(char *varName, double initialVal, int maxDigits);
 /* Make a text control filled with initial floating-point value.  */
 
+void cgiMakeDropListClass(char *name, char *menu[], int menuSize, char *checked, char *class);
+/* Make a drop-down list with names and style sheet class. */
+
 void cgiMakeDropList(char *name, char *menu[], int menuSize, char *checked);
-/* Make a drop-down list with names. */
+/* Make a drop-down list with names. 
+ * uses style "normalText" */
 
 void cgiMakeDropListFull(char *name, char *menu[], char *values[], int menuSize, char *checked, char *extraAttribs);
 /* Make a drop-down list with names and values. */

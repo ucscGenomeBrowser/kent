@@ -1,0 +1,12 @@
+#!/bin/tcsh
+if ($HOST != "kkr1u00.kilokluster.ucsc.edu") then
+    echo "You must run iSync on kkr1u00.kilokluster.ucsc.edu"
+    exit -1
+endif
+foreach i (kkr3u00 kkr4u00 kkr5u00 kkr6u00 kkr7u00 kkr8u00)
+    rsync -arlq --delete /iscratch/i/ $i\:/iscratch/i/ &
+end
+rsync -arlv --delete /iscratch/i/ kkr2u00:/iscratch/i/
+echo waiting for other machines
+wait
+echo done iSync

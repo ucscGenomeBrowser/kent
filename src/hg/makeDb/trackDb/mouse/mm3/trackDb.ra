@@ -63,7 +63,7 @@ type sample 0 8
 
 
 track blastzTightRat
-shortLabel Tight Rat 
+shortLabel Rat Tight 
 longLabel Blastz Rat, Tight Subset of Best Alignments
 group compGeno
 priority 140
@@ -75,7 +75,7 @@ type psl xeno rn2
 otherDb rn2
 
 track blastzBestRat
-shortLabel Best Rat
+shortLabel Rat Best
 longLabel Blastz Rat Best in Genome Alignments
 group compGeno
 priority 141
@@ -87,7 +87,7 @@ type psl xeno rn2
 otherDb rn2
 
 track blastzRat
-shortLabel Blastz Rat
+shortLabel Rat Blastz
 longLabel Merged Blastz Rat Alignments
 group compGeno
 priority 142
@@ -99,16 +99,16 @@ type psl xeno rn2
 otherDb rn2
 
 track blastzTightHuman
-shortLabel Tight Human
-longLabel Blastz Human (Apr. 03), Tight Subset of Alignments
+shortLabel Human Tight
+longLabel Blastz Human (hg15-Apr 03), Tight Subset of Alignments
 group compGeno
 priority 124
 visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
-type psl xeno hg13
-otherDb hg13
+type psl xeno hg15
+otherDb hg15
 
 track humanChain
 shortLabel Human Chain 
@@ -124,7 +124,7 @@ otherDb hg15
 
 track mm3Hg15L
 shortLabel Human Cons
-longLabel Mouse/Human (Apr. 03) Evolutionary Conservation Score
+longLabel Mouse/Human (Apr. '03) Evolutionary Conservation Score
 group compGeno
 color 100,50,0
 altColor 175,150,128
@@ -164,28 +164,28 @@ altColor 255,240,200
 type bed 4 +
 
 track blastzBestHuman
-shortLabel Best Human
-longLabel Blastz Human (Nov. 02) Best in Genome Alignments
+shortLabel Human Best
+longLabel Blastz Human (hg15-Apr 03) Best in Genome Alignments
 group compGeno
 priority 127.5
 visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
-type psl xeno hg13
-otherDb hg13
+type psl xeno hg15
+otherDb hg15
 
 track blastzHuman
-shortLabel Blastz Human
-longLabel All Blastz Human (Nov. 02) Blastz Alignments
+shortLabel Human Blastz
+longLabel All Human (hg15-Apr 03) Blastz Alignments
 group compGeno
 priority 128
 visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
-type psl xeno hg13
-otherDb hg13
+type psl xeno hg15
+otherDb hg15
 
 track syntenyRat
 shortLabel Rat Synteny

@@ -24,7 +24,7 @@ priority 48
 visibility pack
 color 0,0,200
 chromosomes chrI,chrII,chrIII,chrIV,chrV,chrX
-type genePred
+type genePred sangerPep
 url http://www.wormbase.org/db/gene/gene?name=$$
 
 track est

@@ -1,0 +1,19 @@
+<H3>Description</H3>
+This column shows the similarity of the expression of each gene 
+to the selected gene. Genes with identical
+expression profiles show a value of 0.
+This column shows data only for the 1000 genes (including
+splicing variants) that have the most similar expression
+profiles.
+
+<H3>Method</H3>
+The expression distance between two genes is a weighted
+sum computed with the following formula:
+<PRE>
+  &nbsp;&nbsp;&nbsp;delta(a,b) = sum(w[i] * |a[i] - b[i]| ) / sum(w[i])
+</PRE>
+where a and b are expression vectors associated with the two
+genes indexed by tissue,  w is an array of weights, and the
+sums are taken over all tissues.  Currently, all weights have a value
+of 1.0. 
+

@@ -14,7 +14,7 @@
 #include "kgAlias.h"
 #include "findKGAlias.h"
 
-static char const rcsid[] = "$Id: knownGene.c,v 1.20 2003/09/12 11:06:51 kent Exp $";
+static char const rcsid[] = "$Id: knownGene.c,v 1.22 2003/09/24 11:21:33 kent Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
@@ -208,19 +208,17 @@ return gpList;
 struct genePos *knownPosAll(struct sqlConnection *conn)
 /* Get all positions in knownGene table. */
 {
-if (showOnlyCannonical())
-    return genePosFromQuery(conn, 
-    	"select transcript,chrom,chromStart,chromEnd,protein from knownCannonical");
+if (showOnlyCanonical())
+    return genePosFromQuery(conn, genomeSetting("allGeneQuery"));
 else
-    return genePosFromQuery(conn,
-    	"select name,chrom,txStart,txEnd,proteinId from knownGene");
+    return genePosFromQuery(conn, genomeSetting("allTranscriptQuery"));
 }
 
 void setupColumnKnownPos(struct column *col, char *parameters)
 /* Set up column that links to genome browser based on known gene
  * position. */
 {
-genePredPosMethods(col, "knownGene");
+genePredPosMethods(col, genomeSetting("geneTable"));
 col->cellVal = knownPosCellVal;
 }
 

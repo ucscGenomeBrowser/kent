@@ -16,7 +16,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.20 2003/09/17 17:14:08 kent Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.21 2003/09/20 01:22:18 braney Exp $";
 
 jmp_buf htmlRecover;
 
@@ -85,7 +85,11 @@ void htmlMemDeath()
 errAbort("Out of memory.");
 }
 
-static char *htmlStyle = NULL;
+static char *htmlStyle = 
+    "<STYLE TYPE=\"text/css\">"
+    ".hiddenText {background-color: silver}"
+    ".normalText {background-color: white}"
+    "</STYLE>\n";
 
 char *htmlStyleUndecoratedLink =
 /* Style that gets rid of underline of links. */

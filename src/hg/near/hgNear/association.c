@@ -1,4 +1,12 @@
-/* association - handle association type columns. */
+/* association - handle association type columns.  
+ * An association is a two column table (or query)
+ * with one column corresponding to a key, and the other
+ * to a value.  It is very similar to a lookup type.
+ * However where there is only one value per key in a lookup
+ * there can be multiple values per keyin an association.
+ *
+ * Originally the pfam column was an association.  Unfortunately
+ * mySQL was just too slow with the join that it required. */
 
 #include "common.h"
 #include "hash.h"
@@ -98,7 +106,7 @@ for (ref = refList; ref != NULL; ref = ref->next)
 return FALSE;
 }
 
-boolean wildMatchRefs(struct slName *wildList, struct slRef *refList, 
+static boolean wildMatchRefs(struct slName *wildList, struct slRef *refList, 
 	boolean orLogic)
 /* If using orLogic return true if any element of refList
  * matches any element of wildList.
@@ -127,7 +135,7 @@ else
     }
 }
 
-struct genePos *wildAssociationFilter(
+static struct genePos *wildAssociationFilter(
 	struct slName *wildList, boolean orLogic, 
 	struct column *col, struct sqlConnection *conn, struct genePos *list)
 /* Handle relatively slow filtering when there is a wildcard present. */
@@ -165,7 +173,7 @@ assocGroupFree(&ag);
 return list;
 }
 
-struct genePos *tameAssociationFilter(
+static struct genePos *tameAssociationFilter(
 	struct slName *termList, boolean orLogic, 
 	struct column *col, struct sqlConnection *conn, struct genePos *list)
 /* Handle filtering when there are no wildcards present. */
@@ -228,7 +236,7 @@ freeHash(&passHash);
 return list;
 }
 
-struct genePos *associationAdvFilter(struct column *col, 
+static struct genePos *associationAdvFilter(struct column *col, 
 	struct sqlConnection *conn, struct genePos *list)
 /* Do advanced filter on position. */
 {
@@ -328,7 +336,7 @@ static void associationFilterControls(struct column *col,
 {
 hPrintf("Please enclose term in single quotes if it "
         "contains multiple words.  You can include "
-	"* and ? wildcards, though this will be slower.<BR>\n");
+	"* and ? wildcards.<BR>\n");
 hPrintf("Term(s): ");
 advFilterRemakeTextVar(col, "terms", 35);
 hPrintf(" Include if ");

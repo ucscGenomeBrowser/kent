@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
 
     char *alias;
 
+    char *alignID;
     char *displayID, *secondaryID, *pdbID;
     char *proteinAC;
 
@@ -43,7 +44,7 @@ int main(int argc, char *argv[])
 
     o1 = fopen("j.dat", "w");
 
-    sprintf(query2,"select name, proteinID from %s.knownGene;", database);
+    sprintf(query2,"select name, proteinID, alignID from %s.knownGene;", database);
     
     sr2 = sqlMustGetResult(conn2, query2);
     row2 = sqlNextRow(sr2);
@@ -51,6 +52,7 @@ int main(int argc, char *argv[])
 	{
 	kgID		= row2[0];
 	displayID	= row2[1];
+	alignID		= row2[2];
 
 	fprintf(o1, "%s\t%s\t%s\n", kgID, displayID, displayID);
        
@@ -62,9 +64,10 @@ int main(int argc, char *argv[])
 		}
 	else
 		{
-		fprintf(stderr, "%s\t%s does not have protein accession number!\n", kgID, displayID);
+		fprintf(stderr, "%s\t%s\t%s does not have protein accession number!\n", 
+			kgID, displayID, alignID);
 		fflush(stderr);
-		exit(1);
+		break;
 		}
  
 	sprintf(query,"select accession2 from %s.spSecondaryID where displayID='%s';", 

@@ -41,7 +41,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.108 2003/09/16 04:35:58 braney Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.111 2003/09/24 17:43:06 braney Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -2639,7 +2639,7 @@ hgp = hgPositionsFind(searchSpec, "", hgAppName, cart);
 if (hgp == NULL || hgp->posCount == 0)
     {
     hgPositionsFree(&hgp);
-    errAbort("Sorry, couldn't locate %s in genome database\n", spec);
+    warn("Sorry, couldn't locate %s in genome database\n", spec);
     return NULL;
     }
 
@@ -2654,7 +2654,8 @@ else
     {
     if (*retWinStart != 1)
 	hgPositionsHtml(hgp, stdout, useWeb, hgAppName, cart);
-    else
+/* now we always return # of hits */
+/*    else */
 	*retWinStart = hgp->posCount;
 
     return NULL;
@@ -2897,7 +2898,11 @@ else
     findFosEndPairs(query, hgp);
     findFosEndPairsBad(query, hgp);
     findStsPos(query, hgp);
-    findMrnaKeys(query, hgp, hgAppName, cart);
+    /* use original query, not range-stripped version,
+     * to suppress spurious matching in Rna tables
+     * RT 752: Jumping to chrY on rat gives strange things
+     */
+    findMrnaKeys(hgp->query, hgp, hgAppName, cart);
     findZooGenes(query, hgp);
     findRgdGenes(query, hgp);
     findSnpPos(query, hgp, "snpTsc");

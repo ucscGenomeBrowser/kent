@@ -26,7 +26,7 @@
 #include "portable.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.93 2003/09/16 18:45:30 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.94 2003/09/25 16:58:22 angie Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -116,6 +116,10 @@ retStats->stdev = sqrt(total / N);
 /* copied from hgGateway: */
 static char *onChangeDb = "onchange=\"document.orgForm.db.value = document.mainForm.db.options[document.mainForm.db.selectedIndex].value; document.orgForm.submit();\"";
 static char *onChangeOrg = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.db.value = 0; document.orgForm.submit();\"";
+/* User can choose from Positional or Non-positional tables.  When one is 
+ * selected, clear the other: */
+static char *onChangePos = "onchange=\"document.mainForm.table1.value = document.mainForm.table1.options[0].value;\"";
+static char *onChangeNonPos = "onchange=\"document.mainForm.table0.value = document.mainForm.table0.options[0].value;\"";
 
 /* Droplist menu for selecting output type: */
 #define allFieldsPhase      "Tab-separated, All fields"
@@ -879,12 +883,12 @@ puts("<TR><TD>");
 categorizeTables(&posTableList, &nonposTableList);
 puts("Choose a table:");
 puts("</TD><TD>");
-puts("<SELECT NAME=table0 SIZE=1>");
+printf("<SELECT NAME=table0 SIZE=1 %s>\n", onChangePos);
 printf("<OPTION VALUE=\"Choose table\">Positional tables</OPTION>\n");
 printSelectOptions(posTableList, "table0");
 puts("</SELECT>");
 
-puts("<SELECT NAME=table1 SIZE=1>");
+printf("<SELECT NAME=table1 SIZE=1 %s>\n", onChangeNonPos);
 printf("<OPTION VALUE=\"Choose table\">Non-positional tables</OPTION>\n");
 printSelectOptions(nonposTableList, "table1");
 puts("</SELECT>");

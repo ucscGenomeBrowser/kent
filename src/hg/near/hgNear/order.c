@@ -296,28 +296,42 @@ else
 freez(&dupe);
 }
 
+static int orderCmpPriority(const void *va, const void *vb)
+/* Compare to sort orders based on priority. */
+{
+const struct order *a = *((struct order **)va);
+const struct order *b = *((struct order **)vb);
+float dif = a->priority - b->priority;
+if (dif < 0)
+    return -1;
+else if (dif > 0)
+    return 1;
+else
+    return 0;
+}
+
+
 struct order *orderGetAll(struct sqlConnection *conn)
 /* Return list of row orders available. */
 {
-char *raName = "hgNearData/orderDb.ra";
-struct lineFile *lf = lineFileOpen(raName, TRUE);
+char *raName = "orderDb.ra";
+struct hash *ra, *raList = readRas(raName);
 struct order *ord, *ordList = NULL;
-struct hash *raHash;
 
-while ((raHash = raNextRecord(lf)) != NULL)
+for (ra = raList; ra != NULL; ra = ra->next)
     {
     AllocVar(ord);
-    ord->name = mustFindInRaHash(lf, raHash, "name");
-    ord->shortLabel = mustFindInRaHash(lf, raHash, "shortLabel");
-    ord->longLabel = mustFindInRaHash(lf, raHash, "longLabel");
-    ord->type = mustFindInRaHash(lf, raHash, "type");
-    ord->settings = raHash;
+    ord->name = mustFindInRaHash(raName, ra, "name");
+    ord->shortLabel = mustFindInRaHash(raName, ra, "shortLabel");
+    ord->longLabel = mustFindInRaHash(raName, ra, "longLabel");
+    ord->type = mustFindInRaHash(raName, ra, "type");
+    ord->priority = atof(mustFindInRaHash(raName, ra, "priority"));
+    ord->settings = ra;
     orderSetMethods(ord);
     if (ord->exists(ord, conn))
 	slAddHead(&ordList, ord);
     }
-lineFileClose(&lf);
-slReverse(&ordList);
+slSort(&ordList, orderCmpPriority);
 return ordList;
 }
 

@@ -7,7 +7,7 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.45 2003/09/13 04:14:03 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.46 2003/09/24 02:29:49 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -669,6 +669,31 @@ for (;;)
     if (b != c)
        ++out;
     }
+}
+
+void stripString(char *s, char *strip)
+/* Remove all occurences of strip from s. */
+{
+char c, *in = s, *out = s;
+int stripSize = strlen(strip);
+char stripFirst = strip[0];
+
+while ((c = *in) != 0)
+    {
+    c = *in;
+    if (c == stripFirst)
+        {
+	if (startsWith(strip, in))
+	    {
+	    in += stripSize;
+	    continue;
+	    }
+	}
+    *out = c;
+    ++out;
+    ++in;
+    }
+*out = 0;
 }
 
 int countChars(char *s, char c)

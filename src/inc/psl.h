@@ -187,6 +187,13 @@ int pslCheck(char *pslDesc, FILE* out, struct psl* psl);
 /* Validate a PSL for consistency.  pslDesc is printed the error messages
  * to file out (open /dev/null to discard). Return count of errors. */
 
+int pslCountBlocks(struct psl *target, struct psl *query, int maxBlockGap);
+/* count the number of blocks in the query that overlap the target */
+/* merge blocks that are closer than maxBlockGap */
+
+struct hash *readPslToBinKeeper(char *sizeFileName, char *pslFileName);
+/* read a list of psls and return results in hash of binKeeper structure for fast query*/
+
 boolean pslIsProtein(const struct psl *psl);
 /* is psl a protein psl (are it's blockSizes and scores in protein space) */
 

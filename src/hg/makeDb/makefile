@@ -44,6 +44,7 @@ DIRS = \
 	hgSanger22 \
 	hgSoftberryHom \
 	hgSoftPromoter \
+	hgStanfordMicroarray \
 	hgStsAlias \
 	hgStsMarkers \
 	hgTomRough \

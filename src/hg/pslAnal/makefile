@@ -13,7 +13,7 @@ compile: $O
 	mv a.out $A
 	strip $A
 	chmod a+rx $A
-	cp $A /cluster/home/booch/bin/i386
+	cp $A $$HOME/bin/i386
 
 debug: $O
 	gcc $O $(MYLIBS) $(L) 

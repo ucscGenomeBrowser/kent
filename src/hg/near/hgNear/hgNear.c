@@ -17,29 +17,27 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.79 2003/09/17 17:17:47 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.96 2003/09/27 02:24:52 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
 	saveCurrentConfName, useSavedConfName, 
 	filSaveCurrentVarName, filUseSavedVarName,
 	getSeqVarName, getSeqPageVarName, getGenomicSeqVarName, getTextVarName, 
-	advFilterVarName, advFilterClearVarName, advFilterBrowseVarName,
+	advFilterVarName, advFilterClearVarName, 
 	advFilterListVarName, 
-#ifdef OLD
-	advFilterListProtVarName, advFilterListAccVarName, 
-#endif /* OLD */
 	idVarName, idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. */
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
 char *database;		/* Name of genome database - hg15, mm3, or the like. */
-char *organism;		/* Name of organism - mouse, human, etc. */
+char *genome;		/* Name of genome - mouse, human, etc. */
 char *groupOn;		/* Current grouping strategy. */
 int displayCount;	/* Number of items to display. */
 char *displayCountString; /* Ascii version of display count, including 'all'. */
 struct hash *oldCart;	/* Old cart hash. */
+struct hash *genomeSettings;  /* Genome-specific settings from settings.ra. */
 
 struct genePos *curGeneId;	  /* Identity of current gene. */
 
@@ -267,6 +265,34 @@ freez(&buf);
 return list;
 }
 
+static struct hash *upcHashWordsInFile(char *fileName, int hashSize)
+/* Create a hash of space delimited uppercased words in file. */
+{
+struct hash *hash = newHash(hashSize);
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line, *word;
+while (lineFileNext(lf, &line, NULL))
+    {
+    while ((word = nextWord(&line)) != NULL)
+	{
+	touppers(word);
+        hashAdd(hash, word, NULL);
+	}
+    }
+lineFileClose(&lf);
+return hash;
+}
+
+
+static struct hashEl *upcHashLookup(struct hash *hash, char *name)
+/* Lookup upper cased name in hash. */
+{
+char s[128];
+safef(s, sizeof(s), "%s", name);
+touppers(s);
+return hashLookup(hash, s);
+}
+
 struct hash *keyFileHash(struct column *col)
 /* Make up a hash from key file for this column. 
  * Return NULL if no key file. */
@@ -274,7 +300,7 @@ struct hash *keyFileHash(struct column *col)
 char *fileName = keyFileName(col);
 if (fileName == NULL)
     return NULL;
-return hashWordsInFile(fileName, 16);
+return upcHashWordsInFile(fileName, 16);
 }
 
 char *cellLookupVal(struct column *col, struct genePos *gp, 
@@ -307,15 +333,24 @@ if (s == NULL)
     }
 else
     {
-    if (col->itemUrl != NULL)
+    if (col->selfLink)
+        {
+	selfAnchorId(gp);
+	hPrintNonBreak(s);
+        hPrintf("</A>");
+	}
+    else if (col->itemUrl != NULL)
         {
 	hPrintf("<A HREF=\"");
 	hPrintf(col->itemUrl, s);
 	hPrintf("\" TARGET=_blank>");
-	}
-    hPrintNonBreak(s);
-    if (col->itemUrl != NULL)
+	hPrintNonBreak(s);
         hPrintf("</A>");
+	}
+    else
+        {
+	hPrintNonBreak(s);
+	}
     freeMem(s);
     }
 hPrintf("</TD>");
@@ -348,7 +383,7 @@ void labelSimplePrint(struct column *col)
 {
 int colWidth = columnSettingInt(col, "colWidth", 0);
 
-hPrintf("<TH VALIGN=BOTTOM><B><PRE>");
+hPrintf("<TH ALIGN=LEFT VALIGN=BOTTOM><B><PRE>");
 /* The <PRE> above helps Internet Explorer avoid wrapping
  * in the label column, which helps us avoid wrapping in 
  * the data columns below.  Wrapping in the data columns
@@ -363,9 +398,8 @@ else
     int labelLen = strlen(col->shortLabel);
     int diff = colWidth - labelLen;
     if (diff < 0) diff = 0;
-    hPrintSpaces(diff/2);
     colInfoLink(col);
-    hPrintSpaces((diff+1)/2);
+    hPrintSpaces(diff);
     }
 hPrintf("</PRE></B></TH>");
 }
@@ -463,7 +497,7 @@ static char *debugCellVal(struct column *col, struct genePos *gp,
 	struct sqlConnection *conn)
 /* Return value for debugging column. */
 {
-char buf[16];
+char buf[32];
 safef(buf, sizeof(buf), "%f", gp->distance);
 return cloneString(buf);
 }
@@ -496,7 +530,7 @@ if (keyHash != NULL)
     for (gp = list; gp != NULL; gp = next)
         {
 	next = gp->next;
-	if (hashLookup(keyHash, gp->name))
+	if (upcHashLookup(keyHash, gp->name))
 	    {
 	    slAddHead(&newList, gp);
 	    }
@@ -556,6 +590,7 @@ col->cellPrint = cellSelfLinkPrint;
 
 /* ---- Simple table lookup type columns ---- */
 
+
 struct searchResult *lookupTypeSimpleSearch(struct column *col, 
     struct sqlConnection *conn, char *search)
 /* Search lookup type column. */
@@ -578,7 +613,8 @@ else
 sr = sqlGetResult(searchConn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    res = knownGeneSearchResult(conn, row[0], NULL);
+    AllocVar(res);
+    res->gp.name = cloneString(row[0]);
     slAddHead(&resList, res);
     }
 
@@ -602,7 +638,7 @@ advFilterAnyAllMenu(col, "logic", TRUE);
 hPrintf("words in search term match.<BR>");
 if (!columnSetting(col, "noKeys", NULL))
     {
-    hPrintf("Limit to items in list: ");
+    hPrintf("Limit to items (no wildcards) in list: ");
     advFilterKeyPasteButton(col);
     hPrintf(" ");
     advFilterKeyUploadButton(col);
@@ -611,10 +647,13 @@ if (!columnSetting(col, "noKeys", NULL))
 	{
 	if (fileExists(fileName))
 	    {
+	    int count = countWordsInFile(fileName);
 	    advFilterKeyClearButton(col);
 	    hPrintf("<BR>\n");
-	    hPrintf("(There are currently %d items in list.)",
-		    countWordsInFile(fileName));
+	    if (count == 1)
+		hPrintf("(There is currently 1 item in the list.)", count);
+	    else
+		hPrintf("(There are currently %d items in the list.)", count);
 	    }
 	else
 	    {
@@ -643,7 +682,7 @@ if (wild != NULL || keyHash != NULL)
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
-	if (keyHash == NULL || hashLookup(keyHash, row[1]))
+	if (keyHash == NULL || upcHashLookup(keyHash, row[1]))
 	    {
 	    if (wildList == NULL || wildMatchList(row[1], wildList, orLogic))
 		hashAdd(hash, row[0], NULL);
@@ -768,52 +807,52 @@ static void makeGenomeAssemblyControls()
 /* Query database to figure out which ones
  * support neighborhood browser. */
 {
-/* Make up a list of organisms that have a family
+/* Make up a list of genome that have a family
  * browser, and a list of assemblies that have a
- * family browser for the current organism. */
+ * family browser for the current genome. */
 struct slRef *as, *asList = NULL;
 struct slRef *org, *orgList = NULL;
 struct dbDb *db, *dbList = hGetIndexedDatabases();
-char *ourOrg = hOrganism(database);
+char *ourOrg = hGenome(database);
 struct hash *orgHash = newHash(8);
 for (db = dbList; db != NULL; db = db->next)
     {
     if (db->hgNearOk)
 	{
-	if (!hashLookup(orgHash, db->organism))
+	if (!hashLookup(orgHash, db->genome))
 	    {
-	    hashAdd(orgHash, db->organism, db);
+	    hashAdd(orgHash, db->genome, db);
 	    refAdd(&orgList, db);
 	    }
-	if (sameString(ourOrg, db->organism))
+	if (sameString(ourOrg, db->genome))
 	    refAdd(&asList, db);
         }
     }
 slReverse(&asList);
 slReverse(&orgList);
 
-/* Make organism drop-down. */
-hPrintf("organism: ");
+/* Make genome drop-down. */
+hPrintf("genome ");
 hPrintf("<SELECT NAME=\"%s\" ", orgVarName);
 hPrintf("onchange=\"%s\"",
-  "document.orgForm.org=document.mainForm.org.options[document.mainForm.org.selectedIndex].value;"
-  "document.orgForm.db.value = 0;"
-  "document.orgForm.near_search.value = \"\";"
+  "document.orgForm.org.value=document.mainForm.org.options[document.mainForm.org.selectedIndex].value;"
+  "document.orgForm.db.value=0;"
+  "document.orgForm.near_search.value='';"
   "document.orgForm.submit();");
 hPrintf(">\n");
 for (org = orgList; org != NULL; org = org->next)
     {
     struct dbDb *db = org->val;
-    char *organism = db->organism;
-    hPrintf("<OPTION VALUE=\"%s\"", organism);
-    if (sameString(ourOrg, organism))
+    char *genome = db->genome;
+    hPrintf("<OPTION VALUE=\"%s\"", genome);
+    if (sameString(ourOrg, genome))
 	hPrintf(" SELECTED");
-    hPrintf(">%s\n", organism);
+    hPrintf(">%s\n", genome);
     }
 hPrintf("</SELECT>");
 
 /* Make assembly drop-down. */
-hPrintf(" assembly: ");
+hPrintf(" assembly ");
 hPrintf("<SELECT NAME=\"%s\" ", dbVarName);
 hPrintf("onchange=\"%s\"",
   "document.orgForm.db.value = document.mainForm.db.options[document.mainForm.db.selectedIndex].value;"
@@ -843,28 +882,7 @@ void controlPanel(struct genePos *gp, struct order *curOrd, struct order *ordLis
 hPrintf("<TABLE WIDTH=\"100%%\" BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
 hPrintf("<TR><TD ALIGN=CENTER>");
 
-/* Do sort by drop-down */
-    {
-    struct order *ord;
-
-    hPrintf("sort by ");
-    hPrintf("<SELECT NAME=\"%s\">\n", orderVarName);
-    for (ord = ordList; ord != NULL; ord = ord->next)
-        {
-	hPrintf("<OPTION VALUE=\"%s\"", ord->name);
-	if (ord == curOrd)
-	    hPrintf(" SELECTED");
-	hPrintf(">%s\n", ord->shortLabel);
-	}
-    hPrintf("</SELECT>\n");
-    }
-
-/* Do items to display drop-down */
-    {
-    static char *menu[] = {"25", "50", "100", "200", "500", "1000", "all"};
-    hPrintf(" display ");
-    cgiMakeDropList(countVarName, menu, ArraySize(menu), displayCountString);
-    }
+makeGenomeAssemblyControls();
 
 /* Do search box. */
     {
@@ -882,36 +900,48 @@ hPrintf("<TR><TD ALIGN=CENTER>");
 
 hPrintf("</TD></TR>\n<TR><TD ALIGN=CENTER>");
 
-makeGenomeAssemblyControls();
-#ifdef OLD
-/* Do genome drop down (just fake for now) */
+
+/* Do sort by drop-down */
     {
-    static char *menu[] = {"Human"};
-    hPrintf("genome: ");
-    cgiMakeDropList("near.genome", menu, ArraySize(menu), menu[0]);
+    struct order *ord;
+
+    hPrintf("sort by ");
+    hPrintf("<SELECT NAME=\"%s\">\n", orderVarName);
+    for (ord = ordList; ord != NULL; ord = ord->next)
+        {
+	hPrintf("<OPTION VALUE=\"%s\"", ord->name);
+	if (ord == curOrd)
+	    hPrintf(" SELECTED");
+	hPrintf(">%s\n", ord->shortLabel);
+	}
+    hPrintf("</SELECT>\n");
     }
 
-/* Do assembly drop down (again just fake) */
+/* advFilter, configure buttons */
     {
-    static char *menu[] = {"April 2003"};
-    hPrintf(" assembly: ");
-    cgiMakeDropList("near.assembly", menu, ArraySize(menu), menu[0]);
-    }
-#endif /* OLD */
-
-/* Make getDna, getText, advFilter, configure buttons */
-    {
-    hPrintf(" ");
-    cgiMakeButton(getSeqPageVarName, "as sequence");
-    hPrintf(" ");
-    cgiMakeButton(getTextVarName, "as text");
+    cgiMakeButton(confVarName, "configure");
     hPrintf(" ");
     if (gotAdvFilter())
 	cgiMakeButton(advFilterVarName, "filter (now on)");
      else
 	cgiMakeButton(advFilterVarName, "filter (now off)");
     hPrintf(" ");
-    cgiMakeButton(confVarName, "configure");
+    }
+
+/* Do items to display drop-down */
+    {
+    static char *menu[] = {"25", "50", "100", "200", "500", "1000", "all"};
+    hPrintf(" display ");
+    cgiMakeDropList(countVarName, menu, ArraySize(menu), displayCountString);
+    }
+
+
+/* Make getDna, getText buttons */ 
+    {
+    hPrintf(" output ");
+    cgiMakeOptionalButton(getSeqPageVarName, "sequence", gp == NULL);
+    hPrintf(" ");
+    cgiMakeOptionalButton(getTextVarName, "text", gp == NULL);
     }
 
 
@@ -978,7 +1008,7 @@ else
     return 0;
 }
 
-static void refinePriorities(struct column *colList)
+void refinePriorities(struct column *colList)
 /* Consult colOrderVar if it exists to reorder priorities. */
 {
 char *orig = cartOptionalString(cart, colOrderVar);
@@ -1021,13 +1051,12 @@ for (col = colList; col != NULL; col = col->next)
     }
 }
 
-char *mustFindInRaHash(struct lineFile *lf, struct hash *raHash, char *name)
+char *mustFindInRaHash(char *fileName, struct hash *raHash, char *name)
 /* Look up in ra hash or die trying. */
 {
 char *val = hashFindVal(raHash, name);
 if (val == NULL)
-    errAbort("Missing required %s field in record ending line %d of %s",
-    	name, lf->lineIx, lf->fileName);
+    errAbort("Missing required %s field in %s", name, fileName);
 return val;
 }
 
@@ -1063,36 +1092,167 @@ else if (sameString(type, "expRatio"))
     setupColumnExpRatio(col, s);
 else if (sameString(type, "go"))
     setupColumnGo(col, s);
+else if (sameString(type, "pfam"))
+    setupColumnPfam(col, s);
 else
     errAbort("Unrecognized type %s for %s", col->type, col->name);
 freez(&dupe);
 }
 
+static boolean foldInOne(struct lineFile *lf, struct hash *hashOfHash)
+/* Fold in one record from ra file into hashOfHash. */
+{
+char *word, *line, *name;
+struct hash *ra;
+struct hashEl *hel;
+
+/* Get first nonempty non-comment line and make sure
+ * it contains name. */
+if (!lineFileNextReal(lf, &line))
+    return FALSE;
+word = nextWord(&line);
+if (!sameString(word, "name"))
+    errAbort("Expecting 'name' line %d of %s, got %s", 
+    	lf->lineIx, lf->fileName, word);
+name = nextWord(&line);
+if (name == NULL)
+    errAbort("Short name field line %d of %s", lf->lineIx, lf->fileName);
+
+/* Find ra hash associated with name, making up a new
+ * one if need be. */
+if ((ra = hashFindVal(hashOfHash, name)) == NULL)
+    {
+    ra = newHash(7);
+    hashAdd(hashOfHash, name, ra);
+    hashAdd(ra, "name", lmCloneString(ra->lm, name));
+    }
+
+/* Fill in fields of ra hash with data up to next
+ * blank line or end of file. */
+for (;;)
+    {
+    if (!lineFileNext(lf, &line, NULL))
+        break;
+    line = skipLeadingSpaces(line);
+    if (line[0] == 0)
+        break;
+    if (line[0] == '#')
+        continue;
+    word = nextWord(&line);
+    line = skipLeadingSpaces(line);
+    if (line == NULL)
+        line = "";
+    hel = hashLookup(ra, word);
+    if (hel == NULL)
+        hel = hashAdd(ra, word, lmCloneString(ra->lm, line));
+    else
+        hel->val = lmCloneString(ra->lm, line);
+    }
+return TRUE;
+}
+
+static void foldInRa(char *fileName, struct hash *hashOfHash)
+/* Read ra's in file name and fold them into hashOfHash. */
+{
+struct lineFile *lf = lineFileMayOpen(fileName, TRUE);
+if (lf != NULL)
+    {
+    while (foldInOne(lf, hashOfHash))
+        ;
+    lineFileClose(&lf);
+    }
+}
+
+static char *rootDir = "hgNearData";
+
+char *dirForOrg(char *org)
+/* Make directory name from organism name. */
+{
+org = cloneString(org);
+stripChar(org, '.');
+subChar(org, ' ', '_');
+return org;
+}
+
+struct hash *readRas(char *rootName)
+/* Read in ra in root, root/org, and root/org/database. */
+{
+struct hash *hashOfHash = newHash(10);
+char *org = dirForOrg(genome);
+char fileName[512];
+struct hashEl *helList, *hel;
+struct hash *raList = NULL, *ra;
+
+/* Create hash of hash. */
+safef(fileName, sizeof(fileName), "%s/%s", rootDir, rootName);
+foldInRa(fileName, hashOfHash);
+safef(fileName, sizeof(fileName), "%s/%s/%s", rootDir, org, rootName);
+foldInRa(fileName, hashOfHash);
+safef(fileName, sizeof(fileName), "%s/%s/%s/%s", rootDir, org, database, rootName);
+foldInRa(fileName, hashOfHash);
+freez(&org);
+
+/* Create list of hashes. */
+helList = hashElListHash(hashOfHash);
+for (hel = helList; hel != NULL; hel = hel->next)
+    {
+    ra = hel->val;
+    slAddHead(&raList, ra);
+    }
+slFreeList(&helList);
+hashFree(&hashOfHash);
+return raList;
+}
+
+static void getGenomeSettings()
+/* Set up genome settings hash */
+{
+struct hash *hash = readRas("genome.ra");
+char *name;
+if (hash == NULL)
+    errAbort("Can't find anything in genome.ra");
+name = hashMustFindVal(hash, "name");
+if (!sameString(name, "global"))
+    errAbort("Can't find global ra record in genome.ra");
+genomeSettings = hash;
+}
+
+
+char *genomeSetting(char *name)
+/* Return genome setting value.   Aborts if setting not found. */
+{
+return hashMustFindVal(genomeSettings, name);
+}
+
 struct column *getColumns(struct sqlConnection *conn)
 /* Return list of columns for big table. */
 {
-char *raName = "hgNearData/columnDb.ra";
-struct lineFile *lf = lineFileOpen(raName, TRUE);
+char *raName = "columnDb.ra";
 struct column *col, *colList = NULL;
-struct hash *raHash;
+struct hash *raList = readRas(raName), *raHash;
+char *selfLink;
 
-while ((raHash = raNextRecord(lf)) != NULL)
+if (raList == NULL)
+    errAbort("Couldn't find anything from %s", raName);
+for (raHash = raList; raHash != NULL; raHash = raHash->next)
     {
     AllocVar(col);
-    col->name = mustFindInRaHash(lf, raHash, "name");
-    col->shortLabel = mustFindInRaHash(lf, raHash, "shortLabel");
-    col->longLabel = mustFindInRaHash(lf, raHash, "longLabel");
-    col->priority = atof(mustFindInRaHash(lf, raHash, "priority"));
-    col->on = col->defaultOn = sameString(mustFindInRaHash(lf, raHash, "visibility"), "on");
-    col->type = mustFindInRaHash(lf, raHash, "type");
+    col->name = mustFindInRaHash(raName, raHash, "name");
+    col->shortLabel = mustFindInRaHash(raName, raHash, "shortLabel");
+    col->longLabel = mustFindInRaHash(raName, raHash, "longLabel");
+    col->priority = atof(mustFindInRaHash(raName, raHash, "priority"));
+    col->on = col->defaultOn = sameString(mustFindInRaHash(raName, raHash, "visibility"), "on");
+    col->type = mustFindInRaHash(raName, raHash, "type");
     col->itemUrl = hashFindVal(raHash, "itemUrl");
+    selfLink = hashFindVal(raHash, "selfLink");
+    if (selfLink != NULL && selfLink[0] != '0')
+        col->selfLink = TRUE;
     col->settings = raHash;
     columnDefaultMethods(col);
     setupColumnType(col);
     if (col->exists(col, conn))
 	slAddHead(&colList, col);
     }
-lineFileClose(&lf);
 refinePriorities(colList);
 refineVisibility(colList);
 slSort(&colList, columnCmpPriority);
@@ -1253,16 +1413,17 @@ void doMainDisplay(struct sqlConnection *conn,
  * a big table. */
 {
 char buf[128];
-safef(buf, sizeof(buf), "UCSC %s Gene Family Browser", organism);
-makeTitle(buf, "hgNear.html");
+safef(buf, sizeof(buf), "UCSC %s Gene Family Browser", genome);
+makeTitle(buf, "hgNearHelp.html");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" NAME=\"mainForm\" METHOD=GET>\n");
 cartSaveSession(cart);
 controlPanel(curGeneId, ord, ordList);
+hPrintf("</FORM>\n");
 if (geneList != NULL)
     bigTable(conn, colList,geneList);
-hPrintf("</FORM>");
 
-hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=\"GET\" NAME=\"orgForm\"><input type=\"hidden\" name=\"org\" value=\"%s\">\n", organism);
+hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=\"GET\" NAME=\"orgForm\">\n");
+hPrintf("<input type=\"hidden\" name=\"org\" value=\"%s\">\n", genome);
 hPrintf("<input type=\"hidden\" name=\"db\" value=\"%s\">\n", database);
 hPrintf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", searchVarName,
 	cartUsualString(cart, searchVarName, ""));
@@ -1293,7 +1454,8 @@ static char *lookupProtein(struct sqlConnection *conn, char *mrnaName)
 char query[256];
 char buf[64];
 safef(query, sizeof(query), 
-	"select protein from knownCannonical where transcript='%s'", mrnaName);
+	"select protein from %s where transcript='%s'", 
+	genomeSetting("canonicalTable"), mrnaName);
 if (!sqlQuickQuery(conn, query, buf, sizeof(buf)))
     return NULL;
 return cloneString(buf);
@@ -1342,55 +1504,20 @@ void doFixedId(struct sqlConnection *conn, struct column *colList)
 displayData(conn, colList, curGenePos());
 }
 
-
-void doExamples(struct sqlConnection *conn, struct column *colList)
-/* Put up controls and then some helpful text and examples.
- * Called when search box is empty. */
-{
-displayData(conn, colList, NULL);
-htmlHorizontalLine();
-hPrintf("%s",
- "<P>This program displays a table of genes that are related to "
- "each other.  The relationship can be of several types including "
- "protein-level homology, similarity of gene expression profiles, or "
- "genomic proximity.  The 'group by' drop-down controls "
- "which type of relationship is used.</P>"
- "<P>To use this tool please type something into the search column and "
- "hit the 'Go' button. You can search for many types of things including "
- "the gene name, the SwissProt protein name, a word or phrase "
- "that occurs in the description of a gene, or a GenBank mRNA accession. "
- "Some examples of search terms are 'FOXA1' 'HOXA9' and 'MAP kinase.' </P>"
- "<P>After the search a table appears containing the gene and it's relatives, "
- "one gene per row.  The gene matching the search will be hilighted in light "
- "green.  In the case of search by genome position, the hilighted gene will "
- "be in the middle of the table. In other cases it will be the first row. "
- "Some of the columns in the table including the BLAST 'E-value' and "
- "'%ID' columns will be calculated relative to the hilighted gene.  You can "
- "select a different gene in the list by clicking on the gene's name. "
- "Clicking on the 'Genome Position' will open the Genome Browser on that "
- "gene.  Clicking on the 'Description' will open a details page on the "
- "gene.</P>"
- "<P>To control which columns are displayed in the table use the 'configure' "
- "button. To control the number of rows displayed use the 'display' drop "
- "down. The 'as sequence' button will fetch protein, mRNA, promoter, or "
- "genomic sequence associated with the genes in the table.  The 'as text' "
- "button fetches the table in a simple tab-delimited format suitable for "
- "import into a spreadsheet or relational database. The advanced filter "
- "button allows you to select which genes are displayed in the table "
- "in a very detailed and flexible fashion.</P>"
- "<P>The UCSC Gene Family Browser was designed and implemented by Jim Kent, "
- "Fan Hsu, David Haussler, and the UCSC Genome Bioinformatics Group. This "
- "work is supported by a grant from the National Human Genome Research "
- "Institute and by the Howard Hughes Medical Institute.</P>"
- );
-}
-
 static char *colHtmlFileName(struct column *col)
 /* Return html file associated with column.  You can
  * freeMem this when done. */
 {
 char name[PATH_LEN];
-safef(name, sizeof(name), "hgNearData/%s.html", col->name);
+char *org = dirForOrg(genome);
+safef(name, sizeof(name), "%s/%s/%s/%s.html", rootDir, org, database, col->name);
+if (!fileExists(name))
+    {
+    safef(name, sizeof(name), "%s/%s/%s.html", rootDir, org, col->name);
+    if (!fileExists(name))
+	safef(name, sizeof(name), "%s/%s.html", rootDir, col->name);
+    }
+freez(&org);
 return cloneString(name);
 }
 
@@ -1422,16 +1549,16 @@ else
 freeMem(htmlFileName);
 }
 
-static char *defaultHgNearDb(char *organism)
+static char *defaultHgNearDb(char *genome)
 /* Return default database for hgNear for given
- * organism (or NULL for default organism.) 
+ * genome (or NULL for default genome.) 
  * You can freeMem the returned value when done. */
 {
 char *dbName = NULL;
 
-if (organism != NULL)
+if (genome != NULL)
     {
-    hDefaultDbForGenome(organism);
+    hDefaultDbForGenome(genome);
     if (dbName != NULL && hgNearOk(dbName))
 	 return dbName;
     }
@@ -1465,12 +1592,12 @@ if (hgNearOk(database))
     return;
 else
     {
-    database = defaultHgNearDb(organism);
+    database = defaultHgNearDb(genome);
     if (database == NULL)
 	errAbort("No databases are supporting hgNear.");
-    organism = hOrganism(database);
+    genome = hGenome(database);
     cartSetString(cart, dbVarName, database);
-    cartSetString(cart, orgVarName, organism);
+    cartSetString(cart, orgVarName, genome);
     }
 }
 
@@ -1484,14 +1611,10 @@ struct sqlConnection *conn;
 struct column *colList, *col;
 cart = theCart;
 
-getDbAndGenome(cart, &database, &organism);
+getDbAndGenome(cart, &database, &genome);
 makeSureDbHasHgNear();
-#ifdef OLD
-database = "hg15";
-cartSetString(cart, "db", database);
-organism = "Human";
-#endif /* OLD */
 hSetDb(database);
+getGenomeSettings();
 conn = hAllocConn();
 
 /* Get groupOn.  Revert to default if no advanced filter. */
@@ -1507,15 +1630,15 @@ if (cartVarExists(cart, confVarName))
     doConfigure(conn, colList, NULL);
 else if (cartVarExists(cart, colInfoVarName))
     doColInfo(conn, colList, cartString(cart, colInfoVarName));
-else if ((var = cartFindFirstLike(cart, "near.up.*")) != NULL)
+else if ((var = cartFindFirstLike(cart, "near.do.up.*")) != NULL)
     {
     doConfigure(conn, colList, var);
-    cartRemovePrefix(cart, "near.up.");
+    cartRemovePrefix(cart, "near.do.up.");
     }
-else if ((var = cartFindFirstLike(cart, "near.down.*")) != NULL)
+else if ((var = cartFindFirstLike(cart, "near.do.down.*")) != NULL)
     {
     doConfigure(conn, colList, var);
-    cartRemovePrefix(cart, "near.down.");
+    cartRemovePrefix(cart, "near.do.down.");
     }
 else if (cartVarExists(cart, defaultConfName))
     doDefaultConfigure(conn, colList);
@@ -1542,16 +1665,8 @@ else if (cartVarExists(cart, advFilterVarName))
     doAdvFilter(conn, colList);
 else if (cartVarExists(cart, advFilterClearVarName))
     doAdvFilterClear(conn, colList);
-else if (cartVarExists(cart, advFilterBrowseVarName))
-    doAdvFilterBrowse(conn, colList);
 else if (cartVarExists(cart, advFilterListVarName))
     doAdvFilterList(conn, colList);
-#ifdef OLD
-else if (cartVarExists(cart, advFilterListProtVarName))
-    doAdvFilterListProt(conn, colList);
-else if (cartVarExists(cart, advFilterListAccVarName))
-    doAdvFilterListAcc(conn, colList);
-#endif /* OLD */
 else if (cartVarExists(cart, getSeqPageVarName))
     doGetSeqPage(conn, colList);
 else if (cartVarExists(cart, idVarName))
@@ -1586,7 +1701,6 @@ int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
 htmlSetStyle(htmlStyleUndecoratedLink);
-hPrintf("</TD><TD>");
 oldCart = hashNew(10);
 cartHtmlShell("Gene Family v1", doMiddle, hUserCookie(), excludeVars, oldCart);
 return 0;

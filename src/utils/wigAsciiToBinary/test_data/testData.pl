@@ -31,9 +31,9 @@ if( $argc == 3 ) {
 	$dataSpan = shift;
 }
 
-printf STDERR "Generating $count points, at frequency $frequency, span $dataSpan\n";
-if( $count < 2 ) {
-	print "ERROR: number of points must be > 1\n";
+# printf STDERR "Generating $count points, at frequency $frequency, span $dataSpan\n";
+if( $count < 1 ) {
+	print "ERROR: number of points must be > 0\n";
 	exit(255);
 }
 

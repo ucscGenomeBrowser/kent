@@ -9,7 +9,7 @@
 #include "axt.h"
 #include "chainToAxt.h"
 
-static char const rcsid[] = "$Id: chainToAxt.c,v 1.4 2003/09/04 04:34:01 baertsch Exp $";
+static char const rcsid[] = "$Id: chainToAxt.c,v 1.5 2003/09/19 19:21:40 baertsch Exp $";
 
 int maxGap = 100;
 int maxChain = BIGNUM;
@@ -117,17 +117,6 @@ struct nibInfo *qNib = NULL, *tNib = NULL;
 
 while ((chain = chainRead(lf)) != NULL)
     {
-    qNib = nibInfoFromCache(nibHash, qNibDir, chain->qName);
-    tNib = nibInfoFromCache(nibHash, tNibDir, chain->tName);
-    qSeq = nibInfoLoadStrand(qNib, chain->qStart, chain->qEnd, chain->qStrand);
-    tSeq = nibInfoLoadStrand(tNib, chain->tStart, chain->tEnd, '+');
-    axtList = chainToAxt(chain, qSeq, chain->qStart, tSeq, chain->tStart,
-    	maxGap, maxChain);
-    for (axt = axtList; axt != NULL; axt = axt->next)
-        axtWrite(axt, f);
-    axtFreeList(&axtList);
-    freeDnaSeq(&qSeq);
-    freeDnaSeq(&tSeq);
     if (chain->score >= minScore)
 	{
 	qNib = nibInfoFromCache(nibHash, qNibDir, chain->qName);
@@ -142,9 +131,9 @@ while ((chain = chainRead(lf)) != NULL)
 	    if (minIdRatio <= idRatio)
 		{
 		if (bedOut)
-		    axtWrite(axt, f);
-		else
 		    bedWriteAxt(axt, chain->qSize, chain->tSize, idRatio, f);
+		else
+		    axtWrite(axt, f);
 		}
 	    }
 	axtFreeList(&axtList);

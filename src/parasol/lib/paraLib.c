@@ -44,16 +44,6 @@ if (host == NULL)
 return host;
 }
 
-char *getUser()
-/* Get user name */
-{
-uid_t uid = geteuid();
-struct passwd *pw = getpwuid(uid);
-if (pw == NULL)
-    errnoAbort("can't get user name for uid %d", uid);
-return pw->pw_name;
-}
-
 int forkOrDie()
 /* Fork, aborting if it fails. */
 {

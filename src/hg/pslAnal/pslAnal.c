@@ -16,11 +16,20 @@
 #include "portable.h"
 #include "dnautil.h"
 #include "dnaseq.h"
-#include "nib.h"
 #include "psl.h"
 #include "snp.h"
 #include "fa.h"
 #include "psl.h"
+#include "options.h"
+
+/* command line option specifications */
+static struct optionSpec optionSpecs[] = {
+    {"db", OPTION_STRING},
+    {"verbose", OPTION_BOOLEAN},
+    {NULL, 0}
+};
+
+boolean verbose = FALSE;
 
 struct acc
 {
@@ -77,6 +86,10 @@ struct pslInfo
   struct indel *indelList;
   int snp;
   int thirdPos;
+  int synSub;
+  int nonSynSub;
+  int synSubSnp;
+  int nonSynSubSnp;
   int loci;
 } *piList = NULL;
 
@@ -246,6 +259,21 @@ for (i=1; i<psl->blockCount; ++i)
 return(count);
 }
 
+boolean haveSnpTable(struct sqlConnection *conn)
+/* Check if the SNP table exists for this DB */
+{
+static boolean checked = FALSE;
+static boolean haveSnpTbl;
+if (!checked)
+    {
+    haveSnpTbl = sqlTableExists(conn, "snpTsc");
+    checked = TRUE;
+    if (!haveSnpTbl)
+        fprintf(stderr, "warning: no snpTsc table in this databsae\n");
+    }
+return haveSnpTbl;
+}
+
 int snpBase(struct sqlConnection *conn, char *chr, int position)
 /* Determine whether a given position is known to be a SNP */ 
 {
@@ -276,7 +304,11 @@ void cdsCompare(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *r
 {
 int i,j;
 DNA *r, *d; 
+DNA rCodon[4], dCodon[4];
+int codonSnps = 0, codonMismatches = 0;
 
+strcpy(rCodon, "---");
+strcpy(dCodon, "---");
 r = rna->dna;
 d = dna->dna;
 pi->cdsMatch = pi->cdsMismatch = 0;
@@ -287,24 +319,55 @@ for (i = 0; i < pi->psl->blockCount; i++)
     int tstart = pi->psl->tStarts[i] - pi->psl->tStarts[0];
     /* Compare each base */
     for (j = 0; j < pi->psl->blockSizes[i]; j++) 
-      /* Check if it is in the coding region */
+        {
+        /* Check if it is in the coding region */
 	if (((qstart+j) >= pi->cdsStart) && ((qstart+j) < pi->cdsEnd))
-	  /* Bases match */
-	  if ((char)r[qstart+j] == (char)d[tstart+j])
-	    pi->cdsMatch++;
-          /* Check if mismatch is due to a SNP */
-	  else if (snpBase(conn,pi->psl->tName,tstart+j+pi->psl->tStarts[0])) 
-	    {
-	      pi->cdsMatch++;
-	      pi->snp++;
-	    }
-	  else
-	    {
-	      pi->cdsMismatch++;
-	      /* Check if mismatch is in a codon wobble position */
-	      if (((qstart+j-pi->cdsStart+1)%3)==0)
-		pi->thirdPos++;
-	    }
+            {
+            int iCodon = ((qstart+j-pi->cdsStart)%3);
+            if (iCodon == 0)
+                {
+                codonSnps = 0;
+                codonMismatches = 0;
+                }
+            rCodon[iCodon] = r[qstart+j];
+            dCodon[iCodon] = d[tstart+j];
+            /* Bases match */
+            if ((char)r[qstart+j] == (char)d[tstart+j])
+                pi->cdsMatch++;
+            /* Check if mismatch is due to a SNP */
+            else if (haveSnpTable(conn)
+                     && snpBase(conn,pi->psl->tName,tstart+j+pi->psl->tStarts[0])) 
+                {
+                pi->cdsMatch++;
+                pi->snp++;
+                codonSnps++;
+                }
+            else
+                {
+                pi->cdsMismatch++;
+                codonMismatches++;
+                /* Check if mismatch is in a codon wobble position.*/
+                if (iCodon==2)
+                    pi->thirdPos++;
+                }
+            /* If third base, check codon for mismatch */
+            if ((iCodon==2) && !sameString(rCodon, dCodon))
+                {
+                if (lookupCodon(rCodon) == lookupCodon(dCodon))
+                    {
+                    pi->synSub++;
+                    if ((codonSnps > 0) && (codonMismatches == 0))
+                        pi->synSubSnp++;
+                    }
+                else
+                    {
+                    pi->nonSynSub++;
+                    if ((codonSnps > 0) && (codonMismatches == 0))
+                        pi->nonSynSubSnp++;
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -609,13 +672,14 @@ void cdsIndels(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rn
 void processCds(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rna, struct dnaSeq *dna)
 /* Examine closely the alignment of the coding region */
 {
-  printf("Processing %s\n", pi->psl->qName);
-  /* Compare the actual aligned parts */
-  cdsCompare(conn, pi, rna, dna);
-  pi->cdsPctId = (float)(pi->cdsMatch)/(pi->cdsMatch + pi->cdsMismatch);
-  pi->cdsCoverage = (float)(pi->cdsMatch + pi->cdsMismatch)/(pi->cdsSize);
-  /* Determine indels in the alignment */
-  cdsIndels(conn, pi, rna);
+if (verbose)
+    printf("Processing %s\n", pi->psl->qName);
+/* Compare the actual aligned parts */
+cdsCompare(conn, pi, rna, dna);
+pi->cdsPctId = (float)(pi->cdsMatch)/(pi->cdsMatch + pi->cdsMismatch);
+pi->cdsCoverage = (float)(pi->cdsMatch + pi->cdsMismatch)/(pi->cdsSize);
+/* Determine indels in the alignment */
+cdsIndels(conn, pi, rna);
 } 
 
 struct pslInfo *processPsl(struct sqlConnection *conn, struct psl *psl)
@@ -679,16 +743,18 @@ int i;
   {*/
 fprintf(of, "%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t", pi->psl->qName, pi->psl->tName, pi->psl->tStart, 
 	pi->psl->tEnd,pi->psl->qStart,pi->psl->qEnd,pi->psl->qSize,pi->loci);
-fprintf(of, "%.4f\t%.4f\t%d\t%d\t%.4f\t%.4f\t%d\t%d\t%d\t%d\t%d\t%d\t", 
+fprintf(of, "%.4f\t%.4f\t%d\t%d\t%.4f\t%.4f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t", 
 	pi->coverage, pi->pctId, pi->cdsStart+1, 
 	pi->cdsEnd, pi->cdsCoverage, pi->cdsPctId, pi->cdsMatch, 
-	pi->cdsMismatch, pi->snp, pi->thirdPos, pi->introns, pi->stdSplice);
+	pi->cdsMismatch, pi->snp, pi->thirdPos, pi->synSub, pi->nonSynSub,
+        pi->synSubSnp, pi->nonSynSubSnp, pi->introns, pi->stdSplice);
 fprintf(of, "%d\t%d\t%d\t%d\t", pi->unalignedCds, pi->singleIndel, pi->tripleIndel, pi->totalIndel);
 for (i = 0; i < pi->indelCount; i++)
     fprintf(of, "%d,", pi->indels[i]);
 fprintf(of, "\n");
 
-printf("Writing out indels\n");
+if (verbose)
+    printf("Writing out indels\n");
 for (indel = pi->indelList; indel != NULL; indel=indel->next)
     {
     /*printf("Indel of size %d in %s:%d-%d vs. %s:%d-%d\n",
@@ -752,31 +818,36 @@ int main(int argc, char *argv[])
 {
 struct lineFile *pf, *cf, *lf;
 FILE *of, *in;
-char *faFile;
-
+char *faFile, *db;
+optionInit(&argc, argv, optionSpecs);
 if (argc < 6)
     {
-    fprintf(stderr, "USAGE: pslAnal <psl file> <cds file> <loci file> <fa file> <out file name> <indel file>\n");
+    fprintf(stderr, "USAGE: pslAnal [-db=db] -verbose <psl file> <cds file> <loci file> <fa file> <out file name> <indel file>\n");
     return 1;
     }
-
+db = optionVal("db", "hg15");
+verbose = optionExists("verbose");
 pf = pslFileOpen(argv[1]);
 cf = lineFileOpen(argv[2], FALSE);
 lf = lineFileOpen(argv[3], FALSE);
 faFile = argv[4];
 of = mustOpen(argv[5], "w");
-fprintf(of, "Acc\tChr\tStart\tEnd\tmStart\tmEnd\tSize\tLoci\tCov\tID\tCdsStart\tCdsEnd\tCdsCov\tCdsID\tCdsMatch\tCdsMismatch\tSnp\tThirdPos\tIntrons\tStdSplice\tUnCds\tSingle\tTriple\tTotal\tIndels\n");
-fprintf(of, "10\t10\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10\n");
+fprintf(of, "Acc\tChr\tStart\tEnd\tmStart\tmEnd\tSize\tLoci\tCov\tID\tCdsStart\tCdsEnd\tCdsCov\tCdsID\tCdsMatch\tCdsMismatch\tSnp\tThirdPos\tSyn\tNonSyn\tSynSnp\tNonSynSnp\tIntrons\tStdSplice\tUnCds\tSingle\tTriple\tTotal\tIndels\n");
+fprintf(of, "10\t10\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10\n");
 in = mustOpen(argv[6], "w");
 
-hSetDb("hg15");
-printf("Reading CDS file\n");
+hSetDb(db);
+if (verbose)
+    printf("Reading CDS file\n");
 readCds(cf);
-printf("Reading FA file\n");
+if (verbose)
+    printf("Reading FA file\n");
 readRnaSeq(faFile);
-printf("Reading loci file\n");
+if (verbose)
+    printf("Reading loci file\n");
 readLoci(lf);
-printf("Processing psl file\n");
+if (verbose)
+    printf("Processing psl file\n");
 doFile(pf, of, in);
 /*printf("Writing out file\n");
   writeOut(of, in);*/

@@ -1,0 +1,10 @@
+#This file contains default definitions of genome-specific
+#variables.  It must start with 'name global'
+#
+name global
+examples Examples of search terms include FOXA2, HOXA9, and MAP kinase.
+geneTable knownGene
+canonicalTable knownCanonical
+isoformTable knownIsoforms
+allTranscriptQuery select name,chrom,txStart,txEnd,proteinId from knownGene
+allGeneQuery select transcript,chrom,chromStart,chromEnd,protein from knownCanonical

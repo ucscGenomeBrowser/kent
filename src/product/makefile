@@ -9,7 +9,7 @@ include ../inc/common.mk
 
 #	This version string needs to be raised for a release
 
-VER=33
+VER=34
 
 DESTDIR=.
 install_dir=${DESTDIR}/install_image
@@ -17,7 +17,7 @@ install_dir=${DESTDIR}/install_image
 all::	INST_DIR COPYRIGHT.txt README.building.source.txt \
 	README.cvs.access.txt README.install.txt \
 	README.mysql.setup.txt version source_tar \
-	source_built example gbdb goldenPath
+	source_built example webroot gbdb goldenPath
 
 INST_DIR:
 	@if [ ! -d ${install_dir} ]; then \

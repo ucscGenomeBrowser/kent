@@ -38,6 +38,53 @@ color 100,50,0
 altColor 175,150,128
 type genePred 
 
+track affyGnfU74A
+shortLabel GNF U74A
+longLabel GNF Expression Atlas on Mouse Affymetrix U74A Chip
+group regulation
+priority 85.0
+visibility hide
+type expRatio
+expScale 4.0
+expStep 0.5
+expTable affyGnfU74AExps
+chip U74
+canPack off
+
+track affyGnfU74B
+shortLabel GNF U74B
+longLabel GNF Expression Atlas on Mouse Affymetrix U74B Chip
+group regulation
+priority 85.0
+visibility hide
+type expRatio
+expScale 4.0
+expStep 0.5
+expTable affyGnfU74BExps
+chip U74
+canPack off
+
+track affyGnfU74C
+shortLabel GNF U74C
+longLabel GNF Expression Atlas on Mouse Affymetrix U74C Chip
+group regulation
+priority 85.0
+visibility hide
+type expRatio
+expScale 4.0
+expStep 0.5
+expTable affyGnfU74CExps
+chip U74
+canPack off
+
+track affyU74
+shortLabel Affymetrix U74
+longLabel Alignments of Affymetrix Targets from MG-U74 v2 (A,B, and C)
+group regulation
+priority 86
+visibility hide
+type psl .
+
 track blatFish
 shortLabel Tetraodon Blat
 longLabel Tetraodon nigroviridis Translated Blat Alignments

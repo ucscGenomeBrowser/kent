@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.11 2003/09/17 17:16:22 kent Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.16 2003/09/27 02:24:52 kent Exp $";
 
 struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -26,7 +26,9 @@ if (gotAdvFilter())
     for (col = colList; col != NULL; col = col->next)
 	{
 	if (col->advFilter)
+	    {
 	    list = col->advFilter(col, conn, list);
+	    }
 	}
     }
 return list;
@@ -127,9 +129,9 @@ cartRemovePrefix(cart, keyWordUploadPrefix);
 hPrintf("<H2>Upload List : %s - %s</H2>\n", col->shortLabel, col->longLabel);
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST ENCTYPE=\"multipart/form-data\">\n");
 cartSaveSession(cart);
-hPrintf("Please enter the name of a file in your computer containing a space");
+hPrintf("Please enter the name of a file from your computer that contains a space,");
 hPrintf("tab, or ");
-hPrintf("line separated list of the item want to include.<BR>");
+hPrintf("line separated list of the items you want to include.<BR>");
 
 varName = colVarName(col, keyWordPastedPrefix);
 hPrintf("<INPUT TYPE=FILE NAME=\"%s\"> ", varName);
@@ -262,35 +264,15 @@ static void bigButtons()
 /* Put up the big clear/submit buttons. */
 {
 hPrintf("<TABLE><TR><TD>");
-cgiMakeButton(advFilterBrowseVarName, "Submit");
+cgiMakeButton("submit", "Submit");
 hPrintf("</TD><TD>");
 cgiMakeButton(advFilterClearVarName, "Clear Filter");
 hPrintf("</TD><TD>");
 cgiMakeButton(filSaveCurrentVarName, "Save Filter");
 hPrintf("</TD><TD>");
-hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\"", filUseSavedVarName, 
-	"Load Filter");
-if (!userSettingsAnySaved(filUserSettings()))
-    hPrintf(" DISABLED");
-hPrintf(">");
+cgiMakeOptionalButton(filUseSavedVarName, "Load Filter", 
+	!userSettingsAnySaved(filUserSettings()));
 hPrintf("</TD></TR></TABLE>");
-hPrintf("Submit will take you back to the main page "
- "with the current filter.<BR>To quickly get a list of gene "
- "names that pass the filter push ");
-cgiMakeButton(advFilterListVarName, "List Names");
-#ifdef OLD
-"Hint: you can combine filters by copying the results of 'List Names'<BR>\n"
-"and then doing a 'Paste List' in the Name controls.<BR>");
-hPrintf("</TD></TR><TR><TD>");
-hPrintf("Quick Text:");
-hPrintf("</TD><TD>");
-cgiMakeButton(advFilterListVarName, "List Names");
-hPrintf("</TD><TD>");
-cgiMakeButton(advFilterListProtVarName, "List Proteins");
-hPrintf("</TD><TD>");
-cgiMakeButton(advFilterListAccVarName, "List Accessions");
-hPrintf("</TD></TR></TABLE>\n");
-#endif /* OLD */
 }
 
 void doAdvFilter(struct sqlConnection *conn, struct column *colList)
@@ -307,10 +289,13 @@ hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST>\n");
 cartSaveSession(cart);
 
 hPrintf("<BR>");
-hPrintf("With this page you can restrict which genes appear in the main<BR>");
-hPrintf("table based on the values in any column.<BR>");
-/* Put up little table with clear all/submit */
+hPrintf("With this page you can restrict which genes appear in the main table<BR>");
+hPrintf("based on the values in any column. Submit will take you back to the<BR>");
+hPrintf("main page with the current filter.");
 bigButtons();
+hPrintf("To quickly get a list of gene "
+ "names that pass the filter push ");
+cgiMakeButton(advFilterListVarName, "List Names");
 
 /* See if have any to do in either first (displayed columns)
  * or second (hidden columns) pass. */
@@ -343,10 +328,13 @@ for (onOff = 1; onOff >= 0; --onOff)
 		col->filterControls(col, conn);
 		hPrintf("</TD></TR>");
 		hPrintf("</TABLE>");
+		hPrintf("<BR>");
 		hPrintf("</TD></TR>");
 		}
 	    }
 	hPrintf("</TABLE>\n");
+	hPrintf("<BR>");
+	cgiMakeButton("submit", "Submit");
 	}
     }
 hPrintf("</FORM>\n");
@@ -358,12 +346,6 @@ void doAdvFilterClear(struct sqlConnection *conn, struct column *colList)
 cartRemovePrefix(cart, advFilterPrefix);
 cartRemovePrefix(cart, advFilterPrefixI);
 doAdvFilter(conn, colList);
-}
-
-void doAdvFilterBrowse(struct sqlConnection *conn, struct column *colList)
-/* List gene names matching advanced filter. */
-{
-doSearch(conn, colList);
 }
 
 void doAdvFilterListCol(struct sqlConnection *conn, struct column *colList,

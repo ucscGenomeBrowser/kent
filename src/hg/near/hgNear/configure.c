@@ -12,7 +12,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.28 2003/09/17 17:16:49 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.35 2003/09/27 02:24:52 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -31,11 +31,11 @@ hPrintf("<TABLE BORDER=1>\n");
 
 /* Write out first row - labels. */
 hPrintf("<TR BGCOLOR=\"#EFEFFF\">");
-hPrintf("<TH>Name</TH>");
-hPrintf("<TH>On</TH>");
-hPrintf("<TH>Position</TH>");
-hPrintf("<TH>Description</TH>");
-hPrintf("<TH>Configuration</TH>");
+hPrintf("<TH ALIGN=left>Name</TH>");
+hPrintf("<TH ALIGN=left>On</TH>");
+hPrintf("<TH ALIGN=left>Position</TH>");
+hPrintf("<TH ALIGN=left>Description</TH>");
+hPrintf("<TH ALIGN=left>Configuration</TH>");
 
 /* Print out configuration controls. */
 hPrintf("</TR>");
@@ -57,17 +57,15 @@ for (col = colList; col != NULL; col = col->next)
 
     /* Do left/right button */
     hPrintf("<TD ALIGN=CENTER>");
-    safef(varName, sizeof(varName), "near.up.%s", col->name);
+    safef(varName, sizeof(varName), "near.do.up.%s", col->name);
     if (col != colList)
 	{
-	// cgiMakeButton(varName, " up ");
 	hPrintf("<INPUT NAME=\"%s\" TYPE=\"IMAGE\" VALUE=\"up\" ", varName);
 	hPrintf("SRC=\"../images/up.gif\">");
 	}
-    safef(varName, sizeof(varName), "near.down.%s", col->name);
+    safef(varName, sizeof(varName), "near.do.down.%s", col->name);
     if (col->next != NULL)
 	{
-	// cgiMakeButton(varName, "down");
 	hPrintf("<INPUT NAME=\"%s\" TYPE=\"IMAGE\" VALUE=\"down\" ", varName);
 	hPrintf("SRC=\"../images/down.gif\">");
 	}
@@ -176,8 +174,8 @@ char *val = cartUsualString(cart, expRatioColorVarName, colorSchemeVals[0]);
 return !sameString(val, colorSchemeVals[0]);
 }
 
-boolean showOnlyCannonical()
-/* Return TRUE if we only show cannonical splicing varients. */
+boolean showOnlyCanonical()
+/* Return TRUE if we only show canonical splicing variants. */
 {
 return !cartUsualBoolean(cart, showAllSpliceVarName, FALSE);
 }
@@ -205,41 +203,52 @@ cartSaveSession(cart);
 
 hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
 hPrintf("<TR><TD ALIGN=LEFT>");
-hPrintf("Show all splicing varients: ");
-cgiMakeCheckBox(showAllSpliceVarName, 
-	cartUsualBoolean(cart, showAllSpliceVarName, FALSE));
 cgiMakeButton("submit", "Submit");
-hPrintf("</TD></TR><TR><TD>");
-hPrintf("Expression ratio colors: ");
-colorSchemeDropDown();
-hPrintf("</TD></TR></TABLE>");
-
-hPrintf("<HR>");
-hPrintf("<H2>Column Configuration</H2>\n");
-hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
-hPrintf("<TR><TD ALIGN=LEFT>");
+hPrintf("</TD><TD> ");
+hPrintf("</TD><TD> ");
+hPrintf("</TD><TD>");
+hPrintf("Columns:");
+hPrintf("</TD><TD> ");
 cgiMakeButton(hideAllConfName, "Hide All");
 hPrintf("</TD><TD>");
 cgiMakeButton(showAllConfName, "Show All");
 hPrintf("</TD><TD>");
-hPrintf("&nbsp;");
+cgiMakeButton(defaultConfName, "Default");
 hPrintf("</TD><TD>");
-cgiMakeButton(saveCurrentConfName, "Save Settings");
-hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\"", useSavedConfName, 
-	"Load Settings");
-if (!userSettingsAnySaved(us))
-    hPrintf(" DISABLED");
-hPrintf(">");
+hPrintf("Settings:");
 hPrintf("</TD><TD>");
-hPrintf("&nbsp;");
+cgiMakeButton(saveCurrentConfName, "Save");
 hPrintf("</TD><TD>");
-cgiMakeButton(defaultConfName, "Default Settings");
-hPrintf("</TD><TD>");
-cgiMakeButton("submit", "Submit");
+cgiMakeOptionalButton(useSavedConfName, "Load", !userSettingsAnySaved(us));
 hPrintf("</TD></TR></TABLE>");
+
+// hPrintf("<HR>");
+// hPrintf("<H2>Column Configuration</H2>\n");
+hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
+hPrintf("<TR><TD ALIGN=LEFT>");
+hPrintf("Expression ratio colors: ");
+colorSchemeDropDown();
+hPrintf("</TD><TD>");
+hPrintf("Show all splicing variants: ");
+cgiMakeCheckBox(showAllSpliceVarName, 
+	cartUsualBoolean(cart, showAllSpliceVarName, FALSE));
+hPrintf(" ");
 hPrintf("</TD></TR></TABLE>");
 configTable(colList, conn);
 hPrintf("</FORM>");
+}
+
+static void restoreDefaultOrder(struct column **pColList)
+/* Restore order of columns to default using priority settings. */
+{
+struct column *col;
+for (col = *pColList; col != NULL; col = col->next)
+    {
+    char *priority = columnSetting(col, "priority", NULL);
+    if (priority != NULL)
+        col->priority = atof(priority);
+    }
+slSort(pColList, columnCmpPriority);
 }
 
 void doDefaultConfigure(struct sqlConnection *conn, struct column *colList)
@@ -251,6 +260,7 @@ for (col=colList; col != NULL; col = col->next)
     col->on = col->defaultOn;
 cartRemovePrefix(cart, colConfigPrefix);
 cartRemove(cart, colOrderVar);
+restoreDefaultOrder(&colList);
 doConfigure(conn, colList, NULL);
 }
 
@@ -300,5 +310,9 @@ void doSaveCurrentColumns(struct sqlConnection *conn, struct column *colList)
 {
 struct userSettings *us = colUserSettings();
 if (userSettingsProcessForm(us))
+    {
+    refinePriorities(colList);
+    slSort(&colList, columnCmpPriority);
     doConfigure(conn, colList, NULL);
+    }
 }

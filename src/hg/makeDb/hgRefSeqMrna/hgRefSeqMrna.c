@@ -10,7 +10,7 @@
 #include "hgRelate.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: hgRefSeqMrna.c,v 1.13 2003/06/12 23:57:16 markd Exp $";
+static char const rcsid[] = "$Id: hgRefSeqMrna.c,v 1.14 2003/09/20 21:09:21 kent Exp $";
 
 
 /* Variables that can be set from command line. */
@@ -241,7 +241,6 @@ void findCdsStartEndInGenome(struct refSeqInfo *rsi, struct psl *psl,
 int startOffset, endOffset;
 int cdsStart = -1, cdsEnd = -1;
 int i;
-boolean fuglyf = (sameString(psl->qName, "XX_006440"));
 
 if (psl->strand[0] == '-')
     {
@@ -254,8 +253,6 @@ else
     endOffset =  psl->qEnd - rsi->cdsEnd;
     }
 
-if (fuglyf) uglyf("%s qStart %d, rsi->cdsStart %d, startOffset %d\n", psl->qName, psl->qStart, rsi->cdsStart, startOffset);
-if (fuglyf) uglyf("   qEnd %d, rsi->cdsEnd %d, endOffset %d\n", psl->qEnd, rsi->cdsEnd, endOffset);
 
 /* Adjust starting pos. */
 for (i=0; i<psl->blockCount; ++i)
@@ -265,17 +262,14 @@ for (i=0; i<psl->blockCount; ++i)
     if (startOffset < blockSize)
 	{
         cdsStart = psl->tStarts[i] + startOffset;
-	if (fuglyf)uglyf("cdsStart calculated = %d\n", cdsStart);
 	break;
 	}
     /* Adjust start offset for this block.  Also adjust for
      * query sequence between blocks that doesn't align. */
     startOffset -= blockSize;
-    if (fuglyf)uglyf("blockSize = %d\n", blockSize);
     if (i != psl->blockCount - 1)
 	{
 	int skip =  psl->qStarts[i+1] - (psl->qStarts[i] + blockSize);
-	if (fuglyf)uglyf("skip = %d\n", skip);
 	startOffset -= skip;
 	}
     }
@@ -297,6 +291,11 @@ for (i=psl->blockCount-1; i >= 0; --i)
         {
 	int skip =  psl->qStarts[i] - (psl->qStarts[i-1] + psl->blockSizes[i-1]);
 	endOffset -= skip;
+	if (endOffset < 0)	/* CDS end was in gap, ugh! */
+	    {
+	    cdsEnd = psl->tStarts[i] + blockSize;
+	    break;
+	    }
 	}
     }
 
@@ -569,10 +568,10 @@ while ((psl = pslNext(lf)) != NULL)
 	dotOut();
 	}
     exonList = pslToExonList(psl);
-    fprintf(kgTab, "%s\t%s\t%c\t%d\t%d\t",
-	psl->qName, psl->tName, psl->strand[0], psl->tStart, psl->tEnd);
     rsi = hashMustFindVal(rsiHash, psl->qName);
     findCdsStartEndInGenome(rsi, psl, &cdsStart, &cdsEnd);
+    fprintf(kgTab, "%s\t%s\t%c\t%d\t%d\t",
+	psl->qName, psl->tName, psl->strand[0], psl->tStart, psl->tEnd);
     fprintf(kgTab, "%d\t%d\t", cdsStart, cdsEnd);
     fprintf(kgTab, "%d\t", slCount(exonList));
     for (exon = exonList; exon != NULL; exon = exon->next)

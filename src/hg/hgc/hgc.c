@@ -70,7 +70,6 @@
 #include "web.h"
 #include "dbDb.h"
 #include "jaxOrtholog.h"
-#include "expRecord.h"
 #include "dnaProbe.h"
 #include "ancientRref.h"
 #include "jointalign.h"
@@ -111,7 +110,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.474 2003/09/17 00:23:51 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.482 2003/09/25 16:25:46 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -829,15 +828,26 @@ for (axt = axtList; axt != NULL; axt = axt->next)
     int size = axt->symCount;
     int sizeLeft = size;
     int qPtr ;
-    fprintf(f, ">%s:%d-%d %s:%d-%d (%c) score %d coding %d-%d xscript %d-%d \n", 
+    char qStrand = (axt->qStrand == gp->strand[0] ? '+' : '-');
+    int qStart = axt->qStart;
+    int qEnd = axt->qEnd;
+    int qSize = 0;
+    if (!sameString(axt->qName, "gap"))
+        qSize = hChromSize2(axt->qName);
+    if (qStrand == '-')
+        {
+        qStart = qSize - axt->qEnd;
+        qEnd = qSize - axt->qStart;
+        }
+    fprintf(f, ">%s:%d-%d %s:%d-%d (%c) score %d coding %d-%d utr/coding %d-%d gene %c alignment %c\n", 
 	    axt->tName, axt->tStart+1, axt->tEnd,
-	    axt->qName, axt->qStart+1, axt->qEnd, axt->qStrand, axt->score,  tStart+1, tEnd, gp->txStart+1, gp->txEnd);
+	    axt->qName, qStart+1, qEnd, qStrand, axt->score,  tStart+1, tEnd, gp->txStart+1, gp->txEnd, gp->strand[0], axt->qStrand);
 
-    qPtr = axt->qStart;
+    qPtr = qStart;
     qCodonPos = tCodonPos; /* put translation back in sync */
     if (!posStrand)
         {
-        qPtr = axt->qEnd;
+        qPtr = qEnd;
         /* skip to next exon fi we are starting in the middle of a gene  - should not happen */
         while ((tPtr < nextEnd) && (nextEndIndex > 0))
             {
@@ -1922,6 +1932,10 @@ if (wordCount > 0)
     else if (sameString(type, "axt"))
         {
 	genericAxtClick(conn, tdb, item, start, words[1]);
+	}
+    else if (sameString(type, "expRatio"))
+        {
+	genericExpRatio(conn, tdb, item, start);
 	}
     }
 printTrackHtml(tdb);
@@ -5618,7 +5632,19 @@ char *seqType;
 boolean dnaBased;
 char *proteinAC;
 char *pfamAC, *pfamID, *pfamDesc;
-cartWebStart(cart, "Known Gene");
+char *atlasUrl;
+char *mapID, *locusID, *mapDescription;
+char *geneID;
+char *geneSymbol;
+char cart_name[255];
+boolean hasPathway, hasMedical;
+
+sprintf(cond_str, "kgID='%s'", mrnaName);
+geneSymbol = sqlGetField(conn, database, "kgXref", "geneSymbol", cond_str);
+if (geneSymbol == NULL) geneSymbol = mrnaName;
+
+sprintf(cart_name, "Known Gene: %s", geneSymbol);
+cartWebStart(cart, cart_name);
 
 dnaBased = FALSE;
 if (hTableExists("knownGeneLink"))
@@ -5634,7 +5660,6 @@ if (hTableExists("knownGeneLink"))
         proteinAC = sqlGetField(conn, database, "knownGeneLink", "proteinID", cond_str);
         }
     }
-
 // Display mRNA or DNA info and NCBI link
 if (dnaBased && refSeqName != NULL)
     {
@@ -5665,6 +5690,7 @@ else
 
 // Display protein description and links
 printf("<B>Protein:</B> ");
+
 sprintf(cond_str, "name='%s'", mrnaName);
 proteinID = sqlGetField(conn, database, "knownGene", "proteinID", cond_str);
 if (proteinID == NULL)
@@ -5716,6 +5742,7 @@ while (row != NULL)
 sqlFreeResult(&sr);
 printf("<BR>");
 
+// show Pfam links
 if (hTableExistsDb(protDbName, "pfamXref"))
     {
     sprintf(cond_str, "swissDisplayID='%s'", proteinID);
@@ -5741,16 +5768,16 @@ if (hTableExistsDb(protDbName, "pfamXref"))
             pfamDesc= sqlGetField(conn2, protDbName, "pfamDesc", "description", cond_str);
 	    printf(" %s<BR>\n", pfamDesc);
     	    }
-    	printf("<BR>");
     	sqlFreeResult(&sr);
     	}
     }
 
 //The following is disabled until UCSC Proteome Browser relased to public
-/*
+goto skipPB;
+
 // display link to UCSC Proteome Browser
 printf("<LI><B>UCSC Proteome Browser: </B>");
-printf("<A HREF=\"http://hgwdev-fanhsu.cse.ucsc.edu/cgi-bin/pb8?");
+printf("<A HREF=\"http:/cgi-bin/pb10?");
 printf("proteinDB=SWISS&proteinID=%s&mrnaID=%s\" ", proteinID, mrnaName);
 printf(" target=_blank>");
 printf(" %s</A>", proteinID);
@@ -5761,21 +5788,125 @@ sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL) printf(", ");
 while (row != NULL)    
-{
-printf("<A HREF=\"http://hgwdev-fanhsu.cse.ucsc.edu/cgi-bin/pb8?");
-printf("proteinDB=SWISS&proteinID=%s&mrnaID=%s\" ", row[0], mrnaName);
-printf(" target=_blank>");
-printf(" %s</A>", row[0]);
-row = sqlNextRow(sr);
-if (row != NULL) printf(", ");
-}
+    {
+    printf("<A HREF=\"http:/cgi-bin/pb10?");
+    printf("proteinDB=SWISS&proteinID=%s&mrnaID=%s\" ", row[0], mrnaName);
+    printf(" target=_blank>");
+    printf(" %s</A>", row[0]);
+    row = sqlNextRow(sr);
+    if (row != NULL) printf(", ");
+    }
 sqlFreeResult(&sr);
-*/
 
-    printf("</UL>");
-    fflush(stdout);
+skipPB:
+printf("</UL>");
+
+// Display Gene Family Browser link
+if (sqlTableExists(conn, "knownCanonical"))
+    {
+    printf("<B>UCSC Gene Family Browser:</B> ");
+    printf("<A HREF=\"http:/cgi-bin/hgNear?near.id=%s\"", mrnaName);
+    printf("TARGET=_blank>%s</A>&nbsp\n", geneSymbol);fflush(stdout);
+    printf("<BR><BR>");
+    }
+
+// Show Pathway links if any exists
+hasPathway = FALSE;
+
+//Process KEGG Pathway link data
+if (sqlTableExists(conn, "keggPathway"))
+    {
+    sprintf(query, "select * from %s.keggPathway where kgID = '%s'", database, mrnaName);
+    sr = sqlGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+	{
+	if (!hasPathway)
+	    {
+	    printf("<B>Pathways</B><UL>");
+	    hasPathway = TRUE;
+	    }
+        while (row != NULL)
+            {
+            locusID = row[1];
+	    mapID   = row[2];
+	    printf("<LI><B>KEGG:&nbsp</B>");
+	    sprintf(cond_str, "mapID=%c%s%c", '\'', mapID, '\'');
+	    mapDescription = sqlGetField(conn2, database, "keggMapDesc", "description", cond_str);
+	    printf("<A HREF = \"");
+	    printf("http://www.genome.ad.jp/dbget-bin/show_pathway?%s+%s", mapID, locusID);
+	    printf("\" TARGET=_blank>%s</A> %s </LI>\n",mapID, mapDescription);
+            row = sqlNextRow(sr);
+	    }
+	}
+    sqlFreeResult(&sr);
+    }
+
+// Process SRI BioCyc link data
+if (sqlTableExists(conn, "bioCycPathway"))
+    {
+    sprintf(query, "select * from %s.bioCycPathway where kgID = '%s'", database, mrnaName);
+    sr = sqlGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+	{
+	if (!hasPathway)
+	    {
+	    printf("<BR><B>Pathways</B><UL>");
+	    hasPathway = TRUE;
+	    }
+        while (row != NULL)
+            {
+            geneID = row[1];
+	    mapID   = row[2];
+	    printf("<LI><B>BioCyc:&nbsp</B>");
+	    sprintf(cond_str, "mapID=%c%s%c", '\'', mapID, '\'');
+	    mapDescription = sqlGetField(conn2, database, "bioCycMapDesc", "description", cond_str);
+	    printf("<A HREF = \"");
+	    printf("http://biocyc.org:1555/HUMAN/new-image?type=PATHWAY&object=%s&detail-level=2",
+		   mapID);
+	    printf("\" TARGET=_blank>%s</A> %s </LI>\n",mapID, mapDescription);
+            row = sqlNextRow(sr);
+	    }
+	}
+    sqlFreeResult(&sr);
+    }
+
+if (hasPathway)
+    {
+    printf("</UL>\n");
+    }
+
+// Process medical related links here
+hasMedical = FALSE;
+
+// process links to Atlas of Genetics and Cytogenetics in Oncology and Haematology 
+if (sqlTableExists(conn, "atlasOncoGene"))
+    {
+    sprintf(cond_str, "locusSymbol=%c%s%c", '\'', geneSymbol, '\'');
+    atlasUrl = sqlGetField(conn, database, "atlasOncoGene", "url", cond_str);
+    if (atlasUrl != NULL)
+	{
+	if (!hasMedical)
+	    {
+    	    printf("<B>Medical Related Links:</B><UL>");
+	    hasMedical = TRUE;
+	    }
+
+    	printf("<LI><B>Atlas of Genetics and Cytogenetics in Oncology and Haematology:&nbsp</B>");
+
+	printf("<A HREF = \"%s%s\" TARGET=_blank>%s</A><BR></LI>\n", 
+	   "http://www.infobiogen.fr/services/chromcancer/", atlasUrl, geneSymbol);fflush(stdout);
+    	}
+    }
+
+if (hasMedical)
+    {
+    printf("</UL>\n");
+    }
 
 // Display RefSeq related info, if there is a corresponding RefSeq
+
     sprintf(query, "select refseq from %s.mrnaRefseq where mrna = '%s'",  database, mrnaName);
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);
@@ -5910,7 +6041,6 @@ sqlFreeResult(&sr);
 		}
 	    printStanSource(rl->mrnaAcc, "mrna");
 	    }
-
 	htmlHorizontalLine();
 	if (dnaBased)
 	    {
@@ -6574,12 +6704,13 @@ else
     org[0] = tolower(org[0]);
     safef(chainTable,sizeof(chainTable), "%sChain", org);
     }
+printf("<B>Score:</B> %d Gap Ratio: %d Intron Ratio: %d <B>PolyA tail length:</B> %d <B>Start:</B> %d <BR>\n", pg->score, pg->score2, pg->score3, pg->polyA, pg->polyAstart);
+htmlHorizontalLine();
 printf("<p>");
-printf("<B>%s Gene:</B> %s %s in %s <p>\n", hOrganism(pg->assembly), pg->gene, pg->geneTable, pg->assembly);
+printf("<B>%s Gene:</B> %s %s in %s\n", hOrganism(pg->assembly), pg->gene, pg->geneTable, pg->assembly);
 linkToOtherBrowser(pg->assembly, pg->chrom, pg->gStart, pg->gEnd);
 printf("%s:%d-%d \n", pg->chrom, pg->gStart, pg->gEnd);
 printf("</A>");
-printf("<B>Score:</B> %d Gap Ratio: %d Intron Ratio: %d<BR>\n", pg->score, pg->score2, pg->score3);
 
 pslList = loadPslRangeT("mrnaBlastz", pg->name, pg->chrom, pg->gStart, pg->gEnd);
 if (pslList != NULL)
@@ -6678,14 +6809,13 @@ cartWebStart(cart, acc);
 printf("<H4>PseudoGene/Genomic Alignment</H4>");
 printAlignments(pslList, start, "htcCdnaAli", table, acc);
 
-sprintf(query, "select * from pseudoGeneLink where name = '%s'", acc);
+sprintf(query, "select * from pseudoGeneLink where name = '%s' and pchrom = '%s' and pStart = %d", acc, chrom, start);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     pg = pseudoGeneLinkLoad(row);
     if (hTableExists("axtInfo") && pslList != NULL)
         {
-        htmlHorizontalLine();
         pseudoPrintPos(pslList->tName, pslList->tStart, pslList->tEnd, pg);
         }
     }
@@ -10316,111 +10446,6 @@ puts("<br><br><font size=-2><i>If you have comments and/or suggestions please em
      "<a href=\"mailto:sugnet@cse.ucsc.edu\">sugnet@cse.ucsc.edu</a>.\n");
 }
 
-void makeCheckBox(char *name, boolean isChecked)
-/* Create a checkbox with the given name in the given state. */
-{
-printf("<INPUT TYPE=CHECKBOX NAME=\"%s\" VALUE=on%s>", name,
-       (isChecked ? " CHECKED" : "") );
-}
-
-
-struct rgbColor getColorForExprBed(float val, float max)
-/* Return the correct color for a given score */
-{
-char *colorScheme = cartUsualString(cart, "exprssn.color", "rg");
-boolean redGreen = sameString(colorScheme, "rg");
-float absVal = fabs(val);
-struct rgbColor color; 
-int colorIndex = 0;
-/* if log score is -10000 data is missing */
-if(val == -10000) 
-    {
-    color.g = color.r = color.b = 128;
-    return(color);
-    }
-
-if(absVal > max) 
-    absVal = max;
-if (max == 0) 
-    errAbort("ERROR: hgc::getColorForExprBed() maxDeviation can't be zero\n"); 
-colorIndex = (int)(absVal * 255/max);
-if(redGreen) 
-    {
-    if(val > 0) 
-	{
-	color.r = colorIndex; 
-	color.g = 0;
-	color.b = 0;
-	}
-    else 
-	{
-	color.r = 0;
-	color.g = colorIndex;
-	color.b = 0;
-	}
-    }
-else
-    {
-    if(val > 0) 
-	{
-	color.r = colorIndex; 
-	color.g = 0;
-	color.b = 0;
-	}
-    else 
-	{
-	color.r = 0;
-	color.g = 0;
-	color.b = colorIndex;
-	}
-    }
-return color;
-}
-
-struct rgbColor getColorForAffyBed(float val, float max)
-/* Return the correct color for a given score */
-{
-struct rgbColor color; 
-int colorIndex = 0;
-int offset = 0;
-
-/* if log score is -10000 data is missing */
-if(val == -10000) 
-    {
-    color.g = color.r = color.b = 128;
-    return(color);
-    }
-
-val = fabs(val);
-/* take the log for visualization */
-if(val > 0)
-    val = logBase2(val);
-else
-    val = 0;
-
-/* scale offset down to 0 */
-if(val > offset) 
-    val -= offset;
-else
-    val = 0;
-
-if (max <= 0) 
-    errAbort("ERROR: hgc::getColorForAffyBed() maxDeviation can't be zero\n"); 
-max = logBase2(max);
-max -= offset;
-if(max < 0)
-    errAbort("hgc::getColorForAffyBed() - Max val should be greater than 0 but it is: %g", max);
-    
-if(val > max) 
-    val = max;
-
-colorIndex = (int)(val * 255/max);
-color.r = 0;
-color.g = 0;
-color.b = colorIndex;
-return color;
-}
-
 
 void abbr(char *s, char *fluff)
 /* Cut out fluff from s. */
@@ -10434,21 +10459,9 @@ if (s != NULL)
     }
 }
 
-char *abbrevExprBedName(char *name)
-/* chops part off rosetta exon identifiers, returns pointer to 
-   local static char* */
-{
-static char abbrev[32];
-char *ret;
-strncpy(abbrev, name, sizeof(abbrev));
-abbr(abbrev, "LINK_Em:");
-return abbrev;
-}
-
 void printTableHeaderName(char *name, char *clickName, char *url) 
 /* creates a table to display a name vertically,
- * basically creates a column of letters 
- */
+ * basically creates a column of letters */
 {
 int i, length;
 char *header = cloneString(name);
@@ -10489,800 +10502,6 @@ for(i = 0; i < length; i++)
     }
 printf("</table>\n");
 freez(&header);
-}
-
-void msBedPrintTableHeader(struct bed *bedList, 
-			   struct hash *erHash, char *itemName, 
-			   char **headerNames, int headerCount, char *scoresHeader)
-/* print out a bed with multiple scores header for a table.
-   headerNames contain titles of columns up to the scores columns. scoresHeader
-   is a single string that will span as many columns as there are beds.*/
-{
-struct bed *bed;
-int featureCount = slCount(bedList);
-int i=0;
-printf("<tr>");
-for(i=0;i<headerCount; i++)
-    printf("<th align=center>%s</th>\n",headerNames[i]);
-printf("<th align=center colspan=%d valign=top>%s</th>\n",featureCount, scoresHeader);
-printf("</tr>\n<tr>");
-for(i=0;i<headerCount; i++)
-    printf("<td>&nbsp</td>\n");
-for(bed = bedList; bed != NULL; bed = bed->next)
-    {
-    printf("<td valign=top align=center>\n");
-    printTableHeaderName(bed->name, itemName, NULL);
-    printf("</td>");
-    }
-printf("</tr>\n");
-}
-
-void msBedDefaultPrintHeader(struct bed *bedList, struct hash *erHash, 
-			     char *itemName)
-/* print out a header with names for each bed with itemName highlighted */
-{
-char *headerNames[] = {"Experiment"};
-char *scoresHeader = "Item Name";
-msBedPrintTableHeader(bedList, erHash, itemName, headerNames, ArraySize(headerNames), scoresHeader);
-}
-
-void rosettaPrintHeader(struct bed *bedList, 
-			struct hash *erHash, char *itemName)
-/* print out the header for the rosetta details table */
-{
-char *headerNames[] = {"&nbsp", "Hybridization"};
-char *scoresHeader = "Exon Number";
-msBedPrintTableHeader(bedList, erHash, itemName, headerNames, ArraySize(headerNames), scoresHeader);
-}
-
-void cghNci60PrintHeader(struct bed *bedList, 
-			 struct hash *erHash, char *itemName)
-/* print out the header for the CGH NCI 60 details table */
-{
-char *headerNames[] = {"Cell Line", "Tissue"};
-char *scoresHeader ="CGH Log Ratio";
-msBedPrintTableHeader(bedList, erHash, itemName, headerNames, ArraySize(headerNames), scoresHeader);
-}
-
-void printExprssnColorKey(float minVal, float maxVal, float stepSize, int base,
-			  struct rgbColor(*getColor)(float val, float maxVal))
-/* print out a little table which provides a color->score key */
-{
-float currentVal = -1 * maxVal;
-int square = 15;
-int numColumns;
-assert(stepSize != 0);
-
-numColumns = maxVal/stepSize *2+1;
-printf("<TABLE  BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
-printf("<TABLE  BGCOLOR=\"#fffee8\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR>");
-printf("<th colspan=%d>False Color Key, all values log base %d</th></tr><tr>\n",numColumns, base);
-/* have to add the stepSize/2 to account for the ability to 
-   absolutely represent some numbers as floating points */
-for(currentVal = minVal; currentVal <= maxVal + (stepSize/2); currentVal += stepSize)
-    {
-    printf("<th><b>%.2f</b></th>", currentVal);
-    }
-printf("</tr><tr>\n");
-for(currentVal = minVal; currentVal <= maxVal + (stepSize/2); currentVal += stepSize)
-    {
-    struct rgbColor rgb = getColor(currentVal, maxVal);
-    printf("<td bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", rgb.r, rgb.g, rgb.b);
-    }
-printf("</tr></table>\n");
-printf("</td></tr></table>\n");
-}
-
-void printAffyExprssnColorKey(float minVal, float maxVal, float stepSize, int base,
-			      struct rgbColor(*getColor)(float val, float maxVal))
-/* print out a little table which provides a color->score key */
-{
-float currentVal = -1 * maxVal;
-int square = 15;
-int numColumns;
-
-assert(maxVal != 0);
-if(minVal != 0)
-    numColumns = logBase2(maxVal) - logBase2(minVal);
-else 
-    numColumns = logBase2(maxVal);
-printf("<TABLE  BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
-printf("<TABLE  BGCOLOR=\"#fffee8\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\">\n<tr>");
-printf("<th colspan=%d>False Color Key</th></tr>\n<tr>",numColumns);
-printf("<th width=55><b> NA </b></th>");
-for(currentVal = minVal; currentVal <= maxVal; currentVal = (2*currentVal))
-    {
-    printf("<th width=55><b> %7.2g </b></th>", currentVal);
-    }
-printf("</tr>\n<tr>");
-printf("<td bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", 128,128,128);
-for(currentVal = minVal; currentVal <= maxVal; currentVal = (2*currentVal))
-    {
-    struct rgbColor rgb = getColor(currentVal, maxVal);
-    printf("<td bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", rgb.r, rgb.g, rgb.b);
-    }
-printf("</tr></table>\n");
-printf("</td></tr></table>\n");
-}
-
-void msBedExpressionPrintRow(struct bed *bedList, struct hash *erHash, 
-			     int expIndex, char *expName, float maxScore)
-/* print the name of the experiment and color the 
-   background of individual cells using the score to 
-   create false two color display */
-{
-char buff[32];
-struct bed *bed = bedList;
-struct expRecord *er = NULL;
-int square = 10;
-snprintf(buff, sizeof(buff), "%d", expIndex);
-er = hashMustFindVal(erHash, buff);
-
-printf("<tr>\n");
-if(strstr(er->name, expName))
-    printf("<td align=left bgcolor=\"D9E4F8\"> %s</td>\n",er->name);
-else
-    printf("<td align=left> %s</td>\n", er->name);
-
-for(bed = bedList;bed != NULL; bed = bed->next)
-    {
-    /* use the background colors to creat patterns */
-    struct rgbColor rgb = getColorForExprBed(bed->expScores[expIndex], maxScore);
-    printf("<td height=%d width=%d bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", square, square, rgb.r, rgb.g, rgb.b);
-    }
-printf("</tr>\n");
-}
-
-void msBedAffyPrintRow(struct bed *bedList, struct hash *erHash, int expIndex, char *expName, float maxScore)
-/* print the name of the experiment and color the 
-   background of individual cells using the score to 
-   create false two color display */
-{
-char buff[32];
-struct bed *bed = bedList;
-struct expRecord *er = NULL;
-int square = 10;
-snprintf(buff, sizeof(buff), "%d", expIndex);
-er = hashMustFindVal(erHash, buff);
-
-printf("<tr>\n");
-if(strstr(er->name, expName))
-    printf("<td align=left bgcolor=\"D9E4F8\"> %s</td>\n",er->name);
-else
-    printf("<td align=left> %s</td>\n", er->name);
-
-for(bed = bedList;bed != NULL; bed = bed->next)
-    {
-    /* use the background colors to creat patterns */
-    struct rgbColor rgb = getColorForAffyBed(bed->expScores[expIndex], maxScore);
-    printf("<td height=%d width=%d bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", square, square, rgb.r, rgb.g, rgb.b);
-    }
-printf("</tr>\n");
-}
-
-
-void msBedPrintTable(struct bed *bedList, struct hash *erHash, char *itemName, 
-		     char *expName, float minScore, float maxScore, float stepSize, int base,
-		     void(*printHeader)(struct bed *bedList, struct hash *erHash, char *item),
-		     void(*printRow)(struct bed *bedList,struct hash *erHash, int expIndex, char *expName, float maxScore),
-		     void(*printKey)(float minVal, float maxVal, float size, int base, struct rgbColor(*getColor)(float val, float max)),
-		     struct rgbColor(*getColor)(float val, float max))
-/* prints out a table from the data present in the bedList */
-{
-int i,featureCount=0, currnetRow=0, square=10;
-struct bed *bed = NULL;
-char buff[32];
-if(bedList == NULL)
-    errAbort("hgc::msBedPrintTable() - bedList is NULL");
-
-featureCount = slCount(bedList);
-/* time to write out some html, first the table and header */
-if(printKey != NULL)
-    printKey(minScore, maxScore, stepSize, base, getColor);
-printf("<p>\n");
-printf("<basefont size=-1>\n");
-printf("<table  bgcolor=\"#000000\" border=\"0\" cellspacing=\"0\" cellpadding=\"1\"><tr><td>");
-printf("<table  bgcolor=\"#fffee8\" border=\"0\" cellspacing=\"0\" cellpadding=\"1\">");
-printHeader(bedList, erHash, itemName);
-for(i=0; i<bedList->expCount; i++)
-    {
-    printRow(bedList, erHash, i, expName, maxScore);
-    }
-printf("</table>");
-printf("</td></tr></table>");
-printf("</basefont>");
-}
-
-struct bed * loadMsBed(char *table, char *chrom, uint start, uint end)
-/* load every thing from a bed 15 table in the given range */
-{
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-int rowOffset;
-struct bed *bedList = NULL, *bed;
-sr = hRangeQuery(conn, table, chrom, start, end, NULL, &rowOffset);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    bed = bedLoadN(row+rowOffset, 15);
-    slAddHead(&bedList, bed);
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-slReverse(&bedList);
-return bedList;
-}
-
-struct bed * loadMsBedAll(char *table)
-/* load every thing from a bed 15 table */
-{
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-struct bed *bedList = NULL, *bed;
-char query[512];
-sprintf(query, "select * from %s", table); 
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    bed = bedLoadN(row, 15);
-    slAddHead(&bedList, bed);
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-slReverse(&bedList);
-return bedList;
-}
-
-struct expRecord * loadExpRecord(char *table, char *database)
-/* load everything from an expRecord table in the
-   specified database, usually hgFixed instead of hg7, hg8, etc. */
-{
-struct sqlConnection *conn = sqlConnect(database);
-char query[256];
-struct expRecord *erList = NULL;
-snprintf(query, sizeof(query), "select * from %s", table);
-erList = expRecordLoadByQuery(conn, query);
-sqlDisconnect(&conn);
-return erList;
-}
-
-void msBedGetExpDetailsLink(char *expName, struct trackDb *tdb, char *expTable)
-/* Create link to download data from a MsBed track */
-{
-char *msBedTable = tdb->tableName;
-
-printf("<H3>Download raw data for experiments:</H3>\n");
-printf("<UL>\n");
-hgcAnchorSomewhere("getMsBedAll", expTable, msBedTable, seqName);
-printf("<LI>All data</A>\n");
-hgcAnchorSomewhere("getMsBedRange", expTable, msBedTable, seqName);
-printf("<LI>Data in range</A>\n");
-printf("</UL>\n");
-}
-
-void getMsBedExpDetails(struct trackDb *tdb, char *expName, boolean all)
-/* Create tab-delimited output to download */
-{
-char *expTable = cartString(cart, "i");
-char *bedTable = cartString(cart, "o");
-struct expRecord *er, *erList=NULL;
-struct bed *b, *bedList=NULL;
-char line[1024];
-int i;
-
-/* Get all of the expression record details */
-erList = loadExpRecord(expTable, "hgFixed");
-
-/* Get either all of the data, or only that data in the range */
-if (all) 
-    bedList = loadMsBedAll(bedTable);
-else 
-    bedList = loadMsBed(bedTable, seqName, winStart, winEnd); 
-
-/* Print out a header row */
-printf("<HTML><BODY><PRE>\n");
-printf("Name\tChr\tChrStart\tChrEnd\tTallChrStart\tTallChrEnd");
-for (er = erList; er != NULL; er = er->next)
-    if (sameString(bedTable, "cghNci60"))
-	printf("\t%s(%s)",er->name, er->extras[1]);
-    else 
-	printf("\t%s",er->name);
-printf("\n");
-
-/* Print out a row for each of the record in the bedList */
-for (b = bedList; b != NULL; b = b->next)
-    {
-    printf("%s\t%s\t%d\t%d\t%d\t%d",b->name, b->chrom, b->chromStart, b->chromEnd, b->thickStart, b->thickEnd);
-    for (i = 0; i < b->expCount; i++)
-	if (i == b->expIds[i])
-	    printf("\t%f",b->expScores[i]);
-	else
-	    printf("\t");
-    printf("\n");
-    }
-printf("</PRE>");
-}
-
-struct bed *rosettaFilterByExonType(struct bed *bedList)
-/* remove beds from list depending on user preference for 
-   seeing confirmed and/or predicted exons */
-{
-struct bed *bed=NULL, *tmp=NULL, *tmpList=NULL;
-char *exonTypes = cartUsualString(cart, "rosetta.et", rosettaExonEnumToString(0));
-enum rosettaExonOptEnum et = rosettaStringToExonEnum(exonTypes);
-
-if(et == rosettaAllEx)
-    return bedList;
-/* go through and remove appropriate beds */
-for(bed = bedList; bed != NULL; )
-    {
-    if(et == rosettaConfEx)
-	{
-	tmp = bed->next;
-	if(bed->name[strlen(bed->name) -2] == 't')
-	    slSafeAddHead(&tmpList, bed);
-	else
-	    bedFree(&bed);
-	bed = tmp;
-	}
-    else if(et == rosettaPredEx)
-	{
-	tmp = bed->next;
-	if(bed->name[strlen(bed->name) -2] == 'p')
-	    slSafeAddHead(&tmpList, bed);
-	else
-	    bedFree(&bed);
-	bed = tmp;
-	}
-    }
-slReverse(&tmpList);
-return tmpList;
-}
-
-void rosettaPrintRow(struct bed *bedList, struct hash *erHash, int expIndex, char *expName, float maxScore)
-/* print a row in the details table for rosetta track, designed for
-   use msBedPrintTable */
-{
-char buff[32];
-struct bed *bed = bedList;
-struct expRecord *er = NULL;
-int square = 10;
-snprintf(buff, sizeof(buff), "%d", expIndex);
-er = hashMustFindVal(erHash, buff);
-
-sprintf(buff,"e%d",er->id);
-printf("<tr>\n");
-printf("<td align=left>");
-makeCheckBox(buff,FALSE);
-printf("</td>");
-if(strstr(er->name, expName))
-    printf("<td align=left bgcolor=\"D9E4F8\"> %s</td>\n",er->name);
-else
-    printf("<td align=left> %s</td>\n", er->name);
-for(bed = bedList;bed != NULL; bed = bed->next)
-    {
-    /* use the background colors to creat patterns */
-    struct rgbColor rgb = getColorForExprBed(bed->expScores[expIndex], maxScore);
-    printf("<td height=%d width=%d bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", square, square, rgb.r, rgb.g, rgb.b);
-    }
-printf("</tr>\n");
-}
-
-void rosettaPrintDataTable(struct bed *bedList, char *itemName, char *expName, float maxScore, char *tableName)
-/* creates a false color table of the data in the bedList */
-{
-struct expRecord *erList = NULL, *er;
-struct hash *erHash;
-float stepSize = 0.2;
-char buff[32];
-if(bedList == NULL)
-    printf("<b>No Expression Data in this Range.</b>\n");
-else 
-    {
-    erHash = newHash(2);
-    erList = loadExpRecord(tableName, "hgFixed");
-    for(er = erList; er != NULL; er=er->next)
-	{
-	snprintf(buff, sizeof(buff), "%d", er->id);
-	hashAddUnique(erHash, buff, er);
-	}
-    msBedPrintTable(bedList, erHash, itemName, expName, -1*maxScore, maxScore, stepSize, 2,
-		    rosettaPrintHeader, rosettaPrintRow, printExprssnColorKey, getColorForExprBed);
-    expRecordFreeList(&erList);
-    hashFree(&erHash);
-    bedFreeList(&bedList);
-    }
-}
-
-void rosettaDetails(struct trackDb *tdb, char *expName)
-/* print out a page for the rosetta data track */
-{
-struct bed *bedList, *bed=NULL;
-char *tableName = "rosettaExps";
-char *itemName = cgiUsualString("i2","none");
-char *nameTmp=NULL;
-char buff[256];
-char *plotType = NULL;
-float maxScore = 2.0;
-char *maxIntensity[] = { "100", "20", "15", "10", "5" ,"4","3","2","1" };
-char *exonTypes = cartUsualString(cart, "rosetta.et", rosettaExonEnumToString(0));
-enum rosettaExonOptEnum et = rosettaStringToExonEnum(exonTypes);
-
-/* get data from database and filter it */
-bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
-bedList = rosettaFilterByExonType(bedList);
-
-
-/* abbreviate the names */
-for(bed=bedList; bed != NULL; bed = bed->next)
-    {
-    nameTmp = abbrevExprBedName(bed->name);
-    freez(&bed->name);
-    bed->name = cloneString(nameTmp);
-    }
-
-/* start html */
-snprintf(buff, sizeof(buff), "Rosetta Expression Data For: %s %d-%d</h2>", seqName, winStart, winEnd);
-cartWebStart(cart, buff);
-printf("%s", tdb->html);
-printf("<br><br>");
-printf("<form action=\"../cgi-bin/rosChr22VisCGI\" method=get>\n");
-rosettaPrintDataTable(bedList, itemName, expName, maxScore, tableName);
-
-/* other info needed for plotting program */
-cgiMakeHiddenVar("table", tdb->tableName);
-cgiMakeHiddenVar("db", database);
-sprintf(buff,"%d",winStart);
-cgiMakeHiddenVar("winStart", buff);
-zeroBytes(buff,64);
-sprintf(buff,"%d",winEnd);
-
-/* plot type is passed to graphing program to tell it which exons to use */
-if(et == rosettaConfEx)
-    plotType = "te";
-else if(et == rosettaPredEx)
-    plotType = "pe";
-else if(et == rosettaAllEx) 
-    plotType = "e";
-else 
-    errAbort("hgc::rosettaDetails() - don't recognize rosettaExonOptEnum %d", et);
-cgiMakeHiddenVar("t",plotType);
-cgiMakeHiddenVar("winEnd", buff);
-printf("<br>\n");
-printf("<table width=\"100%%\" cellpadding=0 cellspacing=0>\n");
-printf("<tr><th align=left><h3>Plot Options:</h3></th></tr><tr><td><p><br>");
-cgiMakeDropList("mi",maxIntensity, 9, "20");
-printf(" Maximum Intensity value to allow.\n");
-printf("</td></tr><tr><td align=center><br>\n");
-printf("<b>Press Here to View Detailed Plots</b><br><input type=submit name=Submit value=submit>\n");
-printf("<br><br><br><b>Clear Values</b><br><input type=reset name=Reset></form>\n");
-printf("</td></tr></table>");
-}
-
-void nci60Details(struct trackDb *tdb, char *expName) 
-/* print out a page for the nci60 data from stanford */
-{
-struct bed *bedList;
-char *tableName = "nci60Exps";
-char *itemName = cgiUsualString("i2","none");
-struct expRecord *erList = NULL, *er;
-char buff[32];
-struct hash *erHash;
-float stepSize = 0.2;
-float maxScore = 2.0;
-bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
-genericHeader(tdb, itemName);
-
-printf("%s", tdb->html);
-printf("<br><br>");
-if(bedList == NULL)
-    printf("<b>No Expression Data in this Range.</b>\n");
-else 
-    {
-    erHash = newHash(2);
-    erList = loadExpRecord(tableName, "hgFixed");
-    for(er = erList; er != NULL; er=er->next)
-	{
-	snprintf(buff, sizeof(buff), "%d", er->id);
-	hashAddUnique(erHash, buff, er);
-	}
-    msBedPrintTable(bedList, erHash, itemName, expName, -1*maxScore, maxScore, stepSize, 2,
-		    msBedDefaultPrintHeader, msBedExpressionPrintRow, printExprssnColorKey, getColorForExprBed);
-    expRecordFreeList(&erList);
-    hashFree(&erHash);
-    bedFreeList(&bedList);
-    }
-}
-
-void printAffyGnfLinks(char *name, char *chip)
-/* print out links to affymetrix's netaffx website */
-{
-char *netaffx = "https://www.netaffx.com/LinkServlet?array=;";
-char *netaffxDisp = "https://www.netaffx.com/svghtml?query=";
-char *gnfDetailed = "http://expression.gnf.org/cgi-bin/index.cgi?text=";
-/* char *gnf = "http://expression.gnf.org/promoter/tissue/images/"; */
-if(name != NULL)
-    {
-    printf("<p>More information about individual probes and probe sets is available ");
-    printf("at Affymetrix's <a href=\"https://www.netaffx.com/index2.jsp\">netaffx.com</a> website. [registration required]\n");
-    printf("<ul>\n");
-    printf("<li> Information about probe sequences is <a href=\"%s%s&probeset=%s\">available there</a></li>\n",
-	   netaffx, chip, name);
-    printf("<li> A graphical representation is also <a href=\"%s%s\">available</a> ",netaffxDisp, name);
-    printf("<basefont size=-2>[svg viewer required]</basefont></li>\n");
-    printf("</ul>\n");
-    printf("<p>A <a href=\"%s%s\">histogram</a> of the data for the probe set selected (%s) over all ",gnfDetailed, name, name);
-    printf("tissues is available at the<a href=\"http://expression.gnf.org/cgi-bin/index.cgi\"> GNF web supplement</a>.\n");
-    }
-}
-
-void printAffyUclaLinks(char *name, char *chip)
-/* print out links to affymetrix's netaffx website */
-{
-char *netaffx = "https://www.netaffx.com/LinkServlet?array=";
-char *netaffxDisp = "https://www.netaffx.com/svghtml?query=";
-if(name != NULL)
-    {
-    printf("<p>More information about individual probes and probe sets is available ");
-    printf("at Affymetrix's <a href=\"https://www.netaffx.com/index2.jsp\">netaffx.com</a> website. [registration required]\n");
-    printf("<ul>\n");
-    printf("<li> Information about probe sequences is <a href=\"%s%s&probeset=%s\">available there</a></li>\n",
-	   netaffx, chip, name);
-    printf("<li> A graphical representation is also <a href=\"%s%s\">available</a> ",netaffxDisp, name);
-    printf("<basefont size=-2>[svg viewer required]</basefont></li>\n");
-    printf("</ul>\n");
-    }
-}
-
-void affyDetails(struct trackDb *tdb, char *expName) 
-/* print out a page for the affy data from gnf */
-{
-struct bed *bedList;
-char *tableName = "affyExps";
-char *itemName = cgiUsualString("i2","none");
-int stepSize = 1;
-struct expRecord *erList = NULL, *er;
-char buff[32];
-struct hash *erHash;
-float maxScore = 262144/16; /* 2^18/2^4 */
-float minScore = 2;
-bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
-genericHeader(tdb, itemName);
-printf("<h2></h2><p>\n");
-printf("%s", tdb->html);
-
-printAffyGnfLinks(itemName, "U95");
-if(bedList == NULL)
-    printf("<b>No Expression Data in this Range.</b>\n");
-else 
-    {
-    erHash = newHash(2);
-    erList = loadExpRecord(tableName, "hgFixed");
-    for(er = erList; er != NULL; er=er->next)
-	{
-	snprintf(buff, sizeof(buff), "%d", er->id);
-	hashAddUnique(erHash, buff, er);
-	}
-    printf("<h2></h2><p>\n");
-    msBedPrintTable(bedList, erHash, itemName, expName, minScore, maxScore, stepSize, 2,
-		    msBedDefaultPrintHeader, msBedAffyPrintRow, printAffyExprssnColorKey, getColorForAffyBed);
-    expRecordFreeList(&erList);
-    hashFree(&erHash);
-    bedFreeList(&bedList);
-    }
-}
-
-void affyRatioDetails(struct trackDb *tdb, char *expName) 
-/* print out a page for the affy data from gnf based on ratio of
- * measurements to the median of the measurements. */
-{
-struct bed *bedList;
-char *tableName = "affyExps";
-char *itemName = cgiUsualString("i2","none");
-struct expRecord *erList = NULL, *er;
-char buff[32];
-struct hash *erHash;
-float stepSize = 0.5;
-float maxScore = 3.0;
-
-bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
-genericHeader(tdb, itemName);
-printf("<h2></h2><p>\n");
-printf("%s", tdb->html);
-
-printAffyGnfLinks(itemName, "U95");
-if(bedList == NULL)
-    printf("<b>No Expression Data in this Range.</b>\n");
-else 
-    {
-    erHash = newHash(2);
-    erList = loadExpRecord(tableName, "hgFixed");
-    for(er = erList; er != NULL; er=er->next)
-	{
-	snprintf(buff, sizeof(buff), "%d", er->id);
-	hashAddUnique(erHash, buff, er);
-	}
-    printf("<h2></h2><p>\n");
-    msBedPrintTable(bedList, erHash, itemName, expName, -1*maxScore, maxScore, stepSize, 2,
-		    msBedDefaultPrintHeader, msBedExpressionPrintRow, printExprssnColorKey, getColorForExprBed);
-    expRecordFreeList(&erList);
-    hashFree(&erHash);
-    bedFreeList(&bedList);
-    }
-}
-
-void affyUclaDetails(struct trackDb *tdb, char *expName) 
-/* print out a page for the affy data from gnf based on ratio of
- * measurements to the median of the measurements. */
-{
-struct bed *bedList;
-char *tableName = "affyUclaExps";
-char *itemName = cgiUsualString("i2","none");
-struct expRecord *erList = NULL, *er;
-char buff[32];
-struct hash *erHash;
-float stepSize = 0.25;
-float maxScore = 1.5;
-
-bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
-genericHeader(tdb, itemName);
-printf("<h2></h2><p>\n");
-printf("%s", tdb->html);
-
-printAffyUclaLinks(itemName, "U133");
-if(bedList == NULL)
-    printf("<b>No Expression Data in this Range.</b>\n");
-else 
-    {
-    erHash = newHash(2);
-    erList = loadExpRecord(tableName, "hgFixed");
-    for(er = erList; er != NULL; er=er->next)
-	{
-	snprintf(buff, sizeof(buff), "%d", er->id);
-	hashAddUnique(erHash, buff, er);
-	}
-    printf("<h2></h2><p>\n");
-    msBedPrintTable(bedList, erHash, itemName, expName, -1*maxScore, maxScore, stepSize, 10,
-		    msBedDefaultPrintHeader, msBedExpressionPrintRow, printExprssnColorKey, getColorForExprBed);
-    expRecordFreeList(&erList);
-    hashFree(&erHash);
-    bedFreeList(&bedList);
-    }
-}
-
-
-struct rgbColor getColorForCghBed(float val, float max)
-/* Return the correct color for a given score */
-{
-char *colorScheme = cartUsualString(cart, "cghNci60.color", "gr");
-boolean redColor = sameString(colorScheme, "rg");
-float absVal = fabs(val);
-struct rgbColor color; 
-int colorIndex = 0;
-/* if log score is -10000 data is missing */
-if(val == -10000) 
-    {
-    color.g = color.r = color.b = 128;
-    return(color);
-    }
-
-if(absVal > max) 
-    absVal = max;
-if (max == 0) 
-    errAbort("ERROR: hgc::getColorForCghBed() maxDeviation can't be zero\n"); 
-colorIndex = (int)(absVal * 255/max);
-if(sameString(colorScheme, "gr")) 
-    {
-    if(val < 0) 
-	{
-	color.r = colorIndex; 
-	color.g = 0;
-	color.b = 0;
-	}
-    else 
-	{
-	color.r = 0;
-	color.g = colorIndex;
-	color.b = 0;
-	}
-    } 
-else if(sameString(colorScheme, "rg")) 
-    {
-    if(val > 0) 
-	{
-	color.r = colorIndex; 
-	color.g = 0;
-	color.b = 0;
-	}
-    else 
-	{
-	color.r = 0;
-	color.g = colorIndex;
-	color.b = 0;
-	}
-    }
-else
-    {
-    if(val > 0) 
-	{
-	color.r = colorIndex; 
-	color.g = 0;
-	color.b = 0;
-	}
-    else 
-	{
-	color.r = 0;
-	color.g = 0;
-	color.b = colorIndex;
-	}
-    }
-return color;
-}
-
-void msBedCghPrintRow(struct bed *bedList, struct hash *erHash, int expIndex, char *expName, float maxScore)
-/* print the name of the experiment and color the 
-   background of individual cells using the score to 
-   create false two color display */
-{
-char buff[32];
-struct bed *bed = bedList;
-struct expRecord *er = NULL;
-int square = 10;
-snprintf(buff, sizeof(buff), "%d", expIndex);
-er = hashMustFindVal(erHash, buff);
-
-printf("<tr>\n");
-if(strstr(er->name, expName))
-    printf("<td align=left bgcolor=\"D9E4F8\"> %s</td>\n",er->name);
-else
-    printf("<td align=left> %s</td>\n", er->name);
-
-printf("<td align=left>  %s</td>\n", er->extras[1]);
-for(bed = bedList;bed != NULL; bed = bed->next)
-    {
-    /* use the background colors to creat patterns */
-    struct rgbColor rgb = getColorForCghBed(bed->expScores[expIndex], maxScore);
-    printf("<td height=%d width=%d bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", square, square, rgb.r, rgb.g, rgb.b);
-    }
-printf("</tr>\n");
-}
-
-void cghNci60Details(struct trackDb *tdb, char *expName) 
-/* print out a page for the nci60 data from stanford */
-{
-struct bed *bedList;
-char *tableName = "cghNci60Exps";
-char *itemName = cgiUsualString("i2","none");
-struct expRecord *erList = NULL, *er;
-char buff[32];
-struct hash *erHash;
-float stepSize = 0.2;
-float maxScore = 1.6;
-bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
-genericHeader(tdb, itemName);
-
-printf("%s", tdb->html);
-printf("<br><br>");
-msBedGetExpDetailsLink(expName, tdb, tableName);
-printf("<br><br>");
-if(bedList == NULL)
-    printf("<b>No CGH Data in this Range.</b>\n");
-else 
-    {
-    erHash = newHash(2);
-    erList = loadExpRecord(tableName, "hgFixed");
-    for(er = erList; er != NULL; er=er->next)
-	{
-	snprintf(buff, sizeof(buff), "%d", er->id);
-	hashAddUnique(erHash, buff, er);
-	}
-    msBedPrintTable(bedList, erHash, itemName, expName, -1 * maxScore,  maxScore, stepSize, 2,
-		    cghNci60PrintHeader, msBedCghPrintRow, printExprssnColorKey, getColorForCghBed);
-    expRecordFreeList(&erList);
-    hashFree(&erHash);
-    bedFreeList(&bedList);
-    }
 }
 
 struct sageExp *loadSageExps(char *tableName, struct bed  *bedist)
@@ -12903,14 +12122,6 @@ else if (sameWord(track, "getMsBedRange"))
     {
     getMsBedExpDetails(tdb, item, FALSE);
     }
-else if (sameWord(track, "cghNci60"))
-    {
-    cghNci60Details(tdb, item);
-    }
-else if (sameWord(track, "nci60"))
-    {
-    nci60Details(tdb, item);
-    }
 else if (sameWord(track, "perlegen"))
     {
     perlegenDetails(tdb, item);
@@ -12927,13 +12138,22 @@ else if(sameWord(track, "rosetta"))
     {
     rosettaDetails(tdb, item);
     }
+else if (sameWord(track, "cghNci60"))
+    {
+    cghNci60Details(tdb, item);
+    }
+else if (sameWord(track, "nci60"))
+    {
+    nci60Details(tdb, item);
+    }
 else if(sameWord(track, "affy"))
     {
     affyDetails(tdb, item);
     }
-else if(sameWord(track, "affyRatio"))
+else if ( sameWord(track, "affyRatio") || sameWord(track, "affyGnfU74A") 
+	|| sameWord(track, "affyGnfU74B") || sameWord(track, "affyGnfU74C"))
     {
-    affyRatioDetails(tdb, item);
+    gnfExpRatioDetails(tdb, item);
     }
 else if(sameWord(track, "affyUcla"))
     {

@@ -25,7 +25,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.140 2003/09/18 03:15:15 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.143 2003/09/22 18:41:18 hiram Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -243,7 +243,18 @@ if ((row = sqlNextRow(sr)) != NULL)
     }
 if (db == NULL)
     {
-    errAbort("Can't find genome \"%s\" in central database table defaultDb.\n", genome);
+    /* Can't find any of specified ones ?  Then use the first
+     *	This is for the product browser which may have none of
+     *	the usual UCSC genomes, but it needs to be able to function.
+     */
+    sprintf(query, "select * from defaultDb");
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+	db = defaultDbLoad(row);
+	}
+    if (db == NULL)
+	errAbort("Can't find genome \"%s\" in central database table defaultDb.\n", genome);
     }
 
 sqlFreeResult(&sr);
@@ -564,15 +575,12 @@ if(bed->blockCount == 0)
 else
     {
     int offSet = bed->chromStart;
-    struct dyString *currentSeq = NULL;
-    for(i=0;i<bed->blockCount; i++)
-	size += bed->blockSizes[i];
-    currentSeq = newDyString(size + 1);
+    struct dyString *currentSeq = newDyString(2048);
     hNibForChrom(bed->chrom, fileName);
     for(i=0; i<bed->blockCount; i++)
 	{
 	block = nibLoadPart(fileName, offSet+bed->chromStarts[i], bed->blockSizes[i]);
-	dyStringAppend(currentSeq, block->dna);
+	dyStringAppendN(currentSeq, block->dna, block->size);
 	dnaSeqFree(&block);
 	}
     AllocVar(bedSeq);
@@ -713,6 +721,30 @@ while ((hel = hashNext(&cookie)) != NULL)
     el = newSlName(hel->name);
     slAddHead(&list, el);
     }
+
+slReverse(&list);
+return list;
+}
+
+struct slName *hAllChromNamesDb(char *db)
+/* Get list of all chromosome names in database. */
+{
+struct hashCookie cookie;
+struct hashEl *hel;
+struct slName *list = NULL, *el;
+struct sqlConnection *conn;
+
+// get connection to db
+conn = hAllocConn();
+
+cookie = hashFirst(hdbChromInfoHashConn(NULL, conn));
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    el = newSlName(hel->name);
+    slAddHead(&list, el);
+    }
+
+hFreeConn(&conn);
 
 slReverse(&list);
 return list;

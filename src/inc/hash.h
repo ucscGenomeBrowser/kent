@@ -16,11 +16,12 @@ struct hashEl
 
 struct hash
     {
-    bits32 mask;
-    struct hashEl **table;
-    int powerOfTwoSize;
-    int size;
-    struct lm *lm;
+    struct hash *next;	/* Next in list. */
+    bits32 mask;	/* Mask hashCrc with this to get it to fit table. */
+    struct hashEl **table;	/* Hash buckets. */
+    int powerOfTwoSize;		/* Size of table as a power of two. */
+    int size;			/* Size of table. */
+    struct lm *lm;	/* Local memory pool. */
     };
 
 struct hashCookie

@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "pseudoGeneLink.h"
 
-static char const rcsid[] = "$Id: pseudoGeneLink.c,v 1.3 2003/09/06 19:46:39 baertsch Exp $";
+static char const rcsid[] = "$Id: pseudoGeneLink.c,v 1.4 2003/09/19 18:46:07 baertsch Exp $";
 
 void pseudoGeneLinkStaticLoad(char **row, struct pseudoGeneLink *ret)
 /* Load a row from pseudoGeneLink table into ret.  The contents of ret will
@@ -30,6 +30,11 @@ ret->score3 = sqlUnsigned(row[9]);
 ret->chainId = sqlUnsigned(row[10]);
 ret->strand = row[11];
 ret->polyA = sqlUnsigned(row[12]);
+ret->polyAstart = sqlUnsigned(row[13]);
+ret->pchrom = row[14];
+ret->pStart = sqlUnsigned(row[15]);
+ret->pEnd = sqlUnsigned(row[16]);
+ret->pStrand = row[17];
 }
 
 struct pseudoGeneLink *pseudoGeneLinkLoad(char **row)
@@ -54,6 +59,11 @@ ret->score3 = sqlUnsigned(row[9]);
 ret->chainId = sqlUnsigned(row[10]);
 ret->strand = cloneString(row[11]);
 ret->polyA = sqlUnsigned(row[12]);
+ret->polyAstart = sqlUnsigned(row[13]);
+ret->pchrom = cloneString(row[14]);
+ret->pStart = sqlUnsigned(row[15]);
+ret->pEnd = sqlUnsigned(row[16]);
+ret->pStrand = cloneString(row[17]);
 return ret;
 }
 
@@ -63,7 +73,7 @@ struct pseudoGeneLink *pseudoGeneLinkLoadAll(char *fileName)
 {
 struct pseudoGeneLink *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[13];
+char *row[18];
 
 while (lineFileRow(lf, row))
     {
@@ -81,7 +91,7 @@ struct pseudoGeneLink *pseudoGeneLinkLoadAllByChar(char *fileName, char chopper)
 {
 struct pseudoGeneLink *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[13];
+char *row[18];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -116,6 +126,11 @@ ret->score3 = sqlUnsignedComma(&s);
 ret->chainId = sqlUnsignedComma(&s);
 ret->strand = sqlStringComma(&s);
 ret->polyA = sqlUnsignedComma(&s);
+ret->polyAstart = sqlUnsignedComma(&s);
+ret->pchrom = sqlStringComma(&s);
+ret->pStart = sqlUnsignedComma(&s);
+ret->pEnd = sqlUnsignedComma(&s);
+ret->pStrand = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -133,6 +148,8 @@ freeMem(el->geneTable);
 freeMem(el->gene);
 freeMem(el->chrom);
 freeMem(el->strand);
+freeMem(el->pchrom);
+freeMem(el->pStrand);
 freez(pEl);
 }
 
@@ -190,6 +207,20 @@ fprintf(f, "%s", el->strand);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%u", el->polyA);
+fputc(sep,f);
+fprintf(f, "%u", el->polyAstart);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->pchrom);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->pStart);
+fputc(sep,f);
+fprintf(f, "%u", el->pEnd);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->pStrand);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 

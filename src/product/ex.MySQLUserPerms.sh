@@ -37,7 +37,7 @@ fi
 #	using an alternative hgcentral database.  These will be
 #	specified in the cgi-bin/hg.conf file
 #
-for DBVERSION in hg15 cb1 hgcentral hgcentraltest hgFixed
+for DBVERSION in cb1 hgcentral hgcentraltest hgFixed
 do
     echo "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, ALTER \
 	on ${DBVERSION}.* TO browser@localhost \
@@ -52,7 +52,7 @@ done
 #
 #	Read only access to genome databases for the browser CGI binaries
 #
-for DBVERSION in cb1 hg15 hgFixed
+for DBVERSION in cb1 hgFixed
 do
     echo "GRANT SELECT on ${DBVERSION}.* TO readonly@localhost \
 	IDENTIFIED BY 'access';" | \

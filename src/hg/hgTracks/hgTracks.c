@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.594 2003/09/16 04:31:15 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.605 2003/09/26 20:07:14 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -98,9 +98,6 @@ boolean chromosomeColorsMade = FALSE;
 int z;
 int maxCount;
 int bestColor;
-/*
-int maxChromShade = CHROMOSOME_SHADES - 1;
-*/
 int maxItemsInFullTrack = 250;  /* Maximum number of items displayed in full */
 int guidelineSpacing = 10;	/* Pixels between guidelines. */
 
@@ -1598,12 +1595,13 @@ tg->colorShades = shadesOfGray;
 return tg;
 }
 
-struct linkedFeatures *lfFromBed(struct bed *bed)
+struct linkedFeatures *lfFromBedExtra(struct bed *bed, int scoreMin, 
+	int scoreMax)
 /* Return a linked feature from a (full) bed. */
 {
 struct linkedFeatures *lf;
 struct simpleFeature *sf, *sfList = NULL;
-int grayIx = grayInRange(bed->score, 0, 1000);
+int grayIx = grayInRange(bed->score, scoreMin, scoreMax);
 int *starts = bed->chromStarts, start;
 int *sizes = bed->blockSizes;
 int blockCount = bed->blockCount, i;
@@ -1630,7 +1628,10 @@ lf->tallEnd = bed->thickEnd;
 return lf;
 }
 
-
+struct linkedFeatures *lfFromBed(struct bed *bed)
+{
+    return lfFromBedExtra(bed, 0, 1000);
+}
 
 void setTgDarkLightColors(struct track *tg, int r, int g, int b)
 /* Set track color to r,g,b.  Set altColor to a lighter version
@@ -1864,7 +1865,7 @@ struct track *userPslTg()
 {
 struct track *tg = linkedFeaturesTg();
 tg->mapName = "hgUserPsl";
-tg->visibility = tvPack;
+tg->visibility = tvFull;
 tg->longLabel = "Your Sequence from BLAT Search";
 tg->shortLabel = "BLAT Sequence";
 tg->loadItems = loadUserPsl;
@@ -2833,13 +2834,16 @@ int heightPer = tg->heightPer;
 int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
 int w;
+struct trackDb *tdb = tg->tdb;
+int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
+int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
 
 if (tg->itemColor != NULL)
     color = tg->itemColor(tg, bed, vg);
 else
     {
     if (tg->colorShades)
-	color = tg->colorShades[grayInRange(bed->score, 0, 1000)];
+	color = tg->colorShades[grayInRange(bed->score, scoreMin, scoreMax)];
     }
 w = x2-x1;
 if (w < 1)
@@ -5326,7 +5330,7 @@ if (withLeftLabels)
 	    sameString( track->mapName, "musHumL" ) ||
 	    sameString( track->mapName, "mm3Rn2L" ) ||		
 	    sameString( track->mapName, "hg15Mm3L" ) ||		
-        sameString( track->mapName, "mm3Hg15L" ) ||
+	    sameString( track->mapName, "mm3Hg15L" ) ||
 	    sameString( track->mapName, "regpotent" ) ||
 	    sameString( track->mapName, "HMRConservation" )  )
 	    {
@@ -5784,13 +5788,16 @@ char **row;
 int rowOffset;
 struct bed *bed;
 struct linkedFeatures *lfList = NULL, *lf;
+struct trackDb *tdb = tg->tdb;
+int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
+int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
 
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoadN(row+rowOffset, 8);
     bed8To12(bed);
-    lf = lfFromBed(bed);
+    lf = lfFromBedExtra(bed, scoreMin, scoreMax);
     slAddHead(&lfList, lf);
     bedFree(&bed);
     }
@@ -5810,12 +5817,15 @@ char **row;
 int rowOffset;
 struct bed *bed;
 struct linkedFeatures *lfList = NULL, *lf;
+struct trackDb *tdb = tg->tdb;
+int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
+int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
 
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoad12(row+rowOffset);
-    lf = lfFromBed(bed);
+    lf = lfFromBedExtra(bed, scoreMin, scoreMax);
     slAddHead(&lfList, lf);
     bedFree(&bed);
     }
@@ -5885,6 +5895,10 @@ if (sameWord(type, "bed"))
 	track->loadItems = loadGappedBed;
 	}
     }
+else if (sameWord(type, "wig"))
+    {
+    wigMethods(track, tdb, wordCount, words);
+    }
 else if (sameWord(type, "sample"))
     {
     sampleMethods(track, tdb, wordCount, words);
@@ -5916,6 +5930,10 @@ else if (sameWord(type, "axt"))
     if (wordCount < 2)
         errAbort("Expecting 2 words in axt track type for %s", tdb->tableName);
     axtMethods(track, words[1]);
+    }
+else if (sameWord(type, "expRatio"))
+    {
+    expRatioMethods(track);
     }
 }
 
@@ -5949,6 +5967,7 @@ if (tdb->useScore)
     else
 	track->colorShades = shadesOfGray;
     }
+track->tdb = tdb;
 fillInFromType(track, tdb);
 return track;
 }
@@ -6463,7 +6482,7 @@ registerTrackHandler("cghNci60", cghNci60Methods);
 registerTrackHandler("rosetta", rosettaMethods);
 registerTrackHandler("affy", affyMethods);
 registerTrackHandler("affyRatio", affyRatioMethods);
-registerTrackHandler("affyUcla", affyUclaMethods);
+// registerTrackHandler("affyUcla", affyUclaMethods);
 registerTrackHandler("ancientR", ancientRMethods );
 registerTrackHandler("altGraphX", altGraphXMethods );
 registerTrackHandler("altGraphXCon", altGraphXMethods );
@@ -6696,7 +6715,7 @@ if (!hideControls)
 	    hPrintf(" %s<BR> ", track->shortLabel);
 	    if (track->hasUi)
 		hPrintf("</A>");
-	    hTvDropDown(track->mapName, track->visibility, track->canPack);
+	    hTvDropDownClass(track->mapName, track->visibility, track->canPack, (track->visibility == tvHide)? "hiddenText" : "normalText" );
 	    controlGridEndCell(cg);
 	    }
 	/* now finish out the table */
@@ -6939,7 +6958,12 @@ if(sameString(position, ""))
     errAbort("Please go back and enter a coordinate range in the \"position\" field.<br>For example: chr22:20100000-20200000.\n");
 
 chromName = NULL;
-hgp = findGenomePos(position, &chromName, &winStart, &winEnd, cart);
+winStart = 0;
+if (NULL == (hgp = findGenomePos(position, &chromName, &winStart, &winEnd, cart)))
+    {
+    if (winStart == 0)	/* number of positions found */
+	hgp = findGenomePos(defaultPosition, &chromName, &winStart, &winEnd, cart);
+    }
 
 if (NULL != hgp && NULL != hgp->tableList && NULL != hgp->tableList->name)
     {
@@ -7153,6 +7177,6 @@ cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
 if (cgiVarExists("hgt.reset"))
     resetVars();
-cartHtmlShell("UCSC Genome Browser v34", doMiddle, hUserCookie(), excludeVars, NULL);
+cartHtmlShell("UCSC Genome Browser v36", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }

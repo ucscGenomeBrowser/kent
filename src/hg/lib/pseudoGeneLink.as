@@ -14,4 +14,9 @@ table pseudoGeneLink
     uint chainId;          "chain id of gene/pseudogene alignment"
     string strand;         "strand of gene"
     uint polyA;         "length of polyA"
+    uint polyAstart;    "start f polyA"
+    string pchrom;	"Chromosome name for pseudogene"
+    uint pStart;	"pseudogene alignment start position"
+    uint pEnd;         "pseudogene alignment end position"
+    string pStrand;         "strand of pseudoegene"
     )

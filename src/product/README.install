@@ -118,7 +118,17 @@ The example mysql user here is: "browser" with a password of: "genome"
 	
 	cp -Rp /mnt/cdrom/goldenPath ${WEBROOT}/html
 
-11.  Load the hgFixed database (a database common to all organisms)
+11.  Copy the gbdb data to /gbdb
+	The directory /gbdb is a location where the browser finds
+	large data files that do not conveniently fit into the
+	database.  This directory can be a symlink to a filesystem
+	other than root where data space is available.
+
+	mkdir <filesystem with space available>/gbdb
+	ln -s <filesystem with space available>/gbdb /gbdb
+	cp -Rp /mnt/cdrom/gdbd /
+
+12.  Load the hgFixed database (a database common to all organisms)
 	echo "create database hgFixed;" | mysql -pgenome
 	cd ${WEBROOT}/html/goldenPath/hgFixed/database
 	# Create tables in hgFixed:
@@ -142,7 +152,7 @@ The example mysql user here is: "browser" with a password of: "genome"
 	back to their original state.  This process consumes quite
 	a bit of time.
 
-12.  Load the example C. briggsae organism database.
+13.  Load the example C. briggsae organism database.
 
 	echo "create database cb1;" | mysql -pgenome
 	cd ${WEBROOT}/html/goldenPath/cbJul2002/database
@@ -166,18 +176,6 @@ The example mysql user here is: "browser" with a password of: "genome"
 	of the next file to proceed while previous files are gzipped
 	back to their original state.  This process consumes quite
 	a bit of time.
-
-13.  The browser code has some assumptions expecting the Human
-	database to be existing.  To make it work with just the
-	sample C. briggsae organism, we need to create an empty
-	hg15 database:
-
-	echo "create database hg15;" | mysql -pgenome
-
-	Please note, the Human genome will appear on the pulldown
-	menu of the gateway page but it will be nonfunctional.
-	You should select the C. briggsae genome to see the browser
-	function properly.
 
 14.  The browser should now appear at the URL:
 	http://localhost/

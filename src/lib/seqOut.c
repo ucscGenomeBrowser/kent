@@ -11,7 +11,7 @@
 #include "seqOut.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.15 2003/05/12 14:41:06 booch Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.16 2003/09/19 19:33:00 braney Exp $";
 
 struct cfm *cfmNew(int wordLen, int lineLen, 
 	boolean lineNumbers, boolean countDown, FILE *out, int numOff)
@@ -183,10 +183,9 @@ void bafWriteLine(struct baf *baf)
 {
 int i;
 int count = baf->cix;
-int div3 = (baf->isTrans ? 3 : 1);
-int nStart = baf->nLineStart/div3 + 1 + baf->nNumOff;
+int nStart = baf->nLineStart + 1 + baf->nNumOff;
 int hStart = baf->hLineStart + 1 + baf->hNumOff;
-int nEnd = baf->nCurPos/div3 + baf->nNumOff;
+int nEnd = baf->nCurPos + baf->nNumOff;
 int hEnd = baf->hCurPos + baf->hNumOff;
 int startDigits = maxDigits(nStart, hStart);
 int endDigits = maxDigits(nEnd, hEnd);

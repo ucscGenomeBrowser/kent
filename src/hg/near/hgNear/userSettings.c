@@ -11,7 +11,7 @@
 #include "jksql.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: userSettings.c,v 1.4 2003/09/12 08:06:15 kent Exp $";
+static char const rcsid[] = "$Id: userSettings.c,v 1.5 2003/09/25 08:29:35 kent Exp $";
 
 static char *catAndClone(char *a, char *b)
 /* Return concatenation of a and b in dynamic memory. */
@@ -208,7 +208,7 @@ printLabelList(us, list);
 hPrintf("</SELECT>");
 hPrintf("</TD><TD>");
 cgiMakeButton(us->formVar, "Load");
-hPrintf("<BR>");
+hPrintf(" ");
 cgiMakeButton(us->formVar, "Cancel");
 hPrintf("</TD></TR></TABLE>");
 

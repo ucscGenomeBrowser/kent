@@ -300,7 +300,7 @@ else
 bedFreeList(&bedList);
 }
 
-void lfsFromAffyUclaBed(struct track *tg)
+void lfsFromAffyGenericBed(struct track *tg)
 /* filters the bedList stored at tg->items
 into a linkedFeaturesSeries as determined by
 filter type */
@@ -316,7 +316,7 @@ if(tg->limitedVis == tvDense)
     }
 else 
     {
-    tg->items = msBedGroupByIndex(bedList, "hgFixed", "affyUclaExps", 0, NULL, -1);
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", tg->expTable, affyTissue, NULL, -1);
     slSort(&tg->items,lfsSortByName);
     }
 bedFreeList(&bedList);
@@ -697,7 +697,7 @@ else
     }
 }
 
-Color affyUclaColor(struct track *tg, void *item, struct vGfx *vg)
+Color expRatioColor(struct track *tg, void *item, struct vGfx *vg)
 /* Does the score->color conversion for affymetrix arrays using ratios,
  * if dense do an intensity color in blue based on score value otherwise do
  * red/green display from expScores */
@@ -712,7 +712,7 @@ if(tg->visibility == tvDense)
     }
 else
     {
-    return expressionColor(tg, item, vg, 1.0, 1.0);
+    return expressionColor(tg, item, vg, tg->expScale, tg->expScale);
     }
 }
 
@@ -870,18 +870,6 @@ tg->mapItem = lfsMapItemName;
 tg->mapsSelf = TRUE;
 }
 
-void affyUclaMethods(struct track *tg)
-/* set up special methods for affyUcla track and tracks with multiple
-   scores in general */
-{
-linkedFeaturesSeriesMethods(tg);
-tg->itemColor = affyUclaColor;
-tg->loadItems = loadMaScoresBed;
-tg->trackFilter = lfsFromAffyUclaBed;
-tg->mapItem = lfsMapItemName;
-tg->mapsSelf = TRUE;
-}
-
 void cghNci60Methods(struct track *tg)
 /* set up special methods for CGH NCI60 track */
 {
@@ -889,5 +877,21 @@ linkedFeaturesSeriesMethods(tg);
 tg->itemColor = cghNci60Color;
 tg->loadItems = loadMultScoresBed;
 tg->trackFilter = lfsFromCghNci60Bed;
+}
+
+void expRatioMethods(struct track *tg)
+/* Set up methods for expRatio type tracks in general. */
+{
+struct trackDb *tdb = tg->tdb;
+char *expScale = trackDbRequiredSetting(tdb, "expScale");
+char *expTable = trackDbRequiredSetting(tdb, "expTable");
+tg->expScale = atof(expScale);
+tg->expTable = expTable;
+linkedFeaturesSeriesMethods(tg);
+tg->itemColor = expRatioColor;
+tg->loadItems = loadMaScoresBed;
+tg->trackFilter = lfsFromAffyGenericBed;
+tg->mapItem = lfsMapItemName;
+tg->mapsSelf = TRUE;
 }
 

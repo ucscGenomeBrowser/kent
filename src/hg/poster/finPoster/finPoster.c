@@ -27,7 +27,7 @@
 #include "hCommon.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: finPoster.c,v 1.7 2003/09/17 17:18:39 kent Exp $";
+static char const rcsid[] = "$Id: finPoster.c,v 1.8 2003/09/20 00:50:04 kent Exp $";
 
 /* Which database to use */
 char *database = "hg16";
@@ -996,7 +996,7 @@ while (lineFileRow(lf, row))
         {
 	AllocVar(sd);
 	sd->start = lineFileNeedNum(lf, row, 1);
-	sd->end = lineFileNeedNum(lf, row, 1);
+	sd->end = lineFileNeedNum(lf, row, 2);
 	if (sd->start > sd->end)
 	    {
 	    int temp = sd->start;
