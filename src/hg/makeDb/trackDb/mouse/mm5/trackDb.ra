@@ -7,6 +7,15 @@ visibility dense
 altColor 150,50,50
 type bed 4 +
 
+track ECgene
+shortLabel ECgene Genes
+longLabel ECgene v1.2 Gene Predictions with Alt-Splicing
+group genes
+priority 41.5
+visibility hide
+color 155, 0, 125
+type genePred ECgenePep
+
 track multiz5way
 shortLabel Conservation
 longLabel Rat/Human/Dog/Chicken Multiz Alignments & PhyloHMM Cons

@@ -16,6 +16,15 @@ group map
 visibility dense
 type bed 3 +
 
+track ECgene
+shortLabel ECgene Genes
+longLabel ECgene v1.2 Gene Predictions with Alt-Splicing
+group genes
+priority 41.5
+visibility hide
+color 155, 0, 125
+type genePred ECgenePep
+
 track rnaGene
 shortLabel RNA Genes
 longLabel Non-coding RNA Genes (dark) and Pseudogenes (light) [Lifted from hg16]
