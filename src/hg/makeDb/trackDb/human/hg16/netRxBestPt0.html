@@ -1,62 +1,70 @@
 <H2>Description</H2>
-<P>This track shows the best human/chimp chain for 
+<P>
+This track shows the best human/chimp chain for 
 every part of the chimp genome.  It is useful for
 finding orthologous regions and for studying genome
-rearrangement.  In full mode the top level (level 1)
-chains are the largest, highest scoring chains that
-span this region.  In many cases there are gaps in the
-top level chain.  When possible, these are filled in by
-other chains that are displayed at level 2.  The gaps in 
-level 2 chains may be filled by level 3 chains and so
-forth.
-</P>
+rearrangement.  
 <P>
 In the graphical display, the boxes represent ungapped 
-alignments, while the lines represent gaps.  Clicking
-on a box brings up detailed information about the chain
-as a whole, while clicking on a line brings up information
+alignments, while the lines represent gaps.  
+In full display mode, the top-level (Level 1)
+chains are the largest, highest-scoring chains that
+span this region.  In many cases, gaps exist in the
+top-level chains.  When possible, these are filled in by
+other chains displayed at Level 2.  The gaps in 
+Level 2 chains may be filled by Level 3 chains and so
+forth.
+Clicking on a box displays detailed information about the chain
+as a whole, while clicking on a line shows information
 on the gap.  The detailed information is useful in determining
-the cause of the gap or, for lower level chains, the genomic
-rearrangement. </P> 
-<P> 
-Individual items in the display are categorized as one of four types
-(other than gap):</P>
-<P><UL>
-<LI><B>Top</B> -  the best, longest match. Displayed on level 1.
-<LI><B>Syn</B> - lineups on the same chromosome as the gap in the level
+the cause of the gap or, for lower-level chains, the genomic
+rearrangement. 
+<P>
+Individual track features are categorized as one of four types
+(other than gap):
+<UL>
+<LI><B>Top</B> - the best, longest match. Displayed on Level 1.
+<LI><B>Syn</B> - aligns to the same chromosome as the gap in the level
     above it.
-<LI><B>Inv</B> -   a lineup on the same chromosome as the gap above it, but in the
+<LI><B>Inv</B> - aligns to the same chromosome as the gap above it, but in the
     opposite orientation.
-<LI><B>NonSyn</B> - a match to a chromosome different than the gap in the level above.
+<LI><B>NonSyn</B> - matches a chromosome different from the gap in the level 
+above it.
 </UL></P>
-
+<P>
+The chimp sequence used in this track is from the 13 Nov. 2003 Arachne assembly.</P>
 
 <H2>Methods</H2>
-<P>First, chains are derived from blastz alignments as
-described in the details pages of the chain tracks
-and sorted so that the highest scoring chain in the
-genome is first. The program chainNet then places
-chains one at a time, trimming them as necessary to
-fit into section that is not already covered by 
-a higher scoring chain.  During this process, a
-natural hierarchy emerges where chains that fill gaps
+<P>First, chains were derived from blastz alignments as
+described in the details pages of the chain tracks.
+These chains were sorted such that the highest scoring chain in the
+genome is first. The program chainNet was then used to place
+each chain one at a time, trimming it as necessary to
+fit into a section not already covered by 
+a higher-scoring chain. During this process, a
+natural hierarchy emerges in which chains that fill gaps
 in a previous chain are considered underneath the
-previous chain.   The program netSyntenic fills in
-information about the relationship between upper
-and lower level chains, including whether a lower level
-chain is syntenic with the higher level chain,  whether
-it is inverted with respect to the higher level chain,
+previous chain. The program netSyntenic was used to fill in
+information about the relationship between upper-
+and lower-level chains, including whether a lower-level
+chain is syntenic with the higher-level chain,  whether
+it is inverted with respect to the higher-level chain,
 and so forth.
 </P>
 
 <H2>Credits</H2>
-<P>The chainNet, netSyntenic, and netClass programs were
+The chimp sequence used in this track was obtained from the 13 Nov. 2003 
+Arachne assembly. We'd like to thank the National Human Genome Research Institute 
+(NHGRI), the Eli & Edythe L. Broad Institute at MIT/Harvard, and Washington University 
+School of Medicine for providing this sequence.</P>
+<P>
+The chainNet, netSyntenic, and netClass programs were
 developed at the University of California
 at Santa Cruz by Jim Kent.</P>
-
-<P>Lineage-specific repeats were identified by Arian Smit and his
+<P>
+Lineage-specific repeats were identified by Arian Smit and his
 program <A HREF="http://repeatmasker.genome.washington.edu/cgi-bin/RepeatMasker">RepeatMasker</A>.</P>
-
-<P>The browser display and database storage of the nets were made
+<P>
+The browser display and database storage of the nets were made
 by Robert Baertsch and Jim Kent.</P>
 
