@@ -105,7 +105,9 @@ boolean understand = FALSE;
 char *type;
 
 struct sqlConnection *conn = hAllocConn();
-tdb = hTrackInfo(conn, track);
+tdb = hMaybeTrackInfo(conn, track);
+if (tdb == NULL)
+    return FALSE;
 type = tdb->type;
 understand = (startsWith("psl ", type) || startsWith("bed ", type) ||
 	sameString("genePred", type) || startsWith("genePred ", type) ||
@@ -244,9 +246,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 		w = blockSizes[i];
 		s = chromSize - tStarts[i] - w;
 		e = s + w;
-		setRangePlusExtra(&fbList, NULL, chrom, s, e, '-', 
-			(i == 0 ? 0 : extraSize), 
-			(i == blockCount-1 ?  0 : extraSize), winStart, winEnd);
+		setRangePlusExtra(&fbList, NULL, chrom, s, e, '-', extraSize, 
+				  extraSize, winStart, winEnd);
 		}
 	    }
 	else
@@ -255,9 +256,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 		{
 		s = tStarts[i];
 		e = s + blockSizes[i];
-		setRangePlusExtra(&fbList, NULL, chrom, s, e, '+', 
-			(i == 0 ? 0 : extraSize), 
-			(i == blockCount-1 ? 0 : extraSize), winStart, winEnd);
+		setRangePlusExtra(&fbList, NULL, chrom, s, e, '+', extraSize, 
+				  extraSize, winStart, winEnd);
 		}
 	    }
 	}
@@ -275,11 +275,16 @@ struct bed *bed;
 char **row;
 struct featureBits *fbList = NULL;
 char strand = '?';
-boolean doUp, doEnd;
-int promoSize, endSize;
+boolean doUp, doEnd, doExon = FALSE, doIntron = FALSE;
+int promoSize, endSize, extraSize;
+int i, count, *starts, *sizes;
 
 doUp = upstreamQualifier(qualifier, extra, &promoSize);
 doEnd = endQualifier(qualifier, extra, &endSize);
+if (doExon = exonQualifier(qualifier, extra, &extraSize))
+    ;
+else if (doIntron = intronQualifier(qualifier, extra, &extraSize))
+    ;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     int s, e; 
@@ -298,6 +303,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    e = bed->chromStart;
 	    s = e - promoSize;
 	    }
+	fbAddFeature(&fbList, bed->name, bed->chrom, s, e - s, strand,
+		     winStart, winEnd);
 	}
     else if (doEnd)
         {
@@ -311,14 +318,49 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    s = bed->chromEnd;
 	    e = s + endSize;
 	    }
+	fbAddFeature(&fbList, bed->name, bed->chrom, s, e - s, strand,
+		     winStart, winEnd);
+	}
+    else if (doIntron)
+        {
+	if (fields >= 12)
+	    {
+	    count  = bed->blockCount;
+	    starts = bed->chromStarts;
+	    sizes  = bed->blockSizes;
+	    for (i=1; i<count; ++i)
+	      {
+		s = bed->chromStart + starts[i-1] + sizes[i-1];
+		e = bed->chromStart + starts[i];
+		setRangePlusExtra(&fbList, bed->name, bed->chrom, s, e, strand,
+				  extraSize, extraSize, winStart, winEnd);
+	      }
+	    }
+	/* N/A if fields < 12.... but don't crash, just return empty. */
 	}
     else
         {
-	s = bed->chromStart;
-	e = bed->chromEnd;
+	if (fields >= 12)
+	    {
+	    count  = bed->blockCount;
+	    starts = bed->chromStarts;
+	    sizes  = bed->blockSizes;
+	    for (i=0; i<count; ++i)
+	      {
+		s = bed->chromStart + starts[i];
+		e = bed->chromStart + starts[i] + sizes[i];
+		setRangePlusExtra(&fbList, bed->name, bed->chrom, s, e, strand,
+				  extraSize, extraSize, winStart, winEnd);
+	      }
+	    }
+	else
+  	    {
+	    s = bed->chromStart;
+	    e = bed->chromEnd;
+	    setRangePlusExtra(&fbList, bed->name, bed->chrom, s, e, strand,
+			      extraSize, extraSize, winStart, winEnd);
+	    }
 	}
-    fbAddFeature(&fbList, NULL, bed->chrom, 
-	s, e - s, strand, winStart, winEnd);
     bedFree(&bed);
     }
 slReverse(&fbList);
@@ -418,7 +460,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    s = ends[i-1];
 	    e = starts[i];
-	    setRangePlusExtra(&fbList, NULL, gp->chrom, s, e, gp->strand[0],
+	    setRangePlusExtra(&fbList, gp->name, gp->chrom, s, e, gp->strand[0],
 		extraSize, extraSize, winStart, winEnd);
 	    }
 	}
@@ -458,9 +500,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 		    if (s < gp->cdsEnd) s = gp->cdsEnd;
 		    }
 		}
-	    setRangePlusExtra(&fbList, NULL, gp->chrom, s, e, gp->strand[0],
-	    	(i == 0 ? 0 : extraSize), 
-		(i == count-1 ? 0 : extraSize), winStart, winEnd);
+	    setRangePlusExtra(&fbList, gp->name, gp->chrom, s, e, gp->strand[0],
+			      extraSize, extraSize, winStart, winEnd);
 	    }
 	}
     genePredFree(&gp);
