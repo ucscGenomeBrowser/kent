@@ -136,6 +136,14 @@ altColor 0,0,160
 visibility hide
 type sample 9
 
+track mcs_b
+shortLabel MCS (Binomial)
+longLabel Binomial-based MCSs
+priority 399
+visibility hide
+color 0,60,120
+type bed 3 .
+
 track binomialCons
 shortLabel Binomial
 longlabel Binomial Conservation Scores
@@ -143,6 +151,7 @@ priority 400
 altColor 160,0,0
 visibility hide
 type sample 9
+
 
 track binomialCons2
 shortLabel Conservation Score
@@ -152,13 +161,13 @@ altColor 160,0,0
 visibility hide
 type sample 9
 
-track footPrinter
-shortLabel FootPrinter
-longlabel FootPrinter Conservation Score
-priority 420
-altColor 0,160,0
+track mcs_p
+shortLabel MCS (Parsimony P-Value)
+longLabel Parsimony P_Value based MCSs
+priority 429
 visibility hide
-type sample 9
+color 0,60,120
+type bed 3 .
 
 track parsPValues
 shortLabel parsPValues
@@ -167,6 +176,14 @@ priority 430
 altColor 0,160,0
 visibility full
 type sample 9
+
+track mcs_u
+shortLabel MCS (Uniform)
+longLabel Uniform P-Value based MCSs
+priority 434
+visibility hide
+color 0,120,0
+type bed 3 .
 
 track uniformPValues
 shortLabel uniformPValues
@@ -340,27 +357,12 @@ altColor 255,240,200
 spectrum on
 type psl xeno
 
-track mcs_u
-shortLabel MCS (Uniform)
-longLabel Uniform P-Value based MCSs
-priority 500
-visibility hide
-color 0,120,0
-type bed 3 .
 
-track mcs_b
-shortLabel MCS (Binomial)
-longLabel Binomial-based MCSs
-priority 510
-visibility hide
-color 0,60,120
-type bed 3 .
 
-track mcs_p
-shortLabel MCS (Parsimony P-Value)
-longLabel Parsimony P_Value based MCSs
-priority 520
+track footPrinter
+shortLabel FootPrinter
+longlabel FootPrinter Conservation Score
+priority 530
+altColor 0,160,0
 visibility hide
-color 0,60,120
-type bed 3 .
-
+type sample 9
