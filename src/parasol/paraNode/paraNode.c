@@ -197,17 +197,21 @@ else
 }
 
 void changeUid(char *name, char **retDir)
-/* Try and change process user (and groups) id to that of name. */
+/* Try and change process user (and groups) id to that of name. if 
+ * we are root.  Get home dir no matter what. */
 {
 struct passwd *pw = getpwnam(name);
 if (pw == NULL)
     errnoAbort("can't obtain user passwd entry for user %s", name);
-if (initgroups(name, pw->pw_gid) < 0)
-    errnoAbort("initgroups failed");
-if (setgid(pw->pw_gid) < 0)
-    errnoAbort("setgid failed");
-if (setuid(pw->pw_uid) < 0)
-    errnoAbort("setuid failed");
+if (geteuid() == 0)
+    {
+    if (initgroups(name, pw->pw_gid) < 0)
+        errnoAbort("initgroups failed");
+    if (setgid(pw->pw_gid) < 0)
+        errnoAbort("setgid failed");
+    if (setuid(pw->pw_uid) < 0)
+        errnoAbort("setuid failed");
+    }
 if (retDir != NULL)
     *retDir = pw->pw_dir;
 }
@@ -297,7 +301,7 @@ if ((grandChildId = forkOrDie()) == 0)
     int newStdin, newStdout, newStderr;
     char *homeDir = "";
 
-    /* Change to given user and dir. */
+    /* Change to given user (if root) and dir */
     changeUid(user, &homeDir);
     if (chdir(dir) < 0)
         errnoAbort("can't chdir to %s", dir);
