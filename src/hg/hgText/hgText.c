@@ -35,7 +35,7 @@
 #include "hgText.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.159 2004/10/12 21:06:06 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.160 2004/11/19 16:08:36 kent Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -4987,6 +4987,7 @@ char trash[32];
 char *table2  = getTable2Name();
 char *db2 = getTable2Db();
 
+hgBotDelay();
 cart = theCart;
 table = getTableName();
 db = getTableDb();
@@ -5061,7 +5062,6 @@ else
 	doOutputOptions();
     else if (existsAndEqual("phase", getOutputPhase))
 	{
-	hgBotDelay();
 	if (existsAndEqual("outputType", allFieldsPhase) ||
 	    existsAndEqual("outputType", oldAllFieldsPhase))
 	    doTabSeparated(TRUE);
