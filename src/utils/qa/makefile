@@ -33,4 +33,3 @@ install:
 	cp -p --remove-destination updateTimesDb.csh       ${SCRIPTS}
 	cp -p --remove-destination gc-stats.pl             ${SCRIPTS}
 	cp -p --remove-destination getJoinerKeyErrors.pl   ${SCRIPTS}
-	cp -p --remove-destination gene-check              ${SCRIPTS}
