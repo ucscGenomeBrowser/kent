@@ -37,12 +37,19 @@ struct asBlock
     bool hit;			/* This hit? Used by system internally. */
     };
 
+struct asBlockRef
+/* Reference to a block. */
+    {
+    struct asBlockRef *next;	/* Next in list. */
+    struct asBlock *block;	/* Block reference. */
+    };
+
 struct asChain
 /* A chain of blocks.  Used for output of asStitch. */
     {
-    struct asChain *next;	/* Next in list. */
-    struct asBlock *blockList;	/* List of blocks. */
-    int score;			/* Total score for chain. */
+    struct asChain *next;	  /* Next in list. */
+    struct asBlockRef *blockList; /* List of blocks. */
+    int score;			  /* Total score for chain. */
     };
 
 struct asBranch
@@ -112,6 +119,23 @@ const struct asBlock *a = *((struct asBlock **)va);
 const struct asBlock *b = *((struct asBlock **)vb);
 return a->tStart - b->tStart;
 }
+
+int asBlockCmpTotal(const void *va, const void *vb)
+/* Compare to sort based on total score. */
+{
+const struct asBlock *a = *((struct asBlock **)va);
+const struct asBlock *b = *((struct asBlock **)vb);
+return b->totalScore - a->totalScore;
+}
+
+int asChainCmpScore(const void *va, const void *vb)
+/* Compare to sort based on total score. */
+{
+const struct asChain *a = *((struct asChain **)va);
+const struct asChain *b = *((struct asChain **)vb);
+return b->score - a->score;
+}
+
 
 int medianVal(struct dlList *list, int medianIx, int dim)
 /* Return value of median block in list on given dimension 
@@ -361,14 +385,13 @@ if (branch->block == NULL)
 }
 
 
-struct asChain *asChainFind(struct asTree *tree, struct asBlock *blockList)
+void connectBlocks(struct asTree *tree, struct asBlock *blockList)
 /* Find highest scoring chain in tree. */
 {
 static struct predScore noBest;
 struct asBlock *block;
 struct asBlock *bestBlock = NULL;
 int bestScore = 0;
-struct asChain *chain;
 
 for (block = blockList; block != NULL; block = block->next)
     {
@@ -385,18 +408,6 @@ for (block = blockList; block != NULL; block = block->next)
 	bestBlock = block;
 	}
     }
-AllocVar(chain);
-chain->score = bestScore;
-for (block = bestBlock; ; )
-    {
-    struct asBranch *pred;
-    slAddHead(&chain->blockList, block);
-    pred = block->bestPred;
-    if (pred == NULL)
-        break;
-    block = pred->block;
-    }
-return chain;
 }
 
 struct seqPair
@@ -407,6 +418,22 @@ struct seqPair
     struct axt *axtList; /* List of alignments. */
     };
 
+int scoreBlocks(struct asBlockRef *refList)
+/* Score list of blocks including gaps between blocks. */
+{
+struct asBlock *block, *lastBlock = NULL;
+struct asBlockRef *ref;
+int score = 0;
+for (ref = refList; ref != NULL; ref = ref->next)
+    {
+    block = ref->block;
+    score += block->score;
+    if (lastBlock != NULL)
+	score -= gap(lastBlock, block);
+    lastBlock = block;
+    }
+return score;
+}
 
 void chainPair(struct seqPair *sp, FILE *f)
 /* Make chains for all alignments in sp. */
@@ -416,7 +443,7 @@ struct asNode *n, *nList = NULL;
 struct asTree *tree;
 struct axt *axt, *first, *last;
 struct asBlock *blockList = NULL, *block;
-struct asChain *chain;
+struct asChain *chainList = NULL, *chain;
 
 /* Make block list */
 for (axt = sp->axtList; axt != NULL; axt = axt->next)
@@ -439,24 +466,70 @@ tree = asTreeMake(blockList);
 dt = clock1000() - startTime;
 uglyf("Made tree in %5.3f seconds\n", dt*0.001);
 
-/* Get longest chain from tree and print it out. */
-chain = asChainFind(tree, blockList);
-if (chain != NULL)
+/* Connect up blocks to their best predecessors. */
+startTime = clock1000();
+connectBlocks(tree, blockList);
+dt = clock1000() - startTime;
+uglyf("Traversed tree in %5.3f seconds\n", dt*0.001);
+
+/* Create list of all chains. */
+startTime = clock1000();
+slSort(&blockList, asBlockCmpTotal);
+for (block = blockList; block != NULL; block = block->next)
+    block->hit = FALSE;
+for (block = blockList; block != NULL; block = block->next)
     {
-    struct asBlock *first = chain->blockList;
-    struct asBlock *last = slLastEl(first);
+    if (!block->hit)
+        {
+	struct asBlock *b;
+	AllocVar(chain);
+	slAddHead(&chainList, chain);
+	for (b = block; ; )
+	    {
+	    struct asBlockRef *ref;
+	    AllocVar(ref);
+	    ref->block = b;
+	    b->hit = TRUE;
+	    slAddHead(&chain->blockList, ref);
+	    if (b->bestPred == NULL)
+	         break;
+	    b = b->bestPred->block;
+	    if (b->hit)
+	        break;
+	    }
+	}
+    }
+dt = clock1000() - startTime;
+uglyf("Made chains in %5.3f seconds\n", dt*0.001);
+
+/* Score chains and sort. */
+startTime = clock1000();
+for (chain = chainList; chain != NULL; chain = chain->next)
+    chain->score = scoreBlocks(chain->blockList);
+slSort(&chainList, asChainCmpScore);
+dt = clock1000() - startTime;
+uglyf("Scored and sorted chains in %5.3f seconds\n", dt*0.001);
+
+/* Dump chains to file. */
+for (chain = chainList; chain != NULL; chain = chain->next)
+    {
+    struct asBlockRef *first = chain->blockList;
+    struct asBlockRef *last = slLastEl(first);
+    struct asBlockRef *ref;
     fprintf(f, "%s Chain %d, score %d, %d %d, %d %d:\n", 
 	sp->name, slCount(chain->blockList), chain->score,
-	first->qStart, last->qEnd, first->tStart, last->tEnd);
-    for (block = chain->blockList; block != NULL; block = block->next)
+	first->block->qStart, last->block->qEnd, first->block->tStart, last->block->tEnd);
+    for (ref = chain->blockList; ref != NULL; ref = ref->next)
         {
-	struct axt *axt = block->ali;
+	struct axt *axt = ref->block->ali;
 	fprintf(f, " %s%c%s %d %d, %d %d, %d\n",
 		axt->qName, axt->qStrand, axt->tName, 
 		axt->qStart, axt->qEnd, axt->tStart, axt->tEnd,
 		axt->score);
 	}
+    fprintf(f, "\n");
     }
+uglyf("\n");
 asTreeFree(&tree);
 slFreeList(&blockList);
 }
