@@ -159,7 +159,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.829 2005/02/05 22:32:19 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.830 2005/02/07 22:07:34 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -172,7 +172,6 @@ char *scientificName;	/* Scientific name of organism. */
 
 char *protDbName;	/* Name of proteome database */
 struct sqlConnection *protDbConn; /* connection to proteins database */
-struct sqlConnection *swissProtConn; /* connection to proteins database */
 struct hash *trackHash;	/* A hash of all tracks - trackDb valued */
 
 void printLines(FILE *f, char *s, int lineSize);
@@ -259,7 +258,7 @@ static void printSwissProtProteinUrl(FILE *f, char *accession)
 {
 char *spAcc;
 /* make sure accession number is used (not display ID) when linking to Swiss-Prot */
-spAcc = spFindAcc(swissProtConn, accession);
+spAcc = uniProtFindPrimAcc(accession);
 fprintf(f, "\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\"", spAcc);
 }
 
@@ -13868,7 +13867,7 @@ if (!isDm && (prot != NULL) && !sameString("(null)", prot))
     printf("<B>UniProt:</B> ");
     printf("<A HREF=");
     printSwissProtProteinUrl(stdout, prot);
-    printf(" TARGET=_blank>%s</A></B><BR>\n", spFindAcc(swissProtConn, prot));
+    printf(" TARGET=_blank>%s</A></B><BR>\n", uniProtFindPrimAcc(prot));
     }
 printf("<B>Protein length:</B> %d<BR>\n",pslList->qSize);
 
@@ -14324,7 +14323,6 @@ hSetDb(database);
 
 protDbName = hPdbFromGdb(database);
 protDbConn = sqlConnect(protDbName);
-swissProtConn = sqlConnect("swissProt");
 
 seqName = cartString(cart, "c");
 winStart = cartIntExp(cart, "l");
