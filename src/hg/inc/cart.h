@@ -157,6 +157,12 @@ void cartSaveSession(struct cart *cart);
 void cartDump(struct cart *cart);
 /* Dump contents of cart. */
 
+void cartDumpList(struct hashEl *elList);
+/* Dump list of cart variables. */
+
+void cartDumpPrefix(struct cart *cart, char *prefix);
+/* Dump all cart variables with prefix */
+
 struct hashEl *cartFindPrefix(struct cart *cart, char *prefix);
 /* Return list of name/val pairs from cart where name starts with 
  * prefix.  Free when done with hashElFreeList. */

@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.37 2004/03/03 16:22:29 kent Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.38 2004/04/19 20:45:45 kate Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -537,14 +537,31 @@ static void cartDumpItem(struct hashEl *hel)
 printf("%s %s\n", hel->name, (char*)(hel->val));
 }
 
-void cartDump(struct cart *cart)
-/* Dump contents of cart. */
+void cartDumpList(struct hashEl *elList)
+/* Dump list of cart variables. */
 {
-struct hashEl *el, *elList = hashElListHash(cart->hash);
+struct hashEl *el;
+
+if (elList == NULL)
+    return;
 slSort(&elList, hashElCmp);
 for (el = elList; el != NULL; el = el->next)
     cartDumpItem(el);
-hashElFreeList(&el);
+hashElFreeList(&elList);
+}
+
+void cartDump(struct cart *cart)
+/* Dump contents of cart. */
+{
+struct hashEl *elList = hashElListHash(cart->hash);
+cartDumpList(elList);
+}
+
+void cartDumpPrefix(struct cart *cart, char *prefix)
+/* Dump all cart variables with prefix */
+{
+struct hashEl *elList = cartFindPrefix(cart, prefix);
+cartDumpList(elList);
 }
 
 char *cartFindFirstLike(struct cart *cart, char *wildCard)
