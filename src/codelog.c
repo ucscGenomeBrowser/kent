@@ -766,5 +766,8 @@
       testing.
 452 - Blat v. 20. Genome Browser v. 17 with relatively minor updates. 
       Parasol v. 6 (UDP + threads). 
-453 - Blat v. 21 (-fine option).  Gene Browser v. 17 with updates,
+453 - Blat v. 21 (-fine option).  Genome Browser v. 17 with updates,
       but still considered alpha.
+454 - Blat v. 24.x2.  Genome Browser v. 42.  Family Browser, hgGene, 
+      and a lot of stuff.  Mostly people are accessing source code
+      via CVS now.
