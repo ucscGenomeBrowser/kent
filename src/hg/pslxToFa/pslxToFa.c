@@ -51,8 +51,12 @@ while ((psl = pslNext(in)) != NULL)
 	}
     if (liftTarget != NULL)
 	{
-	fprintf(liftTarget,"%d\t%s/%s_%d_%d\t%d\t%s\t%d\n",
-		psl->tStarts[0], &psl->tName[3], psl->qName,0,psl->blockCount, strlen(psl->qSequence[0]), psl->tName, psl->tSize);
+	if (psl->strand[1] == '-')
+	    fprintf(liftTarget,"%d\t%s/%s_%d_%d\t%d\t%s\t%d\t%c\n",
+		    psl->tSize - psl->tStarts[0], &psl->tName[3], psl->qName,0,psl->blockCount, 3*strlen(psl->qSequence[0]), psl->tName, psl->tSize, psl->strand[1]);
+	else
+	    fprintf(liftTarget,"%d\t%s/%s_%d_%d\t%d\t%s\t%d\t%c\n",
+		    psl->tStarts[0], &psl->tName[3], psl->qName,0,psl->blockCount, 3*strlen(psl->qSequence[0]), psl->tName, psl->tSize, psl->strand[1]);
 	}
     fprintf(out,">%s_%d_%d\n%s\n",psl->qName, 0, psl->blockCount, psl->qSequence[0]);
 
@@ -60,8 +64,12 @@ while ((psl = pslNext(in)) != NULL)
 	{
 	if (liftTarget != NULL)
 	    {
-	    fprintf(liftTarget,"%d\t%s/%s_%d_%d\t%d\t%s\t%d\n",
-		psl->tStarts[ii], &psl->tName[3], psl->qName,ii,psl->blockCount, strlen(psl->qSequence[ii]), psl->tName, psl->tSize);
+	if (psl->strand[1] == '-')
+	    fprintf(liftTarget,"%d\t%s/%s_%d_%d\t%d\t%s\t%d\t%c\n",
+		psl->tSize - psl->tStarts[ii], &psl->tName[3], psl->qName,ii,psl->blockCount, 3*strlen(psl->qSequence[ii]), psl->tName, psl->tSize, psl->strand[1]);
+	else
+	    fprintf(liftTarget,"%d\t%s/%s_%d_%d\t%d\t%s\t%d\t%c\n",
+		psl->tStarts[ii], &psl->tName[3], psl->qName,ii,psl->blockCount, 3*strlen(psl->qSequence[ii]), psl->tName, psl->tSize, psl->strand[1]);
 	    }
 	if (liftQuery != NULL)
 	    {
