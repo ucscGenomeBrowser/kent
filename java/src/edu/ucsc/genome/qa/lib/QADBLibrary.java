@@ -422,7 +422,7 @@ public class QADBLibrary {
   *  @param  column   The column to retrieve.
   *  @param  debug    Runs debugging if set to true.
   *
-  *  @return       List of all elemetns fo the column.
+  *  @return       List of all elements of the column.
   */
   public static ArrayList getColumn(HGDBInfo dbinfo, String table, 
                              String column, boolean debug) {
@@ -461,6 +461,56 @@ public class QADBLibrary {
     return (dblist);
 
   }
+
+
+
+ /** 
+  *  Gets entire column from a table.
+  * 
+  *  @param  dbinfo   The machine, database, user and password.
+  *  @param  table    The table to query.
+  *  @param  column   The column to retrieve.
+  *  @param  condition   The condition to match.
+  *
+  *  @return       List of all elements of the column.
+  */
+  public static ArrayList getColumnMatchingCondition(HGDBInfo dbinfo, 
+                                                     String table, 
+                                                     String column, 
+                                                     String condition) {
+
+    String id;
+    ArrayList dblist = new ArrayList();
+    ResultSet rs;
+    
+    String dbURL = jdbcURL(dbinfo);
+
+    try {
+      Connection con = DriverManager.getConnection(dbURL);
+      Statement stmt = con.createStatement();
+
+      String query;
+
+      query = "SELECT " + column + " FROM " + table + " where " + condition;
+
+      rs = stmt.executeQuery(query);
+    
+      while (rs.next()) {
+        id = rs.getString(column);
+        dblist.add(id);
+      }
+
+      stmt.close();
+      con.close();
+    
+    } catch (Exception e) {
+      System.err.println(e.getMessage());
+    }
+
+    return (dblist);
+
+  }
+
 
   // check JDBC driver
  /**
