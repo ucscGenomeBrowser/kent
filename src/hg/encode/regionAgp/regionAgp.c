@@ -12,7 +12,7 @@
 #include "agpGap.h"
 #include "contigAcc.h"
 
-static char const rcsid[] = "$Id: regionAgp.c,v 1.11 2004/10/13 04:43:31 kate Exp $";
+static char const rcsid[] = "$Id: regionAgp.c,v 1.12 2004/10/19 20:07:13 kate Exp $";
 
 #define DIR_OPTION              "dir"
 #define NAME_PREFIX_OPTION      "namePrefix"
@@ -57,6 +57,8 @@ struct hash *contigAccHash = newHash(0);
 struct contigAcc *contigAcc, *contigAccList;
 
 contigAccList = contigAccLoadAll(contigFile);
+if (contigAccList == NULL)
+    return NULL;
 for (contigAcc = contigAccList; contigAcc->next; contigAcc = contigAcc->next)
     hashAddUnique(contigAccHash, contigAcc->contig, contigAcc->acc);
 return contigAccHash;
@@ -94,6 +96,8 @@ if (contigFile != NULL)
     {
     /* read in contig to accession mapping */
     contigAccHash = contigAccLoadToHash(contigFile);
+    if (contigAccHash == NULL)
+        errAbort("Empty contig file: %s", contigFile);
     }
 
 /* process BED lines, emitting an AGP file */
@@ -125,7 +129,7 @@ for (pos = posList; pos != NULL; pos = pos->next)
             /* fragment */
             int chromStart, chromEnd;
             struct agpFrag frag, *agpFrag = (struct agpFrag *)agp->entry;
-            int fragLen = 0;
+            int offset = 0, fragLen = 0;
 
             /* determine if this AGP entry intersects the range */
             if (pos->chromEnd < agpFrag->chromStart ||
@@ -134,31 +138,28 @@ for (pos = posList; pos != NULL; pos = pos->next)
 
             chromStart = max(pos->chromStart, agpFrag->chromStart);
             chromEnd = min(pos->chromEnd, agpFrag->chromEnd);
+            fragLen = chromEnd - chromStart + 1;
 
             /* populate the fragment */
             frag.chrom = regionName;
             frag.chromStart = start - 1;  // agpFragOutput adds 1
-            frag.chromEnd = start + chromEnd - chromStart;
-            fragLen = frag.chromEnd - frag.chromStart;
-            if (agpFrag->strand[0] == '-' && agpFrag->chromStart < pos->chromStart)
+            frag.chromEnd = frag.chromStart + fragLen;
+            verbose(3, "pos start=%d, agp start = %d\n", 
+                    pos->chromStart, agpFrag->chromStart);
+            offset = pos->chromStart - agpFrag->chromStart;
+            offset = max(0, offset);
+            verbose(3, "offset=%d\n", offset);
+            if (agpFrag->strand[0] == '-')
                 {
-                /* first contig */
-                frag.fragStart = agpFrag->fragStart - 1;
-                frag.fragEnd = agpFrag->fragStart + fragLen - 1;
-                }
-            else if (agpFrag->strand[0] == '-' && agpFrag->chromEnd > pos->chromEnd)
-                {
-                /* last contig */
-                frag.fragStart = agpFrag->fragEnd - fragLen;
-                frag.fragEnd = agpFrag->fragEnd;
+                frag.fragEnd = agpFrag->fragEnd - offset;
+                frag.fragStart = frag.fragEnd - fragLen;
+                verbose(3, "fragStart = %d, fragEnd = %d\n",
+                                frag.fragStart, frag.fragEnd);
                 }
             else
                 {
-                /* in the middle, or else on the plus strand */
-                frag.fragStart = agpFrag->fragStart +
-                                chromStart - agpFrag->chromStart - 1;
-                frag.fragEnd = agpFrag->fragEnd -
-                                (agpFrag->chromEnd - chromEnd);
+                frag.fragStart = agpFrag->fragStart + offset - 1;
+                frag.fragEnd = frag.fragStart + fragLen;
                 }
             start = frag.chromEnd + 1;
             frag.ix = seqNum++;;
