@@ -13,9 +13,10 @@
 #include "ra.h"
 #include "spDb.h"
 #include "genePred.h"
+#include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.20 2003/10/28 20:19:57 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.21 2003/10/30 08:33:16 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -201,7 +202,7 @@ hPrintf("</TD></TR></TABLE>\n");
 void hPrintLinkCellStart()
 /* Print link cell start in our colors. */
 {
-hPrintf("<TD BGCOLOR=\"#D9F8E4\">");
+hPrintf("<TD BGCOLOR=\"#"HG_COL_TABLE"\">");
 }
 
 void hPrintLinkCellEnd()
@@ -221,8 +222,8 @@ hPrintLinkCellEnd();
 void hPrintWideLabelCell(char *label, int colSpan)
 /* Print label cell over multiple columns in our colors. */
 {
-hPrintf("<TD BGCOLOR=\"#1616D1\"");
-// hPrintf("<TD BGCOLOR=\"#D9F8E4\"");
+hPrintf("<TD BGCOLOR=\"#"HG_COL_TABLE_LABEL"\"");
+// hPrintf("<TD BGCOLOR=\"#"HG_COL_TABLE\"");
 if (colSpan > 1)
     hPrintf(" COLSPAN=%d", colSpan);
 hPrintf("><FONT COLOR=\"#FFFFFF\"><B>%s</B></FONT></TD>", label);

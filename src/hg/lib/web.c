@@ -7,8 +7,9 @@
 #include "cheapcgi.h"
 #include "dbDb.h"
 #include "axtInfo.h"
+#include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.42 2003/10/14 19:58:06 donnak Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.43 2003/10/30 08:33:17 kent Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -88,7 +89,7 @@ puts(
     "	</TITLE>" "\n"
     "	<LINK REL=\"STYLESHEET\" HREF=\"/style/HGStyle.css\">" "\n"
     "</HEAD>" "\n"
-    "<BODY BGCOLOR=\"FFF9D2\" LINK=\"0000CC\" VLINK=\"#330066\" ALINK=\"#6600FF\">" "\n"
+    "<BODY BGCOLOR=\""HG_COL_OUTSIDE"\" LINK=\"0000CC\" VLINK=\"#330066\" ALINK=\"#6600FF\">" "\n"
     "<A NAME=\"TOP\"></A>" "\n"
     "" "\n"
     "<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=\"100%\">" "\n");
@@ -123,8 +124,8 @@ puts(
        "<!--HOTLINKS BAR---------------------------------------------------------->" "\n"
        "<TR><TD COLSPAN=3 HEIGHT=40 >" "\n"
        "<table bgcolor=\"000000\" cellpadding=\"1\" cellspacing=\"1\" width=\"100%%\" height=\"27\">" "\n"
-       "<tr bgcolor=\"2636D1\"><td valign=\"middle\">" "\n"
-       "	<table BORDER=0 CELLSPACING=0 CELLPADDING=0 bgcolor=\"2636D1\" height=\"24\"><TR>" "\n	"
+       "<tr bgcolor=\""HG_COL_HOTLINKS"\"><td valign=\"middle\">" "\n"
+       "	<table BORDER=0 CELLSPACING=0 CELLPADDING=0 bgcolor=\""HG_COL_HOTLINKS"\" height=\"24\"><TR>" "\n	"
        " 	<TD VALIGN=\"middle\"><font color=\"#89A1DE\">&nbsp;" "\n" 
        );
 
@@ -155,16 +156,16 @@ if(!skipSectionHeader)
 	 "<!--Content Tables------------------------------------------------------->" "\n"
 	 "<TR><TD COLSPAN=3>	" "\n"
 	 "  	<!--outer table is for border purposes-->" "\n"
-	 "  	<TABLE WIDTH=\"100%\" BGCOLOR=\"#888888\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>	" "\n"
-	 "    <TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\"  BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR><TD>	" "\n"
-	 "	<TABLE BGCOLOR=\"D9E4F8\" BACKGROUND=\"/images/hr.gif\" WIDTH=\"100%\"><TR><TD>" "\n"
+	 "  	<TABLE WIDTH=\"100%\" BGCOLOR=\"#"HG_COL_BORDER"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>	" "\n"
+	 "    <TABLE BGCOLOR=\""HG_COL_INSIDE"\" WIDTH=\"100%\"  BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR><TD>	" "\n"
+	 "	<TABLE BGCOLOR=\""HG_COL_HEADER"\" BACKGROUND=\"/images/hr.gif\" WIDTH=\"100%\"><TR><TD>" "\n"
 	 "		<FONT SIZE=\"4\"><b>&nbsp;"
 	 );
     vprintf(format, args);
 
     puts(
 	 "</b></FONT></TD></TR></TABLE>" "\n"
-	 "	<TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>" "\n"
+	 "	<TABLE BGCOLOR=\""HG_COL_INSIDE"\" WIDTH=\"100%\" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>" "\n"
 	 "	<TR><TD WIDTH=10>&nbsp;</TD><TD>" "\n"
 	 "	" "\n"
 	 );
@@ -227,9 +228,9 @@ puts(
     "<BR>" "\n"
     "" "\n"
     "  	<!--outer table is for border purposes-->" "\n"
-    "  	<TABLE WIDTH=\"100%\" BGCOLOR=\"#888888\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>	" "\n"
-    "    <TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\"  BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR><TD>	" "\n"
-    "	<TABLE BGCOLOR=\"D9E4F8\" BACKGROUND=\"/images/hr.gif\" WIDTH=\"100%\"><TR><TD>" "\n"
+    "  	<TABLE WIDTH=\"100%\" BGCOLOR=\"#"HG_COL_BORDER"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>	" "\n"
+    "    <TABLE BGCOLOR=\""HG_COL_INSIDE"\" WIDTH=\"100%\"  BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR><TD>	" "\n"
+    "	<TABLE BGCOLOR=\""HG_COL_HEADER"\" BACKGROUND=\"/images/hr.gif\" WIDTH=\"100%\"><TR><TD>" "\n"
     "		<FONT SIZE=\"4\"><b>&nbsp; "
 );
 
@@ -237,7 +238,7 @@ vprintf(format, args);
 
 puts(
     "	</b></FONT></TD></TR></TABLE>" "\n"
-    "	<TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>" "\n"
+    "	<TABLE BGCOLOR=\""HG_COL_INSIDE"\" WIDTH=\"100%\" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>" "\n"
     "	<TR><TD WIDTH=10>&nbsp;</TD><TD>" "\n"
     "" "\n"
 );
