@@ -8,7 +8,7 @@
 #include "hgColors.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.61 2004/11/01 18:46:23 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.62 2004/11/01 19:14:37 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wds, char *left, char *right)
@@ -314,7 +314,7 @@ if (wds->spanLimit)
     fprintf (fh, "#\tspan specified: %u\n", wds->spanLimit);
 if (wds->winEnd)
     fprintf (fh, "#\tposition specified: %d-%d\n",
-	wds->winStart+1, wds->winEnd);
+	BASE_1(wds->winStart), wds->winEnd);
 if (wds->bedConstrained && !wds->chrName)
     fprintf (fh, "#\tconstrained by chr names and coordinates in bed list\n");
 else if (wds->bedConstrained)
@@ -1891,8 +1891,8 @@ if (wds->stats)
 
 
 	    fprintf(fh,"<TR><TH ALIGN=LEFT> %s </TH>\n", stats->chrom);
-	    fprintf(fh,"\t<TD ALIGN=RIGHT> %u </TD>\n", stats->chromStart+1);
-						    /* display closed coords */
+	    fprintf(fh,"\t<TD ALIGN=RIGHT> %u </TD>\n",
+			BASE_1(stats->chromStart)); /* display closed coords */
 	    fprintf(fh,"\t<TD ALIGN=RIGHT> %u </TD>\n", stats->chromEnd);
 	    fprintf(fh,"\t<TD ALIGN=RIGHT> ");
 	    printLongWithCommas(fh, (long long)stats->count);
@@ -1916,8 +1916,8 @@ if (wds->stats)
 	else
 	    {
 	    fprintf(fh,"%s", stats->chrom);
-	    fprintf(fh,"\t%u", stats->chromStart+1);
-						    /* display closed coords */
+	    fprintf(fh,"\t%u", BASE_1(stats->chromStart));
+					/* display closed coords */
 	    fprintf(fh,"\t%u", stats->chromEnd);
 	    fprintf(fh,"\t%u", stats->count);
 	    fprintf(fh,"\t%d", stats->span);
