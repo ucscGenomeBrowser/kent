@@ -518,7 +518,7 @@ url http://supfam.org/SUPERFAMILY/cgi-bin/gene.cgi?seqid=$$
 
 track mrna
 shortLabel $Organism mRNAs
-longLabel $Organism mRNAs from Genbank 
+longLabel $Organism mRNAs from GenBank 
 group rna
 priority 54
 visibility pack
@@ -527,7 +527,7 @@ type psl .
 
 track mrnaBlastz
 shortLabel $Organism mRNAs Blastz
-longLabel $Organism mRNAs from Genbank Aligned with Blastz
+longLabel $Organism mRNAs from GenBank Aligned with Blastz
 group rna
 priority 54
 visibility hide
@@ -536,7 +536,7 @@ type psl .
 
 track tightMrna
 shortLabel Tight mRNAS
-longLabel Tightly Filtered $Organism mRNAs from Genbank
+longLabel Tightly Filtered $Organism mRNAs from GenBank
 group rna
 priority 55
 visibility hide
@@ -572,7 +572,7 @@ type psl est
 
 track xenoMrna
 shortLabel Non$Organism mRNAs
-longLabel Non$Organism mRNAs from Genbank
+longLabel Non$Organism mRNAs from GenBank
 group rna
 priority 63
 visibility dense
@@ -581,7 +581,7 @@ type psl xeno
 
 track xenoBestMrna
 shortLabel Other Best mRNAs
-longLabel Non$Organism mRNAs from Genbank Best in Genome Alignments
+longLabel Non$Organism mRNAs from GenBank Best in Genome Alignments
 group rna
 priority 64
 visibility hide
@@ -590,7 +590,7 @@ type psl xeno
 
 track xenoEst
 shortLabel Non$Organism ESTs
-longLabel Non$Organism ESTs from Genbank 
+longLabel Non$Organism ESTs from GenBank 
 group rna
 priority 65
 visibility hide
