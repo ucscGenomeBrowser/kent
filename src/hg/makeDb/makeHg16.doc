@@ -25,8 +25,7 @@ exit; # don't actually run this like a script :)
 # NCBI download site:
 
     ftp ftp.ncbi.nih.gov
-    # Login: hgpguest
-    # Password: tElo8=Hp (private, do not share!)
+    # user hgpguest, password from /cse/guests/kent/buildHg6.doc
     cd build_34    
  
 # Download all finished agp's and fa's into gs.17/agp
@@ -176,6 +175,54 @@ exit; # don't actually run this like a script :)
 # Copy it to the new freeze location
         cp /projects/hg2/booch/psl/fish/all.fish.format /projects/hg2/booch/psl/gs.17/build34/fish/
 
+# CREATING DATABASE  (DONE - 2003-07-26 - Hiram)
+    ssh hgwdev
+    # if you haven't already:
+    ln -s /cluster/store4/gs.17/build34 ~/hg16
+    # Make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
+    df -h /var/lib/mysql
+#	Filesystem            Size  Used Avail Use% Mounted on
+#	/dev/sda1             472G  416G   31G  93% /var/lib/mysql
+    # Create the database.
+    echo 'create database hg16' | hgsql hg15
+    # make a semi-permanent read-only alias (add this to your .cshrc/.bashrc):
+    #	(I have not seen a use for this in any procedures ? -Hiram)
+    #		alias hg16 mysql -u hguser -phguserstuff -A hg16
+    #	(use 'hgsql hg16' instead)
+    # Initialize the relational-mrna and external sequence info tables:
+    hgLoadRna new hg16
+    # Copy over grp table (for track grouping) from another database:
+    echo "create table grp (PRIMARY KEY(NAME)) select * from hg15.grp" \
+    | hgsql hg16
+
+# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE (DONE - 2003-07-26 - Hiram)
+    ssh hgwdev
+    # Enter hg16 into hgcentraltest.dbDb so test browser knows about it:
+    echo 'insert into dbDb (name, description, nibPath, organism, \
+	defaultPos, active, orderKey, genome, scientificName) \
+	values("hg16", "July 2003", "/gbdb/hg16/nib", "Human", \
+	"chr7:26828631-26938371", 1, 10, "Human", "Homo sapiens");' \
+	| hgsql -h genome-testdb hgcentraltest
+    # Make trackDb table so browser knows what tracks to expect:
+    cd ~kent/src/hg/makeDb/trackDb
+    cvs up -d -P .
+    # Edit that makefile to add hg16 in all the right places and do
+    make update
+    make alpha
+    cvs commit makefile
+
+# MAKE LIFTALL.LFT, NCBI.LFT (DONE - 2003-07-26 - Hiram)
+    cd ~/hg16
+    mkdir -p jkStuff
+    cat ?{,?}/lift/{ordered,random}.lft > jkStuff/liftAll.lft
+    # Create jkStuff/ncbi.lft for lifting stuff built with the NCBI assembly.
+    # Note: this ncbi.lift will not lift floating contigs to chr_random coords,
+    # but it will show the strand orientation of the floating contigs 
+    # (grep for '|').
+    mdToNcbiLift seq_contig.md jkStuff/ncbi.lft 
+    # If a lift file has been edited (e.g. as in 6.2.5 above), edit ncbi.lft 
+    # to match. If no step 6.2.5 then no editing needed
+
 # REPEAT MASKING (WORKING - 2003-07-25 - Hiram)
     # Split contigs, run RepeatMasker, lift results
     # Notes: 
@@ -194,13 +241,13 @@ exit; # don't actually run this like a script :)
     foreach d (../contigs/NT_* )
       set contig = $d:t
 	echo "splitting $contig"
-      faSplit size ../contigs/$contig 500000 split/${contig}_ -lift=split/$contig.lft \
-        -maxN=500000
+      faSplit size ../contigs/$contig 500000 split/${contig}_ \
+	-lift=split/$contig.lft -maxN=500000
     end
 
     #- Make the run directory and job list:
     cd ~/hg16
-    mkdir jkStuff
+    mkdir -p jkStuff
     #  According to RepeatMasker help file, no arguments are required to
     #	specify species because its default is set for primate (human)
     #  This run script saves the .tbl file to be sent to Arian.  He uses
@@ -251,7 +298,7 @@ if (-e /tmp/hg16/$2/$2.tbl) /bin/cp /tmp/hg16/$2/$2.tbl ./
     # cluster.  See SIMPLE REPEAT section below
 
 
-# SIMPLE REPEAT [TRF] TRACK (WORKING - 2003-07-25 - Hiram)
+# SIMPLE REPEAT [TRF] TRACK (DONE - 2003-07-25 - Hiram)
     # Distribute contigs to /iscratch/i
     ssh kkr1u00
     rm -rf /iscratch/i/gs.17/build34/contigs
@@ -301,12 +348,65 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
     para check
     para push
     para check
+#  Completed: 472 of 472 jobs
+# CPU time in finished jobs:      36177s     602.95m    10.05h    0.42d  0.001 y
+# IO & Wait Time:                  2038s      33.97m     0.57h    0.02d  0.000 y
+# Average job time:                  81s       1.35m     0.02h    0.00d
+# Longest job:                     6992s     116.53m     1.94h    0.08d
+# Submission to last job:         10703s     178.38m     2.97h    0.12d
     # When cluster run is done
     liftUp simpleRepeat.bed ~/hg16/jkStuff/liftAll.lft warn trf/*.bed
 
     # Load into the database:
     ssh hgwdev
     cd ~/hg16/bed/simpleRepeat
-    ~matt/bin/i386/hgLoadBed hg16 simpleRepeat simpleRepeat.bed \
-      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+    /cluster/bin/i386/hgLoadBed hg16 simpleRepeat simpleRepeat.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+#	stringTab = 0
+#	Reading simpleRepeat.bed
+#	Loaded 625049 elements
+#	Sorted
+#	Saving bed.tab
+#	Loading hg16
+
+# PROCESS SIMPLE REPEATS INTO MASK (TBD)
+    # After the simpleRepeats track has been built, make a filtered version 
+    # of the trf output: keep trf's with period <= 12:
+    ssh eieio
+    cd ~/hg16/bed/simpleRepeat
+    mkdir -p trfMask
+    foreach f (trf/NT_*.bed)
+      awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
+    end
+    # Lift up filtered trf output to chrom coords as well:
+    cd ~/hg16
+    mkdir -p bed/simpleRepeat/trfMaskChrom
+    foreach c (?{,?})
+      if (-e $c/lift/ordered.lst) then
+        perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+          $c/lift/ordered.lst > $c/lift/oTrf.lst
+        liftUp bed/simpleRepeat/trfMaskChrom/chr$c.bed \
+          jkStuff/liftAll.lft warn `cat $c/lift/oTrf.lst`
+      endif
+      if (-e $c/lift/random.lst) then
+        perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+           $c/lift/random.lst > $c/lift/rTrf.lst
+        liftUp bed/simpleRepeat/trfMaskChrom/chr${c}_random.bed \
+          jkStuff/liftAll.lft warn `cat $c/lift/rTrf.lst`
+      endif
+    end
+    #  We have some errors from the above that need to be checked:
+# lift list: 6/lift/rTrf.lst
+# Got 483 lifts in jkStuff/liftAll.lft
+# Couldn't open bed/simpleRepeat/trfMask/NG_002432.bed , No such file or direc
+# lift list: M/lift/oTrf.lst
+# Got 483 lifts in jkStuff/liftAll.lft
+# Couldn't open bed/simpleRepeat/trfMask/NT_999999.bed , No such file or direc
+# lift list: X/lift/oTrf.lst
+# Got 483 lifts in jkStuff/liftAll.lft
+# Couldn't open bed/simpleRepeat/trfMask/NT_079581.bed , No such file or direc
+# lift list: Y/lift/oTrf.lst
+# Got 483 lifts in jkStuff/liftAll.lft
+# Couldn't open bed/simpleRepeat/trfMask/NT_079581.bed , No such file or direc
+
 
