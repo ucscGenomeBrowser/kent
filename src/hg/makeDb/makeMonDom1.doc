@@ -1137,6 +1137,15 @@ done
     featureBits monDom1 netHg17
     #	3223616544 bases of 3492108230 (92.311%) in intersection
 
+    #	create a copy of for hgdownload  (2005-01-13 - Hiram)
+    ssh hgwdev
+    mkdir -p /usr/local/apache/htdocs/goldenPath/monDom1/vsHg17
+    cd /cluster/data/monDom1/bed/bz.hg17/axtChain
+    gzip --stdout all.chain > \
+	/usr/local/apache/htdocs/goldenPath/monDom1/vsHg17/human.chain.gz
+    gzip --stdout monDom1.net > \
+	/usr/local/apache/htdocs/goldenPath/monDom1/vsHg17/human.net.gz
+
 # BLASTZ HUMAN CLEAN UP (DONE - 2005-01-12 - Hiram)
     ssh eieio
     cd /cluster/data/monDom1/bed/zb.hg17/axtChain
@@ -1151,6 +1160,12 @@ done
     nice gzip axtChrom/maf/* &
     nice gzip axtChrom/*.axt &
     nice gzip pslChrom/* lav/*/* &
+
+    cd /cluster/data/monDom1/bed/bz.hg17/axtChain
+    nice rm -f noClass.net link.tab chain.tab &
+    nice gzip all.chain monDom1.net &
+    cd ../axtNet
+    nice gzip all.axt &
 
 # LOAD CPGISSLANDS (DONE - 2004-12-13 - Hiram)
     ssh hgwdev
@@ -1550,6 +1565,15 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     featureBits monDom1 chainGalGal2
     #	2437546469 bases of 3492108230 (69.802%) in intersection
 
+    #	create a copy of for hgdownload  (2005-01-13 - Hiram)
+    ssh hgwdev
+    mkdir -p /usr/local/apache/htdocs/goldenPath/monDom1/vsGalGal2
+    cd /cluster/data/monDom1/bed/bz.galGal2/axtChain
+    gzip --stdout all.chain > \
+	/usr/local/apache/htdocs/goldenPath/monDom1/vsGalGal2/chicken.chain.gz
+    gzip --stdout monDom1.net > \
+	/usr/local/apache/htdocs/goldenPath/monDom1/vsGalGal2/chicken.net.gz
+
 # BLASTZ CHICKEN CLEAN UP (DONE - 2005-01-12 - Hiram)
     ssh eieio
     cd /cluster/data/monDom1/bed/zb.galGal2/axtChain
@@ -1564,6 +1588,12 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     nice gzip axtNet/*.axt &
     nice gzip axtChrom/*.axt &
     nice gzip pslChrom/* lav/*/* &
+
+    cd /cluster/data/monDom1/bed/bz.galGal2/axtChain
+    nice rm -f noClass.net link.tab chain.tab &
+    nice gzip all.chain monDom1.net &
+    cd ../axtNet
+    nice gzip all.axt &
 
 # ALIGN TO MOUSE (DONE - 2004-12-16 - Hiram)
 #	NAMING CONVENTION: the zb.mm5 directory will be the Opossum
@@ -1909,6 +1939,15 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     featureBits monDom1 netMm5
     #	2889580530 bases of 3492108230 (82.746%) in intersection
 
+    #	create a copy of for hgdownload  (2005-01-13 - Hiram)
+    ssh hgwdev
+    mkdir -p /usr/local/apache/htdocs/goldenPath/monDom1/vsMm5
+    cd /cluster/data/monDom1/bed/bz.mm5/axtChain
+    gzip --stdout all.chain > \
+	/usr/local/apache/htdocs/goldenPath/monDom1/vsMm5/mouse.chain.gz
+    gzip --stdout monDom1.net > \
+	/usr/local/apache/htdocs/goldenPath/monDom1/vsMm5/mouse.net.gz
+
 # BLASTZ MOUSE CLEAN UP (DONE - 2005-01-12 - Hiram)
     ssh eieio
     cd /cluster/data/monDom1/bed/zb.mm5/axtChain
@@ -1924,6 +1963,11 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     nice gzip axtChrom/*.axt &
     nice gzip pslChrom/* lav/*/* &
 
+    cd /cluster/data/monDom1/bed/bz.mm5/axtChain
+    nice rm -f noClass.net link.tab chain.tab &
+    nice gzip all.chain monDom1.net &
+    cd ../axtNet
+    nice gzip all.axt &
 
 # MAKE Human Proteins track (hg17 DONE 2004-12-15 braney)
     ssh eieio
@@ -2402,6 +2446,15 @@ XXX - TBD - 2004-12-19 20:15
     #	2437546469 bases of 3492108230 (69.802%) in intersection
     featureBits monDom1 chainMm5Link
 
+    #	create a copy of for hgdownload  (2005-01-13 - Hiram)
+    ssh hgwdev
+    mkdir -p /usr/local/apache/htdocs/goldenPath/monDom1/vsDanRer2
+    cd /cluster/data/monDom1/bed/bz.danRer2/axtChain
+    gzip --stdout all.chain > \
+	/usr/local/apache/htdocs/goldenPath/monDom1/vsDanRer2/zebrafish.chain.gz
+    gzip --stdout ZFish.net > \
+	/usr/local/apache/htdocs/goldenPath/monDom1/vsDanRer2/zebrafish.net.gz
+
 # BLASTZ ZEBRAFISH CLEAN UP (DONE - 2005-01-12 - Hiram)
     ssh eieio
     cd /cluster/data/monDom1/bed/zb.danRer2/axtChain
@@ -2417,12 +2470,20 @@ XXX - TBD - 2004-12-19 20:15
     nice gzip axtChrom/*.axt &
     nice gzip pslChrom/* lav/*/* &
 
+    cd /cluster/data/monDom1/bed/bz.danRer2/axtChain
+    nice rm -f noClass.net link.tab chain.tab &
+    nice gzip all.chain ZFish.net &
+    cd ../axtNet
+    nice gzip all.axt &
+
 # 5-WAY VAR_MULTIZ - ALIGNMENTS Hg17, Mm5, MonDom1, GalGal2, DanRer2
 #		DONE - 2005-01-04 - Hiram
     ssh eieio
     cd /cluster/data/monDom1/bed
     mkdir multiz
     bash		#	if you are csh normally
+    #	if all.axt has been gzipped, simply use all.axt.gz
+    #	It will work the same way
     for A in danRer2 galGal2 mm5 hg17
     do
       axtSort bz.${A}/axtNet/all.axt stdout | axtToMaf -tSplit stdin \
