@@ -23,6 +23,7 @@ struct xap
    struct xapStack stackBuf[128];		/* Stack buffer. */
    struct xapStack *endStack;			/* End of stack. */
    int stackDepth;				/* Number of elements in stack. */
+   int skipDepth;				/* Depth beneath which we skip. */
    void *(*startHandler)(struct xap *xp, char *name, char **atts);	/* Handler for start tags. */
    void (*endHandler)(struct xap *xp, char *name);	/* Handler for end tags. */
    void *expat;				        /* Pointer to expat parser. */
@@ -46,6 +47,9 @@ void xapError(struct xap *xp, char *format, ...);
 
 void xapIndent(int count, FILE *f);
 /* Write out some spaces. */
+
+void xapSkip(struct xap *xp);
+/* Skip current tag and any children.  Called from startHandler. */
 
 #endif /* XAP_H */
 

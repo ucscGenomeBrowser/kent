@@ -30,7 +30,8 @@ if (stack < xp->stackBuf)
 if (stack->text == NULL)
     stack->text = newDyString(256);
 stack->elName = (char*)name;
-stack->object = xp->startHandler(xp, (char*)name, (char**)atts);
+if (xp->skipDepth == 0)
+    stack->object = xp->startHandler(xp, (char*)name, (char**)atts);
 if (xp->stackDepth == 1)
     {
     freeMem(xp->topType);
@@ -45,8 +46,12 @@ static void xapEndTag(void *userData, const char *name)
 struct xap *xp = userData;
 struct xapStack *stack;
 
-if (xp->endHandler != NULL)
-    xp->endHandler(xp, (char*)name);
+if (xp->skipDepth == 0 || xp->skipDepth <= xp->stackDepth)
+    {
+    xp->skipDepth = 0;
+    if (xp->endHandler)
+	xp->endHandler(xp, (char*)name);
+    }
 stack = xp->stack++;
 if (xp->stack > xp->endStack)
     xapError(xp, "xap stack underflow");
@@ -58,7 +63,8 @@ static void xapText(void *userData, const XML_Char *s, int len)
 /* Handle some text. */
 {
 struct xap *xp = userData;
-dyStringAppendN(xp->stack->text, (char *)s, len);
+if (xp->skipDepth == 0)
+    dyStringAppendN(xp->stack->text, (char *)s, len);
 }
 
 struct xap *xapNew(void *(*startHandler)(struct xap *xp, char *name, char **atts),
@@ -125,5 +131,11 @@ for (i=0; i<count; ++i)
     {
     fputc(' ', f);
     }
+}
+
+void xapSkip(struct xap *xp)
+/* Skip current tag and any children.  Called from startHandler. */
+{
+xp->skipDepth = xp->stackDepth;
 }
 
