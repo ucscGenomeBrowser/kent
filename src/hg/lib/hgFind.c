@@ -40,7 +40,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.96 2003/08/01 23:06:10 donnak Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.97 2003/08/05 23:50:00 kate Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -1430,8 +1430,8 @@ hFreeConn(&conn);
 return ok;
 }
 
-static boolean findGenePred(char *spec, struct hgPositions *hgp, char *tableName)
-/* Look for position in gene prediction table. */
+static boolean findGenePredPattern(char *pattern, struct hgPositions *hgp, char *tableName)
+/* Look for position pattern in gene prediction table. */
 {
 struct sqlConnection *conn;
 struct sqlResult *sr = NULL;
@@ -1446,13 +1446,13 @@ struct hgPos *pos = NULL;
 int rowOffset;
 char *localName;
 
-localName = spec;
+localName = pattern;
 if (!hTableExists(tableName))
     return FALSE;
 rowOffset = hOffsetPastBin(NULL, tableName);
 conn = hAllocConn();
 query = newDyString(256);
-dyStringPrintf(query, "SELECT chrom, txStart, txEnd, name FROM %s WHERE name LIKE '%s'", tableName, localName);
+dyStringPrintf(query, "SELECT chrom, txStart, txEnd, name FROM %s WHERE name LIKE '%s'", tableName, pattern);
 sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -1480,6 +1480,22 @@ freeDyString(&query);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 return ok;
+}
+
+static boolean findGenePred(char *spec, struct hgPositions *hgp, char *tableName)
+{
+/* Look for exact match of position in gene prediction table. */
+    char buf[64];
+    snprintf(buf, 64, "%s", spec); 
+    return  findGenePredPattern(buf, hgp, tableName);
+}
+
+static boolean findGenePredLike(char *spec, struct hgPositions *hgp, char *tableName)
+{
+/* Look for leading match of position in gene prediction table. */
+    char buf[64];
+    snprintf(buf, 64, "%s%%", spec); 
+    return findGenePredPattern(buf, hgp, tableName);
 }
 
 
@@ -2818,8 +2834,13 @@ else
     findGenePred(query, hgp, "acembly");
     findGenePred(query, hgp, "genscan");
     findGenePred(query, hgp, "sangerGene");
+    findGenePred(query, hgp, "tigrGeneIndex");
+    findGenePredLike(query, hgp, "slamRat");
+    findGenePredLike(query, hgp, "slamMouse");
+    findGenePredLike(query, hgp, "slamHuman");
     findBedTablePos(query, "HG-U95:", hgp, "affyGnf");
     findBedTablePos(query, "HG-U133:", hgp, "affyUcla");
+    findBedTablePos(query, "", hgp, "uniGene_2");
     // findBedPos(query,hgp,"gbRRNA");
     // findBedPos(query,hgp,"gbTRNA");
     // findBedPos(query,hgp,"gbMiscRNA");
