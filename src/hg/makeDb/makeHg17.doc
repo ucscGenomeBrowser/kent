@@ -12767,5 +12767,29 @@ hgsql hg17 -e 'load data local infile "rgdQtlLink.tab" into table hg17.rgdQtlLin
 # updated trackDb.ra under /kent/src/hg/makeDb/trackDb/human/hg17 and
 # added rgdQtl.html.
 
+# GENOSCOPE TETRAODON (tetNig1) ECORES (DONE, 2005-02-08, hartera)
+    ssh eieio
+    mkdir -p /cluster/data/hg17/bed/ecoresTetNig1
+    cd /cluster/data/hg17/bed/ecoresTetNig1
+                                                                                
+    wget --timestamp \
+         http://www.genoscope.cns.fr/externe//4ucsc/ExofishHs35Tnig1
+    # this is in gff format
+    # remove "Ecotig" from name field
+    sed -e 's/Ecotig EG/EG/g' ExofishHs35Tnig1 > ExofishHs35Tnig1.gff
+    # need to have tabs between fields not a space to load file into table
+    sed -e 's/ /\t/g' ExofishHs35Tnig1.gff > Hs35Tnig1format.gff
+    # if "ecore" is changed to "CDS" and "ecotig" to "transcript" this loads
+    # correctly into the table.
+    sed -e 's/ecore/CDS/' Hs35Tnig1format.gff | sed -e 's/ecotig/transcript/' \
+           > Hg17vstetNig1.gff
 
-
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/ecoresTetNig1
+    nice ldHgGene hg17 ecoresTetNig1 Hg17vstetNig1.gff
+    # Read 40172 transcripts in 186032 lines in 1 files
+    #  40172 groups 42 seqs 1 sources 2 feature types
+    # 40172 gene predictions
+# added ecoresTetNig1 entry to trackDb.ra in trackDb/human
+# and created ecoresTetNig1.html.  Genoscope will not be maintaining this
+# newest data in their Exofish comparative browser display.

@@ -346,6 +346,16 @@ priority 118
 visibility hide
 type sample 0 8
 
+track ecoresTetNig1
+shortLabel Tetraodon Ecores
+longLabel Human/$o_Organism ($o_date/$o_db) Evolutionary Conserved Regions
+group compGeno
+priority 120.1
+visibility hide
+color 0,60,120
+type genePred
+otherDb tetNig1
+
 track slamNonCodingMouse
 shortLabel Slam Non-Coding Mouse
 longLabel Slam Predictions of Human/Mouse Conserved Non-Coding Regions
