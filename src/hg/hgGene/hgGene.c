@@ -16,7 +16,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.27 2004/04/27 20:43:22 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.28 2004/05/19 23:23:08 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -405,6 +405,7 @@ addGoodSection(flyBasePhenotypesSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(flyBaseSynonymsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(bdgpExprInSituSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(goSection(conn, sectionRa), conn, &sectionList);
+addGoodSection(methodSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(sgdLocalizationSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(pathwaysSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(mrnaDescriptionsSection(conn, sectionRa), conn, &sectionList);
@@ -541,6 +542,30 @@ if (gp == NULL)
 return gp;
 }
 
+void doKgMethod(struct sqlConnection *conn)
+/* display knownGene.html content 
+(USCS Known Genes Method, Credits, and Data Use Restrictions) */
+    {
+    struct trackDb *tdb;
+    struct section *sectionList = NULL;
+    struct section *section;
+
+    sectionList = loadSectionList(conn);
+
+    for (section = sectionList; section != NULL; section = section->next)
+    	{
+	if (sameWord(section->name, "method"))
+	    {
+	    cartWebStart(cart, section->longLabel);
+	    break;
+	    }
+    	}
+
+    tdb = hTrackDbForTrack("knownGene");
+    hPrintf("%s", tdb->html);
+    
+    cartWebEnd();
+    }
 
 void cartMain(struct cart *theCart)
 /* We got the persistent/CGI variable cart.  Now
@@ -563,6 +588,8 @@ swissProtAcc = getSwissProtAcc(conn, spConn, curGeneId);
  * don't want to put up the hot link bar etc. */
 if (cartVarExists(cart, hggDoGetMrnaSeq))
     doGetMrnaSeq(conn, curGeneId, curGeneName);
+else if (cartVarExists(cart, hggDoKgMethod))
+    doKgMethod(conn);
 else if (cartVarExists(cart, hggDoGetProteinSeq))
     doGetProteinSeq(conn, curGeneId, curGeneName);
 else if (cartVarExists(cart, hggDoRnaFoldDisplay))
