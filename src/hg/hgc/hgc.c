@@ -68,6 +68,7 @@
 #include "ancientRref.h"
 #include "jointalign.h"
 #include "gcPercent.h"
+#include "uPennClones.h"
 
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
@@ -81,6 +82,7 @@ char *database;		/* Name of mySQL database. */
 
 struct pslWScore *sageExpList = NULL;
 char *entrezScript = "http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4";
+char *unistsnameScript = "http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=unists";
 char *unistsScript = "http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=";
 char *gdbScript = "http://www.gdb.org/gdb-bin/genera/accno?accessionNum=";
 char *cloneRegScript = "http://www.ncbi.nlm.nih.gov/genome/clone/clname.cgi?stype=Name&list=";
@@ -102,6 +104,12 @@ void printEntrezProteinUrl(FILE *f, char *accession)
 /* Print URL for Entrez browser on a nucleotide. */
 {
 fprintf(f, "\"%s&db=p&term=%s\"", entrezScript, accession);
+}
+
+void printEntrezUniSTSUrl(FILE *f, char *name)
+/* Print URL for Entrez browser on a STS name. */
+{
+fprintf(f, "\"%s&term=%s\"", unistsnameScript, name);
 }
 
 void printUnistsUrl(FILE *f, int id)
@@ -3725,6 +3733,99 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void doUPennClones(struct trackDb *tdb, char *clone)
+/* Handle click on the Univ of Penn clones track */
+{
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+struct uPennClones *upc;
+char sband[32], eband[32];
+int i;
+
+/* Print out non-sequence info */
+cartWebStart("University of Penn BAC Clones");
+
+/* Find the instance of the object in the bed table */ 
+sprintf(query, "SELECT * FROM uPennClones WHERE name = '%s' 
+                AND chrom = '%s' AND chromStart = %d
+                AND chromEnd = %d",
+	        clone, seqName, start, end);  
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL)
+    {
+    boolean gotS, gotB;
+    upc = uPennClonesLoad(row);
+    /* Print out general sequence positional information */
+    printf("<H2><A HREF=");
+    printCloneRegUrl(stdout, clone);
+    printf(">%s</A></H2>\n", clone);
+    htmlHorizontalLine();
+    printf("<TABLE>\n");
+    printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
+    printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start);
+    printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
+    gotS = chromBand(seqName, start, sband);
+    gotB = chromBand(seqName, end, eband);
+    if (gotS && gotB)
+	{
+	if (sameString(sband,eband)) 
+	    {
+	    printf("<TR><TH ALIGN=left>Band:</TH><TD>%s</TD></TR>\n",sband);
+	    }
+	else
+	    {
+	    printf("<TR><TH ALIGN=left>Bands:</TH><TD>%s - %s</TD></TR>\n",sband, eband);
+	    }
+	}
+    printf("</TABLE>\n");
+    htmlHorizontalLine();
+    
+    /* Print out information about the clone */
+    printf("<H4>Placement of %s on draft sequence was determined using BAC end sequences and/or an STS marker</H4>\n",clone);
+    printf("<TABLE>\n");
+    if (upc->accT7) 
+	{
+	printf("<TR><TH ALIGN=left>T7 end sequence:</TH>");
+	printf("<TD><A HREF=");
+	printEntrezNucleotideUrl(stdout, upc->accT7);
+	printf(">%s</A></TD>", upc->accT7);
+	printf("<TD>%s:</TD><TD ALIGN=right>%d</TD><TD ALIGN=LEFT> - %d</TD>", 
+	       seqName, upc->startT7, upc->endT7);
+	printf("</TR>\n");
+	}
+    if (upc->accSP6) 
+	{
+	printf("<TR><TH ALIGN=left>SP6 end sequence:</TH>");
+	printf("<TD><A HREF=");
+	printEntrezNucleotideUrl(stdout, upc->accSP6);
+	printf(">%s</A></TD>", upc->accSP6);
+	printf("<TD>%s:</TD><TD ALIGN=right>%d</TD><TD ALIGN=LEFT> - %d</TD>", 
+	       seqName, upc->startSP6, upc->endSP6);
+	printf("</TR>\n");
+	}
+    if (upc->stsMarker) 
+	{
+	printf("<TR><TH ALIGN=left>STS Marker:</TH>");
+	printf("<TD><A HREF=");
+	printEntrezUniSTSUrl(stdout, upc->stsMarker);
+	printf(">%s</A></TD>", upc->stsMarker);
+	printf("<TD>%s:</TD><TD ALIGN=right>%d</TD><TD ALIGN=LEFT> - %d</TD>", 
+	       seqName, upc->stsStart, upc->stsEnd);
+	printf("</TR>\n");
+	}
+    printf("</TABLE>\n");
+    }
+webNewSection("Notes:");
+puts(tdb->html);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 void doMouseSyn(char *track, char *itemName)
 /* Handle click on mouse synteny track. */
 {
@@ -5720,6 +5821,10 @@ else if (sameWord(track, "stsMarker"))
 else if (sameWord(track, "stsMap"))
     {
     doStsMarker(tdb, item);
+    }
+else if (sameWord(track, "uPennClones"))
+    {
+    doUPennClones(tdb, item);
     }
 else if (sameWord(track, "mouseSyn"))
     {
