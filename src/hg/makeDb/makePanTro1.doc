@@ -1011,3 +1011,17 @@ type wig 0 100
                 pslSortAcc nohead bed/blatHg16.pt0.swap/chrom \
                                   bed/blatHg16.pt0.swap/temp stdin
 
+
+# Genbank ESTs completed, but needed to redo native ESTs/mRNAs with 
+# new ooc file.
+
+    # Remove native ESTs:
+    cd /cluster/data/genbank
+    find aligned/genbank.139.0/panTro1 -name 'est.*.native.*' |xargs rm -f
+
+    # realign native ESTs
+    nice bin/gbAlignStep -srcDb=genbank -type=est -verbose=1 -initial panTro1&
+
+    # Reload mRNAs and load ESTS
+    ssh hgwdev
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad panTro1
