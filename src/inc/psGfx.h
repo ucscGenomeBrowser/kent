@@ -64,5 +64,7 @@ void psPopG(struct psGfx *ps);
 
 void psPushClipRect(struct psGfx *ps, int x, int y, int width, int height);
 /* Push clipping rectangle onto graphics stack. */
+
+
 #endif /* PSGFX_H */
 

@@ -18,16 +18,14 @@ struct pscmGfx
     int colAlloc;	  /* Colors allocated. */
     int colUsed;	  /* Colors used. */
     struct rgbColor *colMap; /* Colors. */
+    void *curFont;	  /* Current font. */
     };
 
-struct pscmGfx *pscmNew(int width, int height, char *file);
+struct pscmGfx *pscmOpen(int width, int height, char *file);
 /* Return new pscmGfx. */
 
-void pscmFree(struct pscmGfx **ppscm);
-/* Free up structure. */
-
-void pscmClearPixels(struct pscmGfx *pscm);
-/* Set all pixels to background. */
+void pscmClose(struct pscmGfx **ppscm);
+/* Finish writing out and free structure. */
 
 void pscmSetClip(struct pscmGfx *pscm, int x, int y, int width, int height);
 /* Set clipping rectangle. */
@@ -35,55 +33,25 @@ void pscmSetClip(struct pscmGfx *pscm, int x, int y, int width, int height);
 void pscmUnclip(struct pscmGfx *pscm);
 /* Set clipping rect cover full thing. */
 
-int pscmAddColor(struct pscmGfx *pscm, int r, int g, int b);
-/* Add color to map and return index. */
-
-Color pscmClosestColor(struct pscmGfx *pscm, 
-	unsigned char r, unsigned char g, unsigned char b);
-/* Returns closest color in color map to r,g,b */
+int pscmFindColorIx(struct pscmGfx *pscm, int r, int g, int b);
+/* Find color index for rgb. */
 
 static void pscmVerticalSmear(struct pscmGfx *pscm,
 	int xOff, int yOff, int width, int height, 
 	Color *dots, boolean zeroClear);
 /* Put a series of one 'pixel' width vertical lines. */
 
-void pscmDrawBox(struct pscmGfx *pscm, int x, int y, 
-	int width, int height, Color color);
+void pscmBox(struct pscmGfx *pscm, int x, int y, 
+	int width, int height, int colorIx);
 /* Draw a box. */
 
-void pscmDrawHorizontalLine(struct pscmGfx *pscm, int y1, Color color);
-/* special case of pscmDrawLine, for horizontal line across entire window 
- * at y-value y1.*/
-
-void pscmDrawLine(struct pscmGfx *pscm, 
-	int x1, int y1, int x2, int y2, Color color);
+void pscmLine(struct pscmGfx *pscm, 
+	int x1, int y1, int x2, int y2, int colorIx);
 /* Draw a line from one point to another. */
 
-void pscmText(struct pscmGfx *pscm, int x, int y, Color color, 
+void pscmText(struct pscmGfx *pscm, int x, int y, int colorIx, 
 	MgFont *font, char *text);
 /* Draw a line of text with upper left corner x,y. */
 
-void pscmTextCentered(struct pscmGfx *pscm, int x, int y, int width, int height, 
-	Color color, MgFont *font, char *text);
-/* Draw a line of text centered in box defined by x/y/width/height */
-
-void pscmTextRight(struct pscmGfx *pscm, int x, int y, int width, int height, 
-	Color color, MgFont *font, char *text);
-/* Draw a line of text right justified in box defined by x/y/width/height */
-
-int pscmFontPixelHeight(MgFont *font);
-/* How high in pixels is font? */
-
-int pscmFontLineHeight(MgFont *font);
-/* How many pixels to next line ideally? */
-
-int pscmFontWidth(MgFont *font, char *chars, int charCount);
-/* How wide are a couple of letters? */
-
-int pscmFontStringWidth(MgFont *font, char *string);
-/* How wide is a string? */
-
-int pscmFontCharWidth(MgFont *font, char c);
-/* How wide is a character? */
 
 #endif /* PSCMGFX_H */
