@@ -1346,8 +1346,8 @@ visibility hide
 type sample 9
 
 track refFullAli
-shortLabel Full Alignments
-longLabel Full Alignments
+shortLabel DBTSS mRNA
+longLabel RefSeq mRNA extended to the 5' end from DBTSS
 priority 52
 visibility hide
 color 0, 0, 100
