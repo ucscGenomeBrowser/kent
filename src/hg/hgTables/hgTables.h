@@ -676,6 +676,7 @@ void doAllGalaQuery(struct sqlConnection *conn);
 boolean galaAvail(char *db);
 /* Check to see if GALA is available for this freeze */
 
+#define uglyw warn	/* Warn for debugging purposes. */
 #endif /* HGTABLES_H */
 
 

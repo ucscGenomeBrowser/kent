@@ -53,8 +53,7 @@ char buf[256];
 
 AllocVar(ct);
 AllocVar(tdb);
-safef(buf, sizeof(buf), "ct_%s", ctName);
-tdb->tableName = cloneString(buf);
+tdb->tableName = customTrackTableFromLabel(ctName);
 tdb->shortLabel = ctName;
 tdb->longLabel = ctDesc;
 safef(buf, sizeof(buf), "bed %d .", fields);
