@@ -13,7 +13,7 @@
 #include "sample.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.75 2003/11/13 00:23:04 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.76 2003/12/05 19:08:11 booch Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -51,6 +51,26 @@ printf(" ");
 smoeDropDown("stsMap.type", stsMapMap);
 }
 
+void stsMapMouseUi(struct trackDb *tdb)
+/* Put up UI stsMapMouse. */
+{
+char *stsMapMouseFilter = cartUsualString(cart, "stsMapMouse.filter", "blue");
+char *stsMapMouseMap = cartUsualString(cart, "stsMapMouse.type", smmoeEnumToString(0));
+filterButtons("stsMapMouse.filter", stsMapMouseFilter, TRUE);
+printf(" ");
+smmoeDropDown("stsMapMouse.type", stsMapMouseMap);
+}
+
+void stsMapRatUi(struct trackDb *tdb)
+/* Put up UI stsMapRat. */
+{
+char *stsMapRatFilter = cartUsualString(cart, "stsMapRat.filter", "blue");
+char *stsMapRatMap = cartUsualString(cart, "stsMapRat.type", smroeEnumToString(0));
+filterButtons("stsMapRat.filter", stsMapRatFilter, TRUE);
+printf(" ");
+smroeDropDown("stsMapRat.type", stsMapRatMap);
+}
+
 void cbrWabaUi(struct trackDb *tdb)
 /* Put up UI cbrWaba. */
 {
@@ -81,6 +101,22 @@ void recombRateUi(struct trackDb *tdb)
 char *recombRateMap = cartUsualString(cart, "recombRate.type", rroeEnumToString(0));
 printf("<b>Map Distances: </b>");
 rroeDropDown("recombRate.type", recombRateMap);
+}
+
+void recombRateRatUi(struct trackDb *tdb)
+/* Put up UI recombRateRat. */
+{
+char *recombRateRatMap = cartUsualString(cart, "recombRateRat.type", rrroeEnumToString(0));
+printf("<b>Map Distances: </b>");
+rrroeDropDown("recombRateRat.type", recombRateRatMap);
+}
+
+void recombRateMouseUi(struct trackDb *tdb)
+/* Put up UI recombRateMouse. */
+{
+char *recombRateMouseMap = cartUsualString(cart, "recombRateMouse.type", rrmoeEnumToString(0));
+printf("<b>Map Distances: </b>");
+rrmoeDropDown("recombRateMouse.type", recombRateMouseMap);
 }
 
 void cghNci60Ui(struct trackDb *tdb)
@@ -543,12 +579,20 @@ int wordCount = 0;
 
 if (sameString(track, "stsMap"))
         stsMapUi(tdb);
+else if (sameString(track, "stsMapMouseNew"))
+        stsMapMouseUi(tdb);
+else if (sameString(track, "stsMapRat"))
+        stsMapRatUi(tdb);
 else if (sameString(track, "cbr_waba"))
         cbrWabaUi(tdb);
 else if (sameString(track, "fishClones"))
         fishClonesUi(tdb);
 else if (sameString(track, "recombRate"))
         recombRateUi(tdb);
+else if (sameString(track, "recombRateRat"))
+        recombRateRatUi(tdb);
+else if (sameString(track, "recombRateMouse"))
+        recombRateMouseUi(tdb);
 else if (sameString(track, "nci60"))
         nci60Ui(tdb);
 else if (sameString(track, "cghNci60"))
