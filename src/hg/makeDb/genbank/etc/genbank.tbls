@@ -19,6 +19,7 @@ imageClone
 # refseq metadata
 refSeqStatus
 refLink
+refSeqSummary
 
 # file tables
 gbSeq
