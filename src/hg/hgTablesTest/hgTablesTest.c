@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.8 2004/11/07 23:51:00 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.9 2004/11/08 00:14:55 kent Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -601,6 +601,31 @@ for (db = dbVar->values; db != NULL; db = db->next)
 htmlPageFree(&orgPage);
 }
 
+void testJoining(struct htmlPage *rootPage)
+/* Simulate pressing buttons to get a reasonable join on a
+ * couple of swissProt tables. */
+{
+struct htmlPage *allPage, *page;
+struct sqlConnection *conn = sqlConnect("swissProt");
+int expectedCount = sqlTableSize(conn, "taxon");
+
+allPage = quickSubmit(rootPage, NULL, "swissProt", "allTables", "swissProt", 
+	"swissProt.taxon", "swissProtTables", NULL, NULL);
+if (allPage != NULL)
+    {
+    int count = testAllFields(allPage, allPage->forms, NULL, "swissProt",
+    	"allTables", "swissProt", "swissProt.taxon");
+    if (count != expectedCount)
+	qaStatusSoftError(tablesTestList->status, 
+		"Got %d rows in swissProt.taxon, expected %d", count, 
+		expectedCount);
+    }
+
+
+htmlPageFree(&allPage);
+sqlDisconnect(&conn);
+}
+
 void statsOnSubsets(struct tablesTest *list, int subIx, FILE *f)
 /* Report tests of certain subtype. */
 {
@@ -698,6 +723,7 @@ else
 	    }
 	}
     }
+testJoining(rootPage);
 htmlPageFree(&rootPage);
 slReverse(&tablesTestList);
 reportSummary(tablesTestList, stdout);
