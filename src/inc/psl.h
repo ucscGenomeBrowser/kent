@@ -57,7 +57,14 @@ struct psl
     unsigned *blockSizes;	/* Size of each block */
     unsigned *qStarts;	/* Start of each block in query. */
     unsigned *tStarts;	/* Start of each block in target. */
+
+    char **qSequence;  /* query sequence for each block */
+    char **tSequence;  /* target sequence for each block */
     };
+
+struct psl *pslxLoad(char **row);
+/* Load a pslx from row fetched with select * from psl
+ * from database.  Dispose of this with pslFree(). */
 
 struct psl *pslLoad(char **row);
 /* Load a psl from row fetched with select * from psl
@@ -92,6 +99,9 @@ struct psl *pslLoadAll(char *fileName);
 struct psl *pslNext(struct lineFile *lf);
 /* Read next line from file and convert it to psl.  Return
  * NULL at eof. */
+
+struct psl *pslxLoadLm(char **row, struct lm *lm);
+/* Load row into local memory pslx. */
 
 struct psl *pslLoadLm(char **row, struct lm *lm);
 /* Load row into local memory psl. */
