@@ -15,6 +15,7 @@
 #include "sqlUpdater.h"
 #include "seqTbl.h"
 #include "imageCloneTbl.h"
+#include "dbLoadOptions.h"
 #include "gbDefs.h"
 #include "gbVerb.h"
 #include "gbIndex.h"
@@ -29,7 +30,7 @@
 #include "sqlDeleter.h"
 #include "genbank.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.3 2003/06/25 17:49:01 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.4 2003/06/28 04:02:21 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -106,9 +107,10 @@ static char *raFieldTables[] =
     "author", "keyword", "description", NULL
     };
 
-static char tmpDir[PATH_LEN];      /* tmp dir for load file */
-static unsigned srcDb = 0;         /* source database */
-static boolean goFaster = FALSE;   /* optimize speed */
+/* global configuration */
+static unsigned gDbLoadOptions = 0;   /* options */
+static char gTmpDir[PATH_LEN];      /* tmp dir for load file */
+static unsigned gSrcDb = 0;         /* source database */
 static char gbdbGenBank[PATH_LEN]; /* root dir to store in database */
 
 /* Update objects for each table */
@@ -142,70 +144,83 @@ static unsigned raProtSize;
 static off_t raProtFaOff;
 static unsigned raProtFaSize;
 
-/* date for fields that are stored in unique string tables */
 struct raField
 /* Entry for a ra field.  New values are buffered until we decide that
- * the entry is going to be kept. */
+ * the entry is going to be kept, then they are added to a unique string
+ * table. */
 {
     struct raField *next;
     char *raName;                 /* field name */
-    HGID curId;                   /* current id */
-    char *curVal;                 /* current val */
+    HGID curId;                   /* current id  */
+    char *curVal;                 /* current val, or null if not set. */
+    struct dyString* valBuf;      /* buffer for values */
     struct uniqueStrTbl *ust;     /* table of strings to ids */
 };
-static struct raField *raFieldTableList = NULL;
-static struct hash *raFields = NULL;
+static struct raField *gRaFieldTableList = NULL;
+static struct hash *gRaFields = NULL;
 
-static void raFieldsDefine(struct sqlConnection *conn, char *table,
+static void raFieldDefine(struct sqlConnection *conn, char *table,
                            char *raName, int hashPow2Size)
 /* Define a ra field, setting the unique table associated with it */
 {
 struct hashEl *hel;
-struct raField *raField;
-AllocVar(raField);
+struct raField *raf;
+AllocVar(raf);
 
 if (hashPow2Size == 0)
     hashPow2Size = 14; /* 16kb */
 
-hel = hashAdd(raFields, raName, raField);
-raField->raName = hel->name;
-raField->ust = uniqueStrTblNew(conn, table, hashPow2Size, goFaster, tmpDir,
-                               (verbose >= 2));
-raField->next = raFieldTableList;
-raFieldTableList = raField;
+hel = hashAdd(gRaFields, raName, raf);
+raf->raName = hel->name;
+raf->valBuf = dyStringNew(0);
+raf->ust = uniqueStrTblNew(conn, table, hashPow2Size,
+                           ((gDbLoadOptions & DBLOAD_GO_FASTER) != 0),
+                           gTmpDir, (verbose >= 2));
+raf->next = gRaFieldTableList;
+gRaFieldTableList = raf;
+}
+
+static void raFieldFree(struct raField *raf)
+/* Free data associated with a ra field */
+{
+dyStringFree(&raf->valBuf);
+uniqueStrTblFree(&raf->ust);
+freeMem(&raf);
 }
 
 static void raFieldsInit(struct sqlConnection *conn)
 /* initialize global table of ra fields */
 {
-raFields = hashNew(8);
+assert(gRaFieldTableList == NULL);
+
+gRaFields = hashNew(8);
 /* default is 16kb */
-raFieldsDefine(conn, "source", "src", 0);
-raFieldsDefine(conn, "organism", "org", 0);
-raFieldsDefine(conn, "library", "lib", 0);
-raFieldsDefine(conn, "mrnaClone", "clo", 21);    /* 2mb */
-raFieldsDefine(conn, "sex", "sex", 9);           /* 512k */
-raFieldsDefine(conn, "tissue", "tis", 0);
-raFieldsDefine(conn, "development", "dev", 0);
-raFieldsDefine(conn, "cell", "cel", 14);
-raFieldsDefine(conn, "cds", "cds", 0);
-raFieldsDefine(conn, "geneName", "gen", 0);
-raFieldsDefine(conn, "productName", "pro", 19);   /* 256k */
-raFieldsDefine(conn, "author", "aut", 0);
-raFieldsDefine(conn, "keyword", "key", 0);
-raFieldsDefine(conn, "description", "def", 19);   /* 512k */
+raFieldDefine(conn, "source", "src", 0);
+raFieldDefine(conn, "organism", "org", 0);
+raFieldDefine(conn, "library", "lib", 0);
+raFieldDefine(conn, "mrnaClone", "clo", 21);    /* 2mb */
+raFieldDefine(conn, "sex", "sex", 9);           /* 512k */
+raFieldDefine(conn, "tissue", "tis", 0);
+raFieldDefine(conn, "development", "dev", 0);
+raFieldDefine(conn, "cell", "cel", 14);
+raFieldDefine(conn, "cds", "cds", 0);
+raFieldDefine(conn, "geneName", "gen", 0);
+raFieldDefine(conn, "productName", "pro", 19);   /* 256k */
+raFieldDefine(conn, "author", "aut", 0);
+raFieldDefine(conn, "keyword", "key", 0);
+raFieldDefine(conn, "description", "def", 19);   /* 512k */
 }
 
 static void raFieldsFree()
 /* Free ra field data */
 {
 struct raField* raf;
-while ((raf = raFieldTableList) != NULL)
+while ((raf = gRaFieldTableList) != NULL)
     {
-    raFieldTableList = raFieldTableList->next;
-    uniqueStrTblFree(&raf->ust);
+    gRaFieldTableList = gRaFieldTableList->next;
+    raFieldFree(raf);
     }
-hashFree(&raFields);
+hashFree(&gRaFields);
 }
 
 static void raFieldClearLastIds()
@@ -213,40 +228,60 @@ static void raFieldClearLastIds()
  * in the next record parsed get a zero id */
 {
 struct raField *raf;
-for (raf = raFieldTableList; raf != NULL; raf = raf->next)
+for (raf = gRaFieldTableList; raf != NULL; raf = raf->next)
     {
     raf->curId = 0;
     raf->curVal = NULL;
+    dyStringClear(raf->valBuf);
     }
 }
 
-static void raFieldSet(char *raField, char *val, struct sqlConnection* conn)
-/* Add a ra field value the object. */
+static void raFieldSet(char *raField, char *val)
+/* Set a RA field value for later use.  This does not load the unique string
+ * table. A value of NULL clears the value */
 {
 /* ignore if not tracking field */
-struct raField *raf = hashFindVal(raFields, raField);
+struct raField *raf = hashFindVal(gRaFields, raField);
 if (raf != NULL)
-    raf->curId = uniqueStrTblGet(raf->ust, conn, val, &raf->curVal);
+    {
+    /* never append to an existing value, replace or clear */
+    dyStringClear(raf->valBuf);
+    raf->curId = 0;
+    raf->curVal = NULL;
+    if (val != NULL)
+        {
+        dyStringAppend(raf->valBuf, val);
+        raf->curVal = raf->valBuf->string;
+        }
+    }
 }
 
-static HGID raFieldCurId(char *raField)
+static void raFieldStore(struct raField *raf, struct sqlConnection *conn)
+/* store a RA field value in the unique string table */
+{
+assert(raf->curId == 0);
+raf->curId = uniqueStrTblGet(raf->ust, conn, raf->curVal, NULL);
+}
+
+static HGID raFieldCurId(char *raField, struct sqlConnection *conn)
 /* get the last id that was stored for a raField */
 {
-struct raField *raf = hashFindVal(raFields, raField);
-if (raf != NULL)
-    return raf->curId;
-else
+struct raField *raf = hashFindVal(gRaFields, raField);
+if (raf == NULL)
     return 0;  /* not tracking field */
+if ((raf->curId == 0) && (raf->curVal != NULL))
+    raFieldStore(raf, conn);
+return raf->curId;
 }
 
 static char* raFieldCurVal(char *raField)
-/* get the last stringg that was stored for a raField */
+/* get the last string that was stored for a raField */
 {
-struct raField *raf = hashFindVal(raFields, raField);
-if (raf != NULL)
-    return raf->curVal;
-else
+struct raField *raf = hashFindVal(gRaFields, raField);
+if (raf == NULL)
     return NULL;  /* not tracking field */
+else
+    return raf->curVal;
 }
 
 static void gbWarn(char *format, ...)
@@ -267,43 +302,43 @@ static char *emptyForNull(char *s)
 return ((s == NULL) ? "" : s);
 }
 
-void gbMetaDataInit(struct sqlConnection *conn, unsigned relSrcDb,
-                    char *gbdbGenBankPath, boolean goFasterOpt,
-                    char *tmpDirPath)
+void gbMetaDataInit(struct sqlConnection *conn, unsigned srcDb,
+                    unsigned dbLoadOptions, char *gbdbGenBankPath,
+                    char *tmpDir)
 /* initialize for parsing metadata */
 {
-srcDb = relSrcDb;
+gDbLoadOptions = dbLoadOptions;
+gSrcDb = srcDb;
 gbdbGenBank[0] = '\0';
 if (gbdbGenBankPath != NULL)
     strcpy(gbdbGenBank, gbdbGenBankPath);
-goFaster = goFasterOpt;
-strcpy(tmpDir, tmpDirPath);
+strcpy(gTmpDir, tmpDir);
 
 /* field table is cached in goFaster mode */
-if (raFieldTableList == NULL)
+if (gRaFieldTableList == NULL)
     raFieldsInit(conn);
 if (seqTbl == NULL)
-    seqTbl = seqTblNew(conn, tmpDir, (verbose >= 2));
+    seqTbl = seqTblNew(conn, gTmpDir, (verbose >= 2));
 if (imageCloneTbl == NULL)
-    imageCloneTbl = imageCloneTblNew(conn, tmpDir, (verbose >= 2));
+    imageCloneTbl = imageCloneTblNew(conn, gTmpDir, (verbose >= 2));
 
 if (!sqlTableExists(conn, "mrna"))
     sqlUpdate(conn, mrnaCreate);
 if (mrnaUpd == NULL)
-    mrnaUpd = sqlUpdaterNew("mrna", tmpDir, (verbose >= 2), &allUpdaters);
+    mrnaUpd = sqlUpdaterNew("mrna", gTmpDir, (verbose >= 2), &allUpdaters);
 
-if (srcDb == GB_REFSEQ)
+if (gSrcDb == GB_REFSEQ)
     {
     if (!sqlTableExists(conn, "refSeqStatus"))
         sqlUpdate(conn, refSeqStatusCreate);
     if (refSeqStatusUpd == NULL)
-        refSeqStatusUpd = sqlUpdaterNew("refSeqStatus", tmpDir, (verbose >= 2),
+        refSeqStatusUpd = sqlUpdaterNew("refSeqStatus", gTmpDir, (verbose >= 2),
                                         &allUpdaters);
 
     if (!sqlTableExists(conn, "refLink"))
         sqlUpdate(conn, refLinkCreate);
     if (refLinkUpd == NULL)
-        refLinkUpd = sqlUpdaterNew("refLink", tmpDir, (verbose >= 2),
+        refLinkUpd = sqlUpdaterNew("refLink", gTmpDir, (verbose >= 2),
                                    &allUpdaters);
     }
 }
@@ -428,15 +463,12 @@ for (;;)
         /* might have multiple values, just use first */
         raOmimId = gbParseUnsigned(raLf, firstWordInLine(val));
         }
-    else if ((type == GB_EST) && sameString(tag, "def"))
-        {
-        /* skip description for EST, or the table will get huge */
-        }
     else
         {
+        /* save under hashed name */
         if (sameString(tag, "cds"))
             safef(raCds, sizeof(raCds), "%s", val);
-        raFieldSet(tag, val, conn);
+        raFieldSet(tag, val);
         }
     }
 
@@ -485,7 +517,7 @@ assert((status->stateChg & GB_NEW) || (status->gbSeqId != 0));
 if (status->stateChg & GB_NEW)
     {
     char* seqType = (status->type == GB_MRNA) ?  SEQ_MRNA : SEQ_EST;
-    char* seqSrcDb = (srcDb == GB_GENBANK) ? SEQ_GENBANK : SEQ_REFSEQ;
+    char* seqSrcDb = (gSrcDb == GB_GENBANK) ? SEQ_GENBANK : SEQ_REFSEQ;
     assert(status->gbSeqId == 0);
 
     status->gbSeqId = seqTblAdd(seqTbl, raAcc, raVersion, seqType, seqSrcDb,
@@ -506,24 +538,18 @@ else if (status->stateChg & (GB_SEQ_CHG|GB_EXT_CHG))
 static void mrnaUpdate(struct gbStatus* status, struct sqlConnection *conn)
 /* Update the mrna table for the current entry */
 {
-HGID desc = 0;
-
-/* description is only tracked for mRNA */
-if (status->type == GB_MRNA)
-    desc = raFieldCurId("def");
-
 if (status->stateChg & GB_NEW)
     {
     sqlUpdaterAddRow(mrnaUpd, "%u\t%s\t%u\t%s\t%s\t%c\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u",
                      status->gbSeqId, raAcc, raVersion, gbFormatDate(raModDate),
                      ((status->type == GB_MRNA) ? "mRNA" : "EST"), raDir,
-                     raFieldCurId("src"), raFieldCurId("org"),
-                     raFieldCurId("lib"), raFieldCurId("clo"),
-                     raFieldCurId("sex"), raFieldCurId("tis"),
-                     raFieldCurId("dev"), raFieldCurId("cel"),
-                     raFieldCurId("cds"), raFieldCurId("key"), desc,
-                     raFieldCurId("gen"), raFieldCurId("pro"),
-                     raFieldCurId("aut"));
+                     raFieldCurId("src", conn), raFieldCurId("org", conn),
+                     raFieldCurId("lib", conn), raFieldCurId("clo", conn),
+                     raFieldCurId("sex", conn), raFieldCurId("tis", conn),
+                     raFieldCurId("dev", conn), raFieldCurId("cel", conn),
+                     raFieldCurId("cds", conn), raFieldCurId("key", conn),
+                     raFieldCurId("def", conn), raFieldCurId("gen", conn),
+                     raFieldCurId("pro", conn), raFieldCurId("aut", conn));
     }
 else if (status->stateChg & GB_META_CHG)
     {
@@ -534,13 +560,14 @@ else if (status->stateChg & GB_META_CHG)
                      "description=%u, geneName=%u, productName=%u, author=%u "
                      "WHERE id=%u",
                      raVersion, gbFormatDate(raModDate), raDir,
-                     raFieldCurId("src"), raFieldCurId("org"),
-                     raFieldCurId("lib"), raFieldCurId("clo"),
-                     raFieldCurId("sex"), raFieldCurId("tis"),
-                     raFieldCurId("dev"), raFieldCurId("cel"),
-                     raFieldCurId("cds"), raFieldCurId("key"), desc,
-                     raFieldCurId("gen"), raFieldCurId("pro"),
-                     raFieldCurId("aut"), status->gbSeqId);
+                     raFieldCurId("src", conn), raFieldCurId("org", conn),
+                     raFieldCurId("lib", conn), raFieldCurId("clo", conn),
+                     raFieldCurId("sex", conn), raFieldCurId("tis", conn),
+                     raFieldCurId("dev", conn), raFieldCurId("cel", conn),
+                     raFieldCurId("cds", conn), raFieldCurId("key", conn),
+                     raFieldCurId("def", conn), raFieldCurId("gen", conn),
+                     raFieldCurId("pro", conn), raFieldCurId("aut", conn),
+                     status->gbSeqId);
     }
 }
 
@@ -564,7 +591,7 @@ else if (status->stateChg & GB_META_CHG)
                        raRefSeqStatus, raAcc);
 }
 
-static void refLinkUpdate(struct gbStatus* status)
+static void refLinkUpdate(struct sqlConnection *conn, struct gbStatus* status)
 /* Update the refLink table for the current entry */
 {
 char *gen = emptyForNull(raFieldCurVal("gen"));
@@ -576,14 +603,14 @@ pro = sqlEscapeString2(alloca(2*strlen(pro)+1), pro);
 if (status->stateChg & GB_NEW)
     sqlUpdaterAddRow(refLinkUpd, "%s\t%s\t%s\t%s\t%u\t%u\t%u\t%u",
                      gen, pro, raAcc, raProtAcc,
-                     raFieldCurId("gen"), raFieldCurId("pro"),
+                     raFieldCurId("gen", conn), raFieldCurId("pro", conn),
                      raLocusLinkId, raOmimId);
 else if (status->stateChg & GB_META_CHG)
     sqlUpdaterModRow(refLinkUpd, 1, "name='%s', product='%s', protAcc='%s', "
                      "geneName=%u, prodName=%u, locusLinkId=%u, "
                      "omimId=%u where mrnaAcc='%s'",
                      gen, pro, raProtAcc,
-                     raFieldCurId("gen"), raFieldCurId("pro"),
+                     raFieldCurId("gen", conn), raFieldCurId("pro", conn),
                      raLocusLinkId, raOmimId, raAcc);
 }
 
@@ -604,6 +631,17 @@ if (raProtFaOff >= 0)
     }
 }
 
+static boolean keepDesc(struct gbStatus* status)
+/* Check if description should be stored.  Skip description for EST, or the
+ * table will get huge.  Xeno mRNA descriptions are optional, normally
+ * omitted. Always save refSeq description. */
+{
+return ((status->type == GB_MRNA) && 
+        ((status->orgCat == GB_NATIVE)
+         || (gDbLoadOptions & DBLOAD_XENO_MRNA_DESC)
+         || (status->srcDb == GB_REFSEQ)));
+}
+
 static void updateMetaData(struct sqlConnection *conn, struct gbStatus* status,
                            struct gbStatusTbl* statusTbl, HGID faFileId,
                            HGID pepFaId)
@@ -612,14 +650,18 @@ static void updateMetaData(struct sqlConnection *conn, struct gbStatus* status,
 {
 char *geneName;
 
+/* clear description if we are not keeping it */
+if (!keepDesc(status))
+    raFieldSet("def", NULL);
+
 seqUpdate(status, faFileId);  /* must be first to get status->gbSeqId */
 mrnaUpdate(status, conn);
 imageCloneUpdate(status);
 
-if (srcDb == GB_REFSEQ)
+if (gSrcDb == GB_REFSEQ)
     {
     refSeqStatusUpdate(status);
-    refLinkUpdate(status);
+    refLinkUpdate(conn, status);
     refSeqPepUpdate(conn, pepFaId);
     }
 
@@ -630,7 +672,7 @@ status->modDate = raModDate;
 if (!genbankParseCds(raCds, &status->cdsStart, &status->cdsEnd))
     {
     /* not valid CDS, only warn if RefSeq, where we expect to be better */
-    if (srcDb == GB_REFSEQ)
+    if (gSrcDb == GB_REFSEQ)
         gbWarn("%s: malformed RefSeq CDS: %s", status->acc, raCds);
     }
 
@@ -734,7 +776,7 @@ seqTblCommit(seqTbl, conn);
 seqTblFree(&seqTbl);
 
 /* unique string tables next, before mrna */
-for (nextRa = raFieldTableList; nextRa != NULL; nextRa = nextRa->next)
+for (nextRa = gRaFieldTableList; nextRa != NULL; nextRa = nextRa->next)
     uniqueStrTblCommit(nextRa->ust, conn);
 
 /* image ids are loaded next */
@@ -750,7 +792,7 @@ mrnaUpd = NULL;
 refSeqStatusUpd = NULL;
 refLinkUpd = NULL;
 /* cache unique string tables in goFaster mode */
-if (!goFaster)
+if ((gDbLoadOptions & DBLOAD_GO_FASTER) == 0)
     raFieldsFree();
 }
 
@@ -787,16 +829,16 @@ sqlDeleterDel(deleter, conn, SEQ_TBL, "acc");
 void gbMetaDataDeleteOutdated(struct sqlConnection *conn,
                               struct gbSelect* select,
                               struct gbStatusTbl* statusTbl,
-                              char *tmpDirPath)
+                              char *tmpDir)
 /* delete outdated metadata */
 {
-struct sqlDeleter* deleter = sqlDeleterNew(tmpDirPath, (verbose >= 2));
+struct sqlDeleter* deleter = sqlDeleterNew(tmpDir, (verbose >= 2));
 struct gbStatus* status;
-srcDb = select->release->srcDb;
-strcpy(tmpDir, tmpDirPath);
+gSrcDb = select->release->srcDb;
+strcpy(gTmpDir, tmpDir);
 
 /* Delete any meta modified from id tables */
-deleter = sqlDeleterNew(tmpDirPath, (verbose >= 2));
+deleter = sqlDeleterNew(tmpDir, (verbose >= 2));
 for (status = statusTbl->seqChgList; status != NULL; status = status->next)
     {
     if (status->stateChg & GB_META_CHG)
@@ -812,7 +854,7 @@ gbMetaDataDeleteFromIdTables(conn, deleter);
 sqlDeleterFree(&deleter);
 
 /* remove deleted and orphans from metadata. */
-deleter = sqlDeleterNew(tmpDirPath, (verbose >= 2));
+deleter = sqlDeleterNew(tmpDir, (verbose >= 2));
 for (status = statusTbl->deleteList; status != NULL; status = status->next)
     sqlDeleterAddAcc(deleter, status->acc);
 for (status = statusTbl->orphanList; status != NULL; status = status->next)

@@ -6,7 +6,7 @@
 #include "gbGenome.h"
 #include "common.h"
 
-static char const rcsid[] = "$Id: gbDefs.c,v 1.1 2003/06/03 01:27:45 markd Exp $";
+static char const rcsid[] = "$Id: gbDefs.c,v 1.2 2003/06/28 04:02:21 markd Exp $";
 
 /* Directories */
 char* GB_PROCESSED_DIR = "data/processed";
@@ -199,13 +199,13 @@ return NULL;
 char* gbFmtSelect(unsigned select)
 /* Format a set of the various selection flags.  If restricted to a particular
  * type, then this set is parsable by the parse methods.
- * Warning: return is a static buffer, however rotated between 4 buffers to
+ * Warning: return is a static buffer, however rotated between 8 buffers to
  * make it easy to use in print statements. */
 /* FIXME: this name is now confusing due other select */
 {
 static int iBuf = 0;
-static char bufs[4][256];
-if (++iBuf >= 4)
+static char bufs[8][256];
+if (++iBuf >= 8)
     iBuf = 0;
 bufs[iBuf][0] = '\0';
 

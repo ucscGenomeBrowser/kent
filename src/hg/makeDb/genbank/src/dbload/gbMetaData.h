@@ -14,9 +14,9 @@ struct gbStatusTbl;
 struct gbSelect;
 struct sqlDeleter;
 
-void gbMetaDataInit(struct sqlConnection *conn, unsigned relSrcDb,
-                    char *gbdbGenBankPath, boolean goFasterOpt,
-                    char *tmpDirPath);
+void gbMetaDataInit(struct sqlConnection *conn, unsigned srcDb,
+                    unsigned dbLoadOptions, char *gbdbGenBankPath, 
+                    char *tmpDir);
 /* initialize for parsing metadata */
 
 void gbMetaDataProcess(struct sqlConnection *conn,
@@ -39,7 +39,7 @@ void gbMetaDataDeleteFromTables(struct sqlConnection *conn, unsigned srcDb,
 void gbMetaDataDeleteOutdated(struct sqlConnection *conn,
                               struct gbSelect* select,
                               struct gbStatusTbl* statusTbl,
-                              char *tmpDirPath);
+                              char *tmpDir);
 /* delete outdated metadata */
 
 void gbMetaDataDrop(struct sqlConnection *conn);

@@ -15,6 +15,7 @@
 #include "gbIndex.h"
 #include "gbRelease.h"
 #include "gbEntry.h"
+#include "dbLoadOptions.h"
 #include "gbAligned.h"
 #include "gbGenome.h"
 #include "gbStatusTbl.h"
@@ -25,7 +26,7 @@
 #include "gbBuildState.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: gbAlignData.c,v 1.4 2003/06/15 07:11:24 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignData.c,v 1.5 2003/06/28 04:02:21 markd Exp $";
 
 /* table names */
 static char *REF_SEQ_ALI = "refSeqAli";
@@ -42,8 +43,8 @@ static char *gXenoRefGeneTableDef = NULL;
 static char *gXenoRefFlatTableDef = NULL;
 
 /* global conf */
+static unsigned gDbLoadOptions = 0;   /* options */
 static char gTmpDir[PATH_LEN];
-static boolean gBuildPerChrom = FALSE;   /* build per-chrom tables */
 static struct slName* gChroms = NULL;  /* global list of chromsome */
 
 /* objects used to build tab files */
@@ -89,11 +90,11 @@ safef(editDef, sizeof(editDef),
 free(tmpDef);
 }
 
-void gbAlignDataInit(char *tmpDirPath, boolean noPerChrom)
+void gbAlignDataInit(char *tmpDirPath, unsigned dbLoadOptions)
 /* initialize for outputing PSL files, called once per genbank type */
 {
+gDbLoadOptions = dbLoadOptions;
 strcpy(gTmpDir, tmpDirPath);
-gBuildPerChrom = !noPerChrom;
 if (gChroms == NULL)
     gChroms = hAllChromNames();
 
@@ -226,7 +227,8 @@ case GB_XENO|GB_EST:
 writePsl(fh, psl);
 
 /* per-chromosome for table for native */
-if ((status->entry->orgCat == GB_NATIVE) && gBuildPerChrom)
+if ((status->entry->orgCat == GB_NATIVE) && 
+    (gDbLoadOptions & DBLOAD_PER_CHROM_ALIGN))
     {
     if (select->type == GB_MRNA)
         fh = getChromPslTabFile("mrna", psl->tName, &gPerChromMRnaPsls, conn);
@@ -392,7 +394,7 @@ if ((status != NULL) && (status->selectAlign != NULL)
     {
     /* replace with acc without version */
     strcpy(psl->qName, acc);
-    if (gBuildPerChrom)
+    if (gDbLoadOptions & DBLOAD_PER_CHROM_ALIGN)
         fh = getChromPslTabFile("intronEst", psl->tName, &gIntronEstPsls, conn);
     else
         fh = getPslTabFile("intronEst", conn, &gIntronEstUpd);

@@ -17,7 +17,7 @@
 #include "hdb.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: chkMetaDataTbls.c,v 1.2 2003/06/15 07:11:25 markd Exp $";
+static char const rcsid[] = "$Id: chkMetaDataTbls.c,v 1.3 2003/06/28 04:02:21 markd Exp $";
 
 
 static char* validRefSeqStatus[] = {
@@ -114,6 +114,9 @@ while (iRow < 20)
     int id = strToUnsigned(row[iRow++], md->acc, "mrna.?", NULL);
     if (id > 0)
         numNonZero++;
+    /* remember if we have a description */
+    if (iRow-1 == 16)
+        md->haveDesc = (id != 0);
     }
 if (numNonZero == 0)
     gbError("%s: none of mrna string ids have non-zero values", dir);
@@ -138,7 +141,11 @@ if (select->accPrefix != NULL)
           select->accPrefix);
 safef(query, sizeof(query), 
       "SELECT acc,id,version,moddate,type,direction,"
-      "source,organism,library,mrnaClone,sex,tissue,development,cell,cds,keyword,description,geneName,productName,author "
+      /*        0  1       2       3    4         5 */
+      "source,organism,library,mrnaClone,sex,tissue,development,cell,cds,"
+      /*    6        7       8         9  10     11          12   13  14 */
+      "keyword,description,geneName,productName,author "
+      /*    15          16       17          18     19 */
       "FROM mrna WHERE (type='%s')%s",
       ((select->type == GB_MRNA) ? "mRNA" : "EST"), accWhere);
 /* mrna doesn't have a srcDb, so we guess from acc */
@@ -432,7 +439,8 @@ sqlFreeResult(&result);
 }
 
 static void loadGbStatusRow(struct metaDataTbls* metaDataTbls,
-                            struct sqlConnection* conn, char** row)
+                            struct sqlConnection* conn, char** row,
+                            unsigned descOrgCats)
 /* load a row of the gbStatus table */
 {
 struct metaData* md;
@@ -455,6 +463,7 @@ if (!isOk)
 
 md->gbsType = gbParseType(row[iRow++]);
 md->gbsSrcDb = gbParseSrcDb(row[iRow++]);
+md->gbsOrgCat = gbParseOrgCat(row[iRow++]);
 seqId = strToUnsigned(row[iRow++], md->acc, "gbStatus.gbSeq", NULL);
 md->gbsNumAligns = strToUnsigned(row[iRow++], md->acc, "gbStatus.numAligns",
                                  NULL);
@@ -472,17 +481,29 @@ if (md->inMrna)
     if (md->gbsSrcDb != (md->typeFlags & GB_SRC_DB_MASK))
         gbError("%s: gbStatus.srcDb (%s) not same mrna.srcDb (%s)", md->acc,
                 gbFmtSelect(md->gbsSrcDb), gbFmtSelect(md->typeFlags));
-    }
-if (md->inMrna)
-    {
     if ((md->gbsModDate != md->mrnaModdate))
         gbError("%s: gbStatus.modDate (%s) not same mrna.moddate (%s)", md->acc,
                 gbFormatDate(md->gbsModDate), gbFormatDate(md->mrnaModdate));
+    /* verify either have or don't have a description */
+    if (descOrgCats & md->gbsOrgCat)
+        {
+        if (!md->haveDesc)
+            gbError("%s: should have mrna.description: %s", md->acc,
+                    gbFmtSelect(md->gbsType|md->gbsOrgCat|md->gbsSrcDb));
+        }
+    else
+        {
+        if (md->haveDesc)
+            gbError("%s: should not have mrna.description: %s", md->acc,
+                    gbFmtSelect(md->gbsType|md->gbsOrgCat|md->gbsSrcDb));
+        }
     }
 }
 
 static void loadGbStatus(struct metaDataTbls* metaDataTbls,
-                         struct gbSelect* select, struct sqlConnection* conn)
+                         struct gbSelect* select, 
+                         unsigned descOrgCats,
+                         struct sqlConnection* conn)
 /* load the gbStatus table */
 {
 char accWhere[64];
@@ -496,7 +517,7 @@ if (select->accPrefix != NULL)
     safef(accWhere, sizeof(accWhere), " AND (acc LIKE '%s%%')",
           select->accPrefix);
 safef(query, sizeof(query), 
-      "SELECT acc,version,modDate,type,srcDb,gbSeq,numAligns "
+      "SELECT acc,version,modDate,type,srcDb,orgCat,gbSeq,numAligns "
       "FROM gbStatus WHERE (type='%s') AND (srcDb='%s')%s",
       ((select->type == GB_MRNA) ? "mRNA" : "EST"),
       ((select->release->srcDb == GB_GENBANK) ? "GenBank" : "RefSeq"),
@@ -504,7 +525,7 @@ safef(query, sizeof(query),
 
 result = sqlGetResult(conn, query);
 while ((row = sqlNextRow(result)) != NULL)
-    loadGbStatusRow(metaDataTbls, conn, row);
+    loadGbStatusRow(metaDataTbls, conn, row, descOrgCats);
 sqlFreeResult(&result);
 }
 
@@ -645,8 +666,10 @@ if (!md->inGbIndex)
 struct metaDataTbls* chkMetaDataTbls(struct gbSelect* select,
                                      struct sqlConnection* conn,
                                      boolean checkExtSeqRecs,
+                                     unsigned descOrgCats,
                                      char* gbdbMapToCurrent)
-/* load the metadata tables do basic validatation */
+/* load the metadata tables do basic validatation.  descOrgCats are
+ * orgCats that should have descriptions. */
 {
 struct metaDataTbls* metaDataTbls;
 
@@ -667,7 +690,7 @@ if (select->release->srcDb == GB_REFSEQ)
     loadRefSeqStatus(metaDataTbls, conn);
     loadRefLink(metaDataTbls, conn);
     }
-loadGbStatus(metaDataTbls, select, conn);
+loadGbStatus(metaDataTbls, select, descOrgCats, conn);
 
 gbVerbLeave(1, "load and check metadata tables: %s", gbSelectDesc(select));
 return metaDataTbls;

@@ -14,9 +14,8 @@ struct gbStatus;
 
 struct gbStatusTbl* gbBuildState(struct sqlConnection *conn,
                                  struct gbSelect* select,
-                                 boolean initialLoad,
+                                 unsigned dbLoadOptions,
                                  float maxShrinkage,
-                                 boolean allowLargeDeletes,
                                  char* tmpDir, int verboseLevel,
                                  boolean* maxShrinkageExceeded);
 /* Load status table and find of state of all genbank entries in the release

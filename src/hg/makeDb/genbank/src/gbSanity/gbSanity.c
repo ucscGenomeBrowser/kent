@@ -37,7 +37,7 @@
 #include "chkAlignTbls.h"
 #include <stdarg.h>
 
-static char const rcsid[] = "$Id: gbSanity.c,v 1.2 2003/06/15 07:11:25 markd Exp $";
+static char const rcsid[] = "$Id: gbSanity.c,v 1.3 2003/06/28 04:02:21 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -45,6 +45,7 @@ static struct optionSpec optionSpecs[] = {
     {"release", OPTION_STRING},
     {"type", OPTION_STRING},
     {"xenoRefSeq", OPTION_BOOLEAN},
+    {"xenoMrnaDesc", OPTION_BOOLEAN},
     {"accPrefix", OPTION_STRING},
     {"test", OPTION_BOOLEAN},
     {"checkExtSeqRecs", OPTION_BOOLEAN},
@@ -57,6 +58,7 @@ static struct optionSpec optionSpecs[] = {
 static char* gGbdbMapToCurrent = NULL;  /* map this gbdb root to current */
 static boolean gNoPerChrom = FALSE;    /* don't check per-chrom tables */
 static boolean gXenoRefSeq = FALSE;    /* have xeno RefSeq tables */
+static boolean gXenoMrnaDesc = FALSE;    /* Have descriptions for xeno mRNAs */
 static boolean gCheckExtSeqRecs = FALSE;
 
 void checkMrnaStrKeys(struct sqlConnection* conn)
@@ -108,9 +110,22 @@ void checkSanity(struct gbSelect* select,
 /* check sanity on a select partation */
 {
 /* load and validate all metadata */
-struct metaDataTbls* metaDataTbls = chkMetaDataTbls(select, conn,
-                                                    gCheckExtSeqRecs,
-                                                    gGbdbMapToCurrent);
+struct metaDataTbls* metaDataTbls;
+unsigned descOrgCats = 0;
+
+/* determine if there should be descriptions */
+if (select->type == GB_MRNA)
+    {
+    if (select->release->srcDb == GB_REFSEQ)
+        descOrgCats |= GB_NATIVE|GB_XENO;
+    else if (gXenoMrnaDesc)
+        descOrgCats |= GB_NATIVE|GB_XENO;
+    else
+        descOrgCats |= GB_NATIVE;
+    }
+
+metaDataTbls= chkMetaDataTbls(select, conn, gCheckExtSeqRecs, descOrgCats,
+                              gGbdbMapToCurrent);
 chkGbRelease(select, metaDataTbls);
 
 /* check the alignment tables */
@@ -284,6 +299,7 @@ testMode = optionExists("test");
 gCheckExtSeqRecs = optionExists("checkExtSeqRecs");
 gNoPerChrom = optionExists("noPerChrom");
 gXenoRefSeq = optionExists("xenoRefSeq");
+gXenoMrnaDesc = optionExists("xenoMrnaDesc");
 database = argv[1];
 
 gbVerbEnter(0, "gbSanity: begin: %s", database);

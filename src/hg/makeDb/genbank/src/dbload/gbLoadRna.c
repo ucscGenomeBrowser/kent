@@ -10,6 +10,7 @@
 #include "hdb.h"
 #include "portable.h"
 #include "hgRelate.h"
+#include "dbLoadOptions.h"
 #include "gbIndex.h"
 #include "gbRelease.h"
 #include "gbUpdate.h"
@@ -30,7 +31,7 @@
 #include "extFileTbl.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.3 2003/06/25 17:49:01 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.4 2003/06/28 04:02:21 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 /* FIXME: ignored deletion could be in it's own module */
@@ -43,6 +44,7 @@ static struct optionSpec optionSpecs[] = {
     {"accPrefix", OPTION_STRING},
     {"workdir", OPTION_STRING},
     {"xenoRefSeq", OPTION_BOOLEAN},
+    {"xenoMrnaDesc", OPTION_BOOLEAN},
     {"goFaster", OPTION_BOOLEAN},
     {"dryRun", OPTION_BOOLEAN},
     {"initialLoad", OPTION_BOOLEAN},
@@ -57,15 +59,10 @@ static struct optionSpec optionSpecs[] = {
 
 
 /* command list parameters */
+static unsigned gDbLoadOptions = 0;   /* options */
 static char *gDatabase = NULL;        /* database to load */
-static boolean gXenoRefSeq = FALSE;   /* create xeno RefSeq tables */
-static boolean gGoFaster = FALSE;     /* optmized for speed */
-static boolean gInitialLoad = FALSE;  /* initial load of database */
-static boolean gDryRun = FALSE;       /* don't modify the database */
 static char* gGbdbGenBank = NULL;     /* root file path to put in database */
 static float gMaxShrinkage = 0.1;     /* restriction on number deleted */
-static boolean gAllowLargeDeletes = FALSE; /* override maxShrinkage */
-static boolean gNoPerChrom = FALSE;   /* don't build per-chrom tables */
 static char* gWorkDir = NULL;         /* tmp directory */
 
 /* other globals */
@@ -421,7 +418,8 @@ void processMetaData(struct sqlConnection *conn, struct gbSelect* select,
 struct gbUpdate* update;
 
 gbVerbEnter(1, "processing metadata");
-gbMetaDataInit(conn, select->release->srcDb, gGbdbGenBank, gGoFaster, tmpDir);
+gbMetaDataInit(conn, select->release->srcDb, gDbLoadOptions, 
+               gGbdbGenBank, tmpDir);
 
 for (update = select->release->updates; update != NULL; update = update->next)
     {
@@ -433,7 +431,7 @@ for (update = select->release->updates; update != NULL; update = update->next)
     }
 select->update = NULL;
 gbVerbLeave(1, "processing metadata");
-if (!gInitialLoad)
+if ((gDbLoadOptions & DBLOAD_INITIAL) == 0)
     loadMetaData(conn);
 }
 
@@ -503,7 +501,7 @@ struct gbUpdate* update;
 
 gbVerbEnter(1, "processing alignments");
 
-gbAlignDataInit(tmpDir, gNoPerChrom);
+gbAlignDataInit(tmpDir, gDbLoadOptions);
 /* load alignments for updates that are new and actually had sequences align */
 for (update = select->release->updates; update != NULL; update = update->next)
     {
@@ -513,7 +511,7 @@ for (update = select->release->updates; update != NULL; update = update->next)
 select->update = NULL;
 gbAlignDataSetStatus(statusTbl);
 gbVerbLeave(1, "processing alignments");
-if (!gInitialLoad)
+if ((gDbLoadOptions & DBLOAD_INITIAL) == 0)
     loadAligns(conn);
 }
 
@@ -538,22 +536,21 @@ else
 safef(tmpDir, sizeof(tmpDir), "%s/%s/%s/%s",
       gWorkDir, select->release->name, select->release->genome->database,
       typePrefix);
-if (!gDryRun)
+if ((gDbLoadOptions & DBLOAD_DRY_RUN) == 0)
     gbMakeDirs(tmpDir);
 
 /* Build list of entries that need processed.  This also flags updates that
  * have the change and new entries so we can limit the per-update processing.
  */
-statusTbl = gbBuildState(conn, select, gInitialLoad, gMaxShrinkage,
-                         gAllowLargeDeletes, tmpDir, verbose,
-                         &maxShrinkageExceeded);
+statusTbl = gbBuildState(conn, select, gDbLoadOptions, gMaxShrinkage, tmpDir,
+                         verbose, &maxShrinkageExceeded);
 if (maxShrinkageExceeded)
     {
     fprintf(stderr, "Warning: switching to dryRun mode due to maxShrinkage being exceeded\n");
     gMaxShrinkageError = TRUE;
-    gDryRun = TRUE;
+    gDbLoadOptions |= DBLOAD_DRY_RUN;
     }
-if (gDryRun)
+if (gDbLoadOptions & DBLOAD_DRY_RUN)
     {
     gbVerbLeave(1, "dry run, skipping update %s", gbSelectDesc(select));
     gbStatusTblFree(&statusTbl);
@@ -568,7 +565,7 @@ processMetaData(conn, select, statusTbl, tmpDir);
 processAligns(conn, select, statusTbl, tmpDir);
 
 /* now it's safe to update the status table, delay commit for initialLoad */
-if (gInitialLoad)
+if (gDbLoadOptions & DBLOAD_INITIAL)
     slSafeAddHead(&gPendingStatusUpdates,
                   gbStatusTblUpdate(statusTbl, conn, FALSE));
 else
@@ -576,7 +573,7 @@ else
 
 /* add this and partation to the loaded table, if not already there */
 updateLoadedTbl(select);
-if (!gInitialLoad)
+if ((gDbLoadOptions & DBLOAD_INITIAL) == 0)
     gbLoadedTblCommit(gLoadedTbl, conn);
 
 /* print before freeing memory */
@@ -672,11 +669,11 @@ unsigned orgCats;
 hgSetDb(database);
 conn = hAllocConn();
 
-if (gInitialLoad)
+if (gDbLoadOptions & DBLOAD_INITIAL)
     checkInitialLoad(conn);
 
 /* delete anything on the reload list up front */
-if (!gDryRun && (reloadList != NULL))
+if (((gDbLoadOptions & DBLOAD_DRY_RUN) == 0) && (reloadList != NULL))
     deleteReload(reloadList);
 
 /* get list of partitions to process.  Only include xeno refses if
@@ -684,11 +681,14 @@ if (!gDryRun && (reloadList != NULL))
 orgCats = (GB_NATIVE|GB_XENO);
 gbSelectList = gbIndexGetPartitions(index, GB_ALIGNED, GB_GENBANK,
                                     relName, types, orgCats, limitAccPrefix);
-orgCats = gXenoRefSeq ? (GB_NATIVE|GB_XENO) : GB_NATIVE;
+
+orgCats = (gDbLoadOptions & DBLOAD_XENO_REFSEQS)
+    ? (GB_NATIVE|GB_XENO) : GB_NATIVE;
 rsSelectList = gbIndexGetPartitions(index, GB_ALIGNED, GB_REFSEQ,
                                     relName, types, orgCats, limitAccPrefix);
+
 selectList = slCat(gbSelectList, rsSelectList);
-if (gInitialLoad && (selectList == NULL))
+if ((gDbLoadOptions & DBLOAD_INITIAL) && (selectList == NULL))
     errAbort("-initialLoad specified and no sequences were found to load");
 
 /* clean up any ignored entries before setting anything up */
@@ -702,11 +702,12 @@ for (select = selectList; select != NULL; select = select->next)
     loadPartition(select, conn, forceLoad);
 
 /* If we are delaying table load, now is the time */
-if (gInitialLoad && !gDryRun)
+if ((gDbLoadOptions & DBLOAD_INITIAL)
+    && ((gDbLoadOptions & DBLOAD_DRY_RUN) == 0))
     loadDelayedTables();
 
 /* clean up extFile table if we change references for any seq */
-if ((gTotalExtChgCnt > 0) && !gDryRun)
+if ((gTotalExtChgCnt > 0) && ((gDbLoadOptions & DBLOAD_DRY_RUN) == 0))
     cleanExtFileTable();
 
 /* clean up */
@@ -755,8 +756,12 @@ errAbort(
   "\n"
   "     -accPrefix=ac - Only process ESTs with this 2 char accession prefix.\n"
   "      Must specify -type=est, mostly useful for debugging.\n"
+  "\n"
   "     -xenoRefSeq - Build xeno RefSeq alignment tables.  By default, only\n"
   "      native RefSeq alignments are loaded.\n"
+  "\n"
+  "     -xenoMrnaDesc - Load descriptions for xeno mRNAs.  By default, only\n"
+  "      native mRNA descriptions are loaded.\n"
   "\n"
   "     -gbdbGenBank=dir - set gbdb path to dir, default /gbdb/genbank\n"
   "\n"
@@ -849,18 +854,26 @@ else
     gWorkDir = optionVal("workdir", "work/load");
     if (limitAccPrefix != NULL)
         tolowers(limitAccPrefix);
-    gGoFaster = optionExists("goFaster");
-    gDryRun = optionExists("dryRun");
-    gInitialLoad = optionExists("initialLoad");
-    if (gInitialLoad)
-        gGoFaster = TRUE;
+    if (optionExists("goFaster"))
+        gDbLoadOptions |= DBLOAD_GO_FASTER;
+    if (optionExists("dryRun"))
+        gDbLoadOptions |= DBLOAD_DRY_RUN;
+    if (optionExists("initialLoad"))
+        gDbLoadOptions |= DBLOAD_INITIAL|DBLOAD_GO_FASTER;
+    if (optionExists("xenoRefSeq"))
+        gDbLoadOptions |= DBLOAD_XENO_REFSEQS;
+    if (optionExists("xenoMrnaDesc"))
+        gDbLoadOptions |= DBLOAD_XENO_MRNA_DESC;
+    if (optionExists("allowLargeDeletes"))
+        gDbLoadOptions |= DBLOAD_LARGE_DELETES;
+    if (!optionExists("noPerChrom"))
+        gDbLoadOptions |= DBLOAD_PER_CHROM_ALIGN;
+        
     gMaxShrinkage = optionFloat("maxShrinkage", 0.1);
-    gXenoRefSeq = optionExists("xenoRefSeq");
-    gAllowLargeDeletes = optionExists("allowLargeDeletes");
     gGbdbGenBank = optionVal("gbdbGenBank", "/gbdb/genbank");
-    gNoPerChrom = optionExists("noPerChrom");
+
     hgSetDb(gDatabase);
-    if (gDryRun)
+    if (gDbLoadOptions & DBLOAD_DRY_RUN)
         printf("*** using dry run mode ***\n");
     gbLoadRna(gDatabase, relName, typeStr, limitAccPrefix, reloadList);
     }

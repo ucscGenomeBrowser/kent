@@ -10,6 +10,7 @@ struct gbEntry;
 struct metaDataTbls* chkMetaDataTbls(struct gbSelect* select,
                                      struct sqlConnection* conn,
                                      boolean checkExtSeqRecs,
+                                     unsigned descOrgCats,
                                      char* gbdbMapToCurrent);
 /* load the metadata tables do basic validatation */
 

@@ -112,7 +112,7 @@ char* gbOrgCatName(unsigned orgCat);
 char* gbFmtSelect(unsigned select);
 /* Format a set of the various selection flags.  If restricted to a particular
  * type, then this set is parsable by the parse methods. 
- * Warning: return is a static buffer, however rotated between 4 buffers to
+ * Warning: return is a static buffer, however rotated between 8 buffers to
  * make it easy to use in print statements. */
 
 char* gbSelectDesc(struct gbSelect* select);

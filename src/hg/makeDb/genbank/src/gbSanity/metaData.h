@@ -28,7 +28,7 @@ struct metaData
     boolean isNative;
 
     /* Should this be excluded from the database?  RefSeq non-native are
-     * not loaded into the DB. */
+     * not usually loaded into the DB. */
     boolean excluded;
 
     /* fields from the mrna table */
@@ -36,6 +36,7 @@ struct metaData
     unsigned mrnaVersion;  /* stripped ACC */
     time_t mrnaModdate;
     unsigned mrnaType;
+    boolean haveDesc;
 
     /* fields from the seq table */
     unsigned seqSize;
@@ -49,6 +50,7 @@ struct metaData
     time_t gbsModDate;
     unsigned gbsType;
     unsigned gbsSrcDb;
+    unsigned gbsOrgCat;
     unsigned gbsNumAligns;
 
     /* Count of alignments found */
