@@ -76,7 +76,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.547 2003/07/01 22:45:46 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.548 2003/07/03 00:15:50 fanhsu Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -3018,6 +3018,36 @@ tg->mapItemName = knownGeneMapName;
 tg->itemColor 	= knownGeneColor;
 }
 
+char *superfamilyName(struct track *tg, void *item)
+/* Return map name of the track item (used by hgc). */
+{
+char *name;
+char *proteinName;
+char *genomeName;
+struct sqlConnection *conn = hAllocConn();
+char conditionStr[256];
+
+struct bed *sw = item;
+
+// This is necessary because Ensembl changed their xref table definition
+sprintf(conditionStr, "transcript_name='%s'", sw->name);
+if (hTableExists("ensemblXref2"))
+    {
+    proteinName = sqlGetField(conn, database, "ensemblXref2", "translation_name", conditionStr);
+    }
+else
+    {
+    proteinName = sqlGetField(conn, database, "ensemblXref", "translation_name", conditionStr);
+    }
+name = strdup(proteinName);
+hFreeConn(&conn);
+
+abbr(name, "000000");
+abbr(name, "00000");
+abbr(name, "0000");
+return(name);
+}
+
 char *superfamilyMapName(struct track *tg, void *item)
 /* Return map name of the track item (used by hgc). */
 {
@@ -3029,8 +3059,16 @@ char conditionStr[256];
 
 struct bed *sw = item;
 
+// This is necessary because Ensembl changed their xref table definition
 sprintf(conditionStr, "transcript_name='%s'", sw->name);
-proteinName = sqlGetField(conn, database, "ensemblXref", "translation_name", conditionStr);
+if (hTableExists("ensemblXref2"))
+    {
+    proteinName = sqlGetField(conn, database, "ensemblXref2", "translation_name", conditionStr);
+    }
+else
+    {
+    proteinName = sqlGetField(conn, database, "ensemblXref", "translation_name", conditionStr);
+    }
 name = strdup(proteinName);
 hFreeConn(&conn);
 
@@ -3187,7 +3225,7 @@ void superfamilyMethods(struct track *tg)
 {
 tg->drawItems 	= superfamilyDraw;
 tg->drawItemAt 	= superfamilyDrawAt;
-tg->itemName 	= superfamilyMapName;
+tg->itemName 	= superfamilyName;
 tg->mapItemName = superfamilyMapName;
 tg->totalHeight = tgFixedTotalHeight;
 tg->itemHeight 	= tgFixedItemHeight;
