@@ -1,8 +1,9 @@
 #!/bin/sh
+VERBOSE=""
 
 rm -f chrM.ascii chr0.wib chrM.wib
 ./testData.pl 16570 4 > chrM.ascii
-wigAsciiToBinary -verbose -chrom=chr0 chrM.ascii
+wigAsciiToBinary ${VERBOSE} -chrom=chr0 chrM.ascii
 
 S0=`sum -r gold.wib`
 S1=`sum -r chr0.wib`
@@ -13,11 +14,17 @@ fi
 
 rm -f chrM_256.ascii chrS.wig chrS.wib
 ./testData.pl 16570 4 256 > chrM_256.ascii
-wigAsciiToBinary -verbose -dataSpan=256 -binsize=4 -chrom=chrS chrM_256.ascii
+wigAsciiToBinary ${VERBOSE} -dataSpan=256 -binsize=4 -chrom=chrS chrM_256.ascii
 
+#	This binary file should be the same as before
 S0=`sum -r gold.wib`
-S1=`sum -r chr0.wib`
+S1=`sum -r chrS.wib`
 
 if [ "${S0}" != "${S1}" ]; then
 	echo "*** FAIL ***"
 fi
+
+rm -f chrM_1K.ascii chrK.wig chrK.wib
+./testData.pl 16570 16 1024 > chrM_1K.ascii
+echo -e "26976758\t63" >> chrM_1K.ascii
+wigAsciiToBinary ${VERBOSE} -dataSpan=1024 -binsize=16 -chrom=chrK chrM_1K.ascii
