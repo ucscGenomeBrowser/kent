@@ -8,7 +8,7 @@
 #include "bed.h"
 #include "repMask.h"
 
-static char const rcsid[] = "$Id: maskOutFa.c,v 1.7 2003/06/25 18:07:18 hiram Exp $";
+static char const rcsid[] = "$Id: maskOutFa.c,v 1.8 2003/06/26 20:12:35 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -90,8 +90,8 @@ if (!extraHard)
     while ((wordCount = lineFileChop(lf, words)) != 0)
 	{
 	/* Figure out name of sequence and where to set N's. */
-	char *seqName;
-	int start, end;
+	char *seqName = (char *) NULL;
+	int start=-1, end=-1;
 	int repSize, seqSize;
 	boolean clipped;
 
