@@ -813,7 +813,9 @@ sub runMysqlDump($) {
     my($args) = @_;
 
     my($user, $pass) = getMysqlUser();
-    runProg("mysqldump -u$user -p$pass $args");
+    # still not super secure, since ps can see env.
+    $main::ENV{MYSQL_PWD} = $pass;
+    runProg("mysqldump -u$user $args");
 }
 
 # execute a mysql with genome user/password
@@ -821,7 +823,9 @@ sub runMysql($) {
     my($args) = @_;
 
     my($user, $pass) = getMysqlUser();
-    runProg("mysql -u$user -p$pass $args");
+    # still not super secure, since ps can see env.
+    $main::ENV{MYSQL_PWD} = $pass;
+    runProg("mysql -u$user $args");
 }
 
 # get download time file for a db
