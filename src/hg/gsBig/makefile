@@ -9,4 +9,4 @@ O = gsBig.o
 
 gsBig: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/gsBig $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/gsBig
+#strip $(HOME)/bin/$(MACHTYPE)/gsBig
