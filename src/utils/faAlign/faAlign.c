@@ -7,7 +7,7 @@
 #include "fa.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: faAlign.c,v 1.1 2004/07/02 06:23:19 kent Exp $";
+static char const rcsid[] = "$Id: faAlign.c,v 1.2 2005/01/10 00:45:33 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -17,23 +17,28 @@ errAbort(
   "usage:\n"
   "   faAlign target.fa query.fa output.axt\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -dna - use DNA scoring scheme\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"dna", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
-void faAlign(char *targetFile, char *queryFile, char *outFile)
+void faAlign(char *targetFile, char *queryFile, char *outFile, boolean isDna)
 /* faAlign - Align two fasta files. */
 {
-bioSeq *targetList = faReadAllPep(targetFile);
-bioSeq *queryList = faReadAllPep(queryFile);
+bioSeq *targetList = faReadAllMixed(targetFile);
+bioSeq *queryList = faReadAllMixed(queryFile);
 bioSeq *target, *query;
-struct axtScoreScheme *ss = axtScoreSchemeProteinDefault();
+struct axtScoreScheme *ss;
 FILE *f = mustOpen(outFile, "w");
 
+if (isDna)
+    ss = axtScoreSchemeDefault();
+else
+    ss = axtScoreSchemeProteinDefault();
 for (query = queryList; query != NULL; query = query->next)
     {
     for (target = targetList; target != NULL; target = target->next)
@@ -57,6 +62,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
-faAlign(argv[1], argv[2], argv[3]);
+faAlign(argv[1], argv[2], argv[3], optionExists("dna"));
 return 0;
 }
