@@ -29,25 +29,31 @@ errAbort(
   );
 }
 
-void dasAbout()
-/* Print a little info when they just hit cgi-bin/das. */
+void dasHead(int err)
+/* Write out very start of DAS header */
 {
-puts("Content-Type:text/plain\n");
-puts("UCSC Human Genome DAS Server.\n");
-puts("See http://www.biodas.org for more info on DAS.");
-exit(0);
+printf("X-DAS-Version: DAS/0.95\n");
+printf("X-DAS-Status: %d\n", err);
+printf("Content-Type:text/plain\n");
+printf("\n");
 }
 
 void dasHeader(int err)
-/* Write out very start of DAS header */
+/* Write out DAS header */
 {
-printf("Content-Type:text/plain\n");
-printf("X-DAS-Version: DAS/0.95\n");
-printf("X-DAS-Status: %d\n", err);
-printf("\n");
+dasHead(err);
 if (err != 200)
     exit(-1);
 printf("<?xml version=\"1.0\" standalone=\"no\"?>\n");
+}
+
+void dasAbout()
+/* Print a little info when they just hit cgi-bin/das. */
+{
+dasHead(200);
+puts("UCSC DAS Server.\n");
+puts("See http://www.biodas.org for more info on DAS.");
+exit(0);
 }
 
 void normalHeader()
@@ -388,7 +394,7 @@ for (db = dbList; db != NULL; db = db->next)
     {
     char *freeze = hFreezeFromDb(db->name);
     printf("   <DSN>\n");
-    printf("     <SOURCE id=\"%s\" version=\"%s\">%s Human Genome at UCSC</SOURCE>\n", 
+    printf("     <SOURCE id=\"%s\" version=\"%s\">%s at UCSC</SOURCE>\n", 
     	db->name, version, freeze);
     printf("     <MAPMASTER>http://genome.cse.ucsc.edu:80/cgi-bin/das/%s</MAPMASTER>\n",
         db->name);
@@ -827,11 +833,6 @@ void dispatch(char *dataSource, char *command)
 /* Dispatch a dase command. */
 {
 struct slName *dbList = hDbList();
-    {
-    struct slName *db;
-    for (db = dbList; db != NULL; db = db->next)
-        uglyf("%s\n", db->name);
-    }
 if (sameString(dataSource, "dsn"))
     {
     doDsn(dbList);
