@@ -72,7 +72,7 @@ install:
 
 clean: 
 	cd lib && ${MAKE} clean
-	@for D in ${BROWSER_BINS}; do \
+	@for D in ${BROWSER_BINS} ${USE_DIRS}; do \
 		(cd $${D} && ${MAKE} clean;) \
 	done
 
