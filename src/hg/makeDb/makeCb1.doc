@@ -451,3 +451,145 @@ drop table seq; drop table sex; drop table source; drop table tissue;' \
     hgLoadPsl cb1 all_est.psl -nobin
 
 # END ====  MAKING AND STORING mRNA AND EST ALIGNMENTS
+
+# BEGINNING OF Ce1 BLASTZ   (DONE 2003-6-17 - Hiram)
+
+    # next machine
+    ssh kk
+    mkdir -p ~/cb1/bed/blastzCe1
+    cd ~/cb1/bed/blastzCe1
+    cp ~angie/hummus/DEF.cb1-ce1.2003-06-17 DEF
+#	source the DEF file which was carefully written as above.
+    . ./DEF
+    mkdir -p $BASE/run
+    ~angie/hummus/make-joblist $DEF > $BASE/run/j
+    # that created xdir.sh and joblist run/j
+    sh $BASE/xdir.sh
+    # xdir.sh makes a bunch of result directories in $BASE/raw/
+    # based on chrom name and CHUNK size
+    cd $BASE/run
+    # now edit j because it is not correct:
+    sed -e 's#^#/cluster/home/angie/schwartzbin/#' j > j2
+    wc -l j*
+    head j2
+    # *** make sure the j2 edits are OK, then use it:
+    mv j2 j
+    # para create will create the file: 'batch' for the cluster run
+    para create j
+    para try
+    para check
+    para push
+    ... etc ...
+Average job time:                1485s      24.75m     0.41h    0.02d
+Longest job:                     3821s      63.68m     1.06h    0.04d
+
+    # When that cluster run is done, results are in $BASE/raw/chr*/*
+    # continuing with ~angie/hummus/Notes:
+    # --- normalize and single_cov
+    cd ~/cb1/bed/blastzCe1
+    #   source the DEF file again in case you are coming back to this
+    . ./DEF
+    # a new run directory
+    mkdir -p $BASE/run.1
+    # another obscure script creates a new job list:
+    ~angie/hummus/do.out2lav $DEF >$BASE/run.1/j
+    cd $BASE/run.1
+    # the job list is once again incorrect, edit it:
+    sed -e 's/^/\/cluster\/home\/angie\/schwartzbin\//' j > j2
+    wc -l j*
+    head j2
+    # make sure the edited j2 is OK, then use it:
+    mv j2 j
+    para create j
+    para try
+    para push;para check; ... etc ...
+# Average job time:                 412s       6.86m     0.11h    0.00d
+# Longest job:                      585s       9.75m     0.16h    0.01d
+
+    # Translate the .lav files created by the end of ~angie/hummus Notes
+    # into axt files
+    ssh eieio
+    set base="/cluster/store5/worm/cb1/bed/blastzCe1"
+    set seq1_dir="/cluster/store5/worm/cb1/nib"
+    set seq2_dir="/cluster/store5/worm/ce1/nib"
+    set tbl="blastzCe1"
+    cd $base
+    mkdir -p axtChrom
+    foreach c (lav/*)
+      pushd $c
+      set chr=$c:t
+      set out=$base/axtChrom/$chr.axt
+      echo "Translating $chr lav to $out"
+      cat `ls -1 *.lav | sort -g` \
+        | /cluster/bin/i386/lavToAxt stdin $seq1_dir $seq2_dir stdout \
+        | /cluster/bin/i386/axtSort stdin $out
+      popd
+    end
+
+    # Translate the sorted axt files into psl:
+    cd $base
+    mkdir -p pslChrom
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      nice /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+
+    # load these blastz results
+    # next machine
+    ssh hgwdev
+    cd ~/cb1/bed/blastzCe1/pslChrom
+    /cluster/bin/i386/hgLoadPsl cb1 chr*_*.psl
+    # trackDb/worm/cb1/trackDb.ra entry:
+#   track blastzCe1
+#   shortLabel briggsae Blastz
+#   longLabel Blastz C briggsae
+#   group compGeno
+#   priority 159
+#   visibility dense
+#   color 0,0,0
+#   altColor 50,128,50
+#   spectrum on
+#   type psl xeno cb1
+
+# CHAINING Briggsae blastz
+    # next machine, small cluster is good for these tiny jobs
+    ssh kkr1u00
+    cd /cluster/store5/worm/cb1/bed/blastzCe1
+    mkdir axtChain
+    cd axtChain
+    mkdir run1
+    cd run1
+    ls -1S ../../axtChrom/*.axt > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > doChain
+#!/bin/csh
+    axtChain $1  /cluster/store5/worm/cb1/nib /cluster/store5/worm/ce1/nib $2 > $3
+'_EOF_'
+    chmod a+x doChain
+
+    mkdir out chain
+    gensub2 input.lst single gsub spec
+    para create spec
+    para try
+Average job time:                3175s      52.92m     0.88h    0.04d
+Longest job:                     3175s      52.92m     0.88h    0.04d
+
+    # now on the cluster server, sort chains
+    # next machine
+    ssh eieio
+    cd ~/cb1/bed/blastzCe1/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    # optionally: rm run1/chain/*.chain
+
+    # Load chains into database
+    # next machine
+    ssh hgwdev
+    cd ~/cb1/bed/blastzCe1/axtChain/chain
+    hgLoadChain cb1 chrUn_ce1Chain chrUn.chain
+
+# END Blastz C Elegans
