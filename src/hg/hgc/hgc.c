@@ -113,7 +113,7 @@
 #include "flyBaseSwissProt.h"
 #include "affyGenoDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.496 2003/10/10 20:24:57 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.497 2003/10/13 04:50:55 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11596,7 +11596,7 @@ struct spaceSaver *ssList = NULL;
 struct hash *heightHash = NULL;
 int rowCount = 0;
 struct tempName gifTn;
-int pixWidth = atoi(cartUsualString(cart, "pix", "600" ));
+int pixWidth = atoi(cartUsualString(cart, "pix", "620" ));
 int pixHeight = 0;
 struct vGfx *vg;
 int lineHeight = 0;
