@@ -487,7 +487,6 @@ SEQ2_LEN=$BASE/S2.len
     # use same jobList, DEF file, etc.
 
     # lavToAxt
-
     ssh kksilo
     cd /cluster/data/bosTau1/bed/blastz
     mkdir axtTemp
@@ -497,6 +496,35 @@ SEQ2_LEN=$BASE/S2.len
 	  /cluster/data/bosTau1/bosTau1.2bit ../axtTemp/$i.axt
 	echo done $i
     end
+
+    # axtChain
+    ssh kki
+    # make input.lst
+    # doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try
+    para check
+    para push
+
+    # sort
+    ssh kksilo
+    cd /cluster/data/bosTau1/bed/blastz/axtChain
+    /cluster/bin/i386/chainMergeSort run1/chain/*.chain > all.chain
+    mv run1/chain run1/chain.orig
+    # rm run1/chain/*.chain
+    # rm -f ../axtTemp
+    /cluster/bin/i386/chainSplit chain all.chain
+
+    # load
+    ssh hgwdev
+    cd /cluster/data/bosTau1/bed/blastz/axtChain/chain
+    foreach i (*.chain)
+      set c = $i:r
+      echo loading $c
+      /cluster/bin/i386/hgLoadChain hg17 ${c}_chainBosTau1 $i
+    end
+
 
 # GC5BASE - (DONE 2004-10-27 - Hiram)
     ssh kksilo
