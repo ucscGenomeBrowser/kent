@@ -3008,6 +3008,7 @@ char *url;
 htmlStart("Custom Track");
 fileName = nextWord(&fileItem);
 itemName = skipLeadingSpaces(fileItem);
+printf("<H2>Custom Track Item %s</H2>\n", itemName);
 if (fileName == NULL || itemName == NULL)
     errAbort("Misformed fileItem in hgCustom");
 ctList = customTracksFromFile(fileName);
@@ -3030,7 +3031,8 @@ bedPrintPos(bed);
 if ((url = ct->bt->url) != NULL)
     {
     char *before, *after = "", *s;
-    struct dyString *dy = newDyString(0);
+    struct dyString *uUrl = newDyString(0);
+    struct dyString *eUrl = newDyString(0);
     char fixedUrl[1024];
     before = url;
     s = stringIn("$$", url);
@@ -3039,13 +3041,17 @@ if ((url = ct->bt->url) != NULL)
        char *eItem = cgiEncode(itemName);
        *s = 0;
        after = s+2;
-       dyStringPrintf(dy, "%s%s%s", before, eItem, after);
+       dyStringPrintf(uUrl, "%s%s%s", before, itemName, after);
+       dyStringPrintf(eUrl, "%s%s%s", before, eItem, after);
        }
     else
-       dyStringPrintf(dy, "%s", url);
+       {
+       dyStringPrintf(uUrl, "%s", url);
+       dyStringPrintf(eUrl, "%s", url);
+       }
     printf("<B>outside link: </B>");
-    printf("<A HREF=\"%s\">", dy->string);
-    printf("%s</A><BR>\n", dy->string);
+    printf("<A HREF=\"%s\">", eUrl->string);
+    printf("%s</A><BR>\n", uUrl->string);
     }
 }
 
