@@ -5,7 +5,7 @@
 #
 # Author:       kate
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-align.csh,v 1.1 2004/04/20 20:25:58 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-align.csh,v 1.2 2004/07/14 19:52:28 kate Exp $
 
 if ( $#argv != 4 ) then
     echo "usage: $0 <old-assembly> <old-nibdir> <new-assembly> <new-splitdir>"
@@ -37,7 +37,6 @@ set blatDir = blat.$newAssembly.`date +%Y-%m-%d`
 echo "Setting up blat in $blatDir"
 rm -fr $blatDir
 mkdir -p $blatDir
-ln -s $blatDir blat.$newAssembly
 cd $blatDir
 mkdir -p raw psl run
 cd run
@@ -55,8 +54,8 @@ ls -1S $newSplitDir/*.fa > new.lst
 gensub2 old.lst new.lst gsub spec
 para create spec
 
-head -2 $blatDir/run/spec
-echo "Created parasol job in $blatDir/run"
+head -2 spec
+echo "Created parasol job in bed/$blatDir/run"
 echo "Now, run the cluster job on kk, then run makeLoChain-lift on the fileserver"
 exit 0
 

@@ -6,7 +6,7 @@
 #
 # Author:       kate
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-lift.csh,v 1.1 2004/04/20 20:28:25 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-lift.csh,v 1.2 2004/07/14 19:52:28 kate Exp $
 
 if ( $#argv != 3 ) then
     echo "usage: $0 <old-assembly> <new-assembly> <new-liftdir>"
@@ -33,7 +33,7 @@ if ( $fs != "" && $fs != $HOST ) then
     exit 1
 endif
 
-foreach i (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y M)
+foreach i (`cat /cluster/data/$newAssembly/chrom.lst`)
     echo chr$i
     liftUp -pslQ ../psl/chr$i.psl $newLiftDir/chr$i.lft warn chr*_chr$i.psl
     echo done $i
