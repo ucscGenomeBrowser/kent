@@ -2794,12 +2794,62 @@ if (limitVisibility(tg, tg->items) == tvFull)
 }
 
 
+Color refGeneColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Return color to draw refseq gene in. */
+{
+struct linkedFeatures *lf = item;
+int col = tg->ixColor;
+struct rgbColor *normal = &(tg->color);
+struct rgbColor lighter, lightest;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+
+/* If refSeqStatus is available, use it to determine the color.
+ * Reviewed -> normal, Provisional -> lighter, Predicted(other) -> lightest 
+ * If no refSeqStatus, color it normally. 
+ */
+if (hTableExists("refSeqStatus"))
+    {
+    sprintf(query, "select status from refSeqStatus where mrnaAcc = '%s'",
+	    lf->name);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+	if (startsWith("Reviewed", row[0]))
+	    {
+	    /* Use the usual color */
+	    }
+	else if (startsWith("Provisional", row[0]))
+	    {
+	    lighter.r = (6*normal->r + 4*255) / 10;
+	    lighter.g = (6*normal->g + 4*255) / 10;
+	    lighter.b = (6*normal->b + 4*255) / 10;
+	    col = mgFindColor(mg, lighter.r, lighter.g, lighter.b);
+	    }
+	else
+	    {
+	    lightest.r = (1*normal->r + 2*255) / 3;
+	    lightest.g = (1*normal->g + 2*255) / 3;
+	    lightest.b = (1*normal->b + 2*255) / 3;
+	    col = mgFindColor(mg, lightest.r, lightest.g, lightest.b);
+	    }
+	}
+    sqlFreeResult(&sr);
+    }
+hFreeConn(&conn);
+return(col);
+}
+
+
 void refGeneMethods(struct trackGroup *tg)
 /* Make track group of known genes from refSeq. */
 {
 tg->loadItems = loadRefGene;
 tg->itemName = refGeneName;
 tg->mapItemName = refGeneMapName;
+tg->itemColor = refGeneColor;
 }
 
 
