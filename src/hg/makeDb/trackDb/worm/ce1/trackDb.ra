@@ -17,8 +17,8 @@ altColor 90,70,40
 type bed 3 +
 
 track sangerGene
-shortLabel Sanger Genes
-longLabel Sanger Gene Predictions
+shortLabel WormBase Genes
+longLabel WormBase Gene Annotations
 group genes
 priority 48
 visibility pack
