@@ -2498,18 +2498,28 @@ Submission to last job:          8029s     133.82m     2.23h    0.09d
     #	DropOverlap seems to drop more than axtDropSelf above
     foreach f (axtChrom/chr*.axt)
       set c=$f:t:r
-	mv axtChrom/$c.axt axtChrom/$c.axt.preDrop
-	/cluster/bin/i386/axtDropOverlap axtChrom/$c.axt.preDrop \
+	mv axtChrom/$c.axt axtChrom/$c.axt
+	/cluster/bin/i386/axtDropOverlap axtChrom/$c.axt \
 		/cluster/bluearc/hg16/bed/blastzSelf/axtChromDropped/$c.axt
 	echo "Done: $c"
     end
-XXXX - DropOverlap above proceeding 2003-09-02 - Hiram
-    mkdir -p pslChrom
+    cd /cluster/bluearc/hg16/bed/blastzSelf/axtChromDropped
+    gzip *.axt
+    #  Needed a deliver of these right away:
+    ssh hgwdev
+    mkdir -p /usr/local/apache/htdocs/goldenPath/hg16/vsSelf
+    cd /usr/local/apache/htdocs/goldenPath/hg16/vsSelf
+    cp -p /cluster/bluearc/hg16/bed/blastzSelf/axtChromDropped/*.axt.gz .
+	
+    ssh eieio
+    mkdir -p /cluster/data/hg16/bed/blastzSelf/pslChrom
+    cd /cluster/data/hg16/bed/blastzSelf
     set tbl = "blastzSelf"
     foreach f (axtChrom/chr*.axt)
       set c=$f:t:r
       echo "Processing chr $c"
-      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+      zcat /cluster/bluearc/hg16/bed/blastzSelf/axtChromDropped/${c}.axt.gz | \
+	/cluster/bin/i386/axtToPsl stdin S1.len S2.len pslChrom/${c}_${tbl}.psl
     end
     #	That takes about 20 minutes
 
@@ -2517,7 +2527,8 @@ XXXX - DropOverlap above proceeding 2003-09-02 - Hiram
     ssh hgwdev
     set tbl = "blastzSelf"
     cd /cluster/data/hg16/bed/blastzSelf/pslChrom
-    /cluster/bin/i386/hgLoadPsl hg16 chr*_${tbl}.psl
+    /cluster/bin/i386/hgLoadPsl hg16 chr*_blastzSelf.psl
+XXXX - DropOverlap above proceeding 2003-09-02 - Hiram
     # This takes 30 minutes to an hour
     # create trackDb/human/hg16 and get a trackDb.ra file started with:
 
@@ -2704,6 +2715,8 @@ Out of memory - request size 973662824 bytes
      hgsql hg16 < axtInfoInserts.sql
 
 # MAKING CHAIN SELF BLASTZ (DONE - 2003-08-27 - Hiram)
+# MAKING CHAIN SELF BLASTZ (RE-DONE - 2003-09-04 - Hiram)
+#				2003-09-04 - with dropped overlap axtChrom
 
 # Run axtChain on little cluster
     ssh kkr1u00
@@ -2711,7 +2724,8 @@ Out of memory - request size 973662824 bytes
     cd /cluster/data/hg16/bed/blastzSelf/axtChain/run1
     mkdir out chain
 
-    ls -1S /cluster/data/hg16/bed/blastzSelf/axtChrom/*.axt > input.lst
+#    ls -1S /cluster/data/hg16/bed/blastzSelf/axtChrom/*.axt > input.lst
+  ls -1S /cluster/bluearc/hg16/bed/blastzSelf/axtChromDropped/*.axt > input.lst
     cat << '_EOF_' > gsub
 #LOOP
 doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
@@ -2722,6 +2736,8 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
 
     cat << '_EOF_' > doChain
 #!/bin/csh
+	#	use all the _random's here, add -notQRandom to get rid
+	#	of all
     axtFilter -notQ=chrUn_random $1 | axtChain stdin \
 	/iscratch/i/gs.17/build34/bothMaskedNibs \
 	/iscratch/i/gs.17/build34/bothMaskedNibs $2 > $3
@@ -2803,11 +2819,13 @@ axtFilter -q=$1 $2 | axtChain stdin \
     cd ..
     mkdir n1 
     cd preNet
+#	Probably OK to make this minSpace=10, used to be 1
     foreach i (*.chain)
       set n = $i:r.net
       echo primary netting $i
-      /cluster/bin/i386/chainNet $i -minSpace=1 /cluster/data/hg16/chrom.sizes \
-                            /cluster/data/hg16/chrom.sizes ../n1/$n /dev/null
+      /cluster/bin/i386/chainNet $i -minSpace=10 \
+			/cluster/data/hg16/chrom.sizes \
+                        /cluster/data/hg16/chrom.sizes ../n1/$n /dev/null
     end
     #  The above takes about 5 minutes
 
@@ -2836,6 +2854,21 @@ axtFilter -q=$1 $2 | axtChain stdin \
 
     # Add entries for net and chain to human/hg16 trackDb
 
+----- replacement -----
+# MAKING SELF AXTTIGHT FROM AXTCHROM ()
+    # After creating axtBest alignments above, use subsetAxt to get axtTight:
+
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastzSelf/axtChrom
+    mkdir -p ../axtTight
+    tcsh
+
+    foreach i (*.axt)
+      echo $i
+      subsetAxt  $i ../axtTight/$i \
+        ~kent/src/hg/mouseStuff/subsetAxt/90.mat 5000
+    end
+----- replacement -----
 # MAKING SELF AXTTIGHT FROM AXTBEST (DONE - 2003-08-26 - Hiram)
     # After creating axtBest alignments above, use subsetAxt to get axtTight:
 
@@ -2843,11 +2876,13 @@ axtFilter -q=$1 $2 | axtChain stdin \
     cd /cluster/data/hg16/bed/blastzSelf/axtNet
     mkdir -p ../axtTight
     tcsh
+
     foreach i (*.axt)
       echo $i
       subsetAxt  $i ../axtTight/$i \
         ~kent/src/hg/mouseStuff/subsetAxt/coding.mat 3400
     end
+----- replacement -----
 
     # translate to psl
     cd ../axtTight
