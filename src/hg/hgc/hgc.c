@@ -3985,7 +3985,7 @@ genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
 printCustomUrl(tdb, item, TRUE);
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
-sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d", table, item, seqName, start);
+sprintf(query, "select * from %s where name = '%s' and chrom = '%s'", table, item, seqName);
 sr = sqlGetResult(conn, query);
 
 while ((row = sqlNextRow(sr)) != NULL)
@@ -4019,9 +4019,11 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     }
 
-htmlHorizontalLine();
 
-errAbort( "stopping here: table = %s, item = %s\n<br>", table, item );
+if( firstTime )
+    errAbort( "No database entry for: %s\n<br>", item );
+
+htmlHorizontalLine();
 
 printf("<i>human sequence on top, mouse on bottom</i><br><br>" );
 /* look in associated table 'ancientRref' to get human/mouse alignment*/
