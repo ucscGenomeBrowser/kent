@@ -1890,6 +1890,7 @@ if (cgiOptionalString("hgSeq.casing") == NULL)
     cgiMakeHiddenVar("table", getTableVar());
     cgiMakeButton("submit", "Submit");
     puts("</FORM>\n");
+    webEnd();
     return;
     }
 
