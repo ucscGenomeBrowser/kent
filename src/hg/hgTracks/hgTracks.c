@@ -9405,8 +9405,9 @@ char *s;
 boolean hideAll = cgiVarExists("hgt.hideAll");
 
 /* Tell browser where to go when they click on image. */
-printf("<FORM ACTION=\"%s\">\n\n", hgTracksName());
+printf("<FORM ACTION=\"%s\" NAME=\"TrackForm\">\n\n", hgTracksName());
 cartSaveSession(cart);
+
 
 /* See if want to include sequence search results. */
 userSeqString = cartOptionalString(cart, "ss");
