@@ -36,3 +36,14 @@ visibility hide
 color 100,50,0
 altColor 175,150,128
 type genePred
+
+track slamNonCoding
+shortLabel Slam Non Coding 
+longLabel SLAM predictions of human/rat conserved non-coding regions
+group compGeno
+priority 120
+visibility hide
+color 30,130,210
+altColor 200,220,255
+spectrum on
+type bed 5 
