@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "affy120KDetails.h"
 
-static char const rcsid[] = "$Id: affy120KDetails.c,v 1.1 2004/02/19 01:30:56 daryl Exp $";
+static char const rcsid[] = "$Id: affy120KDetails.c,v 1.2 2004/03/23 00:14:22 daryl Exp $";
 
 void affy120KDetailsStaticLoad(char **row, struct affy120KDetails *ret)
 /* Load a row from affy120KDetails table into ret.  The contents of ret will
@@ -17,7 +17,7 @@ void affy120KDetailsStaticLoad(char **row, struct affy120KDetails *ret)
 int sizeOne,i;
 char *s;
 
-ret->affyId = row[0];
+ret->affyId = sqlSigned(row[0]);
 ret->rsId = row[1];
 strcpy(ret->baseA, row[2]);
 strcpy(ret->baseB, row[3]);
@@ -92,7 +92,7 @@ int sizeOne,i;
 char *s;
 
 AllocVar(ret);
-ret->affyId = cloneString(row[0]);
+ret->affyId = sqlSigned(row[0]);
 ret->rsId = cloneString(row[1]);
 strcpy(ret->baseA, row[2]);
 strcpy(ret->baseB, row[3]);
@@ -227,7 +227,7 @@ void affy120KDetailsSaveToDb(struct sqlConnection *conn, struct affy120KDetails 
  * If worried about this use affy120KDetailsSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s','%s',%f,%f,%f,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')", 
+dyStringPrintf(update, "insert into %s values ( %d,'%s','%s','%s','%s','%s','%s',%f,%f,%f,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')", 
 	tableName,  el->affyId,  el->rsId,  el->baseA,  el->baseB,  el->sequenceA,  el->sequenceB,  el->enzyme,  el->minFreq,  el->hetzyg,  el->avHetSE,  el->NA04477,  el->NA04479,  el->NA04846,  el->NA11036,  el->NA11038,  el->NA13056,  el->NA17011,  el->NA17012,  el->NA17013,  el->NA17014,  el->NA17015,  el->NA17016,  el->NA17101,  el->NA17102,  el->NA17103,  el->NA17104,  el->NA17105,  el->NA17106,  el->NA17201,  el->NA17202,  el->NA17203,  el->NA17204,  el->NA17205,  el->NA17206,  el->NA17207,  el->NA17208,  el->NA17210,  el->NA17211,  el->NA17212,  el->NA17213,  el->PD01,  el->PD02,  el->PD03,  el->PD04,  el->PD05,  el->PD06,  el->PD07,  el->PD08,  el->PD09,  el->PD10,  el->PD11,  el->PD12,  el->PD13,  el->PD14,  el->PD15,  el->PD16,  el->PD17,  el->PD18,  el->PD19,  el->PD20,  el->PD21,  el->PD22,  el->PD23,  el->PD24);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
@@ -243,8 +243,7 @@ void affy120KDetailsSaveToDbEscaped(struct sqlConnection *conn, struct affy120KD
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *affyId, *rsId, *baseA, *baseB, *sequenceA, *sequenceB, *enzyme, *NA04477, *NA04479, *NA04846, *NA11036, *NA11038, *NA13056, *NA17011, *NA17012, *NA17013, *NA17014, *NA17015, *NA17016, *NA17101, *NA17102, *NA17103, *NA17104, *NA17105, *NA17106, *NA17201, *NA17202, *NA17203, *NA17204, *NA17205, *NA17206, *NA17207, *NA17208, *NA17210, *NA17211, *NA17212, *NA17213, *PD01, *PD02, *PD03, *PD04, *PD05, *PD06, *PD07, *PD08, *PD09, *PD10, *PD11, *PD12, *PD13, *PD14, *PD15, *PD16, *PD17, *PD18, *PD19, *PD20, *PD21, *PD22, *PD23, *PD24;
-affyId = sqlEscapeString(el->affyId);
+char  *rsId, *baseA, *baseB, *sequenceA, *sequenceB, *enzyme, *NA04477, *NA04479, *NA04846, *NA11036, *NA11038, *NA13056, *NA17011, *NA17012, *NA17013, *NA17014, *NA17015, *NA17016, *NA17101, *NA17102, *NA17103, *NA17104, *NA17105, *NA17106, *NA17201, *NA17202, *NA17203, *NA17204, *NA17205, *NA17206, *NA17207, *NA17208, *NA17210, *NA17211, *NA17212, *NA17213, *PD01, *PD02, *PD03, *PD04, *PD05, *PD06, *PD07, *PD08, *PD09, *PD10, *PD11, *PD12, *PD13, *PD14, *PD15, *PD16, *PD17, *PD18, *PD19, *PD20, *PD21, *PD22, *PD23, *PD24;
 rsId = sqlEscapeString(el->rsId);
 baseA = sqlEscapeString(el->baseA);
 baseB = sqlEscapeString(el->baseB);
@@ -306,11 +305,10 @@ PD22 = sqlEscapeString(el->PD22);
 PD23 = sqlEscapeString(el->PD23);
 PD24 = sqlEscapeString(el->PD24);
 
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s','%s',%f,%f,%f,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')", 
-	tableName,  affyId,  rsId,  baseA,  baseB,  sequenceA,  sequenceB,  enzyme, el->minFreq , el->hetzyg , el->avHetSE ,  NA04477,  NA04479,  NA04846,  NA11036,  NA11038,  NA13056,  NA17011,  NA17012,  NA17013,  NA17014,  NA17015,  NA17016,  NA17101,  NA17102,  NA17103,  NA17104,  NA17105,  NA17106,  NA17201,  NA17202,  NA17203,  NA17204,  NA17205,  NA17206,  NA17207,  NA17208,  NA17210,  NA17211,  NA17212,  NA17213,  PD01,  PD02,  PD03,  PD04,  PD05,  PD06,  PD07,  PD08,  PD09,  PD10,  PD11,  PD12,  PD13,  PD14,  PD15,  PD16,  PD17,  PD18,  PD19,  PD20,  PD21,  PD22,  PD23,  PD24);
+dyStringPrintf(update, "insert into %s values ( %d,'%s','%s','%s','%s','%s','%s',%f,%f,%f,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')", 
+	tableName, el->affyId ,  rsId,  baseA,  baseB,  sequenceA,  sequenceB,  enzyme, el->minFreq , el->hetzyg , el->avHetSE ,  NA04477,  NA04479,  NA04846,  NA11036,  NA11038,  NA13056,  NA17011,  NA17012,  NA17013,  NA17014,  NA17015,  NA17016,  NA17101,  NA17102,  NA17103,  NA17104,  NA17105,  NA17106,  NA17201,  NA17202,  NA17203,  NA17204,  NA17205,  NA17206,  NA17207,  NA17208,  NA17210,  NA17211,  NA17212,  NA17213,  PD01,  PD02,  PD03,  PD04,  PD05,  PD06,  PD07,  PD08,  PD09,  PD10,  PD11,  PD12,  PD13,  PD14,  PD15,  PD16,  PD17,  PD18,  PD19,  PD20,  PD21,  PD22,  PD23,  PD24);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
-freez(&affyId);
 freez(&rsId);
 freez(&baseA);
 freez(&baseB);
@@ -383,7 +381,7 @@ int i;
 
 if (ret == NULL)
     AllocVar(ret);
-ret->affyId = sqlStringComma(&s);
+ret->affyId = sqlSignedComma(&s);
 ret->rsId = sqlStringComma(&s);
 sqlFixedStringComma(&s, ret->baseA, sizeof(ret->baseA));
 sqlFixedStringComma(&s, ret->baseB, sizeof(ret->baseB));
@@ -458,7 +456,6 @@ void affy120KDetailsFree(struct affy120KDetails **pEl)
 struct affy120KDetails *el;
 
 if ((el = *pEl) == NULL) return;
-freeMem(el->affyId);
 freeMem(el->rsId);
 freez(pEl);
 }
@@ -480,9 +477,7 @@ void affy120KDetailsOutput(struct affy120KDetails *el, FILE *f, char sep, char l
 /* Print out affy120KDetails.  Separate fields with sep. Follow last field with lastSep. */
 {
 int i;
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->affyId);
-if (sep == ',') fputc('"',f);
+fprintf(f, "%d", el->affyId);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->rsId);

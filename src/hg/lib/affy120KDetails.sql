@@ -5,7 +5,7 @@
 
 #Information from affyGenoDetails representing the Affymetrix 120K SNP Genotyping array
 CREATE TABLE affy120KDetails (
-    affyId varchar(255) not null,	# Affymetrix SNP id
+    affyId int not null,	# Affymetrix SNP id
     rsId varchar(255) not null,	# RS identifier (some are null)
     baseA char(2) not null,	# The first allele (A)
     baseB char(2) not null,	# The second allele (B)

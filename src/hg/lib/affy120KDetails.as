@@ -1,6 +1,6 @@
 table affy120KDetails
 "Information from affyGenoDetails representing the Affymetrix 120K SNP Genotyping array"
-(	string     affyId;    "Affymetrix SNP id"
+(	int        affyId;    "Affymetrix SNP id"
 	string     rsId;      "RS identifier (some are null)"
 	char[2]    baseA;     "The first allele (A)"
 	char[2]    baseB;     "The second allele (B)"

@@ -15,7 +15,7 @@ struct affy120KDetails
 /* Information from affyGenoDetails representing the Affymetrix 120K SNP Genotyping array */
     {
     struct affy120KDetails *next;  /* Next in singly linked list. */
-    char *affyId;	/* Affymetrix SNP id */
+    int affyId;	/* Affymetrix SNP id */
     char *rsId;	/* RS identifier (some are null) */
     char baseA[3];	/* The first allele (A) */
     char baseB[3];	/* The second allele (B) */

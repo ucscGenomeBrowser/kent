@@ -133,7 +133,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.586 2004/03/19 23:14:14 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.587 2004/03/23 00:14:15 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -10475,7 +10475,7 @@ if (strncmp(rsId,"rs",2)) /* is not a valid rsId, so it must be an affyId */
 	  "select * from affy120KDetails where affyId = '%s'", name);
     a120K = affy120KDetailsLoadByQuery(conn, query);
     if (a120K != NULL) /* found affy120K record */
-	safef(rsId, strlen(a120K->rsId)+3, "rs%s", a120K->rsId);
+	rsId = cloneString(a120K->rsId);
     affy120KDetailsFree(&a120K);
     if (strncmp(rsId,"rs",2)) /* not a valid affy120K snp, might be affy10K */
 	{
@@ -10668,7 +10668,7 @@ safef(query, sizeof(query),
          "        PD09, PD10, PD11, PD12, PD13, PD14, PD15, PD16, "
          "        PD17, PD18, PD19, PD20, PD21, PD22, PD23, PD24  "
          "from    affy120KDetails "
-         "where   affyId = '%s'", name);
+         "where   affyId = %s", name);
 snp = affy120KDetailsLoadByQuery(conn, query);
 if (snp!=NULL)
     {
@@ -10749,7 +10749,6 @@ if (snp!=NULL)
     printf("PD24:&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;", snp->PD24);
     printf("\n</font>\n");
     }
-/* else errAbort("<BR>%s<BR>\n",query); */
 affy120KDetailsFree(&snp);
 sqlDisconnect(&conn);
 }
