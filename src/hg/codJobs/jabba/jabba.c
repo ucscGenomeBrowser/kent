@@ -33,6 +33,9 @@ errAbort(
   "      -maxPush=N  Maximum numer of jobs to queue - default 10000\n"
   "      -warnTime=N Number of minutes job can run before hang warning - default 4320 (3 days)\n"
   "      -killTime=N Number of minutes job can run before push kills it - default 20160 (2 weeks)\n"
+  "jabba shove batch.hut\n"
+  "   Push jobs until can't push any more.  Options as with push and also:\n"
+  "      -sleepTime=N  Number of seconds to sleep between pushes\n"
   "jabba try batch.hut\n"
   "      This is like jabba push, but only submits up to 10 jobs\n"
   "jabba check batch.hut\n"
@@ -59,11 +62,12 @@ errAbort(
 /* Variables that can be set from command line. */
 
 int retries = 3;
-int maxQueue = 20000;
+int maxQueue = 10000;
 int minPush = 1;
 int maxPush = 20000;
 int warnTime = 3*24*60;
 int killTime = 14*24*60;
+int sleepTime = 20*60;
 
 /* Some variable we might want to move to a config file someday. */
 char *tempName = "jabba.tmp";	/* Name for temp files. */
@@ -763,8 +767,9 @@ if (sub == NULL)
 return sub->submitError || sub->queueError || sub->crashed || sub->trackingError;
 }
 
-void jabbaPush(char *batch)
-/* Push a batch of jobs forward - submit jobs. */
+int jabbaPush(char *batch)
+/* Push a batch of jobs forward - submit jobs.  Return number of jobs
+ * pushed. */
 {
 struct jobDb *db = readBatch(batch);
 struct job *job;
@@ -805,11 +810,23 @@ for (tryCount=1; tryCount<=retries && !finished; ++tryCount)
 	}
     }
 writeBatch(db, batch);
+jobDbFree(&db);
 if (pushCount > 0)
    printf("\n");
 printf("Pushed Jobs: %d\n", pushCount);
 if (retryCount > 0)
     printf("Retried jobs: %d\n", retryCount);
+return pushCount;
+}
+
+void jabbaShove(char *batch)
+/* Keep pushing jobs until finished. */
+{
+while (jabbaPush(batch) > 0)
+    {
+    printf("Sleeping until next push - hit <control>C to quit shoving\n");
+    sleep(sleepTime);
+    }
 }
 
 void reportOnJobs(struct jobDb *db)
@@ -1264,6 +1281,10 @@ else if (sameString(command, "check"))
 else if (sameString(command, "push"))
     {
     jabbaPush(batch);
+    }
+else if (sameString(command, "shove"))
+    {
+    jabbaShove(batch);
     }
 else if (sameString(command, "try"))
     {
