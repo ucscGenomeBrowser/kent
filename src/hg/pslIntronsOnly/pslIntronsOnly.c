@@ -15,32 +15,6 @@ errAbort(
   "   pslIntronsOnly in.psl in.nib out.psl\n");
 }
 
-boolean hasIntron(struct psl *psl, struct dnaSeq *seq, int seqOffset)
-/* Return TRUE if there's a probable intron. */
-{
-int blockCount = psl->blockCount, i;
-unsigned *tStarts = psl->tStarts;
-unsigned *blockSizes = psl->blockSizes;
-unsigned *qStarts = psl->qStarts;
-int blockSize, start, end;
-DNA *dna = seq->dna;
-
-for (i=1; i<blockCount; ++i)
-    {
-    blockSize = blockSizes[i-1];
-    start = qStarts[i-1]+blockSize;
-    end = qStarts[i];
-    if (start == end)
-        {
-	start = tStarts[i-1]+blockSize-seqOffset;
-	end = tStarts[i]-seqOffset;
-	if (intronOrientation(dna+start, dna+end) != 0)
-	    return TRUE;
-	}
-    }
-return FALSE;
-}
-
 void pslIntronsOnly(char *inPslName, char *inNibName, char *outPslName)
 /* pslIntronsOnly - Filter psl files to only include those with introns. */
 {
@@ -70,7 +44,7 @@ while ((psl = pslNext(lf)) != NULL)
 	uglyf("Processing %s:%d-%d\n", inNibName, nibStart, nibEnd);
 	nibSeq = nibLdPart(inNibName, nibFile, nibSize, nibStart, nibEnd - nibStart);
 	}
-    if (hasIntron(psl, nibSeq, nibStart))
+    if (pslHasIntron(psl, nibSeq, nibStart))
         {
 	++intronCount;
 	pslTabOut(psl, outFile);
