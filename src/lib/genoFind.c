@@ -1338,7 +1338,7 @@ for (i=tileSizeMinusOne; i<size; ++i)
 return hitList;
 }
 
-static struct gfHit *gfStraightFindHits(struct genoFind *gf, aaSeq *seq, struct lm *lm,
+static struct gfHit *gfStraightFindHits(struct genoFind *gf, aaSeq *seq, Bits *qMaskBits, struct lm *lm,
 	int *retHitCount)
 /* Find hits associated with one sequence in a non-segmented
  * index where hits match exactly. */
@@ -1362,16 +1362,22 @@ for (i=0; i<=lastStart; ++i)
     if (tile < 0)
 	continue;
     listSize = gf->listSizes[tile];
-    qStart = i;
-    tList = gf->lists[tile];
-    for (j=0; j<listSize; ++j)
+    if (listSize > 0)
 	{
-	lmAllocVar(lm,hit);
-	hit->qStart = qStart;
-	hit->tStart = tList[j];
-	hit->diagonal = hit->tStart + size - qStart;
-	slAddHead(&hitList, hit);
-	++hitCount;
+	qStart = i;
+	if (qMaskBits == NULL || bitCountRange(qMaskBits, qStart, tileSize) == 0)
+	    {
+	    tList = gf->lists[tile];
+	    for (j=0; j<listSize; ++j)
+		{
+		lmAllocVar(lm,hit);
+		hit->qStart = qStart;
+		hit->tStart = tList[j];
+		hit->diagonal = hit->tStart + size - qStart;
+		slAddHead(&hitList, hit);
+		++hitCount;
+		}
+	    }
 	}
     }
 *retHitCount = hitCount;
@@ -1379,7 +1385,7 @@ return hitList;
 }
 
 static struct gfHit *gfStraightFindNearHits(struct genoFind *gf, aaSeq *seq, 
-	struct lm *lm, int *retHitCount)
+	Bits *qMaskBits, struct lm *lm, int *retHitCount)
 /* Find hits associated with one sequence in a non-segmented
  * index where hits can mismatch in one letter. */
 {
@@ -1441,16 +1447,22 @@ for (i=0; i<=lastStart; ++i)
 		if (varVal != avoid)
 		    {
 		    listSize = gf->listSizes[tile];
-		    qStart = i;
-		    tList = gf->lists[tile];
-		    for (j=0; j<listSize; ++j)
+		    if (listSize > 0)
 			{
-			lmAllocVar(lm,hit);
-			hit->qStart = qStart;
-			hit->tStart = tList[j];
-			hit->diagonal = hit->tStart + size - qStart;
-			slAddHead(&hitList, hit);
-			++hitCount;
+			qStart = i;
+			if (qMaskBits == NULL || bitCountRange(qMaskBits, qStart, tileSize) == 0)
+			    {
+			    tList = gf->lists[tile];
+			    for (j=0; j<listSize; ++j)
+				{
+				lmAllocVar(lm,hit);
+				hit->qStart = qStart;
+				hit->tStart = tList[j];
+				hit->diagonal = hit->tStart + size - qStart;
+				slAddHead(&hitList, hit);
+				++hitCount;
+				}
+			    }
 			}
 		    }
 		tile += posMul;
@@ -1463,7 +1475,7 @@ for (i=0; i<=lastStart; ++i)
 return hitList;
 }
 
-static struct gfHit *gfSegmentedFindHits(struct genoFind *gf, aaSeq *seq, struct lm *lm,
+static struct gfHit *gfSegmentedFindHits(struct genoFind *gf, aaSeq *seq, Bits *qMaskBits, struct lm *lm,
 	int *retHitCount)
 /* Find hits associated with one sequence in general case in a segmented
  * index. */
@@ -1487,27 +1499,30 @@ int (*makeTile)(char *poly, int n) = (gf->isPep ? gfPepTile : gfDnaTile);
 initNtLookup();
 for (i=0; i<=lastStart; ++i)
     {
-    tileHead = makeTile(poly+i, tileHeadSize);
-    if (tileHead < 0)
-	continue;
-    tileTail = makeTile(poly+i+tileHeadSize, tileTailSize);
-    if (tileTail < 0)
-	continue;
-    listSize = gf->listSizes[tileHead];
-    qStart = i;
-    endList = gf->endLists[tileHead];
-    for (j=0; j<listSize; ++j)
+    if (qMaskBits == NULL || bitCountRange(qMaskBits, i, tileSize) == 0)
 	{
-	if (endList[0] == tileTail)
+	tileHead = makeTile(poly+i, tileHeadSize);
+	if (tileHead < 0)
+	    continue;
+	tileTail = makeTile(poly+i+tileHeadSize, tileTailSize);
+	if (tileTail < 0)
+	    continue;
+	listSize = gf->listSizes[tileHead];
+	qStart = i;
+	endList = gf->endLists[tileHead];
+	for (j=0; j<listSize; ++j)
 	    {
-	    lmAllocVar(lm,hit);
-	    hit->qStart = qStart;
-	    hit->tStart = (endList[1]<<16) + endList[2];
-	    hit->diagonal = hit->tStart + size - qStart;
-	    slAddHead(&hitList, hit);
-	    ++hitCount;
+	    if (endList[0] == tileTail)
+		{
+		lmAllocVar(lm,hit);
+		hit->qStart = qStart;
+		hit->tStart = (endList[1]<<16) + endList[2];
+		hit->diagonal = hit->tStart + size - qStart;
+		slAddHead(&hitList, hit);
+		++hitCount;
+		}
+	    endList += 3;
 	    }
-	endList += 3;
 	}
     }
 *retHitCount = hitCount;
@@ -1515,7 +1530,7 @@ return hitList;
 }
 
 static struct gfHit *gfSegmentedFindNearHits(struct genoFind *gf, 
-	aaSeq *seq, struct lm *lm, int *retHitCount)
+	aaSeq *seq, Bits *qMaskBits, struct lm *lm, int *retHitCount)
 /* Find hits associated with one sequence in a segmented
  * index where one mismatch is allowed. */
 {
@@ -1559,56 +1574,59 @@ else
 
 for (i=0; i<=lastStart; ++i)
     {
-    headPosMul = tailPosMul = 1;
-    for (varPos = tileSize-1; varPos >= 0; --varPos)
+    if (qMaskBits == NULL || bitCountRange(qMaskBits, i, tileSize) == 0)
 	{
-	/* Make a tile that has zero value at variable position. */
-	modTail = (varPos >= tileHeadSize);
-	oldChar = poly[i+varPos];
-	poly[i+varPos] = zeroChar;
-	tileHead = makeTile(poly+i, tileHeadSize);
-	tileTail = makeTile(poly+i+tileHeadSize, tileTailSize);
-	poly[i+varPos] = oldChar;
-
-	/* Avoid checking the unmodified tile multiple times. */
-	if (varPos == 0)
-	    avoid = -1;
-	else
-	    avoid = seqValLookup[oldChar];
-
-	if (tileHead >= 0 && tileTail >= 0)
+	headPosMul = tailPosMul = 1;
+	for (varPos = tileSize-1; varPos >= 0; --varPos)
 	    {
-	    for (varVal=0; varVal<alphabetSize; ++varVal)
+	    /* Make a tile that has zero value at variable position. */
+	    modTail = (varPos >= tileHeadSize);
+	    oldChar = poly[i+varPos];
+	    poly[i+varPos] = zeroChar;
+	    tileHead = makeTile(poly+i, tileHeadSize);
+	    tileTail = makeTile(poly+i+tileHeadSize, tileTailSize);
+	    poly[i+varPos] = oldChar;
+
+	    /* Avoid checking the unmodified tile multiple times. */
+	    if (varPos == 0)
+		avoid = -1;
+	    else
+		avoid = seqValLookup[oldChar];
+
+	    if (tileHead >= 0 && tileTail >= 0)
 		{
-		if (varVal != avoid)
+		for (varVal=0; varVal<alphabetSize; ++varVal)
 		    {
-		    listSize = gf->listSizes[tileHead];
-		    qStart = i;
-		    endList = gf->endLists[tileHead];
-		    for (j=0; j<listSize; ++j)
+		    if (varVal != avoid)
 			{
-			if (endList[0] == tileTail)
+			listSize = gf->listSizes[tileHead];
+			qStart = i;
+			endList = gf->endLists[tileHead];
+			for (j=0; j<listSize; ++j)
 			    {
-			    lmAllocVar(lm,hit);
-			    hit->qStart = qStart;
-			    hit->tStart = (endList[1]<<16) + endList[2];
-			    hit->diagonal = hit->tStart + size - qStart;
-			    slAddHead(&hitList, hit);
-			    ++hitCount;
+			    if (endList[0] == tileTail)
+				{
+				lmAllocVar(lm,hit);
+				hit->qStart = qStart;
+				hit->tStart = (endList[1]<<16) + endList[2];
+				hit->diagonal = hit->tStart + size - qStart;
+				slAddHead(&hitList, hit);
+				++hitCount;
+				}
+			    endList += 3;
 			    }
-			endList += 3;
 			}
+		    if (modTail)
+			tileTail += tailPosMul;
+		    else 
+			tileHead += headPosMul;
 		    }
-		if (modTail)
-		    tileTail += tailPosMul;
-		else 
-		    tileHead += headPosMul;
 		}
+	    if (modTail)
+		tailPosMul *= alphabetSize;
+	    else 
+		headPosMul *= alphabetSize;
 	    }
-	if (modTail)
-	    tailPosMul *= alphabetSize;
-	else 
-	    headPosMul *= alphabetSize;
 	}
     }
 *retHitCount = hitCount;
@@ -1629,19 +1647,17 @@ else
     {
     if (gf->segSize == 0)
 	{
-	// ~~~ Need to add qMaskBits here
 	if (gf->allowOneMismatch)
-	    hitList = gfStraightFindNearHits(gf, seq, lm, retHitCount);
+	    hitList = gfStraightFindNearHits(gf, seq, qMaskBits, lm, retHitCount);
 	else
-	    hitList = gfStraightFindHits(gf, seq, lm, retHitCount);
+	    hitList = gfStraightFindHits(gf, seq, qMaskBits, lm, retHitCount);
 	}
     else
 	{
-	// ~~~ Need to add qMaskBits here
 	if (gf->allowOneMismatch)
-	    hitList = gfSegmentedFindNearHits(gf, seq, lm, retHitCount);
+	    hitList = gfSegmentedFindNearHits(gf, seq, qMaskBits, lm, retHitCount);
 	else
-	    hitList = gfSegmentedFindHits(gf, seq, lm, retHitCount);
+	    hitList = gfSegmentedFindHits(gf, seq, qMaskBits, lm, retHitCount);
 	}
     }
 cmpQuerySize = seq->size;
