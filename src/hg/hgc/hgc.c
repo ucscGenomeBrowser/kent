@@ -1211,6 +1211,27 @@ accession = acc;
 		}  
 }
 
+void printStanSource(char *acc, char *type)
+/* Print out a link to Stanford's SOURCE web resource. 
+   Types known are: est,mrna,unigene,locusLink. */
+{
+char *stanSourceLink = "http://genome-www5.stanford.edu/cgi-bin/SMD/source/sourceResult?"; 
+if(sameWord(type, "est"))
+    {
+    printf("<B>Stanford SOURCE:</B> %s <A HREF=\"%soption=Number&criteria=%s&choice=Gene\">[Gene Info]</A> ",acc,stanSourceLink,acc);
+    printf("<A HREF=\"%soption=Number&criteria=%s&choice=cDNA\">[Clone Info]</A><BR>\n",stanSourceLink,acc);
+    }
+else if(sameWord(type,"unigene"))
+    {
+    printf("<B>Stanford SOURCE:</B> %s <A HREF=\"%soption=CLUSTER&criteria=%s&choice=Gene\">[Gene Info]</A> ",acc,stanSourceLink,acc);
+    printf("<A HREF=\"%soption=CLUSTER&criteria=%s&choice=cDNA\">[Clone Info]</A><BR>\n",stanSourceLink,acc);
+    }
+else if(sameWord(type,"mrna"))
+    printf("<B>Stanford SOURCE:</B> <A HREF=\"%soption=Number&criteria=%s&choice=Gene\">%s</A><BR>\n",stanSourceLink,acc,acc);
+else if(sameWord(type,"locusLink"))
+    printf("<B>Stanford SOURCE Locus Link:</B> <A HREF=\"%soption=LLID&criteria=%s&choice=Gene\">%s</A><BR>\n",stanSourceLink,acc,acc);
+}
+
 void printRnaSpecs(char *acc)
 /* Print auxiliarry info on RNA. */
 {
@@ -1224,6 +1245,7 @@ char *type,*direction,*source,*organism,*library,*clone,*sex,*tissue,
 int seqSize,fileSize;
 long fileOffset;
 char *ext_file;		    
+
 /* This sort of query and having to keep things in sync between
  * the first clause of the select, the from clause, the where
  * clause, and the results in the row ... is really tedious.
@@ -1296,6 +1318,10 @@ if (row != NULL)
     /* Put up Gene Lynx */
     if (sameWord(type, "mrna"))
         printGeneLynx(acc);
+    
+    /* Put up Stanford Source link. */
+    printStanSource(acc, type);
+    
 
     if ((strstr(hgGetDb(), "mm") != NULL) 
         && hTableExists("rikenaltid"))
@@ -3179,6 +3205,8 @@ if (startsWith("hg", hGetDb()))
 	   rl->name);
     printf("%s</A><BR>\n", rl->name);
     }
+printStanSource(rl->mrnaAcc, "mrna");
+
 htmlHorizontalLine();
 
 geneShowPosAndLinks(rl->mrnaAcc, rl->protAcc, tdb, "refPep", "htcTranslatedProtein",
@@ -5227,32 +5255,30 @@ struct sqlConnection *conn = hAllocConn();
 int start = cartInt(cart, "o");
 struct dnaProbe *dp = NULL;
 char buff[256];
- genericHeader(tdb, item); 
+genericHeader(tdb, item); 
 snprintf(buff, sizeof(buff), "select * from dnaProbe where name='%s'",  item);
-
 dp = dnaProbeLoadByQuery(conn, buff);
 if(dp != NULL)
     {
     printf("<h3>Probe details:</h3>\n");
-    printf("<b>Name:</b> %s<br>\n",dp->name);
+    printf("<b>Name:</b> %s  <font size=-2>[dbName genomeVersion strand coordinates]</font><br>\n",dp->name);
     printf("<b>Dna:</b> %s", dp->dna );
-    printf("[<a href=\"hgBlat?type=DNA&genome=hg8&sort=&query,score&output=hyperlink&userSeq=%s\">blat</a>]<br>", dp->dna);
+    printf("[<a href=\"hgBlat?type=DNA&genome=hg8&sort=&query,score&output=hyperlink&userSeq=%s\">blat (blast like alignment)</a>]<br>", dp->dna);
     printf("<b>Size:</b> %d<br>", dp->size );
     printf("<b>Chrom:</b> %s<br>", dp->chrom );
     printf("<b>ChromStart:</b> %d<br>", dp->start );
     printf("<b>ChromEnd:</b> %d<br>", dp->end );
     printf("<b>Strand:</b> %s<br>", dp->strand );
     printf("<b>3' Dist:</b> %d<br>", dp->tpDist );
-    printf("<b>Tm:</b> %f<br>", dp->tm );
+    printf("<b>Tm:</b> %f <font size=-2>[scores over 100 are allowed]</font><br>", dp->tm );
     printf("<b>%%GC:</b> %f<br>", dp->pGC );
-    printf("<b>Affy:</b> %d<br>", dp->affyHeur );
+    printf("<b>Affy:</b> %d <font size=-2>[1 passes, 0 doesn't pass Affy heuristic]</font><br>", dp->affyHeur );
     printf("<b>Sec Struct:</b> %f<br>", dp->secStruct);
     printf("<b>blatScore:</b> %d<br>", dp->blatScore );
     printf("<b>Comparison:</b> %f<br>", dp->comparison);
-    printf("<hr>\n");
     }
-printf("<h3>Genomic Details:</h3>\n");
-genericBedClick(conn, tdb, item, start, 1);
+//printf("<h3>Genomic Details:</h3>\n");
+//genericBedClick(conn, tdb, item, start, 1);
 printTrackHtml(tdb);
 hFreeConn(&conn);
 }
@@ -6594,6 +6620,13 @@ slSort(&sgList,sortSageByPslOrder);
 
 printSageReference(sgList);
 printSageGraphUrl(sgList);
+printf("<BR>\n");
+for(sg=sgList; sg != NULL; sg = sg->next)
+    {
+    char buff[256];
+    sprintf(buff,"Hs.%d",sg->uni);
+    printStanSource(buff, "unigene");
+    }
 featureCount= slCount(sgList); 
 printf("<basefont size=-1>\n");
 printf("<table cellspacing=0 border=1 bordercolor=\"black\">\n");
@@ -6966,9 +6999,32 @@ printf("<br><a HREF=\"%s?position=%s:%d-%d&mrna=full&intronEst=full&refGene=full
        hgTracksName(), ag->tName, ag->tStart, ag->tEnd, cartSidUrlString(cart));
 printf(" ALT=\"Zoom to browser coordinates of altGraphX\">");
 printf("Jump to browser for %d</a><font size=-1>[%s:%d-%d]</font><br><br>\n", ag->id, ag->tName, ag->tStart, ag->tEnd);
+printf("<table cellpadding=1 border=1>\n");
+printf("<tr><th>Cassette Exon</th><th>Tissues Found</th></tr>\n");
+for(i=0; i<ag->edgeCount; i++)
+    {
+    if(ag->edgeTypes[i] == ggCassette)
+	{
+	char buff[512];
+	int j=0;
+	struct evidence *e =  slElementFromIx(ag->evidence, i);	
+	printf("<tr><td>%d-%d</td><td>\n", ag->edgeStarts[i], ag->edgeEnds[i]);
+	for(j=0; j<e->evCount; j++)
+	    {
+	    char *tmp = NULL;
+	    snprintf(query, sizeof(query), "select name from tissue where id = %d",e->mrnaIds[j]);
+	    tmp = sqlQuickQuery(conn, query, buff, sizeof(buff));
+	    if(tmp != NULL)
+		printf("%s,", buff);
+	    }
+	printf("</td></tr>\n");
+	}
+    }
+printf("</table>\n");
 printf("<table cellpadding=0 cellspacing=0>\n");
 printf("<tr><th><b>Vertices</b></th><th><b>Edges</b></th></tr>\n");
 printf("<tr><td valign=top>\n");
+
 printf("<table cellpadding=1 border=1>\n");
 printf("<tr><th><b>Number</b></th><th><b>Type</b></th></tr>\n");
 for(i=0; i<ag->vertexCount; i++)
@@ -6994,6 +7050,7 @@ for(i=0; i<ag->edgeCount; i++)
     printf("</td></tr>\n");
     }
 printf("</table>\n");
+
 printf("</td></tr>\n");
 printf("</table>\n");
 printf("</center>\n");
