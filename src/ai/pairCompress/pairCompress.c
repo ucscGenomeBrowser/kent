@@ -79,34 +79,6 @@ if (sym != NULL)
     }
 }
 
-struct compSym *rLongest(int level, struct compSym *initialSym, char *string, int size)
-/* Return longest child, grandchild, etc. that matches. */
-{
-struct slRef *ref;
-struct compSym *sym, *child, *promising, *bestSoFar = initialSym;
-int bestSize = bestSoFar->size;
-int i;
-
-for (ref = initialSym->children; ref != NULL; ref = ref->next)
-    {
-    sym = ref->val;
-    if (sym->size <= size)
-        {
-	struct compSym *dad = sym->dad;
-	if (memcmp(string, dad->text, dad->size) == 0)
-	    {
-	    promising = rLongest(level+1, sym, string+dad->size, size - dad->size);
-	    if (promising->size > bestSize)
-	        {
-		bestSoFar = promising;
-		bestSize = promising->size;
-		}
-	    }
-	}
-    }
-return bestSoFar;
-}
-
 struct compresser 
 /* Keep info needed while compressing. */
     {
@@ -149,14 +121,45 @@ if (sym != NULL)
     }
 }
 
+struct compSym *rLongest(struct compSym *initialSym, char *string, int size, int minUse)
+/* Return longest child, grandchild, etc. that matches. */
+{
+struct slRef *ref;
+struct compSym *sym, *child, *promising, *bestSoFar = initialSym;
+int bestSize = bestSoFar->size;
+int i;
+
+for (ref = initialSym->children; ref != NULL; ref = ref->next)
+    {
+    sym = ref->val;
+    if (sym->useCount >= minUse && sym->size <= size)
+        {
+	struct compSym *dad = sym->dad;
+	if (memcmp(string, dad->text, dad->size) == 0)
+	    {
+	    promising = rLongest(sym, string+dad->size, size - dad->size, minUse);
+	    if (promising->size > bestSize)
+	        {
+		bestSoFar = promising;
+		bestSize = promising->size;
+		}
+	    }
+	}
+    }
+return bestSoFar;
+}
+
 struct compSym *longestMatching(struct compresser *comp, 
 	unsigned char *string, int size)
 /* Return longest element in hash that is same as start of string. */
 {
-struct compSym *sym;
-sym = rLongest(0, comp->letters[string[0]], string+1, size-1);
-rMarkIndirectUse(sym);
-sym->useCount += 1;
+struct compSym *firstRep, *sym;
+firstRep = rLongest(comp->letters[string[0]], string+1, size-1, 0);
+if (firstRep->useCount == 0)
+    sym = rLongest(comp->letters[string[0]], string+1, size-1, 1);
+else
+    sym = firstRep;
+firstRep->useCount += 1;
 return sym;
 }
 
