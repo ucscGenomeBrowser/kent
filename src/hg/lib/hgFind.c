@@ -41,7 +41,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.109 2003/09/19 05:35:23 kate Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.110 2003/09/19 19:22:30 braney Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -2639,7 +2639,7 @@ hgp = hgPositionsFind(searchSpec, "", hgAppName, cart);
 if (hgp == NULL || hgp->posCount == 0)
     {
     hgPositionsFree(&hgp);
-    errAbort("Sorry, couldn't locate %s in genome database\n", spec);
+    warn("Sorry, couldn't locate %s in genome database\n", spec);
     return NULL;
     }
 
