@@ -116,7 +116,7 @@
 #include "encodeRegionInfo.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.512 2003/11/05 20:52:15 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.513 2003/11/05 21:22:17 sugnet Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11656,16 +11656,16 @@ double scale = 0;
 
 scale = (double)pixWidth/(ag->tEnd - ag->tStart);
 lineHeight = 2 * fontHeight +1;
-altGraphXLayout(ag, ag->tStart, pixWidth, pixWidth, scale, 100, &ssList, &heightHash, &rowCount);
+altGraphXLayout(ag, ag->tStart, ag->tEnd, scale, 100, &ssList, &heightHash, &rowCount);
 pixHeight = rowCount * lineHeight;
 makeTempName(&gifTn, "hgc", ".gif");
 vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi);
 makeGrayShades(vg);
 vgSetClip(vg, 0, 0, pixWidth, pixHeight);
-altGraphXDrawPack(ag, ssList, 0, 0, pixWidth, lineHeight, lineHeight-1,
-		  ag->tStart, ag->tEnd, scale, ag->tEnd-ag->tStart, vg, font, MG_BLACK, shadesOfGray, "Dummy", NULL);
+altGraphXDrawPack(ag, ssList, vg, 0, 0, pixWidth, lineHeight, lineHeight-1,
+		  ag->tStart, ag->tEnd, scale, font, MG_BLACK, shadesOfGray, "Dummy", NULL);
 vgUnclip(vg);
-vgClose(&vg);
+vgClose(&vg); 
 printf(
        "<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d><BR>\n",
        gifTn.forHtml, pixWidth, pixHeight);
@@ -11797,7 +11797,7 @@ for(i=0; i<ag->edgeCount; i++)
     {
     struct evidence *e =  slElementFromIx(ag->evidence, i);
     printf("<tr><td>%d</td><td>%d</td>", 	   ag->edgeStarts[i], ag->edgeEnds[i]);
-    printf("<td><a href=%s?position=%s:%d-%d&mrna=full&intronEst=full&refGene=full&altGraphX=full\">%s</a></td><td>", 
+    printf("<td><a href=\"%s?position=%s:%d-%d&mrna=full&intronEst=full&refGene=full&altGraphX=full\">%s</a></td><td>", 
 	   hgTracksName(), 
 	   ag->tName, 
 	   ag->vPositions[ag->edgeStarts[i]], 
@@ -12740,7 +12740,8 @@ else if( sameWord(track, "gcPercent"))
     {
     doGcDetails(tdb, item);
     }
-else if( sameWord(track, "altGraphX") || sameWord(track, "altGraphXCon"))
+else if( sameWord(track, "altGraphX") || sameWord(track, "altGraphXCon") 
+	 || sameWord(track, "altGraphXT6Con") || sameWord(track, "altGraphXOrtho"))
     {
     doAltGraphXDetails(tdb,item);
     }
