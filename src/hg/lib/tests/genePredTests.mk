@@ -16,9 +16,8 @@ TEST_TBL=gpTest_${USER}
 #   - refSeq.cds - CDS for above.
 #   - refSeqMin.gp - miminmal genePred, only required columns
 #   - refSeqId.gp - with id
-#   - refSeqName2.gp - with name2
 #   - refSeqIdName2.gp - with id, name2
-#   - refSeqFrame.gp - with cdsStat and frame fields (from mrnaToGene)
+#   - refSeqFrame.gp - with id, name2, cdsStat and frame fields (from mrnaToGene)
 
 
 test: fileTests tableTests fromPslTests compatTblTests fromGxfTests
@@ -27,7 +26,7 @@ test: fileTests tableTests fromPslTests compatTblTests fromGxfTests
 ###
 # test of reading/writing tab-separated files.
 ###
-fileTests: fileMinTest fileIdTest fileName2Test fileIdName2Test fileFrameTest fileFrameStatTest
+fileTests: fileMinTest fileIdTest fileIdName2Test fileFrameTest fileFrameStatTest
 doFileTest = ${MAKE} -f genePredTests.mk doFileTest
 
 fileMinTest:
@@ -36,16 +35,13 @@ fileMinTest:
 fileIdTest:
 	${doFileTest} id=$@ inGp=refSeqId.gp opts="-idFld"
 
-fileName2Test:
-	${doFileTest} id=$@ inGp=refSeqName2.gp opts="-name2Fld"
-
 fileIdName2Test:
 	${doFileTest} id=$@ inGp=refSeqIdName2.gp opts="-idFld -name2Fld"
 
 fileFrameTest:
 	${doFileTest} id=$@ inGp=refSeqFrame.gp opts="-cdsStatFld -exonFramesFld"
 
-# this regress a bug parsing unk cds status
+# this regress a bug parsing unk cds status, also tests auto-increment (ids are zero)
 fileFrameStatTest:
 	${doFileTest} id=$@ inGp=refSeqFrameStat.gp opts="-cdsStatFld -exonFramesFld"
 
@@ -61,28 +57,26 @@ doFileTest: mkout
 	diff -u expected/genePred/${id}.info ${OUT_DIR}/${id}.info
 
 ###
-# test of loading and reading database tables
+# Test of loading and reading database tables.  When ids are not auto-assigned,
+# then compare with input file, otherwise, we need an expected file.
 ###
-tableTests: tableMinTest tableIdTest tableName2Test tableIdName2Test tableFrameTest tableFrameStatTest
+tableTests: tableMinTest tableIdTest tableIdName2Test tableFrameTest tableFrameStatTest
 doTableTest = ${MAKE} -f genePredTests.mk doTableTest
 
 tableMinTest:
-	${doTableTest} id=$@ inGp=refSeqMin.gp
+	${doTableTest} id=$@ inGp=refSeqMin.gp expGp=input/genePred/refSeqMin.gp
 
 tableIdTest:
-	${doTableTest} id=$@ inGp=refSeqId.gp opts="-idFld"
-
-tableName2Test:
-	${doTableTest} id=$@ inGp=refSeqName2.gp opts="-name2Fld"
+	${doTableTest} id=$@ inGp=refSeqId.gp opts="-idFld" expGp=input/genePred/refSeqId.gp
 
 tableIdName2Test:
-	${doTableTest} id=$@ inGp=refSeqIdName2.gp opts="-idFld -name2Fld"
+	${doTableTest} id=$@ inGp=refSeqIdName2.gp opts="-idFld -name2Fld" expGp=input/genePred/refSeqIdName2.gp
 
 tableFrameTest:
-	${doTableTest} id=$@ inGp=refSeqFrame.gp opts="-cdsStatFld -exonFramesFld"
+	${doTableTest} id=$@ inGp=refSeqFrame.gp opts="-cdsStatFld -exonFramesFld" expGp=expected/genePred/tableFrameTest.gp
 
 tableFrameStatTest:
-	${doTableTest} id=$@ inGp=refSeqFrameStat.gp opts="-cdsStatFld -exonFramesFld"
+	${doTableTest} id=$@ inGp=refSeqFrameStat.gp opts="-cdsStatFld -exonFramesFld" expGp=expected/genePred/tableFrameStatTest.gp
 
 
 # Recurisve target to run a table read/write test.  Will diff the output
@@ -90,11 +84,12 @@ tableFrameStatTest:
 # Expects the following variables to be set:
 #  id - test id
 #  inGp - genePred (omitting dir)
+#  expGp - expected gp, full path.
 #  opts - genePredTester options to add
 doTableTest: mkout
 	${GENE_PRED_TESTER} ${opts} -needRows=5 -output=${OUT_DIR}/${id}.gp loadTable ${DB} ${TEST_TBL} input/genePred/${inGp}
 	${GENE_PRED_TESTER} ${opts} -needRows=5 -output=${OUT_DIR}/${id}.gp -info=${OUT_DIR}/${id}.info readTable ${DB} ${TEST_TBL}
-	diff -u input/genePred/${inGp} ${OUT_DIR}/${id}.gp
+	diff -u ${expGp} ${OUT_DIR}/${id}.gp
 	diff -u expected/genePred/${id}.info ${OUT_DIR}/${id}.info
 
 

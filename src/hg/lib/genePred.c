@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.34 2004/02/24 22:04:43 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.35 2004/02/26 03:45:12 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -38,8 +38,7 @@ static char *binFieldSql =
 "    INDEX(tName(8),bin),";
 
 static char *idFieldSql = 
-"    id int unsigned not null,"    /* Numeric id of gene annotation. */
-"    PRIMARY KEY(id),";
+"    id int unsigned PRIMARY KEY auto_increment,";   /* Numeric id of gene annotation. */
 
 static char *name2FieldSql = 
 "   name2 varchar(255) not null,"    /* Secondary name. (e.g. name of gene) or NULL if not available */
@@ -221,20 +220,20 @@ for (i=0; i<el->exonCount; ++i)
     }
 if (sep == ',') fputc('}',f);
 
-/* optional fields */
-if (el->optFields & genePredIdFld)
+/* optional fields, >= test is used so unspecified coumns can be filled in */
+if (el->optFields >= genePredIdFld)
     {
     fputc(sep,f);
     fprintf(f, "%u", el->id);
     }
-if (el->optFields & genePredName2Fld)
+if (el->optFields >= genePredName2Fld)
     {
     fputc(sep,f);
     if (sep == ',') fputc('"',f);
-    fprintf(f, "%s", el->name2);
+    fprintf(f, "%s", ((el->name2 != NULL) ? el->name2 : ""));
     if (sep == ',') fputc('"',f);
     }
-if (el->optFields & genePredCdsStatFld)
+if (el->optFields >= genePredCdsStatFld)
     {
     fputc(sep,f);
     if (sep == ',') fputc('"',f);
@@ -245,7 +244,7 @@ if (el->optFields & genePredCdsStatFld)
     fprintf(f, "%s", genePredCdsStatStr(el->cdsEndStat));
     if (sep == ',') fputc('"',f);
     }
-if (el->optFields & genePredExonFramesFld)
+if (el->optFields >= genePredExonFramesFld)
     {
     fputc(sep,f);
     if (sep == ',') fputc('{',f);
@@ -295,32 +294,15 @@ errAbort("invalid genePred cdsStatus: \"%s\"", statStr);
 return cdsNone;  /* make compiler happy */
 }
 
-static int calcNumCols(unsigned fields)
-/* calculate the expected number of columns based on the optional fields */
-{
-int numCols = GENEPRED_NUM_COLS;
-if (fields & genePredIdFld)
-    numCols++;
-if (fields & genePredName2Fld)
-    numCols++;
-if (fields & genePredCdsStatFld)
-    numCols += 2;
-if (fields & genePredExonFramesFld)
-    numCols++;
-return numCols;
-}
-
-struct genePred *genePredExtLoad(char **row, int numCols, unsigned fields)
-/* Load a genePred with from a row, specifying the list of optional fields.
- * Present columns must be in the same order as the struct and there must be a
- * sufficient number of columns. Dispose of this with genePredFree(). */
+struct genePred *genePredExtLoad(char **row, int numCols)
+/* Load a genePred with from a row, with optional fields.  The row must
+ * contain columns in the order in the struct, and they must be present up to
+ * the last specfied optional field.  Missing intermediate fields must have
+ * zero or empty columns, they may not be omitted.  Fields at the end can be
+ * omitted. Dispose of this with genePredFree(). */
 {
 struct genePred *ret;
 int sizeOne, iCol;
-int needNumCols = calcNumCols(fields);
-if (numCols < needNumCols)
-    errAbort("not enough columns for genePred; needed %d, got %d",
-             needNumCols, numCols);
 
 AllocVar(ret);
 ret->exonCount = sqlUnsigned(row[7]);
@@ -336,31 +318,39 @@ assert(sizeOne == ret->exonCount);
 sqlUnsignedDynamicArray(row[9], &ret->exonEnds, &sizeOne);
 assert(sizeOne == ret->exonCount);
 
-ret->optFields = fields;
-
 iCol=GENEPRED_NUM_COLS;
-if (fields & genePredIdFld)
+if (iCol < numCols)
+    {
     ret->id = sqlUnsigned(row[iCol++]);
-if (fields & genePredName2Fld)
+    ret->optFields |= genePredIdFld;
+    }
+if (iCol < numCols)
+    {
     ret->name2 = cloneString(row[iCol++]);
-if (fields & genePredCdsStatFld)
+    ret->optFields |= genePredName2Fld;
+    }
+if (iCol < numCols)
     {
     ret->cdsStartStat = parseCdsStat(row[iCol++]);
-    ret->cdsEndStat = parseCdsStat(row[iCol++]);
+    ret->optFields |= genePredCdsStatFld;
     }
-if (fields & genePredExonFramesFld)
+if (iCol < numCols)
+    {
+    ret->cdsEndStat = parseCdsStat(row[iCol++]);
+    ret->optFields |= genePredCdsStatFld;
+    }
+if (iCol < numCols)
     {
     sqlSignedDynamicArray(row[iCol++], &ret->exonFrames, &sizeOne);
     assert(sizeOne == ret->exonCount);
+    ret->optFields |= genePredExonFramesFld;
     }
 return ret;
 }
 
-struct genePred *genePredExtLoadAll(char *fileName, unsigned fields)
-/* Load all genePreds with from tab-separated file, specifying the list of
- * optional fields.  Present columns must be in the same order as the struct
- * and there must be a sufficient number of columns. Dispose of this with
- * genePredFreeList(). */
+struct genePred *genePredExtLoadAll(char *fileName)
+/* Load all genePreds with from tab-separated file, possibly with optional
+ * fields. Dispose of this with genePredFreeList(). */
 {
 struct genePred *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
@@ -369,8 +359,8 @@ int numCols;
 
 while ((numCols = lineFileChopNextTab(lf, row, ArraySize(row))) > 0)
     {
-    lineFileExpectAtLeast(lf, calcNumCols(fields), numCols);
-    el = genePredExtLoad(row, numCols, fields);
+    lineFileExpectAtLeast(lf, GENEPRED_NUM_COLS, numCols);
+    el = genePredExtLoad(row, numCols);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -842,17 +832,20 @@ return genePredFromPsl2(psl, 0, &cds, insertMergeSize);
 }
 
 
-char* genePredGetCreateSql(char* table, unsigned extFields, unsigned options)
-/* Get SQL required to create a genePred table. extFields is a bit set
- * consisting of the genePredFields values. Options are beit set of
- * genePredCreateOpts. Returned string should be freed. */
+char* genePredGetCreateSql(char* table, unsigned optFields, unsigned options)
+/* Get SQL required to create a genePred table. optFields is a bit set
+ * consisting of the genePredFields values. Options are a bit set of
+ * genePredCreateOpts. Returned string should be freed.
+ * This will create all optional fields that preceed the highest optFields
+ * column. */
 {
+/* the >= is used so that we create preceeding fields. */
 char sqlCmd[1024];
 char *binFld = (options & genePredWithBin) ? binFieldSql : "";
-char *idFld = (extFields & genePredIdFld) ? idFieldSql : "";
-char *name2Fld = (extFields & genePredName2Fld) ? name2FieldSql : "";
-char *cdsStatFld = (extFields & genePredCdsStatFld) ? cdsStatFieldSql : "";
-char *exonFramesFld = (extFields & genePredExonFramesFld) ? exonFramesFieldSql : "";
+char *idFld = (optFields >= genePredIdFld) ? idFieldSql : "";
+char *name2Fld = (optFields >= genePredName2Fld) ? name2FieldSql : "";
+char *cdsStatFld = (optFields >= genePredCdsStatFld) ? cdsStatFieldSql : "";
+char *exonFramesFld = (optFields >= genePredExonFramesFld) ? exonFramesFieldSql : "";
 
 safef(sqlCmd, sizeof(sqlCmd), createSql, table,
       binFld, idFld, name2Fld, cdsStatFld, exonFramesFld);

@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.25 2004/02/24 23:02:43 markd Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.26 2004/02/26 03:45:13 markd Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
 boolean requireCDS = FALSE;     /* should genes with CDS be dropped */
@@ -98,7 +98,7 @@ int i;
 for (i=0; i<gCount; ++i)
     {
     printf("Reading %s\n", gNames[i]);
-    gpList = slCat(genePredExtLoadAll(gNames[i], gOptFields), gpList);
+    gpList = slCat(genePredExtLoadAll(gNames[i]), gpList);
     }
 printf("%d gene predictions\n", slCount(gpList));
 slSort(&gpList, genePredCmp);

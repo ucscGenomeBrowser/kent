@@ -1,4 +1,4 @@
-genePredIdFld: no
-genePredName2Fld: no
+genePredIdFld: yes
+genePredName2Fld: yes
 genePredCdsStatFld: yes
 genePredExonFramesFld: yes

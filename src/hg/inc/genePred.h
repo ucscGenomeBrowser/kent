@@ -29,7 +29,8 @@ enum genePredCreateOpts
 
 
 enum genePredFields
-/* bit set to indicate which optional fields are used */
+/* Bit set to indicate which optional fields are used.
+ * N.B. value order must match order in genePred */
 {
     genePredNoOptFld      = 0x00,  /* use for no opt fields */
     genePredIdFld         = 0x01,  /* id field */
@@ -69,7 +70,7 @@ struct genePred
 };
 
 #define GENEPRED_NUM_COLS 10  /* number of columns in a genePred */
-#define GENEPREDX_NUM_COLS 15  /* number of columns in extended genePred */
+#define GENEPREDX_NUM_COLS 15  /* max number of columns in extended genePred */
 
 struct genePred *genePredLoad(char **row);
 /* Load a genePred from row fetched with select * from genePred
@@ -110,16 +111,16 @@ void genePredOutput(struct genePred *el, FILE *f, char sep, char lastSep);
 
 /* ---------  Start of hand generated code. ---------------------------- */
 
-struct genePred *genePredExtLoad(char **row, int numCols, unsigned fields);
-/* Load a genePred with from a row, specifying the list of optional fields.
- * Present columns must be in the same order as the struct and there must be a
- * sufficient number of columns. Dispose of this with genePredFree(). */
+struct genePred *genePredExtLoad(char **row, int numCols);
+/* Load a genePred with from a row, with optional fields.  The row must
+ * contain columns in the order in the struct, and they must be present up to
+ * the last specfied optional field.  Missing intermediate fields must have
+ * zero or empty columns, they may not be omitted.  Fields at the end can be
+ * omitted. Dispose of this with genePredFree(). */
 
-struct genePred *genePredExtLoadAll(char *fileName, unsigned fields);
-/* Load all genePreds with from tab-separated file, specifying the list of
- * optional fields.  Present columns must be in the same order as the struct
- * and there must be a sufficient number of columns. Dispose of this with
- * genePredFreeList(). */
+struct genePred *genePredExtLoadAll(char *fileName);
+/* Load all genePreds with from tab-separated file, possibly with optional
+ * fields. Dispose of this with genePredFreeList(). */
 
 char *genePredCdsStatStr(enum cdsStatus stat);
 /* get string value of a cdsStatus */

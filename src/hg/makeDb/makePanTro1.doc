@@ -1331,3 +1331,8 @@ ldHgGene panTro1 mappedRefSeq new.gtf
     # to  ~/kent/src/hg/makeDb/trackDb/chimp/panTro1
     #add a track entry to trackDb.ra 
     # in  ~/kent/src/hg/makeDb/trackDb/chimp/panTro1
+
+# HUMAN REFSEQ ALIGNMENTS (markd)
+   Added hack in genbank alignment code so that the xeno refseq track
+   consists only of human refseqs.  This had to be reloaded due to
+   query type getting lost.

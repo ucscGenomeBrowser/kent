@@ -34,4 +34,4 @@ ${BIN_DIR}/genePredTester: genePredTester.o ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o $@ $< ${MYLIBS} ${L}
 
 clean:
-	rm -rf *.o bin output
+	rm -rf *.o bin output *.tmp

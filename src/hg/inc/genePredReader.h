@@ -23,11 +23,12 @@ struct genePredReader *genePredReaderRangeQuery(struct sqlConnection* conn,
  * extraWhere is not null, it is added as an additional where condition. It
  * will determine if extended genePred columns are in the table. */
 
-struct genePredReader *genePredReaderFile(char* gpFile, unsigned optFields,
-                                          char* chrom);
+struct genePredReader *genePredReaderFile(char* gpFile, char* chrom);
 /* Create a new genePredReader to read from a file.  If chrom is not null,
- * only this chromsome is read.  optFields is the bitset of optional fields
- * to include.  They must be in the same order as genePred. */
+ * only this chromsome is read.  The rows must contain columns in the order in
+ * the struct, and they must be present up to the last specfied optional
+ * field.  Missing intermediate fields must have zero or empty columns, they
+ * may not be omitted. */
 
 struct genePred *genePredReaderNext(struct genePredReader* gpr);
 /* Read the next genePred, returning NULL if no more */
@@ -48,8 +49,7 @@ struct genePred *genePredReaderDoRangeQuery(struct sqlConnection* conn,
                                             char* extraWhere);
 /* Function that encapsulates doing a range query and loading the results */
 
-struct genePred *genePredReaderDoFile(char* gpFile, unsigned optFields,
-                                      char* chrom);
+struct genePred *genePredReaderDoFile(char* gpFile, char* chrom);
 /* Function that encapsulates reading a genePred file */
 
 

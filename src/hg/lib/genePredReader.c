@@ -27,29 +27,35 @@ static char *name2Aliases[] =
 };
 
 /* Field names in the order that they must be passed to genePredLoadExt, with
- * the index optFields flags and aliases for the fields in certain tables.  */
-static struct {
+ * the index and optFields flags and aliases for the fields in certain
+ * tables. Also default values to use. */
+struct field
+{
     char *fld;
+    int fldIdx;
     unsigned optFlag;
     char **aliases;
-} fieldTbl[] =
+    char *defaultVal;
+};
+
+static struct field fieldTbl[] =
 {
-    {"name",         0, NULL},
-    {"chrom",        0, NULL},
-    {"strand",       0, NULL},
-    {"txStart",      0, NULL},
-    {"txEnd",        0, NULL},
-    {"cdsStart",     0, NULL},
-    {"cdsEnd",       0, NULL},
-    {"exonCount",    0, NULL},
-    {"exonStarts",   0, NULL},
-    {"exonEnds",     0, NULL},
-    {"id",           genePredIdFld, idAliases},
-    {"name2",        genePredName2Fld, name2Aliases}, 
-    {"cdsStartStat", genePredCdsStatFld, NULL},
-    {"cdsEndStat",   genePredCdsStatFld, NULL},
-    {"exonFrames",   genePredExonFramesFld, NULL},
-    {NULL,           0, NULL},
+    {"name",          0, 0, NULL, NULL},
+    {"chrom",         1, 0, NULL, NULL},
+    {"strand",        2, 0, NULL, NULL},
+    {"txStart",       3, 0, NULL, NULL},
+    {"txEnd",         4, 0, NULL, NULL},
+    {"cdsStart",      5, 0, NULL, NULL},
+    {"cdsEnd",        6, 0, NULL, NULL},
+    {"exonCount",     7, 0, NULL, NULL},
+    {"exonStarts",    8, 0, NULL, NULL},
+    {"exonEnds",      9, 0, NULL, NULL},
+    {"id",           10, genePredIdFld, idAliases, "0"},
+    {"name2",        11, genePredName2Fld, name2Aliases, ""}, 
+    {"cdsStartStat", 12, genePredCdsStatFld, NULL, "none"},
+    {"cdsEndStat",   13, genePredCdsStatFld, NULL, "none"},
+    {"exonFrames",   14, genePredExonFramesFld, NULL, NULL},
+    {NULL,           0, 0, NULL, NULL},
 };
 
 
@@ -57,36 +63,56 @@ struct genePredReader
 /* Object to read genePred objects from database tables or files. */
 {
     char *table;            /* name of table or file */
-    unsigned optFields;     /* optional fields being included */
+
+    /* for DB access */
+    unsigned optFields;     /* optional fields being included from DB */
+    unsigned numFields;
+    unsigned queryCols;
     struct sqlResult *sr;   /* results if reading from a DB */
     int rowOffset;          /* offset if have a bin column */
+    int queryToFldMap[GENEPREDX_NUM_COLS+1];  /* map of columns in query order
+                                               * to field order, may include
+                                               * bin, hence =1  */
+    /* for file access */
     struct lineFile *lf;    /* lineFile when reading from a file */
     char* chrom;            /* chrom restriction for files */
-    unsigned numCols;
-    int colToQueryMap[GENEPREDX_NUM_COLS];  /* map of columns in field order
-                                               * to query order.  */
 };
 
-static int findField(char *fname)
-/* search fieldTbl for the specified field, return it's index or -1 if
- * not found */
+static int optFieldsToNumFields(unsigned optFields)
+/* determine the required number of columns, given the desired optional
+ * fields */
+{
+int numFields = GENEPRED_NUM_COLS;
+if (optFields & genePredIdFld)
+    numFields = GENEPRED_NUM_COLS+1;
+if (optFields & genePredName2Fld)
+    numFields = GENEPRED_NUM_COLS+2;
+if (optFields & genePredCdsStatFld)
+    numFields = GENEPRED_NUM_COLS+4; /* two columns */
+if (optFields & genePredExonFramesFld)
+    numFields = GENEPRED_NUM_COLS+5;
+return numFields;
+}
+
+static struct field* findField(char *fname)
+/* search fieldTbl for the specified field */
 {
 int iFld, iAlias;
 
 for (iFld = 0; fieldTbl[iFld].fld != NULL; iFld++)
     {
     if (sameString(fieldTbl[iFld].fld, fname))
-        return iFld;
+        return &(fieldTbl[iFld]);
     if (fieldTbl[iFld].aliases != NULL)
         {
         for (iAlias = 0; fieldTbl[iFld].aliases[iAlias] != NULL; iAlias++)
             {
             if (sameString(fieldTbl[iFld].aliases[iAlias], fname))
-                return iFld;
+                return &(fieldTbl[iFld]);
             }
         }
     }
-return -1;
+return NULL;
 }
 
 static void buildResultFieldMap(struct genePredReader* gpr)
@@ -95,43 +121,33 @@ static void buildResultFieldMap(struct genePredReader* gpr)
 {
 int iCol = 0, iFld;
 char *fname;
-int fieldToQuery[GENEPREDX_NUM_COLS];
 
 /* initialize to not used */
-for (iFld = 0; iFld < GENEPREDX_NUM_COLS; iFld++)
-    fieldToQuery[iFld] = -1;
+for (iFld = 0; iFld < GENEPREDX_NUM_COLS+1; iFld++)
+    gpr->queryToFldMap[iFld] = -1;
 
 /* build sparse field map */
 while ((fname = sqlFieldName(gpr->sr)) != NULL)
     {
     if (sameString(fname, "bin"))
         {
-        assert(iCol == 0);
+        if (iCol == 0)
+            errAbort("bin column not first column in %s", gpr->table);
         gpr->rowOffset = 1;
         }
     else
         {
-        iFld = findField(fname);
-        if (iFld >= 0)
+        struct field* field = findField(fname);
+        if (field != NULL)
             {
-            fieldToQuery[iFld] = iCol++;
-            gpr->optFields |= fieldTbl[iFld].optFlag;
-            gpr->numCols++;  /* doesn't include bin */
+            gpr->queryToFldMap[iCol] = field->fldIdx;
+            gpr->optFields |= field->optFlag;
             }
         }
+    gpr->queryCols++;
+    iCol++;
     }
-
-/* Turn into column to column map (dense) and verify all required columns are
- * available */
-for (iFld = 0, iCol = 0; iFld < GENEPREDX_NUM_COLS; iFld++)
-    {
-    if ((fieldToQuery[iFld] < 0) && (fieldTbl[iFld].optFlag == 0))
-        errAbort("required field \"%s\" not found in %s",
-                 fieldTbl[iFld].fld, gpr->table);
-    if (fieldToQuery[iFld] >= 0)
-        gpr->colToQueryMap[iCol++] = fieldToQuery[iFld]; 
-    }
-assert(iCol == gpr->numCols);
+gpr->numFields = optFieldsToNumFields(gpr->optFields);
 }
 
 struct genePredReader *genePredReaderQuery(struct sqlConnection* conn,
@@ -177,11 +193,12 @@ assert(gpr->rowOffset == rowOffset);
 return gpr;
 }
 
-struct genePredReader *genePredReaderFile(char* gpFile, unsigned optFields,
-                                          char* chrom)
+struct genePredReader *genePredReaderFile(char* gpFile, char* chrom)
 /* Create a new genePredReader to read from a file.  If chrom is not null,
- * only this chromsome is read.  optFields is the bitset of optional fields
- * to include.  They must be in the same order as genePred. */
+ * only this chromsome is read.  The rows must contain columns in the order in
+ * the struct, and they must be present up to the last specfied optional
+ * field.  Missing intermediate fields must have zero or empty columns, they
+ * may not be omitted. */
 {
 struct genePredReader* gpr;
 int rowOffset;
@@ -189,17 +206,6 @@ AllocVar(gpr);
 gpr->table = cloneString(gpFile);
 if (chrom != NULL)
     gpr->chrom = cloneString(chrom);
-
-gpr->optFields = optFields;
-gpr->numCols = GENEPRED_NUM_COLS;
-if (optFields & genePredIdFld)
-    gpr->numCols++;
-if (optFields &genePredName2Fld)
-    gpr->numCols++;
-if (optFields & genePredCdsStatFld)
-    gpr->numCols += 2;
-if (optFields & genePredExonFramesFld)
-    gpr->numCols++;
 
 gpr->lf = lineFileOpen(gpFile, TRUE);
 
@@ -210,28 +216,37 @@ return gpr;
 static struct genePred *queryNext(struct genePredReader* gpr)
 /* read the next record from a query */
 {
-int iCol;
+int iFld, iCol;
 char **row = sqlNextRow(gpr->sr);
 char *reorderedRow[GENEPREDX_NUM_COLS];
 if (row == NULL)
     return NULL;
 
-/* reorder row */
-for (iCol = 0; iCol < gpr->numCols; iCol++)
-    reorderedRow[iCol] = row[gpr->colToQueryMap[iCol]+gpr->rowOffset];
+/* fill in row defaults */
+for (iFld = 0; iFld < GENEPREDX_NUM_COLS; iFld++)
+    reorderedRow[iFld] = fieldTbl[iFld].defaultVal;
 
-return genePredExtLoad(reorderedRow, gpr->numCols, gpr->optFields);
+/* reorder row */
+for (iCol = 0; iCol < gpr->queryCols; iCol++)
+    {
+    iFld = gpr->queryToFldMap[iCol];
+    if (iFld >= 0)
+        reorderedRow[iFld] = row[iCol];
+    }
+return genePredExtLoad(reorderedRow, gpr->numFields);
 }
 
 static struct genePred *fileNext(struct genePredReader* gpr)
 /* read the next record from a file */
 {
 char *row[GENEPREDX_NUM_COLS];
+int numFields;
 
-while (lineFileNextRowTab(gpr->lf, row, gpr->numCols))
+while ((numFields = lineFileChopNextTab(gpr->lf, row, GENEPREDX_NUM_COLS)) > 0)
     {
+    lineFileExpectAtLeast(gpr->lf, GENEPRED_NUM_COLS, numFields);
     if ((gpr->chrom == NULL) || (sameString(row[1], gpr->chrom)))
-        return genePredExtLoad(row, gpr->numCols, gpr->optFields);
+        return genePredExtLoad(row, numFields);
     }
 return NULL;
 }
@@ -292,11 +307,11 @@ genePredReaderFree(&gpr);
 return gpList;
 }
 
-struct genePred *genePredReaderDoFile(char* gpFile, unsigned optFields,
-                                      char* chrom)
+struct genePred *genePredReaderDoFile(char* gpFile, char* chrom)
 /* Function that encapsulates reading a genePred file */
 {
-struct genePredReader *gpr = genePredReaderFile(gpFile, optFields, chrom);
+
+struct genePredReader *gpr = genePredReaderFile(gpFile, chrom);
 struct genePred *gpList = genePredReaderAll(gpr);
 genePredReaderFree(&gpr);
 return gpList;
