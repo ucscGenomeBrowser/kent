@@ -4,6 +4,7 @@
  * granted for all use - public, private or commercial. */
 
 #include "common.h"
+#include "errabort.h"
 #include "portable.h"
 #include "dnautil.h"
 #include "dnaseq.h"
@@ -19,7 +20,7 @@ char lineBuf[1024];
 int lineSize;
 char *words[1];
 int c;
-long offset = ftell(f);
+off_t offset = ftello(f);
 size_t dnaSize = 0;
 DNA *dna, *sequence, b;
 int bogusChars = 0;
@@ -37,6 +38,8 @@ for (;;)
     {
     if(fgets(lineBuf, sizeof(lineBuf), f) == NULL)
         {
+        if (ferror(f))
+            errnoAbort("read of fasta file failed");
         return FALSE;
         }
     lineSize = strlen(lineBuf);
@@ -44,14 +47,15 @@ for (;;)
         {
 	if (retCommentLine != NULL)
             *retCommentLine = cloneString(lineBuf);
-        offset = ftell(f);
+        offset = ftello(f);
         chopByWhite(lineBuf, words, ArraySize(words));
         name = words[0]+1;
         break;
         }
     else if (!mustStartWithComment)
         {
-        fseek(f, offset, SEEK_SET);
+        if (fseeko(f, offset, SEEK_SET) < 0)
+            errnoAbort("fseek on fasta file failed");
         break;
         }
     else
@@ -71,7 +75,8 @@ for (;;)
 
 /* Allocate DNA and fill it up from file. */
 dna = sequence = needHugeMem(dnaSize+1);
-fseek(f, offset, SEEK_SET);
+if (fseeko(f, offset, SEEK_SET) < 0)
+    errnoAbort("fseek on fasta file failed");
 for (;;)
     {
     c = fgetc(f);
@@ -91,6 +96,8 @@ if (c == '>')
 *dna = 0;
 
 *retSeq = newDnaSeq(sequence, dnaSize, name);
+if (ferror(f))
+    errnoAbort("read of fasta file failed");
 return TRUE;
 }
 
