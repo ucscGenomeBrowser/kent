@@ -13,7 +13,7 @@
 #include "hgExp.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.30 2003/10/16 14:51:40 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.31 2003/10/23 03:42:27 angie Exp $";
 
 
 static char *expCellVal(struct genePos *gp,
@@ -126,11 +126,15 @@ void expFilterControls(struct column *col, char *subName,
 char lVarName[64];
 int i;
 int skipName = atoi(columnSetting(col, "skipName", "0"));
+char *experimentType = cloneString(columnSetting(col, "experimentType",
+						 "tissue"));
 char **experiments = hgExpGetNames("hgFixed", experimentTable, 
 	representativeCount, representatives, skipName);
 
 hPrintf("<TABLE BORDER=1 CELLSPACING=1 CELLPADDING=1>\n");
-hPrintf("<TR><TH>Tissue</TH><TH>Minimum</TH><TH>Maximum</TH></TR>\n");
+toUpperN(experimentType, 1);
+hPrintf("<TR><TH>%s</TH><TH>Minimum</TH><TH>Maximum</TH></TR>\n",
+	experimentType);
 for (i=0; i<representativeCount; ++i)
     {
     int ix = representatives[i];
@@ -152,22 +156,26 @@ for (i=0; i<representativeCount; ++i)
 hPrintf("</TABLE>\n");
 hPrintf("Include if ");
 advFilterAnyAllMenu(col, "logic", FALSE);
-hPrintf(" tissues meet minimum/maximum criteria.");
+toLowerN(experimentType, 1);
+hPrintf(" %ss meet minimum/maximum criteria.", experimentType);
+freeMem(experimentType);
 }
 
-static void explainLogTwoRatio(char *maxVal)
+static void explainLogTwoRatio(char *maxVal, char *experimentType)
 /* Put up note on log base 2 expression values. */
 {
 hPrintf("Note: the values here range from about -%s to %s.<BR>\n",
 	maxVal, maxVal);
-hPrintf("These are calculated as logBase2(tissue/reference).<BR>\n");
+hPrintf("These are calculated as logBase2(%s/reference).<BR>\n",
+	experimentType);
 }
 
 void expRatioFilterControls(struct column *col, struct sqlConnection *conn)
 /* Print out controls for advanced filter. */
 {
 char *maxVal = columnSetting(col, "max", "3.0");
-explainLogTwoRatio(maxVal);
+char *experimentType = columnSetting(col, "experimentType", "tissue");
+explainLogTwoRatio(maxVal, experimentType);
 expFilterControls(col, "", col->experimentTable, 
 	col->representativeCount, col->representatives);
 }
@@ -552,7 +560,8 @@ static void expEmdControl(struct column *col)
 {
 struct expMultiData *emd;
 struct expMultiData *curEmd = getSelectedEmd(col, col->emdList);
-hPrintf("tissues: ");
+char *experimentType = columnSetting(col, "experimentType", "tissue");
+hPrintf("%ss: ", experimentType);
 hPrintf("<SELECT NAME=\"%s\">", configVarName(col, "emd"));
 for (emd = col->emdList; emd != NULL; emd = emd->next)
     {
@@ -618,7 +627,8 @@ if (col->expShowAbs)
 else
     {
     char *ratioMax = columnSetting(col, "ratioMax", "3.0");
-    explainLogTwoRatio(ratioMax);
+    char *experimentType = columnSetting(col, "experimentType", "tissue");
+    explainLogTwoRatio(ratioMax, experimentType);
     dataTable = emd->ratioTable;
     }
 expMultiFilterPrefix(col, sizeof(emfPrefix), emfPrefix);
