@@ -6790,3 +6790,99 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     # remove temp files
     # rm dbSnpRs*
 
+# JAX ORTHOLOG (WORKING hiram 2004-02-20 )
+    # Add Jackson labs info
+    cd /cluster/data/hg16/bed
+    mkdir jaxOrtholog
+    cd jaxOrtholog
+    wget --timestamping ftp://ftp.informatics.jax.org/pub/reports/HMD_Human4.rpt
+
+    # this is a tricky one to parse.  This .rpt file is plain text, no
+    # tabs, with expected text columns to contain the data.  We need to
+    # convert this.  Beware of table changes, you may need to rework
+    # this each time if they change the data.  Here is what we have
+    # today, an example first line with text columns numbered:
+# 1234567 101234567 201234567 301234567 401234567 501234567 601234567 701234567 
+801234567 90123456 100123456 110123456 120123456 130123456 140123456 150123456 1
+60123456 170123456 180123456 170
+# MGI:1918914                    71664                          0610006F02Rik   
+          10           syntenic D3         196410                         MGC173
+01                  12q13.13
+# ^ mgiId
+#         ^ mouse chr
+#                      ^ mouseCm position
+#                               ^ possible Mouse band
+#                                            Mouse-Human Symbol ^
+#                                                            Human Symbol ^
+#                   ^ Human Band(s)
+
+    #	This awk script picks out the correct columns, removes spaces,
+    #	picks the first of possibly several human band designations,
+    #	and decides if a mouse band has been specified
+    cat << '_EOF_' > jaxToUCSC.awk
+/^MGI:/ {
+    LAST=NF
+    PREV=LAST-1
+    humanSymbol = substr($0,153,26)
+    gsub(" ","",humanSymbol)
+    Band = substr($0,179)
+    humanBand = Band;
+    numBands = split(Band,humanBands," ")
+    if (numBands > 1) { humanBand = humanBands[0] }
+    gsub(" ","",humanBand)
+    mouseBand = substr($0,111,11)
+    gsub(" ","",mouseBand)
+    if (length(mouseBand) < 1) { mouseBand = "N/A" }
+    printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\n", humanSymbol,humanBand,
+	$1,$3,$4,$5,mouseBand
+}
+'_EOF_'
+    # then using that script to fix it:
+    awk -f jaxToUCSC.awk *.rpt > jaxOrtholog.tab
+
+    # Drop (just in case), create and load the table:
+    hgsql -e 'drop table jaxOrtholog;' hg16
+    hgsql hg16 < ~/kent/src/hg/lib/jaxOrtholog.sql
+    hgsql -e \
+	'load data local infile "jaxOrtholog.tab" into table jaxOrtholog;' hg16
+
+LOAD ACEMBLY (WORKING - 2004-02-21 - Hiram)
+    mkdir -p /cluster/data/hg16/bed/acembly
+    cd /cluster/data/hg16/bed/acembly
+    # Get acembly*gene.gff from Jean and Danielle Thierry-Mieg
+    set build = ncbi_34
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/$build.human.genes/acembly.$build.genes.proteins.fasta.tar.gz
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/$build.human.genes/acembly.$build.genes.gff.tar.gz
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/$build.human.genes/acembly.$build.genes.pfamhits.tar.gz
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/$build.human.genes/acembly.$build.mrnas.fasta.tar.gz
+    gunzip -c acembly.$build.genes.gff.tar.gz | tar xvf -
+    gunzip -c acembly.$build.genes.proteins.fasta.tar.gz | tar xvf -
+    cd acembly.$build.genes.gff
+    # Save just the floating-contig features to different files for lifting 
+    # and lift up the floating-contig features to chr*_random coords:
+    # NOTE: file prefix (x1) has been added since build 31
+    foreach f (x1.acemblygenes.*.gff)
+      set c=$f:r:e
+      egrep '^[a-zA-Z0-9]+\|NT_[0-9][0-9][0-9][0-9][0-9][0-9]' $f | \
+        perl -wpe 's/^(\w+)\|(\w+)/$1\/$2/' > ctg-chr${c}_random.gff
+      if (-e ../../../$c/lift/random.lft) then
+        liftUp chr${c}_random.gff ../../../$c/lift/random.lft warn \
+          ctg-chr${c}_random.gff
+      endif
+      # Strip out _random or floating contig lines from the normal chrom gff,
+      # and add the "chr" prefix:
+      grep -v ^$c\| $f | grep -v ^Hs | perl -wpe 's/^/chr/;' > chr$c.gff
+    end
+
+    cd ../acembly.$build.genes.proteins.fasta
+    #- Remove G_t*_ prefixes from acemblyproteins.*.fasta:
+    foreach f (x1.acemblyproteins.*.fasta)
+      perl -wpe 's/^\>G_t[\da-zA-Z]+_/\>/' $f > chr$f:r:e.fa
+    end
+
+    #- Load into database:
+    cd ..
+    ldHgGene hg16 acembly acembly.$build.genes.gff/chr*.gff
+    hgPepPred hg16 generic acemblyPep \
+      acembly.$build.genes.proteins.fasta/chr*.fa
+    unset build
