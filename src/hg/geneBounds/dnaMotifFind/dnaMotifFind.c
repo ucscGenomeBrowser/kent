@@ -22,6 +22,7 @@ errAbort(
   "   -markov=level  Level of Markov background model - 0 1 or 2\n"
   "   -background=seq.fa  Sequence to use for background model\n"
   "   -threshold=N  significance threshold (ln based, default 8.0)\n"
+  "   -rc Include reverse complement\n"
   );
 }
 
@@ -93,10 +94,10 @@ AllocArray(m->gProb, colCount);
 AllocArray(m->tProb, colCount);
 for (i=0; i<colCount; ++i)
     {
-    m->aProb[i] = fSlogScale * old->aProb[i];
-    m->cProb[i] = fSlogScale * old->cProb[i];
-    m->gProb[i] = fSlogScale * old->gProb[i];
-    m->tProb[i] = fSlogScale * old->tProb[i];
+    m->aProb[i] = slog( old->aProb[i] );
+    m->cProb[i] = slog( old->cProb[i] );
+    m->gProb[i] = slog( old->gProb[i] );
+    m->tProb[i] = slog( old->tProb[i] );
     }
 return m;
 }
@@ -115,11 +116,11 @@ slReverse(&smList);
 return smList;
 }
 
-double motifScore(struct dnaMotif *motif, DNA *dna, int pos)
+int motifScore(struct slogMotif *motif, DNA *dna, int pos)
 /* Score hit to DNA according to motif. */
 {
 int col, colCount = motif->columnCount;
-double score = 1.0;
+int score = 0;
 DNA base;
 
 dna += pos;
@@ -128,62 +129,63 @@ for (col=0; col < colCount; ++col)
     {
     base = dna[col];
     if (base == 'a')
-        score *= motif->aProb[col];
+        score += motif->aProb[col];
     else if (base == 'c')
-        score *= motif->cProb[col];
+        score += motif->cProb[col];
     else if (base == 'g')
-        score *= motif->gProb[col];
+        score += motif->gProb[col];
     else if (base == 't')
-        score *= motif->tProb[col];
+        score += motif->tProb[col];
     }
 return score;
 }
 
-double backgroundScore(DNA *dna, int pos, int width)
+int backgroundScore(DNA *dna, int pos, int width)
 /* Return background probability for dna at position. */
 {
-double score = 1.0;
+int score = 0;
 int i;
 
 if (markovLevel == 0)
     {
     dna += pos;
     for (i=0; i<width; ++i)
-	score *= mark0[ntVal[dna[i]]+1];
+	score += slogMark0[ntVal[dna[i]]+1];
     }
 else if (markovLevel == 1)
     {
     if (pos == 0 && width > 0)
         {
-	score *= mark0[ntVal[dna[0]]+1];
+	score += slogMark0[ntVal[dna[0]]+1];
 	pos += 1;
 	width -= 1;
 	}
     dna += pos;
     for (i=0; i<width; ++i)
-        score *= mark1[ntVal[dna[i-1]]+1][ntVal[dna[i]]+1];
+        score += slogMark1[ntVal[dna[i-1]]+1][ntVal[dna[i]]+1];
     }
 else if (markovLevel == 2)
     {
     if (pos == 0 && width > 0)
         {
-	score *= mark0[ntVal[dna[0]]+1];
+	score += slogMark0[ntVal[dna[0]]+1];
 	pos += 1;
 	width -= 1;
 	}
     if (pos == 1 && width > 0)
         {
-        score *= mark1[ntVal[dna[0]]+1][ntVal[dna[1]]+1];
+        score += slogMark1[ntVal[dna[0]]+1][ntVal[dna[1]]+1];
 	pos += 1;
 	width -= 1;
 	}
+    dna += pos;
     for (i=0; i<width; ++i)
-        score *= mark2[ntVal[dna[i-2]]+1][ntVal[dna[i-1]]+1][ntVal[dna[i]]+1];
+        score += slogMark2[ntVal[dna[i-2]]+1][ntVal[dna[i-1]]+1][ntVal[dna[i]]+1];
     }
 return score;
 }
 
-void findHits(FILE *f, struct dnaSeq *seq, char strand, struct dnaMotif *motif)
+void findHits(FILE *f, struct dnaSeq *seq, char strand, struct slogMotif *motif)
 /* Find hits to motif that are past threshold. */
 {
 DNA *dna = seq->dna;
@@ -194,14 +196,18 @@ double score;
 
 for (pos=0; pos<lastPos; pos += 1)
     {
-    score = log(motifScore(motif, dna, pos)/backgroundScore(dna, pos, width));
-    if (score > threshold)
+    score = motifScore(motif, dna, pos) - backgroundScore(dna, pos, width);
+    if (score > slogThreshold)
         {
-	int bedScore = round((score - 5.0)*100);
+	double fScore = invSlogScale * score;
+	int bedScore = round((fScore - 5.0)*100);
+	int s = pos,  e = pos+width, tmp;
 	if (bedScore < 0) bedScore = 0;
 	if (bedScore > 1000) bedScore = 1000;
+	if (strand == '-')
+	    reverseIntRange(&s, &e, seq->size);
 	fprintf(f, "%s\t%d\t%d\t%s\t%d\t%c\n",
-	     seq->name, pos, pos+width, motif->name, bedScore, strand);
+	     seq->name, s, e, motif->name, bedScore, strand);
 	}
     }
 }
@@ -211,7 +217,8 @@ void dnaMotifFind(char *motifFile, char *seqFile, char *outFile)
 {
 FILE *f = mustOpen(outFile, "w");
 struct dnaSeq *seqList = NULL, *seq;
-struct dnaMotif *motifList = NULL, *motif;
+struct slogMotif *motifList = NULL, *motif;
+boolean doRc = optionExists("rc");
 
 threshold = optionFloat("threshold", threshold);
 slogThreshold = threshold * fSlogScale;
@@ -219,11 +226,20 @@ uglyf("Threshold %f,  slogThreshold %d\n", threshold, slogThreshold);
 getBackground(seqFile);
 
 seqList = faReadAllDna(seqFile);
-motifList = dnaMotifLoadAll(motifFile);
+motifList = fixMotifs(dnaMotifLoadAll(motifFile));
 for (seq = seqList; seq != NULL; seq = seq->next)
     {
     for (motif = motifList; motif != NULL; motif = motif->next)
 	findHits(f, seq, '+', motif);
+    if (doRc)
+        {
+	reverseComplement(seq->dna, seq->size);
+	for (motif = motifList; motif != NULL; motif = motif->next)
+	    findHits(f, seq, '-', motif);
+	reverseComplement(seq->dna, seq->size);
+	}
+    printf(".");
+    fflush(stdout);
     }
 carefulClose(&f);
 }
