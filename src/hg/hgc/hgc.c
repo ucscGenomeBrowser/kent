@@ -111,7 +111,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.449 2003/06/30 21:45:41 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.450 2003/07/01 22:44:37 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3144,7 +3144,7 @@ char *table;
 int start = cartInt(cart, "o");
 struct psl *pslList = NULL;
 
-if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameString("xenoEst", track) || sameString("sim4", track))
+if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameString("xenoEst", track) || sameString("sim4", track) || sameString("pseudoMrna",track))
     {
     char temp[256];
     sprintf(temp, "non-%s RNA", organism);
@@ -11782,7 +11782,8 @@ else if (sameWord(track, "mrna") || sameWord(track, "mrna2") ||
          sameWord(track, "mgcIncompleteMrna") ||
          sameWord(track, "mgcFailedEst") ||
          sameWord(track, "mgcPickedEst") ||
-         sameWord(track, "mgcUnpickedEst")
+         sameWord(track, "mgcUnpickedEst") ||
+         sameWord(track, "pseudoMrna")
          )
     {
     doHgRna(tdb, item);
