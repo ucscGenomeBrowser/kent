@@ -16,7 +16,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.73 2003/09/12 22:09:41 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.74 2003/09/13 16:39:52 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -1066,6 +1066,8 @@ for (gene = geneList; gene != NULL; gene = gene->next)
 	    }
 	}
     hPrintf("</TR>\n");
+    if (ferror(stdout))
+        errAbort("Write error to stdout");
     }
 
 hPrintf("</TABLE>");

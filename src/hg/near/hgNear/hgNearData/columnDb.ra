@@ -54,7 +54,7 @@ shortLabel Short Expression
 longLabel Selected UCLA expression data.
 priority 2.7
 visibility on
-type expRatio knownToAffyUcla affyUcla hgFixed.affyUclaExps
+type expRatio knownToU133 affyUcla hgFixed.affyUclaExps
 max 1.0
 representatives 9,37,24,17,34,12,19,21,22,35,
 
@@ -63,7 +63,7 @@ shortLabel Long Expression
 longLabel All UCLA expression data from normal tissues on U133 chip.
 priority 2.8
 visibility off
-type expRatio knownToAffyUcla affyUcla hgFixed.affyUclaExps
+type expRatio knownToU133 affyUcla hgFixed.affyUclaExps
 max 1.0
 representatives 3,4,9,2,8,36,5,6,-1,37,1,33,23,25,20,-1,24,0,29,38,-1,17,7,31,41,-1,30,34,18,32,10,-1,11,12,13,39,26,-1,14,19,15,21,16,22,-1,35,27,28,40,
 
