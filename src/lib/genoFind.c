@@ -1,4 +1,6 @@
 /* genoFind - Quickly find where DNA occurs in genome.. */
+/* Copyright 2001-2002 Jim Kent.  All rights reserved. */
+
 #include "common.h"
 #include <signal.h>
 #include "obscure.h"
