@@ -91,7 +91,7 @@ void axtWrite(struct axt *axt, FILE *f)
 {
 static int ix = 0;
 fprintf(f, "%d %s %d %d %s %d %d %c",
-	++ix, axt->tName, axt->tStart+1, axt->tEnd, 
+	ix++, axt->tName, axt->tStart+1, axt->tEnd, 
 	axt->qName, axt->qStart+1, axt->qEnd, axt->qStrand);
 if (axt->tStrand == '-')
     fprintf(f, "%c", axt->tStrand);
