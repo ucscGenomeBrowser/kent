@@ -164,10 +164,10 @@ public class ApacheReport {
       pw.print("</HEAD>\n");
       pw.print("<BODY>\n");
       if (fileFlag.equals("daily")) {
-        pw.print("<H2>Daily Apache Report " + getMonthText(month) + " " +
+        pw.print("<H2>Daily Apache Report -- " + getMonthText(month) + " " +
                   day + ", " + year + "</H2>\n");
       } else {
-        pw.print("<H2>Monthly Apache Report " + getMonthText(month) + ", " +
+        pw.print("<H2>Monthly Apache Report -- " + getMonthText(month) + ", " +
                year + "</H2>\n");
       }
       pw.print("<TABLE BORDER CELLSPACING=0 CELLPADDING=5>\n");
@@ -351,7 +351,7 @@ public class ApacheReport {
       int secondsInHour = 60 * 60;
       int totalAccess = 0;
       int totalError = 0;
-       for (int reportHour = 0; reportHour <= 23; reportHour++) {
+      for (int reportHour = 0; reportHour <= 23; reportHour++) {
       // for (int reportHour = 0; reportHour <= 1; reportHour++) {
         pw.print("<TR>\n");
         pw.print("<TD>" + reportHour + "</TD>\n");
@@ -411,24 +411,29 @@ public class ApacheReport {
 	    totalError = totalError + cnt;
 
         // need to convert numerator and denominator to float first?  (yes)
-	    float percent;
+	float percent;
         if (nullcnt == 0) {
           percent = 0;
         } else {
-          percent = (float) cnt / (float) nullcnt;
+          percent = (float) cnt / (float) nullcnt * 100;
         }
         String printPercent = df.format(percent);
         pw.print("<TD>" + printPercent + "</TD>\n");
         pw.print("</TR>\n");
       }
+      float totalPercent = (float) totalError / (float) totalAccess * 100;
       // print totals
       pw.print("<TR>\n");
       pw.print("<TD>Totals</TD>\n");
       pw.print("<TD>" + totalAccess + "</TD>\n");
       pw.print("<TD>" + totalError + "</TD>\n");
-      float totalPercent = totalError / totalAccess;
+      
       String printTotPercent = df.format(totalPercent);
       pw.print("<TD>" + printTotPercent + "</TD>\n");
+      // System.out.println("totalAccess = " + totalAccess);
+      // System.out.println("totalError  = " + totalError );
+      // System.out.println("origPercent = " + totalPercent);
+      // System.out.println("totalPercent= " + printTotPercent);
       pw.print("</TR>\n");
       printFooter(pw);
       pw.close();
