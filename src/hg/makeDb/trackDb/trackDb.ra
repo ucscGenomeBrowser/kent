@@ -35,7 +35,7 @@ type bed 5 +
 
 track fishClones
 shortLabel FISH Clones
-longLabel Clones placed on Cytogenetic Map using FISH
+longLabel Clones Placed on Cytogenetic Map Using FISH
 group map
 priority 6
 visibility hide
@@ -220,7 +220,7 @@ type bed 6
 
 track humanParalog
 shortLabel Human Paralog 
-longLabel Human Paralogs using Fgenesh++ Gene Predictions
+longLabel Human Paralogs Using Fgenesh++ Gene Predictions
 group map
 priority 28
 visibility hide
@@ -274,7 +274,7 @@ type genePred
 
 track knownGene
 shortLabel Known Genes
-longLabel Known Genes based on SWISS-PROT, TrEMBL, mRNA, and RefSeq
+longLabel Known Genes Based on SWISS-PROT, TrEMBL, mRNA, and RefSeq
 group genes
 priority 34
 visibility pack
@@ -375,7 +375,7 @@ type genePred twinscanPep
 
 track pseudoUcsc
 shortLabel Ucsc pseudo
-longLabel Processed Pseudogene Locus based on blastz Chains UCSC
+longLabel Processed Pseudogene Locus Based on Blastz Chains UCSC
 group genes
 priority 45
 visibility hide
@@ -478,8 +478,8 @@ spectrum on
 type psl .
 
 track mrnaBlastz
-shortLabel $Organism mRNAs blastz
-longLabel $Organism mRNAs from Genbank Aligned with blastz
+shortLabel $Organism mRNAs Blastz
+longLabel $Organism mRNAs from Genbank Aligned with Blastz
 group rna
 priority 54
 visibility hide
@@ -552,7 +552,7 @@ url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
 
 track anyCovBed
 shortLabel mRNA/EST/pseud
-longLabel blastz Alignments of GenBank mRNA Including Pseudogenes and All ESTs
+longLabel Blastz Alignments of GenBank mRNA Including Pseudogenes and All ESTs
 group rna
 priority 66
 visibility hide
@@ -561,7 +561,7 @@ type bed 3
 
 track anyMrnaCov
 shortLabel mRNA/pseud
-longLabel blastz Alignments of GenBank mRNA Including Pseudogenes
+longLabel Blastz Alignments of GenBank mRNA Including Pseudogenes
 group rna
 priority 67
 visibility hide
@@ -576,7 +576,7 @@ priority 68
 visibility hide
 color 100,0,0
 type genePred
-url http://www.tigr.org/tigr-scripts/nhgi_scripts/tc_report.pl?$$
+url http://www.tigr.org/tigr-scripts/tgi/tc_report.pl?$$
 
 track uniGene_2
 shortLabel UniGene
@@ -803,8 +803,8 @@ type bed 5 .
 url http://www.genoscope.cns.fr/proxy/cgi-bin/exofish.cgi?Id=$$&Mode=Id
 
 track blatFish
-shortLabel Tetraodon BLAT
-longLabel Tetraodon nigriviridis Translated BLAT Alignments
+shortLabel Tetraodon Blat
+longLabel Tetraodon nigriviridis Translated Blat Alignments
 group compGeno
 priority 112
 visibility dense
@@ -814,8 +814,8 @@ spectrum on
 type psl xeno
 
 track blatFugu
-shortLabel Fugu BLAT
-longLabel Takifugu rubripes Translated BLAT Alignments
+shortLabel Fugu Blat
+longLabel Takifugu rubripes Translated Blat Alignments
 group compGeno
 priority 113
 visibility dense
@@ -836,8 +836,8 @@ spectrum on
 type psl xeno 
 
 track blatTetra
-shortLabel Tetra BLAT
-longLabel Tetraodon nigriviridis Translated BLAT Alignments
+shortLabel Tetra Blat
+longLabel Tetraodon nigriviridis Translated Blat Alignments
 group compGeno
 priority 114
 visibility dense
@@ -856,8 +856,8 @@ color 50,100,200
 altColor 85,170,225
 
 track blatChicken
-shortLabel Chicken BLAT
-longLabel Chicken Translated BLAT Alignments
+shortLabel Chicken Blat
+longLabel Chicken Translated Blat Alignments
 group compGeno
 priority 116
 visibility hide
@@ -888,7 +888,7 @@ type sample 0 8
 
 track syntenyHuman
 shortLabel Human Synteny
-longLabel Human/Mouse Synteny Using blastz Single Coverage (100k window)
+longLabel Human/Mouse Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 127
 visibility hide
@@ -898,7 +898,7 @@ type bed 4 +
 
 track ratChain
 shortLabel Rat Chain 
-longLabel Chained blastz Rat/$Organism Alignments
+longLabel Chained Blastz Rat/$Organism Alignments
 group compGeno
 priority 133
 visibility hide
@@ -936,7 +936,7 @@ altColor 0,0,0
 type bed 4+
 
 shortLabel Rat Synteny
-longLabel Human/Rat Synteny Using blastz Single Coverage (100,000 base window)
+longLabel Human/Rat Synteny Using Blastz Single Coverage (100,000 base window)
 group compGeno
 priority 138
 visibility hide
@@ -956,7 +956,7 @@ type bed 6+
 
 track syntenyRat
 shortLabel Rat Synteny
-longLabel $Organism/Rat Synteny Using blastz Single Coverage (100k window)
+longLabel $Organism/Rat Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 140
 visibility hide
@@ -965,8 +965,8 @@ altColor 255,240,200
 type bed 4 +
 
 track blatChimpWashu
-shortLabel Chimp BLAT - WashU
-longLabel Chimp BLAT Alignments - WashU
+shortLabel Chimp Blat - WashU
+longLabel Chimp Blat Alignments - WashU
 group compGeno
 priority 141
 visibility hide
@@ -1056,7 +1056,7 @@ type bed 4 +
 
 track blastzSelfUnmasked
 shortLabel Self Unmasked
-longLabel blastz Self Join without Repeats Masked (tandem repeats masked)
+longLabel Blastz Self Join without Repeats Masked (tandem repeats masked)
 group x
 priority 159
 visibility hide
