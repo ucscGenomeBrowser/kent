@@ -25,6 +25,26 @@ visibility hide
 color 0,100,100
 type genePred twinscanPep
 
+track evofold
+shortLabel evofold
+longLabel evofold predictions of RNA secondary structure (id_score)
+group genes
+priority 63
+visibility hide
+color 20,90,0
+type bed 6 +
+mafTrack multiz8way
+
+track rnafold
+shortLabel RNAfold
+longLabel RNAfold predictions of RNA secondary structure (id_score)
+group genes
+priority 64
+visibility hide
+color 20,70,0
+type bed 6 +
+mafTrack multiz8way
+
 track flyFeepComposite
 compositeTrack on
 shortLabel FEEP
@@ -92,36 +112,6 @@ yLineOnOff Off
 autoScaleDefault Off
 pairwise 041109
 speciesOrder droYak1 droAna1 dp2 droVir1 droMoj1 anoGam1 apiMel1
-
-track rnaTestFolds
-shortLabel rna test folds
-longLabel rna test folds
-group genes
-priority 104
-visibility hide
-color 60,70,0
-type bed 6 +
-mafTrack multiz7way
-
-track mcFolds
-shortLabel folds of mcElem
-longLabel folds of most conserved elements
-group genes
-priority 104
-visibility hide
-color 40,80,0
-type bed 6 +
-mafTrack multizForPhastConsPaper
-
-track evofold
-shortLabel evofold
-longLabel evofold predictions of RNA secondary structure
-group genes
-priority 105	
-visibility hide
-color 20,90,0
-type bed 6 +
-mafTrack multiz7way
 
 track phastConsElements8way
 shortLabel Most Conserved
