@@ -365,7 +365,23 @@ longLabel Mammalian Gene Collection CDS Complete ESTs
 priority 21.1
 visibility hide
 spectrum on
-type psl .
+type psl est
+
+track mgcSplicedFullClones
+shortLabel MGC Spliced ESTs
+longLabel Mammalian Gene Collection CDS Complete ESTs That Have Been Spliced
+priority 21.2
+visibility hide
+spectrum on
+type psl est
+
+track mgcEstCluster
+shortLabel MGC Cluster
+longLabel Mammalian Gene Collection Clustered ESTs
+priority 21.3
+visibility hide
+spectrum on
+type psl est
 
 track cpgIsland
 shortLabel CpG Islands
