@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.27 2004/01/12 22:29:48 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.28 2004/01/13 21:41:29 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -49,10 +49,10 @@ struct wigItem
     char *db;		/* Database */
     int ix;		/* Position in list. */
     int height;		/* Pixel height of item. */
-    unsigned Span;      /* each value spans this many bases */
-    unsigned Count;     /* number of values to use */
-    unsigned Offset;    /* offset in File to fetch data */
-    char *File; /* path name to data file, one byte per value */
+    unsigned span;      /* each value spans this many bases */
+    unsigned count;     /* number of values to use */
+    unsigned offset;    /* offset in File to fetch data */
+    char *file; /* path name to data file, one byte per value */
     double lowerLimit;  /* lowest data value in this block */
     double dataRange;   /* lowerLimit + dataRange = upperLimit */
     unsigned validCount;        /* number of valid data values in this block */
@@ -70,7 +70,7 @@ if (el != NULL)
     {
     freeMem(el->name);
     freeMem(el->db);
-    freeMem(el->File);
+    freeMem(el->file);
     freez(pEl);
     }
 }
@@ -275,7 +275,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
 	struct wigItem *wi;
 	size_t fileNameSize = 0;
-	char *File = (char *) NULL;
 
 	++itemsLoaded;
 	wiggle = wiggleLoad(row + rowOffset);
@@ -284,19 +283,15 @@ while ((row = sqlNextRow(sr)) != NULL)
 	wi->end = wiggle->chromEnd;
 	/*	May need unique name here some day XXX	*/
 	wi->name = tg->shortLabel;
-	fileNameSize = strlen("/gbdb//wib/") + strlen(database)
-	    + strlen(wiggle->File) + 1;
-	File = (char *) needMem((size_t)fileNameSize);
-	snprintf(File, fileNameSize, "/gbdb/%s/wib/%s", database, wiggle->File);
+	fileNameSize = strlen(wiggle->file) + 1;
 
-	if (! fileExists(File))
-	    errAbort("wigLoadItems: file '%s' missing", File);
-	wi->File = cloneString(File);
-	freeMem(File);
+	if (! fileExists(wiggle->file))
+	    errAbort("wigLoadItems: file '%s' missing", wiggle->file);
+	wi->file = cloneString(wiggle->file);
 
-	wi->Span = wiggle->Span;
-	wi->Count = wiggle->Count;
-	wi->Offset = wiggle->Offset;
+	wi->span = wiggle->span;
+	wi->count = wiggle->count;
+	wi->offset = wiggle->offset;
 	wi->lowerLimit = wiggle->lowerLimit;
 	wi->dataRange = wiggle->dataRange;
 	wi->validCount = wiggle->validCount;
@@ -306,10 +301,10 @@ while ((row = sqlNextRow(sr)) != NULL)
 	el = hashLookup(trackSpans, wi->name);
 	if ( el == NULL)
 	    	hashAdd(trackSpans, wi->name, spans);
-	snprintf(spanName, sizeof(spanName), "%d", wi->Span);
+	snprintf(spanName, sizeof(spanName), "%d", wi->span);
 	el = hashLookup(spans, spanName);
 	if ( el == NULL)
-	    	hashAddInt(spans, spanName, wi->Span);
+	    	hashAddInt(spans, spanName, wi->span);
 	slAddHead(&wiList, wi);
 	wiggleFree(&wiggle);
     }
@@ -439,25 +434,25 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
     /*	Now that we know what Span to draw, see if this item should be
      *	drawn at all.
      */
-    if (usingDataSpan == wi->Span)
+    if (usingDataSpan == wi->span)
 	{
 	/*	Check our data file, see if we need to open a new one */
 	if (currentFile)
 	    {
-	    if (differentString(currentFile,wi->File))
+	    if (differentString(currentFile,wi->file))
 		{
 		if (f != (FILE *) NULL)
 		    {
 		    fclose(f);
 		    freeMem(currentFile);
 		    }
-		currentFile = cloneString(wi->File);
+		currentFile = cloneString(wi->file);
 		f = mustOpen(currentFile, "r");
 		}
 	    }
 	else
 	    {
-	    currentFile = cloneString(wi->File);
+	    currentFile = cloneString(wi->file);
 	    f = mustOpen(currentFile, "r");
 	    }
 /*	Ready to draw, what do we know:
@@ -473,9 +468,9 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
  *	drawing window in chrom coords: seqStart, seqEnd
  *	'basesPerPixel' is known, 'pixelsPerBase' is known
  */
-	fseek(f, wi->Offset, SEEK_SET);
-	ReadData = (unsigned char *) needMem((size_t) (wi->Count + 1));
-	fread(ReadData, (size_t) wi->Count, (size_t) sizeof(unsigned char), f);
+	fseek(f, wi->offset, SEEK_SET);
+	ReadData = (unsigned char *) needMem((size_t) (wi->count + 1));
+	fread(ReadData, (size_t) wi->count, (size_t) sizeof(unsigned char), f);
 
 	/*	let's check end point screen coordinates.  If they are
  	 *	the same, then this entire data block lands on one pixel,
@@ -485,11 +480,11 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
  	 *	later smoothing operations
 	 */
 	x1 = (wi->start - seqStart) * pixelsPerBase;
-	x2 = ((wi->start+(wi->Count * usingDataSpan))-seqStart) * pixelsPerBase;
+	x2 = ((wi->start+(wi->count * usingDataSpan))-seqStart) * pixelsPerBase;
 
 	if (x2 > x1) {
 	    /*	walk through all the data in this block	*/
-	    for (dataOffset = 0; dataOffset < wi->Count; ++dataOffset)
+	    for (dataOffset = 0; dataOffset < wi->count; ++dataOffset)
 		{
 		unsigned char datum = ReadData[dataOffset];
 		if (datum != WIG_NO_DATA)
@@ -655,12 +650,15 @@ for (x1 = 0; x1 < width; ++x1)
 	    boxTop -= 1;
 	    boxHeight = 1;
 	    }
-	/*	Last pixel is a special case of a close interval */
+	/*	Last pixel (bottom) is a special case of a close interval */
 	if ((boxTop == h) && (boxHeight == 0))
 	    {
-	    boxTop = h -1;
+	    boxTop = h - 1;
 	    boxHeight = 1;
 	    }
+	/*	Special case data value on upper limit line	*/
+	if ((boxTop+boxHeight) == 0)
+		boxHeight += 1;
 	/*	negative data is the alternate color	*/
 	if (dataValue < 0.0)
 	    drawColor = tg->ixAltColor;
@@ -755,6 +753,7 @@ else if( tg->visibility == tvFull)
     /*	Is there room left to draw the min, max ?	*/
     if (height >= (3 * fontHeight))
 	{
+	boolean zeroOK = TRUE;
 	double graphUpperLimit = -1.0e+300;
 	double graphLowerLimit = 1.0e+300;
 	char upper[128];
@@ -784,6 +783,7 @@ else if( tg->visibility == tvFull)
 	    graphUpperLimit = d;
 	    snprintf(upper, 128, "No data %c", upperTic);
 	    snprintf(lower, 128, "No data _");
+	    zeroOK = FALSE;
 	    }
 	else
 	    {
@@ -800,7 +800,7 @@ else if( tg->visibility == tvFull)
 	    drawColor, font, lower);
 	/*	Maybe zero can be displayed */
 	/*	It may overwrite the track label ...	*/
-	if ( (0.0 < graphUpperLimit) && (0.0 > graphLowerLimit) )
+	if ( zeroOK && (0.0 < graphUpperLimit) && (0.0 > graphLowerLimit) )
 	    {
 	    int zeroOffset;
 	    drawColor = vgFindColorIx(vg, 0, 0, 0);
