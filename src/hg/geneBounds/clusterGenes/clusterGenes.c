@@ -8,7 +8,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.8 2004/01/26 04:55:08 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.9 2004/02/02 01:46:14 markd Exp $";
 
 /* Command line driven variables. */
 int verbose = 0;
@@ -127,13 +127,13 @@ struct cluster
     };
 
 void clusterDump(struct cluster *cluster)
-/* Dump contents of cluster to stdout. */
+/* Dump contents of cluster to stderr. */
 {
 struct clusterGene *gene;
-printf("%d-%d", cluster->start, cluster->end);
+fprintf(stderr, "%d-%d", cluster->start, cluster->end);
 for (gene = cluster->genes; gene != NULL; gene = gene->next)
-    printf(" %s", gene->gp->name);
-printf("\n");
+    fprintf(stderr, " %s", gene->gp->name);
+fprintf(stderr, "\n");
 }
 
 struct cluster *clusterNew()
@@ -234,9 +234,9 @@ struct binElement *bkEl;
 
 if (verbose >= 3) 
     {
-    printf(" a: ");
+    fprintf(stderr, " a: ");
     clusterDump(aCluster);
-    printf(" b: ");
+    fprintf(stderr, " b: ");
     clusterDump(bCluster);
     }
 
@@ -266,7 +266,7 @@ dlRemove(bNode);
 clusterFree(&bCluster);
 if (verbose >= 3) 
     {
-    printf(" ab: ");
+    fprintf(stderr, " ab: ");
     clusterDump(aCluster);
     }
 }
@@ -440,7 +440,7 @@ else
                 {
                 /* Merge new cluster into old one. */
                 if (verbose >= 3)
-                    printf("Merging %p %p\n", oldNode, newNode);
+                    fprintf(stderr, "Merging %p %p\n", oldNode, newNode);
                 mergeClusters(cm->bk, bEl->next, oldNode, newNode);
                 }
             }
@@ -467,7 +467,7 @@ struct dlNode *oldNode = NULL;
  * the old one. */
 
 if (verbose >= 2)
-    printf("%s %d-%d\n", gp->name, gp->txStart, gp->txEnd);
+    fprintf(stderr, "%s %s %d-%d\n", track->name, gp->name, gp->txStart, gp->txEnd);
 
 for (exonIx = 0; exonIx < gp->exonCount; ++exonIx)
     {
@@ -475,7 +475,7 @@ for (exonIx = 0; exonIx < gp->exonCount; ++exonIx)
     if (gpGetExon(gp, exonIx, &exonStart, &exonEnd))
         {
         if (verbose >= 4)
-            printf("  %d %d\n", exonIx, exonStart);
+            fprintf(stderr, "  %s %d %d\n", track->name, exonIx, exonStart);
         clusterMakerAddExon(cm, track, gp, exonStart, exonEnd, &oldNode);
         }
     }
@@ -539,7 +539,7 @@ void loadGenes(struct clusterMaker *cm, struct sqlConnection *conn,
 /* load genes into cluster from a table or file */
 {
 if (verbose >= 1)
-    printf("%s %s %c\n", table, chrom, strand);
+    fprintf(stderr, "%s %s %c\n", table, chrom, strand);
 if (fileExists(table))
     loadGenesFromFile(cm, table, chrom, strand, gpList);
 else if (hTableExists(table))
