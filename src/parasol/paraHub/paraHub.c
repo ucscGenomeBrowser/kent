@@ -1,26 +1,36 @@
 /* paraHub - parasol hub server. */
 #include "common.h"
-#include "dlist.h"
-#include "hash.h"
 #include "options.h"
-#include "dystring.h"
 #include "linefile.h"
-#include "paraLib.h"
+#include "hash.h"
+#include "errabort.h"
+#include "dystring.h"
+#include "dlist.h"
 #include "net.h"
+#include "paraLib.h"
 #include "paraHub.h"
+
+/* Some command-line configurable quantities and their defaults. */
+int jobCheckPeriod = 10;	/* Minutes between checking running jobs. */
+int machineCheckPeriod = 20;	/* Minutes between checking dead machines. */
+int initialSpokes = 50;		/* Number of spokes to start with. */
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort("paraHub - parasol hub server.\n"
          "usage:\n"
-	 "    paraHub start\n"
+	 "    paraHub machineList\n"
+	 "Where machine list is a file with machine names in the\n"
+	 "first column, and number of CPUs in the second column.\n"
 	 "options:\n"
-	 "    spokes=N  Number of processes that feed jobs to nodes - default 50\n"
-	 "    machines=list  File with list of node machines, one per line\n"
+	 "    spokes=N  Number of processes that feed jobs to nodes - default %d\n"
+	 "    jobCheckPeriod=N  Minutes between checking on job - default %d\n"
+	 "    machineCheckPeriod=N Seconds between checking on machine - default %d\n"
 	 "    log=logFile Write a log to logFile. Use 'stdout' here for console\n"
+	               ,
+	 jobCheckPeriod, machineCheckPeriod, initialSpokes
 	 );
-
 }
 
 FILE *logFile = NULL;
@@ -46,8 +56,6 @@ if (logFile != NULL)
     va_end(args);
     }
 }
-
-
 
 struct spoke *spokeList;	/* List of all spokes. */
 struct dlList *freeSpokes;      /* List of free spokes. */
@@ -138,6 +146,21 @@ for (node = list->head; !dlEnd(node); node = node->next)
     mach = node->val;
     if (sameString(mach->name, name))
         return mach;
+    }
+return NULL;
+}
+
+struct job *jobFind(struct dlList *list, int id)
+/* Find node of job with given id on list.  Return NULL if
+ * not found. */
+{
+struct dlNode *el;
+struct job *job;
+for (el = list->head; !dlEnd(el); el = el->next)
+    {
+    job = el->val;
+    if (job->id == id)
+        return job;
     }
 return NULL;
 }
@@ -255,16 +278,31 @@ while (--count >= 0)
         break;
 }
 
-void checkPeriodically(struct dlList *machList, int period, char *checkMessage)
+boolean sendViaSpoke(struct machine *machine, char *message)
+/* Send a message to machine via spoke. */
+{
+struct dlNode *node = dlPopHead(freeSpokes);
+struct spoke *spoke;
+if (node == NULL)
+    return FALSE;
+dlAddTail(busySpokes, node);
+spoke = node->val;
+spoke->lastPinged = time(NULL);
+spokeSendMessage(spoke, machine, message);
+return TRUE;
+}
+
+void checkPeriodically(struct dlList *machList, int period, char *checkMessage,
+	int spokesToUse)
 /* Periodically send checkup messages to machines on list. */
 {
-struct dlNode *mNode, *sNode;
+struct dlNode *mNode;
 struct machine *machine;
-struct spoke *spoke;
 char message[512];
+int i;
 
 sprintf(message, "%s %s", checkMessage, hubHost);
-for (;;)
+for (i=0; i<spokesToUse; ++i)
     {
     /* If we have some free spokes and some busy machines, and
      * the busy machines haven't been checked for a while, go
@@ -276,26 +314,45 @@ for (;;)
         break;
     machine->lastChecked = time(NULL);
     mNode = dlPopHead(machList);
-    sNode = dlPopHead(freeSpokes);
     dlAddTail(machList, mNode);
-    dlAddTail(busySpokes, sNode);
-    spoke = sNode->val;
-    spoke->lastPinged = time(NULL);
-    spokeSendMessage(spoke, machine, message);
+    sendViaSpoke(machine, message);
     }
 }
 
-void hangman()
-/* Check that nodes aren't hung.  Check that they aren't
- * free and we don't know about it. */
+void hangman(int spokesToUse)
+/* Check that busy nodes aren't dead.  Also send message for 
+ * busy nodes to check in, in case we missed one of their earlier
+ * jobDone messages. */
 {
-checkPeriodically(busyMachines, 60 * 1 /* 15 */, "check");
+int i, period = jobCheckPeriod*60;
+struct dlNode *mNode;
+struct machine *machine;
+struct job *job;
+
+for (i=0; i<spokesToUse; ++i)
+    {
+    if (dlEmpty(freeSpokes) || dlEmpty(busyMachines))
+        break;
+    machine = busyMachines->head->val;
+    if (time(NULL) - machine->lastChecked < period)
+        break;
+    machine->lastChecked = time(NULL);
+    mNode = dlPopHead(busyMachines);
+    dlAddTail(busyMachines, mNode);
+    job = machine->job;
+    if (job != NULL)
+        {
+	char message[512];
+	sprintf(message, "check %s %d", hubHost, job->id);
+	sendViaSpoke(machine, message);
+	}
+    }
 }
 
-void graveDigger()
+void graveDigger(int spokesToUse)
 /* Check out dead nodes.  Try and resurrect them periodically. */
 {
-checkPeriodically(deadMachines, 60 * 2 /* 30 */, "resurrect");
+checkPeriodically(deadMachines, 60 * machineCheckPeriod, "resurrect", spokesToUse);
 }
 
 void straightenSpokes()
@@ -331,10 +388,18 @@ for (node = busySpokes->head; !dlEnd(node); node = next)
 void processHeartbeat()
 /* Check that system is ok.  See if we can do anything useful. */
 {
+int spokesToUse;
 runner(50);
-graveDigger();
-hangman();
 straightenSpokes();
+spokesToUse = dlCount(freeSpokes);
+if (spokesToUse > 0)
+    {
+    spokesToUse >>= 1;
+    spokesToUse -= 1;
+    if (spokesToUse < 1) spokesToUse = 1;
+    graveDigger(spokesToUse);
+    hangman(spokesToUse);
+    }
 }
 
 
@@ -366,17 +431,29 @@ dlRemove(mach->node);
 dlAddTail(freeMachines, mach->node);
 }
 
+void recycleJob(struct job *job)
+/* Remove job from lists and free up memory associated with it. */
+{
+dlRemove(job->node);
+jobFree(&job);
+}
+
 void nodeCheckIn(char *line)
 /* Deal with check in message from node. */
 {
 char *machine = nextWord(&line);
+char *jobIdString = nextWord(&line);
 char *status = nextWord(&line);
+int jobId = atoi(jobIdString);
 if (status != NULL && sameString(status, "free"))
     {
-    struct machine *mach = findMachineOnDlList(machine, busyMachines);
-    if (mach != NULL)
+    struct job *job = jobFind(runningJobs, jobId);
+    if (job != NULL)
          {
-	 recycleMachine(mach);
+	 struct machine *mach = job->machine;
+	 if (mach != NULL)
+	     recycleMachine(mach);
+	 recycleJob(job);
 	 logIt("hub:  >>>RECYCLING MACHINE IN NODE CHECK IN<<<<\n");
 	 }
     }
@@ -406,7 +483,9 @@ for (node = busySpokes->head; !dlEnd(node); node = node->next)
 	break;
 	}
     }
-sendOk(foundSpoke, connectionHandle);
+sendOk(foundSpoke, connectionHandle);	/* Do we really need this handshake?
+                                         * Other end in spoke.c would need 
+					 * to be deleted too. */
 if (!foundSpoke)
     warn("Couldn't free spoke %s", spokeName);
 else
@@ -453,31 +532,20 @@ processHeartbeat();
 }
 
 
-struct job *jobFind(struct dlList *list, int id)
-/* Find node of job with given id on list.  Return NULL if
- * not found. */
-{
-struct dlNode *el;
-struct job *job;
-for (el = list->head; !dlEnd(el); el = el->next)
-    {
-    job = el->val;
-    if (job->id == id)
-        return job;
-    }
-return NULL;
-}
-
-void sendKillJobMessage(struct machine *mach, struct job *job)
+void sendKillJobMessage(struct machine *machine, struct job *job)
 /* Send message to compute node to kill job there. */
 {
-}
-
-void recycleJob(struct job *job)
-/* Remove job from lists and free up memory associated with it. */
-{
-dlRemove(job->node);
-jobFree(&job);
+char message[64];
+sprintf(message, "kill %d", job->id);
+sendViaSpoke(machine, message);
+     /* There's a race condition here that can cause jobs not
+      * to be killed if there are no spokes free to handle
+      * this message.  I'm trying to think of a simple solution
+      * to this. The damage isn't too serious though,
+      * since the jobs will at least stay on the main job list.
+      * if they are not killed.  User can curse us and try to
+      * kill jobs again.  At least the node won't end up 
+      * double-booked.  */
 }
 
 void finishJob(struct job *job)
@@ -519,7 +587,7 @@ void jobDone(char *line)
 /* Handle job is done message. */
 {
 struct job *job;
-char *machine, *id, *status;
+char *id, *status;
 id = nextWord(&line);
 status = nextWord(&line);
 if (status != NULL)
@@ -647,26 +715,27 @@ return hubFd;
 void startSpokes()
 /* Start default number of spokes. */
 {
-int i, initialSpokes = atoi(optionVal("spokes", "50"));
+int i;
 for (i=0; i<initialSpokes; ++i)
     addSpoke(-1, -1);
 }
 
-void startMachines()
+void startMachines(char *fileName)
 /* If they give us a beginning machine list use it here. */
 {
-char *fileName = optionVal("machines", NULL);
-if (fileName != NULL)
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+while (lineFileRow(lf, row))
     {
-    struct lineFile *lf = lineFileOpen(fileName, TRUE);
-    char *line;
-    while (lineFileNext(lf, &line, NULL))
-	addMachine(line);
-    lineFileClose(&lf);
+    char *name = row[0];
+    int cpus = lineFileNeedNum(lf, row, 1);
+    while (--cpus >= 0)
+	addMachine(name);
     }
+lineFileClose(&lf);
 }
 
-void startHub()
+void startHub(char *machineList)
 /* Do hub daemon - set up socket, and loop around on it until we get a quit. */
 {
 int socketHandle = 0, connectionHandle = 0;
@@ -680,7 +749,7 @@ logIt("Starting paraHub on %s\n", hubHost);
 
 /* Set up various lists. */
 setupLists();
-startMachines();
+startMachines(machineList);
 assert(sigLen < sizeof(sig));
 sig[sigLen] = 0;
 
@@ -762,12 +831,11 @@ if (argc < 2)
 log = optionVal("log", NULL);
 if (log != NULL)
     logFile = mustOpen(log, "w");
+jobCheckPeriod = optionInt("jobCheckPeriod", jobCheckPeriod);
+machineCheckPeriod = optionInt("machineCheckPeriod", machineCheckPeriod);
+initialSpokes = optionInt("spokes",  initialSpokes);
 pushWarnHandler(vLogIt);
-command = argv[1];
-if (sameString(command, "start"))
-    startHub();
-else
-    errAbort("Unknown command %s", command);
+startHub(argv[1]);
 return 0;
 }
 

@@ -4,20 +4,37 @@
 #include "common.h"
 #include "errabort.h"
 #include "dystring.h"
+#include "dlist.h"
 #include "hash.h"
 #include "options.h"
 #include "paraLib.h"
 #include "net.h"
 
-int socketHandle;		/* Handle to socket to hub. */
-int connectionHandle;	        /* Connection to singel hub request. */
-char execCommand[16*1024];          /* Name of command currently executing. */
 char *hostName;			/* Name of this host. */
+int busyProcs = 0;		/* Number of processers in use. */
+int maxProcs = 1;		/* Number of processers allowed to use. */
+FILE *logFile = NULL;		/* Where to write messages. */
+int socketHandle;		/* Main message queue socket. */
+int connectionHandle;		/* A connection accepted. */
 
-boolean busy = FALSE;           /* True if executing a command. */
-boolean gotZombie = FALSE;      /* True if command finished. */
-int childId;                    /* PID of child. */
-int grandId;			/* PID of grandchild. */
+struct job
+/* Info on one job in this node. */
+    {
+    struct job *next;	/* Next job. */
+    int jobId;		/* Job ID for hub. */
+    int pid;			/* Process ID of running job. */
+    };
+struct job *runningJobs;
+
+struct job *findJob(int jobId)
+/* Return job if it's on list, otherwise NULL */
+{
+struct job *job;
+for (job = runningJobs; job != NULL; job = job->next)
+    if (job->jobId == jobId)
+        return job;
+return NULL;
+}
 
 void usage()
 /* Explain usage and exit. */
@@ -26,10 +43,10 @@ errAbort("paraNode - parasol node serve.\n"
          "usage:\n"
 	 "    paraNode start\n"
 	 "options:\n"
-	 "    log=file - file may be 'stdout' to go to console");
+	 "    log=file - file may be 'stdout' to go to console\n"
+	 "    cpu=N - Number of CPUs to use.  Default 1\n");
 }
 
-FILE *logFile = NULL;
 
 void vLogIt(char *format, va_list args)
 /* Virtual logit. */
@@ -53,55 +70,18 @@ if (logFile != NULL)
     }
 }
 
-void childSignalHandler(int x)
-/* Handle child died signal. */
-{
-gotZombie = TRUE;
-}
-
-void clearZombie()
-/* Wait on any leftover zombie. */
-{
-if (gotZombie)
-    {
-    int pid, status;
-    pid = wait(&status);
-    if (pid == childId)
-	{
-	childId = 0;
-	busy = FALSE;
-	gotZombie = FALSE;
-	execCommand[0] = 0;
-	}
-    }
-}
-
-void handleTerm(int x)
-/* Handle SIGTERM for manager process - kill grandchild. */
-{
-if (grandId != 0)
-    {
-    int id = grandId;
-    grandId = 0;
-    kill(id, SIGTERM);
-    }
-exit(-1);
-}
-
-void manageExec(char *managingHost, char *jobId, char *user,
+void execProc(char *managingHost, char *jobIdString, char *user,
 	char *dir, char *in, char *out, char *err,
 	char *exe, char **params)
 /* This routine is the child process of doExec.
  * It spawns a grandchild that actually does the
- * work and waits on it.  It then lets the hub
- * know when the exec is done. */
+ * work and waits on it.  It sends message to the
+ * main message loop here when done. */
 {
 close(connectionHandle);
-if ((grandId = fork()) == 0)
+if (fork() == 0)
     {
     int newStdin, newStdout, newStderr;
-
-    /* Get rid of excess old file handles. */
     close(socketHandle);
 
     /* Change to given dir. */
@@ -125,10 +105,9 @@ if ((grandId = fork()) == 0)
     if (execvp(exe, params) < 0)
 	{
 	perror("");
-	errAbort("Error execlp'ing %s %s", exe, params);
+	warn("Error execlp'ing %s %s", exe, params);
 	}
-    // Never gets here because of execlp.
-    errAbort("Must have skipped execlp!");
+    exit(0);
     }
 else
     {
@@ -136,14 +115,13 @@ else
      * started the job. */
     int status;
     int sd;
-    char buf[128];
-    signal(SIGTERM, handleTerm);
+
     wait(&status);
-    // sleep(1);	/* Help keep from overloading server. I wish there were a better way. */
-    sd = netConnect(managingHost, paraPort);
+    sd = netConnect(hostName, paraPort);
     if (sd > 0)
         {
-	sprintf(buf, "jobDone %s %d", jobId, status);
+	char buf[256];
+	sprintf(buf, "jobDone %s %s %d", managingHost, jobIdString, status);
 	write(sd, paraSig, strlen(paraSig));
 	netSendLongString(sd, buf);
 	close(sd);
@@ -152,19 +130,69 @@ else
     }
 }
 
+void clearZombies()
+/* Clear any zombie processes */
+{
+int stat;
+for (;;)
+    {
+    if (waitpid(-1, &stat, WNOHANG) <= 0)
+        break;
+    }
+}
+
+void jobDone(char *line)
+/* Handle job-done message - forward it to managing host. */
+{
+char *managingHost = nextWord(&line);
+char *jobIdString = nextWord(&line);
+char *status = nextWord(&line);
+
+clearZombies();
+if (status != NULL)
+    {
+    int sd;
+
+    /* Remove job from list. */
+    struct job *job = findJob(atoi(jobIdString));
+    if (job != NULL)
+        {
+	slRemoveEl(&runningJobs, job);
+	freez(&job);
+	--busyProcs;
+	}
+
+    /* Tell managing host that job is done. */
+    sd = netConnect(managingHost, paraPort);
+    if (sd > 0)
+	{
+	char buf[256];
+	sprintf(buf, "jobDone %s %s", jobIdString, status);
+	write(sd, paraSig, strlen(paraSig));
+	netSendLongString(sd, buf);
+	}
+    }
+}
+
 void doCheck(char *line)
 /* Send back check result */
 {
 char *managingHost = nextWord(&line);
-if (managingHost != NULL)
+char *jobIdString = nextWord(&line);
+if (jobIdString != NULL)
     {
+    int jobId = atoi(jobIdString);
+    struct job *job = findJob(jobId);
     int sd = netConnect(managingHost, paraPort);
-    char *status = (busy ? "busy" : "free");
-    char buf[256];
-    sprintf(buf, "checkIn %s %s", hostName, status);
-    write(sd, paraSig, strlen(paraSig));
-    netSendLongString(sd, buf);
-    close(sd);
+    if (sd > 0)
+	{
+	char *status = (job != NULL  ? "busy" : "free");
+	char buf[256];
+	sprintf(buf, "checkIn %s %s %s", hostName, jobIdString, status);
+	write(sd, paraSig, strlen(paraSig));
+	netSendLongString(sd, buf);
+	close(sd);
+	}
     }
 }
 
@@ -187,38 +215,42 @@ void doRun(char *line)
 /* Execute command. */
 {
 static char *args[1024];
-char *managingHost, *jobId, *user, *dir, *in, *out, *err, *cmd;
+char *managingHost, *jobIdString, *user, *dir, *in, *out, *err, *cmd;
 int argCount;
-int commandOffset;
 if (line == NULL)
     warn("Executing nothing...");
-else if (!busy || gotZombie)
+else if (busyProcs < maxProcs)
     {
     char *exe;
-    if (gotZombie)
-	clearZombie();
-    strcpy(execCommand, line);
-    argCount = chopLine(line, args);
-    if (argCount >= ArraySize(args))
-        errAbort("Too many arguments");
-    args[argCount] = NULL;
-    managingHost = args[0];
-    jobId = args[1];
-    user = args[2];
-    dir = args[3];
-    in = args[4];
-    out = args[5];
-    err = args[6];
-    commandOffset = 7;
-    signal(SIGCHLD, childSignalHandler);
-    if ((childId = fork()) == 0)
-	{
-	manageExec(managingHost, jobId, user, dir, in, out, err,
-		args[commandOffset], args+commandOffset);
-	}
+    int childPid;
+    managingHost = nextWord(&line);
+    jobIdString = nextWord(&line);
+    user = nextWord(&line);
+    dir = nextWord(&line);
+    in = nextWord(&line);
+    out = nextWord(&line);
+    err = nextWord(&line);
+    if (line == NULL || (argCount = chopLine(line, args)) < 1)
+        warn("Not enough parameters to run");
+    else if (argCount >= ArraySize(args))
+        warn("Too many arguments to run");
     else
 	{
-	busy = TRUE;
+	args[argCount] = NULL;
+	if ((childPid = fork()) == 0)
+	    {
+	    execProc(managingHost, jobIdString, 
+	    	user, dir, in, out, err, args[0], args);
+	    }
+	else
+	    {
+	    struct job *job;
+	    AllocVar(job);
+	    job->jobId = atoi(jobIdString);
+	    job->pid = childPid;
+	    slAddHead(&runningJobs, job);
+	    ++busyProcs;
+	    }
 	}
     }
 else
@@ -227,14 +259,21 @@ else
     }
 }
 
-void doKill()
+void doKill(char *line)
 /* Kill current job if any. */
 {
-if (childId != 0)
+char *jobIdString = nextWord(&line);
+int jobId = atoi(jobIdString);
+if (jobId != 0)
     {
-    logIt("Killing %s\n", execCommand);
-    kill(childId, SIGTERM);
-    clearZombie();
+    struct job *job = findJob(jobId);
+    if (job != NULL)
+        {
+	kill(job->pid, SIGTERM);
+	slRemoveEl(&runningJobs, job);
+	freez(&job);
+	--busyProcs;
+	}
     }
 else
     {
@@ -246,11 +285,8 @@ else
 void doStatus()
 /* Report status. */
 {
-char *status = (busy ? "busy" : "free");
 struct dyString *dy = newDyString(256);
-dyStringAppend(dy, status);
-if (busy)
-    dyStringPrintf(dy, " %s", execCommand);
+dyStringPrintf(dy, "%d of %d CPUs busy", busyProcs, maxProcs);
 write(connectionHandle, dy->string, dy->stringSize);
 }
 
@@ -259,7 +295,6 @@ void paraNode()
 {
 char *buf = NULL, *line;
 int fromLen, readSize;
-int childCount = 0;
 char *command;
 char signature[20];
 int sigLen = strlen(paraSig);
@@ -286,17 +321,17 @@ for (;;)
 	    {
 	    line = buf = netGetLongString(connectionHandle);
 	    logIt("node  %s: %s\n", hostName, line);
-	    clearZombie();
-	    ++childCount;
 	    command = nextWord(&line);
 	    if (sameString("quit", command))
 		break;
 	    else if (sameString("run", command))
 		doRun(line);
+	    else if (sameString("jobDone", command))
+	        jobDone(line);
 	    else if (sameString("status", command))
 		doStatus();
 	    else if (sameString("kill", command))
-		doKill();
+		doKill(line);
 	    else if (sameString("check", command))
 	        doCheck(line);
 	    else if (sameString("resurrect", command))
@@ -310,10 +345,14 @@ for (;;)
 	connectionHandle = 0;
 	}
     }
+close(socketHandle);
+socketHandle = 0;
 }
 
 void paraFork()
-/* Fork off real handler and exit */
+/* Fork off real daemon and exit.  This effectively
+ * removes dependence of paraNode daemon on terminal. 
+ * Set up log file if any here as well. */
 {
 if (fork() == 0)
     {
@@ -340,6 +379,7 @@ int main(int argc, char *argv[])
 optionHash(&argc, argv);
 if (argc != 2)
     usage();
+maxProcs = optionInt("cpu", 1);
 paraFork();
 return 0;
 }

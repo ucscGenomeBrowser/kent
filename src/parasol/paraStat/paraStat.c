@@ -1,6 +1,6 @@
 /* paraStat - query list of nodes for status. */
 #include "common.h"
-#include "obscure.h"
+#include "linefile.h"
 #include "net.h"
 #include "paraLib.h"
 
@@ -16,18 +16,16 @@ errAbort("paraStat - query status of parasol node servers.\n"
 void paraStat(char *machineList)
 /* Stop node server on all machines in list. */
 {
-int mCount;
-char *mBuf, **mNames, *name;
-int i;
+struct lineFile *lf = lineFileOpen(machineList, FALSE);
 int sd;
 char statCmd[256];
 char status[256];
 int size;
+char *row[1];
 
-readAllWords(machineList, &mNames, &mCount, &mBuf);
-for (i=0; i<mCount; ++i)
+while (lineFileRow(lf, row))
     {
-    name = mNames[i];
+    char *name = row[0];
     if ((sd = netConnect(name, paraPort)) >= 0)
 	{
 	write(sd, paraSig, strlen(paraSig));
@@ -49,8 +47,6 @@ for (i=0; i<mCount; ++i)
 	printf("%s - no node server\n", name);
 	}
     }
-freeMem(mNames);
-freeMem(mBuf);
 }
 
 
