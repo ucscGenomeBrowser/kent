@@ -7,11 +7,12 @@
 #include "dystring.h"
 #include "dnaseq.h"
 #include "nib.h"
+#include "twoBit.h"
 #include "axt.h"
 #include "fa.h"
 
 struct dnaSeq *faList;
-static char const rcsid[] = "$Id: lavToAxt.c,v 1.17 2004/02/24 18:43:13 angie Exp $";
+static char const rcsid[] = "$Id: lavToAxt.c,v 1.18 2004/10/21 21:10:05 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -20,6 +21,8 @@ errAbort(
   "lavToAxt - Convert blastz lav file to an axt file (which includes sequence)\n"
   "usage:\n"
   "   lavToAxt in.lav tNibDir qNibDir out.axt\n"
+  "Where tNibDir/qNibDir are either directories full of nib files, or a single\n"
+  "twoBit file\n"
   "options:\n"
   "   -fa  qNibDir is interpreted as a fasta file of multiple dna seq instead of directory of nibs\n"
   "   -dropSelf  drops alignment blocks on the diagonal for self alignments\n"
@@ -42,23 +45,38 @@ struct block
     int percentId;	/* Percentage identity. */
     };
 
-struct cachedNib
+struct cachedSeqFile
 /* File in cache. */
     {
-    struct cashedNib *next;	/* next in list. */
-    char *name;		/* Sequence name (allocated here) */
+    struct cachedSeqFile *next;	/* next in list. */
     char *fileName;     /* File name (allocated here) */
-    FILE *f;		/* Open file. */
+    struct twoBitFile *tbf;	/* Two bit file if any. */
+    char *name;		/* Sequence name (allocated here) for nib file */
+    FILE *f;		/* Open nib file. */
     int size;		/* Size of sequence. */
     };
 
-struct cachedNib *openFromCache(struct dlList *cache, char *dirName, char *seqName)
+void cachedSeqFileFree(struct cachedSeqFile **pCn)
+/* Free up resources associated with cached sequence file. */
+{
+struct cachedSeqFile *cn = *pCn;
+if (cn != NULL)
+    {
+    carefulClose(&cn->f);
+    twoBitClose(&cn->tbf);
+    freeMem(cn->fileName);
+    freeMem(cn->name);
+    freez(pCn);
+    }
+}
+
+struct cachedSeqFile *openNibFromCache(struct dlList *cache, char *dirName, char *seqName)
 /* Return open file handle via cache.  */
 {
 static int maxCacheSize=32;
 int cacheSize = 0;
 struct dlNode *node;
-struct cachedNib *cn;
+struct cachedSeqFile *cn;
 char fileName[512];
 
 /* First loop through trying to find it in cache, counting
@@ -80,10 +98,7 @@ if (cacheSize >= maxCacheSize)
     {
     node = dlPopTail(cache);
     cn = node->val;
-    carefulClose(&cn->f);
-    freeMem(cn->fileName);
-    freeMem(cn->name);
-    freeMem(cn);
+    cachedSeqFileFree(&cn);
     freeMem(node);
     }
 
@@ -97,20 +112,53 @@ dlAddValHead(cache, cn);
 return cn;
 }
 
+struct cachedSeqFile *openTwoBitFromCache(struct dlList *cache, char *fileName)
+/* Return open file handle via cache.  In this case it's just a cache of one.  */
+{
+struct cachedSeqFile *cn;
+if (dlEmpty(cache))
+    {
+    AllocVar(cn);
+    cn->fileName = cloneString(fileName);
+    cn->tbf = twoBitOpen(fileName);
+    dlAddValHead(cache, cn);
+    }
+else
+    cn = cache->head->val;
+return cn;
+}
+
+struct cachedSeqFile *openFromCache(struct dlList *cache, char *dirName, char *seqName, 
+	boolean isTwoBit)
+/* Return open file handle via cache.  */
+{
+if (isTwoBit)
+    return openTwoBitFromCache(cache, dirName);
+else
+    return openNibFromCache(cache, dirName, seqName);
+}
+
 struct dnaSeq *readFromCache(struct dlList *cache, char *dirName, char *seqName,
-	int start, int size, int seqSize)
+	int start, int size, int seqSize, boolean isTwoBit)
 /* Return dnaSeq read from the appropriate nib file.  
  * You need to dnaSeqFree this when done (it is the nib
  * file that is cached, not the sequence). */
 {
-struct cachedNib *cn = openFromCache(cache, dirName, seqName);
-if (seqSize != cn->size)
-    errAbort("%s/%s is %d bases in .lav file and %d in .nib file\n",
-       dirName, seqName, seqSize, cn->size); 
-if ((start+size) > 1000000000 )
-    printf("%s/%s is %d bases in .lav file and %d in .nib file start %d size %d end %d\n",
-       dirName, seqName, seqSize, cn->size, start, size, start+size); 
-return nibLdPartMasked(NIB_MASK_MIXED, cn->fileName, cn->f, cn->size, start, size);
+struct cachedSeqFile *cn = openFromCache(cache, dirName, seqName, isTwoBit);
+if (isTwoBit)
+    {
+    return twoBitReadSeqFrag(cn->tbf, seqName, start, start+size);
+    }
+else
+    {
+    if (seqSize != cn->size)
+	errAbort("%s/%s is %d bases in .lav file and %d in .nib file\n",
+	   dirName, seqName, seqSize, cn->size); 
+    if ((start+size) > cn->size )
+	printf("%s/%s is %d bases in .lav file and %d in .nib file start %d size %d end %d\n",
+	   dirName, seqName, seqSize, cn->size, start, size, start+size); 
+    return nibLdPartMasked(NIB_MASK_MIXED, cn->fileName, cn->f, cn->size, start, size);
+    }
 }
 
 void outputBlocks(struct lineFile *lf,
@@ -127,6 +175,8 @@ struct dyString *qSym = newDyString(16*1024);
 struct dyString *tSym = newDyString(16*1024);
 struct dnaSeq *qSeq = NULL, *tSeq = NULL, *seq = NULL;
 struct axt axt;
+boolean qIsTwoBit = twoBitIsFile(qNibDir);
+boolean tIsTwoBit = twoBitIsFile(tNibDir);
 
 static int ix = 0;
 
@@ -162,7 +212,7 @@ if (isRc)
             errAbort("sequence not found %d\n",qName);
         }
     else
-        qSeq = readFromCache(qCache, qNibDir, qName, qStart, qEnd - qStart, qSize);
+        qSeq = readFromCache(qCache, qNibDir, qName, qStart, qEnd - qStart, qSize, qIsTwoBit);
     reverseIntRange(&qStart, &qEnd, qSize);
     reverseComplement(qSeq->dna, qSeq->size);
     }
@@ -186,9 +236,9 @@ else
 	    errAbort("sequence not found %d\n",qName);
         }
     else
-        qSeq = readFromCache(qCache, qNibDir, qName, qStart, qEnd - qStart, qSize);
+        qSeq = readFromCache(qCache, qNibDir, qName, qStart, qEnd - qStart, qSize, qIsTwoBit);
     }
-tSeq = readFromCache(tCache, tNibDir, tName, tStart, tEnd - tStart, tSize);
+tSeq = readFromCache(tCache, tNibDir, tName, tStart, tEnd - tStart, tSize, tIsTwoBit);
 
 /* Loop through blocks copying sequence into dynamic strings. */
 for (block = blockList; block != NULL; block = block->next)
