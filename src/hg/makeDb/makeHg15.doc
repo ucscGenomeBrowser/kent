@@ -338,7 +338,7 @@ exit; # don't actually run this like a script :)
     ssh hgwdev
     # Substitute BBB with the correct number for the hostname:
     echo 'insert into blatServers values("hg15", "blat2", "17778", "1"); \
-          insert into blatServers values("hg15", "blat2, "17779", "0");' \
+          insert into blatServers values("hg15", "blat2", "17779", "0");' \
     | hgsql -h genome-testdb hgcentraltest
 
 
@@ -386,7 +386,7 @@ exit; # don't actually run this like a script :)
     # Load into the database:
     ssh hgwdev
     cd ~/hg15/bed/simpleRepeat
-    hgLoadBed hg15 simpleRepeat simpleRepeat.bed \
+    ~matt/bin/i386/hgLoadBed hg15 simpleRepeat simpleRepeat.bed \
       -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
 
 
@@ -765,7 +765,7 @@ mrna is done against unmasked 041203
     cd ~/hg15/bed/est/intronEst
     hgLoadPsl hg15 *.psl
 
-# ESTORIENTINFO, MRNAORIENTINFO, GENE BOUNDS (RNACLUSTER) (TO DO)
+# ESTORIENTINFO, MRNAORIENTINFO, GENE BOUNDS (RNACLUSTER) (DONE 041303 MS+JK)
     # Put orientation info on ESTs and mRNAs into database:
     ssh eieio
     cd ~/hg15/bed/est
@@ -791,6 +791,7 @@ mrna is done against unmasked 041203
     para create spec
     para try 
     para check, para push, para check, ....
+
     # When the cluster run is done do:
     ssh hgwdev
     cd ~/hg15/bed/mrnaOrientInfo
@@ -814,7 +815,7 @@ mrna is done against unmasked 041203
     para create spec
     para try 
     para check, para push, para check, ....
-DONE TO HERE - MATT
+
     # When the cluster run is done do:
     ssh hgwdev
     cd ~/hg15/bed/estOrientInfo
@@ -841,6 +842,7 @@ DONE TO HERE - MATT
       echo clusterRna -mrnaExclude=hg15.rage.libs hg15 /dev/null $out -chrom=$c
       clusterRna -mrnaExclude=hg15.rage.libs hg15 /dev/null $out -chrom=$c
     end
+
     cd bed/rnaCluster
     hgLoadBed hg15 rnaCluster chrom/*.bed > /dev/null
 
@@ -1167,7 +1169,7 @@ Locate motifs on all promoters with
 	cd /cluster/store2/tmp
 	hgLoadRna addSeq hg15 /gbdb/hg15/bacends.4/BACends.fa
                 
-
+IN PROGRESS - MATT
 # BACEND SEQUENCE ALIGNMENTS (TO DO)
 # (alignments done without RepeatMasking)
 
@@ -1187,6 +1189,7 @@ Locate motifs on all promoters with
 
 # Copy files to final destination and remove
         make copy.assembly
+DONE TO HERE - MATT FINISHING FOR TERRY
         make clean # DONT'T DO THIS (may want to wait until sure they're OK)
 
 
@@ -1949,12 +1952,12 @@ o - # ssh hgwdev
     # use hg15.uniGene.lifted.pslReps.psl for building SAGE track (above).
 
 
-# LOADING MOUSE MM3 BLASTZ ALIGNMENTS FROM PENN STATE: (TO DO)
+# LOADING MOUSE MM3 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 041303)
 
     # Translate Penn State .lav files into sorted axt:
     ssh eieio
-    set base="/cluster/store5/gs.16/build33/bed/blastz.mm3.2003-03-17-ASH"
-    set seq1_dir="/cluster/store5/gs.16/build33/mixedNib/"
+    set base="/cluster/store5/gs.16/build33/bed/blastz.mm3.2003-04-12-03-MS"
+    set seq1_dir="/cluster/store5/gs.16/build33/nib/"
     set seq2_dir="/cluster/store2/mm.2003.02/mm3/mixedNib/"
     set tbl="blastzMm3"
     cd $base
@@ -1981,17 +1984,17 @@ o - # ssh hgwdev
 
     # Load tables
     ssh hgwdev
-    set base="/cluster/store5/gs.16/build33/bed/blastz.mm3.2003-03-17-ASH"
+    set base="/cluster/store5/gs.16/build33/bed/blastz.mm3.2003-04-12-03-MS"
     set tbl="blastzMm3"
     cd $base/pslChrom
     hgLoadPsl hg15 chr*_${tbl}.psl
 
-# MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM3 AXT FILES (TO DO)
+# MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM3 AXT FILES (DONE - 041303)
 
     # Consolidate AXT files to chrom level, sort, pick best, make psl.
     ssh eieio
     tcsh
-    set base="/cluster/store5/gs.16/build33/bed/blastz.mm3.2003-03-17-ASH"
+    set base="/cluster/store5/gs.16/build33/bed/blastz.mm3.2003-04-12-03-MS"
     set tbl="blastzBestMm3"
     cd $base
     mkdir -p axtBest pslBest
@@ -2002,9 +2005,10 @@ o - # ssh hgwdev
       echo translating axtBest to psl for $chr
       axtToPsl axtBest/$chr.axt S1.len S2.len pslBest/${chr}_${tbl}.psl
     end
+
     # Load tables
      ssh hgwdev
-     set base="/cluster/store5/gs.16/build33/bed/blastz.mm3.2003-03-17-ASH"
+     set base="/cluster/store5/gs.16/build33/bed/blastz.mm3.2003-04-12-03-MS"
      set tbl="blastzBestMm3"
      cd $base/pslBest
      hgLoadPsl hg15 chr*_${tbl}.psl
@@ -2027,16 +2031,18 @@ o - # ssh hgwdev
      hgsql hg15 < ~/kent/src/hg/lib/axtInfo.sql
      hgsql hg15 < axtInfoInserts.sql
 
-# MAKING THE AXTTIGHT FROM AXTBEST (TO DO)
+# MAKING THE AXTTIGHT FROM AXTBEST (DONE 041203)
     # After creating axtBest alignments above, use subsetAxt to get axtTight:
     ssh eieio
-    cd ~/hg15/bed/blastz.mm3.2003-03-17-ASH/axtBest
+    cd ~/hg15/bed/blastz.mm3.2003-04-12-03-MS/axtBest
     mkdir -p ../axtTight
+    tcsh
     foreach i (*.axt)
       echo $i
       subsetAxt  $i ../axtTight/$i \
         ~kent/src/hg/mouseStuff/subsetAxt/coding.mat 3400
     end
+
     # translate to psl
     cd ../axtTight
     mkdir -p ../pslTight
@@ -2044,9 +2050,10 @@ o - # ssh hgwdev
       set c = $i:r
       axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightMm3.psl
     end
+
     # Load tables into database
     ssh hgwdev
-    cd ~/hg15/bed/blastz.mm3.2003-03-17-ASH/pslTight
+    cd ~/hg15/bed/blastz.mm3.2003-04-12-03-MS/pslTight
     hgLoadPsl hg15 chr*_blastzTightMm3.psl
 
 # BEGINNING OF RAT BLASTZ
@@ -2481,14 +2488,20 @@ MAKING PROMOTER FILES
     zip upstream5000.zip upstream5000.fa
     rm upstream*.fa
     
-#MAKING MOUSE AND RAT SYNTENY
+#MAKING MOUSE AND RAT SYNTENY (IN PROGRESS)
 
-syntenicBest.pl -db=hg15 -table=blastzBestMm3
-smooth.pl
-joinsmallgaps.pl
-fillgap.pl -db=hg15 -table=blastzBestMm3
-synteny2bed.pl
+cd ~/hg15
+mkdir syntenyMouse
+# Copy all the needed scripts from ~/hg14
+
+./syntenicBest.pl -db=hg15 -table=blastzBestMm3
+./smooth.pl
+DONE TO HERE - MATT
+./joinsmallgaps.pl
+./fillgap.pl -db=hg15 -table=blastzBestMm3
+./synteny2bed.pl
 hgLoadBed hg15 syntenyMouse ucsc100k.bed
+DONE TO HERE - MATT - RUNNING LONG TIME 
 
 syntenicBest.pl -db=hg15 -table=blastzBestRn2
 smooth.pl
