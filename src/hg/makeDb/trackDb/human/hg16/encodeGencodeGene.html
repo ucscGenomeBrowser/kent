@@ -1,0 +1,72 @@
+<html><head></head><body><h2>Description</h2>
+<p>
+This track shows high-quality manual annotations as well as experimental gene structure validations generated within the <a href="http://genome.imim.es/gencode/">GENCODE project</a>.<br>
+</p><h2>Methods</h2>
+<p>
+<u><a href="http://www.sanger.ac.uk/HGP/havana/">HAVANA</a> manual annotations</u>:<br>
+Finished genomic sequence is analysed on a clone by clone basis using a
+combination of similarity searches against DNA and protein databases as
+well as a series of <i>ab initio</i>
+gene predictions. Nucleotide sequence databases are searched with
+WUBLASTN (http://blast.wustl.edu), and significant hits are re-aligned
+to the unmasked genomic sequence by EST2GENOME. The Uniprot protein
+database (http://www.uniprot.org) is searched with WUBLASTX, and the
+accession numbers of significant hits are looked up in the Pfam
+database . The hidden Markov models for Pfam protein domains are
+aligned against the genomic sequence using Genewise , to provide
+annotation of protein domains. We also run a number of <i>ab initio</i>
+prediction algorithms: Genscan and Fgenesh for genes, tRNAscan to find
+tRNA genes, and Eponine TSS which predicts transcription start sites.
+The annotators use the (AceDB-based) Otterlace interface to create and
+edit gene objects, which are then stored in a local database named <i>Otter</i>.
+Where predicted transcript structures from Ensembl are available these
+can be viewed from within the otterlace interface and may be used as
+starting templates for gene curation. Annotation in the Otter database
+is submitted to the EMBL/Genbank/DDBJ nucleotide database.
+<br>
+<br>
+
+</p><h2>Verification</h2>
+<p>Gene objects selected for verification come from various
+computational prediction methods and HAVANA annotations. RT-PCR and
+RACE experiments were performed on them, using a variety of human
+tissues, to confirm their structure. Human cDNAs from 24 different
+tissues (brain, heart, kidney, spleen, liver, colon, small intestine,
+muscle, lung, stomach, testis, placenta, skin, peripheral blood
+leucocytes, bone marrow, fetal brain, fetal liver, fetal kidney, fetal
+heart, fetal lung, thymus, pancreas, mammary gland, prostate) were
+synthesized using 12 poly(A)+ RNAs from Origene, 8 from Clemente
+Associates/Quantum Magnetics and 4 from BD Biosciences as described in
+[Reymond et al., 2002, Nature; Reymond et al., 2002, Genomics]. The
+relative amount of each cDNA was normalized by quantitative PCR using
+SyberGreen as intercalator and an ABI Prism 7700 Sequence Detection
+System.
+Predictions of human genes junctions were assayed experimentally by
+RT-PCR as previously described and modified [Reymond, 2002 Genomics,
+Waterston, 2002, Nature, Guigo, 2003 PNAS]. Similar amounts of Homo
+sapiens cDNAs were mixed with JumpStart REDTaq ReadyMix (Sigma) and 4
+ng/ul primers (Sigma-Genosys) with a BioMek 2000 robot (Beckman). The
+ten first cycles of PCR amplification were performed with a touchdown
+annealing temperatures decreasing from 60 to 50ºC; annealing
+temperature of the next 30 cycles was carried out at 50ºC. Amplimers
+were separated on "Ready to Run" precast gels (Pharmacia) and
+sequenced. RACE experiments were performed with the BD SMART RACE cDNA
+Amplification Kit following the manufacturer instructions (BD
+Biosciences).
+</p><h2>Credits</h2>
+<p>The complete list of people who participated in the GENCODE project
+can be found at: http://genome.imim.es/gencode/participants.html. </p><h2>References</h2>
+<p>
+Ashurst JL <i>et al</i>. The Vertebrate Genome Annotation (Vega) database. Nucleic Acids Res 33, Database Issue:D459-65 (2005).
+<br><br>
+Guigo R <i>et al</i>. Comparison of mouse and human genomes
+followed by experimental verification yields an estimated 1,019
+additional genes. Proc Natl Acad Sci U S A 100, 1140-5 (2003).
+<br><br>
+Reymond A <i>et al</i>. Human chromosome 21 gene expression atlas in the mouse. Nature 420, 582-6 (2002).
+<br><br>
+Reymond A <i>et al</i>. Nineteen additional unpredicted transcripts from human chromosome 21. Genomics 79, 824-32 (2002).
+<br><br>
+Waterston RH <i>et al</i>. Initial sequencing and comparative analysis of the mouse genome. Nature 420, 520-62 (2002).
+
+<br></p></body></html>
