@@ -1273,6 +1273,17 @@ termRegex [BPORUP][A-Z]+[0-9]+(_H)?
 searchMethod prefix
 searchPriority 50
 
+searchName acemblyGene
+searchTable acembly
+searchType genePred
+searchMethod prefix
+searchPriority 50
+
+searchTable acembly
+searchType genePred
+termRegex [^[:space:]]+
+searchPriority 52
+
 track uniGene_2
 shortLabel UniGene
 longLabel UniGene Alignments and SAGE Info
