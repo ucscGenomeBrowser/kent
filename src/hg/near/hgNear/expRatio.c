@@ -10,7 +10,7 @@
 #include "hCommon.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.1 2003/06/21 05:54:42 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.2 2003/06/21 16:52:16 kent Exp $";
 
 
 static char *expRatioCellVal(struct column *col, char *geneId, 
@@ -20,7 +20,7 @@ static char *expRatioCellVal(struct column *col, char *geneId,
 return cloneString("coming soon");
 }
 
-boolean expRatioExists(struct column *col, struct sqlConnection *conn)
+static boolean expRatioExists(struct column *col, struct sqlConnection *conn)
 /* This returns true if relevant tables exist. */
 {
 boolean tableOk = sqlTableExists(conn, col->table);
@@ -29,6 +29,66 @@ boolean expTableOk = sqlTableExists(conn, col->expTable);
 return tableOk && posTableOk && expTableOk;
 }
 
+static void hexOne(double val)
+/* Convert val 0.0-1.0 to hex 00 to FF */
+{
+int hex = val * 0xFF;
+hPrintf("%02X", hex);
+}
+
+void colorVal(double val, boolean useBlue)
+/* Val is -1.0 to 1.0.  Print color in form #FF0000, normally
+ * using green for minus values, red for plus values, but
+ * optionally using blue for plus values. */
+{
+if (useBlue)
+    {
+    if (val < 0)
+	{
+	hPrintf("00");	    /* Red */
+        hexOne(val*0.7);    /* Green - much brighter than blue*/
+	hPrintf("00");      /* Blue */
+	}
+    else
+	{
+	hPrintf("00");
+        hPrintf("00");
+        hexOne(val);
+	}
+    }
+else 
+    {
+    if (val < 0)
+	{
+	hPrintf("00");	    /* Red */
+        hexOne(val*0.8);    /* Green - brighter than red*/
+	hPrintf("00");      /* Blue */
+	}
+    else
+	{
+        hexOne(val);
+	hPrintf("00");
+        hPrintf("00");
+	}
+    }
+}
+
+boolean expRatioUseBlue = FALSE;
+
+void expRatioCellPrint(struct column *col, char *geneId, 
+	struct sqlConnection *conn)
+/* Print out html for expRatio cell. */
+{
+int i;
+hPrintf("<TD><TT><PRE><TABLE BORDER=0 CELLSPACING=0><TR>");
+for (i=0; i<9; ++i)
+    {
+    hPrintf("<TD BGCOLOR=\"#");
+    colorVal(i*0.1, FALSE);
+    hPrintf("\">&nbsp;</TD>");
+    }
+hPrintf("</PRE></TT></TR></TABLE></TD>");
+}
 
 void setupColumnExpRatio(struct column *col, char *parameters)
 /* Set up expression ration type column. */
@@ -67,4 +127,5 @@ else
 
 col->exists = expRatioExists;
 col->cellVal = expRatioCellVal;
+col->cellPrint = expRatioCellPrint;
 }
