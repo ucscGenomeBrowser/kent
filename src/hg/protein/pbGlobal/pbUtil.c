@@ -905,7 +905,7 @@ sqlDisconnect(&conn);
 
 if (protCntInSwissByGene > protCntInSupportedGenomeDb)
     {
-    if (protCntInSupportedGenomeDb >1)
+    if (protCntInSupportedGenomeDb >0)
     	{
     	hPrintf("<FONT SIZE=4><B>Other Organisms:</B></FONT>\n");
     	hPrintf("<UL>");
