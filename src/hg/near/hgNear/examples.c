@@ -44,7 +44,7 @@ hPrintf("%s",
  "detailed and flexible criteria, click the <em>filter</em> button. </P>"
  "<P>The default set of table columns -- "
  "which can be expanded, reduced, and rearranged via the <em>configure</em> "
- "button -- show additional information about the genes. Some of the column "
+ "button -- shows additional information about the genes. Some of the column "
  "data, such as those in the <em>BLAST E-value</em> and <em>%ID</em> columns, "
  "are calculated relative to the highlighted gene. To select a different gene "
  "in the list, click on its name. "
