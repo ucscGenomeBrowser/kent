@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.68 2005/01/03 19:36:07 galt Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.69 2005/01/25 07:28:04 donnak Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -197,7 +197,7 @@ else
 	}
     printf("       <A HREF=\"/cgi-bin/hgTables%s\" class=\"topbar\">\n", uiState);
     puts("           Tables</A> &nbsp; - &nbsp;");
-    puts("       <A HREF=\"/FAQ.html\" class=\"topbar\">" "\n"
+    puts("       <A HREF=\"/FAQ/\" class=\"topbar\">" "\n"
 	 "           FAQ</A> &nbsp; - &nbsp;" "\n" 
 	 );
     if (endsWith(scriptName, "hgBlat"))
