@@ -129,7 +129,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.578 2004/03/04 07:11:13 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.579 2004/03/08 00:19:59 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7225,44 +7225,61 @@ else
     org[0] = tolower(org[0]);
     safef(chainTable,sizeof(chainTable), "%sChain", org);
     }
-printf("<B>Bases syntenic with mouse:</B> %d \n",pg->overlapDiag);
-printf("<B>PolyA tail length:</B> %d \n",pg->polyA);
-printf("<B>PolyA Start:</B> %d \n",pg->polyAstart);
+printf("<B>PseudoGene Score:</B> %d \n",pg->score);
+printf("<B>Syntenic with mouse:</B> %d bp\n",pg->overlapDiag);
+printf("<B>PolyA tail:</B> %d \n",pg->polyA);
+printf("<B>Start:</B> %d \n",pg->polyAstart);
 printf("<B>Exons Covered:</B> %d out of %d \n",pg->exonCover,pg->exonCount);
 printf("<B>Coverage:</B> %d %%\n",pg->coverage);
 printf("<B>Bases matching:</B> %d \n", pg->matches);
-printf("<B>Align Score:</B> %d \n",pg->score);
 htmlHorizontalLine();
 printf("<p>");
-printf("<B>%s Gene:</B> %s %s in %s\n", hOrganism(pg->assembly), pg->gene, pg->geneTable, pg->assembly);
-linkToOtherBrowser(pg->assembly, pg->gChrom, pg->gStart, pg->gEnd);
-printf("%s:%d-%d \n", pg->gChrom, pg->gStart, pg->gEnd);
+
+
+printf("<p><B>RefSeq:</B> %s \n", pg->refSeq);
+linkToOtherBrowser(pg->assembly, pg->gChrom, pg->rStart, pg->rEnd);
+printf("%s:%d-%d \n", pg->gChrom, pg->rStart, pg->rEnd);
 printf("</A>");
 
-printf("<B>Gene Details: </B> " );
-printf("<A TARGET=\"_blank\" ");
-printf("HREF=\"../cgi-bin/hgGene?%s&%s=%s&%s=%s&%s=%s&%s=%d&%s=%d\" ",
-            cartSidUrlString(cart),
-            "db", database,
-            "hgg_gene", pg->gene,
-            "hgg_chrom", pg->gChrom,
-            "hgg_start", pg->gStart,
-            "hgg_end", pg->gEnd);
-printf(">%s</A>  ",pg->gene);
-if (hTableExists("knownGene"))
+if (!sameString(pg->kgName,"noKg"))
     {
-    char *description;
-    safef(query, sizeof(query), 
-            "select proteinId from knownGene where name = '%s'", pg->gene);
-    description = sqlQuickString(conn, query);
-    if (description != NULL)
-    printf("<B>SwissProt ID: </B> " );
-    printf("<A TARGET=\"_blank\" HREF=");
-    printSwissProtProteinUrl(stdout, description);
-    printf(">%s</A>",description);
-    freez(&description);
+    printf("<p><B>KnownGene:</B> " );
+    printf("<A TARGET=\"_blank\" ");
+    printf("HREF=\"../cgi-bin/hgGene?%s&%s=%s&%s=%s&%s=%s&%s=%d&%s=%d\" ",
+                cartSidUrlString(cart),
+                "db", database,
+                "hgg_gene", pg->gene,
+                "hgg_chrom", pg->gChrom,
+                "hgg_start", pg->kStart,
+                "hgg_end", pg->kEnd);
+    printf(">%s</A>  ",pg->gene);
+    linkToOtherBrowser(pg->assembly, pg->gChrom, pg->kStart, pg->kEnd);
+    printf("%s:%d-%d \n", pg->gChrom, pg->kStart, pg->kEnd);
+    printf("</A>");
+    if (hTableExists("knownGene"))
+        {
+        char *description;
+        safef(query, sizeof(query), 
+                "select proteinId from knownGene where name = '%s'", pg->gene);
+        description = sqlQuickString(conn, query);
+        if (description != NULL)
+        printf("<B>SwissProt ID: </B> " );
+        printf("<A TARGET=\"_blank\" HREF=");
+        printSwissProtProteinUrl(stdout, description);
+        printf(">%s</A>",description);
+        freez(&description);
+        }
+    }
+else
+    {
+    /* display mrna */
+    printf("<p><B>mRna:</B> %s \n", pg->gene);
+    linkToOtherBrowser(pg->assembly, pg->gChrom, pg->mStart, pg->mEnd);
+    printf("%s:%d-%d \n", pg->gChrom, pg->mStart, pg->mEnd);
+    printf("</A>");
     }
 /* display pfam domains */
+
 printf("<p>");
 if (hTableExists("knownToPfam") && hTableExists("proteins031112.pfamDesc"))
     {
@@ -7324,7 +7341,7 @@ if (hTableExists(chainTable_chrom) )
         printf("<B>Chain:</B> %d  \n",pg->chainId);
         hgcAnchorTranslatedChain(pg->chainId, chainTable, chrom, pg->gStart, pg->gEnd);
         printf("View details of parts of chain within browser window</A>.<BR>\n");
-        puts("</LI>\n");
+        puts("</LI>\n<b>");
         }
     //printf("<p>");
     if (pg->chainId > 0)
