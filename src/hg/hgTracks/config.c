@@ -18,14 +18,32 @@ cartUsualString(cart, textSizeVar, "small");
 hDropList(textSizeVar, sizes, ArraySize(sizes), tl.textSize);
 }
 
-void trackConfig()
-/* Put up track configurations. */
+void trackConfig(char *groupToChange,  int changeVis)
+/* Put up track configurations. If groupToChange is 
+ * NULL then set visibility for tracks in all groups.  Otherwise,
+ * just set it for the given group.  If vis is -2, then visibility is
+ * unchanged.  If -1 then set visibility to default, otherwise it should 
+ * be tvHide, tvDense, etc. */
 {
 struct track *trackList = getTrackList();
 struct group *group, *groupList = NULL;
 boolean showedRuler = FALSE;
 
 groupTracks(&trackList, &groupList);
+
+/* Set up ruler mode according to changeVis. */
+if (changeVis != -2)
+    {
+    if (groupToChange == NULL || 
+    	(groupList != NULL && sameString(groupToChange, groupList->name)))
+	{
+	if (changeVis == -1)
+	    rulerMode = tvFull;
+	else
+	    rulerMode = changeVis;
+	}
+    }
+
 hTableStart();
 for (group = groupList; group != NULL; group = group->next)
     {
@@ -33,6 +51,18 @@ for (group = groupList; group != NULL; group = group->next)
 
     if (group->trackList == NULL)
 	continue;
+
+    if (changeVis != -2 && (groupToChange == NULL || group->name == groupToChange))
+        {
+	for (tr = group->trackList; tr != NULL; tr = tr->next)
+	    {
+	    struct track *track = tr->track;
+	    if (changeVis == -1)
+	        track->visibility = track->tdb->visibility;
+	    else
+	        track->visibility = changeVis;
+	    }
+	}
 
     hPrintf("<TR>");
     hPrintf("<TH colspan=3 BGCOLOR=#536ED3>");
@@ -64,9 +94,9 @@ for (group = groupList; group != NULL; group = group->next)
 	hPrintf("<TR>");
 	hPrintf("<TD>");
 	if (track->hasUi)
-	    hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s\">", hgTrackUiName(),
+	    hPrintf("<A HREF=\"%s?%s=%u&g=%s\">", hgTrackUiName(),
 		cartSessionVarName(), cartSessionId(cart),
-		chromName, track->mapName);
+		track->mapName);
 	hPrintf(" %s", track->shortLabel);
 	if (track->hasUi)
 	    hPrintf("</A>");
@@ -90,31 +120,68 @@ for (group = groupList; group != NULL; group = group->next)
 hTableEnd();
 }
 
-void configPage()
-/* Put up configuration page. */
+void configPageSetTrackVis(char *group, int vis)
+/* Do config page after setting track visibility.  If group is
+ * NULL then set visibility for tracks in all groups.  Otherwise,
+ * just set it for the given group.  If vis is -1 then set
+ * visibility to default, otherwise it should be tvHide, tvDense, etc. */
 {
-char *position = cartUsualString(cart, "position", hDefaultPos(database));
 struct dyString *title = dyStringNew(0);
 
-dyStringPrintf(title, "Configure %s %s (%s) Browser Display",
+dyStringPrintf(title, "Configure Image",
 	       hOrganism(database), hFreezeFromDb(database), database);
 webStartWrapper(cart, title->string, NULL, FALSE, FALSE);
 hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=POST>\n", hgTracksName());
 cartSaveSession(cart);
 
-hPrintf("position: ");
-hTextVar("position", addCommasToPos(position), 30);
 hPrintf(" image width: ");
 hIntVar("pix", tl.picWidth, 4);
 hPrintf(" text size: ");
 textSizeDropDown();
 hPrintf(" ");
 cgiMakeButton("Submit", "Submit");
+hPrintf("<P>");
+hTableStart();
+hPrintf("<TR><TD>");
+hCheckBox("ideogram", cartUsualBoolean(cart, "ideogram", TRUE));
+hPrintf("</TD><TD>");
+hPrintf("Display chromosome ideogram above main graphic.");
+hPrintf("</TD></TR>");
+hPrintf("<TR><TD>");
+hCheckBox("guidelines", cartUsualBoolean(cart, "guidelines", TRUE));
+hPrintf("</TD><TD>");
+hPrintf("Show light blue vertical guidelines.");
+hPrintf("</TD></TR>");
+hPrintf("<TR><TD>");
+hCheckBox("leftLabels", cartUsualBoolean(cart, "leftLabels", TRUE));
+hPrintf("</TD><TD>");
+hPrintf("Display labels to the left of items tracks.");
+hPrintf("</TD></TR>");
+hPrintf("<TR><TD>");
+hCheckBox("centerLabels", cartUsualBoolean(cart, "centerLabels", TRUE));
+hPrintf("</TD><TD>");
+hPrintf("Display track description above each track.");
+hPrintf("</TD></TR>");
+hTableEnd();
 
-webNewSection("Track Controls");
-trackConfig();
+webNewSection("Configure Tracks");
+hPrintf("Control tracks in all groups here ");
+cgiMakeButton(configHideAll, "Hide All");
+hPrintf(" ");
+cgiMakeButton(configShowAll, "Show All");
+hPrintf(" ");
+cgiMakeButton(configDefaultAll, "Default");
+hPrintf(" ");
+hPrintf("or control tracks visibility more selectively below.<BR>");
+trackConfig(group, vis);
 
 hPrintf("</FORM>");
 dyStringFree(&title);
 }
 
+
+void configPage()
+/* Put up configuration page. */
+{
+configPageSetTrackVis(NULL, -2);
+}

@@ -13,7 +13,7 @@
 #include "hCommon.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.77 2005/01/03 19:45:03 hiram Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.78 2005/02/01 23:33:56 kent Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -166,6 +166,8 @@ puts(
 "</td></tr><tr><td><center>\n"
 );
 cgiMakeButton("customTrackPage", "Add Your Own Custom Tracks");
+printf(" ");
+cgiMakeButton("hgTracksConfigPage", "Configure Tracks and Display");
 puts("</center>\n"
 "</td></tr></table>\n"
 "</td></tr></table>\n"

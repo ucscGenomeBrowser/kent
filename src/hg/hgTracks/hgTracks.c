@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.875 2005/02/01 20:23:09 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.876 2005/02/01 23:33:56 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -169,11 +169,7 @@ boolean withCenterLabels = TRUE;	/* Display center labels? */
 boolean withGuidelines = TRUE;		/* Display guidelines? */
 boolean hideControls = FALSE;		/* Hide all controls? */
 
-#define RULER_MODE_OFF 0
-#define RULER_MODE_ON 1
-#define RULER_MODE_FULL 2
-
-int rulerMode = RULER_MODE_ON;         /* on, off, full */
+int rulerMode = tvHide;         /* on, off, full */
 
 char *rulerMenu[] =
 /* dropdown for ruler visibility */
@@ -309,12 +305,22 @@ void initTl()
  * wide. */
 {
 MgFont *font;
-
-font = tl.font = mgSmallFont();
+tl.textSize = cartUsualString(cart, textSizeVar, "small");
+if (sameString(tl.textSize, "tiny"))
+     font = mgTinyFont();
+else if (sameString(tl.textSize, "medium"))
+     font = mgSmallishFont();
+else if (sameString(tl.textSize, "large"))
+     font = mgMediumFont();
+else if (sameString(tl.textSize, "huge"))
+     font = mgLargeFont();
+else
+     font = mgSmallFont();
+tl.font = font;
 tl.mWidth = mgFontStringWidth(font, "M");
-tl.nWidth = mgFontStringWidth(font, "N");
+tl.nWidth = mgFontStringWidth(font, "n");
 tl.fontHeight = mgFontLineHeight(font);
-tl.leftLabelWidth = hgDefaultLeftLabelWidth;
+tl.leftLabelWidth = 17*tl.nWidth + trackTabWidth;
 tl.picWidth = hgDefaultPixWidth;
 setPicWidth(cartOptionalString(cart, "pix"));
 }
@@ -7274,14 +7280,14 @@ pixWidth = tl.picWidth;
 
 /* Figure out height of each visible track. */
 pixHeight = gfxBorder;
-if (rulerMode != RULER_MODE_OFF)
+if (rulerMode != tvHide)
     {
     if (zoomedToBaseLevel)
 	basePositionHeight += baseHeight;
     yAfterRuler += basePositionHeight;
     yAfterBases = yAfterRuler;
     pixHeight += basePositionHeight;
-    if (rulerMode == RULER_MODE_FULL && 
+    if (rulerMode == tvFull && 
             (zoomedToBaseLevel || zoomedToCdsColorLevel))
         {
         yAfterRuler += rulerTranslationHeight;
@@ -7329,7 +7335,7 @@ makeSeaShades(vg);
 orangeColor = makeOrangeColor(vg);
 brickColor = makeBrickColor(vg);
 
-if (rulerMode == RULER_MODE_FULL &&
+if (rulerMode == tvFull &&
         (zoomedToBaseLevel || zoomedToCdsColorLevel) && !cdsColorsMade)
     {
     makeCdsShades(vg, cdsColor);
@@ -7371,11 +7377,11 @@ if (withLeftLabels && psOutput == NULL)
     boolean grayButtonGroup = FALSE;
     struct group *lastGroup = NULL;
     y = gfxBorder;
-    if (rulerMode != RULER_MODE_OFF)
+    if (rulerMode != tvHide)
         {
         /* draw button for Base Position pseudo-track */
         int height = basePositionHeight;
-        if (rulerMode == RULER_MODE_FULL && 
+        if (rulerMode == tvFull && 
                         (zoomedToBaseLevel || zoomedToCdsColorLevel))
             height += rulerTranslationHeight;
         drawGrayButtonBox(vg, trackTabX, y, trackTabWidth, height, TRUE);
@@ -7425,16 +7431,16 @@ if (withLeftLabels)
     vgBox(vg, leftLabelX + leftLabelWidth, 0,
     	gfxBorder, pixHeight, lightRed);
     y = gfxBorder;
-    if (rulerMode != RULER_MODE_OFF)
+    if (rulerMode != tvHide)
 	{
 	vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, rulerHeight, 
 		    MG_BLACK, font, RULER_TRACK_LABEL);
 	if (zoomedToBaseLevel || 
-                (zoomedToCdsColorLevel && rulerMode == RULER_MODE_FULL))
+                (zoomedToCdsColorLevel && rulerMode == tvFull))
 	    drawComplementArrow(vg,leftLabelX, y+rulerHeight,
 				leftLabelWidth-1, baseHeight, font);
 	y += basePositionHeight;
-        if ((rulerMode == RULER_MODE_FULL) &&
+        if ((rulerMode == tvFull) &&
                 (zoomedToBaseLevel || zoomedToCdsColorLevel))
             y += rulerTranslationHeight;
 	}
@@ -7473,7 +7479,7 @@ if (withGuidelines)
     }
 
 /* Show ruler at top. */
-if (rulerMode != RULER_MODE_OFF)
+if (rulerMode != tvHide)
     {
     struct dnaSeq *seq = NULL;
     y = 0;
@@ -7529,7 +7535,7 @@ if (rulerMode != RULER_MODE_OFF)
 	}
     }
     if (zoomedToBaseLevel || 
-            (zoomedToCdsColorLevel && rulerMode == RULER_MODE_FULL))
+            (zoomedToCdsColorLevel && rulerMode == tvFull))
         {
         Color baseColor = MG_BLACK;
         int start, end, chromSize;
@@ -7570,13 +7576,13 @@ if (rulerMode != RULER_MODE_OFF)
             {
             char newRulerVis[100];
             safef(newRulerVis, 100, "%s=%s", RULER_TRACK_NAME,
-                         rulerMode == RULER_MODE_FULL ?  
-                                rulerMenu[RULER_MODE_ON] : 
-                                rulerMenu[RULER_MODE_FULL]);
+                         rulerMode == tvFull ?  
+                                rulerMenu[tvDense] : 
+                                rulerMenu[tvFull]);
             mapBoxReinvokeExtra(insideX, y+rulerHeight, insideWidth,baseHeight, 
                                 NULL, NULL, 0, 0, "", newRulerVis);
             }
-        if (rulerMode == RULER_MODE_FULL && 
+        if (rulerMode == tvFull && 
                                 (zoomedToBaseLevel || zoomedToCdsColorLevel))
             {
             /* display codons */
@@ -9230,41 +9236,10 @@ else
 hButton(var, paddedLabel);
 }
 
-void doTrackForm(char *psOutput)
-/* Make the tracks display form with the zoom/scroll
- * buttons and the active image. */
+struct track *getTrackList()
+/* Return list of all tracks. */
 {
-struct group *group;
-struct track *track;
-char *freezeName = NULL;
-boolean hideAll = cgiVarExists("hgt.hideAll");
-boolean showedRuler = FALSE;
-long thisTime = 0, lastTime = 0;
-
-zoomedToBaseLevel = (winBaseCount <= insideWidth / tl.mWidth);
-zoomedToCodonLevel = (ceil(winBaseCount/3) * tl.mWidth) <= insideWidth;
-zoomedToCdsColorLevel = (winBaseCount <= insideWidth*3);
-
-if (psOutput != NULL)
-   {
-   suppressHtml = TRUE;
-   hideControls = TRUE;
-   }
-
-/* Tell browser where to go when they click on image. */
-hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" METHOD=GET>\n\n", hgTracksName());
-cartSaveSession(cart);
-
-/* See if want to include sequence search results. */
-userSeqString = cartOptionalString(cart, "ss");
-if (userSeqString && !ssFilesExist(userSeqString))
-    {
-    userSeqString = NULL;
-    cartRemove(cart, "ss");
-    }
-if (!hideControls)
-    hideControls = cartUsualBoolean(cart, "hideControls", FALSE);
-
+struct track *trackList = NULL;
 /* Register tracks that include some non-standard methods. */
 registerTrackHandler("rgdGene", rgdGeneMethods);
 registerTrackHandler("cytoBand", cytoBandMethods);
@@ -9465,7 +9440,45 @@ loadFromTrackDb(&trackList);
 if (userSeqString != NULL) slSafeAddHead(&trackList, userPslTg());
 slSafeAddHead(&trackList, oligoMatchTg());
 loadCustomTracks(&trackList);
+return trackList;
+}
 
+void doTrackForm(char *psOutput)
+/* Make the tracks display form with the zoom/scroll
+ * buttons and the active image. */
+{
+struct group *group;
+struct track *track;
+char *freezeName = NULL;
+boolean hideAll = cgiVarExists("hgt.hideAll");
+boolean showedRuler = FALSE;
+long thisTime = 0, lastTime = 0;
+
+zoomedToBaseLevel = (winBaseCount <= insideWidth / tl.mWidth);
+zoomedToCodonLevel = (ceil(winBaseCount/3) * tl.mWidth) <= insideWidth;
+zoomedToCdsColorLevel = (winBaseCount <= insideWidth*3);
+
+if (psOutput != NULL)
+   {
+   suppressHtml = TRUE;
+   hideControls = TRUE;
+   }
+
+/* Tell browser where to go when they click on image. */
+hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" METHOD=GET>\n\n", hgTracksName());
+cartSaveSession(cart);
+
+/* See if want to include sequence search results. */
+userSeqString = cartOptionalString(cart, "ss");
+if (userSeqString && !ssFilesExist(userSeqString))
+    {
+    userSeqString = NULL;
+    cartRemove(cart, "ss");
+    }
+if (!hideControls)
+    hideControls = cartUsualBoolean(cart, "hideControls", FALSE);
+
+trackList = getTrackList();
 
 groupTracks(&trackList, &groupList);
 
@@ -9612,11 +9625,14 @@ if (!hideControls)
 	hWrites("position ");
 	hTextVar("position", addCommasToPos(position), 30);
 	sprintLongWithCommas(buf, winEnd - winStart);
-	hPrintf(" size %s ", buf);
-	hWrites(" bp. &nbsp;image width: ");
-	hIntVar("pix", tl.picWidth, 4);
 	hWrites(" ");
 	hButton("submit", "jump");
+	hPrintf(" size %s bp. ", buf);
+#ifdef OLD
+	hWrites("&nbsp;image width: ");
+	hIntVar("pix", tl.picWidth, 4);
+#endif /* OLD */
+        hButton("hgTracksConfigPage", "configure");
 	hPutc('\n');
 	}
     }
@@ -9843,7 +9859,7 @@ void zoomToBaseLevel()
 /* Set things so that it's zoomed to base level. */
 {
 zoomToSize(insideWidth/tl.mWidth);
-if (rulerMode == RULER_MODE_OFF)
+if (rulerMode == tvHide)
     cartSetString(cart, "ruler", "dense");
 }
 
@@ -10059,11 +10075,11 @@ if (cgiVarExists("hgt.hideAll"))
     cartSetString(cart, RULER_TRACK_NAME, "dense");
 s = cartUsualString(cart, RULER_TRACK_NAME, "full");
 if (sameWord(s, "full") || sameWord(s, "on"))
-    rulerMode = RULER_MODE_FULL;
+    rulerMode = tvFull;
 else if (sameWord(s, "dense"))
-    rulerMode = RULER_MODE_ON;
+    rulerMode = tvDense;
 else
-    rulerMode = RULER_MODE_OFF;
+    rulerMode = tvHide;
 
 /* Do zoom/scroll if they hit it. */
 if (cgiVarExists("hgt.left3"))
@@ -10355,6 +10371,26 @@ else if (cartVarExists(cart, "chromInfoPage"))
     {
     cartRemove(cart, "chromInfoPage");
     chromInfoPage();
+    }
+else if (cartVarExists(cart, "hgTracksConfigPage"))
+    {
+    cartRemove(cart, "hgTracksConfigPage");
+    configPage();
+    }
+else if (cartVarExists(cart, configHideAll))
+    {
+    cartRemove(cart, configHideAll);
+    configPageSetTrackVis(NULL, tvHide);
+    }
+else if (cartVarExists(cart, configShowAll))
+    {
+    cartRemove(cart, configShowAll);
+    configPageSetTrackVis(NULL, tvDense);
+    }
+else if (cartVarExists(cart, configDefaultAll))
+    {
+    cartRemove(cart, configDefaultAll);
+    configPageSetTrackVis(NULL, -1);
     }
 else
     {
