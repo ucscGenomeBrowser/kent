@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: lavToPsl.c,v 1.6 2003/05/06 07:22:28 kate Exp $";
+static char const rcsid[] = "$Id: lavToPsl.c,v 1.7 2004/10/22 16:14:13 kent Exp $";
 
 /* strand to us for target */
 char* targetStrand = "+";
@@ -159,6 +159,21 @@ if (word == NULL)
 return word;
 }
 
+char *justChrom(char *s)
+/* Simplify mongo nib file thing in axt. */
+{
+char *e = stringIn(".nib:", s);
+if (e == NULL)
+    return s;
+*e = 0;
+e = strrchr(s, '/');
+if (e == NULL)
+    return s;
+else
+    return e+1;
+}
+
+
 void parseH(struct lineFile *lf,  char **tName, char **qName, boolean *isRc)
 /* Parse out H stanza */
 {
@@ -193,9 +208,9 @@ for (i=0; ; ++i)
 	    ++line;
 	}
     if (i == 0)
-        *tName = cloneString(word);
+        *tName = cloneString(justChrom(word));
     else if (i == 1)
-        *qName = cloneString(word);
+        *qName = cloneString(justChrom(word));
     if ((line != NULL) && (stringIn("(reverse", line) != NULL))
         *isRc = TRUE;
     }
