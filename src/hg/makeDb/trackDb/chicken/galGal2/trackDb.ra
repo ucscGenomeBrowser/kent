@@ -193,3 +193,30 @@ color 0,0,0
 type bed 5 +
 useScore 1
 
+track bgiGene
+shortLabel BGI Genes
+longLabel Gene Annotations from Beijing Genomics Institute
+group genes
+priority 33
+visibility pack
+color 20,20,170
+type genePred
+
+track bgiSnp
+shortLabel BGI SNPs
+longLabel SNPs from Beijing Genomics Institute
+group varRep
+priority 20
+visibility dense
+color 170,20,20
+type bed 4 +
+
+track bgiCov
+shortLabel BGI Coverage
+longLabel Regions Covered by Beijing Genomics Institute SNP Reads
+group varRep
+priority 21
+visibility hide
+color 50,50,50
+type bed 4 +
+
