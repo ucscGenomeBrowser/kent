@@ -345,6 +345,22 @@ exit; # don't actually run this like a script :)
   nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad bosTau1
   # logged to /cluster/data/genbank/var/dbload/hgwdev/logs/YYMMDDHHMMSS.dbload.log
 
+  # ESTs required modification to the build process to deal with the huge
+  # number of scaffolds.  Once completed, the following line was
+  # added to genbank.conf to enable it's uses:
+    bosTau1.mondoTwoBitParts = 5000
+  ssh eieio
+  cd /cluster/data/genbank
+  bin/gbAlignStep -initial -srcDb=genbank -type=est bosTau1
+  
+  # load the ESTs, reloading mRNAs as well
+  ssh hgwdev
+  cd /cluster/data/genbank
+  nice bin/gbDbLoadStep -drop -initialLoad bosTau1
+
+  # add bosTau1 to list of databases to align in
+  #  /cluster/data/genbank/etc/align-genbank
+
   # GC PERCENT (DONE Oct. 17, 2004, Heather)
   # use old-style (non-wiggle)
   # run on kolossus (serialized)
