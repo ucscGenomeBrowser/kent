@@ -74,7 +74,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.526 2003/06/06 17:23:42 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.527 2003/06/06 17:24:54 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -3334,9 +3334,9 @@ static char abbrev[32];
 
 strncpy(abbrev, full, sizeof(abbrev));
 abbr(abbrev, "SEPT20T.");
-abbr(abbrev, "000000");
-abbr(abbrev, "00000");
-abbr(abbrev, "0000");
+abbr(abbrev, "T000000");
+abbr(abbrev, "T00000");
+abbr(abbrev, "T0000");
 return abbrev;
 }
 
