@@ -12,7 +12,7 @@
 #include "scoredRef.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.56 2004/08/25 16:52:37 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.57 2004/08/27 20:32:03 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -333,6 +333,8 @@ struct hash *spans = NULL;	/* Spans encountered during load */
 if (tg->customPt == (void *)NULL)
     errAbort("ctWigLoadItems: did not find a custom wiggle track: %s", tg->mapName);
 
+/*	turn off maps self until we properly handle wiggle tracks in hgc */
+tg->mapsSelf = FALSE;
 /*	Each instance of this LoadItems will create a new spans hash
  *	It will be the value included in the trackSpans hash
  */
