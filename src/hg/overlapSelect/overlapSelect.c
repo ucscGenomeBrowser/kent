@@ -25,6 +25,7 @@ static struct optionSpec optionSpecs[] = {
     {"strand", OPTION_BOOLEAN},
     {"excludeSelf", OPTION_BOOLEAN},
     {"dropped", OPTION_STRING},
+    {"fraction", OPTION_STRING},
     {"merge", OPTION_BOOLEAN},
     {"overlapThreshold", OPTION_FLOAT},
     {"overlapSimilarity", OPTION_FLOAT},
@@ -51,6 +52,7 @@ boolean nonOverlapping = FALSE;
 boolean idOutput = FALSE;
 float overlapThreshold = 0.0;
 float overlapSimilarity = 0.0;
+FILE* fractionFh = NULL;
 
 struct ioFiles
 /* object containing input files */
@@ -234,7 +236,7 @@ switch (selectFmt)
 lineFileClose(&lf);
 }
 
-void overlapSelect(char *selectFile, char *inFile, char *outFile, char *dropFile)
+void overlapSelect(char *selectFile, char *inFile, char *outFile, char *dropFile, char *fractionFile)
 /* select records based on overlap of chromosome ranges */
 {
 struct slRef *overlappedRecLines = NULL;
@@ -246,6 +248,8 @@ loadSelectTable(selectFile);
 ioFiles.outFh = mustOpen(outFile, "w");
 if (dropFile != NULL)
     ioFiles.dropFh = mustOpen(dropFile, "w");
+if (fractionFile != NULL)
+    fractionFh = mustOpen(fractionFile, "w");
 
 switch (inFmt)
     {
@@ -265,6 +269,7 @@ switch (inFmt)
 lineFileClose(&ioFiles.inLf);
 carefulClose(&ioFiles.outFh);
 carefulClose(&ioFiles.dropFh);
+carefulClose(&fractionFh);
 }
 
 void usage(char *msg)
@@ -308,7 +313,8 @@ errAbort("%s:\n"
          "      Note that this is only coverage by a single select record and this is;\n"
          "      bidirectional inFile and selectFile must overlap by this amount.  A value of 1.0\n"
          "      will select identical records (or CDS if both CDS options are specified.\n"
-         "  -dropped=file - output rows that were dropped to this file.\n"
+         "  -dropped=file  - output rows that were dropped to this file.\n"
+         "  -fraction=file - output rows that contains overlap fraction numbers.\n"
          "  -merge - output file with be a merge of the input file with the\n"
          "      selectFile records that selected it.  The format is\n"
          "         inRec<tab>selectRec.\n"
@@ -321,7 +327,7 @@ errAbort("%s:\n"
 
 /* entry */
 int main(int argc, char** argv) {
-char *selectFile, *inFile, *outFile, *dropFile;
+char *selectFile, *inFile, *outFile, *dropFile, *fractionFile;
 optionInit(&argc, argv, optionSpecs);
 if (argc != 4)
     usage("wrong # args");
@@ -393,7 +399,8 @@ if (doMerge)
     }
 
 dropFile = optionVal("dropped", NULL);
+fractionFile = optionVal("fraction", NULL);
 
-overlapSelect(selectFile, inFile, outFile, dropFile);
+overlapSelect(selectFile, inFile, outFile, dropFile, fractionFile);
 return 0;
 }
