@@ -98,7 +98,8 @@ for (cur = dbList; cur != NULL; cur = cur->next)
         numAssemblies++;
         }
     else if (strstrNoCase(organism, cur->organism) && 
-             !strstrNoCase(cur->description, "zoo"))
+             !strstrNoCase(cur->description, "zoo") &&
+             (cur->active || strstrNoCase(cur->name, db)))
         {
         assemblyList[numAssemblies] = cur->description;
         values[numAssemblies] = cur->name;
