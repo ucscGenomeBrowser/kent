@@ -13,7 +13,7 @@
 #include "chainLink.h"
 #include "chainDb.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.9 2003/06/27 21:39:38 braney Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.10 2003/07/07 21:06:47 braney Exp $";
 
 
 static void chainDraw(struct track *tg, int seqStart, int seqEnd,
@@ -64,7 +64,7 @@ if (tg->items != NULL)
     if (!hTableExistsDb(hGetDb(), fullName))
 	strcpy(fullName, tg->mapName);
     dyStringPrintf(query, 
-	    "select chainId,tStart,tEnd from %sLink where ",fullName);
+	    "select chainId,tStart,tEnd,qStart from %sLink where ",fullName);
     hAddBinToQuery(seqStart, seqEnd, query);
     dyStringPrintf(query, "tStart<%u and tEnd>%u", seqEnd, seqStart);
     sr = sqlGetResult(conn, query->string);
@@ -79,14 +79,14 @@ if (tg->items != NULL)
 	    lmAllocVar(lm, sf);
 	    sf->start = sqlUnsigned(row[1]);
 	    sf->end = sqlUnsigned(row[2]);
-	    sf->grayIx = maxShade;
+	    sf->grayIx = sqlUnsigned(row[3]);
 	    slAddHead(&lf->components, sf);
 	    }
 	}
 
     /* Someday we may need to put in a sort on the simple features
      * here.  For now though nobody cares. */
-
+    /* Besides we sort in linkedFeaturesDrawAt says braney */
     linkedFeaturesDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width,
 	    font, color, vis);
 
@@ -171,6 +171,6 @@ tg->itemColor = lfChromColor;
 tg->loadItems = chainLoadItems;
 tg->drawItems = chainDraw;
 tg->mapItemName = lfMapNameFromExtra;
-tg->subType = lfSubXeno;
+tg->subType = lfSubChain;
 }
 
