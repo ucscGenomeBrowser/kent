@@ -1077,16 +1077,13 @@ char *interpolate;
 char *aa; 
 int fill; 
 
-char o1[128];
-char o2[128];
-char o3[128];
+char o1[128]; /* Option 1 - linear interp */
+char o2[128]; /* Option 2 - anti alias */
+char o3[128]; /* Option 3 - fill */
 
 double hFactor;
 double minRange, maxRange;
-
-
 int gapPrevEnd = -1;
-
 
 tg->colorShades = shadesFromBaseColor( &tg->color );
 shades = tg->colorShades;
@@ -5629,6 +5626,114 @@ tg->mapsSelf = TRUE;
 tg->mapItem = altGraphXMapItem;
 }
 
+int lfNamePositionCmp(const void *va, const void *vb)
+/* Compare based on name, then chromStart, used for
+   sorting sample based tracks. */
+{
+const struct linkedFeatures *a = *((struct linkedFeatures **)va);
+const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
+int dif;
+char *tgName = NULL;
+if(sortGroupList != NULL)
+    tgName = sortGroupList->shortLabel;
+if(tgName != NULL)
+    {
+    if(sameString(a->name, tgName) && differentString(b->name, tgName))
+	return -1;
+    if(sameString(b->name, tgName) && differentString(a->name, tgName))
+	return 1;
+    }
+dif = strcmp(a->name, b->name);
+if (dif == 0)
+    dif = a->start - b->start;
+return dif;
+}
+
+void loadAffyTranscriptome(struct trackGroup *tg)
+/* Convert sample info in window to linked feature. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+struct sample *sample;
+struct linkedFeatures *lfList = NULL, *lf;
+char *hasDense = NULL;
+char *where = NULL;
+char query[256];
+unsigned int chromSize = hChromSize(chromName);
+int resolution = 0;
+char tableName[256];
+int zoom1 = 23924, zoom2 = 2991; /* bp per data point */
+float pixPerBase = 0;
+if(tl.picWidth == 0)
+    errAbort("hgTracks.c::loadAffyTranscriptome() - can't have pixel width of 0");
+pixPerBase = (winEnd - winStart)/ tl.picWidth;
+
+
+/* Determine zoom level. */
+if(pixPerBase >= zoom1)
+    snprintf(tableName, sizeof(tableName), "%s_%s", "zoom1", tg->mapName);
+else if(pixPerBase >= zoom2)
+    snprintf(tableName, sizeof(tableName), "%s_%s", "zoom2", tg->mapName);
+else 
+    snprintf(tableName, sizeof(tableName), "%s", tg->mapName);
+
+/*see if we have a summary table*/
+if(hTableExists(tableName))
+    snprintf(query, sizeof(query), "select name from %s where name = '%s' limit 1",  tableName, tg->shortLabel);
+else
+    {
+    warn("<p>Couldn't find table %s<br><br>", tableName);
+    snprintf(query, sizeof(query), "select name from %s where name = '%s' limit 1",  tg->mapName, tg->shortLabel);
+    snprintf(tableName, sizeof(tableName), "%s", tg->mapName);
+    }
+
+hasDense = sqlQuickQuery(conn, query, query, sizeof(query));
+
+/* If we're in dense mode and have a summary table load it. */
+if(tg->visibility == tvDense)
+    {
+    if(hasDense != NULL)
+	{
+	snprintf(query, sizeof(query), " name = '%s' ", tg->shortLabel);
+	where = cloneString(query);
+	}
+    }
+
+sr = hRangeQuery(conn, tableName, chromName, winStart, winEnd, where, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    sample = sampleLoad(row+rowOffset);
+    lf = lfFromSample(sample);
+    slAddHead(&lfList, lf);
+    sampleFree(&sample);
+    }
+if(where != NULL)
+    freez(&where);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&lfList);
+
+/* sort to bring items with common names to the same line
+but only for tracks with a summary table (with name=shortLabel) in
+dense mode*/
+
+if( hasDense != NULL )
+    {
+    sortGroupList = tg; /* used to put track name at top of sorted list. */
+    slSort(&lfList, lfNamePositionCmp);
+    sortGroupList = NULL;
+    }
+tg->items = lfList;
+}
+
+
+void affyTranscriptomeMethods(struct trackGroup *tg)
+/* Overide the load function to look for zoomed out tracks. */
+{
+tg->loadItems = loadAffyTranscriptome;
+}
 
 void mapBoxHcTwoItems(int start, int end, int x, int y, int width, int height, 
 	char *group, char *item1, char *item2, char *statusLine)
@@ -6963,35 +7068,33 @@ if (withLeftLabels)
 			    newy += updateY( name, group->itemName(group, prev), itemHeight );
 			    if( newy == y )
 			        continue;
-			  
-                if( group->heightPer > (3 * fontHeight ) )
-                    {
-			        ymax = y - (group->heightPer / 2) + (fontHeight / 2);
-			        ymin = y + (group->heightPer / 2) - (fontHeight / 2);
-			        mgTextRight(mg, gfxBorder, ymin, inWid-1, itemHeight, 
-				    	group->ixAltColor, font, minRangeStr );
-			        mgTextRight(mg, gfxBorder, ymax, inWid-1, itemHeight, 
-					    group->ixAltColor, font, maxRangeStr );
-                    }
-			    }
-			else
-			    {
-			    newy += itemHeight;
-			    
-                if( group->heightPer > (3 * fontHeight ) )
-                    {
+				
+			    if( group->heightPer > (3 * fontHeight ) )
+				{
 			        ymax = y - (group->heightPer / 2) + (fontHeight / 2);
 			        ymin = y + (group->heightPer / 2) - (fontHeight / 2);
 			        mgTextRight(mg, gfxBorder, ymin, inWid-1, itemHeight, 
 					    group->ixAltColor, font, minRangeStr );
 			        mgTextRight(mg, gfxBorder, ymax, inWid-1, itemHeight, 
 					    group->ixAltColor, font, maxRangeStr );
-                    }
+				}
+			    }
+			else
+			    {
+			    newy += itemHeight;
+			    
+			    if( group->heightPer > (3 * fontHeight ) )
+				{
+			        ymax = y - (group->heightPer / 2) + (fontHeight / 2);
+			        ymin = y + (group->heightPer / 2) - (fontHeight / 2);
+			        mgTextRight(mg, gfxBorder, ymin, inWid-1, itemHeight, 
+					    group->ixAltColor, font, minRangeStr );
+			        mgTextRight(mg, gfxBorder, ymax, inWid-1, itemHeight, 
+					    group->ixAltColor, font, maxRangeStr );
+				}
 			    
 			    }
-            prev = item;
-
-
+			prev = item;
 			mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight, group->ixColor, font, name);
 			/* Reset the clipping rectangle to its original proportions */
 			mgSetClip(mg, gfxBorder, gfxBorder, inWid, pixHeight - (2 * gfxBorder));
@@ -7314,28 +7417,6 @@ slReverse(&lfList);
 tg->items = lfList;
 }
 
-int lfNamePositionCmp(const void *va, const void *vb)
-/* Compare based on name, then chromStart, used for
-   sorting sample based tracks. */
-{
-const struct linkedFeatures *a = *((struct linkedFeatures **)va);
-const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
-int dif;
-char *tgName = NULL;
-if(sortGroupList != NULL)
-    tgName = sortGroupList->shortLabel;
-if(tgName != NULL)
-    {
-    if(sameString(a->name, tgName) && differentString(b->name, tgName))
-	return -1;
-    if(sameString(b->name, tgName) && differentString(a->name, tgName))
-	return 1;
-    }
-dif = strcmp(a->name, b->name);
-if (dif == 0)
-    dif = a->start - b->start;
-return dif;
-}
 
 void loadSampleIntoLinkedFeature(struct trackGroup *tg)
 /* Convert sample info in window to linked feature. */
@@ -7884,7 +7965,7 @@ registerTrackHandler("triangle", triangleMethods );
 registerTrackHandler("mgcNcbiPicks", estMethods);
 registerTrackHandler("mgcNcbiSplicedPicks", intronEstMethods);
 registerTrackHandler("mgcUcscPicks", intronEstMethods);
-
+registerTrackHandler("affyTranscriptome", affyTranscriptomeMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
@@ -7932,7 +8013,8 @@ if (!hideControls)
     if(freezeName == NULL)
 	freezeName = "Unknown";
     printf("<FONT SIZE=5><B>UCSC Genome Browser on %s Freeze</B></FONT><BR>\n",freezeName); 
-
+    /* This is a clear submit button that browsers will use by default when enter is pressed in position box. */
+    printf("<INPUT TYPE=IMAGE BORDER=0 NAME=\"hgt.dummyEnterButton\" src=\"../images/DOT.gif\">");
     /* Put up scroll and zoom controls. */
     fputs("move ", stdout);
     cgiMakeButton("hgt.left3", "<<<");
@@ -8148,6 +8230,8 @@ char newPos[256];
 
 /* Read in input from CGI. */
 position = cartString(cart, "position");
+if(sameString(position, ""))
+    errAbort("Please go back and enter a coordinate range in the \"position\" field.<br>For example: chr22:20100000-20200000.\n");
 if (!findGenomePos(position, &chromName, &winStart, &winEnd, cart)) 
     return;
 
