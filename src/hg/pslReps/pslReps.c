@@ -8,11 +8,13 @@
 #include "psl.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: pslReps.c,v 1.13 2003/05/06 07:22:34 kate Exp $";
+static char const rcsid[] = "$Id: pslReps.c,v 1.14 2003/08/11 21:28:33 sugnet Exp $";
 
 double minAli = 0.93;
 double nearTop = 0.01;
 double minCover = 0.0;
+boolean ignoreNs = FALSE; /* Ignore the n's when calculating coverage score, other
+			     wise n's count as mismatches. */
 boolean ignoreSize = FALSE;
 boolean noIntrons = FALSE;
 boolean singleHit = FALSE;
@@ -38,6 +40,7 @@ errAbort(
     "              size factor\n"
     "    -singleHit  Takes single best hit, not splitting into parts\n"
     "    -minCover=0.N minimum coverage to output.  Default is 0.\n"
+    "    -ignoreNs Ignore 'N's when calculating minCover.\n"
     "    -minAli=0.N minimum alignment ratio\n"
     "               default is 0.93\n"
     "    -nearTop=0.N how much can deviate from top and be taken\n"
@@ -134,6 +137,28 @@ for (blockIx = 0; blockIx < psl->blockCount; ++blockIx)
 return FALSE;
 }
 
+boolean passMinCoverage(struct psl *psl)
+/* Does this psl have enough bases aligned to pass the minCover filter. */
+{
+if(ignoreNs)
+    return (psl->match + psl->repMatch >= minCover * (psl->qSize - psl->nCount));
+else
+    return (psl->match + psl->repMatch >= minCover * psl->qSize);
+}
+
+boolean passFilters(struct psl *psl, int *scoreTrack)
+/* Return TRUE if this psl passes the millScore, minCoverage and
+   closeToTop thresholds.  If scoreTrack is NULL then closeToTop
+   threshold is skipped. */
+{
+int milliMin = 1000*minAli;
+if (calcMilliScore(psl) >= milliMin && 
+    (scoreTrack == NULL || closeToTop(psl, scoreTrack)) &&
+    passMinCoverage(psl))
+    return TRUE;
+return FALSE;
+}
+
 void processBestMulti(char *acc, struct psl *pslList, FILE *bestFile, FILE *repFile)
 /* Find psl's that are best anywhere along their length. */
 {
@@ -194,10 +219,9 @@ if (uglyTarget(pslList)) uglyf("---finding best---\n");
 /* Print out any alignments that are within 2% of top score. */
 for (psl = pslList; psl != NULL; psl = psl->next)
     {
-    if (calcMilliScore(psl) >= milliMin && closeToTop(psl, scoreTrack)
-        && psl->match + psl->repMatch >= minCover * psl->qSize)
+    if(passFilters(psl, scoreTrack))
 	{
-if (uglyTarget(psl)) uglyf("accepted\n");
+	if (uglyTarget(psl)) uglyf("accepted\n");
 	pslTabOut(psl, bestFile);
 	++bestAliCount;
 	}
@@ -272,7 +296,7 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 threshold = round((1.0 - nearTop)*bestScore);
 for (psl = pslList; psl != NULL; psl = psl->next)
     {
-    if (pslScore(psl) >= threshold)
+    if (pslScore(psl) >= threshold && passFilters(psl, NULL))
         pslTabOut(psl, bestFile);
     }
 }
@@ -297,8 +321,8 @@ int lineSize;
 char *line;
 char *words[32];
 int wordCount;
-struct psl *pslList = NULL, *psl;
-char lastName[256];
+struct psl *pslList = NULL, *psl = NULL;
+char lastName[512];
 int aliCount = 0;
 quiet = sameString(bestAliName, "stdout") || sameString(repName, "stdout");
 
@@ -322,7 +346,7 @@ while (lineFileNext(in, &line, &lineSize))
 	{
 	doOneAcc(lastName, pslList, bestFile, repFile);
 	pslFreeList(&pslList);
-	strcpy(lastName, psl->qName);
+	safef(lastName, sizeof(lastName), "%s", psl->qName);
 	}
     slAddHead(&pslList, psl);
     }
@@ -349,6 +373,7 @@ ignoreSize = cgiBoolean("ignoreSize");
 noIntrons = cgiBoolean("noIntrons");
 singleHit = cgiBoolean("singleHit");
 noHead = cgiBoolean("nohead");
+ignoreNs = cgiBoolean("ignoreNs");
 pslReps(argv[1], argv[2], argv[3]);
 return 0;
 }
