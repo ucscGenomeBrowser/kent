@@ -1091,6 +1091,17 @@ color 0,100,0
 altColor 255,240,200
 type netAlign galGal1 chainGalGal1
 
+track blastzBestGalGal1
+shortLabel Chicken Best
+longLabel Blastz Chicken (galGal1) Best in Genome
+group compGeno
+priority 157.5
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno 
+
 track tblastGalGal1
 shortLabel Chicken Best Exon
 longLabel best galGal1 tblastn hit/hg16 knownGene exon
@@ -1100,7 +1111,6 @@ priority 158
 visibility hide
 type psl xeno
 
-
 track blast22Br
 shortLabel chr22 protein blast
 longLabel chr22 protein blast
@@ -1108,4 +1118,3 @@ group x
 priority 1101
 visibility hide
 type psl protein
-
