@@ -7,6 +7,7 @@
 #include "common.h"
 #include <fcntl.h>
 #include "dystring.h"
+#include "errabort.h"
 #include "linefile.h"
 
 struct lineFile *lineFileAttatch(char *fileName, bool zTerm, int fd)
@@ -63,6 +64,15 @@ void lineFileReuse(struct lineFile *lf)
 /* Reuse current line. */
 {
 lf->reuse = TRUE;
+}
+
+void lineFileSeek(struct lineFile *lf, off_t offset, int whence)
+/* Seek to read next line from given position. */
+{
+lf->reuse = FALSE;
+lf->lineStart = lf->lineEnd = lf->bytesInBuf;
+if (lseek(lf->fd, offset, whence) == -1)
+    errnoAbort("Couldn't lineFileSeek %s", lf->fileName);
 }
 
 int lineFileLongNetRead(int fd, char *buf, int size)
