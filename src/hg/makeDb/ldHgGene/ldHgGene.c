@@ -1,4 +1,4 @@
-/* ldHgGene - load a set of Genie gene predictions from GFF file into
+/* ldHgGene - load a set of gene predictions from GFF  or GTF file into
  * mySQL database. */
 
 #include "common.h"
@@ -151,6 +151,7 @@ char *tabName = "genePred.tab";
 FILE *f;
 boolean isSoftberry = sameWord("softberryGene", table);
 boolean isEnsembl = sameWord("ensGene", table);
+boolean isSanger22 = sameWord("sanger22", table);
 
 for (i=0; i<gtfCount; ++i)
     {
