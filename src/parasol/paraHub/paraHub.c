@@ -464,21 +464,6 @@ return job;
 }
 
 
-void removeMachine(char *name)
-/* Remove machine from pool. */
-{
-struct machine *mach;
-name = trimSpaces(name);
-if ((mach = findMachine(name)) != NULL)
-    {
-    if (mach->job != NULL)
-	removeJobId(mach->job->id);
-    dlRemove(mach->node);
-    slRemoveEl(&machineList, mach);
-    machineFree(&mach);
-    }
-}
-
 void requeueJob(struct job *job)
 /* Move job from running queue back to a user pending
  * queue.  This happens when a node is down or when
@@ -499,6 +484,22 @@ dlAddHead(user->curBatches, batch->node);
 dlRemove(user->node);
 dlAddHead(queuedUsers, user->node);
 }
+
+void removeMachine(char *name)
+/* Remove machine from pool. */
+{
+struct machine *mach;
+name = trimSpaces(name);
+if ((mach = findMachine(name)) != NULL)
+    {
+    if (mach->job != NULL)
+	requeueJob(mach->job);
+    dlRemove(mach->node);
+    slRemoveEl(&machineList, mach);
+    machineFree(&mach);
+    }
+}
+
 
 void machineDown(struct machine *mach)
 /* Mark machine as down and move it to dead list. */
