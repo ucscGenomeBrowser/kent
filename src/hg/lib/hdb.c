@@ -25,7 +25,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.142 2003/09/19 23:42:33 heather Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.143 2003/09/22 18:41:18 hiram Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -243,7 +243,18 @@ if ((row = sqlNextRow(sr)) != NULL)
     }
 if (db == NULL)
     {
-    errAbort("Can't find genome \"%s\" in central database table defaultDb.\n", genome);
+    /* Can't find any of specified ones ?  Then use the first
+     *	This is for the product browser which may have none of
+     *	the usual UCSC genomes, but it needs to be able to function.
+     */
+    sprintf(query, "select * from defaultDb");
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+	db = defaultDbLoad(row);
+	}
+    if (db == NULL)
+	errAbort("Can't find genome \"%s\" in central database table defaultDb.\n", genome);
     }
 
 sqlFreeResult(&sr);
