@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.24 2003/08/06 03:19:25 baertsch Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.25 2003/08/19 23:54:43 baertsch Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -704,7 +704,14 @@ pushWarnHandler(cartEarlyWarningHandler);
 cart = cartAndCookie(cookieName, exclude, oldVars);
 getDbAndGenome(cart, &db, &org);
 pos = cgiOptionalString(positionCgiName);
-safef(titlePlus,sizeof(titlePlus), "%s %s - %s",org,pos, title );
+if (pos == NULL && org != NULL) 
+    safef(titlePlus,sizeof(titlePlus), "%s - %s",org, title );
+else if (pos != NULL && org == NULL)
+    safef(titlePlus,sizeof(titlePlus), "%s - %s",pos, title );
+else if (pos == NULL && org == NULL)
+    safef(titlePlus,sizeof(titlePlus), "%s", title );
+else
+    safef(titlePlus,sizeof(titlePlus), "%s %s - %s",org,pos, title );
 popWarnHandler();
 htmStart(stdout, titlePlus);
 cartWarnCatcher(doMiddle, cart, htmlVaWarn);
