@@ -12,7 +12,7 @@
 #include "gbGenome.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.6 2004/09/01 08:31:32 genbank Exp $";
+static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.7 2004/09/03 04:08:26 markd Exp $";
 
 /* FIXME: check native vs xeno, flag in metaData. */
 /* FIXME: check OI tables */
@@ -176,101 +176,39 @@ static void chkGenePred(struct genePred* gene, char *geneName, unsigned iRow,
 /* Validate a genePred of a refSeq to genome alignment against the metadata.
  * Also count the number of alignments, and check the geneName, if available */
 {
-char geneDesc[512];
+char desc[512];
 unsigned chromSize = getChromSize(gene->chrom);
-unsigned iExon;
 struct metaData* md = metaDataTblsFind(metaDataTbls, gene->name);
 
 if (gbVerbose >= 3)
     gbVerbMsg(3, "chkGenePred %s:%d %s %s",  table, iRow, 
               gene->name, gene->chrom);
-safef(geneDesc, sizeof(geneDesc), "gene %s.%s:%u %s %s", database, table,
+safef(desc, sizeof(desc), "gene %s.%s:%u %s %s", database, table,
       iRow, gene->name, gene->chrom);
 
-if (!(sameString(gene->strand, "+") || sameString(gene->strand, "-")))
-    gbError("%s: invalid strand: \"%s\"", geneDesc, gene->strand);
+/* basic sanity checks */
+if (genePredCheck(desc, stderr, chromSize, gene))
+    errorCnt++;
 
-/* check chrom */
-if (chromSize == 0)
-    gbError("%s: chrom not a valid chromosome: \"%s\"", geneDesc, gene->chrom);
-else
-    {
-    if (gene->txEnd > chromSize)
-        gbError("%s: %s txEnd %u >= chromSize %u", geneDesc, gene->name,
-                gene->txEnd, chromSize);
-    }
-
-/* check in mrna table */
+/* check if in mrna table */
 if (md == NULL)
-    gbError("%s: %s in not in mrna table", geneDesc, gene->name);
+    gbError("%s: %s in not in mrna table", desc, gene->name);
 else
     {
     if (typeFlags != md->typeFlags)
         gbError("%s: alignment of %s type %s doesn't match expected %s",
-                geneDesc, gene->name, gbFmtSelect(md->typeFlags),
+                desc, gene->name, gbFmtSelect(md->typeFlags),
                 gbFmtSelect(typeFlags));
     md->numAligns++;
     }
 
-/* check internal consistency */
-if (gene->txStart >= gene->txEnd)
-    gbError("%s: %s txStart %u >= txEnd %u", geneDesc, gene->name,
-            gene->txStart, gene->txEnd);
-/* no CDS is indicated by cdsStart == cdsEnd */
-if (gene->cdsStart != gene->cdsEnd)
-    {
-    if (gene->cdsStart > gene->cdsEnd)
-        gbError("%s: %s cdsStart %u > cdsEnd %u", geneDesc, gene->name,
-                gene->cdsStart, gene->cdsEnd);
-    if ((gene->cdsStart < gene->txStart) || (gene->cdsStart > gene->txEnd))
-        gbError("%s: %s cdsStart %u not in tx bounds %u-%u", geneDesc,
-                gene->name, gene->cdsStart, gene->txStart, gene->txEnd);
-    if ((gene->cdsEnd < gene->txStart) || (gene->cdsEnd > gene->txEnd))
-        gbError("%s: %s cdsEnd %u not in tx bounds %u-%u", geneDesc, 
-                gene->name, gene->cdsEnd, gene->txStart, gene->txEnd);
-    }
-for (iExon = 0; iExon < gene->exonCount; iExon++)
-    {
-    unsigned exonStart = gene->exonStarts[iExon];
-    unsigned exonEnd = gene->exonEnds[iExon];
-#if WARN_BLAT_BUGS
-    if (exonStart >= exonEnd)
-        fprintf(stderr, "%s: %s exon %u start %u >= end %u\n", geneDesc, gene->name,
-                iExon, exonStart, exonEnd);
-#else
-    if (exonStart >= exonEnd)
-        gbError("%s: %s exon %u start %u >= end %u", geneDesc, gene->name,
-                iExon, exonStart, exonEnd);
-#endif
-    if (exonStart < gene->txStart)
-        gbError("%s: %s exon %u start %u < txStart %u", geneDesc, gene->name,
-                iExon, exonStart, gene->txStart);
-    if (exonEnd > gene->txEnd)
-        gbError("%s: %s exon %u end %u > txEnd %u", geneDesc, gene->name,
-                iExon, exonEnd, gene->txEnd);
-    if (iExon > 0)
-        {
-        unsigned prevExonEnd = gene->exonEnds[iExon-1];
-#if WARN_BLAT_BUGS
-        if (exonStart < prevExonEnd)
-            fprintf(stderr, "%s: %s exon %u overlaps previous exon\n", geneDesc,
-                    gene->name, iExon);
-#else
-        if (exonStart < prevExonEnd)
-            gbError("%s: %s exon %u overlaps previous exon", geneDesc,
-                    gene->name, iExon);
-#endif
-        if (exonStart == prevExonEnd)
-            gbError("%s: %s exon %u follows zero length intron", geneDesc,
-                    gene->name, iExon);
-        }
-    }
+/* check gene name */
 if ((md != NULL) && (geneName != NULL))
     {
     char* rlName = (md->rlName == NULL) ? "" : md->rlName;
     if (!sameString(geneName, rlName))
         gbError("%s: %s geneName \"%s\" does not match refLink name \"%s\"",
-                geneDesc, gene->name, geneName, rlName);
+                desc, gene->name, geneName, rlName);
     }
 }
 

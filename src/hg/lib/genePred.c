@@ -11,7 +11,10 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.53 2004/07/20 18:27:18 markd Exp $";
+/* FIXME: remove when bugs fixes */
+#define WARN_BLAT_BUGS 1
+
+static char const rcsid[] = "$Id: genePred.c,v 1.54 2004/09/03 04:08:26 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -1164,4 +1167,109 @@ boolean genePredCdsIntersect(struct genePred *gp, int start, int end)
 /* Check if a range intersects the CDS */
 {
 return (rangeIntersection(gp->cdsStart, gp->cdsEnd, start, end) > 0);
+}
+
+/* state for genePredCheck */
+static int gpErrorCnt = 0;  /* error count for gpError */
+static FILE *gpErrFh = NULL;  /* error output for gpError */
+
+static void gpError(char *format, ...)
+/* print and count an error */
+{
+va_list args;
+fprintf(stderr, "Error: ");
+va_start(args, format);
+vfprintf(gpErrFh, format, args);
+va_end(args);
+fputc('\n', gpErrFh);
+gpErrorCnt++;
+}
+
+int genePredCheck(char *desc, FILE* out, int chromSize, 
+                  struct genePred* gp)
+/* Validate a genePred for consistency.  desc is printed the error messages
+ * to file out (open /dev/null to discard).  chromSize should contain
+ * size of chromosome, or 0 if chrom is not valid, or -1 to not check
+ * chromosome bounds. Returns count of errors. */
+{
+int iExon;
+gpErrorCnt = 0;
+gpErrFh = out;
+
+if (!(sameString(gp->strand, "+") || sameString(gp->strand, "-")))
+    gpError("%s: invalid strand: \"%s\"", desc, gp->strand);
+
+/* check chrom */
+if (chromSize == 0)
+    gpError("%s: chrom not a valid chromosome: \"%s\"", desc, gp->chrom);
+else if (chromSize > 0)
+    {
+    if (gp->txEnd > chromSize)
+        gpError("%s: %s txEnd %u >= chromSize %u", desc, gp->name,
+                gp->txEnd, chromSize);
+    }
+
+/* check internal consistency */
+if (gp->txStart >= gp->txEnd)
+    gpError("%s: %s txStart %u >= txEnd %u", desc, gp->name,
+            gp->txStart, gp->txEnd);
+/* no CDS is indicated by cdsStart == cdsEnd */
+if (gp->cdsStart != gp->cdsEnd)
+    {
+    if (gp->cdsStart > gp->cdsEnd)
+        gpError("%s: %s cdsStart %u > cdsEnd %u", desc, gp->name,
+                gp->cdsStart, gp->cdsEnd);
+    if ((gp->cdsStart < gp->txStart) || (gp->cdsStart > gp->txEnd))
+        gpError("%s: %s cdsStart %u not in tx bounds %u-%u", desc,
+                gp->name, gp->cdsStart, gp->txStart, gp->txEnd);
+    if ((gp->cdsEnd < gp->txStart) || (gp->cdsEnd > gp->txEnd))
+        gpError("%s: %s cdsEnd %u not in tx bounds %u-%u", desc, 
+                gp->name, gp->cdsEnd, gp->txStart, gp->txEnd);
+    }
+for (iExon = 0; iExon < gp->exonCount; iExon++)
+    {
+    unsigned exonStart = gp->exonStarts[iExon];
+    unsigned exonEnd = gp->exonEnds[iExon];
+#if WARN_BLAT_BUGS
+    if (exonStart >= exonEnd)
+        fprintf(stderr, "%s: %s exon %u start %u >= end %u\n", desc, gp->name,
+                iExon, exonStart, exonEnd);
+#else
+    if (exonStart >= exonEnd)
+        gpError("%s: %s exon %u start %u >= end %u", desc, gp->name,
+                iExon, exonStart, exonEnd);
+#endif
+    if (exonStart < gp->txStart)
+        gpError("%s: %s exon %u start %u < txStart %u", desc, gp->name,
+                iExon, exonStart, gp->txStart);
+    if (exonEnd > gp->txEnd)
+        gpError("%s: %s exon %u end %u > txEnd %u", desc, gp->name,
+                iExon, exonEnd, gp->txEnd);
+    if (iExon > 0)
+        {
+        unsigned prevExonEnd = gp->exonEnds[iExon-1];
+#if WARN_BLAT_BUGS
+        if (exonStart < prevExonEnd)
+            fprintf(stderr, "%s: %s exon %u overlaps previous exon\n", desc,
+                    gp->name, iExon);
+#else
+        if (exonStart < prevExonEnd)
+            gpError("%s: %s exon %u overlaps previous exon", desc,
+                    gp->name, iExon);
+#endif
+        if (exonStart == prevExonEnd)
+            gpError("%s: %s exon %u follows zero length intron", desc,
+                    gp->name, iExon);
+        }
+    }
+if (gp->optFields & genePredExonFramesFld)
+    {
+    for (iExon = 0; iExon < gp->exonCount; iExon++)
+        {
+        int frame = gp->exonFrames[iExon];
+        if ((frame < -1) || (frame > 2))
+            gpError("%s: %s invalid exonFrame: %d", desc, gp->name, frame);
+        }
+    }
+return gpErrorCnt;
 }

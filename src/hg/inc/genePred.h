@@ -193,5 +193,12 @@ boolean genePredCdsExon(struct genePred *gp, int iExon, int *startPtr, int *endP
 boolean genePredCdsIntersect(struct genePred *gp, int start, int end);
 /* Check if a range intersects the CDS */
 
+int genePredCheck(char *desc, FILE* out, int chromSize, 
+                  struct genePred* gp);
+/* Validate a genePred for consistency.  desc is printed the error messages
+ * to file out (open /dev/null to discard).  chromSize should contain
+ * size of chromosome, or 0 if chrom is not valid, or -1 to not check
+ * chromosome bounds. Returns count of errors. */
+
 #endif /* GENEPRED_H */
 

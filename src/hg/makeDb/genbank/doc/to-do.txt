@@ -736,3 +736,6 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 
 -  multi-line /product= are truncated to the first line:
    NM_033227 NM_021201 NM_033227 NM_021201 NM_003808 NM_052901 NM_175739
+
+- need to be able to have reload.acc local to a specify database
+
