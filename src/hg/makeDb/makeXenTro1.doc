@@ -1858,3 +1858,70 @@ cd $gp/bigZips
 md5sum *.zip > md5sum.txt
 # Take a look at bigZips, update README.txt.
 
+# MAKE VSHG17 DOWNLOADABLES (DONE 11/06/04 Fan)
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/bz.hg17/axtChain
+    gzip -c all.chain > /cluster/data/xenTro1/zip/human.chain.gz
+    gzip -c xenTro1.net > /cluster/data/xenTro1/zip/human.net.gz
+   
+    mkdir /cluster/data/xenTro1/zip/axtNet
+    gzip -c ../axtNet/all.axt > /cluster/data/xenTro1/zip/axtNet/all.axt.gz
+      
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/xenTro1/vsHg17
+    cd /usr/local/apache/htdocs/goldenPath/xenTro1/vsHg17
+    mv /cluster/data/xenTro1/zip/human*.gz .
+    mv /cluster/data/xenTro1/zip/axtNet .
+    md5sum *.gz > md5sum.txt
+    # Copy over & edit README.txt w/pointers to chain, net formats.
+
+# MAKE VSMM5 DOWNLOADABLES (DONE 11/06/04 Fan)
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/bz.mm5/axtChain
+    gzip -c all.chain > /cluster/data/xenTro1/zip/mouse.chain.gz
+    gzip -c xenTro1.net > /cluster/data/xenTro1/zip/mouse.net.gz
+   
+    mkdir /cluster/data/xenTro1/zip/axtNet
+    gzip -c ../axtNet/all.axt > /cluster/data/xenTro1/zip/axtNet/all.axt.gz
+      
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/xenTro1/vsMm5
+    cd /usr/local/apache/htdocs/goldenPath/xenTro1/vsMm5
+    mv /cluster/data/xenTro1/zip/mouse*.gz .
+    mv /cluster/data/xenTro1/zip/axtNet .
+    md5sum *.gz > md5sum.txt
+    # Copy over & edit README.txt w/pointers to chain, net formats.
+
+# MAKE VSGALGAL2 DOWNLOADABLES (DONE 11/06/04 Fan)
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/bz.galGal2/axtChain
+    gzip -c all.chain > /cluster/data/xenTro1/zip/chicken.chain.gz
+    gzip -c xenTro1.net > /cluster/data/xenTro1/zip/chicken.net.gz
+   
+    mkdir /cluster/data/xenTro1/zip/axtNet
+    gzip -c ../axtNet/all.axt > /cluster/data/xenTro1/zip/axtNet/all.axt.gz
+      
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/xenTro1/vsGalGal2
+    cd /usr/local/apache/htdocs/goldenPath/xenTro1/vsGalGal2
+    mv /cluster/data/xenTro1/zip/chicken*.gz .
+    mv /cluster/data/xenTro1/zip/axtNet .
+    md5sum *.gz > md5sum.txt
+    # Copy over & edit README.txt w/pointers to chain, net formats.
+
+# MAKE VSDANRER1 DOWNLOADABLES (DONE 11/06/04 Fan)
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/bz.danRer1/axtChain
+    gzip -c all.chain > /cluster/data/xenTro1/zip/zebrafish.chain.gz
+    gzip -c xenTro1.net > /cluster/data/xenTro1/zip/zebrafish.net.gz
+   
+    mkdir /cluster/data/xenTro1/zip/axtNet
+    gzip -c ../axtNet/all.axt > /cluster/data/xenTro1/zip/axtNet/all.axt.gz
+      
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/xenTro1/vsDanRer1
+    cd /usr/local/apache/htdocs/goldenPath/xenTro1/vsDanRer1
+    mv /cluster/data/xenTro1/zip/zebrafish*.gz .
+    mv /cluster/data/xenTro1/zip/axtNet .
+    md5sum *.gz > md5sum.txt
+    # Copy over & edit README.txt w/pointers to chain, net formats.
