@@ -2,79 +2,49 @@
 #include "common.h"
 #include "linefile.h"
 #include "jksql.h"
-#include "xAli.h"
+#include "genePred.h"
 
 void usage()
 /* Print usage and exit. */
 {
-errAbort("usage: freen output");
+errAbort("usage: freen in out");
 }
 
-void freen(char *output)
+void genePredOffset(struct genePred *gp, int offset)
+/* Add offset to gene prediction. */
 {
-FILE *f = NULL;
-struct lineFile *lf = NULL;
-char *line;
-struct xAli xa;
-struct xAli *x;
-
-xa.matches = 20;
-xa.misMatches = 0;
-xa.repMatches = 0;
-xa.nCount = 0;
-xa.qNumInsert = 1;
-xa.qBaseInsert = 10;
-xa.tNumInsert = 1;
-xa.tBaseInsert = 20;
-strcpy(xa.strand, "++");
-xa.qName = "query";
-xa.qSize = 100;
-xa.qStart = 10;
-xa.qEnd = 40;
-xa.tName = "target";
-xa.tSize = 10;
-xa.tEnd = 50;
-xa.blockCount = 2;
-AllocArray(xa.blockSizes,2);
-xa.blockSizes[0] = 10;
-xa.blockSizes[1] = 10;
-AllocArray(xa.qStarts,2);
-xa.qStarts[0] = 10;
-xa.qStarts[1] = 30;
-AllocArray(xa.tStarts,2);
-xa.tStarts[0] = 10;
-xa.tStarts[1] = 40;
-AllocArray(xa.qSeq, 2);
-xa.qSeq[0] = "AAAAATTTTT";
-xa.qSeq[1] = "GGGGGCCCCC";
-AllocArray(xa.tSeq, 2);
-xa.tSeq[0] = "AAAAATTTTT";
-xa.tSeq[1] = "GGGGGCCCCC";
-
-f = mustOpen(output, "w");
-xAliTabOut(&xa, f);
-carefulClose(&f);
-
-x = xAliLoadAll(output);
-
-f = mustOpen(output, "w");
-xAliCommaOut(x, f);
-fprintf(f,"\n");
-carefulClose(&f);
-
-lf = lineFileOpen(output, TRUE);
-while (lineFileNext(lf, &line, NULL))
+int i;
+gp->txStart += offset;
+gp->txEnd += offset;
+gp->cdsStart += offset;
+gp->cdsEnd += offset;
+for (i=0; i<gp->exonCount; ++i)
     {
-    x = xAliCommaIn(&line, NULL);
-    xAliTabOut(x, stdout);
+    gp->exonStarts[i] += offset;
+    gp->exonEnds[i] += offset;
     }
+}
 
+void freen(char *input, char *output)
+{
+FILE *f = mustOpen(output, "w");
+struct lineFile *lf = NULL;
+char *row[50];
+struct genePred *gp;
+
+lf = lineFileOpen(input, TRUE);
+while (lineFileChop(lf, row))
+    {
+    gp = genePredLoad(row);
+    genePredOffset(gp, 100000);
+    genePredTabOut(gp, f);
+    }
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-if (argc != 2)
+if (argc != 3)
    usage();
-freen(argv[1]);
+freen(argv[1], argv[2]);
 }

@@ -668,21 +668,21 @@ o - Load Ensembl peptides:
 
      hgPepPred hg10 generic ensPep ensembl.pep
 
-LOAD SANGER22 GENES (todo)
-      - cd ~/oo/bed
-      - mkdir sanger22
-      - cd sanger22
-      - not sure where these files were downloaded from
-      - grep -v Pseudogene Chr22*.genes.gff | hgSanger22 hg10 stdin Chr22*.cds.gff *.genes.dna *.cds.pep 0
+LOAD SANGER22 GENES 
+      cd ~/oo/bed
+      mkdir sanger22
+      cd sanger22
+      not sure where these files were downloaded from
+      grep -v Pseudogene Chr22*.genes.gff | hgSanger22 hg10 stdin Chr22*.cds.gff *.genes.dna *.cds.pep 0
           | ldHgGene hg10 sanger22pseudo stdin
-         - Note: this creates sanger22extras, but doesn't currently create
-           a correct sanger22 table, which are replaced in the next steps
-      - sanger22-gff-doctor Chr22.3.1x.cds.gff Chr22.3.1x.genes.gff \
+  Note: this creates sanger22extras, but doesn't currently create
+  a correct sanger22 table, which are replaced in the next steps
+      sanger22-gff-doctor Chr22.3.1x.cds.gff Chr22.3.1x.genes.gff \
           | ldHgGene hg10 sanger22 stdin
-      - sanger22-gff-doctor -pseudogenes Chr22.3.1x.cds.gff Chr22.3.1x.genes.gff \
+      sanger22-gff-doctor -pseudogenes Chr22.3.1x.cds.gff Chr22.3.1x.genes.gff \
           | ldHgGene hg10 sanger22pseudo stdin
 
-      - hgPepPred hg10 generic sanger22pep *.pep
+      hgPepPred hg10 generic sanger22pep *.pep
 
 LOAD SANGER 20 GENES (todo)
      First download files from James Gilbert's email to ~/oo/bed/sanger20 and
