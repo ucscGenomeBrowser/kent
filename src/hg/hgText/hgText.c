@@ -292,7 +292,7 @@ hashElFreeList(&posTableList);
 webNewSection("Getting started on the Table Browser");
 
 puts(
-	"This web tool allows convenient and precise access to the primary database tables containing the human genome sequence and associated annotation tracks. By specifying chromosomal range and table type, the exact data set of interest can be viewed.  This tool thus makes it unnecessary to download and manipulate the human genome itself and its massive data tracks (though that option is will always remain <A HREF=\"/\">available</A>.)" "\n"
+	"This web tool allows convenient and precise access to the primary database tables containing the genome sequence and associated annotation tracks. By specifying chromosomal range and table type, the exact data set of interest can be viewed.  This tool thus makes it unnecessary to download and manipulate the genome itself and its massive data tracks (though that option is will always remain <A HREF=\"/\">available</A>.)" "\n"
 	"<P>" "\n"
 	"After each round of genome assembly, features such as mRNAs are located within the genome by alignment. This process generates <B>positional</B> stop-start coordinates and other descriptive data which are then stored within MySQL relational database tables. It is these tables that drive the graphical tracks in the Genome Browser, meaning that the two views of the data are always in agreement. Chromosomal coordinates usually change with each  build because of newly filled gaps or assembly procedure refinements." "\n"
 	"<P>" "\n"
@@ -375,6 +375,9 @@ if(existsAndEqual("table", "Choose table"))
 
 /* get the real name of the table */
 parseTableName(table, choosenChromName);
+
+if(!hTableExists(table))
+	webAbort("No data", "%s There is no information in table %s for chromosome %s.", table, getTableVar(), choosenChromName);
 
 /* make sure that the table name doesn't have anything "weird" in it */
 if(!allLetters(table))
