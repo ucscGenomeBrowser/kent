@@ -38,7 +38,7 @@
 #include "binRange.h"
 
 
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.20 2004/01/16 17:00:31 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.21 2004/01/29 01:24:17 sugnet Exp $";
 static struct binKeeper *netBins = NULL;  /* Global bin keeper structure to find cnFills. */
 static struct rbTree *netTree = NULL;  /* Global red-black tree to store cnfills in for quick searching. */
 static struct rbTree *orthoAgxTree = NULL; /* Global red-black tree to store agx's so don't need db. */
@@ -103,7 +103,12 @@ static boolean speciesSpecific;    /* Look for species specific
 FILE *rFile = NULL;                /* Loci report file. */
 FILE *edgeFile = NULL;             /* Edge report file. */
 FILE *mappingFile = NULL;          /* Which loci are ortholgous to which. */
-FILE *speciesSpecificExons = NULL; /* File for species specific exons. */
+FILE *speciesSpecificExons = NULL;  /* File for species specific exons. */
+FILE *speciesSpecificGraphs = NULL; /* File for species specific exons. */
+int speciesSpExonCount = 0;         /* Count of species specific exons. */
+int speciesSpTransCount = 0;        /* Count of species specific transcripts. */
+int speciesSpExInOrtho = 0;         /* Count of species specific exons in transcrips with ortholog. */
+
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
 {
@@ -862,7 +867,8 @@ void outputSpeciesExon(struct altGraphX *ag, int v1, int v2)
 struct bed bed;
 static char name[256];
 int *vPos = ag->vPositions;
-if(isHardVertex(ag, v1) && isHardVertex(ag,v2)) 
+boolean softEndsOk = !optionExists("hardEndsOnly");
+if((isHardVertex(ag, v1) && isHardVertex(ag,v2)) || softEndsOk)
     {
     safef(name, sizeof(name), "%s.%d.%d", ag->name, v1, v2);
     bed.name = name;
@@ -1433,6 +1439,8 @@ int i=0,j=0;
 int vCount = ag->vertexCount;
 bool match = FALSE;
 boolean reverse = FALSE;
+boolean orthologFound = FALSE;
+int spSpecificExons = 0;
 
 /* Load up orthologous graphs. */
 loadOrthoAgxList(ag, chain, &reverse, &orthoAgList);
@@ -1512,6 +1520,8 @@ for(i=0;i<vCount; i++)
 	    else
 		match = FALSE;
 
+
+
 	    /* We include differently depending on whether we are looking
 	       for conserved splicing or species-specific splicing. */
 	    if(speciesSpecific) 
@@ -1528,11 +1538,18 @@ for(i=0;i<vCount; i++)
 		match = TRUE;
 	    else if(possibleExons != NULL)
 		match |= isPossibleExon(ag, i, j);
+
+	    if(speciesSpecific && match == FALSE)
+		orthologFound = TRUE;
+	    /* If we have a match add it to the graph. */
 	    if(match)
 		{
 		struct evidence *commonEv = NULL;
 		if(speciesSpecific && getEdgeType(ag, i, j) == ggExon)
+		    {
 		    outputSpeciesExon(ag, i, j);
+		    spSpecificExons++;
+		    }
 		AllocVar(commonEv);
 		commonEv->evCount = oldEv->evCount;
 		commonEv->mrnaIds = CloneArray(oldEv->mrnaIds, oldEv->evCount);
@@ -1570,6 +1587,15 @@ freez(&vertexOrthoPos);
 altGraphXFreeList(&agxToFree);
 slFreeList(&seList);
 
+/* Record number of species specific exons found. */
+if(speciesSpecific && orthologFound) 
+    speciesSpExInOrtho += spSpecificExons;
+else if(speciesSpecific)
+    {
+    altGraphXTabOut(ag, speciesSpecificGraphs);
+    speciesSpExonCount += spSpecificExons;
+    speciesSpTransCount++;
+    }
 return commonAg;
 }
 
@@ -1650,6 +1676,7 @@ if(speciesSpecific = optionExists("speciesSpecific"))
     {
     warn("Doing species specific splicing.");
     speciesSpecificExons = mustOpen("speciesSpecificExon.tab", "w");
+    speciesSpecificGraphs = mustOpen("speciesSpecificGraphs.tab", "w");
     }
 if(optionExists("exonFile"))
     initPossibleExons(optionVal("exonFile", NULL));
@@ -1706,7 +1733,12 @@ warn("%d graphs, %d orthos found %d no ortho splice graph",
      (noOrtho+foundOrtho), foundOrtho, noOrtho);
 freez(&row);
 if(speciesSpecific) 
+    {
     carefulClose(&speciesSpecificExons);
+    warn("Found %d exons in %d species specific transcripts.\n"
+	 "%d species specific exons found in loci with possible orthologs.", 
+	 speciesSpExonCount, speciesSpTransCount, speciesSpExInOrtho);
+    }
 lineFileClose(&lf);
 carefulClose(&cFile);
 carefulClose(&rFile);
