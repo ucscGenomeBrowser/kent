@@ -80,7 +80,7 @@ int i;
 fprintf(f, "%u", el->id);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->name, lastSep);
+fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

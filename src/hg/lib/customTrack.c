@@ -3,6 +3,7 @@
 #include "common.h"
 #include "hash.h"
 #include "obscure.h"
+#include "errabort.h"
 #include "linefile.h"
 #include "sqlList.h"
 #include "customTrack.h"
@@ -275,6 +276,104 @@ struct customTrack *customTracksFromFile(char *text)
 return customTracksParse(text, TRUE);
 }
 
+static void saveBtLine(FILE *f, char *fileName, struct browserTable *bt)
+/* Write 'track' line that save browserTable info.  Only
+ * write parts that aren't default. */
+{
+struct browserTable *def = btDefault();
+
+fprintf(f, "track");
+if (!sameString(bt->shortLabel, def->shortLabel))
+    fprintf(f, "\t%s='%s'", "shortLabel", bt->shortLabel);
+if (!sameString(bt->longLabel, def->longLabel))
+    fprintf(f, "\t%s='%s'", "longLabel", bt->longLabel);
+if (!sameString(bt->tableName, def->tableName))
+    fprintf(f, "\t%s='%s'", "tableName", bt->tableName);
+if (!sameString(bt->mapName, def->mapName))
+    fprintf(f, "\t%s='%s'", "mapName", bt->mapName);
+if (!sameString(bt->trackType, def->trackType))
+    fprintf(f, "\t%s='%s'", "trackType", bt->trackType);
+if (bt->url != NULL)
+    fprintf(f, "\t%s='%s'", "url", bt->url);
+if (bt->visibility != def->visibility)
+    fprintf(f, "\t%s='%d'", "visibility", bt->visibility);
+if (bt->useScore != def->useScore)
+    fprintf(f, "\t%s='%d'", "useScore", bt->useScore);
+if (bt->priority != def->priority)
+    fprintf(f, "\t%s='%d'", "priority", bt->priority);
+if (bt->colorR != def->colorR || bt->colorG != def->colorG || bt->colorB != bt->colorB)
+    fprintf(f, "\t%s='%d,%d,%d'", "color", bt->colorR, bt->colorG, bt->colorB);
+if (bt->altColorR != def->altColorR || bt->altColorG != def->altColorG 
+	|| bt->altColorB != bt->altColorB)
+    fprintf(f, "\t%s='%d,%d,%d'", "altColor", bt->altColorR, bt->altColorG, bt->altColorB);
+fputc('\n', f);
+if (ferror(f))
+    errnoAbort("Write error to %s", fileName);
+browserTableFree(&def);
+}
+
+static void saveBedPart(FILE *f, char *fileName, struct bed *bed, int fieldCount)
+/* Write out bed that may not include all lines as a line in file. */
+{
+int i, count, *pt;
+fprintf(f, "%s\t%d\t%d", bed->chrom, bed->chromStart, bed->chromEnd);
+if (fieldCount > 3)
+    fprintf(f, "\t%s",  bed->name);
+if (fieldCount > 4)
+    fprintf(f, "\t%d", bed->score);
+if (fieldCount > 5)
+    fprintf(f, "\t%s", bed->strand);
+if (fieldCount > 6)
+    fprintf(f, "\t%d", bed->otherStart);
+if (fieldCount > 7)
+    fprintf(f, "\t%d", bed->otherEnd);
+if (fieldCount > 8)
+    fprintf(f, "\t%d", bed->otherSize);
+if (fieldCount > 9)
+    {
+    count = bed->blockCount;
+    fprintf(f, "\t%d", count);
+    }
+if (fieldCount > 10)
+    {
+    pt = bed->blockSizes;
+    fputc('\t', f);
+    for (i=0; i<count; ++i)
+        fprintf(f, "%d,", pt[i]);
+    }
+if (fieldCount > 11)
+    {
+    pt = bed->chromStarts;
+    fputc('\t', f);
+    for (i=0; i<count; ++i)
+        fprintf(f, "%d,", pt[i]);
+    }
+if (fieldCount > 12)
+    {
+    pt = bed->otherStarts;
+    fputc('\t', f);
+    for (i=0; i<count; ++i)
+        fprintf(f, "%d,", pt[i]);
+    }
+fputc('\n', f);
+}
+
+void customTrackSave(char *fileName, struct customTrack *trackList)
+/* Save out custom tracks. */
+{
+struct customTrack *track;
+struct bed *bed;
+FILE *f = mustOpen(fileName, "w");
+
+for (track = trackList; track != NULL; track = track->next)
+    {
+    saveBtLine(f, fileName, track->bt);
+    for (bed = track->bedList; bed != NULL; bed = bed->next)
+         saveBedPart(f, fileName, bed, track->fieldCount);
+    }
+carefulClose(&f);
+}
+
 static char *testData = 
 "track shortLabel='Colors etc.' undefined=nothing longLabel='Some colors you might use'\n"
 "chr2	1	12	rose\n"
@@ -293,10 +392,17 @@ if (slCount(trackList) != 2)
     warn("Failed customTrackTest() 1");
     return FALSE;
     }
+customTrackSave("test.foo", trackList);
+trackList = customTracksFromFile("test.foo");
+if (slCount(trackList) != 2)
+    {
+    warn("Failed customTrackTest() 2");
+    return FALSE;
+    }
 trackList = customTracksFromText(cloneString(""));
 if (slCount(trackList) != 0)
     {
-    warn("Failed customTrackTest() 2");
+    warn("Failed customTrackTest() 3");
     return FALSE;
     }
 warn("Passed customTrackTest()");
