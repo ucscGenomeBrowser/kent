@@ -775,50 +775,22 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
     int compCount = 0;
     int w;
     int prevEnd = -1;
-    boolean colorToggle;
-    if (lfs->orientation == 1)
-        {
-	colorToggle = FALSE;
-	}
-    else 
-        {
-	colorToggle = TRUE;
-	}
     
     for (lf = lfs->features; lf != NULL; lf = lf->next)
         {
 	if ((isFull) && (prevEnd != -1)) 
 	    {
-            bColor = tg->ixAltColor;
 	    bColor = mgFindColor(mg,0,0,0);
 	    x1 = round((double)((int)prevEnd-winStart)*scale) + xOff;
 	    x2 = round((double)((int)lf->start-winStart)*scale) + xOff;
 	    w = x2-x1;
 	    mgBarbedHorizontalLine(mg, x1, midY, x2-x1, 2, 5, 
 		 		     lfs->orientation, bColor);
-	    mgDrawBox(mg, x1, midY, w, 1, bColor);
 	    }	
 	prevEnd = lf->end;
 
 	if (tg->itemColor && shades == NULL)
-	    {
 	    color = tg->itemColor(tg, lf, mg);
-	    }
-        else
-	    {
- 	    if (colorToggle)
-	        {
-	        color = mgFindColor(mg,tg->altColor.r,tg->altColor.g,tg->altColor.b);
-	        bColor = color;
-	        colorToggle = FALSE;
-                }
-            else
-	        {
-	        color = mgFindColor(mg,tg->color.r,tg->color.g,tg->color.b);
-	        bColor = color;
-                colorToggle = TRUE;
-                }
-	    }
 	tallStart = lf->tallStart;
 	tallEnd = lf->tallEnd;
 	if (lf->components != NULL && !hideLine)
