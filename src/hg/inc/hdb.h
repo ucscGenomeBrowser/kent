@@ -266,10 +266,6 @@ int hOffsetPastBin(char *chrom, char *table);
 /* Return offset into a row of table that skips past bin
  * field if any. */
 
-boolean hgParseTargetRange(char *spec, char **retTargetName,
-                           int *retWinStart, int *retWinEnd);
-/* Parse something of form target:start-end into pieces. */
-
 boolean hgParseChromRange(char *spec, char **retChromName, 
 	int *retWinStart, int *retWinEnd);
 /* Parse something of form chrom:start-end into pieces. */
