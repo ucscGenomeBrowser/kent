@@ -80,7 +80,9 @@ INSTALL INSTRUCTIONS FOR CODE USING THE BROWSER DATABASE
 
 CODE CONVENTIONS
 
-The code follows a few conventions that are a bit
+INDENTATION:
+
+The code follows an indentation conventions that is a bit
 unusual for C.  Opening and closing braces are on
 a line by themselves and are indented at the same
 level as the block they enclose:
@@ -89,6 +91,74 @@ level as the block they enclose:
 	doSomething();
 	doSomethingElse();
 	}
+Tab stops are set to 8.  Each block of code is 
+indented by 4 from the previous block.  (In the
+vi editor set ts=8  set sw=4)
+
+NAMES
+
+Variable, function, and field names begin with
+a lower-case letter.  The second and subsequent
+words in a name begin with a capital letter to
+help visually separate the words.  Abbreviation
+of words is strongly discouraged.  If a word
+is abbreviated in general it is abbreviated to
+the first three letters:
+   tabSeparatedFile -> tabSepFile
+In some cases, for local variables abbreviating
+to a single letter for each word is ok:
+   tabSeparatedFile -> tsf
+In rare, complex, cases you may treat the
+abbreviation itself as a word, and only the
+first letter is capitalized.
+   genscanTabSeparatedFile -> genscanTsf
+Numbers are considered words.  You would
+represent "chromosome 22 annotations"
+as "chromosome22Annotations" or "chr22Ann."
+Note the capitalized 'A" after the 22.
+
+ERROR HANDLING AND MEMORY ALLOCATION
+
+Another convention is that errors are reported
+at a fairly low level, and the programs simply
+print an error message and abort.  If you
+need to catch errors underneath you see the
+file errAbort.h and install an "abort handler".
+
+Variable, function, and field names are 
+Memory is generally allocated through "needMem"
+(which aborts on failure to allocate) and the
+macros "AllocVar" and "AllocArray".  This 
+memory is initially set to zero, and the programs
+very much depend on this fact.
+
+COMMENTING 
+
+Every module should have a comment at the start of
+a file that explains concisely what the module
+does.  Explanations of algorithms also belong
+at the top of the file in most cases. Comments should
+be of the /*  */ form rather than the // form, which
+is not yet portable across all C compilers in all platforms.
+Structures should be commented following the pattern of this
+example:
+
+struct dyString
+/* Dynamically resizable string that you can do formatted
+ * output to. */
+    {
+    struct dyString *next;      /* Next in list. */
+    char *string;               /* Current buffer. */
+    int bufSize;                /* Size of buffer. */
+    int stringSize;             /* Size of string. */
+    };
+
+That is there is a comment describing the overall purpose
+of the object between the struct name, and the opening brace,
+and there is a short comment by each field.  In many cases
+these may not say much more than well-chosen field names,
+but that's ok. 
+
 Almost any structure with more than three or four
 elements includes a "next" pointer as its first
 member, so that it can be part of a singly-linked
@@ -97,17 +167,84 @@ common.c and common.h) which work on singly-linked
 lists where the next field comes first. Their
 names all start with "sl."
 
-Another convention is that errors are reported
-at a fairly low level, and the programs simply
-print an error message and abort.  If you
-need to catch errors underneath you see the
-file errAbort.h and install an "abort handler".
+Functions which work on a structure by convention begin with
+the name of the structure, simulating an object-oriented
+coding style.  In general these functions are all grouped
+in a file, in this case in twoBit.c.  Static functions in
+this file need not have the prefix, though they may.  Functions
+have comment between their prototype and the opening brace
+as in this example:
 
-Memory is generally allocated through "needMem"
-(which aborts on failure to allocate) and the
-macros "AllocVar" and "AllocArray".  This 
-memory is initially set to zero, and the programs
-very much depend on this fact.
+char dyStringAppendC(struct dyString *ds, char c)
+/* Append char to end of string. */
+{
+char *s;
+if (ds->stringSize >= ds->bufSize)
+     dyStringExpandBuf(ds, ds->bufSize+256);
+s = ds->string + ds->stringSize++;
+*s++ = c;
+*s = 0;
+return c;
+}
+
+For short functions like this, the opening comment may be the only
+comment.  Longer functions should be broken into logical 'paragraphs'
+with a comment at the start of each paragraph and blank lines
+between paragraphs as in this example:
+
+struct twoBit *twoBitFromDnaSeq(struct dnaSeq *seq, boolean doMask)
+/* Convert dnaSeq representation in memory to twoBit representation.
+ * If doMask is true interpret lower-case letters as masked. */
+{
+int ubyteSize = packedSize(seq->size);
+UBYTE *pt;
+struct twoBit *twoBit;
+DNA last4[4];   /* Holds few bases. */
+DNA *dna;
+int i, end;
+
+/* Allocate structure and fill in name. */
+AllocVar(twoBit);
+pt = AllocArray(twoBit->data, ubyteSize);
+twoBit->name = cloneString(seq->name);
+twoBit->size = seq->size;
+    
+/* Convert to 4-bases per byte representation. */
+dna = seq->dna;
+end = seq->size - 4;
+for (i=0; i<end; i += 4)
+    {
+    *pt++ = packDna4(dna+i);
+    }
+
+/* Take care of conversion of last few bases. */
+last4[0] = last4[1] = last4[2] = last4[3] = 'T';
+memcpy(last4, dna+i, seq->size-i);
+*pt = packDna4(last4);
+
+/* Deal with blocks of N. */
+twoBit->nBlockCount = countBlocksOfN(dna, seq->size);
+if (twoBit->nBlockCount > 0)
+    {
+    AllocArray(twoBit->nStarts, twoBit->nBlockCount);
+    AllocArray(twoBit->nSizes, twoBit->nBlockCount);
+    storeBlocksOfN(dna, seq->size, twoBit->nStarts, twoBit->nSizes);
+    }
+
+/* Deal with masking */
+if (doMask)
+    {
+    twoBit->maskBlockCount = countBlocksOfLower(dna, seq->size);
+    if (twoBit->maskBlockCount > 0)
+        {
+        AllocArray(twoBit->maskStarts, twoBit->maskBlockCount);
+        AllocArray(twoBit->maskSizes, twoBit->maskBlockCount);
+        storeBlocksOfLower(dna, seq->size,
+                twoBit->maskStarts, twoBit->maskSizes);
+        }
+    }
+return twoBit;
+}
 
 MAJOR MODULES
 
