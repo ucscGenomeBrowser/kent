@@ -1,17 +1,17 @@
 <H2>Description</H2>
 <P>
-This track shows $O_organism/$Organism genomic alignments using
+This track shows $o_organism/$Organism genomic alignments using
 a gap scoring system that allows longer gaps than traditional
 affine gap scoring systems.  It can also tolerate gaps
-in both $O_organism and $Organism simultaneously.  These &quot;double-sided&quot;
+in both $o_organism and $Organism simultaneously.  These &quot;double-sided&quot;
 gaps can be caused by local inversions and overlapping deletions
-in both species. The $O_organism sequence is from the $o_date ($o_db) 
+in both species. The $o_organism sequence is from the $o_date ($o_db) 
 assembly.</P>
 <P>
 The chain track displays boxes joined together by either single or 
 double lines. The boxes represent aligning regions. 
 Single lines indicate gaps that are largely due to a deletion in the genome of 
-the $O_organism species or an insertion in the $Organism assembly.
+the $o_organism species or an insertion in the $Organism assembly.
 Double lines represent more complex gaps that involve substantial
 sequence in both species. This may result from inversions, overlapping
 deletions, an abundance of local mutation, or an unsequenced gap in one species.
@@ -25,12 +25,12 @@ location (in thousands) of the match for each matching alignment.
 
 <H2>Methods</H2>
 <P>
-Transposons that have been inserted since the $O_organism/$Organism
+Transposons that have been inserted since the $o_organism/$Organism
 split are removed,  and the resulting abbreviated genomes are
 aligned with blastz.  The transposons are then put back into the
 alignments.  The resulting alignments are converted into axt format
 and the resulting axts are fed into axtChain.  AxtChain organizes all 
-the alignments between a single $O_organism and a single $Organism chromosome
+the alignments between a single $o_organism and a single $Organism chromosome
 into a group,  and makes a kd-tree out of all the gapless subsections
 (blocks) of the alignments.  Next, maximally scoring chains of these
 blocks are found by running a dynamic program over the kd-tree.  Chains
