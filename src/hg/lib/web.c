@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.78 2005/03/24 21:21:20 braney Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.79 2005/03/25 01:57:19 donnak Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -192,21 +192,21 @@ if (isEncode)
 else
     {
     printf("&nbsp;<A HREF=\"/index.html%s\" class=\"topbar\">" "\n", uiState);
-    puts("           Home</A> &nbsp; - &nbsp;");
+    puts("           Home</A> &nbsp;&nbsp;&nbsp;");
     printf("       <A HREF=\"/cgi-bin/hgGateway%s\" class=\"topbar\">\n",
 	   uiState);
-    puts("           Genomes</A> &nbsp; - &nbsp;");
+    puts("           Genomes</A> &nbsp;&nbsp;&nbsp;");
     if (endsWith(scriptName, "hgTracks") || endsWith(scriptName, "hgGene") ||
 	endsWith(scriptName, "hgTrackUi") || endsWith(scriptName, "hgc"))
 	{
 	printf("       <A HREF=\"/cgi-bin/hgTracks%s\" class=\"topbar\">\n",
 	       uiState);
-	puts("           Genome Browser</A> &nbsp; - &nbsp;");
+	puts("           Genome Browser</A> &nbsp;&nbsp;&nbsp;");
 	}
     if (!endsWith(scriptName, "hgBlat"))
 	{
     	printf("       <A HREF=\"/cgi-bin/hgBlat?command=start&%s\" class=\"topbar\">", uiState+1);
-    	puts("           Blat</A> &nbsp; - &nbsp;");
+    	puts("           Blat</A> &nbsp;&nbsp;&nbsp;");
 	}
     {
     char *table = (endsWith(scriptName, "hgGene") ?
@@ -230,22 +230,22 @@ else
 	printf("       <A HREF=\"/cgi-bin/hgTables%s\" class=\"topbar\">\n",
 	       uiState);
     }
-    puts("           Tables</A> &nbsp; - &nbsp;");
+    puts("           Tables</A> &nbsp;&nbsp;&nbsp;");
     if (!endsWith(scriptName, "hgNear")) 
     /*  possible to make this conditional: if (db != NULL && hgNearOk(db))	*/
 	{
 	printf("       <A HREF=\"/cgi-bin/hgNear%s\" class=\"topbar\">\n",
 	       uiState);
-	puts("           Gene Sorter</A> &nbsp; - &nbsp;");
+	puts("           Gene Sorter</A> &nbsp;&nbsp;&nbsp;");
 	}
     if ((!endsWith(scriptName, "hgPcr")) && (db == NULL || hgPcrOk(db)))
 	{
 	printf("       <A HREF=\"/cgi-bin/hgPcr%s\" class=\"topbar\">\n",
 	       uiState);
-	puts("           PCR</A> &nbsp; - &nbsp;");
+	puts("           PCR</A> &nbsp;&nbsp;&nbsp;");
 	}
     puts("       <A HREF=\"/FAQ/\" class=\"topbar\">" "\n"
-	 "           FAQ</A> &nbsp; - &nbsp;" "\n" 
+	 "           FAQ</A> &nbsp;&nbsp;&nbsp;" "\n" 
 	 );
     if (endsWith(scriptName, "hgBlat"))
 	puts("       <A HREF=\"/goldenPath/help/hgTracksHelp.html#BLATAlign\"");
