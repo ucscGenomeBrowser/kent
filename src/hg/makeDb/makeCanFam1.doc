@@ -25,6 +25,15 @@ exit; # don't actually run this like a script :)
     # header line with just ">chrM".
 
 
+# MAKE JKSTUFF AND BED DIRECTORIES (DONE 7/1/04 angie)
+    # This used to hold scripts -- better to keep them inline in the .doc 
+    # so they're in CVS.  Now it should just hold lift file(s) and 
+    # temporary scripts made by copy-paste from this file.  
+    mkdir /cluster/data/canFam1/jkStuff
+    # This is where most tracks will be built:
+    mkdir /cluster/data/canFam1/bed
+
+
 # DOWNLOAD WHOLE GENOME SHOTGUN CONTIGS & QUAL (TODO 7/6/04 angie)
     ssh kksilo
     cd /cluster/data/canFam1
@@ -114,13 +123,10 @@ exit; # don't actually run this like a script :)
     echo "0	M/chrM_1	16775	chrM	16775" > M/lift/ordered.lft
 
 
-# MAKE JKSTUFF AND BED DIRECTORIES (TODO 7/6/04 angie)
-    # This used to hold scripts -- better to keep them inline here so 
-    # they're in CVS.  Now it should just hold lift file(s) and 
-    # temporary scripts made by copy-paste from this file.  
-    mkdir /cluster/data/canFam1/jkStuff
-    # This is where most tracks will be built:
-    mkdir /cluster/data/canFam1/bed
+# MAKE LIFTALL.LFT (TODO 7/6/04 angie)
+    ssh kksilo
+    cd /cluster/data/canFam1
+    cat */lift/{ordered,random}.lft > jkStuff/liftAll.lft
 
 
 # CREATING DATABASE (TODO 7/6/04 angie)
@@ -298,29 +304,6 @@ if (-e /tmp/canFam1/$2/$2.cat) /bin/cp /tmp/canFam1/$2/$2.cat ./
     featureBits canFam1 rmsk
 
 
-# MAKE 10.OOC, 11.OOC FILES FOR BLAT (TODO 7/6/04 angie)
-    # Use -repMatch=??? (based on size -- for human we use 1024, and 
-    # dog size is ~??% of human)
-    ssh kkr1u00
-    mkdir /cluster/data/canFam1/bed/ooc
-    cd /cluster/data/canFam1/bed/ooc
-    ls -1 /cluster/data/canFam1/nib/chr*.nib > nib.lst
-    mkdir /cluster/bluearc/canFam1
-    blat nib.lst /dev/null /dev/null -tileSize=11 \
-      -makeOoc=/cluster/bluearc/canFam1/11.ooc -repMatch=???
-    blat nib.lst /dev/null /dev/null -tileSize=10 \
-      -makeOoc=/cluster/bluearc/canFam1/10.ooc -repMatch=???
-    mkdir /iscratch/i/canFam1
-    cp -p /cluster/bluearc/canFam1/*.ooc /iscratch/i/canFam1/
-    iSync
-
-
-# MAKE LIFTALL.LFT (TODO 7/6/04 angie)
-    ssh kksilo
-    cd /cluster/data/canFam1
-    cat */lift/{ordered,random}.lft > jkStuff/liftAll.lft
-
-
 # SIMPLE REPEATS (TRF) (TODO 7/6/04 angie)
     # TRF runs pretty quickly now... it takes a few hours total runtime, 
     # so instead of binrsyncing and para-running, just do this on the
@@ -391,9 +374,6 @@ if (-e /tmp/canFam1/$2/$2.cat) /bin/cp /tmp/canFam1/$2/$2.cat ./
 
 
 # MASK SEQUENCE WITH REPEATMASKER AND SIMPLE REPEAT/TRF (TODO 7/6/04 angie)
-    # Note: just to keep things consistent, redid chr1 and chr2 7/6 with 
-    # the ProcessRepeats-only rerun results (only masking changes were 
-    # 5bp in chr1 and 3bp in chr2)
     ssh kksilo
     cd /cluster/data/canFam1
     # Soft-mask (lower-case) the contig and chr .fa's, 
@@ -431,8 +411,8 @@ if (-e /tmp/canFam1/$2/$2.cat) /bin/cp /tmp/canFam1/$2/$2.cat ./
 
 # MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR CANFAM1 (TODO 7/6/04 angie)
     ssh hgwdev
-    echo 'insert into blatServers values("canFam1", "blat1", "17778", "1"); \
-          insert into blatServers values("canFam1", "blat1", "17779", "0");' \
+    echo 'insert into blatServers values("canFam1", "blat???", "17778", "1"); \
+          insert into blatServers values("canFam1", "blat???", "17779", "0");' \
       | hgsql -h genome-testdb hgcentraltest
 
 
@@ -453,10 +433,10 @@ if (-e /tmp/canFam1/$2/$2.cat) /bin/cp /tmp/canFam1/$2/$2.cat ./
     mkdir /iscratch/i/canFam1/nib
     cp -p /cluster/data/canFam1/nib/chr*.nib /iscratch/i/canFam1/nib
     # Pseudo-contig fa that have been repeat- and trf-masked:
-    rm -rf /iscratch/i/canFam1/trfFa
-    mkdir /iscratch/i/canFam1/trfFa
+    rm -rf /iscratch/i/canFam1/maskedContigs
+    mkdir /iscratch/i/canFam1/maskedContigs
     foreach d (/cluster/data/canFam1/*/chr*_?{,?})
-      cp $d/$d:t.fa /iscratch/i/canFam1/trfFa
+      cp $d/$d:t.fa /iscratch/i/canFam1/maskedContigs
     end
     cp -p /cluster/data/canFam1/canFam1.2bit /iscratch/i/canFam1/
     iSync
@@ -498,6 +478,23 @@ if (-e /tmp/canFam1/$2/$2.cat) /bin/cp /tmp/canFam1/$2/$2.cat ./
     # Ask cluster-admin for an rsync.
 
 
+# MAKE 10.OOC, 11.OOC FILES FOR BLAT (TODO 7/6/04 angie)
+    # Use -repMatch=??? (based on size -- for human we use 1024, and 
+    # dog size is ~??% of human)
+    ssh kkr1u00
+    mkdir /cluster/data/canFam1/bed/ooc
+    cd /cluster/data/canFam1/bed/ooc
+    ls -1 /cluster/data/canFam1/nib/chr*.nib > nib.lst
+    mkdir /cluster/bluearc/canFam1
+    blat nib.lst /dev/null /dev/null -tileSize=11 \
+      -makeOoc=/cluster/bluearc/canFam1/11.ooc -repMatch=???
+    blat nib.lst /dev/null /dev/null -tileSize=10 \
+      -makeOoc=/cluster/bluearc/canFam1/10.ooc -repMatch=???
+    mkdir /iscratch/i/canFam1
+    cp -p /cluster/bluearc/canFam1/*.ooc /iscratch/i/canFam1/
+    iSync
+
+
 # AUTO UPDATE GENBANK MRNA RUN  (TODO 7/6/04 angie)
     # Update genbank config and source in CVS:
     cd ~/kent/src/hg/makeDb/genbank
@@ -516,6 +513,12 @@ canFam1.genbank.est.xeno.load = no
 canFam1.downloadDir = canFam1
 
     cvs ci etc/genbank.conf
+    # Since dog is a new species for us, edit src/lib/gbGenome.c.  
+    # Pick some other browser species, & monkey-see monkey-do.  
+    cvs diff src/lib/gbGenome.c
+    make
+    cvs ci src/lib/gbGenome.c
+
     # Edit src/align/gbBlat to add /iscratch/i/canFam1/11.ooc
     cvs diff src/align/gbBlat
     make
@@ -604,9 +607,9 @@ zip -j mrna.zip mrna.fa
 
 # SWAP BLASTZ HUMAN-DOG TO DOG-HUMAN (HG17) (TODO 7/6/04 angie)
     ssh kolossus
-    mkdir /cluster/data/canFam1/bed/blastz.hg17.swap.2004-02-25
-    cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-02-25
-    set aliDir = /cluster/data/hg17/bed/blastz.canFam1.2004-02-25
+    mkdir /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08
+    cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08
+    set aliDir = /cluster/data/hg17/bed/blastz.canFam1.2004-07-08
     cp $aliDir/S1.len S2.len
     cp $aliDir/S2.len S1.len
     mkdir unsorted axtChrom
@@ -619,19 +622,13 @@ zip -j mrna.zip mrna.fa
       axtSort $f axtChrom/$f:t
     end
     du -sh $aliDir/axtChrom unsorted axtChrom
-#1.4G    /cluster/data/hg17/bed/blastz.canFam1.2004-02-25/axtChrom
-#1.4G    unsorted
-#1.4G    axtChrom
     rm -r unsorted
 
 
 # RESCORE HUMAN BLASTZ (TODO 7/6/04 angie)
-    # Webb noticed low scores in latest runs with repeats abridged --
-    # PSU's restore_rpts program rescored alignments with default matrix 
-    # instead of BLASTZ_Q matrix.  Rescore them here so the chainer sees 
-    # the higher scores:
+  # DO THIS ONLY IF A NON-DEFAULT MATRIX WAS USED FOR BLASTZ_Q
     ssh kolossus
-    cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-02-25
+    cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08
     mkdir axtChrom.rescore
     foreach f (axtChrom/chr*.axt)
       axtRescore -scoreScheme=/cluster/data/blastz/HoxD55.q \
@@ -644,11 +641,11 @@ zip -j mrna.zip mrna.fa
 # CHAIN HUMAN BLASTZ (TODO 7/6/04 angie)
     # Run axtChain on little cluster
     ssh kki
-    cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-02-25
+    cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08
     mkdir -p axtChain/run1
     cd axtChain/run1
     mkdir out chain
-    ls -1S /cluster/data/canFam1/bed/blastz.hg17.swap.2004-02-25/axtChrom/*.axt \
+    ls -1S /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08/axtChrom/*.axt \
       > input.lst
     cat << '_EOF_' > gsub
 #LOOP
@@ -675,7 +672,7 @@ axtChain $1 \
 
     # now on the cluster server, sort chains
     ssh kksilo
-    cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-02-25/axtChain
+    cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08/axtChain
     chainMergeSort run1/chain/*.chain > all.chain
     chainSplit chain all.chain
     rm run1/chain/*.chain
@@ -690,7 +687,7 @@ axtChain $1 \
 
     # Load chains into database
     ssh hgwdev
-    cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-02-25/axtChain/chain
+    cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08/axtChain/chain
     foreach i (*.chain)
         set c = $i:r
         echo loading $c
@@ -700,26 +697,26 @@ axtChain $1 \
 
 # NET HUMAN BLASTZ (TODO 7/6/04 angie)
     ssh kksilo
-    cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-02-25/axtChain
+    cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08/axtChain
     chainPreNet all.chain ../S1.len ../S2.len stdout \
     | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
     | netSyntenic stdin noClass.net
 
     # Add classification info using db tables:
     ssh hgwdev
-    cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-02-25/axtChain
+    cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08/axtChain
     netClass noClass.net canFam1 hg17 human.net
 
     # Make a 'syntenic' subset:
     ssh kksilo
-    cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-02-25/axtChain
+    cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08/axtChain
     rm noClass.net
     # Make a 'syntenic' subset of these with
     netFilter -syn human.net > humanSyn.net
 
     # Load the nets into database 
     ssh hgwdev
-    cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-02-25/axtChain
+    cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08/axtChain
     netFilter -minGap=10 human.net |  hgLoadNet canFam1 netHg17 stdin
     netFilter -minGap=10 humanSyn.net | hgLoadNet canFam1 netSyntenyHg17 stdin
     # Add entries for chaing16, netHg17, syntenyHg17 to dog/canFam1 trackDb
@@ -727,11 +724,7 @@ axtChain $1 \
 
 # MAKE VSHG17 DOWNLOADABLES (TODO 7/6/04 angie)
     ssh kksilo
-    cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-02-25
-    # Webb asked for axtChrom/chr22.axt... since axtChrom is rel. small 
-    # this time, just put it all out there.
-    zip /cluster/data/canFam1/zip/HGaxtChrom.zip axtChrom/chr*.axt
-    cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-02-25/axtChain
+    cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08/axtChain
     cp all.chain human.chain
     zip /cluster/data/canFam1/zip/human.chain.zip human.chain
     rm human.chain
@@ -741,7 +734,6 @@ axtChain $1 \
     ssh hgwdev
     mkdir /usr/local/apache/htdocs/goldenPath/canFam1/vsHg17
     cd /usr/local/apache/htdocs/goldenPath/canFam1/vsHg17
-    mv /cluster/data/canFam1/zip/HGaxtChrom.zip axtChrom.zip
     mv /cluster/data/canFam1/zip/human*.zip .
     md5sum *.zip > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
@@ -870,13 +862,6 @@ cat `ls -1 *.lav | sort -g` \
     head jobList
     para create jobList
     para try, check, push, check,...
-#Completed: 53 of 54 jobs
-#Crashed: 1 jobs
-#Average job time:                  30s       0.51m     0.01h    0.00d
-#Longest job:                      541s       9.02m     0.15h    0.01d
-#Submission to last job:           576s       9.60m     0.16h    0.01d
-    # The crash was not a memory problem -- it was that chr8_random's lav 
-    # contained only 1 alignment, to itself (dropped), so its .axt is empty.  
 
 
 # CHAIN SELF BLASTZ (TODO 7/6/04 angie)
@@ -906,12 +891,6 @@ axtFilter -notQ=chrUn $1 \
     gensub2 input.lst single gsub jobList
     para create jobList
     para try, check, push, check...
-    # oops -- empty chr8_random strikes again:
-#Completed: 53 of 54 jobs
-#Crashed: 1 jobs
-#Average job time:                  53s       0.89m     0.01h    0.00d
-#Longest job:                      514s       8.57m     0.14h    0.01d
-#Submission to last job:           514s       8.57m     0.14h    0.01d
 
     # now on the cluster server, sort chains
     ssh kolossus
@@ -973,21 +952,15 @@ axtFilter -notQ=chrUn $1 \
 
 # MAKE VSSELF DOWNLOADABLES (TODO 7/6/04 angie)
     ssh kolossus
-    cd /cluster/data/canFam1/bed/blastz.canFam1.2004-03-03
-    # Webb asked for axtChrom/chr22.axt... since axtChrom is rel. small 
-    # this time, just put it all out there.
-    zip /cluster/data/canFam1/zip/CCaxtChrom.zip axtChrom/chr*.axt
     cd /cluster/data/canFam1/bed/blastz.canFam1.2004-03-03/axtChain
     cp all.chain self.chain
     zip /cluster/data/canFam1/zip/self.chain.zip self.chain
     rm self.chain
     zip /cluster/data/canFam1/zip/self.net.zip self.net
-    zip /cluster/data/canFam1/zip/selfSyn.net.zip selfSyn.net
 
     ssh hgwdev
     mkdir /usr/local/apache/htdocs/goldenPath/canFam1/vsSelf
     cd /usr/local/apache/htdocs/goldenPath/canFam1/vsSelf
-    mv /cluster/data/canFam1/zip/CCaxtChrom.zip axtChrom.zip
     mv /cluster/data/canFam1/zip/self*.zip .
     md5sum *.zip > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
@@ -1046,6 +1019,7 @@ axtFilter -notQ=chrUn $1 \
     ssh kk
     mkdir /cluster/data/canFam1/bed/blatFr1
     cd /cluster/data/canFam1/bed/blatFr1
+    # Note: might need to do a better job of partitioning here...
     ls -1S /iscratch/i/fugu/trfFa/*.fa > fugu.lst
     ls -1S /iscratch/i/canFam1/nib/*.nib > dog.lst
     cat << '_EOF_' > gsub
@@ -1058,11 +1032,7 @@ blat -mask=lower -q=dnax -t=dnax {check in exists $(path1)} {check in line+ $(pa
     gensub2 dog.lst fugu.lst gsub spec
     para create spec
     para try, check, push, check, ...
-    # for future reference, the trfFa on bluearc seem better partitioned...
-#Completed: 31212 of 31212 jobs
-#Average job time:                 187s       3.11m     0.05h    0.00d
-#Longest job:                    31706s     528.43m     8.81h    0.37d
-#Submission to last job:         31706s     528.43m     8.81h    0.37d
+    # for future reference, the fugu trfFa on bluearc seem better partitioned...
 
     # Sort alignments:
     ssh kksilo
@@ -1262,13 +1232,11 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     # align on big cluster
     ssh kk
     cd /cluster/data/canFam1/bed/unigene
-    ls -1S /iscratch/i/canFam1/trfFa/*.fa > allctg.lst
+    ls -1S /iscratch/i/canFam1/maskedContigs/*.fa > allctg.lst
     ls -1S /iscratch/i/canFam1/unigene/*.fa > uniGene.lst
-# seems to be a bug in latest blat: -mask=lower => 0 alignments!  
-# for now, use Jim's next-to-latest blat.27:
     cat << '_EOF_' > template.sub
 #LOOP
-/cluster/home/kent/bin/i386/blat.27 -mask=lower -minIdentity=95 -ooc=/iscratch/i/canFam1/11.ooc {check in line+ $(path1)} {check in line+ $(path2)}  {check out line+ psl/$(root1)_$(root2).psl}
+/cluster/bin/i386/blat -mask=lower -minIdentity=95 -ooc=/iscratch/i/canFam1/11.ooc {check in line+ $(path1)} {check in line+ $(path2)}  {check out line+ psl/$(root1)_$(root2).psl}
 #ENDLOOP
 '_EOF_'
     # << this line makes emacs coloring happy
@@ -1276,10 +1244,6 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     para create jobList
     mkdir psl
     para try, check, push, check
-#Completed: 259 of 259 jobs
-#Average job time:                  13s       0.22m     0.00h    0.00d
-#Longest job:                       21s       0.35m     0.01h    0.00d
-#Submission to last job:            22s       0.37m     0.01h    0.00d
     # postprocess
     ssh kksilo
     pslSort dirs raw.psl tmp psl >& pslSort.log
@@ -1298,7 +1262,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     hgLoadPsl -fastLoad -table=uniGene_cf canFam1 uniGene.lifted.pslReps.psl
 
 
-# RUN GENE-CHECK ON MRNA W/CDS, ENSEMBL (TODO 3/29/04 markd)
+# RUN GENE-CHECK ON MRNA W/CDS, ENSEMBL (TODO 9/1/04 angie)
     # Note: /cluster/bin/scripts/runGeneCheck should make this easier 
     # in the future, but this also shows how MarkD ran gene-check on 
     # mRNAs with annotated CDS:
@@ -1356,16 +1320,16 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     #     causes - list of symbolic names summarizing the failures 
 
 
-# TWINSCAN FROM BRENT LAB (TODO 8/1/04)
+# TWINSCAN FROM BRENT LAB (TODO 8/1/04 angie)
     ssh hgwdev
     mkdir /cluster/data/canFam1/bed/twinscan
     cd /cluster/data/canFam1/bed/twinscan
-    wget http://www.cs.wustl.edu/~pflicek/dog/dog.043004.ts.tar.gz
-    tar xvzf dog.043004.ts.tar.gz
+    wget http://www.cs.wustl.edu/????
+    tar xvzf ????
     ldHgGene -gtf -frame -id -geneName canFam1 twinscan chr*.gtf
     runGeneCheck .
-    wget http://www.cs.wustl.edu/~pflicek/dog/dog.043004.ts.ptx.tar.gz
-    tar xvzf dog.043004.ts.ptx.tar.gz
+    wget http://www.cs.wustl.edu/????
+    tar xvzf ????
     perl -wpe 's/^>(\S+)/>$1.a/' chr*.prot.fa > twinscanPep.fa
     hgPepPred canFam1 generic twinscanPep twinscanPep.fa
 
