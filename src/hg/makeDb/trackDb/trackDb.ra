@@ -211,7 +211,7 @@ visibility hide
 type sample
 
 track genomicSuperDups
-shortLabel filtered WGAC
+shortLabel Segmental Dups
 longLabel Duplications of >1000 Bases of non-repeatMasked Sequence
 group map
 priority 27
@@ -808,17 +808,6 @@ altColor 175,150,128
 priority 119
 visibility full
 type sample 0 8
-
-track slamNonCoding
-shortLabel Slam Non Coding 
-longLabel SLAM predictions of human/mouse conserved non-coding regions
-group compGeno
-priority 120
-visibility hide
-color 30,130,210
-altColor 200,220,255
-spectrum on
-type bed 5 
 
 track humanChain
 shortLabel Human Chain 
