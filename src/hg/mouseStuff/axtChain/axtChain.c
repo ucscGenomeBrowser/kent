@@ -13,6 +13,7 @@
 #include "portable.h"
 
 int minScore = 400;
+char *detailsName = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -23,6 +24,7 @@ errAbort(
   "   axtChain in.axt tNibDir qNibDir out.chain\n"
   "options:\n"
   "   -minScore=N  Minimum score for chain, default 400\n"
+  "   -details=fileName Output some additional chain details\n"
   );
 }
 
@@ -232,6 +234,20 @@ return v[sCount-2] + dv * (x - s[sCount-2]) / ds;
  * chromosome 2 using a preliminary gap cost of
  * 400 * pow(dq+dt, 0.4).   The program 'gapCost' 
  * did this. */
+static int gapInitPos[] = { 
+   1, 3, 11, 111, 2111, 12111, 20000, 120000,
+};
+static int gapInitQGap[] = { 
+   400, 500, 700, 900, 2900, 22900, 40000, 140000,
+};
+static int gapInitTGap[] = { 
+   400, 500, 700, 900, 2900, 22900, 40000, 140000,
+};
+static int gapInitBothGap[] = { 
+   500+400, 500+500, 500+700, 500+900, 500+2900, 500+22900, 500+40000, 500+140000,
+};
+
+#ifdef OLD
 static int gapInitPos[29] = { 
 	1,2,3,4,5,6,7,8,9,10,
         15,20,30,40,60,80,
@@ -255,6 +271,7 @@ static int gapInitBothGap[] = {
 	/* Linear from here... */
 	3000,4000,7000,12000,22000,
 	52000,102000};
+#endif /* OLD */
 
 struct gapAid
 /* A structure that bundles together stuff to help us
@@ -296,11 +313,11 @@ void initGapAid()
 int i, startLong = -1;
 
 /* Set up to handle small values */
-aid.smallSize = 100;
+aid.smallSize = 111;
 AllocArray(aid.qSmall, aid.smallSize);
 AllocArray(aid.tSmall, aid.smallSize);
 AllocArray(aid.bSmall, aid.smallSize);
-for (i=1; i<100; ++i)
+for (i=1; i<aid.smallSize; ++i)
     {
     aid.qSmall[i] = interpolate(i, gapInitPos, gapInitQGap, ArraySize(gapInitQGap));
     aid.tSmall[i] = interpolate(i, gapInitPos, gapInitTGap, ArraySize(gapInitTGap));
@@ -541,7 +558,8 @@ return score;
 }
 
 void chainPair(struct seqPair *sp,
-	struct dnaSeq *qSeq, struct dnaSeq *tSeq, struct chain **pChainList)
+	struct dnaSeq *qSeq, struct dnaSeq *tSeq, struct chain **pChainList,
+	FILE *details)
 /* Chain up blocks and output. */
 {
 struct chain *chainList, *chain, *next;
@@ -568,9 +586,8 @@ for (b = sp->blockList; b != NULL; b = b->next)
 /* Get chain list and clean it up a little. */
 startTime = clock1000();
 chainList = chainBlocks(sp->qName, qSeq->size, sp->qStrand, 
-	sp->tName, tSeq->size, &sp->blockList, connectCost, gapCost);
+	sp->tName, tSeq->size, &sp->blockList, connectCost, gapCost, details);
 dt = clock1000() - startTime;
-uglyf("Made %d chains in %5.3f s\n", slCount(chainList), dt*0.001);
 for (chain = chainList; chain != NULL; chain = chain->next)
     {
     removePartialOverlaps(chain, qSeq, tSeq, scoreData.ss->matrix);
@@ -605,7 +622,10 @@ char *qName = "",  *tName = "";
 struct dnaSeq *qSeq = NULL, *tSeq = NULL;
 char qStrand = 0, tStrand = 0;
 struct chain *chainList = NULL, *chain;
+FILE *details = NULL;
 
+if (detailsName != NULL)
+    details = mustOpen(detailsName, "w");
 /* Read input file and divide alignments into various parts. */
 while ((axt = axtRead(lf)) != NULL)
     {
@@ -634,7 +654,7 @@ for (sp = spList; sp != NULL; sp = sp->next)
     uglyf("%d blocks after duplicate removal\n", slCount(sp->blockList));
     loadIfNewSeq(qNibDir, sp->qName, sp->qStrand, &qName, &qSeq, &qStrand);
     loadIfNewSeq(tNibDir, sp->tName, '+', &tName, &tSeq, &tStrand);
-    chainPair(sp, qSeq, tSeq, &chainList);
+    chainPair(sp, qSeq, tSeq, &chainList, details);
     }
 slSort(&chainList, chainCmpScore);
 for (chain = chainList; chain != NULL; chain = chain->next)
@@ -645,7 +665,6 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     }
 
 dyStringFree(&dy);
-uglyf("ConnCount = %d, overlapCount = %d\n", connCount, overlapCount);
 }
 
 void testGaps()
@@ -657,6 +676,9 @@ for (i=1; ; i *= 10)
    if (i == 1000000000)
        break;
    }
+uglyf("%d %d cost %d\n", 6489540, 84240, gapCost(84240, 6489540));
+uglyf("%d %d cost %d\n", 2746361, 1075188, gapCost(1075188, 2746361));
+uglyf("%d %d cost %d\n", 6489540 + 2746361 + 72, 84240 + 1075188 + 72, gapCost(84240 + 1075188 + 72, 6489540 + 2746361 + 72));
 }
 
 
@@ -665,9 +687,10 @@ int main(int argc, char *argv[])
 {
 optionHash(&argc, argv);
 minScore = optionInt("minScore", minScore);
+detailsName = optionVal("details", NULL);
 dnaUtilOpen();
 initGapAid();
-// testGaps();
+testGaps();
 if (argc != 5)
     usage();
 axtChain(argv[1], argv[2], argv[3], argv[4]);
