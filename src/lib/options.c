@@ -12,14 +12,14 @@
 #include "verbose.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: options.c,v 1.20 2004/08/05 22:09:33 krish Exp $";
+static char const rcsid[] = "$Id: options.c,v 1.21 2004/08/10 19:27:07 hartera Exp $";
 
 #ifdef MACHTYPE_alpha
     #define strtoll strtol
 #endif
 
 /* mask for type in optionSpec.flags */
-#define OPTION_TYPE_MASK (OPTION_BOOLEAN|OPTION_STRING|OPTION_INT|OPTION_FLOAT|OPTION_LONG_LONG)
+#define OPTION_TYPE_MASK (OPTION_BOOLEAN|OPTION_STRING|OPTION_INT|OPTION_FLOAT|OPTION_LONG_LONG|OPTION_DOUBLE)
 
 static struct optionSpec commonOptions[] = {
    {"verbose", OPTION_INT},
@@ -80,6 +80,14 @@ case OPTION_FLOAT:
     strtod(val, &valEnd);
     if ((*val == '\0') || (*valEnd != '\0'))
         errAbort("value of -%s is not a valid float: \"%s\"",
+                 name, val);
+    break;
+case OPTION_DOUBLE:
+    if (val == NULL)
+        errAbort("double option -%s must have a value", name);
+    strtod(val, &valEnd);
+    if ((*val == '\0') || (*valEnd != '\0'))
+        errAbort("value of -%s is not a valid double: \"%s\"",
                  name, val);
     break;
 default:
@@ -360,6 +368,21 @@ ret = hashFindVal(options, name);
 if (ret == NULL)
      ret = defaultVal;
 return ret;
+}
+
+double optionDouble(char *name, float defaultVal)
+/* Return double value or default value if not set */
+{
+char *s = optGet(name);
+char *valEnd;
+float val;
+if (s == NULL)
+    return defaultVal;
+
+val = strtod(s, &valEnd);
+if ((*s == '\0') || (*valEnd != '\0'))
+    errAbort("value of -%s is not a valid double: \"%s\"", name, s);
+return val;
 }
 
 boolean optionExists(char *name)
