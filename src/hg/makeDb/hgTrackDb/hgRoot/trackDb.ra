@@ -367,6 +367,18 @@ spectrum on
 type psl xeno
 private on
 
+track ancientR
+shortLabel Ancient Repeats
+longLabel Ancient Mouse Repeats
+priority 24.2
+visibility hide
+color 0,0,255
+altColor 255,240,200
+spectrum on
+chromosomes 1,
+type bed 13
+private on
+
 track exoMouse
 shortLabel Exonerate Mouse
 longLabel Mouse/Human Evolutionarily Conserved Regions (Exonerate)
