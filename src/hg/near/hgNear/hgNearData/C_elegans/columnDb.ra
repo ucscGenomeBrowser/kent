@@ -18,6 +18,9 @@ itemUrl http://us.expasy.org/cgi-bin/niceprot.pl?%s
 name refSeq
 type lookup sangerToRefSeq name value
 
+name locusLink
+type lookup sangerToLocusLink name value
+
 name altSplice
 shortLabel Alt Splice
 longLabel Alternative Splicing Curated by Zahler Lab

@@ -12,6 +12,9 @@ itemUrl http://us.expasy.org/cgi-bin/niceprot.pl?%s
 name refSeq
 type lookup bdgpToRefSeq name value
 
+name locusLink
+type lookup bdgpToLocusLink name value
+
 name acc
 hide
 
