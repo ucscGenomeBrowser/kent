@@ -5770,7 +5770,9 @@ exit $status
     ssh eieio
     cd /cluster/data/hg17/blastz.panTro1/axtChain
     nice gzip chimp.net
-    cp
+    cp chimp.net.gz /usr/local/apache/htdocs/goldenPath/panTro1/vsHg17
+    cd /usr/local/apache/htdocs/goldenPath/panTro1/vsHg17
+    md5sum *.gz > md5sum.txt
 
 
 # RECIPROCAL BEST CHAINS FOR ENSEMBL GENE BUILD (DONE 2004-10-11 kate)
