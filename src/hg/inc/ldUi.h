@@ -8,10 +8,10 @@
 #define ldHcbDefault   FALSE
 #define ldJptDefault   FALSE
 #define ldYriDefault   FALSE
-#define ldValueDefault "rsquared"
+#define ldValueDefault "lod"
 #define ldPosDefault   "red"
 #define ldNegDefault   "blue"
-#define ldOutDefault   "none"
+#define ldOutDefault   "black"
 #define ldTrimDefault  TRUE
 
 extern boolean  ldCeu;
