@@ -6,7 +6,7 @@
 #include "dlist.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: growNet.c,v 1.1 2004/11/12 03:29:46 kent Exp $";
+static char const rcsid[] = "$Id: growNet.c,v 1.2 2004/11/12 16:53:00 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -54,6 +54,7 @@ struct associator
     int id;			/* Unique identifier. */
     float score;		/* Only top scoring associators survive.  It's brutal. */
     float pRecognized;		/* Probability we've recognized input. */
+    float pPredicted;		/* Probability we've predicted input. */
     struct prediction *predictions; /* Predictions for next output. */
     int predictionCount;	/* Number of used predictions. */
     int predictionAlloc;	/* Number of allocated predictions. */
@@ -131,8 +132,9 @@ for (i=0; i<count; ++i)
 void dumpAssociator(struct associator *assoc)
 /* Dump out current state of associator */
 {
-printf("as %d: %s '", assoc->id,
-	(assoc->forceOrder ? "ordered" : "unordered"));
+printf("as %d: %s %f '", assoc->id, 
+	(assoc->forceOrder ? "ordered" : "unordered"),
+	assoc->score);
 dumpSymbols(assoc->symbols, assoc->symbolCount);
 printf("'\n");
 }
@@ -233,9 +235,11 @@ else
 		}
 	    }
 	}
+    assoc->predictionCount = assoc->predictionAlloc;
 
     /* Normalize weights to add up to one. */
     invCount = 1.0/assoc->symbolCount;
+    uglyf("   weights ");
     for (i=0; i<count; ++i)
 	{
         assoc->predictions[i].p *= invCount;
@@ -243,7 +247,6 @@ else
 	}
     uglyf("\n");
     }
-assoc->predictionAlloc = assoc->predictionCount;
 }
 
 struct associator *associatorNewRandom(struct growNet *gn, struct interleaver *il)
@@ -278,8 +281,9 @@ AllocArray(assoc->symbols, assoc->symbolCount);
 assert(assoc->symbolCount <= ArraySize(il->history));
 for (i=0; i<assoc->symbolCount; ++i)
     assoc->symbols[i] = il->history[i];
-allocatePredictions(assoc);
+uglyf("Creating associator:\n   ");
 dumpAssociator(assoc);
+allocatePredictions(assoc);
 return assoc;
 }
 
@@ -321,7 +325,118 @@ return gn;
 void associatorNext(struct associator *assoc, struct interleaver *il)
 /* Have associator process next input from interleaver. */
 {
-	/* TODO: something real. */
+int *symbols = assoc->symbols;
+int *history = il->history;
+if (assoc->forceOrder)
+    {
+    // if (assoc->compressRuns)
+    // else
+        {
+	int startIx, i;
+	boolean match = FALSE;
+
+	for (startIx=0; startIx<assoc->symbolCount; ++startIx)
+	    {
+	    int i;
+	    boolean subMatch = TRUE;
+	    for (i=startIx; i<assoc->symbolCount; ++i)
+	        {
+		if (symbols[i] != history[i - startIx])
+		    {
+		    subMatch = FALSE;
+		    break;
+		    }
+		}
+	    if (subMatch)
+	        {
+		match = TRUE;
+		break;
+		}
+	    }
+	if (match)
+	    {
+	    if (startIx == 0)
+		{
+	        assoc->pPredicted = 0.0;
+		assoc->predictionCount = 0;
+		assoc->pRecognized = 1.0;
+		}
+	    else
+		{
+		assoc->predictionCount = 1;
+		assoc->predictions[0].p = 1.0;
+		assoc->predictions[0].symbol = assoc->symbols[startIx-1];
+		assoc->pRecognized = (double)(assoc->symbolCount - startIx)
+			/assoc->symbolCount;
+	        assoc->pPredicted = assoc->pRecognized;
+		}
+	    }
+	else
+	    {
+	    assoc->pRecognized = assoc->pPredicted = 0.0;
+	    }
+	}
+    }
+else
+    {
+    int histIx, symIx, matchCount = 0, mismatchCount = 0;
+    int maxToSniff = assoc->symbolCount*1.2;  /* Possibly make this another parameter */
+    if (maxToSniff > ArraySize(il->history))
+        maxToSniff = ArraySize(il->history);
+
+    /* Figure out how many associator symbols are covered in 'sniff area' */
+    for (symIx=0; symIx < assoc->symbolCount; ++symIx)
+        {
+	int sym = symbols[symIx];
+	for (histIx = 0; histIx < maxToSniff; ++histIx)
+	    {
+	    if (history[histIx] == sym)
+	        {
+		++matchCount;
+		break;
+		}
+	    }
+	}
+    assoc->pRecognized = (double)matchCount / assoc->symbolCount;
+
+    /* Figured out in local area how much of history matches symbols */
+    matchCount = mismatchCount = 0;
+    for (histIx = 0; histIx < maxToSniff; ++histIx)
+        {
+	int sym = history[histIx];
+	boolean subMatch = FALSE;
+	for (symIx = 0; symIx < assoc->symbolCount; ++symIx)
+	    {
+	    if (symbols[symIx] == sym)
+	        {
+		subMatch = TRUE;
+		break;
+		}
+	    }
+	if (subMatch)
+	    ++matchCount;
+	else
+	    ++mismatchCount;
+	if (matchCount >= assoc->symbolCount)
+	    break;
+	}
+    assoc->pRecognized *= (double)matchCount / (matchCount + mismatchCount);
+    assoc->pPredicted = assoc->pRecognized;
+    }
+if (assoc->pPredicted > 0.0 || assoc->pRecognized > 0.0)
+    {
+    uglyf("rec/pred by\n   ");
+    dumpAssociator(assoc);
+    uglyf("   rec %f, pred %f:",
+	assoc->pRecognized, assoc->pPredicted);
+    if (assoc->predictionCount > 0)
+        {
+	int i;
+	for (i=0; i<assoc->predictionCount; ++i)
+	    uglyf(" %c %4.2f,", assoc->predictions[i].symbol, assoc->predictions[i].p);
+	}
+    uglyf("\n");
+    }
 }
 
 void classifierNext(struct classifier *cl)
@@ -440,9 +555,9 @@ void growNetNext(struct growNet *gn, int sym)
 struct associator *assoc;
 interleaverRecordInput(gn->inputInterleaver, sym);
 dumpInterleaver(gn->inputInterleaver);
+propagateFromInterleaver(gn, gn->inputInterleaver);
 assoc = associatorNewRandom(gn, gn->inputInterleaver);
 assoc->score = 0.5;
-propagateFromInterleaver(gn, gn->inputInterleaver);
 }
 
 void growNet(char *inFile)
