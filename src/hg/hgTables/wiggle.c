@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.4 2004/08/27 23:10:47 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.5 2004/08/28 16:07:10 hiram Exp $";
 
 boolean isWiggle(char *db, char *table)
 /* Return TRUE if db.table is a wiggle. */
@@ -181,12 +181,14 @@ for (region = regionList; region != NULL; region = region->next)
     unsigned span = 0;
     boolean hasBin;
 
+/*
     sprintLongWithCommas(num1Buf, region->start + 1);
     sprintLongWithCommas(num2Buf, region->end);
     hPrintf("<P><B> Position: </B> %s:%s-%s</P>\n", region->chrom,
 	    num1Buf, num2Buf );
     sprintLongWithCommas(num1Buf, region->end - region->start);
     hPrintf ("<P><B> Total Bases in view: </B> %s </P>\n", num1Buf);
+*/
 
     wDS->setChromConstraint(wDS, region->chrom);
     wDS->setPositionConstraint(wDS, region->start, region->end);
@@ -214,6 +216,7 @@ for (region = regionList; region != NULL; region = region->next)
     /*	This printout is becoming common to what is already in
      *	hgc/wiggleClick.c, need to put this in one of the library files.
      */
+/*
     if (valuesMatched == 0)
 	{
 	if ( span < (3 * (region->end - region->end)))
@@ -230,22 +233,25 @@ for (region = regionList; region != NULL; region = region->next)
 	hPrintf("<P><B> Statistics on: </B> %s <B> bases </B> (%% %.4f coverage)</P>\n",
 	    num1Buf, 100.0*(wDS->stats->count * wDS->stats->span)/(region->end - region->start));
 	}
+*/
 
-    hTableStart();
-    hPrintf("<TR><TD>");
 
-    /* first TRUE == sort results, second TRUE == html table output */
-    wDS->statsOut(wDS, "stdout", TRUE, TRUE);
 
-    hPrintf("</TD></TR>");
-
-    /*	TBD: histogram printout here (lib call)	*/
-
-    hTableEnd();
-    wDS->freeStats(wDS);
     wDS->freeConstraints(wDS);
     }
 wigFetchTime = clock1000() - startTime;
+
+hTableStart();
+hPrintf("<TR><TD>");
+
+/* first TRUE == sort results, second TRUE == html table output */
+wDS->statsOut(wDS, "stdout", TRUE, TRUE);
+
+hPrintf("</TD></TR>");
+hTableEnd();
+wDS->freeStats(wDS);
+
+    /*	TBD: histogram printout here when only one region (lib call)	*/
 
 webNewSection("Region and Timing Statistics");
 hTableStart();
