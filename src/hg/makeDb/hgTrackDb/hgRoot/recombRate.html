@@ -1,7 +1,9 @@
 <H2>Description</H2>
 <P> The recombination rate track represents calculated
-sex-averaged rates of recombination based on the deCODE genetic
-map.  
+sex-averaged  rates of recombination based on the deCODE genetic
+map.  Female and Male specific recombination rates can also be
+displayed by choosing the appropriate option on the track user
+interface page.
 </P>
 
 <H2>Methods</H2>
@@ -13,11 +15,8 @@ of 1,257 meiotic events.  For more information on this map, please see
 <I>Nature Genetics</I>, 31(3), pages 241-247.
 </P>
 
-<P> Recombination rates are calculated by first binning the genome
-into 1Mb, non-overlapping segments.  The recombination rate of each
-segment is estimated using the genetic distances from the deCODE map
-assuming a constant crossover rate bewteen two adjacent markers.
-Cubic splines are fitted to this data using the centerpoint for each
-segment and the initial estimated recombination rate for the 1Mb bin.
-The resulting value at the midpoint is assigned to each 1Mb region.
+<P> Each base is assigned the recombination rate calculated by assuming a
+linear genetic distance across the immediately flanking genetic
+markers. The recombination rate assigned to each 1Mb windows is the
+average recombination rate of the bases contained within the window.
 </P>
