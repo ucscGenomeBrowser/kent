@@ -56,7 +56,7 @@ void usage()
 /* Explain usage and exit. */
 {
 printf(
-  "blat - Standalone BLAT v. %d.x1 fast sequence search command line tool\n"
+  "blat - Standalone BLAT v. %d.x2 fast sequence search command line tool\n"
   "usage:\n"
   "   blat database query [-ooc=11.ooc] output.psl\n"
   "where:\n"
