@@ -49,7 +49,7 @@ errAbort("paraNode - parasol node server.\n"
 	 "    -cpu=N  Number of CPUs to use - default 1.\n");
 }
 
-static char const rcsid[] = "$Id: paraNode.c,v 1.67 2004/09/24 16:12:33 markd Exp $";
+static char const rcsid[] = "$Id: paraNode.c,v 1.68 2004/09/24 16:15:14 markd Exp $";
 
 /* Command line overwriteable variables. */
 char *hubName;			/* Name of hub machine, may be NULL. */
@@ -782,13 +782,13 @@ for (;;)
 		else if (sameString("fetch", command))
 		    doFetch(line);
                 else
-                    logDebug("invalid command: \"%s\"", command);
+                    logWarn("invalid command: \"%s\"", command);
 		}
 	    logDebug("done command");
 	    }
 	else
 	    {
-	    logDebug("command from unauthorized host %x", pmIn.ipAddress.sin_addr.s_addr);
+	    logWarn("command from unauthorized host %x", pmIn.ipAddress.sin_addr.s_addr);
 	    }
 	}
     }
