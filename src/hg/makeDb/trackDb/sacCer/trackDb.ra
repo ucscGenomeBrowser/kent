@@ -60,15 +60,18 @@ type psl est
 intronGap 30
 
 track multizYeast 
-shortLabel Multiz Yeast
-longLabel Multiz Alignments of Seven Species of Saccharomyces
+shortLabel Conservation
+longLabel Seven Species of Saccharomyces, Alignments & Conservation
 group compGeno
-priority 146
-visibility full
-type maf
-color 0,0,20
-altColor 0,0,20
-
+priority 100
+visibility pack
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons
+yLineOnOff Off
+autoScaleDefault Off
+pairwise pwMaf
+speciesOrder sacPar sacMik sacKud sacBay sacCas sacKlu
 
 searchTable sgdGene
 searchType sgdGene
