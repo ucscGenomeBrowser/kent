@@ -252,12 +252,12 @@ if (x1 == x2)
     if (y1 > y2)
 	{
 	y = y2;
-	height = y1-y2;
+	height = y1-y2+1;
 	}
     else
         {
 	y = y1;
-	height = y2-y1;
+	height = y2-y1+1;
 	}
     if (fillFromBase)
         {
@@ -273,12 +273,12 @@ else if (y1 == y2)
     if (x1 > x2)
         {
 	x = x2;
-	width = x1-x2;
+	width = x1-x2+1;
 	}
     else
         {
 	x = x1;
-	width = x2-x1;
+	width = x2-x1+1;
 	}
     if (fillFromBase)
         {
