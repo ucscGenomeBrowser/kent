@@ -9461,3 +9461,148 @@ hgsql hg17 -e 'load data local infile "rgdQtlLink.tab" into table hg17.rgdQtlLin
 #knownGenesUtr5.bed 0.266%, hg17.fr1.mafRangesCollapsed.bed 1.723%, both 0.041%, cover 15.59%, enrich 9.05x
 
 
+# MAKE UNIGENE/SAGE TRACK (DONE - 2004-10-15 Fan)
+
+# First get SAGE data and determine which version of UniGene to use first
+    ssh hgwdev
+    cd ~/kent/src/hg/sage
+    make
+    # XXX = uniGene build for which SAGE was built -- not necessarily current!
+    # Figure out the build number by peeking at this file:
+    wget -O - ftp://ftp.ncbi.nih.gov/pub/sage/map/info.txt 2> /dev/null
+
+# UniGene Build #44  Arabidopsis thaliana
+# UniGene Build #61  Bos taurus
+# UniGene Build #16  Caenorhabditis elegans
+# UniGene Build #171  Homo sapiens
+# UniGene Build #19  Medicago truncatula
+# UniGene Build #138  Mus musculus
+# UniGene Build #52  Oryza sativa
+# UniGene Build #14  Pinus taeda
+# UniGene Build #132  Rattus norvegicus
+# UniGene Build #27  Sus scrofa
+# UniGene Build #38  Triticum aestivum
+# UniGene Build #11  Vitis vinifera
+# UniGene Build #41  Zea mays
+
+# From above info, set Version 171 for hg17
+    ls /projects/cc/hg/sugnet/uniGene
+#   set Version = XXX
+    set Version=171
+    mkdir /projects/cc/hg/sugnet/sage/sage.$Version
+    cd /projects/cc/hg/sugnet/sage/sage.$Version
+
+    wget -r -nH --cut-dirs=2 --timestamp ftp://ftp.ncbi.nih.gov/pub/sage/map/Hs
+    wget -r -nH --cut-dirs=2 --timestamp ftp://ftp.ncbi.nih.gov/pub/sage/map/readme.txt
+    wget -r -nH --cut-dirs=2 --timestamp ftp://ftp.ncbi.nih.gov/pub/sage/map/info.txt
+    wget -r -nH --cut-dirs=2 --timestamp ftp://ftp.ncbi.nih.gov/pub/sage/extr
+    wget -r -nH --cut-dirs=2 --timestamp ftp://ftp.ncbi.nih.gov/pub/sage/info
+
+#  That downloaded about 1 GB of data
+
+    cd map/Hs/NlaIII
+    unzip -j SAGEmap_tag_ug-rel.zip
+    cd ../../../extr/
+    ../../scripts/summarizeCounts.pl expCounts.tab ./SAGE_*
+    ../../scripts/countGenesPerTag.pl expCounts.tab allTags.count.tab
+    ../../scripts/createArraysForTags.pl allTags.count.tab tagExpArrays.tab \
+      ./SAGE_*
+    ../../scripts/countsPerExp.pl expCounts.tab expList.tab
+
+    cd ../map/Hs/NlaIII/ 
+    cat << '_EOF_' > /tmp/t.pl
+#!/usr/local/bin/perl
+
+while (<>) {
+ chomp($_);
+ @p = split(/\t/, $_);
+ print "$p[2]\t$p[3]\t$p[0]\n";
+}
+'_EOF_'
+    chmod +x /tmp/t.pl
+
+    cat SAGEmap_tag_ug-rel | /tmp/t.pl | sort | sed -e 's/ /_/g' \
+      > SAGEmap_ug_tag-rel_Hs
+    cd ../../../extr
+    createSageSummary ../map/Hs/NlaIII/SAGEmap_ug_tag-rel_Hs \
+      tagExpArrays.tab sageSummary.sage
+
+# Create the uniGene alignments 
+# /cluster/data/hg17/uniGene/hg17.uniGene.lifted.pslReps.psl
+
+    # Download of the latest UniGene version is now automated by a 
+    # cron job -- see /cluster/home/angie/crontab , 
+    # /cluster/home/angie/unigeneVers/unigene.csh .  
+    # If hgwdev gets rebooted, that needs to be restarted... maybe there's 
+    # a more stable place to set up that cron job.  
+
+    # substitute XXX -> the uniGene version used by SAGE.
+    # set Version = XXX
+    set Version = 171			(bash: export Version=171)
+    cd /projects/cc/hg/sugnet/uniGene/uniGene.$Version
+    gunzip Hs.seq.uniq.gz Hs.data.gz
+    ../countSeqsInCluster.pl Hs.data counts.tab
+    ../parseUnigene.pl Hs.seq.uniq Hs.seq.uniq.simpleHeader.fa leftoverData.tab
+    # Distribute UniGene sequence to /iscratch/i/ (kkstore can see /projects)
+    ssh kkstore
+    set Version = 171 # same as above
+    mkdir -p /iscratch/i/uniGene.$Version
+    cp -p \
+  /projects/cc/hg/sugnet/uniGene/uniGene.$Version/Hs.seq.uniq.simpleHeader.fa \
+      /iscratch/i/uniGene.$Version
+    ssh kkr1u00
+    iSync
+    ssh kk
+    set Version = 171 # same as above
+    mkdir -p /cluster/data/hg17/bed/uniGene.$Version
+    cd /cluster/data/hg17/bed/uniGene.$Version
+    ls -1S /scratch/hg/gs.18/build35/maskedContigs/*.fa > allctg.lst
+    ls -1S /iscratch/i/uniGene.$Version/Hs.seq.uniq.simpleHeader.fa \
+      > uniGene.lst
+    cat << '_EOF_' > template.sub
+#LOOP
+/cluster/bin/i386/blat -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc $(path1) $(path2)  {check out 
+line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+
+    gensub2 allctg.lst uniGene.lst template.sub para.spec
+    para create para.spec
+    mkdir psl
+    para try
+    para check
+    para push
+# Completed: 380 of 380 jobs
+# CPU time in finished jobs:      35994s     599.91m    10.00h    0.42d  0.001 y
+# IO & Wait Time:                  1812s      30.19m     0.50h    0.02d  0.000 y
+# Average job time:                  99s       1.66m     0.03h    0.00d
+# Longest job:                     1497s      24.95m     0.42h    0.02d
+# Submission to last job:          1551s      25.85m     0.43h    0.02d
+
+    ssh eieio
+    set Version = 171 # same as above
+    cd /cluster/data/hg17/bed/uniGene.$Version
+    pslSort dirs raw.psl tmp psl >& pslSort.log
+    liftUp -type=.psl stdout ../../jkStuff/liftAll.lft warn raw.psl \
+    | pslReps -minCover=0.2 -sizeMatters -minAli=0.965 -nearTop=0.002 \
+      stdin hg17.uniGene.lifted.pslReps.psl /dev/null
+# Processed 141416 alignments
+
+# use hg17.uniGene.lifted.pslReps.psl for building UNIGENE/SAGE track.
+
+    ssh hgwdev
+    set Version = 171
+    cd /projects/cc/hg/sugnet/sage/sage.$Version/extr
+    addAveMedScoreToPsls \
+      /cluster/data/hg17/bed/uniGene.$Version/hg17.uniGene.lifted.pslReps.psl \
+      sageSummary.sage  uniGene.wscores.bed
+    hgLoadBed hg17 uniGene_2 uniGene.wscores.bed
+    hgsql hg17 < ~kent/src/hg/lib/sage.sql 
+    echo "load data local infile 'sageSummary.sage' into table sage" \
+        | hgsql hg17
+    cd ../info
+    ../../scripts/parseRecords.pl ../extr/expList.tab  > sageExp.tab
+    hgsql hg17 < ~/kent/src/hg/lib/sageExp.sql 
+    echo "load data local infile 'sageExp.tab' into table sageExp" | hgsql hg17
+    # update ~/kent/src/hg/makeDb/trackDb/human/hg17/uniGene_2.html 
+    # with current uniGene date. 
