@@ -6671,7 +6671,7 @@ axtFilter -notQ=chrUn $1 \
     ~kate/bin/i386/liftUp -chainQ best.chain scaffolds.lft \
                                         warn best.scaffolds.chain
 
-#Make a track from Tarjei's chimp deletions file (2/12/04)
+#Make a track from Tarjei's chimp deletions file (2/12/04, kpollard)
 #  80-12000 bp indels in human/chimp alignments
 
     #make .bed files from Tarjei's .fa files
@@ -7568,3 +7568,254 @@ url http://www.sanger.ac.uk/cgi-bin/Rfam/mirna/mirna_entry.pl?id=$$
     #	to lib/hgFind.c to allow searching for these items.
 
 
+#5-WAY MULTIZ & PHYLO-HMM HUMAN/CHIMP/MOUSE/RAT/CHICKEN (3/19/04, kpollard)
+
+    # UPDATE WOODY BINARIES
+    ssh hgwdev
+    cd /cluster/data/woody   
+    cvs update -dP
+    cd src
+    make
+    # make sure Makefile has INSTALLDIR = /cluster/bin/woody
+    make install 
+
+    #MULTIZ to add chimp, then chicken to HUMOR (see above)
+    ssh kk
+    set fiveDir = /cluster/data/hg16/bed/multiz.hg16mm3rn3panTro1galGal2
+    mkdir -p $fiveDir/hmrp
+    mkdir -p $fiveDir/hmrpg
+    cd $fiveDir
+	
+    #wrapper script for multiz
+    cat << EOF > mz
+#!/bin/csh
+/cluster/bin/penn/tbaBin/multiz \$1 \$2 - > \$3
+EOF
+    chmod +x mz
+
+    #CHIMP
+    # put the MAFs on bluearc
+    ssh eieio
+    set clustDir = /cluster/bluearc/multiz.hg16mm3rn3panTro1galGal2
+    mkdir -p $clustDir/hp
+    mkdir -p $clustDir/hmr
+    cp /cluster/data/hg16/bed/humor.2003-09-08/hmr/*.maf $clustDir/hmr
+    cp /cluster/data/hg16/bed/blastz-blat.panTro1.lifted/mafRBestNet/*.maf $clustDir/hp
+    logout  # back to kk
+
+    #set up joblist (common denominator set: no chr19_random in hmr)
+    set clustDir = /cluster/bluearc/multiz.hg16mm3rn3panTro1galGal2
+    cd $fiveDir
+    rm -f jobList
+    foreach file ($clustDir/hmr/*.maf) 
+	set root=`echo $file:t:r | sed 's/\.hmr//'`		
+       	echo "mz $clustDir/hp/${root}.maf $file $fiveDir/hmrp/${root}.maf" >> jobList
+    end
+
+    #run on kk	
+    chmod +x jobList
+    para create jobList
+    #para try, para check, para push, etc.
+
+    #add chr19_random from hp to hmrp
+    cp /cluster/data/hg16/bed/blastz-blat.panTro1.lifted/mafRBestNet/chr19_random.maf $fiveDir/hmrp
+
+    #clean up bluearc
+    ssh eieio
+    set clustDir = /cluster/bluearc/multiz.hg16mm3rn3panTro1galGal2
+    rm -r $clustDir/hp
+    rm -r $clustDir/hmr
+
+    #CHICKEN
+    # put the MAFs on bluearc
+    ssh eieio
+    set fiveDir = /cluster/data/hg16/bed/multiz.hg16mm3rn3panTro1galGal2
+    mkdir -p $clustDir/hmrp
+    mkdir -p $clustDir/hg
+    cp $fiveDir/hmrp/*.maf $clustDir/hmrp
+    cp /cluster/data/hg16/bed/blastz.galGal2.2004-02-25/mafBest/*.maf
+ $clustDir/hg
+    logout  # back to kk
+    logout #move to kki
+
+    #set up job list 2
+    ssh kki
+    set fiveDir = /cluster/data/hg16/bed/multiz.hg16mm3rn3panTro1galGal2
+    set clustDir = /cluster/bluearc/multiz.hg16mm3rn3panTro1galGal2
+    cd $fiveDir
+    rm -f jobList.2
+    foreach file ($clustDir/hg/*.maf) 
+	set root=`echo $file:t:r | sed 's/\.hg//'`		
+	echo "mz $file $clustDir/hmrp/${root}.maf $fiveDir/hmrpg/${root}.maf" >> jobList.2
+    end
+    
+    #run on kki	
+    chmod +x jobList.2
+    para create jobList.2
+    #para try, para check, para push, etc.
+
+    # clean up bluearc
+    ssh eieio
+    rm -r /cluster/bluearc/multiz.hg16mm3rn3panTro1galGal2
+    logout
+
+    #PHYLO-HMM CONSERVATION
+    #Set path
+    set path = ($path /cluster/bin/woody)
+
+    #Create "sufficient statistics" (SS) file from maf
+    ssh eieio
+    cd /cluster/data/hg16/bed/multiz.hg16mm3rn3panTro1galGal2
+    mkdir phyloHMM
+    cd phyloHMM
+
+    # create script to run msa_view.
+    cat > makeSS.csh << 'EOF'
+set path = ($path /cluster/bin/woody)
+cd /cluster/data/hg16/bed/multiz.hg16mm3rn3panTro1galGal2/hmrpg
+foreach f (chr*.maf)
+    set c = $f:r
+    echo "$c"
+    msa_view $f -i MAF -o SS -s 1 -r 1 -O hg16,mm3,rn3,panTro1,galGal2 > \
+       ../phyloHMM/$c.ss
+end
+'EOF'
+    csh makeSS.csh >&! makeSS.log &
+    tail -100f makeSS.log
+    head phyloHMM/chr1.ss
+    head phyloHMM/chrY.ss
+    
+    #model hpmrc_rev_dg.mod (from Adam)
+    set path = ($path /cluster/bin/woody)
+    cat hpmrc_rev_dg.mod
+#ALPHABET: A C G T
+#ORDER: 0
+#SUBST_MOD: REV
+#NRATECATS: 10
+#ALPHA: 4.4
+#BACKGROUND: 0.286083 0.213573 0.213691 0.286652
+#RATE_MAT:
+#  -0.891523    0.166770    0.574850    0.149902
+#   0.223389   -1.146311    0.153784    0.769137
+#   0.769591    0.153699   -1.147159    0.223869
+#   0.149605    0.573055    0.166888   -0.889548
+#TREE: ((1:0.0056,2:0.0057):0.1043,(3:0.076303,4:0.083043):0.2753):0.47,5:0.47); 
+    /cluster/data/woody/scripts/extract-tree.pl human,chimp,mouse,rat,chicken \
+        hpmrc_rev_dg.mod
+#((human:0.0056,chimp:0.0057):0.1043,(mouse:0.076303,rat:0.083043):0.2753):0.47,chicken:0.47);
+    #order is human-chimp-mouse-rat-chicken, so fix maf order in next step
+
+    #break up the genome-wide MAFs into pieces
+    # NOTE: using the hg16 chr fasta files stashed on bluearc for hg16 humor
+    mkdir -p /cluster/bluearc/hg16/bed/multiz.hg16mm3rn3panTro1galGal2
+    cp /cluster/data/hg16/bed/multiz.hg16mm3rn3panTro1galGal2/hmrpg/*.maf /cluster/bluearc/hg16/bed/multiz.hg16mm3rn3panTro1galGal2
+    cd /cluster/data/hg16/bed/multiz.hg16mm3rn3panTro1galGal2/phyloHMM
+    cat << 'EOF' > doSplit
+#!/bin/sh
+
+WOODY=/cluster/bin/woody
+FA_SRC=/cluster/bluearc/hg16/bed/humor
+WINDOWS=/cluster/data/hg16/bed/multiz.hg16mm3rn3panTro1galGal2/phyloHMM/WINDOWS
+
+maf=$1
+c=`basename $maf .maf`
+echo $c
+mkdir -p /scratch/msa_split
+${WOODY}/msa_split $maf -i MAF -M ${FA_SRC}/$c.fa -O hg16,panTro1,mm3,rn3,galGal2 -w 1000000,0 -r /scratch/msa_split/$c -o SS -I 1000 -d 1 -B 5000
+echo "Copying..."
+cd /scratch/msa_split
+for file in $c.*.ss ; do gzip -c $file > ${WINDOWS}/$file.gz ; done
+rm -f /scratch/msa_split/$c.*.ss
+echo "Done copying"
+'EOF'
+    chmod +x doSplit
+    mkdir -p WINDOWS
+    rm -f WINDOWS/* jobs.lst
+    foreach file (/cluster/bluearc/hg16/bed/multiz.hg16mm3rn3panTro1galGal2/*.maf) 
+	echo "doSplit $file" >> jobs.lst
+    end
+    
+    #run on kki
+    ssh kki
+    cd /cluster/data/hg16/bed/multiz.hg16mm3rn3panTro1galGal2/phyloHMM
+    para create jobs.lst  
+    # para try, para check, para push, etc.
+    logout
+
+    #compute the conservation scores
+    # NOTE: need to use gensub2, check out+ facilities to check for
+    # failures.  Will want to chunk msa_split output (above) into chr dirs.
+    # to make the gensub template reasonable.    
+    ssh kk
+    cd /cluster/data/hg16/bed/multiz.hg16mm3rn3panTro1galGal2/phyloHMM
+    cat << 'EOF' > doPostProbs
+#!/bin/sh
+
+WOODY=/cluster/bin/woody
+TMP=/tmp/phyloHMMcons
+
+file=$1
+root=`basename $file .ss.gz`
+chrom=`echo $root | awk -F\. '{print $1}'`
+echo $chrom
+
+mkdir -p $TMP
+zcat $file | $WOODY/label -m - -d hpmrc_rev_dg.mod -i SS -o $TMP/$root -k 10 -L 0.9 -A -p 0 -j 1 -s $chrom -x
+mkdir -p POSTPROBS/$chrom
+gzip -c $TMP/$root.postprob > POSTPROBS/$chrom/$root.postprob.gz
+rm $TMP/$root.postprob
+'EOF'
+
+    chmod +x doPostProbs
+    mkdir -p POSTPROBS
+    rm -f jobs2.lst 
+    foreach file (WINDOWS/chr*.ss.gz) 
+       echo "doPostProbs $file" >> jobs2.lst 
+    end
+    wc -l jobs2.lst
+    para create jobs2.lst
+    #para try, para check, para push, etc.
+    #1 problem: chr19_random crashed - due to no alignments in HMR. Leave out.
+
+    # Create wiggle (.wib) file and load into database
+    ssh eieio
+    cd /cluster/data/hg16/bed/multiz.hg16mm3rn3panTro1galGal2/phyloHMM
+    mkdir wibLimits
+    mkdir wib
+    cat > makeWig.csh << 'EOF'
+foreach dir (POSTPROBS/*)
+    set chrom = $dir:t
+    echo $chrom 
+    zcat `ls POSTPROBS/$chrom/*postprob.gz | sort -t\. -k2,2n` | \
+	wigAsciiToBinary -chrom=$chrom \
+	-dataSpan=1 -wibFile=wib/${chrom}_hpmrg_phyloHMM -name=hpmrg \
+	stdin > wibLimits/${chrom}
+end
+'EOF'
+    csh makeWig.csh >&! makeWig.log &
+
+    #load tables
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2/phyloHMM
+    hgLoadWiggle hg16 mzPt1Mm3Rn3Gg2_pHMM_wig wib/*_hpmrg_phyloHMM.wig 
+    ln -s `pwd`/wib/chr*_hpmrg_phyloHMM.wib /gbdb/hg16/wib 
+    chmod 775 . wib 
+    chmod 664 wib/*.wib
+
+    cd /cluster/data/hg16/bed/multiz.hg16mm3rn3panTro1galGal2/hmrpg
+    mkdir -p /gbdb/hg16/mzPt1Mm3Rn3Gg2_pHMM
+    ln -s /cluster/data/hg16/bed/multiz.hg16mm3rn3panTro1galGal2/hmrpg/*.maf /gbdb/hg16/mzPt1Mm3Rn3Gg2_pHMM
+    hgLoadMaf hg16 -warn mzPt1Mm3Rn3Gg2_pHMM   
+
+    cd /cluster/data/hg16/bed/blastz-blat.panTro1.lifted/mafRBestNet/
+    mkdir -p /gbdb/hg16/chimp_hmrg
+    ln -s /cluster/data/hg16/bed/blastz-blat.panTro1.lifted/mafRBestNet/*.maf /gbdb/hg16/chimp_hmrg 
+    hgLoadMaf hg16 -warn chimp_hmrg   
+
+    #cleanup bluearc
+    ssh eieio
+    rm -r /cluster/bluearc/hg16/bed/multiz.hg16mm3rn3panTro1galGal2
+    logout
+
+    #Add description file: mzPt1Mm3Rn3Gg2_pHMM.html
+    #Add track to trackDb.ra: mzPt1Mm3Rn3Gg2_pHMM
