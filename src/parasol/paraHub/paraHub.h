@@ -92,4 +92,6 @@ extern char hubHAddress[32]; /* Host address of machine running this. Not IP add
 void logIt(char *format, ...);
 /* Print message to log file. */
 
+#define MINUTE 60
+
 #endif /* PARAHUB_H */

@@ -16,7 +16,7 @@ static void heartbeatDeamon()
 int hubFd;
 for (;;)
     {
-    sleep(30);
+    sleep(MINUTE/2);
     hubFd = hubConnect();
     if (hubFd > 0)
         {

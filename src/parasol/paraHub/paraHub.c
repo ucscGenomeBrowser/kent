@@ -445,7 +445,7 @@ void hangman(int spokesToUse, time_t now)
  * busy nodes to check in, in case we missed one of their earlier
  * jobDone messages. */
 {
-int i, period = jobCheckPeriod*60;
+int i, period = jobCheckPeriod*MINUTE;
 struct dlNode *mNode;
 struct machine *machine;
 struct job *job;
@@ -473,7 +473,7 @@ for (i=0; i<spokesToUse; ++i)
 void graveDigger(int spokesToUse, time_t now)
 /* Check out dead nodes.  Try and resurrect them periodically. */
 {
-checkPeriodically(deadMachines, 60 * machineCheckPeriod, "resurrect", 
+checkPeriodically(deadMachines, MINUTE * machineCheckPeriod, "resurrect", 
 	spokesToUse, now);
 }
 
@@ -567,7 +567,7 @@ struct resultQueue *newList = NULL, *rq, *next;
 for (rq = resultQueues; rq != NULL; rq = next)
     {
     next = rq->next;
-    if (now - rq->lastUsed > 5*60)
+    if (now - rq->lastUsed > 5*MINUTE)
 	{
 	logIt("hub: closing results file %s\n", rq->name);
         resultQueueFree(&rq);

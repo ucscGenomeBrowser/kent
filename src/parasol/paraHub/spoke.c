@@ -63,7 +63,7 @@ else
     {
     char *command = nextWord(&message);
     char *job = NULL;
-    if (sameString(runCmd, command))
+    if (sameString(runCmd, command) || sameString("check", command))
 	{
 	char *hub = nextWord(&message);
 	job = nextWord(&message);
