@@ -341,8 +341,8 @@ type bed 4 .
 url http://rgd.mcw.edu/generalSearch/RgdSearch.jsp?quickSearch=1&searchKeyword=
 
 track xenoRefGene
-shortLabel Xeno RefSeq
-longLabel Xeno RefSeq Genes
+shortLabel Non-$Organism RefSeq
+longLabel Non-$Organism RefSeq Genes
 group genes
 priority 35.1
 visibility dense
@@ -590,8 +590,8 @@ spectrum on
 type psl est
 
 track xenoMrna
-shortLabel Xeno mRNAs
-longLabel Xeno mRNAs from GenBank
+shortLabel Non$Organism mRNAs
+longLabel Non$Organism mRNAs from GenBank
 group rna
 priority 63
 visibility hide
@@ -601,7 +601,7 @@ cdsDrawOptions enabled
 
 track xenoBestMrna
 shortLabel Other Best mRNAs
-longLabel Xeno mRNAs from GenBank Best in Genome Alignments
+longLabel Non$Organism mRNAs from GenBank Best in Genome Alignments
 group rna
 priority 64
 visibility hide
@@ -609,8 +609,8 @@ spectrum on
 type psl xeno
 
 track xenoEst
-shortLabel Xeno ESTs
-longLabel Xeno ESTs from GenBank 
+shortLabel Non$Organism ESTs
+longLabel Non$Organism ESTs from GenBank 
 group rna
 priority 65
 visibility hide
