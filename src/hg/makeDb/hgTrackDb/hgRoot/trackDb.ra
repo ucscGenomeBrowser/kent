@@ -82,8 +82,6 @@ shortLabel BAC End Pairs
 longLabel BAC End Pairs
 priority 9.5
 visibility hide
-color 67,57,206
-altColor 204,20,35
 
 track genomicDups
 priority 10
