@@ -5,6 +5,7 @@
 #include "common.h"
 #include "jksql.h"
 #include "gff.h"
+#include "linefile.h"
 #include "genePred.h"
 
 struct genePred *genePredLoad(char **row)
@@ -141,6 +142,24 @@ fputc(lastSep,f);
 }
 
 /* ---------  Start of hand generated code. ---------------------------- */
+
+struct genePred *genePredLoadAll(char *fileName) 
+/* Load all genePred from a tab-separated file.
+ * Dispose of this with genePredFreeList(). */
+{
+struct genePred *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[10];
+
+while (lineFileRow(lf, row))
+    {
+    el = genePredLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
 
 int genePredCmp(const void *va, const void *vb)
 /* Compare to sort based on chromosome, txStart. */

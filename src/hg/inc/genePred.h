@@ -53,6 +53,10 @@ void genePredOutput(struct genePred *el, FILE *f, char sep, char lastSep);
 
 /* ---------  Start of hand generated code. ---------------------------- */
 
+struct genePred *genePredLoadAll(char *fileName);
+/* Load all genePred from a tab-separated file.
+ * Dispose of this with genePredFreeList(). */
+
 int genePredCmp(const void *va, const void *vb);
 /* Compare to sort based on chromosome, txStart. */
 
