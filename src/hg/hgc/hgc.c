@@ -4676,6 +4676,8 @@ struct psl *psl = loadPslFromRangePair(pslTable,  item);
 char nibFile[512];
 char query[256];
 char name[256];
+char *qChrom;
+char *ptr;
 struct dnaSeq *musSeq = NULL;
 //struct sqlConnection *conn = hAllocConn();
 struct sqlConnection *conn2 ;
@@ -4683,12 +4685,17 @@ hSetDb2(otherDb);
 conn2 = hAllocConn2();
 
 psl = pslTrimToTargetRange(psl, winStart, winEnd);
+/* In hg10 tables, psl->qName can be org.chrom.  Strip it down to just 
+ * the chrom: */
+qChrom = cloneString(psl->qName);
+if ((ptr = strchr(qChrom, '.')) != NULL)
+    strcpy(qChrom, ptr+1);
 sprintf(query, "select fileName from %s where chrom = '%s'", 
-	otherChromTable, psl->qName);
+	otherChromTable, qChrom);
 if (sqlQuickQuery(conn2, query, nibFile, sizeof(nibFile)) == NULL)
-    errAbort("Sequence %s isn't in %s in database %s", psl->qName, otherChromTable, otherDb);
+    errAbort("Sequence %s isn't in %s in database %s", qChrom, otherChromTable, otherDb);
 musSeq = nibLoadPart(nibFile, psl->qStart, psl->qEnd - psl->qStart);
-snprintf(name, sizeof(name), "%s.%s", otherOrg, psl->qName);
+snprintf(name, sizeof(name), "%s.%s", otherOrg, qChrom);
 showSomeAlignment(psl, musSeq, gftDnaX, psl->qStart, psl->qEnd, name);
 hFreeConn2(&conn2);
 }
