@@ -2,7 +2,7 @@ table displayId
 "Relate ID and primary accession. A good table to use just get handle on all records."
     (
     char[8] acc;	"Primary accession"
-    char[10] val;	"SwissProt display ID"
+    char[12] val;	"SwissProt display ID"
     )
 
 table otherAcc

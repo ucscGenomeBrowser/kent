@@ -6,7 +6,7 @@
 #Relate ID and primary accession. A good table to use just get handle on all records.
 CREATE TABLE displayId (
     acc char(8) not null,	# Primary accession
-    val char(10) not null,	# SwissProt display ID
+    val char(12) not null,	# SwissProt display ID
               #Indices
     PRIMARY KEY(acc),
     UNIQUE(val)
