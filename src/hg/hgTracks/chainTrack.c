@@ -13,7 +13,7 @@
 #include "chainLink.h"
 #include "chainDb.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.11 2003/07/09 22:31:21 braney Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.12 2003/07/10 00:40:42 braney Exp $";
 
 
 static void doQuery(struct sqlConnection *conn, 
@@ -58,93 +58,110 @@ static void chainDraw(struct track *tg, int seqStart, int seqEnd,
  * frees the simple features again. */
 {
 struct linkedFeatures *lf;
-struct lm *lm = lmInit(1024*4);
 struct simpleFeature *sf;
-struct hash *hash = newHash(0);	/* Hash of chain ids. */
-struct sqlConnection *conn = hAllocConn();
+struct lm *lm;
+struct hash *hash;	/* Hash of chain ids. */
+struct sqlConnection *conn;
 double scale = ((double)(winEnd - winStart))/width;
 char fullName[64];
 int start, end, extra;
 boolean keepGoing;
 struct simpleFeature *components, *lastSf;
 
-if (tg->items != NULL)
-    {
-    /* Make up a hash of all linked features keyed by
-     * id, which is held in the extras field.  To
-     * avoid burning memory on full chromosome views
-     * we'll just make a single simple feature and
-     * exclude from hash chains less than three pixels wide, 
-     * since these would always appear solid. */
-    for (lf = tg->items; lf != NULL; lf = lf->next)
-	{
-	double pixelWidth = scale * (lf->end - lf->start);
-	if (pixelWidth >= 2.5)
-	    {
-	    hashAdd(hash, lf->extra, lf);
-	    }
-	else
-	    {
-	    lmAllocVar(lm, sf);
-	    sf->start = lf->start;
-	    sf->end = lf->end;
-	    sf->grayIx = lf->grayIx;
-	    lf->components = sf;
-	    }
-	}
+if (tg->items == NULL)		/*Exit Early if nothing to do */
+    return;
 
+lm = lmInit(1024*4);
+hash = newHash(0);
+conn = hAllocConn();
+
+/* Make up a hash of all linked features keyed by
+ * id, which is held in the extras field.  To
+ * avoid burning memory on full chromosome views
+ * we'll just make a single simple feature and
+ * exclude from hash chains less than three pixels wide, 
+ * since these would always appear solid. */
+for (lf = tg->items; lf != NULL; lf = lf->next)
+    {
+    double pixelWidth = (lf->end - lf->start) / scale;
+    /*
+	    printf(" g %d %d %d\n",winEnd,winStart,width);
+	    printf(" f %d %d\n",lf->end,lf->start);
+	    printf(" small %g\n",pixelWidth);
+	    printf(" scale %g\n",scale);
+	    */
+    if (pixelWidth >= 2.5)
+	{
+	hashAdd(hash, lf->extra, lf);
+	}
+    else
+	{
+	lmAllocVar(lm, sf);
+	sf->start = lf->start;
+	sf->end = lf->end;
+	sf->grayIx = maxShade;
+	lf->components = sf;
+	}
+    }
+
+if (hash->size)
+    {
     /* Make up range query. */
     sprintf(fullName, "%s_%s", chromName, tg->mapName);
     if (!hTableExistsDb(hGetDb(), fullName))
 	strcpy(fullName, tg->mapName);
 
-#define STARTSLOP	1
+#define STARTSLOP	10000
     extra = STARTSLOP;
     start = seqStart - extra;
     end = seqEnd + extra;
     doQuery(conn, fullName, lm,  hash, start, end);
 
-    for (lf = tg->items; lf != NULL; lf = lf->next)
-	if (lf->components != NULL)
-	    slSort(&lf->components, linkedFeaturesCmpStart);
-
-    for (lf = tg->items; lf != NULL; lf = lf->next)
+    if (vis != tvDense)
 	{
-	end = seqEnd + extra;
-	while (lf->end > end )
+	for (lf = tg->items; lf != NULL; lf = lf->next)
+	    if (lf->components != NULL)
+		slSort(&lf->components, linkedFeaturesCmpStart);
+
+	for (lf = tg->items; lf != NULL; lf = lf->next)
 	    {
-	    for(lastSf=sf=lf->components;sf;lastSf=sf,sf=sf->next)
-		;
+	    end = seqEnd + extra;
+	    while (lf->end > end )
+		{
+		for(lastSf=sf=lf->components;sf;lastSf=sf,sf=sf->next)
+		    ;
 
-	    if ( (lastSf != NULL) &&(lastSf->end > seqEnd))
-		break;
+		if ( (lastSf != NULL) &&(lastSf->end > seqEnd))
+		    break;
 
-	    extra *= 10;
-	    start = end;
-	    end = start + extra;
-	    doQuery(conn, fullName, lm,  hash, start, end);
-	    slSort(&lf->components, linkedFeaturesCmpStart);
+		extra *= 10;
+		start = end;
+		end = start + extra;
+		doQuery(conn, fullName, lm,  hash, start, end);
+		slSort(&lf->components, linkedFeaturesCmpStart);
+		}
+
+	    extra = STARTSLOP;
+	    start = seqStart - extra; 
+	    while((lf->start < start) && 
+		(lf->components->start > seqStart))
+	    {
+		extra *= 10;
+		end = start;
+		start = end - extra;
+		doQuery(conn, fullName, lm,  hash, start, end);
+		slSort(&lf->components, linkedFeaturesCmpStart);
+		}
 	    }
 
-	extra = STARTSLOP;
-	start = seqStart - extra; 
-	while((lf->start < start) && 
-	    (lf->components->start > seqStart))
-	{
-	    extra *= 10;
-	    end = start;
-	    start = end - extra;
-	    doQuery(conn, fullName, lm,  hash, start, end);
-	    slSort(&lf->components, linkedFeaturesCmpStart);
-	    }
 	}
-
-    linkedFeaturesDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width,
-	    font, color, vis);
     }
+linkedFeaturesDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width,
+	font, color, vis);
 /* Cleanup time. */
 for (lf = tg->items; lf != NULL; lf = lf->next)
     lf->components = NULL;
+
 lmCleanup(&lm);
 freeHash(&hash);
 hFreeConn(&conn);
