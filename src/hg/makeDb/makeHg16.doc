@@ -4660,3 +4660,52 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
 # Michael Zhang <mzhang@cshl.edu>
 # Got firstEF.txt from Gengzin 7/30/03
 	hgLoadBed hg16 firstEF firstEF.txt
+
+
+# LOAD ENSEMBL GENES (DONE 2003-11-07 angie)
+    mkdir /cluster/data/hg16/bed/ensembl
+    cd /cluster/data/hg16/bed/ensembl
+    # Get the ensembl protein data from 
+    # http://www.ensembl.org/Homo_sapiens/martview
+    # Follow this sequence through the pages:
+    # Page 1) Make sure that the Homo_sapiens choice is selected. Hit next.
+    # Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
+    # Page 3) Choose the "Structures" box. 
+    # Page 4) Choose GTF as the ouput.  choose gzip compression.  hit export.
+    # Save as ensemblGene.gtf.gz
+
+    # Ensembl handles random chromosomes differently than us, so we
+    # strip this data.  Fortunately it just loses a couple of genes.
+    # Add "chr" to front of each line in the gene data gtf file to make 
+    # it compatible with our software.
+    # Finally, get rid of the ".1" or ".2" after the name
+    gunzip -c ensemblGene.gtf.gz \
+    | grep -v ^6_DR51 \
+    | grep -v ^DR51 \
+    | grep -v _NT_ \
+    | perl -wpe 's/^([0-9]|X|Y|Un)/chr$1/ \
+                 || die "Line $. doesnt start with human chrom:\n$_"' \
+    | sed -e 's/\..\"/\"/g' \
+    > ensGene.gtf
+    ssh hgwdev
+    /cluster/bin/i386/ldHgGene hg16 ensGene \
+      /cluster/data/hg16/bed/ensembl/ensGene.gtf
+
+    # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 
+    # hgKnownToSuper.  Use ensMart to create it as above, except:
+    # Page 3) Choose the "Features" box. In "Ensembl Attributes", check 
+    # Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID.  
+    # Choose Text, tab-separated as the output format.  Result name ensGtp.
+    # Save file as ensGtp.txt.gz
+    gunzip ensGtp.txt.gz
+    hgsql hg16 < ~/kent/src/hg/lib/ensGtp.sql
+    echo "load data local infile 'ensGtp.txt' into table ensGtp" | hgsql hg16
+
+    # Load Ensembl peptides:
+    # Get them from ensembl as above in the gene section except for
+    # Page 3) Choose the "Sequences" box. 
+    # Page 4) Transcripts/Proteins.  Peptide.  Format = FASTA.
+    # Save file as ensemblPep.fa.gz
+    gunzip ensemblPep.fa.gz
+    hgPepPred hg16 ensembl ensemblPep.fa
+
