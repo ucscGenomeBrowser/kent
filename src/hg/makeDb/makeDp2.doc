@@ -152,9 +152,9 @@ popd
     hgsql dp2 -e 'drop index bin       on rmsk; \
                   drop index genoStart on rmsk; \
                   drop index genoEnd   on rmsk; \
-                  create index bin       on rmsk (bin,      genoName(9)); \
-                  create index genoStart on rmsk (genoStart,genoName(9)); \
-                  create index genoEnd   on rmsk (genoEnd,  genoName(9));'
+                  create index bin       on rmsk (genoName(9), bin); \
+                  create index genoStart on rmsk (genoName(9), genoStart); \
+                  create index genoEnd   on rmsk (genoName(9), genoEnd);'
 
 
 # SIMPLE REPEATS (TRF) (DONE 8/3/04 angie)
@@ -356,7 +356,7 @@ popd
 
 
 # PUT SEQUENCE ON /ISCRATCH FOR BLASTZ (DONE 8/3/04 angie)
-    ssk kkr1u00
+    ssh kkr1u00
     mkdir /iscratch/i/dp2
     cp -pR /cluster/data/dp2/nib /iscratch/i/dp2/
     iSync
@@ -633,19 +633,23 @@ dp2.perChromTables = no
     hgGcPercent dp2 ../../nib
 
 
-# MAKE EMPTY GAP TABLE (DONE 8/4/04 angie)
-    # featureBits prints out 759 warnings (1 per scaffold) about there 
-    # being no gap table.  So does netClass.  There's no gap information 
-    # provided with the assembly.  We could make guesses about gaps based 
-    # on runs of N over a certain size but that's potentially misleading.  
-    # For now, make an empty gap table.  
-    hgsql dp2 -e 'create table gap select * from dm1.chr2L_gap where 0'
-    # Made a dp2/trackDb.ra entry with a bogus chromosomes setting to prevent 
-    # the track/track control from appearing in hgTracks.
+# EXTRACTING GAP INFO FROM BLOCKS OF NS (DONE 11/5/04 angie)
+    ssh kksilo
+    mkdir /cluster/data/dp2/bed/fakeAgp
+    cd /cluster/data/dp2/bed/fakeAgp
+    cat ../../scaffolds/*.fa \
+    | faGapSizes stdin \
+        -niceSizes=5,10,20,25,30,40,50,100,250,500,1000,10000,100000
+    # More blocks of N's than we would expect are exactly 10bp long.  That is 
+    # probably the min gap size for the assembly:
+    cat ../../scaffolds/*.fa \
+    | hgFakeAgp -minContigGap=10 stdin fake.agp
+    ssh hgwdev
+    hgLoadGap -unsplit dp2 /cluster/data/dp2/bed/fakeAgp/fake.agp
 
 
 # TWINSCAN (FROM BAYLOR) (DONE 8/4/04 angie)
-    ssk kksilo
+    ssh kksilo
     mkdir /cluster/data/dp2/bed/twinscan
     cd /cluster/data/dp2/bed/twinscan
     wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Dpseudoobscura/gene_predictions/freeze01_twinscan.pep.fa
