@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.11 2004/03/30 21:54:25 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.12 2004/04/02 23:42:07 hiram Exp $";
 
 static char *currentFile = (char *) NULL;	/* the binary file name */
 static FILE *wibFH = (FILE *) NULL;		/* file handle to binary file */
@@ -56,10 +56,10 @@ if (wibFH != (FILE *) NULL)
 }
 
 static struct wiggleData * wigReadDataRow(struct wiggle *wiggle,
-    int winStart, int winEnd, int tableId, boolean summaryOnly,
+    int chrStart, int winEnd, int tableId, boolean summaryOnly,
 	boolean (*wiggleCompare)(int tableId, double value,
 	    boolean summaryOnly, struct wiggle *wiggle))
-/*  read one row of wiggle data, return data values between winStart, winEnd */
+/*  read one row of wiggle data, return data values between chrStart, winEnd */
 {
 unsigned char *readData = (unsigned char *) NULL;
 size_t itemsRead = 0;
@@ -122,7 +122,7 @@ else
 	    ++noData;
 	else
 	    {
-	    if (chromPosition >= winStart && chromPosition < winEnd)
+	    if (chromPosition >= chrStart && chromPosition < winEnd)
 		{
 		double value =
 		    BIN_TO_VALUE(datum,wiggle->lowerLimit,wiggle->dataRange);
@@ -141,7 +141,7 @@ else
 
 		    if (chromStart < 0)
 			chromStart = chromPosition;
-		    chromEnd = chromPosition + 1 + wiggle->span;
+		    chromEnd = chromPosition + wiggle->span;
 		    if (lowerLimit > dataPtr->value)
 			lowerLimit = dataPtr->value;
 		    if (upperLimit < dataPtr->value)
@@ -178,22 +178,26 @@ if (validCount)
 return (ret);	/* may be null if validCount < 1	*/
 }	/*	static struct wiggleData * wigReadDataRow()	*/
 
-void wigFreeData(struct wiggleData *wigData)
-/* free everything in the wiggleData structure */
+static void wigFree(struct wiggleData **pEl)
+/* Free a single dynamically allocated wiggle data item */
 {
-struct wiggleData *wd;
+struct wiggleData *el;
+if ((el = *pEl) == NULL) return;
+freeMem(el->data);
+freez(pEl);
+}
 
-if (wigData == (struct wiggleData *)NULL)
-    return;
+void wigFreeData(struct wiggleData **pList)
+/* free a list of dynamically allocated wiggle data items */
+{
+struct wiggleData *el, *next;
 
-for (wd = wigData; wd != (struct wiggleData *) NULL; )
+for (el = *pList; el != NULL; el = next)
     {
-    struct wiggleData *wdPtr = wd;
-    if (wdPtr->data)
-	freeMem(wdPtr->data);
-    wd = wd->next;	/*	get this pointer before it is gone */
-    freeMem(wdPtr);	/*	going, going, gone	*/
+    next = el->next;
+    wigFree(&el);
     }
+*pList = NULL;
 }
 
 struct wiggleData *wigFetchData(char *db, char *tableName, char *chromName,
@@ -205,6 +209,7 @@ struct wiggleData *wigFetchData(char *db, char *tableName, char *chromName,
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
+int chrStart = winStart - 1;	/* from user closed to DB open coords */
 char **row;
 int rowOffset;
 int rowCount = 0;
@@ -248,7 +253,7 @@ else
 if (! sqlTableExists(conn, tableName))
     {
     hFreeConn(&conn);
-    return(wdList);
+    return((struct wiggleData *)NULL);
     }
 
 /*	Survey the spans to see what the story is here */
@@ -285,7 +290,7 @@ while ((el = hashNext(&cookie)) != NULL)
     else
 	snprintf(whereSpan, sizeof(whereSpan), "span = %s", el->name);
 
-    sr = hOrderedRangeQuery(conn, tableName, chromName, winStart, winEnd,
+    sr = hOrderedRangeQuery(conn, tableName, chromName, chrStart, winEnd,
         whereSpan, &rowOffset);
     rowCount = 0;
     while ((row = sqlNextRow(sr)) != NULL)
@@ -294,7 +299,7 @@ while ((el = hashNext(&cookie)) != NULL)
 	wiggle = wiggleLoad(row + rowOffset);
 	if (wiggle->count > 0)
 	    {
-	    wigData = wigReadDataRow(wiggle, winStart, winEnd,
+	    wigData = wigReadDataRow(wiggle, chrStart, winEnd,
 		    tableId, summaryOnly, wiggleCompare );
 	    if (wigData)
 		{
@@ -313,7 +318,7 @@ closeWibFile();
 
 hFreeConn(&conn);
 
-if (wdList != (struct wiggleData *) NULL)
+if (wdList != (struct wiggleData *)NULL)
 	slReverse(&wdList);
 
 return(wdList);
