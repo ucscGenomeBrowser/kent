@@ -32,16 +32,28 @@ type group esRegGeneToModule gene module
 priority 2.5
 
 name blastp
-shortLabel Protein Homology
+shortLabel Protein Homology - BLASTP
 longLabel Blastp E-value with Selected Gene
 type pair knownBlastTab query target bitScore -1 
 priority 3
+
+name rankProp
+shortLabel Protein Homology - Rankprop
+longLabel Rankprop score with Selected Gene
+type pair rankProp qKgId tKgId score -1
+priority 3.1
+
+name spPsiBlast
+shortLabel Protein Homology - PSI-BLAST
+longLabel PSI-BLAST E-Value with Selected Gene
+type pair spPsiBlast kgId1 kgId2 eval 1
+priority 3.2
 
 name pfamSimilarity
 shortLabel Pfam Similarity
 longLabel Number of Pfam Domains Shared with Selected Gene
 type association knownToPfam
-priority 3.1
+priority 3.5
 queryOne select value from knownToPfam where name='%s'
 queryAll select name,value from knownToPfam
 
@@ -84,5 +96,4 @@ priority 7.1
 protKey on
 queryOne select goId from go.goaPart where dbObjectSymbol='%s'
 queryAll select dbObjectSymbol,goId from go.goaPart
-
 
