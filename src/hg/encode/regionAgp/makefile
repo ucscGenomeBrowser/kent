@@ -23,7 +23,6 @@ encode_scripts:
             if test "$$F" -nt "$(ENCODE_SCRIPT_DIR)/$$I"; then \
                 echo "installing $$I in ${ENCODE_SCRIPT_DIR}" ;\
                 cp $$F $(ENCODE_SCRIPT_DIR)/$$I ;\
-                chmod 775 $(ENCODE_SCRIPT_DIR)/$$I ;\
             fi ;\
 	done
 
