@@ -35,7 +35,7 @@ struct featureBits *el, *next;
 for (el = *pList; el != NULL; el = next)
     {
     next = el->next;
-    freeMem(el);
+    featureBitsFree(&el);
     }
 *pList = NULL;
 }
@@ -329,7 +329,7 @@ struct featureBits *fbGetRangeQueryDb(char *db, char *trackQualifier,
 /* Get features in range that match sqlConstraints. */
 {
 struct hTableInfo *hti;
-struct bed *bedList, *bed;
+struct bed *bedList = NULL, *bed;
 struct featureBits *fbList = NULL, *fbItem;
 char itemName[128];
 char nameBuf[512];
@@ -636,6 +636,6 @@ void fbOrTableBits(Bits *bits, char *trackQualifier, char *chrom,
 {
 struct featureBits *fbList = fbGetRange(trackQualifier, chrom, 0, chromSize);
 fbOrBits(bits, chromSize, fbList, 0);
-slFreeList(&fbList);
+featureBitsFreeList(&fbList);
 }
 
