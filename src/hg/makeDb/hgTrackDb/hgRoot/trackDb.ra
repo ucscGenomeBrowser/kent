@@ -512,13 +512,20 @@ color 100,0,0
 type genePred
 url http://www.tigr.org/tigr-scripts/nhgi_scripts/tc_report.pl?$$
 
-track uniGene
+track uniGene_2
 shortLabel UniGene
 longLabel UniGene Alignments and SAGE Info
 priority 20.5
 visibility hide
 spectrum on
 type bed 12 
+
+track uniGene
+shortLabel UniGene
+longLabel UniGene Alignments and SAGE Info
+priority 20.5
+visibility hide
+type psl . 
 
 track mgc_mrna
 shortLabel MGC mRNAs
