@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.146 2004/07/19 17:48:12 kate Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.147 2004/07/19 19:45:40 kate Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -1052,8 +1052,8 @@ for (el = accList; el != NULL; el = el->next)
         }
     else
         {
-        /* display mRNA details page */
-        dyStringPrintf(dy, "<A HREF=\"%s%cg=xenoMrna&i=%s",
+        /* display mRNA details page -- need to add dummy CGI variables*/
+        dyStringPrintf(dy, "<A HREF=\"%s%cg=xenoMrna&i=%s&c=0&o=0&l=0&r=0",
 		       hgcName(), hgAppCombiner, acc);
         }
     if (ui != NULL)
