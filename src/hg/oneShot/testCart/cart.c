@@ -7,6 +7,10 @@
 #include "htmshell.h"
 #include "cart.h"
 
+static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
+static char *selfVar = "hgself";	/* Name of cgi variable script name is stored in. */
+static boolean savedSession = FALSE;	/* TRUE if they've called cartSaveSession. */
+
 static void hashUpdateDynamicVal(struct hash *hash, char *name, void *val)
 /* Val is a dynamically allocated (freeMem-able) entity to put
  * in hash.  Override existing hash item with that name if any.
@@ -275,37 +279,24 @@ sprintf(buf, "bool.%s", name);
 return buf;
 }
 
-boolean cartBoolean(struct cart *cart, char *var)
+static boolean cartBoo(struct cart *cart, char *var)
 /* Retrieve cart boolean.   Since CGI booleans simply
  * don't exist when they're false - which messes up
  * cart persistence,  we have to jump through some
  * hoops.   We prepend 'bool.' to the cart representation
  * of the variable to separate it from the cgi
  * representation that may or may not be transiently
- * in the cart.
- *
- * You may need to either call this function or
- * cartCgiBoolean depending on the context. 
- * This routine will ignore cgi boolean variables
- * entirely unless they are first retrieved with
- * cartCgiBoolean(). */
+ * in the cart. */
 {
 var = boolName(var);
 return cartInt(cart, var);
 }
 
-boolean cartUsualBoolean(struct cart *cart, char *var, boolean usual)
+static boolean cartUsualBoo(struct cart *cart, char *var, boolean usual)
 /* Return variable value if it exists or usual if not. */
 {
 var = boolName(var);
 return cartUsualInt(cart, var, usual);
-}
-
-void cartSetBoolean(struct cart *cart, char *var, boolean val)
-/* Set boolean value. */
-{
-var = boolName(var);
-cartSetInt(cart,var,val);
 }
 
 boolean cartCgiBoolean(struct cart *cart, char *var)
@@ -319,13 +310,48 @@ cartSetBoolean(cart, var, val);
 return val;
 }
 
-void cartSaveSession(struct cart *cart)
+boolean cartBoolean(struct cart *cart, char *var, char *selfVal)
+/* Retrieve cart boolean.   Since CGI booleans simply
+ * don't exist when they're false - which messes up
+ * cart persistence,  we have to jump through some
+ * hoops.   If we are calling self, then we assume that
+ * the booleans are in cgi-variables,  otherwise we
+ * look in the cart for them. */
+{
+char *s = cgiOptionalString(selfVar);
+if (s != NULL && sameString(s, selfVal))
+    return cartCgiBoolean(cart, var);
+else
+    return cartBoo(cart, var);
+}
+
+boolean cartUsualBoolean(struct cart *cart, char *var, boolean usual, char *selfVal)
+/* Return variable value if it exists or usual if not. 
+ * See cartBoolean for explanation of selfVal. */
+{
+char *s = cgiOptionalString(selfVar);
+if (s != NULL && sameString(s, selfVal))
+    return cartCgiBoolean(cart, var);
+else
+    return cartUsualBoo(cart, var, usual);
+}
+
+void cartSetBoolean(struct cart *cart, char *var, boolean val)
+/* Set boolean value. */
+{
+var = boolName(var);
+cartSetInt(cart,var,val);
+}
+
+void cartSaveSession(struct cart *cart, char *selfName)
 /* Save session in a hidden variable. This needs to be called
- * somewhere inside of form. */
+ * somewhere inside of form or bad things will happen. */
 {
 char buf[64];
 sprintf(buf, "%u", cart->sessionInfo->id);
-cgiMakeHiddenVar("hgsid", buf);
+cgiMakeHiddenVar(sessionVar, buf);
+cgiMakeHiddenVar(selfVar, selfName);
+savedSession = TRUE;
 }
 
 static void cartDumpItem(struct hashEl *hel)
@@ -358,6 +384,9 @@ int hguid = (hguidString == NULL ? 0 : atoi(hguidString));
 int hgsid = cgiUsualInt("hgsid", 0);
 struct cart *cart = cartNew(hguid, hgsid, exclude);
 
+cartExclude(cart, sessionVar);
+cartExclude(cart, selfVar);
+
 printf("Set-Cookie: %s=%u; path=/; domain=.ucsc.edu; expires=%s\n",
 	cookieName, cart->userInfo->id, cookieDate());
 puts("Content-Type:text/html");
@@ -366,6 +395,8 @@ puts("\n");
 htmStart(stdout, title);
 doMiddle(cart);
 cartFree(&cart);
+if (!savedSession)
+    errAbort("Program error - need to call saveSession inside form");
 htmlEnd();
 }
 

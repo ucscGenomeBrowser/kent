@@ -57,23 +57,17 @@ double cartUsualDouble(struct cart *cart, char *var, double usual);
 void cartSetDouble(struct cart *cart, char *var, double val);
 /* Set double value. */
 
-boolean cartBoolean(struct cart *cart, char *var);
+boolean cartBoolean(struct cart *cart, char *var, char *selfVal);
 /* Retrieve cart boolean.   Since CGI booleans simply
  * don't exist when they're false - which messes up
  * cart persistence,  we have to jump through some
- * hoops.   We prepend 'bool.' to the cart representation
- * of the variable to separate it from the cgi
- * representation that may or may not be transiently
- * in the cart.
- *
- * You may need to either call this function or
- * cartCgiBoolean depending on the context. 
- * This routine will ignore cgi boolean variables
- * entirely unless they are first retrieved with
- * cartCgiBoolean(). */
+ * hoops.   If we are calling self, then we assume that
+ * the booleans are in cgi-variables,  otherwise we
+ * look in the cart for them. */
 
-boolean cartUsualBoolean(struct cart *cart, char *var, boolean usual);
-/* Return variable value if it exists or usual if not. */
+boolean cartUsualBoolean(struct cart *cart, char *var, boolean usual, char *selfVal);
+/* Return variable value if it exists or usual if not. 
+ * See cartBoolean for explanation of selfVal. */
 
 void cartSetBoolean(struct cart *cart, char *var, boolean val);
 /* Set boolean value. */
@@ -82,10 +76,9 @@ boolean cartCgiBoolean(struct cart *cart, char *var);
 /* Return boolean variable from CGI.  Remove it from cart.
  * CGI booleans alas do not store cleanly in cart. */
 
-void cartSaveSession(struct cart *cart);
+void cartSaveSession(struct cart *cart, char *selfName);
 /* Save session in a hidden variable. This needs to be called
- * somewhere inside of form.  If you don't and the user has
- * more than one browser window up, it will get messy. */
+ * somewhere inside of form or bad things will happen. */
 
 void cartDump(struct cart *cart);
 /* Dump contents of cart. */
