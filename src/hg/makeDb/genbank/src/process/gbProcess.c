@@ -47,7 +47,7 @@
 #include "gbFileOps.h"
 #include "gbProcessed.h"
 
-static char const rcsid[] = "$Id: gbProcess.c,v 1.2 2003/06/27 01:10:51 markd Exp $";
+static char const rcsid[] = "$Id: gbProcess.c,v 1.3 2003/07/14 07:31:09 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -971,7 +971,7 @@ void procGbEntry(struct lineFile *lf, struct hash *estAuthorHash,
 char *words[16];
 char date[64];
 int wordCount;
-DNA *dna;
+DNA *dna = NULL;
 int dnaSize;
 char sizeString[16];
 char accVer[64];
@@ -1082,7 +1082,11 @@ if ((filter->keyExp == NULL) || keyExpEval(filter->keyExp, kvt))
     {
     /* Handle sequence part of read. */
     contigCount = 0;
-    gbfReadSequence(lf, &dna, &dnaSize);
+    dna = gbfReadSequence(lf, &dnaSize);
+    }
+/* just discard if no sequence */
+if (dna != NULL)
+    {
     seqKey = kvtAdd(kvt, "seq", dna);
     safef(sizeString, sizeof(sizeString), "%d", dnaSize);
     sizeKey = kvtAdd(kvt, "siz", sizeString);

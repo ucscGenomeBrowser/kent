@@ -6,9 +6,10 @@
 #include "hash.h"
 #include "keys.h"
 #include "gbParse.h"
+#include "gbFileOps.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbParse.c,v 1.2 2003/06/27 01:10:51 markd Exp $";
+static char const rcsid[] = "$Id: gbParse.c,v 1.3 2003/07/14 07:31:09 markd Exp $";
 
 
 /* Some fields we'll want to use directly. */
@@ -33,6 +34,10 @@ struct gbField *gbGeneDbxField;
 struct gbField *gbCdsDbxField;
 struct gbField *gbProteinIdField;
 struct gbField *gbTranslationField;
+
+/* State flag, indicates end-of-record reached on current entry; needed to
+ * detect entries that don't have sequences */
+static boolean gReachedEOR = FALSE;
 
 char *skipLeadingNonSpaces(char *s)
 /* Return first non-white space or NULL. */
@@ -431,8 +436,13 @@ while (lineFileNext(lf, &line, &lineSize))
         }
     if (gbf == NULL && parentIndent < 0)
         {
-        if (startsWith("ORIGIN", firstWord) || startsWith("//", firstWord))
+        if (startsWith("ORIGIN", firstWord))
             return TRUE;
+        if (startsWith("//", firstWord))
+            {
+            gReachedEOR = TRUE;
+            return TRUE;
+            }
         }
     }
 return FALSE;
@@ -442,15 +452,25 @@ boolean gbfReadFields(struct lineFile *lf)
 /* Read in a single Gb record up to the ORIGIN. */
 {
 gbfClearVals(gbStruct);
+gReachedEOR = FALSE;
 return recurseReadFields(lf, gbStruct, -1);
 }
 
-void gbfReadSequence(struct lineFile *lf, DNA **retDna, int *retSize)
+DNA* gbfReadSequence(struct lineFile *lf, int *retSize)
 /* Read in sequence part of genBank file */
 {
 static int dnaAlloc = 0;
 static DNA *dna = NULL;
 int dnaCount = 0;
+
+*retSize = 0;
+if (gReachedEOR)
+    {
+    /* some gbcon.seq don't have origin, they reference contigs, just skip */
+    warn("no mRNA sequence for %s in %s", gbAccessionField->val->string,
+         lf->fileName);
+    return NULL;  /* no sequence */
+    }
 
 if (dnaAlloc == 0)
     {
@@ -485,8 +505,13 @@ for (;;)
         }
     }
 dna[dnaCount] = 0;
-*retDna = dna;
 *retSize = dnaCount;
+
+/* FIXME: make abort */
+if (!allowedRNABases(dna))
+    warn("invalid mRNA bases for %s in %s", gbAccessionField->val->string,
+         lf->fileName);
+return dna;
 }
 
 void gbfSkipSequence(struct lineFile *lf)
@@ -497,6 +522,7 @@ int lineSize;
 while (lineFileNext(lf, &line, &lineSize))
     if (startsWith("//", line))
         break;
+gReachedEOR = TRUE;
 }
 
 static void recurseFlatten(struct gbField *gbf, struct kvt *kvt);

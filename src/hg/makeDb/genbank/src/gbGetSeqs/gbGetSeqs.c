@@ -14,7 +14,7 @@
 #include "gbFa.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.3 2003/07/02 23:47:03 markd Exp $";
+static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.4 2003/07/14 07:31:09 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -22,14 +22,14 @@ static struct optionSpec optionSpecs[] = {
     {"db", OPTION_STRING},
     {"native", OPTION_BOOLEAN},
     {"xeno", OPTION_BOOLEAN},
-    {"noVersion", OPTION_BOOLEAN},
+    {"inclVersion", OPTION_BOOLEAN},
     {"verbose", OPTION_INT},
     {NULL, 0}
 };
 
 /* global options from command line */
 unsigned gOrgCats;
-boolean gNoVersion;
+boolean gInclVersion;
 
 
 struct seqIdSelect
@@ -130,11 +130,13 @@ void processSeq(struct gbSelect* select, struct gbFa* inFa, struct gbFa* outFa)
 {
 char acc[GB_ACC_BUFSZ];
 short version = gbSplitAccVer(inFa->id, acc);
+
+/* will return NULL on ignored sequences */
 struct gbEntry* entry = gbReleaseFindEntry(select->release, acc);
-if (entry->selectVer == version)
+if ((entry != NULL) && (entry->selectVer == version))
     {
     /* selected, output */
-    if (gNoVersion)
+    if (!gInclVersion)
         strcpy(inFa->id, acc);  /* remove version */
     gbFaWriteFromFa(outFa, inFa, NULL);
     }
@@ -236,7 +238,7 @@ errAbort("   gbGetSeqs [options] srcDb type seqFa [ids ...]\n"
          "     supplied.\n"
          "    -native - get native sequence\n"
          "    -xeno - get xeno sequences\n"
-         "    -noVersion - don't include version number in sequence id\n"
+         "    -version - include version number in sequence id\n"
          "    -verbose=n - enable verbose output, values greater than 1\n"
          "     increase verbosity.\n"
          "\n"
@@ -246,7 +248,7 @@ errAbort("   gbGetSeqs [options] srcDb type seqFa [ids ...]\n"
          "     seqFa - fasta file to create.  It will be compressed if it\n"
          "             ends in .gz."
          "     ids - If sequence ids are specified, only they are extracted.\n"
-         "           They may optionalls include the version numnber.\n"
+         "           They may optionally include the version numnber.\n"
          "\n");
 }
 
@@ -275,7 +277,7 @@ if (optionExists("xeno"))
     gOrgCats |= GB_XENO;
 if (gOrgCats == 0)
     gOrgCats = GB_NATIVE|GB_XENO;
-gNoVersion = optionExists("noVersion");
+gInclVersion = optionExists("inclVersion");
 
 if (argc > 4)
     {

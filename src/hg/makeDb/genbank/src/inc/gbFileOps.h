@@ -10,6 +10,17 @@
 #include <stdarg.h>
 #include <stdio.h>
 
+/* Table of RNA bases that are allowed.  Lower-case only, plus some special
+ * meta characters. Call allowedRNABasesInit before using directly.*/
+bool gAllowedRNABases[256];
+
+void allowedRNABasesInit();
+/* initialize allowed RNA bases */
+
+boolean allowedRNABases(char *rna);
+/* check if a sequence consists of only allowed characters.  An empty
+ * string is also invalid */
+
 boolean gbIsReadable(char* path);
 /* Test if a file exists and is readable by the user. */
 

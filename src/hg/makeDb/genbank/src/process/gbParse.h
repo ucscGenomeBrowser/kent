@@ -82,8 +82,8 @@ void gbfInit();
 boolean gbfReadFields(struct lineFile *lf);
 /* Read in a single Gb record up to the ORIGIN. */
 
-void gbfReadSequence(struct lineFile *lf, DNA **retDna, int *retSize);
-/* Read in sequence part of genBank file */
+DNA* gbfReadSequence(struct lineFile *lf, int *retSize);
+/* Read in sequence part of genBank file, or NULL if no sequence */
 
 void gbfSkipSequence(struct lineFile *lf);
 /* Skip to '//' if sequence not read */
