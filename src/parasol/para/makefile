@@ -5,7 +5,7 @@ L = -lm
 MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
-O = para.o
+O = para.o jobDb.o
 
 para: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/para $O $(MYLIBS) $L
