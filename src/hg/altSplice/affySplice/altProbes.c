@@ -14,6 +14,7 @@
 #include "dnaseq.h"
 #include "dMatrix.h"
 #include <gsl/gsl_math.h>
+#include <gsl/gsl_cdf.h>
 #include <gsl/gsl_statistics_double.h>
 
 struct altPath
@@ -70,6 +71,20 @@ struct bindSite
     char *rnaBinder;   /* Rna binding protein associated with these sites. */
 };
 
+
+struct unitTest
+{
+    struct unitTest *next; /* Next in list. */
+    boolean (*test)(struct unitTest *test);     /* Function to call for test. */
+    char *description;     /* Description of tests. */
+    char *errorMsg;        /* Error message returned by test. */
+};
+
+/* Create a funtion pointer. */
+typedef boolean (*testFunction)(struct unitTest *test);
+
+struct unitTest *tests = NULL;
+
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
 {
@@ -94,6 +109,7 @@ static struct optionSpec optionSpecs[] =
     {"skipMotifControls", OPTION_BOOLEAN},
     {"selectedPValues", OPTION_STRING},
     {"selectedPValFile", OPTION_STRING},
+    {"doTests", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -121,7 +137,8 @@ static char *optionDescripts[] =
     "Use exon beds, not just splice junction beds.",
     "Skip looking at the motifs in the controls, can be quite slow.",
     "File containing list of AFFY G###### ids and gene names.",
-    "File to output pvalue vectors for selected genes to."
+    "File to output pvalue vectors for selected genes to.",
+    "Do some unit tests."
 };
 
 struct hash *bedHash = NULL; /* Access bed probe sets by hash. */
@@ -138,6 +155,7 @@ boolean useComboProbes = FALSE; /* Combine probe sets on a given path using fish
 boolean useExonBedsToo = FALSE; /* Use exon beds too, not just splice junction beds. */
 
 FILE *pathProbabilitiesOut = NULL; /* File to print out path probability vectors. */
+FILE *pathExpressionOut = NULL; /* File to print out path probability vectors. */
 FILE *pathProbabilitiesBedOut = NULL; /* File to print out corresponding beds for paths. */
 struct hash *outputPValHash = NULL; /* Hash of selected names. */
 
@@ -234,6 +252,49 @@ for(i=0; i<ArraySize(optionSpecs) -1; i++)
     fprintf(stderr, "  -%s -- %s\n", optionSpecs[i].name, optionDescripts[i]);
 errAbort("\nusage:\n   ");
 }
+
+struct splice *ndr2CassTest()
+/* Create a splice for use in testsing. */
+{
+char *string = cloneString("chr14	43771400	43772080	chr14.7822-8.26	2	-	9319	38	43765895,43766921,43767127,43767179,43767304,43767340,43767563,43767611,43767860,43767912,43768199,43768244,43768682,43768786,43768944,43769001,43769182,43769269,43769488,43769549,43770672,43770735,43770929,43771050,43771294,43771356,43771400,43771404,43771700,43771742,43772080,43772161,43773937,43774090,43774093,43774180,43774538,43774609,	0,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,1,3,2,1,3,1,3,1,1,2,2,1,2,	2	{\"chr14\",43771400,43772080,0,2,2,{26,30,},24,31,0,},{\"chr14\",43771400,43772080,0,4,4,{26,28,29,30,},24,31,42,},");
+struct splice *splice = NULL;
+char *words[100];
+chopByWhite(string, words, sizeof(words));
+splice = spliceLoad(words);
+}
+
+struct bed *ndr2BedTest()
+/* Create beds used in testing. */
+{
+char *inc1 = "chr14	43771385	43771715	G6912708@J918653_RC@j_at	0	-	43771385	43771715	0	2	15,15,	0,315,";
+char *skip = "chr14	43771385	43772095	G6912708@J918654_RC@j_at	0	-	43771385	43772095	0	2	15,15,	0,695,";
+char *inc2 = "chr14	43771727	43772095	G6912708@J918655_RC@j_at	0	-	43771727	43772095	0	2	15,15,	0,353,";
+char *gene = "chr14	43765981	43772151	G6912708_RC_a_at	0	-	43765981	43772151	0	9	25,25,25,25,25,25,25,25,43,	0,149,1602,3222,3262,3516,5000,5392,6127,";
+struct bed *bedList = NULL, *bed = NULL;
+char *words[12];
+
+chopByWhite(cloneString(inc1), words, ArraySize(words));
+bed = bedLoadN(words,12);
+slAddHead(&bedList, bed);
+
+chopByWhite(cloneString(skip), words, ArraySize(words));
+bed = bedLoadN(words,12);
+slAddHead(&bedList, bed);
+
+chopByWhite(cloneString(inc2), words, ArraySize(words));
+bed = bedLoadN(words,12);
+slAddHead(&bedList, bed);
+
+chopByWhite(cloneString(gene), words, ArraySize(words));
+bed = bedLoadN(words,12);
+slAddHead(&bedList, bed);
+
+slReverse(&bedList);
+return bedList;
+}
+
+
+
 
 void logSpliceType(enum altSpliceType type)
 /* Log the different types of splicing. */
@@ -451,6 +512,19 @@ if(bed->blockCount == 2 && bed->blockSizes[0] == 15 && bed->blockSizes[1] == 15)
 return FALSE;
 }
 
+boolean validVertex(struct splice *splice, int v1, int v2)
+/* Check to see if a given vertex is the sink or source of the
+   graph and should be ignored. */
+{
+return (v1 >= 0 && v1 < splice->vCount && v2 >= 0 && v2 < splice->vCount);
+}
+
+enum ggEdgeType pathEdgeTypeValid(struct splice *s, int v1, int v2)
+{
+assert(validVertex(s, v1,v2));
+return pathEdgeType(s->vTypes, v1, v2);
+}
+
 boolean pathContainsIntron(struct splice *splice, struct path *path, char *chrom,
 			   int chromStart, int chromEnd, char *strand)
 /* Return TRUE if this path contains an intron (splice junction) that
@@ -466,7 +540,8 @@ if(differentString(splice->tName, chrom) ||
 /* Check the edges on the path. */
 for(i = 0; i < path->vCount - 1; i++)
     {
-    if(pathEdgeType(splice->vTypes, verts[i], verts[i+1]) == ggSJ)
+    if(validVertex(splice, verts[i], verts[i+1]) &&
+       pathEdgeTypeValid(splice, verts[i], verts[i+1]) == ggSJ)
 	{
 	if(chromStart == vPos[verts[i]] && chromEnd == vPos[verts[i+1]])
 	    return TRUE;
@@ -490,8 +565,8 @@ if(differentString(splice->tName, chrom) ||
     return FALSE;
 
 /* Check the first edge. */
-if(path->upV != -1 && pathEdgeType(splice->vTypes, path->upV, 
-				   verts[0]) == ggExon)
+if(validVertex(splice, path->upV, verts[0]) &&
+   pathEdgeTypeValid(splice, path->upV,verts[0]) == ggExon)
     {
     if(chromStart >= vPos[path->upV] && chromEnd <= vPos[verts[0]])
 	return TRUE;
@@ -501,8 +576,8 @@ if(path->upV != -1 && pathEdgeType(splice->vTypes, path->upV,
     }
 
 /* Check the last edge. */
-if(path->downV != -1 && 
-   pathEdgeType(splice->vTypes, verts[path->vCount - 1], path->downV) == ggExon)
+if(validVertex(splice, verts[path->vCount -1], path->downV) &&
+   pathEdgeTypeValid(splice, verts[path->vCount - 1], path->downV) == ggExon)
     {
     if(chromStart >= vPos[verts[path->vCount - 1]] && 
        chromEnd <= vPos[path->downV])
@@ -516,7 +591,8 @@ if(path->downV != -1 &&
 /* Check the edges on the path. */
 for(i = 0; i < path->vCount - 1; i++)
     {
-    if(pathEdgeType(splice->vTypes, verts[i], verts[i+1]) == ggExon)
+    if(validVertex(splice, verts[i], verts[i+1]) &&
+       pathEdgeTypeValid(splice, verts[i], verts[i+1]) == ggExon)
 	{
 	if(chromStart >= vPos[verts[i]] && chromEnd <= vPos[verts[i+1]])
 	    return TRUE;
@@ -529,7 +605,7 @@ return FALSE;
 }
 
 boolean pathContainsBed(struct splice *splice, struct path *path, 
-			struct bed *bed, boolean allBases, boolean intronsToo)
+			struct bed *bed,  boolean intronsToo)
 /* Return TRUE if this path contains this bed, FALSE otherwise. If
    allBases, the bed must be completely subsumed by the path. */
 {
@@ -543,7 +619,7 @@ for(i = 0; i < bed->blockCount; i++)
 
     /* Check the exon. */
     containsBed &= pathContainsBlock(splice, path, bed->chrom, chromStart, 
-				     chromEnd, bed->strand, allBases);
+				     chromEnd, bed->strand, TRUE);
     if(containsBed == FALSE)
 	break;
 
@@ -590,8 +666,8 @@ for(be = beList; be != NULL; be = be->next)
 	    {
 	    /* If it is a junction pass the intronsToo flag == TRUE, otherwise
 	       set to false. */
-	    if((isJunctionBed(bed) && pathContainsBed(splice, altPath->path, bed, TRUE, TRUE)) ||
-	       (!isJunctionBed(bed) && pathContainsBed(splice, altPath->path, bed, TRUE, FALSE)))
+	    if((isJunctionBed(bed) && pathContainsBed(splice, altPath->path, bed, TRUE)) ||
+	       (!isJunctionBed(bed) && pathContainsBed(splice, altPath->path, bed, FALSE)))
 		{
 		if(altMatchPath == NULL)
 		    altMatchPath = altPath; /* So far unique match. */
@@ -634,7 +710,6 @@ for(bed = bedList; bed != NULL; bed = bed->next)
     chromKeeperAdd(bed->chrom, bed->chromStart, bed->chromEnd, bed);
     hashAdd(bedHash, bed->name, bed);
     }
-
 }
 
 struct altEvent *altEventsFromSplices(struct splice *spliceList)
@@ -787,9 +862,9 @@ for(altPath = altEvent->altPathList; altPath != NULL; altPath = altPath->next)
 	    /* Try the alternative gene probe set. */
 	    if(altIndex != -1)
 		{
-		int offSet = geneCount;
+		int offSet = geneCount - 1;
 		altEvent->geneBeds[offSet] = hashFindVal(bedHash, geneName);
-		altEvent->geneExpVals[offSet] = intenM->matrix[index];
+		altEvent->geneExpVals[offSet] = intenM->matrix[altIndex];
 		index =  hashIntValDefault(probM->nameIndex, altGeneName, -1);
 		if(index != -1)
 		    altEvent->genePVals[offSet] = probM->matrix[index];
@@ -830,6 +905,11 @@ for(geneIx = 0; geneIx < event->geneProbeCount; geneIx++)
 return FALSE;
 }
 
+void printVars(double *preLog, double *log)
+{
+printf("Pre-Log %.20f, Log() %.20f\n", preLog, log);
+}
+
 boolean altPathProbesCombExpressed(struct altEvent *event, struct altPath *altPath,
 			       int probeIx, int tissueIx)
 /* Return TRUE if the path is expressed, FALSE otherwise. */
@@ -838,58 +918,81 @@ double probProduct = 0;
 int probCount = 0;
 int i = 0;
 double combination = 0;
+double x = 0;
 for(i = 0; i < altPath->probeCount; i++)
     {
     if(altPath->pVals[i])
 	{
-	probProduct = probProduct + log(altPath->pVals[i][tissueIx]);
-	if(probProduct < 0)
-	    probProduct = 0;
+	if(altPath->pVals[i][tissueIx] == 0)
+	    x = log(.00000001);
+	else
+	    x = log(altPath->pVals[i][tissueIx]);
+	probProduct += x;
 	probCount++;
 	}
     }
 if(probCount == 0) 
     return FALSE;
-combination = gsl_cdf_chisq_P(-2*probProduct,2*probCount); 
+if(probCount == 1 && probProduct == 0)
+    return FALSE; combination = gsl_cdf_chisq_P(-2.0*probProduct,2.0*probCount); 
+combination = gsl_cdf_chisq_P(-2.0*probProduct,2.0*probCount); //combination = gsl_cdf_gamma_P(-2.0*probProduct,1.0 * probCount, 2.0); 
 if(combination <= 1 - presThresh)
     return TRUE;
 return FALSE;
 }
 
 boolean altPathProbesExpressed(struct altEvent *event, struct altPath *altPath,
-			       int probeIx, int tissueIx)
+			       int probeIx, int tissueIx, double *expression)
 /* Return TRUE if the path is expressed, FALSE otherwise. */
 {
-boolean expressed = FALSE;
 int i = 0;
+int probeCount = 0;
+double **expVals = altPath->expVals;
+boolean expressed = FALSE;
 if(useMaxProbeSet) 
     {
     for(i = 0; i < altPath->probeCount; i++)
 	{
 	if(altPath->pVals[i] && altPath->pVals[i][tissueIx] >= presThresh)
+	    {
 	    expressed = TRUE;
+	    *expression = max(*expression, expVals[i][tissueIx]);
+	    }	    
 	}
     }
-else if(useComboProbes && 
-	altPathProbesCombExpressed(event, altPath, probeIx, tissueIx))
+else if(useComboProbes)
     {
-    expressed = TRUE;
+    if(altPathProbesCombExpressed(event, altPath, probeIx, tissueIx))
+	expressed = TRUE;
+    if(expVals[i] != NULL)
+	{
+	for(i = 0; i < altPath->probeCount; i++)
+	    {
+	    *expression += expVals[i][tissueIx];
+	    probeCount++;
+	    }
+	}
+    if(probeCount > 0)
+	*expression = *expression / probeCount;
     }
 else
     {
     if(altPath->pVals[probeIx] && altPath->pVals[probeIx][tissueIx] >= presThresh)
+	{
 	expressed = TRUE;
+	*expression = altPath->expVals[probeIx][tissueIx];
+	}
     }
 return expressed;
 }
 
 boolean tissueExpressed(struct altEvent *event, struct altPath *altPath, 
-			int probeIx, int tissueIx)
+			int probeIx, int tissueIx, double *expression)
 /* Return TRUE if the probeIx in tissueIx is above minimum
    pVal, FALSE otherwise. */
 {
 int geneIx = 0;
-if(!altPathProbesExpressed(event, altPath, probeIx, tissueIx))
+if(!altPathProbesExpressed(event, altPath, probeIx, tissueIx, expression))
     return FALSE;
 if(event->genePVals && geneExpressed(event, tissueIx))
     return TRUE;
@@ -1076,23 +1179,29 @@ return "error";
 }
 
 void outputPathProbabilities(struct altEvent* event, struct altPath *altPath,
-			      struct dMatrix *intenM, struct dMatrix *probM,
-			      int** expressed, int **notExpressed, int pathIx)
+			     struct dMatrix *intenM, struct dMatrix *probM,
+			     int** expressed, int **notExpressed, double **expression,
+			     int pathIx)
 /* Print out a thresholded probablilty vector for clustering and visualization
    in treeview. */
 {
 int i = 0;
 FILE *out = pathProbabilitiesOut;
+FILE *eOut = pathExpressionOut;
 struct splice *splice = event->splice;
 struct path *path = altPath->path;
 char *geneName = NULL;
 assert(out);
 if((geneName = isSelectedProbeSet(event, altPath)) != NULL)
     {
-    fprintf(out, "%s.%s.%s.%d", splice->name, geneName, 
-	    nameForType(splice->type), path->bpCount);
+    char *psName = "Error";
+    assert(altPath->beds[0] != NULL);
+    psName = altPath->beds[0]->name;
+    fprintf(out, "%s\t%s.%s.%s.%d", psName, geneName, nameForType(splice->type), psName, path->bpCount);
+    fprintf(eOut, "%s\t%s.%s.%s.%d", psName, geneName, nameForType(splice->type), psName, path->bpCount);
     for(i = 0; i < probM->colCount; i++)
 	{
+	fprintf(eOut, "\t%f", expression[pathIx][i]);
 	if(expressed[pathIx][i])
 	    fprintf(out, "\t2");
 	else if(notExpressed[pathIx][i])
@@ -1101,12 +1210,14 @@ if((geneName = isSelectedProbeSet(event, altPath)) != NULL)
 	    fprintf(out, "\t0");
 	}
     fprintf(out, "\n");
+    fprintf(eOut, "\n");
     }
 }
 
 boolean altPathExpressed(struct altEvent *event, struct altPath *altPath,
-		      struct dMatrix *intenM, struct dMatrix *probM,
-		      int **expressed, int **notExpressed, int pathIx)
+			 struct dMatrix *intenM, struct dMatrix *probM,
+			 int **expressed, int **notExpressed, double **expression,
+			 int pathIx)
 /* Fill in the expression matrix for this path. */
 {
 int bestProbeIx = 0;
@@ -1125,7 +1236,8 @@ if(bestProbeIx == -1)
 
 for(tissueIx = 0; tissueIx < probM->colCount; tissueIx++)
     {
-    if(tissueExpressed(event, altPath, bestProbeIx, tissueIx))
+    double e = -1;
+    if(tissueExpressed(event, altPath, bestProbeIx, tissueIx, &e))
 	{
 	expressed[pathIx][tissueIx]++;
 	total++;
@@ -1134,6 +1246,7 @@ for(tissueIx = 0; tissueIx < probM->colCount; tissueIx++)
 	{
 	notExpressed[pathIx][tissueIx]++;
 	}
+    expression[pathIx][tissueIx] = e;
     }
 return total > 0;
 }
@@ -1274,7 +1387,8 @@ int *verts = path->vertices;
 if(sameString(splice->strand,"+"))
     {
     for(i = 0; i < vC -1; i++)
-	if(pathEdgeType(vTypes, verts[i], verts[i+1]) == ggExon)
+	if(validVertex(splice, verts[i], verts[i+1]) &&
+	   pathEdgeTypeValid(splice, verts[i], verts[i+1]) == ggExon)
 	    {
 	    firstSplice = vPos[verts[i]];
 	    secondSplice = vPos[verts[i+1]];
@@ -1282,8 +1396,9 @@ if(sameString(splice->strand,"+"))
     }
 else
     {
-    for(i = vC-1; i > 0; i--)
-	if(pathEdgeType(vTypes, verts[i-1], verts[i]) == ggExon)
+    for(i = vC-1; i >= 0; i--)
+	if(validVertex(splice, verts[i-1], verts[i]) &&
+	   pathEdgeTypeValid(splice, verts[i-1], verts[i]) == ggExon)
 	    {
 	    firstSplice = vPos[verts[i-1]];
 	    secondSplice = vPos[verts[i]];
@@ -1331,7 +1446,6 @@ if(sameString(splice->strand, "-"))
     }
 }
 
-
 void makeJunctMdbGenericLink(struct splice *js, struct dyString *buff, char *name)
 {
 int offSet = 100;
@@ -1361,15 +1475,15 @@ else
     diff = lastPath->bpCount;
 buff = newDyString(256);
 fprintf(brainSpTableHtmlOut, "<tr><td><a target=\"browser\" "
-	"href=\"http://%s/cgi-bin/hgTracks?db=%s&position=%s:%d-%d\">", browserName,
+	"href=\"http://%s/cgi-bin/hgTracks?db=%s&position=%s:%d-%d&hgt.motifs=GGGG%%2CCTCTCT%%2CGCATG\",>", browserName,
 	db, pathBed->chrom, pathBed->chromStart-100, pathBed->chromEnd+100);
 fprintf(brainSpTableHtmlOut,"%s </a>\n", splice->name);
 fprintf(brainSpTableHtmlOut, "<a target=\"browser\" "
-	"href=\"http://%s/cgi-bin/hgTracks?db=%s&position=%s:%d-%d&complement=%d\">[u]</a>", 
+	"href=\"http://%s/cgi-bin/hgTracks?db=%s&position=%s:%d-%d&complement=%d&hgt.motifs=GGGG%%2CCTCTCT%%2CGCATG\">[u]</a>", 
 	browserName, db, pathBed->chrom, pathBed->chromStart-95, pathBed->chromStart+5,
 	pathBed->strand[0] == '-' ? 1 : 0);
 fprintf(brainSpTableHtmlOut, "<a target=\"browser\" "
-	"href=\"http://%s/cgi-bin/hgTracks?db=%s&position=%s:%d-%d&complement=%d\">[d]</a>", 
+	"href=\"http://%s/cgi-bin/hgTracks?db=%s&position=%s:%d-%d&complement=%d&hgt.motifs=GGGG%%2CCTCTCT%%2CGCATG\">[d]</a>", 
 	browserName, db, pathBed->chrom, pathBed->chromEnd-5, pathBed->chromEnd+95,
 	pathBed->strand[0] == '-' ? 1 : 0);
 makeJunctMdbGenericLink(splice, buff, "[p]");
@@ -1501,7 +1615,7 @@ switch(type)
 
 void outputTissueSpecificEvents(struct altEvent *event, int **expressed, int **notExpressed,
 			       int pathCount, struct dMatrix *probM)
-/* Output the event if it is alt-expressed and tissue specific
+/* Output the event if it is tissue specific
    specific. */
 {
 int tissueIx = 0;
@@ -1530,6 +1644,7 @@ void doEventAnalysis(struct altEvent *event, struct dMatrix *intenM,
 int i = 0;
 int **expressed = NULL;
 int **notExpressed = NULL;
+double **expression = NULL;
 struct altPath *altPath = NULL;
 int pathCount = slCount(event->altPathList);
 int pathExpCount = 0;
@@ -1539,10 +1654,12 @@ int withProbes = 0;
 /* Allocate a 2D array for expression. */
 AllocArray(expressed, pathCount);
 AllocArray(notExpressed, pathCount);
+AllocArray(expression, pathCount);
 for(i = 0; i < pathCount; i++)
     {
     AllocArray(expressed[i], probM->colCount);
     AllocArray(notExpressed[i], probM->colCount);
+    AllocArray(expression[i], intenM->colCount);
     }
 
 /* Fill in the array. */
@@ -1551,17 +1668,17 @@ for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next)
     if(altPath->probeCount > 0)
 	withProbes++;
     if(altPathExpressed(event, altPath, intenM, probM, 
-			expressed, notExpressed, pathIx))
+			expressed, notExpressed, expression, pathIx))
 	pathExpCount++;
-    if(pathProbabilitiesOut != NULL)
+    
+    /* Output the probabilities. */
+    if(pathProbabilitiesOut != NULL && event->splice->type != altOther)
 	{
 	outputPathProbabilities(event, altPath, intenM, probM, 
-				expressed, notExpressed, pathIx);
+				expressed, notExpressed, expression, pathIx);
 	}
     pathIx++;
     }
-
-
 
 /* Determine our expression, alternate or otherwise. */
 if(pathExpCount >= tissueExpThresh && withProbes > 1)
@@ -1591,9 +1708,26 @@ for(i = 0; i < pathCount; i++)
     {
     freez(&expressed[i]);
     freez(&notExpressed[i]);
+    freez(&expression[i]);
     }
 freez(&notExpressed);
 freez(&expressed);
+freez(&expression);
+}
+
+int stringOccurance(char *needle, char *haystack)
+/* How many times is needle in haystack? */
+{
+int count = 0;
+char *rest = haystack;
+touppers(needle);
+touppers(haystack);
+while((rest = stringIn(needle, rest)) != NULL)
+    {
+    count++;
+    rest++;
+    }
+return count;
 }
 
 int countMotifs(char *seq, struct bindSite *bs)
@@ -1602,14 +1736,10 @@ int countMotifs(char *seq, struct bindSite *bs)
 {
 int i = 0, j = 0;
 int count = 0;
+touppers(seq);
 for(i = 0; i < bs->motifCount; i++)
     {
-    char *rest = seq;
-    while((rest = stringIn(bs->motifs[i],rest)) != NULL)
-	{
-	count++;
-	rest++;
-	}
+    count += stringOccurance(bs->motifs[i],seq);
     }
 return count;
 }
@@ -1638,8 +1768,6 @@ else
     upStream = hChromSeq(path->tName, chromStart-motifWin, chromStart);
     downStream = hChromSeq(path->tName, chromEnd, chromEnd+motifWin);
     }
-touppers(upStream->dna);
-touppers(downStream->dna);
 AllocArray(altPath->motifUpCounts, bindSiteCount);
 AllocArray(altPath->motifDownCounts, bindSiteCount);
 for(i = 0; i < bindSiteCount; i++)
@@ -1939,6 +2067,17 @@ carefulClose(&brainSpFrameHtmlOut);
 dyStringFree(&file);
 }
 
+void printCdtHeader(FILE *out, struct dMatrix *dM)
+{
+int i = 0;
+fprintf(out, "YORF\tNAME");
+for(i = 0; i < dM->colCount; i++)
+    {
+    fprintf(out, "\t%s", dM->colNames[i]);
+    }
+fprintf(out, "\n");
+}
+
 void altProbes()
 /* Top level function to map probes to paths and analyze. */
 {
@@ -1971,6 +2110,14 @@ if(probIn == NULL || intenIn == NULL)
     errAbort("Must specify intensityFile and probeFile");
 intenM = dMatrixLoad(intenIn);
 probM = dMatrixLoad(probIn);
+
+/* If we're doing path probabilities print some headers. */
+if(pathProbabilitiesOut != NULL)
+    {
+    printCdtHeader(pathProbabilitiesOut, probM);
+    printCdtHeader(pathExpressionOut, intenM);
+    }
+
 if(optionExists("tissueSpecific"))
     initTissueSpecific(probM->colCount);
 warn("Filling in event data.");
@@ -1991,11 +2138,266 @@ carefulClose(&brainSpBedDownOut);
 carefulClose(&brainSpPathBedOut);
 }
 
+boolean testStringOccurance(struct unitTest *test)
+/* Test how many times a motif is counted. */
+{
+int count = 0;
+
+if(stringOccurance(cloneString("ggGG"), cloneString("nnnnnggggg")) != 2)
+    return FALSE;
+
+if(stringOccurance(cloneString("ggGG"), cloneString("nnnnngggggnnnn")) != 2)
+    return FALSE;
+
+if(stringOccurance(cloneString("ggGG"), cloneString("gggggnnnn")) != 2)
+    return FALSE;
+
+if(stringOccurance(cloneString("gcATG"), cloneString("GcatGcattg")) != 1)
+    return FALSE;
+
+return TRUE;
+}
+
+boolean testCdfChiSqP(struct unitTest *test)
+/* Test the gsl results for the chisq function. Gold values from R.*/
+{
+double result = 0;
+char buff[256];
+
+/* Run the function for som test values, print to 
+   a buffer to get the precision / rounding right. */
+result = gsl_cdf_chisq_P(-2*log(.9),2);
+safef(buff, sizeof(buff), "%.7f", result);
+if(differentString(buff, "0.1000000"))
+    return FALSE;
+
+result = gsl_cdf_chisq_P(-2*log(.1),2);
+safef(buff, sizeof(buff), "%.7f", result);
+if(differentString(buff, "0.9000000"))
+    return FALSE;
+
+result = gsl_cdf_chisq_P(-2*(log(.1)+log(.9)+log(.5)),6);
+safef(buff, sizeof(buff), "%.7f", result);
+if(differentString(buff, "0.5990734"))
+    return FALSE;
+
+result = gsl_cdf_chisq_P(-2*(log(.8)+log(.8)),4);
+safef(buff, sizeof(buff), "%.8f", result);
+if(differentString(buff, "0.07437625"))
+    return FALSE;
+return TRUE;
+}
+
+boolean testPathContains(struct unitTest *test)
+/* Test the path contains block functionality. */
+{
+struct splice *ndr2 = ndr2CassTest();
+struct path *skipPath = NULL, *incPath = NULL;
+struct dyString *error = newDyString(128);
+boolean result = TRUE, currentResult = TRUE;
+skipPath = ndr2->paths;
+incPath = ndr2->paths->next;
+
+if(pathContainsIntron(ndr2, skipPath, "chr14", 43771385+15, 43772095-15, "-") != TRUE)
+    currentResult = FALSE;
+if(pathContainsIntron(ndr2, skipPath, "chr14", 43771385+15, 43771715-15, "-") != FALSE)
+    currentResult = FALSE;
+if(pathContainsIntron(ndr2, skipPath, "chr14", 43771727+15, 43772095-15, "-") != FALSE)
+    currentResult = FALSE;
+if(currentResult == FALSE)
+    {
+    dyStringPrintf(error, "Problem with placing introns on skip path, ");
+    result = FALSE;
+    }
+
+currentResult = TRUE;
+if(pathContainsIntron(ndr2, incPath, "chr14", 43771385+15, 43772095-15, "-") != FALSE)
+    currentResult = FALSE;
+if(pathContainsIntron(ndr2, incPath, "chr14", 43771385+15, 43771715-15, "-") != TRUE)
+    currentResult = FALSE;
+if(pathContainsIntron(ndr2, incPath, "chr14", 43771727+15, 43772095-15, "-") != TRUE)
+    currentResult = FALSE;
+if(currentResult == FALSE)
+    {
+    dyStringPrintf(error, "Problem with placing introns on skip path, ");
+    result = FALSE;
+    }
+
+currentResult = TRUE;
+if(pathContainsBlock(ndr2, incPath,  "chr14", 43771727, 43771727+15, "-", TRUE) != TRUE)
+    currentResult = FALSE;
+if(pathContainsBlock(ndr2, incPath,  "chr14", 43771703, 43771735, "-", TRUE) != TRUE)
+    currentResult = FALSE;
+if(pathContainsBlock(ndr2, skipPath,  "chr14", 43771703, 43771735, "-", TRUE) != FALSE)
+    currentResult = FALSE;
+if(currentResult == FALSE)
+    {
+    dyStringPrintf(error, "Problem placing blocks with all bases, ");
+    result = FALSE;
+    }
+
+currentResult = TRUE;
+if(pathContainsBlock(ndr2, incPath,  "chr14", 43771727, 43771727+16, "-", TRUE) != FALSE)
+    currentResult = FALSE;
+if(pathContainsBlock(ndr2, incPath,  "chr14", 43771727, 43771727+16, "-", FALSE) != TRUE)
+    currentResult = FALSE;
+if(currentResult == FALSE)
+    {
+    dyStringPrintf(error, "Problem placing blocks with not all bases, ");
+    result = FALSE;
+    }
+    
+test->errorMsg = cloneString(error->string);
+dyStringFree(&error);
+return result;
+}
+
+boolean testPathContainsBed(struct unitTest *test)
+/* Test to see if a path contains the right stuff. */
+{
+struct splice *ndr2 = ndr2CassTest();
+struct bed *bedList = ndr2BedTest(), *bed = NULL;
+/* 1 include, 2 skip, 3 include, 4 gene. */
+struct path *skipPath = NULL, *incPath = NULL;
+boolean result = TRUE;
+struct dyString *error = newDyString(128);
+skipPath = ndr2->paths;
+incPath = ndr2->paths->next;
+
+/* First include. */
+bed = bedList; 
+if(pathContainsBed(ndr2, skipPath, bed, TRUE) != FALSE)
+    {
+    result = FALSE;
+    dyStringPrintf(error, "Matching include bed to skip, ");
+    }
+if(pathContainsBed(ndr2, incPath, bed, TRUE) != TRUE)
+    {
+    result = FALSE;
+    dyStringPrintf(error, "Not matching include bed to include, ");
+    }
+
+/* Skip probe set. */
+bed = bed->next;
+if(pathContainsBed(ndr2, skipPath, bed, TRUE) != TRUE)
+    {
+    result = FALSE;
+    dyStringPrintf(error, "Not matching skip bed to skip, ");
+    }
+if(pathContainsBed(ndr2, incPath, bed, TRUE) != FALSE)
+    {
+    result = FALSE;
+    dyStringPrintf(error, "Matching skip bed to include, ");
+    }
+
+/* Second include. */
+bed = bed->next;
+if(pathContainsBed(ndr2, skipPath, bed, TRUE) != FALSE)
+    {
+    result = FALSE;
+    dyStringPrintf(error, "Matching 2nd include bed to skip, ");
+    }
+if(pathContainsBed(ndr2, incPath, bed, TRUE) != TRUE)
+    {
+    result = FALSE;
+    dyStringPrintf(error, "Not matching 2nd include bed to include, ");
+    }
+
+/* Gene probe set. */
+bed = bed->next;
+if(pathContainsBed(ndr2, skipPath, bed, FALSE) != FALSE)
+    {
+    result = FALSE;
+    dyStringPrintf(error, "Matching gene set to skip path,  ");
+    }
+
+if(pathContainsBed(ndr2, incPath, bed, FALSE) != FALSE)
+    {
+    result = FALSE;
+    dyStringPrintf(error, "Matching gene set to include path,  ");
+    }
+test->errorMsg = cloneString(error->string);
+dyStringFree(&error);
+return result;
+}
+
+void initTests()
+{
+struct unitTest *test = NULL;
+
+/* Testing stat routines. */
+AllocVar(test);
+test->test = testCdfChiSqP;
+test->description = "GSL ChiSq function";
+slAddHead(&tests, test);
+
+/* Testing motif matching. */
+AllocVar(test);
+test->test = testStringOccurance;
+test->description = "Motif searching";
+slAddHead(&tests, test);
+
+/* Testing finding blocks on paths. */
+AllocVar(test);
+test->test = testPathContains;
+test->description = "Match introns and exon blocks to paths";
+slAddHead(&tests, test);
+
+/* Testing finding blocks on paths. */
+AllocVar(test);
+test->test = testPathContainsBed;
+test->description = "Match beds to paths";
+slAddHead(&tests, test);
+
+slReverse(&tests);
+}
+
+void runTests()
+{
+struct unitTest *test, *testNext, *passed = NULL, *failed = NULL;
+boolean passedAll = TRUE;
+int passCount = 0, *failCount = 0;
+for(test = tests; test != NULL; test = testNext)
+    {
+    testNext = test->next;
+    if(test->test(test) != FALSE)
+	{
+	passCount++;
+	slAddHead(&passed, test);
+	}
+    else
+	{
+	slAddHead(&failed, test);
+	passedAll = FALSE;
+	failCount++;
+	}
+    }
+if(passedAll)
+    {
+    fprintf(stdout, "Passed all %d tests.\n", passCount);
+    exit(0);
+    }
+else
+    {
+    fprintf(stdout, "Failed tests:\n");
+    for(test = failed; test != NULL; test = test->next)
+	{
+	fprintf(stdout, "%-40s\tFAILED\t%s\n", test->description, test->errorMsg == NULL ? "" : test->errorMsg);
+	}
+    exit(1);
+    }
+}
+
 
 void setOptions()
 /* Set up some options. */
 {
 char *selectedPValues = optionVal("selectedPValues", NULL);
+if(optionExists("doTests"))
+    {
+    initTests();
+    runTests();
+    }
 tissueExpThresh = optionInt("tissueExpThresh", 1);
 otherTissueExpThres = optionInt("otherTissueExpThres", 1);
 useMaxProbeSet = optionExists("useMaxProbeSet");
@@ -2016,7 +2418,8 @@ if(selectedPValues != NULL)
     pathProbabilitiesOut = mustOpen(selectedPValFile, "w");
     safef(buff, sizeof(buff), "%s.bed", selectedPValFile);
     pathProbabilitiesBedOut = mustOpen(buff, "w");
-
+    safef(buff, sizeof(buff), "%s.intensity", selectedPValFile);
+    pathExpressionOut = mustOpen(buff, "w");
     }
 
 if(useMaxProbeSet)
