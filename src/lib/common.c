@@ -582,8 +582,7 @@ for (;;)
 
 char *replaceChars(char *string, char *old, char *new)
 /*
-  Replaces the old with the new.
- The old and new string need not be of equal size
+  Replaces the old with the new. The old and new string need not be of equal size
  Can take any length string.
  Return value needs to be freeMem'd.
 */
@@ -602,25 +601,25 @@ while(NULL != ptr)
     ptr += oldLen;
     ptr = strstr(ptr, old);
     }
-strLen = strlen(string) + (numTimes * (newLen - oldLen));
+strLen = max(strlen(string) + (numTimes * (newLen - oldLen)), strlen(string));
 result = needMem(strLen + 1);
 
 ptr = strstr(string, old);
 resultPtr = result;
 while(NULL != ptr)
     {
-    fprintf(stderr, "RESULT: %s XXXXXXXXXXXXXXXXXXXXXXX<BR>\n", result);
+/*    fprintf(stderr, "RESULT: %s XXXXXXXXXXXXXXXXXXXXXXX<BR>\n", result); */
     strLen = ptr - string;
     strcpy(resultPtr, string);
     string = ptr + oldLen;
 
-    fprintf(stderr, "RESULT: %s XXXXXXXXXXXXXXXXXXXXXXX<BR>\n", result);
+/*    fprintf(stderr, "RESULT: %s XXXXXXXXXXXXXXXXXXXXXXX<BR>\n", result); */
     resultPtr += strLen;
-    fprintf(stderr, "RESULT: %s XXXXXXXXXXXXXXXXXXXXXXX<BR>\n", result);
+/*    fprintf(stderr, "RESULT: %s XXXXXXXXXXXXXXXXXXXXXXX<BR>\n", result); */
     strcpy(resultPtr, new);
-    fprintf(stderr, "RESULT: %s XXXXXXXXXXXXXXXXXXXXXXX<BR>\n", result);
+/*     fprintf(stderr, "RESULT: %s XXXXXXXXXXXXXXXXXXXXXXX<BR>\n", result); */
     resultPtr += newLen;
-    fprintf(stderr, "RESULT: %s XXXXXXXXXXXXXXXXXXXXXXX<BR>\n", result);
+/*    fprintf(stderr, "RESULT: %s XXXXXXXXXXXXXXXXXXXXXXX<BR>\n", result); */
     ptr = strstr(string, old);
     }
 
