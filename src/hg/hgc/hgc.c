@@ -139,8 +139,9 @@
 #include "zdobnovSynt.h"
 #include "HInv.h"
 #include "bed6FloatScore.h"
+#include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.708 2004/07/29 17:43:10 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.709 2004/07/29 21:50:49 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -615,6 +616,51 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 }
 
+void showBedTopScorersInWindow(struct sqlConnection *conn,
+			       struct trackDb *tdb, char *item, int start,
+			       int maxScorers)
+/* Show a list of track items in the current browser window, ordered by 
+ * score.  Track must be BED 5 or greater.  maxScorers is upper bound on 
+ * how many items will be displayed. */
+{
+struct sqlResult *sr = NULL;
+char **row = NULL;
+struct bed *bedList = NULL, *bed = NULL;
+char table[64];
+boolean hasBin = FALSE;
+char query[512];
+int i=0;
+
+hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+safef(query, sizeof(query),
+      "select * from %s where chrom = '%s' and chromEnd > %d and "
+      "chromStart < %d",
+      table, seqName, winStart, winEnd);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    bed = bedLoadN(row+hasBin, 5);
+    slAddHead(&bedList, bed);
+    }
+sqlFreeResult(&sr);
+if (bedList == NULL)
+    return;
+slSort(&bedList, bedCmpScore);
+slReverse(&bedList);
+puts("<B>Top-scoring elements in window:</B><BR>");
+for (i=0, bed=bedList;  bed != NULL && i < maxScorers;  bed=bed->next, i++)
+    {
+    if (sameWord(item, bed->name) && bed->chromStart == start)
+	printf("&nbsp;&nbsp;&nbsp;<B>%s</B> ", bed->name);
+    else
+	printf("&nbsp;&nbsp;&nbsp;%s ", bed->name);
+    printf("(%s:%d-%d) %d<BR>\n",
+	   bed->chrom, bed->chromStart+1, bed->chromEnd, bed->score);
+    }
+if (bed != NULL)
+    printf("(list truncated -- more than %d elements)<BR>\n", maxScorers);
+}
+
 void genericBedClick(struct sqlConnection *conn, struct trackDb *tdb, 
 		     char *item, int start, int bedSize)
 /* Handle click in generic BED track. */
@@ -626,6 +672,7 @@ char query[512];
 struct sqlResult *sr;
 char **row;
 boolean firstTime = TRUE;
+char *showTopScorers = trackDbSetting(tdb, "showTopScorers");
 
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
 if (bedSize <= 3)
@@ -642,6 +689,12 @@ while ((row = sqlNextRow(sr)) != NULL)
 	htmlHorizontalLine();
     bed = bedLoadN(row+hasBin, bedSize);
     bedPrintPos(bed, bedSize);
+    }
+sqlFreeResult(&sr);
+if (bedSize >= 5 && showTopScorers != NULL)
+    {
+    int maxScorers = atoi(showTopScorers);
+    showBedTopScorersInWindow(conn, tdb, item, start, maxScorers);
     }
 }
 
@@ -2539,7 +2592,7 @@ if (cgiBooleanDefined("hgSeq.revComp"))
     // don't set revComp in cart -- it shouldn't be a default.
     }
 if (cgiBooleanDefined("hgSeq.maskRepeats"))
-    cartSetBoolean(cart, "hgSeq.maskRepeats", revComp);
+    cartSetBoolean(cart, "hgSeq.maskRepeats", maskRep);
 if (*repMasking != 0)
     cartSetString(cart, "hgSeq.repMasking", repMasking);
 if (maskRep)
@@ -5082,6 +5135,7 @@ void doCpgIsland(struct trackDb *tdb, char *item)
 /* Print info on CpG Island. */
 {
 char *table = tdb->tableName;
+boolean isExt = hHasField(table, "obsExp");
 cartWebStart(cart, "CpG Island Info");
 printf("<H2>CpG Island Info</H2>\n");
 if (cgiVarExists("o"))
@@ -5099,7 +5153,7 @@ if (cgiVarExists("o"))
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
-	if (sameString("cpgIslandExt", table))
+	if (isExt)
 	    {
 	    islandExt = cpgIslandExtLoad(row+rowOffset);
 	    island = (struct cpgIsland *)islandExt;
@@ -14142,6 +14196,58 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+static void doPscreen(struct trackDb *tdb, char *item)
+/* P-Screen (BDGP Gene Disruption Project) P el. insertion locations/genes. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+int start = cartInt(cart, "o");
+char fullTable[64];
+boolean hasBin = FALSE;
+char query[512];
+
+genericHeader(tdb, item);
+hFindSplitTable(seqName, tdb->tableName, fullTable, &hasBin);
+safef(query, sizeof(query),
+     "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
+      fullTable, seqName, start, item);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct pscreen *psc = pscreenLoad(row+hasBin);
+    int i;
+    bedPrintPos((struct bed *)psc, 4);
+    printf("<B>Strand:</B> %s<BR>\n", psc->strand);
+    if (psc->stockNumber != 0)
+	printf("<B>Stock number:</B> "
+	       "<A HREF=\"http://rail.bio.indiana.edu/.bin/fbstoq.html?%d\" "
+	       "TARGET=_BLANK>%d</A><BR>\n", psc->stockNumber,
+	       psc->stockNumber);
+    for (i=0;  i < psc->geneCount;  i++)
+	{
+	char gNum[4];
+	if (psc->geneCount > 1)
+	    safef(gNum, sizeof(gNum), " %d", i+1);
+	else
+	    gNum[0] = 0;
+	if (isNotEmpty(psc->geneIds[i]))
+	    printf("<B>Gene%s BDGP ID:</B> "
+		   "<A HREF=\"http://flybase.bio.indiana.edu/.bin/fbquery?"
+		   "query=%s&sections=FBgn&submit=issymbol\" TARGET=_BLANK>"
+		   "%s</A><BR>\n", gNum, psc->geneIds[i], psc->geneIds[i]);
+	printf("<B>Gene%s delta:</B> %d<BR>\n", gNum, psc->geneDeltas[i]);
+	}
+    pscreenFree(&psc);
+    }
+else
+    errAbort("query returned no results: \"%s\"", query);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+printTrackHtml(tdb);
+}
+
+
 void doMiddle()
 /* Generate body of HTML. */
 {
@@ -14824,6 +14930,10 @@ else if (startsWith("eponine", track))
 else if (sameWord(organism, "fugu") && startsWith("ecores", track))
     {
     doScaffoldEcores(tdb, item);
+    }
+else if (startsWith("pscreen", track))
+    {
+    doPscreen(tdb, item);
     }
 else if (tdb != NULL)
     {
