@@ -1271,7 +1271,7 @@ shortLabel Human Proteins
 longLabel Human Proteins
 group compGeno
 priority 142
-visibility pack
+visibility hide
 colorChromDefault off
 type psl protein
 pred hg16.blastKGPep00
