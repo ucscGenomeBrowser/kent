@@ -1,6 +1,6 @@
 track cytoBand
 shortLabel Chromosome Band
-longLabel 
+longLabel Chromosome Bands Based On ISCN Lengths
 group map
 priority 1
 visibility dense
