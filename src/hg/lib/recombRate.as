@@ -7,4 +7,6 @@ table recombRate
    string name;       "Constant string recombRate"
 
    float   recombRate; "Calculated recombination rate for this interval"
+   float   femaleRate; "Calculated female recombination rate for this interval"
+   float   maleRate;   "Calculated male recombination rate for this interval"
    )

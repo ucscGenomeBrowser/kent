@@ -20,6 +20,8 @@ ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = row[3];
 ret->recombRate = atof(row[4]);
+ret->femaleRate = atof(row[5]);
+ret->maleRate = atof(row[6]);
 }
 
 struct recombRate *recombRateLoad(char **row)
@@ -36,6 +38,8 @@ ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
 ret->recombRate = atof(row[4]);
+ret->femaleRate = atof(row[5]);
+ret->maleRate = atof(row[6]);
 return ret;
 }
 
@@ -45,7 +49,7 @@ struct recombRate *recombRateLoadAll(char *fileName)
 {
 struct recombRate *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[5];
+char *row[7];
 
 while (lineFileRow(lf, row))
     {
@@ -97,6 +101,8 @@ ret->chromStart = sqlUnsignedComma(&s);
 ret->chromEnd = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
 ret->recombRate = sqlFloatComma(&s);
+ret->femaleRate = sqlFloatComma(&s);
+ret->maleRate = sqlFloatComma(&s);
 *pS = s;
 return ret;
 }
@@ -143,6 +149,10 @@ fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%f", el->recombRate);
+fputc(sep,f);
+fprintf(f, "%f", el->femaleRate);
+fputc(sep,f);
+fprintf(f, "%f", el->maleRate);
 fputc(lastSep,f);
 }
 
