@@ -46,7 +46,6 @@ struct psGfx *ps;
 /* Allocate structure and open file. */
 AllocVar(ps);
 ps->f = mustOpen(fileName, "w");
-psWriteHeader(ps->f, ptWidth, ptHeight);
 
 /* Save page dimensions and calculate scaling factors. */
 ps->pixWidth = pixWidth;
@@ -71,6 +70,8 @@ ps->fontHeight = 10;
  * than top to bottom. */
 ps->yScale = -ps->yScale;
 ps->yOff = ps->ptHeight - ps->yOff;
+
+psWriteHeader(ps->f, ptWidth, ptHeight);
 
 /* Set line width to a single pixel. */
 fprintf(ps->f, "%f setlinewidth\n", ps->xScale);
