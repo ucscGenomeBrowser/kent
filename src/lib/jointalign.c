@@ -3,10 +3,12 @@
  * for personal, academic, and non-profit purposes.  Commercial use          *
  * permitted only by explicit agreement with Ryan Weber (weber@cse.ucsc.edu) *
  *****************************************************************************/
-/* jointalign.h - routines for printing a joint alignment in html. */
+/* jointalign.c - routines for printing a joint alignment in html. */
 
+#include <string.h>
 #include "common.h"
 #include "jointalign.h"
+
 
 void htmlPrintJointAlignment( char *seq1, char *seq2, int columnNum, 
         int start, int end, char *strand )
@@ -16,7 +18,47 @@ void htmlPrintJointAlignment( char *seq1, char *seq2, int columnNum,
  * strand the sequences are on (+ or -).*/
 {
 
+int i;
+validateSeqs( seq1, seq2 );
+
+/*print the sequences with lines connecting identical residues*/
+printf("<tt>");
+for( i=0; i<strlen( seq1 ); i++ )
+    printf("%c",seq1[i]);
+printf("<br>");
+for( i=0; i<strlen( seq1 ); i++ )
+    {
+    if(ucaseMatch( seq1[i], seq2[i] ))
+        printf("|");
+    else
+        printf("&nbsp;");
+    }
+printf("<br>");
+for( i=0; i<strlen( seq1 ); i++ )
+    printf("%c",seq2[i]);
+printf("</tt>");
+printf("<br><br>");
+
 printf("<tt>%s</tt> &nbsp;&nbsp;<br>", seq1 );
 printf("<tt>%s</tt> &nbsp;&nbsp;<br>", seq2 );
 
+}
+
+boolean ucaseMatch( char a, char b )
+/* Case insensitive character matching */
+{
+if( toupper( a ) == toupper( b ) )
+    return( TRUE );
+else 
+    return( FALSE );
+}
+
+void validateSeqs( char *seq1, char *seq2 )
+/*Make sure sequences are the same length*/
+{
+if( strlen(seq1) != strlen(seq2) )
+    {
+    printf("%s<br>%s<br>", seq1, seq2 );
+    errAbort("The sequences are not properly aligned (different lengths)<br>\n"); 
+    }
 }

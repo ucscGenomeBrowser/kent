@@ -66,6 +66,7 @@
 #include "expRecord.h"
 //#include "dnaProbe.h"
 #include "ancientRref.h"
+#include "jointalign.h"
 
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
@@ -3970,15 +3971,15 @@ int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
 char table[64];
 boolean hasBin;
-struct bed *bed;
+struct bed *bed = NULL;
 char query[512];
-struct sqlResult *sr;
+struct sqlResult *sr = NULL;
 char **row;
 boolean firstTime = TRUE;
 char *itemForUrl = item;
 double ident = -1.0;
 
-struct ancientRref *ar;
+struct ancientRref *ar = NULL;
 
 if(tdb == NULL)
     errAbort("TrackDb entry null for ancientR, item=%s\n", item);

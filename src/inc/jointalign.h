@@ -15,5 +15,12 @@ void htmlPrintJointAlignment( char *seq1, char *seq2, int columnNum,
  * the start and end positions and oriented according to the
  * strand the sequences are on (+ or -).*/
 
+boolean ucaseMatch( char a, char b );
+/* Case insensitive character matching */
+
+void validateSeqs( char *seq1, char *seq2 );
+/*Make sure sequences are the same length*/
+
+
 #endif /* JOINTALIGN */
 
