@@ -25,7 +25,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.183 2005/02/16 21:24:11 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.184 2005/03/14 18:21:57 daryl Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -214,11 +214,11 @@ for (snpLocType=0; snpLocType<snpLocTypeCartSize; snpLocType++)
 void ldUi(struct trackDb *tdb)
 /* Put up UI snp data. */
 {
-ldValue  = cartUsualString(cart,  "ldValues", "rsquared");
-ldTrim   = cartUsualBoolean(cart, "ldTrim",   TRUE);
-ldPos    = cartUsualString(cart,  "ldPos",    "red");
-ldNeg    = cartUsualString(cart,  "ldNeg",    "blue");
-ldOut    = cartUsualString(cart,  "ldOut",    "none");
+ldValue  = cartUsualString(cart,  "ldValues", ldValueDefault);
+ldPos    = cartUsualString(cart,  "ldPos",    ldPosDefault);
+ldNeg    = cartUsualString(cart,  "ldNeg",    ldNegDefault);
+ldOut    = cartUsualString(cart,  "ldOut",    ldOutDefault);
+ldTrim   = cartUsualBoolean(cart, "ldTrim",   ldTrimDefault);
 
 /* It would be nice to add a 'reset' button to reset the ld variables to their defaults. */
 
@@ -1278,6 +1278,8 @@ else if (sameString(track, "snpMap"))
 else if (sameString(track, "snp"))
         snpUi(tdb);
 else if (sameString(track, "ld"))
+        ldUi(tdb);
+else if (sameString(track, "hapmapLd"))
         ldUi(tdb);
 else if (sameString(track, "cbr_waba"))
         cbrWabaUi(tdb);
