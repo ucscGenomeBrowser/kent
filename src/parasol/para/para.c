@@ -866,7 +866,12 @@ if (submitError > 0)
 if (queueError > 0)
    printf("queue errors: %d\n", queueError);
 if (trackingError > 0)
-   printf("tracking errors: %d\n", trackingError);
+   {
+   if (!fileExists(resultsName))
+       printf("tracking errors: no %s file!?\n", resultsName);
+   else
+       printf("tracking errors: %d\n", trackingError);
+   }
 if (inQueue > 0)
    printf("queued and waiting: %d\n", inQueue);
 if (crashed > 0)
