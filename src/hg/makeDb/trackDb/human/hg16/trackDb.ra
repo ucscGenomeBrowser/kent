@@ -28,30 +28,10 @@ track vegaGene2
 shortLabel Vega Genes2
 longLabel Vega Annotations from Sanger, Genoscope
 group genes
-priority 36
+priority 37.1
 visibility hide
 color 0,100,180
 type genePred vegaPep
-url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
-
-track vegaPseudoGene
-shortLabel Vega Pseudogenes
-longLabel Vega Annotated Pseudogenes and Immunoglobulin Segments
-group genes
-priority 37.1
-visibility hide
-color 30,130,210
-type genePred
-url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
-
-track vegaPseudoGene2
-shortLabel Vega Pseudogenes
-longLabel Vega Annotated Pseudogenes and Immunoglobulin Segments
-group genes
-priority 36.1
-visibility hide
-color 30,130,210
-type genePred
 url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
 
 track twinscan
