@@ -457,3 +457,23 @@ SEQ2_LEN=$BASE/S2.len
   sed -e 's@^blastz-run@/cluster/bin/penn/blastz-run@' j > jobList
   para create jobList
   para try, push check, para push, para check....
+
+# GC5BASE - (DONE 2004-10-27 - Hiram)
+    ssh kksilo
+    mkdir /cluster/data/bosTau1/bed/gc5Base
+    cd /cluster/data/bosTau1/bed/gc5Base
+    hgGcPercent -wigOut -doGaps -file=stdout -win=5 bosTau1 \
+      /cluster/data/bosTau1 | wigBedToBinary stdin gc5Base.wig gc5Base.wib
+    #       Calculating gcPercent with window size 5
+    #       Using twoBit: /cluster/data/bosTau1/bosTau1.2bit
+    #       File stdout created
+    #	Converted stdin, upper limit 100.00, lower limit 0.00
+    #	real    254m41.199s
+    #	user    139m32.740s
+    #	sys     85m1.450s
+    #	Now load those results into the database
+    ssh hgwdev
+    cd /cluster/data/bosTau1/bed/gc5Base
+    mkdir /gbdb/bosTau1/wib
+    ln -s `pwd`/gc5Base.wib /gbdb/bosTau1/wib
+    hgLoadWiggle -pathPrefix=/gbdb/bosTau1/wib bosTau1 gc5Base gc5Base.wig
