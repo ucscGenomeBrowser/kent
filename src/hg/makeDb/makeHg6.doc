@@ -271,6 +271,11 @@ o - load into database as so:
 	hgLoadRna addSeq '-abbr=gnl|' hg6 /projects/hg3/mouse/ncbiTrace/fasta.mus*
     These last two will take quite some time.  Perhaps an hour each.
       
+o - Build fa file with only mouse traces that are part of alignments:
+        ssh kks00
+	cd ~/mouse/vsOo29
+	subsetTraces ~/mouse/ncbiTrimmed blatMouse aliTrace.fa '-abbr=gnl|'
+
 o - Load mouse trace ancillary information into the mouseTraceInfo table.
     This parses the trace id and template id out of the NCBI trace FASTA
     files.  The name of the table as well as the database is specified:
