@@ -134,6 +134,9 @@ struct trackDb *showTrackField(struct grp *selGroup,
 
 /* --------- Utility functions --------------------- */
 
+boolean anyCompression();
+/*  Check if any compressed file output has been requested */
+
 void initGroupsTracksTables(struct sqlConnection *conn);
 /* Get list of groups that actually have something in them. */
 
@@ -374,6 +377,11 @@ boolean anyIntersection();
 #define hgtaTrack "hgta_track"
 #define hgtaSelDb "hgta_selDb"
 #define hgtaRegionType "hgta_regionType"
+#define hgtaCompressType "hgta_compressType"
+#define hgtaCompressNone "hgta_compressNone"
+#define hgtaCompressGzip "hgta_compressGzip"
+#define hgtaCompressZip "hgta_compressZip"
+#define hgtaCompressBzip2 "hgta_compressBzip2"
 #define hgtaRange "position"
 #define hgtaOffsetStart "hgta_offsetStart"
 #define hgtaOffsetEnd "hgta_offsetEnd"
