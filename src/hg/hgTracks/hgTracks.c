@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.720 2004/04/30 01:41:38 sugnet Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.721 2004/05/05 22:19:16 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -8243,7 +8243,7 @@ void customTrackPage()
 /* Put up page that lets user upload custom tracks. */
 {
 puts("<H2>Add Your Own Custom Track</H2>");
-puts("<FORM ACTION=\"/cgi-bin/hgTracks\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n");
+puts("<FORM ACTION=\"/cgi-bin/hgTracks\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n");
 cartSaveSession(cart);
 
 puts(
@@ -8262,11 +8262,17 @@ puts(
 
 cgiMakeButton("Submit", "Submit");
 
-puts(
-"<BR>\n"
-"<TEXTAREA NAME=\"hgt.customText\" ROWS=14 COLS=80></TEXTAREA>\n"
-"</FORM>\n"
-);
+cgiSimpleTableStart();
+cgiSimpleTableRowStart();
+cgiSimpleTableFieldStart();
+cgiMakeTextArea("hgt.customText", "", 14, 80);
+cgiTableFieldEnd();
+cgiSimpleTableFieldStart();
+cgiMakeResetButton();
+cgiTableFieldEnd();
+cgiTableRowEnd();
+cgiTableEnd();
+puts("</FORM>");
 }
 
 
