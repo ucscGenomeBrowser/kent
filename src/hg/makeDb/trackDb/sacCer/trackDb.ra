@@ -103,6 +103,20 @@ exonArrows off
 showTopScorers 200
 type bed 5 .
 
+track sevenWayPaper
+shortLabel Conservation (Std.)
+longLabel Seven Species of Saccharomyces, Alignments & Standardized Conservation
+group compGeno
+priority 105.1
+visibility hide
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastConsPaper
+yLineOnOff Off
+autoScaleDefault Off
+pairwise pwMaf
+speciesOrder sacPar sacMik sacKud sacBay sacCas sacKlu
+
 searchTable sgdGene
 searchType sgdGene
 searchPriority 1

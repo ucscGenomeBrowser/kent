@@ -41,11 +41,11 @@ showTopScorers 200
 type bed 5 .
 
 track multiz7way
-shortLabel 7way Cons.
-longLabel 6 Flies and Mosquito Multiz Alignments & phastCons Scores
+shortLabel Conservation (Std)
+longLabel Six Flies and Mosquito, Multiz Alignments & Standardized Conservation
 group compGeno
 priority 106
-visibility pack
+visibility hide
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastCons7way
@@ -54,14 +54,15 @@ autoScaleDefault Off
 pairwise 041109
 speciesOrder droYak1 droAna1 dp2 droVir1 droMoj1 anoGam1
 
-track phastConsElements7way
-shortLabel 7way Most Cons.
-longLabel PhastCons Conserved Elements (6 Flies and Mosquito)
+track phastConsElementsPaper
+shortLabel Most Cons. (Std)
+longLabel PhastCons Conserved Elements for 6 Flies and Mosquito, Standardized Across Species
 group compGeno
 priority 106.01
 visibility hide
 exonArrows off
 showTopScorers 200
+useScore 1
 type bed 5 .
 
 track anophelesEcores

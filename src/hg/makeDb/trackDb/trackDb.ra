@@ -1430,6 +1430,17 @@ exonArrows off
 showTopScorers 200
 type bed 5 .
 
+track phastConsElementsPaper
+shortLabel Most Cons. (Std)
+longLabel PhastCons Conserved Elements, Standardized Across Species
+group compGeno
+priority 105.1
+visibility hide
+exonArrows off
+useScore 1
+showTopScorers 200
+type bed 5 .
+
 track encodeRegions
 shortLabel liftOver Regions 1
 longLabel liftOver ENCODE Region Orthologs (Freeze 1)
@@ -1491,7 +1502,7 @@ type bed 4 .
 
 track phastConsTopPaper
 shortLabel phastCons Top
-longLabel Top-Scoring PhastCons Elements (for paper)
+longLabel Top-Scoring PhastCons Elements
 group compGeno
 priority 191.2
 visibility hide

@@ -232,10 +232,10 @@ showTopScorers 200
 type bed 5 .
 
 track varMultizMm5Rn3GalGal2Fr1
-shortLabel varMultiz5Way
-longLabel Human/Mouse/Rat/Chicken/Fugu VarMultiz & PhastCons 
+shortLabel Conservation (Std)
+longLabel Human/Mouse/Rat/Chicken/Fugu Multiz Alignments & Standardized Conservation
 group compGeno
-priority 191
+priority 109.5
 visibility hide
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
@@ -245,13 +245,14 @@ autoScaleDefault Off
 pairwise netBlastz
 speciesOrder mm5 rn3 galGal2 fr1
 
-track phastConsElementsVarMultiz
-shortLabel Most Conserved VMZ
-longLabel PhastCons Conserved Elements, VarMultiz 5-Way
+track phastConsElementsPaper
+shortLabel Most Cons. (Std)
+longLabel PhastCons Conserved Elements, Standardized Across Species
 group compGeno
-priority 191.1
+priority 109.6
 visibility hide
 exonArrows off
+useScore 1
 showTopScorers 200
 type bed 5 .
 
