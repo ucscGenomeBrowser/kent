@@ -633,3 +633,7 @@
 387 - Up to ooGreedy 97 and then back down to 96.  (See ooGreedy/version.doc
       for details).
 388 - Trying to set things up for CVS.
+389 - Seems to be under CVS.  I'm still saving sequentially numbered
+      .zip files.  Hopefully I'll get into the habit of adding everything
+      to the CVS archive that needs adding as a make it.  
+         Also working on unpacking the NT contigs in .gl and gold files.
