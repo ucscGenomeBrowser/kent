@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- Build file for genome.ucsc.edu QA library directory -->
 
-<project name="qa" default="build" basedir=".">
+<project name="qa" default="compile" basedir=".">
     <target name="init">
         <property name="build.dir" value="."/>
         <property name="src.dir" value="src"/>
@@ -19,10 +19,11 @@
         <property name="javadoc.dir" value="${doc.dir}/api" />
        
         <!-- running tests -->
-        <property name="test.quickprops" value="src/edu/ucsc/genome/qa/cgiCheck/quick.props" />
+        <property name="test.quickProps" value="src/edu/ucsc/genome/qa/cgiCheck/quick.props" />
+        <property name="test.fullProps" value="src/edu/ucsc/genome/qa/cgiCheck/full.props" />
     </target>
 
-    <target name="build" depends="compile, javadoc">
+    <target name="build" depends="compile, javaDoc, quickTest">
     </target>
 
     <target name="compile" depends="init"
@@ -38,7 +39,7 @@
       </javac>
     </target>
 
-    <target name="javadoc" depends="init"
+    <target name="javaDoc" depends="init"
            description="Build the API documentation">
         <mkdir dir="${javadoc.dir}"/>
         <javadoc destdir="${javadoc.dir}" 
@@ -50,11 +51,19 @@
        </javadoc>
     </target>
 
-    <target name="smoke-test" depends="init"
+    <target name="quickTest" depends="init"
 	   description="Quick test of the tests">
         <java classname="edu.ucsc.genome.qa.cgiCheck.TrackCheck"
                classpath="${build.classes}">
-           <arg value="${test.quickprops}"/>
+           <arg value="${test.quickProps}"/>
+        </java>
+    </target>
+
+    <target name="fullTest" depends="init"
+	   description="Full automated test of site.">
+        <java classname="edu.ucsc.genome.qa.cgiCheck.TrackCheck"
+               classpath="${build.classes}">
+           <arg value="${test.fullProps}"/>
         </java>
     </target>
 
