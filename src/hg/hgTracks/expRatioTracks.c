@@ -106,16 +106,21 @@ for(er = erList; er != NULL; er = er->next)
     {
     if ((filterIndex == -1) || (sameString(filter, er->extras[filterIndex])))
         {
-	val = hashFindVal(seen, er->extras[index]);
+	char *name;
+	if (index >= 0)
+	    name = er->extras[index];
+	else
+	    name = er->name;
+	val = hashFindVal(seen, name);
 	if (val == NULL)
 	    {
 	    /* if this type is new 
 	       save the index for this type */
 	    AllocVar(val);
 	    snprintf(buff, sizeof(buff), "%d", unique);
-	    hashAdd(expIndexesToNames, buff, er->extras[index]);
+	    hashAdd(expIndexesToNames, buff, name);
 	    val->val = cloneString(buff);
-	    hashAdd(seen, er->extras[index], val);
+	    hashAdd(seen, name, val);
 
 	    /* save the indexes associated with this index */
 	    AllocVar(sr);
@@ -178,11 +183,12 @@ if(sameString(b->name, "NSCLC"))
 return(strcmp(a->name, b->name));
 }
 
-struct linkedFeaturesSeries *msBedGroupByIndex(struct bed *bedList, char *database, char *table, int expIndex, 
-					       char *filter, int filterIndex) 
-/* groups bed expScores in multiple scores bed by the expIndex 
-   in the expRecord->extras array. Makes use of hashes to remember numerical
-   index of experiments, as hard to do in a list. */
+struct linkedFeaturesSeries *msBedGroupByIndex(struct bed *bedList, char *database, 
+	char *table, int expIndex, char *filter, int filterIndex) 
+/* Groups bed expScores in multiple scores bed by the expIndex 
+ * in the expRecord->extras array. Makes use of hashes to remember 
+ * numerical index of experiments, as hard to do in a list. 
+ * If expIndex is -1, then use name instead of extras[expIndex] */
 {
 struct linkedFeaturesSeries *lfsList = NULL, *lfs, **lfsArray;
 struct linkedFeatures *lf = NULL;
@@ -204,9 +210,9 @@ if(bedList == NULL)
 /* otherwise if we're goint to do some filtering
    set up the data structures */
 conn = sqlConnect(database);
-indexes = newHash(2);
-expTypes = newHash(2);
-expIndexesToNames = newHash(2);
+indexes = newHash(6);
+expTypes = newHash(6);
+expIndexesToNames = newHash(6);
 
 /* load the experiment information */
 snprintf(buff, sizeof(buff), "select * from %s order by id asc", table);
@@ -218,8 +224,13 @@ sqlDisconnect(&conn);
 /* build hash to map experiment ids to types */
 for(er = erList; er != NULL; er = er->next)
     {
+    char *name;
+    if (expIndex >= 0)
+        name = er->extras[expIndex];
+    else
+        name = er->name;
     snprintf(buff, sizeof(buff), "%d", er->id);
-    hashAdd(expTypes, buff, er->extras[expIndex]);
+    hashAdd(expTypes, buff, name);
     }
 /* get the number of indexes and the experiment values associated
    with each index */
@@ -295,7 +306,7 @@ slReverse(&lfsList);
 return lfsList;
 }
 
-void lfsFromAffyBed(struct track *tg)
+static void lfsFromAffyBed(struct track *tg)
 /* filters the bedList stored at tg->items
 into a linkedFeaturesSeries as determined by
 filter type */
@@ -303,31 +314,35 @@ filter type */
 struct linkedFeaturesSeries *lfsList = NULL, *lfs;
 struct linkedFeatures *lf;
 struct bed *bed = NULL, *bedList= NULL;
-char *affyMap = cartUsualString(cart, "affy.type", affyEnumToString(affyTissue));
-enum affyOptEnum affyType = affyStringToEnum(affyMap);
+char varName[128];
+char *affyMap;
+enum affyOptEnum affyType;
 int i=0;
 bedList = tg->items;
 
+safef(varName, sizeof(varName), "%s.%s", tg->mapName, "type");
+affyMap = cartUsualString(cart, varName, affyEnumToString(affyTissue));
+affyType = affyStringToEnum(affyMap);
 if(tg->limitedVis == tvDense)
     {
     tg->items = lfsFromMsBedSimple(bedList, "Affymetrix");
     }
 else if(affyType == affyTissue)
     {
-    tg->items = msBedGroupByIndex(bedList, "hgFixed", "affyExps", affyTissue, NULL, -1);
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", tg->expTable, affyTissue, NULL, -1);
     slSort(&tg->items,lfsSortByName);
     }
 else if(affyType == affyId)
     {
-    tg->items = msBedGroupByIndex(bedList, "hgFixed", "affyExps", affyId, NULL, -1);
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", tg->expTable, affyId, NULL, -1);
     }
 else if(affyType == affyChipType)
     {
-    tg->items = msBedGroupByIndex(bedList, "hgFixed", "affyExps", affyChipType, NULL, -1);
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", tg->expTable, affyChipType, NULL, -1);
     }
 else
     {
-    tg->items = msBedGroupByIndex(bedList, "hgFixed", "affyExps", affyTissue, affyMap, 1);
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", tg->expTable, affyAllData, affyMap, 1);
     slSort(&tg->items,lfsSortByName);
     }
 bedFreeList(&bedList);
@@ -393,24 +408,27 @@ if(vis == tvFull)
 bedFreeList(&bedList);
 }
 
-void lfsFromAffyGenericBed(struct track *tg)
+static void lfsFromAffyGenericBed(struct track *tg)
 /* filters the bedList stored at tg->items
-into a linkedFeaturesSeries as determined by
-filter type */
+ * into a linkedFeaturesSeries as determined by
+ * filter type */
 {
 struct linkedFeaturesSeries *lfsList = NULL, *lfs;
 struct linkedFeatures *lf;
 struct bed *bed = NULL, *bedList= NULL;
 int i=0;
 bedList = tg->items;
-if(tg->limitedVis == tvDense)
+if (tg->limitedVis == tvDense)
     {
     tg->items = lfsFromMsBedSimple(bedList, "Affymetrix");
     }
-else 
+else if (tg->limitedVis == tvPack || tg->limitedVis == tvSquish)
     {
     tg->items = msBedGroupByIndex(bedList, "hgFixed", tg->expTable, affyTissue, NULL, -1);
-    slSort(&tg->items,lfsSortByName);
+    }
+else 
+    {
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", tg->expTable, -1, NULL, -1);
     }
 bedFreeList(&bedList);
 }
@@ -852,6 +870,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 slReverse(&bedList);
 
+#ifdef NEVER
 /* A lot of filters will blow up the number of items in a 
    track, limit the number of items we will do in "full" mode. */
 if(vis == tvFull)
@@ -862,6 +881,8 @@ if(vis == tvFull)
 	tg->visibility = tvPack;
 	}
     }
+#endif /* NEVER */
+
 tg->limitedVis = tg->visibility;
 /* run the filter if it exists, otherwise use default */
 if(tg->trackFilter != NULL)
@@ -958,6 +979,15 @@ tg->mapItem = lfsMapItemName;
 tg->mapsSelf = TRUE;
 }
 
+void cghNci60Methods(struct track *tg)
+/* set up special methods for CGH NCI60 track */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->itemColor = cghNci60Color;
+tg->loadItems = loadMultScoresBed;
+tg->trackFilter = lfsFromCghNci60Bed;
+}
+
 void affyMethods(struct track *tg)
 /* set up special methods for NCI60 track and tracks with multiple
    scores in general */
@@ -970,16 +1000,30 @@ tg->mapItem = lfsMapItemName;
 tg->mapsSelf = TRUE;
 }
 
+void expRatioMethods(struct track *tg)
+/* Set up methods for expRatio type tracks in general. */
+{
+struct trackDb *tdb = tg->tdb;
+char *expScale = trackDbRequiredSetting(tdb, "expScale");
+char *expTable = trackDbRequiredSetting(tdb, "expTable");
+
+linkedFeaturesSeriesMethods(tg);
+tg->expScale = atof(expScale);
+tg->expTable = expTable;
+tg->itemColor = expRatioColor;
+tg->loadItems = loadMaScoresBed;
+tg->trackFilter = lfsFromAffyGenericBed;
+tg->mapItem = lfsMapItemName;
+tg->mapsSelf = TRUE;
+}
+
 void affyRatioMethods(struct track *tg)
 /* set up special methods for NCI60 track and tracks with multiple
    scores in general */
 {
-linkedFeaturesSeriesMethods(tg);
+expRatioMethods(tg);
 tg->itemColor = affyRatioColor;
-tg->loadItems = loadMaScoresBed;
 tg->trackFilter = lfsFromAffyBed;
-tg->mapItem = lfsMapItemName;
-tg->mapsSelf = TRUE;
 }
 
 void affyUclaNormMethods(struct track *tg)
@@ -988,34 +1032,6 @@ void affyUclaNormMethods(struct track *tg)
 {
 linkedFeaturesSeriesMethods(tg);
 tg->itemColor = affyUclaNormColor;
-tg->loadItems = loadMaScoresBed;
 tg->trackFilter = lfsFromAffyUclaNormBed;
-tg->mapItem = lfsMapItemName;
-tg->mapsSelf = TRUE;
-}
-
-void cghNci60Methods(struct track *tg)
-/* set up special methods for CGH NCI60 track */
-{
-linkedFeaturesSeriesMethods(tg);
-tg->itemColor = cghNci60Color;
-tg->loadItems = loadMultScoresBed;
-tg->trackFilter = lfsFromCghNci60Bed;
-}
-
-void expRatioMethods(struct track *tg)
-/* Set up methods for expRatio type tracks in general. */
-{
-struct trackDb *tdb = tg->tdb;
-char *expScale = trackDbRequiredSetting(tdb, "expScale");
-char *expTable = trackDbRequiredSetting(tdb, "expTable");
-tg->expScale = atof(expScale);
-tg->expTable = expTable;
-linkedFeaturesSeriesMethods(tg);
-tg->itemColor = expRatioColor;
-tg->loadItems = loadMaScoresBed;
-tg->trackFilter = lfsFromAffyGenericBed;
-tg->mapItem = lfsMapItemName;
-tg->mapsSelf = TRUE;
 }
 

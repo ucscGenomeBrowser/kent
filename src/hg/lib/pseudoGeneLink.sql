@@ -5,7 +5,7 @@
 
 #links a gene/pseudogene prediction to an ortholog or paralog.
 CREATE TABLE pseudoGeneLink (
-    bin smallint not null,	# bin for browser speedup 
+    bin smallint not null,              # bin for speedup
     chrom varchar(255) not null,	# Chromosome name for pseudogene
     chromStart int unsigned not null,	# pseudogene alignment start position
     chromEnd int unsigned not null,	# pseudogene alignment end position
@@ -22,7 +22,7 @@ CREATE TABLE pseudoGeneLink (
     exonCount int unsigned not null,	# # of exons in gene 
     geneOverlap int unsigned not null,	# bases overlapping
     polyA int unsigned not null,	# length of polyA
-    polyAstart int unsigned not null,	# start f polyA
+    polyAstart int not null,	# start of polyA, relative to end of pseudogene
     exonCover int unsigned not null,	# number of exons in Gene covered
     intronCount int unsigned not null,	# number of introns in pseudogene
     bestAliCount int unsigned not null,	# number of good mrnas aligning
@@ -38,17 +38,16 @@ CREATE TABLE pseudoGeneLink (
     chainId int unsigned not null,	# chain id of gene/pseudogene alignment
     axtScore int not null,	# blastz score, gene mrna aligned to pseudogene
     refSeq varchar(255) not null,	# Name of closest regSeq to gene
-    rStart int unsigned not null,	# refSeq alignment start position
-    rEnd int unsigned not null,	# refSeq alignment end position
+    rStart int not null,	# refSeq alignment start position
+    rEnd int not null,	# refSeq alignment end position
     mgc varchar(255) not null,	# Name of closest mgc to gene
-    mStart int unsigned not null,	# mgc alignment start position
-    mEnd int unsigned not null,	# mgc alignment end position
+    mStart int not null,	# mgc alignment start position
+    mEnd int not null,	# mgc alignment end position
     kgName varchar(255) not null,	# Name of closest knownGene to gene
-    kStart int unsigned not null,	# kg alignment start position
-    kEnd int unsigned not null,	# kg alignment end position
-    kgId int unsigned not null,	# kg id
+    kStart int not null,	# kg alignment start position
+    kEnd int not null,	# kg alignment end position
+    kgId int not null,	# kg id
               #Indices
     PRIMARY KEY(chrom(8),bin, name(10), chromStart),
     INDEX (name(8))
-
 );

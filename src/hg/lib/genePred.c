@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.42 2004/03/15 19:17:52 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.43 2004/03/29 01:02:03 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -1041,5 +1041,21 @@ for (i=0; i<exonCount; ++i)
     	gp->exonStarts[i], gp->exonEnds[i]);
     }
 return baseCount;
+}
+
+boolean genePredCdsExon(struct genePred *gp, int iExon, int *startPtr, int *endPtr)
+/* Get the CDS range in an exon.  If there is no CDS, return FALSE and then
+ * set start == end */
+{
+int start = gp->exonStarts[iExon];
+int end = gp->exonEnds[iExon];
+
+if (start < gp->cdsStart)
+    start = gp->cdsStart;
+if (end > gp->cdsEnd)
+    end = gp->cdsEnd;
+*startPtr = start;
+*endPtr = end;
+return (start < end);
 }
 

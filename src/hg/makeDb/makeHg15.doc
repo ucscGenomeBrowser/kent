@@ -2197,54 +2197,81 @@ o - # ssh hgwdev
     mv hg15.nci60.bed /cluster/store5/gs.16/build33/bed/nci60
     rm *.psl 
 
-LOAD AFFYRATIO [GNF] (DONE: sugnet - Mon Apr 28 13:49:30 PDT 2003)
-o - [hgwdev:hg15> cd /cluster/store1/sugnet/hg15/build33
-    [hgwdev:build33> rm -rf affyGnf/
-    [hgwdev:build33> mkdir affyGnf
-    [hgwdev:build33> cd affyGnf/
-    [hgwdev:affyGnf> cp /projects/compbio/data/microarray/affyGnf/sequences/HG-U95/HG-U95Av2_target ./
-    [hgwdev:affyGnf> ssh kk
-    [kk:~> cd store1/hg15/build33/affyGnf/
-    [kk:affyGnf> ls -1 /scratch/hg/gs.16/build33/trfFa/ > allctg.lst
-    [kk:affyGnf> echo '#LOOP\n/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.16/build33/trfFa/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
-    [kk:affyGnf> gensub2 allctg.lst affy.lst template.sub para.spec
-    [kk:affyGnf> mkdir psl
-    [kk:affyGnf> para create para.spec
-    Checking input files
-    546 jobs written to batch
-    [kk:affyGnf> para try
-    546 jobs in batch
-    3477 jobs (including everybody's) in Parasol queue.
-    Checking finished jobs
-    updated job database on disk
-    Pushed Jobs: 10
-    [kk:affyGnf> para check
-    546 jobs in batch
-    2098 jobs (including everybody's) in Parasol queue.
-    Checking finished jobs
-    unsubmitted jobs: 536
-    ranOk: 10
-    total jobs in batch: 546
-    [kk:affyGnf> para push
-    [kk:affyGnf> para check
-    546 jobs in batch
-    901 jobs (including everybody's) in Parasol queue.
-    Checking finished jobs...
-    ranOk: 546
-    total jobs in batch: 546
-    [kk:affyGnf> liftUp hg15.affy.lifted.psl  /cluster/store5/gs.16/build33/jkStuff/liftAll.lft warn hg15.affy.psl
-    Got 546 lifts in /cluster/store5/gs.16/build33/jkStuff/liftAll.lft
-    Lifting hg15.affy.psl
-    [kk:affyGnf> pslReps -minCover=.85 -minAli=.95 hg15.affy.lifted.psl hg15.affy.pslReps.psl out.psr
-    Processing hg15.affy.lifted.psl to hg15.affy.pslReps.psl and out.psr
-    Processed 15351 alignments
-    [kk:affyGnf> exit
-    [hgwdev:affyGnf> /cse/grads/sugnet/bin/i386/affyPslAndAtlasToBed hg15.affy.pslReps.psl   /projects/compbiodata/microarray/affyGnf/human_atlas_U95_gnf.noquotes.txt affyRatio.bed affyRatio.exr >& affyPslAndAtlasToBed.log 
-    [hgwdev:affyGnf> hg15S -A < /projects/compbio/data/microarray/affyGnf/browserFiles/affyRatio.sql 
-    [hgwdev:affyGnf> mkdir /cluster/store5/gs.16/build33/bed/affyRatio
-    [hgwdev:affyGnf> cp affyRatio.bed  /cluster/store5/gs.16/build33/bed/affyRatio
-    [hgwdev:affyGnf> rm rm -rf psl tmp err *.psl *.bed HG-U95Av2_target 
+CREATE AND LOAD AFFYU95 [ DONE: hartera 2004-03-30 ]
+
+# Set up cluster job to align consensus/exemplar sequences for Affymetrix
+# HG-U95Av2 chip to hg15
+    cp /projects/compbio/data/microarray/affyGnf/sequences/HG-U95/HG-U95Av2_all.fa /cluster/bluearc/affyGnf
+    ssh kkr1u00
+    cd /cluster/data/hg15/bed
+    rm -rf affyRatio.2004-03-19
+    mkdir affyRatio.2004-03-19
+    cd affyRatio.2004-03-19
+    mkdir -p /iscratch/i/affy
+    cp /cluster/bluearc/affyGnf/HG-U95Av2_all.fa /iscratch/i/affy
+    iSync
+    rm /cluster/bluearc/affyGnf/HG-U95Av2_all.fa
+
+    ssh kk
+    cd /cluster/data/hg15/bed/affyRatio.2004-03-19
+    ls -1 /iscratch/i/affy/HG-U95Av2_all.fa > affy.lst
+    ls -1 /scratch/hg/gs.16/build33/trfFa/ > allctg.lst
+    echo '#LOOP\n/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.16/build33/trfFa/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+    gensub2 allctg.lst affy.lst template.sub para.spec
+    mkdir psl
+    para create para.spec
+
+# Actually do the job with usual para try/check/push/time etc.
+# para time  2004-03-19
+#Completed: 546 of 546 jobs
+#CPU time in finished jobs:       9072s     151.20m     2.52h    0.10d  0.000 y
+#IO & Wait Time:                  5409s      90.15m     1.50h    0.06d  0.000 y
+#Average job time:                  27s       0.44m     0.01h    0.00d
+#Longest job:                      272s       4.53m     0.08h    0.00d
+#Submission to last job:           310s       5.17m     0.09h    0.00d
+
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create affyU95.psl
+    pslSort dirs raw.psl tmp psl
+
+    # use these filter parameters for these sequences. only use alignments that
+    # cover 30% of sequence and have at least 95% identity in aligned region.
+    # minAli = 0.97 too high. low minCover as a lot of n's in these sequences
+    pslReps -minCover=0.3 -sizeMatters -minAli=0.95 -nearTop=0.005 raw.psl contig.psl /dev/null
+    liftUp affyU95.psl ../../jkStuff/liftAll.lft warn contig.psl
+
+    # eliminate the long names to keep names in dependent tables in sync
+    sed -e "s/U95Av2://" affyU95.psl | sed -e "s/;//" > affyU95shortQname.psl
+
+    hgLoadPsl hg15 -table=affyU95 affyU95shortQname.psl
     
+    # LOAD SEQUENCE DATA FOR AFFY U95Av2 FOR ALIGNMENT DISPLAY
+
+    # Copy probe sequence to /gbdb if it isn't already (they are already there
+    # for hg16)
+    mkdir -p /gbdb/hgFixed/affyProbes
+    cd /gbdb/hgFixed/affyProbes    ln -s /projects/compbio/data/microarray/affyGnf/sequences/HG-U95/HG-U95Av2_all.fa .
+    
+    # load sequences with "U95Av2:" prefix removed so acc matches name used    
+    # in other dependent tables for affy U95Av2   
+    hgLoadSeq -abbr=U95Av2: hg15 /gbdb/hgFixed/affyProbes/HG-U95Av2_all.fa
+
+# UPDATE AFFYRATIO (GNF) [DONE, hartera, 2004-03-30]
+    # Merge with spot data and load into database. added -chip flag to
+    # affyPslAndAtlasToBed to allow correct parsing. affyRatio needs updating
+    # because the consensus/exemplar sequences are now being used for the
+    # alignments in affyU95. Affy probe targe:t regions were previously used
+    # for alignments in affyRatio
+
+    ssh hgwdev
+    cd /cluster/data/hg15/bed/affyRatio.2004-03-19
+    /cluster/home/sugnet/bin/i386/affyPslAndAtlasToBed -chip=U95Av2 affyU95shortQname.psl /projects/compbiodata/microarray/affyGnf/human_atlas_U95_gnf.noquotes.txt affyRatio.bed affyRatio.exr >& affyPslAndAtlasToBed.log
+     
+    hgLoadBed -sqlTable=$HOME/src/hg/lib/affyRatio.sql hg15 affyRatio affyRatio.bed
+
+    # Clean up
+    rm -r psl tmp err *.tab *.debug batch.bak contig.psl raw.psl batch template.sub *.lst para*
+
 # LOAD SAGE DATA (DONE - 2003-05-14 - Hiram)
     ssh hgwdev
     cd ~/kent/src/hg/sage

@@ -185,5 +185,9 @@ int genePredBases(struct genePred *gp);
 int genePredCodingBases(struct genePred *gp);
 /* Count up the number of coding bases in gene prediction. */
 
+boolean genePredCdsExon(struct genePred *gp, int iExon, int *startPtr, int *endPtr);
+/* Get the CDS range in an exon.  If there is no CDS, return FALSE and then
+ * set start == end */
+
 #endif /* GENEPRED_H */
 

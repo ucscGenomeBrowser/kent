@@ -117,6 +117,17 @@ else if (startsWith("known", jf->table) || startsWith("kg", jf->table))
 return col;
 }
 
+void edgeArrow(FILE *f, struct joinerField *jf)
+/* Figure out what type of fancy arrow if any to make. */
+{
+if (jf->full && jf->unique)
+    fprintf(f, "[arrowhead=invdot]");
+else if (jf->full)
+    fprintf(f, "[arrowhead=dot]");
+else if (jf->unique)
+    fprintf(f, "[arrowhead=invodot]");
+}
+
 void makeEdge(FILE *f, struct hash *asHash, char *primaryDb, 
 	struct joinerField *primary, char *otherDb, struct joinerField *jf)
 /* Cause a single edge to be drawn between primary and jf. */
@@ -133,6 +144,7 @@ else
 	primaryDb, primary->table,  otherDb, jf->table);
     }
 edgeColor(f, primaryDb, primary);
+edgeArrow(f, jf);
 fprintf(f, ";\n");
 }
 
@@ -155,7 +167,7 @@ if (asHash != NULL)
     fprintf(f, " rankdir=LR;\n");
     fprintf(f, " node [shape=record];\n");
     }
-
+fprintf(f, " edge [arrowhead=odot];\n");
 for (dbIx = 0; dbIx < ArraySize(dbs); ++dbIx)
     {
     db = dbs[dbIx];

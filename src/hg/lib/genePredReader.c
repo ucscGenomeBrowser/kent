@@ -186,8 +186,10 @@ int rowOffset;
 AllocVar(gpr);
 gpr->table = cloneString(table);
 
+/* non-existant table will return null */
 gpr->sr = hRangeQuery(conn, table, chrom, start, end, extraWhere, &rowOffset);
-buildResultFieldMap(gpr);
+if (gpr->sr != NULL)
+    buildResultFieldMap(gpr);
 
 assert(gpr->rowOffset == rowOffset);
 return gpr;

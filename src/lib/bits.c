@@ -6,7 +6,7 @@
 #include "common.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: bits.c,v 1.13 2004/01/08 08:36:49 markd Exp $";
+static char const rcsid[] = "$Id: bits.c,v 1.14 2004/03/29 01:00:07 markd Exp $";
 
 
 static Bits oneBit[8] = { 0x80, 0x40, 0x20, 0x10, 0x8, 0x4, 0x2, 0x1};
@@ -211,5 +211,20 @@ while (--byteCount >= 0)
     {
     *a++ = ~*a;
     }
+}
+
+void bitPrint(Bits *a, int startIx, int bitCount, FILE* out)
+/* Print part or all of bit map as a string of 0s and 1s.  Mostly useful for
+ * debugging */
+{
+int i;
+for (i = startIx; i < bitCount; i++)
+    {
+    if (bitReadOne(a, i))
+        fputc('1', out);
+    else
+        fputc('0', out);
+    }
+fputc('\n', out);
 }
 

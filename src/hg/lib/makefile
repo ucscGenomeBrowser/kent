@@ -25,7 +25,8 @@ O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
     geneBands.o geneGraph.o genePred.o genePredReader.o genomicDups.o \
     genomicSuperDups.o ggCluster.o ggDbIo.o ggDump.o ggGraph.o ggMrnaAli.o \
     glDbRep.o goa.o goaPart.o grp.o hCommon.o \
-    hdb.o hgConfig.o hgExp.o hgFind.o hgGene.o \
+    hdb.o hgConfig.o hgExp.o hgFind.o hgFindSpec.o hgFindSpecCustom.o \
+    hgGene.o \
     hgMaf.o hgRelate.o hgSeq.o hui.o humanParalog.o \
     imageClone.o isochores.o itemAttr.o jaxOrtholog.o jaxQTL.o jksql.o joiner.o \
     kgAlias.o kgProtAlias.o knownInfo.o knownMore.o knownToSuper.o \
@@ -43,7 +44,7 @@ O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
     synMap.o synteny100000.o syntenyBerk.o syntenySanger.o tableDescriptions.o \
     tigrCmrGene.o tilingPath.o traceInfo.o trackDb.o trackDbCustom.o \
     trackTable.o vegaInfo.o wabAli.o web.o wiggle.o wiggleCart.o wiggleUtils.o \
-    splignAlign.o tfbsConsMap.o
+    splignAlign.o tfbsConsMap.o liftOver.o
 
 
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) 

@@ -134,7 +134,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.593 2004/03/24 21:16:59 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.601 2004/04/01 01:00:10 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -557,7 +557,7 @@ if (url != NULL && url[0] != 0)
     uUrl = subMulti(url, ArraySize(ins), ins, outs);
     outs[0] = eItem;
     eUrl = subMulti(url, ArraySize(ins), ins, outs);
-    printf("<B>Outside Link: </B>");
+    printf("<B>%s </B>", trackDbSettingOrDefault(tdb, "urlLabel", "Outside Link:"));
     printf("<A HREF=\"%s\" target=_blank>", eUrl->string);
     
     if (sameWord(tdb->tableName, "npredGene"))
@@ -1923,6 +1923,9 @@ netAlignFree(&net);
 
 void tfbsCons(struct trackDb *tdb, char *item)
 {
+boolean printFactors = FALSE;
+boolean printedPlus = FALSE;
+boolean printedMinus = FALSE;
 char *dupe, *type, *words[16];
 char title[256];
 int wordCount;
@@ -1939,6 +1942,7 @@ struct tfbsCons *tfbsConsList = NULL;
 struct tfbsConsMap tfbsConsMap;
 boolean firstTime = TRUE;
 char *linkName = NULL;
+char *mappedId = NULL;
 
 dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
@@ -1954,34 +1958,72 @@ while ((row = sqlNextRow(sr)) != NULL)
     tfbs = tfbsConsLoad(row+hasBin);
     slAddHead(&tfbsConsList, tfbs);
     }
+sqlFreeResult(&sr); 
+slReverse(&tfbsConsList);
 
-if (tfbsConsList != NULL)
+if (hTableExists("tfbsConsMap"))
     {
-    slReverse(&tfbsConsList);
-    if (hTableExists("tfbsConsMap"))
+    sprintf(query, "select * from tfbsConsMap where id = '%s'", tfbsConsList->name);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
 	{
-	sprintf(query, "select * from tfbsConsMap where id = '%s'", tfbsConsList->name);
-	sr = sqlGetResult(conn, query);
-	if ((row = sqlNextRow(sr)) != NULL)
-	    {
-	    tfbsConsMapStaticLoad(row, &tfbsConsMap);
-	    printCustomUrl(tdb, tfbsConsMap.ac, FALSE);
-	    }
+	tfbsConsMapStaticLoad(row, &tfbsConsMap);
+	mappedId = cloneString(tfbsConsMap.ac);
 	}
+    }
+sqlFreeResult(&sr); 
 
-    printf("<B>Item:</B> %s<BR>\n", tfbsConsList->name);
-    printf("<B>Score:</B> %d<BR>\n", tfbsConsList->score );
-    printf("<B>Strand:</B> %s<BR>\n", tfbsConsList->strand);
-    printPos(tfbsConsList->chrom, tfbsConsList->chromStart, tfbsConsList->chromEnd, NULL, TRUE, tfbsConsList->name);
+printf("<B><font size=\"5\">Transcription Factor Binding Site information:</font></B><BR><BR><BR>");
+for(tfbs=tfbsConsList ; tfbs != NULL ; tfbs = tfbs->next)
+    {
+    if (!sameString(tfbs->species, "N"))
+	printFactors = TRUE;
 
-    for(; tfbsConsList != NULL ; tfbsConsList = tfbsConsList->next)
+    /* print each strand only once */
+    if ((printedMinus && (tfbs->strand[0] == '-')) || (printedPlus && (tfbs->strand[0] == '+')))
+	continue;
+
+    if (!firstTime)
+	htmlHorizontalLine(); 
+    else
+	firstTime = FALSE;
+
+    printf("<B>Item:</B> %s<BR>\n", tfbs->name);
+    if (mappedId != NULL)
+	printCustomUrl(tdb, mappedId, FALSE);
+    printf("<B>Score:</B> %d<BR>\n", tfbs->score );
+    printf("<B>Strand:</B> %s<BR>\n", tfbs->strand);
+    printPos(tfbsConsList->chrom, tfbs->chromStart, tfbs->chromEnd, NULL, TRUE, tfbs->name);
+    printedPlus = printedPlus || (tfbs->strand[0] == '+');
+    printedMinus = printedMinus || (tfbs->strand[0] == '-');
+    }
+
+if (printFactors)
+    {
+    htmlHorizontalLine(); 
+    printf("<B><font size=\"5\">Transcription Factors known to bind to this site:</font></B><BR><BR>");
+    for(tfbs=tfbsConsList ; tfbs != NULL ; tfbs = tfbs->next)
 	{
-	printf("<BR>\n");
-	if (!sameString(tfbsConsList->factor, "N"))
+	/* print only the positive strand when factors are on both strands */
+	if ((tfbs->strand[0] == '-') && printedPlus)
+	    continue;
+
+	if (!sameString(tfbs->species, "N"))
 	    {
-	    printf("<B>Factor:</B> %s<BR>\n", tfbsConsList->factor);
-	    printf("<B>Species:</B> %s<BR>\n", tfbsConsList->species);
-	    printf("<B>SwissProt ID:</B> %s<BR>\n", tfbsConsList->id);
+	    printf("<BR><B>Factor:</B> %s<BR>\n", tfbs->factor);
+	    printf("<B>Species:</B> %s<BR>\n", tfbs->species);
+	    printf("<B>SwissProt ID:</B> %s<BR>\n", sameString(tfbs->id, "N")? "unknown": tfbs->id);
+
+	    /* Only display link if entry exists in protein browser */
+	    sprintf(query, "select * from hg16.kgProtMap where qName = '%s';", tfbs->id );
+	    sr = sqlGetResult(conn, query); 
+	    if ((row = sqlNextRow(sr)) != NULL)                                                         
+		{
+		printf("<A HREF=\"http://hgwdev.cse.ucsc.edu/cgi-bin/pbTracks?proteinID=%s&db=hg16\" target=_blank><B>Protein Browser Entry</B></A><BR><BR>",  tfbs->id);
+		sqlFreeResult(&sr); 
+		}
+	    else                                                                                          
+		printf("No Protein Browser entry.\n<BR><BR>"); 
 	    }
 	}
     }
@@ -3215,6 +3257,7 @@ static char *mgcStatusDesc[][2] =
     {"artifact", "library artifacts"},
     {"noPolyATail", "no polyA-tail"},
     {"cantSequence", "unable to sequence"},
+    {"inconsistentWithGene", "inconsistent with known gene structure"},
     {NULL, NULL}
 };
 
@@ -7246,6 +7289,7 @@ void pseudoPrintPos(char *chrom, int chromStart, int chromEnd, struct pseudoGene
 char *tbl = cgiUsualString("table", cgiString("g"));
 char chainStr[32];
 char query[256];
+struct dyString *dy = newDyString(1024);
 char pfamDesc[128], *pdb;
 char chainTable[64];
 char chainTable_chrom[64];
@@ -7320,8 +7364,8 @@ else
     {
     /* display mrna */
     printf("<LI><B>mRna:</B> %s \n", pg->gene);
-    linkToOtherBrowser(pg->assembly, pg->gChrom, pg->mStart, pg->mEnd);
-    printf("%s:%d-%d \n", pg->gChrom, pg->mStart, pg->mEnd);
+    linkToOtherBrowser(pg->assembly, pg->gChrom, pg->gStart, pg->gEnd);
+    printf("%s:%d-%d \n", pg->gChrom, pg->gStart, pg->gEnd);
     printf("</A></LI>");
     }
 if (!sameString(pg->mgc,"noMgc"))
@@ -7367,17 +7411,23 @@ if (hTableExists(chainTable_chrom) )
     /* lookup chain if not stored */
     if (pg->chainId == 0 && pg->gStrand != NULL)
         {
+        dyStringPrintf(dy,
+            "select id, score, qStart, qEnd, qStrand, qSize from %s_%s where ", 
+            chrom, chainTable);
+        hAddBinToQuery(chromStart, chromEnd, dy);
         if (sameString(pg->gStrand,pg->strand))
-            safef(query,sizeof(query),
-                "select id, score, qStart, qEnd, qStrand, qSize from %s_%s where tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d order by qStart",
-                chrom, chainTable,chromStart,chromEnd, pg->gChrom, pg->gStart, pg->gEnd);
+            dyStringPrintf(dy,
+                "tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d ",
+                chromStart,chromEnd, pg->gChrom, pg->gStart, pg->gEnd);
         else
             {
-            safef(query,sizeof(query),
-                "select id, score, qStart, qEnd, qStrand, qSize from %s_%s where tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d order by qStart",
-                chrom, chainTable,chromStart,chromEnd, pg->gChrom, hChromSize(pg->gChrom)-(pg->gEnd), hChromSize(pg->gChrom)-(pg->gStart));
+            dyStringPrintf(dy,
+                "tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d ",
+                chromStart,chromEnd, pg->gChrom, hChromSize(pg->gChrom)-(pg->gEnd), 
+                hChromSize(pg->gChrom)-(pg->gStart));
             }
-        sr = sqlGetResult(conn, query);
+        dyStringAppend(dy, " order by qStart");
+        sr = sqlGetResult(conn, dy->string);
         while ((row = sqlNextRow(sr)) != NULL)
             {
             int chainId, score;
@@ -7593,26 +7643,19 @@ sqlFreeResult(&sr);
 struct hash *makeTrackHash(char *chrom)
 /* Make hash of trackDb items for this chromosome. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct trackDb *tdbs = hTrackDb(chrom);
 struct hash *trackHash = newHash(7);
-struct sqlResult *sr;
-char **row;
-struct trackDb *tdb;
-char *trackDb = hTrackDbName();
-char query[256];
-snprintf(query, sizeof(query), "select * from %s", trackDb);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+
+while (tdbs != NULL)
     {
-    tdb = trackDbLoad(row);
+    struct trackDb *tdb = slPopHead(&tdbs);
     hLookupStringsInTdb(tdb, database);
     if (hTrackOnChrom(tdb, chrom))
 	hashAdd(trackHash, tdb->tableName, tdb);
     else
         trackDbFree(&tdb);
     }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
+
 return trackHash;
 }
 
@@ -13420,7 +13463,7 @@ else if (sameWord(track, "mrna") || sameWord(track, "mrna2") ||
     {
     doHgRna(tdb, item);
     }
-else if (sameWord(track, "affyU95") || sameWord(track, "affyU133") || sameWord(track, "affyU74") )
+else if (sameWord(track, "affyU95") || sameWord(track, "affyU133") || sameWord(track, "affyU74") || sameWord(track, "affyRAE230") )
     {
     doAffy(tdb, item, NULL);
     }
@@ -13878,7 +13921,8 @@ else if(sameWord(track, "affy"))
     affyDetails(tdb, item);
     }
 else if ( sameWord(track, "affyRatio") || sameWord(track, "affyGnfU74A") 
-	|| sameWord(track, "affyGnfU74B") || sameWord(track, "affyGnfU74C") || sameWord(track, "affyUclaNorm"))
+	|| sameWord(track, "affyGnfU74B") || sameWord(track, "affyGnfU74C") 
+	|| sameWord(track, "affyUclaNorm") || sameWord(track, "gnfAtlas2"))
     {
     gnfExpRatioDetails(tdb, item);
     }

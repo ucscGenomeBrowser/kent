@@ -15,6 +15,7 @@
 #ifndef CART_H
 #include "cart.h"
 #endif
+struct itemAttr;
 struct itemAttrTbl;
 
 struct track
@@ -188,7 +189,7 @@ struct linkedFeatures
     int orientation;                    /* Orientation. */
     struct simpleFeature *components;   /* List of component simple features. */
     void *extra;			/* Extra info that varies with type. */
-    void *customPt;                     /* Misc pointer variable unique to group. */
+    struct itemAttr *itemAttr;          /* itemAttr object for this lf, or NULL */
     char popUp[128];			/* text for popup */
     };
 

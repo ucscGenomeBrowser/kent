@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.56 2004/03/24 18:27:38 angie Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.57 2004/03/29 01:17:23 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -1359,5 +1359,55 @@ if (row == NULL)
 time = sqlDateToUnixTime(row[updateIx]);
 sqlFreeResult(&sr);
 return time;
+}
+
+char** sqlGetEnumDef(struct sqlConnection *conn, char* table, char* colName)
+/* Get the definitions of a enum column in a table, returning a
+ * null-terminated array of enum values.  Free array when finished.  */
+{
+static char *enumPrefix = "enum(";
+struct sqlResult *sr;
+char query[128];
+char **row;
+char *defStr, *defStrCp;
+int numValues, i;
+char **enumDef;
+
+/* get enum definition */
+safef(query, sizeof(query), "describe %s", table);
+sr = sqlGetResult(conn, query);
+while (((row = sqlNextRow(sr)) != NULL) && !sameString(row[0], colName))
+    continue;
+if (row == NULL)
+    errAbort("can't find column %s in results of %s", colName, query);
+
+/* parse definition in the form:
+ * enum('unpicked','candidate',... ,'cantSequence') */
+if (!startsWith(enumPrefix, row[1]))
+    errAbort("%s column %s isn't an enum: %s", table, colName, row[1]);
+defStr = row[1] + strlen(enumPrefix);
+
+/* build char** array with string space in same block */
+numValues = chopString(defStr, ",", NULL, 0);
+enumDef = needMem(((numValues+1) * sizeof (char**)) + strlen(defStr)+1);
+defStrCp = ((char*)enumDef) + ((numValues+1) * sizeof (char**));
+strcpy(defStrCp, defStr);
+chopString(defStrCp, ",", enumDef, numValues);
+
+/* remove quotes */
+for (i = 0; enumDef[i] != NULL; i++)
+    {
+    int len = strlen(enumDef[i]);
+    if (enumDef[i+1] == NULL)
+        len--;  /* last entry hash close paren */
+    if ((enumDef[i][0] != '\'') || (enumDef[i][len-1] != '\''))
+        errAbort("can't find quotes in %s column %s enum value: %s", 
+                 table, colName, enumDef[i]);
+    enumDef[i][len-1] = '\0';
+    enumDef[i]++;
+    }
+
+sqlFreeResult(&sr);
+return enumDef;
 }
 

@@ -299,7 +299,7 @@ group genes
 priority 35.1
 visibility dense
 color 12,12,120
-type genePred refPep refMrna
+type genePred xenoRefPep xenoRefMrna
 
 track mgcGenes
 shortLabel MGC Genes
@@ -317,7 +317,7 @@ group x
 priority 30.10
 visibility hide
 color 10,100,15
-type genePred
+type genePred +
 
 track ncbiGeneCDS99
 shortLabel NCBI CDS 99 set
@@ -681,7 +681,7 @@ track cpgIsland
 shortLabel CpG Islands
 longLabel CpG Islands (Islands < 300 Bases are Light Green)
 group regulation
-priority 76
+priority 90
 visibility hide
 color 0,100,0
 altColor 128,228,128
@@ -691,7 +691,7 @@ track cpgIslandExt
 shortLabel CpG Islands
 longLabel CpG Islands (Islands < 300 Bases are Light Green)
 group regulation
-priority 76
+priority 90
 visibility hide
 color 0,100,0
 altColor 128,228,128
@@ -701,7 +701,7 @@ track firstEF
 shortLabel FirstEF 
 longLabel FirstEF: First-Exon and Promoter Prediction
 group regulation
-priority 76.5
+priority 90.1
 visibility hide
 spectrum on
 type bed 6
@@ -709,11 +709,20 @@ scoreMin 500
 scoreMax 1000
 url http://rulai.cshl.org/tools/FirstEF/Readme/README.html
 
+track softPromoter
+shortLabel TSSW Promoters
+longLabel TSSW Promoter Predictions
+group regulation
+priority 90.2
+visibility hide
+color 0,100,0
+type bed 5 +
+
 track transfacHit
 shortLabel Transfac Hits 
 longLabel Transfac Transcription Factor Binding Sites Near Transcription Start
 group regulation
-priority 77
+priority 91
 visibility hide
 spectrum on
 type bed 6
@@ -722,7 +731,7 @@ track triangleSelf
 shortLabel Golden Triangle  
 longLabel Golden Triangle Possible Transcription Factor Binding Sites
 group regulation
-priority 78
+priority 92
 visibility hide
 spectrum on
 type bed 6
@@ -731,7 +740,7 @@ track esRegGeneToMotif
 shortLabel Regulatory Module 
 longLabel Eran Segal Regulatory Module
 group regulation
-priority 78.1
+priority 93
 visibility dense
 spectrum on
 type bed 6 +
@@ -740,7 +749,7 @@ track triangle
 shortLabel Golden Extra
 longLabel Golden Triangle Motif Matching Sites Near Transcription Start
 group regulation
-priority 79
+priority 94
 visibility hide
 spectrum on
 type bed 6
@@ -749,7 +758,7 @@ track transfac
 shortLabel Transfac Hits
 longLabel Transfac Hits
 group regulation
-priority 80
+priority 95
 visibility hide
 color 12,12,120
 type genePred refPep refMrna
@@ -758,7 +767,7 @@ track transfacRatios
 shortLabel Transfac Ratios
 longLabel Transfac Likelihood Ratios
 group regulation
-priority 81
+priority 96
 visibility hide
 color 12,12,120
 type bed 6
@@ -767,56 +776,10 @@ track psuReg
 shortLabel Known Regulatory 
 longLabel Functional Regulatory Elements Compiled by Penn State 
 group regulation
-priority 82
+priority 97
 visibility hide
 color 30,130,210
 type bed 4 .
-
-track softPromoter
-shortLabel TSSW Promoters
-longLabel TSSW Promoter Predictions
-group regulation
-priority 83
-visibility hide
-color 0,100,0
-type bed 5 +
-
-track nci60
-shortLabel NCI60
-longLabel Microarray Experiments for NCI 60 Cell Lines
-group regulation
-priority 84
-visibility hide
-type bed 15 +
-
-track affy
-shortLabel GNF
-longLabel GNF Gene Expression Atlas Using Affymetrix GeneChips
-group regulation
-priority 85
-visibility hide
-type bed 15 +
-
-track affyRatio
-shortLabel GNF Ratio
-longLabel GNF Gene Expression Atlas Ratios Using Affymetrix GeneChips
-group regulation
-priority 86
-visibility hide
-type bed 15 +
-expScale 3.0
-expStep 0.5
-expTable affyExps
-chip U95
-canPack off
-
-track cghNci60
-shortLabel CGH NCI60
-longLabel Comparative Genomic Hybridization Experiments for NCI 60 Cell Lines
-group regulation
-priority 87
-visibility hide
-type bed 15 +
 
 track rosetta
 shortLabel Rosetta
@@ -1012,38 +975,30 @@ longLabel Simple Nucleotide Polymorphisms (SNPs)
 group varRep
 priority 144
 visibility hide
-type bed 6 .
+type bed 4 .
 
-track perlegen
-shortLabel Haplotype Blocks
-longLabel Perlegen Common High-Resolution Haplotype Blocks
+track genomicSuperDups
+shortLabel Segmental Dups
+longLabel Duplications of >1000 Bases of Non-RepeatMasked Sequence
 group varRep
-priority 145.21
+priority 146
 visibility hide
-chromosomes chr21,
-color 0,0,0
-altColor 0,0,0
-spectrum on
-type bed 12
-url http://www.perlegen.com/haplotype/blk/$$.html
+type bed 6 
 
-track haplotype
-shortLabel Haplotype Blocks
-longLabel Common Haplotype Blocks
+track lineageMutations
+shortLabel LineageMutations
+longLabel Lineage Specific Mutations
 group varRep
-priority 145.22
+priority 147
+altColor 0,160,0
 visibility hide
-chromosomes chr22,
-color 0,0,0
-altColor 0,0,0
-spectrum on
-type bed 12
+type sample
 
 track rmsk
 shortLabel RepeatMasker
 longLabel Repeating Elements by RepeatMasker
 group varRep
-priority 146.1
+priority 149.1
 visibility dense
 spectrum on
 type rmsk
@@ -1053,7 +1008,7 @@ track reconRepeat
 shortLabel Recon Repeats
 longLabel Repeats Determined with Recon
 group varRep
-priority 146.2
+priority 149.2
 visibility hide
 type bed 4 +
 
@@ -1061,26 +1016,9 @@ track simpleRepeat
 shortLabel Simple Repeats
 longLabel Simple Tandem Repeats by TRF
 group varRep
-priority 146.3
+priority 149.3
 visibility hide
 type bed 4 +
-
-track genomicSuperDups
-shortLabel Segmental Dups
-longLabel Duplications of >1000 Bases of Non-RepeatMasked Sequence
-group varRep
-priority 147
-visibility hide
-type bed 6 
-
-track lineageMutations
-shortLabel LineageMutations
-longLabel Lineage Specific Mutations
-group varRep
-priority 148
-altColor 0,160,0
-visibility hide
-type sample
 
 track blastzSelfUnmasked
 shortLabel Self Unmasked
@@ -1228,3 +1166,254 @@ color 175,150,128
 altColor 255,128,0
 type wig 0.0 1.0
 autoScaleDefault Off
+
+
+
+
+searchTable ctgPos
+searchMethod exact
+shortCircuit 1
+termRegex (ctg|NT_)[0-9]+
+query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
+searchPriority 5
+
+searchTable cytoBand
+searchMethod exact
+searchType cytoBand
+shortCircuit 1
+termRegex (x|y|[1-9][0-9]?)(p|q)[0-9]+(.[0-9]+)?
+searchPriority 6
+padding 500000
+
+searchTable clonePos
+searchMethod exact
+searchType bed
+shortCircuit 1
+termRegex [a-z].{4}.?.?.?.?[0-9]
+searchPriority 7
+
+searchTable gold
+searchMethod exact
+searchType gold
+shortCircuit 1
+termRegex [abz].[0-9]+(\.[0-9]+)?
+searchPriority 8
+
+searchTable mrna
+searchMethod prefix
+searchType mrnaAcc
+shortCircuit 1
+termRegex [a-z][a-z0-9][0-9]+
+searchPriority 10
+
+searchTable encodeRegions
+searchMethod exact
+searchType bed
+termRegex EN[rm][0-9]+
+searchPriority 11
+
+searchTable knownGene
+searchType knownGene
+searchPriority 1
+
+searchName refGeneMrna
+searchTable refGene
+searchMethod exact
+searchType genePred
+termRegex (N|X)M_[0-9]{6}
+searchDescription mRNA Accession of RefSeq Gene
+searchPriority 2
+
+searchName refGeneProt
+searchTable refGene
+searchMethod exact
+searchType genePred
+termRegex (N|X)P_[0-9]{6}
+xrefTable refLink
+xrefQuery select mrnaAcc from %s where protAcc like '%s'
+searchDescription Protein Accession of RefSeq Gene
+searchPriority 3
+
+searchName refGeneLocus
+searchTable refGene
+searchMethod exact
+searchType genePred
+termRegex [0-9]+
+xrefTable refLink
+xrefQuery select mrnaAcc from %s where locusLinkId = %s
+searchDescription LocusLink ID of RefSeq Gene
+searchPriority 4
+
+searchName refGeneOmim
+searchTable refGene
+searchMethod exact
+searchType genePred
+termRegex [0-9]+
+xrefTable refLink
+xrefQuery select mrnaAcc from %s where omimId = %s
+searchDescription OMIM ID of RefSeq Gene
+searchPriority 5
+
+searchName refGeneName
+searchTable refGene
+searchMethod prefix
+searchType genePred
+xrefTable refLink
+xrefQuery select mrnaAcc from %s where name like '%s%%'
+searchDescription RefSeq Gene
+searchPriority 5.1
+
+searchName refGeneProduct
+searchTable refGene
+searchMethod fuzzy
+searchType genePred
+xrefTable refLink
+xrefQuery select mrnaAcc from %s where product like '%%%s%%'
+searchDescription Product RefSeq Gene
+searchPriority 5.2
+
+searchTable superfamily
+searchType bed
+searchMethod fuzzy
+xrefTable sfDescription
+xrefQuery select name from %s where description like '%%%s%%'
+searchDescription Description of Superfamily Protein
+searchPriority 6
+padding 100
+
+searchTable fishClones
+searchMethod exact
+searchType bed
+termRegex (RP|CT|GS)[:alnum:]+-[:alnum:]+
+searchPriority 7
+
+searchTable bacEndPairs
+searchMethod exact
+searchType bed
+termRegex ([:alnum:]+|(RP|CT|GS)[:alnum:]+-[:alnum:]+|-[:alnum:]+-[:alnum:]+)
+searchPriority 8
+
+searchTable fosEndPairs
+searchMethod exact
+searchType bed
+termRegex ([:alnum:]+|(RP|CT|GS)[:alnum:]+-[:alnum:]+|-[:alnum:]+-[:alnum:]+)
+searchPriority 9
+
+searchTable fosEndPairsBad
+searchMethod exact
+searchType bed
+termRegex ([:alnum:]+|(RP|CT|GS)[:alnum:]+-[:alnum:]+|-[:alnum:]+-[:alnum:]+)
+searchPriority 10
+
+searchName stsMapAlias
+searchTable stsMap
+searchType bed
+xrefTable stsAlias
+xrefQuery select trueName from %s where alias like '%s'
+searchDescription Alias of STS Marker
+searchPriority 11
+padding 100000
+
+searchTable stsMap
+searchType bed
+searchPriority 12
+padding 100000
+
+searchTable mrna
+searchType mrnaKeyword
+searchPriority 15
+
+searchTable xenoMrna
+searchType mrnaKeyword
+searchPriority 15.1
+
+searchTable snpMap
+searchMethod exact
+searchType bed
+termRegex rs[0-9]+
+searchPriority 16
+padding 5000
+
+searchTable ensGene
+searchType genePred
+searchPriority 50
+
+searchTable genieAlt
+searchType genePred
+searchPriority 50
+
+searchTable softberryGene
+searchType genePred
+searchPriority 50
+
+searchTable acembly
+searchType genePred
+searchPriority 50
+
+searchTable genscan
+searchType genePred
+searchPriority 50
+
+searchTable twinscan
+searchType genePred
+searchPriority 50
+
+searchTable ECgene
+searchType genePred
+searchPriority 50
+
+searchTable sangerGene
+searchType genePred
+searchPriority 50
+
+searchTable vegaGene
+searchType genePred
+searchPriority 50
+
+searchTable slamRat
+searchType genePred
+searchPriority 50
+
+searchTable slamMouse
+searchType genePred
+searchPriority 50
+
+searchTable slamHuman
+searchType genePred
+searchPriority 50
+
+searchTable tigrGeneIndex
+searchType genePred
+searchPriority 50
+
+searchTable gbProtCode
+searchType gbProtCode
+searchPriority 60
+
+searchName tigrCmrORFsCommon
+searchTable tigrCmrORFs
+searchType bed
+searchMethod fuzzy
+xrefTable tigrCmrORFsInfo
+xrefQuery select name from %s where tigrCommon like '%%%s%%'
+searchDescription Common Name of TIGR Locus
+searchPriority 61
+
+searchName tigrCmrORFsMainRole
+searchTable tigrCmrORFs
+searchType bed
+searchMethod fuzzy
+xrefTable tigrCmrORFsInfo
+xrefQuery select name from %s where tigrMainRole like '%%%s%%'
+searchDescription Main Role of TIGR Locus
+searchPriority 62
+
+searchName tigrCmrORFsSubRole
+searchTable tigrCmrORFs
+searchType bed
+searchMethod fuzzy
+xrefTable tigrCmrORFsInfo
+xrefQuery select name from %s where tigrSubRole like '%%%s%%'
+searchDescription SubRole of TIGR Locus
+searchPriority 63
+

@@ -7,7 +7,7 @@
 opts="$*"
 
 # databases to update
-databases="mm3 rn3 hg16 fr1 dm1 mm4 sacCer1 panTro1"
+databases="mm3 rn3 hg16 fr1 dm1 mm4 sacCer1 panTro1 galGal2"
 
 # gbRoot on hgnfs1
 gbRoot=/cluster/data/genbank

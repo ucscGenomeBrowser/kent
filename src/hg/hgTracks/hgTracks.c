@@ -85,7 +85,7 @@
 
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.693 2004/03/24 22:05:21 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.697 2004/03/31 20:25:25 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -2142,7 +2142,7 @@ while ((gp = genePredReaderNext(gpr)) != NULL)
         lf->components = sfFromGenePred(gp, grayIx);
 
     if ((tg->itemAttrTbl != NULL) && (gp->optFields & genePredIdFld))
-        lf->customPt = itemAttrTblGet(tg->itemAttrTbl, gp->id);
+        lf->itemAttr = itemAttrTblGet(tg->itemAttrTbl, gp->id);
 
     linkedFeaturesBoundsAndGrays(lf);
 
@@ -6746,9 +6746,8 @@ Color genePredItemAttrColor(struct track *tg, void *item, struct vGfx *vg)
  * table. */
 {
 struct linkedFeatures *lf = item;
-struct itemAttr *ia = lf->customPt;
-if (ia != NULL)
-    return vgFindColorIx(vg, ia->colorR, ia->colorG, ia->colorB);
+if (lf->itemAttr != NULL)
+    return vgFindColorIx(vg, lf->itemAttr->colorR, lf->itemAttr->colorG, lf->itemAttr->colorB);
 else
     return tg->ixColor;
 }
@@ -7434,7 +7433,6 @@ registerTrackHandler("cghNci60", cghNci60Methods);
 registerTrackHandler("rosetta", rosettaMethods);
 registerTrackHandler("affy", affyMethods);
 registerTrackHandler("affyRatio", affyRatioMethods);
-// registerTrackHandler("affyUcla", affyUclaMethods);
 registerTrackHandler("affyUclaNorm", affyUclaNormMethods);
 registerTrackHandler("ancientR", ancientRMethods );
 registerTrackHandler("altGraphX", altGraphXMethods );
@@ -7449,6 +7447,7 @@ registerTrackHandler("gbProtCode", gbGeneMethods);
 registerTrackHandler("tigrCmrORFs", tigrGeneMethods);
 registerTrackHandler("llaPfuPrintA",llArrayMethods);
 registerTrackHandler("llaPaePrintA",llArrayMethods);
+registerTrackHandler("BlastPEuk",llBlastPMethods);
 /* MGC related */
 registerTrackHandler("mgcIncompleteMrna", mrnaMethods);
 registerTrackHandler("mgcFailedEst", estMethods);
@@ -8191,6 +8190,6 @@ cgiSpoof(&argc, argv);
 if (cgiVarExists("hgt.reset"))
     resetVars(except);
 htmlSetBackground("../images/floret.jpg");
-cartHtmlShell("UCSC Genome Browser v57", doMiddle, hUserCookie(), excludeVars, NULL);
+cartHtmlShell("UCSC Genome Browser v58", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }

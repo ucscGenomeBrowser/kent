@@ -9,8 +9,12 @@
 //#include "hdb.h"
 #include "psl.h"
 #include "bed.h"
+#include "axt.h"
+#include "dnautil.h"
 #include "dnaseq.h"
 #include "nib.h"
+#include "fa.h"
+#include "dlist.h"
 #include "rmskOut.h"
 #include "binRange.h"
 #include "cheapcgi.h"
@@ -20,19 +24,21 @@
 #define WORDCOUNT 3
 #define POLYASLIDINGWINDOW 10
 #define POLYAREGION 160
-
+#define INTRONMAGIC 10 /* allow more introns if lots of exons covered - if (exonCover - intronCount > INTRONMAGIC) */
 /* label for classification stored in pseudoGeneLink table */
 #define PSEUDO 1
 #define NOTPSEUDO -1
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.10 2004/03/09 01:58:28 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.11 2004/03/25 06:48:52 baertsch Exp $";
 
 char *db;
+char *nibDir;
+char *mrnaSeq;
 double minAli = 0.98;
 double maxRep = 0.35;
 double minAliPseudo = 0.60;
 double nearTop = 0.01;
-double minCover = 0.90;
+double minCover = 0.50;
 double minCoverPseudo = 0.01;
 int maxBlockGap = 60;
 boolean ignoreSize = FALSE;
@@ -42,7 +48,23 @@ boolean noHead = FALSE;
 boolean quiet = FALSE;
 int minNearTopSize = 10;
 struct genePred *gpList1 = NULL, *gpList2 = NULL, *kgList = NULL;
-FILE *bestFile, *pseudoFile, *linkFile;
+FILE *bestFile, *pseudoFile, *linkFile, *axtFile;
+struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
+struct dnaSeq *mrnaList = NULL; /* list of all input mrna sequences */
+struct hash *tHash = NULL;  /* seqFilePos value. */
+struct hash *qHash = NULL;  /* seqFilePos value. */
+struct dlList *fileCache = NULL;
+struct hash *fileHash = NULL;  
+
+struct seqFilePos
+/* Where a sequence is in a file. */
+    {
+    struct filePos *next;	/* Next in list. */
+    char *name;	/* Sequence name. Allocated in hash. */
+    char *file;	/* Sequence file name, allocated in hash. */
+    long pos; /* Position in fa file/size of nib. */
+    bool isNib;	/* True if a nib file. */
+    };
 void usage()
 /* Print usage instructions and exit. */
 {
@@ -50,7 +72,7 @@ errAbort(
     "pslPseudo - analyse repeats and generate genome wide best\n"
     "alignments from a sorted set of local alignments\n"
     "usage:\n"
-    "    pslPseudo db in.psl sizes.lst rmskDir trf.bed syntenic.bed mrna.psl out.psl pseudo.psl pseudoLink.txt nibDir refGene.tab gene.tab kglist.tab \n\n"
+    "    pslPseudo db in.psl sizes.lst rmskDir trf.bed syntenic.bed mrna.psl out.psl pseudo.psl pseudoLink.txt nib.lst mrna.fa refGene.tab mgcGene.tab kglist.tab \n\n"
     "where in.psl is an blat alignment of mrnas sorted by pslSort\n"
     "blastz.psl is an blastz alignment of mrnas sorted by pslSort\n"
     "sizes.lst is a list of chrromosome followed by size\n"
@@ -60,12 +82,14 @@ errAbort(
     "out.psl is the best mrna alignment for the gene \n"
     "and pseudo.psl contains pseudogenes\n"
     "pseudoLink.txt will have the link between gene and pseudogene\n"
+    "nib.lst list of genome nib file\n"
+    "mrna.fa sequence data for all aligned mrnas using blastz\n"
     "options:\n"
     "    -nohead don't add PSL header\n"
     "    -ignoreSize Will not weigh in favor of larger alignments so much\n"
     "    -noIntrons Will not penalize for not having introns when calculating\n"
     "              size factor\n"
-    "    -minCover=0.N minimum coverage for mrna to output.  Default is 0.90\n"
+    "    -minCover=0.N minimum coverage for mrna to output.  Default is 0.50\n"
     "    -minCoverPseudo=0.N minimum coverage of pseudogene to output.  Default is 0.01\n"
     "    -minAli=0.N minimum alignment ratio for mrna\n"
     "               default is 0.98\n"
@@ -81,6 +105,383 @@ errAbort(
     "               for aligmnent to be kept.  Default .35\n");
 }
 
+struct cachedFile
+/* File in cache. */
+    {
+    struct cachedFile *next;	/* next in list. */
+    char *name;		/* File name (allocated here) */
+    FILE *f;		/* Open file. */
+    };
+
+boolean isFa(char *file)
+/* Return TRUE if looks like a .fa file. */
+{
+FILE *f = mustOpen(file, "r");
+int c = fgetc(f);
+fclose(f);
+return c == '>';
+}
+
+void addNib(char *file, struct hash *fileHash, struct hash *seqHash)
+/* Add a nib file to hashes. */
+{
+struct seqFilePos *sfp;
+char root[128];
+int size;
+FILE *f = NULL;
+splitPath(file, NULL, root, NULL);
+AllocVar(sfp);
+hashAddSaveName(seqHash, root, sfp, &sfp->name);
+sfp->file = hashStoreName(fileHash, file);
+sfp->isNib = TRUE;
+nibOpenVerify(file, &f, &size);
+sfp->pos = size;
+}
+
+void addFa(char *file, struct hash *fileHash, struct hash *seqHash)
+/* Add a fa file to hashes. */
+{
+struct lineFile *lf = lineFileOpen(file, TRUE);
+char *line, *name;
+char root[128];
+char *rFile = hashStoreName(fileHash, file);
+
+while (lineFileNext(lf, &line, NULL))
+    {
+    if (line[0] == '>')
+        {
+	struct seqFilePos *sfp;
+	line += 1;
+	name = nextWord(&line);
+	if (name == NULL)
+	   errAbort("bad line %d of %s", lf->lineIx, lf->fileName);
+	AllocVar(sfp);
+	hashAddSaveName(seqHash, name, sfp, &sfp->name);
+	sfp->file = rFile;
+	sfp->pos = lineFileTell(lf);
+	}
+    }
+lineFileClose(&lf);
+}
+
+void hashFileList(char *fileList, struct hash *fileHash, struct hash *seqHash)
+/* Read file list into hash */
+{
+if (endsWith(fileList, ".nib"))
+    addNib(fileList, fileHash, seqHash);
+else if (isFa(fileList))
+    addFa(fileList, fileHash, seqHash);
+else
+    {
+    struct lineFile *lf = lineFileOpen(fileList, TRUE);
+    char *row[1];
+    while (lineFileRow(lf, row))
+        {
+	char *file = row[0];
+	if (endsWith(file, ".nib"))
+	    addNib(file, fileHash, seqHash);
+	else
+	    addFa(file, fileHash, seqHash);
+	}
+    lineFileClose(&lf);
+    }
+}
+
+FILE *openFromCache(struct dlList *cache, char *fileName)
+/* Return open file handle via cache.  The simple logic here
+ * depends on not more than N files being returned at once. */
+{
+static int maxCacheSize=32;
+int cacheSize = 0;
+struct dlNode *node;
+struct cachedFile *cf;
+
+/* First loop through trying to find it in cache, counting
+ * cache size as we go. */
+for (node = cache->head; !dlEnd(node); node = node->next)
+    {
+    ++cacheSize;
+    cf = node->val;
+    if (sameString(fileName, cf->name))
+        {
+	dlRemove(node);
+	dlAddHead(cache, node);
+	return cf->f;
+	}
+    }
+
+/* If cache has reached max size free least recently used. */
+if (cacheSize >= maxCacheSize)
+    {
+    node = dlPopTail(cache);
+    cf = node->val;
+    carefulClose(&cf->f);
+    freeMem(cf->name);
+    freeMem(cf);
+    freeMem(node);
+    }
+
+/* Cache new file. */
+AllocVar(cf);
+cf->name = cloneString(fileName);
+cf->f = mustOpen(fileName, "rb");
+dlAddValHead(cache, cf);
+return cf->f;
+}
+
+struct dnaSeq *readCachedSeq(char *seqName, struct hash *hash, 
+	struct dlList *fileCache)
+/* Read sequence hopefully using file cache. */
+{
+struct dnaSeq *mrna = NULL;
+struct dnaSeq *qSeq = NULL;
+struct seqFilePos *sfp = hashMustFindVal(hash, seqName);
+FILE *f = openFromCache(fileCache, sfp->file);
+unsigned options = NIB_MASK_MIXED;
+if (sfp->isNib)
+    {
+    return nibLdPartMasked(options, sfp->file, f, sfp->pos, 0, sfp->pos);
+    }
+else
+    {
+    for (mrna = mrnaList; mrna != NULL ; mrna = mrna->next)
+        if (sameString(mrna->name, seqName))
+            {
+            qSeq = mrna;
+            break;
+            }
+    return qSeq;
+    }
+}
+
+struct dnaSeq *readSeqFromFaPos(struct seqFilePos *sfp,  FILE *f)
+/* Read part of FA file. */
+{
+struct dnaSeq *seq;
+fseek(f, sfp->pos, SEEK_SET);
+if (!faReadNext(f, "", TRUE, NULL, &seq))
+    errAbort("Couldn't faReadNext on %s in %s\n", sfp->name, sfp->file);
+return seq;
+}
+
+void readCachedSeqPart(char *seqName, int start, int size, 
+     struct hash *hash, struct dlList *fileCache, 
+     struct dnaSeq **retSeq, int *retOffset, boolean *retIsNib)
+/* Read sequence hopefully using file cashe. If sequence is in a nib
+ * file just read part of it. */
+{
+struct seqFilePos *sfp = hashMustFindVal(hash, seqName);
+FILE *f = openFromCache(fileCache, sfp->file);
+unsigned options = NIB_MASK_MIXED;
+if (sfp->isNib)
+    {
+    *retSeq = nibLdPartMasked(options, sfp->file, f, sfp->pos, start, size);
+    *retOffset = start;
+    *retIsNib = TRUE;
+    }
+else
+    {
+    *retSeq = readSeqFromFaPos(sfp, f);
+    *retOffset = 0;
+    *retIsNib = FALSE;
+    }
+}
+
+struct axt *axtCreate(char *q, char *t, int size, struct psl *psl)
+/* create axt */
+{
+int i;
+static int ix = 0;
+int qs = psl->qStart, qe = psl->qEnd;
+int ts = psl->tStart, te = psl->tEnd;
+int symCount = 0;
+struct axt *axt = NULL;
+
+AllocVar(axt);
+if (psl->strand[0] == '-')
+    reverseIntRange(&qs, &qe, psl->qSize);
+
+if (psl->strand[1] == '-')
+    reverseIntRange(&ts, &te, psl->tSize);
+
+//if (psl->strand[1] != 0)
+//    fprintf(f, "%d %s %d %d %s %d %d %c%c 0\n", ++ix, psl->tName, ts+1, 
+//            te, psl->qName, qs+1, qe, psl->strand[1], psl->strand[0]);
+//else
+//    fprintf(f, "%d %s %d %d %s %d %d %c 0\n", ++ix, psl->tName, psl->tStart+1, 
+//            psl->tEnd, psl->qName, qs+1, qe, psl->strand[0]);
+
+axt->qName = cloneString(psl->qName);
+axt->tName = cloneString(psl->tName);
+axt->qStart = qs+1;
+axt->qEnd = qe;
+axt->qStrand = psl->strand[0];
+axt->tStrand = '+';
+if (psl->strand[1] != 0)
+    {
+    axt->tStart = ts+1;
+    axt->tEnd = te;
+    }
+else
+    {
+    axt->tStart = psl->tStart+1;
+    axt->tEnd = psl->tEnd;
+    }
+axt->symCount = symCount = strlen(t);
+axt->tSym = cloneString(t);
+if (strlen(q) != symCount)
+    warn("Symbol count %d != %d inconsistent at t %s:%d and qName %s\n%s\n%s\n",
+    	symCount, strlen(q), psl->tName, psl->tStart, psl->qName, t, q);
+axt->qSym = cloneString(q);
+axt->score = axtScore(axt, ss);
+printf("axt score = %d\n",axt->score);
+assert(axt->score<800000);
+//for (i=0; i<size ; i++) 
+//    fputc(t[i],f);
+//for (i=0; i<size ; i++) 
+//    fputc(q[i],f);
+return axt;
+}
+
+void writeInsert(struct dyString *aRes, struct dyString *bRes, char *aSeq, int gapSize)
+/* Write out gap, possibly shortened, to aRes, bRes. */
+{
+dyStringAppendN(aRes, aSeq, gapSize);
+dyStringAppendMultiC(bRes, '-', gapSize);
+}
+
+
+void writeGap(struct dyString *aRes, int aGap, char *aSeq, struct dyString *bRes, int bGap, char *bSeq)
+/* Write double - gap.  Something like:
+ *         --c
+ *         ag-  */
+
+{
+dyStringAppendMultiC(aRes, '-', bGap);
+dyStringAppendN(bRes, bSeq, bGap);
+dyStringAppendN(aRes, aSeq, aGap);
+dyStringAppendMultiC(bRes, '-', aGap);
+}
+
+struct axt *pslToAxt(struct psl *psl, struct hash *qHash, struct hash *tHash,
+	struct dlList *fileCache)
+{
+static char *tName = NULL, *qName = NULL;
+static struct dnaSeq *tSeq = NULL, *qSeq = NULL, *mrna;
+struct dyString *q = newDyString(16*1024);
+struct dyString *t = newDyString(16*1024);
+int blockIx, diff;
+int qs, ts , symCount;
+int lastQ = 0, lastT = 0, size;
+int qOffset = 0;
+int tOffset = 0;
+struct axt *axt = NULL;
+boolean qIsNib = FALSE;
+boolean tIsNib = FALSE;
+int cnt = 0;
+
+freeDnaSeq(&qSeq);
+freez(&qName);
+assert(mrnaList != NULL);
+for (mrna = mrnaList; mrna != NULL ; mrna = mrna->next)
+    {
+    assert(mrna != NULL);
+    cnt++;
+    if (sameString(mrna->name, psl->qName))
+        {
+        qSeq = cloneDnaSeq(mrna);
+        assert(qSeq != NULL);
+        break;
+        }
+    }
+if (qSeq == NULL)
+    errAbort("mrna sequence data not found %s, searched %d sequences\n",psl->qName,cnt);
+qName = cloneString(psl->qName);
+if (qIsNib && psl->strand[0] == '-')
+    qOffset = psl->qSize - psl->qEnd;
+else
+    qOffset = 0;
+printf("qString len = %d qOffset = %d\n",strlen(qSeq->dna),qOffset);
+if (tName == NULL || !sameString(tName, psl->tName) || tIsNib)
+    {
+    freeDnaSeq(&tSeq);
+    freez(&tName);
+    tName = cloneString(psl->tName);
+    readCachedSeqPart(tName, psl->tStart, psl->tEnd-psl->tStart, 
+	tHash, fileCache, &tSeq, &tOffset, &tIsNib);
+    }
+if (tIsNib && psl->strand[1] == '-')
+    tOffset = psl->tSize - psl->tEnd;
+if (psl->strand[0] == '-')
+    reverseComplement(qSeq->dna, qSeq->size);
+if (psl->strand[1] == '-')
+    reverseComplement(tSeq->dna, tSeq->size);
+for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
+    {
+    qs = psl->qStarts[blockIx] - qOffset;
+    ts = psl->tStarts[blockIx] - tOffset;
+
+    if (blockIx != 0)
+        {
+	int qGap, tGap, minGap;
+	qGap = qs - lastQ;
+	tGap = ts - lastT;
+	minGap = min(qGap, tGap);
+	if (minGap > 0)
+	    {
+	    writeGap(q, qGap, qSeq->dna + lastQ, t, tGap, tSeq->dna + lastT);
+	    }
+	else if (qGap > 0)
+	    {
+	    writeInsert(q, t, qSeq->dna + lastQ, qGap);
+	    }
+	else if (tGap > 0)
+	    {
+	    writeInsert(t, q, tSeq->dna + lastT, tGap);
+	    }
+	}
+    size = psl->blockSizes[blockIx];
+    assert(qSeq != NULL);
+    dyStringAppendN(q, qSeq->dna + qs, size);
+    lastQ = qs + size;
+    dyStringAppendN(t, tSeq->dna + ts, size);
+    lastT = ts + size;
+    }
+
+if (strlen(q->string) != strlen(t->string))
+    warn("Symbol count(t) %d != %d inconsistent at t %s:%d and qName %s\n%s\n%s\n",
+    	strlen(t->string), strlen(q->string), psl->tName, psl->tStart, psl->qName, t->string, q->string);
+axt = axtCreate(q->string, t->string, min(q->stringSize,t->stringSize), psl);
+dyStringFree(&q);
+dyStringFree(&t);
+if (qIsNib)
+    freez(&qName);
+if (tIsNib)
+    freez(&tName);
+return axt;
+}
+int calcScore(struct psl *psl)
+{
+char nibFile[256];
+FILE *f;
+int seqSize;
+int size = (psl->tEnd)-(psl->tStart);
+struct dnaSeq *tSeq = NULL;
+struct dnaSeq *qSeq = NULL;
+struct dnaSeq *mrna = NULL;
+errAbort("calcScore");
+//safef(nibFile, sizeof(nibFile), "%s/%s.nib", nibDir, psl->tName);
+nibOpenVerify(nibFile, &f, &seqSize);
+assert(seqSize == psl->tSize);
+tSeq = nibLdPart(nibFile, f, seqSize, psl->tStart, size);
+for (mrna = mrnaList; mrna != NULL ; mrna = mrna->next)
+    if (sameString(mrna->name, psl->qName))
+        {
+        qSeq = mrna;
+        break;
+        }
+return axtScoreSym(ss, size, qSeq->dna, tSeq->dna);
+}
 int calcMilliScore(struct psl *psl)
 /* Figure out percentage score. */
 {
@@ -99,7 +500,7 @@ int milliBad = calcMilliScore(psl);
 int coverage = ((psl->match+psl->repMatch)*100)/psl->qSize;
 
 fprintf(linkFile,"\n");
-bed->score = milliBad - (100-log(polyA)*20) - (overlapDiagonal*2) - (100-coverage) + log(psl->match+psl->repMatch)*100 ;
+bed->score = (milliBad - (100-log(polyA)*20) - (overlapDiagonal*2) - (100-coverage) + log(psl->match+psl->repMatch)*100)/2 ;
 bedOutputN( bed , 6, linkFile, ' ', ' ');
 fprintf(linkFile,"%s %s %s %s %d %d %s %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d ",
         /* 8     9     10      11       12          13 */
@@ -108,7 +509,7 @@ fprintf(linkFile,"%s %s %s %s %d %d %s %d %d %d %d %d %d %d %d %d %d %d %d %d %d
         /* 14           15      16 */
         maxExons, geneOverlap, polyA, 
         /* polyAstart 17*/
-        (psl->strand[0] == '+') ? polyAstart - psl->tEnd : psl->tStart - (polyAstart + polyA) , 
+        (psl->strand[0] == '+') ? polyAstart - psl->tEnd : psl->tStart - polyAstart , 
         /* 18           19              20      21 */
         exonCover, intronCount, bestAliCount, psl->match+psl->repMatch, 
         /* 22           23                24    25      26 */
@@ -129,23 +530,51 @@ void outputLink(struct psl *psl, char *type, char *bestqName, char *besttName,
 outputNoLink(psl, type, bestqName, besttName, besttStart, besttEnd, 
             maxExons, geneOverlap, bestStrand, polyA, polyAstart, label,
             exonCover, intronCount, bestAliCount, tReps, qReps, overlapDiagonal); 
+
+struct axt *axt = NULL;
+int score = -999999999;
+
+if (label == 1)
+    {
+    axt = pslToAxt(psl, qHash, tHash, fileCache);
+    score = axtScore(axt, ss);
+    axtWrite(axt, axtFile);
+    }
+
+fprintf(linkFile,"%d ",score);
 if (gp != NULL)
+    {
     fprintf(linkFile,"%s %d %d ", gp->name, gp->txStart, gp->txEnd);
+    }
 else
+    {
     fprintf(linkFile,"noRefSeq -1 -1 ");
+    }
+
 if (mgc != NULL)
+    {
     fprintf(linkFile,"%s %d %d ", mgc->name, mgc->txStart, mgc->txEnd);
+    }
 else
+    {
     fprintf(linkFile,"noMgc -1 -1 ");
+    }
+
 if (kg != NULL)
     {
     if (kg->name2 != NULL)
+        {
         fprintf(linkFile,"%s %d %d %d ", kg->name2, kg->txStart, kg->txEnd, 0);
+        }
     else
+        {
         fprintf(linkFile,"%s %d %d %d ", kg->name, kg->txStart, kg->txEnd, 0);
+        }
     }
 else
+    {
     fprintf(linkFile,"noKg -1 -1 -1 ");
+    }
 }
 
 int intronFactor(struct psl *psl, struct hash *bkHash, struct hash *trfHash)
@@ -255,10 +684,10 @@ return TRUE; //sameString(psl->qName, "NM_006905") || sameString(psl->qName, "AK
 }
 
 
-boolean closeToTop(struct psl *psl, int *scoreTrack , struct hash *bkHash, struct hash *trfHash)
+boolean closeToTop(struct psl *psl, int *scoreTrack , int milliScore) /*struct hash *bkHash, struct hash *trfHash)*/
 /* Returns TRUE if psl is near the top scorer for at least 20 bases. */
 {
-int milliScore = calcSizedScore(psl, bkHash, trfHash);
+//int milliScore = calcSizedScore(psl, bkHash, trfHash);
 int threshold = round(milliScore * (1.0+nearTop));
 int i, blockIx;
 int start, size, end;
@@ -273,15 +702,22 @@ for (blockIx = 0; blockIx < psl->blockCount; ++blockIx)
     end = start+size;
     if (strand == '-')
 	reverseIntRange(&start, &end, psl->qSize);
+    //uglyf("block %d threshold=%d s-e:%d-%d. ",blockIx, threshold, start, end);
     for (i=start; i<end; ++i)
 	{
+        //uglyf("s=%d tc=%d ",scoreTrack[i],topCount);
 	if (scoreTrack[i] <= threshold)
 	    {
 	    if (++topCount >= minNearTopSize)
+                {
+                //uglyf("\nYES\n");
 		return TRUE;
+                }
 	    }
 	}
+        //uglyf("\nblock NO\n");
     }
+    //uglyf("\nctt=false\n");
 return FALSE;
 }
 
@@ -354,23 +790,26 @@ for (j=0 ; j<=size-winSize ; j++)
 return maxCount;
 }
 
-int polyACalc(int start, int end, char *strand, int tSize, char *nibDir, char *chrom, int winSize, int region, int *polyAstart, int *polyAend)
+int polyACalc(int start, int end, char *strand, int tSize, char *chrom, int winSize, int region, int *polyAstart, int *polyAend)
 /* get size of polyA tail in genomic dna , count bases in a 
  * sliding winSize window in region of the end of the sequence*/
 {
 char nibFile[256];
-FILE *f;
 int seqSize;
 struct dnaSeq *seq = NULL;
 int count = 0;
 int seqStart = strand[0] == '+' ? end-(region/2) : start-(region/2);
 int score[POLYAREGION+1], pStart = 0, pEnd = 0; 
+struct seqFilePos *sfp = hashMustFindVal(tHash, chrom);
+FILE *f = openFromCache(fileCache, sfp->file);
+seqSize = sfp->pos;
 
 assert(region > 0);
 assert(end != 0);
 *polyAstart = 0 , *polyAend = 0;
-safef(nibFile, sizeof(nibFile), "%s/%s.nib", nibDir, chrom);
-nibOpenVerify(nibFile, &f, &seqSize);
+//safef(nibFile, sizeof(nibFile), "%s/%s.nib", nibDir, chrom);
+//nibOpenVerify(nibFile, &f, &seqSize);
+printf("polyA file %s size %d\n",sfp->file, seqSize);
 assert (seqSize == tSize);
 if (seqStart < 0) seqStart = 0;
 if (seqStart + region > seqSize) region = seqSize - seqStart;
@@ -379,21 +818,20 @@ seq = nibLdPartMasked(NIB_MASK_MIXED, nibFile, f, seqSize, seqStart, region);
 if (strand[0] == '+')
     {
     assert (seq->size <= POLYAREGION);
-//printf("\n + range=%d %d %s \n",seqStart, seqStart+region, seq->dna );
+printf("\n + range=%d %d %s \n",seqStart, seqStart+region, seq->dna );
     count = scoreWindow('A',seq->dna,seq->size, score, polyAstart, polyAend);
     }
 else
     {
     assert (seq->size <= POLYAREGION);
-//printf("\n - range=%d %d %s \n",seqStart, seqStart+region, seq->dna );
+printf("\n - range=%d %d %s \n",seqStart, seqStart+region, seq->dna );
     count = scoreWindow('T',seq->dna,seq->size, score, polyAend, polyAstart);
     }
 pStart += seqStart;
 *polyAstart += seqStart;
 *polyAend += seqStart;
-//printf("\nst=%d %s range %d %d cnt %d\n",seqStart, seq->dna, *polyAstart, *polyAend, count);
+printf("\nst=%d %s range %d %d cnt %d\n",seqStart, seq->dna, *polyAstart, *polyAend, count);
 freeDnaSeq(&seq);
-fclose(f);
 return count;
 }
 
@@ -563,7 +1001,7 @@ pslFree(&targetM);
 pslFree(&queryM);
 return count;
 }
-void processBestMulti(char *acc, struct psl *pslList, struct hash *trfHash, struct hash *synHash, struct hash *mrnaHash, struct hash *bkHash, char *nibDir)
+void processBestMulti(char *acc, struct psl *pslList, struct hash *trfHash, struct hash *synHash, struct hash *mrnaHash, struct hash *bkHash)
 /* Find psl's that are best anywhere along their length. */
 
 {
@@ -598,7 +1036,7 @@ int bestScore = 0, bestSEScore = 0;
 if (pslList == NULL)
     return;
 
-/* get biggest mrna - some have polyA tail stripped off */
+/* get biggest mrna to size Score array - some have polyA tail stripped off */
 for (psl = pslList; psl != NULL; psl = psl->next)
     if (psl->qSize > qSize)
         qSize = psl->qSize;
@@ -631,11 +1069,16 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 		warn("Error: qName %s tName %s qSize %d psl->qSize %d start %d end %d",
 		    psl->qName, psl->tName, qSize, psl->qSize, start, end);
 		}
+//            uglyf("milliScore: %d qName %s tName %s:%d-%d qSize %d psl->qSize %d start %d end %d \n",
+ //                   milliScore, psl->qName, psl->tName, psl->tStart, psl->tEnd, qSize, psl->qSize, start, end);
 	    for (i=start; i<end; ++i)
 		{
                 assert(i<=qSize);
 		if (milliScore > scoreTrack[i])
-		    scoreTrack[i] = milliScore;
+                    {
+                    //printf(" %d ",milliScore);
+                    scoreTrack[i] = milliScore;
+                    }
 		}
 	    }
 	}
@@ -648,28 +1091,39 @@ for (psl = pslList; psl != NULL; psl = psl->next)
     {
     int intronCount = 0;
     struct psl *pslMerge;
+    int score = calcSizedScore(psl, bkHash, trfHash);
+    
+   /* uglyf("checking: %d qName %s tName %s:%d-%d psl->qSize %d start %d end %d match %d >= cover %d\n",
+    *           calcSizedScore(psl, bkHash, trfHash), 
+    *           psl->qName, psl->tName, psl->tStart, psl->tEnd, psl->qSize, psl->qStart, psl->qEnd
+    *           ,(psl->match + psl->repMatch) , round(minCover * psl->qSize));
+    */
     if (
-        calcMilliScore(psl) >= milliMin && closeToTop(psl, scoreTrack, bkHash, trfHash)
-        && psl->match + psl->repMatch >= minCover * psl->qSize)
+        calcMilliScore(psl) >= milliMin && closeToTop(psl, scoreTrack, score) /*bkHash, trfHash)*/
+        && (psl->match + psl->repMatch + psl->misMatch) >= round(minCover * psl->qSize))
 	{
         ++bestAliCount;
         AllocVar(pslMerge);
         pslMergeBlocks(psl, pslMerge, 30);
-        if (calcMilliScore(psl) > bestScore && pslMerge->blockCount > 1)
+        
+//        uglyf("checking score %d against %d blockCount %d\n", score ,bestScore,pslMerge->blockCount);
+        if (score  > bestScore && pslMerge->blockCount > 1)
             {
             bestPsl = psl;
             bestStart = psl->tStart;
             bestEnd = psl->tEnd;
             bestChrom = cloneString(psl->tName);
-            bestScore = calcMilliScore(psl);
+//            uglyf("new score %d beats %d\n", score ,bestScore);
+            bestScore = score;
             }
-        if (calcMilliScore(psl) > bestSEScore )
+        if (score  > bestSEScore )
             {
             bestSEPsl = psl;
             bestSEStart = psl->tStart;
             bestSEEnd = psl->tEnd;
             bestSEChrom = cloneString(psl->tName);
-            bestSEScore = calcMilliScore(psl);
+//            uglyf("new SE score %d beats %d\n", score ,bestSEScore);
+            bestSEScore = score  ;
             }
         //intronCount = intronFactor(psl, bkHash, trfHash);
         if (pslMerge->blockCount > maxExons )
@@ -682,9 +1136,10 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 if (pslList != NULL)
     for (psl = pslList; psl != NULL; psl = psl->next)
     {
+    int score = calcSizedScore(psl, bkHash, trfHash);
     if (
-        calcMilliScore(psl) >= milliMin && closeToTop(psl, scoreTrack, bkHash, trfHash)
-        && psl->match + psl->repMatch >= minCover * psl->qSize)
+        calcMilliScore(psl) >= milliMin && closeToTop(psl, scoreTrack, score) /*bkHash, trfHash)*/
+        && psl->match + psl->misMatch + psl->repMatch >= minCover * psl->qSize)
             {
             pslTabOut(psl, bestFile);
             }
@@ -693,7 +1148,7 @@ if (pslList != NULL)
         /* calculate various features of pseudogene */
         int intronCount = intronFactor(psl, bkHash, trfHash);
         int overlapDiagonal = -1;
-        int polyA = polyACalc(psl->tStart, psl->tEnd, psl->strand, psl->tSize, nibDir, psl->tName, 
+        int polyA = polyACalc(psl->tStart, psl->tEnd, psl->strand, psl->tSize, psl->tName, 
                         POLYASLIDINGWINDOW, POLYAREGION, &polyAstart, &polyAend);
         /* count # of alignments that span introns */
         int exonCover = pslCountExonSpan(bestPsl, psl, maxBlockGap, bkHash, &tReps, &qReps) ;
@@ -727,16 +1182,16 @@ if (pslList != NULL)
             slFreeList(&elist);
             }
 
-        if (intronCount == 0 && 
+        if ((intronCount == 0 || (exonCover - intronCount > INTRONMAGIC)) && 
             maxExons > 1 && bestAliCount > 0 && bestChrom != NULL &&
             (calcMilliScore(psl) >= milliMinPseudo && 
-            psl->match + psl->repMatch >= minCoverPseudo * (float)psl->qSize))
+            psl->match + psl->misMatch + psl->repMatch >= minCoverPseudo * (float)psl->qSize))
             {
 
-            if (exonCover > 1 && intronCount == 0 && 
+            if (exonCover > 1 && (intronCount == 0 || (exonCover - intronCount > INTRONMAGIC))&& 
                 maxExons > 1 && bestAliCount > 0 && bestChrom != NULL &&
                 (calcMilliScore(psl) >= milliMinPseudo && 
-                psl->match + psl->repMatch >= minCoverPseudo * (float)psl->qSize))
+                psl->match + psl->misMatch + psl->repMatch >= minCoverPseudo * (float)psl->qSize))
                 {
                 if (trfHash != NULL)
                     {
@@ -841,8 +1296,8 @@ if (pslList != NULL)
                             }
                         }
                     slFreeList(&elist);
-                    printf("mrnaBases %d exons %d name %s pos %s:%d-%d\n",
-                            mrnaBases,exonCount,mPsl == NULL ? "NULL" : bestOverlap, psl->tName,psl->tStart,psl->tEnd);
+//                    printf("mrnaBases %d exons %d name %s pos %s:%d-%d\n",
+//                            mrnaBases,exonCount,mPsl == NULL ? "NULL" : bestOverlap, psl->tName,psl->tStart,psl->tEnd);
                     if (mrnaBases > 50  && exonCount > 1) 
                         /* if overlap > 50 bases and not single exon mrna , then skip*/
                         {
@@ -890,12 +1345,13 @@ if (pslList != NULL)
                         {
                         if (!quiet)
                             {
-                            printf("YES %s %d rr %3.1f rl %d ln %d %s iF %d maxE %d bestAli %d isp %d score %d match %d cover %3.1f rp %d polyA %d syn %d",
+                            printf("YES %s %d rr %3.1f rl %d ln %d %s iF %d maxE %d bestAli %d isp %d score %d match %d cover %3.1f rp %d polyA %d syn %d distA %d polyAstart %d",
                                 psl->qName,psl->tStart,((float)rep/(float)(psl->tEnd-psl->tStart) ),rep, 
                                 psl->tEnd-psl->tStart,psl->tName, intronCount, 
                                 maxExons , bestAliCount, exonCover,
-                                calcMilliScore(psl),  psl->match + psl->repMatch , 
-                                minCoverPseudo * (float)psl->qSize, tReps + qReps, polyA, overlapDiagonal );
+                                calcMilliScore(psl),  psl->match + psl->misMatch + psl->repMatch , 
+                                minCoverPseudo * (float)psl->qSize, tReps + qReps, polyA, overlapDiagonal ,
+                                (psl->strand[0] == '+') ? polyAstart - psl->tEnd : psl->tStart - (polyAstart + polyA), polyAstart );
                             if (rmsk != NULL)
                                 printf(" rmsk %s",rmsk->genoName);
                             printf("\n");
@@ -922,7 +1378,7 @@ if (pslList != NULL)
                             psl->qName,psl->tStart,((float)rep/(float)(psl->tEnd-psl->tStart) ),rep, 
                             psl->tEnd-psl->tStart,psl->tName, intronCount, maxExons , 
                             bestAliCount, exonCover,
-                            calcMilliScore(psl),  psl->match + psl->repMatch , 
+                            calcMilliScore(psl),  psl->match + psl->misMatch + psl->repMatch , 
                             minCoverPseudo * (float)psl->qSize, tReps + qReps);
                     if (bestPsl == NULL)
                         outputNoLink( psl, "span", "?", "?", -1, -1, 
@@ -940,7 +1396,7 @@ if (pslList != NULL)
                     printf("NO. %s %d rr %3.1f rl %d ln %d %s iF %d maxE %d bestAli %d isp %d score %d match %d cover %3.1f rp %d\n",
                         psl->qName,psl->tStart,((float)rep/(float)(psl->tEnd-psl->tStart) ),rep, 
                         psl->tEnd-psl->tStart,psl->tName, intronCount, maxExons , bestAliCount, exonCover,
-                        calcMilliScore(psl),  psl->match + psl->repMatch , minCoverPseudo * (float)psl->qSize, tReps + qReps);
+                        calcMilliScore(psl),  psl->match + psl->misMatch + psl->repMatch , minCoverPseudo * (float)psl->qSize, tReps + qReps);
                 if (bestPsl != NULL)
                     outputNoLink( psl, "introns", bestPsl->qName, bestPsl->tName, bestPsl->tStart, bestPsl->tEnd, 
                             maxExons, geneOverlap, bestPsl->strand, polyA, polyAstart, NOTPSEUDO,
@@ -955,7 +1411,7 @@ if (pslList != NULL)
 freeMem(scoreTrack);
 }
 
-void processBestSingle(char *acc, struct psl *pslList, struct hash *trfHash, struct hash *synHash, struct hash *mrnaHash, struct hash *bkHash, char *nibDir)
+void processBestSingle(char *acc, struct psl *pslList, struct hash *trfHash, struct hash *synHash, struct hash *mrnaHash, struct hash *bkHash)
 /* Find single best psl in list. */
 {
 struct psl *bestPsl = NULL, *psl;
@@ -980,17 +1436,17 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 }
 
 void doOneAcc(char *acc, struct psl *pslList, struct hash *trfHash, struct hash *synHash, struct hash *mrnaHash, 
-        struct hash *bkHash, char *nibDir)
+        struct hash *bkHash)
 /* Process alignments of one piece of mRNA. */
 {
 if (singleHit)
-    processBestSingle(acc, pslList, trfHash, synHash, mrnaHash, bkHash, nibDir);
+    processBestSingle(acc, pslList, trfHash, synHash, mrnaHash, bkHash);
 else
-    processBestMulti(acc, pslList, trfHash, synHash, mrnaHash, bkHash, nibDir);
+    processBestMulti(acc, pslList, trfHash, synHash, mrnaHash, bkHash);
 }
 
 void pslPseudo(char *inName, struct hash *bkHash, struct hash *trfHash, struct hash *synHash, struct hash *mrnaHash, 
-        char *bestAliName, char *psuedoFileName, char *linkFileName, char *nibDir)
+        char *bestAliName, char *psuedoFileName, char *linkFileName, char *axtFileName)
 /* find best alignments with and without introns.
  * Put pseudogenes  in pseudoFileName. 
  * store link between pseudogene and gene in LinkFileName */
@@ -1007,6 +1463,7 @@ quiet = sameString(bestAliName, "stdout") || sameString(psuedoFileName, "stdout"
 bestFile = mustOpen(bestAliName, "w");
 pseudoFile = mustOpen(psuedoFileName, "w");
 linkFile = mustOpen(linkFileName, "w");
+axtFile = mustOpen(axtFileName, "w");
 
 if (!quiet)
     printf("Processing %s to %s and %s\n", inName, bestAliName, psuedoFileName);
@@ -1024,15 +1481,19 @@ while (lineFileNext(in, &line, &lineSize))
     if (wordCount != 21)
 	errAbort("Bad line %d of %s\n", in->lineIx, in->fileName);
     psl = pslLoad(words);
+//    struct axt *axt = pslToAxt(psl, qHash, tHash, fileCache);
+//    axtWrite(axt, stdout);
     if (!sameString(lastName, psl->qName))
 	{
-	doOneAcc(lastName, pslList, trfHash, synHash, mrnaHash, bkHash, nibDir);
+        slReverse(&pslList);
+	doOneAcc(lastName, pslList, trfHash, synHash, mrnaHash, bkHash);
 	pslFreeList(&pslList);
 	safef(lastName, sizeof(lastName), psl->qName);
 	}
     slAddHead(&pslList, psl);
     }
-doOneAcc(lastName, pslList, trfHash, synHash, mrnaHash, bkHash, nibDir);
+slReverse(&pslList);
+doOneAcc(lastName, pslList, trfHash, synHash, mrnaHash, bkHash);
 pslFreeList(&pslList);
 lineFileClose(&in);
 fclose(bestFile);
@@ -1049,11 +1510,16 @@ struct hash *bkHash = NULL, *trfHash = NULL, *synHash = NULL, *mrnaHash = NULL;
 //struct bed *syntenicList = NULL, *bed;
 //char  *row[3];
 struct genePredReader *gprKg;
-
 cgiSpoof(&argc, argv);
-if (argc != 15)
+ss = axtScoreSchemeDefault();
+fileHash = newHash(0);  
+tHash = newHash(20);  /* seqFilePos value. */
+qHash = newHash(20);  /* seqFilePos value. */
+fileCache = newDlList();
+if (argc != 17)
     usage();
 db = cloneString(argv[1]);
+nibDir = cloneString(argv[11]);
 minAli = cgiOptionalDouble("minAli", minAli);
 maxRep = cgiOptionalDouble("maxRep", maxRep);
 minAliPseudo = cgiOptionalDouble("minAliPseudo", minAliPseudo);
@@ -1068,12 +1534,18 @@ noIntrons = cgiBoolean("noIntrons");
 noHead = cgiBoolean("nohead");
 
 if (!quiet)
-    printf("Scoring alignments from %s.\n",argv[2]);
-gpList1 = genePredLoadAll(argv[12]);
-gpList2 = genePredLoadAll(argv[13]);
-//gprKg = genePredReaderFile(argv[14], NULL);
+    printf("Scanning %s\n", argv[12]);
+hashFileList(argv[12], fileHash, tHash);
+if (!quiet)
+    printf("Loading mrna sequences from %s\n",argv[13]);
+mrnaList = faReadAllMixed(argv[13]);
+if (mrnaList == NULL)
+    errAbort("could not open %s\n",argv[13]);
+gpList1 = genePredLoadAll(argv[14]);
+gpList2 = genePredLoadAll(argv[15]);
+//gprKg = genePredReaderFile(argv[16], NULL);
 //kgLis = genePredReaderAll(gprKg);
-kgList = genePredLoadAll(argv[14]);
+kgList = genePredLoadAll(argv[16]);
 
 if (!quiet)
     printf("Loading Syntenic Bed %s\n",argv[5]);
@@ -1087,7 +1559,9 @@ bkHash = readRepeatsAll(argv[3], argv[4]);
 if (!quiet)
     printf("Reading mrnas from %s\n",argv[7]);
 mrnaHash = readPslToBinKeeper(argv[3], argv[7]);
+if (!quiet)
+    printf("Scoring alignments from %s.\n",argv[2]);
+printf("start\n");
 pslPseudo(argv[2], bkHash, trfHash, synHash, mrnaHash, argv[8], argv[9], argv[10], argv[11]);
-//genePredReaderFree(&gprKg);
 return 0;
 }

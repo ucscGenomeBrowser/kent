@@ -28,7 +28,7 @@
 #include "gbSql.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: gbAlignData.c,v 1.11 2004/03/09 02:11:36 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignData.c,v 1.12 2004/03/29 02:26:15 markd Exp $";
 
 /* table names */
 static char *REF_SEQ_ALI = "refSeqAli";
@@ -444,11 +444,18 @@ static void updateRefFlatEntry(struct sqlConnection *conn,
 char* geneName = (status->geneName == NULL) ? "" : status->geneName;
 geneName = sqlEscapeString2(alloca(2*strlen(geneName)+1), geneName);
 
-
-/* creates updater if it doesn't exist */
-getOtherTabFile("refFlat", conn, gRefFlatTableDef, &gRefFlatUpd);
-sqlUpdaterModRow(gRefFlatUpd, status->numAligns,
-                   "geneName='%s' WHERE name='%s'", geneName, status->acc);
+if (status->entry->orgCat == GB_NATIVE)
+    {
+    getOtherTabFile(REF_FLAT_TBL, conn, gRefFlatTableDef, &gRefFlatUpd);
+    sqlUpdaterModRow(gRefFlatUpd, status->numAligns,
+                     "geneName='%s' WHERE name='%s'", geneName, status->acc);
+    }
+else
+    {
+    getOtherTabFile(XENO_REF_FLAT_TBL, conn, gXenoRefFlatTableDef, &gXenoRefFlatUpd);
+    sqlUpdaterModRow(gXenoRefFlatUpd, status->numAligns,
+                     "geneName='%s' WHERE name='%s'", geneName, status->acc);
+    }
 }
 
 static void updateRefFlat(struct sqlConnection *conn, struct gbSelect* select,

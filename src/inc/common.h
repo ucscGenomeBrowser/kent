@@ -457,6 +457,9 @@ int differentWord(char *s1, char *s2);
 #define sameString(a,b) (strcmp(a,b)==0)
 /* Returns TRUE if two strings same. */
 
+#define isEmpty(string) (string == NULL || string[0] == 0)
+#define isNotEmpty(string) (! isEmpty(string))
+
 boolean startsWith(char *start,char *string);
 /* Returns TRUE if string begins with start. */
 
@@ -586,6 +589,9 @@ char *lastWordInLine(char *line);
 char *nextWord(char **pLine);
 /* Return next word in *pLine and advance *pLine to next
  * word. Returns NULL when no more words. */
+
+char *nextTabWord(char **pLine);
+/* Return next tab-separated word. */
 
 int stringArrayIx(char *string, char *array[], int arraySize);
 /* Return index of string in array or -1 if not there. */

@@ -47,6 +47,37 @@ hgMedianMicroarray hgFixed gnfMouseU74aAll gnfMouseU74aAllExps gnfMouseU74aMedia
 hgMedianMicroarray hgFixed gnfMouseU74bAll gnfMouseU74bAllExps gnfMouseU74bMedian.ra gnfMouseU74bMedian gnfMouseU74bMedianExps -minExps=1
 hgMedianMicroarray hgFixed gnfMouseU74cAll gnfMouseU74cAllExps gnfMouseU74cMedian.ra gnfMouseU74cMedian gnfMouseU74cMedianExps -minExps=1
 
+
+#The Human GNF Expression Atlas 2 (2004)
+#
+# Create the main expRecord table and the expData table for
+# the absolute measurements as so:
+hgGnfMicroarray gnfHumanAtlas2AllExps gnfHumanAtlas2All /projects/compbio/data/microarray/geneAtlas2/human/U133A+GNF1B_101402.AD.txt -chip=U133A+GNF1B
+# Convert these to ratios using the median of medians of non-cancerous
+# cell types as the denominator as so:
+cd ~/src/hg/makeDb/hgRatioMicroarray
+hgRatioMicroarray gnfHumanAtlas2All gnfHumanAtlas2AllRatio -clump=gnfHumanAtlas2Clumps.ra
+# Take the median value over multiple replicants and put in this table:
+cd ../hgMedianMicroarray
+hgMedianMicroarray hgFixed gnfHumanAtlas2AllRatio gnfHumanAtlas2AllExps gnfHumanAtlas2.ra gnfHumanAtlas2MedianRatio gnfHumanAtlas2MedianExps -minExps=1
+# Also make a median version of the absolute measurements
+hgMedianMicroarray hgFixed gnfHumanAtlas2All gnfHumanAtlas2AllExps gnfHumanAtlas2.ra gnfHumanAtlas2Median gnfHumanAtlas2MedianExps -minExps=1
+
+#The Mouse GNF Expression Atlas 2 (2004)
+# Create the main expRecord table and the expData table for
+# the absolute measurements as so:
+hgGnfMicroarray gnfMouseAtlas2AllExps gnfMouseAtlas2All /projects/compbio/data/microarray/geneAtlas2/mouse/GNF1M_20030403.AD.txt -chip=GNF1M
+# Convert these to ratios using the median of medians of non-cancerous
+# cell types as the denominator as so:
+cd ~/src/hg/makeDb/hgRatioMicroarray
+hgRatioMicroarray gnfMouseAtlas2All gnfMouseAtlas2AllRatio -clump=../hgMedianMicroarray/gnfMouseAtlas2.ra
+# Take the median value over multiple replicants and put in this table:
+cd ../hgMedianMicroarray
+hgMedianMicroarray hgFixed gnfMouseAtlas2AllRatio gnfMouseAtlas2AllExps gnfMouseAtlas2.ra gnfMouseAtlas2MedianRatio gnfMouseAtlas2MedianExps -minExps=1
+# Also make a median version of the absolute measurements
+hgMedianMicroarray hgFixed gnfMouseAtlas2All gnfMouseAtlas2AllExps gnfMouseAtlas2.ra gnfMouseAtlas2Median gnfMouseAtlas2MedianExps -minExps=1
+
+
 # C. elegans life cycle data from the Kim Lab via the Stanford Microarray Database.
 cd ~/kent/src/hg/makeDb/hgStanfordMicroarray
 hgStanfordMicroarray hgFixed kimWormLifeAllRatio kimWormLifeAllExps /projects/compbio/data/microarray/wormLifeCycle/spots -swap '-trimName=(green)' -suppress=green '-trimTissue=(repeat #?)'

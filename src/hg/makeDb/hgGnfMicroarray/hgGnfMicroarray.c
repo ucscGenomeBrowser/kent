@@ -8,7 +8,7 @@
 #include "expRecord.h"
 #include "expData.h"
 
-static char const rcsid[] = "$Id: hgGnfMicroarray.c,v 1.2 2003/12/08 07:26:56 kent Exp $";
+static char const rcsid[] = "$Id: hgGnfMicroarray.c,v 1.4 2004/03/30 06:49:21 kent Exp $";
 
 char *chip = "HG-U95Av2";
 char *database = "hgFixed";
@@ -76,7 +76,7 @@ struct expCounter *ec;
 char *spaced;
 char name[128];
 
-while ((word = nextWord(&line)) != NULL)
+while ((word = nextTabWord(&line)) != NULL)
     {
     if ((ec = hashFindVal(hash, word)) == NULL)
         {
@@ -144,7 +144,7 @@ int dataCount = 0, pslCount = 0, bedCount = 0;
 int minExpVal = 20;
 
 /* Open Atlas file and use first line to create experiment table. */
-if (!lineFileNext(lf, &line, NULL))
+if (!lineFileNextReal(lf, &line))
     errAbort("%s is empty", lf->fileName);
 if (startsWith("Affy", line))
     line += 4;
@@ -152,7 +152,7 @@ if (startsWith("Gene Name", line))
     line += 9;
 if (line[0] != '\t')
     errAbort("%s doesn't seem to be a new format atlas file", lf->fileName);
-expCount = lineToExpTable(line, expTable);
+expCount = lineToExpTable(line+1, expTable);
 if (expCount <= 0)
     errAbort("No experiments in %s it seems", lf->fileName);
 warn("%d experiments\n", expCount);

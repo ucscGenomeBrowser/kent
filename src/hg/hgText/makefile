@@ -6,7 +6,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = hgText
 
-O = $A.o
+O = $A.o hgWigText.o
 
 include ../../inc/cgi_build_rules.mk
 

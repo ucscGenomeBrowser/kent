@@ -8,8 +8,9 @@
 #include "fa.h"
 #include "nib.h"
 #include "psl.h"
+#include "axt.h"
 
-static char const rcsid[] = "$Id: pslPretty.c,v 1.26 2004/03/02 17:19:20 braney Exp $";
+static char const rcsid[] = "$Id: pslPretty.c,v 1.27 2004/03/25 01:09:55 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -226,6 +227,8 @@ void axtOutString(char *q, char *t, int size, int lineSize,
 static int ix = 0;
 int qs = psl->qStart, qe = psl->qEnd;
 int ts = psl->tStart, te = psl->tEnd;
+struct axtScoreScheme *ss = axtScoreSchemeDefault();
+int score = axtScoreSym(ss, size, q, t);
 
 if (psl->strand[0] == '-')
     reverseIntRange(&qs, &qe, psl->qSize);
@@ -234,11 +237,11 @@ if (psl->strand[1] == '-')
     reverseIntRange(&ts, &te, psl->tSize);
 
 if (psl->strand[1] != 0)
-    fprintf(f, "%d %s %d %d %s %d %d %c%c 0\n", ++ix, psl->tName, ts+1, 
-            te, psl->qName, qs+1, qe, psl->strand[1], psl->strand[0]);
+    fprintf(f, "%d %s %d %d %s %d %d %c%c %d\n", ++ix, psl->tName, ts+1, 
+            te, psl->qName, qs+1, qe, psl->strand[1], psl->strand[0], score);
 else
-    fprintf(f, "%d %s %d %d %s %d %d %c 0\n", ++ix, psl->tName, psl->tStart+1, 
-            psl->tEnd, psl->qName, qs+1, qe, psl->strand[0]);
+    fprintf(f, "%d %s %d %d %s %d %d %c %d\n", ++ix, psl->tName, psl->tStart+1, 
+            psl->tEnd, psl->qName, qs+1, qe, psl->strand[0], score);
 for (i=0; i<size ; i++) 
     fputc(t[i],f);
 fputc('\n',f);

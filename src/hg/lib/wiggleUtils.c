@@ -7,10 +7,10 @@
 #include "hdb.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.10 2004/03/24 21:21:11 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.11 2004/03/30 21:54:25 hiram Exp $";
 
 static char *currentFile = (char *) NULL;	/* the binary file name */
-static FILE *f = (FILE *) NULL;			/* file handle to binary file */
+static FILE *wibFH = (FILE *) NULL;		/* file handle to binary file */
 
 static void openWibFile(char *fileName)
 /*  smart open of the .wib file - only if it isn't already open */
@@ -19,31 +19,39 @@ if (currentFile)
     {
     if (differentString(currentFile,fileName))
 	{
-	if (f != (FILE *) NULL)
+	if (wibFH != (FILE *) NULL)
 	    {
-	    fclose(f);
+	    fclose(wibFH);
+	    wibFH = (FILE *) NULL;
 	    freeMem(currentFile);
+	    currentFile = (char *) NULL;
 	    }
 	currentFile = cloneString(fileName);
-	f = mustOpen(currentFile, "r");
+	if (differentString(currentFile,fileName))
+	    errAbort("openWibFile: currentFile != fileName %s != %s",
+		currentFile, fileName );
+	wibFH = mustOpen(currentFile, "r");
 	}
     }
 else
     {
     currentFile = cloneString(fileName);
-    f = mustOpen(currentFile, "r");
+    if (differentString(currentFile,fileName))
+	errAbort("openWibFile: currentFile != fileName %s != %s",
+	    currentFile, fileName );
+    wibFH = mustOpen(currentFile, "r");
     }
 }
 
-static void closeWibFile(FILE *f)
+static void closeWibFile()
 /*	smart close of .wib file - close only if open	*/
 {
-if (f != (FILE *) NULL)
+if (wibFH != (FILE *) NULL)
     {
-    fclose(f);
+    fclose(wibFH);
+    wibFH = (FILE *) NULL;
     freeMem(currentFile);
     currentFile = (char *) NULL;
-    f = (FILE *) NULL;
     }
 }
 
@@ -68,7 +76,6 @@ double lowerLimit = 1.0e+300;
 double upperLimit = -1.0e+300;
 double sumData = 0.0;
 double sumSquares = 0.0;
-unsigned dataArea;
 
 if (summaryOnly)
     {
@@ -92,17 +99,15 @@ if (summaryOnly)
 else
     {
     openWibFile(wiggle->file);
-    fseek(f, wiggle->offset, SEEK_SET);
+    fseek(wibFH, wiggle->offset, SEEK_SET);
     readData = (unsigned char *) needMem((size_t) (wiggle->count + 1));
     itemsRead = fread(readData, (size_t) wiggle->count,
-	    (size_t) sizeof(unsigned char), f);
+	    (size_t) sizeof(unsigned char), wibFH);
     if (itemsRead != sizeof(unsigned char))
 	errAbort("wigReadDataRow: can not read %u bytes from %s at offset %u",
 	    wiggle->count, wiggle->file, wiggle->offset);
 
     /*	need at most this amount, perhaps less	*/
-    dataArea = sizeof(struct wiggleDatum)*wiggle->validCount;
-
     /*	this data area goes with the result, must be freed by wigFreeData */
     data = (struct wiggleDatum *) needMem((size_t)
 	(sizeof(struct wiggleDatum)*wiggle->validCount));
@@ -130,6 +135,10 @@ else
 		    dataPtr->chromStart = chromPosition;
 		    dataPtr->value = value;
 		    ++validCount;
+		    if (validCount > wiggle->count)
+		errAbort("wigReadDataRow: validCount > wiggle->count %u > %u",
+				validCount, wiggle->count);
+
 		    if (chromStart < 0)
 			chromStart = chromPosition;
 		    chromEnd = chromPosition + 1 + wiggle->span;
@@ -188,18 +197,15 @@ for (wd = wigData; wd != (struct wiggleData *) NULL; )
 }
 
 struct wiggleData *wigFetchData(char *db, char *tableName, char *chromName,
-    int winStart, int winEnd, boolean summaryOnly, int tableId,
-	boolean (*wiggleCompare)(int tableId, double value,
+    int winStart, int winEnd, boolean summaryOnly, boolean freeData,
+	int tableId, boolean (*wiggleCompare)(int tableId, double value,
 	    boolean summaryOnly, struct wiggle *wiggle),
 	    char *constraints)
 /*  return linked list of wiggle data between winStart, winEnd */
 {
-struct wiggleData *ret = (struct wiggleData *) NULL;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-char *whereNULL = NULL;
-char *whereGROUP = "group by span";
 int rowOffset;
 int rowCount = 0;
 struct wiggle *wiggle;
@@ -207,7 +213,7 @@ struct hash *spans = NULL;      /* List of spans encountered during load */
 char spanName[128];
 char whereSpan[128];
 char query[256];
-struct hashEl *el, *elList;
+struct hashEl *el;
 int leastSpan = BIGNUM;
 int mostSpan = 0;
 int spanCount = 0;
@@ -292,7 +298,7 @@ while ((el = hashNext(&cookie)) != NULL)
 		    tableId, summaryOnly, wiggleCompare );
 	    if (wigData)
 		{
-		if (summaryOnly)
+		if (freeData)
 		    {
 		    freeMem(wigData->data); /* and mark it gone */
 		    wigData->data = (struct wiggleDatum *)NULL;
@@ -303,7 +309,7 @@ while ((el = hashNext(&cookie)) != NULL)
 	}
     sqlFreeResult(&sr);
     }
-closeWibFile(f);
+closeWibFile();
 
 hFreeConn(&conn);
 

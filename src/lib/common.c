@@ -7,7 +7,7 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.58 2004/03/13 05:38:03 markd Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.59 2004/03/30 06:47:11 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1179,6 +1179,32 @@ e = skipToSpaces(s);
 if (e != NULL)
     *e++ = 0;
 *pLine = e;
+return s;
+}
+
+char *nextTabWord(char **pLine)
+/* Return next tab-separated word. */
+{
+char *s = *pLine;
+char *e;
+if (s == NULL || *s == '\n' || *s == 0)
+    {
+    *pLine = NULL;
+    return NULL;
+    }
+e = strchr(s, '\t');
+if (e == NULL)
+    {
+    e = strchr(s, '\n');
+    if (e != NULL)
+        *e = 0;
+    *pLine = NULL;
+    }
+else
+    {
+    *e++ = 0;
+    *pLine = e;
+    }
 return s;
 }
 

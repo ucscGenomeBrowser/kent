@@ -10,7 +10,7 @@
 #include "linefile.h"
 #include "gbFileOps.h"
 
-static char const rcsid[] = "$Id: mgcImport.c,v 1.4 2003/06/27 18:39:34 markd Exp $";
+static char const rcsid[] = "$Id: mgcImport.c,v 1.5 2004/03/29 02:24:38 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -77,6 +77,8 @@ switch (fullength->full_length)
         return &MGC_NO_POLYA_TAIL;
     case 107 :
         return &MGC_CANT_SEQUENCE;
+    case 108 :
+        return &MGC_INCONSISTENT_WITH_GENE;
     default  :
         errAbort("unknown value for column full_length %d in fullength "
                  "table for id_image %d",

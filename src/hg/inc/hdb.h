@@ -65,6 +65,7 @@ struct hTableInfo
     char countField[32];	/* Name of exon(block)Count field. */
     char startsField[32];	/* Name of exon(block)Starts field. */
     char endsSizesField[32];	/* Name of exon(block)Ends(Sizes) field. */
+    char spanField[32];		/* Name of span field. (wiggle) */
     boolean hasCDS;		/* True if it has cdsStart,cdsEnd fields. */
     boolean hasBlocks;		/* True if it has count,starts,endsSizes. */
     char *type;			/* A guess at the trackDb type for this. */
@@ -188,6 +189,9 @@ boolean hTableExists2(char *table);
 
 boolean hTableExistsDb(char *db, char *table);
 /* Return TRUE if a table exists in db. */
+
+boolean hTableOrSplitExistsDb(char *db, char *table);
+/* Return TRUE if table (or a chrN_table) exists in db. */
 
 boolean hColExists(char *table, char *column);
 /* Return TRUE if a column exists in table. */
@@ -346,8 +350,9 @@ boolean hTrackOnChrom(struct trackDb *tdb, char *chrom);
 /* Return TRUE if track exists on this chromosome. */
 
 struct trackDb *hTrackDb(char *chrom);
-/* Load tracks associated with current chromosome (which may
- * be NULL */
+/* Load tracks associated with current chromosome (which may be NULL for
+ * all). If trackDbLocal exists, then it's row either override or are added to
+ * the standard trackDb. */
 
 struct trackDb *hTrackDbForTrack(char *track);
 /* Load trackDb object for a track. If trackDbLocal exists, then it's row is

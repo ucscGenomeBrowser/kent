@@ -5,14 +5,14 @@
 
 #Information from affy10KDetails representing the Affymetrix 10K Mapping Array
 CREATE TABLE affy10KDetails (
-    affyId varchar(255) not null,	# Affymetrix SNP id
-    rsId varchar(255) not null,	# RS identifier (some are null)
-    tscId varchar(255) not null,	# TSC identifier (some are null)
-    baseA char(2) not null,	# The first allele (A)
-    baseB char(2) not null,	# The second allele (B)
-    sequenceA char(34) not null,	# The A allele with flanking sequence
-    sequenceB char(34) not null,	# The B allele with flanking sequence
-    enzyme char(8) not null,	# The enzyme that was used to prepare the sample (HindIII or XbaI)
+    affyId 	varchar(255) 		not null,	# Affymetrix SNP id
+    rsId 	varchar(255) 		not null,	# RS identifier (some are null)
+    tscId 	varchar(255) 		not null,	# TSC identifier (some are null)
+    baseA 	enum('X', 'A','C','G') 	default 'X',	# The first allele (A)
+    baseB 	enum('X', 'C','G','T') 	default 'X',	# The second allele (B)
+    sequenceA 	char(34) 		not null,	# The A allele with flanking sequence
+    sequenceB 	char(34) 		not null,	# The B allele with flanking sequence
+    enzyme  	enum('X', 'HindIII','XbaI') default 'X',# The enzyme that was used to prepare the sample (HindIII or XbaI)
               #Indices
     PRIMARY KEY(affyId)
 );

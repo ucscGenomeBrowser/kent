@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "pseudoGeneLink.h"
 
-static char const rcsid[] = "$Id: pseudoGeneLink.c,v 1.10 2004/03/24 19:36:10 baertsch Exp $";
+static char const rcsid[] = "$Id: pseudoGeneLink.c,v 1.11 2004/03/25 20:39:47 baertsch Exp $";
 
 void pseudoGeneLinkStaticLoad(char **row, struct pseudoGeneLink *ret)
 /* Load a row from pseudoGeneLink table into ret.  The contents of ret will
@@ -33,7 +33,7 @@ ret->gStrand = row[12];
 ret->exonCount = sqlUnsigned(row[13]);
 ret->geneOverlap = sqlUnsigned(row[14]);
 ret->polyA = sqlUnsigned(row[15]);
-ret->polyAstart = sqlUnsigned(row[16]);
+ret->polyAstart = sqlSigned(row[16]);
 ret->exonCover = sqlUnsigned(row[17]);
 ret->intronCount = sqlUnsigned(row[18]);
 ret->bestAliCount = sqlUnsigned(row[19]);
@@ -49,15 +49,15 @@ ret->milliBad = sqlUnsigned(row[28]);
 ret->chainId = sqlUnsigned(row[29]);
 ret->axtScore = sqlSigned(row[30]);
 ret->refSeq = row[31];
-ret->rStart = sqlUnsigned(row[32]);
-ret->rEnd = sqlUnsigned(row[33]);
+ret->rStart = sqlSigned(row[32]);
+ret->rEnd = sqlSigned(row[33]);
 ret->mgc = row[34];
-ret->mStart = sqlUnsigned(row[35]);
-ret->mEnd = sqlUnsigned(row[36]);
+ret->mStart = sqlSigned(row[35]);
+ret->mEnd = sqlSigned(row[36]);
 ret->kgName = row[37];
-ret->kStart = sqlUnsigned(row[38]);
-ret->kEnd = sqlUnsigned(row[39]);
-ret->kgId = sqlUnsigned(row[40]);
+ret->kStart = sqlSigned(row[38]);
+ret->kEnd = sqlSigned(row[39]);
+ret->kgId = sqlSigned(row[40]);
 }
 
 struct pseudoGeneLink *pseudoGeneLinkLoad(char **row)
@@ -85,7 +85,7 @@ ret->gStrand = cloneString(row[12]);
 ret->exonCount = sqlUnsigned(row[13]);
 ret->geneOverlap = sqlUnsigned(row[14]);
 ret->polyA = sqlUnsigned(row[15]);
-ret->polyAstart = sqlUnsigned(row[16]);
+ret->polyAstart = sqlSigned(row[16]);
 ret->exonCover = sqlUnsigned(row[17]);
 ret->intronCount = sqlUnsigned(row[18]);
 ret->bestAliCount = sqlUnsigned(row[19]);
@@ -101,15 +101,15 @@ ret->milliBad = sqlUnsigned(row[28]);
 ret->chainId = sqlUnsigned(row[29]);
 ret->axtScore = sqlSigned(row[30]);
 ret->refSeq = cloneString(row[31]);
-ret->rStart = sqlUnsigned(row[32]);
-ret->rEnd = sqlUnsigned(row[33]);
+ret->rStart = sqlSigned(row[32]);
+ret->rEnd = sqlSigned(row[33]);
 ret->mgc = cloneString(row[34]);
-ret->mStart = sqlUnsigned(row[35]);
-ret->mEnd = sqlUnsigned(row[36]);
+ret->mStart = sqlSigned(row[35]);
+ret->mEnd = sqlSigned(row[36]);
 ret->kgName = cloneString(row[37]);
-ret->kStart = sqlUnsigned(row[38]);
-ret->kEnd = sqlUnsigned(row[39]);
-ret->kgId = sqlUnsigned(row[40]);
+ret->kStart = sqlSigned(row[38]);
+ret->kEnd = sqlSigned(row[39]);
+ret->kgId = sqlSigned(row[40]);
 return ret;
 }
 
@@ -175,7 +175,7 @@ ret->gStrand = sqlStringComma(&s);
 ret->exonCount = sqlUnsignedComma(&s);
 ret->geneOverlap = sqlUnsignedComma(&s);
 ret->polyA = sqlUnsignedComma(&s);
-ret->polyAstart = sqlUnsignedComma(&s);
+ret->polyAstart = sqlSignedComma(&s);
 ret->exonCover = sqlUnsignedComma(&s);
 ret->intronCount = sqlUnsignedComma(&s);
 ret->bestAliCount = sqlUnsignedComma(&s);
@@ -191,15 +191,15 @@ ret->milliBad = sqlUnsignedComma(&s);
 ret->chainId = sqlUnsignedComma(&s);
 ret->axtScore = sqlSignedComma(&s);
 ret->refSeq = sqlStringComma(&s);
-ret->rStart = sqlUnsignedComma(&s);
-ret->rEnd = sqlUnsignedComma(&s);
+ret->rStart = sqlSignedComma(&s);
+ret->rEnd = sqlSignedComma(&s);
 ret->mgc = sqlStringComma(&s);
-ret->mStart = sqlUnsignedComma(&s);
-ret->mEnd = sqlUnsignedComma(&s);
+ret->mStart = sqlSignedComma(&s);
+ret->mEnd = sqlSignedComma(&s);
 ret->kgName = sqlStringComma(&s);
-ret->kStart = sqlUnsignedComma(&s);
-ret->kEnd = sqlUnsignedComma(&s);
-ret->kgId = sqlUnsignedComma(&s);
+ret->kStart = sqlSignedComma(&s);
+ret->kEnd = sqlSignedComma(&s);
+ret->kgId = sqlSignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -290,7 +290,7 @@ fprintf(f, "%u", el->geneOverlap);
 fputc(sep,f);
 fprintf(f, "%u", el->polyA);
 fputc(sep,f);
-fprintf(f, "%u", el->polyAstart);
+fprintf(f, "%d", el->polyAstart);
 fputc(sep,f);
 fprintf(f, "%u", el->exonCover);
 fputc(sep,f);
@@ -324,27 +324,27 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->refSeq);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->rStart);
+fprintf(f, "%d", el->rStart);
 fputc(sep,f);
-fprintf(f, "%u", el->rEnd);
+fprintf(f, "%d", el->rEnd);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->mgc);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->mStart);
+fprintf(f, "%d", el->mStart);
 fputc(sep,f);
-fprintf(f, "%u", el->mEnd);
+fprintf(f, "%d", el->mEnd);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->kgName);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->kStart);
+fprintf(f, "%d", el->kStart);
 fputc(sep,f);
-fprintf(f, "%u", el->kEnd);
+fprintf(f, "%d", el->kEnd);
 fputc(sep,f);
-fprintf(f, "%u", el->kgId);
+fprintf(f, "%d", el->kgId);
 fputc(lastSep,f);
 }
 

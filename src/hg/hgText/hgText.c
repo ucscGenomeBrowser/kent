@@ -33,11 +33,17 @@
 #include "botDelay.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.125 2004/03/24 21:22:10 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.129 2004/03/31 00:40:05 hiram Exp $";
+
+extern void wigDoStats(char *database, char *table, struct slName *chromList,
+    int winStart, int winEnd, int tableId, char *constraints);
+extern void wiggleConstraints(char *cmp, char *pat, int tableIndex);
+extern void doGetWiggleData(boolean doCt);
+extern void doWiggleCtOptions(boolean doCt);
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
-static char *customTrackPseudoDb = "customTrack";
+char *customTrackPseudoDb = "customTrack";
 
 /* getCustomTracks() initializes this only once: */
 struct customTrack *theCtList = NULL;
@@ -59,6 +65,8 @@ char *chrom = NULL;
 int winStart = 0;
 int winEnd = 0;
 boolean allGenome = FALSE;
+boolean typeWiggle = FALSE;
+boolean typeWiggle2 = FALSE;
 
 /* main() sets this: */
 struct hash *oldVars = NULL;
@@ -122,7 +130,6 @@ retStats->stdev = sqrt(total / N);
 
 
 /* copied from hgGateway: */
-static char *onChangeDb = "onchange=\"document.orgForm.db.value = document.mainForm.db.options[document.mainForm.db.selectedIndex].value; document.orgForm.submit();\"";
 static char *onChangeOrg = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.db.value = 0; document.orgForm.submit();\"";
 /* User can choose from Track, Positional or Non-positional tables.  
  * When one is selected, clear the others: */
@@ -141,8 +148,10 @@ static char *onChangePos2 = "onchange=\"document.mainForm.tbTrack2.value = docum
 #define gffPhase            "GTF"
 #define bedOptionsPhase     "BED..."
 #define ctOptionsPhase      "Custom Track..."
+#define ctWigOptionsPhase   "Data custom track..."
 #define linksPhase          "Hyperlinks to Genome Browser"
 #define statsPhase          "Summary/Statistics"
+#define wigOptionsPhase     "Get data points"
 char *outputTypePosMenu[] =
 {
     bedOptionsPhase,
@@ -162,6 +171,13 @@ char *outputTypeNonPosMenu[] =
     statsPhase,
 };
 int outputTypeNonPosMenuSize = sizeof(outputTypeNonPosMenu)/sizeof(char *);
+char *outputTypeWiggleMenu[] =
+{
+    statsPhase,
+    wigOptionsPhase,
+    ctWigOptionsPhase,
+};
+int outputTypeWiggleMenuSize = sizeof(outputTypeWiggleMenu)/sizeof(char *);
 /* Other values that the "phase" var can take on: */
 #define chooseTablePhase    "table"
 #define pasteNamesPhase     "Paste in Names/Accessions"
@@ -173,9 +189,10 @@ int outputTypeNonPosMenuSize = sizeof(outputTypeNonPosMenu)/sizeof(char *);
 #define getBedPhase         "Get BED"
 #define getCtPhase          "Get Custom Track"
 #define getCtBedPhase       "Get Custom Track File"
+#define getWigglePhase      "Get data"
+#define getCtWigglePhase    "Get Custom Track Data File"
 #define intersectOptionsPhase "Intersect Results..."
 #define histPhase           "Get histogram"
-#define wigglePhase         "Get data points"
 #define descTablePhase      "Describe table"
 /* Old "phase" values handled for backwards compatibility: */
 #define oldAllFieldsPhase   "Get all fields"
@@ -519,6 +536,7 @@ char *getTableName()
 char *val, *ptr;
 	
 val = getTableVar();
+
 if (val == NULL)
     return val;
 else if ((ptr = strchr(val, '.')) != NULL)
@@ -532,6 +550,7 @@ char *getTableDb()
 char *val, *ptr;
 	
 val = cloneString(getTableVar());
+
 if (val == NULL)
     return NULL;
 if ((ptr = strchr(val, '.')) != NULL)
@@ -654,8 +673,6 @@ return FALSE;
 void doGateway()
 /* Table Browser gateway page: select organism, db, position */
 {
-char *oldDb;
-
 webStart(cart, "Table Browser: Choose Organism &amp; Assembly");
 
 if (! hDbIsActive(database))
@@ -851,7 +868,7 @@ if (! tableExists(table, getTable2Db()))
 	     getTable2Name(), table, getTable2Db());
 }
 
-static boolean existsAndEqual(char *var, char *value)
+boolean existsAndEqual(char *var, char *value)
 /* returns true is the given CGI var exists and equals value */
 {
 if (cgiOptionalString(var) != 0 && sameString(cgiOptionalString(var), value))
@@ -894,6 +911,7 @@ printf("<FORM ACTION=\"%s\" METHOD=\"%s\">", hgTextName(), httpFormMethod);
 cgiContinueHiddenVar("org");
 cgiContinueHiddenVar("db");
 cgiMakeHiddenVar("position", "genome");
+
 cgiMakeHiddenVar("table", getTableVar());
 cgiMakeHiddenVar("phase", chooseTablePhase);
 if (tableIsPositional)
@@ -929,6 +947,7 @@ printf("<FORM ACTION=\"%s\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n",
 cgiContinueHiddenVar("org");
 cgiContinueHiddenVar("db");
 cgiMakeHiddenVar("position", "genome");
+
 cgiMakeHiddenVar("table", getTableVar());
 cgiMakeHiddenVar("phase", chooseTablePhase);
 if (tableIsPositional)
@@ -1314,7 +1333,7 @@ puts("</TABLE>");
 }
 
 void filterOptionsTableDb(char *fullTblName, char *db, char *tableId,
-    boolean typeWiggle)
+    boolean filterWiggle)
 /* Print out an HTML table with form inputs for constraints on table fields */
 {
 struct sqlConnection *conn = hAllocOrConnect(db);
@@ -1372,7 +1391,7 @@ puts("Free-form query: ");
 snprintf(name, sizeof(name), "rawQuery%s", tableId);
 cgiMakeTextVar(name, cgiUsualString(name, ""), 50);
 puts("</TD></TR>");
-if (typeWiggle)
+if (filterWiggle)
     {
     printf("<TR VALIGN=BOTTOM><TD><TABLE><TR VALIGN=BOTTOM><TD> data value </TD><TD>\n");
     puts(" is \n");
@@ -1387,102 +1406,6 @@ if (typeWiggle)
     }
 puts("</TABLE>");
 }
-
-
-void doOutputOptions()
-/* print out a form with output table format & filtering options */
-{
-struct hashEl *ctPosTableList = NULL;
-struct hashEl *posTableList = NULL;
-struct hashEl *nonposTableList = NULL;
-char *table = getTableName();
-char *db = getTableDb();
-struct sqlConnection *conn = hAllocOrConnect(db);
-struct trackDb *tdb;
-char *track = getTrackName();
-int wordCount = 0;
-char *words[128];
-char *trackType = (char *) NULL;
-boolean typeWiggle = FALSE;
-
-tdb = hMaybeTrackInfo(conn, track);
-if (tdb && tdb->type)
-    {
-    wordCount = chopLine(tdb->type,words);
-    if (wordCount > 0)
-	trackType = words[0];
-    }
-hFreeOrDisconnect(&conn);
-
-if ((trackType != (char *) NULL) && sameString(trackType,"wig"))
-    typeWiggle = TRUE;
-
-saveChooseTableState();
-
-webStart(cart, "Table Browser: %s %s: %s",  hOrganism(database),freezeName, outputOptionsPhase);
-checkTableExists(fullTableName);
-printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n\n",
-       hgTextName(), httpFormMethod);
-cartSaveSession(cart);
-cgiMakeHiddenVar("db", database);
-cgiMakeHiddenVar("table", getTableVar());
-displayPosition();
-
-printf("<P><HR><H3> Select Output Format for %s </H3>\n", table);
-puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Formats\">"
-     "<B>Help</B></A><P>");
-if (tableIsPositional)
-    cgiMakeDropList("outputType", outputTypePosMenu, outputTypePosMenuSize,
-		    cartCgiUsualString(cart, "outputType",
-				       outputTypePosMenu[0]));
-else
-    cgiMakeDropList("outputType", outputTypeNonPosMenu,
-		    outputTypeNonPosMenuSize,
-		    cartCgiUsualString(cart, "outputType",
-				       outputTypeNonPosMenu[0]));
-cgiMakeButton("phase", getOutputPhase);
-
-printf("<P><HR><H3> (Optional) Filter %s Records by Field Values </H3>",
-       table);
-puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Constraints\">"
-     "<B>Help</B></A><P>");
-if (sameString(customTrackPseudoDb, db))
-    filterOptionsCustomTrack(table, "");
-else
-    filterOptionsTableDb(fullTableName, db, "", typeWiggle);
-cgiMakeButton("phase", getOutputPhase);
-
-if (tableIsPositional)
-    {
-    puts("<P><HR><H3> (Optional) Intersect Results with Another Table </H3>");
-    puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Intersection\">"
-	 "<B>Help</B></A><P>");
-    puts("Note: Output Format must be FASTA, BED, Hyperlinks, GTF \n"
-	 "or Summary/Statistics "
-	 "for this feature.  <P>");
-    ctPosTableList = getCustomTrackNames();
-    categorizeTables(&posTableList, &nonposTableList);
-    puts("Choose a second table:");
-    printTrackDropList(database, onChangeTrack2, "tbTrack2");
-    printf("<SELECT NAME=tbCustomTrack2 SIZE=1 %s>\n", onChangeCT2);
-    printf("<OPTION VALUE=\"Choose table\">Custom tracks</OPTION>\n");
-    printSelectOptions(ctPosTableList, "tbCustomTrack2");
-    puts("</SELECT>");
-    printf("<SELECT NAME=table2 SIZE=1 %s>", onChangePos2);
-    printf("<OPTION VALUE=\"Choose table\">Positional tables</OPTION>\n");
-    printSelectOptions(posTableList, "table2");
-    puts("</SELECT>");
-    hashElFreeList(&posTableList);
-    hashElFreeList(&nonposTableList);
-    
-    puts("<P>");
-    cgiMakeButton("phase", intersectOptionsPhase);
-    }
-
-puts("</FORM>");
-webEnd();
-}
-
 
 void parseNum(char *fieldName, struct kxTok **tok, struct dyString *q)
 {
@@ -1653,7 +1576,6 @@ void constrainFreeForm(char *rawQuery, struct dyString *clause)
  * this is just a token cop. */
 {
 struct kxTok *tokList, *tokPtr;
-struct slName *fnPtr;
 char *ptr;
 int numLeftParen, numRightParen;
 
@@ -1767,134 +1689,6 @@ if (numLeftParen != numRightParen)
 	     numLeftParen, numRightParen);
 
 slFreeList(&tokList);
-}
-
-/*********   wiggle compare functions   ***********************************/
-static boolean wigInRange(int tableId, double value, boolean summaryOnly,
-    struct wiggle *wiggle)
-{
-boolean ret = FALSE;
-if (summaryOnly)
-    ret = ((wiggle->lowerLimit <= wigDataConstraint[tableId][1]) &&
-      (wiggle->lowerLimit+wiggle->dataRange >= wigDataConstraint[tableId][0]));
-else
-    ret = (value >= wigDataConstraint[tableId][0] &&
-	value <= wigDataConstraint[tableId][1]);
-return ret;
-}
-static boolean wigLessThan(int tableId, double value, boolean summaryOnly,
-    struct wiggle *wiggle)
-{
-boolean ret = FALSE;
-if (summaryOnly)
-   ret = (wiggle->lowerLimit < wigDataConstraint[tableId][0]);
-else
-   ret = (value < wigDataConstraint[tableId][0]);
-return ret;
-}
-static boolean wigLessEqual(int tableId, double value, boolean summaryOnly,
-    struct wiggle *wiggle)
-{
-boolean ret = FALSE;
-if (summaryOnly)
-   ret = (wiggle->lowerLimit <= wigDataConstraint[tableId][0]);
-else
-   ret = (value <= wigDataConstraint[tableId][0]);
-return ret;
-}
-static boolean wigEqual(int tableId, double value, boolean summaryOnly,
-    struct wiggle *wiggle)
-{
-boolean ret = FALSE;
-if (summaryOnly)
-   ret = ((wiggle->lowerLimit < wigDataConstraint[tableId][0]) &&
-	(wiggle->lowerLimit+wiggle->dataRange > wigDataConstraint[tableId][0]));
-else
-   ret = (value == wigDataConstraint[tableId][0]);
-return ret;
-}
-static boolean wigNotEqual(int tableId, double value, boolean summaryOnly,
-    struct wiggle *wiggle)
-{
-boolean ret = FALSE;
-if (summaryOnly)
-   ret = ((wiggle->lowerLimit > wigDataConstraint[tableId][0]) ||
-	(wiggle->lowerLimit+wiggle->dataRange < wigDataConstraint[tableId][0]));
-else
-   ret = (value != wigDataConstraint[tableId][0]);
-return ret;
-}
-static boolean wigGreaterEqual(int tableId, double value, boolean summaryOnly,
-    struct wiggle *wiggle)
-{
-boolean ret = FALSE;
-if (summaryOnly)
-   ret=(wiggle->lowerLimit+wiggle->dataRange >= wigDataConstraint[tableId][0]);
-else
-   ret = (value >= wigDataConstraint[tableId][0]);
-return ret;
-}
-static boolean wigGreaterThan(int tableId, double value, boolean summaryOnly,
-    struct wiggle *wiggle)
-{
-boolean ret = FALSE;
-if (summaryOnly)
-   ret = (wiggle->lowerLimit+wiggle->dataRange > wigDataConstraint[tableId][0]);
-else
-   ret = (value > wigDataConstraint[tableId][0]);
-return ret;
-}
-
-void wiggleConstraints(char *cmp, char *pat, int tableIndex)
-{
-wigConstraint[tableIndex] = cmp;
-wiggleCompare[tableIndex] = NULL;
-if (strlen(pat)>0)
-    {
-    if (sameWord(cmp,"in range"))
-	{
-	char *rangeValues[2];
-	char *clone = cloneString(pat);
-	int records = 0;
-	char *comma = strchr(pat,',');
-
-	if (comma == (char *)NULL)
-	    records = chopByWhite(clone,rangeValues,2);
-	else
-	    records = chopByChar(clone,',',rangeValues,2);
-
-	if (records == 2)
-	    {
-	    trimSpaces(rangeValues[0]);
-	    trimSpaces(rangeValues[1]);
-	    wigDataConstraint[tableIndex][0] = sqlDouble(rangeValues[0]);
-	    wigDataConstraint[tableIndex][1] = sqlDouble(rangeValues[1]);
-	    if (wigDataConstraint[tableIndex][0] >
-		    wigDataConstraint[tableIndex][1])
-		{
-		double d = wigDataConstraint[tableIndex][1];
-		wigDataConstraint[tableIndex][1] =
-		    wigDataConstraint[tableIndex][0];
-		wigDataConstraint[tableIndex][0] = d;
-		}
-            wiggleCompare[tableIndex] = wigInRange;
-	    }
-	freeMem(clone);
-	if (wigDataConstraint[tableIndex][1] ==
-		wigDataConstraint[tableIndex][0])
-	    errAbort("For \"in range\" constraint, you must give two numbers separated by whitespace or comma.");
-	}
-    else
-	{
-	wigDataConstraint[tableIndex][0] = sqlDouble(pat);
-	if (sameWord(cmp,"<")) wiggleCompare[tableIndex] = wigLessThan;
-	else if (sameWord(cmp,"<=")) wiggleCompare[tableIndex] = wigLessEqual;
-	else if (sameWord(cmp,"=")) wiggleCompare[tableIndex] = wigEqual;
-	else if (sameWord(cmp,"!=")) wiggleCompare[tableIndex] = wigNotEqual;
-	else if (sameWord(cmp,">=")) wiggleCompare[tableIndex]=wigGreaterEqual;
-	else if (sameWord(cmp,">")) wiggleCompare[tableIndex] = wigGreaterThan;
-	}
-    }
 }
 
 char *constrainFields(char *tableId)
@@ -2199,7 +1993,6 @@ void preserveConstraints(char *fullTblName, char *db, char *tableId)
  * in order to catch any syntax errors sooner rather than later. */
 {
 struct cgiVar *current;
-struct bedFilter *bf = constrainBedFields(tableId);
 char *constraints = constrainFields(tableId);
 char varName[128];
 
@@ -2389,6 +2182,86 @@ if ((table2 != NULL) && (table2[0] != 0) && (op != NULL))
 return(hti);
 }
 
+void doOutputOptions()
+/* print out a form with output table format & filtering options */
+{
+struct hashEl *ctPosTableList = NULL;
+struct hashEl *posTableList = NULL;
+struct hashEl *nonposTableList = NULL;
+char *table = getTableName();
+char *db = getTableDb();
+
+saveChooseTableState();
+
+webStart(cart, "Table Browser: %s %s: %s",  hOrganism(database),freezeName, outputOptionsPhase);
+checkTableExists(fullTableName);
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n\n",
+       hgTextName(), httpFormMethod);
+cartSaveSession(cart);
+cgiMakeHiddenVar("db", database);
+
+cgiMakeHiddenVar("table", getTableVar());
+displayPosition();
+
+printf("<P><HR><H3> Select Output Format for %s </H3>\n", table);
+puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Formats\">"
+     "<B>Help</B></A><P>");
+
+if (tableIsPositional)
+    if (typeWiggle)
+	cgiMakeDropList("outputType", outputTypeWiggleMenu,
+	    outputTypeWiggleMenuSize,
+	    cartCgiUsualString(cart, "outputType", outputTypeWiggleMenu[0]));
+    else
+	cgiMakeDropList("outputType", outputTypePosMenu, outputTypePosMenuSize,
+	    cartCgiUsualString(cart, "outputType", outputTypePosMenu[0]));
+else
+    cgiMakeDropList("outputType", outputTypeNonPosMenu,
+	outputTypeNonPosMenuSize,
+	    cartCgiUsualString(cart, "outputType", outputTypeNonPosMenu[0]));
+
+cgiMakeButton("phase", getOutputPhase);
+
+printf("<P><HR><H3> (Optional) Filter %s Records by Field Values </H3>",
+       table);
+puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Constraints\">"
+     "<B>Help</B></A><P>");
+if (sameString(customTrackPseudoDb, db))
+    filterOptionsCustomTrack(table, "");
+else
+    filterOptionsTableDb(fullTableName, db, "", typeWiggle);
+cgiMakeButton("phase", getOutputPhase);
+
+if (tableIsPositional)
+    {
+    puts("<P><HR><H3> (Optional) Intersect Results with Another Table </H3>");
+    puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Intersection\">"
+	 "<B>Help</B></A><P>");
+    puts("Note: Output Format must be FASTA, BED, Hyperlinks, GTF \n"
+	 "or Summary/Statistics "
+	 "for this feature.  <P>");
+    ctPosTableList = getCustomTrackNames();
+    categorizeTables(&posTableList, &nonposTableList);
+    puts("Choose a second table:");
+    printTrackDropList(database, onChangeTrack2, "tbTrack2");
+    printf("<SELECT NAME=tbCustomTrack2 SIZE=1 %s>\n", onChangeCT2);
+    printf("<OPTION VALUE=\"Choose table\">Custom tracks</OPTION>\n");
+    printSelectOptions(ctPosTableList, "tbCustomTrack2");
+    puts("</SELECT>");
+    printf("<SELECT NAME=table2 SIZE=1 %s>", onChangePos2);
+    printf("<OPTION VALUE=\"Choose table\">Positional tables</OPTION>\n");
+    printSelectOptions(posTableList, "table2");
+    puts("</SELECT>");
+    hashElFreeList(&posTableList);
+    hashElFreeList(&nonposTableList);
+    
+    puts("<P>");
+    cgiMakeButton("phase", intersectOptionsPhase);
+    }
+
+puts("</FORM>");
+webEnd();
+}
 
 void bedFilterBatch(struct bed **bedListPtr)
 /* If position is batch, filter by name. */
@@ -2521,8 +2394,7 @@ char *constraints;
 char *table2 = getTable2Name();
 char *op = cgiOptionalString("tbIntersectOp");
 char *track = getTrackName();
-int fields;
-int i, totalCount;
+int i;
 
 if (! tableExists(fullTableName, db))
     return NULL;
@@ -2958,7 +2830,6 @@ char *db = getTableDb();
 char *table = getTableName();
 struct hTableInfo *hti = getHti(db, table);
 struct customTrack *ct = lookupCt(table);
-struct slName *chosenFields;
 struct bed *firstFewBed = NULL, *bed = NULL;
 int i;
 
@@ -3097,33 +2968,13 @@ void descTable(boolean histButtons)
  * offering histograms for the text/enum fields. */
 {
 char *db = getTableDb();
-char *table = getTableName();
-struct sqlConnection *conn = hAllocOrConnect(db);
+struct sqlConnection *conn;
 struct sqlResult *sr;
 char **row;
 char button[64];
 char query[256];
-struct trackDb *tdb;
-char *track = getTrackName();
-int wordCount = 0;
-char *words[128];
-char *trackType = (char *) NULL;
-boolean typeWiggle = FALSE;
 
-tdb = hMaybeTrackInfo(conn, track);
-/*	for some reason on Kates wigMaf tables, it doesn't return
- *	anything ?
- */
-
-if (tdb && tdb->type)
-    {
-    wordCount = chopLine(tdb->type,words);
-    if (wordCount > 0)
-	trackType = words[0];
-    }
-if ((trackType != (char *) NULL) && sameString(trackType,"wig"))
-    typeWiggle = TRUE;
-
+conn = hAllocOrConnect(db);
 safef(query, sizeof(query), "desc %s", fullTableName);
 sr = sqlGetResult(conn, query);
 // For some reason BORDER=1 does not work in our web.c nested table scheme.
@@ -3144,16 +2995,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if ((isSqlStringType(row[1]) || startsWith("enum", row[1])) &&
 	    ! sameString(row[1], "longblob"))
 	    {
-	    if (typeWiggle && sameString(row[0],"file"))
-		{
-		snprintf(button, sizeof(button), "%s", wigglePhase);
-		cgiMakeButton("phase", button);
-		}
-	    else
-		{
-		snprintf(button, sizeof(button), "%s for %s",histPhase,row[0]);
-		cgiMakeButton("phase", button);
-		}
+	    snprintf(button, sizeof(button), "%s for %s",histPhase,row[0]);
+	    cgiMakeButton("phase", button);
 	    }
 	else
 	    {
@@ -3185,6 +3028,7 @@ printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n\n",
        hgTextName(), httpFormMethod);
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
+
 cgiMakeHiddenVar("table", getTableVar());
 displayPosition();
 puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#DescTable\">"
@@ -3208,7 +3052,8 @@ else
     // to tell the creation & last-update dates and times.  
     if (tableIsPositional && sqlTableExists(conn, hTrackDbName()))
 	{
-	struct trackDb *tdb = hMaybeTrackInfo(conn, track);
+	struct trackDb *tdb;
+	tdb = hMaybeTrackInfo(conn, track);
 	if (tdb)
 	    showTdbInfo(tdb);
 	}
@@ -3226,7 +3071,7 @@ webEnd();
 
 void doTabSeparatedCT(boolean allFields)
 {
-struct bed *bedList, *bed;
+struct bed *bedList;
 char *table = getTableName();
 struct customTrack *ct = lookupCt(table);
 struct slName *chosenFields;
@@ -3395,6 +3240,7 @@ printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n\n",
        hgTextName(), httpFormMethod);
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
+
 cgiMakeHiddenVar("table", getTableVar());
 displayPosition();
 cgiMakeHiddenVar("outputType", outputType);
@@ -3449,6 +3295,7 @@ printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n\n",
        hgTextName(), httpFormMethod);
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
+
 cgiMakeHiddenVar("table", getTableVar());
 displayPosition();
 cgiMakeHiddenVar("outputType", outputType);
@@ -3552,7 +3399,7 @@ struct gffLine *bedToGffLines(struct bed *bedList, struct hTableInfo *hti,
 			      char *source, boolean gtf2StopCodons)
 /* Translate a (list of) bed into list of gffLine elements. */
 {
-struct gffLine *gffList = NULL, *gff;
+struct gffLine *gffList = NULL;
 struct bed *bed;
 int i, j, s, e;
 
@@ -3703,7 +3550,6 @@ struct hTableInfo *hti = getOutputHti();
 char *table = getTableName();
 char *table2 = getTable2Name();
 char *op = cgiOptionalString("tbIntersectOp");
-char *track = getTrackName();
 char *db = getTableDb();
 char *outputType = cgiUsualString("outputType", cgiString("phase"));
 char *phase = (existsAndEqual("phase", getOutputPhase) ?
@@ -3721,6 +3567,7 @@ printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n",
        hgTextName(), httpFormMethod);
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
+
 cgiMakeHiddenVar("table", getTableVar());
 displayPosition();
 cgiMakeHiddenVar("outputType", outputType);
@@ -3815,7 +3662,6 @@ struct featureBits *fbList = NULL, *fbPtr;
 struct customTrack *ctNew = NULL;
 struct tempName tn;
 char *table = getTableName();
-char *track = getTrackName();
 char *phase = (existsAndEqual("phase", getOutputPhase) ?
 	       cgiString("outputType") : cgiString("phase"));
 boolean doCtHdr = (cgiBoolean("tbDoCustomTrack") || doCt ||
@@ -3949,10 +3795,8 @@ bedFreeList(&bedList);
 
 void doGetBrowserLinks()
 {
-struct hTableInfo *hti = getOutputHti();
 struct bed *bedList;
 struct bed *bedPtr;
-char *table = getTableName();
 char *track = getTrackName();
 char *track2 = getTrack2Name();
 char track2CGI[128];
@@ -3997,44 +3841,18 @@ webEnd();
 
 void doIntersectOptions()
 {
-struct bed *bedList, *bedPtr;
-struct sqlConnection *conn;
-struct sqlResult *sr;
-char **row;
 char *outputType = cgiString("outputType");
 char *table = getTableName();
 char *table2 = getTable2Name();
-char *track = getTrackName();
 char *db = getTableDb();
 char *db2 = getTable2Db();
 char *setting, *op;
 char fullTableName2[256];
-char query[256];
-char name[128];
-boolean gotFirst;
-struct sqlConnection *conn2;
-struct trackDb *tdb2;
-char *track2 = getTrack2Name();
-char *typeLine2;
-int wordCount = 0;
-char *words[128];
-char *trackType2 = (char *) NULL;
-boolean typeWiggle2 = FALSE;
+struct hTableInfo *hti = NULL;
 
-if ((table2 != (char *)NULL) && (db2 != (char *)NULL))
-    {
-    conn2 = hAllocOrConnect(db2);
-    tdb2 = hMaybeTrackInfo(conn2, track2);
-    hFreeOrDisconnect(&conn2);
-    if (tdb2 && tdb2->type)
-	{
-	typeLine2 = cloneString(tdb2->type);
-	wordCount = chopLine(typeLine2,words);
-	if (wordCount > 0)
-	    trackType2 = words[0];
-	}
-    }
-if ((trackType2 != (char *) NULL) && sameString(trackType2,"wig"))
+hti = getHti(db2, table2);
+
+if (HTI_IS_WIGGLE)
     typeWiggle2 = TRUE;
 
 saveOutputOptionsState();
@@ -4062,6 +3880,7 @@ printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n",
        hgTextName(), httpFormMethod);
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
+
 cgiMakeHiddenVar("table", getTableVar());
 displayPosition();
 cgiMakeHiddenVar("outputType", outputType);
@@ -4131,8 +3950,6 @@ void descForm()
  * histograms for the text/enum fields. */
 {
 char *db = getTableDb();
-char button[64];
-
 
 // Not supported for custom tracks, just for database tables.
 if (sameString(customTrackPseudoDb, db))
@@ -4142,6 +3959,7 @@ printf("<FORM ACTION=\"%s\" NAME=\"descForm\" METHOD=\"%s\">\n\n",
        hgTextName(), httpFormMethod);
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
+
 cgiMakeHiddenVar("table", getTableVar());
 preserveConstraints(fullTableName, db, NULL);
 cgiContinueHiddenVar("position");
@@ -4158,7 +3976,6 @@ void doGetStatsNonpositional()
 {
 struct sqlConnection *conn;
 struct dyString *query = newDyString(256);
-char **row;
 char *constraints;
 char *table = getTableName();
 char *db = getTableDb();
@@ -4172,6 +3989,7 @@ printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n\n",
        hgTextName(), httpFormMethod);
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
+
 cgiMakeHiddenVar("table", getTableVar());
 displayPosition();
 preserveConstraints(fullTableName, db, NULL);
@@ -4383,180 +4201,6 @@ else
     return(cloneString(name));
 }
 
-static void wigStatsCalc(unsigned count, double wigSumData,
-    double wigSumSquares, double *mean, double *variance, double *stddev)
-{
-*mean = 0.0;
-*variance = 0.0;
-*stddev = 0.0;
-if (count > 0)
-    *mean = wigSumData / count;
-if (count > 1)
-    {
-    *variance = (wigSumSquares - ((wigSumData*wigSumData)/count)) / (count-1);
-    if (*variance > 0.0)
-	*stddev = sqrt(*variance);
-    }
-}
-static void wigStatsRow(char *chrom, unsigned start, unsigned end,
-    int span, unsigned count, double wigUpperLimit, double wigLowerLimit,
-    double mean, double variance, double stddev)
-{
-printf("<TR><TH ALIGN=LEFT> %s </TH>\n", chrom);
-printf("\t<TD ALIGN=RIGHT> %u </TD>\n", start);
-printf("\t<TD ALIGN=RIGHT> %u </TD>\n", end);
-printf("\t<TD ALIGN=RIGHT> %u </TD>\n", count);
-printf("\t<TD ALIGN=RIGHT> %d </TD>\n", span);
-printf("\t<TD ALIGN=RIGHT> %u </TD>\n", count*span);
-printf("\t<TD ALIGN=RIGHT> %g </TD>\n", wigLowerLimit);
-printf("\t<TD ALIGN=RIGHT> %g </TD>\n", wigUpperLimit);
-printf("\t<TD ALIGN=RIGHT> %g </TD>\n", wigUpperLimit - wigLowerLimit);
-printf("\t<TD ALIGN=RIGHT> %g </TD>\n", mean);
-printf("\t<TD ALIGN=RIGHT> %g </TD>\n", variance);
-printf("\t<TD ALIGN=RIGHT> %g </TD>\n", stddev);
-printf("<TR>\n");
-}
-
-static void wigDoStats(char *database, char *table, struct slName *chromList,
-    int winStart, int winEnd, int tableId, char *constraints)
-{
-int spanCount = 0;
-struct wiggleData *wigData;
-struct slName *chromPtr;
-char *db = getTableDb();
-struct sqlConnection *conn = hAllocOrConnect(db);
-struct sqlResult *sr = (struct sqlResult *)NULL;
-char query[256];
-char **row = (char **)NULL;
-int numChroms = slCount(chromList);
-char wigFullTableName[256];
-
-if (tableIsSplit)
-    {
-    getFullTableName(wigFullTableName, "chr1", table);
-    snprintf(query, sizeof(query), "show table status like '%s'", wigFullTableName);
-    }
-else
-    snprintf(query, sizeof(query), "show table status like '%s'", table);
-
-sr = sqlMustGetResult(conn,query);
-row = sqlNextRow(sr);
-
-// For some reason BORDER=1 does not work in our web.c nested table scheme.
-// So use web.c's trick of using an enclosing table to provide a border.  
-puts("<P><!--outer table is for border purposes-->" "\n"
-     "<TABLE BGCOLOR=\"#"HG_COL_BORDER"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
-
-puts("<TABLE BORDER=\"1\" BGCOLOR=\""HG_COL_INSIDE"\" CELLSPACING=\"0\">");
-
-if (row != NULL)
-    {
-    printf("<TR><TD COLSPAN=12>\n");
-    printf("<TABLE COLS=12 ALIGN=CENTER HSPACE=0>"
-	"<TR><TH COLSPAN=1 ALIGN=LEFT> Database: %s </TH><TH COLSPAN=1 ALIGN=CENTER> Table: %s </TH><TH COLSPAN=10 ALIGN=RIGHT>  Last update: %s </TH></TR></TABLE></TD></TR>\n",
-	database, table, row[11]);
-    }
-else
-    {
-    printf("<TR><TH COLSPAN=6 ALIGN=LEFT> Database: %s </TH><TH COLSPAN=6 ALIGN=RIGHT> Table: %s </TH></TR>\n", database,
-	table);
-    }
-
-sqlFreeResult(&sr);
-hFreeOrDisconnect(&conn);
-
-printf("<TR><TH> Chrom </TH><TH> Data <BR> start </TH>");
-printf("<TH> Data <BR> end </TH>");
-printf("<TH> # of Data <BR> values </TH><TH> Data <BR> span </TH>");
-printf("<TH> Bases <BR> covered </TH><TH> Minimum </TH>");
-printf("<TH> Maximum </TH><TH> Range </TH><TH> Mean </TH>");
-printf("<TH> Variance </TH><TH> Standard <BR> deviation </TH></TR>\n");
-
-for (chromPtr=chromList;  chromPtr != NULL; chromPtr=chromPtr->next)
-    {
-    char *chrom = chromPtr->name;
-    char *tbl = table;
-    char wigFullTableName[256];
-    if (tableIsSplit)
-	{
-	getFullTableName(wigFullTableName, chromPtr->name, table);
-	tbl = wigFullTableName;
-	}
-
-    if (numChroms > 1)
-	wigData = wigFetchData(database, tbl, chrom, winStart, winEnd,
-		WIG_SUMMARY_ONLY, tableId, wiggleCompare[tableId],
-		constraints);
-    else
-	wigData = wigFetchData(database, tbl, chrom, winStart, winEnd,
-		WIG_ALL_DATA, tableId, wiggleCompare[tableId], constraints);
-
-    if (wigData)
-	{
-	unsigned span = 0;
-	double wigLowerLimit = 1.0e+300;
-	double wigUpperLimit = -1.0e+300;
-	double wigSumData = 0.0;
-	double wigSumSquares = 0.0;
-	unsigned count = 0;
-	unsigned chromStart = BIGNUM;
-	unsigned chromEnd = 0;
-	struct wiggleData *wdPtr;
-	double mean;
-	double variance;
-	double stddev;
-	for (wdPtr = wigData; wdPtr != (struct wiggleData *) NULL;
-		    wdPtr= wdPtr->next)
-	    {
-	    int i;
-	    struct wiggleDatum *wd;
-	    if (span != wdPtr->span)
-		{
-		++spanCount;
-		if (span > 0)
-		    {
-		    wigStatsCalc(count, wigSumData, wigSumSquares,
-			    &mean, &variance, &stddev);
-		    wigStatsRow(chrom, chromStart, chromEnd, span, count,
-			wigUpperLimit, wigLowerLimit, mean, variance, stddev);
-		    }
-		span = wdPtr->span;
-		wigLowerLimit = 1.0e+300;
-		wigUpperLimit = -1.0e+300;
-		wigSumData = 0.0;
-		wigSumSquares = 0.0;
-		count = 0;
-		chromStart = BIGNUM;
-		chromEnd = 0;
-		}
-	    wigSumData += wdPtr->sumData;
-	    wigSumSquares += wdPtr->sumSquares;
-	    count += wdPtr->count;
-	    if (wdPtr->lowerLimit < wigLowerLimit)
-		    wigLowerLimit = wdPtr->lowerLimit;
-	    if (wdPtr->lowerLimit+wdPtr->dataRange > wigUpperLimit)
-		    wigUpperLimit = wdPtr->lowerLimit+wdPtr->dataRange;
-	    if (wdPtr->chromStart < chromStart)
-		    chromStart = wdPtr->chromStart;
-	    if (wdPtr->chromEnd > chromEnd)
-		    chromEnd = wdPtr->chromEnd;
-	    }
-	wigStatsCalc(count, wigSumData, wigSumSquares,
-	    &mean, &variance, &stddev);
-	wigStatsRow(chrom, chromStart, chromEnd, span, count,
-	    wigUpperLimit, wigLowerLimit, mean, variance, stddev);
-	wigFreeData(wigData);
-	}
-    else
-	{
-	printf("<TR><TH ALIGN=LEFT> %s </TH>", chrom);
-	printf("<TH COLSPAN=11> No data </TH></TR>\n");
-	}
-    }
-printf("</TABLE>\n");
-puts("</TD></TR></TABLE></P>");
-}
-
 void doGetStatsPositional()
 /* Print out statistics about positional query results. */
 {
@@ -4575,7 +4219,6 @@ char *db2 = getTable2Db();
 char *table2 = getTable2Name();
 char *op = cgiOptionalString("tbIntersectOp");
 char *constraints, *constraints2;
-char fullTableName2[256];
 int numChroms;
 int numCols;
 int *itemCounts, *bitCounts, *itemUncCounts;
@@ -4588,56 +4231,22 @@ int **utr3Arrs;
 int **blockCountArrs;
 int **blockSizeArrs;
 int i, j;
-struct sqlConnection *conn = hAllocOrConnect(db);
-struct sqlConnection *conn2;
-struct trackDb *tdb;
-struct trackDb *tdb2;
-char *track = getTrackName();
-char *track2 = getTrack2Name();
-char *typeLine;
-char *typeLine2;
-char *trackType = (char *) NULL;
-char *trackType2 = (char *) NULL;
-boolean typeWiggle = FALSE;
+struct hTableInfo *hti2 = NULL;
 boolean typeWiggle2 = FALSE;
-int wordCount;
-char *words[128];
 boolean wiggleDone = FALSE;
 
 saveOutputOptionsState();
 saveIntersectOptionsState();
 
-tdb = hMaybeTrackInfo(conn, track);
-if (tdb && tdb->type)
-    {
-    typeLine = cloneString(tdb->type);
-    wordCount = chopLine(typeLine,words);
-    if (wordCount > 0)
-	trackType = words[0];
-    }
-hFreeOrDisconnect(&conn);
-
-if ((trackType != (char *) NULL) && sameString(trackType,"wig"))
-    typeWiggle = TRUE;
-
 if (op == NULL)
     table2 = NULL;
 
-if ((table2 != (char *)NULL) && (db2 != (char *)NULL))
+if ((db2 != NULL) && (table2 != NULL))
     {
-    conn2 = hAllocOrConnect(db2);
-    tdb2 = hMaybeTrackInfo(conn2, track2);
-    hFreeOrDisconnect(&conn2);
-    if (tdb2 && tdb2->type)
-	{
-	typeLine2 = cloneString(tdb2->type);
-	wordCount = chopLine(typeLine2,words);
-	if (wordCount > 0)
-	    trackType2 = words[0];
-	}
+    hti2 = getHti(db2, table2);
+    if (hti2->spanField[0] !=0)
+	typeWiggle2 = TRUE;
     }
-if ((trackType2 != (char *) NULL) && sameString(trackType2,"wig"))
-    typeWiggle2 = TRUE;
 
 if (allGenome)
     chromList = getOrderedChromList();
@@ -4673,6 +4282,7 @@ printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n\n",
        hgTextName(), httpFormMethod);
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
+
 cgiMakeHiddenVar("table", getTableVar());
 displayPosition();
 preserveConstraints(fullTableName, db, NULL);
@@ -4681,8 +4291,14 @@ preserveTable2();
 printf("<H4> Get "
        "<A HREF=\"/goldenPath/help/hgTextHelp.html#Formats\">Output</A>"
        ": </H4>\n");
-cgiMakeDropList("outputType", outputTypePosMenu, outputTypePosMenuSize,
-		statsPhase);
+
+if (typeWiggle)
+    cgiMakeDropList("outputType", outputTypeWiggleMenu,
+	outputTypeWiggleMenuSize, statsPhase);
+else
+    cgiMakeDropList("outputType", outputTypePosMenu,
+	outputTypePosMenuSize, statsPhase);
+
 cgiMakeButton("phase", getOutputPhase);
 puts("</FORM>");
 
@@ -5056,111 +4672,6 @@ descForm();
 webEnd();
 }
 
-void doGetWiggleData()
-/* Find wiggle data and display it */
-{
-char *db = getTableDb();
-char *table = getTableName();
-struct wiggleData *wigData = (struct wiggleData *) NULL;
-struct wiggleData *wdPtr = (struct wiggleData *) NULL;
-struct trackDb *tdb;
-struct sqlConnection *conn = hAllocOrConnect(db);
-char *track = getTrackName();
-char *typeLine;
-char *longLabel;
-unsigned char visibility;
-unsigned char colorR, colorG, colorB;
-unsigned char altColorR, altColorG, altColorB;
-float priority;
-int wordCount;
-char *words[128];
-char *trackType = (char *) NULL;
-char *visibilities[] = {
-    "hide",
-    "dense",
-    "full",
-    "pack",
-    "squish",
-};
-
-tdb = hMaybeTrackInfo(conn, track);
-if (tdb && tdb->type)
-    {
-    typeLine = cloneString(tdb->type);
-    longLabel = cloneString(tdb->longLabel);
-    priority = tdb->priority;
-    wordCount = chopLine(typeLine,words);
-    if (wordCount > 0)
-	trackType = words[0];
-    colorR = tdb->colorR; colorG = tdb->colorG; colorB = tdb->colorB;
-    altColorR = tdb->altColorR; altColorG = tdb->altColorG;
-    altColorB = tdb->altColorB;
-    visibility = tdb->visibility;
-    }
-else
-    {
-    priority = 42;
-    longLabel = cloneString("wiggle data");
-    colorR = colorG = colorB = 255;
-    altColorR = altColorG = altColorB = 128;
-    visibility = 2;
-    }
-hFreeOrDisconnect(&conn);
-
-saveOutputOptionsState();
-saveIntersectOptionsState();
-
-printf("Content-Type: text/plain\n\n");
-webStartText();
-
-/* temporarily disabled until a method is determined to not kill a
- *	browser with a massive amount of output
-if (! allGenome)
-    wigData = wigFetchData(database, table, chrom, winStart, winEnd,
-	WIG_ALL_DATA, WIG_TABLE_1, wiggleCompare[WIG_TABLE_1], (char *)NULL);
-*/
-
-if (wigData)
-    {
-    unsigned span = 0;
-    char *chrom = (char *) NULL;
-    printf("track type=wiggle_0 name=%s description=\"%s\" "
-	"visibility=%s color=%d,%d,%d altColor=%d,%d,%d "
-	"priority=%g\n", table, longLabel, visibilities[visibility],
-	colorR, colorG, colorB, altColorR, altColorG, altColorB, priority);
-    for (wdPtr = wigData; wdPtr != (struct wiggleData *) NULL;
-		wdPtr= wdPtr->next)
-	{
-	int i;
-	struct wiggleDatum *wd;
-	if ((chrom == (char *) NULL) || differentWord(chrom,wdPtr->chrom))
-	    {
-	    printf("variableStep chrom=%s span=%u\n",
-		wdPtr->chrom, wdPtr->span);
-	    chrom = wdPtr->chrom;
-	    span = wdPtr->span;
-	    }
-	if (span != wdPtr->span)
-	    {
-	    printf("variableStep chrom=%s span=%u\n",
-		wdPtr->chrom, wdPtr->span);
-	    span = wdPtr->span;
-	    }
-	wd = wdPtr->data;
-	for (i = 0; i < wdPtr->count; ++i)
-	    {
-	    printf("%u\t%g\n", wd->chromStart, wd->value);
-	    ++wd;
-	    }
-	}
-    wigFreeData(wigData);
-    }
-else
-    printf("#\tthis data fetch function is under development, expected early April 2004\n");
-
-webEnd();
-}
-
 void doGetStats()
 /* Print out statistics about the query results. */
 {
@@ -5351,6 +4862,7 @@ void doMiddle(struct cart *theCart)
 char *table = NULL;
 char *db = NULL;
 char trash[32];
+struct hTableInfo *hti = NULL;
 
 cart = theCart;
 table = getTableName();
@@ -5359,6 +4871,14 @@ getDbAndGenome(cart, &database, &organism);
 database = cloneString(database);
 hSetDb(database);
 hDefaultConnect();
+
+if (db != NULL && table != NULL)
+    {
+    hti = getHti(db, table);
+
+    if (HTI_IS_WIGGLE)
+	typeWiggle = TRUE;
+    }
 
 freezeName = hFreezeFromDb(database);
 if (freezeName == NULL)
@@ -5437,6 +4957,10 @@ else
 	    doGetBrowserLinks();
 	else if (existsAndEqual("outputType", statsPhase))
 	    doGetStats();
+	else if (existsAndEqual("outputType", ctWigOptionsPhase))
+	    doWiggleCtOptions(TRUE);
+	else if (existsAndEqual("outputType", wigOptionsPhase))
+	    doWiggleCtOptions(FALSE);
 	else
 	    webAbort("Table Browser: CGI option error",
 		     "Error: unrecognized value of CGI var outputType: %s",
@@ -5462,6 +4986,14 @@ else
 	doGetGFF();
     else if (existsAndEqual("phase", bedOptionsPhase))
 	doBedCtOptions(FALSE);
+    else if (existsAndEqual("phase", getCtWigglePhase))
+	doGetWiggleData(TRUE);
+    else if (existsAndEqual("phase", ctWigOptionsPhase))
+	doWiggleCtOptions(TRUE);
+    else if (existsAndEqual("phase", wigOptionsPhase))
+	doWiggleCtOptions(FALSE);
+    else if (existsAndEqual("phase", getWigglePhase))
+	doGetWiggleData(FALSE);
     else if (existsAndEqual("phase", ctOptionsPhase))
 	doBedCtOptions(TRUE);
     else if (existsAndEqual("phase", getBedPhase))
@@ -5478,8 +5010,6 @@ else
 	doIntersectOptions();
     else if (existsAndStartsWith("phase", histPhase))
 	doGetHistogram();
-    else if (existsAndEqual("phase", wigglePhase))
-	doGetWiggleData();
     else if (existsAndStartsWith("phase", descTablePhase))
 	doDescTable();
     else
@@ -5498,7 +5028,7 @@ if (position != NULL)
  * permanently. */
 char *excludeVars[] = {"Submit", "submit", 
 	"tbUserKeys",
-	"tbShowPasteResults", "tbShowUploadResults"};
+	"tbShowPasteResults", "tbShowUploadResults", NULL};
 
 
 int main(int argc, char *argv[])

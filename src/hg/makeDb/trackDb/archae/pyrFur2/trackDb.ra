@@ -1,6 +1,6 @@
 track llaPfuPrintA
 shortLabel LL microarray A
-longLabel Lowe lab and DiRuggerio lab full-genome P. furiosus microarray experiments
+longLabel Lowe lab and DiRuggiero lab full-genome P. furiosus microarray experiments
 group regulation
 priority 85.0
 visibility dense

@@ -507,6 +507,7 @@ enum affyOptEnum {
     affyChipType = 0,
     affyId = 1,
     affyTissue = 2,
+    affyAllData = 3,
 };
 
 enum affyOptEnum affyStringToEnum(char *string);

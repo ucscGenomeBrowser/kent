@@ -3748,6 +3748,7 @@ LOAD AffyUclaRatio [in progress jk Sept 19, 2003]
     rm HG-U133AB_all 
 
 # DO FAMILY BROWSER VERSIONS OF AFFYUCLANORMAL TRACK (In Progress -jk 3/2/2004)
+# (This is suspended because GNF Gene Atlas data is available and public!)
    # Create affyU133Orient table data
    ssh eieio
    cd /cluster/data/hg16/bed/affyUcla.2044-02-04
@@ -3775,6 +3776,46 @@ LOAD AffyUclaRatio [in progress jk Sept 19, 2003]
    # Do clustering (this takes about 10 minutes to run)
    clusterRna hg16 u133Cluster.bed /dev/null -noEst -noRefSeq -group=u133Group.tab -mRNAOrient=affyU133OrientInfo -rna=affyU133
 ~~~
+
+# GNF ATLAS 2  [Done jk 3/29/2004]
+    # Align probes from GNF1H chip.
+    ssh kk
+    cd /cluster/data/hg16/bed
+    mkdir -p geneAtlas2/run/psl
+    cd geneAtlas2/run
+    mkdir -p /cluster/bluearc/geneAtlas2
+    cp /projects/compbio/data/microarray/geneAtlas2/human/gnf1h.fa /cluster/bluearc/geneAtlas2
+    ls -1 /scratch/hg/gs.17/build34/trfFa/ > genome.lst
+    ls -1 /cluster/bluearc/geneAtlas2/gnf1h.fa > mrna.lst
+    echo '#LOOP\nblat -fine -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.17/build34/trfFa/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > gsub
+    gensub2 genome.lst mrna.lst gsub spec
+    para create spec
+    para try
+    para check
+    para push
+    para time
+#Completed: 491 of 491 jobs
+#CPU time in finished jobs:      10718s     178.63m     2.98h    0.12d  0.000 y
+#IO & Wait Time:                  1499s      24.99m     0.42h    0.02d  0.000 y
+#Average job time:                  25s       0.41m     0.01h    0.00d
+#Longest job:                      652s      10.87m     0.18h    0.01d
+#Submission to last job:           723s      12.05m     0.20h    0.01d
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create gnf1h.psl.
+    pslSort dirs raw.psl tmp psl
+    pslReps -minCover=0.3 -minAli=0.95 -nearTop=0.005 raw.psl contig.psl /dev/null
+    liftUp ../affyGnf1h.psl ../../../jkStuff/liftAll.lft warn contig.psl
+    rm -r contig.psl raw.psl psl
+
+    # Load probes and alignments from GNF1H into database.
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/geneAtlas2
+    ln -s /projects/compbio/data/microarray/geneAtlas2/human/gnf1h.fa /gbdb/hgFixed/affyProbes
+    hgLoadPsl hg16 affyGnf1h.psl
+    hgLoadSeq hg16 /gbdb/hgFixed/affyProbes/gnf1h.fa
+
+    
+
 
 # GENE BOUNDS (RNACLUSTER) (DONE 10-05-03 Chuck)
     # Create rnaCluster table (depends on {est,mrna}OrientInfo created but not checked in)
@@ -7262,49 +7303,92 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     # save a little space
     gzip jaxOrtholog.tab
 
-LOAD ACEMBLY (WORKING - 2004-02-21 - Hiram)
+LOAD ACEMBLY (DONE - 2004-03-30 - Hiram)
     mkdir -p /cluster/data/hg16/bed/acembly
     cd /cluster/data/hg16/bed/acembly
-    # Get acembly*gene.gff from Jean and Danielle Thierry-Mieg
-    set build = ncbi_34
-    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/$build.human.genes/acembly.$build.genes.proteins.fasta.tar.gz
-    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/$build.human.genes/acembly.$build.genes.gff.tar.gz
-    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/$build.human.genes/acembly.$build.genes.pfamhits.tar.gz
-    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/$build.human.genes/acembly.$build.mrnas.fasta.tar.gz
-    gunzip -c acembly.$build.genes.gff.tar.gz | tar xvf -
-    gunzip -c acembly.$build.genes.proteins.fasta.tar.gz | tar xvf -
-    cd acembly.$build.genes.gff
+
+    # Data is obtained from:
+    # Danielle et Jean Thierry-Mieg	mieg@ncbi.nlm.nih.gov
+
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_34.human.genes/acembly.ncbi_34.genes.proteins.fasta.tar.gz
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_34.human.genes/acembly.ncbi_34.genes.gff.tar.gz
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_34.human.genes/acembly.ncbi_34.mrnas.fasta.tar.gz
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_34.human.genes/acembly.ncbi_34.genes.pfamhits.tar.gz
+
+    tar xvzf acembly.ncbi_34.genes.gff.tar.gz
+    tar xvzf acembly.ncbi_34.genes.proteins.fasta.tar.gz
+    cd acembly.ncbi_34.genes.gff
+
+    # chrom 6.gff is broken, it has a bogus number in the first column
+    #	where a 6 should be.  Fix-up until I hear from the authors:
+    mv x1.acemblygenes.6.gff x1.acemblygenes.6.gff.broken
+    sed -e "s/^28212469/6/" x1.acemblygenes.6.gff.broken > x1.acemblygenes.6.gff 
+
+    #	There are a number of start and end coordinates that are
+    #	in reversed order.  Until I hear from the authors, I have
+    #	switched those coords:
+    cat << '_EOF_' > fixupReversedBlocks
+#!/bin/sh
+for i in x1*.gff
+do
+        echo -n "$i working ..."
+        awk -F"\t" '
+{
+if ($4 > $5) {
+        printf "%s\t%s\t%s\t%s\t%s", $1, $2, $3, $5, $4
+        for ( i = 6; i <= NF; ++i ) {
+                printf "\t%s", $i
+        }
+        printf "\n"
+} else
+        print
+}
+' $i > $i.fixed
+        echo " done"
+done
+'_EOF_'
+    chmod +x fixupReversedBlocks
+    ./fixupReversedBlocks
+
     # Save just the floating-contig features to different files for lifting 
     # and lift up the floating-contig features to chr*_random coords:
     # NOTE: file prefix (x1) has been added since build 31
-    foreach f (x1.acemblygenes.*.gff)
+
+    foreach f (x1.acemblygenes.*.gff.fixed)
       set c=$f:r:e
+      set c=$f:r:r:e
       egrep '^[a-zA-Z0-9]+\|NT_[0-9][0-9][0-9][0-9][0-9][0-9]' $f | \
         perl -wpe 's/^(\w+)\|(\w+)/$1\/$2/' > ctg-chr${c}_random.gff
       if (-e ../../../$c/lift/random.lft) then
         liftUp chr${c}_random.gff ../../../$c/lift/random.lft warn \
           ctg-chr${c}_random.gff
       endif
-      # Strip out _random or floating contig lines from the normal chrom gff,
-      # and add the "chr" prefix:
-      grep -v ^$c\| $f | grep -v ^Hs | perl -wpe 's/^/chr/;' > chr$c.gff
+      grep -v ^$c\| $f | grep -v ^Hs | perl -wpe 's/^/chr/;' | \
+	grep -v "^chr//" > chr$c.gff
+      echo "done $c"
     end
-
-    cd ../acembly.$build.genes.proteins.fasta
-    #- Remove G_t*_ prefixes from acemblyproteins.*.fasta:
-    foreach f (x1.acemblyproteins.*.fasta)
-      perl -wpe 's/^\>G_t[\da-zA-Z]+_/\>/' $f > chr$f:r:e.fa
-    end
+    # that last grep strips out _random or floating contig lines from the
+    # normal chrom gff, and add the "chr" prefix
+    #	Three of them end up empty, check for this and remove them
+    #	if necessary
+    rm -f chr19_random.gff chr18_random.gff chrUn.gff
+    #	There was one error in a coordinate on chr17_random:
+    # chr17_random    acembly stop_codon      -2      0       .       +       1      gene_id M17S2; transcript_id M17S2.cDec03;
+    #	This line was removed (shows up as first line) from
+    #	chr17_random.gff before the database load
 
     #- Load into database:
     cd ..
-    ldHgGene hg16 acembly acembly.$build.genes.gff/chr*.gff
+    ldHgGene -gtf hg16 acembly acembly.ncbi_34.genes.gff/chr*.gff
     hgPepPred hg16 generic acemblyPep \
-      acembly.$build.genes.proteins.fasta/chr*.fa
-    unset build
+	acembly.ncbi_34.genes.proteins.fasta/*.fasta
 
+    #	check that the track is OK
+    checkTableCoords hg16 acembly
+    #	should display no errors
 
 # MAKE HUMAN-CHIMP OVER.CHAIN FOR LIFTOVER (DONE 3/2/04 angie)
+g 
     ssh kolossus
     mkdir /cluster/data/hg16/bed/bedOver/hg16toPt0
     cd /cluster/data/hg16/bed/bedOver/hg16toPt0
@@ -7848,4 +7932,98 @@ end
 
     #Add description file: mzPt1Mm3Rn3Gg2_pHMM.html
     #Add track to trackDb.ra: mzPt1Mm3Rn3Gg2_pHMM
+
+# EXONIPHY HMR
+# (started, acs, 2004-03-23)
+
+    ssh hgwdev
+    # (update woody binaries, if necessary -- see above)
+    # (also, make sure /cluster/bin/woody in path)
+    mkdir /cluster/store6/exoniphy.hg16mm3rn3.2004-03-23
+    cd /cluster/data/hg16/bed
+    ln -s /cluster/store6/exoniphy.hg16mm3rn3.2004-03-23
+    ln -s exoniphy.hg16mm3rn3.2004-03-23 exoniphy.hg16mm3rn3
+
+    # first, break up the genome-wide MAFs into pieces; it's worth doing
+    # this as a little cluster job
+    ssh eieio
+    mkdir -p /cluster/bluearc/hg16/bed/humor
+    cp /cluster/data/hg16/bed/humor/hmr/*.maf /cluster/data/hg16/?{,?}/chr*.fa /cluster/bluearc/hg16/bed/humor
+    logout
+    ssh kk
+    cd /cluster/data/hg16/bed/exoniphy.hg16mm3rn3
+    cat << EOF > doSplit
+#!/bin/sh
+
+WOODY=/cluster/bin/woody
+FA_SRC=/cluster/bluearc/hg16/bed/humor
+WINDOWS=/cluster/data/hg16/bed/exoniphy.hg16mm3rn3/WINDOWS
+
+maf=$1
+prefix=`echo $maf | awk -F\/ '{print $NF}' | awk -F\. '{print $1}'` 
+chr=`echo $prefix | sed 's/chr//g ; s/_random//g'`
+mkdir -p /scratch/msa_split
+${WOODY}/msa_split $maf -i MAF -M ${FA_SRC}/$prefix.fa -O hg16,mm3,rn3 -w 50000,2000 -r /scratch/msa_split/$prefix -o SS -I 1000 -d 1 -B 1000 -T 3
+mkdir -p ${WINDOWS}/$chr
+cd /scratch/msa_split
+for file in `ls | egrep -w ${prefix}` ; do gzip -c $file > ${WINDOWS}/$chr/$file.gz ; rm $file ; done
+EOF
+
+    chmod +x doSplit
+    mkdir -p WINDOWS
+    rm -rf WINDOWS/* jobs.lst
+    for file in /cluster/bluearc/hg16/bed/humor/*.maf ; do echo "doSplit $file" >> jobs.lst ; done
+    para create jobs.lst  
+    # etc ...   (run cluster job)
+
+
+    # now set up cluster job for exoniphy.  Use phylo-HMMs estimated
+    # for RECOMB '04 paper.  (below requires bash shell)
+    TRAIN=/cluster/home/acs/RECOMB2004/TRAIN
+    TEST=/cluster/home/acs/RECOMB2004/TEST-NEW
+    OPTIONS="${TEST}/models-icnc-physpldg-gc1,${TEST}/models-icnc-physpldg-gc2,${TEST}/models-icnc-physpldg-gc3,${TEST}/models-icnc-physpldg-gc4,${TEST}/models-icnc-physpldg-gc5 -c ${TRAIN}/exons-newsplice.cm -H ${TRAIN}/exons-hmr-indel-spl_tweak.hmm -f -q -U -W 10,11,20,21,27,28,29,30,start,stop -b cds -V icnc -I cds,background,icnc,5\'splice,3\'splice,prestart -i SS -D 0.4,0.45,0.5,0.55 -X 0.036"
+    # FIXME: next time add -S  (log odds scores)
+    cat << EOF > doLabel
+#!/bin/bash
+zcat \$1 | /cluster/bin/woody/label -m - -d $OPTIONS \${*:2}
+EOF
+    chmod +x doLabel
+    rm -f jobs.lst
+    for dir in WINDOWS/* ; do
+	chr=`echo $dir | awk -F\/ '{print $NF}'`
+	mkdir -p OUTPUT/$chr
+	find OUTPUT/$chr -name "*.bed" -exec rm {} \; 
+	find OUTPUT/$chr -name "*.gff" -exec rm {} \;
+	for file in `ls $dir | sort -n -t\. +1`; do 
+	    base=`basename $file .ss.gz`
+	    prefix=`echo $base | awk -F\. '{print $1}'`
+	    echo "doLabel WINDOWS/$chr/$file -o OUTPUT/$chr/$base -s $prefix " >> jobs.lst 
+	done 
+    done
+    
+    para create jobs.lst
+    # etc... (run cluster job)
+    logout
+
+    # create track
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/exoniphy.hg16mm3rn3
+    rm -f all.bed
+    for dir in OUTPUT/* ; do 
+	    echo "cleaning up $dir..."
+	    find $dir -name "*.bed" -size 0 -exec rm {} \; 
+	    echo "getting predictions from $dir..."
+	    for file in `ls $dir | grep bed | sort -t\. -k1,1 -k2,2n`; do cat $dir/$file >> all.bed ; done 
+    done
+
+    hgLoadBed hg16 exoniphy all.bed 
+#track exoniphy
+#shortLabel Exoniphy 
+#longLabel Exoniphy: Conserved Exon Predictions (Human/Mouse/Rat)
+#group genes
+#priority 50.9
+#visibility hide
+#color 173,17,162
+#exonArrows on
+#type bed 12
 

@@ -78,3 +78,24 @@ color 100,50,0
 altColor 128,120,100
 type axt dm1
 
+
+searchTable gold
+searchMethod exact
+searchType gold
+shortCircuit 1
+termRegex Contig[0-9]+(_Contig[0-9]+)?
+searchPriority 8
+
+searchTable bdgpLiftGene
+searchMethod exact
+searchType genePred
+termRegex CG[0-9]+-R.
+searchPriority 15
+
+searchName bdgpLiftGenePrefix
+searchTable bdgpLiftGene
+searchMethod exact
+termRegex CG[0-9]+
+query select chrom,txStart,txEnd,name from %s where name like '%s-R_'
+searchPriority 16
+

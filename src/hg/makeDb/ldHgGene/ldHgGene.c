@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.29 2004/03/17 03:41:40 markd Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.30 2004/03/31 18:08:15 markd Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
 boolean requireCDS = FALSE;     /* should genes with CDS be dropped */
@@ -134,6 +134,7 @@ boolean isGtf = optionExists("gtf");
 boolean isSoftberry = sameWord("softberryGene", table);
 boolean isEnsembl = sameWord("ensGene", table);
 boolean isSanger22 = sameWord("sanger22", table);
+int nextId = 1;
 
 for (i=0; i<gtfCount; ++i)
     {
@@ -167,7 +168,11 @@ for (group = gff->groupList; group != NULL; group = group->next)
         if (requireCDS && (gp->cdsStart == gp->cdsEnd))
             genePredFree(&gp);
         else
+            {
+            if (gOptFields & genePredIdFld)
+                gp->id = nextId++;
             slAddHead(&gpList, gp);
+            }
 	}
     }
 printf("%d gene predictions\n", slCount(gpList));
@@ -203,6 +208,8 @@ if (optionExists("frame"))
     gOptFields |= (genePredCdsStatFld|genePredExonFramesFld);
 if (optionExists("geneName"))
     gOptFields |= genePredName2Fld;
+if (optionExists("id"))
+    gOptFields |= genePredIdFld;
 
 if (optionExists("predTab"))
     ldHgGenePred(argv[1], argv[2], argc-3, argv+3);
