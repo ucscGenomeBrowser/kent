@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.62 2004/08/06 03:05:05 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.63 2004/09/03 23:04:11 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -102,15 +102,43 @@ if (monitorFlags)
 return deltaTime;
 }
 
+static void monitorPrint(struct sqlConnection *sc, char *name,
+                         char *format, ...)
+#if defined(__GNUC__) && defined(JK_WARN)
+__attribute__((format(printf, 3, 4)))
+#endif
+/* print a monitor message, with connection id and databases.  Handle
+ * indentation.   Format maybe NULL. */
+{
+va_list args;
+fprintf(stderr, "%.*s%s %ld %s ", traceIndent, indentStr, name,
+        sc->conn->thread_id, sc->conn->db);
+if (format != NULL)
+    {
+    va_start(args, format);
+    vfprintf(stderr, format, args);
+    va_end(args);
+    }
+fputc('\n', stderr);
+}
+
 static void monitorPrintTime()
 /* print total time */
 {
 /* only print if not explictly disabled */
 if (monitorFlags & JKSQL_PROF)
     {
-    fprintf(stderr, "%.*sSQL_TOTAL_TIME: %0.3fs\n", traceIndent, indentStr,
+    fprintf(stderr, "%.*sSQL_TOTAL_TIME %0.3fs\n", traceIndent, indentStr,
             ((double)sqlTotalTime)/1000.0);
     }
+}
+
+static void monitorPrintQuery(struct sqlConnection *sc, char *query)
+/* print a query, replacing newlines with \n */
+{
+char *cleaned = replaceChars(query, "\n", "\\n");
+monitorPrint(sc, "SQL_QUERY", "%s", cleaned);
+freeMem(cleaned);
 }
 
 void sqlMonitorEnable(unsigned flags)
@@ -123,7 +151,9 @@ void sqlMonitorEnable(unsigned flags)
  * These options can also be enabled by setting the JKSQL_TRACE and/or
  * JKSQL_PROF environment variables to "on".  The cheapcgi module will set
  * these environment variables if the corresponding CGI variables are set
- * to "on".
+ * to "on".  These may also be set in the .hg.conf file.  While this method
+ * of setting these parameters is a bit of a hack, it avoids uncessary
+ * dependencies.
  */
 {
 monitorFlags = flags;
@@ -199,6 +229,8 @@ if (sc != NULL)
 	}
     if (conn != NULL)
 	{
+        if (monitorFlags & JKSQL_TRACE)
+            monitorPrint(sc, "SQL_DISCONNECT", NULL);
         monitorEnter();
 	mysql_close(conn);
         monitorLeave();
@@ -348,10 +380,6 @@ sc->resultList = newDlList();
 sc->node = dlAddValTail(sqlOpenConnections, sc);
 
 monitorEnter();
-if (monitorFlags & JKSQL_TRACE)
-    fprintf(stderr, "%.*sSQL_CONNECT: %s %s %s\n",
-            traceIndent, indentStr, host, user, database);
-
 if ((sc->conn = conn = mysql_init(NULL)) == NULL)
     {
     monitorLeave();
@@ -373,6 +401,9 @@ if (mysql_real_connect(
 	    database, host, user, mysql_error(conn));
     return NULL;
     }
+if (monitorFlags & JKSQL_TRACE)
+    monitorPrint(sc, "SQL_CONNECT", "%s %s", host, user);
+
 monitorLeave();
 return sc;
 }
@@ -468,7 +499,7 @@ long deltaTime;
 
 monitorEnter();
 if (monitorFlags & JKSQL_TRACE)
-    fprintf(stderr, "%.*sSQL_QUERY: %s\n", traceIndent, indentStr, query);
+    monitorPrintQuery(sc, query);
 
 if (mysql_real_query(conn, query, strlen(query)) != 0)
     {
@@ -499,8 +530,7 @@ else
     }
 deltaTime = monitorLeave();
 if (monitorFlags & JKSQL_TRACE)
-    fprintf(stderr, "%.*sSQL_TIME: %0.3fs\n", traceIndent, indentStr,
-            ((double)deltaTime)/1000.0);
+    monitorPrint(sc, "SQL_TIME", "%0.3fs", ((double)deltaTime)/1000.0);
 return res;
 }
 

@@ -271,7 +271,9 @@ void sqlMonitorEnable(unsigned flags);
  * These options can also be enabled by setting the JKSQL_TRACE and/or
  * JKSQL_PROF environment variables to "on".  The cheapcgi module will set
  * these environment variables if the corresponding CGI variables are set
- * to "on".
+ * to "on".  These may also be set in the .hg.conf file.  While this method
+ * of setting these parameters is a bit of a hack, it avoids uncessary
+ * dependencies.
  */
 
 void sqlMonitorSetIndent(unsigned indent);
