@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: textHistogram.c,v 1.14 2004/02/23 18:10:36 kent Exp $";
+static char const rcsid[] = "$Id: textHistogram.c,v 1.15 2004/05/19 23:19:55 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -18,7 +18,6 @@ static struct optionSpec optionSpecs[] = {
     {"real", OPTION_BOOLEAN},
     {"autoscale", OPTION_INT},
     {"pValues", OPTION_BOOLEAN},
-    {"extra", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -35,7 +34,6 @@ int col = 0;
 int aveCol = -1;
 boolean real = FALSE;
 int autoscale = 0;
-boolean extraVerbose = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -57,7 +55,6 @@ errAbort(
   "   -real - Data input are real values (default is integer)\n"
   "   -autoscale=N - autoscale to N # of bins\n"
   "   -pValues - show p-Values as well as counts (sets -noStar too)\n"
-  "   -extra - extra outputs during processing\n"
   );
 }
 
@@ -74,10 +71,10 @@ double max = - HUGE;
 double range = 0.0;
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
 
-while (wordCount = lineFileChop(lf, row))
+while ((wordCount = lineFileChop(lf, row)))
     {
     double d;
-    if (wordCount <= col || wordCount <= aveCol)
+    if ((wordCount <= col) || (wordCount <= aveCol))
         errAbort("Not enough words line %d of %s", lf->lineIx, lf->fileName);
     d = lineFileNeedDouble(lf, row, col);
     if ( d < min ) min = d;
@@ -108,24 +105,22 @@ else
     fprintf(stderr, "#\tautoscale data range: (%d - %d)/%d = %d\n",
 	(int) ceil(max), minVal, maxBinCount, binSize);
     }
-if (extraVerbose)
+verbose(2, "#\tautoscale number of data values: %lu\n", dataCount);
+    
+verbose(2, "#\tautoscale maxBinCount: %d\n", maxBinCount);
+if (real)
     {
-    fprintf(stderr, "#\tautoscale number of data values: %lu\n", dataCount);
-    fprintf(stderr, "#\tautoscale maxBinCount: %d\n", maxBinCount);
-    if (real)
-	{
-    fprintf(stderr, "#\tautoscale data range: %g = [%g:%g]\n",
+    verbose(2, "#\tautoscale data range: %g = [%g:%g]\n",
 	range, minValR, max);
-    fprintf(stderr, "#\tautoscale minVal: %g\n", minValR);
-    fprintf(stderr, "#\tautoscale binSize: %g\n", binSizeR);
-	}
-    else
-	{
-    fprintf(stderr, "#\tautoscale data range: %g = [%d:%d]\n",
+    verbose(2, "#\tautoscale minVal: %g\n", minValR);
+    verbose(2, "#\tautoscale binSize: %g\n", binSizeR);
+    }
+else
+    {
+    verbose(2, "#\tautoscale data range: %g = [%d:%d]\n",
 	range, minVal, (int) ceil(max));
-    fprintf(stderr, "#\tautoscale minVal: %d\n", minVal);
-    fprintf(stderr, "#\tautoscale binSize: %d\n", binSize);
-	}
+    verbose(2, "#\tautoscale minVal: %d\n", minVal);
+    verbose(2, "#\tautoscale binSize: %d\n", binSize);
     }
 }	/*	autoScale()	*/
 
@@ -153,7 +148,7 @@ if (aveCol >= 0)
 
 /* Go through each line of input file accumulating
  * data. */
-while (wordCount = lineFileChop(lf, row))
+while ((wordCount = lineFileChop(lf, row)))
     {
     int x;	/*	will become the index into hist[]	*/
     if (wordCount <= col || wordCount <= aveCol)
@@ -191,8 +186,7 @@ while (wordCount = lineFileChop(lf, row))
 	}
 	else
 	    {
-	    if (extraVerbose)
-		fprintf(stderr, "truncating index %d\n", x);
+	    verbose(2, "truncating index %d\n", x);
 	    truncation = (x > truncation) ? x : truncation;
 	    }
     }
@@ -244,7 +238,7 @@ if (doLog)
 
 begin = minData;
 end = maxData + 1;
-if (extraVerbose)
+if (verboseLevel()>1)
     {
     begin = 0;
     end = maxBinCount;
@@ -255,13 +249,13 @@ if (pValues)
     totalCounts = 0;
     for (i=begin; i<end; ++i)
 	totalCounts += hist[i];
-    if (extraVerbose)
+    if (verboseLevel()>1)
 	printf("#\ttotal data values: %llu\n", totalCounts);
     if (totalCounts < 1)
 	errAbort("ERROR: No bins with any data ?\n");
     }
 
-if (extraVerbose)
+if (verboseLevel()>1)
     {
     if (noStar) {
 	if (pValues)
@@ -299,7 +293,7 @@ for (i=begin; i<end; ++i)
 	ct = log(ct);
     if (noStar)
 	{
-	if (extraVerbose)
+	if (verboseLevel()>1)
 	    printf("%2d\t", i);
 	if (real)
 	    printf("%3d %g:%g\t%f", i, binStartR, binStartR+binSizeR, ct);
@@ -314,7 +308,7 @@ for (i=begin; i<end; ++i)
     else
 	{
 	int astCount = round(ct * 60.0 / maxCt);
-	if (extraVerbose)
+	if (verboseLevel()>1)
 	    printf("%2d ", i);
 	if (real)
 	    printf("%f ", binStartR);
@@ -349,7 +343,6 @@ col = optionInt("col", 1) - 1;
 aveCol = optionInt("aveCol", 0) - 1;
 real = optionExists("real");
 autoscale = optionInt("autoscale", 0);
-extraVerbose = optionExists("extra");
 
 /*	pValues turns on noStar too	*/
 if (pValues) noStar = TRUE;
@@ -376,30 +369,26 @@ else
     minVal = atoi(minValStr);
     }
 
-if (extraVerbose)
-    {
-    fprintf(stderr, "#\textra on, options:\n");
-    fprintf(stderr, "#\tbinSize: ");
-    if (real) fprintf(stderr, "%f\n", binSizeR);
-	else fprintf(stderr, "%d\n", binSize);
-    fprintf(stderr, "#\tmaxBinCount: %d\n", maxBinCount);
-    fprintf(stderr, "#\tminVal: ");
-    if (real) fprintf(stderr, "%f\n", minValR);
-	else fprintf(stderr, "%d\n", minVal);
-    fprintf(stderr, "#\tlog function: %s\n", doLog ? "ON" : "OFF" );
-    fprintf(stderr, "#\tdraw asterisks: %s\n", noStar ? "NO" : "YES" );
-    fprintf(stderr, "#\thistogram on data input column: %d\n", col+1);
-    if (aveCol >= 0)
-	fprintf(stderr, "#\taveCol: %d\n", aveCol);
-    else
-	fprintf(stderr, "#\taveCol: not selected\n");
-    fprintf(stderr, "#\treal valued data: %s\n", real ? "YES" : "NO" );
-    if (autoscale > 0)
-	fprintf(stderr, "#\tautoscaling to %d bins\n", autoscale);
-    else
-	fprintf(stderr, "#\tautoscale: not selected\n");
-    fprintf(stderr, "#\tshow p-Values: %s\n", pValues ? "YES" : "NO" );
-    }
+verbose(2,"#\tbinSize: ");
+if (real) verbose(2, "%f\n", binSizeR);
+    else verbose(2, "%d\n", binSize);
+verbose(2,"#\tmaxBinCount: %d\n", maxBinCount);
+verbose(2,"#\tminVal: ");
+if (real) verbose(2, "%f\n", minValR);
+    else verbose(2, "%d\n", minVal);
+verbose(2,"#\tlog function: %s\n", doLog ? "ON" : "OFF" );
+verbose(2,"#\tdraw asterisks: %s\n", noStar ? "NO" : "YES" );
+verbose(2,"#\thistogram on data input column: %d\n", col+1);
+if (aveCol >= 0)
+    verbose(2, "#\taveCol: %d\n", aveCol);
+else
+    verbose(2, "#\taveCol: not selected\n");
+verbose(2,"#\treal valued data: %s\n", real ? "YES" : "NO" );
+if (autoscale > 0)
+    verbose(2, "#\tautoscaling to %d bins\n", autoscale);
+else
+    verbose(2, "#\tautoscale: not selected\n");
+verbose(2, "#\tshow p-Values: %s\n", pValues ? "YES" : "NO" );
 
 /*	to autoscale stdin we would need to keep all the data read in
  *	during the min,max scan and reuse that data for the histogram

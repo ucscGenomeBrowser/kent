@@ -10,3 +10,6 @@ O = textHistogram.o
 textHistogram: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/textHistogram $O $(MYLIBS) $L
 	strip $(HOME)/bin/$(MACHTYPE)/textHistogram
+
+clean:
+	rm -f ${O}
