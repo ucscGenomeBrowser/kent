@@ -179,29 +179,30 @@ protein property data and links to a wealth of related information.
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
 	<TR><TD WIDTH=10>&nbsp;</TD><TD>
 <P>
-The UCSC Genome Bioinformatics <A HREF="http://genome.ucsc.edu" TARGET=_blank>home
-page</A>
+The UCSC Genome Bioinformatics <A HREF="http://genome.ucsc.edu" 
+TARGET=_blank>home page</A>
 provides access to Genome Browsers on several different genome assemblies. 
-To get started, click the Browser link on the blue sidebar. This will take you
-to a Gateway page where you can select which genome to display.
+To get started, click the Browser link on the blue sidebar. This will take 
+you to a Gateway page where you can select which genome to display.
 <P>
 <B>Opening the Genome Browser at a specific position</B><BR> 
-To get oriented in using the Genome Browser, try viewing a gene or region of the genome with 
-which you are already familiar, or use the default position. To open the Genome Browser
-window:
+To get oriented in using the Genome Browser, try viewing a gene or region of 
+the genome with which you are already familiar, or use the default position. 
+To open the Genome Browser window:
 <TABLE>
 	<TR><TD WIDTH="20" VALIGN="top"><B>1.</B></TD><TD>
-	Select the clade, genome and assembly that you want to display from 
-	the corresponding menus.
-	To access older assembly versions that are no longer available from the menu,
-	look in the Genome Browser <A HREF="http://genome-archive.cse.ucsc.edu/"
+	Select the clade, genome and assembly that you wish to display from 
+	the corresponding pull-down menus. To access older assembly versions 
+	that are no longer available from the menu, look in the Genome 
+	Browser <A HREF="http://genome-archive.cse.ucsc.edu/"
 	TARGET=_blank>archives</A>.
 	</TD></TR>
 
 	<TR><TD WIDTH="20" VALIGN="top"><B>2.</B></TD><TD>
-	Specify the genome location you'd like the Genome Browser to open to. To 
-	select a location, enter a valid position query in the <I>position</I> 
-	text box at the top of the Gateway page or accept the default position already 
+	Specify the genome location you'd like the Genome Browser to open to.
+	To select a location, enter a valid position query in the 
+	<I>position</I> text box at the top of the Gateway page or accept the
+	default position already 
 	displayed. The position search supports several different types of queries: gene 
 	symbols, mRNA or EST accession numbers, chromosome 
 	bands, descriptive terms likely to occur in GenBank text, or specific chromosomal 
@@ -217,18 +218,22 @@ window:
 	</TD></TR>
 </TABLE>
 <P>
-Occasionally the Gateway page returns a list of several matches in response to a 
-position search, rather than immediately displaying the Genome Browser window. When
-this occurs, click on the item in which you're interested and the Genome Browser
-will open to that location.
+Occasionally the Gateway page returns a list of several matches in response 
+to a position search, rather than immediately displaying the Genome Browser 
+window. When this occurs, click on the item in which you're interested and 
+the Genome Browser will open to that location.
 <P>
-The position search mechanism is not a site-wide search engine. Instead, it primarily 
-searches GenBank mRNA records whose text annotations can include gene names, gene 
-symbols, journal title words, author names, and RefSeq mRNAs. Searches on other
-selected identifiers, such as NP and
-NM accession numbers, OMIM identifiers, and Entrez Gene IDs are supported. 
-However, some types of position queries will return an error, e.g. post-assembly GenBank 
-entries, withdrawn gene names, and abandoned synonyms. 
+The position search mechanism is not a site-wide search engine. Instead, it 
+primarily searches GenBank mRNA records whose text annotations can include 
+gene names, gene symbols, journal title words, author names, and RefSeq 
+mRNAs. Searches on other selected identifiers, such as NP and NM accession 
+numbers, OMIM identifiers, and Entrez Gene IDs are supported.  However, some 
+types of position queries will return an error, e.g. post-assembly GenBank 
+entries, withdrawn gene names, and abandoned synonyms. If your initial
+position query is unsuccessful, try entering a different related term that
+may produce the same location. For example, if a query on a gene symbol
+produces no results, try entering an mRNA accession, gene ID number, or
+descriptive words associated with the gene.
 <P>
 <B>Finding a genome location using BLAT</B><BR>
 If you have genomic, mRNA, or protein sequence, but don't know the name or
@@ -350,18 +355,19 @@ misleading matches in genome coordinates found by alignment.
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
 	<TR><TD WIDTH=10>&nbsp;</TD><TD>
 <p>
-The Genome Browser page displays a genome location specified
-through a Gateway position search, a BLAT search, or an uploaded custom annotation track.
-There are four main features on this page: a set of navigation controls, a 
-chromosome ideogram, the annotations tracks image, and a set of display controls.
+The Genome Browser annotation tracks page displays a genome location 
+specified through a Gateway position search, a BLAT search, or an uploaded 
+custom annotation track. There are five main features on this page: a set of 
+<A HREF="#NAV">navigation controls</A>, a 
+chromosome ideogram, the annotations tracks image, 
+<A HREF=#TRACK_CONFIG>display configuration buttons</A>, and a set of track 
+<A HREF="#TRACK_CONT">display controls</A>.
 <P>
 The first time you open the
 Genome Browser, it will use the application default values to configure the
-annotation track display. By manipulating the navigation and display 
-configuration controls, you can customize the annotation tracks display to 
-suit your needs. The display controls are grouped into categories that reflect 
-the type of
-data in the track, e.g. Gene Prediction Tracks, mRNA and EST tracks, etc. 
+annotation tracks display. By manipulating the navigation, configuration 
+and display controls, you can customize the annotation tracks display to 
+suit your needs. 
 For a complete description of the annotation tracks available in all assembly
 versions supported by the Genome Browser, see the <A HREF="#IndivTracks">
 Annotation Track Descriptions</A> section.
@@ -382,9 +388,10 @@ display conventions:<BR>
 	descriptions:</B> 
 	Each annotation track has an associated description page that contains a
 	discussion of the track, the methods used to create the annotation, the data 
-	sources and credits for the track, and (in some cases) filters to
-	fine-tune the information displayed in the track. To display the
-	description page, click on the gray mini-button to the left of a displayed
+	sources and credits for the track, and (in some cases) filter and
+	configuration options to
+	fine-tune the information displayed in the track. To view the
+	description page, click on the mini-button to the left of a displayed
 	track or on the label for the track in the Track Controls section.</TD></TR>
 
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>Annotation track
@@ -491,6 +498,7 @@ display conventions:<BR>
 	information on interpreting the display.</TD></TR>
 </TABLE> 
 <P>
+<A NAME="TRACK_CONT"></A>
 <B>Changing the display mode of an individual annotation track</B><BR>
 Each annotation track within the window may have up to five display modes: 
 <P>
@@ -555,12 +563,30 @@ Each annotation track within the window may have up to five display modes:
 	</TD></TR>
 </TABLE> 
 <P>
+The track display controls are grouped into categories that reflect the type 
+of data in the track, e.g. Gene Prediction Tracks, mRNA and EST tracks, etc. 
 To change the display mode for a track, find the track's controller in the
 Track Controls section at the bottom of the Genome Browser page, select the desired
 mode from the control's display menu, and then click the <I>refresh</I> button. 
 Alternatively, you can toggle between dense and full modes 
 for a displayed track (or pack mode when available) by clicking on the optional 
 center label for the track. 
+<P>
+<B>Changing the display mode for a group of tracks</B><BR>
+Track display modes may be set individually or as a group on the Genome
+Browser Track Configuration page. To access the configuration page, click the
+<em>configure</em> button on the annotation tracks page or the 
+<em>Configure Tracks and Display</em> button on the Gateway page. Exercise
+caution when using the <em>Show All</em> buttons on track groups or 
+assemblies that contain a large number tracks; this may seriously impact the
+display performance of the Genome Browser or cause your Internet browser to
+time out.
+<P>
+<B>Hiding the track display controls</B><BR>
+The entire set of track display controls at the bottom of the annotation 
+tracks page may be hidden from view by checking the <em>Show track controls 
+under main graphic</em> option in the Configure Image section of the Track 
+Configuration page.
 <P>
 <B>Changing the display of a track by using filters and configuration options</B><BR>
 Some tracks have additional filter and configuration capabilities, 
@@ -590,6 +616,7 @@ To remove all user configuration settings and completely restore the defaults,
 click the &quot;Click here to reset&quot; link on the Genome Browser Gateway 
 page. 
 <P>
+<A NAME="NAV"></A>
 <B>Zooming and scrolling the tracks display</B><BR>
 At times you may want to adjust the amount of flanking region displayed in the
 annotation tracks window or adjust the scale of the display. At a scale of 1 pixel per 
@@ -623,16 +650,41 @@ the <I>position</I> text box, then click the <I>Jump</I> button. For more inform
 valid entries for this text box, refer to the <A HREF="#GetStarted">Getting
 Started</A> section.
 <P>
+<A NAME="TRACK_CONFIG"></A>
 <B>Changing the width of the annotation track window</B><BR>
 By default, the width of the annotation track window is set to 610 pixels. To modify the width to 
 best suit the display capabilities of your monitor, enter a new value in the 
-<I>image width</I> text box, then click the <I>Jump</I> button. For example, setting the 
+<I>image width</I> text box on the Track Configuration page, then click the 
+<I>Submit</I> button. For example, setting the 
 display to 1100 pixels on a 19" monitor will increase the visible portion of the genome
 and reduce the need for redraws. The maximum supported width is 5000 pixels.
 <P>
+<B>Changing the text size in the annotation track image</B><BR>
+The annotation track image may be adjusted to display text in a range of
+fonts from &quot;tiny&quot; to &quot;huge&quot;. To change the size of the
+text, select an option from the <em>text size</em> pull-down menu on the 
+Track Configuration page, then click <em>Submit</em>. The text size is set to
+&quot;small&quot; by default.
+<P>
+<B>Hiding the annotation track labels</B><BR>
+The track and element labels displayed above and to the left of the tracks
+in the annotation tracks image may be hidden from view by unchecking the
+<em>Display track descriptions above each track</em> and <em>Display labels 
+to the left of items in tracks</em> boxes, respectively, on the Track 
+Configuration page.
+<P>
+<B>Hiding the display grid on the annotation tracks image</B><BR>
+The light blue vertical guidelines on the annotation tracks image may be
+removed by unchecking the <em>Show light blue vertical guidelines</em> box
+on the Track Configuration page.
+<P>
 <B>Hiding the chromosome ideogram</B><BR>
-To hide the chromosome ideogram displayed above the annotation tracks image,
-uncheck the <I>Chromosome</I> box located below the tracks image.
+The chromosome ideogram, located just above the annotation tracks image,
+provides a graphical overview of the features on the selected chromosome, 
+including its bands, the position of the centromere, and an indication of
+the region currently displayed in the annotation tracks image. 
+To hide the ideogram, uncheck the <em>Display chromosome ideogram above 
+main graphic</em> box on the Tracks Configuraiton page.
 <P>
 <B>Printing a copy of the annotation track window</B><BR>
 The Genome Browser provides a mechanism for saving a copy of 
