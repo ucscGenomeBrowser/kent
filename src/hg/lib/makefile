@@ -31,7 +31,7 @@ O = affyAtlas.o agpFrag.o agpGap.o altGraphX.o ancientRref.o \
     stsMap.o stsMapMouse.o  stsMarker.o stsInfoMouse.o synteny100000.o\
     stsMapMouseNew.o stsInfoMouseNew.o\
     syntenyBerk.o syntenySanger.o tilingPath.o traceInfo.o \
-    trackChromScore.o trackDb.o \
+    trackDb.o \
     trackDbCustom.o trackTable.o wabAli.o \
     coordConv.o expRecord.o dnaProbe.o \
     ggMrnaAli.o genbank.o \
