@@ -192,25 +192,28 @@ static void netDraw(struct track *tg, int seqStart, int seqEnd,
 struct chainNet *net = chainNetLoadRange(database, tg->mapName, chromName,
 	seqStart, seqEnd, NULL);
 
-/* Copy parameters to statics for recursive routine. */
-rTg = tg;
-rVg = vg;
-rX = xOff;
+if (net != NULL)
+    {
+    /* Copy parameters to statics for recursive routine. */
+    rTg = tg;
+    rVg = vg;
+    rX = xOff;
 
-/* Compute a few other positional things for recursive routine. */
-rHeightPer = tg->heightPer;
-rMidLineOff = rHeightPer/2;
-rIsFull = (vis == tvFull);
-if (rIsFull)
-    rNextLine = tg->lineHeight;
-else
-    rNextLine = 0;
-rScale = scaleForPixels(width);
+    /* Compute a few other positional things for recursive routine. */
+    rHeightPer = tg->heightPer;
+    rMidLineOff = rHeightPer/2;
+    rIsFull = (vis == tvFull);
+    if (rIsFull)
+	rNextLine = tg->lineHeight;
+    else
+	rNextLine = 0;
+    rScale = scaleForPixels(width);
 
-/* Recursively do main bit of work. */
-rNetDraw(net->fillList, 1, yOff);
+    /* Recursively do main bit of work. */
+    rNetDraw(net->fillList, 1, yOff);
+    chainNetFree(&net);
+    }
 
-chainNetFree(&net);
 }
 
 void netMethods(struct track *tg)

@@ -172,7 +172,8 @@ conn = sqlConnect(database);
 sr = hRangeQuery(conn, track, chrom, start, end, extraWhere, &rowOffset);
 net = chainNetLoadResult(sr, rowOffset);
 sqlFreeResult(&sr);
-net->size = hdbChromSize(conn, chrom);
+if (net != NULL)
+    net->size = hdbChromSize(conn, chrom);
 sqlDisconnect(&conn);
 return net;
 }
