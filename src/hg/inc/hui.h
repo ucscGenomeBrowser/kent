@@ -61,7 +61,8 @@ void hTvDropDownClass(char *varName, enum trackVisibility vis, boolean canPack, 
 /* Make track visibility drop down for varName with style class */
 
 void hTvDropDown(char *varName, enum trackVisibility vis, boolean canPack);
-/* Make track visibility drop down for varName */
+/* Make track visibility drop down for varName 
+ * uses style "normalText" */
 
 /****** Some stuff for stsMap related controls *******/
 enum stsMapOptEnum {
