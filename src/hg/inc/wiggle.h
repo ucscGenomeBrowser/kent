@@ -177,6 +177,7 @@ void wigFetchYLineMarkValue(struct trackDb *tdb, double *tDbYMark);
 /* return value for the y line marker to be drawn	*/
 
 /*	cart and trackDb strings	*/
+#define VIEWLIMITS "viewLimits"
 #define DEFAULTVIEWLIMITS "defaultViewLimits"
 #define MIN_Y "minY"
 #define MAX_Y "maxY"
@@ -187,6 +188,7 @@ void wigFetchYLineMarkValue(struct trackDb *tdb, double *tDbYMark);
 #define AUTOSCALE "autoScale"
 #define AUTOSCALEDEFAULT "autoScaleDefault"
 #define LINEBAR "lineBar"
+#define GRAPHTYPE "graphType"
 #define GRAPHTYPEDEFAULT "graphTypeDefault"
 #define WINDOWINGFUNCTION "windowingFunction"
 #define SMOOTHINGWINDOW "smoothingWindow"
