@@ -24,8 +24,8 @@ fi
 
 if [ -z "${GBDB}" ]; then
 	echo "ERROR: Need to set GBDB, a directory with 200 Mb of free space"
-	echo -e "\tIf you expect to load the entire Human Genome Browser"
-	echo -e "\texpect to use more than 200 Gb of data here."
+	echo -e "\tIf you expect to load the entire UCSC Genome Browser"
+	echo -e "\texpect to use more than 400 Gb of data here."
 	exit 255
 fi
 
@@ -66,33 +66,24 @@ cp -Rp ${CDROM}/goldenPath ${WEBROOT}/html
 #	Copy the /gbdb data
 cp -Rp ${CDROM}/gbdb ${GBDB}
 
-#	Create hgFixed database and load its data
-mysql -pgenome -e "create database hgFixed;"
-cd ${WEBROOT}/html/goldenPath/hgFixed/database
-for file in *.sql
-do
-	mysql -pgenome hgFixed < $file
-done
-for file in *.txt.gz
-do
-	FN=`echo $file | sed -e "s/.gz//"`
-	echo "working on $file"
-	gunzip $file
-	mysqlimport -pgenome hgFixed $FN
-	echo "imported $FN"
-	gzip $FN &
-done
+#	Create hgFixed and cb1 databases and load their data.
+#	cb1 was named before systematic naming was in effect,
+#		fixup its name to work in the loop below
+cd ${WEBROOT}/html/goldenPath
+ln -s cbJul2002 cb1
 
-
-#	Create the cb1 database and load its data
-mysql -pgenome -e "create database cb1;"
-cd ${WEBROOT}/html/goldenPath/cbJul2002/database
-for SQL in *.sql
+for DB in cb1 hgFixed
 do
-    T_NAME=${SQL%%.sql}
-    echo "loading table ${T_NAME}"
-    mysql -pgenome cb1 -e "DROP TABLE ${T_NAME};"
-    mysql -pgenome cb1 < ${SQL}
-    zcat "${T_NAME}.txt.gz" | mysql -pgenome cb1 -e \
-	"LOAD DATA LOCAL INFILE \"/dev/stdin\" INTO TABLE ${T_NAME};"
+    #	Create the cb1 database and load its data
+    mysql -pgenome -e "create database ${DB};" mysql
+    cd ${WEBROOT}/html/goldenPath/cbJul2002/database
+    for SQL in *.sql
+    do
+	T_NAME=${SQL%%.sql}
+	echo "loading table ${T_NAME}"
+	mysql -pgenome ${DB} -e "DROP TABLE ${T_NAME};"
+	mysql -pgenome ${DB} < ${SQL}
+	zcat "${T_NAME}.txt.gz" | mysql -pgenome ${DB} -e \
+	    "LOAD DATA LOCAL INFILE \"/dev/stdin\" INTO TABLE ${T_NAME};"
+    done
 done
