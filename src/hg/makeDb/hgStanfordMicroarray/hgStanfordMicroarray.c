@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgStanfordMicroarray.c,v 1.2 2003/09/24 02:25:06 kent Exp $";
+static char const rcsid[] = "$Id: hgStanfordMicroarray.c,v 1.3 2003/10/09 09:41:41 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -233,6 +233,8 @@ int dataIx, geneIx, expIx = *pExpCount;
 		}
 	    assert(expIx < maxExps);
 	    gene->spots[expIx] = atof(data);
+	    if (clSwap)
+	        gene->spots[expIx] = -gene->spots[expIx];
 	    }
 	}
     }
