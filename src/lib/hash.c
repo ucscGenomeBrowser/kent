@@ -199,7 +199,7 @@ for (i=0; i<hash->size; ++i)
     for (hel = hash->table[i]; hel != NULL; hel = hel->next)
 	{
 	dupe = cloneMem(hel, sizeof(*hel));
-	slAddHead(&list, hel);
+	slAddHead(&list, dupe);
 	}
     }
 return list;
