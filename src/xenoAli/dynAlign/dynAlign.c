@@ -273,7 +273,7 @@ while (fgets(line, sizeof(line), in))
         {
         char *chrom;
         int start, end;
-        boolean isRc;
+        boolean isRc = TRUE;
         char strand;
         int score = atoi(words[0]);
 
