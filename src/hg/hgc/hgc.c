@@ -116,7 +116,7 @@
 #include "encodeRegionInfo.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.508 2003/11/01 00:41:15 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.509 2003/11/04 02:00:10 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6945,20 +6945,23 @@ printf("<B>%s PseudoGene:</B> %s:%d-%d   %d bp<BR>\n", hOrganism(database),  bed
 printf("Strand: %c",bed->strand[0]);
 printf("<p>");
 }
-void pseudoPrintPos(char *chrom, int chromStart, int chromEnd, struct pseudoGeneLink *pg)
+void pseudoPrintPos(char *chrom, int chromStart, int chromEnd, struct pseudoGeneLink *pg, char *alignTable)
 /*    print details of pseudogene record */ 
 {
 char *tbl = cgiUsualString("table", cgiString("g"));
 char chainStr[32];
 char query[256];
 char chainTable[64];
+char chainTable_chrom[64];
 struct sqlResult *sr;
 char **row;
-struct psl *pslList ;
+struct psl *pslList = NULL;
 struct sqlConnection *conn = hAllocConn();
 
 if (sameString(pg->assembly , database))
     safef(chainTable,sizeof(chainTable), "selfChain");
+    if (!hTableExists(chainTable) )
+        safef(chainTable,sizeof(chainTable), "chainSelf");
 else
     {
     char *org = hOrganism(pg->assembly);
@@ -6973,53 +6976,61 @@ linkToOtherBrowser(pg->assembly, pg->chrom, pg->gStart, pg->gEnd);
 printf("%s:%d-%d \n", pg->chrom, pg->gStart, pg->gEnd);
 printf("</A>");
 
-pslList = loadPslRangeT("mrnaBlastz", pg->name, pg->chrom, pg->gStart, pg->gEnd);
-if (pslList != NULL)
-    printAlignments(pslList, chromStart, "htcCdnaAli", "mrnaBlastz", pg->name);
-htmlHorizontalLine();
-/* lookup chain if not stored */
-if (pg->chainId == 0 && pg->strand != NULL)
+
+if (hTableExists(alignTable))
     {
-    if (sameString(pg->strand,pg->pStrand))
-        safef(query,sizeof(query),
-            "select id, score from %s_%s where tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d order by score desc",
-            chrom, chainTable,chromStart,chromEnd, pg->chrom, pg->gStart, pg->gEnd);
+    pslList = loadPslRangeT(alignTable, pg->name, pg->chrom, pg->gStart, pg->gEnd);
+    if (pslList != NULL)
+        printAlignments(pslList, chromStart, "htcCdnaAli", alignTable, pg->name);
+    }
+htmlHorizontalLine();
+safef(chainTable_chrom,sizeof(chainTable_chrom), "%s_chainSelf",chrom);
+if (hTableExists(chainTable_chrom) )
+    {
+    /* lookup chain if not stored */
+    if (pg->chainId == 0 && pg->strand != NULL)
+        {
+        if (sameString(pg->strand,pg->pStrand))
+            safef(query,sizeof(query),
+                "select id, score from %s_%s where tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d order by score desc",
+                chrom, chainTable,chromStart,chromEnd, pg->chrom, pg->gStart, pg->gEnd);
+        else
+            {
+            safef(query,sizeof(query),
+                "select id, score from %s_%s where tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d order by score desc",
+                chrom, chainTable,chromStart,chromEnd, pg->chrom, hChromSize(pg->chrom)-(pg->gEnd), hChromSize(pg->chrom)-(pg->gStart));
+            }
+        sr = sqlGetResult(conn, query);
+        while ((row = sqlNextRow(sr)) != NULL)
+            {
+            int chainId, score;
+            chainId = sqlUnsigned(row[0]);
+            score = sqlUnsigned(row[1]);
+            if (pg->chainId == 0) pg->chainId = chainId;
+            puts("<LI>\n");
+            printf("<B>Chain:</B> %d  \n",chainId);
+            hgcAnchorTranslatedChain(chainId, chainTable, chrom, pg->gStart, pg->gEnd);
+            printf("View details of parts of chain within browser window</A>. score %d %s:%d-%d<BR>\n",score, pg->chrom,pg->gStart,pg->gEnd);
+            puts("</LI>\n");
+            }
+        sqlFreeResult(&sr);
+        }
     else
         {
-        safef(query,sizeof(query),
-            "select id, score from %s_%s where tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d order by score desc",
-            chrom, chainTable,chromStart,chromEnd, pg->chrom, hChromSize(pg->chrom)-(pg->gEnd), hChromSize(pg->chrom)-(pg->gStart));
-        }
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-        int chainId, score;
-        chainId = sqlUnsigned(row[0]);
-        score = sqlUnsigned(row[1]);
-        if (pg->chainId == 0) pg->chainId = chainId;
         puts("<LI>\n");
-        printf("<B>Chain:</B> %d  \n",chainId);
-        hgcAnchorTranslatedChain(chainId, chainTable, chrom, pg->gStart, pg->gEnd);
-        printf("View details of parts of chain within browser window</A>. score %d %s:%d-%d<BR>\n",score, pg->chrom,pg->gStart,pg->gEnd);
+        printf("<B>Chain:</B> %d  \n",pg->chainId);
+        hgcAnchorTranslatedChain(pg->chainId, chainTable, chrom, pg->gStart, pg->gEnd);
+        printf("View details of parts of chain within browser window</A>.<BR>\n");
         puts("</LI>\n");
         }
-    sqlFreeResult(&sr);
-    }
-else
-    {
-    puts("<LI>\n");
-    printf("<B>Chain:</B> %d  \n",pg->chainId);
-    hgcAnchorTranslatedChain(pg->chainId, chainTable, chrom, pg->gStart, pg->gEnd);
-    printf("View details of parts of chain within browser window</A>.<BR>\n");
-    puts("</LI>\n");
-    }
-//printf("<p>");
-if (pg->chainId > 0)
-    {
-    puts("<LI>\n");
-    hgcAnchorPseudoGene(pg->gene, pg->geneTable, chrom, "startcodon", chromStart, chromEnd, pg->chrom, pg->gStart, pg->gEnd, pg->chainId, pg->assembly);
-    printf("Show %s %s aligned to pseudogene</A>  to see frameshifts and in frame stops <BR>\n",hOrganism(pg->assembly), pg->geneTable);
-    puts("</LI>\n");
+    //printf("<p>");
+    if (pg->chainId > 0)
+        {
+        puts("<LI>\n");
+        hgcAnchorPseudoGene(pg->gene, pg->geneTable, chrom, "startcodon", chromStart, chromEnd, pg->chrom, pg->gStart, pg->gEnd, pg->chainId, pg->assembly);
+        printf("Show %s %s aligned to pseudogene</A>  to see frameshifts and in frame stops <BR>\n",hOrganism(pg->assembly), pg->geneTable);
+        puts("</LI>\n");
+        }
     }
 puts("<LI>\n");
 linkToOtherBrowser(pg->assembly, pg->chrom, pg->gStart, pg->gEnd);
@@ -7036,7 +7047,7 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row;
 char *type;
-char *table = NULL;
+char table[256];
 boolean hasBin;
 struct pseudoGeneLink *pg;
 int start = cartInt(cart, "o");
@@ -7056,12 +7067,18 @@ genericHeader(tdb, acc);
 if (startsWith(track,"pseudoMrna"))
     {
     type = "mRNA";
-    table = "mrnaBlastz";
+    if (hTableExists("mrnaBlastz") )
+        safef(table, sizeof(table), "mrnaBlastz");
+    else
+        {
+        if (hTableExists("mrnaBlat") )
+            safef(table, sizeof(table), "mrnaBlat");
+        }
     }
 else 
     {
     type = "mRNA";
-    table = "all_mrna";
+    safef(table, sizeof(table), "all_mrna");
     }
 
 /* Print non-sequence info. */
@@ -7077,7 +7094,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     pg = pseudoGeneLinkLoad(row);
     if (hTableExists("axtInfo") && pslList != NULL)
         {
-        pseudoPrintPos(pslList->tName, pslList->tStart, pslList->tEnd, pg);
+        pseudoPrintPos(pslList->tName, pslList->tStart, pslList->tEnd, pg, table);
         }
     }
 //htmlHorizontalLine();
@@ -7120,7 +7137,7 @@ if (sqlTableExists(conn, tdb->tableName))
         pseudoGeneLinkStaticLoad(row, &pg);
         if (hTableExists("axtInfo") && bed != NULL)
             {
-            pseudoPrintPos(bed->chrom, bed->chromStart, bed->chromEnd, &pg);
+            pseudoPrintPos(bed->chrom, bed->chromStart, bed->chromEnd, &pg, "mrnaBlat");
             }
         }
     }
@@ -8105,11 +8122,17 @@ if (tChrom->size != net->size)
 
 /* load chain */
 if (sameString(database,db2))
+    {
     strcpy(track, "selfChain");
+    if (!hTableExists("chr1_selfChain"))
+        strcpy(track, "chainSelf");
+    }
 else
+    {
     sprintf(track, "%sChain",hOrganism(db2));
+    }
 track[0] = tolower(track[0]);
-if (chainId > 0)
+if (chainId > 0 )
     {
     chain = chainDbLoad(conn, database, track, chrom, chainId);
 
