@@ -6238,15 +6238,27 @@ if (withLeftLabels)
 return x;
 }
 
-void drawButtonBox(struct memGfx *mg, int x, int y, int w, int h)
+void drawButtonBox(struct memGfx *mg, int x, int y, int w, int h, int enabled)
 /* Draw a min-raised looking button. */
 {
 int light = shadesOfGray[1], mid = shadesOfGray[2], dark = shadesOfGray[4];
-mgDrawBox(mg, x, y, w, 1, light);
-mgDrawBox(mg, x, y+1, 1, h-1, light);
-mgDrawBox(mg, x+1, y+1, w-2, h-2, mid);
-mgDrawBox(mg, x+1, y+h-1, w-1, 1, dark);
-mgDrawBox(mg, x+w-1, y+1, 1, h-1, dark);
+if (enabled) 
+    {
+    mgDrawBox(mg, x, y, w, 1, light);
+    mgDrawBox(mg, x, y+1, 1, h-1, light);
+    mgDrawBox(mg, x+1, y+1, w-2, h-2, mid);
+    mgDrawBox(mg, x+1, y+h-1, w-1, 1, dark);
+    mgDrawBox(mg, x+w-1, y+1, 1, h-1, dark);
+    }
+else				/* try to make the button look as if
+				 * it is already depressed */
+    {
+    mgDrawBox(mg, x, y, w, 1, dark);
+    mgDrawBox(mg, x, y+1, 1, h-1, dark);
+    mgDrawBox(mg, x+1, y+1, w-2, h-2, light);
+    mgDrawBox(mg, x+1, y+h-1, w-1, 1, light);
+    mgDrawBox(mg, x+w-1, y+1, 1, h-1, light);
+    }
 }
 
 
@@ -6339,10 +6351,10 @@ if (withLeftLabels)
 	    if (withCenterLabels)
 		nextY += fontHeight;
 	    h = nextY - lastY - 1;
-	    drawButtonBox(mg, trackTabX, lastY, trackTabWidth, h);
+ 	    drawButtonBox(mg, trackTabX, lastY, trackTabWidth, h, group->hasUi); 
 	    if (group->hasUi)
 		mapBoxTrackUi(trackTabX, lastY, trackTabWidth, 
-		    h,  group);
+			      h,  group);
 	    }
 	switch (group->limitedVis)
 	    {
