@@ -273,6 +273,9 @@ stored in a single table rather than one table per chromosome:</P>
   href="#EnsemblXref">ensemblXref</A> 
   - Cross-reference info between transcript entries and translation entries of Ensembl genes</LI>
   <LI><A 
+  href="#EnsemblXref2">ensemblXref2</A> 
+  - Cross-reference info between transcript entries and translation entries of Ensembl genes (alternative table used in some assemblies)</LI>
+  <LI><A 
   href="#GenePredictions">ensEst</A> 
   - Ensembl gene predictions based on ESTs</LI>
   <LI><A 
@@ -933,6 +936,16 @@ The following definition is used for several tables as follows:<BR>
    string translation_name; 	"Translation name in database"
    string external_db;		"External database"
    string external_name;	"External status"
+   )
+</PRE>
+
+<H4><A name=EnsemblXref2></A>EnsemblXref2</H4>
+<PRE>table ensemblXref2
+"Cross-reference info between transcript entries and translation entries of Ensembl genes 
+(alternative table used in some assemblies)."  
+   (
+   string transcript_name; 	"Transcript name"
+   string translation_name; 	"Translation name"
    )
 </PRE>
 
