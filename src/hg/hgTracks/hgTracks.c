@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.752 2004/06/06 17:24:24 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.753 2004/06/07 18:36:19 sugnet Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -1188,7 +1188,7 @@ lfColors(tg, item, vg, &col, &barbCol);
 return col;
 }
 
-static void linkedFeaturesDrawAt(struct track *tg, void *item,
+void linkedFeaturesDrawAt(struct track *tg, void *item,
 	struct vGfx *vg, int xOff, int y, double scale, 
 	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single simple bed item at position. */
@@ -3493,6 +3493,12 @@ struct bed *bed = item;
 return bed->chromEnd;
 }
 
+void freeSimpleBed(struct track *tg)
+/* Free the beds in a track group that has
+   beds as its items. */
+{
+bedFreeList(((struct bed **)(&tg->items)));
+}
 
 void bedMethods(struct track *tg)
 /* Fill in methods for (simple) bed tracks. */
@@ -3505,6 +3511,7 @@ tg->totalHeight = tgFixedTotalHeight;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = bedItemStart;
 tg->itemEnd = bedItemEnd;
+tg->freeItems = freeSimpleBed;
 }
 
 void loadTfbsCons(struct track *tg)
@@ -6276,8 +6283,11 @@ if (rulerMode != RULER_MODE_OFF)
         pixHeight += rulerTranslationHeight;
         }
     }
+
+trackHash = newHash(8);
 for (track = trackList; track != NULL; track = track->next)
     {
+    hashAddUnique(trackHash, track->mapName, track);
     if (track->visibility != tvHide)
 	{
 	int h;
@@ -6920,6 +6930,7 @@ for (track = trackList; track != NULL; track = track->next)
 	}
     }
 }
+hashFree(&trackHash);
 /* Finish map. */
 hPrintf("</MAP>\n");
 
@@ -7029,6 +7040,8 @@ hFreeConn(&conn);
 slReverse(&list);
 tg->items = list;
 }
+
+
 
 void bed8To12(struct bed *bed)
 /* Turn a bed 8 into a bed 12 by defining one block. */

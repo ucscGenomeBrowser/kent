@@ -12,7 +12,7 @@
 #include "scoredRef.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.51 2004/06/04 18:17:48 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.52 2004/06/07 18:36:18 sugnet Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -35,6 +35,7 @@ struct wigCartOptions
     int defaultHeight;	/*	requested height from cart	*/
     int minHeight;	/*	minimum pixels height from trackDb	*/
     double yLineMark;	/*	user requested line at y = */
+    char *colorTrack;   /*	Track to use for coloring wiggle track. */
     };
 
 struct preDrawElement
@@ -69,6 +70,84 @@ struct wigItem
     double graphUpperLimit;	/* filled in by DrawItems	*/
     double graphLowerLimit;	/* filled in by DrawItems	*/
     };
+
+
+static void wigFillInColorLfArray(struct track *wigTrack, Color *colArray, int colSize,
+				  struct track *colorTrack)
+/* Fill in a color array with the linkedFeatures based colorTrack's
+   color where it would normally have an exon. */
+{
+struct linkedFeatures *lf = NULL, *lfList = colorTrack->items;
+struct simpleFeature *sf = NULL;
+double scale = scaleForPixels(colSize);
+int x1 = 0, x2 = 0;
+int i = 0;
+for(lf = lfList; lf != NULL; lf = lf->next)
+    {
+    for (sf = lf->components; sf != NULL; sf = sf->next)
+	{
+	x1 = round((double)((int)sf->start-winStart)*scale);
+	x2 = round((double)((int)sf->end-winStart)*scale);
+	if(x1 < 0)
+	    x1 = 0;
+	if(x2 > colSize)
+	    x2 = colSize;
+	if(x1 == x2)
+	    x2++;
+	for(i = x1; i < x2; i++)
+	    colArray[i] = colorTrack->ixColor;
+	}
+    }
+}
+
+static void wigFillInColorBedArray(struct track *wigTrack, Color *colArray, int colSize,
+				  struct track *colorTrack)
+/* Fill in a color array with the simple bed based colorTrack's
+   color where it would normally have an block. */
+{
+struct bed *bed = NULL, *bedList = colorTrack->items;
+double scale = scaleForPixels(colSize);
+int x1 = 0, x2 = 0;
+int i = 0;
+for (bed = bedList; bed != NULL; bed = bed->next)
+    {
+    x1 = round((double)((int)bed->chromStart-winStart)*scale);
+    x2 = round((double)((int)bed->chromEnd-winStart)*scale);
+    if(x1 < 0)
+	x1 = 0;
+    if(x2 > colSize)
+	x2 = colSize;
+    if(x1 == x2)
+	x2++;
+    for(i = x1; i < x2; i++)
+	colArray[i] = colorTrack->ixColor;
+    }
+}
+
+
+void wigFillInColorArray(struct track *wigTrack, struct vGfx *vg, 
+			 Color *colorArray, int colSize, struct track *colorTrack)
+/* Fill in a color array with the colorTrack's color where
+   it would normally have an exon. */
+{
+boolean trackLoaded = FALSE;
+/* If the track is hidden currently, load the items. */
+if(colorTrack->visibility == tvHide)
+    {
+    trackLoaded = TRUE;
+    colorTrack->loadItems(colorTrack);
+    colorTrack->ixColor = vgFindRgb(vg, &colorTrack->color);
+    colorTrack->ixAltColor = vgFindRgb(vg, &colorTrack->altColor);
+    }
+
+if(colorTrack->drawItemAt == linkedFeaturesDrawAt)
+    wigFillInColorLfArray(wigTrack, colorArray, colSize, colorTrack);
+else if(colorTrack->drawItemAt == bedDrawSimpleAt)
+    wigFillInColorBedArray(wigTrack, colorArray, colSize, colorTrack);
+
+if(trackLoaded && colorTrack->freeItems != NULL)
+    colorTrack->freeItems(colorTrack);
+}
 
 void wigSetCart(struct track *track, char *dataID, void *dataValue)
     /*	set one of the variables in the wigCart	*/
@@ -438,8 +517,10 @@ double graphRange;		/*	scaling choice will set these	*/
 double epsilon;			/*	range of data in one pixel	*/
 int x1 = 0;			/*	screen coordinates	*/
 int x2 = 0;			/*	screen coordinates	*/
-
+Color *colorArray = NULL;       /*	Array of pixels to be drawn.	*/
 wigCart = (struct wigCartOptions *) tg->extraUiData;
+if(sameString(tg->mapName, "affyTranscription"))
+    wigCart->colorTrack = "affyTransfrags";
 horizontalGrid = wigCart->horizontalGrid;
 lineBar = wigCart->lineBar;
 autoScale = wigCart->autoScale;
@@ -559,7 +640,7 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 		unsigned char datum = ReadData[dataOffset];
 		if (datum != WIG_NO_DATA)
 		    {
-    x1 = ((wi->start-seqStart) + (dataOffset * usingDataSpan)) * pixelsPerBase;
+		    x1 = ((wi->start-seqStart) + (dataOffset * usingDataSpan)) * pixelsPerBase;
 		    x2 = x1 + (usingDataSpan * pixelsPerBase);
 		    for (i = x1; i <= x2; ++i)
 			{
@@ -567,8 +648,8 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 			if ((xCoord >= 0) && (xCoord < preDrawSize))
 			    {
 			    double dataValue =
-			      BIN_TO_VALUE(datum,wi->lowerLimit,wi->dataRange);
-
+				BIN_TO_VALUE(datum,wi->lowerLimit,wi->dataRange);
+			    
 			    ++preDraw[xCoord].count;
 			    if (dataValue > preDraw[xCoord].max)
 				preDraw[xCoord].max = dataValue;
@@ -746,6 +827,33 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 	wi->graphUpperLimit = graphUpperLimit;
 	wi->graphLowerLimit = graphLowerLimit;
     }
+/*	Set up the color by array. Determine color of each pixel
+ *	based initially on the sign of the data point. If a colorTrack
+ *	is specified also fill in the color array with that. 
+ */
+AllocArray(colorArray, width);
+for(x1 = 0; x1 < width; ++x1)
+    {
+    int preDrawIndex = x1 + preDrawZero;
+    if (preDraw[preDrawIndex].count)
+	{
+	double dataValue;	/*	the data value in data space	*/
+	dataValue = preDraw[preDrawIndex].smooth;
+	/*	negative data is the alternate color	*/
+	if (dataValue < 0.0)
+	    colorArray[x1] = tg->ixAltColor;
+	else
+	    colorArray[x1] = tg->ixColor;
+	}
+    }
+
+/* Fill in colors from alternate track if necessary. */
+if(wigCart->colorTrack != NULL) 
+    {
+    struct track *cTrack = hashMustFindVal(trackHash, wigCart->colorTrack);
+    wigFillInColorArray(tg, vg, colorArray, width, cTrack);
+    }
+
 /*	right now this is a simple pixel by pixel loop.  Future
  *	enhancements will smooth this data and draw boxes where pixels
  *	are all the same height in a run.
@@ -815,11 +923,12 @@ for (x1 = 0; x1 < width; ++x1)
 	    boxHeight = 1;
 	    }
 
-	/*	negative data is the alternate color	*/
-	if (dataValue < 0.0)
-	    drawColor = tg->ixAltColor;
-	else
-	    drawColor = tg->ixColor;
+	drawColor = colorArray[x1];
+/* 	/\*	negative data is the alternate color	*\/ */
+/* 	if (dataValue < 0.0) */
+/* 	    drawColor = tg->ixAltColor; */
+/* 	else */
+/* 	    drawColor = tg->ixColor; */
 
 	/*	vgBox will take care of clipping.  No need to worry
 	 *	about coordinates or height of line to draw.
@@ -900,7 +1009,7 @@ if ((vis == tvFull) && (yLineOnOff == wiggleYLineMarkOn))
 	}
 
     }	/*	drawing y= line marker	*/
-
+freez(&colorArray);
 freeMem(preDraw);
 }	/*	wigDrawItems()	*/
 
