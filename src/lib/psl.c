@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.52 2004/09/08 23:10:06 baertsch Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.53 2004/09/12 13:12:01 baertsch Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -1468,6 +1468,9 @@ if (endInsert > 0)
 *qStringPtr = qString;
 *tStringPtr = tString;
 *aliSizePtr = aliSize;
+/* recursive call to handle double gap */
+if (startInsert > 0 || endInsert > 0)
+    trimAlignment(psl, qStringPtr, tStringPtr, aliSizePtr);
 }
 
 struct psl* pslFromAlign(char *qName, int qSize, int qStart, int qEnd, char *qString,
