@@ -99,8 +99,8 @@ endif
   # write a line in output file for this record
   # s is string, d is decimal
   echo "$num $host $timeHours $hitsPerHr $hitsPerMin " \
-       | gawk '{ printf("%7s %45s %8s %7s %6s\n", \
-       $1, $2, $3, $4, $5) }' >> $output
+       | gawk '{printf("%7s %45s %8s %7s %6s\n", \
+       $1, $2, $3, $4, $5)}' >> $output
   @ checked ++
 end
 echo >> $output
@@ -131,12 +131,12 @@ cat xxHoursHitsxx  >> $output
 echo >> $output
 
 set maxInHour=`head -1 xxHoursHitsxx | gawk '{print $1}'`
-if ($maxInHour > 1800) then
+if ($maxInHour > 1000) then
   set maxHourUser=`head -1 xxHoursHitsxx | gawk '{print $2}'`
   set maxHrUserPerMin=`echo $maxInHour | gawk '{printf  "%.0f", $1/60}'`
   set maxHrUserPerSec=`echo $maxHrUserPerMin | gawk '{printf  "%.1f", $1/60}'`
 
-  echo " this user is above 1800 in the last hour: $maxHourUser" >> $output
+  echo " this user is above 1000 in the last hour: $maxHourUser" >> $output
   echo " $maxHrUserPerMin per min, $maxHrUserPerSec per sec\n" >> $output
   ipw $maxHourUser | head -10  >> $output
   echo >> $output
