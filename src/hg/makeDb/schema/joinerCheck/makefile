@@ -8,7 +8,7 @@ O = joinerCheck.o
 
 joinerCheck: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/joinerCheck $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/joinerCheck
+#	strip ${HOME}/bin/${MACHTYPE}/joinerCheck
 
 clean:
 	rm -f $O

@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.13 2004/03/12 09:59:04 kent Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.14 2004/03/12 19:11:04 kent Exp $";
 
 /* Variable that are set from command line. */
 boolean parseOnly; 
@@ -58,6 +58,31 @@ for (db = jf->dbList; db != NULL; db = db->next)
     fprintf(f, "%s", db->name);
     }
 fprintf(f, ".%s.%s", jf->table, jf->field);
+}
+
+struct slName *getTablesForField(struct sqlConnection *conn, 
+	char *splitPrefix, char *table)
+/* Get tables that match field. */
+{
+struct slName *list = NULL, *el;
+if (splitPrefix != NULL)
+    {
+    char query[256], **row;
+    struct sqlResult *sr;
+    safef(query, sizeof(query), "show tables like '%s%s'", splitPrefix, table);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	el = slNameNew(row[0]);
+	slAddHead(&list, el);
+	}
+    sqlFreeResult(&sr);
+    slReverse(&list);
+    }
+if (list == NULL)
+    if (sqlTableExists(conn, table))
+	list = slNameNew(table);
+return list;
 }
 
 static boolean fieldExists(struct hash *fieldHash,
@@ -180,6 +205,18 @@ safef(query, sizeof(query), "select count(*) from %s", table);
 return sqlQuickNum(conn, query);
 }
 
+int totalTableRows(struct sqlConnection *conn, struct slName *tableList)
+/* Return total number of rows in all tables in list. */
+{
+int rowCount = 0;
+struct slName *table;
+for (table = tableList; table != NULL; table = table->next)
+    {
+    rowCount += sqlTableRows(conn, table->name);
+    }
+return rowCount;
+}
+
 struct sqlConnection *sqlWarnConnect(char *db)
 /* Connect to database, or warn and return NULL. */
 {
@@ -218,53 +255,79 @@ if (conn == NULL)
     {
     return NULL;
     }
-else if (!sqlTableExists(conn, keyField->table))
-    {
-    /* warn("Key table %s.%s doesn't exist", db, keyField->table); */
-    }
 else
     {
-    int rowCount = sqlTableRows(conn, keyField->table);
+    struct slName *table;
+    struct slName *tableList = getTablesForField(conn,keyField->splitPrefix,
+    						 keyField->table);
+    int rowCount = totalTableRows(conn, tableList);
     int hashSize = digitsBaseTwo(rowCount)+1;
     char query[256], **row;
     struct sqlResult *sr;
     int itemCount = 0;
     int dupeCount = 0;
     char *dupe = NULL;
-    keyHash = hashNew(hashSize);
-    safef(query, sizeof(query), "select %s from %s", 
-    	keyField->field, keyField->table);
-    uglyf("%s\n", query);
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-	char *id = doChops(keyField, row[0]);
-	if (hashLookup(keyHash, id))
-	    {
-	    if (!keyField->dupeOk)
-	        {
-		if (dupeCount == 0)
-		    dupe = cloneString(id);
-		++dupeCount;
-		}
-	    }
-	else
-	    {
-	    hashAdd(keyHash, id, NULL);
-	    ++itemCount;
-	    }
-	}
-    sqlFreeResult(&sr);
-    if (dupe != NULL)
+
+    if (rowCount > 0)
 	{
-        warn("%d duplicates in %s.%s.%s including %s",
-		dupeCount, db, keyField->table, keyField->field, dupe);
-	freez(&dupe);
+	keyHash = hashNew(hashSize);
+	for (table = tableList; table != NULL; table = table->next)
+	    {
+	    safef(query, sizeof(query), "select %s from %s", 
+		keyField->field, table->name);
+	    uglyf("%s\n", query);
+	    sr = sqlGetResult(conn, query);
+	    while ((row = sqlNextRow(sr)) != NULL)
+		{
+		char *id = doChops(keyField, row[0]);
+		if (hashLookup(keyHash, id))
+		    {
+		    if (!keyField->dupeOk)
+			{
+			if (dupeCount == 0)
+			    dupe = cloneString(id);
+			++dupeCount;
+			}
+		    }
+		else
+		    {
+		    hashAdd(keyHash, id, NULL);
+		    ++itemCount;
+		    }
+		}
+	    sqlFreeResult(&sr);
+	    }
+	if (dupe != NULL)
+	    {
+	    warn("%d duplicates in %s.%s.%s including %s",
+		    dupeCount, db, keyField->table, keyField->field, dupe);
+	    freez(&dupe);
+	    }
+	uglyf("%d items in %s.%s.%s\n", 
+		itemCount, db, keyField->table, keyField->field);
 	}
-    uglyf("%d items in %s.%s.%s\n", itemCount, db, keyField->table, keyField->field);
+    slFreeList(&tableList);
     }
 sqlDisconnect(&conn);
 return keyHash;
+}
+
+static void addHitMiss(struct hash *keyHash, char *id, struct joinerField *jf,
+	int *pHits, char **pMiss, int *pTotal)
+/* Record info about one hit or miss to keyHash */
+{
+id = doChops(jf, id);
+if (jf->exclude == NULL || !slNameInList(jf->exclude, id))
+    {
+    if (hashLookup(keyHash, id))
+	++(*pHits);
+    else
+	{
+	if (*pMiss == NULL)
+	    *pMiss = cloneString(id);
+	}
+    ++(*pTotal);
+    }
 }
 
 void doMinCheck(char *db, struct joiner *joiner, struct joinerSet *js, 
@@ -273,28 +336,24 @@ void doMinCheck(char *db, struct joiner *joiner, struct joinerSet *js,
 struct sqlConnection *conn = sqlMayConnect(db);
 if (conn != NULL)
     {
-    if (sqlTableExists(conn, jf->table))
+    int total = 0, hits = 0, hitsNeeded;
+    char *miss = NULL;
+    struct slName *table;
+    struct slName *tableList = getTablesForField(conn,jf->splitPrefix,
+    						 jf->table);
+    for (table = tableList; table != NULL; table = table->next)
 	{
 	char query[256], **row;
 	struct sqlResult *sr;
-	int total = 0, hits = 0, hitsNeeded;
-	char *miss = NULL;
-	safef(query, sizeof(query), "select %s from %s", jf->field, jf->table);
+	safef(query, sizeof(query), "select %s from %s", 
+		jf->field, table->name);
 	uglyf("db %s: %s\n", db, query);
 	sr = sqlGetResult(conn, query);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    if (jf->separator == NULL)
 		{
-		char *id = doChops(jf, row[0]);
-		if (hashLookup(keyHash, id))
-		    ++hits;
-		else
-		    {
-		    if (miss == NULL)
-			miss = cloneString(id);
-		    }
-		++total;
+		addHitMiss(keyHash, row[0], jf, &hits, &miss, &total);
 		}
 	    else 
 	        {
@@ -311,32 +370,27 @@ if (conn != NULL)
 		        safef(buf, sizeof(buf), "%d", ix);
 			id = buf;
 			}
-		    else
-		        id = doChops(jf, el->name);
-		    if (hashLookup(keyHash, id))
-			++hits;
-		    else
-			{
-			if (miss == NULL)
-			    miss = cloneString(id);
-			}
-		    ++total;
+		    addHitMiss(keyHash, row[0], jf, &hits, &miss, &total);
 		    }
 		slFreeList(&list);
 		}
 	    }
 	sqlFreeResult(&sr);
+	}
+    if (tableList != NULL)
+	{
 	hitsNeeded = round(total * jf->minCheck);
 	if (hits < hitsNeeded)
 	    {
 	    warn("%d of %d elements of %s.%s.%s are not in key line %d of %s\n"
-	         "Example miss: %s",
-	    	total - hits, total, db, jf->field, jf->table, jf->lineIx,
+		 "Example miss: %s\n"
+		, total - hits, total, db, jf->table, jf->field, jf->lineIx,
 		joiner->fileName, miss);
 	    }
 	freez(&miss);
+	sqlDisconnect(&conn);
 	}
-    sqlDisconnect(&conn);
+    slFreeList(&tableList);
     }
 }
 
