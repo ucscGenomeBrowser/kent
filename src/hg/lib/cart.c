@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.44 2004/09/14 01:11:21 fanhsu Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.45 2004/11/25 01:16:04 daryl Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -732,9 +732,7 @@ static void cartErrorCatcher(void (*doMiddle)(struct cart *cart),
 int status = setjmp(htmlRecover);
 pushAbortHandler(htmlAbort);
 if (status == 0)
-    {
     doMiddle(cart);
-    }
 popAbortHandler();
 }
 
@@ -753,7 +751,7 @@ printf("%s", htmlWarnEndPattern());
 }
 
 void cartWarnCatcher(void (*doMiddle)(struct cart *cart), struct cart *cart, WarnHandler warner)
-/* Wrap error and warning handlers around doMiddl. */
+/* Wrap error and warning handlers around doMiddle. */
 {
 pushWarnHandler(warner);
 cartErrorCatcher(doMiddle, cart);
