@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.698 2004/07/23 23:38:28 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.699 2004/07/24 00:09:50 markd Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5453,7 +5453,7 @@ struct dnaSeq *seq;
 int cdsStart, cdsEnd;
 int rowOffset = hOffsetPastBin(seqName, table);
 
-hgcStart("DNA Near Gene");
+hgcStart("Predicted mRNA from genome");
 safef(query, sizeof(query), "select * from %s where name = '%s'", table, geneName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -7240,7 +7240,7 @@ cartWebStart(cart, acc);
 printRnaSpecs(tdb, acc);
 htmlHorizontalLine();
 geneShowPosAndLinks(acc, acc, tdb, NULL, NULL,
-                    "htcGeneMrna", "htcGeneInGenome", "mRNA Sequence");
+                    "htcGeneMrna", "htcGeneInGenome", "Predicted mRNA");
 
 /* print alignments that track was based on */
 pslList = getAlignments(conn, "all_mrna", acc);
