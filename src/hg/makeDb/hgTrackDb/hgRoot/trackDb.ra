@@ -294,6 +294,13 @@ color 150,0,0
 type genePred ensPep
 url http://www.ensembl.org/perl/transview?transcript=$$
 
+track ensEst
+shortLabel Ensembl ESTs
+longLabel $Organism ESTs From Ensembl
+priority 15
+visibility dense
+type genePred ensEstPep
+
 track mouseOrtho
 shortLabel Mouse Ortholog
 longLabel Mouse Orthology using Fgenesh++ Gene Predictions
