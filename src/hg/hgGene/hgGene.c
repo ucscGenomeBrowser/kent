@@ -16,7 +16,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.39 2005/02/07 23:26:39 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.40 2005/02/08 23:59:24 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -293,12 +293,17 @@ if (protAcc != NULL)
 	    "TARGET=_blank>%s</A></B>\n",
 	    protAcc, protAcc);
     /* show SWISS-PROT display ID if it is different than the accession ID */
+    /* but, if display name is like: Q03399 | Q03399_HUMAN, then don't show display name */
     spDisplayId = spAccToId(spConn, protAcc);
-
-    /* if display name is like: Q03399 | Q03399_HUMAN, don't show display name */
     if (strstr(spDisplayId, protAcc) == NULL)
 	{
-	hPrintf(" (aka %s or %s)\n", spDisplayId, oldSpDisplayId(spDisplayId));
+	hPrintf(" (aka %s", spDisplayId);
+	/* show once if the new and old displayId are the same */
+	if (!sameWord(spDisplayId, oldSpDisplayId(spDisplayId)))
+	    {
+	    hPrintf(" or %s", oldSpDisplayId(spDisplayId));
+	    }
+	hPrintf(")\n", oldSpDisplayId(spDisplayId));
 	}
     }
 
