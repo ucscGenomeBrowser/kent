@@ -2,7 +2,8 @@
 # neighborhood browser.  Don't start these until
 # there is a knownGene track.
 
-# Set up some variables and make working directory
+# Set up db variable (you'll actually need to redo this
+# after each ssh until we work out a better system.)
 ssh hgwdev
 set db = hg16
 
