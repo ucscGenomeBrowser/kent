@@ -261,6 +261,11 @@ identifier pseudoGeneName
     hg16.pseudoMrna.qName dupeOk
     hg16.pseudoGeneLink.name
 
+identifier mrnaBlastzName
+"Link together mrnaBlastz and pseudoMrna"
+    hg16.mrnaBlastz.qName
+    hg16.pseudoMrna.qName
+
 # Microarray stuff.
 
 identifier gnfHumanAtlas2
