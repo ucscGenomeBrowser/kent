@@ -3279,6 +3279,42 @@ statistical model that simultaneously describes exon structure and exon evolutio
 
 <A NAME="F_tracks"></A>
 
+<!--commented out until release
+<P><B>FEEP</B> (<em>D. melanogaster)</em><BR>
+The full euchromatic expression profile (FEEP) track shows RNA expression of 
+protein-coding and noncoding sequences at each major life cycle stage, as 
+described in Stolc, V. <em>et al</em>., 
+<A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=15499012"
+TARGET=_blank>A gene expression map for the euchromatic genome of Drosophila 
+melanogaster</A>, <em>Science</em> <B>306</B>(5696), 655-60 (2004). Probe 
+sequences were mapped to Release 4 genomic sequence at UCSC using BLAT. For
+more information about the methods and probes used to produce the data
+displayed in this track, see the track description page.
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	Mapped probe sequences are represented by blocks.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	In dense display mode, the track shows the genomic locations of 
+	mapped probe sequences. In the fuller display modes, the track shows
+	the medians of all experiments for each life cycle stage. Clicking on 
+	an entry displays a full euchromatic expression profile.</TD></TR> 
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track configuration:</I></B> 
+	The track decription page provides an option to select which of the
+	the three probe sets should be displayed (all probes, probes expressed
+	above background, probes differentially expressed by ANOVA).</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>flyFeepComposite</I> positional table in the Table Browser. To 
+	view the table definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#FlyFeepComposite"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+-->
 
 <P><B>Fgenesh++ Genes</B><BR>
 This tracks shows Fgenesh++ gene predictions based on <A
@@ -3435,6 +3471,38 @@ This track shows non-coding genes annotated by FlyBase (version 3.2).
 	<I>bdgpGene</I> positional table in the Table Browser. To view the table
 	definition, click <A
 	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#GenePredExt"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>FlyReg</B> (<em>D. melanogaster)</em><BR>
+This track shows DNase I Footprint data from the
+<A HREF="http://www.flyreg.org/" TARGET=_blank>FlyReg</A> version 2.0 
+database. FlyReg provides access to results of the systematic curation and 
+genome annotation of 1,350 DNase I footprints for the fruitfly 
+<em>D. melanogaster</em> reported in Bergman, C.M. <em>et al</em>., 
+<A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=15572468" 
+TARGET=_blank>Drosophila DNase I footprint database: a systematic genome 
+annotation of transcription factor binding sites in the fruitfly, D. 
+melanogaster</A>, <em>Bioinformatics</em> 2004 Nov. 30 [Epub ahead of 
+print].
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	Footprint regions are represented by blocks.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display provides footprint information,
+	links to external databases, and a link to view the related genomic
+	DNA. When available, a footprint motif is also displayed, based on a 
+	MEME matrix computed by Dan Pollard on the set of footprints for 
+	the factor. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>flyreg2</I> positional table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#FlyReg2"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
