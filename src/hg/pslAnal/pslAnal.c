@@ -508,7 +508,7 @@ for (i = 0; i < psl->blockCount; i++)
 	  ge = psl->tStarts[i]+psl->blockSizes[i];
 	}
     }
-/*printf("Extracting %s:%d-%d of %d-%d\n",psl->tName, gstart, gend, gstart, gend);*/ 
+/*printf("Extracting %s:%d-%d of %d-%d\n",psl->tName, gstart, gend, gstart, gend);*/
 ret = hDnaFromSeq(psl->tName, gstart, gend, dnaLower);
 /* If opposite strand alignment, reverse the start and end positions in the mRNA */
 if (((psl->strand[0] == '-')  && (psl->strand[1] != '-')) 
@@ -801,8 +801,8 @@ struct indel *createCodonSub(struct sqlConnection *conn, char *mrna, int mrnaSta
   mi->chromStart = genPos[0];
   mi->chromEnd = genPos[2];
   mi->mrna = mrna;
-  mi->mrnaStart = mrnaStart;
-  mi->mrnaEnd = mrnaStart+2;
+  mi->mrnaStart = mrnaStart-2;
+  mi->mrnaEnd = mrnaStart;
   memcpy(mi->codonGenPos, genPos, sizeof(mi->codonGenPos));
   strcpy(mi->genCodon, gCodon);
   strcpy(mi->mrnaCodon, mCodon);
@@ -860,11 +860,11 @@ for (i = 0; i < pi->psl->blockCount; i++)
 	    if (pi->psl->strand[0] == '-')
                 {
 	        tPosition = pi->psl->tSize - tPosition - 1;
-                codonGenPos[2-iCodon] = tPosition;
+                codonGenPos[2-iCodon] = tPosition + 1;
                 }
             else
                 {
-                codonGenPos[iCodon] = tPosition;
+                codonGenPos[iCodon] = tPosition + 1;
                 }
             rCodon[iCodon] = r[qstart+j];
             dCodon[iCodon] = d[tstart+j];
