@@ -16,7 +16,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.25 2004/07/18 02:57:21 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.26 2004/07/18 03:20:14 kent Exp $";
 
 
 void usage()
@@ -230,7 +230,9 @@ char *chromTable(struct sqlConnection *conn, char *table)
  * You can freeMem this when done. */
 {
 char *chrom = hDefaultChrom();
-if (sqlTableExists(conn, table))
+if (sameString("mrna", table))
+    return cloneString(table);
+else if (sqlTableExists(conn, table))
     return cloneString(table);
 else
     {
@@ -376,16 +378,19 @@ boolean isPositional(char *db, char *table)
 {
 boolean result = FALSE;
 struct sqlConnection *conn = sqlConnect(db);
-if (sqlTableExists(conn, "chromInfo"))
+if (!sameString(table, "mrna"))
     {
-    char chromName[64];
-    struct hTableInfo *hti;
-    sqlQuickQuery(conn, "select chrom from chromInfo limit 1", 
-    	chromName, sizeof(chromName));
-    hti = hFindTableInfoDb(db, chromName, table);
-    if (hti != NULL)
-        {
-	result = htiIsPositional(hti);
+    if (sqlTableExists(conn, "chromInfo"))
+	{
+	char chromName[64];
+	struct hTableInfo *hti;
+	sqlQuickQuery(conn, "select chrom from chromInfo limit 1", 
+	    chromName, sizeof(chromName));
+	hti = hFindTableInfoDb(db, chromName, table);
+	if (hti != NULL)
+	    {
+	    result = htiIsPositional(hti);
+	    }
 	}
     }
 sqlDisconnect(&conn);
