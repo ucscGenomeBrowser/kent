@@ -51,6 +51,7 @@
 #include "sageExp.h"
 #include "pslWScore.h"
 #include "lfs.h"
+#include "mcnBreakpoints.h"
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
 #define FUREY_CODE 1
@@ -153,30 +154,33 @@ cfmCleanup(&cfm);
 printf("</PRE></TT>");
 }
 
-char *chromBand(char *chrom, int pos)
-/* Return text string that says what bend pos is on. */
+void chromBand(char *chrom, int pos, char *retBand)
+/* Return text string that says what band pos is on. */
 {
 struct sqlConnection *conn = hAllocConn();
 char query[256];
 char buf[64];
-static char band[64];
+/*static char band[64];*/
 
 sprintf(query, 
 	"select name from cytoBand where chrom = '%s' and chromStart <= %d and chromEnd > %d", 
 	chrom, pos, pos);
 buf[0] = 0;
 sqlQuickQuery(conn, query, buf, sizeof(buf));
-sprintf(band, "%s%s", skipChr(chrom), buf);
+sprintf(retBand, "%s%s", skipChr(chrom), buf);
 hFreeConn(&conn);
-return band;
+/*return band;*/
 }
 
 void printPos(char *chrom, int start, int end, char *strand, boolean featDna)
 /* Print position lines.  'strand' argument may be null. */
 {
+char band[64];
+
+chromBand(chrom, (start + end)/2, band);
 printf("<B>Chromosome:</B> %s<BR>\n", skipChr(chrom));
 if (hTableExists("cytoBand"))
-    printf("<B>Band:</B> %s<BR>\n", chromBand(chrom, (start + end)/2));
+    printf("<B>Band:</B> %s<BR>\n", band);
 printf("<B>Begin in Chromosome:</B> %d<BR>\n", start+1);
 printf("<B>End in Chromosome:</B> %d<BR>\n", end);
 printf("<B>Genomic Size:</B> %d<BR>\n", end - start);
@@ -2827,8 +2831,8 @@ hgcStart(tissue);
 printf("<H2>UCSF Comparative Genomic Hybridizations - %s</H2>\n", tissue);
 printf("<P><HR ALIGN=\"CENTER\"></P>\n<TABLE>\n");
 printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n",seqName);
-printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",winStart);
-printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",winEnd);
+printf("<TR><TH ALIGN=left>Start window:</TH><TD>%d</TD></TR>\n",winStart);
+printf("<TR><TH ALIGN=left>End window:</TH><TD>%d</TD></TR>\n",winEnd);
 printf("</TABLE>\n");
 printf("<P><HR ALIGN=\"CENTER\"></P>\n");
 
@@ -2860,6 +2864,55 @@ printf("<TR><TD>&nbsp</TD></TR>\n");
 
 printf("</TR>\n</TABLE>\n");
 
+hgFreeConn(&conn);
+} 
+
+void doMcnBreakpoints(char *track, char *name, struct trackDb *tdb)
+/* Create detail page for MCN breakpoints track */ 
+{
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+int start = cgiInt("o");
+int end = cgiInt("t");
+char startBand[32]; 
+char endBand[32]; 
+char **row;
+int rowOffset;
+struct mcnBreakpoints *mcnRecord;
+
+/* Print out non-sequence info */
+hgcStart(name);
+
+/* Print general range info */
+printf("<H2>MCN Breakpoints - %s</H2>\n", name);
+printf("<P><HR ALIGN=\"CENTER\"></P>\n<TABLE>\n");
+printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n",seqName);
+printf("<TR><TH ALIGN=left>Begin in Chromosome:</TH><TD>%d</TD></TR>\n",start);
+printf("<TR><TH ALIGN=left>End in Chromosome:</TH><TD>%d</TD></TR>\n",end);
+chromBand(seqName, start, startBand);
+chromBand(seqName, end - 1, endBand);
+printf("<TR><TH Align=left>Chromosome Band Range:</TH><TD>%s - %s<TD></TR>\n",
+       startBand, endBand);	
+printf("</TABLE>\n");
+
+/* Find all of the breakpoints in this range for this name*/
+sprintf(query, "SELECT * FROM mcnBreakpoints WHERE chrom = '%s' AND
+                chromStart = %d and chromEnd = %d AND name = '%s'",
+                seqName, start, end, name);
+sr = sqlGetResult(conn, query);
+while (row = sqlNextRow(sr)) 
+     {
+     printf("<P><HR ALIGN=\"CENTER\"></P>\n");
+     mcnRecord = mcnBreakpointsLoad(row);
+     printf("<TABLE>\n");
+     printf("<TR><TH ALIGN=left>Case ID:</TH><TD>%s</TD></TR>", mcnRecord->caseId);
+     printf("<TR><TH ALIGN=left>Breakpoint ID:</TH><TD>%s</TD></TR>", mcnRecord->bpId);
+     printf("<TR><TH ALIGN=left>Trait:</TH><TD>%s</TD><TD>%s</TD></TR>", mcnRecord->trId, mcnRecord->trTxt);
+     printf("<TR><TH ALIGN=left>Trait Group:</TH><TD>%s</TD><TD>%s</TD></TR>", mcnRecord->tgId, mcnRecord->tgTxt);
+     printf("</TR>\n</TABLE>\n");
+     }  
+sqlFreeResult(&sr);
 hgFreeConn(&conn);
 } 
 
@@ -3633,6 +3686,10 @@ else if (sameWord(track, "uniGene"))
  else if (sameWord(track, "cgh"))
    {
      doCgh(track, item, tdb);
+   }
+ else if (sameWord(track, "mcnBreakpoints"))
+   {
+     doMcnBreakpoints(track, item, tdb);
    }
 #endif /*FUREY_CODE*/
 else if (sameWord(track, "htcCloneSeq"))
