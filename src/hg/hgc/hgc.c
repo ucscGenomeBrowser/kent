@@ -153,7 +153,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.805 2004/12/23 03:19:33 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.806 2005/01/01 20:40:45 genbank Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3845,6 +3845,12 @@ else if (startsWith("danRer", database))
     mgcDb.name = "ZGC";
     mgcDb.organism = "Dr";
     mgcDb.server = "zgc";
+    }
+else if (startsWith("xenTro", database))
+    {
+    mgcDb.name = "XGC";
+    mgcDb.organism = "xt";
+    mgcDb.server = "xgc";
     }
 else
     errAbort("can't map database \"%s\" to an MGC organism", database);
