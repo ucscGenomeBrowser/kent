@@ -4296,8 +4296,7 @@ printf("<B>%s position:</B> %s:%d-%d<BR>\n", thisOrg,
    psl->tName, psl->tStart+1, psl->tEnd);
 
 
-printf("<B>%s size:</B> %d<BR>\n", thisOrg,
-	psl->tEnd - psl->tStart);
+printf("<B>%s size:</B> %d<BR>\n", thisOrg, psl->tEnd - psl->tStart);
 printf("<B>Identical Bases:</B> %d<BR>\n", psl->match + psl->repMatch);
 printf("<B>Number of Gapless Aligning Blocks:</B> %d<BR>\n", psl->blockCount );
 printf("<B>Percent identity within gapless aligning blocks:</B> %3.1f%%<BR>\n", 0.1*(1000 - pslCalcMilliBad(psl, FALSE)));
@@ -4316,7 +4315,9 @@ freez(&cgiItem);
 }
 
 
-
+/* 
+ Multipurpose function to show alignments in details pages where applicable
+ */
 void longXenoPsl1(struct trackDb *tdb, char *item, 
 	char *otherOrg, char *otherChromTable, char *otherDb)
 /* Put up cross-species alignment when the second species
@@ -4427,6 +4428,7 @@ if (!(strcmp(otherName,"human")
       && strcmp(otherName,"rat")
       && strcmp(otherName,"chicken")
       && strcmp(otherName,"fugu")
+      && strcmp(otherName,"tetra")
       && strcmp(otherName,"zebrafish")))
     {
     sprintf( chromStr, "%sChrom" , otherName );
@@ -8605,7 +8607,7 @@ else if (sameWord("blastzMm2", track)
 	 || startsWith("blastzBestMouse", track)
 	 || startsWith("blastzBestMouse_0824", track)
 	 || sameWord("aarMm2", track)
-         || sameWord("blastzStrictChainMouse", track))
+         )
     {
     doBlatMus(tdb, item);
     }
@@ -8613,10 +8615,24 @@ else if (startsWith("multAlignWebb", track))
     {
     doMultAlignZoo(tdb, item, &track[13] );
     }
-else if (sameWord(track, "blatHuman") 
-        || sameWord(track, "blastzStrictChainHuman"))
+else if (sameWord(track, "blatHuman"))
     {
     doBlatHuman(tdb, item);
+    }
+/*
+Generalized code to show strict chain blastz alignments in the zoo browsers
+ */
+else if (containsStringNoCase(track, "blastzStrictChain")
+         && containsStringNoCase(database, "zoo"))
+    {
+    int len = strlen("blastzStrictChain");
+    char *orgName = &track[len];
+    char dbName[32] = "zoo";
+    strcpy(&dbName[3], orgName);
+    len = strlen(orgName);
+    strcpy(&dbName[3 + len], "3");
+//    uglyf("DBNAME: %s, ORGNAME: %s, ITEM: %s\n", dbName, orgName, item);
+    longXenoPsl1(tdb, item, orgName, "chromInfo", dbName);
     }
 else if (sameWord(track, "blastzHg"))
     {
@@ -8874,9 +8890,24 @@ else
 cartHtmlEnd();
 }
 
+struct hash *orgDbHash = NULL;
+
+void initOrgDbHash()
+/* 
+Function to initialize a has of organism names that hash to a database ID.
+This is used to show alignments by hashing the organism associated with the track to the
+database name where the chromInfo is stored. For example, the mousBlat track in the 
+human browser would hash to the mm2 database.
+*/
+{
+orgDbHash = hashNew(4); // 16 entries max so far
+
+}
+
 void cartDoMiddle(struct cart *theCart)
 /* Save cart and do main middle handler. */
 {
+initOrgDbHash();
 cart = theCart;
 doMiddle();
 }
