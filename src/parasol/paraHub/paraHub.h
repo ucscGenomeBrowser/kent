@@ -112,18 +112,6 @@ void startHeartbeat();
 void endHeartbeat();
 /* Kill heartbeat deamon. */
 
-void mutexLock(pthread_mutex_t *mutex);
-/* Lock a mutex or die trying. */
-
-void mutexUnlock(pthread_mutex_t *mutex);
-/* Lock a mutex or die trying. */
-
-void condSignal(pthread_cond_t *cond);
-/* Set conditional signal */
-
-void condWait(pthread_cond_t *cond, pthread_mutex_t *mutex);
-/* Wait for conditional signal. */
-
 struct paraMessage *hubMessageGet();  
 /* Get message from central queue, waiting if necessary for one to appear. 
  * Do a paraMessageFree when you're done with this message. */

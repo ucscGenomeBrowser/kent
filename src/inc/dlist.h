@@ -51,10 +51,12 @@ void dlListInit(struct dlList *dl);
 
 void freeDlList(struct dlList **pList);
 /* Free up a doubly linked list and it's nodes (but not the node values). */
+#define dlListFree freeDlList
 
 void freeDlListAndVals(struct dlList **pList);
 /* Free all values in doubly linked list and the list itself.  (Just calls
  * freeMem on all values. */
+#define dlListFreeAndVals freeDlListAndVals
 
 void dlAddBefore(struct dlNode *anchor, struct dlNode *newNode);
 /* Add a node to list before anchor member. */

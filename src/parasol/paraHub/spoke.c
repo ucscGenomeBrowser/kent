@@ -3,19 +3,15 @@
  * waiting on a remote host.  Parasol recieves all messages through it's
  * central socket though. */
 
-#include <signal.h>
-#include <sys/socket.h>
-#include <sys/un.h>
-#include <netinet/in.h>
-#include <netdb.h>
-#include "common.h"
+#include "paraCommon.h"
 #include "dlist.h"
 #include "dystring.h"
 #include "linefile.h"
 #include "net.h"
 #include "internet.h"
-#include "paraHub.h"
 #include "portable.h"
+#include "pthreadWrap.h"
+#include "paraHub.h"
 
 int spokeLastId;	/* Id of last spoke allocated. */
 static char *runCmd = "run";
@@ -84,12 +80,12 @@ struct paraMessage *message = NULL;
 for (;;)
     {
     /* Wait for next message. */
-    mutexLock(&spoke->messageMutex);
+    pthreadMutexLock(&spoke->messageMutex);
     while (spoke->message == NULL)
-	condWait(&spoke->messageReady, &spoke->messageMutex);
+	pthreadCondWait(&spoke->messageReady, &spoke->messageMutex);
     message = spoke->message;
     spoke->message = NULL;
-    mutexUnlock(&spoke->messageMutex);
+    pthreadMutexUnlock(&spoke->messageMutex);
 
     line = message->data;
     logIt("%s: %s\n", spoke->name, line);
@@ -149,12 +145,12 @@ return pm;
 static void spokeSyncSendMessage(struct spoke *spoke, struct paraMessage *pm)
 /* Synchronize with spoke and update it's message pointer. */
 {
-mutexLock(&spoke->messageMutex);
+pthreadMutexLock(&spoke->messageMutex);
 if (spoke->message != NULL)
     warn("Sending message to %s, which is occupied", spoke->name);
 spoke->message = pm;
-condSignal(&spoke->messageReady);
-mutexUnlock(&spoke->messageMutex);
+pthreadCondSignal(&spoke->messageReady);
+pthreadMutexUnlock(&spoke->messageMutex);
 }
 
 void spokeSendMessage(struct spoke *spoke, struct machine *machine, char *message)
