@@ -4,6 +4,12 @@ visibility pack
 track mgcGenes
 visibility pack
 
+track baylorRtPcrGeneA
+visibility pack
+
+track baylorRtPcr
+visibility pack
+
 track mgcTSExpPcr
 visibility pack
 

@@ -308,6 +308,24 @@ visibility hide
 color 34,139,34
 type genePred
 
+track baylorRtPcrGeneA
+shortLabel Baylor GeneA
+longLabel Baylor RT-PCR GeneA for MGC
+group genes
+priority 36.1
+visibility hide
+color 200,0,50
+type psl .
+
+track baylorRtPcr
+shortLabel Baylor RT-PCR
+longLabel Baylor RT-PCR for MGC
+group genes
+priority 36.2
+visibility hide
+color 200,0,100
+type psl .
+
 track mgcTSExpPcr
 shortLabel TWINSCAN Exp PCR
 longLabel TWINSCAN predictions proposed for exploratory PCR confirmation
