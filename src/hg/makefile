@@ -6,8 +6,11 @@ BROWSER_BINS=cartReset das hgBlat hgCoordConv hgGateway hgGene hgPcr hgTables hg
 
 all::    cgi utils
 
-utils:
+hgLib:
+	@./sqlEnvTest.sh
 	cd lib && ${MAKE}
+
+utils:	hgLib
 	@for D in $(USE_DIRS) x; do \
             if test "$$D" != "x" ; then \
                 ( cd $$D && echo $$D && $(MAKE) ) ;\
@@ -32,8 +35,7 @@ BAD_DIRS = \
 # Compile only, the cgi's for those builds without write access
 #	to apache cgi-bin directories  (this compiles and links executables)
 
-compile:
-	cd lib && ${MAKE}
+compile:	hgLib
 	@for D in ${BROWSER_BINS}; do \
 		(cd $${D} && ${MAKE} compile;) \
 	done
@@ -41,32 +43,28 @@ compile:
 # Build cgi's
 #   cgi: Destination for the binaries is /usr/local/apache/cgi-bin-${USER}
 
-cgi:
-	cd lib && ${MAKE}
+cgi:	hgLib
 	@for D in ${BROWSER_BINS}; do \
 		(cd $${D} && ${MAKE};) \
 	done
 
 #   alpha: Destination for the binaries is /usr/local/apache/cgi-bin/
 
-alpha:
-	cd lib && ${MAKE}
+alpha:	hgLib
 	@for D in ${BROWSER_BINS}; do \
 		(cd $${D} && ${MAKE} alpha;) \
 	done
 
 #   beta: Destination for the binaries is /usr/local/apache/cgi-bin-beta/
 
-beta:
-	cd lib && ${MAKE}
+beta:	hgLib
 	@for D in ${BROWSER_BINS}; do \
 		(cd $${D} && ${MAKE} beta;) \
 	done
 
 # install: Destination for the binaries is ${DESTDIR}/usr/local/apache/cgi-bin
 
-install:
-	cd lib && ${MAKE}
+install:	hgLib
 	@for D in ${BROWSER_BINS}; do \
 		(cd $${D} && ${MAKE} install;) \
 	done
@@ -84,7 +82,7 @@ clean_utils::
 		(cd $${D} && ${MAKE} clean;) \
 	done
 
-test::
+test::	hgLib
 	cd lib && ${MAKE} test
 	cd blastToPsl && ${MAKE} test
 	cd embossToPsl && ${MAKE} test
