@@ -897,7 +897,7 @@ SEQ2_DIR=/iscratch/i/gs.18/build35/bothMaskedNibs
 SEQ2_RMSK=
 # FLAG not currently used
 SEQ2_FLAG=
-SEQ1_SMSK=/iscratch/i/gs.18/build35/linSpecRep.notInRat
+SEQ2_SMSK=/iscratch/i/gs.18/build35/linSpecRep.notInMouse
 SEQ2_IN_CONTIGS=0
 SEQ2_CHUNK=30000000
 SEQ2_LAP=0
@@ -919,14 +919,12 @@ SEQ2_LEN=$BASE/S2.len
     /cluster/data/hg17/jkStuff/BlastZ_run0.sh
     cd run.0
     para try, check, push, check, ....
-XXX - running - 2004-07-06
-
-# Completed: 44330 of 44330 jobs
-# CPU time in finished jobs:   16250628s  270843.80m  4514.06h  188.09d  0.515 y
-# IO & Wait Time:                387936s    6465.60m   107.76h    4.49d  0.012 y
-# Average job time:                 375s       6.26m     0.10h    0.00d
-# Longest job:                     4417s      73.62m     1.23h    0.05d
-# Submission to last job:         43754s     729.23m    12.15h    0.51d
+# Completed: 46717 of 46717 jobs
+# CPU time in finished jobs:   16171136s  269518.93m  4491.98h  187.17d  0.513 y
+# IO & Wait Time:                534501s    8908.35m   148.47h    6.19d  0.017 y
+# Average job time:                 358s       5.96m     0.10h    0.00d
+# Longest job:                     5263s      87.72m     1.46h    0.06d
+# Submission to last job:         30066s     501.10m     8.35h    0.35d
 
     #	the file server to its knees.  Run this on the small cluster.
     ssh kki
@@ -935,12 +933,11 @@ XXX - running - 2004-07-06
     cd run.1
     para try, check, push, etc ...
 # Completed: 341 of 341 jobs
-# CPU time in finished jobs:       2189s      36.48m     0.61h    0.03d  0.000 y
-# IO & Wait Time:                  7714s     128.57m     2.14h    0.09d  0.000 y
-# Average job time:                  29s       0.48m     0.01h    0.00d
-# Longest job:                      165s       2.75m     0.05h    0.00d
-# Submission to last job:           830s      13.83m     0.23h    0.01d
-
+# CPU time in finished jobs:       2186s      36.43m     0.61h    0.03d  0.000 y
+# IO & Wait Time:                  1804s      30.07m     0.50h    0.02d  0.000 y
+# Average job time:                  12s       0.20m     0.00h    0.00d
+# Longest job:                       82s       1.37m     0.02h    0.00d
+# Submission to last job:          3895s      64.92m     1.08h    0.05d
 
     #	Third cluster run to convert lav's to axt's
     #	Does not work on kki since /scratch on the iservers is not the
@@ -950,37 +947,18 @@ XXX - running - 2004-07-06
     /cluster/data/hg17/jkStuff/BlastZ_run2.sh
     cd run.2
     para try, check, push, etc ...
-# Completed: 45 of 46 jobs
-# Crashed: 1 jobs
-# CPU time in finished jobs:       1638s      27.30m     0.46h    0.02d  0.000 y
-# IO & Wait Time:                 12068s     201.13m     3.35h    0.14d  0.000 y
-# Average job time:                 305s       5.08m     0.08h    0.00d
-# Longest job:                     1124s      18.73m     0.31h    0.01d
-# Submission to last job:          2519s      41.98m     0.70h    0.03d
-    #	chr19 takes too long, the axtSort becomes too large and the poor
-    #	node ends up swapping forever.  When you are down to that last
-    #	job running, stop it and go to kolossus.
-    #	Adjusting the location of the nib directories, and fixing the
-    #	MACHTYPE on the commands in the blastz script:
-    ssh kolossus
-    cd /cluster/data/mm5/bed/blastz.hg17
-    sed -e "s/i386/x86_64/g" /cluster/bin/scripts/blastz-chromlav2axt > \
-	x86_64-chromlav2axt
-    chmod +x x86_64-chromlav2axt
-    time ./x86_64-chromlav2axt \
-	/cluster/data/mm5/bed/blastz.hg17/lav/chr19 \
-	/cluster/data/mm5/bed/blastz.hg17/axtChrom/chr19.axt \
-	/cluster/bluearc/scratch/hg/gs.18/build35/bothMaskedNibs \
-	/cluster/bluearc/scratch/mus/mm5/softNib
-    #	real    7m41.719s
-    #	user    2m2.850s
-    #	sys     0m23.070s
+# Completed: 43 of 43 jobs
+# CPU time in finished jobs:       2099s      34.98m     0.58h    0.02d  0.000 y
+# IO & Wait Time:                  6862s     114.37m     1.91h    0.08d  0.000 y
+# Average job time:                 208s       3.47m     0.06h    0.00d
+# Longest job:                     1276s      21.27m     0.35h    0.01d
+# Submission to last job:          1291s      21.52m     0.36h    0.01d
 
     # translate sorted axt files into psl
-    ssh eieio
+    ssh kksilo
     cd /cluster/data/mm5/bed/blastz.hg17
-    mkdir -p pslChrom
-    set tbl = "blastzMm5"
+    mkdir p pslChrom
+    set tbl = "blastzHg17"
     foreach f (axtChrom/chr*.axt)
       set c=$f:t:r
       echo "Processing chr $c"
@@ -989,16 +967,16 @@ XXX - running - 2004-07-06
     #	This takes more than an hour.  You can shorten this by changing
     #	that command to a simple echo, put the results into a file,
     #	split the file into four parts and run the four files as shell
-    #	scripts on eieio to have four processes running at the same
-    #	time.  Load on eieio gets up to about 20 which is reasonable.
+    #	scripts on kksilo to have four processes running at the same
+    #	time.  Load on kksilo gets up to about 20 which is reasonable.
 
     # Load database tables
     ssh hgwdev
     cd /cluster/data/mm5/bed/blastz.hg17/pslChrom
     bash		#	for tcsh users
-    for F in chr*_blastzMm5.psl
+    for F in chr*_blastzHg17.psl
     do
-	/cluster/bin/i386/hgLoadPsl hg17 ${F}
+	/cluster/bin/i386/hgLoadPsl mm5 ${F}
 	echo "${F} done"
     done
     # this is a 40 minute job
@@ -1007,12 +985,10 @@ XXX - running - 2004-07-06
     # featureBits on blastzMm3 or 4 will not work on hgwdev, runs out of
     # memory.  But if you reset your ~/.hg.conf to use the read-only
     #	user and contact the hgwdev host, then use the x86_64 featureBits
-    # featureBits hg16 blastzMm5
-    # 1056761609 bases of 2865248791 (36.882%) in intersection
-    # featureBits hg17 blastzMm5
-    #	1052077141 bases of 2866216770 (36.706%) in intersection
-    # featureBits hg17 blastzMm4
-    #  1056201417 bases of 2866216770 (36.850%) in intersection
+    # featureBits mm5 blastzHg17
+    #	1057836001 bases of 2615483787 (40.445%) in intersection
+    # featureBits mm4 blastzHg16
+    #	1068995521 bases of 2627444668 (40.686%) in intersection
 
 # CHAIN MM5 BLASTZ (DONE - 2004-07-02 - Hiram)
 
@@ -1034,8 +1010,8 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} out/$(
 
     cat << '_EOF_' > doChain
 #!/bin/csh
-axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
-	/iscratch/i/mus/mm5/softNib $2 > $3
+axtChain $1 /iscratch/i/mus/mm5/softNib \
+	/iscratch/i/gs.18/build35/bothMaskedNibs $2 > $3
 '_EOF_'
     # << this line makes emacs coloring happy
     chmod a+x doChain
@@ -1045,26 +1021,25 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
     para create jobList
     para try
     para push # ... etc ...
-# Completed: 46 of 46 jobs
-# CPU time in finished jobs:       4856s      80.94m     1.35h    0.06d  0.000 y
-# IO & Wait Time:                 20083s     334.71m     5.58h    0.23d  0.001 y
-# Average job time:                 542s       9.04m     0.15h    0.01d
-# Longest job:                     2929s      48.82m     0.81h    0.03d
-# Submission to last job:          2929s      48.82m     0.81h    0.03d
-
+# Completed: 43 of 43 jobs
+# CPU time in finished jobs:       5354s      89.23m     1.49h    0.06d  0.000 y
+# IO & Wait Time:                 10543s     175.72m     2.93h    0.12d  0.000 y
+# Average job time:                 370s       6.16m     0.10h    0.00d
+# Longest job:                     1694s      28.23m     0.47h    0.02d
+# Submission to last job:          1694s      28.23m     0.47h    0.02d
 
     # now on the file server, sort chains
-    ssh eieio
+    ssh kksilo
     cd /cluster/data/mm5/bed/blastz.hg17/axtChain
     time chainMergeSort run1/chain/*.chain > all.chain
-    #	real    8m42.853s
-    #	user    5m59.100s
-    #	sys     0m40.320s
+    #	real    4m53.428s
+    #	user    4m3.040s
+    #	sys     0m29.440s
 
     time chainSplit chain all.chain
-    #	real    10m52.224s
-    #	user    5m52.360s
-    #	sys     0m34.870s
+    #	real    4m34.674s
+    #	user    3m38.370s
+    #	sys     0m29.990s
 
     # optionally: rm run1/chain/*.chain
 
@@ -1073,53 +1048,52 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
     ssh hgwdev
     cd /cluster/data/mm5/bed/blastz.hg17/axtChain/chain
     bash	#	for tcsh users
-    for i in *.chain
+    for I in *.chain
     do
-        c=${i/.chain/}
-        hgLoadChain hg17 ${c}_chainMm5 $i
+        c=${I/.chain/}
+        hgLoadChain mm5 ${c}_chainHg17 $I
         echo done $c
     done
     # exit bash if you are tcsh
     #	This is a 50 minute job
 
-    #	featureBits hg17 chainMm5
-    #	2834490112 bases of 2866216770 (98.893%) in intersection
-    #	featureBits hg17 chainMm4
-    #	2829135227 bases of 2866216770 (98.706%) in intersection
-    #	featureBits hg16 chainMm4
-    #	2828363353 bases of 2865248791 (98.713%) in intersection
+    #	featureBits mm5 chainHg17
+    #	2507720521 bases of 2615483787 (95.880%) in intersection
+    #	featureBits mm4 chainHg16
+    #	2558968088 bases of 2627444668 (97.394%) in intersection
 
 # NET MM5 (WORKING - 2004-07-02 - Hiram)
-    ssh eieio
+    ssh kksilo
     cd /cluster/data/mm5/bed/blastz.hg17/axtChain
     mkdir preNet
     cd chain
     bash	#	for tcsh users
-    for i in *.chain
+    for I in *.chain
     do
-      echo preNetting $i
-      /cluster/bin/i386/chainPreNet $i /cluster/data/hg17/chrom.sizes \
-                        /cluster/data/mm5/chrom.sizes ../preNet/$i
+      echo preNetting $I
+      /cluster/bin/i386/chainPreNet $I /cluster/data/mm5/chrom.sizes \
+		/cluster/data/hg17/chrom.sizes ../preNet/$I
     done
     # exit bash if you are tcsh
-    #	15 minute job
+    #	7 minute job
 
     cd ..
     mkdir n1
     cd preNet
     bash	#	for tcsh users
-    for i in *.chain
+    for I in *.chain
     do
-      n=${i/.chain/}.net
-      echo primary netting $i $n
-      /cluster/bin/i386/chainNet $i -minSpace=1 /cluster/data/hg17/chrom.sizes \
-	/cluster/data/mm5/chrom.sizes ../n1/$n /dev/null
+      n=${I/.chain/}.net
+      echo primary netting $I $n
+      /cluster/bin/i386/chainNet $I -minSpace=1 /cluster/data/mm5/chrom.sizes \
+	/cluster/data/hg17/chrom.sizes ../n1/$n /dev/null
     done
     # exit bash if you are tcsh
-    #	9 minute job
+    #	5 minute job
 
     cd ..
     cat n1/*.net | /cluster/bin/i386/netSyntenic stdin hNoClass.net
+XXX running 2004-07-08 14:49
     #	memory usage 2546110464, utime 16327 s/100, stime 3546
 
     ssh hgwdev
@@ -1132,7 +1106,7 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
     #	sys     1m48.470s
 
     # If things look good do
-    ssh eieio
+    ssh kksilo
     cd /cluster/data/mm5/bed/blastz.hg17/axtChain
     rm -r n1 hNoClass.net
     # Make a 'syntenic' subset of these with
@@ -1166,7 +1140,7 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
     # Add entries for net and chain to mouse/hg17 trackDb
 
     # make net
-    ssh eieio
+    ssh kksilo
     cd /cluster/data/mm5/bed/blastz.hg17/axtChain
     mkdir mouseNet
     time netSplit mouse.net mouseNet
@@ -1175,7 +1149,7 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
     #	sys     1m13.490s
 
     #	extract axt's from net, and convert to maf's
-    ssh eieio
+    ssh kksilo
     cd /cluster/data/mm5/bed/blastz.hg17/axtChain
     mkdir ../axtNet ../mafNet
 cat > makeMaf.csh << '_EOF_'
@@ -1214,7 +1188,7 @@ cat > makeMaf.csh << '_EOF_'
     #	32 minute gzip
 
     #  Convert those axt files to psl
-    ssh eieio
+    ssh kksilo
     cd /cluster/data/mm5/bed/blastz.hg17
     mkdir pslBest
     foreach a (axtBest/chr*.axt)
@@ -1294,7 +1268,7 @@ hgLoadBed hg17 ensRatMm5Hom ucsc100k.bed -sqlTable=ensRatMm5Hom.sql
 
 # MAKING MOUSE AXTTIGHT FROM AXTBEST (DONE - 2004-07-02 - Hiram)
     # After creating axtBest alignments above, use subsetAxt to get axtTight:
-    ssh eieio
+    ssh kksilo
     cd /cluster/data/mm5/bed/blastz.hg17/axtNet
     mkdir -p ../axtTight
     bash	#	for tcsh users
