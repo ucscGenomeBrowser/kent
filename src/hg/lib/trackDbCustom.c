@@ -1,5 +1,6 @@
 /* trackDbCustom - custom (not autoSQL generated) code for working
- * with trackDb. */
+ * with trackDb.  This code is concerned with making the trackDb
+ * MySQL table out of the trackDb.ra files. */
 
 #include "common.h"
 #include "linefile.h"
@@ -10,7 +11,7 @@
 #include "ra.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.9 2003/05/06 07:22:24 kate Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.10 2003/06/26 21:21:31 kent Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 

@@ -9,15 +9,71 @@
 #include "hdb.h"
 #include "hCommon.h"
 #include "hgNear.h"
+#include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.5 2003/06/23 17:21:44 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.9 2003/06/26 00:06:48 kent Exp $";
 
 
-static char *expRatioCellVal(struct column *col, char *geneId, 
+static boolean loadExpVals(struct sqlConnection *conn,
+	char *table, char *name, char *posTable,
+	int *retValCount, float **retVals)
+/* Load up and return expression bed record.  Return NULL
+ * if none of given name exist. */
+{
+char query[256];
+char expName[64];
+struct sqlResult *sr;
+char **row;
+boolean ok = FALSE;
+safef(query, sizeof(query), "select value from %s where name = '%s'", 
+	table, name);
+if (sqlQuickQuery(conn, query, expName, sizeof(expName)) == NULL)
+    return FALSE;
+safef(query, sizeof(query), "select expScores from %s where name = '%s'",
+	posTable, expName);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    sqlFloatDynamicArray(row[0], retVals, retValCount);
+    ok = TRUE;
+    }
+sqlFreeResult(&sr);
+return ok;
+}
+
+static char *expRatioCellVal(struct column *col, struct genePos *gp, 
 	struct sqlConnection *conn)
 /* Get comma separated list of values. */
 {
-return cloneString("coming soon");
+int i, numExpts = col->representativeCount;
+struct dyString *dy = newDyString(1024);
+int valCount;
+float *vals = NULL;
+char *result;
+
+if (loadExpVals(conn, col->table, gp->name, col->posTable, &valCount, &vals))
+    {
+    for (i=0; i<numExpts; ++i)
+	{
+	int ix = col->representatives[i];
+	if (i != -1)
+	    {
+	    float val = vals[ix];
+	    if (val < -9999)
+	        dyStringPrintf(dy, "n/a,");
+	    else
+	        dyStringPrintf(dy, "%4.3f,", val);
+	    }
+	}
+    freez(&vals);
+    }
+else
+    {
+    dyStringPrintf(dy, "n/a");
+    }
+result = cloneString(dy->string);
+dyStringFree(&dy);
+return result;
 }
 
 static boolean expRatioExists(struct column *col, struct sqlConnection *conn)
@@ -37,7 +93,30 @@ if (hex > 0xFF) hex = 0xFF;
 hPrintf("%02X", hex);
 }
 
-void colorVal(double val, boolean useBlue)
+static char *colSchemeVarName(struct column *col)
+/* Return variable name for use-blue. */
+{
+static char buf[128];
+safef(buf, sizeof(buf), "near.col.%s.color", col->name);
+return buf;
+}
+
+static char *scaleVarName(struct column *col)
+/* Return variable name for use-blue. */
+{
+static char buf[128];
+safef(buf, sizeof(buf), "near.col.%s.scale", col->name);
+return buf;
+}
+
+
+static char *colorSchemeVals[] = {
+/* Menu option for color scheme. */
+   "red high/green low",
+   "blue high/green low",
+};
+
+static void colorVal(double val, boolean useBlue)
 /* Val is -1.0 to 1.0.  Print color in form #FF0000, normally
  * using green for minus values, red for plus values, but
  * optionally using blue for plus values. */
@@ -74,7 +153,6 @@ else
     }
 }
 
-static boolean expRatioUseBlue = FALSE;
 static int expSubcellWidth = 16;
 
 static void startExpCell()
@@ -95,7 +173,6 @@ static void restartExpCell()
 endExpCell();
 startExpCell();
 }
-
 
 static void printRatioShades(struct column *col, int repCount, 
 	int *reps, int valCount, float *vals)
@@ -122,13 +199,14 @@ for (i=0; i<repCount; ++i)
 	else
 	    {
 	    hPrintf("<TD WIDTH=%d BGCOLOR=\"#", expSubcellWidth);
-	    colorVal(val*scale, FALSE);
+	    colorVal(val*scale, col->expRatioUseBlue);
 	    hPrintf("\">&nbsp;</TD>");
 	    }
 	}
     }
 endExpCell();
 }
+
 
 static void replicate(char *s, int repCount, int *reps)
 /* Replicate s in cells of table */
@@ -148,37 +226,24 @@ for (i=0; i<repCount; ++i)
 endExpCell();
 }
 
-void expRatioCellPrint(struct column *col, char *geneId, 
+void expRatioCellPrint(struct column *col, struct genePos *gp, 
 	struct sqlConnection *conn)
 /* Print out html for expRatio cell. */
 {
 int i, numExpts = col->representativeCount;
-struct bed *bed;
-struct sqlResult *sr;
-char **row, query[256];
-char expName[64];
+int valCount;
+float *vals = NULL;
 
-safef(query, sizeof(query), "select value from %s where name = '%s'", 
-	col->table, geneId);
-if (sqlQuickQuery(conn, query, expName, sizeof(expName)) == NULL)
+if (loadExpVals(conn, col->table, gp->name, col->posTable, &valCount, &vals))
     {
-    replicate("n/a", col->representativeCount, col->representatives);
-    return;
-    }
-safef(query, sizeof(query), "select expScores from %s where name = '%s'",
-	col->posTable, expName);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) == NULL)
-    replicate("n/a???", col->representativeCount, col->representatives);
-else 
-    {
-    int idCount, valCount;
-    float *vals;
-    sqlFloatDynamicArray(row[0], &vals, &valCount);
     printRatioShades(col, col->representativeCount, col->representatives, 
     	valCount, vals);
+    freez(&vals);
     }
-sqlFreeResult(&sr);
+else
+    {
+    replicate("n/a", col->representativeCount, col->representatives);
+    }
 }
 
 static char **getExperimentNames(char *database, char *table, int expCount, int *expIds)
@@ -274,6 +339,171 @@ for (i=0; i<numExpts; ++i)
 freeMem(experiments);
 }
 
+static void expRatioConfigControls(struct column *col)
+/* Print out configuration column */
+{
+hPrintf("<TD>");
+
+/* Make color drop-down. */
+    {
+    char *varName = colSchemeVarName(col);
+    char *checked = cartUsualString(cart, varName, colorSchemeVals[0]);
+    hPrintf("colors: ");
+    cgiMakeDropList(varName, colorSchemeVals, ArraySize(colorSchemeVals), checked);
+    }
+
+/* Make scale drop-down. */
+    {
+    char *varName = scaleVarName(col);
+    char *val = cartUsualString(cart, varName, "1.0");
+    hPrintf("scale: ");
+    cgiMakeTextVar(varName, val, 3);
+    }
+hPrintf("</TD>");
+}
+
+void expRatioSearchControls(struct column *col, struct sqlConnection *conn)
+/* Print out controls for advanced search. */
+{
+char lVarName[16];
+int i, numExpts = col->representativeCount;
+char **experiments = getExperimentNames("hgFixed", col->expTable, numExpts,
+	col->representatives);
+
+hPrintf("Note: expression ratio values are scaled from -1 to 1");
+hPrintf("<TABLE BORDER=1 CELLSPACING=1 CELLPADDING=1>\n");
+hPrintf("<TR><TH>Tissue</TH><TH>Minimum</TH><TH>Maximum</TH></TR>\n");
+
+for (i=0; i<numExpts; ++i)
+    {
+    int ix = col->representatives[i];
+    hPrintf("<TR>");
+    if (ix != -1)
+        {
+	hPrintf("<TD>%s</TD>", experiments[i]);
+	safef(lVarName, sizeof(lVarName), "min%d", ix);
+	hPrintf("<TD>");
+	advSearchRemakeTextVar(col, lVarName, 8);
+	hPrintf("</TD>");
+	safef(lVarName, sizeof(lVarName), "max%d", ix);
+	hPrintf("<TD>");
+	advSearchRemakeTextVar(col, lVarName, 8);
+	hPrintf("</TD>");
+	}
+    hPrintf("</TR>");
+    }
+hPrintf("</TABLE>\n");
+}
+
+static struct hash *expValHash(struct sqlConnection *conn, char *table)
+/* Load up all expresssion data into a hash keyed by table->name */
+{
+char query[256];
+struct sqlResult *sr;
+char **row;
+struct hash *hash = newHash(16);
+
+safef(query, sizeof(query), "select name,expScores from %s", table);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *name = row[0];
+    if (!hashLookup(hash, name))
+        {
+	float *vals = NULL;
+	int valCount;
+	sqlFloatDynamicArray(row[1], &vals, &valCount);
+	hashAdd(hash, name, vals);
+	}
+    }
+sqlFreeResult(&sr);
+return hash;
+}
+
+struct hash *getNameExpHash(struct sqlConnection *conn, 
+	char *table, char *keyField, char *valField, struct hash *expHash)
+/* For each key in table lookup val in expHash, and if there
+ * put key/exp in table. */
+{
+char query[256];
+struct sqlResult *sr;
+char **row;
+struct hash *hash = newHash(16);
+
+safef(query, sizeof(query), "select %s,%s from %s", keyField, valField,table);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    float *val = hashFindVal(expHash, row[1]);
+    if (val != NULL)
+        hashAdd(hash, row[0], val);
+    }
+sqlFreeResult(&sr);
+return hash;
+}
+
+struct genePos *expRatioAdvancedSearch(struct column *col, 
+	struct sqlConnection *conn, struct genePos *list)
+/* Do advanced search on position. */
+{
+if (advSearchColAnySet(col))
+    {
+    struct hash *expHash = expValHash(conn, col->posTable);
+    struct hash *nameExpHash = getNameExpHash(conn, col->table, "name", "value", expHash);
+    char lVarName[16];
+    int i, numExpts = col->representativeCount;
+    for (i=0; i<numExpts; ++i)
+	{
+	int ix = col->representatives[i];
+	if (ix != -1)
+	    {
+	    static char *varType[2] = {"min", "max"};
+	    char *varValString;
+	    int isMax;
+	    for (isMax=0; isMax<2; ++isMax)
+	        {
+		safef(lVarName, sizeof(lVarName), "%s%d", varType[isMax], ix);
+		varValString = advSearchVal(col, lVarName);
+		if (varValString != NULL)
+		    {
+		    float varVal = atof(varValString)/col->expScale;
+		    float *vals = NULL;
+		    struct genePos *newList = NULL, *gp, *next;
+		    for (gp = list; gp != NULL; gp = next)
+			{
+			next = gp->next;
+			if ((vals = hashFindVal(nameExpHash, gp->name)) != NULL)
+			    {
+			    float val = vals[ix];
+			    if (isMax)
+			        {
+				if (val <= varVal)
+				    {
+				    slAddHead(&newList, gp);
+				    }
+				}
+			    else
+			        {
+				if (val >= varVal)
+				    {
+				    slAddHead(&newList, gp);
+				    }
+				}
+			    }
+			}
+		    slReverse(&newList);
+		    list = newList;
+		    }
+		}
+	    }
+	}
+    freeHash(&nameExpHash);
+    freeHashAndVals(&expHash);
+    }
+return list;
+}
+
+
 void setupColumnExpRatio(struct column *col, char *parameters)
 /* Set up expression ration type column. */
 {
@@ -313,8 +543,27 @@ if (expMax != NULL)
 else
     col->expScale = 1.0/3.0;
 
+/* Figure out color scheme. */
+    {
+    char *varName = colSchemeVarName(col);
+    char *val = cartUsualString(cart, varName, colorSchemeVals[0]);
+    col->expRatioUseBlue = !sameString(val, colorSchemeVals[0]);
+    }
+
+/* Figure out scale. */
+    {
+    char *varName = scaleVarName(col);
+    char *val = cartUsualString(cart, varName, "1 x");
+    double fVal = atof(val);
+    if (fVal == 0) fVal = 1.0;
+    col->expScale *= fVal;
+    }
+
 col->exists = expRatioExists;
 col->cellVal = expRatioCellVal;
 col->cellPrint = expRatioCellPrint;
 col->labelPrint = expRatioLabelPrint;
+col->configControls = expRatioConfigControls;
+col->searchControls = expRatioSearchControls;
+col->advancedSearch = expRatioAdvancedSearch;
 }

@@ -10,8 +10,8 @@ spectrum on
 type psl xeno hg15
 
 track gold
-shortLabel Scaffolds
-longLabel Unordered Assembly from Fragments
+shortLabel Assembly
+longLabel Whole Genome Shotgun Assembly
 group map
 priority 10
 visibility pack

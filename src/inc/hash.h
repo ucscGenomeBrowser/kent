@@ -7,6 +7,7 @@
 #define HASH_H
 
 struct hashEl
+/* An element in a hash list. */
     {
     struct hashEl *next;
     char *name;
@@ -71,9 +72,6 @@ char *hashMustFindName(struct hash *hash, char *name);
 
 void *hashMustFindVal(struct hash *hash, char *name);
 /* Lookup name in hash and return val.  Abort if not found. */
-
-int hashFindSize(struct hash *hash, char *name);
-/* Find size of name in hash or die trying. */
 
 void *hashFindVal(struct hash *hash, char *name);
 /* Look up name in hash and return val or NULL if not found. */

@@ -19,8 +19,8 @@ int sqlSigned(char *s);
 /* Convert string to signed integer.  Unlike atol assumes 
  * all of string is number. */
 
-off_t sqlLongLong(char *s);
-/* Convert string to an off_t.  Unlike atol assumes all of string is
+long long sqlLongLong(char *s);
+/* Convert string to a long long.  Unlike atol assumes all of string is
  * number. */
 
 #endif /* SQLNUM_H */

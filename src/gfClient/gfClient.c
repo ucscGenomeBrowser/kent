@@ -7,6 +7,7 @@
 #include "genoFind.h"
 #include "psl.h"
 #include "cheapcgi.h"
+#include "fuzzyFind.h"
 
 /* Variables that can be overridden by command line. */
 int dots = 0;
@@ -56,7 +57,9 @@ printf(
   "                   axt - blastz-associated axt format\n"
   "                   maf - multiz-associated maf format\n"
   "                   wublast - similar to wublast format\n"
-  "                   blast - similar to NCBI blast format\n", gfVersion);
+  "                   blast - similar to NCBI blast format\n"
+  "   -maxIntron=N  Sets maximum intron size. Default is %d\n",
+                        gfVersion, ffIntronMaxDefault);
 exit(-1);
 }
 
@@ -144,6 +147,8 @@ minIdentity = cgiUsualDouble("minIdentity", minIdentity);
 minScore = cgiOptionalInt("minScore", minScore);
 dots = cgiOptionalInt("dots", 0);
 outputFormat = cgiUsualString("out", outputFormat);
+/* set global for fuzzy find functions */
+setFfIntronMax(cgiOptionalInt("maxIntron", ffIntronMaxDefault));
 gfClient(argv[1], argv[2], argv[3], argv[4], argv[5], tType, qType);
 return 0;
 }

@@ -203,6 +203,8 @@ struct bed *bedFilterByWildNames(struct bed *bedList, struct slName *wildNames);
 /* Given a bed list and a list of names that may include wildcard characters,
  * return the list of bed items whose name matches at least one wildName. */
 
+struct hash *readBedToBinKeeper(char *sizeFileName, char *bedFileName, int wordCount);
+/* read a list of beds and return results in hash of binKeeper structure for fast query*/
 
 #endif /* BED_H */
 

@@ -15,7 +15,7 @@
 #include "chainDb.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: chainDb.c,v 1.4 2003/05/06 07:22:21 kate Exp $";
+static char const rcsid[] = "$Id: chainDb.c,v 1.5 2003/06/27 21:38:44 braney Exp $";
 
 void chainHeadStaticLoad(char **row, struct chain *ret)
 /* Load a row from chain table into ret.  The contents of ret will
@@ -146,9 +146,15 @@ struct dyString *query = newDyString(1024);
 struct sqlResult *sr = NULL;
 char **row;
 struct boxIn *b;
+char fullName[64];
 
-dyStringPrintf(query, "select tStart,tEnd,qStart from %s_%sLink where chainId = %d",
-	chain->tName, track, chain->id);
+sprintf(fullName, "%s_%s", chain->tName, track);
+if (!hTableExistsDb(hGetDb(), fullName))
+    strcpy(fullName, track);
+dyStringPrintf(query, 
+	"select tStart,tEnd,qStart from %s_%sLink where chainId = %d",
+	fullName);
+
 sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {

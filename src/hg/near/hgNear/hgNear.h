@@ -11,8 +11,32 @@
 #include "jksql.h"
 #endif
 
+struct genePos
+/* A gene and optionally a position */
+    {
+    struct genePos *next;
+    char *name;		/* Gene ID. */
+    char *chrom;	/* Optional chromosome location. NULL ok. */
+    int start;		/* Chromosome start. Disregarded if chrom == NULL. */
+    int end;		/* End in chromosome. Disregarded if chrom == NULL. */
+    };
+
+struct searchResult
+/* A result from search - includes short and long names as well
+ * as genePos. */
+    {
+    struct searchResult *next;
+    char *shortLabel;		/* Short name (gene name) */
+    char *longLabel;		/* Long name (gene description) */
+    struct genePos gp;		/* Gene id. */
+    };
+
+int searchResultCmpShortLabel(const void *va, const void *vb);
+/* Compare to sort based on short label. */
+
 struct column
-/* A column in the big table. */
+/* A column in the big table. The central data structure for
+ * hgNear. */
    {
    /* Data set during initialization and afterwards held constant 
     * that is guaranteed to be in each track.  */
@@ -21,6 +45,7 @@ struct column
    char *shortLabel;		/* Column label. */
    char *longLabel;		/* Column description. */
    boolean on;			/* True if turned on. */
+   boolean defaultOn;		/* On by default? */
    float priority;		/* Order displayed. */
    char *type;			/* Type - encodes which methods to used etc. */
    struct hash *settings;	/* Settings from ra file. */
@@ -29,14 +54,32 @@ struct column
    boolean (*exists)(struct column *col, struct sqlConnection *conn);
    /* Return TRUE if column exists in database. */
 
-   char *(*cellVal)(struct column *col, char *geneId, struct sqlConnection *conn);
-   /* Get value of one cell as string.  FreeMem this when done. */
+   char *(*cellVal)(struct column *col, struct genePos *gp, 
+   	struct sqlConnection *conn);
+   /* Get value of one cell as string.  FreeMem this when done.  Note that
+    * gp->chrom may be NULL legitimately. */
 
-   void (*cellPrint)(struct column *col, char *geneId, struct sqlConnection *conn);
-   /* Print one cell of this column. */
+   void (*cellPrint)(struct column *col, struct genePos *gp, 
+   	struct sqlConnection *conn);
+   /* Print one cell of this column.  Note that gp->chrom may be 
+    * NULL legitimately. */
 
    void (*labelPrint)(struct column *col);
    /* Print the label in the label row. */
+
+   void (*configControls)(struct column *col);
+   /* Print out configuration controls. */
+
+   struct searchResult *(*simpleSearch)(struct column *col, 
+   	struct sqlConnection *conn, char *search);
+   /* Return list of genes with descriptions that match search. */
+
+   void (*searchControls)(struct column *col, struct sqlConnection *conn);
+   /* Print out controls for advanced search. */
+
+   struct genePos *(*advancedSearch)(struct column *col, struct sqlConnection *conn,
+   	struct genePos *inputList);
+   /* Return list of positions for advanced search. */
 
    /* -- Data that may be track-specific. -- */
    char *table;			/* Name of associated table. */
@@ -44,10 +87,11 @@ struct column
    char *valField;		/* Value field in associated table. */
    char *curGeneField;		/* curGeneId field in associated table. */
    char *expTable;		/* Experiment table in hgFixed if any. */
-   char *posTable;		/* Positional table (bed12) for expression experiments. */
+   char *posTable;		/* Positional (bed12) for expression experiments. */
    double expScale;		/* What to scale by to get expression val from -1 to 1. */
    int representativeCount;	/* Count of representative experiments. */
    int *representatives;	/* Array (may be null) of representatives. */
+   boolean expRatioUseBlue;	/* Use blue rather than red in expRatio. */
    };
 
 /* ---- global variables ---- */
@@ -55,20 +99,29 @@ struct column
 extern struct cart *cart; /* This holds variables between clicks. */
 extern char *database;	  /* Name of genome database - hg15, or the like. */
 extern char *organism;	  /* Name of organism - mouse, human, etc. */
-extern char *curGeneId;	  /* Identity of current gene. */
-extern char *sortOn;	  /* Current sort strategy. */
+extern char *groupOn;	  /* Current grouping strategy. */
 extern int displayCount;  /* Number of items to display. */
+
+extern struct genePos *curGeneId;	  /* Identity of current gene. */
 
 /* ---- Cart Variables ---- */
 
 #define confVarName "near.configure"	/* Configuration button */
 #define countVarName "near.count"	/* How many items to display. */
 #define searchVarName "near.search"	/* Search term. */
-#define geneIdVarName "near.geneId"     /* Purely cart, not cgi. Last valid geneId */
+#define idVarName "near.id"         	/* Overrides searchVarName if it exists */
+#define idPosVarName "near.idPos"      	/* chrN:X-Y position of id, may be empty. */
 #define groupVarName "near.group"	/* Grouping scheme. */
+#define getSeqVarName "near.getSeq"	/* Button to get sequence. */
+#define getTextVarName "near.getText"	/* Button to get as text. */
+#define advSearchVarName "near.advSearch"      /* Advanced search */
+#define advSearchClearVarName "near.advSearchClear" /* Advanced search clear all button. */
+#define advSearchSubmitVarName "near.advSearchSubmit" /* Advanced search submit button. */
 #define colOrderVar "near.colOrder"     /* Order of columns. */
 #define defaultConfName "near.default"  /* Restore to default settings. */
+#define hideAllConfName "near.hideAll"  /* Hide all columns. */
 #define resetConfName "near.reset"      /* Ignore setting changes. */
+#define advSearchPrefix "near.as"       /* Prefix for advanced search variables. */
 
 /* ---- Some html helper routines. ---- */
 
@@ -81,10 +134,13 @@ void hPrintf(char *format, ...);
 void makeTitle(char *title, char *helpName);
 /* Make title bar. */
 
-/* -- Other helper routines. -- */
+void selfAnchorId(struct genePos *gp);
+/* Print self anchor to given id. */
 
-struct column *getColumns(struct sqlConnection *conn);
-/* Return list of columns for big table. */
+void selfAnchorSearch(struct genePos *gp);
+/* Print self anchor to given search term. */
+
+/* -- Other helper routines. -- */
 
 int columnCmpPriority(const void *va, const void *vb);
 /* Compare to sort columns based on priority. */
@@ -92,25 +148,22 @@ int columnCmpPriority(const void *va, const void *vb);
 struct hash *hashColumns(struct column *colList);
 /* Return a hash of columns keyed by name. */
 
-void doConfigure(char *bumpVar);
-/* Configuration page. */
-
-void doDefaultConfigure();
-/* Do configuration starting with defaults. */
-
 
 /* ---- Some helper routines for column methods. ---- */
 
-char *cellLookupVal(struct column *col, char *geneId, struct sqlConnection *conn);
+char *columnSetting(struct column *column, char *name, char *defaultVal);
+/* Return value of named setting in column, or default if it doesn't exist. */
+
+char *cellLookupVal(struct column *col, struct genePos *gp, struct sqlConnection *conn);
 /* Get a field in a table defined by col->table, col->keyField, col->valField. */
 
-void cellSimplePrint(struct column *col, char *geneId, struct sqlConnection *conn);
+void cellSimplePrint(struct column *col, struct genePos *gp, struct sqlConnection *conn);
 /* This just prints cellSimpleVal. */
 
 void labelSimplePrint(struct column *col);
 /* This just prints cell->shortLabel. */
 
-static void cellSelfLinkPrint(struct column *col, char *geneId,
+static void cellSelfLinkPrint(struct column *col, struct genePos *gp,
 	struct sqlConnection *conn);
 /* Print self and hyperlink to make this the search term. */
 
@@ -123,9 +176,33 @@ void columnDefaultMethods(struct column *col);
 void lookupTypeMethods(struct column *col, char *table, char *key, char *val);
 /* Set up the methods for a simple lookup column. */
 
-char *knownPosVal(struct column *col, char *geneId, 
+struct searchResult *knownGeneSearchResult(struct sqlConnection *conn, 
+	char *kgID, char *alias);
+/* Return a searchResult for a known gene. */
+
+struct genePos *knownPosAll(struct sqlConnection *conn);
+/* Get all positions in knownGene table. */
+
+void fillInKnownPos(struct genePos *gp, struct sqlConnection *conn);
+/* If gp->chrom is not filled in go look it up. */
+
+char *advSearchName(struct column *col, char *varName);
+/* Return variable name for advanced search. */
+
+char *advSearchVal(struct column *col, char *varName);
+/* Return value for advanced search variable.  Return NULL if it
+ * doesn't exist or if it is "" */
+
+void advSearchRemakeTextVar(struct column *col, char *varName, int size);
+/* Make a text field of given name and size filling it in with
+ * the existing value if any. */
+
+struct genePos *weedUnlessInHash(struct genePos *inList, struct hash *hash);
+/* Return input list with stuff not in hash removed. */
+
+struct genePos *getSearchNeighbors(struct column *colList, 
 	struct sqlConnection *conn);
-/* Get genome position of knownPos table.  Ok to have col NULL. */
+/* Get neighbors by search. */
 
 /* ---- Column method setters. ---- */
 
@@ -152,6 +229,44 @@ void setupColumnLookupKnown(struct column *col, char *parameters);
 
 void setupColumnExpRatio(struct column *col, char *parameters);
 /* Set up expression ration type column. */
+
+boolean gotAdvSearch();
+/* Return TRUE if advanced search variables are set. */
+
+boolean advSearchColAnySet(struct column *col);
+/* Return TRUE if any of the advanced search variables
+ * for this col are set. */
+
+/* ---- Create high level pages. ---- */
+void displayData(struct sqlConnection *conn, struct column *colList, struct genePos *gp);
+/* Display data in neighborhood of gene. */
+
+void doSearch(struct sqlConnection *conn, struct column *colList);
+/* Search.  If result is unambiguous call doMain, otherwise
+ * put up a page of choices. */
+
+void doAdvancedSearch(struct sqlConnection *conn, struct column *colList);
+/* Put up advanced search page. */
+
+void doAdvancedSearchClear(struct sqlConnection *conn, struct column *colList);
+/* Clear variables in advanced search page. */
+
+void doAdvancedSearchSubmit(struct sqlConnection *conn, struct column *colList);
+/* Handle submission in advanced search page. */
+
+void doConfigure(struct sqlConnection *conn, struct column *colList, 
+	char *bumpVar);
+/* Configuration page. */
+
+void doDefaultConfigure(struct sqlConnection *conn, struct column *colList );
+/* Do configuration starting with defaults. */
+
+void doConfigHideAll(struct sqlConnection *conn, struct column *colList);
+/* Respond to hide all button in configuration page. */
+
+void doGetSeq(struct sqlConnection *conn, struct column *colList, 
+	struct genePos *geneList);
+/* Put up the get sequence page. */
 
 #endif /* HGNEAR_H */
 

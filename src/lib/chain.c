@@ -7,9 +7,8 @@
 #include "dnaseq.h"
 #include "dnautil.h"
 #include "chain.h"
-#include <stdint.h>
 
-static char const rcsid[] = "$Id: chain.c,v 1.8 2003/06/16 21:09:07 baertsch Exp $";
+static char const rcsid[] = "$Id: chain.c,v 1.9 2003/06/30 21:44:17 hiram Exp $";
 
 void chainFree(struct chain **pChain)
 /* Free up a chain. */

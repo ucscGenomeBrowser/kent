@@ -361,6 +361,32 @@ void axtMethods(struct track *tg, char *otherDb);
 #define uglyh printHtmlComment
 /* Debugging aid. */
 
+/* Stuff added to get lowe lab stuff to work.  Maybe these will go in a
+ * place.  I just put them at the end.  */
+ 
+struct linkedFeaturesSeries *lfsFromMsBedSimple(struct bed *bedList, char * name);
+/* Makes a lfs from a multiple scores bed (microarray bed).*/
+
+struct linkedFeaturesSeries *msBedGroupByIndex(struct bed *bedList, char *database, char *table, int expIndex,
+                                               char *filter, int filterIndex);
+/* This one is related to lfsFromMsBedSimple */
+
+void makeRedGreenShades(struct vGfx *vg);
+/* Makes some colors for the typical red/green microarray spectrum. */
+
+int lfsSortByName(const void *va, const void *vb);
+
+void linkedFeaturesSeriesMethods(struct track *tg);
+
+void loadMaScoresBed(struct track *tg);
+/* This one loads microarray specific beds (multiple scores). */
+
+void lfsMapItemName(struct track *tg, void *item, char *itemName, int start, int end,
+                    int x, int y, int width, int height);
+
+Color expressionColor(struct track *tg, void *item, struct vGfx *vg,
+                      float denseMax, float fullMax);
+/* Returns track item color based on expression. */
 
 #endif /* HGTRACKS_H */
 

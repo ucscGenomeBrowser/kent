@@ -184,4 +184,7 @@ int  dnaOrAaScoreMatch(char *a, char *b, int size, int matchScore, int mismatchS
 	char ignore);
 /* Compare two sequences (without inserts or deletions) and score. */
 
+void writeSeqWithBreaks(FILE *f, char *letters, int letterCount, int maxPerLine);
+/* Write out letters with newlines every maxLine. */
+
 #endif /* DNAUTIL_H */

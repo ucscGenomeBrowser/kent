@@ -280,16 +280,16 @@ exit; # don't actually run this like a script :)
 
 
 # MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR FUGU (5/6/03 KRR)
-    echo 'insert into defaultDb values("Fugu", "fr1");' \
+    echo 'INSERT INTO defaultDb VALUES ("Fugu", "fr1");' \
       | hgsql -h genome-testdb hgcentraltest
 
     # Warning: must genome and organism fields must correspond
     # with defaultDb values
-    echo 'insert into dbDb \
+    echo 'INSERT INTO dbDb \
         (name, description, nibPath, organism, \
                 defaultPos, active, orderKey, genome) values \
         ("fr1", "Aug. 2002", "/gbdb/fr1/nib", "Fugu", \
-               "chrUn:79469-167499", 1, 10, "Fugu");' \
+               "chrUn:827700-845800", 1, 10, "Fugu");' \
       | hgsql -h genome-testdb hgcentraltest
 
     # Make trackDb table so browser knows what tracks to expect:
@@ -418,8 +418,8 @@ exit; # don't actually run this like a script :)
 
     # setup BlueArc with EST files
     ssh kk
-    mkdir -p /cluster/bluearc/fugu/est
-    cd /cluster/bluearc/fugu/est
+    mkdir -p /cluster/bluearc/fugu/fr1/est
+    cd /cluster/bluearc/fugu/fr1/est
     
     # split up est file into 100Kb chunks 
     # (makes ~120 query files * ~600 target superscaffolds = 70000 jobs)
@@ -433,7 +433,7 @@ exit; # don't actually run this like a script :)
     cd est
     mkdir psl
     ls -1S /iscratch/i/fugu/trfFa/*.fa > genome.lst
-    ls -1S /cluster/bluearc/fugu/est/*.fa > est.lst
+    ls -1S /cluster/bluearc/fugu/fr1/est/*.fa > est.lst
     cat << '_EOF_' > gsub
 #LOOP
 /cluster/bin/i386/blat -mask=lower -ooc={check in exists /scratch/hg/h/11.ooc} {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
@@ -515,7 +515,7 @@ hide mol
     # NOTE: probably want to do this earlier
     # so it is available for all alignments
     ssh kk
-    cd /cluster/bluearc/fugu
+    cd /cluster/bluearc/fugu/fr1
     mkdir chromNib
     cp ~/fr1/nib/* chromNib
 
@@ -534,8 +534,8 @@ hide mol
     mkdir xenoMrna
     cd xenoMrna
     mkdir psl
-    ls -1S /cluster/bluearc/fugu/trfFa/s*.fa > genome.lst
-    ls -1S /cluster/bluearc/fugu/xenoRnaSplit/m*.fa > mrna.lst
+    ls -1S /cluster/bluearc/fugu/fr1/trfFa/s*.fa > genome.lst
+    ls -1S /cluster/bluearc/fugu/fr1/xenoRnaSplit/m*.fa > mrna.lst
     cat << '_EOF_' > gsub
 #LOOP
 /cluster/bin/i386/blat -q=rnax -t=dnax -mask=lower {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
@@ -589,6 +589,27 @@ hide mol
          $datadir/$mrnadir/fuguXenoRna.ra
 
 
+# PRODUCE HUMAN BLAT ALIGNMENT (6/19/03 KRR)
+    ssh kk
+    mkdir ~/hg15/bed/blatHg15.new
+    cd ~/hg15/bed/blatHg15.new
+    mkdir -p psl/chrUn
+    ls -1S /cluster/bluearc/fugu/fr1/trfFa/*.fa > fugu.lst
+    # 7 files of 50MB
+    ls -1S /scratch/hg/gs.16/build33/trfFa/*.fa > human.lst
+    cat << 'EOF' > gsub
+#LOOP
+/cluster/bin/i386/blat -mask=lower -q=dnax -t=dnax {check in line+ $(path1)} {check in line+ $(path2)} {check out line+ /cluster/store5/Fugu_Rubripes_V3/bed/blatHg15.new/psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'EOF'
+
+    gensub2 fugu.lst human.lst gsub spec
+    para create spec
+    para try
+    para check
+    para push
+    para check
+
 # PRODUCE HUMAN BLAT ALIGNMENT (6/11/03 KRR)
     # For this build, use the Fugu BLAT to human (hg15),
     # and reverse the alignment
@@ -627,7 +648,9 @@ hide mol
     cd $gbdbdir
     foreach f (/cluster/store5/gs.16/build33/?{,?})
         set c = $f:t
-        ln -s $f/chr${c}.fa
+        if (-e $f/chr${c}.fa) then
+            ln -s $f/chr${c}.fa
+        endif
         if (-e $f/chr${c}_random.fa) then
             ln -s $f/chr${c}_random.fa
         endif
@@ -639,3 +662,340 @@ hide mol
     hgLoadRna addSeq fr1 /gbdb/fr1/hg15/*.fa
     unset fr1dir hg15dir
         
+
+# PRODUCE TETRAODON BLASTZ (6/13/03 IN PROGRESS KRR)
+
+    cd eieio
+    mkdir ~/fr1/bed/blastzTetra
+
+    # translate the Genoscope fasta files to upper-case
+    # so sequence doesn't look like it's masked out (all-lower)
+    cd /iscratch/i/fish
+    foreach f (*.fa)
+        echo $f
+        tr '[a-z]' '[A-Z]' < $f > /cluster/bluearc/tetra/$f
+    end
+    (cat README; echo "NOTE: Upper-cased files from /iscratch/i/fish") > \
+                                        /cluster/bluearc/tetra/README
+
+    # copy fugu files to cluster filesystem
+    set clusterdir = /cluster/bluearc
+    mkdir -p $clusterdir/fugu/fr1/rmsk
+    cd $clusterdir/fugu/fr1/rmsk
+    rm *.out
+    cp ~/fr1/Un/chrUn.fa.out .
+
+    # generate DEF file
+    cd ~/fr1/bed/blastzTetra
+    cat << '_EOF_' > DEF
+# Tetraodon vs. Fugu
+# TODO: angie's home dir out of this
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/home/angie/schwartzbin:/cluster/bin/i386
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+#BLASTZ_ABRIDGE_REPEATS=1 if SMSK is specified
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET - Fugu
+# soft-masked chrom nib
+SEQ1_DIR=/cluster/bluearc/fugu/fr1/chromNib
+# repeat masker output file for chrom
+SEQ1_RMSK=/cluster/bluearc/fugu/fr1/rmsk
+# lineage-specific repeats -- (repeats in fugu, not in tetraodon)
+# we don't have that information for these species
+SEQ1_SMSK=/dev/null
+# currently unused
+SEQ1_FLAG=-fish
+SEQ1_IN_CONTIGS=0
+# 10 MB chunk for target
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY - Tetraodon
+SEQ2_DIR=/cluster/bluearc/tetra
+# no repeatmasker output for these sequences
+SEQ2_RMSK=/dev/null
+SEQ2_SMSK=/dev/null
+# currently unused
+SEQ2_FLAG=-fish
+# set to 1 if multiple contigs are in 1 fasta file
+SEQ2_IN_CONTIGS=1
+# 10 Mbase for query
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/store5/Fugu_Rubripes_V3/bed/blastzTetra
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+
+#DEBUG=1
+'_EOF_' 
+
+    # save the DEF file in the current standard place
+    chmod +x DEF
+    cp DEF ~angie/hummus/DEF.fr1-tetra.2003-06-17
+
+    # setup cluster run
+    ssh kk
+    cd ~/fr1/bed/blastzTetra
+
+    # source the DEF file
+    bash
+    . ./DEF
+
+    # follow the next set of directions slavishly
+    mkdir -p $BASE/run
+    # give up on avoiding angie's directories
+    # tcl script
+    # creates xdir.sh and joblist run/j
+    ~angie/hummus/make-joblist $DEF > $BASE/run/j
+        # Computing genome sizes
+        # Writing mkdir script: /cluster/store5/Fugu_Rubripes_V3/bed/blastzTetra/xdir.sh
+        # Writing job list
+
+    # xdir.sh makes a bunch of result directories in $BASE/raw/
+    # based on chrom name and CHUNK size
+    sh $BASE/xdir.sh
+    cd $BASE/run
+
+    # now edit j to prefix path to executable name
+    # NOTE: we should have a controlled version of schwartz bin executables
+    sed -e 's#^#/cluster/home/schwartz/bin/#' j > j2
+    wc -l j*
+    head j2
+
+    # *** make sure the j2 edits are OK, then use it:
+    mv j2 j
+
+    # para create will create the file: 'batch' for the cluster run
+    para create j
+        # Checking input files
+        # 1400 jobs written to batch
+    para try
+    para check
+    para push
+    # ... etc ...
+    # about 3 hrs. per job
+
+    # post-process blastz
+    # normalize
+    ssh kk
+    cd ~/fr1/bed/blastzTetra
+        #   source the DEF file again in case you are coming back to this
+    bash
+    . ./DEF
+
+    # a new run directory
+    mkdir -p $BASE/run.1
+
+    # another obscure script creates a new job list:
+    ~angie/hummus/do.out2lav $DEF >$BASE/run.1/j
+    cd $BASE/run.1
+
+    # add path to executable in the job list:
+    sed -e 's/^/\/cluster\/home\/schwartz\/bin\//' j > j2
+    wc -l j*
+    head j2
+
+    # make sure the edited j2 is OK, then use it:
+    mv j2 j
+    para create j
+    para try
+    para check
+    para push
+    # etc.
+        # 15 minute jobs
+
+    # Translate the .lav files
+    # into axt files
+    ssh kkstore
+    set base="/cluster/store5/Fugu_Rubripes_V3/bed/blastzTetra"
+    set tbl="blastzTetra"
+
+    # generate single tetra fa file required for lavToAxt
+    cd /cluster/bluearc
+    cat tetra/* > tetra-all.fa
+
+    # copy lav files to bluearc to speed up job
+    ssh eieio
+    mkdir -p /cluster/bluearc/fugu/fr1/blastzTetra/lav
+    cp ~/fr1/bed/blastzTetra/lav/chrUn/* /cluster/bluearc/fugu/fr1/blastzTetra/lav
+    
+    # cluster job for converting lav files
+    # these take a long time because query is in fa files
+    # (with 880K sequences), not a chrom nib
+    ssh kk
+    cd ~/fr1/bed/blastzTetra
+    mkdir -p axtLav
+    mkdir run.lavToAxt
+    cd run.lavToAxt
+    
+    # create file lists
+    ls -1S /cluster/bluearc/fugu/fr1/blastzTetra/lav/*.lav > lav.lst
+    echo "" > dummy.lst
+
+    # Create template file, gsub, for gensub2. 
+    cat << 'EOF' > gsub
+#LOOP 
+/cluster/bin/i386/lavToAxt {check in line+ $(path1)} /cluster/bluearc/fugu/fr1/chromNib -fa /cluster/bluearc/tetra-all.fa {check out line+ /cluster/store5/Fugu_Rubripes_V3/bed/blastzTetra/axtLav/$(root1).axt}
+#ENDLOOP
+'EOF'
+
+    gensub2 lav.lst dummy.lst gsub jobList
+    para create jobList
+    para try 
+    para check
+    para push
+
+    # 35 hours (too long -- need to split up better).
+
+    cd $base
+    mkdir -p axtChrom
+    cat axtLav/*.axt | /cluster/bin/i386/axtSort stdin axtChrom/chrUn.axt
+    
+    #foreach c (lav/*)
+      #pushd $c
+      #set chr=$c:t
+      #set out=$base/axtChrom/$chr.axt
+      #echo "out=$out"
+      #echo "Translating $chr lav to $out"
+      #echo cat `ls -1 *.lav | sort -g` \
+        #| /cluster/bin/i386/lavToAxt stdin $fugudir/nib \
+                #-fa /cluster/bluearc/tetra-all.fa stdout \
+        #| /cluster/bin/i386/axtSort stdin $out
+      #popd
+    #end
+
+    # Translate the sorted axt files into psl:
+    cd $base
+    mkdir -p pslChrom
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+
+    # load these blastz results
+    ssh hgwdev
+    cd ~/fr1/bed/blastzTetra/pslChrom
+    /cluster/bin/i386/hgLoadPsl fr1 chr*_*.psl
+
+    # STOPPED HERE -- due to empty output data
+
+
+# PRODUCING GENSCAN PREDICTIONS (6/17/03 KRR)
+#       Note: Genscan input files should be hard-masked
+    
+    ssh eieio
+
+    # hard mask the super-scaffolds
+    mkdir -p ~/fr1/superscaffolds.hardmasked
+    cd ~/fr1/superscaffolds
+    foreach f (ss_*.fa)
+        echo $
+        maskOutFa $f hard ../superscaffolds.hardmasked/$f
+    end
+
+    # setup the genscan directory
+    mkdir -p ~/fr1/bed/genscan
+    cd ~/fr1/bed/genscan
+
+    # Make 3 subdirectories for genscan to put output files in
+    mkdir -p gtf pep subopt
+
+    # Generate a list file, genome.list, of all the contigs
+    # *that do not have pure Ns* (due to heterochromatin, unsequenceable 
+    # stuff) which would cause genscan to run forever.
+    rm -f genome.list
+    touch genome.list
+    foreach f ( `ls -1S /cluster/store5/Fugu_Rubripes_V3/superscaffolds.hardmasked/ss_*.fa` )
+      egrep '[ACGT]' $f > /dev/null
+      if ($status == 0) echo $f >> genome.list
+    end
+
+    # Log into kkr1u00 (not kk!).  kkr1u00 is the driver node for the small
+    # cluster (kkr2u00 -kkr8u00. Genscan has problem running on the
+    # big cluster, due to limitation of memory and swap space on each
+    # processing node).
+    ssh kkr1u00
+    cd ~/fr1/bed/genscan
+
+    # Create template file, gsub, for gensub2. 
+    # NOTE: According to the README for Genscan, 
+    # the HumanIso.smat parameter files is used for all vertebrates
+    cat << '_EOF_' > gsub
+#LOOP 
+/cluster/home/kent/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_' 
+    echo "" > dummy.list
+    gensub2 genome.list dummy.list gsub jobList
+    para create jobList
+    para try
+    para check
+    para push
+
+    # Convert output to chrom coordinates
+    ssh eieio
+    cd ~/fr1/bed/genscan
+    liftUp genscan.gtf ~/fr1/Un/chrUn.lft warn gtf/*.gtf
+    liftUp genscanSubopt.bed ~/fr1/Un/chrUn.lft warn subopt/*.bed > /dev/null
+    cat pep/*.pep > genscan.pep
+
+    # Load into the database
+    ssh hgwdev
+    cd ~/fr1/bed/genscan
+    ldHgGene fr1 genscan genscan.gtf
+        # Reading genscan.gtf
+        # Read 36106 transcripts in 243984 lines in 1 files
+        # 36106 groups 1 seqs 1 sources 1 feature types
+        # 36106 gene predictions
+    hgPepPred fr1 generic genscanPep genscan.pep
+    hgLoadBed fr1 genscanSubopt genscanSubopt.bed > /dev/null
+
+
+# CPGISLANDS (6/17/03 KRR)
+    ssh eieio
+    mkdir -p ~/fr1/bed/cpgIsland
+    cd ~/fr1/bed/cpgIsland
+
+    # Build software emailed from Asif Chinwalla (achinwal@watson.wustl.edu)
+    # NOTE: we should keep this centrally
+    # tar xvf cpg_dist.tar 
+    # cd cpg_dist
+    # gcc readseq.c cpg_lh.c -o cpglh.exe
+    cp ~kent/mm3/bed/cpgIsland/cpg_dist/cpglh.exe .
+
+    # hard-mask the chrom fa 
+    # cpglh.exe requires hard-masked (N) .fa's.  
+    # There may be warnings about "bad character" for IUPAC ambiguous 
+    # characters like R, S, etc.  Ignore the warnings.  
+    cd ~/fr1/Un
+    maskOutFa chrUn.fa hard chrUn.hardmasked.fa
+
+    # run cpgislands on the hard-masked chrom fa
+    cd ~/fr1/bed/cpgIsland
+    ./cpglh.exe ~/fr1/Un/chrUn.hardmasked.fa > chrUn.cpg
+
+    cp ~kent/mm3/bed/cpgIsland/filter.awk .
+    awk -f filter.awk chr*.cpg > cpgIsland.bed
+
+    # load annotations into database
+    ssh hgwdev
+    cd ~/fr1/bed/cpgIsland
+    # NOTE: this should go into a shared lib dir
+    cp $HOME/kent/src/hg/lib/cpgIsland.sql .
+    hgLoadBed fr1 cpgIsland -tab -noBin \
+      -sqlTable=cpgIsland.sql cpgIsland.bed
+        # Reading cpgIsland.bed
+        # Loaded 41723 elements
+        # Sorted
+        # Saving bed.tab
+        # Loading fr1
+
+

@@ -24,7 +24,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.114 2003/06/20 18:01:11 sugnet Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.118 2003/06/30 22:28:30 kate Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -873,6 +873,115 @@ hFreeConn(&conn);
 return faSeqFromMemText(buf, FALSE);
 }
 
+static boolean checkIfInTable(struct sqlConnection *conn, char *acc,
+                              char *column, char *table)
+/* check if a a sequences exists in a table */
+{
+boolean inTable = FALSE;
+char query[256];
+struct sqlResult *sr;
+char **row;
+safef(query, sizeof(query), "select 0 from %s where %s = '%s'",
+      table, column, acc);
+sr = sqlGetResult(conn, query);
+inTable = ((row = sqlNextRow(sr)) != NULL);
+sqlFreeResult(&sr);
+return inTable;
+}
+
+boolean hGenBankHaveSeq(char *acc, char *compatTable)
+/* Check if GenBank or RefSeq mRNA or peptide sequence is in the database.
+ * This handles compatibility between pre-incremental genbank databases 
+ * where refSeq sequences were stored in tables and the newer scheme
+ * that keeps all sequences in external files.  If compatTable is not
+ * NULL and the table exists, this is checked as a fallback.  If compatTable
+ * is null, only the external file tables are checked.
+ */
+{
+struct sqlConnection *conn = hAllocConn();
+boolean haveSeq = FALSE;
+if (sqlTableExists(conn, "gbSeq"))
+    haveSeq = checkIfInTable(conn, acc, "acc", "gbSeq");
+else
+    haveSeq = checkIfInTable(conn, acc, "acc", "seq");
+
+/* If not found, and have compatTable, check it.  This is done
+ * even if we have gbSeq to allow for partial migration of databases */
+if (!haveSeq && (compatTable != NULL) && sqlTableExists(conn, compatTable))
+    haveSeq = checkIfInTable(conn, acc, "name", compatTable);
+
+hFreeConn(&conn);
+return haveSeq;
+}
+
+static struct dnaSeq *loadSeqFromTable(struct sqlConnection *conn,
+                                       char *acc, char *table)
+/* load a sequence from table. */
+{
+struct dnaSeq *seq = NULL;
+struct sqlResult *sr;
+char **row;
+char query[256];
+
+safef(query, sizeof(query), "select name,seq from %s where name = '%s'",
+      table, acc);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    seq = newDnaSeq(cloneString(row[1]), strlen(row[1]), row[0]);
+
+sqlFreeResult(&sr);
+return seq;
+}
+
+struct dnaSeq *hGenBankGetMrna(char *acc, char *compatTable)
+/* Get a GenBank or RefSeq mRNA or EST sequence or NULL if it doesn't exist.
+ * This handles compatibility between pre-incremental genbank databases where
+ * refSeq sequences were stored in tables and the newer scheme that keeps all
+ * sequences in external files.  If compatTable is not NULL and the table
+ * exists, this is checked as a fallback.  If compatTable is null, only the
+ * external file tables are checked.
+ */
+{
+struct sqlConnection *conn = hAllocConn();
+struct dnaSeq *seq = NULL;
+
+if (sqlTableExists(conn, "gbSeq"))
+    seq = hRnaSeq(acc);
+
+/* If not found, and have compatTable, check it.  This is done
+ * even if we have gbSeq to allow for partial migration of databases */
+if ((seq == NULL) && (compatTable != NULL) && sqlTableExists(conn, compatTable))
+    seq = loadSeqFromTable(conn, acc, compatTable);
+
+hFreeConn(&conn);
+return seq;
+}
+
+aaSeq *hGenBankGetPep(char *acc, char *compatTable)
+/* Get a RefSeq peptide sequence or NULL if it doesn't exist.  This handles
+ * compatibility between pre-incremental genbank databases where refSeq
+ * sequences were stored in tables and the newer scheme that keeps all
+ * sequences in external files.  If compatTable is not NULL and the table
+ * exists, this is checked as a fallback.  If compatTable is null, only the
+ * external file tables are checked.  Note, older databases only have
+ * peptides in the tables.
+ */
+{
+struct sqlConnection *conn = hAllocConn();
+struct dnaSeq *seq = NULL;
+
+if (sqlTableExists(conn, "gbSeq"))
+    seq = hPepSeq(acc);
+
+/* If not found, and have compatTable, check it.  This is done
+ * even if we have gbSeq to allow for partial migration of databases */
+if ((seq == NULL) && (compatTable != NULL) && sqlTableExists(conn, compatTable))
+    seq = loadSeqFromTable(conn, acc, compatTable);
+
+hFreeConn(&conn);
+return seq;
+}
+
 struct bed *hGetBedRangeDb(char *db, char *table, char *chrom, int chromStart,
 			   int chromEnd, char *sqlConstraints)
 /* Return a bed list of all items (that match sqlConstraints, if nonNULL) 
@@ -1204,6 +1313,41 @@ if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
 
 hDisconnectCentral(&conn);
 return res;
+}
+
+char *hScientificName(char *database)
+/* Return scientific name for organism represented by this database */
+/* Return NULL if unknown database */
+/* NOTE: must free returned string after use */
+{
+struct sqlConnection *conn = hConnectCentral();
+char buf[128];
+char query[256];
+char *res = NULL;
+sprintf(query, "select scientificName from dbDb where name = '%s'", database);
+if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
+    {
+    res = cloneString(buf);
+    }
+hDisconnectCentral(&conn);
+return res;
+}
+
+int hOrganismID(char *database)
+/* Get organism ID from relational organism table */
+/* Return -1 if not found */
+{
+    char query[256];
+    char buf[64];
+    struct sqlConnection *conn = hAllocConn();
+    int organismID;
+    int ret;
+
+    sprintf(query, "select id from organism where name = '%s'",
+                                        hScientificName(database));
+    ret = sqlQuickNum(conn, query);
+    hFreeConn(&conn);
+    return ret;
 }
 
 char *hLookupStringVars(char *in, char *database)
@@ -2157,6 +2301,28 @@ tdb = hMaybeTrackInfo(conn, trackName);
 if (tdb == NULL)
     errAbort("Track %s not found", trackName);
 return tdb;
+}
+
+
+boolean hTrackCanPack(char *trackName)
+/* Return TRUE if this track can be packed. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct trackDb *tdb = hMaybeTrackInfo(conn, trackName);
+boolean ret = FALSE;
+if (tdb != NULL)
+    {
+    ret = tdb->canPack;
+    trackDbFree(&tdb);
+    }
+hFreeConn(&conn);
+return ret;
+}
+
+char *hTrackOpenVis(char *trackName)
+/* Return "pack" if track is packable, otherwise "full". */
+{
+return hTrackCanPack(trackName) ? "pack" : "full";
 }
 
 struct dbDb *hGetIndexedDatabases()

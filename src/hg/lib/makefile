@@ -14,7 +14,7 @@ O = affyAtlas.o agpFrag.o agpGap.o altGraphX.o ancientRref.o \
     clonePos.o cpgIsland.o ctgPos.o customTrack.o cytoBand.o \
     defaultDb.o dbDb.o dnaMotif.o ensFace.o \
     est3.o estOrientInfo.o estPair.o exoFish.o \
-    featureBits.o fishClones.o gcPercent.o geneBands.o geneGraph.o \
+    featureBits.o findKGAlias.o fishClones.o gcPercent.o geneBands.o geneGraph.o \
     genePred.o genomicDups.o \
     genomicSuperDups.o celeraDupPositive.o celeraCoverage.o\
     ggCluster.o altGraph.o ggDbIo.o \
@@ -22,10 +22,12 @@ O = affyAtlas.o agpFrag.o agpGap.o altGraphX.o ancientRref.o \
     hgGene.o hgSeq.o hgRelate.o hui.o humanParalog.o isochores.o \
     jaxOrtholog.o jaxQTL.o jksql.o \
     knownInfo.o knownMore.o lfs.o \
+    minGeneInfo.o tigrCmrGene.o llaInfo.o \
     mapSts.o mcnBreakpoints.o mouseSyn.o mouseSynWhd.o mouseOrtho.o \
     ensPhusionBlast.o netAlign.o pseudoGeneLink.o \
     ooUtils.o pepPred.o plasEndPairs.o pslWScore.o \
-    qaSeq.o recombRate.o refLink.o riken.o rmskOut.o \
+    qaSeq.o recombRate.o kgAlias.o kgProtAlias.o findKGAlias.o findKGProtAlias.o \
+    refLink.o riken.o rmskOut.o \
     rnaGene.o rnaGroup.o rikenBest.o rikenCluster.o roughAli.o \
     sage.o sageCounts.o sageExp.o sanger22extra.o \
     scoredRef.o simpleRepeat.o snp.o softberryHom.o \
@@ -53,6 +55,9 @@ ctags:
 
 tags:
 	etags *.c *.h ../inc/*.h ../lib/*.c ../../inc/*.h ../../lib/*.c
+
+test:
+	cd tests && runtest
 
 tests: 	
 #	gcc -Wimplicit -ggdb   -I../../inc -I../inc  -o test_ggMrnaAli test_ggMrnaAli.c  $(MYLIBS) $L

@@ -60,7 +60,13 @@ struct ffAli
     int startGood, endGood; /* Number that match perfectly on ends. */
     };
 
-#define ffIntronMax 750000	/* Maximum intron size */
+/* maximum intron size for fuzzy find functions */
+
+#define ffIntronMaxDefault 750000	/* Default maximum intron size */
+
+extern int ffIntronMax;
+
+void setFfIntronMax(int value);         /* change max intron size */
 
 /************* lib/ffAli.c routines - using alignments ************/
 

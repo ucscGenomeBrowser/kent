@@ -18,7 +18,7 @@
 #include "hdb.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.34 2003/06/12 14:26:11 braney Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.35 2003/06/24 13:13:57 braney Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -149,7 +149,7 @@ row[12] = "";
 static boolean isChromName(char *word)
 /* Return TRUE if it's a contig or chromosome */
 {
-return startsWith("chr", word)  || startsWith("ctg", word) || startsWith("NT_", word) || startsWith("target", word);
+return startsWith("chr", word)  || startsWith("ctg", word) || startsWith("NT_", word) || startsWith("target", word) || startsWith("Scaffold_", word);
 }
 
 static void checkChromName(char *word, int lineIx)
@@ -713,7 +713,7 @@ for (;;)
 	    bed = customTrackPsl(pslIsProt, row, wordCount, chromHash, lineIx);
 	else
 	    bed = customTrackBed(row, wordCount, chromHash, lineIx);
-	if (!startsWith("chr", bed->chrom) && !startsWith("target", bed->chrom))
+	if (!startsWith("chr", bed->chrom) && !startsWith("target", bed->chrom) && !startsWith("Scaffold", bed->chrom))
 	    track->needsLift = TRUE;
 	slAddHead(&track->bedList, bed);
 	}

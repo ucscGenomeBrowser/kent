@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.14 2003/06/21 22:47:47 baertsch Exp $";
+static char const rcsid[] = "$Id: hash.c,v 1.16 2003/06/23 22:04:09 baertsch Exp $";
 
 bits32 hashCrc(char *string)
 /* Returns a CRC value on string. */
@@ -131,7 +131,7 @@ if ((hel = hashLookup(hash, name)) != NULL)
 return hashAdd(hash, name, NULL)->name;
 }
 
-int hashFindSize(struct hash *hash, char *name)
+int hashIntVal(struct hash *hash, char *name)
 /* Find size of name in hash or die trying. */
 {
 void *val = hashMustFindVal(hash, name);
@@ -171,15 +171,6 @@ void hashAddInt(struct hash *hash, char *name, int val)
 {
 char *pt = NULL;
 hashAdd(hash, name, pt + val);
-}
-
-int hashIntVal(struct hash *hash, char *name)
-/* Return integer value associated with name in a simple 
- * hash of ints. */
-{
-char *n = NULL;
-char *pt = hashMustFindVal(hash, name);
-return pt - n;
 }
 
 struct hash *newHash(int powerOfTwoSize)

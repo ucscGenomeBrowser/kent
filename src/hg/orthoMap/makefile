@@ -6,16 +6,19 @@ MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 % : %.c
-	gcc -Wimplicit -ggdb -I../inc  -I../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) $(MYSQLLIBS) -lm -lz
+	gcc -Wimplicit -ggdb -I../inc  -I../../inc  -o $@ $(addsuffix .c,$@) $(O) $(MYLIBS) $(MYSQLLIBS) -lm -lz
 	cp $@ $(HOME)/bin/$(ARCHTYPE)
 
 %Test: %Test.c 
 	gcc -Wimplicit -ggdb  -I../inc -I../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) $(L)
 
-O =  orthoMap orthoEvaluate # spliceStats spliceVis
+E =  orthoMap orthoEvaluate orthoPickIntron # spliceStats spliceVis
 
+O = orthoEval.o
 
-exe: $(O)
+exe: compile $(E) 
+
+compile: $(O)
 
 test: $(TESTS)
 

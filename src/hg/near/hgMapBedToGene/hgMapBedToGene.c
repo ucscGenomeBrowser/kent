@@ -10,7 +10,7 @@
 #include "bed.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: hgMapBedToGene.c,v 1.1 2003/06/21 00:51:57 kent Exp $";
+static char const rcsid[] = "$Id: hgMapBedToGene.c,v 1.2 2003/06/24 00:12:40 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -120,7 +120,8 @@ dyStringPrintf(dy,
 "    name varchar(255) not null,\n"
 "    value varchar(255) not null,\n"
 "              #Indices\n"
-"    PRIMARY KEY(name(16))\n"
+"    PRIMARY KEY(name(16)),\n"
+"    INDEX(name(16))\n"
 ")\n",  tableName);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);

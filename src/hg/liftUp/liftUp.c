@@ -11,11 +11,12 @@
 #include "chromInserts.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.13 2003/05/06 07:22:24 kate Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.17 2003/06/27 06:01:19 kate Exp $";
 
 boolean nohead = FALSE;	/* No header for psl files? */
 boolean nosort = FALSE;	/* Don't sort files */
 int dots=0;	/* Put out I'm alive dot now and then? */
+int gapsize = 0;        /* optional non-default gap size */
 
 void usage()
 /* Explain usage and exit. */
@@ -41,7 +42,7 @@ errAbort(
  "also needs to be included in the command line:\n"
  "   liftUp dest.agp liftSpec how inserts sourceFile(s)\n"
  "This file describes where large inserts due to heterochromitin\n"
- "should be added.\n"
+ "should be added. Use /dev/null and set -gapsize if there's not inserts file.\n"
  "\n"
  "options:\n"
  "   -nohead  No header written for .psl files\n"
@@ -49,6 +50,7 @@ errAbort(
  "   -pslQ  Lift query (rather than target) side of psl\n"
  "   -axtQ  Lift query (rather than target) side of axt\n"
  "   -nosort Don't sort bed, gff, or gdup files, to save memory\n"
+ "   -gapsize change contig gapsize from default\n"
  );
 }
 
@@ -243,8 +245,9 @@ for (i=0; i<sourceCount; ++i)
     while (lineFileNext(lf, &line, &lineSize))
 	{
 	wordCount = chopLine(line, words);
-	if (wordCount < 14 || wordCount > 16)
-	    errAbort("Expecting 14 words line %d of %s", lf->lineIx, lf->fileName);
+	// 16 becomes 17, new field in RMasker June23 '03 - Hiram
+	if (wordCount < 14 || wordCount > 17)
+	    errAbort("Expecting 14-17 words (found %d) line %d of %s", wordCount, lf->lineIx, lf->fileName);
 	if (wordCount >= 15)
 	    id = words[14];
 	else
@@ -320,7 +323,7 @@ struct lineFile *lf;
 int lineSize, wordCount;
 char *line, *words[32];
 struct psl *psl;
-struct xAli *xa;
+struct xAli *xa = NULL;
 unsigned *starts;
 struct liftSpec *spec;
 int offset;
@@ -514,7 +517,8 @@ int lineSize, wordCount;
 char *line, *words[32];
 char *s;
 struct liftSpec *spec;
-int start, end;
+int start = 0;
+int end = 0;
 int ix = 0;
 char newDir[256], newName[128], newExt[64];
 struct bigInsert *bi;
@@ -653,7 +657,10 @@ char *words[128], *line, *source;
 struct lineFile *lf;
 FILE *f = mustOpen(destFile, "w");
 int i,j;
-int start, end, start2, end2;
+int start = 0;
+int end = 0;
+int start2 = 0;
+int end2 = 0;
 char *contig, *chrom = NULL, *chrom2 = NULL;
 struct liftSpec *spec;
 static char buf[1024*16];
@@ -972,8 +979,12 @@ cgiSpoof(&argc, argv);
 nohead = cgiBoolean("nohead");
 nosort = cgiBoolean("nosort");
 dots = cgiUsualInt("dots", dots);
+gapsize = cgiOptionalInt("gapsize", 0);
+if (gapsize !=0)
+    chromInsertsSetDefaultGapSize(gapsize);
 if (argc < 5)
     usage();
 liftUp(argv[1], argv[2], argv[3], argc-4, argv+4);
+return 0;
 }
 

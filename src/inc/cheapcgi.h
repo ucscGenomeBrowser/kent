@@ -25,6 +25,9 @@ struct cgiVar* cgiVarList();
 /* Get the string associated with varName from the cookie string. */
 char *findCookieData(char *varName);
 
+void dumpCookieList();
+/* Print out the cookie list. */
+
 /* Return TRUE if looks like we're being run as a CGI. */
 boolean cgiIsOnWeb();
 

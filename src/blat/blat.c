@@ -135,7 +135,8 @@ printf(
   "                   blast - similar to NCBI blast format\n"
   "   -fine       For high quality mRNAs look harder for small initial and\n"
   "               terminal exons.  Not recommended for ESTs\n"
-  , gfVersion
+  "   -maxIntron=N  Sets maximum intron size. Default is %d\n"
+  , gfVersion, ffIntronMaxDefault
   );
 exit(-1);
 }
@@ -901,6 +902,8 @@ qMask = optionVal("qMask", NULL);
 outputFormat = optionVal("out", outputFormat);
 dotEvery = optionInt("dots", 0);
 verbose = optionExists("verbose");
+/* set global for fuzzy find functions */
+setFfIntronMax(optionInt("maxIntron", ffIntronMaxDefault));
 
 /* Call routine that does the work. */
 blat(argv[1], argv[2], argv[3]);

@@ -29,11 +29,20 @@
 #include "hgFind.h"
 #include "hdb.h"
 #include "refLink.h"
+#include "kgAlias.h"
 #include "cheapcgi.h"
 #include "web.h"
+#include "kgAlias.h"
+#include "kgProtAlias.h"
+#include "findKGAlias.h"
+#include "findKGProtAlias.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.87 2003/06/19 22:58:10 donnak Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.91 2003/06/30 21:25:05 kate Exp $";
+
+/* alignment tables to check when looking for mrna alignments */
+static char *estTables[] = { "all_est", "xenoEst", NULL};
+static char *mrnaTables[] = { "all_mrna", "xenoMrna", NULL};
 
 char *MrnaIDforGeneName(char *geneName)
 /* return mRNA ID for a gene name */
@@ -96,7 +105,7 @@ hFreeConn(&conn);
 return result;
 }
 
-static boolean findKnownGeneExact(char *spec, struct hgPositions *hgp, char *tableName)
+static boolean findKnownGeneExact(char *spec, char *geneSymbol, struct hgPositions *hgp, char *tableName)
 /* Look for position in Known Genes table. */
 {
 struct sqlConnection *conn;
@@ -131,14 +140,15 @@ while ((row = sqlNextRow(sr)) != NULL)
 	dyStringClear(query);
 	dyStringPrintf(query, "%s Gene Predictions", tableName);
 	table->description = cloneString("Known Genes");
-	table->name = cloneString(query->string);
+	table->name = cloneString("knownGene");
 	slAddHead(&hgp->tableList, table);
 	}
     AllocVar(pos);
     pos->chrom = hgOfficialChromName(row[0]);
     pos->chromStart = atoi(row[1]);
     pos->chromEnd = atoi(row[2]);
-    pos->name = cloneString(row[3]);
+    //pos->name = cloneString(row[3]);
+    pos->name = cloneString(geneSymbol);
     slAddHead(&table->posList, pos);
     }
 if (table != NULL) 
@@ -171,7 +181,7 @@ if (!hTableExists(tableName))
 rowOffset = hOffsetPastBin(NULL, tableName);
 conn = hAllocConn();
 query = newDyString(256);
-dyStringPrintf(query, "SELECT chrom, txStart, txEnd, name FROM %s WHERE name LIKE '%s'", tableName, localName);
+dyStringPrintf(query, "SELECT chrom, txStart, txEnd, name FROM %s WHERE name LIKE '%%%s%%'", tableName, localName);
 sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -182,7 +192,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	dyStringClear(query);
 	table->description = cloneString("Known Genes");
 	dyStringPrintf(query, "%s", tableName);
-	table->name = cloneString(query->string);
+	table->name = cloneString("knownGene");
 	slAddHead(&hgp->tableList, table);
 	}
 
@@ -220,24 +230,28 @@ char *mrnaID;
 if (! hTableExists("knownGene"))
     return FALSE;
 
-if (findKnownGeneExact(spec, hgp, tableName))
+if (findKnownGeneExact(spec, spec, hgp, tableName))
     {    
     return(TRUE);
     }
 else
     {
     mrnaID = MrnaIDforProtein(spec);
-	
+
+    if (mrnaID == NULL)
+	{
+    	mrnaID = MrnaIDforProtein(spec);
+	}
     if (mrnaID != NULL)
 	{
-	return(findKnownGeneExact(mrnaID, hgp, tableName));
+	return(findKnownGeneExact(mrnaID, spec, hgp, tableName));
 	}
     else
 	{
 	mrnaID = MrnaIDforGeneName(spec);
 	if (mrnaID != NULL)
 	    {
-	    return(findKnownGeneExact(mrnaID, hgp, tableName));
+	    return(findKnownGeneExact(mrnaID, spec, hgp, tableName));
 	    }
 	else
 	    {
@@ -297,8 +311,9 @@ return s;
 }
 
 
-static void singlePos(struct hgPositions *hgp, char *tableDescription, char *posDescription,
-                      char *tableName, char *posName, char *chrom, int start, int end)
+static void singlePos(struct hgPositions *hgp, char *tableDescription,
+                      char *posDescription, char *tableName, char *posName,
+                      char *chrom, int start, int end)
 /* Fill in pos for simple case single position. */
 {
 struct hgPosTable *table;
@@ -816,30 +831,57 @@ char a0 = toupper(acc[0]);
 return ((strlen(acc) > 3) && (acc[2] == '_') && ((a0 == 'N') || (a0 == 'X')));
 }
 
+static boolean mrnaInfo(char *acc, struct sqlConnection *conn, 
+                                char **mrnaType, int *organismID)
+/* Return mrna/est type and organism name for the accession */
+/* Ignores returned values if parameters are NULL */
+/* Return TRUE if search succeeded, else FALSE */
+/* NOTE: caller must free mrnaType */
+{
+static char typeBuf[16];
+char query[256];
+struct sqlResult *sr;
+char **row;
+int ret;
+
+sprintf(query, "select type, organism from mrna where acc = '%s'", acc);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (mrnaType != NULL)
+        *mrnaType = cloneString(row[0]);
+    if (organismID != NULL)
+        *organismID = sqlUnsigned(row[1]);
+    ret = TRUE;
+    }
+else
+    ret = FALSE;
+sqlFreeResult(&sr);
+return ret;
+}
+
 static char *mrnaType(char *acc)
 /* Return "mrna" or "est" if acc is mRNA, otherwise NULL.  Returns
  * NULL for refseq mRNAs */
-{
 /* for compat with older databases, just look at the seqId to
  * determine if it's a refseq, don't use table */
+/* NOTE: caller must free returned type */
+{
+struct sqlConnection *conn;
+char *type;
+char *ret;
+
 if (isRefSeqAcc(acc))
     return NULL;
+conn = hAllocConn();
+if (mrnaInfo(acc, conn, &type, NULL))
+   ret = type;
 else
-    {
-    static char typeBuf[16];
-    char *type;
-    struct sqlConnection *conn = hAllocConn();
-    char query[256];
-
-    safef(query, sizeof(query), "select type from mrna where acc = '%s'", acc);
-    type = sqlQuickQuery(conn, query, typeBuf, sizeof(typeBuf));
-    hFreeConn(&conn);
-    return type;
-    }
+   ret = NULL;
+hFreeConn(&conn);
+return ret;
 }
-
-static struct psl *findAllAli(char *acc, char *type)
-/* Find all alignments of the given type. */
+static struct psl *findAllAli(char *acc, char *lowerType)
 {
 struct sqlConnection *conn = hAllocConn();
 char query[256];
@@ -847,22 +889,42 @@ struct psl *pslList = NULL, *psl;
 struct sqlResult *sr;
 char **row;
 int rowOffset;
-char table[64];
+char **tables, *table;
 
+/*
 if (type[0] == 0)
-   strncpy(table, "xenoMrna", sizeof(table));
+   /* older databases have empty column for xeno mrna's ?
+   table = "xenoMrna";
 else
-    snprintf(table, sizeof(table), "all_%s", type);
-rowOffset = hOffsetPastBin(NULL, table);
-snprintf(query, sizeof(query), "select * from %s where qName = '%s'", table, acc);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+*/
+
+if (sameWord(lowerType, "mrna"))
+    tables = mrnaTables;
+else if (sameWord(lowerType, "est"))
+    tables = estTables;
+else
+    /* invalid type */
+    return pslList;
+
+while ((table = *tables++) != NULL)
     {
-    psl = pslLoad(row+rowOffset);
-    slAddHead(&pslList, psl);
+    if (sqlTableExists(conn, table))
+	{
+        rowOffset = hOffsetPastBin(NULL, table);
+        snprintf(query, sizeof(query), "select * from %s where qName = '%s'",
+                                                             table, acc);
+        sr = sqlGetResult(conn, query);
+        while ((row = sqlNextRow(sr)) != NULL)
+            {
+            psl = pslLoad(row+rowOffset);
+            slAddTail(&pslList, psl);
+            }
+        if (pslList != NULL) 
+            /* for speed -- found proper table, so don't need to look farther */
+            break;
+	}
     }
 hFreeConn(&conn);
-slReverse(&pslList);
 return pslList;
 }
 
@@ -906,14 +968,19 @@ fprintf(f, "%s", pos->description);
 
 static boolean findMrnaPos(char *acc,  struct hgPositions *hgp,
 			   char *hgAppName, struct cart *cart)
-/* Look to see if it's an mRNA.  Fill in hgp and return
+/* Find MRNA or EST position(s) from accession number.
+ * Look to see if it's an mRNA or EST.  Fill in hgp and return
  * TRUE if it is, otherwise return FALSE. */
+/* NOTE: this excludes RefSeq mrna's, as they are currently
+ * handled in findRefGenes(), which is called later in the main function */
 {
 char *type;
 char *extraCgi = hgp->extraCgi;
 char *ui = getUiUrl(cart);
 char tableName [64];
 if ((type = mrnaType(acc)) == NULL || type[0] == 0)
+    /* this excludes refseq mrna's, and accessions with
+     * invalid column type in mrna table (refseq's and ests) */
     return FALSE;
 else
     {
@@ -931,6 +998,7 @@ else
         {
 	errAbort("%s %s doesn't align anywhere in the genome",
 		 type, acc);
+        freez(type);
 	return FALSE;
 	}
     else
@@ -1531,7 +1599,7 @@ return list;
 #endif /* OLD */
 
 static void findHitsToTables(char *key, char *tables[], int tableCount, 
-    struct hash **retHash, struct slName **retList)
+                            struct hash **retHash, struct slName **retList)
 /* Return all unique accessions that match any table. */
 {
 struct slName *list = NULL, *el;
@@ -1551,8 +1619,7 @@ for (i = 0; i<tableCount; ++i)
      * in one step in SQL just because it somehow is much
      * faster this way (like 100x faster) when using mySQL. */
     field = tables[i];
-    sprintf(query, "select id from %s where name like '%%%s%%'", 
-       field, key);
+    sprintf(query, "select id from %s where name like '%%%s%%'", field, key);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -1563,16 +1630,20 @@ for (i = 0; i<tableCount; ++i)
     for (idEl = idList; idEl != NULL; idEl = idEl->next)
         {
         /* don't check srcDb to exclude refseq for compat with older tables */
-	sprintf(query, "select acc from mrna where %s = %s and type = 'mRNA'", field, idEl->name);
+	sprintf(query, 
+            "select acc, organism from mrna where %s = %s and type = 'mRNA'",
+                        field, idEl->name);
 	sr = sqlGetResult(conn, query);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    char *acc = row[0];
+            /* will use this later to distinguish xeno mrna */
+	    int organismID = sqlUnsigned(row[1]);
 	    if (!isRefSeqAcc(acc) && !hashLookup(hash, acc))
 		{
 		el = newSlName(acc);
-		slAddHead(&list, el);
-		hashAdd(hash, acc, NULL);
+                slAddHead(&list, el);
+                hashAdd(hash, acc, NULL);
 		}
 	    }
 	sqlFreeResult(&sr);
@@ -1612,33 +1683,134 @@ static void mrnaKeysHtmlOnePos(struct hgPosTable *table, struct hgPos *pos, FILE
 fprintf(f, "%s", pos->description);
 }
 
-static boolean mrnaAligns(struct sqlConnection *conn, char *acc)
-/* Return TRUE accession is in one of our mRNA 
- * alignment tables. */
+static boolean mrnaAligns(struct sqlConnection *conn, char *acc,
+                                char *type, boolean isXeno)
+/* Return TRUE if accession is in the designated alignment table */
 {
-static char *estTables[] = { "all_est", "xenoEst", NULL};
-static char *mrnaTables[] = { "all_mrna", "xenoMrna", NULL};
-char **tables, *table;
-char query[256], buf[64], *type;
-safef(query, sizeof(query), "select type from mrna where acc = '%s'", acc);
-type = sqlQuickQuery(conn, query, buf, sizeof(buf));
-if (type == NULL)
-    internalErr();
+char *table;
+char query[256], buf[64];
+
 if (sameWord(type, "EST"))
-    tables = estTables;
-else
-    tables = mrnaTables;
-while ((table = *tables++) != NULL)
+    table = isXeno ? "xenoEst" : "all_est";
+else 
+    /* use mrna tables if we can't determine type */
+    table = isXeno ? "xenoMrna" : "all_mrna";
+
+safef(query, sizeof(query), 
+    "select qName from %s where qName = '%s'", table, acc);
+if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
     {
-    if (sqlTableExists(conn, table))
-	{
-	safef(query, sizeof(query), 
-	    "select qName from %s where qName = '%s'", table, acc);
-	if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
-	    return TRUE;
-	}
+    return TRUE;
     }
 return FALSE;
+}
+
+static void addMrnaPositionTable(struct hgPositions *hgp, 
+                                struct slName *accList, struct cart *cart,
+                                struct sqlConnection *conn, char *hgAppName,
+                                boolean aligns, boolean isXeno)
+/* Generate table of positions that match criteria.
+ * Add to hgp if any found */
+{
+char title[256];
+struct hgPosTable *table;
+struct hgPos *pos;
+struct slName *el;
+struct dyString *dy = newDyString(256);
+char **row;
+char query[256];
+char description[512];
+char *ui = getUiUrl(cart);
+char *acc = NULL;
+boolean isXenoItem;
+char *mrnaType;
+int itemOrganismID;
+int organismID = hOrganismID(hgp->database);   /* id from mrna organism table */
+
+AllocVar(table);
+
+/* Examine all accessions to see if they fit criteria for
+ * this table. Add all matching to the position list, and
+ * remove from the accession list */
+for (el = accList; el != NULL; el = el->next)
+    {
+    acc = el->name;
+    if (!mrnaInfo(acc, conn, &mrnaType, &itemOrganismID))
+        {
+        /* bad element -- remove from list */
+        slRemoveEl(accList, el);
+        freeMem(el);
+        continue;
+        }
+    /* check if item matches xeno criterion */
+    if (isXeno == (itemOrganismID == organismID))
+        continue;
+
+    /* check if item matches alignment criterion */
+    if (aligns != mrnaAligns(conn, acc, mrnaType, isXeno))
+            /* this accession doesn't fit table criteria -- leave it alone */
+            continue;
+
+    /* item fits criteria, so enter in table */
+    AllocVar(pos);
+    slAddHead(&table->posList, pos);
+    pos->name = cloneString(acc);
+    dyStringClear(dy);
+    
+    if (aligns)
+        {
+        /* accession has link only if it aligns */
+        dyStringPrintf(dy, "<A HREF=\"%s?position=%s",
+                                         hgAppName, acc);
+        if (ui != NULL)
+            dyStringPrintf(dy, "&%s", ui);
+        dyStringPrintf(dy, "%s\">", 
+                   hgp->extraCgi);
+        dyStringPrintf(dy, "%s</A>", acc);
+        }
+    else
+        /* TODO: link to Genbank record */
+        //dyStringPrintf(dy, "%s ", acc);
+        dyStringPrintf(dy, 
+            "<A HREF=\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu\" TARGET=_blank>%s</A>", 
+                        acc, acc);
+    sprintf(query, 
+                "select description.name from mrna,description"
+                " where mrna.acc = '%s' and mrna.description = description.id",
+                acc);
+    if (sqlQuickQuery(conn, query, description, sizeof(description)))
+        dyStringPrintf(dy, " - %s", description);
+    dyStringPrintf(dy, "\n");
+    pos->description = cloneString(dy->string);
+
+    /* remove processed element from accession list */
+    // TODO: figure out why removal from list doesn't work
+    slRemoveEl(accList, el);
+    // TODO: figure out why freeing this mem crashes
+    //freeMem(el);
+    }
+
+/* fill in table and add to hgp only if it contains results */
+// TODO: figure out why list always has 1 element
+//if (slLastEl(&table->posList) != NULL)
+#ifdef DEBUG
+printf("table size = %d\n", slCount(&table->posList));
+#endif
+if (slCount(&table->posList) > 1)
+    {
+    char *organism = hOrganism(hgp->database);      /* dbDb organism column */
+    slReverse(&table->posList);
+    sprintf(title, "%s%s %sAligned mRNA Search Results",
+                            isXeno ? "Non" : "", 
+                            organism, 
+                            aligns ?  "" : "Non");
+    freeMem(organism);
+    table->description = cloneString(title);
+    table->name = NULL;
+    table->htmlOnePos = mrnaKeysHtmlOnePos;
+    slAddHead(&hgp->tableList, table);
+    }
+freeDyString(&dy);
 }
 
 static void findMrnaKeys(char *keys, struct hgPositions *hgp,
@@ -1648,7 +1820,6 @@ static void findMrnaKeys(char *keys, struct hgPositions *hgp,
 char *words[32];
 char buf[512];
 int wordCount;
-struct slName *el;
 static char *tables[] = {
 	"productName", "geneName",
 	"author", "tissue", "cell", "description", "development", 
@@ -1659,11 +1830,8 @@ struct hash *allKeysHash = NULL;
 struct slName *allKeysList = NULL;
 struct hash *andedHash = NULL;
 struct slName *andedList = NULL;
+struct sqlConnection *conn = hAllocConn();
 int i;
-struct dyString *dy = NULL;
-struct hgPosTable *table;
-struct hgPos *pos;
-
 
 strncpy(buf, keys, sizeof(buf));
 wordCount = chopLine(buf, words);
@@ -1695,54 +1863,15 @@ for (i=0; i<wordCount; ++i)
 if (allKeysList == NULL)
     return;
 
+/* generate position lists and add to hgp */
+/* organism aligning */
+addMrnaPositionTable(hgp, allKeysList, cart, conn, hgAppName, TRUE, FALSE);
+/* organism non-aligning */
+addMrnaPositionTable(hgp, allKeysList, cart, conn, hgAppName, FALSE, FALSE);
+/* xeno aligning */
+addMrnaPositionTable(hgp, allKeysList, cart, conn, hgAppName, TRUE, TRUE);
 
-dy = newDyString(256);
-AllocVar(table);
-slAddHead(&hgp->tableList, table);
-table->name = NULL;
-table->description = cloneString("mRNA Associated Search Results");
-table->htmlOnePos = mrnaKeysHtmlOnePos;
-
-/* Dummy block made to allow local declarations */
-/* Fetch descriptions of all matchers and display. */
-    {
-    struct sqlConnection *conn = hAllocConn();
-    struct sqlResult *sr;
-    char **row;
-    char query[256];
-    char description[512];
-    char *ui = getUiUrl(cart);
-    for (el = allKeysList; el != NULL; el = el->next)
-        {
-	if (mrnaAligns(conn, el->name))
-	    {
-	    AllocVar(pos);
-	    slAddHead(&table->posList, pos);
-	    pos->name = cloneString(el->name);
-	    dyStringClear(dy);
-	    
-	    dyStringPrintf(dy, "<A HREF=\"%s?position=%s", hgAppName, el->name);
-	    
-	    if (ui != NULL)
-		dyStringPrintf(dy, "&%s", ui);
-	    dyStringPrintf(dy, "%s\">", 
-			   hgp->extraCgi);
-	    dyStringPrintf(dy, "%s </A>", el->name);
-	    sprintf(query, 
-		    "select description.name from mrna,description"
-		    " where mrna.acc = '%s' and mrna.description = description.id",
-		    el->name);
-	    if (sqlQuickQuery(conn, query, description, sizeof(description)))
-		dyStringPrintf(dy, "- %s", description);
-	    dyStringPrintf(dy, "\n");
-	    pos->description = cloneString(dy->string);
-	    }
-        }
-    slReverse(&table->posList);
-    hFreeConn(&conn);
-    }
-
-    freeDyString(&dy);
+hFreeConn(&conn);
 }
 
 static void findKnownGenes(char *spec, struct hgPositions *hgp)
@@ -1842,6 +1971,173 @@ return TRUE;
 static void findAffyProbe(char *spec, struct hgPositions *hgp)
 /* Look up affy probes. */
 {
+}
+
+int findKgGenesByAlias(char *spec, struct hgPositions *hgp)
+/* Look up Known Genes using the gene Alias table, kgAlias. */
+{
+struct sqlConnection *conn  = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn();
+struct sqlResult *sr 	    = NULL;
+struct dyString *ds 	    = newDyString(256);
+char **row;
+boolean gotOne 		    = FALSE;
+struct hgPosTable *table    = NULL;
+struct hgPos *pos;
+struct genePred *gp;
+char *answer, cond_str[256];
+char *desc;
+struct kgAlias *kaList 	    = NULL, *kl;
+boolean gotKgAlias 	    = sqlTableExists(conn, "kgAlias");
+int kgFound 		    = 0;
+
+if (gotKgAlias)
+    {
+    /* get a link list of kgAlias (kgID/alias pair) nodes that match the spec using "Fuzzy" mode*/
+    kaList = findKGAlias(hGetDb(), spec, "F");
+    }
+
+if (kaList != NULL)
+    {
+    struct hash *hash = newHash(8);
+    kgFound = 1;
+    AllocVar(table);
+    slAddHead(&hgp->tableList, table);
+    table->description = cloneString("Known Genes");
+    table->name = cloneString("knownGene");
+    
+    for (kl = kaList; kl != NULL; kl = kl->next)
+        {
+        /* Don't return duplicate mrna accessions */
+        if (hashFindVal(hash, kl->kgID))
+            {            
+            hashAdd(hash, kl->kgID, kl);
+            continue;
+            }
+
+        hashAdd(hash, kl->kgID, kl);
+	dyStringClear(ds);
+	dyStringPrintf(ds, "select * from knownGene where name = '%s'", kl->kgID);
+	sr = sqlGetResult(conn, ds->string);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    gp = genePredLoad(row);
+	    AllocVar(pos);
+	    slAddHead(&table->posList, pos);
+	    pos->name = cloneString(kl->alias);
+
+	    sprintf(cond_str, "kgID = '%s'", kl->kgID);
+	    answer = sqlGetField(conn2, hGetDb(), "kgXref", "description", cond_str);
+	    if (answer != NULL) 
+		{
+		desc = answer;
+		}
+	    else
+		{
+		desc = kl->alias;
+		}
+
+	    dyStringClear(ds);
+	    dyStringPrintf(ds, "(%s) %s", kl->kgID, desc);
+	    pos->description = cloneString(ds->string);
+	    pos->chrom = hgOfficialChromName(gp->chrom);
+	    pos->chromStart = gp->txStart;
+	    pos->chromEnd = gp->txEnd;
+	    genePredFree(&gp);
+	    }
+	sqlFreeResult(&sr);
+	}
+    kgAliasFreeList(&kaList);
+    freeHash(&hash);
+    }
+freeDyString(&ds);
+hFreeConn(&conn);
+hFreeConn(&conn2);
+return(kgFound);
+}
+
+int findKgGenesByProtAlias(char *spec, struct hgPositions *hgp)
+/* Look up Known Genes using the protein alias table, kgProtAlias. */
+{
+struct sqlConnection *conn  = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn();
+struct sqlResult *sr 	    = NULL;
+struct dyString *ds 	    = newDyString(256);
+char **row;
+boolean gotOne 		    = FALSE;
+struct hgPosTable *table    = NULL;
+struct hgPos *pos;
+struct genePred *gp;
+char *answer, cond_str[256];
+char *desc;
+struct kgProtAlias *kpaList = NULL, *kl;
+boolean gotKgProtAlias 	    = sqlTableExists(conn, "kgProtAlias");
+int kgFound 		    = 0;
+
+if (gotKgProtAlias)
+    {
+    /* get a link list of kgProtAlias (kgID, displayID, and alias) nodes that 
+       match the query spec using "Fuzzy" search mode*/
+    kpaList = findKGProtAlias(hGetDb(), spec, "F");
+    }
+
+if (kpaList != NULL)
+    {
+    struct hash *hash = newHash(8);
+    kgFound = 1;
+    AllocVar(table);
+    slAddHead(&hgp->tableList, table);
+    table->description = cloneString("Known Genes");
+    table->name = cloneString("knownGene");
+    
+    for (kl = kpaList; kl != NULL; kl = kl->next)
+        {
+        /* Don't return duplicate mrna accessions */
+        if (hashFindVal(hash, kl->kgID))
+            {            
+            hashAdd(hash, kl->kgID, kl);
+            continue;
+            }
+
+        hashAdd(hash, kl->kgID, kl);
+	dyStringClear(ds);
+	dyStringPrintf(ds, "select * from knownGene where name = '%s'", kl->kgID);
+	sr = sqlGetResult(conn, ds->string);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    gp = genePredLoad(row);
+	    AllocVar(pos);
+	    slAddHead(&table->posList, pos);
+	    pos->name = cloneString(kl->alias);
+
+	    sprintf(cond_str, "kgID = '%s'", kl->kgID);
+	    answer = sqlGetField(conn2, hGetDb(), "kgXref", "description", cond_str);
+	    if (answer != NULL) 
+		{
+		desc = answer;
+		}
+	    else
+		{
+		desc = kl->alias;
+		}
+
+	    dyStringClear(ds);
+	    dyStringPrintf(ds, "(%s) %s", kl->displayID, desc);
+	    pos->description = cloneString(ds->string);
+	    pos->chrom = hgOfficialChromName(gp->chrom);
+	    pos->chromStart = gp->txStart;
+	    pos->chromEnd = gp->txEnd;
+	    genePredFree(&gp);
+	    }
+	sqlFreeResult(&sr);
+	}
+    kgProtAliasFreeList(&kpaList);
+    freeHash(&hash);
+    }
+freeDyString(&ds);
+hFreeConn(&conn);
+hFreeConn(&conn2);
+return(kgFound);
 }
 
 static void findRefGenes(char *spec, struct hgPositions *hgp)
@@ -2210,6 +2506,7 @@ boolean relativeFlag;
 char buf[256];
 char *startOffset,*endOffset;
 int iStart = 0, iEnd = 0;
+int kgFound;
 
 AllocVar(hgp);
 hgp->useAlias = FALSE;
@@ -2280,6 +2577,9 @@ else if (hgFindClonePos(query, &chrom, &start, &end))
     }
 else if (findMrnaPos(query, hgp, hgAppName, cart))
     {
+    /* here for MRNA's (but not RefSeq) and EST's */
+    /* NOTE: findMrnaPos generates the list
+     * so this block is empty. */
     }
 else if (findGenethonPos(query, &chrom, &start, &end))	/* HG3 only. */
     {
@@ -2305,9 +2605,26 @@ else if (isRatContigName(query) && findRatContigPos(query, &chrom, &start, &end)
     }
 else 
     {
+    kgFound = 0;
+    if (hTableExists("kgAlias"))
+	{
+	// invoke new Known Genes gene alias search if kgAlias table exists */ 
+	kgFound = findKgGenesByAlias(query, hgp);
+	}
+
+    if (!kgFound && hTableExists("kgProtAlias"))
+	{
+	// invoke new Known Genes protein alias search if kgProtAlias table exists 
+	kgFound = findKgGenesByProtAlias(query, hgp);
+	}
+
+    if (!kgFound)
+	{
+    	findKnownGene(query, hgp, "knownGene");
+	}
+
     findKnownGenes(query, hgp);
     findRefGenes(query, hgp);
-    findKnownGene(query, hgp, "knownGene");
     if (hTableExists("superfamily")) findSuperfamily(query, hgp);
     findFishClones(query, hgp);
     findBacEndPairs(query, hgp);
@@ -2432,8 +2749,8 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 		    hgAppName, range);
 		if (ui != NULL)
 		    fprintf(f, "&%s", ui);
-		fprintf(f, "%s&%s=full\">%s at %s</A>",
-		    extraCgi, table->name, pos->name, range);
+		fprintf(f, "%s&%s=%s\">%s at %s</A>",
+		    extraCgi, table->name, hTrackOpenVis(table->name), pos->name, range);
 		desc = pos->description;
 		if (desc)
 		    fprintf(f, " - %s", desc);
@@ -2511,6 +2828,9 @@ if (strstrNoCase(organism, "human"))
 "<TR><TD VALIGN=Top NOWRAP>chr3:1-1000000</TD>\n"
 "	<TD WIDTH=14></TD>\n"
 "	<TD VALIGN=Top>Displays first million bases of chr 3, counting from p arm telomere</TD></TR>\n"
+"<TR><TD VALIGN=Top NOWRAP>scf1:1-1000000</TD>\n"
+"	<TD WIDTH=14></TD>\n"
+"	<TD VALIGN=Top>Displays first million bases of scaffold 1 of an unmapped genome assembly</TD></TR>\n"
 "\n"
 "<TR><TD VALIGN=Top><br></TD></TR>\n"
 "\n"
@@ -2776,7 +3096,7 @@ else if (strstrNoCase(organism, "SARS"))
 "Sequence Alignment and Modeling (SAM) T02</A> \n"
 "tool. UCSC does not plan to provide a comprehensive set of browsers for viruses.  \n"
 "However, this browser will be maintained as long as there is strong scientific  \n"
-"and public interest in the SARS conronavirus TOR2.\n</P>");
+"and public interest in the SARS coronavirus TOR2.\n</P>");
     puts("<P><H3>Sample position queries</P></H3>\n");
     puts(
 "<P>A genome position can be specified by the accession number of an "

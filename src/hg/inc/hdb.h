@@ -223,6 +223,34 @@ struct dnaSeq *hRnaSeq(char *acc);
 aaSeq *hPepSeq(char *acc);
 /* Return sequence for a peptide. */
 
+boolean hGenBankHaveSeq(char *acc, char *compatTable);
+/* Get a GenBank or RefSeq mRNA or EST sequence or NULL if it doesn't exist.
+ * This handles compatibility between pre-incremental genbank databases where
+ * refSeq sequences were stored in tables and the newer scheme that keeps all
+ * sequences in external files.  If compatTable is not NULL and the table
+ * exists, this is checked as a fallback.  If compatTable is null, only the
+ * external file tables are checked.
+ */
+
+struct dnaSeq *hGenBankGetMrna(char *acc, char *compatTable);
+/* Get a GenBank or RefSeq mRNA or EST sequence or NULL if it doesn't exist.
+ * This handles compatibility between pre-incremental genbank databases where
+ * refSeq sequences were stored in tables and the newer scheme that keeps all
+ * sequences in external files.  If compatTable is not NULL and the table
+ * exists, this is checked as a fallback.  If compatTable is null, only the
+ * external file tables are checked.
+ */
+
+aaSeq *hGenBankGetPep(char *acc, char *compatTable);
+/* Get a RefSeq peptide sequence or NULL if it doesn't exist.  This handles
+ * compatibility between pre-incremental genbank databases where refSeq
+ * sequences were stored in tables and the newer scheme that keeps all
+ * sequences in external files.  If compatTable is not NULL and the table
+ * exists, this is checked as a fallback.  If compatTable is null, only the
+ * external file tables are checked.  Note, older databases only have
+ * peptides in the tables.
+ */
+
 struct bed *hGetBedRange(char *table, char *chrom, int chromStart,
 			 int chromEnd, char *sqlConstraints);
 /* Return a bed list of all items (that match sqlConstraints, if nonNULL) 
@@ -368,6 +396,12 @@ struct trackDb *hMaybeTrackInfo(struct sqlConnection *conn, char *trackName);
 struct trackDb *hTrackInfo(struct sqlConnection *conn, char *trackName);
 /* Look up track in database, errAbort if it's not there. */
 
+boolean hTrackCanPack(char *trackName);
+/* Return TRUE if this track can be packed. */
+
+char *hTrackOpenVis(char *trackName);
+/* Return "pack" if track is packable, otherwise "full". */
+
 struct dbDb *hGetIndexedDatabases();
 /* Get list of databases for which there is a nib dir. 
  * Dispose of this with dbDbFreeList. */
@@ -402,6 +436,15 @@ char *hDefaultPos(char *database);
 char *hOrganism(char *database);
 /* Return organism associated with database.   Use freeMem on
  * return value when done. */
+
+int hOrganismID(char *database);
+/* Get organism ID from relational organism table */
+/* Return -1 if not found */
+
+char *hScientificName(char *database);
+/* Return scientific name for organism represented by this database */
+/* Return NULL if unknown database */
+/* NOTE: must free returned string after use */
 
 char *hGenome(char *database);
 /* Return genome associated with database.   Use freeMem on

@@ -26,7 +26,7 @@
 #include "portable.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.87 2003/06/19 15:33:38 donnak Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.88 2003/07/01 18:10:50 braney Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -478,11 +478,13 @@ printf("<FORM ACTION=\"%s\" METHOD=\"%s\" NAME=\"orgForm\">\n", hgTextName(),
        httpFormMethod);
 cgiMakeHiddenVar("org", organism);
 cgiMakeHiddenVar("db", database);
+cartSetString(cart, "db",database);
+cartSetString(cart, "org", organism);
+cartSetString(cart, "position",position);
 cartSaveSession(cart);
 puts("</FORM>");
 
 hgPositionsHelpHtml(organism);
-cartSetString(cart, "position",position);
 webEnd();
 }
 
@@ -4271,6 +4273,7 @@ else
 		 cgiUsualString("phase", "(Undefined)"));
     }
 cartSetString(cart, "db", database);
+cartSetString(cart, "org", organism);
 cartSetString(cart, "position", position);
 }
 

@@ -66,6 +66,7 @@
 #include "expRecord.h"
 #include "altGraph.h"
 #include "altGraphX.h"
+#include "loweLabTracks.h"
 #include "geneGraph.h"
 #include "sample.h"
 #include "genMapDb.h"
@@ -75,7 +76,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.539 2003/06/20 16:29:14 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.547 2003/07/01 22:45:46 baertsch Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -2625,7 +2626,7 @@ struct track *userPslTg()
 {
 struct track *tg = linkedFeaturesTg();
 tg->mapName = "hgUserPsl";
-tg->visibility = tvFull;
+tg->visibility = tvPack;
 tg->longLabel = "Your Sequence from BLAT Search";
 tg->shortLabel = "BLAT Sequence";
 tg->loadItems = loadUserPsl;
@@ -6986,8 +6987,7 @@ int z;
 float pixPerBase = 0;
 
 if(tl.picWidth == 0)
-    errAbort("hgTracks.c::loadHumMusL() - can't have pixel
-	    width of 0");
+    errAbort("hgTracks.c::loadHumMusL() - can't have pixel width of 0");
 pixPerBase = (winEnd - winStart)/ tl.picWidth;
 
 
@@ -9875,6 +9875,7 @@ registerTrackHandler("syntenyBuild30", syntenyMethods);
 registerTrackHandler("syntenyBerk", syntenyMethods);
 registerTrackHandler("syntenyRatBerkSmall", syntenyMethods);
 registerTrackHandler("syntenySanger", syntenyMethods);
+registerTrackHandler("syntenyPevzner", syntenyMethods);
 registerTrackHandler("mouseOrtho", mouseOrthoMethods);
 registerTrackHandler("mouseOrthoSeed", mouseOrthoMethods);
 //registerTrackHandler("orthoTop4", drawColorMethods);
@@ -9971,6 +9972,7 @@ registerTrackHandler("blastzMouseSyn", longXenoPslMethods);
 registerTrackHandler("blastzCb1", longXenoPslMethods);
 registerTrackHandler("blastzCe1", longXenoPslMethods);
 registerTrackHandler("blastzSelf", longXenoPslMethods);
+registerTrackHandler("pseudoMrna", xenoMrnaMethods);
 registerTrackHandler("xenoBlastzMrna", xenoMrnaMethods);
 registerTrackHandler("xenoBestMrna", xenoMrnaMethods);
 registerTrackHandler("xenoMrna", xenoMrnaMethods);
@@ -9997,6 +9999,11 @@ registerTrackHandler("altGraphXCon", altGraphXMethods );
 registerTrackHandler("triangle", triangleMethods );
 registerTrackHandler("triangleSelf", triangleMethods );
 registerTrackHandler("transfacHit", triangleMethods );
+/* Lowe lab related */
+registerTrackHandler("gbProtCode", gbGeneMethods);
+registerTrackHandler("tigrCmrORFs", tigrGeneMethods);
+registerTrackHandler("llaPfuPrintA",llArrayMethods);
+registerTrackHandler("llaPaePrintA",llArrayMethods);
 /* MGC related */
 registerTrackHandler("mgcIncompleteMrna", mrnaMethods);
 registerTrackHandler("mgcFailedEst", estMethods);
@@ -10416,16 +10423,41 @@ else
 freez(&pdfFile);
 }
 
+boolean isGenome(char *pos)
+/* Return TRUE if pos is genome. */
+{
+pos = trimSpaces(pos);
+return(sameWord(pos, "genome") || sameWord(pos, "hgBatch"));
+}
+
+char *searchPosition(char *pos, char **retChrom, int *retStart, int *retEnd)
+/* Use hgFind if necessary; return NULL 
+ * if we had to display the gateway page or hgFind's selection page. */
+{
+if (! isGenome(pos))
+    {
+    struct hgPositions *hgp = hgPositionsFind(pos, "", "", cart);
+
+    if ((hgp == NULL) || (hgp->singlePos == NULL))
+	{
+	return NULL;
+	}
+    }
+return(pos);
+}
+
 void tracksDisplay()
 /* Put up main tracks display. This routine handles zooming and
  * scrolling. */
 {
 char newPos[256];
+char *defaultPosition = hDefaultPos(database);
+char *chrom;
+int start, end;
 position = getPositionFromCustomTracks();
 if (NULL == position) 
     {
-    /* Read in input from CGI. */
-    position = cartUsualString(cart, "position", hDefaultPos(database));
+    position = cloneString(cartUsualString(cart, "position", NULL));
     }
 
 if(sameString(position, ""))
@@ -10436,7 +10468,8 @@ hgp = findGenomePos(position, &chromName, &winStart, &winEnd, cart);
 
 if (NULL != hgp && NULL != hgp->tableList && NULL != hgp->tableList->name)
     {
-    cartSetString(cart, hgp->tableList->name, "full");
+    char *trackName = hgp->tableList->name;
+    cartSetString(cart, trackName, hTrackOpenVis(trackName));
     }
 
 /* This means that no single result was found 
@@ -10527,6 +10560,8 @@ if (winBaseCount <= 0)
     errAbort("Window out of range on %s", chromName);
 /* Save computed position in cart. */
 sprintf(newPos, "%s:%d-%d", chromName, winStart+1, winEnd);
+cartSetString(cart, "org", organism);
+cartSetString(cart, "db", database);
 cartSetString(cart, "position", newPos);
 if (cgiVarExists("hgt.psOutput"))
     handlePostscript();
@@ -10542,9 +10577,11 @@ char *debugTmp = NULL;
 struct dyString *state = NULL;
 /* Initialize layout and database. */
 cart = theCart;
-state = cgiUrlString();
 /* Uncomment this to see parameters for debugging. */
-/* printf("State: %s\n", state->string);   */
+/* Be careful though, it breaks if custom track
+ * is more than 4k */
+/*state = cgiUrlString();
+ printf("State: %s\n", state->string);   */
 getDbAndGenome(cart, &database, &organism);
 hSetDb(database);
 protDbName = hPdbFromGdb(database);
@@ -10605,6 +10642,6 @@ htmlSetBackground("../images/floret.jpg");
 if (cgiVarExists("hgt.reset"))
     resetVars();
 zooSpeciesHashInit();
-cartHtmlShell("UCSC Genome Browser v26", doMiddle, hUserCookie(), excludeVars, NULL);
+cartHtmlShell("UCSC Genome Browser v27", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }

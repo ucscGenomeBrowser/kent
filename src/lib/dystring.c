@@ -6,7 +6,7 @@
 #include "common.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: dystring.c,v 1.11 2003/05/06 07:33:42 kate Exp $";
+static char const rcsid[] = "$Id: dystring.c,v 1.13 2003/06/26 15:06:21 braney Exp $";
 
 struct dyString *newDyString(int initialBufSize)
 /* Allocate dynamic string with initial buffer size.  (Pass zero for default) */

@@ -44,6 +44,20 @@ DOWNLOAD SEQUENCE (DONE 2003-05-20 - Hiram)
     mkdir Un
     mv ultra.agp Un/chrUn.agp
     mv ultra.lft Un/chrUn.lft
+
+    #---------------  NEW GAP STUFF ------------------------------
+    # liftup sanger contig agp file to chrUn coordinates
+    zcat sanger/cb25.agp8.agp.gz > Un/cb25.agp8.agp
+    cd Un
+    # NOTE: silly liftUp requires files to have same name as chrom
+    # NOTE: the generated agp is no longer needed, save it anyway
+    mv chrUn.agp chrUn.ultra.agp 
+    liftUp -gapsize=1000 chrUn.agp chrUn.lft warn cb25.agp8.agp
+    mv chrUn.agp chrUn.contig.agp
+    #hgGoldGapGl -noGl cb1 ~/cb1 Un
+
+    #---------------  END NEW GAP STUFF ------------------------------
+
     # hgGoldGapGl is an unusual command.  It is given a directory
     # argument and a sub directory argument.  It puts those two together
     # and then looks in that pathname for directory names of 1 or 2
@@ -270,7 +284,7 @@ mrna; \
 drop table mrnaClone; drop table organism; drop table productName; \
 drop table seq; drop table sex; drop table source; drop table tissue;' \
         | hgsql cb1
-
+    # OR - hgLoadRna drop cb1
 
 # MAKE GCPERCENT (DONE 2003-06-10 - Hiram)
     # next machine

@@ -7,7 +7,7 @@
 #include "sqlNum.h"
 #include "repMask.h"
 
-static char const rcsid[] = "$Id: repMask.c,v 1.4 2003/05/06 07:33:44 kate Exp $";
+static char const rcsid[] = "$Id: repMask.c,v 1.5 2003/06/26 20:14:23 hiram Exp $";
 
 void repeatMaskOutStaticLoad(char **row, struct repeatMaskOut *ret)
 /* Load a row from repeatMaskOut table into ret.  The contents of ret will
@@ -27,8 +27,21 @@ ret->qLeft = row[7];
 strcpy(ret->strand, row[8]);
 ret->rName = row[9];
 ret->rFamily = row[10];
-ret->rStart = row[11];
+ret->rStart = row[11];	/* sometimes this number is enclosed in (parens) */
+/* This row[12] is interpreted as an Unsigned - but I can find no good reason
+ * for it to be an error exit when there is a negative number here.
+ * The only programs that use this routine are blat, psLayout and
+ * maskOutFa and none of them even use this number for anything.
+ * For data base loading of the rmsk tracks, these .out files are parsed
+ * by hgLoadOut and none of this business is referenced.
+ */
+i = sqlSigned(row[12]);
+if( i < 0 ) {
+    warn("WARNING: negative rEnd: %d %s:%d-%d %s", i, ret->qName, ret->qStart, ret->qEnd, ret->rName);
+    ret->rEnd = 0;
+} else {
 ret->rEnd = sqlUnsigned(row[12]);
+}
 ret->rLeft = row[13];
 }
 

@@ -7,12 +7,12 @@
 #include "../../hg/inc/agpFrag.h"
 #include "../../hg/inc/agpGap.h"
 
-static char const rcsid[] = "$Id: scaffoldFaToAgp.c,v 1.2 2003/05/31 05:06:04 kate Exp $";
+static char const rcsid[] = "$Id: scaffoldFaToAgp.c,v 1.3 2003/06/30 20:34:50 kate Exp $";
 
 #define GAP_SIZE 1000
 /* TODO: optionize this */
 
-#define GAP_TYPE "scaffold"
+#define GAP_TYPE "contig"        /* or perhaps "clone" ? */
 #define CHROM_NAME "chrUn"
 
 void usage()

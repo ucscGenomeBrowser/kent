@@ -15,7 +15,7 @@
 #include "common.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: dnautil.c,v 1.19 2003/05/06 07:33:42 kate Exp $";
+static char const rcsid[] = "$Id: dnautil.c,v 1.20 2003/06/26 05:37:37 kent Exp $";
 
 struct codonTable
 /* The dread codon table. */
@@ -663,6 +663,22 @@ int aaScoreMatch(AA *a, AA *b, int size)
 return dnaOrAaScoreMatch(a, b, size, 2, -1, 'X');
 }
 
+void writeSeqWithBreaks(FILE *f, char *letters, int letterCount, int maxPerLine)
+/* Write out letters with newlines every maxLine. */
+{
+int lettersLeft = letterCount;
+int lineSize;
+while (lettersLeft > 0)
+    {
+    lineSize = lettersLeft;
+    if (lineSize > maxPerLine)
+        lineSize = maxPerLine;
+    mustWrite(f, letters, lineSize);
+    fputc('\n', f);
+    letters += lineSize;
+    lettersLeft -= lineSize;
+    }
+}
 
 /* Tables to convert from 0-20 to ascii single letter representation
  * of proteins. */

@@ -2,6 +2,7 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
+#include "dystring.h"
 #include "cheapcgi.h"
 #include "jksql.h"
 #include "htmshell.h"
@@ -12,20 +13,23 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.16 2003/06/23 17:21:44 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.32 2003/06/26 05:36:48 kent Exp $";
 
-char *excludeVars[] = { "submit", "Submit", confVarName, defaultConfName,
-	resetConfName, NULL }; 
+char *excludeVars[] = { "submit", "Submit", confVarName, 
+	defaultConfName, hideAllConfName, 
+	getSeqVarName, getTextVarName, 
+	advSearchVarName, advSearchClearVarName, advSearchSubmitVarName,
+        resetConfName, idVarName, idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. */
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
 char *database;		/* Name of genome database - hg15, mm3, or the like. */
 char *organism;		/* Name of organism - mouse, human, etc. */
-char *curGeneId;	/* Identity of current gene. */
 char *groupOn;		/* Current grouping strategy. */
 int displayCount;	/* Number of items to display. */
 
+struct genePos *curGeneId;	  /* Identity of current gene. */
 
 /* ---- Some html helper routines. ---- */
 
@@ -58,7 +62,35 @@ hPrintf("</TR></TABLE>");
 
 /* ---- Some helper routines for column methods. ---- */
 
-char *cellLookupVal(struct column *col, char *geneId, 
+char *columnSetting(struct column *column, char *name, char *defaultVal)
+/* Return value of named setting in column, or default if it doesn't exist. */
+{
+char *result = hashFindVal(column->settings, name);
+if (result == NULL)
+    result = defaultVal;
+return result;
+}
+
+char *cellLookupVal(struct column *col, struct genePos *gp, struct sqlConnection *conn);
+/* Get a field in a table defined by col->table, col->keyField, col->valField. */
+
+void cellSimplePrint(struct column *col, struct genePos *gp, struct sqlConnection *conn);
+/* This just prints cellSimpleVal. */
+
+void labelSimplePrint(struct column *col);
+/* This just prints cell->shortLabel. */
+
+static void cellSelfLinkPrint(struct column *col, struct genePos *gp,
+	struct sqlConnection *conn);
+/* Print self and hyperlink to make this the search term. */
+
+boolean simpleTableExists(struct column *col, struct sqlConnection *conn);
+/* This returns true if col->table exists. */
+
+void columnDefaultMethods(struct column *col);
+/* Set up default methods. */
+
+char *cellLookupVal(struct column *col, struct genePos *gp, 
 	struct sqlConnection *conn)
 /* Get a field in a table defined by col->table, col->keyField, col->valField. */
 {
@@ -67,7 +99,7 @@ struct sqlResult *sr;
 char **row;
 char *res = NULL;
 safef(query, sizeof(query), "select %s from %s where %s = '%s'",
-	col->valField, col->table, col->keyField, geneId);
+	col->valField, col->table, col->keyField, gp->name);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     res = cloneString(row[0]);
@@ -75,11 +107,11 @@ sqlFreeResult(&sr);
 return res;
 }
 
-void cellSimplePrint(struct column *col, char *geneId, 
+void cellSimplePrint(struct column *col, struct genePos *gp, 
 	struct sqlConnection *conn)
 /* This just prints one field from table. */
 {
-char *s = col->cellVal(col, geneId, conn);
+char *s = col->cellVal(col, gp, conn);
 if (s == NULL) 
     {
     hPrintf("<TD>n/a</TD>", s);
@@ -97,16 +129,33 @@ void labelSimplePrint(struct column *col)
 hPrintf("<TH VALIGN=BOTTOM><B>%s</B></TH>", col->shortLabel);
 }
 
+void selfAnchorSearch(struct genePos *gp)
+/* Print self anchor to given search term. */
+{
+hPrintf("<A HREF=\"../cgi-bin/hgNear?%s&%s=%s\">", 
+	cartSidUrlString(cart), searchVarName, gp->name);
+}
 
-static void cellSelfLinkPrint(struct column *col, char *geneId,
+void selfAnchorId(struct genePos *gp)
+/* Print self anchor to given id. */
+{
+hPrintf("<A HREF=\"../cgi-bin/hgNear?%s&%s=%s", 
+	cartSidUrlString(cart), idVarName, gp->name);
+if (gp->chrom != NULL)
+    hPrintf("&%s=%s:%d-%d", idPosVarName, gp->chrom, gp->start+1, gp->end);
+hPrintf("\">");
+}
+
+static void cellSelfLinkPrint(struct column *col, struct genePos *gp,
 	struct sqlConnection *conn)
 /* Print self and hyperlink to make this the search term. */
 {
-char *s = col->cellVal(col, geneId, conn);
+char *s = col->cellVal(col, gp, conn);
 if (s == NULL) 
     s = cloneString("n/a");
-hPrintf("<TD><A HREF=\"../cgi-bin/hgNear?%s&near.search=%s\">%s</A></TD>",
-	cartSidUrlString(cart), geneId, s);
+hPrintf("<TD>");
+selfAnchorId(gp);
+hPrintf("%s</A></TD>", s);
 freeMem(s);
 }
 
@@ -122,7 +171,7 @@ boolean simpleTableExists(struct column *col, struct sqlConnection *conn)
 return sqlTableExists(conn, col->table);
 }
 
-static char *noVal(struct column *col, char *geneId, struct sqlConnection *conn)
+static char *noVal(struct column *col, struct genePos *gp, struct sqlConnection *conn)
 /* Return not-available value. */
 {
 return cloneString("n/a");
@@ -139,10 +188,10 @@ col->labelPrint = labelSimplePrint;
 
 /* ---- Accession column ---- */
 
-static char *accVal(struct column *col, char *geneId, struct sqlConnection *conn)
+static char *accVal(struct column *col, struct genePos *gp, struct sqlConnection *conn)
 /* Return clone of geneId */
 {
-return cloneString(geneId);
+return cloneString(gp->name);
 }
 
 void setupColumnAcc(struct column *col, char *parameters)
@@ -154,7 +203,7 @@ col->cellVal = accVal;
 
 /* ---- Number column ---- */
 
-static char *numberVal(struct column *col, char *geneId, 
+static char *numberVal(struct column *col, struct genePos *gp, 
 	struct sqlConnection *conn)
 /* Return incrementing number. */
 {
@@ -175,6 +224,71 @@ col->cellPrint = cellSelfLinkPrint;
 
 /* ---- Simple table lookup type columns ---- */
 
+static struct searchResult *lookupTypeSimpleSearch(struct column *col, 
+    struct sqlConnection *conn, char *search)
+/* Search lookup type column. */
+{
+struct dyString *query = dyStringNew(512);
+char *searchHow = columnSetting(col, "search", "exact");
+struct sqlConnection *searchConn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+struct searchResult *resList = NULL, *res;
+
+dyStringPrintf(query, "select %s from %s where %s ", 
+	col->keyField, col->table, col->valField);
+if (sameString(searchHow, "fuzzy"))
+    dyStringPrintf(query, "like '%%%s%%'", search);
+else
+    dyStringPrintf(query, " = '%s'", search);
+sr = sqlGetResult(searchConn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    res = knownGeneSearchResult(conn, row[0], NULL);
+    slAddHead(&resList, res);
+    }
+
+/* Clean up and go home. */
+sqlFreeResult(&sr);
+hFreeConn(&searchConn);
+dyStringFree(&query);
+slReverse(&resList);
+return resList;
+}
+
+void lookupSearchControls(struct column *col, struct sqlConnection *conn)
+/* Print out controls for advanced search. */
+{
+hPrintf("%s search (including * and ? wildcards): ", col->shortLabel);
+advSearchRemakeTextVar(col, "wild", 18);
+}
+
+struct genePos *lookupAdvancedSearch(struct column *col, 
+	struct sqlConnection *conn, struct genePos *list)
+/* Do advanced search on position. */
+{
+char *wild = advSearchVal(col, "wild");
+if (wild != NULL)
+    {
+    struct hash *hash = newHash(17);
+    char query[256];
+    struct sqlResult *sr;
+    char **row;
+    safef(query, sizeof(query), "select %s,%s from %s",
+    	col->keyField, col->valField, col->table);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	if (wildMatch(wild, row[1]))
+	    hashAdd(hash, row[0], NULL);
+	}
+    list = weedUnlessInHash(list, hash);
+    sqlFreeResult(&sr);
+    hashFree(&hash);
+    }
+return list;
+}
+
 void lookupTypeMethods(struct column *col, char *table, char *key, char *val)
 /* Set up the methods for a simple lookup column. */
 {
@@ -183,6 +297,12 @@ col->keyField = cloneString(key);
 col->valField = cloneString(val);
 col->exists = simpleTableExists;
 col->cellVal = cellLookupVal;
+if (columnSetting(col, "search", NULL))
+    {
+    col->simpleSearch = lookupTypeSimpleSearch;
+    }
+col->searchControls = lookupSearchControls;
+col->advancedSearch = lookupAdvancedSearch;
 }
 
 void setupColumnLookup(struct column *col, char *parameters)
@@ -199,7 +319,7 @@ lookupTypeMethods(col, table, keyField, valField);
 
 /* ---- Distance table type columns ---- */
 
-static char *cellDistanceVal(struct column *col, char *geneId, struct sqlConnection *conn)
+static char *cellDistanceVal(struct column *col, struct genePos *gp, struct sqlConnection *conn)
 /* Get a field in a table defined by col->table, col->keyField, col->valField. */
 {
 char query[512];
@@ -207,12 +327,70 @@ struct sqlResult *sr;
 char **row;
 char *res = NULL;
 safef(query, sizeof(query), "select %s from %s where %s = '%s' and %s = '%s'",
-	col->valField, col->table, col->keyField, geneId, col->curGeneField, curGeneId);
+	col->valField, col->table, col->keyField, gp->name, col->curGeneField, curGeneId->name);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     res = cloneString(row[0]);
 sqlFreeResult(&sr);
 return res;
+}
+
+void distanceSearchControls(struct column *col, struct sqlConnection *conn)
+/* Print out controls for advanced search. */
+{
+hPrintf("minimum: ");
+advSearchRemakeTextVar(col, "min", 8);
+hPrintf(" maximum: ");
+advSearchRemakeTextVar(col, "max", 8);
+}
+
+struct genePos *weedUnlessInHash(struct genePos *inList, struct hash *hash)
+/* Return input list with stuff not in hash removed. */
+{
+struct genePos *outList = NULL, *gp, *next;
+for (gp = inList; gp != NULL; gp = next)
+    {
+    next = gp->next;
+    if (hashLookup(hash, gp->name))
+        {
+	slAddHead(&outList, gp);
+	}
+    }
+slReverse(&outList);
+return outList;
+}
+
+struct genePos *distanceAdvancedSearch(struct column *col, 
+	struct sqlConnection *conn, struct genePos *list)
+/* Do advanced search on distance type. */
+{
+char *minString = advSearchVal(col, "min");
+char *maxString = advSearchVal(col, "max");
+if (minString != NULL || maxString != NULL)
+    {
+    struct hash *passHash = newHash(16);  /* Hash of genes that pass. */
+    struct sqlResult *sr;
+    char **row;
+    struct dyString *dy = newDyString(512);
+    dyStringPrintf(dy, "select %s from %s where", col->keyField, col->table);
+    dyStringPrintf(dy, " %s='%s'", col->curGeneField, curGeneId->name);
+    if (minString)
+         dyStringPrintf(dy, " and %s >= %s", col->valField, minString);
+    if (maxString)
+         {
+	 if (minString)
+	     dyStringPrintf(dy, " and ");
+         dyStringPrintf(dy, " and %s <= %s", col->valField, maxString);
+	 }
+    sr = sqlGetResult(conn, dy->string);
+    while ((row = sqlNextRow(sr)) != NULL)
+        hashAdd(passHash, row[0], NULL);
+    list = weedUnlessInHash(list, passHash);
+    sqlFreeResult(&sr);
+    dyStringFree(&dy);
+    hashFree(&passHash);
+    }
+return list;
 }
 
 void distanceTypeMethods(struct column *col, char *table, 
@@ -226,6 +404,8 @@ col->valField = cloneString(valField);
 col->curGeneField = cloneString(curGene);
 col->exists = simpleTableExists;
 col->cellVal = cellDistanceVal;
+col->searchControls = distanceSearchControls;
+col->advancedSearch = distanceAdvancedSearch;
 }
 
 void setupColumnDistance(struct column *col, char *parameters)
@@ -243,7 +423,7 @@ distanceTypeMethods(col, table, curGene, otherGene, valField);
 
 /* ---- Page/Form Making stuff ---- */
 
-void controlPanel()
+void controlPanel(struct genePos *gp)
 /* Make control panel. */
 {
 hPrintf("<TABLE WIDTH=\"100%%\" BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
@@ -256,25 +436,28 @@ hPrintf("<TR><TD ALIGN=CENTER>");
     }
 
 /* Do sort by drop-down */
-groupOn = cartUsualString(cart, groupVarName, "homology");
     {
-    static char *menu[] = {"homology", "position"};
+    static char *menu[] = {"expression", "homology", "name", "position", "advanced search"};
+    int menuSize = ArraySize(menu);
+    if (!gotAdvSearch())
+	menuSize -= 1;
     hPrintf("group by ");
-    cgiMakeDropList(groupVarName, menu, ArraySize(menu), groupOn);
+    cgiMakeDropList(groupVarName, menu, menuSize, groupOn);
     }
 
 /* Do items to display drop-down */
     {
-    char *count = cartUsualString(cart, countVarName, "25");
+    char buf[16];
     static char *menu[] = {"25", "50", "100", "200", "500", "1000"};
+    safef(buf, sizeof(buf), "%d", displayCount);
     hPrintf(" display ");
-    cgiMakeDropList(countVarName, menu, ArraySize(menu), count);
-    displayCount = atoi(count);
+    cgiMakeDropList(countVarName, menu, ArraySize(menu), buf);
     }
 
 /* Do search box. */
     {
-    char *search = cartUsualString(cart, searchVarName, "");
+    char *search = "";
+    if (gp != NULL) search = gp->name;
     hPrintf(" search ");
     cgiMakeTextVar(searchVarName,  search, 25);
     }
@@ -285,100 +468,145 @@ groupOn = cartUsualString(cart, groupVarName, "homology");
     cgiMakeButton("submit", "Go!");
     }
 
+hPrintf("</TR>\n<TR><TD ALIGN=CENTER>");
+
+/* Do genome drop down (just fake for now) */
+    {
+    static char *menu[] = {"Human"};
+    hPrintf("genome: ");
+    cgiMakeDropList("near.genome", menu, ArraySize(menu), menu[0]);
+    }
+
+/* Do assembly drop down (again just fake) */
+    {
+    static char *menu[] = {"April 2003"};
+    hPrintf(" assembly: ");
+    cgiMakeDropList("near.assembly", menu, ArraySize(menu), menu[0]);
+    }
+
+/* Make getDna, getText, advancedSearch buttons */
+    {
+    hPrintf(" ");
+    cgiMakeButton(getSeqVarName, "as sequence");
+    hPrintf(" ");
+    cgiMakeButton(getTextVarName, "as text");
+    hPrintf(" ");
+    cgiMakeButton(advSearchVarName, "advanced search");
+    }
+
+
 hPrintf("</TD></TR></TABLE>");
 }
 
-char *findGeneId()
-/* Find out gene ID from search term if available or
- * last gene ID if not. Returns NULL if not found. */
+struct genePos *genePosSimple(char *name)
+/* Return a simple gene pos - with no chrom info. */
 {
-char *search = cartUsualString(cart, searchVarName, "");
-char query[256];
-char *result = NULL;
-search = trimSpaces(search);
-if (sameString(search, ""))
-    search = cartOptionalString(cart, geneIdVarName);
-if (search != NULL)
-    {
-    struct sqlConnection *conn = hAllocConn();
-    safef(query, sizeof(query), 
-    	"select name from knownGene where name = '%s'", search);
-    if (sqlExists(conn, query))
-	result = cloneString(search);
-    else
-	warn("%s not found", search);
-    hFreeConn(&conn);
-    }
-return result;
+struct genePos *gp;
+AllocVar(gp);
+gp->name = cloneString(name);
+return gp;
 }
 
-struct slName *getHomologyNeighbors(struct sqlConnection *conn)
-/* Get homology neighborhood. */
+struct genePos *genePosFull(char *name, char *chrom, int start, int end)
+/* Return full gene position */
+{
+struct genePos *gp = genePosSimple(name);
+gp->chrom = cloneString(chrom);
+gp->start = start;
+gp->end = end;
+return gp;
+}
+
+static struct genePos *neighborhoodList(struct sqlConnection *conn, char *query, 
+	int maxCount)
+/* Get list of up to maxCount from query. */
 {
 struct sqlResult *sr;
 char **row;
-struct dyString *query = dyStringNew(1024);
-struct slName *list = NULL, *name;
+struct genePos *list = NULL, *name;
 struct hash *dupeHash = newHash(0);
 int count = 0;
-
-/* Look for matchers.  Look for a few more than they ask for to
- * account for dupes. */
-dyStringPrintf(query, 
-	"select target from knownBlastTab where query='%s'", 
-	curGeneId);
-dyStringPrintf(query, " order by bitScore desc limit %d", (int)(displayCount*1.5));
-sr = sqlGetResult(conn, query->string);
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     if (!hashLookup(dupeHash, row[0]))
 	{
 	hashAdd(dupeHash, row[0], NULL);
-	name = slNameNew(row[0]);
+	name = genePosSimple(row[0]);
 	slAddHead(&list, name);
-	if (++count >= displayCount)
+	if (++count >= maxCount)
 	    break;
 	}
     }
-sqlFreeResult(&sr);
-dyStringFree(&query);
 freeHash(&dupeHash);
+sqlFreeResult(&sr);
 slReverse(&list);
 return list;
 }
 
-struct slName *getGenomicNeighbors(struct sqlConnection *conn, char *geneId,
-	char *chrom, int start, int end)
+struct genePos *getExpressionNeighbors(struct sqlConnection *conn)
+/* Get expression neighborhood. */
+{
+struct dyString *query = dyStringNew(1024);
+struct genePos *list;
+
+/* Look for matchers.  Look for a few more than they ask for to
+ * account for dupes. */
+dyStringPrintf(query, 
+	"select target from knownExpDistance where query='%s'", 
+	curGeneId->name);
+dyStringPrintf(query, " order by distance limit %d", displayCount);
+list = neighborhoodList(conn, query->string, displayCount);
+dyStringFree(&query);
+if (list == NULL)
+    warn("There is no expression data associated with %s.", curGeneId->name);
+return list;
+}
+
+struct genePos *getHomologyNeighbors(struct sqlConnection *conn)
+/* Get homology neighborhood. */
+{
+struct dyString *query = dyStringNew(1024);
+struct genePos *list;
+
+/* Look for matchers.  Look for a few more than they ask for to
+ * account for dupes. */
+dyStringPrintf(query, 
+	"select target from knownBlastTab where query='%s'", 
+	curGeneId->name);
+dyStringPrintf(query, " order by bitScore desc limit %d", (int)(displayCount*1.5));
+list = neighborhoodList(conn, query->string, displayCount);
+dyStringFree(&query);
+if (list == NULL)
+    warn("There is no protein associated with %s. "
+            "Therefore group by homology is empty.", curGeneId->name);
+return list;
+}
+
+
+struct genePos *getGenomicNeighbors(struct sqlConnection *conn, struct genePos *curGp)
 /* Get neighbors in genome. */
 {
-struct genePos
-/* A gene position (a little local helper struct) */
-    {
-    struct genePos *next;
-    char *name;
-    int start;
-    int end;
-    } *gpList = NULL, *gp;
+struct genePos *gpList = NULL, *gp, *next;
 char query[256];
 struct sqlResult *sr;
 char **row;
 int i, ix = 0, chosenIx = -1;
 int startIx, endIx, listSize;
 int geneCount = 0;
-struct slName *geneList = NULL, *gene;
+struct genePos *geneList = NULL, *gene;
 
 /* Get list of all genes in chromosome */
 safef(query, sizeof(query), 
-	"select name,txStart,txEnd from knownGene where chrom='%s'", chrom);
+	"select name,txStart,txEnd from knownGene where chrom='%s'", curGp->chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    AllocVar(gp);
-    gp->name = cloneString(row[0]);
-    gp->start = sqlUnsigned(row[1]);
-    gp->end = sqlUnsigned(row[2]);
+    gp = genePosFull(row[0], curGp->chrom, 
+    	sqlUnsigned(row[1]), sqlUnsigned(row[2]));
     slAddHead(&gpList, gp);
-    if (start == gp->start && end == gp->end && sameString(geneId, gp->name) )
+    if (curGp->start == gp->start && curGp->end == gp->end 
+    	&& sameString(curGp->name, gp->name) )
         chosenIx = ix;
     ++ix;
     ++geneCount;
@@ -386,25 +614,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 slReverse(&gpList);
 
-/* If not already found, find gene that we should try to put in middle of
- * our list. */
 if (chosenIx < 0)
-    {
-    int middle = (start+end)/2, mid;
-    int distance, bestDistance = BIGNUM;
-    for (gp = gpList,ix=0; gp != NULL; gp = gp->next,++ix)
-        {
-	mid = (gp->start + gp->end)/2;
-	distance = middle - mid;
-	if (distance < 0) distance = -distance;
-	if (distance < bestDistance)
-	    {
-	    bestDistance = distance;
-	    chosenIx = ix;
-	    }
-	}
-    warn("%s is not mapped", geneId);
-    }
+    errAbort("%s is not mapped", curGp->name);
 
 /* Figure out start and ending index of genes we want. */
 startIx = chosenIx - displayCount/2;
@@ -414,47 +625,133 @@ if (endIx > geneCount) endIx = geneCount;
 listSize = endIx - startIx;
 
 gp = slElementFromIx(gpList, startIx);
-for (i=0; i<listSize; ++i, gp=gp->next)
+for (i=0; i<listSize; ++i, gp=next)
     {
-    gene = slNameNew(gp->name);
-    slAddHead(&geneList, gene);
+    next = gp->next;
+    slAddHead(&geneList, gp);
     }
 slReverse(&geneList);
-
-/* Clean up. */
-for (gp = gpList; gp != NULL; gp = gp->next)
-    freez(&gp->name);
-slFreeList(&gpList);
 
 return geneList;
 }
 
 
-struct slName *getPositionNeighbors(struct sqlConnection *conn)
+struct genePos *getPositionNeighbors(struct sqlConnection *conn)
 /* Get genes in genomic neighborhood. */
 {
-char *pos = knownPosVal(NULL, curGeneId, conn);
-if (pos == NULL)
+return getGenomicNeighbors(conn, curGeneId);
+}
+
+struct scoredIdName
+/* A structure that stores a key, a name, and a score. */
     {
-    warn("no position associated with %s", curGeneId);
-    return NULL;
+    struct scoredIdName *next;
+    char *id;		/* GeneID */
+    char *name;		/* Gene name. */
+    int score;		/* Big is better. */
+    };
+
+int scoredIdNameCmpScore(const void *va, const void *vb)
+/* Compare to sort based on score. */
+{
+const struct scoredIdName *a = *((struct scoredIdName **)va);
+const struct scoredIdName *b = *((struct scoredIdName **)vb);
+int diff = b->score - a->score;
+if (diff == 0)
+    diff = strcmp(a->name, b->name);
+return diff;
+}
+
+int countStartSame(char *prefix, char *name)
+/* Return how many letters of prefix match first characters of name. */
+{
+int i;
+char c;
+for (i=0; ;++i)
+    {
+    c = prefix[i];
+    if (c == 0 || c != name[i])
+        break;
     }
+return i;
+}
+
+struct scoredIdName *scorePrefixMatch(char *prefix, char *id, char *name)
+/* Return scoredIdName structure based on name and how many
+ * characters match prefix. */
+{
+struct scoredIdName *sin;
+AllocVar(sin);
+sin->id = cloneString(id);
+sin->name = cloneString(name);
+sin->score = countStartSame(prefix, name);
+return sin;
+}
+
+struct genePos *getNameborhood(struct sqlConnection *conn,
+	char *curName, char *table, char *idField, char *nameField)
+/* Get list of all genes that are similarly prefixed. */
+{
+struct sqlResult *sr;
+char **row;
+char query[512];
+struct scoredIdName *sinList = NULL, *sin;
+int i;
+struct genePos *gpList = NULL, *gp;
+
+/* Scan table for names and sort by similarity. */
+safef(query, sizeof(query), "select %s,%s from %s", idField, nameField, table);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    sin = scorePrefixMatch(curName, row[0], row[1]);
+    slAddHead(&sinList, sin);
+    }
+sqlFreeResult(&sr);
+slSort(&sinList, scoredIdNameCmpScore);
+
+/* Make list of top ones. */
+for (i=0, sin=sinList; i<displayCount && sin != NULL; ++i, sin = sin->next)
+    {
+    AllocVar(gp);
+    gp->name = sin->id;
+    sin->id = NULL;
+    slAddHead(&gpList, gp);
+    }
+slReverse(&gpList);
+return gpList;
+}
+
+struct genePos *getNameNeighbors(struct sqlConnection *conn)
+/* Get genes in genomic neighborhood. */
+{
+char query[256];
+char name[128];
+safef(query, sizeof(query), 
+	"select geneSymbol from kgXref where kgID = '%s'", curGeneId->name);
+if (sqlQuickQuery(conn, query, name, sizeof(name)))
+    return getNameborhood(conn, name, "kgXref", "kgID", "geneSymbol");
 else
     {
-    char *chrom;
-    int start,end;
-    hgParseChromRange(pos, &chrom, &start, &end);
-    return getGenomicNeighbors(conn, curGeneId, chrom, start, end);
+    warn("Couldn't find name for %s", curGeneId->name);
+    return NULL;
     }
 }
 
-struct slName *getNeighbors(struct sqlConnection *conn)
+
+struct genePos *getNeighbors(struct column *colList, struct sqlConnection *conn)
 /* Return gene neighbors. */
 {
-if (sameString(groupOn, "homology"))
+if (sameString(groupOn, "expression"))
+    return getExpressionNeighbors(conn);
+else if (sameString(groupOn, "homology"))
     return getHomologyNeighbors(conn);
 else if (sameString(groupOn, "position"))
     return getPositionNeighbors(conn);
+else if (sameString(groupOn, "name"))
+    return getNameNeighbors(conn);
+else if (sameString(groupOn, "advanced search"))
+    return getSearchNeighbors(colList, conn);
 else
     {
     errAbort("Unknown sort value %s", groupOn);
@@ -574,7 +871,7 @@ while ((raHash = raNextRecord(lf)) != NULL)
     col->shortLabel = mustFindInRaHash(lf, raHash, "shortLabel");
     col->longLabel = mustFindInRaHash(lf, raHash, "longLabel");
     col->priority = atof(mustFindInRaHash(lf, raHash, "priority"));
-    col->on = sameString(mustFindInRaHash(lf, raHash, "visibility"), "on");
+    col->on = col->defaultOn = sameString(mustFindInRaHash(lf, raHash, "visibility"), "on");
     col->type = mustFindInRaHash(lf, raHash, "type");
     col->settings = raHash;
     columnDefaultMethods(col);
@@ -603,13 +900,15 @@ for (col = colList; col != NULL; col = col->next)
 return hash;
 }
 
-void bigTable()
+void bigTable(struct sqlConnection *conn, struct column *colList, 
+	struct genePos *geneList)
 /* Put up great big table. */
 {
-struct sqlConnection *conn = hAllocConn();
-struct slName *geneList = getNeighbors(conn), *gene;
-struct column *colList = getColumns(conn), *col;
+struct column *col;
+struct genePos *gene;
 
+if (geneList == NULL)
+    return;
 hPrintf("<TABLE BORDER=1 CELLSPACING=1 CELLPADDING=1>\n");
 
 /* Print label row. */
@@ -627,8 +926,7 @@ hPrintf("</TR>\n");
 /* Print other rows. */
 for (gene = geneList; gene != NULL; gene = gene->next)
     {
-    char *geneId = gene->name;
-    if (sameString(geneId, curGeneId))
+    if (sameString(gene->name, curGeneId->name))
         hPrintf("<TR BGCOLOR=\"#D0FFD0\">");
     else
         hPrintf("<TR>");
@@ -640,56 +938,156 @@ for (gene = geneList; gene != NULL; gene = gene->next)
 	    if (col->cellPrint == NULL)
 		hPrintf("<TD></TD>");
 	    else
-		col->cellPrint(col,geneId,conn);
+		col->cellPrint(col,gene,conn);
 	    }
 	}
     hPrintf("</TR>");
     }
 
 hPrintf("</TABLE>");
-hFreeConn(&conn);
 }
 
-void doMain()
-/* The main page. */
+void doGetText(struct sqlConnection *conn, struct column *colList, 
+	struct genePos *geneList)
+/* Put up great big table. */
+{
+struct genePos *gene;
+struct column *col;
+boolean first = TRUE;
+
+if (geneList == NULL)
+    {
+    hPrintf("empty table");
+    return;
+    }
+hPrintf("<TT><PRE>");
+/* Print labels. */
+hPrintf("#");
+for (col = colList; col != NULL; col = col->next)
+    {
+    if (first)
+	first = FALSE;
+    else
+	hPrintf("\t");
+    if (col->on)
+	hPrintf("%s", col->name);
+    }
+hPrintf("\n");
+for (gene = geneList; gene != NULL; gene = gene->next)
+    {
+    first = TRUE;
+    for (col = colList; col != NULL; col = col->next)
+	{
+	if (col->on)
+	    {
+	    char *val = col->cellVal(col, gene, conn);
+	    if (first)
+	        first = FALSE;
+	    else
+		hPrintf("\t");
+	    if (val == NULL)
+		hPrintf("n/a", val);
+	    else
+		hPrintf("%s", val);
+	    freez(&val);
+	    }
+	}
+    hPrintf("\n");
+    }
+hPrintf("</PRE></TT>");
+}
+
+void doMainDisplay(struct sqlConnection *conn, struct column *colList, 
+	struct genePos *geneList)
+/* Put up the main family browser display - a control panel followed by 
+ * a big table. */
 {
 char buf[128];
 safef(buf, sizeof(buf), "UCSC %s Gene Family Browser", organism);
 makeTitle(buf, "hgNear.html");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=GET>\n");
-controlPanel();
-curGeneId = findGeneId();
-if (curGeneId != NULL)
-    {
-    bigTable();
-    }
+cartSaveSession(cart);
+controlPanel(curGeneId);
+if (geneList != NULL)
+    bigTable(conn, colList,geneList);
+hPrintf("</FORM>");
 }
+
+void displayData(struct sqlConnection *conn, struct column *colList, struct genePos *gp)
+/* Display data in neighborhood of gene. */
+{
+struct genePos *geneList = NULL;
+curGeneId = gp;
+if (gp)
+    geneList = getNeighbors(colList, conn);
+if (cartVarExists(cart, getTextVarName))
+    doGetText(conn, colList, geneList);
+else if (cartVarExists(cart, getSeqVarName))
+    doGetSeq(conn, colList, geneList);
+else
+    doMainDisplay(conn, colList, geneList);
+}
+
+void doFixedId(struct sqlConnection *conn, struct column *colList)
+/* Put up the main page based on id/idPos. */
+{
+struct genePos *gp;
+AllocVar(gp);
+gp->name = cloneString(cartString(cart, idVarName));
+if (cartVarExists(cart, idPosVarName))
+    {
+    hgParseChromRange(cartString(cart, idPosVarName),
+    	&gp->chrom, &gp->start, &gp->end);
+    gp->chrom = cloneString(gp->chrom);
+    }
+displayData(conn, colList, gp);
+}
+
 
 void doMiddle(struct cart *theCart)
 /* Write the middle parts of the HTML page. 
  * This routine sets up some globals and then
  * dispatches to the appropriate page-maker. */
 {
-char *var = NULL;
+char *var = NULL, *val;
+struct sqlConnection *conn;
+struct column *colList;
 cart = theCart;
 getDbAndGenome(cart, &database, &organism);
 hSetDb(database);
-if (cgiVarExists(confVarName))
-    doConfigure(NULL);
+conn = hAllocConn();
+
+/* Get groupOn.  Revert to default if no advanced search. */
+groupOn = cartUsualString(cart, groupVarName, "expression");
+if (!gotAdvSearch() && sameString(groupOn, "search"))
+    groupOn = "expression";
+
+val = cartUsualString(cart, countVarName, "25");
+displayCount = atoi(val);
+colList = getColumns(conn);
+if (cartVarExists(cart, confVarName))
+    doConfigure(conn, colList, NULL);
 else if ((var = cartFindFirstLike(cart, "near.up.*")) != NULL)
-    doConfigure(var);
+    doConfigure(conn, colList, var);
 else if ((var = cartFindFirstLike(cart, "near.down.*")) != NULL)
-    doConfigure(var);
-else if (cgiVarExists(defaultConfName))
-    {
-    doDefaultConfigure();
-    }
+    doConfigure(conn, colList, var);
+else if (cartVarExists(cart, defaultConfName))
+    doDefaultConfigure(conn, colList);
+else if (cartVarExists(cart, hideAllConfName))
+    doConfigHideAll(conn, colList);
+else if (cartVarExists(cart, advSearchVarName))
+    doAdvancedSearch(conn, colList);
+else if (cartVarExists(cart, advSearchClearVarName))
+    doAdvancedSearchClear(conn, colList);
+else if (cartVarExists(cart, advSearchSubmitVarName))
+    doAdvancedSearchSubmit(conn, colList);
+else if (cartVarExists(cart, idVarName))
+    doFixedId(conn, colList);
 else
-    doMain();
+    doSearch(conn, colList);
 cartRemoveLike(cart, "near.up.*");
 cartRemoveLike(cart, "near.down.*");
-cartSaveSession(cart);
-hPrintf("</FORM>");
+hFreeConn(&conn);
 }
 
 void usage()

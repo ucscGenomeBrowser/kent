@@ -8,7 +8,7 @@
 #include "bed.h"
 #include "repMask.h"
 
-static char const rcsid[] = "$Id: maskOutFa.c,v 1.6 2003/05/06 07:22:26 kate Exp $";
+static char const rcsid[] = "$Id: maskOutFa.c,v 1.8 2003/06/26 20:12:35 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -29,15 +29,6 @@ errAbort(
 }
 
 boolean faMixedSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, char **retName);
-
-void lowerToN(char *s, int size)
-/* Convert lower case letters to 'N' */
-{
-int i;
-for (i=0; i<size; ++i)
-   if (islower(s[i]))
-       s[i] = 'N';
-}
 
 void maskOutFa(char *inFa, char *maskFile, char *outFa)
 /* maskOutFa - Produce a masked .fa file given an unmasked .fa and a RepeatMasker .out file. */
@@ -99,8 +90,8 @@ if (!extraHard)
     while ((wordCount = lineFileChop(lf, words)) != 0)
 	{
 	/* Figure out name of sequence and where to set N's. */
-	char *seqName;
-	int start, end;
+	char *seqName = (char *) NULL;
+	int start=-1, end=-1;
 	int repSize, seqSize;
 	boolean clipped;
 

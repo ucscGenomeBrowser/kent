@@ -10,7 +10,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.47 2003/06/21 16:50:12 kent Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.50 2003/06/26 16:35:40 kent Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -25,6 +25,13 @@ static struct cgiVar *cookieList = NULL;
 /* should cheapcgi use temp files to store uploaded files */
 static boolean doUseTempFile = FALSE;
 
+void dumpCookieList()
+/* Print out the cookie list. */
+{
+struct cgiVar *v;
+for (v=cookieList; v != NULL; v = v->next)
+    printf("%s=%s (%d)\n", v->name, v->val, v->saved);
+}
 
 void useTempFile() 
 /* tell cheapcgi to use temp files */
@@ -638,6 +645,8 @@ void cgiMakeTextVar(char *varName, char *initialVal, int charSize)
 /* Make a text control filled with initial value.  If charSize
  * is zero it's calculated from initialVal size. */
 {
+if (initialVal == NULL)
+    initialVal = "";
 if (charSize == 0) charSize = strlen(initialVal);
 if (charSize == 0) charSize = 8;
 
@@ -807,7 +816,8 @@ for (cv = inputList; cv != NULL; cv = cv->next)
     if (cv != inputList)
        dyStringAppend(dy, "&");
     e = cgiEncode(cv->val);
-    dyStringPrintf(dy, "%s=%s", cv->name, e);
+    dyStringPrintf(dy, "%s=", cv->name);
+    dyStringAppend(dy, e);
     freez(&e);
     }
 return dy;

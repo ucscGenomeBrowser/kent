@@ -18,8 +18,9 @@
 #include "altGraphX.h"
 #include "bits.h"
 #include "dnautil.h"
+#include "orthoEval.h"
 
-static char const rcsid[] = "$Id: orthoEvaluate.c,v 1.5 2003/06/23 06:37:30 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoEvaluate.c,v 1.8 2003/06/24 05:53:07 sugnet Exp $";
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -27,10 +28,7 @@ static struct optionSpec optionSpecs[] =
     {"help", OPTION_BOOLEAN},
     {"db", OPTION_STRING},
     {"bedFile", OPTION_STRING},
-    {"bedOutFile", OPTION_STRING},
-    {"htmlFile", OPTION_STRING},
-    {"htmlFrameFile", OPTION_STRING},
-    {"numPicks", OPTION_INT},
+    {"orthoEvalOut", OPTION_STRING},
     {"bestOrfExe", OPTION_STRING},
     {"tmpFa", OPTION_STRING},
     {"tmpOrf", OPTION_STRING},
@@ -43,48 +41,12 @@ static char *optionDescripts[] =
     "Display this message.",
     "Database (i.e. hg15) that bedFile corresponds to.",
     "File with beds to be evaluated.",
-    "File to output final bed picks for track.",
-    "File for html output.",
-    "[optional default: frame.html] File for html frames.",
-    "[optional default: 100] Number of introns to pick.",
+    "File to output evaluation records.",
     "[optional default: borf] bestOrf executable name.",
     "[optional default: generated] temp fasta file for bestOrf.",
     "[optional default: generated] temp output file for bestOrf."
 };
 
-struct orthoEval
-/* Evaluation for a single mapped mRNA. */
-{
-    struct orthoEval *next; /* Next in list. */
-    struct bed *orthoBed;  /* Bed record created by mapping accession.*/
-    struct borf *borf;     /* Results from Victors Solovyev's bestOrf program. */
-    struct bed *agxBed;    /* Summary of native mRNA's and intronEsts at loci. */
-    struct altGraphX *agx; /* Splicing graph at native loci. */
-    struct dnaSeq *seq;    /* Genomice sequence for orthoBed. */
-    int basesOverlap;      /* Number of bases overlapping with transcripts at native loci. */
-    int numIntrons;        /* Number of introns in orthoBed. Should be orthoBed->exonCount -1. */
-    char *agxBedName;      /* Name of agxBed that most overlaps, memory not owned here. */
-    bool *inCodInt;        /* Are the introns surrounded in orf (as defined by borf record). */
-    int *orientation;      /* Orientation of an intron, -1 = reverse, 0 = not consensus, 1 = forward. */
-    int *support;          /* Number of native transcripts supporting each intron. */
-    char **agxNames;       /* Names of native agx that support each intron. Memory for names not owned here. */
-};
-
-struct intronEv
-/** Data about one intron. */
-{
-    struct intronEv *next; /* Next in list. */
-    struct orthoEval *ev;  /* Parent orthoEval structure. */
-    char *chrom;           /* Chromosome. */
-    unsigned int           /* Exon starts and stops on chromsome. */
-        e1S, e1E, 
-	e2S, e2E;
-    char *agxName;         /* Name of best fitting native agx record. Memory not owned here. */
-    int support;           /* Number of mRNAs supporting this list. */
-    int orientation;       /* Orientation of intron. */
-    bool inCodInt;         /* TRUE if in coding region, FALSE otherwise. */
-    float borfScore;       /* Score for ev from borf program. */
-};
 
 static boolean doHappyDots;   /* output activity dots? */
 
@@ -104,8 +66,8 @@ warn("orthoEvaluate - Evaluate the coding potential of a bed.\n"
 for(i=0; i<ArraySize(optionSpecs) -1; i++)
     fprintf(stderr, "  -%s -- %s\n", optionSpecs[i].name, optionDescripts[i]);
 errAbort("\nusage:\n"
-	 "  not sure just yet..."
-	 "NOTE: THIS PROGRAM UNDER DEVLOPMENT. NOT FOR PRODUCTION USE!\n");
+	 "  orthoEvaluate -db=hg15 -bedFile=mm3.hg15.orthoMap.bed -orthoEvalOut=orthoEval.tab\n"
+	 "  NOTE: THIS PROGRAM UNDER DEVLOPMENT. NOT FOR PRODUCTION USE!\n");
 }
 
 void occassionalDot()
@@ -120,6 +82,7 @@ if (doHappyDots && (--dot <= 0))
     dot = dotMod;
     }
 }
+
 
 struct bed *loadNativeAgxBedsForBed(struct bed *orthoBed, char *table)
 /* Load up all the beds that span the area in bed. */
@@ -208,7 +171,10 @@ for(bed=ev->agxBed; bed != NULL; bed = bed->next)
 	currentOverlap = bitCountRange(orthoBits, 0, bitSize);
 	ev->basesOverlap += currentOverlap;
 	if(currentOverlap >= maxOverlap)
-	    ev->agxBedName = bed->name;
+	    {
+	    freez(&ev->agxBedName);
+	    ev->agxBedName = cloneString(bed->name);
+	    }
 	bitClear(nativeBits, bitSize);
 	}
     }
@@ -335,6 +301,7 @@ int agxSupportForEdge(struct altGraphX *agxList, struct bed *bed, int intron,
 {
 struct altGraphX *agx = NULL;
 int ev = 0;
+
 for(agx = agxList; agx != NULL; agx = agx->next)
     {
     ev = agxSupportForSplice(agx, bed, intron);
@@ -384,13 +351,15 @@ for(agx = agxList; agx != NULL; agx = agx->next)
 /* } */
     
 
-void evaluateAnIntron(struct bed *orthoBed, int intron, struct altGraphX *agxList, struct dnaSeq *genoSeq,
-		      int *orientation, int *support, bool *inCodInt, char **agxNames)
+void evaluateAnIntron(struct orthoEval *ev,
+		      struct bed *orthoBed, int intron, struct altGraphX *agxList, struct dnaSeq *genoSeq,
+		      int *orientation, int *support, int *inCodInt, char **agxNames)
 /* Fill in the orientation, support, inCodInt values for a particular intron. */
 {
 struct altGraphX *agx = NULL;
 unsigned int chromStart = orthoBed->chromStart + orthoBed->chromStarts[intron] + orthoBed->blockSizes[intron];
 unsigned int chromEnd = orthoBed->chromStart + orthoBed->chromStarts[intron+1];
+agxNames[intron] = ev->orthoBedName;
 agxSupportForEdge(agxList, orthoBed, intron, support, agxNames);
 orientation[intron] = intronOrientation(genoSeq->dna - orthoBed->chromStart + chromStart,
 					genoSeq->dna - orthoBed->chromStart + chromEnd);
@@ -405,7 +374,7 @@ int i=0, start=0, end=0;
 int numIntrons = 0;
 int *support = NULL;
 int *orientation = NULL;
-bool *inCodInt = NULL;
+int *inCodInt = NULL;
 char **agxNames = NULL;
 struct bed *orthoBed = NULL;
 struct dnaSeq *genoSeq = NULL;
@@ -424,7 +393,7 @@ AllocArray(agxNames, orthoBed->blockCount -1);
 genoSeq = hChromSeq(orthoBed->chrom, orthoBed->chromStart, orthoBed->chromEnd);
 agxList = loadNativeAgxForBed(orthoBed, "altGraphX");
 for(i=0; i<orthoBed->blockCount -1; i++)
-    evaluateAnIntron(orthoBed, i, agxList, genoSeq, orientation, support, inCodInt, agxNames);
+    evaluateAnIntron(ev, orthoBed, i, agxList, genoSeq, orientation, support, inCodInt, agxNames);
 ev->agx = agxList;
 ev->numIntrons = orthoBed->blockCount -1;
 ev->inCodInt = inCodInt;
@@ -457,12 +426,12 @@ struct borf *convertBorfOutput(char *fileName)
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line = mustFindLine(lf, "BESTORF");
-char *word;
+char *word=NULL;
 char *row[13];
 struct borf *borf = NULL;
-int i;
+int i=0;
 struct dnaSeq seq;
-int seqSize;
+int seqSize = 0;
 AllocVar(borf);
 ZeroVar(&seq);
 
@@ -503,7 +472,7 @@ return borf;
 struct borf *borfForBed(struct bed *bed)
 /* borfBig - Run Victor Solovyev's bestOrf on a bed. */
 {
-char *exe = optionVal("bestOrfExe", "/projects/compbio/bin/bestorf.linux/bestorf /projects/compbio/bin/bestorf.linux/hume.dat");
+char *exe = optionVal("bestOrfExe", "/cluster/home/sugnet/bin/bestorf /cluster/home/sugnet/bin/hume.dat");
 static char *tmpFa = NULL;
 static char *tmpOrf = NULL;
 struct borf *borf = NULL;
@@ -553,7 +522,7 @@ bed->thickStart = thickStart;
 bed->thickEnd = thickEnd;
 }
 
-struct orthoEval *scoreOrthoBeds(char *bedFile, char *db)
+struct orthoEval *scoreOrthoBeds(char *bedFile, char *db, FILE *out)
 /* Score each bed in the orhtoBed file. */
 {
 struct bed *bedList = NULL, *bed = NULL;
@@ -566,12 +535,16 @@ for(bed = bedList; bed != NULL; bed = bed->next)
     {
     occassionalDot();
     AllocVar(ev);
+    ev->orthoBedName = cloneString(bed->name);
+    ev->agxBedName = cloneString(bed->name);
     ev->orthoBed = bed;
     ev->borf = borf = borfForBed(bed);
     setThickStartStop(ev);
     calcBasesOverlap(ev);
     calcIntronStats(ev);
 //    borfTabOut(borf, stdout);
+    if(ev->numIntrons > 0)
+	orthoEvalTabOut(ev, out);
     slAddHead(&evList, ev);
     }
 warn("\nDone.");
@@ -579,158 +552,6 @@ warn("\nDone.");
 return evList;
 }
 
-struct intronEv *intronIvForEv(struct orthoEval *ev, int intron)
-/* Return an intronEv record for a particular intron. */
-{
-struct intronEv *iv = NULL;
-struct bed *bed = NULL;
-assert(ev);
-assert(ev->orthoBed);
-assert(intron < ev->orthoBed->blockCount - 1);
-bed = ev->orthoBed;
-AllocVar(iv);
-iv->ev = ev;
-iv->chrom = bed->chrom;
-
-iv->e1S = bed->chromStart + bed->chromStarts[intron];
-iv->e1E = iv->e1S + bed->blockSizes[intron];
-iv->e2S = bed->chromStart + bed->chromStarts[intron+1];
-iv->e2E = iv->e2S + bed->blockSizes[intron+1];
-
-if(ev->agxNames[intron] != NULL)
-    iv->agxName = ev->agxNames[intron];
-else
-    iv->agxName = ev->agxBedName;
-
-iv->support = ev->support[intron];
-iv->orientation = ev->orientation[intron];
-iv->inCodInt = ev->inCodInt[intron];
-iv->borfScore = ev->borf->score;
-return iv;
-}
-
-int scoreForIntronEv(const struct intronEv *iv)
-/* Score function based on native support, orientation, and coding. */
-{
-static FILE *tmp = NULL;
-int score = 0;
-
-if(tmp == NULL)
-    tmp = mustOpen("scores.tab", "w");
-fprintf(tmp, "%d\t%d\t%d\t%f\n", iv->orientation, iv->support, iv->borfScore, iv->inCodInt);
-if(iv->orientation != 0)
-    score += 5;
-score += iv->support *2;
-score += (float) iv->borfScore/5;
-if(iv->inCodInt)
-    score = score +2;
-return score;
-}
-
-boolean checkMgcPicks(struct intronEv *iv)
-/* Try to look up an mgc pick in this area. */
-{
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-char **row;
-int rowOffset = 0;
-char *mgcTable = optionVal("mgcTable", "chuckMgcPicked");
-char *mgcGenes = optionVal("mgcGenes", "chuckMgcGenes");
-boolean foundSome = FALSE;
-sr = hRangeQuery(conn, mgcTable, iv->chrom, iv->e1S, iv->e2E, NULL, &rowOffset); 
-if(sqlNextRow(sr) != NULL)
-    foundSome = TRUE;
-sqlFreeResult(&sr);
-
-if(foundSome == FALSE)
-    {
-    sr = hRangeQuery(conn, mgcGenes, iv->chrom, iv->e1S, iv->e2E, NULL, &rowOffset); 
-    if(sqlNextRow(sr) != NULL)
-	foundSome = TRUE;
-    sqlFreeResult(&sr);
-    }
-
-hFreeConn(&conn);
-return foundSome;
-}
-
-int intronEvalCmp(const void *va, const void *vb)
-/* Compare to sort based score function. */
-{
-const struct intronEv *a = *((struct intronEv **)va);
-const struct intronEv *b = *((struct intronEv **)vb);
-float aScore = scoreForIntronEv(a);
-float bScore = scoreForIntronEv(b);
-return bScore - aScore; /* reverse to get largest values first. */
-}
-
-boolean isUniqueCoordAndAgx(struct intronEv *iv, struct hash *posHash, struct hash *agxHash)
-/* Return TRUE if iv isn't in posHash and agxHash.
-   Return FALSE otherwise. */
-{
-static char key[1024];
-boolean unique = TRUE;
-
-safef(key, sizeof(key), "%s-%d-%d-%d-%d", iv->chrom, iv->e1S, iv->e1E, iv->e2S, iv->e2E);
-/* Unique location (don't pick same intron twice. */
-if(hashFindVal(posHash, key) == NULL)
-    hashAdd(posHash, key, iv);
-else 
-    unique = FALSE;
-
-/* Unique loci, don't pick from same overall loci if possible. */
-if(iv->agxName != NULL)
-    safef(key, sizeof(key), "%s", iv->agxName);
-else 
-    safef(key, sizeof(key), "%s", iv->ev->orthoBed->name);
-
-if(hashFindVal(agxHash, key) == NULL)
-    hashAdd(agxHash, key, iv);
-else
-    unique = FALSE;
-
-if(unique)
-    unique = !checkMgcPicks(iv);
-
-return unique;
-}
-
-struct bed *bedForIv(struct intronEv *iv)
-/* Make a bed to represent a intronEv structure. */
-{
-struct bed *bed = NULL;
-AllocVar(bed);
-bed->chrom = cloneString(iv->chrom);
-bed->chromStart = bed->thickStart = iv->e1S;
-bed->chromEnd = bed->thickEnd = iv->e2E;
-bed->name = cloneString(iv->ev->orthoBed->name);
-if(iv->orientation == 1)
-    safef(bed->strand, sizeof(bed->strand), "+");
-else if(iv->orientation == -1)
-    safef(bed->strand, sizeof(bed->strand), "-");
-else 
-    safef(bed->strand, sizeof(bed->strand), "%s", iv->ev->orthoBed->strand);
-bed->blockCount = 2;
-AllocArray(bed->chromStarts, 2);
-bed->chromStarts[0] = iv->e1S - bed->chromStart;
-bed->chromStarts[1] = iv->e2S - bed->chromStart;
-AllocArray(bed->blockSizes, 2);
-bed->blockSizes[0] = iv->e1E - iv->e1S;
-bed->blockSizes[1] = iv->e2E - iv->e2S;
-bed->score = scoreForIntronEv(iv);
-return bed;
-}
-
-void writeOutFrames(FILE *htmlOut, char *fileName, char *db)
-{
-fprintf(htmlOut, "<html><head><title>Introns and flanking exons for RACE PCR</title></head>\n"
-	"<frameset cols=\"18%,82%\">\n"
-	"<frame name=\"_list\" src=\"./%s\">\n"
-	"<frame name=\"browser\" src=\"http://mgc.cse.ucsc.edu/cgi-bin/hgTracks?db=%s&position=chrX:151171710-151173193&"
-	"hgt.customText=http://www.soe.ucsc.edu/~sugnet/tmp/mgcIntron.bed\">\n"
-	"</frameset>\n"
-	"</html>\n", fileName, db);
-}
 
 void orthoEvaluate(char *bedFile, char *db)
 /* Create orthoEval records and find best introns
@@ -741,66 +562,16 @@ void orthoEvaluate(char *bedFile, char *db)
 */
 {
 struct orthoEval *evList = NULL, *ev = NULL;
-struct intronEv *ivList = NULL, *iv = NULL;
-struct hash *posHash = newHash(12), *agxHash = newHash(12);
-char *htmlOutName= NULL, *bedOutName = NULL;
-char *htmlFrameName=NULL;
-FILE *htmlOut=NULL, *bedOut=NULL, *htmlFrameOut=NULL;
-struct bed *bed = NULL;
-int maxPicks = optionInt("numPicks", 100);
-int i=0;
-
-htmlOutName = optionVal("htmlFile", NULL);
-bedOutName = optionVal("bedOutFile", NULL);
-htmlFrameName = optionVal("htmlFrameFile", "frame.html");
-if(htmlOutName == NULL)
-    errAbort("Please specify an htmlFile. Use -help for usage.");
-if(bedOutName == NULL)
-    errAbort("Please specify an bedOutFile. Use -help for usage.");
-evList = scoreOrthoBeds(bedFile, db);
-warn("Creating intron records");
-for(ev = evList; ev != NULL; ev = ev->next)
-    {
-    for(i=0; i<ev->numIntrons; i++)
-	{
-	occassionalDot();
-	iv = intronIvForEv(ev, i);
-	slAddHead(&ivList, iv);
-	}
-    }
-warn("\nDone");
-warn("Sorting");
-slSort(&ivList, intronEvalCmp);
-htmlOut = mustOpen(htmlOutName, "w");
-bedOut = mustOpen(bedOutName, "w");
-htmlFrameOut = mustOpen(htmlFrameName, "w");
-writeOutFrames(htmlFrameOut, htmlOutName, db);
-fprintf(htmlOut, "<html><body><table border=1><tr><th>Mouse Acc.</th><th>Score</th></tr>\n");
-warn("Writing out");
-for(iv = ivList; iv != NULL && maxPicks > 0; iv = iv->next)
-    {
-    if(isUniqueCoordAndAgx(iv, posHash, agxHash))
-	{
-	bed = bedForIv(iv);
-	fprintf(htmlOut, "<tr><td><a target=\"browser\" "
-		"href=\"http://mgc.cse.ucsc.edu/cgi-bin/hgTracks?db=hg15&position=%s:%d-%d\"> "
-		"%s </a></td><td>%d</td></tr>\n", 
-		bed->chrom, bed->chromStart-40, bed->chromEnd+50, bed->name, bed->score);
-	bedTabOutN(bed, 12, bedOut);
-	bedFree(&bed);
-	maxPicks--;
-	}
-    }
-
-fprintf(htmlOut, "</table></body></html>\n");
-carefulClose(&bedOut);
-carefulClose(&htmlOut);
-carefulClose(&htmlFrameOut);
-warn("Done.");
-hashFree(&posHash);
-hashFree(&agxHash);
+char *orthoEvalOutName=NULL;
+FILE *orthoEvalOut = NULL;
+orthoEvalOutName = optionVal("orthoEvalOut", NULL);
+if(orthoEvalOutName == NULL)
+    errAbort("Please specify an orthoEvalOut file. Use -help for usage.");
+orthoEvalOut = mustOpen(orthoEvalOutName, "w");
+evList = scoreOrthoBeds(bedFile, db, orthoEvalOut);
+carefulClose(&orthoEvalOut);
 }
-	
+
 int main(int argc, char *argv[])
 /* Where it all starts. */
 {

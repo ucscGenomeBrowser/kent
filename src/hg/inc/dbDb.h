@@ -5,6 +5,8 @@
 #ifndef DBDB_H
 #define DBDB_H
 
+#define DBDB_NUM_COLS 9
+
 struct dbDb
 /* Description of annotation database */
     {
@@ -14,9 +16,10 @@ struct dbDb
     char *nibPath;	/* Path to packed sequence files */
     char *organism;	/* Common name of organism - first letter capitalized */
     char *defaultPos;	/* Default starting position */
-    int orderKey;	/* Int used to control display order within a genome */
     int active;	/* Flag indicating whether this db is in active use */
+    int orderKey;	/* Int used to control display order within a genome */
     char *genome;	/* Unifying genome collection to which an assembly belongs */
+    char *scientificName;	/* Genus and species of the organism; e.g. Homo sapiens */
     };
 
 void dbDbStaticLoad(char **row, struct dbDb *ret);
@@ -28,12 +31,15 @@ struct dbDb *dbDbLoad(char **row);
  * from database.  Dispose of this with dbDbFree(). */
 
 struct dbDb *dbDbLoadAll(char *fileName);
-/* Load all dbDb from a tab-separated file.
+/* Load all dbDb from whitespace-separated file.
  * Dispose of this with dbDbFreeList(). */
 
-struct dbDb *dbDbLoadWhere(struct sqlConnection *conn, char *table, char *where);
-/* Load all dbDb from table that satisfy where clause. The
- * where clause may be NULL in which case whole table is loaded
+struct dbDb *dbDbLoadAllByChar(char *fileName, char chopper);
+/* Load all dbDb from chopper separated file.
+ * Dispose of this with dbDbFreeList(). */
+
+#define dbDbLoadAllByTab(a) dbDbLoadAllByChar(a, '\t');
+/* Load all dbDb from tab separated file.
  * Dispose of this with dbDbFreeList(). */
 
 struct dbDb *dbDbCommaIn(char **pS, struct dbDb *ret);
@@ -56,6 +62,8 @@ void dbDbOutput(struct dbDb *el, FILE *f, char sep, char lastSep);
 
 #define dbDbCommaOut(el,f) dbDbOutput(el,f,',',',');
 /* Print out dbDb as a comma separated list including final comma. */
+
+/* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 #endif /* DBDB_H */
 

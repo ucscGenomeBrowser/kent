@@ -25,12 +25,14 @@
 #include "fa.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadRna.c,v 1.26 2003/06/18 17:57:10 kate Exp $";
+static char const rcsid[] = "$Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/hgLoadRna/Attic/hgLoadRna.c,v 1.27 2003/06/30 20:41:33 kate Exp $";
 
 /* Command line options and defaults. */
 char *abbr = NULL;
-boolean filesOnly = FALSE;
+boolean noDbLoad = FALSE;
 boolean ignore = FALSE;
+boolean xenoDescriptions = FALSE;
+boolean test = FALSE;
 
 char historyTable[] =	
 /* This contains a row for each update made to database.
@@ -211,7 +213,8 @@ if (sr != NULL)
 	{
 	HGID id = sqlUnsigned(row[0]);
 	char *name = row[1];
-	hel = hashAdd(hash, name, nullPt + id);
+        if (!test)
+            hel = hashAdd(hash, name, nullPt + id);
 	++count;
 	}
     }
@@ -369,8 +372,8 @@ errAbort(
   "usage:\n"
   "   hgLoadRna new database\n"
   "This creates freshly the RNA part of the database\n"
-  "   hgLoadRna add [-type=type] [-mrnaType=type] [-filesOnly] database /full/path/mrna.fa mrna.ra [-ignore]\n"
-  "      type can be mRNA or EST or whatever goes into extFile.name\n"
+  "   hgLoadRna add [-type=type] [-mrnaType=type] [-noDbLoad] database /full/path/mrna.fa mrna.ra [-ignore]\n"
+  "      type can be mRNA, EST, xenoRNA or whatever goes into extFile.name\n"
   "      The type for the mrna table (mRNA or EST) will be guessed from type.\n"
   "      If it can't be guessed, it must be specified with -mrnaType=\n"
   "This adds mrna info to the database\n"
@@ -382,8 +385,11 @@ errAbort(
   "The -ignore flag tells hgLoadRna not to validate the contents of the extFile table.\n"
   "It is only to be used if a normal load fails.\n"
   "Please notify someone responsible if an error is flagged.\n"
-  "The -filesOnly flag tells hgLoadRna to suppress loading the database.\n"
-  "HgLoadRna will exit after generating the database upload files (<table>.tab)\n"
+  "The -noDbLoad flag tells hgLoadRna to suppress loading the database.\n"
+"            HgLoadRna will exit after generating the files (<table>.tab)\n"
+  "The -test flag suppresses reading from and loading database.\n"
+  "The -xenoDescriptions flag causes loading of xenoRna descriptions.\n"
+  "          This is useful for non-model organisms with few mrna's.\n"
   );
 }
 
@@ -414,7 +420,7 @@ struct uniqueTable *uniSrc, *uniOrg, *uniLib, *uniClo, *uniSex,
                    *uniTis, *uniDev, *uniCel, *uniCds, *uniGen,
 		   *uniPro, *uniAut, *uniKey, *uniDef;
 
-if (!filesOnly)
+if (!noDbLoad && !test)
     {
     extFileId= hgStoreExtFilesTable(conn, symFaName, faName);
     }
@@ -431,8 +437,9 @@ hashAdd(raFieldHash, "gen", uniGen = getUniqueTable(conn, "geneName", "gen"));
 hashAdd(raFieldHash, "pro", uniPro = getUniqueTable(conn, "productName", "pro"));
 hashAdd(raFieldHash, "aut", uniAut = getUniqueTable(conn, "author", "aut"));
 hashAdd(raFieldHash, "key", uniKey = getUniqueTable(conn, "keyword", "key"));
-if (sameWord(type, "mRNA") || sameWord(type, "xenoRNA"))
+if (sameWord(type, "mRNA") || (xenoDescriptions && sameWord(type, "xenoRNA")))
     {
+    printf("Adding xeno descriptions\n");
     hashAdd(raFieldHash, "def", uniDef = getUniqueTable(conn, "description", "def"));
     }
 else
@@ -570,7 +577,7 @@ for (;;)
     }
 printf("%d\n", count);
 
-if (filesOnly) 
+if (noDbLoad || test) 
     {
     /* command-line option to suppress loading database */
     printf("Created tab files... exiting\n");
@@ -802,7 +809,9 @@ if (argc < 2)
 
 abbr = cgiOptionalString("abbr");
 ignore = (NULL != cgiOptionalString("ignore"));
-filesOnly = (NULL != cgiOptionalString("filesOnly"));
+noDbLoad = (NULL != cgiOptionalString("noDbLoad"));
+test = cgiVarExists("test");
+xenoDescriptions = cgiVarExists("xenoDescriptions");
 command = argv[1];
 
 if (sameString(command, "new"))

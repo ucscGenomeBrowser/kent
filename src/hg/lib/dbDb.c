@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "dbDb.h"
 
-static char const rcsid[] = "$Id: dbDb.c,v 1.7 2003/05/06 07:22:21 kate Exp $";
+static char const rcsid[] = "$Id: dbDb.c,v 1.9 2003/06/30 22:28:29 kate Exp $";
 
 void dbDbStaticLoad(char **row, struct dbDb *ret)
 /* Load a row from dbDb table into ret.  The contents of ret will
@@ -22,9 +22,10 @@ ret->description = row[1];
 ret->nibPath = row[2];
 ret->organism = row[3];
 ret->defaultPos = row[4];
-ret->orderKey = sqlSigned(row[5]);
-ret->active = sqlSigned(row[6]);
+ret->active = sqlSigned(row[5]);
+ret->orderKey = sqlSigned(row[6]);
 ret->genome = row[7];
+ret->scientificName = row[8];
 }
 
 struct dbDb *dbDbLoad(char **row)
@@ -41,19 +42,20 @@ ret->description = cloneString(row[1]);
 ret->nibPath = cloneString(row[2]);
 ret->organism = cloneString(row[3]);
 ret->defaultPos = cloneString(row[4]);
-ret->orderKey = sqlSigned(row[5]);
-ret->active = sqlSigned(row[6]);
+ret->active = sqlSigned(row[5]);
+ret->orderKey = sqlSigned(row[6]);
 ret->genome = cloneString(row[7]);
+ret->scientificName = cloneString(row[8]);
 return ret;
 }
 
 struct dbDb *dbDbLoadAll(char *fileName) 
-/* Load all dbDb from a tab-separated file.
+/* Load all dbDb from a whitespace-separated file.
  * Dispose of this with dbDbFreeList(). */
 {
 struct dbDb *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[8];
+char *row[9];
 
 while (lineFileRow(lf, row))
     {
@@ -65,28 +67,21 @@ slReverse(&list);
 return list;
 }
 
-struct dbDb *dbDbLoadWhere(struct sqlConnection *conn, char *table, char *where)
-/* Load all dbDb from table that satisfy where clause. The
- * where clause may be NULL in which case whole table is loaded
+struct dbDb *dbDbLoadAllByChar(char *fileName, char chopper) 
+/* Load all dbDb from a chopper separated file.
  * Dispose of this with dbDbFreeList(). */
 {
 struct dbDb *list = NULL, *el;
-struct dyString *query = dyStringNew(256);
-struct sqlResult *sr;
-char **row;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[9];
 
-dyStringPrintf(query, "select * from %s", table);
-if (where != NULL)
-    dyStringPrintf(query, " where %s", where);
-sr = sqlGetResult(conn, query->string);
-while ((row = sqlNextRow(sr)) != NULL)
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
     el = dbDbLoad(row);
     slAddHead(&list, el);
     }
+lineFileClose(&lf);
 slReverse(&list);
-sqlFreeResult(&sr);
-dyStringFree(&query);
 return list;
 }
 
@@ -105,9 +100,10 @@ ret->description = sqlStringComma(&s);
 ret->nibPath = sqlStringComma(&s);
 ret->organism = sqlStringComma(&s);
 ret->defaultPos = sqlStringComma(&s);
-ret->orderKey = sqlSignedComma(&s);
 ret->active = sqlSignedComma(&s);
+ret->orderKey = sqlSignedComma(&s);
 ret->genome = sqlStringComma(&s);
+ret->scientificName = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -125,6 +121,7 @@ freeMem(el->nibPath);
 freeMem(el->organism);
 freeMem(el->defaultPos);
 freeMem(el->genome);
+freeMem(el->scientificName);
 freez(pEl);
 }
 
@@ -165,13 +162,19 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->defaultPos);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%d", el->orderKey);
-fputc(sep,f);
 fprintf(f, "%d", el->active);
+fputc(sep,f);
+fprintf(f, "%d", el->orderKey);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->genome);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->scientificName);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
+
+/* -------------------------------- End autoSql Generated Code -------------------------------- */
 

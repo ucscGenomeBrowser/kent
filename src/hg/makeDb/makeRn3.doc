@@ -1,7 +1,7 @@
 # This file describes how we made the browser database on the Rattus 
 # Norvegicus genome, January 2003 update.
 
-DOWNLOAD SEQUENCE (DONE - 2003-06-22 - Hiram)
+DOWNLOAD SEQUENCE (DONE Rnor3.1 - 2003-06-29 - Hiram)
 
     ssh kkstore
     mkdir /cluster/store3/rn3
@@ -10,19 +10,18 @@ DOWNLOAD SEQUENCE (DONE - 2003-06-22 - Hiram)
     wget ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/conditions_for_use
     #  Three extra files that were not in Rn2:
     wget ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/bac.clones
+    wget ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/bacfile.gz
     wget ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/bactigs.bacs
     wget ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/bactigs.contigs
 
     # Get BCM's chrom assemblies -- we will assemble our own chr*.fa from 
     # contig fa + agp, and cross-check against this.  
-    #  WHAT'S THIS ?  There is no X chrom in June 2003 release ?
-    #  But there now is a 21 ?
-    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 Un)
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 X Un)
       mkdir $c
       wget -O $c/chr$c.fa.bcm.gz \
        ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/chromosome/chr$c.fa.gz
       wget -O $c/chr${c}_random.fa.bcm.gz \
-       ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/chromosome/chr$c.random.fa.gz
+ ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/chromosome/chr$c.random.fa.gz
     end
 
     # Get BCM's contig fa + agp.  We will split into our own conveniently-sized
@@ -33,69 +32,95 @@ DOWNLOAD SEQUENCE (DONE - 2003-06-22 - Hiram)
     # wget ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/contigs/record.dat.gz
     #  Perhaps the extra three files bac.clones, bactigs.bacs and
     #  bactigs.contigs can be used ?
-    #  WHAT'S THIS ?  There is no X chrom in June 2003 release ?
-    #  But there now is a 21 ?
-    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 Un)
-      wget -O $c/chr$c.agp.gz \
-       ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/contigs/chr$c.agp.gz
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 X Un)
+      wget -O $c/chr$c.agp \
+       ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/contigs/chr$c.agp
       wget -O $c/chr$c.contig.fa.gz \
-       ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/contigs/chr$c.contig.fa.gz
-      wget -O $c/chr${c}_random.agp.gz \
-       ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/contigs/chr$c.random.agp.gz
+   ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/contigs/chr$c.contig.fa.gz
+      wget -O $c/chr${c}_random.agp \
+   ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/contigs/chr$c.random.agp
       wget -O $c/chr${c}_random.contig.fa.gz \
-       ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/contigs/chr$c.random.contig.fa.gz
-      gunzip $c/chr$c.agp.gz
-      gunzip $c/chr${c}_random.agp.gz
+   ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/contigs/chr$c.random.contig.fa.gz
     end
 
-BUILD AND CHECK CHROM-LEVEL SEQUENCE (DONE - 2003-06-22 - Hiram)
+BUILD AND CHECK CHROM-LEVEL SEQUENCE (DONE - 2003-06-29 - Hiram)
 
     # Make chrom fa:
+    ssh kkstore
+    # The contig sequences are delivered with various upper and lower
+    # case.  We need them all in upper case to begin with.  The first
+    # line of the file is not a problem, it is already all upper case.
+    # According to Kim Worley: <kworley@swan.hgsc.bcm.tmc.edu>
+    # "The lowercase letters are regions where Phrap assigns a quality score
+    #	of less than 20.  These can safely be ignored."
     foreach c (?{,?})
-      gunzip $c/chr$c.contig.fa.gz
-      agpToFa -simpleMulti $c/chr$c.agp chr$c $c/chr$c.fa $c/chr$c.contig.fa
+	set f = $c/chr$c.contig.fa.gz
+	set g = $f:r
+	echo "${f}"
+	zcat ${f} | tr '[a-z]' '[A-Z]' > ${g}
+    end
+    foreach c (?{,?})
+	set f = $c/chr${c}_random.contig.fa.gz
+	set g = $f:r
+	if (-e ${f}) then
+	    echo "${f}"
+	    zcat ${f} | tr '[a-z]' '[A-Z]' > ${g}
+	endif
+    end
+
+    foreach c (?{,?})
+      echo "Processing ${c}"
+      $HOME/bin/i386/agpToFa -simpleMultiMixed $c/chr$c.agp chr$c \
+	$c/chr$c.fa $c/chr$c.contig.fa
       if (-e $c/chr${c}_random.agp) then
-        gunzip $c/chr${c}_random.contig.fa.gz
-        agpToFa -simpleMulti $c/chr${c}_random.agp chr${c}_random \
-          $c/chr${c}_random.fa $c/chr${c}_random.contig.fa
+        $HOME/bin/i386/agpToFa -simpleMultiMixed $c/chr${c}_random.agp \
+	chr${c}_random $c/chr${c}_random.fa $c/chr${c}_random.contig.fa
       endif
+      echo "${c} - DONE"
     end
     # Check that the size of each chromosome .fa file is equal to the 
     # last coord of the .agp:
-    foreach f ( */*.agp )
+    foreach f ( ?{,?}/*.agp )
       set agpLen = `tail -1 $f | awk '{print $3;}'`
       set g = $f:r
       set faLen = `faSize $g.fa | awk '{print $1;}'`
       if ($agpLen == $faLen) then
-        echo $f length = $g length = $faLen
+        echo "   OK: $f length = $g length = $faLen"
       else
-        echo ERROR\!\!\!  $f length = $agpLen, but $g length = $faLen
+        echo "ERROR:  $f length = $agpLen, but $g length = $faLen"
       endif
     end
     # Check that our assembled chrom fa jive with the BCM chrom fa
+    #	You will want a long window size in your terminal to run this
+    #	It outputs quite a few lines
     foreach c ( ?{,?} )
       set ucscLen = `faSize $c/chr$c.fa | awk '{print $1;}'`
       set bcmLen  = `gunzip -c $c/chr$c.fa.bcm.gz | faSize stdin \
                        | awk '{print $1;}'`
       if ($ucscLen == $bcmLen) then
-        echo chr$c.fa length = chr$c.fa.bcm length = $bcmLen
+        echo "   OK: chr$c.fa length = chr$c.fa.bcm length = $bcmLen"
       else
-        echo ERROR\!\!\!  chr$c.fa length = $ucscLen, but chr$c.fa.bcm length = $bcmLen
+        echo -n "ERROR:  chr$c.fa length = $ucscLen, but chr$c.fa.bcm length"
+	echo " = $bcmLen"
+        echo -n "ERROR:  chr$c.fa length = $ucscLen, but chr$c.fa.bcm length"
+	echo " = $bcmLen"
       endif
       if (-e $c/chr${c}_random.fa) then
         set ucscLen = `faSize $c/chr${c}_random.fa | awk '{print $1;}'`
         set bcmLen  = `gunzip -c $c/chr${c}_random.fa.bcm.gz | faSize stdin \
                         | awk '{print $1;}'`
         if ($ucscLen == $bcmLen) then
-          echo chr${c}_random.fa length = chr${c}_random.fa.bcm length = $bcmLen
+          echo -n "   OK: chr${c}_random.fa length = chr${c}_random.fa.bcm"
+	  echo " length = $bcmLen"
         else
-          echo ERROR\!\!\!  chr${c}_random.fa length = $ucscLen, but chr${c}_random.fa.bcm length = $bcmLen
+          echo -n "ERROR:  chr${c}_random.fa length = $ucscLen, but"
+	  echo " chr${c}_random.fa.bcm length = $bcmLen"
         endif
       endif
     end
 
 BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON_BRIDGED CONTIGS
-					(DONE - 2003-06-22 - Hiram)
+					(DONE - 2003-06-29 - Hiram)
 
     # This will split the rat sequence into approx. 5 Mbase
     # supercontigs between non-bridged clone contigs and drop the
@@ -105,12 +130,14 @@ BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON_BRIDGED CONTIGS
     ssh kkstore
     cd /cluster/store3/rn3
     foreach c (?{,?})
+      echo "Working ${c}"
       cp -p $c/chr$c.agp $c/chr$c.agp.bak
       cp -p $c/chr$c.fa $c/chr$c.fa.bak
       splitFaIntoContigs $c/chr$c.agp $c/chr$c.fa . -nSize=5000000
       if (-e $c/chr${c}_random.fa) then
         cp -p $c/chr${c}_random.agp $c/chr${c}_random.agp.bak
         cp -p $c/chr${c}_random.fa $c/chr${c}_random.fa.bak
+        rm -fr ${c}_random
         splitFaIntoContigs $c/chr${c}_random.agp $c/chr${c}_random.fa . \
           -nSize=5000000
         mv ${c}_random/lift/oOut.lst $c/lift/rOut.lst
@@ -118,66 +145,93 @@ BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON_BRIDGED CONTIGS
         mv ${c}_random/lift/ordered.lst $c/lift/random.lst
         rmdir ${c}_random/lift
         rm ${c}_random/chr${c}_random.{agp,fa}
+        rm -fr $c/chr${c}_random_1
+        rm -fr $c/chr${c}_random_2
         mv ${c}_random/* $c
         rmdir ${c}_random
       endif
+      echo "DONE ${c}"
     end
     # Make sure the reconstructed .fa jives with the original:
+    #	four lines output for each chrom, long window required to be
+    #	able to catch all the output.  Look for non-zero numbers.  The
+    #	wc -l should always output zero
     foreach f ( */*.fa.bak )
-      echo $f:r
+      echo -n $f:r " "
       diff $f $f:r | wc -l
     end
     # The .agp goes through a slight format change, but make sure it 
     # at least ends up with the same number of lines:
-    foreach f ( */*.agp.bak )
-      set l1 = `wc -l $f | awk '{print $1;}'`
-      set l2 = `wc -l $f:r | awk '{print $1;}'`
+    foreach f ( ?{,?}/*.agp.bak )
+      set l1 = `wc -l $f | awk '{print $1}'`
+      set l2 = `wc -l $f:r | awk '{print $1}'`
       if ($l1 == $l2) then
-        echo "$f and $f:r have the same #lines"
+        echo "   OK: $f and $f:r have the same #lines"
       else
-        echo ERROR\!\!\!  $f has $l1 lines, but $f:r has $l2
+        echo "ERROR:  $f has $l1 lines, but $f:r has $l2"
       endif
     end
-    # Save some space
-    foreach c (?{,?})
-      echo $c
-      gzip $c/chr*.contig.fa
-    end
-    rm */*.bak
+    # Save some space - NO - the *.contig.fa.gz files already existing
+    # here are the original downloads.  These non-zipped versions are
+    # the translated to upper case versions.
+#	foreach c (?{,?})
+#	echo $c
+#	gzip $c/chr*.contig.fa
+#	end
+    # Do need to at least move these out of the way because later
+    # wild card expansions are looking for things like *.fa and we
+    # don't want these in those expansions.
+	foreach c (?{,?})
+	echo "$c/chr${c}.contig.fa -> $c/chr${c}.contig.fa.UC"
+	mv $c/chr${c}_random.contig.fa $c/chr${c}_random.contig.fa.UC
+	mv $c/chr${c}.contig.fa $c/chr${c}.contig.fa.UC
+	end
+    # This rm may be a good thing to do.  But later, after repeat
+    # masking is done and thus the soft masked results can be compared
+    # with the *.bak originals.
+#	rm */*.bak
 
-COPY OVER JKSTUFF SCRIPTS DIRECTORY (TO DO)
+COPY OVER JKSTUFF SCRIPTS DIRECTORY (DONE - 2003-06-29 - Hiram)
+	# Some of these scripts are being edited after they were
+	#	copied to here.  Some cases of binaries in
+	#	~kent/bin/i386 need to be changed either to
+	#	/cluster/bin/i386 or ~hiram/bin/i386 depending upon what
+	#	was being fixed as all this proceeded.
+	#	The "real" place should be /cluster/bin/i386 but before
+	#	we go that route, we need to have our build processes
+	#	working properly to keep that bin up to date.
 
     ssh kkstore
     ln -s /cluster/store3/rn3 ~/rn3
     rm -f ~/lastRn
-    ln -s /cluster/store3/rn1 ~/lastRn
+    ln -s /cluster/store4/rn2 ~/lastRn
     cd ~/rn3
     cp -Rp ~/lastRn/jkStuff .
     rm jkStuff/*.{out,lst,lft} jkStuff/*~
 
 
-CREATING DATABASE (TO DO)
+CREATING DATABASE (DONE - 2003-06-23 - Hiram)
 
     # Create the database.
     ssh hgwdev
-    # Enter mysql via:
-    hgsql rn1
-    # At mysql prompt type:
-      create database rn3;
-      quit
+    echo 'create database rn3' | hgsql ''
     # make a semi-permanent read-only alias:
+    #	(I haven't noticed any use of this ?  Useless ? - Hiram)
     alias rn3 "mysql -u hguser -phguserstuff -A rn3"
     # Use df to ake sure there is at least 5 gig free on 
-    # hgwdev:/var/lib/mysql
+    #		hgwdev:/var/lib/mysql
+    # [hiram@hgwdev /cluster/home/hiram] df -h /var/lib/mysql
+    # Filesystem            Size  Used Avail Use% Mounted on
+    # /dev/sda1             472G  384G   64G  86% /var/lib/mysql
 
 
-CREATING GRP TABLE FOR TRACK GROUPING (TO DO)
+CREATING GRP TABLE FOR TRACK GROUPING (DONE - 2003-06-23 - Hiram)
     ssh hgwdev
     echo "create table grp (PRIMARY KEY(NAME)) select * from rn1.grp" \
       | hgsql rn3
 
 
-REPEAT MASKING (TO DO)
+REPEAT MASKING (RUNNING - 2003-06-30 - Hiram)
    Split contigs, run RepeatMasker, lift results
    Notes: 
    * If there is a new version of RepeatMasker, build it and ask the admins 
@@ -187,46 +241,71 @@ REPEAT MASKING (TO DO)
    * For the NCBI assembly we repeat mask on the sensitive mode setting
      (RepeatMasker -m -s)
 
-        #- Split contigs into 500kb chunks:
-        ssh kkstore
-        cd ~/rn3
-        foreach d ( */chr*_?{,?} )
-          cd $d
-          set contig = $d:t
-          faSplit size $contig.fa 500000 ${contig}_ -lift=$contig.lft \
-            -maxN=500000
-          cd ../..
-        end
+    #- Split contigs into 500kb chunks:
+    ssh kkstore
+    cd ~/rn3
+    foreach d ( */chr*_?{,?} )
+	cd $d
+	echo "splitting $d"
+	set contig = $d:t
+	faSplit size $contig.fa 500000 ${contig}_ -lift=$contig.lft \
+	    -maxN=500000
+	cd ../..
+    end
 
-        #- Make the run directory and job list:
-        cd ~/rn3
-        mkdir RMRun
-        rm -f RMRun/RMJobs
-        touch RMRun/RMJobs
-        foreach d ( ?{,?}/chr*_?{,?} )
+    #- Make the run directory and job list:
+    cd ~/rn3
+    cat << '_EOF_' > jkStuff/RMRat
+#!/bin/csh -fe
+
+cd $1
+pushd .
+/bin/mkdir -p /tmp/$2
+/bin/cp $2 /tmp/$2/
+cd /tmp/$2
+/cluster/bluearc/RepeatMasker030619/RepeatMasker -ali -s -spec rat -comp mouse $2
+popd
+/bin/cp /tmp/$2/$2.out ./
+if (-e /tmp/$2/$2.align) /bin/cp /tmp/$2/$2.align ./
+if (-e /tmp/$2/$2.tbl) /bin/cp /tmp/$2/$2.tbl ./
+if (-e /tmp/$2/$2.cat) /bin/cp /tmp/$2/$2.cat ./
+/bin/rm -fr /tmp/$2/*
+/bin/rmdir --ignore-fail-on-non-empty /tmp/$2
+'_EOF_'
+    chmod +x jkStuff/RMRat
+    mkdir RMRun
+    rm -f RMRun/RMJobs
+    touch RMRun/RMJobs
+    foreach d ( ?{,?}/chr*_?{,?} )
           set ctg = $d:t
           foreach f ( $d/${ctg}_?{,?}.fa )
             set f = $f:t
-            echo /cluster/bin/scripts/RMRat \
+            echo /cluster/store3/rn3/jkStuff/RMRat \
                  /cluster/store3/rn3/$d $f \
                '{'check out line+ /cluster/store3/rn3/$d/$f.out'}' \
               >> RMRun/RMJobs
           end
-        end
+    end
 
-        #- Do the run
-        ssh kk
-        cd ~/rn3/RMRun
-        para create RMJobs
-        para try, para check, para check, para push, para check,...
+    #- Do the run
+    ssh kk
+    cd ~/rn3/RMRun
+    para create RMJobs
+    para try, para check, para check, para push, para check,...
+# Completed: 6209 of 6209 jobs
+# CPU time in finished jobs:   37009055s  616817.58m 10280.29h  428.35d  1.174 y
+# IO & Wait Time:                 96849s    1614.15m    26.90h    1.12d  0.003 y
+# Average job time:                5976s      99.60m     1.66h    0.07d
+# Longest job:                    16048s     267.47m     4.46h    0.19d
+# Submission to last job:         49589s     826.48m    13.77h    0.57d
 
         #- Lift up the split-contig .out's to contig-level .out's
-        ssh kkstore
-        cd ~/rn3
+	ssh kkstore
+    cd ~/rn3
         foreach d ( ?{,?}/chr*_?{,?} )
           cd $d
           set contig = $d:t
-          liftUp $contig.fa.out $contig.lft warn ${contig}_*.fa.out > /dev/null
+          /cluster/home/hiram/bin/i386/liftUp $contig.fa.out $contig.lft warn ${contig}_*.fa.out > /dev/null
           cd ../..
         end
 
@@ -238,43 +317,60 @@ REPEAT MASKING (TO DO)
         foreach i (?{,?})
             foreach j ($i/chr${i}_?{,?}/chr${i}_?{,?}.fa \
                        $i/chr${i}_random_?{,?}/chr${i}_random_?{,?}.fa)
-                maskOutFa $j $j.out $j -soft
+                /cluster/home/hiram/bin/i386/maskOutFa $j $j.out $j -soft
             end
             echo done $i
         end
+	# You will see a few WARNING lines from maskOutFa.  This is a
+	# a good sign.  Much better than when maskOutFa used to exit.
+	# With the fix, everything is getting masked properly.
 
         #- Load the .out files into the database with:
         ssh hgwdev
         cd ~/rn3
         hgLoadOut rn3 ?{,?}/*.fa.out
 
+MAKE LIFTALL.LFT (DONE - 2003-07-01 - Hiram)
 
-MAKE LIFTALL.LFT (TO DO)
-
+    ssh kkstore
     cd ~/rn3
     cat ?{,?}/lift/{ordered,random}.lft > jkStuff/liftAll.lft
+    cp -p jkStuff/liftAll.lft /cluster/bluearc/rat/rn3
 
-VERIFY REPEATMASKER RESULTS (TO DO)
+VERIFY REPEATMASKER RESULTS (DONE - 2003-06-24 - Hiram)
+
+    # Something about this is too early at this point.  It errors with:
+    #	Can't start query:
+    #	select chrom,size,fileName from chromInfo
+    #	mySQL error 1146: Table 'rn3.chromInfo' doesn't exist
+    # you have to wait until the nibs have been loaded below and the
+    # chrom.sizes works
 
     # Run featureBits on rn3 and on a comparable genome build, and compare:
     ssh hgwdev
     featureBits rn3 rmsk
-    # --> 1100534407 bases of 2764911379 (39.804%) in intersection
-    # --> (orig run, July libs) 1058156286 bases of 2764911379 (38.271%) in intersection
+    #   1117328265 bases of 2571104688 (43.457%) in intersection
     featureBits rn1 rmsk
-    # --> 1081814344 bases of 2852382926 (37.927%) in intersection
+    #	1081814344 bases of 2555848684 (42.327%) in intersection
+    featureBits rn2 rmsk
+    #	1100534407 bases of 2495551408 (44.100%) in intersection
 
 
-STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (TO DO)
+STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE - 2003-06-24 - Hiram)
 
     # Make (unmasked) nibs
     ssh kkstore
     cd ~/rn3
-    mkdir nib
+    mkdir nibNotMasked
     foreach f (?{,?}/chr*.fa)
-      faToNib $f nib/$f:t:r.nib
+      echo -n "${f} - "
+      ~/bin/i386/faToNib $f nibNotMasked/$f:t:r.nib
     end
+
     # Make symbolic links from /gbdb/rn3/nib to the real nibs.
+    # It is unclear to me what kind of nibs these links are supposed to
+    # point to.  Below, after the soft masked nibs are created, I am
+    # going to reset these links to point to the soft masked nibs.
     ssh hgwdev
     mkdir -p /gbdb/rn3/nib
     foreach f (/cluster/store3/rn3/nib/chr*.nib)
@@ -282,36 +378,55 @@ STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (TO DO)
     end
     # Load /gbdb/rn3/nib paths into database and save size info.
      ssh hgwdev
-     hgsql rn3  < ~/src/hg/lib/chromInfo.sql
+     hgsql rn3  < ~/kent/src/hg/lib/chromInfo.sql
      cd ~/rn3
      hgNibSeq -preMadeNib rn3 /gbdb/rn3/nib ?{,?}/chr?{,?}{,_random}.fa
+    #	2835152425 total bases
      echo "select chrom,size from chromInfo" | hgsql -N rn3 > chrom.sizes
+    # take a look at chrom.sizes, should be 44 lines and reasonable
+    # numbers
+    wc chrom.sizes
+    #	44      88     778 chrom.sizes
 
 
-GOLD AND GAP TRACKS (TO DO)
+GOLD AND GAP TRACKS (DONE - 2003-06-26 - Hiram)
     ssh hgwdev
     cd ~/rn3
     hgGoldGapGl -noGl rn3 /cluster/store3/rn3 .
 
 
-MAKE GCPERCENT (TO DO)
+MAKE GCPERCENT (DONE - 2003-06-26 - Hiram)
      ssh hgwdev
      mkdir -p /cluster/store3/rn3/bed/gcPercent
      cd /cluster/store3/rn3/bed/gcPercent
-     hgsql rn3  < ~/src/hg/lib/gcPercent.sql
-     hgGcPercent rn3 ../../nib
+     hgsql rn3  < ~/kent/src/hg/lib/gcPercent.sql
+     hgGcPercent rn3 ../../nibNotMasked
 
 
-MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR RN3 (TO DO)
+MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR RN3 (DONE - 2003-06-24 - Hiram)
     # Enter rn3 into hgcentraltest.dbDb so test browser knows about it:
-    mysql -h genome-testdb -u root -pbigSecret -A hgcentraltest
-      insert into dbDb values("rn3", "Rat Jan. 2003",
-        "/gbdb/rn3/nib", "Rat", "Napa", 1,
-        20, "Rat");
-      quit
+    echo 'insert into dbDb values("rn3", "Jun 2003", \
+        "/gbdb/rn3/nib", "Rat", "Espn", 1, \
+        30, "Rat");' | hgsql -h genome-testdb hgcentraltest
+    # Temporary entry until mrna tables come along.  Approximate
+    # calculated position the same as rn2
+    echo 'insert into dbDb values("rn3", "Jun 2003", \
+        "/gbdb/rn3/nib", "Rat", "chr5:168054448-168086858", 1, \
+        30, "Rat");' | hgsql -h genome-testdb hgcentraltest
+    # since Espn is the specified position here, this default position
+    # will not function as the make trackDb is done next since there are
+    # no tables in which to look up Espn.  But you can run the browser
+    # if you enter actual coodinates, e.g. chr1:1-1000, etc ...
+    #	Espn in Jan 2003 rat is: chr5:186572879-186605289
+    #	The new rat is much shorter for chr5
+    #  If you need to delete this dbDb entry to rewrite it:
+        echo 'delete from dbDb where name="rn3";' \
+        | hgsql -h genome-testdb hgcentraltest
+
+
     # Make trackDb table so browser knows what tracks to expect:
     ssh hgwdev
-    cd ~/src/hg/makeDb/trackDb
+    cd ~/kent/src/hg/makeDb/trackDb
     cvs up -d -P
     # Edit that makefile to add rn3 in all the right places and do
     make update
@@ -326,34 +441,74 @@ MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR RN3 (TO DO)
       | hgsql -h genome-testdb hgcentraltest
 
 
-SIMPLE REPEAT TRACK (TO DO)
-    # TRF runs pretty quickly now... it takes a few hours total runtime, 
-    # so instead of binrsyncing and para-running, just do this on kkstore:
+SIMPLE REPEAT TRACK (DONE - 2003-06-26 - Hiram)
+    #  Need to be careful with this one on the cluster.  This trf
+    #  thing does a lot of I/O on the input and output file.
+    #  Place the splits on /cluster/bluearc for cluster access
     ssh kkstore
+    mkdir -p /cluster/bluearc/rat/rn3
+    cd /cluster/store3/rn3/
+    ls ?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa  \
+	| cpio -pdm /cluster/bluearc/rat/rn3
+
+    # now, a safe cluster job to trf mask
+    ssh kk
     mkdir ~/rn3/bed/simpleRepeat
     cd ~/rn3/bed/simpleRepeat
     mkdir trf
-    rm -f jobs.csh
-    touch jobs.csh
-    foreach f (/cluster/store3/rn3/?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa)
-      set fout = $f:t:r.bed
-      echo "/cluster/home/kent/bin/i386/trfBig -trf=/cluster/home/kent/bin/i386/trf $f /dev/null -bedAt=trf/$fout -tempDir=/tmp" \
-        >> jobs.csh
-    end
-    tcsh jobs.csh |& tee jobs.log
-    wc -l jobs.csh
-    ls -1 trf | wc -l
-    # When job is done do:
+    ls /cluster/bluearc/rat/rn3/?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa \
+	> genome.lst
+
+    cat << '_EOF_' > runTrf
+#!/bin/csh -fe
+#
+set path1 = $1
+set inputFN = $1:t
+set outpath = $2
+set outputFN = $2:t
+mkdir -p /tmp/$outputFN
+cp $path1 /tmp/$outputFN
+pushd .
+cd /tmp/$outputFN
+/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $inputFN /dev/null -bedAt=$outputFN -tempDir=/tmp
+popd
+rm -f $outpath
+cp -p /tmp/$outputFN/$outputFN $outpath
+rm -fr /tmp/$outputFN/*
+rmdir --ignore-fail-on-non-empty /tmp/$outputFN
+'_EOF_'
+    chmod +x runTrf
+
+    cat << '_EOF_' > gsub
+#LOOP
+./runTrf {check in line+ $(path1)}  {check out line trf/$(root1).bed}
+#ENDLOOP
+'_EOF_'
+
+    gensub2 genome.lst single gsub spec
+    para create spec
+    para try
+    para check
+    para push
+    ... etc ...
+Completed: 591 of 591 jobs
+CPU time in finished jobs:      27837s     463.95m     7.73h    0.32d  0.001 y
+IO & Wait Time:                 13105s     218.41m     3.64h    0.15d  0.000 y
+Average job time:                  69s       1.15m     0.02h    0.00d
+Longest job:                      205s       3.42m     0.06h    0.00d
+Submission to last job:           263s       4.38m     0.07h    0.00d
+
+    ssh kkstore
+    cd ~/rn3/bed/simpleRepeat
     liftUp simpleRepeat.bed ~/rn3/jkStuff/liftAll.lft warn trf/*.bed
 
     # Load this into the database as so
     ssh hgwdev
     cd ~/rn3/bed/simpleRepeat
     hgLoadBed rn3 simpleRepeat simpleRepeat.bed \
-      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+      -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
 
-
-PROCESS SIMPLE REPEATS INTO MASK (TO DO)
+PROCESS SIMPLE REPEATS INTO MASK (DONE - 2003-06-26 - Hiram)
 
     # After the simpleRepeats track has been built, make a filtered version 
     # of the trf output: keep trf's with period <= 12:
@@ -382,7 +537,8 @@ PROCESS SIMPLE REPEATS INTO MASK (TO DO)
     end
 
 
-MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (TO DO)
+MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF
+			(DONE - 2003-06-26 - Hiram)
 
     # This used to be done right after RepeatMasking.  Now, we mask with 
     # TRF as well, so do this after the "PROCESS SIMPLE REPEATS" step above.
@@ -390,16 +546,42 @@ MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (TO DO)
     cd ~/rn3
     #- Soft-mask (lower-case) the contig and chr .fa's
     ./jkStuff/makeFaMasked.sh
+    # You will see warnings from the above command, these are OK:
+    # WARNING: negative rEnd: -203 chr1:36149039-36149198 L1M3c
+    # WARNING: negative rEnd: -14 chr1:185432802-185432864 PB1D10
     #- Make hard-masked .fa.masked files as well:
     ./jkStuff/makeHardMasked.sh
     #- Rebuild the nib, mixedNib, maskedNib files:
     ./jkStuff/makeNib.sh
     # Copy the masked contig fa to /scratch:
     ssh kkstore
-    rm -rf /scratch/hg/rn3/trfFa
-    mkdir -p /scratch/hg/rn3/trfFa
-    cp -p ~/rn3/?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa /scratch/hg/rn3/trfFa
+    rm -rf /cluster/bluearc/rat/rn3/trfFa
+    mkdir -p /cluster/bluearc/rat/rn3/trfFa
+    cp -p ~/rn3/?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa \
+	/cluster/bluearc/rat/rn3/trfFa
 
+RESET NIB POINTERS TO softNib (DONE - 2003-06-27 - Hiram)
+
+    # As mentioned above the first time this was done, I don't know if
+    # this needs to done to reset the links, but I'm going to do it.
+    ssh hgwdev
+    cd /gbdb/rn3/nib
+    rm -f *
+    foreach f (/cluster/store3/rn3/softNib/chr*.nib)
+      ln -s $f /gbdb/rn3/nib
+    end
+    #  I wonder if this needs to be run again ?  I'm going to do it
+    #	anyway.
+    # Load /gbdb/rn3/nib paths into database and save size info.
+     ssh hgwdev
+     cd ~/rn3
+     hgNibSeq -preMadeNib rn3 /gbdb/rn3/nib ?{,?}/chr?{,?}{,_random}.fa
+    #	2835152425 total bases
+     echo "select chrom,size from chromInfo" | hgsql -N rn3 > chrom.sizes
+    # take a look at chrom.sizes, should be 44 lines and reasonable
+    # numbers
+    wc chrom.sizes
+    #	44      88     778 chrom.sizes
 
 MAKE DOWNLOADABLE SEQUENCE FILES (TO DO)
     ssh kkstore
@@ -437,7 +619,7 @@ MAKE DOWNLOADABLE SEQUENCE FILES (TO DO)
     rm upstream5000.fa
 
 
-PREPARE CLUSTER FOR BLASTZ RUN (TO DO)
+PREPARE CLUSTER FOR BLASTZ RUN (DONE - 2003-06-27 - Hiram)
     # This needs to be done after trf-masking and nib generation.
     ssh kkstore
     # Extract lineage-specific repeats using Arian Smit's script:
@@ -450,20 +632,20 @@ PREPARE CLUSTER FOR BLASTZ RUN (TO DO)
     /cluster/bin/scripts/perl-rename 's/(\.fa|\.nib)//' *.out.*spec
     /cluster/bin/scripts/perl-rename 's/\.(rod|prim)spec/.spec/' *.out.*spec
     rm *.out
-    cd ..
-    rm -rf /scratch/hg/rn3/linSpecRep
-    mkdir -p /scratch/hg/rn3
-    cp -Rp linSpecRep /scratch/hg/rn3
+    cd ~/rn3/bed
+    rm -rf /cluster/bluearc/rat/rn3/linSpecRep
+    #  This dir already exists from above
+    # mkdir -p /cluster/bluearc/rat/rn3
+    cp -Rp linSpecRep /cluster/bluearc/rat/rn3
     # RepeatMasker .out:
     cd ~/rn3
-    rm -rf /scratch/hg/rn3/rmsk
-    mkdir -p /scratch/hg/rn3/rmsk
-    cp -p ?{,?}/chr?{,?}{,_random}.fa.out /scratch/hg/rn3/rmsk
+    rm -rf /cluster/bluearc/rat/rn3/rmsk
+    mkdir -p /cluster/bluearc/rat/rn3/rmsk
+    cp -p ?{,?}/chr?{,?}{,_random}.fa.out /cluster/bluearc/rat/rn3/rmsk
     # Chrom-level mixed nibs that have been repeat- and trf-masked:
-    rm -rf /scratch/hg/rn3/chromTrfMixedNib
-    mkdir -p /scratch/hg/rn3/chromTrfMixedNib
-    cp -p mixedNib/chr*.nib /scratch/hg/rn3/chromTrfMixedNib
-    # Ask cluster-admin@cse.ucsc.edu to binrsync /scratch/hg to clusters
+    rm -rf /cluster/bluearc/rat/rn3/softNib
+    mkdir -p /cluster/bluearc/rat/rn3/softNib
+    cp -p softNib/chr*.nib /cluster/bluearc/rat/rn3/softNib
 
     # Jim's comments Feb 12 '03 about the order in which to run blastz:
     # In general we should do
@@ -477,6 +659,34 @@ PREPARE CLUSTER FOR BLASTZ RUN (TO DO)
     # get out of having to run the inverse of 1,2 & 3,  though
     # 2 in particular is so fast perhaps it's just as well to
     # do the inverse explicitly.
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  STOP HERE 2003-06-27
+XXXXXXXXXXXXXXXXXX  The following needs to be done with Mark's new
+XXXXXXXXXXXXXXXXXX  system of auto-update genbank data.  Will start
+XXXXXXXXXXXXXXXXXX  on this later today.
+
+AUTO UPDATE GENBANK MRNA RUN
+
+    ssh eieio
+    cd /cluster/store5/genbank
+    set db = rn3
+    set nibGlob = '/cluster/bluearc/rat/rn3/softNib/chr*.nib'
+    set liftFile = /cluster/bluearc/rat/rn3/liftAll.lft
+    nice bin/gbAlignStep -verbose=1 -initial -srcDb=genbank -type=mrna \
+	$db "$nibGlob" $liftFile &
+    # To watch the progress of your cluster job, go to machine kk and
+    # cd /cluster/store5/genbank/work/initial.rn3/align
+    # where the batch file is.  You can now do normal parasol checking
+    # operations.  Beware of "para check" it can take quite a bit of time
+    # if your batch job is very large.  'parasol list batches' or
+    # 'parasol list users' may be quicker to take a look at status.
+    #  On this particular run, some jobs got stuck, seemed to be hung
+    #  on I/O.  To recover, simply do a 'para stop' in this directory,
+    #  the jobs will be restarted automatically by the controlling
+    #  gbAlignRun which is running all of this business.
+
+    #  After that is finished successfully, load the mRNAs:
+    nice bin/gbDbLoadStep -verbose=1 -initialLoad rn3
 
 
 MAKING AND STORING mRNA AND EST ALIGNMENTS  (TO DO)
@@ -650,7 +860,7 @@ Load them into database as so:
      ssh hgwdev
      cd ~/rn3/bed/estOrientInfo
      hgLoadBed rn3 estOrientInfo estOrientInfo.bed \
-       -sqlTable=/cluster/home/kent/src/hg/lib/estOrientInfo.sql
+       -sqlTable=$HOME/kent/src/hg/lib/estOrientInfo.sql
      
 PRODUCING MRNAORIENTINFO TABLE (TO DO)
     ssh kkstore
@@ -675,7 +885,7 @@ PRODUCING MRNAORIENTINFO TABLE (TO DO)
     ssh hgwdev
     cd ~/rn3/bed/mrnaOrientInfo
     hgLoadBed rn3 mrnaOrientInfo mrnaOrientInfo.bed \
-       -sqlTable=/cluster/home/kent/src/hg/lib/mrnaOrientInfo.sql
+       -sqlTable=$HOME/kent/src/hg/lib/mrnaOrientInfo.sql
 
 
 CREATE RNACLUSTER TABLE (TO DO)

@@ -6,8 +6,9 @@
 #include "jksql.h"
 #include "linefile.h"
 #include "bed.h"
+#include "binRange.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.16 2003/06/16 21:04:42 baertsch Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.17 2003/07/01 22:43:50 baertsch Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -789,3 +790,40 @@ return bedListOut;
 }
 
  
+struct hash *readBedToBinKeeper(char *sizeFileName, char *bedFileName, int wordCount)
+/* read a list of beds and return results in hash of binKeeper structure for fast query*/
+{
+struct binKeeper *bk; 
+int size;
+struct bed *bed;
+struct lineFile *lf = lineFileOpen(sizeFileName, TRUE);
+struct lineFile *bf = lineFileOpen(bedFileName , TRUE);
+struct hash *hash = newHash(0);
+char *chromRow[2];
+char *row[3] ;
+
+assert (wordCount == 3);
+while (lineFileRow(lf, chromRow))
+    {
+    char *name = chromRow[0];
+    int size = lineFileNeedNum(lf, chromRow, 1);
+
+    if (hashLookup(hash, name) != NULL)
+        warn("Duplicate %s, ignoring all but first\n", name);
+    else
+        {
+        bk = binKeeperNew(0, size);
+        assert(size > 1);
+	hashAdd(hash, name, bk);
+        }
+    }
+while (lineFileNextRow(bf, row, ArraySize(row)))
+    {
+    bed = bedLoadN(row, wordCount);
+    bk = hashMustFindVal(hash, bed->chrom);
+    binKeeperAdd(bk, bed->chromStart, bed->chromEnd, bed);
+    }
+lineFileClose(&bf);
+lineFileClose(&lf);
+return hash;
+}
