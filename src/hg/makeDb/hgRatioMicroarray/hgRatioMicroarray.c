@@ -9,7 +9,7 @@
 #include "expData.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgRatioMicroarray.c,v 1.1 2003/10/07 05:46:25 kent Exp $";
+static char const rcsid[] = "$Id: hgRatioMicroarray.c,v 1.2 2003/12/08 07:27:18 kent Exp $";
 
 /* Command line overridable options. */
 char *database = "hgFixed";
@@ -54,7 +54,7 @@ errAbort(
   "   -tab=dir - Output tab-separated files to directory.\n"
   "   -noLoad  - If true don't load database and don't clean up tab files\n"
   "   -limit=N - Only do limit rows of table, for testing\n"
-  , database, minMaxVal, minAbsVal
+  , database, minAbsVal, minMaxVal
   );
 }
 
