@@ -11,10 +11,11 @@
 #include "hash.h"
 #include "linefile.h"
 #include "dystring.h"
+#include "altGraphX.h"
 #include "altSpliceSite.h"
-#include "altSpliceType.h"
-/* #include <gsl/gsl_math.h> */
-/* #include <gsl/gsl_statistics_double.h> */
+
+#include <gsl/gsl_math.h>
+#include <gsl/gsl_statistics_double.h>
 
 struct junctSet 
 /* A set of beds with a common start or end. */
@@ -57,6 +58,7 @@ struct junctSet
     int sjDisagree;             /* Number of times sj disagrees with matched exon. */
     int sjExp;                  /* Number of times sj expressed. */
     int exonExp;                /* Number of times exon expressed. */
+    int spliceType;             /* Type of splicing event. */
 };
 
 struct resultM 
@@ -142,8 +144,17 @@ int alt3Count = 0;
 int alt3SoftCount = 0;
 int alt5Count = 0;
 int alt5SoftCount = 0;
-int altCassette = 0;
+int altCassetteCount = 0;
 int otherCount = 0;
+
+/* Counts of different alternative splicing 
+   events that are expressed. */
+int alt3ExpCount = 0;
+int alt3SoftExpCount = 0;
+int alt5ExpCount = 0;
+int alt5SoftExpCount = 0;
+int altCassetteExpCount = 0;
+int otherExpCount = 0;
 
 void usage()
 /** Print usage and quit. */
@@ -273,6 +284,7 @@ if(colCount != 14) /* If the junctions used fields not present fill them in late
     js->junctUsedCount = sqlUnsigned(row[index++]);
     sqlStringDynamicArray(row[index++], &js->junctUsed, &count);
     }
+js->spliceType = altOther;
 return js;
 }
 
@@ -644,6 +656,31 @@ for(js = jsList; js != NULL; js = js->next)
 }
 
 
+void countExpSpliceType(int type)
+/* Record the counts of different alt-splice types. */
+{
+switch(type)
+    {
+    case alt3Prime:
+	alt3ExpCount++;
+	break;
+    case alt5Prime:
+	alt5ExpCount++;
+	break;
+    case alt3PrimeSoft:
+	alt3SoftExpCount++;
+	break;
+    case alt5PrimeSoft:
+	alt5SoftExpCount++;
+	break;
+    case altCassette:
+	altCassetteExpCount++;
+	break;
+    default:
+	otherExpCount++;
+    }
+}
+
 int calcExpressed(struct junctSet *jsList, struct resultM *probMat)
 /* Loop through and calculate expression and score where score is correlation. */
 {
@@ -706,7 +743,10 @@ for(js = jsList; js != NULL; js = js->next)
 	}
 
     if(js->altExpressed == TRUE)
+	{
 	js->score = calcMinCorrelation(js, expressed, totalTissues, colCount);
+	countExpSpliceType(js->spliceType);
+	}
     else
 	js->score = BIGNUM;
     freez(&expressed);
@@ -714,6 +754,9 @@ for(js = jsList; js != NULL; js = js->next)
 
 warn("%d junctions expressed above p-val %.2f, %d alternative (%.2f%%)",
      junctOneExp, presThresh, junctTwoExp, 100*((double)junctTwoExp/junctOneExp));
+warn("%d altCassette, %d alt3, %d alt5, %d altTranStart %d altTranEnd, %d other of expressed",
+	 altCassetteExpCount, alt3ExpCount, alt5SoftExpCount, 
+	 alt5ExpCount, alt3SoftExpCount, otherExpCount);
 }
 
 int junctSetScoreCmp(const void *va, const void *vb)
@@ -921,6 +964,31 @@ else
     dyStringPrintf(buff, "%s", js->hName);
 }
 
+char *spliceTypeName(int t)
+/* Return the splice type names. */
+{
+switch(t) 
+    {
+    case alt5Prime:
+	return "alt5";
+    case alt3Prime:
+	return "alt3";
+    case altCassette:
+	return "altCass";
+    case altRetInt:
+	return "altRetInt";
+    case altOther:
+	return "altOther";
+    case alt3PrimeSoft:
+	return "txEnd";
+    case alt5PrimeSoft:
+	return "txStart";
+    default:
+	return "unknown";
+    }
+return NULL;
+}
+
 void outputLinks(struct junctSet **jsList, struct hash *bedHash, struct resultM *probM, FILE *out)
 /* Output a report for each junction set. */
 {
@@ -953,6 +1021,7 @@ for(js = *jsList; js != NULL; js = js->next)
 	makePlotLinks(js, dy);
 	fprintf(out, "<b>Plots:</b> %s ", dy->string);
 	fprintf(out, "<b>Score:</b> %.2f", js->score);
+	fprintf(out, "<b> Type:</b> %s", spliceTypeName(js->spliceType));
 	safef(affyName, sizeof(affyName), "%s", js->junctUsed[0]);
 	tmp = strchr(affyName, '@');
 	assert(tmp);
@@ -1192,8 +1261,9 @@ for(bed = bedList; bed != NULL; bed = bed->next)
   }
 return bedHash;
 }
+
 int agxVertexByPos(struct altGraphX *agx, int position)
-     /* Return the vertex index by to position. */
+/* Return the vertex index by to position. */
 {
   int *vPos = agx->vPositions;
   int vC = agx->vertexCount;
@@ -1255,10 +1325,14 @@ int translateStrand(int type, char strand)
    both alt3Prime and alt5Prime are flipped. */
 {
 boolean isNeg = strand == '-';
-if(type == al3Prime && isNeg)
+if(type == alt3Prime && isNeg)
     type = alt5Prime;
 else if(type == alt3PrimeSoft && isNeg)
     type = alt5PrimeSoft;
+else if(type == alt5Prime && isNeg)
+    type = alt3Prime;
+else if(type == alt5PrimeSoft && isNeg)
+    type = alt3PrimeSoft;
 return type;
 }
 
@@ -1273,71 +1347,106 @@ struct binElement *be = NULL;
 int ssPos[4];
 int ssCount = 0;
 struct bed *bedUp = NULL, *bedDown = NULL;
-unsigned char *vTypes = ag->vTypes;
+unsigned char *vTypes = NULL;
+struct altGraphX *ag = NULL;
+
 /* Can't have more than three introns and be a simple
    process. */
 if(js->maxJunctCount + js->junctDupCount > 3)
     return -1;
-if(js->cassette == TRUE)
-    return altCassette;
 
+be = chromKeeperFind(js->chrom, js->chromStart, js->chromEnd);
+if(slCount(be) == 1)
+    ag = be->val;
+slFreeList(&be);
+if(ag == NULL)
+    return -1;
+
+vTypes = ag->vTypes;
 em = altGraphXCreateEdgeMatrix(ag);
-  /* Get the beds. */
-  bedUp = hashFindVal(bedHash, bed->junctPSets[0]);
-  bedDown = hashFindVal(bedHash, bed->junctPSets[1]);
-  /* Sort the beds. */
-  if(bedUp->chromStart > bedDown->chromStart ||
-     (bedDown->chromStart == bedDown->chromStart && 
-      bedUp->chromEnd > bedDown->chromStart))
+/* Get the beds. If their are enough primar junctions
+ use them. Otherwise use the duplicates. */
+if(js->maxJunctCount >= 2)
     {
-      struct bed *tmp = bedUp;
-      bedUp = bedDown;
-      bedDown = bedUp;
+    bedUp = hashMustFindVal(junctBedHash, js->junctPSets[0]);
+    bedDown = hashMustFindVal(junctBedHash, js->junctPSets[1]);
     }
-  /* If same start type check for alternative 3' splice. */
-  if(bedUp->chromStart == bedDown->chromStart)
+else
     {
-      int start = -1, ve1 = -1, ve2 = -2;
-      int altBpStart = 0, altBpEnd = 0, firstVertex = 0, lastVertex = 0;
-      start = agxVertexByPos(agx, bedUp->chromStart+bedUp->blockSizes[0]);
-      ve1 = agxVertexByPos(agx, bedSpliceEnd(bedUp));
-      ve2 = agxVertexByPos(agx, bedSpliceEnd(bedDown));
-      isThreePrime = astIsAlt3Prime(agx, em, start, end);
-      /* Check to see if this is an alt transcription start
-	 or end. */
-      if(isThreePrime && (connectToDownStreamSoft(ag, em, ve1) ||
-			  connectToDownStreamSoft(ag, em, ve2)))
-	  type = alt3PrimeSoft;
-      type = translateStrand(type, ag->strand[0]));
+    bedUp = hashMustFindVal(junctBedHash, js->junctPSets[0]);
+    bedDown = hashMustFindVal(junctBedHash, js->dupJunctPSets[0]);
     }
-  /* If same end then check for an alternative 5' splice site. */
-  else if(bedUp->chromEnd == bedDown->chromEnd)
-      {
-      int start1 = -1, start2 = -1, ve1 = -1, ve2 = -2;
-      int altBpStart = 0, altBpEnd = 0, firstVertex = 0, lastVertex = 0;
-      ve1 = agxVertexByPos(agx, bedSpliceStart(bedUp));
-      ve2 = agxVertexByPos(agx, bedSpliceStart(bedDown));
-      start1 = agxFindClosestUpstreamVertex(agx, em, ve1);
-      start2 = agxFindClosestUpstreamVertex(agx, em, ve2);
-      if(start1 == start2)
-	  {
-	  isFivePrime = astIsAlt5Prime(agx, em, start1, ve1, ve2);
-	  /* If we're on the negative strand then swap the call. */
-	  if(isFivePrime && agx->strand[0] == '-')
-	      type = alt3Prime;
-	  else if(isFivePrime)
-	      type = alt5Prime;
-	  }
-      else /* Check for alternative transcription starts. */
-	  {
-	  if(vTypes[start1] == ggSoftStart ||
-	     vTypes[start2] == ggSoftStart)
-	      type = alt5PrimeSoft;
-	  }
-      }
 
-  altGraphXFreeEdgeMatrix(&em, vC);
-  return type;
+/* Sort the beds. */
+if(bedUp->chromStart > bedDown->chromStart ||
+   (bedDown->chromStart == bedDown->chromStart && 
+    bedUp->chromEnd > bedDown->chromEnd))
+    {
+    struct bed *tmp = bedUp;
+    bedUp = bedDown;
+    bedDown = tmp;
+    }
+
+/* If same start type check for alternative 3' splice. */
+if(bedUp->chromStart == bedDown->chromStart)
+    {
+    int start = -1, ve1 = -1, ve2 = -2;
+    int altBpStart = 0, altBpEnd = 0, firstVertex = 0, lastVertex = 0;
+    int isThreePrime = -1;
+    start = agxVertexByPos(ag, bedSpliceStart(bedUp));
+    ve1 = agxVertexByPos(ag, bedSpliceEnd(bedUp));
+    ve2 = agxVertexByPos(ag, bedSpliceEnd(bedDown));
+    isThreePrime = agxIsAlt3Prime(ag, em, start, ve1, ve2,
+				  &altBpStart, &altBpEnd, &firstVertex, &lastVertex);
+    if(isThreePrime)
+	type = alt3Prime;
+    else if(agxIsAlt3PrimeSoft(ag, em, start, ve1, ve2,
+			       &altBpStart,  &altBpEnd, &firstVertex, &lastVertex))
+	{
+	type = alt3PrimeSoft;
+	}
+    else if(agxIsCassette(ag, em, start, ve1, ve2, 
+			  &altBpStart,  &altBpEnd, &firstVertex, &lastVertex))
+	type = altCassette;
+    type = translateStrand(type, ag->strand[0]);
+    }
+/* If same end then check for an alternative 5' splice site. */
+else if(bedUp->chromEnd == bedDown->chromEnd)
+    {
+    int start1 = -1, start2 = -1, ve1 = -1, ve2 = -2;
+    int altBpStart = 0, altBpEnd = 0, firstVertex = 0, lastVertex = 0;
+    int isFivePrime = -1;
+    ve1 = agxVertexByPos(ag, bedSpliceStart(bedUp));
+    ve2 = agxVertexByPos(ag, bedSpliceStart(bedDown));
+    start1 = agxFindClosestUpstreamVertex(ag, em, ve1);
+    start2 = agxFindClosestUpstreamVertex(ag, em, ve2);
+    if(start1 == start2)
+	{
+	if(agxIsAlt5Prime(ag, em, start1, ve1, ve2,
+			  &altBpStart, &altBpEnd, &firstVertex, &lastVertex))
+	    type = alt5Prime;
+	}
+    else if(agxIsAlt5PrimeSoft(ag, em, start1, start2, ve1, ve2, 
+			       &altBpStart, &altBpEnd, &firstVertex, &lastVertex)) 
+        /* Check for alternative transcription starts. */
+	{
+	type = alt5PrimeSoft;
+	}
+    else  /* Could be a cassette. */
+	{
+	int start = -1;
+	int end = agxVertexByPos(ag, bedSpliceEnd(bedDown));
+	start = agxVertexByPos(ag, bedSpliceStart(bedUp));
+	if(agxIsCassette(ag, em, start, start2, end,
+			 &altBpStart, &altBpEnd, &firstVertex, &lastVertex)) 
+	    type = altCassette;
+	}
+    type = translateStrand(type, ag->strand[0]);
+    }
+if(js->cassette && type != altCassette)
+    js->cassette == FALSE;
+altGraphXFreeEdgeMatrix(&em, ag->vertexCount);
+return type;
 }
 
 void countSpliceType(int type)
@@ -1364,6 +1473,7 @@ switch(type)
 	otherCount++;
     }
 }
+
     
 void outputBedsForJunctSet(int type, struct junctSet *js)
 /* Write out the beds for the junction set with the 
@@ -1373,18 +1483,28 @@ struct bed *bed = NULL;
 int i = 0;
 for(i = 0; i < js->maxJunctCount; i++)
     {
-    bed = hashFindVal(bedHash, js->junctPSets[i]);
+    bed = hashFindVal(junctBedHash, js->junctPSets[i]);
     bed->score = type;
-    bedTabOutN(bed, 6, bedJunctTypeOut);
+    bedTabOutN(bed, 12, bedJunctTypeOut);
+    }
+for(i = 0; i < js->junctDupCount; i++)
+    {
+    bed = hashFindVal(junctBedHash, js->dupJunctPSets[i]);
+    bed->score = type;
+    bedTabOutN(bed, 12, bedJunctTypeOut);
     }
 }
+
 void determineSpliceTypes(struct junctSet *jsList)
 {
-  int type = -1;
-  struct junctSet *js = NULL;
-  for(js = jsList; js != NULL)
+int type = -1;
+struct junctSet *js = NULL;
+for(js = jsList; js != NULL; js = js->next)
     {
       type = spliceTypeForJunctSet(js);
+      if(type == -1)
+	  type = altOther;
+      js->spliceType = type;
       countSpliceType(type);
       outputBedsForJunctSet(type, js);
     }
@@ -1432,22 +1552,23 @@ assert(bedFile);
 probM = readResultMatrix(probFile);
 warn("Loaded %d rows and %d columns from %s", probM->rowCount, probM->colCount, probFile);
 
+
+fillInJunctUsed(jsList, intenM);
+fillInProbs(jsList, probM);
+fillInIntens(jsList, intenM);
+bedHash = hashBeds(bedFile);
+junctBedHash = bedHash;
 if(doJunctionTypes)
     {
     determineSpliceTypes(jsList);
     warn("%d altCassette, %d alt3, %d alt5, %d altTranStart %d altTranEnd, %d other",
 	 altCassetteCount, alt3Count, alt5SoftCount, 
-	 alt5Count, alt3SoftCount, otherCount;);
+	 alt5Count, alt3SoftCount, otherCount);
     }
-fillInJunctUsed(jsList, intenM);
-fillInProbs(jsList, probM);
-fillInIntens(jsList, intenM);
-
 warn("Calculating expression");
 calcExpressed(jsList, probM);
 
-bedHash = hashBeds(bedFile);
-junctBedHash = bedHash;
+
 calcExonCorrelation(jsList, bedHash, intenM, probM);
 
 /* Write out the lists. */
@@ -1513,7 +1634,7 @@ void agxLoadChromKeeper(char *file)
   agxList = altGraphXLoadAll(file);
   for(agx = agxList; agx != NULL; agx = agx->next)
     {
-      chromKeeperAdd(agx->chrom, agx->chromStart, agx->chromEnd, agx);
+      chromKeeperAdd(agx->tName, agx->tStart, agx->tEnd, agx);
     }
   doJunctionTypes = TRUE;
 }
@@ -1534,8 +1655,11 @@ agxFileName = optionVal("agxFile", NULL);
 
 if(agxFileName != NULL)
     {
-    agxFile = mustOpen(agxFileName, "w");
-    agxLoadChromKeeper(agxFile);
+    char *spliceTypeFile = optionVal("spliceTypes", NULL);
+    if(spliceTypeFile == NULL)
+	errAbort("Must specify spliceTypes flag when specifying agxFile");
+    bedJunctTypeOut = mustOpen(spliceTypeFile, "w");
+    agxLoadChromKeeper(agxFileName);
     }
 
 if((exonPsFile = optionVal("exonStats", NULL)) != NULL)
@@ -1552,6 +1676,6 @@ else
 altHtmlPages(optionVal("junctFile", NULL), optionVal("probFile", NULL), 
 	     optionVal("intensityFile", NULL), optionVal("bedFile", NULL));
 carefulClose(&exonPsStats);
-carefulClose(&agxFile);
+carefulClose(&bedJunctTypeOut);
 return 0;
 }
