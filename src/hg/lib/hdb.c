@@ -197,6 +197,15 @@ hFreeConn(&conn);
 return exists;
 }
 
+boolean hTableExists2(char *table)
+/* Return TRUE if a table exists in secondary database. */
+{
+struct sqlConnection *conn = hAllocConn2();
+boolean exists = sqlTableExists(conn, table);
+hFreeConn2(&conn);
+return exists;
+}
+
 
 int hChromSize(char *chromName)
 /* Return size of chromosome. */
@@ -695,7 +704,7 @@ return binned;
 }
 
 
-boolean hFindMoreFieldsAndBin(char *table, 
+boolean hFindMoreFieldsAndBinDb(char *db, char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32],
 	char retName[32], char retStrand[32],
 	boolean *retBinned)
@@ -703,11 +712,21 @@ boolean hFindMoreFieldsAndBin(char *table,
  * name, strand, and whether it's binned.  Name and strand may be "". */
 {
 char query[256];
+struct sqlConnection *conn;
 struct sqlResult *sr;
 char **row;
 struct hash *hash = newHash(5);
-struct sqlConnection *conn = hAllocConn();
 boolean gotIt = TRUE, binned = FALSE;
+
+if (sameString(db, hGetDb()))
+    conn = hAllocConn();
+else if (sameString(db, hGetDb2()))
+    conn = hAllocConn2();
+else
+    {
+    hSetDb2(db);
+    conn = hAllocConn2();
+    }
 
 /* Read table description into hash. */
 sprintf(query, "describe %s", table);
@@ -755,9 +774,24 @@ else if (startsWith("chr", table) && endsWith(table, "_gl") && hashLookup(hash, 
 else
     gotIt = FALSE;
 freeHash(&hash);
-hFreeConn(&conn);
+if (sameString(db, hGetDb()))
+    hFreeConn(&conn);
+else
+    hFreeConn2(&conn);
 *retBinned = binned;
 return gotIt;
+}
+
+boolean hFindMoreFieldsAndBin(char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32],
+	char retName[32], char retStrand[32],
+	boolean *retBinned)
+/* Given a table return the fields for selecting chromosome, start, end,
+ * name, strand, and whether it's binned.  Name and strand may be "". */
+{
+return hFindMoreFieldsAndBinDb(hGetDb(),
+			       table, retChrom, retStart, retEnd,
+			       retName, retStrand, retBinned);
 }
 
 boolean hFindMoreFields(char *table, 
@@ -769,6 +803,17 @@ boolean hFindMoreFields(char *table,
 boolean isBinned;
 return hFindMoreFieldsAndBin(table, retChrom, retStart, retEnd, retName,
 			     retStrand, &isBinned);
+}
+
+boolean hFindMoreFieldsDb(char *db, char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32],
+	char retName[32], char retStrand[32])
+/* Given a table return the fields for selecting chromosome, start, end,
+ * name, strand.  Name and strand may be "". */
+{
+boolean isBinned;
+return hFindMoreFieldsAndBinDb(db, table, retChrom, retStart, retEnd,
+			       retName, retStrand, &isBinned);
 }
 
 boolean hFindFieldsAndBin(char *table, 
@@ -790,6 +835,17 @@ boolean isBinned;
 char retName[32], retStrand[32];
 return hFindMoreFieldsAndBin(table, retChrom, retStart, retEnd, retName,
 			     retStrand, &isBinned);
+}
+
+
+boolean hFindChromStartEndFieldsDb(char *db, char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32])
+/* Given a table return the fields for selecting chromosome, start, and end. */
+{
+boolean isBinned;
+char retName[32], retStrand[32];
+return hFindMoreFieldsAndBinDb(db, table, retChrom, retStart, retEnd,
+			       retName, retStrand, &isBinned);
 }
 
 
