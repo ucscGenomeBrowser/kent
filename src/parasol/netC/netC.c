@@ -32,20 +32,35 @@ int port = 0x46DC;
 char buf[512];
 int bufPos = 0;
 char *command = argv[0];
+int optVal = 1;
+int optLen = sizeof(optVal);
 
 /* Set up connection. */
+#ifdef OLD
 host = gethostbyname(hostName);
 if (host == NULL)
     {
     herror("");
     errAbort("Couldn't find host %s.  h_errno %d", hostName, h_errno);
     }
+#endif /* OLD */
 sai.sin_family = AF_INET;
 sai.sin_port = htons(port);
-memcpy(&sai.sin_addr.s_addr, host->h_addr_list[0], sizeof(sai.sin_addr.s_addr));
+// memcpy(&sai.sin_addr.s_addr, host->h_addr_list[0], sizeof(sai.sin_addr.s_addr));
+sai.sin_addr.s_addr = htonl(INADDR_BROADCAST);
+
 sd = socket(AF_INET, SOCK_DGRAM, 0);
+#ifdef OLD
 if (connect(sd, (struct sockaddr *)&sai, sizeof(sai)) == -1)
     errAbort("Couldn't connect to %s", hostName);
+#endif /* OLD */
+
+/* Set socket to broadcast. */
+if (setsockopt(sd, SOL_SOCKET, SO_BROADCAST, (char *)&optVal, optLen) != 0)
+    {
+    close(sd);
+    errAbort("Can't set broadcast option on socket\n");
+    }
 
 /* Put command line back together as one string. */
 memset(buf, 0, sizeof(buf));
@@ -64,7 +79,7 @@ for (i=0; i<argc; ++i)
     }
 
 /* Issue command. */
-if (send(sd, buf, sizeof(buf), 0) < 0)
+if (sendto(sd, buf, sizeof(buf), 0, (struct sockaddr *)&sai, sizeof(sai)) < 0)
     {
     perror("");
     errAbort("Couldn't write to %s", hostName);
@@ -80,6 +95,7 @@ int main(int argc, char *argv[])
 if (argc < 3)
     usage();
 netC(argv[1], argc-2, argv+2);
+return 0;
 }
 
 
