@@ -1409,7 +1409,7 @@ o - Rescuing STS track:
      - mv chrom.psl ../convert.psl
 
 
-LOAD SLAM GENES 
+LOAD SLAM GENES (hg12)
      cd /cluster/store3/gs.13/build30/bed/slam
      wget http://bio.math.berkeley.edu/slam/rat/gff/UCSC/rnCDS.gff.gz
      wget http://bio.math.berkeley.edu/slam/rat/gff/UCSC/rnCNS.gff.gz
@@ -1426,3 +1426,21 @@ LOAD SLAM GENES
      examine head and tail of sorted file for range of sizes
      rm rnCNS.bed.2.size.sort
      expand.pl < rnCNS.bed.2 > rnCNS.bed.2.expand
+
+SLAM (hg13)
+     cd /cluster/store4/rn1/bed/slam
+     mkdir hg13
+     cd hg13
+
+     wget http://baboon.math.berkeley.edu/~cdewey/slam/hs_31_Nov2002_rn_2_Nov2002/gff/rnCDS.gff.gz
+     gunzip rnCDS.gff.gz
+     mv rnCDS.gff ratFromHumanCDS.gff
+     ldHgGene -exon=CDS rn1 slamHuman
+
+     wget http://baboon.math.berkeley.edu/~scawley/slam/hs_31_Nov2002_rn_2_Nov2002/gff/rnCNS.bed.gz
+     gunzip rnCNS.bed.gz
+     mv rnCNS.bed ratFromHumanCNS.bed
+     expand.pl < ratFromHumanCNS.bed > ratFromHumanCNS.bed.expand
+     hgLoadBed -tab rn1 slamNonCodingHuman ratFromHumanCNS.bed.expand    
+
+     
