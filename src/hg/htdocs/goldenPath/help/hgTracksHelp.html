@@ -1110,8 +1110,8 @@ that correspond to the feature names in your web page.
 
 <P><B><I>Example:</I></B><BR>
 Here is an example of a file in which the <I>url</I> attribute has been set to
-point to the file <A HREF="http://genome-test.cse.ucsc.edu/clones.html"
-TARGET=_blank>http://genome-test.cse.ucsc.edu/clones.html</A>. The '#$$'
+point to the file <A HREF="http://genome-test.cse.ucsc.edu/goldenPath/help/clones.html"
+TARGET=_blank>http://genome-test.cse.ucsc.edu/goldenPath/help/clones.html</A>. The '#$$'
 appended to the end of the file name in the example points to the HTML NAME tag within the file that 
 matches the name of the feature (cloneA, cloneB, etc.). 
 NOTE: The track line in this example has been split over 2 lines for 
@@ -1121,7 +1121,7 @@ the browser, you must remove the line break to display the track successfully.
 <PRE><TT>browser position chr22:1000-10000
 browser hide all
 track name=clones description="Clones" visibility=2
-color=0,128,0 useScore=1 url="http://genome-test.cse.ucsc.edu/clones.html#$$"
+color=0,128,0 useScore=1 url="http://genome-test.cse.ucsc.edu/goldenPath/help/clones.html#$$"
 chr22 1000 5000 cloneA 960 
 chr22 2000 6000 cloneB 200 
 chr22 5000 9000 cloneC 700 
@@ -1156,8 +1156,10 @@ Examples of this include: db=hg11 (Human April 2002 freeze), db=mm2 (Mouse Feb 2
 coordinates. Examples of this include: position=chr22, position=chr22:15916196-31832390.
 <LI>The URL of the annotation file on your web site. This information is
 of the form <tt>hgt.customText=URL</tt>, where
-<I>URL</I> points to the annotation file on your website. An example of an annotation file URL is <font color="000099"><A HREF="http://genome-test.cse.ucsc.edu/test.bed"
-TARGET=_blank>http://genome-test.cse.ucsc.edu/test.bed</A></font>.  
+<I>URL</I> points to the annotation file on your website. An example of an
+annotation file URL is <font color="000099"><A
+HREF="http://genome-test.cse.ucsc.edu/goldenPath/help/test.bed"
+TARGET=_blank>http://genome-test.cse.ucsc.edu/goldenPath/help/test.bed</A></font>.  
 </UL>
 
 <P>Combine the above pieces of information into a URL of the following
@@ -1168,10 +1170,11 @@ color="000099"><I>chr_position</I></font>&amp;hgt.customText=<font color="000099
 
 <P><B><I>Example:</I></B><BR>
 The following URL will open up the Genome Browser window to display chr 22 of the April 2002 freeze of the 
-human genome (hg11), and will display the annotation track pointed to by the URL http://genome.ucsc.edu/test.bed:<BR><BR>
+human genome (hg11), and will display the annotation track pointed to by the URL
+http://genome.ucsc.edu/goldenPath/help/test.bed:<BR><BR>
 
 <font color="000099"><A HREF="
-http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg11&amp;position=chr22&amp;hgt.customText=http://genome-test.cse.ucsc.edu/test.bed"><tt>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg11&amp;position=chr22&amp;<br>hgt.customText=http://genome-test.cse.ucsc.edu/test.bed</tt></A></font><BR><BR>
+http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg11&amp;position=chr22&amp;hgt.customText=http://genome-test.cse.ucsc.edu/goldenPath/help/test.bed"><tt>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg11&amp;position=chr22&amp;<br>hgt.customText=http://genome-test.cse.ucsc.edu/goldenPath/help/test.bed</tt></A></font><BR><BR>
 
 <P>If you'd like to share your annotation track with a broader audience, send the URL for your track - along with a description of 
 the format, methods, and data used - to the UCSC Genome mailing list 
