@@ -390,7 +390,7 @@ void loadPsl(struct track *tg)
 lfFromPslsInRange(tg, winStart,winEnd, chromName, FALSE, FALSE, 1);
 }
 
-static void loadProteinPsl(struct track *tg)
+void loadProteinPsl(struct track *tg)
 /* load up all of the psls from correct table into tg->items item list*/
 {
 lfFromPslsInRange(tg, winStart,winEnd, chromName, TRUE, FALSE, 3);
