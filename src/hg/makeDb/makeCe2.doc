@@ -3,7 +3,7 @@ exit; # don't actually run this like a script :)
 
 # This file describes how to make the browser database for the
 # worm C. elegans
-# 2004-03-30 [in progress, hartera]
+# 2004-03-30 [DONE, 2004-05-20, hartera]
 
 # DOWNLOAD SEQUENCE (DONE, 2004-03-31, hartera)
 
@@ -2128,15 +2128,15 @@ rmdir --ignore-fail-on-non-empty /tmp/pHMMCe1
     mkdir /gbdb/ce2/wib/pHMMCb1
     ln -s `pwd`/wib/chr*_phyloHMMcons.wib /gbdb/ce2/wib/pHMMCb1
 
-
-######## MAKING FAMILY BROWSER TABLES #### (in progress - 2004-05-21 - hartera)
+######## MAKING GENE SORTER TABLES #### (DONE - 2004-05-27 - hartera)
 # These are instructions for building the
 # neighborhood browser.  Don't start these until
 # there is a sangerGene table with a proteinID column containing Swiss-Prot
 # protein IDs, and also Kim lab expression data is required (in hgFixed).
 
     # Cluster together various alt-splicing isoforms.
-    #       Creates the sangerIsoforms and sangerCanonical tables
+    # Creates the sangerIsoforms and sangerCanonical tables
+    # (DONE, 2004-05-21, hartera)
     ssh hgwdev
     hgClusterGenes ce2 sangerGene sangerIsoforms sangerCanonical
     # You may need to build this binary in src/hg/near/hgClusterGenes
@@ -2145,5 +2145,99 @@ rmdir --ignore-fail-on-non-empty /tmp/pHMMCe1
     # 54156601 bases of 100291761 (53.999%) in intersection
     # featureBits ce1 sangerCanonical 
     # 53654286 bases of 100277784 (53.506%) in intersection
+
+    # Create Self blastp table - sangerBlastTab (DONE, 2004-05-24, hartera)
+    # Get sangerPep peptide sequences fasta file from sangerPep dir
+    # and create a blast database out of them.
+    mkdir -p /cluster/data/ce2/bed/blastp
+    cd /cluster/data/ce2/bed/blastp
+    mv /cluster/data/ce2/bed/sangerPep/wormPep120 wormPep120.faa
+    
+    formatdb -i wormPep120.faa -t wormPep120 -n wormPep120
+    # This command is in /projects/compbio/bin/$MACH/formatdb
+
+    # Copy database over to iscratch
+    ssh kkr1u00
+    mkdir -p mkdir -p /iscratch/i/ce2/blastp
+    cp /cluster/data/ce2/bed/blastp/wormPep120.* /iscratch/i/ce2/blastp
+    iSync
+    # Blastall and Data directory are already in /iscratch/i/blast/
+    # From the dates, this looks to be the same versio as in
+    # /projects/compbio/bin/i686/
+    # Split up fasta file into bite sized chunks for cluster
+    cd /cluster/data/ce2/bed/blastp
+    mkdir split
+    faSplit sequence wormPep120.faa 8000 split/wp
+
+    # Make parasol run directory 
+    ssh kk
+    mkdir -p /cluster/data/ce2/bed/blastp/self
+    cd /cluster/data/ce2/bed/blastp/self
+    mkdir run
+    cd run
+    mkdir out
+
+# Make blast script
+    cat  << '_EOF_' > blastSome
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/ce2/blastp/wormPep120 \
+-i $1 -o $2 -e 0.01 -m 8 -b 1000
+'_EOF_'
+     chmod a+x blastSome
+     # Make gensub2 file
+     cat  << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+     # Create parasol batch
+     # 'ls ../../split/*.fa' is too long an argument list, hence the echo
+
+     echo ../../split/*.fa | wordLine stdin > split.lst
+     gensub2 split.lst single gsub jobList
+     para create jobList
+     para try
+# Wait a minute, and do a para check,  if all is good
+# then do a
+     para push, para check etc.
+# para time
+# Completed: 6684 of 6684 jobs
+# CPU time in finished jobs:      35657s     594.28m     9.90h    0.41d  0.001 y
+# IO & Wait Time:                 27262s     454.37m     7.57h    0.32d  0.001 y
+# Average job time:                   9s       0.16m     0.00h    0.00d
+# Longest job:                      193s       3.22m     0.05h    0.00d
+# Submission to last job:           302s       5.03m     0.08h    0.00d
+
+    # Load into database.  
+    ssh hgwdev
+    cd /cluster/data/ce2/bed/blastp/self/run/out
+    hgLoadBlastTab ce2 knownBlastTab *.tab
+
+# CREATE EXPRESSION DISTANCE TABLES FOR  
+# KIM LAB EXPRESSION DATA (DONE, 2004-05-24, hartera) 
+hgExpDistance ce2 hgFixed.kimWormLifeMedianRatio \
+              hgFixed.kimWormLifeMedianExps kimExpDistance
+
+# CREATE TABLE TO MAP BETWEEN SANGERGENES AND REFSEQ GENES
+# sangerToRefSeq (DONE, 2004-05-24, hartera)
+hgMapToGene ce2 refGene sangerGene sangerToRefSeq
+
+# CREATE TABLE TO MAP BETWEEN SANGER GENES AND PFAM DOMAINS
+# sangerToPfam (DONE, 2004-05-24, hartera)
+hgMapViaSwissProt ce2 sangerGene name proteinID Pfam knownToPfam
+
+# CREATE MAPPING OF SANGER GENES TO KIM LAB EXPRESSION DATA GENES 
+# sangerToKim (DONE, 2004-05-27, hartera)
+# This is actually a mapping of the sangerGene table to itself - 
+# this is how this table was created for ce1.
+# This means that many gene names (4614/19134) in kimWormLifeAllRatio 
+# do not appear in sangerGene but when randomly checking some of these, 
+# it was found they are not in WS120 WormBase and probably represent 
+# alternate names or names that no longer exist or withdrawn sequences.
+hgMapToGene ce2 sangerGene sangerGene sangerToKim
+
+
+
 
 
