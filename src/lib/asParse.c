@@ -5,7 +5,7 @@
 #include "tokenizer.h"
 #include "asParse.h"
 
-static char const rcsid[] = "$Id: asParse.c,v 1.1 2004/03/22 14:17:09 kent Exp $";
+static char const rcsid[] = "$Id: asParse.c,v 1.2 2004/05/19 23:53:59 angie Exp $";
 
 struct asTypeInfo asTypes[] = {
     {t_double,  "double",  FALSE, FALSE, "double",           "double",        "Double", "Double", "%f"},
@@ -147,7 +147,7 @@ for (;;)
 	tokenizerMustMatch(tkz, ";");
 	col->comment = cloneString(tkz->string);
 	tokenizerMustHaveNext(tkz);
-	if (col->lowType->type == t_char)
+	if (col->lowType->type == t_char && col->fixedSize != 0)
 	    {
 	    col->isList = FALSE;	/* It's not really a list... */
 	    }
