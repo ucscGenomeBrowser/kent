@@ -142,9 +142,13 @@ if (NULL == genome)
 /* Get proper default from defaultDb table */
 sprintf(query, "select * from defaultDb where genome = '%s'", genome);
 sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+if ((row = sqlNextRow(sr)) != NULL)
     {
     db = defaultDbLoad(row);
+    }
+if (db == NULL)
+    {
+    errAbort("Can't find genome \"%s\" in central database table defaultDb.\n", genome);
     }
 
 sqlFreeResult(&sr);
