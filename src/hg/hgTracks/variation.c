@@ -115,7 +115,6 @@ for (snpFunc=0; snpFunc<snpFuncCartSize; snpFunc++)
 return FALSE;
 }
 
-
 void loadSnpMap(struct track *tg)
 /* Load up snpMap from database table to track items. */
 {
@@ -152,7 +151,7 @@ for (snpValid=0;   snpValid   < snpValidCartSize; snpValid++)
 for (snpFunc=0;    snpFunc    < snpFuncCartSize; snpFunc++)
     snpFuncCart[snpFunc] = cartUsualString(cart, snpFuncStrings[snpFunc], snpFuncDefault[snpFunc]);
 bedLoadItem(tg, "snp", (ItemLoader)snpLoad);
-
+//return;
 filterSnpItems(tg, snpSourceFilterItem);
 filterSnpItems(tg, snpMolTypeFilterItem);
 filterSnpItems(tg, snpClassFilterItem);
@@ -206,7 +205,7 @@ char  *funcString = NULL;
 int    snpValid = 0;
 int    snpFunc = 0;
 
-switch (stringArrayIx(snpColorSource, snpColorSourceLabel, snpColorSourceLabelSize))
+switch (stringArrayIx(snpColorSource, snpColorSourceLabels, snpColorSourceLabelsSize))
     {
     case snpColorSourceSource:
 	thisSnpColor=(enum snpColorEnum)stringArrayIx(snpSourceCart[stringArrayIx(el->source,snpSourceDataName,snpSourceDataNameSize)],snpColorLabel,snpColorLabelSize);
@@ -262,12 +261,15 @@ struct snpMap *sm = item;
 int heightPer = tg->heightPer;
 int x1 = round((double)((int)sm->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)((int)sm->chromEnd-winStart)*scale) + xOff;
+int w = x2-x1;
 Color itemColor = tg->itemColor(tg, sm, vg);
 
-vgBox(vg, x1, y, 1, heightPer, itemColor);
+if ( w<1 )
+    w=1;
+vgBox(vg, x1, y, w, heightPer, itemColor);
 /* Clip here so that text will tend to be more visible... */
 if (tg->drawName && vis != tvSquish)
-    mapBoxHc(sm->chromStart, sm->chromEnd, x1, y, x2 - x1, heightPer,
+    mapBoxHc(sm->chromStart, sm->chromEnd, x1, y, w, heightPer,
 	     tg->mapName, tg->mapItemName(tg, sm), NULL);
 }
 
@@ -280,12 +282,15 @@ struct snp *s = item;
 int heightPer = tg->heightPer;
 int x1 = round((double)((int)s->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)((int)s->chromEnd-winStart)*scale) + xOff;
+int w = x2-x1;
 Color itemColor = tg->itemColor(tg, s, vg);
 
-vgBox(vg, x1, y, 1, heightPer, itemColor);
+if ( w<1 || sameString(s->locType,"between") )
+    w=1;
+vgBox(vg, x1, y, w, heightPer, itemColor);
 /* Clip here so that text will tend to be more visible... */
 if (tg->drawName && vis != tvSquish)
-    mapBoxHc(s->chromStart, s->chromEnd, x1, y, x2 - x1, heightPer,
+    mapBoxHc(s->chromStart, s->chromEnd, x1, y, w, heightPer,
 	     tg->mapName, tg->mapItemName(tg, s), NULL);
 }
 
@@ -527,7 +532,6 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	drawScaledBox(vg, s, e, scale, xOff, y+((tg->heightPer-heightPer)/2), heightPer, blackIndex());
     }
 }
-
 
 void haplotypeMethods(struct track *tg)
 /* setup special methods for haplotype track */
