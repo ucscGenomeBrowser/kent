@@ -14,7 +14,7 @@
 #include "hdb.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: joining.c,v 1.14 2004/07/18 01:09:10 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.15 2004/07/18 02:29:03 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -579,16 +579,22 @@ static struct joinerField *findJoinerField(struct joinerSet *js,
 /* Find field in set if any that matches dtf */
 {
 struct joinerField *jf;
-for (jf = js->fieldList; jf != NULL; jf = jf->next)
-     {
-     if (sameString(dtf->table, jf->table) && sameString(dtf->field, jf->field))
-         {
-	 if (slNameInList(jf->dbList, dtf->database))
-	     return jf;
+while (js != NULL)
+    {
+    for (jf = js->fieldList; jf != NULL; jf = jf->next)
+	 {
+	 if (sameString(dtf->table, jf->table) && sameString(dtf->field, jf->field))
+	     {
+	     if (slNameInList(jf->dbList, dtf->database))
+		 return jf;
+	     }
 	 }
-     }
+    js = js->parent;
+    }
 return NULL;
 }
+
+
 
 struct joinedTables *joinedTablesCreate( struct joiner *joiner, 
 	char *primaryDb, char *primaryTable,
