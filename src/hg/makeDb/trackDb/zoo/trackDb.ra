@@ -227,7 +227,7 @@ type sample
 
 track footPrinterHMR
 shortLabel FootPrinterHMR
-longLabel FootPrinter Conservation Score, Human/Mouse/Rat
+longLabel Human/Mouse/Rat FootPrinter Conservation Score
 group compGeno
 priority 24
 altColor 0,160,0
@@ -259,7 +259,7 @@ type sample 500 1000
 
 track blastzStrictChainHuman
 shortLabel Blastz Human
-longLabel Strict Chain Blastz Human Alignments
+longLabel Human Strict Chain Blastz Alignments
 group compGeno
 priority 26
 visibility hide
@@ -271,7 +271,7 @@ otherDb zooHuman3
 
 track blastzStrictChainChimp
 shortLabel Blastz Chimp
-longLabel Strict Chain Blastz Chimp Alignments
+longLabel Chimp Strict Chain Blastz Alignments
 group compGeno
 priority 27
 visibility hide
@@ -283,7 +283,7 @@ otherDb zooChimp3
 
 track blastzStrictChainBaboon
 shortLabel Blastz Baboon
-longLabel Strict Chain Blastz Baboon Alignments
+longLabel Baboon Strict Chain Blastz Alignments
 group compGeno
 priority 28
 visibility hide
@@ -295,7 +295,7 @@ otherDb zooBaboon3
 
 track blastzStrictChainCat
 shortLabel Blastz Cat
-longLabel Strict Chain Blastz Cat Alignments
+longLabel Cat Strict Chain Blastz Alignments
 group compGeno
 priority 29
 visibility hide
@@ -307,7 +307,7 @@ otherDb zooCat3
 
 track blastzStrictChainDog
 shortLabel Blastz Dog
-longLabel Strict Chain Blastz Dog Alignments
+longLabel Dog Strict Chain Blastz Alignments
 group compGeno
 priority 30
 visibility hide
@@ -319,7 +319,7 @@ otherDb zooDog3
 
 track blastzStrictChainCow
 shortLabel Blastz Cow
-longLabel Strict Chain Blastz Cow Alignments
+longLabel Cow Strict Chain Blastz Alignments
 group compGeno
 priority 31
 visibility hide
@@ -331,7 +331,7 @@ otherDb zooCow3
 
 track blastzStrictChainPig
 shortLabel Blastz Pig
-longLabel Strict Chain Blastz Pig Alignments
+longLabel Pig Strict Chain Blastz Alignments
 group compGeno
 priority 32
 visibility hide
@@ -343,7 +343,7 @@ otherDb zooPig3
 
 track blastzStrictChainRat
 shortLabel Blastz Rat
-longLabel Strict Chain Blastz Rat Alignments
+longLabel Rat Strict Chain Blastz Alignments
 group compGeno
 priority 33
 visibility hide
@@ -355,7 +355,7 @@ otherDb zooRat3
 
 track blastzStrictChainMouse
 shortLabel Blastz Mouse
-longLabel Strict Chain Blastz Mouse Alignments
+longLabel Mouse Strict Chain Blastz Alignments
 group compGeno
 priority 34
 visibility hide
@@ -367,7 +367,7 @@ otherDb zooMouse3
 
 track blastzStrictChainChicken
 shortLabel Blastz Chicken
-longLabel Strict Chain Blastz Chicken Alignments
+longLabel Chicken Strict Chain Blastz Alignments
 group compGeno
 priority 35
 visibility hide
@@ -379,7 +379,7 @@ otherDb zooChicken3
 
 track blastzStrictChainFugu
 shortLabel Blastz Fugu
-longLabel Strict Chain Blastz Fugu Alignments
+longLabel Fugu Strict Chain Blastz Alignments
 group compGeno
 priority 36
 visibility hide
@@ -391,7 +391,7 @@ otherDb zooFugu3
 
 track blastzStrictChainTetra
 shortLabel Blastz Tetra
-longLabel Strict Chain Blastz Tetra Alignments
+longLabel Tetra Strict Chain Blastz Alignments
 group compGeno
 priority 37
 visibility hide
@@ -403,7 +403,7 @@ otherDb zooTetra3
 
 track blastzStrictChainZebrafish
 shortLabel Blastz Zebrafish
-longLabel Strict Chain Blastz Zebrafish Alignments
+longLabel Zebrafish Strict Chain Blastz Alignments
 group compGeno
 priority 38
 visibility hide

@@ -40,7 +40,7 @@ type maf
 
 track chainDp1
 shortLabel D. pseud. Chain
-longLabel D. pseudoobscura (Aug. 2003/dp1) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
 group compGeno
 priority 133
 visibility hide
@@ -52,7 +52,7 @@ otherDb dp1
 
 track netDp1
 shortLabel D. pseud. Net
-longLabel D. pseudoobscura (Aug. 2003/dp1) Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 134
 visibility hide
@@ -62,17 +62,18 @@ otherDb dp1
 
 track axtNetDp1
 shortLabel D. pseud. Aligns
-longLabel D. pseudoobscura (Aug. 2003/dp1) Blastz Alignments from Net
+longLabel $o_Organism ($o_date/$o_db) Blastz Alignments from Net
 group compGeno
 priority 135
 visibility hide
 color 100,50,0
 altColor 128,120,100
 type axt dp1
+otherDb dp1
 
 track chainDroYak1
 shortLabel D. yakuba Chain
-longLabel D. yakuba (Apr. 2004/droYak1) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
 group compGeno
 priority 135
 visibility hide
@@ -84,7 +85,7 @@ otherDb droYak1
 
 track netDroYak1
 shortLabel D. yakuba Net
-longLabel D. yakuba (Apr. 2004/droYak1) Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 136
 visibility hide
@@ -94,7 +95,7 @@ otherDb droYak1
 
 track chainAnoGam1
 shortLabel Anopheles Chain
-longLabel Anopheles (Apr. 2004/anoGam1) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
 group compGeno
 priority 132.1
 visibility hide
@@ -106,7 +107,7 @@ otherDb anoGam1
 
 track netAnoGam1
 shortLabel Anopheles Net
-longLabel Anopheles (Apr. 2004/anoGam1) Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 132.2
 visibility hide
@@ -116,18 +117,19 @@ otherDb anoGam1
 
 track anophelesEcores
 shortLabel Anopheles Ecores
-longLabel Fruitfly/Anopheles Evolutionary Conserved Regions
+longLabel Fruitfly/$o_Organism ($o_date/$o_db) Evolutionary Conserved Regions
 group compGeno
 priority 132.05
 visibility dense
 color 0,60,120
 altColor 200,220,255
 type bed 12 .
+otherDb anoGam1
 url http://www.genoscope.cns.fr/comparative?premier=Drosophila&deuxieme=Anopheles&position=$$
 
 track phastCons
-shortLabel phastCons 
-longLabel phastCons Conservation Score, melanogaster/yakuba/pseudoobscura
+shortLabel PhastCons 
+longLabel PhastCons Conservation Score, melanogaster/yakuba/pseudoobscura
 group compGeno
 priority 103
 visibility hide
@@ -137,8 +139,8 @@ type wig 0.0 1.0
 autoScaleDefault off
 
 track phastConsElements
-shortLabel phastConsElements
-longLabel phastCons Conserved Elements, melanogaster/yakuba/pseudoobscura
+shortLabel PhastConsElements
+longLabel PhastCons Conserved Elements, melanogaster/yakuba/pseudoobscura
 group compGeno
 priority 105
 visibility hide
@@ -149,8 +151,8 @@ exonArrows off
 type bed 12 .
 
 track phastCons4wayElements
-shortLabel phastCons4wayElements
-longLabel phastCons4way Conserved Elements, melanogaster/yakuba/pseudoobscura/anopheles
+shortLabel PhastCons4wayElements
+longLabel PhastCons4way Conserved Elements, melanogaster/yakuba/pseudoobscura/anopheles
 group compGeno
 priority 105
 visibility hide

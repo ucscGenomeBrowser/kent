@@ -26,7 +26,7 @@ type bed 3 +
 
 track blastzHg17
 shortLabel Human Blastz
-longLabel Blastz Human (hg17-May 04) Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
 group compGeno
 priority 124.1
 visibility hide
@@ -38,7 +38,7 @@ otherDb hg17
 
 track chainHg17
 shortLabel Human Chain
-longLabel Chained Human (hg17)/Zebrafish Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 124.2
 visibility hide
@@ -50,7 +50,7 @@ otherDb hg17
 
 track blastzFr1
 shortLabel Fugu Blastz
-longLabel Blastz Fr1 (fr1-Aug 02) Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
 group compGeno
 priority 125.1
 visibility hide
@@ -62,7 +62,7 @@ otherDb fr1
 
 track chainFr1
 shortLabel Fugu Chain
-longLabel Chained Fugu (fr1)/Zebrafish Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 125.2
 visibility hide
@@ -74,7 +74,7 @@ otherDb fr1
 
 track netFr1
 shortLabel Fugu Net
-longLabel Fugu (fr1)/Zebrafish Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 125.3
 visibility hide
@@ -84,7 +84,7 @@ otherDb fr1
 
 track affyZebrafish
 shortLabel Affy Zebrafish
-longLabel Alignments of Affymetrix Consensus Sequences from Zebrafish chip
+longLabel Alignments of Affymetrix Consensus Sequences from Zebrafish Chip
 group regulation
 priority 80
 visibility hide

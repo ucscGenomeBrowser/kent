@@ -18,7 +18,7 @@ type bed 3 +
 
 track chainHg16
 shortLabel Human Chain 
-longLabel Chained (July 2003 - hg16) Human/$Organism Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 125
 visibility hide
@@ -30,7 +30,7 @@ otherDb hg16
 
 track netHg16
 shortLabel Human Net
-longLabel (July 2003 - hg16) Human/$Organism Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 126
 visibility dense
@@ -40,7 +40,7 @@ otherDb hg16
 
 track netSyntenyHg16
 shortLabel Human Synteny
-longLabel (July 2003 - hg16) Human/$Organism Synteny Using Chained/Netted Blastz
+longLabel Human (July 2003/hg16) Synteny Using Chained/Netted Blastz
 group compGeno
 priority 127
 visibility hide
@@ -49,8 +49,8 @@ altColor 255,240,200
 type netAlign hg16 chainHg16
 
 track blastzBestHg16
-shortLabel Human axtBest
-longLabel Blastz Human(July 2003 - hg16) Human/$Organism AxtBest
+shortLabel Human AxtBest
+longLabel Human (July 2003/hg16) Blastz AxtBest
 group compGeno
 priority 128
 visibility hide
@@ -102,7 +102,7 @@ type bed 6
 
 track blatFr1
 shortLabel Fugu Blat
-longLabel Takifugu rubripes (fr1) Translated Blat Alignments
+longLabel $o_Organism ($o_date/$o_db) Translated Blat Alignments
 group compGeno
 priority 110
 visibility dense
@@ -110,6 +110,7 @@ color 0,60,120
 altColor 200,220,255
 spectrum on
 type psl xeno
+otherDb fr1
 
 track uniGene_gg
 shortLabel UniGene

@@ -52,7 +52,7 @@ type bed 5
 
 track blastzMm2
 shortLabel Blastz Mouse
-longLabel Merged Blastz Mouse (Feb. 02) Alignments
+longLabel $o_Organism ($o_date/$o_db) Merged Blastz Alignments
 group compGeno
 priority 130
 visibility hide
@@ -88,7 +88,7 @@ url http://www.eva.mpg.de/genetics/annotation_track_chimp/custom_track_chimp/Rik
 
 track aarMm2
 shortLabel Ancient Repeats
-longLabel Aligned Human/Mouse (Feb. 02) Ancient Repeats
+longLabel Human/$o_Organism ($o_date/$o_db) Aligned Ancient Repeats
 group x
 priority 159
 visibility hide
@@ -111,7 +111,7 @@ type bed 4 .
 
 track blastzBestHuman
 shortLabel Best Human 
-longLabel Blastz Human Best in Genome Alignments
+longLabel Human Blastz Best-in-Genome Alignments
 group varRep
 priority 146.2
 visibility hide
@@ -123,7 +123,7 @@ otherDb mm2
 
 track blastzBestMouse
 shortLabel Best Mouse 
-longLabel Blastz Mouse (Feb. 02) Best in Genome Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Best in Genome Alignments
 group compGeno
 priority 126
 visibility dense
@@ -135,7 +135,7 @@ otherDb mm2
 
 track blastzHuman
 shortLabel Blastz Human
-longLabel Blastz Human Alignments
+longLabel Human Blastz Alignments
 group varRep
 priority 146.3
 visibility hide
@@ -147,7 +147,7 @@ otherDb hg12
 
 track blastzRecipBest
 shortLabel Reciprocal Best
-longLabel Blastz Reciprocal Best Human Mouse (Feb. 02)
+longLabel $o_Organism ($o_date/$o_db) Blastz Reciprocal Best 
 group compGeno
 priority 125
 visibility hide
@@ -159,7 +159,7 @@ otherDb mm2
 
 track blastzTightMouse
 shortLabel Tight Mouse 
-longLabel Blastz Mouse (Feb. 02), Tight Subset of Best Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Best Alignments
 group compGeno
 priority 123
 visibility hide
@@ -171,7 +171,7 @@ otherDb mm2
 
 track blatMus
 shortLabel Mouse Blat
-longLabel Mouse (Feb. 02) Translated Blat Alignments
+longLabel $o_Organism ($o_date/$o_db) Translated Blat Alignments
 group compGeno
 priority 120
 visibility hide

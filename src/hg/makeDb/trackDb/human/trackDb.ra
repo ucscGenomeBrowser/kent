@@ -358,14 +358,14 @@ altColor 200,220,255
 spectrum on
 type bed 5
 
-
 track chimpSimpleDiff
 shortLabel Chimp Diff
-longLabel Chimp Simple Differences in Regions of High Quality Sequence
+longLabel $o_Organism ($o_date/$o_db) Simple Differences in Regions of High Quality Sequence
 group compGeno
 priority 206
 visibility hide
 type bed 3+
+otherDb panTro1
 
 track snpMap
 shortLabel SNPs

@@ -18,7 +18,7 @@ type bed 3 +
 
 track chainHg16
 shortLabel Human Chain 
-longLabel Chained Human (July 2003/hg16) Alignments
+longLabel Chained $o_Organism ($o_date/$o_db) Alignments
 group compGeno
 priority 125
 visibility hide
@@ -30,7 +30,7 @@ otherDb hg16
 
 track netHg16
 shortLabel Human Net
-longLabel Human (July 2003/hg16) Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 126
 visibility dense

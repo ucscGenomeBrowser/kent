@@ -877,7 +877,7 @@ type psl xeno
 
 track blatFr1
 shortLabel Fugu Blat
-longLabel Fugu (fr1-Aug 02) Translated Blat Alignments
+longLabel $o_Organism ($o_date/$o_db) Translated Blat Alignments
 group compGeno
 priority 113
 visibility dense
