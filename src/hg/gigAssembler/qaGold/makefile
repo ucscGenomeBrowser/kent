@@ -1,14 +1,14 @@
-include ../../inc/common.mk
+include ../../../inc/common.mk
 
 
 L = -lm
-MYLIBDIR = ../../lib/$(MACHTYPE)
+MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = qaGold.o
 
-qaGold: $O ../../lib/$(MACHTYPE)/jkweb.a 
+qaGold: $O ../../../lib/$(MACHTYPE)/jkweb.a 
 	gcc -O -o $(HOME)/bin/$(MACHTYPE)/qaGold $O $(MYLIBS) $L
 
 lib:
-	cd ../../lib; make
+	cd ../../../lib; make

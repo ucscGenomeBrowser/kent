@@ -1,14 +1,14 @@
-include ../../inc/common.mk
+include ../../../inc/common.mk
 
 
 L = -lm
-MYLIBDIR = ../../lib/$(MACHTYPE)
+MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = makePai.o 
 
-makePai: $O ../../lib/$(MACHTYPE)/jkweb.a
+makePai: $O ../../../lib/$(MACHTYPE)/jkweb.a
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/makePai $O $(MYLIBS) $L
 
 lib:
-	cd ../../lib; make
+	cd ../../../lib; make

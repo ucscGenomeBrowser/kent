@@ -1,8 +1,8 @@
-include ../../inc/common.mk
+include ../../../inc/common.mk
 
 
 L = -lm
-MYLIBDIR = ../../lib/$(MACHTYPE)
+MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = ooNtInput.o
@@ -13,5 +13,5 @@ ooNtInput: $O $(MYLIBS)
 
 
 lib:
-	cd ../lib; make
 	cd ../../lib; make
+	cd ../../../lib; make

@@ -1,4 +1,4 @@
-include ../../../inc/common.mk
+include ../../../../inc/common.mk
 
 L = -lm
 MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
@@ -11,5 +11,5 @@ ooGreedy.84:
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/ooGreedy.84 ooGreedy.o $(MYLIBS) $L
 
 lib:
-	cd ../lib; make
 	cd ../../lib; make
+	cd ../../../lib; make

@@ -1,7 +1,7 @@
-include ../../../inc/common.mk
+include ../../../../inc/common.mk
 
 L = -lm
-MYLIBDIR = ../../../lib/$(MACHTYPE)
+MYLIBDIR = ../../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = ppSanger.o sangInsert.o sangRange.o sangRead.o
@@ -12,5 +12,5 @@ ppSanger: $O $(MYLIBS)
 
 
 lib:
-	cd ../lib; make
 	cd ../../lib; make
+	cd ../../../lib; make

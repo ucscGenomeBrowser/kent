@@ -23,7 +23,6 @@ BAD_DIRS = \
 	geneOverlap \
 	hgBatch \
 	makeSeqs \
-	ooCloneOverlaps \
 	oneShot \
 	orthoMap \
 	synMap \
@@ -93,15 +92,6 @@ DIRS = \
 	borfBig \
 	cartDump \
 	cartReset \
-	checkAgpAndFa \
-	checkDbSync \
-	checkGoldDupes \
-	checkN \
-	checkNt \
-	checkOut \
-	checkPsl \
-	checkQa \
-	checkYbr \
 	cmParse \
 	cmpMap \
 	ctgFaToFa \
@@ -116,14 +106,12 @@ DIRS = \
 	fragPart \
 	g2gOverlap \
 	g2gSeqOverlap \
-	gapper \
 	gbOneAcc \
 	gbToFaRa \
 	geneBounds \
 	getFeatDna \
 	getRna \
 	getRnaPred \
-	goldToAgp \
 	gpStats \
 	gpToGtf \
 	gpcrParser \
@@ -146,25 +134,11 @@ DIRS = \
 	makeDb \
 	maskOutFa \
 	mdToNcbiLift \
-	mendMap \
 	mouseStuff \
 	mrnaToGene \
 	nci60 \
-	ntGoldGl \
-	ooChains \
-	ooCloneEnds \
-	ooCloneInfo \
-	ooCloneSizes \
-	ooCloneSpan \
-	ooGreedy \
-	ooLiftSpec \
-	ooNtInput \
 	ooSplitFins \
-	ooTester \
-	ooWeedZero \
-	pairedReads \
 	patCount \
-	psLayout \
 	pslCat \
 	pslCheck \
 	pslCoverage \
@@ -180,7 +154,6 @@ DIRS = \
 	pslSortAcc \
 	pslSwap \
 	pslUnpile \
-	qaGold \
 	qaToQac \
 	qacToQa \
 	ratStuff \
