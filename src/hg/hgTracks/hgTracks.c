@@ -45,7 +45,6 @@
 #include "stsMap.h"
 #include "mouseSyn.h"
 #include "knownMore.h"
-#include "exprBed.h"
 #include "estPair.h"
 #include "customTrack.h"
 #include "trackDb.h"
@@ -5287,6 +5286,7 @@ else
 }
 
 Color nci60Color(struct trackGroup *tg, void *item, struct memGfx *mg ) 
+/* Does the score->color conversion for various microarray tracks */
 {
 struct linkedFeatures *lf = item;
 float val = lf->score;
@@ -5471,7 +5471,6 @@ tg->loadItems = loadMultScoresBed;
 tg->trackFilter = lfsFromCghNci60Bed;
 }
 
-
 void perlegenMethods(struct trackGroup *tg)
 /* setup special methods for haplotype track */
 {
@@ -5479,88 +5478,6 @@ tg->drawItems = perlegenLinkedFeaturesDraw;
 tg->itemName = perlegenName;
 tg->colorShades = shadesOfSea;
 }
-
-int calcExprBedFullSize(struct exprBed  *exp) 
-/* Because exprBedItemHeight and exprBedTotalHeight are also
-used to center the labels on the left hand side
-it was necessary to write this function which is essentially
-a duplication of exprBedTotalHeight */
-{
-if(exp != NULL) 
-    return 2*exp->numExp;
-else
-    return 0;
-}
-
-char *abbrevExprBedName(char *name)
-{
-static char abbrev[32];
-char *ret;
-strncpy(abbrev, name, sizeof(abbrev));
-abbr(abbrev, "LINK_Em:");
-ret = strstr(abbrev, "_");
-ret++;
-return ret;
-}
-
-char *exprBedName(struct trackGroup *tg, void *item) 
-/* Return Name minus LINK_Em:_CloneName_. */
-{
-struct exprBed *exp = item;
-char *full = exp->name;
-return abbrevExprBedName(full);
-}
-
-char* exprBedItemName(struct trackGroup *tg, void *item)
-/* Checks to make sure there is enough room for the next item 
-   and returns the name if there is */
-{
-int maxHeight = tg->totalHeight(tg, tg->limitedVis);
-int numItems = slCount(tg->items);
-if(tg->items != item) 
-    return cloneString("");
-else 
-    return cloneString(tg->shortLabel);
-}
-
-static int exprBedItemHeight(struct trackGroup *tg, void *item)
-/* Return item height for fixed height track. */
-{
-int minHeight;
-struct exprBed *exp = item;
-if(tg->limitedVis == tvFull) 
-    minHeight = calcExprBedFullSize(exp);
-else 
-    minHeight = mgFontLineHeight(tl.font);
-
-if(tg->items == item) 
-    return minHeight;
-else 
-    return 0;
-}
-
-static int exprBedTotalHeight(struct trackGroup *tg, enum trackVisibility vis)
-/* exprBed track groups will use this to figure out the height they use. */
-{
-struct exprBed *exp = tg->items;
-tg->lineHeight = tg->itemHeight(tg, tg->items);
-tg->heightPer = tg->lineHeight - 1;
-switch (vis)
-    {
-    case tvFull:
-	tg->lineHeight = tg->heightPer = calcExprBedFullSize(exp);
-	tg->height = tg->lineHeight +1;
-	break;
-    case tvDense:
-	tg->lineHeight = mgFontLineHeight(tl.font);
-	tg->heightPer = tg->lineHeight;
-	tg->height = tg->lineHeight+1;;
-	break;
-    } 
-return tg->height;
-}
-
-
 
 Color getExprDataColor(float val, float maxDeviation, boolean RG_COLOR_SCHEME ) 
 /** Returns the appropriate Color from the shadesOfGreen and shadesOfRed arrays
@@ -5602,23 +5519,6 @@ else
     }
 }
 
-static void mgExprBedBox(struct memGfx *mg, int xOff, int yOff, int width, int height, struct exprBed *exp)
-{
-int y1, y2;
-int strips = exp->numExp;
-int i;
-int color = 1;
-
-y2 = 0;
-for (i=0; i<strips; ++i)
-    {
-    Color color = getExprDataColor(exp->scores[i],0.7,TRUE);
-    y1 = y2;
-    y2 = (i+1)*height/strips;
-    mgDrawBox(mg, xOff, yOff+y1, width, y2-y1, color);
-    }
-}
-
 void mapBoxHcWTarget(int start, int end, int x, int y, int width, int height, 
 	char *group, char *item, char *statusLine, boolean target, char *otherFrame)
 /* Print out image map rectangle that would invoke the htc (human track click)
@@ -5637,99 +5537,6 @@ printf("ALT=\"%s\" TITLE=\"%s\">\n", statusLine, statusLine);
 freeMem(encodedItem);
 }
 
-
-static void exprBedDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-			struct memGfx *mg, int xOff, int yOff, int width,
-			MgFont *font, Color color, enum trackVisibility vis) 
-/**
- * Draw the box for a ExprBed.h
- */
-{
-int baseWidth = seqEnd - seqStart;
-struct exprBed *item;
-int y = yOff;
-struct exprBed *exp;
-
-int lineHeight = tg->lineHeight;
-int x1,x2,w;
-boolean isFull = (vis == tvFull);
-double scale = width/(double)baseWidth;
-int fontHeight = mgFontLineHeight(font);
-exp = tg->items;
-
-if(!exprBedColorsMade)
-    makeRedGreenShades(mg);
-
-for (item = tg->items; item != NULL; item = item->next)
-    {
-    x1 = round((double)((int)item->chromStart-winStart)*scale) + xOff;
-    x2 = round((double)((int)item->chromEnd-winStart)*scale) + xOff;
-    w = x2-x1;
-    if (tg->itemColor != NULL)
-	color = tg->itemColor(tg, item, mg);
-    if (w < 1)
-	w = 1;
-    mgExprBedBox(mg, x1, y, w, lineHeight, item);
-    if(tg->visibility == tvFull)
-	{
-	if(otherFrame != NULL)
-	    mapBoxHcWTarget(item->chromStart, item->chromEnd, x1, y, w, lineHeight, 
-			    tg->mapName, item->name, abbrevExprBedName(item->name), TRUE, otherFrame); 
-	else
-	    mapBoxHcWTarget(item->chromStart, item->chromEnd, x1, y, w, lineHeight, 
-			    tg->mapName, item->name, abbrevExprBedName(item->name), FALSE, NULL); 
-	}
-    else 
-	{
-	mapBoxToggleVis(0, y, tl.picWidth, tg->lineHeight, tg);
-	}
-    }
-}
-
-
-void loadRosettaPeBed(struct trackGroup *tg)
-/* Load up exprBed from database table rosettaPe to trackgroup items. */
-{
-bedLoadItem(tg, "rosettaPe", (ItemLoader)exprBedLoad);
-}
-
-void loadRosettaTeBed(struct trackGroup *tg)
-/* Load up exprBed from database table rosettaTe to trackgroup items. */
-{
-bedLoadItem(tg, "rosettaTe", (ItemLoader)exprBedLoad);
-}
-
-
-void freeExprBed(struct trackGroup *tg)
-/* Free up exprBed items. */
-{
-exprBedFreeList((struct exprBed**)&tg->items);
-}
-
-
-void rosettaPeMethods(struct trackGroup *tg)
-/* Make track group for Rosetta Track Predicted Exons. */
-{
-tg->mapsSelf = TRUE;
-tg->drawItems = exprBedDraw;
-tg->itemHeight = exprBedItemHeight;
-tg->itemName = exprBedItemName;
-tg->totalHeight = exprBedTotalHeight;
-tg->loadItems = loadRosettaPeBed;
-tg->freeItems = freeExprBed;
-}
-
-void rosettaTeMethods(struct trackGroup *tg)
-/* Make track group for Rosetta Track Predicted Exons. */
-{
-tg->mapsSelf = TRUE;
-tg->drawItems = exprBedDraw;
-tg->itemHeight = exprBedItemHeight;
-tg->itemName = exprBedItemName;
-tg->totalHeight = exprBedTotalHeight;
-tg->loadItems = loadRosettaTeBed;
-tg->freeItems = freeExprBed;
-}
 
 #endif /*CHUCK_CODE*/
 
@@ -6706,8 +6513,6 @@ registerTrackHandler("tet_waba", tetWabaMethods);
 registerTrackHandler("rnaGene", rnaGeneMethods);
 registerTrackHandler("rmsk", repeatMethods);
 registerTrackHandler("simpleRepeat", simpleRepeatMethods);
-registerTrackHandler("rosettaTe",rosettaTeMethods);   
-registerTrackHandler("rosettaPe",rosettaPeMethods); 
 registerTrackHandler("uniGene",uniGeneMethods);
 registerTrackHandler("perlegen",perlegenMethods);
 registerTrackHandler("nci60", nci60Methods);
