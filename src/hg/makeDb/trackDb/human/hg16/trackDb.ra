@@ -1059,11 +1059,13 @@ group compGeno
 priority 146.2
 visibility hide
 autoScaleDefault Off
-maxHeightPixels 128
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
 color 0,128,255
 altColor 255,128,0
 defaultViewLimits 0.0:0.01
-type wig -0.0732 0.153
+type wig -0.0983 0.210
 
 track regPotential2X
 shortLabel 2x Reg Potential
@@ -1072,7 +1074,9 @@ group compGeno
 priority 146.25
 visibility hide
 autoScaleDefault Off
-maxHeightPixels 128
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
 color 0,128,255
 altColor 255,128,0
 defaultViewLimits 0.0:0.01
