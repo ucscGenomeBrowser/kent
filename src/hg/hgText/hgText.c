@@ -119,7 +119,7 @@ void positionLookup(char *phase)
 /* print the location and a jump button */
 {
 cgiMakeTextVar("position", position, 30);
-cgiMakeHiddenVar("phase", phase);
+cgiMakeHiddenVar("origPhase", phase);
 cgiMakeButton("submit", "Look up");
 }
 
@@ -476,7 +476,7 @@ slSort(&fixedPosTableList, compareTable);
 fixedNonposTableList = hashElListHash(fixedNonposTableHash);
 slSort(&fixedNonposTableList, compareTable);
 
-printf("<FORM ACTION=\"%s\">\n\n", hgTextName());
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\">\n\n", hgTextName());
 cgiMakeHiddenVar("db", database);
 puts("<TABLE CELLPADDING=\"8\">");
 puts("<TR><TD>");
@@ -611,7 +611,7 @@ else
 
 webStart(cart, "Table Browser: %s", freezeName);
 checkTableExists(fullTableName);
-printf("<FORM ACTION=\"%s\">\n\n", hgTextName());
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\">\n\n", hgTextName());
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
 positionLookupSamePhase();
@@ -679,50 +679,79 @@ puts("</FORM>");
 
 puts(
      "<P>\n"
-     "By default, all records in the specified position range will be returned. \n"
-     "To restrict the number of records that are returned, you may enter \n"
-     "constraints on the values of fields. \n"
-     "</P><P>\n"
-     "Text fields are compared to patterns containing wildcard characters.  \n"
+     "By default, the table browser retrieves all records for the specified \n"
+     "coordinate range (use \"genome\" to search all chromosomes). \n"
+     "To restrict the set of records retrieved from this range, you may \n"
+     "enter constraints on the values of fields. \n"
+     "</P>\n"
+     "<H4> Individual Field Constraints </H4>"
+     "<P>\n"
+     "Text fields are compared to words or patterns containing wildcard \n"
+     "characters.  \n"
      "Wildcards are \"*\" (to match \n"
      "0 or more characters) and \"?\" (to match a single character).  \n"
-     "Each word in a text field box will be treated as a pattern to match \n"
-     "against that field.  If any pattern matches, that field matches. \n"
+     "Each space-separated word/pattern in a text field box will be matched \n"
+     "against the value of that field in each record.  \n"
+     "If any word/pattern matches the value, then the record meets the \n"
+     "constraint on that field. \n"
      "</P><P>\n"
-     "For numeric fields, enter a single number for operators such as &lt;, \n"
-     "&gt;, != etc.  Enter two numbers (start and end) separated by a \"-\" or \n"
-     "\",\" for \"in range\". \n"
+     "Numeric fields are compared to table data using an operator \n"
+     "such as &lt;, &gt;, != (not equal) followed by a number.  \n"
+     "To specify a range, enter two numbers (start and end) separated by a \n"
+     "\"-\". \n"
      "</P><P>\n"
-     "The \"Free-form query\" expression allows you to form more complex \n"
-     "constraints.  The syntax is the same as a SQL \"where\" clause, but \n"
-     "wildcards are \"*\" and \"?\" as described above.  In short: \n"
-     "<UL>\n"
-     "<LI> Complex constraints are built by combining simple constraints. \n"
-     "     A simple constraint is of this form: \n"
-     "     <BR> <I> fieldName operator value </I> \n"
-     "     <BR> where <I>fieldName</I> is a field name listed above, \n"
-     "     <I>operator</I> is the mode of comparison (see below), \n"
-     "     and <I>value</I> is a number, string, wildcard (see below), \n"
+     "The individual field constraints are combined with AND.  In other \n"
+     "words, a record must meet all individual field constraints in order \n"
+     "to be retrieved.  The default values will match all records, \n"
+     "so the only constraints that apply are the ones that you edit.  \n"
+     "</P>\n"
+     "<H4> Free-form Query </H4>"
+     "<P>\n"
+     "When the filters above aren\'t enough, free-form queries allow \n"
+     "fancier constraints that typically relate two or more field names of \n"
+     "the selected table. If you are familiar with \n"
+     "<A HREF=\"http://www.w3schools.com/sql/sql_where.asp\" TARGET=_blank>"
+     "SQL syntax</A>, \n"
+     "queries here are just \"where\" clauses (with wildcards as above). \n"
+     "Queries can combine simple constraints with AND, OR, and NOT using \n"
+     "parentheses as needed for clarity. \n"
+     "<P> A simple constraint consists of a field name listed above, \n"
+     "     a comparison operator (see below), \n"
+     "     and a value: a number, string, wildcard value (see below), \n"
      "     or another field name. \n"
-     "     <I>fieldName</I> may also be an arithmetic expression of \n"
-     "     numeric field names.  For example (with the chrN_rmsk table): \n"
-     "     <BR> (milliDel + milliIns) &lt; 500 \n"
-     "     <BR> Simple constraints can be negated with NOT, and combined \n"
-     "     with AND or OR.  You may use as many parentheses as you like to \n"
-     "     group expressions.  For example: \n"
-     "     <BR> ((txEnd - txStart) &gt; 100) AND (txStart != cdsStart) \n"
-     "     </LI>\n"
-     "<LI> String or wildcard values for text comparisons must be quoted.  \n"
+     "     In place of a field name, you may use \n"
+     "     an arithmetic expression of numeric field names.  </P>\n"
+     "<P> String or wildcard values for text comparisons must be quoted.  \n"
      "     Single or double quotes may be used.  \n"
      "     If comparing to a literal string value, \n"
-     "     you may use the \"=\" operator.  If comparing to a wildcard \n"
+     "     you may use the \"=\" (or \"!=\") operator.  \n"
+     "     If comparing to a wildcard \n"
      "     value, you must use the \"LIKE\" (or \"NOT LIKE\") operator.  \n"
-     "     For example: \n"
-     "     <BR> chrom = \"chr19\" \n"
-     "     <BR> chrom NOT LIKE \'chr??\' \n"
-     "     </LI> \n"
-     "<LI> Numeric comparison operators are &lt;, &lt;=, =, !=, &gt;=, and \n"
-     "     &gt; .  Arithmetic operators include +, -, *, and /.  \n"
+     "     </P> \n"
+     "<P> Numeric comparison operators include "
+     "&lt;, &lt;=, =, != (not equal), &gt;=, and &gt; .  \n"
+     "     Arithmetic operators include +, -, *, and /.  \n"
+     "     Other "
+     "<A HREF=\"http://www.w3schools.com/sql/sql_where.asp\" TARGET=_blank>"
+     "SQL</A> \n"
+     "     comparison keywords may be used.  \n"
+     "     </P> \n"
+     "</P><P>\n"
+     "Free-form query examples (taken from the refGene table):\n"
+     "<UL>\n"
+     "<LI> <FONT COLOR=\"#0000FF\">txStart = cdsStart</FONT> \n"
+     "searches for gene models missing expected 5\' UTR upstream sequence \n"
+     "(if strand is \'+\'; 3\' UTR downstream if strand is \'-\'). </LI>\n"
+     "<LI> <FONT COLOR=\"#0000FF\">chrom NOT LIKE \"chr??\"</FONT> \n"
+     "filters search to chromosomes 1-9 plus X and Y. </LI> \n"
+     "<LI> <FONT COLOR=\"#0000FF\">(cdsEnd - cdsStart) &gt; 10000</FONT> \n"
+     "selects genes whose coding regions span over 10 kbp. </LI> \n"
+     "<LI> <FONT COLOR=\"#0000FF\">(txStart != cdsStart) AND (txEnd != cdsEnd)"
+     " AND exonCount = 1</FONT> \n"
+     "finds single exon genes with both 3\' and 5\' flanking UTR.</LI> \n"
+     "<LI><FONT COLOR=\"#0000FF\">((cdsEnd - cdsStart) &gt; 30000) AND "
+     "(exonCount=2 OR exonCount=3)</FONT> \n"
+     "finds genes with long spans but only 2-3 exons.</LI>"
      "</UL>\n"
      "</P>\n"
      );
@@ -1282,7 +1311,7 @@ else
 
 webStart(cart, "Table Browser: %s", freezeName);
 checkTableExists(fullTableName);
-printf("<FORM ACTION=\"%s\">\n\n", hgTextName());
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\">\n\n", hgTextName());
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
 positionLookupSamePhase();
@@ -1326,7 +1355,7 @@ void doSequenceOptions()
 {
 webStart(cart, "Table Browser: %s", freezeName);
 checkTableExists(fullTableName);
-printf("<FORM ACTION=\"%s\">\n\n", hgTextName());
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\">\n\n", hgTextName());
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
 preserveConstraints();
@@ -1594,7 +1623,7 @@ webStart(cart, "Table Browser: %s", freezeName);
 checkTableExists(fullTableName);
 if (! fbUnderstandTrackDb(getTableDb(), track))
     webAbort("Error", "Can't do Custom Track/Bed for table %s", track);
-puts("<FORM ACTION=\"/cgi-bin/hgText\" METHOD=\"GET\">\n");
+puts("<FORM ACTION=\"/cgi-bin/hgText\" NAME=\"mainForm\" METHOD=\"GET\">\n");
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
 preserveConstraints();
@@ -1799,6 +1828,14 @@ position = getPosition(&chrom, &winStart, &winEnd);
 if (position == NULL)
     return;
 allGenome = sameString("genome", position);
+
+if (existsAndEqual("submit", "Look up"))
+    {
+    // Stay in same phase if we're just looking up position.
+    char *origPhase = cgiOptionalString("origPhase");
+    if (origPhase != NULL)
+	cgiVarSet("phase", origPhase);
+    }
 
 if (table == NULL || existsAndEqual("phase", chooseTablePhase))
     {
