@@ -4,6 +4,7 @@
 #  05-10-04
 # 
 #  checks the links in all the files in a directory
+#  Robert Kuhn
 # 
 ###############################################
 
@@ -15,7 +16,7 @@ set currDir=$cwd
 if ($#argv < 1) then
   # no command line args
   echo
-  echo "  checks the links in all the files in a directory"
+  echo "  checks the links in all the files in a directory (uses list on hgwbeta)."
   echo
   echo "    usage:  path in /htdocs (zero for root), "
   echo '      [yymmmdd (or other dateString)] defaults to "today"'
