@@ -4,6 +4,8 @@
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
 
+#ifndef OBSCURE_H
+#define OBSCURE_H
 
 long incCounterFile(char *fileName);
 /* Increment a 32 bit value on disk. */
@@ -89,3 +91,10 @@ void shuffleList(void *pList, int shuffleCount);
 char *stripCommas(char *position);
 /* make a new string with commas stripped out */
 
+void dotForUserInit(int dotMod);
+/* Set how often dotForUser() outputs a dot. */
+
+void dotForUser();
+/* Write out a dot every _dotForUserMod times this is called. */
+
+#endif /* OBSCURE_H */
