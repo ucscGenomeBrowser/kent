@@ -108,6 +108,8 @@ if (s == NULL)
     return defaultVal;
 if ((s[0] == '-' && isdigit(s[1])) || isdigit(s[0]))
     return atoi(s);
+if (sameString(s,"on"))
+    return defaultVal;
 errAbort("option %s has to be integer valued", name);
 return 0;
 }
