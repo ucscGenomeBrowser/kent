@@ -825,3 +825,49 @@ o - Rescuing STS track:
      - mv chrom.psl ../convert.psl
 
 
+LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (markd)
+
+    - loading both blastz alignments and reference (single coverage) alignments
+    - in xAli format, which includes sequence
+    - done in a tmp dir and intermediate files discarded
+
+    - create psl files for each per-contig lav file
+
+       set sc=""
+       set tbl="blastzMm2"
+       foreach chrdir (/cluster/store1/gs.11/build28/bed/blastz.mm2.2002-04-14/lav/chr*)
+         set chr=$chrdir:t
+         set outdir=lav-psl${sc}/$chr
+         mkdir -p $outdir
+         foreach lav ($chrdir/*.lav${sc})
+           lavToPsl -target-strand=+ $lav $outdir/$lav:t:r.psl
+         end
+       end
+
+    - Convert to per-chromsome files, sort, and add sequence
+       mkdir -p lav-xa{sc}
+       foreach chrdir (lav-psl${sc}/*)
+         set chr=$chrdir:t
+         pslCat -check -nohead -ext=.psl -dir lav-psl${sc}/$chr \
+          | liftUp -type=.psl -pslQ -nohead stdout /cluster/store2/mm.2002.02/mm2/jkStuff/liftAll.lft warn stdin \
+          | sort -k 15n -k 16n \
+          | pslToXa stdin lav-xa${sc}/${chr}_${tbl}.xa /cluster/store2/mm.2002.02/mm2/nib /cluster/store1/gs.11/build28/nib
+       end
+
+    - repeat both loops, this time doing the single-coverage alignment:
+        set sc=".sc"
+        set tbl="blastzMm2Sc
+        <above loops>
+
+    - Load tables
+        cd lav-xa
+        hgLoadPsl -xa hg10 *.xa
+        cd lav-xa.sc
+        hgLoadPsl -xa hg10 *.xa
+  
+
+   - Load aligned ancient repeats, from
+       /cluster/store1/gs.11/build28/bed/blastz.mm2.2002-04-14/aar
+     Ryan create:
+       /cluster/store1/gs.11/build28/bed/blastz.mm2.2002-04-14/aar/xali
+     - Loaded into aarMm2
