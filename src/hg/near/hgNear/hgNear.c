@@ -6,6 +6,7 @@
 #include "obscure.h"
 #include "portable.h"
 #include "cheapcgi.h"
+#include "memalloc.h"
 #include "jksql.h"
 #include "htmshell.h"
 #include "subText.h"
@@ -18,18 +19,11 @@
 #include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.142 2004/04/15 00:08:23 galt Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.143 2004/04/15 07:29:50 kent Exp $";
 
-char *excludeVars[] = { "submit", "Submit", confVarName, 
-	detailsVarName, colInfoVarName,
-	defaultConfName, hideAllConfName, showAllConfName,
-	saveCurrentConfName, useSavedConfName, 
-	filSaveCurrentVarName, filUseSavedVarName,
-	getSeqVarName, getSeqPageVarName, getGenomicSeqVarName, getTextVarName, 
-	advFilterVarName, advFilterClearVarName, 
-	advFilterListVarName, 
-	idVarName, idPosVarName, NULL }; 
-/* The excludeVars are not saved to the cart. */
+char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
+/* The excludeVars are not saved to the cart. (We also exclude
+ * any variables that start "near.do.") */
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -40,6 +34,7 @@ int displayCount;	/* Number of items to display. */
 char *displayCountString; /* Ascii version of display count, including 'all'. */
 struct hash *oldCart;	/* Old cart hash. */
 struct hash *genomeSettings;  /* Genome-specific settings from settings.ra. */
+struct hash *columnHash;  /* Hash of active columns keyed by name. */
 
 struct genePos *curGeneId;	  /* Identity of current gene. */
 
@@ -332,7 +327,7 @@ if (endsWith(colName, "__filename"))
     int newLen = strlen(colName) - strlen("__filename");
     colName[newLen] = 0;
     }
-return findNamedColumn(colList, colName);
+return findNamedColumn(colName);
 }
 
 static char *keyFileName(struct column *col)
@@ -382,16 +377,6 @@ while (lineFileNext(lf, &line, NULL))
     }
 lineFileClose(&lf);
 return hash;
-}
-
-
-static struct hashEl *upcHashLookup(struct hash *hash, char *name)
-/* Lookup upper cased name in hash. */
-{
-char s[128];
-safef(s, sizeof(s), "%s", name);
-touppers(s);
-return hashLookup(hash, s);
 }
 
 struct hash *keyFileHash(struct column *col)
@@ -486,10 +471,16 @@ while (--count >= 0)
 char *colInfoUrl(struct column *col)
 /* Return URL to get column info.  freeMem this when done. */
 {
-char url[512];
-safef(url, sizeof(url), "../cgi-bin/hgNear?%s&%s=%s",
-	cartSidUrlString(cart), colInfoVarName, col->name);
-return cloneString(url);
+char *labelUrl;
+if ((labelUrl = columnSetting(col, "labelUrl", NULL)) != NULL)
+    return labelUrl;
+else
+    {
+    char url[512];
+    safef(url, sizeof(url), "../cgi-bin/hgNear?%s&%s=%s",
+	    cartSidUrlString(cart), colInfoVarName, col->name);
+    return cloneString(url);
+    }
 }
 
 void colInfoAnchor(struct column *col)
@@ -671,7 +662,7 @@ if (keyHash != NULL)
     for (gp = list; gp != NULL; gp = next)
         {
 	next = gp->next;
-	if (upcHashLookup(keyHash, gp->name))
+	if (hashLookupUpperCase(keyHash, gp->name))
 	    {
 	    slAddHead(&newList, gp);
 	    }
@@ -742,8 +733,8 @@ struct sqlResult *sr;
 char **row;
 struct searchResult *resList = NULL, *res;
 
-dyStringPrintf(query, "select %s from %s where %s ", 
-	col->keyField, col->table, col->valField);
+dyStringPrintf(query, "select %s,%s from %s where %s ", 
+	col->keyField, col->valField, col->table, col->valField);
 if (sameString(searchHow, "fuzzy"))
     dyStringPrintf(query, "like '%%%s%%'", search);
 else if (sameString(searchHow, "prefix"))
@@ -755,6 +746,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(res);
     res->gp.name = cloneString(row[0]);
+    if (!sameString(searchHow, "fuzzy"))
+	res->matchingId = cloneString(row[1]);
     slAddHead(&resList, res);
     }
 
@@ -822,7 +815,7 @@ if (wild != NULL || keyHash != NULL)
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
-	if (keyHash == NULL || upcHashLookup(keyHash, row[1]))
+	if (keyHash == NULL || hashLookupUpperCase(keyHash, row[1]))
 	    {
 	    if (wildList == NULL || wildMatchList(row[1], wildList, orLogic))
 		hashAdd(hash, row[0], NULL);
@@ -960,7 +953,6 @@ char *minString = advFilterVal(col, "min");
 char *maxString = advFilterVal(col, "max");
 if (minString != NULL || maxString != NULL)
     {
-    struct hash *passHash = newHash(16);  /* Hash of genes that pass. */
     struct sqlResult *sr;
     char **row;
     struct dyString *dy = newDyString(512);
@@ -1231,7 +1223,7 @@ else
     return 0;
 }
 
-void refinePriorities(struct column *colList)
+void refinePriorities(struct hash *colHash)
 /* Consult colOrderVar if it exists to reorder priorities. */
 {
 char *orig = cartOptionalString(cart, colOrderVar);
@@ -1240,7 +1232,6 @@ if (orig != NULL)
     char *dupe = cloneString(orig);
     char *s = dupe;
     char *name, *val;
-    struct hash *colHash = hashColumns(colList);
     struct column *col;
     while ((name = nextWord(&s)) != NULL)
         {
@@ -1254,7 +1245,6 @@ if (orig != NULL)
 	if (col != NULL)
 	    col->priority = atof(val);
 	}
-    hashFree(&colHash);
     freez(&dupe);
     }
 }
@@ -1291,6 +1281,7 @@ char *dupe = cloneString(col->type);
 char *s = dupe;
 char *type = nextWord(&s);
 
+columnDefaultMethods(col);
 if (type == NULL)
     warn("Missing type value for column %s", col->name);
 if (sameString(type, "num"))
@@ -1325,6 +1316,8 @@ else if (sameString(type, "pfam"))
     setupColumnPfam(col, s);
 else if (sameString(type, "flyBdgp"))
     setupColumnFlyBdgp(col, s); 
+else if (sameString(type, "custom"))
+    setupColumnCustom(col, s);
 else
     errAbort("Unrecognized type %s for %s", col->type, col->name);
 freez(&dupe);
@@ -1374,47 +1367,30 @@ safef(query, sizeof(query), "select name from %s where proteinId='%s'",
 return sqlQuickString(conn, query);
 }
 
-struct column *getColumns(struct sqlConnection *conn)
-/* Return list of columns for big table. */
+void columnVarsFromSettings(struct column *col, char *fileName)
+/* Grab a bunch of variables from col->settings and
+ * move them into col proper. */
 {
-char *raName = "columnDb.ra";
-struct column *col, *colList = NULL;
-struct hash *raList = readRa(raName), *raHash;
+struct hash *settings = col->settings;
 char *selfLink;
-
-if (raList == NULL)
-    errAbort("Couldn't find anything from %s", raName);
-for (raHash = raList; raHash != NULL; raHash = raHash->next)
-    {
-    AllocVar(col);
-    col->name = mustFindInRaHash(raName, raHash, "name");
-    col->settings = raHash;
-    col->shortLabel = mustFindInRaHash(raName, raHash, "shortLabel");
-    col->longLabel = mustFindInRaHash(raName, raHash, "longLabel");
-    col->priority = atof(mustFindInRaHash(raName, raHash, "priority"));
-    col->on = col->defaultOn = sameString(mustFindInRaHash(raName, raHash, "visibility"), "on");
-    col->type = mustFindInRaHash(raName, raHash, "type");
-    col->itemUrl = hashFindVal(raHash, "itemUrl");
-    col->useHgsid = columnSettingExists(col, "hgsid");
-    col->urlChromVar = hashFindVal(raHash, "urlChromVar");
-    col->urlStartVar = hashFindVal(raHash, "urlStartVar");
-    col->urlEndVar = hashFindVal(raHash, "urlEndVar");
-    selfLink = hashFindVal(raHash, "selfLink");
-    if (selfLink != NULL && selfLink[0] != '0')
-        col->selfLink = TRUE;
-    columnDefaultMethods(col);
-    setupColumnType(col);
-    if (!hashFindVal(raHash, "hide"))
-	if (col->exists(col, conn))
-	    slAddHead(&colList, col);
-    }
-refinePriorities(colList);
-refineVisibility(colList);
-slSort(&colList, columnCmpPriority);
-return colList;
+col->name = mustFindInRaHash(fileName, settings, "name");
+col->shortLabel = mustFindInRaHash(fileName, settings, "shortLabel");
+col->longLabel = mustFindInRaHash(fileName, settings, "longLabel");
+col->priority = atof(mustFindInRaHash(fileName, settings, "priority"));
+col->on = col->defaultOn = 
+	sameString(mustFindInRaHash(fileName, settings, "visibility"), "on");
+col->type = mustFindInRaHash(fileName, settings, "type");
+col->itemUrl = hashFindVal(settings, "itemUrl");
+col->useHgsid = columnSettingExists(col, "hgsid");
+col->urlChromVar = hashFindVal(settings, "urlChromVar");
+col->urlStartVar = hashFindVal(settings, "urlStartVar");
+col->urlEndVar = hashFindVal(settings, "urlEndVar");
+selfLink = hashFindVal(settings, "selfLink");
+if (selfLink != NULL && selfLink[0] != '0')
+    col->selfLink = TRUE;
 }
 
-struct hash *hashColumns(struct column *colList)
+static struct hash *hashColumns(struct column *colList)
 /* Return a hash of columns keyed by name. */
 {
 struct column *col;
@@ -1428,16 +1404,59 @@ for (col = colList; col != NULL; col = col->next)
 return hash;
 }
 
-struct column *findNamedColumn(struct column *colList, char *name)
+struct column *getColumns(struct sqlConnection *conn)
+/* Return list of columns for big table. */
+{
+char *raName = "columnDb.ra";
+struct column *col, *next, *customList, *colList = NULL;
+struct hash *raList = readRa(raName), *raHash, *settings;
+
+/* Create built-in columns. */
+if (raList == NULL)
+    errAbort("Couldn't find anything from %s", raName);
+for (raHash = raList; raHash != NULL; raHash = raHash->next)
+    {
+    AllocVar(col);
+    col->settings = raHash;
+    columnVarsFromSettings(col, raName);
+    if (!hashFindVal(raHash, "hide"))
+	{
+	setupColumnType(col);
+	if (col->exists(col, conn))
+	    {
+	    slAddHead(&colList, col);
+	    }
+	}
+    }
+
+/* Create custom columns. */
+customList = customColumnsRead(conn, genome, database);
+for (col = customList; col != NULL; col = next)
+    {
+    next = col->next;
+    setupColumnType(col);
+    if (col->exists(col, conn))
+	{
+	slAddHead(&colList, col);
+	}
+    }
+
+/* Put columns in hash */
+columnHash = hashColumns(colList);
+
+/* Tweak ordering and visibilities as per user settings. */
+refinePriorities(columnHash);
+refineVisibility(colList);
+slSort(&colList, columnCmpPriority);
+return colList;
+}
+
+struct column *findNamedColumn(char *name)
 /* Return column of given name from list or NULL if none. */
 {
-struct column *col;
-for (col = colList; col != NULL; col = col->next)
-    {
-    if (sameString(col->name, name))
-        return col;
-    }
-return NULL;
+if (columnHash == NULL)
+    internalErr();
+return hashFindVal(columnHash, name);
 }
 
 int totalHtmlColumns(struct column *colList)
@@ -1692,11 +1711,12 @@ void doColInfo(struct sqlConnection *conn, struct column *colList,
 	char *colName)
 /* Put up info page on column. */
 {
-struct column *col = findNamedColumn(colList, colName);
-char *htmlFileName = colHtmlFileName(col);
+struct column *col = findNamedColumn(colName);
+char *htmlFileName;
 if (col == NULL)
     errAbort("Can't find column '%s'", colName);
 hPrintf("<H2>Column %s - %s</H2>\n", col->shortLabel, col->longLabel);
+htmlFileName = colHtmlFileName(col);
 if (fileExists(htmlFileName))
     {
     char *raw, *cooked;
@@ -1815,12 +1835,10 @@ else if (cartVarExists(cart, colInfoVarName))
 else if ((var = cartFindFirstLike(cart, "near.do.up.*")) != NULL)
     {
     doConfigure(conn, colList, var);
-    cartRemovePrefix(cart, "near.do.up.");
     }
 else if ((var = cartFindFirstLike(cart, "near.do.down.*")) != NULL)
     {
     doConfigure(conn, colList, var);
-    cartRemovePrefix(cart, "near.do.down.");
     }
 else if (cartVarExists(cart, defaultConfName))
     doDefaultConfigure(conn, colList);
@@ -1861,12 +1879,25 @@ else if ((col = advFilterKeyUploadPressed(colList)) != NULL)
     doAdvFilterKeyUpload(conn, colList, col);
 else if ((col = advFilterKeyClearPressed(colList)) != NULL)
     doAdvFilterKeyClear(conn, colList, col);
+else if (cartVarExists(cart, customPageDoName))
+    doCustomPage(conn, colList);
+else if (cartVarExists(cart, customSubmitDoName))
+    doCustomSubmit(conn, colList);
+else if (cartVarExists(cart, customClearDoName))
+    doCustomClear(conn, colList);
+else if (cartVarExists(cart, customPasteDoName))
+    doCustomPaste(conn, colList);
+else if (cartVarExists(cart, customUploadDoName))
+    doCustomUpload(conn, colList); 
+else if (cartVarExists(cart, customFromUrlDoName))
+    doCustomFromUrl(conn, colList);
 else if (cartNonemptyString(cart, searchVarName))
     doSearch(conn, colList);
 else
     doExamples(conn, colList);
 hFreeConn(&conn);
 cartSetString(cart, oldOrgVarName, genome);
+cartRemovePrefix(cart, "near.do.");
 }
 
 void usage()
@@ -1882,10 +1913,10 @@ errAbort(
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+// pushCarefulMemHandler(100000000);
 cgiSpoof(&argc, argv);
 htmlSetStyle(htmlStyleUndecoratedLink);
 htmlSetBgColor(HG_CL_OUTSIDE);
-// htmlSetBgColor(HG_CL_INSIDE);
 oldCart = hashNew(10);
 cartHtmlShell("Gene Family v25", doMiddle, hUserCookie(), excludeVars, oldCart);
 return 0;

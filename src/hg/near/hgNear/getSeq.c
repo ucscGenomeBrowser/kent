@@ -14,7 +14,7 @@
 #include "genePred.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: getSeq.c,v 1.7 2003/10/21 22:07:41 kent Exp $";
+static char const rcsid[] = "$Id: getSeq.c,v 1.8 2004/04/15 07:29:50 kent Exp $";
 
 static void printNameAndDescription(struct sqlConnection *conn, 
 	struct genePos *gp, struct column *nameCol, struct column *descCol)
@@ -45,8 +45,8 @@ char query[256];
 struct genePos *gp;
 struct sqlConnection *conn2 = hAllocConn();
 char *tableName = genomeSetting(tableId);
-struct column *descCol = findNamedColumn(colList, "description");
-struct column *nameCol = findNamedColumn(colList, "name");
+struct column *descCol = findNamedColumn("description");
+struct column *nameCol = findNamedColumn("name");
 
 hPrintf("<TT><PRE>");
 for (gp = geneList; gp != NULL; gp = gp->next)
@@ -86,8 +86,8 @@ char **row;
 char query[256];
 struct genePos *gp;
 struct sqlConnection *conn2 = hAllocConn();
-struct column *descCol = findNamedColumn(colList, "description");
-struct column *nameCol = findNamedColumn(colList, "name");
+struct column *descCol = findNamedColumn("description");
+struct column *nameCol = findNamedColumn("name");
 char *table = genomeSetting(tableId);
 
 hPrintf("<TT><PRE>");
@@ -172,8 +172,8 @@ struct sqlConnection *conn2 = hAllocConn();
 int upSize = cartInt(cart, proUpSizeVarName);
 int downSize = cartInt(cart, proDownSizeVarName);
 boolean fiveOnly = cartBoolean(cart, proIncludeFiveOnly);
-struct column *descCol = findNamedColumn(colList, "description");
-struct column *nameCol = findNamedColumn(colList, "name");
+struct column *descCol = findNamedColumn("description");
+struct column *nameCol = findNamedColumn("name");
 
 hPrintf("<TT><PRE>");
 for (gp = geneList; gp != NULL; gp = gp->next)

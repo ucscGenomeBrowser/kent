@@ -31,9 +31,9 @@ name percentId
 type distance sgdBlastTab query target identity
 
 name pdb
-queryFull select acc,pdb from  proteins031112.pdbSP,swissProt.displayId where val=sp 
-queryOne select pdb,pdb from proteins031112.pdbSP,swissProt.displayId where val=sp and acc='%s'
-invQueryOne select acc from proteins031112.pdbSP,swissProt.displayId where val=sp and pdb='%s'
+queryFull select acc,pdb from  proteins040315.pdbSP,swissProt.displayId where val=sp 
+queryOne select pdb,pdb from proteins040315.pdbSP,swissProt.displayId where val=sp and acc='%s'
+invQueryOne select acc from proteins040315.pdbSP,swissProt.displayId where val=sp and pdb='%s'
 
 name yeastChoCellCycle
 shortLabel Cho Cell Cycle
@@ -47,9 +47,9 @@ ratioMax 2.5
 absoluteMax 6000 
 
 name pfamDomains
-queryFull select swissAC,description from proteins031112.pfamXref,proteins031112.pfamDesc where pfamXref.pfamAC = pfamDesc.pfamAC
-queryOne select description,proteins031112.pfamDesc.pfamAC from proteins031112.pfamXref,proteins031112.pfamDesc where swissAC = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC order by description
-invQueryOne select swissAC from proteins031112.pfamXref,proteins031112.pfamDesc where description = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC
+queryFull select swissAC,description from proteins040315.pfamXref,proteins040315.pfamDesc where pfamXref.pfamAC = pfamDesc.pfamAC
+queryOne select description,proteins040315.pfamDesc.pfamAC from proteins040315.pfamXref,proteins040315.pfamDesc where swissAC = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC order by description
+invQueryOne select swissAC from proteins040315.pfamXref,proteins040315.pfamDesc where description = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC
 
 name sgdLocalization
 type association sgdLocalization

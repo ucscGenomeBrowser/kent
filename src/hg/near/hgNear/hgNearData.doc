@@ -105,6 +105,9 @@ The types are:
 	    invQueryOne - SQL query that returns gene ID given value.
 	    protKey - (optional) If set, the proteinID rather than the
 	        geneID is used.
+    float - A column based on a simple database lookup of a number.
+	It is ok for some gene ID's to have no associated value.
+	Parameters: table, geneId field, value field.
     debug - A column that displays something to help debug, currently
         the distance value from the ordering.  This is only shown on
 	hgwdev.

@@ -7,7 +7,7 @@
 #include "obscure.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: search.c,v 1.16 2004/02/13 09:22:20 kent Exp $";
+static char const rcsid[] = "$Id: search.c,v 1.17 2004/04/15 07:29:50 kent Exp $";
 
 int searchResultCmpShortLabel(const void *va, const void *vb)
 /* Compare to sort based on short label. */
@@ -113,8 +113,8 @@ static void fillInMissingLabels(struct sqlConnection *conn,
 /* Fill in missing columns by looking up name and description
  * if possible. */
 {
-struct column *nameColumn = findNamedColumn(colList, "name");
-struct column *desColumn = findNamedColumn(colList, "description");
+struct column *nameColumn = findNamedColumn("name");
+struct column *desColumn = findNamedColumn("description");
 struct searchResult *sr;
 
 for (sr = srList; sr != NULL; sr = sr->next)
@@ -220,7 +220,11 @@ else
 	for (sr = csr->results; sr != NULL; sr = sr->next)
 	    {
 	    selfAnchorSearch(&sr->gp);
-	    hPrintf("%s</A> - %s<BR>\n", sr->shortLabel, sr->longLabel);
+	    if (sr->matchingId != NULL)
+		hPrintf("%s (%s)", sr->matchingId, sr->shortLabel);
+	    else
+		hPrintf("%s", sr->shortLabel);
+	    hPrintf("</A> - %s<BR>\n", sr->longLabel);
 	    }
 	}
     }

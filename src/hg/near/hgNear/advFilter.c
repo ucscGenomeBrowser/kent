@@ -11,7 +11,7 @@
 #include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.21 2004/03/24 16:45:12 kent Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.22 2004/04/15 07:29:50 kent Exp $";
 
 struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -326,7 +326,7 @@ void doAdvFilterListCol(struct sqlConnection *conn, struct column *colList,
 /* List a column for genes matching advanced filter. */
 {
 struct genePos *gp, *list = NULL;
-struct column *col = findNamedColumn(colList, colName);
+struct column *col = findNamedColumn(colName);
 
 if (col == NULL)
     {
@@ -364,22 +364,6 @@ void doAdvFilterList(struct sqlConnection *conn, struct column *colList)
 {
 doAdvFilterListCol(conn, colList, "name");
 }
-
-#ifdef OLD
-void doAdvFilterListProt(struct sqlConnection *conn, struct column *colList)
-/* List proteins matching advanced filter. */
-{
-doAdvFilterListCol(conn, colList, "proteinName");
-}
-
-void doAdvFilterListAcc(struct sqlConnection *conn, struct column *colList)
-/* List accessions matching advanced filter. */
-{
-doAdvFilterListCol(conn, colList, "acc");
-}
-#endif /* OLD */
-
-
 
 static struct genePos *firstBitsOfList(struct genePos *inList, int maxCount, 
 	struct genePos **pRejects)

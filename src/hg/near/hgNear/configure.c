@@ -14,7 +14,7 @@
 #include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.40 2004/02/15 01:10:48 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.41 2004/04/15 07:29:50 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -222,7 +222,8 @@ hPrintf("</TD><TD>");
 hPrintf("Show all splicing variants: ");
 cgiMakeCheckBox(showAllSpliceVarName, 
 	cartUsualBoolean(cart, showAllSpliceVarName, FALSE));
-hPrintf(" ");
+hPrintf("</TD><TD>");
+cgiMakeButton(customPageDoName, "Custom Columns");
 hPrintf("</TD></TR></TABLE>");
 controlPanelEnd();
 }
@@ -314,7 +315,7 @@ void doSaveCurrentColumns(struct sqlConnection *conn, struct column *colList)
 struct userSettings *us = colUserSettings();
 if (userSettingsProcessForm(us))
     {
-    refinePriorities(colList);
+    refinePriorities(columnHash);
     slSort(&colList, columnCmpPriority);
     doConfigure(conn, colList, NULL);
     }

@@ -43,6 +43,7 @@ struct searchResult
     struct searchResult *next;
     char *shortLabel;		/* Short name (gene name) */
     char *longLabel;		/* Long name (gene description) */
+    char *matchingId;		/* Matching id (may be NULL). */
     struct genePos gp;		/* Gene id. */
     };
 
@@ -147,6 +148,9 @@ struct column
 
    /* Pfam uses this. */
    char *protDb; /* Which protein database pfam tables are in. */
+
+   /* Custom columns use this. */
+   struct hash *customIdHash;	/* Hash filled with custom data, keyed by gene ID. */
    };
 
 struct expMultiData 
@@ -208,11 +212,12 @@ struct order *orderGetAll(struct sqlConnection *conn);
 
 extern struct cart *cart; /* This holds variables between clicks. */
 extern char *database;	  /* Name of genome database - hg15, or the like. */
-extern char *organism;	  /* Name of organism - mouse, human, etc. */
+extern char *genome;	  /* Name of organism - mouse, human, etc. */
 extern char *groupOn;	  /* Current grouping strategy. */
 extern int displayCount;  /* Number of items to display. */
 
 extern struct genePos *curGeneId;	  /* Identity of current gene. */
+extern struct hash *columnHash;		  /* Hash of active columns keyed by name. */
 
 /* ---- Cart Variables ---- */
 
@@ -231,8 +236,8 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 	/* chrN:X-Y position of id, may be empty. */
 #define groupVarName "near.group"	/* Grouping scheme. */
 #define orderVarName "near.order"	/* Ordering scheme. */
-#define getSeqVarName "near.getSeq"	/* Button to get sequence. */
-#define getGenomicSeqVarName "near.getGenomicSeq"	
+#define getSeqVarName "near.do.getSeq"	/* Button to get sequence. */
+#define getGenomicSeqVarName "near.do.getGenomicSeq"	
 	/* Button to fetch genomic sequence. */
 #define getSeqHowVarName "near.getSeqHow" /* How to get sequence. */
 #define getSeqPageVarName "near.do.getSeqPage" /* Button go to getSequence page. */
@@ -240,7 +245,7 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define proDownSizeVarName "near.proDownSize" /* Promoter downstream size. */
 #define proIncludeFiveOnly "near.proIncludeFiveOnly" 
 	/* Include without 5' UTR? */
-#define getTextVarName "near.getText"	/* Button to get as text. */
+#define getTextVarName "near.do.getText"	/* Button to get as text. */
 
 #define advFilterPrefix "near.as."      
 	/* Prefix for advanced filter variables. */
@@ -280,6 +285,18 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define keyWordPastedPrefix "near.do.keyPasted." 
 	/* Prefix for keyword paste-ins. */
 #define keyWordClearPrefix "near.do.keyClear." /* Prefix for keyword paste-ins. */
+
+#define customFileVarName "near.customFile"  /* Temp file for custom columns. */
+#define customPageDoName "near.do.custom"   /* Put up custom column page. */
+#define customUploadDoName "near.do.customUpload" /* Custom upload file. */
+#define customUploadVarName "near.customUpload"
+#define customPasteDoName "near.do.customPaste"   /* Custom paste file. */
+#define customPasteVarName "near.customPaste"
+#define customFromUrlDoName "near.do.customFromUrl"   /* Custom from URL. */
+#define customFromUrlVarName "near.customFromUrl"
+#define customSubmitDoName "near.do.customSubmit" /* Custom submit data. */
+#define customClearDoName "near.do.customClear"   /* Custom clear data. */
+
 
 /* ---- General purpose helper routines. ---- */
 
@@ -362,13 +379,14 @@ void selfAnchorSearch(struct genePos *gp);
 int columnCmpPriority(const void *va, const void *vb);
 /* Compare to sort columns based on priority. */
 
-void refinePriorities(struct column *colList);
+void columnVarsFromSettings(struct column *col, char *fileName);
+/* Grab a bunch of variables from col->settings and
+ * move them into col proper. */
+
+void refinePriorities(struct hash *colHash);
 /* Consult colOrderVar if it exists to reorder priorities. */
 
-struct hash *hashColumns(struct column *colList);
-/* Return a hash of columns keyed by name. */
-
-struct column *findNamedColumn(struct column *colList, char *name);
+struct column *findNamedColumn(char *name);
 /* Return column of given name from list or NULL if none. */
 
 /* ---- Some helper routines for order methods. ---- */
@@ -612,6 +630,32 @@ void setupColumnFlyBdgp(struct column *col, char *parameters);
 
 void associationSimilarityMethods(struct order *ord, char *parameters);
 /* Fill in associationSimilarity methods. */
+
+/* ---- Custom column stuff ---- */
+
+void setupColumnCustom(struct column *col, char *parameters);
+/* Set up custom column. */
+
+void doCustomPage(struct sqlConnection *conn, struct column *colList);
+/* Put up initial page to input custom columns. */
+
+void doCustomUpload(struct sqlConnection *conn, struct column *colList);
+/* Put up page to upload custom columns. */
+
+void doCustomPaste(struct sqlConnection *conn, struct column *colList);
+/* Put up page to paste custom columns. */
+
+void doCustomFromUrl(struct sqlConnection *conn, struct column *colList);
+/* Put up page to paste in URLS with custom columns. */
+
+void doCustomSubmit(struct sqlConnection *conn, struct column *colList);
+/* Put up page to submit custom columns. */
+
+void doCustomClear(struct sqlConnection *conn, struct column *colList);
+/* Put up page to clear custom columns. */
+
+struct column *customColumnsRead(struct sqlConnection *conn, char *org, char *db);
+/* Read in data for custom columns. */
 
 /* ---- Get config options ---- */
 boolean showOnlyCanonical();
