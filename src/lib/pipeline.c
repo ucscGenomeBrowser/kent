@@ -130,9 +130,9 @@ static void plProcFree(struct plProc *proc)
 {
 int i;
 for (i = 0; proc->cmd[i] != NULL; i++)
-    free(proc->cmd[i]);
-free(proc->cmd);
-free(proc);
+    freeMem(proc->cmd[i]);
+freeMem(proc->cmd);
+freeMem(proc);
 }
 
 static void plProcExec(struct plProc* proc, int stdinFd, int stdoutFd, int stderrFd)
