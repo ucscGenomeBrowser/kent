@@ -36,7 +36,7 @@ if (flyBaseId == NULL)
     return FALSE;
 if (!sqlTableExists(conn, section->flyBaseTable) )
     return FALSE;
-if (!checkTables("fbAllele fbGene fbRef", conn) )
+if (!sqlTablesExist(conn, "fbAllele fbGene fbRef") )
     return FALSE;
 safef(query, sizeof(query), "select count(*) from %s where geneId = '%s'", 
 	section->flyBaseTable, flyBaseId);

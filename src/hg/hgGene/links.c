@@ -66,7 +66,7 @@ for (ra = raList; ra != NULL; ra = ra->next)
     if (linkOptionalField(ra, "hide") == NULL)
 	{
 	if (checkDatabases(linkOptionalField(ra, "databases")) 
-	    && checkTables(linkOptionalField(ra, "tables"), conn))
+	    && sqlTablesExist(conn, linkOptionalField(ra, "tables")))
 	    {
 	    AllocVar(link);
 	    link->priority = atof(linkRequiredField(ra, "priority"));

@@ -16,7 +16,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.21 2003/10/30 08:33:16 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.22 2003/11/12 18:45:31 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -123,24 +123,6 @@ boolean ok = TRUE;
 while ((word = nextWord(&s)) != NULL)
      {
      if (!sqlDatabaseExists(word))
-         {
-	 ok = FALSE;
-	 break;
-	 }
-     }
-freeMem(dupe);
-return ok;
-}
-
-boolean checkTables(char *tables, struct sqlConnection *conn)
-/* Check all tables in space delimited string exist. */
-{
-char *dupe = cloneString(tables);
-char *s = dupe, *word;
-boolean ok = TRUE;
-while ((word = nextWord(&s)) != NULL)
-     {
-     if (!sqlTableExists(conn, word))
          {
 	 ok = FALSE;
 	 break;
@@ -289,7 +271,7 @@ else
 freez(&description);
 if (summaryTables != NULL)
     {
-    if (checkTables(summaryTables, conn))
+    if (sqlTablesExist(conn, summaryTables))
 	{
 	char *summary = genoQuery(id, "summarySql", conn);
 	if (summary != NULL)

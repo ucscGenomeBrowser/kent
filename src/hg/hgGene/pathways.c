@@ -166,7 +166,7 @@ static boolean pathwayExists(struct pathwayLink *pl,
 	struct sqlConnection *conn, char *geneId)
 /* Return TRUE if pathway exists and has data. */
 {
-if (!checkTables(pl->tables, conn))
+if (!sqlTablesExist(conn, pl->tables))
     return FALSE;
 return pl->count(pl, conn, geneId) > 0;
 }
