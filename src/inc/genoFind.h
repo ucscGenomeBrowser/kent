@@ -109,14 +109,23 @@ struct genoFind *gfIndexNibs(int nibCount, char *nibNames[],
 	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile);
 /* Make index for all nib files. */
 
+void gfIndexTransNibs(struct genoFind *transGf[2][3], int nibCount, char *nibNames[], 
+    int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile);
+/* Make translated (6 frame) index for all nib files. */
+
 struct gfClump *gfFindClumps(struct genoFind *gf, struct dnaSeq *seq);
 /* Find clumps associated with one sequence. */
 
 struct gfClump *gfPepFindClumps(struct genoFind *gf, aaSeq *seq);
 /* Find clumps associated with one sequence. */
 
-void gfTransFindClumps(struct genoFind *gfs[3], bioSeq *seq, struct gfClump *clumps[3]);
+void gfTransFindClumps(struct genoFind *gfs[3], aaSeq *seq, struct gfClump *clumps[3]);
 /* Find clumps associated with one sequence in three translated reading frames. */
+
+void gfTransTransFindClumps(struct genoFind *gfs[3], aaSeq *seqs[3], 
+	struct gfClump *clumps[3][3]);
+/* Find clumps associated with three sequences in three translated 
+ * reading frames. Used for translated/translated protein comparisons. */
 
 void gfClumpDump(struct genoFind *gf, struct gfClump *clump, FILE *f);
 /* Print out info on clump */
@@ -160,14 +169,25 @@ char *gfSignature();
 void gfSendString(int sd, char *s);
 /* Send a string down a socket - length byte first. */
 
+void gfSendLongString(int sd, char *s);
+/* Send a string down a socket - up to 64k characters. */
+
 char *gfRecieveString(int sd, char buf[256]);
 /* Read string into buf and return it.  If buf is NULL
  * an internal buffer will be used. Abort if any problem. */
+
+char *gfRecieveLongString(int sd);
+/* Read string and return it.  freeMem
+ * the result when done. Abort if any problem*/
 
 char *gfGetString(int sd, char buf[256]);
 /* Read string into buf and return it.  If buf is NULL
  * an internal buffer will be used. Print warning message
  * and return NULL if any problem. */
+
+char *gfGetLongString(int sd);
+/* Read string and return it.  freeMem
+ * the result when done. */
 
 int gfReadMulti(int sd, void *vBuf, size_t size);
 /* Read in until all is read or there is an error. */
@@ -201,6 +221,12 @@ void gfAlignStrand(char *hostName, char *portName, char *nibDir, struct dnaSeq *
  * Then load homologous bits of genome locally and do detailed alignment.
  * Call 'outFunction' with each alignment that is found.  gfSavePsl is a handy
  * outFunction to use. */
+
+void gfAlignTrans(char *hostName, char *portName, char *nibDir, aaSeq *seq,
+    int minMatch, GfSaveAli outFunction, struct gfSavePslxData *outData);
+/* Search indexed translated genome on server with an amino acid sequence. 
+ * Then load homologous bits of genome locally and do detailed alignment.
+ * Call 'outFunction' with each alignment that is found. */
 
 #endif /* GENOFIND_H */
 

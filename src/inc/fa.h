@@ -15,7 +15,13 @@
 #endif
 
 struct dnaSeq *faReadDna(char *fileName);
-/* Open fa file and read a single sequence from it. */
+/* Open fa file and read a single dna sequence from it. */
+
+aaSeq *faReadAa(char *fileName);
+/* Open fa file and read a single dna sequence from it. */
+
+bioSeq *faReadSeq(char *fileName, boolean isDna);
+/* Read a dna or protein sequence. */
 
 struct dnaSeq *faReadAllDna(char *fileName);
 /* Return list of all DNA sequences in FA file. */
@@ -43,6 +49,10 @@ struct dnaSeq *faFromMemText(char *text);
  * be allocated with needMem.  This buffer becomes part of
  * the returned dnaSeq, which may be freed normally with
  * freeDnaSeq. */
+
+bioSeq *faSeqFromMemText(char *text, boolean isDna);
+/* Convert fa in memory to bioSeq. This cannabalizes text
+ * as does faFromMemText above. */
 
 boolean faFastReadNext(FILE *f, DNA **retDna, int *retSize, char **retName);
 /* Read in next FA entry as fast as we can. Return FALSE at EOF. 
