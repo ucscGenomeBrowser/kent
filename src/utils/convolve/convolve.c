@@ -9,24 +9,30 @@
 #include	<math.h>
 
 
-static char const rcsid[] = "$Id: convolve.c,v 1.4 2003/10/08 20:21:27 hiram Exp $";
+static char const rcsid[] = "$Id: convolve.c,v 1.5 2003/10/08 23:05:21 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"count", OPTION_INT},
+    {"html", OPTION_BOOLEAN},
+    {"logs", OPTION_BOOLEAN},
     {"verbose", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
 static int convolve_count = 4;		/* # of times to convolve	*/
+static boolean html = FALSE;		/* need neat html output	*/
+static boolean logs = FALSE;		/* input data is in logs, not probs */
 static boolean verbose = FALSE;		/* describe what happens	*/
 
 static void usage()
 {
 errAbort(
     "convolve - perform convolution of probabilities\n"
-    "usage: convolve [-count=N] <file with initial set of probabilities>\n"
+    "usage: convolve [-count=N] [-logs] [-html] <file with initial set of probabilities>\n"
     "\t-count=N - number of times to run convolution\n"
+    "\t-logs - input data is in log base 2 format, not probabilities\n"
+    "\t-html - output in html table row format\n"
 );
 }
 
@@ -42,54 +48,6 @@ struct histoGram
 
 /* log base two is	[regardless of the base of log() function] */
 #define	log2(x)	(log(x)/log(2.0))
-
-/*	the printHistorgram needs to order the entries from the hash
- *	by bin number since the hash is not necessarily ordered.
- *	Thus, we first count them, then allocate an array for all,
- *	read them into the array, and then traversing the array they
- *	are ordered.  bin numbers are assumed to run from 0 to N-1
- *	for N bins.
- */
-static void printHistogram( struct hash * histo, int medianBin )
-{
-int i;				/*	for loop counting	*/
-int elCount = 0;		/*	to count the hash elements	*/
-double * probabilities;		/*	will be an array of probabilities */
-double * log_2;			/*	will be an array of the log_2	*/
-struct hashEl *el, *elList;	/*	to traverse the hash	*/
-
-elList = hashElListHash(histo);	/*	fetch the hash as a list	*/
-for( el = elList; el != NULL; el = el->next )
-    {
-		++elCount;	/*	count hash elements	*/
-    }
-
-/*	Allocate the arrays	*/
-probabilities = (double *) needMem( (size_t) (sizeof(double) * elCount) );
-log_2 = (double *) needMem( (size_t) (sizeof(double) * elCount) );
-
-/*	Traverse the list again, this time placing all values in the
- *	arrays
- */
-for( el = elList; el != NULL; el = el->next )
-    {
-    struct histoGram * hg;	/*	histogram hash element	*/
-    hg = el->val;
-    probabilities[hg->bin] = hg->prob;
-    log_2[hg->bin] = hg->log_2;
-    }
-hashElFreeList(&elList);
-
-printf( "Histogram with %d bins:\n", elCount );
-/*	Now the array is an ordered list	*/
-for( i = 0; i < elCount; ++i )
-    {
-    if( medianBin == i )
-	printf("bin %d: %.8g %0.6g\t- median\n", i, probabilities[i], log_2[i]);
-    else
-	printf("bin %d: %.8g %0.6g\n", i, probabilities[i], log_2[i]);
-    }
-}
 
 /*	Working in log space for probabilities and need to add
  *	two probabilities together.  This case is for logs base
@@ -127,6 +85,81 @@ static double addLogProbabilities( double l0, double l1 )
 	}
     result = m + log2(1 + pow(2.0,-d));
     return(result);
+}	/*	addLogProbabilities()	*/
+
+/*	the printHistorgram needs to order the entries from the hash
+ *	by bin number since the hash is not necessarily ordered.
+ *	Thus, we first count them, then allocate an array for all,
+ *	read them into the array, and then traversing the array they
+ *	are ordered.  bin numbers are assumed to run from 0 to N-1
+ *	for N bins.
+ */
+static void printHistogram( struct hash * histo, int medianBin )
+{
+int i;				/*	for loop counting	*/
+int elCount = 0;		/*	to count the hash elements	*/
+double * probabilities;		/*	will be an array of probabilities */
+double * log_2;			/*	will be an array of the log_2	*/
+struct hashEl *el, *elList;	/*	to traverse the hash	*/
+double cumulativeProbability;	/*	to show CPD	*/
+double cumulativeLog_2;		/*	to show CPD	*/
+
+elList = hashElListHash(histo);	/*	fetch the hash as a list	*/
+for( el = elList; el != NULL; el = el->next )
+    {
+		++elCount;	/*	count hash elements	*/
+    }
+
+/*	Allocate the arrays	*/
+probabilities = (double *) needMem( (size_t) (sizeof(double) * elCount) );
+log_2 = (double *) needMem( (size_t) (sizeof(double) * elCount) );
+
+/*	Traverse the list again, this time placing all values in the
+ *	arrays
+ */
+for( el = elList; el != NULL; el = el->next )
+    {
+    struct histoGram * hg;	/*	histogram hash element	*/
+    hg = el->val;
+    probabilities[hg->bin] = hg->prob;
+    log_2[hg->bin] = hg->log_2;
+    }
+hashElFreeList(&elList);
+
+cumulativeProbability = 0.0;
+cumulativeLog_2 = -500.0;	/*	arbitrarily small number	*/
+
+printf( "Histogram with %d bins:\n", elCount );
+/*	Now the array is an ordered list	*/
+for( i = 0; i < elCount; ++i )
+    {
+    double inverseProbability;
+    double inverseLog_2;
+
+    cumulativeLog_2 = addLogProbabilities( cumulativeLog_2, log_2[i] );
+    cumulativeProbability  = pow(2.0,cumulativeLog_2);
+    inverseProbability = 1.0 - cumulativeProbability;
+    inverseLog_2 = log2(inverseProbability);
+    if( html )
+	{
+	if( medianBin == i )
+	    printf("<TR><TH> %d <BR> (median) </TH>\n", i);
+
+	printf("\t<TD ALIGN=RIGHT> %% %.2f </TD><TD ALIGN=RIGHT> %.4g </TD>\n\t<TD ALIGN=RIGHT> %% %.2f </TD><TD ALIGN=RIGHT> %.4f </TD>\n\t<TD ALIGN=RIGHT> %% %.2f </TD><TD ALIGN=RIGHT> %.4f </TD></TR>\n",
+		100.0 * probabilities[i],
+		log_2[i], 100.0 * cumulativeProbability,
+		cumulativeLog_2, 100.0 * inverseProbability, inverseLog_2);
+	} else {
+	printf("bin %d: %% %.2f %0.6g\t%% %.2f\t%.6g\t%% %.2f\t%.6g", i,
+		100.0 * probabilities[i], log_2[i],
+		100.0 * cumulativeProbability,
+		cumulativeLog_2, 100.0 * inverseProbability, inverseLog_2);
+	if( medianBin == i )
+	    printf(" - median\n");
+	else
+	    printf("\n");
+	}
+    }
 }
 
 /*	one iteration of convolution
@@ -201,7 +234,7 @@ for( i = 1; i < argc; ++i )
     struct hash * histo1;	/*	second histogram	*/
     int medianBin0 = 0;		/*	bin at median for histo0	*/
     int medianBin1 = 0;		/*	bin at median for histo1	*/
-    double medianProb = 0.0;	/*	probability at median	*/
+    double medianLog_2 = -500.0;	/*	log at median	*/
     int bin = 0;		/*	0 to N-1 for N bins	*/
     int convolutions = 0;	/*	loop counter for # of convolutions */
 
@@ -230,20 +263,29 @@ warn("May have more than 128 values at line %d, file: %s", lineCount, argv[i]);
 	for( j = 0; j < wordCount; ++j )
 	    {
 	    char binName[128];
+	    double dataValue;
 	    double probInput;
 	    double log_2;
-	    probInput = strtod(words[j], NULL);
+	    dataValue = strtod(words[j], NULL);
 	    ++inputValuesCount;
-	    if( probInput > 0.0 )
+	    if( logs )
 		{
-		    log_2 = log2(probInput);
-		    if( probInput > medianProb )
-			{
-			medianProb = probInput;
-			medianBin0 = bin;
-			}
+		log_2 = dataValue;
+		probInput = pow(2.0,log_2);
 		} else {
-		    log_2 = -32.0;
+		if( dataValue > 0.0 )
+		    {
+		    log_2 = log2(dataValue);
+		    probInput = dataValue;
+		    } else {
+		    log_2 = -500.0;	/*	arbitrary limit	*/
+		    probInput = pow(2.0,log_2);
+		    }
+		}
+	    if( log_2 > medianLog_2 )
+		{
+		medianLog_2 = log_2;
+		medianBin0 = bin;
 		}
 	    if( verbose ) printf("bin %d: %g %0.5g\n",
 		    inputValuesCount-1, probInput, log_2);
@@ -296,11 +338,15 @@ if(argc < 2)
 
 convolve_count = optionInt("count", 4);
 verbose = optionExists("verbose");
+logs = optionExists("logs");
+html = optionExists("html");
 
 if( verbose )
     {
     printf("options: -verbose, input file(s):\n" );
     printf("-count=%d\n", convolve_count );
+    printf("data input is in %s format\n", logs ? "log" : "probability" );
+    if( html ) printf ("output in html format\n");
     }
 
 convolve(argc, argv);
