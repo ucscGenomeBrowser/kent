@@ -49,7 +49,9 @@ longLabel Conserved Non-Coding (Cons Elements Minus Predicted Coding)
 priority 109.11
 group compGeno
 visibility hide
-type bed 4
+spectrum on
+exonArrows off
+type bed 6 .
 
 track multiz7way
 shortLabel 7Way Cons
