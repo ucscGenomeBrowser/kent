@@ -7457,7 +7457,7 @@ cat > makeMaf.csh << '_EOF_'
     ln -s /cluster/data/hg17/bed/liftOver/hg17ToMonDom1.chain /gbdb/hg17/liftOver/hg17ToMonDom1.over.chain
     hgAddLiftOverChain -multiple hg17 monDom1 
 
-# HG17 TO DANRER2 LIFTOVER CHAIN (IN PROGRESS 3/1/05 Andy)
+# HG17 TO DANRER2 LIFTOVER CHAIN (DONE 3/2/05 Andy)
     ssh kolossus
     cd /cluster/data/hg17/bed/blastz.danRer2/axtChain
     chainSplit chain all.chain.gz
