@@ -23,7 +23,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.33 2004/05/21 00:14:02 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.34 2004/05/21 01:21:13 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -1842,9 +1842,7 @@ while(parseList(myUser.contents,'?',i,tempVar,sizeof(tempVar)))
    
     if (sameString(tempVarName,"showColumns"))
 	{
-	freeMem(showColumns);
-	showColumns = needMem(strlen(tempVal)+1);
-	safef(showColumns, strlen(tempVal)+1, tempVal);
+	showColumns = cloneString(tempVal);
 	}
 
     if (sameString(tempVarName,"org"))
@@ -1938,6 +1936,8 @@ if (loginOK)
     {
     htmlSetCookie("qapushq", u.user, NULL, NULL, NULL, FALSE);
     qaUser=u.user;
+    oldRandState="";
+    showColumns=cloneString(defaultColumns);
     readMyUser();
     oldRandState="";
     saveMyUser();
@@ -1969,7 +1969,6 @@ dyStringPrintf(query,
     tbl, showColumns, pushQtbl, month, oldRandState, myUser.user);
 sqlUpdate(conn, query->string);
 freeDyString(&query);
-//probably not needed anymore:  readMyUser();  /* refresh myUser */
 }
 
 
@@ -2889,8 +2888,7 @@ conn = sqlConnectRemote(host, user, password, database);
 setLock();
 
 /* default columns */
-showColumns = needMem(2048);
-safef(showColumns, 2048, defaultColumns);
+showColumns = cloneString(defaultColumns);
     
 readMyUser();
 

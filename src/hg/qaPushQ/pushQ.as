@@ -38,6 +38,5 @@ table users
     char[8]  user;        "User"
     char[34] password;    "Password" 
     char[8]  role;        "Role=admin,dev,qa"
-	char[20] cacheDefeat; "Random string to defeat caches"
-	lstring  contents;    "pushq-cart contents"
+    lstring  contents;    "pushq-cart contents"
     )

@@ -112,7 +112,7 @@ void pushQOutput(struct pushQ *el, FILE *f, char sep, char lastSep);
 #define pushQCommaOut(el,f) pushQOutput(el,f,',',',');
 /* Print out pushQ as a comma separated list including final comma. */
 
-#define USERS_NUM_COLS 5
+#define USERS_NUM_COLS 4
 
 struct users
 /* PushQ Users */
@@ -121,7 +121,6 @@ struct users
     char user[9];	/* User */
     char password[35];	/* Password */
     char role[9];	/* Role=admin,dev,qa */
-    char cacheDefeat[21];	/* Random string to defeat caches */
     char *contents;	/* pushq-cart contents */
     };
 

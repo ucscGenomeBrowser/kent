@@ -43,7 +43,6 @@ CREATE TABLE users (
     user char(8) not null,	# User
     password char(34) not null,	# Password
     role char(8) not null,	# Role=admin,dev,qa
-    cacheDefeat char(20) not null,	# Random string to defeat caches
     contents longblob not null,	# pushq-cart contents
               #Indices
     PRIMARY KEY(user)
