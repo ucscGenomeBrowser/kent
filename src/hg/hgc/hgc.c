@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.665 2004/06/15 14:53:42 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.666 2004/06/15 20:30:58 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7310,8 +7310,8 @@ char chainTable[64];
 char chainTable_chrom[64];
 struct sqlResult *sr;
 char **row;
-struct psl *pslList = NULL;
 struct sqlConnection *conn = hAllocConn();
+int first = 0;
 
 safef(chainTable,sizeof(chainTable), "selfChain");
 if (!hTableExists(chainTable) )
@@ -7330,8 +7330,7 @@ printf("<B>Exons&nbsp;Inserted:</B>&nbsp;%d&nbsp;out&nbsp;of&nbsp;%d&nbsp;<br>\n
 printf("<B>Bases&nbsp;matching:</B>&nbsp;%d&nbsp;\n", pg->matches);
 printf("(%d&nbsp;%% of gene)<p>\n",pg->coverage);
 printf("<H4>RetroGene/Gene Alignment</H4>");
-printAlignments(pseudoList, start, "htcCdnaAli", tbl, acc);
-htmlHorizontalLine();
+printAlignments(pseudoList, start, "htcCdnaAli", alignTable, acc);
 printf("<H4>Annotation for Gene locus that spawned RetroGene</H4>");
 
 
@@ -7386,7 +7385,7 @@ else
     }
 if (!sameString(pg->mgc,"noMgc"))
     {
-    printf("<LI><B>Mgc Gene:</B> %s \n", pg->mgc);
+    printf("<LI><B>MGC Gene:</B> %s \n", pg->mgc);
     linkToOtherBrowser(database, pg->gChrom, pg->mStart, pg->mEnd);
     printf("%s:%d-%d \n", pg->gChrom, pg->mStart, pg->mEnd);
     printf("</A></LI>");
@@ -7416,12 +7415,12 @@ if (hTableExists("knownToPfam") && hTableExists(pfamDesc))
 
 if (hTableExists(alignTable))
     {
-    pslList = loadPslRangeT(alignTable, pg->name, pg->gChrom, pg->gStart, pg->gEnd);
+    struct psl *pslList = loadPslRangeT(alignTable, pg->name, pg->gChrom, pg->gStart, pg->gEnd);
     if (pslList != NULL)
         printAlignments(pslList, pslList->tStart, "htcCdnaAli", alignTable, pg->name);
     }
 htmlHorizontalLine();
-safef(chainTable_chrom,sizeof(chainTable_chrom), "%s_chainSelf",pslList->tName);
+safef(chainTable_chrom,sizeof(chainTable_chrom), "%s_chainSelf",pseudoList->tName);
 if (hTableExists(chainTable_chrom) )
     {
         /* lookup chain */
@@ -7447,10 +7446,10 @@ if (hTableExists(chainTable_chrom) )
         int chainId, score;
         unsigned int qStart, qEnd, qSize;
         char qStrand;
-        int first = 0;
         if (first == 0)
             {
-            printf("<H4>Gene/PseudoGene Alignment (multiple records are a result of breaks in the human Self Chaining)</H4>Shows removed introns, frameshifts and in frame stops.");
+            printf("<H4>Gene/PseudoGene Alignment (multiple records are a result of breaks in the human Self Chaining)</H4>\n");
+            printf("Shows removed introns, frameshifts and in frame stops.\n");
             first = 1;
             }
         chainId = sqlUnsigned(row[0]);
@@ -7466,14 +7465,15 @@ if (hTableExists(chainTable_chrom) )
             qStart = tmp;
             }
         //if (pg->chainId == 0) pg->chainId = chainId;
-        puts("<LI>\n");
-        hgcAnchorPseudoGene(pg->kgName, "knownGene", pslList->tName, "startcodon", pseudoList->tStart, pslList->tEnd, 
+        puts("<ul><LI>\n");
+        hgcAnchorPseudoGene(pg->kgName, "knownGene", pseudoList->tName, "startcodon", pseudoList->tStart, pseudoList->tEnd, 
                 pg->gChrom, pg->kStart, pg->kEnd, chainId, database);
         printf("Annotated alignment using chainId: %d </A> \n", chainId);
         printf("score: %d \n", score);
-        hgcAnchorTranslatedChain(chainId, chainTable, pslList->tName, pg->gStart, pg->gEnd);
-        printf("Raw alignment %s:%d-%d </A> \n", pg->gChrom,qStart,qEnd);
         puts("</LI>\n");
+        printf("<ul>Raw alignment: ");
+        hgcAnchorTranslatedChain(chainId, chainTable, pseudoList->tName, pg->gStart, pg->gEnd);
+        printf("%s:%d-%d </A></ul> </ul>\n", pg->gChrom,qStart,qEnd);
         }
     sqlFreeResult(&sr);
     }
@@ -7501,18 +7501,18 @@ int winStart = cartInt(cart, "l");
 int winEnd = cartInt(cart, "r");
 char *chrom = cartString(cart, "c");
 struct psl *pslList = NULL, *psl = NULL;
-char *tbl = cgiUsualString("table", cgiString("g"));
+char *alignTable = cgiUsualString("table", cgiString("g"));
 int rowOffset = 0;
 
 /* Get alignment info. */
-if (sameString(tbl,"pseudoGeneLink2"))
-    tbl = cloneString("pseudoMrna2");
-if (startsWith(tbl,"pseudoGeneLink"))
-    tbl = cloneString("pseudoMrna");
-if (hTableExists(tbl) )
-    pslList = loadPslRangeT(tbl, acc, chrom, winStart, winEnd);
+if (sameString(alignTable,"pseudoGeneLink2"))
+    alignTable = cloneString("pseudoMrna2");
+if (startsWith(alignTable,"pseudoGeneLink"))
+    alignTable = cloneString("pseudoMrna");
+if (hTableExists(alignTable) )
+    pslList = loadPslRangeT(alignTable, acc, chrom, winStart, winEnd);
 else
-    errAbort("Table %s not found.\n",tbl);
+    errAbort("Table %s not found.\n",alignTable);
 slSort(&pslList, pslCmpScoreDesc);
 
 /* print header */
@@ -7545,7 +7545,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     pg = pseudoGeneLinkLoad(row+rowOffset);
     if (hTableExists("axtInfo") && pslList != NULL)
         {
-        pseudoPrintPos(pslList, pg, table, start, acc);
+        pseudoPrintPos(pslList, pg, alignTable, start, acc);
         }
     }
 printTrackHtml(tdb);
