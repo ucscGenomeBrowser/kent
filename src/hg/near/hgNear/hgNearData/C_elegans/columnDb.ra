@@ -27,7 +27,7 @@ type lookup altSplice name value
 
 name kimLifeCycleMedian
 shortLabel Median Expression
-longLabel Median Kim-lab Life-cycle Expression Data
+longLabel Median Kim-Lab Life-Cycle Expression Data
 priority 2.7
 visibility on
 type expRatio sangerToKim hgFixed.kimWormLifeMedianRatio hgFixed.kimWormLifeMedianExps
@@ -36,7 +36,7 @@ representatives 0,1,2,3,4,5,6
 
 name kimLifeCycleFull
 shortLabel Long Expression
-longLabel All Kim-lab Life-cycle Data Expression Data
+longLabel All Kim-Lab Life-Cycle Expression Data
 priority 2.8
 visibility off
 type expRatio sangerToKim hgFixed.kimWormLifeAllRatio hgFixed.kimWormLifeAllExps
