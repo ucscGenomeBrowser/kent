@@ -961,3 +961,11 @@ termRegex [BPORUP][A-Z]+[0-9]+(_H)?
 searchMethod prefix
 searchPriority 50
 
+track uniGene_2
+shortLabel UniGene
+longLabel UniGene Alignments and SAGE Info
+group rna
+priority 69
+visibility hide
+spectrum on
+type bed 12
