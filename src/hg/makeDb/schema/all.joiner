@@ -256,6 +256,11 @@ identifier vegaPseudogeneName typeOf=vegaName
 "Link together VEGA pseudogene and other info."
     $gbd.vegaPseudoGene.name
 
+identifier pseudoGeneName
+"Link together pseudo predicted gene structure and peptide"
+    hg16.pseudoMrna.qName dupeOk
+    hg16.pseudoGeneLink.name
+
 # Microarray stuff.
 
 identifier gnfHumanAtlas2
