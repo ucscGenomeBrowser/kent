@@ -3516,7 +3516,7 @@ Color contrastingColor(struct vGfx *vg, int backgroundIx)
 /* Return black or white whichever would be more visible over
  * background. */
 {
-struct rgbColor c = vg->colorIxToRgb(vg, backgroundIx);
+struct rgbColor c = vgColorIxToRgb(vg, backgroundIx);
 int val = (int)c.r + c.g + c.g + c.b;
 if (val >= 256)
     return MG_BLACK;

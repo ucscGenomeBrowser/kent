@@ -303,5 +303,9 @@ void chainMethods(struct trackGroup *tg);
 void netMethods(struct trackGroup *tg);
 /* Make track group for chain/net alignment. */
 
+#define uglyh printHtmlComment
+/* Debugging aid. */
+
+
 #endif /* HGTRACKS_H */
 
