@@ -14,7 +14,7 @@
 
 DBS = 	hg13 hg15 hg16 hg17 \
 	panTro1 \
-	mm2 mm3 mm4 \
+	mm2 mm3 mm4 mm5\
 	rn2 rn3 \
 	galGal2 \
 	fr1 \
@@ -50,7 +50,7 @@ DBS = 	hg13 hg15 hg16 hg17 \
 
 MGC_DBS = \
 	hg15 hg16 hg17 \
-	mm3 mm4
+	mm3 mm4 mm5
 
 update:
 	@for DB in $(DBS) x; do \
