@@ -25,7 +25,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.140 2003/09/18 03:15:15 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.141 2003/09/18 22:41:36 markd Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -564,15 +564,12 @@ if(bed->blockCount == 0)
 else
     {
     int offSet = bed->chromStart;
-    struct dyString *currentSeq = NULL;
-    for(i=0;i<bed->blockCount; i++)
-	size += bed->blockSizes[i];
-    currentSeq = newDyString(size + 1);
+    struct dyString *currentSeq = newDyString(2048);
     hNibForChrom(bed->chrom, fileName);
     for(i=0; i<bed->blockCount; i++)
 	{
 	block = nibLoadPart(fileName, offSet+bed->chromStarts[i], bed->blockSizes[i]);
-	dyStringAppend(currentSeq, block->dna);
+	dyStringAppendN(currentSeq, block->dna, block->size);
 	dnaSeqFree(&block);
 	}
     AllocVar(bedSeq);
