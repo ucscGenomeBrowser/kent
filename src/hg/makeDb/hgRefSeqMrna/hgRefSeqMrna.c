@@ -274,6 +274,30 @@ chopSuffix(parts[3]);
 return parts[3];
 }
 
+char *accWithoutSuffix(char *acc) 
+/* 
+Function to strip the suffix from an accession in order to make it consistent
+with our notation here. We ignore the suffix.
+Eg. NM_123456.1 becomes NM_123456
+*/
+{
+char *fixedAcc = acc;
+char *dotIndex = strchr(acc, '.');
+
+if (dotIndex)
+    {
+    char *accNum = NULL;
+    int dotPos = dotIndex - acc; /* stupid C pointer arith. No other way to do get the string
+                                    length up to the period. */
+    accNum = needMem(dotPos + 1);
+    strncpy(accNum, acc, dotPos);
+    accNum[dotPos] = 0; /* Null terminate */
+    fixedAcc = accNum;
+    }
+
+return fixedAcc;
+}
+
 void writeSeqTable(char *faName, FILE *out, boolean unburyAccession, boolean isPep)
 /* Write out contents of fa file to name/sequence pairs in tabbed out file. */
 {
@@ -294,18 +318,8 @@ while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, !isPep))
         {
 	seq.name = unburyAcc(lf, seq.name);
         }
-
-    dotIndex = strchr(seq.name, '.');
-    if (dotIndex)
-        {
-        char accNum[32];    
-        int dotPos = dotIndex - seq.name; /* G*dd*am stupid C pointer arith. No other way to do get the string
-                                            length up to the period. Grrr */
-        strncpy(accNum, seq.name, dotPos);
-        accNum[dotPos] = 0; /* Null terminate */
-        seq.name = accNum;
-        }
-
+    
+    seq.name = accWithoutSuffix(seq.name);
     fprintf(out, "%s\t%s\n", seq.name, seq.dna);
     }
 if (clDots) printf("\n");
@@ -392,6 +406,7 @@ sqlUpdate(conn, "delete from refMrna");
 /* Scan through locus link to omim ID file and put in hash. */
     {
     char *row[2];
+
     printf("Scanning %s\n", mim2locFile);
     lf = lineFileOpen(mim2locFile, TRUE);
     while (lineFileRow(lf, row))
@@ -449,7 +464,6 @@ while (lineFileNext(lf, &line, NULL))
     {
     int mimVal;
     char *mrnaAcc;
-    char *dotIndex = NULL;
 
     if (line[0] == '#')
         continue;
@@ -458,17 +472,7 @@ while (lineFileNext(lf, &line, NULL))
         errAbort("Expecting at least 5 tab-separated words line %d of %s",
 		lf->lineIx, lf->fileName);
     mrnaAcc = row[1];
-
-    dotIndex = strchr(mrnaAcc, '.');
-    if (dotIndex)
-        {
-        char accNum[32];    
-        int dotPos = dotIndex - mrnaAcc; /* G*dd*am stupid C pointer arith. No other way to do get the string
-                                           length up to the period. Grrr */
-        strncpy(accNum, mrnaAcc, dotPos);
-        accNum[dotPos] = 0; /* Null terminate */
-        mrnaAcc = accNum;
-        }
+    mrnaAcc = accWithoutSuffix(mrnaAcc);
 
     if (mrnaAcc[2] != '_')
         warn("%s is and odd name %d of %s", 
@@ -478,19 +482,7 @@ while (lineFileNext(lf, &line, NULL))
 	void *v;
 	rsi->locusLinkId = lineFileNeedNum(lf, row, 0);
 	rsi->omimId = ptToInt(hashFindVal(loc2mimHash, row[0]));
-
-        dotIndex = strchr(row[4], '.');
-        if (dotIndex)
-            {
-            char accNum[32];    
-            int dotPos = dotIndex - row[4]; /* G*dd*am stupid C pointer arith. No other way to do get the string
-                                                length up to the period. Grrr */
-            strncpy(accNum, row[4], dotPos);
-            accNum[dotPos] = 0; /* Null terminate */
-            row[4] = accNum;
-            }
-
-	rsi->proteinAcc = cloneString(row[4]);
+	rsi->proteinAcc = cloneString(accWithoutSuffix(row[4]));
 	}
     }
 lineFileClose(&lf);
