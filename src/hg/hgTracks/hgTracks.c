@@ -4313,10 +4313,27 @@ int oneHeight;
 int x1, x2, w;
 int baseWidth = seqEnd - seqStart;
 int tooBig = (winBaseCount > cloneFragMaxWin);
+int hilight = MG_CYAN;
+boolean gotTiling = hTableExists("tilingPath");
+struct sqlConnection *conn = NULL;
+int bgColor;
+char accOnly[64];
 
 
+if (gotTiling)
+    conn = hAllocConn();
 for (ci = tg->items; ci != NULL; ci = ci->next)
     {
+    bgColor = light;
+    if (gotTiling)
+	{
+	char query[256], buf[256];
+	strcpy(accOnly, ci->name);
+	chopSuffix(accOnly);
+	sprintf(query, "select accession from tilingPath where accession = '%s'", accOnly);
+        if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
+	    bgColor = hilight;
+	}
     if (!tooBig)
 	oneHeight = oneOrRowCount(ci)*lineHeight+2;
     else
@@ -4324,7 +4341,7 @@ for (ci = tg->items; ci != NULL; ci = ci->next)
     x1 = roundingScale(ci->cloneStart-winStart, width, baseWidth)+xOff;
     x2 = roundingScale(ci->cloneEnd-winStart, width, baseWidth)+xOff;
     w = x2-x1;
-    mgDrawBox(mg, x1, y, w, oneHeight-1, light);
+    mgDrawBox(mg, x1, y, w, oneHeight-1, bgColor);
     if (!tooBig)
 	drawOneClone(ci, seqStart, seqEnd, mg, xOff, y+1, width, font, lineHeight, 
 		color, TRUE, tg->subType);
@@ -4333,6 +4350,7 @@ for (ci = tg->items; ci != NULL; ci = ci->next)
 		color, FALSE, tg->subType);
     y += oneHeight;
     }
+hFreeConn(&conn);
 }
 
 static void cloneDraw(struct trackGroup *tg, int seqStart, int seqEnd,
