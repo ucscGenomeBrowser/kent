@@ -381,6 +381,8 @@ else
 	    toLowerN(seq->dna, seq->size);
 	    }
 	}
+    else
+	qIsProt = TRUE;
     }
 if (seqList != NULL && seqList->name[0] == 0)
     {
