@@ -39,6 +39,15 @@ if (origSec == 0)
 return (tv.tv_sec-origSec)*1000 + tv.tv_usec / 1000;
 }
 
+void sleep1000(int milli)
+/* Sleep for given number of 1000ths of second */
+{
+struct timeval tv;
+tv.tv_sec = milli/1000;
+tv.tv_usec = (milli%1000)*1000;
+select(0, NULL, NULL, NULL, &tv);
+}
+
 long clock1()
 /* A seconds clock. */
 {

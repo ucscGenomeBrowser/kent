@@ -46,6 +46,9 @@ boolean makeDir(char *dirName);
 /* 1000 hz clock */
 long clock1000();
 
+/* Sleep for given number of milliseconds. */
+void sleep1000(int milli);
+
 /* A 1 hz clock. */
 long clock1();
 
