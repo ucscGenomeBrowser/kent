@@ -13,7 +13,7 @@
 #include "kgAlias.h"
 #include "findKGAlias.h"
 
-static char const rcsid[] = "$Id: knownGene.c,v 1.5 2003/06/25 02:47:31 kent Exp $";
+static char const rcsid[] = "$Id: knownGene.c,v 1.6 2003/06/25 02:51:25 kent Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
@@ -213,7 +213,6 @@ for (ka = kaList; ka != NULL; ka = ka->next)
     sr = knownGeneSearchResult(conn, ka->kgID, ka->alias);
     slAddHead(&srList, sr);
     }
-slSort(&srList, searchResultCmpShortLabel);
 return srList;
 }
 
