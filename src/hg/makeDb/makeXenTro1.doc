@@ -1598,10 +1598,86 @@ doPhast $(file1) $(root1)
     wigAsciiCrunch -dirDir ppRaw /cluster/data/xenTro1/bed/multiz/cons/phastCons5.pp
     cd /cluster/data/xenTro1/bed/multiz/cons
     wigAsciiToBinary -wibFile=phastCons5 phastCons5.pp
-
+    
     # Load gbdb and database with wiggle.
     ssh hgwdev
     ln -s /cluster/data/xenTro1/bed/multiz/cons/phastCons5.wib /gbdb/xenTro1/wib/phastCons5.wib
     cd /cluster/data/xenTro1/bed/multiz/cons
     hgLoadWiggle xenTro1 phastCons5 phastCons5.wig
+
+# RE-INDEX 12 TABLES TO ACCOMODATE LONG SCAFFOLD NAMES
+
+    hgsql xenTro1 -e 'drop index qName on blatFr1'
+    hgsql xenTro1 -e 'create index qName on blatFr1(qName(16))'
+
+    hgsql xenTro1 -e 'drop index tName on all_est'
+    hgsql xenTro1 -e 'create index tName on all_est(tName(16),bin)'
+    hgsql xenTro1 -e 'drop index tName_2 on all_est'
+    hgsql xenTro1 -e 'create index tName_2 on all_est(tName(16),tStart)'
+    hgsql xenTro1 -e 'drop index tName_3 on all_est'
+    hgsql xenTro1 -e 'create index tName_3 on all_est(tName(16),tEnd)'
+
+    hgsql xenTro1 -e 'drop index chrom on estOrientInfo'
+    hgsql xenTro1 -e 'create index chrom on estOrientInfo(chrom(16),bin)'
+    hgsql xenTro1 -e 'drop index chrom_2 on estOrientInfo'
+    hgsql xenTro1 -e 'create index chrom_2 on estOrientInfo(chrom(16),chromStart)'
+    hgsql xenTro1 -e 'drop index chrom_3 on estOrientInfo'
+    hgsql xenTro1 -e 'create index chrom_3 on estOrientInfo(chrom(16),chromEnd)'
+
+    hgsql xenTro1 -e 'drop index chrom on gc5Base'
+    hgsql xenTro1 -e 'create index chrom on gc5Base(chrom(16))'
+
+    hgsql xenTro1 -e 'drop index name on genscan'
+    hgsql xenTro1 -e 'create index name on genscan(name(16))'
+    hgsql xenTro1 -e 'drop index name2 on genscan'
+    hgsql xenTro1 -e 'create index name2 on genscan(name2(16))'
+    hgsql xenTro1 -e 'drop index chrom on genscan'
+    hgsql xenTro1 -e 'create index chrom on genscan(chrom(16),txStart)'
+    hgsql xenTro1 -e 'drop index chrom_2 on genscan'
+    hgsql xenTro1 -e 'create index chrom_2 on genscan(chrom(16),txEnd)'
+
+    hgsql xenTro1 -e 'drop index chrom on genscanSubopt'
+    hgsql xenTro1 -e 'create index chrom on genscanSubopt(chrom(16),bin)'
+    hgsql xenTro1 -e 'drop index chrom_2 on genscanSubopt'
+    hgsql xenTro1 -e 'create index chrom_2 on genscanSubopt(chrom(16),chromStart)'
+    hgsql xenTro1 -e 'drop index chrom_3 on genscanSubopt'
+    hgsql xenTro1 -e 'create index chrom_3 on genscanSubopt(chrom(16),chromEnd)'
+
+    hgsql xenTro1 -e 'drop index tName on intronEst'
+    hgsql xenTro1 -e 'create index tName on intronEst(tName(16),bin)'
+    hgsql xenTro1 -e 'drop index tName_2 on intronEst'
+    hgsql xenTro1 -e 'create index tName_2 on intronEst(tName(16),tStart)'
+    hgsql xenTro1 -e 'drop index tName_3 on intronEst'
+    hgsql xenTro1 -e 'create index tName_3 on intronEst(tName(16),tEnd)'
+
+    hgsql xenTro1 -e 'drop index chrom on mostConserved'
+    hgsql xenTro1 -e 'create index chrom on mostConserved(chrom(16),bin)'
+    hgsql xenTro1 -e 'drop index chrom_2 on mostConserved'
+    hgsql xenTro1 -e 'create index chrom_2 on mostConserved(chrom(16),chromStart)'
+    hgsql xenTro1 -e 'drop index chrom_3 on mostConserved'
+    hgsql xenTro1 -e 'create index chrom_3 on mostConserved(chrom(16),chromEnd)'
+
+    hgsql xenTro1 -e 'drop index tName on all_mrna'
+    hgsql xenTro1 -e 'create index tName on all_mrna(tName(16),bin)'
+    hgsql xenTro1 -e 'drop index tName_2 on all_mrna'
+    hgsql xenTro1 -e 'create index tName_2 on all_mrna(tName(16),tStart)'
+    hgsql xenTro1 -e 'drop index tName_3 on all_mrna'
+    hgsql xenTro1 -e 'create index tName_3 on all_mrna(tName(16),tEnd)'
+
+    hgsql xenTro1 -e 'drop index chrom on mrnaOrientInfo'
+    hgsql xenTro1 -e 'create index chrom on mrnaOrientInfo(chrom(16),bin)'
+    hgsql xenTro1 -e 'drop index chrom_2 on mrnaOrientInfo'
+    hgsql xenTro1 -e 'create index chrom_2 on mrnaOrientInfo(chrom(16),chromStart)'
+    hgsql xenTro1 -e 'drop index chrom_3 on mrnaOrientInfo'
+    hgsql xenTro1 -e 'create index chrom_3 on mrnaOrientInfo(chrom(16),chromEnd)'
+
+    hgsql xenTro1 -e 'drop index chrom on multiz5way'
+    hgsql xenTro1 -e 'create index chrom on multiz5way(chrom(16),bin)'
+    hgsql xenTro1 -e 'drop index chrom_2 on multiz5way'
+    hgsql xenTro1 -e 'create index chrom_2 on multiz5way(chrom(16),chromStart)'
+    hgsql xenTro1 -e 'drop index chrom_3 on multiz5way'
+    hgsql xenTro1 -e 'create index chrom_3 on multiz5way(chrom(16),chromEnd)'
+
+    hgsql xenTro1 -e 'drop index chrom on phastCons5'
+    hgsql xenTro1 -e 'create index chrom on phastCons5(chrom(16))'
 
