@@ -34,24 +34,6 @@ color 30,130,210
 type genePred
 url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
 
-track intronEst
-shortLabel Spliced ESTs
-longLabel $Organism ESTs That Have Been Spliced
-group rna
-priority 56
-visibility dense
-spectrum on
-type psl est
-
-track est
-shortLabel $Organism ESTs
-longLabel $Organism ESTs Including Unspliced
-group rna
-priority 57
-visibility hide
-spectrum on
-type psl est
-
 track blatFr1
 shortLabel Fugu Blat
 longLabel Takifugu rubripes Translated Blat Alignments
