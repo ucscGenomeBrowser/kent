@@ -38,6 +38,9 @@ void bitAnd(Bits *a, Bits *b, int bitCount);
 void bitOr(Bits *a, Bits *b, int bitCount);
 /* Or two bitmaps.  Put result in a. */
 
+void bitXor(Bits *a, Bits *b, int bitCount);
+/* Xor two bitmaps.  Put result in a. */
+
 void bitNot(Bits *a, int bitCount);
 /* Flip all bits in a. */
 
