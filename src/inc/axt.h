@@ -191,6 +191,31 @@ boolean axtAffineSmallEnough(double querySize, double targetSize);
 /* Return TRUE if it is reasonable to align sequences of given sizes
  * with axtAffine. */
 
+
+struct axt *axtAffine2Level(bioSeq *query, bioSeq *target, struct axtScoreScheme *ss);
+/* 
+
+   Return alignment if any of query and target using scoring scheme. 
+   
+   2Level uses an economical amount of ram and should work for large target sequences.
+   
+   If Q is query size and T is target size and M is memory size, then
+   Total memory used M = 30*Q*sqrt(T).  When the target is much larger than the query
+   this method saves ram, and average runtime is only 50% greater, or 1.5 QT.  
+   If Q=5000 and T=245,522,847 for hg17 chr1, then M = 2.2 GB ram.  
+   axtAffine would need M=3QT = 3.4 TB.
+   Of course massive alignments will be painfully slow anyway.
+
+   Works for protein as well as DNA given the correct scoreScheme.
+  
+   NOTES:
+   Double-gap cost is equal to gap-extend cost, but gap-open would also work.
+   On very large target, score integer may overflow.
+   Input sequences not checked for invalid chars.
+   Input not checked but query should be shorter than target.
+   
+*/
+
 void axtAddBlocksToBoxInList(struct boxIn **pList, struct axt *axt);
 /* Add blocks (gapless subalignments) from (non-NULL!) axt to block list. 
  * Note: list will be in reverse order of axt blocks. */
