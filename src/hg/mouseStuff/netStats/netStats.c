@@ -32,7 +32,8 @@ void logIt(char *format, ...)
 va_list args;
 va_start(args, format);
 vprintf(format, args);
-vfprintf(logFile, format, args);
+if (logFile != NULL && logFile != stdout)
+    vfprintf(logFile, format, args);
 va_end(args);
 }
 
@@ -123,6 +124,7 @@ struct fillStats
 /* Information on fills. */
     {
     int count;
+    double totalAli;			/* Total alignments. */
     struct intList *spanT, *spanQ;	/* Coverage with gaps. */
     struct intList *ali;		/* Coverage no gaps. */
     struct intList *qFar;		/* Total farness. */
@@ -149,12 +151,14 @@ void addFillStats(struct fillStats *stats, struct cnFill *fill, FILE *f)
 /* Add info from one fill to stats. */
 {
 stats->count += 1;
+
 addInt(&stats->spanT, fill->tSize);
 addInt(&stats->spanQ, fill->qSize);
 addInt(&stats->ali, fill->ali);
-if (fill->qDup > 0)
+stats->totalAli += fill->ali;
+if (fill->qDup >= 0)
     addInt(&stats->qDup, fill->qDup);
-if (fill->qFar > 0)
+if (fill->qFar >= 0)
     addInt(&stats->qFar, fill->qFar);
 if (f)
     fprintf(f, "%d\t%d\t%d\t%d\t%d\n", fill->tSize, fill->qSize, fill->ali,
@@ -214,15 +218,16 @@ if (fill->type != NULL && sameString(fill->type, "syn"))
 }
 
 
-void logListStats(struct intList **pList, int count)
+void logListStats(struct intList **pList)
 /* Write out some stats to log file. */
 {
-int i, middle = count/2;
 struct intList *el;
 double total = 0;
 int minVal = 0, medVal = 0, maxVal = 0;
+int count = slCount(*pList);
+int i, middle = count/2;
 
-if (*pList != NULL)
+if (count != 0)
     {
     slSort(pList, intListCmp);
     minVal = (*pList)->val;
@@ -244,21 +249,23 @@ void logFillStats(char *name, struct fillStats *stats)
 /* Write out info on stats */
 {
 logIt("%s count: %d\n", name, stats->count);
+logIt("%s percent of total: %3.1f%%\n", name, 
+	100.0*stats->totalAli/fillStats.totalAli);
 logIt("%s span T: ", name);
-logListStats(&stats->spanT, stats->count);
+logListStats(&stats->spanT);
 logIt("%s span Q: ", name);
-logListStats(&stats->spanQ, stats->count);
+logListStats(&stats->spanQ);
 logIt("%s aligning: ", name);
-logListStats(&stats->ali, stats->count);
+logListStats(&stats->ali);
 if (stats->qDup != NULL)
     {
     logIt("%s ave qDup: ", name);
-    logListStats(&stats->qDup, stats->count);
+    logListStats(&stats->qDup);
     }
 if (stats->qFar != NULL)
     {
     logIt("%s ave qFar: ", name);
-    logListStats(&stats->qFar, stats->count);
+    logListStats(&stats->qFar);
     }
 }
 
@@ -311,6 +318,24 @@ logFillStats("nonSyn", &nonSynStats);
 logFillStats("syn", &synStats);
 logFillStats("inv", &invStats);
 logFillStats("dupe", &dupeStats);
+}
+
+void testList()
+{
+struct intList *list = NULL;
+intLm = lmInit(0);
+addInt(&list, 1);
+addInt(&list, 2);
+addInt(&list, 3);
+addInt(&list, 4);
+addInt(&list, 5);
+addInt(&list, 6);
+addInt(&list, 7);
+addInt(&list, 8);
+addInt(&list, 9);
+addInt(&list, 10);
+addInt(&list, 11);
+logListStats(&list);
 }
 
 int main(int argc, char *argv[])
