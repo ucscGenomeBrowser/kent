@@ -310,3 +310,80 @@ mkdir $db.test $db.nibTest
 time agpAllToFaFile $db.contig.agp $fa $db.fa
 faSplit byname $db.fa $db.test/
 csh  testFa.csh panTro1 chimp >&! testFa.chimp.log &
+
+
+cd /cluster/data/encode/ortho2/agp/tests
+cat > getSeqFromAcc.pl <<EOF
+#!/usr/bin/perl -W
+ 
+$URL = "http://www.ncbi.nih.gov/entrez/eutils/efetch.fcgi?db=nucleotide&rettype=fasta&id=";
+$db=shift;
+$dir = "/cluster/data/encode/ortho2/agp/tests/$db.contig.fa";
+system("mkdir -p $dir");
+ 
+while (<>)
+{
+    chomp();
+    system("wget -O $dir/$_ \"$URL$_\"");
+}
+EOF
+#
+chmod ug+x getSeqFromAcc.pl
+
+cat > accHeader.pl <<EOF
+#!/usr/bin/perl -W
+$dir=shift;
+$db=shift;
+opendir(DIR,$dir) or die "Can't open $dir";
+open (OUT, ">$db.contigAccs.fa");
+@files = readdir(DIR);
+foreach $file (@files)
+{
+    open (IN,  "<$dir/$file");
+    while (<IN>)
+    {
+        if (/^>/)
+        {
+            @f=split /\|/;
+            print OUT ">$f[3]\n";
+        }
+        else
+        {
+            print OUT;
+        }
+    }
+    close(IN);
+}
+close(OUT);
+EOF
+#
+chmod ug+x accHeader.pl
+
+# rat
+set db  = rn3
+set org = rat
+set fa  = $db.contig.fa
+mkdir -p $db.test $db.nibTest
+
+cat ../$db/${org}_EN*.agp | grep W | cut -f6 > $db.accessions
+./getSeqFromAcc.pl $db < $db.accessions >& $db.log
+./accHeader.pl $db.contig.fa $db >>& $db.log
+
+agpAllToFaFile $db.contig.agp $fa $db.fa
+faSplit byname $db.fa $db.test/
+csh  testFa.csh $db $org >&! testFa.$org.log &
+
+# mouse
+set db  = mm5
+set org = mouse
+set fa  = $db.contig.fa
+mkdir -p $db.test $db.nibTest
+
+cat ../$db/${org}_EN*.agp | grep W | cut -f6 > $db.accessions
+./getSeqFromAcc.pl $db < $db.accessions >& $db.log
+./accHeader.pl $db.contig.fa $db >>& $db.log
+
+agpAllToFaFile $db.contig.agp $fa $db.fa
+faSplit byname $db.fa $db.test/
+csh  testFa.csh $db $org >&! testFa.$org.log &
+
