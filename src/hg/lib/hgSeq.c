@@ -23,7 +23,7 @@ void hgSeqFeatureRegionOptions(struct cart *cart, boolean canDoUTR,
 char *exonStr = canDoIntrons ? " Exons" : "";
 char *setting;
 
-puts("<H3> Sequence Retrieval Region Options: </H3>\n");
+puts("\n<H3> Sequence Retrieval Region Options: </H3>\n");
 
 if (canDoIntrons || canDoUTR)
     {
@@ -32,7 +32,7 @@ if (canDoIntrons || canDoUTR)
     puts("Promoter/Upstream by ");
     setting = cartCgiUsualString(cart, "hgSeq.promoterSize", "1000");
     cgiMakeTextVar("hgSeq.promoterSize", setting, 5);
-    puts("bases <BR>\n");
+    puts("bases <BR>");
     }
 
 if (canDoUTR)
@@ -86,7 +86,7 @@ if (canDoIntrons || canDoUTR)
     puts("Downstream by ");
     setting = cartCgiUsualString(cart, "hgSeq.downstreamSize", "1000");
     cgiMakeTextVar("hgSeq.downstreamSize", setting, 5);
-    puts("bases <BR>\n");
+    puts("bases <BR>");
     }
 
 if (canDoIntrons || canDoUTR)
@@ -95,15 +95,15 @@ if (canDoIntrons || canDoUTR)
     cgiMakeRadioButton("hgSeq.granularity", "gene",
 		       sameString(setting, "gene"));
     if (canDoUTR)
-	puts("One FASTA record per gene. <BR>\n");
+	puts("One FASTA record per gene. <BR>");
     else
-	puts("One FASTA record per item. <BR>\n");
+	puts("One FASTA record per item. <BR>");
     cgiMakeRadioButton("hgSeq.granularity", "feature",
 		       sameString(setting, "feature"));
     if (canDoUTR)
-	puts("One FASTA record per region (exon, intron, etc.) with \n");
+	puts("One FASTA record per region (exon, intron, etc.) with ");
     else
-	puts("One FASTA record per region (block/between blocks) with \n");
+	puts("One FASTA record per region (block/between blocks) with ");
     }
 else
     {
@@ -111,10 +111,17 @@ else
     }
 setting = cartCgiUsualString(cart, "hgSeq.padding5", "0");
 cgiMakeTextVar("hgSeq.padding5", setting, 5);
-puts("extra bases upstream (5') and \n");
+puts("extra bases upstream (5') and ");
 setting = cartCgiUsualString(cart, "hgSeq.padding3", "0");
 cgiMakeTextVar("hgSeq.padding3", setting, 5);
-puts("extra downstream (3') <BR>\n");
+puts("extra downstream (3') <BR>");
+if (canDoIntrons && canDoUTR)
+    {
+    puts("&nbsp;&nbsp;&nbsp;");
+    cgiMakeCheckBox("hgSeq.splitCDSUTR",
+		    cartCgiUsualBoolean(cart, "hgSeq.splitCDSUTR", FALSE));
+    puts("Split UTR and CDS parts of an exon into separate FASTA records");
+    }
 puts("<P>\n");
 
 }
@@ -133,35 +140,35 @@ if (canDoIntrons)
     {
     cgiMakeRadioButton("hgSeq.casing", "exon", sameString(casing, "exon"));
     if (canDoUTR)
-	puts("Exons in upper case, everything else in lower case. <BR>\n");
+	puts("Exons in upper case, everything else in lower case. <BR>");
     else
-	puts("Blocks in upper case, everything else in lower case. <BR>\n");
+	puts("Blocks in upper case, everything else in lower case. <BR>");
     }
 if (canDoUTR)
     {
     if (sameString(casing, "exon") && !canDoIntrons)
 	casing = "cds";
     cgiMakeRadioButton("hgSeq.casing", "cds", sameString(casing, "cds"));
-    puts("CDS in upper case, UTR in lower case. <BR>\n");
+    puts("CDS in upper case, UTR in lower case. <BR>");
     }
 if ((sameString(casing, "exon") && !canDoIntrons) ||
     (sameString(casing, "cds") && !canDoUTR))
     casing = "upper";
 cgiMakeRadioButton("hgSeq.casing", "upper", sameString(casing, "upper"));
-puts("All upper case. <BR>\n");
+puts("All upper case. <BR>");
 cgiMakeRadioButton("hgSeq.casing", "lower", sameString(casing, "lower"));
-puts("All lower case. <BR>\n");
+puts("All lower case. <BR>");
 
 cgiMakeCheckBox("hgSeq.maskRepeats",
 		cartCgiUsualBoolean(cart, "hgSeq.maskRepeats", FALSE));
-puts("Mask repeats: \n");
+puts("Mask repeats: ");
 
 repMasking = cartCgiUsualString(cart, "hgSeq.repMasking", "lower");
 cgiMakeRadioButton("hgSeq.repMasking", "lower",
 		   sameString(repMasking, "lower"));
-puts(" to lower case \n");
+puts(" to lower case ");
 cgiMakeRadioButton("hgSeq.repMasking", "N", sameString(repMasking, "N"));
-puts(" to N <BR>\n");
+puts(" to N <BR>");
 if (offerRevComp)
     {
     cgiMakeCheckBox("hgSeq.revComp",
@@ -275,12 +282,14 @@ int padding5     = cgiOptionalInt("hgSeq.padding5", 0);
 int padding3     = cgiOptionalInt("hgSeq.padding3", 0);
 char *casing     = cgiString("hgSeq.casing");
 char *repMasking = cgiString("hgSeq.repMasking");
+char *granularity  = cgiOptionalString("hgSeq.granularity");
+boolean concatRegions = granularity && sameString("gene", granularity);
 
 if (rCount < 1)
     return;
 
-/* Don't support padding if we're concatenating multiple regions. */
-if (rCount > 1)
+/* Don't support padding if granularity is gene (i.e. concat'ing all). */
+if (concatRegions)
     {
     padding5 = padding3 = 0;
     }
@@ -307,18 +316,15 @@ if (sameString(casing, "upper"))
 cSize = 0;
 for (i=0;  i < rCount;  i++)
     {
-    if (sameString(casing, "exon") && exonFlags[i])
+    if ((sameString(casing, "exon") && exonFlags[i]) ||
+	(sameString(casing, "cds") && cdsFlags[i]))
 	{
 	int rStart = rStarts[i] - seqStart;
 	toUpperN(rSeq->dna+rStart, rSizes[i]);
 	}
-    else if (sameString(casing, "cds") && cdsFlags[i])
-	{
-	int rStart = rStarts[i] - seqStart;
-	toUpperN(rSeq->dna+rStart, rSizes[i]);
-	}
-    cSize += (rSizes[i] + padding5 + padding3);
+    cSize += rSizes[i];
     }
+cSize += (padding5 + padding3);
 AllocVar(cSeq);
 cSeq->dna = needMem(cSize+1);
 cSeq->size = cSize;
@@ -332,8 +338,18 @@ if (maskRep)
 offset = 0;
 for (i=0;  i < rCount;  i++)
     {
-    int start = rStarts[i] - (isRc ? padding3 : padding5) - seqStart;
-    int size  = rSizes[i] + padding5 + padding3;
+    int start = rStarts[i] - seqStart;
+    int size  = rSizes[i];
+    if (i == 0)
+	{
+	start -= (isRc ? padding3 : padding5);
+	assert(start == 0);
+	size  += (isRc ? padding3 : padding5);
+	}
+    if (i == rCount-1)
+	{
+	size  += (isRc ? padding5 : padding3);
+	}
     memcpy(cSeq->dna+offset, rSeq->dna+start, size);
     offset += size;
     }
@@ -358,11 +374,12 @@ faWriteNext(stdout, recName, cSeq->dna, cSeq->size);
 }
 
 
-void hgSeqRegionsDb(char *db, char *chrom, char strand, char *name,
-		    boolean concatRegions,
-		    int rCount, unsigned *rStarts, unsigned *rSizes,
-		    boolean *exonFlags, boolean *cdsFlags)
-/* Concatenate and print out dna for a series of regions. */
+void hgSeqRegionsAdjDb(char *db, char *chrom, char strand, char *name,
+		       boolean concatRegions, boolean concatAdjacent,
+		       int rCount, unsigned *rStarts, unsigned *rSizes,
+		       boolean *exonFlags, boolean *cdsFlags)
+/* Concatenate and print out dna for a series of regions, 
+ * optionally concatenating adjacent exons. */
 {
 if (concatRegions || (rCount == 1))
     {
@@ -371,18 +388,46 @@ if (concatRegions || (rCount == 1))
     }
 else
     {
-    int i, j;
+    int i, count;
     boolean isRc = (strand == '-');
     char rName[256];
-    for (i=0;  i < rCount;  i++)
+    for (i=0,count=0;  i < rCount;  i++,count++)
 	{
-	snprintf(rName, sizeof(rName), "%s_%d", name, i);
+	int j, jEnd, len, lo, hi;
+	snprintf(rName, sizeof(rName), "%s_%d", name, count);
 	j = (isRc ? (rCount - i - 1) : i);
+	jEnd = (isRc ? (j - 1) : (j + 1));
+	if (concatAdjacent && exonFlags[j])
+	    {
+	    lo = (isRc ? jEnd       : (jEnd - 1));
+	    hi = (isRc ? (jEnd + 1) : jEnd);
+	    while ((i < rCount) &&
+		   ((rStarts[lo] + rSizes[lo]) == rStarts[hi]) &&
+		   exonFlags[jEnd])
+		{
+		i++;
+		jEnd = (isRc ? (jEnd - 1) : (jEnd + 1));
+		lo = (isRc ? jEnd       : (jEnd - 1));
+		hi = (isRc ? (jEnd + 1) : jEnd);
+		}
+	    }
+	len = (isRc ? (j - jEnd) : (jEnd - j));
+	lo  = (isRc ? (jEnd + 1) : j);
 	hgSeqConcatRegionsDb(hGetDb(), chrom, strand, rName,
-			     1, &rStarts[j], &rSizes[j], &exonFlags[j],
-			     &cdsFlags[j]);
+			     len, &rStarts[lo], &rSizes[lo], &exonFlags[lo],
+			     &cdsFlags[lo]);
 	}
     }
+}
+
+void hgSeqRegionsDb(char *db, char *chrom, char strand, char *name,
+		    boolean concatRegions,
+		    int rCount, unsigned *rStarts, unsigned *rSizes,
+		    boolean *exonFlags, boolean *cdsFlags)
+/* Concatenate and print out dna for a series of regions. */
+{
+hgSeqRegionsAdjDb(db, chrom, strand, name, concatRegions, FALSE,
+		  rCount, rStarts, rSizes, exonFlags, cdsFlags);
 }
 
 void hgSeqRegions(char *chrom, char strand, char *name,
@@ -460,6 +505,8 @@ int promoterSize   = cgiOptionalInt("hgSeq.promoterSize", 0);
 int downstreamSize = cgiOptionalInt("hgSeq.downstreamSize", 0);
 char *granularity  = cgiOptionalString("hgSeq.granularity");
 boolean concatRegions = granularity && sameString("gene", granularity);
+boolean concatAdjacent = (cgiBooleanDefined("hgSeq.splitCDSUTR") &&
+			  (! cgiBoolean("hgSeq.splitCDSUTR")));
 boolean isCDS, doIntron;
 boolean foundFields;
 boolean canDoUTR, canDoIntrons;
@@ -675,8 +722,9 @@ for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
 		   bedItem->chromEnd, promoterSize, FALSE, FALSE);
 	}
     snprintf(itemName, sizeof(itemName), "%s_%s", hti->rootName, bedItem->name);
-    hgSeqRegionsDb(db, bedItem->chrom, bedItem->strand[0], itemName,
-		   concatRegions, count, starts, sizes, exonFlags, cdsFlags);
+    hgSeqRegionsAdjDb(db, bedItem->chrom, bedItem->strand[0], itemName,
+		      concatRegions, concatAdjacent,
+		      count, starts, sizes, exonFlags, cdsFlags);
     totalCount += count;
     freeMem(starts);
     freeMem(sizes);
