@@ -5,7 +5,7 @@
 #include "options.h"
 
 int binSize = 1;
-int maxBinCount = 100;
+int maxBinCount = 25;
 int minVal = 0;
 
 void usage()
@@ -17,7 +17,9 @@ errAbort(
   "   textHistogram inFile\n"
   "Where inFile contains one number per line."
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -binSize=N  Size of bins, default 1\n"
+  "   -maxBinCount=N  Maximum # of bins, default 25\n"
+  "   -minVal=N  Minimum value to put in histogram, default 0\n"
   );
 }
 
@@ -34,10 +36,13 @@ AllocArray(hist, maxBinCount);
 while (lineFileRow(lf, row))
     {
     int x = lineFileNeedNum(lf, row, 0);
-    x -= minVal;
-    x /= binSize;
-    if (x >= 0 && x < maxBinCount)
-	hist[x] += 1;
+    if (x >= minVal)
+	{
+	x -= minVal;
+	x /= binSize;
+	if (x >= 0 && x < maxBinCount)
+	    hist[x] += 1;
+	}
     }
 for (i=0; i<maxBinCount; ++i)
     {
@@ -65,6 +70,9 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionHash(&argc, argv);
+binSize = optionInt("binSize", binSize);
+maxBinCount = optionInt("maxBinCount", maxBinCount);
+minVal = optionInt("minVal", minVal);
 if (argc != 2)
     usage();
 textHistogram(argv[1]);
