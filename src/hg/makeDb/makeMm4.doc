@@ -2410,3 +2410,22 @@ XXXX  Need something that converts stsMarkers_pos.rdb to stsMapMouse.bed
 	${STSFLAGS} /cluster/data/mm4 ../maps ../../stsMarkers_pos.rdb
     /projects/compbio/usr/booch/booch/scripts/createUCSCplots -x 50000000 \
 	${STSFLAGS} /cluster/data/mm4 ../maps ../../stsMarkers_pos.rdb
+
+LOAD GENEID GENES (DONE - 2003-11-27 - Hiram)
+    mkdir -p /cluster/data/mm4/bed/geneid/download
+    cd /cluster/data/mm4/bed/geneid/download
+    foreach f (/cluster/data/mm4/?{,?}/chr?{,?}{,_random}.fa)
+      set chr = $f:t:r
+      wget \
+http://genome.imim.es/genepredictions/M.musculus/mmOct2003/geneid_v1.1/$chr.gtf
+      wget \
+http://genome.imim.es/genepredictions/M.musculus/mmOct2003/geneid_v1.1/$chr.prot
+    end
+    # Add missing .1 to protein id's
+    foreach f (*.prot)
+      perl -wpe 's/^(>chr\w+)$/$1.1/' $f > $f:r-fixed.prot
+    end
+    cd ..
+    ldHgGene mm4 geneid download/*.gtf -exon=CDS
+    hgPepPred mm4 generic geneidPep download/*-fixed.prot
+
