@@ -370,7 +370,7 @@ chr22 2000 6000 cloneB 900 - 2000 6000 0 2 433,399, 0,3601</TT></PRE></FONT>
 		    transcriptome data.
 
 		    <P><B>General Structure</B><P> The .wig format is
-		    line-oriented.  The first section begins with <A
+		    line-oriented.  <!-- The first section begins with <A
 		    HREF="http://genome.ucsc.edu/goldenPath/help/customTrack.html#BROWSER">browser
 		    lines</A> that configure the overall display of
 		    the Genome Browser window when your annotation
@@ -378,9 +378,11 @@ chr22 2000 6000 cloneB 900 - 2000 6000 0 2 433,399, 0,3601</TT></PRE></FONT>
 		    attribute. 
 
 		    <P> The browser lines are followed by a <A
+		    <P> The browser lines are followed -->
+		    The wiggle data is preceeded by a <A
 		    HREF="http://genome.ucsc.edu/goldenPath/help/customTrack.html#TRACK">
-		    track definition line</A>.  The wiggle track
-		    definition adds a number of options for
+		    track definition line</A>, which
+		    adds a number of options for
 		    controlling the default display of this track.
 
 		    <P> Following the track definition line is the
@@ -397,13 +399,13 @@ chr22 2000 6000 cloneB 900 - 2000 6000 0 2 433,399, 0,3601</TT></PRE></FONT>
 
 		    <LI> <B>variableStep</B> two column data; started by a
 		    declaration line and followed with chromosome positions and data values:
-<FONT color="#0000FF"><PRE>  <B>variableStep</B>  <B>chrom=</B><I>chrN</I>  <B>[span=</B><I>binLength</I><B>}</B>
+<FONT color="#0000FF"><PRE>  <B>variableStep</B>  <B>chrom=</B><I>chrN</I>  <B>[span=</B><I>windowSize</I><B>}</B>
   <I>chromStartA</I>  <I>dataValueA</I>
   <I>chromStartB</I>  <I>dataValueB</I></PRE></FONT>
 
 		    <LI> <B>fixedStep</B> single column data; started by a
 		    declaration line and followed with data values:
-<FONT color="#0000FF"><PRE>  <B>fixedStep</B>  <B>chrom=</B><I>chrN</I>  <B>start=</B><I>position</I>  <B>step=</B><I>stepInterval</I>  <B>[span=</B><I>binLength</I><B>]</B>
+<FONT color="#0000FF"><PRE>  <B>fixedStep</B>  <B>chrom=</B><I>chrN</I>  <B>start=</B><I>position</I>  <B>step=</B><I>stepInterval</I>  <B>[span=</B><I>windowSize</I><B>]</B>
   <I>dataValue1</I>
   <I>dataValue2</I></PRE></FONT>
 		    </UL>
@@ -462,20 +464,19 @@ chr22 2000 6000 cloneB 900 - 2000 6000 0 2 433,399, 0,3601</TT></PRE></FONT>
 <P>
 		    <LI>The <B>variableStep</B> two column data format is the most commonly used
 		    data format.  It begins with a declaration line:
-<FONT color="#0000FF"><PRE>  <B>variableStep chrom=</B><I>chrN</I> <B>[span=</B><I>binLength</I><B>]</B></PRE></FONT>
+<FONT color="#0000FF"><PRE>  <B>variableStep chrom=</B><I>chrN</I> <B>[span=</B><I>windowSize</I><B>]</B></PRE></FONT>
 		    and is followed with two column data representing
 		    chromosome position and data value.  The declaration line starts with the word
-		    <B>variableStep</B>, is followed by a
-		    specification for chromosome, and optionally the
-		    <B>span</B> of each data point.  The span allows
-		    more efficient encoding of binned data, where the
-		    same value applies to a contiguous set of bases
+		    <B>variableStep</B> and is followed by a
+		    specification for chromosome.  The optional
+		    <B>span</B> allows more efficient encoding of a
+		    single value for a contiguous run of bases
 		    beginning at the specified position.
 <P>
 		    <LI>The <B>fixedStep</B> format takes a single
-		    column data, and is used when there is a constant
-		    interval between data values.  This is used for
-		    bin data with constant bin widths.  The fixedStep
+		    column data, and is used when there is a regular 
+		    interval between new data values.  This is used for
+		    data values that apply to a constant size run of bases.  The fixedStep
 		    single column data format begins with the
 		    declaration line: 
 <FONT color="#0000FF"><PRE>  <B>fixedStep chrom=</B><I>chrN</I> <B>start=</B>chromStart<I></I> <B>step=</B><I>stepInterval</I> <B>[span=</B><I></I>]</PRE></FONT>
