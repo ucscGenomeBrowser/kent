@@ -1,3 +1,8 @@
+/* chainBlock - Chain together scored blocks from an alignment
+ * into scored chains.  Internally this uses a kd-tree and a
+ * varient of an algorithm suggested by Webb Miller and further
+ * developed by Jim Kent. */
+
 #include "common.h"
 #include "localmem.h"
 #include "linefile.h"
@@ -36,7 +41,7 @@ struct kdTree
 
 
 static int kdLeafCmpQ(const void *va, const void *vb)
-/* Compare to sort based on target start. */
+/* Compare to sort based on query start. */
 {
 const struct kdLeaf *a = *((struct kdLeaf **)va);
 const struct kdLeaf *b = *((struct kdLeaf **)vb);
@@ -172,7 +177,9 @@ for (i=0 , leaf=leafList; leaf != NULL; leaf = leaf->next, ++i)
     dlAddTail(&qList, &qNodes[i]);
     dlAddTail(&tList, &tNodes[i]);
     }
-dlSort(&qList, kdLeafCmpQ); /* tList sorted since leafList is sorted. */
+/* Just sort qList since tList is sorted because it was
+ * constructed from sorted leafList. */
+dlSort(&qList, kdLeafCmpQ); 
 lists[0] = &qList;
 lists[1] = &tList;
 
@@ -200,6 +207,9 @@ static struct predScore bestPredecessor(
 	int dim,		    /* Dimension level of tree splits on. */
 	struct kdBranch *branch,    /* Subtree to explore */
 	struct predScore bestSoFar) /* Best predecessor so far. */
+/* Find the highest scoring predecessor to this leaf, and
+ * thus iteratively the highest scoring subchain that ends
+ * in this leaf. */
 {
 struct kdLeaf *leaf;
 double maxScore = branch->maxScore + lonely->cb->score;
@@ -253,7 +263,7 @@ else
 
 static void updateScoresOnWay(struct kdBranch *branch, 
 	int dim, struct kdLeaf *leaf)
-/* Traverse kd-tree to find block.  Update all maxScores on the way
+/* Traverse kd-tree to find leaf.  Update all maxScores on the way
  * to reflect leaf->totalScore. */
 {
 int newDim = 1-dim;
@@ -270,7 +280,7 @@ if (branch->leaf == NULL)
 
 static void findBestPredecessors(struct kdTree *tree, struct kdLeaf *leafList, 
 	ConnectCost connectCost, GapCost gapCost)
-/* Find best predecessor for each block. */
+/* Find best predecessor for each leaf. */
 {
 static struct predScore noBest;
 struct kdLeaf *leaf;
@@ -380,7 +390,7 @@ struct chain *chainBlocks(char *qName, int qSize, char qStrand,
 	ConnectCost connectCost, GapCost gapCost, FILE *details)
 /* Create list of chains from list of blocks.  The blockList will get
  * eaten up as the blocks are moved from the list to the chain. 
- * The chain returned is sorted by score. 
+ * The list of chains returned is sorted by score. 
  *
  * The details FILE may be NULL, and is where additional information
  * about the chaining is put.
