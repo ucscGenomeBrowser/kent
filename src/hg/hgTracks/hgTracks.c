@@ -73,7 +73,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.642 2003/12/18 00:25:11 daryl Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.643 2003/12/18 01:29:34 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -7119,6 +7119,10 @@ if (!hideControls)
     hButton("hgt.out3", "10x");
     hWrites("<BR>\n");
 
+    hPrintf("</FORM>\n");
+    hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" METHOD=POST>\n\n", hgTracksName());
+    cartSaveSession(cart);
+
     /* Make line that says position. */
 	{
 	char buf[256];
@@ -7169,11 +7173,8 @@ if (!hideControls)
     hButton("hgt.dinkRR", " > ");
     hPrintf("<TR></TABLE>\n");
     smallBreak();
-    hPrintf("</FORM>\n");
 
     /* Display bottom control panel. */
-    hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" METHOD=POST>\n\n", hgTracksName());
-    cartSaveSession(cart);
     hButton("hgt.reset", "reset all");
     hPrintf(" ");
     hButton("hgt.hideAll", "hide all");
