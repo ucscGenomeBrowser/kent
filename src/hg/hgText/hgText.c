@@ -324,6 +324,8 @@ if (tableIsPositional)
     else
 	printf("position: %s<P>\n", position);
     }
+printf("<A HREF=\"/cgi-bin/hgBatch?db=%s\">Change position</A><P>",
+       database);
 cgiContinueHiddenVar("hgb.showPasteResults");
 cgiContinueHiddenVar("hgb.showUploadResults");
 //#*** Really need to save this off to a local file!
