@@ -141,7 +141,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.717 2004/08/11 19:45:26 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.718 2004/08/12 22:21:13 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4409,6 +4409,10 @@ tSeq = hDnaFromSeq(seqName, tStart, tEnd, dnaLower);
 freez(&tSeq->name);
 tSeq->name = cloneString(psl->tName);
 safef(tName, sizeof(tName), "%s.%s", organism, psl->tName);
+fprintf(f, "<H2>Alignment of %s and %s:%d-%d</H2>\n",
+	qName, psl->tName, psl->tStart+1, psl->tEnd);
+fputs("Click on links in the frame to the left to navigate through "
+      "the alignment.\n", f);
 blockCount = pslShowAlignment(psl, qType == gftProt, 
 	qName, qSeq, qStart, qEnd, 
 	tName, tSeq, tStart, tEnd, f);
@@ -4443,7 +4447,8 @@ dnaSeq->name = cloneString(psl->tName);
 
 /* Write body heading info. */
 fprintf(body, "<H2>Alignment of %s and %s:%d-%d</H2>\n", psl->qName, psl->tName, psl->tStart+1, psl->tEnd);
-fprintf(body, "Click on links in the frame to left to navigate through alignment.\n");
+fprintf(body, "Click on links in the frame to the left to navigate through "
+	"the alignment.\n");
 
 /* Convert psl alignment to ffAli. */
 tRcAdjustedStart = tStart;
@@ -14190,6 +14195,18 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+char *stripBDGPSuffix(char *name)
+/* cloneString(name), and if it ends in -R[A-Z], strip that off. */
+{
+char *stripped = cloneString(name);
+int len = strlen(stripped);
+if (stripped[len-3] == '-' &&
+    stripped[len-2] == 'R' &&
+    isalpha(stripped[len-1]))
+    stripped[len-3] = 0;
+return(stripped);
+}
+
 static void doPscreen(struct trackDb *tdb, char *item)
 /* P-Screen (BDGP Gene Disruption Project) P el. insertion locations/genes. */
 {
@@ -14226,10 +14243,13 @@ if ((row = sqlNextRow(sr)) != NULL)
 	else
 	    gNum[0] = 0;
 	if (isNotEmpty(psc->geneIds[i]))
+	    {
+	    char *stripped = stripBDGPSuffix(psc->geneIds[i]);
 	    printf("<B>Gene%s BDGP ID:</B> "
 		   "<A HREF=\"http://flybase.bio.indiana.edu/.bin/fbquery?"
 		   "query=%s&sections=FBgn&submit=issymbol\" TARGET=_BLANK>"
-		   "%s</A><BR>\n", gNum, psc->geneIds[i], psc->geneIds[i]);
+		   "%s</A><BR>\n", gNum, stripped, psc->geneIds[i]);
+	    }
 	printf("<B>Gene%s delta:</B> %d<BR>\n", gNum, psc->geneDeltas[i]);
 	}
     pscreenFree(&psc);
