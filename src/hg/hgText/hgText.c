@@ -30,8 +30,8 @@
 static char *hgFixed = "hgFixed";
 static char *customTrackPseudoDb = "customTrack";
 
-/* lookupCt, getCustomTrackNames, and doGetBed initialize this if NULL: */
-struct customTrack *ctList = NULL;
+/* getCustomTracks() initializes this only once: */
+struct customTrack *theCtList = NULL;
 
 /* doMiddle() sets these: */
 struct cart *cart = NULL;
@@ -46,6 +46,65 @@ int winStart;
 int winEnd;
 boolean allGenome;
 
+/* Representation of bed-filtering operations */
+/* maybe these should be moved to the bed lib? */
+enum charFilterType
+    {
+    cftIgnore = 0,
+    cftSingleLiteral = 1,
+    cftMultiLiteral = 2,
+    };
+enum stringFilterType
+    {
+    sftIgnore = 0,
+    sftSingleLiteral = 1,
+    sftMultiLiteral = 2,
+    sftSingleRegexp = 3,
+    sftMultiRegexp = 4,
+    };
+enum numericFilterType
+    {
+    nftIgnore = 0,
+    nftLessThan = 1,
+    nftLTE = 2,
+    nftEqual = 3,
+    nftNotEqual = 4,
+    nftGTE = 5,
+    nftGreaterThan = 6,
+    nftInRange = 7,
+    nftNotInRange = 8,
+    };
+struct bedFilter
+    {
+    enum stringFilterType chromFilter;
+    char **chromVals;
+    boolean chromInvert;
+    enum numericFilterType chromStartFilter;
+    int *chromStartVals;
+    enum numericFilterType chromEndFilter;
+    int *chromEndVals;
+    enum stringFilterType nameFilter;
+    char **nameVals;
+    boolean nameInvert;
+    enum numericFilterType scoreFilter;
+    int *scoreVals;
+    enum charFilterType strandFilter;
+    char *strandVals;
+    boolean strandInvert;
+    enum numericFilterType thickStartFilter;
+    int *thickStartVals;
+    enum numericFilterType thickEndFilter;
+    int *thickEndVals;
+    enum numericFilterType blockCountFilter;
+    int *blockCountVals;
+    enum numericFilterType chromLengthFilter;
+    int *chromLengthVals;
+    enum numericFilterType thickLengthFilter;
+    int *thickLengthVals;
+    enum numericFilterType compareStartsFilter;
+    enum numericFilterType compareEndsFilter;
+    };
+
 /* copied from hgGateway: */
 static char * const onChangeText = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.submit();\"";
 
@@ -58,12 +117,12 @@ static char * const onChangeText = "onchange=\"document.orgForm.org.value = docu
 #define linksPhase          "Hyperlinks to Genome Browser"
 char *outputTypePosMenu[] =
 {
+    bedOptionsPhase,
+    seqOptionsPhase,
+    gffPhase,
+    linksPhase,
     allFieldsPhase,
     chooseFieldsPhase,
-    seqOptionsPhase,
-    bedOptionsPhase,
-    linksPhase,
-    gffPhase,
 };
 int outputTypePosMenuSize = 6;
 char *outputTypeNonPosMenu[] =
@@ -110,6 +169,14 @@ char *cmpOpMenu[] =
     ">"
 };
 int cmpOpMenuSize = 8;
+
+char *eqOpMenu[] =
+{
+    "ignored",
+    "=",
+    "!=",
+};
+int eqOpMenuSize = 3;
 
 /* Droplist menu for custom track visibility: */
 char *ctVisMenu[] =
@@ -373,11 +440,17 @@ if ((trackName != NULL) && startsWith("chrN_", trackName))
 return trackName;
 }
 
+struct customTrack *getCustomTracks()
+{
+if (theCtList == NULL)
+    theCtList = customTracksParseCart(cart, NULL, NULL);
+return(theCtList);
+}
+
 struct customTrack *lookupCt(char *name)
 {
+struct customTrack *ctList = getCustomTracks();
 struct customTrack *ct;
-if (ctList == NULL)
-    ctList = customTracksParseCart(cart, NULL, NULL);
 for (ct=ctList;  ct != NULL;  ct=ct->next)
     {
     if (sameString(ct->tdb->tableName, name))
@@ -517,13 +590,12 @@ if (retNonposTableList != NULL)
 struct hashEl *getCustomTrackNames()
 /* store custom track names in a hash (custom tracks are always positional) */
 {
+struct customTrack *ctList = getCustomTracks();
 struct hash *ctTableHash = newHash(7);
 struct hashEl *ctTableList;
 struct customTrack *ct;
 char fullName[128];
 
-if (ctList == NULL)
-    ctList = customTracksParseCart(cart, NULL, NULL);
 for (ct=ctList;  ct != NULL;  ct=ct->next)
     {
     snprintf(fullName, sizeof(fullName), "%s.%s",
@@ -688,12 +760,113 @@ else
 checkIsAlpha("table name", dest);
 }
 
+void stringFilterOption (char *field, char *tableId, char *logOp)
+/* Print out a table row with filter constraint options for a string/char. */
+{
+char name[128];
+char *newVal;
+
+printf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", field);
+snprintf(name, sizeof(name), "dd%s_%s", tableId, field);
+cgiMakeDropList(name, ddOpMenu, ddOpMenuSize, ddOpMenu[0]);
+puts(" match </TD><TD>");
+newVal = "*";
+snprintf(name, sizeof(name), "pat%s_%s", tableId, field);
+cgiMakeTextVar(name, newVal, 20);
+if (logOp == NULL)
+    logOp = "";
+printf("</TD><TD> %s </TD></TR>\n", logOp);
+}
+
+void numericFilterOption(char *field, char *fieldLabel, char *tableId,
+			 char *logOp)
+/* Print out a table row with filter constraint options for a number. */
+{
+char name[128];
+char *newVal;
+
+printf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", fieldLabel);
+puts(" is ");
+snprintf(name, sizeof(name), "cmp%s_%s", tableId, field);
+cgiMakeDropList(name, cmpOpMenu, cmpOpMenuSize, cmpOpMenu[0]);
+puts("</TD><TD>\n");
+newVal = "";
+snprintf(name, sizeof(name), "pat%s_%s", tableId, field);
+cgiMakeTextVar(name, newVal, 20);
+if (logOp == NULL)
+    logOp = "";
+printf("</TD><TD>%s</TD></TR>\n", logOp);
+}
+
+void eqFilterOption(char *field, char *fieldLabel1, char *fieldLabel2,
+		    char *tableId, char *logOp)
+/* Print out a table row with filter constraint options for an equality 
+ * comparison. */
+{
+char name[128];
+
+printf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", fieldLabel1);
+puts(" is ");
+snprintf(name, sizeof(name), "cmp%s_%s", tableId, field);
+cgiMakeDropList(name, eqOpMenu, eqOpMenuSize, eqOpMenu[0]);
+/* make a dummy pat_ CGI var for consistency with other filter options */
+snprintf(name, sizeof(name), "pat%s_%s", tableId, field);
+cgiMakeHiddenVar(name, "0");
+puts("</TD><TD>\n");
+printf("%s\n", fieldLabel2);
+if (logOp == NULL)
+    logOp = "";
+printf("<TD>%s</TD></TR>\n", logOp);
+}
+
 void filterOptionsCustomTrack(char *table, char *tableId)
 /* Print out an HTML table with form inputs for constraints on custom track */
 {
-puts("[Sorry, constraints on custom track fields are not supported "
-     "<i>yet</i>.]\n"
-     "<P>");
+struct customTrack *ct = lookupCt(table);
+
+puts("<TABLE>");
+if (ct->fieldCount >= 3)
+    {
+    stringFilterOption("chrom", tableId, " AND ");
+    numericFilterOption("chromStart", "chromStart", tableId, " AND ");
+    numericFilterOption("chromEnd", "chromEnd", tableId, " AND ");
+    }
+if (ct->fieldCount >= 4)
+    {
+    stringFilterOption("name", tableId, " AND ");
+    }
+if (ct->fieldCount >= 5)
+    {
+    numericFilterOption("score", "score", tableId, " AND ");
+    }
+if (ct->fieldCount >= 6)
+    {
+    stringFilterOption("strand", tableId, " AND ");
+    }
+if (ct->fieldCount >= 8)
+    {
+    numericFilterOption("thickStart", "thickStart", tableId, " AND ");
+    numericFilterOption("thickEnd", "thickEnd", tableId, " AND ");
+    }
+if (ct->fieldCount >= 12)
+    {
+    numericFilterOption("blockCount", "blockCount", tableId, " AND ");
+    }
+/* These are not bed fields, just extra constraints that we offer: */
+if (ct->fieldCount >= 3)
+    {
+    numericFilterOption("chromLength", "(chromEnd - chromStart)", tableId,
+			(ct->fieldCount >= 8) ? " AND " : "");
+    }
+if (ct->fieldCount >= 8)
+    {
+    numericFilterOption("thickLength", "(thickEnd - thickStart)",
+			tableId, " AND ");
+    eqFilterOption("compareStarts", "chromStart", "thickStart", tableId,
+		   " AND ");
+    eqFilterOption("compareEnds", "chromEnd", "thickEnd", tableId, "");
+    }
+puts("</TABLE>");
 }
 
 void filterOptionsTableDb(char *fullTblName, char *db, char *tableId)
@@ -776,7 +949,7 @@ cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
 positionLookupSamePhase();
 
-printf("<P><HR><H3> Select Output Format for Table %s </H3>\n", table);
+printf("<P><HR><H3> Select Output Format for %s </H3>\n", table);
 if (tableIsPositional)
     cgiMakeDropList("outputType", outputTypePosMenu, outputTypePosMenuSize,
 		    outputTypePosMenu[0]);
@@ -1258,6 +1431,207 @@ return ret;
 }
 
 
+void cgiToCharFilter(char *dd, char *pat, enum charFilterType *retCft,
+		     char **retVals, boolean *retInv)
+/* Given a "does/doesn't" and a (list of) literal chars from CGI, fill in 
+ * retCft, retVals and retInv to make a filter. */
+{
+char *vals, *ptrs[32];
+int numWords;
+int i;
+
+assert(retCft != NULL);
+assert(retVals != NULL);
+assert(retInv != NULL);
+assert(sameString(dd, "does") || sameString(dd, "doesn't"));
+
+/* catch null-constraint cases.  ? will be treated as a literal match, 
+ * which would make sense for bed strand and maybe other single-char things: */
+if (pat == NULL)
+    pat = "";
+pat = trimSpaces(pat);
+if ((pat[0] == 0) || sameString(pat, "*"))
+    {
+    *retCft = cftIgnore;
+    return;
+    }
+
+*retCft = cftMultiLiteral;
+numWords = chopByWhite(pat, ptrs, ArraySize(ptrs));
+vals = needMem((numWords+1) * sizeof(char));
+for (i=0;  i < numWords;  i++)
+    vals[i] = ptrs[i][0];
+vals[i] = 0;
+*retVals = vals;
+*retInv = sameString("does", dd);
+}
+
+void cgiToStringFilter(char *dd, char *pat, enum stringFilterType *retSft,
+		       char ***retVals, boolean *retInv)
+/* Given a "does/doesn't" and a (list of) regexps from CGI, fill in 
+ * retCft, retVals and retInv to make a filter. */
+{
+char **vals, *ptrs[32];
+int numWords;
+int i;
+
+assert(retSft != NULL);
+assert(retVals != NULL);
+assert(retInv != NULL);
+assert(sameString(dd, "does") || sameString(dd, "doesn't"));
+
+/* catch null-constraint cases: */
+if (pat == NULL)
+    pat = "";
+pat = trimSpaces(pat);
+if ((pat[0] == 0) || sameString(pat, "*"))
+    {
+    *retSft = sftIgnore;
+    return;
+    }
+
+*retSft = sftMultiRegexp;
+numWords = chopByWhite(pat, ptrs, ArraySize(ptrs));
+vals = needMem((numWords+1) * sizeof(char *));
+for (i=0;  i < numWords;  i++)
+    vals[i] = cloneString(ptrs[i]);
+vals[i] = NULL;
+*retVals = vals;
+*retInv = sameString("doesn't", dd);
+}
+
+void cgiToIntFilter(char *cmp, char *pat, enum numericFilterType *retNft,
+		    int **retVals)
+/* Given a comparison operator and a (pair of) integers from CGI, fill in 
+ * retNft and retVals to make a filter. */
+{
+char *ptrs[3];
+int *vals;
+int numWords;
+
+assert(retNft != NULL);
+assert(retVals != NULL);
+
+/* catch null-constraint cases: */
+if (pat == NULL)
+    pat = "";
+pat = trimSpaces(pat);
+if ((pat[0] == 0) || sameString(pat, "*") || sameString(cmp, "ignored"))
+    {
+    *retNft = nftIgnore;
+    return;
+    }
+else if (sameString(cmp, "in range"))
+    {
+    *retNft = nftInRange;
+    numWords = chopString(pat, " \t,", ptrs, ArraySize(ptrs));
+    if (numWords != 2)
+	errAbort("For \"in range\" constraint, you must give two numbers separated by whitespace or comma.");
+    vals = needMem(2 * sizeof(int)); 
+    vals[0] = atoi(ptrs[0]);
+    vals[1] = atoi(ptrs[1]);
+    if (vals[0] > vals[1])
+	{
+	int tmp = vals[0];
+	vals[0] = vals[1];
+	vals[1] = tmp;
+	}
+    *retVals = vals;
+   }
+else
+    {
+    if (sameString(cmp, "<"))
+	*retNft = nftLessThan;
+    else if (sameString(cmp, "<="))
+	*retNft = nftLTE;
+    else if (sameString(cmp, "="))
+	*retNft = nftEqual;
+    else if (sameString(cmp, "!="))
+	*retNft = nftNotEqual;
+    else if (sameString(cmp, ">="))
+	*retNft = nftGTE;
+    else if (sameString(cmp, ">"))
+	*retNft = nftGreaterThan;
+    else
+	errAbort("Unrecognized comparison operator %s", cmp);
+    vals = needMem(sizeof(int));
+    vals[0] = atoi(pat);
+    *retVals = vals;
+    }
+}
+
+struct bedFilter *constrainBedFields(char *tableId)
+/* If the user specified constraints, then translate them to a bedFilter. */
+{
+struct bedFilter *bf;
+struct cgiVar *current;
+char *fieldName;
+char *dd, *cmp, *pat;
+char varName[128];
+int *trash;
+
+if (tableId == NULL)
+    tableId = "";
+
+AllocVar(bf);
+for (current = cgiVarList();  current != NULL;  current = current->next)
+    {
+    /* Look for pattern variable associated with each field. */
+    snprintf(varName, sizeof(varName), "pat%s_", tableId);
+    if (startsWith(varName, current->name))
+	{	
+	fieldName = current->name + strlen(varName);
+	checkIsAlpha("field name", fieldName);
+	pat = cloneString(current->val);
+	snprintf(varName, sizeof(varName), "dd%s_%s", tableId, fieldName);
+	dd = cgiOptionalString(varName);
+	snprintf(varName, sizeof(varName), "cmp%s_%s", tableId, fieldName);
+	cmp = cgiOptionalString(varName);
+	if (sameString("chrom", fieldName))
+	    cgiToStringFilter(dd, pat, &(bf->chromFilter), &(bf->chromVals),
+			      &(bf->chromInvert));
+	else if (sameString("chromStart", fieldName))
+	    cgiToIntFilter(cmp, pat,
+			   &(bf->chromStartFilter), &(bf->chromStartVals));
+	else if (sameString("chromEnd", fieldName))
+	    cgiToIntFilter(cmp, pat,
+			   &(bf->chromEndFilter), &(bf->chromEndVals));
+	else if (sameString("name", fieldName))
+	    cgiToStringFilter(dd, pat, &(bf->nameFilter), &(bf->nameVals),
+			      &(bf->nameInvert));
+	else if (sameString("score", fieldName))
+	    cgiToIntFilter(cmp, pat,
+			   &(bf->scoreFilter), &(bf->scoreVals));
+	else if (sameString("strand", fieldName))
+	    cgiToCharFilter(dd, pat, &(bf->strandFilter), &(bf->strandVals),
+			    &(bf->strandInvert));
+	else if (sameString("thickStart", fieldName))
+	    cgiToIntFilter(cmp, pat,
+			   &(bf->thickStartFilter), &(bf->thickStartVals));
+	else if (sameString("thickEnd", fieldName))
+	    cgiToIntFilter(cmp, pat,
+			   &(bf->thickEndFilter), &(bf->thickEndVals));
+	else if (sameString("blockCount", fieldName))
+	    cgiToIntFilter(cmp, pat,
+			   &(bf->blockCountFilter), &(bf->blockCountVals));
+	else if (sameString("chromLength", fieldName))
+	    cgiToIntFilter(cmp, pat,
+			   &(bf->chromLengthFilter), &(bf->chromLengthVals));
+	else if (sameString("thickLength", fieldName))
+	    cgiToIntFilter(cmp, pat,
+			   &(bf->thickLengthFilter), &(bf->thickLengthVals));
+	else if (sameString("compareStarts", fieldName))
+	    cgiToIntFilter(cmp, pat,
+			   &(bf->compareStartsFilter), &trash);
+	else if (sameString("compareEnds", fieldName))
+	    cgiToIntFilter(cmp, pat,
+			   &(bf->compareEndsFilter), &trash);
+	}
+    }
+return(bf);
+}
+
+
 void preserveConstraints(char *fullTblName, char *db, char *tableId)
 /* Add CGI variables for filtering constraints, so they will be passed to 
  * the next page.  Also parse the constraints and do a null query with them 
@@ -1267,6 +1641,7 @@ struct sqlConnection *conn;
 struct sqlResult *sr;
 struct cgiVar *current;
 struct dyString *query = newDyString(512);
+struct bedFilter *bf = constrainBedFields(tableId);
 char *constraints = constrainFields(tableId);
 char varName[128];
 
@@ -1559,27 +1934,167 @@ return(newBed);
 }
 
 
-struct bed *bedInRange(struct bed *bedListIn, char *chrom, int winStart,
-		       int winEnd, char *constraints)
+boolean filterChar(char value, enum charFilterType cft, char *filterValues,
+		   boolean invert)
+/* Return TRUE if value passes the filter. */
+{
+char thisVal;
+if (filterValues == NULL)
+    return(TRUE);
+switch (cft)
+    {
+    case (cftIgnore):
+	return(TRUE);
+	break;
+    case (cftSingleLiteral):
+	return((value == *filterValues) ^ invert);
+	break;
+    case (cftMultiLiteral):
+	while ((thisVal = *(filterValues++)) != 0)
+	    {
+	    if (value == thisVal)
+		return(TRUE ^ invert);
+	    }
+	break;
+    default:
+	errAbort("illegal charFilterType: %d", cft);
+	break;
+    }
+return(FALSE ^ invert);
+}
+
+boolean filterString(char *value, enum stringFilterType sft,
+		     char **filterValues, boolean invert)
+/* Return TRUE if value passes the filter. */
+{
+char *thisVal;
+
+if (filterValues == NULL)
+    return(TRUE);
+switch (sft)
+    {
+    case (sftIgnore):
+	return(TRUE);
+	break;
+    case (sftSingleLiteral):
+	return(sameString(value, *filterValues) ^ invert);
+	break;
+    case (sftMultiLiteral):
+	while ((thisVal = *(filterValues++)) != NULL)
+	    if (sameString(value, thisVal))
+		return(TRUE ^ invert);
+	break;
+    case (sftSingleRegexp):
+	return(wildMatch(*filterValues, value) ^ invert);
+	break;
+    case (sftMultiRegexp):
+	while ((thisVal = *(filterValues++)) != NULL)
+	    if (wildMatch(thisVal, value))
+		return(TRUE ^ invert);
+	break;
+    default:
+	errAbort("illegal stringFilterType: %d", sft);
+	break;
+    }
+return(FALSE ^ invert);
+}
+
+boolean filterInt(int value, enum numericFilterType nft, int *filterValues)
+/* Return TRUE if value passes the filter. */
+/* This could probably be turned into a macro if performance is bad. */
+{
+if (filterValues == NULL)
+    return(TRUE);
+switch (nft)
+    {
+    case (nftIgnore):
+	return(TRUE);
+	break;
+    case (nftLessThan):
+	return(value < *filterValues);
+	break;
+    case (nftLTE):
+	return(value <= *filterValues);
+	break;
+    case (nftEqual):
+	return(value == *filterValues);
+	break;
+    case (nftNotEqual):
+	return(value != *filterValues);
+	break;
+    case (nftGTE):
+	return(value >= *filterValues);
+	break;
+    case (nftGreaterThan):
+	return(value > *filterValues);
+	break;
+    case (nftInRange):
+	return((value >= *filterValues) && (value <= *(filterValues+1)));
+	break;
+    case (nftNotInRange):
+	return(! ((value >= *filterValues) && (value <= *(filterValues+1))));
+	break;
+    default:
+	errAbort("illegal numericFilterType: %d", nft);
+	break;
+    }
+return(FALSE);
+}
+
+struct bed *filterBedInRange(struct bed *bedListIn, struct bedFilter *bf,
+			     char *chrom, int winStart, int winEnd)
+/* Given a bed list, a position range, and a bedFilter which specifies
+ * constraints on bed fields, return the list of bed items that meet
+ * the constraints.  If chrom is NULL, position range is ignored. */
 {
 struct bed *bedListOut = NULL, *bed;
-
-if ((constraints != NULL) && (constraints[0] != 0))
-    errAbort("Hey, how did constraints=%s get in here?", constraints);
+int cmpValues[2];
 
 for (bed=bedListIn;  bed != NULL;  bed=bed->next)
     {
-    if (sameString(bed->chrom, chrom) &&
-	(bed->chromStart < winEnd) &&
-	(bed->chromEnd   > winStart))
+    boolean passes = TRUE;
+    if (chrom != NULL)
+	passes &= (sameString(bed->chrom, chrom) &&
+		   (bed->chromStart < winEnd) &&
+		   (bed->chromEnd   > winStart));
+    passes &= filterString(bed->chrom, bf->chromFilter, bf->chromVals,
+			   bf->chromInvert);
+    passes &= filterInt(bed->chromStart, bf->chromStartFilter,
+			bf->chromStartVals);
+    passes &= filterInt(bed->chromEnd, bf->chromEndFilter, bf->chromEndVals);
+    passes &= filterString(bed->name, bf->nameFilter, bf->nameVals,
+			   bf->nameInvert);
+    passes &= filterInt(bed->score, bf->scoreFilter, bf->scoreVals);
+    passes &= filterChar(bed->strand[0], bf->strandFilter, bf->strandVals,
+			 bf->strandInvert);
+    passes &= filterInt(bed->thickStart, bf->thickStartFilter,
+			bf->thickStartVals);
+    passes &= filterInt(bed->thickEnd, bf->thickEndFilter, bf->thickEndVals);
+    passes &= filterInt(bed->blockCount, bf->blockCountFilter,
+			bf->blockCountVals);
+    passes &= filterInt((bed->chromEnd - bed->chromStart),
+			bf->chromLengthFilter, bf->chromLengthVals);
+    passes &= filterInt((bed->thickEnd - bed->thickStart),
+			bf->thickLengthFilter, bf->thickLengthVals);
+    cmpValues[0] = cmpValues[1] = bed->thickStart;
+    passes &= filterInt(bed->chromStart, bf->compareStartsFilter, cmpValues);
+    cmpValues[0] = cmpValues[1] = bed->thickEnd;
+    passes &= filterInt(bed->chromEnd, bf->compareEndsFilter, cmpValues);
+    if (passes)
 	{
 	struct bed *newBed = cloneBed(bed);
 	slAddHead(&bedListOut, newBed);
 	}
     }
-
 slReverse(&bedListOut);
 return(bedListOut);
+}
+
+struct bed *filterBed(struct bed *bedListIn, struct bedFilter *bf)
+/* Given a bed list and a bedFilter which specifies constraints on bed 
+ * fields, return the list of bed items that meet the constraints. */
+{
+return filterBedInRange(bedListIn, bf, NULL, 0, 0);
 }
 
 struct bed *getBedList()
@@ -1613,8 +2128,8 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     if (sameString(customTrackPseudoDb, db))
 	{
 	struct customTrack *ct = lookupCt(table);
-	bedListT1 = bedInRange(ct->bedList, chrom, winStart, winEnd,
-			       constraints);
+	struct bedFilter *bf = constrainBedFields(NULL);
+	bedListT1 = filterBedInRange(ct->bedList, bf, chrom, winStart, winEnd);
 	}
     else
 	bedListT1 = hGetBedRangeDb(db, fullTableName, chrom, winStart,
@@ -1653,8 +2168,9 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	if (sameString(customTrackPseudoDb, db2))
 	    {
 	    struct customTrack *ct2 = lookupCt(table2);
-	    struct bed *bedListT2 = bedInRange(ct2->bedList, chrom, winStart,
-					       winEnd, constraints2);
+	    struct bedFilter *bf2 = constrainBedFields("2");
+	    struct bed *bedListT2 = filterBedInRange(ct2->bedList, bf2,
+						     chrom, winStart, winEnd);
 	    struct hTableInfo *hti2 = ctToHti(ct2);
 	    fbListT2 = fbFromBed(track2, hti2, bedListT2, winStart, winEnd,
 				 FALSE, FALSE);
@@ -1962,13 +2478,13 @@ struct bed *bedList, *bed;
 char *table = getTableName();
 struct customTrack *ct = lookupCt(table);
 struct slName *chosenFields;
-char *constraints;
+struct bedFilter *bf;
 boolean gotResults;
 
 printf("Content-Type: text/plain\n\n");
 webStartText();
 checkTableExists(fullTableName);
-constraints = constrainFields(NULL);
+bf = constrainBedFields(NULL);
 
 if (allGenome)
     chromList = hAllChromNames();
@@ -1986,7 +2502,7 @@ gotResults = FALSE;
 for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     {
     getFullTableName(fullTableName, chromPtr->name, table);
-    bedList = bedInRange(ct->bedList, chrom, winStart, winEnd, constraints);
+    bedList = filterBedInRange(ct->bedList, bf, chrom, winStart, winEnd);
     gotResults = printTabbedBed(bedList, chosenFields, gotResults);
     bedFreeList(&bedList);
     }
@@ -2131,7 +2647,7 @@ positionLookupSamePhase();
 preserveConstraints(fullTableName, db, NULL);
 preserveTable2();
 
-printf("<H3> Select Fields of Table %s: </H3>\n", getTableName());
+printf("<H3> Select Fields of %s: </H3>\n", getTableName());
 cgiMakeHiddenVar("origPhase", cgiString("phase"));
 cgiMakeButton("submit", "Check All");
 cgiMakeButton("submit", "Clear All");
@@ -2423,7 +2939,7 @@ cgiMakeHiddenVar("outputType", outputType);
 preserveConstraints(fullTableName, db, NULL);
 preserveTable2();
 positionLookupSamePhase();
-printf("<H3> Select BED Options for Table %s: </H3>\n", hti->rootName);
+printf("<H3> Select BED Options for %s: </H3>\n", hti->rootName);
 puts("<TABLE><TR><TD>");
 cgiMakeCheckBox("hgt.doCustomTrack", TRUE);
 puts("</TD><TD> <B> Include "
@@ -2567,8 +3083,7 @@ else
 if ((ctNew != NULL) && (ctNew->bedList != NULL))
     {
     /* Load existing custom tracks and add this new one: */
-    if (ctList == NULL)
-	ctList = customTracksParseCart(cart, NULL, NULL);
+    struct customTrack *ctList = getCustomTracks();
     slAddHead(&ctList, ctNew);
     /* Save the custom tracks out to file (overwrite the old file): */
     ctFileName = cartOptionalString(cart, "ct");
@@ -2602,7 +3117,7 @@ webStart(cart, "Table Browser: %s: %s", freezeName, linksPhase);
 puts("<FORM ACTION=\"/cgi-bin/hgText\" NAME=\"mainForm\" METHOD=\"GET\">\n");
 cartSaveSession(cart);
 puts("</FORM>");
-printf("<H3> Links to Genome Browser from Table %s </H3>\n", getTableName());
+printf("<H3> Links to Genome Browser from %s </H3>\n", getTableName());
 
 if ((track2 != NULL) && (track2[0] != 0))
     snprintf(track2CGI, sizeof(track2CGI), "&%s=full", track2);
@@ -2707,12 +3222,12 @@ printf("Complement %s before intersection/union <P>\n", table2);
 
 cgiMakeButton("phase", outputType);
 
-printf("<P><HR><H3> (Optional) Filter Table %s Records by Field Values </H3>\n",
+printf("<P><HR><H3> (Optional) Filter %s Records by Field Values </H3>\n",
        table2);
-if (sameString(customTrackPseudoDb, db))
-    filterOptionsCustomTrack(table, "2");
+if (sameString(customTrackPseudoDb, db2))
+    filterOptionsCustomTrack(table2, "2");
 else
-    filterOptionsTableDb(fullTableName, db, "2");
+    filterOptionsTableDb(fullTableName2, db2, "2");
 cgiMakeButton("phase", outputType);
 puts("</FORM>");
 webEnd();
