@@ -297,6 +297,23 @@ visibility hide
 color 20,20,170
 type genePred
 
+track superfamily
+shortLabel Superfamily
+longLabel Superfamily/SCOP: Proteins having homologs with known structure/function
+priority 2.9
+visibility dense
+color 150,0,0
+type bed 4 +
+url http://supfam.org/SUPERFAMILY/cgi-bin/gene.cgi?seqid=$$
+
+track knownGene
+shortLabel Known Genes
+longLabel Known Genes based on SWISS-PROT, TrEMBL, and mRNA
+priority 2.8
+visibility full
+color 12,12,120
+type genePred refPep refMrna
+
 track refGene
 shortLabel RefSeq Genes
 longLabel RefSeq Genes
