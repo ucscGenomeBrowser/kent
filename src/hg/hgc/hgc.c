@@ -134,7 +134,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.593 2004/03/24 21:16:59 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.594 2004/03/25 06:44:41 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7246,6 +7246,7 @@ void pseudoPrintPos(char *chrom, int chromStart, int chromEnd, struct pseudoGene
 char *tbl = cgiUsualString("table", cgiString("g"));
 char chainStr[32];
 char query[256];
+struct dyString *dy = newDyString(1024);
 char pfamDesc[128], *pdb;
 char chainTable[64];
 char chainTable_chrom[64];
@@ -7367,17 +7368,23 @@ if (hTableExists(chainTable_chrom) )
     /* lookup chain if not stored */
     if (pg->chainId == 0 && pg->gStrand != NULL)
         {
+        dyStringPrintf(dy,
+            "select id, score, qStart, qEnd, qStrand, qSize from %s_%s where ", 
+            chrom, chainTable);
+        hAddBinToQuery(chromStart, chromEnd, dy);
         if (sameString(pg->gStrand,pg->strand))
-            safef(query,sizeof(query),
-                "select id, score, qStart, qEnd, qStrand, qSize from %s_%s where tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d order by qStart",
-                chrom, chainTable,chromStart,chromEnd, pg->gChrom, pg->gStart, pg->gEnd);
+            dyStringPrintf(dy,
+                "tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d ",
+                chromStart,chromEnd, pg->gChrom, pg->gStart, pg->gEnd);
         else
             {
-            safef(query,sizeof(query),
-                "select id, score, qStart, qEnd, qStrand, qSize from %s_%s where tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d order by qStart",
-                chrom, chainTable,chromStart,chromEnd, pg->gChrom, hChromSize(pg->gChrom)-(pg->gEnd), hChromSize(pg->gChrom)-(pg->gStart));
+            dyStringPrintf(dy,
+                "tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d ",
+                chromStart,chromEnd, pg->gChrom, hChromSize(pg->gChrom)-(pg->gEnd), 
+                hChromSize(pg->gChrom)-(pg->gStart));
             }
-        sr = sqlGetResult(conn, query);
+        dyStringAppend(dy, " order by qStart");
+        sr = sqlGetResult(conn, dy->string);
         while ((row = sqlNextRow(sr)) != NULL)
             {
             int chainId, score;
