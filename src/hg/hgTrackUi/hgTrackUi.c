@@ -22,7 +22,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.148 2004/11/20 19:44:59 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.149 2004/11/23 17:19:31 fanhsu Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1236,7 +1236,8 @@ else if (tdb->type != NULL)
 	/* if bed has score then show optional filter based on score */
 	if (sameWord(words[0], "bed") && wordCount == 3)
 	    {
-	    if (atoi(words[1]) > 4)
+	    /* Note: jaxQTL3 is a bed 8 format track because of thickStart/thickStart, but there is no valid score */
+	    if ((atoi(words[1]) > 4) && !sameString(track, "jaxQTL3"))
 		scoreUi(tdb);
 	    }
 	else if (sameWord(words[0], "psl"))
