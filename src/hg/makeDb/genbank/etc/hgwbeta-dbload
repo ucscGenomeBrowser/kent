@@ -29,6 +29,8 @@ lastCopyTime=$dbloadVar/copy.time
 lastCopyTimeTmp=$lastCopyTime.tmp
 dbloadTime=$dbloadVar/dbload.time
 
+mkdir -p $dbloadVar
+
 # Checking for an existing lock file, Silently exits if lock file exists
 # and is less than one day old,  error if older.
 gbCheckLock $dbloadVar/run/dbload.lock
