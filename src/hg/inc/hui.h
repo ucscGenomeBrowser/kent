@@ -586,4 +586,21 @@ char *genePredDropDown(struct cart *cart, struct hash *trackHash,
 /* Make gene-prediction drop-down().  Return track name of
  * currently selected one.  Return NULL if no gene tracks. */
 
+/****** Stuff for acembly related options *******/
+
+enum acemblyOptEnum {
+    acemblyAll =0,
+    acemblyMain=1,
+    acemblyPutative=2,
+};
+
+enum acemblyOptEnum acemblyStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *acemblyEnumToString(enum acemblyOptEnum x);
+/* Convert from enum to string representation. */
+
+void acemblyDropDown(char *var, char *curVal);
+/* Make drop down of options. */
+
 #endif /* HUI_H */
