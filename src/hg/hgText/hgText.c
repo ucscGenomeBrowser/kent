@@ -34,7 +34,7 @@
 #include "wiggle.h"
 #include "hgText.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.131 2004/04/05 22:45:10 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.132 2004/04/06 17:45:25 angie Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -4862,7 +4862,7 @@ void doMiddle(struct cart *theCart)
 char *table = NULL;
 char *db = NULL;
 char trash[32];
-char *table2  = cgiOptionalString("table2");
+char *table2  = getTable2Name();
 char *db2 = getTable2Db();
 
 cart = theCart;
