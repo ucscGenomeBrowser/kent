@@ -1,6 +1,7 @@
 /* gensub2 - Generate condor submission file from template and two file lists. */
 #include "common.h"
 #include "linefile.h"
+#include "subText.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -26,84 +27,11 @@ errAbort(
   "       $(num2)   - index of second file in list\n");
 }
 
-struct sub
-/** Structure that holds data for a single substitution to be made */
-	{
-	struct sub *next;		/* pointer to next substitution */
-	char *in;				/* source side of substitution */
-	char *out;				/* dest side of substitution */
-	int inSize;				/* length of in string */
-	int outSize;			/* length of out string */
-	};
-
-struct sub *subNew(char *in, char *out)
-/* Make new substitution structure. */
-{
-struct sub *sub;
-AllocVar(sub);
-sub->in = in;
-sub->out = out;
-sub->inSize = strlen(in);
-sub->outSize = strlen(out);
-return sub;
-}
-
-boolean firstSame(char *s, char *t, int len)
-/* Return TRUE if  the  first len characters of the strings s and t
- * are the same. */
-{
-while (--len >= 0)
-    {
-    if (*s++ != *t++)
-	return FALSE;
-    }
-return TRUE;
-}
-
-struct sub *firstInList(struct sub *l, char *name)
-/* Return first element in Sub list who's in string matches the
- * first part of name. */
-{
-while (l != NULL)
-    {
-    if (firstSame(l->in, name, l->inSize))
-	return l;
-    l = l->next;
-    }
-return NULL;
-}
-
-void subString(char *in, char *out, struct sub *subList)
-/* Do substitution while copying from in to out.  This
- * cheap little routine doesn't check that out is big enough.... */
-{
-struct sub *sub;
-char *s, *d;
-
-s = in;
-d = out;
-while (*s)
-    {
-    if ((sub = firstInList(subList, s)) != NULL)
-	{
-	s += sub->inSize;
-	memcpy(d, sub->out, sub->outSize);
-	d += strlen(sub->out);
-	}
-    else
-	{
-	*d++ = *s++;
-	}
-    }
-*d++ = 0;
-}
-
-void writeSubbed(char *string, struct sub *subList, FILE *f)
+void writeSubbed(char *string, struct subText *subList, FILE *f)
 /* Perform substitutions on (copy of) string and write to file. */
 {
 static char subBuf[2048];
-
-subString(string, subBuf, subList);
+subTextStatic(subList, string, subBuf, sizeof(subBuf));
 fprintf(f, "%s\n", subBuf);
 }
 
@@ -117,7 +45,7 @@ char *lineT, *path1, *path2;
 int lineSize, i, j;
 struct slName *loopList = NULL, *loopEl;
 bool gotLoop = FALSE, gotEndLoop = FALSE;
-struct sub *subList = NULL, *sub;
+struct subText *subList = NULL, *sub;
 char numBuf1[16], numBuf2[16];
 char dir1[256], root1[128], ext1[64], file1[265];
 char dir2[256], root2[128], ext2[64], file2[265];
@@ -164,34 +92,34 @@ while (lineFileNext(lf1, &path1, &lineSize))
 
 	splitPath(path1, dir1, root1, ext1);
 	sprintf(file1, "%s%s", root1, ext1);
-	sub = subNew("$(path1)", path1);
+	sub = subTextNew("$(path1)", path1);
 	slAddHead(&subList, sub);
-	sub = subNew("$(dir1)", dir1);
+	sub = subTextNew("$(dir1)", dir1);
 	slAddHead(&subList, sub);
-	sub = subNew("$(root1)", root1);
+	sub = subTextNew("$(root1)", root1);
 	slAddHead(&subList, sub);
-	sub = subNew("$(ext1)", ext1);
+	sub = subTextNew("$(ext1)", ext1);
 	slAddHead(&subList, sub);
-	sub = subNew("$(file1)", file1);
+	sub = subTextNew("$(file1)", file1);
 	slAddHead(&subList, sub);
 	sprintf(numBuf1, "%d", i);
-	sub = subNew("$(num1)", numBuf1);
+	sub = subTextNew("$(num1)", numBuf1);
 	slAddHead(&subList, sub);
 
 	splitPath(path2, dir2, root2, ext2);
 	sprintf(file2, "%s%s", root2, ext2);
-	sub = subNew("$(path2)", path2);
+	sub = subTextNew("$(path2)", path2);
 	slAddHead(&subList, sub);
-	sub = subNew("$(dir2)", dir2);
+	sub = subTextNew("$(dir2)", dir2);
 	slAddHead(&subList, sub);
-	sub = subNew("$(root2)", root2);
+	sub = subTextNew("$(root2)", root2);
 	slAddHead(&subList, sub);
-	sub = subNew("$(ext2)", ext2);
+	sub = subTextNew("$(ext2)", ext2);
 	slAddHead(&subList, sub);
-	sub = subNew("$(file2)", file2);
+	sub = subTextNew("$(file2)", file2);
 	slAddHead(&subList, sub);
 	sprintf(numBuf2, "%d", j);
-	sub = subNew("$(num2)", numBuf2);
+	sub = subTextNew("$(num2)", numBuf2);
 	slAddHead(&subList, sub);
 
 	for (loopEl = loopList; loopEl != NULL; loopEl = loopEl->next)
