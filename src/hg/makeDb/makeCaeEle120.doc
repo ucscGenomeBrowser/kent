@@ -20,6 +20,13 @@ ln -s /cluster/data/ce2/sanger/* sanger
 mkdir nt4
 cd nt4
 
+#	program fatont4 is in kent/src/reformat/fatont4
+#	The *.nt4 files created are machine specific.
+#	You can not use nt4 files on different machines.
+#	ALSO, the index files can not be used on different machines.
+#	If you want to move the Intronerator to a different machine
+#	you basically need to do this processing on that machine
+
 cat << '_EOF_' > dna2nt4.sh
 #!/bin/sh
 
@@ -59,6 +66,9 @@ time makec2c sanger features/c2c /dev/null > features/make.c2c.out 2>&1
 #	user    0m27.290s
 #	sys     0m3.220s
 
+#	these *.dir files are used by some of the processing utilities
+#	here and in the browser to find these directories
+#
 mkdir features/sanger
 cd features/sanger
 echo "/projects/compbio/experiments/worm/idb.ws120/cDNA/" > cdna.dir
@@ -67,6 +77,8 @@ echo "/projects/compbio/experiments/worm/idb.ws120/nt4/" > nt4.dir
 echo "/projects/compbio/experiments/worm/idb.ws120/xeno/" > xeno.dir
 cd ../..
 ln -s features/sanger/*.dir .
+
+#	makepgo is in kent/src/index/makepgo
 
 makepgo features/c2c features/ .coo
 
@@ -100,12 +112,15 @@ makepgo features/sanger/c2g features/sanger/ .pgo
 #	Writing 6141 entries nameSize 12 into features/sanger/x.pgo
 #	Writing 0 entries nameSize 0 into features/sanger/m.pgo
 
+#	indexgl is in kent/src/index/indexgl
+
 cd features/sanger
 indexgl genes.gdf genes.ix
 #	Reading input
 #	Got 43467 offsets 21 nameSize.  Sorting...
 #	Writing index file 
 
+#	ixword3 is in kent/src/index/ixword3
 cd ../..
 ixword3 features/c2c features/c2c.ix
 #	Got 3391 offsets 10 nameSize.  Sorting...
@@ -143,6 +158,9 @@ tail -4 gb2cdi.out
 #	1 male 141467 hermaphrodite 47123 mixed
 #	33 adult 55646 embryo 57368 varied 70127 L1 5180 L2 3346 L4 0 other
 #	214773 cDNAs in all
+#
+#	indexfa is in kent/src/index/indexfa
+#
 time indexfa allcdna.fa allcdna.ix >> indexfa.out 2>&1
 #	real    0m15.549s
 #	user    0m5.660s
@@ -181,12 +199,16 @@ do
 done > $RESULT
 
 #	back on kks00, index that all.st file, and st files
+#	program ixxenost is in kent/src/index/ixxenost
 ssh kks00
 cd /projects/compbio/experiments/worm/idb.ws120
 time ixxenost xeno/cbriggsae/all.st xeno/cbriggsae/all.ix
 #	real    4m29.919s
 #	user    3m50.790s
 #	sys     0m14.070s
+#	stToXao is in kent/src/index/stToXao
+#	this one reads the *.dir files to find things, expects to
+#	find those files in current working director
 time stToXao xeno/cbriggsae/all.st xeno/cbriggsae/
 #	real    4m37.433s
 #	user    3m51.040s
@@ -251,18 +273,23 @@ time refiAli ea/all.out cDNA/allcdna nt4 ra/good.txt \
 #	real    100m22.510s
 #	user    96m34.360s
 #	sys     1m29.580s
+#	binGood is in kent/src/cdnaAli/binGood and it needs the object
+#	in kent/src/cdnaAli/lib/cdnaAli.o
 binGood ra/good.txt cDNA/good.ali > cDNA/binGood.out 2>&1
 #	real    0m14.993s
 #	user    0m12.610s
 #	sys     0m1.010s
+#	ixali is in kent/src/index/ixali
 ixali cDNA/good.ali cDNA/good.ix > cDNA/ixali.out 2>&1
 #	real    0m4.795s
 #	user    0m4.290s
 #	sys     0m0.410s
+#	ali2alx is in kent/src/cdnaAli/ali2alx
 ali2alx cDNA/good.ali cDNA/ > cDNA/ali2alx.out 2>&1
 #	real    0m4.038s
 #	user    0m3.770s
 #	sys     0m0.190s
+#    cdnaOff is in kent/src/cdnaAli/cdnaOff
 cdnaOff ra/good.txt cDNA/ > cDNA/cdnaOff.out 2>&1
 #	real    0m12.397s
 #	user    0m11.490s
