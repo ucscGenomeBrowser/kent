@@ -16,10 +16,10 @@ struct snpMap
     {
     struct snpMap *next;  /* Next in singly linked list. */
     char *chrom;	/* Chromosome or 'unknown' */
-    int chromStart;	/* Start position in chrom - negative 1 if unpositioned */
+    unsigned chromStart;	/* Start position in chrom */
     unsigned chromEnd;	/* End position in chrom */
-    char *name;	/* Name of SNP */
-    char *source;	/* BAC_OVERLAP | MIXED | RANDOM | OTHER */
+    char *name;	/* Name of SNP - rsId or Affy name */
+    char *source;	/* BAC_OVERLAP | MIXED | RANDOM | OTHER | Affy10K | Affy120K */
     char *type;	/* SNP | INDEL | SEGMENTAL */
     };
 

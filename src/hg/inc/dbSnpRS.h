@@ -9,18 +9,20 @@
 #include "jksql.h"
 #endif
 
+#define DBSNPRS_NUM_COLS 8
+
 struct dbSnpRS
 /* Information from dbSNP at the reference SNP level */
     {
     struct dbSnpRS *next;  /* Next in singly linked list. */
-    unsigned rsId;	/* rs identifier */
+    char *rsId;	/* dbSnp reference snp (rs) identifier */
     float avHet;	/* the average heterozygosity from all observations */
-    float avHetSE;	/* the Standard Error for the average heterozygosity from all observations */
+    float avHetSE;	/* the Standard Error for the average heterozygosity */
     char *valid;	/* the validation status of the SNP */
-    char *allele1;	/* the assembly allele */
-    char *allele2;	/* the alternate allele */
-    char *assembly;	/* the sequence in the ucsc assembly (incl. flank) */
-    char *alternate;	/* the sequence of the alternate allele (incl. flank) */
+    char *allele1;	/* the sequence of the first allele */
+    char *allele2;	/* the sequence of the second allele */
+    char *assembly;	/* the sequence in the assembly */
+    char *alternate;	/* the sequence of the alternate allele */
     };
 
 void dbSnpRSStaticLoad(char **row, struct dbSnpRS *ret);
@@ -32,7 +34,15 @@ struct dbSnpRS *dbSnpRSLoad(char **row);
  * from database.  Dispose of this with dbSnpRSFree(). */
 
 struct dbSnpRS *dbSnpRSLoadAll(char *fileName);
-/* Load all dbSnpRS from a tab-separated file.
+/* Load all dbSnpRS from whitespace-separated file.
+ * Dispose of this with dbSnpRSFreeList(). */
+
+struct dbSnpRS *dbSnpRSLoadAllByChar(char *fileName, char chopper);
+/* Load all dbSnpRS from chopper separated file.
+ * Dispose of this with dbSnpRSFreeList(). */
+
+#define dbSnpRSLoadAllByTab(a) dbSnpRSLoadAllByChar(a, '\t');
+/* Load all dbSnpRS from tab separated file.
  * Dispose of this with dbSnpRSFreeList(). */
 
 struct dbSnpRS *dbSnpRSLoadByQuery(struct sqlConnection *conn, char *query);
