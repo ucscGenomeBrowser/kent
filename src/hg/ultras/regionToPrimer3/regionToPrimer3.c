@@ -10,8 +10,10 @@
 char *exe = "primer3_core";
 double minTm = 57.0;
 double maxTm = 63.0;
+
 char *tempInName = "rtp_tmp.in";
 char *tempOutName = "rtp_tmp.out";
+int primerMinSize = 16;
 
 void usage()
 /* Explain usage and exit. */
@@ -189,7 +191,6 @@ return parseWritePrimer3Output(name, midSize + 2*primerMinSize, tempOutName, out
 boolean findPrimers(FILE *f, char *name, DNA *dna, int startSize, int midSize, int endSize)
 /* Call primer3 to find primer that will amplify midSize region, and write results to file. */
 {
-int primerMinSize = 16;
 int extra;
 int totalSize = startSize + midSize + endSize;
 for (extra = 25; 
@@ -237,8 +238,8 @@ while (regionReadNext(lf, &dna, &size, &name))
     stripChar(dna, ')');
 
     /* Mask out G quartets and whatever RepeatMasker finds. */
-    polyToLower(dna, pOpen-dna, 'G', 4);
-    polyToLower(pClose+1, dna+size - pClose - 1, 'C', 4);
+    polyToLower(dna, pOpen-dna + primerMinSize, 'G', 4);
+    polyToLower(pClose+1 - primerMinSize, dna+size - pClose - 1 + primerMinSize, 'C', 4);
     lowerToN(dna, size);
 
     findPrimers(f, name, dna, startSize, midSize, endSize);
