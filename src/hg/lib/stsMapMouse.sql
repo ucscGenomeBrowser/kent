@@ -13,7 +13,7 @@ CREATE TABLE stsMapMouse (
     identNo int unsigned not null,	# Marker Identification number of STS
     probeId int unsigned not null,	# Probe Identification number of STS
               #Indices
-    PRIMARY KEY(chrom),
+    INDEX(name),
     INDEX(chrom(8),chromStart),
     INDEX(chrom(8),chromEnd)
 );
