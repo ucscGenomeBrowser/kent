@@ -36,30 +36,30 @@ endif
 set dbs=`getAssemblies.csh trackDb hgwbeta \
   | egrep -v "checking|get all|found|^qa_|^zoo" | egrep "."`
  
+# set file paths and URLs
 set today=`date +%Y-%m-%d`
 # set today="2005-01-23"
 set dirPath="/usr/local/apache/htdocs/qa/test-results/trackDb"
 set urlPath="http://hgwdev.cse.ucsc.edu/qa/test-results/trackDb"
-if ( ! -d $dirPath/$today ) then
-  mkdir $dirPath/$today
-endif
-
+mkdir -p $dirPath/$today
 set summaryFile=$dirPath/$today/$today.trackDb.html
 set summaryUrl=$urlPath/$today/$today.trackDb.html
 rm -f $summaryFile
-echo "<HTML><BODY>\n<PRE>\n" >> $summaryFile
+echo "<HTML><HEAD><TITLE>trackDb Diffs $today</TITLLE></HEAD><BODY>\n<PRE> \
+      \n" >! $summaryFile
 
-foreach db ( $dbs )
-  compareTrackDbAll.csh $db hgwbeta $machine \
-     >& $dirPath/$today/$db.$machine.trackDbAll
-  if ( $status ) then
-    echo "error detected from compareTrackDbAll.csh"  >> $summaryFile
-  endif
+echo "db      diffs"
+echo "-------------"
+foreach db ( $dbs testDummmy)
   set outfile="$dirPath/$today/$db.$machine.trackDbAll"
+  compareTrackDbAll.csh $db hgwbeta $machine >& $outfile
+  if ( $status ) then
+    echo "${db}: error detected from compareTrackDbAll.csh"  >> $summaryFile
+  endif
 
   set diffs=`cat $outfile | egrep "Diff|The diff" | wc -l` 
-  echo "db   diffs"
-  echo "$db   $diffs"
+  echo "$db $diffs" | gawk '{printf "%7s %2d", $1, $2}'
+  echo
   if ( $diffs == 0 ) then
     echo "$db number of diffs:" >> $summaryFile
     # rm -f $outfile
@@ -68,10 +68,10 @@ foreach db ( $dbs )
       >> $summaryFile
   endif
   echo "    $diffs\n<P>" >> $summaryFile
-  sleep 30
+  sleep 45
 end
 
 echo "\n</PRE></BODY></HTML>" >> $summaryFile
 echo $summaryUrl
-exit 1
+exit 0
 
