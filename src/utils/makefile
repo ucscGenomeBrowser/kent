@@ -73,6 +73,7 @@ DIRS = \
 	faSomeRecords \
 	faSplit \
 	faToNib \
+	faToTab \
 	faToTwoBit \
 	faTrans \
 	faTrimPolyA \
