@@ -23,7 +23,7 @@ set parasolServer = kkr1u00
 set subShellDir = chainNet.$tDbName.$qDbName.tmp
 
 mkdir -p $subShellDir
-cd chainNet.$tDbName.$qDbName.tmp
+cd $subShellDir
 cat >chainRun.csh <<endCat
 #!/bin/csh -efx
 
