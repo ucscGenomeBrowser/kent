@@ -12,7 +12,7 @@
 #include "hgFind.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.43 2003/06/17 23:06:57 braney Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.44 2003/06/18 20:34:31 braney Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -36,7 +36,7 @@ void hgGateway()
 {
 char *oldDb = NULL;
 char *defaultPosition = hDefaultPos(db);
-char *position = cartUsualString(cart, "position", defaultPosition);
+char *position = cloneString(cartUsualString(cart, "position", defaultPosition));
 
 /* JavaScript to copy input data on the change genome button to a hidden form
 This was done in order to be able to flexibly arrange the UI HTML
@@ -57,6 +57,7 @@ if (oldDb && !containsStringNoCase(oldDb, db))
     position = defaultPosition;
     removeCustomTrackData();
     }
+cartSetString(cart, "position",position);
 
 puts(
 "<CENTER>"
