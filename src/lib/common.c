@@ -571,6 +571,54 @@ for (;;)
     }
 }
 
+char *replaceChars(char *string, char *old, char *new)
+/*
+  Replaces the old with the new.
+ The old and new string need not be of equal size
+ Can take any length string.
+ Return value needs to be freeMem'd.
+*/
+{
+int numTimes = 0;
+int oldLen = strlen(old);
+int newLen = strlen(new);
+int strLen = 0;
+char *result = NULL;
+char *ptr = strstr(string, old);
+char *resultPtr = NULL;
+
+while(NULL != ptr)
+    {
+    numTimes++;
+    ptr += oldLen;
+    ptr = strstr(ptr, old);
+    }
+strLen = strlen(string) + (numTimes * (newLen - oldLen));
+result = needMem(strLen + 1);
+
+ptr = strstr(string, old);
+resultPtr = result;
+while(NULL != ptr)
+    {
+    fprintf(stderr, "RESULT: %s XXXXXXXXXXXXXXXXXXXXXXX<BR>\n", result);
+    strLen = ptr - string;
+    strcpy(resultPtr, string);
+    string = ptr + oldLen;
+
+    fprintf(stderr, "RESULT: %s XXXXXXXXXXXXXXXXXXXXXXX<BR>\n", result);
+    resultPtr += strLen;
+    fprintf(stderr, "RESULT: %s XXXXXXXXXXXXXXXXXXXXXXX<BR>\n", result);
+    strcpy(resultPtr, new);
+    fprintf(stderr, "RESULT: %s XXXXXXXXXXXXXXXXXXXXXXX<BR>\n", result);
+    resultPtr += newLen;
+    fprintf(stderr, "RESULT: %s XXXXXXXXXXXXXXXXXXXXXXX<BR>\n", result);
+    ptr = strstr(string, old);
+    }
+
+strcpy(resultPtr, string);
+return result;
+}
+
 void subChar(char *s, char oldChar, char newChar)
 /* Substitute newChar for oldChar throughout string s. */
 {
