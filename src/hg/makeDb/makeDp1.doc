@@ -345,19 +345,27 @@ PRODUCING GENSCAN PREDICTIONS (TODO 11/14/03 angie)
     hgLoadBed dp1 genscanSubopt genscanSubopt.bed
 
 
-# MAKE DOWNLOADABLE FILES (TODO (no mrna.zip) 11/14/03 angie)
+# MAKE DOWNLOADABLE FILES (DONE (no mrna.zip) 12/1/03 angie)
     ssh kksilo
     cd /cluster/data/dp1
     mkdir zips
     zip -j zips/chromOut.zip ?{,?}/chr?{,?}.fa.out
+    head -3 chunks/chunk_00.scaf.out > scaffolds.fa.out
+    foreach f ( chunks/*_??.scaf.out chunks/*_???.scaf.out)
+      tail +4 $f >> scaffolds.fa.out
+    end
+    zip zips/scaffoldOut.zip scaffolds.fa.out
+    rm scaffolds.fa.out
     zip -j zips/chromFa.zip ?{,?}/chr?{,?}.fa
     foreach f (?{,?}/chr?{,?}.fa)
       maskOutFa $f hard $f.masked
     end
     zip -j zips/chromFaMasked.zip ?{,?}/chr?{,?}.fa.masked
+    zip -j zips/scaffoldFa.zip scaffolds/*.fa
+    zip -j zips/scaffoldFaMasked.zip scaffoldsMasked/*.fa.masked
     cd bed/simpleRepeat
     zip ../../zips/chromTrf.zip trfMaskChrom/chr*.bed
-    zip ../../zips/contigTrf.zip trfMask/N{T,G}*.bed
+    zip ../../zips/scaffoldTrf.zip scaffoldsTrfMask.bed
     cd ../..
     zip -j zips/liftAll.zip jkStuff/liftAll.lft
     foreach f (zips/*.zip)
@@ -370,5 +378,23 @@ PRODUCING GENSCAN PREDICTIONS (TODO 11/14/03 angie)
     mkdir bigZips database
     # Create README.txt files in bigZips/ and database/ to explain the files.
     cp -p /cluster/data/dp1/zips/*.zip bigZips
+
+
+# SCAFFOLDS TRACK (DONE 12/1/03 angie)
+    # make ctgPos (contig name, size, chrom, chromStart, chromEnd) from liftAll
+    ssh hgwdev
+    mkdir /cluster/data/dp1/bed/ctgPos
+    cd /cluster/data/dp1/bed/ctgPos
+    perl -we 'while (<>) { \
+                ($cStart, $ctg, $size, $chrom, undef) = split; \
+                if ($ctg =~ /^Contig/) { \
+                  $cEnd = $cStart + $size; \
+                  print "$ctg\t$size\t$chrom\t$cStart\t$cEnd\n"; \
+                } \
+              }' \
+      ../../jkStuff/liftAll.lft > ctgPos.tab
+    hgsql dp1 < ~/kent/src/hg/lib/ctgPos.sql
+    echo "load data local infile 'ctgPos.tab' into table ctgPos" | hgsql dp1
+
 
 
