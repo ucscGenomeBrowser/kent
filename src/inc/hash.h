@@ -33,6 +33,10 @@ struct hashEl *hashLookup(struct hash *hash, char *name);
 struct hashEl *hashAdd(struct hash *hash, char *name, void *val);
 /* Add new element to hash table. */
 
+void *hashRemove(struct hash *hash, char *name);
+/* Remove item of the given name from hash table. 
+ * Returns value of removed item. */
+
 struct hashEl *hashAddUnique(struct hash *hash, char *name, void *val);
 /* Add new element to hash table. Squawk and die if is already in table. */
 

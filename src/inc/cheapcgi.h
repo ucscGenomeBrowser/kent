@@ -6,8 +6,13 @@
 /* Cheapcgi.h - turns variables passed from the web form into 
  * something that C understands. */
 
+#ifndef DYSTRING_H
+#include "dystring.h"
+#endif 
+
 /* Return TRUE if looks like we're being run as a CGI. */
 boolean cgiIsOnWeb();
+
 
 /* These routines abort the html output if the input isn't
  * there or is misformatted. */
@@ -79,6 +84,12 @@ void cgiContinueHiddenVar(char *varName);
 /* Write CGI var back to hidden input for next time around. 
  * (if it exists). */
 
+void cgiVarExclude(char *varName);
+/* If varName exists, remove it. */
+
+struct dyString *cgiUrlString();
+/* Get URL-formatted that expresses current CGI variable state. */
+
 boolean cgiSpoof(int *pArgc, char *argv[]);
 /* Use the command line to set up things as if we were a CGI program. 
  * User types in command line (assuming your program called cgiScript) 
@@ -90,3 +101,4 @@ boolean cgiSpoof(int *pArgc, char *argv[]);
  * the character '=') are erased from argc/argv.  Normally you call this
  *        cgiSpoof(&argc, argv);
  */
+

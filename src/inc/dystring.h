@@ -4,6 +4,8 @@
  * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
  *****************************************************************************/
 /* dystring - dynamically resizing string. */
+#ifndef DYSTRING_H
+#define DYSTRING_H
 
 struct dyString
 /* Dynamically resizable string that you can do formatted
@@ -34,3 +36,6 @@ void dyStringPrintf(struct dyString *ds, char *format, ...);
 /*  Printf to end of dyString.  Don't do more than 1000 characters this way... */
 
 #define dyStringClear(ds) (ds->string[0] = ds->stringSize = 0)
+
+#endif /* DYSTRING_H */
+
