@@ -1816,7 +1816,7 @@ if (reportTime) printf("%4.3f seconds to outputList\n", 0.001*(endTime-startTime
 
 int main(int argv, char *argc[])
 {
-uglyOut = mustOpen("/c/temp/uglyOut.fa", "w");
+uglyOut = mustOpen("/usr/local/apache/trash/uglyOut.fa", "w");
 dnaUtilOpen();
 localMem = lmInit(0);
 htmShell("Relative Sequence Data", doMiddle, NULL);
