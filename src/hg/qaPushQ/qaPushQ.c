@@ -13,14 +13,14 @@
 #include <stdio.h>
 #include <crypt.h>
 #include <fcntl.h>
-
+#include <sys/utsname.h>
 
 #include "pushQ.h"
 #include "formPushQ.h"
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.5 2004/05/05 10:05:44 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.6 2004/05/05 19:03:54 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -48,6 +48,8 @@ char *qaUser = NULL;
 
 time_t curtime;
 struct tm *loctime;
+
+struct utsname utsName;
 
 struct users myUser;
 
@@ -695,7 +697,7 @@ initColsFromString(showColumns);
 safef(monthsql,sizeof(monthsql),"");
 if (!sameString(month,""))
     {
-    safef(monthsql,sizeof(monthsql),"where qadate like '%s%%' ",month);
+    safef(monthsql,sizeof(monthsql),"where priority='L' and qadate like '%s%%' ",month);
     }
 
 /* Get a list of all (or in month). */
@@ -719,6 +721,11 @@ slReverse(&kiList);
 /* #rows returned
 slCount(kiList)
 */
+
+if (sameString(utsName.nodename,"hgwdev"))
+    {
+    printf("<p style=\"color:red\">Machine: %s THIS IS NOT THE REAL PUSHQ- GO TO HGWBETA </p>\n",utsName.nodename);
+    }
 
 if (sameString(month,""))
     {
@@ -1843,6 +1850,7 @@ curtime = time (NULL);
 /* Convert it to local time representation. */
 loctime = localtime (&curtime);
 
+uname(&utsName);
 
 database = cfgOption("pq.db"      );
 host     = cfgOption("pq.host"    );
