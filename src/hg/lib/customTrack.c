@@ -277,8 +277,6 @@ checkChromName(psl->tName, lineIx);
 /* Allocate bed and fill in from psl. */
 AllocVar(bed);
 bed->chrom = hashStoreName(chromHash, psl->tName);
-bed->chromStart = chromStart = psl->tStart;
-bed->chromEnd = psl->tEnd;
 
 bed->score = 1000 - 2*pslCalcMilliBad(psl, TRUE);
 if (bed->score < 0) bed->score = 0;
@@ -297,7 +295,16 @@ if (isProt)
         {
 	blockSizes[i] *= 3;
 	}
+    /* Do a little trimming here.  Arguably blat should do it 
+     * instead. */
+    for (i=1; i<blockCount; ++i)
+	{
+	int lastEnd = blockSizes[i-1] + chromStarts[i-1];
+	if (chromStarts[i] < lastEnd)
+	    chromStarts[i] = lastEnd;
+	}
     }
+
 
 /* Switch minus target strand to plus strand. */
 if (psl->strand[1] == '-')
@@ -311,8 +318,8 @@ if (psl->strand[1] == '-')
 	}
     }
 
-bed->thickStart = bed->chromStart;
-bed->thickEnd = bed->chromEnd;
+bed->thickStart = bed->chromStart = chromStart = chromStarts[0];
+bed->thickEnd = bed->chromEnd = chromStarts[blockCount-1] + blockSizes[blockCount-1];
 
 /* Convert coordinates to relative. */
 for (i=0; i<blockCount; ++i)
