@@ -69,6 +69,7 @@ struct hgPosTable
     {
     struct hgPosTable *next;	/* Next table in list. */
     char *name;			/* Name of table.  Not allocated here. */
+        char *description;      /* Table description. No allocated here */
     struct hgPos *posList;      /* List of positions in this table. */
     void (*htmlStart)(struct hgPosTable *table, FILE *f);   /* Print preamble to positions. */
     void (*htmlOnePos)(struct hgPosTable *table, struct hgPos *pos, FILE *f); /* Print one position. */
