@@ -14,11 +14,12 @@
 #include "cdsColors.h"
 #include "wiggle.h"
 #include "hgMaf.h"
+#include "obscure.h"
 
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.101 2004/05/18 18:09:49 donnak Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.102 2004/05/19 19:02:10 kate Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -844,6 +845,30 @@ if (tdb->html != NULL && tdb->html[0] != 0)
     }
 }
 
+struct trackDb *trackDbForRuler()
+/* Create a trackDb entry for the base position ruler.
+   It is not (yet?) a real track, so doesn't appear in trackDb */
+{
+struct trackDb *tdb;
+char htmlFile[256];
+char *buf;
+size_t size;
+
+AllocVar(tdb);
+tdb->tableName = RULER_TRACK_NAME;
+tdb->shortLabel = RULER_TRACK_LABEL;
+tdb->longLabel = RULER_TRACK_LONGLABEL;
+tdb->visibility = tvDense;
+tdb->priority = 1.0;
+safef(htmlFile, 256, "/gbdb/browser/%s.html", RULER_TRACK_NAME);
+readInGulp(htmlFile, &buf, &size);
+tdb->html = buf;
+tdb->type = "none";
+tdb->grp = "map";
+tdb->canPack = FALSE;
+return tdb;
+}
+
 void doMiddle(struct cart *theCart)
 /* Write body of web page. */
 {
@@ -854,7 +879,11 @@ track = cartString(cart, "g");
 database = cartUsualString(cart, "db", hGetDb());
 hSetDb(database);
 chromosome = cartString(cart, "c");
-tdb = hTrackDbForTrack(track);
+if (sameWord(track, RULER_TRACK_NAME))
+    /* special handling -- it's not a full-fledged track */
+    tdb = trackDbForRuler();
+else
+    tdb = hTrackDbForTrack(track);
 if (tdb == NULL)
    errAbort("Can't find %s in track database %s chromosome %s", track, database, chromosome);
 printf("<FORM ACTION=\"%s\">\n\n", hgTracksName());
