@@ -212,7 +212,7 @@ void hgcAnchorSomewhere(char *group, char *item, char *other, char *chrom)
 {
 char *tbl = cgiUsualString("table", cgiString("g"));
 printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&table=%s\">",
-       hgcPathAndSettings(), group, cgiEncode(item), chrom, winStart, winEnd, other,
+       hgcPathAndSettings(), group, item, chrom, winStart, winEnd, other,
        tbl);
 }
 
@@ -238,7 +238,7 @@ if (dbList != NULL)
 else
     db2 = "mm2";
 printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&db2=%s&xyzzy=xyzzy#%s\">",
-       hgcPathAndSettings(), "htcGenePsl", cgiEncode(item), chrom, winStart, winEnd,
+       hgcPathAndSettings(), "htcGenePsl", item, chrom, winStart, winEnd,
        other, db2, tag);
 dbDbFreeList(&dbList);
 }
@@ -249,7 +249,7 @@ void hgcAnchorSomewhereDb(char *group, char *item, char *other,
  * and other parameters. */
 {
 printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&db=%s\">",
-	hgcPathAndSettings(), group, cgiEncode(item), chrom, winStart, winEnd, other, db);
+	hgcPathAndSettings(), group, item, chrom, winStart, winEnd, other, db);
 }
 
 void hgcAnchor(char *group, char *item, char *other)
