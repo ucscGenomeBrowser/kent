@@ -30,7 +30,7 @@
 #include "hgColors.h"
 #include "tableDescriptions.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.103 2003/11/05 22:55:30 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.104 2003/11/08 00:35:18 angie Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -127,6 +127,9 @@ static char *onChangeTrack = "onchange=\"document.mainForm.tbCustomTrack.value =
 static char *onChangeCT = "onchange=\"document.mainForm.tbTrack.value = document.mainForm.tbTrack.options[0].value; document.mainForm.table0.value = document.mainForm.table0.options[0].value; document.mainForm.table1.value = document.mainForm.table1.options[0].value;\"";
 static char *onChangePos = "onchange=\"document.mainForm.tbTrack.value = document.mainForm.tbTrack.options[0].value; document.mainForm.tbCustomTrack.value = document.mainForm.tbCustomTrack.options[0].value; document.mainForm.table1.value = document.mainForm.table1.options[0].value;\"";
 static char *onChangeNonPos = "onchange=\"document.mainForm.tbTrack.value = document.mainForm.tbTrack.options[0].value; document.mainForm.tbCustomTrack.value = document.mainForm.tbCustomTrack.options[0].value; document.mainForm.table0.value = document.mainForm.table0.options[0].value;\"";
+static char *onChangeTrack2 = "onchange=\"document.mainForm.tbCustomTrack2.value = document.mainForm.tbCustomTrack2.options[0].value; document.mainForm.table2.value = document.mainForm.table2.options[0].value;\"";
+static char *onChangeCT2 = "onchange=\"document.mainForm.tbTrack2.value = document.mainForm.tbTrack2.options[0].value; document.mainForm.table2.value = document.mainForm.table2.options[0].value;\"";
+static char *onChangePos2 = "onchange=\"document.mainForm.tbTrack2.value = document.mainForm.tbTrack2.options[0].value; document.mainForm.tbCustomTrack2.value = document.mainForm.tbCustomTrack2.options[0].value;\"";
 
 /* Droplist menu for selecting output type: */
 #define allFieldsPhase      "Tab-separated, All fields"
@@ -525,10 +528,21 @@ return trackName;
 
 char *getTable2Var()
 {
+char *track  = cartCgiUsualString(cart, "tbTrack2", NULL);
+char *ct     = cartCgiUsualString(cart, "tbCustomTrack2", NULL);
 char *table2  = cgiOptionalString("table2");
+if (track != NULL && sameString(track, "Choose table"))
+    track = NULL;
+if (ct != NULL && sameString(ct, "Choose table"))
+    ct = NULL;
 if ((table2 != NULL) && sameString(table2, "Choose table"))
     table2 = NULL;
-return table2;
+if (track != NULL)
+    return track;
+else if (ct != NULL)
+    return ct;
+else
+    return table2;
 }
 
 char *getTable2Name()
@@ -564,11 +578,11 @@ if ((trackName != NULL) && startsWith("chrN_", trackName))
 return trackName;
 }
 
-void printTrackDropList(char *db, char *javascript)
+void printTrackDropList(char *db, char *javascript, char *varName)
 /* Print tracks for this database */
 {
 struct trackDb *trackList = hTrackDb(NULL), *t;
-char *tbTrack = cartCgiUsualString(cart, "tbTrack", NULL);
+char *value = cartCgiUsualString(cart, varName, NULL);
 int trackCount = slCount(trackList);
 char **trackLabels, **trackNames;
 char *selected = NULL;
@@ -590,14 +604,14 @@ for (t = trackList, i=1; t != NULL; t = t->next, ++i)
     else
 	safef(tbl, sizeof(tbl), "%s.%s", database, t->tableName);
     trackNames[i] = cloneString(tbl);
-    if (tbTrack != NULL && sameString(tbTrack, tbl))
+    if (value != NULL && sameString(value, tbl))
         selected = t->shortLabel;
     }
 if (selected == NULL)
     {
     selected = trackLabels[0];
     }
-cgiMakeDropListFull("tbTrack", trackLabels, trackNames, 
+cgiMakeDropListFull(varName, trackLabels, trackNames, 
 	trackCount+1, selected, javascript);
 }
 
@@ -1073,7 +1087,7 @@ puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#ChooseTable\">"
 ctPosTableList = getCustomTrackNames();
 categorizeTables(&posTableList, &nonposTableList);
 puts("<P> Choose a table: <BR>");
-printTrackDropList(database, onChangeTrack);
+printTrackDropList(database, onChangeTrack, "tbTrack");
 printf("<SELECT NAME=tbCustomTrack SIZE=1 %s>\n", onChangeCT);
 printf("<OPTION VALUE=\"Choose table\">Custom tracks</OPTION>\n");
 printSelectOptions(ctPosTableList, "tbCustomTrack");
@@ -1314,8 +1328,9 @@ puts("</TD></TR></TABLE>");
 void doOutputOptions()
 /* print out a form with output table format & filtering options */
 {
-struct hashEl *posTableList;
-struct hashEl *nonposTableList;
+struct hashEl *ctPosTableList = NULL;
+struct hashEl *posTableList = NULL;
+struct hashEl *nonposTableList = NULL;
 char *table = getTableName();
 char *db = getTableDb();
 
@@ -1362,9 +1377,15 @@ if (tableIsPositional)
     puts("Note: Output Format must be FASTA, BED, Hyperlinks, GTF \n"
 	 "or Summary/Statistics "
 	 "for this feature.  <P>");
+    ctPosTableList = getCustomTrackNames();
     categorizeTables(&posTableList, &nonposTableList);
     puts("Choose a second table:");
-    puts("<SELECT NAME=table2 SIZE=1>");
+    printTrackDropList(database, onChangeTrack2, "tbTrack2");
+    printf("<SELECT NAME=tbCustomTrack2 SIZE=1 %s>\n", onChangeCT2);
+    printf("<OPTION VALUE=\"Choose table\">Custom tracks</OPTION>\n");
+    printSelectOptions(ctPosTableList, "tbCustomTrack2");
+    puts("</SELECT>");
+    printf("<SELECT NAME=table2 SIZE=1 %s>", onChangePos2);
     printf("<OPTION VALUE=\"Choose table\">Positional tables</OPTION>\n");
     printSelectOptions(posTableList, "table2");
     puts("</SELECT>");
@@ -2107,10 +2128,10 @@ char *op = cgiOptionalString("tbIntersectOp");
 
 if ((table2 != NULL) && (table2[0] != 0) && (op != NULL))
     {
+    char buf[128];
     if (sameString("and", op) || sameString("or", op))
 	{
 	struct hTableInfo *effHti;
-	char buf[128];
 	AllocVar(effHti);
 	snprintf(buf, sizeof(buf), "%s_%s_%s", table, op, table2);
 	effHti->rootName = cloneString(buf);
@@ -2133,6 +2154,11 @@ if ((table2 != NULL) && (table2[0] != 0) && (op != NULL))
 	strcpy(buf, "bed 4");
 	effHti->type = cloneString(buf);
 	return(effHti);
+	}
+    else
+	{
+	snprintf(buf, sizeof(buf), "%s_%s_%s", hti->rootName, op, table2);
+	hti->rootName = cloneString(buf);
 	}
     }
 return(hti);
@@ -2701,20 +2727,23 @@ struct slName *chosenFields;
 struct bed *firstFewBed = NULL, *bed = NULL;
 int i;
 
-printf("<BR> Custom track %s is stored locally as a bed %d file.\n",
+printf("<P> Custom track %s is stored locally as a bed %d file.\n",
        table, ct->fieldCount);
 puts("(Note: custom tracks may initially be loaded into the browser \n"
      "from files in other formats such as PSL or GFF, \n"
      "but upon loading they are translated to BED for local processing \n"
-     "and temporary storage.");
+     "and temporary storage.)");
 
 printf("<P>Custom track %s has %d rows total.<BR>\n",
        hti->rootName, slCount(ct->bedList));
 if (ct->bedList != 0)
     {
     firstFewBed = NULL;
-    for (i=0,bed=ct->bedList;  i < 3, bed != NULL;  i++,bed=bed->next)
-	slAddHead(&firstFewBed, cloneBed(bed));
+    for (i=0,bed=ct->bedList;  i < 3 && bed != NULL;  i++,bed=bed->next)
+	{
+	struct bed *newBed = cloneBed(bed);
+	slAddHead(&firstFewBed, newBed);
+	}
     slReverse(&firstFewBed);
     printf ("Example rows of custom track %s (not necessarily from current position!):<BR>\n",
 	    hti->rootName);
