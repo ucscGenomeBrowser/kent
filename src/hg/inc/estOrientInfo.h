@@ -68,8 +68,9 @@ void estOrientInfoOutput(struct estOrientInfo *el, FILE *f, char sep, char lastS
 struct estOrientInfo *estOrientInfoLoadLm(char **row, struct lm *lm);
 /* Load a estOrientInfo row into local memory struct. */
 
-char *estOrientInfoGetCreateSql(char *table);
-/* Get SQL to create an estOrientInfo table.  */
+char *estOrientInfoGetCreateSql(char *table, int chromIdxLen);
+/* Get SQL to create an estOrientInfo table. chromIdxLen is the number of
+ * chars at that start of chrom to use for the index. */
 
 #endif /* ESTORIENTINFO_H */
 

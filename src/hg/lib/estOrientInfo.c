@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "estOrientInfo.h"
 
-static char const rcsid[] = "$Id: estOrientInfo.c,v 1.3 2003/05/06 07:22:21 kate Exp $";
+static char const rcsid[] = "$Id: estOrientInfo.c,v 1.4 2005/04/06 23:29:51 markd Exp $";
 
 static char *createString = 
     "CREATE TABLE %s (\n"
@@ -23,9 +23,9 @@ static char *createString =
     "    signalPos smallint not null,	        # Position of start of polyA signal relative to end of EST or 0 if no signal\n"
     "    revSignalPos smallint not null,	# PolyA signal position on reverse strand if any\n"
     "              #Indices\n"
-    "    INDEX(chrom(8),bin),\n"
-    "    INDEX(chrom(8),chromStart),\n"
-    "    INDEX(chrom(8),chromEnd),\n"
+    "    INDEX(chrom(%d),bin),\n"
+    "    INDEX(chrom(%d),chromStart),\n"
+    "    INDEX(chrom(%d),chromEnd),\n"
     "    INDEX(name(20))\n"
     ")\n";
 
@@ -187,12 +187,13 @@ fprintf(f, "%d", el->revSignalPos);
 fputc(lastSep,f);
 }
 
-char *estOrientInfoGetCreateSql(char *table)
-/* Get SQL to create an estOrientInfo table.  */
+char *estOrientInfoGetCreateSql(char *table, int chromIdxLen)
+/* Get SQL to create an estOrientInfo table. chromIdxLen is the number of
+ * chars at that start of chrom to use for the index. */
 {
 struct dyString *sqlCmd = newDyString(2048);
 char *sqlCmdStr;
-dyStringPrintf(sqlCmd, createString, table);
+dyStringPrintf(sqlCmd, createString, table, chromIdxLen, chromIdxLen, chromIdxLen);
 sqlCmdStr = cloneString(sqlCmd->string);
 dyStringFree(&sqlCmd);
 return sqlCmdStr;

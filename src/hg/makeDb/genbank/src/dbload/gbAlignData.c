@@ -28,7 +28,7 @@
 #include "gbSql.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: gbAlignData.c,v 1.18 2005/04/06 22:00:26 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignData.c,v 1.19 2005/04/06 23:29:51 markd Exp $";
 
 /* table names */
 static char *REF_SEQ_ALI = "refSeqAli";
@@ -216,7 +216,7 @@ if (*tabFileVar == NULL)
     *tabFileVar = sqlUpdaterNew(table, gTmpDir, (gbVerbose >= 2), &gAllUpdaters);
     if (!sqlTableExists(conn, table))
         {
-        char *createSql = estOrientInfoGetCreateSql(table);
+        char *createSql = estOrientInfoGetCreateSql(table, hGetMinIndexLength());
         sqlRemakeTable(conn, table, createSql);
         freez(&createSql);
         }
