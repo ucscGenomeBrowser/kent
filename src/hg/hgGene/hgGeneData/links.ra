@@ -34,13 +34,6 @@ priority 30
 #url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
 #priority 40
 
-name locusLink
-shortLabel LocusLink
-tables kgXref refLink
-idSql select refLink.locusLinkId from kgXref,refLink where kgID = '%s' and kgXref.refseq = refLink.mrnaAcc
-url http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l=%s
-priority 45
-
 name entrezGene
 shortLabel Entrez Gene
 tables kgXref refLink

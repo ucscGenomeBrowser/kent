@@ -11,6 +11,7 @@
 #include "hdb.h"
 #include "hCommon.h"
 #include "hui.h"
+#include "ldUi.h"
 #include "snpUi.h"
 #include "sample.h"
 #include "cdsColors.h"
@@ -23,7 +24,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.165 2005/01/12 03:29:48 donnak Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.167 2005/01/20 00:49:51 daryl Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -207,6 +208,58 @@ for (snpLocType=0; snpLocType<snpLocTypeCartSize; snpLocType++)
     snpFilterButtons(snpLocTypeStrings[snpLocType], snpLocTypeCart[snpLocType]);
     printf(" - <B>%s</B><BR>\n",snpLocTypeLabels[snpLocType]);
     }
+}
+
+void ldUi(struct trackDb *tdb)
+/* Put up UI snp data. */
+{
+ldValue  = cartUsualString(cart,  "ldValues", "rsquared");
+ldCeu    = cartUsualBoolean(cart, "ldCeu",    TRUE);
+ldHcb    = cartUsualBoolean(cart, "ldHcb",    FALSE);
+ldJpt    = cartUsualBoolean(cart, "ldJpt",    FALSE);
+ldYri    = cartUsualBoolean(cart, "ldYri",    FALSE);
+ldCov    = cartUsualInt(cart,     "ldCov",    100000);
+ldHeight = cartUsualInt(cart,     "ldHeight", 200);
+ldPos    = cartUsualString(cart,  "ldPos",    "red");
+ldNeg    = cartUsualString(cart,  "ldNeg",    "blue");
+ldOut    = cartUsualString(cart,  "ldOut",    "yellow");
+
+/* It would be nice to add a 'reset' button to reset the ld variables to their defaults. */
+
+printf("<BR><B>LD Values:</B><BR>&nbsp;&nbsp;\n");
+cgiMakeRadioButton("ldValues", "rsquared", sameString("rsquared", ldValue));
+printf("&nbsp;r^2&nbsp;&nbsp;");
+cgiMakeRadioButton("ldValues", "dprime",   sameString("dprime",   ldValue));
+printf("&nbsp;D'&nbsp;&nbsp;");
+cgiMakeRadioButton("ldValues", "lod",      sameString("lod",      ldValue));
+printf("&nbsp;LOD<BR>");
+
+printf("<BR><B>Populations:</B> <font color=red>THESE CONTROLS ARE NOT FUNCTIONAL YET</font><BR>&nbsp;&nbsp;\n");
+cgiMakeCheckBox("ldCeu", ldCeu); printf("&nbsp;Northern European from Utah (CEPH)<BR>&nbsp;&nbsp;\n");
+cgiMakeCheckBox("ldHcb", ldHcb); printf("&nbsp;Han Chinese from Beijing<BR>&nbsp;&nbsp;\n");
+cgiMakeCheckBox("ldJpt", ldJpt); printf("&nbsp;Japanese from Tokyo<BR>&nbsp;&nbsp;\n");
+cgiMakeCheckBox("ldYri", ldYri); printf("&nbsp;Yoruba from Ibidan<BR>\n");
+
+printf("<BR><B>Track Geometry:</B><BR>&nbsp;&nbsp;\n");
+cgiMakeIntVar("ldCov",    ldCov,    6); printf("&nbsp; Maximum window of LD to show (maximum of 500,000 bases)<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n");
+cgiMakeIntVar("ldHeight", ldHeight, 3); printf("&nbsp;Track height (maximum of 400 pixels)<BR>\n");
+
+printf("<BR><B>Colors:</B><BR>&nbsp;&nbsp;");
+radioButton("ldPos", ldPos, "red");
+radioButton("ldPos", ldPos, "green");
+radioButton("ldPos", ldPos, "blue");
+printf("&nbsp; - Color for positive values of LD<BR>&nbsp;&nbsp;");
+radioButton("ldNeg", ldNeg, "red");
+radioButton("ldNeg", ldNeg, "green");
+radioButton("ldNeg", ldNeg, "blue");
+printf("&nbsp; - Color for negative values of LD<BR>&nbsp;&nbsp;");
+radioButton("ldOut", ldOut, "red");
+radioButton("ldOut", ldOut, "green"); /* must add mg_green in hgtracks */
+radioButton("ldOut", ldOut, "blue");
+radioButton("ldOut", ldOut, "yellow");
+radioButton("ldOut", ldOut, "black");
+radioButton("ldOut", ldOut, "none");
+printf("&nbsp; - Color for outlines<BR>&nbsp;&nbsp;");
 }
 
 void cbrWabaUi(struct trackDb *tdb)
@@ -1180,6 +1233,8 @@ else if (sameString(track, "snpMap"))
         snpMapUi(tdb);
 else if (sameString(track, "snp"))
         snpUi(tdb);
+else if (sameString(track, "ld"))
+        ldUi(tdb);
 else if (sameString(track, "cbr_waba"))
         cbrWabaUi(tdb);
 else if (sameString(track, "fishClones"))
@@ -1224,7 +1279,7 @@ else if (sameString(track, "blastDm1FB"))
         blastFBUi(tdb);
 else if (sameString(track, "blastSacCer1SG"))
         blastSGUi(tdb);
-else if (sameString(track, "blastHg17KG") || sameString(track, "blastHg16KG") || sameString(track, "tblastnHg16KGPep"))
+else if (sameString(track, "blastHg17KG") || sameString(track, "blastHg16KG") || sameString(track, "blatzHg17KG"))
         blastUi(tdb);
 else if (startsWith("wig", tdb->type))
         {

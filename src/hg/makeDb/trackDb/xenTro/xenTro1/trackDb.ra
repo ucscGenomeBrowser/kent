@@ -6,17 +6,16 @@ group map
 visibility dense
 type bed 3 +
 
-track partMrnas
 track blastHg17KG
 shortLabel Human Proteins
-longLabel Human (hg17) proteins mapped by chained tBLASTn
+longLabel Human(hg17) proteins mapped by chained tBLASTn
 group genes
 priority 49.5
 visibility pack
 colorChromDefault off
 type psl protein
-pred hg17.blastKGPep00
-blastRef hg17.blastKGRef00
+pred hg17.blastKGPep01
+blastRef hg17.blastKGRef01
 
 track all_mrna
 shortLabel $Organism mRNAs
@@ -36,6 +35,15 @@ priority 57
 visibility hide
 spectrum on
 type psl est
+
+track xenLaeRna
+shortLabel X. laevis mRNAs
+longLabel Xenopus Laevis mRNAs Mapped with Blatz
+group rna
+priority 58
+visibililty pack
+spectrum on
+type psl xeno
 
 track multiz5way
 shortLabel Conservation

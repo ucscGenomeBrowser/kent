@@ -8,7 +8,7 @@
 #include "axt.h"
 #include "bandExt.h"
 
-int maxInsert = 9;
+int maxInsert = 100;
 
 void usage()
 /* Explain usage and exit. */
@@ -35,8 +35,8 @@ static struct optionSpec options[] = {
 void testBandExt(char *aName, char *bName)
 /* testBandExt - Test band extension. */
 {
-struct dnaSeq *aSeq = faReadAllDna(aName);
-struct dnaSeq *bSeq = faReadAllDna(bName);
+struct dnaSeq *aSeq = faReadAllMixed(aName);
+struct dnaSeq *bSeq = faReadAllMixed(bName);
 int symAlloc = aSeq->size + bSeq->size;
 int symCount, i;;
 char *aSym, *bSym;

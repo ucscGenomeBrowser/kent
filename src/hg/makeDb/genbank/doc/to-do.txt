@@ -749,10 +749,82 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 
 - NM_005541 split into two pieces because it has a gap in an intron
        -human chr1 uses 362M for blat
-      - maybe allow small gaps in windows??
+      - allow for small in windows, since these can be in introns
       - windows don't really have to be a multiple of overlap, can
         have relatively large windows with small overalp.
 
 - include version number in download fasta.
 
 - add a weekly analyze table.
+
+- could the command line parsing be more integrated with genbank.conf?
+  so it becomes an override mechanism.
+
+- DDC  NM_000790.2 has definition line truncated (or maybe product line).
+
+- convert over to using pipeline module.  Hiram needed pipeline write 
+  from stdout, so add function do to this.  Also add unit test.
+
+- should TPA mrnas be included in genbank track.
+
+- why is this not aligned
+      U01833  ds-mRNA    linear   PRI 03-FEB-1995
+  
+- from gbAlignSetup: tmp job file exists: suggest course of action here.
+
+- current mondo job distribution runs longest jobs first.
+
+- if ignore.idx is modified between gbAlignGet and gbAlignFinish, gbAlignFinish
+  will get an error.
+
+- Daniela asks (2005/01/03):
+    P.S.  Are you planning to map the laevis clones against the tropicalis
+    genome as well?  The issues of paralogs as well as the fairly high
+    difference in sequence would make this a much more complicated, but I think
+    useful.
+
+- LocusLink to Entrez Gene link conversion.  Change refLink table, maybe
+  include both gene id and locus id:
+
+      /db_xref="GeneID:3952"
+      /db_xref="LocusID:3952"
+  drop old refseq build programs from tree.
+
+
+- dna based ones: 
+      select * from kgXref where kgID like "NM_%" limit 10;
+        NM_000050 -> P00966 swiss Cross-references ->  L00084 is dna
+
+        use kgHg17BTemp
+            locus2Acc0;
+            locus2Ref0
+        use proteins;
+        describe hugo;
+
+   KG gene lookup:
+      start with swissprot accession (spAcc)
+      spAcc lookup gbAccs in swissProt
+      if any of gbAccs in mrna table, then done (on to blat, etc)
+      
+      (see dnaGene.c)
+      foreach refAcc in locus2Ref:
+            locusId = locus2Ref[refAcc].locusId
+            lookup locusId in locus2acc0 with seqType='g', 
+            gbAcc = first of these, now have a (refAcc,gbAcc) pair
+            lookup refAcc in proteins.hugo, 
+            spIdHugo = proteins.hugo.swissprot
+
+            # need to get display id
+            lookup spIdHugo in proteins.spXref 
+            spDisplayId = proteins.spXref.displayID
+
+            if spDisplayId == NULL
+               # look at all matching spxref2
+               foreach gbAcc in locus2Acc0 with locusId:
+                     gbAcc in proteins.spXref.extAC
+                     spDisplayId = spXref.display.ID, break
+            if spDisplayId != NULL:
+               get refGene, output refGene + spID + spDisplayId
+            
+
+       spAcc/spDisplayId, alignment

@@ -33,6 +33,12 @@ struct vGfx
 	    int x1, int y1, int x2, int y2, int colorIx);
     /* Draw a line from one point to another. */
 
+    void (*diamond)(void *v, 
+	    int xl, int yl, int xr, int yr, 
+            int xt, int yt, int xb, int yb, int colorIx,
+	    boolean drawOutline, Color outlineColor);
+    /* Draw a filled diamond between four points: left, right, top, bottom. */
+
     void (*text)(void *v, int x, int y, int colorIx, void *font, char *text);
     /* Draw a line of text with upper left corner x,y. */
 
@@ -97,6 +103,10 @@ void vgClose(struct vGfx **pVg);
 
 #define vgLine(v,x1,y1,x2,y2,color) v->line(v->data,x1,y1,x2,y2,color)
 /* Draw a line from one point to another. */
+
+#define vgDiamond(v,xl,yl,xr,yr,xt,yt,xb,yb,color,drawOutline,outlineColor) \
+ v->diamond(v->data,xl,yl,xr,yr,xt,yt,xb,yb,color,drawOutline,outlineColor)
+/* Draw a filled diamond between four points: left, right, top, bottom */
 
 #define vgText(v,x,y,color,font,string) v->text(v->data,x,y,color,font,string)
 /* Draw a line of text with upper left corner x,y. */

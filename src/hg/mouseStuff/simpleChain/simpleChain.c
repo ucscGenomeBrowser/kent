@@ -7,6 +7,7 @@
 #include "chain.h"
 #include "dystring.h"
 
+#ifndef MACHTYPE_x86_64
 int maxGap=250000;
 boolean outPsl = FALSE;
 int sizeMul = 1;
@@ -199,11 +200,11 @@ struct psl *prevPsl, *nextPsl;
 prevPsl = NULL;
 for(psl = *pslList; psl ;  psl = nextPsl)
     {
-    nextPsl = psl->next;
     int qStart = psl->qStarts[0];
     int qEnd = psl->qStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
     int tStart = psl->tStarts[0];
     int tEnd = psl->tStarts[psl->blockCount - 1] + sizeMul * psl->blockSizes[psl->blockCount - 1];
+    nextPsl = psl->next;
 
     assert(tEnd > tStart);
     assert(qEnd > qStart);
@@ -398,13 +399,14 @@ for(sp = spList; sp; sp = sp->next)
 
     for(psl = sp->psl; psl ;  psl = nextPsl)
 	{
-	nextPsl = psl->next;
-	sp->psl  = nextPsl;
 
 	int qStart = psl->qStarts[0];
 	int qEnd = psl->qStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
 	int tStart = psl->tStarts[0];
 	int tEnd = psl->tStarts[psl->blockCount - 1] + sizeMul * psl->blockSizes[psl->blockCount - 1];
+	
+	nextPsl = psl->next;
+	sp->psl  = nextPsl;
 
 	assert(tEnd > tStart);
 	assert(qEnd > qStart);
@@ -478,3 +480,11 @@ sizeMul = optionExists("prot") ? 3 : 1;
 simpleChain(argv[1], argv[2]);
 return 0;
 }
+#else
+int
+main()
+{
+printf("Not supported on x86_64\n");
+exit(1);
+}
+#endif

@@ -413,6 +413,7 @@ longLabel HapMap Linkage Disequilibrium
 group varRep
 priority 144.5
 visibility hide
+canPack off
 type bed 4 +
 
 track haplotype

@@ -52,4 +52,4 @@ rsc - RefSeq completeness from comment.
         incmpl3 = incomplete on the 3' end.
         part    = not full length.
         unk     = unknown
-        
+rsd - space seperated list of accessions that a RefSeq was derived from.

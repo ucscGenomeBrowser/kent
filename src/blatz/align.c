@@ -407,19 +407,6 @@ slReverse(&chainList);
 return chainList;
 }
 
-static void offsetBlocks(struct cBlock *blockList, int qOff, int tOff)
-/* Add offsets to block list. */
-{
-struct cBlock *block;
-for (block = blockList; block != NULL; block = block->next)
-    {
-    block->tStart += tOff;
-    block->tEnd += tOff;
-    block->qStart += qOff;
-    block->qEnd += qOff;
-    }
-}
-
 int uglyCount, uglyTotalQ, uglyTotalT;
 double uglyArea;
 
@@ -458,13 +445,13 @@ tNew.dna = target->dna + tStart;
 tNew.size = tSize;
 tNew.name = target->name;
 
-index = blatzIndexOne(&tNew, bzp->weight);
+index = blatzIndexOne(&tNew, tStart, target->size, bzp->weight);
 chainList = blatzChainAgainstIndex(bzp, index, &qNew, strand);
 blatzIndexFree(&index);
 
 for (chain = chainList; chain != NULL; chain = chain->next)
     {
-    offsetBlocks(chain->blockList, qStart, tStart);
+    cBlocksAddOffset(chain->blockList, qStart, tStart);
     addBlocksToList(pBlockList, &chain->blockList);
     }
 chainFreeList(&chainList);

@@ -1532,10 +1532,10 @@ visibility hide
 type bed 4 .
 
 track phastConsTopPaper
-shortLabel phastCons Top
-longLabel Top-Scoring PhastCons Elements
+shortLabel phastCons HCE
+longLabel PhastCons Highly Conserved Elements (HCEs)
 group compGeno
-priority 191.2
+priority 109.25
 visibility hide
 color 0,100,0
 type bed 5 .

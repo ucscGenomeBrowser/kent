@@ -21,7 +21,7 @@
 #include "cheapcgi.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.55 2004/12/09 21:32:46 angie Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.56 2005/01/19 19:29:35 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -911,6 +911,13 @@ printf(" wc:%d <BR>\n", wordCount);
 	{
 	if (wordCount != track->fieldCount)
 	    {
+	    int i;
+	    warn("Custom track data input error<BR>\n");
+	    warn("line&nbsp;%d,&nbsp;%d&nbsp;%s:&nbsp'",
+		lineIx, wordCount, wordCount > 1 ? "fields" : "field");
+	    for ( i = 0; (wordCount > 0) && (i < (wordCount-1)); ++i )
+		warn("%s&nbsp;", row[i]);
+	    warn("%s'<BR>\n",(wordCount > 0)?row[wordCount-1]:"(empty line?)");
 	    errAbort("line %d of custom input: Track has %d fields in one place and %d another", 
 		    lineIx, track->fieldCount, wordCount);
 	    }

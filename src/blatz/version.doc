@@ -354,18 +354,16 @@
       6:00 chr1 + chr21 vs mouse rna
          Curiously slow.  Index falling out of cache?
 	 match 192458 mismatch 48596 repMatch 4233
-
-    
-time blat chr21.nib humanPlusRna.fa blatHuman.psl -ooc=$HOME/src/blat/11.ooc -q=rna
-Loaded 44626493 letters in 1 sequences
-Searched 531551 bases in 190 sequences
-19.380u 1.110s 0:21.51 95.2%    0+0k 0+4io 0pf+0w
-
-time blat chr21.nib humanPlusRna.fa blatFine.psl -ooc=$HOME/src/blat/11.ooc -q=rna -fine
-Loaded 44626493 letters in 1 sequences
-Searched 531551 bases in 190 sequences
-23.040u 1.390s 0:25.44 96.0%    0+0k 0+4io 0pf+0w
-
-time blatz test/chr21/chr21.fa test/chr21/humanPlusRna.fa -out=psl blatzHuman.psl -rna
-274.570u 74.800s 5:58.29 97.5%  0+0k 0+27io 0pf+0w
-
+93 - Fixed bug in bandExt.
+      2.26 chain 1310598 human2 100000 + 27 98887 mouse17 75584 + 24 73322 1
+      0:28.38 chain 8324871 human 2000000 + 361721 1947371 mouse 1120000 + 8735 1116037 1
+94 - Adding -transition flag.  By default it is 1, and the program works 
+     as before.  Here's the results with it set to 0 on the 100k and meg
+     test sets.
+      1.46 chain 1186753 human2 100000 + 27 98887 mouse17 75584 + 24 73322 1
+      0:10.94 chain 6411945 human 2000000 + 361822 1947371 mouse 1120000 + 8804 1116037 1
+95 - Ported to Mac. Making it autolift from nib/2bit subranges in target.
+      4.22 chain 1310598 human2 100000 + 27 98887 mouse17 75584 + 24 73322 1
+      0:49.757 chain 8325211 human 2000000 + 361721 1947371 mouse 1120000 + 8735 1116037 1
+96 - Doing autolift on target in server as well as standalone.  Doing autolift on
+     query as well as target in standalone.

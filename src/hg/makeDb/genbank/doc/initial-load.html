@@ -42,10 +42,13 @@
            on the latest GenBank release. 
       <LI> Edit <CODE>genbank/src/align/gbBlat</CODE> to add the <EM><CODE>ooc</CODE></EM> file.
            If there is no <EM><CODE>ooc</CODE></EM>, this script still needs to be
-           modified to indicate this fact.
+           modified to indicate this fact.  You probably want to create and specify
+           a BLAT OOC file.
       <LI> cd to the top of the genbank source (<CODE>kent/src/hg/makeDb/genbank/</CODE>)
       <LI> <CODE>make</CODE> to test if the source builds
       <LI> <CODE>make install-server</CODE> to update <CODE>/cluster/data/genbank/</CODE>.
+      <LI> Once these changes are debugged and committed, ask <A HREF="mailto:markd@cse.ucsc.edu"><CODE>markd</CODE></A>
+           to update the round-robin code.
 
       </UL>
       <LI> Edit <A HREF="config.html"><CODE>/cluster/data/etc/genbank.conf</CODE></A> to 
@@ -63,7 +66,7 @@
       <LI><CODE>cd /cluster/data/genbank</CODE><BR>
           This directory is <CODE>$gbRoot</CODE>.
 
-      <LI> <CODE>nice bin/gbAlignStep -verbose=1 -initial <EM>$db</EM>&</CODE><BR>
+      <LI> <CODE>nice bin/gbAlignStep -initial <EM>$db</EM>&</CODE><BR>
            <P>This will run the entire alignment process.
            The <CODE>-initial</CODE> option defaults several parameters for
            and initial alignment and prevents this alignment from blocking
@@ -103,7 +106,7 @@
                to be aligned, no option is required when doing the ESTs after
                an initial mRNA alignment.
 
-          <P> If anything fails, a subset of the trasks done by
+          <P> If anything fails, a subset of the tasks done by
               <CODE>gbAlignStep</CODE> script can be rerun after correcting
               the problem.  This is done using the
               <CODE>-continue=<EM>subtask</EM></CODE> option with
@@ -134,7 +137,7 @@
     <H3>Initial Database Load</H3>
 
     <OL>
-      <LI><CODE>nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad $db</CODE></LI>
+      <LI><CODE>nice bin/gbDbLoadStep -drop -initialLoad $db</CODE></LI>
       <LI>
           <UL>
           <LI> The <CODE>-drop</CODE> option drops any existing GenBank or RefSeq
@@ -181,13 +184,14 @@
            specified.  Reloading of ESTs isn't supported, use <CODE>-drop</CODE>
            and <CODE>-initialLoad</CODE> instead.
           <UL>
-          <LI><CODE>nice bin/gbDbLoadStep=1 -reload -srcDb=genbank -type=mrna $db</CODE></LI>
+          <LI><CODE>nice bin/gbDbLoadStep -reload -srcDb=genbank -type=mrna $db</CODE></LI>
           </UL>
       </OL>
 <!--
 FIXME: 
   - mention that build takes place on kk.
   - alignment directory, monitor with list batches
+  - building download sequences/ making writable directories..
 -->
 
   </BODY>

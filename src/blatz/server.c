@@ -147,7 +147,7 @@ for (;;)
     {
     FILE *f = netFileFromSocket(sd);
     struct chain *chainList = blatzAlign(&lbzp, indexList, seq);
-    blatzWriteChains(&lbzp, chainList, seq, indexList, f);
+    blatzWriteChains(&lbzp, chainList, seq, 0, 0, indexList, f);
     bzpTime("sent result - %d chains", slCount(chainList));
     chainFreeList(&chainList);
     carefulClose(&f);
@@ -262,8 +262,7 @@ void serverStart(char *files[], int fileCount)
 /* Load DNA. Build up indexes, set up listing port, and fall into
  * accept loop. */
 {
-struct dnaSeq *seqList = NULL, *seq;
-struct blatzIndex *indexList;
+struct blatzIndex *indexList = NULL;
 int i;
 int acceptor;
 struct bzp *bzp = bzpDefault();
@@ -275,20 +274,11 @@ bzpSetOptions(bzp);
 for (i=0; i<fileCount; ++i)
     {
     struct dnaLoad *dl = dnaLoadOpen(files[i]);
-    while ((seq = dnaLoadNext(dl)) != NULL)
-        {
-	if (bzp->unmask)
-	    toUpperN(seq->dna, seq->size);
-        slAddHead(&seqList, seq);
-        }
+    struct blatzIndex *oneList = blatzIndexDl(dl, bzp->weight, bzp->unmask);
+    indexList = slCat(indexList, oneList);
     dnaLoadClose(&dl);
     }
-slReverse(&seqList);
-bzpTime("Loaded %d sequences", slCount(seqList));
-
-/* Index them. */
-indexList = blatzIndexAll(seqList, bzp->weight);
-bzpTime("Built indexes");
+bzpTime("Loaded and indexed %d sequences", slCount(indexList));
 verbose(1, "Ready for queries\n");
 
 /* Turn self into proper daemon. */

@@ -157,7 +157,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.816 2005/01/14 01:33:06 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.822 2005/01/21 04:08:57 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3823,7 +3823,7 @@ struct mgcDb
 /* information about an MGC databases */
 {
     char *name;       /* collection name */
-    char *organism;   /* organism name */
+    char *organism;   /* organism name for URL, case-sensitive */
     char *server;     /* MGC server */
 };
 
@@ -3833,6 +3833,7 @@ struct mgcDb getMgcDb()
 struct mgcDb mgcDb;
 mgcDb.name = "MGC";
 mgcDb.server = "mgc";
+/* NOTE: mgc server likes first letter of organism capitalized */
 if (startsWith("hg", database))
     mgcDb.organism = "Hs";
 else if (startsWith("mm", database))
@@ -3848,7 +3849,7 @@ else if (startsWith("danRer", database))
 else if (startsWith("xenTro", database))
     {
     mgcDb.name = "XGC";
-    mgcDb.organism = "xt";
+    mgcDb.organism = "Xt";
     mgcDb.server = "xgc";
     }
 else
@@ -4195,6 +4196,11 @@ if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameSt
     char temp[256];
     sprintf(temp, "non-%s RNA", organism);
     type = temp;
+    table = track;
+    }
+else if ( sameWord("blatzHg17KG", track) )
+    {
+    type = "Human mRNA";
     table = track;
     }
 else if (stringIn("est", track) || stringIn("Est", track) ||
@@ -5013,6 +5019,8 @@ char *typeWords[2];
 char *otherDb = NULL, *org = NULL, *otherOrg = NULL;
 struct dnaSeq *qSeq = NULL;
 char name[128];
+
+hgBotDelay();	/* Prevent abuse. */
 
 /* Figure out other database. */
 if (chopLine(type, typeWords) < ArraySize(typeWords))
@@ -5852,21 +5860,6 @@ printf("</TT></PRE>");
 dnaSeqFree(&seq);
 }
 
-void htcKnownGeneMrna(char *geneName)
-/* Display mRNA associated with a knownGene gene. */
-{
-/* check both gbSeq and knowGeneMrna */
-struct dnaSeq *seq = hGenBankGetMrna(geneName, "knownGeneMrna");
-if (seq == NULL)
-    errAbort("Known gene mRNA sequence %s not found", geneName);
-
-hgcStart("Known Gene mRNA");
-printf("<PRE><TT>");
-faWriteNext(stdout, seq->name, seq->dna, seq->size);
-printf("</TT></PRE>");
-dnaSeqFree(&seq);
-}
-
 void cartContinueRadio(char *var, char *val, char *defaultVal)
 /* Put up radio button, checking it if it matches val */
 {
@@ -5980,98 +5973,6 @@ if (itemCount == 0)
 puts("</PRE>");
 }
 
-void doKnownGene(struct trackDb *tdb, char *geneName)
-/* Handle click on known gene track. */
-{
-char *transName = geneName;
-struct knownMore *km = NULL;
-boolean anyMore = FALSE;
-boolean upgraded = FALSE;
-char *knownTable = "knownInfo";
-boolean knownMoreExists = FALSE;
-
-cartWebStart(cart, "RefSeq Gene");
-printf("<H2>RefSeq Gene %s</H2>\n", geneName);
-if (hTableExists("knownMore"))
-    {
-    knownMoreExists = TRUE;
-    knownTable = "knownMore";
-    }
-if (!isGenieGeneName(geneName))
-    transName = hugoToGenieName(geneName, knownTable);
-else
-    geneName = NULL;
-    
-if (knownMoreExists)
-    {
-    char query[256];
-    struct sqlResult *sr;
-    char **row;
-    struct sqlConnection *conn = hAllocConn();
-
-    upgraded = TRUE;
-    sprintf(query, "select * from knownMore where transId = '%s'", transName);
-    sr = sqlGetResult(conn, query);
-    if ((row = sqlNextRow(sr)) != NULL)
-	km = knownMoreLoad(row);
-    sqlFreeResult(&sr);
-
-    hFreeConn(&conn);
-    }
-
-if (km != NULL)
-    {
-    geneName = km->name;
-    if (km->hugoName != NULL && km->hugoName[0] != 0)
-	medlineLinkedLine("Name", km->hugoName, km->hugoName);
-    if (km->aliases[0] != 0)
-	printf("<B>Aliases:</B> %s<BR>\n", km->aliases);
-    if (km->omimId != 0)
-	{
-	printf("<B>OMIM:</B> <A HREF=\"");
-	printEntrezOMIMUrl(stdout, km->omimId);
-	printf("\" TARGET=_blank>%d</A><BR>\n", km->omimId);
-	}
-    if (km->locusLinkId != 0)
-        {
-	printf("<B>LocusLink:</B> ");
-	printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l=%d\" TARGET=_blank>",
-	       km->locusLinkId);
-	printf("%d</A><BR>\n", km->locusLinkId);
-	}
-    anyMore = TRUE;
-    }
-if (geneName != NULL) 
-    {
-    medlineLinkedLine("Symbol", geneName, geneName);
-    printGeneLynxName(geneName);
-    printGeneCards(geneName);
-    anyMore = TRUE;
-    }
-
-if (anyMore)
-    htmlHorizontalLine();
-
-geneShowCommon(transName, tdb, "genieKnownPep");
-puts(
-     "<P>Known genes are derived from the "
-     "<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/\" TARGET=_blank>"
-     "RefSeq</A> mRNA database supplemented by other mRNAs with annotated coding regions.  "
-     "These mRNAs were mapped to the draft "
-     "human genome using <A HREF = \"http://www.cse.ucsc.edu/~kent\" TARGET=_blank>"
-     "Jim Kent's</A> PatSpace software, and further processed by "
-     "<A HREF = \"http://www.affymetrix.com\" TARGET=_blank>Affymetrix</A> to cope "
-     "with sequencing errors in the draft.</P>\n");
-if (!upgraded)
-    puts(
-	 "<P>The treatment of known genes in the browser is quite "
-	 "preliminary.  We hope to provide links into OMIM and LocusLink "
-	 "in the near future.</P>");
-puts(
-     "<P>Additional information may be available by clicking on the "
-     "mRNA associated with this gene in the main browser window.</P>");
-}
-
 void doViralProt(struct trackDb *tdb, char *geneName)
 /* Handle click on known viral protein track. */
 {
@@ -6131,655 +6032,6 @@ printf("%d block(s) covering %d bases<BR>\n"
 
 printTrackHtml(tdb);
 hFreeConn(&conn);
-}
-
-void doSPGene(struct trackDb *tdb, char *mrnaName)
-/* Process click on a known gene. */
-{
-struct sqlConnection *conn  = hAllocConn();
-struct sqlConnection *conn2 = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char query[256];
-
-char cond_str[128];
-char *refSeqName = NULL;
-char *descID;
-char *mrnaDesc;
-char *proteinID;
-char *proteinDesc;
-char *pdbID;
-char *freezeName;
-char *mgiID;
-struct refLink *rl;
-char *seqType;
-boolean dnaBased;
-char *proteinAC;
-char *pfamAC, *pfamID, *pfamDesc;
-char *atlasUrl;
-char *mapID, *locusID, *mapDescription;
-char *geneID;
-char *geneSymbol;
-char cart_name[255];
-char *cgapID, *biocMapID;
-char *diseaseDesc;
-boolean hasPathway, hasMedical;
-boolean showGeneSymbol;
-
-showGeneSymbol = FALSE;
-
-if (hTableExists("kgXref"))
-    {
-    sprintf(cond_str, "kgID='%s'", mrnaName);
-    geneSymbol = sqlGetField(conn, database, "kgXref", "geneSymbol", cond_str);
-    if (geneSymbol == NULL) 
-	{
-	geneSymbol = mrnaName;
-	}
-    else
-	{
-	showGeneSymbol = TRUE;
-	}
-    }
-else
-    {
-    geneSymbol = mrnaName;
-    }
-
-if (showGeneSymbol)
-    {
-    sprintf(cart_name, "Known Gene: %s", geneSymbol);
-    }
-else
-    {
-    sprintf(cart_name, "Known Gene");
-    }
-cartWebStart(cart, cart_name);
-
-dnaBased = FALSE;
-if (hTableExists("knownGeneLink"))
-    {
-    sprintf(cond_str, "name='%s' and seqType='g'", mrnaName);
-    seqType = sqlGetField(conn, database, "knownGeneLink", "seqType", cond_str);
-
-    if (seqType != NULL)
-        {
-        dnaBased = TRUE;
-        refSeqName = strdup(mrnaName);
-        sprintf(cond_str, "name='%s'", refSeqName);
-        proteinAC = sqlGetField(conn, database, "knownGeneLink", "proteinID", cond_str);
-        }
-    }
-
-/* Display mRNA or DNA info and NCBI link */
-if (dnaBased && refSeqName != NULL)
-    {
-    printf("This gene is based on RefSeq %s, which is derived from a DNA sequence.", refSeqName);
-    printf("  Please follow the link below for further details.<br>\n");
-
-    printf("<UL><LI>");
-    printf("<B>NCBI: </B> <A HREF=\"");
-    printEntrezNucleotideUrl(stdout, refSeqName);
-    printf("\" TARGET=_blank>%s</A><BR>\n", refSeqName);
-    printf("</UL>");
-    }
-else
-    {
-    printf("<B>mRNA:</B> ");
-    sprintf(cond_str, "acc='%s'", mrnaName);
-    descID = sqlGetField(conn, database, "gbCdnaInfo", "description", cond_str);
-    sprintf(cond_str, "id=%s", descID);
-    mrnaDesc = sqlGetField(conn, database, "description", "name", cond_str);
-    if (mrnaDesc != NULL) printf("%s\n", mrnaDesc);
-
-    printf("<UL><LI>");
-    printf("<B>NCBI: </B> <A HREF=\"");
-    printEntrezNucleotideUrl(stdout, mrnaName);
-    printf("\" TARGET=_blank>%s</A><BR>\n", mrnaName);
-    printf("</UL>");
-    }
-
-/* Display protein description and links */
-printf("<B>Protein:</B> ");
-
-sprintf(cond_str, "name='%s'", mrnaName);
-proteinID = sqlGetField(conn, database, "knownGene", "proteinID", cond_str);
-if (proteinID == NULL)
-    {
-    errAbort("Couldn't find corresponding protein for mRNA %s.", mrnaName);
-    }
-
-sprintf(cond_str, "displayID='%s'", proteinID);
-proteinAC = sqlGetField(conn, protDbName, "spXref3", "accession", cond_str);
-sprintf(cond_str, "displayID='%s'", proteinID);
-proteinDesc = sqlGetField(conn, protDbName, "spXref3", "description", cond_str);
-if (proteinDesc != NULL) printf("%s\n", proteinDesc);
-sprintf(cond_str, "sp='%s'", proteinID);
-pdbID= sqlGetField(conn, protDbName, "pdbSP", "pdb", cond_str);
-
-printf("<UL>");
-
-if (pdbID != NULL)
-    {
-    printf("<LI><B>PDB: </B>");
-    sprintf(query, "select pdb from %s.pdbSP where sp = '%s'", 
-	    protDbName, proteinID);
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-    	{
-    	pdbID  = row[0];
-	printf("<A HREF=\"http://www.rcsb.org/pdb/cgi/explore.cgi?pdbId=%s\"", pdbID);
-	printf("TARGET=_blank>%s</A>&nbsp\n", pdbID);
-    	}
-    printf("<BR>");
-    sqlFreeResult(&sr);
-    }
-
-printf("<LI><B>SWISS-PROT/TrEMBL: </B>");
-printf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank>%s</A>\n", 
-       proteinAC, proteinID);
-
-/* print more protein links if there are other proteins correspond to this mRNA */
-sprintf(query, "select dupProteinID from %s.dupSpMrna where mrnaID = '%s'", database, mrnaName);
-sr = sqlGetResult(conn, query);
-row = sqlNextRow(sr);
-if (row != NULL) printf(", ");
-while (row != NULL)    
-    {
-    /* spID  = row[0]; */
-    printf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank>%s</A>\n", 
-	   row[0], row[0]);
-    row = sqlNextRow(sr);
-    if (row != NULL) printf(", ");
-    }
-sqlFreeResult(&sr);
-printf("<BR>");
-
-/* show Pfam links */
-if (hTableExistsDb(protDbName, "pfamXref"))
-    {
-    sprintf(cond_str, "swissDisplayID='%s'", proteinID);
-    pfamAC = sqlGetField(conn, protDbName, "pfamXref", "pfamAC", cond_str);
-
-    if (pfamAC != NULL)
-    	{
-        printf("<LI><B>Pfam-A Domains: </B><BR>");
-    	sprintf(query, "select pfamAC from %s.pfamXref where swissDisplayID = '%s'", 
-		protDbName, proteinID);
-    	sr = sqlGetResult(conn, query);
-    	while ((row = sqlNextRow(sr)) != NULL)
-    	    {
-    	    pfamAC  = row[0];
-            sprintf(cond_str, "pfamAC='%s'", pfamAC);
-            pfamID = sqlGetField(conn2, protDbName, "pfamDesc", "pfamID", cond_str);
-	    printf("&nbsp&nbsp&nbsp");
-	    printf("<A HREF=\"http://www.sanger.ac.uk/cgi-bin/Pfam/swisspfamget.pl?name=%s\"", 
-		   proteinID);
-	    printf("TARGET=_blank>%s</A>", pfamAC);
-	    printf("&nbsp(%s)&nbsp", pfamID);
-    	    sprintf(cond_str, "pfamAC='%s'", pfamAC);
-            pfamDesc= sqlGetField(conn2, protDbName, "pfamDesc", "description", cond_str);
-	    printf(" %s<BR>\n", pfamDesc);
-    	    }
-    	sqlFreeResult(&sr);
-    	}
-    }
-
-/* The following is disabled until UCSC Proteome Browser relased to public */
-goto skipPB;
-
-/* display link to UCSC Proteome Browser */
-printf("<LI><B>UCSC Proteome Browser: </B>");
-printf("<A HREF=\"http:/cgi-bin/pb10?");
-printf("proteinDB=SWISS&proteinID=%s&mrnaID=%s\" ", proteinID, mrnaName);
-printf(" target=_blank>");
-printf(" %s</A>", proteinID);
-
-/* display additional entries if they exist */
-sprintf(query, "select dupProteinID from %s.dupSpMrna where mrnaID = '%s'", database, mrnaName);
-sr = sqlGetResult(conn, query);
-row = sqlNextRow(sr);
-if (row != NULL) printf(", ");
-while (row != NULL)    
-    {
-    printf("<A HREF=\"http:/cgi-bin/pb10?");
-    printf("proteinDB=SWISS&proteinID=%s&mrnaID=%s\" ", row[0], mrnaName);
-    printf(" target=_blank>");
-    printf(" %s</A>", row[0]);
-    row = sqlNextRow(sr);
-    if (row != NULL) printf(", ");
-    }
-sqlFreeResult(&sr);
-
-skipPB:
-printf("</UL>");
-
-/* Display Gene Sorter link */
-if (sqlTableExists(conn, "knownCanonical"))
-    {
-    printf("<B>UCSC Gene Sorter:</B> ");
-    printf("<A HREF=\"/cgi-bin/hgNear?near_search=%s\"", mrnaName);
-    printf("TARGET=_blank>%s</A>&nbsp\n", geneSymbol);fflush(stdout);
-    printf("<BR><BR>");
-    }
-
-#ifdef NEVER /* go database has no goObjTerm... */
-/* Show GO links if any exists */
-hasGO = FALSE;
-goConn = sqlMayConnect("go");
-
-if (goConn != NULL)
-    {
-    goAspectChar[0] = 'F';
-    goAspectChar[1] = 'P';
-    goAspectChar[2] = 'C';
-
-    /* loop for 3 GO aspects */
-    for (iGoAsp = 0; iGoAsp<3; iGoAsp++)
-	{
-	sprintf(query, 
-		"select goID, termName from go.goObjTerm where dbObjectSymbol = '%s' and aspect='%c'",
-		proteinID, goAspectChar[iGoAsp]);
-	sr = sqlGetResult(goConn, query);
-	row = sqlNextRow(sr);
-	if (row != NULL)
-	    {
-	    if (!hasGO)
-		{
-		printf("<B>Gene Ontology</B><UL>");
-		hasGO = TRUE;
-		}
-	    if (goAspectChar[iGoAsp] == 'F') printf("<LI><B>Molecular Function:</B></LI><UL>");
-	    if (goAspectChar[iGoAsp] == 'P') printf("<LI><B>Biological Process:</B></LI><UL>");
-	    if (goAspectChar[iGoAsp] == 'C') printf("<LI><B>Cellular Component:</B></LI><UL>");
-	    while (row != NULL)
-		{
-		goID 	   = row[0];
-		goTermName = row[1];
-
-		printf("<LI><A HREF = \"");
-		printf("http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=%s", goID);
-		printf("\" TARGET=_blank>%s</A> %s</LI>\n", goID, goTermName);
-		row = sqlNextRow(sr);
-		}
-	    printf("</UL>");
-	    sqlFreeResult(&sr);
-	    }
-	}
-    fflush(stdout);
-    if (hasGO) printf("</UL>");
-    }
-#endif /* NEVER */
-
-/* Show Pathway links if any exists */
-hasPathway = FALSE;
-cgapID     = NULL;
-
-/* Process BioCarta Pathway link data */
-if (sqlTableExists(conn, "cgapBiocPathway"))
-    {
-    sprintf(cond_str, "alias='%s'", geneSymbol);
-    cgapID = sqlGetField(conn2, database, "cgapAlias", "cgapID", cond_str);
-
-    if (cgapID != NULL)
-	{
-    	sprintf(query, "select mapID from %s.cgapBiocPathway where cgapID = '%s'", database, cgapID);
-    	sr = sqlGetResult(conn, query);
-    	row = sqlNextRow(sr);
-    	if (row != NULL)
-	    {
-	    if (!hasPathway)
-	        {
-	        printf("<B>Pathways</B><UL>");
-	        hasPathway = TRUE;
-	    	}
-	    }
-    	while (row != NULL)
-	    {
-	    biocMapID = row[0];
-	    printf("<LI><B>BioCarta:&nbsp</B>");
-	    sprintf(cond_str, "mapID=%c%s%c", '\'', biocMapID, '\'');
-	    mapDescription = sqlGetField(conn2, database, "cgapBiocDesc", "description",cond_str);
-	    printf("<A HREF = \"");
-	    printf("http://cgap.nci.nih.gov/Pathways/BioCarta/%s", biocMapID);
-	    printf("\" TARGET=_blank>%s</A> %s </LI>\n", biocMapID, mapDescription);
-	    row = sqlNextRow(sr);
-	    }
-        sqlFreeResult(&sr);
-	}
-    }
-
-/* Process KEGG Pathway link data */
-if (sqlTableExists(conn, "keggPathway"))
-    {
-    sprintf(query, "select * from %s.keggPathway where kgID = '%s'", database, mrnaName);
-    sr = sqlGetResult(conn, query);
-    row = sqlNextRow(sr);
-    if (row != NULL)
-	{
-	if (!hasPathway)
-	    {
-	    printf("<B>Pathways</B><UL>");
-	    hasPathway = TRUE;
-	    }
-        while (row != NULL)
-            {
-            locusID = row[1];
-	    mapID   = row[2];
-	    printf("<LI><B>KEGG:&nbsp</B>");
-	    sprintf(cond_str, "mapID=%c%s%c", '\'', mapID, '\'');
-	    mapDescription = sqlGetField(conn2, database, "keggMapDesc", "description", cond_str);
-	    printf("<A HREF = \"");
-	    printf("http://www.genome.ad.jp/dbget-bin/show_pathway?%s+%s", mapID, locusID);
-	    printf("\" TARGET=_blank>%s</A> %s </LI>\n",mapID, mapDescription);
-            row = sqlNextRow(sr);
-	    }
-	}
-    sqlFreeResult(&sr);
-    }
-
-/* Process SRI BioCyc link data */
-if (sqlTableExists(conn, "bioCycPathway"))
-    {
-    sprintf(query, "select * from %s.bioCycPathway where kgID = '%s'", database, mrnaName);
-    sr = sqlGetResult(conn, query);
-    row = sqlNextRow(sr);
-    if (row != NULL)
-	{
-	if (!hasPathway)
-	    {
-	    printf("<BR><B>Pathways</B><UL>");
-	    hasPathway = TRUE;
-	    }
-        while (row != NULL)
-            {
-            geneID = row[1];
-	    mapID   = row[2];
-	    printf("<LI><B>BioCyc:&nbsp</B>");
-	    sprintf(cond_str, "mapID=%c%s%c", '\'', mapID, '\'');
-	    mapDescription = sqlGetField(conn2, database, "bioCycMapDesc", "description", cond_str);
-	    printf("<A HREF = \"");
-	    printf("http://biocyc.org:1555/HUMAN/new-image?type=PATHWAY&object=%s&detail-level=2",
-		   mapID);
-	    printf("\" TARGET=_blank>%s</A> %s </LI>\n",mapID, mapDescription);
-            row = sqlNextRow(sr);
-	    }
-	}
-    sqlFreeResult(&sr);
-    }
-
-if (hasPathway)
-    {
-    printf("</UL>\n");
-    }
-
-/* Process medical related links here */
-hasMedical = FALSE;
-
-/* Process SWISS-PROT disease data */
-
-/* borrow char array query here */
-sprintf(query, "%s.%s", protDbName, "spDisease");
-if (sqlTableExists(conn, query))
-    {
-    sprintf(query,"select diseaseDesc from %s.spDisease where displayID='%s'",protDbName,proteinID);
-    sr = sqlGetResult(conn, query);
-    row = sqlNextRow(sr);
-    if (row != NULL)
-	{
-    	if (!hasMedical)
-   	    {
-    	    printf("<B>Medical-Related Info:</B><UL>");
-    	    hasMedical = TRUE;
-    	    }
-        printf("<LI><B>Diseases:</B><UL>");
-        while (row != NULL)
-            {
-            diseaseDesc = row[0];
-	    mapID   = row[2];
-	    printf("<LI>%s</LI>", diseaseDesc);
-            row = sqlNextRow(sr);
-	    }
-	printf("</UL>");
-	}
-    sqlFreeResult(&sr);
-    }
-
-/* Process OMIM link */
-sprintf(query, "select refseq from %s.mrnaRefseq where mrna = '%s'",  database, mrnaName);
-sr = sqlGetResult(conn, query);
-row = sqlNextRow(sr);
-if (row != NULL)
-    {
-    if (dnaBased)
-     	{
-        refSeqName = strdup(mrnaName);
-        }
-    else
-        {
-        refSeqName = strdup(row[0]);
-        }
-    sprintf(query, "select * from refLink where mrnaAcc = '%s'", refSeqName);
-
-    sqlFreeResult(&sr);
-    sr = sqlGetResult(conn, query);
-    if ((row = sqlNextRow(sr)) != NULL)
-        {
-       	rl = refLinkLoad(row);
-       	sqlFreeResult(&sr);
-       	if (rl->omimId != 0)
-    	    {
-	    if (!hasMedical)
-	   	{
-    	    	printf("<B>Medical-Related Info:</B><UL>");
-	    	hasMedical = TRUE;
-	    	}
-	    printf("<LI><B>OMIM:</B> <A HREF=\"");
-            printEntrezOMIMUrl(stdout, rl->omimId);
-            printf("\" TARGET=_blank>%d</A></LI>\n", rl->omimId);
-            }
-	}
-    }
-
-/* Process NCI Cancer Genome Anatomy gene
- * cgapID should already be obtained earlier */
-if (cgapID != NULL)
-    {
-    if (!hasMedical)
-   	{
-    	printf("<B>Medical-Related Info:</B><UL>");
-    	hasMedical = TRUE;
-    	}
-    printf("<LI><B>NCI Cancer Genome Anatomy:&nbsp</B>");
-    printf("<A HREF = \"");
-    printf("http://cgap.nci.nih.gov/Genes/GeneInfo?ORG=");
-
-    /* select appropriate two letters used by CGAP for organism */
-    if (sameWord(organism, "Human"))
-	{
-	printf("Hs");
-	}
-    else
-	{
-    	if (sameWord(organism, "Mouse"))
-	    {
-	    printf("Mm");
-	    }
-	else
-	    {
-	    errAbort("Our current database table for NCI CGAP does not cover oganism %s.\n", organism); 
-	    }
-	}
-    printf("&CID=%s\" TARGET=_blank>%s</A> </LI>\n", cgapID, cgapID);
-    }
-
-/* process links to Atlas of Genetics and Cytogenetics in Oncology and Haematology */
-if (sqlTableExists(conn, "atlasOncoGene"))
-    {
-    sprintf(cond_str, "locusSymbol=%c%s%c", '\'', geneSymbol, '\'');
-    atlasUrl = sqlGetField(conn, database, "atlasOncoGene", "url", cond_str);
-    if (atlasUrl != NULL)
-	{
-	if (!hasMedical)
-	    {
-    	    printf("<B>Medical-Related Info:</B><UL>");
-	    hasMedical = TRUE;
-	    }
-
-    	printf("<LI><B>Atlas of Genetics and Cytogenetics in Oncology and Haematology:&nbsp</B>");
-	printf("<A HREF = \"%s%s\" TARGET=_blank>%s</A><BR></LI>\n", 
-	   "http://www.infobiogen.fr/services/chromcancer/", atlasUrl, geneSymbol);fflush(stdout);
-    	}
-    }
-
-if (hasMedical)
-    {
-    printf("</UL>\n");
-    }
-
-/* Display RefSeq related info, if there is a corresponding RefSeq */
-
-    sprintf(query, "select refseq from %s.mrnaRefseq where mrna = '%s'",  database, mrnaName);
-    sr = sqlGetResult(conn, query);
-    row = sqlNextRow(sr);
-    if ((row == NULL) && (!dnaBased))
-	{
-	printf("<B>RefSeq:</B>"); 
-	printf(" No corresponding RefSeq entry found for %s.<br>\n", mrnaName);
-	fflush(stdout);
-	}
-    else
-	{
-	if (dnaBased)
-	    {
-	    refSeqName = strdup(mrnaName);
-	    }
-	else
-	    {
-	    refSeqName = strdup(row[0]);
-	    }
-	sprintf(query, "select * from refLink where mrnaAcc = '%s'", refSeqName);
-
-	sqlFreeResult(&sr);
-	sr = sqlGetResult(conn, query);
-	if ((row = sqlNextRow(sr)) == NULL) 
-	    {
-	    sqlFreeResult(&sr);
-	    printf("<B>RefSeq:</B>"); 
-	    printf(" A corresponding Reference Sequence ");
-	    printf("<A HREF=\"");
-	    printEntrezNucleotideUrl(stdout, refSeqName);
-	    printf("\" TARGET=_blank>%s</A>", refSeqName);
-	    printf(" is not found in our database for "); 
-	    freezeName = hFreezeFromDb(database);
-	    if(freezeName == NULL) freezeName = "Unknown";
-	    printf("%s %s Freeze.<BR>\n",hOrganism(database),freezeName); 
-	    fflush(stdout);
-	    }
-	else
-	    {
-	    rl = refLinkLoad(row);
-	    sqlFreeResult(&sr);
-    
-	    htmlHorizontalLine();
-	    printf("<B>RefSeq:</B> <A HREF=\"");
-	    printEntrezNucleotideUrl(stdout, rl->mrnaAcc);
-	    printf("\" TARGET=_blank>%s</A>", rl->mrnaAcc);
-
-	    /* If refSeqStatus is available, report it: */
-	    if (hTableExists("refSeqStatus"))
-		{
-		sprintf(query, "select status from refSeqStatus where mrnaAcc = '%s'",
-			refSeqName);
-		sr = sqlGetResult(conn, query);
-		if ((row = sqlNextRow(sr)) != NULL)
-		    {
-		    printf("&nbsp;&nbsp; Status: <B>%s</B>", row[0]);
-		    }
-		sqlFreeResult(&sr);
-		}
-	    printf("<BR>");
-
-	    printf("<B>Gene ID: %s<BR></B>\n", rl->name);
-   
-	    if (rl->locusLinkId != 0)
-		{
-		printf("<B>LocusLink:</B> ");
-		printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?");
-		printf("l=%d\" TARGET=_blank>", rl->locusLinkId);
-		printf("%d</A><BR>\n", rl->locusLinkId);
-		if ((strstr(hgGetDb(), "mm") != NULL) && hTableExists("MGIid"))
-		    {
-		    sprintf(query, "select MGIid from MGIid where LLid = '%d';",
-			    rl->locusLinkId);
-
-		    sr = sqlGetResult(conn, query);
-		    if ((row = sqlNextRow(sr)) != NULL)
-			{
-			printf("<B>Mouse Genome Informatics:</B> ");
-			mgiID = strdup(row[0]);
-			printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?");
-			printf("id=%s\" TARGET=_BLANK>%s</A><BR>\n",
-			       mgiID, mgiID);
-			}
-		    else
-			{
-			/* per Carol Bult from Jackson Lab 4/12/02, JAX do not always agree
-			 * with Locuslink on seq to gene association.
-			 * Thus, not finding a MGIid even if a LocusLink ID
-			 * exists is always a possibility. */
-			}
-		    sqlFreeResult(&sr);
-		    }
-		}
-	    medlineLinkedLine("PubMed on Gene", rl->name, rl->name);
-	    if (rl->product[0] != 0)
-    		medlineProductLinkedLine("PubMed on Product", rl->product);
-	    printf("\n");
-	    printGeneLynxName(rl->name);
-	    printf("\n");
-	    printGeneCards(rl->name);
-	    if (hTableExists("jaxOrtholog"))
-		{
-		struct jaxOrtholog jo;
-		sprintf(query, "select * from jaxOrtholog where humanSymbol='%s'", rl->name);
-		sr = sqlGetResult(conn, query);
-		while ((row = sqlNextRow(sr)) != NULL)
-		    {
-		    jaxOrthologStaticLoad(row, &jo);
-		    printf("<B>MGI Mouse Ortholog:</B> ");
-		    printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?");
-		    printf("id=%s\" target=_BLANK>", jo.mgiId);
-		    printf("%s</A><BR>\n", jo.mouseSymbol);
-		    }
-		sqlFreeResult(&sr);
-		}
-
-	    if (startsWith("hg", hGetDb()))
-		{
-		printf("\n");
-		printf("<B>AceView:</B> ");
-		printf("<A HREF = \"http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?");
-		printf("db=human&l=%s\" TARGET=_blank>", rl->name);
-		printf("%s</A><BR>\n", rl->name);
-		}
-	    printStanSource(rl->mrnaAcc, "mrna");
-	    }
-	htmlHorizontalLine();
-	if (dnaBased)
-	    {
-	    geneShowPosAndLinksDNARefseq(mrnaName,mrnaName,tdb,"knownGenePep","htcTranslatedProtein",
-					 "htcKnownGeneMrna", "htcGeneInGenome", "mRNA Sequence");
-	    }
-	else
-	    {
-	    geneShowPosAndLinks(mrnaName, mrnaName, tdb, "knownGenePep", "htcTranslatedProtein",
-				"htcKnownGeneMrna", "htcGeneInGenome", "mRNA Sequence");
-	    }
-	}
-    printTrackHtml(tdb);
-    hFreeConn(&conn);
-    hFreeConn(&conn2);
 }
 
 void printEnsemblCustomUrl(struct trackDb *tdb, char *itemName, boolean encode)
@@ -7232,10 +6484,11 @@ if (rl->omimId != 0)
     }
 if (rl->locusLinkId != 0)
     {
-    printf("<B>LocusLink:</B> ");
-    printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l=%d\" TARGET=_blank>",
-	   rl->locusLinkId);
+    printf("<B>Entrez Gene:</B> ");
+    printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%d\" TARGET=_blank>",
+    	rl->locusLinkId);
     printf("%d</A><BR>\n", rl->locusLinkId);
+
     } 
 printStanSource(rl->mrnaAcc, "mrna");
 
@@ -7414,10 +6667,6 @@ if (rl->omimId != 0)
     }
 if (rl->locusLinkId != 0)
     {
-    printf("<B>LocusLink:</B> ");
-    printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l=%d\" TARGET=_blank>",
-	   rl->locusLinkId);
-    printf("%d</A><BR>\n", rl->locusLinkId);
     printf("<B>Entrez Gene:</B> ");
     printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%d\" TARGET=_blank>",
     	rl->locusLinkId);
@@ -11230,44 +10479,6 @@ if (!strcmp(dbOrg,"Hg"))
 return rsId;
 }
 
-void doSnpLocusLink(struct trackDb *tdb, char *name)
-/* print link to Locus Link for this SNP */
-{
-char *group = tdb->tableName;
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char query[512];
-int rowOffset;
-
-safef(query, sizeof(query),
-         "select distinct        "
-         "       rl.locusLinkID, "
-         "       rl.name,        "
-         "       kg.name,        "
-         "       kg.proteinID    "
-         "from   knownGene  kg,  "
-         "       refLink    rl,  "
-         "       %s         snp, "
-	 "       mrnaRefseq mrs  "
-         "where  snp.chrom  = kg.chrom       "
-	 "  and  kg.name    = mrs.mrna       "
-         "  and  mrs.refSeq = rl.mrnaAcc     "
-         "  and  kg.txStart < snp.chromStart "
-         "  and  kg.txEnd   > snp.chromEnd   "
-         "  and  snp.name   = '%s'", group, name);
-rowOffset = hOffsetPastBin(seqName, group);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-    printf("locusId=%s\" TARGET=_blank>LocusLink for ", row[0]);
-    printf("%s (%s; %s)</A></P>\n", row[1], row[2], row[3]);
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-}
-
 void doSnpOld(struct trackDb *tdb, char *itemName)
 /* Put up info on a SNP. */
 {
@@ -11311,37 +10522,32 @@ if (printId)
     {
     printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
     if (!strcmp(printId, "valid"))
-	{
 	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link</A></P>\n", itemName);
-	doSnpLocusLink(tdb, itemName);
-	}
     else
-	{
 	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link (%s)</A></P>\n", 
 	       printId, printId);
-	doSnpLocusLink(tdb, printId);
-	}
     }
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void writeSnpException(char *exceptionList, char *itemName, int rowOffset)
+void writeSnpException(char *exceptionList, char *itemName, int rowOffset, 
+		       char *chrom, int chromStart)
 {
-char *tokens;
-struct lineFile *lf;
-struct tokenizer *tkz;
-struct snpExceptions se;
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char query[256];
-char *id;
-char *br=" ";
-char *noteColor="#7f0000";
-boolean firstException=TRUE;
-boolean multiplePositions=FALSE;
+char    *tokens;
+struct   lineFile      *lf;
+struct   tokenizer     *tkz;
+struct   snpExceptions  se;
+struct   sqlConnection *conn = hAllocConn();
+struct   sqlResult     *sr;
+char   **row;
+char     query[256];
+char    *id;
+char    *br=" ";
+char    *noteColor="#7f0000";
+boolean  firstException=TRUE;
+boolean  multiplePositions=FALSE;
 
 if (sameString(exceptionList,"0"))
     return;
@@ -11374,14 +10580,17 @@ printf("%s\n",br);
 if (multiplePositions)
     {
     struct snp snp;
-    printf("<font color=#7f0000><B>Other Positions</font></B>:<BR>");
+    printf("<font color=#7f0000><B>Other Positions</font></B>:<BR><BR>");
     safef(query, sizeof(query), "select * from snp where name='%s'", itemName);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr))!=NULL)
 	{
 	snpStaticLoad(row+rowOffset, &snp);
-	bedPrintPos((struct bed *)&snp, 3);
-	printf("<BR>\n");
+	if (differentString(chrom,snp.chrom) || chromStart!=snp.chromStart)
+	    {
+	    bedPrintPos((struct bed *)&snp, 3);
+	    printf("<BR>\n");
+	    }
 	}
     }
 }
@@ -11415,6 +10624,8 @@ char   query[256];
 int    rowOffset=hOffsetPastBin(seqName, group);
 int    firstOne=1;
 char  *exception=0;
+char  *chrom="";
+int    chromStart=0;
 
 cartWebStart(cart, "Simple Nucleotide Polymorphism (SNP)");
 printf("<H2>Simple Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
@@ -11427,6 +10638,8 @@ while ((row = sqlNextRow(sr))!=NULL)
     if (firstOne)
 	{
 	exception=cloneString(snp.exception);
+	chrom = cloneString(snp.chrom);
+	chromStart = snp.chromStart;
 	bedPrintPos((struct bed *)&snp, 3);
 	printf("<BR>\n");
 	firstOne=0;
@@ -11435,9 +10648,8 @@ while ((row = sqlNextRow(sr))!=NULL)
     }
 printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
 printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link</A></P>\n", itemName);
-doSnpLocusLink(tdb, itemName);
 if (hTableExists("snpExceptions") && differentString(exception,"0"))
-    writeSnpException(exception, itemName,rowOffset);
+    writeSnpException(exception, itemName, rowOffset, chrom, chromStart);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -11483,7 +10695,6 @@ if (snp!=NULL)
 	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link for %s</A></P>\n",
 	       snp->rsId, snp->rsId);
 	}
-    doSnpLocusLink(tdb, name);
     printf("<BR>Genotypes:<BR>");
     printf("\n<BR><font face=\"Courier\">");
     printf("NA04477:&nbsp;%s&nbsp;&nbsp;", snp->NA04477);
@@ -11625,7 +10836,6 @@ if (snp!=NULL)
     printf("<P><A HREF=\"http://snp.cshl.org/cgi-bin/snp?name=");
     printf("%s\" TARGET=_blank>TSC link for %s</A></P>\n",
 	   snp->tscId, snp->tscId);
-    doSnpLocusLink(tdb, name);
     }
 /* else errAbort("<BR>Error in Query:\n%s<BR>\n",query); */
 affy10KDetailsFree(&snp);
@@ -15096,6 +14306,7 @@ else if (sameWord(track, "mrna") || sameWord(track, "mrna2") ||
          sameWord(track, "xenoBlastzMrna") || sameWord(track, "sim4") ||
          sameWord(track, "xenoEst") || sameWord(track, "psu") ||
          sameWord(track, "tightMrna") || sameWord(track, "tightEst") ||
+	 sameWord(track, "blatzHg17KG") ||
          sameWord(track, "mgcIncompleteMrna") ||
          sameWord(track, "mgcFailedEst") ||
          sameWord(track, "mgcPickedEst") ||
@@ -15167,10 +14378,6 @@ else if (startsWith("cpgIsland", track))
     {
     doCpgIsland(tdb, item);
     }
-else if (sameWord(track, "knownGene"))
-    {
-    doSPGene(tdb, item);
-    }
 else if (sameWord(track, "rgdGene"))
     {
     doRgdGene(tdb, item);
@@ -15211,10 +14418,6 @@ else if (sameWord(track, "mappedRefSeq"))
 else if (sameWord(track, "mgcGenes"))
     {
     doMgcGenes(tdb, item);
-    }
-else if (sameWord(track, "genieKnown"))
-    {
-    doKnownGene(tdb, item);
     }
 else if (startsWith("viralProt", track))
     {
@@ -15345,10 +14548,6 @@ else if (startsWith("map", track) ||startsWith("blastz", track) || startsWith("b
         genome = hGenome(genome);
         }
     doAlignCompGeno(tdb, item, genome);
-    }
-else if (sameWord(track, "humanKnownGene")) 
-    {
-    doKnownGene(tdb, item);
     }
 else if (sameWord(track, "rnaGene"))
     {
@@ -15529,10 +14728,6 @@ else if (sameWord(track, "htcRefMrna"))
 else if (sameWord(track, "htcDisplayMrna"))
     {
     htcDisplayMrna(item);
-    }
-else if (sameWord(track, "htcKnownGeneMrna"))
-    {
-    htcKnownGeneMrna(item);
     }
 else if (sameWord(track, "htcGeneInGenome"))
     {

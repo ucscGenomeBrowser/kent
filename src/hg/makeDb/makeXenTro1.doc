@@ -331,6 +331,66 @@ cvs commit etc/genbank.conf
     ln -s `pwd`/gc5Base.wib /gbdb/xenTro1/wib
     hgLoadWiggle -pathPrefix=/gbdb/xenTro1/wib xenTro1 gc5Base gc5Base.wig
 
+# PRODUCE X. LAEVIS MRNA ALIGNMENTS (DONE 1/14/05 JK)
+    # Make working directory and get Laevis RNA
+    ssh hgwdev
+    mkdir -p /cluster/data/xenTro1/bed/xenLaeRna
+    cd /cluster/data/xenTro1/bed/xenLaeRna
+    hgSpeciesRna hg17 Xenopus laevis xenLaeRna.fa
+
+    # Split RNA into 3 and load on temp device
+    ssh kkr1u00
+    cd /iscratch/i/xenTro1
+    mkdir xenLaeRna
+    cd xenLaeRna
+    faSplit sequence /cluster/data/xenTro1/bed/xenLaeRna/xenLaeRna.fa 3 xl
+    iSync
+
+    # Do blatz cluster run
+    ssh kk
+    cd /cluster/data/xenTro1/bed/xenLaeRna
+    mkdir run1
+    cd run1
+    mkdir psl
+    awk '{print $1;}' /cluster/data/xenTro1/chrom.sizes > genome.lst
+    ls -1 /iscratch/i/xenTro1/xenLaeRna/*.fa > mrna.lst
+    cat << '_EOF_' > gsub
+#LOOP
+blatz -rna -minScore=6000 /iscratch/i/xenTro1/nib/xenTro1.2bit:$(file1) $(path2) -out=psl {check out line psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    gensub2 genome.lst mrna.lst gsub spec
+    para create spec
+    # Then do usual para try/para push/para time
+CPU time in finished jobs:    3896883s   64948.04m  1082.47h   45.10d  0.124 y
+IO & Wait Time:               1031103s   17185.06m   286.42h   11.93d  0.033 y
+Average job time:                  61s       1.01m     0.02h    0.00d
+Longest job:                     3276s      54.60m     0.91h    0.04d
+Submission to last job:          5989s      99.82m     1.66h    0.07d
+
+    # Do sort and near-besting on file server
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/xenLaeRna/run1
+    catDir psl | pslFilter -minScore=100 -minAli=255 -noHead stdin stdout | sort -k 10 > ../filtered.psl
+    cd ..
+    pslReps filtered.psl nearBest.psl /dev/null -nohead -minAli=0.5 -nearTop=0.01 -minCover=0.255
+    sort -k 14 nearBest.psl > xenLaeRna.psl
+
+    # Clean up
+    rm -r run1/psl 
+
+    # Load into database
+    ssh hgwdev
+    cd /cluster/data/xenTro1/bed/xenLaeRna
+    ln -s /cluster/data/xenTro1/bed/xenLaeRna/xenLaeRna.fa /gbdb/xenTro1/xenLaeRna.fa
+    hgLoadSeq xenTro1 /gbdb/xenTro1/xenLaeRna.fa
+    hgLoadPsl xenTro1 xenLaeRna.psl 
+
+
+
+
+
 # PRODUCING GENSCAN PREDICTIONS (DONE 10/27/04 Fan)
   
     ssh hgwdev
@@ -836,6 +896,10 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     ssh hgwdev
     cd /cluster/data/xenTro1/bed/zb.galGal2/axtChain
     netFilter -minGap=10 galGal2.net |  hgLoadNet galGal2 netXenTro1 stdin
+
+    # index had NULL cardinality; analzye table to fix (DONE 1/18/2005 Heather)
+    hgsql hg17
+    analyze table netXenTro1
 
 # SWAP EVERYTHING AND REMAKE NET FROM XENOPUS REFERENCE
     ssh kksilo
@@ -2056,3 +2120,141 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 #  44091 cpgIsland.bed
     featureBits xenTro1 cpgIslandExt
 #19279778 bases of 1381238994 (1.396%) in intersection
+
+# MAKE Human Proteins track (hg17 DONE 2005-1-15 braney)
+    ssh kksilo
+    mkdir -p /cluster/data/xenTro1/blastDb
+    cd /cluster/data/xenTro1/blastDb
+    for i in `cat ../chrom.lst`; do ls -1 ../$i/*/*.fa  ; done > list
+    for i in `cat list`
+    do
+	ln -s $i .
+	formatdb -i `basename $i` -p F
+    done
+    rm *.log *.fa list
+
+    ssh kkr1u00
+    mkdir -p /iscratch/i/xenTro1/blastDb
+    cd /cluster/data/xenTro1/blastDb
+    for i in nhr nin nsq; do cp *.$i /iscratch/i/xenTro1/blastDb     ; echo $i; done
+
+    cd
+    iSync > sync.out
+
+    mkdir -p /cluster/data/xenTro1/bed/tblastn.hg17KG
+    cd /cluster/data/xenTro1/bed/tblastn.hg17KG
+    echo  /iscratch/i/xenTro1/blastDb/*.nsq  | xargs ls -S | sed "s/\.nsq//"  > query.lst  
+    # back to kksilo
+    exit
+
+    cd /cluster/data/xenTro1/bed/tblastn.hg17KG
+    calc `wc /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl | awk "{print \\\$1}"`/\(300000/`wc query.lst | awk "{print \\\$1}"`\)
+    # 42156/(300000/498) = 69.978960
+    mkdir -p /cluster/bluearc/xenTro1/bed/tblastn.hg17KG/kgfa
+    split -l 70 /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl /cluster/bluearc/xenTro1/bed/tblastn.hg17KG/kgfa/kg
+    ln -s /cluster/bluearc/xenTro1/bed/tblastn.hg17KG/kgfa kgfa
+    cd kgfa
+    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    cd ..
+    ls -1S kgfa/*.fa > kg.lst
+    mkdir -p /cluster/bluearc/xenTro1/bed/tblastn.hg17KG/blastOut
+    ln -s /cluster/bluearc/xenTro1/bed/tblastn.hg17KG/blastOut
+    for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+    tcsh
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/iscratch/i/blast/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg17/bed/blat.hg17KG/protein.lft warn $f.2       
+        if pslCheck -prot $3.tmp                                                                          
+        then                                                                                              
+            mv $3.tmp $3                                                                                  
+            rm -f $f.1 $f.2 
+        fi
+        exit 0                                                                                            
+    fi                                                                                                    
+fi                                                                                                        
+rm -f $f.1 $f.2 $3.tmp $f.8
+exit 1
+'_EOF_'
+
+    chmod +x blastSome
+    gensub2 query.lst kg.lst blastGsub blastSpec
+
+    ssh kk
+    cd /cluster/data/xenTro1/bed/tblastn.hg17KG
+    para create blastSpec
+    para push
+# Completed: 253435 of 253435 jobs
+# CPU time in finished jobs:   58003988s  966733.13m 16112.22h  671.34d  1.839 y
+# IO & Wait Time:              13196517s  219941.96m  3665.70h  152.74d  0.418 y
+# Average job time:                 281s       4.68m     0.08h    0.00d
+# Longest job:                     6238s     103.97m     1.73h    0.07d
+# Submission to last job:        174503s    2908.38m    48.47h    2.02d
+
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainSome $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainSome
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=100000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainSome
+
+    ls -1dS `pwd`/blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+
+    ssh kki
+    cd /cluster/data/xenTro1/bed/tblastn.hg17KG
+    para create chainSpec
+    para push
+
+# Completed: 603 of 603 jobs
+# CPU time in finished jobs:        883s      14.72m     0.25h    0.01d  0.000 y
+# IO & Wait Time:                 75640s    1260.66m    21.01h    0.88d  0.002 y
+# Average job time:                 127s       2.12m     0.04h    0.00d
+# Longest job:                      342s       5.70m     0.10h    0.00d
+# Submission to last job:          5747s      95.78m     1.60h    0.07d
+
+    exit
+    # back to kksilo
+    cd /cluster/data/xenTro1/bed/tblastn.hg17KG/blastOut
+    for i in kg??
+    do 
+	cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+	echo $i
+    done
+
+    cat u.*.psl m60* | sort -T /tmp -k 14,14 -k 17,17n -k 17,17n  | uniq  > /cluster/data/xenTro1/bed/tblastn.hg17KG/blastHg17KG.psl
+    cd ..
+
+    ssh hgwdev
+    cd /cluster/data/xenTro1/bed/tblastn.hg17KG
+    hgLoadPsl xenTro1 blastHg17KG.psl
+
+    # back to kksilo
+    rm -rf blastOut
+# End tblastn

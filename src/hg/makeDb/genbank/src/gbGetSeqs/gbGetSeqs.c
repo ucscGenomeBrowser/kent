@@ -16,7 +16,7 @@
 #include "portable.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.11 2004/02/23 09:07:20 kent Exp $";
+static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.12 2005/01/17 16:43:45 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -397,7 +397,7 @@ errAbort("   gbGetSeqs [options] srcDb type outFile [ids ...]\n"
          "     type - type. mrna, or est\n"
          "     seqFa - output file.  If -get=seq, a fasta file is created,\n"
          "             others are PSLs.  It will be compressed if it ends\n"
-         "             in .gz."
+         "             in .gz.\n"
          "     ids - If sequence ids are specified, only they are extracted.\n"
          "           They may optionally include the version numnber.\n"
          "\n");

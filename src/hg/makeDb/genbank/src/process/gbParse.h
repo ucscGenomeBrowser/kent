@@ -63,6 +63,7 @@ extern struct gbField *gbTranslationField;
 extern struct gbField *gbRefSeqStatusField;
 extern struct gbField *gbRefSeqSummaryField;
 extern struct gbField *gbRefSeqCompletenessField;
+extern struct gbField *gbRefSeqDerivedField;
 
 char *skipLeadingNonSpaces(char *s);
 /* Return first non-white space or NULL. */

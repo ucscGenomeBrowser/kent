@@ -16,7 +16,6 @@ DBS = 	hg13 hg15 hg16 hg17 \
 	panTro1 \
 	canFam1 \
 	mm2 mm3 mm4 mm5\
-	mm2X mm3X \
 	rn2 rn3 \
 	bosTau1 \
 	monDom1 \
@@ -55,9 +54,11 @@ MGC_DBS = \
 update:
 	@for D in *; do \
             if [ -d "$$D" ]; then \
-                if [ -e "$$D/makefile" ]; then \
-                    ( cd $$D && echo $$D && $(MAKE) ) ;\
-                    x=$$? ; if [ $$x -ne 0 ]; then exit $$x; fi \
+		if test "$$D" != "zoo" ; then \
+		    if [ -e "$$D/makefile" ]; then \
+			( cd $$D && echo $$D && $(MAKE) ) ;\
+			x=$$? ; if [ $$x -ne 0 ]; then exit $$x; fi \
+		    fi; \
                 fi; \
             fi; \
 	done
@@ -79,7 +80,6 @@ update:
 		echo $$cmd ;  $$cmd ; \
 	    fi ; \
 	done
-	cd zoo && ${MAKE} update
 
 alpha:
 	cvs up -d -P .
@@ -112,7 +112,6 @@ alpha:
 		fi ; \
 	    fi ; \
 	done
-	cd zoo && ${MAKE} alpha
 	cmd="../../encode/encodeTrackDb.csh"; echo $$cmd; $$cmd
 
 strict:
@@ -143,7 +142,6 @@ strict:
 		echo $$cmd ;  $$cmd ; \
 	    fi ; \
 	done
-	cd zoo && ${MAKE} strict
 
 # this will fail if we are not in a beta checkout:
 checkbeta:

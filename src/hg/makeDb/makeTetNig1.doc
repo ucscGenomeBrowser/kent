@@ -430,7 +430,7 @@ if (-e /tmp/tetNig1/$2/$2.cat) /bin/cp /tmp/tetNig1/$2/$2.cat ./
           $HOME/kent/src/hg/makeDb/trackDb/tetraodon/tetNig1/description.html
     cd $HOME/kent/src/hg/makeDb/trackDb/tetraodon/tetNig1/
     # Check it in and copy (ideally using "make alpha" in trackDb) to
-    # /gbdb/danRer1/html
+    # /gbdb/tetNig1/html
     cvs add description.html
     cvs commit description.html
 
@@ -607,12 +607,11 @@ hgGcPercent -chr=${chr} -doGaps -file=stdout -win=5 tetNig1 \
     # Wrote 8776 overused 11-mers to /cluster/bluearc/tetNig1/11.ooc
     # For 10.ooc, repMatch = 4096 for human, so use 520
     blat nib.lst /dev/null /dev/null -tileSize=10 \
-      -makeOoc=/cluster/bluearc/danRer1/10.ooc -repMatch=520
+      -makeOoc=/cluster/bluearc/tetNig1/10.ooc -repMatch=520
     # Wrote 1976 overused 11-mers to /cluster/bluearc/tetNig1/11.ooc
     # keep copies of ooc files in this directory and copy to iscratch
-    # UP TO HERE
-    cp /cluster/bluearc/danRer1/*.ooc .
-    cp -p /cluster/bluearc/danRer1/*.ooc /iscratch/i/danRer1/
+    cp /cluster/bluearc/tetNig1/*.ooc .
+    cp -p /cluster/bluearc/tetNig1/*.ooc /iscratch/i/tetNig1/
     iSync
                                                                        
 # AUTO UPDATE GENBANK MRNA AND EST RUN  (DONE, 2004-08-24, hartera and markd)
@@ -1819,7 +1818,6 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     # Reloaded without -genePredExt 1/6/05:
     nice ldHgGene tetNig1 cytokines chr*.gff
 
-
 # GENEID GENES (DONE 9/22/04 angie)
     ssh kksilo
     mkdir /cluster/data/tetNig1/bed/geneid
@@ -1837,6 +1835,63 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     cd /cluster/data/tetNig1/bed/geneid
     ldHgGene -gtf -genePredExt tetNig1 geneid chr*.gtf
     hgPepPred tetNig1 generic geneidPep geneidPep.fa
+
+# GENOSCOPE GENEWISE HUMAN IPI (DONE, 2004-10-14, hartera)
+    ssh kksilo
+    mkdir -p /cluster/data/tetNig1/bed/Genoscope/humanIPI
+    cd /cluster/data/tetNig1/bed/Genoscope/humanIPI
+    # Create README to describe data from Genoscope tetraodon.all.gff.readme
+    awk '{if ($2 == "GWS_H") print;}' /cluster/data/tetNig1/tetraodon.all.gff \
+        > humanIPI.gff
+    # remove "exon" from name field 
+    sed -e 's/exon GWS/GWS/g' humanIPI.gff > humanIPIformat.gff
+
+    # load database with gene predictions
+    ssh hgwdev
+    cd /cluster/data/tetNig1/bed/Genoscope/humanIPI
+    nice ldHgGene -genePredExt tetNig1 humanIPI humanIPIformat.gff
+    # Read 43384 transcripts in 185494 lines in 1 files
+    # 43384 groups 27 seqs 1 sources 2 feature types
+    # 21692 gene predictions
+    # add to trackDb and write html page
+
+# GENOSCOPE HUMAN IPI ECOTIGS (DONE, 2004-10-18, hartera) 
+    ssh kksilo
+    mkdir -p /cluster/data/tetNig1/bed/Genoscope/humanIPIEcotigs
+    cd /cluster/data/tetNig1/bed/Genoscope/humanIPIEcotigs
+    # Create README to describe data from Genoscope tetraodon.all.gff.readme
+    awk '{if ($2 == "EP3_H") print;}' /cluster/data/tetNig1/tetraodon.all.gff \
+        > humanIPIEcotigs.gff
+    # remove "exon" from name field 
+    sed -e 's/exon EP3/EP3/g' humanIPIEcotigs.gff > humanIPIEcotigsformat.gff
+
+    # load database with gene predictions - LOAD IN RAHSEQ FIRST TO CHECK
+    ssh hgwdev
+    cd /cluster/data/tetNig1/bed/Genoscope/humanIPIEcotigs
+    nice ldHgGene -genePredExt tetNig1 humanIPIEcotigs humanIPIEcotigsformat.gff
+    # Read 55800 transcripts in 204355 lines in 1 files
+    # 55800 groups 27 seqs 1 sources 2 feature types
+    # 27900 gene predictions
+
+# GENOSCOPE FUGU (Takifugu) ECOTIGS (in progress, 2004-10-18, hartera) 
+    ssh kksilo
+    mkdir -p /cluster/data/tetNig1/bed/Genoscope/fuguEcotigs
+    cd /cluster/data/tetNig1/bed/Genoscope/fuguEcotigs
+    # Create README to describe data from Genoscope tetraodon.all.gff.readme
+    awk '{if ($2 == "EG3_F") print;}' /cluster/data/tetNig1/tetraodon.all.gff \
+        > fuguEcotigs.gff
+ # remove "HSP" from name field, change HSP to "exon" and match to "transcript" 
+    sed -e 's/HSP EG3/EG3/g' fuguEcotigs.gff | sed -e 's/HSP/exon/' \
+           | sed -e 's/match/transcript/' > fuguEcotigsformat.gff
+
+    # load database with gene predictions
+    # load in when know which version of Fugu this is so can name appropriately
+    ssh hgwdev
+    cd /cluster/data/tetNig1/bed/Genoscope/fuguEcotigs
+    nice ldHgGene -genePredExt tetNig1 fuguEcotigs fuguEcotigsformat.gff
+    # Read 35552 transcripts in 210128 lines in 1 files
+    #   35552 groups 27 seqs 1 sources 2 feature types
+    # 17776 gene predictions
 
 # Adding a photograph to the description
 #	Permission to use photos obtained from Hugues Roest Crollius:
@@ -1866,7 +1921,6 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
 # Best wishes,
 
 # Hugues Roest Crollius
-
 # -------------------------------------------------------------------------
 # Hugues Roest Crollius
 # Laboratoire Dynamique et Organisation des Genomes (Dyogen)
@@ -1874,3 +1928,352 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
 # Departement de Biologie
 # Ecole Normale Superieure                        Tel: +33 (0)1 44 32 23 70
 # 46 rue d'Ulm, 75230 Paris Cedex 05              Email: hrc@ens.fr
+
+# SELF BLASTZ (DONE, 2005-01-12, hartera)
+    ssh kksilo
+    rm /cluster/data/tetNig1/bed/blastzSelf
+    mkdir -p /cluster/store8/tetNig1/bed/blastzSelf.2005-01-11
+    ln -s /cluster/store8/tetNig1/bed/blastzSelf.2005-01-11 \
+          /cluster/data/tetNig1/bed/blastzSelf
+    cd /cluster/data/tetNig1/bed/blastzSelf
+    # try using contigs
+    mkdir -p /cluster/data/tetNig1/bed/blastzSelf/contigSeqs
+    cd /cluster/data/tetNig1/bed/blastzSelf/contigSeqs
+    foreach c (`cat /cluster/data/tetNig1/chrom.lst`)
+       foreach d (/cluster/data/tetNig1/$c/chr${c}*_?{,?})
+      echo "splitting $d"
+      set contig = $d:t
+      echo "$contig"
+      ~/bin/i386/faSplit gap $d/$contig.fa 500000 ${contig}_ -lift=$contig.lft \
+            -minGapSize=100
+      end
+    end
+    # 1025 files for chr*.fa and chr*.lft - 940 for chr*.fa, 85 for chr*.lft
+    cat chr*.fa >> tetNig1Contigs.fa
+    cat chr*.lft >> 500kbcontigs.lft
+    rm chr*.fa chr*.lft
+    
+    ssh kkr1u00
+    mkdir -p /iscratch/i/tetNig1/contigs
+    mv /cluster/data/tetNig1/bed/blastzSelf/contigSeqs/tetNig1Contigs.fa \
+       /iscratch/i/tetNig1/contigs
+    iSync
+
+    ssh kk
+    cd /cluster/data/tetNig1/bed/blastzSelf
+    # for this blastz run, M=50
+    cat << '_EOF_' > DEF
+# tetraodon vs. tetraodon
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
+
+ALIGN=blastz-run1
+BLASTZ=blastz
+BLASTZ_L=5000
+BLASTZ_H=2500
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET
+# Tetraodon
+SEQ1_DIR=/iscratch/i/tetNig1/nib
+# not used
+SEQ1_RMSK=
+# not used
+SEQ1_FLAG=
+SEQ1_SMSK=
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=500000
+SEQ1_LAP=500
+
+# QUERY
+# Tetraodon
+SEQ2_DIR=/iscratch/i/tetNig1/contigs
+# not currently used
+SEQ2_RMSK=
+# not currently used
+SEQ2_FLAG=
+SEQ2_SMSK=
+SEQ2_IN_CONTIGS=1
+SEQ2_CHUNK=
+SEQ2_LAP=
+
+BASE=/cluster/data/tetNig1/bed/blastzSelf
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+
+#DEBUG=1
+'_EOF_'
+    # << this line makes emacs coloring happy                                                                                
+    # Save the DEF file in the current standard place - TO BE DONE
+    chmod +x DEF
+    cp DEF ~angie/hummus/DEF.tetNig1-tetNig1.2005-01-11
+    # prepare first cluster run
+    bash # if a csh/tcsh user
+    . ./DEF
+    /cluster/data/tetNig1/jkStuff/BlastZ_run0.sh
+    cd run.0
+    # check batch looks ok then
+    para try, check, push, check, ....
+# para time
+# Completed: 820 of 820 jobs
+# CPU time in finished jobs:    1611164s   26852.74m   447.55h   18.65d  0.051 y
+# IO & Wait Time:                 11448s     190.80m     3.18h    0.13d  0.000 y
+# Average job time:                1979s      32.98m     0.55h    0.02d
+# Longest job:                     4231s      70.52m     1.18h    0.05d
+# Submission to last job:         14753s     245.88m     4.10h    0.17d
+
+    # second cluster run: lift raw alignments -> lav dir
+    cd /cluster/data/tetNig1/bed/blastzSelf
+    bash # if a csh/tcsh user
+    . ./DEF
+    /cluster/data/tetNig1/jkStuff/BlastZ_run1.sh
+    cd run.1
+    para try, check, push, check etc.
+# para time
+# Completed: 820 of 820 jobs
+# CPU time in finished jobs:       2741s      45.68m     0.76h    0.03d  0.000 y
+# IO & Wait Time:                 13346s     222.44m     3.71h    0.15d  0.000 y
+# Average job time:                  20s       0.33m     0.01h    0.00d
+# Longest job:                      106s       1.77m     0.03h    0.00d
+# Submission to last job:           926s      15.43m     0.26h    0.01d
+
+    # third run: lav -> axt
+    ssh kki
+    cd /cluster/data/tetNig1/bed/blastzSelf
+    mkdir axtChrom run.2
+    cd run.2
+    cat << '_EOF_' > do.csh
+#!/bin/csh -ef
+cd $1
+cat `ls -1 *.lav | sort -g` \
+| lavToAxt -fa stdin /iscratch/i/tetNig1/nib \
+/iscratch/i/tetNig1/contigs/tetNig1Contigs.fa stdout \
+| axtSort stdin $2
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x do.csh
+    cat << '_EOF_' > gsub
+#LOOP
+./do.csh {check in exists $(path1)} {check out line+ /cluster/data/tetNig1/bed/blastzSelf/axtChrom/$(root1).axt}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    \ls -1Sd ../lav/chr* > chrom.list
+    gensub2 chrom.list single gsub jobList
+    wc -l jobList
+    head jobList
+    para create jobList
+    para try, check, push, check,...
+# para time
+# Completed: 27 of 27 jobs
+# CPU time in finished jobs:        337s       5.61m     0.09h    0.00d  0.000 y
+# IO & Wait Time:                   324s       5.41m     0.09h    0.00d  0.000 y
+# Average job time:                  24s       0.41m     0.01h    0.00d
+# Longest job:                      273s       4.55m     0.08h    0.00d
+# Submission to last job:          1675s      27.92m     0.47h    0.02d
+
+    # do liftup here
+    #- Lift up the 500KB chunk .out's to 5MB ("pseudo-contig") level
+    ssh kksilo
+    cd /cluster/data/tetNig1/bed/blastzSelf
+    
+    foreach d (axtChrom/chr*.axt)
+      echo $d
+      liftUp -axtQ ${d}.out.axt ./contigSeqs/500kbcontigs.lft warn $d \
+        > /dev/null
+    end
+
+    #- Lift pseudo-contigs to chromosome level
+    # check this is working correctly
+    set tetra = "/cluster/data/tetNig1"
+    foreach c (`cat ${tetra}/chrom.lst`)
+      echo lifting $c
+      liftUp -axtQ ./axtChrom/chr${c}.out2.axt \
+         $tetra/jkStuff/liftAll.lft warn \
+        ./axtChrom/chr${c}.axt.out.axt > /dev/null
+    end
+    cd axtChrom
+    # need to drop Self alignments after lifting up co-ordinates
+    foreach c (`cat ${tetra}/chrom.lst`)
+      echo "Processing $c..."
+      axtDropSelf chr${c}.out2.axt chr${c}.dropped.axt
+      mv chr${c}.axt chr${c}.axt.old
+      mv chr${c}.dropped.axt chr${c}.axt
+      rm chr${c}.axt.out.axt
+    end
+    # translate sorted axt files into psl
+    ssh kolossus
+    cd /cluster/data/tetNig1/bed/blastzSelf
+    mkdir -p pslChrom
+    set tbl = "blastzSelf"
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      /cluster/bin/i386/axtToPsl $f S1.len S1.len pslChrom/${c}_${tbl}.psl
+    end
+    # Load database tables
+    ssh hgwdev
+    cd /cluster/data/tetNig1/bed/blastzSelf/pslChrom
+    foreach f (./*.psl)
+      /cluster/bin/i386/hgLoadPsl -noTNameIx tetNig1 $f
+      echo "$f Done"
+    end
+# not in contigs: blastzSelf
+# featureBits -chrom=chr1 tetNig1 all_mrna blastzSelf -enrichment
+# all_mrna 2.601%, blastzSelf 16.728%, both 0.654%, cover 25.13%, enrich 1.50x
+# featureBits -chrom=chr1 tetNig1 blastzSelf
+# 2704737 bases of 16169091 (16.728%) in intersection
+
+# blastzSelfC, query is in contigs, M=50
+# featureBits -chrom=chr1 tetNig1 all_mrna blastzSelfC -enrichment
+# all_mrna 2.601%, blastzSelfC 16.208%, both 0.638%, cover 24.51%, enrich 1.51x
+# featureBits -chrom=chr1 tetNig1 blastzSelfC 
+# 2620707 bases of 16169091 (16.208%) in intersection
+
+# blastzSelfCM100, query is in contigs, M=100
+# featureBits -chrom=chr1 tetNig1 all_mrna blastzSelfCM100 -enrichment
+# all_mrna 2.601%, blastzSelfCM100 16.319%, both 0.639%, cover 24.56%, 
+# enrich 1.51x
+# featureBits -chrom=chr1 tetNig1 blastzSelfCM100
+# 2638606 bases of 16169091 (16.319%) in intersection
+# gain little by using M=100 except for a lot of extra alignments so use 
+# M=50 instead.
+# L=5000
+# featureBits -chrom=chr1 tetNig1 blastzSelfL5k
+# 2488953 bases of 16169091 (15.393%) in intersection
+# L=8000, L8k
+# featureBits -chrom=chr1 tetNig1 blastzSelfL8k
+# 2303191 bases of 16169091 (14.244%) in intersection 
+# rows in table
+# blastzSelf: 517242
+# blastzSelfC: 86073
+# blastzSelfCM100: 132429
+# blastzSelfCL5k: 62933
+# blastzSelfL8k: 43137
+
+# use blastz with contigs, M=50 and L=5000. Using L=5000 removes some of the 
+# short low scoring alignments but not too stringently. After chaining, 
+# further removal of low scoring alignments can be done.
+
+# CHAIN SELF BLASTZ (DONE, 2005-01-14, hartera)
+    # Run axtChain on little cluster
+    ssh kki 
+    cd /cluster/data/tetNig1/bed/blastzSelf
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    rm axtChrom/chr*.out2.axt
+    rm axtChrom/chr*.old
+    ls -1S /cluster/data/tetNig1/bed/blastzSelf/axtChrom/*.axt \
+        > input.lst
+cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+# axtChain now using human/chicken gap scoring matrix as default
+cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain $1 \
+    /iscratch/i/tetNig1/nib \
+    /iscratch/i/tetNig1/nib $2 >& $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+# Completed: 27 of 27 jobs
+# CPU time in finished jobs:        864s      14.40m     0.24h    0.01d  0.000 y
+# IO & Wait Time:                   137s       2.28m     0.04h    0.00d  0.000 y
+# Average job time:                  37s       0.62m     0.01h    0.00d
+# Longest job:                      559s       9.32m     0.16h    0.01d
+# Submission to last job:          1758s      29.30m     0.49h    0.02d
+
+    # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/tetNig1/bed/blastzSelf/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chainRaw all.chain
+    # apply chainAntiRepeat to remove chains that are the result of repeats
+    # and degenerate DNA 
+    mkdir chain
+    cd chainRaw
+    foreach f (*.chain)
+       set c = $f:r
+       echo $c
+       nice chainAntiRepeat /cluster/bluearc/tetNig1/nib \
+                       /cluster/bluearc/tetNig1/nib $f \
+                       ../chain/$c.chain
+    end
+    cd ..
+    # take a look at score distr's,try also with larger bin size.
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r >> hist10k.out
+      textHistogram -binSize=10000 /tmp/score.$f:t:r >> hist10k.out
+      echo ""
+    end
+    # trim to minScore=10000 to cut some of the fluff
+    mkdir chainFilt
+    foreach f (chain/*.chain)
+      chainFilter -minScore=10000 $f > chainFilt/$f:t
+    end
+    # load tables    
+    ssh hgwdev
+    cd /cluster/data/tetNig1/bed/blastzSelf/axtChain/chainFilt
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain tetNig1 ${c}_chainSelf $i
+        echo done $c
+    end
+# filtering on minScore=5000
+# featureBits -chrom=chr1 tetNig1 chainSelf5kLink
+# 2377755 bases of 16169091 (14.706%) in intersection
+# rows = 362482
+# filtering on minScore=10000, use this
+# featureBits -chrom=chr1 tetNig1 chainSelfLink
+# 2199465 bases of 16169091 (13.603%) in intersection
+# rows = 233729
+
+# NET SELF BLASTZ (DONE, 2005-01-14, hartera)
+    ssh kksilo
+    cd /cluster/data/tetNig1/bed/blastzSelf/axtChain
+    mkdir preNet
+    cd chainFilt
+    foreach i (*.chain)
+       echo preNetting $i
+       /cluster/bin/i386/chainPreNet $i ../../S1.len ../../S1.len \
+                                     ../preNet/$i
+    end
+    cd ..
+    mkdir n1
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      /cluster/bin/i386/chainNet $i -minSpace=1 ../../S1.len ../../S1.len \
+                                 ../n1/$n /dev/null
+    end
+    cd ..
+    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin noClass.net
+    # memory usage 78983168, utime 485 s/100, stime 55
+
+    # Add classification info using db tables:
+    # netClass looks for ancient repeats in one of the databases
+    # hg17 has this table - hand-curated by Arian but this is for
+    # human-rodent comparisons so do not use here, use -noAr option
+
+    ssh hgwdev
+    cd /cluster/data/tetNig1/bed/blastzSelf/axtChain
+    time netClass noClass.net tetNig1 tetNig1 self.net -noAr
+    # 14.530u 4.550s 0:31.26 61.0%    0+0k 0+0io 218pf+0w
+
+    netFilter -minGap=10 self.net |  hgLoadNet tetNig1 netSelf stdin
+    # featureBits tetNig1 netSelf
+    # 184618536 bases of 342403326 (53.918%) in intersection
+

@@ -26,8 +26,9 @@
 #include "cart.h"
 #include "hdb.h"
 #include "hui.h"
+#include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgCoordConv.c,v 1.25 2004/07/23 04:22:06 braney Exp $";
+static char const rcsid[] = "$Id: hgCoordConv.c,v 1.26 2005/01/21 04:11:59 kent Exp $";
 
 /* these variables are used for testing mode */
 boolean hgTest = FALSE;          /* are we in testing mode ? */
@@ -690,6 +691,7 @@ void doConvertCoordinates(struct cart *theCart)
 /* Seperate zoo conversions from non-zoo conversions... */
 
 cart = theCart;
+hgBotDelay();	/* Prevent abuse. */
 
 if(strstr(origGenome, "zoo")){
     convertCoordinatesZoo(stdout, stdout, doGoodReportZoo, doBadReportZoo);

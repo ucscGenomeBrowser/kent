@@ -3,6 +3,7 @@
 /* Copyright 2005 Jim Kent.  All rights reserved. */
 
 #include "common.h"
+#include "hash.h"
 #include "options.h"
 #include "errabort.h"
 #include "memalloc.h"
@@ -36,16 +37,14 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-static void alignAll(struct bzp *bzp, struct dnaSeq *targetList, 
+static void alignAll(struct bzp *bzp, struct blatzIndex *indexList, 
         struct dnaLoad *queryDl, char *outFile)
 /* Make up neighorhood index for queryList, and use it to scan
  * targetList.  Put output in outFile */
 {
 FILE *f = mustOpen(outFile, "w");
-struct blatzIndex *indexList = blatzIndexAll(targetList, bzp->weight);
 struct dnaSeq *query;
 
-bzpTime("Made index");
 while ((query = dnaLoadNext(queryDl)) != NULL)
     {
     double bestScore = 0;
@@ -65,7 +64,8 @@ while ((query = dnaLoadNext(queryDl)) != NULL)
 	}
     verbose(1, "%s (%d bases) score %2.0f\n", 
             query->name, query->size, bestScore);
-    blatzWriteChains(bzp, chainList, query, indexList, f);
+    blatzWriteChains(bzp, chainList, query, 
+    	dnaLoadCurOffset(queryDl), dnaLoadCurSize(queryDl), indexList, f);
     chainFreeList(&chainList);
     dnaSeqFree(&query);
     }
@@ -76,20 +76,14 @@ static void loadAndAlignAll(struct bzp *bzp,
         char *target, char *query, char *output)
 /* blatz - Align genomic dna across species. */
 {
-struct dnaSeq *targetList = dnaLoadAll(target);
 struct dnaLoad *queryDl = dnaLoadOpen(query);
-struct blatzIndex *index;
-bzpTime("loaded DNA");
+struct dnaLoad *targetDl = dnaLoadOpen(target);
+struct blatzIndex *indexList = blatzIndexDl(targetDl, bzp->weight, bzp->unmask);
+bzpTime("loaded and indexed target DNA");
 
-verbose(2, "Loaded %d in %s, opened %s\n", slCount(targetList), target,
+verbose(2, "Loaded %d in %s, opened %s\n", slCount(indexList), target,
         query);
-if (bzp->unmask)
-    {
-    struct dnaSeq *seq;
-    for (seq = targetList; seq != NULL; seq = seq->next)
-	toUpperN(seq->dna, seq->size);
-    }
-alignAll(bzp, targetList, queryDl, output);
+alignAll(bzp, indexList, queryDl, output);
 }
 
 int main(int argc, char *argv[])

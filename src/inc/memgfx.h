@@ -191,5 +191,9 @@ void mgTriLeft(struct memGfx *mg, int x1, int y1, int y2, int color);
 void mgTriRight(struct memGfx *mg, int x1, int y1, int y2, int color);
 /* Draw a triangle pointing right with straight edge along x1 from y1 to y2 */
 
+void mgCircle(struct memGfx *mg, int xCen, int yCen, int rad, 
+	Color color, boolean filled);
+/* Draw a circle using a stepping algorithm.  Doesn't correct
+ * for non-square pixels. */
 
 #endif /* MEMGFX_H */

@@ -69,6 +69,13 @@ boolean nibIsFile(char *fileName);
 boolean nibIsRange(char *fileName);
 /* Return TRUE if file specifies a subrange of a nib file. */
 
+void nibParseName(unsigned options, char *fileSpec, char *filePath,
+                         char *name, unsigned *start, unsigned *end);
+/* Parse the nib name, getting the file name, seq name to use, and
+ * optionally the start and end positions. Zero is return for start
+ * and end if they are not specified. Return the path to the file
+ * and the name to use for the sequence. */
+
 struct nibStream *nibStreamOpen(char *fileName);
 /* Create a new nib stream.  Open file and stuff. */
 

@@ -86,7 +86,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.859 2005/01/13 01:00:55 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.863 2005/01/20 00:50:06 daryl Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -534,42 +534,6 @@ return '.';
 }
 
 
-enum trackVisibility limitVisibility(struct track *tg)
-/* Return default visibility limited by number of items. 
- * This also sets tg->height. */
-{
-if (!tg->limitedVisSet)
-    {
-    enum trackVisibility vis = tg->visibility;
-    int h;
-    int maxHeight = maximumTrackHeight();
-    tg->limitedVisSet = TRUE;
-    h = tg->totalHeight(tg, vis);
-    if (h > maxHeight)
-        {
-	if (vis == tvFull && tg->canPack)
-	    vis = tvPack;
-	else if (vis == tvPack)
-	    vis = tvSquish;
-	else
-	    vis = tvDense;
-	h = tg->totalHeight(tg, vis);
-	if (h > maxHeight && vis == tvPack)
-	    {
-	    vis = tvSquish;
-	    h = tg->totalHeight(tg, vis);
-	    }
-	if (h > maxHeight)
-	    {
-	    vis = tvDense;
-	    h = tg->totalHeight(tg, vis);
-	    }
-	}
-    tg->height = h;
-    tg->limitedVis = vis;
-    }
-return tg->limitedVis;
-}
 
 static struct dyString *uiStateUrlPart(struct track *toggleGroup)
 /* Return a string that contains all the UI state in CGI var
@@ -7195,10 +7159,12 @@ return y;
 
 static bool isCompositeTrack(struct track *track)
 /* Determine if this is a composite track. This is currently defined
- * as a top-level dummy track, with a list of subtracks of the same type */
+ * as a top-level dummy track, with a list of subtracks of the same type.
+ * Need to check trackDb, as we need to ignore wigMaf's which have
+ * subtracks but aren't composites */
 {
 if (track->tdb)
-    return trackDbIsComposite(track->tdb);
+    return track->subtracks && trackDbIsComposite(track->tdb);
 return FALSE;
 }
 
@@ -7224,6 +7190,45 @@ for (subtrack = trackList; subtrack; subtrack = subtrack->next)
     if (subtrackVisible(subtrack->mapName))
         ct++;
 return ct;
+}
+
+enum trackVisibility limitVisibility(struct track *tg)
+/* Return default visibility limited by number of items. 
+ * This also sets tg->height. */
+{
+if (!tg->limitedVisSet)
+    {
+    enum trackVisibility vis = tg->visibility;
+    int h;
+    int maxHeight = maximumTrackHeight();
+    if (isCompositeTrack(tg))
+        maxHeight = maxHeight * subtrackCount(tg->subtracks);
+    tg->limitedVisSet = TRUE;
+    h = tg->totalHeight(tg, vis);
+    if (h > maxHeight)
+        {
+	if (vis == tvFull && tg->canPack)
+	    vis = tvPack;
+	else if (vis == tvPack)
+	    vis = tvSquish;
+	else
+	    vis = tvDense;
+	h = tg->totalHeight(tg, vis);
+	if (h > maxHeight && vis == tvPack)
+	    {
+	    vis = tvSquish;
+	    h = tg->totalHeight(tg, vis);
+	    }
+	if (h > maxHeight)
+	    {
+	    vis = tvDense;
+	    h = tg->totalHeight(tg, vis);
+	    }
+	}
+    tg->height = h;
+    tg->limitedVis = vis;
+    }
+return tg->limitedVis;
 }
 
 void makeActiveImage(struct track *trackList, char *psOutput)
@@ -8225,6 +8230,18 @@ tg->drawItemAt = valAlDrawAt;
 }
 
 
+void loadBlatz(struct track *tg)
+{
+enum trackVisibility vis = tg->visibility;
+loadXenoPsl(tg);
+if (vis != tvDense)
+    {
+    lookupProteinNames(tg);
+    slSort(&tg->items, linkedFeaturesCmpStart);
+    }
+vis = limitVisibility(tg);
+}
+
 void loadBlast(struct track *tg)
 {
 enum trackVisibility vis = tg->visibility;
@@ -8240,6 +8257,16 @@ vis = limitVisibility(tg);
 Color blastNameColor(struct track *tg, void *item, struct vGfx *vg)
 {
 return 1;
+}
+
+void blatzMethods(struct track *tg)
+/* blatz track methods */
+{
+tg->loadItems = loadBlatz;
+tg->itemName = refGeneName;
+tg->mapItemName = refGeneMapName;
+tg->itemColor = blastColor;
+tg->itemNameColor = blastNameColor;
 }
 
 void blastMethods(struct track *tg)
@@ -8449,28 +8476,33 @@ unsigned char deltaR = 0, deltaG = 0, deltaB = 0;
 struct trackDb *subTdb;
 /* number of possible subtracks for this track */
 int subtrackCt = slCount(tdb->subtracks);
+int altColors = subtrackCt - 1;
+
+/* ignore if no subtracks */
+if (!subtrackCt)
+    return;
 
 /* setup function handlers for composite track */
 track->loadItems = compositeLoad;
 track->totalHeight = compositeTotalHeight;
 
-if (finalR || finalG || finalB)
+if (altColors && (finalR || finalG || finalB))
     {
     /* not black -- make a color gradient for the subtracks,
                 from black, to the specified color */
-    deltaR = (finalR - altR) / (subtrackCt-1);
-    deltaG = (finalG - altG) / (subtrackCt-1);
-    deltaB = (finalB - altB) / (subtrackCt-1);
+    deltaR = (finalR - altR) / altColors;
+    deltaG = (finalG - altG) / altColors;
+    deltaB = (finalB - altB) / altColors;
     }
 
 /* count number of visible subtracks for this track */
-/* if no subtracks are selected in cart, turn them all on */
 subtrackCt = 0;
 for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
     {
     if (subtrackVisible(subTdb->tableName))
         subtrackCt++;
     }
+/* if no subtracks are selected in cart, turn them all on */
 if (!subtrackCt)
     for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
         setSubtrackVisible(subTdb->tableName);
@@ -9113,6 +9145,7 @@ registerTrackHandler("stsMapMouseNew", stsMapMouseMethods);
 registerTrackHandler("stsMapRat", stsMapRatMethods);
 registerTrackHandler("snpMap", snpMapMethods);
 registerTrackHandler("snp", snpMethods);
+registerTrackHandler("ld", ldMethods);
 registerTrackHandler("recombRate", recombRateMethods);
 registerTrackHandler("recombRateMouse", recombRateMouseMethods);
 registerTrackHandler("recombRateRat", recombRateRatMethods);
@@ -9169,6 +9202,7 @@ registerTrackHandler("blastDm1FB", blastMethods);
 registerTrackHandler("blastHg16KG", blastMethods);
 registerTrackHandler("blastHg17KG", blastMethods);
 registerTrackHandler("blatHg16KG", blastMethods);
+registerTrackHandler("blatzHg17KG", blatzMethods);
 registerTrackHandler("blastSacCer1SG", blastMethods);
 registerTrackHandler("tblastnHg16KGPep", blastMethods);
 registerTrackHandler("xenoRefGene", xenoRefGeneMethods);

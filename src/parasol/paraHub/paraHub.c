@@ -67,7 +67,7 @@
 #include "machSpec.h"
 #include "log.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.81 2005/01/10 00:45:13 kent Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.82 2005/01/13 20:51:35 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -251,7 +251,7 @@ if (batch == NULL)
     else
 	dlAddTail(user->curBatches, batch->node);
     updateUserPriority(user);
-    updateUserMaxNode (user);
+    updateUserMaxNode(user);
     }
 return batch;
 }
@@ -544,7 +544,7 @@ dlAddHead(user->curBatches, batch->node);
 dlRemove(user->node);
 dlAddHead(queuedUsers, user->node);
 updateUserPriority(user);
-updateUserMaxNode (user);
+updateUserMaxNode(user);
 }
 
 void removeMachine(char *name)
@@ -1169,9 +1169,9 @@ void setMaxNodeAcknowledge(char *line, struct paraMessage *pm)
 /* Set batch maxNode.  Line format is <user> <dir> <maxNode>
 * Returns new maxNode or -2 if a problem.  Send new maxNode back to client. */
 {
-int id = setMaxNodeFromMessage(line);
+int maxNode = setMaxNodeFromMessage(line);
 pmClear(pm);
-pmPrintf(pm, "%d", id);
+pmPrintf(pm, "%d", maxNode);
 pmSend(pm, rudpOut);
 }
 
@@ -1212,9 +1212,9 @@ void setPriorityAcknowledge(char *line, struct paraMessage *pm)
 /* Set batch priority.  Line format is <user> <dir> <priority>
 * Returns new priority or 0 if a problem.  Send new priority back to client. */
 {
-int id = setPriorityFromMessage(line);
+int priority = setPriorityFromMessage(line);
 pmClear(pm);
-pmPrintf(pm, "%d", id);
+pmPrintf(pm, "%d", priority);
 pmSend(pm, rudpOut);
 }
 
@@ -1325,7 +1325,7 @@ if (batchName != NULL)
 	    dlRemove(batch->node);
 	    dlAddTail(user->oldBatches, batch->node);
 	    updateUserPriority(user);
-	    updateUserMaxNode (user);
+	    updateUserMaxNode(user);
 	    }
 	res = "ok";
 	}
