@@ -9,7 +9,7 @@ trap "echo Error: `hostname` copy failed >&2; exit 1" ERR
 exec </dev/null
 
 # databases to copy:
-databases="hg15 mm3 rn3 hg16 fr1"
+databases="hg15 mm3 rn3 hg16 fr1 dm1"
 
 # initialize
 gbRoot=/export/genbank

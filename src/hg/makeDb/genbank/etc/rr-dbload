@@ -6,7 +6,10 @@
 opts="$*"
 
 # databases to update
-databases="rn3 hg16"
+databases="mm3 rn3 hg16"
+
+# other options to include
+otherOpts="-updateDownloadSeqs"
 
 # gbRoot on hgnfs1
 gbRoot=/genbank
@@ -17,4 +20,4 @@ workdir=/var/tmp/genbank
 # wait for copy to hgwnfs1
 copyTime=var/copy/copy.time
 
-exec $gbRoot/etc/dbload $opts $gbRoot "$databases" $copyTime $workdir
+exec $gbRoot/etc/dbload $opts $otherOpts $gbRoot "$databases" $copyTime $workdir

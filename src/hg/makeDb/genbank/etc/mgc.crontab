@@ -9,5 +9,5 @@ MAILTO=genbank@cse.ucsc.edu
 # machine, MGC needs current ESTs and this is also nice sanity check for other
 # machines.
 # daily, 22:00-4:00
-30 22-04 * * *	/genbank/etc/mgc-dbload -inclEsts
+30 22-23,00-04 * * *	/genbank/etc/mgc-dbload -inclEsts
 
