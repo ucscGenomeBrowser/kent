@@ -130,7 +130,7 @@ alignment coverage from 33% of the human genome to 40%. [Scott, check numbers.]
 The modified Blastz was used to compare all the human sequence with all of the
 mouse, i.e., to produce a complete catalog of matching regions.
 more than one region of the mouse sequence aligned to the same
-region of the human sequence.  This is a natural consequence of
+region of the human sequence.  [jk new] This is a natural consequence of
 duplications in the mouse genome and the human/mouse common ancestor.
 These duplications include paralogous genes, processed and unprocessed
 psuedogenes, tandem repeats, simple repeats, etc.  For many purposes 
@@ -303,18 +303,26 @@ post processing steps the improved locality of reference (avoiding the
 need to retrieve parts of multi gigabyte datasets) is a clear necessity.
 
 A second, and more important post-processing step is to compute the
-single-coverage rendition of the alignment.  In the even that several
-queries overlap in the target, this procedure attempts to select the
-best one.  [[describe axtBest]].
-
+single-coverage rendition of the alignment with axtBest.
 Other sorts of post-processing include the generation of Percent Identity
 Plots, Dotplots, and tracks on the Genome Browser.
 
 
 
- Program Execution [Santa Cruz configuration and performance data -- Scott]
+Program Execution [Santa Cruz configuration and performance data -- Scott]
 
- Software Evaluation
+To align 2.8 Gb of human sequence vs. 2.5 Gb of mouse sequence
+took 481 hours of CPU time and a half day of wall clock time on
+a cluster of 1000 833 Mhz Pentium III CPUs.  This produced 9 Gig
+of output in a relatively dense format, .lav.  The .lav files were
+expanded to another format, .axt, which includes the mouse and
+human sequence used in the alignment.  The axt files were 20 Gig.
+The axt files after axtBest were 2.5 Gig.  Only 3.3% of the human 
+genome is covered by multiple alignments, but some of these places,
+particularly on chromosome 19, are covered to a great depth.
+
+
+Software Evaluation
 
 While Blastz's sensitivity (success at identifying orthologous,
 or at least homologous, regions) was less critical than its specificity
@@ -353,20 +361,14 @@ REVERSE COMPLEMENT) of the mouse sequence.
 Reversal retains the local complexity (e.g., a tandem dinucleotide repeat is
 preserved) and guarantees that all generated alignments are inappropriate.
 
-/* THE RUBBER HITS THE ROAD:
-
-In the next day or two, I'll send Scott a version of Blastz that gathers
-statistics about alignments to the forward and reverse mouse sequence,
-for both "outer" and "inner" alignments (i.e., thresholds 3000 or <= 2200).
-When I get the numbers back, I'll ask Francesca to prepare plots showing the
-probability of an alignment being bogus as a function of its score.  I may
-want to distinguish unique matches from alignments that overlap another
-alignment.
-
-Jim -- can you describe your analysis of correctness of the AxtBest files?
-Are there results using synteny information that help make our case?
-
-*/
-
+[jk new] Another test of the specificity of blastz alignments is based
+on synteny.  Human chromosome 20 is considered to be completely 
+syntenic to parts of mouse chromosome 2.  After filtering through axtBest
+only 3.3% of the human chromosome 20 bases in alignments aligned outside
+of mouse chromosome 2.   A certain degree of non-syntenic alignment is
+to be expected from processed psuedogenes.  Since only approximately
+96% of the mouse genome is sequenced, in some cases a paralog on another
+chromosome will fill in for a non-sequenced ortholog on chromosome 2 as
+well. 
 
 
