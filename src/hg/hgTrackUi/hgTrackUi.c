@@ -14,7 +14,7 @@
 #include "cdsColors.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.91 2004/03/31 20:24:26 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.92 2004/04/01 15:31:38 weber Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -246,10 +246,23 @@ void cdsColorOptions(char *tableName, int value)
     char *drawOption;
     char cdsColorVar[128];
     printf("<p>Color track by codons:</b>");
-    snprintf(cdsColorVar, 128, "%s.cds.draw", tableName );
+    safef(cdsColorVar, 128, "%s.cds.draw", tableName );
     drawOption = cartUsualString(cart, cdsColorVar, CDS_DRAW_DEFAULT);
     cdsColorDropDown(cdsColorVar, drawOption, value);
 }
+
+void cdsColorPlusOptions(char *tableName, int value)
+/*Codon coloring options with extra info.*/
+{
+    char *drawOption;
+    char cdsColorPlusVar[128];
+    printf("<p>Color track by codons:</b>");
+    safef(cdsColorPlusVar, 128, "%s.cds.draw", tableName );
+    drawOption = cartUsualString(cart, cdsColorPlusVar, CDS_DRAW_DEFAULT);
+    cdsColorPlusDropDown(cdsColorPlusVar, drawOption, value);
+}
+
+
 
 
 void refGeneUI(struct trackDb *tdb)
@@ -300,7 +313,10 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
      oneMrnaFilterUi(cg, fil->label, fil->key);
 endControlGrid(&cg);
 
-/*cdsColorOptions(tdb->tableName, -1);*/
+if(sameString(tdb->tableName,"mrna") ||
+        sameString(tdb->tableName,"xenoMrna") ||
+        sameString(tdb->tableName,"mrnaBlastz"))
+        cdsColorOptions(tdb->tableName, -1);
 }
 
 void bedUi(struct trackDb *tdb)
@@ -327,7 +343,6 @@ cg = startControlGrid(4, NULL);
 for (fil = mud->filterList; fil != NULL; fil = fil->next)
      oneMrnaFilterUi(cg, fil->label, fil->key);
 endControlGrid(&cg);
-/*cdsColorOptions(tdb->tableName, -1);*/
 }
 
 void crossSpeciesUi(struct trackDb *tdb)
@@ -784,13 +799,21 @@ else
     wordCount = chopLine(typeLine, words);
     
     if (sameWord(words[0], "genePred"))
-	cdsColorOptions(tdb->tableName,2);
-    
-    if (wordCount == 3)
-	{
-	if (sameWord(words[0], "psl") && sameWord(words[1], "xeno"))
-	    crossSpeciesUi(tdb);
-	}
+        {
+        /*see if last word is '+' meaning all optional fields are present*/
+        if (sameWord(words[wordCount-1], "+"))
+                cdsColorPlusOptions(tdb->tableName, 3);
+        else        
+	        cdsColorOptions(tdb->tableName, 2);
+        }
+        if (sameWord(words[0], "psl"))
+                {
+                if (wordCount == 3)
+                        if(sameWord(words[1], "xeno"))
+	                        crossSpeciesUi(tdb);
+
+                cdsColorOptions(tdb->tableName,-1);
+                }
     freeMem(typeLine);
     }
 }
