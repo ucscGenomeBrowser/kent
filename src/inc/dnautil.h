@@ -43,6 +43,7 @@ extern AA aaChars[256];
  * to numerical one: X_BASE_VAL as above. */
 extern int ntVal[256];
 extern int aaVal[256];
+int ntValLower[256];	/* NT values only for lower case. */
 
 /* Like ntVal, but with T_BASE_VAL in place of -1 for nonexistent nucleotides. */
 extern int ntValNoN[256];     

@@ -1,6 +1,7 @@
 /* blat - Standalone BLAT fast sequence search command line tool. */
 #include "common.h"
 #include "linefile.h"
+#include "bits.h"
 #include "hash.h"
 #include "dnautil.h"
 #include "dnaseq.h"
@@ -32,6 +33,7 @@ char *ooc = NULL;
 enum gfType qType = gftDna;
 enum gfType tType = gftDna;
 char *mask = NULL;
+char *qMask = NULL;
 double minRepDivergence = 15;
 double minIdentity = 90;
 char *outputFormat = "psl";
@@ -87,11 +89,16 @@ errAbort(
   "               The default is dna\n"
   "   -prot       Synonymous with -d=prot -q=prot\n"
   "   -mask=type  Mask out repeats.  Alignments won't be started in masked region but\n"
-  "               may extend through it.  Mask types are:\n"
+  "               may extend through it.  Masking only works for nucleotides. Mask types are:\n"
   "                 lower - mask out lower cased sequence\n"
   "                 upper - mask out upper cased sequence\n"
   "                 out   - mask according to database.out RepeatMasker .out file\n"
   "                 file.out - mask database according to RepeatMasker file.out\n"
+  "   -qMask=type Mask out repeats in query sequence.  Alignments won't be started in masked\n"
+  "               region but may extend through it.  Masking only works for nucleotides. Mask:\n"
+  "               types are:\n"
+  "                 lower - mask out lower cased sequence\n"
+  "                 upper - mask out upper cased sequence\n"
   "   -minRepDivergence=NN - minimum percent divergence of repeats to allow them to be\n"
   "               unmasked.  Default is 15\n"
   "   -out=type   Controls output file format.  Type is one of:\n"
@@ -230,7 +237,7 @@ char *outFile = NULL, outNameBuf[512];
 
 if (sameWord(maskType, "upper"))
     {
-    /* This is easy - use has done it for us. */
+    /* This is easy - user has done it for us. */
     return;
     }
 else if (sameWord(maskType, "lower"))
@@ -250,7 +257,6 @@ else
     }
 unmaskNucSeqList(seqList);
 maskFromOut(seqList, outFile);
-
 }
 
 bioSeq *getSeqList(int fileCount, char *files[], struct hash *hash, boolean isProt, boolean simpleNuc, char *maskType)
@@ -334,13 +340,13 @@ outForm->saveSeq = sameWord(outputFormat, "pslx");
 }
 
 void searchOneStrand(struct dnaSeq *seq, struct genoFind *gf, FILE *psl, 
-	boolean isRc, struct hash *maskHash)
+	boolean isRc, struct hash *maskHash, Bits *qMaskBits)
 /* Search for seq in index, align it, and write results to psl. */
 {
 struct gfSavePslxData data;
 outputOptions(&data, psl);
 data.maskHash = maskHash;
-gfLongDnaInMem(seq, gf, isRc, minScore, gfSavePslx, &data);
+gfLongDnaInMem(seq, gf, isRc, minScore, qMaskBits, gfSavePslx, &data);
 }
 
 void searchOneProt(aaSeq *seq, struct genoFind *gf, FILE *psl)
@@ -373,7 +379,7 @@ if (dotEvery > 0)
     }
 }
 
-void searchOne(bioSeq *seq, struct genoFind *gf, FILE *psl, boolean isProt, struct hash *maskHash)
+void searchOne(bioSeq *seq, struct genoFind *gf, FILE *psl, boolean isProt, struct hash *maskHash, Bits *qMaskBits)
 /* Search for seq on either strand in index. */
 {
 dotOut();
@@ -383,9 +389,9 @@ if (isProt)
     }
 else
     {
-    searchOneStrand(seq, gf, psl, FALSE, maskHash);
+    searchOneStrand(seq, gf, psl, FALSE, maskHash, qMaskBits);
     reverseComplement(seq->dna, seq->size);
-    searchOneStrand(seq, gf, psl, TRUE, maskHash);
+    searchOneStrand(seq, gf, psl, TRUE, maskHash, qMaskBits);
     reverseComplement(seq->dna, seq->size);
     }
 }
@@ -400,6 +406,8 @@ bioSeq *seqList = NULL, *targetSeq;
 int count = 0; 
 unsigned long totalSize = 0;
 FILE *psl = mustOpen(pslOut, "w");
+boolean maskQuery = (qMask != NULL);
+boolean lcMask = (qMask != NULL && sameWord(qMask, "lower"));
 
 if (!noHead)
     pslWriteHead(psl);
@@ -417,7 +425,7 @@ for (i=0; i<fileCount; ++i)
 	freez(&seq->name);
 	seq->name = cloneString(fileName);
 	carefulClose(&f);
-	searchOne(seq, gf, psl, isProt, maskHash);
+	searchOne(seq, gf, psl, isProt, maskHash, NULL);
 	totalSize += seq->size;
 	freeDnaSeq(&seq);
 	count += 1;
@@ -426,15 +434,29 @@ for (i=0; i<fileCount; ++i)
         {
 	static struct dnaSeq seq;
 	struct lineFile *lf = lineFileOpen(fileName, TRUE);
-	while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, !isProt))
+	while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
 	    {
+	    Bits *qMaskBits = NULL;
+	    if (isProt)
+		faToProtein(seq.dna, seq.size);
+	    else
+	        {
+		if (maskQuery)
+		    {
+		    if (lcMask)
+		        toggleCase(seq.dna, seq.size);
+		    qMaskBits = maskFromUpperCaseSeq(&seq);
+		    }
+		faToDna(seq.dna, seq.size);
+		}
 	    if (seq.size > qWarnSize)
 	        {
 		warn("Query sequence %d has size %d, it might take a while.", seq.name, seq.size);
 		}
-	    searchOne(&seq, gf, psl, isProt, maskHash);
+	    searchOne(&seq, gf, psl, isProt, maskHash, qMaskBits);
 	    totalSize += seq.size;
 	    count += 1;
+	    bitFree(&qMaskBits);
 	    }
 	lineFileClose(&lf);
 	}
@@ -761,6 +783,7 @@ noHead = cgiBoolean("noHead");
 ooc = cgiOptionalString("ooc");
 makeOoc = cgiOptionalString("makeOoc");
 mask = cgiOptionalString("mask");
+qMask = cgiOptionalString("qMask");
 outputFormat = cgiUsualString("out", outputFormat);
 dotEvery = cgiOptionalInt("dots", 0);
 

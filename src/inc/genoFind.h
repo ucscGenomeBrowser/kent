@@ -139,6 +139,10 @@ struct gfClump *gfFindClumps(struct genoFind *gf, struct dnaSeq *seq,
 	struct lm *lm, int *retHitCount);
 /* Find clumps associated with one sequence. */
 
+struct gfClump *gfFindClumpsWithQmask(struct genoFind *gf, bioSeq *seq, Bits *qMaskBits, 
+	struct lm *lm, int *retHitCount);
+/* Find clumps associated with one sequence soft-masking seq according to qMaskBits */
+
 struct gfClump *gfPepFindClumps(struct genoFind *gf, aaSeq *seq, 
 	struct lm *lm, int *retHitCount);
 /* Find clumps associated with one sequence. */
@@ -270,7 +274,7 @@ void gfMakeOoc(char *outName, char *files[], int fileCount,
 /* Count occurences of tiles in seqList and make a .ooc file. */
 
 void gfLongDnaInMem(struct dnaSeq *query, struct genoFind *gf, 
-   boolean isRc, int minScore, GfSaveAli outFunction, void *outData);
+   boolean isRc, int minScore, Bits *qMaskBits, GfSaveAli outFunction, void *outData);
 /* Chop up query into pieces, align each, and stitch back
  * together again. */
 

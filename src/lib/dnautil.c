@@ -107,6 +107,7 @@ struct codonTable codonTable [64] =
  * (which is order aa's are in biochemistry codon tables)
  * and gives -1 for all others. */
 int ntVal[256];
+int ntValLower[256];	/* NT values only for lower case. */
 int ntVal5[256];
 int ntValNoN[256]; /* Like ntVal, but with T_BASE_VAL in place of -1 for nonexistent ones. */
 DNA valToNt[5];
@@ -122,18 +123,18 @@ if (!inittedNtVal)
     int i;
     for (i=0; i<ArraySize(ntVal); i++)
         {
-	ntVal[i] = -1;
+	ntValLower[i] = ntVal[i] = -1;
         ntValNoN[i] = T_BASE_VAL;
 	if (isspace(i) || isdigit(i))
 	    ntVal5[i] = -1;
 	else
 	    ntVal5[i] = N_BASE_VAL;
         }
-    ntVal5['t'] = ntVal5['T'] = ntValNoN['t'] = ntValNoN['T'] = ntVal['t'] = ntVal['T'] = T_BASE_VAL;
-    ntVal5['u'] = ntVal5['U'] = ntValNoN['u'] = ntValNoN['U'] = ntVal['u'] = ntVal['U'] = U_BASE_VAL;
-    ntVal5['c'] = ntVal5['C'] = ntValNoN['c'] = ntValNoN['C'] = ntVal['c'] = ntVal['C'] = C_BASE_VAL;
-    ntVal5['a'] = ntVal5['A'] = ntValNoN['a'] = ntValNoN['A'] = ntVal['a'] = ntVal['A'] = A_BASE_VAL;
-    ntVal5['g'] = ntVal5['G'] = ntValNoN['g'] = ntValNoN['G'] = ntVal['g'] = ntVal['G'] = G_BASE_VAL;
+    ntVal5['t'] = ntVal5['T'] = ntValNoN['t'] = ntValNoN['T'] = ntVal['t'] = ntVal['T'] = ntValLower['t'] = T_BASE_VAL;
+    ntVal5['u'] = ntVal5['U'] = ntValNoN['u'] = ntValNoN['U'] = ntVal['u'] = ntVal['U'] = ntValLower['u'] = U_BASE_VAL;
+    ntVal5['c'] = ntVal5['C'] = ntValNoN['c'] = ntValNoN['C'] = ntVal['c'] = ntVal['C'] = ntValLower['c'] = C_BASE_VAL;
+    ntVal5['a'] = ntVal5['A'] = ntValNoN['a'] = ntValNoN['A'] = ntVal['a'] = ntVal['A'] = ntValLower['a'] = A_BASE_VAL;
+    ntVal5['g'] = ntVal5['G'] = ntValNoN['g'] = ntValNoN['G'] = ntVal['g'] = ntVal['G'] = ntValLower['g'] = G_BASE_VAL;
 
     valToNt[T_BASE_VAL] = 't';
     valToNt[C_BASE_VAL] = 'c';

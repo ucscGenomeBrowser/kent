@@ -6,6 +6,7 @@
 /* dnaSeq.c - stuff to manage DNA sequences. */
 #include "common.h"
 #include "dnaseq.h"
+#include "bits.h"
 
 
 struct dnaSeq *newDnaSeq(DNA *dna, int size, char *name)
@@ -121,5 +122,20 @@ for (i=0; i<seqCount; ++i)
     }
 internalErr();
 return NULL;
+}
+
+Bits *maskFromUpperCaseSeq(bioSeq *seq)
+/* Allocate a mask for sequence and fill it in based on
+ * sequence case. */
+{
+int size = seq->size, i;
+char *poly = seq->dna;
+Bits *b = bitAlloc(size);
+for (i=0; i<size; ++i)
+    {
+    if (isupper(poly[i]))
+        bitSetOne(b, i);
+    }
+return b;
 }
 

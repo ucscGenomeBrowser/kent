@@ -10,6 +10,10 @@
 #include "dnautil.h"
 #endif
 
+#ifndef BITS_H
+#include "bits.h"
+#endif
+
 struct dnaSeq
 /* A dna sequence in one-character per base format. */
     {
@@ -44,6 +48,10 @@ boolean seqIsDna(bioSeq *seq);
 
 bioSeq *whichSeqIn(bioSeq **seqs, int seqCount, char *letters);
 /* Figure out which if any sequence letters is in. */
+
+Bits *maskFromUpperCaseSeq(bioSeq *seq);
+/* Allocate a mask for sequence and fill it in based on
+ * sequence case. */
 
 #endif /* DNASEQ_H */
 

@@ -1491,7 +1491,7 @@ ssBundleFreeList(pOneList);
 }
 
 void gfLongDnaInMem(struct dnaSeq *query, struct genoFind *gf, 
-   boolean isRc, int minScore, GfSaveAli outFunction, void *outData)
+   boolean isRc, int minScore, Bits *qMaskBits, GfSaveAli outFunction, void *outData)
 /* Chop up query into pieces, align each, and stitch back
  * together again. */
 {
@@ -1535,7 +1535,7 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     endPos = &subQuery.dna[subSize];
     saveEnd = *endPos;
     *endPos = 0;
-    clumpList = gfFindClumps(gf, &subQuery, lm, &hitCount);
+    clumpList = gfFindClumpsWithQmask(gf, &subQuery, qMaskBits, lm, &hitCount);
     oneBunList = gfClumpsToBundles(clumpList, &subQuery, isRc, &rangeList);
     addToBigBundleList(&oneBunList, bunHash, &bigBunList, query);
     gfClumpFreeList(&clumpList);

@@ -754,21 +754,6 @@ for (isRc=0; isRc <= 1; ++isRc)
     }
 }
 
-Bits *maskFromUpper(bioSeq *seq)
-/* Allocate a mask for sequence and fill it in based on
- * sequence case. */
-{
-int size = seq->size, i;
-char *poly = seq->dna;
-Bits *b = bitAlloc(size);
-for (i=0; i<size; ++i)
-    {
-    if (isupper(poly[i]))
-        bitSetOne(b, i);
-    }
-return b;
-}
-
 struct genoFind *gfSmallIndexSeq(struct genoFind *gf, bioSeq *seqList,
 	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile, 
 	boolean isPep, boolean maskUpper)
@@ -798,7 +783,7 @@ for (i=0, seq = seqList; i<seqCount; ++i, seq = seq->next)
     offset += seq->size;
     ss->end = offset;
     if (maskUpper)
-	ss->maskedBits = maskFromUpper(seq);
+	ss->maskedBits = maskFromUpperCaseSeq(seq);
     }
 gf->totalSeqSize = offset;
 gfZeroOverused(gf);
@@ -832,7 +817,7 @@ for (i=0, seq = seqList; i<seqCount; ++i, seq = seq->next)
     offset += seq->size;
     ss->end = offset;
     if (maskUpper)
-	ss->maskedBits = maskFromUpper(seq);
+	ss->maskedBits = maskFromUpperCaseSeq(seq);
     }
 gf->totalSeqSize = offset;
 gfZeroOverused(gf);
@@ -1302,7 +1287,7 @@ return clumpList;
 
 
 static struct gfHit *gfFastFindDnaHits(struct genoFind *gf, struct dnaSeq *seq, 
-	struct lm *lm, int *retHitCount)
+	Bits *qMaskBits,  struct lm *lm, int *retHitCount)
 /* Find hits associated with one sequence. This is is special fast
  * case for DNA that is in an unsegmented index. */
 {
@@ -1331,16 +1316,22 @@ for (i=tileSizeMinusOne; i<size; ++i)
     bits += bVal;
     bits &= mask;
     listSize = gf->listSizes[bits];
-    qStart = i-tileSizeMinusOne;
-    tList = gf->lists[bits];
-    for (j=0; j<listSize; ++j)
+    if (listSize != 0)
 	{
-	lmAllocVar(lm, hit);
-	hit->qStart = qStart;
-	hit->tStart = tList[j];
-	hit->diagonal = hit->tStart + size - qStart;
-	slAddHead(&hitList, hit);
-	++hitCount;
+	qStart = i-tileSizeMinusOne;
+	if (qMaskBits == NULL || bitCountRange(qMaskBits, qStart, gf->tileSize) == 0)
+	    {
+	    tList = gf->lists[bits];
+	    for (j=0; j<listSize; ++j)
+		{
+		lmAllocVar(lm, hit);
+		hit->qStart = qStart;
+		hit->tStart = tList[j];
+		hit->diagonal = hit->tStart + size - qStart;
+		slAddHead(&hitList, hit);
+		++hitCount;
+		}
+	    }
 	}
     }
 *retHitCount = hitCount;
@@ -1625,18 +1616,20 @@ return hitList;
 }
 
 
-struct gfClump *gfFindClumps(struct genoFind *gf, bioSeq *seq, struct lm *lm, int *retHitCount)
-/* Find clump whether its peptide or dna.  Call fast routine if possible.*/
+struct gfClump *gfFindClumpsWithQmask(struct genoFind *gf, bioSeq *seq, Bits *qMaskBits, 
+	struct lm *lm, int *retHitCount)
+/* Find clumps associated with one sequence soft-masking seq according to qMaskBits */
 {
 struct gfHit *hitList = NULL;
 struct gfClump *clumpList = NULL;
 
 if (gf->segSize == 0 && !gf->isPep && !gf->allowOneMismatch)
-    hitList = gfFastFindDnaHits(gf, seq, lm, retHitCount);
+    hitList = gfFastFindDnaHits(gf, seq, qMaskBits, lm, retHitCount);
 else
     {
     if (gf->segSize == 0)
 	{
+	// ~~~ Need to add qMaskBits here
 	if (gf->allowOneMismatch)
 	    hitList = gfStraightFindNearHits(gf, seq, lm, retHitCount);
 	else
@@ -1644,6 +1637,7 @@ else
 	}
     else
 	{
+	// ~~~ Need to add qMaskBits here
 	if (gf->allowOneMismatch)
 	    hitList = gfSegmentedFindNearHits(gf, seq, lm, retHitCount);
 	else
@@ -1655,6 +1649,13 @@ clumpList = clumpHits(gf, hitList, gf->minMatch);
 // uglyf("hitCount = %d, clumpCount = %d\n", *retHitCount, slCount(clumpList));
 return clumpList;
 }
+
+struct gfClump *gfFindClumps(struct genoFind *gf, bioSeq *seq, struct lm *lm, int *retHitCount)
+/* Find clumps associated with one sequence. */
+{
+return gfFindClumpsWithQmask(gf, seq, NULL, lm, retHitCount);
+}
+
 
 void gfTransFindClumps(struct genoFind *gfs[3], aaSeq *seq, struct gfClump *clumps[3], struct lm *lm, int *retHitCount)
 /* Find clumps associated with one sequence in three translated reading frames. */
