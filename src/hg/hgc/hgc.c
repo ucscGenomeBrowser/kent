@@ -136,7 +136,7 @@
 #include "botDelay.h"
 #include "zdobnovSynt.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.615 2004/04/23 22:58:42 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.616 2004/04/26 21:48:17 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2179,7 +2179,7 @@ if (wordCount > 0)
         {
 	genericAxtClick(conn, tdb, item, start, words[1]);
 	}
-    else if (sameString(type, "expRatio") || sameString(type, "gnfAtlas2"))
+    else if (sameString(type, "expRatio"))
         {
 	genericExpRatio(conn, tdb, item, start);
 	}
