@@ -6,9 +6,9 @@
 #include "blastParse.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: blastToPsl.c,v 1.13 2004/08/10 19:42:11 hartera Exp $";
+static char const rcsid[] = "$Id: blastToPsl.c,v 1.14 2004/08/11 23:50:21 hartera Exp $";
 
-double eVal = 10; /* default Expect value for filtering */
+double eVal = -1; /* default Expect value signifying no filtering */
 
 struct block
 /* coordinates of a block */
@@ -48,7 +48,7 @@ errAbort(
   "  -verbose=n - n >= 3 prints each line of file after parsing.\n"
   "               n >= 4 dumps the result of each query\n"
   "  -eVal=n n is e-value threshold to filter results. Format can be either\n"
-  "          an integer, double or 1e-10. Default is 10.\n"
+  "          an integer, double or 1e-10. Default is no filter.\n"
   );
 }
 
@@ -266,7 +266,7 @@ while (nextUngappedBlk(bb, &blk))
     addPslBlock(psl, &blk, &pslMax);
     prevBlk = blk;
     }
-if (psl->blockCount > 0 && bb->eVal <= eVal)
+if (psl->blockCount > 0 && (bb->eVal <= eVal || eVal == -1))
     {
     finishPsl(psl, flags);
     pslTabOut(psl, pslFh);
@@ -321,7 +321,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, optionSpecs);
-eVal = optionDouble("eVal", 10);
+eVal = optionDouble("eVal", eVal);
 if (argc != 3)
     usage();
 blastToPsl(argv[1], argv[2], optionVal("scores", NULL));
