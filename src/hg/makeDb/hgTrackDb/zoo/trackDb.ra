@@ -837,3 +837,11 @@ priority 1430
 altColor 0,0,160
 visibility full
 type sample 9
+
+track longMCS
+shortLabel Long MCSs
+longLabel Long MCSs
+priority 1440
+visibility hide
+color 0,0,160
+type bed 4 .
