@@ -87,3 +87,20 @@ searchTable blastHg17KG
 searchType psl
 query select tName,tStart,tEnd,qName from %s where qName like '%%%s%%'
 searchPriority 25
+
+searchName brhInparalogFast
+searchTable brhInparalog
+searchMethod prefix
+searchType genePred
+shortCircuit 1
+termRegex Amel_[0-9]+(\.[[:alnum:]_]+)?
+searchPriority 50
+
+searchName brhInparalogSlow
+searchTable brhInparalog
+searchMethod fuzzy
+searchType genePred
+termRegex [[:alnum:]_]+
+dontCheck Amel_[0-9]+\.[[:alnum:]_]+
+searchPriority 50
+
