@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.36 2004/09/13 18:56:41 donnak Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.37 2004/09/13 23:58:37 donnak Exp $";
 
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -224,7 +224,7 @@ selTable = cartUsualString(cart, hgtaTable, nameList->name);
 if (!slNameInList(nameList, selTable))
     selTable = nameList->name;
 /* Print out label and drop-down list. */
-hPrintf("<B>table:</B>");
+hPrintf("<B>table: </B>");
 hPrintf("<SELECT NAME=%s %s>\n", hgtaTable, onChangeGroupOrTrack());
 for (name = nameList; name != NULL; name = name->next)
     {
@@ -382,7 +382,7 @@ hPrintf("<TABLE BORDER=0>\n");
 /* Select identifiers line. */
 if (!isWig)
     {
-    hPrintf("<TR><TD><B>select identifiers</B> (names/accessions):\n");
+    hPrintf("<TR><TD><B>identifiers (names/accessions):</B>\n");
     cgiMakeButton(hgtaDoPasteIdentifiers, "Paste List");
     hPrintf(" ");
     cgiMakeButton(hgtaDoUploadIdentifiers, "Upload List");
