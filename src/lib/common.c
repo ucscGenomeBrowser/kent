@@ -1291,3 +1291,27 @@ needleCopy[needleLen] = 0; /* Null terminate */
 
 return strstr(haystackCopy, needleCopy);
 }
+
+int vasafef(char* buffer, int bufSize, char *format, va_list args)
+/* format string to buffer, vsprintf style, but detect buffer overflow
+ * and abort */
+{
+int sz = vsnprintf(buffer, bufSize, format, args);
+/* note that some version return -1 if too small */
+if ((sz < 0) || (sz >= bufSize))
+    errAbort("buffer overflow, size %d, format: %s", bufSize, format);
+return sz;
+}
+
+int safef(char* buffer, int bufSize, char *format, ...)
+/* format string to buffer, sprintf style, but detect buffer
+ * to small and abort */
+{
+int sz;
+va_list args;
+va_start(args, format);
+sz = vasafef(buffer, bufSize, format, args);
+va_end(args);
+return sz;
+}
+

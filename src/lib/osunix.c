@@ -15,10 +15,10 @@
 
 /* Return how long the named file is in bytes. 
  * Return -1 if no such file. */
-long fileSize(char *fileName)
+off_t fileSize(char *fileName)
 {
 int fd;
-long size;
+off_t size;
 fd = open(fileName, O_RDONLY, 0);
 if (fd < 0)
     return -1;

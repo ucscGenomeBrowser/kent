@@ -540,7 +540,7 @@ double doubleExp(char *text);
 char* readLine(FILE* fh);
 /* Read a line of any size into dynamic memory, return null on EOF */
 
-long fileSize(char *fileName);
+off_t fileSize(char *fileName);
 /* The size of a file. */
 
 boolean fileExists(char *fileName);
@@ -553,5 +553,18 @@ char *containsStringNoCase(char *haystack, char *needle);
 
 char *strstrNoCase(char *haystack, char *needle);
 /* A case-insensitive strstr */
+
+int vasafef(char* buffer, int bufSize, char *format, va_list args);
+/* format string to buffer, vsprintf style, but detect buffer overflow
+ * and abort */
+
+int safef(char* buffer, int bufSize, char *format, ...)
+/* format string to buffer, sprintf style, but detect buffer overflow
+ * and abort */
+#ifdef __GNUC__
+__attribute__((format(printf, 3, 4)))
+#endif
+;
+
 
 #endif /* COMMON_H */
