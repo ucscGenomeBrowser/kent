@@ -10,7 +10,7 @@
 #include "gff.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: gff.c,v 1.12 2003/08/05 18:01:59 genbank Exp $";
+static char const rcsid[] = "$Id: gff.c,v 1.13 2003/09/10 19:41:29 markd Exp $";
 
 void gffGroupFree(struct gffGroup **pGroup)
 /* Free up a gffGroup including lineList. */
@@ -66,9 +66,13 @@ const struct gffLine *a = *((struct gffLine **)va);
 const struct gffLine *b = *((struct gffLine **)vb);
 int diff;
 
+/* for overlaping starts, sort by end, genePredFromGroupedGtf() depends on
+ * this */
 diff = strcmp(a->seq, b->seq);
 if (diff == 0)
     diff = a->start - b->start;
+if (diff == 0)
+    diff = a->end - b->end;
 return diff;
 }
 
