@@ -2169,6 +2169,13 @@ cat > split.csh << 'EOF'
 
 
 # STS MARKERS (DONE 2004-07-21 kate)
+# MANUAL UPDATE OF D21S168 and D21S167 (DONE, 2005-02-11, hartera)
+# FILTERED OUT noOoc ALIGNMENTS WITH tBaseInsert >=1000 
+# (DONE, 2005-02-17, hartera) AND RELOADED stsMap, stsInfo2 and all_sts_seq
+# DATABASE TABLES AFTER ADDING FILTERED ALIGNMENTS TO all_sts_seq AND 
+# REMOVING DATA FROM stsMap and stsInfo2 FOR THE MARKERS REMOVED FROM THE FILTERED SET
+# (DONE, 2005-02-18, hartera)
+
     # Terry's sts.9 dir is in /cluster/store5/sts.2004-07.old
     # remove this after verifying the newer version
 
@@ -2393,6 +2400,127 @@ cat > template << 'EOF'
         # out of 92674 total sequences
     cp stsMarkers.final stsMarkers.lifted.psl stsMarkers.*lifted.psl.initial* stsMarkers.found \
                 /cluster/data/hg17/bed/sts
+    # Alignments from noOoc set were not added to all_sts_seq but info for the markers
+    # is in stsMap and stsInfo2. Some of the alignments are bad so filter by removing
+    # all alignments from noOoc psl file where tBaseInsert >=1000. Add the remaining 
+    # alignments to the set of final alignments for stsMarkers. The information for the  
+    # removed markers from the filtered set was also removed from stsMap and stsInfo2.
+    # (DONE, 2005-02-17, hartera)
+    ssh eieio
+    cd /cluster/data/hg17/bed/sts/fix
+    cp /cluster/bluearc/hg17/sts/sts/stsMarkers.noOoc.lifted.psl .
+    awk '{if ($8 < 1000) print;}' stsMarkers.noOoc.lifted.psl > stsMarkers.noOoc.lifted.filt1000.psl
+    wc -l *.filt*.psl
+    # 254    5334   26384 stsMarkers.noOoc.lifted.filt1000.psl
+    sort -k 4n /cluster/bluearc/hg17/sts/sts/stsMarkers.noOoc.lifted.psl.initial.acc > stsMarkers.extra
+    awk '{print $4;}' stsMarkers.extra | sort -n | uniq >  extra.ids
+    # in psl file, the ids are the 10th field
+    awk '{print $10;}' stsMarkers.noOoc.lifted.psl | sort -n | uniq \
+        > noOoc.ids
+    diff extra.ids noOoc.ids
+    # there is no difference as expected
+    # get list of IDs from filtered file, filter < 1000
+    awk '{print $10;}' stsMarkers.noOoc.lifted.filt1000.psl \
+        | sort -n | uniq > filt1000.ids
+    foreach i (`cat filt1000.ids`)
+     awk 'BEGIN {OFS="\t"} \
+         {if ($4 == "'$i'") print $1, $2, $3, $4, $5, $6, $7}' \
+         stsMarkers.extra >> stsMarkers.extra.filt1000
+    end
+    cp ../stsMarkers.final stsMarkers.final
+  #  cat stsMarkers.extra.filt1000 >> stsMarkers.final2 
+     # need to filter stsMarkers.final not just cat this on the end
+    # get list of alignments with tBaseInsert >= 1000 and remove these
+    cd /cluster/data/hg17/bed/sts/fix
+    awk '{if ($8 >= 1000) print;}' stsMarkers.noOoc.lifted.psl > stsMarkers.noOoc.lifted.filtToRemove.psl
+    wc -l *.filt*.psl
+    # 254 stsMarkers.noOoc.lifted.filt1000.psl
+    # 249 stsMarkers.noOoc.lifted.filt500.psl
+    # 448 stsMarkers.noOoc.lifted.filtToRemove.psl
+    # get list of IDs that need to be removed
+    awk '{print $10;}' stsMarkers.noOoc.lifted.filtToRemove.psl | sort -n \
+        | uniq  > noOoc.IdsToRemove.txt
+    # get chrom and co-ordinates for IDs to be removed 
+    awk 'BEGIN {OFS = "\t"} {print $14,$16,$17,$10}' \
+        stsMarkers.noOoc.lifted.filtToRemove.psl | sort | uniq \
+        > sts.noOoc.filtToRemove.coords
+    # checked that the stsMarkers.final contain the noOoc alignments
+    # wrote perl script to remove lines with these IDs from stsMarkers.final
+cat << '_EOF_' > removeIds.pl
+#!/usr/bin/perl -w
+use strict;
+
+my $ids = $ARGV[0];
+my $file = $ARGV[1];
+# list of IDs with chrom and coords to remove
+open(IDS, $ids) || die "Can not open $ids: $!\n";
+# file for removal of IDs
+open(FILE, $file) || die "Can not open $file: $!\n";
+open(OUT, ">removed.txt") || die "Can not create removed.txt: $!\n";
+
+my %idsHash;
+
+while (<IDS>) {
+   chomp;
+   my @a = split(/\t/);
+
+   my $chr = $a[0];
+   my $st = $a[1];
+   my $end = $a[2];
+   my $id = $a[3];
+   my $key = $id."_".$chr . "_" . $st . "_" . $end;
+   $idsHash{$key}->{chrom} = $chr;
+   $idsHash{$key}->{start} = $st;
+   $idsHash{$key}->{end} = $end;
+}
+close IDS;
+
+while (<FILE>) {
+   chomp;
+   my $l = $_;
+   my $found = "FALSE";
+   my @f = split(/\t/, $l);
+   foreach my $k (keys(%idsHash)) {
+      # if the id is contained in the key
+      if ($k =~ /^$f[3]/) {
+         my $c = $idsHash{$k}->{chrom};
+         my $s = $idsHash{$k}->{start};
+         my $e = $idsHash{$k}->{end};
+         if ($f[0] eq $c && $f[1] == $s && $f[2] == $e) {
+             print OUT "$c\t$s\t$e\t$f[3]\n";
+             $found = "TRUE";
+         }
+      }
+   }
+   if ($found eq "FALSE") {
+      print "$l\n";
+   }
+}
+'_EOF_'
+    chmod +x removeIds.pl
+    perl removeIds.pl sts.noOoc.filtToRemove.coords stsMarkers.final \
+         > stsMarkers.final.new
+    wc -l stsMarkers.final*
+    # 92338 stsMarkers.final
+    # 91890 stsMarkers.final.new
+    # There are 448 ids and sets of co-ordinates in list of Ids to remove
+    # check that stsMarkers.final.new contains all the alignments that
+    # are in filtered set: stsMarkers.noOoc.lifted.filt1000.psl
+    awk 'BEGIN {OFS = "\t"} {print $14,$16,$17,$10}' \
+        stsMarkers.noOoc.lifted.filt1000.psl | sort | uniq \
+        > sts.noOoc.filt1000.coords
+    awk 'BEGIN {OFS = "\t"} {print $1,$2,$3,$4}' \
+        stsMarkers.final.new | sort | uniq \
+        > sts.finalnew.coords
+    diff sts.finalnew.coords sts.noOoc.filt1000.coords > finalnewvsfilt1000
+    grep '>' finalnewvsfilt1000
+    # there is nothing in sts.noOoc.filt1000.coords not found in the 
+    # sts.finalnew.coords file therefore this contains all the alignments
+    # from the filtered noOoc file.
+    cp ../primers/primers.final .
+    awk '{print $4}' primers.final | sort | uniq > primers.ids
+    awk '{print $4}' stsMarkers.final.new | sort | uniq > stsfinal.new.ids
+
 
     # primers
     ssh eieio
@@ -2554,11 +2682,11 @@ cat > template << 'EOF'
     wc -l primers.final
     # 314713 primers.final
 
-
     # Merge primer and sequence files to create final bed file
     # Merge (combineSeqPrimerPos) takes about an hour to run
     ssh kolossus
     cd /cluster/data/hg17/bed/sts
+    
     /cluster/bin/scripts/combineSeqPrimerPos stsMarkers.final primers/primers.final
         # creates *_pos.rdb
     /cluster/bin/scripts/createSTSbed /cluster/data/ncbi/sts.9/stsInfo2.bed \
@@ -2584,6 +2712,144 @@ cat > template << 'EOF'
     hgLoadPsl -nobin -table=all_sts_primer hg17 primers/primers.psl
     hgLoadPsl -nobin -table=all_sts_seq hg17 stsMarkers.lifted.psl
 
+    # update of information for D21S167 and D21S168 (2005-02-11, hartera)
+    # currently X52289 associated with D21S168 
+    # and X53367 associated with D21S167 - these need to be switched as they
+    # are causing incorrect positioning
+    # On Terry's advice, first update stsInfo2.bed so that the corrected
+    # version is carried through to the next version
+    cd /cluster/data/hg17/bed/sts
+    # manually change accessions in this file so now X52289 is associated
+    # with D21S167 and X53367 is now associated with D21S168 
+    # manually update the chromStart and chromEnd fields for these
+    # records in stsMap.bed
+    chr21   39867340        39867513        D21S167 1000    7888    AF064860
+    # becomes
+    chr21   37117635        37117858        D21S167 1000    7888    AF064860
+
+    chr21   37117635        37117858        D21S168 1000    103256  AP000699
+    # becomes
+    chr21   39867340        39867513        D21S168 1000    103256  AP000699
+    
+    # then reload the stsMap.bed and stsInfo2.bed files
+    # copy this updated bed file back to ncbi directory
+    cp stsInfo2.bed /cluster/data/ncbi/sts.9/
+    # delete previous data before reloading tables
+    hgsql hg17 -e 'delete from stsInfo2'
+    hgsql hg17 -e 'drop table stsMap'
+    hgsql hg17 -e 'load data local infile "stsInfo2.bed" into table stsInfo2'
+    hgLoadBed -noBin -tab -sqlTable=/cluster/home/kent/src/hg/lib/stsMap.sql \
+	hg17 stsMap stsMap.bed
+    
+    # Add new information after filtering the noOoc files 
+    # (DONE, 2005-02-17, hartera)
+    # latest psl file: stsMarker.lifted.new.psl is in fix dir    
+    # Merge primer and sequence files to create final bed file
+    ssh kolossus
+    cd /cluster/data/hg17/bed/sts/fix
+    nice /cluster/bin/scripts/combineSeqPrimerPos stsMarkers.final.new \
+                                             ../primers/primers.final
+    # creates *_pos.rdb
+    /cluster/bin/scripts/createSTSbed /cluster/data/ncbi/sts.9/stsInfo2.bed \
+                stsMarkers_pos.rdb > stsMap.bed
+    awk '{print $6;}' stsMap.bed | sort -n | uniq > stsMap.ids
+    diff stsMap.ids filt1000.ids 
+    # There is only 1 id that does not make it into this set (109375)
+    # There are 38 of the IDs to remove that do not appear in stsMap.ids
+    # there are 65 therefore that appear in stsMap.bed: noOoctoremoveinStsMap
+    foreach i (`cat noOoctoremoveinStsMap`) 
+       awk 'BEGIN {OFS = "\t"} {if ($10 == "'$i'" && $8 >= 1000) \
+        print $14, $16, $17, $10;}' stsMarkers.noOoc.lifted.filtToRemove.psl \
+        >> stsMap.noOoc.toRemove.coords
+    end 
+    sort stsMap.noOoc.toRemove.coords > stsMap.noOoc.toRemove.coords.sort
+    wc -l stsMap.noOoc.toRemove.coords.sort
+    # 122
+    # get the equivalent co-ordinates from stsMap.bed
+    foreach i (`cat noOoctoremoveinStsMap`)
+       awk 'BEGIN {OFS = "\t"} {if ($6 == "'$i'") print $1,$2,$3,$6;}' \
+           stsMap.bed >> stsMap.toRemove.coords
+    end
+    sort stsMap.toRemove.coords > stsMap.toRemove.coords.sort
+    wc -l stsMap.toRemove.coords.sort
+    # 68
+    diff stsMap.noOoc.toRemove.coords stsMap.toRemove.coords.sort
+    # They are different co-ordinates in each set although the same ID
+    # is represented.
+    # none of the noOoc alignments are in stsMarkers.lifted.psl so add
+    cp ../stsMarkers.lifted.psl stsMarkers.lifted.psl
+    awk '{print $10}' stsMarkers.lifted.psl | sort -n | uniq > sts.liftedpsl.ids
+    # none of the noOoc alignments are in stsMarkers.lifted.psl so add
+    # the filtered version
+    cp stsMarkers.lifted.psl stsMarkers.lifted.new.psl
+    cat stsMarkers.noOoc.lifted.filt1000.psl >> stsMarkers.lifted.new.psl
+    wc -l stsMarkers.lifted.new.psl
+    # 91890 
+    awk '{print $1;}' ../stsInfo2.bed | sort -n | uniq > stsInfo2.ids
+    # diff with filt1000.ids and noOoc.IdsToRemove.txt
+    # all of these are in stsInfo2.bed
+    # need to remove info for the filtered out set but only for the 38 that
+    # were removed from stsMap.bed - noOocnotinstsMap 
+    perl removeById.pl noOocnotinstsMap stsInfo2.bed > stsInfo2.new.bed
+cat << '_EOF_' > removeById.pl
+#!/usr/bin/perl -w
+use strict;
+
+my $ids = $ARGV[0];
+my $file = $ARGV[1];
+# list of to remove
+open(IDS, $ids) || die "Can not open $ids: $!\n";
+# file of stsMarkers.final
+open(FILE, $file) || die "Can not open $file: $!\n";
+open(OUT, ">removedIds.txt") || die "Can not create removedIds.txt: $!\n";
+
+my %idsHash;
+while (<IDS>) {
+   chomp;
+   my @a = split(/\t/);
+   my $id = $a[0];
+   $idsHash{$id} = 1;
+}
+close IDS;
+
+while (<FILE>) {
+   my $l = $_;
+   my $found = "FALSE";
+   my @f = split(/\t/, $l);
+   foreach my $k (keys(%idsHash)) {
+      # if the id is contained in the key
+      if ($k eq $f[0]) {
+         $found = "TRUE";
+         print OUT "$f[0]\n";
+      }
+   }
+   if ($found eq "FALSE") {
+      print $l;
+   }
+}
+'_EOF_'
+    chmod +x removeById.pl
+    # this removed data for all 38 of these Ids from stsInfo2.bed
+    
+    # need to reload database tables (2005-02-18, hartera)
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/sts/fix
+    hgsql hg17 -e 'drop table stsMap'
+    hgsql hg17 -e 'drop table all_sts_seq'
+    hgsql hg17 -e 'drop table stsInfo2'
+    mv stsInfo2.new.bed stsInfo2.bed
+    cp stsInfo2.bed /cluster/data/ncbi/sts.9/stsInfo2.bed
+    mv stsMap.new.bed stsMap.bed
+    mv stsMarkers.lifted.new.psl stsMarkers.lifted.psl
+    hgLoadBed -noBin -tab -sqlTable=/cluster/home/kent/src/hg/lib/stsMap.sql \
+	hg17 stsMap stsMap.bed
+    hgLoadPsl -nobin -table=all_sts_seq hg17 stsMarkers.lifted.psl
+    hgsql hg17 < ~kent/src/hg/lib/stsInfo2.sql
+    hgsql hg17 -e 'load data local infile "stsInfo2.bed" into table stsInfo2'
+    cd ..
+    mkdir old
+    mv stsMap.bed stsInfo2.bed stsMarkers.lifted.psl ./old
+    mv ./fix/stsMap.bed ./fix/stsInfo2.bed ./fix/stsMarkers.lifted.psl .
     
 # RECOMBINATION RATES (2004-07-13 Terry)
 #                       (2004-07-21 kate)
@@ -11884,6 +12150,7 @@ while (<GFF>) {
 # geneClasses main putative
 # gClass_main 128,0,125
 # gClass_putative 200,0,125
+# urlLabel Transcript ID:
 
 # search added:
 # searchTable acembly
@@ -11892,6 +12159,15 @@ while (<GFF>) {
 # termRegex [^[:space:]]+
 # searchPriority 50
 
+    # Received data with gene product relationship from Jean Thierry-Mieg
+    # (2005-02-17)
+    ssh eieio
+    cd /cluster/data/hg17/bed/acembly/acembly.ncbi_35.genes.proteins.fasta
+    wget --timestamp ftp://ftp.ncbi.nlm.nih.gov/repository/acedb/human/acembly.ncbi_35.gene2product.txt.gz
+    gunzip acembly.ncbi_35.gene2product.txt.gz
+    # these are gene ID and product mappings, need transcript ID to product
+    # mappings. E-mailed Jean Thierry-Mieg to ask for this information
+    
 # BUILD WGRNA TRACK (DONE, 2004-12-13, Fan)
 
 # Grab data from original miRNA track and convert them into wgRna .tab format.
