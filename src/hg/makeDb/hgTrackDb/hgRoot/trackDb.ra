@@ -556,7 +556,6 @@ longLabel Comparative Genomic Hybridization Experiments for NCI 60 Cell Lines
 priority 39
 visibility hide
 type bed 15 +
-private on
 
 track rosetta
 shortLabel Rosetta
