@@ -106,7 +106,7 @@
 #include "maf.h"
 #include "hgc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.408 2003/05/08 16:39:45 booch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.409 2003/05/09 00:23:52 daryl Exp $";
 
 
 struct cart *cart;	/* User's settings. */
@@ -8273,7 +8273,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 doDbSnpRS(ncbiName);
 printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
 printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link</A></P>\n", snp.name);
-doSnpLocusLink(tdb, itemName);
+if (hTableExists("knownGene"))
+    doSnpLocusLink(tdb, itemName);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
