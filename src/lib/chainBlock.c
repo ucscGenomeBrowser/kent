@@ -1,5 +1,6 @@
 #include "common.h"
 #include "localmem.h"
+#include "linefile.h"
 #include "dlist.h"
 #include "chainBlock.h"
 
@@ -429,5 +430,91 @@ slSort(&chainList,  chainCmpScore);
 lmCleanup(&lm);
 *pBlockList = NULL;
 return chainList;
+}
+
+void chainWrite(struct chain *chain, FILE *f)
+/* Write out chain to file. */
+{
+struct boxIn *b, *nextB;
+fprintf(f, "chain %d %s %d + %d %d %s %d %c %d %d\n", chain->score,
+    chain->tName, chain->tSize, chain->tStart, chain->tEnd,
+    chain->qName, chain->qSize, chain->qStrand, chain->qStart, chain->qEnd);
+for (b = chain->blockList; b != NULL; b = nextB)
+    {
+    nextB = b->next;
+    fprintf(f, "%d", b->qEnd - b->qStart);
+    if (nextB != NULL)
+	fprintf(f, "\t%d\t%d", 
+		nextB->tStart - b->tEnd, nextB->qStart - b->qEnd);
+    fputc('\n', f);
+    }
+fputc('\n', f);
+}
+
+struct chain *chainRead(struct lineFile *lf)
+/* Read next chain from file.  Return NULL at EOF. 
+ * Note that chain block scores are not filled in by
+ * this. */
+{
+char *row[12];
+struct chain *chain;
+int q,t;
+
+if (!lineFileRow(lf, row))
+    return NULL;
+if (!sameString(row[0], "chain"))
+    errAbort("Expecting 'chain' line %d of %s", lf->lineIx, lf->fileName);
+AllocVar(chain);
+chain->score = lineFileNeedNum(lf, row, 1);
+chain->tName = cloneString(row[2]);
+chain->tSize = lineFileNeedNum(lf, row, 3);
+
+/* skip tStrand for now, always implicitly + */
+chain->tStart = lineFileNeedNum(lf, row, 5);
+chain->tEnd = lineFileNeedNum(lf, row, 6);
+chain->qName = cloneString(row[7]);
+chain->qSize = lineFileNeedNum(lf, row, 8);
+chain->qStrand = row[9][0];
+chain->qStart = lineFileNeedNum(lf, row, 10);
+chain->qEnd = lineFileNeedNum(lf, row, 11);
+if (chain->qStart >= chain->qEnd || chain->tStart >= chain->tEnd)
+    errAbort("End before start line %d of %s", lf->lineIx, lf->fileName);
+if (chain->qStart < 0 || chain->tStart < 0)
+    errAbort("Start before zero line %d of %s", lf->lineIx, lf->fileName);
+if (chain->qEnd > chain->qSize || chain->tEnd > chain->tSize)
+    errAbort("Past end of sequence line %d of %s", lf->lineIx, lf->fileName);
+
+/* Now read in block list. */
+q = chain->qStart;
+t = chain->tStart;
+for (;;)
+    {
+    int wordCount = lineFileChop(lf, row);
+    int size = lineFileNeedNum(lf, row, 0);
+    struct boxIn *b;
+    AllocVar(b);
+    slAddHead(&chain->blockList, b);
+    b->qStart = q;
+    b->tStart = t;
+    q += size;
+    t += size;
+    b->qEnd = q;
+    b->tEnd = t;
+    if (wordCount == 1)
+        break;
+    else if (wordCount < 3)
+        errAbort("Expecting 1 or 3 words line %d of %s\n", 
+		lf->lineIx, lf->fileName);
+    t += lineFileNeedNum(lf, row, 1);
+    q += lineFileNeedNum(lf, row, 2);
+    }
+if (q != chain->qEnd)
+    errAbort("q end mismatch %d vs %d line %d of %s\n", 
+    	q, chain->qEnd, lf->lineIx, lf->fileName);
+if (t != chain->tEnd)
+    errAbort("t end mismatch %d vs %d line %d of %s\n", 
+    	t, chain->tEnd, lf->lineIx, lf->fileName);
+slReverse(&chain->blockList);
+return chain;
 }
 

@@ -1,6 +1,7 @@
 /* chainBlock - Chain together scored blocks from an alignment
  * into scored chains.  Internally this uses a kd-tree and a
- * varient of an algorithm suggested by Webb Miller. */
+ * varient of an algorithm suggested by Webb Miller and further
+ * developed by Jim Kent. */
 
 #ifndef CHAINBLOCK_H
 #define CHAINBLOCK_H
@@ -52,5 +53,13 @@ void chainFreeList(struct chain **pList);
 
 int chainCmpScore(const void *va, const void *vb);
 /* Compare to sort based on score. */
+
+void chainWrite(struct chain *chain, FILE *F);
+/* Write out chain to file. */
+
+struct chain *chainRead(struct lineFile *lf);
+/* Read next chain from file.  Return NULL at EOF. 
+ * Note that chain block scores are not filled in by
+ * this. */
 
 #endif /* CHAINBLOCK_H */
