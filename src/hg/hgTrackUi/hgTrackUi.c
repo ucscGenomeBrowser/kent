@@ -22,7 +22,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.129 2004/08/05 18:08:44 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.130 2004/08/05 22:17:14 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -873,9 +873,6 @@ void specificUi(struct trackDb *tdb)
 	/* Draw track specific parts of UI. */
 {
 char *track = tdb->tableName;
-char *typeLine = NULL;
-char *words[8];
-int wordCount = 0;
 
 if (sameString(track, "stsMap"))
         stsMapUi(tdb);
@@ -971,28 +968,31 @@ else if (sameString(track, RULER_TRACK_NAME))
     rulerUi(tdb);
 else if(sameString(track, "affyTransfrags"))
     affyTransfragUi(tdb);
-else 
+else if (tdb->type != NULL)
     {
     /* handle all tracks with type genePred or bed or "psl xeno <otherDb>" */
-    if (tdb->type != NULL)
-        typeLine = cloneString(tdb->type);
+    char *typeLine = cloneString(tdb->type);
+    char *words[8];
+    int wordCount = 0;
     wordCount = chopLine(typeLine, words);
-    
-    if (sameWord(words[0], "genePred"))
-	        cdsColorOptions(tdb, 2);
-    /* if bed has score then show optional filter based on score */
-    if (sameWord(words[0], "bed") && wordCount == 3)
-                {
-                if (atoi(words[1]) > 4)
-                    scoreUi(tdb);
-                }
-    else if (sameWord(words[0], "psl"))
-                {
-                if (wordCount == 3)
-                        if(sameWord(words[1], "xeno"))
-	                        crossSpeciesUi(tdb);
-                cdsColorOptions(tdb,-1);
-                }
+    if (wordCount > 0)
+	{
+	if (sameWord(words[0], "genePred"))
+	    cdsColorOptions(tdb, 2);
+	/* if bed has score then show optional filter based on score */
+	if (sameWord(words[0], "bed") && wordCount == 3)
+	    {
+	    if (atoi(words[1]) > 4)
+		scoreUi(tdb);
+	    }
+	else if (sameWord(words[0], "psl"))
+	    {
+	    if (wordCount == 3)
+		if (sameWord(words[1], "xeno"))
+		    crossSpeciesUi(tdb);
+	    cdsColorOptions(tdb, -1);
+	    }
+	}
     freeMem(typeLine);
     }
 }
