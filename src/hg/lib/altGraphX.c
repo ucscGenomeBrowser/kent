@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.10 2003/06/18 17:04:45 sugnet Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.11 2003/06/18 19:46:17 sugnet Exp $";
 
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
@@ -1474,17 +1474,16 @@ for(ss = ssList, ag=agList; ss != NULL && ag != NULL; ss=ss->next, ag=ag->next)
     {
     struct spaceNode *sn = NULL;
     int *sjStarts = NULL, *sjEnds = NULL;
-    int mapStart = round((ag->tStart - regionStart)*scale) + xOff;
-    int mapEnd = round((ag->tEnd - regionStart)*scale) + xOff;	
-    int mapHeight = 0;
 
     /* Draw a clickable thing if we can. */
     if(mapItem != NULL)
 	{
+	int mapStart = round((ag->tStart - regionStart)*scale) + xOff;
+	int mapEnd = round((ag->tEnd - regionStart)*scale) + xOff;	
+	int mapHeight = ss->rowCount * lineHeight;
 	int mapWidth = mapEnd - mapStart;
 	if(mapWidth < 1) 
 	    mapStart = 1;
-	mapHeight = ((ss->rowCount+1) * lineHeight);
 	mapItem(drawName, ag, ag->tStart, ag->tEnd, mapStart, yOff, mapWidth, mapHeight);
 	}
     /* Draw all of the exons that have been stored in the spacesaver. */
