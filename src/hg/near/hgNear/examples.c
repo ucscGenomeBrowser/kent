@@ -18,7 +18,7 @@ hPrintf("%s",
  "one another.  The relationship can be one of several types, including "
  "protein-level homology, similarity of gene expression profiles, or "
  "genomic proximity. </P>"
- "<P>To display a gene and it's relatives:"
+ "<P>To display a gene and its relatives:"
  "<OL>"
  "<LI>Select a genome and assembly from the corresponding pull-down menus. " 
  "<LI>Type a word or phrase into the <em>search</em> text box to specify "
