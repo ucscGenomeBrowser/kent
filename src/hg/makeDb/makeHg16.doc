@@ -3854,7 +3854,7 @@ end
 	set root=$file:t:r
 	echo "/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $file /dev/null -bedAt=/cluster/data/hg16/bed/blastz.gg0/trf/${root}.bed -tempDir=/tmp" >> jobList
     end
-    (run jobList on cluster)  # took 2.5 min.
+    #(run jobList on cluster)  -- took 2.5 min.
 
     # add new softmasking to reflect TRF output
     mkdir /cluster/bluearc/gg0/split100_with_trf
@@ -4071,7 +4071,7 @@ SEQ2_LEN=$BASE/S2.len
 #	color 100,50,0
 #	altColor 255,240,200
 #	spectrum on
-#	type psl xeno gg0
+#	type psl xeno 
 
 
 # MAKE BLASTZ BEST CHICKEN (finished, Adam, 11/3/03)
@@ -4913,7 +4913,209 @@ o - Load genomic dupes
     rm cftr9.ss cftr9_humanref.maf   # easy to regenerate
     gzip cftr9.postprob
 
+# CFTR PHYLOHMM CONSERVATION, 25-way alignment
+# done, acs, 2003-11-21
+
+# This can be done exactly as above for the 9-way alignment, except
+# that the tree estimation procedure has to be adjusted to circumvent
+# the problem that the distant species align only in conserved regions
+# (so that a tree estimated from the whole data set will have
+# disproportionally short branches to and among these species).  The
+# procedure I've used is semi-manual and somewhat ad hoc, but I'll
+# record the main steps here for completeness.  I'll only cover the
+# tree estimation procedure (running 'label' and loading the track is
+# the same as before) .
+
+    ssh hgwdev
+    mkdir /cluster/data/nisc/targets/cftr/phyloHMMcons25
+    cd /cluster/data/nisc/targets/cftr/phyloHMMcons25
+
+    # extract sufficient statistics for two data sets: all sites for
+    # mammals and sites in 3rd codon positions for all species.  I'm
+    # not including platyplus with the mammals (it's technically a
+    # mammal, but a monotreme, and quite distant) because it seems to
+    # align mostly in conserved regions
+    maf_project /cluster/data/nisc/targets/cftr/25way/tba.maf /cluster/data/nisc/targets/cftr/25way/human > cftr25_humanref.maf
+    setenv CFTR_START 115365025 
+    setenv CFTR_END 117242450	
+    setenv SPEC_ORDER  hg16,chimp,orangutan,baboon,macaque,vervet,lemur,rabbit,rn3,mm3,cow,pig,horse,cat,dog,ajbat,cpbat,hedgehog,opossum,dunnart,platypus,chicken,zfish,tetra,fr1
+    msa_view cftr25_humanref.maf -i MAF -o SS -s $CFTR_START -e $CFTR_END -r 1 -O $SPEC_ORDER > cftr25.ss 
+	# whole data set, ordered suff stats -- use this for 'label'
+    msa_view cftr25.ss -i SS -o SS -z -l 21,22,23,24,25 -x > cftr20.ss
+				# exclude non-mammals (plus platypus)
+    /bin/echo -e 'NCATS = 3\ncds 1-3' > cats.cm   # category map for cds sites
+    /cluster/home/acs/woody/scripts/refFlat2gff.pl -S -P -A hg16 -w 'chrom="chr7" and cdsStart > 115365025 and cdsEnd < 117242450' | sed 's/chr7/hg16/' | egrep -v 'NM_152829|NM_001233|NM_018412' > cftr.gff
+	# gets refseq annotations for this region as a gff; the egrep
+	# explicitly removes some duplicate entries (should have a
+	# better way of doing this); the sed changes the seq name so
+	# that msa_view recognizes it's the same as the name in the
+	# alignment
+    msa_view cftr25_humanref.maf -i MAF -o SS -z -c cats.cm -g cftr.gff -O $SPEC_ORDER > cftr25.3.ss
+
+    # now fit a tree model to each data set
+    echo "((((((((((1,2),3),((4,5),6)),7),(8,(9,10))),((((11,12),(13,(14,15))),(16,17)),18)),(19,20)),21),22),(23,(24,25)))" > cftr25.nh
+    fit_tree_model -m cftr25.3.ss -C 3 -i SS -t cftr25.nh -s REV -o cftr25 -E -l cftr25.3.log -T -p MED -k 5 -a 1.8
+
+    # (this next one may take an hour or two -- run it on a fast
+    # workstation or be sure to nice if on hgwdev; you can speed it up
+    # by giving it a good starting *.mod file based on the above [-M option])
+    echo "(((((((1,2),3),((4,5),6)),7),(8,(9,10))),((((11,12),(13,(14,15))),(16,17)),18)),(19,20))" > cftr20.nh
+    fit_tree_model -m cftr20.ss -i SS -t cftr20.nh -s REV -o cftr20 -E -l cftr20.log -T -p MED -k 5 -a 4
+
+    cp cftr20.mod cftr25_hybrid.mod
+    # Now edit cftr25_hybrid.mod by hand.  Copy the tail end of the
+    # TREE line from cftr25.3.mod, corresponding to all nodes and
+    # branches outside of the clade for the non-monotreme mammals, and
+    # append it to the TREE line in cftr25_hybrid.mod (adjusting
+    # parens as necessary).  Then multiply each one of these new
+    # branch lengths by a factor of 1.2 (computed as the sum of all
+    # branch lengths in cftr25.mod divided by the sum of the
+    # corresponding branch lengths in cftr25.3.mod).  The resulting
+    # tree is well supported within the (non-monotreme mammals) and
+    # includes a reasonable approximation of the non-mammal branch
+    # lengths.  Proceed with 'label' using cftr25_hybrid.mod.
+
+    # cleanup
+    rm cftr25_humanref.maf cftr*.ss         # easy to regenerate
+
 # HMR PHYLOHMM CONSERVATION
 # (in progress, acs, 2003-11-19)
 
+# CHICKEN BLAT (translated)
+# (done, acs, 2003-11-19)
+
+    # (using repeat- and TRF-masked files already created -- see
+    # CHICKEN BLASTZ, above)
+    ssh kk
+
+    # set up main dir
+    cd /cluster/data/hg16/bed
+    mkdir blat.gg0.2003-11-19
+    ln -s blat.gg0.2003-11-19 blat.gg0
+    cd blat.gg0
+
+    # warning: I'm writing this up in a rush -- watch for errors!
+
+    # set up cluster job
+    cat << EOF > make-joblist.pl
+#!/usr/bin/perl
+
+# script to create a job list for translated blat of human
+# vs. another species; assumes directory of fa files for the xeno
+# species.  Output directories are set up as a side effect.
+
+# USAGE: make-joblist.pl <hg-nibs-dir> <xeno-fa-dir> <hg-chr-lengths-file> <output_root_dir>
+
+$SIZE=10000000;			# partitioning params for human
+$OVERLAP=10000;
+
+# read lengths of chromosomes
+open(LENF, $ARGV[2]);
+while (<LENF>) { ($chr, $l) = split(/\s+/); $length{$chr} = $l;}
+close(LENF);
+
+@falist = <$ARGV[1]/*.fa>;
+foreach $nib (<$ARGV[0]/*.nib>) {
+  $nib =~ /.*(chr.*)\.nib/ || die();
+  $chr = $1;
+  $l = $length{$chr};
+
+  for ($start = 1; $start <= $l; $start += $SIZE) {
+    $end = $start + $SIZE + $OVERLAP - 1;
+    if ($end > $l) { $end = $l; }
+    $dir = sprintf("%s/%s/%d_%d", $ARGV[3], $chr, $start, $end);
+    foreach $fa (@falist) {    
+      $fa =~ /.*\/([^\/]+)\.fa/ || die();
+      $name = $1;
+      printf "/cluster/bin/i386/blat -mask=lower -qMask=lower -q=dnax -t=dnax %s:%d-%d %s {check out line+ %s/%s_%d_%d_%s.psl}\\n", $nib, $start, $end, $fa, $dir, $chr, $start, $end, $name;
+    }
+    `mkdir -p $dir`;		# set up output directories
+  }
+}
+EOF
+
+    # NOTE: there's a slight error above with indexing.  Next time use
+    # something like:
+
+#  for ($start = 0; $start < $l; $start += $SIZE) {
+#    $end = $start + $SIZE + $OVERLAP;
+#    if ($end >= $l) { $end = $l; }
+
+    # The "make-lift.pl" script below should be changed also to be
+    # consistent (should be enough to change exactly the same lines)
+
+    chmod +x make-joblist.pl
+    cp /cluster/data/hg16/bed/blastz.gg0/S1.len . # just borrow existing lens
+    mkdir -p run
+    ./make-joblist.pl /iscratch/i/gs.17/build34/bothMaskedNibs /cluster/bluearc/gg0/split100_with_trf S1.len /cluster/data/hg16/bed/blat.gg0/psl > run/jobs.lst
+    # make sure directory structure is created under psl
+    cd run
+    para create jobs.lst ; para try ; para check ; para push ; # etc...
+
+#33561 jobs in batch
+#0 jobs (including everybody's) in Parasol queue.
+#Checking finished jobs
+#Completed: 33561 of 33561 jobs
+#CPU time in finished jobs:   14432527s  240542.12m  4009.04h  167.04d  0.458 y
+#IO & Wait Time:                147210s    2453.50m    40.89h    1.70d  0.005 y
+#Average job time:                 434s       7.24m     0.12h    0.01d
+#Longest job:                    14117s     235.28m     3.92h    0.16d
+#Submission to last job:         31483s     524.72m     8.75h    0.36d
+
+    # post process psl files
+    cd ..			# back to main blat.gg0 dir
+cat << EOF > make-lift.pl
+#!/usr/bin/perl
+
+# create a lift spec to map psl files for windows to chromosome coords
+# USAGE: make-lift.pl <hg-nibs-dir> <hg-chr-lengths-file>
+
+$SIZE=10000000;
+$OVERLAP=10000;
+
+open(LENF, $ARGV[1]);
+while (<LENF>) { ($chr, $l) = split(/\s+/); $length{$chr} = $l;}
+close(LENF);
+
+foreach $nib (<$ARGV[0]/*.nib>) {
+  $nib =~ /.*(chr.*)\.nib/ || die();
+  $chr = $1;
+  $l = $length{$chr};
+  for ($start = 1; $start <= $l; $start += $SIZE) {
+    $end = $start + $SIZE + $OVERLAP - 1;
+    if ($end > $l) { $end = $l; }
+    printf "%d\t%s:%d-%d\t%d\t%s\t%d\n", $start, $chr, $start, $end, $end-$start, $chr, $l;
+  }
+}
+EOF
+
+    chmod +x make-lift.pl
+    ./make-lift.pl /iscratch/i/gs.17/build34/bothMaskedNibs S1.len > psl.lft
+    mkdir -p pslChrom
+    foreach dir ( psl/* )
+	set chrom = $dir:t 
+	echo $chrom 
+	/cluster/bin/i386/pslCat -dir $dir/* | /cluster/bin/i386/liftUp pslChrom/${chrom}_blatGg0.psl psl.lft warn stdin
+    end
+
+    # Load database tables
     ssh hgwdev
+    cd /cluster/data/hg16/bed/blat.gg0/pslChrom
+    /cluster/bin/i386/hgLoadPsl hg16 chr*.psl
+    #	New entry in human/hg16/trackDb.ra
+#	track blatGg0
+#	shortLabel Chicken Blat
+#	longLabel Chicken Translated Blat (Gg0-contigs, 5.2x coverage)
+#	group compGeno
+#	priority 145.95
+#	visibility hide
+#	color 100,50,0
+#	altColor 255,240,200
+#	spectrum on
+#	type psl xeno 
+
+    # look at coverage
+    featureBits hg16 blatGg0 knownGene:CDS
+#18205137 bases of 2865248791 (0.635%) in intersection
+    featureBits hg16 knownGene:CDS
+#31268809 bases of 2865248791 (1.091%) in intersection
