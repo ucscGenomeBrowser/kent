@@ -386,8 +386,13 @@ if(!allLetters(table))
 /* get the name of the start and end fields */
 if(hFindChromStartEndFields(table, chromFieldName, startName, endName))
 	{
-	snprintf(query, 256, "SELECT * FROM %s WHERE %s = \"%s\" AND %s >= %d AND %s <= %d",
-		table, chromFieldName, choosenChromName, startName, winStart, endName, winEnd);
+	/* build the rest of the query */
+        if(sameString(chromFieldName, ""))
+            snprintf(query, 256, "SELECT * FROM %s WHERE %s >= %d AND %s <= %d",
+                    table, startName, winStart, endName, winEnd);
+        else
+            snprintf(query, 256, "SELECT * FROM %s WHERE %s = \"%s\" AND %s >= %d AND %s <= %d",
+                    table, chromFieldName, choosenChromName, startName, winStart, endName, winEnd);
 	}
 else
 	snprintf(query, 256, "SELECT * FROM %s ", table);
@@ -643,7 +648,7 @@ if(hFindChromStartEndFields(table, chromFieldName, startName, endName))
             sprintf(query, "%s WHERE %s = \"%s\" AND %s >= %d AND %s <= %d",
                             query, chromFieldName, choosenChromName, startName, winStart, endName, winEnd);
 	}
-	
+
 conn = hAllocConn();
 sr = sqlGetResult(conn, query);
 numberColumns = sqlCountColumns(sr);
