@@ -113,6 +113,9 @@ struct sqlConnection *hAllocConn();
 struct sqlConnection *hAllocConn2();
 /* Get free connection if possible. If not allocate a new one. */
 
+struct sqlConnection *hAllocConnDb(char *db);
+/* Get free connection for a database if possible. If not allocate a new one. */
+
 void hFreeConn(struct sqlConnection **pConn);
 /* Put back connection for reuse. */
 
@@ -139,6 +142,13 @@ boolean hTableExists2(char *table);
 
 boolean hTableExistsDb(char *db, char *table);
 /* Return TRUE if a table exists in db. */
+
+boolean hColExists(char *table, char *column);
+/* Return TRUE if a column exists in table. */
+
+boolean hColExistsDb(char *db, char *table, char *column);
+/* Return TRUE if a column exists in table in db. */
+
 
 void hParseTableName(char *table, char trackName[128], char chrom[32]);
 /* Parse an actual table name like "chr17_random_blastzWhatever" into 
