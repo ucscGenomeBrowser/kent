@@ -148,7 +148,7 @@ static int findEnd(int *reps, int repCount, int maxCount)
 int i;
 if (repCount <= maxCount)
     return repCount;
-for (i=repCount; i>0; --i)
+for (i=maxCount; i>0; --i)
     {
     if (reps[i] == -1)
         return i;
@@ -167,7 +167,7 @@ char *s = dupe;
 char *repString = cloneString(hashMustFindVal(col->settings, "representatives"));
 char *shortType, *lookupTable, *expTable, *ratioTable;
 int representativeCount, *representatives = NULL;
-int repSize, repStart, maxInRow=30;
+int repSize, repStart, maxInRow=40;
 
 shortType = nextWord(&s);
 lookupTable = nextWord(&s);
