@@ -229,6 +229,20 @@ if (err < 0)
     }
 }
 
+void receiveAndIgnore(int inSd, struct bdMessage *m, int count)
+/* Throw count packets into the bit bucket, stopping as soon as
+ * the socket is empty. */
+{
+int i, err;
+bits32 ip;
+for (i=0; i<count; ++i)
+    {
+    err = bdReceive(inSd, m, &ip);
+    if (err < 0)
+	break;
+    }
+}
+
 void sendFile(struct dlList *machineList, struct dlList *deadList, struct bdMessage *m, 
 	int inSd, int outSd, char *fileName)
 /* Broadcast file. */
@@ -374,12 +388,7 @@ else
 		    }
 		}
 	    blockIx = subStart;
-	    for (subBlockIx = 0; subBlockIx < subBlockCount; ++subBlockIx, ++blockIx)
-		{
-		err = bdReceive(inSd, m, &ip);	/* This recieve is just to control flow. */
-		if (err < 0)
-		    break;
-		}
+	    receiveAndIgnore(inSd, m, subBlockCount);
 	    }
 	primaryTime += microTime() - t2;
 
@@ -424,7 +433,7 @@ else
 			    machine->gotCleanStatus = TRUE;
 			else
 			    {
-			    int i;
+			    int i, ackPending = 0;
 			    struct bdMessage *m2;  /* Need 2nd message cause still using first. */
 			    char *dataArea2;
 			    AllocVar(m2);
@@ -442,10 +451,15 @@ else
 				bdMakeBlockMessage(m2, ip, ++messageIx, fileIx, sectionIx, 
 					blockIx, readSize, dataArea2);
 				broadcast(outSd, m2);
-				err = bdReceive(inSd, m2, &ip);
+				if (++ackPending >= bdSubSectionSize)
+				    {
+				    receiveAndIgnore(inSd, m2, ackPending);
+				    ackPending = 0;
+				    }
 				trackTimeOuts(err, machine, &totalTimeOuts);
 				++statResent;
 				}
+			    receiveAndIgnore(inSd, m2, ackPending);
 			    freez(&m2);
 			    }
 			}
