@@ -21,10 +21,16 @@ memcpy(tok->string, string, stringSize);
 return tok;
 }
 
-struct kxTok *kxTokenize(char *text, boolean wildAst)
+struct kxTok *kxTokenizeFancy(char *text, boolean wildAst,
+			      boolean wildPercent, boolean includeHyphen)
 /* Convert text to stream of tokens. If 'wildAst' is
  * TRUE then '*' character will be treated as wildcard
- * rather than multiplication sign. */
+ * rather than multiplication sign.  
+ * If wildPercent is TRUE then the '%' character will be treated as a 
+ * wildcard (as in SQL) rather than a modulo (kxtMod) or percent sign.
+ * If includeHyphen is TRUE then a '-' character in the middle of a String 
+ * token will be treated as a hyphen (part of the String token) instead of 
+ * a new kxtSub token. */
 {
 struct kxTok *tokList = NULL, *tok;
 char c, *s, *start = NULL, *end = NULL;
@@ -40,20 +46,25 @@ for (;;)
         {
         continue;
         }
-    else if (isalnum(c) || c == '?' || (wildAst && c == '*'))
+    else if (isalnum(c) || c == '?' || (wildAst && c == '*') ||
+	     (wildPercent && c == '%'))
         {
         if (c == '?')
             type = kxtWildString;
 	else if (wildAst && c == '*')
+            type = kxtWildString;
+	else if (wildPercent && c == '%')
             type = kxtWildString;
         else
             type = kxtString;
         for (;;)
             {
             c = *s;
-            if (isalnum(c) || c == ':' || c == '_' || c == '.')
+            if (isalnum(c) || c == ':' || c == '_' || c == '.' ||
+		(includeHyphen && c == '-'))
                 ++s;
-            else if (c == '?' || (wildAst && c == '*'))
+            else if (c == '?' || (wildAst && c == '*') ||
+		     (wildPercent && c == '%'))
                 {
                 type = kxtWildString;
                 ++s;
@@ -73,7 +84,7 @@ for (;;)
             c = *s++;
             if (c == '"')
                 break;
-            if (c == '*' || c == '?')
+            if (c == '*' || c == '?' || (wildPercent && c == '%'))
                 type = kxtWildString;
             }
 	if (! includeQuotes)
@@ -91,7 +102,7 @@ for (;;)
             c = *s++;
             if (c == '\'')
                 break;
-            if (c == '*' || c == '?')
+            if (c == '*' || c == '?' || (wildPercent && c == '%'))
                 type = kxtWildString;
             }
 	if (! includeQuotes)
@@ -181,6 +192,11 @@ for (;;)
         type = kxtDot;
         end = s;
 	}
+    else if (c == '%')
+        {
+        type = kxtMod;
+        end = s;
+	}
     else if (ispunct(c))
         {
         type = kxtPunct;
@@ -199,6 +215,14 @@ slReverse(&tokList);
 return tokList;
 }
 
+
+struct kxTok *kxTokenize(char *text, boolean wildAst)
+/* Convert text to stream of tokens. If 'wildAst' is
+ * TRUE then '*' character will be treated as wildcard
+ * rather than multiplication sign. */
+{
+return kxTokenizeFancy(text, wildAst, FALSE, FALSE);
+}
 
 void kxTokIncludeQuotes(boolean val)
 /* Pass in TRUE if kxTok should include quote characters in string tokens. */
