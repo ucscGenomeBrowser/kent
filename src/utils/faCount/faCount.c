@@ -4,7 +4,7 @@
 #include "dnautil.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: faCount.c,v 1.2 2003/05/06 07:41:05 kate Exp $";
+static char const rcsid[] = "$Id: faCount.c,v 1.3 2004/01/21 23:23:54 krish Exp $";
 
 void usage()
 /* Print usage info and exit. */
@@ -17,7 +17,7 @@ errAbort("faCount - count base statistics and CpGs in FA files.\n"
 void faCount(char *faFiles[], int faCount)
 /* faCount - count bases. */
 {
-int i, j;
+int f, i, j;
 struct dnaSeq seq;
 unsigned long long totalLength = 0;
 unsigned long long totalBaseCount[5];
@@ -31,9 +31,9 @@ for (i = 0; i < ArraySize(totalBaseCount); i++)
 printf("#seq\tlen\tA\tC\tG\tT\tN\tcpg\n");
 
 dnaUtilOpen();
-for (i = 0; i<faCount; ++i)
+for (f = 0; f<faCount; ++f)
     {
-    lf = lineFileOpen(faFiles[i], FALSE);
+    lf = lineFileOpen(faFiles[f], FALSE);
     while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
         {
         int prevBase = -1;
