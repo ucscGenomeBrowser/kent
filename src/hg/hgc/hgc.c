@@ -10280,11 +10280,11 @@ else if (sameWord(track, "triangle") || sameWord(track, "triangleSelf") || sameW
     {
     doTriangle(tdb, item);
     }
-else if( sameWord( track, "humMusL" ))
+else if( sameWord( track, "humMusL" ) || sameWord( track, "regPotential" ))
     {
     humMusClickHandler( tdb, item, 0, 0);
     }
-else if( sameWord( track, "musHumL" ) )
+else if( sameWord( track, "musHumL" ))
     {
     humMusClickHandler( tdb, item, 1, 0);
     }
