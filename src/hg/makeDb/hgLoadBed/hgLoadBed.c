@@ -26,6 +26,8 @@ errAbort(
   "options:\n"
   "   -noBin   suppress bin field\n"
   "   -oldTable add to existing table\n"
+  "   -onServer This will speed things up if you're running in a directory that\n"
+  "             the mysql server can access.\n"
   "   -sqlTable=table.sql Create table from .sql file\n"
   "   -tab  Separate by tabs rather than space\n"
   );
@@ -133,6 +135,7 @@ void loadDatabase(char *database, char *track, int bedSize, struct bedStub *bedL
 struct sqlConnection *conn = sqlConnect(database);
 struct dyString *dy = newDyString(1024);
 char *tab = "bed.tab";
+int loadOptions = (cgiBoolean("onServer") ? SQL_SERVER_TAB_FILE : 0);
 
 /* First make table definition. */
 if (sqlTable != NULL)
@@ -191,9 +194,7 @@ printf("Saving %s\n", tab);
 writeBedTab(tab, bedList, bedSize);
 
 printf("Loading %s\n", database);
-dyStringClear(dy);
-dyStringPrintf(dy, "load data local infile '%s' into table %s", tab, track);
-sqlUpdate(conn, dy->string);
+sqlLoadTabFile(conn, tab, track, loadOptions);
 sqlDisconnect(&conn);
 }
 
