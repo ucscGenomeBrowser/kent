@@ -6655,3 +6655,30 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     checkTableCoords mm5 tigrGeneIndex
     
     gzip *.gff *TCs
+
+# MAKE VSDANRER2 DOWNLOADABLES (DONE, 2004-12-14, hartera)
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/blastz.danRer2/axtChrom
+    set gp = /usr/local/apache/htdocs/goldenPath/mm5
+    mkdir -p $gp/vsDanRer2/axtChrom
+    cp -p *.axt $gp/vsDanRer2/axtChrom
+    cd $gp/vsDanRer2/axtChrom
+    gzip *.axt
+    md5sum *.gz > md5sum.txt
+                                                                               
+    # copy chains and nets to downloads area
+    cd /cluster/data/mm5/bed/blastz.danRer2/axtChain
+    gzip -c all.chain.filt5k > /cluster/data/mm5/zip/zebrafish.chain.gz
+    gzip -c danRer2.net > /cluster/data/mm5/zip/zebrafish.net.gz
+    cd $gp/vsDanRer2
+    mv /cluster/data/mm5/zip/zebrafish*.gz .
+    md5sum *.gz > md5sum.txt
+    # Copy over & edit README.txt w/pointers to chain, net formats.
+
+# BLASTZ DANRER2 CLEANUP (DONE, 2004-12-14, hartera)
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blastz.danRer2
+    nice rm axtChain/run1/chain/* &
+    nice rm -fr axtChain/n1 axtChain/noClass.net &
+    nice gzip axtChrom/* pslChrom/* axtChain/all.chain axtChain/all.chain.unfiltered axtChain/*.net &
+
