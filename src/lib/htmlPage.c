@@ -22,7 +22,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.13 2004/11/08 17:13:31 kent Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.14 2004/11/09 23:34:21 kent Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -790,7 +790,7 @@ struct htmlPage *htmlPageParse(char *url, char *fullText)
 /* Parse out page and return. */
 {
 struct htmlPage *page;
-char *dupe = cloneString(fullText);
+char *dupe = cloneLongString(fullText);
 char *s = dupe;
 struct htmlStatus *status = htmlStatusParse(&s);
 char *contentType;
