@@ -7,7 +7,10 @@
 #include "chainNet.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: netSyntenic.c,v 1.5 2003/05/06 07:22:28 kate Exp $";
+static char const rcsid[] = "$Id: netSyntenic.c,v 1.6 2005/01/13 20:15:31 heather Exp $";
+
+struct lm *lm;
+struct rbTreeNode **rbStack;
 
 void usage()
 /* Explain usage and exit. */
@@ -172,8 +175,8 @@ uglyAbort("All for now");
 #endif /* TEST */
 
 
-void rCalcDupes(struct chainNet *net,  struct hash *qChromHash,
-	struct cnFill *fillList)
+void rCalcDupes(struct chainNet *net,  struct hash *qChromHash, 
+      struct cnFill *fillList)
 /* Recursively add duplicate sequence to tree. */
 {
 struct cnFill *fill;
@@ -187,7 +190,7 @@ for (fill = fillList; fill != NULL; fill = fill->next)
         {
 	AllocVar(qChrom);
 	hashAddSaveName(qChromHash, fill->qName, qChrom, &qChrom->name);
-	qChrom->dupeTree = rbTreeNew(dupeRangeCmp);
+	qChrom->dupeTree = rbTreeNewDetailed(dupeRangeCmp, lm, rbStack);
 	}
     dupeTree = qChrom->dupeTree;
     if (fill->chainId)
@@ -268,6 +271,9 @@ struct lineFile *lf = lineFileOpen(inFile, TRUE);
 FILE *f = mustOpen(outFile, "w");
 struct chainNet *netList, *net;
 struct hash *qChromHash = newHash(10);
+
+lm = lmInit(0);
+lmAllocArray(lm, rbStack, 256);
 
 /* Read in net. */
 while ((net = chainNetRead(lf)) != NULL)
