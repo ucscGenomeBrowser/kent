@@ -127,7 +127,7 @@ otherDb cb1
 
 track blastzSelf
 shortLabel Self Blastz
-longLabel C. elegans Blastz (Self)
+longLabel $Organism Blastz Self Alignments
 group varRep
 priority 159
 visibility hide
@@ -139,7 +139,7 @@ otherDb ce1
 
 track chainSelf
 shortLabel Self Chain 
-longLabel C. elegans/C. elegans Chained Alignments
+longLabel $Organism Chained Self Alignments
 group varRep
 priority 158
 visibility hide

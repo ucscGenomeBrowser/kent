@@ -196,7 +196,7 @@ type bed 4 +
 
 track chainSelf
 shortLabel Self Chain 
-longLabel $Organism Chained Self-Alignments
+longLabel $Organism Chained Self Alignments
 group varRep
 priority 125
 visibility hide
@@ -208,7 +208,7 @@ otherDb galGal2
 
 track netSelf
 shortLabel Self Net
-longLabel $Organism Chained Self-Alignment Net
+longLabel $Organism Chained Self Alignment Net
 group varRep
 priority 126
 visibility dense
@@ -218,7 +218,7 @@ otherDb galGal2
 
 track netSyntenySelf
 shortLabel Self Synteny
-longLabel Organism Self-Alignment Net, Synteny-filtered
+longLabel $Organism Self-Alignment Net, Synteny-filtered
 group varRep
 priority 127
 visibility hide

@@ -209,7 +209,7 @@ type wig 0 1
 
 track blastzSelf
 shortLabel Self Blastz
-longLabel Self Blastz Alignments
+longLabel $Organism Blastz Self Alignments
 group varRep
 priority 160
 visibility hide

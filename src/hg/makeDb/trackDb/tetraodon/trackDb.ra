@@ -140,7 +140,7 @@ otherDb mm5
 
 track blastzSelf
 shortLabel Self Blastz
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+longLabel $Organism Blastz Self Alignments
 group varRep
 priority 126.1
 visibility hide
