@@ -12,7 +12,7 @@
 #include "psl.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: orthoMap.c,v 1.1 2003/06/04 00:43:39 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoMap.c,v 1.2 2003/06/04 00:46:19 sugnet Exp $";
 static boolean doHappyDots;   /* output activity dots? */
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -58,8 +58,9 @@ warn("orthoMap - Map psl alignments from one organism to another.\n"
      "   (version: %s)", version );
 for(i=0; i<ArraySize(optionSpecs) -1; i++)
     fprintf(stderr, "  -%s -- %s\n", optionSpecs[i].name, optionDescripts[i]);
-errAbort("\nusage:\n   "
-	 "   orthoMap -db=mm3 -orthoDb=hg15 -pslTable=mrna -outBed=mm3.hg15.orthoMrna.bed\n");
+errAbort("\nusage:\n"
+	 "   orthoMap -chrom=chrX -db=mm3 -orthoDb=hg13 -netTable=humanNet \\\n"
+	 "     -chainFile=mm3.hg13.chains/chrX.chain -pslTable=mrna -outBed=mm3.hg13.orthoMrna.bed");
 }
 
 struct hash *allChainsHash(char *fileName)
