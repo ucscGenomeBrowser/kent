@@ -11,13 +11,15 @@ my $snpOut = 'bgiSnp.bed';
 my $geneSnpOut = 'bgiGeneSnp.tab';
 
 my $strainExpr = '(Broiler|Layer|Silkie)';
-my $geneSrcExpr = '(GenBank_complete|GenBank_partial|HumanDiseaseGene|IMS-GSF|UMIST\(orf lessthan 300\)|UMIST\(orf morethan 300\)|Hans_Cheng|Leif_Andersson|Martien_Groenen)';
+my $geneSrcExpr = '(GenBank_complete|GenBank_partial|HumanDiseaseGene|IMS-GSF|UMIST\(orf lessthan 300\)|UMIST\(orf morethan 300\)|UMIST|Ensembl|Hans_Cheng|Leif_Andersson|Martien_Groenen)';
 my %geneSrcAbbrev = ('GenBank_complete' => 'GBC',
 		     'GenBank_partial' => 'GBP',
 		     'HumanDiseaseGene' => 'HDG',
 		     'IMS-GSF' => 'IG',
 		     'UMIST(orf lessthan 300)' => 'UM',
 		     'UMIST(orf morethan 300)' => 'UM',
+		     'UMIST' => 'UM',
+		     'Ensembl' => 'ENS',
 		     'Hans_Cheng' => 'HC',
 		     'Leif_Andersson' => 'LA',
 		     'Martien_Groenen' => 'MG',
@@ -78,6 +80,7 @@ sub parseStrain {
 # Since we have GO in a db, pare down to just the numeric IDs:
 sub parseGo {
   my $line = shift;
+  return undef if (! defined $line);
   while ($line =~ s/GO:(\d+): [^;]*;/$1,/) {}
   return($line);
 }
@@ -182,12 +185,12 @@ while (<L>) {
     while (<IN>) {
       chop;
       my @words = split(/\t/);
-      if (scalar(@words) != 15) {
-	die "Wrong #words for line $. of $fname:\n$_\n";
+      if (scalar(@words) != 18) {
+	die "Wrong #words (" .scalar(@words). ") for line $. of $fname:\n$_\n";
       }
       my ($snpId, $snpType, $pos, $rPos, $qual, $rQual, $change,
 	  $flankL, $flankR, $rName, $readDir, $strains, $primerL, $primerR,
-	  $conf, $extra)
+	  $ampSize, $distL, $conf, $extra)
 	= @words;
       my ($start, $end) = &parsePos($pos);
       my ($rStart, $rEnd) = &parsePos($rPos);

@@ -6,13 +6,14 @@
 # Also, get annotation source from filename, abbreviate & make it a 
 # suffix to uniquify the gene names.  Shorten huge ENST|ENSG gene names.
 
-my $geneSrcExpr = '(GenBank_complete|GenBank_partial|HumanDiseaseGene|IMS-GSF|UMIST\(orf lessthan 300\)|UMIST\(orf morethan 300\)|Hans_Cheng|Leif_Andersson|Martien_Groenen)';
+my $geneSrcExpr = '(GenBank_complete|GenBank_partial|HumanDiseaseGene|IMS-GSF|UMIST\(orf lessthan 300\)|UMIST\(orf morethan 300\)|UMIST|Hans_Cheng|Leif_Andersson|Martien_Groenen)';
 my %geneSrcAbbrev = ('GenBank_complete' => 'GBC',
 		     'GenBank_partial' => 'GBP',
 		     'HumanDiseaseGene' => 'HDG',
 		     'IMS-GSF' => 'IG',
 		     'UMIST(orf lessthan 300)' => 'UM',
 		     'UMIST(orf morethan 300)' => 'UM',
+		     'UMIST' => 'UM',
 		     'Hans_Cheng' => 'HC',
 		     'Leif_Andersson' => 'LA',
 		     'Martien_Groenen' => 'MG',
