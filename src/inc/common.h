@@ -191,8 +191,9 @@ void verboseDot();
 int verboseLevel();
 /* Get verbosity level. */
 
-int verboseSetLevel(int level);
-/* Set verbosity level. (1 is default) */
+void verboseSetLevel(int verbosity);
+/* Set verbosity level in log.  0 for no logging,
+ * higher number for increasing verbosity. */
 
 void zeroBytes(void *vpt, int count);     
 /* fill a specified area of memory with zeroes */
