@@ -120,7 +120,7 @@ char *unistsnameScript = "http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=un
 char *unistsScript = "http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=";
 char *gdbScript = "http://www.gdb.org/gdb-bin/genera/accno?accessionNum=";
 char *cloneRegScript = "http://www.ncbi.nlm.nih.gov/genome/clone/clname.cgi?stype=Name&list=";
-char *genMapDbScript = "http://genomics.med.upenn.edu/cgi-bin/genmapdb/byclonesearch.pl?clone=";
+char *genMapDbScript = "http://genomics.med.upenn.edu/perl/genmapdb/byclonesearch.pl?clone=";
 
 static void hgcStart(char *title)
 /* Print out header of web page with title.  Set
