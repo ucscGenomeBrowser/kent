@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: maf.c,v 1.2 2004/09/25 05:09:02 kent Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.3 2004/11/18 22:41:54 kent Exp $";
 
 boolean isMafTable(char *database, struct trackDb *track, char *table)
 /* Return TRUE if table is maf. */
@@ -40,10 +40,14 @@ void doOutMaf(struct trackDb *track, char *table, struct sqlConnection *conn)
 {
 struct region *region, *regionList = getRegions();
 textOpen();
+if (anyIntersection())
+    errAbort("Can't do maf output when intersection is on, sorry. ");
 mafWriteStart(stdout, NULL);
+regionFillInChromEnds(regionList, 0);
 for (region = regionList; region != NULL; region = region->next)
     {
     struct mafAli *mafList, *maf;
+    int end = region->end;
     char dbChrom[64];
     safef(dbChrom, sizeof(dbChrom), "%s.%s", database, region->chrom);
     mafList = mafLoadInRegion(conn, table, region->chrom, 
