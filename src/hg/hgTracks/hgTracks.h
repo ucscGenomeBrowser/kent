@@ -119,6 +119,8 @@ struct track
 
     float expScale;	/* What to scale expression tracks by. */
     char *expTable;	/* Expression table in hgFixed. */
+
+    boolean exonArrows;	/* Draw arrows on exons? */
     };
 
 struct trackRef 

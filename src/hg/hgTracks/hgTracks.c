@@ -73,7 +73,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.638 2003/12/05 19:06:33 booch Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.639 2003/12/10 00:45:18 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -1040,8 +1040,10 @@ if (barbDir == 0)
 
 if (x < 0) x = 0;
 if (x2 > vg->width) x2 = vg->width;
-vgBarbedHorizontalLine(vg, x, y, x2 - x, barbHeight, barbSpacing, barbDir,
-	color, needDrawMiddle);
+width = x2 - x;
+if (width > 0)
+    vgBarbedHorizontalLine(vg, x, y, width, barbHeight, barbSpacing, barbDir,
+	    color, needDrawMiddle);
 }
 
 void innerLine(struct vGfx *vg, int x, int y, int w, Color color)
@@ -1113,6 +1115,8 @@ int midY = y + (heightPer>>1);
 int midY1 = midY - (heightPer>>2);
 int midY2 = midY + (heightPer>>2);
 int w;
+boolean exonArrows = tg->exonArrows;
+
 
 if ((tg->tdb != NULL) && (vis != tvDense))
     intronGap = atoi(trackDbSettingOrDefault(tg->tdb, "intronGap", "0"));
@@ -1164,6 +1168,15 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
     if (e > s)
 	{
 	drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, color, lf->score);
+	if (exonArrows)
+	    {
+	    int nw = e - s - 2;
+	    x1 = round((double)((int)s-winStart)*scale) + xOff;
+	    x2 = round((double)((int)e-winStart)*scale) + xOff;
+	    w = x2-x1;
+	    clippedBarbs(vg, x1+1, midY, x2-x1-2, 2, 5, lf->orientation,
+	       MG_WHITE, TRUE);
+	    }
 	}
 
     if ((intronGap || chainLines) && sf->next != NULL)
@@ -6436,6 +6449,7 @@ if (tdb->useScore)
 	track->colorShades = shadesOfGray;
     }
 track->tdb = tdb;
+track->exonArrows = (trackDbSetting(tdb, "exonArrows") != NULL);
 fillInFromType(track, tdb);
 return track;
 }
