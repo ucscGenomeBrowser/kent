@@ -4,7 +4,7 @@
 #include "common.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.2 2004/08/04 22:01:34 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.3 2004/08/05 20:56:51 hiram Exp $";
 
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
 {
@@ -232,6 +232,36 @@ verbose(2, "#\twigSetCompareByte: [%g : %g] becomes [%d : %d]\n",
 	lower, lower+range, wDS->ucLowerLimit, wDS->ucUpperLimit);
 }
 
+static boolean nextRow(struct wiggleDataStream *wDS, char *row[], int maxRow)
+/*	read next wig row from sql query or lineFile
+ *	FALSE return on no more data	*/
+{
+int numCols;
+
+if (wDS->isFile)
+    {
+    numCols = lineFileChopNextTab(wDS->lf, row, maxRow);
+    if (numCols != maxRow) return FALSE;
+    verbose(3, "#\tnumCols = %d, row[0]: %s, row[1]: %s, row[%d]: %s\n",
+	numCols, row[0], row[1], maxRow-1, row[maxRow-1]);
+    }
+else
+    {
+    int i;
+    char **sqlRow;
+    sqlRow = sqlNextRow(wDS->sr);
+    if (sqlRow == NULL)
+	return FALSE;
+    /*	skip the bin column sqlRow[0]	*/
+    for (i=1; i <= maxRow; ++i)
+	{
+	row[i-1] = sqlRow[i];
+	}
+    }
+return TRUE;
+}
+
+
 static void closeWibFile(struct wiggleDataStream *wDS)
 /*	if there is a Wib file open, close it	*/
 {
@@ -320,6 +350,7 @@ wds->setSpanConstraint = setSpanConstraint;
 wds->setDataConstraint = setDataConstraint;
 wds->setCompareByte = setCompareByte;
 wds->openWibFile = openWibFile;
+wds->nextRow = nextRow;
 wds->closeWigConn = closeWigConn;
 wds->openWigConn = openWigConn;
 return wds;
