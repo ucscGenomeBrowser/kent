@@ -693,14 +693,17 @@ struct ntCtgClonePos *makeNtCloneHash(char *gsDir, struct hash *ntCloneHash)
 {
 char fileName[512];
 struct lineFile *lf;
-char *row[7];
+char *row[10];
+int wordCount;
 struct ntCtgClonePos *list = NULL, *nccp;
 
 sprintf(fileName, "%s/ffa/ctg_coords", gsDir);
 lf = lineFileOpen(fileName, TRUE);
-while (lineFileRow(lf, row))
+while ((wordCount = lineFileChop(lf, row)) != 0)
     {
     char *cloneName = row[6];
+    if (wordCount < 7)
+        errAbort("Expecting at least 7 words line %d of %s", lf->lineIx, lf->fileName); 
     if (!startsWith("NT_", row[0]))
         errAbort("Expecting line %d of %s to start with NT_", lf->lineIx, lf->fileName);
     chopSuffix(cloneName);
@@ -708,9 +711,20 @@ while (lineFileRow(lf, row))
     slAddHead(&list, nccp);
     hashAddSaveName(ntCloneHash, cloneName, nccp, &nccp->acc);
     nccp->nt = cloneString(row[0]);
-    nccp->start = lineFileNeedNum(lf, row, 3) - 1;
-    nccp->end = lineFileNeedNum(lf, row, 4);
-    nccp->strand = row[5][0];
+    if (wordCount >= 9)
+	{
+	nccp->start = lineFileNeedNum(lf, row, 2) - 1;
+	nccp->end = lineFileNeedNum(lf, row, 3);
+	nccp->strand = row[4][0];
+	}
+    else
+	{
+	nccp->start = lineFileNeedNum(lf, row, 3) - 1;
+	nccp->end = lineFileNeedNum(lf, row, 4);
+	nccp->strand = row[5][0];
+	}
+    if (nccp->strand != '+' && nccp->strand != '-')
+        errAbort("Expecting + or - in strand field line %d of %s", lf->lineIx, lf->fileName);
     }
 lineFileClose(&lf);
 slReverse(&list);
@@ -808,7 +822,7 @@ while (lineFileNext(lf, &line, &lineSize))
         errAbort("Expecting at least 5 words line %d of %s", 
 		lf->lineIx, lf->fileName);
     imreCloneStaticLoad(words, &im);
-    if (hashLookup(badHash, im.accession))
+    if (hashLookup(badHash, im.accession) && !stringIn(im.source, "TPF"))
         continue;
     eraseWhiteSpace(im.imreContig);
     if (startsWith("ctg", im.imreContig))
