@@ -7,22 +7,18 @@
 7	This is a seed storage protein.
 8	Hexamer; each subunit is composed of an acidic and a basic chain derived from a single precursor and linked by a disulfide bond.
 9	Belongs to the 11S seed storage protein (globulins) family.
-10	Major structural protein which may play a role as rickettsial virulence factor and/or immunogen during infection.
-11	Cell wall. This bacterium is covered by a S- layer with hexagonal symmetry.
-12	Its C-terminus potentially may bear the epitopes conferring antigenicity to the protein.
-13	Belongs to the rickettsiae ompA/ompB family.
-14	Belongs to the GTP1 / OBG family.
-15	Catalyzes the oxidation of the 12-alpha-hydroxyl group of bile acids, both in their free and conjugated form. Also acts on bile alcohols.
-16	3-alpha,7-alpha,12-alpha-trihydroxy-5-beta- cholanate + NADP(+) = 3-alpha,7-alpha-dihydroxy-12-oxo-5-beta- cholanate + NADPH.
-17	Homotetramer.
-18	The thermostability of the enzyme is greatly increased due to NADP binding.
-19	Repressed by exogenous auxin.
-20	 Event=Alternative splicing; Named isoforms=1;   Comment=A number of isoforms are produced. According to EST   sequences; Name=1;   IsoId=P15455-1; Sequence=Displayed;
-21	Seed storage protein.
-22	Hexamer; each subunit is composed of an acidic and a basic chain derived from a single precursor and linked by a disulfide bond (By similarity).
-23	Expressed only in immatures seeds.
-24	Expressed between 7 and 28 days after pollination.
-25	The sequence of the probable beta chain is highly homologous to the N-terminal sequence of BW24KD, a major buckwheat allergen.
-26	Causes an allergic reaction in human.
-27	Seed storage protein with a relatively high level of Lys and Met.
-28	Cotyledons and endosperm protein bodies.
+10	Belongs to the GTP1 / OBG family.
+11	Catalyzes the oxidation of the 12-alpha-hydroxyl group of bile acids, both in their free and conjugated form. Also acts on bile alcohols.
+12	3-alpha,7-alpha,12-alpha-trihydroxy-5-beta- cholanate + NADP(+) = 3-alpha,7-alpha-dihydroxy-12-oxo-5-beta- cholanate + NADPH.
+13	Homotetramer.
+14	The thermostability of the enzyme is greatly increased due to NADP binding.
+15	Repressed by exogenous auxin.
+16	 Event=Alternative splicing; Named isoforms=1;   Comment=A number of isoforms are produced. According to EST   sequences; Name=1;   IsoId=P15455-1; Sequence=Displayed;
+17	Seed storage protein.
+18	Hexamer; each subunit is composed of an acidic and a basic chain derived from a single precursor and linked by a disulfide bond (By similarity).
+19	Expressed only in immatures seeds.
+20	Expressed between 7 and 28 days after pollination.
+21	The sequence of the probable beta chain is highly homologous to the N-terminal sequence of BW24KD, a major buckwheat allergen.
+22	Causes an allergic reaction in human.
+23	Seed storage protein with a relatively high level of Lys and Met.
+24	Cotyledons and endosperm protein bodies.

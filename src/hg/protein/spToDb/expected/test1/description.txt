@@ -4,7 +4,6 @@ P18646	10 kDa protein precursor (Clone PSAS10).
 P13813	110 kDa antigen (PK110) (Fragment).
 P19084	11S globulin seed storage protein G3 precursor (Helianthinin G3) [Contains: 11S globulin seed storage protein G3 acidic chain; 11S globulin seed storage protein G3 basic chain].
 P13744	11S globulin beta subunit precursor [Contains: 11S globulin gamma chain (11S globulin acidic chain); 11S globulin delta chain (11S globulin basic chain)].
-P14914	120 kDa surface-exposed protein.
 P32234	GTP-binding protein 128UP.
 P21215	12-alpha-hydroxysteroid dehydrogenase (EC 1.1.1.176) (Fragment).
 Q05349	Auxin-repressed 12.5 kDa protein.
