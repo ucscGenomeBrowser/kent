@@ -13,7 +13,7 @@ CREATE TABLE psl (
     qBaseInsert int unsigned not null,	# Number of bases inserted in query
     tNumInsert int unsigned not null,	# Number of inserts in target
     tBaseInsert int unsigned not null,	# Number of bases inserted in target
-    strand char(1) not null,	# + or - for strand
+    strand char(2) not null,	# + or - for strand
     qName varchar(255) not null,	# Query sequence name
     qSize int unsigned not null,	# Query sequence size
     qStart int unsigned not null,	# Alignment start position in query

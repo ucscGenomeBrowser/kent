@@ -9,7 +9,7 @@ table psl
     int qBaseInsert; "Number of bases inserted in query"
     uint tNumInsert; "Number of inserts in target"
     int tBaseInsert; "Number of bases inserted in target"
-    char[1] strand; "+ or - for strand"
+    char[2] strand; "+ or - for strand"
     string qName; "Query sequence name"
     uint qSize; "Query sequence size"
     uint qStart; "Alignment start position in query"
