@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.659 2004/06/09 19:04:34 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.660 2004/06/10 16:48:39 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4168,7 +4168,18 @@ int blockCount;
 int tStart = psl->tStart;
 int tEnd = psl->tEnd;
 char tName[256];
-struct dnaSeq *tSeq = hDnaFromSeq(seqName, tStart, tEnd, dnaLower);
+struct dnaSeq *tSeq;
+
+/* protein psl's have a tEnd that isn't quite right */
+if (qType == gftProt)
+    {
+    if (psl->strand[1] == '-')
+	tEnd = psl->tSize - psl->tStarts[0];
+    else
+	tEnd = psl->tStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1] * 3;
+    }
+tSeq = hDnaFromSeq(seqName, tStart, tEnd, dnaLower);
+
 freez(&tSeq->name);
 tSeq->name = cloneString(psl->tName);
 safef(tName, sizeof(tName), "%s.%s", organism, psl->tName);
@@ -13681,12 +13692,13 @@ if (hTableExists("hg16KG"))
     }
 printf("supporting human mRNA : %s<BR>\n",itemName);
 
-slSort(&pslList, pslCmpScore);
+slSort(&pslList, pslCmpMatch);
 if (slCount(pslList) > 1)
     printf("<P>The alignment you clicked on is first in the table below.<BR>\n");
 printf("<TT><PRE>");
-printf("ALIGNMENT  SCORE START  END IDENTITY    LINK TO BROWSER \n");
-printf("---------------------------------------------------------------------\n");
+printf("                                   QUERY            TARGET\n");
+printf("ALIGNMENT COVERAGE IDENTITY  START END EXTENT  STRAND   LINK TO BROWSER \n");
+printf("----------------------------------------------------------------------------\n");
 for (same = 1; same >= 0; same -= 1)
     {
     for (psl = pslList; psl != NULL; psl = psl->next)
@@ -13697,9 +13709,11 @@ for (same = 1; same >= 0; same -= 1)
 		hgcName(), psl->tStart, psl->qName,  psl->tName,
 		psl->tStart, psl->tEnd, database,tdb->tableName, uiState);
 	    printf("alignment</A> ");
-	    printf("%5d %5d %5d %5.1f%%      ",
-		pslScore(psl), psl->qStart+1, psl->qEnd, 
-		100.0 - pslCalcMilliBad(psl, TRUE) * 0.1);
+	    printf("%5.1f%%    %5.1f%% %5d %5d %5.1f%%    %c   ",
+		100.0 * psl->match / psl->qSize,
+		100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
+		psl->qStart+1, psl->qEnd, 
+		100.0 * (psl->qEnd - psl->qStart) / psl->qSize, psl->strand[1]);
 	    printf("<A HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s\">",
 		hgTracksName(), psl->tName, psl->tStart + 1, psl->tEnd, database, 
 		tdb->tableName, itemName, uiState);
