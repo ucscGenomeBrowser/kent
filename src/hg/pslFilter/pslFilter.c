@@ -7,7 +7,7 @@
 #include "cheapcgi.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: pslFilter.c,v 1.4 2003/05/06 07:22:34 kate Exp $";
+static char const rcsid[] = "$Id: pslFilter.c,v 1.5 2005/01/15 17:31:52 kent Exp $";
 
 int reward = 1;
 int cost = 1;
@@ -37,6 +37,7 @@ errAbort(
     "    -minUniqueMatch (default %d) Min non-repeats to pass)\n"
     "    -maxBadPpt (default %d) Maximum divergence in parts per thousand\n"
     "    -minAli (default %d) Minimum ratio query in alignment in ppt\n"
+    "    -noHead  Don't output psl header\n"
     "    -minAliT (default %d) Like minAli for target\n",
     reward, cost, gapOpenCost, gapSizeLogMod, minScore, minMatch,
     minUniqueMatch, maxBadPpt, minAli, minAliT);
@@ -76,8 +77,9 @@ struct psl *psl;
 int passCount = 0;
 int totalCount = 0;
 
-printf("Filtering %s to %s\n", inName, outName);
-pslWriteHead(out);
+verbose(1, "Filtering %s to %s\n", inName, outName);
+if (!cgiVarExists("noHead") && !cgiVarExists("nohead"))
+    pslWriteHead(out);
 while ((psl = pslNext(in)) != NULL)
     {
     ++totalCount;
