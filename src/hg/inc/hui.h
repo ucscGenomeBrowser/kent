@@ -119,6 +119,77 @@ char *smroeEnumToString(enum stsMapRatOptEnum x);
 void smroeDropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
+/****** Some stuff for snpType related controls *******/
+
+/* SingleNP, indel, segnemtal */
+#define snpTypeCount 3
+
+enum snpTypeEnum {
+    snpTypeInclude = 0,
+    snpTypeExclude = 1,
+};
+
+enum snpTypeEnum snpTypeStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpTypeEnumToString(enum snpTypeEnum x);
+/* Convert from enum to string representation. */
+
+enum snpTypeEnum snpTypeLabelStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpTypeLabelEnumToString(enum snpTypeEnum x);
+/* Convert from enum to string representation. */
+
+enum snpTypeEnum snpTypeStateStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpTypeStateEnumToString(enum snpTypeEnum x);
+/* Convert from enum to string representation. */
+
+enum snpTypeEnum snpTypeDataStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpTypeDataEnumToString(enum snpTypeEnum x);
+/* Convert from enum to string representation. */
+
+/****** Some stuff for snpSource related controls *******/
+
+/* Random, Bac, Mixed, Other, Affy10K, Affy120K */
+#define snpSourceCount 6
+
+enum snpSourceEnum {
+    snpSourceRed      = 0,
+    snpSourceGreen    = 1,
+    snpSourceBlue     = 2,
+    snpSourceBlack    = 3,
+    snpSourceExclude  = 4,
+};
+
+enum snpSourceEnum snpSourceStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpSourceEnumToString(enum snpSourceEnum x);
+/* Convert from enum to string representation. */
+
+enum snpSourceEnum snpSourceLabelStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpSourceLabelEnumToString(enum snpSourceEnum x);
+/* Convert from enum to string representation. */
+
+enum snpSourceEnum snpSourceColorStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpSourceColorEnumToString(enum snpSourceEnum x);
+/* Convert from enum to string representation. */
+
+enum snpSourceEnum snpSourceDataStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpSourceDataEnumToString(enum snpSourceEnum x);
+/* Convert from enum to string representation. */
+
 /****** Some stuff for fishClones related controls *******/
 enum fishClonesOptEnum {
    fcoeFHCRC = 0,
