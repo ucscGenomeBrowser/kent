@@ -66,7 +66,7 @@ Exon count in mammals has an early peak that declines rapidly and
 monotonically to a very long tail reaching out to 
 <A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;list_uids=11717165&amp;dopt=Abstract"
 TARGET=_blank>363 exons</A> (which code for 38,138 amino 
-acids) in the gene titin. The KIAA cDNA Human Unidentified Gene-Encoded database 
+acids) in the human gene titin. The KIAA cDNA Human Unidentified Gene-Encoded database 
 (<A
 HREF="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=14681467&dopt=Abstract"
 TARGET=_blank>HUGE</A>) has somewhat corrected for a very 
