@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgSeq.c,v 1.18 2003/11/19 04:31:58 kent Exp $";
+static char const rcsid[] = "$Id: hgSeq.c,v 1.19 2004/01/06 22:54:22 angie Exp $";
 
 /* I don't like using this global, but don't want to do a zillion 
  * hChromSizes in addFeature and don't want to add it as a param of 
@@ -195,7 +195,7 @@ else
     {
     canDoUTR = hti->hasCDS;
     canDoIntrons = hti->hasBlocks;
-    offerRevComp = FALSE;
+    offerRevComp = (hti->strandField[0] == 0);
     }
 hgSeqFeatureRegionOptions(cart, canDoUTR, canDoIntrons);
 hgSeqDisplayOptions(cart, canDoUTR, canDoIntrons, offerRevComp);
