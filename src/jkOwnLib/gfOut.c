@@ -365,6 +365,75 @@ axtBundleFreeList(&aod->bundleList);
 }
 
 
+static int findBreak(char *a, char *b, int startPos, int size, int minBreakSize)
+/* Return index of break, which is defines as either minBreakSize
+ * dashes in a row, or the end of s */
+{
+char ac, bc;
+int breakStart = startPos;
+int i;
+
+for (i=startPos; i<size; ++i)
+    {
+    ac = a[i];
+    bc = b[i];
+    if (ac == '-' || bc == '-')
+	{
+        if (i - breakStart >= minBreakSize)
+	     return i+1;
+	}
+    else
+        {
+	breakStart = i;
+	}
+    }
+return size;
+}
+
+static double axtIdRatio(struct axt *axt)
+/* Return matches/total. */
+{
+int matchCount = 0;
+int i;
+for (i=0; i<axt->symCount; ++i)
+    {
+    if (axt->qSym[i] == axt->tSym[i])
+        ++matchCount;
+    }
+return (double)matchCount/(double)axt->symCount;
+}
+
+static void sim4QueryOut(struct gfOutput *out, FILE *f)
+/* Do sim4-like output - at end of processing query. */
+{
+struct axtData *aod = out->data;
+struct axtBundle *gab;
+char *qName = NULL, *tName = NULL;
+char stand = 0;
+
+for (gab = aod->bundleList; gab != NULL; gab = gab->next)
+    {
+    struct axt *axt = gab->axtList;
+    fprintf(f, "\n");
+    fprintf(f, "seq1 = %s, %d bp\n", axt->qName, gab->qSize);
+    fprintf(f, "seq2 = %s, %d bp\n", axt->tName, gab->tSize);
+    fprintf(f, "\n");
+    if (axt->qStrand == '-')
+	fprintf(f, "(complement)\n");
+    for (axt = gab->axtList; axt != NULL; axt = axt->next)
+	{
+	fprintf(f, "%d-%d  ", axt->qStart+1, axt->qEnd);
+	fprintf(f, "(%d-%d)   ", axt->tStart+1, axt->tEnd);
+	fprintf(f, "%1.0f%% ", 100.0 * axtIdRatio(axt));
+	if (axt->qStrand == '-')
+	     fprintf(f, "<-\n");
+	else
+	     fprintf(f, "->\n");
+	}
+    }
+axtBundleFreeList(&aod->bundleList);
+}
+
 static void blastQueryOut(struct gfOutput *out, FILE *f)
 /* Output wublast on query. */
 {
@@ -443,6 +512,19 @@ out->fileHead = mafHead;
 return out;
 }
 
+struct gfOutput *gfOutputSim4(int goodPpt, boolean qIsProt, boolean tIsProt, 
+	char *databaseName)
+/* Set up to output in sim4 format. */
+{
+struct gfOutput *out = gfOutputAxtMem(goodPpt, qIsProt, tIsProt);
+struct axtData *ad = out->data;
+if (qIsProt || tIsProt)
+    errAbort("sim4 output is not available for protein query sequences.");
+ad->databaseName = databaseName;
+out->queryOut = sim4QueryOut;
+return out;
+}
+
 struct gfOutput *gfOutputBlast(int goodPpt, 
 	boolean qIsProt, boolean tIsProt, 
 	char *databaseName, int databaseSeqCount, double databaseLetters,
@@ -467,7 +549,7 @@ struct gfOutput *gfOutputAny(char *format,
 	FILE *f)
 /* Initialize output in a variety of formats in file or memory. 
  * Parameters:
- *    format - either 'psl', 'pslx', 'blast', 'wublast', 'axt', 'xml'
+ *    format - either 'psl', 'pslx', 'sim4', 'blast', 'wublast', 'axt', 'xml'
  *    goodPpt - minimum identity of alignments to output in parts per thousand
  *    qIsProt - true if query side is a protein.
  *    tIsProt - true if target (database) side is a protein.
@@ -485,6 +567,8 @@ if (sameWord(format, "psl"))
     out = gfOutputPsl(goodPpt, qIsProt, tIsProt, f, FALSE, noHead);
 else if (sameWord(format, "pslx"))
     out = gfOutputPsl(goodPpt, qIsProt, tIsProt, f, TRUE, noHead);
+else if (sameWord(format, "sim4"))
+    out = gfOutputSim4(goodPpt, qIsProt, tIsProt, databaseName);
 else if (sameWord(format, "blast"))
     out = gfOutputBlast(goodPpt, qIsProt, tIsProt, 
 	    databaseName, databaseSeqCount, databaseLetters, FALSE, FALSE, f);
