@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.4 2003/09/24 03:57:00 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.5 2003/09/25 07:11:37 hiram Exp $";
 
 struct wigItem
 /* A wig track item. */
@@ -287,18 +287,33 @@ static void wigDrawItems(struct track *tg, int seqStart, int seqEnd,
 	MgFont *font, Color color, enum trackVisibility vis)
 {
 struct linkedFeatures *lf;
-double scale = scaleForPixels(width);
+double pixelsPerBase = scaleForPixels(width);
 double basesPerPixel = 1.0;
-int x1,y1,w,h,x2,y2;
 struct rgbColor *normal = &(tg->color);
 int black;
 int itemCount = 0;
 char *currentFile = (char *) NULL;	/*	the binary file name */
 FILE *f = (FILE *) NULL;		/*	file handle to binary file */
 struct hashEl *el, *elList;
+char cartStr[64];	/*	to set cart strings	*/
+char *interpolate = NULL;	/*	samples only, or interpolate */
+char o2[128];	/*	Option 2 - interpolate or samples only	*/
+enum wiggleOptEnum wiggleType;
 
-if( scale > 0.0 )
-    basesPerPixel = 1.0 / scale;
+snprintf( o2, sizeof(o2), "%s.linear.interp", tg->mapName);
+interpolate = cartOptionalString(cart, o2);
+if( interpolate )
+    wiggleType = wiggleStringToEnum(interpolate);
+    else 
+    {
+    wiggleType = wiggleStringToEnum("Linear Interpolation");
+    /*	And set that value back into the cart for hgTrackUi	*/
+    snprintf( cartStr, sizeof(cartStr), "%s", "Linear Interpolation" );
+    cartSetString( cart, o2, cartStr );
+    }
+
+if( pixelsPerBase > 0.0 )
+    basesPerPixel = 1.0 / pixelsPerBase;
 
 for (lf = tg->items; lf != NULL; lf = lf->next)
     ++itemCount;
@@ -306,30 +321,37 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
 black = vgFindColorIx(vg, 0, 0, 0);
 
 /*	width - width of drawing window in pixels
- *	scale - pixels per base
- *	basesPerPixel - calculated as 1.0/scale
+ *	pixelsPerBase - pixels per base
+ *	basesPerPixel - calculated as 1.0/pixelsPerBase
  */
-snprintf(dbgMsg, DBGMSGSZ, "width: %d, height: %d, heightPer: %d, scale: %.4f", width, tg->lineHeight, tg->heightPer, scale );
+snprintf(dbgMsg, DBGMSGSZ, "========================  Next Item  ============\nwidth: %d, height: %d, heightPer: %d, pixelsPerBase: %.4f", width, tg->lineHeight, tg->heightPer, pixelsPerBase );
 debugPrint("wigDrawItems");
 snprintf(dbgMsg, DBGMSGSZ, "seqStart: %d, seqEnd: %d, xOff: %d, yOff: %d, black: %d", seqStart, seqEnd, xOff, yOff, black );
 debugPrint("wigDrawItems");
 snprintf(dbgMsg, DBGMSGSZ, "itemCount: %d, Y range: %.1f - %.1f, basesPerPixel: %.4f", itemCount, tg->minRange, tg->maxRange, basesPerPixel );
 debugPrint("wigDrawItems");
 
-y1 = yOff;
-h = tg->lineHeight;
 itemCount = 0;
 for (lf = tg->items; lf != NULL; lf = lf->next)
     {
     struct simpleFeature *sf = lf->components;
     struct wigItem *wi = lf->extra;
-    int defaultSpan = 1;
+    int usingDataSpan = 1;
     unsigned char *ReadData;
     int pixelsToDraw = 0;
     unsigned char *dataPtr;
+    int dataStarts;	/*	chrom coords	*/
+    int dataEnds;	/*	chrom coords	*/
+    int dataSpan;	/*	chrom coords	*/
+    int dataPointsInView;	/*	number of data points to use */
+    double dataValuesPerPixel;	/*  values in the data file per pixel */
+    int pixelsPerDataValue;	/*  to specify drawing box width */
+    int x1 = 0;
+    int y1,w,h,x2,y2;
 
+    h = tg->lineHeight;
     /*	Take a look through the potential spans, and given what we have
-     *	here for basesPerPixel, pick the largest defaultSpan that is
+     *	here for basesPerPixel, pick the largest usingDataSpan that is
      *	not greater than the basesPerPixel
      */
     el = hashLookup(trackSpans, lf->name);	/*  What Spans do we have */
@@ -338,15 +360,15 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
 	{
 	int Span;
 	Span = (int) el->val;
-	if( (Span < basesPerPixel) && (Span > defaultSpan) )
-	    defaultSpan = Span;
+	if( (Span < basesPerPixel) && (Span > usingDataSpan) )
+	    usingDataSpan = Span;
 	}
     hashElFreeList(&elList);
 
     /*	Now that we know what Span to draw, see if this item should be
      *	drawn at all.
      */
-    if( defaultSpan == wi->Span )
+    if( usingDataSpan == wi->Span )
 	{
 	/*	Check our data file, see if we need to open a new one */
 	if ( currentFile )
@@ -379,35 +401,77 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
  *	The drawing window, in pixels:
  *	xOff = left margin, y1 = top margin, h = height
  *	drawing window in chrom coords: seqStart, seqEnd
- *	basesPerPixel is known, 'scale' is pixelsPerBase
+ *	basesPerPixel is known, 'pixelsPerBase' is known
  */
-snprintf(dbgMsg, DBGMSGSZ, "seek to: %d, read: %d bytes", wi->Offset, wi->Count );
-debugPrint("wigDrawItems");
 	fseek(f, wi->Offset, SEEK_SET);
 	ReadData = (unsigned char *) needMem((size_t) (wi->Count + 1));
 	fread(ReadData, (size_t) wi->Count, (size_t) sizeof(unsigned char), f);
 
-	w = (sf->end - sf->start) * scale;
-    	dataPtr = ReadData;
-	if( defaultSpan == 1 ) {
-    		int skipDataPoints = 0;
-		double skipping;
-    		skipping = (double)wi->Count / (double)w;
-snprintf(dbgMsg, DBGMSGSZ, "Data Points: %d, Width: %d, skip: %.4f", wi->Count, w, skipping );
+	dataStarts = max(sf->start,seqStart);
+	dataEnds = min(sf->end,seqEnd);
+	dataSpan = dataEnds - dataStarts;
+	dataPointsInView = dataSpan / usingDataSpan;
+	if( dataPointsInView < 1 ) dataPointsInView = 1;
+	w = (dataEnds - dataStarts) * pixelsPerBase;
+	dataValuesPerPixel = (double) dataPointsInView / (double) w;
+	pixelsPerDataValue = 1.0 / dataValuesPerPixel;
+	if( pixelsPerDataValue < 1 ) pixelsPerDataValue = 1;
+	if( w < 0 ) w = 0;
+snprintf(dbgMsg, DBGMSGSZ, "seek to: %d, read: %d bytes, dataStarts: %d, dataEnds: %d, pixels: %d", wi->Offset, wi->Count, dataStarts, dataEnds, w );
+debugPrint("wigDrawItems");
+snprintf(dbgMsg, DBGMSGSZ, "pixelsPerBase %.4f / dataPointsInView: %d = dataValuesPerPixel: %.4f", pixelsPerBase, dataPointsInView, dataValuesPerPixel );
+debugPrint("wigDrawItems");
+snprintf(dbgMsg, DBGMSGSZ, "pixelsPerDataValue %d", pixelsPerDataValue );
+debugPrint("wigDrawItems");
+    	dataPtr = ReadData + (dataStarts - sf->start);;
+	if( usingDataSpan == 1 ) {
+		x1 = xOff + (dataStarts - seqStart)*pixelsPerBase;
+snprintf(dbgMsg, DBGMSGSZ, "Data Points: %d, Width: %d, start at x1: %d", wi->Count, w, x1 );
 debugPrint("wigDrawItems");
 	for ( pixelsToDraw = 0; pixelsToDraw < w; ++pixelsToDraw )
 	    {
 		int boxHeight;
 		int dataValue;
-    		skipDataPoints = skipping * pixelsToDraw;
+    		int skipDataPoints;
+    		skipDataPoints = dataValuesPerPixel * pixelsToDraw;
 		dataValue = *(dataPtr + pixelsToDraw + skipDataPoints);
-		boxHeight = (h * dataValue) / 128;
-		x1 = pixelsToDraw + xOff + (sf->start - seqStart)*scale;
-		y1 = yOff - boxHeight + h;
-		vgBox(vg, x1, y1, 1, boxHeight, black);
+		if( ((int) dataValuesPerPixel > 1) &&
+			    (wiggleType == wiggleLinearInterpolation) )
+		    {		/* skipping data points, find maximum */
+			int j;	/*	in this area skipped	*/
+			int validData = 0;
+			unsigned char data;
+			dataValue = 0;
+			for( j = 0; j < (int) dataValuesPerPixel; ++j )
+			    {
+				data = *(dataPtr + pixelsToDraw + j);
+				if( data < WIG_NO_DATA )
+				    {
+				    dataValue = max(dataValue,data);
+				    ++validData;
+				    }
+			    }
+			/*	Is there actually any valid data here */
+			if( ! validData ) dataValue = WIG_NO_DATA;
+		    }
+		/*	Check for the NO_DATA situation	*/
+		if( dataValue < WIG_NO_DATA )
+		    {
+		    boxHeight = (h * dataValue) / 128;
+		    if( boxHeight < 1 ) boxHeight = 1;
+		    x1 = pixelsToDraw + xOff +
+			(dataStarts - seqStart)*pixelsPerBase;
+		    y1 = yOff - boxHeight + h;
+		    vgBox(vg, x1, y1, pixelsPerDataValue, boxHeight, black);
+		    }
+		if( pixelsToDraw == w ) {
+snprintf(dbgMsg, DBGMSGSZ, "finished at x1: %d, skipDataPoints: %d", x1, skipDataPoints );
+debugPrint("wigDrawItems");
+		}
 	    }
 	} else {
-	x1 = xOff + (sf->start - seqStart)*scale;
+	y1 = yOff;
+	x1 = xOff + (sf->start - seqStart)*pixelsPerBase;
 	vgBox(vg, x1, y1, w, h, black);
 	}
 
