@@ -10,7 +10,7 @@ O = aliType.o bits.o blastParse.o cda.o cheapcgi.o codebias.o common.o crudeali.
     keys.o largefnt.o linefile.o localmem.o \
     medfnt.o memalloc.o memgfx.o nib.o \
     nt4.o obscure.o oldGff.o ooc.o osunix.o patSpace.o \
-    portimpl.o psl.o rle.o sailfnt.o seqOut.o servcis.o \
+    portimpl.o psl.o repMask.o rle.o sailfnt.o seqOut.o servcis.o \
     servCrunx.o servcl.o servmsII.o servpws.o shaRes.o \
     sixhi.o smallishfnt.o snof.o snofmake.o snofsig.o spaceSaver.o \
     sqlNum.o sqlList.o  supStitch.o trans3.o wildcmp.o wormdna.o \

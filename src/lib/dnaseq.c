@@ -21,6 +21,16 @@ seq->size = size;
 return seq;
 }
 
+struct dnaSeq *cloneDnaSeq(struct dnaSeq *orig)
+/* Duplicate dna sequence in RAM. */
+{
+struct dnaSeq *seq = CloneVar(orig);
+seq->name = cloneString(seq->name);
+seq->dna = needHugeMem(seq->size+1);
+memcpy(seq->dna, orig->dna, seq->size+1);
+return seq;
+}
+
 void freeDnaSeq(struct dnaSeq **pSeq)
 /* Free up DNA seq. (And unlink underlying resource node.) */
 {

@@ -364,20 +364,18 @@ for (seq=seqList; seq != NULL; seq = seq->next)
 fclose(f);
 }
 
-
-boolean faSomeSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, char **retName, boolean isDna)
-/* Read in DNA or Peptide FA record. */
+boolean faMixedSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, char **retName)
+/* Read in DNA or Peptide FA record in mixed case.   Allow any upper or lower case
+ * letter, or the dash character in. */
 {
-int c;
+char c;
 int bufIx = 0;
 static char name[256];
 int nameIx = 0;
 boolean gotSpace = FALSE;
 int lineSize, i;
 char *line;
-char *checkChars = (isDna ? ntChars : aaChars);
 
-dnaUtilOpen();
 
 /* Read first line, make sure it starts wiht '>', and read first word
  * as name of sequence. */
@@ -415,14 +413,7 @@ for (;;)
         {
 	c = line[i];
 	if (isalpha(c) || c == '-')
-	    {
-	    c = checkChars[c];
-	    if (c == 0) 
-		{
-	    	c = (isDna ? 'n' : 'X');
-		}
 	    faFastBuf[bufIx++] = c;
-	    }
 	}
     }
 if (bufIx >= faFastBufSize)
@@ -431,6 +422,56 @@ faFastBuf[bufIx] = 0;
 *retDna = faFastBuf;
 *retSize = bufIx;
 *retName = name;
+return TRUE;
+}
+
+void faToProtein(char *poly, int size)
+/* Convert possibly mixed-case protein to upper case.  Also
+ * convert any strange characters to 'X'.  Does not change size.
+ * of sequence. */
+{
+int i;
+char c;
+dnaUtilOpen();
+for (i=0; i<size; ++i)
+    {
+    if ((c = aaChars[poly[i]]) == 0)
+	c = 'X';
+    poly[i] = c;
+    }
+}
+
+void faToDna(char *poly, int size)
+/* Convert possibly mixed-case DNA to lower case.  Also turn
+ * any strange characters to 'n'.  Does not change size.
+ * of sequence. */
+{
+int i;
+char c;
+dnaUtilOpen();
+for (i=0; i<size; ++i)
+    {
+    if ((c = ntChars[poly[i]]) == 0)
+	c = 'n';
+    poly[i] = c;
+    }
+}
+
+boolean faSomeSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, char **retName, boolean isDna)
+/* Read in DNA or Peptide FA record. */
+{
+char *poly;
+int size;
+
+dnaUtilOpen();
+if (!faMixedSpeedReadNext(lf, retDna, retSize, retName))
+    return FALSE;
+size = *retSize;
+poly = *retDna;
+if (isDna)
+    faToDna(poly, size);
+else
+    faToProtein(poly, size);
 return TRUE;
 }
 
