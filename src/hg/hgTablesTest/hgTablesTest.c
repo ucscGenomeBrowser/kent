@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.13 2004/11/08 05:15:04 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.14 2004/11/08 19:47:07 kent Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -44,6 +44,7 @@ errAbort(
   , clOrgs, clDbs, clTracks, clTables);
 }
 
+FILE *logFile;	/* Log file. */
 
 static struct optionSpec options[] = {
    {"org", OPTION_STRING},
@@ -387,16 +388,21 @@ if (outPage != NULL)
 htmlPageFree(&outPage);
 }
 
-void checkFaOutput(struct htmlPage *page, int expectedCount)
-/* Check that page contains expected number of sequences. */
+void checkFaOutput(struct htmlPage *page, int expectedCount, boolean lessOk)
+/* Check that page contains expected number of sequences.  If lessOk is set
+ * (needed to handle some multiply mapped cases in refSeq) then just check
+ * that have at least one if expecting any. */
 {
 if (page != NULL)
     {
     char *s = page->htmlText;
     int count = countChars(page->htmlText, '>');
     if (count != expectedCount)
-	qaStatusSoftError(tablesTestList->status, 
-		"Got %d sequences, expected %d", count, expectedCount);
+	{
+	if (!lessOk || count > expectedCount || (expectedCount > 0 && count <= 0))
+	    qaStatusSoftError(tablesTestList->status, 
+		    "Got %d sequences, expected %d", count, expectedCount);
+	}
     }
 }
 
@@ -413,15 +419,13 @@ outPage = quickSubmit(tablePage, org, db, group, track, table,
 if (outPage != NULL)
      {
      struct htmlFormVar *typeVar;
-     struct htmlPage *seqPage;
 
-     /* Look and see if this is the form that gives various types
-      * of sequence as an option.  If so check protein and mRNA sequence if
-      * available, and then go to genomic page, which is the only
-      * think most tracks get. */
+     /* Since some genomic sequence things are huge, this will
+      * only test in case where it's a gene prediction. */
      typeVar = htmlFormVarGet(outPage->forms, hgtaGeneSeqType);
      if (typeVar != NULL)
          {
+	 struct htmlPage *seqPage;
 	 static char *types[] = {"protein", "mRNA"};
 	 int i;
 	 for (i=0; i<ArraySize(types); ++i)
@@ -435,23 +439,24 @@ if (outPage != NULL)
 		 safef(testName, sizeof(testName), "%sSeq", type);
 		 page = quickSubmit(outPage, org, db, group, track, table,
 		    testName, hgtaDoGenePredSequence, "submit");
-		 checkFaOutput(page, expectedRows);
+		 checkFaOutput(page, expectedRows, TRUE);
 		 htmlPageFree(&page);
 		 }
 	     }
 	 htmlPageSetVar(outPage, NULL, hgtaGeneSeqType, "genomic");
 	 serialSubmit(&outPage, org, db, group, track, table, "seqUi2",
 	    hgtaDoGenePredSequence, "submit");
+
+	 /* On genomic page uncheck intron if it's there, then get results
+	  * and count them. */
+	 if (htmlFormVarGet(outPage->forms, "hgSeq.intron") != NULL)
+	     htmlPageSetVar(outPage, NULL, "hgSeq.intron", NULL);
+	 seqPage = quickSubmit(outPage, org, db, group, track, table,
+	      "genomicSeq", hgtaDoGenomicDna, "submit");
+	 checkFaOutput(seqPage, expectedRows, FALSE);
+	 htmlPageFree(&seqPage);
 	 }
 
-     /* On genomic page uncheck intron if it's there, then get results
-      * and count them. */
-     if (htmlFormVarGet(outPage->forms, "hgSeq.intron") != NULL)
-         htmlPageSetVar(outPage, NULL, "hgSeq.intron", NULL);
-     seqPage = quickSubmit(outPage, org, db, group, track, table,
-          "genomicSeq", hgtaDoGenomicDna, "submit");
-     checkFaOutput(seqPage, expectedRows);
-     htmlPageFree(&seqPage);
      }
 htmlPageFree(&outPage);
 }
@@ -592,6 +597,8 @@ end = middle+2500000;
 if (start < 0) start = 0;
 if (end > ci.size) end = ci.size;
 safef(region, regionSize, "%s:%d-%d", ci.chrom, start+1, end);
+verbose(1, "Testing at position %s\n", region);
+fprintf(logFile, "Testing at position %s\n", region);
 sqlFreeResult(&sr);
 sqlDisconnect(&conn);
 }
@@ -794,11 +801,11 @@ for (test = list; test != NULL; test = test->next)
     }
 }
 
-void hgTablesTest(char *url, char *log)
+void hgTablesTest(char *url, char *logName)
 /* hgTablesTest - Test hgTables web page. */
 {
 struct htmlPage *rootPage = htmlPageGet(url);
-FILE *f = mustOpen(log, "w");
+logFile = mustOpen(logName, "w");
 htmlPageValidateOrAbort(rootPage);
 if (clDb != NULL)
     {
@@ -829,15 +836,15 @@ testJoining(rootPage);
 htmlPageFree(&rootPage);
 slReverse(&tablesTestList);
 reportSummary(tablesTestList, stdout);
-reportAll(tablesTestList, f);
-fprintf(f, "---------------------------------------------\n");
-reportSummary(tablesTestList, f);
+reportAll(tablesTestList, logFile);
+fprintf(logFile, "---------------------------------------------\n");
+reportSummary(tablesTestList, logFile);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-pushCarefulMemHandler(200000000);
+pushCarefulMemHandler(300000000);
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
