@@ -15,7 +15,7 @@ errAbort(
   "usage:\n"
   "   axtBest in.axt chrom out.axt\n"
   "options:\n"
-  "   -winSize=N  - Size of window, default 1000\n"
+  "   -winSize=N  - Size of window, default 10000\n"
   "   -minScore=N - Minimum score alignments to consider.  Default 1000\n"
   "   -minOutSize=N - Minimum score of piece to output. Default 10\n"
   "   -matrix=file.mat - override default scoring matrix\n"
