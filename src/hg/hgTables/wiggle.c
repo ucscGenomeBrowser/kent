@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.11 2004/09/03 16:57:18 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.12 2004/09/03 17:30:09 hiram Exp $";
 
 enum wigOutputType 
 /*	type of output requested	*/
@@ -237,12 +237,20 @@ struct region *regionList = getRegions(), *region;
 int maxOut = 100000, oneOut, curOut = 0;
 char *name;
 extern char *maxOutMenu[];
-char *maxOutput = maxOutMenu[0];
+char *maxOutputStr = NULL;
+char *maxOutput = NULL;
 
 name = filterFieldVarName(database, curTable, "", filterMaxOutputVar);
-maxOutput = cartUsualString(cart, name, maxOutMenu[0]);
+maxOutputStr = cartOptionalString(cart, name);
+/*	Don't modify(stripChar) the values sitting in the cart hash	*/
+if (NULL == maxOutputStr)
+    maxOutput = cloneString(maxOutMenu[0]);
+else
+    maxOutput = cloneString(maxOutputStr);
+
 stripChar(maxOutput, ',');
 maxOut = sqlUnsigned(maxOutput);
+freeMem(maxOutput);
 
 textOpen();
 
