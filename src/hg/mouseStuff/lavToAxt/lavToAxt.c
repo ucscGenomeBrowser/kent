@@ -152,12 +152,12 @@ for (block = blockList; block != NULL; block = block->next)
 	if (qGap > 0)
 	    {
 	    dyStringAppendMultiC(qSym, '-', qGap);
-	    dyStringAppendN(tSym, tSeq->dna + lastBlock->tEnd - tStart, tGap);
+	    dyStringAppendN(tSym, tSeq->dna + lastBlock->tEnd - tStart, qGap);
 	    }
 	if (tGap > 0)
 	    {
 	    dyStringAppendMultiC(tSym, '-', tGap);
-	    dyStringAppendN(qSym, qSeq->dna + lastBlock->qEnd - qStart, qGap);
+	    dyStringAppendN(qSym, qSeq->dna + lastBlock->qEnd - qStart, tGap);
 	    }
 	}
     dyStringAppendN(qSym, qSeq->dna + block->qStart - qStart,
