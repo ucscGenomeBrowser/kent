@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.19 2005/01/31 21:31:22 kate Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.20 2005/02/01 03:57:19 kate Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -627,7 +627,7 @@ ldColorsMade = TRUE;
 void ldLoadItems(struct track *tg)
 /* loadItems loads up items for the chromosome range indicated.   */
 {
-bedLoadItem(tg, "ld", (ItemLoader)ldLoad);
+bedLoadItem(tg, tg->mapName, (ItemLoader)ldLoad);
 tg->canPack=FALSE;
 tg->limitedVis=TRUE;
 tg->visibility=tvFull;
