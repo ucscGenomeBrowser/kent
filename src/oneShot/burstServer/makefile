@@ -1,6 +1,6 @@
-include ../../../inc/common.mk
+include ../../inc/common.mk
 
-L = -lm
+L = -lm -lpthread
 MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
