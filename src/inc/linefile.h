@@ -64,6 +64,9 @@ void lineFileReuse(struct lineFile *lf);
 void lineFileSeek(struct lineFile *lf, off_t offset, int whence);
 /* Seek to read next line from given position. */
  
+void lineFileUnexpectedEnd(struct lineFile *lf);
+/* Complain about unexpected end of file. */
+
 void lineFileExpectWords(struct lineFile *lf, int expecting, int got);
 /* Check line has right number of words. */
 

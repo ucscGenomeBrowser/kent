@@ -10,7 +10,7 @@
 #include "errabort.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: linefile.c,v 1.27 2003/12/10 00:26:33 hiram Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.28 2004/03/11 07:03:05 kent Exp $";
 
 struct lineFile *lineFileAttatch(char *fileName, bool zTerm, int fd)
 /* Wrap a line file around an open'd file. */
@@ -206,11 +206,17 @@ if (retSize != NULL)
 return TRUE;
 }
 
+void lineFileUnexpectedEnd(struct lineFile *lf)
+/* Complain about unexpected end of file. */
+{
+errAbort("Unexpected end of file in %s", lf->fileName);
+}
+
 void lineFileNeedNext(struct lineFile *lf, char **retStart, int *retSize)
 /* Fetch next line from file.  Squawk and die if it's not there. */
 {
 if (!lineFileNext(lf, retStart, retSize))
-    errAbort("Unexpected end of file in %s", lf->fileName);
+    lineFileUnexpectedEnd(lf);
 }
 
 void lineFileClose(struct lineFile **pLf)
