@@ -1579,9 +1579,9 @@ if(lf==NULL) return;
 snprintf( o1, sizeof(o1),"%s.linear.interp", tg->mapName);
 snprintf( o2, sizeof(o2), "%s.anti.alias", tg->mapName);
 snprintf( o3, sizeof(o3),"%s.fill", tg->mapName);
-snprintf( o4, sizeof(o5),"%s.min.cutoff", tg->mapName);
-snprintf( o5, sizeof(o6),"%s.max.cutoff", tg->mapName);
-snprintf( o6, sizeof(o4),"%s.interp.gap", tg->mapName);
+snprintf( o4, sizeof(o4),"%s.min.cutoff", tg->mapName);
+snprintf( o5, sizeof(o5),"%s.max.cutoff", tg->mapName);
+snprintf( o6, sizeof(o6),"%s.interp.gap", tg->mapName);
 
 interpolate = cartUsualString(cart, o1, "Linear Interpolation");
 wiggleType = wiggleStringToEnum(interpolate);
@@ -1671,7 +1671,7 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	    if( wiggleType == wiggleLinearInterpolation ) 
 	    /*connect samples*/
 		{
-		if( lineGapSize < 0 || sampleX - prevX <= lineGapSize )   
+		if( lineGapSize < 0 || prevX - sampleX <= lineGapSize )   
 		    /*don't interpolate over large gaps*/
 		    {
 		    if (fill)
