@@ -41,16 +41,16 @@ errAbort("paraNode - parasol node serve.\n"
          "usage:\n"
 	 "    paraNode start\n"
 	 "options:\n"
-	 "    logFacility=facility log to the specified syslog facility.\n"
-	 "    hub=host - restrict access to connections from hub\n"
-	 "    umask=000 - set umask to run under, default 002\n"
-	 "    userPath=bin:bin/i386 User dirs to add to path\n"
-	 "    sysPath=/sbin:/local/bin System dirs to add to path\n"
-	 "    randomDelay=N - Up to this many milliseconds of random delay before\n"
+	 "    -logFacility=facility log to the specified syslog facility.\n"
+	 "    -hub=host - restrict access to connections from hub\n"
+	 "    -umask=000 - set umask to run under, default 002\n"
+	 "    -userPath=bin:bin/i386 User dirs to add to path\n"
+	 "    -sysPath=/sbin:/local/bin System dirs to add to path\n"
+	 "    -randomDelay=N - Up to this many milliseconds of random delay before\n"
 	 "        starting a job.  This is mostly to avoid swamping NFS with\n"
 	 "        file opens when loading up an idle cluster.  Also it limits\n"
 	 "        the impact on the hub of very short jobs. Default is 5000\n"
-	 "    cpu=N - Number of CPUs to use.  Default 1\n");
+	 "    -cpu=N - Number of CPUs to use.  Default 1\n");
 }
 
 /* Command line overwriteable variables. */
