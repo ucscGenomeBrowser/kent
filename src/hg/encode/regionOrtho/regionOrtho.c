@@ -12,7 +12,7 @@ errAbort("regionOrtho - merge orthology predictions from liftOver and Mercator.\
 	 "                    consensusFile.bed order.err\n");
 }
 
-struct sizeList *getRegions(char *regionSource)
+struct sizeList *getRegions(char *regionSource, boolean excludeRandoms)
 {
 struct sizeList *list = NULL, *sl;
 if (fileExists(regionSource))
@@ -22,6 +22,8 @@ if (fileExists(regionSource))
     while (lineFileRow(IN, row))
 	{
 	if (sameString(row[0], "chrom"))
+	    continue;
+	if (excludeRandoms && endsWith(row[0], "random"))
 	    continue;
 	AllocVar(sl);
 	sl->chrom      = cloneString(row[0]);
@@ -35,7 +37,7 @@ if (fileExists(regionSource))
     }
 else
     {
-    struct sqlConnection *conn = sqlConnect("hg16");
+    struct sqlConnection *conn = sqlConnect("hg17");
     char query[1024];
     char **row;
     struct sqlResult *sr = NULL;
@@ -92,39 +94,35 @@ struct sizeList *unionSizeLists(struct sizeList *a, struct sizeList *b, FILE *er
 struct sizeList *s, *t, *u, *c=sizeListClone(a), *d=sizeListClone(b);
 boolean didChange=TRUE;
 int mergeGaps=20000;
+if (a == NULL)
+    return b;
 while (didChange)
     {
     didChange=FALSE;
     for (s = c; s != NULL; s = s->next)
-	{
 	for (t = d; t != NULL; t = t->next)
 	    {
 	    if (t->chrom == NULL || t->name == NULL)
 		continue;
 //	    printf("%s/%s.%d-%d\t%s/%s.%d-%d\t", s->name, s->chrom, s->chromStart, s->chromEnd, t->name, t->chrom, t->chromStart, t->chromEnd);
-	    if (!strncmp(s->name, t->name, 6) && sameString(s->chrom,t->chrom))
-		{
+	    if ( !strncmp(s->name, t->name, 6) && sameString(s->chrom, t->chrom) )
 		if (rangeIntersection(s->chromStart,s->chromEnd,t->chromStart,t->chromEnd)+mergeGaps>0)
 		    {
 		    s->chromStart = min(s->chromStart,t->chromStart);
 		    s->chromEnd   = max(s->chromEnd,  t->chromEnd);
-		    t->chrom=t->name=NULL; // it would be better to remove the element here
-		    didChange=TRUE;
+		    t->chrom  = t->name = NULL; // it would be better to remove the element here
+		    didChange = TRUE;
 		    continue;
 		    }
-		}
 	    }
-	}
     }
 for (t = d; t != NULL; t = t->next)
-    {
     if (t->name != NULL && t->chrom!=NULL)
 	{
 	u = sizeListNew(t->chrom, t->chromStart, t->chromEnd, t->name);
 	slAddTail(c, u);
 	fprintf(err, "%s\t%d\t%d\t%s\n", t->chrom, t->chromStart, t->chromEnd, t->name);
 	}
-    }
 return c;
 }
 
@@ -135,46 +133,40 @@ char *name;
 for ( sl = sList; sl != NULL; sl = sl->next)
     {
     if (endsWith(sl->name,"+") || endsWith(sl->name,"-"))
-	{
 	chopSuffixAt(sl->name, '_');
-//	chopSuffixAt(sl->name, '_');
-//	chopSuffixAt(sl->name, '_');
-	}
     fprintf(File, "%s\t%d\t%d\t%s\n", sl->chrom, sl->chromStart, sl->chromEnd, sl->name);
     }
 }
 
 int main(int argc, char *argv[])
 {
-//char *source;
 char *ortho1;
 char *ortho2;
 char *consensus;
 char *err;
-//struct sizeList *sourceList=NULL;
 struct sizeList *ortho1List=NULL;
 struct sizeList *ortho2List=NULL;
 struct sizeList *consensusList=NULL;
 FILE *consensusFile=NULL;
 FILE *errFile=NULL;
 
-if(argc != 6)
+if(argc != 5)
     usage();
 
-//source     = cloneString(argv[1]);
-ortho1     = cloneString(argv[2]);
-ortho2     = cloneString(argv[3]);
-consensus  = cloneString(argv[4]);
-err        = cloneString(argv[5]);
-printf("%s\n",err);
-//sourceList = getRegions(source);
-ortho1List = getRegions(ortho1);
-ortho2List = getRegions(ortho2);
+ortho1        = cloneString(argv[1]); // liftOver
+ortho2        = cloneString(argv[2]); // Mercator
+consensus     = cloneString(argv[3]); // Consensus
+err           = cloneString(argv[4]); // errors
+
+ortho1List    = getRegions(ortho1, FALSE); // liftOver - include random chroms
+ortho2List    = getRegions(ortho2, TRUE ); // Mercator - exclude random chroms
 
 consensusFile = mustOpen(consensus, "w");
 errFile       = mustOpen(err, "w");
 
-consensusList = unionSizeLists(ortho1List, ortho2List, errFile);
+consensusList = unionSizeLists(ortho1List,    ortho2List, errFile);
+consensusList = unionSizeLists(consensusList, ortho1List, errFile);
+consensusList = unionSizeLists(consensusList, ortho2List, errFile);
 writeSizeListToBedFile(consensusFile, consensusList);
 return 0;
 }
