@@ -1,12 +1,12 @@
 <H2>Description</H2>
 This track shows best-in-genome  
-<em>C. elegans</em>/<em>C. briggsae</em> alignments based on the 
-<em>C. elegans</em>/<em>C. briggsae</em> alignment net; i.e., the best chain 
-for every part of the <em>C. elegans</em> genome.  This track displays alignment scores, and when zoomed in to
-the base level, the alignment itself is displayed. 
-The <em>C.briggsae</em> sequence is from 
+<em>$organism</em>/<em>$o_organism</em> alignments based on the 
+<em>$organism</em>/<em>$o_organism</em> alignment net; i.e., the best chain 
+for every part of the <em>$organism</em> genome.  This track displays alignment 
+scores, and when zoomed in to the base level, the alignment itself is displayed. 
+The <em>$o_organism</em> sequence is from 
 <A HREF="http://www.wormbase.org/" TARGET=_blank>WormBase</A>
-Version cb25.agp8 (July 2002) assembly.
+Version cb25.agp8 ($o_date ) assembly.
 <P>
 In the graphical display, the shade (in dense display mode) 
 or height (in full mode) of a vertical line indicates the score 
@@ -14,13 +14,11 @@ of the best chained and netted alignment at that location.
 Clicking on the track brings up detailed information about the 
 blastz alignments (taken from the axt-formatted output) in the 
 currently displayed range of positions.  
-<BR>
 
 <H2>Methods</H2>
 First, chains are derived from 
 <A HREF="http://bio.cse.psu.edu/dist/blastz.pdf" TARGET=_blank>blastz</A> 
-alignments as
-described in the details pages of the chain tracks
+alignments as described in the details pages of the chain tracks
 and sorted so that the highest scoring chain in the
 genome is first. The program <em>chainNet</em> then places
 chains one at a time, trimming them as necessary to
@@ -37,7 +35,7 @@ and so forth.  The program <em>netClass</em> then fills in
 how much of the gaps and chains are filled with N's
 (sequencing gaps) in one or both species,  how much
 is filled with transposons inserted before and after
-<em>C. elegans</em> and <em>C. briggsae</em> diverged, and so forth.
+<em>$organism</em> and <em>$o_organism</em> diverged, and so forth.
 The program <em>netToAxt</em> translates the net back 
 to axt.  <em>netToAxt</em> is run with -maxGap=300.  
 
