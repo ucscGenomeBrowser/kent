@@ -4,7 +4,7 @@
 #include "xa.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: hgWaba.c,v 1.2 2003/05/06 07:22:26 kate Exp $";
+static char const rcsid[] = "$Id: hgWaba.c,v 1.3 2003/06/04 23:25:32 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -139,16 +139,22 @@ printf("Writing tab-delimited files\n");
 for (xa = xaList; xa != NULL; xa = xa->next)
     {
     int squeezedSize;
+    squeezedSize = squeezeSym(xa->tSym, xa->hSym, xa->symCount, xa->hSym);
+    if( squeezedSize != xa->tEnd - xa->tStart ) {
+		printf("%s squeezedSize: %d, tEnd, tStart: %d, %d, diff: %d\n", xa->query, squeezedSize, xa->tEnd, xa->tStart, xa->tEnd - xa->tStart );
+        } else {
     fprintf(fullTab, "%s\t%d\t%d\t%c\t%s\t%d\t%d\t%d\t%d\t%s\t%s\t%s\n",
-    	xa->query, xa->qStart, xa->qEnd, xa->qStrand,
+    	/*xa->query, xa->qStart, xa->qEnd, xa->qStrand,*/
+    	xa->name, xa->qStart, xa->qEnd, xa->qStrand,
 	chromosome, xa->tStart, xa->tEnd,
 	xa->milliScore, xa->symCount, 
 	xa->qSym, xa->tSym, xa->hSym);
-    squeezedSize = squeezeSym(xa->tSym, xa->hSym, xa->symCount, xa->hSym);
     assert(squeezedSize == xa->tEnd - xa->tStart);
     fprintf(chromTab, "%s\t%d\t%d\t%c\t%d\t%s\n",
-        xa->query, xa->tStart, xa->tEnd, xa->qStrand,
+        /*xa->query, xa->tStart, xa->tEnd, xa->qStrand,*/
+        xa->name, xa->tStart, xa->tEnd, xa->qStrand,
 	xa->milliScore, xa->hSym);
+        }
     }
 fclose(fullTab);
 fclose(chromTab);
