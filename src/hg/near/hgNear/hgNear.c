@@ -17,7 +17,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.109 2003/10/23 15:41:43 heather Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.110 2003/10/24 18:26:37 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	detailsVarName, colInfoVarName,
@@ -1019,7 +1019,8 @@ slReverse(&newList);
 }
 
 struct genePos *getOrderedList(struct order *ord,
-	struct column *colList, struct sqlConnection *conn)
+	struct column *colList, struct sqlConnection *conn, 
+	int maxCount)
 /* Return sorted list of gene neighbors. */
 {
 struct genePos *geneList = advFilterResults(colList, conn);
@@ -1034,13 +1035,13 @@ for (gp = geneList; gp != NULL; gp = gp->next)
 
 /* Calculate distances, trim unset distances, and sort. */
 if (ord->calcDistances)
-    ord->calcDistances(ord, conn, &geneList, geneHash, displayCount);
+    ord->calcDistances(ord, conn, &geneList, geneHash, maxCount);
 if (!gotAdvFilter())
     trimFarGenes(&geneList);
 slSort(&geneList, genePosCmpDistance);
 
 /* Trim list to max number. */
-gp = slElementFromIx(geneList, displayCount-1);
+gp = slElementFromIx(geneList, maxCount-1);
 if (gp != NULL)
     gp->next = NULL;
 
@@ -1438,16 +1439,26 @@ struct order *ord = curOrder(ordList);
 if (gp != NULL && gp->protein == NULL)
     gp->protein = lookupProtein(conn, gp->name);
 curGeneId = gp;
-if (gp)
-    geneList = getOrderedList(ord, colList, conn);
 if (cartVarExists(cart, getTextVarName))
+    {
+    if (gp) geneList = getOrderedList(ord, colList, conn, BIGNUM);
     doGetText(conn, colList, geneList);
+    }
 else if (cartVarExists(cart, getSeqVarName))
+    {
+    if (gp) geneList = getOrderedList(ord, colList, conn, BIGNUM);
     doGetSeq(conn, colList, geneList, cartString(cart, getSeqHowVarName));
+    }
 else if (cartVarExists(cart, getGenomicSeqVarName))
+    {
+    if (gp) geneList = getOrderedList(ord, colList, conn, BIGNUM);
     doGetGenomicSeq(conn, colList, geneList);
+    }
 else
+    {
+    if (gp) geneList = getOrderedList(ord, colList, conn, displayCount);
     doMainDisplay(conn, ord, ordList, colList, geneList);
+    }
 }
 
 static struct genePos *curGenePos()
