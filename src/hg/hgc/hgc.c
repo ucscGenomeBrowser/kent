@@ -975,7 +975,7 @@ printf("<A HREF=\"http://www.genelynx.org/cgi-bin/linklist?tableitem=GLID_NAME.n
 printf("%s</A><BR>\n", search);
 }
 
-/* --- */
+/* --- !!! Riken code is under development Fan. 4/16/02 */
 void printRikenInfo(char *acc, struct sqlConnection *conn )
 /* Print Riken annotation info */
 {
@@ -987,10 +987,10 @@ char *qualifier, *anntext, *datasrc, *srckey, *href, *evidence;
 
 accession = acc;
 
-	//!!! uncomment the following line, if you want to test Riken annotation 
+	//!! uncomment the following line, if you want to test Riken annotation 
 	// before the new genbank data get loaded into the mouse genome database.  
 	//    Fan 3/28/02
-	//accession = strdup("AK002809");
+	accession = strdup("AK002809");
 
 	snprintf(qry, sizeof(qry), "select seqid from rikenaltid where altid='%s';", accession);
 	sr = sqlMustGetResult(conn, qry);
@@ -1014,11 +1014,16 @@ accession = acc;
 			srckey    = row[3];
 			href      = row[4];
 			evidence  = row[5];
-		
-			printf("<B>Riken/%s link:</B> ",datasrc);
-	        	printf("<A HREF=\"%s\">", href);	
-	        	printf("%s",anntext);
-			printf("</A><BR>\n");
+	
+	  //                    printf("<h4>%s</h4>\n", href);
+			      
+	//		printf("<B>Riken/%s link:</B> ",datasrc);
+	        	
+			//printf("<h2>%s</h2>\n", href);
+//!			printf("<A HREF=\"%s\">", href);	
+//!	  printf("x");
+	  //      	printf("%s",anntext);
+//!			printf("</A><BR>\n");
 
 			row = sqlNextRow(sr);		
 			}
@@ -1126,7 +1131,7 @@ if (row != NULL)
         && hTableExists("rikenaltid"))
 	{
         sqlFreeResult(&sr);
-	printRikenInfo(acc, conn);
+//!	printRikenInfo(acc, conn);
 	}
     }
 else
@@ -1267,7 +1272,6 @@ printRnaSpecs(acc);
 
 /* Get alignment info. */
 hFindSplitTable(seqName, table, splitTable, &hasBin);
-
 sprintf(query, "select * from %s where qName = '%s'", table, acc);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -2876,6 +2880,8 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char query[256];
+char *mgiID;
+
 struct refLink *rl;
 struct genePred *gp;
 
@@ -2905,8 +2911,30 @@ if (rl->locusLinkId != 0)
     printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l=%d\" TARGET=_blank>",
 	    rl->locusLinkId);
     printf("%d</A><BR>\n", rl->locusLinkId);
-    }
 
+    if ( (strstr(hgGetDb(), "mm") != NULL) && hTableExists("MGIid"))
+    	{
+	sprintf(query, "select MGIid from MGIid where LLid = '%d';",
+	rl->locusLinkId);
+
+	sr = sqlGetResult(conn, query);
+	if ((row = sqlNextRow(sr)) != NULL)
+    		{
+		printf("<B>Mouse Genome Informatics:</B> ");
+		mgiID = strdup(row[0]);
+		
+		printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?id=%s\">%s</A><BR>\n",mgiID, mgiID);
+		}
+	else
+		{
+		// per Carol from Jackson Lab 4/12/02, JAX do not always agree
+		// with Locuslink on seq to gene association.
+		// Thus, not finding a MGIid even if a LocusLink ID
+		// exists is always a possibility.
+    		}
+	sqlFreeResult(&sr);
+	}
+    } 
 medlineLinkedLine("PubMed on Gene", rl->name, rl->name);
 if (rl->product[0] != 0)
     medlineLinkedLine("PubMed on Product", rl->product, rl->product);
