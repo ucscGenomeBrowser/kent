@@ -6,7 +6,7 @@
 #include "jksql.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: spDb.c,v 1.5 2003/10/14 06:28:49 kent Exp $";
+static char const rcsid[] = "$Id: spDb.c,v 1.6 2003/11/12 19:30:30 hiram Exp $";
 
 boolean spIsPrimaryAcc(struct sqlConnection *conn, char *acc)
 /* Return TRUE if this is a primary accession in database. */
@@ -188,6 +188,15 @@ struct slName *spGenes(struct sqlConnection *conn, char *acc)
 char query[256];
 safef(query, sizeof(query),
     "select val from gene where acc = '%s'", acc);
+return sqlQuickList(conn, query);
+}
+
+struct slName *spTaxons(struct sqlConnection *conn, char *acc)
+/* Return list of taxons associated with accession */
+{
+char query[256];
+safef(query, sizeof(query),
+    "select taxon from accToTaxon where acc = '%s'", acc);
 return sqlQuickList(conn, query);
 }
 
