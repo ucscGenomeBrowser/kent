@@ -283,11 +283,12 @@ int main(int argc, char* argv[]) {
         ungetc(*chrom, windowsFile);
     
     while(!feof(windowsFile)) {
-        fscanf(windowsFile, "%15s\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t"
+        if(fscanf(windowsFile, "%15s\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t"
                                "%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld",
                 chrom, &chromStart, &chromEnd, &number, 
                 &AA, &AC, &AG, &AT, &CA, &CC, &CG, &CT,
-                &GA, &GC, &GG, &GT, &TA, &TC, &TG, &TT);
+                &GA, &GC, &GG, &GT, &TA, &TC, &TG, &TT) != 20)
+            continue;
 
         percentId = (((double)AA) + CC + GG +TT) /
             (((double)AA) + AC + AG + AT + CA + CC + CG + CT + GA + GC + GG + GT + TA + TC + TG + TT);
