@@ -16,7 +16,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.56 2003/09/06 18:41:10 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.57 2003/09/06 18:55:09 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -384,9 +384,9 @@ static char *accVal(struct column *col, struct genePos *gp, struct sqlConnection
 return cloneString(gp->name);
 }
 
-struct genePos *accAdvancedSearch(struct column *col, 
+struct genePos *accAdvFilter(struct column *col, 
 	struct sqlConnection *conn, struct genePos *list)
-/* Do advanced search on accession. */
+/* Do advanced filter on accession. */
 {
 char *wild = advFilterVal(col, "wild");
 struct hash *keyHash = keyFileHash(col);
@@ -429,8 +429,8 @@ void setupColumnAcc(struct column *col, char *parameters)
 {
 columnDefaultMethods(col);
 col->cellVal = accVal;
-col->searchControls = lookupSearchControls;
-col->advancedSearch = accAdvancedSearch;
+col->filterControls = lookupAdvFilterControls;
+col->advFilter = accAdvFilter;
 }
 
 /* ---- Number column ---- */
@@ -488,8 +488,8 @@ slReverse(&resList);
 return resList;
 }
 
-void lookupSearchControls(struct column *col, struct sqlConnection *conn)
-/* Print out controls for advanced search. */
+void lookupAdvFilterControls(struct column *col, struct sqlConnection *conn)
+/* Print out controls for advanced filter. */
 {
 char *fileName = advFilterVal(col, "keyFile");
 hPrintf("%s search (including * and ? wildcards):", col->shortLabel);
@@ -522,9 +522,9 @@ if (!columnSetting(col, "noKeys", NULL))
     }
 }
 
-struct genePos *lookupAdvancedSearch(struct column *col, 
+struct genePos *lookupAdvFilter(struct column *col, 
 	struct sqlConnection *conn, struct genePos *list)
-/* Do advanced search on position. */
+/* Do advanced filter on position. */
 {
 char *wild = advFilterVal(col, "wild");
 struct hash *keyHash = keyFileHash(col);
@@ -566,8 +566,8 @@ if (columnSetting(col, "search", NULL))
     {
     col->simpleSearch = lookupTypeSimpleSearch;
     }
-col->searchControls = lookupSearchControls;
-col->advancedSearch = lookupAdvancedSearch;
+col->filterControls = lookupAdvFilterControls;
+col->advFilter = lookupAdvFilter;
 }
 
 void setupColumnLookup(struct column *col, char *parameters)
@@ -600,8 +600,8 @@ sqlFreeResult(&sr);
 return res;
 }
 
-void distanceSearchControls(struct column *col, struct sqlConnection *conn)
-/* Print out controls for advanced search. */
+void distanceFilterControls(struct column *col, struct sqlConnection *conn)
+/* Print out controls for advanced filter. */
 {
 hPrintf("minimum: ");
 advFilterRemakeTextVar(col, "min", 8);
@@ -609,9 +609,9 @@ hPrintf(" maximum: ");
 advFilterRemakeTextVar(col, "max", 8);
 }
 
-struct genePos *distanceAdvancedSearch(struct column *col, 
+struct genePos *distanceAdvFilter(struct column *col, 
 	struct sqlConnection *conn, struct genePos *list)
-/* Do advanced search on distance type. */
+/* Do advanced filter on distance type. */
 {
 char *minString = advFilterVal(col, "min");
 char *maxString = advFilterVal(col, "max");
@@ -653,8 +653,8 @@ col->valField = cloneString(valField);
 col->curGeneField = cloneString(curGene);
 col->exists = simpleTableExists;
 col->cellVal = cellDistanceVal;
-col->searchControls = distanceSearchControls;
-col->advancedSearch = distanceAdvancedSearch;
+col->filterControls = distanceFilterControls;
+col->advFilter = distanceAdvFilter;
 }
 
 void setupColumnDistance(struct column *col, char *parameters)
@@ -729,7 +729,7 @@ hPrintf("</TD></TR>\n<TR><TD ALIGN=CENTER>");
     cgiMakeDropList("near.assembly", menu, ArraySize(menu), menu[0]);
     }
 
-/* Make getDna, getText, advancedSearch buttons */
+/* Make getDna, getText, advFilter buttons */
     {
     hPrintf(" ");
     cgiMakeButton(getSeqPageVarName, "as sequence");
@@ -998,7 +998,7 @@ slReverse(&newList);
 struct genePos *getNeighbors(struct column *colList, struct sqlConnection *conn)
 /* Return sorted list of gene neighbors. */
 {
-struct genePos *geneList = advancedSearchResults(colList, conn);
+struct genePos *geneList = advFilterResults(colList, conn);
 struct hash *geneHash = newHash(16);
 struct genePos *gp;
 
@@ -1393,7 +1393,7 @@ hPrintf("%s",
  "down. The 'as sequence' button will fetch protein, mRNA, promoter, or "
  "genomic sequence associated with the genes in the table.  The 'as text' "
  "button fetches the table in a simple tab-delimited format suitable for "
- "import into a spreadsheet or relational database. The advanced search "
+ "import into a spreadsheet or relational database. The advanced filter "
  "button allows you to select which genes are displayed in the table "
  "in a very detailed and flexible fashion.</P>"
  "<P>The UCSC Gene Family Browser was designed and implemented by Jim Kent, "
@@ -1461,7 +1461,7 @@ organism = "Human";
 hSetDb(database);
 conn = hAllocConn();
 
-/* Get groupOn.  Revert to default if no advanced search. */
+/* Get groupOn.  Revert to default if no advanced filter. */
 groupOn = cartUsualString(cart, groupVarName, "expression");
 
 displayCountString = cartUsualString(cart, countVarName, "50");
@@ -1495,13 +1495,13 @@ else if (cartVarExists(cart, saveCurrentConfName))
 else if (cartVarExists(cart, useSavedConfName))
     doConfigUseSaved(conn, colList);
 else if (cartVarExists(cart, advFilterVarName))
-    doAdvancedSearch(conn, colList);
+    doAdvFilter(conn, colList);
 else if (cartVarExists(cart, advFilterClearVarName))
-    doAdvancedSearchClear(conn, colList);
+    doAdvFilterClear(conn, colList);
 else if (cartVarExists(cart, advFilterBrowseVarName))
-    doAdvancedSearchBrowse(conn, colList);
+    doAdvFilterBrowse(conn, colList);
 else if (cartVarExists(cart, advFilterListVarName))
-    doAdvancedSearchList(conn, colList);
+    doAdvFilterList(conn, colList);
 else if (cartVarExists(cart, getSeqPageVarName))
     doGetSeqPage(conn, colList);
 else if (cartVarExists(cart, idVarName))

@@ -11,7 +11,7 @@
 #include "hgNear.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.17 2003/09/06 18:41:10 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.18 2003/09/06 18:55:09 kent Exp $";
 
 
 static boolean loadExpVals(struct sqlConnection *conn,
@@ -339,8 +339,8 @@ hPrintf("<TD>");
 hPrintf("</TD>");
 }
 
-void expRatioSearchControls(struct column *col, struct sqlConnection *conn)
-/* Print out controls for advanced search. */
+void expRatioFilterControls(struct column *col, struct sqlConnection *conn)
+/* Print out controls for advanced filter. */
 {
 char lVarName[16];
 int i, numExpts = col->representativeCount;
@@ -432,9 +432,9 @@ safef(varName, sizeof(varName), "%s%d", varType[isMax], col->representatives[rep
 return advFilterVal(col, varName);
 }
 
-struct genePos *expRatioAdvancedSearch(struct column *col, 
+struct genePos *expRatioAdvFilter(struct column *col, 
 	struct sqlConnection *conn, struct genePos *list)
-/* Do advanced search on position. */
+/* Do advanced filter on position. */
 {
 if (advFilterColAnySet(col))
     {
@@ -598,6 +598,6 @@ col->cellVal = expRatioCellVal;
 col->cellPrint = expRatioCellPrint;
 col->labelPrint = expRatioLabelPrint;
 col->configControls = expRatioConfigControls;
-col->searchControls = expRatioSearchControls;
-col->advancedSearch = expRatioAdvancedSearch;
+col->filterControls = expRatioFilterControls;
+col->advFilter = expRatioAdvFilter;
 }

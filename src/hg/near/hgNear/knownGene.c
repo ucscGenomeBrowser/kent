@@ -14,7 +14,7 @@
 #include "kgAlias.h"
 #include "findKGAlias.h"
 
-static char const rcsid[] = "$Id: knownGene.c,v 1.16 2003/09/06 18:41:10 kent Exp $";
+static char const rcsid[] = "$Id: knownGene.c,v 1.17 2003/09/06 18:55:09 kent Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
@@ -90,8 +90,8 @@ else
 hPrintf("</TD>");
 }
 
-static void genePredPosSearchControls(struct column *col, struct sqlConnection *conn)
-/* Print out controls for advanced search. */
+static void genePredPosFilterControls(struct column *col, struct sqlConnection *conn)
+/* Print out controls for advanced filter. */
 {
 hPrintf("chromosome: ");
 advFilterRemakeTextVar(col, "chr", 8);
@@ -101,9 +101,9 @@ hPrintf(" end: ");
 advFilterRemakeTextVar(col, "end", 8);
 }
 
-static struct genePos *genePredPosAdvancedSearch(struct column *col, 
+static struct genePos *genePredPosAdvFilter(struct column *col, 
 	struct sqlConnection *conn, struct genePos *list)
-/* Do advanced search on position. */
+/* Do advanced filter on position. */
 {
 char *chrom = advFilterVal(col, "chr");
 char *startString = advFilterVal(col, "start");
@@ -162,8 +162,8 @@ col->table = table;
 col->exists = simpleTableExists;
 col->cellVal = genePredPosVal;
 col->cellPrint = genePredPosPrint;
-col->searchControls = genePredPosSearchControls;
-col->advancedSearch = genePredPosAdvancedSearch;
+col->filterControls = genePredPosFilterControls;
+col->advFilter = genePredPosAdvFilter;
 }
 
 static char *knownPosCellVal(struct column *col, struct genePos *gp, 

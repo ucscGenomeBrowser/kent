@@ -86,12 +86,12 @@ struct column
    	struct sqlConnection *conn, char *search);
    /* Return list of genes with descriptions that match search. */
 
-   void (*searchControls)(struct column *col, struct sqlConnection *conn);
-   /* Print out controls for advanced search. */
+   void (*filterControls)(struct column *col, struct sqlConnection *conn);
+   /* Print out controls for advanced filter. */
 
-   struct genePos *(*advancedSearch)(struct column *col, struct sqlConnection *conn,
+   struct genePos *(*advFilter)(struct column *col, struct sqlConnection *conn,
    	struct genePos *inputList);
-   /* Return list of positions for advanced search. */
+   /* Return list of positions for advanced filter. */
 
    /* -- Data that may be track-specific. -- */
       /* Most columns that need any data at all use the next few fields. */
@@ -141,13 +141,13 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define proIncludeFiveOnly "near.proIncludeFiveOnly" 
 	/* Include without 5' UTR? */
 #define getTextVarName "near.getText"	/* Button to get as text. */
-#define advFilterVarName "near.advFilter"      /* Advanced search */
+#define advFilterVarName "near.advFilter"      /* Aadvanced filter */
 #define advFilterClearVarName "near.advFilterClear" 
-	/* Advanced search clear all button. */
+	/* Aadvanced filter clear all button. */
 #define advFilterBrowseVarName "near.advFilterBrowse" 
-	/* Advanced search browse  button. */
+	/* Aadvanced filter browse  button. */
 #define advFilterListVarName "near.advFilterList" 
-	/* Advanced search submit list. */
+	/* Aadvanced filter submit list. */
 #define colOrderVar "near.colOrder"     /* Order of columns. */
 #define defaultConfName "near.default"  /* Restore to default settings. */
 #define hideAllConfName "near.hideAll"  /* Hide all columns. */
@@ -171,9 +171,9 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define colConfigPrefix "near.col."     
 	/* Prefix for stuff set in configuration pages. */
 #define advFilterPrefix "near.as."      
-	/* Prefix for advanced search variables. */
+	/* Prefix for advanced filter variables. */
 #define advFilterPrefixI "near.asi."    
-	/* Prefix for advanced search variables not forcing search. */
+	/* Prefix for advanced filter variables not forcing search. */
 #define keyWordUploadPrefix "near.keyUp." /* Prefix for keyword uploads. */
 #define keyWordPastePrefix "near.keyPaste." /* Prefix for keyword paste-ins. */
 #define keyWordPastedPrefix "near.keyPasted." 
@@ -265,8 +265,8 @@ void labelSimplePrint(struct column *col);
 boolean simpleTableExists(struct column *col, struct sqlConnection *conn);
 /* This returns true if col->table exists. */
 
-void lookupSearchControls(struct column *col, struct sqlConnection *conn);
-/* Print out controls for advanced search. */
+void lookupAdvFilterControls(struct column *col, struct sqlConnection *conn);
+/* Print out controls for advanced filter. */
 
 void lookupTypeMethods(struct column *col, char *table, char *key, char *val);
 /* Set up the methods for a simple lookup column. */
@@ -286,20 +286,20 @@ struct hash *knownCannonicalHash(struct sqlConnection *conn);
 void fillInKnownPos(struct genePos *gp, struct sqlConnection *conn);
 /* If gp->chrom is not filled in go look it up. */
 
-struct genePos *advancedSearchResults(struct column *colList, 
+struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn);
-/* Get list of genes that pass all advanced search filters.  
+/* Get list of genes that pass all advanced filter filters.  
  * If no filters are on this returns all genes. */
 
 char *advFilterName(struct column *col, char *varName);
-/* Return variable name for advanced search. */
+/* Return variable name for advanced filter. */
 
 char *advFilterVal(struct column *col, char *varName);
-/* Return value for advanced search variable.  Return NULL if it
+/* Return value for advanced filter variable.  Return NULL if it
  * doesn't exist or if it is "" */
 
 char *advFilterNameI(struct column *col, char *varName);
-/* Return name for advanced search that doesn't force search. */
+/* Return name for advanced filter that doesn't force search. */
 
 void advFilterRemakeTextVar(struct column *col, char *varName, int size);
 /* Make a text field of given name and size filling it in with
@@ -322,7 +322,7 @@ struct column *advFilterKeyUploadPressed(struct column *colList);
 
 void doAdvFilterKeyUpload(struct sqlConnection *conn, struct column *colList, 
     struct column *col);
-/* Handle upload keyword list button press in advanced search form. */
+/* Handle upload keyword list button press in advanced filter form. */
 
 void advFilterKeyPasteButton(struct column *col);
 /* Make a button for uploading keywords. */
@@ -333,7 +333,7 @@ struct column *advFilterKeyPastePressed(struct column *colList);
 
 void doAdvFilterKeyPaste(struct sqlConnection *conn, struct column *colList, 
     struct column *col);
-/* Handle search keyword list button press in advanced search form. */
+/* Handle search keyword list button press in advanced filter form. */
 
 struct column *advFilterKeyPastedPressed(struct column *colList);
 /* Return column where an key upload button was pressed, or
@@ -341,7 +341,7 @@ struct column *advFilterKeyPastedPressed(struct column *colList);
 
 void doAdvFilterKeyPasted(struct sqlConnection *conn, struct column *colList, 
     struct column *col);
-/* Handle search keyword list button press in advanced search form. */
+/* Handle search keyword list button press in advanced filter form. */
 
 void advFilterKeyClearButton(struct column *col);
 /* Make a button for uploading keywords. */
@@ -352,7 +352,7 @@ struct column *advFilterKeyClearPressed(struct column *colList);
 
 void doAdvFilterKeyClear(struct sqlConnection *conn, struct column *colList, 
     struct column *col);
-/* Handle clear keyword list button press in advanced search form. */
+/* Handle clear keyword list button press in advanced filter form. */
 
 struct genePos *weedUnlessInHash(struct genePos *inList, struct hash *hash);
 /* Return input list with stuff not in hash removed. */
@@ -407,10 +407,10 @@ void setupColumnExpRatio(struct column *col, char *parameters);
 /* Set up expression ration type column. */
 
 boolean gotAdvFilter();
-/* Return TRUE if advanced search variables are set. */
+/* Return TRUE if advanced filter variables are set. */
 
 boolean advFilterColAnySet(struct column *col);
-/* Return TRUE if any of the advanced search variables
+/* Return TRUE if any of the advanced filter variables
  * for this col are set. */
 
 /* ---- Get config options ---- */
@@ -432,17 +432,17 @@ void doSearch(struct sqlConnection *conn, struct column *colList);
 /* Search.  If result is unambiguous call doMain, otherwise
  * put up a page of choices. */
 
-void doAdvancedSearch(struct sqlConnection *conn, struct column *colList);
-/* Put up advanced search page. */
+void doAdvFilter(struct sqlConnection *conn, struct column *colList);
+/* Put up advanced filter page. */
 
-void doAdvancedSearchClear(struct sqlConnection *conn, struct column *colList);
-/* Clear variables in advanced search page. */
+void doAdvFilterClear(struct sqlConnection *conn, struct column *colList);
+/* Clear variables in advanced filter page. */
 
-void doAdvancedSearchBrowse(struct sqlConnection *conn, struct column *colList);
-/* Put up family browser with advanced search group by. */
+void doAdvFilterBrowse(struct sqlConnection *conn, struct column *colList);
+/* Put up family browser with advanced filter group by. */
 
-void doAdvancedSearchList(struct sqlConnection *conn, struct column *colList);
-/* List gene names matching advanced search. */
+void doAdvFilterList(struct sqlConnection *conn, struct column *colList);
+/* List gene names matching advanced filter. */
 
 void doConfigure(struct sqlConnection *conn, struct column *colList, 
 	char *bumpVar);
