@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.691 2004/07/18 21:59:40 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.692 2004/07/18 22:05:06 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1477,10 +1477,10 @@ for (gp = gpList; gp != NULL; gp = gp->next)
                 printf("<b>CDS Start is unknown. (coding, but not known)</b><br>\n");
                 break;
             case cdsIncomplete:  /* "incmpl" - CDS is not complete at this end  */
-                printf("<b>CDS Start is not complete at this end of gene. <br>\n");
+                printf("CDS Start is <b>not</b> complete. <br>\n");
                 break;
             case cdsComplete:    /* "cmpl" - CDS is complete at this end  */
-                printf("<b>CDS Start is complete. <br>\n");
+                printf("<b>CDS Start is complete. </b><br>\n");
                 break;
             }
     if (gp->exonFrames != NULL ) 
@@ -1493,10 +1493,10 @@ for (gp = gpList; gp != NULL; gp = gp->next)
                 printf("<b>CDS End is unknown. (coding, but not known)</b><br>\n");
                 break;
             case cdsIncomplete:  /* "incmpl" - CDS is not complete at this end  */
-                printf("<b>CDS End is not complete at this end of gene. <br>\n");
+                printf("CDS End is <b>not</b> complete. <br>\n");
                 break;
             case cdsComplete:    /* "cmpl" - CDS is complete at this end  */
-                printf("<b>CDS End is complete. <br>\n");
+                printf("<b>CDS End is complete. </b><br>\n");
                 break;
             }
     }
