@@ -600,7 +600,7 @@ type psl xeno
 url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
 
 track anyCovBed
-shortLabel mRNA/EST/psued
+shortLabel mRNA/EST/pseud
 longLabel Blastz Alignments of GenBank mRNA including Pseudogenes and all ESTs
 priority 23.5
 visibility hide
@@ -610,7 +610,7 @@ type bed 3
 
 
 track anyMrnaCov
-shortLabel mRNA/psued
+shortLabel mRNA/pseud
 longLabel Blastz Alignments of GenBank mRNA including Pseudogenes
 priority 23.4
 visibility hide
