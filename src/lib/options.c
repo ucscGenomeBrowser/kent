@@ -12,7 +12,7 @@
 #include "verbose.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: options.c,v 1.19 2004/08/04 21:31:20 krish Exp $";
+static char const rcsid[] = "$Id: options.c,v 1.20 2004/08/05 22:09:33 krish Exp $";
 
 #ifdef MACHTYPE_alpha
     #define strtoll strtol
@@ -87,23 +87,28 @@ default:
 }
 }
 
-void parseMultiOption(struct hash *hash, char *name, char* val, struct optionSpec *spec) {
+static void parseMultiOption(struct hash *hash, char *name, char* val, struct optionSpec *spec)
 /* process multiple instances of an option, requres that the optionSpec of the option */
+{
 struct slName *valList;
-switch(spec->flags & OPTION_TYPE_MASK) {
+switch (spec->flags & OPTION_TYPE_MASK)
+    {
     case OPTION_STRING:
         valList = hashFindVal(hash, name);
-        if(valList == NULL) {   /* first multi option */
+        if (valList == NULL)   /* first multi option */
+            {
             valList = newSlName(val);
             hashAdd(hash, name, valList);
-        } else {
+            }
+        else
+            {
             struct slName *el = newSlName(val);
             slAddTail(valList, el); /* added next multi option */
-        }
+            }
         break;
     default:
         errAbort("UNIMPLEMENTED: multiple instances of a non-string option is not currently implemented");
-}
+    }
 }
 
 static boolean parseAnOption(struct hash *hash, char *arg, struct optionSpec *optionSpecs)
@@ -138,16 +143,16 @@ if (optionSpecs != NULL)
     validateOption(name, val, optionSpecs);
 if (val == NULL)
     val = "on";
-if(optionSpecs == NULL) {
+if (optionSpecs == NULL)
     hashAdd(hash, name, val);
-} else {
+else
+    {
     struct optionSpec *spec = matchingOption(name, optionSpecs);
-    if(spec != NULL && (spec->flags & OPTION_MULTI)) {    /* process multiple instances of option */
+    if (spec != NULL && (spec->flags & OPTION_MULTI))    /* process multiple instances of option */
         parseMultiOption(hash, name, val, spec);
-    } else {
+    else
         hashAdd(hash, name, val);
     }
-}
 
 if (eqPtr != NULL)
     *eqPtr = '=';
