@@ -28,6 +28,10 @@ set tetNig tetNig1
 # Define all organism/assembly-specific databases.
 set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$canFam,$droYak,$anoGam,$cioSav,$tetNig
 
+# Define organism databases based on whole-genome shotgun projects 
+# (Assembly based on WGS project contigs accessioned in Genbank)
+set wgs $rn,$panTro,$galGal,$canFam
+
 # Only consider one of members of gbd at a time.
 exclusiveSet $gbd
 
@@ -609,6 +613,15 @@ identifier humanBacAccessionVersion typeOf=bacAccession
     $hg.clonePos.name dupeOk
     $hg.gl.frag $split chopAfter=_
     $hg.gold.frag $split
+
+identifier wgsContigAccession typeOf=genbankAccession
+"Genbank accession.version of whole-genome shotgun contig"
+    $wgs.contigAcc.acc
+
+identifier wgsContigName
+"Sequencing project name for whole-genome shotgun contigs." 
+    $wgs.contigAcc.contig
+    $wgs.gold.frag $split
 
 identifier proteinAccession typeOf=genbankAccession fuzzy
 "Genbank protein accession."
