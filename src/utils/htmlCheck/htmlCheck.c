@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.6 2004/02/28 08:58:34 kent Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.7 2004/02/28 10:47:54 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -196,6 +196,7 @@ for (;;)
 	    slAddHead(&tagList, tag);
 	    pos = tagName - dupe - 1;
 	    tag->start = html+pos;
+	    // uglyf(">>>%s<<<\n", tagName);
 
 	    /* If already got end tag (or EOF) stop processing tag. */
 	    if (c == '>' || c == 0)
@@ -221,46 +222,67 @@ for (;;)
 		    }
 
 		/* Get name - everything up to equals. */
-		e = strchr(s, '=');
-		if (e == NULL)
+		e = s;
+		for (;;)
 		    {
-		    warn("missing '=' in attributes list");
+		    c = *e;
+		    if (c == '=')
+		        break;
+		    else if (c == '>')
+		        break;
+		    else if (c == 0)
+		        break;
+		    e += 1;
+		    }
+		if (c == 0)
+		    {
+		    warn("End of file in tag");
 		    break;
 		    }
 		name = s;
 		*e++ = 0;
 		eraseTrailingSpaces(name);
-		val = e = skipLeadingSpaces(e);
-		if (e[0] == '"')
+		// uglyf(" (%s)\n", name);
+		if (c == '>')
 		    {
-		    if (!parseQuotedString(val, val, &e))
-			break;
+		    val = "";
+		    gotEnd = TRUE;
 		    }
 		else
 		    {
-		    for (;;)
+		    val = e = skipLeadingSpaces(e);
+		    if (e[0] == '"')
 			{
-			c = *e;
-			if (c == '>')
+			if (!parseQuotedString(val, val, &e))
+			    break;
+			}
+		    else
+			{
+			for (;;)
 			    {
-			    gotEnd = TRUE;
-			    *e++ = 0;
-			    tag->end = html + (e - dupe);
-			    break;
+			    c = *e;
+			    if (c == '>')
+				{
+				gotEnd = TRUE;
+				*e++ = 0;
+				tag->end = html + (e - dupe);
+				break;
+				}
+			    else if (isspace(c))
+				{
+				*e++ = 0;
+				break;
+				}
+			    else if (c == 0)
+				break;
+			    ++e;
 			    }
-			else if (isspace(c))
-			    {
-			    *e++ = 0;
-			    break;
-			    }
-			else if (c == 0)
-			    break;
-			++e;
 			}
 		    }
 		AllocVar(att);
 		att->name = cloneString(name);
 		att->val = cloneString(val);
+		// uglyf("  [%s]\n", val);
 		slAddTail(&tag->attributes, att);
 		s = e;
 		if (gotEnd)
@@ -419,7 +441,7 @@ vaErrAbort(format, args);
 va_end(args);
 }
 
-void httpValidateTables(struct httpTag *startTag, struct httpTag *endTag)
+void validateTables(struct httpTag *startTag, struct httpTag *endTag)
 /* Validate <TABLE><TR><TD> are all properly nested, and that there
  * are no empty rows. */
 {
@@ -474,28 +496,129 @@ for (tag = startTag; tag != endTag; tag = tag->next)
     else if (sameWord(tag->name, "TD") || sameWord(tag->name, "TH"))
         {
 	if ((table = tableStack) == NULL)
-	    tagAbort(tag, "<TD> outside of <TABLE>");
+	    tagAbort(tag, "<%s> outside of <TABLE>", tag->name);
 	if ((row = table->row) == NULL)
-	    tagAbort(tag, "<TD> outside of <TR>");
+	    tagAbort(tag, "<%s> outside of <TR>", tag->name);
 	if (row->inTd)
-	    tagAbort(tag, "<TD>...<TD> with no </TD> in between");
+	    tagAbort(tag, "<%s>...<%s> with no </%s> in between", 
+	    	tag->name, tag->name, tag->name);
 	row->inTd = TRUE;
 	row->tdCount += 1;
 	}
     else if (sameWord(tag->name, "/TD") || sameWord(tag->name, "/TH"))
         {
 	if ((table = tableStack) == NULL)
-	    tagAbort(tag, "</TD> outside of <TABLE>");
+	    tagAbort(tag, "<%s> outside of <TABLE>", tag->name);
 	if ((row = table->row) == NULL)
-	    tagAbort(tag, "</TD> outside of <TR>");
+	    tagAbort(tag, "<%s> outside of <TR>", tag->name);
 	if (!row->inTd)
-	    tagAbort(tag, "</TD> with no <TD>");
+	    tagAbort(tag, "<%s> with no <%s>", tag->name, tag->name+1);
 	row->inTd = FALSE;
 	}
     }
 if (tableStack != NULL)
     tagAbort(tag, "Missing </TABLE>");
 }
+
+void checkTagIsInside(char *outsiders, char *insiders,  
+	struct httpTag *startTag, struct httpTag *endTag)
+/* Check that insiders are all bracketed by outsiders. */
+{
+char *outDupe = cloneString(outsiders);
+char *inDupe = cloneString(insiders);
+char *line, *word;
+int depth = 0;
+struct httpTag *tag;
+struct hash *outOpen = newHash(8);
+struct hash *outClose = newHash(8);
+struct hash *inHash = newHash(8);
+char buf[256];
+
+/* Create hashes of all insiders */
+line = inDupe;
+while ((word = nextWord(&line)) != NULL)
+    {
+    touppers(word);
+    hashAdd(inHash, word, NULL);
+    }
+
+/* Create hash of open and close outsiders. */
+line = outDupe;
+while ((word = nextWord(&line)) != NULL)
+    {
+    touppers(word);
+    hashAdd(outOpen, word, NULL);
+    safef(buf, sizeof(buf), "/%s", word);
+    hashAdd(outClose, buf, NULL);
+    }
+
+/* Stream through tags making sure that insiders are
+ * at least one deep inside of outsiders. */
+for (tag = startTag; tag != NULL; tag = tag->next)
+    {
+    char *type = tag->name;
+    if (hashLookup(outOpen, type ))
+        ++depth;
+    else if (hashLookup(outClose, type))
+        --depth;
+    else if (hashLookup(inHash, type))
+        {
+	if (depth <= 0)
+	    tagAbort(tag, "%s outside of any of %s", type, outsiders);
+	}
+    }
+freeHash(&inHash);
+freeHash(&outOpen);
+freeHash(&outClose);
+freeMem(outDupe);
+freeMem(inDupe);
+}
+
+void checkNest(char *type, struct httpTag *startTag, struct httpTag *endTag)
+/* Check that <type> and </type> tags are properly nested. */
+{
+struct httpTag *tag;
+int depth = 0;
+char endType[256];
+safef(endType, sizeof(endType), "/%s", type);
+for (tag = startTag; tag != endTag; tag = tag->next)
+    {
+    if (sameWord(tag->name, type))
+	++depth;
+    else if (sameWord(tag->name, endType))
+        {
+	--depth;
+	if (depth < 0)
+	   tagAbort(tag, "<%s> without preceding <%s>", endType, type);
+	}
+    }
+if (depth != 0)
+    errAbort("Missing <%s> tag", endType);
+}
+
+void validateNestingTags(struct httpTag *startTag, struct httpTag *endTag,
+	char *nesters[], int nesterCount)
+/* Validate many tags that do need to nest. */
+{
+int i;
+for (i=0; i<nesterCount; ++i)
+    checkNest(nesters[i], startTag, endTag);
+}
+
+static char *bodyNesters[] = 
+/* Nesting tags that appear in body. */
+{
+    "ADDRESS", "DIV", "H1", "H2", "H3", "H4", "H5", "H6",
+    "ACRONYM", "BLOCKQUOTE", "CITE", "CODE", "DEL", "DFN"
+    "DIR", "DL", "MENU", "OL", "UL", "CAPTION", "TABLE", 
+    "A", "MAP", "OBJECT", "FORM"
+};
+
+static char *headNesters[] =
+/* Nesting tags that appear in header. */
+{
+    "TITLE",
+};
 
 struct httpTag *validateBody(struct httpTag *startTag)
 /* Go through tags from current position (just past <BODY>)
@@ -514,7 +637,17 @@ for (tag = startTag; tag != NULL; tag = tag->next)
     }
 if (endTag == NULL)
     errAbort("Missing </BODY>");
-httpValidateTables(startTag, endTag);
+validateTables(startTag, endTag);
+checkTagIsInside("DIR MENU OL UL", "LI", startTag, endTag);
+checkTagIsInside("DL", "DD DT", startTag, endTag);
+checkTagIsInside("COLGROUP TABLE", "COL", startTag, endTag);
+checkTagIsInside("AREA", "MAP", startTag, endTag);
+checkTagIsInside("FORM", 
+	"INPUT BUTTON /BUTTON OPTION SELECT /SELECT TEXTAREA /TEXTAREA"
+	"FIELDSET /FIELDSET"
+	, 
+	startTag, endTag);
+validateNestingTags(startTag, endTag, bodyNesters, ArraySize(bodyNesters));
 return endTag->next;
 }
 
@@ -522,7 +655,11 @@ void validate(struct httpPage *page)
 /* Do some basic validations. */
 {
 struct httpTag *tag;
-boolean gotTitle;
+boolean gotTitle = FALSE;
+
+/* To simplify things upper case all tag names. */
+for (tag = page->tags; tag != NULL; tag = tag->next)
+    touppers(tag->name);
 
 /* Validate header, and make a suggestion or two */
 if ((tag = page->tags) == NULL)
@@ -542,6 +679,9 @@ for (;;)
     if (sameWord(tag->name, "/HEAD"))
         break;
     }
+if (!gotTitle)
+    warn("No title in <HEAD>");
+validateNestingTags(page->tags, tag, headNesters, ArraySize(headNesters));
 tag = tag->next;
 if (tag == NULL || !sameWord(tag->name, "BODY"))
     errAbort("<BODY> tag does not follow <HTML> tag");
