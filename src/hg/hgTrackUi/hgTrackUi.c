@@ -266,6 +266,7 @@ void specificUi(struct trackDb *tdb)
 /* Draw track specific parts of UI. */
 {
 char *track = tdb->tableName;
+
 if (sameString(track, "stsMap"))
     stsMapUi(tdb);
 else if (sameString(track, "fishClones"))
@@ -368,6 +369,8 @@ else if (sameString(track, "blatHuman"))
     colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "affyTranscriptome"))
     affyTranscriptomeUi(tdb);
+else if (sameString(tdb->type, "sample 9"))
+    genericWiggleUi(tdb,5);
 }
 
 void trackUi(struct trackDb *tdb)
