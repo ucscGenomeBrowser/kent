@@ -83,6 +83,14 @@ an update each time you rebuild your trackDb tables.  In this case,
 comment out the line: cvs up -d -P .
 immediately following the 'alpha:' target
 
+Also, a make in this trackDb directory wants to do all assemblies
+that exist at UCSC.  You are most likely working on a subset
+of these, and often only one.  In this case, limit the list
+of assemblies with the extra arguments ZOO_DBS and DBS,
+for example to rebuild just the hg17.trackDb:
+
+$ make alpha ZOO_DBS="" DBS=hg17
+
 Extra Credit:
 
 If you really do want to build all the utilities and all database
@@ -106,4 +114,7 @@ source tree libraries is taken care of because a make in any
 directory that produces a binary will always re-link the
 binary every time, thus always picking up any potentially new
 library.
+
+====================================================================
+This file last updated: $Date: 2004/12/15 22:05:07 $
 
