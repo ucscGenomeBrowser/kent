@@ -4787,9 +4787,11 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
 # Gengxin Chen <cheng@cshl.edu>
 # Ivo Grosse <grosse@ipk-gatersleben.de>
 # Michael Zhang <mzhang@cshl.edu>
-# Got firstEF.txt from Gengzin 7/30/03
-	hgLoadBed hg16 firstEF firstEF.txt
 
+    mkdir /cluster/data/hg16/bed/firstEF
+    cd /cluster/data/hg16/bed/firstEF
+# Got firstEF.txt from Gengzin 7/30/03
+    hgLoadBed hg16 firstEF firstEF.txt
 
 # Load chicken sequence loaded & processed by booch & acs (2003-11-4 kate)
     hgLoadSeq hg16 /gbdb/gg0/chicken.fa
