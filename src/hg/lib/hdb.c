@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.183 2004/05/29 23:24:26 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.184 2004/06/08 00:00:05 kate Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1816,6 +1816,31 @@ slReverse(&dbList);
 return dbList;
 }
 
+struct dbDb *archiveDbDbLoad(char **row)
+/* Load a archive dbDb from row fetched with select * from dbDb
+         from database.  Dispose of this with dbDbFree().
+  NOTE: this table schema is now detached from the
+  main production dbDb, so we are not using the autoSql functions */
+{
+    struct dbDb *ret;
+    int sizeOne,i;
+    char *s;
+
+    AllocVar(ret);
+    ret->name = cloneString(row[0]);
+    ret->description = cloneString(row[1]);
+    ret->nibPath = cloneString(row[2]);
+    ret->organism = cloneString(row[3]);
+    ret->defaultPos = cloneString(row[4]);
+    ret->active = sqlSigned(row[5]);
+    ret->orderKey = sqlSigned(row[6]);
+    ret->genome = cloneString(row[7]);
+    ret->scientificName = cloneString(row[8]);
+    ret->htmlPath = cloneString(row[9]);
+    ret->hgNearOk = sqlSigned(row[10]);
+    return ret;
+}
+
 struct dbDb *hArchiveDbDbList()
 /* Return list of databases in archive central dbDb.
  * Free this with dbDbFree. */
@@ -1834,7 +1859,7 @@ if (conn)
     sr = sqlGetResult(conn, "select * from dbDb order by orderKey desc,name desc");
     while ((row = sqlNextRow(sr)) != NULL)
         {
-        db = dbDbLoad(row);
+        db = archiveDbDbLoad(row);
         /* strip organism out of assembly description if it's there
          * (true in hg6-hg11 entries) */
         next = assembly = cloneString(db->description);
