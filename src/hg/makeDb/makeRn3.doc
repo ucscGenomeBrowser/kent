@@ -717,6 +717,7 @@ MAKE DOWNLOADABLE SEQUENCE FILES (DONE - 2003-07-03 - 2003-07-09 - Hiram)
         /cluster/bin/scripts/extractLinSpecReps 1 $f > \
                         linSpecRep.notInMouse/$base.out.spec
     end
+
     # copy to iscratch and sync
     ssh kkr1u00
     cd /iscratch/i
@@ -910,6 +911,103 @@ SEQ2_LEN=$BASE/S2.len
 
     # post-process blastz
 
+# BLASTZ Human hg15 (IN PROGRESS 2003-07-20 kate) 
+
+    # Extract lineage-specific repeats vs. human
+    ssh kkstore
+    cd /cluster/bluearc/rat/rn3
+    mkdir linSpecRep.notInHuman
+    foreach f (rmsk.spec/*.out_mus_hum)
+        set base = $f:t:r:r
+        echo $base.out.spec
+        /cluster/bin/scripts/extractLinSpecReps 2 $f > \
+                        linSpecRep.notInHuman/$base.out.spec
+    end
+
+    mkdir -p /cluster/data/rn3/bed/blastz.hg15
+    cd /cluster/data/rn3/bed/blastz.hg15
+    cat << '_EOF_' > DEF
+# rat vs. human
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET
+# Rat
+SEQ1_DIR=/iscratch/i/rn3/bothMaskedNibs/
+# not used
+SEQ1_RMSK=
+# not used
+SEQ1_FLAG=
+# not used
+SEQ1_SMSK=/cluster/bluearc/rat/rn3/linSpecRep.notInHuman/
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY
+SEQ2_DIR=/iscratch/i/gs.16/build33/chromTrfMixedNib/
+SEQ2_RMSK=/iscratch/i/gs.16/build33/rmsk/
+SEQ2_SMSK=/iscratch/i/gs.16/build33/linSpecRep/
+SEQ2_FLAG=-primate
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/store3/rn3/bed/blastz.hg15
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+
+
+# Save the DEF file in the current standard place
+    chmod +x DEF
+    cp DEF ~angie/hummus/DEF.rn3-hg15
+
+    ssh kk
+    cd /cluster/data/rn3/bed/blastz.hg15
+
+    # source the DEF file
+    bash
+    . ./DEF
+
+    # follow the next set of directions slavishly
+    mkdir -p $BASE/run
+    # give up on avoiding angie's directories
+    # tcl script
+    # creates xdir.sh and joblist run/j
+    ~angie/hummus/make-joblist $DEF > $BASE/run/j
+
+    # xdir.sh makes a bunch of result directories in $BASE/raw/
+    # based on chrom name and CHUNK size
+    sh $BASE/xdir.sh
+    cd $BASE/run
+
+    # now edit j to prefix path to executable name
+    # NOTE: we should have a controlled version of schwartz bin executables
+    sed -e 's#^#/cluster/bin/penn/#' j > j2
+    wc -l j*
+    head j2
+
+    # make sure the j2 edits are OK, then use it:
+    mv j2 j
+
+    # para create will create the file: 'batch' for the cluster run
+    para create j
+        # 42120 jobs
+    para try
+    para check
+    para push
+    # ... etc ...
+
+    # post-process blastz
 
 
 # SWAPPING HUMAN-RAT BLASTZ ALIGNMENTS TO RAT-HUMAN (DONE 2003-07-11 kate)
