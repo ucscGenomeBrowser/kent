@@ -14,6 +14,7 @@
 #include "hgc.h"
 #include "genePred.h"
 #include "dnaMotif.h"
+#include "dnaMotifSql.h"
 #include "growthCondition.h"
 #include "transRegCode.h"
 #include "transRegCodeProbe.h"
