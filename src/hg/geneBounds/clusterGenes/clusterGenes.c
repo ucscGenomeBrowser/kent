@@ -9,7 +9,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.4 2004/01/12 23:05:45 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.5 2004/01/13 00:36:35 markd Exp $";
 
 /* Command line driven variables. */
 int verbose = 0;
@@ -24,7 +24,8 @@ errAbort(
   "   clusterGenes outputFile database table1 ... tableN\n"
   "Where outputFile is a tab-separated file describing the clustering,\n"
   "database is a genome database such as mm4 or hg16,\n"
-  "and the table parameters are tables in genePred format in that database\n"
+  "and the table parameters are either tables in genePred format in that\n"
+  "database or genePred tab seperated files.\n"
   "options:\n"
   "   -verbose=N - Print copious debugging info. 0 for none, 3 for loads\n"
   "   -chrom=chrN - Just work on one chromosome\n"
@@ -224,7 +225,6 @@ return clusterList;
 void clusterMakerAdd(struct clusterMaker *cm, char *table, struct genePred *gp)
 /* Add gene to clusterMaker. */
 {
-struct dlNode *node;
 int exonIx;
 struct dlNode *oldNode = NULL;
 
@@ -282,6 +282,70 @@ for (exonIx = 0; exonIx < gp->exonCount; ++exonIx)
     }
 }
 
+void loadGenesFromTable(struct clusterMaker *cm, struct sqlConnection *conn,
+                        char *table, char *chrom, char strand,
+                        struct genePred **gpList)
+/* load genes into cluster from a table */
+{
+char extraWhere[64];
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+
+safef(extraWhere, sizeof(extraWhere), "strand = '%c'", strand);
+sr = hChromQuery(conn, table, chrom, extraWhere, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct genePred *gp = genePredLoad(row + rowOffset);
+    slAddHead(gpList, gp);
+    clusterMakerAdd(cm, table, gp);
+    ++totalGeneCount;
+    }
+sqlFreeResult(&sr);
+}
+
+void loadGenesFromFile(struct clusterMaker *cm, char *gpFile, char *chrom,
+                       char strand, struct genePred **gpList)
+/* load genes into cluster from a table */
+{
+struct lineFile *lf = lineFileOpen(gpFile, TRUE);
+char *row[GENEPRED_NUM_COLS];
+char table[PATH_LEN];
+splitPath(gpFile, NULL, table, NULL);
+
+
+while (lineFileNextRowTab(lf, row, GENEPRED_NUM_COLS))
+    {
+    struct genePred *gp = genePredLoad(row);
+    if ((gp->strand[0] == strand) && sameString(gp->chrom, chrom))
+        {
+        slAddHead(gpList, gp);
+        clusterMakerAdd(cm, table, gp);
+        ++totalGeneCount;
+        }
+    else
+        {
+        genePredFree(&gp);
+        }
+    }
+ lineFileClose(&lf); 
+}
+
+void loadGenes(struct clusterMaker *cm, struct sqlConnection *conn,
+               char *table, char *chrom, char strand,
+               struct genePred **gpList)
+/* load genes into cluster from a table or file */
+{
+if (verbose >= 1)
+    printf("%s %s %c\n", table, chrom, strand);
+if (fileExists(table))
+    loadGenesFromFile(cm, table, chrom, strand, gpList);
+else if (hTableExists(table))
+    loadGenesFromTable(cm, conn, table, chrom, strand, gpList);
+else
+    errAbort("Table or file %s doesn't exist in %s", table, hGetDb());
+}
+
 int clusterId = 0;	/* Assign a unique id to each cluster. */
 
 void clusterGenesOnStrand(struct sqlConnection *conn,
@@ -289,40 +353,19 @@ void clusterGenesOnStrand(struct sqlConnection *conn,
 	FILE *f)
 /* Scan through genes on this strand, cluster, and write clusters to file. */
 {
-struct sqlResult *sr;
-char **row;
-int rowOffset;
-struct genePred *gp = NULL, *gpList = NULL;
-char extraWhere[64], query[256];
+struct genePred *gpList = NULL;
 struct cluster *clusterList = NULL, *cluster;
-int nameLen;
 int tableIx;
 struct clusterMaker *cm = clusterMakerStart(hChromSize(chrom));
 
 for (tableIx = 0; tableIx < tableCount; ++tableIx)
-    {
-    char *table = tables[tableIx];
-    if (!hTableExists(table))
-        errAbort("Table %s doesn't exist in %s", table, hGetDb());
-    if (verbose >= 1)
-	printf("%s %s %c\n", table, chrom, strand);
-    safef(extraWhere, sizeof(extraWhere), "strand = '%c'", strand);
-    sr = hChromQuery(conn, table, chrom, extraWhere, &rowOffset);
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-	gp = genePredLoad(row + rowOffset);
-	slAddHead(&gpList, gp);
-	clusterMakerAdd(cm, table, gp);
-	++totalGeneCount;
-	}
-    sqlFreeResult(&sr);
-    }
+    loadGenes(cm, conn, tables[tableIx], chrom, strand, &gpList);
+
 clusterList = clusterMakerFinish(&cm);
 for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
     {
     struct hashEl *helList = hashElListHash(cluster->geneHash);
     struct hashEl *hel;
-    char *protName;
     ++clusterId;
     for (hel = helList; hel != NULL; hel = hel->next)
 	{
@@ -331,7 +374,7 @@ for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
 	}
     ++totalClusterCount;
     }
-genePredFreeList(&gp);
+genePredFreeList(&gpList);
 }
 
 
@@ -340,7 +383,6 @@ void clusterGenes(char *outFile, char *database, int tableCount, char *tables[])
 {
 struct slName *chromList, *chrom;
 struct sqlConnection *conn;
-int tableIx;
 FILE *f = mustOpen(outFile, "w");
 fprintf(f, "#");
 fprintf(f, "cluster\t");
