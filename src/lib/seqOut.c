@@ -29,33 +29,49 @@ void cfmOutExt(struct cfm *cfm, char c, int color, boolean underline, boolean bo
 {
 if (color != cfm->lastColor)
     {
-    fprintf(cfm->out, "</FONT><FONT COLOR=\"#%06X\">", color);
-    cfm->lastColor = color;
+    fprintf(cfm->out, "</FONT>");
     }
 if (underline != cfm->underline)
     {
-    if (underline)
-       fprintf(cfm->out, "<U>");
-    else
+    if (!underline)
        fprintf(cfm->out, "</U>");
-    cfm->underline = underline;
+    }
+if (italic != cfm->italic)
+    {
+    if (!italic)
+       fprintf(cfm->out, "</I>");
+    }
+if (bold != cfm->bold)
+    {
+    if (!bold)
+       fprintf(cfm->out, "</B>");
+    }
+
+if (bold != cfm->bold)
+    {
+    if (bold)
+       fprintf(cfm->out, "<B>");
+    cfm->bold = bold;
     }
 if (italic != cfm->italic)
     {
     if (italic)
        fprintf(cfm->out, "<I>");
-    else
-       fprintf(cfm->out, "</I>");
     cfm->italic = italic;
     }
-if (bold != cfm->bold)
+if (underline != cfm->underline)
     {
-    if (bold)
-       fprintf(cfm->out, "<B>");
-    else
-       fprintf(cfm->out, "</B>");
-    cfm->bold = bold;
+    if (underline)
+       fprintf(cfm->out, "<U>");
+    cfm->underline = underline;
     }
+if (color != cfm->lastColor)
+    {
+    fprintf(cfm->out, "<FONT COLOR=\"#%06X\">", color);
+    cfm->lastColor = color;
+    }
+
+
 ++cfm->charCount;
 fputc(c, cfm->out);
 if (cfm->wordLen)
