@@ -674,9 +674,15 @@
   href="#AltGraphX">altGraphX</A> 
   - Summary of alt-splicing in EST and mRNA tracks
   <LI><A 
+  href="#ScoredRef">anoGam1_050201</A> 
+  - Scored reference file for anoGam1 alignments
+  <LI><A 
   href="#BED">anophelesEcores</A> 
   - <em>D. melanogaster</em> (dm1)/A. gambiae evolutionary conserved regions (ecores) computed by 
   Exofish</LI>
+  <LI><A 
+  href="#ScoredRef">apiMel1_050201</A> 
+  - Scored reference file for apiMel1 alignments
   <LI><A 
   href="#ExpData">arbFlyLifeAll</A> 
   - Expression data</LI>
@@ -923,8 +929,23 @@
   href="#ScoredRef">dog_netBlastz</A> 
   - Scored reference file for dog alignments
   <LI><A 
+  href="#ScoredRef">dp2_050201</A> 
+  - Scored reference file for dp2 alignments
+  <LI><A 
   href="#BlastTab">drBlastTab</A> 
   - Blastp results of known genes vs. one another (<em>Danio rerio</em>)
+  <LI><A 
+  href="#ScoredRef">droAna1_050201</A> 
+  - Scored reference file for droAna1 alignments
+  <LI><A 
+  href="#ScoredRef">droMoj1_050201</A> 
+  - Scored reference file for droMoj1 alignments
+  <LI><A 
+  href="#ScoredRef">droVir1_050201</A> 
+  - Scored reference file for droVir1 alignments
+  <LI><A 
+  href="#ScoredRef">droYak1_050201</A> 
+  - Scored reference file for droYak1 alignments
   <LI><A 
   href="#DupSpMrna">dupSpMrna</A> 
   - Duplicate mRNA/Protein entries that have identical CDS structures</LI>
@@ -1597,25 +1618,22 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   - Associates mRNA IDs with RefSeq IDs
   <LI><A 
   href="#ScoredRef">multiz5way</A> 
-  - Index of multiz multiple alignments of frog, chicken, human, mouse, 
-  and zebrafish. 
+  - Index of multiz multiple alignments of 5 organisms.
   NOTE: To obtain the conservation scores associated with this
   assembly, download the data from the assembly's <em>phastCons</em> directory
   on the Genome Browser <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/" 
   TARGET=_blank>FTP server</A>.
   <LI><A 
   href="#ScoredRef">multiz8way</A> 
-  - Index of multiz multiple alignments of human, chimp, mouse, rat, chicken,
-  dog, Fugu, and zebrafish.
+  - Index of multiz multiple alignments of 8 organisms. 
   NOTE: To obtain the conservation scores associated with this
   assembly, download the data from the assembly's <em>phastCons</em> directory
   on the Genome Browser <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/" 
   TARGET=_blank>FTP server</A>.
   <LI><A 
   href="#WiggleTrack2">multiz8wayCons</A> 
-  - "Wiggle track" display of evolutionary conservation in human, chimp, 
-  mouse, rat, chicken,  dog, fugu, and zebrafish based on a phylogentiec 
-  hidden Markov model, using multiz alignments. 
+  - "Wiggle track" display of evolutionary conservation in 8 organisms 
+  based on a phylogenetic hidden Markov model, using multiz alignments. 
   NOTE: To obtain the conservation scores associated with this
   assembly, download the data from the assembly's <em>phastCons</em> directory
   on the Genome Browser <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/" 
@@ -1631,7 +1649,7 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   <LI><A 
   href="#WiggleTrack2">mzPt1Mm3Rn3Gg2_pHMM_wig</A> 
   - "Wiggle track" display of evolutionary conservation in human, chimp, 
-  mouse, rat, and chicken based on a phylogentiec hidden Markov model, using 
+  mouse, rat, and chicken based on a phylogenetic hidden Markov model, using 
   multiz alignments. 
   NOTE: To obtain the conservation scores associated with this
   assembly, download the data from the assembly's <em>phastCons</em> directory
@@ -1658,14 +1676,14 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#WiggleTrack2">mzDy1Dp2Ag1_phast_wig</A> 
   - "Wiggle track" display of evolutionary conservation in 
   <em>D. melanogaster</em>, <em>D. pseudoobscura</em>, and <em>A. gambiae</em>
-  based on a phylogentiec hidden Markov model, using multiz alignments. 
+  based on a phylogenetic hidden Markov model, using multiz alignments. 
   NOTE: To obtain the conservation scores associated with this
   assembly, download the data from the assembly's <em>phastCons</em> directory
   on the Genome Browser <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/" 
   TARGET=_blank>FTP server</A>.
   <LI><A 
   href="#ScoredRef">mzHg17Mm5_phast</A> 
-  - Evolutionary conservation in current species, human, and mouse based on a phylogentiec 
+  - Evolutionary conservation in current species, human, and mouse based on a phylogenetic 
   hidden Markov model, using multiz alignments. 
   NOTE: To obtain the conservation scores associated with this
   assembly, download the data from the assembly's <em>phastCons</em> directory
@@ -1674,7 +1692,7 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   <LI><A 
   href="#WiggleTrack2">mzPt1Mm3Rn3Gg2_pHMM_wig</A> 
   - "Wiggle track" display of evolutionary conservation in current species, human, and mouse
-  based on a phylogentiec hidden Markov model, using multiz alignments. 
+  based on a phylogenetic hidden Markov model, using multiz alignments. 
   NOTE: To obtain the conservation scores associated with this
   assembly, download the data from the assembly's <em>phastCons</em> directory
   on the Genome Browser <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/" 
@@ -1832,18 +1850,27 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   - Links Pfam and Swiss-Prot IDs
   <LI><A 
   href="#WiggleTrack">pGC</A> 
-  - Percentage of bases that are G or C in small regions across the genome </LI>
+  - Percentage of bases that are G or C in small regions across the genome 
+  </LI>
   <LI><A 
   href="#WiggleTrack2">phastCons</A> 
-  - "Wiggle track" display of evolutionary conservation based on a phylogentiec hidden 
-  Markov model, using multiz alignments 
+  - "Wiggle track" display of evolutionary conservation based on a 
+  phylogenetic hidden Markov model, using multiz alignments 
   <LI><A 
   href="#WiggleTrack2">phastCons5</A> 
-  - "Wiggle track" display of evolutionary conservation based on a phylogentiec hidden 
-  Markov model, using multiz alignments 
+  - "Wiggle track" display of evolutionary conservation in 4 organisms based 
+  on a phylogenetic hidden Markov model, using multiz alignments 
+  <LI><A 
+  href="#WiggleTrack2">phastCons8way</A> 
+  - "Wiggle track" display of evolutionary conservation in 8 organisms based 
+  on a phylogenetic hidden Markov model, using multiz alignments 
   <LI><A 
   href="#BED">phastConsElements</A> 
   - Predictions of conserved elements produced by phastCons program
+  <LI><A 
+  href="#BED">phastConsElements8way</A> 
+  - Predictions of conserved elements in 8 organisms produced by phastCons 
+  program
   <LI><A 
   href="#LFS">phMouse</A> 
   - Pattern Hunter Mouse/Human Evolutionarily Conserved Regions (Last used Apr. 2001) </LI>
