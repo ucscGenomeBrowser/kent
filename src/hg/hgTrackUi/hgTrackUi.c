@@ -47,6 +47,16 @@ printf(" ");
 smoeDropDown("stsMap.type", stsMapMap);
 }
 
+void fishClonesUi(struct trackDb *tdb)
+/* Put up UI fishClones. */
+{
+char *fishClonesFilter = cartUsualString(cart, "fishClones.filter", "red");
+char *fishClonesMap = cartUsualString(cart, "fishClones.type", fcoeEnumToString(0));
+filterButtons("fishClones.filter", fishClonesFilter, TRUE);
+printf(" ");
+fcoeDropDown("fishClones.type", fishClonesMap);
+}
+
 void nci60Ui(struct trackDb *tdb)
 /* put up UI for the nci60 track from stanford track */
 {
@@ -103,6 +113,8 @@ void specificUi(struct trackDb *tdb)
 char *track = tdb->tableName;
 if (sameString(track, "stsMap"))
     stsMapUi(tdb);
+else if (sameString(track, "fishClones"))
+    fishClonesUi(tdb);
 else if (sameString(track, "nci60"))
     nci60Ui(tdb);
 else if (sameString(track, "mrna"))

@@ -130,6 +130,40 @@ cgiMakeDropList(var, stsMapOptions, ArraySize(stsMapOptions),
 	curVal);
 }
 
+/****** Some stuff for fishClones related controls *******/
+
+static char *fishClonesOptions[] = {
+    "Fred Hutchinson CRC",
+    "National Cancer Institute",
+    "Sanger Centre",
+    "Roswell Park Cancer Institute",
+    "Cedars-Sinai Medical Center",
+    "Los Alamos National Lab",
+    "UC San Francisco",
+};
+
+enum fishClonesOptEnum fcoeStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, fishClonesOptions);
+if (x < 0)
+   errAbort("Unknown option %s", string);
+return x;
+}
+
+char *fcoeEnumToString(enum fishClonesOptEnum x)
+/* Convert from enum to string representation. */
+{
+return fishClonesOptions[x];
+}
+
+void fcoeDropDown(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropList(var, fishClonesOptions, ArraySize(fishClonesOptions), 
+	curVal);
+}
+
 /****** Some stuff for mRNA and EST related controls *******/
 
 static void addMrnaFilter(struct mrnaUiData *mud, char *track, char *label, char *key, char *table)

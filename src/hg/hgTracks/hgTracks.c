@@ -489,10 +489,10 @@ if (color)
 tg->items = newList;
 }
 
-int getFilterColor(char *type)
+int getFilterColor(char *type, int colorIx)
 /* Get color corresponding to filter. */
 {
-int colorIx = MG_BLACK;
+/* int colorIx = MG_BLACK;*/
 if (sameString(type, "red"))
     colorIx = MG_RED;
 else if (sameString(type, "green"))
@@ -1520,7 +1520,7 @@ if (sameString(type, "exclude"))
 else if (sameString(type, "include"))
     isExclude = FALSE;
 else
-    colorIx = getFilterColor(type);
+    colorIx = getFilterColor(type, MG_BLACK);
 type = cartUsualString(cart, mud->logicTypeVar, "and");
 andLogic = sameString(type, "and");
 
@@ -2852,7 +2852,7 @@ else if (startsWith("gpos", stain))
     }
 else if (startsWith("gvar", stain))
     {
-    *retBoxColor = shadesOfGray[2];
+    *retBoxColor = shadesOfGray[maxShade];
     *retTextColor = MG_WHITE;
     }
 else 
@@ -3399,7 +3399,7 @@ stsMapMap = cartUsualString(cart, "stsMap.type", smoeEnumToString(0));
 stsMapType = smoeStringToEnum(stsMapMap);
 bedLoadItem(tg, "stsMap", (ItemLoader)stsMapLoad);
 filterItems(tg, stsMapFilterItem, stsMapFilter);
-stsMapFilterColor = getFilterColor(stsMapFilter);
+stsMapFilterColor = getFilterColor(stsMapFilter, MG_BLACK);
 }
 
 void freeStsMap(struct trackGroup *tg)
@@ -3432,10 +3432,75 @@ tg->freeItems = freeStsMap;
 tg->itemColor = stsMapColor;
 }
 
+char *fishClonesFilter;
+char *fishClonesMap;
+enum fishClonesOptEnum fishClonesType;
+int fishClonesFilterColor = MG_GREEN;
+
+boolean fishClonesFilterItem(struct trackGroup *tg, void *item)
+/* Return TRUE if item passes filter. */
+{
+struct fishClones *el = item;
+int i;
+switch (fishClonesType)
+    {
+    case fcoeFHCRC:
+        for (i = 0; i < el->placeCount; i++)  
+	    if (sameString(el->labs[i],"FHCRC")) 
+	        return TRUE;
+        return FALSE;
+        break;
+    case fcoeNCI:
+        for (i = 0; i < el->placeCount; i++)  
+	    if (sameString(el->labs[i],"NCI")) 
+	        return TRUE;
+        return FALSE;
+        break;
+    case fcoeSC:
+        for (i = 0; i < el->placeCount; i++)  
+	    if (sameString(el->labs[i],"SC")) 
+	        return TRUE;
+        return FALSE;
+        break;
+    case fcoeRPCI:
+        for (i = 0; i < el->placeCount; i++)  
+	    if (sameString(el->labs[i],"RPCI")) 
+	        return TRUE;
+        return FALSE;
+        break;
+    case fcoeCSMC:
+        for (i = 0; i < el->placeCount; i++)  
+	    if (sameString(el->labs[i],"CSMC")) 
+	        return TRUE;
+        return FALSE;
+        break;
+    case fcoeLANL:
+        for (i = 0; i < el->placeCount; i++)  
+	    if (sameString(el->labs[i],"LANL")) 
+	        return TRUE;
+        return FALSE;
+        break;
+    case fcoeUCSF:
+        for (i = 0; i < el->placeCount; i++)  
+	    if (sameString(el->labs[i],"UCSF")) 
+	        return TRUE;
+        return FALSE;
+        break;
+    default:
+	return FALSE;
+        break;
+    }
+}
+
 void loadFishClones(struct trackGroup *tg)
 /* Load up fishClones from database table to trackGroup items. */
 {
+fishClonesFilter = cartUsualString(cart, "fishClones.filter", "green");
+fishClonesMap = cartUsualString(cart, "fishClones.type", fcoeEnumToString(0));
+fishClonesType = fcoeStringToEnum(fishClonesMap);
 bedLoadItem(tg, "fishClones", (ItemLoader)fishClonesLoad);
+filterItems(tg, fishClonesFilterItem, fishClonesFilter);
+fishClonesFilterColor = getFilterColor(fishClonesFilter, MG_GREEN);
 }
 
 
@@ -3445,11 +3510,21 @@ void freeFishClones(struct trackGroup *tg)
 fishClonesFreeList((struct fishClones**)&tg->items);
 }
 
+Color fishClonesColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Return color of fishClones track item. */
+{
+if (fishClonesFilterItem(tg, item))
+    return fishClonesFilterColor;
+else
+    return tg->ixColor;
+}
+
 void fishClonesMethods(struct trackGroup *tg)
 /* Make track group for FISH clones. */
 {
 tg->loadItems = loadFishClones;
 tg->freeItems = freeFishClones;
+tg->itemColor = fishClonesColor;
 }
 
 void loadMouseSyn(struct trackGroup *tg)

@@ -69,6 +69,26 @@ char *smoeEnumToString(enum stsMapOptEnum x);
 void smoeDropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
+/****** Some stuff for fishClones related controls *******/
+enum fishClonesOptEnum {
+   fcoeFHCRC = 0,
+   fcoeNCI = 1,
+   fcoeSC = 2,
+   fcoeRPCI = 3,
+   fcoeCSMC = 4,
+   fcoeLANL = 5,
+   fcoeUCSF = 6,
+};
+
+enum fishClonesOptEnum fcoeStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *fcoeEnumToString(enum fishClonesOptEnum x);
+/* Convert from enum to string representation. */
+
+void fcoeDropDown(char *var, char *curVal);
+/* Make drop down of options. */
+
 /****** Some stuff for mRNA and EST related controls *******/
 
 struct mrnaFilter
