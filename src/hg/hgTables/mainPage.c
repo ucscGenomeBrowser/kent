@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.61 2004/11/21 17:14:24 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.62 2004/11/22 05:18:18 kent Exp $";
 
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
@@ -309,10 +309,10 @@ hPrintf("</TD></TR>\n");
 
 struct outputType otAllFields = { NULL, 
 	outPrimaryTable, 
-	"all fields from primary table", };
+	"all fields from selected table", };
 struct outputType otSelected = { NULL, 
     outSelectedFields,
-    "selected fields from primary and related tables",  };
+    "chosen fields from selected and related tables",  };
 struct outputType otSequence = { NULL, 
     outSequence,
     "sequence", };

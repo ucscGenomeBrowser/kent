@@ -4,7 +4,7 @@
 #include "jksql.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: usage.c,v 1.9 2004/11/22 04:13:23 kent Exp $";
+static char const rcsid[] = "$Id: usage.c,v 1.10 2004/11/22 05:18:18 kent Exp $";
 
 void printMainHelp()
 /* Put up main page help info. */
@@ -70,12 +70,13 @@ hPrintf("%s",
 "        <LI><B>output: </B>Specifies the output format (not all options are \n"
 "        available for some tracks). Formats include:\n"
 "        <UL>\n"
-"        <LI><em>All Fields From Primary Table</em> - data from the primary table associated \n"
-"        with the selected track, displayed in a tab-separated format suitable \n"
+"        <LI><em>All Fields From Selected Table</em> - data from the selected table\n"
+"        displayed in a tab-separated format suitable \n"
 "        for import into spreadsheets and relational databases. The ASCII \n"
-"        format may be read in any text browser.\n"
-"        <LI><em>Selected Fields from Primary and Related Tables</em> - user-selected set of tab-separated fields \n"
-"        from the primary table and optionally other related tables as well. \n"
+"        format may be read in any web browser or text editor.\n"
+"        <LI><em>Chosen Fields from Selected and Related Tables</em> - user-chosen \n"
+"        set of tab-separated fields \n"
+"        from the selected table and optionally other related tables as well. \n"
 "        <LI><em>Sequence</em> - DNA (or protein sequence, in some cases) \n"
 "        associated with the table.</LI>\n"
 "        <LI><em>BED</em> - positions of data items in a standard\n"
