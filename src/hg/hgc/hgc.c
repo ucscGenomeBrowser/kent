@@ -110,7 +110,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.484 2003/09/30 02:45:29 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.485 2003/09/30 23:39:20 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5628,6 +5628,7 @@ void doSPGene(struct trackDb *tdb, char *mrnaName)
 {
 struct sqlConnection *conn  = hAllocConn();
 struct sqlConnection *conn2 = hAllocConn();
+struct sqlConnection *goConn;
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -5651,7 +5652,12 @@ char *mapID, *locusID, *mapDescription;
 char *geneID;
 char *geneSymbol;
 char cart_name[255];
-boolean hasPathway, hasMedical;
+char *cgapID, *biocMapID, *biocMapDesc, *biocMapName;
+char *goID, *goTermName, *goEvidence;
+char goAspectChar[10];
+int  iGoAsp;
+
+boolean hasGO, hasPathway, hasMedical;
 
 sprintf(cond_str, "kgID='%s'", mrnaName);
 geneSymbol = sqlGetField(conn, database, "kgXref", "geneSymbol", cond_str);
@@ -5824,9 +5830,89 @@ if (sqlTableExists(conn, "knownCanonical"))
     printf("<BR><BR>");
     }
 
+// Show GO links if any exists
+hasGO = FALSE;
+goConn = sqlMayConnect("go");
+
+goAspectChar[0] = 'F';
+goAspectChar[1] = 'P';
+goAspectChar[2] = 'C';
+
+// loop for 3 GO aspects 
+
+for (iGoAsp = 0; iGoAsp<3; iGoAsp++)
+{
+sprintf(query, 
+        "select goID, termName from go.goObjTerm where dbObjectSymbol = '%s' and aspect='%c'",
+        proteinID, goAspectChar[iGoAsp]);
+sr = sqlGetResult(goConn, query);
+row = sqlNextRow(sr);
+if (row != NULL)
+    {
+    if (!hasGO)
+	{
+	printf("<B>Gene Ontology</B><UL>");
+	hasGO = TRUE;
+	}
+    if (goAspectChar[iGoAsp] == 'F') printf("<LI><B>Molecular Function:</B></LI><UL>");
+    if (goAspectChar[iGoAsp] == 'P') printf("<LI><B>Biological Process:</B></LI><UL>");
+    if (goAspectChar[iGoAsp] == 'C') printf("<LI><B>Cellular Component:</B></LI><UL>");
+    while (row != NULL)
+	{
+	goID 	   = row[0];
+	goTermName = row[1];
+
+        printf("<LI><A HREF = \"");
+	printf("http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=%s", goID);
+	printf("\" TARGET=_blank>%s</A> %s</LI>\n", goID, goTermName);
+	row = sqlNextRow(sr);
+	}
+    printf("</UL>");
+    sqlFreeResult(&sr);
+    }
+}
+fflush(stdout);
+if (hasGO) printf("</UL>");
+
 // Show Pathway links if any exists
 hasPathway = FALSE;
+cgapID     = NULL;
 
+//Process BioCarta Pathway link data
+if (sqlTableExists(conn, "cgapBiocPathway"))
+    {
+    sprintf(cond_str, "alias='%s'", geneSymbol);
+    cgapID = sqlGetField(conn2, database, "cgapAlias", "cgapID", cond_str);
+
+    if (cgapID != NULL)
+	{
+    	sprintf(query, "select mapID from %s.cgapBiocPathway where cgapID = '%s'", database, cgapID);
+    	sr = sqlGetResult(conn, query);
+    	row = sqlNextRow(sr);
+    	if (row != NULL)
+	    {
+	    if (!hasPathway)
+	        {
+	        printf("<B>Pathways</B><UL>");
+	        hasPathway = TRUE;
+	    	}
+	    }
+    	while (row != NULL)
+	    {
+	    biocMapID = row[0];
+	    //printf("<br>biocMapID: %s\n", biocMapID);
+	    printf("<LI><B>BioCarta:&nbsp</B>");
+	    sprintf(cond_str, "mapID=%c%s%c", '\'', biocMapID, '\'');
+	    mapDescription = sqlGetField(conn2, database, "cgapBiocDesc", "description",cond_str);
+	    printf("<A HREF = \"");
+	    printf("http://cgap.nci.nih.gov/Pathways/BioCarta/%s", biocMapID);
+	    printf("\" TARGET=_blank>%s</A> %s </LI>\n", biocMapID, mapDescription);
+            
+	    row = sqlNextRow(sr);
+	    }
+        sqlFreeResult(&sr);
+	}
+    }
 //Process KEGG Pathway link data
 if (sqlTableExists(conn, "keggPathway"))
     {
@@ -5894,6 +5980,56 @@ if (hasPathway)
 // Process medical related links here
 hasMedical = FALSE;
 
+// Process OMIM link
+sprintf(query, "select refseq from %s.mrnaRefseq where mrna = '%s'",  database, mrnaName);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL)
+    {
+    if (dnaBased)
+     	{
+        refSeqName = strdup(mrnaName);
+        }
+    else
+        {
+        refSeqName = strdup(row[0]);
+        }
+    sprintf(query, "select * from refLink where mrnaAcc = '%s'", refSeqName);
+
+    sqlFreeResult(&sr);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+       	rl = refLinkLoad(row);
+       	sqlFreeResult(&sr);
+       	if (rl->omimId != 0)
+    	    {
+	    if (!hasMedical)
+	   	{
+    	    	printf("<B>Medical-Related Links:</B><UL>");
+	    	hasMedical = TRUE;
+	    	}
+	    printf("<LI><B>OMIM:</B> <A HREF=\"");
+            printEntrezOMIMUrl(stdout, rl->omimId);
+            printf("\" TARGET=_blank>%d</A></LI>\n", rl->omimId);
+            }
+	}
+    }
+
+// Process NCI Cancer Genome Anatomy gene
+if (cgapID != NULL)
+    {
+    if (!hasMedical)
+   	{
+    	printf("<B>Medical-Related Links:</B><UL>");
+    	hasMedical = TRUE;
+    	}
+    printf("<LI><B>NCI Cancer Genome Anatomy:&nbsp</B>");
+    printf("<A HREF = \"");
+    printf("http://cgap.nci.nih.gov/Genes/GeneInfo?ORG=Hs&CID=%s", cgapID);
+    printf("\" TARGET=_blank>%s</A> </LI>\n", cgapID);
+    }
+
 // process links to Atlas of Genetics and Cytogenetics in Oncology and Haematology 
 if (sqlTableExists(conn, "atlasOncoGene"))
     {
@@ -5903,7 +6039,7 @@ if (sqlTableExists(conn, "atlasOncoGene"))
 	{
 	if (!hasMedical)
 	    {
-    	    printf("<B>Medical Related Links:</B><UL>");
+    	    printf("<B>Medical-Related Links:</B><UL>");
 	    hasMedical = TRUE;
 	    }
 
@@ -5983,13 +6119,15 @@ if (hasMedical)
 	    printf("<BR>");
 
 	    printf("<B>Gene ID: %s<BR></B>\n", rl->name);
-    
+   
+	    /* 
 	    if (rl->omimId != 0)
 		{
 		printf("<B>OMIM:</B> <A HREF=\"");
 		printEntrezOMIMUrl(stdout, rl->omimId);
 		printf("\" TARGET=_blank>%d</A><BR>\n", rl->omimId);
 		}
+	    */
 	    if (rl->locusLinkId != 0)
 		{
 		printf("<B>LocusLink:</B> ");
