@@ -40,14 +40,14 @@ char *pos1 = NULL, *pos2 = NULL;
 AllocVar(gp);
 pos1 = strstr(name, ":");
  if(pos1 == NULL)
-   errAbort("runSlam::parseGenomeBit() - %s doesn't look like chrN:1-1000", name);
+   errAbort("samplesForCoordinates::parseGenomeBit() - %s doesn't look like chrN:1-1000", name);
 gp->chrom = name;
 *pos1 = '\0';
 gp->chrom = cloneString(gp->chrom);
 pos1++;
 pos2 = strstr(pos1, "-");
  if(pos2 == NULL)
-   errAbort("runSlam::parseGenomeBit() - %s doesn't look like chrN:1-1000, name");
+   errAbort("samplesForCoordinates::parseGenomeBit() - %s doesn't look like chrN:1-1000, name");
 *pos2 = '\0';
 pos2++;
 gp->chromStart = atoi(pos1);
@@ -295,12 +295,14 @@ for(tail = sList; tail != NULL; tail = tail->next)
 	{
 	for(i=0; i< tail->sampleCount; i++)
 	    {
+	    int pos = 0;
 	    start = tail->chromStart;
 	    end = tail->chromEnd;
-	    if(start + tail->samplePosition[i] >= chromStart && start +tail->samplePosition[i] <= chromEnd)
+	    pos = start + tail->samplePosition[i];
+	    if(pos >= chromStart && pos <= chromEnd)
 		{
-		int sampStart = start + tail->samplePosition[i];
-		int sampEnd = start + tail->samplePosition[i] +1;
+		int sampStart = pos;
+		int sampEnd = pos +1;
 		int count = 1;
 		for(s=tail; s != NULL; s=s->next)
 		    {
@@ -309,8 +311,8 @@ for(tail = sList; tail != NULL; tail = tail->next)
 			int expNum = getExpNum(s->name);
 			int exonExp = ((expNum-1) * exonCount) + exon;
 			outputName = getHumanName(s->name);
-			fprintf(out,"%s\t%d\t%d\t%d\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%s\n", 
-				outputName, expNum, exonExp, exon, probeCount+probeOffset, count++, s->sampleHeight[i], 
+			fprintf(out,"%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%s\n", 
+				outputName, expNum, exonExp, exon, probeOffset+1, probeCount+probeOffset, count++, s->sampleHeight[i], 
 				name, s->chrom, sampStart, sampEnd, s->strand);
 			freez(&outputName);
 			}
@@ -326,7 +328,7 @@ return probeOffset;
 
 void printOutHeader(FILE *out)
 {
-printf("exp\texpNum\texonExp\texon\tprobe\trep\tresponse\tname\tchrom\tchromStart\tchromEnd\tstrand\n");
+printf("exp\texpNum\texonExp\texon\texonProbe\tprobe\trep\tresponse\tname\tchrom\tchromStart\tchromEnd\tstrand\n");
 }
 
 void outputGpSamples(struct genePred *gp, struct sqlConnection *conn, FILE *out)
@@ -350,9 +352,11 @@ for(i=0; i<gp->exonCount; i++)
     groupSamplesByName(pSamp, sList, expCount);
     for(j=0; j<expCount; j++)
 	{
-	probesInExon = outputSampleRows(pSamp[j], out, gp->chrom, 
+	int max = outputSampleRows(pSamp[j], out, gp->chrom, 
 					gp->exonStarts[i], gp->exonEnds[i],(i+1), gp->exonCount, probeCount, gp->name);
 	sampleFreeList(&pSamp[j]);
+	if(probesInExon <= max)
+	    probesInExon = max;
 	}
     probeCount += probesInExon;
     freez(&pSamp);
@@ -396,9 +400,11 @@ for(i=0; i<bed->blockCount; i++)
     groupSamplesByName(pSamp, sList, expCount);
     for(j=0; j<expCount; j++)
 	{
-	probesInExon = outputSampleRows(pSamp[j], out, bed->chrom, 
+	int max = outputSampleRows(pSamp[j], out, bed->chrom, 
 					chromStart, chromStart+size,(i+1), bed->blockCount, probeCount, bed->name);
 	sampleFreeList(&pSamp[j]);
+	if(probesInExon <= max)
+	    probesInExon = max;
 	}
     probeCount += probesInExon;
     freez(&pSamp);
