@@ -17,7 +17,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.89 2003/09/25 03:04:19 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.90 2003/09/25 03:14:14 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -802,7 +802,7 @@ slReverse(&asList);
 slReverse(&orgList);
 
 /* Make genome drop-down. */
-hPrintf("genome: ");
+hPrintf("genome ");
 hPrintf("<SELECT NAME=\"%s\" ", orgVarName);
 hPrintf("onchange=\"%s\"",
   "document.orgForm.org.value=document.mainForm.org.options[document.mainForm.org.selectedIndex].value;"
@@ -822,7 +822,7 @@ for (org = orgList; org != NULL; org = org->next)
 hPrintf("</SELECT>");
 
 /* Make assembly drop-down. */
-hPrintf(" assembly: ");
+hPrintf(" assembly ");
 hPrintf("<SELECT NAME=\"%s\" ", dbVarName);
 hPrintf("onchange=\"%s\"",
   "document.orgForm.db.value = document.mainForm.db.options[document.mainForm.db.selectedIndex].value;"
@@ -870,17 +870,6 @@ makeGenomeAssemblyControls();
 
 hPrintf("</TD></TR>\n<TR><TD ALIGN=CENTER>");
 
-/* advFilter, configure buttons */
-    {
-    cgiMakeButton(confVarName, "configure");
-    hPrintf(" ");
-    if (gotAdvFilter())
-	cgiMakeButton(advFilterVarName, "filter (now on)");
-     else
-	cgiMakeButton(advFilterVarName, "filter (now off)");
-    hPrintf(" ");
-    }
-
 
 /* Do sort by drop-down */
     {
@@ -898,6 +887,17 @@ hPrintf("</TD></TR>\n<TR><TD ALIGN=CENTER>");
     hPrintf("</SELECT>\n");
     }
 
+/* advFilter, configure buttons */
+    {
+    cgiMakeButton(confVarName, "configure");
+    hPrintf(" ");
+    if (gotAdvFilter())
+	cgiMakeButton(advFilterVarName, "filter (now on)");
+     else
+	cgiMakeButton(advFilterVarName, "filter (now off)");
+    hPrintf(" ");
+    }
+
 /* Do items to display drop-down */
     {
     static char *menu[] = {"25", "50", "100", "200", "500", "1000", "all"};
@@ -905,12 +905,13 @@ hPrintf("</TD></TR>\n<TR><TD ALIGN=CENTER>");
     cgiMakeDropList(countVarName, menu, ArraySize(menu), displayCountString);
     }
 
+
 /* Make getDna, getText buttons */ 
     {
+    hPrintf(" output ");
+    cgiMakeOptionalButton(getSeqPageVarName, "sequence", gp == NULL);
     hPrintf(" ");
-    cgiMakeOptionalButton(getSeqPageVarName, "as sequence", gp == NULL);
-    hPrintf(" ");
-    cgiMakeOptionalButton(getTextVarName, "as text", gp == NULL);
+    cgiMakeOptionalButton(getTextVarName, "text", gp == NULL);
     }
 
 
