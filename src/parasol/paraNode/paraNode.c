@@ -31,6 +31,10 @@ errAbort("paraNode - parasol node serve.\n"
 	 "    umask=000 - set umask to run under, default 002\n"
 	 "    userPath=bin:bin/i386 User dirs to add to path\n"
 	 "    sysPath=/sbin:/local/bin System dirs to add to path\n"
+	 "    randomDelay=N - Up to this many milliseconds of random delay before\n"
+	 "        starting a job.  This is mostly to avoid swamping NFS with\n"
+	 "        file opens when loading up an idle cluster.  Also it limits\n"
+	 "        the impact on the hub of very short jobs. Default is 5000\n"
 	 "    cpu=N - Number of CPUs to use.  Default 1\n");
 }
 
@@ -40,6 +44,7 @@ int umaskVal = 0002;		/* File creation mask. */
 int maxProcs = 1;		/* Number of processers allowed to use. */
 char *userPath = "";		/* User stuff to add to path. */
 char *sysPath = "";		/* System stuff to add to path. */
+int randomDelay = 5000;		/* How much to delay job startup. */
 
 /* Other globals. */
 char *hostName;			/* Name of this machine. */
@@ -148,17 +153,13 @@ randomNumber = rand();
 }
 
 void randomSleep()
-/* Put in a random sleep time of 0-4 seconds to help
+/* Put in a random sleep time of 0-5 seconds to help
  * prevent overloading hub with jobDone messages all
- * at once. */
+ * at once, and file server with file open requests
+ * all at once. */
 {
-int sleepTime = randomNumber%4;
-int spinTime = randomNumber%200;
-long doneSpin = clock1000() + spinTime;
-while (clock1000() < doneSpin)
-    ;
-if (sleepTime > 0)
-    sleep(sleepTime);
+int sleepTime = randomNumber%randomDelay;
+sleep1000(sleepTime);
 }
 
 
@@ -692,6 +693,10 @@ for (;;)
 	    connectionHandle = 0;
 	    }
 	}
+    else
+        {
+	logIt("accept failed: %s\n", strerror(errno));
+	}
     }
 close(socketHandle);
 socketHandle = 0;
@@ -743,6 +748,7 @@ maxProcs = optionInt("cpu", 1);
 umaskVal = optionInt("umask", 0002);
 userPath = optionVal("userPath", userPath);
 sysPath = optionVal("sysPath", sysPath);
+randomDelay = optionInt("randomDelay", randomDelay);
 
 /* Look up IP addresses. */
 localIp = lookupIp("localhost");
