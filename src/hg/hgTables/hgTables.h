@@ -179,6 +179,7 @@ char *filterFieldVarName(char *db, char *table, char *field, char *type);
 #define hgtaDoClearAllFieldPrefix "hgta_doClearAllField."
 #define hgtaDoSetAllFieldPrefix "hgta_doSetAllField."
 #define hgtaDoGenePredSequence "hgta_doGenePredSequence"
+#define hgtaDoGenomicDna "hgta_doGenomicDna"
 
 /* Other CGI variables. */
 #define hgtaGroup "hgta_group"
@@ -304,6 +305,9 @@ void doOutSelectedFields(struct trackDb *track, struct sqlConnection *conn);
 void doOutSequence(struct trackDb *track, struct sqlConnection *conn);
 /* Output sequence page. */
 
+void doOutBed(struct trackDb *track, struct sqlConnection *conn);
+/* Output selected regions as bed. */
+
 void doFilterPage(struct sqlConnection *conn);
 /* Respond to filter create/edit button */
 
@@ -318,6 +322,9 @@ void doClearFilter(struct sqlConnection *conn);
 
 void doGenePredSequence(struct sqlConnection *conn);
 /* Output genePred sequence. */
+
+void doGenomicDna(struct sqlConnection *conn);
+/* Get genomic sequence (UI has already told us how). */
 
 void printMainHelp();
 /* Put up main page help info. */

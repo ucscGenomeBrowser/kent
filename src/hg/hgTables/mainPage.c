@@ -15,7 +15,7 @@
 #include "grp.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.11 2004/07/19 05:37:08 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.12 2004/07/20 05:58:19 kent Exp $";
 
 
 static struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -296,7 +296,7 @@ hPrintf("<TABLE BORDER=0>\n");
 	 outStats, outBed, 
 	 outGtf, outCustomTrack };
     static char *labels[] =
-        {"all fields from primary table", "(sequence)", 
+        {"all fields from primary table", "sequence", 
 	 "selected fields from related tables", "schema (database organization)",
 	 "(statistics", "(BED - Browser Extensible Data)", 
 	 "(GTF - Gene Transfer Format)", "(custom track)"};

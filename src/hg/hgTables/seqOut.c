@@ -10,17 +10,19 @@
 #include "hdb.h"
 #include "web.h"
 #include "hui.h"
+#include "hdb.h"
 #include "trackDb.h"
 #include "customTrack.h"
+#include "hgSeq.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.1 2004/07/19 21:09:33 kent Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.2 2004/07/20 05:58:19 kent Exp $";
 
 static char *genePredMenu[] = 
     {
     "genomic",
     "protein",
-    "mrna",
+    "mRNA",
     };
 
 static void genePredTypeButton(char *val, char *selVal)
@@ -30,9 +32,15 @@ static void genePredTypeButton(char *val, char *selVal)
 cgiMakeRadioButton(hgtaGeneSeqType, val, sameString(val, selVal));
 }
 
+static boolean isRefGeneTrack(char *table)
+/* Return TRUE if it's a refGene track. */
+{
+return sameString("refGene", table) || sameString("xenoRefGene", table);
+}
+
 static void genePredOptions(struct trackDb *track, char *type, 
 	struct sqlConnection *conn)
-/* Put up quick options for gene prediction tracks. */
+/* Put up sequence type options for gene prediction tracks. */
 {
 char *predType = cartUsualString(cart, hgtaGeneSeqType, genePredMenu[0]);
 char *dupType = cloneString(type);
@@ -50,12 +58,28 @@ htmlOpen("Select sequence type for %s", track->shortLabel);
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=GET>\n");
 cartSaveSession(cart);
 
-uglyf("%s<BR>\n", type);
-
-for (typeIx = 0; typeIx < typeWordCount; ++typeIx)
+if (isRefGeneTrack(track->tableName))
     {
-    genePredTypeButton(genePredMenu[typeIx], predType);
-    hPrintf(" %s<BR>\n", genePredMenu[typeIx]);
+    /* RefGene covers all 3 types, but in it's own way. */
+    for (typeIx = 0; typeIx < 3; ++typeIx)
+	{
+	genePredTypeButton(genePredMenu[typeIx], predType);
+	hPrintf(" %s<BR>\n", genePredMenu[typeIx]);
+	}
+    }
+else
+    {
+    /* Otherwise we always have genomic, and we have
+     * peptide/mrna only if there are corresponding table
+     * in the type field. */
+    for (typeIx = 0; typeIx < typeWordCount; ++typeIx)
+	{
+	if (typeIx == 0 || sqlTableExists(conn, typeWords[typeIx]))
+	    {
+	    genePredTypeButton(genePredMenu[typeIx], predType);
+	    hPrintf(" %s<BR>\n", genePredMenu[typeIx]);
+	    }
+	}
     }
 cgiMakeButton(hgtaDoGenePredSequence, "Submit");
 hPrintf(" ");
@@ -65,13 +89,162 @@ htmlClose();
 freez(&dupType);
 }
 
+
+void doRefGeneProteinSequence(struct sqlConnection *conn, struct bed *bedList)
+/* Fetch refGene proteins corresponding to names in bedList. */
+{
+struct hash *uniqHash = newHash(18);
+struct hash *protHash = newHash(18);
+struct sqlResult *sr;
+char **row;
+struct bed *bed;
+
+
+/* Get translation from mRNA to protein from refLink table. */
+sr = sqlGetResult(conn, "select mrnaAcc,protAcc from refLink");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *protAcc = row[1];
+    if (protAcc != NULL && protAcc[0] != 0)
+        hashAdd(protHash, row[0], lmCloneString(protHash->lm, protAcc));
+    }
+sqlFreeResult(&sr);
+
+for (bed = bedList; bed != NULL; bed = bed->next)
+    {
+    char *protAcc = hashFindVal(protHash, bed->name);
+    if (protAcc != NULL && !hashLookup(uniqHash, protAcc))
+        {
+	char *fa = hGetSeqAndId(conn, protAcc, NULL);
+	hashAdd(uniqHash, protAcc, NULL);
+	if (fa != NULL)
+	    hPrintf("%s", fa);
+	freez(&fa);
+	}
+    }
+hashFree(&protHash);
+hashFree(&uniqHash);
+}
+
+void doRefGeneMrnaSequence(struct sqlConnection *conn, struct bed *bedList)
+/* Fetch refGene mRNA sequence. */
+{
+struct hash *uniqHash = newHash(18);
+struct bed *bed;
+for (bed = bedList; bed != NULL; bed = bed->next)
+    {
+    if (!hashLookup(uniqHash, bed->name))
+        {
+	char *fa = hGetSeqAndId(conn, bed->name, NULL);
+	hashAdd(uniqHash, bed->name, NULL);
+	if (fa != NULL)
+	    hPrintf("%s", fa);
+	freez(&fa);
+	}
+    }
+hashFree(&uniqHash);
+}
+
+void doGenePredNongenomic(struct sqlConnection *conn, int typeIx)
+/* Get mrna or protein associated with selected genes. */
+{
+char *dupType = cloneString(curTrack->type);
+char *typeWords[3];
+char *table;
+struct bed *bed, *bedList = getFilteredBedsInRegion(conn, curTrack);
+int typeWordCount;
+
+textOpen();
+
+/* Figure out which table to use. */
+typeWordCount = chopLine(dupType, typeWords);
+if (typeIx >= typeWordCount)
+    internalErr();
+table = typeWords[typeIx];
+if (sqlTableExists(conn, table))
+    {
+    struct sqlResult *sr;
+    char **row;
+    char query[256];
+    struct hash *hash = newHash(18);
+
+    /* Make hash of all id's passing filters. */
+    for (bed = bedList; bed != NULL; bed = bed->next)
+	hashAdd(hash, bed->name, NULL);
+
+    /* Scan through table, outputting ones that match. */
+    safef(query, sizeof(query), "select name, seq from %s", table);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	if (hashLookup(hash, row[0]))
+	    {
+	    hPrintf(">%s\n", row[0]);
+	    writeSeqWithBreaks(stdout, row[1], strlen(row[1]), 60);
+	    }
+	}
+    sqlFreeResult(&sr);
+    hashFree(&hash);
+    }
+else if (isRefGeneTrack(curTrack->tableName))
+    {
+    if (typeIx == 1) /* Protein */
+        doRefGeneProteinSequence(conn, bedList);
+    else
+        doRefGeneMrnaSequence(conn, bedList);
+    }
+else
+    {
+    internalErr();
+    }
+freez(&dupType);
+slFreeList(&bedList);
+}
+
+
+void genomicFormatPage(struct sqlConnection *conn)
+/* Put up page asking for what sort of genomic sequence. */
+{
+struct hTableInfo *hti = getHti(database, curTrack->tableName);
+htmlOpen("%s Genomic Sequence", curTrack->shortLabel);
+hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=GET>\n");
+cartSaveSession(cart);
+hgSeqOptionsHtiCart(hti, cart);
+hPrintf("<BR>\n");
+cgiMakeButton(hgtaDoGenomicDna, "Get Sequence");
+hPrintf(" ");
+cgiMakeButton(hgtaDoTopSubmit, "Cancel");
+hPrintf("</FORM>");
+htmlClose();
+}
+
+void doGenomicDna(struct sqlConnection *conn)
+/* Get genomic sequence (UI has already told us how). */
+{
+struct bed *bed, *bedList = getFilteredBedsInRegion(conn, curTrack);
+struct hTableInfo *hti = getHti(database, curTrack->tableName);
+textOpen();
+for (bed = bedList; bed != NULL; bed = bed->next)
+    hgSeqBed(hti, bed);
+slFreeList(&bedList);
+}
+
 void doGenePredSequence(struct sqlConnection *conn)
 /* Output genePred sequence. */
 {
+char *table = curTrack->tableName;
 char *type = cartString(cart, hgtaGeneSeqType);
-textOpen();
-uglyf("Got type %s\n", type);
-uglyf("All for now\n");
+
+if (sameWord(type, "protein"))
+    {
+    doGenePredNongenomic(conn, 1);
+    }
+else if (sameWord(type, "mRNA"))
+    {
+    doGenePredNongenomic(conn, 2);
+    }
+else
+    genomicFormatPage(conn);
 }
 
 void doOutSequence(struct trackDb *track, struct sqlConnection *conn)
@@ -83,7 +256,6 @@ if (startsWith("genePred", type))
     genePredOptions(track, type, conn);
 else
     {
-    uglyAbort("Don't know how to get that type of sequence yet");
-    textOpen();
+    genomicFormatPage(conn);
     }
 }
