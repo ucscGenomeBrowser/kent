@@ -23,7 +23,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.92 2004/12/02 00:24:24 hiram Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.93 2004/12/02 00:33:43 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -188,6 +188,10 @@ else
 		compressFileName->string);
 	    printf("\n");
 
+	    /*	prevent potential gzip hacking	*/
+	    unsetenv("GZIP");
+	    unsetenv("GZIP_OPT");
+
 	    /* necessary to flush, otherwise pending stdout output gets
 	     *	mixed up with the output of the gzip
 	     */
@@ -240,7 +244,7 @@ static char **getCompressor(char *fileName)
 /* if a file is to be compressed, return the command to compress the 
  * approriate format, otherwise return NULL */
 {
-static char *GZ_WRITE[] = {"./gzip", "-qc", NULL};
+static char *GZ_WRITE[] = {"/bin/gzip", "-qc", NULL};
 static char *Z_WRITE[] = {"./compress", "-c", NULL};
 static char *BZ2_WRITE[] = {"./bzip2", "-qzc", NULL};
 static char *ZIP_WRITE[] = {"./zip", "-q", NULL};
