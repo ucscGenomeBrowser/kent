@@ -210,14 +210,6 @@ priority 26
 visibility hide
 type sample
 
-track genomicSuperDups
-shortLabel Segmental Dups
-longLabel Duplications of >1000 Bases of Non-RepeatMasked Sequence
-group varRep
-priority 27
-visibility hide
-type bed 6 
-
 track humanParalog
 shortLabel Human Paralog 
 longLabel Human Paralogs Using Fgenesh++ Gene Predictions
@@ -1014,44 +1006,19 @@ color 100,50,0
 altColor 0,0,255
 type sample
 
-track lineageMutations
-shortLabel LineageMutations
-longLabel Lineage Specific Mutations
-group varRep
-priority 143
-altColor 0,160,0
-visibility hide
-type sample
-
 track snpMap
 shortLabel SNPs
 longLabel Simple Nucleotide Polymorphisms (SNPs)
 group varRep
-priority 143.9
-visibility hide
-type bed 6 .
-
-track snpNih
-shortLabel Overlap SNPs
-longLabel Simple Nucleotide Polymorphisms (SNPs) from Clone Overlaps
-group varRep
 priority 144
 visibility hide
-type bed 4 .
-
-track snpTsc
-shortLabel Random SNPs
-longLabel Simple Nucleotide Polymorphisms (SNPs) from Random Reads
-group varRep
-priority 145
-visibility hide
-type bed 4 .
+type bed 6 .
 
 track perlegen
 shortLabel Haplotype Blocks
 longLabel Perlegen Common High-Resolution Haplotype Blocks
 group varRep
-priority 145.01
+priority 145.21
 visibility hide
 chromosomes chr21,
 color 0,0,0
@@ -1064,7 +1031,7 @@ track haplotype
 shortLabel Haplotype Blocks
 longLabel Common Haplotype Blocks
 group varRep
-priority 145.02
+priority 145.22
 visibility hide
 chromosomes chr22,
 color 0,0,0
@@ -1076,7 +1043,7 @@ track rmsk
 shortLabel RepeatMasker
 longLabel Repeating Elements by RepeatMasker
 group varRep
-priority 147
+priority 146.1
 visibility dense
 spectrum on
 type rmsk
@@ -1086,9 +1053,34 @@ track reconRepeat
 shortLabel Recon Repeats
 longLabel Repeats Determined with Recon
 group varRep
-priority 147.5
+priority 146.2
 visibility hide
 type bed 4 +
+
+track simpleRepeat
+shortLabel Simple Repeats
+longLabel Simple Tandem Repeats by TRF
+group varRep
+priority 146.3
+visibility hide
+type bed 4 +
+
+track genomicSuperDups
+shortLabel Segmental Dups
+longLabel Duplications of >1000 Bases of Non-RepeatMasked Sequence
+group varRep
+priority 147
+visibility hide
+type bed 6 
+
+track lineageMutations
+shortLabel LineageMutations
+longLabel Lineage Specific Mutations
+group varRep
+priority 148
+altColor 0,160,0
+visibility hide
+type sample
 
 track blastzSelfUnmasked
 shortLabel Self Unmasked
@@ -1098,14 +1090,6 @@ priority 159
 visibility hide
 spectrum on
 type psl xeno
-
-track simpleRepeat
-shortLabel Simple Repeats
-longLabel Simple Tandem Repeats by TRF
-group varRep
-priority 148
-visibility hide
-type bed 4 +
 
 track olly25
 shortLabel Cross-hyb3 25

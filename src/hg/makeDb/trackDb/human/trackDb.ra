@@ -268,23 +268,6 @@ priority 206
 visibility hide
 type bed 3+
 
-
-track affy120K
-shortLabel Affy 120K SNPs
-longLabel Affymetrix 120K SNP Release Oct 2003
-group varRep
-priority 146
-visibility hide
-type bed 4 .
-
-track affy10K
-shortLabel Affy 10K SNPs
-longLabel Affymetrix Mapping 10K SNPs
-group varRep
-priority 146.1
-visibility hide
-type bed 4 .
-
 track chainSelf
 shortLabel Self Chain 
 longLabel Chained Self Alignments

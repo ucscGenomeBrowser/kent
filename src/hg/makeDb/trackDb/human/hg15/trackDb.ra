@@ -275,7 +275,7 @@ track jkDuplicon
 shortLabel JK Duplicon
 longLabel Duplicated Regions of $Organism Genome Shaded by % ID
 group varRep
-priority 144
+priority 147.1
 visibility hide
 spectrum on
 type bed 6
@@ -284,7 +284,7 @@ track blastzSelf
 shortLabel Blastz Self
 longLabel Merged Blastz Human Alignments
 group varRep
-priority 145
+priority 147.2
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -296,7 +296,7 @@ track selfChain
 shortLabel Self Chain 
 longLabel Chained Blastz Human/$Organism Alignments
 group varRep
-priority 146
+priority 147.3
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -308,7 +308,7 @@ track selfChain2
 shortLabel Self Chain 2 
 longLabel Chained Blastz Human/$Organism Alignments smaller gap score
 group varRep
-priority 146
+priority 147.4
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -320,7 +320,7 @@ track selfNet
 shortLabel self Net
 longLabel Human/$Organism Alignment Net
 group varRep
-priority 147
+priority 147.5
 visibility hide
 spectrum on
 type netAlign hg15 selfChain
