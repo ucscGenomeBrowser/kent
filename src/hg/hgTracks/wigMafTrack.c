@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.40 2004/10/20 15:35:45 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.41 2004/10/20 19:18:58 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -441,7 +441,7 @@ for (i=0; i < textSize && outPositions < outSize;  i++)
         {
         if (insertSize != 0)
             {
-            outLine[outIx++] = '|';     // escape to indicate following is count
+            outLine[outIx++] = '|';// escape to indicate following is count
             outLine[outIx++] = (unsigned char) max(255, insertSize);
             insertSize = 0;
             }
@@ -455,9 +455,21 @@ for (i=0; i < textSize && outPositions < outSize;  i++)
             insertSize++;
         }
     }
-/* end unaligned sequence with indicator */
 if (text[0] == UNALIGNED_SEQ_BEFORE)
-    outLine[--outIx] = UNALIGNED_SEQ_AFTER;
+    {
+    /* end unaligned sequence with indicator */
+    char unalignedChar;
+    unalignedChar = (outLine[--outIx] == UNALIGNED_SEQ_BEFORE ?
+                                                UNALIGNED_SEQ_BOTH :
+                                                UNALIGNED_SEQ_AFTER);
+    outLine[outIx] = unalignedChar;
+    if (offset > 0 && outLine[-1] == UNALIGNED_SEQ_AFTER)
+        {
+        /* suppress redundant indicator between two unaligned sections  */
+        outLine[0] = '-';
+        outLine[-1] = '-';
+        }
+    }
 }
 
 static void drawScoreOverview(char *tableName, int height,

@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.821 2004/10/20 15:35:45 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.822 2004/10/20 19:18:58 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6550,13 +6550,17 @@ for (i=0; i<count; i++, text++, textPos++)
         continue;
         }
     if (match && 
-            (*text == UNALIGNED_SEQ_BEFORE || *text == UNALIGNED_SEQ_AFTER))
+            (*text == UNALIGNED_SEQ_BEFORE || 
+             *text == UNALIGNED_SEQ_AFTER ||
+             *text == UNALIGNED_SEQ_BOTH))
         {
         /* indicates sequence present for the region, but not aligned
-         * display gap char and colored vertical bar */
-        int xOff = (*text == UNALIGNED_SEQ_BEFORE ? x+x1 : x+x2);
+         * display gap char and colored vertical bar(s) */
+        if (*text == UNALIGNED_SEQ_BEFORE || *text == UNALIGNED_SEQ_BOTH)
+            vgBox(vg, x+x1, y, 1, height, alignBreakColor());
+        if (*text == UNALIGNED_SEQ_AFTER || *text == UNALIGNED_SEQ_BOTH)
+            vgBox(vg, x+x2, y, 1, height, alignBreakColor());
         *text = '-';
-        vgBox(vg, xOff, y, 1, height, alignBreakColor());
         }
     c[0] = *text;
     clr = color;

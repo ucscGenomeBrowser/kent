@@ -267,6 +267,7 @@ void makeRedGreenShades(struct vGfx *vg);
 /* used in MAF display */
 #define UNALIGNED_SEQ_BEFORE '^'
 #define UNALIGNED_SEQ_AFTER 'V'
+#define UNALIGNED_SEQ_BOTH 'X'
 
 void hPrintf(char *format, ...);
 /* Printf that can be suppressed if not making html. 
