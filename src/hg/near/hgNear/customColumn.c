@@ -212,7 +212,7 @@ return col;
 
 struct column *verifyCopyColumn(struct sqlConnection *conn, 
 	struct lineFile *lf, FILE *output, char *line,
-	struct column *builtInList)
+	struct column *builtInList, struct hash *uniqHash)
 /* Parse out column from line file.  If output is non-NULL
  * then also save it to output. */
 {
@@ -221,6 +221,25 @@ struct column *col = parseColumnLine(lf, line);
 struct hash *lookupHash = NULL;
 char *lookup = NULL;
 int hitCount = 0, missCount = 0;
+
+/* Deal with non-uniq names. */
+if (hashLookup(uniqHash, col->name))
+    {
+    int ix = 1;
+    char buf[256];
+    for (;;)
+	{
+	safef(buf, sizeof(buf), "%s%d", col->name, ++ix);
+	if (!hashLookup(uniqHash, buf))
+	    {
+	    col->name = cloneString(buf);
+	    break;
+	    }
+	}
+    hashRemove(col->settings, "name");
+    hashAdd(col->settings, "name", col->name);
+    }
+hashAdd(uniqHash, col->name, col);
 
 /* If there's a idLookup setting then make lookup hash. */
 if ((lookup = hashFindVal(col->settings, "idLookup")) != NULL)
@@ -256,9 +275,14 @@ while (lineFileNext(lf, &line, NULL))
         continue;
     if (line[0] == 0)
         break;
+    if (startsWith("column ", line))
+        {
+	lineFileReuse(lf);
+	break;
+	}
     word = nextWord(&line);
     line = skipLeadingSpaces(line);
-    if (line[0] == 0)
+    if (line == NULL || line[0] == 0)
         {
 	errAbort("Expecting at least two words in line %d of %s",
 	    lf->lineIx, lf->fileName);
@@ -285,9 +309,19 @@ hashFree(&lookupHash);
 return col;
 }
 
+static struct hash *hashColumns(struct column *colList)
+/* Return a hash of columns keyed by name. */
+{
+struct column *col;
+struct hash *hash = hashNew(9);
+for (col = colList; col != NULL; col = col->next)
+    hashAdd(hash, col->name, col);
+return hash;
+}
+
 static struct column *verifyCopyColumns(struct sqlConnection *conn,
 	struct lineFile *lf, FILE *output, 
-	struct column *builtInList)
+	struct column *builtInList, struct hash *uniqHash)
 /* Read in custom columns.  Verify that they are ok.  Copy 
  * version after lookup if any to output. */
 {
@@ -298,7 +332,7 @@ while (lineFileNextReal(lf, &line))
     word = nextWord(&line);
     if (sameString("column", word))
         {
-	struct column *col = verifyCopyColumn(conn, lf, output, line, builtInList);
+	struct column *col = verifyCopyColumn(conn, lf, output, line, builtInList, uniqHash);
 	if (col != NULL)
 	    {
 	    slAddHead(&colList, col);
@@ -349,6 +383,7 @@ struct lineFile *lf = lineFileOnString("custom column", TRUE, text);
 char *outFileName = getDupedCustomFileName();
 struct column *newList;
 FILE *f;
+struct hash *uniqHash = NULL;
 
 /* Remove file name from cart for better error recovery. */
 cartRemove(cart, customFileVarName);
@@ -356,7 +391,8 @@ cartRemove(cart, customFileVarName);
 /* Copy and verify output. */
 f = mustOpen(outFileName, "w");
 removeOldCustomColumns(pColList);
-newList = verifyCopyColumns(conn, lf, f, *pColList);
+uniqHash = hashColumns(*pColList);
+newList = verifyCopyColumns(conn, lf, f, *pColList, uniqHash);
 *pColList = slCat(*pColList, newList);
 lf->buf = NULL;		/* Don't let lineFileClose free this */
 lineFileClose(&lf);
@@ -365,6 +401,7 @@ carefulClose(&f);
 /* Put back file name in cart , looks like we must have succeeded. */
 cartSetString(cart, customFileVarName, outFileName);
 freez(&outFileName);
+freeHash(&uniqHash);
 }
 
 static void customFromUrls(struct sqlConnection *conn, char *urlList, 
@@ -372,9 +409,10 @@ static void customFromUrls(struct sqlConnection *conn, char *urlList,
 /* Grab custom columns from a list of URLs. */
 {
 char *outFileName = getDupedCustomFileName();
-struct column *customCols = NULL, *oldList = *pColList;
+struct column *customCols = NULL;
 FILE *f;
 char *url;
+struct hash *uniqHash = NULL;
 
 /* Remove file name from cart for better error recovery. */
 cartRemove(cart, customFileVarName);
@@ -382,22 +420,24 @@ cartRemove(cart, customFileVarName);
 /* Copy and verify output. */
 f = mustOpen(outFileName, "w");
 removeOldCustomColumns(pColList);
+uniqHash = hashColumns(*pColList);
 
 /* Loop through and add columns from each URL. */
 while ((url = nextWord(&urlList)) != NULL)
     {
     struct lineFile *lf = netLineFileOpen(url);
-    struct column *newList = verifyCopyColumns(conn, lf, f, oldList);
+    struct column *newList = verifyCopyColumns(conn, lf, f, *pColList, uniqHash);
     customCols = slCat(newList, customCols);
     lineFileClose(&lf);
     }
 
-*pColList = slCat(customCols, oldList);
+*pColList = slCat(customCols, *pColList);
 carefulClose(&f);
 
 /* Put back file name in cart , looks like we must have succeeded. */
 cartSetString(cart, customFileVarName, outFileName);
 freez(&outFileName);
+hashFree(&uniqHash);
 }
 
 void doCustomSubmit(struct sqlConnection *conn, struct column *colList)
