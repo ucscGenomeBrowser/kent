@@ -2,7 +2,6 @@ import java.io.*;
 import java.net.*;
 import java.sql.*;
 import java.util.Properties;
-import lib.*;
 
 /**
  *  Checks for validity of database connection and metadatabase info.
