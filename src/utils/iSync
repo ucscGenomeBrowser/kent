@@ -1,5 +1,7 @@
 #!/bin/tcsh
-if ($HOST != "kkr1u00.kilokluster.ucsc.edu") then
+# $Id: iSync,v 1.2 2004/06/02 18:02:05 angie Exp $
+
+if ($HOST != "kkr1u00.kilokluster.ucsc.edu" && $HOST != "kkr1u00") then
     echo "You must run iSync on kkr1u00.kilokluster.ucsc.edu"
     exit -1
 endif
