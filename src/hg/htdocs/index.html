@@ -107,9 +107,7 @@ document.location = theUrl + 'org=' + theDb;
 						<OPTION VALUE="human">Human
 						<OPTION VALUE="mouse">Mouse 
 						<OPTION VALUE="rat">Rat 
-<!---Not released yet
-						<OPTION VALUE="SARS+coronavirus+TOR2">SARS 
--->
+						<OPTION VALUE="SARS">SARS 
 					</SELECT>
 			</td></tr></table><hr>
 			<A CLASS="leftbar" HREF="javascript:dbGo('/cgi-bin/hgGateway?');">
@@ -156,7 +154,7 @@ document.location = theUrl + 'org=' + theDb;
 	
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=3></TH></TR><TR><TD WIDTH=10></TD><TD>
 	<P>This site contains the reference sequence for the human
-	genome and the working drafts for the mouse and rat genomes. 
+	genome and working drafts for the mouse, rat, and SARS genomes. 
 	<P>
 	<B>Homo sapiens</B> - The human reference sequence (UCSC version hg15) is based on NCBI Build 33 and was produced by the International Human
 	Genome Sequencing Consortium. The sequence covers about 99 percent of 
@@ -190,6 +188,17 @@ document.location = theUrl + 'org=' + theDb;
 	provides approximately 6.5-fold coverage of the rat genome.
 	
 	<P>
+	<B>SARS coronavirus TOR2</B> - The SARS draft genome assembly (UCSC version sc1)
+	is based on sequence deposited into GenBank as of 14 April 2003.
+	This browser - which represents a departure from UCSC's usual focus on vertebrate 
+	genomes - shows gene predictions, locations of putative proteins, and 
+	viral mRNA and protein alignments. Protein structure analysis and 
+	predictions were determined by using the <A HREF="http://www.cse.ucsc.edu/research/compbio/sam.html" TARGET=_blank>Sequence Alignment and Modeling (SAM) T02</A> 
+	tool. UCSC does not plan to provide a 
+	comprehensive set of browsers for viruses. However, this browser 
+	will be maintained as long as there is strong scientific and public interest in
+	the SARS conronavirus TOR2.
+	<P>
 	We encourage you to explore the reference sequence and working drafts 
 	with the UCSC Genome Browser, which displays the work of many annotators 
 	worldwide. The Genome Browser and the data it displays are freely 
@@ -199,6 +208,7 @@ document.location = theUrl + 'org=' + theDb;
 	assembly to view the use restrictions
 	specific to that release. Program-driven use is limited to a 
 	maximum of one hit every 10 seconds and no more than 5,000 hits per day.  
+
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	<BR></TD></TR></TABLE>
 	</TD></TR></TABLE>
@@ -216,69 +226,42 @@ document.location = theUrl + 'org=' + theDb;
 	</TD></TR></TABLE>
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=3></TH></TR><TR><TD WIDTH=10></TD><TD>
 
-	<P><FONT FACE="courier" SIZE=3><B>Apr. 21, 2003</B></FONT><BR>
-	The file that we originally used to build the agp files for the 
-	April 2003 human release (Build 33) erroneously contained 2 contigs on 
-	chromosome 8 that were listed twice: NT_078037, NT_008183.  We've 
-	received a corrected version and have updated the following files on our 
-	website: contigAgp.zip, chromAgp.zip, liftAll.zip. You can obtain the 
-	newer versions of these files from our ftp site at 
-	<A HREF="ftp://genome.ucsc.edu//goldenPath/10april2003/bigZips/">
-	ftp://genome.ucsc.edu//goldenPath/10april2003/bigZips/</A>.
-
-	<P><FONT FACE="courier" SIZE=3><B>Apr. 14, 2003</B></FONT><BR>
-	The International Human Genome Sequencing Consortium today announced the
-	successful completion of the Human Genome Project. The most
-	significant outcome of this project is the reference sequence of
-	the human genome. The sequencing of
-	the 3 billion letters of DNA in the human genome - which many consider to 
-	be one of the most ambitious scientific undertakings in history - was
-	completed 2 years ahead of schedule and at substantially less cost than
-	original estimates. The reference sequence will serve as a new foundation
-	for research in the fields of medicine and human biology.
-	<P>
-	In conjunction with this announcement, the UCSC Genome Bioinformatics 
-	group is proud to release a genome browser and BLAT server on the 
-	reference sequence (NCBI Build 33), along with bulk downloads of the 
-	sequence and annotation data. The initial browser provides a preliminary 
-	set of annotations that will be expanded in coming weeks. Bulk downloads
-	of the data are available via FTP at 
-	<A HREF="ftp://genome.ucsc.edu/goldenPath/10april2003">ftp://genome.ucsc.edu/goldenPath/10april2003</A> 
-	or through the <A HREF="downloads.html">Downloads</A> link on this page. 
-	We
-	recommend that FTP be used rather than HTML for the download
-	of large or multiple files.
-	<P>
-	The reference sequence covers about 99 percent of the human genome's gene-containing
-	regions, and has been sequenced to an accuracy of 99.99 percent. The
-	missing portions are essentially contained in less than 400 defined gaps
-	that represent DNA regions with unusual structures that can't be reliably
-	sequenced using current technology. The average DNA letter now lies within
-	a stretch of approximately 27,332,000 base pairs of uninterrupted 
-	sequence! 
-	<P>
-	Chromosomal sequences for this release were assembled by the 
-	International Human Genome Sequencing Consortium sequencing centers and verified by 
-	NCBI and UCSC. In some cases, sequence joins between adjacent clones 
-	could not be computationally validated, e.g. due to polymorphisms in the 
-	overlapping sequence. In situations like this, supporting evidence for 
-	the join has been provided by the sequencing center responsible for that 
-	particular chromosome. The <A HREF="goldenPath/certTable.html">
-	Non-standard Join Certificates</A> table displays this information. The 
-	annotations on the UCSC website have been provided
-	by UCSC and collaborators worldwide. See the 
-	<A HREF="goldenPath/credits.html">Credits</A> page for a detailed
-	list of organizations and individuals who contributed to the success of 
-	this release.
+	<P><FONT FACE="courier" SIZE=3><B>May 23, 2003</B></FONT><BR>
+	Today we'd like to announce the release of a genome browser and BLAT
+	server for the SARS coronavirus TOR2 draft assembly. The browser - which is based on
+	sequence deposited into GenBank as of 14 April 2003 - provides seven
+	annotations showing gene predictions, locations of putative proteins, and
+	viral mRNA and protein alignments. Of particular note are the protein 
+	structure analysis and predictions, determined by using the 
+	<A HREF="http://www.cse.ucsc.edu/research/compbio/sam.html" TARGET=_blank>Sequence Alignment and Modeling (SAM) T02</A> tool. 
 
 	<P>
-	We'd like to congratulate the many people worldwide who have worked on 
-	the Human Genome Project for this landmark achievement. We'd also like to acknowledge the UCSC
-	Genome Browser project team who worked many long hours to ensure that
-	the genome browser and sequence data were released on time for this
-	announcement: David Haussler, Jim Kent, Terry Furey, Matt Schwartz, Heather Trumbower, 
-	Angie Hinrichs, Fan Hsu, 
-	Donna Karolchik, Jorge Garcia, Patrick Gavin, Chuck Sugnet, Yontao Lu, Mark Diekhans, Ryan Weber, Robert Baertsch, Krishna Roskin, and the many other students in the UCSC Genome Bioinformatics group.
+	This browser marks a departure from our usual collection of vertebrate 
+	genomes. Its inception was inspired by one of our engineers - Angie 
+	Hinrichs - who was vacationing in New Zealand when the SARs draft assembly
+	was initially released. Struck by the impact of SARS in that part of the 
+	world, she downloaded the sequence and built the initial tracks from a
+	terminal at an Internet cafe! The rest of the team joined in on the 
+	grassroots effort, generating the additional annotations and SAM 
+	T02 protein analyses and predictions. Victor Solovyev chimed in with 
+	Fgenesv+ gene predictions from Softberry Inc. UCSC does not intend to 
+	provide a comprehensive collection of viral genomes in the future, but 
+	will maintain this browser as long as scientific and public interest in 
+	SARS persists.
+
+	<P>
+	Downloads of the annotation data are available
+	at <A HREF="ftp://genome.ucsc.edu/goldenPath/scApr2003/database" TARGET=_blank>
+	ftp://genome.ucsc.edu/goldenPath/scApr2003/database</A> or via the Downloads 
+	link on this page. 
+
+	<P>
+	We'd like to thank everyone who worked on this release, including
+	Angie Hinrichs, Robert Baertsch, Fan Hsu, Matt Schwartz, Heather Trumbower, Jim
+	Kent, Kevin Karplus, Donna Karolchik, Brian Raney, Hiram Clawson, Kate 
+	Rosenbloom, Victor Solovyev, and 
+	our extremely dedicated systems administrators Paul Tatarsky, Patrick 
+	Gavin, and Jorge Garcia.
 
     </TD><TD WIDTH=15></TD></TR></TABLE>
 	<BR></TD></TR></TABLE>
@@ -293,11 +276,15 @@ document.location = theUrl + 'org=' + theDb;
 	<FONT SIZE="4" ><a name="Tech"></a><b>&nbsp; Technical Information About the Assembled Sequence</b></FONT>
 	</TD></TR></TABLE>
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=3></TH></TR><TR><TD>
+<P><FONT SIZE="4">General information:</FONT>
 <UL>
-	<LI><A HREF="goldenPath/certTable.html"><FONT SIZE="4">Non-standard Join Certificates (April 2003 Human Genome)</FONT></A>
 	<LI><A HREF="goldenPath/gbdDescriptions.html"><FONT SIZE="4">Description of the annotation database</FONT></A>
 	<LI><A HREF="goldenPath/datorg.html"><FONT SIZE="4">Data organization and format</FONT></A>
 	<LI><A HREF="goldenPath/term.html"><FONT SIZE="4">Terminology</FONT></A>
+</UL>
+<P><FONT SIZE="4">Additional information on the human genome: </FONT>
+<UL>
+	<LI><A HREF="goldenPath/certTable.html"><FONT SIZE="4">Non-standard Join Certificates (April 2003 Human Genome only)</FONT></A>
 	<LI><A HREF="goldenPath/stats.html"><FONT SIZE="4">Summary statistics</FONT></A>
 	<LI><A HREF="goldenPath/chromReports"><FONT SIZE="4">Chromosome Reports</FONT></A>
          <LI><A HREF="goldenPath/mapPlots/"><FONT SIZE="4">Genome Map Plots</FONT></A>
