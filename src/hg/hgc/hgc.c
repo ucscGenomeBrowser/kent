@@ -8404,6 +8404,80 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 }
 
+void footPrinterSampleClick(struct sqlConnection *conn, struct trackDb *tdb, 
+	char *item, int start, int smpSize)
+/* Handle click in humMus sample (wiggle) track. */
+{
+
+int humMusWinSize = 50;
+int flag;
+int i;
+char table[64];
+boolean hasBin;
+struct sample *smp;
+char query[512];
+char istr[1024];
+char tempTableName[1024];
+struct sqlResult *sr;
+char **row;
+char **pslRow;
+boolean firstTime = TRUE;
+struct psl *psl;
+struct psl *thisPsl;
+
+char pslItem[1024];
+char str[256];
+char thisItem[256];
+char *cgiPslItem;
+    char filename[10000];
+
+char pslTableName[128] = "blastzBestMouse";
+
+struct sqlResult *pslSr;
+struct sqlConnection *conn2 = hAllocConn();
+
+int thisStart, thisEnd;
+ int offset;
+ int motifid;
+ 
+int left = cartIntExp( cart, "l" );
+int right = cartIntExp( cart, "r" );
+
+hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+sprintf(query, "select * from %s where name = '%s'",
+        table, item);
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (firstTime)
+	    firstTime = FALSE;
+    else
+	    htmlHorizontalLine();
+    smp = sampleLoad(row+hasBin);
+
+    sscanf(smp->name,"footPrinter.%d.%d",&offset,&motifid);
+    sprintf(filename,"../zoo_blanchem/raw_no_chimp_offset%d.fa.main.html?motifID=%d",offset,motifid);
+   
+ 
+  //printf("<HEAD><META HTTP-EQUIV=\"REFRESH\"\nCONTENT=\"2;URL=%s\"><TITLE>Reset Cart</TITLE>\n</HEAD>",filename);
+
+    
+    sprintf( tempTableName, "%s_%s", smp->chrom, pslTableName );
+    hFindSplitTable(seqName, pslTableName, table, &hasBin);
+    sprintf(query, "select * from %s where tName = '%s' and tEnd >= %d and tStart <= %d" ,
+        table, smp->chrom, smp->chromStart+smp->samplePosition[0],
+        smp->chromStart+smp->samplePosition[smp->sampleCount-1] );
+
+ printf("Content-Type: text/html\n\n<HTML><BODY><SCRIPT>\n");
+  printf("location.replace('%s')\n",filename); 
+  printf("</SCRIPT> <NOSCRIPT> No JavaScript support. Click <b><a href=\"%s\">continue</a></b> for the requested GenBank report. </NOSCRIPT>\n",filename); 
+
+    
+
+    }
+
+}
 
 void humMusClickHandler(struct trackDb *tdb, char *item, boolean reverse )
 /* Put up generic track info. */
@@ -8433,6 +8507,33 @@ if (wordCount > 0)
     else
         humMusSampleClick( conn, tdb, item, start, num,
             "Human", "hg10", "blastzBestHuman" );
+    }
+printTrackHtml(tdb);
+freez(&dupe);
+hFreeConn(&conn);
+}
+
+void footPrinterClickHandler(struct trackDb *tdb, char *item )
+/* Put up generic track info. */
+{  
+char *dupe, *type, *words[16];
+ char title[256];
+ int num;
+int wordCount;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+dupe = cloneString(tdb->type);
+//genericHeader(tdb, item);
+wordCount = chopLine(dupe, words);
+if (wordCount > 0)
+    {
+    type = words[0];
+
+	num = 0;
+	if (wordCount > 1)
+	    num = atoi(words[1]);
+	if (num < 3) num = 3;
+        footPrinterSampleClick(conn, tdb, item, start, num);
     }
 printTrackHtml(tdb);
 freez(&dupe);
@@ -8860,6 +8961,17 @@ else if (sameWord(track, "triangle") || sameWord(track, "triangleSelf") || sameW
     {
     doTriangle(tdb, item);
     }
+<<<<<<< hgc.c
+else if( sameWord( track, "humMusL" ))
+  {
+    humMusClickHandler( tdb, item );
+  }
+/*BLANCHETTE'S CODE*/
+else if( sameWord( track, "footPrinter" ))
+  {
+    footPrinterClickHandler( tdb, item );
+  }
+=======
 else if( sameWord( track, "humMusL" ) )
         {
         humMusClickHandler( tdb, item, 0 );
@@ -8868,6 +8980,7 @@ else if( sameWord( track, "musHumL" ) )
         {
         humMusClickHandler( tdb, item, 1 );
         }
+>>>>>>> 1.246
 else if (sameWord(track, "jaxQTL"))
     {
     doJaxQTL(tdb, item);
