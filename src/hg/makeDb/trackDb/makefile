@@ -17,7 +17,8 @@ update:
 	hgTrackDb human hg15 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb human hg16 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb malaria falciparum trackDb_$(USER) ../../lib/trackDb.sql .
-	hgTrackDb mouse mm2 trackDb_$(USER) ../../lib/trackDb.sql .
+        hgTrackDb mouse mm2 trackDb_$(USER) ../../lib/trackDb.sql .
+ 	hgTrackDb mouse mm3 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb -visibility=mouse/mm4/visibility.ra mouse mm4 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb rat rn2 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb -visibility=rat/visibility.ra rat rn3 trackDb_$(USER) ../../lib/trackDb.sql .
