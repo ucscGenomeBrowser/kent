@@ -36,7 +36,7 @@ if ($status) then
           | egrep -w "genoName"`
     if ($status) then
       echo '\n  '$db.$track' has no "chrom", "tName" or "genoName" fields.\n'
-      ${0}:
+      echo ${0}:
       $0
       exit 1 
     endif 
