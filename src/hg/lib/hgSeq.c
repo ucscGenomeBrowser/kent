@@ -2,6 +2,7 @@
 #include "common.h"
 #include "dnautil.h"
 #include "dnaseq.h"
+#include "cart.h"
 #include "cheapcgi.h"
 #include "hdb.h"
 #include "web.h"
@@ -10,30 +11,36 @@
 #include "genePred.h"
 #include "bed.h"
 
-void hgSeqFeatureRegionOptions(boolean canDoUTR, boolean canDoIntrons)
+void hgSeqFeatureRegionOptions(struct cart *cart, boolean canDoUTR,
+			       boolean canDoIntrons)
 /* Print out HTML FORM entries for feature region options. */
 {
 char *exonStr = canDoIntrons ? " Exons" : "";
+char *setting;
 
 puts("<H3> Sequence Retrieval Region Options: </H3>\n");
 
 if (canDoIntrons || canDoUTR)
     {
-    cgiMakeCheckBox("hgSeq.promoter", FALSE);
+    cgiMakeCheckBox("hgSeq.promoter",
+		    cartCgiUsualBoolean(cart, "hgSeq.promoter", FALSE));
     puts("Promoter/Upstream by ");
-    cgiMakeIntVar("hgSeq.promoterSize", 1000, 5);
+    setting = cartCgiUsualString(cart, "hgSeq.promoterSize", "1000");
+    cgiMakeTextVar("hgSeq.promoterSize", setting, 5);
     puts("bases <BR>\n");
     }
 
 if (canDoUTR)
     {
-    cgiMakeCheckBox("hgSeq.utrExon5", TRUE);
+    cgiMakeCheckBox("hgSeq.utrExon5",
+		    cartCgiUsualBoolean(cart, "hgSeq.utrExon5", TRUE));
     printf("5' UTR%s <BR>\n", exonStr);
     }
 
 if (canDoIntrons)
     {
-    cgiMakeCheckBox("hgSeq.cdsExon", TRUE);
+    cgiMakeCheckBox("hgSeq.cdsExon",
+		    cartCgiUsualBoolean(cart, "hgSeq.cdsExon", TRUE));
     if (canDoUTR)
 	printf("CDS Exons <BR>\n");
     else
@@ -41,7 +48,8 @@ if (canDoIntrons)
     }
 else if (canDoUTR)
     {
-    cgiMakeCheckBox("hgSeq.cdsExon", TRUE);
+    cgiMakeCheckBox("hgSeq.cdsExon",
+		    cartCgiUsualBoolean(cart, "hgSeq.cdsExon", TRUE));
     printf("CDS <BR>\n");
     }
 else
@@ -51,13 +59,15 @@ else
 
 if (canDoUTR)
     {
-    cgiMakeCheckBox("hgSeq.utrExon3", TRUE);
-    printf("3' UTR%s <BR>\n", exonStr);
+    cgiMakeCheckBox("hgSeq.utrExon3",
+ 		    cartCgiUsualBoolean(cart, "hgSeq.utrExon3", TRUE));
+   printf("3' UTR%s <BR>\n", exonStr);
     }
 
 if (canDoIntrons)
     {
-    cgiMakeCheckBox("hgSeq.intron", TRUE);
+    cgiMakeCheckBox("hgSeq.intron",
+		    cartCgiUsualBoolean(cart, "hgSeq.intron", TRUE));
     if (canDoUTR)
 	puts("Introns <BR>");
     else
@@ -66,20 +76,25 @@ if (canDoIntrons)
 
 if (canDoIntrons || canDoUTR)
     {
-    cgiMakeCheckBox("hgSeq.downstream", FALSE);
+    cgiMakeCheckBox("hgSeq.downstream",
+		    cartCgiUsualBoolean(cart, "hgSeq.downstream", FALSE));
     puts("Downstream by ");
-    cgiMakeIntVar("hgSeq.downstreamSize", 1000, 5);
+    setting = cartCgiUsualString(cart, "hgSeq.downstreamSize", "1000");
+    cgiMakeTextVar("hgSeq.downstreamSize", setting, 5);
     puts("bases <BR>\n");
     }
 
 if (canDoIntrons || canDoUTR)
     {
-    cgiMakeRadioButton("hgSeq.granularity", "gene", TRUE);
+    setting = cartCgiUsualString(cart, "hgSeq.granularity", "gene");
+    cgiMakeRadioButton("hgSeq.granularity", "gene",
+		       sameString(setting, "gene"));
     if (canDoUTR)
 	puts("One FASTA record per gene. <BR>\n");
     else
 	puts("One FASTA record per item. <BR>\n");
-    cgiMakeRadioButton("hgSeq.granularity", "feature", FALSE);
+    cgiMakeRadioButton("hgSeq.granularity", "feature",
+		       sameString(setting, "feature"));
     if (canDoUTR)
 	puts("One FASTA record per region (exon, intron, etc.) with \n");
     else
@@ -89,24 +104,29 @@ else
     {
     puts("Add ");
     }
-cgiMakeIntVar("hgSeq.padding5", 0, 5);
+setting = cartCgiUsualString(cart, "hgSeq.padding5", "0");
+cgiMakeTextVar("hgSeq.padding5", setting, 5);
 puts("extra bases upstream (5') and \n");
-cgiMakeIntVar("hgSeq.padding3", 0, 5);
+setting = cartCgiUsualString(cart, "hgSeq.padding3", "0");
+cgiMakeTextVar("hgSeq.padding3", setting, 5);
 puts("extra downstream (3') <BR>\n");
 puts("<P>\n");
 
 }
 
 
-void hgSeqDisplayOptions(boolean canDoUTR, boolean canDoIntrons,
-			 boolean offerRevComp)
+void hgSeqDisplayOptions(struct cart *cart, boolean canDoUTR,
+			 boolean canDoIntrons, boolean offerRevComp)
 /* Print out HTML FORM entries for sequence display options. */
 {
+char *casing, *repMasking;
+
 puts("\n<H3> Sequence Formatting Options: </H3>\n");
 
+casing = cartCgiUsualString(cart, "hgSeq.casing", "exon");
 if (canDoIntrons)
     {
-    cgiMakeRadioButton("hgSeq.casing", "exon", TRUE);
+    cgiMakeRadioButton("hgSeq.casing", "exon", sameString(casing, "exon"));
     if (canDoUTR)
 	puts("Exons in upper case, everything else in lower case. <BR>\n");
     else
@@ -114,29 +134,41 @@ if (canDoIntrons)
     }
 if (canDoUTR)
     {
-    cgiMakeRadioButton("hgSeq.casing", "cds", !canDoIntrons);
+    if (sameString(casing, "exon") && !canDoIntrons)
+	casing = "cds";
+    cgiMakeRadioButton("hgSeq.casing", "cds", sameString(casing, "cds"));
     puts("CDS in upper case, UTR in lower case. <BR>\n");
     }
-cgiMakeRadioButton("hgSeq.casing", "upper", !(canDoIntrons || canDoUTR));
+if ((sameString(casing, "exon") && !canDoIntrons) ||
+    (sameString(casing, "cds") && !canDoUTR))
+    casing = "upper";
+cgiMakeRadioButton("hgSeq.casing", "upper", sameString(casing, "upper"));
 puts("All upper case. <BR>\n");
-cgiMakeRadioButton("hgSeq.casing", "lower", FALSE);
+cgiMakeRadioButton("hgSeq.casing", "lower", sameString(casing, "lower"));
 puts("All lower case. <BR>\n");
 
-cgiMakeCheckBox("hgSeq.maskRepeats", FALSE);
+cgiMakeCheckBox("hgSeq.maskRepeats",
+		cartCgiUsualBoolean(cart, "hgSeq.maskRepeats", FALSE));
 puts("Mask repeats: \n");
-cgiMakeRadioButton("hgSeq.repMasking", "lower", TRUE);
+
+repMasking = cartCgiUsualString(cart, "hgSeq.repMasking", "lower");
+cgiMakeRadioButton("hgSeq.repMasking", "lower",
+		   sameString(repMasking, "lower"));
 puts(" to lower case \n");
-cgiMakeRadioButton("hgSeq.repMasking", "N", FALSE);
+cgiMakeRadioButton("hgSeq.repMasking", "N", sameString(repMasking, "N"));
 puts(" to N <BR>\n");
 if (offerRevComp)
     {
-    cgiMakeCheckBox("hgSeq.revComp", FALSE);
+    cgiMakeCheckBox("hgSeq.revComp",
+		    cartCgiUsualBoolean(cart, "hgSeq.revComp", FALSE));
     puts("Reverse complement (get \'-\' strand sequence)");
     }
 }
 
-void hgSeqOptionsHti(struct hTableInfo *hti)
-/* Print out HTML FORM entries for gene region and sequence display options. */
+
+void hgSeqOptionsHtiCart(struct hTableInfo *hti, struct cart *cart)
+/* Print out HTML FORM entries for gene region and sequence display options. 
+ * Use defaults from CGI and cart. */
 {
 boolean canDoUTR, canDoIntrons, offerRevComp;
 
@@ -151,9 +183,18 @@ else
     canDoIntrons = hti->hasBlocks;
     offerRevComp = FALSE;
     }
-hgSeqFeatureRegionOptions(canDoUTR, canDoIntrons);
-hgSeqDisplayOptions(canDoUTR, canDoIntrons, offerRevComp);
+hgSeqFeatureRegionOptions(cart, canDoUTR, canDoIntrons);
+hgSeqDisplayOptions(cart, canDoUTR, canDoIntrons, offerRevComp);
 }
+
+
+void hgSeqOptionsHti(struct hTableInfo *hti)
+/* Print out HTML FORM entries for gene region and sequence display options.
+ * Use defaults from CGI. */
+{
+hgSeqOptionsHtiCart(hti, NULL);
+}
+
 
 void hgSeqOptionsDb(char *db, char *table)
 /* Print out HTML FORM entries for gene region and sequence display options. */

@@ -3,8 +3,17 @@
 #ifndef HGSEQ_H
 #define HGSEQ_H
 
+#include "hdb.h"
+#include "cart.h"
+#include "bed.h"
+
 void hgSeqOptionsHti(struct hTableInfo *hti);
-/* Print out HTML FORM entries for gene region and sequence display options. */
+/* Print out HTML FORM entries for gene region and sequence display options.
+ * Use defaults from CGI. */
+
+void hgSeqOptionsHtiCart(struct hTableInfo *hti, struct cart *cart);
+/* Print out HTML FORM entries for gene region and sequence display options. 
+ * Use defaults from CGI and cart. */
 
 void hgSeqOptionsDb(char *db, char *table);
 /* Print out HTML FORM entries for gene region and sequence display options. */
