@@ -1,11 +1,11 @@
 <H2>Description</H2>
 <P>
    This track displays the conservation between the mouse (Feb. 2003) and human (April 2003) genomes for 
-   50bp windows in the mouse genome that have at least 15 bp aligned to
+   50 bp windows in the mouse genome that have at least 15 bp aligned to
    human. Unlike previous versions of this track, it is based on the netting alignment which
    throws out some of the less well supported blastz alignment pieces.
    The score for a window reflects the probability that the
-   level of observed conservation in that 50bp region would occur by
+   level of observed conservation in that 50 bp region would occur by
    chance under neutral evolution. It is given on a logarithmic scale,
    and thus it is called the "L-score". An L-score of 1 means there is a
    1/10 probability that the observed conservation level would occur by
@@ -13,14 +13,14 @@
    means a 1/1000 probability, etc. The L-scores display as
    "mountain ranges". Clicking on a mountain range, a detail page is
    displayed from which you can access the base level alignments, both
-   for the whole region and for the individual 50bp windows.
+   for the whole region and for the individual 50 bp windows.
 </P>
 
 <H2>Methods</H2>
 <P>
    Genome-wide alignments between mouse and human were produced by
    blastz and filtered for pseudogenes and artifacts with Jim Kent's "netting". 
-   A set of 50bp windows in the mouse genome were determined
+   A set of 50 bp windows in the mouse genome were determined
    by scanning the sequence, sliding 5 bases at a time, and only those
    windows with at least 15 aligned bases were kept. For each window,
    a conservation score defined by
@@ -32,7 +32,7 @@
    was calculated, where n is the number of aligning bases in the
    window, p is the percent identity between mouse and human for these
    aligning bases, and m is the average percent identity for aligned
-   neutrally evolving bases in a larger region surrounding the 50bp
+   neutrally evolving bases in a larger region surrounding the 50 bp
    window being scored. Neutral bases were taken from ancestral repeat
    sequences, which are relics of transposons that were inserted before
    the mouse-human split. To transform S into an L-score, the empirical
