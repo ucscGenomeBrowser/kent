@@ -14,6 +14,7 @@
 #include "bed.h"
 #include "cytoBand.h"
 #include "mapSts.h"
+#include "snp.h"
 #include "rnaGene.h"
 #include "stsMarker.h"
 #include "knownInfo.h"
@@ -590,6 +591,63 @@ hFreeConn(&conn);
 return ok;
 }
 
+static boolean findSnpPos(char *spec, struct hgPositions *hgp, char *tableName)
+/* Look for position in stsMarker table. */
+{
+struct sqlConnection *conn;
+struct sqlResult *sr = NULL;
+struct dyString *query;
+char **row;
+boolean ok = FALSE;
+char *chrom;
+struct snp snp;
+char buf[64];
+struct hgPosTable *table = NULL;
+struct hgPos *pos = NULL;
+int rowOffset;
+char *localName;
+
+/* Make sure it start's with 'rs'.  Then skip over it. */
+if (!startsWith("rs", spec))
+    return FALSE;
+localName = spec+2;
+if (!hTableExists(tableName))
+    return FALSE;
+rowOffset = hOffsetPastBin(NULL, tableName);
+conn = hAllocConn();
+query = newDyString(256);
+dyStringPrintf(query, "select * from %s where name = '%s'", tableName, localName);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (ok == FALSE)
+        {
+	ok = TRUE;
+	AllocVar(table);
+	dyStringClear(query);
+	dyStringPrintf(query, "SNP %s Position", spec);
+	table->name = cloneString(query->string);
+	slAddHead(&hgp->tableList, table);
+	}
+    snpStaticLoad(row+rowOffset, &snp);
+    if ((chrom = hgOfficialChromName(snp.chrom)) == NULL)
+	errAbort("Internal Database error: Odd chromosome name '%s' in %s", snp.chrom, tableName); 
+    AllocVar(pos);
+    pos->chrom = chrom;
+    pos->chromStart = snp.chromStart - 5000;
+    pos->chromEnd = snp.chromEnd + 5000;
+    pos->name = cloneString(spec);
+    slAddHead(&table->posList, pos);
+    }
+if (table != NULL)
+    slReverse(&table->posList);
+freeDyString(&query);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return ok;
+}
+
+
 
 static boolean findOldStsPos(char *table, char *spec, 
    char **retChromName, int *retWinStart, int *retWinEnd)
@@ -1008,6 +1066,12 @@ else if (findMrnaPos(query, hgp, useHgTracks))
     {
     }
 else if (findStsPos(query, hgp))
+    {
+    }
+else if (findSnpPos(query, hgp, "snpTsc"))
+    {
+    }
+else if (findSnpPos(query, hgp, "snpNih"))
     {
     }
 else if (findGenethonPos(query, &chrom, &start, &end))	/* HG3 only. */

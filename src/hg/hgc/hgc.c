@@ -335,11 +335,16 @@ char query[512];
 struct sqlResult *sr;
 char **row;
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
-uglyf("That's all there is for generic PSL's now");
+sprintf(query, "select * from %s where qName = '%s'", table, item);
 sr = sqlGetResult(conn, query);
+printf("<PRE><TT>\n");
+printf("#match\tmisMatches\trepMatches\tnCount\tqNumInsert\tqBaseInsert\tstrand\tqName\tqSize\tqStart\tqEnd\ttName\ttSize\ttStart\ttEnd\tblockCount\tblockSizes\tqStarts\ttStarts\n");
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    struct psl *psl = pslLoad(row+hasBin);
+    pslTabOut(psl, stdout);
     }
+printf("</PRE></TT>\n");
 }
 
 void genericClickHandler(struct trackDb *tdb, char *item)
@@ -2949,7 +2954,7 @@ if (fileName == NULL || itemName == NULL)
 ctList = customTracksFromFile(fileName);
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
-    if (sameString(trackId, ct->bt->mapName))
+    if (sameString(trackId, ct->tdb->tableName))
 	break;
     }
 if (ct == NULL)
@@ -2963,7 +2968,7 @@ for (bed = ct->bedList; bed != NULL; bed = bed->next)
 if (bed == NULL)
     errAbort("Couldn't find %s@%s:%d in %s", itemName, seqName, start, fileName);
 bedPrintPos(bed);
-printCustomUrl(ct->bt->url, itemName);
+printCustomUrl(ct->tdb->url, itemName);
 }
 
 struct hash *makeTrackHash(char *chrom)

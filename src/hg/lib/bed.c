@@ -302,9 +302,8 @@ if (wordCount > 11)
 return bed;
 }
 
-
-void fullBedOutput(struct bed *el, FILE *f, char sep, char lastSep) 
-/* Print out bed.  Separate fields with sep. Follow last field with lastSep. */
+void bedOutputN(struct bed *el, int wordCount, FILE *f, char sep, char lastSep)
+/* Write a bed of wordCount fields. */
 {
 int i;
 if (sep == ',') fputc('"',f);
@@ -314,24 +313,64 @@ fputc(sep,f);
 fprintf(f, "%u", el->chromStart);
 fputc(sep,f);
 fprintf(f, "%u", el->chromEnd);
+if (wordCount <= 3)
+    {
+    fputc(lastSep, f);
+    return;
+    }
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
+if (wordCount <= 4)
+    {
+    fputc(lastSep, f);
+    return;
+    }
 fputc(sep,f);
 fprintf(f, "%u", el->score);
+if (wordCount <= 5)
+    {
+    fputc(lastSep, f);
+    return;
+    }
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->strand);
 if (sep == ',') fputc('"',f);
+if (wordCount <= 6)
+    {
+    fputc(lastSep, f);
+    return;
+    }
 fputc(sep,f);
 fprintf(f, "%u", el->thickStart);
+if (wordCount <= 7)
+    {
+    fputc(lastSep, f);
+    return;
+    }
 fputc(sep,f);
 fprintf(f, "%u", el->thickEnd);
+if (wordCount <= 8)
+    {
+    fputc(lastSep, f);
+    return;
+    }
 fputc(sep,f);
 fprintf(f, "%u", el->reserved);
+if (wordCount <= 9)
+    {
+    fputc(lastSep, f);
+    return;
+    }
 fputc(sep,f);
 fprintf(f, "%d", el->blockCount);
+if (wordCount <= 10)
+    {
+    fputc(lastSep, f);
+    return;
+    }
 fputc(sep,f);
 if (sep == ',') fputc('{',f);
 for (i=0; i<el->blockCount; ++i)
@@ -340,6 +379,11 @@ for (i=0; i<el->blockCount; ++i)
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);
+if (wordCount <= 11)
+    {
+    fputc(lastSep, f);
+    return;
+    }
 fputc(sep,f);
 if (sep == ',') fputc('{',f);
 for (i=0; i<el->blockCount; ++i)

@@ -4700,6 +4700,13 @@ tg->mapItemName = ctMapItemName;
 return tg;
 }
 
+boolean bogusMacEmptyChars(char *s)
+/* Return TRUE if it looks like this is just a buggy
+ * Mac browser putting in bogus chars into empty text box. */
+{
+return (s[0] == 45);
+}
+
 void loadCustomTracks(struct trackGroup **pGroupList)
 /* Load up custom tracks and append to list. */
 {
@@ -4709,6 +4716,8 @@ char *customText = cgiOptionalString("customText");
 char *fileName = cgiOptionalString("ct");
 
 customText = skipLeadingSpaces(customText);
+if (customText != NULL && bogusMacEmptyChars(customText))
+    customText = NULL;
 if (customText == NULL || customText[0] == 0)
     customText = cgiOptionalString("customFile");
 customText = skipLeadingSpaces(customText);
