@@ -41,9 +41,8 @@ puts(
 "<FORM ACTION=\"/cgi-bin/hgGateway\" METHOD=\"GET\" NAME=\"changeGenome\">\n"
 "<!--cheap trick to get background on row to be continuous-->\n"
 "<table CELLPADDING=3 CELLSPACING=0 MARGIN=0 WIDTH=100%><tr>\n"
-"<td ALIGN=\"left\"><font SIZE=\"4\"><b>&nbsp;<font COLOR=\"003366\"></td>\n"
-"<td ALIGN=\"right\"><font COLOR=\"003366\" FACE=\"Arial, Helvetica\" SIZE=\"-1\">\n"
-"change genome:</font>\n"
+"<td ALIGN=\"left\">&nbsp;</td>\n"
+"<td ALIGN=\"right\">change genome:</font>\n"
 );
 
 for (cur = dbList; cur != NULL; cur = cur->next)
@@ -61,7 +60,7 @@ cgiMakeDropListFull(orgCgiName, orgList, orgList, numOrganisms, organism);
 cartSaveSession(cart);
 
 puts(
-"<input type=\"image\" height=\"19\" width=\"21\" border=0 value=\"Go\" name=\"Go\" src=\"/images/go.gif\">\n"
+"<input type=\"submit\" value=\"Go\" name=\"Go\" alt=\"Go\" align=\"absmiddle\">\n"
 "</td></tr></table>\n"
 "</FORM>\n"
 "<CENTER>"
@@ -115,7 +114,7 @@ for (cur = dbList; cur != NULL; cur = cur->next)
 
 cgiMakeDropListFull(assemblyCgiName, assemblyList, values, numAssemblies, assembly);
 
-printf("position\n");
+printf(" position\n");
 
 cgiMakeTextVar("position", position, 30);
 freez(&defaultPosition);
@@ -258,7 +257,7 @@ else if (strstrNoCase(organism, "mouse"))
 "	\n"
 "<TR><TD VALIGN=Top><br></TD></TR>\n"
 "	\n"
-"<TR><TD VALIGN=Top NOWRAP>chr7</TD>\n"
+"<TR><TD VALIGN=Top NOWRAP>chr16</TD>\n"
 "	<TD WIDTH=14></TD>\n"
 "	<TD VALIGN=Top>Displays all of chromosome 16</TD></TR>\n"
 "<TR><TD VALIGN=Top NOWRAP>chr16:1-5000000</TD>\n"
@@ -279,7 +278,7 @@ else if (strstrNoCase(organism, "mouse"))
 "</TD></TR>\n"
 "<TR><TD VALIGN=Top NOWRAP>AW045217</TD>\n"
 "	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region of EST with GenBank acc. AW045217</TD></TR>\n"
+"	<TD VALIGN=Top>Displays region of EST with GenBank accession AW045217</TD></TR>\n"
 "<TR><TD VALIGN=Top NOWRAP>Ncam2</TD>\n"
 "	<TD WIDTH=14></TD>\n"
 "	<TD VALIGN=Top>Displays region of genome with official MGI mouse genetic nomenclature Ncam2</TD></TR>\n"
