@@ -10,7 +10,7 @@
 #include "hgExp.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: microarray.c,v 1.9 2003/11/12 18:47:21 kent Exp $";
+static char const rcsid[] = "$Id: microarray.c,v 1.10 2004/04/13 21:01:31 kent Exp $";
 
 struct expColumn
 /* An expression column. */
@@ -75,6 +75,19 @@ safef(query, sizeof(query), "select value from %s where name='%s'",
 return sqlQuickString(conn, query);
 }
 
+char *checkProbeData(struct sqlConnection *conn, char *table, char *probe)
+/* Return probe if it exists in table, else NULL */
+{
+char query[256];
+if (probe == NULL)
+    return NULL;
+safef(query, sizeof(query), "select count(*) from %s where name = '%s'",
+	table, probe);
+if (sqlQuickNum(conn, query) <= 0)
+    probe = NULL;
+return probe;
+}
+
 char *expRatioProbeCheck(struct sqlConnection *conn, char *geneId,
 	char *lookup, char *parameters)
 /* Check all necessary tables exist, and if so return 
@@ -82,12 +95,14 @@ char *expRatioProbeCheck(struct sqlConnection *conn, char *geneId,
 {
 char *data = nextWord(&parameters);
 char *exp = nextWord(&parameters);
+char *probe = NULL;
 if (exp == NULL)
     errAbort("short expRatio type line");
 if (!sqlTableExists(conn, lookup) 
 	|| !sqlTableExists(conn, data) || !sqlTableExists(conn, exp))
-    return FALSE;
-return expProbe(conn, lookup, geneId);
+    return NULL;
+probe = expProbe(conn, lookup, geneId);
+return checkProbeData(conn, data, probe);
 }
 
 static void expMultiSubtype(struct hash *ra, char *colName,
@@ -138,9 +153,10 @@ if (absolute == NULL)
 fConn = sqlConnect("hgFixed");
 ok = (sqlTableExists(fConn, exp) && sqlTableExists(fConn, ratio)
 	&& sqlTableExists(fConn, absolute));
-sqlDisconnect(&fConn);
 if (ok)
     probe = expProbe(conn, lookup, geneId);
+probe = checkProbeData(fConn, absolute, probe);
+sqlDisconnect(&fConn);
 freez(&dupe);
 return probe;
 }
@@ -194,7 +210,19 @@ static boolean microarrayExists(struct section *section,
 /* Return TRUE if microarray tables exist and have something
  * on this one. */
 {
+struct expColumn *col;
+
 section->items = microarrayColumns(conn, geneId);
+for (col = section->items; col != NULL; col = col->next)
+    {
+    if (startsWith("expRatio", col->type))
+        {
+	}
+    else if (startsWith("expMulti", col->type))
+        {
+	}
+    }
+// return FALSE;
 return section->items != NULL;
 }
 
