@@ -248,7 +248,7 @@ visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
-type psl xeno
+type psl xeno zooHuman3
 
 track blastzStrictChainChimp
 shortLabel Blastz Chimp
@@ -259,7 +259,7 @@ visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
-type psl xeno
+type psl xeno zooChimp3
 
 track blastzStrictChainBaboon
 shortLabel Blastz Baboon
@@ -270,7 +270,7 @@ visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
-type psl xeno
+type psl xeno zooBaboon3
 
 track blastzStrictChainCat
 shortLabel Blastz Cat
@@ -281,7 +281,7 @@ visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
-type psl xeno
+type psl xeno zooCat3
 
 track blastzStrictChainDog
 shortLabel Blastz Dog
@@ -292,7 +292,7 @@ visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
-type psl xeno
+type psl xeno zooDog3
 
 track blastzStrictChainCow
 shortLabel Blastz Cow
@@ -303,7 +303,7 @@ visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
-type psl xeno
+type psl xeno zooCow3
 
 track blastzStrictChainPig
 shortLabel Blastz Pig
@@ -314,7 +314,7 @@ visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
-type psl xeno
+type psl xeno zooPig3
 
 track blastzStrictChainRat
 shortLabel Blastz Rat
@@ -325,7 +325,7 @@ visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
-type psl xeno
+type psl xeno zooRat3
 
 track blastzStrictChainMouse
 shortLabel Blastz Mouse
@@ -336,7 +336,7 @@ visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
-type psl xeno
+type psl xeno zooMouse3
 
 track blastzStrictChainChicken
 shortLabel Blastz Chicken
@@ -347,7 +347,7 @@ visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
-type psl xeno
+type psl xeno zooChicken3
 
 track blastzStrictChainFugu
 shortLabel Blastz Fugu
@@ -358,7 +358,7 @@ visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
-type psl xeno
+type psl xeno zooFugu3
 
 track blastzStrictChainTetra
 shortLabel Blastz Tetra
@@ -369,7 +369,7 @@ visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
-type psl xeno
+type psl xeno zooTetra3
 
 track blastzStrictChainZebrafish
 shortLabel Blastz Zebrafish
@@ -380,7 +380,7 @@ visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
-type psl xeno
+type psl xeno zooZebrafish3
 
 track rodentsGaps
 shortLabel rodentGaps 

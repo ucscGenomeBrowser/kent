@@ -159,7 +159,7 @@ longLabel  hg15repeats
 group compGeno
 priority 172
 visibility hide
-type psl 
+type psl .
 
 track chainHg15
 shortLabel Chained Hg15
@@ -178,7 +178,7 @@ longLabel TBlastN Mouse(mm3) Known Gene Pep PSL
 group compgeno
 priority 50
 visibility dense
-type psl
+type psl .
 
 track rn2PepPsl
 shortLabel Rat KGPep
@@ -186,7 +186,7 @@ longLabel TBlastN Rat(rn2) Known Gene Pep PSL
 group compgeno
 priority 50
 visibility dense
-type psl
+type psl .
 
 track hg15PepPsl
 shortLabel Human KGPep
@@ -194,7 +194,7 @@ longLabel TBlastN Human(hg15) Known Gene Pep PSL
 group compgeno
 priority 50
 visibility dense
-type psl
+type psl .
 
 track hg15Pep
 shortLabel Human KGPep

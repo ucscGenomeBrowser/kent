@@ -630,7 +630,7 @@ longLabel AltGraph
 group rna
 priority 73
 visibility hide
-type psl
+type psl .
 
 track altGraphX
 shortLabel AltGraphX
@@ -647,7 +647,7 @@ group rna
 priority 75
 visibility hide
 color 120,12,12
-type psl
+type psl .
 
 track mgcPickedEst
 shortLabel MGC In-progress
