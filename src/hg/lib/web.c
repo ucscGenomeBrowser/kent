@@ -94,8 +94,13 @@ if (withLogo)
 
 if (NULL != theCart)
     {
+    char *theDb = NULL;
+    char *theGenome = NULL;
+
+    getDbAndGenome(theCart, &theDb, &theGenome);
+
     snprintf(uiState, sizeof(uiState), "?%s=%s&%s=%u", 
-	     dbCgiName, cartUsualString(theCart, dbCgiName, hGetDb()),
+	     orgCgiName, theGenome,
 	     cartSessionVarName(), cartSessionId(theCart));
     }
 else
