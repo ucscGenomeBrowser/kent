@@ -89,7 +89,7 @@
 #include "bedCart.h"
 #include "cytoBand.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.915 2005/02/23 19:24:38 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.916 2005/02/25 00:12:48 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -731,6 +731,11 @@ void mapBoxHgcOrHgGene(int start, int end, int x, int y, int width, int height,
 /* Print out image map rectangle that would invoke the hgc (human genome click)
  * program. */
 {
+struct sqlConnection *conn = hAllocConn();
+char condStr[256];
+char *chp;
+char *refseqId;
+char *kgId, *kgChrom, *kgStart, *kgEnd;
 int xEnd = x+width;
 int yEnd = y+height;
 if (x < 0) x = 0;
@@ -741,14 +746,63 @@ if (x < xEnd)
     hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, xEnd, yEnd);
     if (doHgGene)
         {
-	hPrintf("HREF=\"../cgi-bin/hgGene?%s&%s=%s&%s=%s&%s=%s&%s=%d&%s=%d\" ",
-		cartSidUrlString(cart),
-		"db", database,
-		"hgg_gene", item,
-		"hgg_chrom", chromName,
-		"hgg_start", start,
-		"hgg_end", end);
-	}
+	if (sameWord(track, "ccdsGene"))
+	    {
+            safef(condStr, sizeof(condStr), 
+	    	  "ccds='%s'", item);
+	    refseqId = sqlGetField(conn, database, "ccdsInfo", "mrnaAcc", condStr);
+	    chp = strstr(refseqId, ".");
+	    if (chp != NULL) *chp = '\0';
+            safef(condStr, sizeof(condStr), 
+	    	  "refseq='%s' and cdsOverlap >= 0.95 order by cdsOverlap desc", 
+		  refseqId);
+	    
+	    /* check existence of refSeqKg table, which is not available for older geome releases */
+	    if (hTableExists("refSeqKg"))
+	    	{
+	    	kgId = sqlGetField(conn, database, "refSeqKg", "kgId", condStr);
+	        }
+	    else
+	        {
+		kgId = NULL;
+		}
+	    /* call hgGene if the item is in refSeqKg table and above the CDS overlap threshold */
+	    if (kgId != NULL)
+	   	{ 
+		safef(condStr, sizeof(condStr), "name='%s'", kgId);
+	    	kgChrom = sqlGetField(conn, database, "knownGene", "chrom", condStr);
+	    	kgStart = sqlGetField(conn, database, "knownGene", "txStart", condStr);
+	    	kgEnd   = sqlGetField(conn, database, "knownGene", "txEnd", condStr);
+	        hPrintf("HREF=\"../cgi-bin/hgGene?%s&%s=%s&%s=%s&%s=%s&%s=%s&%s=%s&%s=%s&%s=%s\" ",
+			cartSidUrlString(cart),
+			"db", database,
+			"hgg_gene", kgId,
+			"hgg_chrom", kgChrom,
+			"hgg_start", kgStart,
+			"hgg_end", kgEnd,
+			"hgg_type", track,
+			"hgg_item", item);
+		}
+	    else
+	        {
+	        hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
+	    		hgcNameAndSettings(), start, end, track, encodedItem, 
+	    		chromName, winStart, winEnd, 
+	    		database, tl.picWidth);
+		}
+	    } /* end of TRUE branch of: if (sameWord(track, "ccdsGene")) */
+	else
+	    {
+  	    hPrintf("HREF=\"../cgi-bin/hgGene?%s&%s=%s&%s=%s&%s=%s&%s=%d&%s=%d&%s=%s\" ",
+		    cartSidUrlString(cart),
+		    "db", database,
+		    "hgg_gene", item,
+		    "hgg_chrom", chromName,
+		    "hgg_start", start,
+		    "hgg_end", end,
+	 	    "hgg_type", track);
+	    }
+	} /* end of TRUE branch of: if (doHgGene) */
     else
 	{
 	hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
@@ -761,6 +815,7 @@ if (x < xEnd)
     hPrintf(">\n");
     freeMem(encodedItem);
     }
+hFreeConn(&conn);
 }
 
 void mapBoxHc(int start, int end, int x, int y, int width, int height, 
