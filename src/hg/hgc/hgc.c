@@ -110,7 +110,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.485 2003/09/30 23:39:20 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.486 2003/10/01 19:29:12 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -808,7 +808,7 @@ if (posStrand)
     {
     if ((axtList->tStart)-1 > tStart)
         {
-        struct axt *axtGap = createAxtGap(nibFile,gp->chrom,tStart,axtList->tStart-1,gp->strand[0]);
+        struct axt *axtGap = createAxtGap(nibFile,gp->chrom,tStart,axtList->tStart,gp->strand[0]);
         slAddHead(&axtList, axtGap);
         tPtr = axtList->tStart;
         }
@@ -1269,7 +1269,7 @@ while ((axt = axtRead(lf)) != NULL)
         }
     if (sameString(gp->chrom, axt->tName) && (axt->tStart > gp->txEnd)) 
         {
-        if (prevEnd < axt->tStart) //&& gp->txEnd > axt->tStart)
+        if ((prevEnd < axt->tStart) && prevEnd < min(gp->txEnd, axt->tStart))
             {
             axtGap = createAxtGap(nib,gp->chrom,prevEnd,min(axt->tStart,gp->txEnd),gp->strand[0]);
             if (gp->strand[0] == '-')
@@ -7795,7 +7795,7 @@ if (sqlQuickQuery(conn, query, nibFile, sizeof(nibFile)) == NULL)
     errAbort("Sequence %s isn't in chromInfo", chrom);
 
 // get nibFile for Gene in other species
-sprintf(query, "select fileName from chromInfo where chrom = 'chr1'");
+sprintf(query, "select fileName from chromInfo where chrom = '%s'" ,qChrom);
 if (sqlQuickQuery(conn2, query, qNibFile, sizeof(qNibFile)) == NULL)
     errAbort("Sequence chr1 isn't in chromInfo");
 // get gp
@@ -7883,15 +7883,17 @@ if (chainId > 0)
     tChrom = nibLoadPartMasked(NIB_MASK_MIXED, nibFile, 
             fill->tStart, fill->tSize);
     axtList = netFillToAxt(fill, tChrom, hChromSize(chrom), qChromHash, qNibDir, chain, TRUE);
-    /*
-    if (subChain == NULL)
-        subChain = chain;
-    axtList = chainToAxt(subChain, qSeq, qOffset, tChrom, fill->tStart, 200);
-    */
+    /* make sure list is in correct order */
+    if (axtList != NULL)
+        if (axtList->next != NULL)
+            if ((gp->strand[0] == '+' && axtList->tStart > axtList->next->tStart) 
+                || (gp->strand[0] == '-' && axtList->tStart < axtList->next->tStart) )
+                slReverse(&axtList);
+
 
     /* fill in gaps between axt blocks */
     /* allows display of aligned coding regions */
-    axtFillGap(&axtList,qNibDir);
+    axtFillGap(&axtList,qNibDir, gp->strand[0]);
 
     if (gp->strand[0] == '-')
         axtListReverse(&axtList, database);
