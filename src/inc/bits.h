@@ -50,6 +50,10 @@ void bitXor(Bits *a, Bits *b, int bitCount);
 void bitNot(Bits *a, int bitCount);
 /* Flip all bits in a. */
 
+void bitPrint(Bits *a, int startIx, int bitCount, FILE* out);
+/* Print part or all of bit map as a string of 0s and 1s.  Mostly useful for
+ * debugging */
+
 extern int bitsInByte[256];
 /* Lookup table for how many bits are set in a byte. */
 
