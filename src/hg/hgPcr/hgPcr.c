@@ -21,7 +21,7 @@
 #include "web.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgPcr.c,v 1.7 2004/07/08 01:33:19 galt Exp $";
+static char const rcsid[] = "$Id: hgPcr.c,v 1.8 2004/07/22 17:48:47 donnak Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -116,7 +116,7 @@ puts(
 "\n"
 "<H3>Output</H3>\n"
 "When successful, the search returns a sequence output file in fasta format \n"
-"containing all regions in the database that lie between the \n"
+"containing all sequence in the database that lie between and include the \n"
 "primer pair.  The fasta header describes the region in the database\n"
 "and the primers.  The fasta body is capitalized in areas where the primer\n"
 "sequence matches the database sequence and in lower-case elsewhere.  Here\n"
