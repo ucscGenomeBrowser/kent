@@ -75,8 +75,10 @@ while (!bothDone)
 		kgID = strdup(answer);
 		fprintf(o2, "%s\t%s\n", kgID, symbol);
 		}
-	    if ( (aliases  != NULL) && (strlen(aliases) != 0) )
-		{    
+	    if ( (aliases  != NULL) && (strlen(aliases) != 0) && (answer != NULL) )
+		{
+		kgID = strdup(answer);
+    
 		chp0 = aliases; 
 	    	while (chp0 != NULL)
 		    {
