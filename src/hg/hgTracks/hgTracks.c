@@ -51,6 +51,9 @@
 #include "lfs.h"
 #include "mcnBreakpoints.h"
 
+static char *selfName(){return "../cgi-bin/jkTracks";}	/* uglyf */
+#define hgTracksName selfName
+
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
 #define FUREY_CODE 1
@@ -219,6 +222,10 @@ struct trackGroup
     Color (*itemColor)(struct trackGroup *tg, void *item, struct memGfx *mg);
     /* Get color of item (optional). */
 
+    void (*extraUi)(struct trackGroup *tg);
+    void *extraUiData;
+    /* Stuff to draw extra user interface parts. */
+
     void *customPt;            /* Misc pointer variable unique to group. */
     int customInt;             /* Misc int variable unique to group. */
     int subType;               /* Variable to say what subtype this is for similar groups
@@ -332,6 +339,62 @@ if(thisFrame != NULL)
 cgiContinueHiddenVar("ss");
 cgiContinueHiddenVar("ct");
 }
+
+struct controlGrid
+/* Keep track of a control grid (table) */
+    {
+    int columns;	/* How many columns in grid. */
+    int columnIx;	/* Index (0 based) of current column. */
+    char *align;	/* Which way to align. */
+    };
+
+struct controlGrid *startControlGrid(int columns, char *align)
+/* Start up a control grid. */
+{
+struct controlGrid *cg;
+AllocVar(cg);
+cg->columns = columns;
+cg->align = cloneString(align);
+return cg;
+}
+
+void controlGridStartCell(struct controlGrid *cg)
+/* Start a new cell in control grid. */
+{
+if (cg->columnIx == cg->columns)
+    {
+    printf("</tr>\n<tr>");
+    cg->columnIx = 0;
+    }
+if (cg->align)
+    printf("<td align=%s>", cg->align);
+else
+    printf("<td>");
+}
+
+void controlGridEndCell(struct controlGrid *cg)
+/* End cell in control grid. */
+{
+printf("</td>");
+++cg->columnIx;
+}
+
+void endControlGrid(struct controlGrid **pCg)
+/* Finish up a control grid. */
+{
+struct controlGrid *cg = *pCg;
+if (cg != NULL)
+    {
+    int i;
+    if (cg->columnIx != 0 && cg->columnIx < cg->columns)
+	for( i = cg->columnIx; i <= cg->columns; i++)
+	    printf("<td>&nbsp</td>\n");
+    printf("</tr>\n</table>\n");
+    freeMem(cg->align);
+    freez(pCg);
+    }
+}
+
 
 static struct dyString *uiStateUrlPart(struct trackGroup *toggleGroup)
 /* Return a string that contains all the UI state in CGI var
@@ -474,6 +537,7 @@ struct linkedFeatures
     int start, end;			/* Start/end in browser coordinates. */
     int tallStart, tallEnd;		/* Start/end of fat display. */
     int grayIx;				/* Average of components. */
+    int filterColor;			/* Filter color (-1 for none) */
     char name[32];			/* Accession of query seq. */
     int orientation;                    /* Orientation. */
     struct simpleFeature *components;   /* List of component simple features. */
@@ -781,8 +845,12 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
 	    }	
 	prevEnd = lf->end;
 
-	if (tg->itemColor)
+	if (lf->filterColor > 0)
+	    color = lf->filterColor;
+	else if (tg->itemColor)
 	    color = tg->itemColor(tg, lf, mg);
+	else if (shades) 
+	    color =  shades[lf->grayIx+isXeno];
 	tallStart = lf->tallStart;
 	tallEnd = lf->tallEnd;
 	if (lf->components != NULL && !hideLine)
@@ -796,12 +864,10 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
 		mgBarbedHorizontalLine(mg, x1, midY, x2-x1, 2, 5, 
 		 		     lf->orientation, bColor, FALSE);
 		}
-	    if (shades) color =  shades[lf->grayIx+isXeno];
 	    mgDrawBox(mg, x1, midY, w, 1, color);
 	    }
 	for (sf = lf->components; sf != NULL; sf = sf->next)
 	    {
-	    if (shades) color =  shades[lf->grayIx+isXeno];
 	    s = sf->start;
 	    e = sf->end;
 	    if (s < tallStart)
@@ -1433,16 +1499,245 @@ return lfFromPslx(psl, 1, isXeno);
 }
 
 
-struct linkedFeatures *lfFromPslsInRange(char *table, int start, int end, char *chromName, boolean isXeno)
+struct mrnaFilter
+/* Info on one type of mrna filter. */
+   {
+   struct  mrnaFilter *next;	/* Next in list. */
+   char *label;	  /* Filter label. */
+   char *key;     /* Suffix of cgi variable holding search pattern. */
+   char *table;	  /* Associated table to search. */
+   char *pattern; /* Pattern to find. */
+   int mrnaTableIx;	/* Index of field in mrna table. */
+   struct hash *hash;  /* Hash of id's in table that match pattern */
+   };
+
+struct mrnaUiData
+/* Data for mrna-specific user interface. */
+   {
+   boolean isXeno;	/* Is this cross-species? */
+   char *filterTypeVar;	/* cgi variable that holds type of filter. */
+   struct mrnaFilter *filterList;	/* List of filters that can be applied. */
+   };
+
+void addMrnaFilter(struct mrnaUiData *mud, char *track, char *label, char *key, char *table)
+/* Add an mrna filter */
+{
+struct mrnaFilter *fil;
+char buf[64];
+AllocVar(fil);
+fil->label = label;
+sprintf(buf, "%s_%s", track, key);
+fil->key = cloneString(buf);
+fil->table = table;
+slAddTail(&mud->filterList, fil);
+}
+
+struct mrnaUiData *newMrnaUiData(char *track, boolean isXeno)
+/* Make a new  in extra-ui data structure for mRNA. */
+{
+struct mrnaUiData *mud;
+char buf[64];
+AllocVar(mud);
+mud->isXeno = isXeno;
+sprintf(buf, "%sFt", track);
+mud->filterTypeVar = cloneString(buf);
+addMrnaFilter(mud, track, "organism", "org", "organism");
+addMrnaFilter(mud, track, "author", "aut", "author");
+addMrnaFilter(mud, track, "library", "lib", "library");
+addMrnaFilter(mud, track, "tissue", "tis", "tissue");
+addMrnaFilter(mud, track, "cell", "cel", "cell");
+addMrnaFilter(mud, track, "keyword", "key", "keyword");
+addMrnaFilter(mud, track, "gene", "gen", "geneName");
+addMrnaFilter(mud, track, "product", "pro", "productName");
+addMrnaFilter(mud, track, "description", "des", "description");
+return mud;
+}
+
+void oneMrnaFilterUi(struct controlGrid *cg, char *text, char *var)
+/* Print out user interface for one type of mrna filter. */
+{
+controlGridStartCell(cg);
+printf("%s:<BR>", text);
+cgiMakeTextVar(var, cgiUsualString(var, ""), 25);
+controlGridEndCell(cg);
+}
+
+void mudRadio(char *var, char *val, char *ourVal)
+/* Print one radio button */
+{
+cgiMakeRadioButton(var, ourVal, sameString(ourVal, val));
+printf("%s ", ourVal);
+}
+
+void mrnaUi(struct trackGroup *tg)
+/* Put up UI for an mRNA (or EST) track. */
+{
+struct mrnaUiData *mud = tg->extraUiData;
+struct mrnaFilter *fil;
+struct controlGrid *cg = NULL;
+char *filterTypeVar = mud->filterTypeVar;
+char *filterTypeVal = cgiUsualString(filterTypeVar, "none");
+
+/* Define type of filter. */
+printf("<B>Filter:</B> ");
+mudRadio(filterTypeVar, filterTypeVal, "none");
+mudRadio(filterTypeVar, filterTypeVal, "red");
+mudRadio(filterTypeVar, filterTypeVal, "green");
+mudRadio(filterTypeVar, filterTypeVal, "blue");
+mudRadio(filterTypeVar, filterTypeVal, "exclude");
+mudRadio(filterTypeVar, filterTypeVal, "include");
+printf(" ");
+cgiMakeButton("submit", "refresh");
+printf("<BR>\n");
+
+/* List various fields you can filter on. */
+printf("<table border=0 cellspacing=1 cellpadding=1 width=%d><tr>\n", CONTROL_TABLE_WIDTH);
+cg = startControlGrid(3, NULL);
+for (fil = mud->filterList; fil != NULL; fil = fil->next)
+     oneMrnaFilterUi(cg, fil->label, fil->key);
+endControlGrid(&cg);
+}
+
+void filterMrna(struct trackGroup *tg, struct linkedFeatures **pLfList)
+/* Apply filters if any to mRNA linked features. */
+{
+struct linkedFeatures *lf, *next, *newList = NULL;
+struct mrnaUiData *mud = tg->extraUiData;
+struct mrnaFilter *fil;
+char *type;
+int i = 0;
+boolean anyFilter = FALSE;
+boolean colorIx = 0;
+boolean isExclude = FALSE;
+char **row;
+struct sqlConnection *conn = NULL;
+
+if (*pLfList == NULL || mud == NULL)
+    return;
+type = cgiUsualString(mud->filterTypeVar, "none");
+if (sameString(type, "none"))
+    return;
+if (sameString(type, "red"))
+    colorIx = MG_RED;
+else if (sameString(type, "green"))
+    colorIx = MG_GREEN;
+else if (sameString(type, "blue"))
+    colorIx = MG_BLUE;
+else if (sameString(type, "exclude"))
+    isExclude = TRUE;
+else if (sameString(type, "include"))
+    isExclude = FALSE;
+else
+    errAbort("Unknown filter type %s (%s)", type, mud->filterTypeVar);
+
+/* Make a pass though each filter, and start setting up search for
+ * those that have some text. */
+conn = hAllocConn();
+for (fil = mud->filterList; fil != NULL; fil = fil->next)
+    {
+    fil->pattern = cgiUsualString(fil->key, "");
+    if (fil->pattern[0] != 0)
+	{
+        anyFilter = TRUE;
+	fil->hash = newHash(10);
+	if ((fil->mrnaTableIx = sqlFieldIndex(conn, "mrna", fil->table)) < 0)
+	    internalErr();
+	}
+    }
+
+if (anyFilter)
+    {
+    char query[256];
+    struct sqlResult *sr;
+
+    /* Scan tables id/name tables to build up hash of matching id's. */
+    for (fil = mud->filterList; fil != NULL; fil = fil->next)
+        {
+	struct hash *hash = fil->hash;
+	if (hash != NULL)
+	    {
+	    char *pattern = fil->pattern;
+	    boolean anyWild = (strchr(pattern, '*') != NULL || strchr(pattern, '?') != NULL);
+	    sprintf(query, "select * from %s", fil->table);
+	    touppers(pattern);
+	    sr = sqlGetResult(conn, query);
+	    while ((row = sqlNextRow(sr)) != NULL)
+	        {
+		boolean gotMatch;
+		touppers(row[1]);
+		if (anyWild)
+		    gotMatch = wildMatch(pattern, row[1]);
+		else
+		    gotMatch = sameString(pattern, row[1]);
+		if (gotMatch)
+		    {
+		    hashAdd(hash, row[0], NULL);
+		    }
+		}
+	    sqlFreeResult(&sr);
+	    }
+	}
+
+    /* Scan through linked features coloring and or including/excluding ones that 
+     * match filter. */
+    for (lf = *pLfList; lf != NULL; lf = next)
+	{
+	boolean passed = TRUE;
+	next = lf->next;
+	sprintf(query, "select * from mrna where acc = '%s'", lf->name);
+	sr = sqlGetResult(conn, query);
+	if ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    for (fil = mud->filterList; fil != NULL; fil = fil->next)
+	        {
+		if (fil->hash != NULL)
+		    if (hashLookup(fil->hash, row[fil->mrnaTableIx]) == NULL)
+			passed = FALSE;
+		}
+	    }
+	sqlFreeResult(&sr);
+	if (colorIx > 0)
+	    {
+	    if (passed)
+	        lf->filterColor = colorIx;
+	    }
+	else
+	    {
+	    if (passed ^ isExclude)
+	        {
+		slAddHead(&newList, lf);
+		}
+	    }
+	}
+    
+    /* Unless it's just a color tweak, update list. */
+    if (colorIx <= 0)
+        {
+	slReverse(&newList);
+	*pLfList = newList;
+	}
+
+    /* Free up hashes, etc. */
+    for (fil = mud->filterList; fil != NULL; fil = fil->next)
+        {
+	hashFree(&fil->hash);
+	}
+    }
+hFreeConn(&conn);
+}
+
+struct linkedFeatures *lfFromPslsInRange(struct trackGroup *tg, int start, int end, 
+	char *chromName, boolean isXeno)
 /* Return linked features from range of table. */
 {
+char *track = tg->mapName;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row;
 int rowOffset;
 struct linkedFeatures *lfList = NULL, *lf;
 
-sr = hRangeQuery(conn, table, chromName, start, end, NULL, &rowOffset);
+sr = hRangeQuery(conn, track, chromName, start, end, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct psl *psl = pslLoad(row+rowOffset);
@@ -1451,6 +1746,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     pslFree(&psl);
     }
 slReverse(&lfList);
+if (tg->extraUiData)
+    filterMrna(tg, &lfList);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 return lfList;
@@ -2000,7 +2297,17 @@ void estMethods(struct trackGroup *tg)
 /* Make track group of EST methods - overrides color handler. */
 {
 tg->itemColor = estColor;
+tg->extraUiData = newMrnaUiData(tg->mapName, FALSE);
+tg->extraUi = mrnaUi;
 }
+
+void mrnaMethods(struct trackGroup *tg)
+/* Make track group of mRNA methods. */
+{
+tg->extraUiData = newMrnaUiData(tg->mapName, FALSE);
+tg->extraUi = mrnaUi;
+}
+
 
 char *sanger22Name(struct trackGroup *tg, void *item)
 /* Return Sanger22 name. */
@@ -3011,13 +3318,13 @@ else
 return name;
 }
 
-
 void xenoMrnaMethods(struct trackGroup *tg)
 /* Fill in custom parts of xeno mrna alignments. */
 {
 tg->itemName = xenoMrnaName;
+tg->extraUiData = newMrnaUiData(tg->mapName, TRUE);
+tg->extraUi = mrnaUi;
 }
-
 
 void loadRnaGene(struct trackGroup *tg)
 /* Load up rnaGene from database table to trackGroup items. */
@@ -5247,7 +5554,7 @@ tg->items = lfFromGenePredInRange(tg->mapName, chromName, winStart, winEnd);
 void loadPsl(struct trackGroup *tg)
 /* load up all of the psls from correct table into tg->items item list*/
 {
-tg->items = lfFromPslsInRange(tg->mapName, winStart,winEnd, chromName, FALSE);
+tg->items = lfFromPslsInRange(tg, winStart,winEnd, chromName, FALSE);
 if (tg->visibility == tvFull)
     slSort(&tg->items, linkedFeaturesCmpStart);
 }
@@ -5255,7 +5562,7 @@ if (tg->visibility == tvFull)
 void loadXenoPsl(struct trackGroup *tg)
 /* load up all of the psls from correct table into tg->items item list*/
 {
-tg->items = lfFromPslsInRange(tg->mapName, winStart,winEnd, chromName, TRUE);
+tg->items = lfFromPslsInRange(tg, winStart,winEnd, chromName, TRUE);
 if (tg->visibility == tvFull)
     slSort(&tg->items, linkedFeaturesCmpStart);
 }
@@ -5575,7 +5882,6 @@ fputs("</TR></TABLE>", stdout);
 fputs("</TD></TR></TABLE>\n", stdout);
 }
 
-
 void doForm()
 /* Make the tracks display form with the zoom/scroll
  * buttons and the active image. */
@@ -5628,6 +5934,7 @@ registerTrackHandler("refGene", refGeneMethods);
 registerTrackHandler("sanger22", sanger22Methods);
 registerTrackHandler("genieAlt", genieAltMethods);
 registerTrackHandler("ensGene", ensGeneMethods);
+registerTrackHandler("mrna", mrnaMethods);
 registerTrackHandler("intronEst", estMethods);
 registerTrackHandler("est", estMethods);
 registerTrackHandler("estPair", estPairMethods);
@@ -5726,6 +6033,8 @@ makeActiveImage(tGroupList);
 
 if (!hideControls)
     {
+    struct controlGrid *cg = NULL;
+
     fputs("Click on an item in a track to view more information on that item. "
 	  "Click center label to toggle between full and dense display of "
 	  "that track.  Tracks with more than 300 items are always displayed "
@@ -5753,7 +6062,6 @@ if (!hideControls)
     cgiMakeButton("submit", "refresh");
     printf("<BR>\n");
 
-
     /* Display viewing options for each group. */
     /* Chuck: This is going to be wrapped in a table so that
      * the controls don't wrap around randomly
@@ -5763,34 +6071,42 @@ if (!hideControls)
     smallBreak();
     printf("<B>Track Controls:</B><BR> ");
     printf("</th></tr>\n");
-    printf("<tr><td align=left>\n");
+    printf("<tr>\n");
+    cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
+    controlGridStartCell(cg);
     printf(" Base Position <BR>");
     cgiMakeDropList("ruler", offOn, 2, offOn[withRuler]);
-    printf("</td>");
-    controlColNum=1;
+    controlGridEndCell(cg);
     for (group = tGroupList; group != NULL; group = group->next)
 	{
-	if(controlColNum >= MAX_CONTROL_COLUMNS) 
-	    {
-	    printf("</tr><tr><td align=left>\n");
-	    controlColNum =1;
-	    }
-	else 
-	    {
-	    printf("<td align=left>\n");
-	    controlColNum++;
-	    }
+	controlGridStartCell(cg);
+	if (group->visibility != tvHide && group->extraUi != NULL)
+	    printf("<A HREF=\"#%s\">", group->mapName);
 	printf(" %s<BR> ", group->shortLabel);
+	if (group->visibility != tvHide && group->extraUi != NULL)
+	    printf("</A>");
 	cgiMakeDropList(group->mapName, tvStrings, ArraySize(tvStrings), tvStrings[group->visibility]);
-	printf("</td>\n");
+	controlGridEndCell(cg);
 	}
     /* now finish out the table */
-    for( ; controlColNum < MAX_CONTROL_COLUMNS; controlColNum++)
-	printf("<td>&nbsp</td>\n");
-    printf("</tr>\n</table>\n");
+    endControlGrid(&cg);
 
+    printf("</CENTER>\n");
 
+    /* Do Extra parts of UI. */
+    for (group = tGroupList; group != NULL; group = group->next)
+	{
+	if (group->visibility != tvHide && group->extraUi != NULL)
+	    {
+	    htmlHorizontalLine();
+	    printf("<A NAME=\"%s\">", group->mapName);
+	    printf("<H3>%s</H3>\n", group->longLabel);
+	    group->extraUi(group);
+	    }
+	}
     }
+
+
 saveHiddenVars();
 
 /* Clean up. */
