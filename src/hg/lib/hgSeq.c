@@ -228,6 +228,17 @@ if (rCount > 1)
 i = rCount - 1;
 seqStart = rStarts[0]             - (isRc ? padding3 : padding5);
 seqEnd   = rStarts[i] + rSizes[i] + (isRc ? padding5 : padding3);
+if (seqEnd <= seqStart)
+    {
+    printf("# Null range for %s%s%s_%s (range=%s:%d-%d 5'pad=%d 3'pad=%d)\n",
+	   db, 
+	   (sameString(db, hGetDb()) ? "" : "_"),
+	   (sameString(db, hGetDb()) ? "" : hGetDb()),
+	   name,
+	   chrom, seqStart+1, seqEnd,
+	   padding5, padding3);
+    return;
+    }
 rSeq = hDnaFromSeq(chrom, seqStart, seqEnd, dnaLower);
 
 /* Handle casing and compute size of concatenated sequence */
@@ -293,7 +304,7 @@ void hgSeqRegionsDb(char *db, char *chrom, char strand, char *name,
 		    boolean *exonFlags, boolean *cdsFlags)
 /* Concatenate and print out dna for a series of regions. */
 {
-if (concatRegions)
+if (concatRegions || (rCount == 1))
     {
     hgSeqConcatRegionsDb(hGetDb(), chrom, strand, name,
 			 rCount, rStarts, rSizes, exonFlags, cdsFlags);
@@ -325,35 +336,35 @@ hgSeqRegionsDb(hGetDb(), chrom, strand, name, concatRegions,
 }
 
 
+void addFeature(int *count, unsigned *starts, unsigned *sizes,
+		boolean *exonFlags, boolean *cdsFlags,
+		int start, int size, boolean eFlag, boolean cFlag)
+{
+if (size > 0)
+    {
+    starts[*count]    = start;
+    sizes[*count]     = size;
+    exonFlags[*count] = eFlag;
+    cdsFlags[*count]  = cFlag;
+    (*count)++;
+    }
+}
+
+
 void hgSeqRange(char *chrom, int chromStart, int chromEnd, char strand,
 		char *name)
 /* Print out dna sequence for the given range. */
 {
-int count;
+int count = 0;
 int starts[1];
 int sizes[1];
 boolean exonFlags[1];
 boolean cdsFlags[1];
 
-count = 1;
-starts[0] = chromStart;
-sizes[0] = chromEnd - chromStart;
-exonFlags[0] = FALSE;
-cdsFlags[0] = FALSE;
+addFeature(&count, starts, sizes, exonFlags, cdsFlags,
+	   chromStart, chromEnd - chromStart, FALSE, FALSE);
 hgSeqRegions(chrom, strand, name, FALSE, count, starts, sizes, exonFlags,
 	     cdsFlags);
-}
-
-
-void addFeature(int *count, unsigned *starts, unsigned *sizes,
-		boolean *exonFlags, boolean *cdsFlags,
-		int start, int size, boolean eFlag, boolean cFlag)
-{
-starts[*count]    = start;
-sizes[*count]     = size;
-exonFlags[*count] = eFlag;
-cdsFlags[*count]  = cFlag;
-(*count)++;
 }
 
 
