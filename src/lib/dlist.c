@@ -171,7 +171,26 @@ int dlCount(struct dlList *list)
 return slCount(list->head) - 1;
 }
 
-void dlSort(struct dlList *list, int (*compare )(const void *elem1,  const void *elem2))
+
+struct dlSorter 
+/* Helper structure for sorting dlNodes preserving order */
+    {
+    struct dlNode *node;
+    };
+
+static int (*compareFunc)(const void *elem1, const void *elem2);
+/* Node comparison pointer, just used by dlSortNodes and helpers. */
+
+static int dlNodeCmp(const void *elem1, const void *elem2)
+/* Compare two dlSorters indirectly, by calling compareFunc. */
+{
+struct dlSorter *a = (struct dlSorter *)elem1;
+struct dlSorter *b = (struct dlSorter *)elem2;
+return compareFunc(&a->node->val, &b->node->val);
+}
+    
+void dlSort(struct dlList *list, 
+	int (*compare )(const void *elem1,  const void *elem2))
 /* Sort a singly linked list with Qsort and a temporary array. 
  * The arguments to the compare function in real, non-void, life
  * are pointers to pointers of the type that is in the val field of 
@@ -182,15 +201,20 @@ int len = dlCount(list);
 if (len > 1)
     {
     /* Move val's onto an array, sort, and then put back into list. */
-    void **sorter = needLargeMem(len * sizeof(sorter[0]));
+    struct dlSorter *sorter = needLargeMem(len * sizeof(sorter[0])), *s;
     struct dlNode *node;
     int i;
 
     for (i=0, node = list->head; i<len; ++i, node = node->next)
-        sorter[i] = node->val;
-    qsort(sorter, len, sizeof(sorter[0]), compare);
+	{
+	s = &sorter[i];
+	s->node = node;
+	}
+    compareFunc = compare;
+    qsort(sorter, len, sizeof(sorter[0]), dlNodeCmp);
+    dlListInit(list);
     for (i=0, node = list->head; i<len; ++i, node = node->next)
-        node->val = sorter[i];
+	dlAddTail(list, sorter[i].node);
     freeMem(sorter);
     }
 }
