@@ -34,6 +34,22 @@ BAD_DIRS = \
 	synMap \
 	wikiPlot 
 
+# Compile only, the cgi's for those builds without write access
+#	to apache cgi-bin directories
+
+compile:
+	cd lib && ${MAKE}
+	cd cartReset && ${MAKE} compile
+	cd das && ${MAKE} compile
+	cd hgBlat && ${MAKE} compile
+	cd hgCoordConv && ${MAKE} compile
+	cd hgGateway && ${MAKE} compile
+	cd hgText && ${MAKE} compile
+	cd hgTracks && ${MAKE} compile
+	cd hgTrackUi && ${MAKE} compile
+	cd hgc && ${MAKE} compile
+	cd cartDump && ${MAKE} compile
+
 # Build cgi's
 
 cgi:
