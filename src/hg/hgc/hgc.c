@@ -313,7 +313,7 @@ for (same = 1; same >= 0; same -= 1)
 	    sprintf(otherString, "%d&type=%s", psl->tStart, typeName);
 	    hgcAnchorSomewhere(hgcCommand, itemIn, otherString, psl->tName);
 	    printf("%5d  %5.1f%%  %9s     %s %9d %9d  %8s %5d %5d %5d</A>",
-		psl->match + psl->misMatch + psl->repMatch + psl->nCount,
+		psl->match + psl->misMatch + psl->repMatch,
 		100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
 		skipChr(psl->tName), psl->strand, psl->tStart + 1, psl->tEnd,
 		psl->qName, psl->qStart+1, psl->qEnd, psl->qSize);
@@ -817,7 +817,7 @@ chmod(bodyTn.forCgi, 0666);
 /* Write index. */
 index = mustOpen(indexTn.forCgi, "w");
 htmStart(index, psl->qName);
-fprintf(index, "<H3>Alignment</H3>", psl->qName);
+fprintf(index, "<H3>Alignment of %s</H3>", psl->qName);
 fprintf(index, "<A HREF=\"%s#cDNA\" TARGET=\"body\">%s</A><BR>\n", bodyTn.forCgi, psl->qName);
 fprintf(index, "<A HREF=\"%s#genomic\" TARGET=\"body\">genomic</A><BR>\n", bodyTn.forCgi);
 for (i=1; i<=blockCount; ++i)
@@ -913,6 +913,17 @@ if (oSeq == NULL)  errAbort("%s is in %s but not in %s. Internal error.", qName,
 showSomeAlignment(psl, oSeq, qt);
 }
 
+char *blatMouseTable()
+/* Return name of blatMouse table. */
+{
+static char buf[64];
+sprintf(buf, "%s_blatMouse", seqName);
+if (hTableExists(buf))
+    return buf;
+else
+    return "blatMouse";
+}
+
 void htcBlatMouse(char *readName)
 /* Show alignment for accession. */
 {
@@ -934,8 +945,8 @@ printf("<HEAD>\n<TITLE>Mouse Read %s</TITLE>\n</HEAD>\n\n", readName);
 puts("<HTML>");
 
 start = cgiInt("o");
-sprintf(query, "select * from blatMouse where qName = '%s' and tName = '%s' and tStart=%d",
-    readName, seqName, start);
+sprintf(query, "select * from %s where qName = '%s' and tName = '%s' and tStart=%d",
+    blatMouseTable(), readName, seqName, start);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     errAbort("Couldn't find alignment for %s at %d", readName, start);
@@ -2085,13 +2096,17 @@ htmlStart(itemName);
 printf("<H1>BLAT Alignment of Mouse Read %s</H1>", itemName);
 
 puts(
- "<P>This track displays alignments of 11 million mouse whole genome "
- "shotgun reads vs. the draft human genome.  The alignments were done "
+ "<P>This track displays alignments of 16 million mouse whole genome shotgun "
+ "reads (3x coverage) vs. the draft human genome.  The alignments were done "
  "with BLAT in translated protein mode requiring two perfect 4-mer hits "
- "within 100 amino acids of each other to trigger an alignment. </P>");
+ "within 100 amino acids of each other to trigger an alignment.  The human "
+ "genome was masked with RepeatMasker and Tandem Repeat Finder before "
+ "running BLAT.  Places where more than 150 reads aligned were filtered out "
+ "as were alignments of greater than 95% base identity (to avoid human "
+ "contaminants in the mouse data). </P>");
 htmlHorizontalLine();
 /* Get alignment info. */
-sprintf(query, "select * from blatMouse where qName = '%s'", itemName);
+sprintf(query, "select * from %s where qName = '%s'", blatMouseTable(), itemName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -2108,12 +2123,10 @@ puts(
  "These data are made available before scientific publication with the "
  "following understanding:<BR>"
  "1.The data may be freely downloaded, used in analyses, and "
- " repackaged in databases.<BR>"
+ "  repackaged in databases.<BR>"
  "2.Users are free to use the data in scientific papers analyzing "
- " particular genes and regions, provided that providers of this data "
- " (the Sanger Centre, Washington University, and Whitehead Institute "
- " for the reads, Jim Kent and the University of California at Santa Cruz "
- " for the alignments) are properly acknowledged. <BR>"
+ "  particular genes and regions, provided that providers of this data "
+ "  (the Mouse Sequencing Consortium) are properly acknowledged. "
  "3.The Centers producing the data reserve the right to publish the initial "
  "  large-scale analyses of the dataset-including large-scale identification "
  "  of regions of evolutionary conservation and large-scale "
@@ -2181,7 +2194,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>type:</B> %s<BR>\n", rna.type);
     printf("<B>score:</B> %2.1f<BR>\n", rna.fullScore);
     printf("<B>is pseudo-gene:</B> %s<BR>\n", (rna.isPsuedo ? "yes" : "no"));
-    printf("<B>program predicted with:</B> %d<BR>\n", rna.source);
+    printf("<B>program predicted with:</B> %s<BR>\n", rna.source);
     bedPrintPos((struct bed *)&rna);
     printf("<B>strand:</B> %s<BR>\n", rna.strand);
     htmlHorizontalLine();
@@ -2316,7 +2329,7 @@ char **row;
 char query[256];
 
 htmlStart("Mouse Synteny");
-printf("<H2>Mouse Synteny</H2>\n", itemName);
+printf("<H2>Mouse Synteny</H2>\n");
 
 sprintf(query, "select * from mouseSyn where chrom = '%s' and chromStart = %d",
     seqName, start);
@@ -2355,7 +2368,7 @@ int start = cgiInt("o");
 struct cytoBand el;
 
 htmlStart("Chromosome Bands");
-printf("<H2>Chromosome Bands</H2>\n", itemName);
+printf("<H2>Chromosome Bands</H2>\n");
 sprintf(query, 
 	"select * from cytoBand where chrom = '%s' and chromStart = '%d'",
 	seqName, start);
@@ -2860,4 +2873,5 @@ int main(int argc, char *argv[])
 {
 dnaUtilOpen();
 htmEmptyShell(doMiddle, NULL);
+return 0;
 }
