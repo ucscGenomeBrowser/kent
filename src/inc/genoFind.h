@@ -87,6 +87,7 @@ struct genoFind
     int sourceCount;			 /* Count of source files. */
     struct gfSeqSource *sources;         /* List of sequence sources. */
     boolean isPep;			 /* Is a peptide. */
+    bits32 totalSeqSize;		 /* Total size of all sequences. */
     };
 
 void genoFindFree(struct genoFind **pGenoFind);

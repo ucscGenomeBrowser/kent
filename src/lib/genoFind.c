@@ -1,5 +1,6 @@
 /* genoFind - Quickly find where DNA occurs in genome.. */
 #include "common.h"
+#include "obscure.h"
 #include "dnautil.h"
 #include "dnaseq.h"
 #include "nib.h"
@@ -463,8 +464,9 @@ for (i=0; i<nibCount; ++i)
     offset += nibSize;
     ss->end = offset;
     }
-printf("Done adding\n");
+gf->totalSeqSize = offset;
 gfZeroOverused(gf);
+printf("Done adding\n");
 return gf;
 }
 
@@ -587,6 +589,7 @@ for (isRc=0; isRc <= 1; ++isRc)
     for (frame = 0; frame < 3; ++frame)
 	{
 	gf = transGf[isRc][frame];
+	gf->totalSeqSize = offset[isRc][frame];
 	gfZeroOverused(gf);
 	}
     }
@@ -622,6 +625,7 @@ for (i=0, seq = seqList; i<seqCount; ++i, seq = seq->next)
     offset += seq->size;
     ss->end = offset;
     }
+gf->totalSeqSize = offset;
 gfZeroOverused(gf);
 return gf;
 }
@@ -823,6 +827,8 @@ else
     }
 }
 
+static int nearEnough = 512;
+
 static struct gfClump *clumpNear(struct genoFind *gf, struct gfClump *oldClumps, int minMatch)
 /* Go through clump list and make sure hits are also near each other.
  * If necessary divide clumps. */
@@ -844,7 +850,7 @@ for (clump = oldClumps; clump != NULL; clump = nextClump)
     for (hit = oldHits; hit != NULL; hit = nextHit)
         {
 	nextHit = hit->next;
-	if (hit->tStart > 512 + lastT)
+	if (hit->tStart > nearEnough + lastT)
 	     {
 	     if (clumpSize >= minMatch)
 	         {
@@ -893,40 +899,72 @@ struct gfClump *clumpList = NULL, *clump = NULL;
 int maxGap = gf->maxGap;
 struct gfHit *clumpStart = NULL, *hit, *nextHit, *lastHit = NULL;
 int clumpSize = 0;
+int totalHits = 0, usedHits = 0, clumpCount = 0;
 int tileSize = gf->tileSize;
+int bucketShift = 16;		/* 64k buckets. */
+bits32 bucketSize = (1<<bucketShift);
+int bucketCount = (gf->totalSeqSize >> bucketShift) + 1;
+bits32 boundary = bucketSize - nearEnough;
+int i;
+struct gfHit **buckets = NULL, **pb;
 
-for (hit = hitList; ; hit = nextHit)
+/* Sort hit list into buckets. */
+AllocArray(buckets, bucketCount);
+for (hit = hitList; hit != NULL; hit = nextHit)
     {
-    // if (hit != NULL) uglyf(" %d %d (%d)\n", hit->qStart, hit->tStart, hit->diagonal);
-    /* See if time to finish old clump/start new one. */
-    if (lastHit == NULL || hit == NULL || hit->diagonal - lastHit->diagonal > maxGap)
-        {
-	if (clumpSize >= minMatch)
-	    {
-	    clump->hitCount = clumpSize;
-	    slAddHead(&clumpList, clump);
-	    }
-	else
-	    {
-	    if (clump != NULL)
-		{
-#ifdef OLD
-		slFreeList(&clump->hitList);
-#endif /* OLD */
-		freez(&clump);
-		clump = NULL;
-		}
-	    }
-	if (hit == NULL)
-	    break;
-	AllocVar(clump);
-	clumpSize = 0;
-	}
     nextHit = hit->next;
-    slAddHead(&clump->hitList, hit);
-    clumpSize += 1;
-    lastHit = hit;
+    pb = buckets + (hit->tStart >> bucketShift);
+    slAddHead(pb, hit);
     }
+
+uglyf("bucketCount %d, bucketSize %d, gf->totalSeqSize %d\n", bucketCount, bucketSize, gf->totalSeqSize);
+/* Sort each bucket on diagonal and clump. */
+for (i=0; i<bucketCount; ++i)
+    {
+    int clumpSize;
+    bits32 maxT;
+    struct gfHit *clumpHits;
+    pb = buckets + i;
+    slSort(pb, gfHitCmpDiagonal);
+    for (hit = *pb; hit != NULL; )
+         {
+	 /* Each time through this loop will get info on a clump.  Will only
+	  * actually create clump if it is big enough though. */
+	 clumpSize = 0;
+	 clumpHits = lastHit = NULL;
+	 maxT = 0;
+	 for (; hit != NULL; hit = nextHit)
+	     {
+	     nextHit = hit->next;
+	     if (lastHit != NULL && hit->diagonal - lastHit->diagonal > maxGap)
+		 break;
+	     if (hit->tStart > maxT) maxT = hit->tStart;
+	     slAddHead(&clumpHits, hit);
+	     ++clumpSize;
+	     ++totalHits;
+	     lastHit = hit;
+	     }
+	 if (maxT > boundary && i < bucketCount-1)
+	     {
+	     /* Move clumps that are near boundary to next bucket to give them a
+	      * chance to merge with hits there. */
+	     buckets[i+1] = slCat(clumpHits, buckets[i+1]);
+	     }
+	 else if (clumpSize >= minMatch)
+	     {
+	     /* Save clumps that are large enough on list. */
+	     AllocVar(clump);
+	     slAddHead(&clumpList, clump);
+	     clump->hitCount = clumpSize;
+	     clump->hitList = clumpHits;
+	     usedHits += clumpSize;
+	     ++clumpCount;
+	     }
+	 }
+    *pb = NULL;
+    boundary += bucketSize;
+    }
+uglyf("%d hits, %d used in %d clumps\n", totalHits, usedHits, clumpCount);
 clumpList = clumpNear(gf, clumpList, minMatch);
 slSort(&clumpList, gfClumpCmpHitCount);
 #ifdef DEBUG
@@ -936,6 +974,7 @@ for (clump = clumpList; clump != NULL; clump = clump->next)	/* uglyf */
     uglyf(" %d %d %s %d %d (%d hits)\n", clump->qStart, clump->qEnd, clump->target->seq->name,   clump->tStart, clump->tEnd, clump->hitCount);
     }
 #endif /* DEBUG */
+freez(&buckets);
 return clumpList;
 }
 
@@ -989,7 +1028,6 @@ for (i=tileSizeMinusOne; i<size; ++i)
 	}
     }
 cmpQuerySize = seq->size;
-slSort(&hitList, gfHitCmpDiagonal);
 *retHitCount = hitCount;
 return clumpHits(gf, hitList, minMatch);
 }
@@ -1032,7 +1070,7 @@ for (i=0; i<=lastStart; ++i)
 	}
     }
 cmpQuerySize = seq->size;
-slSort(&hitList, gfHitCmpDiagonal);
+// slSort(&hitList, gfHitCmpDiagonal);
 *retHitCount = hitCount;
 return clumpHits(gf, hitList, minMatch);
 }
