@@ -1329,8 +1329,8 @@ struct dyString *dy = newDyString(1024);
 char curDir[512];
 char *result;
 int priority = atoi(val);
-if ((priority < 1) || (priority > 10000))
-    errAbort("Priority out of range = %d, should be 1 to 10000",priority);
+if ((priority < 1) || (priority > MAX_PRIORITY))
+    errAbort("Priority %d out of range, should be 1 to %d",priority,MAX_PRIORITY);
 if (getcwd(curDir, sizeof(curDir)) == NULL)
     errAbort("Couldn't get current directory");
 dyStringPrintf(dy, "setPriority %s %s/para.results %d", getUser(), curDir, priority);
