@@ -386,6 +386,7 @@ boolean formCassetteExon(struct junctionSet *start, struct junctionSet *end)
 struct bed *cassette[4];
 if(start->junctCount != 2 || end->junctCount != 2)
     return FALSE;
+
 cassette[0] = start->bedArray[0];
 cassette[1] = start->bedArray[1];
 cassette[2] = end->bedArray[0];

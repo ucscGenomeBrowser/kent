@@ -8,6 +8,7 @@
 #include "dnautil.h"
 #include "chromKeeper.h"
 #include "options.h"
+#include "obscure.h"
 
 void usage()
 {
@@ -17,7 +18,8 @@ errAbort("axtCountBeds.c - Program to count matching bases in bed and output\n"
 	 "axtCountBeds bedFile axtFile db outFile chrom\n");
 }
 
-
+struct axt *axtList = NULL;
+boolean ckInit = FALSE;
 
 struct axt* axtReadAll(char* fileName)
 /* Read all of the axt records from a file. */
@@ -38,13 +40,29 @@ return axtList;
 
 void chromKeeperForAxt(char *fileName, char *db)
 {
-struct axt *axtList = NULL, *axt = NULL;
+struct axt *axt = NULL;
 axtList = axtReadAll(fileName);
-chromKeeperInit(db);
+if(!ckInit)
+    {
+    chromKeeperInit(db);
+    ckInit = TRUE;
+    }
 for(axt = axtList; axt != NULL; axt = axt->next)
     {
     chromKeeperAdd(axt->tName, axt->tStart, axt->tEnd, axt);
     }
+}
+
+void cleanUpChromKeeper()
+/* Clean stuff out of the chromkeeper. */
+{
+struct axt *axt = NULL, *axtNext = NULL;
+for(axt = axtList; axt != NULL; axt = axtNext)
+    {
+    axtNext = axt->next;
+    chromKeeperRemove(axt->tName, axt->tStart, axt->tEnd, axt);
+    }
+axtFreeList(&axtList);
 }
 
 void printIntArray(int *array, int count)
@@ -60,7 +78,7 @@ fflush(stderr);
 
 boolean isDna(char c)
 {
-return (strchr("atgc", c)) != NULL;
+return (strchr("atgcATGC", c)) != NULL;
 }
 
 void scoreMatches(struct axt *axt, int *matches, char *dna, int matchCount, int chromStart, int chromEnd)
@@ -115,41 +133,80 @@ fprintf(out,"%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
 	"match", "mismatch", "notAlign", "percentId", "dna", "matchesSize", "matches");
 }
 
-void writeAxt(FILE *out, struct bed *bed, struct axt *axt)
+void writeAxt(FILE *out, struct bed *bed, struct binElement *beList)
 {
 struct dyString *outSeq = newDyString(bed->chromEnd - bed->chromStart+100);
 struct dyString *outSeqOrtho = newDyString(bed->chromEnd - bed->chromStart+100);
-
-if(bed->chromStart >= axt->tStart && bed->chromEnd <= axt->tEnd)
+int currentStart = bed->chromStart;
+int currentEnd = bed->chromEnd;
+struct binElement *be = NULL;
+fprintf(out, ">%s.%d.%s.%s:%d-%d\n", 
+	bed->name, bed->score, bed->strand, 
+	bed->chrom, bed->chromStart,bed->chromEnd);
+for(be = beList; be != NULL; be = be->next)
     {
-    int start = bed->chromStart - axt->tStart;
-    int end = bed->chromEnd - axt->tStart;
+    struct axt *axt = be->val;
+    int start = currentStart - axt->tStart;
+    int end = 0;//max(currentEnd - axt->tStart, axt->tEnd - currentStart);
     int pos = 0;
     int i = 0;
-    fprintf(out, ">%s.%d.%s.%s:%d-%d\n", 
-	    bed->name, bed->score, bed->strand, 
-	    bed->chrom, bed->chromStart,bed->chromEnd);
-    /* Loop through incrementing position when non-indel characters
-       are found in target sequence. */
-    while(pos < end && axt->qSym[i] != '\0') 
+    struct dnaSeq *seq = NULL;
+    end = min(axt->tEnd - axt->tStart, currentEnd - axt->tStart);
+    if(bed->chromEnd >= axt->tStart && bed->chromStart <= axt->tEnd)
 	{
-	if(pos >= start && pos < end)
+	/* If axt doesn't cover, pad things with genomic dna. */
+	if(start < 0)
 	    {
-	    dyStringPrintf(outSeq, "%c", axt->tSym[i]);
-	    dyStringPrintf(outSeqOrtho, "%c", axt->qSym[i]);
+	    seq = hChromSeq(bed->chrom, currentStart, axt->tStart);
+	    for(i = 0; i < abs(start); i++)
+		{
+		dyStringPrintf(outSeq, "%c", seq->dna[i]);
+		dyStringPrintf(outSeqOrtho, "-");
+		}
+	    dnaSeqFree(&seq);
+	    currentStart = axt->tStart;
+	    start = 0;
 	    }
-	if(axt->tSym[i] != '-')
-	    pos++;
-	i++;
+	i = 0;
+	/* Loop through incrementing position when non-indel characters
+	   are found in target sequence. */
+	while(pos < end && axt->qSym[i] != '\0') 
+	    {
+	    if(pos >= start && pos < end)
+		{
+		dyStringPrintf(outSeq, "%c", axt->tSym[i]);
+		dyStringPrintf(outSeqOrtho, "%c", axt->qSym[i]);
+		if(axt->tSym[i] != '-')
+		    currentStart++;
+		}
+	    if(axt->tSym[i] != '-')
+		{
+		pos++;
+		}
+	    i++;
+	    }
 	}
-    if(bed->strand[0] == '-')
-	{
-	reverseComplement(outSeq->string, outSeq->stringSize);
-	reverseComplement(outSeqOrtho->string, outSeqOrtho->stringSize);
-	}
-    fprintf(out, "%s\n", outSeq->string);
-    fprintf(out, "%s\n", outSeqOrtho->string);
     }
+/* Pad out the end with sequence. */
+if(currentStart < bed->chromEnd)
+    {
+    struct dnaSeq *seq = NULL;
+    int i = 0;
+    seq = hChromSeq(bed->chrom, currentStart, bed->chromEnd);
+    for(i = 0; i < bed->chromEnd - currentStart; i++)
+	{
+	dyStringPrintf(outSeq, "%c", seq->dna[i]);
+	dyStringPrintf(outSeqOrtho, "-");
+	}
+    dnaSeqFree(&seq);
+    }
+if(bed->strand[0] == '-')
+    {
+    reverseComplement(outSeq->string, outSeq->stringSize);
+    reverseComplement(outSeqOrtho->string, outSeqOrtho->stringSize);
+    }
+fprintf(out, "%s\n", outSeq->string);
+fprintf(out, "%s\n", outSeqOrtho->string);
 dyStringFree(&outSeq);
 dyStringFree(&outSeqOrtho);
 }
@@ -177,10 +234,13 @@ for(be = beList; be != NULL; be = be->next)
     scoreMatches(axt, matches, dna, matchSize, bed->chromStart, bed->chromEnd);
     } 
 
-if(axtOut != NULL && slCount(beList) == 1 )
+if(axtOut != NULL && slCount(beList) != 0 )
     {
-    axt = beList->val;
-    writeAxt(axtOut, bed, axt);
+    writeAxt(axtOut, bed, beList);
+    }
+else
+    {
+    warn("Nothing for %s %s:%d-%d", bed->name, bed->chrom, bed->chromStart, bed->chromEnd);
     }
 
 /* Output bed. */
@@ -235,26 +295,45 @@ struct rbTree *axtTree = NULL;
 FILE *out = NULL;
 FILE *axtOut = NULL;
 char *axtOutName = optionVal("axtOut", NULL);
+struct sqlConnection *conn = NULL;
+struct sqlResult *sr = NULL;
+char **row;
+char query[256];
+struct dyString *axtChromFile = NULL;
 
 warn("Loading Beds.");
 bedList = bedLoadNAll(bedFile, 6);
-warn("Loading Axts.");
-chromKeeperForAxt(axtFile, db);
-warn("Counting Matches.");
+hSetDb(db);
+conn = hAllocConn();
+if(sameString(chrom, "all"))
+    safef(query, sizeof(query), "select chrom from chromInfo where chrom like '%%' order by chrom;");
+else
+    safef(query, sizeof(query), "select chrom from chromInfo where chrom like '%s';", chrom);
+sr = sqlGetResult(conn, query);
 out = mustOpen(outFile, "w");
 outputHeader(out);
-hSetDb(db);
+axtChromFile = newDyString(strlen(axtFile)+100);
 if(axtOutName != NULL)
     axtOut = mustOpen(axtOutName, "w");
-for(bed = bedList; bed != NULL; bed = bed->next)
+dotForUserInit(1);
+warn("Reading axts.");
+while((row = sqlNextRow(sr)) != NULL)
     {
-    if(differentString(bed->chrom, chrom))
-	continue;
-    countMatches(bed, out, axtOut);
+    dyStringClear(axtChromFile);
+    dyStringPrintf(axtChromFile, "%s/%s.axt", axtFile, row[0]);
+    dotForUser();
+    chromKeeperForAxt(axtChromFile->string, db);
+    for(bed = bedList; bed != NULL; bed = bed->next)
+	{
+	if(differentString(bed->chrom, row[0]))
+	    continue;
+	countMatches(bed, out, axtOut);
+	}
+    cleanUpChromKeeper();
     }
 carefulClose(&out);
 carefulClose(&axtOut);
-warn("Done.");
+warn("\nDone.");
 }
 
 int main(int argc, char *argv[])

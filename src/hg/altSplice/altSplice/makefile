@@ -10,12 +10,13 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ../lib/${MACHTYPE}/libSpliceG
 	cp $@ ${HOME}/bin/${MACHTYPE}
 
 %Test: %Test.c 
-	${CC} ${COPT}  -I../../inc -I../../../inc  -o $@ ${addsuffix .c,$@} ${MYLIBS} ${L}
+	${CC} ${COPT} -gp  -I../../inc -I../../../inc  -o $@ ${addsuffix .c,$@} ${MYLIBS} ${L}
 
 
-O =  sequenceForBed genePredToBed genePredToPsl altAnalysis \
-	altSplice orthoSplice agxToBed altSummary bedInGraph # spliceStats spliceVis
-
+O =  sequenceForBed  altAnalysis \
+	altSplice orthoSplice agxToBed altSummary bedInGraph \
+	consForBed altPaths
+# genePredToBed genePredToPsl
 TESTO = test_geneGraph.o
 
 TESTS = altGraphXMemTest geneGraphTest 

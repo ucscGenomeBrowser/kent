@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: splice.c,v 1.1 2004/07/15 22:27:59 sugnet Exp $";
+static char const rcsid[] = "$Id: splice.c,v 1.2 2004/08/03 02:20:25 sugnet Exp $";
 
 struct path *pathCommaIn(char **pS, struct path *ret)
 /* Create a path out of a comma separated string. 
@@ -395,6 +395,15 @@ for(i = 0; i < path->vCount; i++)
     {
     if(path->vertices[i] != sink && path->vertices[i] != source)
 	dyStringPrintf(buff, "%d,", path->vertices[i]);
+    }
+if(splice->type == alt5Prime || splice->type == alt3Prime ||
+   splice->type == altRetInt || splice->type == altCassette)
+    {
+    int pathIx = slIxFromElement(splice->paths, path);
+    if(pathIx == 0)
+	dyStringPrintf(buff, "-Ex");
+    else if(pathIx == 1)
+	dyStringPrintf(buff, "-Inc");
     }
 bed->name = cloneString(buff->string);
 for(i = 0; i < bed->blockCount; i++)

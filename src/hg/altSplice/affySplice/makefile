@@ -12,7 +12,8 @@ GNUSL = /cluster/home/sugnet/local
 
 O =  altHtmlPages bedOverlap gcPresAbs junctionSets agxStartsEnds \
      bedsSpliceCheck probeMatcher seqForExonProbes mergeAffyProbes \
-      merge1lqAndCels makeRFiles rnaBindingClusterCorr calcSpliceDistance 
+      merge1lqAndCels makeRFiles rnaBindingClusterCorr calcSpliceDistance  \
+     altProbes
 
 exe: $(O)
 

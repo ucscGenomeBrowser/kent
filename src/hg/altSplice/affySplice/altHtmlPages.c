@@ -8,7 +8,6 @@
 #include "chromKeeper.h"
 #include "binRange.h"
 #include "obscure.h"
-#include "hash.h"
 #include "linefile.h"
 #include "dystring.h"
 #include "altGraphX.h"

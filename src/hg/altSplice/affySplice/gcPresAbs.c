@@ -649,14 +649,14 @@ if(outputDuplicates)
 	    /* Output a column for each repetition. */
 	    rMap = slElementFromIx(rMapList, j);
 	    for(k = 0; k < rMap->repCount -1; k++)
-		fprintf(out, "%.10g\t", probeSetPVals[i][j]);
+		fprintf(out, "%.5g\t", probeSetPVals[i][j]);
 
 	    /* If this is the last repetion then print the newline
 	       otherwise continue with tabs. */
 	    if(j == sampleCount -1)
-		fprintf(out, "%.10g\n", probeSetPVals[i][j]);
+		fprintf(out, "%.5g\n", probeSetPVals[i][j]);
 	    else
-		fprintf(out, "%.10g\t", probeSetPVals[i][j]);
+		fprintf(out, "%.5g\t", probeSetPVals[i][j]);
 	    }
 	}
     }
@@ -670,8 +670,8 @@ else /* Only print one column per rMap. */
 	{
 	fprintf(out, "%s\t", probeSetNames[i]);
 	for(j = 0; j < sampleCount -1; j++)
-	    fprintf(out, "%.10g\t", probeSetPVals[i][j]);
-	fprintf(out, "%.10g\n", probeSetPVals[i][j]);
+	    fprintf(out, "%.5g\t", probeSetPVals[i][j]);
+	fprintf(out, "%.5g\n", probeSetPVals[i][j]);
 	}
     }
 carefulClose(&out);
