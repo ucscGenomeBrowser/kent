@@ -1403,7 +1403,7 @@ for (ff = ali; ff != NULL; ff = nextFf)
     if (nextFf != NULL)
 	{
 	int nhStart = t3GenoPos(nextFf->hStart, genoSeq, t3List, FALSE) + chromOffset;
-	int ohEnd = t3GenoPos(ff->hEnd-1, genoSeq, t3List, TRUE) + chromOffset;
+	int ohEnd = t3GenoPos(ff->hEnd-1, genoSeq, t3List, TRUE) + chromOffset+1;
 	int hGap = nhStart - ohEnd;
 	int nGap = nextFf->nStart - ff->nEnd;
 
