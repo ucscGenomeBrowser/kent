@@ -5422,6 +5422,27 @@ done
     # Make the cytoBand track (above) and then:
     echo "create table cytoBandIdeo (index(chrom(10),chromStart)) as select * from cytoBand;" | hgsql mm5
 
+# REBUILD CYTOBAND TRACK (DONE - 2004-09-15 - Fan)
+    # NCBI updated the ideogram.gz file and also changed its format,
+    # added a new density field after stein.
+    ssh hgwdev
+    cd /cluster/data/mm5
+    mv cytoBand cytoBand.old
+    mkdir cytoBand
+    cd cytoBand
+    # Get file from NCBI
+    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/maps/mapview/BUILD.33/ideogram.gz
+    gunzip ideogram
+    # Create bed file
+    /cluster/bin/scripts/createNcbiCytoBand ideogram
+    # Load the bed file
+    hgLoadBed -noBin -sqlTable=/cluster/home/kent/src/hg/lib/cytoBand.sql mm5 cytoBand cytoBand.bed
+
+# Make cytoBandIdeo track for ideogram gif on hgTracks page.
+    # For mouse cytoBandIdeo is just a replicate of the cytoBand track.
+    # First, drop the cytoBandIdeo table in mm5.
+    # Make the cytoBand track (above) and then:
+    echo "create table cytoBandIdeo (index(chrom(10),chromStart)) as select * from cytoBand;"|hgsql mm5
 
 # ADD MAP CONTIGS TRACK (DONE - 2004-09-07 - Fan)
     ssh hgwdev
