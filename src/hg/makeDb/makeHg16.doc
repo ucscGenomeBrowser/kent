@@ -5078,7 +5078,8 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     # hgTracks.c needed to be updated to recognize syntenyMm4 so it
     # would color properly.
 
-# TIGR GENE INDEX (DONE 2004-05017 Fan)
+
+# TIGR GENE INDEX (DONE 2004-05020 Fan)
     mkdir -p /cluster/data/hg16/bed/tigr
     cd /cluster/data/hg16/bed/tigr
     wget ftp://ftp.tigr.org/pub/data/tgi/Homo_sapiens/TGI_track_HumanGenome_hg16_05-2004.tgz
@@ -5108,7 +5109,12 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
         hgsql hg16 -e "select count(*) from tigrGeneIndex"
     end
     # Total of 354491 entries created in tigrGeneIndex table.
-    
+
+    hgsql hg16 -e "update tigrGeneIndex set cdsStart = txStart;"
+    hgsql hg16 -e "update tigrGeneIndex set cdsEnd = txEnd;"
+
+    checkTableCoords hg16 tigrGeneIndex
+
     gzip *.gff *TCs
 
 # LOAD VEGA GENES AND PSEUDOGENES (DONE 2003-11-11 braney )
