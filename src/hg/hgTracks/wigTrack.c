@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.43 2004/02/20 18:20:51 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.44 2004/03/02 19:15:08 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -148,7 +148,6 @@ int wigTotalHeight(struct track *tg, enum trackVisibility vis)
 struct wigItem *item;
 int defaultHeight;
 struct wigCartOptions *wigCart;
-int itemCount = 1;
 
 wigCart = (struct wigCartOptions *) tg->extraUiData;
 
