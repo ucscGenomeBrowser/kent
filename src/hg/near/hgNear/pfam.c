@@ -22,8 +22,8 @@ static void pfamFilterControls(struct column *col,
 /* Print out controls for advanced filter. */
 {
 hPrintf(
-  "The terms can either be Pfam descriptions such as 'Cytochrome P450'<BR>"
-  "or Pfam ID's such as PF00067. Please enclose term in single quotes<BR>"
+  "The terms can be either Pfam descriptions such as 'Cytochrome P450'<BR>"
+  "or Pfam IDs such as PF00067. Please enclose term in single quotes<BR>"
   "if it contains multiple words. You can use * and ? wildcards.<BR>\n");
 hPrintf("Term(s): ");
 advFilterRemakeTextVar(col, "terms", 35);
@@ -59,7 +59,7 @@ if (terms != NULL)
 
     for (term = termList; term != NULL; term = term->next)
         {
-	/* Build up a list of ID's of descriptions that match term. */
+	/* Build up a list of IDs of descriptions that match term. */
 	struct slName *idList = NULL, *id;
 	if (isPfamId(term->name))
 	    {
