@@ -108,7 +108,7 @@ type genePred
 
 track pseudoGeneLink
 shortLabel Retroposed Genes 
-longLabel Retroposed (Pseudo)genes, Including Nonfunctional, Based on mRNA Alignments.
+longLabel Retroposed (Pseudo)genes, Including Nonfunctional, Based on mRNA Alignments
 group genes
 priority 52.5
 visibility hide
