@@ -27,7 +27,7 @@
 #include "maf.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.168 2004/03/30 17:21:52 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.169 2004/03/30 20:22:19 hiram Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2481,7 +2481,6 @@ if (start == NULL)
 	return FALSE;
     else
        {
-       chrom;
        iStart = 0;
        iEnd = hChromSize(chrom);
        }
