@@ -71,6 +71,11 @@ boolean fileExists(char *fileName)
  * portable faster way some day). */
 {
 int fd;
+/* To make piping easier stdin and stdout always exist. */
+if (sameString(fileName, "stdin")) return TRUE;
+if (sameString(fileName, "stdout")) return TRUE;
+
+/* Otherwise open file and close it to find out... */
 if ((fd = open(fileName, O_RDONLY)) < 0)
     return FALSE;
 close(fd);
