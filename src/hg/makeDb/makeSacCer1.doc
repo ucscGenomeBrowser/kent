@@ -42,6 +42,7 @@ exit; # don't actually run this like a script :)
     wget -nH --cut-dirs=3 -r ftp://genome-ftp.stanford.edu/pub/yeast/data_download/protein_info
     wget -nH --cut-dirs=3 -r ftp://genome-ftp.stanford.edu/pub/yeast/data_download/sequence_similarity
     wget -nH --cut-dirs=3 -r ftp://genome-ftp.stanford.edu/pub/yeast/data_download/systematic_results
+    wget -nH --cut-dirs=5 -r -l 2 ftp://genome-ftp.stanford.edu/pub/yeast/data_download/sequence/genomic_sequence/orf_protein
 
 #Make dummy gap files
 #    cd /cluster/data/sacCer1
@@ -139,7 +140,7 @@ exit; # don't actually run this like a script :)
     mkdir -p /gbdb/sacCer1/html
     ln -s /cluster/data/sacCer1/html/description.html /gbdb/sacCer1/html/
 
-# MAKE HGCENTRALTEST BLATSERVERS ENTRY (In Progress 2003-11-24 Jim)
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY (DONE 2003-11-24 Jim)
 # AND SET UP BLAT SERVERS
     ssh blat10
     cd /scratch
@@ -151,7 +152,7 @@ exit; # don't actually run this like a script :)
           insert into blatServers values("sacCer1", "blat10", "17789", "1");' \
       | hgsql -h genome-testdb hgcentraltest
 
-# CREATING SGD-BASED KNOWN GENES
+# CREATING SGD-BASED KNOWN GENES (DONE 2003-11-25 Jim)
     ssh hgwdev
     cd /cluster/data/sacCer1/bed
     mkdir sgdGene
@@ -160,6 +161,34 @@ exit; # don't actually run this like a script :)
     ldHgGene sacCer1 sgdGene codingGenes.gff
     hgLoadBed sacCer1 sgdOther otherFeatures.bed \
         -sqlTable=$HOME/kent/src/hg/lib/sgdOther.sql
+    zcat ../../download/orf_protein/*.fasta.gz \
+        | hgSgdPep -restrict=genePred.tab stdin sgdPep.fa symbol.txt
+    hgPepPred sacCer1 generic sgdPep sgdPep.fa
+
+# ADDING SWISSPROT ACCESSION TO KNOWN GENES (DONE 2003-11-25 Jim)
+    ssh hgwdev
+    cd /cluster/data/sacCer1/bed/sgdGene
+    awk '$2 == "SwissProt" {printf("%s\t%s\n", $3, $1);}' \
+        ../../download/chromosomal_feature/external_id.tab \
+	> sgdToSwissProt.txt
+    echo 'create table sgdToSwissProt ( \
+          name varchar(10) not null, \
+	  value varchar(10) not null, \
+	  PRIMARY KEY(name), \
+	  INDEX (value));' | hgsql sacCer1
+    echo 'load data local infile "sgdToSwissProt.txt" \
+          into table sgdToSwissProt;' | hgsql sacCer1
+    hgProtIdToGenePred sacCer1 sgdGene sgdToSwissProt name value
+
+# CREATE SGD-BASED CLONE TRACK (DONE 2003-11-25 Jim)
+    ssh hgwdev
+    cd /cluster/data/sacCer1/bed
+    mkdir sgdClone
+    cd sgdClone
+    awk -F '\t' '{printf("chr%s\t%d\t%d\t%s\t%s\n", $3, $4-1, $5, $2, $1);}' \
+    	../../download/chromosomal_feature/clone.tab > sgdClone.bed
+    hgLoadBed sacCer1 sgdClone  sgdClone.bed -tab \
+        -sqlTable=$HOME/kent/src/hg/lib/sgdClone.sql
 
 # AUTO UPDATE GENBANK MRNA RUN  (In Progress 2003-11-24 Jim)
 
