@@ -17,7 +17,7 @@
 #include "twoBit.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfBlatLib.c,v 1.4 2004/09/27 21:48:38 angie Exp $";
+static char const rcsid[] = "$Id: gfBlatLib.c,v 1.5 2004/10/30 04:55:54 kent Exp $";
 
 void dumpRange(struct gfRange *r, FILE *f)
 /* Dump range to file. */
@@ -1514,6 +1514,7 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     addToBigBundleList(&oneBunList, bunHash, &bigBunList, query);
     *endPos = saveEnd;
     }
+
 for (bun = bigBunList; bun != NULL; bun = bun->next)
     {
     ssStitch(bun, ffCdna, minScore, 16);
