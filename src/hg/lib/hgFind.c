@@ -1755,12 +1755,23 @@ static struct hgPositions *genomePos(char *spec, char **retChromName,
 { 
 struct hgPositions *hgp;
 struct hgPos *pos;
+char *searchSpec = NULL;
 
-if (strstr(spec,";") != NULL)
-    return handleTwoSites(spec, retChromName, retWinStart, retWinEnd, cart,
+/* Make sure to escape single quotes for DB parseability */
+if (strchr(spec, '\''))
+    {
+    searchSpec = replaceChars(spec, "'", "''");
+    }
+else 
+    {
+    searchSpec = spec;
+    }
+
+if (strstr(searchSpec,";") != NULL)
+    return handleTwoSites(searchSpec, retChromName, retWinStart, retWinEnd, cart,
 			  useWeb, hgAppName);
 
-hgp = hgPositionsFind(spec, "", hgAppName, cart);
+hgp = hgPositionsFind(searchSpec, "", hgAppName, cart);
 if (hgp == NULL || hgp->posCount == 0)
     {
     hgPositionsFree(&hgp);
@@ -1793,8 +1804,7 @@ struct hgPositions *findGenomePos(char *spec, char **retChromName,
  * Return TRUE if the query results in a unique position.  
  * Otherwise display list of positions and return FALSE. */
 {
-return genomePos(spec, retChromName, retWinStart, retWinEnd, cart, TRUE,
-		 FALSE, "hgTracks");
+return genomePos(spec, retChromName, retWinStart, retWinEnd, cart, TRUE, FALSE, "hgTracks");
 }
 
 struct hgPositions *findGenomePosWeb(char *spec, char **retChromName, 
