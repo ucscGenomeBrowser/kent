@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.14 2003/10/25 08:22:07 kent Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.15 2003/11/01 05:52:22 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -285,6 +285,26 @@ for (i=0; i<textSize && outIx < outSize;  ++i)
     }
 }
 
+static void setIxAlign(int ix, int *ixMafAli, int count)
+/* make an array of alignment indices, one per base */
+{
+    int i;
+    for (i = 0; i < count; i++)
+        {
+        *ixMafAli++ = ix;
+        }
+}
+
+static int getIxMafAli(int *ixMafAli, int position, int maxPos)
+/* get alignment index for a base position */
+{
+    if (position > maxPos)
+        {
+        return 0;
+        }
+    return *(ixMafAli + position);
+}
+
 static void getNormalizedScores(struct mafAli *maf, char *masterText,
 	double *scores, int scoreCount)
 /* Make an array of normalized scores, one per base. */
@@ -490,13 +510,13 @@ static void mafDrawGraphic(struct track *tg, int seqStart, int seqEnd,
 int seqSize = seqEnd - seqStart;
 if (seqSize >= 1000000)
     {
-    mafDrawOverview(tg, seqStart, seqEnd, vg, 
-    	xOff, yOff, width, font, color, vis);
+    mafDrawOverview(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, 
+            color, vis);
     }
 else
     {
     mafDrawDetails(tg, seqStart, seqEnd, vg, 
-	xOff, yOff, width, font, color, vis, isAxt);
+                        xOff, yOff, width, font, color, vis, isAxt);
     }
 }
 
@@ -509,13 +529,13 @@ struct mafItem *miList = tg->items, *mi;
 struct mafAli *mafList = tg->customPt, *maf, *sub;
 int lineCount = slCount(miList);
 char **lines = NULL, *scoreLine, *selfLine, *insertLine;
-double *scores;
+double *scores;  /* per base scores */
+int *ixMafAli;   /* per base alignment index */
 double scoreScale;
 int i, y = yOff;
 struct dnaSeq *seq = NULL;
 struct hash *miHash = newHash(9);
 char dbChrom[64];
-
 
 /* Allocate a line of characters for each item. */
 AllocArray(lines, lineCount-1);
@@ -526,6 +546,7 @@ for (i=1; i<lineCount-1; ++i)
     memset(lines[i], ' ', winBaseCount);
     }
 AllocArray(scores, winBaseCount);
+AllocArray(ixMafAli, winBaseCount);
 
 /* Give nice names to first three. */
 insertLine = lines[0];
@@ -548,6 +569,7 @@ for (mi = miList; mi != NULL; mi = mi->next)
 
 /* Go through the mafs saving relevant info in lines. */
 safef(dbChrom, sizeof(dbChrom), "%s.%s", database, chromName);
+i = 0;
 for (maf = mafList; maf != NULL; maf = maf->next)
     {
     sub = mafSubset(maf, dbChrom, winStart, winEnd);
@@ -557,6 +579,8 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 	char db[64];
 	int subStart,subEnd;
 	int lineOffset, subSize;
+
+        i++;
 	mcMaster = mafFindComponent(sub, dbChrom);
 	if (mcMaster->strand == '-')
 	    mafFlipStrand(sub);
@@ -580,6 +604,7 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 		}
 	    }
 	getNormalizedScores(sub, mcMaster->text, scores + lineOffset, subSize);
+        setIxAlign(i, ixMafAli + lineOffset, subSize);
 	}
     mafAliFree(&sub);
     }
@@ -620,7 +645,8 @@ for (i=0; i<winBaseCount; ++i)
         {
 	int wiggleH = scores[i] * scoreScale;
 	vgBox(vg, x1+xOff, y + mi->height-2 - wiggleH, 
-	    x2-x1, wiggleH+1, color);
+	    x2-x1, wiggleH+1, 
+            getIxMafAli(ixMafAli, i, winBaseCount) % 2 ? color : tg->ixAltColor);
 	}
     }
 y += mi->height;
@@ -643,7 +669,8 @@ static void mafOrAxtDraw(struct track *tg, int seqStart, int seqEnd,
 if (zoomedToBaseLevel)
     mafDrawBases(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
 else 
-    mafDrawGraphic(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis, isAxt);
+    mafDrawGraphic(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, 
+                    color, vis, isAxt);
 mapBoxHc(seqStart, seqEnd, xOff, yOff, width, tg->height, tg->mapName, 
     tg->mapName, NULL);
 }
