@@ -12,7 +12,7 @@
 #include "maf.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.11 2003/07/25 23:45:16 braney Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.12 2003/08/01 16:28:29 braney Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -407,7 +407,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
 	{
 	int shade = ref.score * maxShade;
-	Color c = shadesOfGray[shade];
+	Color c;
+	if ((shade < 0) || (shade >= maxShade))
+	    shade = 0;
+	c = shadesOfGray[shade];
 	vgBox(vg, x1 + xOff, yOff, 1, tg->heightPer, c);
 	}
     }
