@@ -413,7 +413,7 @@ char *replaceChars(char *string, char *oldStr, char *newStr);
 /*
   Replaces the old with the new.
  The old and new string need not be of equal size
- Can take any lenght string.
+ Can take any length string.
  Return value needs to be freeMem'd.
 */
 
