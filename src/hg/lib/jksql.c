@@ -12,7 +12,7 @@
 #include "jksql.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.37 2003/09/09 21:09:00 baertsch Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.38 2003/09/20 00:49:49 kent Exp $";
 
 boolean sqlTrace = FALSE;  /* setting to true prints each query */
 int sqlTraceIndent = 0;    /* number of spaces to indent traces */
@@ -843,3 +843,36 @@ char *connGetDatabase(struct sqlConnCache *conn)
 {
     return conn->database;
 }
+
+char *sqlLikeFromWild(char *wild)
+/* Convert normal wildcard string to SQL wildcard by
+ * mapping * to % and ? to _.  Escape any existing % and _'s. */
+{
+int escCount = countChars(wild, '%') + countChars(wild, '_');
+int size = strlen(wild) + escCount + 1;
+char *retVal = needMem(size);
+char *s = retVal, c;
+
+while ((c = *wild++) != 0)
+    {
+    switch (c)
+	{
+	case '%':
+	case '_':
+	    *s++ = '\\';
+	    *s++ = c;
+	    break;
+	case '*':
+	    *s++ = '%';
+	    break;
+	case '?':
+	    *s++ = '_';
+	    break;
+	default:
+	    *s++ = c;
+	    break;
+	}
+    }
+return retVal;
+}
+

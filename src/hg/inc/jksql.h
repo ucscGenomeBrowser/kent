@@ -183,3 +183,7 @@ void sqlCleanupAll();
 
 char *connGetDatabase(struct sqlConnCache *conn);
 /* return database for a connection cache */
+
+char *sqlLikeFromWild(char *wild);
+/* Convert normal wildcard string to SQL wildcard by
+ * mapping * to % and ? to _.  Escape any existing % and _'s. */
