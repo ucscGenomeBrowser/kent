@@ -163,6 +163,7 @@ UTIL_DIRS = \
 	pslMap \
 	pslPairs \
 	pslPretty \
+	pslQuickFilter \
 	pslReps \
 	pslSelect \
 	pslSimp \
