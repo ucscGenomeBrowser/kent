@@ -9,7 +9,7 @@ molWeight: 52595
 createDate: 1990-04-01
 seqDate: 2003-02-28
 annDate: 2004-03-15
-description: 12S seed storage protein precursor.
+description: 12S seed storage protein CRA1 precursor [Contains: 12S seed storage protein CRA1 alpha chain (12S seed storage protein CRA1 acidic chain); 12S seed storage protein CRA1 beta chain (12S seed storage protein CRA1 basic chain)].
 taxon: 3702
 first scientific name: Arabidopsis thaliana
 first common name: Mouse-ear cress
@@ -25,10 +25,10 @@ gene(s): CRA1, AT5G44120, MLN1.4,
  Mouse-ear cress MLN1.4: P15455,
 keyword(s): Seed storage protein, Signal, Alternative splicing, Multigene family,
 Mouse-ear cress Seed storage protein (6): P15455 P15456 P15457 P15458...
-all Seed storage protein (184): P19084 P13744 P15455 P15456...
-all Signal (24165): Q43495 P18646 P19084 P13744...
-all Alternative splicing (5153): P15455 P48348 P48347 P92177...
-all Multigene family (10492): P19084 P15455 P15456 O23878...
+all Seed storage protein (190): P19084 P13744 P15455 P15456...
+all Signal (27038): Q43495 P18646 P19084 P13744...
+all Alternative splicing (5441): P15455 P48348 P48347 P92177...
+all Multigene family (10595): P19084 P15455 P15456 O23878...
 All comments:
  This is a seed storage protein.
  Hexamer; each subunit is composed of an acidic and a basic chain derived from a single precursor and linked by a disulfide bond.
@@ -46,21 +46,21 @@ GenBank/EMBL: M37247, X14312, AB005239, AY070730, Z17590,
 acc from M37247: P15455
 PDB:
 All features:
-SIGNAL	0	24	POTENTIAL
-CHAIN	24	282	ACIDIC CHAIN (BY SIMILARITY)
-CHAIN	282	472	BASIC CHAIN (BY SIMILARITY)
-DISULFID	111	289	INTERCHAIN (ALPHA-BETA) (POTENTIAL)
-CONFLICT	166	167	E -> Q (IN REF. 1)
-CONFLICT	355	356	V -> E (IN REF. 1)
+SIGNAL	0	24	Potential
+CHAIN	24	282	12S seed storage protein CRA1 alpha chain(By similarity)
+CHAIN	282	472	12S seed storage protein CRA1 beta chain(By similarity)
+DISULFID	111	289	Interchain (alpha-beta) (Potential)
+CONFLICT	166	167	E -> Q (in Ref. 1)
+CONFLICT	355	356	V -> E (in Ref. 1)
 CONFLICT class features:
-CONFLICT	166	167	E -> Q (IN REF. 1)
-CONFLICT	355	356	V -> E (IN REF. 1)
-V -> E (IN REF. 1) type features:
-CONFLICT	355	356	V -> E (IN REF. 1)
+CONFLICT	166	167	E -> Q (in Ref. 1)
+CONFLICT	355	356	V -> E (in Ref. 1)
+V -> E (in Ref. 1) type features:
+CONFLICT	355	356	V -> E (in Ref. 1)
 same class & type features:
-CONFLICT	355	356	V -> E (IN REF. 1)
+CONFLICT	355	356	V -> E (in Ref. 1)
 class loop: 8->CONFLICT->8
-type loop: 39->V -> E (IN REF. 1)->39
+type loop: 39->V -> E (in Ref. 1)->39
 title: Molecular cloning, genome organization, expression and evolution of 12S seed storage protein genes of Arabidopsis thaliana.
 authors: Pang P.P.,  Pruitt R.E.,  Meyerowitz E.M., 
 location: Plant Mol. Biol. 11:805-820(1988).
@@ -78,7 +78,7 @@ authors: Raynal M.,  Grellet F.,  Laudie M.,  Meyer Y.,  Cooke R.,  Delseny M.,
 location: Submitted (OCT-1992) to the EMBL/GenBank/DDBJ databases.
 pubMed: 
 other accs associated with last reference:
-	  (150): P15455 P15456 P15458 P15459 P15460 P18825...
+	  (156): P15455 P15456 P15458 P15459 P15460 P18825...
 input: P29312
 primary accession: P29312
 SwissProt id: 143Z_HUMAN
@@ -100,13 +100,12 @@ all scientific names: Homo sapiens, Bos taurus,
 gene(s): YWHAZ,
  any YWHAZ: P29312, P35215, P29361, Q86V33, Q8BWN0, AAH03623,
  Human YWHAZ: P29312, Q86V33, AAH03623,
-keyword(s): Neurone, Phosphorylation, Acetylation, Multigene family, 3D-structure,
-Human Neurone (39): P31946 P42655 Q04917 P35214...
-all Neurone (152): P29358 P31946 Q9CQV8 P35213...
-all Phosphorylation (8797): P29358 P31946 Q9CQV8 P35213...
-all Acetylation (1700): P29358 P31946 Q9CQV8 P35213...
-all Multigene family (10492): P19084 P15455 P15456 O23878...
-all 3D-structure (5576): P29312 P01892 P18485 P37821...
+keyword(s): Phosphorylation, Acetylation, Multigene family, 3D-structure,
+Human Phosphorylation (1124): P31946 Q04917 P35214 P27348...
+all Phosphorylation (8918): P29358 P31946 Q9CQV8 P35213...
+all Acetylation (1717): P29358 P31946 Q9CQV8 P35213...
+all Multigene family (10595): P19084 P15455 P15456 O23878...
+all 3D-structure (6109): P93343 P29312 P01892 P18485...
 All comments:
  Activates tyrosine and tryptophan hydroxylases in the presence of Ca(2+)/calmodulin-dependent protein kinase II, and strongly activates protein kinase C. Is probably a multifunctional regulator of the cell signaling processes mediated by both kinases. Activates the ADP-ribosyltransferase (exoS) activity of bacterial origin.
  Homodimer.
@@ -135,7 +134,7 @@ PDB: 1A37, 1A38, 1A4O, 1QJA, 1QJB, 1IB1,
 All features:
 MOD_RES	0	1	ACETYLATION (BY SIMILARITY)
 MOD_RES	183	184	PHOSPHORYLATION (BY SIMILARITY)
-CONFLICT	24	25	C -> A (IN REF. 4)
+CONFLICT	24	25	C -> A (in Ref. 4)
 HELIX	2	16	n/a
 TURN	16	17	n/a
 HELIX	18	31	n/a
@@ -147,14 +146,16 @@ TURN	103	104	n/a
 HELIX	104	108	n/a
 HELIX	111	131	n/a
 TURN	131	132	n/a
-HELIX	137	159	n/a
+TURN	139	140	n/a
+HELIX	140	159	n/a
 TURN	161	163	n/a
 HELIX	164	180	n/a
 TURN	180	181	n/a
-HELIX	184	201	n/a
+HELIX	184	200	n/a
+TURN	200	202	n/a
 HELIX	202	205	n/a
 TURN	207	210	n/a
-HELIX	210	229	n/a
+HELIX	210	228	n/a
 title: Cloning and expression of a human 14-3-3 protein mediating phospholipolysis. Identification of an arachidonoyl-enzyme intermediate during catalysis.
 authors: Zupan L.A.,  Steffens D.L.,  Berry C.A.,  Landt M.L.,  Gross R.W., 
 location: J. Biol. Chem. 267:8707-8710(1992).
