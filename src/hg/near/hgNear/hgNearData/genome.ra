@@ -2,7 +2,7 @@
 #variables.  It must start with 'name global'
 #
 name global
-examples Some examples of search terms are 'FOXA1' 'HOXA9' and 'MAP kinase.'
+examples Examples of search terms include FOXA1, HOXA9, and MAP kinase.
 geneTable knownGene
 canonicalTable knownCanonical
 isoformTable knownIsoforms
