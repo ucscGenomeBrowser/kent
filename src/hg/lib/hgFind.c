@@ -33,7 +33,7 @@
 #include "web.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.85 2003/06/19 15:27:13 donnak Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.86 2003/06/19 22:53:18 donnak Exp $";
 
 char *MrnaIDforGeneName(char *geneName)
 /* return mRNA ID for a gene name */
@@ -2667,8 +2667,6 @@ else if (strstrNoCase(organism, "mouse"))
 "<TR><TD VALIGN=Top NOWRAP>kruppel zinc finger</TD>\n"
 "	<TD WIDTH=14></TD>\n"
 "	<TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>huntington</TD>\n"
-"	<TD WIDTH=14></TD>\n"
 "	<TD VALIGN=Top>Lists candidate genes associated with Huntington's disease</TD></TR>\n"
 "<TR><TD VALIGN=Top NOWRAP>Evans,J.E.</TD>\n"
 "	<TD WIDTH=14></TD>\n"
@@ -2849,10 +2847,171 @@ else if (strstrNoCase(organism, "zoo"))
 "<A HREF=\"http://www.nisc.nih.gov/projects/NISC_DataUsePolicy.html\" TARGET=_blank>\n"
 "data release and usage policy</A> for the NISC Comparative Sequencing Program.</P> \n");
     }
+else if (strstrNoCase(organism, "C. elegans"))
+    {
+    puts("<P><H3>About the Caenorhabditis elegans assembly</P></H3>\n");
+    puts(
+"<P>This genome assembly (UCSC version ce1) \n"
+"is based on sequence version WS100 deposited into <A HREF=\"http://www.wormbase.org/about/about_Celegans.html\" TARGET=_blank>WormBase</A> as of 02 May 2003. "
+"C. elegans is a major model organism used for biomedical research. "
+"It is the first multicellular animal to have a fully "
+"sequenced genome, a joint collaboration between the "
+" <A HREF=\"http://genome.wustl.edu/\" TARGET=_blank>Genome Sequencing Center</A> " 
+"at Washington University in St. Louis and the "
+"<A HREF=\"http://www.sanger.ac.uk/\" TARGET=_blank>Sanger Institute</A>. "
+"For more information, see the special issue of <em>Science</em> "
+"&quot;<A HREF=\"http://www.sciencemag.org/content/vol282/issue5396/\" TARGET=_blank>C. elegans: Sequence to Biology</A>&quot;."
+
+"</P>");
+    puts("<P><H3>Sample position queries</P></H3>\n");
+    puts(
+"<P>A genome position can be specified by the accession number of a sequenced "
+"genomic clones, an mRNA, or EST, or a gene identifier, chromosomal coordinate "
+"range, or keywords from "
+"the Genbank description of an mRNA. The following list provides "
+"examples of various types of position queries for the C. elegans genome. "
+"See the "
+"<A HREF=\"http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html\" TARGET=_blank>"
+"User Guide</A> for more help. </P>\n"
+"<P>\n"
+"\n"
+"<P>\n"
+"<TABLE  border=0 CELLPADDING=0 CELLSPACING=0>\n"
+"<TR><TD VALIGN=Top NOWRAP><B>Request:</B><br></TD>\n"
+"	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD></TR>\n"
+"	\n"
+"<TR><TD VALIGN=Top><br></TD></TR>\n"
+"	\n"
+
+"<TR><TD VALIGN=Top NOWRAP>chrII</TD>\n"
+"	<TD WIDTH=14></TD>\n"
+"	<TD VALIGN=Top>Displays all of chromosome II (valid chr entries include I, II, III, IV, V, M, X)</TD></TR>\n"
+
+"<TR><TD VALIGN=Top NOWRAP>chrI:1-100000</TD>\n"
+"	<TD WIDTH=14></TD>\n"
+"	<TD VALIGN=Top>Displays the first 100,000 bases of chrI</TD></TR>\n"
+
+"<TR><TD VALIGN=Top NOWRAP>U40798.1</TD>\n"
+"	<TD WIDTH=14></TD>\n"
+"	<TD VALIGN=Top>Displays clone fragment U40798.1</TD></TR>\n"
+
+"<TR><TD VALIGN=Top NOWRAP>mec-8</TD>\n"
+"	<TD WIDTH=14></TD>\n"
+"	<TD VALIGN=Top>Displays region of genome associated with RefSeq gene mec-8</TD></TR>\n"
+
+"<TR><TD VALIGN=Top NOWRAP>F46A9.4</TD>\n"
+"	<TD WIDTH=14></TD>\n"
+"	<TD VALIGN=Top>Displays the region associated with the Sanger predicted gene F46A9.4</TD></TR>\n"
+
+"<TR><TD VALIGN=Top NOWRAP>NM_060107</TD>\n"
+"	<TD WIDTH=14></TD>\n"
+"	<TD VALIGN=Top>Displays region of genome associated with RefSeq identifier NM_060107</TD></TR>\n"
+
+"<TR><TD VALIGN=Top NOWRAP>BJ111711</TD>\n"
+"	<TD WIDTH=14></TD>\n"
+"	<TD VALIGN=Top>Displays region of EST associated with GenBank accession BJ111711</TD></TR>\n"
+
+"<TR><TD VALIGN=Top NOWRAP>zinc finger</TD>\n"
+"       <TD WIDTH=14></TD>\n"
+"       <TD VALIGN=Top>Lists many zinc finger mRNAs</TD></TR>\n"
+
+"<TR><TD VALIGN=Top NOWRAP>kruppel zinc finger</TD>\n"
+"       <TD WIDTH=14></TD>\n"
+"       <TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD></TR>\n"
+
+"<TR><TD VALIGN=Top NOWRAP>Jones,D.</TD>\n"
+"	<TD WIDTH=14></TD>\n"
+"	<TD VALIGN=Top>Lists mRNAs deposited by co-author D. Jones</TD></TR>\n"
+"\n"
+"<TR><TD VALIGN=Top><br></TD></TR>\n"
+"	\n"
+"<TR><TD COLSPAN=\"3\" > Use this last format for entry authors -- "
+"even though Genbank searches require Jones D "
+"format, GenBank entries themselves use Jones,D. internally.\n"
+"</TABLE>\n"
+"\n");
+    }
+else if (strstrNoCase(organism, "C. briggsae"))
+    {
+    puts("<P><H3>About the Caenorhabditis briggsae assembly</P></H3>\n");
+    puts(
+"<P>The C. briggsae genome assembly (UCSC version cb1) \n"
+"is based on sequence version cb25.agp8 deposited into "
+"<A HREF=\"http:www.wormbase.org/\" TARGET=_blank>WormBase</A> "
+"as of 11 July 2002. This version was assembled from 2.05 million whole genome "
+"shotgun (WGS) reads, of which 88.2% were in read pairs. The Phusion assembler "
+"was used to assemble the WGS reads into contigs based on overlap information, "
+"and then into supercontigs using read pair information to cross gaps. These "
+"supercontigs were assembled into mapped ultracontigs based on FPC " 
+"fingerprint mapping, with material from previously finished clones used to " 
+"bridge gaps. Draft chromosome sequences are not available for C. briggsae, due "
+"to the lack of dense chromosomal maps that allow assignment of the ultracontigs "
+"to chromosomal locations. As a result, all data in this browser maps to chrUn.\n"
+"</P>"
+"<P>"
+"The N50 contig size in this assembly is 41 kb and the N50 supercontig size is "
+"1450 kb. Most genes should be complete. The sequencing centers estimate that "
+"this whole genome shotgun assembly achieved 98% coverage of the genome.\n"
+"</P>" 
+"<P>"
+"This data carries <A HREF=\"http://genome-test.cse.ucsc.edu/goldenPath/credits.html#cbr_use\">"
+"specific conditions for use</A>.\n"
+"</P>"
+);
+    puts("<P><H3>Sample position queries</P></H3>\n");
+    puts(
+"<P>A genome position can be specified by the accession number of a sequenced "
+"genomic clones, an mRNA, or EST, or a gene identifier, chromosomal coordinate "
+"range, or keywords from "
+"the Genbank description of an mRNA. The following list provides "
+"examples of various types of position queries for the C. briggsae genome. "
+"See the "
+"<A HREF=\"http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html\" TARGET=_blank>"
+"User Guide</A> for more help. </P>\n"
+"<P>\n"
+"\n"
+"<P>\n"
+"<TABLE  border=0 CELLPADDING=0 CELLSPACING=0>\n"
+"<TR><TD VALIGN=Top NOWRAP><B>Request:</B><br></TD>\n"
+"	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD></TR>\n"
+"	\n"
+"<TR><TD VALIGN=Top><br></TD></TR>\n"
+"	\n"
+
+"<TR><TD VALIGN=Top NOWRAP>chrUn</TD>\n"
+"	<TD WIDTH=14></TD>\n"
+"	<TD VALIGN=Top>Displays all of chromosome Un (only valid chr entry for this genome)</TD></TR>\n"
+
+"<TR><TD VALIGN=Top NOWRAP>chrUn:1-1000000</TD>\n"
+"	<TD WIDTH=14></TD>\n"
+"	<TD VALIGN=Top>Displays the first million bases of chrUn</TD></TR>\n"
+
+"<TR><TD VALIGN=Top NOWRAP>R02870</TD>\n"
+"	<TD WIDTH=14></TD>\n"
+"	<TD VALIGN=Top>Displays region of EST associated with GenBank accession R02870</TD></TR>\n"
+
+"<TR><TD VALIGN=Top NOWRAP>U48289</TD>\n"
+"	<TD WIDTH=14></TD>\n"
+"	<TD VALIGN=Top>Displays the region associated with the mRNA accession U48289</TD></TR>\n"
+
+"<TR><TD VALIGN=Top NOWRAP>protein phosphatase PP2C </TD>\n"
+"       <TD WIDTH=14></TD>\n"
+"       <TD VALIGN=Top>Lists only records pertaining to protein phophatase PP2C</TD></TR>\n"
+
+"<TR><TD VALIGN=Top NOWRAP>Kimble,J.</TD>\n"
+"	<TD WIDTH=14></TD>\n"
+"	<TD VALIGN=Top>Lists mRNAs deposited by co-author J. Kimble</TD></TR>\n"
+"\n"
+"<TR><TD VALIGN=Top><br></TD></TR>\n"
+"	\n"
+"<TR><TD COLSPAN=\"3\" > Use this last format for entry authors -- "
+"even though Genbank searches require Kimble J "
+"format, GenBank entries themselves use Kimble,J. internally.\n"
+"</TABLE>\n"
+"\n");
+    }
 else 
     {
     printf("<H2>%s</H2>", organism);
     }
 }
-
-
