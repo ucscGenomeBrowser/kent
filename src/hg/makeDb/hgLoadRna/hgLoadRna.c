@@ -210,7 +210,7 @@ else
     {
     HGID id = hgNextId();
     hashAdd(hash, name, nullPt + id);
-    fprintf(uni->tabFile, "%lu\t%s\n", id, name);
+    fprintf(uni->tabFile, "%u\t%s\n", id, name);
     return id;
     }
 }
@@ -258,7 +258,7 @@ if (extFilesHash == NULL)
 	    {
             if(ignore) 
                 {
-                fprintf(stderr, "WARNING: External file %s out of sync.\n Expected size: %ul, got size %ul\n", ex->path, ex->size, gotSize);
+                fprintf(stderr, "WARNING: External file %s out of sync.\n Expected size: %lu, got size %lu\n", ex->path, ex->size, gotSize);
                 }
             else 
                 {
@@ -295,7 +295,7 @@ else
     ex->name = hel->name;
     ex->path = cloneString(path);
     ex->size = size;
-    sprintf(query, "INSERT into extFile VALUES(%lu,'%s','%s',%lu)",
+    sprintf(query, "INSERT into extFile VALUES(%u,'%s','%s',%lu)",
 	id, name, path, size);
     sqlUpdate(conn,query);
     return id;
@@ -514,9 +514,9 @@ for (;;)
 	errAbort("No size in %s\n", faAcc);
     id = hgNextId();
 
-    fprintf(seqTab, "%lu\t%s\t%d\t%s\t%lu\t%lu\t%d\n",
+    fprintf(seqTab, "%u\t%s\t%d\t%s\t%lu\t%lu\t%d\n",
 	id, faAcc, dnaSize, sqlDate, extFileId, faOffset, faSize);
-    fprintf(mrnaTab, "%lu\t%s\t%s\t%s\t%c\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\n",
+    fprintf(mrnaTab, "%u\t%s\t%s\t%s\t%c\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\n",
             id, faAcc, version, type, dir,
             uniSrc->curId, uniOrg->curId, uniLib->curId, uniClo->curId,
             uniSex->curId, uniTis->curId, uniDev->curId, uniCel->curId,
@@ -657,7 +657,7 @@ for (i=0; i<fileCount; ++i)
 	faSize = (int)(faEndOffset - faOffset); 
 	id = hgNextId();
 
-	fprintf(seqTab, "%lu\t%s\t%d\t%s\t%lu\t%lu\t%d\n",
+	fprintf(seqTab, "%u\t%s\t%d\t%s\t%lu\t%lu\t%d\n",
 	    id, faAcc, dnaSize, sqlDate, extFileId, faOffset, faSize);
 	}
     printf("%d\n", count);
