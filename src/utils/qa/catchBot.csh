@@ -11,6 +11,7 @@ set threshhold=10000  # the number of hits from a user to use as the alarm level
 set size=5            # the number of users to check
 set db=""
 set output="xxResultsxx"
+set debug="false"
 
 if ($#argv < 1 || $#argv > 2) then
   # not enough command line args
@@ -18,6 +19,7 @@ if ($#argv < 1 || $#argv > 2) then
   echo "  script to catch bots."
   echo "  monitors the most common IP addresses of users "
   echo "    and squawks when someone gets too high."
+  echo "  now also checks the last hour."
   echo
   echo "    usage:  threshhold (number of hits from single source), "
   echo "            [report size] (defaults to 5)"
@@ -31,8 +33,21 @@ if ($#argv == 2) then
   set size=$argv[2]
 endif
 
+# get some times
+set lastHit=`hgsql -N -h genome-centdb -e 'SELECT MAX(time_stamp) FROM access_log' apachelog`
+set firstHit=`hgsql -N -h genome-centdb -e 'SELECT MIN(time_stamp) FROM access_log' apachelog`
+set hitSpan=`echo $lastHit $firstHit | gawk '{printf "%.1f", ($1 - $2) / 3600}'`
+set hourAgo=`echo $lastHit | gawk '{printf "%.0f", $1 - 3600}'`
+
+if ($debug == "true") then
+  echo "hitSpan = $hitSpan (hours)"
+  echo "hourAgo = $hourAgo (sec)"
+endif
+
 # get whole list from access_log
+#### 
 hgsql -N -h genome-centdb -e "SELECT remote_host FROM access_log" apachelog > remote_host
+#### 
 sort remote_host | uniq -c | sort -nr > xxUserCountxx
 set totalHits=`wc -l remote_host | gawk '{print $1}'`
 
@@ -41,7 +56,7 @@ set max=0
 
 # write header to file
 rm -f $output
-echo "\nfrom apachelogs.access_log" >> $output
+echo "\nfrom apachelogs.access_log covering the last $hitSpan hours" >> $output
 echo "\ntotal hits: $totalHits" >> $output
 echo "users with the most hits:" >> $output
 echo "                                                                   per    per" >> $output
@@ -60,11 +75,22 @@ while ($checked < $size)
   # get timeSpan stats
   set num=`echo $line | gawk '{print $1}'`
   set host=`echo $line |gawk '{print $2}'`
-  set timeSpan=`hgsql -N -h genome-centdb -e 'SELECT MAX(time_stamp) - MIN(time_stamp) AS timeSpan \
-      FROM access_log WHERE remote_host = "'$host'"' apachelog`
-  set timeHours=`echo $timeSpan | awk '{printf  "%.1f", $1/3600}'`
-  set hitsPerHr=`echo $num $timeHours | awk '{printf  "%.0f", $1/$2}'`
-  set hitsPerMin=`echo $hitsPerHr | awk '{printf  "%.1f", $1/60}'`
+  set timeSpan=`hgsql -N -h genome-centdb -e 'SELECT MAX(time_stamp) - MIN(time_stamp) \
+      AS timeSpan FROM access_log WHERE remote_host = "'$host'"' apachelog`
+  set timeHours=`echo $timeSpan | gawk '{printf  "%.1f", $1/3600}'`
+  set hitsPerHr=`echo $num $timeHours | gawk '{printf  "%.0f", $1/$2}'`
+  set hitsPerMin=`echo $hitsPerHr | gawk '{printf  "%.1f", $1/60}'`
+  
+if ($debug == "true") then
+  echo
+  echo "host = $host"
+  echo "hits = $num"
+  echo "timeSpan = $timeSpan"
+  echo "timeHours = $timeHours"
+  echo "hitsPerHr = $hitsPerHr"
+  echo "hitsPerMin = $hitsPerMin"
+endif
+   
 
   if ($num > $max) then
     set max=$num
@@ -90,16 +116,42 @@ echo >> $output
 
 echo "fastest hitter = $fastest" >> $output
 echo >> $output
-ipw $fastest | sed -e "10,$ d" >> $output
+ipw $fastest | head -10 >> $output
 echo >> $output
 
-if ($max > $threshhold) then
-  cat $output
-else
-  # stay quiet
+# ----------------------------------------------
+# check last hour  
+
+hgsql -N -h genome-centdb -e "SELECT remote_host FROM access_log \
+   WHERE time_stamp > $hourAgo" apachelog > xxLastHoursHostsxx
+sort -nr xxLastHoursHostsxx | uniq -c | sort -nr | head -5 > xxHoursHitsxx 
+echo "\n-------------------------------------------------------" >> $output
+echo " the busiest users in the last hour: \n" >> $output
+cat xxHoursHitsxx  >> $output
+echo >> $output
+
+set maxInHour=`head -1 xxHoursHitsxx | gawk '{print $1}'`
+if ($maxInHour > 1800) then
+  set maxHourUser=`head -1 xxHoursHitsxx | gawk '{print $2}'`
+  set maxHrUserPerMin=`echo $maxInHour | gawk '{printf  "%.0f", $1/60}'`
+  set maxHrUserPerSec=`echo $maxHrUserPerMin | gawk '{printf  "%.1f", $1/60}'`
+
+  echo " this user is above 1800 in the last hour: $maxHourUser" >> $output
+  echo " $maxHrUserPerMin per min, $maxHrUserPerSec per sec\n" >> $output
+  ipw $maxHourUser | head -10  >> $output
+  echo >> $output
 endif
 
+# ----------------------------------------------
+# check criteria for output and print
+
+if ($max > $threshhold || $maxInHour > 1000) then
+  cat $output
+endif
+
+rm remote_host
 rm xxUserCountxx
 rm  $output
-
+rm xxLastHoursHostsxx
+rm xxHoursHitsxx 
 exit
