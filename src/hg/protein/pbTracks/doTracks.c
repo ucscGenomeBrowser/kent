@@ -141,7 +141,7 @@ for (index=0; index < len; index++)
 calxy0(0, *yOffp, &xx, &yy);
 vgBox(g_vg, 0, yy-10, xx, 20, bkgColor);
 
-trackTitle = strdup("AA Anomalies");
+trackTitle = cloneString("AA Anomalies");
 vgTextRight(g_vg, xx-25, yy-4, 10, 10, MG_BLACK, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
 mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-6, trackTitleLen*6+12, 14, trackTitle, "pepAnom");
@@ -188,7 +188,7 @@ for (index=0; index < len; index++)
 
 calxy0(0, *yOffp, &xx, &yy);
 vgBox(g_vg, 0, yy-10, xx, 30, bkgColor);
-trackTitle = strdup("Polarity");
+trackTitle = cloneString("Polarity");
 vgTextRight(g_vg, xx-25, yy-4, 10, 10, MG_BLACK, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
 mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-6, trackTitleLen*6+12, 14, trackTitle, "polarity");
@@ -252,7 +252,7 @@ for (index=0; index < len; index++)
 calxy0(0, *yOffp, &xx, &yy);
 vgBox(g_vg, 0, yy-17, xx, 40, bkgColor);
 
-trackTitle = strdup("Hydrophobicity");
+trackTitle = cloneString("Hydrophobicity");
 vgTextRight(g_vg, xx-25, yy-4, 10, 10, MG_BLACK, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
 mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-6, trackTitleLen*6+12, 14, trackTitle, "hydroTr");
@@ -305,12 +305,12 @@ for (index=1; index < (len-2); index++)
 calxy0(0, *yOffp, &xx, &yy);
 vgBox(g_vg, 0, yy-15, xx, 33, bkgColor);
 
-trackTitle = strdup("Cysteines");
+trackTitle = cloneString("Cysteines");
 vgTextRight(g_vg, xx-25, yy-8, 10, 10, MG_RED, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
 mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-6, trackTitleLen*6+12, 14, trackTitle, "cCntTr");
 
-trackTitle = strdup("Glycosylation");
+trackTitle = cloneString("Glycosylation");
 vgTextRight(g_vg, xx-25, yy, 10, 10, MG_BLUE, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
 mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-2, trackTitleLen*6+12, 14, trackTitle, "glycosylation");
@@ -389,7 +389,7 @@ if (markedIndex != len)
 calxy0(0, *yOffp, &xx, &yy);
 vgBox(g_vg, 0, yy-tb*9-1, xx, 20, bkgColor);
 
-trackTitle = strdup("AA Scale");
+trackTitle = cloneString("AA Scale");
 vgTextRight(g_vg, xx-25, yy-9*tb, 10, 10, MG_BLACK, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
 mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-9*tb-2, trackTitleLen*6+12, 14, trackTitle, "aaScale");
@@ -663,7 +663,7 @@ for (j = 0; j < mrnaLen; j++)
 	}
     }
 
-positionStr = strdup(cartOptionalString(cart, "position"));
+positionStr = cloneString(cartOptionalString(cart, "position"));
 if (jcnt > 0)
     {
     calxy(jPrevStart/3, *yOffp, &xx, &yy);
@@ -714,7 +714,7 @@ else
 
 calxy0(0, *yOffp, &xx, &yy);
 vgBox(g_vg, 0, yy-10, xx, 20, bkgColor);
-trackTitle = strdup("Genome Browser");
+trackTitle = cloneString("Genome Browser");
 vgTextRight(g_vg, xx-25, yy-8, 10, 10, MG_BLACK, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
 mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-6, trackTitleLen*6+12, 14, trackTitle, "gb");
@@ -810,7 +810,7 @@ mapBoxExon(xx - (exonEndPos - exonStartPos)*pbScale/3, yy-9,
 calxy0(0, *yOffp, &xx, &yy);
 vgBox(g_vg, 0, yy-10, xx, 12, bkgColor);
 
-trackTitle = strdup("Exons");
+trackTitle = cloneString("Exons");
 vgTextRight(g_vg, xx-25, yy-9, 10, 10, MG_BLACK, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
 mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-12, trackTitleLen*6+12, 14, trackTitle, "exon");
@@ -1010,7 +1010,7 @@ for (ii=0; ii<sf_cnt; ii++)
 calxy0(0, *yOffp, &xx, &yy);
 vgBox(g_vg, 0, yy-10, xx, 20, bkgColor);
 
-trackTitle = strdup("Superfamily/SCOP");
+trackTitle = cloneString("Superfamily/SCOP");
 vgTextRight(g_vg, xx-25, yy, 10, 10, MG_BLACK, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
 mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-2, trackTitleLen*6+12, 14, trackTitle, "superfam");
@@ -1058,7 +1058,7 @@ for (index=0; index < len; index++)
 calxy0(0, *yOffp, &xx, &yy);
 vgBox(g_vg, 0, yy-10, xx, 20, bkgColor);
 
-trackTitle = strdup("AA Sequence");
+trackTitle = cloneString("AA Sequence");
 vgTextRight(g_vg, xx-25, yy, 10, 10, MG_BLACK, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
 mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-2, trackTitleLen*6+12, 14, trackTitle, "aaSeq");
@@ -1160,12 +1160,13 @@ for (j = 0; j < mrnaLen; j++)
 
 	if (strand == '-') 
 	    {
-            vgTextRight(g_vg, xx-3+(j%3)*6, yy, 10, 10, MG_GRAY, g_font, base);
+            vgTextRight(g_vg, xx-3+(j%3)*6, yy-3, 10, 10, MG_GRAY, g_font, base);
 	    vgTextRight(g_vg, xx-3+(j%3)*6, yy+9, 10, 10, color, g_font, baseComp);
        	    }
 	else
 	    {
-	    vgTextRight(g_vg, xx-3+(j%3)*6, yy, 10, 10, color, g_font, base);
+	    //vgTextRight(g_vg, xx-3+(j%3)*6, yy, 10, 10, color, g_font, base);
+	    vgTextRight(g_vg, xx-3+(j%3)*6, yy-3, 10, 10, color, g_font, base);
             }
         }
     color = MG_BLUE;
@@ -1173,9 +1174,8 @@ for (j = 0; j < mrnaLen; j++)
    
 calxy0(0, *yOffp, &xx, &yy);
 vgBox(g_vg, 0, yy-10, xx, 30, bkgColor);
-//vgTextRight(g_vg, xx-25, yy, 10, 10, MG_BLACK, g_font, "DNA Sequence");
 
-trackTitle = strdup("DNA Sequence");
+trackTitle = cloneString("DNA Sequence");
 vgTextRight(g_vg, xx-25, yy-4, 10, 10, MG_BLACK, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
 mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-6, trackTitleLen*6+12, 14, trackTitle, "dna");

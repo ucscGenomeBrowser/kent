@@ -150,7 +150,7 @@ sr  = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
     {
-    seq	= strdup(row[0]);
+    seq	= cloneString(row[0]);
     len = strlen(seq);
     chp = seq;
     for (i=0; i<len; i++)
@@ -237,20 +237,20 @@ if (row == NULL)
     errAbort("%s does not have Exon info\n", proteinID);
     }
 
-qNameStr        = strdup(row[0]);
-qSizeStr        = strdup(row[1]);
-qStartStr       = strdup(row[2]);
-qEndStr         = strdup(row[3]);
-tNameStr        = strdup(row[4]);
-tSizeStr        = strdup(row[5]);
-tStartStr       = strdup(row[6]);
-tEndStr         = strdup(row[7]);
-blockCountStr   = strdup(row[8]);
-blockSizesStr   = strdup(row[9]);
-qStartsStr      = strdup(row[10]);
-tStartsStr      = strdup(row[11]);
+qNameStr        = cloneString(row[0]);
+qSizeStr        = cloneString(row[1]);
+qStartStr       = cloneString(row[2]);
+qEndStr         = cloneString(row[3]);
+tNameStr        = cloneString(row[4]);
+tSizeStr        = cloneString(row[5]);
+tStartStr       = cloneString(row[6]);
+tEndStr         = cloneString(row[7]);
+blockCountStr   = cloneString(row[8]);
+blockSizesStr   = cloneString(row[9]);
+qStartsStr      = cloneString(row[10]);
+tStartsStr      = cloneString(row[11]);
 
-strand          = strdup(row[12]);
+strand          = cloneString(row[12]);
 
 if (!((strand[0] == '+') || (strand[0] == '-')) || (strand[1] != '\0') ) 
    errAbort("wrong strand '%s' encountered in getExon(), aborting ...", strand);

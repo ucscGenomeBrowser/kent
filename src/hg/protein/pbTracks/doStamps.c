@@ -398,15 +398,15 @@ int edgeColor;
 Color stampColor;
 int titleLen;
 
-stampName   = strdup(pbStampPtr->stampName);
-stampTable  = strdup(pbStampPtr->stampTable);
-stampTitle  = strdup(pbStampPtr->stampTitle);
+stampName   = cloneString(pbStampPtr->stampName);
+stampTable  = cloneString(pbStampPtr->stampTable);
+stampTitle  = cloneString(pbStampPtr->stampTitle);
 n           = pbStampPtr->len;
 txmin       = pbStampPtr->xmin;
 txmax       = pbStampPtr->xmax;
 tymin       = pbStampPtr->ymin;
 tymax       = pbStampPtr->ymax;
-stampDesc   = strdup(pbStampPtr->stampDesc);
+stampDesc   = cloneString(pbStampPtr->stampDesc);
 
 ix = stampPictPtr->xOrig;
 iy = stampPictPtr->yOrig;
@@ -469,14 +469,14 @@ int xx, yy;
 char charStr[2];
 int titleLen;
 
-stampTable  = strdup(pbStampPtr->stampTable);
-stampTitle  = strdup(pbStampPtr->stampTitle);
+stampTable  = cloneString(pbStampPtr->stampTable);
+stampTitle  = cloneString(pbStampPtr->stampTitle);
 n           = pbStampPtr->len;
 txmin       = pbStampPtr->xmin;
 txmax       = pbStampPtr->xmax;
 tymin       = pbStampPtr->ymin;
 tymax       = pbStampPtr->ymax;
-stampDesc   = strdup(pbStampPtr->stampDesc);
+stampDesc   = cloneString(pbStampPtr->stampDesc);
 
 ix = stampPictPtr->xOrig;
 iy = stampPictPtr->yOrig;
@@ -531,14 +531,14 @@ double txmin, tymin, txmax, tymax;
 int i, n, index;
 int xx, yy;
 
-stampTable	= strdup(pbStampPtr->stampTable);
-stampTitle	= strdup(pbStampPtr->stampTitle);
+stampTable	= cloneString(pbStampPtr->stampTable);
+stampTitle	= cloneString(pbStampPtr->stampTitle);
 n		= pbStampPtr->len;
 txmin		= pbStampPtr->xmin;
 txmax		= pbStampPtr->xmax;
 tymin		= pbStampPtr->ymin;
 tymax		= pbStampPtr->ymax;
-stampDesc	= strdup(pbStampPtr->stampDesc);
+stampDesc	= cloneString(pbStampPtr->stampDesc);
 
 xScale = (double)(iw)/(txmax - txmin);
 yScale = (double)(ih)/(tymax - tymin);
@@ -692,7 +692,7 @@ sprintf(cond_str, "qName='%s'", proteinID);
 answer = sqlGetField(NULL, database, kgProtMapTableName, "blockCount", cond_str);
 if (answer != NULL)
     {
-    valStr       = strdup(answer);
+    valStr       = cloneString(answer);
     exonCount    = (double)atoi(answer);
     stampDataPtr = getStampData("exonCnt");
     xPosition = xPosition + stampWidth + stampWidth/8;
@@ -726,7 +726,7 @@ sprintf(cond_str, "accession='%s'", proteinID);
 answer = sqlGetField(NULL, protDbName, "swInterPro", "count(*)", cond_str);
 if (answer != NULL)
     {
-    valStr       = strdup(answer);
+    valStr       = cloneString(answer);
     stampDataPtr = getStampData("intPCnt");
     setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, stampWidth, stampHeight);
     drawPbStamp(stampDataPtr, stampPictPtr);
@@ -736,7 +736,7 @@ if (answer != NULL)
     }
 else
     {
-    valStr       = strdup("N/A");
+    valStr       = cloneString("N/A");
     stampDataPtr = getStampData("intPCnt");
     setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, stampWidth, stampHeight);
     drawPbStamp(stampDataPtr, stampPictPtr);
@@ -796,7 +796,7 @@ if (answer != NULL)
     pbStampFree(&stampDataPtr);
     }
 
-vertLabel = strdup("Frequency");
+vertLabel = cloneString("Frequency");
 for (i=strlen(vertLabel)-1; i>=0; i--)
     {
     vertLabel[i+1] = '\0';
