@@ -75,7 +75,7 @@
 #include "cdsColors.h"
 #include "cds.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.649 2004/01/06 19:18:02 weber Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.650 2004/01/06 20:18:00 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -7244,15 +7244,27 @@ if (!hideControls)
     hButton("hgt.out3", "10x");
     hWrites("<BR>\n");
 
+    /* Break into a second form so that zooming and scrolling
+     * can be done with a 'GET' so that user can back up from details
+     * page without Internet Explorer popping up an annoying dialog.
+     * Do rest of page as a 'POST' so that the ultra-long URL from
+     * all the track controls doesn't break things.  IE URL limit
+     * is 2000 bytes, but some firewalls impose a ~1000 byte limit.
+     * As a side effect of breaking up the page into two forms
+     * we need to repeat the position in a hidden variable here
+     * so that zoom/scrolling always has current position to work
+     * from. */
+    hPrintf("<INPUT TYPE=HIDDEN NAME=\"position\""
+            "VALUE=\"%s:%d-%d\">", chromName, winStart+1, winEnd);
     hPrintf("</FORM>\n");
     hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" METHOD=POST>\n\n", hgTracksName());
-    cartSaveSession(cart);
+    cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
+
 
     /* Make line that says position. */
 	{
 	char buf[256];
         char *javascript = "onchange=\"document.location = '/cgi-bin/hgTracks?db=' + document.TrackForm.db.options[document.TrackForm.db.selectedIndex].value;\"";
-
         if (containsStringNoCase(database, "zoo"))
             {
             hPuts("Organism ");
