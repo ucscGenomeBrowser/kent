@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.157 2005/02/15 23:57:34 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.158 2005/02/25 18:30:19 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -1428,9 +1428,6 @@ struct sqlResult *sr = NULL;
 struct dyString *ds = newDyString(256);
 char **row;
 boolean gotOne = FALSE;
-struct hgPosTable *table = NULL;
-struct hgPos *pos;
-struct genePred *gp;
 struct refLink *rlList = NULL, *rl;
 boolean gotRefLink = sqlTableExists(conn, "refLink");
 boolean found = FALSE;
@@ -1469,16 +1466,8 @@ if (gotRefLink)
     }
 if (rlList != NULL)
     {
+    struct hgPosTable *table = NULL;
     struct hash *hash = newHash(8);
-    char desc[256];
-    AllocVar(table);
-    if (startsWith("xeno", refGene))
-	safef(desc, sizeof(desc), "Non-%s RefSeq Genes", hOrganism(hGetDb()));
-    else
-	safef(desc, sizeof(desc), "RefSeq Genes");
-    table->description = cloneString(desc);
-    slAddHead(&hgp->tableList, table);
-    table->name = cloneString(refGene);
     for (rl = rlList; rl != NULL; rl = rl->next)
         {
         /* Don't return duplicate mrna accessions */
@@ -1495,11 +1484,24 @@ if (rlList != NULL)
 	sr = sqlGetResult(conn, ds->string);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
-	    gp = genePredLoad(row);
+	    struct genePred *gp = genePredLoad(row);
+	    struct hgPos *pos = NULL;
 	    AllocVar(pos);
+	    if (table == NULL)
+		{
+		char desc[256];
+		AllocVar(table);
+		table->name = cloneString(refGene);
+		if (startsWith("xeno", refGene))
+		    safef(desc, sizeof(desc), "Non-%s RefSeq Genes",
+			  hOrganism(hGetDb()));
+		else
+		    safef(desc, sizeof(desc), "RefSeq Genes");
+		table->description = cloneString(desc);
+		slAddHead(&hgp->tableList, table);
+		}
 	    slAddHead(&table->posList, pos);
 	    pos->name = cloneString(rl->name);
-/* 	    pos->browserName = cloneString(rl->name); highlight change */
 	    pos->browserName = cloneString(rl->mrnaAcc);
 	    dyStringClear(ds);
 	    dyStringPrintf(ds, "(%s) %s", rl->mrnaAcc, rl->product);
