@@ -200,8 +200,7 @@ exit; # don't actually run this like a script :)
       /iscratch/i/mrna.134/Homo_sapiens/
     cp -p /cluster/store5/mrna.134/humanXenoEstSplit/*.fa \
       /iscratch/i/mrna.134/Homo_sapiens/
--   ~kent/bin/iSync
-
+    ~kent/bin/iSync
 
 # REPEAT MASKING (DONE 041103)
     # Split contigs, run RepeatMasker, lift results
@@ -248,7 +247,10 @@ exit; # don't actually run this like a script :)
     # Distribute the split files and splitting lift files back to our normal
     #  chromosome contig directory tree.
     cd ~/hg15
+
 # Edit script first!
+# This copies lft/out/align files from the flat dir structure we were forced to use at first.
+# This is a one-time only step.
     /cluster/bin/scripts/distNcbiCtgOut contigOut/split .
 
     #- Lift up the split-contig .out's to contig-level .out's
@@ -293,6 +295,44 @@ exit; # don't actually run this like a script :)
     # Compare $nt.fa.out against the original ~/hg15/$chr/$nt/$nt.fa.out 
     # and against the appropriate part of $chr/chr$chr.fa.out (use the coords 
     # for $nt given in seq_contig.md).  
+
+# CREATING DATABASE  (DONE 04/08/03)
+    ssh hgwdev
+    # if you haven't already:
+    ln -s /cluster/store5/gs.16/build33 ~/oo
+    ln -s /cluster/store5/gs.16/build33 ~/hg15
+    # Make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
+    df -h /var/lib/mysql
+    # Create the database.
+    echo 'create database hg15' | hgsql hg14
+    # make a semi-permanent read-only alias (add this to your .cshrc/.bashrc):
+        alias hg15 mysql -u hguser -phguserstuff -A hg15
+    # Initialize the relational-mrna and external sequence info tables:
+    hgLoadRna new hg15
+    # Copy over grp table (for track grouping) from another database:
+    echo "create table grp (PRIMARY KEY(NAME)) select * from hg14.grp" \
+    | hgsql hg15
+
+# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE (DONE 041103)
+    ssh hgwdev
+    # Enter hg15 into hgcentraltest.dbDb so test browser knows about it:
+    echo 'insert into dbDb values("hg15", "Human April 2003", \
+            "/gbdb/hg15/nib", "Human", "DUSP18", 1, 80, "Human");' \
+    | hgsql -h genome-testdb hgcentraltest
+    # Make trackDb table so browser knows what tracks to expect:
+    cd ~/src/hg/makeDb/trackDb
+    cvs up -d -P .
+    # Edit that makefile to add hg15 in all the right places and do
+    make update
+    make alpha
+    cvs commit makefile
+
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY (DONE 04/08/03)
+    ssh hgwdev
+    # Substitute BBB with the correct number for the hostname:
+    echo 'insert into blatServers values("hg15", "blat2", "17778", "1"); \
+          insert into blatServers values("hg15", "blat2, "17779", "0");' \
+    | hgsql -h genome-testdb hgcentraltest
 
 
 # MAKE LIFTALL.LFT, NCBI.LFT (DONE 041103)
@@ -356,7 +396,7 @@ exit; # don't actually run this like a script :)
     # Edit each fa file to say chr1, chr2, etc. in the top comment line.
     ls -1 /iscratch/i/mrna.134/Homo_sapiens/refSeq.fa > mrna.lst
     cp ~/hg13/bed/refSeq/gsub .
-    # Edit the file to make it do blat.x -band
+    # Edit the file to make it do blat.x -band -q=rna -trimHardA
     gensub2 genome.lst mrna.lst gsub spec
     
     # Run this on the small cluster
@@ -483,49 +523,6 @@ DONE TO HERE
     # 2 in particular is so fast perhaps it's just as well to
     # do the inverse explicitly.
 
-
-# MAKE DOWNLOADABLE SEQUENCE FILES (TO DO)
-    ssh eieio
-    cd ~/hg15
-    #- Build the .zip files
-    ./jkStuff/zipAll.sh |& tee zipAll.log
-    #- Look at zipAll.log to make sure all file lists look reasonable.  
-    #- Check zip file integrity:
-    mkdir zip
-    mv *.zip* zip
-    cd zip
-    foreach f (*.zip)
-      unzip -t $f > $f.test
-      tail -1 $f.test
-    end
-    wc -l *.zip.test
-    #- Copy the .zip files to hgwdev:/usr/local/apache/...
-    ssh hgwdev
-    cd ~/hg15/zip
-    # Edit cpToWeb.sh to contain the correct destination path.
-    ../jkStuff/cpToWeb.sh
-    cd /usr/local/apache/htdocs/goldenPath/10mar2003
-    #- Take a look at bigZips/* and chromosomes/*, update their README.txt's
-
-
-# CREATING DATABASE  (DONE 04/08/03)
-    ssh hgwdev
-    # if you haven't already:
-    ln -s /cluster/store5/gs.16/build33 ~/oo
-    ln -s /cluster/store5/gs.16/build33 ~/hg15
-    # Make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
-    df -h /var/lib/mysql
-    # Create the database.
-    echo 'create database hg15' | hgsql hg14
-    # make a semi-permanent read-only alias (add this to your .cshrc/.bashrc):
-        alias hg15 mysql -u hguser -phguserstuff -A hg15
-    # Initialize the relational-mrna and external sequence info tables:
-    hgLoadRna new hg15
-    # Copy over grp table (for track grouping) from another database:
-    echo "create table grp (PRIMARY KEY(NAME)) select * from hg14.grp" \
-    | hgsql hg15
-
-
 # SEQUENCE INFO: CHROMINFO (DONE)
     ssh eieio
     cd ~/hg15
@@ -560,8 +557,32 @@ DONE TO HERE
     hgNibSeq -preMadeNib hg15 /gbdb/hg15/nib ?{,?}/chr?{,?}{,_random}.fa
     echo "select chrom,size from chromInfo" | hgsql -N hg15 > chrom.sizes
 
+# MAKE DOWNLOADABLE SEQUENCE FILES (TO DO)
+    ssh eieio
+    cd ~/hg15
+    #- Build the .zip files
+    ./jkStuff/zipAll.sh |& tee zipAll.log
+    #- Look at zipAll.log to make sure all file lists look reasonable.  
+    #- Check zip file integrity:
+    mkdir zip
+    mv *.zip* zip
+    cd zip
+    foreach f (*.zip)
+      unzip -t $f > $f.test
+      tail -1 $f.test
+    end
+    wc -l *.zip.test
+    #- Copy the .zip files to hgwdev:/usr/local/apache/...
+    ssh hgwdev
+    cd ~/hg15/zip
+    # Edit cpToWeb.sh to contain the correct destination path.
+    ../jkStuff/cpToWeb.sh
+    cd /usr/local/apache/htdocs/goldenPath/10mar2003
+    #- Take a look at bigZips/* and chromosomes/*, update their README.txt's
 
-# O+O: ASSEMBLY [GOLD], GAP, COVERAGE, MAP CONTIGS TRACKS (TO DO)
+
+# O+O: ASSEMBLY [GOLD], GAP, COVERAGE, MAP CONTIGS TRACKS (MOSTLY DONE - 041103 
+- BUT NEED TO REDO WHEN WE GET THE .gl FILES)
     # Store o+o info in database.
     # Note: for build31, Terry specially requested these files from NCBI:
     # finished.finf
@@ -573,6 +594,7 @@ DONE TO HERE
     if (-f contig_overlaps.agp) then
       jkStuff/liftGl.sh contig.gl
     else
+      ssh hgwdev
       hgGoldGapGl -noGl hg15 /cluster/store5/gs.16 build33 
       echo ""
       echo "*** Note from makeHg15.doc:"
@@ -584,7 +606,7 @@ DONE TO HERE
       hgGoldGapGl hg15 /cluster/store5/gs.16 build33 
       cd /cluster/store5/gs.16
       hgClonePos hg15 build33 ffa/sequence.inf /cluster/store5/gs.16 -maxErr=3
-    end
+    end 
     cd /cluster/store5/gs.16
     hgCtgPos hg15 build33 
 
@@ -631,21 +653,6 @@ DONE TO HERE
      hgGcPercent hg15 ../../nib
 
 
-# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE (TO DO)
-    ssh hgwdev
-    # Enter hg15 into hgcentraltest.dbDb so test browser knows about it:
-    echo 'insert into dbDb values("hg15", "Human Mar. 2003", \
-            "/gbdb/hg15/nib", "Human", "DUSP18", 1, 80, "Human");' \
-    | hgsql -h genome-testdb hgcentraltest
-    # Make trackDb table so browser knows what tracks to expect:
-    cd ~/src/hg/makeDb/trackDb
-    cvs up -d -P .
-    # Edit that makefile to add hg15 in all the right places and do
-    make update
-    make alpha
-    cvs commit makefile
-
-
 # PRELOAD MRNA/EST SEQUENCE INFO INTO DATABASE (DONE 04/08/03)
     # Make /gbdb symlinks for sequence .fa (not .ra)
     mkdir -p /gbdb/hg15/mrna.134
@@ -666,15 +673,7 @@ DONE TO HERE
       /cluster/store5/mrna.134/humanXenoEst.ra
 
 
-# MAKE HGCENTRALTEST BLATSERVERS ENTRY (DONE 04/08/03)
-    ssh hgwdev
-    # Substitute BBB with the correct number for the hostname:
-    echo 'insert into blatServers values("hg15", "blat2", "17778", "1"); \
-          insert into blatServers values("hg15", "blat2, "17779", "0");' \
-    | hgsql -h genome-testdb hgcentraltest
-
-
-# MAKING AND STORING mRNA AND EST ALIGNMENTS (TO DO)
+# MAKING AND STORING mRNA AND EST ALIGNMENTS (IN PROGRESS)
     # Make sure that /scratch/hg/gs.16/build33/trfFa is loaded with NT_*.fa 
     # and has been pushed to the big cluster nodes.  (MASK SEQUENCE above)
     # Make sure mrna/est .fa's are under /iscratch/i too (GENBANK above)
