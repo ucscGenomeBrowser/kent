@@ -228,10 +228,10 @@ for (child = pp->children; child != NULL; child = child->next)
 }
 
 
-struct pfParse *pfParseStatement(struct pfParse *parent, 
+struct pfParse *pfParseSemilessStatement(struct pfParse *parent, 
 	struct pfToken **pTokList, struct pfScope *scope);
 
-struct pfParse *pfParseSemiStatement(struct pfParse *parent, 
+struct pfParse *pfParseStatement(struct pfParse *parent, 
 	struct pfToken **pTokList, struct pfScope *scope);
 
 struct pfParse *pfParseExpression(struct pfParse *parent, 
@@ -831,7 +831,7 @@ for (;;)
 	slReverse(&pp->children);
 	return;
 	}
-    statement = pfParseSemiStatement(pp, &tok, scope);
+    statement = pfParseStatement(pp, &tok, scope);
     slAddHead(&pp->children, statement);
     }
 }
@@ -953,13 +953,13 @@ if (tok->type != ')')
 tok = tok->next;
 
 /* Body */
-trueBody = pfParseSemiStatement(pp, &tok, scope);
+trueBody = pfParseStatement(pp, &tok, scope);
 
 /* Else clause. */
 if (tok->type == pftElse)
     {
     tok = tok->next;
-    falseBody = pfParseSemiStatement(pp, &tok, scope);
+    falseBody = pfParseStatement(pp, &tok, scope);
     }
 *pTokList = tok;
 
@@ -989,7 +989,7 @@ if (tok->type != ')')
 tok = tok->next;
 
 /* Body */
-body = pfParseSemiStatement(pp, &tok, scope);
+body = pfParseStatement(pp, &tok, scope);
 
 *pTokList = tok;
 
@@ -1013,7 +1013,7 @@ tok = tok->next;	/* Skip over 'foreach' */
 element = parseDottedNames(pp, &tok, scope);
 skipRequiredName("in", &tok);
 collection = parseDottedNames(pp, &tok, scope);
-statement = pfParseSemiStatement(pp, &tok, scope);
+statement = pfParseStatement(pp, &tok, scope);
 slAddHead(&pp->children, statement);
 slAddHead(&pp->children, collection);
 slAddHead(&pp->children, element);
@@ -1042,7 +1042,7 @@ tok = tok->next;
 if (tok->type == ';')
     init = emptyStatement(pp, tok);
 else
-    init = pfParseStatement(pp, &tok, scope);
+    init = pfParseSemilessStatement(pp, &tok, scope);
 if (tok->type != ';')
     expectingGot(";", tok);
 tok = tok->next;
@@ -1060,13 +1060,13 @@ tok = tok->next;
 if (tok->type == ')')
     advance = emptyStatement(pp, tok);
 else
-    advance = pfParseStatement(pp, &tok, scope);
+    advance = pfParseSemilessStatement(pp, &tok, scope);
 if (tok->type != ')')
     expectingGot(")", tok);
 tok = tok->next;
 
 /* Get body of loop. */
-statement = pfParseSemiStatement(pp, &tok, scope);
+statement = pfParseStatement(pp, &tok, scope);
 
 /* Hang various subparts of for statement onto children list. */
 slAddHead(&pp->children, statement);
@@ -1123,7 +1123,7 @@ return pp;
 }
 
     	
-struct pfParse *pfParseStatement(struct pfParse *parent, 
+struct pfParse *pfParseSemilessStatement(struct pfParse *parent, 
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse a single statement, and add results to (head) of
  * parent->childList. */
@@ -1190,11 +1190,11 @@ return statement;
 }
 
 
-struct pfParse *pfParseSemiStatement(struct pfParse *parent, 
+struct pfParse *pfParseStatement(struct pfParse *parent, 
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse a statement followed by any number of semicolons. */
 {
-struct pfParse *statement = pfParseStatement(parent, pTokList, scope);
+struct pfParse *statement = pfParseSemilessStatement(parent, pTokList, scope);
 struct pfToken *tok = *pTokList;
 while (tok->type == ';')
     tok = tok->next;
@@ -1210,7 +1210,7 @@ struct pfParse *program = pfParseNew(pptProgram, tokList, NULL);
 
 while (tok->type != pftEnd)
     {
-    struct pfParse *statement = pfParseSemiStatement(program, &tok, scope);
+    struct pfParse *statement = pfParseStatement(program, &tok, scope);
     slAddHead(&program->children, statement);
     }
 slReverse(&program->children);
