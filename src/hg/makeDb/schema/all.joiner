@@ -1,5 +1,8 @@
+# This contains linkage information between various fields
+# in various databases.
+#
 # So far have looked through hg13,hg15,hg16,mm4,mm3,rn3,ce1,dm1,sacCer1,
-# panTro1,galGal2,fr1,cb1 databases
+# panTro1,galGal2,fr1,cb1,hgFixed,go, and swissProt databases
 
 # Define databases used for various organisms
 set hg hg13,hg15,hg16
@@ -36,14 +39,14 @@ set familyDb $hg,$mm,$ce,$sacCer,$dm
 
 # GO - Gene Ontology Info
 
-identifier goAccession external=GO
+joiner goAccession external=GO
 "Gene ontology term accessions.  Example - GO:0003574"
      $dm.bdgpInfo.go comma
      $dm.bdgpNonCodingInfo comma
      go.goaPart.goId
      go.term.acc
 
-identifier goId external=GO
+joiner goId external=GO
 "Gene ontology term ID's.  Shouldn't be used outside of go database"
      go.term.id
      go.term2term.term1_id
@@ -55,7 +58,7 @@ identifier goId external=GO
 
 # SwissProt Related Stuff
 
-identifier swissProtId external=SwissProt
+joiner swissProtId external=SwissProt
 "Swiss Prot ID. Same as accession for uncurated trEMBL proteins"
      $gbd.dupSpMrna.proteinID
      $gbd.dupSpMrna.dupProteinID
@@ -69,7 +72,7 @@ identifier swissProtId external=SwissProt
      go.goaPart.dbObjectSymbol
      swissProt.displayId.val
 
-identifier swissProtAccession external=SwissProt
+joiner swissProtAccession external=SwissProt
 "SwissProt Accession"
      $knownDb.kgProtAlias.alias part
      $knownDb.kgProtMap.qName
@@ -101,73 +104,73 @@ identifier swissProtAccession external=SwissProt
      swissProt.otherAcc.acc
      swissProt.protein.acc
 
-identifier swissProtAuthor
+joiner swissProtAuthor
 "Author ID in SwissProt (just use inside UCSC Relationalized SwissProt)"
     swissProt.author.id
     swissProt.referenceAuthors.author
 
-identifier swissProtReference
+joiner swissProtReference
 "Reference (journal) ID in SwissProt (just inside UCSC Relationalized)"
     swissProt.citation.reference
     swissProt.reference.id
     swissProt.referenceAuthors.reference
 
-identifier swissProtCitation
+joiner swissProtCitation
 "Citation ID in SwissProt (just use inside UCSC Relationalized SwissProt)"
     swissProt.citation.id
     swissProt.citationRc.citation
 
-identifier swissProtCitationRp
+joiner swissProtCitationRp
 "Reference Position Line ID in SwissProt (just inside UCSC Relationalized)"
     swissProt.citation.rp
     swissProt.citationRp.id
 
-identifier swissProtRcType
+joiner swissProtRcType
 "Reference Comment Type in SwissProt (just inside UCSC Relationalized)"
     swissProt.citationRc.rcType
     swissProt.rcType.id
 
-identifier swissProtRcVal
+joiner swissProtRcVal
 "Reference Comment Text in SwissProt (just inside UCSC Relationalized)"
     swissProt.citationRc.rcVal;
     swissProt.rcVal.id
 
-identifier swissProtCommentType
+joiner swissProtCommentType
 "Type of swissProt comment type (just inside UCSC Relationalized)"
     swissProt.comment.commentType
     swissProt.commentType.id
 
-identifier swissProtCommentVal
+joiner swissProtCommentVal
 "Text of swissProt comment text (just inside UCSC Relationalized)"
      swissProt.comment.commentVal
      swissProt.commentVal.id
 
-identifier swissProtExtDb
+joiner swissProtExtDb
 "SwissProt external database ID (just inside UCSC Relationalized)"
      swissProt.extDb.id
      swissProt.extDbRef.extDb
 
-identifier swissProtFeatureClass
+joiner swissProtFeatureClass
 "Type of swissProt feature class (just inside UCSC Relationalized)"
      swissProt.feature.featureClass
      swissProt.featureClass.id
 
-identifier swissProtFeatureType
+joiner swissProtFeatureType
 "Type of swissProt feature type (just inside UCSC Relationalized)"
      swissProt.feature.featureType
      swissProt.featureType.id
 
-identifier swissProtOrganelle
+joiner swissProtOrganelle
 "Type of swissProt organelle ID (just inside UCSC Relationalized)"
      swissProt.info.organelle
      swissProt.organelle.id
 
-identifier swissProtKeyword
+joiner swissProtKeyword
 "SwissProt keyword ID (just inside UCSC Relationalized)"
      swissProt.accToKeyword.keyword
      swissProt.keyword.id
 
-identifier ncbiTaxon
+joiner ncbiTaxon
 "NCBI Taxon ID - number for a species.  Used by SwissProt too"
      swissProt.accToTaxon.taxon
      swissProt.commonName.taxon
@@ -175,69 +178,69 @@ identifier ncbiTaxon
 
 # Various types of gene predictions in UCSC Genome Browser
 
-identifier acemblyName
+joiner acemblyName
     $gbd.acembly.name
     $gbd.acemblyPep.name
 
-identifier ECgeneName
+joiner ECgeneName
 "Link together EC gene predicted gene structure and peptide"
     $gbd.ECgene.name
     $gbd.ECgenePep.name
 
-identifier geneidName
+joiner geneidName
 "Link together geneid predicted gene structure and peptide"
     $gbd.geneid.name
     $gbd.geneidPep.name
 
-identifier genscanName
+joiner genscanName
 "Link together genscan predicted gene structure and peptide"
     $gbd.genscan.name
     $gbd.genscan.pep
 
-identifier sgpGeneName
+joiner sgpGeneName
 "Link together sgp predicted gene structure and peptide"
     $gbd.sgpGene.name
     $gbd.sgpPep.name
 
-identifier softberryGeneName
+joiner softberryGeneName
 "Link together Fshgene++ gene structure, pepdide, and homolog"
     $gbd.softberryGene.name
     $gbd.softberryPep.name
     $gbd.softberryHom.name
 
-identifier twinscanName
+joiner twinscanName
 "Link together twinscan predicted gene structure and peptide"
     $gbd.twinscan.name
     $gbd.twinscanPep.name
 
-identifier vegaName
+joiner vegaName
 "Link together various VEGA human curated gene annotation"
     $gbd.vegaInfo.transcriptId
 
-identifier vegaGeneName typeOf=vegaName
+joiner vegaGeneName typeOf=vegaName
 "Link together VEGA predicted gene structure and peptide"
     $gbd.vegaGene.name
     $gbd.vegaPep.name
 
-identifier vegaPseudogeneName typeOf=vegaName
+joiner vegaPseudogeneName typeOf=vegaName
 "Link together VEGA pseudogene and other info. */
     $gbd.vegaPseudoGene.name
 
 # Microarray stuff.
 
-identifier affyU95
+joiner affyU95
 "Affymetrix Human U95 chip identifiers"
     $hg.affyRatio.name
     $hg.affyRatioNew.name
     $hg.affyU95.qName
     $hg.knownToU95.value
 
-identifier affyU133
+joiner affyU133
 "Affymetrix Human U133 chip identifiers"
     $hg.knownToU133.value
     $hg.affyU133.qName
 
-identifier affyU74
+joiner affyU74
 "Affymetrix Mouse U74 chip identifiers"
     $mm.affyGnfU74A.name
     $mm.affyGnfU74B.name
@@ -245,36 +248,36 @@ identifier affyU74
     $mm.affyU74.qName
     $mm.knownToU74.value
 
-identifier nci60SampleId
+joiner nci60SampleId
 "Identifiers of NCI 60 Cell lines for expression experiments"
     hgFixed.nci60Exps.id
     $hg.nci60.expIds comma
     $hg.nci60.expIds comma indexOf
 
-identifier rosettaChr22SampleId
+joiner rosettaChr22SampleId
 "Identifiers for samples used in Rosetta chromosome 22 public experiments"
     hgFixed.rosettaExps.name
     hgFixed.rosChr22Dat.expName
 
-identifier gnfU95SampleIdV0
+joiner gnfU95SampleIdV0
 "Identifiers of RNA samples used early version of GNF Human Expression Atlas 1"
      hgFixed.affyExps.id
      $hg.affyRatio.expIds comma
      $hg.affyRatio.expScores comma indexOf
 
-identifier gnfU95SampleIdV1
+joiner gnfU95SampleIdV1
 "Identifiers of RNA samples used in GNF Human Expression Atlas 1"
      hgFixed.gnfHumanU95AllExps.id
      hgFixed.gnfHumanU95All.expIds comma indexOf
      hgFixed.gnfHumanU95AllRatio.expIds comma indexOf
 
-identifier gnfU95MedianSampleIdV1
+joiner gnfU95MedianSampleIdV1
 "Identifiers of pooled RNA samples used in GNF Human Expression Atlas 1"
      hgFixed.gnfHumanU95MedianExps.id
      hgFixed.gnfHumanU95Median.expIds comma indexOf
      hgFixed.gnfHumanU95MedianRatio.expIds comma indexOf
 
-identifier gnfU74aSampleId
+joiner gnfU74aSampleId
 "Identifiers of RNA samples used in GNF Mouse Expression Atlas 1 on U74A Chip"
      hgFixed.gnfMouseU74aAllExps.id
      hgFixed.gnfMouseU74aAll.expScores comma indexOf
@@ -282,13 +285,13 @@ identifier gnfU74aSampleId
      $mm.affyGnfU74A.expIds comma
      $mm.affyGnfU74A.expScores comma indexOf
 
-identifier gnfU74aMedianSampleId
+joiner gnfU74aMedianSampleId
 "Pooled RNA samples used in GNF Mouse Expression Atlas 1 on U74A Chip"
      hgFixed.gnfMouseU74aMedianExps.id
      hgFixed.gnfMouseU74aMedian.expScores comma indexOf
      hgFixed.gnfMouseU74aMedianRatio.expScores comma indexOf
 
-identifier gnfU74bSampleId
+joiner gnfU74bSampleId
 "Identifiers of RNA samples used in GNF Mouse Expression Atlas 1 on U74B Chip"
      hgFixed.gnfMouseU74bAllExps.id
      hgFixed.gnfMouseU74bAll.expScores comma indexOf
@@ -296,13 +299,13 @@ identifier gnfU74bSampleId
      $mm.affyGnfU74B.expIds comma
      $mm.affyGnfU74B.expScores comma indexOf
 
-identifier gnfU74bMedianSampleId
+joiner gnfU74bMedianSampleId
 "Pooled RNA samples used in GNF Mouse Expression Atlas 1 on U74B Chip"
      hgFixed.gnfMouseU74bMedianExps.id
      hgFixed.gnfMouseU74bMedian.expScores comma indexOf
      hgFixed.gnfMouseU74bMedianRatio.expScores comma indexOf
 
-identifier gnfU74cSampleId
+joiner gnfU74cSampleId
 "Identifiers of RNA samples used in GNF Mouse Expression Atlas 1 on U74C Chip"
      hgFixed.gnfMouseU74cAllExps.id
      hgFixed.gnfMouseU74cAll.expScores comma indexOf
@@ -310,37 +313,37 @@ identifier gnfU74cSampleId
      $mm.affyGnfU74C.expIds comma
      $mm.affyGnfU74C.expScores comma indexOf
 
-identifier gnfU74cMedianSampleId
+joiner gnfU74cMedianSampleId
 "Pooled RNA samples used in GNF Mouse Expression Atlas 1 on U74C Chip"
      hgFixed.gnfMouseU74cMedianExps.id
      hgFixed.gnfMouseU74cMedian.expScores comma indexOf
      hgFixed.gnfMouseU74cMedianRatio.expScores comma indexOf
 
-identifier arbFlyLifeAllSampleId
+joiner arbFlyLifeAllSampleId
 "Identifiers of RNA samples used in Arbeitman fly life cycle experiments"
      hgFixed.arbFlyLifeAllExps.id
      hgFixed.arbFlyLifeAll.expScores comma indexOf
      hgFixed.arbFlyLifeAllRatio.expScores comma indexOf
      
-identifier arbFlyLifeMedianSampleId
+joiner arbFlyLifeMedianSampleId
 "Identifiers of pooled RNA samples used in Arbeitman fly life cycle experiments"
      hgFixed.arbFlyLifeMedianExps.id
      hgFixed.arbFlyLifeMedian.expScores comma indexOf
      hgFixed.arbFlyLifeMedianRatio.expScores comma indexOf
 
-identifier kimWormLifeAllSampleId
+joiner kimWormLifeAllSampleId
 "Identifiers of RNA samples used in Kim worm life cycle experiments"
      hgFixed.kimWormLifeAllExps.id
      hgFixed.kimWormLifeAll.expScores comma indexOf
      hgFixed.kimWormLifeAllRatio.expScores comma indexOf
 
-identifier kimWormLifeMedianSampleId
+joiner kimWormLifeMedianSampleId
 "Identifiers of pooled RNA samples used in Kim worm life cycle experiments"
      hgFixed.kimWormLifeMedianExps.id
      hgFixed.kimWormLifeMedian.expScores comma indexOf
      hgFixed.kimWormLifeMedianRatio.expScores comma indexOf
 
-identifier yeastChoCellCycleSampleId
+joiner yeastChoCellCycleSampleId
 "Identifiers of RNA samples used in Cho yeast cell cycle experiments"
      hgFixed.yeastChoCellCycleExps.id
      hgFixed.yeastChoCellCycle.expScores comma indexOf
@@ -348,7 +351,7 @@ identifier yeastChoCellCycleSampleId
 
 # Stuff to link together alignment chains and nets
 
-identifier chain${chainDb}Id
+joiner chain${chainDb}Id
 "Link together chimp ${chainDb} chain info"
     $gbd.allChain${chainDb}.id
     $gbd.chain${chainDb}.id
@@ -357,13 +360,13 @@ identifier chain${chainDb}Id
     $gbd.net${chainDb}NonGap.chainId
     $gbd.netSynteny${chainDb}.chainId
 
-identifier chainSelf
+joiner chainSelf
 "Link together self chain info"
     $gbd.chainSelf.id
     $gbd.chainSelfLink.chainId
     $gbd.netSelf.chainId
 
-identifier mouseChainId
+joiner mouseChainId
 "Link together chain/net on hg13,hg15 for mouse"
     hg13,hg15.mouseChain.id
     hg13,hg15.mouseChainLink.chainId
@@ -371,24 +374,24 @@ identifier mouseChainId
 
 # Genbank/trEMBL Accessions and meaningful subsets thereof
 
-identifier genbankAccession external=genbank
+joiner genbankAccession external=genbank
 "Generic Genbank Accession.  More specific Genbank accessions follow"
     $gbd.seq.acc
 
-identifier stsAccession external=genbank
+joiner stsAccession external=genbank
 "Genbank accession of a Sequence Tag Site (STS) sequence."
     $gbd.stsInfo2.genbank
 
-identifier bacEndAccession typeOf=genbankAccession
+joiner bacEndAccession typeOf=genbankAccession
 "Genbank accession of a BAC end read."
     $gbd.all_bacends.qName
     $gbd.bacEndPairs.lfNames comma
     $hg.fishClones.beNames comma
 
-identifier bacAccession typeOf=genbankAccession
+joiner bacAccession typeOf=genbankAccession
 "Genbank accession of a sequenced BAC (~150kb of genomic sequence)."
 
-identifier $hg.acAccession typeOf=bacAccession
+joiner $hg.acAccession typeOf=bacAccession
 "Genbank accession of a sequenced $hg.BAC (~150kb of genomic sequence)."
     $hg.certificate.accession1
     $hg.certificate.accession2
@@ -397,48 +400,48 @@ identifier $hg.acAccession typeOf=bacAccession
     $hg.clonePos.name chopAfter=.
     $hg.fishClones.accNames chopAfter=. comma
 
-identifier $hg.acAccessionVersion typeOf=bacAccession
+joiner $hg.acAccessionVersion typeOf=bacAccession
 "Genbank accession.version of sequence $hg.BAC"
     $hg.gl.frag chopAfter=_
     $hg.gold.frag
     $hg.clonePos.name
 
-identifier proteinAccession typeOf=genbankAccession
+joiner proteinAccession typeOf=genbankAccession
 "Genbank protein accession."
     $knownDb.kgProtAlias.alias 
     $knownDb.kgXref.protAcc
     $gbd.refLink.protAcc 
 
-identifier estOrMrnaAccession typeOf=genbankAccession
+joiner estOrMrnaAccession typeOf=genbankAccession
 "Genbank EST or mRNA accession."
     $gbd.mrna.acc subset
     $gbd.gbSeq.acc subset
     $gbd.gbStatus.acc subset
     $gbd.imageClone.acc subset
 
-identifier estAccession typeOf=estOrMrnaAccession
+joiner estAccession typeOf=estOrMrnaAccession
 "Genbank EST accession"
     $gbd.gbSeq.acc
 
-identifier nativeEstAccession typeOf=estAccession
+joiner nativeEstAccession typeOf=estAccession
 "Genbank Native (same organism as database) EST accession"
     $gbd.all_est.qName
     $gbd.est.qName
     $gbd.intronEst.qName
     $gbd.estOrientInfo.name
 
-identifier xenoEstAccession typeOf=estAccession
+joiner xenoEstAccession typeOf=estAccession
 "Genbank xeno (different organism from database) EST accession"
     $gbd.xenoEst.qName
 
-identifier mrnaAccession typeOf=estOrMrnaAccession
+joiner mrnaAccession typeOf=estOrMrnaAccession
 "Genbank mRNA accession"
 
-identifier xenoMrnaAccession typeOf=mrnaAccession
+joiner xenoMrnaAccession typeOf=mrnaAccession
 "Genbank xeno (different organism from database) mRNA accession"
     $gbd.xenoMrna.qName
 
-identifier nativeMrnaAccession typeOf=mrnaAccession
+joiner nativeMrnaAccession typeOf=mrnaAccession
 "Genbank Native (same organism as database) mRNA accession"
     $gbd.all_mrna.qName
     $gbd.chr*_mrna.qName
@@ -448,13 +451,13 @@ identifier nativeMrnaAccession typeOf=mrnaAccession
     $gbd.mrnaRefseq.mrna
     $gbd.spMrna.mrnaID
 
-identifier mgcAccession typeOf=nativeMrnaAccession
+joiner mgcAccession typeOf=nativeMrnaAccession
 "Mammalian Gene Collection Genbank mRNA accession."
     gdb.mgcFullMrna.qName 
     $gbd.mgcFullStatus.acc
     $gbd.mgcGenes.name
 
-identifier refSeqId typeOf=mrnaAccession
+joiner refSeqId typeOf=mrnaAccession
 "RefSeq mRNA accession"
     $gbd.bioCycPathway.geneId
     $gbd.cgapAlias.alias
@@ -471,7 +474,7 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd.refSeqSummarry.mrnaAcc
     $dm.bdgpToRefSeq.value
 
-identifier knownGeneId typeOf=nativeMrnaAccession
+joiner knownGeneId typeOf=nativeMrnaAccession
 "Known Gene ID - the genbank accession of the representative mRNA"
     $gbd.bioCycPathway.kgID
     $knownDb.ceBlastTab.query
@@ -517,74 +520,74 @@ identifier knownGeneId typeOf=nativeMrnaAccession
 
 # Fields parsed out of a Genbank flat file, associated with mRNA records
 
-identifier genBankAuthor
+joiner genBankAuthor
 "Connects genBank mRNA/EST and it's author"
     $gbd.mrna.author
     $gbd.author.id
 
-identifier genBankCds
+joiner genBankCds
 "Connects genBank mRNA/EST and it's coding region (CDS)"
     $gbd.mrna.cds
     $gbd.cds.id
 
-identifier genBankCell
+joiner genBankCell
 "Connects genBank mRNA/EST and the cell type it came from"
     $gbd.mrna.cell
     $gbd.cell.id
 
-identifier genBankDevelopment
+joiner genBankDevelopment
 "Connects genBank mRNA/EST and development stage of the organism it came from"
     $gbd.mrna.development
     $gbd.development.id
 
-identifier genBankDescription
+joiner genBankDescription
 "Connects genBank mRNA/EST and descriptive text"
     $gbd.mrna.description
     $gbd.description.id
     
-identifier genBankGeneName
+joiner genBankGeneName
 "Connects genBank mRNA/EST and gene name"
     $gbd.mrna.geneName
     $gbd.geneName.id
     $gbd.refLink.geneName
 
-identifier genBankKeyword
+joiner genBankKeyword
 "Connects genBank mRNA/EST and keyword"
     $gbd.mrna.keyword
     $gbd.keyword.id
 
-identifier genBankLibrary
+joiner genBankLibrary
 "Connects genBank mRNA/EST and cDNA library"
     $gbd.mrna.library
     $gbd.library.id
 
-identifier genBankMrnaClone
+joiner genBankMrnaClone
 "Connects genBank mRNA/EST and cDNA clone name"
     $gbd.mrna.mrnaClone
     $gbd.mrnaClone.id
 
-identifier genBankOrganism
+joiner genBankOrganism
 "Connects genBank mRNA/EST and organism it came from"
     $gbd.mrna.organism
     organism.id
 
-identifier genBankProductName
+joiner genBankProductName
 "Connects genBank mRNA/EST and protein product name"
     $gbd.mrna.productName
     $gbd.productName.id
     $gbd.refLink.prodName
 
-identifier genBankSex
+joiner genBankSex
 "Connects genBank mRNA/EST and sex mRNA came from"
     $gbd.mrna.sex
     sex.id
 
-identifier genBankSource
+joiner genBankSource
 "Connects genBank mRNA/EST and source of mRNA"
     $gbd.mrna.source
     $gbd.source.id
 
-identifier genBankTissue
+joiner genBankTissue
 "Connects genBank mRNA/EST and tissue mRNA isolated from"
     $gbd.mrna.tissue
     tissue.id
@@ -592,7 +595,7 @@ identifier genBankTissue
 
 # Some misc clone-oriented identifiers
 
-identifier bacCloneName 
+joiner bacCloneName 
 "A Roswell Park, Cal Tech or other clone ID"
     $gbd.fishClones.name
     $gbd.bacEndPairs.name
@@ -602,24 +605,24 @@ imageCloneId external="IMAGE Consortium"
     $gbd.mgcFullStatus.imageId
     $gbd.imageClone.imageId
 
-identifier $hg.fosmidId
+joiner $hg.fosmidId
 "Human Fosmid (~50kb genomic sequence) clone"
     $hg.fosEndPairs.name
 
-identifier $hg.fosmidEndId
+joiner $hg.fosmidEndId
 "Identifier of read from one end of human formid."
     $hg.all_fosends.qName
     $hg.fosEndPairs.lfNames comma
 
 # Mapping Stuff, STS, etc.
 
-identifier dbStsId external=dbSts
+joiner dbStsId external=dbSts
 "NCBI dbSTS (Sequenced Tagged Site, aka mapping sequence) ID"
     $hg.all_sts_primer.qName chopBefore=dbSTS_
     $gbd.all_sts_seq.qName
     $gbd.stsInfo2.dbSTSid
 
-identifier ucscStsId
+joiner ucscStsId
 "UCSC STS (Sequenced Tagged Site, aka mapping sequence) ID"
     $gbd.stsAlias.identNo
     $gbd.stsInfo2.identNo
@@ -628,13 +631,13 @@ identifier ucscStsId
     $mm.stsInfoMouseNew.identNo
     $mm.stsMapMouseNew.identNo
 
-identifier stsName
+joiner stsName
 "STS (Sequenced Tagged Site, aka mapping sequence) Name"
     $hg.fishClones.stsNames comma
     $gbd.stsInfo2.otherNames comma
     $mm.stsInfoMouseNew.alias separator=;
  
-identifier stsTrueName typeOf=stsName
+joiner stsTrueName typeOf=stsName
 "STS (Sequenced Tagged Site, aka mapping sequence) Unique Name"
     $gbd.stsAlias.trueName
     $gbd.stsInfo2.name
@@ -643,7 +646,7 @@ identifier stsTrueName typeOf=stsName
     $mm.stsInfoMouseNew.name
     $mm.stsMapMouseNew.name
 
-identifier hugoName external=HUGO
+joiner hugoName external=HUGO
 "International Human Gene Identifier"
     $hg.atlasOncoGene.locusSymbol
     $hg.kgAlias.alias subset
@@ -652,63 +655,63 @@ identifier hugoName external=HUGO
     $hg.refLink.name
     $hg.jaxOrtholog.humanSymbol
 
-identifier bioCycMapId external=BioCyc
+joiner bioCycMapId external=BioCyc
 "BioCyc Pathway Map ID"
     $gbd.bioCycMapDesc.mapID
     $gbd.bioCycPathway.mapID
 
-identifier keggMapId external=KEGG
+joiner keggMapId external=KEGG
 "KEGG Pathway Map ID"
     $gbd.keggMapDesc.mapID
     $gbd.keggPathway.mapID
 
-identifier locusLinkId external=LocusLink
+joiner locusLinkId external=LocusLink
 "NCBI LocusLink ID"
     $gbd.keggPathway.mapID
     $knownDb.knownToLocusLink.value
     $gbd.refLink.locusLinkId
     $dm.bdgpToLocusLink.value
 
-identifier omimId external=OMIM
+joiner omimId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) ID"
     $gbd.refLink.omimId
 
-identifier knownAlignId
+joiner knownAlignId
 "Which (of sometimes multiple) mapping of a known gene"
     $knownDb.knownGene.alignId
 
-identifier knownIsoformCluster
+joiner knownIsoformCluster
 "ID of a cluster of overlapping known genes"
     $knownDb.knownCanonical.clusterId
     $knownDb.knownIsoforms.clusterId
 
-identifier pfamId external=Pfam
+joiner pfamId external=Pfam
 "Pfam (Protein Family) ID"
     $knownDb.knownToPfam.value
     $dm.bdgpToPfam.value
 
-identifier superfamilyId external=SCOP
+joiner superfamilyId external=SCOP
 "Protein SCOP/Superfamily ID"
     $knownDb.knownToSuper.superfamily
     $gbd.sfAssign.sfID
     $gbd.sfDes.id
     hgFixed.scopDes.sunid    
 
-identifier mouseGeneName
+joiner mouseGeneName
 "Mouse gene name from Jackson Labs/RefSeq"
     $hg.jaxOrtholog.mouseSymbol
     $mm.refLink.name
 
-identifier jaxMgiId
+joiner jaxMgiId
 "Jackson Labs Mouse Gene Identifier"
     $hg.jaxOrtholog.mgiId
 
-identifier wormBaseIsoformCluster
+joiner wormBaseIsoformCluster
 "Overlapping (after splicing) WormBase transcripts"
     $ce.sangerCanonical.clusterId
     $ce.sangerIsoforms.clusterId
 
-identifier wormBaseId external=WormBase
+joiner wormBaseId external=WormBase
 "WormBase (C. elegans) ORF ID"
     $gbd.ceBlastTab.target
     $ce.sangerGene.name
@@ -730,17 +733,17 @@ identifier wormBaseId external=WormBase
     $ce.mmBlastTab.query
     $ce.scBlastTab.query
 
-identifier flyBaseRefId
+joiner flyBaseRefId
 "FlyBase (Drosophila) Reference (Literature)"
     $dm.fbPhenotype.fbRef
     $dm.fbRef.id
 
-identifier flyBaseAlleleId
+joiner flyBaseAlleleId
 "FlyBase (Drosophila) Allele ID"
     $dm.fbAllele.id
     $dm.fbPhenotype.fbAllele
 
-identifier flyBaseGeneId external=FlyBase
+joiner flyBaseGeneId external=FlyBase
 "FlyBase (Drosophila) Gene ID"
     $gbd.dmBlastTab.target
     $dm.bdgpExprLink.flyBaseId
@@ -754,18 +757,18 @@ identifier flyBaseGeneId external=FlyBase
     $dm.fbTranscript.geneId
     $dm.flyBaseSwissProt.flyBaseId
 
-identifier bdgpIsoformCluster
+joiner bdgpIsoformCluster
 "Overlapping (after splicing) BDGP Drosophila transcripts"
     $dm.bdgpIsoforms.clusterId
     $dm.bdgpCanonical.clusterId
 
-identifier bdgpGeneId external=BDGP
+joiner bdgpGeneId external=BDGP
 "Berkeley Drosophila Genome Project Gene ID"
     $dm.bdgpExprLink.bdgpName
     $dm.bdgpGeneInfo.bdgpName
     $dm.bdgpToCanonical.value
 
-identifier bdgpTranscriptId external=BDGP
+joiner bdgpTranscriptId external=BDGP
 "Berkeley Drosophila Genome Project Transcript ID"
     $dm.arbExpDistance.query
     $dm.arbExpDistance.target
@@ -788,20 +791,20 @@ identifier bdgpTranscriptId external=BDGP
     $dm.scBlastTab.query
     $dm.fbTranscript.transcriptId
 
-identifier bdgpNonCodingId external=BDGP
+joiner bdgpNonCodingId external=BDGP
 "Berkeley Drosophila Genome Project Noncoding Gene ID"
     $dm.bdgpNonCoding.name chopAfter=-
     $dm.bdgpNonCodingInfo.bdgpName
 
-identifier sgdIsoformCluster
+joiner sgdIsoformCluster
 "Overlapping (after splicing) SGD (Yeast) transcripts"
     $sacCer.sgdCanonical.clusterId
     $sacCer.sgdIsoforms.clusterId
 
-identifier sgdId external=SGD
+joiner sgdId external=SGD
 "Sacchromyces Genome Database ID - Coding or other"
 
-identifier sgdCodingId typeOf=sgdId
+joiner sgdCodingId typeOf=sgdId
 "Sacchromyces Genome Database ID"
     $gbd.scBlastTab.target
     $sacCer.sgdGene.name
@@ -822,19 +825,19 @@ identifier sgdCodingId typeOf=sgdId
     $sacCer.sgdPep.name
     $sacCer.sgdToSwissProt.name
 
-identifier sgdNoncodingId typeOf=sgdId
+joiner sgdNoncodingId typeOf=sgdId
 "Sacchromyces Genome Database Noncoding/Dubious feature ID"
     $sacCer.sgdOther.name
     $sacCer.sgdOtherDescription.name
 
-identifier ensemblGeneId external=Ensembl
+joiner ensemblGeneId external=Ensembl
 "Ensemble Gene ID"
     $gbd.ensGeneXref.gene_name
     mm3,hg13.ensemblXref.gene_name
     $gbd.ensGtp.gene chopAfter=.
     $gbd.ensTranscript.gene_name
 
-identifier ensemblProteinId external=Ensembl
+joiner ensemblProteinId external=Ensembl
 "Ensemble Translated Protein ID"
     $gbd.ensGtp.protein chopAfter=.
     $gbd.ensTranscript.translation_name
@@ -842,7 +845,7 @@ identifier ensemblProteinId external=Ensembl
     $gbd.sfDescription.proteinID
     $gbd.sfAssign.seqID
 
-identifier ensemblTranscriptId external=Ensembl
+joiner ensemblTranscriptId external=Ensembl
 "Ensembl Transcript ID"
     $gbd.ensGene.name
     $gbd.ensGeneXref.transcript_name
@@ -855,27 +858,27 @@ identifier ensemblTranscriptId external=Ensembl
     $gbd.sfDescription.name
     mm2,mm3.superfamily.name
 
-identifier cgapId
+joiner cgapId
 "NCI Cancer Genome Annotation Project Gene ID"
     $gbd.cgapAlias.cgapID
     $gbd.cgapBiocPathway.cgapID
 
-identifier cgapMapId
+joiner cgapMapId
 "NCI Cancer Genome Annotation Project Map ID"
     $gbd.cgapBioDesc.mapID
     $gbd.cgapBiocPathway.mapID
 
-identifier affySnp10KId external=Affymetrix
+joiner affySnp10KId external=Affymetrix
 "Affymetrix 10K SNP Identifier"
     hgFixed.affy10KDetails.affyId
     $hg.affy10K.name
 
-identifier affySnp120KId external=Affymetrix
+joiner affySnp120KId external=Affymetrix
 "Affymetrix 120K SNP Identifier"
     hgFixed.affyGeno.affyId
     $hg.affyGeno.name
 
-identifier dbSnpId external=dbSNP
+joiner dbSnpId external=dbSNP
 "NCBI dbSNP ID"
     $knownDb.knownToCdsSnp.value
     $gbd.snpMap.name
@@ -886,18 +889,18 @@ identifier dbSnpId external=dbSNP
     hgFixed.dbSnpRsMm.rsId
     hgFixed.dbSnpRsRn.rsId
 
-identifier encodeRegion
+joiner encodeRegion
 "ENCODE (extensive analysis of 1% of genome) Region"
     $hg.encodeRegions.name
     $hgFixed.encodeRegionInfo.name
 
-identifier unigeneId
+joiner unigeneId
 "NCBI UniGene Cluster ID"
     $gbd.sage.uni
     $gbd.uniGene_2.name chopBefore=.
     hgFixed.sage.uni
 
-identifier sageExpId
+joiner sageExpId
 "Sage experiment (tissue type etc) ID"
     $gbd.sageExp.num
     $gbd.sage.exps comma
