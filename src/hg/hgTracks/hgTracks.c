@@ -2782,7 +2782,7 @@ return col;
 }
 
 Color estColorAndOrient(struct trackGroup *tg, void *item, struct memGfx *mg)
-/* Return color to draw est in, also tries to orient them using genbank info. */
+/* Always returns MG_BLACK, also tries to orient them using genbank info. */
 {
 struct linkedFeatures *lf = item;
 static int startIx = 0, endIx = 0;
@@ -2791,19 +2791,21 @@ char buf[64], *s;
 struct sqlConnection *conn = hAllocConn();
 int col = MG_BLACK;
 int estOrient = 0;
-if (startIx == 0)
+/*if (startIx == 0)
     {
     startIx = mgFindColor(mg, 0, 0, 180);
     endIx = mgFindColor(mg, 160, 0, 0);
     }
+*/
 sprintf(query, "select direction from mrna where acc='%s'", lf->name);
 if ((s = sqlQuickQuery(conn, query, buf, sizeof(buf))) != NULL)
     {
-    if (s[0] == '5')
-	col = startIx;
-    else if (s[0] == '3')
+    //  if (s[0] == '5')
+//	col = startIx;
+//    else 
+if (s[0] == '3')
 	{
-	col = endIx;
+	//col = endIx;
 	lf->orientation = -lf->orientation;	/* Not the best place for this but... */
 	}
     }
