@@ -124,6 +124,10 @@ exit; # don't actually run this like a script :)
 
     # Convert fa files into UCSC style fa files and place in "contigs"
     # directory inside the gs.18/build35 directory 
+    #	(a check that can be done here is make a list of the contigs
+    #	in this ./contigs directory before and compare it with the
+    #	list of distributed contigs created after they have been
+    #	disbursed.)
     #	faNcbiToUcsc was fixed to handle the NC_ identifier
 
     cd /cluster/store5/gs.18/build35
@@ -133,7 +137,16 @@ exit; # don't actually run this like a script :)
     #	real    5m10.938s
     #	user    2m20.070s
     #	sys     0m51.020s
-    #	Make a listing of all the fasta record headers:
+    #	Make a list of the contigs for use later
+    rm contig.lst
+    touch contig.lst
+    foreach chrom ( `cat chrom.lst` )
+	foreach c ( $chrom/N{C,G,T}_?????? )
+	    set contig = $c:t
+	    echo "${chrom}/${contig}/${contig}.fa" >> contig.lst
+	end
+    end
+    #	Make a listing of all the fasta record headers, just FYI:
     cd /cluster/store5/gs.18/ffa
     zcat ffa/ncbi_build35.fa.gz | grep "^>" > ncbi.fa.headers
 
@@ -361,3 +374,104 @@ Strange perc. field -0.3 line 4339 of 5/chr5.fa.out
 Processing 19/chr19.fa.out
 Strange perc. field -18.6 line 77032 of 19/chr19.fa.out
 
+# SIMPLE REPEAT [TRF] TRACK (WORKING - 2004-05-21 - Hiram)
+    #	Copy the contigs, first to the bluearc, then to /iscratch/i
+    ssh eieio
+    mkdir /cluster/bluearc/hg17
+    mkdir /cluster/bluearc/hg17/contigs
+
+    cd /cluster/data/hg17
+    foreach ctg ( `cat contig.lst` )
+	set c = $ctg:t
+ 	echo "$ctg > /cluster/bluearc/hg17/contigs/$c"
+	cp -p $ctg /cluster/bluearc/hg17/contigs/$c
+    end
+    #	Check how much is there:
+    #	du -hsc /cluster/bluearc/hg17/contigs
+    #	2.8G    /cluster/bluearc/hg17/contigs
+
+    # Distribute contigs to /iscratch/i
+    ssh kkr1u00
+    mkdir /iscratch/i/hg17
+    mkdir /iscratch/i/hg17/contigs
+    cd /cluster/data/hg17
+    foreach ctg ( `cat contig.lst` )
+	set c = $ctg:t
+ 	echo "/cluster/bluearc/hg17/contigs/$c -> /iscratch/i/hg17/contigs"
+	cp -p /cluster/bluearc/hg17/contigs/$c /iscratch/i/hg17/contigs
+    end
+
+    # Verify same amount made it there:
+    #	du -hsc /iscratch/i/hg17/contigs
+    #	2.8G    /iscratch/i/hg17/contigs
+
+    /cluster/bin/iSync
+
+    #	Go to the small cluster for this business:
+    ssh kki
+
+    mkdir -p /cluster/data/hg17/bed/simpleRepeat
+    cd /cluster/data/hg17/bed/simpleRepeat
+    mkdir trf
+    cat << '_EOF_' > runTrf
+#!/bin/csh -fe
+#
+set path1 = $1
+set inputFN = $1:t
+set outpath = $2
+set outputFN = $2:t
+mkdir -p /tmp/$outputFN
+cp $path1 /tmp/$outputFN
+pushd .
+cd /tmp/$outputFN
+/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $inputFN /dev/null -bedAt=$outputFN -tempDir=/tmp
+popd
+rm -f $outpath
+cp -p /tmp/$outputFN/$outputFN $outpath
+rm -fr /tmp/$outputFN/*
+rmdir --ignore-fail-on-non-empty /tmp/$outputFN
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod +x runTrf
+
+    cat << '_EOF_' > gsub
+#LOOP
+./runTrf {check in line+ $(path1)}  {check out line trf/$(root1).bed}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    ls -1S /iscratch/i/hg17/contigs/*.fa > genome.lst
+    gensub2 genome.lst single gsub jobList
+    para create jobList
+    para try
+    para check
+    para push
+    para check
+XXX - running 2004-05-21 12:58
+#  Completed: 472 of 472 jobs
+# CPU time in finished jobs:      36177s     602.95m    10.05h    0.42d  0.001 y
+# IO & Wait Time:                  2038s      33.97m     0.57h    0.02d  0.000 y
+# Average job time:                  81s       1.35m     0.02h    0.00d
+# Longest job:                     6992s     116.53m     1.94h    0.08d
+# Submission to last job:         10703s     178.38m     2.97h    0.12d
+    # When cluster run is done, a couple of extra files not caught in
+    # the above sequence
+    ./runTrf /cluster/store5/gs.18/build35/M/NT_999999/NT_999999.fa trf/NT_999999.bed
+    # That produces an empty .bed file, mark it so:
+    echo "# trf run produces nothing for this one" >> trf/NT_999999.bed
+
+    liftUp simpleRepeat.bed /cluster/data/hg17/jkStuff/liftAll.lft \
+	warn trf/*.bed  > lu.out 2>&1
+
+    # Load into the database:
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/simpleRepeat
+    /cluster/bin/i386/hgLoadBed hg17 simpleRepeat simpleRepeat.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+#	stringTab = 0
+#	Reading simpleRepeat.bed
+#	Loaded 627883 elements
+#	Sorted
+#	Saving bed.tab
+#	Loading hg17
