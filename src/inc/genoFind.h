@@ -13,6 +13,7 @@ enum gfConstants {
     gfMaxGap = 2,
     gfTileSize = 12,
     gfMaxTileUse = 1024,
+    gfPepMaxTileUse = 4096,
 };
 
 struct gfSeqSource
