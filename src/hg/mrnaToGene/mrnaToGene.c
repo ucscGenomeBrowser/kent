@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: mrnaToGene.c,v 1.11 2004/09/05 18:26:38 markd Exp $";
+static char const rcsid[] = "$Id: mrnaToGene.c,v 1.12 2004/09/17 05:58:35 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -107,7 +107,7 @@ else
     {
     char query[512];
     safef(query, sizeof(query),
-          "SELECT cds.name FROM cds,mrna WHERE (mrna.acc = '%s') AND (mrna.cds !=0) AND (mrna.cds = cds.id)",
+          "SELECT cds.name FROM cds,gbCdnaInfo WHERE (gbCdnaInfo.acc = '%s') AND (gbCdnaInfo.cds !=0) AND (gbCdnaInfo.cds = cds.id)",
           acc);
     return sqlQuickQuery(conn, query, cdsBuf, cdsBufSize);
     }
@@ -201,7 +201,7 @@ struct sqlResult *sr;
 /* generate join of cds with psls */
 safef(query, sizeof(query),
       "SELECT cds.name,matches,misMatches,repMatches,nCount,qNumInsert,qBaseInsert,tNumInsert,tBaseInsert,strand,qName,qSize,qStart,qEnd,tName,tSize,tStart,tEnd,blockCount,blockSizes,qStarts,tStarts "
-      "FROM cds,%s,mrna WHERE (%s.qName = mrna.acc) AND (mrna.cds !=0) AND (mrna.cds = cds.id)",
+      "FROM cds,%s,gbCdnaInfo WHERE (%s.qName = gbCdnaInfo.acc) AND (gbCdnaInfo.cds !=0) AND (gbCdnaInfo.cds = cds.id)",
       pslTable, pslTable);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
