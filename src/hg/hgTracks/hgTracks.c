@@ -84,7 +84,10 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.834 2004/11/06 23:43:26 daryl Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.835 2004/11/09 18:10:08 kent Exp $";
+
+boolean measureTiming = FALSE;	/* Flip this on to display timing
+                                 * stats on each track at bottom of page. */
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -7293,7 +7296,10 @@ if (withCenterLabels)
 
 /* Draw tracks. */
 {
+    long thisTime = 0, lastTime = 0;
     y = yAfterRuler;
+    if (measureTiming)
+        lastTime = clock1000();
     for (track = trackList; track != NULL; track = track->next)
 	{
 	if (track->limitedVis != tvHide)
@@ -7310,6 +7316,12 @@ if (withCenterLabels)
 	    track->drawItems(track, winStart, winEnd,
 			     vg, insideX, y, insideWidth, 
 			     font, track->ixColor, track->limitedVis);
+	    if (measureTiming)
+		{
+		thisTime = clock1000();
+		track->drawTime = thisTime - lastTime;
+		lastTime = thisTime;
+		}
 	    vgUnclip(vg);
 	    y += track->height;
 	    }
@@ -8574,6 +8586,7 @@ struct track *track;
 char *freezeName = NULL;
 boolean hideAll = cgiVarExists("hgt.hideAll");
 boolean showedRuler = FALSE;
+long thisTime = 0, lastTime = 0;
 
 zoomedToBaseLevel = (winBaseCount <= insideWidth / tl.mWidth);
 zoomedToCodonLevel = (ceil(winBaseCount/3) * tl.mWidth) <= insideWidth;
@@ -8823,7 +8836,14 @@ for (track = trackList; track != NULL; track = track->next)
 	}
     else if (track->visibility != tvHide)
 	{
+	if (measureTiming)
+	    lastTime = clock1000();
 	track->loadItems(track); 
+	if (measureTiming)
+	    {
+	    thisTime = clock1000();
+	    track->loadTime = thisTime - lastTime;
+	    }
 	}
     }
 
@@ -9055,6 +9075,17 @@ if (!hideControls)
 	    controlGridEndRow(cg);
 	}
     endControlGrid(&cg);
+
+    if (measureTiming)
+        {
+	hPrintf("track, load time, draw time<BR>\n");
+	for (track = trackList; track != NULL; track = track->next)
+	    {
+	    if (track->visibility != tvHide)
+	        hPrintf("%s, %d, %d<BR>\n", 
+			track->shortLabel, track->loadTime, track->drawTime);
+	    }
+	}
     }
 hButton("submit", "refresh");
 hPrintf("</CENTER>\n");

@@ -144,6 +144,8 @@ struct track
                                 loaded and drawn by this track.  This
                                 is used for "composite" tracks, such
                                 as "mafWiggle */
+    int loadTime;	/* Time it takes to load (for performance tuning) */
+    int drawTime;	/* Time it takes to draw (for performance tuning) */
     };
 
 
