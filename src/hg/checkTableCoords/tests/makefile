@@ -34,6 +34,6 @@ run: load mkdirs ${TESTS}
 
 ${TESTS}:
 	${CTC} test ${@}Good
-	-${CTC} test ${@}Bad > output/${@}Bad.out
+	-${CTC} test ${@}Bad -verbose=2 > output/${@}Bad.out
 	diff expected/${@}Bad.out output/${@}Bad.out
 
