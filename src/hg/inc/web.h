@@ -12,6 +12,9 @@ void webStartText();
 void webStart(struct cart *theCart, char* format,...);
 /* output a CGI and HTML header with the given title in printf format */
 
+void webStartHeader(struct cart *theCart, char *header, char* format,...);
+/* output a CGI and HTML header with the given title in printf format */
+
 void webStartWrapper(struct cart *theCart, char *format, va_list args, boolean withHttpHeader,
 	boolean withLogo);
 /* output a CGI and HTML header with the given title in printf format */
