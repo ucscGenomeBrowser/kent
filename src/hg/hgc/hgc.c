@@ -2884,8 +2884,8 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
-int showGfAlignment(struct psl *psl, bioSeq *oSeq, FILE *f, enum gfType qType, int qStart, 
-	int qEnd, char *qName)
+int showGfAlignment(struct psl *psl, bioSeq *oSeq, FILE *f, 
+	enum gfType qType, int qStart, int qEnd, char *qName)
 /* Show protein/DNA alignment or translated DNA alignment. */
 {
 struct dnaSeq *dnaSeq = NULL;
@@ -3040,7 +3040,7 @@ fprintf(f, "<H4><A NAME=genomic></A>%s.%s %s:</H4>\n",
 	    }
 	else
 	    {
-	    for (j=1; j<sz; ++j)
+	    for (j=0; j<sz; ++j)
 	        {
 		if (oSeq->dna[qs+j] == dnaSeq->dna[ts+j])
 		    {
@@ -3079,16 +3079,16 @@ fprintf(f, "<H4><A NAME=ali></A>Side by Side Alignment*</H4>\n");
     bafInit(&baf, oSeq->dna, qbafStart, qIsRc,
             dnaSeq->dna, tbafStart, tIsRc, f, 60, isProt);
 	    
-    for (i=0; i<psl->blockCount; ++i)
+    if (isProt)
 	{
-	int qs = psl->qStarts[i] - qStart;
-	int ts = psl->tStarts[i] - tStart;
-	int sz = psl->blockSizes[i];
-
-	bafSetPos(&baf, qs, ts);
-	bafStartLine(&baf);
-	if (isProt)
+	for (i=0; i<psl->blockCount; ++i)
 	    {
+	    int qs = psl->qStarts[i] - qStart;
+	    int ts = psl->tStarts[i] - tStart;
+	    int sz = psl->blockSizes[i];
+
+	    bafSetPos(&baf, qs, ts);
+	    bafStartLine(&baf);
 	    for (j=0; j<sz; ++j)
 		{
 		AA aa = oSeq->dna[qs+j];
@@ -3098,17 +3098,51 @@ fprintf(f, "<H4><A NAME=ali></A>Side by Side Alignment*</H4>\n");
 		bafOut(&baf, aa, codon[1]);
 		bafOut(&baf, ' ', codon[2]);
 		}
+	    bafFlushLine(&baf);
 	    }
-	else
+	}
+    else
+	{
+	int lastQe = psl->qStarts[0] - qStart;
+	int lastTe = psl->tStarts[0] - tStart;
+	int maxSkip = 20;
+	bafSetPos(&baf, lastQe, lastTe);
+	bafStartLine(&baf);
+	for (i=0; i<psl->blockCount; ++i)
 	    {
-	    for (j=0; j<sz; ++j)
-		{
-		bafOut(&baf, oSeq->dna[qs+j], dnaSeq->dna[ts+j]);
+	    int qs = psl->qStarts[i] - qStart;
+	    int ts = psl->tStarts[i] - tStart;
+	    int sz = psl->blockSizes[i];
+	    boolean doBreak = TRUE;
+	    int qSkip = qs - lastQe;
+	    int tSkip = ts - lastTe;
+
+	    if (qSkip >= 0 && qSkip <= maxSkip && tSkip == 0)
+	        {
+		for (j=0; j<qSkip; ++j)
+		    bafOut(&baf, oSeq->dna[lastQe+j], '-');
+		doBreak = FALSE;
 		}
+	    else if (tSkip > 0 && tSkip <= maxSkip && qSkip == 0)
+	        {
+		for (j=0; j<tSkip; ++j)
+		    bafOut(&baf, '-', dnaSeq->dna[lastTe+j]);
+		doBreak = FALSE;
+		}
+	    if (doBreak)
+		bafFlushLine(&baf);
+	    bafSetPos(&baf, qs, ts);
+	    if (doBreak)
+	        bafStartLine(&baf);
+	    for (j=0; j<sz; ++j)
+		bafOut(&baf, oSeq->dna[qs+j], dnaSeq->dna[ts+j]);
+	    lastQe = qs + sz;
+	    lastTe = ts + sz;
 	    }
 	bafFlushLine(&baf);
+
+	fprintf( f, "<I>*Aligned Blocks with gaps <= %d bases are merged for this display</I>\n", maxSkip);
 	}
-    fprintf( f, "<I>*Aligned Blocks with gaps <= 5 bases are merged for this display</I>\n");
     }
 fprintf(f, "</TT></PRE>");
 if (qIsRc)
