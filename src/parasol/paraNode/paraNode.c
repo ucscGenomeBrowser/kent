@@ -149,7 +149,6 @@ else
 	netSendLongString(sd, buf);
 	close(sd);
 	}
-    exit(0);
     }
 }
 
@@ -161,6 +160,29 @@ for (;;)
     {
     if (waitpid(-1, &stat, WNOHANG) <= 0)
         break;
+    }
+}
+
+void tellManagerJobIsDone(char *managingHost, char *jobIdString, char *line)
+/* Try and send message to host saying job is done. */
+{
+int sd = -1;
+int i;
+
+/* Keep trying every 5 seconds for a minute to connect.... */
+for (i=0; i<12; ++i)
+    {
+    if ((sd = netConnect(managingHost, paraPort)) >= 0)
+        break;
+    sleep(5);
+    }
+
+if (sd >= 0)
+    {
+    char buf[256];
+    snprintf(buf, sizeof(buf), "jobDone %s %s", jobIdString, line);
+    write(sd, paraSig, strlen(paraSig));
+    netSendLongString(sd, buf);
     }
 }
 
@@ -185,13 +207,10 @@ if (jobIdString != NULL && line != NULL && line[0] != 0)
 	}
 
     /* Tell managing host that job is done. */
-    sd = netConnect(managingHost, paraPort);
-    if (sd > 0)
+    if (fork() == 0)
 	{
-	char buf[256];
-	snprintf(buf, sizeof(buf), "jobDone %s %s", jobIdString, line);
-	write(sd, paraSig, strlen(paraSig));
-	netSendLongString(sd, buf);
+	tellManagerJobIsDone(managingHost, jobIdString, line);
+	exit(0);
 	}
     }
 }
@@ -206,7 +225,7 @@ if (jobIdString != NULL)
     int jobId = atoi(jobIdString);
     struct job *job = findJob(jobId);
     int sd = netConnect(managingHost, paraPort);
-    if (sd > 0)
+    if (sd >= 0)
 	{
 	char *status = (job != NULL  ? "busy" : "free");
 	char buf[256];
@@ -276,6 +295,7 @@ else if (busyProcs < maxProcs)
 
 	    execProc(managingHost, jobIdString, reserved,
 		user, dir, in, out, err, args[0], args);
+	    exit(0);
 	    }
 	else
 	    {
@@ -340,7 +360,6 @@ hostName = getHost();
 
 /* Precompute some signature stuff. */
 assert(sigLen < sizeof(signature));
-signature[sigLen] = 0;
 
 /* Set up socket and self to listen to it. */
 socketHandle = netAcceptingSocket(paraPort, 10);
@@ -355,6 +374,7 @@ for (;;)
 	{
 	if (netReadAll(connectionHandle, signature, sigLen) == sigLen)
 	    {
+	    signature[sigLen] = 0;
 	    if (sameString(paraSig, signature))
 		{
 		line = buf = netGetLongString(connectionHandle);
@@ -362,20 +382,23 @@ for (;;)
 		    {
 		    logIt("node  %s: %s\n", hostName, line);
 		    command = nextWord(&line);
-		    if (sameString("quit", command))
-			break;
-		    else if (sameString("run", command))
-			doRun(line);
-		    else if (sameString("jobDone", command))
-			jobDone(line);
-		    else if (sameString("status", command))
-			doStatus();
-		    else if (sameString("kill", command))
-			doKill(line);
-		    else if (sameString("check", command))
-			doCheck(line);
-		    else if (sameString("resurrect", command))
-			doResurrect(line);
+		    if (command != NULL)
+			{
+			if (sameString("quit", command))
+			    break;
+			else if (sameString("run", command))
+			    doRun(line);
+			else if (sameString("jobDone", command))
+			    jobDone(line);
+			else if (sameString("status", command))
+			    doStatus();
+			else if (sameString("kill", command))
+			    doKill(line);
+			else if (sameString("check", command))
+			    doCheck(line);
+			else if (sameString("resurrect", command))
+			    doResurrect(line);
+			}
 		    freez(&buf);
 		    }
 		}
