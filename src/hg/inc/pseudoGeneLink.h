@@ -5,30 +5,39 @@
 #ifndef PSEUDOGENELINK_H
 #define PSEUDOGENELINK_H
 
-#define PSEUDOGENELINK_NUM_COLS 18
+#define PSEUDOGENELINK_NUM_COLS 27
 
 struct pseudoGeneLink
 /* links a gene/pseudogene prediction to an ortholog or paralog. */
     {
     struct pseudoGeneLink *next;  /* Next in singly linked list. */
+    short bin;	/* bin for browser speedup */
+    char *chrom;	/* Chromosome name for pseudogene */
+    unsigned chromStart;	/* pseudogene alignment start position */
+    unsigned chromEnd;	/* pseudogene alignment end position */
     char *name;	/* Name of pseudogene */
     unsigned score;	/* score of pseudogene with gene */
+    char *strand;	/* strand of pseudoegene */
     char *assembly;	/* assembly for gene */
     char *geneTable;	/* mysql table of gene */
     char *gene;	/* Name of gene */
-    char *chrom;	/* Chromosome name */
+    char *gChrom;	/* Chromosome name */
     unsigned gStart;	/* gene alignment start position */
     unsigned gEnd;	/* gene alignment end position */
     unsigned score2;	/* intron score of pseudogene with gap */
     unsigned score3;	/* intron score of pseudogene */
     unsigned chainId;	/* chain id of gene/pseudogene alignment */
-    char *strand;	/* strand of gene */
+    char *gStrand;	/* strand of gene */
     unsigned polyA;	/* length of polyA */
     unsigned polyAstart;	/* start f polyA */
-    char *pchrom;	/* Chromosome name for pseudogene */
-    unsigned pStart;	/* pseudogene alignment start position */
-    unsigned pEnd;	/* pseudogene alignment end position */
-    char *pStrand;	/* strand of pseudoegene */
+    unsigned exonCover;	/* number of exons in Gene covered */
+    unsigned intronCount;	/* number of introns in pseudogene */
+    unsigned bestAliCount;	/* number of good mrnas aligning */
+    unsigned matches;	/* matches + repMatches */
+    unsigned qSize;	/* aligning bases in pseudogene */
+    unsigned tReps;	/* repeats in gene */
+    unsigned qReps;	/* repeats in pseudogene */
+    unsigned overlapDiag;	/* bases on the diagonal to mouse */
     };
 
 void pseudoGeneLinkStaticLoad(char **row, struct pseudoGeneLink *ret);
