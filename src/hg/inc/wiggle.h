@@ -353,5 +353,6 @@ void destroyWigDataStream(struct wiggleDataStream **wDS);
 #define VERBOSE_CHR_LEVEL	2
 #define VERBOSE_SQL_ROW_LEVEL	3
 #define VERBOSE_PER_VALUE_LEVEL	4
+#define VERBOSE_HIGHEST		5
 
 #endif /* WIGGLE_H */
