@@ -3,6 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "chain.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -10,23 +11,29 @@ void usage()
 errAbort(
   "chainSwap - Swap target and query in chain\n"
   "usage:\n"
-  "   chainSwap XXX\n"
-  "options:\n"
-  "   -xxx=XXX\n"
+  "   chainSwap in.chain out.chain\n"
   );
 }
 
-void chainSwap(char *XXX)
+void chainSwapFile(char *in, char *out)
 /* chainSwap - Swap target and query in chain. */
 {
+struct lineFile *lf = lineFileOpen(in, TRUE);
+FILE *f = mustOpen(out, "w");
+struct chain *chain;
+while ((chain = chainRead(lf)) != NULL)
+    {
+    chainSwap(chain);
+    chainWrite(chain, f);
+    }
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionHash(&argc, argv);
-if (argc != 2)
+if (argc != 3)
     usage();
-chainSwap(argv[1]);
+chainSwapFile(argv[1], argv[2]);
 return 0;
 }
