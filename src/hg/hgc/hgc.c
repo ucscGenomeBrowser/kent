@@ -29,6 +29,7 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 #include "ctgPos.h"
+#include "ctgPos2.h"
 #include "clonePos.h"
 #include "bactigPos.h"
 #include "rmskOut.h"
@@ -139,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.676 2004/06/28 16:28:00 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.677 2004/07/03 18:34:16 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4060,15 +4061,24 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 struct ctgPos *ctg;
+struct ctgPos2 *ctg2 = NULL;
 int cloneCount;
 
 genericHeader(tdb, ctgName);
+printf("<B>Name:</B> %s<BR>\n", ctgName);
 sprintf(query, "select * from %s where contig = '%s'", track, ctgName);
 selectOneRow(conn, track, query, &sr, &row);
-ctg = ctgPosLoad(row);
-sqlFreeResult(&sr);
-printf("<B>Name:</B> %s<BR>\n", ctgName);
 
+if (sameString("ctgPos2", track)) 
+    {
+    ctg2 = ctgPos2Load(row);
+    printf("<B>Type:</B> %s<BR>\n", ctg2->type);
+    ctg = (struct ctgPos*)ctg2;
+    }
+else 
+    ctg = ctgPosLoad(row);
+
+sqlFreeResult(&sr);
 if (hTableExists("clonePos"))
     {
     sprintf(query, 
@@ -13856,7 +13866,7 @@ else if (sameWord(track, "rikenMrna"))
     {
     doRikenRna(tdb, item);
     }
-else if (sameWord(track, "ctgPos"))
+else if (sameWord(track, "ctgPos") || sameWord(track, "ctgPos2"))
     {
     doHgContig(tdb, item);
     }
