@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.20 2003/11/10 16:59:30 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.21 2003/11/10 20:39:35 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -569,16 +569,33 @@ wigDebugPrint("wigDrawItems");
 
 if (autoScale == wiggleScaleAuto)
     {
-	graphUpperLimit = overallUpperLimit + (overallRange * 0.1);
-	graphLowerLimit = overallLowerLimit - (overallRange * 0.1);
-	graphRange = overallRange * 1.2;
+    if (overallRange == 0.0)
+	{
+	if (overallUpperLimit > 0.0)
+	    {
+	    graphUpperLimit = overallUpperLimit;
+	    graphLowerLimit = 0.0;
+	    } else if (overallUpperLimit < 0.0) {
+	    graphUpperLimit = 0.0;
+	    graphLowerLimit = overallUpperLimit;
+	    } else {
+	    graphUpperLimit = 1.0;
+	    graphLowerLimit = -1.0;
+	    }
+	    graphRange = graphUpperLimit - graphLowerLimit;
+	} else {
+	graphUpperLimit = overallUpperLimit;
+	graphLowerLimit = overallLowerLimit;
+	}
 snprintf(dbgMsg, DBGMSGSZ, "autoScale requested");
     } else {
-	graphUpperLimit = overallUpperLimit + (overallRange * 0.1);
-	graphLowerLimit = overallLowerLimit - (overallRange * 0.1);
-	graphRange = graphUpperLimit - graphLowerLimit;
+	graphUpperLimit = wigCart->maxY;
+	graphLowerLimit = wigCart->minY;
 snprintf(dbgMsg, DBGMSGSZ, "manualScale requested");
     }
+graphRange = graphUpperLimit - graphLowerLimit;
+wigDebugPrint("wigDrawItems");
+snprintf(dbgMsg, DBGMSGSZ, "Scale: [%g:%g] range: %g", graphLowerLimit, graphUpperLimit, graphRange);
 wigDebugPrint("wigDrawItems");
 
 /*	right now this is a simple pixel by pixel loop.  Future
@@ -625,33 +642,30 @@ for (x1 = 0; x1 < width; ++x1)
 	}
 	drawColor = tg->ixColor;
 	if (dataValue < 0.0) drawColor = tg->ixAltColor;
-	boxHeight = h * ((dataValue - (overallLowerLimit - overallRange*0.1)) /
-		(overallRange * 1.2));
+	boxHeight = h * ((dataValue - graphLowerLimit) / graphRange);
 	if (boxHeight > h) boxHeight = h;
 	if (boxHeight < 1) boxHeight = 1;
 	boxTop = h - boxHeight;
 	y1 = yOff+boxTop;
-	if ( (0.0 > overallLowerLimit) && (0.0 < overallUpperLimit) )
+	if ( (0.0 > graphLowerLimit) && (0.0 < graphUpperLimit) )
 	    {
-		boxHeight = h * (fabs(dataValue) / (overallRange * 1.2));
+		boxHeight = h * (fabs(dataValue) / graphRange);
 		if (boxHeight > h) boxHeight = h;
 		if (boxHeight < 1) boxHeight = 1;
 		if (dataValue > 0.0) {
 			boxTop =
-	(h * ((overallUpperLimit + overallRange*0.1)/ (overallRange * 1.2)));
+	(h * (graphUpperLimit/ graphRange));
 			boxTop -= boxHeight;
 			y1 = yOff+boxTop;
 		} else {
 			boxTop = h -
-			(h * (((0.0-(overallLowerLimit - overallRange*0.1)) /
-				(overallRange * 1.2))));
+			(h * (((0.0-graphLowerLimit) /
+				graphRange)));
 			y1 = yOff+boxTop + boxHeight;
 		}
-	    } else if (overallUpperLimit < 0.0)
+	    } else if (graphUpperLimit < 0.0)
 	    {
-		boxHeight= h *
-	(((overallUpperLimit + overallRange*0.1)-dataValue) /
-			(overallRange * 1.2));
+		boxHeight= h * ((graphUpperLimit-dataValue) / graphRange);
 		if (boxHeight > h) boxHeight = h;
 		if (boxHeight < 1) boxHeight = 1;
 		boxTop = 0;
@@ -692,9 +706,8 @@ vgBox(v,x,y,width,height,color)
 	    {
 	    double dataValue;
 	    int grayIndex;
-	    dataValue = preDraw[preDrawIndex].max -
-			(overallLowerLimit - (overallRange * 0.1));
-	    grayIndex = (dataValue/overallRange) * MAX_WIG_VALUE;
+	    dataValue = preDraw[preDrawIndex].max - graphLowerLimit;
+	    grayIndex = (dataValue/graphRange) * MAX_WIG_VALUE;
 			
 	    drawColor =
 shadesOfPrimary[grayInRange(grayIndex, 0, MAX_WIG_VALUE)];
@@ -828,6 +841,9 @@ wigCart->heightFromCart = heightFromCart;
  */
 track->minRange = max( minY, minYc);
 track->maxRange = min( maxY, maxYc);
+wigCart->minY = track->minRange;
+wigCart->maxY = track->maxRange;
+
 if (track->maxRange < track->minRange)
     {
 	double d;
