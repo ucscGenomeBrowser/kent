@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.2 2004/11/07 16:50:51 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.3 2004/11/07 18:32:41 kent Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -147,23 +147,127 @@ if (test->status->errMessage != NULL)
     tablesTestLogOne(test, stderr);
 }
 
+void testSchema(struct htmlPage *tablePage, struct htmlForm *mainForm,
+     char *org, char *db, char *group, char *track, char *table)
+/* Make sure schema page comes up. */
+{
+struct htmlPage *schemaPage = quickSubmit(tablePage, org, db, group,
+        track, table, "schema", hgtaDoSchema, "submit");
+htmlPageFree(&schemaPage);
+}
+
+void testSummaryStats(struct htmlPage *tablePage, struct htmlForm *mainForm,
+     char *org, char *db, char *group, char *track, char *table)
+/* Make sure summary stats page comes up. */
+{
+if (htmlFormVarGet(mainForm, hgtaDoSummaryStats) != NULL)
+    {
+    struct htmlPage *statsPage = quickSubmit(tablePage, org, db, group,
+    	track, table, "summaryStats", hgtaDoSummaryStats, "submit");
+    htmlPageFree(&statsPage);
+    }
+}
+
+boolean outTypeAvailable(struct htmlForm *form, char *value)
+/* Return true if outType options include value. */
+{
+struct htmlFormVar *outType = htmlFormVarGet(form, hgtaOutputType);
+if (outType == NULL)
+    errAbort("Couldn't find %s variable in form", hgtaOutputType);
+return slNameInList(outType->values, value);
+}
+
+int countNoncommentLines(char *s)
+/* Count number of lines in s that don't start with # */
+{
+int count = 0;
+s = skipLeadingSpaces(s);
+while (s != NULL && s[0] != 0)
+    {
+    if (s[0] != '#')
+	++count;
+    s = strchr(s, '\n');
+    s = skipLeadingSpaces(s);
+    }
+return count;
+}
+
+int testAllFields(struct htmlPage *tablePage, struct htmlForm *mainForm,
+     char *org, char *db, char *group, char *track, char *table)
+/* Get all fields and return count of rows. */
+{
+struct htmlPage *outPage;
+int rowCount = 0;
+
+htmlPageSetVar(tablePage, NULL, hgtaOutputType, "primaryTable");
+outPage = quickSubmit(tablePage, org, db, group, track, table,
+    "allFields", hgtaDoTopSubmit, "submit");
+rowCount = countNoncommentLines(outPage->htmlText);
+htmlPageFree(&outPage);
+return rowCount;
+}
+
+struct htmlFormVar *findPrefixedVar(struct htmlFormVar *list, char *prefix)
+/* Find first var with given prefix in list. */
+{
+struct htmlFormVar *var;
+for (var = list; var != NULL; var = var->next)
+    {
+    if (startsWith(prefix, var->name))
+        return var;
+    }
+return NULL;
+}
+
+void testOneField(struct htmlPage *tablePage, struct htmlForm *mainForm,
+     char *org, char *db, char *group, char *track, char *table, 
+     int expectedRows)
+/* Get one field and make sure the count agrees with expected. */
+{
+struct htmlPage *outPage;
+
+htmlPageSetVar(tablePage, NULL, hgtaOutputType, "selectedFields");
+outPage = quickSubmit(tablePage, org, db, group, track, table,
+    "selFieldsPage", hgtaDoTopSubmit, "submit");
+if (outPage != NULL)
+    {
+    struct htmlForm *form = outPage->forms;
+    struct htmlFormVar *var;
+    int rowCount = 0;
+    if (form == NULL)
+        errAbort("No forms in select fields page");
+    var = findPrefixedVar(form->vars, "hgta_fs.check.");
+    if (var == NULL)
+        errAbort("No hgta_fs.check. vars in form");
+    htmlPageSetVar(outPage, NULL, var->name, "on");
+    serialSubmit(&outPage, org, db, group, track, table, "oneField",
+    	hgtaDoPrintSelectedFields, "submit");
+    rowCount = countNoncommentLines(outPage->htmlText);
+    if (rowCount != expectedRows)
+	qaStatusSoftError(tablesTestList->status, 
+		"Got %d rows, expected %d", rowCount, expectedRows);
+    }
+htmlPageFree(&outPage);
+}
+	
+	
 void testOneTable(struct htmlPage *trackPage, char *org, char *db,
 	char *group, char *track, char *table)
 /* Test stuff on one table. */
 {
 struct htmlPage *tablePage = quickSubmit(trackPage, org, db, group, 
 	track, table, "selectTable", hgtaTable, table);
-struct htmlPage *schemaPage = quickSubmit(tablePage, org, db, group,
-        track, table, "schema", hgtaDoSchema, "submit");
 struct htmlForm *mainForm;
-htmlPageFree(&schemaPage);
+
 if ((mainForm = htmlFormGet(trackPage, "mainForm")) == NULL)
     errAbort("Couldn't get main form on tablePage");
-if (htmlFormVarGet(mainForm, hgtaDoSummaryStats) != NULL)
+testSchema(tablePage, mainForm, org, db, group, track, table);
+testSummaryStats(tablePage, mainForm, org, db, group, track, table);
+if (outTypeAvailable(mainForm, "primaryTable"))
     {
-    struct htmlPage *statsPage = quickSubmit(tablePage, org, db, group,
-    	track, table, "summaryStats", hgtaDoSummaryStats, "submit");
-    htmlPageFree(&statsPage);
+    int rowCount;
+    rowCount = testAllFields(tablePage, mainForm, org, db, group, track, table);
+    testOneField(tablePage, mainForm, org, db, group, track, table, rowCount);
     }
 verbose(1, "Tested %s %s %s %s %s\n", org, db, group, track, table);
 htmlPageFree(&tablePage);
