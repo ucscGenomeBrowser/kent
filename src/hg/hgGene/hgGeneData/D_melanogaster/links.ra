@@ -27,7 +27,7 @@ priority 26
 
 name swissProt
 tables bdgpGene
-idSql select proteinID from bdgpGene where name = '%s'
+idSql select proteinID from bdgpGene where name = '%s' and proteinId != "n/a"
 
 name refSeq
 shortLabel RefSeq
