@@ -219,7 +219,7 @@ int orientFromChar(char c);
 char charFromOrient(int orient);
 /* Return + or - in place of 1 or -1 */
 
-enum trackVisibility limitVisibility(struct track *tg, void *items);
+enum trackVisibility limitVisibility(struct track *tg);
 /* Return default visibility limited by number of items. */
 
 char *hgcNameAndSettings();

@@ -482,7 +482,7 @@ else
 }
 
 
-enum trackVisibility limitVisibility(struct track *tg, void *items)
+enum trackVisibility limitVisibility(struct track *tg)
 /* Return default visibility limited by number of items. 
  * This also sets tg->height. */
 {
@@ -730,18 +730,20 @@ void filterItems(struct track *tg,
 struct slList *newList = NULL, *oldList = NULL, *el, *next;
 boolean exclude = FALSE;
 boolean color = FALSE;
-enum trackVisibility vis;
+enum trackVisibility vis = 0;	/* suppress compiler warning. */
 
 if (sameWord(filterType, "none"))
     return;
 
-vis = limitVisibility(tg, tg->items);
 if (sameWord(filterType, "include"))
     exclude = FALSE;
 else if (sameWord(filterType, "exclude"))
     exclude = TRUE;
 else
+    {
     color = TRUE;
+    vis = limitVisibility(tg);
+    }
 
 for (el = tg->items; el != NULL; el = next)
     {
@@ -2171,7 +2173,7 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 if (!anyFilter)
     return;
 
-isFull = (limitVisibility(tg, tg->items) == tvFull);
+isFull = (limitVisibility(tg) == tvFull);
 
 type = cartUsualString(cart, mud->filterTypeVar, "red");
 if (sameString(type, "exclude"))
@@ -2346,12 +2348,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     pslFree(&psl);
     }
 slReverse(&lfList);
-if (limitVisibility(tg, lfList) != tvDense)
+tg->items = lfList;
+if (limitVisibility(tg) != tvDense)
     slSort(&lfList, linkedFeaturesCmpStart);
 if (tg->extraUiData)
     filterMrna(tg, &lfList);
 sqlFreeResult(&sr);
-tg->items = lfList;
 }
 
 void lfFromPslsInRange(struct track *tg, int start, int end, 
@@ -2737,7 +2739,7 @@ void loadGenieKnown(struct track *tg)
 /* Load up Genie known genes. */
 {
 tg->items = lfFromGenePredInRange("genieKnown", chromName, winStart, winEnd);
-if (limitVisibility(tg, tg->items) == tvFull)
+if (limitVisibility(tg) == tvFull)
     {
     lookupKnownNames(tg->items);
     }
@@ -2849,7 +2851,7 @@ void loadknownGene(struct track *tg)
 /* Load up known genes. */
 {
 tg->items = lfFromGenePredInRange("knownGene", chromName, winStart, winEnd);
-if (limitVisibility(tg, tg->items) == tvFull)
+if (limitVisibility(tg) == tvFull)
     {
     lookupKnownGeneNames(tg->items);
     }
@@ -3144,7 +3146,7 @@ void loadRefGene(struct track *tg)
 {
 enum trackVisibility vis;
 tg->items = lfFromGenePredInRange("refGene", chromName, winStart, winEnd);
-vis = limitVisibility(tg, tg->items);
+vis = limitVisibility(tg);
 if (vis != tvDense)
     {
     lookupRefNames(tg->items);
@@ -4688,7 +4690,7 @@ void loadGenomicDups(struct track *tg)
 /* Load up simpleRepeats from database table to track items. */
 {
 bedLoadItem(tg, "genomicDups", (ItemLoader)genomicDupsLoad);
-if (limitVisibility(tg, tg->items) == tvFull)
+if (limitVisibility(tg) == tvFull)
     slSort(&tg->items, bedCmpScore);
 else
     slSort(&tg->items, bedCmp);
@@ -8829,7 +8831,7 @@ for (track = trackList; track != NULL; track = track->next)
 	{
 	if (withCenterLabels)
 	    pixHeight += fontHeight;
-	limitVisibility(track, track->items);
+	limitVisibility(track);
 	pixHeight += track->height;
 	}
     else
