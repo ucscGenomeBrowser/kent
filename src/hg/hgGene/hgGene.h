@@ -80,6 +80,10 @@ struct section *goSection(struct sqlConnection *conn,
 	struct hash *sectionRa);
 /* Create GO annotations section. */
 
+struct section *methodSection(struct sqlConnection *conn,
+        struct hash *sectionRa);
+/* Create UCSC KG Method section. */
+
 struct section *mrnaDescriptionsSection(struct sqlConnection *conn, 
 	struct hash *sectionRa);
 /* Create mrnaDescriptions section. */
