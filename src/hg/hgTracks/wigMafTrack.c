@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.20 2004/04/15 07:29:14 kent Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.21 2004/04/19 18:02:34 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -120,7 +120,7 @@ slAddHead(&miList, mi);
  * all mafs and looking at database prefix to source. */
     {
     /* get species order from trackDb setting */
-    char *speciesOrder = trackDbRequiredSetting(track->tdb, "speciesOrder");
+    char *speciesOrder = trackDbRequiredSetting(track->tdb, SPECIES_ORDER_VAR);
     char *species[100];
     int speciesCt = chopLine(speciesOrder, species);
     struct hash *hash = newHash(8);	/* keyed by database. */
@@ -218,7 +218,7 @@ if (suffix != NULL)
     /* make up items for other organisms by scanning through
      * all mafs and looking at database prefix to source. */
     {
-    char *speciesOrder = trackDbRequiredSetting(track->tdb, "speciesOrder");
+    char *speciesOrder = trackDbRequiredSetting(track->tdb, SPECIES_ORDER_VAR);
     char *species[200];
     int speciesCt = chopLine(speciesOrder, species);
     int i;
@@ -502,7 +502,7 @@ if (miList == NULL)
     return FALSE;
 
 /* obtain suffix for pairwise wiggle tables */
-suffix = trackDbSetting(track->tdb, "pairwise");
+suffix = trackDbSetting(track->tdb, PAIRWISE_VAR);
 if (suffix == NULL)
     return FALSE;
 
@@ -616,6 +616,7 @@ int i, x = xOff, y = yOff;
 struct dnaSeq *seq = NULL;
 struct hash *miHash = newHash(9);
 char dbChrom[64];
+char buf[1024];
 
 /* Allocate a line of characters for each item. */
 AllocArray(lines, lineCount);
@@ -699,7 +700,9 @@ spreadString(vg, x, y, width, mi->height-1, color,
 y += mi->height;
 
 /* draw base-level alignments */
-alternateBlocksBehindChars(vg, x, y-1, width, mi->height*(lineCount-2), 
+safef(buf, sizeof(buf), "%s.%s", track->mapName, BASE_COLORS_VAR);
+if (cartCgiUsualBoolean(cart, buf, TRUE))
+    alternateBlocksBehindChars(vg, x, y-1, width, mi->height*(lineCount-2), 
 	tl.mWidth, winBaseCount, 4,
 	MG_WHITE, shadesOfSea[0]);
 
