@@ -74,7 +74,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.531 2003/06/17 00:34:29 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.532 2003/06/17 01:14:13 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -4155,25 +4155,37 @@ void freeGenomicSuperDups(struct track *tg)
 genomicSuperDupsFreeList((struct genomicSuperDups**)&tg->items);
 }
 
+Color dupPptColor(int ppt, struct vGfx *vg)
+/* Return color of duplication - orange for > 990, yellow for > 980 */
+{
+static bool gotColor = FALSE;
+static Color orange, yellow;
+int grayLevel;
+if (!gotColor)
+    {
+    orange = vgFindColorIx(vg, 230, 130, 0);
+    yellow = vgFindColorIx(vg, 210, 200, 0);
+    gotColor = TRUE;
+    }
+if (ppt > 990)
+    return orange;
+else if (ppt > 980)
+    return yellow;
+grayLevel = grayInRange(ppt, 900, 1000);
+return shadesOfGray[grayLevel];
+}
+
 Color genomicSuperDupsColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return name of gcPercent track item. */
 {
 struct genomicSuperDups *dup = item;
 int ppt = dup->score;
-int grayLevel;
 char *verdict=dup->verdict;
 
 
 if ((verdict[0]=='B')&&(verdict[1]=='A')&&(verdict[2]=='D'))
     return vgFindColorIx(vg, 255,51,51);
-
-
-else if (ppt > 990)
-    return tg->ixColor;
-else if (ppt > 980)
-    return tg->ixAltColor;
-grayLevel = grayInRange(ppt, 900, 1000);
-return shadesOfGray[grayLevel];
+return dupPptColor(ppt, vg);
 }
 
 char *genomicSuperDupsName(struct track *tg, void *item)
@@ -4199,6 +4211,7 @@ tg->freeItems = freeGenomicSuperDups;
 tg->itemName = genomicSuperDupsName;
 tg->itemColor = genomicSuperDupsColor;
 }
+
 /******************************************************************/
 		/*end of Royden test Code genomicSuperDups */
 /******************************************************************/
@@ -4756,15 +4769,7 @@ Color genomicDupsColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return name of gcPercent track item. */
 {
 struct genomicDups *dup = item;
-int ppt = dup->score;
-int grayLevel;
-
-if (ppt > 990)
-    return tg->ixColor;
-else if (ppt > 980)
-    return tg->ixAltColor;
-grayLevel = grayInRange(ppt, 900, 1000);
-return shadesOfGray[grayLevel];
+return dupPptColor(dup->score, vg);
 }
 
 char *genomicDupsName(struct track *tg, void *item)
