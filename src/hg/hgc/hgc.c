@@ -1917,7 +1917,7 @@ cgiMakeRadioButton("case", "lower", !caseUpper);
 printf(" Lower ");
 cgiMakeButton("Submit", "Submit");
 printf("<BR>\n");
-printf("<TABLE BORDER=1 COL=8>\n");
+printf("<TABLE BORDER=1>\n");
 printf("<TR><TD>Track<BR>Name</TD><TD>Toggle<BR>Case</TD><TD>Under-<BR>line</TD><TD>Bold</TD><TD>Italic</TD><TD>Red</TD><TD>Green</TD><TD>Blue</TD></TR>\n");
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
