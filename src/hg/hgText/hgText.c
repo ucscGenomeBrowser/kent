@@ -23,6 +23,8 @@
 #include "hgSeq.h"
 #include "featureBits.h"
 #include "bed.h"
+#include "portable.h"
+#include "customTrack.h"
 
 static char *hgFixed = "hgFixed";
 
@@ -358,6 +360,8 @@ return trackName;
 char *getTable2Var()
 {
 char *table2  = cgiOptionalString("table2");
+if ((table2 != NULL) && sameString(table2, "Choose table"))
+    table2 = NULL;
 return table2;
 }
 
@@ -2039,9 +2043,12 @@ void doBedOptions()
 {
 struct hTableInfo *hti = getOutputHti();
 char *table = getTableName();
+char *table2 = getTable2Name();
 char *track = getTrackName();
 char *db = getTableDb();
 char *outputType = cgiUsualString("outputType", cgiString("phase"));
+char *val;
+char buf[256];
 
 webStart(cart, "Table Browser: %s: %s", freezeName, bedOptionsPhase);
 checkTableExists(fullTableName);
@@ -2060,14 +2067,28 @@ puts("</TD><TD> <B> Print "
      "<A HREF=\"/goldenPath/help/customTrack.html\" TARGET=_blank>"
      "custom track</A> header: </B>");
 puts("</TD></TR><TR><TD></TD><TD>name=");
-cgiMakeTextVar("hgt.ctName", "", 16);
+snprintf(buf, sizeof(buf), "tb_%s%s%s", hti->rootName,
+	 (table2 ? "_" : ""),
+	 (table2 ? table2 : ""));
+val = cgiUsualString("hgt.ctName", buf);
+cgiMakeTextVar("hgt.ctName", val, 16);
 puts("</TD></TR><TR><TD></TD><TD>description=");
-cgiMakeTextVar("hgt.ctDesc", "", 50);
+snprintf(buf, sizeof(buf), "table browser query on %s%s%s",
+	 hti->rootName,
+	 (table2 ? ", " : ""),
+	 (table2 ? table2 : ""));
+val = cgiUsualString("hgt.ctDesc", buf);
+cgiMakeTextVar("hgt.ctDesc", val, 50);
 puts("</TD></TR><TR><TD></TD><TD>visibility=");
-cgiMakeDropList("hgt.ctVis", ctVisMenu, ctVisMenuSize, ctVisMenu[1]);
+val = cgiUsualString("hgt.ctVis", ctVisMenu[1]);
+cgiMakeDropList("hgt.ctVis", ctVisMenu, ctVisMenuSize, val);
 puts("</TD></TR><TR><TD></TD><TD>url=");
-cgiMakeTextVar("hgt.ctUrl", "", 50);
-puts("</TABLE>");
+val = cgiUsualString("hgt.ctUrl", "");
+cgiMakeTextVar("hgt.ctUrl", val, 50);
+puts("</TD></TR><TR><TD></TD><TD>");
+cgiMakeCheckBox("hgt.loadCustomTrack", FALSE);
+puts("Load this custom track into my session");
+puts("</TD></TR></TABLE>");
 puts("<P> <B> Create one BED record per: </B>");
 fbOptionsHti(hti);
 cgiMakeButton("phase", getBedPhase);
@@ -2076,12 +2097,38 @@ webEnd();
 }
 
 
+struct customTrack *newCT(char *ctName, char *ctDesc, int visNum, char *ctUrl,
+			  int fields)
+/* Make a new custom track record for the query results. */
+{
+struct customTrack *ct;
+struct trackDb *tdb;
+char buf[256];
+AllocVar(ct);
+AllocVar(tdb);
+snprintf(buf, sizeof(buf), "ct_%s", ctName);
+tdb->tableName = cloneString(buf);
+tdb->shortLabel = ctName;
+tdb->longLabel = ctDesc;
+snprintf(buf, sizeof(buf), "bed %d .", fields);
+tdb->type = cloneString(buf);
+tdb->visibility = visNum;
+tdb->url = ctUrl;
+ct->tdb = tdb;
+ct->fieldCount = fields;
+ct->needsLift = FALSE;
+ct->fromPsl = FALSE;
+return(ct);
+}
+
 void doGetBed()
 {
 struct hTableInfo *hti = getOutputHti();
 struct bed *bedList = getBedList();
 struct bed *bedPtr;
 struct featureBits *fbList = NULL, *fbPtr;
+struct customTrack *ctList = NULL, *ctNew = NULL;
+struct tempName tn;
 char *table = getTableName();
 char *track = getTrackName();
 char *db = getTableDb();
@@ -2090,43 +2137,49 @@ char *ctName = cgiUsualString("hgt.ctName", table);
 char *ctDesc = cgiUsualString("hgt.ctDesc", table);
 char *ctVis  = cgiUsualString("hgt.ctVis", "dense");
 char *ctUrl  = cgiUsualString("hgt.ctUrl", "");
+boolean loadCT = cgiBoolean("hgt.loadCustomTrack");
+char *ctFileName = NULL;
 char *fbQual = fbOptionsToQualifier();
 char fbTQ[128];
 int fields;
-int itemCount;
+boolean gotResults = FALSE;
 
 printf("Content-Type: text/plain\n\n");
 webStartText();
 
-if (doCT)
+if (hti->hasBlocks)
+    fields = 12;
+else if (hti->hasCDS)
+    fields = 8;
+else if (hti->strandField[0] != 0)
+    fields = 6;
+else if (hti->scoreField[0] != 0)
+    fields = 5;
+else
+    fields = 4;
+
+if (doCT && (bedList != NULL))
     {
     int visNum = (sameString("hide", ctVis) ? 0 :
 		  sameString("full", ctVis) ? 2 : 1);
+    if (loadCT)
+	ctNew = newCT(ctName, ctDesc, visNum, ctUrl, fields);
     printf("track name=\"%s\" description=\"%s\" visibility=%d url=%s \n",
 	   ctName, ctDesc, visNum, ctUrl);
     }
 
-itemCount = 0;
 if ((fbQual == NULL) || (fbQual[0] == 0))
     {
-    if (hti->hasBlocks)
-	fields = 12;
-    else if (hti->hasCDS)
-	fields = 8;
-    else if (hti->strandField[0] != 0)
-	fields = 6;
-    else if (hti->scoreField[0] != 0)
-	fields = 5;
-    else
-	fields = 4;
     for (bedPtr = bedList;  bedPtr != NULL;  bedPtr = bedPtr->next)
 	{
 	char *ptr = strchr(bedPtr->name, ' ');
 	if (ptr != NULL)
 	    *ptr = 0;
 	bedTabOutN(bedPtr, fields, stdout);
-	itemCount++;
+	gotResults = TRUE;
 	}
+    if (ctNew != NULL)
+	ctNew->bedList = bedList;
     }
 else
     {
@@ -2140,13 +2193,32 @@ else
 	printf("%s\t%d\t%d\t%s\t%d\t%c\n",
 	       fbPtr->chrom, fbPtr->start, fbPtr->end, fbPtr->name,
 	       0, fbPtr->strand);
-	itemCount++;
+	gotResults = TRUE;
 	}
+    if (ctNew != NULL)
+	ctNew->bedList = fbToBed(fbList);
     featureBitsFreeList(&fbList);
     }
-bedFreeList(&bedList);
-if (itemCount == 0)
+
+if ((ctNew != NULL) && (ctNew->bedList != NULL))
+    {
+    /* Load existing custom tracks and add this new one: */
+    ctList = customTracksParseCart(cart, NULL, NULL);
+    slAddHead(&ctList, ctNew);
+    /* Save the custom tracks out to file (overwrite the old file): */
+    ctFileName = cartOptionalString(cart, "ct");
+    if (ctFileName == NULL)
+	{
+	makeTempName(&tn, "hgtct", ".bed");
+	ctFileName = cloneString(tn.forCgi);
+	}
+    customTrackSave(ctList, ctFileName);
+    cartSetString(cart, "ct", ctFileName);
+    }
+
+if (! gotResults)
     printf("\n# No results returned from query.\n\n");
+bedFreeList(&bedList);
 }
 
 
