@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.43 2004/05/26 19:36:13 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.44 2004/05/28 16:38:14 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -2927,6 +2927,7 @@ struct sqlResult *sr;
 char **row;
 char query[256];
 char tempName[256];
+char now[256];
 
 int y=0,m=0,d=0;
 
@@ -2999,7 +3000,10 @@ for (ki = kiList; ki != NULL; ki = ki->next)
 
 printf("</ul>\n");
 printf("<p>\n");
-printf(" For more information about the tracks and tables listed on this page, refer to the <a href=/goldenPath/gbdDescriptions.html>Description of the annotation database</a> and the <a href=/goldenPath/help/hgTracksHelp.html#IndivTracks>User's Guide</a>.<br>\n");
+printf(" For more information about the tracks and tables listed on this page, refer to the <a href=/goldenPath/gbdDescriptions.html>Description of the annotation database</a> and the <a href=/goldenPath/help/hgTracksHelp.html#IndivTracks>User's Guide</a>.<p>\n");
+
+strftime (now, sizeof(now), "%02d %b %Y", loctime); /* default to today's date */
+printf("<em>Last updated %s. <a HREF=\"mailto:genome@soe.ucsc.edu\">Inquiries and feedback welcome</a>.</em>\n",now);
 
 for (ki = kiList; ki != NULL; ki = ki->next)
     {
