@@ -5278,11 +5278,12 @@ if (nameGetsPos)
     	chain->tName, chain->tStart, chain->tEnd);
 #endif /* OLD */
     lf->extra = cloneString(buf);
-    snprintf(lf->name, sizeof(lf->name), "id %d %s %dk", chain->id, chain->qName, chain->qStart/1000);
+    snprintf(lf->name, sizeof(lf->name), "%s %c %dk", chain->qName, 
+    	chain->qStrand, chain->qStart/1000);
     }
 else
     strncpy(lf->name, chain->qName, sizeof(lf->name));
-lf->orientation = '+';
+lf->orientation = 1;
 if (rcTarget)
     lf->orientation = -lf->orientation;
 for (bl = chain->blockList; bl != NULL; bl = bl->next)
@@ -5290,16 +5291,6 @@ for (bl = chain->blockList; bl != NULL; bl = bl->next)
     AllocVar(sf);
     sf->start = sf->end = bl->tStart;
     sf->end = bl->tEnd;
-    /*
-    if (rcTarget)
-        {
-	int s, e;
-	s = chain->tSize - sf->end;
-	e = chain->tSize - sf->start;
-	sf->start = s;
-	sf->end = e;
-	}
-    */
     sf->grayIx = grayIx;
     slAddHead(&sfList, sf);
     }
@@ -5311,7 +5302,8 @@ lf->end = chain->tEnd;
 return lf;
 }
 
-void connectedLfFromChainsInRange(struct sqlConnection *conn, struct sqlConnection *conn2,
+void connectedLfFromChainsInRange(struct sqlConnection *conn, 
+    struct sqlConnection *conn2,
     struct trackGroup *tg, int start, int end, char *chromName,
     boolean isXeno, boolean nameGetsPos)
 /* Return linked features from range of table after have
@@ -5339,15 +5331,15 @@ snprintf( optionChr, sizeof(optionChr), "%s.chromFilter", tg->mapName);
 snprintf( trackChain, sizeof(trackChain), "%s_%s", chromName, track);
 optionChrStr = cartUsualString(cart, optionChr, "All");
 if (startsWith("chr",optionChrStr)) 
-	{
-	snprintf(extraWhere, sizeof(extraWhere), "qName = \"%s\"",optionChrStr);
-	sr = hRangeQuery(conn, track, chromName, start, end, extraWhere, &rowOffset);
-	}
+    {
+    snprintf(extraWhere, sizeof(extraWhere), "qName = \"%s\"",optionChrStr);
+    sr = hRangeQuery(conn, track, chromName, start, end, extraWhere, &rowOffset);
+    }
 else
-	{
-	snprintf(extraWhere, sizeof(extraWhere), " ");
-	sr = hRangeQuery(conn, track, chromName, start, end, NULL, &rowOffset);
-	}
+    {
+    snprintf(extraWhere, sizeof(extraWhere), " ");
+    sr = hRangeQuery(conn, track, chromName, start, end, NULL, &rowOffset);
+    }
 
 if (sqlCountColumns(sr) < 11+rowOffset)
     errAbort("trackDb has incorrect table type for table \"%s\"",
@@ -5359,48 +5351,54 @@ while ((row = sqlNextRow(sr)) != NULL)
     chainArr[chain->id] = chain;
     }
 
-    query = newDyString(1024);
-    dyStringPrintf(query, "select c.bin, c.score, c.tName, c.tSize, c.tStart, c.tEnd, c.qName, c.qSize, c.qStrand, c.qStart, c.qEnd, c.id, g.tName, g.tStart, g.tEnd, g.qStart from %s c , %s g where g.tStart < c.tEnd and g.tEnd > c.tStart and g.tStart >= %d and g.tEnd <= %d and g.chainId = c.id and ",
+query = newDyString(1024);
+dyStringPrintf(query, 
+	"select c.bin, c.score, c.tName, c.tSize, c.tStart, c.tEnd"
+	", c.qName, c.qSize, c.qStrand, c.qStart, c.qEnd, c.id"
+	", g.tName, g.tStart, g.tEnd, g.qStart from %s c , %s g "
+	"where g.tStart < c.tEnd and g.tEnd > c.tStart "
+	"and g.tStart >= %d and g.tEnd <= %d and g.chainId = c.id "
+	"and ",
          trackChain, trackLink, start, end, winStart, winEnd, winStart, winEnd);
-    hAddBinToQueryGeneral("c.bin", winStart, winEnd, query);
- 	hAddBinToQueryGeneral("g.bin", winStart, winEnd, query);
-    dyStringPrintf(query, "(g.tEnd - g.tStart) > %d ",minGap);
+hAddBinToQueryGeneral("c.bin", winStart, winEnd, query);
+    hAddBinToQueryGeneral("g.bin", winStart, winEnd, query);
+dyStringPrintf(query, "(g.tEnd - g.tStart) > %d ",minGap);
  
 //    sprintf(query, "SELECT tName, tStart, tEnd, qStart from %s where chainId = %d and tStart < %d and tEnd > %d and tStart >= %d and tEnd <= %d",
 //               trackLink, chain->id, chain->tEnd, chain->tStart, winStart, winEnd);
 //    printf(" %s <p>\n",query->string);
-    srLink = sqlGetResult(conn2, query->string);
-    while ((rowLink = sqlNextRow(srLink)) != NULL)
-        {
-        struct chainView *chainView = chainViewLoad(rowLink+rowOffset);
+srLink = sqlGetResult(conn2, query->string);
+while ((rowLink = sqlNextRow(srLink)) != NULL)
+    {
+    struct chainView *chainView = chainViewLoad(rowLink+rowOffset);
 
-        struct boxIn *b;
-        AllocVar(b);
-        b->tStart = chainView->gtStart;
-        b->tEnd = chainView->gtEnd;
-        b->qStart = chainView->qStart;
-        b->qEnd = chainView->qStart + chainView->gtEnd - chainView->gtStart;
-        if (prevChainId == chainView->id)
-            {
-            slAddHead(&bList, b);
-            }
-        else
-            {
-            if (prevChainId != 0)
-                {
-                chain = chainArr[prevChainId];
-                slReverse(&bList);
-                chain->blockList = bList;
-                lf = lfFromChainx(chain, 0, isXeno, nameGetsPos);
-                slAddHead(&lfList, lf);
-                }
-            bList = NULL;
-            slAddHead(&bList, b);
-            }
-        prevChainId = chainView->id;
-        }
-    freeDyString(&query);
-    //chainFree(&chain);
+    struct boxIn *b;
+    AllocVar(b);
+    b->tStart = chainView->gtStart;
+    b->tEnd = chainView->gtEnd;
+    b->qStart = chainView->qStart;
+    b->qEnd = chainView->qStart + chainView->gtEnd - chainView->gtStart;
+    if (prevChainId == chainView->id)
+	{
+	slAddHead(&bList, b);
+	}
+    else
+	{
+	if (prevChainId != 0)
+	    {
+	    chain = chainArr[prevChainId];
+	    slReverse(&bList);
+	    chain->blockList = bList;
+	    lf = lfFromChainx(chain, 0, isXeno, nameGetsPos);
+	    slAddHead(&lfList, lf);
+	    }
+	bList = NULL;
+	slAddHead(&bList, b);
+	}
+    prevChainId = chainView->id;
+    // Chain View Free??
+    }
+freeDyString(&query);
 
 slReverse(&lfList);
 if (limitVisibility(tg, lfList) == tvFull)
@@ -5437,6 +5435,7 @@ char option[128]; /* Option -  rainbow chromosome color */
 char optionChr[128]; /* Option -  chromosome filter */
 char *optionChrStr; 
 char *optionStr ;
+linkedFeaturesMethods(tg);
 snprintf( option, sizeof(option), "%s.color", tg->mapName);
 optionStr = cartUsualString(cart, option, "on");
 tg->mapItemName = mapNameFromLfExtra;
@@ -10139,12 +10138,7 @@ else if (sameWord(type, "psl"))
     }
 else if (sameWord(type, "chain"))
     {
-    char *subType = ".";
-    if (wordCount >= 2)
-       subType = words[1];
-    linkedFeaturesMethods(group);
-    if (!tdb->useScore)
-        group->colorShades = NULL;
+    chainMethods(group);
     }
 else if (sameWord(type, "netAlign"))
     {
