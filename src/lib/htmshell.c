@@ -16,7 +16,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.24 2004/06/03 21:14:35 kent Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.25 2004/11/08 18:13:33 kent Exp $";
 
 jmp_buf htmlRecover;
 
@@ -63,6 +63,40 @@ void htmHorizontalLine(FILE *f)
 {
 fprintf(f, "<P><HR ALIGN=\"CENTER\"></P>");
 }
+
+void htmTextOut(FILE *f, char *s)
+/* Print out string to file, if necessary replacing > with &gt; and the like */
+{
+char c;
+while ((c = *s++) != 0)
+    {
+    switch (c)
+        {
+	case '>':
+	    fputs("&gt;", f);
+	    break;
+	case '<':
+	    fputs("&lt;", f);
+	    break;
+	case '&':
+	    fputs("&amp;", f);
+	    break;
+	case '"':
+	    fputs("&quot;", f);
+	    break;
+	default:
+	    fputc(c, f);
+	    break;
+	}
+    }
+}
+
+void htmlTextOut(char *s)
+/* Print out string, if necessary replacing > with &gt; and the like */
+{
+htmTextOut(stdout, s);
+}
+
 
 char *htmlWarnStartPattern()
 /* Return starting pattern for warning message. */

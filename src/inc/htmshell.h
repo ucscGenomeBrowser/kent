@@ -32,6 +32,12 @@ void htmlHorizontalLine();
 void htmHorizontalLine(FILE *f);
 /* Print a horizontal line. */
 
+void htmTextOut(FILE *f, char *s);
+/* Print out string to file, if necessary replacing > with &gt; and the like */
+
+void htmlTextOut(char *s);
+/* Print out string, if necessary replacing > with &gt; and the like */
+
 void htmlMemDeath();
 /* Complain about lack of memory and abort.  */
 
