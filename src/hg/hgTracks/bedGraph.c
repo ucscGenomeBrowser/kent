@@ -14,29 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: bedGraph.c,v 1.6 2005/02/09 22:48:59 hiram Exp $";
-
-/*	bedGraphCartOptions structure - to carry cart options from
- *	bedGraphMethods to all the other methods via the
- *	track->extraUiData pointer
- */
-struct bedGraphCartOptions
-    {
-    enum wiggleGridOptEnum horizontalGrid;	/*  grid lines, ON/OFF */
-    enum wiggleGraphOptEnum lineBar;		/*  Line or Bar chart */
-    enum wiggleScaleOptEnum autoScale;		/*  autoScale on */
-    enum wiggleWindowingEnum windowingFunction;	/*  max,mean,min */
-    enum wiggleSmoothingEnum smoothingWindow;	/*  N: [1:15] */
-    enum wiggleYLineMarkEnum yLineOnOff;	/*  OFF/ON	*/
-    double minY;	/*	from trackDb.ra words, the absolute minimum */
-    double maxY;	/*	from trackDb.ra words, the absolute maximum */
-    int maxHeight;	/*	maximum pixels height from trackDb	*/
-    int defaultHeight;	/*	requested height from cart	*/
-    int minHeight;	/*	minimum pixels height from trackDb	*/
-    double yLineMark;	/*	user requested line at y = */
-    char *colorTrack;   /*	Track to use for coloring the graph. */
-    int graphColumn;	/*	column to be graphing	*/
-    };
+static char const rcsid[] = "$Id: bedGraph.c,v 1.7 2005/02/09 23:37:42 hiram Exp $";
 
 struct bedGraphItem
 /* A bedGraph track item. */
@@ -48,124 +26,6 @@ struct bedGraphItem
     double graphUpperLimit;	/* filled in by DrawItems	*/
     double graphLowerLimit;	/* filled in by DrawItems	*/
     };
-
-
-static void bedGraphFillInColorLfArray(struct track *bedGraphTrack, Color *colArray, int colSize,
-				  struct track *colorTrack)
-/* Fill in a color array with the linkedFeatures based colorTrack's
-   color where it would normally have an exon. */
-{
-struct linkedFeatures *lf = NULL, *lfList = colorTrack->items;
-struct simpleFeature *sf = NULL;
-double scale = scaleForPixels(colSize);
-int x1 = 0, x2 = 0;
-int i = 0;
-for(lf = lfList; lf != NULL; lf = lf->next)
-    {
-    for (sf = lf->components; sf != NULL; sf = sf->next)
-	{
-	x1 = round((double)((int)sf->start-winStart)*scale);
-	x2 = round((double)((int)sf->end-winStart)*scale);
-	if(x1 < 0)
-	    x1 = 0;
-	if(x2 > colSize)
-	    x2 = colSize;
-	if(x1 == x2)
-	    x2++;
-	for(i = x1; i < x2; i++)
-	    colArray[i] = colorTrack->ixAltColor;
-	}
-    }
-}
-
-static void bedGraphFillInColorBedArray(struct track *bedGraphTrack, Color *colArray, int colSize,
-				  struct track *colorTrack, struct vGfx *vg)
-/* Fill in a color array with the simple bed based colorTrack's
-   color where it would normally have an block. */
-{
-struct bed *bed = NULL, *bedList = colorTrack->items;
-double scale = scaleForPixels(colSize);
-int x1 = 0, x2 = 0;
-int i = 0;
-for (bed = bedList; bed != NULL; bed = bed->next)
-    {
-    x1 = round((double)((int)bed->chromStart-winStart)*scale);
-    x2 = round((double)((int)bed->chromEnd-winStart)*scale);
-    if(x1 < 0)
-	x1 = 0;
-    if(x2 > colSize)
-	x2 = colSize;
-    if(x1 == x2)
-	x2++;
-    for(i = x1; i < x2; i++)
-	colArray[i] = colorTrack->itemColor(colorTrack, bed, vg);
-    }
-}
-
-void bedGraphFillInColorArray(struct track *bedGraphTrack, struct vGfx *vg, 
-			 Color *colorArray, int colSize, struct track *colorTrack)
-/* Fill in a color array with the colorTrack's color where
-   it would normally have an exon. */
-{
-boolean trackLoaded = FALSE;
-/* If the track is hidden currently, load the items. */
-if(colorTrack->visibility == tvHide)
-    {
-    trackLoaded = TRUE;
-    colorTrack->loadItems(colorTrack);
-    colorTrack->ixColor = vgFindRgb(vg, &colorTrack->color);
-    colorTrack->ixAltColor = vgFindRgb(vg, &colorTrack->altColor);
-    }
-
-if(colorTrack->drawItemAt == linkedFeaturesDrawAt)
-    bedGraphFillInColorLfArray(bedGraphTrack, colorArray, colSize, colorTrack);
-else if(colorTrack->drawItemAt == bedDrawSimpleAt)
-    bedGraphFillInColorBedArray(bedGraphTrack, colorArray, colSize, colorTrack, vg);
-
-if(trackLoaded && colorTrack->freeItems != NULL)
-    colorTrack->freeItems(colorTrack);
-}
-
-void bedGraphSetCart(struct track *track, char *dataID, void *dataValue)
-    /*	set one of the variables in the bedGraphCart	*/
-{
-struct bedGraphCartOptions *bedGraphCart;
-bedGraphCart = (struct bedGraphCartOptions *) track->extraUiData;
-
-if (sameWord(dataID, MIN_Y))
-    bedGraphCart->minY = *((double *)dataValue);
-else if (sameWord(dataID, MAX_Y))
-    bedGraphCart->maxY = *((double *)dataValue);
-}
-
-/*	these two routines unused at this time	*/
-#if defined(NOT)
-static void bedGraphItemFree(struct bedGraphItem **pEl)
-    /* Free up a bedGraphItem. */
-{
-struct bedGraphItem *el = *pEl;
-if (el != NULL)
-    {
-    /* freeMem(el->name);	DO NOT - this belongs to tg->mapName */
-    freeMem(el->db);
-    freeMem(el->file);
-    freez(pEl);
-    }
-}
-
-static void bedGraphItemFreeList(struct bedGraphItem **pList)
-    /* Free a list of dynamically allocated bedGraphItem's */
-{
-struct bedGraphItem *el, *next;
-
-for (el = *pList; el != NULL; el = next)
-    {
-    next = el->next;
-    bedGraphItemFree(&el);
-    }
-*pList = NULL;
-}
-#endif
 
 /*	The item names have been massaged during the Load.  An
  *	individual item may have been read in on multiple table rows and
@@ -185,9 +45,9 @@ int bedGraphTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Wiggle track will use this to figure out the height they use
    as defined in the cart */
 {
-struct bedGraphCartOptions *bedGraphCart;
+struct wigCartOptions *wigCart;
 
-bedGraphCart = (struct bedGraphCartOptions *) tg->extraUiData;
+wigCart = (struct wigCartOptions *) tg->extraUiData;
 
 /*
  *	A track is just one
@@ -205,7 +65,7 @@ bedGraphCart = (struct bedGraphCartOptions *) tg->extraUiData;
 if (vis == tvDense)
     tg->lineHeight = tl.fontHeight+1;
 else if (vis == tvFull)
-    tg->lineHeight = max(bedGraphCart->minHeight, bedGraphCart->defaultHeight);
+    tg->lineHeight = max(wigCart->minHeight, wigCart->defaultHeight);
 
 tg->heightPer = tg->lineHeight;
 tg->height = tg->lineHeight;
@@ -236,11 +96,11 @@ int rowOffset = 0;
 struct bedGraphItem *bgList = NULL;
 int itemsLoaded = 0;
 int colCount = 0;
-struct bedGraphCartOptions *bedGraphCart = (struct bedGraphCartOptions *) NULL;
+struct wigCartOptions *wigCart = (struct wigCartOptions *) NULL;
 int graphColumn = 5;
 
-bedGraphCart = (struct bedGraphCartOptions *) tg->extraUiData;
-graphColumn = bedGraphCart->graphColumn;
+wigCart = (struct wigCartOptions *) tg->extraUiData;
+graphColumn = wigCart->graphColumn;
 
 /*	Verify this is NOT a custom track	*/
 if (tg->customPt != (void *)NULL)
@@ -303,9 +163,6 @@ wigDebugPrint("bedGraphFreeItems");
 #endif
 }
 
-/*	DrawItems has grown too large.  It has several distinct sections
- *	in it that should now be broken out into their own routines.
- */
 static void bedGraphDrawItems(struct track *tg, int seqStart, int seqEnd,
 	struct vGfx *vg, int xOff, int yOff, int width,
 	MgFont *font, Color color, enum trackVisibility vis)
@@ -314,7 +171,7 @@ struct bedGraphItem *wi;
 double pixelsPerBase = scaleForPixels(width);
 double basesPerPixel = 1.0;
 int itemCount = 0;
-struct bedGraphCartOptions *bedGraphCart;
+struct wigCartOptions *wigCart;
 enum wiggleYLineMarkEnum yLineOnOff;
 double yLineMark;
 struct preDrawElement *preDraw;	/* to accumulate everything in prep for draw */
@@ -331,12 +188,12 @@ double epsilon;			/*	range of data in one pixel	*/
 int x1 = 0;			/*	screen coordinates	*/
 int x2 = 0;			/*	screen coordinates	*/
 Color *colorArray = NULL;       /*	Array of pixels to be drawn.	*/
-bedGraphCart = (struct bedGraphCartOptions *) tg->extraUiData;
+wigCart = (struct wigCartOptions *) tg->extraUiData;
 if(sameString(tg->mapName, "affyTranscription"))
-    bedGraphCart->colorTrack = "affyTransfrags";
+    wigCart->colorTrack = "affyTransfrags";
 
-yLineOnOff = bedGraphCart->yLineOnOff;
-yLineMark = bedGraphCart->yLineMark;
+yLineOnOff = wigCart->yLineOnOff;
+yLineMark = wigCart->yLineMark;
 
 if (pixelsPerBase > 0.0)
     basesPerPixel = 1.0 / pixelsPerBase;
@@ -417,16 +274,16 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
  *	cooresponds to a single pixel on the screen
  */
 
-preDrawWindowFunction(preDraw, preDrawSize, bedGraphCart->windowingFunction);
-preDrawSmoothing(preDraw, preDrawSize, bedGraphCart->smoothingWindow);
+preDrawWindowFunction(preDraw, preDrawSize, wigCart->windowingFunction);
+preDrawSmoothing(preDraw, preDrawSize, wigCart->smoothingWindow);
 overallRange = preDrawLimits(preDraw, preDrawZero, width,
     &overallUpperLimit, &overallLowerLimit);
 graphRange = preDrawAutoScale(preDraw, preDrawZero, width,
-    bedGraphCart->autoScale,
+    wigCart->autoScale,
     &overallUpperLimit, &overallLowerLimit,
     &graphUpperLimit, &graphLowerLimit,
     &overallRange, &epsilon, tg->lineHeight,
-    bedGraphCart->maxY, bedGraphCart->minY);
+    wigCart->maxY, wigCart->minY);
 
 /*
  *	We need to put the graphing limits back into the items
@@ -443,20 +300,20 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
     }
 
 colorArray = allocColorArray(preDraw, width, preDrawZero,
-    bedGraphCart->colorTrack, tg, vg);
+    wigCart->colorTrack, tg, vg);
 
 graphPreDraw(preDraw, preDrawZero, width,
     tg, vg, xOff, yOff, graphUpperLimit, graphLowerLimit, graphRange,
-    epsilon, colorArray, vis, bedGraphCart->lineBar);
+    epsilon, colorArray, vis, wigCart->lineBar);
 
-drawZeroLine(vis, bedGraphCart->horizontalGrid,
+drawZeroLine(vis, wigCart->horizontalGrid,
     graphUpperLimit, graphLowerLimit,
     vg, xOff, yOff, width, tg->lineHeight);
 
-drawArbitraryYLine(vis, bedGraphCart->yLineOnOff,
+drawArbitraryYLine(vis, wigCart->yLineOnOff,
     graphUpperLimit, graphLowerLimit,
-    vg, xOff, yOff, width, tg->lineHeight, bedGraphCart->yLineMark, graphRange,
-    bedGraphCart->yLineOnOff);
+    vg, xOff, yOff, width, tg->lineHeight, wigCart->yLineMark, graphRange,
+    wigCart->yLineOnOff);
 
 wigMapSelf(tg, seqStart, seqEnd, xOff, yOff, width);
 
@@ -464,131 +321,22 @@ freez(&colorArray);
 freeMem(preDraw);
 }	/*	bedGraphDrawItems()	*/
 
-static void bedGraphLeftLabels(struct track *tg, int seqStart, int seqEnd,
-	struct vGfx *vg, int xOff, int yOff, int width, int height,
-	boolean withCenterLabels, MgFont *font, Color color,
-	enum trackVisibility vis)
+void wigBedGraphFindItemLimits(void *items,
+    double *graphUpperLimit, double *graphLowerLimit)
+/*	find upper and lower limits of graphed items (bedGraphItem)	*/
 {
 struct bedGraphItem *wi;
-int fontHeight = tl.fontHeight+1;
-int centerOffset = 0;
-double lines[2];	/*	lines to label	*/
-int numberOfLines = 1;	/*	at least one: 0.0	*/
-int i;			/*	loop counter	*/
-struct bedGraphCartOptions *bedGraphCart;
+*graphUpperLimit = -1.0e+300;
+*graphLowerLimit = 1.0e+300;
 
-bedGraphCart = (struct bedGraphCartOptions *) tg->extraUiData;
-lines[0] = 0.0;
-lines[1] = bedGraphCart->yLineMark;
-if (bedGraphCart->yLineOnOff == wiggleYLineMarkOn)
-    ++numberOfLines;
-
-if (withCenterLabels)
-	centerOffset = fontHeight;
-
-/*	We only do Dense and Full	*/
-if (tg->visibility == tvDense)
+for (wi = items; wi != NULL; wi = wi->next)
     {
-    vgTextRight(vg, xOff, yOff+centerOffset, width - 1, height-centerOffset,
-	tg->ixColor, font, tg->shortLabel);
+    if (wi->graphUpperLimit > *graphUpperLimit)
+	*graphUpperLimit = wi->graphUpperLimit;
+    if (wi->graphLowerLimit < *graphLowerLimit)
+	*graphLowerLimit = wi->graphLowerLimit;
     }
-else if (tg->visibility == tvFull)
-    {
-    int centerLabel = (height/2)-(fontHeight/2);
-    int labelWidth = 0;
-
-    /* track label is centered in the whole region */
-    vgText(vg, xOff, yOff+centerLabel, tg->ixColor, font, tg->shortLabel);
-    labelWidth = mgFontStringWidth(font,tg->shortLabel);
-    /*	Is there room left to draw the min, max ?	*/
-    if (height >= (3 * fontHeight))
-	{
-	boolean zeroOK = TRUE;
-	double graphUpperLimit = -1.0e+300;
-	double graphLowerLimit = 1.0e+300;
-	char upper[128];
-	char lower[128];
-	char upperTic = '-';	/* as close as we can get with ASCII */
-			/* the ideal here would be to draw tic marks in
- 			 * exactly the correct location.
-			 */
-	Color drawColor;
-	if (withCenterLabels)
-	    {
-	    centerOffset = fontHeight;
-	    upperTic = '_';	/*	this is correct	*/
-	    }
-	for (wi = tg->items; wi != NULL; wi = wi->next)
-	    {
-	    if (wi->graphUpperLimit > graphUpperLimit)
-		graphUpperLimit = wi->graphUpperLimit;
-	    if (wi->graphLowerLimit < graphLowerLimit)
-		graphLowerLimit = wi->graphLowerLimit;
-	    }
-	/*  In areas where there is no data, these limits do not change */
-	if (graphUpperLimit < graphLowerLimit)
-	    {
-	    double d = graphLowerLimit;
-	    graphLowerLimit = graphUpperLimit;
-	    graphUpperLimit = d;
-	    snprintf(upper, 128, "No data %c", upperTic);
-	    snprintf(lower, 128, "No data _");
-	    zeroOK = FALSE;
-	    }
-	else
-	    {
-	    snprintf(upper, 128, "%g %c", graphUpperLimit, upperTic);
-	    snprintf(lower, 128, "%g _", graphLowerLimit);
-	    }
-	drawColor = tg->ixColor;
-	if (graphUpperLimit < 0.0) drawColor = tg->ixAltColor;
-	vgTextRight(vg, xOff, yOff, width - 1, fontHeight, drawColor,
-	    font, upper);
-	drawColor = tg->ixColor;
-	if (graphLowerLimit < 0.0) drawColor = tg->ixAltColor;
-	vgTextRight(vg, xOff, yOff+height-fontHeight, width - 1, fontHeight,
-	    drawColor, font, lower);
-
-	for (i = 0; i < numberOfLines; ++i )
-	    {
-	    double lineValue = lines[i];
-	    /*	Maybe zero can be displayed */
-	    /*	It may overwrite the track label ...	*/
-	    if (zeroOK && (lineValue < graphUpperLimit) &&
-		(lineValue > graphLowerLimit))
-		{
-		int offset;
-		int Width;
-
-		drawColor = vgFindColorIx(vg, 0, 0, 0);
-		offset = centerOffset +
-		    (int)(((graphUpperLimit - lineValue) *
-				(height - centerOffset)) /
-			(graphUpperLimit - graphLowerLimit));
-		/*	reusing the lower string here	*/
-		if (i == 0)
-		    snprintf(lower, 128, "0 -");
-		else
-		    snprintf(lower, 128, "%g -", lineValue);
-		/*	only draw if it is far enough away from the
-		 *	upper and lower labels, and it won't overlap with
-		 *	the center label.
-		 */
-		Width = mgFontStringWidth(font,lower);
-		if ( !( (offset < centerLabel+fontHeight) &&
-		    (offset > centerLabel-(fontHeight/2)) &&
-		    (Width+labelWidth >= width) ) &&
-		    (offset > (fontHeight*2)) &&
-		    (offset < height-(fontHeight*2)) )
-		    {
-		    vgTextRight(vg, xOff, yOff+offset-(fontHeight/2),
-			width - 1, fontHeight, drawColor, font, lower);
-		    }
-		}	/*	drawing a zero label	*/
-	    }	/*	drawing 0.0 and perhaps yLineMark	*/
-	}	/* if (height >= (3 * fontHeight))	*/
-    }	/*	if (tg->visibility == tvFull)	*/
-}	/* bedGraphLeftLabels */
+}	/*	wigBedGraphFindItemLimits	*/
 
 /*
  *	WARNING ! - track->visibility is merely the default value
@@ -603,30 +351,30 @@ int defaultHeight = atoi(DEFAULT_HEIGHT_PER);  /* truncated by limits	*/
 double minY = 0.0;	/*	from trackDb or cart, requested minimum */
 double maxY = 1000.0;	/*	from trackDb or cart, requested maximum */
 double yLineMark;	/*	from trackDb or cart */
-struct bedGraphCartOptions *bedGraphCart;
+struct wigCartOptions *wigCart;
 int maxHeight = atoi(DEFAULT_HEIGHT_PER);
 int minHeight = MIN_HEIGHT_PER;
 
-AllocVar(bedGraphCart);
+AllocVar(wigCart);
 
 /*	These Fetch functions look for variables in the cart bounded by
  *	limits specified in trackDb or returning defaults
  */
-bedGraphCart->lineBar = wigFetchGraphType(tdb, (char **) NULL);
-bedGraphCart->horizontalGrid = wigFetchHorizontalGrid(tdb, (char **) NULL);
+wigCart->lineBar = wigFetchGraphType(tdb, (char **) NULL);
+wigCart->horizontalGrid = wigFetchHorizontalGrid(tdb, (char **) NULL);
 
-bedGraphCart->autoScale = wigFetchAutoScale(tdb, (char **) NULL);
-bedGraphCart->windowingFunction = wigFetchWindowingFunction(tdb, (char **) NULL);
-bedGraphCart->smoothingWindow = wigFetchSmoothingWindow(tdb, (char **) NULL);
+wigCart->autoScale = wigFetchAutoScale(tdb, (char **) NULL);
+wigCart->windowingFunction = wigFetchWindowingFunction(tdb, (char **) NULL);
+wigCart->smoothingWindow = wigFetchSmoothingWindow(tdb, (char **) NULL);
 
 wigFetchMinMaxPixels(tdb, &minHeight, &maxHeight, &defaultHeight);
 wigFetchYLineMarkValue(tdb, &yLineMark);
-bedGraphCart->yLineMark = yLineMark;
-bedGraphCart->yLineOnOff = wigFetchYLineMark(tdb, (char **) NULL);
+wigCart->yLineMark = yLineMark;
+wigCart->yLineOnOff = wigFetchYLineMark(tdb, (char **) NULL);
 
-bedGraphCart->maxHeight = maxHeight;
-bedGraphCart->defaultHeight = defaultHeight;
-bedGraphCart->minHeight = minHeight;
+wigCart->maxHeight = maxHeight;
+wigCart->defaultHeight = defaultHeight;
+wigCart->minHeight = minHeight;
 
 /*wigFetchMinMaxY(tdb, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);*/
 wigFetchMinMaxLimits(tdb, &minY, &maxY, (double *)NULL, (double *)NULL);
@@ -634,23 +382,24 @@ wigFetchMinMaxLimits(tdb, &minY, &maxY, (double *)NULL, (double *)NULL);
 switch (wordCount)
     {
 	case 2:
-	    bedGraphCart->graphColumn = atoi(words[1]);
+	    wigCart->graphColumn = atoi(words[1]);
 	    /*	protect against nonsense values	*/
-	    if ( (bedGraphCart->graphColumn < 2) ||
-		(bedGraphCart->graphColumn > 100) )
-		bedGraphCart->graphColumn = 5; /* default score column */
+	    if ( (wigCart->graphColumn < 2) ||
+		(wigCart->graphColumn > 100) )
+		wigCart->graphColumn = 5; /* default score column */
 
 	    break;
 	default:
-	    bedGraphCart->graphColumn = 5; /* default score column */
+	    wigCart->graphColumn = 5; /* default score column */
 	    break;
     } 
 
 track->minRange = minY;
 track->maxRange = maxY;
 
-bedGraphCart->minY = track->minRange;
-bedGraphCart->maxY = track->maxRange;
+wigCart->minY = track->minRange;
+wigCart->maxY = track->maxRange;
+wigCart->bedGraph = TRUE;	/*	signal to left labels	*/
 
 track->loadItems = bedGraphLoadItems;
 track->freeItems = bedGraphFreeItems;
@@ -663,9 +412,9 @@ track->itemHeight = tgFixedItemHeight;
 track->itemStart = tgItemNoStart;
 track->itemEnd = tgItemNoEnd;
 track->mapsSelf = TRUE;
-track->extraUiData = (void *) bedGraphCart;
+track->extraUiData = (void *) wigCart;
 track->colorShades = shadesOfGray;
-track->drawLeftLabels = bedGraphLeftLabels;
+track->drawLeftLabels = wigLeftLabels;
 /*	the lfSubSample type makes the image map function correctly */
 track->subType = lfSubSample;     /*make subType be "sample" (=2)*/
 

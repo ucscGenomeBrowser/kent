@@ -4,6 +4,29 @@
 #ifndef WIGCOMMON_H
 #define WIGCOMMON_H
 
+
+/*	wigCartOptions structure - to carry cart options from wigMethods
+ *	to all the other methods via the track->extraUiData pointer
+ */
+struct wigCartOptions
+    {
+    enum wiggleGridOptEnum horizontalGrid;	/*  grid lines, ON/OFF */
+    enum wiggleGraphOptEnum lineBar;		/*  Line or Bar chart */
+    enum wiggleScaleOptEnum autoScale;		/*  autoScale on */
+    enum wiggleWindowingEnum windowingFunction;	/*  max,mean,min */
+    enum wiggleSmoothingEnum smoothingWindow;	/*  N: [1:15] */
+    enum wiggleYLineMarkEnum yLineOnOff;	/*  OFF/ON	*/
+    double minY;	/*	from trackDb.ra words, the absolute minimum */
+    double maxY;	/*	from trackDb.ra words, the absolute maximum */
+    int maxHeight;	/*	maximum pixels height from trackDb	*/
+    int defaultHeight;	/*	requested height from cart	*/
+    int minHeight;	/*	minimum pixels height from trackDb	*/
+    double yLineMark;	/*	user requested line at y = */
+    char *colorTrack;   /*	Track to use for coloring wiggle track. */
+    int graphColumn;	/*	column to be graphing (bedGraph tracks)	*/
+    boolean bedGraph;	/*	is this a bedGraph track ?	*/
+    };
+
 struct preDrawElement
     {
 	double	max;	/*	maximum value seen for this point	*/
@@ -68,5 +91,20 @@ void drawArbitraryYLine(enum trackVisibility vis,
 void wigMapSelf(struct track *tg, int seqStart, int seqEnd,
     int xOff, int yOff, int width);
 /*	if self mapping, create the mapping box	*/
+
+void wigLeftLabels(struct track *tg, int seqStart, int seqEnd,
+	struct vGfx *vg, int xOff, int yOff, int width, int height,
+	boolean withCenterLabels, MgFont *font, Color color,
+	enum trackVisibility vis);
+/*	drawing left labels	*/
+
+void wigFindItemLimits(void *items,
+    double *graphUpperLimit, double *graphLowerLimit);
+/*	find upper and lower limits of graphed items (wigItem)	*/
+
+/******************  in source file bedGraph.c ************************/
+void wigBedGraphFindItemLimits(void *items,
+    double *graphUpperLimit, double *graphLowerLimit);
+/*	find upper and lower limits of graphed items (bedGraphItem)	*/
 
 #endif /* WIGCOMMON_H */

@@ -13,31 +13,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.63 2005/02/09 22:48:59 hiram Exp $";
-
-/*	wigCartOptions structure - to carry cart options from wigMethods
- *	to all the other methods via the track->extraUiData pointer
- */
-struct wigCartOptions
-    {
-    boolean zoomCompression;	/*  true - do max() averaging over the bin
-    				 *  false - simple pick one of the
-				 *  points in the bin.
-				 */
-    enum wiggleGridOptEnum horizontalGrid;	/*  grid lines, ON/OFF */
-    enum wiggleGraphOptEnum lineBar;		/*  Line or Bar chart */
-    enum wiggleScaleOptEnum autoScale;		/*  autoScale on */
-    enum wiggleWindowingEnum windowingFunction;	/*  max,mean,min */
-    enum wiggleSmoothingEnum smoothingWindow;	/*  N: [1:15] */
-    enum wiggleYLineMarkEnum yLineOnOff;	/*  OFF/ON	*/
-    double minY;	/*	from trackDb.ra words, the absolute minimum */
-    double maxY;	/*	from trackDb.ra words, the absolute maximum */
-    int maxHeight;	/*	maximum pixels height from trackDb	*/
-    int defaultHeight;	/*	requested height from cart	*/
-    int minHeight;	/*	minimum pixels height from trackDb	*/
-    double yLineMark;	/*	user requested line at y = */
-    char *colorTrack;   /*	Track to use for coloring wiggle track. */
-    };
+static char const rcsid[] = "$Id: wigTrack.c,v 1.64 2005/02/09 23:37:43 hiram Exp $";
 
 struct wigItem
 /* A wig track item. */
@@ -1149,12 +1125,30 @@ freez(&colorArray);
 freeMem(preDraw);
 }	/*	wigDrawItems()	*/
 
-static void wigLeftLabels(struct track *tg, int seqStart, int seqEnd,
+
+void wigFindItemLimits(void *items,
+    double *graphUpperLimit, double *graphLowerLimit)
+/*	find upper and lower limits of graphed items (wigItem)	*/
+{
+struct wigItem *wi;
+*graphUpperLimit = -1.0e+300;
+*graphLowerLimit = 1.0e+300;
+
+for (wi = items; wi != NULL; wi = wi->next)
+    {
+    if (wi->graphUpperLimit > *graphUpperLimit)
+	*graphUpperLimit = wi->graphUpperLimit;
+    if (wi->graphLowerLimit < *graphLowerLimit)
+	*graphLowerLimit = wi->graphLowerLimit;
+    }
+}
+
+void wigLeftLabels(struct track *tg, int seqStart, int seqEnd,
 	struct vGfx *vg, int xOff, int yOff, int width, int height,
 	boolean withCenterLabels, MgFont *font, Color color,
 	enum trackVisibility vis)
+/*	drawing left labels	*/
 {
-struct wigItem *wi;
 int fontHeight = tl.fontHeight+1;
 int centerOffset = 0;
 double lines[2];	/*	lines to label	*/
@@ -1203,13 +1197,13 @@ else if (tg->visibility == tvFull)
 	    centerOffset = fontHeight;
 	    upperTic = '_';	/*	this is correct	*/
 	    }
-	for (wi = tg->items; wi != NULL; wi = wi->next)
-	    {
-	    if (wi->graphUpperLimit > graphUpperLimit)
-		graphUpperLimit = wi->graphUpperLimit;
-	    if (wi->graphLowerLimit < graphLowerLimit)
-		graphLowerLimit = wi->graphLowerLimit;
-	    }
+	if (wigCart->bedGraph)
+	    wigBedGraphFindItemLimits(tg->items,
+		&graphUpperLimit, &graphLowerLimit);
+	else
+	    wigFindItemLimits(tg->items,
+		&graphUpperLimit, &graphLowerLimit);
+
 	/*  In areas where there is no data, these limits do not change */
 	if (graphUpperLimit < graphLowerLimit)
 	    {
@@ -1321,6 +1315,7 @@ track->maxRange = maxY;
 
 wigCart->minY = track->minRange;
 wigCart->maxY = track->maxRange;
+wigCart->bedGraph = FALSE;	/*	signal to left labels	*/
 
 track->loadItems = wigLoadItems;
 track->freeItems = wigFreeItems;
