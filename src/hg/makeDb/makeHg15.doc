@@ -478,7 +478,7 @@ exit; # don't actually run this like a script :)
     cp -p ~/hg15/?{,?}/NT_*/NT_??????.fa /scratch/hg/gs.16/build33/trfFa
 
 
-# PREPARE CLUSTER FOR BLASTZ RUN (TO DO)
+# PREPARE CLUSTER FOR BLASTZ RUN (041203)
     # This needs to be done after trf-masking and nib generation.
     ssh eieio
     # Extract lineage-specific repeats using Arian Smit's script:
@@ -511,10 +511,9 @@ exit; # don't actually run this like a script :)
 
     # Ask cluster-admin@cse.ucsc.edu to binrsync /scratch/hg to clusters
     # Copy to /iscratch as well so we can run blastz before binrsync finishes:
-???- why is this step here? ->    rm -rf /iscratch/i/gs.16/build33/{linSpecRep,rmsk,chromTrfMixedNib}
+    rm -rf /iscratch/i/gs.16/build33/{linSpecRep,rmsk,chromTrfMixedNib}
     cp -Rp /scratch/hg/gs.16/build33/{linSpecRep,rmsk,chromTrfMixedNib} \
       /iscratch/i/gs.16/build33/
-RSYNC IN PROGRESS - DONE TO HERE - MATT
     ssh kkr1u00
     ~kent/bin/iSync
 
@@ -1993,6 +1992,7 @@ o - # ssh hgwdev
 
     # Consolidate AXT files to chrom level, sort, pick best, make psl.
     ssh eieio
+    tcsh
     set base="/cluster/store5/gs.16/build33/bed/blastz.mm3.2003-03-17-ASH"
     set tbl="blastzBestMm3"
     cd $base
