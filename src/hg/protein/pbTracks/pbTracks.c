@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.5 2003/12/16 15:14:06 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.6 2003/12/18 23:03:04 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -36,6 +36,17 @@ char *proteinID;
 char *protDisplayID;
 char *mrnaID;
 char *description;
+
+char *positionStr;
+
+char *prevGBChrom;		/* chrom          previously chosen by Genome Browser */
+int  prevGBStartPos;		/* start position previously chosen by Genome Browser */
+int  prevGBEndPos;		/* end   position previously chosen by Genome Browser */
+int  prevExonStartPos;		/* start position chosen by Genome Browser, converted to exon pos */
+int  prevExonEndPos;		/* end   position chosen by Genome Browser, converted to exon pos */
+
+char *ensPepName;		/* Ensembl peptide name, used for Superfamily track */
+int sfCount;			/* count of Superfamily domains */
 
 struct sqlConnection *spConn;   /* Connection to SwissProt database. */
 
@@ -177,19 +188,22 @@ if (cgiOptionalString("pbScale") != NULL)
 	if (strcmp(cgiOptionalString("pbScale"), "1/6")  == 0) pbScale = 1;
 	if (strcmp(cgiOptionalString("pbScale"), "1/2")  == 0) pbScale = 3;
 	if (strcmp(cgiOptionalString("pbScale"), "FULL") == 0) pbScale = 6;
-	//if (strcmp(cgiOptionalString("pbScale"), "DNA") == 0) pbScale = 18;
-	if (strcmp(cgiOptionalString("pbScale"), "DNA") == 0) pbScale = 22;
+	if (strcmp(cgiOptionalString("pbScale"), "DNA")  == 0) pbScale =22;
 	}
 
 pixWidth = 160+ protSeqLen*pbScale;
+//pixWidth = 160+ protSeqLen*pbScale/2;
+
 if (pixWidth < 550) pixWidth = 550;
 insideWidth = pixWidth-gfxBorder;
 
-pixHeight = 230;
+pixHeight = 260;
 
 //make room for individual residues display
 if (pbScale >=6)  pixHeight = pixHeight + 20;
-if (pbScale >=18) pixHeight = pixHeight + 20;
+if (pbScale >=18) pixHeight = pixHeight + 30;
+sfCount = getSuperfamilies(proteinID);
+if (sfCount > 0) pixHeight = pixHeight + 20;
 
 makeTempName(&gifTn, "hgt", ".gif");
 vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi);
@@ -280,6 +294,7 @@ domainsPrint(conn, proteinID);
 
 //if (cgiOptionalString("exonNum") == NULL)printExonAA(proteinID, protSeq, -1);
 hPrintf("<P>");
+doPathwayLinks(protDisplayID, mrnaID);
 doGenomeBrowserLink(protDisplayID, mrnaID);
 doGeneDetailsLink(protDisplayID, mrnaID);
 doFamilyBrowserLink(protDisplayID, mrnaID);
@@ -342,7 +357,7 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 char *proteinAC;
-
+char *chp, *chp1, *chp9;
 char *debugTmp = NULL;
 struct dyString *state = NULL;
 
@@ -400,6 +415,29 @@ mrnaID = sqlGetField(conn, database, "knownGene", "name", cond_str);
 
 sprintf(cond_str, "accession='%s'", proteinID);
 description = sqlGetField(NULL, protDbName, "spXref3", "description", cond_str);
+
+// obtain previous genome position range selected by the Genome Browser user
+positionStr = strdup(cartOptionalString(cart, "position"));
+if (positionStr != NULL)
+    {
+    chp = strstr(positionStr, ":");
+    *chp = '\0';
+    prevGBChrom = strdup(positionStr);
+    
+    chp1 = chp + 1;
+    chp9 = strstr(chp1, "-");
+    *chp9 = '\0';
+    prevGBStartPos = atoi(chp1);
+    chp1 = chp9 + 1;
+    prevGBEndPos   = atoi(chp1);
+    //printf("<br>%s---%d---%d\n", prevGBChrom, prevGBStartPos, prevGBEndPos);fflush(stdout); 
+    }
+else
+    {
+    prevGBChrom    = NULL;
+    prevGBStartPos = -1;
+    prevGBEndPos   = -1;
+    }
 
 /* Do main display. */
 doTrackForm(NULL);

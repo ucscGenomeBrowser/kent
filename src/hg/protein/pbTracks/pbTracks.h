@@ -39,6 +39,13 @@ extern char *protDbName;
 extern char *proteinID;
 extern char *protDisplayID;
 
+extern char *positionStr;
+extern char *prevGBChrom;              /* chrom          previously chosen by Genome Browser */
+extern int  prevGBStartPos;            /* start position previously chosen by Genome Browser */
+extern int  prevGBEndPos;              /* end position previously chosen by Genome Browser */
+extern int  prevExonStartPos;          /* start pos chosen by GB, converted to exon pos */
+extern int  prevExonEndPos;            /* end   pos chosen by GB, converted to exon pos */
+
 extern char *protSeq;
 extern int   protSeqLen;
 extern char aaAlphabet[];
@@ -51,6 +58,8 @@ extern int exCount;
 extern int exStart[], exEnd[];
 extern int aaStart[], aaEnd[];
 
+extern int sfCount;
+extern char *ensPepName;
 extern struct vGfx *g_vg;
 extern MgFont *g_font;
 extern int currentYoffset;
@@ -88,8 +97,11 @@ int chkAnomaly(double currentAvg, double avg, double stddev);
 
 void calxy(int xin, int yin, int *outxp, int *outyp);
 
+int getSuperfamilies(char *proteinID);
+
 void getExonInfo(char *proteinID, int *exonCount, char **chrom, char *strand);
 void printExonAA(char *proteinID, char *aa, int exonNum);
+void doPathwayLinks(char *protDisplayID, char *mrnaID);
 void doGenomeBrowserLink(char *protDisplayID, char *mrnaID);
 void doGeneDetailsLink(char *protDisplayID, char *mrnaID);
 void doFamilyBrowserLink(char *protDisplayID, char *mrnaID);
