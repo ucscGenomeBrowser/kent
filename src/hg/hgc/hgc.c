@@ -107,7 +107,7 @@
 #include "hgc.h"
 #include "genbank.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.413 2003/05/15 09:02:51 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.414 2003/05/15 22:02:39 kent Exp $";
 
 
 struct cart *cart;	/* User's settings. */
@@ -1633,9 +1633,11 @@ if (winEnd - winStart > 20000)
     }
 else
     {
-    struct mafAli *mafList, *maf;
+    struct mafAli *mafList, *maf, *subList = NULL;
     int realCount = 0;
     char dbChrom[64];
+    struct slName *dbList = NULL, *dbEl;
+
     mafList = mafLoadInRegion(conn, tdb->tableName, seqName, winStart, winEnd);
     safef(dbChrom, sizeof(dbChrom), "%s.%s", database, seqName);
     printf("<TT><PRE>");
@@ -1644,14 +1646,61 @@ else
 	struct mafAli *subset = mafSubset(maf, dbChrom, winStart, winEnd);
 	if (subset != NULL)
 	    {
+	    struct mafComp *mc;
 	    subset->score = mafScoreMultiz(subset);
-	    mafWrite(stdout, subset);
-	    ++realCount;
+	    slAddHead(&subList, subset);
+
+	    /* Get a list of all databases used in any maf. */
+	    for (mc = subset->components; mc != NULL; mc = mc->next)
+	        {
+		char dbOnly[64];
+		char *s;
+		strncpy(dbOnly, mc->src, sizeof(dbOnly));
+		s = strchr(dbOnly, '.');
+		if (s != NULL) *s = 0;
+		slNameStore(&dbList, dbOnly);
+		}
 	    }
+	}
+    slReverse(&subList);
+    slReverse(&dbList);
+    mafAliFreeList(&mafList);
+    printf("Multiple alignments between");
+    for (dbEl = dbList; dbEl != NULL; dbEl = dbEl->next)
+        {
+	char *org = hOrganism(dbEl->name);
+	tolowers(org);
+	if (dbEl != dbList)
+	   {
+	   if (dbEl->next == NULL)
+	       printf(" and");
+	   else
+	       printf(",");
+	   }
+	printf(" %s", org);
+	freez(&org);
+	}
+    printf(".  The versions of each genome used are:");
+    printf("<UL>\n");
+    for (dbEl = dbList; dbEl != NULL; dbEl = dbEl->next)
+        {
+	char *db = dbEl->name;
+	char *org = hOrganism(db);
+	char *freeze = hFreezeFromDb(db);
+	printf("<LI><B>%s</B> - %s (%s)", org, freeze, db);
+	freez(&org);
+	freez(&freeze);
+	}
+    printf("</UL>\n");
+    for (maf = subList; maf != NULL; maf = maf->next)
+        {
+	mafWrite(stdout, maf);
+	++realCount;
 	}
     if (realCount == 0)
         printf("No multiple alignment in browser window");
     printf("</PRE></TT>");
+    mafAliFreeList(&subList);
     }
 }
 
