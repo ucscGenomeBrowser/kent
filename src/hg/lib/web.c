@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.79 2005/03/25 01:57:19 donnak Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.80 2005/03/30 23:14:07 angie Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -209,12 +209,13 @@ else
     	puts("           Blat</A> &nbsp;&nbsp;&nbsp;");
 	}
     {
-    char *table = (endsWith(scriptName, "hgGene") ?
-		   cartOptionalString(theCart, "hgg_type") :
-		   cartOptionalString(theCart, "g"));
-    if ((endsWith(scriptName, "hgc") || endsWith(scriptName, "hgTrackUi") ||
-	 endsWith(scriptName, "hgGene"))
-	&& (table != NULL))
+    char *table = (theCart == NULL ? NULL :
+		   (endsWith(scriptName, "hgGene") ?
+		    cartOptionalString(theCart, "hgg_type") :
+		    cartOptionalString(theCart, "g")));
+    if (table != NULL &&
+	(endsWith(scriptName, "hgc") || endsWith(scriptName, "hgTrackUi") ||
+	 endsWith(scriptName, "hgGene")))
 	{
 	struct trackDb *tdb = hTrackDbForTrack(table);
 	if (tdb != NULL)
