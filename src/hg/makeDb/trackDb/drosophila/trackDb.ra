@@ -95,3 +95,19 @@ xrefQuery select bdgpName,flyBaseId from %s where flyBaseId like '%s'
 searchDescription FlyBase ID of BDGP Non-coding Gene
 searchPriority 20
 
+searchName miRNAPrefix
+searchTable miRNA
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex dme-(mir|let)-[0-9]+[a-z]?
+dontCheck dme-(mir|let)-[0-9]+[a-z]?(-[0-9]+)?
+searchPriority 21
+
+searchTable miRNA
+searchMethod exact
+searchType bed
+shortCircuit 1
+termRegex dme-(mir|let)-.+
+searchPriority 21.5
+
