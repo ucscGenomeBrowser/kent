@@ -718,6 +718,16 @@ priority 25.6
 visibility hide
 type sample 9 
 
+track zooCons
+shortLabel Zoo Conservation
+longlabel ZooSeq 11 Scaled Conservation (100 base windows)
+color 0,60,120
+altColor 0,128,0
+priority 25.7
+visibility hide
+type sample 9
+
+
 track exoFish
 shortLabel Exofish Ecores
 longLabel Exofish Tetraodon/Human Evolutionarily Conserved Regions
