@@ -17,6 +17,15 @@ altColor 200,220,255
 spectrum on
 type psl .
 
+track ensRiken
+shortLabel Ensembl/Riken
+longLabel Ensembl/Riken Gene Predictions
+priority 18
+visibility dense
+color 0,120,60
+altColor 200,255,220
+type genePred
+
 track softberryGene
 shortLabel Fgenesh++ Genes
 longLabel Fgenesh++ Gene Predictions
