@@ -107,7 +107,7 @@
 #include "hgc.h"
 #include "genbank.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.411 2003/05/12 14:45:40 booch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.412 2003/05/13 09:54:15 daryl Exp $";
 
 
 struct cart *cart;	/* User's settings. */
@@ -8237,25 +8237,31 @@ char *group = tdb->tableName;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-char query[256];
+char query[512];
 int rowOffset;
 snprintf(query, sizeof(query),
-         "select kg.name, "
-         "       proteinID, "
-         "       alignID "
-         "from   knownGene kg, "
-         "       %s snp "
-         "where  snp.chrom = kg.chrom "
-         "  and  txStart < chromStart "
-         "  and  txEnd > chromEnd "
-         "  and  snp.name = '%s'", group, name);
+         "select distinct        "
+         "       rl.locusLinkID, "
+         "       rl.name,        "
+         "       kg.name,        "
+         "       kg.proteinID    "
+         "from   knownGene  kg,  "
+         "       refLink    rl,  "
+         "       %s         snp, "
+	 "       mrnaRefseq mrs  "
+         "where  snp.chrom  = kg.chrom       "
+	 "  and  kg.name    = mrs.mrna       "
+         "  and  mrs.refSeq = rl.mrnaAcc     "
+         "  and  kg.txStart < snp.chromStart "
+         "  and  kg.txEnd   > snp.chromEnd   "
+         "  and  snp.name   = '%s'", group, name);
 rowOffset = hOffsetPastBin(seqName, group);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-    printf("locusId=%s\" TARGET=_blank>LocusLink for ", row[2]);
-    printf("%s (%s)</A></P>\n", row[1], row[0]);
+    printf("locusId=%s\" TARGET=_blank>LocusLink for ", row[0]);
+    printf("%s (%s; %s)</A></P>\n", row[1], row[2], row[3]);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
