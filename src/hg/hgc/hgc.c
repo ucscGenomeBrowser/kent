@@ -105,7 +105,7 @@
 #include "hgc.h"
 #include "genbank.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.420 2003/05/22 23:02:50 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.421 2003/05/24 05:19:35 baertsch Exp $";
 
 
 struct cart *cart;	/* User's settings. */
@@ -6607,7 +6607,7 @@ puts("<td align=center>\n");
 printOrgAssemblyListAxtInfo("db2", onChangeAssemblyText);
 puts("</td>\n");
 puts("<td align=center>\n");
-printAlignmentListHtml(db2, "alignment");
+printAlignmentListHtml(db2, "alignment", alignment);
 printf("</td>\n");
 printf("<td align=center>");
 cgiMakeButton("Submit", "Submit");
