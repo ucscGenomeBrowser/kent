@@ -1,19 +1,34 @@
-1 - lost in the mists of time
-2 - beyond the reach of our records
-3 - a version that spanned many recompiles.  Sometimes was stable.
-4 - fixed problem where nodes would be marked as dead if they
-    took longer than 10 minutes to run a job.
-5 - Added logic to cope more gracefully with nodes that are 
-    running jobs but momentarily can't be reached by hub.
-6 - Changing paraHub from processes to threads, and from TCP/IP
-    to UDP.  Separating out node port and hub port so that same
-    machine can run node and hub daemons.  Fixing bug where
-    it would crash when you did a 'parasol remove jobs user'.
-7 - Some changes on paraNode to hopefully make it harder for
-    a node to lose track of the jobs it is running.  Using
-    waitpid() rather than wait, and eliminating the clearZombies().
-8 - Made paraHub just warn rather than abort on failure to close
-    a results file cleanly.  Also changed auto-close time to
-    1 minute rather than 5.
-9 - Added good/bad count to machine struct. Added syslog.
+ 1 - Lost in the mists of time
+ 
+ 2 - Beyond the reach of our records
+ 
+ 3 - A version that spanned many recompiles.  Sometimes was stable.
+ 
+ 4 - Fixed problem where nodes would be marked as dead if they
+     took longer than 10 minutes to run a job.
+     
+ 5 - Added logic to cope more gracefully with nodes that are 
+     running jobs but momentarily can't be reached by hub.
+     
+ 6 - Changing paraHub from processes to threads, and from TCP/IP
+     to UDP.  Separating out node port and hub port so that same
+     machine can run node and hub daemons.  Fixing bug where
+     it would crash when you did a 'parasol remove jobs user'.
+     
+ 7 - Some changes on paraNode to hopefully make it harder for
+     a node to lose track of the jobs it is running.  Using
+     waitpid() rather than wait, and eliminating the clearZombies().
+     
+ 8 - Made paraHub just warn rather than abort on failure to close
+     a results file cleanly.  Also changed auto-close time to
+     1 minute rather than 5.
+     
+ 9 - Added good/bad count to machine struct. 
+     Changed logging to use syslog.
+     Corrected setting of user's groups for better security.
+     
 10 - Added priorities to batches. Added para status command.
+     Changed paraNode to only do SU when running as root,
+     so that stand-alone single user testing works.
+
+
