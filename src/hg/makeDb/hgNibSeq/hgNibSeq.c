@@ -1,12 +1,14 @@
 /* hgNibSeq - convert DNA to nibble-a-base and store location in database. */
 #include "common.h"
 #include "portable.h"
+#include "dystring.h"
 #include "fa.h"
 #include "nib.h"
 #include "jksql.h"
-#include "cheapcgi.h"
+#include "options.h"
 
 boolean preMadeNib = FALSE;
+char *tableName = "chromInfo";
 
 void usage()
 /* Explain usage and exit. */
@@ -14,12 +16,31 @@ void usage()
 errAbort(
   "hgNibSeq - convert DNA to nibble-a-base and store location in database\n"
   "usage:\n"
-  "   hgNibSeq database destDir file(s).fa\n"
-  "This will create .nib versions of all the input .fa files in destDir\n"
-  "and store pointers to them in the database.\n"
+  "   hgNibSeq database nibDir file(s).fa\n"
+  "This will create .nib versions of all the input .fa files in nibDir\n"
+  "and store pointers to them in the database. Use full path name for nibDir.\n"
   "options:\n"
   "   -preMadeNib  don't bother generating nib files, they exist already\n"
+  "   -table=tableName - Use this table name rather than chromInfo\n"
   );
+}
+
+char *createSql = 
+"CREATE TABLE %s (\n"
+    "chrom varchar(255) not null,	# Chromosome name\n"
+    "size int unsigned not null,	# Chromosome size\n"
+    "fileName varchar(255) not null,	# Chromosome file (raw one byte per base)\n"
+              "#Indices\n"
+    "PRIMARY KEY(chrom(16))\n"
+    ")\n";
+
+void createTable(struct sqlConnection *conn)
+/* Make table. */
+{
+struct dyString *dy = newDyString(512);
+dyStringPrintf(dy, createSql, tableName);
+sqlRemakeTable(conn, tableName, dy->string);
+dyStringFree(&dy);
 }
 
 void hgNibSeq(char *database, char *destDir, int faCount, char *faNames[])
@@ -35,7 +56,11 @@ struct dnaSeq *seq = NULL;
 unsigned long total = 0;
 int size;
 
+if (!strchr(destDir, '/'))
+   errAbort("Use full path name for nib file dir\n");
+
 makeDir(destDir);
+createTable(conn);
 for (i=0; i<faCount; ++i)
     {
     faName = faNames[i];
@@ -60,8 +85,8 @@ for (i=0; i<faCount; ++i)
 	    freeDnaSeq(&seq);
 	    }
 	}
-    sprintf(query, "INSERT into chromInfo VALUES('%s', %d, '%s')",
-        name, size, nibName);
+    sprintf(query, "INSERT into %s VALUES('%s', %d, '%s')",
+        tableName, name, size, nibName);
     sqlUpdate(conn,query);
     total += size;
     }
@@ -72,10 +97,11 @@ printf("%lu total bases\n", total);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
-if (argc < 4)
+optionHash(&argc, argv);
+if (argc < 3)
     usage();
-preMadeNib = cgiBoolean("preMadeNib");
+preMadeNib = optionExists("preMadeNib");
+tableName = optionVal("table", tableName);
 hgNibSeq(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }
