@@ -454,16 +454,6 @@ color 170,100,0
 type genePred npredPep 
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=nucleotide&cmd=search&term=$$
 
-track mrna_est
-shortLabel $Organism mRNAs
-longLabel $Organism mRNAs from Genbank 
-priority 18
-visibility full
-spectrum on
-type psl .
-
-
-
 track mrna
 shortLabel $Organism mRNAs
 longLabel $Organism mRNAs from Genbank 
