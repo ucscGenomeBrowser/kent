@@ -5,7 +5,7 @@
 #include "options.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: hgSgdGff3.c,v 1.6 2003/12/10 00:46:18 kent Exp $";
+static char const rcsid[] = "$Id: hgSgdGff3.c,v 1.7 2003/12/21 06:36:03 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -62,7 +62,8 @@ while ((wordCount = lineFileChopNextTab(lf, words, ArraySize(words))) != 0)
     for (i=0; i<10; ++i)
 	{
 	char *s = words[i];
-	cgiDecode(s, s, strlen(s));
+	if (i != 6)
+	    cgiDecode(s, s, strlen(s));
 	tf->fields[i] = cloneString(s);
 	}
     tf->lineIx = lf->lineIx;
