@@ -1605,15 +1605,27 @@ LOAD SOFTBERRY GENES (DONE 9/12/02)
      hgPepPred hg12 softberry *.pro
      hgSoftberryHom hg12 *.pro
 
-LOAD GENEID GENES (todo)
+LOAD GENEID GENES (DONE 11/20/02)
      mkdir ~/oo/bed/geneid
      cd ~/oo/bed/geneid
      mkdir download
      cd download
-   Now download *.gtf and *.prot from 
-   http://www1.imim.es/genepredictions/H.sapiens/golden_path_20011222/geneid_v1.1/
+     # download .gff and prot files for each chrom (and _random):
+     foreach f (~/oo/?{,?}/*.fa.out)
+       set c=$f:t:r:r
+       wget http://www1.imim.es/genepredictions/H.sapiens/golden_path_20020628/geneid_v1.1/$c.gff
+       wget http://www1.imim.es/genepredictions/H.sapiens/golden_path_20020628/geneid_v1.1/$c.prot
+     end
+     # This time around, their "gff" uses screwy keywords.  clean up:
+     # Also replace gi|17981852|ref|NC_001807.4| with chrM:
+     foreach f (chr*.gff)
+       perl -wpi.bak -e 's/(First|Terminal|Internal|Single)/CDS/' $f
+     end
+     foreach f (chr*.{gff,prot})
+       perl -wpi.bak -e 's/gi\|17981852\|ref\|NC_001807.4\|/chrM/g' $f
+     end
      cd ..
-     ldHgGene hg12 geneid download/*.gtf -exon=CDS
+     ldHgGene hg12 geneid download/*.gff -exon=CDS
      hgPepPred hg12 generic geneidPep download/*.prot
 
 LOAD ACEMBLY (DONE 9/10/02)
@@ -1910,6 +1922,49 @@ MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM2 AXT FILES (DONE 9/3/02)
      end
      hgsql hg12 < ~/kent/src/hg/lib/axtInfo.sql
      hgsql hg12 < axtInfoInserts.sql
+
+EXTRACTING DYNAMIC MASKING LOCATIONS FROM BLASTZ LAV (TODO)
+    # Dynamic masking = splicing out of lineage-specific repeats during 
+    # first phase of blastz alignments
+    ssh kkstore
+    cd ~/oo/blastz-whatever-path
+    set tbl=blastzDynMaskMm2
+    # Dig ranges out of lavs; collapse overlapping ranges.
+    rm -rf $tbl.bed
+    touch $tbl.bed
+    foreach c (lav/chr*)
+      set chr=$c:t
+      awk -v c=$chr '/  x/ {print c "\t" $2-1 "\t" $3}' $c/*.lav \
+        | sort -n -k 2,2 | uniq \
+        | perl -we 'while (<>) { \
+                      @words = split(/\t/); \
+                      $chrom = $words[0]; \
+                      $start = $words[1]; \
+                      $end   = $words[2]; \
+                      if (! defined $prevChrom) { \
+                        $prevChrom = $chrom; \
+                        $rStart    = $start; \
+                        $rEnd      = $end; \
+                      } \
+                      if (($start > $rEnd) || ($chrom ne $prevChrom)) { \
+                        print "$prevChrom\t$rStart\t$rEnd"; \
+                        $rStart = $start; \
+                        $rEnd   = $end; \
+                      } \
+                      elsif ($end > $rEnd) { $rEnd = $end; } \
+                      $prevChrom = $chrom; \
+                    } \
+                    print "$prevChrom\t$rStart\t$rEnd" \
+                      if (defined $prevChrom); \
+                    ' \
+        >> $tbl.bed
+    end
+    # load table
+    ssh hgwdev
+    cd ~/oo/blastz-whatever-path
+    set tbl=blastzDynMaskMm2
+    hgLoadBed -nobin -noBin hg12 $tbl $tbl.bed
+
 
 MAKING THE AXTTIGHT FROM AXTBEST (DONE 10/30/02)
     # After creating axtBest alignments above, use subsetAxt to get axtTight:
