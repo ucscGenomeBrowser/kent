@@ -7,8 +7,7 @@ patSpace.o supStitch.o trans3.o xenbig.o xensmall.o
 T = ../lib/$(MACHTYPE)/jkOwnLib.a
 
 $(T): $(O) ../lib/$(MACHTYPE)
-	ar rcu $(T) $(O)
-	ranlib $(T)
+	ar rcus $(T) $(O)
 
 ../lib/$(MACHTYPE):
 	mkdir ../lib/$(MACHTYPE)

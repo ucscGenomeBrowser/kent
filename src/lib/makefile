@@ -20,8 +20,7 @@ O = aliType.o axt.o bits.o binRange.o \
 
 
 $(MACHTYPE)/jkweb.a: $(O) $(MACHTYPE)
-	ar rcu $(MACHTYPE)/jkweb.a $(O)
-	ranlib $(MACHTYPE)/jkweb.a
+	ar rcus $(MACHTYPE)/jkweb.a $(O)
 
 $(MACHTYPE):
 	mkdir $(MACHTYPE)
