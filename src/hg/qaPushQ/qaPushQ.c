@@ -23,7 +23,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.37.2.1 2004/05/24 18:34:42 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.37.2.2 2004/05/26 18:52:26 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -2442,6 +2442,11 @@ whiteSpace(q.tbls);
 whiteSpace(q.cgis);
 whiteSpace(q.files);
 
+q.tbls = replaceChars(q.tbls,"chrN_","chr*_");
+q.tbls = replaceChars(q.tbls,"\\","\\\\");
+q.tbls = replaceChars(q.tbls,"%","\\%");
+q.tbls = replaceChars(q.tbls,"_","\\_");
+
 for(j=0;parseList(q.dbs, ',' ,j,dbsComma,sizeof(dbsComma));j++)
     {
     if (dbsComma[0]==0) 
@@ -2507,6 +2512,7 @@ for(j=0;parseList(q.dbs, ',' ,j,dbsComma,sizeof(dbsComma));j++)
 			    ((c>='A')&&(c<='Z'))
 			 || ((c>='a')&&(c<='z'))
 			 || ((c>='0')&&(c<='9'))
+			 || (c=='\\')
 			 || (c=='_')
 			 || (c=='%')
 			)
