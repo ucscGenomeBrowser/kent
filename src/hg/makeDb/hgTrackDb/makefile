@@ -19,6 +19,7 @@ update:
 	hgTrackDb hg8 ../../lib/trackDb.sql hgRoot
 	hgTrackDb hg9 ../../lib/trackDb.sql hgRoot
 	hgTrackDb hg10 ../../lib/trackDb.sql hgRoot
+	hgTrackDb hg11 ../../lib/trackDb.sql hgRoot
 	hgTrackDb mm1 ../../lib/trackDb.sql hgRoot
 	hgTrackDb mm2 ../../lib/trackDb.sql hgRoot
 
