@@ -370,6 +370,21 @@ char *wiggleSmoothingEnumToString(enum wiggleSmoothingEnum x);
 void wiggleSmoothingDropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
+/*	Wiggle track y Line Mark on/off option	*/
+enum wiggleYLineMarkEnum {
+   wiggleYLineMarkOff = 0,
+   wiggleYLineMarkOn = 1,
+};
+
+enum wiggleYLineMarkEnum wiggleYLineMarkStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *wiggleYLineMarkEnumToString(enum wiggleYLineMarkEnum x);
+/* Convert from enum to string representation. */
+
+void wiggleYLineMarkDropDown(char *var, char *curVal);
+/* Make drop down of options. */
+
 /*	Wiggle track use AutoScale option	*/
 enum wiggleScaleOptEnum {
    wiggleScaleManual = 0,
@@ -414,7 +429,6 @@ char *wiggleGridEnumToString(enum wiggleGridOptEnum x);
 
 void wiggleGridDropDown(char *var, char *curVal);
 /* Make drop down of options. */
-
 
 /*** Some Stuff for the cdsColor track ***/
 
