@@ -76,22 +76,6 @@ priority 141
 visibility full
 type maf
 
-track blastHg15KG
-shortLabel hg15 protein blast
-longLabel hg15 protein blast
-group x
-priority 1101
-visibility dense
-type psl protein
-
-track blastHg16KG
-shortLabel hg16 protein blast
-longLabel hg16 protein blast
-group x
-priority 1101
-visibility dense
-type psl protein
-
 track ecoresMm3
 shortLabel Mouse Ecores
 longLabel Fugu/Mouse Evolutionary Conserved Regions
@@ -184,3 +168,12 @@ altColor 255,240,200
 spectrum on
 type chain hg16
 otherDb hg16
+
+track blastHg16KG
+shortLabel hg16 protein blast
+longLabel hg16 protein blast
+group x
+priority 1101
+visibility hide
+type psl protein
+
