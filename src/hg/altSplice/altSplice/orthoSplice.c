@@ -37,14 +37,16 @@
 #include "rbTree.h"
 #include "binRange.h"
 
-
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.21 2004/01/29 01:24:17 sugnet Exp $";
+#define IS_MRNA 1
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.22 2004/04/17 20:20:59 sugnet Exp $";
 static struct binKeeper *netBins = NULL;  /* Global bin keeper structure to find cnFills. */
 static struct rbTree *netTree = NULL;  /* Global red-black tree to store cnfills in for quick searching. */
 static struct rbTree *orthoAgxTree = NULL; /* Global red-black tree to store agx's so don't need db. */
 static char *workingChrom = NULL;      /* Chromosme we are working on. */
 static struct binKeeper *possibleExons = NULL; /* List of possible exons common to human and mouse. */
 static char *chainTable = NULL;        /* Table that contains chains, i.e. chainMm3. */
+static struct hash *mRnaHash = NULL;   /* Hash for mRNA accesions if we are weigthing them more. */
+static int mRnaWeight = 1;                    /* Weight of mRNAs if we are treating them preferentially. */
 
 struct orthoSpliceEdge 
 /* Structure to hold information about one edge in 
@@ -131,6 +133,7 @@ static struct optionSpec optionSpecs[] =
     {"mappingFile", OPTION_STRING},
     {"chromSize" , OPTION_INT},
     {"exonFile", OPTION_STRING},
+    {"weightMrna", OPTION_INT},
     {NULL, 0}
 };
 
@@ -155,7 +158,8 @@ static char *optionDescripts[] =
     "[optional] Don't use database, read in possible orthologous altGraphX records from file.",
     "[optional] Output a file of mapping to orthologous loci.",
     "[optional] Size of chromsome, required for exonFile.",
-    "[optional] exonFile, exons (bed format) that should be common to both genomes."
+    "[optional] exonFile, exons (bed format) that should be common to both genomes.",
+    "[optional] Weight mRNAs and RefSeqAli table entries as value specified (default 1)",
 };
 
 void usage()
@@ -1159,7 +1163,7 @@ for(i=0; i<vCount; i++)
 		    {
 		    orthoV = findBestOrthoStartByOverlap(ag, em, orthoAg, orthoEm, chain, vMap, i, j, reverse);
 		    }
-		else if(vTypes[i] == ggSoftEnd && vMap[j] != -1 && isExon(ag, j, i) && orthoAgIx[j] == oIndex)
+		else if(vTypes[i] == ggSoftEnd && em[j][i] && vMap[j] != -1 && isExon(ag, j, i) && orthoAgIx[j] == oIndex)
 		    {
 		    orthoV = findBestOrthoEndByOverlap(ag, em, orthoAg, orthoEm, chain, vMap, j, i, reverse);
 		    }
@@ -1420,6 +1424,26 @@ for(i = 0; i < vC; i++)
 ag->vertexCount = count;
 }
 
+int trumpValue(struct evidence *ev, struct altGraphX *ag)
+/** Calculate the weight of the evidence for evidence structure
+    ev of edge in splice graph. */
+{
+int value = 0, i = 0;
+char **accs = ag->mrnaRefs;
+for(i = 0; i < ev->evCount; i++) 
+    {
+    /* If weight mRna is used the mrna and refseq accesions  will be hashed
+       with a 1 value. */
+    if(mRnaHash != NULL && hashIntValDefault(mRnaHash, accs[i], -1) == IS_MRNA)
+	{
+	value += mRnaWeight;
+	}
+    else
+	value++;
+    }
+return value;
+}
+
 struct altGraphX *makeCommonAltGraphX(struct altGraphX *ag, struct chain *chain)
 /** For each edge in ag see if there is a similar edge in the
     orthologus altGraphX structure and output it if there. */
@@ -1520,8 +1544,6 @@ for(i=0;i<vCount; i++)
 	    else
 		match = FALSE;
 
-
-
 	    /* We include differently depending on whether we are looking
 	       for conserved splicing or species-specific splicing. */
 	    if(speciesSpecific) 
@@ -1534,7 +1556,7 @@ for(i=0;i<vCount; i++)
 		if(match == TRUE && possibleExons != NULL)
 		    match = (!isPossibleExon(ag, i, j));
 		}
-	    else if(oldEv->evCount >= trumpNum)
+	    else if(trumpValue(oldEv, ag) >= trumpNum)
 		match = TRUE;
 	    else if(possibleExons != NULL)
 		match |= isPossibleExon(ag, i, j);
@@ -1729,7 +1751,7 @@ while(lineFileNextCharRow(lf, '\t', row, rowCount))
 	}
     altGraphXFree(&ag);
     }
-warn("%d graphs, %d orthos found %d no ortho splice graph",
+warn("\n%d graphs, %d orthos found %d no ortho splice graph",
      (noOrtho+foundOrtho), foundOrtho, noOrtho);
 freez(&row);
 if(speciesSpecific) 
@@ -1745,7 +1767,43 @@ carefulClose(&rFile);
 warn("\nDone.");
 }
     
-   
+void hashMrnas()
+/** Hash all of the accessions in the mrna and refSeqAli
+    tables for this chromosome. */
+{
+struct sqlConnection *conn = NULL;
+char **row = NULL;
+struct sqlResult *sr = NULL;
+char query[256];
+char *chrom = optionVal("chrom", NULL);
+
+/* Allocate some memory. */
+conn = hAllocConn();
+mRnaHash = newHash(13);
+mRnaWeight = optionInt("weightMrna", 1);
+
+assert(chrom);
+
+/* Hash all of the mrna accesions. */
+safef(query, sizeof(query), "select qName from %s_mrna", chrom);
+sr = sqlGetResult(conn, query);
+while((row = sqlNextRow(sr)) != NULL)
+    {
+    hashAddInt(mRnaHash, row[0], IS_MRNA);
+    }
+sqlFreeResult(&sr);
+
+/* Hash all of the refSeq accesions. */
+safef(query, sizeof(query), "select qName from refSeqAli where tName like '%s'", chrom);
+sr = sqlGetResult(conn, query);
+while((row = sqlNextRow(sr)) != NULL)
+    {
+    hashAddInt(mRnaHash, row[0], IS_MRNA);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 
 int main(int argc, char *argv[])
 {
@@ -1766,7 +1824,10 @@ if(db == NULL || orthoDb == NULL)
     errAbort("orthoSplice - Must set db and orhtoDb. Try -help for usage.");
 hSetDb(db);
 hSetDb2(orthoDb);
+if(optionExists("weightMrna"))
+    hashMrnas();
 orthoSplice(db, orthoDb);
+hashFree(&mRnaHash);
 if(mappingFile != NULL)
     carefulClose(&mappingFile);
 return 0;
