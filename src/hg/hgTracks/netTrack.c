@@ -11,7 +11,7 @@
 #include "chainNet.h"
 #include "chainNetDbLoad.h"
 
-static char const rcsid[] = "$Id: netTrack.c,v 1.8 2003/05/21 22:01:37 kent Exp $";
+static char const rcsid[] = "$Id: netTrack.c,v 1.8.16.1 2003/07/28 20:20:44 heather Exp $";
 
 struct netItem
 /* A net track item. */
@@ -70,15 +70,20 @@ static int rNextLine;   /* Y offset to next line. */
 static double rScale;   /* Scale from bases to pixels. */
 static boolean rIsFull; /* Full display? */
 
-static Color netColor(char *chrom)
-/* Get color for chromosome, caching a bit. */
+static char *netColorLastChrom = NULL;
+
+static void netColorClearCashe()
 {
-static char *lastChrom = NULL;
+netColorLastChrom = NULL;
+}
+
+static Color netColor(char *chrom)
+{
 static Color color;
-if (chrom != lastChrom)
+if (chrom != netColorLastChrom)
     {
-    lastChrom = chrom;
-    color = getChromColor(lastChrom+3, rVg);
+    color = getChromColor(chrom+3, rVg);
+    netColorLastChrom = chrom;
     }
 return color;
 }
@@ -217,6 +222,9 @@ if (net != NULL)
     rTg = tg;
     rVg = vg;
     rX = xOff;
+
+    /* Clear cashe. */
+    netColorClearCashe();
 
     /* Compute a few other positional things for recursive routine. */
     rHeightPer = tg->heightPer;
