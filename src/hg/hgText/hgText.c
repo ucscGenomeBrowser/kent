@@ -108,65 +108,6 @@ retStats->stdev = sqrt(total / N);
 }
 
 
-/* Representation of bed-filtering operations */
-/* maybe these should be moved to the bed lib? */
-enum charFilterType
-    {
-    cftIgnore = 0,
-    cftSingleLiteral = 1,
-    cftMultiLiteral = 2,
-    };
-enum stringFilterType
-    {
-    sftIgnore = 0,
-    sftSingleLiteral = 1,
-    sftMultiLiteral = 2,
-    sftSingleRegexp = 3,
-    sftMultiRegexp = 4,
-    };
-enum numericFilterType
-    {
-    nftIgnore = 0,
-    nftLessThan = 1,
-    nftLTE = 2,
-    nftEqual = 3,
-    nftNotEqual = 4,
-    nftGTE = 5,
-    nftGreaterThan = 6,
-    nftInRange = 7,
-    nftNotInRange = 8,
-    };
-struct bedFilter
-    {
-    enum stringFilterType chromFilter;
-    char **chromVals;
-    boolean chromInvert;
-    enum numericFilterType chromStartFilter;
-    int *chromStartVals;
-    enum numericFilterType chromEndFilter;
-    int *chromEndVals;
-    enum stringFilterType nameFilter;
-    char **nameVals;
-    boolean nameInvert;
-    enum numericFilterType scoreFilter;
-    int *scoreVals;
-    enum charFilterType strandFilter;
-    char *strandVals;
-    boolean strandInvert;
-    enum numericFilterType thickStartFilter;
-    int *thickStartVals;
-    enum numericFilterType thickEndFilter;
-    int *thickEndVals;
-    enum numericFilterType blockCountFilter;
-    int *blockCountVals;
-    enum numericFilterType chromLengthFilter;
-    int *chromLengthVals;
-    enum numericFilterType thickLengthFilter;
-    int *thickLengthVals;
-    enum numericFilterType compareStartsFilter;
-    enum numericFilterType compareEndsFilter;
-    };
-
 /* copied from hgGateway: */
 static char * const onChangeText = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.submit();\"";
 
@@ -386,26 +327,18 @@ cgiMakeHiddenVar("origPhase", phase);
 cgiMakeButton("submit", "Look up");
 }
 
-void preserveCgiExceptPosition()
-/* Store all CGI vars except position as hidden vars in the current form. */
-{
-struct cgiVar *cv;
-for (cv = cgiVarList(); cv != NULL; cv = cv->next)
-    if (! sameString("position", cv->name))
-	cgiMakeHiddenVar(cv->name, cv->val);
-}
-
 void positionLookupSamePhase()
 /* print the location and a jump button if the table is positional */
 {
 if (tableIsPositional)
     {
-    printf("<FORM ACTION=\"%s\" NAME=\"posForm\">\n", hgTextName());
     puts("position: ");
     positionLookup(cgiString("phase"));
-    preserveCgiExceptPosition();
-    puts("</FORM>");
     puts("<P>");
+    }
+else
+    {
+    cgiMakeHiddenVar("position", position);
     }
 }
 
@@ -1161,12 +1094,11 @@ saveChooseTableState();
 
 webStart(cart, "Table Browser: %s: %s", freezeName, outputOptionsPhase);
 checkTableExists(fullTableName);
-positionLookupSamePhase();
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\">\n\n", hgTextName());
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
-cgiMakeHiddenVar("position", position);
+positionLookupSamePhase();
 
 printf("<P><HR><H3> Select Output Format for %s </H3>\n", table);
 if (tableIsPositional)
@@ -2130,199 +2062,6 @@ else
 }
 
 
-static struct bed *cloneBed(struct bed *bedItem)
-/* Make an all-newly-allocated copy of a single bed record (<= 12 fields). */
-{
-struct bed *newBed;
-if (bedItem == NULL)
-    return NULL;
-AllocVar(newBed);
-newBed->chrom = cloneString(bedItem->chrom);
-newBed->chromStart = bedItem->chromStart;
-newBed->chromEnd = bedItem->chromEnd;
-newBed->name = cloneString(bedItem->name);
-newBed->score = bedItem->score;
-strcpy(newBed->strand, bedItem->strand);
-newBed->thickStart = bedItem->thickStart;
-newBed->thickEnd = bedItem->thickEnd;
-newBed->reserved = bedItem->reserved;
-newBed->blockCount = bedItem->blockCount;
-if (bedItem->blockCount > 0)
-    {
-    newBed->blockSizes = needMem(sizeof(int) * bedItem->blockCount);
-    memcpy(newBed->blockSizes, bedItem->blockSizes,
-	   sizeof(int) * bedItem->blockCount);
-    newBed->chromStarts = needMem(sizeof(int) * bedItem->blockCount);
-    memcpy(newBed->chromStarts, bedItem->chromStarts,
-	   sizeof(int) * bedItem->blockCount);
-    }
-return(newBed);
-}
-
-
-boolean filterChar(char value, enum charFilterType cft, char *filterValues,
-		   boolean invert)
-/* Return TRUE if value passes the filter. */
-{
-char thisVal;
-if (filterValues == NULL)
-    return(TRUE);
-switch (cft)
-    {
-    case (cftIgnore):
-	return(TRUE);
-	break;
-    case (cftSingleLiteral):
-	return((value == *filterValues) ^ invert);
-	break;
-    case (cftMultiLiteral):
-	while ((thisVal = *(filterValues++)) != 0)
-	    {
-	    if (value == thisVal)
-		return(TRUE ^ invert);
-	    }
-	break;
-    default:
-	errAbort("illegal charFilterType: %d", cft);
-	break;
-    }
-return(FALSE ^ invert);
-}
-
-boolean filterString(char *value, enum stringFilterType sft,
-		     char **filterValues, boolean invert)
-/* Return TRUE if value passes the filter. */
-{
-char *thisVal;
-
-if (filterValues == NULL)
-    return(TRUE);
-switch (sft)
-    {
-    case (sftIgnore):
-	return(TRUE);
-	break;
-    case (sftSingleLiteral):
-	return(sameString(value, *filterValues) ^ invert);
-	break;
-    case (sftMultiLiteral):
-	while ((thisVal = *(filterValues++)) != NULL)
-	    if (sameString(value, thisVal))
-		return(TRUE ^ invert);
-	break;
-    case (sftSingleRegexp):
-	return(wildMatch(*filterValues, value) ^ invert);
-	break;
-    case (sftMultiRegexp):
-	while ((thisVal = *(filterValues++)) != NULL)
-	    if (wildMatch(thisVal, value))
-		return(TRUE ^ invert);
-	break;
-    default:
-	errAbort("illegal stringFilterType: %d", sft);
-	break;
-    }
-return(FALSE ^ invert);
-}
-
-boolean filterInt(int value, enum numericFilterType nft, int *filterValues)
-/* Return TRUE if value passes the filter. */
-/* This could probably be turned into a macro if performance is bad. */
-{
-if (filterValues == NULL)
-    return(TRUE);
-switch (nft)
-    {
-    case (nftIgnore):
-	return(TRUE);
-	break;
-    case (nftLessThan):
-	return(value < *filterValues);
-	break;
-    case (nftLTE):
-	return(value <= *filterValues);
-	break;
-    case (nftEqual):
-	return(value == *filterValues);
-	break;
-    case (nftNotEqual):
-	return(value != *filterValues);
-	break;
-    case (nftGTE):
-	return(value >= *filterValues);
-	break;
-    case (nftGreaterThan):
-	return(value > *filterValues);
-	break;
-    case (nftInRange):
-	return((value >= *filterValues) && (value <= *(filterValues+1)));
-	break;
-    case (nftNotInRange):
-	return(! ((value >= *filterValues) && (value <= *(filterValues+1))));
-	break;
-    default:
-	errAbort("illegal numericFilterType: %d", nft);
-	break;
-    }
-return(FALSE);
-}
-
-struct bed *filterBedInRange(struct bed *bedListIn, struct bedFilter *bf,
-			     char *chrom, int winStart, int winEnd)
-/* Given a bed list, a position range, and a bedFilter which specifies
- * constraints on bed fields, return the list of bed items that meet
- * the constraints.  If chrom is NULL, position range is ignored. */
-{
-struct bed *bedListOut = NULL, *bed;
-int cmpValues[2];
-
-for (bed=bedListIn;  bed != NULL;  bed=bed->next)
-    {
-    boolean passes = TRUE;
-    if (chrom != NULL)
-	passes &= (sameString(bed->chrom, chrom) &&
-		   (bed->chromStart < winEnd) &&
-		   (bed->chromEnd   > winStart));
-    passes &= filterString(bed->chrom, bf->chromFilter, bf->chromVals,
-			   bf->chromInvert);
-    passes &= filterInt(bed->chromStart, bf->chromStartFilter,
-			bf->chromStartVals);
-    passes &= filterInt(bed->chromEnd, bf->chromEndFilter, bf->chromEndVals);
-    passes &= filterString(bed->name, bf->nameFilter, bf->nameVals,
-			   bf->nameInvert);
-    passes &= filterInt(bed->score, bf->scoreFilter, bf->scoreVals);
-    passes &= filterChar(bed->strand[0], bf->strandFilter, bf->strandVals,
-			 bf->strandInvert);
-    passes &= filterInt(bed->thickStart, bf->thickStartFilter,
-			bf->thickStartVals);
-    passes &= filterInt(bed->thickEnd, bf->thickEndFilter, bf->thickEndVals);
-    passes &= filterInt(bed->blockCount, bf->blockCountFilter,
-			bf->blockCountVals);
-    passes &= filterInt((bed->chromEnd - bed->chromStart),
-			bf->chromLengthFilter, bf->chromLengthVals);
-    passes &= filterInt((bed->thickEnd - bed->thickStart),
-			bf->thickLengthFilter, bf->thickLengthVals);
-    cmpValues[0] = cmpValues[1] = bed->thickStart;
-    passes &= filterInt(bed->chromStart, bf->compareStartsFilter, cmpValues);
-    cmpValues[0] = cmpValues[1] = bed->thickEnd;
-    passes &= filterInt(bed->chromEnd, bf->compareEndsFilter, cmpValues);
-    if (passes)
-	{
-	struct bed *newBed = cloneBed(bed);
-	slAddHead(&bedListOut, newBed);
-	}
-    }
-slReverse(&bedListOut);
-return(bedListOut);
-}
-
-struct bed *filterBed(struct bed *bedListIn, struct bedFilter *bf)
-/* Given a bed list and a bedFilter which specifies constraints on bed 
- * fields, return the list of bed items that meet the constraints. */
-{
-return filterBedInRange(bedListIn, bf, NULL, 0, 0);
-}
-
 struct bed *getBedList(boolean ignoreConstraints, char *onlyThisChrom)
 /* For any positional table output: get the features selected by the user 
  * and return them as a bed list.  This is where table intersection happens. */
@@ -2360,7 +2099,8 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	{
 	struct customTrack *ct = lookupCt(table);
 	struct bedFilter *bf = constrainBedFields(NULL);
-	bedListT1 = filterBedInRange(ct->bedList, bf, chrom, winStart, winEnd);
+	bedListT1 = bedFilterListInRange(ct->bedList, bf,
+					 chrom, winStart, winEnd);
 	}
     else
 	bedListT1 = hGetBedRangeDb(db, fullTableName, chrom, winStart,
@@ -2403,8 +2143,8 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	    {
 	    struct customTrack *ct2 = lookupCt(table2);
 	    struct bedFilter *bf2 = constrainBedFields("2");
-	    struct bed *bedListT2 = filterBedInRange(ct2->bedList, bf2,
-						     chrom, winStart, winEnd);
+	    struct bed *bedListT2 = bedFilterListInRange(ct2->bedList, bf2,
+						      chrom, winStart, winEnd);
 	    struct hTableInfo *hti2 = ctToHti(ct2);
 	    fbListT2 = fbFromBed(track2, hti2, bedListT2, winStart, winEnd,
 				 FALSE, FALSE);
@@ -2736,7 +2476,7 @@ gotResults = FALSE;
 for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     {
     getFullTableName(fullTableName, chromPtr->name, table);
-    bedList = filterBedInRange(ct->bedList, bf, chrom, winStart, winEnd);
+    bedList = bedFilterListInRange(ct->bedList, bf, chrom, winStart, winEnd);
     gotResults = printTabbedBed(bedList, chosenFields, gotResults);
     bedFreeList(&bedList);
     }
@@ -2880,12 +2620,11 @@ saveIntersectOptionsState();
 
 webStart(cart, "Table Browser: %s: Choose Fields of %s", freezeName, table);
 checkTableExists(fullTableName);
-positionLookupSamePhase();
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\">\n\n", hgTextName());
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
-cgiMakeHiddenVar("position", position);
+positionLookupSamePhase();
 cgiMakeHiddenVar("outputType", outputType);
 preserveConstraints(fullTableName, db, NULL);
 preserveTable2();
@@ -2926,12 +2665,11 @@ saveIntersectOptionsState();
 
 webStart(cart, "Table Browser: %s: %s", freezeName, seqOptionsPhase);
 checkTableExists(fullTableName);
-positionLookupSamePhase();
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\">\n\n", hgTextName());
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
-cgiMakeHiddenVar("position", position);
+positionLookupSamePhase();
 cgiMakeHiddenVar("outputType", outputType);
 preserveConstraints(fullTableName, getTableDb(), NULL);
 preserveTable2();
@@ -3186,12 +2924,11 @@ saveIntersectOptionsState();
 
 webStart(cart, "Table Browser: %s: %s", freezeName, bedOptionsPhase);
 checkTableExists(fullTableName);
-positionLookupSamePhase();
 puts("<FORM ACTION=\"/cgi-bin/hgText\" NAME=\"mainForm\" METHOD=\"GET\">\n");
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
-cgiMakeHiddenVar("position", position);
+positionLookupSamePhase();
 cgiMakeHiddenVar("outputType", outputType);
 preserveConstraints(fullTableName, db, NULL);
 preserveTable2();
@@ -3441,12 +3178,11 @@ if (! sameString(outputType, seqOptionsPhase) &&
 	     "(FASTA, BED, HyperLinks, GTF or Summary/Statistics) for "
 	     "intersection of tables.");
 
-positionLookupSamePhase();
 puts("<FORM ACTION=\"/cgi-bin/hgText\" NAME=\"mainForm\" METHOD=\"GET\">\n");
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
-cgiMakeHiddenVar("position", position);
+positionLookupSamePhase();
 cgiMakeHiddenVar("outputType", outputType);
 cgiMakeHiddenVar("table2", getTable2Var());
 preserveConstraints(fullTableName, db, NULL);
@@ -3697,18 +3433,17 @@ blockSizeStats = needMem((numChroms+1) * sizeof(struct intStats));
 webStart(cart, "Table Browser: %s: %s", freezeName, statsPhase);
 checkTableExists(fullTableName);
 
-positionLookupSamePhase();
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\">\n\n", hgTextName());
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
-cgiMakeHiddenVar("position", position);
+positionLookupSamePhase();
 preserveConstraints(fullTableName, db, NULL);
 preserveTable2();
 
 printf("<H4> Get Output: </H4>\n");
 cgiMakeDropList("outputType", outputTypePosMenu, outputTypePosMenuSize,
-		outputTypePosMenu[0]);
+		statsPhase);
 cgiMakeButton("phase", getOutputPhase);
 puts("</FORM>");
 
