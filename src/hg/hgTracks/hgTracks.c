@@ -8570,6 +8570,21 @@ void ensRikenMethods(struct trackGroup *tg)
 tg->loadItems = ensRikenLoadItems;
 }
 
+void ensMergeLoadItems(struct trackGroup *tg)
+/* Load ensMerge genepreds  - have to get them from special secret database. */
+{
+struct sqlConnection *conn = sqlConnect("mgsc");
+tg->items = connectedLfFromGenePredInRange(conn, tg->mapName, chromName,
+					   winStart, winEnd);
+sqlDisconnect(&conn);
+}
+
+void ensMergeMethods(struct trackGroup *tg)
+/* Load up ensMerge specific methods. */
+{
+tg->loadItems = ensMergeLoadItems;
+}
+
 void secretRikenTracks(struct trackGroup **pTrackList)
 /* If not on right host remove Riken tracks. */
 {
@@ -8579,7 +8594,10 @@ if (!hIsMgscHost())
     for (tg = *pTrackList; tg != NULL; tg = tg->next)
         {
 	  if (sameString(tg->mapName, "rikenMrna") ||
-	      sameString(tg->mapName, "ensRiken"))
+	      sameString(tg->mapName, "ensRiken")  ||
+	      sameString(tg->mapName, "ensMergeTierB")  ||
+	      sameString(tg->mapName, "ensMergeTierC")  ||
+	      sameString(tg->mapName, "ensMergeTierD"))
 	     {
 	     slRemoveEl(pTrackList, tg);
 	     }
@@ -9039,6 +9057,9 @@ registerTrackHandler("mgcUcscPicks", intronEstMethods);
 registerTrackHandler("affyTranscriptome", affyTranscriptomeMethods);
 registerTrackHandler("rikenMrna", rikenMethods);
 registerTrackHandler("ensRiken", ensRikenMethods);
+registerTrackHandler("ensMergeTierB", ensMergeMethods);
+registerTrackHandler("ensMergeTierC", ensMergeMethods);
+registerTrackHandler("ensMergeTierD", ensMergeMethods);
 registerTrackHandler("genomicSuperDups", genomicSuperDupsMethods);
 registerTrackHandler("celeraDupPositive", celeraDupPositiveMethods);
 registerTrackHandler("celeraCoverage", celeraCoverageMethods);
