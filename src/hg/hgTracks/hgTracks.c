@@ -48,6 +48,7 @@
 #include "trackDb.h"
 #include "pslWScore.h"
 #include "lfs.h"
+#include "mcnBreakpoints.h"
 
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
@@ -4649,6 +4650,28 @@ tg->itemStart = tgWeirdItemStart;
 tg->itemEnd = tgWeirdItemEnd;
 }
 
+
+void loadMcnBreakpoints(struct trackGroup *tg)
+/* Load up MCN breakpoints from database table to trackGroup items. */
+{
+bedLoadItem(tg, "mcnBreakpoints", (ItemLoader)mcnBreakpointsLoad);
+}
+
+void freeMcnBreakpoints(struct trackGroup *tg)
+/* Free up MCN Breakpoints items. */
+{
+mcnBreakpointsFreeList((struct mcnBreakpoints**)&tg->items);
+}
+
+void mcnBreakpointsMethods(struct trackGroup *tg)
+/* Make track group for mcnBreakpoints. */
+{
+tg->loadItems = loadMcnBreakpoints;
+tg->freeItems = freeMcnBreakpoints;
+}
+
+
+
 #endif /*FUREY_CODE*/
 
 enum trackVisibility limitVisibility(struct trackGroup *tg)
@@ -5437,6 +5460,7 @@ if (calledSelf)
 registerTrackHandler("cytoBand", cytoBandMethods);
 registerTrackHandler("bacEndPairs", bacEndPairsMethods);
 registerTrackHandler("cgh", cghMethods);
+registerTrackHandler("mcnBreakpoints", mcnBreakpointsMethods);
 registerTrackHandler("mapGenethon", genethonMethods);
 registerTrackHandler("stsMarker", stsMarkerMethods);
 registerTrackHandler("stsMap", stsMapMethods);
