@@ -7,7 +7,7 @@
 #include "fa.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: checkYbr.c,v 1.5 2003/07/28 20:30:49 booch Exp $";
+static char const rcsid[] = "$Id: checkYbr.c,v 1.6 2004/07/16 21:52:04 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -39,7 +39,6 @@ struct contig *contigsFromAgp(char *fileName, struct hash *hash)
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[3];
 struct contig *contigList = NULL, *contig;
-int lastEnd = 0;
 while (lineFileChop(lf, row))
     {
     char *name = row[0];
@@ -120,6 +119,7 @@ int problemCount= 0;
 /* char *name; */
 char name[16];
 unsigned totSize = 0;
+unsigned seqCount = 0;
 
 while (faSizeNext(lf, comment, &size))
     {
@@ -131,11 +131,13 @@ while (faSizeNext(lf, comment, &size))
 	}
     name[9] = '\0';
     totSize += size;
-    if (name == NULL || (!startsWith("NT_", name) && !startsWith("NG_", name)))
+    ++seqCount;
+    if (name == NULL || (!startsWith("NT_", name) && !startsWith("NG_", name)
+	&& !startsWith("NC_", name)))
 	{
 	++problemCount;
         /* printf("%s has an entry which doesn't have NT_ as a last word\n", fileName); */
-        printf("%s has an entry which doesn't have NT_ as name of contig\n", fileName);
+        printf("%s has an entry which doesn't have NT_ NG_ or NC_ as name of contig: '%s', at sequence %u\n", fileName, name, seqCount);
 	}
     else
         {
