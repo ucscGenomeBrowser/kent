@@ -103,11 +103,6 @@ if (canDoUTR)
     {
     cgiMakeCheckBox("hgSeq.utrExon5", TRUE);
     printf("5' UTR%s <BR>\n", exonStr);
-    if (canDoIntrons)
-	{
-	cgiMakeCheckBox("hgSeq.utrIntron5", TRUE);
-	puts("5' UTR Introns <BR>\n");
-	}
     }
 
 if (canDoIntrons)
@@ -117,11 +112,6 @@ if (canDoIntrons)
 	printf("CDS Exons <BR>\n");
     else
 	printf("Blocks <BR>\n");
-    cgiMakeCheckBox("hgSeq.cdsIntron", TRUE);
-    if (canDoUTR)
-	puts("CDS Introns <BR>\n");
-    else
-	puts("Regions between Blocks <BR>\n");
     }
 else if (canDoUTR)
     {
@@ -137,11 +127,15 @@ if (canDoUTR)
     {
     cgiMakeCheckBox("hgSeq.utrExon3", TRUE);
     printf("3' UTR%s <BR>\n", exonStr);
-    if (canDoIntrons)
-	{
-	cgiMakeCheckBox("hgSeq.utrIntron3", TRUE);
-	puts("3' UTR Introns <BR>\n");
-	}
+    }
+
+if (canDoIntrons)
+    {
+    cgiMakeCheckBox("hgSeq.intron", TRUE);
+    if (canDoUTR)
+	puts("Introns <BR>");
+    else
+	puts("Regions between blocks <BR>");
     }
 
 if (canDoIntrons || canDoUTR)
@@ -156,11 +150,14 @@ if (canDoIntrons || canDoUTR)
     {
     cgiMakeRadioButton("hgSeq.granularity", "gene", TRUE);
     if (canDoUTR)
-	puts("One FASTA record per gene (concatenate selected regions) <BR>\n");
+	puts("One FASTA record per gene. <BR>\n");
     else
-	puts("One FASTA record per item (concatenate selected regions) <BR>\n");
+	puts("One FASTA record per item. <BR>\n");
     cgiMakeRadioButton("hgSeq.granularity", "feature", FALSE);
-	puts("One FASTA record per selected region with \n");
+    if (canDoUTR)
+	puts("One FASTA record per region (exon, intron, etc.) with \n");
+    else
+	puts("One FASTA record per region (block/between blocks) with \n");
     }
 else
     {
@@ -203,9 +200,6 @@ cgiMakeRadioButton("hgSeq.repMasking", "lower", TRUE);
 puts(" to lower case \n");
 cgiMakeRadioButton("hgSeq.repMasking", "N", FALSE);
 puts(" to N <BR>\n");
-
-cgiMakeCheckBox("hgSeq.revComp", TRUE);
-puts("Reverse-complement if from - strand <BR>\n");
 }
 
 void hgSeqOptionsDb(char *db, char *table)
@@ -262,7 +256,7 @@ char recName[256];
 int seqStart, seqEnd;
 int offset, cSize;
 int i;
-boolean isRc     = cartBoolean(cart, "hgSeq.revComp") && (strand == '-');
+boolean isRc     = (strand == '-');
 boolean maskRep  = cartBoolean(cart, "hgSeq.maskRepeats");
 int padding5     = cartInt(cart, "hgSeq.padding5");
 int padding3     = cartInt(cart, "hgSeq.padding3");
@@ -353,7 +347,7 @@ if (concatRegions)
 else
     {
     int i, j;
-    boolean isRc = cartBoolean(cart, "hgSeq.revComp") && (strand == '-');
+    boolean isRc = (strand == '-');
     char rName[256];
     for (i=0;  i < rCount;  i++)
 	{
@@ -424,17 +418,17 @@ boolean *exonFlags = NULL;
 boolean *cdsFlags = NULL;
 int i, rowCount;
 boolean promoter   = cgiBoolean("hgSeq.promoter");
+boolean intron     = cgiBoolean("hgSeq.intron");
 boolean utrExon5   = cgiBoolean("hgSeq.utrExon5");
-boolean utrIntron5 = cgiBoolean("hgSeq.utrIntron5");
+boolean utrIntron5 = utrExon5 && intron;
 boolean cdsExon    = cgiBoolean("hgSeq.cdsExon");
-boolean cdsIntron  = cgiBoolean("hgSeq.cdsIntron");
+boolean cdsIntron  = cdsExon && intron;
 boolean utrExon3   = cgiBoolean("hgSeq.utrExon3");
-boolean utrIntron3 = cgiBoolean("hgSeq.utrIntron3");
+boolean utrIntron3 = utrExon3 && intron;
 boolean downstream = cgiBoolean("hgSeq.downstream");
 int promoterSize   = cgiOptionalInt("hgSeq.promoterSize", 0);
 int downstreamSize = cgiOptionalInt("hgSeq.downstreamSize", 0);
 char *granularity  = cgiOptionalString("hgSeq.granularity");
-boolean revComp    = cgiBoolean("hgSeq.revComp");
 boolean concatRegions = granularity && sameString("gene", granularity);
 boolean isCDS, doIntron;
 boolean foundFields;
@@ -550,7 +544,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     if (fStrand[0] == 0)
 	strand = "?";
-    isRc = revComp && (strand[0] == '-');
+    isRc = (strand[0] == '-');
     // here's the max # of feature regions:
     if (canDoIntrons)
 	count = 2 + (2 * blkCount);
