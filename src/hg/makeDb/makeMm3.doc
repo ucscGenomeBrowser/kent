@@ -1387,20 +1387,23 @@ PRODUCING FUGU FISH ALIGNMENTS (DONE 03/13/03)
     hgLoadRna addSeq mm3 /gbdb/mm3/fuguSeq/fugu_v3_mask.fasta
 
 
-LOAD GENEID GENES (TODO)
-     cd ~/mm/bed
-     mkdir geneid
-     cd geneid
-     mkdir download
-     cd download
-   Now download *.gtf and *.prot from 
-   http://www1.imim.es/genepredictions/M.musculus/mmFeb2002/geneid_v1.1
-   Get rid of the extra .N in the transcripts with subs.  
-     cd ..
-     cp ~/lastMm/bed/geneid/subs .
-     subs -e download/*.gtf > /dev/null
-     ldHgGene mm3 geneid download/*.gtf -exon=CDS
-     hgPepPred mm3 generic geneidPep download/*.prot
+LOAD GENEID GENES (DONE 03/18/03)
+    mkdir -p ~/mm3/bed/geneid/download
+    cd ~/mm3/bed/geneid/download
+    set webroot = \
+      http://genome.imim.es/genepredictions/M.musculus/mmFeb2003/geneid_v1.1
+    foreach f (~/mm3/?{,?}/chr?{,?}{,_random}.fa)
+      set chr = $f:t:r
+      wget $webroot/$chr.gtf
+      wget $webroot/$chr.prot
+    end
+    # Add missing .1 to protein id's
+    foreach f (*.prot)
+      perl -wpe 's/^(>chr\w+)$/$1.1/' $f > $f:r-fixed.prot
+    end
+    cd ..
+    ldHgGene mm3 geneid download/*.gtf -exon=CDS
+    hgPepPred mm3 generic geneidPep download/*-fixed.prot
 
 SGP GENE PREDICTIONS (TODO)
     mkdir -p ~/mm3/bed/sgp/download
