@@ -60,7 +60,8 @@
 #include "netGap.h"
 #include "chainBlock.h"
 #include "chain.h"
-#include "chainGap.h"
+#include "chainLink.h"
+#include "chainView.h"
 #include "knownMore.h"
 #include "estPair.h"
 #include "customTrack.h"
@@ -87,6 +88,7 @@
 #define MEDIUM 2
 #define BRIGHT 3
 #define MAXPIXELS 14000
+#define MAXCHAINS 50000000
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 int imagePixelHeight = 0;
 int colorBin[MAXPIXELS][256]; /* count of colors for each pixel for each color */
@@ -5316,18 +5318,25 @@ void connectedLfFromChainsInRange(struct sqlConnection *conn, struct sqlConnecti
  * already connected to database.. */
 {
 char *track = tg->mapName;
-char trackGap[128];
-struct sqlResult *sr = NULL, *srGap = NULL;
-char **row, **rowGap;
+char trackLink[128];
+char trackChain[128];
+char **row, **rowLink;
 int rowOffset;
 char *optionChrStr;
 struct linkedFeatures *lfList = NULL, *lf;
 struct boxIn *bList = NULL;
 char optionChr[128]; /* Option -  chromosome filter */
-char extraWhere[128] , query[256];
+char extraWhere[128] ;
+struct dyString *query;
+int minGap = (winEnd - winStart ) / 30000;
+int prevChainId = 0 ;
+static struct chain *chainArr[MAXCHAINS];
+struct sqlResult *sr = NULL, *srLink = NULL;
+struct chain *chain ;
 
-snprintf( trackGap, sizeof(trackGap), "%s_%sGap", chromName, track);
+snprintf( trackLink, sizeof(trackLink), "%s_%sLink", chromName, track);
 snprintf( optionChr, sizeof(optionChr), "%s.chromFilter", tg->mapName);
+snprintf( trackChain, sizeof(trackChain), "%s_%s", chromName, track);
 optionChrStr = cartUsualString(cart, optionChr, "All");
 if (startsWith("chr",optionChrStr)) 
 	{
@@ -5345,37 +5354,61 @@ if (sqlCountColumns(sr) < 11+rowOffset)
 	     tg->mapName);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    struct chain *chain = chainLoad(row+rowOffset);
+    chain = chainLoad(row+rowOffset);
+    assert (chain->id < MAXCHAINS);
+    chainArr[chain->id] = chain;
+    }
 
-    sprintf(query, "SELECT tName, tStart, tEnd, qStart from %s where chainId = %d and tStart < %d and tEnd > %d and tStart >= %d and tEnd <= %d",
-                trackGap, chain->id, chain->tEnd, chain->tStart, winStart, winEnd);
-    srGap = sqlGetResult(conn2, query);
-    while ((rowGap = sqlNextRow(srGap)) != NULL)
+    query = newDyString(1024);
+    dyStringPrintf(query, "select c.bin, c.score, c.tName, c.tSize, c.tStart, c.tEnd, c.qName, c.qSize, c.qStrand, c.qStart, c.qEnd, c.id, g.tName, g.tStart, g.tEnd, g.qStart from %s c , %s g where g.tStart < c.tEnd and g.tEnd > c.tStart and g.tStart >= %d and g.tEnd <= %d and g.chainId = c.id and ",
+         trackChain, trackLink, start, end, winStart, winEnd, winStart, winEnd);
+    hAddBinToQueryGeneral("c.bin", winStart, winEnd, query);
+ 	hAddBinToQueryGeneral("g.bin", winStart, winEnd, query);
+    dyStringPrintf(query, "(g.tEnd - g.tStart) > %d ",minGap);
+ 
+//    sprintf(query, "SELECT tName, tStart, tEnd, qStart from %s where chainId = %d and tStart < %d and tEnd > %d and tStart >= %d and tEnd <= %d",
+//               trackLink, chain->id, chain->tEnd, chain->tStart, winStart, winEnd);
+//    printf(" %s <p>\n",query->string);
+    srLink = sqlGetResult(conn2, query->string);
+    while ((rowLink = sqlNextRow(srLink)) != NULL)
         {
-        struct chainGap *cg = chainGapLoad(rowGap);
+        struct chainView *chainView = chainViewLoad(rowLink+rowOffset);
 
         struct boxIn *b;
         AllocVar(b);
-        b->tStart = cg->tStart;
-        b->tEnd = cg->tEnd;
-        b->qStart = cg->qStart;
-        b->qEnd = cg->qStart + cg->tEnd - cg->tStart;
-        slAddHead(&bList, b);
+        b->tStart = chainView->gtStart;
+        b->tEnd = chainView->gtEnd;
+        b->qStart = chainView->qStart;
+        b->qEnd = chainView->qStart + chainView->gtEnd - chainView->gtStart;
+        if (prevChainId == chainView->id)
+            {
+            slAddHead(&bList, b);
+            }
+        else
+            {
+            if (prevChainId != 0)
+                {
+                chain = chainArr[prevChainId];
+                slReverse(&bList);
+                chain->blockList = bList;
+                lf = lfFromChainx(chain, 0, isXeno, nameGetsPos);
+                slAddHead(&lfList, lf);
+                }
+            bList = NULL;
+            slAddHead(&bList, b);
+            }
+        prevChainId = chainView->id;
         }
-    slReverse(&bList);
-    chain->blockList = bList;
-    lf = lfFromChainx(chain, 0, isXeno, nameGetsPos);
-    slAddHead(&lfList, lf);
-    bList = NULL;
-    chainFree(&chain);
-    }
+    freeDyString(&query);
+    //chainFree(&chain);
+
 slReverse(&lfList);
 if (limitVisibility(tg, lfList) == tvFull)
     slSort(&lfList, linkedFeaturesCmpStart);
 if (tg->extraUiData)
     filterMrna(tg, &lfList);
 sqlFreeResult(&sr);
-sqlFreeResult(&srGap);
+sqlFreeResult(&srLink);
 tg->items = lfList;
 }
 
