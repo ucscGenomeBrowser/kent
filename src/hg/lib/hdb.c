@@ -1029,12 +1029,12 @@ hDisconnectCentral(&conn);
 return gotIx;
 }
 
-struct serverTable *hFindBlatServer(char *db, boolean isTrans)
+struct blatServerTable *hFindBlatServer(char *db, boolean isTrans)
 /* Return server for given database.  Db can either be
  * database name or description. Ponter returned is owned
  * by this function and shouldn't be modified */
 {
-static struct serverTable st;
+static struct blatServerTable st;
 struct sqlConnection *conn = hConnectCentral();
 char query[256];
 struct sqlResult *sr;
@@ -1050,7 +1050,7 @@ if (!sqlExists(conn, query))
         db = dbActualName;
     }
 
-/* Do a little join to get data to fit into the serverTable. */
+/* Do a little join to get data to fit into the blatServerTable. */
 sprintf(query, "select dbDb.name,dbDb.description,blatServers.isTrans"
                ",blatServers.host,blatServers.port,dbDb.nibPath "
 	       "from dbDb,blatServers where blatServers.isTrans = %d and "
