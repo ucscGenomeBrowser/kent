@@ -48,6 +48,94 @@ if (val == NULL)
 return val;
 }
 
+static struct hash *chromInfoHash = NULL; /* chromInfo cache for db1 */
+static struct hash *chromInfoHash2 = NULL; /* chromInfo cache for db2 */
+static char *hdbDefaultChrom = NULL; /* default chromosome(table) db1 */
+static char *hdbDefaultChrom2 = NULL;/* default chromosome(table) db2 */
+
+struct chromInfoEntry 
+/* chromInfo hash table contents:  nib file size, nib file name */
+{
+    unsigned size;
+    char *fileName;
+};
+
+struct hash *hdbChromInfoHashConn(char **defaultChrom, 
+		struct sqlConnection *conn)
+/* create a hash of chromInfo contents */
+{
+struct sqlResult *sr;
+char **row;
+struct chromInfoEntry *cEntry;
+struct hash *hash = newHash(6);
+
+sr = sqlGetResult(conn, "select chrom,size,fileName from chromInfo");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if(*defaultChrom == NULL)
+    	*defaultChrom = cloneString(row[0]);
+
+    AllocVar(cEntry);
+    cEntry->size = sqlUnsigned(row[1]);
+    cEntry->fileName = cloneString(row[2]);
+    hashAdd(hash, row[0], cEntry);
+    }
+sqlFreeResult(&sr);
+return hash;
+}
+
+struct hash *hdbChromInfoHash()
+/* return hash or make it if it doesn't exist for db 1*/
+{
+struct sqlConnection *conn;
+if (chromInfoHash == NULL)
+    {
+    conn = hAllocConn();
+    chromInfoHash = hdbChromInfoHashConn(&hdbDefaultChrom, conn);
+    hFreeConn(&conn);
+    }
+
+return chromInfoHash;
+}
+
+struct hash *hdbChromInfoHash2()
+/* return hash or make it if it doesn't exist for db 2*/
+{
+struct sqlConnection *conn;
+if (chromInfoHash2 == NULL)
+    {
+    conn = hAllocConn2();
+    chromInfoHash2 = hdbChromInfoHashConn(&hdbDefaultChrom2, conn);
+    hFreeConn2(&conn);
+    }
+
+return chromInfoHash2;
+}
+
+char *getDefaultChrom2()
+/* get default chromosome (table) for db2 */
+{
+    hdbChromInfoHash2();
+    return hdbDefaultChrom2;
+}
+
+char *getDefaultChrom()
+/* get default chromosome (table) for db1 */
+{
+    hdbChromInfoHash();
+    return hdbDefaultChrom;
+}
+
+char *hgOfficialChromName(char *name)
+/* Returns "cannonical" name of chromosome or NULL
+ * if not a chromosome. */
+{
+struct hashEl *hashEl;
+if ((hashEl = hashLookup(hdbChromInfoHash(),name))!= NULL)
+    return hashEl->name;
+return NULL;
+}
+
 void hDefaultConnect()
 /* read in the connection options from config file */
 {
@@ -113,7 +201,7 @@ void hSetDb2(char *dbName)
 /* Set the database name. */
 {
 if (hdbCc2 != NULL)
-    errAbort("Can't hgSetDb after an hgAllocConn2(), sorry.");
+    errAbort("Can't hgSetDb2 after an hgAllocConn2(), sorry.");
 hdbName2 = dbName;
 }
 
@@ -331,51 +419,33 @@ if (startsWith("chr", table))
     }
 }
 
-int hdbChromSize(struct sqlConnection *conn, char *chromName)
-/* Get chromosome size from given database connection. */
-{
-int size;
-char query[256];
-
-snprintf(query, sizeof(query), 	
-	"select size from chromInfo where chrom = '%s'", chromName);
-size = sqlQuickNum(conn, query);
-return size;
-}
-
-
 int hChromSize(char *chromName)
 /* Return size of chromosome. */
 {
-struct sqlConnection *conn = hAllocConn();
-int size = hdbChromSize(conn, chromName);
-if (size == 0)
-    errAbort("There is no chromosome %s in database %s.", chromName, hdbName);
-hFreeConn(&conn);
-return size;
+struct hashEl *hashEl;
+if ((hashEl = hashLookup(hdbChromInfoHash(),chromName))!= NULL)
+    return ((struct chromInfoEntry *)hashEl->val)->size;
+
+errAbort("There is no chromosome %s in database %s.",chromName,hdbName);
 }
 
 int hChromSize2(char *chromName)
-/* Return size of chromosome. */
+/* Return size of chromosome on db2. */
 {
-struct sqlConnection *conn = hAllocConn2();
-int size = hdbChromSize(conn, chromName);
-if (size == 0)
-    errAbort("There is no chromosome %s in database %s.", chromName, hdbName2);
-hFreeConn2(&conn);
-return size;
+struct hashEl *hashEl;
+if ((hashEl = hashLookup(hdbChromInfoHash2(),chromName))!= NULL)
+    return ((struct chromInfoEntry *)hashEl->val)->size;
+errAbort("There is no chromosome %s in database %s.",chromName,hdbName2);
 }
 
 void hNibForChrom(char *chromName, char retNibName[512])
 /* Get .nib file associated with chromosome. */
 {
-struct sqlConnection *conn;
-char query[256];
-conn = hAllocConn();
-sprintf(query, "select fileName from chromInfo where chrom = '%s'", chromName);
-if (sqlQuickQuery(conn, query, retNibName, 512) == NULL)
+struct hashEl *hashEl;
+if ((hashEl = hashLookup(hdbChromInfoHash(),chromName))== NULL)
     errAbort("Sequence %s isn't in database", chromName);
-hFreeConn(&conn);
+strncpy(retNibName,((struct chromInfoEntry *)hashEl->val)->fileName,
+		512);
 }
 
 struct hash *hCtgPosHash()
@@ -467,19 +537,14 @@ return hDnaFromSeq(chromName, 0, size, dnaLower);
 struct slName *hAllChromNames()
 /* Get list of all chromosome names. */
 {
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
+struct hashEl *hashEl = *(hdbChromInfoHash()->table);
 struct slName *list = NULL, *el;
-char **row;
 
-sr = sqlGetResult(conn, "select chrom from chromInfo");
-while ((row = sqlNextRow(sr)) != NULL)
+for(;hashEl; hashEl = hashEl->next)
     {
-    el = newSlName(row[0]);
+    el = newSlName(hashEl->name);
     slAddHead(&list, el);
     }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
 slReverse(&list);
 return list;
 }
@@ -1419,12 +1484,22 @@ return hFindBed12FieldsAndBinDb(db, table,
 				&isBinned);
 }
 
+int hdbChromSize(char *db, char *chromName)
+/* Get chromosome size from given database . */
+{
+if (sameString(db, hGetDb()))
+    return hChromSize(chromName);
+else if ((hGetDb2() != NULL) && sameString(db, hGetDb2()))
+    return hChromSize2(chromName);
+return 0;
+}
 void hFindDefaultChrom(char *db, char defaultChrom[64])
 /* Find chromosome to use if none specified. */
 {
-struct sqlConnection *conn = sqlConnect(db);
-sqlQuickQuery(conn, "select chrom from chromInfo", defaultChrom, 64);
-sqlDisconnect(&conn);
+if (sameString(db, hGetDb()))
+    strncpy(defaultChrom, getDefaultChrom(), 64);
+else if ((hGetDb2() != NULL) && sameString(db, hGetDb2()))
+    strncpy(defaultChrom, getDefaultChrom2(), 64);
 }
 
 struct hTableInfo *hFindTableInfoDb(char *db, char *chrom, char *rootName)
