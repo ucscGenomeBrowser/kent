@@ -11,7 +11,7 @@ void usage()
 errAbort(
   "pslSomeRecords - Extract multiple psl records\n"
   "usage:\n"
-  "   pslSomeRecords XXX\n"
+  "   pslSomeRecords pslIn listOfQNames pslOut\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
