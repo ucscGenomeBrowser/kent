@@ -145,7 +145,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.738 2004/09/03 20:26:31 kschneid Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.739 2004/09/05 20:17:41 markd Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3556,6 +3556,8 @@ if (sameString(tdb->tableName, "mgcGenes"))
         mgcOrganism = "Hs";
     else if (startsWith("mm", database))
         mgcOrganism = "Mm";
+    else if (startsWith("rn", database))
+        mgcOrganism = "Rn";
     else
         errAbort("can't map database \"%s\" to a MGC organism", database);
     printf("<B>MGC clone information:</B> ");
