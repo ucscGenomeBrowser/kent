@@ -7,7 +7,7 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.46 2003/09/24 02:29:49 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.47 2003/10/01 23:13:43 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -373,7 +373,98 @@ slReverse(&newList);
 *pList = newList;
 }
 
+struct slInt *slIntNew(int x)
+/* Return a new int. */
+{
+struct slInt *a;
+AllocVar(a);
+a->val = x;
+return a;
+}
 
+int slIntCmp(const void *va, const void *vb)
+/* Compare two slInts. */
+{
+const struct slInt *a = *((struct slInt **)va);
+const struct slInt *b = *((struct slInt **)vb);
+return a->val - b->val;
+}
+
+static int doubleCmp(const void *va, const void *vb)
+/* Compare function to sort array of doubles. */
+{
+const double *a = va;
+const double *b = vb;
+double diff = *a - *b;
+if (diff < 0)
+    return -1;
+else if (diff > 0)
+    return 1;
+else
+    return 0;
+}
+
+void doubleSort(int count, double *array)
+/* Sort an array of doubles. */
+{
+if (count > 1)
+qsort(array, count, sizeof(array[0]), doubleCmp);
+}
+
+double doubleMedian(int count, double *array)
+/* Return median value in array.  This will sort
+ * the array as a side effect. */
+{
+double median;
+doubleSort(count, array);
+if (count&1 == 1)
+    median = array[count>>1];
+else
+    {
+    count >>= 1;
+    median = (array[count] + array[count-1]) * 0.5;
+    }
+return median;
+}
+
+struct slDouble *slDoubleNew(double x)
+/* Return a new double. */
+{
+struct slDouble *a;
+AllocVar(a);
+a->val = x;
+return a;
+}
+
+int slDoubleCmp(const void *va, const void *vb)
+/* Compare two slNames. */
+{
+const struct slInt *a = *((struct slInt **)va);
+const struct slInt *b = *((struct slInt **)vb);
+double diff = a->val - b->val;
+if (diff < 0)
+    return -1;
+else if (diff > 0)
+    return 1;
+else
+    return 0;
+}
+
+double slDoubleMedian(struct slDouble *list)
+/* Return median value on list. */
+{
+int i,count = slCount(list);
+struct slDouble *el;
+double *array, median;
+if (count == 0)
+    errAbort("Can't take median of empty list");
+AllocArray(array,count);
+for (i=0, el=list; i<count; ++i, el=el->next)
+    array[i] = el->val;
+median = doubleMedian(count, array);
+freeMem(array);
+return median;
+}
 
 struct slName *newSlName(char *name)
 /* Return a new name. */
@@ -383,7 +474,6 @@ struct slName *sn = needMem(sizeof(*sn)+len);
 strcpy(sn->name, name);
 return sn;
 }
-
 
 int slNameCmp(const void *va, const void *vb)
 /* Compare two slNames. */

@@ -257,6 +257,44 @@ void slFreeList(void *listPt);
  *    slFreeList(&list);
  */
 
+struct slInt
+/* List of integers. */
+    {
+    struct slInt *next;	/* Next in list. */
+    int val;		/* Integer value. */
+    };
+
+struct slInt *slIntNew(int x);
+#define newSlInt slIntNew
+/* Return a new double. */
+
+int slIntCmp(const void *va, const void *vb);
+/* Compare two slInts. */
+
+void doubleSort(int count, double *array);
+/* Sort an array of doubles. */
+
+double doubleMedian(int count, double *array);
+/* Return median value in array.  This will sort
+ * the array as a side effect. */
+
+struct slDouble
+/* List of double-precision numbers. */
+    {
+    struct slDouble *next;	/* Next in list. */
+    double val;			/* Double-precision value. */
+    };
+
+struct slDouble *slDoubleNew(double x);
+#define newSlDouble slDoubleNew
+/* Return a new int. */
+
+int slDoubleCmp(const void *va, const void *vb);
+/* Compare two slNames. */
+
+double slDoubleMedian(struct slDouble *list);
+/* Return median value on list. */
+
 struct slName
 /* List of names. The name array is allocated to accommodate full name
  */
@@ -285,6 +323,7 @@ void *slNameFind(void *list, char *string);
 char *slNameStore(struct slName **pList, char *string);
 /* Put string into list if it's not there already.  
  * Return the version of string stored in list. */
+
 
 struct slRef
 /* Singly linked list of generic references. */
