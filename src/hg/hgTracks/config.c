@@ -45,14 +45,6 @@ if (changeVis != -2)
 	}
     }
 
-hPrintf(
-"<SCRIPT LANGUAGE=\"JavaScript\">\n"
-"function testResults() {\n"
-"   alert('I was there');\n"
-"}\n"
-"</SCRIPT>\n"
-);
-
 cgiMakeHiddenVar(configGroupTarget, "none");
 hTableStart();
 for (group = groupList; group != NULL; group = group->next)
