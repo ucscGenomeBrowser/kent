@@ -135,8 +135,6 @@ while(namePt != 0)
 	slAddHead(&list, el);
 	hashAddSaveName(hash, namePt, el, &el->name);
 
-	//uglyf("%s = %s\n", namePt, dataPt); 
-
 	namePt = dataEndPt;
 	}
     }
@@ -216,6 +214,12 @@ if (s != NULL)
 qs = getenv("QUERY_STRING");
 if (qs == NULL)
     return "POST";
+if (qs[0] == 0)
+    {
+    char *cl = getenv("CONTENT_LENGTH");
+    if (cl != NULL && atoi(cl) > 0)
+	return "POST";
+    }
 return "QUERY";
 }
 
