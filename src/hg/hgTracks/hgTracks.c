@@ -2357,6 +2357,9 @@ else
 	sr = hRangeQuery(conn, track, chromName, start, end, NULL, &rowOffset);
 	}
 
+if (sqlCountColumns(sr) < 21+rowOffset)
+    errAbort("trackDb has incorrect table type for table \"%s\"",
+	     tg->mapName);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct psl *psl = pslLoad(row+rowOffset);
