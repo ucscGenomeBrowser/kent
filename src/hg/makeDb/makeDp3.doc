@@ -836,7 +836,7 @@ chainSome $(path1)
       into table flyBase2004Xref'
 
 
-# SWAP CHAINS FROM DM2, BUILD NETS ETC. (DONE 2/25/05 angie)
+# SWAP CHAINS FROM DM2, BUILD NETS ETC. (DONE 3/4/05 angie)
     ssh kksilo
     mkdir /cluster/data/dp3/bed/blastz.dm2.swap
     cd /cluster/data/dp3/bed/blastz.dm2.swap
@@ -846,6 +846,6 @@ chainSome $(path1)
       -workhorse kkr7u00 >& do.log &
     tail -f do.log
     # Add {chain,net}Dm2 to trackDb.ra if necessary.
-    # Add /usr/local/apache/htdocs/goldenPath/dm2/vsSelf/README.txt
+    # Add /usr/local/apache/htdocs/goldenPath/dp3/vsDm2/README.txt
 
 

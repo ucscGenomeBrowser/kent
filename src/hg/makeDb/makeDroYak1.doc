@@ -895,7 +895,7 @@ chainSome $(path1)
     iSync
 
 
-# SWAP CHAINS FROM DM2, BUILD NETS ETC. (DONE 2/25/05 angie)
+# SWAP CHAINS FROM DM2, BUILD NETS ETC. (DONE 3/2/05 angie)
     ssh kksilo
     mkdir /cluster/data/droYak1/bed/blastz.dm2.swap
     cd /cluster/data/droYak1/bed/blastz.dm2.swap
