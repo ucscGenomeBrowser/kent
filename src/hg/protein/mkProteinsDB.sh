@@ -10,7 +10,7 @@
 #
 #	Thu Nov 20 11:31:51 PST 2003 - Created - Hiram
 #
-#	"$Id: mkProteinsDB.sh,v 1.4 2004/03/22 20:27:48 fanhsu Exp $"
+#	"$Id: mkProteinsDB.sh,v 1.5 2004/03/23 17:31:38 hiram Exp $"
 
 TOP=/cluster/data/proteins
 export TOP
@@ -40,8 +40,10 @@ if [ ${MACHINE} != "hgwdev" ]; then
 fi
 
 DATE=`date "+%y%m%d"`
-PDB="proteins${SPDB_DATE}"
+
+PDB="prot${SPDB_DATE}"
 SPDB=sp"${SPDB_DATE}"
+
 export DATE PDB SPDB
 
 SP_TBLS=`hgsql -e "show tables;" "${SPDB}" | wc -l`
