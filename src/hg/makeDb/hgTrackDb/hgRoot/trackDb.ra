@@ -260,8 +260,8 @@ color 30,130,210
 type genePred
 
 track genieAlt
-shortLabel Affy Genes
-longLabel Affymetrix Gene Predictions
+shortLabel AltGenie
+longLabel Genie Gene Predictions from Affymetrix
 priority 14
 visibility dense
 color 125,0,150
@@ -407,8 +407,8 @@ color 200,0,50
 type bed 12
 
 track genieBounds
-shortLabel Affy Clone Bounds 
-longLabel Affymetrix/Genie Clone Boundaries from EST Mate Pairs
+shortLabel Clone Bounds 
+longLabel Clone Boundaries from EST Mate Pairs
 priority 18.2
 visibility hide
 color 178,34,34
