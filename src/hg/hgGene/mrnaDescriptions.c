@@ -10,29 +10,6 @@
 #include "bed.h"
 #include "hgGene.h"
 
-struct genePred *curGenePred(struct sqlConnection *conn)
-/* Return current gene in genePred. */
-{
-char *track = genomeSetting("knownGene");
-char table[64];
-boolean hasBin;
-char query[256];
-struct sqlResult *sr;
-char **row;
-struct genePred *gp = NULL;
-
-hFindSplitTable(curGeneChrom, track, table, &hasBin);
-safef(query, sizeof(query), 
-	"select * from %s where name = '%s' "
-	"and chrom = '%s' and txStart=%d and txEnd=%d"
-	, table, curGeneId, curGeneChrom, curGeneStart, curGeneEnd);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    gp = genePredLoad(row + hasBin);
-sqlFreeResult(&sr);
-return gp;
-}
-
 static boolean mrnaDescriptionsExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
 /* Return TRUE if mrna
@@ -46,9 +23,7 @@ if (hTableExists("mrna"))
     struct psl *psl;
     int rowOffset;
     char extra[64];
-    struct genePred *gp = curGenePred(conn);
-    safef(extra, sizeof(extra), "strand='%c'", gp->strand[0]);
-    genePredFree(&gp);
+    safef(extra, sizeof(extra), "strand='%c'", curGenePred->strand[0]);
     sr = hRangeQuery(conn, "mrna", curGeneChrom, curGeneStart, curGeneEnd,
     	extra, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -62,20 +37,7 @@ if (hTableExists("mrna"))
 return slCount(list) > 0;
 }
 
-int gpRangeIntersection(struct genePred *gp, int start, int end)
-/* Return number of bases range start,end shares with bed. */
-{
-int intersect = 0;
-int i, exonCount = gp->exonCount;
-for (i=0; i<exonCount; ++i)
-    {
-    intersect += positiveRangeIntersection(gp->exonStarts[i], gp->exonEnds[i],
-    	start, end);
-    }
-return intersect;
-}
-
-int basesShared(struct genePred *gp, struct psl *psl)
+static int basesShared(struct genePred *gp, struct psl *psl)
 /* Return number of bases a&b share. */
 {
 int intersect = 0;
@@ -96,11 +58,10 @@ static void mrnaDescriptionsPrint(struct section *section,
 	struct sqlConnection *conn, char *geneId)
 /* Print out mrna descriptions annotations. */
 {
-struct genePred *gp = curGenePred(conn);
 struct psl *psl, *pslList = section->items;
 for (psl = pslList; psl != NULL; psl = psl->next)
     {
-    if (basesShared(gp, psl) > 12)	/* Filter out possible little noisy flecks. */
+    if (basesShared(curGenePred, psl) > 12)	/* Filter out possible little noisy flecks. */
         {
 	char query[512];
 	char *description;

@@ -12,9 +12,10 @@
 #include "web.h"
 #include "ra.h"
 #include "spDb.h"
+#include "genePred.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.9 2003/10/13 01:42:51 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.10 2003/10/13 04:48:27 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -24,6 +25,7 @@ char *genome;		/* Name of genome - mouse, human, etc. */
 char *curGeneId;	/* Current Gene Id. */
 char *curGeneName;		/* Biological name of gene. */
 char *curGeneChrom;	/* Chromosome current gene is on. */
+struct genePred *curGenePred;	/* Current gene prediction structure. */
 int curGeneStart,curGeneEnd;	/* Position in chromosome. */
 
 
@@ -98,6 +100,19 @@ if (spConn != NULL)
 freeMem(someAcc);
 sqlDisconnect(&lConn);
 return primaryAcc;
+}
+
+int gpRangeIntersection(struct genePred *gp, int start, int end)
+/* Return number of bases range start,end shares with genePred. */
+{
+int intersect = 0;
+int i, exonCount = gp->exonCount;
+for (i=0; i<exonCount; ++i)
+    {
+    intersect += positiveRangeIntersection(gp->exonStarts[i], gp->exonEnds[i],
+    	start, end);
+    }
+return intersect;
 }
 
 
@@ -282,10 +297,10 @@ readRa("section.ra", &sectionRa);
 addGoodSection(linksSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(otherOrgsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(sequenceSection(conn, sectionRa), conn, &sectionList);
-// addGoodSection(microarraySection(conn, sectionRa), conn, &sectionList);
+addGoodSection(microarraySection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(proteinStructureSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(rnaStructureSection(conn, sectionRa), conn, &sectionList);
-// addGoodSection(altSpliceSection(conn, sectionRa), conn, &sectionList);
+addGoodSection(altSpliceSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(multipleAlignmentsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(swissProtCommentsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(goSection(conn, sectionRa), conn, &sectionList);
@@ -310,7 +325,8 @@ for (section=sectionList; section != NULL; section = section->next)
     {
     if (++itemPos > maxPerRow)
         {
-	hPrintf("</TR>\n<TR>");
+	hPrintLinkTableEnd();
+	hPrintLinkTableStart();
 	itemPos = 1;
 	}
     hPrintLinkCellStart();
@@ -328,8 +344,7 @@ void printSections(struct section *sectionList, struct sqlConnection *conn,
 struct section *section;
 for (section = sectionList; section != NULL; section = section->next)
     {
-    webNewSection(section->longLabel);
-    hPrintf("<A NAME=\"%s\"></A>\n", section->name);
+    webNewSection("<A NAME=\"%s\"></A>%s\n", section->name, section->longLabel);
     section->print(section, conn, geneId);
     }
 }
@@ -394,6 +409,30 @@ if (newChrom != NULL && newStarts != NULL && newEnds != NULL)
     }
 }
 
+struct genePred *getCurGenePred(struct sqlConnection *conn)
+/* Return current gene in genePred. */
+{
+char *track = genomeSetting("knownGene");
+char table[64];
+boolean hasBin;
+char query[256];
+struct sqlResult *sr;
+char **row;
+struct genePred *gp = NULL;
+
+hFindSplitTable(curGeneChrom, track, table, &hasBin);
+safef(query, sizeof(query), 
+	"select * from %s where name = '%s' "
+	"and chrom = '%s' and txStart=%d and txEnd=%d"
+	, table, curGeneId, curGeneChrom, curGeneStart, curGeneEnd);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    gp = genePredLoad(row + hasBin);
+sqlFreeResult(&sr);
+return gp;
+}
+
+
 void cartMain(struct cart *theCart)
 /* We got the persistent/CGI variable cart.  Now
  * set up the globals and make a web page. */
@@ -406,6 +445,7 @@ conn = hAllocConn();
 curGeneId = cartString(cart, hggGene);
 getGenomeSettings();
 getGenePosition(conn);
+curGenePred = getCurGenePred(conn);
 curGeneName = getGeneName(curGeneId, conn);
 
 /* Check command variables, and do the ones that

@@ -9,6 +9,10 @@
 #include "jksql.h"
 #endif
 
+#ifndef GENEPRED_H
+#include "genePred.h"
+#endif
+
 struct section
 /* A section of the details page - put in the page
  * index. */
@@ -61,6 +65,14 @@ struct section *mrnaDescriptionsSection(struct sqlConnection *conn,
 	struct hash *sectionRa);
 /* Create mrnaDescriptions section. */
 
+struct section *microarraySection(struct sqlConnection *conn, 
+	struct hash *sectionRa);
+/* Create microarray section. */
+
+struct section *altSpliceSection(struct sqlConnection *conn, 
+	struct hash *sectionRa);
+/* Create altSplice section. */
+
 #ifdef EXAMPLE
 struct section *xyzSection(struct sqlConnection *conn, 
 	struct hash *sectionRa);
@@ -97,6 +109,9 @@ struct hash *readRa(char *rootName, struct hash **retHashOfHash);
 char *swissProtAcc(struct sqlConnection *conn, struct sqlConnection *spConn, char *geneId);
 /* Look up SwissProt id.  Return NULL if not found.  FreeMem this when done.*/
 
+int gpRangeIntersection(struct genePred *gp, int start, int end);
+/* Return number of bases range start,end shares with genePred. */
+
 /* -------- CGI Command Variables ---------- */
 #define hggDoPrefix "hgg_do_"	/* Prefix for all commands. */
 #define hggDoGetMrnaSeq "hgg_do_getMrnaSeq"
@@ -126,5 +141,6 @@ extern char *genome;		/* Name of genome - mouse, human, etc. */
 extern char *curGeneId;	/* Current Gene Id. */
 extern char *curGeneName;		/* Biological name of gene. */
 extern char *curGeneChrom;	/* Chromosome current gene is on. */
+struct genePred *curGenePred;	/* Current gene prediction structure. */
 extern int curGeneStart,curGeneEnd;	/* Position in chromosome. */
 
