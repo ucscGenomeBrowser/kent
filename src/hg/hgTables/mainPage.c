@@ -15,7 +15,7 @@
 #include "grp.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.5 2004/07/18 01:38:17 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.6 2004/07/18 01:51:35 kent Exp $";
 
 
 static struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -273,9 +273,7 @@ hPrintf("<TABLE BORDER=0>\n");
 /* Output line. */
     {
     int i;
-    uglyf("cartString(%s) = %s<BR>\n", hgtaOutputType, cartString(cart, hgtaOutputType));
     char *outputType = cartUsualString(cart, hgtaOutputType, outPrimaryTable);
-    uglyf("outputTYpe = %s<BR>\n", outputType);
     static char *symbols[] = 
         {outPrimaryTable, outSequence, 
 	 outSelectedFields, outSchema,
