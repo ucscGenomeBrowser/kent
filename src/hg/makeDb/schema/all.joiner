@@ -230,7 +230,7 @@ identifier acemblyName dependency
 identifier ECgeneName dependency
 "Link together EC gene predicted gene structure and peptide"
     $gbd.ECgene.name
-    $gbd.ECgenePep.name full unique
+    $gbd.ECgenePep.name unique 
 
 identifier geneidName dependency
 "Link together geneid predicted gene structure and peptide"
@@ -1237,9 +1237,14 @@ identifier omimId external=OMIM
 identifier unigeneId fuzzy
 "NCBI UniGene Cluster ID"
 #   hgFixed.sage.uni 
-    $gbd.uniGene_2.name chopBefore=.
-    $gbd.sage.uni
+    $hg.uniGene_2.name chopBefore=.
+    $hg.sage.uni
 
+identifier unigeneId2 external=UniGene
+"NCBI UniGene Cluster ID for databases with UniGene seq table entry"
+    $gbd.seq.acc
+    $galGal.uniGene_gg.qName
+    $danRer.uniGene_dr.qName
 
 # BGI SNP Identifiers
 
@@ -1647,11 +1652,9 @@ tablesIgnored $fr
 tablesIgnored $galGal
     chr%_gold
     supercontig
-    uniGene_gg
 
 tablesIgnored $danRer
     chr%_gold
-    uniGene_dr
 
 tablesIgnored $canFam
     chr%_gold
