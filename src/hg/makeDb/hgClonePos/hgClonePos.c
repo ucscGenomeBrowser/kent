@@ -57,6 +57,7 @@ while (lineFileNext(lf, &line, &lineSize))
     if (wordCount != 4)
         errAbort("Expecting %d words line %d of %s", 4, lf->lineIx, lf->fileName);
     glStaticLoad(words, &gl);
+    if (startsWith("AB019440", gl.frag)) uglyf("GOt yo8u %s\n", gl.frag);
     fragToCloneVerName(gl.frag, cloneVerName);
     fragToCloneName(gl.frag, cloneName);
     if ((clone = hashFindVal(cloneHash, cloneName)) == NULL)
@@ -125,7 +126,6 @@ slSort(&cloneList, cmpClonePos);
 if (slCount(cloneList) < 0)
    errAbort("No .gl files in %s\n", ooDir);
 printf("Got %d clones\n", slCount(cloneList));
-uglyAbort("All for now");
 return cloneList;
 }
 
@@ -277,6 +277,7 @@ struct clonePos *cloneList = NULL;
 
 cloneList = readClonesFromOoDir(ooDir, cloneHash);
 addStageInfo(gsDir, cloneHash);
+uglyAbort("All for now");
 addSeqInfo(seqInfoName, cloneHash);
 checkClonePos(cloneList);
 saveClonePos(cloneList, database);
