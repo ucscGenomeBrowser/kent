@@ -484,6 +484,28 @@ if (gotNeg)
 return gotNeg;
 }
 
+void mergeAbutting(struct chain *chain)
+/* Merge together blocks in a chain that abut each
+ * other exactly. */
+{
+struct boxIn *newList = NULL, *b, *last = NULL, *next;
+for (b = chain->blockList; b != NULL; b = next)
+    {
+    next = b->next;
+    if (last == NULL || last->qEnd != b->qStart || last->tEnd != b->tStart)
+	{
+	slAddHead(&newList, b);
+	}
+    else
+        {
+	freeMem(b);
+	}
+    last = b;
+    }
+slReverse(&newList);
+chain->blockList = newList;
+}
+
 void removePartialOverlaps(struct chain *chain, 
 	struct dnaSeq *qSeq, struct dnaSeq *tSeq, int matrix[256][256])
 /* If adjacent blocks overlap then find crossover points between them. */
@@ -612,6 +634,7 @@ dt = clock1000() - startTime;
 for (chain = chainList; chain != NULL; chain = chain->next)
     {
     removePartialOverlaps(chain, qSeq, tSeq, scoreData.ss->matrix);
+    mergeAbutting(chain);
     chain->score = chainScore(chain, qSeq, tSeq, scoreData.ss->matrix, gapCost);
     }
 
