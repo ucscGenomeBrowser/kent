@@ -2,7 +2,7 @@
 #include "common.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: htmlPics.c,v 1.2 2003/05/06 07:41:07 kate Exp $";
+static char const rcsid[] = "$Id: htmlPics.c,v 1.3 2003/06/10 17:19:33 kent Exp $";
 
 void usage()
 /* Print usage instructions and bail. */
@@ -27,4 +27,5 @@ for (i=1; i<argc; ++i)
     printf("<IMG SRC=\"%s\">\n", picName);
     }
 htmEnd(stdout);
+return 0;
 }

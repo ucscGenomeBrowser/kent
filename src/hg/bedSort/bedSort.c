@@ -1,8 +1,9 @@
 /* bedSort - Sort a BED file by chrom,chromStart. */
 #include "common.h"
+#include "hash.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: bedSort.c,v 1.2 2003/05/06 07:22:14 kate Exp $";
+static char const rcsid[] = "$Id: bedSort.c,v 1.3 2003/06/10 17:22:45 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

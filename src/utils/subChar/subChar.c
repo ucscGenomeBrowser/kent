@@ -2,7 +2,7 @@
 #include "common.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: subChar.c,v 1.2 2003/05/06 07:41:08 kate Exp $";
+static char const rcsid[] = "$Id: subChar.c,v 1.3 2003/06/10 17:19:33 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -44,7 +44,10 @@ if (len == 1)
 else if (len == 2)
    return unhex(s);
 else
+   {
    usage();
+   return 0;
+   }
 }
 
 void subCharsInFile(char old, char new, char *fileName)

@@ -4,7 +4,7 @@
 #include "dystring.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: newProg.c,v 1.13 2003/05/16 15:25:52 kent Exp $";
+static char const rcsid[] = "$Id: newProg.c,v 1.14 2003/06/10 17:19:33 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -22,7 +22,7 @@ errAbort(
   "in source repository\n");
 }
 
-void makeC(char *name, char *description, char *progPath)
+void makeC(char *name, char *description, char *progPath, boolean doCvs)
 /* makeC - make a new C source skeleton. */
 {
 FILE *f = mustOpen(progPath, "w");
@@ -34,6 +34,11 @@ fprintf(f, "#include \"linefile.h\"\n");
 fprintf(f, "#include \"hash.h\"\n");
 fprintf(f, "#include \"options.h\"\n");
 fprintf(f, "\n");
+if (doCvs)
+    {
+    fprintf(f, "static char const rcsid[] = \"$Id: newProg.c,v 1.14 2003/06/10 17:19:33 kent Exp $\";\n");
+    fprintf(f, "\n");
+    }
 fprintf(f, "void usage()\n");
 fprintf(f, "/* Explain usage and exit. */\n");
 fprintf(f, "{\n");
@@ -120,7 +125,7 @@ else
 makeDir(dirName);
 splitPath(dirName, NULL, fileOnly, NULL);
 sprintf(fileName, "%s/%s.c", dirName, fileOnly);
-makeC(fileOnly, description, fileName);
+makeC(fileOnly, description, fileName, doCvs);
 
 sprintf(fileName, "%s/makefile", dirName);
 makeMakefile(fileOnly, fileName);
