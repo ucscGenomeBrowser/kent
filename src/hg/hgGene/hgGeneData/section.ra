@@ -3,14 +3,14 @@ shortLabel Quick Links
 longLabel Quick Links to Tools and Databases
 priority 10
 
-name otherOrgs
-shortLabel Other Species
-longLabel Homologous Genes in Other Species (BLASTP Best Hit)
-priority 20
-
 name sequence
 shortLabel Sequence
 longLabel Sequence
+priority 20
+
+name otherOrgs
+shortLabel Other Species
+longLabel Homologous Genes in Other Species (BLASTP Best Hit)
 priority 30
 
 name microarray

@@ -44,6 +44,10 @@ struct section *otherOrgsSection(struct sqlConnection *conn,
 	struct hash *sectionRa);
 /* Create other organisms section. */
 
+struct section *sequenceSection(struct sqlConnection *conn,
+	struct hash *sectionRa);
+/* Create links section. */
+
 #ifdef EXAMPLE
 struct section *xyzOrgsSection(struct sqlConnection *conn, 
 	struct hash *sectionRa);
@@ -52,14 +56,42 @@ struct section *xyzOrgsSection(struct sqlConnection *conn,
 
 /* -------- Helper functions ---------- */
 
+char *genomeSetting(char *name);
+/* Return genome setting value.   Aborts if setting not found. */
+
 void hPrintf(char *format, ...);
 /* Print out some html.  Check for write error so we can
  * terminate if http connection breaks. */
 
+void hPrintLinkTableStart();
+/* Print link table start in our colors. */
+
+void hPrintLinkTableEnd();
+/* Print link table end in our colors. */
+
+void hPrintLinkCellStart();
+/* Print link cell start in our colors. */
+
+void hPrintLinkCellEnd();
+/* Print link cell end in our colors. */
+
 struct hash *readRa(char *rootName, struct hash **retHashOfHash);
 /* Read in ra in root, root/org, and root/org/database. */
 
-/* -------- CGI Variables ---------- */
+/* -------- CGI Command Variables ---------- */
+#define hggDoPrefix "hgg_do_"	/* Prefix for all commands. */
+#define hggDoGetMrnaSeq "hgg_do_getMrnaSeq"
+#define hggDoGetProteinSeq "hgg_do_getProteinSeq"
+
+/* -------- Commands ---------- */
+
+void doGetMrnaSeq(struct sqlConnection *conn, char *geneId, char *geneName);
+/* Get mRNA sequence in a simple page. */
+
+void doGetProteinSeq(struct sqlConnection *conn, char *geneId, char *geneName);
+/* Get mRNA sequence in a simple page. */
+
+/* -------- CGI Data Variables ---------- */
 #define hggOrg "org"		/* Organism we're working on. */
 #define hggDb "db"		/* Database we're working on. */
 #define hggGene "hgg_gene"	/* Main gene id. */

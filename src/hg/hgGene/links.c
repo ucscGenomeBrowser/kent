@@ -168,54 +168,15 @@ sqlFreeResult(&sr);
 return name;
 }
 
-#ifdef OLD
-static void linksPrint(struct section *section, struct sqlConnection *conn,
-	char *geneId)
-/* Print the links section. */
-{
-int maxPerRow = 5, itemPos = 0;
-struct link *link, *linkList = getLinkList(conn);
-
-hPrintf("<TABLE CELLSPACING=2 CELLPADDING=2><TR>\n");
-for (link = linkList; link != NULL; link = link->next)
-    {
-    char query[256];
-    char *url = linkGetUrl(link, conn, geneId);
-    char *name = linkGetName(link, conn, geneId);
-    if (++itemPos > maxPerRow)
-        {
-	hPrintf("</TR>\n<TR>");
-	itemPos = 1;
-	}
-    hPrintf("<TD><TABLE WIDTH=100%%>");
-    hPrintf("<TR><TD BGCOLOR=\"#2636D1\"><FONT COLOR=\"#FFFFFF\">%s</FONT></TD></TR>", link->shortLabel);
-    hPrintf("<TR><TD BGCOLOR=\"#D9E4F8\">");
-    if (url != NULL && name != NULL)
-	{
-	hPrintf("<A HREF=\"%s\">", url);
-	hPrintf("%s", name);
-	hPrintf("</A>");
-	}
-    else
-        hPrintf("n/a");
-    hPrintf("</TD></TR>");
-    hPrintf("</TABLE></TD>\n");
-    freez(&url);
-    freez(&name);
-    }
-hPrintf("</TR></TABLE>\n");
-}
-#endif /* OLD */
-
 static void linksPrint(struct section *section, struct sqlConnection *conn,
 	char *geneId)
 /* Print the links section. */
 {
 int maxPerRow = 6, itemPos = 0;
+int rowIx = 0;
 struct link *link, *linkList = getLinkList(conn, section->raFile);
 
-hPrintf("<TABLE><TR><TD BGCOLOR=#888888>\n");
-hPrintf("<TABLE CELLSPACING=1 CELLPADDING=3><TR>\n");
+hPrintLinkTableStart();
 for (link = linkList; link != NULL; link = link->next)
     {
     char query[256];
@@ -226,19 +187,27 @@ for (link = linkList; link != NULL; link = link->next)
 	    {
 	    hPrintf("</TR>\n<TR>");
 	    itemPos = 1;
+	    ++rowIx;
 	    }
-	hPrintf("<TD BGCOLOR=\"#D9F8E4\">");
+	hPrintLinkCellStart();
 	hPrintf("<A HREF=\"%s\" class=\"toc\">", url);
 	hPrintf("%s", link->shortLabel);
 	hPrintf("</A>");
-	hPrintf("</TD>");
+	hPrintLinkCellEnd();
 	freez(&url);
 	}
-    else
-        hPrintf("n/a: %s %s %s", link->shortLabel, url);
     }
-hPrintf("</TR></TABLE>\n");
-hPrintf("</TD></TR></TABLE>\n");
+if (rowIx != 0 && itemPos < maxPerRow)
+/* Fill out partially empty last row. */
+    {
+    int i;
+    for (i=itemPos; i<maxPerRow; ++i)
+        {
+	hPrintLinkCellStart();
+	hPrintLinkCellEnd();
+	}
+    }
+hPrintLinkTableEnd();
 }
 
 struct section *linksSection(struct sqlConnection *conn,

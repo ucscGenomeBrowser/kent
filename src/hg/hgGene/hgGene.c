@@ -13,7 +13,7 @@
 #include "ra.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.4 2003/10/11 09:39:02 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.5 2003/10/12 06:12:06 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -101,6 +101,34 @@ while (c = *s++)
         putchar(c);
     }
 }
+
+void hPrintLinkTableStart()
+/* Print link table start in our colors. */
+{
+hPrintf("<TABLE><TR><TD BGCOLOR=#888888>\n");
+hPrintf("<TABLE CELLSPACING=1 CELLPADDING=3><TR>\n");
+}
+
+void hPrintLinkTableEnd()
+/* Print link table end in our colors. */
+{
+hPrintf("</TR></TABLE>\n");
+hPrintf("</TD></TR></TABLE>\n");
+}
+
+void hPrintLinkCellStart()
+/* Print link cell start in our colors. */
+{
+hPrintf("<TD BGCOLOR=\"#D9F8E4\">");
+}
+
+void hPrintLinkCellEnd()
+/* Print link cell end in our colors. */
+{
+hPrintf("</TD>");
+}
+
+
 
 /* --------------- Mid-level utility functions ----------------- */
 
@@ -220,7 +248,7 @@ struct section *sectionList = NULL, *section;
 readRa("section.ra", &sectionRa);
 addGoodSection(linksSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(otherOrgsSection(conn, sectionRa), conn, &sectionList);
-// addGoodSection(sequenceSection(conn, sectionRa), conn, &sectionList);
+addGoodSection(sequenceSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(microarraySection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(proteinStructureSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(rnaStructureSection(conn, sectionRa), conn, &sectionList);
@@ -244,8 +272,7 @@ struct section *section;
 
 hPrintf("<BR>\n");
 hPrintf("<BR>\n");
-hPrintf("<TABLE><TR><TD BGCOLOR=#888888>\n");
-hPrintf("<TABLE CELLSPACING=1 CELLPADDING=3><TR>\n");
+hPrintLinkTableStart();
 for (section=sectionList; section != NULL; section = section->next)
     {
     if (++itemPos > maxPerRow)
@@ -253,11 +280,12 @@ for (section=sectionList; section != NULL; section = section->next)
 	hPrintf("</TR>\n<TR>");
 	itemPos = 1;
 	}
-    hPrintf("<TD BGCOLOR=\"#D9F8E8\"><A HREF=\"#%s\" class=\"toc\">%s</A></TD>", 
+    hPrintLinkCellStart();
+    hPrintf("<A HREF=\"#%s\" class=\"toc\">%s</A>", 
     	section->name, section->shortLabel);
+    hPrintLinkCellEnd();
     }
-hPrintf("</TR></TABLE>\n");
-hPrintf("</TD></TR></TABLE>\n");
+hPrintLinkTableEnd();
 }
 
 void printSections(struct section *sectionList, struct sqlConnection *conn,
@@ -273,12 +301,22 @@ for (section = sectionList; section != NULL; section = section->next)
     }
 }
 
+void webMain(struct sqlConnection *conn)
+/* Set up fancy web page with hotlinks bar and
+ * sections. */
+{
+struct section *sectionList = NULL;
+printDescription(curGeneId, conn);
+sectionList = loadSectionList(conn);
+printIndex(sectionList);
+printSections(sectionList, conn, curGeneId);
+}
+
 void cartMain(struct cart *theCart)
 /* We got the persistent/CGI variable cart.  Now
  * set up the globals and make a web page. */
 {
 struct sqlConnection *conn = NULL;
-struct section *sectionList = NULL;
 cart = theCart;
 getDbAndGenome(cart, &database, &genome);
 hSetDb(database);
@@ -286,12 +324,21 @@ conn = hAllocConn();
 curGeneId = cartString(cart, hggGene);
 getGenomeSettings();
 curGeneName = getGeneName(curGeneId, conn);
-cartWebStart(cart, "%s Gene %s Details", genome, curGeneName);
-printDescription(curGeneId, conn);
-sectionList = loadSectionList(conn);
-printIndex(sectionList);
-printSections(sectionList, conn, curGeneId);
-cartWebEnd();
+
+/* Check command variables, and do the ones that
+ * don't want to put up the hot link bar etc. */
+if (cartVarExists(cart, hggDoGetMrnaSeq))
+    doGetMrnaSeq(conn, curGeneId, curGeneName);
+else if (cartVarExists(cart, hggDoGetProteinSeq))
+    doGetProteinSeq(conn, curGeneId, curGeneName);
+else
+    {
+    /* Default case - start fancy web page. */
+    cartWebStart(cart, "%s Gene %s Details", genome, curGeneName);
+    webMain(conn);
+    cartWebEnd();
+    }
+cartRemovePrefix(cart, hggDoPrefix);
 }
 
 char *excludeVars[] = {"Submit", "submit", NULL};
