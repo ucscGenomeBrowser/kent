@@ -9,7 +9,9 @@
 # Arguments:
 #  - database - hg13, etc; used to determine ooc file to use.
 #
-#  - genomeFile - the contig fasta file or chromosome nib subseq spec.
+#  - genomeFile - the contig fasta file or chromosome nib subseq spec
+#    in the form .../chrX:start-end.  The subsequence will be lifted back
+#    to the chromsome.
 #
 #  - rnaFa - the RNA/EST query fasta file.  The name of this file
 #    must be in the form type.orgCat.* (mrna.native, est.aa.xeno, etc).  This
@@ -27,7 +29,7 @@
 # is still produced.  This script is very careful to exit non-zero if an error
 # occurs.
 #
-# $Id: gbBlat,v 1.23 2004/06/10 17:20:32 hartera Exp $
+# $Id: gbBlat,v 1.23.2.1 2004/07/18 05:23:13 markd Exp $
 #
 set -e
 
@@ -200,6 +202,48 @@ else
     trap "rm -rf $tmpDir" EXIT
 fi
 
+# If we have a subsequence`chrom spec, lift the results back to the full chrom
+case "$genomeFile" in
+    */*.nib:*-*)
+        liftFile="$tmpDir/chr.lift"
+        # parse the nib spec into various components and get size
+        #    /scratch/hg/gs.18/build35/bothMaskedNibs/chr22.nib:1000000-2000000
+        nibDir=`dirname $genomeFile`\
+        nibBase=`basename $genomeFile`\
+
+        set -- `echo $nibBase | gawk '
+                {match($0, "^(.+)\\\..+:([0-9]+)-([0-9]+)$", a);
+                 print a[1],a[2],a[3]}'`
+        nibChr=$1
+        nibStart=$2
+        nibEnd=$3
+        nibFile=$nibDir/$nibChr.nib
+        nibSize=`nibSize ${nibFile} | cut -f 3`
+        nibSubName="${nibChr}:${nibStart}-${nibEnd}"
+        nibSubSize=`expr ${nibEnd} - ${nibStart}`
+        # make lift file:
+        #  offset oldName oldSize newName newSize
+        echo "${nibStart}	${nibSubName}	${nibSubSize}	${nibChr}	${nibSize}" >$liftFile
+        ;;
+    *)
+        liftFile=""
+        ;;
+esac
+
+# function to install a result file, if liftFile is defined, it is lifted,
+# otherwise copied
+liftOrCp() {
+    local type=$1
+    local inFile=$2
+    local outFile=$3
+    if [ "x${liftFile}" != "x" ] ; then
+        liftUp -nohead -nosort -type=.$type $outFile.tmp $liftFile carry $inFile
+    else
+        cp $inFile $outFile.tmp
+    fi
+    mv -f $outFile.tmp $outFile
+}
+
 # run blat, don't create header, so we can just cat together later
 localPsl="$tmpDir/$outBase.psl"
 $BLAT -noHead $blatParams $genomeFile $rnaFa $localPsl
@@ -217,19 +261,14 @@ if [ -s $localPsl -a $isNative == "YES" ] ; then
     if [ $type == "est" ] ; then
         $PSL_INTRONS_ONLY $localPsl $genomeFile $localIntronPsl
         if [ -s $localPsl ] ; then
-            cp $localIntronPsl $outIntronPsl.tmp
-            mv -f $outIntronPsl.tmp $outIntronPsl
-        else
-            rm -f $localIntronPsl
+            liftOrCp psl $localIntronPsl $outIntronPsl
         fi
     fi
 
     # copy into place, oi first, since it's the derived data and useless
     # without the psl.
-    cp $localOi $outOi.tmp
-    mv -f $outOi.tmp $outOi
+    liftOrCp bed $localOi $outOi
 fi
 
 # always install psl last, even if empty, to indicate completion
-cp $localPsl $outPsl.tmp
-mv -f $outPsl.tmp $outPsl
+liftOrCp psl $localPsl $outPsl
