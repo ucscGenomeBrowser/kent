@@ -110,6 +110,6 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 dnaUtilOpen();
-htmShell("Sequence Search Results", doMiddle, NULL);
+htmShell("BLAT Search Results", doMiddle, NULL);
 return 0;
 }
