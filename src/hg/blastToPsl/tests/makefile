@@ -2,7 +2,7 @@ include ../../../inc/common.mk
 
 all:
 
-test: protMrnaTest protDnaTest mrnaDnaTest
+test: protMrnaTest protDnaTest mrnaDnaTest blockBugTest
 
 
 protMrnaTest: mkdirs
@@ -21,6 +21,12 @@ mrnaDnaTest: mkdirs
 	../blastToPsl input/mrnaDna1.blast output/mrnaDnaTest.psl
 	pslCheck output/mrnaDnaTest.psl
 	diff -u expected/mrnaDnaTest.psl output/mrnaDnaTest.psl
+
+# test case that cause huge target block start.
+blockBugTest: mkdirs
+	../blastToPsl input/blockBug.blast output/blockBugTest.psl
+	pslCheck output/blockBugTest.psl
+	diff -u expected/blockBugTest.psl output/blockBugTest.psl
 
 clean::
 	rm -rf output

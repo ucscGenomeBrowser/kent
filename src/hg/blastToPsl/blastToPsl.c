@@ -6,7 +6,7 @@
 #include "blastParse.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: blastToPsl.c,v 1.10 2003/11/19 23:44:09 markd Exp $";
+static char const rcsid[] = "$Id: blastToPsl.c,v 1.11 2003/12/01 22:25:52 markd Exp $";
 
 struct block
 /* coordinates of a block */
@@ -149,10 +149,10 @@ char *qPtr, *tPtr;
 if (blk->tEnd == 0)
     {
     /* first call */
-    blk->qStart = (bb->qStart-1);
-    blk->qEnd = blk->qStart;
-    blk->tStart = (bb->tStart-1);
-    blk->tEnd = blk->tStart;
+    blk->qStart = bb->qStart;
+    blk->qEnd = blk->qStart+1;
+    blk->tStart = bb->tStart;
+    blk->tEnd = blk->tStart+1;
     }
 else
     {
@@ -184,8 +184,8 @@ blk->alnEnd = blk->alnStart;
 if ((*qPtr == '\0') || (*tPtr == '\0'))
     {
     assert((*qPtr == '\0') && (*tPtr == '\0'));
-    assert(blk->qStart == (bb->qEnd-1));
-    assert(blk->tStart == bb->tEnd-1);
+    assert(blk->qStart == bb->qEnd);
+    assert(blk->tStart == bb->tEnd);
     return FALSE;  /* no more */
     }
 

@@ -8,14 +8,13 @@ A = blastToPsl
 O = $A.o 
 
 my: compile scoreSort blast0To8 pslUniq pslChain
-	mv $A $(HOME)/bin/$(MACHTYPE)
+	cp -f blastToPsl $(HOME)/bin/$(MACHTYPE)
 	mv scoreSort $(HOME)/bin/$(MACHTYPE)
 	mv blast0To8 $(HOME)/bin/$(MACHTYPE)
 #	mv smashTab $(HOME)/bin/$(MACHTYPE)
 	mv pslUniq $(HOME)/bin/$(MACHTYPE)
 #	mv vegaBuildInfo $(HOME)/bin/$(MACHTYPE)
 	mv pslChain $(HOME)/bin/$(MACHTYPE)
-	cp -f blastToPsl $(HOME)/bin/$(MACHTYPE)
 
 pslChain: pslChain.o
 	${CC} -static pslChain.o ${F64} ${MYLIBS} ${L} 

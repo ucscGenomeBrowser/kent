@@ -526,12 +526,14 @@ for (;;)
     parseBlockLine(bf, &bb->tStart, &bb->tEnd, tString);
     }
 DONE:
-bb->qEnd += 1;
+
+/* convert to [0..n) and move to strand coords if necessary */
+bb->qStart--;
 if (bb->qStrand < 0)
-    reverseIntRange(&bb->qStart, &bb->qEnd, bq->queryBaseCount+1);
-bb->tEnd += 1;
+    reverseIntRange(&bb->qStart, &bb->qEnd, bq->queryBaseCount);
+bb->tStart--;
 if (bb->tStrand < 0)
-    reverseIntRange(&bb->tStart, &bb->tEnd, bga->targetSize+1);
+    reverseIntRange(&bb->tStart, &bb->tEnd, bga->targetSize);
 bb->qSym = cloneMem(qString->string, qString->stringSize+1);
 bb->tSym = cloneMem(tString->string, tString->stringSize+1);
 return bb;

@@ -51,8 +51,8 @@ struct blastBlock
     BYTE tStrand;                       /* Target strand (+1 or -1) */
     BYTE frame;                         /* Frame for tblastn, +/- 1, 2, 3, or
                                          * 0 if none. */
-    int qStart;                         /* Query start position. */
-    int tStart;                         /* Target start position. */
+    int qStart;                         /* Query start position. [0..n) */
+    int tStart;                         /* Target start position. [0..n) */
     int qEnd;                           /* Query end position. */
     int tEnd;                           /* Target end position. */
     char *qSym;                         /* Query letters (including '-') */
