@@ -1,21 +1,22 @@
 <H2>Description</H2> <P>
 This track shows a measure of evolutionary conservation in human, chimp, 
 mouse, rat, chicken, fugu, and zebrafish, 
-based on a phylogenetic hidden Markov model (phastCons)
-Multiz alignments of the 
+based on a phylogenetic hidden Markov model (phastCons).
+Multiz alignments of the following assemblies were used to generate this
+annotation: 
 human May 2004 (hg17), 
 chimp Nov. 2003 (panTro1),
 mouse Oct. 2003 (mm4), 
 rat Jun. 2003 (rn3), 
 chicken Feb. 2004 (galGal2),
 fugu Aug. 2002 (fr1),
-and zebrafish Nov. 2003 (danRer1)
-assemblies were used to generate the annotation.</P>
+and zebrafish Nov. 2003 (danRer1).</P>
 <P>
-In &quot;full&quot; visibility mode, this track displays pairwise alignments 
+In full display mode, this track shows the overall conservation score across all
+species as well as pairwise alignments 
 of chimp, mouse, rat, chicken, fugu, and zebrafish, each aligned to the 
-uman genome.  The pairwise alignments are
-displayed in the standard UCSC browser &quot;dense&quot; mode using a greyscale 
+human genome.  The pairwise alignments are
+shown in dense display mode using a grayscale 
 density gradient.  The checkboxes in the track configuration section allow
 the exclusion of species from the pairwise display; however, this does not
 remove them from the conservation score display.  </P>
@@ -35,14 +36,14 @@ for an explanation of the configuration options.
 <H2>Methods</H2>
 <P> 
 Best-in-genome blastz pairwise alignments 
-were multiply aligned using multiz, beginning with human-chimp alignments,
+were multiply aligned using multiz, beginning with human-chimp alignments
 and subsequently adding in mouse, rat, chicken, fugu, and zebrafish.
 The resulting multiple alignments were then assigned 
 conservation scores by phastCons.</P>
 <P>
-The phastCons program uses a probabilistic model (a phylo-HMM),
+The phastCons program uses a probabilistic model (a phylo-HMM)
 that describes both the process
-of DNA substitution at each site in a genome, and the way this process
+of DNA substitution at each site in a genome and the way this process
 changes from one site to the next (Felsenstein and Churchill 1996,
 Yang 1995, Siepel and Haussler 2003, Siepel and Haussler 2004). A 
 phylo-HMM can be thought
@@ -84,7 +85,7 @@ each site is among the 10% most conserved sites in the data set
 (allowing for autocorrelation of substitution rates).  </P>
 <P> 
 In this case, the general reversible (REV) substitution model was
-used in parameter estimation, and lambda was set to 0.9.  Alignment
+used in parameter estimation and lambda was set to 0.9.  Alignment
 gaps were treated as missing data, which sometimes has the effect of
 producing undesirably high posterior probabilities in gappy regions of
 the alignment.  We are looking at several possible ways of improving
