@@ -228,8 +228,8 @@ printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s\">",
 void hgcAnchorSomewhereTag(char *group, char *item, char *other, char *chrom, char *tag)
 /* Generate an anchor that calls click processing program with item and other parameters. */
 {
-printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&xyzzy=xyzzy#%s\">",
-	hgcPathAndSettings(), group, item, chrom, winStart, winEnd, other, tag);
+printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&db2=%s&xyzzy=xyzzy#%s\">",
+	hgcPathAndSettings(), group, item, chrom, winStart, winEnd, other, "mm2",tag);
 }
 
 void hgcAnchorSomewhereDb(char *group, char *item, char *other, char *chrom, char *db)
