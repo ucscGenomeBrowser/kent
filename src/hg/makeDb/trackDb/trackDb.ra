@@ -458,6 +458,15 @@ visibility pack
 spectrum on
 type psl .
 
+track mrnaLoose
+shortLabel loose mRNAs
+longLabel $Organism mRNAs from Genbank  Loose alignments
+group rna
+priority 54
+visibility pack
+spectrum on
+type psl .
+
 track tightMrna
 shortLabel Tight mRNAS
 longLabel Tightly Filtered $Organism mRNAs from Genbank
