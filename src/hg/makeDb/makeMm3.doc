@@ -1821,7 +1821,30 @@ cd ..
 ssh hgwdev
 cd /cluster/data/mm3/bed/affyU74
 pslSortAcc nohead chrom temp all_affyU74.psl
-cat chrom/chr?.psl chr??.psl chr*_random.psl > affyU74.ps
+cat chrom/*.psl > affyU74.psl
 hgLoadPsl mm3 affyU74.psl -tNameIx
 rm -r chrom temp run
+
+MAKE THE affyGnfU74 TRACKs
+----------------------------------
+
+#This needs to be done after affyU74 is already made.
+ssh hgwdev
+mkdir -p /cluster/data/mm3/bed/affyGnf
+cd /cluster/data/mm3/bed/affyGnf
+affyPslAndAtlasToBed ../affyU74/affyU74.psl /projects/compbio/data/microarray/affyGnfMouse/data/data_public_U74 affyGnfU74A.bed affyGnfU74A.exp
+affyPslAndAtlasToBed ../affyU74/affyU74.psl /projects/compbio/data/microarray/affyGnfMouse/data/U74B_b.txt affyGnfU74B.bed affyGnfU74B.exp
+affyPslAndAtlasToBed ../affyU74/affyU74.psl /projects/compbio/data/microarray/affyGnfMouse/data/U74C_b.txt affyGnfU74C.bed affyGnfU74C.exp
+hgsql mm3 < ~/src/hg/lib/affyGnfU74A.sql
+hgsql mm3 < ~/src/hg/lib/affyGnfU74B.sql
+hgsql mm3 < ~/src/hg/lib/affyGnfU74C.sql
+hgsql <<end
+load data local infile 'affyGnfU74A' into table affyGnfU74A;
+end
+hgsql <<end
+load data local infile 'affyGnfU74B' into table affyGnfU74B;
+end
+hgsql <<end
+load data local infile 'affyGnfU74C' into table affyGnfU74C;
+end
 
