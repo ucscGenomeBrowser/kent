@@ -125,8 +125,9 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define defaultConfName "near.default"  /* Restore to default settings. */
 #define hideAllConfName "near.hideAll"  /* Hide all columns. */
 #define resetConfName "near.reset"      /* Ignore setting changes. */
-#define colConfigPrefix "near.col"      /* Prefix for stuff set in configuration pages. */
-#define advSearchPrefix "near.as"       /* Prefix for advanced search variables. */
+#define colConfigPrefix "near.col."     /* Prefix for stuff set in configuration pages. */
+#define advSearchPrefix "near.as."      /* Prefix for advanced search variables. */
+#define advSearchPrefixI "near.asi."    /* Prefix for advanced search variables not forcing search. */
 
 /* ---- Some html helper routines. ---- */
 
@@ -195,9 +196,19 @@ char *advSearchVal(struct column *col, char *varName);
 /* Return value for advanced search variable.  Return NULL if it
  * doesn't exist or if it is "" */
 
+char *advSearchNameI(struct column *col, char *varName);
+/* Return name for advanced search that doesn't force search. */
+
 void advSearchRemakeTextVar(struct column *col, char *varName, int size);
 /* Make a text field of given name and size filling it in with
  * the existing value if any. */
+
+void advSearchAnyAllMenu(struct column *col, char *varName);
+/* Make a drop-down menu with value all/any. */
+
+boolean advSearchOrLogic(struct column *col, char *varName);
+/* Return TRUE if user has selected 'all' from any/all menu
+ * of given name. */
 
 struct genePos *weedUnlessInHash(struct genePos *inList, struct hash *hash);
 /* Return input list with stuff not in hash removed. */

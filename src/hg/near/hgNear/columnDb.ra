@@ -100,8 +100,8 @@ searchLabel Known Gene Descriptions
 
 name domains
 shortLabel Pfam Domains
-longLabel The domain structure of SWISSPROT and TrEMBL proteins according to Pfam
+longLabel The domain structure of SWISSPROT and TrEMBL proteins 
 priority 9
-visibility on
+visibility off
 type lookup kgDomain kgID domains
 search fuzzy

@@ -11,7 +11,7 @@
 #include "hgNear.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.10 2003/07/08 06:18:04 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.11 2003/07/30 04:00:17 kent Exp $";
 
 
 static boolean loadExpVals(struct sqlConnection *conn,
@@ -97,7 +97,7 @@ static char *colSchemeVarName(struct column *col)
 /* Return variable name for use-blue. */
 {
 static char buf[128];
-safef(buf, sizeof(buf), "%s.%s.color", colConfigPrefix, col->name);
+safef(buf, sizeof(buf), "%s%s.color", colConfigPrefix, col->name);
 return buf;
 }
 
@@ -105,7 +105,7 @@ static char *scaleVarName(struct column *col)
 /* Return variable name for use-blue. */
 {
 static char buf[128];
-safef(buf, sizeof(buf), "%s.%s.scale", colConfigPrefix, col->name);
+safef(buf, sizeof(buf), "%s%s.scale", colConfigPrefix, col->name);
 return buf;
 }
 
@@ -393,6 +393,9 @@ for (i=0; i<numExpts; ++i)
     hPrintf("</TR>");
     }
 hPrintf("</TABLE>\n");
+hPrintf("Include if ");
+advSearchAnyAllMenu(col, "logic");
+hPrintf(" tissues meet min/max criteria.");
 }
 
 static struct hash *expValHash(struct sqlConnection *conn, char *table)
@@ -442,6 +445,16 @@ sqlFreeResult(&sr);
 return hash;
 }
 
+static char *expLimitString(struct column *col, int repIx, boolean isMax)
+/* Return string value of min/max variable for a given expression
+ * experiment. */
+{
+char varName[16];
+static char *varType[2] = {"min", "max"};
+safef(varName, sizeof(varName), "%s%d", varType[isMax], col->representatives[repIx]);
+return advSearchVal(col, varName);
+}
+
 struct genePos *expRatioAdvancedSearch(struct column *col, 
 	struct sqlConnection *conn, struct genePos *list)
 /* Do advanced search on position. */
@@ -450,58 +463,92 @@ if (advSearchColAnySet(col))
     {
     struct hash *expHash = expValHash(conn, col->posTable);
     struct hash *nameExpHash = getNameExpHash(conn, col->table, "name", "value", expHash);
-    char lVarName[16];
     int i, numExpts = col->representativeCount;
-    for (i=0; i<numExpts; ++i)
+    boolean orLogic = advSearchOrLogic(col, "logic");
+    int isMax;
+    int repIx;
+    char *varValString;
+    char **mms[2];	/* Min/max strings. */
+    float *mmv[2];	/* Min/max values. */
+    struct genePos *newList = NULL, *gp, *next;
+
+    /* Fetch all limit variables. */
+    for (isMax=0; isMax<2; ++isMax)
 	{
-	int ix = col->representatives[i];
-	if (ix != -1)
+	AllocArray(mms[isMax], numExpts);
+	AllocArray(mmv[isMax], numExpts);
+	for (repIx=0; repIx < numExpts; ++repIx)
 	    {
-	    static char *varType[2] = {"min", "max"};
-	    char *varValString;
-	    int isMax;
-	    for (isMax=0; isMax<2; ++isMax)
-	        {
-		safef(lVarName, sizeof(lVarName), "%s%d", varType[isMax], ix);
-		varValString = advSearchVal(col, lVarName);
-		if (varValString != NULL)
+	    varValString = mms[isMax][repIx] = expLimitString(col, repIx, isMax);
+	    if (varValString != NULL)
+		mmv[isMax][repIx] = atof(varValString)/col->expScale;
+	    }
+	}
+
+    /* Step through each item in list and figure out if it is in. */
+    for (gp = list; gp != NULL; gp = next)
+	{
+	float *vals;
+	next = gp->next;
+	if ((vals = hashFindVal(nameExpHash, gp->name)) != NULL)
+	    {
+	    boolean passes = !orLogic;
+	    for (repIx=0; repIx<numExpts; ++repIx)
+		{
+		boolean anyLimit = FALSE;
+		boolean passesOne = TRUE;
+		float val = vals[col->representatives[repIx]];
+		for (isMax=0; isMax<2; ++isMax)
 		    {
-		    float varVal = atof(varValString)/col->expScale;
-		    float *vals = NULL;
-		    struct genePos *newList = NULL, *gp, *next;
-		    for (gp = list; gp != NULL; gp = next)
+		    if (mms[isMax][repIx] != NULL)
 			{
-			next = gp->next;
-			if ((vals = hashFindVal(nameExpHash, gp->name)) != NULL)
+			float varVal = mmv[isMax][repIx];
+			anyLimit = TRUE;
+			if (isMax)
 			    {
-			    float val = vals[ix];
-			    if (isMax)
-			        {
-				if (val <= varVal)
-				    {
-				    slAddHead(&newList, gp);
-				    }
-				}
-			    else
-			        {
-				if (val >= varVal)
-				    {
-				    slAddHead(&newList, gp);
-				    }
-				}
+			    if (val > varVal)
+				passesOne = FALSE;
+			    }
+			else
+			    {
+			    if (val < varVal)
+				passesOne = FALSE;
 			    }
 			}
-		    slReverse(&newList);
-		    list = newList;
+		    }
+		if (anyLimit)
+		    {
+		    if (orLogic)
+			{
+			passes |= passesOne;
+			}
+		    else
+			{
+			passes &= passesOne;
+			}
 		    }
 		}
+	    if (passes)
+		{
+		slAddHead(&newList, gp);
+		}
 	    }
+	}
+    slReverse(&newList);
+    list = newList;
+
+    /* cleanup . */
+    for (isMax=0; isMax<2; ++isMax)
+	{
+	freez(&mms[isMax]);
+	freez(&mmv[isMax]);
 	}
     freeHash(&nameExpHash);
     freeHashAndVals(&expHash);
     }
 return list;
 }
+
 
 
 void setupColumnExpRatio(struct column *col, char *parameters)

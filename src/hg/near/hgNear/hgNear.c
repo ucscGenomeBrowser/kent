@@ -13,7 +13,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.34 2003/07/21 23:10:38 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.35 2003/07/30 04:00:17 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	defaultConfName, hideAllConfName, 
@@ -74,25 +74,10 @@ return result;
 char *cellLookupVal(struct column *col, struct genePos *gp, struct sqlConnection *conn);
 /* Get a field in a table defined by col->table, col->keyField, col->valField. */
 
-void cellSimplePrint(struct column *col, struct genePos *gp, struct sqlConnection *conn);
-/* This just prints cellSimpleVal. */
-
-void labelSimplePrint(struct column *col);
-/* This just prints cell->shortLabel. */
-
-static void cellSelfLinkPrint(struct column *col, struct genePos *gp,
-	struct sqlConnection *conn);
-/* Print self and hyperlink to make this the search term. */
-
-boolean simpleTableExists(struct column *col, struct sqlConnection *conn);
-/* This returns true if col->table exists. */
-
-void columnDefaultMethods(struct column *col);
-/* Set up default methods. */
-
 char *cellLookupVal(struct column *col, struct genePos *gp, 
 	struct sqlConnection *conn)
-/* Get a field in a table defined by col->table, col->keyField, col->valField. */
+/* Get a field in a table defined by col->table, col->keyField, 
+ * col->valField. */
 {
 char query[512];
 struct sqlResult *sr;
@@ -459,7 +444,7 @@ hPrintf("<TR><TD ALIGN=CENTER>");
     char *search = "";
     if (gp != NULL) search = gp->name;
     hPrintf(" search ");
-    cgiMakeTextVar(searchVarName,  search, 25);
+    cgiMakeTextVar(searchVarName,  search, 50);
     }
 
 /* Do go button. */
@@ -809,7 +794,7 @@ struct column *col;
 
 for (col = colList; col != NULL; col = col->next)
     {
-    safef(varName, sizeof(varName), "%s.%s", colConfigPrefix, col->name);
+    safef(varName, sizeof(varName), "%s%s", colConfigPrefix, col->name);
     val = cartOptionalString(cart, varName);
     if (val != NULL)
 	col->on = sameString(val, "on");
