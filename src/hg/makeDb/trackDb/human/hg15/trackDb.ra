@@ -226,7 +226,7 @@ group varRep
 priority 147
 visibility hide
 spectrum on
-type netAlign hg15 humanChain
+type netAlign hg15 selfChain
 
 track uniGene_2
 shortLabel UniGene
