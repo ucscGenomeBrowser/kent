@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.9 2005/03/18 01:04:11 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.10 2005/03/21 05:20:49 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -774,6 +774,11 @@ mm6.mgcTables.mgc = all
     screen -d -r
 
 XXXX - RUNNING - 2005-03-16 10:43
+XXXX - FAILED - 2005-03-20 21:00 - out of disk space on store3
+	the initial.mm6 directory it created in .../work/ was 45 Gb !
+	This job needs to be redone, but point genbank.conf at nibs
+	instead of the 2bit file.  There are still difficulties
+	processing the 2bit file.
 
 
 #########################################################################
@@ -892,14 +897,13 @@ SEQ1_IN_CONTIGS=0
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
 
-# QUERY
-# Human
-SEQ2_DIR=/iscratch/i/hg17/bothMaskedNibs
+# QUERY: Human
+SEQ2_DIR=/scratch/hg/hg17/bothMaskedNibs
 # RMSK not currently used
 SEQ2_RMSK=
 # FLAG not currently used
 SEQ2_FLAG=
-SEQ2_SMSK=/iscratch/i/hg17/linSpecRep.notInMouse
+SEQ2_SMSK=/scratch/hg/hg17/linSpecRep.notInMouse
 SEQ2_IN_CONTIGS=0
 SEQ2_CHUNK=30000000
 SEQ2_LAP=0
@@ -916,9 +920,57 @@ SEQ2_LEN=$BASE/S2.len
 
     cp /cluster/data/mm6/chrom.sizes ./S1.len
     sort -rn +1 /cluster/data/hg17/chrom.sizes > S2.len
-    nohup /usr/bin/time --portability /cluster/bin/scripts/doBlastzChainNet.pl \
-	-bigClusterHub kk9 `pwd`/DEF > blast.run.out 2>&1 &
-XXXX - RUNNING - 2005-03-15 16:20
+    #	establish a screen to control this job
+    screen
+    time /cluster/bin/scripts/doBlastzChainNet.pl `pwd`/DEF > \
+	blast.run.out 2>&1 &
+    #	real    993m28.547s
+    #	user    0m0.198s
+    #	sys     0m0.171s
+    #	detach from screen session: Ctrl-a Ctrl-d
+    #	to reattach to this screen session:
+    ssh kksilo
+    screen -d -r
+    #	STARTED - 2005-03-17 21:25
+    #	FINISHED - 2005-03-18 14:00
+# Completed: 45347 of 45347 jobs
+# CPU time in finished jobs:   16921981s  282033.02m  4700.55h  195.86d  0.537 y
+# IO & Wait Time:               2381711s   39695.18m   661.59h   27.57d  0.076 y
+# Average job time:                 426s       7.09m     0.12h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            9568s     159.47m     2.66h    0.11d
+# Submission to last job:         58695s     978.25m    16.30h    0.68d
+
+# Completed: 331 of 331 jobs
+# CPU time in finished jobs:        272s       4.54m     0.08h    0.00d  0.000 y
+# IO & Wait Time:                  1145s      19.08m     0.32h    0.01d  0.000 y
+# Average job time:                   4s       0.07m     0.00h    0.00d
+# Longest job:                       24s       0.40m     0.01h    0.00d
+# Submission to last job:           265s       4.42m     0.07h    0.00d
+
+    #	The kki batch doChainRun.csh appears to have failed
+    #	due to underlying changes in the location of hg17 items
+    #	fixup the symlinks which are in a state of flux today, then,
+    #	to recover:
+    ssh kki
+    cd /cluster/data/mm6/bed/blastzHg17.2005_03_14/axtChain/run
+    rm -fr chain
+    time ./doChainRun.csh
+    #	real    22m47.917s
+    #	user    0m0.380s
+    #	sys     0m0.630s
+# Completed: 40 of 40 jobs
+# CPU time in finished jobs:       6373s     106.22m     1.77h    0.07d  0.000 y
+# IO & Wait Time:                   552s       9.20m     0.15h    0.01d  0.000 y
+# Average job time:                 173s       2.89m     0.05h    0.00d
+# Longest job:                      662s      11.03m     0.18h    0.01d
+# Submission to last job:          1200s      20.00m     0.33h    0.01d
+
+    #	That was the last part of the chainRun step, can now continue:
+    ssh kksilo
+    cd /cluster/data/mm6/bed/blastzHg17.2005_03_14
+    time /cluster/bin/scripts/doBlastzChainNet.pl -continue chainMerge `pwd`/DEF > chainMerge.run.out 2>&1 &
+XXX - RUNNING - 2005-03-18 15:00
 
 #########################################################################
 # BLASTZ RAT Rn3 (DONE - 2005-03-15 - 2005-03-17 - Hiram)
@@ -1005,9 +1057,56 @@ SEQ2_LEN=$BASE/S2.len
     #	sys     0m0.360s
     #	FINISHED - 2005-03-17 13:26
 
+    #	it is helpful if you time these commands to make sure everything
+    #	is sane.  The times should also be similar, as are the numbers.
+
+    #	check the numbers
+    featureBits mm6 chainRn3
+    2768422449 bases of 2597150411 (106.595%) in intersection
+    featureBits mm5 chainRn3
+    2646682349 bases of 2615483787 (101.193%) in intersection
+    #	trying to do the chainLink's requires kolossus, big memory
+    ssh kolossus
+    #	specify a .hg.conf file with read-only passwords:
+    #	these take about 90 minutes
+    HGDB_CONF=~/.hg.conf.read-only /usr/bin/time --portability \
+	featureBits mm6 chainRn3Link
+    #	1802980225 bases of 2597150411 (69.421%) in intersection
+    HGDB_CONF=~/.hg.conf.read-only /usr/bin/time --portability \
+	featureBits mm6 chainRn3Link
+    #	1798705001 bases of 2615483787 (68.771%) in intersection
+
+
+
+    #	the netRn3 measurements take about 2m30s
+    featureBits mm6 netRn3
+    #	2720144602 bases of 2597150411 (104.736%) in intersection
+    featureBits mm5 netRn3
+    #	2638255333 bases of 2615483787 (100.871%) in intersection
+
+
     #	And then the swap of that:
     time /cluster/bin/scripts/doBlastzChainNet.pl -swap `pwd`/DEF > \
 	swap.run.out 2>&1 &
+    #	FINISHED - 2004-03-18 00:20
+    #	real    908m11.042s
+    #	user    0m0.467s
+    #	sys     0m0.353s
+
+    #	check the numbers
+    featureBits rn3 chainMm6
+    #	2827312772 bases of 2571104688 (109.965%) in intersection
+    featureBits rn3 chainMm5
+    #	2786666162 bases of 2571104688 (108.384%) in intersection
+    #	something is unusual here, the chainMm5 measurement takes 20
+    #	seconds, the chainMm6 measurement takes 12 minutes.
+    #	These chain tables ended up to be too large.
+
+    featureBits rn3 netMm6
+    #	2820715431 bases of 2571104688 (109.708%) in intersection
+    featureBits rn3 netMm5
+    #	2778454647 bases of 2571104688 (108.065%) in intersection
+
 
 #########################################################################
 # BLASTZ Zebrafish danRer2 (WORKING - 2005-03-17 - Hiram)
@@ -1068,7 +1167,33 @@ SEQ2_LEN=$BASE/S2.len
     #	to reattach to this screen session:
     ssh kksilo
     screen -d -r
-XXXX - RUNNING - 2005-03-17 10:00
+    #	STARTED - 2005-03-17 10:00
+    #	FINISHED - 2005-03-18 01:01
+    #	real    494m43.717s
+    #	user    0m0.322s
+    #	sys     0m0.184s
+
+# Completed: 57263 of 57263 jobs
+# CPU time in finished jobs:   14680881s  244681.36m  4078.02h  169.92d  0.466 y
+# IO & Wait Time:                320049s    5334.14m    88.90h    3.70d  0.010 y
+# Average job time:                 262s       4.37m     0.07h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            1308s      21.80m     0.36h    0.02d
+# Submission to last job:         51993s     866.55m    14.44h    0.60d
+
+# Completed: 331 of 331 jobs
+# CPU time in finished jobs:         87s       1.46m     0.02h    0.00d  0.000 y
+# IO & Wait Time:                   869s      14.48m     0.24h    0.01d  0.000 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest job:                        8s       0.13m     0.00h    0.00d
+# Submission to last job:           161s       2.68m     0.04h    0.00d
+
+# Completed: 40 of 40 jobs
+# CPU time in finished jobs:       2496s      41.60m     0.69h    0.03d  0.000 y
+# IO & Wait Time:                   295s       4.92m     0.08h    0.00d  0.000 y
+# Average job time:                  70s       1.16m     0.02h    0.00d
+# Longest job:                      139s       2.32m     0.04h    0.00d
+# Submission to last job:           470s       7.83m     0.13h    0.01d
 
 
 #########################################################################
@@ -1181,18 +1306,45 @@ SEQ2_LEN=$BASE/S2.len
 '_EOF_'
     # << this line keeps emacs coloring happy
 
-XXX - TBD when there is a cluster free somewhere 2005-03-17
 
     cp /cluster/data/mm6/chrom.sizes ./S1.len
     sort -rn +1 /cluster/data/tetNig1/chrom.sizes > S2.len
     #	establish a screen to control this job
     screen
-    time /cluster/bin/scripts/doBlastzChainNet.pl \
+    time /cluster/bin/scripts/doBlastzChainNet.pl -bigClusterHub kk9 \
 	`pwd`/DEF > blast.run.out 2>&1 &
     #	detach from screen session: Ctrl-a Ctrl-d
     #	to reattach to this screen session:
     ssh kksilo
     screen -d -r
+    #	STARTED 2005-03-17 21:30
+    #	FINISHED 2005-03-18 05:10
+    #	real    461m56.901s
+    #	user    0m0.426s
+    #	sys     0m0.310s
+# Completed: 18867 of 18867 jobs
+# CPU time in finished jobs:    2396227s   39937.11m   665.62h   27.73d  0.076 y
+# IO & Wait Time:                 53160s     886.00m    14.77h    0.62d  0.002 y
+# Average job time:                 130s       2.16m     0.04h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             591s       9.85m     0.16h    0.01d
+# Submission to last job:         26573s     442.88m     7.38h    0.31d
+
+# Completed: 331 of 331 jobs
+# CPU time in finished jobs:         27s       0.45m     0.01h    0.00d  0.000 y
+# IO & Wait Time:                   798s      13.30m     0.22h    0.01d  0.000 y
+# Average job time:                   2s       0.04m     0.00h    0.00d
+# Longest job:                        6s       0.10m     0.00h    0.00d
+# Submission to last job:           200s       3.33m     0.06h    0.00d
+
+# Completed: 40 of 40 jobs
+# CPU time in finished jobs:        688s      11.47m     0.19h    0.01d  0.000 y
+# IO & Wait Time:                   169s       2.82m     0.05h    0.00d  0.000 y
+# Average job time:                  21s       0.36m     0.01h    0.00d
+# Longest job:                       55s       0.92m     0.02h    0.00d
+# Submission to last job:           212s       3.53m     0.06h    0.00d
+
+
 
 #########################################################################
 # CPGISLANDS (DONE - 2005-03-17 - Hiram)
@@ -1264,3 +1416,159 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     featureBits mm3 cpgIsland
     #	10102968 bases of 2505900260 (0.403%) in intersection
 
+
+# BUILD KNOWN GENES TABLES (WORKING - 2005-03-18 - Hiram)
+#	this does not work - there are no longer LocusLink files
+#	from ncbi
+
+    #	using previously built swissProt and proteins DB's:
+    #	sp050201 proteins050201
+
+    #	create a temporary DB kgMm6 to assembly the KG data into:
+    ssh hgwdev
+    hgsql mm6 -e "create database kgMm6"
+    #	make sure all the protein utilities are current, evidently they
+    #	are not all on the utils build list:
+    cd ~/kent/src/hg/protein
+    make utils
+
+    #	and create its temporary data space (disk space juggling here)
+    #	this /cluster/data/kgDB/ location is used because it is built
+    #	into the script.  This process can use 2 to 3 Gb of disk space.
+    mkdir /cluster/data/mm6/bed/kgMm6
+    ln -s /cluster/data/mm6/bed/kgMm6 /cluster/data/kgDB/bed/kgMm6
+    cd /cluster/data/kgDB/bed/kgMm6
+
+    nohup /usr/bin/time --portability ~/kent/src/hg/protein/KGprocess.sh \
+	kgMm6 mm6 050201 > kgRun0.out 2>&1 &
+
+XXX - RUNNING - 2005-03-18 09:10
+  
+  The script was run successfully with the last message:
+
+  	Tue Jun  8 15:36:52 PDT 2004 DONE 
+
+  After initial inspection of tables in kgHg17, do the following
+  from mySql prompt:
+
+  alter table kgHg17.cgapAlias rename as hg17.cgapAlias;
+  alter table kgHg17.cgapBiocDesc rename as hg17.cgapBiocDesc;
+  alter table kgHg17.cgapBiocPathway rename as hg17.cgapBiocPathway;
+  alter table kgHg17.dupSpMrna rename as hg17.dupSpMrna;
+  alter table kgHg17.keggMapDesc rename as hg17.keggMapDesc;
+  alter table kgHg17.keggPathway rename as hg17.keggPathway;
+  alter table kgHg17.kgAlias rename as hg17.kgAlias;
+  alter table kgHg17.kgProtAlias rename as hg17.kgProtAlias;
+  alter table kgHg17.kgXref rename as hg17.kgXref;
+  alter table kgHg17.knownGene rename as hg17.knownGene;
+  alter table kgHg17.knownGeneLink rename as hg17.knownGeneLink;
+  alter table kgHg17.knownGeneMrna rename as hg17.knownGeneMrna;
+  alter table kgHg17.knownGenePep rename as hg17.knownGenePep;
+  alter table kgHg17.mrnaRefseq rename as hg17.mrnaRefseq;
+  alter table kgHg17.spMrna rename as hg17.spMrna;
+
+  hg17.knownGene has 43,401 entries and hg16.knownGene has 43,232 entries.
+  and running featireBits shows:
+  
+   	featureBits hg17 knownGene
+   	63983072 bases of 2866216770 (2.232%) in intersection
+   
+   	featureBits hg16 knownGene
+   	63781799 bases of 2865248791 (2.226%) in intersection
+  
+  Connect to genome-testdb and use hgcentraltest DB.
+  Add a new entry in gdbPdb table:
+ 
+        insert into gdbPdb values('hg17', 'proteins040515');
+
+
+#########################################################################
+# BLASTZ Dog canFam1 (WORKING - 2005-03-18 - Hiram)
+    ssh kksilo
+    mkdir /cluster/data/mm6/bed/blastzCanFam1.2005_03_18
+    cd /cluster/data/mm6/bed/blastzCanFam1.2005_03_18
+
+    cat << '_EOF_' > DEF
+# mouse vs. dog
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+
+# Default
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Mouse (mm6)
+SEQ1_DIR=/panasas/store/mm6/nib
+SEQ1_RMSK=
+SEQ1_FLAG=
+SEQ1_SMSK=/panasas/store/mm6/linSpecRep.notInDog
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Dog (canFam1)
+SEQ2_DIR=/scratch/hg/canFam1/nib
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_SMSK=/scratch/hg/canFam1/linSpecRep.notInMouse
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm6/bed/blastzCanFam1.2005_03_18
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << keep emacs coloring happy
+
+    cp /cluster/data/mm6/chrom.sizes ./S1.len
+    sort -rn +1 /cluster/data/canFam1/chrom.sizes > S2.len
+    #	establish a screen to control this job
+    screen
+    time /cluster/bin/scripts/doBlastzChainNet.pl -bigClusterHub kk9 \
+	`pwd`/DEF > blast.run.out 2>&1 &
+    #	detach from screen session: Ctrl-a Ctrl-d
+    #	to reattach to this screen session:
+    ssh kksilo
+    screen -d -r
+    #	STARTED - 2005-03-18 09:57
+
+#########################################################################
+# BLASTZ Cow bosTau1 (WORKING - 2005-03-18 - Hiram)
+    ssh kksilo
+    mkdir /cluster/data/mm6/bed/blastzBosTau1.2005_03_18
+    cd /cluster/data/mm6/bed/blastzBosTau1.2005_03_18
+
+    cat << '_EOF_' > DEF
+# mouse vs. cow
+# TARGET: Mouse (mm6)
+SEQ1_DIR=/panasas/store/mm6/nib
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LEN=/cluster/data/mm6/chrom.sizes
+
+# QUERY: Cow (bosTau1)
+SEQ2_DIR=/iscratch/i/bosTau1/nib/bosTau1.2bit
+SEQ2_CHUNK=5000000
+SEQ2_LAP=0
+SEQ2_LEN=/iscratch/i/bosTau1/chrom.sizes
+
+BASE=/cluster/data/mm6/bed/blastzBosTau1.2005_03_18
+'_EOF_'
+    # << keep emacs coloring happy
+
+    #	establish a screen to control this job
+    screen
+    time /cluster/bin/scripts/doBlastzChainNet.pl \
+	`pwd`/DEF > blast.run.out 2>&1 &
+    #	detach from screen session: Ctrl-a Ctrl-d
+    #	to reattach to this screen session:
+    ssh kksilo
+    screen -d -r
+XXX    #	STARTED - 2005-03-18 13:20
