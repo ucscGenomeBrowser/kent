@@ -123,6 +123,10 @@ struct bed *bedLoadNAll(char *fileName, int numFields);
 /* Load all bed from a tab-separated file.
  * Dispose of this with bedFreeList(). */
 
+struct bed *bedLoadAll(char *fileName);
+/* Determines how many fields are in a bedFile and load all beds from
+ * a tab-separated file.  Dispose of this with bedFreeList(). */
+
 struct bed *bedLoadNBin(char *row[], int wordCount);
 /* Convert a row of strings to a bed. */
 

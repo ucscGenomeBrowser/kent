@@ -8,7 +8,7 @@
 #include "bed.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.19 2003/08/15 13:32:38 weber Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.20 2003/08/15 17:43:50 sugnet Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -341,6 +341,23 @@ while (lineFileRow(lf, row))
     }
 lineFileClose(&lf);
 slReverse(&list);
+return list;
+}
+
+struct bed *bedLoadAll(char *fileName)
+/* Determines how many fields are in a bedFile and load all beds from
+ * a tab-separated file.  Dispose of this with bedFreeList(). */
+{
+struct bed *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+int numFields = 0;
+char *line = NULL;
+/* First peek to see how many columns in the bed file. */
+lineFileNextReal(lf, &line);
+numFields = chopByWhite(line, NULL, 0);
+lineFileClose(&lf);
+/* Now load them up with that number of fields. */
+list = bedLoadNAll(fileName, numFields);
 return list;
 }
 
