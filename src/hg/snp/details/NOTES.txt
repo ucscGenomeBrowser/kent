@@ -16,4 +16,9 @@ While parsing the XML files (rewrite getObsHet), get the information to update t
   - snpFreq - frequencies of snps in populations
 
 
+Change the format of snpMap fields 'source' and 'type' to enum.
+Add validaton status to snpMap? (enum, of course) - requires UI update also
+
+
+
 
