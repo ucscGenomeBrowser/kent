@@ -11,7 +11,7 @@ sessionDb userDb | sed -e "s/genome-centdb/localhost/" > \
 /tmp/hgcentral.sql
 
 hgsqldump --all -c -h genome-centdb hgcentral \
-defaultDb blatServers dbDb gdbPdb liftOverChain | \
+defaultDb blatServers dbDb gdbPdb liftOverChain clade genomeClade | \
 sed -e "s/genome-centdb/localhost/" >> /tmp/hgcentral.sql
 echo
 echo "*** Diffing old new ***"
