@@ -57,6 +57,7 @@
 #include "mcnBreakpoints.h"
 #include "fishClones.h"
 #include "featureBits.h"
+#include "web.h"
 
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
@@ -2822,6 +2823,7 @@ void doStsMarker(struct trackDb *tdb, char *marker)
 {
 char *table = tdb->tableName;
 char query[256];
+ char title[256];
 struct sqlConnection *conn = hAllocConn();
 boolean stsInfoExists = sqlTableExists(conn, "stsInfo");
 struct sqlConnection *conn1 = hAllocConn();
@@ -2837,7 +2839,9 @@ struct psl *pslList = NULL, *psl;
 int pslStart;
 
 /* Print out non-sequence info */
-hgcStart(marker);
+/*hgcStart(marker);*/
+sprintf(title, "STS Marker %s", marker);
+webStart(title);
 
 /* Find the instance of the object in the bed table */ 
 sprintf(query, "SELECT * FROM %s WHERE name = '%s' 
@@ -2870,8 +2874,8 @@ if (row != NULL)
 	    {
 	    infoRow = stsInfoLoad(row);
 	    /* Print out general sequence positional information */
-            printf("<H2>STS Marker %s</H2>\n", infoRow->name);
-            htmlHorizontalLine();
+            /* printf("<H2>STS Marker %s</H2>\n", infoRow->name);
+	       htmlHorizontalLine(); */
 	    printf("<TABLE>\n");
 	    printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
 	    printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start);
@@ -3015,6 +3019,7 @@ if (row != NULL)
 		  printf("</TABLE><P>\n");
 		}
 	    /* Print out alignment information - full sequence */
+	    webNewSection("Genomic Alignments:");
 	    sprintf(query, "SELECT * FROM all_sts_seq WHERE qName = '%d'", 
 		    infoRow->identNo);  
 	    sr1 = sqlGetResult(conn1, query);
@@ -3034,11 +3039,11 @@ if (row != NULL)
 	    slReverse(&pslList);
 	    if (i > 0) 
 	        {
-		htmlHorizontalLine();
-		printf("<H3>Genomic alignments of full sequence:</H3>\n");
+		printf("<H3>Full sequence:</H3>\n");
 		sprintf(stsid,"%d",infoRow->identNo);
 		printAlignments(pslList, pslStart, "htcCdnaAli", "all_sts_seq", stsid);
 		sqlFreeResult(&sr1);
+		htmlHorizontalLine();
 		}
 	    slFreeList(&pslList);
 	    /* Print out alignment information - primers */
@@ -3062,21 +3067,19 @@ if (row != NULL)
 	    slReverse(&pslList);
 	    if (i > 0) 
 	        {
-		htmlHorizontalLine();
-		printf("<H3>Genomic alignments of primers:</H3>\n");
+		printf("<H3>Primers:</H3>\n");
 		printAlignments(pslList, pslStart, "htcCdnaAli", "all_sts_primer", stsid);
 		sqlFreeResult(&sr1);
 		}
 	    slFreeList(&pslList);
 
-	    htmlHorizontalLine();
 	    stsInfoFree(&infoRow);
 	    }
 	}
     else
         {
-	printf("<H2>STS Marker %s</H2>\n", marker);
-	htmlHorizontalLine();
+	/* printf("<H2>STS Marker %s</H2>\n", marker);
+	   htmlHorizontalLine(); */
 	printf("<TABLE>\n");
 	printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
 	printf("<TR><TH ALIGN=left>Position:</TH><TD>%d</TD></TR>\n", (stsRow.chromStart+stsRow.chromEnd)>>1);
@@ -3140,7 +3143,9 @@ if (row != NULL)
 	htmlHorizontalLine();
 	}
     }
+webNewSection("Notes:");
 puts(tdb->html);
+webEnd();
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 hFreeConn(&conn1);
@@ -3160,7 +3165,9 @@ char sband[32], eband[32];
 int i;
 
 /* Print out non-sequence info */
-hgcStart(clone);
+/*hgcStart(clone);*/
+webStart(clone);
+
 
 /* Find the instance of the object in the bed table */ 
 sprintf(query, "SELECT * FROM fishClones WHERE name = '%s' 
@@ -3228,17 +3235,17 @@ if (row != NULL)
 	printf("</TR>\n");
 	} 
     printf("</TABLE>\n");
-    htmlHorizontalLine();
 
     /* Print out FISH placement information */
-    printf("<H3>Placements of %s by FISH</H3>\n", clone);
+    webNewSection("FISH Placements");
+    /*printf("<H3>Placements of %s by FISH</H3>\n", clone);*/
     printf("<TABLE>\n");
-    printf("<TR><TH WIDTH=100>Lab</TH><TH>Band Position</TH></TR>\n");
+    printf("<TR><TH ALIGN=left WIDTH=100>Lab</TH><TH>Band Position</TH></TR>\n");
     for (i = 0; i < fc->placeCount; i++) 
         {
 	if (sameString(fc->bandStarts[i],fc->bandEnds[i]))
 	    {
-	    printf("<TR><TD WIDTH=100 ALIGN=center>%s</TD><TD ALIGN=center>%s</TD></TR>",
+	    printf("<TR><TD WIDTH=100 ALIGN=left>%s</TD><TD ALIGN=center>%s</TD></TR>",
 		   fc->labs[i], fc->bandStarts[i]);
 	    }
 	else
@@ -3250,8 +3257,9 @@ if (row != NULL)
 
     }
 printf("</TABLE>\n"); 
-htmlHorizontalLine();
+webNewSection("Notes:");
 puts(tdb->html);
+webEnd();
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
@@ -3386,6 +3394,7 @@ void doLinkedFeaturesSeries(char *track, char *clone, struct trackDb *tdb)
 /* Create detail page for linked features series tracks */ 
 {
 char query[256];
+char title[256];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL, *sr1 = NULL;
 char **row, **row1;
@@ -3401,13 +3410,14 @@ struct psl *pslList = NULL, *psl;
 /* Determine type */
 if (sameString("bacEndPairs", track)) 
     {
-    type = "BAC End Pairs";
+    sprintf(title, "Location of %s using BAC end sequences", clone);
     lfLabel = "BAC ends";
     table = track;
     }
 
 /* Print out non-sequence info */
-hgcStart(clone);
+/* hgcStart(clone); */
+webStart(title);
 
 /* Find the instance of the object in the bed table */ 
 sprintf(query, "SELECT * FROM %s WHERE name = '%s' 
@@ -3419,7 +3429,7 @@ row = sqlNextRow(sr);
 if (row != NULL)
     {
     lfs = lfsLoad(row+1);
-    printf("<H2>%s - %s</H2>\n", type, clone);
+    /*printf("<H2>%s - %s</H2>\n", type, clone);*/
     printf("<P><HR ALIGN=\"CENTER\"></P>\n<TABLE>\n");
     printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n",seqName);
     printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start);
@@ -3435,8 +3445,10 @@ if (row != NULL)
         {
 	printOtherLFS(clone, table, start, end);
 	}
-    printf("<P><HR ALIGN=\"CENTER\"></P>\n");
-    printf("<H3>Genomic alignments of %s:</H3>\n", lfLabel);
+
+    sprintf(title, "Genomic alignments of %s:", lfLabel);
+    webNewSection(title);
+    /*printf("<H3>Genomic alignments of %s:</H3>\n", lfLabel);*/
     
     for (i = 0; i < lfs->lfCount; i++) 
       {
@@ -3463,9 +3475,10 @@ else
     warn("Couldn't find %s in %s table", clone, table);
     }
 sqlFreeResult(&sr);
+webNewSection("Notes:");
 puts(tdb->html);
-
 hgFreeConn(&conn);
+webEnd();
 } 
 
 void fillCghTable(int type, char *tissue, boolean bold)
