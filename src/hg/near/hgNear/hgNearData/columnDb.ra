@@ -69,6 +69,13 @@ priority 2.62
 visibility off
 type lookup knownToU95 name value
 
+name u74Id
+shortLabel U74 ID
+longLabel ID of Associated Affymetrix U74 vs (A, B, and C) expression data 
+priority 2.62
+visibility off
+type lookup knownToU74 name value
+
 name expDense
 shortLabel Short Expression
 longLabel Selected UCLA expression data.
@@ -126,7 +133,7 @@ shortLabel Short GNF U74A
 longLabel Selected GNF Expression Atlas data from U74A chip.
 priority 2.7
 visibility on
-type expRatio knownToU74A affyGnfU74A hgFixed.affyGnfU74AExps
+type expRatio knownToU74 affyGnfU74A hgFixed.affyGnfU74AExps
 max 5.0
 representatives 83,6,77,55,51,63,12,16,18,4,
 
@@ -135,9 +142,27 @@ shortLabel All GNF U74A
 longLabel Selected GNF Expression Atlas data from U74A chip.
 priority 2.8
 visibility off
-type expRatio knownToU74A affyGnfU74A hgFixed.affyGnfU74AExps
+type expRatio knownToU74 affyGnfU74A hgFixed.affyGnfU74AExps
 max 5.0
 representatives 85,86,87,88,69,70,83,84,-1,10,11,53,54,67,68,71,72,-1,27,28,59,60,61,62,-1,6,7,81,82,37,38,22,23,-1,77,78,33,34,25,26,39,40,-1,55,56,31,32,45,46,-1,29,30,51,52,49,50,14,15,-1,8,9,0,1,63,64,-1,12,13,16,17,18,19,-1,4,5,24,75,76,79,80,-1,57,58,35,36,41,42,-1,20,21,65,66,2,3,-1,47,48,43,44,73,74,
+
+name gnfU74BAll
+shortLabel All GNF U74B 
+longLabel Selected GNF Expression Atlas data from U74B chip.
+priority 3.0
+visibility off
+type expRatio knownToU74 affyGnfU74B hgFixed.affyGnfU74BExps
+max 5.0
+representatives 0,1,2,3,-1,16,17,4,5,-1,6,7,10,11,-1,18,19,8,9,-1,12,13,14,15,
+
+name gnfU74CAll
+shortLabel All GNF U74C 
+longLabel Selected GNF Expression Atlas data from U74C chip.
+priority 3.1
+visibility off
+type expRatio knownToU74 affyGnfU74C hgFixed.affyGnfU74CExps
+max 5.0
+representatives 0,1,2,3,-1,16,17,4,5,-1,6,7,10,11,-1,18,19,8,9,-1,12,13,14,15,
 
 name bitScore
 shortLabel Bits
@@ -178,9 +203,17 @@ queryOne select value,value from knownToCdsSnp where name = '%s'
 invQueryOne select name from knownToCdsSnp where value = '%s'
 itemUrl http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s
 
+name humanOrthologs
+shortLabel Human
+longLabel Human ortholog (best blastp hit to UCSC Known hg16)
+priority 8.0
+visibility off
+type lookup hgBlastTab query target
+itemUrl http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&position=%s
+
 name mouseOrthologs
 shortLabel Mouse
-longLabel Mouse ortholog (best blastp hit to UCSC Known MM3)
+longLabel Mouse ortholog (best blastp hit to UCSC Known mm3)
 priority 8.0
 visibility off
 type lookup mmBlastTab query target
@@ -201,7 +234,6 @@ priority 8.3
 visibility off
 type lookup dmBlastTab query target
 itemUrl http://flybase.bio.indiana.edu/.bin/fbidq.html?%s
-#itemUrl http://us.expasy.org/cgi-bin/niceprot.pl?%s
 
 name wormOrthologs
 shortLabel C. elegans
