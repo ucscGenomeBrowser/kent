@@ -1334,9 +1334,9 @@ SEQ2_LEN=$BASE/S2.len
     para try
     para check
     para push
-    # The two crashed jobs are about chr19_random
-    #  Its .fa file is almost all masked sequence
-    #  The resulting .axt file is empty
+    # The two crashed jobs are about chr19 and chr19_random
+    #  Its chr19_random .fa file is almost all masked sequence
+    #  The resulting .axt file is empty.  The chr19 is too big
 #Completed: 40 of 42 jobs
 #Crashed: 2 jobs
 #CPU time in finished jobs:       1908s      31.80m     0.53h    0.02d  0.000 y
@@ -2337,25 +2337,23 @@ Submission to last job:        344744s    5745.73m    95.76h    3.99d
     para try
     para check
     para push
-    # The two crashed jobs are about chr19_random
-    #  Its .fa file is almost all masked sequence
-    #  The resulting .axt file is empty
-#Completed: 40 of 42 jobs
-#Crashed: 2 jobs
-#CPU time in finished jobs:       1908s      31.80m     0.53h    0.02d  0.000 y
-#IO & Wait Time:                 22178s     369.64m     6.16h    0.26d  0.001 y
-#Average job time:                 602s      10.04m     0.17h    0.01d
-#Longest job:                     1723s      28.72m     0.48h    0.02d
-#Submission to last job:          1802s      30.03m     0.50h    0.02d
-    # To fixup the chr19 axtsort problem
-    # sometimes alignments are so huge that they cause axtSort to run out 
-    # of memory.  Run them in two passes like this:
-    ssh kkr1u00
+    # We have two crashed jobs here.  The data for chr7 and chr19 is
+    # too much for the processing.  Have to run those separately on
+    #	the file server eieio.
+Completed: 40 of 42 jobs
+Crashed: 2 jobs
+CPU time in finished jobs:       4737s      78.95m     1.32h    0.05d  0.000 y
+IO & Wait Time:                 57154s     952.57m    15.88h    0.66d  0.002 y
+Average job time:                1547s      25.79m     0.43h    0.02d
+Longest job:                     7969s     132.82m     2.21h    0.09d
+Submission to last job:          8029s     133.82m     2.23h    0.09d
+    # Fixup chr7 and chr19 by running them in two passes like this:
+    ssh eieio
     cd /cluster/data/hg16/bed/blastzSelf
     set base=/cluster/data/hg16/bed/blastzSelf
-    set seq1_dir=/iscratch/i/gs.17/build34/bothMaskedNibs
-    set seq2_dir=/iscratch/i/gs.17/build34/bothMaskedNibs
-    foreach c (lav/chr19)
+    set seq1_dir=/cluster/data/hg16/nib
+    set seq2_dir=/cluster/data/hg16/nib
+    foreach c (lav/chr19 lav/chr7)
       pushd $c
       set chr=$c:t
       set out=axtChrom/$chr.axt
@@ -2370,48 +2368,25 @@ Submission to last job:        344744s    5745.73m    95.76h    3.99d
       popd
     end
 
-    #	Remove the empty axtChrom/chr19_random.axt file to avoid future
-    #	processing errors
-
     # translate sorted axt files into psl
     ssh eieio
     cd /cluster/data/hg16/bed/blastzSelf
     mkdir -p pslChrom
-    set tbl = "blastzMm3"
+    set tbl = "blastzSelf"
     foreach f (axtChrom/chr*.axt)
       set c=$f:t:r
       echo "Processing chr $c"
       /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
     end
     #	That takes about 20 minutes
-    #	chr19 came along later
-    ssh kkr1u00
-    set tbl = "blastzMm3"
-    foreach f (axtChrom/chr19.axt)
-      set c=$f:t:r
-      echo "Processing chr $c"
-      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
-    end
 
     # Load database tables
     ssh hgwdev
-    set tbl = "blastzMm3"
+    set tbl = "blastzSelf"
     cd /cluster/data/hg16/bed/blastzSelf/pslChrom
     /cluster/bin/i386/hgLoadPsl hg16 chr*_${tbl}.psl
     # This takes 30 minutes to an hour
-    # and later chr19
-    /cluster/bin/i386/hgLoadPsl hg16 chr19_${tbl}.psl
     # create trackDb/human/hg16 and get a trackDb.ra file started with:
-#	track blastzMm3
-#	shortLabel Mouse Blastz
-#	longLabel Blastz All Mouse (Feb. 03) Alignments
-#	group compGeno
-#	priority 130
-#	visibility hide
-#	color 100,50,0
-#	altColor 255,240,200
-#	spectrum on
-#	type psl xeno mm3
-#	otherDb mm3
+
     # remake trackDb tables
 
