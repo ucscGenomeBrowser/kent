@@ -222,8 +222,10 @@ int qs = psl->qStart, qe = psl->qEnd;
 if (psl->strand[0] == '-')
     reverseIntRange(&qs, &qe, psl->qSize);
 
-fprintf(f, "%d %s %d %d %s %d %d %s 0\n", ++ix, psl->tName, psl->tStart+1, 
-	psl->tEnd, psl->qName, qs+1, qe, psl->strand);
+if (psl->strand[1] != '-')
+    psl->strand[1] = '+';
+fprintf(f, "%d %s %d %d %s %d %d %c%c 0\n", ++ix, psl->tName, psl->tStart+1, 
+	psl->tEnd, psl->qName, qs+1, qe, psl->strand[1], psl->strand[0]);
 fprintf(f, "%s\n%s\n\n", t, q);
 }
 
@@ -403,6 +405,7 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
 	    writeInsert(t, q, tSeq->dna + lastT, tGap);
 	    }
 	}
+/*    printf("BUild tStart %d qStart %d strand %s q size %d t size %d qs size %d ts size %d\n",psl->tStart,psl->qStart,psl->strand,q->stringSize, t->stringSize, qSeq->size, tSeq->size );*/
     /* Output sequence. */
     size = psl->blockSizes[blockIx];
     dyStringAppendN(q, qSeq->dna + qs, size);
@@ -411,11 +414,16 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     lastT = ts + size;
     }
 
+/*    printf("BF q size %d t size %d qs size %d ts size %d\n",q->stringSize, t->stringSize, qSeq->size, tSeq->size );*/
 if (psl->strand[0] == '-' && !qIsNib)
     reverseComplement(qSeq->dna, qSeq->size);
 if (psl->strand[1] == '-')
     reverseComplement(tSeq->dna, tSeq->size);
 
+if(q->stringSize != t->stringSize)
+    {
+    printf("AF q size %d t size %d qs size %d ts size %d\n",q->stringSize, t->stringSize, qSeq->size, tSeq->size );
+    }
 assert(q->stringSize == t->stringSize);
 if (axt)
     axtOutString(q->string, t->string, q->stringSize, 60, psl, f);
