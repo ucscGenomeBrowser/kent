@@ -5,6 +5,13 @@
 char *optionVal(char *name, char *defaultVal);
 /* Return named option if in options hash, otherwise default. */
 
+int optionInt(char *name, int defaultVal);
+/* Return integer value of named option, or default value
+ * if not set. */
+
+boolean optionExists(char *name);
+/* Return TRUE if option has been set. */
+
 void optionHash(int *pArgc, char *argv[]);
 /* Read options in command line into options hash.   
  * Options come in three forms:

@@ -81,17 +81,41 @@ void optionHash(int *pArgc, char *argv[])
 {
 optionHashSome(pArgc, argv, FALSE);
 }
+
+static char *optGet(char *name)
+/* Lookup option name.  Complain if options hash not set. */
+{
+if (options == NULL)
+    errAbort("optGet called before optionHash");
+return hashFindVal(options, name);
+}
  
 char *optionVal(char *name, char *defaultVal)
 /* Return named option if in options hash, otherwise default. */
 {
-char *ret;
-if (options == NULL)
-    errAbort("optionVal called before optionHash");
-ret = hashFindVal(options, name);
+char *ret = optGet(name);
 if (ret == NULL)
      ret = defaultVal;
 return ret;
+}
+
+int optionInt(char *name, int defaultVal)
+/* Return integer value of named option, or default value
+ * if not set. */
+{
+char *s = optGet(name);
+if (s == NULL)
+    return defaultVal;
+if ((s[0] == '-' && isdigit(s[1])) || isdigit(s[0]))
+    return atoi(s);
+errAbort("option %s has to be integer valued", name);
+return 0;
+}
+
+boolean optionExists(char *name)
+/* Return TRUE if option has been set. */
+{
+return optGet(name) != NULL;
 }
 
 
