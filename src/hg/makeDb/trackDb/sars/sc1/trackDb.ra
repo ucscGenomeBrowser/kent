@@ -8,10 +8,18 @@ spectrum on
 type psl .
 
 track viralProt
-shortLabel corona prot
-longLabel Coronavirus proteins from Swissprot 
-group x
-priority 54
+shortLabel Coronavirus proteins 
+longLabel Coronavirus proteins from Swissprot at least 67% id using Blat
+group compGeno
+priority 133
 visibility pack
+type psl .
+
+track viralProtLoose
+shortLabel Coronavirus loose 
+longLabel Coronavirus proteins from Swissprot loose alignments using Blat
+group compGeno
+priority 134
+visibility hide
 type psl .
 
