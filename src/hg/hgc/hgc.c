@@ -116,7 +116,7 @@
 #include "encodeRegionInfo.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.520 2003/11/20 22:06:59 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.521 2003/11/20 22:25:12 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6633,10 +6633,13 @@ if (!startsWith("Worm", organism))
 	    medlineLinkedLine("PubMed on Product", rl->product, rl->product);
 	}
     printf("\n");
+    if (startsWith("Human", organism)) 
+        {
+        printGeneLynxName(rl->name);
+	printf("\n");
+        }
     if (!startsWith("dm", database))
 	{
-	printGeneLynxName(rl->name);
-	printf("\n");
 	printf("<B>GeneCards:</B> ");
 	printf("<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?search=%s\" TARGET=_blank>",
 	       rl->name);
