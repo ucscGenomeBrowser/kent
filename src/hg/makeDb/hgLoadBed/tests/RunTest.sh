@@ -9,9 +9,11 @@ export TESTPROGRAM verbose tests failures NOLOAD
 
 usage() {
     echo "usage: `basename $0` [-verbose] [-load] [-home] [-help]"
+    echo -e "\tTesting the binary $TESTPROGRAM\n"
     echo -e "\t-verbose - show all test command lines and results"
-    echo -e "\t-load - actually load table 'bedLoadTest' into database 'test'"
-    echo -e "\t-home - use PATH $HOME/bin/$MACHTYPE/$TESTPROGRAM"
+    echo -e "\t-load - load table 'bedLoadTest' into database 'test' (default noLoad)"
+    echo -e "\t-home - use binary $HOME/bin/$MACHTYPE/$TESTPROGRAM"
+    echo -e "\t\t (default uses your PATH to find $TESTPROGRAM)"
     echo -e "\t-help - print this usage message"
     exit 255
 }
