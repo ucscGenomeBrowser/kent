@@ -45,8 +45,8 @@ exit; # don't actually run this like a script :)
     tr '[a-z]' '[A-Z]' < fugu_v3.fasta | \
         sed 's/>SCAFFOLD_/>scaffold_/' > fugu_v3.upper.fasta
 
+
 # SPLIT THE FASTA FILE INTO SCAFFOLDS FOR FURTHER PROCESSING (DONE KRR)
-# Chunk the scaffolds into ~500Kb "super-scaffolds" for convenience
 
     ssh eieio
     set fugudir = /cluster/store5/Fugu_Rubripes_V3
@@ -279,21 +279,18 @@ exit; # don't actually run this like a script :)
      hgGcPercent fr1 ../../nib
 
 
-
 # MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR FUGU (5/6/03 KRR)
     echo 'insert into defaultDb values("Fugu", "fr1");' \
       | hgsql -h genome-testdb hgcentraltest
 
-    # Warning: must change genome, organism fields to correspond
+    # Warning: must genome and organism fields must correspond
     # with defaultDb values
-    echo 'insert into dbDb values("fr1", "Aug. 2002", \
-          "/gbdb/fr1/nib", "Fugu", "chrUn", 0, 10, "Fugu");' \
+    echo 'insert into dbDb \
+        (name, description, nibPath, organism, \
+                defaultPos, active, orderKey, genome) values \
+        ("fr1", "Aug. 2002", "/gbdb/fr1/nib", "Fugu", \
+               "chrUn:79469-167499", 1, 10, "Fugu");' \
       | hgsql -h genome-testdb hgcentraltest
-
-    # activate database
-    #echo 'insert into dbDb values("fr1", "Aug. 2002", \
-          #"/gbdb/fr1/nib", "Fugu", "chrUn", 1, 10, "Fugu");' \
-      #| hgsql -h genome-testdb hgcentraltest
 
     # Make trackDb table so browser knows what tracks to expect:
     ssh hgwdev
@@ -314,7 +311,8 @@ exit; # don't actually run this like a script :)
     cvs add fugu/fr1
     cvs commit fugu
 
-# MAKE RNA TABLES
+
+# MAKE RELATIONAL RNA TABLES
 
     hgLoadRna new fr1
 
@@ -327,7 +325,7 @@ exit; # don't actually run this like a script :)
       | hgsql -h genome-testdb hgcentraltest
 
 
-# MAKING AND STORING mRNA ALIGNMENTS  (6/8/03 KRR)
+# MAKE AND STORE mRNA ALIGNMENTS  (6/8/03 KRR)
 
     # Load up the local disks of the small cluster with  mrna.fa
     # and masked super-scaffolds
@@ -415,7 +413,8 @@ exit; # don't actually run this like a script :)
         /cluster/store5/$mrnaDir/org/Takifugu_rubripes/mrna.ra
         # Adding data of type: mRNA ...
 
-# MAKING AND STORING EST ALIGNMENTS  (IN PROGRESS KRR)
+
+# MAKE AND STORE EST ALIGNMENTS  (6/8/03 KRR)
 
     # setup BlueArc with EST files
     ssh kk
@@ -479,8 +478,164 @@ exit; # don't actually run this like a script :)
 
     set mrnaDir = mrna.134
     ln -s /cluster/store5/$mrnaDir/org/Takifugu_rubripes/est.fa /gbdb/fr1/$mrnaDir
+    
+    cd ~/fr1/bed/est
+    rm *.tab
     hgLoadRna add -type=EST fr1 /gbdb/fr1/$mrnaDir/est.fa \
         /cluster/store5/$mrnaDir/org/Takifugu_rubripes/est.ra
+    unset mrnaDir
 
     # note: there is no Genbank RefSeq directory for this organism
 
+# PRODUCE CROSS_SPECIES MRNA ALIGNMENT (6/9/03 KRR)
+    # Aligns non-Fugu mRNA's  against the masked genome
+    # This uses Genbank mRNA files already downloaded 
+    # to /cluster/store5/genbank.134
+    # Files are unpacked to /cluster/store5/mrna.134
+
+    # use fileserver where genbank.134 resides
+    ssh eieio
+    set genbankdir = /cluster/store5/genbank.134
+    set mrnadir = /cluster/store5/mrna.134
+    cd $mrnaDir
+
+    # generate filter file for unpacking entries
+    # note: skip this if fuguXenoRna.fil exists
+    cat << '_EOF_' > fuguXenoRna.fil
+restrict mol=mRNA & !(org="Takifugu rubripes")
+hide mol
+'_EOF_' 
+
+    # unpack non-Fugu mRNAs
+    gunzip -c $genbankdir/gb{pri,rod,v,mam,inv,bct,htc,pat,phg,pln}* \
+        | gbToFaRa fuguXenoRna.fil \
+                fuguXenoRna.fa fuguXenoRna.ra fuguXenoRna.ta stdin
+
+    # copy masked chromosome nib to bluearc for cluster run
+    # NOTE: probably want to do this earlier
+    # so it is available for all alignments
+    ssh kk
+    cd /cluster/bluearc/fugu
+    mkdir chromNib
+    cp ~/fr1/nib/* chromNib
+
+    # split masked scaffold file into 50Mb chunks
+    # to produce 7 files
+    mkdir trfFa
+    faSplit about ~/fr1/fugu_v3.masked.fa 50000000 trfFa/s
+
+    # split big xeno mrna file into 700Kb chunks on bluearc for cluster run
+    # (makes ~1000 query files * 7 target files = ~7000 jobs)
+    # This is not too many to handle in a single directory (psl)
+    mkdir xenoRnaSplit
+    faSplit about $mrnadir/fuguXenoRna.fa 700000 xenoRnaSplit/m
+
+    cd ~/fr1/bed
+    mkdir xenoMrna
+    cd xenoMrna
+    mkdir psl
+    ls -1S /cluster/bluearc/fugu/trfFa/s*.fa > genome.lst
+    ls -1S /cluster/bluearc/fugu/xenoRnaSplit/m*.fa > mrna.lst
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat -q=rnax -t=dnax -mask=lower {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP 
+'_EOF_'
+    gensub2 genome.lst mrna.lst gsub spec
+    para create spec
+    para try
+    para check
+    para push
+    para check...
+        # Completed: 6629 of 6629 jobs
+        # Avg. job: 2.7 min
+        # Longest job: 4.7 min
+        # Submission to last job: 49 min
+
+    # process alignments
+    ssh eieio
+    cd ~/fr1/bed/xenoMrna
+
+    # sort alignmnents
+    pslSort dirs raw.psl /tmp psl
+        # Got 6629 files 81 files per mid file
+
+    # analyse repeats and generate genome-wide best alignment
+    # note different parameters from previous alignments
+    pslReps -minAli=0.25 raw.psl scaffolds.psl /dev/null
+        # ...........Processed 1675350 alignments
+
+    # lift up PSL files to chrom coordinates
+    liftUp -nohead chrom.psl ~/fr1/Un/chrUn.lft warn scaffolds.psl
+        # Got 40758 lifts in /cluster/home/kate/fr1/Un/chrUn.lft
+
+    # extract psl file for each accession, into a dir
+    pslSortAcc nohead chrom /tmp chrom.psl
+    
+    # merge psl files
+    pslCat -dir chrom > xenoMrna.psl
+
+    # load alignments into database
+    ssh hgwdev
+    cd ~/fr1/bed/xenoMrna
+    rm *.tab
+    hgLoadPsl fr1 xenoMrna.psl -tNameIx
+
+    # load xeno rna into database
+    set mrnadir = mrna.134
+    set datadir = /cluster/store5
+    ln -s $datadir/$mrnadir/fuguXenoRna.fa /gbdb/fr1/$mrnaDir
+    hgLoadRna add -type=xenoRna fr1 /gbdb/fr1/$mrnadir/fuguXenoRna.fa \
+         $datadir/$mrnadir/fuguXenoRna.ra
+
+
+# PRODUCE HUMAN BLAT ALIGNMENT (6/11/03 KRR)
+    # For this build, use the Fugu BLAT to human (hg15),
+    # and reverse the alignment
+
+    # use local fileserver
+    ssh eieio
+
+    mkdir ~/fr1/bed/blatHg15/psl
+    set hg15dir = ~/hg15/bed/blatFugu
+    set fr1dir = ~/fr1/bed/blatHg15
+    mkdir -p $fr1dir/{psl,chrom}
+
+    # swap alignments (for each human chrom)
+    cd $hg15dir/chrom
+    foreach f (chr?{,?}{,_random}_blatFugu.psl)
+        pslSwap $f $fr1dir/psl/$f
+    end
+
+    # merge to single Fugu chrUn chrom
+    cd $fr1dir/psl
+    # pslCat -out=$fr1dir/chrom/chrUn_blatHg15.psl chr?{,?}{,_random}_blatFugu.psl
+    pslCat chr?{,?}{,_random}_blatFugu.psl > \
+                $fr1dir/chrom/scaffolds.psl 
+
+    # lift target side (fugu) to chrom coordinates
+    cd $fr1dir/chrom
+    liftUp chrUn_blatHg15.psl ~/fr1/Un/chrUn.lft warn scaffolds.psl
+    
+    # load into database
+    cd $fr1dir/chrom
+    hgLoadPsl fr1 chrUn_blatHg15.psl
+
+    # make hg15 symlink in /gbdb and load human sequence data
+    set gbdbdir=/gbdb/fr1/hg15
+    mkdir $gbdbdir
+    cd $gbdbdir
+    foreach f (/cluster/store5/gs.16/build33/?{,?})
+        set c = $f:t
+        ln -s $f/chr${c}.fa
+        if (-e $f/chr${c}_random.fa) then
+            ln -s $f/chr${c}_random.fa
+        endif
+    end
+
+    # load human sequences into database
+    ssh hgwdev
+    cd ~/fr1/bed/blatHg15
+    hgLoadRna addSeq fr1 /gbdb/fr1/hg15/*.fa
+    unset fr1dir hg15dir
+        
