@@ -93,6 +93,7 @@ test::
 	cd liftUp && ${MAKE} test
 	cd mrnaToGene && ${MAKE} test
 	cd overlapSelect && ${MAKE} test
+	cd pslDiff && ${MAKE} test
 	cd pslMap && ${MAKE} test
 	cd spideyToPsl && ${MAKE} test
 
@@ -172,6 +173,7 @@ UTIL_DIRS = \
 	pslCat \
 	pslCheck \
 	pslCoverage \
+	pslDiff \
 	pslDropOverlap \
 	pslFilter \
 	pslFilterPrimers \

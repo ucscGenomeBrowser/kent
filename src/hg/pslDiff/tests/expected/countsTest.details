@@ -1,0 +1,4 @@
+#setName	qName	qStart	qEnd	tName	tStart	tEnd	strand	nExons	ident	repMatch	cover
+input/single.psl	NM_000039.1	0	897	chr22_random	13497	15367	+	4	1	0	1
+input/single.psl	NM_000039.1	0	897	chr11	116211678	116213548	-	4	1	0	1
+input/base.psl	NM_000039.1	0	897	chr22_random	13497	15367	+	4	1	0	1
