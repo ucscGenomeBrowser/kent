@@ -598,7 +598,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
 	{
 	snprintf(rangeStr, sizeof(rangeStr), "%s:%d-%d", chrom,
-		 bedItem->chromStart,  bedItem->chromEnd);
+		 bedItem->chromStart+1,  bedItem->chromEnd);
 	bedItem->name   = cloneString(rangeStr);
 	}
     if (hti->scoreField[0] != 0)
