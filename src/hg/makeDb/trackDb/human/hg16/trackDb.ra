@@ -1653,3 +1653,15 @@ priority 40.5
 visibility hide
 color 10,130,10
 type bed 3
+
+searchTable encode_NHGRI_DNAseHS
+searchType bed
+termRegex 500bp_[0-9]+_[0-9]+
+searchMethod exact
+searchPriority 50.1
+
+searchTable encode_Stanford_Promoters
+searchType bed
+termRegex (me|se)(LONG|alt|ONLY)_R?P[0-9]+-[0-9]+
+searchMethod exact
+searchPriority 50.2
