@@ -44,25 +44,25 @@ for (;*s;s++)
     }
 }
 
-void fold2pairingList(char *fold, int *pairList)
-/* take a parenthesis string and return an array of pairing positions:
-   pairList[i] = j <=> i pair with j and pairList[i] = -1 <=> i does
-   not pair. PairList must be of size strlen(fold) */
+void fold2pairingList(char *fold, int len, int *pairList)
+/* take a parenthesis string, allocate and return an array of pairing
+   positions: pairList[i] = j <=> i pair with j and pairList[i] = -1
+   <=> i does not pair.*/
 {
-int L = strlen(fold);
 int i,j, stackSize = 0;
+AllocArray(pairList, len);
 
 /* initialize array */
-for (i = 0; i < L; i++)
+for (i = 0; i < len; i++)
     pairList[i] = -1;
 
 /* fill out pairList */
-for (i = 0; i < L; i++) 
+for (i = 0; i < len; i++) 
     {
     if (fold[i] == '(')
 	{
 	stackSize = 1;
-	for (j = i+1; j < L; j++) 
+	for (j = i+1; j < len; j++) 
 	    {
 	    if (fold[j] == '(')
 		stackSize += 1;
@@ -79,11 +79,11 @@ for (i = 0; i < L; i++)
     }
 }
 
-void mkPairPartnerSymbols(int * pairList, char * pairSymbols, int size)
+void mkPairPartnerSymbols(int *pairList, char *pairSymbols, int size)
 {
 /* Make a symbol string indicating pairing partner */
 int i;
-char symbols[] = "abcdefghiklmnopqrstuvwxyzABCDEFGHIKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()=+{}|[]\\;'"; /* length 80 */
+char symbols[] = "abcdefghiklmnopqrstuvwxyzABCDEFGHIKLMNOPQRSTUVWXYZ1234567890!@#$%^&*=+{}|[]\\;'<>"; /* length 80 */
 int  symbolMax = strlen(symbols);
 int index;
 for (i = 0, index = 0; i < size; i++)
@@ -108,13 +108,14 @@ for (i = 0, index = 0; i < size; i++)
     }
 }
 
-char * projectString(char * s, char * ref, char refChar, char insertChar)
+char * projectString(char *s, char *ref, char refChar, char insertChar)
 /* Insert 'insertChar' in 's' at every position 'ref' has 'refChar'. */
 {
 int i,j,size = strlen(ref);
-char * copy = (char *) needMem(size + 1);
+char *copy = (char *) needMem(size + 1);
 
-assert (strlen(s) == strlen(ref) - countChars(ref, refChar));
+if (strlen(s) != strlen(ref) - countChars(ref, refChar))
+  errAbort("ERROR from rnautil::projectString: Input string 's' has wrong length.\n"); 
 
 for (i = 0, j = 0; i < size; i++)
     {
@@ -129,18 +130,18 @@ for (i = 0, j = 0; i < size; i++)
 return copy;
 }
 
-char * gapAdjustFold(char * s, char * ref)
+char *gapAdjustFold(char *s, char *ref)
 /* Insert space in s when there is a gap ('-') in ref. */
 {
 return projectString(s, ref, '-', ' ');
 }
 
 
-int * projectIntArray(int * in, char * ref, char refChar, int insertInt)
+int *projectIntArray(int *in, char *ref, char refChar, int insertInt)
 /* Insert 'insertChar' in 's' at every positin 'ref' has 'refChar'. */
 {
 int i,j,size = strlen(ref);
-int   * copy = (int *) needMem(size * sizeof(int) );
+int   *copy = (int *) needMem(size *sizeof(int) );
 
 for (i = 0, j = 0; i < size; i++)
     {
@@ -155,23 +156,25 @@ for (i = 0, j = 0; i < size; i++)
 return copy;
 }
 
-int * gapIntArrayAdjust(int * in, char * ref)
+int * gapIntArrayAdjust(int *in, char *ref)
 /* Insert space in s when there is a gap ('-') in ref. */
 {
 return projectIntArray(in, ref, '-', 0);
 }
 
-void markCompensatoryMutations(char *s, char *ref, int * pairList, int *markList)
+void markCompensatoryMutations(char *s, char *ref, int *pairList, int *markList)
 /* Compares s to ref and pairList and sets values in markList
  * according to pairing properties. The value of markList[i] specifies
  * the pairing property of the i'th position. The following values are
  * used: 
- * 0: not pairing, ref[i] = s[i] (default); 
- * 1: not pairing, ref[i] != s[i]; 
- * 2: ref[i] = s[i] and both compatible with * pairList;
- * 3: ref[i] and s[i] differ by c<->t, and both compatible with pairList; 
- * 4: ref[i] and s[i] differ by compensatory change and and both compatible with pairList; 
- * 5: s[i] not compatible with pairList;
+ * 0: not pairing, no substitution (default) 
+ * 1: not pairing, single substitution
+ * 2: pairing, no substitutions 
+ * 3: pairing, single substitution (one of: CG<->TG, GC<->GT, TA<->TG, AT<->GT)
+ * 4: pairing, double substitution (i.e. a compensatory change)
+ * 5: annoated as pairing but dinucleotide cannot pair 
+
+
  */
 {
 int i, size = strlen(s);
