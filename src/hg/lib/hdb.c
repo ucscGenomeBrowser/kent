@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.186 2004/06/11 18:34:31 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.187 2004/06/13 23:46:52 hiram Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -650,11 +650,11 @@ if (startsWith("chr", table))
 	if ((ptr = strstr(chrom, "_random")) != NULL)
 	    *(ptr+strlen("_random")) = 0;
 	}
-    else if ((ptr = strchr(table, '_')) != NULL)
+    else if ((ptr = strrchr(table, '_')) != NULL)
 	{
 	strncpy(trackName, ptr+1, 128);
 	strncpy(chrom, table, 32);
-	if ((ptr = strchr(chrom, '_')) != NULL)
+	if ((ptr = strrchr(chrom, '_')) != NULL)
 	    *ptr = 0;
 	}
     }
