@@ -1659,6 +1659,7 @@ tablesIgnored $ci
 tablesIgnored $dm
     anophelesEcores
     fbRole
+    flyreg
 
 tablesIgnored $fr
     chr%_gold
