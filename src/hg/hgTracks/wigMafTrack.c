@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.41 2004/10/20 19:18:58 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.42 2004/10/20 23:37:46 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -74,6 +74,30 @@ retDb[len] = 0;
 return TRUE;
 }
 
+static struct wigMafItem *newMafItem(char *s)
+/* Allocate and initialize a maf item. Param can be a db or name */
+{
+struct wigMafItem *mi;
+char *val;
+
+AllocVar(mi);
+if ((val = hGenome(s)) != NULL)
+    {
+    /* it's a database name */
+    mi->db = cloneString(s);
+    mi->name = val;
+    }
+else
+    {
+    mi->db = cloneString(s);
+    mi->name = cloneString(s);
+    }
+mi->name = hgDirForOrg(mi->name);
+*mi->name = tolower(*mi->name);
+mi->height = tl.fontHeight;
+return mi;
+}
+
 static struct wigMafItem *scoreItem(scoreHeight)
 /* Make up (wiggle) item that will show the score */
 {
@@ -89,81 +113,40 @@ static struct wigMafItem *loadBaseByBaseItems(struct track *track)
 /* Make up base-by-base track items. */
 {
 struct wigMafItem *miList = NULL, *mi;
-struct mafAli *maf; 
-char buf[64];
-char *otherOrganism;
-char *myOrg = hgDirForOrg(hOrganism(database));
 struct sqlConnection *conn = hAllocConn();
-*myOrg = tolower(*myOrg);
+char *species[100];
+char option[64];
+int i;
+char *speciesOrder = trackDbRequiredSetting(track->tdb, SPECIES_ORDER_VAR);
+int speciesCt = chopLine(speciesOrder, species);
 
 /* load up mafs */
 track->customPt = wigMafLoadInRegion(conn, track->mapName, 
                                         chromName, winStart, winEnd);
 hFreeConn(&conn);
 
-/* Make up item that will show inserts in this organism. */
+/* Make up item that will show gaps in this organism. */
 AllocVar(mi);
-//safef(buf, sizeof(buf), "%s gaps", myOrg);
-//mi->name = cloneString(buf);
 mi->name = "Gaps";
 mi->height = tl.fontHeight;
 slAddHead(&miList, mi);
 
 /* Make up item for this organism. */
-AllocVar(mi);
-mi->name = myOrg;
-mi->height = tl.fontHeight;
-mi->db = cloneString(database);
+mi = newMafItem(database);
 slAddHead(&miList, mi);
 
-
-/* Make up items for other organisms by scanning through
- * all mafs and looking at database prefix to source. */
+/* Make up items for other organisms by scanning through species 
+   track setting */
+for (i = 0; i < speciesCt; i++)
     {
-    /* get species order from trackDb setting */
-    char *speciesOrder = trackDbRequiredSetting(track->tdb, SPECIES_ORDER_VAR);
-    char *species[100];
-    char option[64];
-    int speciesCt = chopLine(speciesOrder, species);
-
-    struct hash *hash = newHash(8);	/* keyed by database. */
-    struct hashEl *el;
-    int i;
-
-    hashAdd(hash, mi->name, mi);	/* Add in current organism. */
-    for (maf = track->customPt; maf != NULL; maf = maf->next)
-        {
-	struct mafComp *mc;
-	for (mc = maf->components; mc != NULL; mc = mc->next)
-	    {
-	    dbPartOfName(mc->src, buf, sizeof(buf));
-	    if (hashLookup(hash, buf) == NULL)
-	        {
-		AllocVar(mi);
-		mi->db = cloneString(buf);
-                otherOrganism = hOrganism(mi->db);
-                mi->name = 
-                    (otherOrganism == NULL ? cloneString(buf) :
-		                             hgDirForOrg(otherOrganism));
-                *mi->name = tolower(*mi->name);
-		mi->height = tl.fontHeight;
-		hashAdd(hash, mi->name, mi);
-		}
-	    }
-	}
-    /* build item list in species order */
-    for (i = 0; i < speciesCt; i++)
-        {
-        /* skip this species if UI checkbox was unchecked */
-        safef (option, sizeof(option), "%s.%s", track->mapName, species[i]);
-        if (!cartUsualBoolean(cart, option, TRUE))
-            continue;
-        *species[i] = tolower(*species[i]);
-        if ((mi = hashFindVal(hash, species[i])) != NULL)
-            slAddHead(&miList, mi);
-        }
-    hashFree(&hash);
+    /* skip this species if UI checkbox was unchecked */
+    safef(option, sizeof(option), "%s.%s", track->mapName, species[i]);
+    if (!cartUsualBoolean(cart, option, TRUE))
+        continue;
+    mi = newMafItem(species[i]);
+    slAddHead(&miList, mi);
     }
+
 /* Add item for score wiggle after base alignment */
 if (track->subtracks != NULL)
     {
@@ -275,8 +258,7 @@ if (suffix != NULL)
         /* skip this species if UI checkbox was unchecked */
         if (!cartUsualBoolean(cart, option, TRUE))
             continue;
-        AllocVar(mi);
-        mi->name = species[i];
+        mi = newMafItem(species[i]);
         if (track->visibility == tvFull)
             mi->height = pairwiseWigHeight(track);
         else
@@ -599,6 +581,8 @@ for (mi = miList; mi != NULL; mi = mi->next)
         /* get wiggle table, of pairwise 
            for example, percent identity */
         tableName = getWigTablename(mi->name, suffix);
+        if (!hTableExists(tableName))
+            tableName = getWigTablename(mi->db, suffix);
         if (hTableExists(tableName))
             {
             /* reuse the wigTrack for pairwise tables */
@@ -618,6 +602,8 @@ for (mi = miList; mi != NULL; mi = mi->next)
                from mafs */
             vgSetClip(vg, xOff, yOff, width, mi->height);
             tableName = getMafTablename(mi->name, suffix);
+            if (!hTableExists(tableName))
+                tableName = getMafTablename(mi->db, suffix);
             if (hTableExists(tableName))
                 drawMafScore(tableName, mi->height, seqStart, seqEnd, 
                                  vg, xOff, yOff, width, font,
@@ -731,9 +717,9 @@ char noAlignment[2000] = {UNALIGNED_SEQ_BEFORE};
 for (i = 1; i < sizeof noAlignment - 1; i++)
     noAlignment[i] = '-';
 
-safef (option, sizeof(option), "%s.%s", track->mapName, MAF_DOT_VAR);
+safef(option, sizeof(option), "%s.%s", track->mapName, MAF_DOT_VAR);
 dots = cartCgiUsualBoolean(cart, option, FALSE);
-safef (option, sizeof(option), "%s.%s", track->mapName, MAF_CHAIN_VAR);
+safef(option, sizeof(option), "%s.%s", track->mapName, MAF_CHAIN_VAR);
 chainBreaks = cartCgiUsualBoolean(cart, option, FALSE);
 
 /* Allocate a line of characters for each item. */
@@ -770,7 +756,6 @@ for (mi = miList; mi != NULL; mi = mi->next)
 /* Go through the mafs saving relevant info in lines. */
 mafList = track->customPt;
 safef(dbChrom, sizeof(dbChrom), "%s.%s", database, chromName);
-
 
 for (maf = mafList; maf != NULL; maf = maf->next)
     {
@@ -914,7 +899,7 @@ if (wigTrack != NULL)
         vgSetClip(vg, xOff, yOff, width, wigTrack->height - 1);
         }
     else
-    vgSetClip(vg, xOff, yOff, width, wigTotalHeight(wigTrack, wigVis) - 1);
+        vgSetClip(vg, xOff, yOff, width, wigTotalHeight(wigTrack, wigVis) - 1);
     wigTrack->drawItems(wigTrack, seqStart, seqEnd, vg, xOff, yOff,
                          width, font, color, wigVis);
     vgUnclip(vg);
