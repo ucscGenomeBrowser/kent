@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.634 2003/11/21 15:49:33 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.635 2003/11/23 15:12:23 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -7079,9 +7079,6 @@ if (NULL == position)
 
 if((position == NULL) || sameString(position, ""))
     errAbort("Please go back and enter a coordinate range in the \"position\" field.<br>For example: chr22:20100000-20200000.\n");
-
-/* doesn't free old position */
-position = stripCommas(position);
 
 chromName = NULL;
 winStart = 0;
