@@ -490,10 +490,10 @@ droVir1.perChromTables = no
     hgGcPercent droVir1 /cluster/data/droVir1
 
 
-# MAKE HGCENTRALTEST BLATSERVERS ENTRY (TODO 11/?/04 angie)
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY (DONE 12/?/04 b0b/jen)
     ssh hgwdev
-    echo 'insert into blatServers values("droVir1", "blat?", "177??", 1, 0); \
-          insert into blatServers values("droVir1", "blat?", "177??", 0, 1);' \
+    echo 'insert into blatServers values("droVir1", "blat14", "17784", 1, 0); \
+          insert into blatServers values("droVir1", "blat14", "17785", 0, 1);' \
       | hgsql -h genome-testdb hgcentraltest
 
 
