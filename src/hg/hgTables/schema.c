@@ -19,7 +19,7 @@
 #include "bedCart.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.29 2005/03/14 22:27:05 angie Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.30 2005/03/22 00:21:25 angie Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -288,6 +288,19 @@ slFreeList(&chain);
 return retVal;
 }
 
+
+static void printTrackHtml(char *table)
+/* If trackDb has html for table, print it out in a new section. */
+{
+struct trackDb *tdb = hTrackDbForTrack(table);
+if (tdb != NULL && tdb->html != NULL && tdb->html[0] != 0)
+    {
+    webNewSection("%s (%s) Track Description", tdb->shortLabel, table);
+    puts(tdb->html);
+    }
+}
+
+
 static void showSchemaDb(char *db, char *table)
 /* Show schema to open html page. */
 {
@@ -356,6 +369,7 @@ if (jpList != NULL)
     }
 webNewSection("Sample Rows");
 printSampleRows(10, conn, splitTable);
+printTrackHtml(table);
 }
 
 static void showSchemaCtWiggle(char *table, struct customTrack *ct)
