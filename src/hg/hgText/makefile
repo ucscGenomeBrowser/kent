@@ -5,14 +5,14 @@ L = $(MYSQLLIBS) -lm
 MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
-O = hgTextBrowser.o hgFind.o
+O = hgText.o
 
-hgTracks: $O 
-	gcc $O $(MYLIBS) $(L)
-	mv a.out hgTextBrowser
-	strip hgTextBrowser
-	chmod a+rx hgTextBrowser
-	mv hgTextBrowser /usr/local/apache/cgi-bin
+hgText: $O 
+	gcc $O $(MYLIBS) $(L) 
+	mv a.out hgText
+	strip hgText
+	chmod a+rx hgText
+	mv hgText $(HGCGI)
 
 lib:
 	cd ../../lib; make

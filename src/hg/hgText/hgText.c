@@ -14,7 +14,7 @@ boolean findGenomePos(char *spec, char **retChromName,
 	struct hgPos *pos;
 	struct dyString *ui;
 
-	hgp = hgPositionsFind(spec, "");
+	hgp = hgPositionsFind(spec, "", FALSE);
 	if (hgp == NULL || hgp->posCount == 0)
 		    {
 				    hgPositionsFree(&hgp);
@@ -31,7 +31,7 @@ boolean findGenomePos(char *spec, char **retChromName,
 									    }
 	else
 		    {
-				    hgPositionsHtml(hgp, stdout);
+				    hgPositionsHtml(hgp, stdout, FALSE);
 					    hgPositionsFree(&hgp);
 						    return FALSE;
 							    }
@@ -73,17 +73,35 @@ return sqlExists(conn, query);
 void doMiddle()
 /* Print middle parts of web page. */
 {
-char* table = cgiOptionalString("table");
-struct cgiVar* current = cgiVarList();
+char* table;
+char* database;
+struct cgiVar* current;
 
 char *chromName;        /* Name of chromosome sequence . */
 int winStart;           /* Start of window in sequence. */
 int winEnd;         /* End of window in sequence. */
 
-char* position = cgiOptionalString("position");
-findGenomePos(position, &chromName, &winStart, &winEnd);
+char* position;
 
-hDefaultConnect();	/* read in the default connection options */
+table = cgiOptionalString("table");
+current = cgiVarList();
+position = cgiOptionalString("position");
+
+database = cgiOptionalString("db");
+if (database == NULL)
+    database = "hg6";
+hSetDb(database);
+hDefaultConnect();
+
+if(position == NULL)
+	position = "";
+if(position != NULL && position[0] != 0)
+	{
+	if (!findGenomePos(position, &chromName, &winStart, &winEnd))
+		return;
+	}
+	
+findGenomePos(position, &chromName, &winStart, &winEnd);
 
 puts("<TABLE>");
 while(current != 0)
