@@ -138,7 +138,7 @@
 #include "zdobnovSynt.h"
 #include "HInv.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.627 2004/05/08 20:05:04 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.628 2004/05/13 23:42:28 markd Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1482,27 +1482,27 @@ void geneShowPosAndLinks(char *geneName, char *pepName, struct trackDb *tdb,
 {
 char *geneTable = tdb->tableName;
 char other[256];
+boolean foundPep = FALSE;
 
 showGenePos(geneName, tdb);
 printf("<H3>Links to sequence:</H3>\n");
 printf("<UL>\n");
 
-if (pepTable != NULL)
+if ((pepTable != NULL) && hGenBankHaveSeq(pepName, pepTable))
     {
-    if (hGenBankHaveSeq(pepName, pepTable))
-        {
-        puts("<LI>\n");
-        hgcAnchorSomewhere(pepClick, pepName, pepTable, seqName);
-        printf("Predicted Protein</A> \n"); 
-        puts("</LI>\n");
-        }
+    puts("<LI>\n");
+    hgcAnchorSomewhere(pepClick, pepName, pepTable, seqName);
+    printf("Predicted Protein</A> \n"); 
+    puts("</LI>\n");
+    foundPep = TRUE;
     }
-else
+if (!foundPep)
     {
     puts("<LI>\n");
     hgcAnchorSomewhere("htcTranslatedPredMRna", geneName, "translate", seqName);
     printf("Translated Protein</A> from predicted mRNA \n"); 
     puts("</LI>\n");
+    foundPep = TRUE;
     }
 
 puts("<LI>\n");
