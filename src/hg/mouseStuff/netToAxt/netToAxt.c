@@ -373,7 +373,8 @@ while ((net = chainNetRead(lf)) != NULL)
     sprintf(path, "%s/%s.nib", tNibDir, net->name);
     tChrom = nibLoadAllMasked( NIB_MASK_MIXED ,path);
     if (tChrom->size != net->size)
-        errAbort("Size mismatch on %s.  Net/nib out of sync?", tChrom->name);
+        errAbort("Size mismatch on %s.  Net/nib out of sync or possibly nib dirs swapped?", 
+		tChrom->name);
     printf("loaded %s\n", path);
 
     rConvert(net->fillList, tChrom, qChromHash, qNibDir, chainHash, f);
