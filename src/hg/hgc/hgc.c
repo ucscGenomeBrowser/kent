@@ -120,9 +120,10 @@
 #include "encodeErge.h"
 #include "encodeErgeHssCellLines.h"
 #include "sgdDescription.h"
+#include "simpleNucDiff.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.545 2004/01/08 18:44:27 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.545.2.1 2004/01/15 23:52:11 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12650,6 +12651,38 @@ genericClickHandlerPlus(tdb, item, NULL, dy->string);
 dyStringFree(&dy);
 }
 
+static void doSimpleDiff(struct trackDb *tdb, char *otherOrg)
+/* Print out simpleDiff info. */
+{
+struct simpleNucDiff snd;
+struct sqlConnection *conn = hAllocConn();
+char fullTable[64];
+char query[256], **row;
+struct sqlResult *sr;
+int rowOffset;
+int start = cartInt(cart, "o");
+
+genericHeader(tdb, NULL);
+if (!hFindSplitTable(seqName, tdb->tableName, fullTable, &rowOffset))
+    errAbort("No %s track in database %s", tdb->tableName, database);
+safef(query, sizeof(query),
+    "select * from %s where chrom = '%s' and chromStart=%d", 
+    fullTable, seqName, start);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    simpleNucDiffStaticLoad(row + rowOffset, &snd);
+    printf("<B>%s sequence:</B> %s<BR>\n", hOrganism(database), snd.tSeq);
+    printf("<B>%s sequence:</B> %s<BR>\n", otherOrg, snd.qSeq);
+    bedPrintPos((struct bed*)&snd, 3);
+    printf("<BR>\n");
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+printTrackHtml(tdb);
+}
+
+
 void doMiddle()
 /* Generate body of HTML. */
 {
@@ -12911,6 +12944,10 @@ else if (sameWord(track, "hg15PepPsl") )
 else if (sameWord(track, "hg15repeats") )
     {
     doAlignCompGeno(tdb, item, "Human");
+    }
+else if (sameWord(track, "chimpSimpleDiff") )
+    {
+    doSimpleDiff(tdb, "Chimp");
     }
 /* This is a catch-all for blastz/blat tracks -- any special cases must be 
  * above this point! */
