@@ -12,3 +12,5 @@ joinerCheck: $O ${MYLIBS}
 
 clean:
 	rm -f $O
+test: 
+	joinerCheck -parseOnly ../all.joiner

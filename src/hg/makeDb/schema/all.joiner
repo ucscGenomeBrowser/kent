@@ -599,7 +599,7 @@ joiner bacCloneName
     $gbd.fishClones.name
     $gbd.bacEndPairs.name
 
-imageCloneId external="IMAGE Consortium"
+joiner imageCloneId external=IMAGEConsortium
 "An image cDNA clone ID"
     $gbd.mgcFullStatus.imageId
     $gbd.imageClone.imageId

@@ -7,7 +7,9 @@
 #include "obscure.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.4 2004/03/11 09:56:45 kent Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.5 2004/03/11 21:34:25 baertsch Exp $";
+
+boolean parseOnly; 
 
 void usage()
 /* Explain usage and exit. */
@@ -17,6 +19,7 @@ errAbort(
   "usage:\n"
   "   joinerCheck file.joiner\n"
   "options:\n"
+  "   -parseOnly just parse joiner file, don't check database.\n"
   "   -xxx=XXX\n"
   );
 }
@@ -149,6 +152,7 @@ return dy->string;
 }
 
 static struct optionSpec options[] = {
+   {"parseOnly", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -338,6 +342,10 @@ while ((line = nextSubbedLine(lf, symHash, dyBuf)) != NULL)
 	    if (js != NULL)
 	        slAddHead(&jsList, js);
 	    }
+        else
+            {
+            errAbort("unrecognized '%s' line %d of %s",word, lf->lineIx, lf->fileName);
+            }
 	}
     }
 slReverse(&jsList);
@@ -547,7 +555,8 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct joinerSet *js, *jsList = joinerParsePassOne(lf);
 joinerParsePassTwo(jsList);
 uglyf("Got %d joiners in %s\n", slCount(jsList), fileName);
-joinerValidateOnDbs(jsList);
+if (!parseOnly)
+    joinerValidateOnDbs(jsList);
 }
 
 
@@ -557,6 +566,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
+parseOnly = optionExists("parseOnly");
 joinerCheck(argv[1]);
 return 0;
 }
