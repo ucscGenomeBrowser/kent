@@ -9,11 +9,21 @@ void usage()
 errAbort("usage: freen file");
 }
 
+void stripeFile(char *inFile, char *outFile)
+/* Read file, add stripes, write file. */
+{
+struct memGfx *mg = mgLoadGif(inFile);
+int i;
+for (i=0; i<mg->height; i += 2)
+   mgDrawBox(mg, 0, i, mg->width, 1, MG_BLUE);
+mgSaveGif(mg, outFile);
+}
+
 void freen(char *fileName)
 /* Print status code. */
 {
-struct vGfx *vg = vgOpenPostScript(500, 500, fileName);
-// struct vGfx *vg = vgOpenGif(500, 500, fileName);
+// struct vGfx *vg = vgOpenPostScript(500, 500, fileName);
+struct vGfx *vg = vgOpenGif(500, 500, fileName);
 MgFont *smallFont = mgSmallFont();
 MgFont *bigFont = mgLargeFont();
 int smallHeight = mgFontPixelHeight(smallFont);
@@ -28,6 +38,7 @@ vgBox(vg, 25, 25, 50, 50, grayIx);
 vgLine(vg, 25, 25, 75, 75, MG_RED);
 vgLine(vg, 25, 75, 75, 25, MG_RED);
 vgClose(&vg);
+stripeFile(fileName, "foo.gif");
 }
 
 
