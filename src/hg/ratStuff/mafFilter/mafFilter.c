@@ -6,9 +6,8 @@
 #include "options.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: mafFilter.c,v 1.5 2005/01/13 18:56:18 kate Exp $";
+static char const rcsid[] = "$Id: mafFilter.c,v 1.6 2005/01/13 20:03:40 kate Exp $";
 
-#define DEFAULT_FACTOR 5
 #define DEFAULT_MIN_ROW 2
 #define DEFAULT_MIN_COL 1
 
@@ -23,12 +22,9 @@ errAbort(
   "   -tolerate - Just ignore bad input rather than aborting.\n"
   "   -minCol=N - Filter out blocks with fewer than N columns (default %d)\n"
   "   -minRow=N - Filter out blocks with fewer than N rows (default %d)\n"
-  "   -factor - Filter out scores below (ncol**2)(nrow)(-minFactor)\n"
-        /* score cutoff recommended by Webb Miller */
-  "   -minFactor=N - Factor to use with -minFactor (default %d)\n"
-  "   -minScore=N - Minimum allowed score (alternative to -minFactor)\n",
+  "   -minScore=N - Minimum allowed score\n",
   "   -reject=filename - Save rejected blocks in filename\n",
-        DEFAULT_MIN_COL, DEFAULT_MIN_ROW, DEFAULT_FACTOR
+        DEFAULT_MIN_COL, DEFAULT_MIN_ROW
   );
 }
 
@@ -37,8 +33,6 @@ static struct optionSpec options[] = {
    {"minCol", OPTION_INT},
    {"minRow", OPTION_INT},
    {"minScore", OPTION_FLOAT},
-   {"factor", OPTION_BOOLEAN},
-   {"minFactor", OPTION_INT},
    {"reject", OPTION_STRING},
    {NULL, 0},
 };
@@ -47,8 +41,6 @@ int minCol = DEFAULT_MIN_COL;
 int minRow = DEFAULT_MIN_ROW;
 boolean gotMinScore = FALSE;
 double minScore;
-boolean gotMinFactor = FALSE;
-int minFactor = DEFAULT_FACTOR;
 char *rejectFile = NULL;
 
 static jmp_buf recover;    /* Catch errors in load maf the hard way in C. */
@@ -69,15 +61,11 @@ boolean filterOne(struct mafAli *maf)
 {
 int ncol = maf->textSize;
 int nrow = slCount(maf->components);
-int fscore = -minFactor * ncol * ncol * nrow;
 
 if (nrow < minRow || ncol < minCol ||
-    (gotMinScore && maf->score < minScore) ||
-    (gotMinFactor && maf->score < fscore))
+    (gotMinScore && maf->score < minScore))
     {
-    verbose(3, "col=%d, row=%d, score=%f, fscore=%d\n", 
-                        ncol, nrow, maf->score, fscore);
-    verbose(3, "ncol**2=%d\n", ncol * ncol);
+    verbose(3, "col=%d, row=%d, score=%f\n", ncol, nrow, maf->score); 
     return FALSE;
     }
 else
@@ -147,18 +135,11 @@ if (optionExists("minScore"))
     gotMinScore = TRUE;
     minScore = optionFloat("minScore", 0);
     }
-if (optionExists("factor"))
-    {
-    if (gotMinScore)
-        errAbort("can't use both -minScore and -minFactor");
-    gotMinFactor = TRUE;
-    minFactor = optionInt("minFactor", DEFAULT_FACTOR);
-    }
 minCol = optionInt("minCol", DEFAULT_MIN_COL);
 minRow = optionInt("minRow", DEFAULT_MIN_ROW);
 rejectFile = optionVal("reject", NULL);
-verbose(3, "minCol=%d, minRow=%d, gotMinScore=%d, minScore=%f, gotMinFactor=%d, minFactor=%d\n", 
-        minCol, minRow, gotMinScore, minScore, gotMinFactor, minFactor);
+verbose(3, "minCol=%d, minRow=%d, gotMinScore=%d, minScore=%f, ", 
+        minCol, minRow, gotMinScore, minScore);
 
 mafFilter(argc-1, argv+1);
 return 0;
