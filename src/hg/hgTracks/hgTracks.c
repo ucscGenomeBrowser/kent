@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.824 2004/10/21 02:16:46 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.825 2004/10/21 04:45:29 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -808,7 +808,7 @@ if ((x1 >= 0) && (x1 < MAXPIXELS) && (chromEnd >= winStart) && (chromStart <= wi
     for (i = x1 ; i < x1+w; i++)
         {
         assert(i<MAXPIXELS);
-        z = colorBin[i][color] ;  /*pick color of highest scoreing alignment  for this pixel */
+        z = colorBin[i][color] ;  /*pick color of highest scoring alignment  for this pixel */
         colorBin[i][color] = (z > score)? z : score;
         }
     }
@@ -6541,7 +6541,7 @@ for (i=0; i<count; i++, text++, textPos++)
     char printChar;
     x1 = i * width/count;
     x2 = (i+1) * width/count - 1;
-    if (match && *text == '|')
+    if (match != NULL && *text == '|')
         {
         /* insert count follows -- replace with a colored vertical bar */
         text++;
@@ -6551,12 +6551,15 @@ for (i=0; i<count; i++, text++, textPos++)
         continue;
         }
     printChar = *text;
-    if (match && *text == UNALIGNED_SEQ_BEFORE ||
-                 *text == UNALIGNED_SEQ_AFTER ||
-                 *text == UNALIGNED_SEQ_BOTH)
+    if (match != NULL && (*text == UNALIGNED_SEQ_BEFORE ||
+                         *text == UNALIGNED_SEQ_AFTER ||
+                         *text == UNALIGNED_SEQ_BOTH))
         {
         /* process unaligned region indicators - display as gaps
-         * delimited by vertical red bars, suppressing redundant ones */
+         * delimited by vertical red bars, suppressing redundant ones:
+         * X, ^ -> left bar, unless preceded by V or X
+         * X, V -> right bar, unless preceded by ^ or X
+         */ 
         if (*text == UNALIGNED_SEQ_BEFORE || *text == UNALIGNED_SEQ_BOTH)
             if (i==0 || (text[-1] != UNALIGNED_SEQ_AFTER && 
                          text[-1] != UNALIGNED_SEQ_BOTH))
@@ -6598,11 +6601,13 @@ for (i=0; i<count; i++, text++, textPos++)
 freez(&inMotif);
 }
 
-void spreadBasesString(struct vGfx *vg, int x, int y, int width, int height,
-	                Color color, MgFont *font, char *s, int count)
+void spreadBasesString(struct vGfx *vg, int x, int y, int width, 
+                        int height, Color color, MgFont *font, 
+                        char *s, int count)
 /* Draw evenly spaced letters in string. */
 {
-spreadAlignString(vg, x, y, width, height, color, font, s, NULL, count, FALSE);
+spreadAlignString(vg, x, y, width, height, color, font, s, 
+                        NULL, count, FALSE);
 }
 
 static void drawBases(struct vGfx *vg, int x, int y, int width, int height,
@@ -6619,7 +6624,8 @@ else
 
 if (complementSeq)
     complement(seq->dna, seq->size);
-spreadBasesString(vg, x, y, width, height, color, font, seq->dna, seq->size);
+spreadBasesString(vg, x, y, width, height, color, font, 
+                                seq->dna, seq->size);
 
 if (thisSeq == NULL)
     freeDnaSeq(&seq);

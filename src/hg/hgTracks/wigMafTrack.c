@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.43 2004/10/21 02:16:46 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.44 2004/10/21 04:45:30 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -688,13 +688,15 @@ static int wigMafDrawBases(struct track *track, int seqStart, int seqEnd,
 /* Draw base-by-base view, return new Y offset. */
 {
 struct wigMafItem *miList = track->items, *mi;
-struct mafAli *mafList, *maf, *sub;
+struct mafAli *mafList, *maf, *sub, *infoMaf;
+struct mafComp *mc, *mcMaster;
 int lineCount = slCount(miList);
 char **lines = NULL, *selfLine, *insertLine;
 int *insertCounts;
 int i, x = xOff, y = yOff;
 struct dnaSeq *seq = NULL;
 struct hash *miHash = newHash(9);
+struct hash *srcHash = newHash(0);
 char dbChrom[64];
 char buf[1024];
 char option[64];
@@ -753,10 +755,16 @@ safef(dbChrom, sizeof(dbChrom), "%s.%s", database, chromName);
 
 for (maf = mafList; maf != NULL; maf = maf->next)
     {
+    /* get info about sequences from full alignment,
+       for use later, when determining if sequence is unaligned or missing */
+    for (mc = maf->components; mc != NULL; mc = mc->next)
+        if (!hashFindVal(srcHash, mc->src))
+            hashAdd(srcHash, mc->src, maf);
+
+    /* get portion of maf in this window */
     sub = mafSubset(maf, dbChrom, winStart, winEnd);
     if (sub != NULL)
         {
-	struct mafComp *mc, *mcMaster;
 	char db[64];
 	int subStart,subEnd;
 	int lineOffset, subSize;
@@ -786,24 +794,55 @@ for (maf = mafList; maf != NULL; maf = maf->next)
                 char *dbUpper;
 
                 /* no alignment for this species */
-                if (!chainBreaks)       /* user doesn't want to see this */
-                    continue;
-
-                /* if chain spans this region, "extend" alignment */
-                dbUpper = cloneString(mi->db);
-                dbUpper[0] = toupper(dbUpper[0]);
-                safef(chainTable, sizeof chainTable, "%s_chain%s", 
-                                            chromName, dbUpper);
-                if (!hTableExistsDb(database, chainTable))
-                    continue;
-                conn = hAllocConn();
-                safef(query, sizeof query,
-                    "SELECT count(*) from %s WHERE tStart < %d AND tEnd > %d",
-                                chainTable, subStart, subEnd);
-                if (sqlQuickNum(conn, query) > 0)
-                    processSeq(noAlignment, mcMaster->text, sub->textSize, 
-                                    lines[mi->ix], lineOffset, subSize);
-                hFreeConn(&conn);
+                if (chainBreaks)
+                    {
+                    /* if user has requested this option, see if a 
+                     * chain spans this region; use it to "extend" alignment */
+                    dbUpper = cloneString(mi->db);
+                    dbUpper[0] = toupper(dbUpper[0]);
+                    safef(chainTable, sizeof chainTable, "%s_chain%s", 
+                                                chromName, dbUpper);
+                    if (hTableExistsDb(database, chainTable))
+                        {
+                        conn = hAllocConn();
+                        safef(query, sizeof query,
+                            "SELECT count(*) from %s WHERE tStart < %d AND tEnd > %d",
+                                        chainTable, subStart, subEnd);
+                        if (sqlQuickNum(conn, query) > 0)
+                            processSeq(noAlignment, mcMaster->text, 
+                                        sub->textSize, lines[mi->ix],
+                                        lineOffset, subSize);
+                        hFreeConn(&conn);
+                        continue;
+                        }
+                    }
+                /* try extending coordinates from another part of alignment */
+#ifdef BIGEXTEND
+                if ((infoMaf = 
+                        (struct mafAli *)hashFindVal(srcHash, mi->db)) != NULL)
+                    {
+                    struct mafComp *master, *src;
+                    int masterOffset, srcStart;
+                    char extendAlignment[2000] = {'^'};
+                    int i;
+                    master = mafFindComponent(infoMaf, dbChrom);
+                    src = mafFindComponent(infoMaf, mi->db);
+                    if (master->strand == '-')
+                        mafFlipStrand(infoMaf);
+                    masterOffset = mcMaster->start - master->start;
+                    srcStart = src->start + masterOffset;
+                    if (srcStart < src->srcSize)
+                        {
+                        /* can extend */
+                        for (i = 1; i < subSize && srcStart+i < src->srcSize;
+                                                 i++)
+                            extendAlignment[i] = '-';
+                        processSeq(extendAlignment, mcMaster->text, 
+                                        sub->textSize, lines[mi->ix],
+                                        lineOffset, subSize);
+                        }
+                    }
+#endif
                 }
             else
                 processSeq(mc->text, mcMaster->text, sub->textSize, 
