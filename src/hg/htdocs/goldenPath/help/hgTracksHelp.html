@@ -348,10 +348,15 @@ Genome Browser does the best it can to operate under this environment.
 The Genome Browser page displays a genome location specified
 through a Gateway position search, a BLAT search, or an uploaded custom annotation track.
 There are three main features on this page: the annotations tracks
-window, navigation controls, and display controls. The first time you open the
-Genome Browser, it will use application default values to configure the
-annotation track display. By using the navigation and display configuration
-controls, you can customize the annotation tracks display to suit your needs.
+image, navigation controls, and display controls. 
+<P>
+The first time you open the
+Genome Browser, it will use the application default values to configure the
+annotation track display. By manipulating the navigation and display 
+configuration controls, you can customize the annotation tracks display to 
+suit your needs. The display controls are grouped into categories that reflect 
+the type of
+data in the track, e.g. Gene Prediction Tracks, mRNA and EST tracks, etc. 
 For a complete description of the annotation tracks available in all assembly
 versions supported by the Genome Browser, see the <A HREF="#IndivTracks">
 Annotation Track Descriptions</A> section.
@@ -376,11 +381,13 @@ display conventions:<BR>
 
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>Annotation track
 	details pages:</B> 
-	When an annotation track is displayed in full mode, each line item
+	When an annotation track is displayed in full, pack, or squish mode, 
+	each line item
 	within the track has an associated details page that can be displayed by 
-	clicking on the item's label. The
+	clicking on the item or its label. The
 	information contained in the details page varies by annotation track, but
-	may include basic position information about the item, related links to outside sites 
+	may include basic position information about the item, related links 
+	to outside sites 
 	and databases, links to genomic alignments, or links to corresponding
 	mRNA, genomic, and protein sequences.
 	</TD></TR>
@@ -553,6 +560,23 @@ best suit the display capabilities of your monitor, enter a new value in the
 display to 1100 pixels on a 19" monitor will increase the visible portion of the genome
 and reduce the need for redraws. The maximum supported width is 5000 pixels,
 although it is recommended that you don't exceed your monitor width initially. 
+<P>
+<B>Printing a copy of the annotation track window</B><BR>
+The Genome Browser provides a mechanism for saving a copy of 
+the currently displayed annotation tracks image to a file that can be printed 
+or edited. Images saved in PostScript format can be printed at high resolution
+and edited by drawing programs such as Adobe Illustrator. This is useful for
+generating figures intended for publication. Images can also be saved in PDF
+format for viewing by Adobe Acrobat Reader.
+<P>
+To print or save the image to a file:
+<TABLE>
+	<TR><TD WIDTH="20" VALIGN="top"><B>1.</B></TD><TD>
+	Click the PDF/PS link in the menu on the annotation tracks page.</TD></TR>
+	<TR><TD WIDTH="20" VALIGN="top"><B>2.</B></TD><TD>
+	Choose the PostScript or PDF link.</TD></TR> 
+</TABLE>
+
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	<br></TD></TR></TABLE>
 	</TD></TR></TABLE>
@@ -1341,22 +1365,24 @@ and using the tracks displayed in the Genome Browser track window, see the secti
 	click on the grey mini-button to the left of a track.</TD></TR>   
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	To display a details page with additional information about a specific line 
-	item within a track in full display mode, click on the item's label. </TD></TR>  
+	item within a track in full display mode, click on the item or its label. </TD></TR>  
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	A track does not appear in the browser if its display mode is set to 
 	<I>hide</I>. To restrict the browser's display to only those tracks in
 	which you're interested, set the display mode of the unwanted tracks to
 	<I>hide</I>.</TD></TR>  
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	A track set to <I>full</I> display mode will display in <I>dense</I> mode if 
-	the total number of lines in the track exceeds 300.</TD></TR>  
+	A track set to <I>full</I> display mode will default to a more tightly
+	packed display mode if 
+	the total number of lines in the track exceeds 250.</TD></TR>  
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	To quickly toggle between <I>full</I> and <I>dense</I> display modes, click on 
+	To quickly toggle between <I>full</I> and <I>dense</I> or <I>pack</I> display modes, click on 
 	the track's center label.</TD></TR>  
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	Only the most recent assemblies are fully active. Older assemblies are <A HREF="http://genome-archive.cse.ucsc.edu/">archived</A>.</TD></TR>  
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	Not all tracks appear in all assemblies. Only basic tracks appear
+	Not all tracks appear in all assemblies. Only a basic set of tracks 
+	appears
 	initially in a new assembly.</TD></TR>  
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	Track data can be viewed equivalently in columns as text tables using
