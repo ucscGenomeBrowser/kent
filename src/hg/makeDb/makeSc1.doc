@@ -329,7 +329,7 @@ mkdir lav/chr1
 /cluster/home/angie/schwartzbin/xout2lav chr1 29736 /cluster/store5/SARS_Coronavirus_TOR2/bed/mrna.blastz.all/raw/chr1/1.29736 /cluster/store5/SARS_Coronavirus_TOR2/bed/mrna.blastz.all/lav/chr1/1.29736.lav /cluster/store5/SARS_Coronavirus_TOR2/bed/mrna.blastz.all/DEF
 
 axtChain axt/xeno.axt /cluster/store5/SARS_Coronavirus_TOR2/nib/ /cluster/store5/SARS_Coronavirus_TOR2/bed/mrna.blastz.all/nib chain/xeno.chain
-
+chainFilter chain/xeno.chain -minScore=3000 -maxScore=2000000 > chain/filter.chain
 chainToPsl chain/filter.chain S1.len S2.len ../../nib/chr1.nib query.lst psl/xenoBlastzMrna.psl
 cd psl
 hgLoadPsl sc1 xenoBlastzMrna.psl
