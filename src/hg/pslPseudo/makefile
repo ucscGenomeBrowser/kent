@@ -26,7 +26,8 @@ pslPseudo: $O $(MYLIBS)
 	#${STRIP} $(HOME)/bin/$(MACHTYPE)/pslPseudo${EXE}
 
 lib:
-	cd ../../lib; make ; cd ../hg/lib ; make
+	cd ../../lib && ${MAKE}
+	cd ../lib && ${MAKE}
 
 test: test1 test2 test3 test4 test5 test6 test7 test8 test9 test10 test13 test14 test15 test16 test17 test18 test19 testRp131 test26 test38
 %:	input/%.psl
