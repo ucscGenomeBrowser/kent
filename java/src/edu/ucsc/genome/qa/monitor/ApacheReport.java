@@ -4,17 +4,20 @@ import java.io.*;
 import java.sql.*;
 
 import java.text.*;
+import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.Calendar;
 
-/** 
+/**
  *  Connect to where mod_log_sql is dumping Apache access logs.
  *  Generate hourly report for previous day.
  */
 
 public class ApacheReport {
 
+    static String fileMonth;
     static String getMonth(int month) {
       if (month == 0) return "Jan";
       if (month == 1) return "Feb";
@@ -30,24 +33,24 @@ public class ApacheReport {
       return "Dec";
     }
 
-   /** 
-    *  Open file for writing HTML output
+   /**
+    *  Open daily file for writing HTML output
     *
-    *  @param path   The path; becomes part of file name
-    *  @param year   The year; becomes part of file name
-    *  @param month  The month; becomes part of file name
-    *  @param day    The day; becomes part of file name
-    *  @throws       Exception
-    *  @return       The PrintWriter object
+    *  @param outpath   The path; becomes part of file name.
+    *  @param year      The year; becomes part of file name.
+    *  @param month     The month; becomes part of file name.
+    *  @param day       The day; becomes part of file name.
+    *
+    *  @throws          Exception.
+    *  @return          The PrintWriter object for daily file report.
     */
-    static PrintWriter setOutputFile(String outpath, int year, int month, int day) throws Exception { 
-
+    static PrintWriter setDailyFile(String outpath, int year, int month, int day) throws Exception {
       String filename = outpath + year + getMonth(month) + day + ".html";
       System.out.println("\nWriting daily report to \n" + filename + "\n");
       String url = "/usr/local/apache/htdocs/";
       if (outpath.startsWith(url)) {
         String urlpath = outpath.replaceFirst(url, "http://hgwdev.cse.ucsc.edu/");
-        System.out.println("\nTry the URL directly: \n" + 
+        System.out.println("Try the URL directly: \n" +
                            urlpath + year + getMonth(month) + day + ".html");
       }
       FileWriter fout = new FileWriter(filename);
@@ -55,43 +58,107 @@ public class ApacheReport {
       return(pw);
     }
 
-   /** 
+   /**
+    *  Name monthly file for yesterday for writing HTML output
+    *  and print the name of the file to the command line.
+    *  Create new file for next month if it is a new month.
+    *
+    *  @param outpath   The path; becomes part of file name.
+    *  @param year      The year; becomes part of file name.
+    *  @param month     The month; becomes part of file name.
+    *
+    *  @throws          Exception.
+    *  @return          The name for monthly report file for yesterday.
+    */
+    static String setMonthlyFile(String outpath, int year, int month)
+          throws Exception {
+
+      // for testing -- set the month to last month
+
+      String yestMonth = getMonth(month);
+
+      // make name of file for yesterday's data
+      fileMonth = outpath + year + getMonth(month) + ".html";
+      Calendar calToday = Calendar.getInstance();
+      int nowMonth = calToday.get(Calendar.MONTH);
+      int nowYear = calToday.get(Calendar.YEAR);
+      String thisMonth = getMonth(nowMonth);
+
+      if (!thisMonth.equals(yestMonth)) {
+        System.out.println("\n" + getMonth(month)
+                   + " monthly report available at: \n" + fileMonth + "\n");
+        String url = "/usr/local/apache/htdocs/";
+        if (outpath.startsWith(url)) {
+          String urlpath = outpath.replaceFirst(url, "http://hgwdev.cse.ucsc.edu/");
+          System.out.println("Try the URL directly: \n" +
+                             urlpath + year + getMonth(month) + ".html");
+        }
+        // start new month file when month changes
+
+        String thisMonthFile = outpath + nowYear + thisMonth + ".html";
+
+        FileWriter fwNextMonth = new FileWriter(thisMonthFile);
+        PrintWriter pwNextMonth = new PrintWriter(fwNextMonth);
+        printHeader(pwNextMonth, nowYear, nowMonth, 0, "month");
+        printFooter(pwNextMonth);
+        pwNextMonth.close();
+        // System.exit(-1);
+
+      }
+      return(fileMonth);
+    }
+
+   /**
     *  Prints header for HTML output file
     *
-    *  @param pw     A PrintWriter object
-    *  @param year   The year; becomes part of file name
-    *  @param month  The month; becomes part of file name
-    *  @param day    The day; becomes part of file name
+    *  @param pw        A PrintWriter object.
+    *  @param year      The year; becomes part of file name.
+    *  @param month     The month; becomes part of file name.
+    *  @param day       The day; becomes part of file name.
+    *  @param fileFlag  Type of file -- daily or monthly.
     */
-    static void printHeader(PrintWriter pw, int year, int month, int day) {
+    static void printHeader(PrintWriter pw, int year, int month, int day, String fileFlag) {
       pw.print("<HTML>\n");
       pw.print("<HEAD>\n");
-      pw.print("<TITLE>Daily Apache Report</TITLE>\n");
+      if (fileFlag.equals("daily")) {
+        pw.print("<TITLE>Daily Apache Report</TITLE>\n");
+      } else {
+        pw.print("<TITLE>Monthly Apache Report</TITLE>\n");
+      }
       pw.print("</HEAD>\n");
       pw.print("<BODY>\n");
-      pw.print("<H2>Daily Apache Report " + getMonth(month) + " " + 
+      if (fileFlag.equals("daily")) {
+        pw.print("<H2>Daily Apache Report " + getMonth(month) + " " +
                day + ", " + year + "</H2>\n");
+      } else {
+        pw.print("<H2>Monthly Apache Report " + getMonth(month) + " " +
+               year + "</H2>\n");
+      }
       pw.print("<TABLE BORDER CELLSPACING=0 CELLPADDING=5>\n");
       pw.print("<TR>\n");
-      pw.print("<TH>Hour</TH>");
+      if (fileFlag.equals("daily")) {
+        pw.print("<TH>Hour</TH>");
+      } else {
+        pw.print("<TH>Day</TH>");
+      }
       pw.print("<TH>Accesses</TH>");
       pw.print("<TH>Error 500</TH>");
       pw.print("<TH>Percent</TH>");
       pw.print("</TR>\n");
     }
 
-   /** 
+   /**
     *  Prints footer for HTML output file
     *
     *  @param pw     A PrintWriter object
     */
     static void printFooter(PrintWriter pw) {
-      pw.print("</TABLE>\n");
-      pw.print("</BODY>\n");
+      pw.print("</TABLE>");
+      pw.print("</BODY>");
       pw.print("</HTML>\n");
     }
 
-   /** 
+   /**
     *  Creates a Calendar object with YEAR/MONTH/DAY set 24 hours in the past
     *
     *  @return  a Calendar object with YEAR/MONTH/DAY set 24 hours in the past
@@ -126,7 +193,7 @@ public class ApacheReport {
     }
 
 
- /** 
+ /**
   *  Writes a usage message to standard out.
   *
   */
@@ -134,7 +201,7 @@ public class ApacheReport {
     System.out.println(
       "\nApacheReport - read logs from mod_log_sql\n" +
       "Generate reports.\n" +
-      
+
       "usage:\n" +
       "   java ApacheReport propertiesFile [-path=pathname] [-mode=verbose]\n" +
       "where properties files may contain sourceMachine, sourceDB, sourceTable, " +
@@ -147,6 +214,10 @@ public class ApacheReport {
       System.exit(-1);
   }
 
+/**
+  *  Writes Daily and Monthly usage reports of error 500s on the RoundRobin.
+  *
+  */
   public static void main(String[] args) {
     String mode  = "";
     String outpath = "/usr/local/apache/htdocs/qa/test-results/apache/";
@@ -201,7 +272,7 @@ public class ApacheReport {
     int monthYesterday = calYesterday.get(Calendar.MONTH);
     int yearYesterday  = calYesterday.get(Calendar.YEAR);
     if (debug == true || mode.equals("verbose")) {
-      System.out.print("\nGenerating report for year = " + yearYesterday + 
+      System.out.print("\nGenerating report for year = " + yearYesterday +
                      " month = " + monthYesterday);
       System.out.println(" day = " + dayYesterday);
     }
@@ -209,9 +280,9 @@ public class ApacheReport {
 
     // make sure CLASSPATH has been set for JDBC driver
     if (!QADBLibrary.checkDriver()) return;
-    
-    // set DB connection 
-    HGDBInfo dbinfo; 
+
+    // set DB connection
+    HGDBInfo dbinfo;
     try {
       dbinfo = new HGDBInfo(target.sourceMachine, target.sourceDB);
     } catch (Exception e) {
@@ -231,20 +302,21 @@ public class ApacheReport {
       if (machine.equals("all")) allMachines = true;
 
       // configure output file
-      PrintWriter pw = setOutputFile(outpath, yearYesterday, monthYesterday, dayYesterday);
+      PrintWriter pw = setDailyFile(outpath, yearYesterday, monthYesterday, dayYesterday);
+      printHeader(pw, yearYesterday, monthYesterday, dayYesterday, "daily");
 
-      printHeader(pw, yearYesterday, monthYesterday, dayYesterday);
       // try to trap some output.
-      // pw.close();  that worked to trap header.
+      // pw.close();  // that worked to trap header.
 
       // set percent output to two decimals
       DecimalFormat df = new DecimalFormat("#,##0.00");
-  
+
       // iterate through 24 hours
       int secondsInHour = 60 * 60;
       int totalAccess = 0;
       int totalError = 0;
       for (int reportHour = 0; reportHour <= 23; reportHour++) {
+      // for (int reportHour = 0; reportHour <= 1; reportHour++) {
         pw.print("<TR>\n");
         pw.print("<TD>" + reportHour + "</TD>\n");
         calYesterday.set(yearYesterday, monthYesterday, dayYesterday, reportHour, 0, 0);
@@ -266,20 +338,20 @@ public class ApacheReport {
         String nullquery = "select count(*) as cnt from ";
         nullquery = nullquery + target.sourceTable + " ";
         nullquery = nullquery + "where time_stamp >= " + secondsReportStart + " ";
-	nullquery = nullquery + "and time_stamp < " + secondsReportEnd;
+	    nullquery = nullquery + "and time_stamp < " + secondsReportEnd;
         if (!allMachines) {
           nullquery = nullquery + " and machine_id = " + target.targetMachine;
         }
         ResultSet nullRS = stmt.executeQuery(nullquery);
         nullRS.next();
         int nullcnt = nullRS.getInt("cnt");
-        
+
         if (debug == true || mode.equals("verbose")) {
           System.out.println(nullquery);
           System.out.println("Count of rows with any status code = " + nullcnt);
         }
         pw.print("<TD>" + nullcnt + "</TD>\n");
-	totalAccess = totalAccess + nullcnt;
+	    totalAccess = totalAccess + nullcnt;
 
         // check for matching rows
         String testquery = "select count(*) as cnt from ";
@@ -300,10 +372,10 @@ public class ApacheReport {
           System.out.println("Count of matching rows = " + cnt + "\n");
         }
         pw.print("<TD>" + cnt + "</TD>\n");
-	totalError = totalError + cnt;
+	    totalError = totalError + cnt;
 
-        // need to convert numerator and denominator to float first (yes)?
-	float percent;
+        // need to convert numerator and denominator to float first?  (yes)
+	    float percent;
         if (nullcnt == 0) {
           percent = 0;
         } else {
@@ -327,9 +399,88 @@ public class ApacheReport {
       stmt.close();
       conn.close();
 
-    } catch (Exception e) {
+      // run monthly report
+      fileMonth = setMonthlyFile(outpath, yearYesterday, monthYesterday);
+      printMonthly(dayYesterday, totalAccess, totalError, printTotPercent);
+    }
+    catch (Exception e) {
       System.err.println(e.getMessage());
     }
+  }
 
+ /**
+  *  Read monthly file and write HTML output
+  *
+  *  @param dayYesterday     Yesterday's date.
+  *  @param totalAccess      Number of system accesses yesterday.
+  *  @param totalError       Number of errors yesterday.
+  *  @param printTotPercent  Formatted total percent.
+  */
+  private static void printMonthly (int dayYesterday, int totalAccess,
+     int totalError, String printTotPercent)
+     throws Exception {
+
+    File f = new File(fileMonth);
+    // System.exit(1);
+    FileReader  frMonth = new FileReader(f);
+    BufferedReader  brMonth = new BufferedReader(frMonth);
+
+
+    // get existing file and load into linklist,
+    // filtering out the closing HTML tags.
+
+    LinkedList ll = new LinkedList();
+    String checkEnd = "</TABLE></BODY></HTML>";
+
+    String nextLine = brMonth.readLine();
+    while (nextLine.indexOf(checkEnd) < 0) {
+      ll.addLast(nextLine);
+      nextLine = brMonth.readLine();
+    }
+
+    brMonth.close();
+
+
+    // write new data on next line
+    String row = tableRow(dayYesterday, totalAccess, totalError, printTotPercent);
+    ll.addLast(row);
+
+    FileWriter fwMonth  = new FileWriter(fileMonth);
+    PrintWriter pwMonth = new PrintWriter(fwMonth);
+
+    // print LinkedList
+    ListIterator iter = ll.listIterator(0);
+
+    String outLine;
+
+    while (iter.hasNext()) {
+      outLine = iter.next().toString();
+      // System.out.println(outLine);
+      pwMonth.print(outLine + "\n");
+    }
+
+    // print footer back.
+    printFooter(pwMonth);
+    pwMonth.close();
+  }
+
+ /**
+  *  Writes HTML row for four-column table.
+  *
+  *  @param index            First column (day or hour).
+  *  @param access           Number of system accesses yesterday.
+  *  @param error            Number of errors yesterday.
+  *  @param totPercent       Formatted total percent.
+  *
+  *  @return                 HTML row for a table.
+  */
+  private static String tableRow(int index, int access,
+    int error, String totPercent) {
+    String newDataLine;
+    newDataLine = "<TR><TD>" + index + "</TD> " +
+                      "<TD>" + access + "</TD> " +
+                      "<TD>" + error + "</TD> " +
+                      "<TD>" + totPercent + "</TD> </TR>\n";
+    return(newDataLine);
   }
 }
