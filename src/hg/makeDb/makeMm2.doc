@@ -9,7 +9,7 @@ o - cd into your CVS source tree under kent/src/hg/splitFaIntoContigs
     - Run 
 	gunzip -c /cluster/store2/mm.2002.02/mm2/assembly/*.fasta.gz | splitFaIntoContigs /cluster/store2/mm.2002.02/mm2/assembly/*.agp stdin /cluster/store2/mm.2002.02/mm2 2000000
 
-    - This will split the mouse sequence into approx. 10Mbase supercontigs between non-bridged clone contigs and drop the resulting dir structure in /cluster/store2/mm.2002.02/mm2.
+    - This will split the mouse sequence into approx. 2 Mbase supercontigs between non-bridged clone contigs and drop the resulting dir structure in /cluster/store2/mm.2002.02/mm2.
     - The resulting dir structure will include 1 dir for each chromosome, each of which has a set of subdirectories, one subdir per supercontig.    
 
 

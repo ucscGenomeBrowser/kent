@@ -1,6 +1,120 @@
 This file describes how we made the browser database on 
 NCBI build 29 (April, 2002 freeze)
 
+
+CREATING DATABASE  (done)
+
+o - ln -s /cluster/store1/gs.12/build29 ~/oo
+o - Make sure there is at least 5 gig free on hgwdev:/usr/local/mysql 
+o - Create the database.
+     - ssh hgwdev
+     - Enter mysql via:
+           hgsql
+     - At mysql prompt type:
+	create database hg11;
+	quit
+     - make a semi-permanent read-only alias:
+        alias hg11 mysql -u hguser -phguserstuff -A hg11
+o - Tell the hgCentral database about it.  Log onto genome-centdb
+    and enter mysql via
+        mysql -u root -pbigSecret hgCentral
+    At the mysql prompt type:
+       insert into dbDb values("hg11", "Human April 2002", "/cluster/store1/gs.12/build29/nib", "Human", "USP18");
+o - Create the trackDb table as so
+       cd ~/src/hg/makeDb/hgTrackDb
+    Edit makefile to add hg11 after hg10 and do
+       make update
+       cvs commit makefile
+
+
+
+STORING O+O SEQUENCE AND ASSEMBLY INFORMATION (done)
+
+Create packed chromosome sequence files 
+     ssh kkstore
+     cd ~/oo
+     tcsh jkStuff/makeNib.sh
+
+Load chromosome sequence info into database
+     ssh hgwdev
+     hgsql hg11 < ~/src/hg/lib/chromInfo.sql
+     cd ~/oo
+     hgNibSeq -preMadeNib hg11 /cluster/store1/gs.12/build29/nib ?/chr*.fa ??/chr*.fa
+
+Store o+o info in database.
+     cd /cluster/store1/gs.12/build29
+     jkStuff/liftGl.sh contig.gl
+     hgGoldGapGl hg11 /cluster/store1/gs.12 build29 
+     cd /cluster/store1/gs.12
+     hgClonePos hg11 build29 ffa/sequence.inf /cluster/store1/gs.12 -maxErr=3
+(Ignore warnings about missing clones - these are in chromosomes 21 and 22)
+     hgCtgPos hg11 build29 
+
+Make and load GC percent table
+     ssh hgwdev
+     cd ~/oo
+     mkdir -p bed/gcPercent
+     cd bed/gcPercent
+     hgsql hg11  < ~/src/hg/lib/gcPercent.sql
+     hgGcPercent hg11 ../../nib
+
+SIMPLE REPEAT TRACK (todo)
+
+o - Create cluster jabba job like so:
+        ssh kk
+	cd ~/oo/bed
+	mkdir simpleRepeat
+	cd simpleRepeat
+	cp ~/lastOo/bed/simpleRepeat/gsub
+	mkdir trf
+	ls -1S /scratch/hg/gs.12/build29/contig/*.fa > genome.lst
+	gensub2 genome.lst single gsub spec
+	para create spec
+	para try
+	para check
+	para push
+     Do para push huts until it is done.   
+        liftUp simpleRepeat.bed ~/oo/jkStuff/liftAll.lft warn trf/*.bed
+
+o - Load this into the database as so
+        ssh hgwdev
+	cd ~/oo/bed/simpleRepeat
+	hgLoadBed hg11 simpleRepeat simpleRepeat.bed -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+
+
+PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (todo)
+
+Make sure that the NT*.fa files are lower-case repeat masked.
+Do something much like the simpleRepeat track, but only
+masking out stuff with a period of 12 or less as so:
+    ssh kk
+    cd ~/oo/bed
+    mkdir trfMask
+    cd trfMask
+    cp ~/lastOo/bed/trfMask/gsub .
+    mkdir trf
+    ls -1S /scratch/hg/gs.12/build29/contig/*.fa > genome.lst
+    gensub2 genome.lst single gsub spec
+    para create spec
+    para try
+    para check
+    para push
+Do para push huts until it is done.   
+    ssh kkstore
+    mkdir /scratch/hg/gs.12/build29/trfFa
+    cd ~/oo
+    foreach i (? ??)
+	cd $i
+        foreach j (NT*)
+	    maskOutFa $j/$j.fa ../bed/trfMask/trf/$j.bed -softAdd /scratch/hg/gs.12/build29/trfFa/$j.fa.trf
+	echo done $i/$j
+	end
+	cd ..
+    end
+Then ask admins to do a binrsync.
+
+
+
 GETTING FRESH mRNA AND EST SEQUENCE FROM GENBANK. (Need to do.
     Looks like there will be a genbank update in a few days)
 
@@ -33,20 +147,6 @@ format.
   o - gunzip -c gbest*.gz | gbToFaRa ~/hg/h/mrna.fil ../mrna.129/est.fa ../mrna.129/est.ra ../mrna.129/est.ta stdin
 
 
-CREATING DATABASE  (done)
-
-o - ln -s /cluster/store1/gs.12/build29 ~/oo
-o - Make sure there is at least 5 gig free on hgwdev:/usr/local/mysql 
-o - Create the database.
-     - ssh hgwdev
-     - Enter mysql via:
-           mysql -u hgcat -pbigsecret
-     - At mysql prompt type:
-	create database hg11;
-	quit
-     - make a semi-permanent read-only alias:
-        alias hg11 mysql -u hguser -phguserstuff -A hg11
-
 STORING mRNA/EST SEQUENCE AND AUXILIARRY INFO  (todo)
 
 o - Store the mRNA (non-alignment) info in database.
@@ -77,37 +177,6 @@ Then load the .out files into the database with:
     ssh hgwdev
     cd ~/oo
     hgLoadOut hg11 ?/*.fa.out ??/*.fa.out
-
-STORING O+O SEQUENCE AND ASSEMBLY INFORMATION (todo)
-
-Create packed chromosome sequence files 
-     ssh kkstore
-     cd ~/oo
-     tcsh jkStuff/makeNib.sh
-
-Load chromosome sequence info into database
-     ssh hgwdev
-     mysql -A -u hgcat -pbigsecret hg11  < ~/src/hg/lib/chromInfo.sql
-     cd ~/oo
-     hgNibSeq -preMadeNib hg11 /cluster/store1/gs.12/build29/nib ?/chr*.fa ??/chr*.fa
-
-Store o+o info in database.
-     cd /cluster/store1/gs.12/build29
-     jkStuff/liftGl.sh contig.gl
-     hgGoldGapGl hg11 /cluster/store1/gs.12/build29 
-     cd /cluster/store1/gs.12
-     hgClonePos hg11 build28 ffa/sequence.inf /cluster/store1/gs.12
-(Ignore warnings about missing clones - these are in chromosomes 21 and 22)
-     hgCtgPos hg11 build28 
-
-Make and load GC percent table
-     ssh hgwdev
-     cd /cluster/store1/gs.12/build29/bed
-     mkdir gcPercent
-     cd gcPercent
-     mysql -A -u hgcat -pbigsecret hg11  < ~/src/hg/lib/gcPercent.sql
-     hgGcPercent hg11 ../../nib
-
 
 
 MAKING AND STORING mRNA AND EST ALIGNMENTS (todo)
@@ -264,45 +333,19 @@ o - Add Jackson labs info
      load data local infile 'jaxOrtholog.tab' into table jaxOrtholog;
 
 
-SIMPLE REPEAT TRACK (todo)
-
-o - Create cluster jabba job like so:
-        ssh kkstore
-	cd ~/oo/bed
-	mkdir simpleRepeat
-	cd simpleRepeat
-	cp ~/lastOo/bed/simpleRepeat/gsub
-	mkdir trf
-	echo single > single.lst
-        echo /scratch/hg/gs.12/build29/contigs | wordLine stdin > genome.lst
-	gensub2 genome.lst single.lst gsub spec
-	jabba make hut spec
-        jabba push hut
-     Do jabba push huts until it is done.   This one is getting
-     erratic errors, requiring multiple runs on some jobs currently.
-     I'm not sure if the problem lies in the cluster, in trfBig, or trf.
-     Jorge suggested it might have been because some of the local
-     disks were full.
-        liftUp simpleRepeat.bed ~/oo/jkStuff/liftAll.lft warn trf/*.bed
-
-o - Load this into the database as so
-        ssh hgwdev
-	cd ~/oo/bed/simpleRepeat
-	hgLoadBed hg11 simpleRepeat simpleRepeat.bed -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
-
 
 PRODUCING GENSCAN PREDICTIONS (todo)
     
 o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
      ssh roar
-     cd ~/build28
+     cd ~/build29
      source jkStuff/gsBig.sh &
     Wait about 3 1/2 days for these to finish.
      started 11:00 am Oct 5.
      finished by 9:00 pm Oct 8.
 
 o - Convert these to chromosome level files as so:
-     cd ~/build28
+     cd ~/build29
      mkdir bed/genscan
      liftUp bed/genscan/genscan.gtf jkStuff/liftAll.lft warn ?/ctg*/genscan.gtf ??/ctg*/genscan.gtf
      liftUp bed/genscan/genscanSubopt.bed jkStuff/liftAll.lft warn ?/ctg*/genscanSub.bed ??/ctg*/genscanSub.bed
@@ -310,30 +353,10 @@ o - Convert these to chromosome level files as so:
 
 o - Load into the database as so:
      ssh hgwdev
-     cd ~/build28/bed/genscan
+     cd ~/build29/bed/genscan
      ldHgGene hg11 genscan genscan.gtf
      hgPepPred hg11 generic genscanPep genscan.pep
      hgLoadBed hg11 genscanSubopt genscanSubopt.bed
-
-
-PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (todo)
-
-Make sure that the NT*.fa files are lower-case repeat masked, and that
-the simpleRepeat track is made.  Then put doubly (simple & interspersed)
-repeat mask files onto /cluster local drive as so.
-    ssh kkstore
-    tcsh
-    mkdir /scratch/hg/gs.12/build29/trfFa
-    cd ~/oo
-    foreach i (? ??)
-	cd $i
-        foreach j (NT*)
-	    maskOutFa $j/$j.fa ../bed/simpleRepeat/trf/$j.bed -softAdd /scratch/hg/gs.12/build29/trfFa/$j.fa.trf
-	echo done $i/$j
-	end
-	cd ..
-    end
-Then ask admins to do a binrsync.
 
 
 
@@ -483,11 +506,11 @@ o - Process these out of genbank flat files as so:
        mkdir mrna.129
        cp /cluster/store1/mrna.129/xenoRna.* mrna.129
 
-Set up cluster run.  First make sure genome is in kks00:/scratch/hg/gs.8/build28/contigTrf
+Set up cluster run.  First make sure genome is in kks00:/scratch/hg/gs.8/build29/contigTrf
 in RepeatMasked + trf form.  (This is probably done already in mouse alignment
 stage).  Also make sure /scratch/hg/mrna.129 is loaded with xenoRna.fa Then do:
        ssh kkstore
-       cd /cluster/store1/gs.8/build28/oo/bed
+       cd /cluster/store1/gs.8/build29/oo/bed
        mkdir xenoMrna
        cd xenoMrna
        mkdir psl
@@ -519,7 +542,7 @@ Load into database as so:
 
 Similarly do xenoEst aligments:
        ssh kkstore
-       cd /cluster/store1/gs.8/build28/oo/bed
+       cd /cluster/store1/gs.8/build29/oo/bed
        mkdir xenoEst
        cd xenoEst
        mkdir psl
@@ -560,7 +583,7 @@ o - Do fish/human alignments.
        cd blatFish
        mkdir psl
        ls -1S /scratch/hg/fish > fish.lst
-       ls -1S /scratch/hg/build28/trfFa > human.lst
+       ls -1S /scratch/hg/build29/trfFa > human.lst
      Copy over gsub from previous version and edit paths to
      point to current assembly.
        gensub2 human.lst fish.lst gsub spec
@@ -612,7 +635,7 @@ LOAD STS MAP (todo)
       hg11 < ~/src/hg/lib/stsMap.sql
       mkdir stsMap
       cd stsMap
-      bedSort /projects/cc/hg/mapplots/data/tracks/build28/stsMap.bed stsMap.bed
+      bedSort /projects/cc/hg/mapplots/data/tracks/build29/stsMap.bed stsMap.bed
       - Enter database with "hg11" command.
       - At mysql> prompt type in:
           load data local infile 'stsMap.bed' into table stsMap;
@@ -624,7 +647,7 @@ LOAD CHROMOSOME BANDS (todo)
       - login to hgwdev
       cd /cluster/store1/gs.12/build29/bed
       mkdir cytoBands
-      cp /projects/cc/hg/mapplots/data/tracks/build28/cytobands.bed cytoBands
+      cp /projects/cc/hg/mapplots/data/tracks/build29/cytobands.bed cytoBands
       hg11 < ~/src/hg/lib/cytoBand.sql
       Enter database with "hg11" command.
       - At mysql> prompt type in:
