@@ -3,14 +3,13 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
-#include "dystring.h"
 #include "options.h"
 #include "jksql.h"
 #include "maf.h"
 #include "hdb.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafFrag.c,v 1.2 2003/10/25 05:27:44 kent Exp $";
+static char const rcsid[] = "$Id: mafFrag.c,v 1.3 2003/10/25 05:28:20 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
