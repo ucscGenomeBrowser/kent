@@ -6,4 +6,4 @@ idbQuery.exe: $(O)
 	gcc $O ../lib/$(MACHTYPE)/jkweb.a
 	mv a.out idbQuery.exe
 	chmod a+rx idbQuery.exe
-	mv idbQuery.exe ../cgi-bin
+	mv idbQuery.exe ${CGI_BIN}-${USER}
