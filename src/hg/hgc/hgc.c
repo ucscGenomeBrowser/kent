@@ -4731,24 +4731,37 @@ void doJaxQTL(struct trackDb *tdb, char *item)
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
-char query[256];
+char query[128];
 char **row;
-char acc[128];
+char acc[64];
+char desc[256];
+char *dupe, *type, *words[16];
+int wordCount;
+int start = cartInt(cart, "o");
+int bedSize = 6;
 
-// look up mgiID field [8th]
+// look up mgiID and description fields
 acc[0] = 0;
-snprintf(query, sizeof(query), "select mgiID from jaxQTL where name = '%s'",
+desc[0] = 0;
+snprintf(query, sizeof(query),
+	 "select mgiID,description from jaxQTL where name = '%s'",
 	 item);
 sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL && row[0] != NULL)
+if ((row = sqlNextRow(sr)) != NULL)
     {
-    strncpy(acc, row[0], sizeof(acc));
+    if (row[0] != NULL)
+        strncpy(acc, row[0], sizeof(acc));
+    if (row[1] != NULL)
+        strncpy(desc, row[1], sizeof(desc));
     }
 sqlFreeResult(&sr);
-hFreeConn(&conn);
 
-// if we can pack desc into 9th field, get that too.
-genericClickHandler(tdb, item, acc);
+genericHeader(tdb, item);
+printCustomUrl(tdb, acc, FALSE);
+printf("<b>Description:</b> %s <BR>\n", desc);
+genericBedClick(conn, tdb, item, start, bedSize);
+printTrackHtml(tdb);
+hFreeConn(&conn);
 }
 
 
