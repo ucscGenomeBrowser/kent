@@ -12,7 +12,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.33 2003/09/26 02:12:33 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.34 2003/09/26 05:54:17 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -205,6 +205,10 @@ cartSaveSession(cart);
 
 hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
 hPrintf("<TR><TD ALIGN=LEFT>");
+cgiMakeButton("submit", "Submit");
+hPrintf("</TD><TD> ");
+hPrintf("</TD><TD> ");
+hPrintf("</TD><TD>");
 hPrintf("Columns:");
 hPrintf("</TD><TD> ");
 cgiMakeButton(hideAllConfName, "Hide All");
@@ -218,10 +222,6 @@ hPrintf("</TD><TD>");
 cgiMakeButton(saveCurrentConfName, "Save");
 hPrintf("</TD><TD>");
 cgiMakeOptionalButton(useSavedConfName, "Load", !userSettingsAnySaved(us));
-hPrintf("</TD><TD> ");
-hPrintf("</TD><TD> ");
-hPrintf("</TD><TD>");
-cgiMakeButton("submit", "Submit");
 hPrintf("</TD></TR></TABLE>");
 
 // hPrintf("<HR>");
