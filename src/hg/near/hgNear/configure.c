@@ -12,13 +12,30 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.36 2003/10/06 23:18:13 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.37 2003/10/08 07:29:10 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
 {
 return on ? "on" : "off";
 }
+
+char *configVarName(struct column *col, char *varName)
+/* Return variable name for configuration. */
+{
+static char name[64];
+safef(name, sizeof(name), "%s%s.%s", colConfigPrefix, col->name, varName);
+return name;
+}
+
+char *configVarVal(struct column *col, char *varName)
+/* Return value for configuration variable.  Return NULL if it
+ * doesn't exist or if it is "" */
+{
+char *name = configVarName(col, varName);
+return cartNonemptyString(cart, name);
+}
+
 
 static void configTable(struct column *colList, struct sqlConnection *conn)
 /* Write out configuration table */
@@ -155,7 +172,7 @@ savePriorities(*pColList);
 static char *colorSchemeVals[] = {
 /* Menu option for color scheme. */
    "red high/green low",
-   "blue high/green low",
+   "yellow high/blue low",
 };
 
 static void colorSchemeDropDown()
