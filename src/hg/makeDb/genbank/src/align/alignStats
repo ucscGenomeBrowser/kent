@@ -21,7 +21,7 @@ FNR == 1 {
     update = a[n-1];
     n = split(a[n], a, ".");
     type = a[1];
-    if ($type == "est") {
+    if (type == "est") {
         orgCat = a[3];
     } else {
         orgCat = a[2];
