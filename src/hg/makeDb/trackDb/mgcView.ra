@@ -5,10 +5,16 @@ track mgcGenes
 visibility pack
 
 track baylorRtPcrGeneA
-visibility pack
+visibility hide
 
 track baylorRtPcr
-visibility pack
+visibility hide
+
+track bcGscMatch
+visibility hide
+
+track bcGscDiscrep
+visibility hide
 
 track mgcTSExpPcr
 visibility pack
