@@ -359,7 +359,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 printf("</PRE></TT>\n");
 }
 
-void genericClickHandler(struct trackDb *tdb, char *item)
+void genericClickHandler(struct trackDb *tdb, char *item, char *itemForUrl)
 /* Put up generic track info. */
 {
 char *dupe, *type, *words[16];
@@ -367,10 +367,12 @@ int wordCount;
 int start = cgiInt("o");
 struct sqlConnection *conn = hAllocConn();
 
+if (itemForUrl == NULL)
+   itemForUrl = item;
 dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
-printCustomUrl(tdb->url, item);
+printCustomUrl(tdb->url, itemForUrl);
 if (wordCount > 0)
     {
     type = words[0];
@@ -1175,7 +1177,7 @@ freez(&dnaSeq->name);
 dnaSeq->name = cloneString(psl->tName);
 
 /* Write body heading info. */
-fprintf(body, "<H2>Alignment of %s and %s:%d-%d</H2>\n", psl->qName, psl->tName, psl->tStart, psl->tEnd);
+fprintf(body, "<H2>Alignment of %s and %s:%d-%d</H2>\n", psl->qName, psl->tName, psl->tStart+1, psl->tEnd);
 fprintf(body, "Click on links in the frame to left to navigate through alignment.\n");
 
 /* Convert psl alignment to ffAli. */
@@ -2652,6 +2654,18 @@ puts("<P>This track shows locations of Single Nucleotide Polymorphisms. "
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
+
+void doTigrGeneIndex(struct trackDb *tdb, char *item)
+/* Put up info on tigr gene index item. */
+{
+char *s = strchr(item, '_');
+if (s == NULL)
+   s = item;
+else
+   s += 1;
+genericClickHandler(tdb, item, s);
+}
+
 #ifdef FUREY_CODE
 
 void printOtherLFS(char *clone, char *table, int start, int end)
@@ -3671,6 +3685,10 @@ else if (sameWord(track, "uniGene"))
     {
     doSageDataDisp(track, item);
     }
+else if (sameWord(track, "tigrGeneIndex"))
+    {
+    doTigrGeneIndex(tdb, item);
+    }
 #endif /*CHUCK_CODE*/
 #ifdef ROGIC_CODE
  else if (sameWord(track, "mgc_mrna"))
@@ -3734,7 +3752,7 @@ else if (sameWord(track, "htcDnaNearGene"))
    }
 else if (tdb != NULL)
    {
-   genericClickHandler(tdb, item);
+   genericClickHandler(tdb, item, NULL);
    }
 else
    {
