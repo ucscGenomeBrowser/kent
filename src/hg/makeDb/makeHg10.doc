@@ -748,16 +748,15 @@ LOAD SOFTBERRY GENES (todo)
 LOAD ACEMBLY
     - Get acembly*gene.gff from Jean and Michelle Thierry-Miegs and
       place in ~/oo/bed/acembly
-    - Replace c_chr with chr in acembly*.gff
-    - Replace G_t1_chr with chr and likewise
-      G_t2_chr with chr, etc.
     - cd ~/oo/bed/acembly
-    - # The step directly below is not necessary since the files were already lifted
-      #  liftUp ./aceChrom.gff /cluster/store1/gs.11/build28/jkStuff/liftHs.lft warn acemblygenes*.gff
-    - Use /cluster/store1/gs.11/build28/mattStuff/filterFiles.pl to prepend "chr" to the
-    start of every line in the gene.gff files and to concat them into the aceChrom.gff
-    gile. Read the script to see what it does. It's tiny and simple.
-    - Concatenate all the protein.fasta files into a single acembly.pep file
+    - Replace c_chr with chr in acembly*.gff
+    - Use /cluster/store1/gs.11/build28/mattStuff/filterGff.pl to do the above
+        and to concat the results into the the aceChrom.gff gile. 
+      Read the script to see what it does. It's tiny and simple.
+    - Use /cluster/store1/gs.11/build28/mattStuff/filterProteins.pl to do the
+below steps.
+    - Remove G_t*_  and likewise G_t2_, etc., from acemblyproteins.*.fasta
+       and concatenate all the protein.fasta files into a single acembly.pep file
     - Load into database as so:
         ldHgGene hg10 acembly aceChrom.gff
         hgPepPred hg10 generic acemblyPep acembly.pep
