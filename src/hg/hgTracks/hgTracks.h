@@ -316,8 +316,14 @@ Color contrastingColor(struct vGfx *vg, int backgroundIx);
 /* Return black or white whichever would be more visible over
  * background. */
 
+boolean isNonChromColor(Color color);
+/* assign fake chrom color to scaffold, based on number */
+
 Color getChromColor(char *name, struct vGfx *vg);
 /* Return color index corresponding to chromosome name. */
+
+Color getScaffoldColor(char *scaffoldNumber, struct vGfx *vg);
+/* assign fake chrom color to scaffold, based on number */
 
 void clippedBarbs(struct vGfx *vg, int x, int y, 
 	int width, int barbHeight, int barbSpacing, int barbDir, Color color,
@@ -400,15 +406,6 @@ void linkedFeaturesMethods(struct track *tg);
 /* Fill in track group methods for linked features. 
  * Many other methods routines will call this first
  * to get a reasonable set of defaults. */
-
-boolean isNonChromColor(Color color);
-/* test if color is a non-chrom color (black or gray) */
-
-Color nonChromColor();
-/* return main non-chrom color (black) */
-
-Color altNonChromColor(Color color);
-/* return other non-chrom color (black or gray) */
 
 Color lfChromColor(struct track *tg, void *item, struct vGfx *vg);
 /* Return color of chromosome for linked feature type items

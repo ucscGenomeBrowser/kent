@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.632 2003/11/19 05:08:37 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.633 2003/11/19 17:28:29 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -3898,6 +3898,12 @@ tg->itemName = xenoMrnaName;
 tg->extraUiData = newMrnaUiData(tg->mapName, TRUE);
 }
 
+boolean isNonChromColor(Color color)
+/* test if color is a non-chrom color (black or gray) */
+{
+return color == chromColor[0];
+}
+
 Color getChromColor(char *name, struct vGfx *vg)
 /* Return color index corresponding to chromosome name. */
 {
@@ -3948,22 +3954,14 @@ colorNum = chromColor[chromNum];
 return colorNum;
 }
 
-boolean isNonChromColor(Color color)
-/* test if color is a non-chrom color (black or gray) */
+Color getScaffoldColor(char *scaffoldNumber, struct vGfx *vg)
+/* assign fake chrom color to scaffold, based on number */
 {
-    return color == chromColor[0];
-}
-
-Color nonChromColor()
-/* return main non-chrom color (black) */
-{
-    return chromColor[0];
-}
-
-Color altNonChromColor(Color color)
-/* return other non-chrom color (black or gray) */
-{
-    return color == chromColor[0] ? shadesOfGray[2] : chromColor[0];
+    int chromNum;
+    chromNum = atoi(scaffoldNumber) % CHROM_COLORS;
+    if (chromNum < 0 || chromNum > CHROM_COLORS)
+        chromNum = 0;
+    return chromColor[chromNum];
 }
 
 Color lfChromColor(struct track *tg, void *item, struct vGfx *vg)
