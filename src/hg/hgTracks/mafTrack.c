@@ -83,11 +83,6 @@ char buf[64];
 mafList = mafLoadInRegion(conn, tg->mapName, chromName, winStart, winEnd);
 tg->customPt = mafList;
 
-/* Make up item that will show the score as grayscale. */
-AllocVar(mi);
-mi->name = cloneString("Score");
-slAddHead(&miList, mi);
-
 /* Make up item that will show inserts in this organism. */
 AllocVar(mi);
 snprintf(buf, sizeof(buf), "%s Inserts", myOrg);
@@ -123,6 +118,12 @@ slAddHead(&miList, mi);
 	}
     hashFree(&hash);
     }
+
+/* Make up item that will show the score as grayscale. */
+AllocVar(mi);
+mi->name = cloneString("Score");
+slAddHead(&miList, mi);
+
 hFreeConn(&conn);
 slReverse(&miList);
 return miList;
@@ -192,7 +193,6 @@ static void processInserts(char *text, int textSize,
 {
 int i, baseIx = 0;
 char c;
-memset(insertLine, ' ', baseCount);
 for (i=0; i<textSize && baseIx < baseCount; ++i)
     {
     c = text[i];
@@ -231,7 +231,6 @@ double scoreScale = maxShade/(maxScore - minScore);
 double score;
 int shade;
 
-uglyh("maxScore %f, scoreScale %f", maxScore, scoreScale);
 memset(outLine, MG_WHITE, outSize);
 for (textIx = 0; textIx < maf->textSize; ++textIx)
     {
@@ -243,7 +242,6 @@ for (textIx = 0; textIx < maf->textSize; ++textIx)
 	    shade = 0;
 	outLine[outIx] = shadesOfGray[shade];
 	++outIx;
-	uglyh("score %f, shade %d, colorIx %d", score, shade, shadesOfGray[shade]);
 	}
     }
 }
@@ -267,13 +265,13 @@ AllocArray(lines, lineCount);
 for (i=0; i<lineCount; ++i)
     {
     lines[i] = needMem(winBaseCount+1);
-    memset(lines[i], '?', winBaseCount);
+    memset(lines[i], ' ', winBaseCount);
     }
 
 /* Give nice names to first three. */
-scoreLine = lines[0];
-insertLine = lines[1];
-selfLine = lines[2];
+insertLine = lines[0];
+selfLine = lines[1];
+scoreLine = lines[lineCount-1];
 
 /* Load up self-line with DNA */
 seq = hChromSeq(chromName, seqStart, seqEnd);
@@ -302,38 +300,37 @@ for (maf = mafList; maf != NULL; maf = maf->next)
         {
 	struct mafComp *mc, *mcMaster;
 	char db[64];
+	int subStart,subEnd;
+	int lineOffset, subSize;
 	mcMaster = mafFindComponent(sub, dbChrom);
+	subStart = mcMaster->start;
+	subEnd = subStart + mcMaster->size;
+	subSize = subEnd - subStart;
+	if (mcMaster->strand == '-')
+	    reverseIntRange(&subStart, &subEnd, mcMaster->srcSize);
+	lineOffset = subStart - seqStart;
 	for (mc = sub->components; mc != NULL; mc = mc->next)
 	    {
 	    dbPartOfName(mc->src, db, sizeof(db));
 	    if (mc == mcMaster)
 		{
 		processInserts(mc->text, sub->textSize, 
-			insertLine, winBaseCount);
+			insertLine+lineOffset, subSize);
 		}
 	    else
 	        {
 		mi = hashMustFindVal(miHash, db);
 		processOtherSeq(mc->text, mcMaster->text, sub->textSize, 
-			lines[mi->ix], winBaseCount);
+			lines[mi->ix] + lineOffset, subSize);
 		}
 	    }
-	processScore(sub, mcMaster->text, scoreLine, winBaseCount);
+	processScore(sub, mcMaster->text, scoreLine + lineOffset, subSize);
 	}
     mafAliFree(&sub);
     }
 
-/* Draw score line. */
-for (i=0; i<winBaseCount; ++i)
-    {
-    int x1 = i * width/winBaseCount;
-    int x2 = (i+1) * width/winBaseCount;
-    vgBox(vg, x1+xOff, y, x2-x1, tg->heightPer, scoreLine[i]);
-    }
-y += tg->lineHeight;
-
-/* Draw other other lines. */
-for (i=1; i<lineCount; ++i)
+/* Draw lines with letters . */
+for (i=0; i<lineCount-1; ++i)
     {
     char *line = lines[i];
     int x = xOff;
@@ -346,6 +343,15 @@ for (i=1; i<lineCount; ++i)
     	line, winBaseCount);
     y += tg->lineHeight;
     }
+/* Draw score line. */
+for (i=0; i<winBaseCount; ++i)
+    {
+    int x1 = i * width/winBaseCount;
+    int x2 = (i+1) * width/winBaseCount;
+    vgBox(vg, x1+xOff, y, x2-x1, tg->heightPer, scoreLine[i]);
+    }
+y += tg->lineHeight;
+
 hashFree(&miHash);
 }
 
