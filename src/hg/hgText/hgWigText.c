@@ -43,6 +43,7 @@ extern boolean existsAndEqual(char *var, char *value);
 extern struct hTableInfo *getOutputHti();
 extern void saveOutputOptionsState();
 extern void saveIntersectOptionsState();
+extern char *constrainFields(char *tableId);
 extern void preserveConstraints(char *fullTblName, char *db, char *tableId);
 extern void preserveTable2();
 extern void displayPosition();
@@ -458,6 +459,7 @@ struct trackDb *tdb = (struct trackDb *)NULL;
 char *track = getTrackName();
 unsigned linesOutput = 0;
 boolean doCtHdr = (cgiBoolean("tbDoCustomTrack") || doCt);
+char *constraints;
 
 if (! sameString(customTrackPseudoDb, db))
     {
@@ -469,19 +471,24 @@ if (! sameString(customTrackPseudoDb, db))
 saveOutputOptionsState();
 saveIntersectOptionsState();
 
+constraints = constrainFields(NULL);
+if ((constraints != NULL) && (constraints[0] == 0))
+    constraints = NULL;
+
 printf("Content-Type: text/plain\n\n");
 webStartText();
 
 if (! allGenome)
     wigData = wigFetchData(database, table, chrom, winStart, winEnd,
 	WIG_ALL_DATA, WIG_RETURN_DATA, WIG_TABLE_1,
-	    wiggleCompare[WIG_TABLE_1], (char *)NULL);
+	    wiggleCompare[WIG_TABLE_1], constraints);
 
 if (wigData)
     {
     unsigned span = 0;
     char *chrom = (char *) NULL;
     char *longLabel;
+    char tableName[128];
     unsigned char visibility;
     unsigned char colorR, colorG, colorB;
     unsigned char altColorR, altColorG, altColorB;
@@ -508,21 +515,35 @@ if (wigData)
 	altColorR = tdb->altColorR; altColorG = tdb->altColorG;
 	altColorB = tdb->altColorB;
 	visibility = tdb->visibility;
+	snprintf(tableName, sizeof(tableName), "tb_%s", table);
 	}
     else
 	{
 	priority = 42;
-	longLabel = cloneString("wiggle data");
+	longLabel = cloneString("User Supplied Track");
 	colorR = colorG = colorB = 255;
 	altColorR = altColorG = altColorB = 128;
 	visibility = 2;
+	snprintf(tableName, sizeof(tableName), "User Track");
 	}
 
     if (doCtHdr)
 	printf("track type=wiggle_0 name=%s description=\"%s\" "
 	    "visibility=%s color=%d,%d,%d altColor=%d,%d,%d "
-	    "priority=%g\n", table, longLabel, visibilities[visibility],
+	    "priority=%g\n", tableName, longLabel, visibilities[visibility],
 	    colorR, colorG, colorB, altColorR, altColorG, altColorB, priority);
+    if (constraints)
+	    printf("#\tSQL query constraint: %s\n", constraints);
+    if (wigConstraint[0])
+	{
+	if (sameWord(wigConstraint[0],"in range"))
+	    printf("#\tdata value constraint range: %s [%g , %g]\n",
+		wigConstraint[0], wigDataConstraint[0][0],
+		    wigDataConstraint[0][1]);
+	else
+	    printf("#\tdata value constraint: %s %g\n",
+		wigConstraint[0], wigDataConstraint[0][0]);
+	}
 
     for (wdPtr = wigData; (linesOutput < MAX_LINES_OUTPUT) &&
 	    (wdPtr != (struct wiggleData *) NULL); wdPtr= wdPtr->next)
