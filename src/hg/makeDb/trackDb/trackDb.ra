@@ -370,7 +370,6 @@ group genes
 priority 45
 visibility hide
 color 0,100,100
-altColor 0,50,50
 type genePred twinscanPep
 
 track pseudoUcsc
