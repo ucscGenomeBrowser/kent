@@ -9,7 +9,7 @@ BINDIR = $(HOME)/bin/$(MACHTYPE)
 
 embossToPsl: $O $(MYLIBS)
 	gcc -ggdb -o embossToPsl $O $(MYLIBS) $L
-	mkdir -p ${BINDIR}
+	${MKDIR} ${BINDIR}
 	cp -f embossToPsl ${BINDIR}
 	strip ${BINDIR}/embossToPsl
 
