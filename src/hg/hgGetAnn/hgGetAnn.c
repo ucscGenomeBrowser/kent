@@ -7,7 +7,7 @@
 #include "hgFind.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: hgGetAnn.c,v 1.2 2004/07/21 16:09:13 hiram Exp $";
+static char const rcsid[] = "$Id: hgGetAnn.c,v 1.3 2004/07/22 05:43:51 markd Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -26,7 +26,8 @@ errAbort(
     "column of the table will be not be included in the output. If the spec\n"
     "contains whitespace or shell meta-characters, it must be quoted.\n"
     "For split tables, the leading chrN_ should be omitted.  Use `mrna' or\n"
-    "`est' for mRNAs/ESTs\n"
+    "`est' for mRNAs/ESTs.  If spec is \"-\", then all rows are retrieved.\n"
+    "This will even work for split tables.\n"
     "\n"
     "Options:\n"
     "   -colHeaders - Include column headers with leading #\n"
@@ -150,13 +151,47 @@ else
 return tableDesc;
 }
 
+struct hgPositions* findAllChroms()
+/* generate a hgPositions record for the full range of all chromsomes */
+{
+struct hgPositions *positions;
+struct hgPosTable *posTab;
+struct slName *chrom;
+
+/* setup s hgPositions object */
+AllocVar(positions);
+positions->query = cloneString("-");
+positions->database = hGetDb();
+
+AllocVar(posTab);
+posTab->name = "chromInfo";
+posTab->description = "all rows";
+positions->tableList = posTab;
+
+for (chrom = hAllChromNames(); chrom != NULL; chrom = chrom->next)
+    {
+    struct hgPos *pos;
+    AllocVar(pos);
+    pos->chrom = chrom->name;
+    pos->chromStart = 0;
+    pos->chromEnd = hChromSize(pos->chrom);
+    slAddHead(&posTab->posList, pos);
+    positions->posCount++;
+    }
+slReverse(&posTab->posList);
+return positions;
+}
+
 struct hgPositions *findPositions(char *spec)
 /* query database with hgFind algorithm */
 {
 struct hgPositions *positions;
 verbose(2, "begin position query: %s\n", spec);
 
-positions = hgPositionsFind(spec, NULL, "hgGetAnn", NULL, FALSE);
+if (sameString(spec, "-"))
+    positions = findAllChroms();
+else
+    positions = hgPositionsFind(spec, NULL, "hgGetAnn", NULL, FALSE);
 
 verbose(2, "end position query: %d matches\n", countFindMatches(positions));
 if (verboseLevel() >= 2)
@@ -343,8 +378,8 @@ else if (!tableInfo->isSplit)
     /* table not split */
     rowCnt += outputByName(outFh, tableInfo, tableInfo->rootName, pos);
     }
-else if (pos->chrom != NULL)
-    {
+else if (pos->chrom != NULL) 
+   {
     /* split table, but we have chrom */
     rowCnt += outputByName(outFh, tableInfo, getTableName(pos->chrom, tableInfo), pos);
     }
