@@ -1135,20 +1135,21 @@ LOAD ENSEMBL PHUSIONBLAST RAT-MOUSE HOMOLOGY (DONE 12/03/02)
     hgLoadBed rn1 ensRatMusHom ensRatMusHom.bed -sqlTable=ensRatMusHom.sql
 
 
-LOAD GENEID GENES (TODO)
-     cd ~/rn1/bed
-     mkdir geneid
-     cd geneid
-     mkdir download
-     cd download
-   Now download *.gtf and *.prot from 
-   http://www1.imim.es/genepredictions/M.musculus/mmFeb2002/geneid_v1.1
-   Get rid of the extra .N in the transcripts with subs.  
-     cd ..
-     cp ~/lastRn/bed/geneid/subs .
-     subs -e download/*.gtf > /dev/null
-     ldHgGene rn1 geneid download/*.gtf -exon=CDS
-     hgPepPred rn1 generic geneidPep download/*.prot
+LOAD GENEID GENES (DONE 01/28/03)
+    mkdir -p ~/rn1/bed/geneid/download
+    cd ~/rn1/bed/geneid/download
+    foreach f (~/rn1/?{,?}/chr?{,?}{,_random}.fa)
+      set chr = $f:t:r
+      wget http://genome.imim.es/genepredictions/R.norvegicus/rnNov2002/geneid_v1.1/$chr.gtf
+      wget http://genome.imim.es/genepredictions/R.norvegicus/rnNov2002/geneid_v1.1/$chr.prot
+    end
+    # Add missing .1 to protein id's
+    foreach f (*.prot)
+      perl -wpe 's/^(>chr\w+)$/$1.1/' $f > $f:r-fixed.prot
+    end
+    cd ..
+    ldHgGene rn1 geneid download/*.gtf -exon=CDS
+    hgPepPred rn1 generic geneidPep download/*-fixed.prot
 
 SGP GENE PREDICTIONS (TODO)
      cd ~/rn1/bed
