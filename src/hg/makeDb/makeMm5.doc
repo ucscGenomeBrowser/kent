@@ -2746,6 +2746,9 @@ hgMapViaSwissProt mm5 knownGene name proteinID Pfam knownToPfam
 # expression data.
     hgMapToGene mm5 gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
 
+# Create table that maps between known genes and BioImage database (DONE 3/5/05 JK)
+    knownToBioImage mm5
+
 # ENABLE GENE SORTER FOR mm5 IN HGCENTRALTEST (DONE 7/20/04 Fan)
     echo "update dbDb set hgNearOk = 1 where name = 'mm5';" \
       | hgsql -h genome-testdb hgcentraltest
