@@ -8,7 +8,39 @@
 #include "jksql.h"
 #include "ccdsInfo.h"
 
-static char const rcsid[] = "$Id: ccdsInfo.c,v 1.1 2005/02/24 00:52:51 markd Exp $";
+/* FIXME: database should really have an enum column */
+
+static enum ccdsInfoSrcDb parseSrcDb(char *srcDbStr, char *mrnaAcc)
+/* parse the srcDb string to an enum */
+{
+if (sameString(srcDbStr, "N"))
+    return ccdsInfoNcbi;
+else if (sameString(srcDbStr, "H"))
+    {
+    if (startsWith("OTT", mrnaAcc))
+        return ccdsInfoVega;
+    else
+        return ccdsInfoEnsembl;
+    }
+errAbort("invalid ccdsInfoSrcDb column \"%s\"", srcDbStr);
+return ccdsInfoNull;
+}
+
+static char *formatSrcDb(enum ccdsInfoSrcDb srcDb)
+/* format the srcDb string to an enum */
+{
+switch (srcDb)
+    {
+    case ccdsInfoNcbi:
+        return "N";
+    case ccdsInfoVega:
+    case ccdsInfoEnsembl:
+        return "H";
+    }
+return "?";
+}
+
+static char const rcsid[] = "$Id: ccdsInfo.c,v 1.2 2005/04/04 23:57:28 markd Exp $";
 
 void ccdsInfoStaticLoad(char **row, struct ccdsInfo *ret)
 /* Load a row from ccdsInfo table into ret.  The contents of ret will
@@ -16,7 +48,7 @@ void ccdsInfoStaticLoad(char **row, struct ccdsInfo *ret)
 {
 
 strcpy(ret->ccds, row[0]);
-strcpy(ret->srcDb, row[1]);
+ret->srcDb = parseSrcDb(row[1], row[2]);
 strcpy(ret->mrnaAcc, row[2]);
 strcpy(ret->protAcc, row[3]);
 }
@@ -29,7 +61,7 @@ struct ccdsInfo *ret;
 
 AllocVar(ret);
 strcpy(ret->ccds, row[0]);
-strcpy(ret->srcDb, row[1]);
+ret->srcDb = parseSrcDb(row[1], row[2]);
 strcpy(ret->mrnaAcc, row[2]);
 strcpy(ret->protAcc, row[3]);
 return ret;
@@ -77,12 +109,14 @@ struct ccdsInfo *ccdsInfoCommaIn(char **pS, struct ccdsInfo *ret)
  * return a new ccdsInfo */
 {
 char *s = *pS;
+char srcDbBuf[2];
 
 if (ret == NULL)
     AllocVar(ret);
 sqlFixedStringComma(&s, ret->ccds, sizeof(ret->ccds));
-sqlFixedStringComma(&s, ret->srcDb, sizeof(ret->srcDb));
+sqlFixedStringComma(&s, srcDbBuf, sizeof(srcDbBuf));
 sqlFixedStringComma(&s, ret->mrnaAcc, sizeof(ret->mrnaAcc));
+ret->srcDb = parseSrcDb(srcDbBuf, ret->mrnaAcc);
 sqlFixedStringComma(&s, ret->protAcc, sizeof(ret->protAcc));
 *pS = s;
 return ret;
@@ -119,7 +153,7 @@ fprintf(f, "%s", el->ccds);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->srcDb);
+fprintf(f, "%s", formatSrcDb(el->srcDb));
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
@@ -134,3 +168,53 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+
+static int cmpMRna(const void *va, const void *vb)
+/* Compare to sort based mrnaAcc. */
+{
+const struct ccdsInfo *a = *((struct ccdsInfo **)va);
+const struct ccdsInfo *b = *((struct ccdsInfo **)vb);
+return strcmp(a->mrnaAcc, b->mrnaAcc);
+}
+
+void ccdsInfoMRnaSort(struct ccdsInfo **ccdsInfos)
+/* Sort list by mrnaAcc */
+{
+slSort(ccdsInfos, cmpMRna);
+}
+
+struct ccdsInfo *ccdsInfoSelectByCcds(struct sqlConnection *conn, char *ccdsId,
+                                      enum ccdsInfoSrcDb srcDb)
+/* Obtain list of ccdsInfo object for the specified id and srcDb.  If srcDb is
+ * ccdsInfoNull, return both.  Return NULL if ccdsId it's not valid */
+{
+char query[256], extraWhere[64];
+struct sqlResult *sr;
+char **row;
+struct ccdsInfo *ccdsInfos = NULL;
+
+switch (srcDb) {
+case ccdsInfoNull:
+    extraWhere[0] = '\0';
+    break;
+case ccdsInfoNcbi:
+    safef(extraWhere, sizeof(extraWhere), " and srcDb = 'N'");
+    break;
+case ccdsInfoVega:
+    safef(extraWhere, sizeof(extraWhere), " and srcDb = 'H' and mrnaAcc like 'OTT%%'");
+    break;
+case ccdsInfoEnsembl:
+    safef(extraWhere, sizeof(extraWhere), " and srcDb = 'H' and mrnaAcc not like 'OTT%%'");
+    break;
+}
+
+safef(query, sizeof(query), "select * from ccdsInfo where ccds = \"%s\"%s",
+      ccdsId, extraWhere);
+sr = sqlGetResult(conn, query);
+
+while ((row = sqlNextRow(sr)) != NULL)
+    slSafeAddHead(&ccdsInfos, ccdsInfoLoad(row));
+sqlFreeResult(&sr);
+
+return ccdsInfos;
+}

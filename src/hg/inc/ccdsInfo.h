@@ -7,12 +7,21 @@
 
 #define CCDSINFO_NUM_COLS 4
 
+enum ccdsInfoSrcDb
+/* source database */
+{
+    ccdsInfoNull = 0,  /* used for no src db */
+    ccdsInfoNcbi = 1,
+    ccdsInfoEnsembl = 2,
+    ccdsInfoVega = 3
+};
+
 struct ccdsInfo
 /* Consensus CDS information, links CCDS ids to NCBI and Hinxton accessions */
     {
     struct ccdsInfo *next;  /* Next in singly linked list. */
     char ccds[13];	/* CCDS id */
-    char srcDb[2];	/* source database: N=NCBI, H=Hinxton */
+    enum ccdsInfoSrcDb srcDb;	/* source database: N=NCBI, H=Hinxton */
     char mrnaAcc[19];	/* mRNA accession (NCBI or Hinxton) */
     char protAcc[19];	/* protein accession (NCBI or Hinxton) */
     };
@@ -57,6 +66,14 @@ void ccdsInfoOutput(struct ccdsInfo *el, FILE *f, char sep, char lastSep);
 
 #define ccdsInfoCommaOut(el,f) ccdsInfoOutput(el,f,',',',');
 /* Print out ccdsInfo as a comma separated list including final comma. */
+
+void ccdsInfoMRnaSort(struct ccdsInfo **ccdsInfos);
+/* Sort list by mrnaAcc */
+
+struct ccdsInfo *ccdsInfoSelectByCcds(struct sqlConnection *conn, char *ccdsId,
+                                      enum ccdsInfoSrcDb srcDb);
+/* Obtain list of ccdsInfo object for the specified id and srcDb.  If srcDb is
+ * ccdsInfoNull, return all.  Return NULL if ccdsId it's not valid */
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
