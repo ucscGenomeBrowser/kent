@@ -59,6 +59,16 @@ spectrum on
 type psl est
 intronGap 30
 
+track transRegCode
+shortLabel Regulatory Code 
+longLabel Transcriptional Regulatory Code from Harbison Gordon et al.
+group regulation
+priority 92.5
+visibility pack
+spectrum on
+type bed 5 +
+exonArrows off
+
 track multizYeast 
 shortLabel Conservation
 longLabel Seven Species of Saccharomyces, Alignments & Conservation
