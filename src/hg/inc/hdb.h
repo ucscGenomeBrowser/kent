@@ -418,6 +418,10 @@ boolean hFindSplitTableDb(char *db, char *chrom, char *rootName,
 boolean hTrackExists(char *trackName);
 /* Return TRUE if track exists. */
 
+struct slName *hSplitTableNames(char *rootName);
+/* Return a list of all split tables for rootName, or of just rootName if not 
+ * split, or NULL if no such tables exist. */
+
 int hBinLevels();
 /* Return number of levels to bins. */
 

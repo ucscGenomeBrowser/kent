@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.176 2004/04/14 05:24:16 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.177 2004/04/14 16:40:04 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2286,6 +2286,43 @@ boolean hTrackExists(char *track)
 /* Return TRUE if track exists. */
 {
 return hFindSplitTable(NULL, track, NULL, NULL);
+}
+
+struct slName *hSplitTableNames(char *rootName)
+/* Return a list of all split tables for rootName, or of just rootName if not 
+ * split, or NULL if no such tables exist. */
+{
+struct slName *matchingTables = NULL, *tableList = NULL;
+struct slName *tPtr = NULL, *tNext = NULL;
+struct sqlConnection *conn = hAllocConn();
+char query[256];
+
+safef(query, sizeof(query), "show tables like '%%\\_%s'", rootName);
+matchingTables = sqlQuickList(conn, query);
+if (matchingTables == NULL && sqlTableExists(conn, rootName))
+    tableList = newSlName(rootName);
+else
+    {
+    for (tPtr = matchingTables;  tPtr != NULL;  tPtr = tNext)
+	{
+	char *p = tPtr->name + strlen(tPtr->name) - (strlen(rootName) + 1);
+	tNext = tPtr->next;
+	*p = 0;
+	if (hgOfficialChromName(tPtr->name) != NULL)
+	    {
+	    *p = '_';
+	    slAddHead(&tableList, tPtr);
+	    }
+	else
+	    {
+	    freez(&tPtr);
+	    }
+	}
+    }
+
+hFreeConn(&conn);
+slReverse(&tableList);
+return(tableList);
 }
 
 boolean hIsMgscHost()
