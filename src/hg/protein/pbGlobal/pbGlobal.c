@@ -187,6 +187,7 @@ void makeActiveImagePB(char *psOutput, char *psOutput2)
 char *mapName = "map";
 int pixWidth, pixHeight;
 
+char *answer;
 char cond_str[255];
 struct sqlConnection *conn; 
 char query[256];
@@ -196,24 +197,45 @@ char *chp;
 int  i,l;
 int  ii = 0;
 int  iypos;
+char *sciName, *commonName;
 
-hPrintf("<br><font size=4>");
-
-if (!proteinInSupportedGenome)
-    {
-    hPrintf("Protein: ");
-    }
-else
-    {
-    hPrintf("%s protein: ", organism);
-    }
+hPrintf("<br><font size=4>Protein ");
 
 hPrintf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank><B>%s</B></A>\n", 
 	proteinID, proteinID);
 if (strcmp(proteinID, protDisplayID) != 0)hPrintf(" (aka %s)", protDisplayID);
 
 hPrintf(" %s\n", description);
-hPrintf("</font><br><br>");
+hPrintf("</font><br>");
+
+hPrintf("Organism: ");
+conn = sqlConnect("swissProt");
+/* get scientific and Genbank common name of this organism */
+    
+sciName    = NULL;
+commonName = NULL;
+/* NOTE: on rare occasions, acc to taxon id is not a one to one relationship, 
+   but we will just use the first valid one */
+safef(cond_str, sizeof(cond_str),"accToTaxon.acc='%s' and accToTaxon.taxon=taxon.id", proteinID);
+answer = sqlGetField(conn, "swissProt", "accToTaxon, taxon", "taxon.id", cond_str);
+    
+if (answer != NULL)
+    {
+    safef(cond_str, sizeof(cond_str), "id=%s and nameType='scientific name'", answer);
+    sciName = sqlGetField(conn, "proteins", "taxonNames", "name", cond_str);
+    
+    safef(cond_str, sizeof(cond_str), "id=%s and nameType='genbank common name'", answer);
+    commonName = sqlGetField(conn, "proteins", "taxonNames", "name", cond_str);
+    }
+if (sciName != NULL)
+    {
+    printf("%s", sciName);
+    }
+if (commonName != NULL)
+    {
+    printf(" (%s)", commonName);
+    }
+hPrintf("<br>");
 
 protSeq = getAA(proteinID);
 if (protSeq == NULL)
