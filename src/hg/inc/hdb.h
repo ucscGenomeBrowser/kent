@@ -142,6 +142,10 @@ char *hgOfficialChromName(char *name);
 /* Returns "cannonical" name of chromosome or NULL
  * if not a chromosome. */
 
+boolean hgNearOk(char *database);
+/* Return TRUE if ok to put up familyBrowser (hgNear) 
+ * on this database. */
+
 boolean hTableExists(char *table);
 /* Return TRUE if a table exists in database. */
 

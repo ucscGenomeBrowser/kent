@@ -25,7 +25,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.138 2003/09/14 23:10:43 sugnet Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.139 2003/09/17 17:10:58 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1372,6 +1372,20 @@ char *hDbFromFreeze(char *freeze)
 /* Return database version from freeze name. */
 {
 return hFreezeDbConversion(NULL, freeze);
+}
+
+boolean hgNearOk(char *database)
+/* Return TRUE if ok to put up familyBrowser (hgNear) 
+ * on this database. */
+{
+struct sqlConnection *conn = hConnectCentral();
+char query[256];
+boolean ok;
+safef(query, sizeof(query), 
+	"select hgNearOk from dbDb where name = '%s'", database);
+ok = sqlQuickNum(conn, query);
+hDisconnectCentral(&conn);
+return ok;
 }
 
 char *hDbDbOptionalField(char *database, char *field)
