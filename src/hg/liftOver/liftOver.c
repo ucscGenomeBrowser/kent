@@ -10,12 +10,15 @@
 #include "sample.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.13 2004/04/15 19:37:34 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.14 2004/09/08 01:42:06 kate Exp $";
 
 double minMatch = LIFTOVER_MINMATCH;
 double minBlocks = LIFTOVER_MINBLOCKS;
+double minSizeT = LIFTOVER_MINSIZE_TARGET;
+double minSizeQ = LIFTOVER_MINSIZE_QUERY;
 bool fudgeThick = FALSE;
 bool errorHelp = FALSE;
+bool multiple = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -37,15 +40,22 @@ errAbort(
   "   -pslT - File is in psl format, map target side only\n"
   "   -minBlocks=0.N Minimum ratio of alignment blocks/exons that must map.\n"
   "                  Default %3.2f\n"
-  "   -fudgeThick  If thickStart/thickEnd is not mapped, use the closest \n"
-  "                mapped base.  Recommended if using -minBlocks.\n"
-  "   -errorHelp        Explaining error messages.\n"
-  , LIFTOVER_MINMATCH, LIFTOVER_MINBLOCKS
+  "   -fudgeThick    If thickStart/thickEnd is not mapped, use the closest \n"
+  "                  mapped base.  Recommended if using -minBlocks.\n"
+  "   -multiple               Allow multiple output regions.\n"
+  "   -minSizeT, -minSizeQ    Minimum chain size in target/query,\n" 
+  "                             when mapping to multiple output regions\n"
+  "                                     (default 4K, 20K).\n"
+  "   -multiple               Allow multiple output regions.\n"
+  "   -errorHelp              Explain error messages.\n",
+    LIFTOVER_MINMATCH, LIFTOVER_MINBLOCKS
+    //LIFTOVER_MINSIZE_TARGET, LIFTOVER_MINSIZE_QUERY
   );
 }
 
-void liftOver(char *oldFile, char *mapFile, double minMatch, double minBlocks,
-                        char *newFile, char *unmappedFile)
+void liftOver(char *oldFile, char *mapFile, double minMatch, 
+                double minBlocks, int minSizeT, int minSizeQ,
+                bool multiple, char *newFile, char *unmappedFile)
 /* liftOver - Move annotations from one assembly to another. */
 {
 struct hash *chainHash = newHash(0);		/* Old chromosome name keyed, chromMap valued. */
@@ -53,7 +63,11 @@ FILE *mapped = mustOpen(newFile, "w");
 FILE *unmapped = mustOpen(unmappedFile, "w");
 int errCt;
 
+if (!fileExists(oldFile))
+    errAbort("Can't find file: %s\n", oldFile);
+fprintf(stderr, "Reading liftover chains\n");
 readLiftOverMap(mapFile, chainHash);
+fprintf(stderr, "Mapping coordinates\n");
 if (optionExists("gff"))
     liftOverGff(oldFile, chainHash, minMatch, minBlocks, mapped, unmapped);
 else if (optionExists("genePred"))
@@ -66,8 +80,8 @@ else if (optionExists("pslT"))
     liftOverPsl(oldFile, chainHash, minMatch, minBlocks, fudgeThick,
                         mapped, unmapped);
 else
-    liftOverBed(oldFile, chainHash, minMatch, minBlocks, fudgeThick,
-                        mapped, unmapped, &errCt);
+    liftOverBed(oldFile, chainHash, minMatch, minBlocks, minSizeT, minSizeQ, 
+                    fudgeThick, mapped, unmapped, multiple, &errCt);
 carefulClose(&mapped);
 carefulClose(&unmapped);
 }
@@ -79,10 +93,14 @@ optionHash(&argc, argv);
 minMatch = optionFloat("minMatch", minMatch);
 minBlocks = optionFloat("minBlocks", minBlocks);
 fudgeThick = optionExists("fudgeThick");
+multiple = optionExists("multiple");
+minSizeT = optionInt("minSizeT", minSizeT);
+minSizeQ = optionInt("minSizeQ", minSizeQ);
 if (optionExists("errorHelp"))
     errAbort(liftOverErrHelp());
 if (argc != 5)
     usage();
-liftOver(argv[1], argv[2], minMatch, minBlocks, argv[3], argv[4]);
+liftOver(argv[1], argv[2], minMatch, minBlocks, minSizeT, minSizeQ, 
+                        multiple, argv[3], argv[4]);
 return 0;
 }

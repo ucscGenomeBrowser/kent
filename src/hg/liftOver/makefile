@@ -9,4 +9,3 @@ O = liftOver.o
 
 liftOver: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/liftOver $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/liftOver${EXE}
