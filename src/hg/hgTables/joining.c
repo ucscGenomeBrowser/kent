@@ -15,7 +15,7 @@
 #include "hgTables.h"
 
 
-static char const rcsid[] = "$Id: joining.c,v 1.31 2004/10/26 19:55:40 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.32 2004/10/27 22:05:14 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -694,7 +694,6 @@ for (link = chain; link != NULL; link = link->next)
     js = link->val;
     for (jf = js->fieldList; jf != NULL; jf = jf->next)
 	 {
-	 warn(" %s.%s", jf->table, jf->field);
 	 if (sameString(dtf->table, jf->table) && sameString(dtf->field, jf->field))
 	     {
 	     if (slNameInList(jf->dbList, dtf->database))
