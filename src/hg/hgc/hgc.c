@@ -165,7 +165,7 @@
 #include "gencodeIntron.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.864 2005/03/29 15:57:32 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.864.2.1 2005/04/05 18:07:01 kuhn Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14959,9 +14959,20 @@ hSetDb(database);
 protDbName = hPdbFromGdb(database);
 protDbConn = sqlConnect(protDbName);
 
-seqName = cartString(cart, "c");
+seqName = hgOfficialChromName(cartString(cart, "c"));
 winStart = cartIntExp(cart, "l");
 winEnd = cartIntExp(cart, "r");
+/* Allow faked-out c=0 l=0 r=0 (e.g. for unaligned mRNAs) but not just any 
+ * old bogus position: */
+if (seqName == NULL)
+    {
+    if (winStart != 0 || winEnd != 0)
+	webAbort("CGI variable error",
+		 "hgc: bad input variables c=%s l=%d r=%d",
+		 cartString(cart, "c"), winStart, winEnd);
+    else
+	seqName = hDefaultChrom();
+    }
 trackHash = makeTrackHash(database, seqName);
 if (parentWigMaf)
     {
