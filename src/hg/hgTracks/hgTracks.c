@@ -74,7 +74,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.508 2003/05/08 03:09:46 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.509 2003/05/08 16:58:27 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -10129,12 +10129,18 @@ hPrintf("<CENTER>\n");
 if (!hideControls)
     {
     hotLinks();
+
     /* Show title . */
     freezeName = hFreezeFromDb(database);
     if(freezeName == NULL)
 	freezeName = "Unknown";
-    hPrintf("<FONT SIZE=5><B>UCSC Genome Browser on %s %s Freeze</B></FONT><BR>\n",
-    	organism, freezeName); 
+    hPrintf("<FONT SIZE=5><B>");
+    if (hIsMgcServer())
+        hPrintf("MGC Genome Browser on %s %s Freeze", organism, freezeName); 
+    else
+        hPrintf("UCSC Genome Browser on %s %s Freeze", organism, freezeName); 
+    hPrintf("</B></FONT><BR>\n");
+
     /* This is a clear submit button that browsers will use by default when enter is pressed in position box. */
     hPrintf("<INPUT TYPE=IMAGE BORDER=0 NAME=\"hgt.dummyEnterButton\" src=\"../images/DOT.gif\">");
     /* Put up scroll and zoom controls. */
