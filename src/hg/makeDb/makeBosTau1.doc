@@ -1058,7 +1058,7 @@ chainSome $(path1)
   /cluster/bin/i386/netFilter -minGap=10 bosTau1.net | /cluster/bin/i386/hgLoadNet hg17 netBosTau1 stdin
   rm bosTau1.net.backup
 
-  # index has NULL cardinality; analzye to fix
+  # index has NULL cardinality; analyze to fix
   hgsql hg17
   analyze table netBosTau1
 
