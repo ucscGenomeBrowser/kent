@@ -14,6 +14,9 @@ The example mysql user here is: "browser" with a password of: "genome"
 	a. Apache WEB server is installed and working
 		http://localhost/
 	    Provides the Apache default home page from your machine
+	    NOTE: As of early March 2005, the browser static html
+	    WEB pages require the Apache XBitHack option to be enabled
+	    to allow <!--#include ... --> statements to function.
 	b. MySQL database is installed and working
 		$ mysql -u browser -pgenome -e 'show tables;' mysql
 	    MySQL can be run from the command line, and
@@ -236,4 +239,4 @@ done
 
 
 ====================================================================
-This file last updated: $Date: 2005/03/07 23:31:37 $
+This file last updated: $Date: 2005/03/08 23:26:23 $
