@@ -1433,10 +1433,15 @@ void genericChainClick(struct sqlConnection *conn, struct trackDb *tdb,
 {
 char *track = tdb->tableName;
 char *thisOrg = hOrganism(database);
-char *otherOrg = hOrganism(otherDb);
+char *otherOrg = NULL;
 struct chain *chain = NULL, *subChain = NULL, *toFree = NULL;
 int chainWinSize;
 int qs, qe;
+
+if (! sameWord(otherDb, "seq"))
+    {
+    otherOrg = hOrganism(otherDb);
+    }
 
 chain = chainDbLoad(conn, track, seqName, atoi(item));
 printf("<B>%s position:</B> %s:%d-%d</a>  size: %d <BR>\n",
@@ -1469,7 +1474,11 @@ else
     printf("Zoom so that browser window covers 1,000,000 bases or less "
            "and return here to see alignment details.<BR>\n");
     }
-chainToOtherBrowser(chain, otherDb, otherOrg);
+if (! sameWord(otherDb, "seq"))
+    {
+    chainToOtherBrowser(chain, otherDb, otherOrg);
+    }
+
 chainFree(&chain);
 }
 
@@ -3829,7 +3838,7 @@ int id = atoi(item);
 char *track = cartString(cart, "o");
 char *type = trackTypeInfo(track);
 char *typeWords[2];
-char *otherDb, *org, *otherOrg;
+char *otherDb = NULL, *org = NULL, *otherOrg = NULL;
 struct dnaSeq *qSeq = NULL;
 char name[128];
 
@@ -3837,7 +3846,10 @@ char name[128];
 if (chopLine(type, typeWords) < ArraySize(typeWords))
     errAbort("type line for %s is short in trackDb", track);
 otherDb = typeWords[1];
-otherOrg = hOrganism(otherDb);
+if (! sameWord(otherDb, "seq"))
+    {
+    otherOrg = hOrganism(otherDb);
+    }
 org = hOrganism(database);
 
 /* Load up subset of chain and convert it to part of psl
@@ -3868,7 +3880,7 @@ else
 writeFramesetType();
 puts("<HTML>");
 printf("<HEAD>\n<TITLE>%s %s vs %s %s </TITLE>\n</HEAD>\n\n", 
-       otherOrg, psl->qName, org, psl->tName );
+       (otherOrg == NULL ? "" : otherOrg), psl->qName, org, psl->tName );
 showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name);
 }
 
