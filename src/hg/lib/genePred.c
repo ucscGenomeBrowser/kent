@@ -14,7 +14,7 @@
 /* FIXME: remove when bugs fixes */
 #define WARN_BLAT_BUGS 1
 
-static char const rcsid[] = "$Id: genePred.c,v 1.57 2004/10/04 19:54:28 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.58 2004/12/11 06:25:10 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -1156,8 +1156,10 @@ if (start < gp->cdsStart)
     start = gp->cdsStart;
 if (end > gp->cdsEnd)
     end = gp->cdsEnd;
-*startPtr = start;
-*endPtr = end;
+if (startPtr != NULL)
+    *startPtr = start;
+if (endPtr != NULL)
+    *endPtr = end;
 return (start < end);
 }
 
