@@ -296,7 +296,7 @@ void splitByCount(char *inName, int pieceSize, char *outRoot, unsigned long estS
 {
 unsigned long pieces = (estSize + pieceSize-1)/pieceSize;
 int digits = digitsBaseTen(pieces);
-int maxN = optionInt("maxN", pieceSize/2);
+int maxN = optionInt("maxN", pieceSize);
 boolean oneFile = optionExists("oneFile");
 char fileName[512];
 char dirOnly[256], noPath[128];
