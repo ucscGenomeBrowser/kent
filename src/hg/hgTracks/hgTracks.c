@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.790 2004/09/01 00:20:20 sugnet Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.791 2004/09/01 15:14:26 sugnet Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -415,10 +415,10 @@ int tgFixedTotalHeightOverflow(struct track *tg, enum trackVisibility vis,
  * they use. */
 {
 int rows;
-tg->heightPer = heightPer;
-tg->lineHeight = lineHeight;
 double maxHeight = maxItemsInFullTrack * tl.fontHeight;
 int itemCount = slCount(tg->items);
+tg->heightPer = heightPer;
+tg->lineHeight = lineHeight;
 
 /* Note that the maxCount variable passed to packCountRowsOverflow() 
    is tied to the maximum height allowed for a track and influences
