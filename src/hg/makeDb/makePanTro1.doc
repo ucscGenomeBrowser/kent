@@ -1336,3 +1336,11 @@ ldHgGene panTro1 mappedRefSeq new.gtf
    Added hack in genbank alignment code so that the xeno refseq track
    consists only of human refseqs.  This had to be reloaded due to
    query type getting lost.
+# load twinscan predictions without filtering pseudogenes baertsch 3/11/04
+# loaded frame info 
+cd /cluster/data/panTro1/bed
+mkdir -p twinscan
+cd twinscan
+wget http://genes.cs.wustl.edu/predictions/chimp/panTro1_vs_mm4/chimp_panTro1_vs_mm4.tgz
+cd chr_gtf
+ldHgGene panTro1 twinscan chr*.gtf -gtf -frame -geneName
