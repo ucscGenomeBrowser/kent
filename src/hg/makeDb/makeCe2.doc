@@ -2596,3 +2596,23 @@ chainSome $(path1)
 # [acs@hgwdev axtChain.2004-04-29]$ featureBits ce2 syntenyNetCb1
 # 73427463 bases of 100291761 (73.214%) in intersection
 # Hmmm -- looking in browser, seems a bit stringent for worm...
+
+# CLEANUP CB1 BLASTZ (DONE, 2004-02-24, hartera)
+    ssh eieio
+    cd /cluster/data/ce2/bed/blastz.cb1
+    nice rm axtChain/run1/chain/* &
+    nice rm -fr axtChain/n1 axtChain/hNoClass.net &
+    nice gzip axtChrom/* pslChrom/* axtChain/all.chain axtChain/cb1Filt.net axtChain/*.net &
+    nice rm -fr axtChain/chain axtChain/preNet &
+    nice rm -rf raw &
+    nice rm -rf lav &
+
+# CLEANUP SELF BLASTZ (DONE, 2004-02-24, hartera)
+    ssh eieio
+    cd /cluster/data/ce2/bed/blastzSelf
+    # remove old chains
+    nice rm -fr axtChain &
+    nice rm axtChain.2004-04-30/run1/chain/* &
+    nice gzip axtChrom/* pslChrom/* axtChain.2004-04-30/all.chain axtChain.2004-04-30/chainFilt/* axtChain.2004-04-30/chain/* &
+    nice rm -rf raw &
+    nice rm -rf lav &
