@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.10 2004/02/29 00:25:18 kent Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.11 2004/02/29 00:47:31 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -447,6 +447,32 @@ for (tag = form->startTag->next; tag != form->endTag; tag = tag->next)
 	    tagWarn(tag, "Unrecognized INPUT TYPE %s", type);
 	    }
 	}
+    else if (sameWord(tag->name, "SELECT"))
+        {
+	char *varName = tagAttributeNeeded(tag, "NAME");
+	struct htmlTag *subTag;
+	var = findOrMakeVar(varName, hash, tag, &varList); 
+	for (subTag = tag->next; subTag != form->endTag; subTag = subTag->next)
+	    {
+	    if (sameWord(subTag->name, "/SELECT"))
+	        break;
+	    else if (sameWord(subTag->name, "OPTION"))
+	        {
+		if (tagAttributeVal(subTag, "SELECTED", NULL) != NULL)
+		    {
+		    char *selVal = tagAttributeVal(subTag, "VALUE", NULL);
+		    if (selVal == NULL)
+		        {
+			char *e = strchr(subTag->end, '<');
+			if (e != NULL)
+			    selVal = cloneStringZ(subTag->end, e - subTag->end);
+			}
+		    if (selVal != NULL)
+			var->curVal = selVal;
+		    }
+		}
+	    }
+	}
     }
 slReverse(&varList);
 for (var = varList; var != NULL; var = var->next)
@@ -609,7 +635,8 @@ for (form = page->forms; form != NULL; form = form->next)
     for (var = form->vars; var != NULL; var = var->next)
         {
 	struct htmlTag *tag = var->tags->val;
-	printf("\t%s\t%s\t%s\t%s\n", var->name, var->tagName, var->type, 
+	printf("\t%s\t%s\t%s\t%s\n", var->name, var->tagName, 
+		naForNull(var->type), 
 		naForNull(var->curVal));
 	}
     }
@@ -625,7 +652,8 @@ for (form = page->forms; form != NULL; form = form->next)
     for (var = form->vars; var != NULL; var = var->next)
         {
 	struct htmlTag *tag = var->tags->val;
-	printf("%s\t%s\t%s\t%s\n", var->name, var->tagName, var->type, 
+	printf("%s\t%s\t%s\t%s\n", var->name, var->tagName, 
+		naForNull(var->type), 
 		naForNull(var->curVal));
 	}
     }
