@@ -1512,6 +1512,16 @@ spectrum on
 type chain mm5
 otherDb mm5
 
+track netMm5
+shortLabel Mouse Net
+longLabel Mouse ($o_date/$o_db) Alignment Net
+group compGeno
+priority 186.5
+visibility hide
+spectrum on
+type netAlign mm5 chainMm5
+otherDb mm5
+
 track chainCanFam1
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
