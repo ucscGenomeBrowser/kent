@@ -1162,3 +1162,22 @@ Longest job:                      874s      14.57m     0.24h    0.01d
 
 
 #  END of Blastz Self
+
+
+LOAD SOFTBERRY GENES (DONE - 2003-08-14 - Hiram)
+     mkdir -p /cluster/data/ce1/bed/softberry
+     cd /cluster/data/ce1/bed/softberry
+
+     wget \
+	ftp://www.softberry.com/pub/SC_CEL_MAY03/Soft_fgenesh_Ce03.tar.gz
+     tar xvzf Soft_fgenesh_Ce03.tar.gz
+
+     ldHgGene ce1 softberryGene chr*.gff
+# Read 19112 transcripts in 276202 lines in 6 files
+#   19112 groups 6 seqs 1 sources 4 feature types
+# 19112 gene predictions
+     hgPepPred ce1 softberry *.protein
+     hgSoftberryHom ce1 *.protein
+
+    # Add entry to worm/ce1/trackDb.ra and add specific
+    # softberryGene.html file
