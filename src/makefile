@@ -10,6 +10,7 @@ full: clean
 
 libs:
 	cd lib; make; cd ..
+	cd jkOwnLib; make; cd ..
 	cd hg/lib; make; cd ../..
 
 clean:
