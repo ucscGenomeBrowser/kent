@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.23 2004/10/28 00:17:52 hiram Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.24 2004/11/08 04:03:03 kent Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -228,7 +228,9 @@ else
     bedSqlFieldsExceptForChrom(hti, &fieldCount, &fields);
     isPsl = htiIsPsl(hti);
     isGenePred = sameString("exonEnds", hti->endsSizesField);
-    isBedWithBlocks = (sameString("chromStarts", hti->startsField) 
+    isBedWithBlocks = (
+    	(sameString("chromStarts", hti->startsField) ||
+	 sameString("blockStarts", hti->startsField))
 	     && sameString("blockSizes", hti->endsSizesField));
 
     /* All beds have at least chrom,start,end.  We omit the chrom
@@ -568,9 +570,8 @@ for (region = regionList; region != NULL; region = region->next)
     }
 if (!gotResults)
     {
-    if (doCt)
-       textOpen();
-    hPrintf("\n# No results returned from query.\n\n");
+    if (!doCt)
+	hPrintf("\n# No results returned from query.\n\n");
     }
 else if (doCt)
     {
