@@ -13,8 +13,8 @@ static struct optionSpec optionSpecs[] = {
     {"userPath", OPTION_STRING},
     {"sysPath", OPTION_STRING},
     {"randomDelay", OPTION_INT},
-    {"cpu", OPTION_INT},
-    {"localhost", OPTION_STRING},
+    {"exe", OPTION_STRING},
+    {"rsh", OPTION_STRING},
     {NULL, 0}
 };
 
