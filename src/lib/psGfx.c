@@ -39,6 +39,7 @@ struct psGfx *psOpen(char *fileName,
  * calculated to keep pixels square. */
 {
 struct psGfx *ps;
+struct psClipRect *clip;
 
 /* Allocate structure and open file. */
 AllocVar(ps);
@@ -63,6 +64,13 @@ ps->xOff = ptMargin;
 ps->yOff = ptMargin;
 ps->fontHeight = 10;
 
+/* Save initial clipping rectangle. */
+AllocVar(clip);
+clip->x1 = clip->y1 = 0;
+clip->x2 = pixWidth;
+clip->y2 = pixHeight;
+ps->clipStack = clip;
+
 /* Cope with fact y coordinates are bottom to top rather
  * than top to bottom. */
 ps->yScale = -ps->yScale;
@@ -83,6 +91,7 @@ struct psGfx *ps = *pPs;
 if (ps != NULL)
     {
     carefulClose(&ps->f);
+    slFreeList(&ps->clipStack);
     freez(pPs);
     }
 }
@@ -122,6 +131,18 @@ void psDrawBox(struct psGfx *ps, double x, double y,
 	double width, double height)
 /* Draw a filled box in current color. */
 {
+/* Do some clipping here to make the postScript
+ * easier to edit in illustrator. */
+struct psClipRect *clip = ps->clipStack;
+double x2 = x + width;
+double y2 = y + height;
+if (x < clip->x1) x = clip->x1;
+if (y < clip->y1) y = clip->y1;
+if (x2 > clip->x2) x2 = clip->x2;
+if (y2 > clip->y2) y2 = clip->y2;
+width = x2 - x;
+height = y2 - y;
+
 psWhOut(ps, width, height);
 psXyOut(ps, x, y+height);
 fprintf(ps->f, "fillBox\n");
@@ -254,9 +275,28 @@ void psPushClipRect(struct psGfx *ps, double x, double y,
 /* Push clipping rectangle onto graphics stack. */
 {
 FILE *f = ps->f;
+struct psClipRect *clip;
+AllocVar(clip);
+clip->x1 = x;
+clip->y1 = y;
+clip->x2 = x + width;
+clip->y2 = y + height;
+slAddHead(&ps->clipStack, clip);
 fprintf(f, "gsave ");
 psXyOut(ps, x, y+height);
 psWhOut(ps, width, height);
 fprintf(f, "rectclip\n");
+}
+
+void psPopClipRect(struct psGfx *ps)
+/* Get rid of clipping. Beware that this does a psPopG, so
+ * other graphic variables will be reset to the time of
+ * the corresponding psPushClipRect. */
+{
+struct psClipRect *clip = ps->clipStack;
+ps->clipStack = clip->next;
+assert(ps->clipStack != NULL);
+freeMem(clip);
+fprintf(ps->f, "grestore %%unclip\n");
 }
 

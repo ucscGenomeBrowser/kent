@@ -16,6 +16,15 @@ struct psGfx
     double xScale, yScale;      /* Conversion from pixels to points. */
     double xOff, yOff;          /* Offset from pixels to points. */
     double fontHeight;		/* Height of current font. */
+    struct psClipRect *clipStack; /* Clipping region. */
+    };
+
+struct psClipRect
+/* A clipping region. */
+    {
+    struct psClipRect *next;
+    int x1, y1;	/* upper left corner. */
+    int x2, y2; /* lower right, not inclusive */
     };
 
 struct psGfx *psOpen(char *fileName, 
@@ -87,6 +96,10 @@ void psPushClipRect(struct psGfx *ps, double x, double y,
 	double width, double height);
 /* Push clipping rectangle onto graphics stack. */
 
+void psPopClipRect(struct psGfx *ps);
+/* Get rid of clipping. Beware that this does a psPopG, so
+ * other graphic variables will be reset to the time of
+ * the corresponding psPushClipRect. */
 
 #endif /* PSGFX_H */
 
