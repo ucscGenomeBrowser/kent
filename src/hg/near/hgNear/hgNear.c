@@ -17,7 +17,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.87 2003/09/25 01:06:04 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.88 2003/09/25 01:12:29 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -852,6 +852,36 @@ void controlPanel(struct genePos *gp, struct order *curOrd, struct order *ordLis
 hPrintf("<TABLE WIDTH=\"100%%\" BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
 hPrintf("<TR><TD ALIGN=CENTER>");
 
+makeGenomeAssemblyControls();
+
+/* Do search box. */
+    {
+    char *search = "";
+    if (gp != NULL) search = gp->name;
+    hPrintf(" search ");
+    cgiMakeTextVar(searchVarName,  search, 25);
+    }
+
+/* Do go button. */
+    {
+    hPrintf(" ");
+    printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" TABINDEX=0>", "submit", "Go!");
+    }
+
+hPrintf("</TD></TR>\n<TR><TD ALIGN=CENTER>");
+
+/* advFilter, configure buttons */
+    {
+    cgiMakeButton(confVarName, "configure");
+    hPrintf(" ");
+    if (gotAdvFilter())
+	cgiMakeButton(advFilterVarName, "filter (now on)");
+     else
+	cgiMakeButton(advFilterVarName, "filter (now off)");
+    hPrintf(" ");
+    }
+
+
 /* Do sort by drop-down */
     {
     struct order *ord;
@@ -875,37 +905,12 @@ hPrintf("<TR><TD ALIGN=CENTER>");
     cgiMakeDropList(countVarName, menu, ArraySize(menu), displayCountString);
     }
 
-/* Do search box. */
-    {
-    char *search = "";
-    if (gp != NULL) search = gp->name;
-    hPrintf(" search ");
-    cgiMakeTextVar(searchVarName,  search, 25);
-    }
-
-/* Do go button. */
-    {
-    hPrintf(" ");
-    printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" TABINDEX=0>", "submit", "Go!");
-    }
-
-hPrintf("</TD></TR>\n<TR><TD ALIGN=CENTER>");
-
-makeGenomeAssemblyControls();
-
-/* Make getDna, getText, advFilter, configure buttons */
+/* Make getDna, getText buttons */ 
     {
     hPrintf(" ");
     cgiMakeOptionalButton(getSeqPageVarName, "as sequence", gp == NULL);
     hPrintf(" ");
     cgiMakeOptionalButton(getTextVarName, "as text", gp == NULL);
-    hPrintf(" ");
-    if (gotAdvFilter())
-	cgiMakeButton(advFilterVarName, "filter (now on)");
-     else
-	cgiMakeButton(advFilterVarName, "filter (now off)");
-    hPrintf(" ");
-    cgiMakeButton(confVarName, "configure");
     }
 
 
