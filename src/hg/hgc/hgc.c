@@ -155,7 +155,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.811 2005/01/08 01:06:54 jill Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.812 2005/01/10 08:18:06 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -461,10 +461,10 @@ boolean gotE = FALSE;
 if (start < 0)
     return;
 gotS = hChromBand(chrom, start, sband);
-// if the start lookup fails, don't bother with the end lookup
+/* if the start lookup fails, don't bother with the end lookup */
 if (!gotS)
     return;
-// if no end chrom, print start band and exit
+/* if no end chrom, print start band and exit */
 if (end == 0)
     {
     if (tableFormat)
@@ -474,7 +474,7 @@ if (end == 0)
     return;
 }
 gotE = hChromBand(chrom, end, eband);
-// if eband equals sband, just use sband
+/* if eband equals sband, just use sband */
 if (gotE && sameString(sband,eband))
    gotE = FALSE;
 if (!gotE)
@@ -502,7 +502,7 @@ printf("<B>Position:</B> "
        "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
        hgTracksPathAndSettings(), database, chrom, start+1, end);
 printf("%s:%d-%d</A><BR>\n", chrom, start+1, end);
-// printBand(chrom, (start + end)/2, 0, FALSE);
+/* printBand(chrom, (start + end)/2, 0, FALSE); */
 printBand(chrom, start, end, FALSE);
 printf("<B>Genomic Size:</B> %d<BR>\n", end - start);
 if (strand != NULL)
@@ -1069,9 +1069,9 @@ for (axt = axtList; axt != NULL; axt = axt->next)
         qStart = qSize - axt->qEnd;
         qEnd = qSize - axt->qStart;
         }
-//    fprintf(f, ">%s:%d-%d %s:%d-%d (%c) score %d coding %d-%d utr/coding %d-%d gene %c alignment %c\n", 
-//	    axt->tName, axt->tStart+1, axt->tEnd,
-//	    axt->qName, qStart+1, qEnd, qStrand, axt->score,  tStart+1, tEnd, gp->txStart+1, gp->txEnd, gp->strand[0], axt->qStrand);
+/*    fprintf(f, ">%s:%d-%d %s:%d-%d (%c) score %d coding %d-%d utr/coding %d-%d gene %c alignment %c\n", 
+ *	    axt->tName, axt->tStart+1, axt->tEnd,
+ *	    axt->qName, qStart+1, qEnd, qStrand, axt->score,  tStart+1, tEnd, gp->txStart+1, gp->txEnd, gp->strand[0], axt->qStrand); */
 
     qPtr = qStart;
     if (gp->exonFrames == NULL)
@@ -1365,7 +1365,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 if (qProt == 0) 
                     {
                     qProt = '*'; /* stop codon is * */
-                    //qClass = INFRAMESTOP;
+                    /* qClass = INFRAMESTOP; */
                     qStopCodon = FALSE;
                     qCoding = TRUE;
                     }
@@ -1450,7 +1450,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
         dyStringAppendC(dyQprot,'\n');
         dyStringAppendC(dyTprot,'\n');
 
-        // debug version
+        /* debug version */
            if (posStrand)
            printf(" %d nextExon=%d-%d xon %d t %d prevEnd %d diffs %d %d<br>",qPtr, nextStart+1,nextEnd,nextEndIndex+1, tPtr,prevEnd, tPtr-nextStart-70, tPtr-(prevEnd+70));
            else
@@ -1587,8 +1587,8 @@ lf = lineFileOpen(getAxtFileName(gp->chrom, toDb, alignment, fromDb), TRUE);
 printf("file %s\n",lf->fileName);
 while ((axt = axtRead(lf)) != NULL)
     {
-//    if (sameString(gp->chrom , axt->tName))
- //           printf("axt %s qstart %d axt tStart %d\n",axt->qName, axt->qStart,axt->tStart);
+/*    if (sameString(gp->chrom , axt->tName))
+ *       printf("axt %s qstart %d axt tStart %d\n",axt->qName, axt->qStart,axt->tStart); */
     if (sameString(gp->chrom , axt->tName) && 
          (sameString(qChrom, axt->qName) && positiveRangeIntersection(qStart, qEnd, axt->qStart, axt->qEnd) )&&
          positiveRangeIntersection(gp->txStart, gp->txEnd, axt->tStart, axt->tEnd) 
@@ -2482,12 +2482,12 @@ struct sqlResult *sr;
 char **row;
 boolean firstTime = TRUE;
 
-//itemForUrl = item;
+/* itemForUrl = item; */
 dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
 printCustomUrl(tdb, item, FALSE);
-//printCustomUrl(tdb, itemForUrl, item == itemForUrl);
+/* printCustomUrl(tdb, itemForUrl, item == itemForUrl); */
 
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
@@ -2879,7 +2879,7 @@ puts(
 if (cgiBooleanDefined("hgSeq.revComp"))
     {
     isRc = revComp;
-    // don't set revComp in cart -- it shouldn't be a default.
+    /* don't set revComp in cart -- it shouldn't be a default. */
     }
 if (cgiBooleanDefined("hgSeq.maskRepeats"))
     cartSetBoolean(cart, "hgSeq.maskRepeats", maskRep);
@@ -3242,7 +3242,7 @@ strncpy(hti->chromField, "tName", 32);
 strncpy(hti->startField, "tStart", 32);
 strncpy(hti->endField, "tEnd", 32);
 strncpy(hti->nameField, "qName", 32);
-// psl can be scored... but strictly speaking, does not have a score field!
+/* psl can be scored... but strictly speaking, does not have a score field! */
 strncpy(hti->strandField, "strand", 32);
 hti->hasCDS = FALSE;
 strncpy(hti->countField, "blockCount", 32);
@@ -3304,13 +3304,13 @@ else
 	if (qt == gftProt)
 	    for (i=0;  i < bed->blockCount;  i++)
 		{
-		// If query is protein, blockSizes are in aa units; fix 'em.
+		/* If query is protein, blockSizes are in aa units; fix 'em. */
 		bed->blockSizes[i] *= 3;
 		}
 	if (psl->strand[1] == '-')
 	    {
-	    // psl: if target strand is '-', flip the coords.
-	    // (this is the target part of pslRcBoth from src/lib/psl.c)
+	    /* psl: if target strand is '-', flip the coords.
+	     * (this is the target part of pslRcBoth from src/lib/psl.c) */
 	    for (i=0;  i < bed->blockCount;  ++i)
 		{
 		bed->chromStarts[i] =
@@ -3321,8 +3321,8 @@ else
 	    reverseInts(bed->blockSizes, bed->blockCount);
 	    assert(bed->chromStart == bed->chromStarts[0]);
 	    }
-	// translate absolute starts to relative starts (after handling 
-	// target-strand coord-flipping)
+	/* translate absolute starts to relative starts (after handling 
+	 * target-strand coord-flipping) */
 	for (i=0;  i < bed->blockCount;  i++)
 	    {
 	    bed->chromStarts[i] -= bed->chromStart;
@@ -3435,8 +3435,8 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         {
 	char buf[256];
 	int r,g,b;
-	// to save a LOT of time, don't fetch track features unless some 
-	// coloring/formatting has been specified for them.
+	/* to save a LOT of time, don't fetch track features unless some 
+	 * coloring/formatting has been specified for them. */
 	boolean hasSettings = FALSE;
 	safef(buf, sizeof(buf), "%s_u", track);
 	hasSettings |= cgiBoolean(buf);
@@ -4537,7 +4537,7 @@ if (hTableExists("certificate"))
 	printf("<B>Joined with Fragment: </B> %s<BR>\n", secondAccVer);
 
 	if (strcmp(spanner, "") != 0) printf("<B>Spanner: </B> %s<BR>\n", spanner);
-	//if (strcmp(evaluation, "") != 0) printf("<B>Evaluation: </B> %s<BR>\n", evaluation);
+	/* if (strcmp(evaluation, "") != 0) printf("<B>Evaluation: </B> %s<BR>\n", evaluation); */
 	if (strcmp(variation, "") != 0) printf("<B>Variation: </B> %s<BR>\n", variation);
 	if (strcmp(varEvidence, "")!= 0) printf("<B>Variation Evidence: </B> %s<BR>\n", varEvidence);
 	if (strcmp(remark, "") != 0) printf("<B>Remark: </B> %s<BR>\n", remark);
@@ -5109,7 +5109,7 @@ writeFramesetType();
 puts("<HTML>");
 printf("<HEAD>\n<TITLE>%s %s vs %s %s </TITLE>\n</HEAD>\n\n", 
        (otherOrg == NULL ? "" : otherOrg), psl->qName, org, psl->tName );
-//showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, 0, 0);
+/*showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, 0, 0); */
 showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, cdsStart, cdsEnd);
 }
 
@@ -6210,7 +6210,7 @@ if (hTableExists("knownGeneLink"))
         }
     }
 
-// Display mRNA or DNA info and NCBI link
+/* Display mRNA or DNA info and NCBI link */
 if (dnaBased && refSeqName != NULL)
     {
     printf("This gene is based on RefSeq %s, which is derived from a DNA sequence.", refSeqName);
@@ -6238,7 +6238,7 @@ else
     printf("</UL>");
     }
 
-// Display protein description and links
+/* Display protein description and links */
 printf("<B>Protein:</B> ");
 
 sprintf(cond_str, "name='%s'", mrnaName);
@@ -6278,14 +6278,14 @@ printf("<LI><B>SWISS-PROT/TrEMBL: </B>");
 printf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank>%s</A>\n", 
        proteinAC, proteinID);
 
-// print more protein links if there are other proteins correspond to this mRNA
+/* print more protein links if there are other proteins correspond to this mRNA */
 sprintf(query, "select dupProteinID from %s.dupSpMrna where mrnaID = '%s'", database, mrnaName);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL) printf(", ");
 while (row != NULL)    
     {
-    //spID  = row[0];
+    /* spID  = row[0]; */
     printf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank>%s</A>\n", 
 	   row[0], row[0]);
     row = sqlNextRow(sr);
@@ -6294,7 +6294,7 @@ while (row != NULL)
 sqlFreeResult(&sr);
 printf("<BR>");
 
-// show Pfam links
+/* show Pfam links */
 if (hTableExistsDb(protDbName, "pfamXref"))
     {
     sprintf(cond_str, "swissDisplayID='%s'", proteinID);
@@ -6324,17 +6324,17 @@ if (hTableExistsDb(protDbName, "pfamXref"))
     	}
     }
 
-//The following is disabled until UCSC Proteome Browser relased to public
+/* The following is disabled until UCSC Proteome Browser relased to public */
 goto skipPB;
 
-// display link to UCSC Proteome Browser
+/* display link to UCSC Proteome Browser */
 printf("<LI><B>UCSC Proteome Browser: </B>");
 printf("<A HREF=\"http:/cgi-bin/pb10?");
 printf("proteinDB=SWISS&proteinID=%s&mrnaID=%s\" ", proteinID, mrnaName);
 printf(" target=_blank>");
 printf(" %s</A>", proteinID);
 
-// display additional entries if they exist
+/* display additional entries if they exist */
 sprintf(query, "select dupProteinID from %s.dupSpMrna where mrnaID = '%s'", database, mrnaName);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -6353,7 +6353,7 @@ sqlFreeResult(&sr);
 skipPB:
 printf("</UL>");
 
-// Display Gene Sorter link
+/* Display Gene Sorter link */
 if (sqlTableExists(conn, "knownCanonical"))
     {
     printf("<B>UCSC Gene Sorter:</B> ");
@@ -6363,7 +6363,7 @@ if (sqlTableExists(conn, "knownCanonical"))
     }
 
 #ifdef NEVER /* go database has no goObjTerm... */
-// Show GO links if any exists
+/* Show GO links if any exists */
 hasGO = FALSE;
 goConn = sqlMayConnect("go");
 
@@ -6373,7 +6373,7 @@ if (goConn != NULL)
     goAspectChar[1] = 'P';
     goAspectChar[2] = 'C';
 
-    // loop for 3 GO aspects 
+    /* loop for 3 GO aspects */
     for (iGoAsp = 0; iGoAsp<3; iGoAsp++)
 	{
 	sprintf(query, 
@@ -6410,11 +6410,11 @@ if (goConn != NULL)
     }
 #endif /* NEVER */
 
-// Show Pathway links if any exists
+/* Show Pathway links if any exists */
 hasPathway = FALSE;
 cgapID     = NULL;
 
-//Process BioCarta Pathway link data
+/* Process BioCarta Pathway link data */
 if (sqlTableExists(conn, "cgapBiocPathway"))
     {
     sprintf(cond_str, "alias='%s'", geneSymbol);
@@ -6448,7 +6448,7 @@ if (sqlTableExists(conn, "cgapBiocPathway"))
 	}
     }
 
-//Process KEGG Pathway link data
+/* Process KEGG Pathway link data */
 if (sqlTableExists(conn, "keggPathway"))
     {
     sprintf(query, "select * from %s.keggPathway where kgID = '%s'", database, mrnaName);
@@ -6477,7 +6477,7 @@ if (sqlTableExists(conn, "keggPathway"))
     sqlFreeResult(&sr);
     }
 
-// Process SRI BioCyc link data
+/* Process SRI BioCyc link data */
 if (sqlTableExists(conn, "bioCycPathway"))
     {
     sprintf(query, "select * from %s.bioCycPathway where kgID = '%s'", database, mrnaName);
@@ -6512,12 +6512,12 @@ if (hasPathway)
     printf("</UL>\n");
     }
 
-// Process medical related links here
+/* Process medical related links here */
 hasMedical = FALSE;
 
-// Process SWISS-PROT disease data
+/* Process SWISS-PROT disease data */
 
-// borrow char array query here
+/* borrow char array query here */
 sprintf(query, "%s.%s", protDbName, "spDisease");
 if (sqlTableExists(conn, query))
     {
@@ -6544,7 +6544,7 @@ if (sqlTableExists(conn, query))
     sqlFreeResult(&sr);
     }
 
-// Process OMIM link
+/* Process OMIM link */
 sprintf(query, "select refseq from %s.mrnaRefseq where mrna = '%s'",  database, mrnaName);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -6580,8 +6580,8 @@ if (row != NULL)
 	}
     }
 
-// Process NCI Cancer Genome Anatomy gene
-// cgapID should already be obtained earlier
+/* Process NCI Cancer Genome Anatomy gene
+ * cgapID should already be obtained earlier */
 if (cgapID != NULL)
     {
     if (!hasMedical)
@@ -6593,7 +6593,7 @@ if (cgapID != NULL)
     printf("<A HREF = \"");
     printf("http://cgap.nci.nih.gov/Genes/GeneInfo?ORG=");
 
-    // select appropriate two letters used by CGAP for organism
+    /* select appropriate two letters used by CGAP for organism */
     if (sameWord(organism, "Human"))
 	{
 	printf("Hs");
@@ -6612,7 +6612,7 @@ if (cgapID != NULL)
     printf("&CID=%s\" TARGET=_blank>%s</A> </LI>\n", cgapID, cgapID);
     }
 
-// process links to Atlas of Genetics and Cytogenetics in Oncology and Haematology 
+/* process links to Atlas of Genetics and Cytogenetics in Oncology and Haematology */
 if (sqlTableExists(conn, "atlasOncoGene"))
     {
     sprintf(cond_str, "locusSymbol=%c%s%c", '\'', geneSymbol, '\'');
@@ -6636,7 +6636,7 @@ if (hasMedical)
     printf("</UL>\n");
     }
 
-// Display RefSeq related info, if there is a corresponding RefSeq
+/* Display RefSeq related info, if there is a corresponding RefSeq */
 
     sprintf(query, "select refseq from %s.mrnaRefseq where mrna = '%s'",  database, mrnaName);
     sr = sqlGetResult(conn, query);
@@ -6723,10 +6723,10 @@ if (hasMedical)
 			}
 		    else
 			{
-			// per Carol from Jackson Lab 4/12/02, JAX do not always agree
-			// with Locuslink on seq to gene association.
-			// Thus, not finding a MGIid even if a LocusLink ID
-			// exists is always a possibility.
+			/* per Carol Bult from Jackson Lab 4/12/02, JAX do not always agree
+			 * with Locuslink on seq to gene association.
+			 * Thus, not finding a MGIid even if a LocusLink ID
+			 * exists is always a possibility. */
 			}
 		    sqlFreeResult(&sr);
 		    }
@@ -7438,10 +7438,10 @@ if (rl->locusLinkId != 0)
 	    }
 	else
 	    {
-	    // per Carol from Jackson Lab 4/12/02, JAX do not always agree
-	    // with Locuslink on seq to gene association.
-	    // Thus, not finding a MGIid even if a LocusLink ID
-	    // exists is always a possibility.
+	    /* per Carol Bult from Jackson Lab 4/12/02, JAX do not always agree
+	     * with Locuslink on seq to gene association.
+	     * Thus, not finding a MGIid even if a LocusLink ID
+	     * exists is always a possibility. */
 	    }
 	sqlFreeResult(&sr);
 	}
@@ -7450,8 +7450,8 @@ if (!startsWith("Worm", organism))
     {
     if (startsWith("dm", database))
 	{
-	// PubMed never seems to have BDGP gene IDs... so if that's all 
-	// that's given for a name/product, ignore name / truncate product.
+	/* PubMed never seems to have BDGP gene IDs... so if that's all 
+	 * that's given for a name/product, ignore name / truncate product. */
 	char *cgp = strstr(rl->product, "CG");
 	if (cgp != NULL)
 	    {
@@ -7677,13 +7677,13 @@ printf("<A HREF=\"http://www.soe.ucsc.edu/research/compbio/SAM_T02/sam-t02-faq.h
 printf(" TARGET=_blank>SAM-T02</A></B><BR><BR>\n");
 
 printf("<B>Multiple Alignment:</B> ");
-//printf("<A HREF=\"http://www.soe.ucsc.edu/~karplus/SARS/%s/summary.html#alignment", 
+/* printf("<A HREF=\"http://www.soe.ucsc.edu/~karplus/SARS/%s/summary.html#alignment",  */
 printf("<A HREF=\"/SARS/%s/summary.html#alignment", 
        itemName);
 printf("\" TARGET=_blank>%s</A><BR>\n", itemName);
 
 printf("<B>Secondary Structure Predictions:</B> ");
-//printf("<A HREF=\"http://www.soe.ucsc.edu/~karplus/SARS/%s/summary.html#secondary-structure", 
+/* printf("<A HREF=\"http://www.soe.ucsc.edu/~karplus/SARS/%s/summary.html#secondary-structure",  */
 printf("<A HREF=\"/SARS/%s/summary.html#secondary-structure", 
        itemName);
 printf("\" TARGET=_blank>%s</A><BR>\n", itemName);
@@ -7698,7 +7698,7 @@ if (sqlGetField(conn2, database, "protHomolog", "proteinID", cond_str) != NULL)
     if (predFN != NULL)
 	{
 	printf("<A HREF=\"/SARS/%s/", itemName);
-	//printf("%s.t2k.undertaker-align.pdb\">%s</A><BR>\n", itemName,itemName);
+	/* printf("%s.t2k.undertaker-align.pdb\">%s</A><BR>\n", itemName,itemName); */
 	printf("%s\">%s</A><BR>\n", predFN,itemName);
 	gotPDBFile = 1;
 	}
@@ -7825,8 +7825,8 @@ if (sqlTableExists(conn, table))
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	borkPseudoHomStaticLoad(row, &hom);
-//	if ((gi = getGi(hom.giString)) == NULL)
-//	    continue;
+/*	if ((gi = getGi(hom.giString)) == NULL)
+ *	    continue; */
 	if (isFirst)
 	    {
 	    htmlHorizontalLine();
@@ -7876,12 +7876,12 @@ int first = 0;
 safef(chainTable,sizeof(chainTable), "selfChain");
 if (!hTableExists(chainTable) )
     safef(chainTable,sizeof(chainTable), "chainSelf");
-//else
-//    {
-//    char *org = hOrganism(pg->assembly);
-//    org[0] = tolower(org[0]);
-//    safef(chainTable,sizeof(chainTable), "%sChain", org);
-//    }
+/*else
+ *    {
+ *    char *org = hOrganism(pg->assembly);
+ *    org[0] = tolower(org[0]);
+ *    safef(chainTable,sizeof(chainTable), "%sChain", org);
+ *    } */
 printf("<B>Description:</B> Retrogenes are processed mRNAs that are inserted back into the genome. Most are pseudogenes, and some are functional genes or anti-sense transcripts that may impede mRNA translation.<p>\n");
 printf("<B>Syntenic&nbsp;in&nbsp;mouse: </B>%d&nbsp;%%<br>\n",pg->overlapDiag);
 printf("<B>PolyA&nbsp;tail:</B>&nbsp;%d As&nbsp;out&nbsp;of&nbsp;%d&nbsp;bp <B>Percent&nbsp;Id:&nbsp;</B>%5.1f&nbsp;%%\n",pg->polyA,pg->polyAlen, (float)pg->polyA*100/(float)pg->polyAlen);
@@ -8068,7 +8068,7 @@ if (hTableExists("all_mrna"))
                     qEnd = qSize - qStart;
                     qStart = tmp;
                     }
-                //if (pg->chainId == 0) pg->chainId = chainId;
+                /* if (pg->chainId == 0) pg->chainId = chainId; */
                 puts("<ul><LI>\n");
                 hgcAnchorPseudoGene(pg->kgName, "knownGene", pg->chrom, "startcodon", pg->chromStart, pg->chromEnd, 
                         pg->gChrom, pg->kStart, pg->kEnd, chainId, database);
@@ -8275,7 +8275,7 @@ if (hTableExists("vegaInfo"))
     }
 
 genericHeader(tdb, geneName);
-// printCustomUrl(tdb, ((vi != NULL) ? vi->otterId : geneName), TRUE);
+/* printCustomUrl(tdb, ((vi != NULL) ? vi->otterId : geneName), TRUE); */
 if (vi != NULL)
     {
     printf("<B>VEGA Gene Name:</B> %s<BR>\n", vi->geneId);
@@ -8950,7 +8950,7 @@ printf("<B>Browser window position:</B> %s:%d-%d<BR>\n", seqName, winStart+1, wi
 printf("<B>Browser window size:</B> %d<BR>\n", winEnd - winStart);
 sprintf(otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s&otherDb=%s", psl->tStart, 
 	tdb->tableName, otherOrg, otherChromTable, otherDb);
-//joni
+/* joni */
 if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL)
     {
     hgcAnchorSomewhere("htcLongXenoPsl2", cgiItem, otherString, psl->tName);
@@ -9171,7 +9171,7 @@ cartWebStart(cart, "Alignment of %s in %s to %s using %s.",
 	     name, hOrganism(database), hOrganism(db2), alignment);
 hSetDb2(db2);
 
-// get genePred including optional frame info
+/* get genePred including optional frame info */
 hFindSplitTable(chrom, track, table, &hasBin);
 snprintf(where, sizeof(where),
 	 "name = '%s' and chrom = '%s' and txStart < %d and txEnd > %d",
@@ -9211,7 +9211,7 @@ cgiMakeButton("Submit", "Submit");
 printf("</td>\n");
 puts("</tr></TABLE>");
 puts("</FORM>");
-// Make sure alignment is not just a leftover from previous db2.
+/* Make sure alignment is not just a leftover from previous db2. */
 if (gp->chrom != NULL)
     aiList = hGetAxtAlignmentsChrom(db2, gp->chrom);
 if (alignment != NULL)
@@ -11157,42 +11157,29 @@ struct sqlResult *sr;
 char **row;
 char query[256];
 char *id;
-/* int firstOne=1; */
+char *br=" ";
 
 if (sameString(exceptionList,"0"))
     return;
-
 tokens=cloneString(exceptionList);
 lf=lineFileOnString("snpExceptions", TRUE, tokens);
 tkz=tokenizerOnLineFile(lf);
 while ((id=tokenizerNext(tkz))!=NULL)
     {
-    if (sameString(id,","))
+    if (sameString(id,",")) /* is there a tokenizer that doesn't return separators? */
 	continue;
+    br=cloneString("<BR>");
     safef(query, sizeof(query), "select * from snpExceptions where exceptionId = %s", id);
-    sr = sqlGetResult(conn, query);
-    if (sr == NULL)
+    if ((sr = sqlGetResult(conn, query)) == NULL)
 	printf("<B>Unknown Exception %s!</B><BR>\n", id);
      /* exceptionId is a primary key; at most 1 record returned */
     while ((row = sqlNextRow(sr))!=NULL)
 	{
 	snpExceptionsStaticLoad(row, &se);
 	printf("<font color=red><B>Data Exception:&nbsp;%s</B></font><BR>\n",se.description);
-/*	if (firstOne)
-	    {
-	    printf("<font color=red><B>Data Exception!<BR>\n");
-	    firstOne=0;
-	    }
-*/
-/*	printf("<BR>ExceptionId:&nbsp;%d\n",se.exceptionId); */
-/*	printf("<BR>Query:&nbsp;%s;\n",se.query); */
-/*	printf("<BR>Description :&nbsp;%s\n",se.description); */
-/*	printf("<BR>Description of exception:&nbsp;%s\n",se.description); */
-/*	printf("<BR>\n"); */
 	}
     }
-/* printf("</B></font><BR><HR><BR>\n"); */
-printf("<BR><HR><BR>\n");
+printf("%s\n",br);
 }
 
 void doSnp(struct trackDb *tdb, char *itemName)
@@ -11224,11 +11211,8 @@ while ((row = sqlNextRow(sr))!=NULL)
     snpStaticLoad(row+rowOffset, &snp);
     if (firstOne)
 	{
-	if (hTableExists("snpExceptions"))
-	    {
-    	    if (differentString(snp.exception,"0"))
-    		writeSnpException(snp.exception);
-	    }
+	if (hTableExists("snpExceptions") && differentString(snp.exception,"0"))
+	    writeSnpException(snp.exception);
 	bedPrintPos((struct bed *)&snp, 3);
 	printf("<BR>\n");
 	firstOne=0; /* rs5886636 is good to test this */
@@ -12401,8 +12385,8 @@ if(dp != NULL)
     printf("<b>blatScore:</b> %d<br>", dp->blatScore );
     printf("<b>Comparison:</b> %f<br>", dp->comparison);
     }
-//printf("<h3>Genomic Details:</h3>\n");
-//genericBedClick(conn, tdb, item, start, 1);
+/* printf("<h3>Genomic Details:</h3>\n");
+ * genericBedClick(conn, tdb, item, start, 1); */
 printTrackHtml(tdb);
 hFreeConn(&conn);
 }
@@ -12668,7 +12652,7 @@ while ((row = sqlNextRow(sr)) != NULL )
     printf("<B>Class:</B> %s<BR>\n", ar->class);
     printf("<B>Family:</B> %s<BR>\n", ar->family);
 
-    //print the aligned sequences in html on multiple rows
+    /* print the aligned sequences in html on multiple rows */
     htmlHorizontalLine();
     printf("<i>human sequence on top, mouse on bottom</i><br><br>" );
     htmlPrintJointAlignment( ar->hseq, ar->mseq, 80,
@@ -12792,7 +12776,7 @@ struct sageExp *loadSageExps(char *tableName, struct bed  *bedist)
 char *user = cfgOption("db.user");
 char *password = cfgOption("db.password");
 struct sqlConnection *sc = NULL;
-//struct sqlConnection *sc = sqlConnectRemote("localhost", user, password, "hgFixed");
+/* struct sqlConnection *sc = sqlConnectRemote("localhost", user, password, "hgFixed"); */
 char query[256];
 struct sageExp *seList = NULL, *se=NULL;
 char **row;
@@ -13522,7 +13506,7 @@ if (pepTable != NULL && hTableExists(pepTable))
     {
     char *pepNameCol = sameString(pepTable, "gbSeq") ? "acc" : "name";
     conn = hAllocConn();
-    // simple query to see if pepName has a record in pepTable:
+    /* simple query to see if pepName has a record in pepTable: */
     safef(query, sizeof(query), "select 0 from %s where %s = '%s'",
 	  pepTable, pepNameCol, item);
     sr = sqlGetResult(conn, query);
@@ -13683,7 +13667,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	printf("<B>Molecular weight: </B> %.2f d<BR>\n",tigr->tigrMw);
 	printf("<B>Isoelectric point: </B> %.2f<BR>\n",tigr->tigrPi);
 	printf("<B>GC percent: </B> %.2f<BR>\n",tigr->tigrGc);
-	// printf("<B>GO term: </B> %s<BR>\n",tigr->goTerm);
+	/* printf("<B>GO term: </B> %s<BR>\n",tigr->goTerm); */
 	if (tigr->next != NULL)
 	    printf("<hr>\n");
 	}
@@ -14136,9 +14120,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 			  min(smp->chromStart +  smp->samplePosition[i] +
 			      humMusWinSize / 2, thisEnd ),
 			  whichNum(smp->sampleHeight[i],0.0,8.0,1000) );
-		//0 to 8.0 is the fixed total L-score range for
-		//all these conservation tracks. Scores outside 
-		//this range are truncated.
+		/* 0 to 8.0 is the fixed total L-score range for
+		 * all these conservation tracks. Scores outside 
+		 * this range are truncated. */
 		printSampleWindow( thisPsl,
 				   smp->chromStart + smp->samplePosition[i] -
 				   humMusWinSize / 2,
@@ -15014,7 +14998,7 @@ else if (sameWord(track, "refGene"))
     doRefGene(tdb, item);
     }
 else if (sameWord(track, "mappedRefSeq"))
-    // human refseqs on chimp browser
+    /* human refseqs on chimp browser */
     {
     doRefGene(tdb, item);
     }

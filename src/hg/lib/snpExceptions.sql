@@ -5,7 +5,7 @@
 
 #Set of queries to look for snps that appear problematic
 CREATE TABLE snpExceptions (
-    exceptionId int unsigned not null,	# unique ID for this execption
+    exceptionId int unsigned not null,	# unique ID for this exception
     query       varchar(255) not null,	# SQL string to retrieve bad records
     num         int unsigned not null,	# Count of SNPs that fail this condition
     description varchar(255) not null,	# Text string for readability

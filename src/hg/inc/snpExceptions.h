@@ -15,7 +15,7 @@ struct snpExceptions
 /* Set of queries to look for snps that appear problematic */
     {
     struct snpExceptions *next;  /* Next in singly linked list. */
-    unsigned exceptionId;	/* unique ID for this execption */
+    unsigned exceptionId;	/* unique ID for this exception */
     char *query;	/* SQL string to retrieve bad records */
     unsigned num;	/* Count of SNPs that fail this condition */
     char *description;	/* Text string for readability */

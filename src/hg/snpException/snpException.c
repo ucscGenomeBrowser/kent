@@ -13,7 +13,7 @@
 #include "snp.h"
 #include "snpExceptions.h"
 
-static char const rcsid[] = "$Id: snpException.c,v 1.2 2005/01/03 21:50:49 daryl Exp $";
+static char const rcsid[] = "$Id: snpException.c,v 1.3 2005/01/10 08:18:17 daryl Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -36,7 +36,30 @@ struct slName        *el    = NULL;
 char                 *query = "select chrom from chromInfo";
 
 sr = sqlGetResult(conn, query);
-while (row=sqlNextRow(sr))
+while ((row=sqlNextRow(sr))!=NULL)
+    {
+    el = newSlName(row[0]);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return list;
+}
+
+struct slName *getGroupList(char *group)
+/* Get list of all rsIds from where clause. */
+{
+struct sqlConnection *conn  = hAllocConn();
+struct sqlResult     *sr    = NULL;
+char                **row   = NULL;
+struct slName        *list  = NULL;
+struct slName        *el    = NULL;
+char                  query[256];
+
+safef(query,sizeof(query),"select name from snp %s", group);
+sr = sqlGetResult(conn, query);
+while ((row=sqlNextRow(sr))!=NULL)
     {
     el = newSlName(row[0]);
     slAddHead(&list, el);
@@ -61,7 +84,7 @@ if (inputExceptionId>0)
     safef(query, sizeof(query), 
 	  "select * from snpExceptions where exceptionId=%d", inputExceptionId);
 sr = sqlGetResult(conn, query);
-while (row=sqlNextRow(sr))
+while ((row=sqlNextRow(sr))!=NULL)
     {
     el = snpExceptionsLoad(row);
     slAddHead(&list, el);
@@ -76,39 +99,76 @@ void getInvariants(struct snpExceptions *exceptionList,
 		   struct slName *chromList, char *fileBase)
 /* write list of invariants to output file */
 {
-struct sqlConnection *conn  = hAllocConn();
-struct sqlResult     *sr;
+struct sqlConnection *conn     = hAllocConn();
+struct sqlResult     *sr       = NULL;
+struct snpExceptions *el       = NULL;
+struct slName        *chrom    = NULL;
+char                **row      = NULL;
 char                  query[1024];
-char                **row   = NULL;
-struct snpExceptions *el    = NULL;
-struct slName        *chrom = NULL;
 unsigned long int     invariantCount;
 char                  thisFile[64];
 FILE                 *outFile;
 int                   colCount, i;
+char                  idString[3];
 
 for (el=exceptionList; el!=NULL; el=el->next)
     {
-    safef(thisFile, sizeof(thisFile), "%s.%d.bed", fileBase, el->exceptionId);
-    outFile = mustOpen(thisFile, "w");
-    fprintf(outFile, "# exceptionId:\t%d\n# query:\t%s;\n", el->exceptionId, el->query);
-    fflush(outFile); /* to keep an eye on output progress */
+    if (el->exceptionId<10)
+	safef(idString,sizeof(idString), "0%d", el->exceptionId);
+    else
+	safef(idString,sizeof(idString), "%d",  el->exceptionId);
     invariantCount = 0;
-    for (chrom=chromList; chrom!=NULL; chrom=chrom->next)
+    if (startsWith("select",el->query))
 	{
-	safef(query, sizeof(query),
-	      "%s and chrom='%s'", el->query, chrom->name);
-	sr = sqlGetResult(conn, query);
-	colCount = sqlCountColumns(sr);
-	while (row = sqlNextRow(sr))
+	safef(thisFile, sizeof(thisFile), "%s.%s.bed", fileBase, idString);
+	outFile = mustOpen(thisFile, "w");
+	fprintf(outFile, "# exceptionId:\t%d\n# query:\t%s;\n", el->exceptionId, el->query);
+	for (chrom=chromList; chrom!=NULL; chrom=chrom->next)
 	    {
-	    invariantCount++; 
-	    fprintf(outFile, "%s\t%s\t%s\t%s\t%d", 
-		    row[0], row[1], row[2], row[3], el->exceptionId);
-	    for (i=4; i<colCount; i++)
-		fprintf(outFile, "\t%s", row[i]);
-	    fprintf(outFile, "\n");
+	    fflush(outFile); /* to keep an eye on output progress */
+	    safef(query, sizeof(query),
+		  "%s and chrom='%s'", el->query, chrom->name);
+	    sr = sqlGetResult(conn, query);
+	    colCount = sqlCountColumns(sr);
+	    while ((row = sqlNextRow(sr))!=NULL)
+		{
+		invariantCount++; 
+		fprintf(outFile, "%s", row[0]);
+		for (i=1; i<colCount; i++)
+		    fprintf(outFile, "\t%s", row[i]);
+		fprintf(outFile, "\n");
+		}
 	    }
+	}
+    else if (startsWith("group",el->query))
+	{
+	struct slName *nameList = NULL;
+	struct slName *name     = NULL;
+	safef(thisFile, sizeof(thisFile), "%s.%s.bed", fileBase, idString);
+	outFile = mustOpen(thisFile, "w");
+	fprintf(outFile, "# exceptionId:\t%d\n# query:\t%s;\n", el->exceptionId, el->query);
+	nameList = getGroupList(el->query);
+	for (name=nameList; name!=NULL; name=name->next)
+	    {
+	    safef(query, sizeof(query),
+		  "select chrom,chromStart,chromEnd,name,%d as score,class,locType,observed "
+		  "from snp where name='%s'", el->exceptionId, name->name);
+	    sr = sqlGetResult(conn, query);
+	    colCount = sqlCountColumns(sr);
+	    while ((row = sqlNextRow(sr))!=NULL)
+		{
+		invariantCount++; 
+		fprintf(outFile, "%s", row[0]);
+		for (i=1; i<colCount; i++)
+		    fprintf(outFile, "\t%s", row[i]);
+		fprintf(outFile, "\n");
+		}
+	    }
+	}
+    else
+	{
+	printf("Invariant %d has no query string\n", el->exceptionId);
+	continue;
 	}
     carefulClose(&outFile);
     printf("Invariant %d has %lu exceptions, written to this file: %s\n", 
