@@ -11643,7 +11643,7 @@ rm $tmpfile
 cat > oneMultiz.csh << 'EOF'
 #!/bin/csh -fe
     set c = $1
-    set multi = /scratch/multiz10way.$c
+    set multi = /scratch/$user/multiz10way.$c
     set pairs = /cluster/bluearc/hg17/multiz10way
 
     # special mode --
@@ -11733,6 +11733,7 @@ allMultiz.csh $(root1) {check out line+ /cluster/data/hg17/bed/multiz10way/maf/$
     para create jobList
     para try; para check
     para push
+
 
 
 # UPDATED WGRNA DATA PER EMAIL FROM WEBER (2004-12-14, Fan).
