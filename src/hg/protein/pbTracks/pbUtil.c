@@ -338,6 +338,8 @@ l =strlen(aa);
 
 hPrintf("<pre>");
 
+hPrintf("Total amino acids: %d\n", strlen(aa));
+hPrintf("\n");
 hPrintf(">%s|%s|%s", proteinID, protDisplayID, description);
 
 chp = aa;
@@ -348,9 +350,7 @@ for (i=0; i<l; i++)
     hPrintf("%c", *chp);
     chp++;
     }
-hPrintf("\n\n");
 
-hPrintf("Total amino acids: %d\n", strlen(aa));
 hPrintf("</pre>");
 }
 
@@ -463,12 +463,12 @@ else
     {
     hPrintf("<A HREF=\"../cgi-bin/hgTracks?position=%s&db=%s\"", protDisplayID, database);
     }
-hPrintf("TARGET=_BLANK>%s</A>&nbsp<BR>\n", mrnaID);
+hPrintf(" TARGET=_BLANK>%s</A>&nbsp\n", mrnaID);
 }
 
 void doFamilyBrowserLink(char *protDisplayID, char *mrnaID)
 {
-hPrintf("\n<B>UCSC Gene Family Browser: </B> ");
+hPrintf("\n<B>Family Browser: </B> ");
 if (mrnaID != NULL)
     {
     hPrintf("<A HREF=\"../cgi-bin/hgNear?near_search=%s\"", mrnaID);
@@ -477,16 +477,16 @@ else
     {
     hPrintf("<A HREF=\"../cgi-bin/hgNear?near_search=%s\"", protDisplayID);
     }
-hPrintf("TARGET=_BLANK>%s</A>&nbsp<BR>\n", mrnaID);
+hPrintf(" TARGET=_BLANK>%s</A>&nbsp<BR>\n", mrnaID);
 }
 
 void doGeneDetailsLink(char *protDisplayID, char *mrnaID)
 {
 if (mrnaID != NULL)
     {
-    hPrintf("\n<B>UCSC Gene Details Page: </B> ");
+    hPrintf("\n<B>Gene Details Page: </B> ");
     hPrintf("<A HREF=\"../cgi-bin/hgGene?hgg_gene=%s\"", mrnaID);
-    hPrintf("TARGET=_BLANK>%s</A>&nbsp<BR>\n", mrnaID);
+    hPrintf(" TARGET=_BLANK>%s</A>&nbsp\n", mrnaID);
     }
 }
 
