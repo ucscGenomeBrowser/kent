@@ -22,6 +22,7 @@ errAbort(
 }
 
 static struct optionSpec options[] = {
+   {"maxGap", OPTION_INT},
    {NULL, 0},
 };
 
@@ -149,7 +150,7 @@ while(chainIn)
 		    prevChain2->next = chain2Next;
 		else
 		    chainIn->next = chain2Next;
-		chain2 = NULL;
+		//chain2 = NULL;
 		}
 	    else
 		prevChain2 = chain2;
@@ -164,6 +165,7 @@ void simpleChain(char *psls,  char *outChainName)
 /* simpleChain - Stitch psls into chains. */
 {
 int lastChainId = -1;
+int superCount = 0;
 struct psl *prevPsl, *nextPsl;
 struct psl *fakePslList;
 int jj;
@@ -201,11 +203,12 @@ while ((psl = pslNext(pslLf)) != NULL)
     slAddHead(&sp->psl, psl);
     }
 lineFileClose(&pslLf);
-printf("read in  %d psls\n",count);
+verbose(1,"read in  %d psls\n",count);
 
 addedBases = deletedBases = 0;
 for(sp = spList; sp; sp = sp->next)
     {
+    int count = 0;
     /* make sure we have a chainList */
     chainList = NULL;
 
@@ -223,9 +226,6 @@ for(sp = spList; sp; sp = sp->next)
 	nextPsl = psl->next;
 	sp->psl  = nextPsl;
 
-	psl->next = NULL;
-	fakePslList = psl;
-
 	int qStart = psl->qStarts[0];
 	int qEnd = psl->qStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
 	int tStart = psl->tStarts[0];
@@ -236,10 +236,11 @@ for(sp = spList; sp; sp = sp->next)
 	/* check for overlap */
 	for(chain = chainList; chain ;  chain = chain->next)
 	    {
-	    if ((((tStart < chain->tEnd) && (tEnd > chain->tStart)) ||
+	    if ((((tStart < chain->tEnd) && (tEnd > chain->tStart)) &&
 		 (qStart < chain->qEnd) && (qEnd > chain->qStart)))
 		    goto out;
 	    }
+	count++;
 
 	AllocVar(chain);
 	chain->tStart = psl->tStarts[0];
@@ -261,9 +262,8 @@ out:
 	freez(&psl);
 	}
 
-    assert(csp->chain == NULL);
-
-    chainWrite(aggregateChains(chainList), outChains);
+    for(chain = aggregateChains(chainList); chain ;  chain = chain->next)
+	chainWrite(chain, outChains);
     }
 
 fclose(outChains);
@@ -278,6 +278,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+maxGap = optionInt("maxGap", maxGap);
 simpleChain(argv[1], argv[2]);
 return 0;
 }
