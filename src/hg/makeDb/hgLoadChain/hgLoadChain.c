@@ -333,8 +333,9 @@ else if (!oldTable)
     dyStringAppend(dy, "  chainId int unsigned not null,\n");
     dyStringAppend(dy, "#Indices\n");
     if (!noBin)
-       dyStringAppend(dy, "  INDEX(chainId,bin),\n");
-    dyStringAppend(dy, "  INDEX(chainId,tStart)\n");
+       dyStringAppend(dy, "  INDEX(bin,chainId)\n");
+    else
+        dyStringAppend(dy, "  INDEX(chainId,tStart)\n");
     dyStringAppend(dy, ")\n");
     sqlRemakeTable(conn, track, dy->string);
     }
@@ -385,8 +386,9 @@ else if (!oldTable)
        dyStringAppend(dy, "  id int unsigned not null,\n");
     dyStringAppend(dy, "#Indices\n");
     if (!noBin)
-       dyStringAppend(dy, "  INDEX(tName(8),bin),\n");
-    dyStringAppend(dy, "  INDEX(tName(8),tStart)\n");
+       dyStringAppend(dy, "  INDEX(bin, tStart)\n");
+    else
+       dyStringAppend(dy, "  INDEX(tName, tStart)\n");
     dyStringAppend(dy, ")\n");
     sqlRemakeTable(conn, track, dy->string);
     }
@@ -411,9 +413,9 @@ char alignFileName[] ="chain.tab";
 char gapFileName[] ="gap.tab";
 FILE *alignFile = mustOpen(alignFileName,"w");
 FILE *gapFile = mustOpen(gapFileName,"w");
-char gapTrack[128];
+char linkTrack[128];
 
-sprintf(gapTrack, "%sGap",track);
+sprintf(linkTrack, "%sLink",track);
 for (i=0; i<chainCount; ++i)
     {
     lf = lineFileOpen(chainFiles[i], TRUE);
@@ -426,7 +428,7 @@ fclose(gapFile);
 /*slSort(&bedList, bedStubCmp);
 printf("Sorted\n");*/
 loadDatabaseChain(database, alignFileName, track);
-loadDatabaseGap(database, gapFileName, gapTrack);
+loadDatabaseGap(database, gapFileName, linkTrack);
 }
 
 int main(int argc, char *argv[])
