@@ -9,7 +9,7 @@
 #include "options.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: faSplit.c,v 1.24 2005/03/24 23:26:30 hiram Exp $";
+static char const rcsid[] = "$Id: faSplit.c,v 1.25 2005/03/28 17:19:42 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -540,26 +540,27 @@ return(gotGap);
 }
 
 static void writeOneByGap(boolean oneFile, char *outRoot,
-    int digits, int pieceIx, FILE *f, char noPath[256], int pos, int thisSize,
+    int digits, int *pieceIx, FILE *f, char noPath[256], int pos, int thisSize,
 	struct dnaSeq *seq, FILE *lift, int *writeCount, char *outPath)
 {
 char numOut[128];
 if (!oneFile)
     {
     char fileName[512];
-    mkOutPath(fileName, outRoot, digits, pieceIx);
+    mkOutPath(fileName, outRoot, digits, *pieceIx);
     f = mustOpen(fileName, "w");
     verbose(2, "writing %s\n", fileName);
     }
 else
     verbose(2, "writing %s\n", outPath);
-sprintf(numOut, "%s%0*d", noPath, digits, pieceIx);
+sprintf(numOut, "%s%0*d", noPath, digits, *pieceIx);
 verbose(3,"#\twriting piece %s, at pos %d for size %d\n", numOut,pos,thisSize);
 faWriteNext(f, numOut, seq->dna + pos, thisSize);
 if (lift)
     fprintf(lift, "%d\t%s\t%d\t%s\t%d\n",
 	pos, numOut, thisSize, seq->name, seq->size);
 *writeCount += 1;
+*pieceIx += 1;
 if (!oneFile)
     carefulClose(&f);
 }
@@ -634,9 +635,11 @@ while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
 	if (startGapLen > minGapSize)
 	    {
 	    if (noGapDrops)
-		writeOneByGap(oneFile, outRoot, digits, pieceIx,
+		{
+		writeOneByGap(oneFile, outRoot, digits, &pieceIx,
 		    f, noPath, pos, startGapLen, &seq, lift,
 			&writeCount, fileName);
+		}
 	    else
 		verbose(3,"#\tbeginning gap of %d size skipped\n", startGapLen);
 	    thisSize = startGapLen;
@@ -650,10 +653,9 @@ while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
 		if (gotGap)
 		  thisSize = gapStart;
 	      }
-	    writeOneByGap(oneFile, outRoot, digits, pieceIx,
+	    writeOneByGap(oneFile, outRoot, digits, &pieceIx,
 		f, noPath, pos, thisSize, &seq, lift, &writeCount, fileName);
 	    }
-        pieceIx++;
 	pos += thisSize;
 	if (gotGap)
 	    {
@@ -661,9 +663,8 @@ while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
 	    /*if ((pos + gapSize) >= seq.size)*/
 	    if (noGapDrops)
 		{
-		writeOneByGap(oneFile, outRoot, digits, pieceIx,
+		writeOneByGap(oneFile, outRoot, digits, &pieceIx,
 		    f, noPath, pos, gapSize, &seq ,lift, &writeCount, fileName);
-		pieceIx++;
 		verbose(3,
 		    "#\tadding gapSize %d to pos %d -> %d and writing gap\n",
 			gapSize, pos, pos+gapSize);
