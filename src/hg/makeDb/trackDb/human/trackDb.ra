@@ -61,13 +61,13 @@ track humMusL
 shortLabel Mouse Cons
 longLabel Human/Mouse Evolutionary Conservation Score (std units)
 group compGeno
-color 100,50,0
+color 175,150,128
 altColor 175,150,128
 priority 118
 visibility full
 type sample 0 8
 
-track regPotential
+track regpotent
 shortLabel Reg. Potential
 longLabel Human/Mouse Regulatory Potential Score
 group compGeno
