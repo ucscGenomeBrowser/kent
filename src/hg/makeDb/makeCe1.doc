@@ -352,7 +352,7 @@ MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR CE1 (DONE 2002-05-12 - Hiram)
 	echo 'delete from defaultDb where name="ce1";' \
         | hgsql -h genome-testdb hgcentraltest
     echo 'insert into dbDb values("ce1", "May 2003", \
-	"/gbdb/ce1/nib", "worm", "chrII:14642289-14671631", 1, 10, \
+	"/gbdb/ce1/nib", "Worm", "chrII:14642289-14671631", 1, 10, \
 	"C. elegans");' \
 	| hgsql -h genome-testdb hgcentraltest
     #  If you need to delete that entry:
