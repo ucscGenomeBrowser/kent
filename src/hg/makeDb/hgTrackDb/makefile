@@ -62,6 +62,7 @@ betaZooUpdate:
 	hgTrackDb zooPig1 trackDb ../../lib/trackDb.sql hgRoot
 	hgTrackDb zooRat1 trackDb ../../lib/trackDb.sql hgRoot
 	hgTrackDb zooZebrafish1 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooCombo1 trackDb ../../lib/trackDb.sql hgRoot
 
 zooUpdate:
 	hgTrackDb zooBaboon1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
@@ -76,6 +77,7 @@ zooUpdate:
 	hgTrackDb zooPig1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
 	hgTrackDb zooRat1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
 	hgTrackDb zooZebrafish1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooCombo1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
 
 debug : $O
 	gcc -ggdb -o hgTrackDb $O $(MYLIBS) $L	
