@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.63 2004/11/16 02:02:33 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.64 2004/11/29 21:38:34 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -2306,7 +2306,7 @@ printf("<a href=\"/cgi-bin/qaPushQ?cb=%s\">RETURN</a><br>", newRandState);
 
 
 void getIndexes(struct sqlConnection *conn, char *tbl, char *s, int ssize)
-/* Get table size via show table status command. Return -1 if err. Will match multiple if "%" used in tbl */ 
+/* Get indexes with show index on table command. Return -1 if err. Will match multiple if "%" used in tbl */ 
 {
 char query[256];
 char **row;
