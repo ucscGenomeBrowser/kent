@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.741 2004/05/21 05:54:08 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.742 2004/05/25 18:55:09 donnak Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -7581,7 +7581,7 @@ hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgText?db=%s&position=%s:%d-%d&ph
 if (hgNearOk(database))
     {
     hPrintf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgNear?%s\">%s</A></TD>",
-                 uiVars->string, wrapWhiteFont("Families"));
+                 uiVars->string, wrapWhiteFont("Gene Sorter"));
     }
 
 if (gotBlat)
