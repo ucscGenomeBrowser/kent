@@ -8,7 +8,7 @@ type bed 3 +
 
 track partMrnas
 track blastHg17KG
-shortLabel Mapped Human
+shortLabel Human Proteins
 longLabel Human (hg17) proteins mapped by chained tBLASTn
 group genes
 priority 49.5
