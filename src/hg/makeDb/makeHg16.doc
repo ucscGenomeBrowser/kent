@@ -2476,8 +2476,7 @@ hgLoadBed hg16 syntenyRn3 ucsc100k.bed
     # mysqldump needs write permission to this directory
     # and you need to use your read/write enabled user with password
     chmod 777 .
-    mysqldump --user=<r/w user> --password=<r/w pass> --all --tab=. hg16 \
-	ancientRepeat
+    hgsqldump --all --tab=. hg15 ancientRepeat
     chmod 775 .
     hgsql hg16 < ancientRepeat.sql
     mysqlimport -u<r/w user> -p<r/w pass> hg16 ancientRepeat.txt
@@ -3762,3 +3761,124 @@ end
 # in /cluster/store1/superFamily/genomes/README.ucsc.  Then
 # make sure that knownToEnsembl and ensGtp tables are created, then:
     zcat /cluster/store1/superFamily/genomes/ass_26-Oct-2003.tab.gz | hgKnownToSuper hg16 hs stdin
+
+# BLASTZ Mm4  (WORKING - 2003-10-29 - Hiram)
+
+    ssh kk
+    mkdir -p /cluster/data/hg16/bed/blastz.mm4.2003-10-29
+    cd /cluster/data/hg16/bed
+    ln -s  blastz.mm4.2003-10-29 blastz.mm4
+    cd blastz.mm4
+
+    cat << '_EOF_' > DEF
+# human vs. mouse
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET
+# Human
+SEQ1_DIR=/iscratch/i/gs.17/build34/bothMaskedNibs
+# RMSK not currently used
+SEQ1_RMSK=/iscratch/i/gs.17/build34/rmsk
+# FLAG not currently used
+SEQ1_FLAG=-primate
+SEQ1_SMSK=/iscratch/i/gs.17/build34/linSpecRep.notInMouse
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+
+# QUERY
+# Mouse
+SEQ2_DIR=/scratch/mus/mm4/softNib
+# RMSK not currently used
+SEQ2_RMSK=/scratch/mus/mm4/rmsk
+# FLAG not currently used
+SEQ2_FLAG=-rodent
+SEQ2_SMSK=/scratch/mus/mm4/linSpecRep.notInHuman
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg16/bed/blastz.mm4
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    # prepare first cluster run
+    ssh kk
+    cd /cluster/data/hg16/bed/blastz.mm4
+    source DEF
+    /cluster/data/mm4/jkStuff/BlastZ_run0.sh
+    cd run.0
+    para try, check, push, check, ....
+# Completed: 43390 of 43392 jobs
+# Crashed: 2 jobs
+# CPU time in finished jobs:   15770466s  262841.10m  4380.69h  182.53d  0.500 y
+# IO & Wait Time:                626227s   10437.11m   173.95h    7.25d  0.020 y
+# Average job time:                 378s       6.30m     0.10h    0.00d
+# Longest job:                     8052s     134.20m     2.24h    0.09d
+# Submission to last job:         45886s     764.77m    12.75h    0.53d
+    # the two crashed jobs:
+# /cluster/home/angie/schwartzbin/blastz-run chr10.nib 40000001 50010000 chrX.nib 120000001 150000000 /cluster/data/hg16/bed/blastz.mm4/DEF
+# blastz: Illegal character '@' in sequence file.
+# /cluster/home/angie/schwartzbin/blastz-run chr18.nib 1 10010000 chr15.nib 60000001 90000000 /cluster/data/hg16/bed/blastz.mm4/DEF
+# seq_read(/tmp/blastz.zstcGa/s1.fa): Input/output error
+    # unusual errors.  Simply try them again and they work
+
+    #	Second cluster run to convert the .out's to .lav's
+    #	You do NOT want to run this on the big cluster.  It brings
+    #	the file server to its knees.  Run this on the small cluster.
+    ssh kkr1u00
+    cd /cluster/data/hg16/bed/blastz.mm4
+    source DEF
+    /cluster/data/mm4/jkStuff/BlastZ_run1.sh
+    cd run.1
+    para try, check, push, etc ...
+# Completed: 339 of 339 jobs
+# CPU time in finished jobs:      15434s     257.23m     4.29h    0.18d  0.000 y
+# IO & Wait Time:                  2393s      39.89m     0.66h    0.03d  0.000 y
+# Average job time:                  53s       0.88m     0.01h    0.00d
+# Longest job:                     1128s      18.80m     0.31h    0.01d
+# Submission to last job:          2561s      42.68m     0.71h    0.03d
+
+    #	Third cluster run to convert lav's to axt's
+    source DEF
+    cd /cluster/data/hg16/bed/blastz.mm4
+    /cluster/data/mm4/jkStuff/BlastZ_run2.sh
+    cd run.2
+    para try, check, push, etc ...
+XXXX - running 2003-10-30 14:00
+# Completed: 44 of 44 jobs
+# CPU time in finished jobs:       3981s      66.35m     1.11h    0.05d  0.000 y
+# IO & Wait Time:                 49397s     823.28m    13.72h    0.57d  0.002 y
+# Average job time:                1213s      20.22m     0.34h    0.01d
+# Longest job:                     7584s     126.40m     2.11h    0.09d
+# Submission to last job:          7597s     126.62m     2.11h    0.09d
+
+    # translate sorted axt files into psl
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastz.mm4
+    mkdir -p pslChrom
+    set tbl = "blastzMm4"
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+    #	That takes about 30 minutes
+    # Load database tables
+    ssh hgwdev
+    set tbl = "blastzMm4"
+    cd /cluster/data/hg16/bed/blastz.mm4/pslChrom
+    /cluster/bin/i386/hgLoadPsl hg16 chr*_${tbl}.psl
+    # this is a 55 minute job

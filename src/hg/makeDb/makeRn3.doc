@@ -2488,3 +2488,184 @@ foreach chr (?{,?})
   end
   cd ..
 end
+
+# BLASTZ Mm4 (WORKING - 2003-10-29 - Hiram)
+
+    ssh kk
+    mkdir -p /cluster/data/rn3/bed/blastz.mm4.2003-10-29
+    cd /cluster/data/rn3/bed
+    ln -s blastz.mm4.2003-10-29 blastz.mm4
+    cd blastz.mm4
+
+    cat << '_EOF_' > DEF
+# rat vs. mouse
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET
+# Rat
+SEQ1_DIR=/iscratch/i/rn3/bothMaskedNibs
+# RMSK not currently used
+SEQ1_RMSK=/cluster/bluearc/rat/rn3/rmsk
+# FLAG not currently used
+SEQ1_FLAG=-rodent
+SEQ1_SMSK=/cluster/bluearc/rat/rn3/linSpecRep.notInMouse
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY
+# Mouse
+SEQ2_DIR=/scratch/mus/mm4/softNib
+# RMSK not currently used
+SEQ2_RMSK=/scratch/mus/mm4/rmsk
+# FLAG not currently used
+SEQ2_FLAG=-rodent
+SEQ2_SMSK=/scratch/mus/mm4/linSpecRep.notInRat
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/rn3/bed/blastz.mm4
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    # prepare first cluster run
+    source DEF
+    cd /cluster/data/rn3/bed/blastz.mm4
+    /cluster/data/mm4/jkStuff/BlastZ_run0.sh
+    cd run.0
+    para try, check, push, check, ....
+# Completed: 39935 of 39936 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:   16180312s  269671.87m  4494.53h  187.27d  0.513 y
+# IO & Wait Time:                687304s   11455.06m   190.92h    7.95d  0.022 y
+# Average job time:                 422s       7.04m     0.12h    0.00d
+# Longest job:                     5808s      96.80m     1.61h    0.07d
+# Submission to last job:         44812s     746.87m    12.45h    0.52d
+    # the crashed job:
+# /cluster/home/angie/schwartzbin/blastz-run chr5.nib 1 10010000 chr14.nib 60000001 90000000 /cluster/data/rn3/bed/blastz.mm4/DEF
+#	seq_read(/tmp/blastz.DkVf00/s1.fa): Input/output error
+#	try it again and it works OK
+
+    #	Second cluster run to convert the .out's to .lav's
+    #	You do NOT want to run this on the big cluster.  It brings
+    #	the file server to its knees.  Run this on the small cluster.
+    ssh kkr1u00
+    cd /cluster/data/rn3/bed/blastz.mm4
+    source DEF
+    /cluster/data/mm4/jkStuff/BlastZ_run1.sh
+    cd run.1
+    para try, check, push, etc ...
+# Completed: 312 of 312 jobs
+# CPU time in finished jobs:      35956s     599.27m     9.99h    0.42d  0.001 y
+# IO & Wait Time:                 15078s     251.30m     4.19h    0.17d  0.000 y
+# Average job time:                 164s       2.73m     0.05h    0.00d
+# Longest job:                      642s      10.70m     0.18h    0.01d
+# Submission to last job:          5811s      96.85m     1.61h    0.07d
+
+    #	Third cluster run to convert lav's to axt's
+    ssh kk
+    cd /cluster/data/rn3/bed/blastz.mm4
+    source DEF
+    /cluster/data/mm4/jkStuff/BlastZ_run2.sh
+    cd run.2
+    para try, check, push, etc ...
+XXXX - running - 2003-10-30 - 14:00
+# Completed: 44 of 44 jobs
+# CPU time in finished jobs:      10649s     177.48m     2.96h    0.12d  0.000 y
+# IO & Wait Time:                129039s    2150.65m    35.84h    1.49d  0.004 y
+# Average job time:                3175s      52.91m     0.88h    0.04d
+# Longest job:                    18946s     315.77m     5.26h    0.22d
+# Submission to last job:         19121s     318.68m     5.31h    0.22d
+
+    # translate sorted axt files into psl
+    ssh kksilo
+    cd /cluster/data/rn3/bed/blastz.rn3
+    mkdir -p pslChrom
+    set tbl = "blastzRn3"
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+    #	That takes about 20 minutes
+    # Load database tables
+    ssh hgwdev
+    set tbl = "blastzRn3"
+    cd /cluster/data/rn3/bed/blastz.rn3/pslChrom
+    /cluster/bin/i386/hgLoadPsl rn3 chr*_${tbl}.psl
+
+
+# CHAIN Rn3 BLASTZ (WORKING - 2003-10-24 - Hiram)
+
+#	Experiment, run this on kolossus
+    ssh kolossus
+    cd ~/kent.$MACHTYPE/src/hg/mouseStuff/axtChain
+    make
+    cd ../axtFilter
+    make
+    mkdir -p /cluster/data/rn3/bed/blastz.rn3/axtChain/run1
+    cd /cluster/data/rn3/bed/blastz.rn3/axtChain/run1
+    mkdir out chain
+
+    ls -1S /cluster/data/rn3/bed/blastz.mm4/axtChrom/*.axt > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+./doChain $(path1) chain/$(root1).chain out/$(root1).out
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+    $HOME/bin/$MACHTYPE/axtFilter -notQ_random $1 | \
+        $HOME/bin/$MACHTYPE/axtChain stdin \
+        /cluster/store3/rn3/softNib \
+        /cluster/store6/mm4/nib $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    mkdir out chain
+
+    gensub2 input.lst single gsub jobList
+    # copy the jobList to runJobs.sh
+    echo "#!/bin/sh" > runJobs.sh
+    cat jobList >> runJobs.sh
+    chmod +x runJobs.sh
+    nohup ./runJobs.sh &
+    #	Well, maybe that wasn't such a good idea.  That shell
+    #	script took about 7 hours to run.  I'd recommend the small
+    #	kluster or the kk9 kluster for this job
+
+    # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/rn3/bed/blastz.rn3/axtChain
+    time chainMergeSort run1/chain/*.chain > all.chain
+    # real    22m15.194s
+    # user    14m9.970s
+    # sys     2m18.350s
+    time chainSplit chain all.chain
+    # real    99m40.570s
+    # user    13m41.590s
+    # sys     29m44.260s
+
+    # Load chains into database
+    # next machine
+    ssh hgwdev
+    cd /cluster/data/rn3/bed/blastz.rn3/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain rn3 ${c}_chainRn3 $i
+        echo done $c
+    end
