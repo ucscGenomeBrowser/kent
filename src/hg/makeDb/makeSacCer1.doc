@@ -1085,11 +1085,14 @@ EOF
     for i in $CHROMS ; do \
 	wigAsciiToBinary -chrom=chr${i} -wibFile=wib/chr${i}_phastCons POSTPROBS/chr${i}.pp.gz ;\
     done
-    hgLoadWiggle sacCer1 phastCons -pathPrefix=/gbdb/sacCer1/wib wib/chr*_phastCons.wig
-    mkdir -p /gbdb/ce2/phastCons/wib
-    rm -f /gbdb/sacCer1/wib/chr*_phastCons.wib
-    ln -s /cluster/data/sacCer1/bed/otherYeast/phastCons/wib/*.wib /gbdb/sacCer1/wib
-    chmod 775 . wib /gbdb/sacCer1/wib
+    #	Changed this path 2004-09-27 so a new set of data could go out
+    #	under the same table name - Hiram, was simply:
+    #	/gbdb/sacCer1/wib/chr*_phastCons.wib
+    hgLoadWiggle sacCer1 phastCons -pathPrefix=/gbdb/sacCer1/wib/phastCons wib/chr*_phastCons.wig
+    mkdir -p /gbdb/sacCer1/wib/phastCons
+    rm -f /gbdb/sacCer1/wib/phastCons/chr*_phastCons.wib
+    ln -s /cluster/data/sacCer1/bed/otherYeast/phastCons/wib/*.wib /gbdb/sacCer1/wib/phastCons
+    chmod 775 . wib /gbdb/sacCer1/wib/phastCons /gbdb/sacCer1/wib/phastCons/*.wib
     chmod 664 wib/*.wib
 
     # set up full alignment/conservation track
