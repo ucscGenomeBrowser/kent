@@ -73,7 +73,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.644 2003/12/18 16:52:39 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.645 2003/12/18 17:36:36 heather Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6877,7 +6877,7 @@ if (psOutput != NULL)
    }
 
 /* Tell browser where to go when they click on image. */
-hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" METHOD=GET>\n\n", hgTracksName());
+hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" METHOD=GET>\n\n", hgTracksName());
 cartSaveSession(cart);
 
 /* See if want to include sequence search results. */
