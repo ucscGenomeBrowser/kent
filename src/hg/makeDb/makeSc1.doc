@@ -131,13 +131,14 @@ MAKING VIRAL mRNA FILES (DONE 04/15/03)
     ~kent/bin/iSync
 
 
-ALIGNING VIRAL RNA (DONE 04/15/03)
+ALIGNING VIRAL RNA (DONE 04/16/03)
     ssh kkr1u00
     mkdir -p ~/sc1/bed/mrna
     cd ~/sc1/bed/mrna
     ls -1S /cluster/store5/SARS_Coronavirus_TOR2/*.fa > genome.lst
     ls -1 /iscratch/i/mrna.134/viralRna.fa > mrna.lst
     cp ~/lastRn/bed/mrna/gsub .
+    # edited gsub to remove -ooc and add query options for translated.
     mkdir psl
     gensub2 genome.lst mrna.lst gsub spec
     para create spec
@@ -148,8 +149,8 @@ ALIGNING VIRAL RNA (DONE 04/15/03)
     ssh eieio
     cd ~/sc1/bed/mrna
     pslSort dirs raw.psl /cluster/store2/temp psl
-    pslReps -nohead -minAli=0.90 -sizeMatters -nearTop=0.02 raw.psl stdout \
-      /dev/null \
+    # Skip the pslReps -- need the sensitivity!
+    cat raw.psl \
     | sed -e 's/TOR2_draft_genome_assembly_140403/chr1/' \
     > all_mrna.psl
     pslSortAcc nohead chrom /cluster/store2/temp all_mrna.psl
