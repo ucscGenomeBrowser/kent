@@ -74,6 +74,9 @@ Identifier Line Attributes:
 	  particular the first field is not expected to contain all 
 	  instances of the identifier.  
      value: n/a
+  dependency - indicates that all tables mentioned in field lines below are
+          dependent on the first table mentioned.
+     value: n/a
 
 Field Line Attributes:
   comma - the field contains a comma separated list of the identifier.
@@ -165,6 +168,13 @@ databasesIgnored - This is followed by a comma-separated list of databases
     databaseChecked or databaseIgnored list.  This is just to help keep
     databases from slipping under the radar, since generally you will want
     to add a new database to various places in the joiner file.
+
+dependency - This line indicates that a table depends on other tables.
+    The joinerCheck program will make sure that the last update date on
+    the table is after any of the tables it depends on.  The syntax is
+    just a list of database.tables.  The first table is the dependent table
+    and the rest are the ones it depends on.  Note that the 'dependency'
+    attribute on an identifier line can also specify dependencies.
 
 tablesIgnored - This statement describes tables that are not checked.
     The joinerCheck program will complain about tables in the system
