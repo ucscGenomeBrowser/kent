@@ -189,6 +189,10 @@ char *hExtFileName(char *extFileTable, unsigned extFileId);
  * fails size check.  Please freeMem the result when you 
  * are done with it. */
 
+int hRnaSeqAndIdx(char *acc, struct dnaSeq **retSeq, HGID *retId, char *gbdate, struct sqlConnection *conn);
+/* Return sequence for RNA, it's database ID, and optionally genbank 
+ * modification date. Return -1 if not found. */
+
 char* hGetSeqAndId(struct sqlConnection *conn, char *acc, HGID *retId);
 /* Return sequence as a fasta record in a string and it's database ID, or 
  * NULL if not found. */

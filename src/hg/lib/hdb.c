@@ -24,7 +24,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.107 2003/05/07 14:34:12 braney Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.108 2003/05/11 07:36:03 markd Exp $";
 
 #define DEFAULT_PROTEINS "proteins"
 #define DEFAULT_GENOME "Human"
@@ -648,9 +648,9 @@ if (read(fd, buf, size) < size)
 return buf;
 }
 
-char* hGetSeqAndId(struct sqlConnection *conn, char *acc, HGID *retId)
+static char* getSeqAndId(struct sqlConnection *conn, char *acc, HGID *retId, char *gbDate)
 /* Return sequence as a fasta record in a string and it's database ID, or 
- * NULL if not found. */
+ * NULL if not found. Optionally get genbank modification date. */
 {
 struct sqlResult *sr;
 char **row;
@@ -665,7 +665,7 @@ struct dnaSeq *seq;
 struct largeSeqFile *lsf;
 
 sprintf(query,
-   "select id,extFile,file_offset,file_size from seq where seq.acc = '%s'",
+   "select id,extFile,file_offset,file_size,gb_date from seq where acc = '%s'",
    acc);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -673,9 +673,14 @@ if ((row == NULL) && sqlTableExists(conn, "gbSeq"))
     {
     /* try gbSeq table */
     sqlFreeResult(&sr);
-    sprintf(query,
-            "select id,gbExtFile,file_offset,file_size from gbSeq where gbSeq.acc = '%s'",
-            acc);
+    if (gbDate != NULL)
+        sprintf(query,
+                "select id,gbExtFile,file_offset,file_size,mod_date from gbSeq,gbStatus where (gbSeq.acc = '%s') and (gbStatus.acc = gbSeq.acc)",
+                acc);
+    else
+        sprintf(query,
+                "select id,gbExtFile,file_offset,file_size from gbSeq where acc = '%s'",
+                acc);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     seqTblSet = GBSEQ_TBL_SET;
@@ -690,6 +695,9 @@ if (retId != NULL)
 extId = sqlUnsigned(row[1]);
 offset = sqlLongLong(row[2]);
 size = sqlUnsigned(row[3]);
+if (gbDate != NULL)
+    strcpy(gbDate, row[4]);
+    
 
 lsf = largeFileHandle(extId, seqTblSet);
 buf = readOpenFileSection(lsf->fd, offset, size, lsf->path);
@@ -702,10 +710,28 @@ static char* mustGetSeqAndId(struct sqlConnection *conn, char *acc,
 /* Return sequence as a fasta record in a string and it's database ID,
  * abort if not found */
 {
-char *buf= hGetSeqAndId(conn, acc, retId);
+char *buf= getSeqAndId(conn, acc, retId, NULL);
 if (buf == NULL)
     errAbort("No sequence for %s in database", acc);
 return buf;
+}
+
+char* hGetSeqAndId(struct sqlConnection *conn, char *acc, HGID *retId)
+/* Return sequence as a fasta record in a string and it's database ID, or 
+ * NULL if not found. */
+{
+return getSeqAndId(conn, acc, retId, NULL);
+}
+
+int hRnaSeqAndIdx(char *acc, struct dnaSeq **retSeq, HGID *retId, char *gbdate, struct sqlConnection *conn)
+/* Return sequence for RNA, it's database ID, and optionally genbank 
+ * modification date. Return -1 if not found. */
+{
+char *buf = getSeqAndId(conn, acc, retId, gbdate);
+if (buf == NULL)
+    return -1;
+*retSeq = faFromMemText(buf);
+return 0;
 }
 
 void hRnaSeqAndId(char *acc, struct dnaSeq **retSeq, HGID *retId)
