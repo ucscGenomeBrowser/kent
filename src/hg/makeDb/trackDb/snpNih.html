@@ -6,3 +6,39 @@ cover the same region of the genome.  </P>
 <P>Thanks to the <A HREF="http://snp.cshl.org/" TARGET=_blank>SNP
 Consortium</A> and NIH's <A HREF="http://www.ncbi.nlm.nih.gov/SNP/" TARGET=_blank>dbSNP
 </A> for providing this data.</P>
+
+<P>========================================================================</P>
+
+<H2>Filtering of dbSNP data for UCSC SNP tracks.</H2>
+
+<P>The SNPs in this track include all of the polymorphisms that can be
+mapped against the current assembly.  This includes known point
+mutations (Single Nucleotide Polymorphisms), insertions, deletions,
+and segmental mutations from the current build of dbSNP.  There are
+three major cases that are not mapped and/or annotated:</P>
+
+<P>a. Submissions that are completely masked as repetitive
+elements. These are dropped from any further computations. This set of
+refSNPs are dumped in chromosome "rs_chMasked" on the dbSNP ftp site.</P>
+
+<P>b. Submissions that are defined in a cDNA context with extensive
+splicing. These SNPs are typically annotated on refseq mRNAs through a
+separate annotation process. Effort is being made to reverse map these
+variations back to contig coordinates, but that has not been
+implemented. For now, you can find this set of variations in
+"rs_chNotOn" on the dbSNP ftp site.</P>
+
+<P>c. Submissions with excessive hits to the genome. Variations with
+3+ hits to the genome are not included in the tracks, but are available in
+"rs_chMulti" on the dbSNP ftp site.</P>
+
+<P>The heuristics for the non-SNP variations (i.e. named elements and
+STRs) are quite conservative so some of these are probably lost. This
+approach was chosen to avoid false annotation of variation in
+inappropriate locations.</P>
+
+<P>The dbSNP ftp site can be found at <A
+HREF="ftp://ftp.ncbi.nih.gov/snp/"
+TARGET=_blank>ftp://ftp.ncbi.nih.gov/snp/</A>.</P>
+
+<P>========================================================================</P>
