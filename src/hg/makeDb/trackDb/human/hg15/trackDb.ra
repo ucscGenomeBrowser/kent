@@ -13,6 +13,7 @@ longLabel Clone Coverage
 group map
 visibility hide
 altColor 180,180,180 
+type clonePos
 
 track vegaGene
 shortLabel Vega Genes

@@ -535,6 +535,7 @@ longLabel Clone Coverage
 group map
 visibility hide
 altColor 180,180,180 
+type clonePos
 
 track refFullAli
 shortLabel DBTSS mRNA
