@@ -668,7 +668,34 @@ cat > jkStuff/zipChroms.csh << 'EOF'
     cp ../../panTro1/chromosomes/README.txt .
     # edit
 
-    # MORE HERE
+    # MORE HERE - 2/3/04 angie
+    ssh kksilo
+    cd /cluster/data/panTro1
+    mkdir zip
+    cat << '_EOF_' > jkStuff/zipOut.csh
+rm -rf zip
+mkdir zip
+zip -j zip/chromOut.zip */chr*.fa.out
+'_EOF_'
+    # << this line makes emacs coloring happy
+    csh ./jkStuff/zipOut.csh |& tee zip/zipOut.log
+    cd zip
+    #- Look at zipAll.log to make sure all file lists look reasonable.  
+    #- Check zip file integrity:
+    foreach f (*.zip)
+      unzip -t $f > $f.test
+      tail -1 $f.test
+    end
+    wc -l *.zip.test
+
+    #- Copy the .zip files to hgwdev:/usr/local/apache/...
+    ssh hgwdev
+    cd /cluster/data/panTro1/zip
+    set gp = /usr/local/apache/htdocs/goldenPath/panTro1
+    mkdir -p $gp/bigZips
+    cp -p *.zip $gp/bigZips
+    cd $gp/bigZips
+    md5sum *.zip > md5sum.txt
 
 
 # AUTO UPDATE GENBANK MRNA RUN  (IN PROGRESS - 2004-01-23 - kate)
