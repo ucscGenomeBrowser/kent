@@ -65,7 +65,7 @@ exit; # don't actually run this like a script :)
 
 # 4) Determine the chromosome sizes from agps
 
-    /cluster/bin/scripts/detChromSizes ../agp
+    /cluster/bin/scripts/getChromSizes ../agp
 
 # 4.1) Create lift files (this will create chromosome directory structure) and inserts file
 
