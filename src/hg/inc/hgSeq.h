@@ -3,6 +3,9 @@
 #ifndef HGSEQ_H
 #define HGSEQ_H
 
+void hgSeqOptionsHti(struct hTableInfo *hti);
+/* Print out HTML FORM entries for gene region and sequence display options. */
+
 void hgSeqOptionsDb(char *db, char *table);
 /* Print out HTML FORM entries for gene region and sequence display options. */
 
@@ -22,5 +25,15 @@ int hgSeqItemsInRange(char *table, char *chrom, int chromStart, int chromEnd,
 void hgSeqRange(char *chrom, int chromStart, int chromEnd, char strand,
 		char *name);
 /* Print out dna sequence of the given range. */
+
+int hgSeqBed(struct hTableInfo *hti, struct bed *bedList);
+/* Print out dna sequence from the current database of all items in bedList.  
+ * hti describes the bed-compatibility level of bedList items.  
+ * Returns number of FASTA records printed out. */
+
+int hgSeqBedDb(char *db, struct hTableInfo *hti, struct bed *bedList);
+/* Print out dna sequence from the given database of all items in bedList.  
+ * hti describes the bed-compatibility level of bedList items.  
+ * Returns number of FASTA records printed out. */
 
 #endif /* HGSEQ_H */
