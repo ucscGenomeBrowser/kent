@@ -18,6 +18,16 @@ endif
 set machine1 = $1
 set machine2 = $2
 
+set validMach1=`echo $machine1 | grep "hgw" | wc -l`
+set validMach2=`echo $machine2 | grep "hgw" | wc -l`
+
+if ($validMach1 == 0 || $validMach2 == 0) then
+  echo
+  echo "    These are not valid machine names: $machine1 $machine2"
+  echo
+  exit 1
+endif
+
 
 #set db = "hg16"
 set db = $3
@@ -50,7 +60,6 @@ rm -f $machine1.$db.$table
 rm -f $machine2.$db.$table 
 
 set machine = "$machine1"
-
 wget -q -O $machine.$db.$table "$url1$machine$url2$db$url3$db$url4$table$url5$field$url6"
 
 set machine = "$machine2"
@@ -58,10 +67,10 @@ wget -q -O $machine.$db.$table "$url1$machine$url2$db$url3$db$url4$table$url5$fi
 
 "diff" $machine1.$db.$table $machine2.$db.$table
 if ( $status ) then
- echo "Differences in $table found between $machine1 and $machine2"
+ echo "\nDifferences are found in $table found between $machine1 and $machine2"
 else
   echo
-  echo " No differences in $table $field."
+  echo " No differences in $table.$field."
   echo
 endif
 
