@@ -10,7 +10,7 @@
 #include "gff.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: gff.c,v 1.16 2004/02/17 22:35:47 angie Exp $";
+static char const rcsid[] = "$Id: gff.c,v 1.17 2004/03/13 05:37:03 markd Exp $";
 
 void gffGroupFree(struct gffGroup **pGroup)
 /* Free up a gffGroup including lineList. */
@@ -158,7 +158,8 @@ for (;;)
       if (s != NULL)
          ++s;
       }
-   if (sameString("gene_id", type))
+   /* only use the first occurance of gene_id and transcript_id */
+   if (sameString("gene_id", type) && (gl->geneId == NULL))
        {
        struct gffGeneId *gg;
        if ((hel = hashLookup(gff->geneIdHash, val)) == NULL)
@@ -174,7 +175,7 @@ for (;;)
 	   }
        gl->geneId = gg->name;
        }
-   else if (sameString("transcript_id", type))
+   else if (sameString("transcript_id", type) && (gl->group == NULL))
        {
        struct gffGroup *gg;
        if ((hel = hashLookup(gff->groupHash, val)) == NULL)
