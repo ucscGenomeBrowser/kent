@@ -13,7 +13,7 @@ O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
     chainDb.o chainLink.o chainNet.o chainNetDbLoad.o chr18deletions.o \
     chromInfo.o chromInserts.o chromKeeper.o \
     clonePos.o columnInfo.o coordConv.o \
-    cpgIsland.o cpgIslandExt.o ctgPos.o ctgPos.o customTrack.o cytoBand.o \
+    cpgIsland.o cpgIslandExt.o ctgPos.o ctgPos2.o customTrack.o cytoBand.o \
     dbDb.o dbSnpRs.o defaultDb.o dnaMotif.o dnaProbe.o \
     encodeErge.o encodeErgeHssCellLines.o\
     encodeRegionInfo.o encodeRegionInfoCustom.o ensFace.o ensPhusionBlast.o \
