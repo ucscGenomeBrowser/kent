@@ -30,7 +30,7 @@ struct rgbColor
     unsigned char r, g, b;
     };
 
-struct rgbColor mgFixedColors[9];	 /* Contains MG_WHITE - MG_GRAY */
+extern struct rgbColor mgFixedColors[9];  /* Contains MG_WHITE - MG_GRAY */
 
 struct memGfx
     {
