@@ -287,7 +287,12 @@ char codonChar;
 
 if (reverse)
     reverseComplement(dna,strlen(dna));
-codonChar = lookupCodon(dna);
+
+if (sameString(chromName, "chrM"))
+    codonChar = lookupMitoCodon(dna);
+else
+    codonChar = lookupCodon(dna);
+
 if (codonChar == 0)
     return(-3);    //stop codon
 else if (codonChar == 'X')
