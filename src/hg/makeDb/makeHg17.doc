@@ -1450,4 +1450,12 @@ printf "./runPsLayout.sh %s %s %s {check out line+ psl/%s/%s.psl}\n",
    	featureBits hg16 knownGene
    	63781799 bases of 2865248791 (2.226%) in intersection
   
+# CREATE LINEAGE-SPECIFIC REPEATS FOR BLASTZ WITH ZEBRAFISH
+# (DONE, 2004-06-08, hartera)
+    # Treat all repeats as lineage-specific
+    mkdir /iscratch/i/gs.18/build35/linSpecRep.notInZebrafish
+    foreach f (/iscratch/i/gs.18/build35/rmsk/chr*.fa.out)
+ cp -p $f /iscratch/i/gs.18/build35/linSpecRep.notInZebrafish/$f:t:r:r.out.spec
+    end
+    iSync
   
