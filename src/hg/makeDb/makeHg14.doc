@@ -2383,3 +2383,19 @@ MAKING PROMOTER FILES
     zip upstream5000.zip upstream5000.fa
     rm upstream*.fa
     
+MAKING MOUSE AND RAT SYNTENY
+#
+syntenicBest.pl -db=hg14 -table=blastzBestMm3
+smooth.pl
+joinsmallgaps.pl
+fillgap.pl -db=hg14 -table=blastzBestMm3
+synteny2bed.pl
+hgLoadBed hg14 syntenyMouse ucsc100k.bed
+
+syntenicBest.pl -db=hg14 -table=blastzBestRn2
+smooth.pl
+joinsmallgaps.pl
+fillgap.pl -db=hg14 -table=blastzBestRn2
+synteny2bed.pl
+hgLoadBed hg14 syntenyRat ucsc100k.bed
+
