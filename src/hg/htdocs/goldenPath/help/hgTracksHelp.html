@@ -414,7 +414,7 @@ display conventions:<BR>
 </TABLE> 
 <P>
 <B>Changing the display mode of an individual annotation track</B><BR>
-Each annotation track within the window has three display modes: 
+Each annotation track within the window may have up to five display modes: 
 <P>
 <TABLE>
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>Hide:</B> the
@@ -435,25 +435,54 @@ Each annotation track within the window has three display modes:
 	want to get an overall view of an annotation. For example, by opening an
 	entire chromosome and setting the RefSeq Genes track to dense, you can get 
 	a feel for the known gene density of the chromosome without displaying
-	excessive detail. </TD></TR></TD></TR>
+	excessive detail. </TD></TR>
 
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>Full:</B> the
 	track is displayed with each annotation feature on a separate line. It is
 	recommended that you use this option sparingly, due to the large number
 	of individual track items that may potentially align at the selected position. For
 	example, hundreds of ESTs might align with a specified gene. When
-	the number of lines within a requested track location exceeds 300, the
-	track automatically defaults to dense mode. In this situation,
+	the number of lines within a requested track location exceeds 250, the
+	track automatically defaults to a more tightly-packed display mode. In 
+	this situation,
 	you can restore the track display to full mode by narrowing the chromosomal 
 	range displayed or by using a track filter to reduce the number of items 
-	displayed. To toggle between full and dense display modes, click on the
+	displayed. On tracks that contain only hide, dense, and full modes, you 
+	can toggle between full and dense display modes by clicking on the
 	track's center label.</TD></TR>
+
+	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>Squish:</B> the 
+	track is displayed with each annotation feature shown separately, but
+	at 50% the height of full mode. Features are unlabeled, and more than one
+	may be drawn on the same line. This mode is useful for reducing the 
+	amount of space used by a track when you want to view a large number of
+	individual features and get an overall view of an annotation. It is
+	particularly good for displaying tracks in which a large number of 
+	features align to a particular section of a chromosome, e.g. EST tracks. 
+	</TD></TR>
+
+	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>Pack:</B> the 
+	track is displayed with each annotation feature shown separately and
+	labeled, but not necessarily displayed on a separate line. 
+	This mode is useful for reducing the 
+	amount of space used by a track when you want to view the large number of
+	individual features allowed by squish mode, but need the labeling and
+	display size provided by full mode. When the number of lines within the
+	requested track location exceeds 250, the track automatically defaults
+	to squish display mode. In this situation, you can restore the track 
+	display to pack mode by narrowing the chromosomal range displayed or by 
+	using a track filter to reduce the number of items 
+	displayed.  To toggle between pack and full display modes, click on 
+	the track's center label.</TD></TR>
+	</TD></TR>
 </TABLE> 
 <P>
 To change the display mode for a track, find the track's controller in the
 Track Controls section at the bottom of the Genome Browser page, select the desired
-mode from the control's display menu, and then click the <I>refresh</I> button. Alternatively, you can toggle between dense and full modes
-for a displayed track by clicking on the optional center label for the track. 
+mode from the control's display menu, and then click the <I>refresh</I> button. 
+Alternatively, you can toggle between dense and full modes 
+for a displayed track (or pack mode when available) by clicking on the optional 
+center label for the track. 
 <P>
 <B>Changing the display of a track by using filters</B><BR>
 Some tracks have additional
@@ -891,6 +920,17 @@ acknowledge the contributor(s) of the data you use.
 <P><B>Downloading the data</B><BR>
 Genome data can be downloaded in two different ways:
 <TABLE>
+	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>Via
+	ftp:</B>The UCSC Genome Bioinformatics ftp site contains download
+	directories for all genome versions currently accessible in the
+	Genome Browser. The ftp command
+	<tt>ftp://genome.ucsc.edu/goldenPath/</tt> will take you to a
+	directory that contains the genome download directories. This 
+	download method is recommended if you plan to download a large file
+	or multiple files from a single directory. Use the <I>mget</I> command
+	to download multiple files: mget <I>filename1 filename2</I>, or
+	mget -a (to download all the files in the directory).</TD></TR>
+
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>Via the Downloads link:</B> Click the
 	<A HREF="http:/genome.ucsc.edu/downloads.html"
 	TARGET=_blank>Downloads</A> link on the left side bar on the UCSC 
@@ -901,20 +941,13 @@ Genome data can be downloaded in two different ways:
 	<A HREF="http://genome-archive.cse.ucsc.edu/"
 	TARGET=_blank>Archive</A> link on the home page.
 	</TD></TR>
-	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>Via
-	ftp:</B>The UCSC Genome Bioinformatics ftp site contains download
-	directories for all genome versions currently accessible in the
-	Genome Browser. The ftp command
-	<tt>ftp://genome.ucsc.edu/goldenPath/</tt> will take you to a
-	directory that contains the genome download directories. 
-	</TD></TR>
-
 </TABLE> 
 <P><B>Types of data available</B><BR>
-There are three download directories associated with each version of a genome
+There are 3 download directories associated with each version of a genome
 assembly: the full data set <I>(bigZips)</I>, the full data set by 
 chromosome <I>(chromosome)</I>, and the annotation database tables
-<I>(database)</I>. 
+<I>(database)</I>. For some assemblies, a set of cross-species alignments may
+may also be available for download, e.g. <I>vsMm2</I> on the hg12 assembly. 
 <P>
 <I>BigZips</I> contains the entire draft of the 
 genome in chromosome and/or contig form. Depending on the genome, this 
@@ -941,6 +974,12 @@ directory may contain some or all of the following files:<BR>
 	shown in lower case non-repeating sequence is shown in upper case.
 	</TD></TR> 
 
+	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>contigFaMasked.zip:</B>
+	the working draft sequence contigs, in one file per contig. 
+	Repeats are masked by capital N's and non-repeating sequence is shown in 
+	upper case.
+	</TD></TR> 
+
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>contigAgp.zip:</B>
 	description of how the working draft was generated from fragments at a 
 	contig layout level. 
@@ -962,12 +1001,28 @@ directory may contain some or all of the following files:<BR>
 
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>database.zip:</B>
 	the Genome Browser database as tab-delimited files and associated 
-	MySQL table-creation tiles.
+	MySQL table-creation tiles (eliminated in later assemblies due to
+	size restrictions).
+	</TD></TR> 
+
+	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>chromTrf.zip:</B>
+	Tandem Repeat Finder locations, filtered to keep repeats with period 
+	less than or equal to 12, translated into one .bed file per chromosomes.
+	</TD></TR> 
+
+	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>contigTrf.zip:</B>
+	Tandem Repeat Finder locations, filtered to keep repeats with period 
+	less than or equal to 12, translated into one .bed file per contig.
 	</TD></TR> 
 
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>liftAll.zip:</B>
 	the offsets of contigs within chromosomes.
 	</TD></TR> 
+
+	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>mrna.zip:</B>
+	a zipped-up file of mRNA from GenBank. 
+	</TD></TR> 
+
 </TABLE> 
 <P><I>Chromosomes</I> contains 
 the assembled sequence for the genome in separate files for each
@@ -2672,15 +2727,33 @@ indices for mouse, rat, cow, and pig also contribute to this track.
 </TABLE></P>
 
 <P><B>Transcriptome</B><BR>
-This track shows transcriptome data for chromosomes 21 and 22 from Affymetrix. 
+This track shows transcriptome data for chromosomes 21 and 22 from Affymetrix, 
+as described in "Large-Scale Transcriptional Activity in Chromosomes 21 and 22", 
+Kapranov, P., Cawley, S. E., Drenkow, J., Bekiranov, S, Strausberg, R. L., 
+Fodor, S.P.A. and Gingeras, T.R.. In general, the data presented is the perfect 
+match - mismatch value. Different experiments were normalized by setting the 
+average value to be the same for each chip. 
 
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Display conventions:</I></B>
-	This track uses the display conventions for wiggle tracks.
+	This track uses the display conventions for wiggle tracks. To present a 
+	more interpretable display when zoomed out, averages have been 
+	precalculated over the chromosome at two different resolutions in 
+	addition to the raw data. For example, when zoomed out, there may appear 
+	to be a peak at the center of a gene rather than a signal at every exon. 
+	Zooming in will reveal the raw data for that region.
 	</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD> 
 	<B><I>Track details:</I></B> 
+	In dense mode (or at the top of the track in full mode), the 
+	transcriptome wiggle track displays the maximum value over all 
+	experiments for that probe, the idea 
+	being to paint as many transcribed regions as possible. In full mode, 
+	the track displays a separate wiggle track for each cell type, showing 
+	the data produced by averaging together replicates for that cell type.
+	Clicking on an individual data point will show positional information and
+	a link to view the sequence for the feature.
 	</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Table details:</I></B> 
