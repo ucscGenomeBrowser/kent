@@ -17,7 +17,8 @@ trap "echo Error: genbank-align failed on `hostname` >&2; exit 1" ERR
 exec </dev/null
 
 # config
-databases="hg15 mm3 rn3 hg16 fr1 dm1 mm4 sacCer1"
+databases="hg15 mm3 rn3 hg16 fr1 dm1 mm4"
+#  sacCer1
 
 # initialize
 gbRoot=/cluster/store5/genbank
@@ -50,10 +51,7 @@ if [ "x$workdir" = "x" ] ; then
     workdir="work/daily/align.$date"
 fi
 
-# align on large cluster, rsyncing to iservers
-clusterdir=/iscratch/genbank
-
-nice gbAlignStep $finish -workdir=$workdir -clusterRootDir=$clusterdir $databases
+nice gbAlignStep $finish -workdir=$workdir $databases
 
 gbMkTimeFile $buildTime
 
