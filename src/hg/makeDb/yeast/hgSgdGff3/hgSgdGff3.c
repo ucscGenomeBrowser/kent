@@ -5,7 +5,7 @@
 #include "options.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: hgSgdGff3.c,v 1.4 2003/12/01 20:32:55 kent Exp $";
+static char const rcsid[] = "$Id: hgSgdGff3.c,v 1.5 2003/12/09 02:57:27 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -16,8 +16,9 @@ errAbort(
   "   hgSgdGff3 s_cerevisiae.gff3 outDir\n"
   "outDir will be filled with:\n"
   "   codingGenes.gff - protein coding genes\n"
+  "   descriptions.gff - Descriptions of coding genes\n"
   "   otherFeatures.bed - other features in bed format\n"
-  "   notes.txt - three columns: ID, type, note\n"
+  "   notes.txt - descriptions of other features: ID, type, note\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -72,39 +73,53 @@ slReverse(&tfList);
 return tfList;
 }
 
+boolean isCds(char *type)
+/* Return TRUE if type is CDS-related. */
+{
+return startsWith("CDS", type) && !sameString("CDS:Pseudogene", type);
+}
 
-void noteIds(struct tenFields *tfList, char *inGff, FILE *f)
+void noteIds(struct tenFields *tfList, char *inGff, 
+	FILE *cdsFile, FILE *otherFile)
 /* Look for cases where tenth field is of form
  * ID=XXX;Note=YYY.  In these cases move XXX to
  * the ninth field, and store the ID, the 
  * third (type) field, and the YYY in f */
 {
 struct tenFields *tf;
+struct hash *uniqHash = newHash(19);
 for (tf = tfList; tf != NULL; tf = tf->next)
     {
     char *s = tf->fields[9];
     if (startsWith("ID=", s))
         {
+	char *type = tf->fields[2];
 	char *id = s+3, *note = "";
 	char *e = strchr(s, ';');
-	if (e != NULL)
+	FILE *f = (isCds(type) ? cdsFile : otherFile);
+	if (!hashLookup(uniqHash, id))
 	    {
-	    *e++ = 0;
-	    s = stringIn("Note=", e);
-	    if (s != NULL)
+	    hashAdd(uniqHash, id, NULL);
+	    if (e != NULL)
 		{
-		note = s+5;
-		cgiDecode(note, note, strlen(note));
+		*e++ = 0;
+		s = stringIn("Note=", e);
+		if (s != NULL)
+		    {
+		    note = s+5;
+		    cgiDecode(note, note, strlen(note));
+		    }
 		}
+	    fprintf(f, "%s\t%s\t%s\n", id, tf->fields[2], note);
 	    }
-	fprintf(f, "%s\t%s\t%s\n", id, tf->fields[2], note);
 	tf->fields[8] = id;
 	}
     }
+hashFree(&uniqHash);
 }
 
 void saveFeatures(struct tenFields *tfList, char *inGff,
-	FILE *codingFile, FILE *otherFile)
+	FILE *codingFile, FILE *descriptionFile, FILE *otherFile)
 /* Save coding genes to coding file as GFF and rest to
  * otherFile as bed. */
 {
@@ -115,7 +130,7 @@ for (tf = tfList; tf != NULL; tf = nextTf)
     {
     char *type = tf->fields[2];
     nextTf = tf->next;
-    if (startsWith("CDS", type) && !sameString("CDS:Pseudogene", type) )
+    if (isCds(type))
         {
 	/* Write exons to coding output. */
 	if (nextTf == NULL || !sameString("exon", nextTf->fields[2]))
@@ -151,11 +166,12 @@ void hgSgdGff3(char *inGff, char *outDir)
 {
 FILE *codingFile = openInDir(outDir, "codingGenes.gff");
 FILE *otherFile = openInDir(outDir, "otherFeatures.bed");
+FILE *descriptionFile = openInDir(outDir, "descriptions.txt");
 FILE *noteFile = openInDir(outDir, "notes.txt");
 struct tenFields *tf, *tfList = parseTenFields(inGff);
 
-noteIds(tfList, inGff, noteFile);
-saveFeatures(tfList, inGff, codingFile, otherFile);
+noteIds(tfList, inGff, descriptionFile, noteFile);
+saveFeatures(tfList, inGff, codingFile, descriptionFile, otherFile);
 carefulClose(&codingFile);
 carefulClose(&otherFile);
 carefulClose(&noteFile);
