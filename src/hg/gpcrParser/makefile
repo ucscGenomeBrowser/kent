@@ -12,6 +12,5 @@ O = gpcrParser.o
 gpcrParser: $O 
 	gcc -ggdb $O $(MYLIBS) $(L) 
 	mv a.out gpcrParser
-#	strip gpcrParser
 	chmod a+rx gpcrParser
-
+	cp gpcrParser $(HOME)/bin/$(MACHTYPE)

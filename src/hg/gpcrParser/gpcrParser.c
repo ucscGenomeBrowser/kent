@@ -1,6 +1,7 @@
 /** gpcrParser.c - Parses transmembrane cooridnates, outputs to xml file. */
 #include "common.h"
 #include "memalloc.h"
+#include "dystring.h"
 
 /** Method prototypes */
 void catSeqFile(FILE* outfile, char* filename);
@@ -13,7 +14,7 @@ void usage(char **argv);
 
 void usage(char **argv)
 {
-   if(argv[1] == NULL || argv[2] == NULL) 
+   if(argv[1] == NULL/* || argv[2] == NULL*/) 
         {
         errAbort(
           "gpcrParser - Create xml files for gpcr snakeplots.\n"
@@ -82,41 +83,30 @@ fprintf(outfile, "\t\t\t");
 void populateXMLFile(FILE *outfile, int tmNumber, char *proteinID, char *path)
 /** Adds the number of TM helices and sequence the the xml file */
 {
-char *filename = (char*)malloc(128*sizeof(char));
-strcpy(filename,path);
-        if(!endsWith(path, "/"))
-           strcat(filename, "/");
-strcat(filename, proteinID);
-strcat(filename, ".seq"); 
+struct dyString *filename = newDyString(128);
+dyStringPrintf(filename, "%s%s.seq", path, proteinID);
 fprintf(outfile, 
     "%d\" id-prefix=\"TM\" nterm-id=\"N-term\" cterm-id=\"C-term\" direction=\"down\" />\n\n
     \t</diagram-layout>\n\n
     \t<protein>\n\n\t\t<name>%s</name>\n\n\t\t<residue-codes>\n\n", 
     tmNumber, proteinID);
-catSeqFile(outfile, filename);
+catSeqFile(outfile, filename->string);
 fprintf(outfile, "\n\n\t\t</residue-codes>\n\n\t\t<secondary-structure>\n\n");
-free(filename);
+freeDyString(&filename);
 }
 
 FILE* createXMLFile(char* proteinID, char *path)
 {
 FILE* outfile;
-char *filename = (char*)malloc(128*sizeof(char));
-    if(path != NULL)
-        {
-        strcpy(filename,path);
-        strcat(filename, "/");
-        }
-strcat(filename,proteinID);
-strcat(filename, ".xml");
-outfile = mustOpen(filename, "w");
+struct dyString *filename = newDyString(128);
+dyStringPrintf(filename, "%s%s.xml", path, proteinID);
+outfile = mustOpen(filename->string, "w");
 fprintf(outfile, 
     "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n\n
     <rbde-diagram xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"H:\\dev\\crover\\xml\\xsd\\residue-based-diagram.xsd\">\n\n
     \t<diagram-layout>\n\n
     \t\t<tm-bundle tm-number=\"");
-free(filename);
-filename = NULL;
+freeDyString(&filename);
 return outfile;
 }
 
@@ -124,31 +114,32 @@ void getTransFromFile(FILE* infile, char *path)
 {
 FILE* outfile = NULL;
 int start, end, tmNumber, count, seqLength;
-char *proteinID, *line, *token;
+char *line, *token;
+struct dyString *proteinID = newDyString(24);
 start = end = tmNumber = count = seqLength = 0;
 while( ( line  = readLine(infile) ) != NULL )
     {  /*grab the protein ID after each <PRE> tag*/
+            printf("%s\n", line);
     while( (token = nextWord(&line)) != NULL )
         {
    	    if( sameString(token,"<PRE>#"))
                 {  /*create a new xml file*/
                 token = nextWord(&line);
-       	        proteinID = (char*)malloc(24*sizeof(char));
-                strcpy(proteinID, token);
-                outfile = createXMLFile(proteinID, path);
-	        token = lastWordInLine(line);
+       	        dyStringAppend(proteinID, token);
+                outfile = createXMLFile(proteinID->string, path);
+                token = lastWordInLine(line);
                 seqLength = atoi(token);
                 }
             if( sameString(token,"predicted") )
                 {   /*grab the number of transmembrane helices*/
-                token = lastWordInLine(line); 
+                token = lastWordInLine(line);
                 tmNumber = atoi(token);
-                populateXMLFile(outfile, tmNumber, proteinID, path);
+                populateXMLFile(outfile, tmNumber, proteinID->string, path);
                 }
             if( sameString(token,"</PRE>") )
                 {  /*close the xml file*/
-	        carefulClose(&outfile);
-  	        free(proteinID);
+                carefulClose(&outfile);
+  	        dyStringClear(proteinID);
                 count = 0;
                 }
             if( sameString(token,"TMhelix") )
@@ -166,20 +157,28 @@ while( ( line  = readLine(infile) ) != NULL )
                     if( count == tmNumber && outfile != NULL )
                         {
                         addCoordinatesToXMLFile(outfile,end+1,seqLength,"C-term",count);
-                        finishXMLFile(outfile, proteinID, seqLength);
+                        finishXMLFile(outfile, proteinID->string, seqLength);
                         }
                 }
         } /*end inner while*/
+   /* freeMem(line);*/
     }   /*end outer while*/
+    freeMem(line);
+    freeDyString(&proteinID);
 }
 
 int main(int argc, char** argv)
 {
 FILE *infile;
+struct dyString *path = newDyString(128);
 usage(argv);
-infile = mustOpen(argv[1], "r");
-getTransFromFile(infile, argv[2]);
+dyStringAppend(path, argv[1]);
+    if(!endsWith(path->string, "/"))
+       dyStringAppend(path, "/");
+infile = mustOpen("/cluster/home/ctrople/test/result.htm", "r");
+getTransFromFile(infile, path->string);
 carefulClose(&infile);
+freeDyString(&path);
 return 0;
 }
 

@@ -14,4 +14,4 @@ makeSeqs: $O
 	mv a.out makeSeqs
 	strip makeSeqs
 	chmod a+rx makeSeqs
-#	cp makeSeqs $(HOME)/bin/$(MACHTYPE)
+	cp makeSeqs $(HOME)/bin/$(MACHTYPE)
