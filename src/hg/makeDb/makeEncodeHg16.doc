@@ -236,3 +236,72 @@ cat > load.csh << 'EOF'
     # use as basis of hg16 trackDb entries
 
 
+# AFFY TRANSCRIPTION AND CHIP/CHIP TEMPORAL PROFILING (2004-12-08 kate)
+
+    # HL60 cells stimulated with Retinoic Acid
+    # Transcription and PolII ChIP/Chip at 4 timepoints (8 experiments)
+    # wig & bed for each experiment 
+    # filenames: EC_HL60_RA_RNA_00hr_AS.hs.NCBIv34.{bed,wig}
+    #            EC_HL60_RA_RNApol2_00hr_AS_b.hs.NCBIv34.{bed,wig}
+    # Use these to construct 16 tracks:
+    # track encodeAffyRnaHl60Hr{0,2,8,32}
+    # track encodeAffyChIpRnapHl60Hr{0,2,8,32}
+    # RNA/Affy HL60 0hr
+    # ChIP/Affy Pol2 0hr
+
+    mkdir -p /gbdb/hg16/encode/Affy/2004-12-03/wib
+    cd /cluster/data/encode
+    mkdir -p Affy/Dec03_2004
+    cd Affy/Dec03_2004
+    wget http://transcriptome.affymetrix.com/download/ENCODE/ucsc_formats.tar.bz2
+    bunzip2 ucsc_formats.tar.bz2
+        # trailing garbage after EOF ignored
+    tar xvf ucsc_formats.tar
+    cd ucsc_formats
+cat > load.csh << 'EOF'
+    foreach f (bed/*.bed)
+        set base = $f:t:r
+        set info = `echo $f:t | sed 's/EC_HL60_RA_\([^_][^_]*\)_\([0-9][0-9]*\)hr.*/\1.\2/'`
+        set hrs = `expr $info:e + 0`
+        set exp = `echo $info:r |  \
+                        sed -e 's/RNApol2/ChIpRnap/' -e 's/RNA/Rna/'`
+        if ($exp == "Rna") then
+            set meas = "Sig"
+        else
+            set meas = "Pval"
+        endif
+        set track = encodeAffy${exp}Hl60SitesHr$hrs
+        sed '1d' $f | \
+            hgLoadBed -noBin hg16 $track stdin
+        set ct = `hgsql -N -s -e "select count(*) from $track" hg16`
+        echo "track $track"
+        echo "$f:t	$ct"
+        set track = encodeAffy${exp}Hl60${meas}Hr$hrs
+        sed '/^track/d' wig/$base.wig | wigEncode stdin $track.wig $track.wib
+        ln -s `pwd`/$track.wib /gbdb/hg16/encode/Affy/2004-12-03/wib
+        # load into database
+        hgLoadWiggle hg16 ${track} $track.wig \
+                    -pathPrefix=/gbdb/hg16/encode/Affy/2004-12-03/wib
+    end
+'EOF'
+    # << for emacs
+    csh load.csh >&! load.log &
+    grep EC_HL60 load.log | grep -v wig > loaded.txt
+    # email loaded.txt to contributor
+    awk '{print $1}' bed/*.bed | sort | uniq > chroms.txt
+    # use in trackDb chromosomes setting
+    grep encodeAffy load.log > trackDb.ra
+    # use as basis of hg16 trackDb entries
+    # (create 4 composite tracks)
+
+    cd description
+    # edit
+    cp EC_HL60_RA_RNA_00hr_AS_hs.NCBIv34.bed.dsc encodeAffyRnaHl60Sites.html
+    cp EC_HL60_RA_RNA_00hr_AS_hs.NCBIv34.wig.dsc encodeAffyRnaHl60Sig.html
+    cp EC_HL60_RA_RNApol2_00hr_AS_hs.NCBIv34.bed.dsc encodeAffyChIpRnapHl60Sites.html
+    cp EC_HL60_RA_RNApol2_00hr_AS_hs.NCBIv34.wig.dsc encodeAffyChIpRnapHl60Pval.html
+
+
+
+
+# TODO: Remove Nov08 data
