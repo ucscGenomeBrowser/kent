@@ -233,11 +233,11 @@ color 20,20,170
 type genePred
 
 track refGene
-shortLabel Known Genes
-longLabel Known Genes (from RefSeq)
+shortLabel RefSeq Genes
+longLabel RefSeq Genes
 priority 12
 visibility full
-color 20,20,170
+color 12,12,120
 type genePred refPep refMrna
 
 track sanger20
