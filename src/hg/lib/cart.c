@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.40 2004/07/09 18:23:34 kent Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.41 2004/07/09 19:14:50 kent Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -171,21 +171,13 @@ static void updateOne(struct sqlConnection *conn,
 	char *table, struct cartDb *cdb, char *contents, int contentSize)
 /* Update cdb in database. */
 {
-if (contentSize <= 6*1024 || cdb->useCount > 0)
-    {
-    struct dyString *dy = newDyString(4096);
-    dyStringPrintf(dy, "UPDATE %s SET contents='", table);
-    dyStringAppendN(dy, contents, contentSize);
-    dyStringPrintf(dy, "',lastUse=now(),useCount=%d ", cdb->useCount+1);
-    dyStringPrintf(dy, " where id=%u", cdb->id);
-    sqlUpdate(conn, dy->string);
-    dyStringFree(&dy);
-    }
-else
-    {
-    fprintf(stderr, "Cart stuffing bot?  Not writing %d bytes to %s id %d on first use\n",
-    	contentSize, table, cdb->id);
-    }
+struct dyString *dy = newDyString(4096);
+dyStringPrintf(dy, "UPDATE %s SET contents='", table);
+dyStringAppendN(dy, contents, contentSize);
+dyStringPrintf(dy, "',lastUse=now(),useCount=%d ", cdb->useCount+1);
+dyStringPrintf(dy, " where id=%u", cdb->id);
+sqlUpdate(conn, dy->string);
+dyStringFree(&dy);
 }
 
 
@@ -215,9 +207,18 @@ for (el = elList; el != NULL; el = el->next)
 	}
     }
 
-/* Make up update statement. */
-updateOne(conn, "userDb", cart->userInfo, encoded->string, encoded->stringSize);
-updateOne(conn, "sessionDb", cart->sessionInfo, encoded->string, encoded->stringSize);
+/* Make up update statement unless it looks like a robot with
+ * a great bunch of variables. */
+if (encoded->stringSize < 6*1024 || cart->userInfo->useCount > 0)
+    {
+    updateOne(conn, "userDb", cart->userInfo, encoded->string, encoded->stringSize);
+    updateOne(conn, "sessionDb", cart->sessionInfo, encoded->string, encoded->stringSize);
+    }
+else
+    {
+    fprintf(stderr, "Cart stuffing bot?  Not writing %d bytes to cart on first use\n",
+    	encoded->stringSize);
+    }
 
 /* Cleanup */
 cartDefaultDisconnector(&conn);
