@@ -12,7 +12,7 @@
 #include "gff.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: gffOut.c,v 1.10 2004/09/25 05:09:02 kent Exp $";
+static char const rcsid[] = "$Id: gffOut.c,v 1.11 2004/10/12 00:14:11 kent Exp $";
 
 static void addGffLineFromBed(struct gffLine **pGffList, struct bed *bed,
 			      char *source, char *feature,
@@ -20,6 +20,7 @@ static void addGffLineFromBed(struct gffLine **pGffList, struct bed *bed,
 /* Create a gffLine from a bed and line-specific parameters, add to list. */
 {
 struct gffLine *gff;
+char strand;
 AllocVar(gff);
 gff->seq = cloneString(bed->chrom);
 gff->source = cloneString(source);
@@ -27,7 +28,10 @@ gff->feature = cloneString(feature);
 gff->start = start;
 gff->end = end;
 gff->score = bed->score;
-gff->strand = bed->strand[0];
+strand = bed->strand[0];
+if (strand != '+' && strand != '-')
+    strand = '.';
+gff->strand = strand;
 gff->frame = frame;
 gff->group = cloneString(txName);
 gff->geneId = cloneString(bed->name);
