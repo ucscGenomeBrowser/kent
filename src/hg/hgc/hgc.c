@@ -149,7 +149,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.779 2004/11/02 10:07:23 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.780 2004/11/09 23:45:33 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5529,13 +5529,14 @@ char protName[256];
 char *prot = NULL;
 
 hgcStart("Protein Translation");
-
 safef(where, sizeof(where), "name = \"%s\"", geneName);
 gp = genePredReaderLoadQuery(conn, tdb->tableName, where);
 hFreeConn(&conn);
 if (gp == NULL)
     errAbort("%s not found in %s when translating to protein",
              geneName, tdb->tableName);
+else if (gp->cdsStart == gp->cdsEnd)
+    errAbort("No CDS defined: no protein translation for %s", geneName);
 prot = getPredMRnaProtSeq(gp);
 safef(protName, sizeof(protName), "%s_prot", geneName);
 displayProteinPrediction(protName, prot);
