@@ -64,6 +64,7 @@ DIRS = \
 	faNcbiToUcsc \
 	faNoise \
 	faOneRecord \
+	faPolyASizes \
 	faRc \
 	faSimplify \
 	faSize \
