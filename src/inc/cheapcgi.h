@@ -89,6 +89,14 @@ char *cgiEncode(char *inString);
 void cgiMakeButton(char *name, char *value);
 /* Make 'submit' type button. */
 
+void cgiMakeRadioButton(char *name, char *value, boolean checked);
+/* Make radio type button.  A group of radio buttons should have the
+ * same name but different values.   The default selection should be
+ * sent with checked on. */
+
+void cgiMakeCheckBox(char *name, boolean checked);
+/* Make check box. */
+
 void cgiMakeTextVar(char *varName, char *initialVal, int charSize);
 /* Make a text control filled with initial value.  If charSize
  * is zero it's calculated from initialVal size. */
