@@ -823,7 +823,7 @@ CREATE TABLE mitopred (
     hgsql sacCer1 < mitopred.sql
     hgsql sacCer1 -e 'load data local infile "mitopred.tab" into table mitopred'
 
-# MAKE Human Proteins track
+# MAKE Human Proteins track (DONE 2004-08-25 braney)
     ssh kksilo
     mkdir -p /cluster/data/sacCer1/blastDb
     cd /cluster/data/sacCer1/blastDb
@@ -856,7 +856,8 @@ blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/
 #!/bin/sh
 BLASTMAT=/iscratch/i/blast/data
 export BLASTMAT
-f=/tmp/`basename $3`
+g=`basename $2`
+f=/tmp/`basename $3`.$g
 for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
 do
 if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
@@ -888,7 +889,7 @@ exit 1
     ssh kk
     cd /cluster/data/sacCer1/bed/tblastn.hg16KG
     para create blastSpec
-    para shove   # jobs will need to be restarted, but they should all finish
+    para try, push
 
     cat << '_EOF_' > chainGsub
 #LOOP
@@ -932,7 +933,7 @@ chainSome $(path1)
 
 # End tblastn
 
-# BLAT SGD predicted sacCer1 proteins against sacCer1
+# BLAT SGD predicted sacCer1 proteins against sacCer1 (DONE 2004-08-31 braney)
     ssh hgwdev
     cd /cluster/data/sacCer1/bed
     mkdir blat.sacCer1SG
