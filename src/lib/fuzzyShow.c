@@ -12,7 +12,7 @@
 #include "cda.h"
 #include "seqOut.h"
 
-static char const rcsid[] = "$Id: fuzzyShow.c,v 1.11 2003/05/06 07:33:42 kate Exp $";
+static char const rcsid[] = "$Id: fuzzyShow.c,v 1.12 2003/05/12 14:42:10 booch Exp $";
 
 int ffShAliPart(FILE *f, struct ffAli *aliList, 
     char *needleName, DNA *needle, int needleSize, int needleNumOffset,
@@ -20,7 +20,8 @@ int ffShAliPart(FILE *f, struct ffAli *aliList,
     int blockMaxGap, boolean rcNeedle, boolean rcHaystack,
     boolean showJumpTable, 
     boolean showNeedle, boolean showHaystack,
-    boolean showSideBySide, boolean upcMatch)
+    boolean showSideBySide, boolean upcMatch,
+    int cdsS, int cdsE)
 /* Display parts of allignment on html page.  Returns number of blocks (after
  * merging blocks separated by blockMaxGap or less). */
 {
@@ -74,14 +75,24 @@ if (showNeedle)
     fprintf(f, "<TT><PRE>\n");
     for (ali = leftAli; ali != NULL; ali = ali->right)
 	{
+	boolean utr = FALSE;
 	int i;
 	int off = ali->nStart-needle;
 	int count = ali->nEnd - ali->nStart;
+	if ((cdsE > 0) && ((cdsS-off-1) > 0)) 
+	    utr = TRUE;
 	for (i=0; i<count; ++i)
 	    {
+	    if (!utr && (i > (cdsE-off-1)) && (cdsE > 0))
+		utr = TRUE;
+	    if (utr && (i == (cdsS-off)))
+		utr = FALSE;
 	    if (toupper(ali->hStart[i]) == toupper(ali->nStart[i]))
 		{
-		colorFlags[off+i] = ((i == 0 || i == count-1) ? socBrightBlue : socBlue);
+		if (utr)
+		    colorFlags[off+i] = ((i == 0 || i == count-1) ? socOrange : socRed);
+		else
+		    colorFlags[off+i] = ((i == 0 || i == count-1) ? socBrightBlue : socBlue);
 		if (upcMatch)
 		    n[off+i] = toupper(n[off+i]);
 		}
@@ -108,14 +119,25 @@ if (showHaystack)
     zeroBytes(colorFlags, haySize);
     for (ali = leftAli; ali != NULL; ali = ali->right)
 	{
+	boolean utr = FALSE;
 	int i;
 	int off = ali->hStart-haystack;
 	int count = ali->hEnd - ali->hStart;
+	int offn = ali->nStart-needle;
+	if ((cdsE > 0) && ((cdsS-offn-1) > 0)) 
+	    utr = TRUE;
 	for (i=0; i<count; ++i)
 	    {
+	    if (!utr && (i > (cdsE-offn-1)) && (cdsE > 0))
+		utr = TRUE;
+	    if (utr && (i == (cdsS-offn)))
+		utr = FALSE;
 	    if (toupper(ali->hStart[i]) == toupper(ali->nStart[i]))
 		{
-		colorFlags[off+i] = ((i == 0 || i == count-1) ? socBrightBlue : socBlue);
+		if (utr)
+		    colorFlags[off+i] = ((i == 0 || i == count-1) ? socOrange : socRed);
+		else
+		    colorFlags[off+i] = ((i == 0 || i == count-1) ? socBrightBlue : socBlue);
 		if (upcMatch)
 		    h[off+i] = toupper(h[off+i]);
 		}
@@ -220,7 +242,7 @@ int ffShAli(FILE *f, struct ffAli *aliList,
 {
 return ffShAliPart(f, aliList, needleName, needle, needleSize, needleNumOffset,
     haystackName, haystack, haySize, hayNumOffset, blockMaxGap, rcNeedle, FALSE,
-    TRUE, TRUE, TRUE, TRUE, FALSE);
+    TRUE, TRUE, TRUE, TRUE, FALSE,0,0);
 }
 
 void ffShowAli(struct ffAli *aliList, char *needleName, DNA *needle, int needleNumOffset,
