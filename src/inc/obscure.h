@@ -50,6 +50,11 @@ boolean parseQuotedString( char *in, char *out, char **retNext);
  * Return pointer to character past end of string in *retNext. 
  * Return FALSE if can't find end. */
 
+struct slName *stringToSlNames(char *string);
+/* Convert string to a list of slNames separated by
+ * white space, but allowing multiple words in quotes.
+ * Quotes if any are stripped.  */
+
 struct hash *hashVarLine(char *line, int lineIx);
 /* Return a symbol table from a line of form:
  *   var1=val1 var2='quoted val2' var3="another val" */
