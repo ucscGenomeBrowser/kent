@@ -6,8 +6,9 @@
 #include "gff.h"
 #include "hgRelate.h"
 #include "gencodeIntron.h"
+#include "options.h"
 
-static char const rcsid[] = "$Id: ldGencodeIntron.c,v 1.1 2005/03/22 03:04:22 kate Exp $";
+static char const rcsid[] = "$Id: ldGencodeIntron.c,v 1.2 2005/04/01 01:36:24 kate Exp $";
 
 void usage()
 {
@@ -16,6 +17,8 @@ errAbort(
        "usage:\n"
        "     ldGencodeIntron database table file(s).gtf\n");
 }
+
+struct optionSpec options[] = {{NULL, 0}};
 
 void ldGencodeIntron(char *database, char *table,  
                         int gtfCount, char *gtfNames[])
@@ -33,10 +36,7 @@ int introns = 0;
 for (i=0; i<gtfCount; i++)
     {
     verbose(1, "Reading %s\n", gtfNames[i]);
-    slAddHead(&gffList, gffRead(gtfNames[i]));
-    }
-for (gff = gffList; gff != NULL; gff = gff->next)
-    {
+    gff = gffRead(gtfNames[i]);
     for (gffLine = gff->lineList; gffLine != NULL; gffLine = gffLine->next)
         {
         if (sameWord(gffLine->feature, "intron"))
@@ -52,8 +52,8 @@ for (gff = gffList; gff != NULL; gff = gff->next)
             intron->transcript = gffLine->group;
             intron->geneId = gffLine->geneId;
             slAddHead(&intronList, intron);
+            verbose(2, "%s %s\n", intron->chrom, intron->name);
             introns++;
-            verbose(1, "intron %s\n", intron->name);
             }
         }
     }
@@ -74,6 +74,7 @@ sqlDisconnect(&conn);
 int main(int argc, char *argv[])
 /* Process command line */
 {
+optionInit(&argc, argv, options);
 if (argc < 3)
     usage();
 ldGencodeIntron(argv[1], argv[2], argc-3, argv+3);
