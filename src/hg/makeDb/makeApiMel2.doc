@@ -559,4 +559,36 @@ apiMel2.perChromTables = no
     # Make a README.txt which explains the files & formats.
     md5sum *.gz > md5sum.txt
 
+# MAKE SCAFFOLDS TRACK (DONE 2/23/2005 Andy)
+    ssh kksilo
+    cd /cluster/data/apiMel2/bed
+    mkdir scaffolds
+    cd scaffolds
+    for g in `seq 1 16` Un; do 
+       wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Amellifera/fasta/Amel20050120-freeze/linearScaffolds/Group${g}_20050120.fa.gz; 
+       gunzip Group${g}_20050120.fa.gz
+       nice blat -fastMap -maxIntron=0 -dots=1000000 ../../apiMel2.2bit:Group$g -ooc=../../11.ooc Group${g}_20050120.fa Group${g}.psl
+       perfectBlatBed4 Group${g}.psl Group${g}.scaffolds.bed
+    done
+    # Fix up the Group10, and GroupUn ones by hand.  Checking line counts for each bed file (Y1) with GroupX.Y2 last record,
+    # Y1 should = Y2.  GroupUn had two full-length hits to GroupUn.1669, so I deleted the one that didn't seem to jive.
+    rm *.fa *.psl
+    cat *.bed >> scaffolds.bed
+    rm Group*.bed
+    sed 's/gnl|.*|//' scaffolds.bed > tmp
+    mv tmp scaffolds.bed
+    hgLoadBed apiMel2 scaffolds scaffolds.bed
+    # trackDb.ra entry:
+track scaffolds
+shortLabel Scaffolds
+longLabel Assembly from Scaffolds
+group map
+priority 9.5
+visibility hide
+color 99,66,20
+altColor 199,147,35
+type bed 4 .
+    # The description needs some editing.
+
 # MAKE MELANOGASTER PROTEINS TRACK (TODO)
+   
