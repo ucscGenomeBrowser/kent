@@ -940,6 +940,14 @@ group compGeno
 visibility hide
 type bed 5
 
+track pHMM_3_WayTop5
+shortLabel Most 3-Way Cons
+longLabel Top 5 % of Human/Mouse/Rat PhyloHMM Cons
+priority 100.2
+group compGeno
+visibility hide
+type bed 5
+
 track leptin
 shortLabel Leptin TBA
 longLabel Leptin Region TBA alignments (human,mouse,rat,chimp,baboon,cow,pig,cat,dog)
