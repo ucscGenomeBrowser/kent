@@ -729,4 +729,11 @@
 436 - Individual track UI back in.  Put 'cart' persistent state into
       browser.  This version is EXPERIMENTAL.   MIRRORS SHOULD NOT BUILD
       BROWSERS FROM THIS SOURCE.
-
+437 - Cart seems to work.
+438 - Fixed bug where EST & mRNA tracks weren't collapsing when they
+      had too many items.  This was introduced in 435.  Fixed bug
+      where blat details page was off introduced who knows when.
+439 - Adapting browser to work with NCBI assembly.  Made blat 
+      handle lower-case masking of database in translated mode.
+      Various minor bug fixes.  Start of several new browser
+      features by other UCSC people.
