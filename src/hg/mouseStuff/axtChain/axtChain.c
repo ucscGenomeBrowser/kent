@@ -13,7 +13,7 @@
 #include "chainBlock.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: axtChain.c,v 1.20 2003/11/24 07:15:39 baertsch Exp $";
+static char const rcsid[] = "$Id: axtChain.c,v 1.21 2003/12/17 04:25:32 baertsch Exp $";
 
 int minScore = 1000;
 char *detailsName = NULL;
@@ -552,6 +552,8 @@ void calcChainBounds(struct chain *chain)
 /* Recalculate chain boundaries. */
 {
 struct boxIn *b = chain->blockList;
+if (chain->blockList == NULL)
+    return;
 chain->qStart = b->qStart;
 chain->tStart = b->tStart;
 b = slLastEl(chain->blockList);
