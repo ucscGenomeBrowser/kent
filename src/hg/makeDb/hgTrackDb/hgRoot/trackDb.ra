@@ -148,11 +148,20 @@ type genePred refPep refMrna
 
 track sanger22
 shortLabel Sanger 22
-longLabel Sanger Center Chromosome 22 Annotations
+longLabel Sanger Center Chromosome 22 Genes
 priority 13
 visibility full
 chromosomes chr22,
 color 0,100,180
+type genePred
+
+track sanger22pseudo
+shortLabel Sanger 22 Pseudo
+longLabel Sanger Center Chromosome 22 Pseudogenes
+priority 13.1
+visibility hide
+chromosomes chr22,
+color 30,130,210
 type genePred
 
 track genieAlt
