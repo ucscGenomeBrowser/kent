@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.16 2004/08/11 21:55:05 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.17 2004/08/11 22:01:14 hiram Exp $";
 
 /* Command line switches. */
 static boolean noAscii = FALSE;	/*	do not output ascii data */
@@ -69,7 +69,7 @@ errAbort(
   "   -silent - no output, scanning data only and prepares result\n"
   "   -fetchNothing - scanning data only, *NOT* preparing result\n"
   "   -timing - display timing statistics\n"
-  "   -skipDataRead - do not read the .wib data (for no-read speed check)\n"
+/*"   -skipDataRead - do not read the .wib data (for no-read speed check)\n"*/
   "   -bedFile=<file> - constrain output to ranges specified in bed <file>\n"
   "   -dataConstraint='DC' - where DC is one of < = >= <= == != 'in range'\n"
   "   -ll=<F> - lowerLimit compare data values to F (float) (all but 'in range')\n"
