@@ -27,7 +27,7 @@ char nibFile[512];
 int wordCount;
 char *words[32];
 struct lineFile *lf = lineFileOpen(bedName, TRUE);
-static int baseCounts[5], totalBases = 0;
+static double baseCounts[5], totalBases = 0;
 
 dnaUtilOpen();
 while ((wordCount = lineFileChop(lf, words)) != 0)
