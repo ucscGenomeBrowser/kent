@@ -498,3 +498,48 @@ Wrote 38031 overused 11-mers to 11.ooc
 Done making 11.ooc
   cp -p 11.ooc /iscratch/i/rheMac0/
   iSync
+
+# SWAP CHAINS FROM HG17, BUILD NETS ETC.   (DONE  3/31/2005  Robert)
+    ssh eieio
+    mkdir /cluster/data/rheMac0/bed/blastz.hg17.swap
+    cd /cluster/data/rheMac0/bed/blastz.hg17.swap
+# use special version of doBlastzChainNet.pl to handle hg17 hack
+# must run on kolossus , due to memory requirements.
+    nohup /cluster/data/hg17/bed/blastz.rheMac0/doBlastzChainNet.pl -swap /cluster/data/hg17/bed/blastz.rheMac0/DEF   \
+       -workhorse=kolossus >& do.log &
+    tail -f do.log
+    # Add {chain,net}hg17 to trackDb.ra if necessary.
+    # Add /usr/local/apache/htdocs/goldenPath/rheMac0/vsHg17/README.txt
+
+# hgLoadChain ran out of memory , split chains
+cd /cluster/data/rheMac0/bed/blastz.hg17.swap/axtChain
+mkdir split
+chainSplit split rheMac0.hg17.all.chain.gz -q &
+# filter chains score < 5000
+mkdir splitFilter
+for i in `ls split` ; do echo $i ;chainFilter split/$i -minScore=5000 > splitFilter/$i ; done
+rm -rf split
+#assumes empty chain tables exist
+for i in `ls splitFilter` ; do echo $i ; hgLoadChain -oldTable -tIndex rheMac0 chainHg17 splitFilter/$i ; done
+# Add gap/repeat stats to the net file using database tables:
+cd /cluster/data/rheMac0/bed/blastz.hg17.swap/axtChain
+netClass -verbose=0 -noAr noClass.net rheMac0 hg17 rheMac0.hg17.net
+
+# Load nets:
+netFilter -minGap=10 rheMac0.hg17.net \
+| hgLoadNet -verbose=0 rheMac0 netHg17 stdin
+
+
+# make liftOver chains
+ssh eieio
+gunzip /cluster/data/hg17/bed/liftOver/hg17.rheMac0.over.chain.gz
+ssh hgwdev
+ln /cluster/data/hg17/bed/liftOver/hg17.rheMac0.over.chain /gbdb/hg17/liftOver/hg17ToRheMac0.over.chain -s
+    cd /usr/local/apache/htdocs/goldenPath/bosTau1/liftOver
+    cp /cluster/data/bosTau1/bed/bedOver/bosTau1.hg17.over.chain.gz .
+
+    # hgsql hgcentraltest
+# insert into liftOverChain 
+#      (fromDb, toDb, path, minMatch, minSizeT, minSizeQ, multiple, minBlocks, fudgeThick) values ("rheMac0", "hg17", "/gbdb/rheMac0/liftOver/rheMac0.hg17.over.chain", 0.95, 0, 0, "Y", 1, "N");
+# insert into liftOverChain 
+#      (fromDb, toDb, path, minMatch, minSizeT, minSizeQ, multiple, minBlocks, fudgeThick) values ("hg17", "rheMac0", "/gbdb/hg17/liftOver/hg17ToRheMac0.over.chain", 0.95, 0, 0, "Y", 1, "N");
