@@ -1,4 +1,5 @@
 /* blat - Standalone BLAT fast sequence search command line tool. */
+/* Copyright 2001-2002 Jim Kent.  All rights reserved. */
 #include "common.h"
 #include "memalloc.h"
 #include "linefile.h"

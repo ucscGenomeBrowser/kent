@@ -741,3 +741,6 @@
       control system.  Doing EST clustering on genome.
 441 - Refinements to parasol, and mouse browser.  Start of zoo
       browser.  Start of golden triangle code.
+442 - Much work on mouse/human alignment analysis.  Made pslPretty
+      and improved BLAT's ability to find small internal exons and
+      gfServer's network error handling.
