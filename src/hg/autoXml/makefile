@@ -1,7 +1,6 @@
 include ../../inc/common.mk
 
 
-L = /projects/cc/hg/jk/outSrc/expat/lib/.libs/libexpat.a -lm
 MYLIBDIR = ../../lib/$(MACHTYPE)
 #MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
@@ -9,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = autoXml.o
 
 autoXml: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/autoXml $O $(MYLIBS) $L
+	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/autoXml $O $(MYLIBS)
 #	strip $(HOME)/bin/$(MACHTYPE)/autoXml
