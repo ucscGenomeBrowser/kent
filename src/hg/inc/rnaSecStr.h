@@ -18,7 +18,7 @@ struct rnaSecStr
     unsigned score;	/* Score from 0-1000 */
     char strand[2];	/* + or - */
     unsigned size;	/* Size of element. */
-    char *secStr;	/* Parenthesis and '.'s which define the secondary structure */
+    char *secStr;	/* Parentheses and '.'s which define the secondary structure */
     double *conf;	/* Confidence of secondary-structure annotation per position (0.0-1.0). */
     };
 
