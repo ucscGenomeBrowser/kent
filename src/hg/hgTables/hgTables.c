@@ -14,7 +14,7 @@
 #include "grp.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.9 2004/07/14 05:53:47 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.10 2004/07/14 06:27:37 kent Exp $";
 
 
 void usage()
@@ -170,17 +170,20 @@ else if (sameString(track->tableName, "intronEst"))
     return cloneString("all_est");
 else if (sameString(track->tableName, "est"))
     return cloneString("all_est");
-else if (!hti->isSplit)  /* easy case. */
+else 
     return cloneString(track->tableName);
+}
+
+char *chromTable(struct sqlConnection *conn, char *table)
+/* Get chr1_table if it exists, otherwise table. */
+{
+char *chrom = hDefaultChrom();
+if (sqlTableExists(conn, table))
+    return cloneString(table);
 else
     {
-    char *chrom;
     char buf[256];
-    if (track->restrictCount > 0)
-        chrom = track->restrictList[0];
-    else
-        chrom = hDefaultChrom();
-    safef(buf, sizeof(buf), "%s_%s", chrom, track->tableName);
+    safef(buf, sizeof(buf), "%s_%s", chrom, table);
     return cloneString(buf);
     }
 }

@@ -18,7 +18,7 @@
 #include "asParse.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.4 2004/07/14 05:53:47 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.5 2004/07/14 06:27:37 kent Exp $";
 
 
 boolean isSqlStringType(char *type)
@@ -126,41 +126,32 @@ puts("</TR></TD></TABLE>");
 sqlFreeResult(&sr);
 }
 
-char *descTableName(char *table)
-/* Convert table from chr1_table to chrN_table. */
-{
-char *rootName;
-char buf[256];
-if (!startsWith("chr", table))
-    return cloneString(table);
-rootName = strchr(table+3, '_');
-if (rootName == NULL)
-    return cloneString(table);
-if (startsWith("_random", rootName))
-    rootName += 7;
-else
-    rootName += 1;
-safef(buf, sizeof(buf), "chrN_%s", rootName);
-return cloneString(buf);
-}
-
 struct asObject *asForTable(struct sqlConnection *conn, char *table)
 /* Get autoSQL description if any associated with table. */
 {
 struct asObject *asObj = NULL;
 if (sqlTableExists(conn, "tableDescriptions"))
     {
-    char *tableName = descTableName(table);
     char query[256];
     char *asText = NULL;
+
+    /* Try split table first. */
     safef(query, sizeof(query), 
-    	"select autoSqlDef from tableDescriptions where tableName='%s'",
-	tableName);
+    	"select autoSqlDef from tableDescriptions where tableName='chrN_%s'",
+	table);
     asText = sqlQuickString(conn, query);
+
+    /* If no result try unsplit table. */
+    if (asText == NULL)
+	{
+	safef(query, sizeof(query), 
+	    "select autoSqlDef from tableDescriptions where tableName='%s'",
+	    table);
+	asText = sqlQuickString(conn, query);
+	}
     if (asText != NULL && asText[0] != 0)
 	asObj = asParseText(asText);
     freez(&asText);
-    freez(&tableName);
     }
 return asObj;
 }
@@ -172,13 +163,14 @@ struct sqlConnection *conn = sqlConnect(db);
 struct joiner *joiner = joinerRead("all.joiner");
 struct joinerPair *jpList, *jp;
 struct asObject *asObj = NULL;
+char *splitTable = chromTable(conn, table);
 
 hPrintf("<B>Database:</B> %s ", db);
 hPrintf("<B>Primary Table:</B> %s<BR>", table);
 
 
 asObj = asForTable(conn, table);
-describeTable(db, table, asObj, conn, TRUE);
+describeTable(db, splitTable, asObj, conn, TRUE);
 
 jpList = joinerRelate(joiner, db, table);
 if (jpList != NULL)
@@ -212,7 +204,8 @@ htmlClose();
 void doTrackSchema(struct trackDb *track, struct sqlConnection *conn)
 /* Show schema around track. */
 {
-char *table = connectingTableForTrack(track);
+char *table = track->tableName;
+table = connectingTableForTrack(track);
 htmlOpen("Schema for %s - %s", track->shortLabel, track->longLabel);
 showSchema(database, table);
 htmlClose();
