@@ -6746,6 +6746,25 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 
     hgsql mm5 -e 'load data local infile "ensemblXref3.tab" into table ensemblXref3 ignore 1 lines'
 
+# CREATE SUPERFAMILY TRACK (DONE 2004-12-17 - Fan)
+   mkdir /cluster/data/mm5/bed/superfamily
+   cd    /cluster/data/mm5/bed/superfamily
+   hgSuperfam mm5 superfam041128 > sf.log
+   wc *
+# It is normal that many proteins does not have corresponding Superfamily entries.
+
+# Load the sfDescription table.
+   hgsql mm5 < ~/src/hg/lib/sfDescription.sql
+   hgsql mm5 -e 'LOAD DATA local INFILE "sfDescription.tab"  into table mm5.sfDescription;'
+
+# Finally, load the superfamily table.
+   hgLoadBed mm5 superfamily superfamily.tab -tab
+
+# Create knownToSuperfamily table
+   
+   cat /cluster/data/superfamily/041128/ass_28-Nov-2004.tab | hgKnownToSuper mm5 mm stdin
+# created 21899 records output
+
 # MAKE VSDANRER2 DOWNLOADABLES (DONE, 2004-12-14, hartera)
     ssh hgwdev
     cd /cluster/data/mm5/bed/blastz.danRer2/axtChrom
