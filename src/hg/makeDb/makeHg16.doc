@@ -5388,3 +5388,90 @@ EOF
     ldHgGene -predTab hg16 ECgene ECgene_hg16_v1.1_25oct2003_genes.txt 
     hgPepPred hg16 tab ECgenePep ECgene_hg16_v1.1_25oct2003_genepep.txt
     gzip *
+
+# MULTIZ HUMAN/MOUSE/RAT/CHIMP (kpollard, 12/16/03)
+#  chimp added to human/mouse/rat (HUMOR) alignment described above
+#  for now, human referenced and no new BLASTZ runs
+
+    ssh kk
+    #fix order in human/chimp BLASTZ MAF files
+    #use Kate's new files in humanBestAxt.2
+    cd /cluster/data/pt0/bed/blastz-blatHg16
+    mkdir humanBestAxt.ord
+    mkdir maf.ord
+    foreach file (humanBestAxt.2/*.axt)
+	set root=$file:t:r
+	echo $root
+	/cluster/bin/i386/axtSort $file humanBestAxt.ord/${root}.axt
+	/cluster/bin/i386/axtToMaf humanBestAxt.ord/${root}.axt ../blastz.hg16/S1.len /cluster/data/pt0/scaffold.sizes maf.ord/${root}.maf.unfixed -tPrefix=hg16. -qPrefix=pt0.
+	/cluster/bin/scripts/fixmaf.pl < maf.ord/${root}.maf.unfixed > maf.ord/${root}.maf
+    end
+
+    #test on chr11 with HMR
+    ssh eieio
+    mkdir -p /cluster/bluearc/multiz.hg16mm3rn3gg0pt0/hp.ord
+    cp /cluster/data/pt0/bed/blastz-blatHg16/maf.ord/chr11.maf /cluster/bluearc/multiz.hg16mm3rn3gg0pt0/hp.ord
+    logout  # back to kk
+    /cluster/data/hg16/bed/multiz.hg16mm3rn3gg0pt0/mz /cluster/bluearc/multiz.hg16mm3rn3gg0pt0/hp.ord/chr11.maf /cluster/bluearc/multiz.hg16mm3rn3gg0pt0/hmr/chr11.hmr.maf /cluster/data/hg16/bed/multiz.hg16mm3rn3gg0pt0/hmrp/chr11.ord.maf
+    #looks good, go ahead with HMRP multiz
+
+    mkdir -p /cluster/data/hg16/bed/multiz.hg16mm3rn3pt0
+    cd /cluster/data/hg16/bed/multiz.hg16mm3rn3pt0
+    mkdir hmrp
+
+    # wrapper script for multiz
+    cat << EOF > mz
+#!/bin/csh
+/cluster/bin/penn/tbaBin/multiz \$1 \$2 - > \$3
+EOF
+    chmod +x mz
+
+    ssh eieio
+    # clean up bluearc
+    rm -r /cluster/bluearc/multiz.hg16mm3rn3gg0pt0
+    # move MAFS to bluearc
+    mkdir -p /cluster/bluearc/multiz.hg16mm3rn3pt0/hmr
+    mkdir -p /cluster/bluearc/multiz.hg16mm3rn3pt0/hp
+    cp /cluster/data/hg16/bed/humor/hmr/*.maf /cluster/bluearc/multiz.hg16mm3rn3pt0/hmr
+    cp /cluster/data/pt0/bed/blastz-blatHg16/maf.ord/*.maf /cluster/bluearc/multiz.hg16mm3rn3pt0/hp
+    logout
+
+    # set up joblist (common denominator set: no chr19_random in hmr)
+    foreach file (/cluster/bluearc/multiz.hg16mm3rn3pt0/hmr/*.maf) 
+	set root=`echo $file:t:r | sed 's/\.hmr//'`
+	echo "/cluster/data/hg16/bed/multiz.hg16mm3rn3pt0/mz /cluster/bluearc/multiz.hg16mm3rn3pt0/hp/${root}.maf $file /cluster/data/hg16/bed/multiz.hg16mm3rn3pt0/hmrp/${root}.maf" >> jobList
+    end
+
+    #run MULTIZ
+    chmod +x jobList
+    para create jobList
+    #submit 10 jobs
+    para try
+    #keep an eye on them
+    para check
+    para finished
+    para running
+    #once these are done, submit rest
+    para push
+    para check
+    para time
+    #ran on cluster: 41 jobs, longest 42 min
+
+    #copy over chr19_random.maf from human/chimp
+    cp /cluster/bluearc/multiz.hg16mm3rn3pt0/hp/chr19_random.maf /cluster/data/hg16/bed/multiz.hg16mm3rn3pt0/hmrp/chr19_random.maf
+
+    # clean up bluearc
+    ssh eieio
+    rm -r /cluster/bluearc/multiz.hg16mm3rn3pt0
+    logout
+
+    # setup external files for database reference
+    ssh hgwdev
+    mkdir -p /gbdb/hg16/multizMm3Rn3Pt0
+    ln -s /cluster/data/hg16/bed/multiz.hg16mm3rn3pt0/hmrp/*.maf /gbdb/hg16/multizMm3Rn3Pt0
+
+    #load into database
+    cd /cluster/data/hg16/bed/multiz.hg16mm3rn3pt0/hmrp
+    /cluster/bin/i386/hgLoadMaf -warn hg16 multizMm3Rn3Pt0
+        # 5385226 mafs in 42 files
+        # 0-2594 warnings/file
