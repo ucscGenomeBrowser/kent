@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.771 2004/07/26 17:30:41 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.772 2004/07/27 16:39:14 hiram Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -4853,7 +4853,7 @@ void stsMapMethods(struct track *tg)
 /* Make track for sts markers. */
 {
 struct sqlConnection *conn = hAllocConn();
-if (sqlCountRows(conn, "stsMap") == 26) 
+if (sqlCountColumnsInTable(conn, "stsMap") == 26) 
     {
     tg->loadItems = loadStsMap;
     }
