@@ -10,7 +10,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.47 2003/06/21 16:50:12 kent Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.48 2003/06/24 07:07:29 kent Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -25,6 +25,13 @@ static struct cgiVar *cookieList = NULL;
 /* should cheapcgi use temp files to store uploaded files */
 static boolean doUseTempFile = FALSE;
 
+void dumpCookieList()
+/* Print out the cookie list. */
+{
+struct cgiVar *v;
+for (v=cookieList; v != NULL; v = v->next)
+    printf("%s=%s (%d)\n", v->name, v->val, v->saved);
+}
 
 void useTempFile() 
 /* tell cheapcgi to use temp files */
