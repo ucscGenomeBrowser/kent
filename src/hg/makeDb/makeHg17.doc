@@ -2509,8 +2509,8 @@ cat > template << 'EOF'
     hgsql hg17 < ~kent/src/hg/lib/stsInfo2.sql
     hgsql hg17 < ~kent/src/hg/lib/stsAlias.sql
     cp /cluster/data/ncbi/sts.9/{stsInfo2.bed,stsAlias.bed} .
-    mysql> load data local infile 'stsInfo2.bed' into table stsInfo2;
-    mysql> load data local infile 'stsAlias.bed' into table stsAlias;
+    hgsql hg17 -e 'load data local infile "stsInfo2.bed" into table stsInfo2'
+    hgsql hg17 -e 'load data local infile "stsAlias.bed" into table stsAlias'
     hgLoadBed -noBin -tab -sqlTable=/cluster/home/kent/src/hg/lib/stsMap.sql \
 	hg17 stsMap stsMap.bed
     hgLoadPsl -nobin -table=all_sts_primer hg17 primers/primers.psl
@@ -2581,7 +2581,7 @@ cat > template << 'EOF'
 	    hg17 recombRate recombRate.bed
 	   
 
-# FISH CLONES (2004-07-13 Terry)
+# FISH CLONES (DONE 2004-07-22 Kate)
 
 # The STS Marker, Coverage, and BAC End Pairs tracks must be completed prior to 
 # creating this track
@@ -2614,10 +2614,9 @@ cat > template << 'EOF'
             fishClones_initial
 	     
 # Get sequences for accessions not in genome
-    ssh kolossus
+    ssh eieio
     mkdir -p /cluster/bluearc/hg17/fishClones/
     cd /cluster/bluearc/hg17/fishClones/
-# GOT HERE
 	# goto http://www.ncbi.nlm.nih.gov/entrez/batchentrez.cgi?db=Nucleotide
 	# select file "/cluster/data/hg17/bed/fishClones/fishClones_initial.acc"
 	# change output to FASTA format
@@ -2626,23 +2625,28 @@ cat > template << 'EOF'
 # Align these using blat
     cp ~booch/tracks/gs.17/build34/fish/convert.pl .
     cp ~booch/tracks/gs.17/build34/fish/blatAll.pl .
+        # edited to use ooc file on bluearc, so can run on kolossus
     convert.pl  < notFound.fa > notFound.convert.fa
     mkdir out
     blatAll.pl /cluster/data/hg17 notFound.convert.fa out
+        # creates raw.psl, not.found.psl
 
 # Make final fishClones file with this new clone placement info
     cd /cluster/data/hg17/bed/fishClones
     fishClones -verbose=1 -fhcrc=fhcrc.sts -noBin \
-         -psl=/cluster/bluearc/hg17/fishClones/notFound.psl hg17 \
+         -psl=/cluster/bluearc/hg17/fishClones/not.found.psl hg17 \
          /cluster/data/ncbi/fishClones/fishClones.2004-07/hbrc.txt \
          /cluster/data/ncbi/fishClones/fishClones.2004-07/clac.out \
          /cluster/data/ncbi/bacends/human/bacends.4/cl_acc_gi_len \
          /cluster/data/hg17/bed/bacends/lifted/bacEnds.lifted.psl fishClones
 
 # Load the track
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/fishClones
     hgLoadBed -noBin -tab \
         -sqlTable=/cluster/home/kent/src/hg/lib/fishClones.sql \
 	hg17 fishClones fishClones.bed
+            # Loaded 10601 elements of size 16
 
 
 # CHROMOSOME BANDS TRACK (2004-07-13 Terry)
