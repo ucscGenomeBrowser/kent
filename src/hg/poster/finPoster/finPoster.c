@@ -22,11 +22,12 @@
 #include "rnaGene.h"
 #include "snp.h"
 #include "cytoBand.h"
+#include "binRange.h"
 #include "refLink.h"
 #include "hCommon.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: finPoster.c,v 1.6 2003/09/13 04:16:14 kent Exp $";
+static char const rcsid[] = "$Id: finPoster.c,v 1.7 2003/09/17 17:18:39 kent Exp $";
 
 /* Which database to use */
 char *database = "hg16";
@@ -1208,7 +1209,7 @@ printf("%s SNP density in %d windows is between %f and %f, average %f\n",
 void getSnpDensity(struct chromGaps *cg, char *chrom, int chromSize, struct sqlConnection *conn, FILE *f)
 /* Put out SNP density info. */
 {
-int windowSize = 50000;
+int windowSize = 100000;
 double scale = 500.0;
 struct sqlResult *sr;
 char **row;
@@ -1301,21 +1302,54 @@ struct wiggleChrom
     struct wigglePos *posList;
     };
 
-void getMutationRate(struct chromGaps *cg, char *chrom, struct hash *muteHash, FILE *f)
+struct binKeeper *gapBinKeeper(struct sqlConnection *conn, 
+	char *chrom, int chromSize)
+/* Make up a binKeeper for gaps on this chromosome bigger
+ * than 1 M. */
+{
+struct agpGap gap;
+int rowOffset;
+struct binKeeper *bk = binKeeperNew(0,chromSize);
+struct sqlResult *sr = hChromQuery(conn, "gap", chrom, "size >= 1000000", &rowOffset);
+char **row;
+
+while ((row = sqlNextRow(sr)) != NULL)
+     {
+     struct agpGap gap;
+     agpGapStaticLoad(row + rowOffset, &gap);
+     binKeeperAdd(bk, gap.chromStart, gap.chromEnd, NULL);
+     }
+sqlFreeResult(&sr);
+return bk;
+}
+
+void getMutationRate(struct chromGaps *cg, struct sqlConnection *conn,
+	char *chrom, int chromSize,
+	struct hash *muteHash, FILE *f)
 /* Get mutation rate out of hash and print it to file. */
 {
 struct wigglePos *wig;
 struct wiggleChrom *wc = hashMustFindVal(muteHash, chrom);
 double minVal = wc->minVal;
 double scale = 1.0/(wc->maxVal-minVal);
+struct binKeeper *bk = gapBinKeeper(conn, chrom, chromSize);
 
 slReverse(&wc->posList);
 for (wig = wc->posList; wig != NULL; wig = wig->next)
     {
-    double val = (wig->val - minVal) * scale;
-    printTabNum(f, cg, chrom, wig->start, wig->end, 
-	    "mutation", "wiggle", 0, 128, 0, val);
+    struct binElement *gapList = binKeeperFind(bk, wig->start, wig->end);
+    if (gapList == NULL)
+	{
+	double val = (wig->val - minVal) * scale;
+	printTabNum(f, cg, chrom, wig->start, wig->end, 
+		"mutation", "wiggle", 0, 128, 0, val);
+	}
+    else
+        {
+	slFreeList(&gapList);
+	}
     }
+binKeeperFree(&bk);
 }
 
 struct hash *makeMuteHash(char *fileName)
@@ -1430,7 +1464,7 @@ getGaps(cg, chrom, conn, f);
 /* Get centromere and telomere repeats. */
 getSynteny(cg, chrom, conn, f);
 getSnpDensity(cg, chrom, chromSize, conn, f);
-getMutationRate(cg, chrom, muteHash, f);
+getMutationRate(cg, conn, chrom, chromSize, muteHash, f);
 getMouseAli(cg, chrom, chromSize, axtFile, conn, f, 
 	"HS_ALI", 50000, 1.0/0.85, 0, 0, 255);
 getMouseId(cg, chrom, chromSize, axtFile, conn, f,
