@@ -10,12 +10,14 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: regionAgp.c,v 1.3 2004/08/17 21:53:36 kate Exp $";
+static char const rcsid[] = "$Id: regionAgp.c,v 1.4 2004/08/18 21:48:01 kate Exp $";
 
-#define DIR_OPTION      "dir"
+#define DIR_OPTION              "dir"
+#define NAME_PREFIX_OPTION      "namePrefix"
 
 static struct optionSpec options[] = {
         {DIR_OPTION, OPTION_BOOLEAN},
+        {NAME_PREFIX_OPTION, OPTION_STRING},
         {NULL, 0}
 };
 
@@ -42,6 +44,7 @@ struct agp {
 } agp;
 
 bool dirOption = FALSE;
+char *namePrefix = "";
 
 struct hash *agpLoadAll(char *agpFile)
 /* load AGP entries into a hash of AGP lists, one per chromosome */
@@ -125,7 +128,7 @@ struct lineFile *lf = lineFileOpen(agpIn, TRUE);
 FILE *fout = NULL;
 int start = 1;
 int seqNum = 1;
-char regionName[16];
+char regionName[64];
 char outFile[64];
 
 /* read in BED file with chromosome coordinate ranges */
@@ -150,12 +153,14 @@ for (pos = posList; pos != NULL; pos = pos->next)
         start = 1;
     verbose(2, "chr=%s, start=%d, end=%d, region=%s, seqnum=%d\n",
             pos->chrom, pos->chromStart, pos->chromEnd, pos->name, pos->score);
-    safef(regionName, ArraySize(regionName), "%s_%d", pos->name, pos->score);
+    safef(regionName, ArraySize(regionName), "%s%s_%d", 
+                namePrefix, pos->name, pos->score);
     if (dirOption)
         {
         start = 1;
         seqNum = 1;
-        safef(outFile, ArraySize(outFile), "%s/%s.agp", agpOut, regionName);
+        safef(outFile, ArraySize(outFile), "%s/%s.agp", 
+                        agpOut, regionName);
         fout = mustOpen(outFile, "w");
         }
     agpList = (struct agp *)hashMustFindVal(agpHash, pos->chrom);
@@ -232,6 +237,7 @@ char *out;
 
 optionInit(&argc, argv, options);
 dirOption = optionExists(DIR_OPTION);
+namePrefix = optionVal(NAME_PREFIX_OPTION, "");
 
 if (argc != 4)
     usage();

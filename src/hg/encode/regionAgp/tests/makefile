@@ -1,16 +1,27 @@
-test:   simpleTest dirTest zeroTest
+test:   namePrefixTest namePrefixDirTest simpleTest dirTest zeroTest
+
+PROG=regionAgp
+
+namePrefixTest:     mkdirs
+	${HOME}/bin/${MACHTYPE}/${PROG} -namePrefix=rat_ input/test.bed input/test.agp output/testNamePrefix.agp
+	diff expected/testNamePrefix.agp output
+
+namePrefixDirTest:     mkdirs
+	mkdir -p output/mouse
+	${HOME}/bin/${MACHTYPE}/${PROG} -namePrefix=mouse_ input/testDir.bed input/testDir.agp -dir output/mouse
+	cat output/mouse/*.agp | diff - expected/testNamePrefixDir.agp
 
 zeroTest:     mkdirs
-	${HOME}/bin/${MACHTYPE}/regionAgp input/test0.bed input/test0.agp output/test0.agp
+	${HOME}/bin/${MACHTYPE}/${PROG} input/test0.bed input/test0.agp output/test0.agp
 	diff expected/test0.agp output
 
 simpleTest:     mkdirs
-	${HOME}/bin/${MACHTYPE}/regionAgp input/test.bed input/test.agp output/region.agp
+	${HOME}/bin/${MACHTYPE}/${PROG} input/test.bed input/test.agp output/region.agp
 	diff expected/region.agp output
 	
 dirTest:         mkdirs
 	mkdir -p output/org
-	${HOME}/bin/${MACHTYPE}/regionAgp input/testDir.bed input/testDir.agp -dir output/org
+	${HOME}/bin/${MACHTYPE}/${PROG} input/testDir.bed input/testDir.agp -dir output/org
 	cat output/org/*.agp | diff - expected/testDir.agp
 
 mkdirs:
