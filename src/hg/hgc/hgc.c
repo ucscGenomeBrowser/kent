@@ -134,7 +134,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.597 2004/03/26 20:29:07 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.598 2004/03/27 15:10:39 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -13469,7 +13469,7 @@ else if (sameWord(track, "mrna") || sameWord(track, "mrna2") ||
     {
     doHgRna(tdb, item);
     }
-else if (sameWord(track, "affyU95") || sameWord(track, "affyU133") || sameWord(track, "affyU74") || (sameWord(track, "affyRAE230") )
+else if (sameWord(track, "affyU95") || sameWord(track, "affyU133") || sameWord(track, "affyU74") || sameWord(track, "affyRAE230") )
     {
     doAffy(tdb, item, NULL);
     }
