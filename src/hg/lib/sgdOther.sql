@@ -5,15 +5,14 @@
 
 #Features other than coding genes from yeast genome database
 CREATE TABLE sgdOther (
-    bin smallint unsigned not null,   # Bin for fast index
+    bin smallint not null,	# Index field
     chrom varchar(255) not null,	# Chromosome in chrNN format
     chromStart int not null,	# Start (zero based)
     chromEnd int not null,	# End (non-inclusive)
     name varchar(255) not null,	# Feature name
+    score int not null,	# Always 0
     strand char(1) not null,	# Strand: +, - or .
     type varchar(255) not null,	# Feature type
               #Indices
-    INDEX(chrom(8),bin),
-    INDEX(name(8)),
-    INDEX(type(8))
+    INDEX(chrom(8),bin)
 );

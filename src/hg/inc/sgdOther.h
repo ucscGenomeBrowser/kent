@@ -5,7 +5,7 @@
 #ifndef SGDOTHER_H
 #define SGDOTHER_H
 
-#define SGDOTHER_NUM_COLS 6
+#define SGDOTHER_NUM_COLS 7
 
 struct sgdOther
 /* Features other than coding genes from yeast genome database */
@@ -15,6 +15,7 @@ struct sgdOther
     int chromStart;	/* Start (zero based) */
     int chromEnd;	/* End (non-inclusive) */
     char *name;	/* Feature name */
+    int score;	/* Always 0 */
     char strand[2];	/* Strand: +, - or . */
     char *type;	/* Feature type */
     };

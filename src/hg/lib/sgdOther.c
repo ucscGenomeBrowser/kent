@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "sgdOther.h"
 
-static char const rcsid[] = "$Id: sgdOther.c,v 1.1 2003/11/25 21:10:47 kent Exp $";
+static char const rcsid[] = "$Id: sgdOther.c,v 1.2 2003/12/10 00:44:28 kent Exp $";
 
 void sgdOtherStaticLoad(char **row, struct sgdOther *ret)
 /* Load a row from sgdOther table into ret.  The contents of ret will
@@ -21,8 +21,9 @@ ret->chrom = row[0];
 ret->chromStart = sqlSigned(row[1]);
 ret->chromEnd = sqlSigned(row[2]);
 ret->name = row[3];
-strcpy(ret->strand, row[4]);
-ret->type = row[5];
+ret->score = sqlSigned(row[4]);
+strcpy(ret->strand, row[5]);
+ret->type = row[6];
 }
 
 struct sgdOther *sgdOtherLoad(char **row)
@@ -38,8 +39,9 @@ ret->chrom = cloneString(row[0]);
 ret->chromStart = sqlSigned(row[1]);
 ret->chromEnd = sqlSigned(row[2]);
 ret->name = cloneString(row[3]);
-strcpy(ret->strand, row[4]);
-ret->type = cloneString(row[5]);
+ret->score = sqlSigned(row[4]);
+strcpy(ret->strand, row[5]);
+ret->type = cloneString(row[6]);
 return ret;
 }
 
@@ -49,7 +51,7 @@ struct sgdOther *sgdOtherLoadAll(char *fileName)
 {
 struct sgdOther *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[7];
 
 while (lineFileRow(lf, row))
     {
@@ -67,7 +69,7 @@ struct sgdOther *sgdOtherLoadAllByChar(char *fileName, char chopper)
 {
 struct sgdOther *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[7];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -93,6 +95,7 @@ ret->chrom = sqlStringComma(&s);
 ret->chromStart = sqlSignedComma(&s);
 ret->chromEnd = sqlSignedComma(&s);
 ret->name = sqlStringComma(&s);
+ret->score = sqlSignedComma(&s);
 sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
 ret->type = sqlStringComma(&s);
 *pS = s;
@@ -140,6 +143,8 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%d", el->score);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->strand);

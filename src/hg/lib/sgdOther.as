@@ -5,6 +5,7 @@ table sgdOther
     int chromStart;	"Start (zero based)"
     int chromEnd;	"End (non-inclusive)"
     string name;	"Feature name"
+    int score;		"Always 0"
     char[1] strand;	"Strand: +, - or ."
     string type;	"Feature type"
     )
