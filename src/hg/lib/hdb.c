@@ -882,10 +882,18 @@ else
     {
     rowOffset = hti->hasBin;
     if (hti->isSplit)
+	{
         dyStringPrintf(query, "select * from %s_%s", chrom, rootTable);
+	if (extraWhere != NULL)
+	    dyStringPrintf(query, " where %s", extraWhere);
+	}
     else
+	{
         dyStringPrintf(query, "select * from %s where %s='%s'", rootTable,
 		hti->chromField, chrom);
+	if (extraWhere != NULL)
+	    dyStringPrintf(query, " and (%s)", extraWhere);
+	}
     sr = sqlGetResult(conn, query->string);
     }
 freeDyString(&query);
@@ -1071,7 +1079,7 @@ struct sqlResult *sr;
 char **row;
 struct trackDb *tdb;
 
-sprintf(query, "select * from %s where tableName = '%s'", trackName, hTrackDbName());
+sprintf(query, "select * from %s where tableName = '%s'", hTrackDbName(), trackName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     errAbort("Track %s not found", trackName);
