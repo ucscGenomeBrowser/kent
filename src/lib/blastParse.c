@@ -3,6 +3,7 @@
 #include "common.h"
 #include "dystring.h"
 #include "linefile.h"
+#include "dnautil.h"
 #include "blastParse.h"
 
 /* enable to print lines as they are read */
@@ -465,8 +466,8 @@ if ((wordCount >= 5) && sameWord("Strand", words[0]))
     }
 else if ((wordCount >= 3) && sameWord("Frame", words[0]))
     {
-    bb->qStrand = '+';
-    bb->tStrand = words[2][0];
+    bb->qStrand = 1;
+    bb->tStrand = (words[2][0] == '-') ? -1 : 1;
     bb->frame = atoi(words[2]);
     }
 else if (wordCount == 0)
@@ -525,8 +526,12 @@ for (;;)
     parseBlockLine(bf, &bb->tStart, &bb->tEnd, tString);
     }
 DONE:
-bb->tEnd += 1;
 bb->qEnd += 1;
+if (bb->qStrand < 0)
+    reverseIntRange(&bb->qStart, &bb->qEnd, bq->queryBaseCount+1);
+bb->tEnd += 1;
+if (bb->tStrand < 0)
+    reverseIntRange(&bb->tStart, &bb->tEnd, bga->targetSize+1);
 bb->qSym = cloneMem(qString->string, qString->stringSize+1);
 bb->tSym = cloneMem(tString->string, tString->stringSize+1);
 return bb;
