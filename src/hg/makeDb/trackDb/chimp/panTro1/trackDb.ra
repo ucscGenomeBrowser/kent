@@ -1,0 +1,22 @@
+track xenoRefGene
+shortLabel Non$Organism RefSeq
+long label Non$Organism RefSeq Genes
+group genes
+priority 35
+visibility dense
+color 12,12,120
+type genePred
+
+track gc5Base
+shortLabel GC Counts
+longLabel 5 base GC Counts
+group map
+priority 23.5
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+color 0,128,255
+altColor 255,128,0
+type wig -2 3
