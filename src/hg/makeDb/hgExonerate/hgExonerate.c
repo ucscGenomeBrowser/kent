@@ -13,7 +13,7 @@ errAbort(
   "   hgExonerate database table inputFile\n");
 }
 
-char *createString = "#A rough alignment - not detailed\n"
+char *createString = 
 "CREATE TABLE %s (\n"
     "chrom varchar(255) not null,	# Human chromosome or FPC contig\n"
     "chromStart int unsigned not null,	# Start position in chromosome\n"
@@ -36,6 +36,7 @@ struct sqlConnection *conn = sqlConnect(database);
 struct dyString *dy = newDyString(2048);
 
 dyStringPrintf(dy, createString, table);
+uglyf("%s", dy->string);
 sqlMaybeMakeTable(conn, table, dy->string);
 if (clear)
     {
@@ -45,6 +46,7 @@ if (clear)
     }
 dyStringClear(dy);
 dyStringPrintf(dy, "LOAD data local infile '%s' into table %s", tabFile, table);
+uglyf("%s", dy->string);
 sqlUpdate(conn, dy->string);
 sqlDisconnect(&conn);
 }
@@ -63,6 +65,7 @@ double score;
 int count = 0;
 
 sprintf(tabFileName, "%s.tab", table);
+#ifdef SOON
 f = mustOpen(tabFileName, "w");
 printf("Converting %s to %s\n", file, tabFileName);
 while (lineFileRow(lf, row))
@@ -88,6 +91,7 @@ while (lineFileRow(lf, row))
     }
 carefulClose(&f);
 lineFileClose(&lf);
+#endif /* SOON */
 
 printf("Loading %d items into table %s in database %s\n", count, table, database);
 loadIntoDb(tabFileName, database, table, TRUE);
