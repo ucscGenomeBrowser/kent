@@ -3255,6 +3255,50 @@ printf("Not implemented for non-positional tables yet...\n");
 webEnd();
 }
 
+struct slName *getOrderedChromList()
+/* Put the _random's at the end, and break them into two lines. */
+/* Also, put the alpha-name chroms after the numeric-name chroms. */
+{
+struct slName *randList = NULL, *nonrList = NULL;
+struct slName *randAlphList = NULL, *nonrAlphList = NULL;
+struct slName *chromPtr;
+struct slName *chromList = hAllChromNames();
+
+for (chromPtr=chromList;  chromPtr != NULL;  chromPtr=chromPtr->next)
+    {
+    if (endsWith(chromPtr->name, "_random"))
+	{
+	struct slName *newEl;
+	char buf[32];
+	char *ptr = strstr(chromPtr->name, "_random");
+	*ptr = 0;
+	snprintf(buf, sizeof(buf), "%s_<BR>random", chromPtr->name);
+	newEl = newSlName(buf);
+	if (isdigit(chromPtr->name[3]))
+	    slAddHead(&randList, newEl);
+	else
+	    slAddHead(&randAlphList, newEl);
+	}
+    else
+	{
+	struct slName *newEl = newSlName(chromPtr->name);
+	if (isdigit(chromPtr->name[3]))
+	    slAddHead(&nonrList, newEl);
+	else
+	    slAddHead(&nonrAlphList, newEl);
+	}
+    }
+slFreeList(&chromList);
+slReverse(&nonrList);
+slReverse(&nonrAlphList);
+slReverse(&randList);
+slReverse(&randAlphList);
+slCat(randList, randAlphList);
+slCat(nonrAlphList, randList);
+chromList = slCat(nonrList, nonrAlphList);
+return(chromList);
+}
+
 void getCumulativeStats(int **Xarrs, int *Ns, int num, struct intStats *stats)
 /* Copy the arrays X[1]...X[num] into X[0], according to lengths in N.
  * Put stats on X[0] into stats[0]. */
@@ -3405,9 +3449,10 @@ if (op == NULL)
     table2 = NULL;
 
 if (allGenome)
-    chromList = hAllChromNames();
+    chromList = getOrderedChromList();
 else
     chromList = newSlName(chrom);
+
 numChroms = slCount(chromList);
 itemCounts = needMem((numChroms+1) * sizeof(int));
 bitCounts = needMem((numChroms+1) * sizeof(int));
@@ -3625,7 +3670,12 @@ if (hti->hasBlocks)
     }
 
 puts("<TABLE BORDER=\"1\">");
-puts("<TR><TH>statistic</TH><TH>total</TH>");
+puts("<TR><TH>statistic");
+/* All these non-blocking spaces are to widen the first column so that some 
+ * row descriptions below do not get wrapped (which would mess up the <br> 
+ * formatting of row contents). */
+puts("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TH>");
+puts("<TH>total</TH>");
 if (numCols > 1)
     for (chromPtr=chromList;  chromPtr != NULL;  chromPtr=chromPtr->next)
 	printf("<TH>%s</TH>", chromPtr->name);
@@ -3693,13 +3743,16 @@ if (itemCounts[0] > 0)
 	}
     if (hti->hasBlocks != 0)
 	{
-	puts("<TR><TD>number of exons (blocks): <br>min<br>avg<br>max<br>stdev</TD>");
+	char *thingy = startsWith("psl", hti->type) ? "gapless block" : "exon";
+	printf("<TR><TD>number of %ss: <br>min<br>avg<br>max<br>stdev</TD>\n",
+	       thingy);
 	for (i=0;  i < numCols;  i++)
 	    printf("<TD><br>%d<br>%.2f<br>%d<br>%.2f</TD>",
 		   blockCountStats[i].min, blockCountStats[i].avg,
 		   blockCountStats[i].max, blockCountStats[i].stdev);
 	puts("</TR>");
-	puts("<TR><TD>number of bases per exon (block): <br>min<br>avg<br>max<br>stdev</TD>");
+	printf("<TR><TD>number of bases per %s: <br>min<br>avg<br>max<br>stdev</TD>\n",
+	       thingy);
 	for (i=0;  i < numCols;  i++)
 	    printf("<TD><br>%d<br>%.2f<br>%d<br>%.2f</TD>",
 		   blockSizeStats[i].min, blockSizeStats[i].avg,
