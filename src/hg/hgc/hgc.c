@@ -93,6 +93,7 @@ struct cart *cart;	/* User's settings. */
 char *seqName;		/* Name of sequence we're working on. */
 int winStart, winEnd;   /* Bounds of sequence. */
 char *database;		/* Name of mySQL database. */
+char *database2;		/* Name of secondary mySQL database. (for comparision/ orthology)*/
 
 int maxShade = 9;	/* Highest shade in a color gradient. */
 Color shadesOfGray[10+1];	/* 10 shades of gray from white to black */
@@ -523,17 +524,27 @@ for (axt = axtList; axt != NULL; axt = axt->next)
     char *q = axt->qSym;
     char *t = axt->tSym;
     int size = axt->symCount;
-    int tPtr = axt->tStart;
-    int qPtr = axt->qStart;
     int sizeLeft = size;
+    int tmp;
+    int tPtr ;
+    int qPtr ;
+    if (axt->qStrand == '-')
+        {
+        tmp = hChromSize2(axt->qName) - axt->qStart;
+        axt->qStart = hChromSize2(axt->qName) - axt->qEnd;
+        axt->qEnd = tmp;
+        }
+    fprintf(f, ">%s:%d-%d %s:%d-%d (%c) score %d coding %d-%d xscript %d-%d\n", 
+        axt->tName, axt->tStart+1, axt->tEnd,
+        axt->qName, axt->qStart+1, axt->qEnd, axt->qStrand, axt->score,  tStart+1, tEnd, gp->txStart+1, gp->txEnd);
+
+    tPtr = axt->tStart;
+    qPtr = axt->qStart;
     if (!posStrand)
         {
         tPtr = axt->tEnd;
         qPtr = axt->qEnd;
         }
-    fprintf(f, ">%s:%d-%d %s:%d-%d score %d coding %d-%d xscript %d-%d\n", 
-        axt->tName, axt->tStart+1, axt->tEnd,
-        axt->qName, axt->qStart+1, axt->qEnd, axt->score,  tStart+1, tEnd, gp->txStart+1, gp->txEnd);
     while (sizeLeft > 0)
         {
         struct dyString *dyT = newDyString(1024);
@@ -929,7 +940,7 @@ printf("<LI>%s</A>\n", mrnaDescription);
 hgcAnchorSomewhere(genomicClick, geneName, geneTable, seqName);
 printf("<LI>Genomic Sequence</A>\n");
 hgcAnchorSomewhere("htcGenePsl", geneName, geneTable, seqName);
-printf("<LI>Genomic Sequence and Codons Aligned using Blastz</A><BR>\n");
+printf("<LI>Comparative Sequence</A><BR>\n");
 printf("</UL>\n");
 }
 
@@ -4238,6 +4249,7 @@ boolean hasBin;
 
 
 database = cartUsualString(cart, "db", hGetDb());
+database2 = cartUsualString(cart, "db2", hGetDb2());
 
 ///hDefaultConnect(); 	/* set up default connection settings */
 //hSetDb(database);
