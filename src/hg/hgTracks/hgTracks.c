@@ -290,13 +290,11 @@ int ret;
 char *tempstr = NULL;
 char *tempstr2 = NULL;
 
-tempstr = needMem( (strlen(name)+1) * sizeof(char) );
-strcpy( tempstr, name );
+tempstr = cloneString( name );
 if( strstr( name, "." ) != NULL )
    strtok( tempstr, "." );
 
-tempstr2 = needMem( (strlen(nextName)+1) * sizeof(char) );
-strcpy( tempstr2, nextName );
+tempstr2 = cloneString( nextName );
 if( strstr( nextName, "." ) != NULL )
    strtok( tempstr2, "." );
 
@@ -594,6 +592,7 @@ struct simpleFeature
     };
 
 enum {lfSubXeno = 1};
+enum {lfSubSample = 2};
 
 struct linkedFeatures
 {
@@ -6919,7 +6918,6 @@ if (withLeftLabels)
 		mapBoxTrackUi(trackTabX, lastY, trackTabWidth, h, group);
 	    }
 
-	
 	if( sameString( group->mapName, "humMus" ) )
 	    {
 	    sprintf( minRangeStr, "%g", whichNum( 500.0, -12.9418, 9.1808, 1000 ));
@@ -6955,7 +6953,7 @@ if (withLeftLabels)
 		    mgSetClip(mg, gfxBorder + trackTabWidth, gfxBorder, inWid - (trackTabWidth), pixHeight - (2 * gfxBorder));
 		    
 		    /* Do some fancy stuff for sample tracks. Draw y-value limits for 'sample' tracks. */
-		    if(group->loadItems == loadSampleIntoLinkedFeature)
+		    if(group->subType == lfSubSample )
 			{
 			if( prev != NULL )
 			    {
@@ -7012,10 +7010,8 @@ if (withLeftLabels)
 		    y += fontHeight;
 		
 		/*draw y-value limits for 'sample' tracks. (always puts 0-100% range)*/
-		if( group->loadItems == loadSampleIntoLinkedFeature &&
-		    group->heightPer > (3 * fontHeight ) )
+		if( group->subType == lfSubSample && group->heightPer > (3 * fontHeight ) )
 		    {
-		    
 		    ymax = y - (group->heightPer / 2) + (fontHeight / 2);
 		    ymin = y + (group->heightPer / 2) - (fontHeight / 2);
 		    mgTextRight(mg, gfxBorder, ymin, inWid-1, group->lineHeight, 
@@ -7150,7 +7146,7 @@ for (group = groupList; group != NULL; group = group->next)
 		    
 		    /*wiggle tracks don't always increment height (y-value) here*/
 		    newy = y;
-		    if( !start && group->loadItems == loadSampleIntoLinkedFeature )
+		    if( !start && group->subType == lfSubSample )
 			{
 			if( item->next != NULL )
 			    {
@@ -7445,11 +7441,13 @@ if (sameWord(type, "bed"))
 else if (sameWord(type, "sample"))
     {
     int fieldCount = 9;
+
     if (wordCount > 1)
         fieldCount = atoi(words[1]);
     group->bedSize = fieldCount;
     if (fieldCount == 9)
 	{
+    group->subType = lfSubSample;     /*make subType be "sample" (=2)*/
 	sampleLinkedFeaturesMethods(group);
 	group->loadItems = loadSampleIntoLinkedFeature;
 	}
