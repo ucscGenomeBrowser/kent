@@ -53,7 +53,7 @@ void findNow();
 
 char* paraFormatIp(bits32 ip);
 /* format a binary IP added into dotted quad format.  ip should be
- * in network byte order. Warning: static return. */
+ * in host byte order. Warning: static return. */
 
 void paraDaemonize(char *progName);
 /* daemonize parasol server process, closing open file descriptors and
