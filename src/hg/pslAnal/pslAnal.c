@@ -36,6 +36,7 @@ boolean verbose = FALSE;
 boolean indelReport = FALSE;
 boolean mismatchReport = FALSE;
 boolean codonSubReport = FALSE;
+boolean xeno = FALSE;
 
 struct acc
 {
@@ -711,8 +712,11 @@ struct indel *createMismatch(struct sqlConnection *conn, char *mrna, int mbase, 
   /* Determine whether mRNAs and ESTs support genomic or mRNA sequence in mismatch */
   searchTrans(conn, "mrna", mrna, rna, mi, strand, MISMATCH);
   searchTrans(conn, "est", mrna, rna, mi, strand, MISMATCH);
-  searchTrans(conn, "xenoMrna", mrna, rna, mi, strand, MISMATCH);
-  searchTrans(conn, "xenoEst", mrna, rna, mi, strand, MISMATCH);
+  if (xeno)
+      {
+      searchTrans(conn, "xenoMrna", mrna, rna, mi, strand, MISMATCH);
+      searchTrans(conn, "xenoEst", mrna, rna, mi, strand, MISMATCH);
+      }
 
   return(mi);
 }
@@ -751,9 +755,11 @@ struct indel *createCodonSub(struct sqlConnection *conn, char *mrna, int mrnaSta
   /* Determine whether mRNAs and ESTs support genomic or mRNA sequence in mismatch */
   searchTrans(conn, "mrna", mrna, rna, mi, strand, CODONSUB);
   searchTrans(conn, "est", mrna, rna, mi, strand, CODONSUB);
-  searchTrans(conn, "xenoMrna", mrna, rna, mi, strand, CODONSUB);
-  searchTrans(conn, "xenoEst", mrna, rna, mi, strand, CODONSUB);
-
+  if (xeno)
+      {
+      searchTrans(conn, "xenoMrna", mrna, rna, mi, strand, CODONSUB);
+      searchTrans(conn, "xenoEst", mrna, rna, mi, strand, CODONSUB);
+      }
   return(mi);
 }
 void cdsCompare(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rna, struct dnaSeq *dna)
@@ -897,8 +903,11 @@ struct indel *createIndel(struct sqlConnection *conn, char *mrna, int mstart, in
   /* Determine whether mRNAs and ESTs support genomic or mRNA sequence in indel region */
   searchTrans(conn, "mrna", mrna, rna, ni, strand, INDEL);
   searchTrans(conn, "est", mrna, rna, ni, strand, INDEL);
-  searchTrans(conn, "xenoMrna", mrna, rna, ni, strand, INDEL);
-  searchTrans(conn, "xenoEst", mrna, rna, ni, strand, INDEL);
+  if (xeno)
+      {
+      searchTrans(conn, "xenoMrna", mrna, rna, ni, strand, INDEL);
+      searchTrans(conn, "xenoEst", mrna, rna, ni, strand, INDEL);
+      }
 
   return(ni);
 }
@@ -1133,64 +1142,67 @@ for (indel = iList; indel != NULL; indel=indel->next)
     fprintf(of, "\n\t%d human ESTs support genomic: ",indel->hs->genEst);
     slReverse(&(indel->hs->genEstAcc));
     for (acc = indel->hs->genEstAcc; acc != NULL; acc = acc->next)
-	fprintf(of, "%s(%s) ", acc->name, acc->organism);
+	fprintf(of, "%s ", acc->name);
     fprintf(of, "\n\t%d human mRNAs support %s: ", indel->hs->mrnaMrna, indel->mrna);
     slReverse(&(indel->hs->mrnaMrnaAcc));
     for (acc = indel->hs->mrnaMrnaAcc; acc != NULL; acc = acc->next)
-	fprintf(of, "%s(%s) ", acc->name, acc->organism);
+	fprintf(of, "%s ", acc->name);
     fprintf(of, "\n\t%d human ESTs support %s: ",indel->hs->mrnaEst, indel->mrna);
     slReverse(&(indel->hs->mrnaEstAcc));
     for (acc = indel->hs->mrnaEstAcc; acc != NULL; acc = acc->next)
-	fprintf(of, "%s(%s) ", acc->name, acc->organism);
+	fprintf(of, "%s ", acc->name);
     fprintf(of, "\n\t%d human mRNAs support neither: ", indel->hs->noMrna);
     slReverse(&(indel->hs->noMrnaAcc));
     for (acc = indel->hs->noMrnaAcc; acc != NULL; acc = acc->next)
-	fprintf(of, "%s(%s) ", acc->name, acc->organism);
+	fprintf(of, "%s ", acc->name);
     fprintf(of, "\n\t%d human ESTs support neither: ",indel->hs->noEst);
     slReverse(&(indel->hs->noEstAcc));
     for (acc = indel->hs->noEstAcc; acc != NULL; acc = acc->next)
-	fprintf(of, "%s(%s) ", acc->name, acc->organism);
+	fprintf(of, "%s ", acc->name);
     fprintf(of, "\n\t%d human mRNAs do not align: ", indel->hs->unMrna);
     slReverse(&(indel->hs->unMrnaAcc));
     for (acc = indel->hs->unMrnaAcc; acc != NULL; acc = acc->next)
-	fprintf(of, "%s(%s) ", acc->name, acc->organism);
+	fprintf(of, "%s ", acc->name);
     fprintf(of, "\n\t%d human ESTs do not align: ",indel->hs->unEst);
     slReverse(&(indel->hs->unEstAcc));
     for (acc = indel->hs->unEstAcc; acc != NULL; acc = acc->next)
-	fprintf(of, "%s(%s) ", acc->name, acc->organism);
+	fprintf(of, "%s ", acc->name);
 
-    fprintf(of, "\n\n\t%d xeno mRNAs support genomic: ", indel->xe->genMrna);
-    slReverse(&(indel->xe->genMrnaAcc));
-    for (acc = indel->xe->genMrnaAcc; acc != NULL; acc = acc->next)
-	fprintf(of, "%s(%s) ", acc->name, acc->organism);
-    fprintf(of, "\n\t%d xeno ESTs support genomic: ",indel->xe->genEst);
-    slReverse(&(indel->xe->genEstAcc));
-    for (acc = indel->xe->genEstAcc; acc != NULL; acc = acc->next)
-	fprintf(of, "%s(%s) ", acc->name, acc->organism);
-    fprintf(of, "\n\t%d xeno mRNAs support %s: ", indel->xe->mrnaMrna, indel->mrna);
-    slReverse(&(indel->xe->mrnaMrnaAcc));
-    for (acc = indel->xe->mrnaMrnaAcc; acc != NULL; acc = acc->next)
-	fprintf(of, "%s(%s) ", acc->name, acc->organism);
-    fprintf(of, "\n\t%d xeno ESTs support %s: ",indel->xe->mrnaEst, indel->mrna);
-    slReverse(&(indel->xe->mrnaEstAcc));
-    for (acc = indel->xe->mrnaEstAcc; acc != NULL; acc = acc->next)
-	fprintf(of, "%s(%s) ", acc->name, acc->organism);
-    fprintf(of, "\n\t%d xeno mRNAs support neither: ", indel->xe->noMrna);
-    slReverse(&(indel->xe->noMrnaAcc));
-    for (acc = indel->xe->noMrnaAcc; acc != NULL; acc = acc->next)
-	fprintf(of, "%s(%s) ", acc->name, acc->organism);
-    fprintf(of, "\n\t%d xeno ESTs support neither: ",indel->xe->noEst);
-    slReverse(&(indel->xe->noEstAcc));
-    for (acc = indel->xe->noEstAcc; acc != NULL; acc = acc->next)
-	fprintf(of, "%s(%s) ", acc->name, acc->organism);
-    fprintf(of, "\n\t%d xeno mRNAs do not align: ", indel->xe->unMrna);
-    slReverse(&(indel->xe->unMrnaAcc));
-    for (acc = indel->xe->unMrnaAcc; acc != NULL; acc = acc->next)
-	fprintf(of, "%s(%s) ", acc->name, acc->organism);
-    fprintf(of, "\n\t%d xeno ESTs do not align: ",indel->xe->unEst);
-    slReverse(&(indel->xe->unEstAcc));
-    for (acc = indel->xe->unEstAcc; acc != NULL; acc = acc->next)
-	fprintf(of, "%s(%s) ", acc->name, acc->organism);
+    if (xeno)
+        {
+        fprintf(of, "\n\n\t%d xeno mRNAs support genomic: ", indel->xe->genMrna);
+	slReverse(&(indel->xe->genMrnaAcc));
+	for (acc = indel->xe->genMrnaAcc; acc != NULL; acc = acc->next)
+	    fprintf(of, "%s(%s) ", acc->name, acc->organism);
+	fprintf(of, "\n\t%d xeno ESTs support genomic: ",indel->xe->genEst);
+	slReverse(&(indel->xe->genEstAcc));
+	for (acc = indel->xe->genEstAcc; acc != NULL; acc = acc->next)
+	    fprintf(of, "%s(%s) ", acc->name, acc->organism);
+	fprintf(of, "\n\t%d xeno mRNAs support %s: ", indel->xe->mrnaMrna, indel->mrna);
+	slReverse(&(indel->xe->mrnaMrnaAcc));
+	for (acc = indel->xe->mrnaMrnaAcc; acc != NULL; acc = acc->next)
+	    fprintf(of, "%s(%s) ", acc->name, acc->organism);
+	fprintf(of, "\n\t%d xeno ESTs support %s: ",indel->xe->mrnaEst, indel->mrna);
+	slReverse(&(indel->xe->mrnaEstAcc));
+	for (acc = indel->xe->mrnaEstAcc; acc != NULL; acc = acc->next)
+	    fprintf(of, "%s(%s) ", acc->name, acc->organism);
+	fprintf(of, "\n\t%d xeno mRNAs support neither: ", indel->xe->noMrna);
+	slReverse(&(indel->xe->noMrnaAcc));
+	for (acc = indel->xe->noMrnaAcc; acc != NULL; acc = acc->next)
+	    fprintf(of, "%s(%s) ", acc->name, acc->organism);
+	fprintf(of, "\n\t%d xeno ESTs support neither: ",indel->xe->noEst);
+	slReverse(&(indel->xe->noEstAcc));
+	for (acc = indel->xe->noEstAcc; acc != NULL; acc = acc->next)
+	    fprintf(of, "%s(%s) ", acc->name, acc->organism);
+	fprintf(of, "\n\t%d xeno mRNAs do not align: ", indel->xe->unMrna);
+	slReverse(&(indel->xe->unMrnaAcc));
+	for (acc = indel->xe->unMrnaAcc; acc != NULL; acc = acc->next)
+	    fprintf(of, "%s(%s) ", acc->name, acc->organism);
+	fprintf(of, "\n\t%d xeno ESTs do not align: ",indel->xe->unEst);
+	slReverse(&(indel->xe->unEstAcc));
+	for (acc = indel->xe->unEstAcc; acc != NULL; acc = acc->next)
+	    fprintf(of, "%s(%s) ", acc->name, acc->organism);
+	}
     fprintf(of, "\n\n");
     }
 }
@@ -1272,7 +1284,7 @@ char *faFile, *db, filename[64];
 optionInit(&argc, argv, optionSpecs);
 if (argc != 6)
     {
-    fprintf(stderr, "USAGE: pslAnal [-db=db] -verbose -indels -mismatches -codonsub <psl file> <cds file> <loci file> <fa file> <out file prefix>\n");
+    fprintf(stderr, "USAGE: pslAnal [-db=db] -verbose -xeno -indels -mismatches -codonsub <psl file> <cds file> <loci file> <fa file> <out file prefix>\n");
     return 1;
     }
 db = optionVal("db", "hg15");
@@ -1280,6 +1292,7 @@ verbose = optionExists("verbose");
 indelReport = optionExists("indels");
 mismatchReport = optionExists("mismatches");
 codonSubReport = optionExists("codonsub");
+xeno = optionExists("xeno");
 pf = pslFileOpen(argv[1]);
 cf = lineFileOpen(argv[2], FALSE);
 lf = lineFileOpen(argv[3], FALSE);
