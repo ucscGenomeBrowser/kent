@@ -9,7 +9,7 @@
 
 void logPrintf(int verbosity, char *format, ...)
 /* Write printf formatted message to log (which by
- * default is stdout) if global verbose variable
+ * default is stderr) if global verbose variable
  * is set to verbosity or higher. */
 #if defined(__GNUC__) && defined(JK_WARN)
 __attribute__((format(printf, 2, 3)))
@@ -17,7 +17,7 @@ __attribute__((format(printf, 2, 3)))
     ;
 
 void logVaPrintf(int verbosity, char *format, va_list args);
-/* Abort function, with optional (vprintf formatted) error message. */
+/* Log with at given verbosity vprintf formatted args. */
 
 void logDot();
 /* Write I'm alive dot (at verbosity level 1) */

@@ -7,13 +7,13 @@
 #include "common.h"
 #include "log.h"
 
-static char const rcsid[] = "$Id: log.c,v 1.1 2004/02/15 01:10:12 kent Exp $";
+static char const rcsid[] = "$Id: log.c,v 1.2 2004/02/16 23:24:52 kent Exp $";
 
 static int logVerbosity = 1;	/* The level of log verbosity.  0 is silent. */
 static FILE *logFile;	/* File to log to. */
 
 void logVaPrintf(int verbosity, char *format, va_list args)
-/* Abort function, with optional (vprintf formatted) error message. */
+/* Log with at given verbosity vprintf formatted args. */
 {
 if (verbosity <= logVerbosity)
     {
@@ -26,7 +26,7 @@ if (verbosity <= logVerbosity)
 
 void logPrintf(int verbosity, char *format, ...)
 /* Write printf formatted message to log (which by
- * default is stdout) if global verbose variable
+ * default is stderr) if global verbose variable
  * is set to verbosity or higher. */
 {
 va_list args;
