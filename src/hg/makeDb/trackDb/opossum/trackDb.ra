@@ -1,0 +1,9 @@
+track mostConserved
+shortLabel Most Conserved
+longLabel Most Conserved (Top 3% of Genome) Elements
+group compGeno
+priority 111
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
