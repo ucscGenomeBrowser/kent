@@ -7,7 +7,7 @@
 # rewritten in perl and extended to handle .2bit inputs and 
 # multi-record fasta for target as well as query by Angie Hinrichs.
 
-# $Id: blastz-run-ucsc,v 1.7 2005/02/17 01:21:45 angie Exp $
+# $Id: blastz-run-ucsc,v 1.8 2005/02/19 18:55:17 angie Exp $
 
 use Getopt::Long;
 use strict;
@@ -76,7 +76,10 @@ my $TMP;
 # For lifting, we'll need to know the sequence sizes:
 my %tSizes = ();
 my %qSizes = ();
-my $defaultPath = "/cluster/bin/penn:/cluster/bin/scripts:/bin:/usr/bin";
+my $machType = $ENV{'MACHTYPE'} || 'i386';
+my $defaultPath = ('/cluster/bin/penn:/cluster/bin/scripts:' .
+		   "/cluster/bin/$machType:" .
+		   '/bin:/usr/bin');
 
 sub run {
   # Run a command in sh, with PATH specified in %defVars.
@@ -470,7 +473,7 @@ foreach my $tSpec (@tFileSpecs) {
   my ($tSeq, $tLocal) = &unpackForBlastz($tSpec, $defVars{'SEQ1_DIR'}, 't');
   foreach my $qSpec (@qFileSpecs) {
     my ($qSeq, $qLocal) = &unpackForBlastz($qSpec, $defVars{'SEQ2_DIR'}, 'q');
-    if ($$defVars{'BLASTZ_ABRIDGE_REPEATS'}) {
+    if ($defVars{'BLASTZ_ABRIDGE_REPEATS'}) {
       &abridgeLinSpecReps($tLocal, $qLocal, $blastzOptions, $littleRaw);
     } else {
       &plainBlastz($tLocal, $qLocal, $blastzOptions, $littleRaw);
