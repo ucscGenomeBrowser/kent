@@ -150,7 +150,7 @@ char socketName[64];
 int spokeId = ++spokeLastId;
 struct sockaddr_un sa;
 
-sprintf(socketName, "spoke.%03d", spokeId);
+sprintf(socketName, "spoke_%03d", spokeId);
 remove(socketName);
 
 childId = fork();

@@ -265,6 +265,7 @@ if ((mach = findMachineWithJob(machName, jobId)) != NULL)
     mach->isDead = TRUE;
     dlAddTail(deadMachines, mach->node);
     }
+runner(1);
 }
 
 char *exeFromCommand(char *cmd)
@@ -469,7 +470,7 @@ if (rq->f != NULL)
 	job->submitTime, job->startTime, now,
 	job->user, job->err, job->cmd);
     fflush(rq->f);
-    if (sameString(status, 0))
+    if (sameString(status, "0"))
         ++finishedJobCount;
     else
         ++crashedJobCount;
