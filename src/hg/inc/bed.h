@@ -113,6 +113,9 @@ struct bed *bedLoad3(char **row);
 struct bed *bedLoad5(char **row);
 /* Load first five fields of bed. */
 
+struct bed *bedLoad6(char **row);
+/* Load first six fields of bed. */
+
 struct bed *bedLoad12(char **row);
 /* Load all 12 fields of bed. */
 
