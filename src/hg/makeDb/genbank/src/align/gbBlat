@@ -27,7 +27,7 @@
 # is still produced.  This script is very careful to exit non-zero if an error
 # occurs.
 #
-# $Id: gbBlat,v 1.13 2004/02/02 00:21:32 angie Exp $
+# $Id: gbBlat,v 1.14 2004/02/07 17:39:46 markd Exp $
 #
 set -e
 
@@ -155,8 +155,8 @@ case "$orgCat" in
         case "$type" in
             mrna)
                 if [ "$srcDb" = "refseq" ] ; then
-                    # -trimHardA was recommended, however this results in
-                    # qSize being less than the sequence size.
+                    # don't use -trimHardA, results in qSize being less than
+                    # the sequence size.
                     blatParams="${blatParams} -q=rna -fine $oocOpt"
                 else
                     blatParams="${blatParams} -q=rna -fine $oocOpt"
