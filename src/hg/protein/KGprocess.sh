@@ -10,7 +10,7 @@
 #	are created.  See also, scripts:
 #	mkSwissProtDB.sh and mkProteinsDB.sh
 #
-#	"$Id: KGprocess.sh,v 1.8 2004/02/07 06:08:03 hiram Exp $"
+#	"$Id: KGprocess.sh,v 1.9 2004/02/09 22:16:34 hiram Exp $"
 #
 #	Thu Nov 20 11:16:16 PST 2003 - Created - Hiram
 #		Initial version is a translation of makeKgMm3.doc
@@ -485,7 +485,7 @@ TablePopulated "knownGeneLink" ${DB} || { \
 #	We need to add dnaGene.tab to knownGene
 #	to make sure this is all done correctly, reload the entire
 #	table with both, now sorted
-if [ ! -s sortedKnownGene ]; then
+if [ ! -s sortedKnownGene.tab ]; then
     hgsql -e "drop table knownGene;" ${DB} 2> /dev/null
     hgsql ${DB} < ~/kent/src/hg/lib/knownGene.sql
     ~/kent/src/hg/protein/sortKg.pl knownGene.tab dnaGene.tab > \
@@ -732,6 +732,92 @@ TablePopulated "keggMapDesc" ${DB} || { \
     hgsql -e \
     'LOAD DATA local INFILE "keggMapDesc.tab" into table keggMapDesc;' ${DB}; \
 }
+
+#	next cluster run requires a lot of I/O, use the bluearc
+#	to alleviate the stress
+if [ ! -d /cluster/bluearc/kgDB/${DB}/kgProtMap ]; then
+	mkdir -p /cluster/bluearc/kgDB/${DB}/kgProtMap
+	ln -s /cluster/bluearc/kgDB/${DB}/kgProtMap ${TOP}/kgProtMap
+fi
+
+cd ${TOP}/kgProtMap
+
+if [ ! -s kgMrna.fa ]; then
+    echo "`date` creating kgMrna.fa"
+    awk '{print ">" $1;print $2}' ${TOP}/refMrna.tab > kgMrna.fa
+    rm -f formatdb.log kgMrna.fa.nsq kgMrna.fa.nin kgMrna.fa.nhr
+fi
+
+if [ ! -s formatdb.log ]; then
+    echo "`date` creating blast database"
+    /scratch/blast/formatdb -i kgMrna.fa -p F
+fi
+
+if [ ! -s kgPep.fa ]; then
+    echo "`date` creating kgPep.fa"
+hgsql -N -e 'select spID,seq from kgXref,knownGenePep where kgID=name' ${DB} \
+	| awk '{print ">" $1;print $2}' >kgPep.fa
+    rm -fr kgPep
+    rm -f jobList
+fi
+
+if [ ! -d kgPep ]; then
+    echo "`date` splitting kgPep.fa"
+    mkdir kgPep
+    faSplit sequence kgPep.fa 5000 kgPep/kgPep
+    rm -f jobList
+fi
+
+
+if [ ! -s kgProtMrna.pairs ]; then
+    echo "`date` creating kgProtMrna.pairs"
+    awk '{printf "%s\t%s\n", $3,$2}' ${TOP}/kgXref.tab > kgProtMrna.pairs
+fi
+
+cp -p ~/kent/src/hg/protein/kgProtBlast.csh .
+
+if [ ! -s jobList ]; then
+    echo "`date` creating jobList"
+    for f in kgPep/*.fa
+    do
+      echo ./kgProtBlast.csh $f >> jobList
+    done
+
+fi
+
+if [ ! -d psl.tmp ]; then
+    echo "`date` cluster run data has been prepared."
+    echo "`date` Cluster Run has been prepared."
+    echo "on machine kk in: "`pwd`
+    echo "perform:"
+    echo "para create jobList"
+    echo "para try"
+    echo "para push ... etc."
+    exit 255
+fi
+
+if [ ! -s psl.tmp/kgProtMrna.psl ]; then
+    echo "`date` Assuming cluster run done, Running analysis of output."
+    echo "`date` creating psl.tmp/kgProtMrna.psl"
+    find ./psl.tmp -name '*.psl.gz' | xargs zcat | \
+	pslReps -nohead stdin psl.tmp/kgProtMrna.psl /dev/null
+fi
+
+if [ ! -s psl.tmp/kgProtMap.psl ]; then
+    echo "`date` creating psl.tmp/kgProtMap.psl"
+    cd psl.tmp
+    (pslMap kgProtMrna.psl ${TOP}/tight_mrna.psl stdout | \
+	sort -k 14,14 -k 16,16n -k 17,17n > kgProtMap.psl) > kgProtMap.out 2>&1
+fi
+
+TablePopulated "kgProtMap" ${DB} || { \
+    echo "`date` creating table kgProtMap"; \
+    hgsql -e "drop table kgProtMap;" ${DB} 2> /dev/null; \
+    echo "`date` hgLoadPsl -tNameIx ${DB} psl.tmp/kgProtMap.psl"; \
+    hgLoadPsl -tNameIx ${DB} psl.tmp/kgProtMap.psl; \
+}
+
+cd ${TOP}
 
 SPECIES=Hs
 case ${RO_DB} in
