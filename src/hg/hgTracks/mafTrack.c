@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.17 2003/12/09 21:12:42 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.18 2003/12/16 18:58:32 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -58,9 +58,9 @@ struct mafAli *mafOrAxtLoadInRegion(struct sqlConnection *conn,
 if (isAxt)
     {
     struct hash *qSizeHash = hChromSizeHash(tg->otherDb);
-    struct mafAli *mafList = axtLoadAsMafInRegion(conn, tg->mapName,
-    	chrom, start, end,
-	database, tg->otherDb, hChromSize(chrom), qSizeHash);
+    struct mafAli *mafList = 
+            axtLoadAsMafInRegion(conn, tg->mapName, chrom, start, end,
+                        database, tg->otherDb, hChromSize(chrom), qSizeHash);
     hashFree(&qSizeHash);
     return mafList;
     }
@@ -235,8 +235,9 @@ if (zoomedToBaseLevel)
     }
 else
     {
-    if (tg->visibility == tvFull)
+    if (tg->visibility == tvFull && winEnd - winStart < 1000000)
         {
+        /* currently implemented only for medium zoom out */
         miList = mafItems(tg, scoreHeight, FALSE, isAxt);
         }
     else
