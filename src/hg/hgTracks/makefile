@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = hgTracks.o hgFind.o
 
 hgTracks: $O 
-	gcc $O ../../lib/$(MACHTYPE)/jkweb.a $(MYLIBS) $L
+	gcc $O $(MYLIBS) $(L) 
 	mv a.out hgTracks
 	strip hgTracks
 	chmod a+rx hgTracks
@@ -16,3 +16,4 @@ hgTracks: $O
 
 lib:
 	cd ../../lib; make
+

@@ -41,7 +41,7 @@
 #include "mouseSyn.h"
 #include "knownMore.h"
 #include "exprBed.h"
-
+#include "browserTable.h"
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
 #define FUREY_CODE 1
@@ -156,7 +156,7 @@ static struct rgbColor lightSeaColor = {200, 220, 255};
 
 struct trackGroup
 /* Structure that displays a group of tracks. */
-    {
+{
     struct trackGroup *next;   /* Next on list. */
     char *mapName;             /* Name on image map and for ui buttons. */
     enum trackVisibility visibility; /* How much of this to see if possible. */
@@ -216,7 +216,17 @@ struct trackGroup
     int customInt;             /* Misc int variable unique to group. */
     int subType;               /* Variable to say what subtype this is for similar groups
                                 * to share code. */
-    };
+    char *version;	/* Versioning information about table. */
+    unsigned short private;	/* True(1) if private, false(0) otherwise. */
+    unsigned short useScore;	/* If True(1) use score information in table, only shades of gray color supported. */
+    unsigned short isSplit;	/* True(1) if table is split over different chromosomes. i.e. chrN_est */
+    int priority;	/* Priority to load tracks in, i.e. order to load tracks in. */
+    char tableName[65];	/* Name of table in database to be queried. */
+    char trackType[33];	/* Initially just 'bed' and 'psl' supported. */
+    char *credit;	/* Who to credit/blame for information in table. */
+    char *url;	/* Link to more information about track. */
+    char *other;	/* Other track specific associated information. */
+};
 struct trackGroup *tGroupList = NULL;  /* List of all tracks. */
 
 static boolean tgLoadNothing(){return TRUE;}
@@ -1075,8 +1085,6 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 return lfList;
 }
-
-
 
 void loadMrnaAli(struct trackGroup *tg)
 /* Load up rnas from table into trackGroup items. */
@@ -4559,6 +4567,201 @@ tg->loadItems = loadRosettaTeBed;
 tg->freeItems = freeExprBed;
 return tg;
 }
+
+struct browserTable *checkDbForTables()
+/* Look in the database meta table to get information on which
+ *   tables to load that aren't hardcoded into the database. */
+{
+struct browserTable *tableList = NULL;
+struct browserTable *table = NULL;
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+
+sprintf(query, "select * from browserTable order by priority");
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    table = browserTableLoad(row);
+    slAddHead(&tableList, table);
+    }
+slReverse(&tableList);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return tableList;
+}
+
+void bedBasicLoad(struct trackGroup *tg)
+/* load up basic beds from table into trackGroupItems */
+{
+bedLoadItem(tg, tg->tableName, (ItemLoader) bedLoad);
+}
+
+void bedWScoresLoad(struct trackGroup *tg)
+/* load up beds and their scores from table into trackGroupItems */
+{
+bedLoadItem(tg, tg->tableName, (ItemLoader) bedLoadWScore);
+}
+
+void bedFreeItemList(struct trackGroup *tg)
+/* Free up the bed items */
+{
+bedFreeList((struct bed **)&tg->items);
+}
+
+static void bedWScoresDraw(struct trackGroup *tg, int seqStart, int seqEnd,
+			   struct memGfx *mg, int xOff, int yOff, int width, 
+			   MgFont *font, Color color, enum trackVisibility vis)
+/* Draw bed items with shades of gray indicating scores. */
+{
+int baseWidth = seqEnd - seqStart;
+struct bed *item;
+int y = yOff;
+int heightPer = tg->heightPer;
+int lineHeight = tg->lineHeight;
+int x1,x2,w;
+boolean isFull = (vis == tvFull);
+double scale = width/(double)baseWidth;
+int invPpt;
+
+for (item = tg->items; item != NULL; item = item->next)
+    {
+    x1 = round((double)((int)item->chromStart-winStart)*scale) + xOff;
+    x2 = round((double)((int)item->chromEnd-winStart)*scale) + xOff;
+    w = x2-x1;
+    color = shadesOfGray[grayInRange(item->score, 0, 1000)];
+    if (w < 1)
+	w = 1;
+    mgDrawBox(mg, x1, y, w, heightPer, color);
+    mapBoxHc(item->chromStart, item->chromEnd, x1, y, w, heightPer, tg->mapName,
+	item->name, item->name);
+    if (isFull)
+	y += lineHeight;
+    }
+}
+
+struct trackGroup *createBedTg(struct browserTable *table)
+/* create a generic bed track using information from browser
+ * meta table. */
+{
+struct trackGroup *tg = bedTg();
+char buff[strlen(table->longLabel) + strlen(table->version) + 10];
+sprintf(buff, "%s [%s]", table->longLabel, table->version);
+
+tg->mapName = cloneString(table->mapName);
+tg->longLabel = cloneString(buff);
+tg->shortLabel = cloneString(table->shortLabel);
+strncpy(tg->tableName, table->tableName, ArraySize(table->tableName));
+tg->visibility = table->visibility;
+
+
+tg->private = table->private;
+tg->isSplit = table->isSplit;
+tg->priority = table->priority;
+strncpy(tg->trackType,table->trackType,ArraySize(table->trackType));
+tg->freeItems = bedFreeItemList;
+if(table->useScore) 
+    {
+    tg->loadItems = bedWScoresLoad;
+    tg->drawItems = bedWScoresDraw;
+    /* with scores we only support black and shades of grey */
+    tg->color.r = 0;
+    tg->color.g = 0;
+    tg->color.b = 0;
+    
+    tg->altColor.r = 0;
+    tg->altColor.g = 0;
+    tg->altColor.b = 0;
+    }
+else 
+    {
+    tg->color.r = table->colorR;
+    tg->color.g = table->colorG;
+    tg->color.b = table->colorB;
+    
+    tg->altColor.r = table->altColorR;
+    tg->altColor.g = table->altColorG;
+    tg->altColor.b = table->altColorB;
+    tg->loadItems = bedBasicLoad;
+    tg->drawItems = bedDrawSimple;
+    }
+return tg;
+}
+
+void loadPsl(struct trackGroup *tg)
+/* load up all of the psls from correct table into tg->items item list*/
+{
+tg->items = lfFromPslsInRange(tg->tableName,winStart,winEnd,NULL,FALSE);
+}
+
+struct trackGroup *createPslTg(struct browserTable *table)
+/* create a generic psl (linkedFeature) track using information from browser
+ * meta table. */
+{
+struct trackGroup *tg = linkedFeaturesTg();
+char buff[strlen(table->longLabel) + strlen(table->version) + 10];
+sprintf(buff, "%s [%s]", table->longLabel, table->version);
+
+tg->mapName = cloneString(table->mapName);
+tg->longLabel = cloneString(buff);
+tg->shortLabel = cloneString(table->shortLabel);
+strncpy(tg->tableName,table->tableName,ArraySize(table->tableName));
+tg->visibility = table->visibility;
+
+tg->color.r = table->colorR;
+tg->color.g = table->colorG;
+tg->color.b = table->colorB;
+
+tg->altColor.r = table->altColorR;
+tg->altColor.g = table->altColorG;
+tg->altColor.b = table->altColorB;
+
+tg->private = table->private;
+tg->isSplit = table->isSplit;
+tg->priority = table->priority;
+strncpy(tg->trackType,table->trackType,ArraySize(table->trackType));
+tg->colorShades = NULL;
+tg->loadItems = loadPsl;
+return tg;
+}
+
+int compareTablePriorities(const void *vp1, const void *vp2)
+/* comparison function for sorting browserTables */
+{
+const struct browserTable *bt1 = *((struct browserTable **)vp1);
+const struct browserTable *bt2 = *((struct browserTable **)vp2);
+return (bt1->priority - bt2->priority);
+}
+
+void addTablesFromBrowserTable(struct trackGroup **tGroupList, 
+			       struct browserTable **tableList)
+/* Creates appropriate trackGroups for tables defined in the browserTable
+   and adds them to the main trackGroup list to be displayed. */
+{
+struct browserTable *table = NULL;
+struct trackGroup *tgList = NULL, *tg = NULL;
+slSort(tableList, compareTablePriorities);
+for(table = *tableList; table != NULL; table = table->next)
+    {
+    if(hTableExists(table->tableName))
+	{
+	if((table->private && privateVersion()) || !table->private)
+	    { 
+	    if(sameString(table->trackType, "bed"))
+		tg = createBedTg(table);
+	    else if(sameString(table->trackType, "psl"))
+		tg = createPslTg(table);
+	    else 
+		tg = NULL;
+	    }
+	if(tg != NULL)
+	    slSafeAddHead(tGroupList, tg);
+	}
+    }
+}
+	   
+
 #endif /*CHUCK_CODE*/
 
 
@@ -5001,6 +5204,8 @@ void doForm()
  * buttons and the active image. */
 {
 struct trackGroup *group;
+struct browserTable *tableList = NULL, *table = NULL;
+
 int controlColNum=0;
 /* See if want to include sequence search results. */
 userSeqString = cgiOptionalString("ss");
@@ -5018,7 +5223,8 @@ if (calledSelf)
     if ((s = cgiOptionalString("ruler")) != NULL)
 	withRuler = !sameWord(s, "off");
     }
-
+if(hTableExists("browserTable"))
+   tableList = checkDbForTables();
 /* Make list of all track groups. */
 if (hTableExists("cytoBand")) slSafeAddHead(&tGroupList, cytoBandTg());
 if (hTableExists("mapGenethon")) slSafeAddHead(&tGroupList, genethonTg());
@@ -5072,6 +5278,9 @@ if (sameString(chromName, "chr22") && hTableExists("rosettaPe")) slSafeAddHead(&
 if (hTableExists("exprBed")) slSafeAddHead(&tGroupList, exprBedTg());
 #endif /* ALL_ROSETTA */
 
+addTablesFromBrowserTable(&tGroupList,&tableList);
+
+
 slReverse(&tGroupList);
 
 /* Get visibility values if any from ui. */
@@ -5106,8 +5315,8 @@ printf("<CENTER>\n");
 if (!hideControls)
     {
     /* Show title . */
-    printf("<H2>Chromosome %s, Bases %d-%d, Size %d</H2>", skipChr(chromName), 
-	    winStart+1, winEnd, winEnd - winStart);
+    printf("<H2>Chromosome %s, Bases %d-%d, Size %d, Database %s.</H2>", skipChr(chromName), 
+	    winStart+1, winEnd, winEnd - winStart, database);
 
     /* Put up scroll and zoom controls. */
     fputs("move ", stdout);
