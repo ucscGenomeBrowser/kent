@@ -28,12 +28,14 @@ static struct optionSpec optionSpecs[] = {
     {"verbose", OPTION_BOOLEAN},
     {"indels", OPTION_BOOLEAN},
     {"mismatches", OPTION_BOOLEAN},
+    {"codonsub", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
 boolean verbose = FALSE;
 boolean indelReport = FALSE;
 boolean mismatchReport = FALSE;
+boolean codonSubReport = FALSE;
 
 struct acc
 {
@@ -41,12 +43,18 @@ struct acc
   char name[16];
 };
 
+/* indel object is now used for tracking several, these constants
+ * defined the type */
+#define INDEL    1
+#define MISMATCH 2
+#define CODONSUB 3
+
 struct indel
 {
   struct indel *next;
   int size;
   char *chrom;
-  int chromStart;
+  int chromStart;  /* note: [1..n] coordinates */
   int chromEnd;
   char *mrna;
   int mrnaStart;
@@ -63,6 +71,11 @@ struct indel
   struct acc *noMrnaAcc;
   int noEst;
   struct acc *noEstAcc;
+
+  /* fields used if this is tracking codon substitutions*/
+  int codonGenPos[3];  /* position of the codon bases */
+  char genCodon[4];
+  char mrnaCodon[4];
 };
 
 struct pslInfo
@@ -96,6 +109,7 @@ struct pslInfo
   int synSubSnp;
   int nonSynSubSnp;
   int loci;
+  struct indel *codonSubList;
 } *piList = NULL;
 
 struct hash *cdsStarts = NULL;
@@ -349,117 +363,124 @@ strcpy(strand, psl->strand);
 return(ret);
 }
 
-void searchTrans(struct sqlConnection *conn, char *table, char *mrnaName, struct dnaSeq *rna, struct indel *ni, char *strand, boolean isIndel)
-/* Find all mRNA's or EST's that align in the region of an indel or mismatch */
+void searchTransPsl(struct sqlConnection *conn, char *table, char *mrnaName, DNA *mdna, struct indel *ni, char *strand, unsigned type, struct psl* psl)
+/* process one mRNA or EST for searchTrans */
+{
+int start = 0, end = 0;
+struct dnaSeq *gseq = NULL, *mseq = NULL;
+char *dna = NULL;
+char thisStrand[2];
+struct acc *acc;
+
+/* Get the DNA sequence for the indel */
+if (type == INDEL)
+    gseq = getDna(psl, ni->chromStart-2, ni->chromEnd+2, &start, &end, thisStrand);
+else
+    gseq = getDna(psl, ni->chromStart-1, ni->chromEnd, &start, &end, thisStrand);
+/* Get the corresponding mRNA or EST  sequence */
+struct dnaSeq *seq = hRnaSeq(psl->qName);
+if (thisStrand[0] != strand[0])
+    {
+    int temp = start;
+    start = seq->size - end;
+    end = seq->size - temp;
+    reverseComplement(seq->dna, seq->size);
+    reverseComplement(gseq->dna, gseq->size);
+    }
+if ((end-start) > 0)
+    {
+    dna = needMem((end-start)+1);
+    strncpy(dna,seq->dna + start, end-start);
+    dna[end-start] = '\0';
+    }
+else
+    dna = cloneString("");
+/*printf("Comparing %s:%d-%d(%d) bases %s with genomic %s\n",psl->qName, start, end, seq->size, seq->dna, gseq->dna);*/
+AllocVar(acc);
+strcpy(acc->name,seq->name);
+if (sameString(gseq->dna, dna)) 
+    if (sameString(table, "mrna"))
+        {
+        ni->genMrna++;
+        slAddHead(&ni->genMrnaAcc, acc);
+        } 
+    else 
+        {
+        ni->genEst++;
+        slAddHead(&ni->genEstAcc, acc);
+        }
+else  
+    if (sameString(mdna, dna)) 
+        if (sameString(table, "mrna"))
+            {
+            ni->mrnaMrna++;
+            slAddHead(&ni->mrnaMrnaAcc, acc);
+            } 
+        else 
+            {
+            ni->mrnaEst++;
+            slAddHead(&ni->mrnaEstAcc, acc);
+            }
+    else
+        if (sameString(table, "mrna"))
+            {
+            ni->noMrna++;
+            slAddHead(&ni->noMrnaAcc, acc);
+            } 
+        else 
+            {
+            ni->noEst++;
+            slAddHead(&ni->noEstAcc, acc);
+            }
+freez(&dna);
+dnaSeqFree(&seq);
+dnaSeqFree(&gseq);
+}
+
+void searchTrans(struct sqlConnection *conn, char *table, char *mrnaName, struct dnaSeq *rna, struct indel *ni, char *strand, unsigned type)
+/* Find all mRNA's or EST's that align in the region of an indel, mismatch, or codon */
 {
 struct sqlResult *sr;
 char **row;
-int offset, start=0, end=0;
+int offset;
 struct psl *psl;
-struct dnaSeq *seq, *gseq, *mseq;
-DNA mdna[10000], dna[10000];
-struct acc *acc;
-char thisStrand[2];
+DNA mdna[10000];
 
-/* Determine the sequence */
-/* If indel, add one base on each side */
-AllocVar(mseq);
-if ((isIndel) && ((ni->mrnaEnd-ni->mrnaStart+4) > 0))
+if (type == CODONSUB)
+    assert(((ni->mrnaEnd-ni->mrnaStart)+1) == 3);
+
+/* Determine the sequence, If indel, add one base on each side */
+if (type == INDEL)
     {
-    strncpy(mdna,rna->dna + ni->mrnaStart - 2,ni->mrnaEnd-ni->mrnaStart+4);
-    mdna[ni->mrnaEnd-ni->mrnaStart+4] = '\0';
-    /*printf("Indel at %d-%d (%d) in %s:%d-%d bases %s\n", ni->mrnaStart, ni->mrnaEnd, rna->size, ni->chrom, ni->chromStart, ni->chromEnd, mseq->dna);*/
-    }
-else if (!isIndel)
-    {
-    strncpy(mdna,rna->dna + ni->mrnaStart,1);
-    mdna[1] = '\0';
-    /*printf("Mismatch in %s at %d in %s:%d bases %s\n", mrnaName, ni->mrnaStart, ni->chrom, ni->chromStart, mdna);*/
+    if ((ni->mrnaEnd-ni->mrnaStart+4) > 0)
+        {
+        strncpy(mdna,rna->dna + ni->mrnaStart - 2,ni->mrnaEnd-ni->mrnaStart+4);
+        mdna[ni->mrnaEnd-ni->mrnaStart+4] = '\0';
+        /*printf("Indel at %d-%d (%d) in %s:%d-%d bases %s\n", ni->mrnaStart, ni->mrnaEnd, rna->size, ni->chrom, ni->chromStart, ni->chromEnd, mseq->dna);*/
+        }
+    else
+        mdna[0] = '\0';
     }
 else
     {
-    mdna[0] = '\0';
+    int len = (ni->mrnaEnd-ni->mrnaStart)+1;
+    strncpy(mdna,rna->dna + ni->mrnaStart,len);
+    mdna[len] = '\0';
+    /*printf("Mismatch in %s at %d in %s:%d bases %s\n", mrnaName, ni->mrnaStart, ni->chrom, ni->chromStart, mdna);*/
     }
 
 /* Find all sequences that span this region */
-if (isIndel)
+if (type == INDEL)
     sr = hRangeQuery(conn, table, ni->chrom, ni->chromStart-2, ni->chromEnd+2, NULL, &offset);
 else 
     sr = hRangeQuery(conn, table, ni->chrom, ni->chromStart-1, ni->chromEnd, NULL, &offset);
 while ((row = sqlNextRow(sr)) != NULL) 
     {
     psl = pslLoad(row+offset);
-    if (strcmp(psl->qName,mrnaName))
-	{
-	start = end = 0;
-	/* Get the DNA sequence for the indel */
-	if (isIndel)
-	    gseq = getDna(psl, ni->chromStart-2, ni->chromEnd+2, &start, &end, thisStrand);
-	else
-	    gseq = getDna(psl, ni->chromStart-1, ni->chromEnd, &start, &end, thisStrand);
-	if (gseq->dna) 
-	    {
-	    /* Get the corresponding mRNA or EST  sequence */
-	    seq = hRnaSeq(psl->qName);
-	    if (thisStrand[0] != strand[0])
-	        {
-		int temp = start;
-		start = seq->size - end;
-		end = seq->size - temp;
-	        reverseComplement(seq->dna, seq->size);
-	        reverseComplement(gseq->dna, gseq->size);
-	        }
-	    if ((end-start) > 0)
-		{
-		strncpy(dna,seq->dna + start, end-start);
-		dna[end-start] = '\0';
-		}
-	    else
-		dna[0] = '\0';
-	    /*printf("Comparing %s:%d-%d(%d) bases %s with genomic %s\n",psl->qName, start, end, seq->size, seq->dna, gseq->dna);*/
-	    AllocVar(acc);
-	    strcpy(acc->name,seq->name);
-	    if (!strcmp(gseq->dna, dna)) 
-	        if (!strcmp(table, "mrna"))
-		    {
-		    ni->genMrna++;
-		    slAddHead(&ni->genMrnaAcc, acc);
-		    } 
-	        else 
-		    {
-		    ni->genEst++;
-		    slAddHead(&ni->genEstAcc, acc);
-		    }
-	    else  
-		if (!strcmp(mdna, dna)) 
-		    if (!strcmp(table, "mrna"))
-			{
-			ni->mrnaMrna++;
-			slAddHead(&ni->mrnaMrnaAcc, acc);
-			} 
-		    else 
-			{
-			ni->mrnaEst++;
-			slAddHead(&ni->mrnaEstAcc, acc);
-			}
-		else
-		    if (!strcmp(table, "mrna"))
-			{
-			ni->noMrna++;
-			slAddHead(&ni->noMrnaAcc, acc);
-			} 
-		    else 
-			{
-			ni->noEst++;
-			slAddHead(&ni->noEstAcc, acc);
-			}
-	    dnaSeqFree(&seq);
-	    }
-	dnaSeqFree(&gseq);
-	}
+    if (!sameString(psl->qName,mrnaName))
+        searchTransPsl(conn, table, mrnaName, mdna, ni, strand, type, psl);
     pslFree(&psl);
     }
-/*dnaSeqFree(&mseq);*/
 sqlFreeResult(&sr);
 }
 
@@ -475,26 +496,44 @@ struct indel *createMismatch(struct sqlConnection *conn, char *mrna, int mbase, 
   mi->chromStart = mi->chromEnd = gbase;
   mi->mrna = mrna;
   mi->mrnaStart = mi->mrnaEnd = mbase;
-  mi->genMrna = 0;
-  mi->genMrnaAcc = NULL;
-  mi->genEst = 0;
-  mi->genEstAcc = NULL;
-  mi->mrnaMrna = 0;
-  mi->mrnaMrnaAcc = NULL;
-  mi->mrnaEst = 0;
-  mi->mrnaEstAcc = NULL;
-  mi->noMrna = 0;
-  mi->noMrnaAcc = NULL;
-  mi->noEst = 0;
-  mi->noEstAcc = NULL;
   
   /* Determine whether mRNAs and ESTs support genomic or mRNA sequence in mismatch */
-  searchTrans(conn, "mrna", mrna, rna, mi, strand, FALSE);
-  searchTrans(conn, "est", mrna, rna, mi, strand, FALSE);
+  searchTrans(conn, "mrna", mrna, rna, mi, strand, MISMATCH);
+  searchTrans(conn, "est", mrna, rna, mi, strand, MISMATCH);
 
   return(mi);
 }
 
+struct indel *createCodonSub(struct sqlConnection *conn, char *mrna, int mrnaStart,
+                             char *mCodon, char* chr, int genPos[3], char* gCodon,
+                             struct dnaSeq *rna, char *strand)
+/* Create a record of a mismatch */
+{
+  struct indel *mi;
+#if 0
+  printf("codonSub: mrna=%s mrnaStart=%d  genPos=%d,%d,%d mCodon=%s,gCodon=%s, aa=%c %c\n",
+         mrna, mrnaStart, genPos[0], genPos[1], genPos[2], mCodon, gCodon,
+         lookupCodon(mCodon), lookupCodon(gCodon));
+#endif
+ 
+  AllocVar(mi);
+  mi->size = 1;
+  mi->chrom = chr;
+  mi->chromStart = genPos[0];
+  mi->chromEnd = genPos[2];
+  mi->mrna = mrna;
+  mi->mrnaStart = mrnaStart;
+  mi->mrnaEnd = mrnaStart+2;
+  memcpy(mi->codonGenPos, genPos, sizeof(mi->codonGenPos));
+  strcpy(mi->genCodon, gCodon);
+  strcpy(mi->mrnaCodon, mCodon);
+  
+  /* Determine whether mRNAs and ESTs support genomic or mRNA sequence in mismatch */
+  searchTrans(conn, "mrna", mrna, rna, mi, strand, CODONSUB);
+  searchTrans(conn, "est", mrna, rna, mi, strand, CODONSUB);
+
+  return(mi);
+}
 void cdsCompare(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rna, struct dnaSeq *dna)
 /* Compare the alignment of the coding region of an mRNA to the genomic sequence */
 {
@@ -502,7 +541,11 @@ int i,j;
 DNA *r, *d; 
 DNA rCodon[4], dCodon[4];
 int codonSnps = 0, codonMismatches = 0;
+int codonGenPos[3];
+int codonMrnaStart = 0;
 struct indel *mi, *miList=NULL;
+struct indel *codonSub, *codonSubList=NULL;
+ZeroVar(codonGenPos);
 
 strcpy(rCodon, "---");
 strcpy(dCodon, "---");
@@ -522,12 +565,19 @@ for (i = 0; i < pi->psl->blockCount; i++)
             {
 	    int tPosition = tstart + j + pi->psl->tStarts[0];
             int iCodon = ((qstart+j-pi->cdsStart)%3);
-	    if (pi->psl->strand[0] == '-')
-	        tPosition = pi->psl->tSize - tPosition - 1;
-            if (iCodon == 0)
-                {
+            if (iCodon == 0) {
                 codonSnps = 0;
                 codonMismatches = 0;
+                codonMrnaStart = qstart+j;
+            }
+	    if (pi->psl->strand[0] == '-')
+                {
+	        tPosition = pi->psl->tSize - tPosition - 1;
+                codonGenPos[2-iCodon] = tPosition;
+                }
+            else
+                {
+                codonGenPos[iCodon] = tPosition;
                 }
             rCodon[iCodon] = r[qstart+j];
             dCodon[iCodon] = d[tstart+j];
@@ -570,6 +620,13 @@ for (i = 0; i < pi->psl->blockCount; i++)
                     if ((codonSnps > 0) && (codonMismatches == 0))
                         pi->nonSynSubSnp++;
                     }
+		if (codonSubReport)
+                    {
+                    codonSub = createCodonSub(conn, pi->psl->qName, qstart+j,
+                                              rCodon, pi->psl->tName, codonGenPos,
+                                              dCodon, rna, pi->psl->strand);
+                    slAddHead(&codonSubList, codonSub);
+                    }
                 }
             }
         }
@@ -578,6 +635,11 @@ if (mismatchReport)
     { 
     slReverse(&miList);
     pi->mmList = miList;
+    }
+if (codonSubReport)
+    {
+    slReverse(&codonSubList);
+    pi->codonSubList = codonSubList;
     }
 }
 
@@ -598,22 +660,10 @@ struct indel *createIndel(struct sqlConnection *conn, char *mrna, int mstart, in
   ni->mrna = mrna;
   ni->mrnaStart = mstart;
   ni->mrnaEnd = mend;
-  ni->genMrna = 0;
-  ni->genMrnaAcc = NULL;
-  ni->genEst = 0;
-  ni->genEstAcc = NULL;
-  ni->mrnaMrna = 0;
-  ni->mrnaMrnaAcc = NULL;
-  ni->mrnaEst = 0;
-  ni->mrnaEstAcc = NULL;
-  ni->noMrna = 0;
-  ni->noMrnaAcc = NULL;
-  ni->noEst = 0;
-  ni->noEstAcc = NULL;
   
   /* Determine whether mRNAs and ESTs support genomic or mRNA sequence in indel region */
-  searchTrans(conn, "mrna", mrna, rna, ni, strand, TRUE);
-  searchTrans(conn, "est", mrna, rna, ni, strand, TRUE);
+  searchTrans(conn, "mrna", mrna, rna, ni, strand, INDEL);
+  searchTrans(conn, "est", mrna, rna, ni, strand, INDEL);
 
   return(ni);
 }
@@ -800,7 +850,7 @@ freeDnaSeq(&dnaSeq);
 return(pi);
 }
 
-void writeOut(FILE *of, FILE *in, FILE *mm, struct pslInfo *pi)
+void writeOut(FILE *of, FILE *in, FILE *mm, FILE* cs, struct pslInfo *pi)
 /* Output results of the mRNA alignment analysis */
 {
 struct indel *indel;
@@ -820,10 +870,10 @@ for (i = 0; i < pi->indelCount; i++)
 fprintf(of, "\n");
 
 /* Write out detailed records of indels, if requested */
-if (verbose)
-    printf("Writing out indels\n");
 if (indelReport) 
     {
+    if (verbose)
+        printf("Writing out indels\n");
     for (indel = pi->indelList; indel != NULL; indel=indel->next)
         {
 	/*printf("Indel of size %d in %s:%d-%d vs. %s:%d-%d\n",
@@ -855,10 +905,10 @@ if (indelReport)
     }
 
 /* Write out detailed records of mismatches, if requested */
-if (verbose)
-    printf("Writing out mismatches\n");
 if (mismatchReport) 
     {
+    if (verbose)
+        printf("Writing out mismatches\n");
     for (indel = pi->mmList; indel != NULL; indel=indel->next)
         {
 	/*printf("Indel of size %d in %s:%d-%d vs. %s:%d-%d\n",
@@ -887,9 +937,45 @@ if (mismatchReport)
 	fprintf(mm, "\n\n");
 	}
     }
+/* Write out detailed records of codon substitutions, if requested */
+if (codonSubReport) 
+    {
+    if (verbose)
+        printf("Writing out codon substitutions\n");
+    for (indel = pi->codonSubList; indel != NULL; indel=indel->next)
+        {
+        bool isSyn = (lookupCodon(indel->mrnaCodon) == lookupCodon(indel->genCodon));
+	fprintf(cs, "%s codon substitution at %s:%d vs. %s:%d,%d,%d\n",
+                (isSyn ? "synonymous" : "non-synonymous"),
+                indel->mrna, indel->mrnaStart, indel->chrom, indel->codonGenPos[0],
+                indel->codonGenPos[1], indel->codonGenPos[2]);
+	fprintf(cs, "\tpsl %s %d %d\t%s %d %d\n",
+                pi->psl->qName, pi->psl->qStart, pi->psl->qEnd,
+                pi->psl->tName, pi->psl->tStart, pi->psl->tEnd);
+	fprintf(cs, "\t%d mRNAs support genomic: ", indel->genMrna);
+	for (acc = indel->genMrnaAcc; acc != NULL; acc = acc->next)
+                fprintf(cs, "%s ", acc->name);
+	fprintf(cs, "\n\t%d ESTs support genomic: ",indel->genEst);
+	for (acc = indel->genEstAcc; acc != NULL; acc = acc->next)
+	    fprintf(cs, "%s ", acc->name);
+	fprintf(cs, "\n\t%d mRNAs support %s: ", indel->mrnaMrna, indel->mrna);
+	for (acc = indel->mrnaMrnaAcc; acc != NULL; acc = acc->next)
+	    fprintf(cs, "%s ", acc->name);
+	fprintf(cs, "\n\t%d ESTs support %s: ",indel->mrnaEst, indel->mrna);
+	for (acc = indel->mrnaEstAcc; acc != NULL; acc = acc->next)
+	    fprintf(cs, "%s ", acc->name);
+	fprintf(cs, "\n\t%d mRNAs support neither: ", indel->noMrna);
+	for (acc = indel->noMrnaAcc; acc != NULL; acc = acc->next)
+	    fprintf(cs, "%s ", acc->name);
+	fprintf(cs, "\n\t%d ESTs support neither: ",indel->noEst);
+	for (acc = indel->noEstAcc; acc != NULL; acc = acc->next)
+	    fprintf(cs, "%s ", acc->name);
+	fprintf(cs, "\n\n");
+	}
+    }
 }
  
-void doFile(struct lineFile *pf, FILE *of, FILE *in, FILE *mm)
+void doFile(struct lineFile *pf, FILE *of, FILE *in, FILE *mm, FILE* cs)
 /* Process all records in a psl file of mRNA alignments */
 {
 int lineSize;
@@ -908,7 +994,7 @@ while (lineFileNext(pf, &line, &lineSize))
     psl = pslLoad(words);
     pi = processPsl(conn, psl);
     slAddHead(&piList, pi);
-    writeOut(of, in, mm, pi);
+    writeOut(of, in, mm, cs, pi);
     pslInfoFree(&pi);
     }
 hFreeConn(&conn);
@@ -917,19 +1003,20 @@ hFreeConn(&conn);
 int main(int argc, char *argv[])
 {
 struct lineFile *pf, *cf, *lf;
-FILE *of, *in=NULL, *mm=NULL;
+FILE *of, *in=NULL, *mm=NULL, *cs=NULL;
 char *faFile, *db, filename[64];
 
 optionInit(&argc, argv, optionSpecs);
-if (argc < 5)
+if (argc != 6)
     {
-    fprintf(stderr, "USAGE: pslAnal [-db=db] -verbose -indels -mismatches <psl file> <cds file> <loci file> <fa file> <out file prefix>\n");
+    fprintf(stderr, "USAGE: pslAnal [-db=db] -verbose -indels -mismatches -codonsub <psl file> <cds file> <loci file> <fa file> <out file prefix>\n");
     return 1;
     }
 db = optionVal("db", "hg15");
 verbose = optionExists("verbose");
 indelReport = optionExists("indels");
 mismatchReport = optionExists("mismatches");
+codonSubReport = optionExists("codonsub");
 pf = pslFileOpen(argv[1]);
 cf = lineFileOpen(argv[2], FALSE);
 lf = lineFileOpen(argv[3], FALSE);
@@ -949,6 +1036,12 @@ if (mismatchReport)
     mm = mustOpen(filename, "w");
     }
 
+if (codonSubReport)
+    {
+    sprintf(filename, "%s.codonsub", argv[5]);
+    cs = mustOpen(filename, "w");
+    }
+
 hSetDb(db);
 if (verbose)
     printf("Reading CDS file\n");
@@ -961,9 +1054,7 @@ if (verbose)
 readLoci(lf);
 if (verbose)
     printf("Processing psl file\n");
-doFile(pf, of, in, mm);
-/*printf("Writing out file\n");
-  writeOut(of, in);*/
+doFile(pf, of, in, mm, cs);
 
 lineFileClose(&pf);
 fclose(of);
