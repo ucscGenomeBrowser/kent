@@ -1,6 +1,6 @@
 track blastHg16KG
-shortLabel Human Proteins
-longLabel Human Proteins
+shortLabel Human (hg16) Proteins
+longLabel Human (hg16) Proteins
 group compGeno
 priority 142
 visibility pack
