@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.56 2004/07/30 19:02:58 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.57 2004/08/10 21:07:41 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -1535,7 +1535,6 @@ getCgiData(&isOK, FALSE, q.joinerYN  , sizeof(q.joinerYN  ), "joinerYN"  );
 getCgiData(&isOK, TRUE ,&q.track     , 256                 , "track"     );
 getCgiData(&isOK, TRUE ,&q.dbs       , 256                 , "dbs"       );
 getCgiData(&isOK, TRUE ,&q.cgis      , 256                 , "cgis"      );
-getCgiData(&isOK, TRUE ,&q.files     , 256                 , "files"     );
 getCgiData(&isOK, TRUE ,&q.stat      , 256                 , "stat"      );
 
 /* integers */
@@ -1553,6 +1552,7 @@ getCgiData(&isOK, FALSE, q.extSource , sizeof(q.extSource ), "extSource" );
 
 /* blobs */
 getCgiData(&isOK, TRUE ,&q.tbls      , -1                  , "tbls"      );  
+getCgiData(&isOK, TRUE ,&q.files     , -1                  , "files"     );
 getCgiData(&isOK, TRUE ,&q.openIssues, -1                  , "openIssues");
 getCgiData(&isOK, TRUE ,&q.notes     , -1                  , "notes"     );
 getCgiData(&isOK, TRUE ,&q.releaseLog, -1                  , "releaseLog");
@@ -1591,11 +1591,6 @@ if (strlen(cgiString("dbs"))>255)
 if (strlen(cgiString("cgis"))>255)
     {
     safef(msg,sizeof(msg),"CGIs: too long for field, 255 char max. <br>\n");
-    isRedo = TRUE;
-    }
-if (strlen(cgiString("files"))>255)
-    {
-    safef(msg,sizeof(msg),"Files: too long for field, 255 char max. <br>\n");
     isRedo = TRUE;
     }
 if (strlen(cgiString("stat"))>255)
@@ -2498,36 +2493,36 @@ return mystat.st_size;
 void doShowSizes()
 /* show the sizes of all the track tables, cgis, and general files in separate window target= _blank  */
 {
-char tbl[256] = "";
-char  db[256] = "";
+char tbl[1024] = "";
+char  db[1024] = "";
 unsigned long size = 0;
 long long totalsize = 0;
 unsigned long sizeMB = 0;
 int i = 0, ii = 0, iii = 0;
 int j = 0, jj = 0, jjj = 0;
 int g = 0, gg = 0, ggg = 0;
-char nicenumber[256]="";
+char nicenumber[1024]="";
 struct pushQ q;
 char newQid[sizeof(q.qid)] = "";
 
-char dbsComma[256];
-char dbsSpace[256];
-char dbsVal[256];
+char dbsComma[1024];
+char dbsSpace[1024];
+char dbsVal[1024];
 char d;
 
 char tempComma[1024];
-char tempSpace[256];
-char tempVal[256];
+char tempSpace[1024];
+char tempVal[1024];
 char c;
 
-char gComma[256];
-char gSpace[256];
-char gVal[256];
+char gComma[1024];
+char gSpace[1024];
+char gVal[1024];
 char gc;
-char cgiPath[256];
-char pathName[256];
-char filePath[256];
-char fileName[256];
+char cgiPath[1024];
+char pathName[1024];
+char filePath[1024];
+char fileName[1024];
 char *found=NULL;
 struct fileInfo *fi = NULL;
 

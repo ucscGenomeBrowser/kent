@@ -1,5 +1,5 @@
 include ../../inc/common.mk
-
+HG_WARN = ${HG_WARN_ERR}
 
 L = -lm
 MYLIBDIR = ../../lib/$(MACHTYPE)

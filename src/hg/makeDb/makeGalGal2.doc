@@ -2546,4 +2546,87 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
     > ensPep.fa
     hgPepPred galGal2 generic ensPep ensPep.fa
 
+# ECORES FROM GENOSCOPE (DONE, hartera, 2004-08-09)
+# download data from  http://www.genoscope.cns.fr/externe/4ucsc/
+# ecotigCT - ecores on chicken genome which are conserved with Tetraodon
+
+    ssh hgwdev
+    mkdir -p /cluster/data/galGal2/bed/ecores
+    # these are in a different format to the previous Ecores
+    # Create a script here to parse the Ecores into bed format
+    # add parse_ecotig.pl to this directory 
+    cp /cluster/data/rn3/bed/ecores/parse_ecotig.pl \
+              /cluster/data/galGal2/bed/ecores/
+
+    # ecores conserved with Tetraodon
+    mkdir -p /cluster/data/galGal2/bed/ecores/tetraodon
+    cd /cluster/data/galGal2/bed/ecores/tetraodon
+
+    # download data for ecotigRF to this directory
+    wget -o fetch.log -r -l1 --no-directories --timestamp \
+       http://www.genoscope.cns.fr/externe/4ucsc/ecotigCT
+    # The format is like those for ecores on Drosophila conserved with Anopheles    # but with a species code missing
+    # [chr] [start ecore] [end ecore] [chr] [start ecore] [end ecore]
+    # Reformat chromosome names to match those in our database
+    sed -e 's/RANDOM/_random/g' ecotigCT | sed -e 's/UN/Un/g;' > ecotigCT.format
+    # get list of chromosomes represented
+    awk '{print $1}' tmp | sort -n | uniq > chrom.lst
+    # compare chroms to those in galGal2: E64 and chr6_random are missing
+    # use perl script to process this to the same format at those
+    # for rn3, hg16 and mm3
+    cd ..
+cat << 'EOF_' > /cluster/data/galGal2/bed/ecores/processEcotigs.pl
+#!/usr/bin/perl -w
+use strict;
+# convert ecores file to bed format
+# Format of Ecores file:
+# [chr] [start ecore] [end ecore] [chr] [start ecore] [end ecore]
+# if the second set of ecores are the same as those at the beginning of the
+# next line then they all belong to the same ecotig
+# Process so all ecores from the same ecotig are on one line as for the other
+# format.
+my $beg_start = 0;
+my $beg_end = 0;
+my $last_start = 0;
+my $last_end = 0;
+my $chr_old = "";
+my $count = 0;
+                                                                                
+while (<STDIN>) {
+   chomp;
+   # remove trailing space
+   s/\s+$//;
+   my @fields = split(/\s+/);
+   my $chr = $fields[0];
+   $beg_start = $fields[1];
+   $beg_end = $fields[2];
+   # if first two co-ordinates are the same as those on the previous line
+   if (($beg_start == $last_start) && ($beg_end == $last_end) && ($chr eq $chr_old)) {
+      # get new last start and end from this line
+      print "\t$last_start\t$last_end";
+      $count++;
+   }
+   else {
+      if ($count > 0) {
+         print "\t$last_start\t$last_end";
+         $count = 0;
+      }
+                                                                                
+      print "\nchr$chr\t$beg_start\t$beg_end";
+   }
+   $chr_old = $chr;
+   if ($#fields == 5) {
+      $last_start = $fields[$#fields - 1];
+      $last_end = $fields[$#fields];
+   }
+}
+'_EOF_'
+
+    # convert data to bed file format 
+    # copy parse_ecotigs.pl from rn3
+    cp /cluster/data/rn3/bed/ecores/parse_ecotig.pl .
+    cd tetraodon
+    perl ../processEcotigs.pl < ecotigCT.format > ecotigCT.format2
+    perl ../parse_ecotig.pl < ecotigCT.format2 > ecotigCT.bed
+    hgLoadBed -tab galGal2 ecoresTetraodon ecotigCT.bed
 

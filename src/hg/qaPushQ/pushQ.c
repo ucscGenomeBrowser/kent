@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "pushQ.h"
 
-static char const rcsid[] = "$Id: pushQ.c,v 1.7 2004/05/24 08:24:10 galt Exp $";
+static char const rcsid[] = "$Id: pushQ.c,v 1.8 2004/08/10 21:07:41 galt Exp $";
 
 void pushQStaticLoad(char **row, struct pushQ *ret)
 /* Load a row from pushQ table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 strcpy(ret->qid, row[0]);
 strcpy(ret->pqid, row[1]);
@@ -53,8 +51,6 @@ struct pushQ *pushQLoad(char **row)
  * from database.  Dispose of this with pushQFree(). */
 {
 struct pushQ *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 strcpy(ret->qid, row[0]);
@@ -157,7 +153,7 @@ void pushQSaveToDb(struct sqlConnection *conn, struct pushQ *el, char *tableName
  * If worried about this use pushQSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s',%u,'%s','%s','%s','%s',%s,'%s','%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s','%s',%s,%s,'%s','%s',%u,'%s','%s',%s)", 
+dyStringPrintf(update, "insert into %s values ( '%s','%s','%s',%u,'%s','%s','%s','%s',%s,'%s',%s,%u,'%s','%s','%s','%s','%s','%s','%s','%s','%s',%s,%s,'%s','%s',%u,'%s','%s',%s)", 
 	tableName,  el->qid,  el->pqid,  el->priority,  el->rank,  el->qadate,  el->newYN,  el->track,  el->dbs,  el->tbls,  el->cgis,  el->files,  el->sizeMB,  el->currLoc,  el->makeDocYN,  el->onlineHelp,  el->ndxYN,  el->joinerYN,  el->stat,  el->sponsor,  el->reviewer,  el->extSource,  el->openIssues,  el->notes,  el->pushState,  el->initdate,  el->bounces,  el->lockUser,  el->lockDateTime,  el->releaseLog);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
@@ -239,7 +235,6 @@ struct pushQ *pushQCommaIn(char **pS, struct pushQ *ret)
  * return a new pushQ */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -311,7 +306,6 @@ for (el = *pList; el != NULL; el = next)
 void pushQOutput(struct pushQ *el, FILE *f, char sep, char lastSep) 
 /* Print out pushQ.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->qid);
 if (sep == ',') fputc('"',f);
@@ -428,8 +422,6 @@ void usersStaticLoad(char **row, struct users *ret)
 /* Load a row from users table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 strcpy(ret->user, row[0]);
 strcpy(ret->password, row[1]);
@@ -442,8 +434,6 @@ struct users *usersLoad(char **row)
  * from database.  Dispose of this with usersFree(). */
 {
 struct users *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 strcpy(ret->user, row[0]);
@@ -559,7 +549,6 @@ struct users *usersCommaIn(char **pS, struct users *ret)
  * return a new users */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -598,7 +587,6 @@ for (el = *pList; el != NULL; el = next)
 void usersOutput(struct users *el, FILE *f, char sep, char lastSep) 
 /* Print out users.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->user);
 if (sep == ',') fputc('"',f);

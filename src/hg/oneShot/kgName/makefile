@@ -5,8 +5,11 @@ MYLIBDIR = $(HOME)/kent/src/lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a 
 CFLAGS= -g
 
-O = kgName.o
 
-kgName: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/kgName $O $(MYLIBS) $L
+all : kgName fbName 
+
+kgName: $(MYLIBS) kgName.o
+	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/kgName kgName.o $(MYLIBS) $L
+fbName: $(MYLIBS) fbName.o
+	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/fbName fbName.o $(MYLIBS) $L
 #	strip $(HOME)/bin/$(MACHTYPE)/kgName

@@ -11,7 +11,7 @@ table pushQ
     string    dbs;        "Databases"
     lstring   tbls;       "Tables"
     string    cgis;       "CGI(s)"
-    string    files;      "File(s)"
+    lstring   files;      "File(s)"
     uint      sizeMB;     "Size MB"
     char [20] currLoc;    "Current Location"
     char [1]  makeDocYN;  "MakeDoc verified?"

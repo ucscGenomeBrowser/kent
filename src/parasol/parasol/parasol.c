@@ -303,7 +303,6 @@ void parasol(char *command, int argc, char *argv[])
 /* parasol - Parasol program - for launching programs in parallel on a computer cluster. */
 {
 char *subType = argv[0];
-int sd;
 
 hubRudp = rudpMustOpen();
 if (sameString(command, "add"))

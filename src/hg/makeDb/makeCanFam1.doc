@@ -293,11 +293,12 @@ while (<>) {
     # Add dbDb and defaultDb entries:
     echo 'insert into dbDb (name, description, nibPath, organism,  \
           defaultPos, active, orderKey, genome, scientificName,  \
-          htmlPath, hgNearOk)  \
+          htmlPath, hgNearOk, hgPbOk, sourceName)  \
           values("canFam1", "Jul. 2004", \
           "/gbdb/canFam1/nib", "Dog", "chr14:10666612-10673232", 1, \
           18, "Dog", "Canis familiaris", \
-          "/gbdb/canFam1/html/description.html", 0);' \
+          "/gbdb/canFam1/html/description.html", 0, 0, \
+          "Broad Institute v. 1.0");' \
     | hgsql -h genome-testdb hgcentraltest
     # If there's another dog assembly, this will be an update not insert:
     echo 'insert into defaultDb (genome, name) values("Dog", "canFam1");' \

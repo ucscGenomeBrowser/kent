@@ -24,13 +24,16 @@ struct lineFile
     bool zTerm;			/* Replace '\n' with zero? */
     bool reuse;			/* Set if reusing input. */
     char *buf;			/* Buffer. */
+    struct pipeline *pl;        /* pipeline if reading compressed */
     };
 
 struct lineFile *lineFileMayOpen(char *fileName, bool zTerm);
-/* Try and open up a lineFile. */
+/* Try and open up a lineFile. If fileName ends in .gz, .Z, or .bz2,
+ * it will be read from a decompress pipeline. */
 
 struct lineFile *lineFileOpen(char *fileName, bool zTerm);
-/* Open up a lineFile or die trying. */
+/* Open up a lineFile or die trying If fileName ends in .gz, .Z, or .bz2,
+ * it will be read from a decompress pipeline.. */
 
 struct lineFile *lineFileAttatch(char *fileName, bool zTerm, int fd);
 /* Wrap a line file around an open'd file. */

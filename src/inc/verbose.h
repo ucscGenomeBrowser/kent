@@ -31,5 +31,7 @@ void verboseSetLevel(int verbosity);
 /* Set verbosity level in log.  0 for no logging,
  * higher number for increasing verbosity. */
 
+void verboseSetLogFile(char *name);
+/* Set logFile for verbose messages overrides stderr. */
 #endif /* VERBOSE_H */
 

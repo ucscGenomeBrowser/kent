@@ -7,4 +7,5 @@ visibility pack
 colorChromDefault off
 type psl protein
 otherDb hg16
+pred hg16.blastKGPep
 

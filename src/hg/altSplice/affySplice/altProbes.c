@@ -14,6 +14,7 @@
 #include "dnaseq.h"
 #include "dMatrix.h"
 #include <gsl/gsl_math.h>
+#include <gsl/gsl_cdf.h>
 #include <gsl/gsl_statistics_double.h>
 
 struct altPath
@@ -40,6 +41,8 @@ struct altPath
     int sjDisagree;             /* Number of times sj disagrees with matched exon. */
     int sjExp;                  /* Number of times sj expressed. */
     int exonExp;                /* Number of times exon expressed. */
+    int *motifUpCounts;         /* Number of motifs counted upstream for each motif. */
+    int *motifDownCounts;        /* Number of motifs counted downstream for each motif. */
 };
 
 struct altEvent 
@@ -59,6 +62,28 @@ struct altEvent
     boolean isAltExpressed;      /* Is this altEvent alt-expressed? */
 };
 
+struct bindSite
+/* Binding sites for a protein. */
+{
+    struct bindSite *next; /* Next in list. */
+    char **motifs;     /* List of valid motifs. */
+    int motifCount;    /* Number of moitfs to look for. */
+    char *rnaBinder;   /* Rna binding protein associated with these sites. */
+};
+
+
+struct unitTest
+{
+    struct unitTest *next; /* Next in list. */
+    boolean (*test)(struct unitTest *test);     /* Function to call for test. */
+    char *description;     /* Description of tests. */
+    char *errorMsg;        /* Error message returned by test. */
+};
+
+/* Create a funtion pointer. */
+typedef boolean (*testFunction)(struct unitTest *test);
+
+struct unitTest *tests = NULL;
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -78,8 +103,16 @@ static struct optionSpec optionSpecs[] =
     {"browser", OPTION_STRING},
     {"brainSpecificStrict", OPTION_BOOLEAN},
     {"tissueSpecific", OPTION_STRING},
+    {"brainTissues", OPTION_STRING},
+    {"combinePSets", OPTION_BOOLEAN},
+    {"useExonBeds", OPTION_BOOLEAN},
+    {"skipMotifControls", OPTION_BOOLEAN},
+    {"selectedPValues", OPTION_STRING},
+    {"selectedPValFile", OPTION_STRING},
+    {"doTests", OPTION_BOOLEAN},
     {NULL, 0}
 };
+
 
 static char *optionDescripts[] =
 /* Description of our options for usage summary. */
@@ -98,7 +131,14 @@ static char *optionDescripts[] =
     "Instead of using best correlated probe set use all probe sets.",
     "Browser to point at when creating web page.",
     "Require each non-brain tissue to be below absThresh.",
-    "Output tissue specific counts for various events to this file."
+    "Output tissue specific counts for various events to this file.",
+    "Comma separated list of tissues to consider brain.",
+    "Combine the p-values for a path using Fisher's method.",
+    "Use exon beds, not just splice junction beds.",
+    "Skip looking at the motifs in the controls, can be quite slow.",
+    "File containing list of AFFY G###### ids and gene names.",
+    "File to output pvalue vectors for selected genes to.",
+    "Do some unit tests."
 };
 
 struct hash *bedHash = NULL; /* Access bed probe sets by hash. */
@@ -111,8 +151,26 @@ char *browserName = NULL;    /* Name of browser that we are going to html link t
 char *db = NULL;             /* Database version used here. */
 boolean useMaxProbeSet;      /* Instead of using the best correlated probe set, use any 
 				probe set. */
+boolean useComboProbes = FALSE; /* Combine probe sets on a given path using fisher's method. */
+boolean useExonBedsToo = FALSE; /* Use exon beds too, not just splice junction beds. */
+
+FILE *pathProbabilitiesOut = NULL; /* File to print out path probability vectors. */
+FILE *pathExpressionOut = NULL; /* File to print out path probability vectors. */
+FILE *pathProbabilitiesBedOut = NULL; /* File to print out corresponding beds for paths. */
+struct hash *outputPValHash = NULL; /* Hash of selected names. */
+
 int otherTissueExpThres = 1; /* Number of other tissues something must be seen in to 
 				be considered expressed, used */
+struct bindSite *bindSiteList = NULL; /* List of rna binding sites to look for. */
+struct bindSite **bindSiteArray = NULL; /* array of rna binding sites to look for. */
+int bindSiteCount = 0;             /* Number of binding sites to loop through. */
+int cassetteExonCount = 0;         /* Number of cassette exons examined. */
+int *cassetteUpMotifs = NULL;      /* Counts of motifs upstream cassette exons. */
+int *cassetteDownMotifs = NULL;    /* Counts of moitfs downstream cassette exons. */
+int controlExonCount = 0;         /* Number of control exons examined. */
+int *controlUpMotifs = NULL;      /* Counts of motifs upstream cassette exons. */
+int *controlDownMotifs = NULL;    /* Counts of moitfs downstream cassette exons. */
+boolean skipMotifControls = FALSE; /* Skip looking for motifs in controls. */
 int brainSpecificEventCount = 0;  /* How many brain specific events are there. */
 int brainSpecificEventCassCount = 0;  /* How many brain specific events are there. */
 int brainSpecificEventMutExCount = 0;  /* How many brain specific events are there. */
@@ -135,6 +193,9 @@ FILE *tissueSpecificOut = NULL;    /* File to output tissue specific results to.
 boolean tissueSpecificStrict = FALSE; /* Do we require that all other tissues be below absThresh? */
 static int **tissueSpecificCounts; /* Array of counts for different tissue specific splice
 				      types per tissue. */
+int *brainSpecificMotifUpCounts = NULL;
+int *brainSpecificMotifDownCounts = NULL;
+
 /* Keep track of how many of each event are occuring. */
 static int alt5PrimeCount = 0;
 static int alt3PrimeCount = 0;
@@ -192,6 +253,79 @@ for(i=0; i<ArraySize(optionSpecs) -1; i++)
 errAbort("\nusage:\n   ");
 }
 
+struct splice *ndr2CassTest()
+/* Create a splice for use in testsing. */
+{
+char *string = cloneString("chr14	43771400	43772080	chr14.7822-8.26	2	-	9319	38	43765895,43766921,43767127,43767179,43767304,43767340,43767563,43767611,43767860,43767912,43768199,43768244,43768682,43768786,43768944,43769001,43769182,43769269,43769488,43769549,43770672,43770735,43770929,43771050,43771294,43771356,43771400,43771404,43771700,43771742,43772080,43772161,43773937,43774090,43774093,43774180,43774538,43774609,	0,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,1,3,2,1,3,1,3,1,1,2,2,1,2,	2	{\"chr14\",43771400,43772080,0,2,2,{26,30,},24,31,0,},{\"chr14\",43771400,43772080,0,4,4,{26,28,29,30,},24,31,42,},");
+struct splice *splice = NULL;
+char *words[100];
+chopByWhite(string, words, sizeof(words));
+splice = spliceLoad(words);
+}
+
+struct bed *ndr2BedTest()
+/* Create beds used in testing. */
+{
+char *inc1 = "chr14	43771385	43771715	G6912708@J918653_RC@j_at	0	-	43771385	43771715	0	2	15,15,	0,315,";
+char *skip = "chr14	43771385	43772095	G6912708@J918654_RC@j_at	0	-	43771385	43772095	0	2	15,15,	0,695,";
+char *inc2 = "chr14	43771727	43772095	G6912708@J918655_RC@j_at	0	-	43771727	43772095	0	2	15,15,	0,353,";
+char *gene = "chr14	43765981	43772151	G6912708_RC_a_at	0	-	43765981	43772151	0	9	25,25,25,25,25,25,25,25,43,	0,149,1602,3222,3262,3516,5000,5392,6127,";
+struct bed *bedList = NULL, *bed = NULL;
+char *words[12];
+
+chopByWhite(cloneString(inc1), words, ArraySize(words));
+bed = bedLoadN(words,12);
+slAddHead(&bedList, bed);
+
+chopByWhite(cloneString(skip), words, ArraySize(words));
+bed = bedLoadN(words,12);
+slAddHead(&bedList, bed);
+
+chopByWhite(cloneString(inc2), words, ArraySize(words));
+bed = bedLoadN(words,12);
+slAddHead(&bedList, bed);
+
+chopByWhite(cloneString(gene), words, ArraySize(words));
+bed = bedLoadN(words,12);
+slAddHead(&bedList, bed);
+
+slReverse(&bedList);
+return bedList;
+}
+
+struct dMatrix *ndr2BedTestMat(boolean probability)
+/* Create a fake matrix of probabilities. If probability is TRUE fill
+ in a probability matrix, otherwise fill in an intensity matrix. */
+{
+struct dMatrix *probs = NULL;
+static char *colNames[] = {"cerebellum", "cortex", "heart", "skeletal"};
+static char *rowNames[] = {"G6912708@J918653_RC@j_at", "G6912708@J918654_RC@j_at", 
+		    "G6912708@J918655_RC@j_at", "G6912708_RC_a_at"};
+double probM[4][4] = {{.8, 1, 0, .5},{0, 0, 0, 1}, {.8, 0, 0, .5}, {1, 0, .5, 1}};
+double intenM[4][4] = {{1, 1, 0, .5}, {1, 1, 1, 1}, {1, 1, 0, .5}, {1, 1, 1, .5}};
+double **matrix = NULL;
+int count = 0;
+AllocVar(probs);
+AllocArray(matrix, ArraySize(rowNames));
+probs->nameIndex = newHash(3);
+
+for(count = 0; count < ArraySize(colNames); count++)
+    {
+    if(probability)
+	matrix[count] = CloneArray(probM[count], ArraySize(probM[count])); 
+    else
+	matrix[count] = CloneArray(intenM[count], ArraySize(intenM[count])); 
+    hashAddInt(probs->nameIndex, rowNames[count], count); 
+    }
+
+probs->colNames = colNames;
+probs->colCount = ArraySize(colNames);
+probs->rowNames = rowNames;
+probs->rowCount = ArraySize(rowNames);
+probs->matrix = matrix;
+return probs;
+}
+
 void logSpliceType(enum altSpliceType type)
 /* Log the different types of splicing. */
 {
@@ -228,6 +362,7 @@ switch (type)
 	errAbort("logSpliceType() - Don't recognize type %d", type);
     }
 }
+
 
 void logSpliceTypeWProbe(enum altSpliceType type)
 /* Log the different types of splicing. */
@@ -340,6 +475,64 @@ switch (type)
     }
 }
 
+void initBindSiteList()
+/* Create a little hand curated knowledge about binding sites. */
+{
+struct bindSite *bsList = NULL, *bs = NULL;
+int i = 0;
+
+/* Nova-1 */
+AllocVar(bs);
+bs->motifCount = 8;
+AllocArray(bs->motifs, bs->motifCount);
+/* Expand TCATY_3 to all 8 possibilities */
+bs->motifs[i++] = cloneString("TCATCTCATCTCATC");
+bs->motifs[i++] = cloneString("TCATCTCATCTCATT");
+bs->motifs[i++] = cloneString("TCATCTCATTTCATT");
+bs->motifs[i++] = cloneString("TCATCTCATTTCATC");
+bs->motifs[i++] = cloneString("TCATTTCATCTCATC");
+bs->motifs[i++] = cloneString("TCATTTCATCTCATT");
+bs->motifs[i++] = cloneString("TCATTTCATTTCATT");
+bs->motifs[i++] = cloneString("TCATTTCATTTCATC");
+bs->rnaBinder = cloneString("Nova-1");
+slAddHead(&bsList, bs);
+
+/* Fox-1 */
+AllocVar(bs);
+bs->motifCount = 1;
+AllocArray(bs->motifs, bs->motifCount);
+bs->motifs[0] = cloneString("GCATG");
+bs->rnaBinder = cloneString("Fox-1");
+slAddHead(&bsList, bs);
+
+/* PTB */
+AllocVar(bs);
+bs->motifCount = 1;
+AllocArray(bs->motifs, bs->motifCount);
+bs->motifs[0] = cloneString("CTCTCT");
+bs->rnaBinder = cloneString("PTB/nPTB");
+slAddHead(&bsList, bs);
+
+/* hnRNPs */
+AllocVar(bs);
+bs->motifCount = 1;
+AllocArray(bs->motifs, bs->motifCount);
+bs->motifs[0] = cloneString("GGGG");
+bs->rnaBinder = cloneString("hnRNP-H/F");
+slAddHead(&bsList, bs);
+
+bindSiteList = bsList;
+slReverse(&bsList);
+AllocArray(bindSiteArray, slCount(bsList));
+
+for(bs = bsList; bs != NULL; bs = bs->next)
+    bindSiteArray[bindSiteCount++] = bs;
+AllocArray(cassetteUpMotifs, bindSiteCount);
+AllocArray(cassetteDownMotifs, bindSiteCount);
+AllocArray(controlUpMotifs, bindSiteCount);
+AllocArray(controlDownMotifs, bindSiteCount);
+}
+
 boolean isJunctionBed(struct bed *bed)
 /* Return TRUE if bed looks like a junction probe. Specifically
    two blocks, each 15bp. FALSE otherwise. */
@@ -347,6 +540,19 @@ boolean isJunctionBed(struct bed *bed)
 if(bed->blockCount == 2 && bed->blockSizes[0] == 15 && bed->blockSizes[1] == 15)
     return TRUE;
 return FALSE;
+}
+
+boolean validVertex(struct splice *splice, int v1, int v2)
+/* Check to see if a given vertex is the sink or source of the
+   graph and should be ignored. */
+{
+return (v1 >= 0 && v1 < splice->vCount && v2 >= 0 && v2 < splice->vCount);
+}
+
+enum ggEdgeType pathEdgeTypeValid(struct splice *s, int v1, int v2)
+{
+assert(validVertex(s, v1,v2));
+return pathEdgeType(s->vTypes, v1, v2);
 }
 
 boolean pathContainsIntron(struct splice *splice, struct path *path, char *chrom,
@@ -364,7 +570,8 @@ if(differentString(splice->tName, chrom) ||
 /* Check the edges on the path. */
 for(i = 0; i < path->vCount - 1; i++)
     {
-    if(pathEdgeType(splice->vTypes, verts[i], verts[i+1]) == ggSJ)
+    if(validVertex(splice, verts[i], verts[i+1]) &&
+       pathEdgeTypeValid(splice, verts[i], verts[i+1]) == ggSJ)
 	{
 	if(chromStart == vPos[verts[i]] && chromEnd == vPos[verts[i+1]])
 	    return TRUE;
@@ -388,8 +595,8 @@ if(differentString(splice->tName, chrom) ||
     return FALSE;
 
 /* Check the first edge. */
-if(path->upV != -1 && pathEdgeType(splice->vTypes, path->upV, 
-				   verts[0]) == ggExon)
+if(validVertex(splice, path->upV, verts[0]) &&
+   pathEdgeTypeValid(splice, path->upV,verts[0]) == ggExon)
     {
     if(chromStart >= vPos[path->upV] && chromEnd <= vPos[verts[0]])
 	return TRUE;
@@ -399,8 +606,8 @@ if(path->upV != -1 && pathEdgeType(splice->vTypes, path->upV,
     }
 
 /* Check the last edge. */
-if(path->downV != -1 && 
-   pathEdgeType(splice->vTypes, verts[path->vCount - 1], path->downV) == ggExon)
+if(validVertex(splice, verts[path->vCount -1], path->downV) &&
+   pathEdgeTypeValid(splice, verts[path->vCount - 1], path->downV) == ggExon)
     {
     if(chromStart >= vPos[verts[path->vCount - 1]] && 
        chromEnd <= vPos[path->downV])
@@ -414,7 +621,8 @@ if(path->downV != -1 &&
 /* Check the edges on the path. */
 for(i = 0; i < path->vCount - 1; i++)
     {
-    if(pathEdgeType(splice->vTypes, verts[i], verts[i+1]) == ggExon)
+    if(validVertex(splice, verts[i], verts[i+1]) &&
+       pathEdgeTypeValid(splice, verts[i], verts[i+1]) == ggExon)
 	{
 	if(chromStart >= vPos[verts[i]] && chromEnd <= vPos[verts[i+1]])
 	    return TRUE;
@@ -427,7 +635,7 @@ return FALSE;
 }
 
 boolean pathContainsBed(struct splice *splice, struct path *path, 
-			struct bed *bed, boolean allBases, boolean intronsToo)
+			struct bed *bed,  boolean intronsToo)
 /* Return TRUE if this path contains this bed, FALSE otherwise. If
    allBases, the bed must be completely subsumed by the path. */
 {
@@ -441,8 +649,9 @@ for(i = 0; i < bed->blockCount; i++)
 
     /* Check the exon. */
     containsBed &= pathContainsBlock(splice, path, bed->chrom, chromStart, 
-				     chromEnd, bed->strand, allBases);
-    
+				     chromEnd, bed->strand, TRUE);
+    if(containsBed == FALSE)
+	break;
 
     /* Check the next intron. */
     if(intronsToo && i+1 != bed->blockCount) 
@@ -480,23 +689,28 @@ beList = chromKeeperFind(splice->tName, splice->tStart, splice->tEnd);
 for(be = beList; be != NULL; be = be->next)
     {
     bed = be->val;
-    if(!isJunctionBed(bed))
-	continue;
-    altMatchPath = NULL; /* Indicates that we haven't found a match for this bed. */
-    for(altPath = altEvent->altPathList; altPath != NULL; altPath = altPath->next)
+    if(isJunctionBed(bed) || (useExonBedsToo && strchr(bed->name, '@') != NULL))
 	{
-	if(pathContainsBed(splice, altPath->path, bed, TRUE, TRUE))
+	altMatchPath = NULL; /* Indicates that we haven't found a match for this bed. */
+	for(altPath = altEvent->altPathList; altPath != NULL; altPath = altPath->next)
 	    {
-	    if(altMatchPath == NULL)
-		altMatchPath = altPath; /* So far unique match. */
-	    else
-		{ /* Not a unique match. */
-		altMatchPath = NULL;
-		break;
+	    /* If it is a junction pass the intronsToo flag == TRUE, otherwise
+	       set to false. */
+	    if((isJunctionBed(bed) && pathContainsBed(splice, altPath->path, bed, TRUE)) ||
+	       (!isJunctionBed(bed) && pathContainsBed(splice, altPath->path, bed, FALSE)))
+		{
+		if(altMatchPath == NULL)
+		    altMatchPath = altPath; /* So far unique match. */
+		else
+		    { /* Not a unique match. */
+		    altMatchPath = NULL;
+		    break;
+		    }
 		}
 	    }
 	}
-
+    else
+	continue;
     /* If we've uniquely found a path for a bed insert it. */
     if(altMatchPath != NULL)
 	insertBedIntoPath(altEvent, altMatchPath, bed);
@@ -678,9 +892,9 @@ for(altPath = altEvent->altPathList; altPath != NULL; altPath = altPath->next)
 	    /* Try the alternative gene probe set. */
 	    if(altIndex != -1)
 		{
-		int offSet = geneCount;
+		int offSet = geneCount - 1;
 		altEvent->geneBeds[offSet] = hashFindVal(bedHash, geneName);
-		altEvent->geneExpVals[offSet] = intenM->matrix[index];
+		altEvent->geneExpVals[offSet] = intenM->matrix[altIndex];
 		index =  hashIntValDefault(probM->nameIndex, altGeneName, -1);
 		if(index != -1)
 		    altEvent->genePVals[offSet] = probM->matrix[index];
@@ -721,35 +935,94 @@ for(geneIx = 0; geneIx < event->geneProbeCount; geneIx++)
 return FALSE;
 }
 
-boolean altPathProbesExpressed(struct altEvent *event, struct altPath *altPath,
+void printVars(double *preLog, double *log)
+{
+printf("Pre-Log %.20f, Log() %.20f\n", preLog, log);
+}
+
+boolean altPathProbesCombExpressed(struct altEvent *event, struct altPath *altPath,
 			       int probeIx, int tissueIx)
 /* Return TRUE if the path is expressed, FALSE otherwise. */
 {
-boolean expressed = FALSE;
+double probProduct = 0;
+int probCount = 0;
 int i = 0;
+double combination = 0;
+double x = 0;
+for(i = 0; i < altPath->probeCount; i++)
+    {
+    if(altPath->pVals[i])
+	{
+	if(altPath->pVals[i][tissueIx] == 0)
+	    x = log(.00000001);
+	else
+	    x = log(altPath->pVals[i][tissueIx]);
+	probProduct += x;
+	probCount++;
+	}
+    }
+if(probCount == 0) 
+    return FALSE;
+if(probCount == 1 && probProduct == 0)
+    return FALSE; combination = gsl_cdf_chisq_P(-2.0*probProduct,2.0*probCount); 
+combination = gsl_cdf_chisq_P(-2.0*probProduct,2.0*probCount); 
+if(combination <= 1 - presThresh)
+    return TRUE;
+return FALSE;
+}
+
+boolean altPathProbesExpressed(struct altEvent *event, struct altPath *altPath,
+			       int probeIx, int tissueIx, double *expression)
+/* Return TRUE if the path is expressed, FALSE otherwise. */
+{
+int i = 0;
+int probeCount = 0;
+double **expVals = altPath->expVals;
+boolean expressed = FALSE;
 if(useMaxProbeSet) 
     {
     for(i = 0; i < altPath->probeCount; i++)
 	{
 	if(altPath->pVals[i] && altPath->pVals[i][tissueIx] >= presThresh)
+	    {
 	    expressed = TRUE;
+	    *expression = max(*expression, expVals[i][tissueIx]);
+	    }	    
 	}
     }
-else 
+else if(useComboProbes)
+    {
+    if(altPathProbesCombExpressed(event, altPath, probeIx, tissueIx))
+	expressed = TRUE;
+    if(expVals[i] != NULL)
+	{
+	for(i = 0; i < altPath->probeCount; i++)
+	    {
+	    *expression += expVals[i][tissueIx];
+	    probeCount++;
+	    }
+	}
+    if(probeCount > 0)
+	*expression = *expression / probeCount;
+    }
+else
     {
     if(altPath->pVals[probeIx] && altPath->pVals[probeIx][tissueIx] >= presThresh)
+	{
 	expressed = TRUE;
+	*expression = altPath->expVals[probeIx][tissueIx];
+	}
     }
 return expressed;
 }
 
 boolean tissueExpressed(struct altEvent *event, struct altPath *altPath, 
-			int probeIx, int tissueIx)
+			int probeIx, int tissueIx, double *expression)
 /* Return TRUE if the probeIx in tissueIx is above minimum
    pVal, FALSE otherwise. */
 {
 int geneIx = 0;
-if(!altPathProbesExpressed(event, altPath, probeIx, tissueIx))
+if(!altPathProbesExpressed(event, altPath, probeIx, tissueIx, expression))
     return FALSE;
 if(event->genePVals && geneExpressed(event, tissueIx))
     return TRUE;
@@ -848,9 +1121,133 @@ for(bedIx = 0; bedIx < altPath->probeCount; bedIx++)
 return bestIx;
 }
 
+void readSelectedList(char *fileName)
+/* Read in a list of gene identifiers that we want to 
+   output. */
+{
+struct lineFile *lf = NULL;
+struct hash *hash = newHash(12);
+char *words[2];
+int wordCount = ArraySize(words);
+assert(fileName);
+lf = lineFileOpen(fileName, TRUE);
+while(lineFileChopNext(lf, words, wordCount)) 
+    {
+    hashAdd(hash, words[0], cloneString(words[1]));
+    }
+lineFileClose(&lf);
+outputPValHash = hash;
+}
+
+char *isSelectedProbeSet(struct altEvent *event, struct altPath *altPath)
+/* Return gene name if this probe set is select for outputing
+   probability vector else return NULL. */
+{
+char *mark;
+char buff[256];
+struct altPath *path = NULL;
+int i = 0; 
+for(i = 0; i < altPath->probeCount; i++)
+    {
+    if(altPath->beds[i] != NULL)
+	{
+	char *mark = strchr(altPath->beds[i]->name, '@');
+	if(mark != NULL)
+	    {
+	    char *geneName = NULL;
+	    *mark = '\0';
+	    if((geneName = hashFindVal(outputPValHash, altPath->beds[i]->name)) != NULL)
+		{
+		*mark = '@';
+		return geneName;
+		}
+	    }
+	}
+    }
+return NULL;
+}
+
+char * nameForType(int type)
+/* Log the different types of splicing. */
+{
+switch (type) 
+    {
+    case alt5Prime:
+	return "alt5Prime";
+	break;
+    case alt3Prime: 
+	return "alt3Prime";
+	break;
+    case altCassette:
+	return "altCassette";
+	break;
+    case altRetInt:
+	return "altRetInt";
+	break;
+    case altOther:
+	return "altOther";
+	break;
+    case altControl:
+	return "altControl";
+	break;
+    case altMutExclusive:
+	return "altMutEx";
+	break;
+    case alt5PrimeSoft:
+	return "altTxStart";
+	break;
+    case alt3PrimeSoft:
+	return "altTxEnd";
+	break;
+    case altIdentity:
+	return "altIdentity";
+	break;
+    default:
+	errAbort("nameForType() - Don't recognize type %d", type);
+    }
+return "error";
+}
+
+void outputPathProbabilities(struct altEvent* event, struct altPath *altPath,
+			     struct dMatrix *intenM, struct dMatrix *probM,
+			     int** expressed, int **notExpressed, double **expression,
+			     int pathIx)
+/* Print out a thresholded probablilty vector for clustering and visualization
+   in treeview. */
+{
+int i = 0;
+FILE *out = pathProbabilitiesOut;
+FILE *eOut = pathExpressionOut;
+struct splice *splice = event->splice;
+struct path *path = altPath->path;
+char *geneName = NULL;
+assert(out);
+if((geneName = isSelectedProbeSet(event, altPath)) != NULL)
+    {
+    char *psName = "Error";
+    assert(altPath->beds[0] != NULL);
+    psName = altPath->beds[0]->name;
+    fprintf(out, "%s\t%s.%s.%s.%d", psName, geneName, nameForType(splice->type), psName, path->bpCount);
+    fprintf(eOut, "%s\t%s.%s.%s.%d", psName, geneName, nameForType(splice->type), psName, path->bpCount);
+    for(i = 0; i < probM->colCount; i++)
+	{
+	fprintf(eOut, "\t%f", expression[pathIx][i]);
+	if(expressed[pathIx][i])
+	    fprintf(out, "\t2");
+	else if(notExpressed[pathIx][i])
+	    fprintf(out, "\t-2");
+	else
+	    fprintf(out, "\t0");
+	}
+    fprintf(out, "\n");
+    fprintf(eOut, "\n");
+    }
+}
+
 boolean altPathExpressed(struct altEvent *event, struct altPath *altPath,
-		      struct dMatrix *intenM, struct dMatrix *probM,
-		      int **expressed, int **notExpressed, int pathIx)
+			 struct dMatrix *intenM, struct dMatrix *probM,
+			 int **expressed, int **notExpressed, double **expression,
+			 int pathIx)
 /* Fill in the expression matrix for this path. */
 {
 int bestProbeIx = 0;
@@ -858,7 +1255,7 @@ int tissueIx = 0;
 int total = 0;
 
 /* Quick check to see if there are any 
-   probes at all. */
+      probes at all. */
 if(altPath->probeCount == 0)
     return FALSE;
 
@@ -869,7 +1266,8 @@ if(bestProbeIx == -1)
 
 for(tissueIx = 0; tissueIx < probM->colCount; tissueIx++)
     {
-    if(tissueExpressed(event, altPath, bestProbeIx, tissueIx))
+    double e = -1;
+    if(tissueExpressed(event, altPath, bestProbeIx, tissueIx, &e))
 	{
 	expressed[pathIx][tissueIx]++;
 	total++;
@@ -878,6 +1276,7 @@ for(tissueIx = 0; tissueIx < probM->colCount; tissueIx++)
 	{
 	notExpressed[pathIx][tissueIx]++;
 	}
+    expression[pathIx][tissueIx] = e;
     }
 return total > 0;
 }
@@ -894,14 +1293,16 @@ int otherTissues = 0;
 int geneBrainTissues = 0;
 int geneOtherTissues = 0;
 int brainIx = 0;
-static char *brainTissuesStrings[] = {"cerebellum","cerebral_hemisphere","cortex","hind_brain",
-				      "medial_eminence","olfactory_bulb","pinealgland","thalamus"};
+static int tissueCount = 0;
+static char *brainTissuesToChop = NULL;
+static char *brainTissuesStrings[256];
 static int isBrain[256];
 static boolean initDone = FALSE;
 
 /* Setup array of what is brain and what isn't. */
 if(!initDone) 
     {
+    brainTissuesToChop = cloneString(optionVal("brainTissues","cerebellum,cerebral_hemisphere,cortex,hind_brain,medial_eminence,olfactory_bulb,pinealgland,thalamus,"));
     if(ArraySize(isBrain) < probM->colCount)
 	errAbort("Can only handle up to %d columns, %d is too many", 
 		 ArraySize(isBrain), probM->colCount);
@@ -910,8 +1311,9 @@ if(!initDone)
 	isBrain[tissueIx] = FALSE;
 
     /* Set brain tissue to TRUE. */
+    tissueCount = chopByChar(brainTissuesToChop, ',', brainTissuesStrings, ArraySize(brainTissuesStrings));
     for(tissueIx = 0; tissueIx < probM->colCount; tissueIx++)
-	for(brainIx = 0; brainIx < ArraySize(brainTissuesStrings); brainIx++)
+	for(brainIx = 0; brainIx < tissueCount; brainIx++)
 	    if(sameWord(brainTissuesStrings[brainIx], probM->colNames[tissueIx]))
 		isBrain[tissueIx] = TRUE;
 
@@ -1015,7 +1417,8 @@ int *verts = path->vertices;
 if(sameString(splice->strand,"+"))
     {
     for(i = 0; i < vC -1; i++)
-	if(pathEdgeType(vTypes, verts[i], verts[i+1]) == ggExon)
+	if(validVertex(splice, verts[i], verts[i+1]) &&
+	   pathEdgeTypeValid(splice, verts[i], verts[i+1]) == ggExon)
 	    {
 	    firstSplice = vPos[verts[i]];
 	    secondSplice = vPos[verts[i+1]];
@@ -1023,8 +1426,9 @@ if(sameString(splice->strand,"+"))
     }
 else
     {
-    for(i = vC-1; i > 0; i--)
-	if(pathEdgeType(vTypes, verts[i-1], verts[i]) == ggExon)
+    for(i = vC-1; i >= 0; i--)
+	if(validVertex(splice, verts[i-1], verts[i]) &&
+	   pathEdgeTypeValid(splice, verts[i-1], verts[i]) == ggExon)
 	    {
 	    firstSplice = vPos[verts[i-1]];
 	    secondSplice = vPos[verts[i]];
@@ -1072,47 +1476,6 @@ if(sameString(splice->strand, "-"))
     }
 }
 
-char * nameForType(int type)
-/* Log the different types of splicing. */
-{
-switch (type) 
-    {
-    case alt5Prime:
-	return "alt5Prime";
-	break;
-    case alt3Prime: 
-	return "alt3Prime";
-	break;
-    case altCassette:
-	return "altCassette";
-	break;
-    case altRetInt:
-	return "altRetInt";
-	break;
-    case altOther:
-	return "altOther";
-	break;
-    case altControl:
-	return "altControl";
-	break;
-    case altMutExclusive:
-	return "altMutEx";
-	break;
-    case alt5PrimeSoft:
-	return "altTxStart";
-	break;
-    case alt3PrimeSoft:
-	return "altTxEnd";
-	break;
-    case altIdentity:
-	return "altIdentity";
-	break;
-    default:
-	errAbort("nameForType() - Don't recognize type %d", type);
-    }
-return "error";
-}
-
 void makeJunctMdbGenericLink(struct splice *js, struct dyString *buff, char *name)
 {
 int offSet = 100;
@@ -1125,11 +1488,12 @@ dyStringPrintf(buff, "%s", name);
 dyStringPrintf(buff, "</a> ");
 }
 
-void printLinks(struct splice *splice)
+void printLinks(struct altEvent *event, struct bed *pathBed)
 /* Loop through and print each splicing event to web page. */
 {
 struct splice *s = NULL;
 struct path *lastPath = NULL;
+struct splice *splice = event->splice;
 int diff = -1;
 struct dyString *buff = NULL;
 if(splice->paths == NULL || splice->type == altControl)
@@ -1141,11 +1505,27 @@ else
     diff = lastPath->bpCount;
 buff = newDyString(256);
 fprintf(brainSpTableHtmlOut, "<tr><td><a target=\"browser\" "
-	"href=\"http://%s/cgi-bin/hgTracks?db=%s&position=%s:%d-%d\">", browserName,
-	db, splice->tName, splice->tStart-100, splice->tEnd+100);
+	"href=\"http://%s/cgi-bin/hgTracks?db=%s&position=%s:%d-%d&hgt.motifs=GGGG%%2CCTCTCT%%2CGCATG\",>", browserName,
+	db, pathBed->chrom, pathBed->chromStart-100, pathBed->chromEnd+100);
 fprintf(brainSpTableHtmlOut,"%s </a>\n", splice->name);
+fprintf(brainSpTableHtmlOut, "<a target=\"browser\" "
+	"href=\"http://%s/cgi-bin/hgTracks?db=%s&position=%s:%d-%d&complement=%d&hgt.motifs=GGGG%%2CCTCTCT%%2CGCATG\">[u]</a>", 
+	browserName, db, pathBed->chrom, pathBed->chromStart-95, pathBed->chromStart+5,
+	pathBed->strand[0] == '-' ? 1 : 0);
+fprintf(brainSpTableHtmlOut, "<a target=\"browser\" "
+	"href=\"http://%s/cgi-bin/hgTracks?db=%s&position=%s:%d-%d&complement=%d&hgt.motifs=GGGG%%2CCTCTCT%%2CGCATG\">[d]</a>", 
+	browserName, db, pathBed->chrom, pathBed->chromEnd-5, pathBed->chromEnd+95,
+	pathBed->strand[0] == '-' ? 1 : 0);
 makeJunctMdbGenericLink(splice, buff, "[p]");
 fprintf(brainSpTableHtmlOut, "%s", buff->string);
+if(splice->type == altCassette)
+    {
+    int i = 0;
+    int *u = event->altPathList->next->motifUpCounts;
+    int *d = event->altPathList->next->motifDownCounts;
+    for(i = 0; i < bindSiteCount; i++)
+	fprintf(brainSpTableHtmlOut, "%d ", u[i] + d[i]);
+    }
 fprintf(brainSpTableHtmlOut, " </td>");
 fprintf(brainSpTableHtmlOut,"<td>%s</td>", nameForType(splice->type));
 fprintf(brainSpTableHtmlOut,"<td>%d</td></tr>\n", diff);
@@ -1162,6 +1542,7 @@ struct dnaSeq *downSeq = NULL;
 struct bed *pathBed = NULL;
 struct bed *upSeqBed = NULL;
 struct bed *downSeqBed = NULL;
+int i = 0;
 int pathIx = 0;
 struct altPath *altPath = NULL;
 boolean brainSpecificEvent = FALSE;
@@ -1180,12 +1561,23 @@ for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next, path
     pathBed = pathToBed(altPath->path, event->splice, -1, -1, FALSE);
     if(pathBed == NULL)
 	continue;
+
+    /* Count up some motifs. */
+    if(splice->type == altCassette && altPath->path->bpCount > 0)
+	{
+	for(i = 0; i < bindSiteCount; i++)
+	    {
+	    brainSpecificMotifUpCounts[i] += altPath->motifUpCounts[i];
+	    brainSpecificMotifDownCounts[i] += altPath->motifDownCounts[i];
+	    }
+	}
+	
     brainSpecificPathCount++;
+    printLinks(event, pathBed);
     brainSpecificEvent = TRUE;
     fillInSequences(event, slLastEl(event->splice->paths),
 		    &upSeq, &downSeq, &upSeqBed, &downSeqBed);
 
-    
     /* Write out the data. */
     faWriteNext(brainSpDnaUpOut, upSeq->name, upSeq->dna, upSeq->size);
     bedTabOutN(upSeqBed, 6, brainSpBedUpOut);
@@ -1201,7 +1593,7 @@ for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next, path
 if(brainSpecificEvent == TRUE)
     {
     brainSpecificEventCount++;
-    printLinks(splice);
+
     switch(splice->type)
 	{
 	case altCassette :
@@ -1253,7 +1645,7 @@ switch(type)
 
 void outputTissueSpecificEvents(struct altEvent *event, int **expressed, int **notExpressed,
 			       int pathCount, struct dMatrix *probM)
-/* Output the event if it is alt-expressed and tissue specific
+/* Output the event if it is tissue specific
    specific. */
 {
 int tissueIx = 0;
@@ -1265,7 +1657,8 @@ for(tissueIx = 0; tissueIx < probM->colCount; tissueIx++)
     int pathIx = 0;
     for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next, pathIx++)
 	{
-	if(tissueSpecific(event, pathIx, tissueIx, expressed, notExpressed, pathCount, probM))
+	if(altPath->path->bpCount > 0 && 
+	   tissueSpecific(event, pathIx, tissueIx, expressed, notExpressed, pathCount, probM))
 	    {
 	    incrementCountByType(tissueSpecificCounts[tissueIx], splice->type);
 	    break;
@@ -1274,8 +1667,6 @@ for(tissueIx = 0; tissueIx < probM->colCount; tissueIx++)
     }
 }
 
-   
-
 void doEventAnalysis(struct altEvent *event, struct dMatrix *intenM,
 		     struct dMatrix *probM)
 /* Analyze a given event. */
@@ -1283,6 +1674,7 @@ void doEventAnalysis(struct altEvent *event, struct dMatrix *intenM,
 int i = 0;
 int **expressed = NULL;
 int **notExpressed = NULL;
+double **expression = NULL;
 struct altPath *altPath = NULL;
 int pathCount = slCount(event->altPathList);
 int pathExpCount = 0;
@@ -1292,10 +1684,12 @@ int withProbes = 0;
 /* Allocate a 2D array for expression. */
 AllocArray(expressed, pathCount);
 AllocArray(notExpressed, pathCount);
+AllocArray(expression, pathCount);
 for(i = 0; i < pathCount; i++)
     {
     AllocArray(expressed[i], probM->colCount);
     AllocArray(notExpressed[i], probM->colCount);
+    AllocArray(expression[i], intenM->colCount);
     }
 
 /* Fill in the array. */
@@ -1304,17 +1698,34 @@ for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next)
     if(altPath->probeCount > 0)
 	withProbes++;
     if(altPathExpressed(event, altPath, intenM, probM, 
-			expressed, notExpressed, pathIx))
+			expressed, notExpressed, expression, pathIx))
 	pathExpCount++;
+    
+    /* Output the probabilities. */
+    if(pathProbabilitiesOut != NULL && event->splice->type != altOther)
+	{
+	outputPathProbabilities(event, altPath, intenM, probM, 
+				expressed, notExpressed, expression, pathIx);
+	}
     pathIx++;
     }
-
 
 /* Determine our expression, alternate or otherwise. */
 if(pathExpCount >= tissueExpThresh && withProbes > 1)
     event->isExpressed = TRUE;
 if(pathExpCount >= tissueExpThresh * 2 && withProbes > 1)
     event->isAltExpressed = TRUE;
+
+/* Get a background count of motifs in the cassettes. */
+if(event->isAltExpressed && event->splice->type == altCassette)
+    {
+    for(i = 0; i < bindSiteCount; i++)
+	{
+	cassetteUpMotifs[i] += event->altPathList->next->motifUpCounts[i];
+	cassetteDownMotifs[i] += event->altPathList->next->motifDownCounts[i];
+	}
+    cassetteExonCount++;
+    }
 
 if(brainSpBedUpOut != NULL && event->isExpressed == TRUE)
     outputBrainSpecificEvents(event, expressed, notExpressed, pathCount, probM);
@@ -1327,10 +1738,134 @@ for(i = 0; i < pathCount; i++)
     {
     freez(&expressed[i]);
     freez(&notExpressed[i]);
+    freez(&expression[i]);
     }
 freez(&notExpressed);
 freez(&expressed);
+freez(&expression);
 }
+
+int stringOccurance(char *needle, char *haystack)
+/* How many times is needle in haystack? */
+{
+int count = 0;
+char *rest = haystack;
+touppers(needle);
+touppers(haystack);
+while((rest = stringIn(needle, rest)) != NULL)
+    {
+    count++;
+    rest++;
+    }
+return count;
+}
+
+int countMotifs(char *seq, struct bindSite *bs)
+/* Count how many times this binding site appears in this
+   sequence. */
+{
+int i = 0, j = 0;
+int count = 0;
+touppers(seq);
+for(i = 0; i < bs->motifCount; i++)
+    {
+    count += stringOccurance(bs->motifs[i],seq);
+    }
+return count;
+}
+
+void doMotifCassetteAnalysis(struct altEvent *event)
+/* Look to see how many motifs are found around this event. */
+{
+struct dnaSeq *upStream = NULL, *downStream = NULL, *tmp = NULL;
+struct altPath *altPath = event->altPathList->next;
+struct path *path = altPath->path;
+int *vPos = event->splice->vPositions;
+int *v = path->vertices;
+int chromStart = vPos[v[1]];
+int chromEnd = vPos[v[2]];
+int motifWin = optionInt("motifWin", 200);
+int i = 0;
+if(event->splice->strand[0] == '-')
+    {
+    upStream = hChromSeq(path->tName, chromEnd, chromEnd+motifWin);
+    reverseComplement(upStream->dna, upStream->size);
+    downStream = hChromSeq(path->tName, chromStart-motifWin, chromStart);
+    reverseComplement(downStream->dna, downStream->size);
+    }
+else
+    {
+    upStream = hChromSeq(path->tName, chromStart-motifWin, chromStart);
+    downStream = hChromSeq(path->tName, chromEnd, chromEnd+motifWin);
+    }
+AllocArray(altPath->motifUpCounts, bindSiteCount);
+AllocArray(altPath->motifDownCounts, bindSiteCount);
+for(i = 0; i < bindSiteCount; i++)
+    {
+    altPath->motifUpCounts[i] += countMotifs(upStream->dna, bindSiteArray[i]);
+    altPath->motifDownCounts[i] += countMotifs(downStream->dna, bindSiteArray[i]);
+    }
+dnaSeqFree(&upStream);
+dnaSeqFree(&downStream);
+}
+
+void doMotifControlAnalysis(struct altEvent *event)
+/* Look to see how many motifs are found around this event. */
+{
+struct dnaSeq *upStream = NULL, *downStream = NULL, *tmp = NULL;
+struct altPath *altPath = event->altPathList;
+struct splice *splice = event->splice;
+struct path *path = altPath->path;
+struct bed *bed = NULL;
+int *vPos = event->splice->vPositions;
+int *v = path->vertices;
+int chromStart = 0;
+int chromEnd = 0;
+int motifWin = optionInt("motifWin", 200);
+int i = 0;
+int blockIx;
+bed = pathToBed(path, splice, -1, -1, FALSE);
+if(bed == NULL)
+    return;
+for(blockIx = 0; blockIx < bed->blockCount; blockIx++)
+    {
+    chromStart = bed->chromStart + bed->chromStarts[blockIx];
+    chromEnd = chromStart + bed->blockSizes[blockIx];
+    if(event->splice->strand[0] == '-')
+	{
+	upStream = hChromSeq(path->tName, chromEnd, chromEnd+motifWin);
+	reverseComplement(upStream->dna, upStream->size);
+	downStream = hChromSeq(path->tName, chromStart-motifWin, chromStart);
+	reverseComplement(downStream->dna, downStream->size);
+	}
+    else
+	{
+	upStream = hChromSeq(path->tName, chromStart-motifWin, chromStart);
+	downStream = hChromSeq(path->tName, chromEnd, chromEnd+motifWin);
+	}
+    touppers(upStream->dna);
+    touppers(downStream->dna);
+    if(altPath->motifUpCounts == NULL)
+	{
+	AllocArray(altPath->motifUpCounts, bindSiteCount);
+	AllocArray(altPath->motifDownCounts, bindSiteCount);
+	}
+    for(i = 0; i < bindSiteCount; i++)
+	{
+	int upStreamCount = countMotifs(upStream->dna, bindSiteArray[i]);
+	int downStreamCount = countMotifs(downStream->dna, bindSiteArray[i]);
+	altPath->motifUpCounts[i] += upStreamCount;
+	controlUpMotifs[i] += upStreamCount;
+	altPath->motifDownCounts[i] += downStreamCount;
+	controlDownMotifs[i] += downStreamCount;
+	}
+    controlExonCount++;
+    }
+dnaSeqFree(&upStream);
+dnaSeqFree(&downStream);
+}
+
+
 
 void doAnalysis(struct altEvent *eventList, struct dMatrix *intenM,
 		struct dMatrix *probM)
@@ -1340,8 +1875,14 @@ struct altEvent *event = NULL;
 int i = 0;
 struct altPath *altPath = NULL;
 int expressed = 0, altExpressed = 0;
+
 for(event = eventList; event != NULL; event = event->next)
     {
+    if(event->splice->type == altCassette && bindSiteCount > 0)
+	doMotifCassetteAnalysis(event);
+    else if(event->splice->type == altControl && bindSiteCount > 0 && 
+	    !skipMotifControls)
+	doMotifControlAnalysis(event);
     doEventAnalysis(event, intenM, probM);
     if(event->isExpressed)
 	logSpliceTypeExp(event->splice->type);
@@ -1358,6 +1899,14 @@ if(denominator != 0)
 return 0;
 }
 
+int cph(double numerator, double denominator)
+/* Calculate a percent checking for zero. */
+{
+if(denominator != 0)
+    return round((100.0 * numerator / denominator));
+return 0;
+}
+
 void reportTissueSpecificCounts(char **tissueNames, int tissueCount)
 /* Writ out a matrix of tissues and their counts. */
 {
@@ -1368,27 +1917,57 @@ assert(tissueSpecificOut);
 fprintf(tissueSpecificOut, "\taltCassette\taltMutExclusive\talt5Prime\talt3Prime\taltOther\n");
 for(i = 0; i < tissueCount; i++)
     {
-    fprintf(tissueSpecificOut, "%22s\t%4d\t%4d\t%4d\t%4d\t%4d\n", tissueNames[i],
+    fprintf(tissueSpecificOut, "%-22s\t%4d\t%4d\t%4d\t%4d\t%4d\n", tissueNames[i],
 	    tissueSpecificCounts[i][altCassette], tissueSpecificCounts[i][altMutExclusive],
 	    tissueSpecificCounts[i][alt5Prime],tissueSpecificCounts[i][alt3Prime],
 	    tissueSpecificCounts[i][altOther]);
     }
 }
 
+void reportMotifCounts(int *up, int *down, int total)
+{
+int *u = up;
+int *d = down;
+int t = total;
+struct bindSite **b = bindSiteArray;
+assert(up);
+assert(down);
+fprintf(stderr, "+----------+-------------+-------------+--------------+---------------+\n");
+fprintf(stderr, "| Position | %10s | %12s | %12s | %13s |\n", 
+	b[0]->rnaBinder, b[1]->rnaBinder, b[2]->rnaBinder, b[3]->rnaBinder);
+fprintf(stderr, "+----------+------------+--------------+--------------+---------------+\n");
+fprintf(stderr, "| %-8s | %3d (%3d%%) | %5d (%3d%%) | %5d (%3d%%) | %6d (%3d%%) |\n",
+	"UpStream", u[0], cph(u[0],t), u[1], cph(u[1],t), u[2], cph(u[2],t), u[3], cph(u[3],t) );
+fprintf(stderr, "| %-8s | %3d (%3d%%) | %5d (%3d%%) | %5d (%3d%%) | %6d (%3d%%) |\n",
+	"DnStream", d[0], cph(d[0],t), d[1], cph(d[1],t), d[2], cph(d[2],t), d[3], cph(d[3],t) );
+fprintf(stderr, "+----------+------------+--------------+--------------+---------------+\n");
+}
+
+
 void reportBrainSpCounts()
 /* Print brain specific results. */
 {
 if(brainSpDnaUpOut != NULL)
     {
-    fprintf(stderr, "%d Brain Specific Events. %d Brain Specific paths\n", 
-	    brainSpecificEventCount, brainSpecificPathCount);
-    fprintf(stderr, "%d Cassette, %d Mutally Exclusive.\n", 
-	    brainSpecificCounts[altCassette], brainSpecificCounts[altMutExclusive]);
-    fprintf(stderr, "%d Alt 3', %d Alt 5'.\n", 
-	    brainSpecificCounts[alt3Prime], brainSpecificCounts[alt5Prime]);
-    fprintf(stderr, "%d Alt Txn End, %d Alt Other.\n", 
-	    brainSpecificCounts[alt3PrimeSoft], brainSpecificCounts[altOther]);
-    
+    int *bC = brainSpecificCounts;
+    char *tissue = optionVal("brainTissues","Brain");
+    fprintf(stderr, "%d %s Specific Events. %d %s Specific paths\n", 
+	     brainSpecificEventCount, tissue, brainSpecificPathCount, tissue);
+    fprintf(stderr, "+----------+---------+-------+-------+-------+-------+\n");
+    fprintf(stderr, "| Cassette | MutExcl | Alt3' | Alt5' | TxEnd | Other |\n");
+    fprintf(stderr, "+----------+---------+-------+-------+-------+-------+\n");
+    fprintf(stderr, "| %8d | %7d | %5d | %5d | %5d | %5d |\n",
+	    bC[altCassette], bC[altMutExclusive], bC[alt3Prime], bC[alt5Prime],
+	    bC[alt3PrimeSoft], bC[altOther]);
+    fprintf(stderr, "+----------+---------+-------+-------+-------+-------+\n");
+    if(bindSiteCount != 0)
+	{
+	int *u = brainSpecificMotifUpCounts;
+	int *d = brainSpecificMotifDownCounts;
+	struct bindSite **b = bindSiteArray;
+	fprintf(stderr,"Cassette binding sites:\n");
+	reportMotifCounts(u,d,bC[altCassette]);
+	}
     }
 }
 
@@ -1426,6 +2005,24 @@ fprintf(stderr, "| alt Control          | %5d |      %4d |      %4d |  %3d |  %5
 	altControlCount, altControlWProbeCount, altControlExpCount, altControlAltExpCount,
 	calcPercent(altControlAltExpCount, altControlExpCount));
 fprintf(stderr, "+----------------------+-------+-----------+-----------+------+---------+\n");
+
+if(bindSiteCount != 0)
+    {
+    int *u = cassetteUpMotifs;
+    int *d = cassetteDownMotifs;
+    struct bindSite **b = bindSiteArray;
+    fprintf(stderr,"Cassette binding sites in %d exons:\n", cassetteExonCount);
+    reportMotifCounts(u,d,cassetteExonCount);
+    }
+
+if(bindSiteCount != 0)
+    {
+    int *u = controlUpMotifs;
+    int *d = controlDownMotifs;
+    struct bindSite **b = bindSiteArray;
+    fprintf(stderr,"Control binding sites in %d exons:\n", controlExonCount);
+    reportMotifCounts(u,d,controlExonCount);
+    }
 }
 
 void initTissueSpecific(int tissueCount)
@@ -1448,6 +2045,12 @@ char *prefix = optionVal("brainSpecific", NULL);
 struct dyString *file = newDyString(strlen(prefix)+10);
 brainSpecificStrict = optionExists("brainSpecificStrict");
 AllocArray(brainSpecificCounts, altMutExclusive + 1);
+
+if(bindSiteCount > 0)
+    {
+    AllocArray(brainSpecificMotifUpCounts, bindSiteCount);
+    AllocArray(brainSpecificMotifDownCounts, bindSiteCount);
+    }
 
 dyStringClear(file);
 dyStringPrintf(file, "%s.path.bed", prefix);
@@ -1473,24 +2076,36 @@ dyStringClear(file);
 dyStringPrintf(file, "%s.table.html", prefix);
 brainSpTableHtmlOut = mustOpen(file->string, "w");
 fprintf(brainSpTableHtmlOut, "<html>\n<body bgcolor=\"#FFF9D2\"><b>Alt-Splice List</b>\n"
+	"<br>Motif Counts: Nova-1, Fox-1, PTB/nPTB, hnRNP-H/F<br>"
 	"<table border=1><tr><th>Name</th><th>Type</th><th>Size</th></tr>\n");
 
 dyStringClear(file);
 dyStringPrintf(file, "%s.frame.html", prefix);
 brainSpFrameHtmlOut = mustOpen(file->string, "w");
-fprintf(brainSpFrameHtmlOut, "<html><head><title>Brain Specific Events.</title></head>\n"
+fprintf(brainSpFrameHtmlOut, "<html><head><title>%s Specific Events.</title></head>\n"
 	"<frameset cols=\"30%,70%\">\n"
 	"   <frame name=\"_list\" src=\"./%s%s\">\n"
 	"   <frameset rows=\"50%,50%\">\n"
-	"      <frame name=\"browser\" src=\"http://%s/cgi-bin/hgTracks?db=%s\">\n"
+	"      <frame name=\"browser\" src=\"http://%s/cgi-bin/hgTracks?db=%s&hgt.motifs=GCATG,CTCTCT,GGGG\">\n"
 	"      <frame name=\"plots\" src=\"http://%s/cgi-bin/hgTracks?db=%s\">\n"
 	"   </frameset>\n"
 	"</frameset>\n"
-	"</html>\n", prefix, ".table.html", 
+	"</html>\n", optionVal("brainTissues","Brain"), prefix, ".table.html", 
 	browserName, db, browserName, db );
 carefulClose(&brainSpFrameHtmlOut);
 
 dyStringFree(&file);
+}
+
+void printCdtHeader(FILE *out, struct dMatrix *dM)
+{
+int i = 0;
+fprintf(out, "YORF\tNAME");
+for(i = 0; i < dM->colCount; i++)
+    {
+    fprintf(out, "\t%s", dM->colNames[i]);
+    }
+fprintf(out, "\n");
 }
 
 void altProbes()
@@ -1525,13 +2140,24 @@ if(probIn == NULL || intenIn == NULL)
     errAbort("Must specify intensityFile and probeFile");
 intenM = dMatrixLoad(intenIn);
 probM = dMatrixLoad(probIn);
+
+/* If we're doing path probabilities print some headers. */
+if(pathProbabilitiesOut != NULL)
+    {
+    printCdtHeader(pathProbabilitiesOut, probM);
+    printCdtHeader(pathExpressionOut, intenM);
+    }
+
 if(optionExists("tissueSpecific"))
     initTissueSpecific(probM->colCount);
+warn("Filling in event data.");
 fillInEventData(eventList, intenM, probM);
+warn("Doing analysis");
 doAnalysis(eventList, intenM, probM);
 reportEventCounts();
 reportBrainSpCounts();
-reportTissueSpecificCounts(probM->colNames, probM->colCount);
+if(tissueSpecificOut)
+    reportTissueSpecificCounts(probM->colNames, probM->colCount);
 if(brainSpTableHtmlOut)
     fprintf(brainSpTableHtmlOut, "</table></body></html>\n");
 carefulClose(&brainSpTableHtmlOut);
@@ -1542,14 +2168,371 @@ carefulClose(&brainSpBedDownOut);
 carefulClose(&brainSpPathBedOut);
 }
 
+boolean testStringOccurance(struct unitTest *test)
+/* Test how many times a motif is counted. */
+{
+int count = 0;
+
+if(stringOccurance(cloneString("ggGG"), cloneString("nnnnnggggg")) != 2)
+    return FALSE;
+
+if(stringOccurance(cloneString("ggGG"), cloneString("nnnnngggggnnnn")) != 2)
+    return FALSE;
+
+if(stringOccurance(cloneString("ggGG"), cloneString("gggggnnnn")) != 2)
+    return FALSE;
+
+if(stringOccurance(cloneString("gcATG"), cloneString("GcatGcattg")) != 1)
+    return FALSE;
+
+return TRUE;
+}
+
+boolean testCdfChiSqP(struct unitTest *test)
+/* Test the gsl results for the chisq function. Gold values from R.*/
+{
+double result = 0;
+char buff[256];
+
+/* Run the function for som test values, print to 
+   a buffer to get the precision / rounding right. */
+result = gsl_cdf_chisq_P(-2*log(.9),2);
+safef(buff, sizeof(buff), "%.7f", result);
+if(differentString(buff, "0.1000000"))
+    return FALSE;
+
+result = gsl_cdf_chisq_P(-2*log(.1),2);
+safef(buff, sizeof(buff), "%.7f", result);
+if(differentString(buff, "0.9000000"))
+    return FALSE;
+
+result = gsl_cdf_chisq_P(-2*(log(.1)+log(.9)+log(.5)),6);
+safef(buff, sizeof(buff), "%.7f", result);
+if(differentString(buff, "0.5990734"))
+    return FALSE;
+
+result = gsl_cdf_chisq_P(-2*(log(.8)+log(.8)),4);
+safef(buff, sizeof(buff), "%.8f", result);
+if(differentString(buff, "0.07437625"))
+    return FALSE;
+return TRUE;
+}
+
+boolean testPathContains(struct unitTest *test)
+/* Test the path contains block functionality. */
+{
+struct splice *ndr2 = ndr2CassTest();
+struct path *skipPath = NULL, *incPath = NULL;
+struct dyString *error = newDyString(128);
+boolean result = TRUE, currentResult = TRUE;
+skipPath = ndr2->paths;
+incPath = ndr2->paths->next;
+
+if(pathContainsIntron(ndr2, skipPath, "chr14", 43771385+15, 43772095-15, "-") != TRUE)
+    currentResult = FALSE;
+if(pathContainsIntron(ndr2, skipPath, "chr14", 43771385+15, 43771715-15, "-") != FALSE)
+    currentResult = FALSE;
+if(pathContainsIntron(ndr2, skipPath, "chr14", 43771727+15, 43772095-15, "-") != FALSE)
+    currentResult = FALSE;
+if(currentResult == FALSE)
+    {
+    dyStringPrintf(error, "Problem with placing introns on skip path, ");
+    result = FALSE;
+    }
+
+currentResult = TRUE;
+if(pathContainsIntron(ndr2, incPath, "chr14", 43771385+15, 43772095-15, "-") != FALSE)
+    currentResult = FALSE;
+if(pathContainsIntron(ndr2, incPath, "chr14", 43771385+15, 43771715-15, "-") != TRUE)
+    currentResult = FALSE;
+if(pathContainsIntron(ndr2, incPath, "chr14", 43771727+15, 43772095-15, "-") != TRUE)
+    currentResult = FALSE;
+if(currentResult == FALSE)
+    {
+    dyStringPrintf(error, "Problem with placing introns on skip path, ");
+    result = FALSE;
+    }
+
+currentResult = TRUE;
+if(pathContainsBlock(ndr2, incPath,  "chr14", 43771727, 43771727+15, "-", TRUE) != TRUE)
+    currentResult = FALSE;
+if(pathContainsBlock(ndr2, incPath,  "chr14", 43771703, 43771735, "-", TRUE) != TRUE)
+    currentResult = FALSE;
+if(pathContainsBlock(ndr2, skipPath,  "chr14", 43771703, 43771735, "-", TRUE) != FALSE)
+    currentResult = FALSE;
+if(currentResult == FALSE)
+    {
+    dyStringPrintf(error, "Problem placing blocks with all bases, ");
+    result = FALSE;
+    }
+
+currentResult = TRUE;
+if(pathContainsBlock(ndr2, incPath,  "chr14", 43771727, 43771727+16, "-", TRUE) != FALSE)
+    currentResult = FALSE;
+if(pathContainsBlock(ndr2, incPath,  "chr14", 43771727, 43771727+16, "-", FALSE) != TRUE)
+    currentResult = FALSE;
+if(currentResult == FALSE)
+    {
+    dyStringPrintf(error, "Problem placing blocks with not all bases, ");
+    result = FALSE;
+    }
+    
+test->errorMsg = cloneString(error->string);
+dyStringFree(&error);
+return result;
+}
+
+boolean testPathContainsBed(struct unitTest *test)
+/* Test to see if a path contains the right stuff. */
+{
+struct splice *ndr2 = ndr2CassTest();
+struct bed *bedList = ndr2BedTest(), *bed = NULL;
+/* 1 include, 2 skip, 3 include, 4 gene. */
+struct path *skipPath = NULL, *incPath = NULL;
+boolean result = TRUE;
+struct dyString *error = newDyString(128);
+skipPath = ndr2->paths;
+incPath = ndr2->paths->next;
+
+/* First include. */
+bed = bedList; 
+if(pathContainsBed(ndr2, skipPath, bed, TRUE) != FALSE)
+    {
+    result = FALSE;
+    dyStringPrintf(error, "Matching include bed to skip, ");
+    }
+if(pathContainsBed(ndr2, incPath, bed, TRUE) != TRUE)
+    {
+    result = FALSE;
+    dyStringPrintf(error, "Not matching include bed to include, ");
+    }
+
+/* Skip probe set. */
+bed = bed->next;
+if(pathContainsBed(ndr2, skipPath, bed, TRUE) != TRUE)
+    {
+    result = FALSE;
+    dyStringPrintf(error, "Not matching skip bed to skip, ");
+    }
+if(pathContainsBed(ndr2, incPath, bed, TRUE) != FALSE)
+    {
+    result = FALSE;
+    dyStringPrintf(error, "Matching skip bed to include, ");
+    }
+
+/* Second include. */
+bed = bed->next;
+if(pathContainsBed(ndr2, skipPath, bed, TRUE) != FALSE)
+    {
+    result = FALSE;
+    dyStringPrintf(error, "Matching 2nd include bed to skip, ");
+    }
+if(pathContainsBed(ndr2, incPath, bed, TRUE) != TRUE)
+    {
+    result = FALSE;
+    dyStringPrintf(error, "Not matching 2nd include bed to include, ");
+    }
+
+/* Gene probe set. */
+bed = bed->next;
+if(pathContainsBed(ndr2, skipPath, bed, FALSE) != FALSE)
+    {
+    result = FALSE;
+    dyStringPrintf(error, "Matching gene set to skip path,  ");
+    }
+
+if(pathContainsBed(ndr2, incPath, bed, FALSE) != FALSE)
+    {
+    result = FALSE;
+    dyStringPrintf(error, "Matching gene set to include path,  ");
+    }
+test->errorMsg = cloneString(error->string);
+dyStringFree(&error);
+return result;
+}
+
+struct altEvent *setupNdr2AltEvent()
+/* Setup an ndr2 fake event for testing. */
+{
+struct splice *splice = ndr2CassTest();
+struct altEvent *event = NULL;
+struct path *path = NULL;
+struct altPath *altPath = NULL;
+struct dMatrix *probM = ndr2BedTestMat(TRUE);
+struct dMatrix *intenM = ndr2BedTestMat(FALSE);
+double expression = 0;
+
+AllocVar(event);
+event->splice = splice;
+AllocArray(event->geneExpVals, 1);
+AllocArray(event->genePVals, 1);
+event->geneProbeCount = 1;
+event->altPathProbeCount = 2;
+event->geneExpVals[0] = intenM->matrix[3];
+event->genePVals[0] = probM->matrix[3];
+
+AllocVar(altPath);
+altPath->path = splice->paths;
+altPath->probeCount = 1;
+AllocArray(altPath->expVals, altPath->probeCount);
+altPath->expVals[0] =  intenM->matrix[1];
+AllocArray(altPath->pVals, altPath->probeCount);
+altPath->pVals[0] = probM->matrix[1];
+slAddHead(&event->altPathList, altPath);
+    
+AllocVar(altPath);
+altPath->path = splice->paths->next;
+altPath->probeCount = 2;
+AllocArray(altPath->expVals, altPath->probeCount);
+altPath->expVals[0] = intenM->matrix[0];
+altPath->expVals[1] = intenM->matrix[2];
+AllocArray(altPath->pVals, altPath->probeCount);
+altPath->pVals[0] = probM->matrix[0];
+altPath->pVals[1] = probM->matrix[2];
+slAddHead(&event->altPathList, altPath);
+
+slReverse(&event->altPathList);
+return event;
+}
+
+boolean testAltPathProbesExpressed(struct unitTest *test)
+/* Test to see if presense abs software is calling. */
+{
+struct altEvent *event = setupNdr2AltEvent();
+struct dyString *error = newDyString(128);
+double expression = 0;
+boolean result = TRUE;
+useMaxProbeSet = TRUE;
+if(altPathProbesExpressed(event, event->altPathList->next, 1, 0, &expression) != FALSE)
+    {
+    result = FALSE;
+    dyStringPrintf(error, "Max probe set calling false positive, ");
+    }
+if(altPathProbesExpressed(event, event->altPathList, 0, 3, &expression) != TRUE)
+    {
+    result = FALSE;
+    dyStringPrintf(error, "Max probe set calling positive false, ");
+    }
+
+useMaxProbeSet = FALSE;
+useComboProbes = TRUE;
+if(altPathProbesExpressed(event, event->altPathList->next, 1, 0, &expression) != TRUE)
+    {
+    result = FALSE;
+    dyStringPrintf(error, "Combo probes not combining correctly, ");
+    }
+test->errorMsg = cloneString(error->string);
+dyStringFree(&error);
+return result;
+}
+
+void initTests()
+{
+struct unitTest *test = NULL;
+
+/* Testing stat routines. */
+AllocVar(test);
+test->test = testCdfChiSqP;
+test->description = "GSL ChiSq function";
+slAddHead(&tests, test);
+
+/* Testing motif matching. */
+AllocVar(test);
+test->test = testStringOccurance;
+test->description = "Motif searching";
+slAddHead(&tests, test);
+
+/* Testing finding blocks on paths. */
+AllocVar(test);
+test->test = testPathContains;
+test->description = "Match introns and exon blocks to paths";
+slAddHead(&tests, test);
+
+/* Testing finding blocks on paths. */
+AllocVar(test);
+test->test = testPathContainsBed;
+test->description = "Match beds to paths";
+slAddHead(&tests, test);
+
+/* Testing finding blocks on paths. */
+AllocVar(test);
+test->test = testAltPathProbesExpressed;
+test->description = "Call paths as expressed or not.";
+slAddHead(&tests, test);
+
+slReverse(&tests);
+}
+
+void runTests()
+{
+struct unitTest *test, *testNext, *passed = NULL, *failed = NULL;
+boolean passedAll = TRUE;
+int passCount = 0, *failCount = 0;
+for(test = tests; test != NULL; test = testNext)
+    {
+    testNext = test->next;
+    if(test->test(test) != FALSE)
+	{
+	passCount++;
+	slAddHead(&passed, test);
+	}
+    else
+	{
+	slAddHead(&failed, test);
+	passedAll = FALSE;
+	failCount++;
+	}
+    }
+if(passedAll)
+    {
+    fprintf(stdout, "Passed all %d tests.\n", passCount);
+    exit(0);
+    }
+else
+    {
+    fprintf(stdout, "Failed tests:\n");
+    for(test = failed; test != NULL; test = test->next)
+	{
+	fprintf(stdout, "%-40s\tFAILED\t%s\n", test->description, test->errorMsg == NULL ? "" : test->errorMsg);
+	}
+    exit(1);
+    }
+}
+
+
 void setOptions()
 /* Set up some options. */
 {
+char *selectedPValues = optionVal("selectedPValues", NULL);
+if(optionExists("doTests"))
+    {
+    initTests();
+    runTests();
+    }
 tissueExpThresh = optionInt("tissueExpThresh", 1);
 otherTissueExpThres = optionInt("otherTissueExpThres", 1);
 useMaxProbeSet = optionExists("useMaxProbeSet");
 db = optionVal("db", NULL);
 browserName = optionVal("browser", "hgwdev-sugnet.cse.ucsc.edu");
+useComboProbes = optionExists("combinePSets");
+useExonBedsToo = optionExists("useExonBeds");
+skipMotifControls = optionExists("skipMotifControls");
+
+if(selectedPValues != NULL)
+    {
+    char *selectedPValFile = optionVal("selectedPValFile", NULL);
+    char buff[2048];
+
+    if(selectedPValFile == NULL)
+	errAbort("Must specify a selectedPValFile when enabling selectedPValues");
+    readSelectedList(selectedPValues);
+    pathProbabilitiesOut = mustOpen(selectedPValFile, "w");
+    safef(buff, sizeof(buff), "%s.bed", selectedPValFile);
+    pathProbabilitiesBedOut = mustOpen(buff, "w");
+    safef(buff, sizeof(buff), "%s.intensity", selectedPValFile);
+    pathExpressionOut = mustOpen(buff, "w");
+    }
+
 if(useMaxProbeSet)
     warn("Using max value from all probe sets in a path.");
 /* Set up the datbase. */
@@ -1558,7 +2541,7 @@ if(db != NULL)
     hSetDb(db);
 else
     errAbort("Must specify database.");
-
+initBindSiteList();
 if(optionVal("brainSpecific", NULL) != NULL)
     initBrainSpecific();
 }

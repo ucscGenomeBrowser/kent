@@ -11,7 +11,7 @@ track loweSnoGene
 shortLabel Lowe snoRNA
 longLabel snoRNA genes found by Todd Lowe
 group genes
-priority 2.6
+priority 2.61
 visibility dense
 color 160,140,50
 type bed 6 .
@@ -20,11 +20,19 @@ track primAORF
 shortLabel AORFs
 longLabel Alternative ORFs noted by Sorel Fitz-Gibbon
 group genes
-priority 2.6
+priority 2.62
 visibility dense
 color 13,124,115
 type bed 6 .
-                                                                                                                       
+
+track igenics
+shortLabel Intergenics
+longLabel Intergenics on microarray
+group genes
+priority 2.63
+visibility dense
+type bed 6 .
+
 track llaPaePrintA
 shortLabel LL microarray A
 longLabel Lowe lab full-genome P. aerophilum microarray experiments
@@ -38,20 +46,11 @@ expTable llaPaePrintAExps
 chip printA
 canPack off
 
-track BlastPpyrFur2
-shortLabel BLASTP Pfu
-longLabel  BLASTP of P. furiosus Proteins
-group compGeno
-priority 4.1
-visibility pack
-spectrum on
-type bed 6 .
-
 track codeBlast
 shortLabel BLASTP codes
 longLabel Conservation of proteins with BLASTP
 group compGeno
 priority 4.5
 visibility dense
-color 160,40,40
 type bed 6 +
+canPack off

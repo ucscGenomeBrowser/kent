@@ -16,7 +16,8 @@ install:
 	cp bin/para* bin/gensub2 /cluster/bin/i386
 
 clean:
-	rm */*.o
+	rm -f */*.o lib/*/*.a
+	rm -rf bin
 
 broad:
 	cd lib; make; cd ..

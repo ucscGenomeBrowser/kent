@@ -537,3 +537,46 @@ do
     ln -s `pwd`/${FN} /gbdb/ci1/wib/gc5Base
     echo ${FN}
 done
+
+
+# SWAP CI1-CIOSAV1 BLASTZ 
+    ssh kksilo
+    mkdir -p /cluster/data/ci1/bed/blastz.cioSav1.swap.2004-08-03
+    ln -s /cluster/data/ci1/bed/blastz.cioSav1.swap.2004-08-03 /cluster/data/ci1/bed/blastz.cioSav1
+    cd /cluster/data/ci1/bed/blastz.cioSav1
+    set aliDir = /cluster/data/cioSav1/bed/blastz.ci1
+    cp $aliDir/S1.len S2.len
+    cp $aliDir/S2.len S1.len
+    cat $aliDir/axtChrom/*.axt | axtSwap stdin $aliDir/S1.len $aliDir/S2.len stdout | axtSort stdin all.axt
+    nice axtChain -verbose=0 all.axt /iscratch/i/ci1/nib /iscratch/i/cioSav1/nib all.chain &
+    wait
+
+    # Load chains into database
+    ssh hgwdev
+    cd /cluster/data/ci1/bed/blastz.cioSav1
+    hgLoadChain ci1 chainCioSav1 all.chain
+    rm *.tab
+
+# NET CIOSAV1 BLASTZ 
+    ssh kksilo
+    cd /cluster/data/ci1/bed/blastz.cioSav1
+    chainPreNet all.chain S1.len S2.len stdout | chainNet stdin -minSpace=1 S1.len S2.len stdout /dev/null 
+    	\ | netSyntenic stdin noClass.net
+
+    # Add classification info using db tables:
+    ssh hgwdev
+    cd /cluster/data/ci1/bed/blastz.cioSav1
+    netClass -noAr noClass.net ci1 cioSav1 cioSav1.net
+
+    exit
+    # back at kksilo
+    # Make a 'syntenic' subset:
+    rm noClass.net 
+    netFilter -syn cioSav1.net > cioSav1Syn.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/ci1/bed/blastz.cioSav1
+    netFilter -minGap=10 cioSav1.net |  hgLoadNet ci1 netCioSav1 stdin
+    netFilter -minGap=10 cioSav1Syn.net  | hgLoadNet ci1 netSyntenyCioSav1 stdin
+

@@ -12,6 +12,7 @@
 #include "portable.h"
 #include "pthreadWrap.h"
 #include "paraHub.h"
+#include "log.h"
 
 int spokeLastId;	/* Id of last spoke allocated. */
 static char *runCmd = "run";
@@ -71,7 +72,6 @@ static void *spokeProcess(void *vptr)
 /* Loop around forever listening to socket and forwarding messages to machines. */
 {
 struct spoke *spoke = vptr;
-int conn, fromLen;
 char *line, *machine, *dottedQuad;
 struct paraMessage *message = NULL;
 

@@ -267,12 +267,13 @@ popd
     # with defaultDb values
     echo 'INSERT INTO dbDb \
         (name, description, nibPath, organism, \
-                defaultPos, active, orderKey, genome, scientificName, \
-                htmlPath, hgNearOk) values \
+             defaultPos, active, orderKey, genome, scientificName, \
+             htmlPath, hgNearOk, hgPbOk, sourceName) values \
         ("dp2", "Aug. 2003", "/gbdb/dp2/nib", "D. pseudoobscura", \
-               "Contig1045_Contig3832:27700-45800", 1, 56, "D. pseudoobscura", \
-                "Drosophila pseudoobscura", "/gbdb/dp2/html/description.html", \
-                0);' \
+             "Contig1006_Contig943:3363975-3378814", 1, 56, \
+             "D. pseudoobscura", \
+             "Drosophila pseudoobscura", "/gbdb/dp2/html/description.html", \
+             0, 0, "Baylor HGSC Freeze 1");' \
       | hgsql -h genome-testdb hgcentraltest
     echo 'update defaultDb set name = "dp2" where genome = "D. pseudoobscura"' \
       | hgsql -h genome-testdb hgcentraltest
@@ -540,7 +541,7 @@ axtChain -verbose=0 $1 \
     iSync
 
 
-# AUTO UPDATE GENBANK MRNA RUN  (IN PROGRESS 8/4/04 angie)
+# AUTO UPDATE GENBANK MRNA RUN  (DONE 8/4/04 angie)
     ssh hgwdev
     # Update genbank config and source in CVS:
     cd ~/kent/src/hg/makeDb/genbank
@@ -549,16 +550,17 @@ axtChain -verbose=0 $1 \
     # edits, check them in if necessary:
     diff /cluster/data/genbank/etc/genbank.conf etc/genbank.conf
 
-    # Edit etc/genbank.conf and add these lines:
+    # Edit etc/genbank.conf and add these lines (note scaffold-browser settings):
 # dp2 (D. pseudoobscura)
-dp2.genome = /iscratch/i/dp2/nib/chr*.nib
-dp2.lift = /cluster/data/dp2/jkStuff/liftAll.lft
+dp2.genome = /iscratch/i/dp2/nib/*.nib
+dp2.lift = no
 dp2.refseq.mrna.native.load = no
 dp2.refseq.mrna.xeno.load = yes
 dp2.refseq.mrna.xeno.pslReps = -minCover=0.15 -minAli=0.75 -nearTop=0.005
 dp2.genbank.mrna.xeno.load = yes
 dp2.genbank.est.xeno.load = no
 dp2.downloadDir = dp2
+dp2.perChromTables = no
 
     cvs ci etc/genbank.conf
     # Since D. pseudoobscura is a new species for us, edit src/lib/gbGenome.c.  
@@ -579,12 +581,12 @@ dp2.downloadDir = dp2
     # This is an -initial run, (xeno) RefSeq only:
     nice bin/gbAlignStep -srcDb=refseq -type=mrna -initial dp2 &
     tail -f [its logfile]
-#TODO
     # Load results:
     ssh hgwdev
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad dp2
     featureBits dp2 xenoRefGene
+#14616774 bases of 135845121 (10.760%) in intersection
     # Clean up:
     rm -rf work/initial.dp2
 
@@ -596,20 +598,26 @@ dp2.downloadDir = dp2
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad dp2
     featureBits dp2 mrna
+#SELECT ,,,,,,,,,, FROM mrna WHERE  < 3647374 AND  > 0
+    # oops, try this instead:
+    featureBits dp2 all_mrna
+#17931 bases of 135845121 (0.013%) in intersection
+    # Wow.  that is so paltry, perhaps we shouldn't even bother having a 
+    # mrna track??
     featureBits dp2 xenoMrna
+#15763946 bases of 135845121 (11.604%) in intersection
     # Clean up:
     rm -rf work/initial.dp2
 
-    ssh eieio
-    # -initial for ESTs (now with /cluster/store7 and iservers):
+    # -initial for ESTs
     nice bin/gbAlignStep -srcDb=genbank -type=est -initial dp2 &
     tail -f [its logfile]
     # Load results:
     ssh hgwdev
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 dp2 &
-    featureBits dp2 intronEst
-    featureBits dp2 est
+    # Doh!  wow, surprised that there are really no ESTs:
+#eieio 2004.08.04-19:18:53 dp2.initalign: nothing to align
     # Clean up:
     rm -rf work/initial.dp2
 
@@ -623,10 +631,165 @@ dp2.downloadDir = dp2
     hgGcPercent dp2 ../../nib
 
 
-# MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR CANFAM1 (TODO 8/?/04 angie)
+# MAKE EMPTY GAP TABLE (DONE 8/4/04 angie)
+    # featureBits prints out 759 warnings (1 per scaffold) about there 
+    # being no gap table.  So does netClass.  There's no gap information 
+    # provided with the assembly.  We could make guesses about gaps based 
+    # on runs of N over a certain size but that's potentially misleading.  
+    # For now, make an empty gap table.  
+    hgsql dp2 -e 'create table gap select * from dm1.chr2L_gap where 0'
+    # Made a dp2/trackDb.ra entry with a bogus chromosomes setting to prevent 
+    # the track/track control from appearing in hgTracks.
+
+
+# TWINSCAN (FROM BAYLOR) (DONE 8/4/04 angie)
+    ssk kksilo
+    mkdir /cluster/data/dp2/bed/twinscan
+    cd /cluster/data/dp2/bed/twinscan
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Dpseudoobscura/gene_predictions/freeze01_twinscan.pep.fa
+    wget -r ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Dpseudoobscura/gene_predictions/twinscan
+    cat ftp.hgsc.bcm.tmc.edu/pub/data/Dpseudoobscura/gene_predictions/twinscan/*/*.gff \
+    | sed -e 's/\.fon\.ace_linear//g' > twinscan.gtf
+    # Doh, freeze01_twinscan.pep.fa has names that don't match with the names 
+    # in the GTF.... and the pep names have coords that don't quite jive with 
+    # the coords in the GTF.  Looks like a version difference -- discard.
+    rm freeze01_twinscan.pep.fa
+    ssh hgwdev
+    cd /cluster/data/dp2/bed/twinscan
+    ldHgGene -gtf -genePredExt dp2 twinscan twinscan.gtf
+    featureBits -enrichment dp2 xenoRefGene twinscan
+#xenoRefGene 10.760%, twinscan 15.319%, both 8.474%, cover 78.76%, enrich 5.14x
+    # Compare with genscan:
+    featureBits -enrichment dp2 xenoRefGene genscan
+#xenoRefGene 10.760%, genscan 18.141%, both 9.393%, cover 87.30%, enrich 4.81x
+
+
+#TODO : ask somebody at Baylor about AGP/gap info for the scaffolds, and the 
+#twinscan coord differences.  
+
+
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY (TODO 8/?/04 angie)
     ssh hgwdev
     echo 'insert into blatServers values("dp2", "blat?", "17780", 1, 0); \
           insert into blatServers values("dp2", "blat?", "17781", 0, 1);' \
       | hgsql -h genome-testdb hgcentraltest
 
 
+# MAKE Drosophila Proteins track
+    ssh kksilo
+    mkdir -p /cluster/data/dp2/blastDb
+    cd /cluster/data/dp2/blastDb
+    for i in ../scaffolds/*.fa; do ln -s $i .; done
+    for i in *.fa; do formatdb -i $i -p F 2> /dev/null; done
+    rm *.fa *.log
+
+    ssh kkr1u00
+    mkdir -p /iscratch/i/dp2/blastDb
+    cp /cluster/data/dp2/blastDb/* /iscratch/i/dp2/blastDb
+    (~kent/bin/iSync) 2>&1 > sync.out
+    
+    mkdir -p /cluster/data/dp2/bed/tblastn.dm1FB
+    cd /cluster/data/dp2/bed/tblastn.dm1FB
+    ls -1S /iscratch/i/dp2/blastDb/*.nsq | sed "s/\.nsq//" > bug.lst
+    exit
+
+    # back to kksilo
+    cd /cluster/data/dp2/bed/tblastn.dm1FB
+    mkdir fbfa
+    # calculate a reasonable number of jobs
+    calc `wc /cluster/data/dm1/bed/blat.dm1FB/dm1FB.psl | awk "{print \\\$1}"`/\(150000/`wc bug.lst | awk "{print \\\$1}"`\)
+    # 18735/(150000/759) = 94.799100
+    split -l 95 /cluster/data/dm1/bed/blat.dm1FB/dm1FB.psl fbfa/fb
+    cd fbfa
+    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    cd ..
+    ls -1S fbfa/*.fa > fb.lst
+    mkdir blastOut
+    for i in `cat fb.lst`; do  mkdir blastOut/`basename $i .fa`; done
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/iscratch/i/blast/data
+export BLASTMAT
+f=/tmp/`basename $3`
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+if /cluster/bin/i386/blastToPsl $f.1 $f.2
+then
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /iscratch/i/dm1/protein.lft warn $f.2
+        mv $3.tmp $3
+        rm -f $f.1 $f.2 
+        exit 0
+    fi
+fi
+rm -f $f.1 $f.2 $3.tmp 
+exit 1
+'_EOF_'
+
+    gensub2 bug.lst fb.lst blastGsub blastSpec
+
+    ssh kk
+    cd /cluster/data/dp2/bed/tblastn.dm1FB
+    para create blastSpec
+    para shove   # jobs will need to be restarted, but they should all finish
+#  Completed: 150282 of 150282 jobs
+#  CPU time in finished jobs:    2977330s   49622.16m   827.04h   34.46d  0.094 y
+#  IO & Wait Time:                999926s   16665.44m   277.76h   11.57d  0.032 y
+#  Average job time:                  26s       0.44m     0.01h    0.00d
+#  Longest job:                      815s      13.58m     0.23h    0.01d
+#  Submission to last job:          8894s     148.23m     2.47h    0.10d
+
+
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainSome $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainSome
+(cd $1; cat q.*.psl | simpleChain -outPsl -maxGap=25000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainSome
+
+    ls -1dS `pwd`/blastOut/fb?? > chain.list
+    gensub2 chain.lst single chainGsub chainSpec
+    para create chainSpec
+    # use my silly script to push no more than 3 jobs with no more than 10 total (20 sec check)
+    # you have to kill it manually
+    ~braney/bin/brShove 10 3 20
+    exit
+
+    # back to kksilo
+    cd /cluster/data/dp2/bed/tblastn.dm1FB/blastOut
+    for i in fb??
+    do 
+	awk "(\$13 - \$12)/\$11 > 0.6 {print}" c.$i.psl > c60.$i.psl
+	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+	echo $i
+    done
+
+    cat u.*.psl m60* |  sort -T /tmp -k 14,14 -k 16,16n -k 17,17n  | uniq  > preblastDm1FB.psl
+    blatDir=/cluster/data/dm1/bed/blat.dm1FB
+    protDat preblastDm1FB.psl $blatDir/dm1FB.psl $blatDir/dm1FB.mapNames blastDm1FB.psl
+
+    ssh hgwdev
+    cd /cluster/data/dp2/bed/tblastn.dm1FB/blastOut
+    hgLoadPsl dp2 blastDm1FB.psl
+
+    mkdir -p /gbdb/dp2/miscSeq
+    ln -s /cluster/data/dm1/bed/blat.dm1FB/dm1FBp.fa /gbdb/dp2/miscSeq
+    hgLoadSeq dp2 /gbdb/dp2/miscSeq/dm1FBp.fa
+# End tblastn

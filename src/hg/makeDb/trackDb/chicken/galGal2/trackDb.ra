@@ -319,6 +319,17 @@ spectrum on
 type chain hg16
 otherDb hg16
 
+track ecoresTetraodon
+shortLabel Tetraodon Ecores
+longLabel Tetraodon Evolutionary Conserved Regions
+group compGeno
+priority 112
+visibility hide
+color 0,60,120
+altColor 200,220,255
+type bed 12 .
+url http://www.genoscope.cns.fr/comparative?premier=Chicken&deuxieme=Tetraodon&position=$$
+urlLabel Exofish Ecotig Display Link:
 
 searchTable gold
 searchMethod exact

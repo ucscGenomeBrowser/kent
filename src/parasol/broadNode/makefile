@@ -1,4 +1,5 @@
 include ../../inc/common.mk
+HG_WARN_ERR = -DJK_WARN -Wall -Werror
 
 L = -lm 
 MYLIBDIR = ../../lib/$(MACHTYPE)

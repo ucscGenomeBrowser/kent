@@ -7,6 +7,27 @@
 #include "bed.h"
 #include "hdb.h"
 #include "binRange.h"
+//#include "cheapcgi.h"
+#include "verbose.h"
+
+boolean strictTab = FALSE;	/* Separate on tabs. */
+boolean hasBin = FALSE;		/* Input bed file includes bin. */
+boolean noBin = FALSE;		/* Suppress bin field. */
+int call;                   /* depth of stack */
+int outCall;                   /* calls to outList */
+struct bedStub *outList;        /* global output list */
+float overlapPercent = 0.02;    /* minimum overlap to be removed */
+
+struct bedStub
+/* A line in a bed file with chromosome, start, end position parsed out. */
+    {
+    struct bedStub *next;	/* Next in list. */
+    char *chrom;                /* Chromosome . */
+    int chromStart;             /* Start position. */
+    int chromEnd;		/* End position. */
+    int score;                  /* score */
+    char *line;                 /* Line. */
+    };
 
 void usage()
 /* Explain usage and exit. */
@@ -16,8 +37,9 @@ errAbort(
   "usage:\n"
   "   bedOverlap infile.bed output.bed\n"
   "options:\n"
-  "   -xxx \n"
-  "Note: infile.bed must be sorted by chrom, chromStart"
+  "   -hasBin         Input bed file starts with a bin field.\n"
+  "   -noBin          Suppress bin field\n"
+  "Note: infile.bed must have at least 5 columns and be sorted by chrom, chromStart"
   );
 }
 
@@ -34,87 +56,210 @@ for (i = 0 ; i < size ; i++)
 return result;
 }
 
-void outputRow(FILE *f, char **row, int size)
+int findBedSize(char *fileName)
+/* Read first line of file and figure out how many words in it. */
 {
-int i;
-if (row == NULL) return;
-for (i = 0 ; i<size ; i++)
-    fprintf(f,"%s ",row[i]);
-fprintf(f,"\n");
-    
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *words[64], *line;
+int wordCount;
+lineFileNeedNext(lf, &line, NULL);
+if (strictTab)
+    wordCount = chopTabs(line, words);
+else
+    wordCount = chopLine(line, words);
+if (wordCount == 0)
+    errAbort("%s appears to be empty", fileName);
+lineFileClose(&lf);
+return wordCount;
 }
 
-void bedOverlap(char *aFile, FILE *f)
-/* Sort a bed file (in place, overwrites old file. */
+void loadOneBed(char *fileName, int bedSize, struct bedStub **pList)
+/* Load one bed file.  Make sure all lines have bedSize fields.
+ * Put results in *pList. */
 {
-char *prevChrom = cloneString("chr1");
-int prevStart = 0, prevEnd = 0;
-bool first = TRUE;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *words[64], *line, *dupe;
+int wordCount;
+struct bedStub *bed;
 
-struct lineFile *lf = lineFileOpen(aFile, TRUE);
-char *row[40], **bestMatch = NULL;
-int bestScore = 0, bestCount = 0;
-int i, wordCount;
-struct binElement *hitList = NULL, *hit;
-struct binKeeper *bk;
-
-printf("Loading Predictions from %s\n",aFile);
-while ((wordCount = lineFileChop(lf, row)) != 0)
+verbose(1, "Reading %s\n", fileName);
+while (lineFileNext(lf, &line, NULL))
     {
-    char *name = row[0];
-    int start = lineFileNeedNum(lf, row, 1);
-    int end = lineFileNeedNum(lf, row, 2);
-    int score = lineFileNeedNum(lf, row, 4);
+    if (hasBin)
+	nextWord(&line);
+    dupe = cloneString(line);
+    if (strictTab)
+	wordCount = chopTabs(line, words);
+    else
+	wordCount = chopLine(line, words);
+    lineFileExpectWords(lf, bedSize, wordCount);
+    AllocVar(bed);
+    bed->chrom = cloneString(words[0]);
+    bed->chromStart = lineFileNeedNum(lf, words, 1);
+    bed->chromEnd = lineFileNeedNum(lf, words, 2);
+    bed->score = lineFileNeedNum(lf, words, 4);
+    bed->line = dupe;
+    if (bed->score > 0)
+        slAddHead(pList, bed);
+    else
+        verbose(1, "Skipping record %s:%d-%d with score %d\n",bed->chrom,bed->chromStart,bed->chromEnd,bed->score);
+    }
+lineFileClose(&lf);
+slReverse(pList);
+}
 
-    if (first || (sameString(name,prevChrom) && start <= prevEnd))
+int getNum(char *words[], int wordIx, int chromStart)
+{
+/* Make sure that words[wordIx] is an ascii integer, and return
+ * binary representation of it. Conversion stops at first non-digit char. */
+char *ascii = words[wordIx];
+char c = ascii[0];
+if (c != '-' && !isdigit(c))
+    errAbort("Expecting number field %d chromStart %d , got %s", 
+    	wordIx+1, chromStart, ascii);
+return atoi(ascii);
+}
+
+void writeBedTab(char *fileName, struct bedStub *bedList, int bedSize)
+/* Write out bed list to tab-separated file. */
+{
+struct bedStub *bed;
+FILE *f = mustOpen(fileName, "w");
+char *words[64];
+int i, wordCount;
+for (bed = bedList; bed != NULL; bed = bed->next)
+    {
+    if (!noBin)
+        fprintf(f, "%u\t", hFindBin(bed->chromStart, bed->chromEnd));
+    if (strictTab)
+	wordCount = chopTabs(bed->line, words);
+    else
+	wordCount = chopLine(bed->line, words);
+    for (i=0; i<wordCount; ++i)
+        {
+	fputs(words[i], f);
+	if (i == wordCount-1)
+	    fputc('\n', f);
+	else
+	    fputc('\t', f);
+	}
+    }
+fclose(f);
+}
+
+void pareList(struct bedStub **bedList, struct bedStub *match)
+/* remove elements from the list that overlap match */
+{
+struct bedStub *bed;
+
+for (bed = *bedList; bed != NULL; bed = bed->next)
+    {
+    char *name = bed->chrom;
+    int start = bed->chromStart;
+    int end = bed->chromEnd;
+    int score = bed->score;
+    int overlap = rangeIntersection(start, end, match->chromStart, match->chromEnd);
+    if (sameString(name, match->chrom) && (overlap > 0))
+            {
+        slRemoveEl(bedList, bed);
+        }
+    }
+}
+
+void removeOverlap(int bedSize , struct bedStub *bedList)
+/* pick highest scoring record from each overlapping cluster 
+ * then remove all overlapping records and call recusively 
+ * return list of best scoring records in each cluster */
+{
+struct bedStub *bed, *bestMatch = NULL, *bedList2 = NULL, *prevBed = NULL;
+int i;
+bool first = TRUE;
+//char *prevChrom = cloneString("chr1");
+int prevStart = 0, prevEnd = 0;
+int bestScore = 0, bestCount = 0;
+
+if (bedList == NULL)
+    return;
+
+for (bed = bedList; bed != NULL; bed = bed->next)
+    {
+    char *name = bed->chrom;
+    int start = bed->chromStart;
+    int end = bed->chromEnd;
+    int score = bed->score;
+
+    if (first || start <= prevEnd ) //&&(sameString(name,prevChrom) && ))
         {
         if (first)
             {
-            prevChrom = cloneString(name);
+//            prevChrom = cloneString(name);
             prevStart = start;
             prevEnd = end;
             first = FALSE;
             }
         if (score > bestScore)
             {
-            bestMatch = cloneRow(row, wordCount);
+            bestMatch = bed;
             bestScore = score;
-            bestCount = wordCount;
             }
         prevEnd = max(prevEnd, end);
+        prevBed = bed;
         }
     else
-        {
-        if (bestMatch != NULL)
-            outputRow(f, bestMatch, bestCount);
-        for (i = 0; i <bestCount ; i++)
-            freeMem(bestMatch[i]);
-        bestMatch = NULL;
-        if (ferror(f))
-            {
-            perror("Writing error\n");
-            errAbort(" file is truncated, sorry.");
-            }
-        bestScore = score;
-        bestCount = wordCount;
-        prevChrom = cloneString(name);
-        prevStart = start;
-        prevEnd = end;
-        bestMatch = cloneRow(row, wordCount);
-        } 
+        break;
     }
-    if (bestMatch != NULL)
-        outputRow(f, bestMatch, bestCount);
-fclose(f);
+/* split list in two to save time*/
+if (bed != NULL)
+    {
+    bedList2 = bed;
+    if (prevBed != NULL)
+        prevBed->next = NULL;
+    else
+        errAbort("list not split %s:%d-%d\n",bed->chrom,bed->chromStart,bed->chromEnd);
+    }
+if (bestMatch != NULL)
+    {
+    struct bedStub *lastEl = NULL;
+    slRemoveEl(&bedList, bestMatch);
+    slAddHead(&outList, bestMatch);
+    verbose(2, "add to outList %d count %d\n",slCount(outList), outCall++);
+    pareList(&bedList, bestMatch);
+    }
+removeOverlap(bedSize , bedList);
+removeOverlap(bedSize , bedList2);
 }
 
+void bedOverlap(char *aFile, char *outFile)
+/* load all beds and pick highest scoring record from each overlapping cluster */
+{
+struct bedStub *bedList = NULL, *bed;
+int i, wordCount;
+struct binElement *hitList = NULL, *hit;
+struct binKeeper *bk;
+int bedSize = findBedSize(aFile);
+
+if (hasBin)
+    bedSize--;
+printf("Loading Predictions from %s of size %d\n",aFile, bedSize);
+if (bedSize < 5)
+    errAbort("%s must have a score\n", aFile);
+loadOneBed(aFile, bedSize, &bedList);
+verbose(1, "Loaded %d elements of size %d\n", slCount(bedList), bedSize);
+removeOverlap(bedSize, bedList);
+verbose(1, "Saving %d records to %s\n", slCount(outList), outFile);
+if (outList != NULL)
+    slReverse(&outList);
+writeBedTab(outFile, outList, bedSize);
+}
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-FILE *f;
-if (argc != 3)
-    usage();
-f = mustOpen(argv[2], "w");
-bedOverlap(argv[1], f);
+optionHash(&argc, argv);
+verboseSetLogFile("stdout");
+hasBin = optionExists("hasBin");
+overlapPercent = optionFloat("minOverlap", overlapPercent);
+noBin = optionExists("noBin") || optionExists("nobin");
+outList = NULL;
+bedOverlap(argv[1], argv[2]);
 return 0;
 }

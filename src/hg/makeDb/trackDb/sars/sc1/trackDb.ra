@@ -9,7 +9,7 @@ type genePred softberryPep
 
 track mrna
 shortLabel $Organism mRNAs
-longLabel $Organism mRNAs from Genbank 
+longLabel $Organism mRNAs from GenBank 
 group rna
 priority 54
 visibility pack
@@ -18,7 +18,7 @@ type psl .
 
 track xenoMrna
 shortLabel Viral mRNAs
-longLabel All Viral mRNAs from Genbank Using Blastz
+longLabel All Viral mRNAs from GenBank Using Blastz
 group rna
 priority 55
 visibility pack
@@ -27,7 +27,7 @@ type psl xeno
 
 track xenoBlastzMrna
 shortLabel Viral mRNAs Chained
-longLabel All Viral mRNAs from Genbank Using Blastz Chained
+longLabel All Viral mRNAs from GenBank Using Blastz Chained
 group rna
 priority 55
 visibility pack

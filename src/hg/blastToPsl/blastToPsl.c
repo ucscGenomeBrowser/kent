@@ -6,7 +6,9 @@
 #include "blastParse.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: blastToPsl.c,v 1.12 2004/05/05 21:35:44 markd Exp $";
+static char const rcsid[] = "$Id: blastToPsl.c,v 1.14 2004/08/11 23:50:21 hartera Exp $";
+
+double eVal = -1; /* default Expect value signifying no filtering */
 
 struct block
 /* coordinates of a block */
@@ -27,6 +29,7 @@ struct block
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"scores", OPTION_STRING},
+    {"eVal", OPTION_DOUBLE},
     {NULL, 0}
 };
 
@@ -44,9 +47,10 @@ errAbort(
   "       strands qName qStart qEnd tName tStart tEnd bitscore eVal\n"
   "  -verbose=n - n >= 3 prints each line of file after parsing.\n"
   "               n >= 4 dumps the result of each query\n"
+  "  -eVal=n n is e-value threshold to filter results. Format can be either\n"
+  "          an integer, double or 1e-10. Default is no filter.\n"
   );
 }
-
 
 struct psl* createPsl(struct blastBlock *bb, int pslMax)
 /* create PSL for a blast block */
@@ -262,13 +266,12 @@ while (nextUngappedBlk(bb, &blk))
     addPslBlock(psl, &blk, &pslMax);
     prevBlk = blk;
     }
-
-if (psl->blockCount > 0)
+if (psl->blockCount > 0 && (bb->eVal <= eVal || eVal == -1))
     {
     finishPsl(psl, flags);
     pslTabOut(psl, pslFh);
     if (scoreFh != NULL)
-        fprintf(scoreFh, "%s\t%s\t%d\t%d\t%s\t%d\t%d\t%d\t%f\n", psl->strand,
+        fprintf(scoreFh, "%s\t%s\t%d\t%d\t%s\t%d\t%d\t%d\t%g\n", psl->strand,
                 psl->qName, psl->qStart, psl->qEnd,
                 psl->tName, psl->tStart, psl->tEnd, bb->bitScore, bb->eVal);
                 
@@ -318,6 +321,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, optionSpecs);
+eVal = optionDouble("eVal", eVal);
 if (argc != 3)
     usage();
 blastToPsl(argv[1], argv[2], optionVal("scores", NULL));

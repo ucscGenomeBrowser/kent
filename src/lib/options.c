@@ -12,14 +12,14 @@
 #include "verbose.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: options.c,v 1.19 2004/08/04 21:31:20 krish Exp $";
+static char const rcsid[] = "$Id: options.c,v 1.21 2004/08/10 19:27:07 hartera Exp $";
 
 #ifdef MACHTYPE_alpha
     #define strtoll strtol
 #endif
 
 /* mask for type in optionSpec.flags */
-#define OPTION_TYPE_MASK (OPTION_BOOLEAN|OPTION_STRING|OPTION_INT|OPTION_FLOAT|OPTION_LONG_LONG)
+#define OPTION_TYPE_MASK (OPTION_BOOLEAN|OPTION_STRING|OPTION_INT|OPTION_FLOAT|OPTION_LONG_LONG|OPTION_DOUBLE)
 
 static struct optionSpec commonOptions[] = {
    {"verbose", OPTION_INT},
@@ -82,28 +82,41 @@ case OPTION_FLOAT:
         errAbort("value of -%s is not a valid float: \"%s\"",
                  name, val);
     break;
+case OPTION_DOUBLE:
+    if (val == NULL)
+        errAbort("double option -%s must have a value", name);
+    strtod(val, &valEnd);
+    if ((*val == '\0') || (*valEnd != '\0'))
+        errAbort("value of -%s is not a valid double: \"%s\"",
+                 name, val);
+    break;
 default:
     errAbort("bug: invalid type in optionSpec for %s", optionSpec->name);
 }
 }
 
-void parseMultiOption(struct hash *hash, char *name, char* val, struct optionSpec *spec) {
+static void parseMultiOption(struct hash *hash, char *name, char* val, struct optionSpec *spec)
 /* process multiple instances of an option, requres that the optionSpec of the option */
+{
 struct slName *valList;
-switch(spec->flags & OPTION_TYPE_MASK) {
+switch (spec->flags & OPTION_TYPE_MASK)
+    {
     case OPTION_STRING:
         valList = hashFindVal(hash, name);
-        if(valList == NULL) {   /* first multi option */
+        if (valList == NULL)   /* first multi option */
+            {
             valList = newSlName(val);
             hashAdd(hash, name, valList);
-        } else {
+            }
+        else
+            {
             struct slName *el = newSlName(val);
             slAddTail(valList, el); /* added next multi option */
-        }
+            }
         break;
     default:
         errAbort("UNIMPLEMENTED: multiple instances of a non-string option is not currently implemented");
-}
+    }
 }
 
 static boolean parseAnOption(struct hash *hash, char *arg, struct optionSpec *optionSpecs)
@@ -138,16 +151,16 @@ if (optionSpecs != NULL)
     validateOption(name, val, optionSpecs);
 if (val == NULL)
     val = "on";
-if(optionSpecs == NULL) {
+if (optionSpecs == NULL)
     hashAdd(hash, name, val);
-} else {
+else
+    {
     struct optionSpec *spec = matchingOption(name, optionSpecs);
-    if(spec != NULL && (spec->flags & OPTION_MULTI)) {    /* process multiple instances of option */
+    if (spec != NULL && (spec->flags & OPTION_MULTI))    /* process multiple instances of option */
         parseMultiOption(hash, name, val, spec);
-    } else {
+    else
         hashAdd(hash, name, val);
     }
-}
 
 if (eqPtr != NULL)
     *eqPtr = '=';
@@ -355,6 +368,21 @@ ret = hashFindVal(options, name);
 if (ret == NULL)
      ret = defaultVal;
 return ret;
+}
+
+double optionDouble(char *name, float defaultVal)
+/* Return double value or default value if not set */
+{
+char *s = optGet(name);
+char *valEnd;
+float val;
+if (s == NULL)
+    return defaultVal;
+
+val = strtod(s, &valEnd);
+if ((*s == '\0') || (*valEnd != '\0'))
+    errAbort("value of -%s is not a valid double: \"%s\"", name, s);
+return val;
 }
 
 boolean optionExists(char *name)

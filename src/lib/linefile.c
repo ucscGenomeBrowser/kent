@@ -9,8 +9,40 @@
 #include "dystring.h"
 #include "errabort.h"
 #include "linefile.h"
+#include "pipeline.h"
 
-static char const rcsid[] = "$Id: linefile.c,v 1.31 2004/04/22 16:35:21 kate Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.32 2004/08/09 15:36:29 markd Exp $";
+
+static char **getDecompressor(char *fileName)
+/* if a file is compressed, return the command to decompress the 
+ * approriate format, otherwise return NULL */
+{
+static char *GZ_READ[] = {"gzip", "-dc", NULL};
+static char *Z_READ[] = {"compress", "-dc", NULL};
+static char *BZ2_READ[] = {"bzip2", "-dc", NULL};
+
+if (endsWith(fileName, ".gz"))
+    return GZ_READ;
+else if (endsWith(fileName, ".Z"))
+    return Z_READ;
+else if (endsWith(fileName, ".bz2"))
+    return BZ2_READ;
+else
+    return NULL;
+}
+
+static struct lineFile *lineFileDecompress(char *fileName, bool zTerm)
+/* open a linefile with decompression */
+{
+struct pipeline *pl;
+struct lineFile *lf;
+if (access(fileName, R_OK) != 0)
+    return NULL;  /* avoid error from pipeline */
+pl = pipelineCreateRead1(getDecompressor(fileName), fileName);
+lf = lineFileAttach(fileName, zTerm, pipelineFd(pl));
+lf->pl = pl;
+return lf;
+}
 
 struct lineFile *lineFileAttatch(char *fileName, bool zTerm, int fd)
 /* Wrap a line file around an open'd file. */
@@ -58,14 +90,17 @@ return lineFileAttatch("stdin", zTerm, fileno(stdin));
 struct lineFile *lineFileMayOpen(char *fileName, bool zTerm)
 /* Try and open up a lineFile. */
 {
-int fd;
-
 if (sameString(fileName, "stdin"))
     return lineFileStdin(zTerm);
-fd = open(fileName, O_RDONLY);
-if (fd == -1)
-    return NULL;
-return lineFileAttatch(fileName, zTerm, fd);
+else if (getDecompressor(fileName) != NULL)
+    return lineFileDecompress(fileName, zTerm);
+else
+    {
+    int fd = open(fileName, O_RDONLY);
+    if (fd == -1)
+        return NULL;
+    return lineFileAttatch(fileName, zTerm, fd);
+    }
 }
 
 struct lineFile *lineFileOpen(char *fileName, bool zTerm)
@@ -87,6 +122,8 @@ lf->reuse = TRUE;
 void lineFileSeek(struct lineFile *lf, off_t offset, int whence)
 /* Seek to read next line from given position. */
 {
+if (lf->pl != NULL)
+    errnoAbort("Can't lineFileSeek on a compressed file: %s", lf->fileName);
 lf->reuse = FALSE;
 if (whence == SEEK_SET && offset >= lf->bufOffsetInFile 
 	&& offset < lf->bufOffsetInFile + lf->bytesInBuf)
@@ -243,7 +280,9 @@ void lineFileClose(struct lineFile **pLf)
 struct lineFile *lf;
 if ((lf = *pLf) != NULL)
     {
-    if (lf->fd > 0 && lf->fd != fileno(stdin))
+    if (lf->pl != NULL)
+        pipelineWait(&lf->pl);
+    else if (lf->fd > 0 && lf->fd != fileno(stdin))
 	close(lf->fd);
     freeMem(lf->fileName);
     freeMem(lf->buf);

@@ -108,7 +108,7 @@ type genePred
 
 track pseudoGeneLink
 shortLabel Retroposed Genes 
-longLabel Retroposed (Pseudo)genes, Including Nonfunctional, Based on mRNA Alignments.
+longLabel Retroposed (Pseudo)genes, Including Nonfunctional, Based on mRNA Alignments
 group genes
 priority 52.5
 visibility hide
@@ -277,7 +277,7 @@ type psl .
 
 track affyGnf1h
 shortLabel Affy GNF1H
-longLabel Alignments of Probes from Affymetrix GNF1H Chip
+longLabel Alignments of Affymetrix Consensus/Exemplars from GNF1H
 group regulation
 priority 89.1
 visibility hide

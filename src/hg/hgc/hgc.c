@@ -141,7 +141,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.711 2004/08/03 23:44:19 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.717 2004/08/11 19:45:26 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -693,7 +693,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 if (bedSize >= 5 && showTopScorers != NULL)
     {
-    int maxScorers = atoi(showTopScorers);
+    int maxScorers = sqlUnsigned(showTopScorers);
     showBedTopScorersInWindow(conn, tdb, item, start, maxScorers);
     }
 }
@@ -3966,10 +3966,6 @@ void doRHmap(struct trackDb *tdb, char *itemName)
 char *dupe, *type, *words[16];
 char buffer[1024];
 char title[256];
-char *item = NULL;
-char *ext = NULL;
-char *accType = NULL;
-char *id = NULL;
 int wordCount;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
@@ -3977,38 +3973,9 @@ struct sqlConnection *conn = hAllocConn();
 dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
 
-strcpy(buffer, itemName);
-item = buffer;
-if ((ext = strchr(item, '.')) != NULL)
-    {
-    *ext++ = 0;
-    if ((accType = strchr(ext, '.')) != NULL)
-	{
-	*accType++ = 0;
-	}
-        if (startsWith("EMB",accType) && ((id = strchr(accType, ':')) != NULL) ) 
-            {
-            *id++ = 0;
-            }
-    }
-
-if (item != NULL) 
-    {
-    genericHeader(tdb, item);
-    }
-else 
-    {
-    genericHeader(tdb, itemName);
-    }
+genericHeader(tdb, itemName);
 /* Print non-sequence info */
 cartWebStart(cart, title);
-
-if (id != NULL)
-    {
-    printf("<H3>Genbank Accession: <A HREF=\"");
-    printEntrezNucleotideUrl(stdout, id);
-    printf("\" TARGET=_blank>%s</A><BR></H3>", id);
-    }
 
 dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
@@ -4789,12 +4756,13 @@ enum gfType tt = gftDnaX, qt = gftProt;
 boolean isProt = 1;
 struct sqlResult *sr;
 struct sqlConnection *conn = hAllocConn();
-struct dnaSeq *seq;
+struct dnaSeq *seq = NULL;
 char query[256], **row;
 char fullTable[64];
 boolean hasBin;
 char buffer[256];
 int addp = 0;
+char *pred = NULL;
 
 /* Print start of HTML. */
 writeFramesetType();
@@ -4802,6 +4770,7 @@ puts("<HTML>");
 printf("<HEAD>\n<TITLE>Protein Sequence vs Genomic</TITLE>\n</HEAD>\n\n");
 
 addp = cartUsualInt(cart, "addp",0);
+pred = cartUsualString(cart, "pred",NULL);
 start = cartInt(cart, "o");
 hFindSplitTable(seqName, table, fullTable, &hasBin);
 sprintf(query, "select * from %s where qName = '%s' and tName = '%s' and tStart=%d",
@@ -4811,29 +4780,38 @@ if ((row = sqlNextRow(sr)) == NULL)
     errAbort("Couldn't find alignment for %s at %d", readName, start);
 psl = pslLoad(row+hasBin);
 sqlFreeResult(&sr);
-hFreeConn(&conn);
-if (addp == 1)
+if ((addp == 1) || (pred != NULL))
     {
     char *ptr;
+
+    if (!hTableExists(pred))
+	addp = 1;
     sprintf(buffer, "%s",readName);
-    if (sameString("blastDm1FB",table))
+    
+    if ((ptr = strchr(buffer, '.')) != NULL)
 	{
+	*ptr = 0;
 	psl->qName = cloneString(buffer);
-	ptr = &buffer[strlen(buffer)];
 	*ptr++ = 'p';
 	*ptr = 0;
 	}
-    else if ((ptr = strchr(buffer, '.')) != NULL)
+    if (addp == 1)
+	seq = hPepSeq(buffer);
+    else
 	{
-	*ptr = 0;
-	*ptr++ = 'p';
-	*ptr = 0;
-	psl->qName = cloneString(buffer);
+	safef(query, sizeof(query),
+	    "select seq from %s where name = '%s'", pred, psl->qName);
+	sr = sqlGetResult(conn, query);
+	if ((row = sqlNextRow(sr)) != NULL)
+	    seq = newDnaSeq(cloneString(row[0]), strlen(row[0]), psl->qName);
+	else
+	    errAbort("Cannot find sequence for '%s' in %s",psl->qName, pred);
+	sqlFreeResult(&sr);
 	}
-    seq = hPepSeq(buffer);
     }
 else
     seq = hPepSeq(readName);
+hFreeConn(&conn);
 showSomeAlignment(psl, seq, qt, 0, seq->size, NULL, 0, 0);
 }
 
@@ -13807,7 +13785,11 @@ char *useName = itemName;
 char *acc = NULL, *prot = NULL;
 char *gene = NULL, *pos = NULL;
 char buffer[1024];
+boolean isDm = FALSE;
+char *pred = trackDbSettingOrDefault(tdb, "pred", "NULL");
 
+if (sameString("blastDm1FB", tdb->tableName))
+    isDm = TRUE;
 strcpy(buffer, itemName);
 acc = buffer;
 if ((pos = strchr(acc, '.')) != NULL)
@@ -13817,26 +13799,41 @@ if ((pos = strchr(acc, '.')) != NULL)
 	{
 	*gene++ = 0;
 	useName = gene;
-	if ((prot = strchr(gene, '.')) != NULL)
+	if (!isDm && ((prot = strchr(gene, '.')) != NULL))
 	    *prot++ = 0;
 	}
     }
-cartWebStart(cart, "Human Protein %s", useName);
+if (isDm == TRUE)
+    cartWebStart(cart, "FlyBase Protein %s", useName);
+else
+    cartWebStart(cart, "Human Protein %s", useName);
 sprintf(uiState, "%s=%u", cartSessionVarName(), cartSessionId(cart));
 if (pos != NULL)
     {
-    printf("<B>Human position:</B>\n");
-    printf("<A TARGET=_BLANK HREF=\"%s?position=%s&db=%s\">",
-	hgTracksName(), pos, "hg16");
+    if (isDm == FALSE)
+	{
+	printf("<B>Human position:</B>\n");
+	printf("<A TARGET=_BLANK HREF=\"%s?position=%s&db=%s\">",
+	    hgTracksName(), pos, "hg16");
+	}
+    else
+	{
+	printf("<B>D. melanogaster position:</B>\n");
+	printf("<A TARGET=_BLANK HREF=\"%s?position=%s&db=%s\">",
+	    hgTracksName(), pos, "dm1");
+	}
     printf("%s</A><BR>",pos);
     }
 if (acc != NULL)
     {
-    printf("<B>Human mRNA:</B> <A HREF=\"");
+    if (isDm== FALSE)
+	printf("<B>Human mRNA:</B> <A HREF=\"");
+    else
+	printf("<B>Drosophila melanogaster mRNA:</B> <A HREF=\"");
     printEntrezNucleotideUrl(stdout, acc);
     printf("\" TARGET=_blank>%s</A><BR>\n", acc);
     }
-if (prot != NULL)
+if (!isDm && (prot != NULL))
     {
     printf("<B>SwissProt:</B> ");
     printf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" "
@@ -13857,9 +13854,9 @@ for (same = 1; same >= 0; same -= 1)
 	{
 	if (same ^ (psl->tStart != start))
 	    {
-	    printf("<A HREF=\"%s?o=%d&g=htcProteinAli&addp=1&i=%s&c=%s&l=%d&r=%d&db=%s&aliTrack=%s&%s\">", 
+	    printf("<A HREF=\"%s?o=%d&g=htcProteinAli&i=%s&c=%s&l=%d&r=%d&db=%s&aliTrack=%s&%s&pred=%s\">", 
 		hgcName(), psl->tStart, psl->qName,  psl->tName,
-		psl->tStart, psl->tEnd, database,tdb->tableName, uiState);
+		psl->tStart, psl->tEnd, database,tdb->tableName, uiState,pred);
 	    printf("alignment</A> ");
 	    printf("<A HREF=\"%s?o=%d&g=htcGetBlastPep&i=%s&c=%s&l=%d&r=%d&db=%s&aliTrack=%s&%s\">", 
 		hgcName(), psl->tStart, psl->qName,  psl->tName,
@@ -14301,7 +14298,7 @@ else if (sameWord(track, "mrna") || sameWord(track, "mrna2") ||
     {
     doHgRna(tdb, item);
     }
-else if (sameWord(track, "affyU95") || sameWord(track, "affyU133") || sameWord(track, "affyU74") || sameWord(track, "affyRAE230") || sameWord(track, "affyZebrafish") )
+else if (sameWord(track, "affyU95") || sameWord(track, "affyU133") || sameWord(track, "affyU74") || sameWord(track, "affyRAE230") || sameWord(track, "affyZebrafish") || sameWord(track, "affyGnf1h") || sameWord(track, "affyGnf1m") )
     {
     doAffy(tdb, item, NULL);
     }
@@ -14963,7 +14960,7 @@ cart = theCart;
 doMiddle();
 }
 
-char *excludeVars[] = {"bool.hcg.dna.rc", "Submit", "submit", "g", "i", "aliTrack", NULL};
+char *excludeVars[] = {"bool.hcg.dna.rc", "Submit", "submit", "g", "i", "aliTrack", "addp", "pred", NULL};
 
 int main(int argc, char *argv[])
 {

@@ -117,24 +117,4 @@ tg->mapItem = lfsMapItemName;
 tg->mapsSelf = TRUE;
 }
 
-char *llBlastPName(struct track *tg, void *item)
-{
-struct bed *bed = item;
-char *itemName = cloneString(bed->name);
-static char buf[256];
-char *nameParts[2];
-chopByChar(itemName,'|',nameParts,ArraySize(nameParts));
-sprintf(buf, "%s", nameParts[0]);
-chopByChar(buf,'$',nameParts,ArraySize(nameParts));
-sprintf(buf,"%s",nameParts[1]);
-freeMem(itemName);
-return buf;
-}
-
-void llBlastPMethods(struct track *tg)
-{
-tg->itemName = llBlastPName;
-}
-
-
 /**** End of Lowe lab additions ****/

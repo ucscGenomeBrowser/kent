@@ -46,7 +46,7 @@ while ((psl = pslNext(in)) != NULL)
     if (liftQuery != NULL)
 	{
 	fprintf(liftQuery,"%d\t%s/%s_%d_%d\t%d\t%s\t%d\n",
-		0, "1", psl->qName,0,psl->blockCount, strlen(psl->qSequence[0]), psl->qName, psl->qSize);
+		psl->qStarts[0], "1", psl->qName,0,psl->blockCount, strlen(psl->qSequence[0]), psl->qName, psl->qSize);
 	//sumQuery += strlen(psl->qSequence[0]);
 	}
     if (liftTarget != NULL)

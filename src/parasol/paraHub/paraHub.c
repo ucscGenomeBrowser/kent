@@ -65,6 +65,7 @@
 #include "internet.h"
 #include "paraHub.h"
 #include "machSpec.h"
+#include "log.h"
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -99,13 +100,13 @@ errAbort("paraHub - parasol hub server version %d\n"
 	 "Where machine list is a file with machine names in the\n"
 	 "first column, and number of CPUs in the second column.\n"
 	 "options:\n"
-	 "    spokes=N  Number of processes that feed jobs to nodes - default %d\n"
-	 "    jobCheckPeriod=N  Minutes between checking on job - default %d\n"
-	 "    machineCheckPeriod=N Minutes between checking on machine - default %d\n"
-	 "    subnet=XXX.YYY.ZZZ Only accept connections from subnet (example 192.168)\n"
-	 "    nextJobId=N  Starting job ID number\n"
-	 "    logFacility=facility log to the specified syslog facility.\n"
-	 "    noResume  Don't try to reconnect with jobs running on nodes\n"
+	 "   -spokes=N  Number of processes that feed jobs to nodes - default %d\n"
+	 "   -jobCheckPeriod=N  Minutes between checking on job - default %d\n"
+	 "   -machineCheckPeriod=N Minutes between checking on machine - default %d\n"
+	 "   -subnet=XXX.YYY.ZZZ Only accept connections from subnet (example 192.168)\n"
+	 "   -nextJobId=N  Starting job ID number\n"
+	 "   -logFacility=facility log to the specified syslog facility - default local0.\n"
+	 "   -noResume  Don't try to reconnect with jobs running on nodes\n"
 	               ,
 	 version, initialSpokes, jobCheckPeriod, machineCheckPeriod
 	 );
@@ -549,7 +550,7 @@ char *exeFromCommand(char *cmd)
 /* Return executable name (without path) given command line. */
 {
 static char exe[128];
-char *s,*e,*x;
+char *s,*e;
 int i, size;
 int lastSlash = -1;
 
@@ -973,12 +974,21 @@ if (status != NULL)
     if (job != NULL)
 	{
         job->lastClockIn = now;
+        if (!sameString(job->machine->name, machine))
+            {
+            logError("hub: checkIn %s %s %s should be from %s",
+                     machine, jobIdString, status, job->machine->name);
+            }
 	}
+    else
+        {
+        logError("hub: checkIn of unknown job: %s %s %s",
+                 machine, jobIdString, status);
+        }
     if (sameString(status, "free"))
 	{
 	/* Node thinks it's free, we think it has a job.  Node
 	 * must have missed our job assignment... */
-	struct user *user = job->batch->user;
 	if (job != NULL)
 	    {
 	    struct machine *mach = job->machine;
@@ -1393,7 +1403,6 @@ struct dlNode *node;
 struct job *job;
 time_t t;
 char *machName;
-char *s;
 char *state = (running ? "r" : "q");
 
 flushResults();
@@ -1791,7 +1800,7 @@ boolean processListJobs(struct multiMachine *mm,
 {
 int running, recent, i, finCount = 0;
 struct runJobMessage rjm;
-char resultsFile[512], *resultsFileString;
+char resultsFile[512];
 
 if (!pmReceiveTimeOut(pm, ru, 2000000))
     {
@@ -1861,10 +1870,9 @@ void checkForJobsOnNodes()
 /* Poll nodes and see if they have any jobs for us. */
 {
 struct machine *mach;
-char *line;
 int running = 0, finished = 0;
 struct hash *erHash = newHash(8);	/* A hash of existingResults */
-struct existingResults *erList = NULL, *er;
+struct existingResults *erList = NULL;
 struct hash *mmHash = newHash(0);	/* Hash of machines. */
 struct multiMachine *mmList = NULL, *mm;
 
@@ -1922,7 +1930,7 @@ startupTime = now;
 
 /* Find name and IP address of our machine. */
 hubHost = getMachine();
-logOpen("paraHub", optionVal("logFacility", NULL));
+logOpenSyslog("paraHub", optionVal("logFacility", NULL));
 logInfo("Starting paraHub on %s\n", hubHost);
 
 /* Set up various lists. */
@@ -2015,7 +2023,7 @@ void notGoodSubnet(char *sns)
 /* Complain about subnet format. */
 {
 errAbort("'%s' is not a properly formatted subnet.  Subnets must consist of\n"
-         "one to three dot-separated numbers between 0 and 255\n");
+         "one to three dot-separated numbers between 0 and 255\n", sns);
 }
 
 void fillInSubnet()

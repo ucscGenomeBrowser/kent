@@ -7,7 +7,8 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 A = hgGene
 
 O = hgGene.o altSplice.o domains.o flyBaseInfo.o go.o links.o microarray.o \
-    method.o mrnaDescriptions.o pathways.o rnaStructure.o sequence.o sgd.o swissProtComments.o
+    method.o localization.o mrnaDescriptions.o pathways.o rnaStructure.o \
+    sequence.o swissProtComments.o
 
 include ../../inc/cgi_build_rules.mk
 

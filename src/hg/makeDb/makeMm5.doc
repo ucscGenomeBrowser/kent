@@ -3712,6 +3712,7 @@ rm -fr /tmp/${root1}_${root2}
 $(root2) {check out line+ bacEnds.out/$(root2)/$(root1).$(root2).psl}
 #ENDLOOP
 '_EOF_'
+    # << this line keeps emacs coloring happy
     #ls -1S /iscratch/i/mm5/bacEnds/BACends???.fa > bacEnds.lst
     ls -1S /scratch/mus/mm5/bacEnds/BACends???.fa > bacEnds.lst
     mkdir bacEnds.out
@@ -3856,6 +3857,7 @@ skipped, 4519 warning(s) loading psl.tab
 # 541027882 bases of 2615483787 (20.686%) in intersection
 # featureBits mm4 bacEndPairsBad
 # 1074505863 bases of 2627444668 (40.895%) in intersection
+
 
 # BLASTZ FUGU (FR1) (WORKING 7/28/04 kate)
     # Using Angie's hg17/fugu as a model
@@ -4499,6 +4501,7 @@ cat > split.csh << 'EOF'
     ssh kkr1u00
     iSync
 
+
 # LOAD GENEID GENES (DONE 8/2/04 Fan)
     # reloaded 3/16/04 with -gtf instead of -exon=CDS (nec. now! for stop_codon)
     mkdir -p /cluster/data/mm5/bed/geneid/download
@@ -4515,8 +4518,9 @@ http://genome.imim.es/genepredictions/M.musculus/mmMay2004/geneid_v1.2/$chr.prot
       perl -wpe 's/^(>chr\w+)$/$1.1/' $f > $f:r-fixed.prot
     end
     cd ..
-    ldHgGene -gtf mm5 geneid download/*.gtf
+    ldHgGene -genePredExt -gtf mm5 geneid download/*.gtf
     hgPepPred mm5 generic geneidPep download/*-fixed.prot
+
 
 # PRODUCING GENSCAN PREDICTIONS (DONE 08-03-04 Fan)
     ssh hgwdev
@@ -4577,7 +4581,410 @@ tmp=/tmp -window=1200000
     # Load into the database as so:
     ssh hgwdev
     cd /cluster/data/mm5/bed/genscan
-    ldHgGene mm5 genscan genscan.gtf
+    ldHgGene mm5 -genePredExt genscan genscan.gtf
     hgPepPred mm5 generic genscanPep genscan.pep
     hgLoadBed mm5 genscanSubopt genscanSubopt.bed
 
+
+# MITOPRED DATA FOR HGGENE (DONE 8/10/04 angie)
+    ssh hgwdev
+    mkdir /cluster/data/mm5/bed/mitopred
+    cd /cluster/data/mm5/bed/mitopred
+    wget http://mitopred.sdsc.edu/data/mus_30.out
+    perl -wpe 's/^(\S+)\s+\S+\s+(.*)/$1\t$2/' mus_30.out > mitopred.tab
+    cat > mitopred.sql << '_EOF_'
+# Prediction of nuclear-encoded mito. proteins from http://mitopred.sdsc.edu/
+CREATE TABLE mitopred (
+    name varchar(10) not null,      # SwissProt ID
+    confidence varchar(8) not null, # Confidence level
+              #Indices
+    PRIMARY KEY(name(6))
+);
+'_EOF_'
+    # << this line makes emacs coloring happy
+    hgsql mm5 < mitopred.sql
+    hgsql mm5 -e 'load data local infile "mitopred.tab" into table mitopred'
+
+# STS MARKERS TRACK (DONE - 2004-08-11- Fan)
+
+    ssh kksilo
+    mkdir -p /cluster/data/mm5/bed/STSmarkers/downloads
+    cd /cluster/data/mm5/bed/STSmarkers/downloads
+    # these files appear to be new almost every day
+    wget --timestamping \
+	ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_mouse.sts
+    wget --timestamping \
+	ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS.aliases
+
+    # these map files appear to be old, 2002 Data
+    wget --timestamping \
+ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
+    #	Picks up files:
+    #	345184 Feb 20  2002 10090.MGD.txt
+    #	173294 Jun 27  2002 10090.WI_Mouse_Genetic.txt
+    #	240637 Jun 27  2002 10090.WI_Mouse_YAC.txt
+    #	390088 Jun 27  2002 10090.Whitehead-MRC_RH.txt
+    # If these files have not been changing, then no need to worry about
+    #	them.  We are just picking them up to see if they have changed
+    #	since the last time we worked on this.
+
+    # these reports from jax.org appear to be changing daily
+    wget --timestamping \
+	ftp://ftp.informatics.jax.org/pub/reports/MRK_Dump2.rpt
+    wget --timestamping \
+	ftp://ftp.informatics.jax.org/pub/reports/MRK_Sequence.rpt
+    wget --timestamping \
+	ftp://ftp.informatics.jax.org/pub/reports/PRB_PrimerSeq.rpt
+
+    # compare them with previous versions.  Before this these were
+    #	in /cluster/store5/mouseMarker/orig
+    # these newly picked up files:
+    sum -r 10090*
+# 48882   338 10090.MGD.txt
+# 24176   381 10090.Whitehead-MRC_RH.txt
+# 62367   170 10090.WI_Mouse_Genetic.txt
+# 50616   235 10090.WI_Mouse_YAC.txt
+    sum -r *.rpt
+# 21267  4442 MRK_Dump2.rpt
+# 51274  3743 MRK_Sequence.rpt
+# 35293  2315 PRB_PrimerSeq.rpt
+    sum -r UniSTS*
+# 40884 10502 UniSTS.aliases
+# 14407  2931 UniSTS_mouse.sts
+
+# the previous copies
+    cd /cluster/store5/mouseMarker/orig
+    sum -r 10090*
+# 48882   338 10090.MGD.txt
+# 24176   381 10090.Whitehead-MRC_RH.txt
+# 62367   170 10090.WI_Mouse_Genetic.txt
+# 50616   235 10090.WI_Mouse_YAC.txt
+    sum -r *.rpt
+# 36880  4160 MRK_Dump2.rpt
+# 02447  3132 MRK_Sequence.rpt
+# 57914  2220 PRB_PrimerSeq.rpt
+    sum -r UniSTS*
+# 36201  8843 UniSTS.aliases
+# 58524   970 UniSTS_mouse.alias
+# 42464  2291 UniSTS_mouse.sts
+
+    # back to our work area, update the bed file
+    #	to do this we need a new UniSTS_mouse.alias file
+    # it is created by a combination of information from several
+    # of the above files ! AND ! the previous stsInfoMouse.bed file
+
+    cp /cluster/data/mm4/bed/STSmarkers/downloads/*.sh . –p
+    cp /cluster/data/mm4/bed/STSmarkers/downloads/*.pl . -p
+
+    #	This process has been captured in the script:
+    #	/cluster/data/mm5/bed/STSmarkers/downloads/fetchAllAliases.sh
+    # which uses a couple of perl scripts in that same directory.
+    # briefly it is:
+    
+    # cd /cluster/data/mm5/bed/STSmarkers/downloads
+    # ./UniSTSParse.pl UniSTS_mouse.sts UniSTS.aliases > UniSTS_mouse_alias.0
+    # grep MGI: UniSTS.aliases > MGI.aliases
+    # ./stsInfoMouseParse.pl /cluster/store5/mouseMarker/stsInfoMouse.bed > \
+    #	stsInfoAliases.txt
+    # ./UniSTSParse.pl stsInfoAliases.txt UniSTS.aliases > stsInfo.aliases
+    # cat UniSTS_mouse_alias.0 MGI.aliases stsInfo.aliases | sort -u \
+    #    | sort -n > UniSTS_mouse.alias
+
+    /cluster/data/mm5/bed/STSmarkers/downloads/fetchAllAliases.sh
+
+    # with that, we can create a new stsInfoMouse.bed file:
+    bash
+    cd /cluster/data/mm5/bed/STSmarkers
+    /cluster/store5/mouseMarker/code/updateBed.pl \
+	/cluster/store5/mouseMarker/stsInfoMouse.bed \
+	downloads/MRK_Dump2.rpt downloads/PRB_PrimerSeq.rpt \
+	downloads/MRK_Sequence.rpt downloads/UniSTS_mouse.alias \
+	downloads/UniSTS_mouse.sts | sed -e "s/\t*$//" > newbedfile
+
+    # Yontao updated /cluster/store5/mouseMarker/code/cleanInfo.pl 8/10/04
+    /cluster/store5/mouseMarker/code/cleanInfo.pl newbedfile > stsInfoMouse.bed
+
+    # comparing to Mm4, this file was used there:
+    # /cluster/store6/mm4/bed/STSmarkers
+    # a wc of it shows:
+    # 56406  786036 6425721 stsInfoMouse.bed
+    # Now we have:
+    # 58488  790056 6602318 stsInfoMouse.bed
+
+    # and from that, create new primer fa, epcr, etc:
+    /cluster/store5/mouseMarker/code/luConvertPrimerToFa \
+	stsInfoMouse.bed mouseP.fa mouseC.fa mouseP.info
+    # the mouseC.fa file will be empty
+    wc mouse?.*
+    #      0       0       0 mouseC.fa
+    # 286931  286877 6480106 mouseP.fa
+    #  32226  161206 2044370 mouseP.info
+
+    # the equivalent Mm4 versions:
+    #      0       0       0 mouseC.fa
+    # 258307  258245 5815248 mouseP.fa
+    # 29906  149545 1890926 mouseP.info
+
+    #	copy the primers over to the bluearc for the kluster run
+    cp -p mouseP.fa /cluster/bluearc/scratch/mus/mm5
+    cp -p mouseP.info /cluster/bluearc/scratch/mus/mm5
+
+
+#  CLUSTER RUN FOR THE STS PRIMERS
+
+    ssh kk
+    mkdir -p /cluster/data/mm5/bed/STSmarkers/primer
+    mkdir -p /cluster/data/mm5/bed/STSmarkers/ePCR
+    cd /cluster/data/mm5/bed/STSmarkers/primer
+    # the mouseP.fa comes from above
+    echo "/cluster/bluearc/scratch/mus/mm5/mouseP.fa" > primers.lst
+    # PLEASE NOTE /cluster/bin/i386/blat.2 SPECIFICALLY IS USED HERE. 
+    cat << '_EOF_' > template
+#LOOP
+/cluster/bin/i386/blat.2 $(path1) $(path2) -ooc=/scratch/hg/h/mouse11.ooc  -
+minMatch=1 -minScore=0 -minIdentity=80 -oneOff {check out line+ 
+primers.out/$(root1).psl}
+#ENDLOOP
+'_EOF_'
+    mkdir primers.out
+    /cluster/bin/scripts/splitContigList -mouse -scratch \
+	/cluster/bluearc/scratch/mus/mm5/maskedContigs 1
+    /cluster/bin/i386/gensub2 contig.lst primers.lst template jobList
+    para create jobList
+    para try
+    para check
+    para push
+    ... etc ...
+
+# During this cluster run, 2 jobs lasted more than an hour without an error.
+# ssh to the node and see no job running under my name.  So para stop
+# and para push again.  Then 2 jobs finished successfully.
+
+# Completed: 639 of 639 jobs
+# CPU time in finished jobs:     337462s    5624.36m    93.74h    3.91d  0.011 y
+# IO & Wait Time:                  4925s      82.09m     1.37h    0.06d  0.000 y
+# Average job time:                 536s       8.93m     0.15h    0.01d
+# Longest job:                      767s      12.78m     0.21h    0.01d
+# Submission to last job:          6686s     111.43m     1.86h    0.08d
+
+
+    # on the file server
+    ssh kksilo
+    cd /cluster/data/mm5/bed/STSmarkers/primer
+    /cluster/bin/i386/pslSort dirs primers.psl temp primers.out
+    rmdir temp
+
+    # comparing results to Mm4:
+    wc primers.psl
+    # 5718412 120086591 590633130 primers.psl
+    # Mm4 wc primers.psl /cluster/data/mm4/bed/STSmarkers/primer/primers.psl
+    # 5745617 120657896 592135728 primers.psl
+
+    # another kluster run
+    ssh kk
+    cd /cluster/data/mm5/bed/STSmarkers/ePCR
+    ls -1S /cluster/bluearc/scratch/mus/mm5/maskedContigs > contig.lst
+    mkdir epcr.out
+    cat << '_EOF_' > template
+#LOOP
+/cluster/bin/scripts/luRunEpcr $(path1) $(path2) epcr.out/$(num2).epcr
+#ENDLOOP
+'_EOF_'
+    # the mouseP.info was created above
+    echo "/cluster/bluearc/scratch/mus/mm5/mouseP.info" > epcr.lst
+    gensub2 epcr.lst contig.lst template jobList
+    para create jobList
+    para try
+    para check
+    para push
+    ... etc ...
+Completed: 639 of 639 jobs
+CPU time in finished jobs:     145313s    2421.88m    40.36h    1.68d  0.005 y
+IO & Wait Time:                 12241s     204.02m     3.40h    0.14d  0.000 y
+Average job time:                 247s       4.11m     0.07h    0.00d
+Longest job:                      356s       5.93m     0.10h    0.00d
+Submission to last job:         16289s     271.48m     4.52h    0.19d
+
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/STSmarkers/ePCR
+    # all those results become all.epcr
+    cat epcr.out/*.epcr > all.epcr
+    # comparing results to Mm4:
+
+    wc /cluster/store6/mm5/bed/STSmarkers/ePCR/*.epcr
+    # 55652  222608 2944329 /cluster/store6/mm5/bed/STSmarkers/ePCR/all.epcr
+    wc /cluster/store6/mm4/bed/STSmarkers/ePCR/*.epcr
+    # 74705  298820 3971712 /cluster/store6/mm4/bed/STSmarkers/ePCR/all.epcr
+
+    cd /cluster/data/mm5/bed/STSmarkers/primer
+
+    /cluster/bin/scripts/filterSTSPrimers \
+    -mouse ../stsInfoMouse.bed primers.psl \
+        ../mouseP.info ../ePCR/all.epcr > primers.psl.filter.blat
+
+    #  The output should show an increasing count:
+    #	Reading name info
+    #	Reading primer info
+    #	Processing file
+    #	100000
+    #	200000
+    #	300000
+    #	...
+    #	5700000
+    #	Determining ePCR not found
+    #
+    wc primers.psl.filter.blat
+    # 33443  702303 3439026 primers.psl.filter.blat
+
+    # Mm4:  wc primers.psl.filter.blat
+    # 32729  687309 3331894 primers.psl.filter.blat
+
+    # create accession_info.rdb  (chrM added to Terry's script for mouse)
+    touch empty_sequence.inf
+    /cluster/bin/scripts/compileAccInfo -mouse \
+	/cluster/data/mm5 empty_sequence.inf
+    # works with two seemingly errors:
+    # cat: /cluster/data/mm5/11/chr11_random.agp: No such file or directory
+    # cat: /cluster/data/mm5/M/chrM_random.agp: No such file or directory
+    mv accession_info.rdb accession_info.rdb.tmp
+    /cluster/bin/scripts/sorttbl Chr Ord Start < accession_info.rdb.tmp > 
+accession_info.rdb
+    rm accession_info.rdb.tmp
+    # comparing results to Mm4:
+    #  Mm5 wc accession_info.rdb
+    # 131845 1450299 9681940 accession_info.rdb
+    #  Mm4 wc accession_info.rdb
+    #  86935  956289 6374930 accession_info.rdb
+
+    # wc /cluster/data/mm4/?/*.agp /cluster/data/mm4/??/*.agp
+    # 219652 1885501 11875772 total
+    # wc /cluster/data/mm5/?/*.agp /cluster/data/mm5/??/*.agp
+    # 252515 2152346 13568720 total
+
+    # creates epcr.not.found.nomatch and epcr.not.found.psl
+    /cluster/bin/scripts/epcrToPsl -mouse \
+	epcr.not.found ../mouseP.info \
+	accession_info.rdb /cluster/data/mm5
+    # Comparing results to Mm4:
+    # Mm5 wc epcr*
+    # 463    1852   17080 epcr.not.found
+    #  61     732    5845 epcr.not.found.nomatch
+    # 402    8442   39007 epcr.not.found.psl
+
+    # Mm4 wc epcr*
+    # 328    1312   12011 epcr.not.found
+    #  57     684    5474 epcr.not.found.nomatch
+    # 266    5586   25711 epcr.not.found.psl
+
+    # there is a single error being propagated here from the file
+    # /cluster/store5/mouseMarker/stsInfoMouse.bed which has an error
+    # at line 53958:
+62943   D2J3    91947   D2J3                            CAACCAGCTCAC    
+CAACCAGCTCAC    1825, 1025BP    0       MUS MUSCULUS
+    # The value '1825,' is incorrect.  Should be a small integer here.
+    # to work around this problem, I'm manually eliminating this problem
+    # from the epcr.not.found.psl file where it has now become four bad
+    # lines:
+# 24    0       0       0       1       1801    1       1789    +       27119   
+1825    0       1825chr11_16 0       1115413 1117226 2       12,12,  0,1813, 
+1115413,1117214,
+# 24    0       0       0       1       1801    1       1789    +       27119   
+1825    0       1825chr11_16 0       1115413 1117226 2       12,12,  0,1813, 
+1115413,1117214,
+216a219,220
+# 24    0       0       0       1       1801    1       1789    +       62943   
+1825,   0       1825,chr11_16        0       1115413 1117226 2       12,12,  
+0,1813, 1115413,1117214,
+# 24    0       0       0       1       1801    1       1789    +       62943   
+1825,   0       1825,chr11_16        0       1115413 1117226 2       12,12,  
+0,1813, 1115413,1117214,
+    # taking those two lines out. 
+    
+    cat primers.psl.filter.blat epcr.not.found.psl > primers.psl.filter
+
+    # lift those primers  (added chrM to this lifter script for mouse)
+    # creates primers.psl.filter.lifted
+    /cluster/bin/scripts/lifter -mouse -psl \
+	/cluster/data/mm5 primers.psl.filter
+    # wc primers.psl.filter.lifted
+    # 33658  706818 3597637 primers.psl.filter.lifted
+
+
+    # create primers.psl.filter.lifted.initial
+	PATH=/cluster/bin/scripts:$PATH \
+	/cluster/bin/scripts/extractPslInfo \
+	primers.psl.filter.lifted
+    #	wc primers.psl.filter.lifted.initial
+    # 33656  201936 1797311 primers.psl.filter.lifted.initial
+
+    # create primers.psl.filter.lifted.initial.acc
+    /cluster/bin/scripts/findAccession -agp \
+	-mouse primers.psl.filter.lifted.initial /cluster/data/mm5
+    # wc primers.psl.filter.lifted.initial.acc
+    # 33656  235592 2155975 primers.psl.filter.lifted.initial.acc
+
+    # this needs to be -rat as that specifies how to scan the
+    # stsInfoMouse.bed file and it does not work if you use -mouse
+    /cluster/bin/scripts/getStsId -rat \
+	../stsInfoMouse.bed  primers.psl.filter.lifted.initial.acc \
+	> primers.initial.acc.trans
+    # wc primers.initial.acc.trans
+    # 33656  235592 1833074 primers.initial.acc.trans
+
+    sort -k 4n primers.initial.acc.trans > primers.final
+    rm primers.psl.filter.lifted.initial.acc primers.initial.acc.trans
+    # comparing results to Mm4:
+    # Mm5 wc primers.final
+    # 33656  235592 1833074 primers.final
+    # Mm4 wc primers.final
+    # 32983  230881 1771293 primers.final
+
+    cd /cluster/data/mm5/bed/STSmarkers
+    # stsMarkers.final is empty for mouse
+    touch stsMarkers.final dummy
+    PATH=/cluster/bin/scripts:$PATH \
+    /cluster/bin/scripts/combineSeqPrimerPos \
+	stsMarkers.final primer/primers.final > stsMarkers_pos.rdb
+    # Comparing results to Mm4
+    # Mm5 wc stsMarkers_pos.rdb
+    # 32052  224364 1861295 stsMarkers_pos.rdb
+    # Mm4 wc stsMarkers_pos.rdb
+    # 31270  218890 1869417 stsMarkers_pos.rdb
+
+    /projects/cc/hg/ytlu/bin/script/perl/createStsBed \
+	stsInfoMouse.bed  stsMarkers_pos.rdb 500 > stsMapMouse.bed
+    # wc stsMapMouse.bed
+    # 29037  307015 2257098 stsMapMouse.bed
+
+#  loading STS markers tables
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/STSmarkers
+    cp –p /cluster/store6/mm4/bed/STSmarkers/ucscAlias.pl .
+    bash
+    ./ucscAlias.pl stsInfoMouse.bed > ucscStsAlias.tab 2> ucscStsAlias.warnings
+     
+    # wc ucscStsAlias.tab
+    # 126646  379926 3037992 ucscStsAlias.tab
+    hgsql -e "drop table stsAlias;" mm5
+    hgsql mm5 < ~/kent/src/hg/lib/stsAlias.sql
+    hgsql -e \
+	'load data local infile "ucscStsAlias.tab" into table stsAlias;' mm5
+    hgsql -e "drop table stsMapMouseNew;" mm5
+    hgsql mm5 < ~/kent/src/hg/lib/stsMapMouseNew.sql
+    hgsql -e \
+'load data local infile "stsMapMouse.bed" into table stsMapMouseNew;' mm5
+    hgsql -e "drop table stsInfoMouseNew;" mm5
+    hgsql mm5 < ~/kent/src/hg/lib/stsInfoMouseNew.sql
+    hgsql -e \
+     'load data local infile "stsInfoMouse.bed" into table stsInfoMouseNew;' mm5
+
+    hgLoadPsl -nobin -table=all_sts_primer mm5 primer/primers.psl.filter.lifted
+
+    # load primer sequences	
+    mkdir /gbdb/mm5/stsMarker
+    ln -s /cluster/data/mm5/bed/STSmarkers/mouseP.fa \
+	/gbdb/mm5/stsMarker/mouseP.fa
+    hgLoadSeq mm5 /gbdb/mm5/stsMarker/mouseP.fa
+#  Adding /gbdb/mm5/stsMarker/mouseP.fa
+#  32226 sequences
+   # DONE - 2004-08-11 11:54

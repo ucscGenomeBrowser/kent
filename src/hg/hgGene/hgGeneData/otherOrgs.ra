@@ -25,7 +25,7 @@ url http://www.ensembl.org/Danio_rerio/protview?peptide=%s
 priority 30
 
 name drosophila
-shortLabel Drosophila
+shortLabel D. melanogaster
 tables dmBlastTab
 idSql select target from dmBlastTab where query = '%s'
 url http://flybase.bio.indiana.edu/cgi-bin/fbidq.html?%s
@@ -39,7 +39,7 @@ url http://www.wormbase.org/db/gene/gene?name=%s
 priority 50
 
 name yeast
-shortLabel Saccharomyces cerevisiae
+shortLabel S. cerevisiae
 tables scBlastTab
 idSql select target from scBlastTab where query = '%s'
 url http://db.yeastgenome.org/cgi-bin/SGD/locus.pl?locus=%s

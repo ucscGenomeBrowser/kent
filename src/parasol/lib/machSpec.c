@@ -13,9 +13,6 @@ void machSpecStaticLoad(char **row, struct machSpec *ret)
 /* Load a row from machSpec table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
-
 ret->name = row[0];
 ret->cpus = sqlSigned(row[1]);
 ret->ramSize = sqlSigned(row[2]);
@@ -30,8 +27,6 @@ struct machSpec *machSpecLoad(char **row)
  * from database.  Dispose of this with machSpecFree(). */
 {
 struct machSpec *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->name = cloneString(row[0]);
@@ -95,7 +90,6 @@ struct machSpec *machSpecCommaIn(char **pS, struct machSpec *ret)
  * return a new machSpec */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -140,7 +134,6 @@ for (el = *pList; el != NULL; el = next)
 void machSpecOutput(struct machSpec *el, FILE *f, char sep, char lastSep) 
 /* Print out machSpec.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);

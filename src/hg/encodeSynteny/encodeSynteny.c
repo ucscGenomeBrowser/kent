@@ -193,7 +193,7 @@ printColumnSeparator();
 void summarizeRegions()
 {
 int assemblyCount = 4;
-//char *assembly[6] = {"mm3", "rn3", "panTro1", "danRer1", "galGal2", "fr1"};
+/*char *assembly[6] = {"mm3", "rn3", "panTro1", "danRer1", "galGal2", "fr1"}; */
 char  *assembly[4] = {"mm3", "rn3", "panTro1", "galGal2"};
 char   where[256], query[1024], diff[2048], buf[2048];
 char   spacer[]= "<BR>\n          ";
@@ -219,10 +219,10 @@ for (i=0; i < assemblyCount; i++)
 	cr=NULL;
 	crList=NULL;
 
-	// 1: print row start, region name, and hg16 size
+	/* 1: print row start, region name, and hg16 size */
 	printRowAndRegion(assembly[i], region);
 
-	// 2: print LiftOver regions
+	/* 2: print LiftOver regions */
 	safef(where, sizeof(where), " where name = '%s'", region->name);
 	liftOver = getNamedRegions(assembly[i], "encodeRegions", where);
 	if (liftOver == NULL)
@@ -244,7 +244,7 @@ for (i=0; i < assemblyCount; i++)
 	    }
 	printColumnSeparator();
 
-	// 3: print Mercator regions
+	/* 3: print Mercator regions */
 	if (printMercatorSegments)
 	    {
 	    safef(where, sizeof(where), " where name like '%s%%'", region->name);
@@ -256,7 +256,7 @@ for (i=0; i < assemblyCount; i++)
 	    printColumnSeparator();
 	    }
 
-	// 4: print Mercator summary (and get differences)
+	/* 4: print Mercator summary (and get differences) */
 	meSummary = getMercatorRegions(assembly[i], region->name);
 
 	ZeroVar(mStartDiffs);
@@ -266,7 +266,7 @@ for (i=0; i < assemblyCount; i++)
 	for (mes = meSummary; mes != NULL; mes = mes->next)
 	    {
 	    printLink(assembly[i],mes->chrom,mes->chromStart,mes->chromEnd,"blue");
-	    // save the start difference
+	    /*  save the start difference */
 	    if (mes->diffStart==999999999)
 		safef(diff, sizeof(diff), "<FONT color=black>(null)</FONT>");
 	    else if (mes->diffStart==0)
@@ -289,7 +289,7 @@ for (i=0; i < assemblyCount; i++)
 		      URL,assembly[i],mes->chrom,newStart,newEnd,options,mes->diffStart);
 		}
 	    dyStringAppend(mStartDiffs, diff);
-	    // save the end difference
+	    /* save the end difference */
 	    if (mes->diffEnd==999999999)
 		safef(diff, sizeof(diff), "<FONT color=black>(null)</FONT>");
 	    else if (mes->diffEnd==0)
@@ -312,13 +312,13 @@ for (i=0; i < assemblyCount; i++)
 		      URL,assembly[i],mes->chrom,newStart,newEnd,options,mes->diffEnd);
 		}
 	    dyStringAppend(mEndDiffs, diff);
-	    // append spacer if needed
+	    /* append spacer if needed */
 	    if (mes->next != NULL)
 		{
 		dyStringAppend(mStartDiffs, spacer);
 		dyStringAppend(mEndDiffs, spacer);
 		}
-	    // if chrom exists, update coords.  Otherwise, store new consensusRegion
+	    /* if chrom exists, update coords.  Otherwise, store new consensusRegion */
 	    for (cr=crList; cr!=NULL; cr=cr->next)
 		{
 		if (sameWord(cr->chrom, mes->chrom))
@@ -349,7 +349,7 @@ for (i=0; i < assemblyCount; i++)
 	slReverse(&crList);
 	printf("        </TD>\n        <TD NOWRAP ALIGN=\"RIGHT\">\n");
 
-	// 5 and 6: print MeStart-LoStart and MeEnd-LoEnd
+	/* 5 and 6: print MeStart-LoStart and MeEnd-LoEnd */
 	if (mStartDiffs->string==NULL)
 	    {
 	    printf("          <FONT color=red>%s</FONT>\n", mStartDiffs->string);
@@ -364,7 +364,7 @@ for (i=0; i < assemblyCount; i++)
 	    }
 	    printColumnSeparator();
 
-	// 7: print Consensus Ranges (and get sizes)
+	    /* 7: print Consensus Ranges (and get sizes) */
 	if (crList==NULL)
 	    printf("          <FONT color=red>(null)</FONT> \n");
 	for (cr=crList; cr!=NULL; cr=cr->next)
@@ -376,7 +376,7 @@ for (i=0; i < assemblyCount; i++)
 	    }
 	printColumnSeparator();
 
-	// 8: print Consensus Sizes
+	/* 8: print Consensus Sizes */
 	if (crList==NULL)
 	    printf("          <FONT color=red>(null)</FONT> \n");
 	for (cr=crList; cr!=NULL; cr=cr->next)
@@ -388,7 +388,7 @@ for (i=0; i < assemblyCount; i++)
 	    }
 	printColumnSeparator();
 
-	// 9: print Notes
+	/* 9: print Notes */
 	if (crList==NULL)
 	    printf("          No notes. \n");
 	for (cr=crList; cr!=NULL; cr=cr->next)

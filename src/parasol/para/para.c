@@ -1133,7 +1133,6 @@ time_t now = time(NULL);
 struct hash *resultsHash;
 
 markQueuedJobs(db);
-markRunJobStatus(db);
 resultsHash = markRunJobStatus(db);
 printf(jobStatusHdr);
 for (job = db->jobList; job != NULL; job = job->next)

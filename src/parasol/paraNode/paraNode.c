@@ -20,6 +20,7 @@
 #include "rudp.h"
 #include "paraMessage.h"
 #include "internet.h"
+#include "log.h"
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -41,16 +42,16 @@ errAbort("paraNode - parasol node serve.\n"
          "usage:\n"
 	 "    paraNode start\n"
 	 "options:\n"
-	 "    logFacility=facility log to the specified syslog facility.\n"
-	 "    hub=host - restrict access to connections from hub\n"
-	 "    umask=000 - set umask to run under, default 002\n"
-	 "    userPath=bin:bin/i386 User dirs to add to path\n"
-	 "    sysPath=/sbin:/local/bin System dirs to add to path\n"
-	 "    randomDelay=N - Up to this many milliseconds of random delay before\n"
+	 "    -logFacility=facility log to the specified syslog facility - default local0.\n"
+	 "    -hub=host - restrict access to connections from hub\n"
+	 "    -umask=000 - set umask to run under, default 002\n"
+	 "    -userPath=bin:bin/i386 User dirs to add to path\n"
+	 "    -sysPath=/sbin:/local/bin System dirs to add to path\n"
+	 "    -randomDelay=N - Up to this many milliseconds of random delay before\n"
 	 "        starting a job.  This is mostly to avoid swamping NFS with\n"
 	 "        file opens when loading up an idle cluster.  Also it limits\n"
 	 "        the impact on the hub of very short jobs. Default is 5000\n"
-	 "    cpu=N - Number of CPUs to use.  Default 1\n");
+	 "    -cpu=N - Number of CPUs to use.  Default 1\n");
 }
 
 /* Command line overwriteable variables. */
@@ -137,7 +138,7 @@ struct hash *environToHash(char **env)
 /* Put environment into hash. */
 {
 struct hash *hash = newHash(7);
-char *name, *val, *s, *e;
+char *name, *val, *s;
 while ((s = *env++) != NULL)
     {
     name = cloneString(s);
@@ -355,7 +356,6 @@ else
      * main process. */
     int status = -1;
     int cid;
-    int sd;
     struct paraMessage pm;
     struct rudp *ru = NULL;
     struct tms tms;
@@ -548,7 +548,6 @@ else
 	    {
 	    if (busyProcs < maxProcs)
 		{
-		char *exe;
 		int childPid;
 		argCount = chopLine(rjm.command, args);
 		if (argCount >= ArraySize(args))
@@ -605,7 +604,7 @@ void doFetch(char *line)
 {
 char *user = nextWord(&line);
 char *fileName = nextWord(&line);
-if (fileName != NULL)
+if ((user == NULL) || (fileName != NULL))
     {
     FILE *f = fopen(fileName, "r");
     pmClear(&pmIn);
@@ -682,7 +681,6 @@ pmSend(&pmIn, mainRudp);
 void listJobs()
 /* Report jobs running and recently finished. */
 {
-struct paraMessage pm;
 struct job *job;
 struct dlNode *node;
 
@@ -719,7 +717,6 @@ void paraNode()
 /* paraNode - a net server. */
 {
 char *line;
-int fromLen, readSize;
 char *command;
 struct sockaddr_in sai;
 
@@ -797,7 +794,7 @@ void paraFork()
  * Set up log file if any here as well. */
 {
 /* Set up log handler. */
-logOpen("paraNode", optionVal("logFacility", NULL));
+logOpenSyslog("paraNode", optionVal("logFacility", NULL));
 
 /* Close standard file handles. */
 close(0);

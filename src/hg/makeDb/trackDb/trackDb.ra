@@ -66,6 +66,7 @@ group map
 priority 9
 visibility hide
 color 150,0,0
+type ctgPos
 
 track gold
 shortLabel Assembly 
@@ -110,6 +111,7 @@ longLabel Clone Coverage/Fragment Position
 group map
 visibility hide
 altColor 180,180,180 
+type clonePos
 
 track bacEndPairs
 shortLabel BAC End Pairs
@@ -718,6 +720,7 @@ useScore 1
 color 255,64,64
 type bed 8
 url http://www.sanger.ac.uk/cgi-bin/Rfam/mirna/mirna_entry.pl?id=$$
+urlLabel miRNA Registry: 
 
 track cpgIsland
 shortLabel CpG Islands
@@ -1242,13 +1245,14 @@ colorChromDefault off
 type psl protein
 
 track blastDm1FB
-shortLabel Drosophila Proteins
-longLabel Drosophila Proteins
+shortLabel D. mel. Proteins
+longLabel D. melanogaster Proteins
 group compGeno
-priority 142
-visibility pack
+priority 112
+visibility hide
 colorChromDefault off
 type psl protein
+pred dm1.blastFBPep00
 
 track blastHg16KG
 shortLabel Human Proteins
@@ -1258,6 +1262,7 @@ priority 142
 visibility pack
 colorChromDefault off
 type psl protein
+pred hg16.blastKGPep00
 
 searchTable ctgPos
 searchMethod exact
@@ -1448,12 +1453,12 @@ searchPriority 50
 
 searchTable sgpGene
 searchType genePred
-termRegex chr[^_]+_(random_)?[0-9]+\.[0-9]+
+termRegex chr[^_]+_(random_|hla_hap[0-9]_)?[0-9]+\.[0-9]+
 searchPriority 50
 
 searchTable geneid
 searchType genePred
-termRegex chr[^_]+_(random_)?[0-9]+\.[0-9]+
+termRegex chr[^_]+_(random_|hla_hap[0-9]_)?[0-9]+\.[0-9]+
 searchPriority 50
 
 searchTable ECgene
@@ -1544,8 +1549,13 @@ searchType bed
 termRegex chr[0-9a-z_]+[.][0-9]+
 searchPriority 50
 
+searchTable blastDm1FB
+searchType bed
+query select tName,tStart,tEnd,qName from %s where qName like '%%%s%%'
+searchPriority 25
+
 searchTable blastHg16KG
 searchType bed
 query select tName,tStart,tEnd,qName from %s where qName like '%%%s%%'
-searchPriority 50
+searchPriority 25
 

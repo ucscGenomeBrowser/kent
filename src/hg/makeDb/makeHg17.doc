@@ -327,10 +327,10 @@ done >> seq_contig.md
     # Enter hg17 into hgcentraltest.dbDb so test browser knows about it:
     hgsql -e 'INSERT INTO dbDb (name, description, nibPath, organism, \
 	defaultPos, active, orderKey, genome, scientificName, \
-	htmlPath, hgNearOk) \
+	htmlPath, hgNearOk, hgPbOk, sourceName) \
 	VALUES("hg17", "May 2004", "/gbdb/hg17/nib", "Human", \
 	"chr4:56214201-56291736", 1, 10, "Human", "Homo sapiens", \
-	"/gbdb/hg17/html/description.html", 0);' \
+	"/gbdb/hg17/html/description.html", 0, 0, "NCBI Build 35");' \
 	-h genome-testdb hgcentraltest
     # Make trackDb table so browser knows what tracks to expect:
     cd ~kent/src/hg/makeDb/trackDb
@@ -2078,7 +2078,7 @@ exit ${RET}
     iSync
   
 
-# PREP FOR LIFTOVER CHAINS TO hg17 (2004-06-10 kate)
+# PREP FOR LIFTOVER CHAINS TO THIS ASSEMBLY (2004-06-10 kate)
 
     # split into 3K chunks
     ssh eieio
@@ -2807,6 +2807,15 @@ cat > template << 'EOF'
 
     mkdir affyU95
     hgLoadPsl hg17 -table=affyU95 affyU95shortQname.psl
+    # sequences loaded 2004-08-06
+    hgLoadSeq -abbr=U95Av2: hg17 /gbdb/hgFixed/affyProbes/HG-U95Av2_all.fa
+    #	Advisory lock created
+    #	Creating .tab file
+    #	Adding /gbdb/hgFixed/affyProbes/HG-U95Av2_all.fa
+    #	12386 sequences
+    #	Updating seq table
+    #	Advisory lock has been released
+    #	All done
 
 # Load AFFYUCLANORM, extended version of affyUcla track. Hopefully
 # final freeze of data set.		(DONE - 2004-07-14 - Hiram)
@@ -5343,11 +5352,11 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     # Copy over & edit README.txt w/pointers to chain, net formats.
 
 
-# 8-WAY MULTIZ MULTIPLE ALIGNMENT WITH MM5 (WORKING 2004-07-13 kate)
+# 8-WAY MULTIZ MULTIPLE ALIGNMENT WITH MM5 (DONE 2004-07-13 kate)
     ssh eieio
     set multizDir = multiz.2004-07-13
     set workingDir = /cluster/bluearc/hg17/$multizDir
-    ln -s $workingDir /cluster/bluearc/hg17/multiz8way.mm5
+    ln -s $workingDir /cluster/bluearc/hg17/multiz8way
     mkdir -p $workingDir
     mkdir -p /cluster/data/hg17/bed/$multizDir
     cd /cluster/data/hg17/bed/$multizDir
@@ -5497,7 +5506,7 @@ mkdir -p $3:h
     cp $workingDir/maf/*.maf maf
 
 
-# PHYLO-HMM CONSERVATION FOR 8-WAY MM5 (WORKING 2004-07-20 kate)
+# PHYLO-HMM CONSERVATION FOR 8-WAY MM5 (DONE 2004-07-20 kate)
 
     ssh eieio
     set path = ($path /cluster/bin/phast)
@@ -5641,7 +5650,6 @@ rm $TMP/$root.pp
 	    -wibFile=PHASTCONS/wib/${chr}_multiz8wayCons stdin ;\
     done
 
-
     # load data for track name "multiz8way"
     ssh hgwdev
     cd /cluster/data/hg17/bed/multiz.2004-07-13/cons
@@ -5653,7 +5661,6 @@ rm $TMP/$root.pp
     ln -s `pwd`/PHASTCONS/wib/*.wib /gbdb/hg17/multiz8way/wib
     chmod 775 . PHASTCONS PHASTCONS/wib
     chmod 664 PHASTCONS/wib/*.wib
-# GOT HERE
     
     # load multiz maf tables 
     ssh hgwdev
@@ -6067,7 +6074,7 @@ TREE: ((((1:0.0056,2:0.0057):0.1043,(3:0.076303,4:0.083043):0.2753):0.4099,5:0.5
 
     #break up the genome-wide MAFs into pieces
     mkdir /cluster/bluearc/hg17/chrom
-    cd /cluster/data/hg17
+    nd /cluster/data/hg17
     foreach f (`cat chrom.lst`)
         echo $f
         cp $f/*.fa /cluster/bluearc/hg17/chrom
@@ -6718,6 +6725,7 @@ SEQ1_RMSK=
 # not used
 SEQ1_FLAG=
 SEQ1_SMSK=/iscratch/i/gs.18/build35/linSpecRep.notInRat
+# notInRat OK as it is identical to notInMouse
 SEQ1_IN_CONTIGS=0
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
@@ -6743,6 +6751,7 @@ SEQ1_LEN=$BASE/S1.len
 SEQ2_LEN=$BASE/S2.len
 '_EOF_'
     # << this line keeps emacs coloring happy
+
 
     # prepare first cluster run
     ssh kk
@@ -6918,6 +6927,7 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
     #	featureBits hg16 chainMm4
     #	2828363353 bases of 2865248791 (98.713%) in intersection
 
+
 # NET MM5 (DONE - 2004-07-02 - Hiram)
     ssh eieio
     cd /cluster/data/hg17/bed/blastz.mm5/axtChain
@@ -7086,6 +7096,25 @@ cat > makeMaf.csh << '_EOF_'
     hgsql hg17 < ~/kent/src/hg/lib/axtInfo.sql
     #	table axtInfo may already exist, ignore create error.
     hgsql hg17 < axtInfoInserts.sql
+
+
+# ADD CHAIN AND NET TO VSMM5 AND VSRN3 DOWNLOAD AREAS (DONE 8/5/04 angie)
+    ssh hgwdev
+    cp -p /cluster/data/hg17/bed/blastz.mm5/axtChain/all.chain.gz \
+      /usr/local/apache/htdocs/goldenPath/hg17/vsMm5/mouse.chain.gz
+    cp -p /cluster/data/hg17/bed/blastz.mm5/axtChain/mouse.net.gz \
+      /usr/local/apache/htdocs/goldenPath/hg17/vsMm5/mouse.net.gz
+    cd /usr/local/apache/htdocs/goldenPath/hg17/vsMm5
+    md5sum *.gz */*.gz > md5sum.txt
+    # Update the README.txt
+    cp -p /cluster/data/hg17/bed/blastz.rn3/axtChain/all.chain.gz \
+      /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/rat.chain.gz
+    cp -p /cluster/data/hg17/bed/blastz.rn3/axtChain/rat.net.gz \
+      /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/rat.net.gz
+    cd /usr/local/apache/htdocs/goldenPath/hg17/vsRn3
+    md5sum *.gz */*.gz > md5sum.txt
+    # Update the README.txt
+
 
 # SWAP BLASTZ ZEBRAFISH-HUMAN (danRer1-hg17) to HUMAN-ZEBRAFISH (hg17-danRer1)
 # USE RESCORED ALIGNMENTS (see makeDanRer1.doc)
@@ -7922,6 +7951,7 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
     nice rm -fr axtChain/n1 axtChain/hNoClass.net &
     nice gzip axtChrom/* pslChrom/* lav/*/* axtChain/all.chain axtChain/*.net &
 
+
 # CREATING BIG ZIPS (DONE - 2004-07-23 - Hiram)
     ssh eieio
     cd /cluster/data/hg17/jkStuff
@@ -7940,6 +7970,153 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
     featureBits hg17 refGene:upstream:5000 -fa=upstream5000.fa
     zip upstream5000.zip upstream5000.fa
     rm upstream5000.fa
+
+
+# ENCODE REGIONS (DONE 2004-07-28 kate)
+
+    ssh eieio
+    cd /cluster/data/hg17/bed
+    mkdir encodeRegions
+    cd encodeRegions
+    liftOver /cluster/data/hg16/bed/encodeRegions/encodeRegions.bed \
+        /cluster/data/hg16/bed/liftOver/hg16ToHg17.over.chain \
+                encodeRegions.bed encodeRegions.unmapped
+    wc -l encodeRegions.*
+    # 44 encodeRegions.bed
+    # 0 encodeRegions.unmapped
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/encodeRegions
+    hgLoadBed hg17 encodeRegions encodeRegions.bed -noBin
+
+
+# H-INVITATIONAL GENE ANNOTATION DATABASE (WORKING 2004-07-28 kate)
+    # http://www.jbirc.aist.go.jp/hinv/top.html
+    # Create knownGene table to reference HINV gene ID's
+    #  for link on knownGenes details page
+    # Also, create an HINV gene track
+
+    # download CDNA file release 1.5 -- got release # from downloads page).
+    ssh kksilo
+    mkdir -p /cluster/data/hinv
+    cd /cluster/data/hinv
+    wget http://www.jbirc.aist.go.jp/hinv/download/alldata/flatfile/FCDNA.gz
+    gunzip FCDNA.gz
+    mv FCDNA FCDNA.1.5
+
+    # set up assembly work area
+    ssh eieio
+    cd /cluster/data/hg17
+    mkdir -p bed/hinv
+    cd bed/hinv
+
+    # extract H-INV ID's and Genbank accessions of mRNAs
+    awk '/CDNA_ACCESSION-NO:/ {print $2}' < /cluster/data/hinv/FCDNA.1.5 \
+                                                        > accessions.txt
+    awk '/CDNA_H-INVITATIONAL-ID:/ {print $2}' < /cluster/data/hinv/FCDNA.1.5 \
+                                                        > ids.txt
+    paste accessions.txt ids.txt > queries.txt
+    wc -l ids.txt
+        #   41118 ids.txt
+
+    # create PSL file from alignments for these mRNA's, extracted from the 
+    #       table of all aligned mRNA's
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/hinv
+    hgsql hg17 -s -e "SELECT * FROM all_mrna"  | cut -f 2- > all_mrna.tab
+
+    ssh eieio
+    cd /cluster/data/hg17/bed/hinv
+    pslReps /dev/null stdout /dev/null | cat - all_mrna.tab > all_mrna.psl
+        # using pslReps to generate the PSL file header
+    ~kate/bin/i386/pslSelect -queryPairs=queries.txt all_mrna.psl hinv_mrna.psl
+        # NOTE: generated with pslSelect.c v1.3 (1.4 is broken -- test is
+        # setup in hg/pslSelect/tests & I requested Robert take a look)
+
+    # load track of mrna alignments
+    hgwdev
+    cd /cluster/data/hg17/bed/hinv
+    hgLoadPsl hg17 -table=HInvGeneMrna hinv_mrna.psl
+    hgsql hg17 -s -e \
+        "select distinct(qName) from HInvGeneMrna order by qName" > hg17.mrna
+    hgsql hg16 -s -e \
+        "select distinct(qName) from HInvGeneMrna order by qName" > hg16.mrna
+    wc -l hg*.mrna
+        # 40998 hg16.mrna
+        # 41023 hg17.mrna
+
+    comm -1 -3 *.mrna > hg17.aligned
+    wc -l hg17.aligned
+        # 29 (transcripts newly aligned in hg17)
+    comm -2 -3 *.mrna > hg16.aligned
+    wc -l hg16.aligned
+        # 4 (transcripts no longer aligned in hg17)
+    comm -2 -3 ids.txt hg17.mrna > hg17.notaligned
+    wc -l hg17.notaligned
+        # 95 (transcripts not aligned in hg17 -- checking on why...)
+
+    # also make a table with various useful items for each transcript
+    ssh hgwdev
+    hgsql hg17 < ~/kent/src/hg/lib/HInv.sql
+    cd /cluster/data/hg17/bed/hinv
+    /cluster/data/hinv/hinvToTable.pl < /cluster/data/hinv/FCDNA.1.5 > HInv.tab
+    echo 'load data local infile "HInv.tab" into table HInv' | hgsql hg17
+    hgsql hg16 -s -e "select count(*) from HInv"
+        # 41118
+    hgsql hg17 -s -e "select count(*) from HInv"
+        # 41118
+
+    # create table for knownGenes detail page
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/hinv
+    hgMapToGene hg17 HInvGeneMrna knownGene knownToHInv
+
+
+# GENEID GENE PREDICTIONS (DONE 7/30/04 angie)
+    ssh hgwdev
+    mkdir /cluster/data/hg17/bed/geneid
+    cd /cluster/data/hg17/bed/geneid
+    foreach chr (`awk '{print $1;}' ../../chrom.sizes`)
+      wget http://genome.imim.es/genepredictions/H.sapiens/golden_path_200405/geneid_v1.2/$chr.gtf
+      wget http://genome.imim.es/genepredictions/H.sapiens/golden_path_200405/geneid_v1.2/$chr.prot
+    end
+    # Add ".1" suffix to each item in .prot's, to match transcript_id's in gtf
+    cp /dev/null geneid.fa
+    foreach f (chr*.prot)
+      perl -wpe 's/^(>chr\S+)/$1.1/' $f >> geneid.fa
+    end
+    ldHgGene -gtf -genePredExt hg17 geneid *.gtf 
+    hgPepPred hg17 generic geneidPep geneid.fa
+
+
+# MITOPRED DATA FOR HGGENE (DONE 7/30/04 angie)
+    ssh hgwdev
+    mkdir /cluster/data/hg17/bed/mitopred
+    cd /cluster/data/hg17/bed/mitopred
+    wget http://mitopred.sdsc.edu/data/hum_30.out
+    perl -wpe 's/^(\S+)\s+\S+\s+(.*)/$1\t$2/' hum_30.out > mitopred.tab
+    cat > mitopred.sql << '_EOF_'
+# Prediction of nuclear-encoded mito. proteins from http://mitopred.sdsc.edu/
+CREATE TABLE mitopred (
+    name varchar(10) not null,      # SwissProt ID
+    confidence varchar(8) not null, # Confidence level
+              #Indices
+    PRIMARY KEY(name(6))
+);
+'_EOF_'
+    # << this line makes emacs coloring happy
+    hgsql hg17 < mitopred.sql
+    hgsql hg17 -e 'load data local infile "mitopred.tab" into table mitopred'
+
+
+# NUCLEAR PROTEIN DATABASE (IN PROGRESS 7/30/04 angie)
+    ssh eieio
+    mkdir /cluster/data/hg17/bed/npd
+    cd /cluster/data/hg17/bed/npd
+    wget ftp://ftp.hgu.mrc.ac.uk/pub/npd/database.zip
+    unzip database.zip
+    # OK, it's one big .mdb (Microsoft Access DB) file.  
+    # Googling... can buy a converter for $40... free trial .exe...
+
 
 # CREATING REFFULL (DONE - 2004-08-02 - Hiram)
 

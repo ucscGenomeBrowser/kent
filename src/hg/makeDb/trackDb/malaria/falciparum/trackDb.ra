@@ -1,6 +1,6 @@
 track gbCDS
-shortLabel Genbank CDS
-longLabel Genbank CDS gene annotation
+shortLabel GenBank CDS
+longLabel GenBank CDS gene annotation
 priority 14
 visibility dense
 color 150,0,0

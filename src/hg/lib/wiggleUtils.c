@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.17 2004/05/28 23:16:38 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.18 2004/08/05 22:49:00 hiram Exp $";
 
 static char *currentFile = (char *) NULL;	/* the binary file name */
 static FILE *wibFH = (FILE *) NULL;		/* file handle to binary file */
@@ -195,6 +195,9 @@ struct wiggleData *el;
 if ((el = *pEl) == NULL) return;
 freeMem(el->data);
 freez(pEl);
+/*	The el->chrom is not freed, it may belong to something else
+ *	since it is not a copy
+ */
 }
 
 void wigFreeData(struct wiggleData **pList)
