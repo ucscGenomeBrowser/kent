@@ -15,8 +15,11 @@ int sizeOne,i;
 char *s;
 
 ret->id = row[0];
-ret->hseq = row[1];
-ret->mseq = row[2];
+ret->name = row[1];
+ret->class = row[2];
+ret->family = row[3];
+ret->hseq = row[4];
+ret->mseq = row[5];
 }
 
 struct ancientRref *ancientRrefLoad(char **row)
@@ -29,8 +32,11 @@ char *s;
 
 AllocVar(ret);
 ret->id = cloneString(row[0]);
-ret->hseq = cloneString(row[1]);
-ret->mseq = cloneString(row[2]);
+ret->name = cloneString(row[1]);
+ret->class = cloneString(row[2]);
+ret->family = cloneString(row[3]);
+ret->hseq = cloneString(row[4]);
+ret->mseq = cloneString(row[5]);
 return ret;
 }
 
@@ -40,7 +46,7 @@ struct ancientRref *ancientRrefLoadAll(char *fileName)
 {
 struct ancientRref *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[3];
+char *row[6];
 
 while (lineFileRow(lf, row))
     {
@@ -63,6 +69,9 @@ int i;
 if (ret == NULL)
     AllocVar(ret);
 ret->id = sqlStringComma(&s);
+ret->name = sqlStringComma(&s);
+ret->class = sqlStringComma(&s);
+ret->family = sqlStringComma(&s);
 ret->hseq = sqlStringComma(&s);
 ret->mseq = sqlStringComma(&s);
 *pS = s;
@@ -77,6 +86,9 @@ struct ancientRref *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->id);
+freeMem(el->name);
+freeMem(el->class);
+freeMem(el->family);
 freeMem(el->hseq);
 freeMem(el->mseq);
 freez(pEl);
@@ -101,6 +113,18 @@ void ancientRrefOutput(struct ancientRref *el, FILE *f, char sep, char lastSep)
 int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->id);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->name);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->class);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->family);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
