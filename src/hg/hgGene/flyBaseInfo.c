@@ -7,8 +7,9 @@
 #include "spDb.h"
 #include "hgGene.h"
 #include "fbTables.h"
+#include "bdgpExprLink.h"
 
-static char const rcsid[] = "$Id: flyBaseInfo.c,v 1.4 2003/11/12 18:47:21 kent Exp $";
+static char const rcsid[] = "$Id: flyBaseInfo.c,v 1.5 2003/11/26 23:59:51 angie Exp $";
 
 static char *getFlyBaseId(struct sqlConnection *conn, char *geneId)
 /* Return flyBase ID of gene if any. */
@@ -291,5 +292,87 @@ return section;
 }
 
 
+static void bdgpExprInSituPrint(struct section *section, 
+	struct sqlConnection *conn, char *geneId)
+/* Print out BDGP Expression in situ image links. */
+{
+char *flyBaseId = getFlyBaseId(conn, geneId);
+char *geneSym = NULL, *geneName = NULL;
+char query[256], **row;
+struct sqlResult *sr;
+
+if (flyBaseId != NULL)
+    {
+    safef(query, sizeof(query), 
+	    "select * from bdgpExprLink where flyBaseId = '%s'", 
+	    flyBaseId);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+	struct bdgpExprLink *be = bdgpExprLinkLoad(row);
+	printf("<A HREF=\"http://www.fruitfly.org/cgi-bin/ex/basic.pl?"
+	       "format=dimage_array&find=%s&searchfield=CG&bp_search=&comment="
+	       "&cytology=&location=&fnc_search=&submit=Run+Basic+Query"
+	       "&.cgifields=fnc&.cgifields=bp&.cgifields=stage\" TARGET=_BLANK>\n",
+	       be->bdgpName);
+	printf("In situ images for BDGP gene %s</A> (%s, FlyBase gene %s) ",
+	       be->bdgpName, be->symbol, be->flyBaseId);
+	puts("are available from the \n"
+	     "<A HREF=\"http://www.fruitfly.org/cgi-bin/ex/insitu.pl\""
+	     " TARGET=_BLANK>\n"
+	     "BDGP Gene Expression</A> project.<BR>");
+	printf("Number of images: %d<BR>\n", be->imageCount);
+	printf("Number of body parts: %d<BR>\n", be->bodyPartCount);
+	printf("EST: %s<BR>\nDGC Plate: %s<BR>\nPlate position: %d<BR>\n",
+	       be->est, be->plate, be->platePos);
+	}
+    else
+	{
+	printf("No expression in situ images available for gene.\n");
+	}
+    sqlFreeResult(&sr);
+    }
+else
+    {
+    printf("No expression in situ images available for gene.\n");
+    }
+}
+
+
+static boolean bdgpExprInSituExists(struct section *section,
+	struct sqlConnection *conn, char *geneId)
+/* Return TRUE if in situ link table exists and has something
+ * on this one. */
+{
+char *flyBaseId = getFlyBaseId(conn, geneId);
+boolean exists = FALSE;
+if (flyBaseId != NULL)
+    {
+    char query[256], **row;
+    struct sqlResult *sr;
+    safef(query, sizeof(query), 
+	    "select flyBaseId from bdgpExprLink where flyBaseId = '%s'", 
+	    flyBaseId);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+	exists = TRUE;
+    sqlFreeResult(&sr);
+    }
+return(exists);
+}
+
+
+struct section *bdgpExprInSituSection(struct sqlConnection *conn,
+	struct hash *sectionRa)
+/* Create BDGP Expression in situ image links section. */
+{
+struct section *section = sectionNew(sectionRa, "bdgpExprInSitu");
+if (section != NULL)
+    {
+    section->exists = bdgpExprInSituExists;
+    section->print = bdgpExprInSituPrint;
+    }
+return section;
+}
 
 

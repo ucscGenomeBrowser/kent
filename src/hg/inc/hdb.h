@@ -223,7 +223,6 @@ boolean hScaffoldPos(char *chrom, int start, int end,
  * it is truncated to the scaffold end.
  * Return FALSE if unable to convert */
 
-char table[64];
 struct dnaSeq *hDnaFromSeq(char *seqName, 
 	int start, int end, enum dnaCase dnaCase);
 /* Fetch DNA in a variety of cases.  */
@@ -257,6 +256,9 @@ char* hGetSeqAndId(struct sqlConnection *conn, char *acc, HGID *retId);
 
 struct dnaSeq *hExtSeq(char *acc);
 /* Return sequence for external seq. */
+
+struct dnaSeq *hExtSeqPart(char *acc, int start, int end);
+/* Return part of external sequence. */
 
 struct dnaSeq *hRnaSeq(char *acc);
 /* Return sequence for RNA. */

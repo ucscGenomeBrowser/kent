@@ -1,0 +1,273 @@
+#!/bin/csh -f # set emacs mode
+exit; # don't actually run this like a script :)
+
+# This describes how to make the sacCer1 browser database.
+#
+# The genomic sequence was downloaded Nov. 17, 2003, and is dated
+# 10/1/2003 on the Stanford FTP site.  The previous version of the
+# genomic sequence is dated Nov. 2002.  I don't see version numbers.
+
+# Create the directory structure and download sequence from the SGD
+# site at Stanford.
+    mkdir /cluster/store6/sacCer1
+    ln -s /cluster/store6/sacCer1 /cluster/data/sacCer1
+    cd /cluster/data/sacCer1
+    mkdir 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 M bed download
+    cd download
+    mkdir chromosomes
+    cd chromosomes
+    foreach i (01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 mt)
+	wget ftp://genome-ftp.stanford.edu/pub/yeast/data_download/sequence/genomic_sequence/chromosomes/fasta/chr$i.fsa
+    end
+    foreach i (1 2 3 4 5 6 7 8 9)
+	echo ">chr$i" > chr$i.fa
+	grep -v '^>' chr0$i.fsa >> chr$i.fa
+    end
+    foreach i (chr1?.fsa)
+	echo ">$i:r" > $i:r.fa
+	grep -v '^>' $i >> $i:r.fa
+    end
+    echo ">chrM" > chrM.fa
+    grep -v '^>' chrmt.fsa > chrM.fa
+    foreach i (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 M)
+	mv chr$i.fa ../../$i
+    end
+    gzip -4 *.fsa
+
+# Download other info from the FTP site.
+    wget -nH --cut-dirs=3 -r ftp://genome-ftp.stanford.edu/pub/yeast/data_download/chromosomal_feature
+    wget -nH --cut-dirs=3 -r ftp://genome-ftp.stanford.edu/pub/yeast/data_download/gene_registry
+    wget -nH --cut-dirs=3 -r ftp://genome-ftp.stanford.edu/pub/yeast/data_download/literature_curation
+    wget -nH --cut-dirs=3 -r ftp://genome-ftp.stanford.edu/pub/yeast/data_download/oracle_schema
+    wget -nH --cut-dirs=3 -r ftp://genome-ftp.stanford.edu/pub/yeast/data_download/protein_info
+    wget -nH --cut-dirs=3 -r ftp://genome-ftp.stanford.edu/pub/yeast/data_download/sequence_similarity
+    wget -nH --cut-dirs=3 -r ftp://genome-ftp.stanford.edu/pub/yeast/data_download/systematic_results
+    wget -nH --cut-dirs=5 -r -l 2 ftp://genome-ftp.stanford.edu/pub/yeast/data_download/sequence/genomic_sequence/orf_protein
+
+    # Check that the genome is in sync with the annotations
+    cd /cluster/data/sacCer1
+    checkSgdSync download
+    # This showed 5 of 5788 with no ATG.  I sent these to Mike Cherry.
+
+# CREATING DATABASE, MAKE AND LOAD NIBS (DONE 2003-11-24 - Jim)
+# NOTE FOR YEAST WE DO NOT REPEAT MASK SEQUENCE.
+    ssh hgwdev
+    echo 'create database sacCer1' | hgsql ''
+    cd /cluster/data/sacCer1
+    hgNibSeq sacCer1 /cluster/data/sacCer1/nib */*.fa
+    mkdir -p /gbdb/sacCer1/nib
+    ln -s /cluster/data/sacCer1/nib/*.nib /gbdb/sacCer1/nib
+    # Create a read-only alias in your .cshrc or .profile
+    alias sacCer1 mysql -u hguser -phguserstuff -A sacCer1
+    # Use df to ake sure there is at least 5 gig of free mySql table space
+    df -h /var/lib/mysql
+
+# CREATING GRP TABLE FOR TRACK GROUPING (DONE 2003-11-21 - Jim)
+    ssh hgwdev
+    #  the following command copies all the data from the table
+    #	grp in the database hg16 to our new database sacCer1
+    echo "create table grp (PRIMARY KEY(NAME)) select * from hg16.grp" \
+      | hgsql sacCer1
+
+# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR YEAST (DONE 2003-11-24 Jim)
+    # Warning: must genome and organism fields must correspond
+    # with defaultDb values
+    echo 'INSERT INTO dbDb \
+        (name, description, nibPath, organism, \
+                defaultPos, active, orderKey, genome, scientificName, \
+                htmlPath, hgNearOk) values \
+        ("sacCer1", "Oct. 2003", "/gbdb/sacCer1/nib", "Yeast", \
+               "chr2:827700-845800", 1, 65, "Yeast", \
+                "Saccharomyces cerevisiae", "/gbdb/sacCer1/html/description.html", \
+                0);' \
+      | hgsql -h genome-testdb hgcentraltest
+    echo 'INSERT INTO defaultDb (genome, name) values ("Yeast", "sacCer1");' \
+      | hgsql -h genome-testdb hgcentraltest
+
+    # Make trackDb table so browser knows what tracks to expect:
+    ssh hgwdev
+    cd ~/src/hg/makeDb/trackDb
+    cvs up -d -P
+
+    # Edit that makefile to add sacCer1 in all the right places and do
+    make update
+
+    # go public on genome-test
+    #make alpha
+    cvs commit makefile
+
+    # Add trackDb directories
+    mkdir sacCer
+    mkdir sacCer/sacCer1
+    cvs add sacCer
+    cvs add sacCer/sacCer1
+    cvs commit sacCer
+
+
+# MAKE GCPERCENT (DONE 2003-11-24 - Jim)
+     ssh hgwdev
+     mkdir /cluster/data/sacCer1/bed/gcPercent
+     cd /cluster/data/sacCer1/bed/gcPercent
+     # create and load gcPercent table
+     hgsql sacCer1  < ~/src/hg/lib/gcPercent.sql
+     hgGcPercent sacCer1 ../../nib
+
+# RUN TANDEM REPEAT MASKER (DONE 2003-11-24 - Jim)
+    # Do tandem repeat masking - this takes about 2 minutes.
+    ssh hgwdev
+    mkdir -p /cluster/data/sacCer1/bed/simpleRepeat
+    cd /cluster/data/sacCer1
+    foreach i (? ??)
+	trfBig $i/chr$i.fa /dev/null \
+	-bedAt=/cluster/data/sacCer1/bed/simpleRepeat/chr$i.bed
+    end
+    # Load into the database
+    cd /cluster/data/sacCer1/bed/simpleRepeat
+    hgLoadBed sacCer1 simpleRepeat *.bed \
+      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+    # Loaded 1316 elements of size 16
+    featureBits sacCer1 simpleRepeat
+    # 82600648 bases of 2627444668 (3.144%) in intersection
+
+# MAKE DESCRIPTION/SAMPLE POSITION HTML PAGE (TODO)
+    ssh hgwdev
+    # Write ~/kent/src/hg/makeDb/trackDb/sacCer/sacCer1/description.html 
+    # with a description of the assembly and some sample position queries.  
+    chmod a+r ~/kent/src/hg/makeDb/trackDb/sacCer/sacCer1/description.html
+    # Check it in and copy (perhaps via a make in trackDb??) to 
+    # /cluster/data/sacCer1/html.  
+    mkdir -p /gbdb/sacCer1/html
+    ln -s /cluster/data/sacCer1/html/description.html /gbdb/sacCer1/html/
+
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY (DONE 2003-11-24 Jim)
+# AND SET UP BLAT SERVERS
+    ssh blat10
+    cd /scratch
+    mkdir sacCer1Nib
+    scp 'hgwdev:/cluster/data/sacCer1/nib/*.nib' sacCer1Nib
+    # Ask admins to set up blat servers and ask which ports they assign.
+    ssh hgwdev
+    echo 'insert into blatServers values("sacCer1", "blat10", "17788", "0"); \
+          insert into blatServers values("sacCer1", "blat10", "17789", "1");' \
+      | hgsql -h genome-testdb hgcentraltest
+
+# CREATING SGD-BASED KNOWN GENES AND OTHER FEATURES (DONE 2003-12-02 Jim)
+# Note initially the s_cerevisiae.gff3 file ended up being out of
+# sync with the genome. Mike Cherry (cherry@genome.stanford.edu)
+# regenerated it.  The format may end up changing in the future though.
+    ssh hgwdev
+    cd /cluster/data/sacCer1/bed
+    mkdir sgdGene
+    hgSgdGff3 ../download/chromosomal_feature/s_cerevisiae.gff3 sgdGene
+    cd sgdGene
+    ldHgGene sacCer1 sgdGene codingGenes.gff
+    hgLoadBed sacCer1 sgdOther otherFeatures.bed \
+        -sqlTable=$HOME/kent/src/hg/lib/sgdOther.sql
+    zcat ../../download/orf_protein/*.fasta.gz \
+        | hgSgdPep -restrict=genePred.tab stdin sgdPep.fa symbol.txt
+    hgPepPred sacCer1 generic sgdPep sgdPep.fa
+    echo 'create table sgdToName ( \
+          name varchar(10) not null, \
+	  value varchar(10) not null, \
+	  PRIMARY KEY(name), \
+	  INDEX (value));' | hgsql sacCer1
+    echo 'load data local infile "symbol.txt" \
+          into table sgdToName;' | hgsql sacCer1
+    hgsql sacCer1 < $HOME/kent/src/hg/lib/sgdDescription.sql
+    echo 'load data local infile "notes.txt" \
+          into table sgdDescription;' | hgsql sacCer1
+
+# ADDING SWISSPROT ACCESSION TO KNOWN GENES (DONE 2003-11-25 Jim)
+    ssh hgwdev
+    cd /cluster/data/sacCer1/bed/sgdGene
+    awk '$2 == "SwissProt" {printf("%s\t%s\n", $3, $1);}' \
+        ../../download/chromosomal_feature/external_id.tab \
+	> sgdToSwissProt.txt
+    echo 'create table sgdToSwissProt ( \
+          name varchar(10) not null, \
+	  value varchar(10) not null, \
+	  PRIMARY KEY(name), \
+	  INDEX (value));' | hgsql sacCer1
+    echo 'load data local infile "sgdToSwissProt.txt" \
+          into table sgdToSwissProt;' | hgsql sacCer1
+    hgProtIdToGenePred sacCer1 sgdGene sgdToSwissProt name value
+
+# CREATE SGD-BASED CLONE TRACK (DONE 2003-11-25 Jim)
+    ssh hgwdev
+    cd /cluster/data/sacCer1/bed
+    mkdir sgdClone
+    cd sgdClone
+    awk -F '\t' '{printf("chr%s\t%d\t%d\t%s\t%s\n", $3, $4-1, $5, $2, $1);}' \
+    	../../download/chromosomal_feature/clone.tab > sgdClone.bed
+    hgLoadBed sacCer1 sgdClone  sgdClone.bed -tab \
+        -sqlTable=$HOME/kent/src/hg/lib/sgdClone.sql
+
+# AUTO UPDATE GENBANK MRNA RUN  (In Progress 2003-11-24 Jim)
+
+    # Put the nib's on /cluster/bluearc:
+    ssh eieio
+    mkdir -p /cluster/bluearc/sacCer/sacCer1/nib
+    cp -pR /cluster/data/sacCer1/nib/*.nib /cluster/bluearc/sacCer/sacCer1/nib
+
+    # Instructions for setting up incremental genbank updates are here:
+    # http://www.soe.ucsc.edu/~markd/genbank-update/doc/initial-load.html
+
+    # Added
+static char *sacCerNames[] = {"Saccharomyces cerevisiae", NULL};
+    and
+{"dm", dmNames, NULL},
+    to appropriate parts of src/hg/makeDb/genbank/src/lib/gbGenome.c
+    # Then make and make install
+    cd src/hg/make/makeDb/genbank
+    make PREFIX=/cluster/store5/genbank install
+
+    # Edit /cluster/data/genbank/etc/genbank.conf and add:
+# sacCer1
+sacCer1.genome = /cluster/bluearc/sacCer/sacCer1/nib/chr*.nib
+sacCer1.lift = no
+sacCer1.genbank.mrna.xeno.load = yes
+sacCer1.genbank.est.xeno.load = no
+sacCer1.downloadDir = sacCer1
+
+    # Do the alignments
+    ssh eieio
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -iserver=no \
+      -clusterRootDir=/cluster/bluearc/genbank \
+      -verbose=1 -initial sacCer1
+
+    # Load the results from the above
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad sacCer1
+
+# ADDING LOCALIZATION AND ABUNDANCE INFO FROM SGD AND
+# http://yeastgfp.ucsf.edu
+	ssh hgwdef
+	cd /cluster/data/sacCer1/bed
+	mkdir sgdLocalization
+	cd sgdLocalization
+	hgSgdGfp ../../download/systematic_results/localization/OS*.tab .
+        # Put a # to comment out any lines the program complains about
+	# and run again.
+	hgSgdGfp sacCer1 ../../download/systematic_results/localization/OS*.tab .
+
+# UPDATE GO DATABASE
+    ssh hgwdev
+    cd /cluster/store1/geneOntology
+    mkdir 20031202
+    cd 20031202
+    wget ftp://ftp.geneontology.org/pub/go/godatabase/archive/latest/go_200311-termdb-data.gz
+    wget ftp://ftp.geneontology.org/pub/go/gene-associations/gene_association.goa_sptr.gz
+    hgsql mysql <<end
+    drop database go;
+    create database go;
+    end
+    zcat go_*data.gz | hgsql go
+    zcat gene_association.goa_sptr.gz | hgGoAssociation go goaPart stdin -taxon=9606,10090,10116,6239,7227,4932
+
+######## MAKING FAMILY BROWSER TABLES #######
+
+    # Making tables to cluster splice varients
+    ssh hgwdev
+    hgClusterGenes sacCer1 sgdGene sgdIsoforms sgdCanonical

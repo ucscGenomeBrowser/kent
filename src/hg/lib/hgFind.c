@@ -40,7 +40,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.117 2003/10/31 18:05:04 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.121 2003/12/03 19:24:26 fanhsu Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -471,7 +471,7 @@ hFreeConn(&conn);
 }
 
 static void findSuperfamily(char *spec, struct hgPositions *hgp)
-/* Look up superfamily entry using sfDescription table. */
+/* Look up Superfamily entry using sfDescription table. */
 {
 struct sqlConnection *conn  = hAllocConn();
 struct sqlConnection *conn2 = hAllocConn();
@@ -483,20 +483,18 @@ boolean gotOne = FALSE;
 struct hgPosTable *table = NULL;
 struct hgPos *pos;
 struct bed *bed;
-
-char *tname;
+boolean ok;
 char *desc;
 
-AllocVar(table);
-slAddHead(&hgp->tableList, table);
-table->description = cloneString("Superfamily Associated Search Results");
-table->name = cloneString("superfamily");
-
+if (!hTableExists("superfamily")) return;
+ 
+ok = FALSE;
 dyStringClear(ds);
-dyStringPrintf(ds, "select name, description from sfDescription where description like'%c%s%c';", '%',spec,'%');
+dyStringPrintf(ds, "select name, description from sfDescription where description like'%c%s%c';", 
+	       '%',spec,'%');
 sr2 = sqlGetResult(conn2, ds->string);
-
-while ((row2 = sqlNextRow(sr2)) != NULL)
+row2 = sqlNextRow(sr2);
+while (row2 != NULL)
     {
     dyStringClear(ds);
     dyStringPrintf(ds, "select * from superfamily where name = '%s';", row2[0]);
@@ -504,6 +502,14 @@ while ((row2 = sqlNextRow(sr2)) != NULL)
         
     while ((row = sqlNextRow(sr)) != NULL)
     	{
+	if (ok == FALSE)
+            {
+            ok = TRUE;
+	    AllocVar(table);
+	    slAddHead(&hgp->tableList, table);
+	    table->description = cloneString("Superfamily Associated Search Results");
+	    table->name = cloneString("superfamily");
+	    }
     	bed = bedLoad3(row+1);
  
     	AllocVar(pos);
@@ -517,6 +523,7 @@ while ((row2 = sqlNextRow(sr2)) != NULL)
     	pos->chromEnd   = bed->chromEnd + (bed->chromEnd - bed->chromStart)/100*10;
     	}
     sqlFreeResult(&sr);
+    row2 = sqlNextRow(sr2);
     }
 sqlFreeResult(&sr2);
 freeDyString(&ds);
@@ -1799,6 +1806,56 @@ hFreeConn(&conn);
 return ok;
 }
 
+static boolean findEncodeRegions(char *spec, struct hgPositions *hgp, char *tableName)
+/* Look for position in encodeRegions table. */
+{
+struct sqlConnection *conn = NULL;
+struct sqlResult *sr = NULL;
+struct dyString *query = NULL;
+char **row = NULL;
+boolean ok = FALSE;
+char *chrom = NULL;
+struct hgPosTable *table = NULL;
+struct hgPos *pos = NULL;
+int rowOffset = 0;
+
+if (!hTableExists(tableName))
+    return FALSE;
+rowOffset = hOffsetPastBin(NULL, tableName);
+conn = hAllocConn();
+query = newDyString(256);
+dyStringPrintf(query, "select * from %s where name = '%s'", tableName, spec);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (ok == FALSE)
+        {
+	ok = TRUE;
+	AllocVar(table);
+	dyStringClear(query);
+	dyStringPrintf(query, "ENCODE REGION %s Position", spec);
+	table->description = cloneString(query->string);
+	table->name = cloneString(tableName);
+	slAddHead(&hgp->tableList, table);
+	}
+    if ((chrom = hgOfficialChromName(row[0])) == NULL)
+	errAbort("Internal Database error: Odd chromosome name '%s' in %s",
+		 row[0], tableName); 
+    AllocVar(pos);
+    pos->chrom = chrom;
+    pos->chromStart = sqlUnsigned(row[1]) - 5000;
+    pos->chromEnd = sqlUnsigned(row[2]) + 5000;
+    pos->name = cloneString(spec);
+    slAddHead(&table->posList, pos);
+    }
+if (table != NULL)
+    slReverse(&table->posList);
+freeDyString(&query);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return ok;
+}
+
 static boolean findOldStsPos(char *table, char *spec,
                              char **retChromName, int *retWinStart, 
                              int *retWinEnd)
@@ -3016,8 +3073,8 @@ if (startOffset != NULL)
 	endOffset = trimSpaces(endOffset);
 	if ((isdigit(startOffset[0])) && (isdigit(endOffset[0])))
 	    {
-	    iStart = atoi(startOffset)-1;
-	    iEnd = atoi(endOffset);
+	    iStart = atoi(stripCommas(startOffset))-1;
+	    iEnd = atoi(stripCommas(endOffset));
 	    relativeFlag = TRUE;
 	    query = buf;
 	    }
@@ -3167,7 +3224,7 @@ else
 
     findKnownGenes(query, hgp);
     findRefGenes(query, hgp);
-    if (hTableExists("superfamily")) findSuperfamily(query, hgp);
+    findSuperfamily(query, hgp);
     findFishClones(query, hgp);
     findBacEndPairs(query, hgp);
     findFosEndPairs(query, hgp);
@@ -3180,6 +3237,7 @@ else
     findMrnaKeys(hgp->query, hgp, hgAppName, cart);
     findZooGenes(query, hgp);
     findRgdGenes(query, hgp);
+    findEncodeRegions(query, hgp, "encodeRegions");
     findSnpPos(query, hgp, "snpTsc");
     findSnpPos(query, hgp, "snpNih");
     findAffySnpPos(query, hgp, "affyGeno");
@@ -3698,8 +3756,8 @@ else if (strstrNoCase(organism, "SARS"))
     puts(
 "<P>The SARS draft genome assembly (UCSC version sc1) \n"
 "is based on sequence deposited into GenBank as of 14 April 2003. \n"
-"is browser - which represents a departure from UCSC's usual focus on vertebrate \n"
-"nomes - shows gene predictions, locations of putative proteins, and \n"
+"This browser - which represents a departure from UCSC's usual focus on vertebrate \n"
+"genomes - shows gene predictions, locations of putative proteins, and \n"
 "viral mRNA and protein alignments. Protein structure analysis and \n"
 "predictions were determined by using the  \n"
 "<A HREF=\"http://www.cse.ucsc.edu/research/compbio/sam.html\" TARGET=_blank> \n"

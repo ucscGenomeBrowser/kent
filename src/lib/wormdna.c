@@ -17,7 +17,7 @@
 #include "sig.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: wormdna.c,v 1.7 2003/05/06 07:33:44 kate Exp $";
+static char const rcsid[] = "$Id: wormdna.c,v 1.8 2003/11/15 21:14:09 kent Exp $";
 
 static char *jkwebDir = NULL;
 
@@ -680,7 +680,7 @@ if ((g = wormGetSomeGdfGene(name, gdfCache)) == NULL)
 gdfGeneExtents(g, &lstart, &lend);
 start = lstart;
 end = lend;
-//wormClipRangeToChrom(chromIds[g->chromIx], &start, &end);
+/* wormClipRangeToChrom(chromIds[g->chromIx], &start, &end); */
 dnaSize = end-start;
 *retDna = dna = wormChromPart(chromIds[g->chromIx], start, dnaSize);
 

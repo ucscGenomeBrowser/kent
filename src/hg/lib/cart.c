@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.30 2003/10/21 17:33:42 kent Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.32 2003/11/19 15:02:25 braney Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -778,9 +778,8 @@ char titlePlus[128];
 pushWarnHandler(cartEarlyWarningHandler);
 cart = cartAndCookie(cookieName, exclude, oldVars);
 getDbAndGenome(cart, &db, &org);
-pos = cgiOptionalString(positionCgiName);
-if (pos != NULL)
-    pos = addCommasToPos(pos);
+pos = cartOptionalString(cart, positionCgiName);
+pos = addCommasToPos(stripCommas(pos));
 if (pos == NULL && org != NULL) 
     safef(titlePlus,sizeof(titlePlus), "%s - %s",org, title );
 else if (pos != NULL && org == NULL)

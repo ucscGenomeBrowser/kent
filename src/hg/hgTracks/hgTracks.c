@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.631 2003/11/13 17:53:29 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.637 2003/12/04 17:30:02 heather Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -593,8 +593,9 @@ if (x < xEnd)
     hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, xEnd, yEnd);
     if (doHgGene)
         {
-	hPrintf("HREF=\"../cgi-bin/hgGene?%s&%s=%s&%s=%s&%s=%d&%s=%d\" ",
+	hPrintf("HREF=\"../cgi-bin/hgGene?%s&%s=%s&%s=%s&%s=%s&%s=%d&%s=%d\" ",
 		cartSidUrlString(cart),
+		"db", database,
 		"hgg_gene", item,
 		"hgg_chrom", chromName,
 		"hgg_start", start,
@@ -2902,6 +2903,30 @@ void bdgpGeneMethods(struct track *tg)
 tg->itemName = bdgpGeneName;
 }
 
+char *sgdGeneName(struct track *tg, void *item)
+/* Return sgdGene symbol. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct linkedFeatures *lf = item;
+char *name = lf->name;
+char *symbol = NULL;
+char query[256];
+char buf[64];
+safef(query, sizeof(query),
+      "select value from sgdToName where name = '%s'", name);
+symbol = sqlQuickQuery(conn, query, buf, sizeof(buf));
+hFreeConn(&conn);
+if (symbol != NULL)
+    name = symbol;
+return(cloneString(name));
+}
+
+void sgdGeneMethods(struct track *tg)
+/* Special handling for sgdGene items. */
+{
+tg->itemName = sgdGeneName;
+}
+
 void bedLoadItem(struct track *tg, char *table, ItemLoader loader)
 /* Generic tg->item loader. */
 {
@@ -3898,6 +3923,12 @@ tg->itemName = xenoMrnaName;
 tg->extraUiData = newMrnaUiData(tg->mapName, TRUE);
 }
 
+boolean isNonChromColor(Color color)
+/* test if color is a non-chrom color (black or gray) */
+{
+return color == chromColor[0];
+}
+
 Color getChromColor(char *name, struct vGfx *vg)
 /* Return color index corresponding to chromosome name. */
 {
@@ -3946,6 +3977,16 @@ else if (!strcmp(name,"V "))
 if (chromNum > CHROM_COLORS) chromNum = 0;
 colorNum = chromColor[chromNum];
 return colorNum;
+}
+
+Color getScaffoldColor(char *scaffoldNumber, struct vGfx *vg)
+/* assign fake chrom color to scaffold, based on number */
+{
+    int chromNum;
+    chromNum = atoi(scaffoldNumber) % CHROM_COLORS;
+    if (chromNum < 0 || chromNum > CHROM_COLORS)
+        chromNum = 0;
+    return chromColor[chromNum];
 }
 
 Color lfChromColor(struct track *tg, void *item, struct vGfx *vg)
@@ -6551,6 +6592,7 @@ registerTrackHandler("vegaGene", vegaMethods);
 registerTrackHandler("vegaPseudoGene", vegaMethods);
 registerTrackHandler("bdgpGene", bdgpGeneMethods);
 registerTrackHandler("bdgpNonCoding", bdgpGeneMethods);
+registerTrackHandler("sgdGene", sgdGeneMethods);
 registerTrackHandler("genieAlt", genieAltMethods);
 registerTrackHandler("ensGene", ensGeneMethods);
 registerTrackHandler("ensEst", ensGeneMethods);
@@ -7063,9 +7105,6 @@ if (NULL == position)
 if((position == NULL) || sameString(position, ""))
     errAbort("Please go back and enter a coordinate range in the \"position\" field.<br>For example: chr22:20100000-20200000.\n");
 
-/* doesn't free old position */
-position = stripCommas(position);
-
 chromName = NULL;
 winStart = 0;
 if (NULL == (hgp = findGenomePos(position, &chromName, &winStart, &winEnd, cart)))
@@ -7286,6 +7325,6 @@ cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
 if (cgiVarExists("hgt.reset"))
     resetVars();
-cartHtmlShell("UCSC Genome Browser v43", doMiddle, hUserCookie(), excludeVars, NULL);
+cartHtmlShell("UCSC Genome Browser v44", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }

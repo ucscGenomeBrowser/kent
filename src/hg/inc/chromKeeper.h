@@ -1,4 +1,4 @@
-/* chromKeeper - Wrapper for bin keepers around the whole genome. */
+/* chromKeeper - Wrapper for binKeepers around the whole genome. */
 #ifndef CHROMKEEPER_H
 #define CHROMKEEPER_H
 

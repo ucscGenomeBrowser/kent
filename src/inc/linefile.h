@@ -88,6 +88,10 @@ boolean lineFileNextRowTab(struct lineFile *lf, char *words[], int wordCount);
 /* Return next non-blank line that doesn't start with '#' chopped into words
  * at tabs. Returns FALSE at EOF.  Aborts on error. */
 
+#define lineFileRowTab(lf, words) \
+	lineFileNextRowTab(lf, words, ArraySize(words))
+/* Read in line chopped by tab into fixed size word array. */
+
 int lineFileChopNext(struct lineFile *lf, char *words[], int maxWords);
 /* Return next non-blank line that doesn't start with '#' chopped into words. */
 

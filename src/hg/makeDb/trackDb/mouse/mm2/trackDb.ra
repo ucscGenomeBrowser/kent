@@ -92,7 +92,7 @@ otherDb rn1
 
 track blastzBestRat
 shortLabel Best Rat
-longLabel Blastz Rat Best in Genome Alignments
+longLabel Blastz Rat Best-in-Genome Alignments
 group compGeno
 priority 141
 visibility hide
@@ -126,7 +126,7 @@ type sample 0 8
 
 track blastzBestMouse
 shortLabel Best Self 
-longLabel Blastz Self Best in Genome Alignments
+longLabel Blastz Self Best-in-Genome Alignments
 group varRep
 priority 156
 visibility hide
@@ -150,7 +150,7 @@ otherDb mm2
 
 track blastzBestHuman
 shortLabel Best Human
-longLabel Blastz Human(Jun02) Best in Genome Alignments
+longLabel Blastz Human(Jun02) Best-in-Genome Alignments
 group compGeno
 priority 127
 visibility hide

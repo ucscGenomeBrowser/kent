@@ -116,7 +116,7 @@
 #include "encodeRegionInfo.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.513 2003/11/05 21:22:17 sugnet Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.525 2003/12/04 08:03:33 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -652,7 +652,7 @@ switch (class)
 	return PURPLE;
     case UTR5:
     case UTR3:
-	return LTGRAY;
+	return ORANGE;
     case INTRON:
 	return LTGRAY;
     case SPLICESITE:
@@ -1825,30 +1825,47 @@ if (net->chainId)
     {
     printf("<B>Chain ID:</B> %u<BR>\n", net->chainId);
     printf("<B>Bases aligning:</B> %u<BR>\n", net->ali);
-    printf("<B>%s parent overlap:</B> %u<BR>\n", otherOrg, net->qOver);
-    printf("<B>%s parent distance:</B> %u<BR>\n", otherOrg, net->qFar);
-    printf("<B>%s bases duplicated:</B> %u<BR>\n", otherOrg, net->qDup);
+    if (net->qOver >= 0)
+	printf("<B>%s parent overlap:</B> %d<BR>\n", otherOrg, net->qOver);
+    if (net->qFar >= 0)
+	printf("<B>%s parent distance:</B> %d<BR>\n", otherOrg, net->qFar);
+    if (net->qDup >= 0)
+	printf("<B>%s bases duplicated:</B> %d<BR>\n", otherOrg, net->qDup);
     }
-printf("<B>N's in %s:</B> %u (%1.1f%%)<BR>\n", org, net->tN, 100.0*net->tN/tSize);
-printf("<B>N's in %s:</B> %u (%1.1f%%)<BR>\n", otherOrg, net->qN, 100.0*net->qN/qSize);
-printf("<B>%s tandem repeat (trf) bases:</B> %u (%1.1f%%)<BR>\n", 
-       org, net->tTrf, 100.0*net->tTrf/tSize);
-printf("<B>%s tandem repeat (trf) bases:</B> %u (%1.1f%%)<BR>\n", 
-       otherOrg, net->qTrf, 100.0*net->qTrf/qSize);
-printf("<B>%s RepeatMasker bases:</B> %u (%1.1f%%)<BR>\n", 
-       org, net->tR, 100.0*net->tR/tSize);
-printf("<B>%s RepeatMasker bases:</B> %u (%1.1f%%)<BR>\n", 
-       otherOrg, net->qR, 100.0*net->qR/qSize);
-printf("<B>%s old repeat bases:</B> %u (%1.1f%%)<BR>\n", 
-       org, net->tOldR, 100.0*net->tOldR/tSize);
-printf("<B>%s old repeat bases:</B> %u (%1.1f%%)<BR>\n", 
-       otherOrg, net->qOldR, 100.0*net->qOldR/qSize);
-printf("<B>%s new repeat bases:</B> %u (%1.1f%%)<BR>\n", 
-       org, net->tNewR, 100.0*net->tNewR/tSize);
-printf("<B>%s new repeat bases:</B> %u (%1.1f%%)<BR>\n", 
-       otherOrg, net->qNewR, 100.0*net->qNewR/qSize);
-printf("<B>%s size:</B> %d<BR>\n", org, net->tEnd - net->tStart);
-printf("<B>%s size:</B> %d<BR>\n", otherOrg, net->qEnd - net->qStart);
+if (net->tN >= 0)
+    printf("<B>N's in %s:</B> %d (%1.1f%%)<BR>\n",
+	   org, net->tN, 100.0*net->tN/tSize);
+if (net->qN >= 0)
+    printf("<B>N's in %s:</B> %d (%1.1f%%)<BR>\n",
+	   otherOrg, net->qN, 100.0*net->qN/qSize);
+if (net->tTrf >= 0)
+    printf("<B>%s tandem repeat (trf) bases:</B> %d (%1.1f%%)<BR>\n", 
+	   org, net->tTrf, 100.0*net->tTrf/tSize);
+if (net->qTrf >= 0)
+    printf("<B>%s tandem repeat (trf) bases:</B> %d (%1.1f%%)<BR>\n", 
+	   otherOrg, net->qTrf, 100.0*net->qTrf/qSize);
+if (net->tR >= 0)
+    printf("<B>%s RepeatMasker bases:</B> %d (%1.1f%%)<BR>\n", 
+	   org, net->tR, 100.0*net->tR/tSize);
+if (net->qR >= 0)
+    printf("<B>%s RepeatMasker bases:</B> %d (%1.1f%%)<BR>\n", 
+	   otherOrg, net->qR, 100.0*net->qR/qSize);
+if (net->tOldR >= 0)
+    printf("<B>%s old repeat bases:</B> %d (%1.1f%%)<BR>\n", 
+	   org, net->tOldR, 100.0*net->tOldR/tSize);
+if (net->qOldR >= 0)
+    printf("<B>%s old repeat bases:</B> %d (%1.1f%%)<BR>\n", 
+	   otherOrg, net->qOldR, 100.0*net->qOldR/qSize);
+if (net->tNewR >= 0)
+    printf("<B>%s new repeat bases:</B> %d (%1.1f%%)<BR>\n", 
+	   org, net->tNewR, 100.0*net->tNewR/tSize);
+if (net->qNewR >= 0)
+    printf("<B>%s new repeat bases:</B> %d (%1.1f%%)<BR>\n", 
+	   otherOrg, net->qNewR, 100.0*net->qNewR/qSize);
+if (net->tEnd >= 0)
+    printf("<B>%s size:</B> %d<BR>\n", org, net->tEnd - net->tStart);
+if (net->qEnd >= 0)
+    printf("<B>%s size:</B> %d<BR>\n", otherOrg, net->qEnd - net->qStart);
 netAlignFree(&net);
 }
 
@@ -2048,7 +2065,7 @@ else
 	 "perform an Advanced Query and select FASTA as the output format.");
     }
 
-hgSeqOptionsHti(hti);
+hgSeqOptionsHtiCart(hti,cart);
 puts("<P>");
 cgiMakeButton("submit", "Get DNA");
 cgiMakeButton("submit", "Extended case/color options");
@@ -2218,12 +2235,12 @@ struct trackDb *tdbList = hTrackDb(seqName), *tdb;
 struct trackDb *ctdbList = tdbForCustomTracks();
 struct trackDb *utdbList = tdbForUserPsl();
 boolean isRc     = cartUsualBoolean(cart, "hgc.dna.rc", FALSE);
-boolean revComp  = cgiBoolean("hgSeq.revComp");
-boolean maskRep  = cgiBoolean("hgSeq.maskRepeats");
-int padding5     = cgiOptionalInt("hgSeq.padding5", 0);
-int padding3     = cgiOptionalInt("hgSeq.padding3", 0);
-char *casing     = cgiUsualString("hgSeq.casing", "");
-char *repMasking = cgiUsualString("hgSeq.repMasking", "");
+boolean revComp  = cartUsualBoolean(cart, "hgSeq.revComp", FALSE);
+boolean maskRep  = cartUsualBoolean(cart, "hgSeq.maskRepeats", FALSE);
+int padding5     = cartUsualInt(cart, "hgSeq.padding5", 0);
+int padding3     = cartUsualInt(cart, "hgSeq.padding3", 0);
+char *casing     = cartUsualString(cart, "hgSeq.casing", "");
+char *repMasking = cartUsualString(cart, "hgSeq.repMasking", "");
 boolean caseUpper= FALSE;
 char *pos = NULL;
 
@@ -2723,6 +2740,25 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         {
 	char buf[256];
 	int r,g,b;
+	// to save a LOT of time, don't fetch track features unless some 
+	// coloring/formatting has been specified for them.
+	boolean hasSettings = FALSE;
+	safef(buf, sizeof(buf), "%s_u", track);
+	hasSettings |= cgiBoolean(buf);
+	safef(buf, sizeof(buf), "%s_b", track);
+	hasSettings |= cgiBoolean(buf);
+	safef(buf, sizeof(buf), "%s_i", track);
+	hasSettings |= cgiBoolean(buf);
+	safef(buf, sizeof(buf), "%s_case", track);
+	hasSettings |= cgiBoolean(buf);
+	safef(buf, sizeof(buf), "%s_red", track);
+	hasSettings |= (cgiOptionalInt(buf, 0) != 0);
+	safef(buf, sizeof(buf), "%s_green", track);
+	hasSettings |= (cgiOptionalInt(buf, 0) != 0);
+	safef(buf, sizeof(buf), "%s_blue", track);
+	hasSettings |= (cgiOptionalInt(buf, 0) != 0);
+	if (! hasSettings)
+	    continue;
 
 	if (sameString("hgUserPsl", track))
 	    {
@@ -3207,14 +3243,16 @@ if (row != NULL)
         {
         printf("<B>Version:</B> %s<BR>\n", version);
         }
+    if (startsWith("Human", organism))
+    {
+      /* Put up Gene Lynx */
+      if (sameWord(type, "mrna"))
+          printGeneLynxAcc(acc);
+    }
 
     if (!startsWith("Worm", organism) && !startsWith("Fugu", organism) &&
 	!startsWith("dm", database))
     {
-	/* Put up Gene Lynx */
-	if (sameWord(type, "mrna"))
-	    printGeneLynxAcc(acc);
-    
 	/* Put up Stanford Source link. */
 	printStanSource(acc, type);
     }
@@ -4527,7 +4565,7 @@ pslFree(&fatPsl);
 
 if (sameWord(otherDb, "seq"))
     {
-    qSeq = hExtSeq(psl->qName);
+    qSeq = hExtSeqPart(psl->qName, psl->qStart, psl->qEnd);
     sprintf(name, "%s", psl->qName);
     }
 else
@@ -5412,7 +5450,7 @@ printf("\n");
 cgiContinueHiddenVar("o");
 printf("\n");
 
-hgSeqOptions(tbl);
+hgSeqOptions(cart, tbl);
 cgiMakeButton("submit", "submit");
 printf("</FORM>");
 }
@@ -5438,7 +5476,7 @@ cgiContinueHiddenVar("r");
 printf("\n");
 cgiContinueHiddenVar("o");
 printf("\n");
-hgSeqOptions(cgiString("o"));
+hgSeqOptions(cart, cgiString("o"));
 cgiMakeButton("submit", "submit");
 printf("</FORM>");
 }
@@ -6612,10 +6650,13 @@ if (!startsWith("Worm", organism))
 	    medlineLinkedLine("PubMed on Product", rl->product, rl->product);
 	}
     printf("\n");
+    if (startsWith("Human", organism)) 
+        {
+        printGeneLynxName(rl->name);
+	printf("\n");
+        }
     if (!startsWith("dm", database))
 	{
-	printGeneLynxName(rl->name);
-	printf("\n");
 	printf("<B>GeneCards:</B> ");
 	printf("<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?search=%s\" TARGET=_blank>",
 	       rl->name);
@@ -6969,18 +7010,64 @@ else
     org[0] = tolower(org[0]);
     safef(chainTable,sizeof(chainTable), "%sChain", org);
     }
-printf("<B>Score:</B> %d Gap Ratio: %d Intron Ratio: %d <B>PolyA tail length:</B> %d <B>Start:</B> %d <BR>\n", pg->score, pg->score2, pg->score3, pg->polyA, pg->polyAstart);
+printf("<B>Bases syntenic with mouse:</B> %d \n",pg->overlapDiag);
+printf("<B>PolyA tail length:</B> %d \n",pg->polyA);
+printf("<B>PolyA Start:</B> %d \n",pg->polyAstart);
+printf("<B>Exons Covered:</B> %d out of %d \n",pg->exonCover,pg->exonCount);
+printf("<B>Coverage:</B> %d %%\n",pg->coverage);
+printf("<B>Bases matching:</B> %d \n", pg->matches);
+printf("<B>Align Score:</B> %d \n",pg->score);
 htmlHorizontalLine();
 printf("<p>");
 printf("<B>%s Gene:</B> %s %s in %s\n", hOrganism(pg->assembly), pg->gene, pg->geneTable, pg->assembly);
-linkToOtherBrowser(pg->assembly, pg->chrom, pg->gStart, pg->gEnd);
-printf("%s:%d-%d \n", pg->chrom, pg->gStart, pg->gEnd);
+linkToOtherBrowser(pg->assembly, pg->gChrom, pg->gStart, pg->gEnd);
+printf("%s:%d-%d \n", pg->gChrom, pg->gStart, pg->gEnd);
 printf("</A>");
 
+printf("<B>Gene Details: </B> " );
+printf("<A TARGET=\"_blank\" ");
+printf("HREF=\"../cgi-bin/hgGene?%s&%s=%s&%s=%s&%s=%s&%s=%d&%s=%d\" ",
+            cartSidUrlString(cart),
+            "db", database,
+            "hgg_gene", pg->gene,
+            "hgg_chrom", pg->gChrom,
+            "hgg_start", pg->gStart,
+            "hgg_end", pg->gEnd);
+printf(">%s</A>  ",pg->gene);
+char *description;
+if (hTableExists("knownGene"))
+    {
+    safef(query, sizeof(query), 
+            "select proteinId from knownGene where name = '%s'", pg->gene);
+    description = sqlQuickString(conn, query);
+    if (description != NULL)
+    printf("<B>SwissProt ID: </B> " );
+    printf("<A TARGET=\"_blank\" HREF=");
+    printSwissProtProteinUrl(stdout, description);
+    printf(">%s</A>",description);
+    freez(&description);
+    }
+/* display pfam domains */
+printf("<p>");
+if (hTableExists("knownToPfam") && hTableExists("proteins031112.pfamDesc"))
+    {
+    safef(query, sizeof(query), 
+            "select description from knownToPfam kp, proteins031112.pfamDesc p where pfamAC = value and kp.name = '%s'", 
+            pg->gene);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        description = row[0];
+        if (description == NULL)
+            description = cloneString("n/a");
+        printf("<B>Pfam Domain:</B> %s <p>", description);
+        }
+    sqlFreeResult(&sr);
+    }
 
 if (hTableExists(alignTable))
     {
-    pslList = loadPslRangeT(alignTable, pg->name, pg->chrom, pg->gStart, pg->gEnd);
+    pslList = loadPslRangeT(alignTable, pg->name, pg->gChrom, pg->gStart, pg->gEnd);
     if (pslList != NULL)
         printAlignments(pslList, chromStart, "htcCdnaAli", alignTable, pg->name);
     }
@@ -6989,17 +7076,17 @@ safef(chainTable_chrom,sizeof(chainTable_chrom), "%s_chainSelf",chrom);
 if (hTableExists(chainTable_chrom) )
     {
     /* lookup chain if not stored */
-    if (pg->chainId == 0 && pg->strand != NULL)
+    if (pg->chainId == 0 && pg->gStrand != NULL)
         {
-        if (sameString(pg->strand,pg->pStrand))
+        if (sameString(pg->gStrand,pg->strand))
             safef(query,sizeof(query),
                 "select id, score from %s_%s where tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d order by score desc",
-                chrom, chainTable,chromStart,chromEnd, pg->chrom, pg->gStart, pg->gEnd);
+                chrom, chainTable,chromStart,chromEnd, pg->gChrom, pg->gStart, pg->gEnd);
         else
             {
             safef(query,sizeof(query),
                 "select id, score from %s_%s where tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d order by score desc",
-                chrom, chainTable,chromStart,chromEnd, pg->chrom, hChromSize(pg->chrom)-(pg->gEnd), hChromSize(pg->chrom)-(pg->gStart));
+                chrom, chainTable,chromStart,chromEnd, pg->gChrom, hChromSize(pg->gChrom)-(pg->gEnd), hChromSize(pg->gChrom)-(pg->gStart));
             }
         sr = sqlGetResult(conn, query);
         while ((row = sqlNextRow(sr)) != NULL)
@@ -7011,7 +7098,7 @@ if (hTableExists(chainTable_chrom) )
             puts("<LI>\n");
             printf("<B>Chain:</B> %d  \n",chainId);
             hgcAnchorTranslatedChain(chainId, chainTable, chrom, pg->gStart, pg->gEnd);
-            printf("View details of parts of chain within browser window</A>. score %d %s:%d-%d<BR>\n",score, pg->chrom,pg->gStart,pg->gEnd);
+            printf("View details of parts of chain within browser window</A>. score %d %s:%d-%d<BR>\n",score, pg->gChrom,pg->gStart,pg->gEnd);
             puts("</LI>\n");
             }
         sqlFreeResult(&sr);
@@ -7028,13 +7115,13 @@ if (hTableExists(chainTable_chrom) )
     if (pg->chainId > 0)
         {
         puts("<LI>\n");
-        hgcAnchorPseudoGene(pg->gene, pg->geneTable, chrom, "startcodon", chromStart, chromEnd, pg->chrom, pg->gStart, pg->gEnd, pg->chainId, pg->assembly);
+        hgcAnchorPseudoGene(pg->gene, pg->geneTable, chrom, "startcodon", chromStart, chromEnd, pg->gChrom, pg->gStart, pg->gEnd, pg->chainId, pg->assembly);
         printf("Show %s %s aligned to pseudogene</A>  to see frameshifts and in frame stops <BR>\n",hOrganism(pg->assembly), pg->geneTable);
         puts("</LI>\n");
         }
     }
 puts("<LI>\n");
-linkToOtherBrowser(pg->assembly, pg->chrom, pg->gStart, pg->gEnd);
+linkToOtherBrowser(pg->assembly, pg->gChrom, pg->gStart, pg->gEnd);
 printf("Open %s browser</A> at position corresponding to the Gene.<BR>\n",hOrganism(pg->assembly) );
 puts("</LI>\n");
 }
@@ -7088,7 +7175,7 @@ cartWebStart(cart, acc);
 printf("<H4>PseudoGene/Genomic Alignment</H4>");
 printAlignments(pslList, start, "htcCdnaAli", table, acc);
 
-sprintf(query, "select * from pseudoGeneLink where name = '%s' and pchrom = '%s' and pStart = %d", acc, chrom, start);
+sprintf(query, "select * from pseudoGeneLink where name = '%s' and chrom = '%s' and chromStart = %d", acc, chrom, start);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -7116,7 +7203,7 @@ char **row;
 boolean isFirst = TRUE, gotAny = FALSE;
 char *gi;
 struct bed *bed = NULL;
-struct pseudoGeneLink pg;
+struct pseudoGeneLink *pg;
 struct sqlConnection *conn = hAllocConn();
 char *tbl = cgiUsualString("table", cgiString("g"));
 char *start = cartString(cart, "o");
@@ -7135,10 +7222,10 @@ if (sqlTableExists(conn, tdb->tableName))
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
-        pseudoGeneLinkStaticLoad(row, &pg);
+        pg = pseudoGeneLinkLoad(row);
         if (hTableExists("axtInfo") && bed != NULL)
             {
-            pseudoPrintPos(bed->chrom, bed->chromStart, bed->chromEnd, &pg, "mrnaBlat");
+            pseudoPrintPos(bed->chrom, bed->chromStart, bed->chromEnd, pg, "mrnaBlat");
             }
         }
     }
@@ -8063,8 +8150,9 @@ if (sqlQuickQuery(conn2, query, qNibFile, sizeof(qNibFile)) == NULL)
     errAbort("Sequence chr1 isn't in chromInfo");
 // get gp
 //hFindSplitTable(chrom, track, table, &hasBin);
-hFindSplitTableDb(db2, qChrom, track, table, &hasBin);
-if (sameString(track, "mrna"))
+if (!hFindSplitTableDb(db2, qChrom, track, table, &hasBin))
+    errAbort("htcPseudoGene: table %s not found.\n",track);
+else if (sameString(track, "mrna"))
     {
     struct psl *psl = NULL ;
     safef(query, sizeof(query),
@@ -8080,7 +8168,7 @@ if (sameString(track, "mrna"))
         }
     sqlFreeResult(&sr);
     }
-else
+else if (table != NULL)
     {
     safef(query, sizeof(query),
              "select * from %s where name = '%s' and chrom = '%s' ",

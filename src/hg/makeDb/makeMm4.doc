@@ -235,13 +235,14 @@ o - Use df to make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
 
 
 # MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR MM4 (DONE - 2003-10-20 - Hiram)
+    #	using the Mm3 position blatted onto Mm4:
     # Enter mm4 into hgcentraltest.dbDb so test browser knows about it:
     hgsql -e 'INSERT INTO dbDb \
         (name, description, nibPath, organism, defaultPos, \
          active, orderKey, genome, scientificName, htmlPath, hgNearOK) \
       VALUES(
         "mm4", "Oct. 2003", "/gbdb/mm4/nib", "Mouse", \
-	"chr6:135181700-135238301", \
+	"chr6:122959016-122974672", \
          1, 20, "Mouse", "Mus musculus", "/gbdb/mm4/html/description.html",
 	0);' \
 	-h genome-testdb hgcentraltest
@@ -1457,6 +1458,57 @@ SEQ2_LEN=$BASE/S2.len
 
     # add README.txt file to dir, if needed
 
+# MAKING RAT AND HUMAN SYNTENY (DONE - 2003-11-05 - Hiram)
+
+    ssh hgwdev
+    mkdir -p /cluster/data/mm4/bed/syntenyRn3
+    cd /cluster/data/mm4/bed/syntenyRn3
+
+#	updating the scripts in use here from 
+#	/cluster/data/hg16/bed/syntenyMm3
+    cp -p /cluster/data/hg16/bed/syntenyMm3/*.pl .
+
+#	fix the syntenicBest script to not try and work on empty
+#	results from its queries.  Also, set the db and table name
+#	in the script itself so the arguments are not needed
+
+    ./syntenicBest.pl
+#	on the order of 3 to 4 hours to complete syntenicBest
+#	almost no time, or only a few minutes at most for any of
+#	the rest
+    ./smooth.pl
+    ./joinsmallgaps.pl
+#	set db and table name in fillgap.pl
+    ./fillgap.pl
+    ./synteny2bed.pl
+    hgLoadBed mm4 syntenyRn3 ucsc100k.bed
+
+#	same thing for Hg16
+    mkdir -p /cluster/data/mm4/bed/syntenyHg16
+    cd /cluster/data/mm4/bed/syntenyHg16
+
+    cp ../syntenyRn3/syntenicBest.pl
+    # fixup table name to be Hg16
+    ./syntenicBest.pl
+    ../syntenyRn3/smooth.pl
+    ../syntenyRn3/joinsmallgaps.pl
+    cp ../syntenyRn3/fillgap.pl
+    # fixup table name to be Hg16
+    ./fillgap.pl
+    ../syntenyRn3/synteny2bed.pl
+    hgLoadBed mm4 syntenyHg16 ucsc100k.bed
+
+    #	check results
+# featureBits mm3 syntenyRat
+# 2384684351 bases of 2505900260 (95.163%) in intersection
+# featureBits mm4 syntenyRn3
+# 2397585098 bases of 2627444668 (91.252%) in intersection
+# featureBits mm3 syntenyHuman
+# 2343924066 bases of 2505900260 (93.536%) in intersection
+# featureBits mm4 syntenyHg16
+# 2299774191 bases of 2627444668 (87.529%) in intersection
+
+
 # BLASTZ Self	(IN PROGRESS - 2003-10-21 - Hiram)
 
     ssh kk
@@ -1729,6 +1781,20 @@ done
     rm upstream5000.fa
     # mrna zips -- auto dump process takes care of this
 
+# CREATE CYTOBAND TRACK
+    # Can be done at any time
+    ssh hgwdev
+    cd /cluster/data/mm4
+    mkdir cytoBand
+    cd cytoBand
+    # Get file from NCBI
+    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/maps/mapview/BUILD.32/Mouse400.dat.gz
+    gunzip Mouse400.dat.gz
+    # Create bed file
+    /cluster/bin/scripts/createNcbiCytoBand Mouse400.dat
+    # Load the bed file
+    hgLoadBed -noBin -sqlTable=/cluster/home/kent/src/hg/lib/cytoBand.sql mm4 cytoBand cytoBand.bed
+
 
 # UPDATE BACEND SEQUENCES (DONE - 2003-10-27 - Hiram)
 
@@ -1987,33 +2053,379 @@ XXXX - running 2003-10-31 14:45
 
     # Load the tables
     cd /cluster/data/mm4/bacends
-    hgsql -e 'load data local infile "bacEnds.load.psl" into table all_bacends;' mm4
-    hgsql -e 'load data local infile "bacEndPairs.bed" into table bacEndPairs;' mm4
-    hgsql -e 'load data local infile "bacEndPairsBad.bed" into table bacEndPairsBad;' mm4
-    hgsql -e 'load data local infile "bacEndPairsLong.bed" into table bacEndPairsLong;' mm4
+    hgsql -e \
+	'load data local infile "bacEnds.load.psl" into table all_bacends;' mm4
+    hgsql -e \
+	'load data local infile "bacEndPairs.bed" into table bacEndPairs;' mm4
+    hgsql -e \
+    'load data local infile "bacEndPairsBad.bed" into table bacEndPairsBad;' \
+	mm4
+    hgsql -e \
+  'load data local infile "bacEndPairsLong.bed" into table bacEndPairsLong;' \
+	mm4
+# featureBits mm4 all_bacends
+# 243096171 bases of 2627444668 (9.252%) in intersection
+# featureBits mm3 all_bacends
+# 220398676 bases of 2505900260 (8.795%) in intersection
 
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXX  -----   all below is old data for reference only  XXXXXXXXXX
-XXXX	The sections below will be deleted as they are performed above
-# ADD MAP CONTIGS TRACK (2003-07-03 Kate)
+# featureBits mm4 bacEndPairs
+# 2549945356 bases of 2627444668 (97.050%) in intersection
+# featureBits mm3 bacEndPairs
+# 2508331798 bases of 2505900260 (100.097%) in intersection
+
+# featureBits mm4 bacEndPairsBad
+# 1074505863 bases of 2627444668 (40.895%) in intersection
+# featureBits mm3 bacEndPairsBad
+# 547271514 bases of 2505900260 (21.839%) in intersection
+
+# featureBits mm4 bacEndPairsLong
+# 2833125883 bases of 2627444668 (107.828%) in intersection
+# featureBits mm3 bacEndPairsLong
+# 2500534101 bases of 2505900260 (99.786%) in intersection
+
+XXXX - running 2003-11-04 10:32
+
+# ADD MAP CONTIGS TRACK (DONE - 2003-11-04 - Hiram)
     ssh hgwdev
-    mkdir -p ~/mm4/bed/ctgPos
-    cd ~/mm4/bed/ctgPos
+    mkdir -p /cluster/data/mm4/bed/ctgPos
+    cd /cluster/data/mm4/bed/ctgPos
     # hgCtgPos uses the lift files... but mouse lift files are for the
     # 5MB contigs from splitFaIntoContigs, not for the real NT_ contigs
     # from the assembly.  (In the future, we should go with the NT's!)
     # So... just for this release, go straight from the seq_contig.md
     # to the table def'n: contig, size, chrom, chromStart, chromEnd
-    perl -we \
-     'while (<>) { \
-        if (/^\d+\s+(\w+)\s+(\d+)\s+(\d+)\s+\S+\s+(NT_\d+)\s+.*ref_strain/) { \
-          $chr=$1; $start=$2; $start -= 1; $end=$3; $ctg=$4; \
-          print "$ctg\t" . ($end-$start) . "\tchr$chr\t$start\t$end\n"; \
-        } \
-      }' /cluster/store5/mm.2003.06/ncbi/seq_contig.md \
-    > ctgPos.tab
+    cat << '_EOF_' > parseSeqContig.pl
+#!/usr/local/bin/perl -w
+
+use strict;
+
+while (<>) {
+    if (/^\d+\s+(\S+)\s+(\d+)\s+(\d+)\s+(\S+)\s+(N[TC]_\d+)\s+(\S+)\s+contig\s+\S+\s+\S+\s*$/i) {
+        my $chr=$1; my $start=$2; $start -= 1; my $end=$3; my $ctg=$5;
+        if ($chr !~ /N/ ) {
+        print "$ctg\t" . ($end-$start) . "\tchr$chr\t$start\t$end\n";
+        }
+    }
+}
+'_EOF_'
+    chmod +x parseSeqContig.pl
+      ./parseSeqContig.pl ../../ncbi/seq_contig.md > ctgPos.tab
     hgsql mm4 < ~/kent/src/hg/lib/ctgPos.sql
     echo "load data local infile 'ctgPos.tab' into table ctgPos" | hgsql mm4
     # Note: the info is there in seq_contig.md to also do the _random's,
     # but we'd have to do some more work: duplicate the gaps of 50000 between
     # contigs for all _random's except chrUn_random (1000 between).
+
+    # featureBits mm4 ctgPos
+    # 2554101163 bases of 2627444668 (97.209%) in intersection
+    # featureBits mm3 ctgPos
+    # 2500661074 bases of 2505900260 (99.791%) in intersection
+
+# KNOWN GENES TRACK (DONE - 2003-11-20 - Hiram)
+
+    # you will probably need to make the programs in kent/src/hg/protein
+    cd ~/kent/src/hg/protein
+    make
+    # The scripts run below will check for programs and let you know
+    # which ones are missing
+
+    # obtain new SwissProt database (should be done about once a month)
+    # the swiss prot data is currently living on store5, first step is
+    # on the fileserver.  This script was used once as it was created,
+    # it may need to be verified and improved as it is used again.  See
+    # comments at the top of the script.
+    ssh eieio
+    cd /cluster/data/swissprot
+    ~/kent/src/hg/protein/mkSwissProtDB.sh
+    # that obtains the data and unpacks it, second step is on hgwdev
+    # to create the database
+    ssh hgwdev
+    cd /cluster/data/swissprot
+    ~/kent/src/hg/protein/mkSwissProtDB.sh
+    # Now the proteins database can be created from that.  Must be on hgwdev
+    # Again, a script that has been used once upon creation, see
+    # comments in it.  For example currently it is assumed these two
+    # scripts have been run on the same day.  In this case 03112
+    ssh hgwdev
+    cd /cluster/data/proteins
+    ~/kent/src/hg/protein/mkProteinsDb.sh
+    # with those two databases existing, read for the actual known genes
+    # track build.  Must be on hgwdev since it is all mostly database
+    # operations.  The {Date} argument is the date stamp created by the
+    # above two scripts.  Something of the form YYMMDD, e.g.: 031112
+    # Again, a script that has been used only once at creation, see
+    # comments at top of script.
+    ssh hgwdev
+    mkdir /cluster/data/mm4/bed/knownGenes
+    cd /cluster/data/mm4/bed/knownGenes
+    DateStamp=031112
+    ~/kent/src/hg/protein/KGprocess.sh ${DateStamp}
+    # that runs to a point where it prepares data and jobList for a
+    # cluster run.  Continue with a cluster run on kk
+    ssh kk
+    cd /cluster/data/mm4/bed/knownGenes/kgBestMrna
+    para create jobList
+    para try
+    para check
+    para push
+    # this is a quick cluster job.  Less than five minutes. e.g.:
+# Completed: 43580 of 43580 jobs
+# CPU time in finished jobs:     114636s    1910.60m    31.84h    1.33d  0.004 y
+# IO & Wait Time:                111889s    1864.82m    31.08h    1.30d  0.004 y
+# Average job time:                   5s       0.09m     0.00h    0.00d
+# Longest job:                        9s       0.15m     0.00h    0.00d
+# Submission to last job:           282s       4.70m     0.08h    0.00d
+
+    # Continuing back on hgwdev, run the same script again
+    ssh hgwdev
+    cd /cluster/data/mm4/bed/knownGenes
+    DateStamp=031112
+    ~/kent/src/hg/protein/KGprocess.sh ${DateStamp}
+    # that should run to completion and the known genes track is ready
+
+    # Add the proteins link into gdbPdb.hgcentral:
+    hgsql -e 'INSERT INTO gdbPdb (genomeDb, proteomeDb) \
+	VALUES ("mm4","proteins031112");' \
+	-h genome-testdb hgcentraltest
+
+
+# SET defaultDb in hgcentraltest to move from mm3 to mm4
+    hgsql -e 'update defaultDb set name = "mm4" where name = "mm3";' \
+	-h genome-testdb hgcentraltest
+
+# STS MARKERS TRACK (WORKING - 2003-11-25 - Hiram)
+
+    ssh kk9
+    mkdir -p /cluster/data/mm4/bed/STSmarkers/primer
+    mkdir -p /cluster/data/mm4/bed/STSmarkers/ePCR
+    cd /cluster/data/mm4/bed/STSmarkers/primer
+    # we need to document where musPrimer.fa comes from
+    echo "/cluster/bluearc/scratch/mus/mm4/musPrimer.fa" > primers.lst
+    cat << '_EOF_' > template
+#LOOP
+/cluster/bin/i386/blat.2 $(path1) $(path2) -ooc=/scratch/hg/h/mouse11.ooc  -minMatch=1 -minScore=0 -minIdentity=80 -oneOff {check out line+ primers.out/$(root1).psl}
+#ENDLOOP
+'_EOF_'
+    mkdir primers.out
+    /cluster/bin/scripts/splitContigList -mouse -scratch \
+	/cluster/bluearc/scratch/mus/mm4/trfFa 1
+    /cluster/bin/i386/gensub2 contig.lst primers.lst template jobList
+    para create jobList
+    para try
+    para check
+    para push
+    ... etc ...
+# Completed: 599 of 599 jobs
+# CPU time in finished jobs:     184360s    3072.66m    51.21h    2.13d  0.006 y
+# IO & Wait Time:                  1734s      28.90m     0.48h    0.02d  0.000 y
+# Average job time:                 311s       5.18m     0.09h    0.00d
+# Longest job:                      417s       6.95m     0.12h    0.00d
+# Submission to last job:          2132s      35.53m     0.59h    0.02d
+
+    /cluster/bin/i386/pslSort dirs primers.psl temp primers.out
+    rmdir temp
+    # comparing results to mm3:
+    # /projects/hg2/booch/psl/mm.2003.02/mm3/primers/primers.psl
+    # Mm3 wc primers.psl
+    # 4263983 89543582 440456942 primers.psl
+    # Mm4 wc primers.psl /cluster/data/mm4/bed/STSmarkers/primer/primers.psl
+    # 4805773 100921172 496200670 primers.psl
+
+    cd /cluster/data/mm4/bed/STSmarkers/ePCR
+    ls -1S /cluster/bluearc/scratch/mus/mm4/trfFa > contig.lst
+    mkdir epcr.out
+    cat << '_EOF_' > template
+#LOOP
+/cluster/bin/scripts/luRunEpcr $(path1) $(path2) epcr.out/$(num2).epcr
+#ENDLOOP
+'_EOF_'
+    # we need to document where mmPrimer.info comes from
+    echo "/cluster/bluearc/scratch/mus/mm4/mmPrimer.info" > epcr.lst
+    gensub2 epcr.lst contig.lst template jobList
+    para create jobList
+    para try
+    para check
+    para push
+    ... etc ...
+# Completed: 599 of 599 jobs
+# CPU time in finished jobs:      65528s    1092.14m    18.20h    0.76d  0.002 y
+# IO & Wait Time:                  1841s      30.68m     0.51h    0.02d  0.000 y
+# Average job time:                 112s       1.87m     0.03h    0.00d
+# Longest job:                      159s       2.65m     0.04h    0.00d
+# Submission to last job:           791s      13.18m     0.22h    0.01d
+
+    ssh hgwdev
+    # all those results become all.epcr
+    cat epcr.out/*.epcr > all.epcr
+    # comparing results to Mm3:
+    # /projects/hg2/booch/psl/mm.2003.02/mm3/primers/all.epcr
+    # Mm3 wc all.epcr
+    #  24627   98508 1329559 all.epcr
+    # Mm4 wc all.epcr	/cluster/data/mm4/bed/STSmarkers/ePCR/all.epcr
+    #  65121  260484 3485112 ../ePCR/all.epcr
+
+    cd /cluster/data/mm4/bed/STSmarkers/primer
+
+    # create primers.psl.filter.blat and epcr.not.found
+    /projects/compbio/usr/booch/booch/scripts/filterPrimers -mouse \
+	/cluster/store5/mouseMarker/stsInfoMouse.bed primers.psl \
+	/cluster/bluearc/scratch/mus/mm4/musPrimer.fa \
+	../ePCR/all.epcr > primers.psl.filter.blat
+    #
+    # comparing results to Mm3:
+    # Mm3: wc primers.psl.filter.blat
+    #  26088  547848 2612720 primers.psl.filter.blat
+    # Mm4:  wc primers.psl.filter.blat
+    #  24056  505176 2385675 primers.psl.filter.blat
+
+    # create accession_info.rdb  (chrM added to Terry's script for mouse)
+    touch empty_sequence.inf
+    /projects/compbio/usr/booch/booch/scripts/compileAccInfo -mouse \
+	/cluster/data/mm4 empty_sequence.inf
+    mv accession_info.rdb temp
+    ~booch/bin/sorttbl Chr Ord Start < temp > accession_info.rdb
+    rm temp
+    # comparing results to Mm3:
+    #  Mm3 wc accession_info.rdb
+    # 173948 1913432 12738822 accession_info.rdb
+    #  Mm4 wc accession_info.rdb
+    #  86935  956289 6374930 accession_info.rdb
+    #### This is an interesting difference.  The structure of the .agp files 
+    # for Mm3 and Mm4 show a large difference in line counts:
+    # wc /cluster/data/mm3/?/*.agp /cluster/data/mm3/??/*.agp
+    # 339937 2893447 18141029 total
+    # wc /cluster/data/mm4/?/*.agp /cluster/data/mm4/??/*.agp
+    # 219652 1885501 11875772 total
+
+    # creates epcr.not.found.nomatch and epcr.not.found.psl
+    /projects/compbio/usr/booch/booch/scripts/epcrToPsl -mouse \
+	epcr.not.found /cluster/bluearc/scratch/mus/mm4/musPrimer.fa \
+	accession_info.rdb /cluster/data/mm4
+    ##### epcr.not.found.psl is empty !
+    # Comparing results to Mm3:
+    # Mm3 wc epcr*
+    # 205     820    7585 epcr.not.found
+    #   1      12      95 epcr.not.found.nomatch
+    # 204    4284   19817 epcr.not.found.psl
+    # 410    5116   27497 total
+
+    # Mm4 wc epcr*
+    #  132     528    5154 epcr.not.found
+    #  132    1584   11622 epcr.not.found.nomatch
+    #    0       0       0 epcr.not.found.psl
+    #  264    2112   16776 total
+
+    # combine them to one, since epcr.not.found.psl is empty, this is a copy
+    cat primers.psl.filter.blat epcr.not.found.psl > primers.psl.filter
+
+    # lift those primers  (added chrM to this lifter script for mouse)
+    # creates primers.psl.filter.lifted
+    /projects/compbio/usr/booch/booch/scripts/lifter -mouse -psl \
+	/cluster/data/mm4 primers.psl.filter
+
+    # create primers.initial
+    PATH=/cluster/home/booch/bin:$PATH \
+	/projects/compbio/usr/booch/booch/scripts/extractPslInfo \
+	primers.psl.filter.lifted
+    # create primers.initial.acc
+    /projects/compbio/usr/booch/booch/scripts/findAccession -agp \
+	-mouse primers.initial /cluster/data/mm4
+
+    # this needs to be -rat as that specifies how to scan the
+    # stsInfoMouse.bed file and it does not work if you use -mouse
+    /projects/compbio/usr/booch/booch/scripts/getStsId -rat \
+	/cluster/store5/mouseMarker/stsInfoMouse.bed \
+	primers.initial.acc > primers.initial.acc.trans
+
+    sort -k 4n primers.initial.acc.trans > primers.final
+    rm primers.initial.acc primers.initial.acc.trans
+    # comparing results to Mm3:
+    # Mm3 wc primers.final
+    # 26292  184044 1253365 primers.final
+    # Mm4 wc primers.final
+    # 24056  168392 1289371 primers.final
+
+    cd /cluster/data/mm4/bed/STSmarkers
+    # stsMarkers.final is empty for mouse
+    touch stsMarkers.final dummy
+    PATH=/cluster/home/booch/bin:$PATH \
+    /projects/compbio/usr/booch/booch/scripts/combineSeqPrimerPos \
+	stsMarkers.final primer/primers.final > stsMarkers_pos.rdb
+    # Comparing results to Mm3
+    # Mm3 wc stsMarkers_pos.rdb
+    # 25925  181475 1413458 stsMarkers_pos.rdb
+    # Mm4 wc stsMarkers_pos.rdb
+    # 24058  168406 1133400 stsMarkers_pos.rdb
+
+    /projects/compbio/usr/booch/booch/scripts/combineAllSeqPrimer \
+	-rat /cluster/store5/mouseMarker/stsInfoMouse.bed \
+	dummy primer/primers.final > stsMarkers_pos_all.rdb
+    # can not find this result for Mm3
+    # Mm4 wc stsMarkers_pos_all.rdb
+    # 22107   46165  293258 stsMarkers_pos_all.rdb
+
+XXXX this createSTSbed is only for Human, does not work here
+XXXX  Need something that converts stsMarkers_pos.rdb to stsMapMouse.bed
+    /projects/compbio/usr/booch/booch/scripts/createSTSbed \
+	/cluster/store5/mouseMarker/stsInfoMouse.bed \
+	stsMarkers_pos.rdb > stsMapMouse.bed
+
+#  STS Markers plots - needs to wait until stsMarkers_pos_all.rdb
+#	is created correctly from above, also needs the three maps files
+    mkdir /cluster/data/mm4/bed/STSmarkers/html
+    cd /cluster/data/mm4/bed/STSmarkers/html
+    mkdir maps plots sts
+
+    # not sure how to make the three maps/*.map files
+    /projects/compbio/usr/booch/booch/scripts/mergeTPFsts -rat \
+	../primer/accession_info.rdb ../stsMarkers_pos.rdb \
+	maps/wi_rh.id.map 3.0 ../stsMarkers_pos_all.rdb \
+	/cluster/store5/mouseMarker/stsInfoMouse.bed > rh.rdb
+    mv map.ranges rh.ranges
+    /projects/compbio/usr/booch/booch/scripts/mergeTPFsts -rat \
+	../primer/accession_info.rdb ../stsMarkers_pos.rdb \
+	maps/wi_gen.id.map 3.0 ../stsMarkers_pos_all.rdb \
+	/cluster/store5/mouseMarker/stsInfoMouse.bed > wi_gen.rdb
+    mv map.ranges wi_gen.ranges
+    /projects/compbio/usr/booch/booch/scripts/mergeTPFsts -rat \
+	../primer/accession_info.rdb ../stsMarkers_pos.rdb \
+	maps/mgd_gen.id.map 3.0 ../stsMarkers_pos_all.rdb \
+	/cluster/store5/mouseMarker/stsInfoMouse.bed > mgd.rdb
+    mv map.ranges mgd.ranges
+
+    /projects/compbio/usr/booch/booch/scripts/combineTPFsts \
+	rh.rdb wi_gen.rdb mgd.rdb > sts.rdb
+
+    /projects/compbio/usr/booch/booch/scripts/TPFrdb2html \
+	-mouse maps/wi_rh.id.map -plain ASSEM sts sts.rdb mm4 sts
+	
+    mv *.rdb sts/
+    mv *.ranges sts/
+
+    cd plots
+    STSFLAGS="-dbl -top 0.3 -mouse -m mm4"
+    /projects/compbio/usr/booch/booch/scripts/createUCSCplots \
+	${STSFLAGS} /cluster/data/mm4 ../maps ../../stsMarkers_pos.rdb
+    /projects/compbio/usr/booch/booch/scripts/createUCSCplots -x 10000000 \
+	${STSFLAGS} /cluster/data/mm4 ../maps ../../stsMarkers_pos.rdb
+    /projects/compbio/usr/booch/booch/scripts/createUCSCplots -x 50000000 \
+	${STSFLAGS} /cluster/data/mm4 ../maps ../../stsMarkers_pos.rdb
+
+LOAD GENEID GENES (DONE - 2003-11-27 - Hiram)
+    mkdir -p /cluster/data/mm4/bed/geneid/download
+    cd /cluster/data/mm4/bed/geneid/download
+    foreach f (/cluster/data/mm4/?{,?}/chr?{,?}{,_random}.fa)
+      set chr = $f:t:r
+      wget \
+http://genome.imim.es/genepredictions/M.musculus/mmOct2003/geneid_v1.1/$chr.gtf
+      wget \
+http://genome.imim.es/genepredictions/M.musculus/mmOct2003/geneid_v1.1/$chr.prot
+    end
+    # Add missing .1 to protein id's
+    foreach f (*.prot)
+      perl -wpe 's/^(>chr\w+)$/$1.1/' $f > $f:r-fixed.prot
+    end
+    cd ..
+    ldHgGene mm4 geneid download/*.gtf -exon=CDS
+    hgPepPred mm4 generic geneidPep download/*-fixed.prot
+

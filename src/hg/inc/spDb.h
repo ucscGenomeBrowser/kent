@@ -30,7 +30,12 @@ struct spFeature
     int end;	/* End coordinate (non-inclusive) */
     int featureClass; /* ID of featureClass */
     int featureType;  /* ID of featureType */
+    char softEndBits;/* 1 for start <, 2 for start ?, 4 for end >, 8 for end ? */
     };
+#define spFeatureStartLess 1
+#define spFeatureStartFuzzy 2
+#define spFeatureEndGreater 4
+#define spFeatureEndFuzzy 8
 
 struct spCitation
 /* A SwissProt citation of a reference.  Generally

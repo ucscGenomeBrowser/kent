@@ -19,7 +19,7 @@ url http://rgd.mcw.edu/tools/query/query.cgi?id=$$
 
 track blastzBestHuman
 shortLabel Best Human
-longLabel Blastz Human (Apr. 03) Best in Genome Alignments
+longLabel Blastz Human (Apr. 03) Best-in-Genome Alignments
 group compGeno
 priority 127.5
 visibility hide

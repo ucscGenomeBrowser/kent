@@ -9,9 +9,8 @@
 #include "dystring.h"
 #include "errabort.h"
 #include "linefile.h"
-//#include <sys/vfs.h>
 
-static char const rcsid[] = "$Id: linefile.c,v 1.25 2003/10/01 23:12:53 kent Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.26 2003/11/15 21:14:09 kent Exp $";
 
 struct lineFile *lineFileAttatch(char *fileName, bool zTerm, int fd)
 /* Wrap a line file around an open'd file. */

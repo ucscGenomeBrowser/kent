@@ -72,6 +72,10 @@ struct section *flyBaseSynonymsSection(struct sqlConnection *conn,
 	struct hash *sectionRa);
 /* Create FlyBase synonyms section. */
 
+struct section *bdgpExprInSituSection(struct sqlConnection *conn,
+	struct hash *sectionRa);
+/* Create BDGP Expression in situ image links section. */
+
 struct section *goSection(struct sqlConnection *conn,
 	struct hash *sectionRa);
 /* Create GO annotations section. */
@@ -99,6 +103,10 @@ struct section *pathwaysSection(struct sqlConnection *conn,
 struct section *rnaStructureSection(struct sqlConnection *conn,
 	struct hash *sectionRa);
 /* Create rnaStructure section. */
+
+struct section *sgdLocalizationSection(struct sqlConnection *conn,
+	struct hash *sectionRa);
+/* Create SGD Localization section. */
 
 #ifdef EXAMPLE
 struct section *xyzSection(struct sqlConnection *conn, 

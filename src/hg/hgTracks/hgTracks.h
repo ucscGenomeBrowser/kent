@@ -316,8 +316,14 @@ Color contrastingColor(struct vGfx *vg, int backgroundIx);
 /* Return black or white whichever would be more visible over
  * background. */
 
+boolean isNonChromColor(Color color);
+/* assign fake chrom color to scaffold, based on number */
+
 Color getChromColor(char *name, struct vGfx *vg);
 /* Return color index corresponding to chromosome name. */
+
+Color getScaffoldColor(char *scaffoldNumber, struct vGfx *vg);
+/* assign fake chrom color to scaffold, based on number */
 
 void clippedBarbs(struct vGfx *vg, int x, int y, 
 	int width, int barbHeight, int barbSpacing, int barbDir, Color color,

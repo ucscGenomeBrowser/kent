@@ -7,18 +7,22 @@
 #include "cart.h"
 #include "bed.h"
 
+#ifdef NEVER
 void hgSeqOptionsHti(struct hTableInfo *hti);
 /* Print out HTML FORM entries for gene region and sequence display options.
  * Use defaults from CGI. */
+#endif /* NEVER */
 
 void hgSeqOptionsHtiCart(struct hTableInfo *hti, struct cart *cart);
 /* Print out HTML FORM entries for gene region and sequence display options. 
  * Use defaults from CGI and cart. */
 
+#ifdef NEVER
 void hgSeqOptionsDb(char *db, char *table);
 /* Print out HTML FORM entries for gene region and sequence display options. */
+#endif /* NEVER */
 
-void hgSeqOptions(char *table);
+void hgSeqOptions(struct cart *cart, char *table);
 /* Print out HTML FORM entries for gene region and sequence display options. */
 
 int hgSeqItemsInRangeDb(char *db, char *table, char *chrom, int chromStart,

@@ -18,7 +18,8 @@ CREATE TABLE fosEndPairs (
     lfSizes longblob not null,	# Comma separated list of sizes of each linked feature in genomic
     lfNames longblob not null,	# Comma separated list of names of linked features
               #Indices
-    INDEX(bin),
-    INDEX(chrom,chromStart)
+    INDEX(chrom(8), bin),
+    INDEX(chrom(8),chromStart),
+    INDEX(chrom(8),chromEnd)
 );
 

@@ -13,7 +13,7 @@
 #include "hCommon.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.67 2003/10/21 21:29:17 angie Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.68 2003/11/27 05:13:40 jill Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -105,6 +105,7 @@ puts(
 "<td align=center valign=baseline>genome</td>\n"
 "<td align=center valign=baseline>assembly</td>\n"
 "<td align=center valign=baseline>position</td>\n"
+"<td align=center valign=baseline> </td>\n"
 "<td align=center valign=baseline>image width</td>\n"
 );
 
@@ -126,6 +127,11 @@ puts("</td>\n");
 puts("<td align=center>\n");
 cgiMakeTextVar("position", addCommasToPos(position), 30);
 printf("</td>\n");
+
+puts("<td align=center>\n");
+cgiMakeOnClickButton("document.mainForm.position.value=''","clear");
+printf("</td>\n");
+
 
 cartSetString(cart, "position",position);
 cartSetString(cart, "db",db);

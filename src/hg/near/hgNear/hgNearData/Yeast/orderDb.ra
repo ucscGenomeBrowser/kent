@@ -1,0 +1,19 @@
+# This contains C. elegans specific ordering info.
+#
+name blastp
+type pair sgdBlastTab query target bitScore -1 
+
+name pfamSimilarity
+type association sgdToPfam
+queryOne select value from sgdToPfam where name='%s'
+queryAll select name,value from sgdToPfam
+
+name nameSimilarity
+type nameSimilarity sgdToName name value
+
+name abc
+type abc sgdToName name value
+
+name goSimilarity
+queryOne select goId from go.goaPart where dbObjectId='%s'
+queryAll select dbObjectId,goId from go.goaPart

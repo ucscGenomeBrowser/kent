@@ -11,7 +11,7 @@
 #include "fa.h"
 
 struct dnaSeq *faList;
-static char const rcsid[] = "$Id: lavToAxt.c,v 1.13 2003/11/12 18:49:03 kent Exp $";
+static char const rcsid[] = "$Id: lavToAxt.c,v 1.14 2003/12/04 03:29:25 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -24,6 +24,8 @@ errAbort(
   "   -fa  qNibDir is interpreted as a fasta file of multiple dna seq instead of directory of nibs\n"
   );
 }
+
+boolean qIsFa = FALSE;	/* Corresponds to -fa flag. */
 
 struct block
 /* A block of an alignment. */
@@ -113,7 +115,7 @@ struct block *lastBlock = NULL;
 struct block *block;
 struct dyString *qSym = newDyString(16*1024);
 struct dyString *tSym = newDyString(16*1024);
-struct dnaSeq *qSeq, *tSeq, *seq = NULL;
+struct dnaSeq *qSeq = NULL, *tSeq = NULL, *seq = NULL;
 struct axt axt;
 
 static int ix = 0;
@@ -134,7 +136,7 @@ for (block = blockList; block != NULL; block = block->next)
 if (isRc)
     {
     reverseIntRange(&qStart, &qEnd, qSize);
-    if (optionExists("fa"))
+    if (qIsFa)
         {
         for (seq = faList ; seq != NULL ; seq = seq->next)
             if (sameString(qName, seq->name))
@@ -156,22 +158,22 @@ if (isRc)
     }
 else
     {    
-    if (optionExists("fa"))
+    if (qIsFa)
         {
         for (seq = faList ; seq != NULL ; seq = seq->next)
 	    {
             if (sameString(qName, seq->name))
                 break;
-            if (seq != NULL)
-                {
-                AllocVar(qSeq);
-                qSeq->size = qEnd - qStart;
-                qSeq->name = cloneString(qName);
-                qSeq->dna = (seq->dna)+qStart;
-                }
-            else
-                errAbort("sequence not found %d\n",qName);
 	    }
+	if (seq != NULL)
+	    {
+	    AllocVar(qSeq);
+	    qSeq->size = qEnd - qStart;
+	    qSeq->name = cloneString(qName);
+	    qSeq->dna = (seq->dna)+qStart;
+	    }
+	else
+	    errAbort("sequence not found %d\n",qName);
         }
     else
         qSeq = readFromCache(qCache, qNibDir, qName, qStart, qEnd - qStart, qSize);
@@ -236,7 +238,7 @@ axt.tSym = tSym->string;
 axtWrite(&axt, f);
 
 /* Clean up. */
-if (!optionExists("fa"))
+if (!qIsFa)
     freeDnaSeq(&qSeq);
 freeDnaSeq(&tSeq);
 dyStringFree(&qSym);
@@ -479,6 +481,7 @@ if (argc != 5)
     usage();
 if (optionExists("fa"))
     {
+    qIsFa = TRUE;
     faList = faReadAllMixed(argv[3]);
     }
 lavToAxt(argv[1], argv[2], argv[3], argv[4]);

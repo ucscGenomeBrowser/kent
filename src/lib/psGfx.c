@@ -6,7 +6,7 @@
 #include "common.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: psGfx.c,v 1.11 2003/05/06 07:33:43 kate Exp $";
+static char const rcsid[] = "$Id: psGfx.c,v 1.12 2003/11/15 21:14:09 kent Exp $";
 
 static void psFloatOut(FILE *f, double x)
 /* Write out a floating point number, but not in too much
@@ -182,7 +182,6 @@ void psTimesFont(struct psGfx *ps, double size)
 /* Set font to times of a certain size. */
 {
 FILE *f = ps->f;
-// fprintf(f, "/Times-Roman findfont ");
 fprintf(f, "/Helvetica findfont ");
 
 /* Note the 1.2 and the 1.0 below seem to get it to 

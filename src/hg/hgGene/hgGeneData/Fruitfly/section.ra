@@ -15,3 +15,8 @@ shortLabel Synonyms
 longLabel FlyBase Synonyms for Gene and Its Alleles
 priority 103
 
+name bdgpExprInSitu
+shortLabel In Situs
+longLabel BDGP Expression In Situ Images
+priority 104
+

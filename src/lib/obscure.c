@@ -10,7 +10,8 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.26 2003/10/22 18:41:48 braney Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.27 2003/11/25 21:02:51 sugnet Exp $";
+static int _dotForUserMod = 100; /* How often does dotForUser() output a dot. */
 
 long incCounterFile(char *fileName)
 /* Increment a 32 bit value on disk. */
@@ -466,4 +467,27 @@ while(*nPtr = *position++)
 	nPtr++;
 
 return newPos;
+}
+
+void dotForUserInit(int dotMod)
+/* Set how often dotForUser() outputs a dot. */
+{
+assert(dotMod > 0);
+_dotForUserMod = dotMod;
+}
+
+void dotForUser()
+/* Write out a dot every _dotForUserMod times this is called. */
+{
+static int dot = -10;
+/* Check to see if dot has been initialized. */
+if(dot == - 10)
+    dot = _dotForUserMod;
+
+if (--dot <= 0)
+    {
+    putc('.', stdout);
+    fflush(stdout);
+    dot = _dotForUserMod;
+    }
 }

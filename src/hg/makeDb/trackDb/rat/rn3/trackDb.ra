@@ -22,7 +22,7 @@ otherDb hg15
 
 track blastzBestHg15
 shortLabel Human Best
-longLabel Human (Apr. 03) Best in Genome Blastz Alignments
+longLabel Human (Apr. 03) Best-in-Genome Blastz Alignments
 group compGeno
 priority 113
 visibility hide
@@ -133,7 +133,7 @@ otherDb mm3
 
 track blastzBestMm3
 shortLabel Mm3 Best
-longLabel Mouse (Feb. 03) Best in Genome Blastz Alignments
+longLabel Mouse (Feb. 03) Best-in-Genome Blastz Alignments
 group compGeno
 priority 213
 visibility hide
@@ -206,7 +206,7 @@ otherDb mm4
 
 track blastzBestMm4
 shortLabel Mm4 Best
-longLabel Mouse (Oct 03/Mm4) Best in Genome Blastz Alignments
+longLabel Mouse (Oct 03/Mm4) Best-in-Genome Blastz Alignments
 group compGeno
 priority 213.1
 visibility hide

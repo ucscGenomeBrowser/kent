@@ -19,7 +19,7 @@
 #include "web.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.67 2003/09/17 17:08:51 kent Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.68 2003/11/19 22:49:05 kuhn Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -558,8 +558,8 @@ puts("Upload sequence: <INPUT TYPE=FILE NAME=\"seqFile\">");
 puts(" <INPUT TYPE=SUBMIT Name=Submit VALUE=\"Submit File\"><P>\n");
 
 printf("%s", 
-"<P>Only DNA sequences of 25,000 or less bases and protein or translated \n"
-"sequence of 5000 or less letters will be processed.  If multiple sequences\n"
+"<P>Only DNA sequences of 25,000 or fewer bases and protein or translated \n"
+"sequence of 5000 or fewer letters will be processed.  If multiple sequences\n"
 "are submitted at the same time, the total limit is 50,000 bases or 12,500\n"
 "letters.\n</P>"
 "BLAT on DNA is designed to\n"

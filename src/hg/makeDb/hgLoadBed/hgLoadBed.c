@@ -9,7 +9,7 @@
 #include "bed.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.17 2003/10/06 23:17:38 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.18 2003/12/01 20:21:07 kent Exp $";
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
@@ -229,7 +229,6 @@ if (argc < 4)
     usage();
 noBin = cgiBoolean("noBin");
 strictTab = cgiBoolean("tab");
-uglyf("stringTab = %d\n", strictTab);
 oldTable = cgiBoolean("oldTable");
 sqlTable = cgiOptionalString("sqlTable");
 hgLoadBed(argv[1], argv[2], argc-3, argv+3);

@@ -5,7 +5,7 @@
 #include "options.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: bedIntersect.c,v 1.3 2003/05/06 07:22:14 kate Exp $";
+static char const rcsid[] = "$Id: bedIntersect.c,v 1.4 2003/12/01 05:40:34 baertsch Exp $";
 
 boolean aHitAny = FALSE;
 
@@ -68,13 +68,13 @@ void bedIntersect(char *aFile, char *bFile, char *outFile)
 struct hash *bHash = readBed(bFile);
 struct lineFile *lf = lineFileOpen(aFile, TRUE);
 FILE *f = mustOpen(outFile, "w");
-char *row[3];
+char *row[40];
 char *name;
-int start, end;
+int start, end, i, wordCount;
 struct binElement *hitList = NULL, *hit;
 struct binKeeper *bk;
 
-while (lineFileRow(lf, row))
+while ((wordCount = lineFileChop(lf, row)) != 0)
     {
     name = row[0];
     start = lineFileNeedNum(lf, row, 1);
@@ -88,7 +88,12 @@ while (lineFileRow(lf, row))
 	if (aHitAny)
 	    {
 	    if (hitList != NULL)
-	        fprintf(f, "%s\t%d\t%d\n", name, start, end);
+                {
+	        fprintf(f, "%s\t%d\t%d", name, start, end);
+                for (i = 3 ; i<wordCount; i++)
+                    fprintf(f, "\t%s",row[i]);
+                fprintf(f, "\n");
+                }
 	    }
 	else
 	    {
@@ -97,7 +102,12 @@ while (lineFileRow(lf, row))
 		int s = max(start, hit->start);
 		int e = min(end, hit->end);
 		if (s < e)
-		    fprintf(f, "%s\t%d\t%d\n", name, s, e);
+                    {
+		    fprintf(f, "%s\t%d\t%d", name, s, e);
+                    for (i = 3 ; i<wordCount; i++)
+                        fprintf(f, "\t%s",row[i]);
+                    fprintf(f, "\n");
+                    }
 		}
 	    }
 	slFreeList(&hitList);

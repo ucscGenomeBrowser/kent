@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.31 2003/10/06 23:12:40 kent Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.34 2003/12/01 19:09:18 braney Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -337,8 +337,6 @@ fprintf(f, "%u", el->qStart);
 fputc(sep,f);
 fprintf(f, "%u", abs(el->qEnd - el->qStart));
 fputc(sep,f);
-//fprintf(f, "%u", el->qEnd);
-//fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->tName);
 if (sep == ',') fputc('"',f);
@@ -350,28 +348,6 @@ fputc(sep,f);
 fprintf(f, "%u", el->blockCount);
 fputc(sep,f);
 if (sep == ',') fputc('{',f);
-//for (i=0; i<el->blockCount; ++i)
-//    {
-//    fprintf(f, "%u", el->blockSizes[i]);
-    //fputc(',', f);
-//    }
-//if (sep == ',') fputc('}',f);
-//fputc(sep,f);
-//if (sep == ',') fputc('{',f);
-//for (i=0; i<el->blockCount; ++i)
-    //{
-    //fprintf(f, "%u", el->qStarts[i]);
-    //fputc(',', f);
-    //}
-//if (sep == ',') fputc('}',f);
-//fputc(sep,f);
-//if (sep == ',') fputc('{',f);
-//for (i=0; i<el->blockCount; ++i)
-    //{
-    //fprintf(f, "%u", el->tStarts[i]);
-    //fputc(',', f);
-    //}
-//if (sep == ',') fputc('}',f);
 fputc(lastSep,f);
 if (ferror(f))
     {
@@ -379,6 +355,7 @@ if (ferror(f))
     errAbort("\n");
     }
 }
+
 struct psl *pslLoadAll(char *fileName)
 /* Load all psl's in file. */
 {
@@ -568,9 +545,9 @@ struct psl *pslxLoadLm(char **row, struct lm *lm)
 {
 struct psl *ret = pslLoadLm(row, lm);
 ret->qSequence = lmAlloc(lm, sizeof(ret->qSequence[0]) * ret->blockCount);
-sqlStringArray(row[21],ret->qSequence, ret->blockCount);
+sqlStringArray(lmCloneString(lm,row[21]),ret->qSequence, ret->blockCount);
 ret->tSequence = lmAlloc(lm, sizeof(ret->tSequence[0]) * ret->blockCount);
-sqlStringArray(row[22],ret->tSequence, ret->blockCount);
+sqlStringArray(lmCloneString(lm,row[22]),ret->tSequence, ret->blockCount);
 return ret;
 }
 
@@ -790,13 +767,21 @@ return ffList;
 int pslOrientation(struct psl *psl)
 /* Translate psl strand + or - to orientation +1 or -1 */
 {
-/* code below doesn't support negative target strand (translated blat) */
-if (psl->strand[1] == '-')
-    errAbort("pslOrientation doesn't support a negative target strand");
-if (psl->strand[0] == '-')
-    return -1;
+if (psl->strand[1] != '\0')
+    {
+    /* translated blat */
+    if (psl->strand[0] != psl->strand[1])
+        return -1;
+    else
+        return 1;
+    }
 else
-    return 1;
+    {
+    if (psl->strand[0] == '-')
+        return -1;
+    else
+        return 1;
+    }
 }
 
 int pslWeightedIntronOrientation(struct psl *psl, struct dnaSeq *genoSeq, int offset)
@@ -1080,10 +1065,10 @@ return sqlCmdStr;
 static void printPslDesc(char* pslDesc, FILE* out, struct psl* psl)
 /* print description of a PSL on first error */
 {
-fprintf(out, "Error: invalid PSL: %s:%u-%u %s:%u-%u %s\n",
+fprintf(out, "Error: invalid PSL: %s:%u-%u %s:%u-%u %s %s\n",
         psl->qName, psl->qStart, psl->qEnd,
         psl->tName, psl->tStart, psl->tEnd,
-        pslDesc);
+        psl->strand, pslDesc);
 }
 
 static void chkRanges(char* pslDesc, FILE* out, struct psl* psl,
@@ -1209,6 +1194,7 @@ chkRanges(pslDesc, out, psl, psl->qName, "query", 'q',
           strand, psl->qSize, psl->qStart, psl->qEnd,
           psl->blockCount, psl->blockSizes, psl->qStarts,
           &errCount);
+
 return errCount;
 }
 

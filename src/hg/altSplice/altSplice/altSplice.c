@@ -71,7 +71,9 @@
 #include "bed.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: altSplice.c,v 1.9 2003/09/14 15:11:05 sugnet Exp $";
+#define USUAL
+// #define AFFYSPLICE
+static char const rcsid[] = "$Id: altSplice.c,v 1.10 2003/11/25 07:17:12 sugnet Exp $";
 
 int cassetteCount = 0; /* Number of cassette exons counted. */
 int misSense = 0;      /* Number of cassette exons that would introduce a missense mutation. */
@@ -79,7 +81,7 @@ int clusterCount = 0;  /* Number of gene clusters identified. */
 struct hash *uniqPos = NULL; /* Hash to make sure we're not outputting doubles. */
 double minCover = 0.0; /* Minimum percent of transcript aligning. */
 double minAli = 0.0;   /* Minimum percent identity of alignments to keep. */
-
+boolean weightMrna = FALSE; /* Add more weight to alignments of mRNAs? */
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
 {
@@ -91,6 +93,8 @@ static struct optionSpec optionSpecs[] =
     {"consensus", OPTION_BOOLEAN},
     {"minCover", OPTION_FLOAT},
     {"minAli", OPTION_FLOAT},
+    {"skipTissues", OPTION_BOOLEAN},
+    {"weightMrna", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -105,6 +109,8 @@ static char *optionDescripts[] =
     "Try to extend partials to consensus site instead of farthest.",
     "Minimum percent of a sequence that an alignment can contain and be included.",
     "Minimum percent id of alignment to keep.",
+    "Skip loading the tissues and libraries.",
+    "Add more weight to mRNAs and RefGenes."
 };
 
 void usage()
@@ -135,6 +141,22 @@ pass = ((1000-pslCalcMilliBad(psl, TRUE)) > milliMin) && pass;
 return pass;
 }
 
+struct psl *clonePsl(struct psl *psl)
+/* Copy a psl to separate memory. */
+{
+struct psl *c = CloneVar(psl);
+c->next = NULL;
+c->qName = cloneString(psl->qName);
+c->tName = cloneString(psl->tName);
+AllocArray(c->blockSizes, c->blockCount);
+CopyArray(psl->blockSizes, c->blockSizes, c->blockCount);
+AllocArray(c->qStarts, c->blockCount);
+CopyArray(psl->qStarts, c->qStarts, c->blockCount);
+AllocArray(c->tStarts, c->blockCount);
+CopyArray(psl->tStarts, c->tStarts, c->blockCount);
+return c;
+}
+
 
 struct psl *loadPslsFromDb(struct sqlConnection *conn, int numTables, char **tables, 
 			   char *chrom, unsigned int chromStart, unsigned int chromEnd)
@@ -158,6 +180,11 @@ for(i = 0; i < numTables; i++)
 	    (psl->tStarts[psl->blockCount -1] <= chromEnd) )
 	    {
 	    slSafeAddHead(&pslList, psl);
+	    if(weightMrna && (stringIn("refSeqAli",tables[i]) || stringIn("mrna", tables[i])))
+		{
+		psl = clonePsl(psl);
+		slSafeAddHead(&pslList, psl);
+		}
 	    }
 	else
 	    {
@@ -213,6 +240,7 @@ dif = -1 * (abs(a->tEnd - a->tStart) - abs(b->tEnd - b->tStart));
 return dif;
 }
 
+
 boolean agIsUnique(struct altGraphX *ag)
 /* Return TRUE if there isn't an altGraphX record already seen like this one. */
 {
@@ -225,6 +253,7 @@ else
     hashAdd(uniqPos, buff, dummy);
 return TRUE;
 }    
+
 
 struct altGraphX *agFromAlignments(struct ggMrnaAli *maList, struct dnaSeq *seq, struct sqlConnection *conn,
 				   struct genePred *gp, int chromStart, int chromEnd, FILE *out )
@@ -245,14 +274,14 @@ if(mcList == NULL)
 /* Get the largest cluster, gene predictions come sorted
  * smallest first. By looking at only the largest cluster
  * we can thus avoid duplicates. */
-slSort(&mcList, mcLargestFirstCmp);
+//slSort(&mcList, mcLargestFirstCmp);
 mc = mcList;
 clusterCount++;
 for(mc != mcList; mc != NULL; mc = mc->next)
     {
     if(optionExists("consensus"))
 	{
-	gg = ggGraphConsensusCluster(mc, ci, TRUE);
+	gg = ggGraphConsensusCluster(mc, ci, !optionExists("skipTissues"));
 	}
     else
 	gg = ggGraphCluster(mc,ci);
@@ -289,8 +318,14 @@ struct altGraphX *agFromGp(struct genePred *gp, struct sqlConnection *conn,
 {
 struct altGraphX *ag = NULL;
 struct dnaSeq *genoSeq = NULL;
+#ifdef AFFYSPLICE
+char *tablePrefixes[] = {}; //{"_mrna", "_intronEst"};
+char *wholeTables[] = {"splicesTmp"}; // {"refSeqAli"};
+#endif
+#ifdef USUAL
 char *tablePrefixes[] = {"_mrna", "_intronEst"};
 char *wholeTables[] = {"refSeqAli"};
+#endif
 int numTables =0;
 char **tables = NULL;
 int i,j,k,l;
@@ -333,8 +368,7 @@ maList = pslListToGgMrnaAliList(pslList, gp->chrom, chromStart, chromEnd, genoSe
 for(ma = maList; ma != NULL; ma = maNext)
     {
     maNext = ma->next;
-    if( (ma->strand[0] == '+' && ma->orientation == 1) ||
-	(ma->strand[0] == '-' && ma->orientation == -1)) 
+    if(ma->strand[0] == gp->strand[0])
 	{
 	slSafeAddHead(&maSameStrand, ma);
 	}
@@ -401,20 +435,23 @@ struct genePred *convertBedsToGps(char *bedFile)
 /* Load beds from a file and convert to bare bones genePredictions. */
 {
 struct genePred *gpList = NULL, *gp =NULL;
-struct bed bed;
+struct bed *bedList=NULL, *bed=NULL;
 char *row[4];
-struct lineFile *lf = lineFileOpen(bedFile, TRUE);
-while(lineFileRow(lf, row))
+bedList = bedLoadAll(bedFile);
+if(bedList->strand == NULL)
+    errAbort("Beds must have strand information.");
+for(bed=bedList; bed!=NULL; bed=bed->next)
     {
-    bedStaticLoad(row, &bed);
     AllocVar(gp);
-    gp->chrom = cloneString(bed.chrom);
-    gp->txStart = bed.chromStart;
-    gp->txEnd = bed.chromEnd;
-    gp->name = cloneString(bed.name);
+    gp->chrom = cloneString(bed->chrom);
+    gp->txStart = bed->chromStart;
+    gp->txEnd = bed->chromEnd;
+    gp->name = cloneString(bed->name);
+    safef(gp->strand, sizeof(gp->strand), "%s", bed->strand);
     slAddHead(&gpList, gp);
     }
-lineFileClose(&lf);
+bedFreeList(&bedList);
+slReverse(&gpList);
 return gpList;
 }
 
@@ -455,7 +492,7 @@ else
     warn("Must specify either a bed file or a genePred file");
     usage();
     }
-slSort(&gpList, gpSmallestFirstCmp);
+slSort(&gpList, genePredCmp);
 
 out = mustOpen(outFile, "w");
 for(gp = gpList; gp != NULL & count < 5; )
@@ -496,6 +533,7 @@ if(outFile == NULL)
 minAli = optionFloat("minAli", 0.0);
 minCover = optionFloat("minCover", 0.0);
 memTest = optionExists("memTest");
+weightMrna = optionExists("weightMrna");
 if(memTest == TRUE)
     warn("Testing for memory leaks, use top to monitor and CTRL-C to stop.");
 uniqPos = newHash(10);

@@ -8,7 +8,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: spToDb.c,v 1.6 2003/10/01 06:25:39 kent Exp $";
+static char const rcsid[] = "$Id: spToDb.c,v 1.7 2003/11/15 21:02:41 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -123,7 +123,12 @@ struct spFeature
     int end;			/* Non-inclusive. */
     char *type;			/* Type of feature, more specific than class. 
                                  * May be NULL. */
+    char softEndBits;/* 1 for start <, 2 for start ?, 4 for end >, 8 for end ? */
     };
+#define spFeatureStartLess 1
+#define spFeatureStartFuzzy 2
+#define spFeatureEndGreater 4
+#define spFeatureEndFuzzy 8
 
 struct spLitRef 
 /* A swissProt literature reference. */
@@ -335,12 +340,36 @@ char *class = nextWord(&line);
 char *start = nextWord(&line);
 char *end = nextWord(&line);
 char *type = skipLeadingSpaces(line);
+char c;
 if (end == NULL || end[0] == 0)
     errAbort("Short FT line %d of %s", lf->lineIx, lf->fileName);
 lmAllocVar(lm, feat);
 feat->class = lmCloneString(lm, class);
+c = *start;
+if (c == '<')
+    {
+    feat->softEndBits |= spFeatureStartLess;
+    start += 1;
+    }
+else if (c == '?')
+    {
+    feat->softEndBits |= spFeatureStartFuzzy;
+    start += 1;
+    }
+c = *end;
+if (c == '>')
+    {
+    feat->softEndBits |= spFeatureEndGreater;
+    end += 1;
+    }
+else if (c == '?')
+    {
+    feat->softEndBits |= spFeatureEndFuzzy;
+    end += 1;
+    }
 feat->start = atoi(start)-1;
 feat->end = atoi(end);
+
 if (type != NULL)
     {
     /* Looks like multi-line type. */
@@ -859,8 +888,8 @@ for (;;)
 	    {
 	    int class = uniqueStore(featureClassUni, feat->class);
 	    int type = uniqueStore(featureTypeUni, feat->type);
-	    fprintf(feature, "%s\t%d\t%d\t%d\t%d\n",
-	    	acc, feat->start, feat->end, class, type);
+	    fprintf(feature, "%s\t%d\t%d\t%d\t%d\t%d\n",
+	    	acc, feat->start, feat->end, class, type, feat->softEndBits);
 	    }
 	}
 

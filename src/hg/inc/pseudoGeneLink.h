@@ -5,35 +5,48 @@
 #ifndef PSEUDOGENELINK_H
 #define PSEUDOGENELINK_H
 
-#define PSEUDOGENELINK_NUM_COLS 18
+#define PSEUDOGENELINK_NUM_COLS 35
 
 struct pseudoGeneLink
 /* links a gene/pseudogene prediction to an ortholog or paralog. */
     {
     struct pseudoGeneLink *next;  /* Next in singly linked list. */
+    short bin;	/* bin for browser speedup */
+    char *chrom;	/* Chromosome name for pseudogene */
+    unsigned chromStart;	/* pseudogene alignment start position */
+    unsigned chromEnd;	/* pseudogene alignment end position */
     char *name;	/* Name of pseudogene */
     unsigned score;	/* score of pseudogene with gene */
+    char *strand;	/* strand of pseudoegene */
+    unsigned thickStart;	/* Start of where display should be thick (start codon) */
+    unsigned thickEnd;	/* End of where display should be thick (stop codon) */
+    unsigned reserved;	/* Always zero for now */
+    int blockCount;	/* Number of blocks */
+    int *blockSizes;	/* Comma separated list of block sizes */
+    int *chromStarts;	/* Start positions relative to chromStart */
     char *assembly;	/* assembly for gene */
     char *geneTable;	/* mysql table of gene */
     char *gene;	/* Name of gene */
-    char *chrom;	/* Chromosome name */
+    char *gChrom;	/* Chromosome name */
     unsigned gStart;	/* gene alignment start position */
     unsigned gEnd;	/* gene alignment end position */
-    unsigned score2;	/* intron score of pseudogene with gap */
-    unsigned score3;	/* intron score of pseudogene */
-    unsigned chainId;	/* chain id of gene/pseudogene alignment */
-    char *strand;	/* strand of gene */
+    char *gStrand;	/* strand of gene */
+    unsigned exonCount;	/* # of exons in gene  */
+    unsigned geneOverlap;	/* bases overlapping */
     unsigned polyA;	/* length of polyA */
     unsigned polyAstart;	/* start f polyA */
-    char *pchrom;	/* Chromosome name for pseudogene */
-    unsigned pStart;	/* pseudogene alignment start position */
-    unsigned pEnd;	/* pseudogene alignment end position */
-    char *pStrand;	/* strand of pseudoegene */
+    unsigned exonCover;	/* number of exons in Gene covered */
+    unsigned intronCount;	/* number of introns in pseudogene */
+    unsigned bestAliCount;	/* number of good mrnas aligning */
+    unsigned matches;	/* matches + repMatches */
+    unsigned qSize;	/* aligning bases in pseudogene */
+    unsigned qEnd;	/* end of cdna alignment */
+    unsigned tReps;	/* repeats in gene */
+    unsigned qReps;	/* repeats in pseudogene */
+    unsigned overlapDiag;	/* bases on the diagonal to mouse */
+    unsigned coverage;	/* bases on the diagonal to mouse */
+    unsigned chainId;	/* chain id of gene/pseudogene alignment */
     };
-
-void pseudoGeneLinkStaticLoad(char **row, struct pseudoGeneLink *ret);
-/* Load a row from pseudoGeneLink table into ret.  The contents of ret will
- * be replaced at the next call to this function. */
 
 struct pseudoGeneLink *pseudoGeneLinkLoad(char **row);
 /* Load a pseudoGeneLink from row fetched with select * from pseudoGeneLink

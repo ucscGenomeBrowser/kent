@@ -10,9 +10,13 @@
 #include "rmskOut.h"
 #include "chromInserts.h"
 #include "axt.h"
+#include "chain.h"
+#include "chainNet.h"
+#include "liftUp.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.20 2003/10/30 13:25:24 braney Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.24 2003/12/01 22:39:28 braney Exp $";
 
+boolean isPtoG = TRUE;  /* is protein to genome lift */
 boolean nohead = FALSE;	/* No header for psl files? */
 boolean nosort = FALSE;	/* Don't sort files */
 int dots=0;	/* Put out I'm alive dot now and then? */
@@ -22,8 +26,8 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
- "liftUp - change coordinates of .psl, .agp, .gl, .out, .gff, .gtf \n"
- ".score .tab .gdup .axt or .bed files to parent coordinate system.\n"
+ "liftUp - change coordinates of .psl, .agp, .gl, .out, .gff, .gtf .bscore \n"
+ ".tab .gdup .axt .chain .net or .bed files to parent coordinate system.\n"
  "usage:\n"
  "   liftUp [-type=.xxx] destFile liftSpec how sourceFile(s)\n"
  "The optional -type parameter tells what type of files to lift\n"
@@ -49,6 +53,8 @@ errAbort(
  "   -dots=N Output a dot every N lines processed\n"
  "   -pslQ  Lift query (rather than target) side of psl\n"
  "   -axtQ  Lift query (rather than target) side of axt\n"
+ "   -chainQ  Lift query (rather than target) side of chain\n"
+ "   -netQ  Lift query (rather than target) side of net\n"
  "   -nosort Don't sort bed, gff, or gdup files, to save memory\n"
  "   -gapsize change contig gapsize from default\n"
  );
@@ -57,62 +63,6 @@ errAbort(
 boolean silentDrop;	/* True if should silently drop items not in liftSpec. */
 boolean carryMissing;   /* True if should carry missing items untranslated. */
 boolean pipeOut;	/* True if main output is stdout. */
-
-struct liftSpec
-/* How to lift coordinates. */
-    {
-    struct liftSpec *next;	/* Next in list. */
-    int offset;			/* Offset to add. */
-    char *oldName;		/* Name in source file. */
-    int oldSize;                /* Size of old sequence. */
-    char *newName;		/* Name in dest file. */
-    int newSize;                   /* Size of new sequence. */
-    char strand;                /* Strand of contig relative to chromosome. */
-    };
-
-struct liftSpec *readLifts(char *fileName)
-/* Read in lift file. */
-{
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-int wordCount;
-char *words[16];
-struct liftSpec *list = NULL, *el;
-
-while ((wordCount = lineFileChop(lf, words)) != 0)
-    {
-    char *offs;
-    if (wordCount < 5)
-        errAbort("Need at least 5 words line %d of %s", lf->lineIx, lf->fileName);
-    offs = words[0];
-    if (!isdigit(offs[0]) && !(offs[0] == '-' && isdigit(offs[1])))
-	errAbort("Expecting number in first field line %d of %s", lf->lineIx, lf->fileName);
-    if (!isdigit(words[4][0]))
-	errAbort("Expecting number in fifth field line %d of %s", lf->lineIx, lf->fileName);
-    AllocVar(el);
-    el->offset = atoi(offs);
-    el->oldName = cloneString(words[1]);
-    el->oldSize = atoi(words[2]);
-    el->newName = cloneString(words[3]);
-    el->newSize = atoi(words[4]);
-    if (wordCount >= 6)
-        {
-	char c = words[5][0];
-	if (c == '+' || c == '-')
-	    el->strand = c;
-	else
-	    errAbort("Expecting + or - field 6, line %d of %s", lf->lineIx, lf->fileName);
-	}
-    else
-        el->strand = '+';
-    slAddHead(&list, el);
-    }
-slReverse(&list);
-lineFileClose(&lf);
-if (!pipeOut) printf("Got %d lifts in %s\n", slCount(list), fileName);
-if (list == NULL)
-    errAbort("Empty liftSpec file %s", fileName);
-return list;
-}
 
 char *rmChromPrefix(char *s)
 /* Remove chromosome prefix if any. */
@@ -132,20 +82,6 @@ for (el = list; el != NULL; el = el->next)
     {
     el->oldName = rmChromPrefix(el->oldName);
     }
-}
-
-struct hash *hashLift(struct liftSpec *list, boolean revOk)
-/* Return a hash of the lift spec. */
-{
-struct hash *hash = newHash(0);
-struct liftSpec *el;
-for (el = list; el != NULL; el = el->next)
-    {
-    if (!revOk && el->strand != '+')
-        errAbort("Can't lift from minus strand contigs (like %s) on this file type", el->oldName);
-    hashAdd(hash, el->oldName, el);
-    }
-return hash;
 }
 
 struct liftSpec *findLift(struct hash *liftHash, char *oldName, struct lineFile *lf)
@@ -325,6 +261,7 @@ char *line, *words[32];
 struct psl *psl;
 struct xAli *xa = NULL;
 unsigned *starts;
+unsigned *blockSizes;
 struct liftSpec *spec;
 int offset;
 int blockCount;
@@ -373,10 +310,34 @@ for (i=0; i<sourceCount; ++i)
 	else
 	    {
 	    offset = spec->offset;
+	    blockSizes = psl->blockSizes;
 	    if (querySide)
 	        {
-		psl->qStart += offset;
-		psl->qEnd += offset;
+		if (!isPtoG)
+		    {
+		    psl->qStart += offset;
+		    psl->qEnd += offset;
+		    }
+		else
+		    {
+		    psl->match *= 3;
+		    psl->misMatch *= 3;
+		    if (spec->strand == '-')
+			{
+			int tmp = psl->qEnd;
+			psl->qEnd = psl->qStart;
+			psl->qStart = tmp;
+			psl->qStart *= -3;
+			psl->qStart += offset;
+			psl->qEnd += offset;
+			}
+		    else
+			{
+			psl->qStart += offset;
+			psl->qEnd *= 3;
+			psl->qEnd += offset;
+			}
+		    }
 		starts = psl->qStarts;
 		seqSize = psl->qSize;
 		}
@@ -388,7 +349,17 @@ for (i=0; i<sourceCount; ++i)
 		seqSize = psl->tSize;
 		}
 	    blockCount = psl->blockCount;
-	    if (psl->strand[strandChar] == '-')
+	    if (isPtoG && (spec->strand == '-'))
+	        {
+		psl->strand[strandChar] = spec->strand;
+		for (j=0; j<blockCount; ++j)
+		    {
+		    int tr = seqSize - (starts[j] + blockSizes[j]);
+		    tr += offset;
+		    starts[j] = spec->newSize - tr;
+		    }
+		}
+	    else if (psl->strand[strandChar] == '-')
 	        {
 		for (j=0; j<blockCount; ++j)
 		    {
@@ -402,6 +373,9 @@ for (i=0; i<sourceCount; ++i)
 		for (j=0; j<blockCount; ++j)
 		    starts[j] += offset;
 		}
+	    if (isPtoG)
+		for (j=0; j<blockCount; ++j)
+		    blockSizes[j] *= 3;
 	    if (querySide)
 	        {
 		psl->qSize = spec->newSize;
@@ -494,6 +468,171 @@ for (sourceIx = 0; sourceIx < sourceCount; ++sourceIx)
 	    }
 	axtWrite(&a, f);
 	axtFree(&axt);
+	doDots(&dotMod);
+	}
+    lineFileClose(&lf);
+    }
+}
+
+void liftChain(char *destFile, struct hash *liftHash, 
+	int sourceCount, char *sources[], boolean querySide)
+/* Lift up coordinates in .chain file. */
+{
+FILE *f = mustOpen(destFile, "w");
+int sourceIx;
+int dotMod = dots;
+
+for (sourceIx = 0; sourceIx < sourceCount; ++sourceIx)
+    {
+    char *source = sources[sourceIx];
+    struct lineFile *lf = lineFileOpen(source, TRUE);
+    struct chain *chain;
+    if (!pipeOut) printf("Lifting %s\n", source);
+    while ((chain = chainRead(lf)) != NULL)
+        {
+	struct liftSpec *spec;
+	char *seqName = querySide ? chain->qName : chain->tName;
+	spec = findLift(liftHash, seqName, lf);
+	if (spec == NULL)
+	    {
+	    if (!carryMissing)
+	        {
+		chainFree(&chain);
+		continue;
+		}
+	    }
+	else
+	    {
+	    struct boxIn *b = NULL;
+	    int offset = spec->offset;
+	    if (querySide)
+		{
+		if (chain->qStrand == '-')
+		    offset = spec->newSize - (spec->offset + spec->oldSize);
+		freeMem(chain->qName);
+		chain->qName = cloneString(spec->newName);
+		chain->qSize = spec->newSize;
+		chain->qStart += offset;
+		chain->qEnd   += offset;
+		for (b=chain->blockList;  b != NULL;  b=b->next)
+		    {
+		    b->qStart += offset;
+		    b->qEnd   += offset;
+		    }
+		}
+	    else
+		{
+		freeMem(chain->tName);
+		chain->tName = cloneString(spec->newName);
+		chain->tSize = spec->newSize;
+		chain->tStart += offset;
+		chain->tEnd   += offset;
+		for (b=chain->blockList;  b != NULL;  b=b->next)
+		    {
+		    b->tStart += offset;
+		    b->tEnd   += offset;
+		    }
+		}
+	    }
+	chainWrite(chain, f);
+	chainFree(&chain);
+	doDots(&dotMod);
+	}
+    lineFileClose(&lf);
+    }
+}
+
+void liftFillsT(struct cnFill *fillList, struct liftSpec *spec)
+/* Lift target coords in each element of fillList and recursively descend to 
+ * children of each element if necessary. */
+{
+struct cnFill *fill;
+for (fill=fillList;  fill != NULL;  fill=fill->next)
+    {
+    fill->tStart += spec->offset;
+    if (fill->children != NULL)
+	liftFillsT(fill->children, spec);
+    }
+}
+
+void liftFillsQ(struct cnFill *fillList, struct hash *nameHash,
+		struct hash *liftHash, struct lineFile *lf)
+/* Lift query coords in each element of fillList and recursively descend to 
+ * children of each element if necessary.  lf is only for err reporting. */
+{
+struct cnFill *fill;
+for (fill=fillList;  fill != NULL;  fill=fill->next)
+    {
+    struct liftSpec *spec = findLift(liftHash, fill->qName, lf);
+    if (spec == NULL)
+	{
+	if (!carryMissing)
+	    {
+	    errAbort("Can't lift fill->qName %s and don't support dropping lifts",
+		     fill->qName);
+	    }
+	}
+    else
+	{
+	fill->qName = spec->newName;
+	fill->qStart += spec->offset;
+	}
+    // nameHash needs to be completely rebuilt with all strings it contained 
+    // before (see chainNet.c::cnFillFromLine), regardless of whether we're 
+    // changing their values:
+    fill->qName = hashStoreName(nameHash, fill->qName);
+    fill->type  = hashStoreName(nameHash, fill->type);
+
+    if (fill->children != NULL)
+	liftFillsQ(fill->children, nameHash, liftHash, lf);
+    }
+}
+
+
+void liftNet(char *destFile, struct hash *liftHash, 
+	int sourceCount, char *sources[], boolean querySide)
+/* Lift up coordinates in .net file. */
+{
+FILE *f = mustOpen(destFile, "w");
+int sourceIx;
+int dotMod = dots;
+
+for (sourceIx = 0; sourceIx < sourceCount; ++sourceIx)
+    {
+    char *source = sources[sourceIx];
+    struct lineFile *lf = lineFileOpen(source, TRUE);
+    struct chainNet *net;
+    if (!pipeOut) printf("Lifting %s\n", source);
+    while ((net = chainNetRead(lf)) != NULL)
+        {
+	if (querySide)
+	    {
+	    struct hash *newNameHash = hashNew(6);
+	    liftFillsQ(net->fillList, newNameHash, liftHash, lf);
+	    hashFree(&(net->nameHash));
+	    net->nameHash = newNameHash;
+	    }
+	else
+	    {
+	    struct liftSpec *spec = findLift(liftHash, net->name, lf);
+	    if (spec == NULL)
+		{
+		if (!carryMissing)
+		    {
+		    chainNetFree(&net);
+		    continue;
+		    }
+		}
+	    else
+		{
+		freeMem(net->name);
+		net->name = cloneString(spec->newName);
+		net->size = spec->newSize;
+		liftFillsT(net->fillList, spec);
+		}
+	    }
+	chainNetWrite(net, f);
+	chainNetFree(&net);
 	doDots(&dotMod);
 	}
     lineFileClose(&lf);
@@ -819,13 +958,13 @@ void liftGdup(char *destFile, struct hash *liftHash, int sourceCount, char *sour
 liftTabbed(destFile, liftHash, sourceCount, sources, 0, 1, 2, TRUE, 6, 7, 8, 1, -1);
 }
 
-void liftScore(char *destFile, struct hash *liftHash, int sourceCount, char *sources[], boolean querySide)
-/* Lift up coordinates of a .score */
+void liftBScore(char *destFile, struct hash *liftHash, int sourceCount, char *sources[], boolean querySide)
+/* Lift up coordinates of a .bscore */
 {
 if (querySide)
-    liftTabbed(destFile, liftHash, sourceCount, sources, 4, 5, 6, FALSE, 0, 0, 0, 0, 1);
+    liftTabbed(destFile, liftHash, sourceCount, sources, 1, 2, 3, FALSE, 0, 0, 0, 0, 1);
 else
-    liftTabbed(destFile, liftHash, sourceCount, sources, 0, 2, 3, FALSE, 0, 0, 0, 0, 1);
+    liftTabbed(destFile, liftHash, sourceCount, sources, 4, 5, 6, FALSE, 0, 0, 0, 0, 1);
 }
 
 void liftBlast(char *destFile, struct hash *liftHash, int sourceCount, char *sources[])
@@ -925,6 +1064,7 @@ else
     usage();
 pipeOut = sameString(destFile, "stdout");
 lifts = readLifts(liftFile);
+if (!pipeOut) printf("Got %d lifts in %s\n", slCount(lifts), liftFile);
 
 if (endsWith(destType, ".out"))
     {
@@ -935,9 +1075,9 @@ if (endsWith(destType, ".out"))
 else if (endsWith(destType, ".pslx") || endsWith(destType, ".xa") || endsWith(destType, ".psl"))
     {
     rmChromPart(lifts);
-    liftHash = hashLift(lifts, FALSE);
+    liftHash = hashLift(lifts, TRUE);
     liftPsl(destFile, liftHash, sourceCount, sources, 
-    	cgiBoolean("pslQ") || cgiBoolean("pslq"), !endsWith(destType, ".psl"));
+    	cgiBoolean("pslQ") || cgiBoolean("pslq"), !endsWith(destType, ".psl") );
     }
 else if (endsWith(destType, ".agp"))
     {
@@ -968,11 +1108,11 @@ else if (endsWith(destType, ".bed"))
     liftHash = hashLift(lifts, TRUE);
     liftBed(destFile, liftHash, sourceCount, sources);
     }
-else if (endsWith(destType, ".score"))
+else if (endsWith(destType, ".bscore"))
     {
     rmChromPart(lifts);
     liftHash = hashLift(lifts, TRUE);
-    liftScore(destFile, liftHash, sourceCount, sources,
+    liftBScore(destFile, liftHash, sourceCount, sources,
     	cgiBoolean("pslQ") || cgiBoolean("pslq"));
     }
 else if (endsWith(destType, ".tab"))
@@ -994,6 +1134,20 @@ else if (strstr(destType, ".axt"))
     liftAxt(destFile, liftHash, sourceCount, sources, 	
     	cgiBoolean("axtQ") || cgiBoolean("axtq"));
     }
+else if (strstr(destType, ".chain"))
+    {
+    rmChromPart(lifts);
+    liftHash = hashLift(lifts, FALSE);
+    liftChain(destFile, liftHash, sourceCount, sources, 	
+    	cgiBoolean("chainQ") || cgiBoolean("chainq"));
+    }
+else if (strstr(destType, ".net"))
+    {
+    rmChromPart(lifts);
+    liftHash = hashLift(lifts, FALSE);
+    liftNet(destFile, liftHash, sourceCount, sources, 	
+    	cgiBoolean("netQ") || cgiBoolean("netq"));
+    }
 else 
     {
     errAbort("Unknown file suffix for %s\n", destType);
@@ -1006,6 +1160,7 @@ int main(int argc, char *argv[])
 cgiSpoof(&argc, argv);
 nohead = cgiBoolean("nohead");
 nosort = cgiBoolean("nosort");
+isPtoG = cgiBoolean("isPtoG");
 dots = cgiUsualInt("dots", dots);
 gapsize = cgiOptionalInt("gapsize", 0);
 if (gapsize !=0)
