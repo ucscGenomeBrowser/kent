@@ -2439,6 +2439,20 @@ tg->loadItems = loadBacEndPairs;
 }
 
 
+void loadFosEndPairs(struct trackGroup *tg)
+/* Load up fosmid end pairs from table into trackGroup items. */
+{
+tg->items = lfsFromBedsInRange("fosEndPairs", winStart, winEnd, chromName);
+}
+
+void fosEndPairsMethods(struct trackGroup *tg)
+/* Fill in track group methods for linked features.series */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->loadItems = loadFosEndPairs;
+}
+
+
 struct linkedFeaturesPair *lfFromPslsInRangeForEstPair(char *table, char *chrom, int start, int end, boolean isXeno)
 /* Return a linked list of structures that have a pair of linked features for 5' and 3' ESTs from range of table. */
 {
@@ -9727,6 +9741,7 @@ withRuler = sameWord(s, "on");
 /* Register tracks that include some non-standard methods. */
 registerTrackHandler("cytoBand", cytoBandMethods);
 registerTrackHandler("bacEndPairs", bacEndPairsMethods);
+registerTrackHandler("fosEndPairs", fosEndPairsMethods);
 registerTrackHandler("genMapDb", genMapDbMethods);
 registerTrackHandler("cgh", cghMethods);
 registerTrackHandler("mcnBreakpoints", mcnBreakpointsMethods);

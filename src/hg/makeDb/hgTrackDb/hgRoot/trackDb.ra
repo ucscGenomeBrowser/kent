@@ -195,12 +195,17 @@ longLabel BAC End Pairs
 priority 10
 visibility hide
 
+track fosEndPairs
+shortLabel Fosmid End Pairs
+longLabel Fosmid End Pairs
+priority 10.1
+visibility hide
 
 
 track genomicSuperDups
 shortLabel filtered WGAC
 longLabel Duplications of >1000 Bases of non-repeatMasked Sequence
-priority 10
+priority 10.2
 visibility hide
 type bed 6 
 
@@ -208,33 +213,33 @@ type bed 6
 track celeraDupPositive
 shortLabel WSSD Duplication
 longLabel Sequence identified as duplicate by high depth Celera Reads 
-priority 10
+priority 10.3
 visibility hide
 type bed 6 +
 
 track celeraCoverage
 shortLabel WSSD Coverage
 longLabel Regions Assayed for SDD
-priority 10
+priority 10.4
 visibility hide
 type bed 6 +
 
 track genMapDb
 shortLabel GenMapDB Clones
 longLabel GenMapDB BAC Clones 
-priority 10.1
+priority 10.5
 visibility hide
 type bed 6 +
 
 track chr18deletions
 shortLabel Chr18 Deletions
 longLabel Chromosome 18 Deletions 
-priority 10.2
+priority 10.6
 visibility hide
 type bed 6 +
 
 track genomicDups
-priority 10.5
+priority 10.7
 shortLabel Duplications
 longLabel Duplications of >1000 Bases Sequence
 visibility hide
@@ -248,20 +253,6 @@ shortLabel Duplications
 longLabel Duplications of >98% Identity >1kb
 visibility dense
 type bed 6 .
-
-track cgh
-shortLabel UCSF CGH
-longLabel UCSF Comparative Genomic Hybridizations
-priority 11.5
-visibility hide
-type bed 4 +
-
-track mcnBreakpoints
-shortLabel MCN Breakpoints
-longLabel MCN breakpoints
-priority 11.7
-visibility hide
-type bed 4 +
 
 track genieKnown
 shortLabel Known Genes

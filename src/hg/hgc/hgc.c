@@ -89,9 +89,6 @@
 #include "jaxQTL.h"
 #include "hgSeq.h"
 
-#define ROGIC_CODE 1
-#define FUREY_CODE 1
-
 char mousedb[] = "mm1";
 
 struct cart *cart;	/* User's settings. */
@@ -2005,9 +2002,6 @@ hgFreeConn(&conn);
 }
 
 
-
-#ifdef ROGIC_CODE
-
 void printEstPairInfo(char *track, char *name)
 /* print information about 5' - 3' EST pairs */
 {
@@ -2040,7 +2034,6 @@ sr = sqlGetResult(conn, query);
 sqlFreeResult(&sr);
 hgFreeConn(&conn);
 }
-#endif /* ROGIC_CODE */
 
 void printAlignments(struct psl *pslList, 
 	int startFirst, char *hgcCommand, char *typeName, char *itemIn)
@@ -2077,7 +2070,6 @@ for (same = 1; same >= 0; same -= 1)
 printf("</TT></PRE>");
 }
 
-#ifdef ROGIC_CODE
 
 void doHgEstPair(char *track, char *name)
 /* Click on EST pair */
@@ -2085,8 +2077,6 @@ void doHgEstPair(char *track, char *name)
 cartWebStart(cart, name);
 printEstPairInfo(track, name);
 }
-
-#endif /* ROGIC_CODE */
 
 void doHgRna(struct trackDb *tdb, char *acc)
 /* Click on an individual RNA. */
@@ -5762,8 +5752,6 @@ hFreeConn(&conn);
 }
 
 
-#ifdef FUREY_CODE
-
 void printOtherLFS(char *clone, char *table, int start, int end)
 /* Print out the other locations of this clone */
 {
@@ -5807,13 +5795,20 @@ int end = cartInt(cart, "t");
 int i;
 struct lfs *lfs, *lfsList = NULL;
 struct psl *pslList = NULL, *psl;
-
+char sband[32], eband[32];
+boolean gotS, gotB;
 
 /* Determine type */
 if (sameString("bacEndPairs", track)) 
     {
     sprintf(title, "Location of %s using BAC end sequences", clone);
     lfLabel = "BAC ends";
+    table = track;
+    }
+if (sameString("fosEndPairs", track)) 
+    {
+    sprintf(title, "Location of %s using fosmid end sequences", clone);
+    lfLabel = "Fosmid ends";
     table = track;
     }
 
@@ -5832,9 +5827,16 @@ if (row != NULL)
     lfs = lfsLoad(row+1);
     if ((sameString("bacEndPairs", track))) 
     {
-    printf("<H2><A HREF=");
-    printCloneRegUrl(stdout, clone);
-    printf(">%s</A></H2>\n", clone);
+    if (sameString("bacEndPairs", track)) 
+	{
+	printf("<H2><A HREF=");
+	printCloneRegUrl(stdout, clone);
+	printf(">%s</A></H2>\n", clone);
+	}
+    else 
+	{
+	printf("%s\n", clone);
+	}
     }
     /*printf("<H2>%s - %s</H2>\n", type, clone);*/
     printf("<P><HR ALIGN=\"CENTER\"></P>\n<TABLE>\n");
@@ -5842,6 +5844,19 @@ if (row != NULL)
     printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start);
     printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
     printf("<TR><TH ALIGN=left>Strand:</TH><TD>%s</TD></TR>\n", lfs->strand);
+    gotS = hChromBand(seqName, start, sband);
+    gotB = hChromBand(seqName, end, eband);
+    if (gotS && gotB)
+	{
+	if (sameString(sband,eband)) 
+	    {
+	    printf("<TR><TH ALIGN=left>Band:</TH><TD>%s</TD></TR>\n",sband);
+	    }
+	else
+	    {
+	    printf("<TR><TH ALIGN=left>Bands:</TH><TD>%s - %s</TD></TR>\n",sband, eband);
+	    }
+	}
     printf("</TABLE>\n");
     printf("<P><HR ALIGN=\"CENTER\"></P>\n");
     if (lfs->score == 1000)
@@ -6253,11 +6268,6 @@ sqlFreeResult(&sr);
 hgFreeConn(&conn);
 } 
 
-#endif /* FUREY_CODE */
-
-
-#ifdef ROGIC_CODE
-
 void doMgcMrna(char *track, char *acc)
 /* Redirects to genbank record */
 {
@@ -6266,8 +6276,6 @@ void doMgcMrna(char *track, char *acc)
   printf("location.replace('http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=%s');\n",acc); 
   printf("</SCRIPT> <NOSCRIPT> No JavaScript support. Click <b><a href=\"http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=%s\">continue</a></b> for the requested GenBank report. </NOSCRIPT>\n",acc); 
 }
-
-#endif /* ROGIC_CODE */
 
 void doProbeDetails(struct trackDb *tdb, char *item)
 {
@@ -8560,12 +8568,10 @@ else if (sameWord(track, "rikenMrna"))
     {
     doRikenRna(tdb, item);
     }
-#ifdef ROGIC_CODE
 else if (sameWord(track, "estPair"))
     {
     doHgEstPair(track, item);
     }
-#endif /*ROGIC_CODE*/
 else if (sameWord(track, "ctgPos"))
     {
     doHgContig(tdb, item);
@@ -8797,14 +8803,15 @@ else if (sameWord(track, "tigrGeneIndex"))
     {
     doTigrGeneIndex(tdb, item);
     }
-#ifdef ROGIC_CODE
  else if (sameWord(track, "mgc_mrna"))
    {
      doMgcMrna(track, item);
    }
-#endif /*ROGIC_CODE*/
-#ifdef FUREY_CODE
  else if (sameWord(track, "bacEndPairs"))
+   {
+     doLinkedFeaturesSeries(track, item, tdb);
+   }
+ else if (sameWord(track, "fosEndPairs"))
    {
      doLinkedFeaturesSeries(track, item, tdb);
    }
@@ -8816,7 +8823,6 @@ else if (sameWord(track, "tigrGeneIndex"))
    {
      doMcnBreakpoints(track, item, tdb);
    }
-#endif /*FUREY_CODE*/
 else if (sameWord(track, "htcCdnaAli"))
    {
    htcCdnaAli(item);
