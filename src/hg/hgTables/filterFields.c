@@ -17,7 +17,7 @@
 #include "joiner.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.16 2004/11/05 23:00:00 kent Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.17 2004/11/05 23:33:08 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -342,14 +342,17 @@ static void doBigSelectPage(char *db, char *table)
 {
 struct joiner *joiner = allJoiner;
 struct dbTable *dtList, *dt;
-char parseBuf[256];
+char dbTableBuf[256];
 
-dbOverrideFromTable(parseBuf, &db, &table);
-htmlOpen("Select Fields from %s.%s", db, table);
+if (strchr(table, '.'))
+    htmlOpen("Select Fields from %s", table);
+else
+    htmlOpen("Select Fields from %s.%s", db, table);
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=POST>\n");
 cartSaveSession(cart);
 cgiMakeHiddenVar(hgtaDatabase, db);
 cgiMakeHiddenVar(hgtaTable, table);
+dbOverrideFromTable(dbTableBuf, &db, &table);
 
 showTableFields(db, table);
 dtList = extraTableList(selFieldLinkedTablePrefix());
@@ -463,10 +466,9 @@ return filterFieldVarName(db, table, field, filterPatternVar);
 boolean anyFilter()
 /* Return TRUE if any filter set. */
 {
+char dbTableBuf[256];
 char *filterTable = cartOptionalString(cart, hgtaFilterTable);
-char *db = database, *table = curTable, buf[256];
-dbOverrideFromTable(buf, &db, &table);
-return (filterTable != NULL && sameString(filterTable, table));
+return (filterTable != NULL && sameString(filterTable, curTable));
 }
 
 /* Droplist menus for filtering on fields: */
@@ -753,12 +755,17 @@ static void doBigFilterPage(struct sqlConnection *conn, char *db, char *table)
 {
 struct joiner *joiner = allJoiner;
 struct dbTable *dtList, *dt;
+char dbTableBuf[256];
 
-htmlOpen("Filter on Fields from %s.%s", db, table);
+if (strchr(table, '.'))
+    htmlOpen("Filter on Fields from %s", table);
+else
+    htmlOpen("Filter on Fields from %s.%s", db, table);
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=POST>\n");
 cartSaveSession(cart);
 cgiMakeHiddenVar(hgtaDatabase, db);
 cgiMakeHiddenVar(hgtaTable, table);
+dbOverrideFromTable(dbTableBuf, &db, &table);
 
 filterControlsForTable(db, table);
 dtList = extraTableList(filterLinkedTablePrefix);
@@ -787,7 +794,6 @@ void doFilterPage(struct sqlConnection *conn)
 char *table = connectingTableForTrack(curTable);
 char *db = database;
 char buf[256];
-dbOverrideFromTable(buf, &db, &table);
 doBigFilterPage(conn, db, table);
 }
 
