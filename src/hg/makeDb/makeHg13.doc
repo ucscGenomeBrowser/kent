@@ -391,14 +391,16 @@ o - Process refSeq mRNA and EST alignments into near best in genome.
 
       cd mrna
       pslSort dirs raw.psl /tmp psl
-      pslReps -minAli=0.96 -nearTop=0.01 raw.psl contig.psl /dev/null
+      #pslReps -minAli=0.96 -nearTop=0.01 raw.psl contig.psl /dev/null
+      pslReps -minAli=0.98 -sizeMatters -nearTop=0.005 raw.psl contig.psl /dev/null
       liftUp -nohead all_mrna.psl ../../jkStuff/liftAll.lft carry contig.psl
       pslSortAcc nohead chrom /tmp all_mrna.psl
       cd ..
 
       cd est
       pslSort dirs raw.psl /cluster/store3/tmp psl
-      pslReps -minAli=0.93 -nearTop=0.01 raw.psl contig.psl /dev/null
+      #pslReps -minAli=0.93 -nearTop=0.01 raw.psl contig.psl /dev/null
+      pslReps -minAli=0.98 -sizeMatters -nearTop=0.005 raw.psl contig.psl /dev/null
       liftUp -nohead all_est.psl ../../jkStuff/liftAll.lft carry contig.psl
       pslSortAcc nohead chrom /cluster/store3/tmp all_est.psl
       cd ..
