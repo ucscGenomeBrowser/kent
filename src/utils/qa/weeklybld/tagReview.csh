@@ -18,7 +18,7 @@ echo "Moving review tag to current tip versions"
 # rtag the review tag
 echo
 echo "moving tag review..."
-cvs -d hgwdev:$CVSROOT rtag -F -rHEAD review kent >& /dev/null
+cvs -d hgwdev:$CVSROOT rtag -a -F -rHEAD review kent >& /dev/null
 if ( $status ) then
  echo "cvs rtag failed for tag review -rHEAD"
  exit 1
