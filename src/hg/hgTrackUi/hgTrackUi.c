@@ -23,7 +23,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.158 2004/12/05 16:17:01 daryl Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.159 2004/12/07 18:00:42 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1158,11 +1158,8 @@ void specificUi(struct trackDb *tdb)
 char *track = tdb->tableName;
 
 if (trackDbSetting(tdb, "compositeTrack"))
-        {
-        compositeUi(tdb);
-        specificUi(tdb->subtracks);
-        }
-else if (sameString(track, "stsMap"))
+    compositeUi(tdb);
+if (sameString(track, "stsMap"))
         stsMapUi(tdb);
 else if (sameString(track, "stsMapMouseNew"))
         stsMapMouseUi(tdb);

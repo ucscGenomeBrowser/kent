@@ -86,7 +86,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.848 2004/12/07 15:07:48 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.849 2004/12/07 18:00:42 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8440,18 +8440,6 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
         subtrack->loadItems(subtrack);
 }
 
-static void compositeDraw(struct track *track, int seqStart, int seqEnd,
-                        struct vGfx *vg, int xOff, int yOff, int width,
-                        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw subtracks */
-{
-struct track *subtrack;
-for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
-    if (subtrackVisible(subtrack->mapName))
-        subtrack->drawItems(subtrack, seqStart, seqEnd, vg, xOff, yOff, width,
-                                font, color, vis);
-}
-
 static int compositeTotalHeight(struct track *track, enum trackVisibility vis)
 /* Return total height of composite track */
 {
@@ -8462,11 +8450,6 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
         height += subtrack->totalHeight(subtrack, vis);
 track->height = height;
 return height;
-}
-
-static void compositeFree(struct track *track)
-/* Dummy function */
-{
 }
 
 static void makeCompositeTrack(struct track *track, struct trackDb *tdb)
@@ -8483,7 +8466,6 @@ int subtrackCt = slCount(tdb->subtracks);
 
 /* setup function handlers for composite track */
 track->loadItems = compositeLoad;
-track->drawItems = compositeDraw;
 track->totalHeight = compositeTotalHeight;
 
 if (finalR || finalG || finalB)
@@ -8556,10 +8538,8 @@ struct track *trackFromTrackDb(struct trackDb *tdb, bool doSubtracks)
 /* Create a track based on the tdb. */
 {
 struct track *track = trackNew();
-struct trackDb *subTdb;
 char *iatName = NULL;
 char *exonArrows;
-int subtrackCt;
 
 track->mapName = cloneString(tdb->tableName);
 track->visibility = tdb->visibility;
@@ -8621,8 +8601,6 @@ TrackHandler handler;
 tdbList = hTrackDb(chromName);
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    if (trackDbSetting(tdb, "compositeTrack"))
-        verbose(5, "composite");
     track = trackFromTrackDb(tdb, TRUE);
     track->hasUi = TRUE;
     handler = lookupTrackHandler(tdb->tableName);
