@@ -1032,4 +1032,24 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     # Add {chain,net}Mm5 to trackDb.ra if necessary.
     # Add /usr/local/apache/htdocs/goldenPath/bosTau1/vsMm5/README.txt
 
+# MAKE COW TO HUMAN LIFTOVER (DONE Mar. 4, 2005, Heather)
+
+    ssh kkr1u00
+    cd /cluster/data/bosTau1/bed/blastz/axtChain
+    /cluster/bin/x86_64/netChainSubset hg17.net.gz all.chain.gz stdout | gzip -c > bosTau1.hg17.over.chain.gz
+    cp bosTau1.hg17.over.chain.gz /cluster/data/bosTau1/bed/bedOver
+
+    ssh hgwdev
+    cd /gbdb/bosTau1
+    mkdir liftOver
+    cd liftOver
+    cp /cluster/data/bosTau1/bed/bedOver/bosTau1.hg17.over.chain.gz .
+    
+    cd /usr/local/apache/htdocs/goldenPath/bosTau1/liftOver
+    cp /cluster/data/bosTau1/bed/bedOver/bosTau1.hg17.over.chain.gz .
+
+    # hgsql hgcentraltest
+    # insert into liftOverChain 
+    # (fromDb, toDb, path, minMatch, minSizeT, minSizeQ, multiple, minBlocks, fudgeThick) 
+    # values ("bosTau1", "hg17", "/gbdb/bosTau1/liftOver/bosTau1.hg17.over.chain", 0.95, 0, 0, "Y", 1, "N");
 
