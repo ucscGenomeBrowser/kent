@@ -16,7 +16,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.61 2003/09/07 19:28:31 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.62 2003/09/08 09:04:21 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -47,14 +47,15 @@ const struct genePos *b = *((struct genePos **)vb);
 return strcmp(a->name, b->name);
 }
 
-void genePosFillFrom4(struct genePos *gp, char **row)
+void genePosFillFrom5(struct genePos *gp, char **row)
 /* Fill in genePos from row containing ascii version of
- * name/chrom/start/end. */
+ * name/chrom/start/end/protein. */
 {
 gp->name = cloneString(row[0]);
 gp->chrom = cloneString(row[1]);
 gp->start = sqlUnsigned(row[2]);
 gp->end = sqlUnsigned(row[3]);
+gp->protein = cloneString(row[4]);
 gp->distance = genePosTooFar;
 }
 
@@ -1131,6 +1132,8 @@ else if (sameString(type, "expRatio"))
     setupColumnExpRatio(col, s);
 else if (sameString(type, "swissProt"))
     setupColumnSwissProt(col, s);
+else if (sameString(type, "go"))
+    setupColumnGo(col, s);
 else
     errAbort("Unrecognized type %s for %s", col->type, col->name);
 freez(&dupe);

@@ -16,10 +16,11 @@ struct genePos
 /* A gene and optionally a position. */
     {
     struct genePos *next;
-    char *name;		/* Gene ID. */
+    char *name;		/* Gene (transcript) ID. */
     char *chrom;	/* Optional chromosome location. NULL ok. */
     int start;		/* Chromosome start. Disregarded if chrom == NULL. */
     int end;		/* End in chromosome. Disregarded if chrom == NULL. */
+    char *protein;	/* Protein ID. */
     float distance;	/* Something to help sort on. */
     };
 #define genePosTooFar 1000000000	/* Definitely not in neighborhood. */
@@ -27,9 +28,9 @@ struct genePos
 int genePosCmpName(const void *va, const void *vb);
 /* Sort function to compare two genePos by name. */
 
-void genePosFillFrom4(struct genePos *gp, char **row);
+void genePosFillFrom5(struct genePos *gp, char **row);
 /* Fill in genePos from row containing ascii version of
- * name/chrom/start/end. */
+ * name/chrom/start/end/protein. */
 
 struct searchResult
 /* A result from simple search - includes short and long names as well
@@ -93,7 +94,7 @@ struct column
    	struct genePos *inputList);
    /* Return list of positions for advanced filter. */
 
-   /* -- Data that may be track-specific. -- */
+   /* -- Data that may be column-specific. -- */
       /* Most columns that need any data at all use the next few fields. */
    char *table;			/* Name of associated table. */
    char *keyField;		/* GeneId field in associated table. */
@@ -108,6 +109,9 @@ struct column
    int representativeCount;	/* Count of representative experiments. */
    int *representatives;	/* Array (may be null) of representatives. */
    boolean expRatioUseBlue;	/* Use blue rather than red in expRatio. */
+
+      /* The GO column uses this. */
+   struct sqlConnection *goConn;  /* Connection to go database. */
    };
 
 /* ---- global variables ---- */
@@ -417,6 +421,9 @@ void setupColumnSwissProt(struct column *col, char *parameters);
 
 void setupColumnExpRatio(struct column *col, char *parameters);
 /* Set up expression ration type column. */
+
+void setupColumnGo(struct column *col, char *parameters);
+/* Set up gene ontology column. */
 
 boolean gotAdvFilter();
 /* Return TRUE if advanced filter variables are set. */

@@ -14,7 +14,7 @@
 #include "kgAlias.h"
 #include "findKGAlias.h"
 
-static char const rcsid[] = "$Id: knownGene.c,v 1.17 2003/09/06 18:55:09 kent Exp $";
+static char const rcsid[] = "$Id: knownGene.c,v 1.18 2003/09/08 09:04:21 kent Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
@@ -188,7 +188,7 @@ return pos;
 }
 
 static struct genePos *genePosFromQuery(struct sqlConnection *conn, char *query)
-/* Get all positions from a query that returns 4 columns. */
+/* Get all positions from a query that returns 5 columns. */
 {
 struct sqlResult *sr;
 char **row;
@@ -198,7 +198,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(gp);
-    genePosFillFrom4(gp, row);
+    genePosFillFrom5(gp, row);
     slAddHead(&gpList, gp);
     }
 sqlFreeResult(&sr);
@@ -210,29 +210,11 @@ struct genePos *knownPosAll(struct sqlConnection *conn)
 {
 if (showOnlyCannonical())
     return genePosFromQuery(conn, 
-    	"select transcript,chrom,chromStart,chromEnd from knownCannonical");
+    	"select transcript,chrom,chromStart,chromEnd,protein from knownCannonical");
 else
     return genePosFromQuery(conn,
-    	"select name,chrom,txStart,txEnd from knownGene");
+    	"select name,chrom,txStart,txEnd,proteinId from knownGene");
 }
-
-#ifdef OLD
-struct hash *knownCannonicalHash(struct sqlConnection *conn)
-/* Get all cannonical gene names in hash. */
-{
-struct hash *hash = newHash(16);
-struct sqlResult *sr;
-char **row;
-sr = sqlGetResult(conn, "select transcript from knownCannonical");
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    hashAdd(hash, row[0], NULL);
-    }
-sqlFreeResult(&sr);
-return hash;
-}
-#endif /* OLD */
-
 
 void setupColumnKnownPos(struct column *col, char *parameters)
 /* Set up column that links to genome browser based on known gene

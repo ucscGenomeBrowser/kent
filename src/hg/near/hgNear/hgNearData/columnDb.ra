@@ -19,7 +19,7 @@ shortLabel Protein
 longLabel SwissProt protein display ID
 priority 2.1
 visibility off
-type swissProt  kgXref kgID spDisplayID
+type swissProt kgXref kgID spDisplayID
 search fuzzy
 
 name expDense
@@ -108,3 +108,12 @@ visibility off
 type lookup kgDomain kgID domains
 search fuzzy
 colWidth 50
+
+name go
+shortLabel GO
+longLabel Gene Ontology Associations
+priority 10
+visibility off
+type go
+colWidth 50
+
