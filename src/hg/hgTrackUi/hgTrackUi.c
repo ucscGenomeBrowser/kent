@@ -24,7 +24,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.168 2005/01/22 20:56:21 daryl Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.169 2005/01/31 23:33:16 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -917,6 +917,7 @@ char option[64];
 
 puts("<P>");
 puts("<TABLE>");
+slSort(&(tdb->subtracks), trackDbCmp);
 for (subtrack = tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
     puts("<TR>");
