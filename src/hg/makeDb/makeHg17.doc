@@ -13791,3 +13791,31 @@ SEQ2_LEN=$BASE/S2.len
 
    rm fraction.out
 
+# BUILD ccdsGene and ccdsInfo tables  (markd, reone 2005-03-17)
+    cd /cluster/store5/genbank/data/ccds/hg17
+    wget ftp://ftp.ncbi.nlm.nih.gov/pub/hcds/Hs35.1/CDSTrackDB/CCDS.20050303.tar.gz
+    mkdir /scratch/tmp/ccds
+    cd /scratch/tmp/ccds
+    tar -zxf  /cluster/store5/genbank/data/ccds/hg17/CCDS.20050303.tar.gz     
+
+    # import ccds database tables
+    hgsql -e 'create database ccds'
+    hgsql ccds </cluster/data/genbank/etc/createTables.sql 
+    hgsql ccds </cluster/data/genbank/etc/createKeys.sql 
+    /cluster/data/genbank/bin/i386/ccdsImport ccds data/[A-Z]*.txt
+
+    # create and load ccdsGene and ccdsInfo tables from imported database
+    /cluster/data/genbank/bin/i386/ccdsMkTables -loadDb ccds hg17 ccdsInfo ccdsGene
+
+    # refSeqKg table
+
+    hgsql -N -e "select * from knownGene" hg17 >kg.gp
+    hgsql -N -e "select * from refGene" hg17 >ref.gp
+
+    overlapSelect -statsOutput -strand -inCds -selectCds -overlapSimilarity=0.90 kg.gp ref.gp stdout | tail +2 | sort -u >refSeqKg.tab
+
+    hgsql hg17 -e 'drop table refSeqKg'
+    hgsql hg17 < ~/compbio/kent/src/hg/lib/refSeqKg.sql
+    hgsql hg17 -e 'load data local infile "refSeqKg.tab" into table refSeqKg'
+    cd ..
+    rm -r ccds
