@@ -277,6 +277,13 @@ int sqlDateToUnixTime(char *sqlDate);
 /* Convert a SQL date such as "2003-12-09 11:18:43" to clock time 
  * (seconds since midnight 1/1/1970 in UNIX). */
 
+char *sqlUnixTimeToDate(time_t *timep, boolean gmTime);
+/* Convert a clock time (seconds since 1970-01-01 00:00:00 unix epoch)
+ *	to the string: "YYYY-MM-DD HH:MM:SS"
+ *  returned string is malloced, can be freed after use
+ *  boolean gmTime requests GMT time instead of local time
+ */
+
 int sqlTableUpdateTime(struct sqlConnection *conn, char *table);
 /* Get last update time for table (in Unix terms). */
 

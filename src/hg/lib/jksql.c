@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.54 2004/03/17 04:22:14 angie Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.55 2004/03/19 16:45:38 hiram Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -1294,6 +1294,29 @@ if (clockTime < 0)
 	     tm->tm_hour, tm->tm_min, tm->tm_sec);
 freez(&tm);
 return clockTime;
+}
+
+char *sqlUnixTimeToDate(time_t *timep, boolean gmTime)
+/* Convert a clock time (seconds since 1970-01-01 00:00:00 unix epoch)
+ *	to the string: "YYYY-MM-DD HH:MM:SS"
+ *  returned string is malloced, can be freed after use
+ *  boolean gmTime requests GMT time instead of local time
+ */
+{
+struct tm *tm;
+char *ret;
+
+if (gmTime)
+    tm = gmtime(timep);
+else
+    tm = localtime(timep);
+
+ret = (char *)needMem(25*sizeof(char));  /* 25 is good for a billion years */
+
+snprintf(ret, 25*sizeof(char), "%d-%02d-%02d %02d:%02d:%02d",
+    1900+tm->tm_year, 1+tm->tm_mon, 1+tm->tm_mday,
+    tm->tm_hour, tm->tm_min, tm->tm_sec);
+return(ret);
 }
 
 static int getUpdateFieldIndex(struct sqlResult *sr)
