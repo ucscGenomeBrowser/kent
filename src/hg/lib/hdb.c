@@ -32,7 +32,7 @@
 #include "twoBit.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.228 2004/12/15 00:30:35 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.229 2004/12/17 21:44:43 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -413,8 +413,14 @@ char *hDefaultGenomeForClade(char *clade)
 struct sqlConnection *conn = hConnectCentral();
 char query[512];
 char *genome = NULL;
+/* Get the top-priority genome *with an active database* so if genomeClade 
+ * gets pushed from hgwdev to hgwbeta/RR with genomes whose dbs haven't been 
+ * pushed yet, they'll be ignored. */
 safef(query, sizeof(query),
-      "select genome from genomeClade where clade = '%s' order by priority",
+      "select genomeClade.genome from genomeClade,dbDb "
+      "where genomeClade.clade = '%s' and genomeClade.genome = dbDb.genome "
+      "and dbDb.active = 1 "
+      "order by genomeClade.priority limit 1",
       clade);
 genome = sqlQuickString(conn, query);
 hDisconnectCentral(&conn);
