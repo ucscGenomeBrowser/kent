@@ -4,7 +4,7 @@ L = -lm ${MYSQLLIBS}
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS = ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a 
 
-XINC=-I../../hg/inc
+XINC=-I../../lib
 
 O = bdfToGem.o
 
