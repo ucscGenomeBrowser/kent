@@ -119,6 +119,10 @@ struct bed *bedLoad12(char **row);
 struct bed *bedLoadN(char *row[], int wordCount);
 /* Convert a row of strings to a bed. */
 
+struct bed *bedLoadNAllChrom(char *fileName, int numFields, char* chrom);
+/* Load bed entries from a tab-separated file that have the given chrom.
+ * Dispose of this with bedFreeList(). */
+
 struct bed *bedLoadNAll(char *fileName, int numFields);
 /* Load all bed from a tab-separated file.
  * Dispose of this with bedFreeList(). */

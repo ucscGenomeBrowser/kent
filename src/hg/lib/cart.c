@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.24 2003/08/06 03:19:25 baertsch Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.27 2003/08/26 18:08:49 kent Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -295,11 +295,10 @@ hashFree(&exceptHash);
 hashElFreeList(&list);
 }
 
-char *cartRemoveLike(struct cart *cart, char *wildCard)
+void cartRemoveLike(struct cart *cart, char *wildCard)
 /* Remove all variable from cart that match wildCard. */
 {
 struct hashEl *el, *elList = hashElListHash(cart->hash);
-char *val = NULL;
 
 slSort(&elList, hashElCmp);
 for (el = elList; el != NULL; el = el->next)
@@ -308,7 +307,20 @@ for (el = elList; el != NULL; el = el->next)
 	cartRemove(cart, el->name);
     }
 hashElFreeList(&el);
-return val;
+}
+
+void cartRemovePrefix(struct cart *cart, char *prefix)
+/* Remove variables with given prefix from cart. */
+{
+struct hashEl *el, *elList = hashElListHash(cart->hash);
+
+slSort(&elList, hashElCmp);
+for (el = elList; el != NULL; el = el->next)
+    {
+    if (startsWith(prefix, el->name))
+	cartRemove(cart, el->name);
+    }
+hashElFreeList(&el);
 }
 
 boolean cartVarExists(struct cart *cart, char *var)
@@ -327,6 +339,16 @@ char *cartOptionalString(struct cart *cart, char *var)
 /* Return string valued cart variable or NULL if it doesn't exist. */
 {
 return hashFindVal(cart->hash, var);
+}
+
+char *cartNonemptyString(struct cart *cart, char *name)
+/* Return string value associated with name.  Return NULL
+ * if value doesn't exist or if it is pure white space. */
+{
+char *val = trimSpaces(cartOptionalString(cart, name));
+if (val != NULL && val[0] == 0)
+    val = NULL;
+return val;
 }
 
 char *cartUsualString(struct cart *cart, char *var, char *usual)
@@ -704,7 +726,14 @@ pushWarnHandler(cartEarlyWarningHandler);
 cart = cartAndCookie(cookieName, exclude, oldVars);
 getDbAndGenome(cart, &db, &org);
 pos = cgiOptionalString(positionCgiName);
-safef(titlePlus,sizeof(titlePlus), "%s %s - %s",org,pos, title );
+if (pos == NULL && org != NULL) 
+    safef(titlePlus,sizeof(titlePlus), "%s - %s",org, title );
+else if (pos != NULL && org == NULL)
+    safef(titlePlus,sizeof(titlePlus), "%s - %s",pos, title );
+else if (pos == NULL && org == NULL)
+    safef(titlePlus,sizeof(titlePlus), "%s", title );
+else
+    safef(titlePlus,sizeof(titlePlus), "%s %s - %s",org,pos, title );
 popWarnHandler();
 htmStart(stdout, titlePlus);
 cartWarnCatcher(doMiddle, cart, htmlVaWarn);

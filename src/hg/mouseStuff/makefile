@@ -47,6 +47,8 @@ DIRS = \
 	lavToAxt \
 	lavToPsl \
 	libScan \
+	mafCoverage \
+	mafToAxt \
 	mmUnmix \
 	mousePoster \
 	netChainSubset \

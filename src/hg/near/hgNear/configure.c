@@ -11,7 +11,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.14 2003/07/30 04:00:17 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.15 2003/08/21 01:57:43 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -172,8 +172,7 @@ struct column *col;
 char varPattern[64];
 for (col=colList; col != NULL; col = col->next)
     col->on = col->defaultOn;
-safef(varPattern, sizeof(varPattern), "%s*", colConfigPrefix);
-cartRemoveLike(cart, varPattern);
+cartRemovePrefix(cart, colConfigPrefix);
 cartRemove(cart, colOrderVar);
 doConfigure(conn, colList, NULL);
 }

@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: search.c,v 1.4 2003/06/26 05:36:48 kent Exp $";
+static char const rcsid[] = "$Id: search.c,v 1.5 2003/08/26 18:49:42 kent Exp $";
 
 int searchResultCmpShortLabel(const void *va, const void *vb)
 /* Compare to sort based on short label. */
@@ -110,37 +110,31 @@ void doSearch(struct sqlConnection *conn, struct column *colList)
 /* Search.  If result is unambiguous call displayData, otherwise
  * put up a page of choices. */
 {
-char *search = cartOptionalString(cart, searchVarName);
+char *search = cartString(cart, searchVarName);
+struct genePos *accList;
 search = trimSpaces(search);
-if (search != NULL && sameString(search, ""))
-    search = NULL;
-if (search == NULL)
-    displayData(conn, colList, NULL);
-else 
+accList = findKnownAccessions(conn, search);
+if (accList != NULL)
     {
-    struct genePos *accList = findKnownAccessions(conn, search);
-    if (accList != NULL)
-        {
-	if (slCount(accList) == 1 || !sameString(groupOn, "position"))
-	    displayData(conn, colList, accList);
-	else
-	    {
-	    struct genePos *acc;
-	    hPrintf("%s maps to %d positions, please pick one below:<BR>\n", 
-	    	search, slCount(accList));
-	    for (acc = accList; acc != NULL; acc = acc->next)
-		{
-		hPrintf("&nbsp;");
-		selfAnchorSearch(acc);
-	        hPrintf("%s:%d-%d</A><BR>\n", acc->chrom, acc->start+1, acc->end);
-		}
-	    }
-	    
-	}
+    if (slCount(accList) == 1 || !sameString(groupOn, "position"))
+	displayData(conn, colList, accList);
     else
-        {
-	searchAllColumns(conn, colList, search);
+	{
+	struct genePos *acc;
+	hPrintf("%s maps to %d positions, please pick one below:<BR>\n", 
+	    search, slCount(accList));
+	for (acc = accList; acc != NULL; acc = acc->next)
+	    {
+	    hPrintf("&nbsp;");
+	    selfAnchorSearch(acc);
+	    hPrintf("%s:%d-%d</A><BR>\n", acc->chrom, acc->start+1, acc->end);
+	    }
 	}
+	
+    }
+else
+    {
+    searchAllColumns(conn, colList, search);
     }
 }
 

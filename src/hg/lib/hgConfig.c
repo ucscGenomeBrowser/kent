@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: hgConfig.c,v 1.7 2003/05/06 07:22:22 kate Exp $";
+static char const rcsid[] = "$Id: hgConfig.c,v 1.8 2003/08/21 04:39:42 genbank Exp $";
 
 #include "common.h"
 #include "hash.h"
@@ -38,7 +38,11 @@ cfgOptionsHash = newHash(6);
 if(!cgiIsOnWeb() ||	/* not a cgi, read from home director, e.g. ~/.hg.conf */
 		(getenv("QUERY_STRING") != 0 && strstr(getenv("QUERY_STRING"), "cgiSpoof") != 0))
     {
-    sprintf(filename, "%s/%s", getenv("HOME"), USER_CONFIG_FILE);
+    /* Check for explictly specified file in env, otherwise use one in home */
+    if (getenv("HGDB_CONF") != NULL)
+        strcpy(filename, getenv("HGDB_CONF"));
+    else
+        sprintf(filename, "%s/%s", getenv("HOME"), USER_CONFIG_FILE);
     /* ensure that the file only readable by the user */
     if (stat(filename, &statBuf) == 0)
 	{

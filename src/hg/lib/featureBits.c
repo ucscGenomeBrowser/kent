@@ -12,7 +12,7 @@
 #include "rmskOut.h"
 #include "featureBits.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.22 2003/05/06 07:22:21 kate Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.23 2003/08/26 05:17:09 kate Exp $";
 
 /* By default, clip features to the search range.  It's important to clip 
  * when featureBits output will be used to populate Bits etc.  But allow 
@@ -699,10 +699,10 @@ struct featureBits *fb;
 for (fb=fbList;  fb != NULL;  fb=fb->next)
     {
     AllocVar(bed);
-    bed->chrom = fb->chrom;
+    bed->chrom = cloneString(fb->chrom);
     bed->chromStart = fb->start;
     bed->chromEnd = fb->end;
-    bed->name = fb->name;
+    bed->name = cloneString(fb->name);
     bed->strand[0] = fb->strand;
     slAddHead(&bedList, bed);
     }

@@ -6,8 +6,11 @@ TWINSCAN predictions proposed for full-ORF PCR confirmation
 <P>
 Multi-exon TWINSCAN predictions that
 <OL>
-<LI> do not overlap <EM>MGC genes</EM> or <EM>MGC in progress</EM> ESTs and
-<LI>  have at least one intron supported by a human EST or mRNA that does not map to any other prediction nearly as well
+<LI> do not overlap <EM>MGC genes</EM> or <EM>MGC in progress</EM> ESTs
+<LI> do have at least one intron supported by a human EST or mRNA that does not map to any other prediction nearly as well
+<LI> do not overlap MGC A-list and 
+<LI> are not 'inside' any Genbank human mRNA. 
 </OL>
 
-
+<EM>inside</EM> means [begin, end] of the alignment of a genbank human mRNA
+contains the [begin, end] of a Twinscan prediction. 

@@ -13,7 +13,7 @@
 #include "common.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: binRange.c,v 1.11 2003/05/06 07:33:41 kate Exp $";
+static char const rcsid[] = "$Id: binRange.c,v 1.12 2003/08/28 04:26:29 kent Exp $";
 
 static int binOffsets[] = {512+64+8+1, 64+8+1, 8+1, 1, 0};
 #define _binFirstShift 17	/* How much to shift to get to finest bin. */
@@ -156,6 +156,41 @@ for (i=0; i<ArraySize(binOffsets); ++i)
     }
 return list;
 }
+
+void binKeeperReplaceVal(struct binKeeper *bk, int start, int end,
+	void *oldVal, void *newVal)
+/* Replace occurences of old val in range from start->end with newVal */
+{
+struct binElement *list = NULL, *el;
+int startBin, endBin;
+int i,j;
+
+if (start < bk->minPos) start = bk->minPos;
+if (end > bk->maxPos) end = bk->maxPos;
+if (start >= end) return;
+startBin = (start>>_binFirstShift);
+endBin = ((end-1)>>_binFirstShift);
+for (i=0; i<ArraySize(binOffsets); ++i)
+    {
+    int offset = binOffsets[i];
+    for (j=startBin+offset; j<=endBin+offset; ++j)
+        {
+	for (el=bk->binLists[j]; el != NULL; el = el->next)
+	    {
+	    if (rangeIntersection(el->start, el->end, start, end) > 0)
+	        {
+		if (el->val == oldVal)
+		    {
+		    el->val = newVal;
+		    }
+		}
+	    }
+	}
+    startBin >>= _binNextShift;
+    endBin >>= _binNextShift;
+    }
+}
+
 
 struct binElement *binKeeperFindSorted(struct binKeeper *bk, int start, int end)
 /* Like binKeeperFind, but sort list on start coordinates. */

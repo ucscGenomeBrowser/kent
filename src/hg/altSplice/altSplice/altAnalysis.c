@@ -9,7 +9,7 @@
 #include "sample.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: altAnalysis.c,v 1.3 2003/07/21 04:33:27 sugnet Exp $";
+static char const rcsid[] = "$Id: altAnalysis.c,v 1.4 2003/08/22 01:39:18 sugnet Exp $";
 
 static int alt5PrimeCount = 0;
 static int alt3PrimeCount = 0;
@@ -28,6 +28,7 @@ FILE *upStream100 = NULL;   /* Bed file for 100bp upstream of 3' splice site. */
 FILE *downStream100 = NULL; /* Bed file for 100bp downstream of 5' splice site. */
 FILE *altRegion = NULL;     /* Bed file representing an alt-spliced region. */
 FILE *constRegion = NULL;   /* Bed file representing a constituative region. */
+FILE *altGraphXOut = NULL;  /* AltgraphX exon representing alt 3', alt 5' and cassette exons. */
 static boolean doSScores = FALSE;
 
 void usage()
@@ -382,8 +383,12 @@ boolean isCassette(struct altGraphX *ag, bool **em,  int vs, int ve1, int ve2,
 {
 unsigned char *vTypes = ag->vTypes;
 int i=0;
+struct altGraphX *subAg = NULL;
+int vCount = ag->vertexCount;
 int numAltVerts = 4;
 int *vPos = ag->vPositions;
+int *starts = ag->edgeStarts;
+int *ends = ag->edgeEnds;
 /* Quick check. */
 if(vTypes[vs] != ggHardEnd || vTypes[ve1] != ggHardStart || vTypes[ve2] != ggHardStart)
     return FALSE;
@@ -437,6 +442,131 @@ if(em[vs][ve1] && em[vs][ve2])
 		    }
 		*altBpStart = ag->vPositions[ve1];
 		*altBpEnd = ag->vPositions[i];
+		if(altGraphXOut != NULL)
+		    {
+		    char name[256];
+		    int hardStart = -1;
+		    int hardEnd = -1;
+		    int k;
+		    /* Find the begining and end of flanking exons. */
+		    for(k=0; k<vCount; k++)
+			{
+			if(vTypes[k] == ggHardStart && em[k][vs]) 
+			    {
+			    hardStart = k;
+			    break;
+			    }
+			}
+		    for(k=0; k<vCount; k++)
+			{
+			if(vTypes[k] == ggHardEnd && em[ve2][k]) 
+			    {
+			    hardEnd = k;
+			    break;
+			    }
+			}
+		    if(hardStart != -1 && hardEnd != -1)
+			{
+			struct evidence *ev = NULL, *agEv = NULL;
+			int evIndex;
+			safef(name, sizeof(name), "%s.cass", ag->name);
+			AllocVar(subAg);
+			subAg->tName = cloneString(ag->tName);
+			subAg->name = cloneString(name);
+			safef(subAg->strand, sizeof(subAg->strand), "%s", ag->strand);
+			subAg->tStart = vPos[hardStart];
+			subAg->tEnd = vPos[hardEnd];
+			subAg->vertexCount = 6;
+			subAg->edgeCount = 6;
+			AllocArray(subAg->vTypes, 6);
+			AllocArray(subAg->vPositions, 6);
+			AllocArray(subAg->edgeStarts, 6);
+			AllocArray(subAg->edgeEnds, 6);
+			AllocArray(subAg->edgeTypes, 6);
+			subAg->mrnaRefCount = ag->mrnaRefCount;
+			subAg->mrnaTissues = ag->mrnaTissues;
+			subAg->mrnaRefs = ag->mrnaRefs;
+			subAg->mrnaLibs = ag->mrnaLibs;
+			/* work out the positions. */
+			subAg->vPositions[0] = vPos[hardStart];
+			subAg->vPositions[1] = vPos[vs];
+			subAg->vPositions[2] = vPos[ve1];
+			subAg->vPositions[3] = vPos[i];
+			subAg->vPositions[4] = vPos[ve2];
+			subAg->vPositions[5] = vPos[hardEnd];
+
+			/* work out the types. */
+			subAg->vTypes[0] = vTypes[hardStart];
+			subAg->vTypes[1] = vTypes[vs];
+			subAg->vTypes[2] = vTypes[ve1];
+			subAg->vTypes[3] = vTypes[i];
+			subAg->vTypes[4] = vTypes[ve2];
+			subAg->vTypes[5] = vTypes[hardEnd];
+
+			/* work out edges */
+			subAg->edgeStarts[0] = 0;
+			subAg->edgeEnds[0] = 1;
+			subAg->edgeTypes[0] = ggExon;
+			evIndex = altGraphXGetEdgeNum(ag, hardStart, vs);
+			agEv = slElementFromIx(ag->evidence, evIndex);
+			ev = CloneVar(agEv);
+			ev->mrnaIds = CloneArray(agEv->mrnaIds, agEv->evCount);
+			slAddHead(&subAg->evidence, ev);
+			
+			subAg->edgeStarts[1] = 1;
+			subAg->edgeEnds[1] = 2;
+			subAg->edgeTypes[1] = ggSJ;
+			evIndex = altGraphXGetEdgeNum(ag, vs, ve1);
+			agEv = slElementFromIx(ag->evidence, evIndex);
+			ev = CloneVar(agEv);
+			ev->mrnaIds = CloneArray(agEv->mrnaIds, agEv->evCount);
+			slAddHead(&subAg->evidence, ev);
+
+			subAg->edgeStarts[2] = 1;
+			subAg->edgeEnds[2] = 4;
+			subAg->edgeTypes[2] = ggSJ;
+			evIndex = altGraphXGetEdgeNum(ag, vs, ve2);
+			agEv = slElementFromIx(ag->evidence, evIndex);
+			ev = CloneVar(agEv);
+			ev->mrnaIds = CloneArray(agEv->mrnaIds, agEv->evCount);
+			slAddHead(&subAg->evidence, ev);
+
+			subAg->edgeStarts[3] = 2;
+			subAg->edgeEnds[3] = 3;
+			subAg->edgeTypes[3] = ggExon;
+			evIndex = altGraphXGetEdgeNum(ag, ve1, i);
+			agEv = slElementFromIx(ag->evidence, evIndex);
+			ev = CloneVar(agEv);
+			ev->mrnaIds = CloneArray(agEv->mrnaIds, agEv->evCount);
+			slAddHead(&subAg->evidence, ev);
+
+			subAg->edgeStarts[4] = 3;
+			subAg->edgeEnds[4] = 4;
+			subAg->edgeTypes[4] = ggSJ;
+			evIndex = altGraphXGetEdgeNum(ag, i, ve2);
+			agEv = slElementFromIx(ag->evidence, evIndex);
+			ev = CloneVar(agEv);
+			ev->mrnaIds = CloneArray(agEv->mrnaIds, agEv->evCount);
+			slAddHead(&subAg->evidence, ev);
+
+			subAg->edgeStarts[5] = 4;
+			subAg->edgeEnds[5] = 5;
+			subAg->edgeTypes[5] = ggExon;
+			evIndex = altGraphXGetEdgeNum(ag, ve2, hardEnd);
+			agEv = slElementFromIx(ag->evidence, evIndex);
+			ev = CloneVar(agEv);
+			ev->mrnaIds = CloneArray(agEv->mrnaIds, agEv->evCount);
+			slAddHead(&subAg->evidence, ev);
+
+			slReverse(&subAg->evidence);
+			altGraphXTabOut(subAg, altGraphXOut);
+			subAg->mrnaRefCount = 0;
+			subAg->mrnaRefs = NULL;
+			subAg->mrnaTissues = NULL;
+			subAg->mrnaLibs = NULL;
+			altGraphXFree(&subAg);
+			}
+		    }
 		return TRUE;
 		}
 	    }
@@ -828,6 +958,7 @@ bedOutputN(&bedUp, 6, upStream100, '\t', '\n');
 bedOutputN(&bedDown, 6, downStream100, '\t', '\n');
 }
 
+
 void lookForAltSplicing(struct altGraphX *ag, struct altSpliceSite **aSpliceList, 
 			int *altSpliceSites, int *altSpliceLoci, int *totalSpliceSites)
 /* Walk throught the altGraphX graph and look for evidence of altSplicing. */
@@ -1048,10 +1179,19 @@ carefulClose(&summaryOut);
 
 int main(int argc, char *argv[])
 {
+char *altGraphXOutName = NULL;
 if(argc < 6)
     usage();
 optionHash(&argc, argv);
 doSScores = optionExists("doSScores");
+altGraphXOutName = optionVal("altGraphXOut", NULL);
+if(altGraphXOutName)
+    {
+    warn("Writing alts to %s", altGraphXOutName);
+    altGraphXOut = mustOpen(altGraphXOutName, "w");
+    }
 altSummary(argv[1], argv[2], argv[3], argv[4], argv[5]);
+if(altGraphXOut != NULL)
+    carefulClose(&altGraphXOut);
 return 0;
 }

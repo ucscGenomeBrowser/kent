@@ -90,5 +90,9 @@ struct genePred *getOverlappingGene(struct genePred **list,  char *table, char *
 
 int genePredBases(struct genePred *gp);
 /* count coding and utr bases in a gene prediction */
+
+int genePredCodingBases(struct genePred *gp);
+/* Count up the number of coding bases in gene prediction. */
+
 #endif /* GENEPRED_H */
 

@@ -1,0 +1,90 @@
+chr8_random    377716 depth         46  0.01 anyCov         46  0.01%
+ 1          46 0.012%
+ 2           0 0.000%
+ 3           0 0.000%
+ 4           0 0.000%
+ 5           0 0.000%
+ 6           0 0.000%
+ 7           0 0.000%
+ 8           0 0.000%
+ 9           0 0.000%
+ 0 to  9:   46.000000 0.012%
+10 to 19:    0.000000 0.000%
+20 to 29:    0.000000 0.000%
+30 to 39:    0.000000 0.000%
+40 to 49:    0.000000 0.000%
+50 to 59:    0.000000 0.000%
+60 to 69:    0.000000 0.000%
+70 to 79:    0.000000 0.000%
+80 to 89:    0.000000 0.000%
+90 to 99:    0.000000 0.000%
+>=100    0.000000 0.000%
+
+all       377716 depth         46  0.01 anyCov         46  0.01%
+ 1          46 0.012%
+ 2           0 0.000%
+ 3           0 0.000%
+ 4           0 0.000%
+ 5           0 0.000%
+ 6           0 0.000%
+ 7           0 0.000%
+ 8           0 0.000%
+ 9           0 0.000%
+ 0 to  9:   46.000000 0.012%
+10 to 19:    0.000000 0.000%
+20 to 29:    0.000000 0.000%
+30 to 39:    0.000000 0.000%
+40 to 49:    0.000000 0.000%
+50 to 59:    0.000000 0.000%
+60 to 69:    0.000000 0.000%
+70 to 79:    0.000000 0.000%
+80 to 89:    0.000000 0.000%
+90 to 99:    0.000000 0.000%
+>=100    0.000000 0.000%
+
+
+all	0.01	0.00	0.00	0.00
+chr1	nan	nan	nan	nan
+chr2	nan	nan	nan	nan
+chr3	nan	nan	nan	nan
+chr4	nan	nan	nan	nan
+chr5	nan	nan	nan	nan
+chr6	nan	nan	nan	nan
+chr7	nan	nan	nan	nan
+chr8	nan	nan	nan	nan
+chr9	nan	nan	nan	nan
+chrM	nan	nan	nan	nan
+chrX	nan	nan	nan	nan
+chrY	nan	nan	nan	nan
+chr1_random	nan	nan	nan	nan
+chr2_random	nan	nan	nan	nan
+chr3_random	nan	nan	nan	nan
+chr4_random	nan	nan	nan	nan
+chr6_random	nan	nan	nan	nan
+chr7_random	nan	nan	nan	nan
+chr8_random	0.01	0.00	0.00	0.00
+chr9_random	nan	nan	nan	nan
+chrX_random	nan	nan	nan	nan
+chrY_random	nan	nan	nan	nan
+chr10	nan	nan	nan	nan
+chr11	nan	nan	nan	nan
+chr12	nan	nan	nan	nan
+chr13	nan	nan	nan	nan
+chr14	nan	nan	nan	nan
+chr15	nan	nan	nan	nan
+chr16	nan	nan	nan	nan
+chr17	nan	nan	nan	nan
+chr18	nan	nan	nan	nan
+chr19	nan	nan	nan	nan
+chr20	nan	nan	nan	nan
+chr21	nan	nan	nan	nan
+chr22	nan	nan	nan	nan
+chr10_random	nan	nan	nan	nan
+chr11_random	nan	nan	nan	nan
+chr12_random	nan	nan	nan	nan
+chr13_random	nan	nan	nan	nan
+chr15_random	nan	nan	nan	nan
+chr16_random	nan	nan	nan	nan
+chr17_random	nan	nan	nan	nan
+chr19_random	nan	nan	nan	nan
+chrUn_random	nan	nan	nan	nan

@@ -12,7 +12,7 @@
 #include "jksql.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.31 2003/06/14 07:24:24 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.34 2003/08/27 23:51:03 markd Exp $";
 
 boolean sqlTrace = FALSE;  /* setting to true prints each query */
 int sqlTraceIndent = 0;    /* number of spaces to indent traces */
@@ -328,7 +328,7 @@ int sqlUpdateRows(struct sqlConnection *conn, char *query, int* matched)
  * is not NULL, it gets the total number matching the query. */
 {
 int numChanged, numMatched;
-char *info;
+const char *info;
 int numScan = 0;
 struct sqlResult *sr = sqlGetResult(conn,query);
 
@@ -349,14 +349,29 @@ void sqlLoadTabFile(struct sqlConnection *conn, char *path, char *table,
                     unsigned options)
 /* Load a tab-seperated file into a database table, checking for errors. 
  * Options are SQL_TAB_FILE_ON_SERVER, SQL_TAB_FILE_WARN_ON_WARN
- * SQL_TAB_FILE_WARN_ON_ERROR */
+ * SQL_TAB_FILE_WARN_ON_ERROR, SQL_TAB_FILE_CONCURRENT */
 {
 char tabPath[PATH_LEN];
 char query[PATH_LEN+256];
 int numScan, numRecs, numSkipped, numWarnings;
-char *localOpt, *info;
+char *localOpt, *concurrentOpt;
+const char *info;
 struct sqlResult *sr;
+/* at least mysql 4.0 */
+boolean isMySql4 = (conn->conn->server_version[0] > '3');
 
+
+/* Ocassionally mysql_info() from return NULL on long loads.  It was
+ * believed that this was due to the connection timing out during load.
+ * So set an really long time out (12 hrs). */
+if (isMySql4)
+    {
+    safef(query, sizeof(query), "SET SESSION wait_timeout=%d", 12*60*60);
+    sqlUpdate(conn, query);
+    }
+
+/* determine if tab file can be accessed directly by the database, or send
+ * over the network */
 if (options & SQL_TAB_FILE_ON_SERVER)
     {
     /* tab file on server requiries full path */
@@ -372,25 +387,30 @@ if (options & SQL_TAB_FILE_ON_SERVER)
 else
     {
     strcpy(tabPath, path);
-    localOpt = "local";
+    localOpt = "LOCAL";
     }
 
-safef(query, sizeof(query),  "LOAD data %s infile '%s' into table %s",
-      localOpt, tabPath, table);
+/* optimize for concurrent to others to access the table. */
+if (options & SQL_TAB_FILE_CONCURRENT)
+    concurrentOpt = "CONCURRENT";
+else
+    {
+    concurrentOpt = "";
+    if (isMySql4)
+        {
+        /* disable update of indexes during load. Inompatible with concurrent,
+         * since enable keys locks other's out. */
+        safef(query, sizeof(query), "ALTER TABLE %s DISABLE KEYS", table);
+        sqlUpdate(conn, query);
+        }
+    }
+
+safef(query, sizeof(query),  "LOAD DATA %s %s INFILE '%s' INTO TABLE %s",
+      localOpt, concurrentOpt, tabPath, table);
 sr = sqlGetResult(conn, query);
 info = mysql_info(conn->conn);
-/* FIXME: sometimes mysql_info returns null after long load!! */
-#if 0
 if (info == NULL)
     errAbort("no info available for result of sql query: %s", query);
-#else
-if (info == NULL)
-    {
-    warn("Warning: mysql_info returned null for query: %s\n", query);
-    sqlFreeResult(&sr);
-    return; /* can't check */
-    }
-#endif
 numScan = sscanf(info, "Records: %d Deleted: %*d  Skipped: %d  Warnings: %d",
                  &numRecs, &numSkipped, &numWarnings);
 if (numScan != 3)
@@ -414,6 +434,12 @@ if ((numSkipped > 0) || (numWarnings > 0))
         warn("Warning: load of %s did not go as planned: %d record(s), "
              "%d row(s) skipped, %d warning(s) loading %s",
              table, numRecs, numSkipped, numWarnings, path);
+    }
+if (((options & SQL_TAB_FILE_CONCURRENT) == 0) && isMySql4)
+    {
+    /* reenable update of indexes */
+    safef(query, sizeof(query), "ALTER TABLE %s ENABLE KEYS", table);
+    sqlUpdate(conn, query);
     }
 }
 

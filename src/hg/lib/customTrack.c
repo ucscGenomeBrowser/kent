@@ -18,7 +18,7 @@
 #include "hdb.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.35 2003/06/24 13:13:57 braney Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.36 2003/08/26 05:13:47 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -920,6 +920,11 @@ void customTrackSave(struct customTrack *trackList, char *fileName)
 struct customTrack *track;
 struct bed *bed;
 FILE *f = mustOpen(fileName, "w");
+
+#ifdef DEBUG
+    // allow file readability for debug
+    chmod(fileName, 0664);
+#endif
 
 for (track = trackList; track != NULL; track = track->next)
     {

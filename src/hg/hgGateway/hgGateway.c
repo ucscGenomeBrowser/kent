@@ -12,7 +12,7 @@
 #include "hCommon.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.61 2003/08/15 16:38:37 hiram Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.63 2003/08/25 23:26:06 kent Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -62,6 +62,7 @@ if ((oldDb && !containsStringNoCase(oldDb, db))
     }
 
 puts(
+"<FORM ACTION=\"/cgi-bin/hgTracks\" NAME=\"mainForm\" METHOD=\"GET\">\n"
 "<CENTER>"
 "<TABLE BGCOLOR=\"FFFEF3\" BORDERCOLOR=\"cccc99\" BORDER=0 CELLPADDING=1>\n"
 "<TR><TD><FONT SIZE=\"2\">\n"
@@ -87,23 +88,19 @@ puts(
 "Software Copyright (c) The Regents of the University of California.\n"
 "All rights reserved.\n"
 "</CENTER>\n"
-"</FONT></TD></TR></TABLE></CENTER><P>\n"
+"</FONT></TD></TR></TABLE></CENTER>\n"
 );
 
 puts(
+"<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"/images/DOT.gif\">\n"
 "<center>\n"
 "<table bgcolor=\"cccc99\" border=\"0\" CELLPADDING=1 CELLSPACING=0>\n"
 "<tr><td>\n"
 "<table BGCOLOR=\"FEFDEF\" BORDERCOLOR=\"CCCC99\" BORDER=0 CELLPADDING=0 CELLSPACING=0>\n"  
 "<tr><td>\n"
-);
-
-puts(
 "<table bgcolor=\"fffef3\" border=0>\n"
 "<tr>\n"
 "<td>\n"
-"<FORM ACTION=\"/cgi-bin/hgTracks\" NAME=\"mainForm\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n"
-"<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"/images/DOT.gif\">\n"
 "<table><tr>\n"
 "<td align=center valign=baseline>genome</td>\n"
 "<td align=center valign=baseline>assembly</td>\n"
@@ -138,41 +135,35 @@ freez(&defaultPosition);
 position = NULL;
 
 puts("<td align=center>\n");
-cgiMakeIntVar("pix", cartUsualInt(cart, "pix", 610), 4);
+cgiMakeIntVar("pix", cartUsualInt(cart, "pix", hgDefaultPixWidth), 4);
+cartSaveSession(cart);
 printf("</td>\n");
 printf("<td align=center>");
 cgiMakeButton("Submit", "Submit");
-cartSaveSession(cart);
 printf("</td>\n");
 
 puts(
 "</tr></table>\n"
 "</td></tr><tr><td><center>\n"
-"<a HREF=\"../cgi-bin/cartReset\">Click here to reset</a> the browser user interface settings to their defaults.\n"
+"<a HREF=\"../cgi-bin/cartReset\">Click here to reset</a> the browser user interface settings to their defaults.<BR>\n"
 "</center>\n"
-"</td></tr></table>\n"
-"</td></tr></table>\n"
-"</td></tr></table>\n"
-"</center>\n"
+"</td></tr><tr><td><center>\n"
 );
+cgiMakeButton("customTrackPage", "Add Your Own Tracks");
+puts("</center>\n"
+"</td></tr></table>\n"
+"</td></tr></table>\n"
+"</td></tr></table>\n"
+);
+puts("</center>");
 
 hgPositionsHelpHtml(organism);
 
 webNewSection("Add Your Own Tracks");
-
-puts(
-"<P>Display your own annotation tracks in the browser using \n"
-"the <A HREF=\"../goldenPath/help/customTrack.html\"> \n"
-"procedure described here</A>.  Annotations may be stored in files or\n"
-"pasted in. You can also paste in a URL or a list of URLs which refer to \n"
-"files in one of the supported formats.</P>\n"
-"Click \n"
-"<A HREF=\"../goldenPath/customTracks/custTracks.html\" TARGET=_blank>here</A> \n"
-"to view a collection of custom annotation tracks submitted by Genome Browser users.</P> \n"
-"\n"
-"	Annotation File: <INPUT TYPE=FILE NAME=\"hgt.customFile\"><BR>\n"
-"	<TEXTAREA NAME=\"hgt.customText\" ROWS=14 COLS=80></TEXTAREA>\n"
-"	</FORM>\n"
+puts("We're changing the interface. To add your own tracks "
+     "please push the button under the position box near the top "
+     "of the page "
+     "</FORM>\n"
 );
 
 printf("<FORM ACTION=\"/cgi-bin/hgGateway\" METHOD=\"GET\" NAME=\"orgForm\"><input type=\"hidden\" name=\"org\" value=\"%s\">\n", organism);
