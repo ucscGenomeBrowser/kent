@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.5 2004/03/04 00:31:11 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.6 2004/03/04 07:46:18 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -75,9 +75,8 @@ return TRUE;
 }
 
 static int wigHeight(struct track *wigTrack, enum trackVisibility vis)
-/* Pad wiggle height by one (remove if Hiram adds buffer at end of wiggle) */
 {
-return wigTotalHeight(wigTrack, vis) + 1;
+return wigTotalHeight(wigTrack, vis);
 }
 
 static struct wigMafItem *scoreItem(scoreHeight)
@@ -233,6 +232,11 @@ if (trackDbSetting(track->tdb, "pairwise") != NULL)
     /* build item list in species order */
     for (i = 0; i < speciesCt; i++)
         {
+        char option[64];
+        safef (option, sizeof(option), "%s.%s", track->mapName, species[i]);
+        /* skip this species if UI checkbox was unchecked */
+        if (!cartUsualBoolean(cart, option, TRUE))
+            continue;
         if ((el = hashLookup(hash, species[i])) != NULL)
             slAddHead(&miList, (struct wigMafItem *)el->val);
         }
@@ -469,8 +473,9 @@ for (mi = miList; mi != NULL; mi = mi->next)
     {
     if (vis == tvFull)
         {
-        /* get wiggle table, containing percent identity of pairwise */
-        safef(table, sizeof(table), "%s_%s", mi->name, suffix);
+        /* get wiggle table, of pairwise 
+           for example, percent identity */
+        safef(table, sizeof(table), "%s_%s_wig", mi->name, suffix);
         if (!hTableExistsDb(database, table))
             continue;
         /* reuse the wigTrack for pairwise tables */
@@ -480,6 +485,7 @@ for (mi = miList; mi != NULL; mi = mi->next)
                                                             wigTrackHeight;
         wigTrack->drawItems(wigTrack, seqStart, seqEnd, vg, xOff, yOff,
                              width, font, color, tvFull);
+        /* need to add extra space between wiggles (for now) */
         //mi->height = wigHeight(wigTrack, tvFull);
         mi->height = wigTrackHeight;
         ret = TRUE;
@@ -488,8 +494,8 @@ for (mi = miList; mi != NULL; mi = mi->next)
         {
         /* pack */
         /* get maf table, containing pairwise alignments for this organism */
-        /* NOTE: might want to use the "pairwise" trackDb setting for this */
-        safef(table, sizeof(table), "%s_%s", mi->name, track->mapName);
+        safef(table, sizeof(table), "%s_%s", mi->name, suffix);
+        //safef(table, sizeof(table), "%s_%s", mi->name, track->mapName);
         if (!hTableExistsDb(database, table))
             continue;
         mafList = wigMafLoadInRegion(conn, table, chromName, 
@@ -501,7 +507,7 @@ for (mi = miList; mi != NULL; mi = mi->next)
         ret = TRUE;
         mafAliFreeList(&mafList);
         }
-    yOff += mi->height + 1;
+    yOff += mi->height;
     }
 hFreeConn(&conn);
 return ret;
@@ -731,7 +737,6 @@ track->itemHeight = wigMafItemHeight;
 track->itemStart = tgItemNoStart;
 track->itemEnd = tgItemNoEnd;
 track->mapsSelf = TRUE;
-track->canPack = TRUE;
 //track->drawLeftLabels = wigMafLeftLabels;
 
 if ((wigTable = trackDbSetting(tdb, "wiggle")) != NULL)
