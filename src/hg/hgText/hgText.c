@@ -220,39 +220,10 @@ storeStringIfSet("table0");
 storeStringIfSet("table1");
 }
 
-void saveFilterOptions(char *tableId)
-/* Store in cart any field constraint CGI variables for the given table */
-{
-struct cgiVar *cv;
-char varName[128];
-
-if (tableId == NULL)
-    tableId = "";
-for (cv=cgiVarList();  cv != NULL;  cv=cv->next)
-    {
-    snprintf(varName, sizeof(varName), "pat%s_", tableId);
-    if (startsWith(varName, cv->name))
-	cartSetString(cart, cv->name, cv->val);
-    snprintf(varName, sizeof(varName), "dd%s_", tableId);
-    if (startsWith(varName, cv->name))
-	cartSetString(cart, cv->name, cv->val);
-    snprintf(varName, sizeof(varName), "cmp%s_", tableId);
-    if (startsWith(varName, cv->name))
-	cartSetString(cart, cv->name, cv->val);
-    snprintf(varName, sizeof(varName), "log_rawQuery%s", tableId);
-    if (sameString(varName, cv->name))
-	cartSetString(cart, cv->name, cv->val);
-    snprintf(varName, sizeof(varName), "rawQuery%s", tableId);
-    if (sameString(varName, cv->name))
-	cartSetString(cart, cv->name, cv->val);
-    }
-}
-
 void saveOutputOptionsState()
 /* Store in cart the user's settings in doOutputOptions() form */
 {
 storeStringIfSet("outputType");
-saveFilterOptions(NULL);
 storeStringIfSet("table2");
 }
 
@@ -311,8 +282,6 @@ void saveIntersectOptionsState()
 storeStringIfSet("hgt.intersectOp");
 storeStringIfSet("hgt.moreThresh");
 storeStringIfSet("hgt.lessThresh");
-storeBooleanIfSet("hgt.invertTable");
-storeBooleanIfSet("hgt.invertTable2");
 }
 
 void positionLookup(char *phase)
@@ -391,16 +360,17 @@ puts(
 "<P><CENTER>Copyright 2001 The Regents of the University of California. "
 "All rights reserved.<P></CENTER><P>\n");
 
-puts(
-     "<P>This tool allows you to download portions of the Genome Browser 
+puts("<P>This tool allows you to download portions of the Genome Browser 
 	database in several output formats.
 	Enter a genome position (or enter \"genome\" to 
-        search all chromosomes), then press the Submit button.\n"
-     );
+        search all chromosomes), then press the Submit button.\n");
 
 printf("Use <A HREF=\"/cgi-bin/hgBlat?db=%s&hgsid=%d\">BLAT Search</A> to 
-        locate a particular sequence in the genome.<P>\n",
+        locate a particular sequence in the genome.",
        database, cartSessionId(cart));
+puts("See the <A HREF=\"/goldenPath/help/hgTextHelp.html\">Table Browser "
+     "User Guide</A> for more information.<P>\n");
+
 cgiMakeHiddenVar("org", organism);
 
 puts(
@@ -809,11 +779,15 @@ struct hashEl *nonposTableList;
 
 webStart(cart, "Table Browser: %s: Choose a table", freezeName);
 handleDbChange();
+
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\">\n\n", hgTextName());
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cartSetString(cart, "db", database);
 puts("<TABLE CELLPADDING=\"8\">");
+puts("<TR><TD>");
+puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#ChooseTable\"><B>Help</B></A>");
+puts("</TD></TR>");
 puts("<TR><TD>");
 
 puts("Choose a position: ");
@@ -835,7 +809,8 @@ puts("<SELECT NAME=table1 SIZE=1>");
 printf("<OPTION VALUE=\"Choose table\">Non-positional tables</OPTION>\n");
 printSelectOptions(nonposTableList, "table1");
 puts("</SELECT>");
-
+hashElFreeList(&posTableList);
+hashElFreeList(&nonposTableList);
 puts("</TD></TR>");
 
 puts("<TR><TD>");
@@ -844,67 +819,9 @@ puts("</TD><TD>");
 cgiMakeButton("phase", oldAllFieldsPhase);
 cgiMakeButton("phase", outputOptionsPhase);
 puts("</TD></TR>");
+
 puts("</TABLE>");
-
 puts("</FORM>");
-
-hashElFreeList(&posTableList);
-hashElFreeList(&nonposTableList);
-
-webNewSection("Getting started on the Table Browser");
-
-puts(
-     "This web tool allows convenient and precise access to the primary
-database tables containing the genome sequence and associated
-annotation tracks. By specifying chromosomal range and table type, the
-exact data set of interest can be viewed.  This tool thus makes it
-unnecessary to download and manipulate the genome itself and its
-massive data tracks (although that option will always remain <A
-HREF=\"/\">available</A>.)" "\n"
-     "<P>" "\n"
-     "After each round of genome assembly, features such as mRNAs are
-located within the genome by alignment. This process generates
-<B>positional</B> stop-start coordinates and other descriptive data
-which are then stored within MySQL relational database tables. It is
-these tables that drive the graphical tracks in the Genome Browser,
-meaning that the two views of the data are always in
-agreement. Chromosomal coordinates usually change with each build
-because of newly filled gaps or assembly procedure refinements." "\n"
-     "<P>" "\n"
-     "Other data is inherently <B>non-positional</B> (not tied to genome
-coordinates), such as submitting author of a GenBank EST, tissue of
-origin , or link to a RefSeq.  These data types are accessed
-separately." "\n"
-     "<P>" "\n"
-     "The \"Positional tables\" selection takes precedence over the 
-\"Non-positional tables\" selection.  In other words, if both a 
-positional and a non-positional table are selected, the positional 
-table is used and the non-positional table is ignored. " "\n"
-     "<P>" "\n");
-printf("Familiarize yourself with the table browser tool by a <B>few minutes
-of exploration</B>. Starting at the top of the form, use the default
-position (or enter a cytological band, eg 20p12, or type in a keyword
-from a GenBank entry to look up). Next select a positional table from
-the menu, for example, chrN_mrna.  Then choose an action: 
-\"Get all fields\" will return all fields of the chrN_mrna table in 
-the given position coordinate range.  \"%s\" ", outputOptionsPhase);
-printf("will offer several output format choices, as well as optional
-filtering constraints to refine the search.  If the chromosomal range
-is too narrow, it may happen that no mRNA occurs there (meaning no
-data will be returned)." "\n"
-     "<P>" "\n"
-     "Notice that if you look up a gene or accession number, the tool
-typically returns a choice of several mRNAs.  Selecting one of these
-returns the table browser to its starting place but with the
-chromosomal location automatically entered in the text box." "\n"
-     "<P>" "\n"
-     "To search all chromosomes, enter <B>\"genome\"</B> as the position. \n"
-     "<P>" "\n"
-     "For either type of table, a user not familiar with what the table
-offers should select \"%s\".  ", outputOptionsPhase);
-puts("The fields of the table will be listed in the optional filtering
-constraints section." "\n"
-     );
 webEnd();
 }
 
@@ -938,10 +855,10 @@ char name[128];
 printf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", field);
 snprintf(name, sizeof(name), "dd%s_%s", tableId, field);
 cgiMakeDropList(name, ddOpMenu, ddOpMenuSize,
-		cartCgiUsualString(cart, name, ddOpMenu[0]));
+		cgiUsualString(name, ddOpMenu[0]));
 puts(" match </TD><TD>");
 snprintf(name, sizeof(name), "pat%s_%s", tableId, field);
-cgiMakeTextVar(name, cartCgiUsualString(cart, name, "*"), 20);
+cgiMakeTextVar(name, cgiUsualString(name, "*"), 20);
 if (logOp == NULL)
     logOp = "";
 printf("</TD><TD> %s </TD></TR>\n", logOp);
@@ -957,10 +874,10 @@ printf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", fieldLabel);
 puts(" is ");
 snprintf(name, sizeof(name), "cmp%s_%s", tableId, field);
 cgiMakeDropList(name, cmpOpMenu, cmpOpMenuSize,
-		cartCgiUsualString(cart, name, cmpOpMenu[0]));
+		cgiUsualString(name, cmpOpMenu[0]));
 puts("</TD><TD>\n");
 snprintf(name, sizeof(name), "pat%s_%s", tableId, field);
-cgiMakeTextVar(name, cartCgiUsualString(cart, name, ""), 20);
+cgiMakeTextVar(name, cgiUsualString(name, ""), 20);
 if (logOp == NULL)
     logOp = "";
 printf("</TD><TD>%s</TD></TR>\n", logOp);
@@ -977,7 +894,7 @@ printf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", fieldLabel1);
 puts(" is ");
 snprintf(name, sizeof(name), "cmp%s_%s", tableId, field);
 cgiMakeDropList(name, eqOpMenu, eqOpMenuSize,
-		cartCgiUsualString(cart, name, eqOpMenu[0]));
+		cgiUsualString(name, eqOpMenu[0]));
 /* make a dummy pat_ CGI var for consistency with other filter options */
 snprintf(name, sizeof(name), "pat%s_%s", tableId, field);
 cgiMakeHiddenVar(name, "0");
@@ -1072,7 +989,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    snprintf(name, sizeof(name), "dd%s_%s", tableId, row[0]);
 	    cgiMakeDropList(name, ddOpMenu, ddOpMenuSize,
-			    cartCgiUsualString(cart, name, ddOpMenu[0]));
+			    cgiUsualString(name, ddOpMenu[0]));
 	    puts(" match </TD><TD>\n");
 	    newVal = "*";
 	    }
@@ -1081,12 +998,12 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    puts(" is \n");
 	    snprintf(name, sizeof(name), "cmp%s_%s", tableId, row[0]);
 	    cgiMakeDropList(name, cmpOpMenu, cmpOpMenuSize,
-			    cartCgiUsualString(cart, name, cmpOpMenu[0]));
+			    cgiUsualString(name, cmpOpMenu[0]));
 	    puts("</TD><TD>\n");
 	    newVal = "";
 	    }
 	snprintf(name, sizeof(name), "pat%s_%s", tableId, row[0]);
-	cgiMakeTextVar(name, cartCgiUsualString(cart, name, newVal), 20);
+	cgiMakeTextVar(name, cgiUsualString(name, newVal), 20);
 	}
     }
 sqlFreeResult(&sr);
@@ -1098,10 +1015,10 @@ puts("</TD></TR></TABLE>\n");
 puts(" </TD></TR><TR VALIGN=BOTTOM><TD>");
 snprintf(name, sizeof(name), "log_rawQuery%s", tableId);
 cgiMakeDropList(name, logOpMenu, logOpMenuSize,
-		cartCgiUsualString(cart, name, logOpMenu[0]));
+		cgiUsualString(name, logOpMenu[0]));
 puts("Free-form query: ");
 snprintf(name, sizeof(name), "rawQuery%s", tableId);
-cgiMakeTextVar(name, cartCgiUsualString(cart, name, ""), 50);
+cgiMakeTextVar(name, cgiUsualString(name, ""), 50);
 puts("</TD></TR></TABLE>");
 }
 
@@ -1125,6 +1042,8 @@ cgiMakeHiddenVar("table", getTableVar());
 positionLookupSamePhase();
 
 printf("<P><HR><H3> Select Output Format for %s </H3>\n", table);
+puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Formats\">"
+     "<B>Help</B></A><P>");
 if (tableIsPositional)
     cgiMakeDropList("outputType", outputTypePosMenu, outputTypePosMenuSize,
 		    cartCgiUsualString(cart, "outputType",
@@ -1138,6 +1057,8 @@ cgiMakeButton("phase", getOutputPhase);
 
 printf("<P><HR><H3> (Optional) Filter %s Records by Field Values </H3>",
        table);
+puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Constraints\">"
+     "<B>Help</B></A><P>");
 if (sameString(customTrackPseudoDb, db))
     filterOptionsCustomTrack(table, "");
 else
@@ -1147,6 +1068,8 @@ cgiMakeButton("phase", getOutputPhase);
 if (tableIsPositional)
     {
     puts("<P><HR><H3> (Optional) Intersect Results with Another Table </H3>");
+    puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Intersection\">"
+	 "<B>Help</B></A><P>");
     puts("Note: Output Format must be FASTA, BED, Hyperlinks, GTF \n"
 	 "or Summary/Statistics "
 	 "for this feature.  <P>");
@@ -1164,87 +1087,6 @@ if (tableIsPositional)
     }
 
 puts("</FORM>");
-
-webNewSection("Output Format and Query/Filtering Options");
-puts(
-     "<P>\n"
-     "By default, the table browser retrieves all records for the specified \n"
-     "coordinate range (use \"genome\" to search all chromosomes). \n"
-     "To restrict the set of records retrieved from this range, you may \n"
-     "enter constraints on the values of fields. \n"
-     "</P>\n"
-     "<H4> Individual Field Constraints </H4>"
-     "<P>\n"
-     "Text fields are compared to words or patterns containing wildcard \n"
-     "characters.  \n"
-     "Wildcards are \"*\" (to match \n"
-     "0 or more characters) and \"?\" (to match a single character).  \n"
-     "Each space-separated word/pattern in a text field box will be matched \n"
-     "against the value of that field in each record.  \n"
-     "If any word/pattern matches the value, then the record meets the \n"
-     "constraint on that field. \n"
-     "</P><P>\n"
-     "Numeric fields are compared to table data using an operator \n"
-     "such as &lt;, &gt;, != (not equal) followed by a number.  \n"
-     "To specify a range, enter two numbers (start and end) separated by a \n"
-     "\"-\". \n"
-     "</P><P>\n"
-     "The individual field constraints are combined with AND.  In other \n"
-     "words, a record must meet all individual field constraints in order \n"
-     "to be retrieved.  The default values will match all records, \n"
-     "so the only constraints that apply are the ones that you edit.  \n"
-     "</P>\n"
-     "<H4> Free-form Query </H4>"
-     "<P>\n"
-     "When the filters above aren\'t enough, free-form queries allow \n"
-     "fancier constraints that typically relate two or more field names of \n"
-     "the selected table. If you are familiar with \n"
-     "<A HREF=\"http://www.w3schools.com/sql/sql_where.asp\" TARGET=_blank>"
-     "SQL syntax</A>, \n"
-     "queries here are just \"where\" clauses (with wildcards as above). \n"
-     "Queries can combine simple constraints with AND, OR, and NOT using \n"
-     "parentheses as needed for clarity. \n"
-     "<P> A simple constraint consists of a field name listed above, \n"
-     "     a comparison operator (see below), \n"
-     "     and a value: a number, string, wildcard value (see below), \n"
-     "     or another field name. \n"
-     "     In place of a field name, you may use \n"
-     "     an arithmetic expression of numeric field names.  </P>\n"
-     "<P> String or wildcard values for text comparisons must be quoted.  \n"
-     "     Single or double quotes may be used.  \n"
-     "     If comparing to a literal string value, \n"
-     "     you may use the \"=\" (or \"!=\") operator.  \n"
-     "     If comparing to a wildcard \n"
-     "     value, you must use the \"LIKE\" (or \"NOT LIKE\") operator.  \n"
-     "     </P> \n"
-     "<P> Numeric comparison operators include "
-     "&lt;, &lt;=, =, != (not equal), &gt;=, and &gt; .  \n"
-     "     Arithmetic operators include +, -, *, and /.  \n"
-     "     Other "
-     "<A HREF=\"http://www.w3schools.com/sql/sql_where.asp\" TARGET=_blank>"
-     "SQL</A> \n"
-     "     comparison keywords may be used.  \n"
-     "     </P> \n"
-     "</P><P>\n"
-     "Free-form query examples (taken from the refGene table):\n"
-     "<UL>\n"
-     "<LI> <FONT COLOR=\"#0000FF\">txStart = cdsStart</FONT> \n"
-     "searches for gene models missing expected 5\' UTR upstream sequence \n"
-     "(if strand is \'+\'; 3\' UTR downstream if strand is \'-\'). </LI>\n"
-     "<LI> <FONT COLOR=\"#0000FF\">chrom NOT LIKE \"chr??\"</FONT> \n"
-     "filters search to chromosomes 1-9 plus X and Y. </LI> \n"
-     "<LI> <FONT COLOR=\"#0000FF\">(cdsEnd - cdsStart) &gt; 10000</FONT> \n"
-     "selects genes whose coding regions span over 10 kbp. </LI> \n"
-     "<LI> <FONT COLOR=\"#0000FF\">(txStart != cdsStart) AND (txEnd != cdsEnd)"
-     " AND exonCount = 1</FONT> \n"
-     "finds single exon genes with both 3\' and 5\' flanking UTR.</LI> \n"
-     "<LI><FONT COLOR=\"#0000FF\">((cdsEnd - cdsStart) &gt; 30000) AND "
-     "(exonCount=2 OR exonCount=3)</FONT> \n"
-     "finds genes with long spans but only 2-3 exons.</LI>"
-     "</UL>\n"
-     "</P>\n"
-     );
-
 webEnd();
 }
 
@@ -2654,6 +2496,8 @@ preserveConstraints(fullTableName, db, NULL);
 preserveTable2();
 
 printf("<H3> Select Fields of %s: </H3>\n", getTableName());
+puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#ChooseFields\">"
+     "<B>Help</B></A><P>");
 cgiMakeHiddenVar("origPhase", cgiString("phase"));
 cgiMakeButton("submit", "Check All");
 cgiMakeButton("submit", "Clear All");
@@ -2698,6 +2542,8 @@ cgiMakeHiddenVar("outputType", outputType);
 preserveConstraints(fullTableName, getTableDb(), NULL);
 preserveTable2();
 printf("<H3>Table: %s</H3>\n", hti->rootName);
+puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#FASTAOptions\">"
+     "<B>Help</B></A><P>");
 hgSeqOptionsHtiCart(hti, cart);
 cgiMakeButton("phase", getSequencePhase);
 puts("</FORM>");
@@ -2957,6 +2803,8 @@ cgiMakeHiddenVar("outputType", outputType);
 preserveConstraints(fullTableName, db, NULL);
 preserveTable2();
 printf("<H3> Select BED Options for %s: </H3>\n", hti->rootName);
+puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#BEDOptions\">"
+     "<B>Help</B></A><P>");
 puts("<TABLE><TR><TD>");
 cgiMakeCheckBox("hgt.doCustomTrack",
 		cartCgiUsualBoolean(cart, "hgt.doCustomTrack", TRUE));
@@ -3144,6 +2992,8 @@ saveIntersectOptionsState();
 
 webStart(cart, "Table Browser: %s: %s", freezeName, linksPhase);
 printf("<H3> Links to Genome Browser from %s </H3>\n", getTableName());
+puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Hyperlinks\">"
+     "<B>Help</B></A><P>");
 
 if ((track2 != NULL) && (track2[0] != 0))
     snprintf(track2CGI, sizeof(track2CGI), "&%s=full", track2);
@@ -3216,6 +3066,8 @@ preserveConstraints(fullTableName, db, NULL);
 preserveConstraints(fullTableName2, db2, "2");
 printf("<H3> Specify how to combine tables %s and %s: </H3>\n",
        table, table2);
+puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Intersection\">"
+     "<B>Help</B></A><P>");
 
 printf("These combinations will maintain the gene/alignment structure (if any) of %s: <P>\n",
        table);
@@ -3249,17 +3101,17 @@ printf("Base-pair-wise intersection (AND) of %s and %s <P>\n",
 cgiMakeRadioButton("hgt.intersectOp", "or", sameString(op, "or"));
 printf("Base-pair-wise union (OR) of %s and %s <P>\n",
        table, table2);
-cgiMakeCheckBox("hgt.invertTable",
-		cartCgiUsualBoolean(cart, "hgt.invertTable", FALSE));
+cgiMakeCheckBox("hgt.invertTable", cgiBoolean("hgt.invertTable"));
 printf("Complement %s before intersection/union <P>\n", table);
-cgiMakeCheckBox("hgt.invertTable2",
-		cartCgiUsualBoolean(cart, "hgt.invertTable2", FALSE));
+cgiMakeCheckBox("hgt.invertTable2", cgiBoolean("hgt.invertTable2"));
 printf("Complement %s before intersection/union <P>\n", table2);
 
 cgiMakeButton("phase", outputType);
 
 printf("<P><HR><H3> (Optional) Filter %s Records by Field Values </H3>\n",
        table2);
+puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Constraints\">"
+     "<B>Help</B></A><P>");
 if (sameString(customTrackPseudoDb, db2))
     filterOptionsCustomTrack(table2, "2");
 else
@@ -3300,7 +3152,7 @@ cgiMakeHiddenVar("table", getTableVar());
 preserveConstraints(fullTableName, db, NULL);
 cgiContinueHiddenVar("position");
 cgiMakeHiddenVar("phase", histPhase);
-printf("Fields of %s:<P>\n", table);
+printf("<H4> Fields of %s: </H4>\n", table);
 puts("<TABLE BORDER=1> <TR> <TH>name</TH> <TH>type</TH> <TH>&nbsp;</TH> </TR>");
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -3345,13 +3197,18 @@ cgiMakeHiddenVar("table", getTableVar());
 preserveConstraints(fullTableName, db, NULL);
 cgiContinueHiddenVar("position");
 
-printf("<H4> Get Output: </H4>\n");
+printf("<H4> Get "
+       "<A HREF=\"/goldenPath/help/hgTextHelp.html#Formats\">Output</A>"
+       ": </H4>\n");
 cgiMakeDropList("outputType", outputTypeNonPosMenu, outputTypeNonPosMenuSize,
 		statsPhase);
 cgiMakeButton("phase", getOutputPhase);
 puts("</FORM>");
 
-printf("<HR><H4> Your query on %s: </H4>\n", table);
+puts("<HR>");
+puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Stats\">"
+     "<B>Help</B></A><P>");
+printf("<H4> Your query on %s: </H4>\n", table);
 constraints = constrainFields(NULL);
 if ((constraints != NULL) && (constraints[0] == 0))
     constraints = NULL;
@@ -3621,13 +3478,18 @@ positionLookupSamePhase();
 preserveConstraints(fullTableName, db, NULL);
 preserveTable2();
 
-printf("<H4> Get Output: </H4>\n");
+printf("<H4> Get "
+       "<A HREF=\"/goldenPath/help/hgTextHelp.html#Formats\">Output</A>"
+       ": </H4>\n");
 cgiMakeDropList("outputType", outputTypePosMenu, outputTypePosMenuSize,
 		statsPhase);
 cgiMakeButton("phase", getOutputPhase);
 puts("</FORM>");
 
-printf("<HR><H4> Your query on %s%s%s: </H4>\n", table,
+puts("<HR>");
+puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Stats\">"
+     "<B>Help</B></A><P>");
+printf("<H4> Your query on %s%s%s: </H4>\n", table,
        (table2 != NULL) ? " vs. " : "",
        (table2 != NULL) ? table2 : "");
 constraints = constrainFields(NULL);
@@ -4069,6 +3931,8 @@ if (maxFreq > 50)
 else
     scale = 1.0;
 // print out name, bar, count for each element
+puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Stats\">"
+     "<B>Help</B></A><P>");
 printf("<H4> Histogram of values for %s.%s%s%s, sorted by descending frequency: </H4>\n",
        table, field,
        (constraints? " "         : ""),
