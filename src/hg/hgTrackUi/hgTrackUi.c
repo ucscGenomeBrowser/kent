@@ -23,7 +23,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.165 2005/01/12 03:29:48 donnak Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.166 2005/01/17 19:31:05 braney Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1224,7 +1224,7 @@ else if (sameString(track, "blastDm1FB"))
         blastFBUi(tdb);
 else if (sameString(track, "blastSacCer1SG"))
         blastSGUi(tdb);
-else if (sameString(track, "blastHg17KG") || sameString(track, "blastHg16KG") || sameString(track, "tblastnHg16KGPep"))
+else if (sameString(track, "blastHg17KG") || sameString(track, "blastHg16KG") || sameString(track, "blatzHg17KG"))
         blastUi(tdb);
 else if (startsWith("wig", tdb->type))
         {
