@@ -642,6 +642,15 @@ visibility hide
 color 178,34,34
 type bed 9
 
+track agxMapped
+shortLabel agxMapped
+longLabel Condensed version of AltGraphX Mapped from Mouse
+group rna
+color 153,26,42,
+priority 72.1
+visibility hide
+type bed 12
+
 track altGraph
 shortLabel AltGraph
 longLabel AltGraph
