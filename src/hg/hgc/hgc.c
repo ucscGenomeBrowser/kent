@@ -114,7 +114,7 @@
 #include "affyGenoDetails.h"
 #include "encodeRegionInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.500 2003/10/14 07:16:11 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.501 2003/10/15 04:45:08 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1653,7 +1653,7 @@ chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
 if (subChain != NULL)
     {
     qChainRangePlusStrand(subChain, &qs, &qe);
-    linkToOtherBrowser(otherDb, subChain->qName, qs, qe);
+    linkToOtherBrowser(otherDb, subChain->qName, qs-1, qe);
     printf("Open %s browser</A> at position corresponding to the part of chain that is in this window.<BR>\n", otherOrg);
     }
 chainFree(&toFree);
