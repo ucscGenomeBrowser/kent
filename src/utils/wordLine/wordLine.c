@@ -42,4 +42,5 @@ if (argc < 2)
     usage();
 for (i=1; i<argc; ++i)
     wordLine(argv[i]);
+return 0;
 }
