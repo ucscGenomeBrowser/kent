@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.652 2004/06/01 22:15:43 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.653 2004/06/02 13:48:56 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -13924,7 +13924,14 @@ if ((row = sqlNextRow(sr)) == NULL)
 psl = pslLoad(row+hasBin);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-seq = hPepSeq(itemName);
+if (itemName[strlen(itemName) -1 ] != 'p')
+    {
+    char buffer[256];
+    sprintf(buffer, "%sp",itemName);
+    seq = hPepSeq(buffer);
+    }
+else
+    seq = hPepSeq(itemName);
 showSomeAlignment(psl, seq, gftProt, 0, seq->size, NULL, 0, 0);
 //showSomeAlignment(psl, seq, gftProtChes, 0, seq->size, NULL, 0, 0);
 //showSomeAlignment(psl, seq, gftProt, psl->qStart, psl->qEnd, psl->qName, 0, 0);
