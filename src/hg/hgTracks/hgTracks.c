@@ -10793,7 +10793,8 @@ if (!hideControls)
 	position = cloneString(buf);
 	hWrites("position ");
 	hTextVar("position", position, 30);
-	hPrintf("  size %d, ", winEnd-winStart);
+	sprintLongWithCommas(buf, winEnd - winStart);
+	hPrintf(" size %s ", buf);
 	hWrites(" image width ");
 	hIntVar("pix", tl.picWidth, 4);
 	hWrites(" ");
