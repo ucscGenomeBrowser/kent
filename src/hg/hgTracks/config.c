@@ -33,6 +33,7 @@ groupTracks(&trackList, &groupList);
 setRulerMode();
 
 /* Set up ruler mode according to changeVis. */
+#ifdef BOB_DOESNT_LIKE
 if (changeVis != -2)
     {
     if (groupToChange == NULL || 
@@ -44,6 +45,7 @@ if (changeVis != -2)
 	    rulerMode = changeVis;
 	}
     }
+#endif /* BOB_DOESNT_LIKE */
 
 cgiMakeHiddenVar(configGroupTarget, "none");
 hTableStart();
