@@ -112,6 +112,13 @@ psXyOut(ps, x, y);
 fprintf(ps->f, "moveto\n");
 }
 
+static void psLineTo(struct psGfx *ps, int x, int y)
+/* Draw line from current point to given point,
+ * and make given point new current point. */
+{
+psXyOut(ps, x, y);
+fprintf(ps->f, "lineto\n");
+}
 void psDrawBox(struct psGfx *ps, int x, int y, int width, int height)
 /* Draw a filled box in current color. */
 {
@@ -129,6 +136,23 @@ psMoveTo(ps, x1, y1);
 psXyOut(ps, x2, y2);
 fprintf(ps->f, "lineto\n");
 fprintf(f, "stroke\n");
+}
+
+void psFillUnder(struct psGfx *ps, int x1, int y1, int x2, int y2, 
+	int bottom)
+/* Draw a 4 sided filled figure that has line x1/y1 to x2/y2 at
+ * it's top, a horizontal line at bottom at it's bottom,  and
+ * vertical lines from the bottom to y1 on the left and bottom to
+ * y2 on the right. */
+{
+FILE *f = ps->f;
+fprintf(f, "newpath\n");
+psMoveTo(ps, x1, y1);
+psLineTo(ps, x2, y2);
+psLineTo(ps, x2, bottom);
+psLineTo(ps, x1, bottom);
+fprintf(f, "closepath\n");
+fprintf(f, "fill\n");
 }
 
 void psTimesFont(struct psGfx *ps, double size)
@@ -150,6 +174,24 @@ void psTextAt(struct psGfx *ps, int x, int y, char *text)
 {
 psMoveTo(ps, x, y + ps->fontHeight);
 fprintf(ps->f, "(%s) show\n", text);
+}
+
+void psTextRight(struct psGfx *ps, int x, int y, int width, int height, 
+	char *text)
+/* Draw a line of text right justified in box defined by x/y/width/height */
+{
+y += (height - ps->fontHeight)/2;
+psMoveTo(ps, x+width, y + ps->fontHeight);
+fprintf(ps->f, "(%s) showBefore\n", text);
+}
+
+void psTextCentered(struct psGfx *ps, int x, int y, int width, int height, 
+	char *text)
+/* Draw a line of text centered in box defined by x/y/width/height */
+{
+y += (height - ps->fontHeight)/2;
+psMoveTo(ps, x+width/2, y + ps->fontHeight);
+fprintf(ps->f, "(%s) showMiddle\n", text);
 }
 
 void psTextDown(struct psGfx *ps, int x, int y, char *text)

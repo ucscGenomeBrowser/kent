@@ -32,13 +32,23 @@ struct vGfx
 	    int x1, int y1, int x2, int y2, int colorIx);
     /* Draw a line from one point to another. */
 
-    void (*text)(void *v, int x, int y, int colorIx, 
-	    void *font, char *text);
+    void (*text)(void *v, int x, int y, int colorIx, void *font, char *text);
     /* Draw a line of text with upper left corner x,y. */
+
+    void (*textRight)(void *v, int x, int y, int width, int height,
+    	int colorIx, void *font, char *text);
+    /* Draw a line of text with upper left corner x,y. */
+
+    void (*textCentered)(void *v, int x, int y, int width, int height,
+    	int colorIx, void *font, char *text);
+    /* Draw a line of text in middle of box. */
 
     int (*findColorIx)(void *v, int r, int g, int b);
     /* Find color in map if possible, otherwise create new color or
      * in a pinch a close color. */
+
+    struct rgbColor (*colorIxToRgb)(void *v, int colorIx);
+    /* Return rgb values for given color index. */
 
     void (*setClip)(void *v, int x, int y, int width, int height);
     /* Set clipping rectangle. */
@@ -51,6 +61,12 @@ struct vGfx
 	    unsigned char *dots, boolean zeroClear);
     /* Put a series of one 'pixel' width vertical lines. */
 
+    void (*fillUnder)(struct memGfx *mg, int x1, int y1, int x2, int y2, 
+	    int bottom, Color color);
+    /* Draw a 4 sided filled figure that has line x1/y1 to x2/y2 at
+     * it's top, a horizontal line at bottom at it's bottom,  and
+     * vertical lines from the bottom to y1 on the left and bottom to
+     * y2 on the right. */
     };
 
 struct vGfx *vgOpenGif(int width, int height, char *fileName);
@@ -73,13 +89,25 @@ void vgClose(struct vGfx **pVg);
 #define vgLine(v,x1,y1,x2,y2,color) v->line(v->data,x1,y1,x2,y2,color)
 /* Draw a line from one point to another. */
 
-#define vgText(v,x,y,color,font,string) v->text(v->data,x,y,color,font,string)
+#define vgText(v,x,y,color,font,string) v->text(v->data,x,y,color,string)
 /* Draw a line of text with upper left corner x,y. */
+
+#define vgTextRight(v,x,y,width,height,color,font,string) \
+	v->textRight(v->data,x,y,width,height,color,font,string)
+/* Draw a line of text with upper left corner x,y. */
+
+#define vgTextCentered(v,x,y,width,height,color,font,string) \
+	v->textCentered(v->data,x,y,width,height,color,font,string)
+/* Draw a line of text in middle of box. */
 
 #define vgFindColorIx(v,r,g,b) v->findColorIx(v->data, r, g, b)
 /* Find index of RGB color.  */
 
-#define vgSetClip(v,x,y,width,height) v->setClip(v->data, x, y, width, height)
+#define vgColorIxToRgb(v,colorIx) v->colorIxToRgb(v->data, colorIx)
+/* Return rgb values for given color index. */
+
+#define vgSetClip(v,x,y,width,height) \
+	v->setClip(v->data, x, y, width, height)
 /* Set clipping rectangle. */
 
 #define vgUnclip(v) v->unclip(v->data);
@@ -90,7 +118,12 @@ void vgClose(struct vGfx **pVg);
  * The only portable way to do this is to strictly pair up
  * the setClip/unclip calls and not to nest them. */
 
-#define vgVerticalSmear(v,x,y,w,h,dots,zeroClear) v->verticalSmear(v->data,x,y,w,h,dots,zeroClear)
+#define vgVerticalSmear(v,x,y,w,h,dots,zeroClear) \
+	v->verticalSmear(v->data,x,y,w,h,dots,zeroClear)
 /* Take array of dots and smear them vertically. */
+
+#define vgFillUnder(v,x1,y1,x2,y2,bottom,color) \
+	v->fillUnder(v->data,x1,y1,x2,y2,bottom,color)
+
 
 #endif /* VGFX_H */

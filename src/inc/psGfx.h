@@ -34,6 +34,13 @@ void psDrawBox(struct psGfx *ps, int x, int y, int width, int height);
 void psDrawLine(struct psGfx *ps, int x1, int y1, int x2, int y2);
 /* Draw a line from x1/y1 to x2/y2 */
 
+void psFillUnder(struct psGfx *ps, int x1, int y1, int x2, int y2, 
+	int bottom);
+/* Draw a 4 sided filled figure that has line x1/y1 to x2/y2 at
+ * it's top, a horizontal line at bottom at it's bottom,  and
+ * vertical lines from the bottom to y1 on the left and bottom to
+ * y2 on the right. */
+
 void psXyOut(struct psGfx *ps, int x, int y);
 /* Output x,y position transformed into PostScript space. 
  * Useful if you're mixing direct PostScript with psGfx
@@ -50,6 +57,14 @@ void psTextAt(struct psGfx *ps, int x, int y, char *text);
 
 void psTextDown(struct psGfx *ps, int x, int y, char *text);
 /* Output text going downwards rather than across at position. */
+
+void psTextRight(struct psGfx *mg, int x, int y, int width, int height, 
+	char *text);
+/* Draw a line of text right justified in box defined by x/y/width/height */
+
+void psTextCentered(struct psGfx *mg, int x, int y, int width, int height, 
+	char *text);
+/* Draw a line of text centered in box defined by x/y/width/height */
 
 void psTimesFont(struct psGfx *ps, double size);
 /* Set font to times of a certain size. */

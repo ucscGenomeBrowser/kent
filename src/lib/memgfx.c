@@ -141,6 +141,12 @@ if (mgColorsFree(mg))
 return mgClosestColor(mg, r, g, b);
 }
 
+struct rgbColor mgColorIxToRgb(struct memGfx *mg, int colorIx)
+/* Return rgb value at color index. */
+{
+return mg->colorMap[colorIx];
+}
+
 Color mgClosestColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned char b)
 /* Returns closest color in color map to r,g,b */
 {
@@ -544,7 +550,6 @@ while (--height >= 0)
 }
 
 
-
 void mgText(struct memGfx *mg, int x, int y, Color color, 
 	MgFont *font, char *text)
 /* Draw a line of text with upper left corner x,y. */
@@ -619,12 +624,12 @@ int mgFontCharWidth(MgFont *font, char c)
 return mgFontWidth(font, &c, 1);
 }
 
-
 void mgSlowDot(struct memGfx *mg, int x, int y, int colorIx)
 /* Draw a dot when a macro won't do. */
 {
 mgPutDot(mg, x, y, colorIx);
 }
+
 
 void vgMgMethods(struct vGfx *vg)
 /* Fill in virtual graphics methods for memory based drawing. */
@@ -634,9 +639,13 @@ vg->dot = (vg_dot)mgSlowDot;
 vg->box = (vg_box)mgDrawBox;
 vg->line = (vg_line)mgDrawLine;
 vg->text = (vg_text)mgText;
+vg->textRight = (vg_textRight)mgTextRight;
+vg->textCentered = (vg_textCentered)mgTextCentered;
 vg->findColorIx = (vg_findColorIx)mgFindColor;
+vg->colorIxToRgb = (vg_colorIxToRgb)mgColorIxToRgb;
 vg->setClip = (vg_setClip)mgSetClip;
 vg->unclip = (vg_unclip)mgUnclip;
 vg->verticalSmear = (vg_verticalSmear)mgVerticalSmear;
+vg->fillUnder = (vg_fillUnder)mgFillUnder;
 }
 

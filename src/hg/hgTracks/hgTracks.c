@@ -9,6 +9,8 @@
 #include "hash.h"
 #include "jksql.h"
 #include "memgfx.h"
+#include "vGfx.h"
+#include "browserGfx.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
 #include "cart.h"
@@ -252,7 +254,7 @@ struct trackGroup
     /* Return height of one item. */
 
     void (*drawItems)(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis);
     /* Draw item list, one per track. */
 
@@ -265,7 +267,7 @@ struct trackGroup
     void (*freeItems)(struct trackGroup *tg);
     /* Free item list. */
 
-    Color (*itemColor)(struct trackGroup *tg, void *item, struct memGfx *mg);
+    Color (*itemColor)(struct trackGroup *tg, void *item, struct vGfx *vg);
     /* Get color of item (optional). */
 
 
@@ -572,7 +574,7 @@ sprintf(table, "%s%s", chromName, tabSuffix);
 return hTableExists(table);
 }
 
-void drawScaledBox(struct memGfx *mg, int chromStart, int chromEnd, 
+void drawScaledBox(struct vGfx *vg, int chromStart, int chromEnd, 
 	double scale, int xOff, int y, int height, Color color)
 /* Draw a box scaled from chromosome to window coordinates. */
 {
@@ -581,10 +583,10 @@ int x2 = round((double)(chromEnd-winStart)*scale) + xOff;
 int w = x2-x1;
 if (w < 1)
     w = 1;
-mgDrawBox(mg, x1, y, w, height, color);
+vgBox(vg, x1, y, w, height, color);
 }
 
-void drawScaledBoxSample(struct memGfx *mg, int chromStart, int chromEnd, double scale, 
+void drawScaledBoxSample(struct vGfx *vg, int chromStart, int chromEnd, double scale, 
 	int xOff, int y, int height, Color color, int score)
 /* Draw a box scaled from chromosome to window coordinates. */
 {
@@ -599,7 +601,7 @@ w = x2-x1;
 
 if (w < 1)
     w = 1;
-mgDrawBox(mg, x1, y, w, height, color);
+vgBox(vg, x1, y, w, height, color);
 if ((x1 >= 0) && (x1 < MAXPIXELS) && (chromEnd >= winStart) && (chromStart <= winEnd))
     {
     for (i = x1 ; i < x1+w; i++)
@@ -836,13 +838,13 @@ Color lightGrayIndex()
 return shadesOfGray[3];
 }
 
-int mgFindRgb(struct memGfx *mg, struct rgbColor *rgb)
+int vgFindRgb(struct vGfx *vg, struct rgbColor *rgb)
 /* Find color index corresponding to rgb color. */
 {
-return mgFindColor(mg, rgb->r, rgb->g, rgb->b);
+return vgFindColorIx(vg, rgb->r, rgb->g, rgb->b);
 }
 
-void makeGrayShades(struct memGfx *mg)
+void makeGrayShades(struct vGfx *vg)
 /* Make eight shades of gray in display. */
 {
 int i;
@@ -852,12 +854,12 @@ for (i=0; i<=maxShade; ++i)
     int level = 255 - (255*i/maxShade);
     if (level < 0) level = 0;
     rgb.r = rgb.g = rgb.b = level;
-    shadesOfGray[i] = mgFindRgb(mg, &rgb);
+    shadesOfGray[i] = vgFindRgb(vg, &rgb);
     }
 shadesOfGray[maxShade+1] = MG_RED;
 }
 
-void mgMakeColorGradient(struct memGfx *mg, 
+void vgMakeColorGradient(struct vGfx *vg, 
     struct rgbColor *start, struct rgbColor *end,
     int steps, Color *colorIxs)
 /* Make a color gradient that goes smoothly from start
@@ -877,37 +879,37 @@ for (i=0; i<=steps; ++i)
     r = invScale * start->r + scale * end->r;
     g = invScale * start->g + scale * end->g;
     b = invScale * start->b + scale * end->b;
-    colorIxs[i] = mgFindColor(mg, r, g, b);
+    colorIxs[i] = vgFindColorIx(vg, r, g, b);
     scale += invStep;
     }
 }
 
-void makeBrownShades(struct memGfx *mg)
+void makeBrownShades(struct vGfx *vg)
 /* Make some shades of brown in display. */
 {
-mgMakeColorGradient(mg, &tanColor, &brownColor, maxShade+1, shadesOfBrown);
+vgMakeColorGradient(vg, &tanColor, &brownColor, maxShade+1, shadesOfBrown);
 }
 
-void makeSeaShades(struct memGfx *mg)
+void makeSeaShades(struct vGfx *vg)
 /* Make some shades of blue in display. */
 {
-mgMakeColorGradient(mg, &lightSeaColor, &darkSeaColor, maxShade+1, shadesOfSea);
+vgMakeColorGradient(vg, &lightSeaColor, &darkSeaColor, maxShade+1, shadesOfSea);
 }
 
-void makeRedGreenShades(struct memGfx *mg) 
+void makeRedGreenShades(struct vGfx *vg) 
 /* Allocate the  shades of Red, Green and Blue */
 {
 static struct rgbColor black = {0, 0, 0};
 static struct rgbColor red = {255, 0, 0};
 static struct rgbColor green = {0, 255, 0};
 static struct rgbColor blue = {0, 0, 255};
-mgMakeColorGradient(mg, &black, &blue, EXPR_DATA_SHADES, shadesOfBlue);
-mgMakeColorGradient(mg, &black, &red, EXPR_DATA_SHADES, shadesOfRed);
-mgMakeColorGradient(mg, &black, &green, EXPR_DATA_SHADES, shadesOfGreen);
+vgMakeColorGradient(vg, &black, &blue, EXPR_DATA_SHADES, shadesOfBlue);
+vgMakeColorGradient(vg, &black, &red, EXPR_DATA_SHADES, shadesOfRed);
+vgMakeColorGradient(vg, &black, &green, EXPR_DATA_SHADES, shadesOfGreen);
 exprBedColorsMade = TRUE;
 }
 
-void makeChromosomeShades(struct memGfx *mg) 
+void makeChromosomeShades(struct vGfx *vg) 
 /* Allocate the  shades of 8 colors in 3 shades to cover 24 chromosomes  */
 {
 static struct rgbColor blk = {0, 0, 0};
@@ -921,49 +923,49 @@ static struct rgbColor chrom6 = {0, 0, 255}; /* blue */
 static struct rgbColor chrom7 = {255, 0, 255}; /* magenta aka purple */
 static struct rgbColor chrom8 = {102, 51, 0}; /* brown */
 
-chromColor[0] = mgFindColor(mg, 0,0, 0); /*black*/
-chromColor[1] = mgFindColor(mg, 0xff,0xcc, 0xcc);  /* light red */
-chromColor[2] = mgFindColor(mg, 0xcc,0, 0);      /* med red */
-chromColor[3] = mgFindColor(mg, 0xff,0, 0);      /* bright red */
+chromColor[0] = vgFindColorIx(vg, 0,0, 0); /*black*/
+chromColor[1] = vgFindColorIx(vg, 0xff,0xcc, 0xcc);  /* light red */
+chromColor[2] = vgFindColorIx(vg, 0xcc,0, 0);      /* med red */
+chromColor[3] = vgFindColorIx(vg, 0xff,0, 0);      /* bright red */
 
-chromColor[4] = mgFindColor(mg, 0xff,0x66,0);     /* bright orange */
-chromColor[5] = mgFindColor(mg, 0xff,0x99,0);
-chromColor[6] = mgFindColor(mg, 0xff,0,0xcc);     /* magenta */
+chromColor[4] = vgFindColorIx(vg, 0xff,0x66,0);     /* bright orange */
+chromColor[5] = vgFindColorIx(vg, 0xff,0x99,0);
+chromColor[6] = vgFindColorIx(vg, 0xff,0,0xcc);     /* magenta */
 
-chromColor[7] = mgFindColor(mg, 0xff,0xff,0x0);     /* bright yellow  */
-chromColor[8] = mgFindColor(mg, 0xcc,0xcc,0x99);     /* olive green*/
-chromColor[9] = mgFindColor(mg, 0x99,0x66,0x0);   /* brown */
+chromColor[7] = vgFindColorIx(vg, 0xff,0xff,0x0);     /* bright yellow  */
+chromColor[8] = vgFindColorIx(vg, 0xcc,0xcc,0x99);     /* olive green*/
+chromColor[9] = vgFindColorIx(vg, 0x99,0x66,0x0);   /* brown */
 
-chromColor[10] = mgFindColor(mg, 0,0xff,0);      /*bt gr*/
-chromColor[11] = mgFindColor(mg, 0xcc,0xff,0);    /* yellow green */
-chromColor[12] = mgFindColor(mg, 0x66,0x66,0);  /* dark  green*/
+chromColor[10] = vgFindColorIx(vg, 0,0xff,0);      /*bt gr*/
+chromColor[11] = vgFindColorIx(vg, 0xcc,0xff,0);    /* yellow green */
+chromColor[12] = vgFindColorIx(vg, 0x66,0x66,0);  /* dark  green*/
 
-chromColor[13] = mgFindColor(mg, 0xcc,0xff,0xff);  /*lt cyan*/
-chromColor[14] = mgFindColor(mg, 0,0xff,0xff);    /*med cyan*/
-chromColor[15] = mgFindColor(mg, 0x0,0x0,0x0); /* black */
+chromColor[13] = vgFindColorIx(vg, 0xcc,0xff,0xff);  /*lt cyan*/
+chromColor[14] = vgFindColorIx(vg, 0,0xff,0xff);    /*med cyan*/
+chromColor[15] = vgFindColorIx(vg, 0x0,0x0,0x0); /* black */
 
-chromColor[16] = mgFindColor(mg, 0x99,0xcc,0xff);  /*light med blue */
-chromColor[17] = mgFindColor(mg, 0x66,0x99,0xff);  /* med blue */
-chromColor[18] = mgFindColor(mg, 0,0 ,0xcc);     /* deep blue */
+chromColor[16] = vgFindColorIx(vg, 0x99,0xcc,0xff);  /*light med blue */
+chromColor[17] = vgFindColorIx(vg, 0x66,0x99,0xff);  /* med blue */
+chromColor[18] = vgFindColorIx(vg, 0,0 ,0xcc);     /* deep blue */
 
-chromColor[19] = mgFindColor(mg, 0xcc,0x99,0xff);  /*lt violet*/
-chromColor[20] = mgFindColor(mg, 0xcc,0x33,0xff);  /* med violet */
-chromColor[21] = mgFindColor(mg, 0x99,0,0xcc);    /* dark violet */
+chromColor[19] = vgFindColorIx(vg, 0xcc,0x99,0xff);  /*lt violet*/
+chromColor[20] = vgFindColorIx(vg, 0xcc,0x33,0xff);  /* med violet */
+chromColor[21] = vgFindColorIx(vg, 0x99,0,0xcc);    /* dark violet */
 
-chromColor[22] = mgFindColor(mg, 0xcc,0xcc,0xcc); /* light gray */
-chromColor[23] = mgFindColor(mg, 0x99,0x99,0x99); /* med gray */
-chromColor[24] = mgFindColor(mg, 0x66,0x66,0x66);  /* med gray */
+chromColor[22] = vgFindColorIx(vg, 0xcc,0xcc,0xcc); /* light gray */
+chromColor[23] = vgFindColorIx(vg, 0x99,0x99,0x99); /* med gray */
+chromColor[24] = vgFindColorIx(vg, 0x66,0x66,0x66);  /* med gray */
 
-chromColor[25] = mgFindColor(mg, 0x0,0x0,0x0); /* black */
+chromColor[25] = vgFindColorIx(vg, 0x0,0x0,0x0); /* black */
 /*
-mgMakeColorGradient(mg, &white, &chrom1, CHROMOSOME_SHADES, shadesOfChrom1);
-mgMakeColorGradient(mg, &white, &chrom2, CHROMOSOME_SHADES, shadesOfChrom2);
-mgMakeColorGradient(mg, &white, &chrom3, CHROMOSOME_SHADES, shadesOfChrom3);
-mgMakeColorGradient(mg, &white, &chrom4, CHROMOSOME_SHADES, shadesOfChrom4);
-mgMakeColorGradient(mg, &white, &chrom5, CHROMOSOME_SHADES, shadesOfChrom5);
-mgMakeColorGradient(mg, &white, &chrom6, CHROMOSOME_SHADES, shadesOfChrom6);
-mgMakeColorGradient(mg, &white, &chrom7, CHROMOSOME_SHADES, shadesOfChrom7);
-mgMakeColorGradient(mg, &white, &chrom8, CHROMOSOME_SHADES, shadesOfChrom8);
+vgMakeColorGradient(vg, &white, &chrom1, CHROMOSOME_SHADES, shadesOfChrom1);
+vgMakeColorGradient(vg, &white, &chrom2, CHROMOSOME_SHADES, shadesOfChrom2);
+vgMakeColorGradient(vg, &white, &chrom3, CHROMOSOME_SHADES, shadesOfChrom3);
+vgMakeColorGradient(vg, &white, &chrom4, CHROMOSOME_SHADES, shadesOfChrom4);
+vgMakeColorGradient(vg, &white, &chrom5, CHROMOSOME_SHADES, shadesOfChrom5);
+vgMakeColorGradient(vg, &white, &chrom6, CHROMOSOME_SHADES, shadesOfChrom6);
+vgMakeColorGradient(vg, &white, &chrom7, CHROMOSOME_SHADES, shadesOfChrom7);
+vgMakeColorGradient(vg, &white, &chrom8, CHROMOSOME_SHADES, shadesOfChrom8);
 chromColor[0] = kshadesOfChrom1[LOW];
 chromColor[1] = shadesOfChrom1[MEDIUM];
 chromColor[2] = shadesOfChrom1[BRIGHT];
@@ -1059,9 +1061,9 @@ const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
 return a->start - b->start;
 }
 
-
-static void linkedFeaturesSeriesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+static void linkedFeaturesSeriesDraw(struct trackGroup *tg, 
+	int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw linked features items. */
 {
@@ -1109,7 +1111,7 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
         if (lf->filterColor > 0)
             color = lf->filterColor;
         else if (tg->itemColor)
-            color = tg->itemColor(tg, lf, mg);
+            color = tg->itemColor(tg, lf, vg);
         else if (shades) 
             color =  shades[lf->grayIx+isXeno];
         tallStart = lf->tallStart;
@@ -1120,12 +1122,12 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
         w = x2-x1;
         if ((isFull) && (prevEnd != -1) && !lfs->noLine) 
               {
-              mgBarbedHorizontalLine(mg, x1, midY, w, 2, 5, 
+              vgBarbedHorizontalLine(vg, x1, midY, w, 2, 5, 
                            lfs->orientation, bColor, TRUE);
               }
         if (prevEnd != -1 && !lfs->noLine) 
               {
-              mgDrawBox(mg, x1, midY, w, 1, color);
+              vgBox(vg, x1, midY, w, 1, color);
               }
         prevEnd = lf->end;
       
@@ -1139,10 +1141,10 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
             if (isFull)
                 {
                 if (shades) bColor =  shades[(lf->grayIx>>1)];
-                mgBarbedHorizontalLine(mg, x1, midY, x2-x1, 2, 5, 
+                vgBarbedHorizontalLine(vg, x1, midY, x2-x1, 2, 5, 
                          lf->orientation, bColor, FALSE);
                 }
-            mgDrawBox(mg, x1, midY, w, 1, color);
+            vgBox(vg, x1, midY, w, 1, color);
             }
         for (sf = lf->components; sf != NULL; sf = sf->next)
             {
@@ -1152,19 +1154,19 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
                 {
                 e2 = e;
                 if (e2 > tallStart) e2 = tallStart;
-                drawScaledBoxSample(mg, s, e2, scale, xOff, y+shortOff, shortHeight, color , lf->score);
+                drawScaledBoxSample(vg, s, e2, scale, xOff, y+shortOff, shortHeight, color , lf->score);
                 s = e2;
                 }
             if (e > tallEnd)
                 {
                 s2 = s;
                 if (s2 < tallEnd) s2 = tallEnd;
-                drawScaledBoxSample(mg, s2, e, scale, xOff, y+shortOff, shortHeight, color , lf->score);
+                drawScaledBoxSample(vg, s2, e, scale, xOff, y+shortOff, shortHeight, color , lf->score);
                 e = s2;
                 }
             if (e > s)
                 {
-                drawScaledBoxSample(mg, s, e, scale, xOff, y, heightPer, color, lf->score);
+                drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, color, lf->score);
                 ++compCount;
                 }
             if(hgDebug)
@@ -1177,7 +1179,7 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
                 snprintf(buff, sizeof(buff), "%.2f", lf->score);
                 textWidth = mgFontStringWidth(font, buff);
                 if (textWidth <= sw )
-                    mgTextCentered(mg, sx1, y, sw, heightPer, MG_WHITE, font, buff);
+                    vgTextCentered(vg, sx1, y, sw, heightPer, MG_WHITE, font, buff);
                 }
             }
         }
@@ -1186,34 +1188,15 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
         x1 = round((double)((int)prevEnd-winStart)*scale) + xOff;
         x2 = round((double)((int)lfs->end-winStart)*scale) + xOff;
         w = x2-x1;
-	mgBarbedHorizontalLine(mg, x1, midY, w, 2, 5, 
+	vgBarbedHorizontalLine(vg, x1, midY, w, 2, 5, 
 			       lfs->orientation, bColor, TRUE);
-	mgDrawBox(mg, x1, midY, w, 1, color);
+	vgBox(vg, x1, midY, w, 1, color);
 	}
 
     if (isFull) y += lineHeight;
     } 
 }
 
-
-boolean sameRgbColor( struct rgbColor *c1, struct rgbColor *c2 )
-{
-    if( c1->r == c2->r  &&
-        c1->g == c2->g  &&
-        c1->b == c2->b )
-        return(TRUE);
-    return(FALSE);
-}
-
-Color *shadesFromBaseColor( struct rgbColor *rgb )
-{
-   if( sameRgbColor( rgb, &darkSeaColor ))
-        return( shadesOfSea );
-   if( sameRgbColor( rgb, &brownColor ))
-        return( shadesOfBrown );
-   else         
-        return( shadesOfGray );
-}
 
 
 int whichBin( double num, double thisMin, double thisMax, double binCount )
@@ -1265,7 +1248,7 @@ if (withLeftLabels)
 return x;
 }
 
-static void drawWiggleHorizontalLine( struct memGfx *mg, 
+static void drawWiggleHorizontalLine( struct vGfx *vg, 
 	double where, double min0, double max0, 
 	int binCount, int y, double hFactor, int heightPer, 
 	Color lineColor )
@@ -1276,12 +1259,12 @@ int bin;
 double y1;
 bin = -whichBin( where, min0, max0, binCount);
 y1 = (int)((double)y+((double)bin)*hFactor+(double)heightPer);
-mgDrawBox( mg, 0, y1, mg->width, 1, lineColor );
+vgBox( vg, 0, y1, vg->width, 1, lineColor );
 }
 
 static void wiggleLinkedFeaturesDraw(struct trackGroup *tg, 
     int seqStart, int seqEnd,
-    struct memGfx *mg, int xOff, int yOff, int width, 
+    struct vGfx *vg, int xOff, int yOff, int width, 
     MgFont *font, Color color, enum trackVisibility vis)
 /* Currently this routine is adapted from Terry's 
  * linkedFeatureSeriesDraw() routine.
@@ -1342,7 +1325,7 @@ double hFactor, hFactor2;
 double minRange, maxRange;
 
 
-Color gridColor = mgFindRgb(mg, &guidelineColor); /* for horizontal lines*/
+Color gridColor = vgFindRgb(vg, &guidelineColor); /* for horizontal lines*/
 
 lf=tg->items;    
 if(lf==NULL) return;
@@ -1376,11 +1359,11 @@ if( sameString( tg->mapName, "humMus" ) )
     /*draw horizontal line across track at 0.0, 2.0, and 5.0*/
     if( !isFull )
 	{
-	drawWiggleHorizontalLine( mg, 0.0, min0, max0, binCount,
+	drawWiggleHorizontalLine( vg, 0.0, min0, max0, binCount,
 	    y, hFactor, heightPer, gridColor );
-	drawWiggleHorizontalLine( mg, 2.0, min0, max0, binCount,
+	drawWiggleHorizontalLine( vg, 2.0, min0, max0, binCount,
 	    y, hFactor, heightPer, gridColor );
-	drawWiggleHorizontalLine( mg, 5.0, min0, max0, binCount,
+	drawWiggleHorizontalLine( vg, 5.0, min0, max0, binCount,
 	    y, hFactor, heightPer, gridColor );
 	}
 
@@ -1398,7 +1381,7 @@ else if( sameString( tg->mapName, "humMusL" )
     if( isFull )
 	{
 	for( i=1; i<=6; i++ )
-	    drawWiggleHorizontalLine( mg, (double)i, min0, max0,
+	    drawWiggleHorizontalLine( vg, (double)i, min0, max0,
 		binCount, y, hFactor, heightPer, gridColor );
 	}
     }
@@ -1454,7 +1437,7 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	    	minRange, maxRange, binCount );
 	    y1 = (int)((double)y+((double)bin)* hFactor+(double)heightPer);
 	    if( gapPrevX >= 0 )
-		drawScaledBox(mg, sampleX, gapPrevX, scale, 
+		drawScaledBox(vg, sampleX, gapPrevX, scale, 
 			xOff, (int)y1, (int)(.10*heightPer), shadesOfGray[2]);
 	    gapPrevX = sampleX;
 	    prevX = -1; /*connect next point with gray bar too*/
@@ -1480,9 +1463,9 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 		    /*don't interpolate over large gaps*/
 		    {
 		    if (fill)
-			mgFillUnder(mg, x1,y1, x2,y2, ybase, bColor);
+			vgFillUnder(vg, x1,y1, x2,y2, ybase, bColor);
 		    else
-			mgDrawLine(mg, x1,y1, x2,y2, color);
+			vgLine(vg, x1,y1, x2,y2, color);
 		    }
 		}
 	    }
@@ -1490,10 +1473,10 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	/* Draw the points themselves*/
 	if (wiggleType != wiggleLinearInterpolation)
 	    {
-	    drawScaledBox(mg, sampleX, sampleX+1, scale, 
+	    drawScaledBox(vg, sampleX, sampleX+1, scale, 
 	    	xOff, (int)y1-1, 3, color);
 	    if( fill )
-		drawScaledBox(mg, sampleX, sampleX+1, scale, xOff, (int)y1+2, 
+		drawScaledBox(vg, sampleX, sampleX+1, scale, xOff, (int)y1+2, 
 		    ybase-y1-2, bColor);
 	    }
 	prevX = gapPrevX = sampleX;
@@ -1522,7 +1505,7 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 
 
 static void linkedFeaturesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw linked features items. */
 /* Integrated with linkedFeaturesSeriesDraw */
@@ -1530,7 +1513,7 @@ static void linkedFeaturesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
 /* Convert to a linked features series object */
 linkedFeaturesToLinkedFeaturesSeries(tg);
 /* Draw items */
-linkedFeaturesSeriesDraw(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
+linkedFeaturesSeriesDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
 /* Convert Back */
 linkedFeaturesSeriesToLinkedFeatures(tg);
 }
@@ -1650,7 +1633,7 @@ for (i=0; i<count; ++i)
 
 
 static void linkedFeaturesSeriesDrawAverage(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw dense clone items. */
 {
@@ -1678,7 +1661,7 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
 	    x2 = round((double)((int)lf->start-winStart)*scale) + xOff;
             w = x2 - x1;
             if (w > 0)
-	        mgDrawBox(mg, x1, yOff + tg->heightPer/2, w, 1, mgFindColor(mg,0,0,0));
+	        vgBox(vg, x1, yOff + tg->heightPer/2, w, 1, vgFindColorIx(vg,0,0,0));
             }
         prevEnd = lf->end;
         for (sf = lf->components; sf != NULL; sf = sf->next)
@@ -1700,58 +1683,57 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
 	}
     }
 grayThreshold(useCounts, width);
-for (i=0; i<lineHeight; ++i)
-    mgPutSegZeroClear(mg, xOff, yOff+i, width, useCounts);
+vgVerticalSmear(vg,xOff,yOff,width,lineHeight,useCounts,TRUE);
 freeMem(useCounts);
 }
 
 static void linkedFeaturesDrawAverage(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw dense clone items. */
 {
 /* Convert to a linked features series object */
 linkedFeaturesToLinkedFeaturesSeries(tg);
 /* Draw items */
-linkedFeaturesSeriesDrawAverage(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
+linkedFeaturesSeriesDrawAverage(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
 /* Convert Back */
 linkedFeaturesSeriesToLinkedFeatures(tg);
 }
 
 static void linkedFeaturesAverageDense(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw dense linked features items. */
 {
 /* Draw items */
 if (vis == tvFull)
     {
-    linkedFeaturesDraw(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
+    linkedFeaturesDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
     }
 else if (vis == tvDense)
     {
-    linkedFeaturesDrawAverage(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
+    linkedFeaturesDrawAverage(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
     }
 }
 
 static void linkedFeaturesSeriesAverageDense(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw dense linked features series items. */
 {
   /*if (vis == tvFull)
     {*/
-    linkedFeaturesSeriesDraw(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
+    linkedFeaturesSeriesDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
     /*    }
 else if (vis == tvDense)
     {
-    linkedFeaturesSeriesDrawAverage(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
+    linkedFeaturesSeriesDrawAverage(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
     }*/
 }
 
 
 static void linkedFeaturesDrawPair(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw linked features items for EST pairs. */
 {
@@ -1789,20 +1771,20 @@ for (lfPair = tg->items; lfPair != NULL; lfPair = lfPair->next)
       if(i==1)
         {
 	lf = lfPair->lf5prime;
-	color = mgFindRgb(mg, &color5prime);
+	color = vgFindRgb(vg, &color5prime);
 	bColor = color;
         }
       else
         {
 	lf = lfPair->lf3prime;
 	lf->orientation = -lf->orientation;
-	color = mgFindRgb(mg, &color3prime);
+	color = vgFindRgb(vg, &color3prime);
 	bColor = color;
         } 
       if(lf != NULL) 
 	  {
 	  if (tg->itemColor && shades == NULL)
-	      color = tg->itemColor(tg, lf, mg);
+	      color = tg->itemColor(tg, lf, vg);
 	  tallStart = lf->tallStart;
 	  tallEnd = lf->tallEnd;
 	  if (lf->components != NULL && !hideLine)
@@ -1813,11 +1795,11 @@ for (lfPair = tg->items; lfPair != NULL; lfPair = lfPair->next)
 	      if (isFull)
 		  {
 		  if (shades) bColor =  shades[(lf->grayIx>>1)];
-		  mgBarbedHorizontalLine(mg, x1, midY, x2-x1, 2, 5, 
+		  vgBarbedHorizontalLine(vg, x1, midY, x2-x1, 2, 5, 
 					 lf->orientation, bColor, FALSE);
 		  }
 	      if (shades) color =  shades[lf->grayIx+isXeno];
-	      mgDrawBox(mg, x1, midY, w, 1, color);
+	      vgBox(vg, x1, midY, w, 1, color);
 	      }
 	  for (sf = lf->components; sf != NULL; sf = sf->next)
 	      {
@@ -1828,19 +1810,19 @@ for (lfPair = tg->items; lfPair != NULL; lfPair = lfPair->next)
 		  {
 		  e2 = e;
 		  if (e2 > tallStart) e2 = tallStart;
-		  drawScaledBox(mg, s, e2, scale, xOff, y+shortOff, shortHeight, color);
+		  drawScaledBox(vg, s, e2, scale, xOff, y+shortOff, shortHeight, color);
 		  s = e2;
 		  }
 	      if (e > tallEnd)
 		  {
 		  s2 = s;
 		  if (s2 < tallEnd) s2 = tallEnd;
-		  drawScaledBox(mg, s2, e, scale, xOff, y+shortOff, shortHeight, color);
+		  drawScaledBox(vg, s2, e, scale, xOff, y+shortOff, shortHeight, color);
 		  e = s2;
 		  }
 	      if (e > s)
 		  {
-		  drawScaledBox(mg, s, e, scale, xOff, y, heightPer, color);
+		  drawScaledBox(vg, s, e, scale, xOff, y, heightPer, color);
 		  ++compCount;
 		  }
 	      }
@@ -1853,7 +1835,7 @@ for (lfPair = tg->items; lfPair != NULL; lfPair = lfPair->next)
 
 static void linkedFeaturesDrawAveragePair(struct trackGroup *tg, 
 	int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw dense clone items for EST pairs. */
 {
@@ -1901,22 +1883,21 @@ for (lfPair = tg->items; lfPair != NULL; lfPair = lfPair->next)
 	}
     }
 grayThreshold(useCounts, width);
-for (i=0; i<lineHeight; ++i)
-    mgPutSegZeroClear(mg, xOff, yOff+i, width, useCounts);
+vgVerticalSmear(vg,xOff,yOff,width,lineHeight,useCounts,TRUE);
 freeMem(useCounts);
 }
 static void linkedFeaturesAverageDensePair(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw dense linked features items. */
 {
   if (vis == tvFull)
     {
-      linkedFeaturesDrawPair(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
+      linkedFeaturesDrawPair(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
     }
   else if (vis == tvDense)
     {
-      linkedFeaturesDrawAveragePair(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
+      linkedFeaturesDrawAveragePair(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
     }
 }
 
@@ -2866,7 +2847,7 @@ if (limitVisibility(tg, tg->items) == tvFull)
     }
 }
 
-Color genieKnownColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color genieKnownColor(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Return color to draw known gene in. */
 {
 struct linkedFeatures *lf = item;
@@ -2875,7 +2856,7 @@ if (startsWith("AK.", lf->name))
     {
     static int colIx = 0;
     if (!colIx)
-	colIx = mgFindColor(mg, 0, 120, 200);
+	colIx = vgFindColorIx(vg, 0, 120, 200);
     return colIx;
     }
 #ifdef SOMETIMES
@@ -2883,7 +2864,7 @@ else if (lf->extra)
     {
     static int colIx = 0;
     if (!colIx)
-	colIx = mgFindColor(mg, 200, 0, 0);
+	colIx = vgFindColorIx(vg, 200, 0, 0);
     return colIx;
     }
 #endif /* SOMETIMES */
@@ -2962,7 +2943,7 @@ if (limitVisibility(tg, tg->items) == tvFull)
 }
 
 
-Color refGeneColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color refGeneColor(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Return color to draw refseq gene in. */
 {
 struct linkedFeatures *lf = item;
@@ -2994,14 +2975,14 @@ if (hTableExists("refSeqStatus"))
 	    lighter.r = (6*normal->r + 4*255) / 10;
 	    lighter.g = (6*normal->g + 4*255) / 10;
 	    lighter.b = (6*normal->b + 4*255) / 10;
-	    col = mgFindRgb(mg, &lighter);
+	    col = vgFindRgb(vg, &lighter);
 	    }
 	else
 	    {
 	    lightest.r = (1*normal->r + 2*255) / 3;
 	    lightest.g = (1*normal->g + 2*255) / 3;
 	    lightest.b = (1*normal->b + 2*255) / 3;
-	    col = mgFindRgb(mg, &lightest);
+	    col = vgFindRgb(vg, &lightest);
 	    }
 	}
     sqlFreeResult(&sr);
@@ -3039,7 +3020,7 @@ void ensGeneMethods(struct trackGroup *tg)
 tg->itemName = ensGeneName;
 }
 
-Color intronEstColorAndOrient(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color intronEstColorAndOrient(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Always returns MG_BLACK, attempts to orient ests using data in estOrientInfo table. */
 {
 struct linkedFeatures *lf = item;
@@ -3075,7 +3056,7 @@ hFreeConn(&conn);
 return col;
 }
 
-Color estColorAndOrient(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color estColorAndOrient(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Always returns MG_BLACK, also tries to orient them using genbank info. */
 {
 struct linkedFeatures *lf = item;
@@ -3198,7 +3179,7 @@ return frag->frag;
 }
 
 static void goldDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw golden path items. */
 {
@@ -3225,7 +3206,7 @@ if (!isFull)
 	{
 	if (!sameWord(gap->bridge, "no"))
 	    {
-	    drawScaledBox(mg, gap->chromStart, gap->chromEnd, scale, xOff, midY, 1, brown);
+	    drawScaledBox(vg, gap->chromStart, gap->chromEnd, scale, xOff, midY, 1, brown);
 	    }
 	}
     }
@@ -3238,7 +3219,7 @@ for (frag = tg->items; frag != NULL; frag = frag->next)
     color =  ((ix&1) ? gold : brown);
     if (w < 1)
 	w = 1;
-    mgDrawBox(mg, x1, y, w, heightPer, color);
+    vgBox(vg, x1, y, w, heightPer, color);
     if (isFull)
 	y += lineHeight;
     else if (baseWidth < 10000000)
@@ -3356,7 +3337,7 @@ return ri->className;
 }
 
 static void repeatDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 {
 int baseWidth = seqEnd - seqStart;
@@ -3403,7 +3384,7 @@ if (isFull)
 	w = x2-x1;
 	if (w <= 0)
 	    w = 1;
-	mgDrawBox(mg, x1, ri->yOffset, w, heightPer, col);
+	vgBox(vg, x1, ri->yOffset, w, heightPer, col);
 	if (baseWidth <= 100000)
 	    {
 	    if (ri == otherRepeatItem)
@@ -3444,7 +3425,7 @@ else
 	    w = x2-x1;
 	    if (w <= 0)
 		w = 1;
-	    mgDrawBox(mg, x1, yOff, w, heightPer, MG_BLACK);
+	    vgBox(vg, x1, yOff, w, heightPer, MG_BLACK);
 	    }
 	}
     dyStringFree(&query);
@@ -3494,12 +3475,12 @@ tg->items = itemList;
 hFreeConn(&conn);
 }
 
-static Color contrastingColor(struct memGfx *mg, int backgroundIx)
+static Color contrastingColor(struct vGfx *vg, int backgroundIx)
 /* Return black or white whichever would be more visible over
  * background. */
 {
-struct rgbColor *c = &mg->colorMap[backgroundIx];
-int valSquared = c->r * c->r + c->g * c->g + c->b * c->b;
+struct rgbColor c = vg->colorIxToRgb(vg, backgroundIx);
+int valSquared = c.r * c.r + c.g * c.g + c.b * c.b;
 int threshold = 3*150*150;
 if (valSquared > threshold)
     return MG_BLACK;
@@ -3508,7 +3489,7 @@ else
 }
 
 static void bedDrawSimple(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw simple Bed items. */
 {
@@ -3533,7 +3514,7 @@ for (item = tg->items; item != NULL; item = item->next)
     x2 = round((double)((int)item->chromEnd-winStart)*scale) + xOff;
     w = x2-x1;
     if (tg->itemColor != NULL)
-        color = tg->itemColor(tg, item, mg);
+        color = tg->itemColor(tg, item, vg);
     else
 	{
 	if (shades)
@@ -3543,7 +3524,7 @@ for (item = tg->items; item != NULL; item = item->next)
 	w = 1;
     if (color)
 	{
-	mgDrawBox(mg, x1, y, w, heightPer, color);
+	vgBox(vg, x1, y, w, heightPer, color);
 	if (tg->drawName)
 	    {
 	    /* Clip here so that text will tend to be more visible... */
@@ -3555,8 +3536,8 @@ for (item = tg->items; item != NULL; item = item->next)
 	    w = x2-x1;
 	    if (w > mgFontStringWidth(font, s))
 		{
-		textColor = contrastingColor(mg, color);
-		mgTextCentered(mg, x1, y, w, heightPer, textColor, font, s);
+		textColor = contrastingColor(vg, color);
+		vgTextCentered(vg, x1, y, w, heightPer, textColor, font, s);
 		}
 	    }
 	}
@@ -3571,8 +3552,8 @@ for (item = tg->items; item != NULL; item = item->next)
         if (dir != 0)
 	    {
 	    int midY = y + midLineOff;
-	    textColor = contrastingColor(mg, color);
-	    mgBarbedHorizontalLine(mg, x1, midY, w, 2, 5, dir, textColor, TRUE);
+	    textColor = contrastingColor(vg, color);
+	    vgBarbedHorizontalLine(vg, x1, midY, w, 2, 5, dir, textColor, TRUE);
 	    }
         }
     if (isFull)
@@ -3648,7 +3629,7 @@ return buf;
 }
 
 static void isochoreDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw isochore items. */
 {
@@ -3670,7 +3651,7 @@ for (item = tg->items; item != NULL; item = item->next)
     color = shadesOfGray[grayInRange(item->gcPpt, 340, 617)];
     if (w < 1)
 	w = 1;
-    mgDrawBox(mg, x1, y, w, heightPer, color);
+    vgBox(vg, x1, y, w, heightPer, color);
     mapBoxHc(item->chromStart, item->chromEnd, x1, y, w, heightPer, tg->mapName,
 	item->name, item->name);
     if (isFull)
@@ -3735,7 +3716,7 @@ void freeCeleraDupPositive(struct trackGroup *tg)
 celeraDupPositiveFreeList((struct celeraDupPositive**)&tg->items);
 }
 
-Color celeraDupPositiveColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color celeraDupPositiveColor(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Return name of gcPercent track item. */
 {
 struct celeraDupPositive *dup = item;
@@ -3825,7 +3806,7 @@ void freeCeleraCoverage(struct trackGroup *tg)
 celeraCoverageFreeList((struct celeraCoverage**)&tg->items);
 }
 
-Color celeraCoverageColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color celeraCoverageColor(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Return name of gcPercent track item. */
 {
 struct celeraDupPositive *dup = item;
@@ -3910,7 +3891,7 @@ void freeGenomicSuperDups(struct trackGroup *tg)
 genomicSuperDupsFreeList((struct genomicSuperDups**)&tg->items);
 }
 
-Color genomicSuperDupsColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color genomicSuperDupsColor(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Return name of gcPercent track item. */
 {
 struct genomicSuperDups *dup = item;
@@ -3920,7 +3901,7 @@ char *verdict=dup->verdict;
 
 
 if ((verdict[0]=='B')&&(verdict[1]=='A')&&(verdict[2]=='D'))
-    return mgClosestColor(mg, 255,51,51);
+    return vgFindColorIx(vg, 255,51,51);
 
 
 else if (ppt > 990)
@@ -3998,7 +3979,7 @@ tg->freeItems = freeSimpleRepeats;
 tg->itemName = simpleRepeatName;
 }
 
-Color cpgIslandColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color cpgIslandColor(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Return color of cpgIsland track item. */
 {
 struct cpgIsland *el = item;
@@ -4094,7 +4075,7 @@ else
 }
 
 static void cytoBandDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw cytoBand items. */
 {
@@ -4123,10 +4104,10 @@ for (band = tg->items; band != NULL; band = band->next)
     if (w < 1)
 	w = 1;
     cytoBandColor(band, tg->ixAltColor, &col, &textCol);
-    mgDrawBox(mg, x1, y, w, heightPer, col);
+    vgBox(vg, x1, y, w, heightPer, col);
     s = abbreviatedBandName(tg, band, tl.font, w);
     if (s != NULL)
-	mgTextCentered(mg, x1, y, w, heightPer, textCol, tl.font, s);
+	vgTextCentered(vg, x1, y, w, heightPer, textCol, tl.font, s);
     mapBoxHc(band->chromStart, band->chromEnd, x1,y,w,heightPer, tg->mapName, 
 	band->name, band->name);
     if (isFull)
@@ -4158,7 +4139,7 @@ tg->itemName = cytoBandName;
 }
 
 static void swissDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw simple Bed items for protein track of SWISS-PROT, etc. */
 {
@@ -4181,7 +4162,7 @@ for (item = tg->items; item != NULL; item = item->next)
     x2 = round((double)((int)item->chromEnd-winStart)*scale) + xOff;
     w = x2-x1;
     if (tg->itemColor != NULL)
-        color = tg->itemColor(tg, item, mg);
+        color = tg->itemColor(tg, item, vg);
     else
 	{
 	if (shades)
@@ -4196,14 +4177,14 @@ for (item = tg->items; item != NULL; item = item->next)
 	if (strstr(item->name, "PDB")     != NULL) color = MG_BLACK;
         if (strstr(item->name, "SWISS")  != NULL) 
 		{
-		color = mgFindColor(mg, 150, 0, 0);
+		color = vgFindColorIx(vg, 150, 0, 0);
 		}
         if (strstr(item->name, "TrEMBL")  != NULL) 
 		{
-		color = mgFindColor(mg, 190, 100, 100);
+		color = vgFindColorIx(vg, 190, 100, 100);
 		}
 	
-	mgDrawBox(mg, x1, y, w, heightPer, color);
+	vgBox(vg, x1, y, w, heightPer, color);
 	if (tg->drawName)
 	    {
 	    /* Clip here so that text will tend to be more visible... */
@@ -4214,7 +4195,7 @@ for (item = tg->items; item != NULL; item = item->next)
 		x2 = xOff + width;
 	    w = x2-x1;
 	    if (w > mgFontStringWidth(font, s))
-		mgTextCentered(mg, x1, y, w, heightPer, MG_WHITE, font, s);
+		vgTextCentered(vg, x1, y, w, heightPer, MG_WHITE, font, s);
 	    }
 	}
     if (tg->subType == lfWithBarbs)
@@ -4228,7 +4209,7 @@ for (item = tg->items; item != NULL; item = item->next)
         if (dir != 0)
 	    {
 	    int midY = y + midLineOff;
-	    mgBarbedHorizontalLine(mg, x1, midY, w, 2, 5, dir, MG_WHITE, TRUE);
+	    vgBarbedHorizontalLine(vg, x1, midY, w, 2, 5, dir, MG_WHITE, TRUE);
 	    }
         }
     if (isFull)
@@ -4239,7 +4220,7 @@ for (item = tg->items; item != NULL; item = item->next)
 static int swissMin = 320;
 static int swissMax = 600;
 
-Color swissColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color swissColor(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Return name of protein track item. */
 {
 int l;
@@ -4347,7 +4328,7 @@ return buf;
 static int gcPercentMin = 320;
 static int gcPercentMax = 600;
 
-Color gcPercentColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color gcPercentColor(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Return name of gcPercent track item. */
 {
 struct gcPercent *gc = item;
@@ -4359,7 +4340,7 @@ return shadesOfGray[grayLevel];
 }
 
 static void gcPercentDenseDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw gcPercent items. */
 {
@@ -4392,21 +4373,20 @@ for (gc = tg->items; gc != NULL; gc = gc->next)
     }
 resampleBytes(useCounts, sampleWidth, aveCounts, width);
 grayThreshold(aveCounts, width);
-for (i=0; i<lineHeight; ++i)
-    mgPutSegZeroClear(mg, xOff, yOff+i, width, aveCounts);
+vgVerticalSmear(vg,xOff,yOff,width,lineHeight,aveCounts,TRUE);
 freeMem(useCounts);
 freeMem(aveCounts);
 }
 
 static void gcPercentDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw gcPercent items. */
 {
 if (vis == tvDense)
-   gcPercentDenseDraw(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
+   gcPercentDenseDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
 else
-   bedDrawSimple(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
+   bedDrawSimple(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
 }
 
 
@@ -4512,7 +4492,7 @@ return buf;
 static int recombRateMin = 320;
 static int recombRateMax = 600;
 
-Color recombRateColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color recombRateColor(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Return color for item in recombRate track item. */
 {
 struct recombRate *rr = item;
@@ -4550,7 +4530,7 @@ chr18deletionsFreeList((struct chr18deletions**)&tg->items);
 }
 
 static void drawChr18deletions(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw chr18deletions items. */
 {
@@ -4590,16 +4570,16 @@ for (cds = tg->items; cds != NULL; cds = cds->next)
 	if (shortStart < tallStart)
 	    {
 	    end = tallStart;
-	    drawScaledBoxSample(mg, shortStart, end, scale, xOff, y+shortOff, shortHeight, color , cds->score);
+	    drawScaledBoxSample(vg, shortStart, end, scale, xOff, y+shortOff, shortHeight, color , cds->score);
 	    }
 	if (shortEnd > tallEnd)
 	    {
 	    start = tallEnd;
-	    drawScaledBoxSample(mg, start, shortEnd, scale, xOff, y+shortOff, shortHeight, color , cds->score);
+	    drawScaledBoxSample(vg, start, shortEnd, scale, xOff, y+shortOff, shortHeight, color , cds->score);
 	    }
 	if (tallEnd > tallStart)
 	    {
-	    drawScaledBoxSample(mg, tallStart, tallEnd, scale, xOff, y, heightPer, color, cds->score);
+	    drawScaledBoxSample(vg, tallStart, tallEnd, scale, xOff, y, heightPer, color, cds->score);
 	    }
 	}
     if (isFull) y += lineHeight;
@@ -4654,7 +4634,7 @@ void freeGenomicDups(struct trackGroup *tg)
 genomicDupsFreeList((struct genomicDups**)&tg->items);
 }
 
-Color genomicDupsColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color genomicDupsColor(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Return name of gcPercent track item. */
 {
 struct genomicDups *dup = item;
@@ -4710,7 +4690,7 @@ tg->loadItems = loadGenethon;
 tg->freeItems = freeGenethon;
 }
 
-Color exoFishColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color exoFishColor(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Return color of exofish track item. */
 {
 struct exoFish *el = item;
@@ -4754,7 +4734,7 @@ return name;
 }
 
 
-Color exoMouseColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color exoMouseColor(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Return color of exoMouse track item. */
 {
 struct roughAli *el = item;
@@ -4817,12 +4797,12 @@ tg->itemName = xenoMrnaName;
 tg->extraUiData = newMrnaUiData(tg->mapName, TRUE);
 }
 
-Color getChromColor(char *name, struct memGfx *mg)
+Color getChromColor(char *name, struct vGfx *vg)
 {
     int chromNum = 0;
     Color colorNum = 0;
     if(!chromosomeColorsMade)
-        makeChromosomeShades(mg);
+        makeChromosomeShades(vg);
     if (atoi(name) != 0)
         chromNum =  atoi(name);
     else if (!strcmp(name,"X"))
@@ -4857,7 +4837,7 @@ struct netItem *ni = item;
 return ni->className;
 }
 
-Color netItemColor(struct netAlign *ms, struct memGfx *mg)
+Color netItemColor(struct netAlign *ms, struct vGfx *vg)
 /* Return color of track item based on chromsome. */
 {
 char chromStr[20];     
@@ -4876,11 +4856,11 @@ else
     strncpy(chromStr,ms->qName+3,2);
     chromStr[2] = '\0';
     }
-return ((Color)getChromColor(chromStr, mg));
+return ((Color)getChromColor(chromStr, vg));
 }
 
 static void netDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 {
 int baseWidth = seqEnd - seqStart;
@@ -4939,7 +4919,7 @@ if (isFull)
         percId = na.score;
         grayLevel = grayInRange(percId, 500, 1000);
         col = shadesOfGray[grayLevel];
-        col = netItemColor(&na, mg);
+        col = netItemColor(&na, vg);
         x1 = roundingScale(na.tStart-winStart, width, baseWidth)+xOff;
         x2 = roundingScale(na.tEnd-winStart, width, baseWidth)+xOff;
         boxStart = na.tStart;
@@ -4968,7 +4948,7 @@ if (isFull)
                 dyStringPrintf(bubble, " Over %d",np.qOver);
             if (np.qDup > 0)
                 dyStringPrintf(bubble, " Dup %d",np.qDup);
-            textColor = contrastingColor(mg, col);
+            textColor = contrastingColor(vg, col);
             dir = 0;
             if(sameString(np.strand , "+")) 
                 dir = 1;
@@ -4982,9 +4962,9 @@ if (isFull)
                 w = g2-g1;
                 if (w <= 0)
                     w = 1;
-                mgDrawBox(mg, g1, ni->yOffset, w, heightPer, col);
+                vgBox(vg, g1, ni->yOffset, w, heightPer, col);
                 if (w > 3)
-                    mgBarbedHorizontalLine(mg, g1, midY, w, 2, 5, dir, textColor, TRUE);
+                    vgBarbedHorizontalLine(vg, g1, midY, w, 2, 5, dir, textColor, TRUE);
                 if (baseWidth <= 10000000)
                     {
                     sprintf(levelName,"%d", na.level);
@@ -5000,16 +4980,16 @@ if (isFull)
                 }
             else 
                 {
-                mgDrawBox(mg, x1, ni->yOffset, w, heightPer, col);
+                vgBox(vg, x1, ni->yOffset, w, heightPer, col);
                 if (w > 3)
-                    mgBarbedHorizontalLine(mg, x1, midY, w, 2, 5, dir, textColor, TRUE);
+                    vgBarbedHorizontalLine(vg, x1, midY, w, 2, 5, dir, textColor, TRUE);
                 if (baseWidth <= 10000000)
                     {
                     sprintf(levelName,"%d", na.level);
                     mapBoxHc(na.tStart, na.tEnd, x1, ni->yOffset, w, heightPer, tg->mapName,
                         levelName, bubble->string);
                     }
-                col = netItemColor(&na, mg);
+                col = netItemColor(&na, vg);
                 x1 = roundingScale(na.tStart-winStart, width, baseWidth)+xOff;
                 x2 = roundingScale(na.tEnd-winStart, width, baseWidth)+xOff;
                 boxStart = na.tStart;
@@ -5021,10 +5001,10 @@ if (isFull)
             netAlignStaticLoad(row+rowOffset, &np);
             dyStringFree(&bubble);
             }
-            mgDrawBox(mg, x1, ni->yOffset, w, heightPer, col);
-            textColor = contrastingColor(mg, col);
+            vgBox(vg, x1, ni->yOffset, w, heightPer, col);
+            textColor = contrastingColor(vg, col);
             if (w > 3)
-                mgBarbedHorizontalLine(mg, x1, midY, w, 2, 5, dir, textColor, TRUE);
+                vgBarbedHorizontalLine(vg, x1, midY, w, 2, 5, dir, textColor, TRUE);
         }
     freeHash(&hash);
     }
@@ -5053,8 +5033,8 @@ else
 		w = 1;
         strncpy(chromStr,row[2]+3,2);
         chromStr[2] = '\0';
-        col = getChromColor(chromStr, mg);
-	    mgDrawBox(mg, x1, yOff, w, heightPer, col);
+        col = getChromColor(chromStr, vg);
+	    vgBox(vg, x1, yOff, w, heightPer, col);
 	    }
 	}
     dyStringFree(&query);
@@ -5079,7 +5059,7 @@ tg->itemStart = tgWeirdItemStart;
 tg->itemEnd = tgWeirdItemEnd;
 }
 
-Color pslItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color pslItemColor(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Return color of mouseOrtho track item. */
 {
 struct linkedFeatures *lf = item;
@@ -5094,7 +5074,7 @@ else
     char chromStr[3];
     strncpy(chromStr, (char *)(chptr+3), 2);
     chromStr[2] = '\0';
-    return(getChromColor(chromStr, mg));
+    return(getChromColor(chromStr, vg));
     }
 }
 
@@ -5292,7 +5272,7 @@ void freeRnaGene(struct trackGroup *tg)
 rnaGeneFreeList((struct rnaGene**)&tg->items);
 }
 
-Color rnaGeneColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color rnaGeneColor(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Return color of rnaGene track item. */
 {
 struct rnaGene *el = item;
@@ -5327,7 +5307,7 @@ tg->itemColor = rnaGeneColor;
 }
 
 
-Color stsColor(struct memGfx *mg, int altColor, 
+Color stsColor(struct vGfx *vg, int altColor, 
 	char *genethonChrom, char *marshfieldChrom, 
 	char *fishChrom, int ppt)
 /* Return color given info about marker. */
@@ -5343,7 +5323,7 @@ else if (fishChrom[0] != '0')
     {
     static int greenIx = -1;
     if (greenIx < 0)
-        greenIx = mgFindColor(mg, 0, 200, 0);
+        greenIx = vgFindColorIx(vg, 0, 200, 0);
     return greenIx;
     }
 else
@@ -5367,11 +5347,11 @@ void freeStsMarker(struct trackGroup *tg)
 stsMarkerFreeList((struct stsMarker**)&tg->items);
 }
 
-Color stsMarkerColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color stsMarkerColor(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Return color of stsMarker track item. */
 {
 struct stsMarker *el = item;
-return stsColor(mg, tg->ixAltColor, el->genethonChrom, el->marshfieldChrom,
+return stsColor(vg, tg->ixAltColor, el->genethonChrom, el->marshfieldChrom,
     el->fishChrom, el->score);
 }
 
@@ -5454,7 +5434,7 @@ void freeStsMap(struct trackGroup *tg)
 stsMapFreeList((struct stsMap**)&tg->items);
 }
 
-Color stsMapColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color stsMapColor(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Return color of stsMap track item. */
 {
 if (stsMapFilterItem(tg, item))
@@ -5584,7 +5564,7 @@ void freeFishClones(struct trackGroup *tg)
 fishClonesFreeList((struct fishClones**)&tg->items);
 }
 
-Color fishClonesColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color fishClonesColor(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Return color of fishClones track item. */
 {
 if ((fishClonesFilterItem(tg, item)) && (fishClonesFilterColor))
@@ -5646,7 +5626,7 @@ void freeMouseOrtho(struct trackGroup *tg)
 mouseOrthoFreeList((struct mouseOrtho**)&tg->items);
 }
 
-Color mouseOrthoItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color mouseOrthoItemColor(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Return color of psl track item based on chromsome. */
 {
 char chromStr[20];     
@@ -5663,7 +5643,7 @@ else if (strlen(ms->name) == 9)
 }
 else
     strncpy(chromStr,ms->name,2);
-return ((Color)getChromColor(chromStr, mg));
+return ((Color)getChromColor(chromStr, vg));
 }
 
 void loadHumanParalog(struct trackGroup *tg)
@@ -5677,7 +5657,7 @@ void freeHumanParalog(struct trackGroup *tg)
 humanParalogFreeList((struct humanParalog**)&tg->items);
 }
 
-Color humanParalogItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color humanParalogItemColor(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Return color of psl track item based on chromsome. */
 {
 char chromStr[20];     
@@ -5694,9 +5674,9 @@ else if (strlen(ms->name) == 9)
 }
 else
     strncpy(chromStr,ms->name,2);
-return ((Color)getChromColor(chromStr, mg));
+return ((Color)getChromColor(chromStr, vg));
 }
-Color syntenyItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color syntenyItemColor(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Return color of psl track item based on chromsome. */
 {
 char chromStr[20];     
@@ -5716,10 +5696,10 @@ else
     strncpy(chromStr,ms->name+3,2);
     chromStr[2] = '\0';
     }
-return ((Color)getChromColor(chromStr, mg));
+return ((Color)getChromColor(chromStr, vg));
 }
 
-Color syntenyBerkItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color syntenyBerkItemColor(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Return color of psl track item based on chromsome. */
 {
 char chromStr[20];     
@@ -5741,10 +5721,10 @@ else
     strncpy(chromStr,(char *)(chptr+3),2);
     chromStr[2] = '\0';
     }
-return ((Color)getChromColor(chromStr, mg));
+return ((Color)getChromColor(chromStr, vg));
 }
 
-Color syntenySangerItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color syntenySangerItemColor(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Return color of psl track item based on chromsome. */
 {
 char chromStr[20];     
@@ -5766,7 +5746,7 @@ else
     strncpy(chromStr,(char *)(chptr+3),2);
     chromStr[2] = '\0';
     }
-return ((Color)getChromColor(chromStr, mg));
+return ((Color)getChromColor(chromStr, vg));
 }
 
 void loadMouseSyn(struct trackGroup *tg)
@@ -5782,7 +5762,6 @@ tg->freeItems = freeSynteny100000;
 tg->itemColor = syntenyItemColor;
 tg->drawName = FALSE;
 tg->subType = lfWithBarbs ;
-
 }
 
 void syntenyBerkMethods(struct trackGroup *tg)
@@ -5841,7 +5820,7 @@ void freeMouseSyn(struct trackGroup *tg)
 mouseSynFreeList((struct mouseSyn**)&tg->items);
 }
 
-Color mouseSynItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color mouseSynItemColor(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Return color of mouseSyn track item. */
 {
 char chromStr[20];     
@@ -5849,7 +5828,7 @@ struct mouseSyn *ms = item;
 
 strncpy(chromStr, ms->name+strlen("mouse "), 2);
 chromStr[2] = '\0';
-return ((Color)getChromColor(chromStr, mg));
+return ((Color)getChromColor(chromStr, vg));
 }
 
 void mouseSynMethods(struct trackGroup *tg)
@@ -5873,7 +5852,7 @@ void freeMouseSynWhd(struct trackGroup *tg)
 mouseSynWhdFreeList((struct mouseSynWhd**)&tg->items);
 }
 
-Color mouseSynWhdItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color mouseSynWhdItemColor(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Return color of mouseSynWhd track item. */
 {
 char chromStr[20];
@@ -5883,7 +5862,7 @@ if (startsWith("chr", ms->name))
     {
     strncpy(chromStr, ms->name+strlen("chr"), 2);
     chromStr[2] = '\0';
-    return((Color)getChromColor(chromStr, mg));
+    return((Color)getChromColor(chromStr, vg));
     }
 else
     {
@@ -5928,7 +5907,7 @@ void freeEnsPhusionBlast(struct trackGroup *tg)
 ensPhusionBlastFreeList((struct ensPhusionBlast**)&tg->items);
 }
 
-Color ensPhusionBlastItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color ensPhusionBlastItemColor(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Return color of ensPhusionBlast track item. */
 {
 struct ensPhusionBlast *epb = item;
@@ -5939,7 +5918,7 @@ if ((ptr = strstr(epb->name, "chr")) != NULL)
     {
     strncpy(chromStr, ptr+strlen("chr"), 2);
     chromStr[2] = '\0';
-    return((Color)getChromColor(chromStr, mg));
+    return((Color)getChromColor(chromStr, vg));
     }
 else
     {
@@ -6102,7 +6081,7 @@ return ix;
 
 
 static void wabaDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw waba alignment items. */
 {
@@ -6136,7 +6115,7 @@ for (wch = tg->items; wch != NULL; wch = wch->next)
 	    w = x2-x1;
 	    if (w < 1)
 		w = 1;
-	    mgDrawBox(mg, x1, y, w, heightPer, color);
+	    vgBox(vg, x1, y, w, heightPer, color);
 	    }
 	}
     if (isFull)
@@ -6230,7 +6209,7 @@ return NULL;
 }
 
 static void contigDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw contig items. */
 {
@@ -6258,10 +6237,10 @@ for (ctg = tg->items; ctg != NULL; ctg = ctg->next)
     w = x2-x1;
     if (w < 1)
 	w = 1;
-    mgDrawBox(mg, x1, y, w, heightPer, color);
+    vgBox(vg, x1, y, w, heightPer, color);
     s = abbreviateContig(ctg->contig, tl.font, w);
     if (s != NULL)
-	mgTextCentered(mg, x1, y, w, heightPer, MG_WHITE, tl.font, s);
+	vgTextCentered(vg, x1, y, w, heightPer, MG_WHITE, tl.font, s);
     if (isFull)
 	y += lineHeight;
     else 
@@ -6486,7 +6465,7 @@ return tg->height;
 }
 
 static void drawOneClone(struct cloneInfo *ci, int seqStart, int seqEnd,
-    struct memGfx *mg, int xOff, int yOff, int width,
+    struct vGfx *vg, int xOff, int yOff, int width,
     MgFont *font, int lineHeight, Color color, boolean stagger, 
     boolean hiliteDupes)
 /* Draw a single clone item - using space saver layout on fragments. */
@@ -6568,10 +6547,10 @@ for (sn = ss->nodeList; sn != NULL; sn = sn->next)
 		col = MG_BLUE;
 	    }
 	}
-    mgDrawBox(mg, x1, y, w, heightPer, col);
+    vgBox(vg, x1, y, w, heightPer, col);
     textWidth = mgFontStringWidth(font, s);
     if (textWidth <= w)
-	mgTextCentered(mg, x1, y, w, heightPer, MG_WHITE, font, s);
+	vgTextCentered(vg, x1, y, w, heightPer, MG_WHITE, font, s);
     if (baseWidth <= 2000000)
 	{
 	psl = cfa->psl;
@@ -6622,7 +6601,7 @@ for (i=0; i<width; ++i)
 }
 
 static void cloneDenseDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw dense clone items. */
 {
@@ -6660,14 +6639,13 @@ for (ci = tg->items; ci != NULL; ci = ci->next)
     }
 resampleBytes(useCounts, sampleWidth, aveCounts, width);
 grayThreshold(aveCounts, width);
-for (i=0; i<lineHeight; ++i)
-    mgPutSegZeroClear(mg, xOff, yOff+i, width, aveCounts);
+vgVerticalSmear(vg,xOff,yOff,width,lineHeight,aveCounts,TRUE);
 freeMem(useCounts);
 freeMem(aveCounts);
 }
 
 static void cloneFullDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw full  clone items. */
 {
@@ -6707,12 +6685,12 @@ for (ci = tg->items; ci != NULL; ci = ci->next)
     x1 = roundingScale(ci->cloneStart-winStart, width, baseWidth)+xOff;
     x2 = roundingScale(ci->cloneEnd-winStart, width, baseWidth)+xOff;
     w = x2-x1;
-    mgDrawBox(mg, x1, y, w, oneHeight-1, bgColor);
+    vgBox(vg, x1, y, w, oneHeight-1, bgColor);
     if (!tooBig)
-	drawOneClone(ci, seqStart, seqEnd, mg, xOff, y+1, width, font, lineHeight, 
+	drawOneClone(ci, seqStart, seqEnd, vg, xOff, y+1, width, font, lineHeight, 
 		color, TRUE, tg->subType);
     else
-	drawOneClone(ci, seqStart, seqEnd, mg, xOff, y, width, font, oneHeight-1, 
+	drawOneClone(ci, seqStart, seqEnd, vg, xOff, y, width, font, oneHeight-1, 
 		color, FALSE, tg->subType);
     y += oneHeight;
     }
@@ -6720,14 +6698,14 @@ hFreeConn(&conn);
 }
 
 static void cloneDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw clone items. */
 {
 if (vis == tvFull)
-    cloneFullDraw(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
+    cloneFullDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
 else
-    cloneDenseDraw(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
+    cloneDenseDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
 }
 
 
@@ -6955,7 +6933,7 @@ return buf;
 }
 
 static void gapDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw gap items. */
 {
@@ -6977,11 +6955,11 @@ for (item = tg->items; item != NULL; item = item->next)
     if (w < 1)
 	w = 1;
     if (sameString(item->bridge, "no"))
-	mgDrawBox(mg, x1, y, w, heightPer, color);
+	vgBox(vg, x1, y, w, heightPer, color);
     else  /* Leave white line in middle of bridged gaps. */
         {
-	mgDrawBox(mg, x1, y, w, halfSize, color);
-	mgDrawBox(mg, x1, y+heightPer-halfSize, w, halfSize, color);
+	vgBox(vg, x1, y, w, halfSize, color);
+	vgBox(vg, x1, y+heightPer-halfSize, w, halfSize, color);
 	}
     if (isFull)
 	{
@@ -7106,7 +7084,7 @@ else
     return "unknown";
 }
 
-Color perlegenColor(struct trackGroup *tg, struct linkedFeatures *lf, struct simpleFeature *sf, struct memGfx *mg)
+Color perlegenColor(struct trackGroup *tg, struct linkedFeatures *lf, struct simpleFeature *sf, struct vGfx *vg)
 /* if it is the start or stop blocks make the color the shades
  * otherwise use black */
 {
@@ -7126,7 +7104,7 @@ else
 }
 
 static void perlegenLinkedFeaturesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* currently this routine is adapted from Terry's linkedFeatureSeriesDraw() routine.
  * it could be cleaned up some but more importantly it should be integrated back 
@@ -7164,19 +7142,19 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	w = x2-x1;
 	color =  shades[lf->grayIx+isXeno];
 	/* draw perlgen thick line ... */
-	mgDrawBox(mg, x1, y+shortOff+1, w, shortHeight-2, color);
+	vgBox(vg, x1, y+shortOff+1, w, shortHeight-2, color);
 	}
     for (sf = lf->components; sf != NULL; sf = sf->next)
 	{
-	color = perlegenColor(tg, lf, sf, mg);
+	color = perlegenColor(tg, lf, sf, vg);
 	heightPer = perlegenHeight(tg, lf, sf);
 	s = sf->start;
 	e = sf->end;
-	drawScaledBox(mg, s, e, scale, xOff, y+((tg->heightPer - heightPer)/2), heightPer, color);
+	drawScaledBox(vg, s, e, scale, xOff, y+((tg->heightPer - heightPer)/2), heightPer, color);
 	/* if we're at the stop or start of a linked feature add a black tick for the snp 
 	 * in addtion to the larger tic of shaded color */
 	if(heightPer == tg->heightPer)
-	    drawScaledBox(mg, s, e, scale, xOff, y+((tg->heightPer - heightPer - 4)/2), (heightPer -4), blackIndex());
+	    drawScaledBox(vg, s, e, scale, xOff, y+((tg->heightPer - heightPer - 4)/2), (heightPer -4), blackIndex());
 	}
     if (isFull)
 	y += lineHeight;
@@ -7199,7 +7177,7 @@ if(tg->visibility == tvFull)
 }
 
 static void altGraphDraw(struct trackGroup *tg, int seqStart, int seqEnd,         
-			 struct memGfx *mg, int xOff, int yOff, int width, 
+			 struct vGfx *vg, int xOff, int yOff, int width, 
 			 MgFont *font, Color color, enum trackVisibility vis)
 /* Draws the blocks for an alt-spliced gene and the connections */
 {
@@ -7226,7 +7204,7 @@ for(ag = agList; ag != NULL; ag = ag->next)
 	}
     if(!isFull && (x2-x1 > 0))
 	{
-	mgDrawBox(mg, x1, yOff+tg->heightPer/2, x2-x1, 1, MG_BLACK);
+	vgBox(vg, x1, yOff+tg->heightPer/2, x2-x1, 1, MG_BLACK);
 	}
     for(i=0; i< ag->edgeCount; i++)
 	{
@@ -7237,9 +7215,9 @@ for(ag = agList; ag != NULL; ag = ag->next)
 	    s = ag->vPositions[ag->edgeStarts[i]] + ag->tStart;
 	    e = ag->vPositions[ag->edgeEnds[i]] + ag->tStart;
 	    if(isFull)
-		drawScaledBox(mg, s, e, scale, xOff, y+(heightPer/2), heightPer/2, MG_BLACK);
+		drawScaledBox(vg, s, e, scale, xOff, y+(heightPer/2), heightPer/2, MG_BLACK);
 	    else
-		drawScaledBox(mg, s, e, scale, xOff, y, heightPer, MG_BLACK);
+		drawScaledBox(vg, s, e, scale, xOff, y, heightPer, MG_BLACK);
 	    }
 	if(isFull)
 	    {
@@ -7255,8 +7233,8 @@ for(ag = agList; ag != NULL; ag = ag->next)
 		x1 = round((double)((int) s - winStart)*scale) + xOff;
 		x2 = round((double)((int) e - winStart)*scale) + xOff;
 		midX = (x1+x2)/2;
-		mgDrawLine(mg, x1, midY, midX, y, MG_BLACK);
-		mgDrawLine(mg, midX, y, x2, midY, MG_BLACK);
+		vgLine(vg, x1, midY, midX, y, MG_BLACK);
+		vgLine(vg, midX, y, x2, midY, MG_BLACK);
 		}
 	    }
 	}
@@ -7394,7 +7372,7 @@ for(e = edges; e != NULL; e = e->next)
 return FALSE;
 }
 
-Color altGraphXColorForEdge(struct memGfx *mg, struct altGraphX *ag, int eIx)
+Color altGraphXColorForEdge(struct vGfx *vg, struct altGraphX *ag, int eIx)
 /* Return the color of an edge given by confidence */
 {
 int confidence = altGraphConfidenceForEdge(ag, eIx);
@@ -7405,7 +7383,7 @@ struct ggEdge *edges = NULL;
 if(ag->edgeTypes[eIx] == ggCassette)
     {
     if(!exprBedColorsMade)
-	makeRedGreenShades(mg);
+	makeRedGreenShades(vg);
     if(confidence == 1) c = shadesOfRed[(maxRGBShade - 6 > 0) ? maxRGBShade - 6 : 0];
     else if(confidence == 2) c = shadesOfRed[(maxRGBShade - 4 > 0) ? maxRGBShade - 4: 0];
     else if(confidence >= 3) c = shadesOfRed[(maxRGBShade - 4 > 0) ? maxRGBShade - 1: 0];
@@ -7420,7 +7398,7 @@ return c;
 }
 
 static void altGraphXDraw(struct trackGroup *tg, int seqStart, int seqEnd,         
-			 struct memGfx *mg, int xOff, int yOff, int width, 
+			 struct vGfx *vg, int xOff, int yOff, int width, 
 			 MgFont *font, Color color, enum trackVisibility vis)
 /* Draws the blocks for an alt-spliced gene and the connections */
 {
@@ -7447,7 +7425,7 @@ for(ag = agList; ag != NULL; ag = ag->next)
 	}
     if(!isFull && (x2-x1 > 0))
 	{
-	mgDrawBox(mg, x1, yOff+tg->heightPer/2, x2-x1, 1, MG_BLACK);
+	vgBox(vg, x1, yOff+tg->heightPer/2, x2-x1, 1, MG_BLACK);
 	}
     for(i= ag->edgeCount -1; i >= 0; i--)   // for(i=0; i< ag->edgeCount; i++)
 	{
@@ -7465,16 +7443,16 @@ for(ag = agList; ag != NULL; ag = ag->next)
 	if( (ag->vTypes[ag->edgeStarts[i]] == ggHardStart || ag->vTypes[ag->edgeStarts[i]] == ggSoftStart)  
 	    && (ag->vTypes[ag->edgeEnds[i]] == ggHardEnd || ag->vTypes[ag->edgeEnds[i]] == ggSoftEnd)) 
 	    {
-	    Color color2 = altGraphXColorForEdge(mg, ag, i);
+	    Color color2 = altGraphXColorForEdge(vg, ag, i);
 	    if(isFull)
 		{
-		drawScaledBox(mg, s, e, scale, xOff, y+(heightPer/2), heightPer/2, color2);
+		drawScaledBox(vg, s, e, scale, xOff, y+(heightPer/2), heightPer/2, color2);
 		textWidth = mgFontStringWidth(font, buff);
 		if (textWidth <= sw + 2 && hgDebug )
-		    mgTextCentered(mg, sx2-textWidth-2, y+(heightPer/2), textWidth+2, heightPer/2, MG_WHITE, font, buff);
+		    vgTextCentered(vg, sx2-textWidth-2, y+(heightPer/2), textWidth+2, heightPer/2, MG_WHITE, font, buff);
 		}
 	    else
-		drawScaledBox(mg, s, e, scale, xOff, y, heightPer, color2);
+		drawScaledBox(vg, s, e, scale, xOff, y, heightPer, color2);
 
 	    }
 	if(isFull)
@@ -7484,7 +7462,7 @@ for(ag = agList; ag != NULL; ag = ag->next)
 	    if( (ag->vTypes[ag->edgeStarts[i]] == ggHardEnd || ag->vTypes[ag->edgeStarts[i]] == ggSoftEnd) 
 		&& (ag->vTypes[ag->edgeEnds[i]] == ggHardStart || ag->vTypes[ag->edgeEnds[i]] == ggSoftStart))
 		{
-		Color color2 = altGraphXColorForEdge(mg, ag, i);
+		Color color2 = altGraphXColorForEdge(vg, ag, i);
 		int x1, x2;
 		int midX;   
 		int midY = y + heightPer/2;
@@ -7493,11 +7471,11 @@ for(ag = agList; ag != NULL; ag = ag->next)
 		x1 = round((double)((int) s - winStart)*scale) + xOff;
 		x2 = round((double)((int) e - winStart)*scale) + xOff;
 		midX = (x1+x2)/2;
-		mgDrawLine(mg, x1, midY, midX, y, color2);
-		mgDrawLine(mg, midX, y, x2, midY, color2);
+		vgLine(vg, x1, midY, midX, y, color2);
+		vgLine(vg, midX, y, x2, midY, color2);
 		textWidth = mgFontStringWidth(font, buff);
 		if (textWidth <= sw && hgDebug )
-		    mgTextCentered(mg, sx1, y+(heightPer/2), sw, heightPer/2, MG_BLACK, font, buff);
+		    vgTextCentered(vg, sx1, y+(heightPer/2), sw, heightPer/2, MG_BLACK, font, buff);
 		}
 	    }
 	}
@@ -8371,7 +8349,7 @@ return lfsList;
 }
 
 
-Color cghNci60Color(struct trackGroup *tg, void *item, struct memGfx *mg ) 
+Color cghNci60Color(struct trackGroup *tg, void *item, struct vGfx *vg ) 
 {
 struct linkedFeatures *lf = item;
 float val = lf->score;
@@ -8383,7 +8361,7 @@ char *colorScheme = cartUsualString(cart, "cghNci60.color", "gr");
 
 /* Make sure colors available */
 if(!exprBedColorsMade)
-    makeRedGreenShades(mg);
+    makeRedGreenShades(vg);
 if(val == -10000)
     return shadesOfGray[5];
 
@@ -8428,7 +8406,7 @@ else
 
 
 
-Color expressionColor(struct trackGroup *tg, void *item, struct memGfx *mg,
+Color expressionColor(struct trackGroup *tg, void *item, struct vGfx *vg,
 		 float denseMax, float fullMax) 
 /* Does the score->color conversion for various microarray tracks */
 {
@@ -8458,7 +8436,7 @@ if(tg->limitedVis == tvDense)
     absVal = absVal/1000;
 
 if(!exprBedColorsMade)
-    makeRedGreenShades(mg);
+    makeRedGreenShades(vg);
 
 /* cap the value to be less than or equal to maxDeviation */
 if (tg->limitedVis == tvFull)
@@ -8486,10 +8464,10 @@ else
     }
 }
 
-Color nci60Color(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color nci60Color(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Does the score->color conversion for various microarray tracks */
 {
-return expressionColor(tg, item, mg, 1.0, 2.6);
+return expressionColor(tg, item, vg, 1.0, 2.6);
 }
 
 Color getColorForAffyExpssn(float val, float max)
@@ -8528,7 +8506,7 @@ colorIndex = (int)(val * maxShade/max);
 return shadesOfSea[colorIndex];
 }
 
-Color affyColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color affyColor(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Does the score->color conversion for affymetrix arrays */
 {
 struct linkedFeatures *lf = item;
@@ -8536,11 +8514,11 @@ float score = lf->score;
 if(tg->visibility == tvDense)
     score = score/10;
 if(!exprBedColorsMade)
-    makeRedGreenShades(mg);
+    makeRedGreenShades(vg);
 return getColorForAffyExpssn(score, 262144/16); /* 262144 == 2^18 */
 }
 
-Color affyRatioColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+Color affyRatioColor(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Does the score->color conversion for affymetrix arrays using ratios,
  * if dense do an intensity color in blue based on score value otherwise do
  * red/green display from expScores */
@@ -8548,7 +8526,7 @@ Color affyRatioColor(struct trackGroup *tg, void *item, struct memGfx *mg)
 struct linkedFeatures *lf = item;
 float score = lf->score;
 if(!exprBedColorsMade)
-    makeRedGreenShades(mg);
+    makeRedGreenShades(vg);
 if(tg->visibility == tvDense)
     {
     score = score/10;
@@ -8556,7 +8534,7 @@ if(tg->visibility == tvDense)
     }
 else
     {
-    return expressionColor(tg, item, mg, 1.0, 3.0);
+    return expressionColor(tg, item, vg, 1.0, 3.0);
     }
 }
 
@@ -8837,7 +8815,7 @@ tg->items = makeCghItems();
 }
 
 static void cghDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 {
 int baseWidth = seqEnd - seqStart;
@@ -8857,7 +8835,7 @@ struct cgh cghRecord;
 
 /* Set up the shades of colors */
 if (!exprBedColorsMade)
-    makeRedGreenShades(mg);
+    makeRedGreenShades(vg);
 
 if (isFull)
     {
@@ -8886,7 +8864,7 @@ if (isFull)
 	w = x2-x1;
 	if (w <= 0)
 	    w = 1;
-	mgDrawBox(mg, x1, cghi->yOffset, w, heightPer, col);
+	vgBox(vg, x1, cghi->yOffset, w, heightPer, col);
         }
     freeHash(&hash);
     }
@@ -8902,7 +8880,7 @@ else
 	w = x2-x1;
 	if (w <= 0)
 	  w = 1;
-	mgDrawBox(mg, x1, yOff, w, heightPer, col);
+	vgBox(vg, x1, yOff, w, heightPer, col);
         }
     }
 sqlFreeResult(&sr);
@@ -8946,7 +8924,7 @@ tg->freeItems = freeMcnBreakpoints;
 
 
 static void drawTriangle(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
+        struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw triangle items.   Relies mostly on bedDrawSimple, but does put
  * a horizontal box connecting items in full mode. */
@@ -8957,7 +8935,7 @@ if (vis == tvDense)
     if (hTableExists("rnaCluster"))
         {
 	int heightPer = tg->heightPer;
-	Color gold = mgFindColor(mg, 250,190,60);
+	Color gold = vgFindColorIx(vg, 250,190,60);
 	int promoSize = 1000;
 	int rowOffset;
 	int baseWidth = seqEnd - seqStart;
@@ -8966,7 +8944,7 @@ if (vis == tvDense)
 	struct sqlResult *sr = hRangeQuery(conn, "rnaCluster", chromName, 
 		winStart - promoSize, winEnd + promoSize, NULL, &rowOffset);
 	char **row;
-	// mgDrawBox(mg, xOff, yOff, width, heightPer, gold);
+	// vgBox(vg, xOff, yOff, width, heightPer, gold);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    int start, end;
@@ -8981,13 +8959,13 @@ if (vis == tvDense)
 		end = atoi(row[1]);
 		start = end - promoSize;
 		}
-	    drawScaledBox(mg, start, end, scale, xOff, yOff, heightPer, gold);
+	    drawScaledBox(vg, start, end, scale, xOff, yOff, heightPer, gold);
 	    }
 
 	hFreeConn(&conn);
 	}
     }
-bedDrawSimple(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
+bedDrawSimple(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
 }
 
 void triangleMethods(struct trackGroup *tg)
@@ -9002,26 +8980,26 @@ void smallBreak()
 printf("<FONT SIZE=1><BR></FONT>\n");
 }
 
-void drawButtonBox(struct memGfx *mg, int x, int y, int w, int h, int enabled)
+void drawButtonBox(struct vGfx *vg, int x, int y, int w, int h, int enabled)
 /* Draw a min-raised looking button. */
 {
 int light = shadesOfGray[1], mid = shadesOfGray[2], dark = shadesOfGray[4];
 if (enabled) 
     {
-    mgDrawBox(mg, x, y, w, 1, light);
-    mgDrawBox(mg, x, y+1, 1, h-1, light);
-    mgDrawBox(mg, x+1, y+1, w-2, h-2, mid);
-    mgDrawBox(mg, x+1, y+h-1, w-1, 1, dark);
-    mgDrawBox(mg, x+w-1, y+1, 1, h-1, dark);
+    vgBox(vg, x, y, w, 1, light);
+    vgBox(vg, x, y+1, 1, h-1, light);
+    vgBox(vg, x+1, y+1, w-2, h-2, mid);
+    vgBox(vg, x+1, y+h-1, w-1, 1, dark);
+    vgBox(vg, x+w-1, y+1, 1, h-1, dark);
     }
 else				/* try to make the button look as if
 				 * it is already depressed */
     {
-    mgDrawBox(mg, x, y, w, 1, dark);
-    mgDrawBox(mg, x, y+1, 1, h-1, dark);
-    mgDrawBox(mg, x+1, y+1, w-2, h-2, light);
-    mgDrawBox(mg, x+1, y+h-1, w-1, 1, light);
-    mgDrawBox(mg, x+w-1, y+1, 1, h-1, light);
+    vgBox(vg, x, y, w, 1, dark);
+    vgBox(vg, x, y+1, 1, h-1, dark);
+    vgBox(vg, x+1, y+1, w-2, h-2, light);
+    vgBox(vg, x+1, y+h-1, w-1, 1, light);
+    vgBox(vg, x+w-1, y+1, 1, h-1, light);
     }
 }
 
@@ -9036,7 +9014,7 @@ else
     str[strlen(str) - strlen(t)] = '\0';
 }
 
-void printYAxisLabel( struct memGfx *mg, int y, struct trackGroup *group, char *labelString,
+void printYAxisLabel( struct vGfx *vg, int y, struct trackGroup *group, char *labelString,
         double min0, double max0 )
 /*print a label for a horizontal y-axis line*/
 {
@@ -9049,7 +9027,7 @@ void printYAxisLabel( struct memGfx *mg, int y, struct trackGroup *group, char *
     tmp = -whichBin( atof(labelString), min0, max0, 999 );
     tmp = (int)((double)ymin+((double)tmp)*(double)group->heightPer/1000.0+(double)group->heightPer)-fontHeight/2.0;
     if( !withCenterLabels ) tmp -= fontHeight;
-    mgTextRight(mg, gfxBorder, tmp, inWid-1, itemHeight0, group->ixColor, tl.font, labelString );
+    vgTextRight(vg, gfxBorder, tmp, inWid-1, itemHeight0, group->ixColor, tl.font, labelString );
 }
 
 void makeActiveImage(struct trackGroup *groupList)
@@ -9057,7 +9035,7 @@ void makeActiveImage(struct trackGroup *groupList)
 {
 struct trackGroup *group;
 MgFont *font = tl.font;
-struct memGfx *mg;
+struct vGfx *vg;
 struct tempName gifTn;
 char *mapName = "map";
 int fontHeight = mgFontLineHeight(font);
@@ -9106,11 +9084,11 @@ for (group = groupList; group != NULL; group = group->next)
 	    pixHeight += fontHeight;
 	}
     }
-mg = mgNew(pixWidth, pixHeight);
-mgClearPixels(mg);
-makeGrayShades(mg);
-makeBrownShades(mg);
-makeSeaShades(mg);
+makeTempName(&gifTn, "hgt", ".gif");
+vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi);
+makeGrayShades(vg);
+makeBrownShades(vg);
+makeSeaShades(vg);
 
 /* Start up client side map. */
 printf("<MAP Name=%s>\n", mapName);
@@ -9119,8 +9097,8 @@ for (group = groupList; group != NULL; group = group->next)
     {
     if (group->limitedVis != tvHide)
 	{
-	group->ixColor = mgFindRgb(mg, &group->color);
-	group->ixAltColor = mgFindRgb(mg, &group->altColor);
+	group->ixColor = vgFindRgb(vg, &group->color);
+	group->ixAltColor = vgFindRgb(vg, &group->altColor);
 	}
     }
 
@@ -9131,13 +9109,13 @@ if (withLeftLabels)
     int nextY, lastY, trackIx = 0;
     double min0, max0;
 
-    mgDrawBox(mg, insideX-gfxBorder*2, 0, gfxBorder, pixHeight, 
-    	mgFindColor(mg, 0, 0, 200));
-    mgSetClip(mg, gfxBorder, gfxBorder, inWid, pixHeight-2*gfxBorder);
+    vgBox(vg, insideX-gfxBorder*2, 0, gfxBorder, pixHeight, 
+    	vgFindColorIx(vg, 0, 0, 200));
+    vgSetClip(vg, gfxBorder, gfxBorder, inWid, pixHeight-2*gfxBorder);
     y = gfxBorder;
     if (withRuler)
 	{
-	mgTextRight(mg, gfxBorder, y, inWid-1, rulerHeight, 
+	vgTextRight(vg, gfxBorder, y, inWid-1, rulerHeight, 
 	    MG_BLACK, font, "Base Position");
 	y += rulerHeight;
 	}
@@ -9153,7 +9131,7 @@ if (withLeftLabels)
 	    if (withCenterLabels)
 		nextY += fontHeight;
 	    h = nextY - lastY - 1;
- 	    drawButtonBox(mg, trackTabX, lastY, trackTabWidth, h, group->hasUi); 
+ 	    drawButtonBox(vg, trackTabX, lastY, trackTabWidth, h, group->hasUi); 
 	    if (group->hasUi)
 		mapBoxTrackUi(trackTabX, lastY, trackTabWidth, h, group);
 	    }
@@ -9169,9 +9147,9 @@ if (withLeftLabels)
 
 	    if( group->limitedVis == tvDense )
 		{
-		printYAxisLabel( mg, y, group, "0.0", min0, max0 );
-		printYAxisLabel( mg, y, group, "2.0", min0, max0 );
-		printYAxisLabel( mg, y, group, "5.0", min0, max0 );
+		printYAxisLabel( vg, y, group, "0.0", min0, max0 );
+		printYAxisLabel( vg, y, group, "2.0", min0, max0 );
+		printYAxisLabel( vg, y, group, "5.0", min0, max0 );
 		}
 
 	    }
@@ -9190,12 +9168,12 @@ if (withLeftLabels)
 
 	    if( group->limitedVis == tvFull && group->heightPer >= 74  )
 		{
-		printYAxisLabel( mg, y+5, group, "1.0", min0, max0 );
-		printYAxisLabel( mg, y+5, group, "2.0", min0, max0 );
-		printYAxisLabel( mg, y+5, group, "3.0", min0, max0 );
-		printYAxisLabel( mg, y+5, group, "4.0", min0, max0 );
-		printYAxisLabel( mg, y+5, group, "5.0", min0, max0 );
-		printYAxisLabel( mg, y+5, group, "6.0", min0, max0 );
+		printYAxisLabel( vg, y+5, group, "1.0", min0, max0 );
+		printYAxisLabel( vg, y+5, group, "2.0", min0, max0 );
+		printYAxisLabel( vg, y+5, group, "3.0", min0, max0 );
+		printYAxisLabel( vg, y+5, group, "4.0", min0, max0 );
+		printYAxisLabel( vg, y+5, group, "5.0", min0, max0 );
+		printYAxisLabel( vg, y+5, group, "6.0", min0, max0 );
 		}
 
 	    }
@@ -9268,9 +9246,9 @@ if (withLeftLabels)
 			    {
 			    ymax = y - (group->heightPer / 2) + (fontHeight / 2);
 			    ymin = y + (group->heightPer / 2) - (fontHeight / 2);
-			    mgTextRight(mg, gfxBorder, ymin, inWid-1, itemHeight,
+			    vgTextRight(vg, gfxBorder, ymin, inWid-1, itemHeight,
 					group->ixAltColor, font, minRangeStr );
-			    mgTextRight(mg, gfxBorder, ymax, inWid-1, itemHeight,
+			    vgTextRight(vg, gfxBorder, ymax, inWid-1, itemHeight,
 					group->ixAltColor, font, maxRangeStr );
 			    }
 			prev = item;
@@ -9278,20 +9256,20 @@ if (withLeftLabels)
 			rootName = cloneString( name );
 			beforeFirstPeriod( rootName );
 			if( sameString( group->mapName, "humMusL" ))
-			    mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight,
+			    vgTextRight(vg, gfxBorder, y, inWid - 1, itemHeight,
 					group->ixColor, font, "Mouse Cons    ");
 			else if( sameString( group->mapName, "musHumL" ))
-			    mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight,
+			    vgTextRight(vg, gfxBorder, y, inWid - 1, itemHeight,
 					group->ixColor, font, "Human Cons    ");
 			else
-			    mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight,
+			    vgTextRight(vg, gfxBorder, y, inWid - 1, itemHeight,
 					group->ixColor, font, rootName );
 
 			freeMem( rootName );
 
 
 			/* Reset the clipping rectangle to its original proportions */
-			mgSetClip(mg, gfxBorder, gfxBorder, inWid, pixHeight - (2 * gfxBorder));
+			vgSetClip(vg, gfxBorder, gfxBorder, inWid, pixHeight - (2 * gfxBorder));
 			start = 0;
 			y = newy;
 			}
@@ -9299,11 +9277,11 @@ if (withLeftLabels)
 			{
 
 			/* Set the clipping rectangle to account for the buttons */
-			mgSetClip(mg, gfxBorder + trackTabWidth, gfxBorder, inWid - (trackTabWidth), pixHeight - (2 * gfxBorder));
+			vgSetClip(vg, gfxBorder + trackTabWidth, gfxBorder, inWid - (trackTabWidth), pixHeight - (2 * gfxBorder));
 		    
-			mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight, group->ixColor, font, name);
+			vgTextRight(vg, gfxBorder, y, inWid - 1, itemHeight, group->ixColor, font, name);
                         /* Reset the clipping rectangle to its original proportions */
-			mgSetClip(mg, gfxBorder, gfxBorder, inWid, pixHeight - (2 * gfxBorder));
+			vgSetClip(vg, gfxBorder, gfxBorder, inWid, pixHeight - (2 * gfxBorder));
 			y += itemHeight;
 			}
 		    }
@@ -9318,12 +9296,12 @@ if (withLeftLabels)
 		    {
 		    ymax = y - (group->heightPer / 2) + (fontHeight / 2);
 		    ymin = y + (group->heightPer / 2) - (fontHeight / 2);
-		    mgTextRight(mg, gfxBorder, ymin, inWid-1, group->lineHeight, 
+		    vgTextRight(vg, gfxBorder, ymin, inWid-1, group->lineHeight, 
 				group->ixAltColor, font, minRangeStr );
-		    mgTextRight(mg, gfxBorder, ymax, inWid-1, group->lineHeight, 
+		    vgTextRight(vg, gfxBorder, ymax, inWid-1, group->lineHeight, 
 				group->ixAltColor, font, maxRangeStr );
 		    }
-		mgTextRight(mg, gfxBorder, y, inWid-1, group->lineHeight, 
+		vgTextRight(vg, gfxBorder, y, inWid-1, group->lineHeight, 
 			    group->ixColor, font, group->shortLabel);
 		y += group->lineHeight;
 		break;
@@ -9338,72 +9316,73 @@ if (withGuidelines)
     int ochXoff = insideX + clWidth;
     int height = pixHeight - 2*gfxBorder;
     int x;
-    Color color = mgFindRgb(mg, &guidelineColor);
+    Color color = vgFindRgb(vg, &guidelineColor);
     int lineHeight = mgFontLineHeight(tl.font)+1;
 
-    mgSetClip(mg, insideX, gfxBorder, insideWidth, height);
+    vgSetClip(vg, insideX, gfxBorder, insideWidth, height);
     y = gfxBorder;
 
     for (x = insideX+guidelineSpacing-1; x<pixWidth; x += guidelineSpacing)
-	mgDrawBox(mg, x, y, 1, height, color);
+	vgBox(vg, x, y, 1, height, color);
     }
 
 /* Show ruler at top. */
 if (withRuler)
     {
     y = 0;
-    mgSetClip(mg, insideX, y, insideWidth, rulerHeight);
+    vgSetClip(vg, insideX, y, insideWidth, rulerHeight);
     relNumOff = winStart;
-    mgDrawRulerBumpText(mg, insideX, y, rulerHeight, insideWidth, MG_BLACK, font,
+    vgDrawRulerBumpText(vg, insideX, y, rulerHeight, insideWidth, MG_BLACK, font,
 			relNumOff, winBaseCount, 0, 1);
 
     /* Make hit boxes that will zoom program around ruler. */
-    {
-    int boxes = 30;
-    int winWidth = winEnd - winStart;
-    int newWinWidth = winWidth/3;
-    int i, ws, we = 0, ps, pe = 0;
-    int mid, ns, ne;
-    double wScale = (double)winWidth/boxes;
-    double pScale = (double)insideWidth/boxes;
-    for (i=1; i<=boxes; ++i)
 	{
-	ps = pe;
-	ws = we;
-	pe = round(pScale*i);
-	we = round(wScale*i);
-	mid = (ws + we)/2 + winStart;
-	ns = mid-newWinWidth/2;
-	ne = ns + newWinWidth;
-	if (ns < 0)
+	int boxes = 30;
+	int winWidth = winEnd - winStart;
+	int newWinWidth = winWidth/3;
+	int i, ws, we = 0, ps, pe = 0;
+	int mid, ns, ne;
+	double wScale = (double)winWidth/boxes;
+	double pScale = (double)insideWidth/boxes;
+	for (i=1; i<=boxes; ++i)
 	    {
-	    ns = 0;
-	    ne -= ns;
+	    ps = pe;
+	    ws = we;
+	    pe = round(pScale*i);
+	    we = round(wScale*i);
+	    mid = (ws + we)/2 + winStart;
+	    ns = mid-newWinWidth/2;
+	    ne = ns + newWinWidth;
+	    if (ns < 0)
+		{
+		ns = 0;
+		ne -= ns;
+		}
+	    if (ne > seqBaseCount)
+		{
+		ns -= (ne - seqBaseCount);
+		ne = seqBaseCount;
+		}
+	    mapBoxJumpTo(ps+insideX,y,pe-ps,rulerHeight,
+			 chromName, ns, ne, "3x zoom");
 	    }
-	if (ne > seqBaseCount)
-	    {
-	    ns -= (ne - seqBaseCount);
-	    ne = seqBaseCount;
-	    }
-	mapBoxJumpTo(ps+insideX,y,pe-ps,rulerHeight,
-		     chromName, ns, ne, "3x zoom");
 	}
     }
-    }
+
 
 /* Draw center labels. */
 if (withCenterLabels)
     {
     int clWidth = insideWidth;
     int ochXoff = insideX + clWidth;
-    mgSetClip(mg, insideX, gfxBorder, insideWidth, pixHeight - 2*gfxBorder);
+    vgSetClip(vg, insideX, gfxBorder, insideWidth, pixHeight - 2*gfxBorder);
     y = yAfterRuler;
     for (group = groupList; group != NULL; group = group->next)
         {
 	if (group->limitedVis != tvHide)
 	    {
 	    Color color = group->ixColor;
-	    mgTextCentered(mg, insideX, y+1, 
+	    vgTextCentered(vg, insideX, y+1, 
 			   clWidth, insideHeight, color, font, group->longLabel);
 	    mapBoxToggleVis(trackPastTabX, y+1, 
 			    trackPastTabWidth, insideHeight, group);
@@ -9422,9 +9401,9 @@ for (group = groupList; group != NULL; group = group->next)
 	{
 	if (withCenterLabels)
 	    y += fontHeight;
-	mgSetClip(mg, insideX, y, insideWidth, group->height);
+	vgSetClip(vg, insideX, y, insideWidth, group->height);
 	group->drawItems(group, winStart, winEnd,
-			 mg, insideX, y, insideWidth, 
+			 vg, insideX, y, insideWidth, 
 			 font, group->ixColor, group->limitedVis);
 	y += group->height;
 	}
@@ -9499,15 +9478,12 @@ for (group = groupList; group != NULL; group = group->next)
 printf("</MAP>\n");
 
 /* Save out picture and tell html file about it. */
-makeTempName(&gifTn, "hgt", ".gif");
-mgSaveGif(mg, gifTn.forCgi);
+vgClose(&vg);
 smallBreak();
 smallBreak();
 printf(
     "<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s><BR>\n",
     gifTn.forHtml, pixWidth, pixHeight, mapName);
-
-mgFree(&mg);
 }
 
 

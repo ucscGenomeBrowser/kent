@@ -48,6 +48,13 @@ col->b = b;
 return colIx;
 }
 
+struct rgbColor pscmColorIxToRgb(struct pscmGfx *pscm, int colorIx)
+/* Return rgb value at color index. */
+{
+return pscm->colMap[colorIx];
+}
+
+
 static void pscmSetDefaultColorMap(struct pscmGfx *pscm)
 /* Set up default color map for a memGfx. */
 {
@@ -109,7 +116,6 @@ pscmSetColor(pscm, color);
 psDrawBox(pscm->ps, x, y, 1, 1);
 }
 
-
 void pscmLine(struct pscmGfx *pscm, 
 	int x1, int y1, int x2, int y2, int color)
 /* Draw a line from one point to another. */
@@ -163,6 +169,34 @@ pscmSetFont(pscm, font);
 psTextAt(pscm->ps, x, y, text);
 }
 
+void pscmTextRight(struct pscmGfx *pscm, int x, int y, int width, int height,
+	int color, MgFont *font, char *text)
+/* Draw a line of text right justified in box defined by x/y/width/height */
+{
+pscmSetColor(pscm, color);
+pscmSetFont(pscm, font);
+psTextRight(pscm->ps, x, y, width, height, text);
+}
+
+void pscmTextCentered(struct pscmGfx *pscm, int x, int y, 
+	int width, int height, int color, MgFont *font, char *text)
+/* Draw a line of text centered in box defined by x/y/width/height */
+{
+pscmSetColor(pscm, color);
+pscmSetFont(pscm, font);
+psTextCentered(pscm->ps, x, y, width, height, text);
+}
+
+void pscmFillUnder(struct pscmGfx *pscm, int x1, int y1, int x2, int y2, 
+	int bottom, Color color)
+/* Draw a 4 sided filled figure that has line x1/y1 to x2/y2 at
+ * it's top, a horizontal line at bottom at it's bottom,  and
+ * vertical lines from the bottom to y1 on the left and bottom to
+ * y2 on the right. */
+{
+pscmSetColor(pscm, color);
+psFillUnder(pscm->ps, x1, y1, x2, y2, bottom);
+}
 
 struct vGfx *vgOpenPostScript(int width, int height, char *fileName)
 /* Open up something that will someday be a PostScript file. */
@@ -174,10 +208,14 @@ vg->dot = (vg_dot)pscmDot;
 vg->box = (vg_box)pscmBox;
 vg->line = (vg_line)pscmLine;
 vg->text = (vg_text)pscmText;
+vg->textRight = (vg_textRight)pscmTextRight;
+vg->textCentered = (vg_textCentered)pscmTextCentered;
 vg->findColorIx = (vg_findColorIx)pscmFindColorIx;
+vg->colorIxToRgb = (vg_colorIxToRgb)pscmColorIxToRgb;
 vg->setClip = (vg_setClip)pscmSetClip;
 vg->unclip = (vg_unclip)pscmUnclip;
-vg->verticalSmear = (vg_verticalSmear)(pscmVerticalSmear);
+vg->verticalSmear = (vg_verticalSmear)pscmVerticalSmear;
+vg->fillUnder = (vg_fillUnder)pscmFillUnder;
 return vg;
 }
 

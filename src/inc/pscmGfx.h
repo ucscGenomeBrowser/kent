@@ -53,5 +53,12 @@ void pscmText(struct pscmGfx *pscm, int x, int y, int colorIx,
 	MgFont *font, char *text);
 /* Draw a line of text with upper left corner x,y. */
 
+void pscmTextRight(struct pscmGfx *pscm, int x, int y, int width, int height,
+	int color, MgFont *font, char *text);
+/* Draw a line of text right justified in box defined by x/y/width/height */
+
+void pscmTextCentered(struct pscmGfx *pscm, int x, int y, 
+	int width, int height, int color, MgFont *font, char *text);
+/* Draw a line of text centered in box defined by x/y/width/height */
 
 #endif /* PSCMGFX_H */

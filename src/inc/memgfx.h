@@ -174,40 +174,11 @@ int mgFontStringWidth(MgFont *font, char *string);
 int mgFontCharWidth(MgFont *font, char c);
 /* How wide is a character? */
 
-
-void mgDrawRuler(struct memGfx *mg, int xOff, int yOff, int height, int width,
-        Color color, MgFont *font,
-        int startNum, int range);
-/* Draw a ruler inside the indicated part of mg with numbers that start at
- * startNum and span range.  */
-
-void mgDrawRulerBumpText(struct memGfx *mg, int xOff, int yOff, 
-	int height, int width,
-        Color color, MgFont *font,
-        int startNum, int range, int bumpX, int bumpY);
-/* Draw a ruler inside the indicated part of mg with numbers that start at
- * startNum and span range.  Bump text positions slightly. */
-
 void mgFillUnder(struct memGfx *mg, int x1, int y1, int x2, int y2, 
 	int bottom, Color color);
 /* Draw a 4 sided filled figure that has line x1/y1 to x2/y2 at
  * it's top, a horizontal line at bottom at it's bottom,  and
  * vertical lines from the bottom to y1 on the left and bottom to
  * y2 on the right. */
-
-void mgConnectingLine( struct memGfx *mg, int x1, double y1, int x2,
-                       double y2, Color *colors, int ybase, int aa,
-                       int fill );
-/*Draw a line between two points, (x1,y1) to (x2,y2). Will be used
- * with wiggle tracks to interpolate between samples, connecting the
- * end of one block to the beginning of the next one.  Uses
- * anti-aliasing unlike mgDrawLine and accepts real-valued y's.*/
-
-void mgBarbedHorizontalLine(struct memGfx *mg, int x, int y, 
-	int width, int barbHeight, int barbSpacing, int barbDir, Color color,
-	boolean drawMiddle);
-/* Draw a horizontal line starting at xOff, yOff of given width.  Will
- * put barbs (successive arrowheads) to indicate direction of line.  
- * BarbDir of 1 points barbs to right, of -1 points them to left. */
 
 #endif /* MEMGFX_H */
