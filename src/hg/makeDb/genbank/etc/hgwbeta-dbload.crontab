@@ -6,7 +6,7 @@ SHELL=/bin/sh
 MAILTO=genbank@cse.ucsc.edu
 
 # poll every hour at half-past
-30 0-23 * * *	/scratch/genbank/etc/hgwbeta-dbload
+30 0-23 * * *	/genbank/etc/hgwbeta-dbload
 
 
 

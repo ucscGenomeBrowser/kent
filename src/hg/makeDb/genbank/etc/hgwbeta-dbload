@@ -44,7 +44,7 @@ fi
 cp -f $copyTime $lastCopyTimeTmp
 
 # update databases
-gbDbLoadStep $verb -workdir=$workdir rn3
+gbDbLoadStep $verb -workdir=$workdir -downloadDump=7 rn3
 
 # on success, save time load completely and build time we started with
 mv -f $lastCopyTimeTmp $lastCopyTime

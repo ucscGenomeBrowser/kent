@@ -5,12 +5,13 @@
 # since the last time files were downloaded.  Remote file access is by rsync.
 
 set -e  # errors terminate
+trap "echo Error: `hostname` copy failed >&2; exit 1" ERR
 
 # databases to copy:
-databases="hg15"
+databases="hg15 rn3"
 
 # initialize
-gbRoot=/home/genbank/genbank
+gbRoot=/export/genbank
 cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
 
@@ -26,4 +27,6 @@ gbBuildRoot=/cluster/data/genbank
 # and is less than one day old,  error if older.
 gbCheckLock $gbRoot/var/copy/run/copy.lock
 
-exec gbCopyStep -rsyncPort=$rsyncPort -gbdb=$gbdb $gbBuildServer $gbBuildRoot $databases
+gbCopyStep -rsyncPort=$rsyncPort -gbdb=$gbdb $gbBuildServer $gbBuildRoot $databases
+
+echo "`hostname` copy completed"
