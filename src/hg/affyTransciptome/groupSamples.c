@@ -5,7 +5,7 @@ void usage()
 {
 errAbort("groupSamples - Group samples together into one sample.\n"
 	 "usage:\n\t"
-	 "groupSamples <gouping size - int> < input file > < output file >\n");
+	 "groupSamples <gouping size - int> <input file> <output file>\n");
 }
 
 void addSampleToCurrent(struct sample *target, struct sample *samp, int grouping)
@@ -20,6 +20,18 @@ for(i=0;i<samp->sampleCount; i++)
     target->sampleHeight[base + i] = samp->sampleHeight[i];
     target->sampleCount++;
     }
+}
+
+int sampleCoordCmp(const void *va, const void *vb)
+/* Compare to sort based on query. */
+{
+const struct sample *a = *((struct sample **)va);
+const struct sample *b = *((struct sample **)vb);
+int diff;
+diff = strcmp(a->chrom, b->chrom);
+if(diff == 0)
+    diff = a->chromStart - b->chromStart;
+return diff;
 }
 
 struct sample *groupByPosition(int grouping , struct sample *sampList)
@@ -65,6 +77,7 @@ void groupSamples(int grouping, char  *input, char *output)
 FILE *out = NULL;
 struct sample *sampList = NULL, *groupedList = NULL, *samp = NULL;
 sampList = sampleLoadAll(input);
+slSort(&sampList, sampleCoordCmp);
 groupedList = groupByPosition(grouping, sampList);
 out = mustOpen(output, "w");
 for(samp = groupedList; samp != NULL; samp = samp->next)
