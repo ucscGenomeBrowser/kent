@@ -1140,20 +1140,23 @@ struct cgiVar *current;
 struct dyString *query = newDyString(512);
 char *constraints = constrainFields();
 
-// Null query will cause errAbort if there's a syntax error, no-op if OK.
-dyStringPrintf(query, "SELECT 1 FROM %s WHERE 0 AND %s",
-	       getTableName(), constraints);
-if (sameString(database, getTableDb()))
-    conn = hAllocConn();
-else
-    conn = hAllocConn2();
-sr = sqlGetResult(conn, query->string);
-dyStringFree(&query);
-sqlFreeResult(&sr);
-if (sameString(database, getTableDb()))
-    hFreeConn(&conn);
-else
-    hFreeConn2(&conn);
+if ((constraints != NULL) && (constraints[0] != 0))
+    {
+    // Null query will cause errAbort if there's a syntax error, no-op if OK.
+    dyStringPrintf(query, "SELECT 1 FROM %s WHERE 0 AND %s",
+		   getTableName(), constraints);
+    if (sameString(database, getTableDb()))
+	conn = hAllocConn();
+    else
+	conn = hAllocConn2();
+    sr = sqlGetResult(conn, query->string);
+    dyStringFree(&query);
+    sqlFreeResult(&sr);
+    if (sameString(database, getTableDb()))
+	hFreeConn(&conn);
+    else
+	hFreeConn2(&conn);
+    }
 
 for (current = cgiVarList();  current != NULL;  current = current->next)
     {
