@@ -63,6 +63,7 @@ struct hgPos
      int chromEnd;		/* End position in chromosome. */
      char *name;		/* Name of position - one word. */
      char *description;		/* Position description - a sentence or so. */
+     char *browserName;		/* name as in hgTracks tg->itemName(). */
      };
 
 

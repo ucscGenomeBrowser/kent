@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.136 2004/04/29 17:00:48 sugnet Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.137 2004/04/29 23:41:03 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -45,6 +45,7 @@ if ((el = *pEl) != NULL)
     {
     freeMem(el->name);
     freeMem(el->description);
+    freeMem(el->browserName);
     freez(pEl);
     }
 }
@@ -231,8 +232,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     pos->chrom = hgOfficialChromName(row[0]);
     pos->chromStart = atoi(row[1]);
     pos->chromEnd = atoi(row[2]);
-    //pos->name = cloneString(row[3]);
     pos->name = cloneString(geneSymbol);
+    pos->browserName = cloneString(geneSymbol);
     slAddHead(&table->posList, pos);
     }
 if (table != NULL) 
@@ -288,6 +289,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     pos->chromStart = atoi(row[1]);
     pos->chromEnd = atoi(row[2]);
     pos->name = cloneString(row[3]);
+    pos->browserName = cloneString(row[3]);
     slAddHead(&table->posList, pos);
     }
 if (table != NULL)
@@ -370,7 +372,7 @@ return s;
 
 static void singlePos(struct hgPositions *hgp, char *tableDescription,
                       char *posDescription, char *tableName, char *posName,
-                      char *chrom, int start, int end)
+                      char *browserName, char *chrom, int start, int end)
 /* Fill in pos for simple case single position. */
 {
 struct hgPosTable *table;
@@ -388,6 +390,7 @@ pos->chromStart = start;
 pos->chromEnd = end;
 pos->name = cloneString(posName);
 pos->description = cloneString(posDescription);
+pos->browserName = cloneString(browserName);
 }
 
 static void fixSinglePos(struct hgPositions *hgp)
@@ -624,9 +627,13 @@ boolean foundIt = FALSE;
 
 for (chromPtr=allChroms;  chromPtr != NULL;  chromPtr=chromPtr->next)
     {
-    snprintf(query, sizeof(query), 
-                "select chromStart,chromEnd from %s_gold where frag = '%s'",
-	        chromPtr->name, name);
+    char tableName[256];
+    safef(tableName, sizeof(tableName), "%s_gold", chromPtr->name);
+    if (! sqlTableExists(conn, tableName))
+	continue;
+    safef(query, sizeof(query), 
+	  "select chromStart,chromEnd from %s where frag = '%s'",
+	  tableName, name);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
@@ -865,6 +872,7 @@ else
 	    pos->chromStart = psl->tStart;
 	    pos->chromEnd = psl->tEnd;
 	    pos->name = cloneString(psl->qName);
+	    pos->browserName = cloneString(psl->qName);
 	    dyStringPrintf(dy, "<A HREF=\"%s%cposition=%s",
 	        hgAppName, hgAppCombiner, hgPosBrowserRange(pos, NULL) );
 	    if (ui != NULL)
@@ -1052,6 +1060,7 @@ for (el = accList; el != NULL; el = el->next)
     AllocVar(pos);
     slAddHead(&table->posList, pos);
     pos->name = cloneString(acc);
+    pos->browserName = cloneString(acc);
     dyStringClear(dy);
     
     if (aligns)
@@ -1281,6 +1290,7 @@ if (kaList != NULL)
 	    AllocVar(pos);
 	    slAddHead(&table->posList, pos);
 	    pos->name = cloneString(kl->alias);
+	    pos->browserName = cloneString(kl->alias);
 
 	    sprintf(cond_str, "kgID = '%s'", kl->kgID);
 	    answer = sqlGetField(conn2, hGetDb(), "kgXref", "description",
@@ -1367,6 +1377,7 @@ if (kpaList != NULL)
 	    AllocVar(pos);
 	    slAddHead(&table->posList, pos);
 	    pos->name = cloneString(kl->alias);
+	    pos->browserName = cloneString(kl->alias);
 
 	    sprintf(cond_str, "kgID = '%s'", kl->kgID);
 	    answer = sqlGetField(conn2, hGetDb(), "kgXref", "description",
@@ -1494,6 +1505,7 @@ if (rlList != NULL)
 	    AllocVar(pos);
 	    slAddHead(&table->posList, pos);
 	    pos->name = cloneString(rl->name);
+	    pos->browserName = cloneString(rl->name);
 	    dyStringClear(ds);
 	    dyStringPrintf(ds, "(%s) %s", rl->mrnaAcc, rl->product);
 	    pos->description = cloneString(ds->string);
@@ -1595,6 +1607,7 @@ if (gbList != NULL)
 	    AllocVar(pos);
 	    slAddHead(&table->posList, pos);
 	    pos->name = cloneString(gb->name);
+	    pos->browserName = cloneString(gb->name);
 	    dyStringClear(ds);
 	    dyStringPrintf(ds, "%s; %s; %s", gb->name, gb->product, gb->note);
 	    pos->description = cloneString(ds->string);
@@ -1666,6 +1679,7 @@ if (tigrList != NULL)
 	    AllocVar(pos);
 	    slAddHead(&table->posList, pos);
 	    pos->name = cloneString(tigr->name);
+	    pos->browserName = cloneString(tigr->name);
 	    dyStringClear(ds);
 	    dyStringPrintf(ds, "%s; %s; %s", tigr->tigrCommon, tigr->tigrMainRole, tigr->tigrSubRole);
 	    pos->description = cloneString(ds->string);
@@ -1732,6 +1746,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     pos->chromStart = atoi(row[1]);
     pos->chromEnd = atoi(row[2]);
     pos->name = cloneString(row[3]);
+    pos->browserName = cloneString(row[3]);
     slAddHead(&table->posList, pos);
     }
 if (table != NULL)
@@ -1841,6 +1856,8 @@ hFreeConn(&conn);
 return(found);
 }
 
+static char *excludeTables = "knownGene,refGene";
+
 void hgPositionsHtml(struct hgPositions *hgp, FILE *f,
 		     boolean useWeb, char *hgAppName, struct cart *cart)
 /* Write out hgp table as HTML to file. */
@@ -1860,6 +1877,7 @@ for (table = hgp->tableList; table != NULL; table = table->next)
     {
     if (table->posList != NULL)
 	{
+	boolean excludeTable = (stringIn(table->name, excludeTables) != NULL);
 	if (table->htmlStart) 
 	    table->htmlStart(table, f);
 	else
@@ -1870,14 +1888,15 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 	        table->htmlOnePos(table, pos, f);
 	    else
 		{
+		char *matches = excludeTable ? "" : pos->browserName;
 		hgPosBrowserRange(pos, range);
 		fprintf(f, "<A HREF=\"%s%cposition=%s",
 			hgAppName, hgAppCombiner, range);
 		if (ui != NULL)
 		    fprintf(f, "&%s", ui);
-		fprintf(f, "%s&%s=%s\">%s at %s</A>",
+		fprintf(f, "%s&%s=%s&hgFind.matches=%s,\">%s at %s</A>",
 			extraCgi, table->name, hTrackOpenVis(table->name),
-			pos->name, range);
+			matches, pos->name, range);
 		desc = pos->description;
 		if (desc)
 		    fprintf(f, " - %s", desc);
@@ -2037,7 +2056,7 @@ else if (sameString(hfs->searchType, "cytoBand"))
     found = hgFindCytoBand(term, &chrom, &start, &end);
     if (found)
 	singlePos(hgp, hfs->searchDescription, NULL, hfs->searchTable, term,
-		  chrom, start, end);
+		  term, chrom, start, end);
     }
 else if (sameString(hfs->searchType, "gold"))
     {
@@ -2052,7 +2071,7 @@ else if (sameString(hfs->searchType, "gold"))
 	    start = start + relStart;
 	    }
 	singlePos(hgp, hfs->searchDescription, NULL, hfs->searchTable, term,
-		  chrom, start, end);
+		  term, chrom, start, end);
 	}
     }
 else if (sameString(hfs->searchType, "mrnaAcc"))
@@ -2166,6 +2185,7 @@ for (tPtr = tableList;  tPtr != NULL;  tPtr = tPtr->next)
 	    safef(buf, sizeof(buf), "%s%s",
 		  termPrefix ? termPrefix : "", row[3]);
 	pos->name = cloneString(buf);
+	pos->browserName = cloneString(row[3]);
 	if (isNotEmpty(xrefTerm))
 	    {
 	    safef(buf, sizeof(buf), "(%s%s)",
@@ -2272,7 +2292,6 @@ boolean canonical = FALSE;
 boolean relativeFlag = FALSE;
 int relStart = 0, relEnd = 0;
 
-char *excludeTables = "knownGene,refGene";
 hgAppName = hgAppNameIn;
 
 
@@ -2333,7 +2352,7 @@ if (hgOfficialChromName(term) != NULL)
 	    start = 0;
 	}
     singlePos(hgp, "Chromosome Range", NULL, "chromInfo", term,
-	      chrom, start, end);
+	      "", chrom, start, end);
     }
 else
     {
@@ -2372,13 +2391,12 @@ else
 	struct hgPosTable *hpTable = NULL;
 	for(hpTable = hgpItem->tableList; hpTable != NULL; hpTable = hpTable->next)
 	    {
+	    struct hgPos *pos = NULL;
 	    if(stringIn(hpTable->name, excludeTables))
 		continue;
-	    struct hgPos *pos = NULL;
 	    for(pos = hpTable->posList; pos != NULL; pos = pos->next)
 		{
-		if(sameWord(pos->name, hgpItem->query))
-		    dyStringPrintf(hgpMatchNames, "%s,", pos->name);
+		dyStringPrintf(hgpMatchNames, "%s,", pos->browserName);
 		}
 	    }
 	}
