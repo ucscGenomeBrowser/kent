@@ -42,7 +42,7 @@
      debugging without admin priveleges can see output.
      Added -debug option to paraHub so it won't demonize for debugging.
 
-11 - Added estimated completion time to para.
+11 - Added estimated completion time to para. -eta for time function.
      Added -maxNode to limit number of nodes a batch can have.
 
 
