@@ -928,10 +928,10 @@ type wig 0.0 1.0
 autoScaleDefault Off
 
 track blastChick
-shortLabel human exon gg0 best 
+shortLabel Chicken Best Exon
 longLabel best gg0 blast hit/hg16 knownGene exon
-group x
-priority 1101
+group compGeno
+priority 145.98
 visibility hide
-type psl .
+type psl xeno
 
