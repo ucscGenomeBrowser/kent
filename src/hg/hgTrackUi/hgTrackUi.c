@@ -23,7 +23,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.162 2004/12/25 21:13:09 daryl Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.163 2005/01/04 15:56:40 fanhsu Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1276,8 +1276,14 @@ else if (tdb->type != NULL)
 	/* if bed has score then show optional filter based on score */
 	if (sameWord(words[0], "bed") && wordCount == 3)
 	    {
-	    /* Note: jaxQTL3 is a bed 8 format track because of thickStart/thickStart, but there is no valid score */
-	    if ((atoi(words[1]) > 4) && !sameString(track, "jaxQTL3"))
+	    /* Note: jaxQTL3 is a bed 8 format track because of thickStart/thickStart, 
+	      	     but there is no valid score.
+	             Similarly, the score field for wgRna track is no long used either.
+		     It originally was usd to depict different RNA types.  But the new 
+		     wgRna table has a new field 'type', which is used to store RNA type info
+		     and from which to determine the display color of each entry.
+	    */
+	    if ((atoi(words[1])>4) && !sameString(track,"jaxQTL3") && !sameString(track, "wgRna"))
 		scoreUi(tdb);
 	    }
 	else if (sameWord(words[0], "psl"))
