@@ -80,10 +80,11 @@ para push
 #Longest job:                      259s       4.32m     0.07h    0.00d
 #Submission to last job:           438s       7.30m     0.12h    0.01d
 
-# Load into database
+# Load into database.  This takes about an hour.
 ssh hgwdev
 cd $dbDir/bed/near/run/out
 hgLoadBlastTab $db knownBlastTab *.tab
+#### DONE TO HERE FOR HG16 ####
 
 # Create a table that maps between known genes and 
 # the nice affyUcla expression data.
