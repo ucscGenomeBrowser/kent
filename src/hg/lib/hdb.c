@@ -32,7 +32,7 @@
 #include "twoBit.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.227 2004/12/07 17:59:52 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.228 2004/12/15 00:30:35 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -405,6 +405,20 @@ AllocArray(result, strlen(db->name) + 1);
 strcpy(result, db->name);
 defaultDbFree(&db);
 return result;
+}
+
+char *hDefaultGenomeForClade(char *clade)
+/* Return highest relative priority genome for clade. */
+{
+struct sqlConnection *conn = hConnectCentral();
+char query[512];
+char *genome = NULL;
+safef(query, sizeof(query),
+      "select genome from genomeClade where clade = '%s' order by priority",
+      clade);
+genome = sqlQuickString(conn, query);
+hDisconnectCentral(&conn);
+return genome;
 }
 
 char *hDefaultDb()
@@ -1906,6 +1920,50 @@ hFreeOrDisconnect(&conn);
 return ret;
 }
 
+static boolean hGotCladeConn(struct sqlConnection *conn)
+/* Return TRUE if central db contains clade info tables. */
+{
+return (sqlTableExists(conn, "clade") && sqlTableExists(conn, "genomeClade"));
+}
+
+boolean hGotClade()
+/* Return TRUE if central db contains clade info tables. */
+{
+struct sqlConnection *conn = hConnectCentral();
+boolean gotClade = hGotCladeConn(conn);
+hDisconnectCentral(&conn);
+return gotClade;
+}
+
+char *hClade(char *genome)
+/* If central database has clade tables, return the clade for the 
+ * given genome; otherwise return NULL. */
+{
+struct sqlConnection *conn = hConnectCentral();
+if (hGotCladeConn(conn))
+    {
+    char query[512];
+    char *clade;
+    safef(query, sizeof(query),
+	  "select clade from genomeClade where genome = '%s'", genome);
+    clade = sqlQuickString(conn, query);
+    hDisconnectCentral(&conn);
+    if (clade == NULL)
+	{
+	warn("Warning: central database genomeClade doesn't contain "
+	     "genome \"%s\"", genome);
+	return cloneString("other");
+	}
+    else
+	return clade;
+    }
+else
+    {
+    hDisconnectCentral(&conn);
+    return NULL;
+    }
+}
+
 static void addSubVar(char *prefix, char *name, 
 	char *value, struct subText **pList)
 /* Add substitution to list. */
@@ -3244,26 +3302,44 @@ char *hTrackOpenVis(char *trackName)
 return hTrackCanPack(trackName) ? "pack" : "full";
 }
 
-struct dbDb *hGetIndexedDatabases()
-/* Get list of databases for which there is a nib dir. 
+static struct dbDb *hGetIndexedDbsMaybeClade(char *theDb)
+/* Get list of active databases, in theDb's clade if theDb is not NULL.
  * Dispose of this with dbDbFreeList. */
 {
 struct sqlConnection *conn = hConnectCentral();
 struct sqlResult *sr = NULL;
 char **row;
 struct dbDb *dbList = NULL, *db;
+char *theClade = theDb ? hClade(hGenome(theDb)) : NULL;
 
 /* Scan through dbDb table, loading into list */
-sr = sqlGetResult(conn, "select * from dbDb where active = 1 order by orderKey,name desc");
+sr = sqlGetResult(conn,
+	   "select * from dbDb where active = 1 order by orderKey,name desc");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     db = dbDbLoad(row);
-    slAddHead(&dbList, db);
+    if (theClade == NULL ||
+	sameString(hClade(hGenome(db->name)), theClade))
+	slAddHead(&dbList, db);
     }
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
 slReverse(&dbList);
 return dbList;
+}
+
+struct dbDb *hGetIndexedDatabases()
+/* Get list of all active databases. 
+ * Dispose of this with dbDbFreeList. */
+{
+return hGetIndexedDbsMaybeClade(NULL);
+}
+
+struct dbDb *hGetIndexedDatabasesForClade(char *db)
+/* Get list of active databases in db's clade.
+ * Dispose of this with dbDbFreeList. */
+{
+return hGetIndexedDbsMaybeClade(db);
 }
 
 struct dbDb *hGetLiftOverFromDatabases()

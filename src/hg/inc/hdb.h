@@ -551,7 +551,11 @@ char *hTrackOpenVis(char *trackName);
 /* Return "pack" if track is packable, otherwise "full". */
 
 struct dbDb *hGetIndexedDatabases();
-/* Get list of databases for which there is a nib dir. 
+/* Get list of all active databases. 
+ * Dispose of this with dbDbFreeList. */
+
+struct dbDb *hGetIndexedDatabasesForClade(char *db);
+/* Get list of active databases in db's clade.
  * Dispose of this with dbDbFreeList. */
 
 struct dbDb *hGetLiftOverFromDatabases();
@@ -622,6 +626,13 @@ char *hGenome(char *database);
 char *hPreviousAssembly(char *database);
 /* Return previous assembly for the genome associated with database. */
 
+boolean hGotClade();
+/* Return TRUE if central db contains clade info tables. */
+
+char *hClade(char *genome);
+/* If central database has clade tables, return the clade for the 
+ * given genome; otherwise return NULL. */
+
 void hAddDbSubVars(char *prefix, char *database, struct subText **pList);
 /* Add substitution variables associated with database to list. */
 
@@ -636,6 +647,9 @@ param organism - The organism for which we are trying to get the
     default database.
 return - The default database name for this organism
  */
+
+char *hDefaultGenomeForClade(char *clade);
+/* Return highest relative priority genome for clade. */
 
 char *sqlGetField(struct sqlConnection *connIn, 
    	          char *dbName, char *tblName, char *fldName, 
