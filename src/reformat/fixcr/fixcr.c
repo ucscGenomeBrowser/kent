@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include "common.h"
 
 
 void backupFile(char *fileName, char *backFileName)
