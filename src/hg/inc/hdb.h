@@ -28,6 +28,9 @@ int hChromSize(char *chromName);
 struct dnaSeq *hDnaFromSeq(char *seqName, int start, int end, enum dnaCase dnaCase);
 /* Fetch DNA */
 
+struct dnaSeq *hLoadChrom(char *chromName);
+/* Fetch entire chromosome into memory. */
+
 struct dnaSeq *hExtSeq(char *acc);
 /* Return sequence for external seq. */
 
