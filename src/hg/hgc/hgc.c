@@ -4376,6 +4376,40 @@ mustParseRange(tRange, &tName, &tStart, &tEnd);
 return loadPslAt(track, qName, qStart, qEnd, tName, tStart, tEnd);
 }
 
+void longXenoPsl1Given(struct trackDb *tdb, char *item, 
+	char *otherOrg, char *otherChromTable, struct psl *psl, char *pslTableName )
+/* Put up cross-species alignment when the second species
+ * sequence is in a nib file, AND psl record is given. */
+{
+struct psl *trimmedPsl = NULL;
+char otherString[256];
+char *cgiItem = cgiEncode(item);
+char *thisOrg = hOrganism(database);
+
+cartWebStart(cart, tdb->longLabel);
+printf("<B>%s position:</B> %s:%d-%d<BR>\n", otherOrg,
+	psl->qName, psl->qStart+1, psl->qEnd);
+printf("<B>%s size:</B> %d<BR>\n", otherOrg, psl->qEnd - psl->qStart);
+printf("<B>%s position:</B> %s:%d-%d<BR>\n", thisOrg,
+	psl->tName, psl->tStart+1, psl->tEnd);
+printf("<B>%s size:</B> %d<BR>\n", thisOrg,
+	psl->tEnd - psl->tStart);
+printf("<B>Identical Bases:</B> %d<BR>\n", psl->match + psl->repMatch);
+printf("<B>Number of Gapless Aligning Blocks:</B> %d<BR>\n", psl->blockCount );
+printf("<B>Percent identity within gapless aligning blocks:</B> %3.1f%%<BR>\n", 0.1*(1000 - pslCalcMilliBad(psl, FALSE)));
+printf("<B>Browser window position:</B> %s:%d-%d<BR>\n", seqName, winStart+1, winEnd);
+printf("<B>Browser window size:</B> %d<BR>\n", winEnd - winStart);
+sprintf(otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s", psl->tStart, 
+	pslTableName, otherOrg, otherChromTable);
+
+if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL)
+    {
+    hgcAnchorSomewhere("htcLongXenoPsl2", cgiItem, otherString, psl->tName);
+    printf("View details of parts of alignment within browser window.</A><BR>\n");
+    }
+freez(&cgiItem);
+}
+
 
 
 void longXenoPsl1(struct trackDb *tdb, char *item, 
@@ -4397,9 +4431,9 @@ printf("<B>%s position:</B> %s:%d-%d<BR>\n", thisOrg,
 	psl->tName, psl->tStart+1, psl->tEnd);
 printf("<B>%s size:</B> %d<BR>\n", thisOrg,
 	psl->tEnd - psl->tStart);
-printf("<B>Bases in aligning blocks:</B> %d<BR>\n", psl->match + psl->repMatch);
-printf("<B>Number of Aligning Blocks:</B> %d<BR>\n", psl->blockCount );
-printf("<B>Percent identity within aligning blocks:</B> %3.1f%%<BR>\n", 0.1*(1000 - pslCalcMilliBad(psl, FALSE)));
+printf("<B>Identical Bases:</B> %d<BR>\n", psl->match + psl->repMatch);
+printf("<B>Number of Gapless Aligning Blocks:</B> %d<BR>\n", psl->blockCount );
+printf("<B>Percent identity within gapless aligning blocks:</B> %3.1f%%<BR>\n", 0.1*(1000 - pslCalcMilliBad(psl, FALSE)));
 printf("<B>Browser window position:</B> %s:%d-%d<BR>\n", seqName, winStart+1, winEnd);
 printf("<B>Browser window size:</B> %d<BR>\n", winEnd - winStart);
 sprintf(otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s", psl->tStart, 
@@ -4435,9 +4469,9 @@ printf("<B>%s position:</B> %s:%d-%d<BR>\n", thisOrg,
 	psl->tName, psl->tStart+1, psl->tEnd);
 printf("<B>%s size:</B> %d<BR>\n", thisOrg,
 	psl->tEnd - psl->tStart);
-printf("<B>Bases in aligning blocks:</B> %d<BR>\n", psl->match + psl->repMatch);
-printf("<B>Number of Aligning Blocks:</B> %d<BR>\n", psl->blockCount );
-printf("<B>Percent identity within aligning blocks:</B> %3.1f%%<BR>\n", 0.1*(1000 - pslCalcMilliBad(psl, FALSE)));
+printf("<B>Identical Bases:</B> %d<BR>\n", psl->match + psl->repMatch);
+printf("<B>Number of Gapless Aligning Blocks:</B> %d<BR>\n", psl->blockCount );
+printf("<B>Percent identity within gapless aligning blocks:</B> %3.1f%%<BR>\n", 0.1*(1000 - pslCalcMilliBad(psl, FALSE)));
 printf("<B>Browser window position:</B> %s:%d-%d<BR>\n", seqName, winStart, winEnd);
 printf("<B>Browser window size:</B> %d<BR>\n", winEnd - winStart);
 
@@ -8032,10 +8066,60 @@ void printWindow( struct psl *thisPsl, int thisWinStart, int thisWinEnd, char *w
 }
                                                         
 
+void firstAndLastPosition( int *thisStart, int *thisEnd, struct psl *thisPsl )
+/*return the first and last base of a psl record (not just chromStart
+ * and chromEnd but the actual blocks.*/
+{
+        *thisStart = thisPsl->tStarts[0];
+        *thisEnd = thisPsl->tStarts[thisPsl->blockCount - 1];
+        if( thisPsl->strand[1] == '-' )
+        {
+            *thisStart = thisPsl->tSize - *thisStart;
+            *thisEnd = thisPsl->tSize - *thisEnd;
+        }
+        *thisEnd += thisPsl->blockSizes[thisPsl->blockCount - 1];
+}
+
+boolean sampleClickRelevant( struct sample *smp, int i, int left, int right,
+        int humMusWinSize, int thisStart, int thisEnd )
+/* Decides if a sample is relevant for the current window and psl
+ * record start and end positions */
+{
+
+            if( smp->chromStart + smp->samplePosition[i] -
+                   humMusWinSize / 2 + 1< left
+            &&  smp->chromStart + smp->samplePosition[i] + humMusWinSize / 2 < left ) 
+                return(0);
+           
+           if( smp->chromStart + smp->samplePosition[i] -
+                   humMusWinSize / 2  + 1< thisStart 
+            && smp->chromStart + smp->samplePosition[i] + humMusWinSize / 2 < thisStart  ) 
+               return(0);
+
+            if( smp->chromStart + smp->samplePosition[i] -
+                   humMusWinSize / 2 + 1> right
+               && smp->chromStart + smp->samplePosition[i] +
+               humMusWinSize / 2  > right )
+                return(0);
+           
+
+            if( smp->chromStart + smp->samplePosition[i] -
+                   humMusWinSize / 2 + 1 > thisEnd 
+                && smp->chromStart + smp->samplePosition[i] +
+                humMusWinSize / 2  > thisEnd  ) 
+                return(0);
+
+            return(1);
+}
+ 
+
 void humMusSampleClick(struct sqlConnection *conn, struct trackDb *tdb, 
 	char *item, int start, int smpSize)
 /* Handle click in humMus sample (wiggle) track. */
 {
+
+int humMusWinSize = 50;
+int flag;
 int i;
 char table[64];
 boolean hasBin;
@@ -8052,6 +8136,7 @@ struct psl *thisPsl;
 
 char pslItem[1024];
 char str[256];
+char thisItem[256];
 char *cgiPslItem;
 
 char pslTableName[128] = "blastzBestMouse";
@@ -8059,90 +8144,102 @@ char pslTableName[128] = "blastzBestMouse";
 struct sqlResult *pslSr;
 struct sqlConnection *conn2 = hAllocConn();
 
-int first;
+int thisStart, thisEnd;
+
 int left = cartIntExp( cart, "l" );
 int right = cartIntExp( cart, "r" );
 
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
-sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
-        table, item, seqName, start);
+sprintf(query, "select * from %s where name = '%s' and chrom = '%s'",
+        table, item, seqName);
+
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     if (firstTime)
-	firstTime = FALSE;
+	    firstTime = FALSE;
     else
-	htmlHorizontalLine();
+	    htmlHorizontalLine();
     smp = sampleLoad(row+hasBin);
-    printf("<B>Item:</B> %s<BR>\n", smp->name);
-    printPos(smp->chrom, winStart, winEnd, NULL, TRUE);
-
 
     sprintf( tempTableName, "%s_%s", smp->chrom, pslTableName );
     hFindSplitTable(seqName, pslTableName, table, &hasBin);
     sprintf(query, "select * from %s where tName = '%s' and tEnd >= %d and tStart <= %d" ,
-        table, smp->chrom, left, right );
+        table, smp->chrom, smp->chromStart+smp->samplePosition[0],
+        smp->chromStart+smp->samplePosition[smp->sampleCount-1] );
+
 
     pslSr = sqlGetResult(conn2, query);
-
-
-    htmlHorizontalLine();
-    printf("<h3>Blastz Alignments Windows </h3>
-            <b>start&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stop
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L-score</b><br>" );
-
 
     while(( pslRow = sqlNextRow(pslSr)) != NULL )
     {
         thisPsl = pslLoad( pslRow+hasBin ); 
-        first = 1;
 
-        for( i=1; i<smp->sampleCount; i=i+2 )
+        firstAndLastPosition( &thisStart, &thisEnd, thisPsl );
+        
+        snprintf(thisItem, 256, "%s:%d-%d %s:%d-%d", thisPsl->qName,
+                thisPsl->qStart, thisPsl->qEnd, thisPsl->tName,
+                thisPsl->tStart, thisPsl->tEnd );
+        flag = 0;
+
+        for( i=0; i<smp->sampleCount; i++ )
         {
-           if( smp->chromStart + smp->samplePosition[i] < left
-               &&  smp->chromStart + smp->samplePosition[i+1] < left ) continue;
-           if( smp->chromStart + smp->samplePosition[i] < thisPsl->tStart 
-                && smp->chromStart + smp->samplePosition[i+1] < thisPsl->tStart  ) 
-                    continue;
+            if( !sampleClickRelevant( smp, i, left, right, humMusWinSize,
+                        thisStart, thisEnd ) )
+                continue;
 
-           if( smp->chromStart + smp->samplePosition[i] > right
-               && smp->chromStart + smp->samplePosition[i+1]  > right ) continue;
-           if( smp->chromStart + smp->samplePosition[i] > thisPsl->tEnd 
-                && smp->chromStart + smp->samplePosition[i+1] > thisPsl->tEnd  ) 
-                    continue;
-
-                       first = 0;
-
-            if( smp->sampleHeight[i] != smp->sampleHeight[i+1] )
-                errAbort("regions not paired properly(%d,%d,%d,%d)!!!\n",
-                    smp->sampleHeight[i-1],
-                    smp->sampleHeight[i], smp->sampleHeight[i+1],
-                    smp->sampleHeight[i+2]);
-
-            snprintf( str, 256, "%d&nbsp;&nbsp;&nbsp;&nbsp;%d&nbsp;&nbsp;&nbsp;&nbsp;%g<br>",
-                smp->chromStart + smp->samplePosition[i],
-                smp->chromStart +  smp->samplePosition[i+1],
-                whichNum(smp->sampleHeight[i],0.0,8.0,1000) );
-
-            printWindow( thisPsl, 
-                    smp->chromStart + smp->samplePosition[i], 
-                    smp->chromStart + smp->samplePosition[i+1],
-                    str );
-
-            if( smp->samplePosition[i+1] + 5 < smp->samplePosition[i+2] ) 
-               printf("<br>");
-
-                //errAbort( "(%d,%d,%d,%d)\n", smp->samplePosition[i-1],  smp->samplePosition[i], smp->samplePosition[i+1], smp->samplePosition[i+2]);
-
-
+           flag = 1;
+            break;
         }
         
+        if( flag ) 
+            longXenoPsl1Given(tdb, thisItem, "Mouse", "mouseChrom", thisPsl, pslTableName );
+        printf("<br>");
     }
 
-    printf("<BR><BR>Note: these alignments can extend beyond
-            the browsers current viewing window.<BR>");
+    htmlHorizontalLine();
+    printf("<h3>Alignments Windows </h3>
+            <b>start&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stop
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L-score</b><br>" );
+
+
+
+    pslSr = sqlGetResult(conn2, query);
+    while(( pslRow = sqlNextRow(pslSr)) != NULL )
+    {
+        thisPsl = pslLoad( pslRow+hasBin ); 
+
+        firstAndLastPosition( &thisStart, &thisEnd, thisPsl );
+
+        for( i=0; i<smp->sampleCount; i++ )
+        {
+
+            if( !sampleClickRelevant( smp, i, left, right, humMusWinSize,
+                        thisStart, thisEnd ) )
+                continue;
+
+            snprintf( str, 256, "%d&nbsp;&nbsp;&nbsp;&nbsp;%d&nbsp;&nbsp;&nbsp;&nbsp;%g<br>",
+                max( smp->chromStart + smp->samplePosition[i] -
+                humMusWinSize / 2 + 1, thisStart + 1),
+                min(smp->chromStart +  smp->samplePosition[i] +
+                humMusWinSize / 2, thisEnd ),
+                whichNum(smp->sampleHeight[i],0.0,6.58323,1000) );
+
+            printWindow( thisPsl, 
+                    smp->chromStart + smp->samplePosition[i] -
+                    humMusWinSize / 2, 
+                    smp->chromStart + smp->samplePosition[i] +
+                    humMusWinSize / 2,
+                    str );
+        }
+
+        printf("<br>");
+    }
 
     hFreeConn(&conn2);
+    printf("<BR><BR>Note: these alignments can extend beyond
+            the browser's current viewing window.<BR>");
+
     }
 
 }
@@ -8175,10 +8272,6 @@ printTrackHtml(tdb);
 freez(&dupe);
 hFreeConn(&conn);
 }
-
-
-
-
 
 
 void hgCustom(char *trackId, char *fileItem)
