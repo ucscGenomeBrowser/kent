@@ -2,7 +2,6 @@
 #include "hCommon.h"
 #include "hdb.h"
 #include "errabort.h"
-
 #include "kgAlias.h"
 
 static void addKgAlias(struct sqlConnection *conn, struct dyString *query,
@@ -19,6 +18,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
+struct kgAlias *findKGAlias(char *dataBase, char *spec, char *mode)
+{
 /* findKGAlias Looks up aliases for Known Genes, given a seach spec 
 
 	mode "E" is for Exact match
@@ -26,8 +27,6 @@ sqlFreeResult(&sr);
 
    it returns a link list of kgAlias nodes, which contain kgID and Alias 
 */
-struct kgAlias *findKGAlias(char *dataBase, char *spec, char *mode)
-{
 struct sqlConnection *conn  = hAllocConn();
 struct sqlResult     *sr    = NULL;
 struct dyString      *ds    = newDyString(256);
