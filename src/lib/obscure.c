@@ -6,6 +6,7 @@
 #include "common.h"
 #include "portable.h"
 #include "obscure.h"
+#include "linefile.h"
 
 long incCounterFile(char *fileName)
 /* Increment a 32 bit value on disk. */
@@ -90,6 +91,22 @@ if (wordCount != 0)
 *retWords = words;
 *retWordCount = wordCount;
 *retBuf = buf;
+}
+
+struct slName *readAllLines(char *fileName)
+/* Read all lines of file into a list.  (Removes trailing carriage return.) */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct slName *list = NULL, *el;
+char *line;
+
+while (lineFileNext(lf, &line, NULL))
+     {
+     el = newSlName(line);
+     slAddHead(&list, el);
+     }
+slReverse(&list);
+return list;
 }
 
 void copyFile(char *source, char *dest)

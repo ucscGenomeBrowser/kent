@@ -40,7 +40,7 @@ int gfConnect(char *hostName, char *portName)
 {
 /* Connect to server. */
 int sd = setupSocket(hostName, portName);
-if (connect(sd, &sai, sizeof(sai)) == -1)
+if (connect(sd, (struct sockaddr*)&sai, sizeof(sai)) == -1)
     {
     errnoAbort("Sorry, the BLAT server seems to be down.  Please try "
                "again later.");

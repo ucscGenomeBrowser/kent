@@ -69,7 +69,8 @@ int newStart;
 if (lf->reuse)
     {
     lf->reuse = FALSE;
-    *retSize = lf->lineEnd - lf->lineStart;
+    if (retSize != NULL)
+	*retSize = lf->lineEnd - lf->lineStart;
     *retStart = buf + lf->lineStart;
     return TRUE;
     }
@@ -129,7 +130,8 @@ if (lf->zTerm)
 lf->lineStart = newStart = lf->lineEnd;
 lf->lineEnd = endIx;
 ++lf->lineIx;
-*retSize = endIx - newStart;
+if (retSize != NULL)
+    *retSize = endIx - newStart;
 *retStart = buf + newStart;
 return TRUE;
 }

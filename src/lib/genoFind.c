@@ -773,6 +773,7 @@ else
     {
     gfSmallIndexSeq(gf, seqList, minMatch, maxGap, tileSize, maxPat, oocFile, isPep);
     }
+return gf;
 }
 
 static int bCmpSeqSource(const void *vTarget, const void *vRange)
