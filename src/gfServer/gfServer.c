@@ -24,6 +24,7 @@ boolean doTrans = FALSE;	/* Do translation? */
 boolean allowOneMismatch = FALSE; 
 int repMatch = 1024;
 int maxGap = gfMaxGap;
+FILE *logFile = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -54,7 +55,8 @@ errAbort(
   "   -maxGap=N   Number of insertions or deletions allowed between n-mers.\n"
   "               Default is 2 for nucleotides, 0 for protiens.\n"
   "   -trans  Translate database to protein in 6 frames.  Note: it is best\n"
-  "           to run this on RepeatMasked data in this case."
+  "           to run this on RepeatMasked data in this case.\n"
+  "   -log=logFile keep a log file that records server requests."
   );
 
 }
@@ -118,19 +120,18 @@ memcpy(&sai.sin_addr.s_addr, hostent->h_addr_list[0], sizeof(sai.sin_addr.s_addr
 return socket(AF_INET, SOCK_STREAM, 0);
 }
 
-FILE *logFile = NULL;
-
 void logIt(char *format, ...)
 /* Print message to log file. */
 {
 va_list args;
-if (logFile == NULL)
-    logFile = stdout;
-fprintf(logFile, "%lu ", clock1000());
-va_start(args, format);
-vfprintf(logFile, format, args);
-va_end(args);
-fflush(logFile);
+if (logFile != NULL)
+    {
+    fprintf(logFile, "%lu ", clock1000());
+    va_start(args, format);
+    vfprintf(logFile, format, args);
+    va_end(args);
+    fflush(logFile);
+    }
 }
 
 /* Some variables to gather statistics on usage. */
@@ -140,7 +141,7 @@ int noSigCount = 0;
 int missCount = 0;
 int trimCount = 0;
 
-void dnaQuery(struct genoFind *gf, struct dnaSeq *seq, FILE *logFile,
+void dnaQuery(struct genoFind *gf, struct dnaSeq *seq, 
 	int connectionHandle, char buf[256])	
 /* Handle a query for DNA/DNA match. */
 {
@@ -168,7 +169,7 @@ lmCleanup(&lm);
 logIt("%d clumps, %d hits\n", clumpCount, hitCount);
 }
 
-void transQuery(struct genoFind *transGf[2][3], aaSeq *seq, FILE *logFile,
+void transQuery(struct genoFind *transGf[2][3], aaSeq *seq, 
 	int connectionHandle, char buf[256])	
 /* Handle a query for protein/translated DNA match. */
 {
@@ -218,7 +219,7 @@ lmCleanup(&lm);
 logIt("%d clumps, %d hits\n", clumpCount, hitCount);
 }
 
-void transTransQuery(struct genoFind *transGf[2][3], struct dnaSeq *seq, FILE *logFile,
+void transTransQuery(struct genoFind *transGf[2][3], struct dnaSeq *seq, 
 	int connectionHandle, char buf[256])	
 /* Handle a query for protein/translated DNA match. */
 {
@@ -284,8 +285,10 @@ char buf[256];
 char *line, *command;
 int fromLen, readSize, res;
 int socketHandle = 0, connectionHandle = 0;
+char *logFileName = cgiOptionalString("log");
 
-logFile = mustOpen("gfServer.log", "w");
+if (logFileName != NULL)
+    logFile = mustOpen(logFileName, "a");
 logIt("gfServer version %d on host %s, port %s\n", version, hostName, portName);
 if (doTrans)
     {
@@ -421,18 +424,21 @@ for (;;)
 			baseCount += seq.size;
 #ifdef DEBUG
 #endif /* DEBUG */
-		    faWriteNext(logFile, "query", seq.dna, seq.size);
-		    fflush(logFile);
+		    if (logFile != NULL)
+			{
+			faWriteNext(logFile, "query", seq.dna, seq.size);
+			fflush(logFile);
+			}
 		    if (doTrans)
 		       {
 		       if (queryIsProt)
-		            transQuery(transGf, &seq, logFile, connectionHandle, buf);
+		            transQuery(transGf, &seq, connectionHandle, buf);
 		       else
 		            transTransQuery(transGf, &seq, 
-			    	logFile, connectionHandle, buf);
+			    	connectionHandle, buf);
 		       }
 		    else
-			dnaQuery(gf, &seq, logFile, connectionHandle, buf);
+			dnaQuery(gf, &seq, connectionHandle, buf);
 		    }
 		freez(&seq.dna);
 		}
