@@ -138,7 +138,7 @@
 #include "zdobnovSynt.h"
 #include "HInv.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.625 2004/05/06 20:54:00 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.626 2004/05/06 23:51:30 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1730,7 +1730,7 @@ if (otherOrg == NULL)
     otherOrg = firstWordInLine(cloneString(tdb->shortLabel));
     }
 
-chain = chainDbLoad(conn, database, track, seqName, atoi(item));
+chain = chainLoadIdRange(database, track, seqName, winStart, winEnd, atoi(item));
 chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
 if (subChain == NULL)
     nullSubset = TRUE;
@@ -1738,6 +1738,7 @@ else
     /* Note: chain.c's chainSubsetOnT says this is a "fake" (scaled) score. */
     subSetScore = subChain->score;
 chainFree(&toFree);
+
 printf("<B>%s position:</B> %s:%d-%d</a>  size: %d <BR>\n",
        thisOrg, chain->tName, chain->tStart+1, chain->tEnd, chain->tEnd-chain->tStart);
 printf("<B>Strand:</B> %c<BR>\n", chain->qStrand);
