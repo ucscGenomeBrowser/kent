@@ -79,13 +79,18 @@ void printSomeAssemblyListHtml(char *db, struct dbDb *dbList, char *javascript);
  * param db - default assembly.  If NULL, no default selection */
 
 void printAllAssemblyListHtmlParm(char *db, struct dbDb *dbList, 
-                                char *dbCgi, bool activeOnly, char *javascript);
+                            char *dbCgi, bool allowInactive, char *javascript);
 /* Prints to stdout the HTML to render a dropdown list containing the list 
-of all possible assemblies to choose from.
+of assemblies for the current genome to choose from.  By default,
+ this includes only active assemblies with a database (with the
+ exception of the default assembly, which will be included even
+ if it isn't active).
+
 param db - The default assembly (the database name) to choose as selected. 
                 If NULL, no default selection.
-param active - if set, print only active assemblies with databases
- */
+param allowInactive - if set, print all assemblies for this genome,
+                        even if they're inactive or have no database
+*/
 
 void printSomeAssemblyListHtmlParm(char *db, struct dbDb *dbList, 
                                         char *dbCgi, char *javascript);

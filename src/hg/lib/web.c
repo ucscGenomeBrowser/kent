@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.47 2004/04/14 22:31:37 kate Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.48 2004/04/20 23:41:59 kate Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -351,7 +351,8 @@ for (cur = dbList; cur != NULL; cur = cur->next)
         }
     }
 
-cgiMakeDropListFull(orgCgiName, orgList, values, numGenomes, selGenome, onChangeText);
+cgiMakeDropListFull(orgCgiName, orgList, values, numGenomes, 
+                        selGenome, onChangeText);
 hashFree(&hash);
 }
 
@@ -367,14 +368,18 @@ printSomeGenomeListHtml(db, hGetIndexedDatabases(), onChangeText);
 }
 
 void printAllAssemblyListHtmlParm(char *db, struct dbDb *dbList, 
-                                    char *dbCgi, bool activeOnly, char *javascript)
+                            char *dbCgi, bool allowInactive, char *javascript)
 {
 /* Prints to stdout the HTML to render a dropdown list containing the list 
-of all possible assemblies to choose from.
+of assemblies for the current genome to choose from.  By default,
+ this includes only active assemblies with a database (with the
+ exception of the default assembly, which will be included even
+ if it isn't active).
 
 param db - The default assembly (the database name) to choose as selected. 
                 If NULL, no default selection.
-param active - if set, print only active assemblies with databases
+param allowInactive - if set, print all assemblies for this genome,
+                        even if they're inactive or have no database
  */
 char *assemblyList[128];
 char *values[128];
@@ -384,12 +389,21 @@ struct hash *hash = hashNew(7); // 2^^7 entries = 128
 char *genome = hGenome(db);
 char *selAssembly = NULL;
 
-
+if (genome == NULL)
+    genome = "Human";
 for (cur = dbList; cur != NULL; cur = cur->next)
     {
-    if (!activeOnly || strstrNoCase(genome, cur->genome)
-        && ((cur->active || !activeOnly) || strstrNoCase(cur->name, db))
-        && (!activeOnly || haveDatabase(cur->name)))
+    /* Only for this genome */
+    if (!sameWord(genome, cur->genome))
+        continue;
+
+    /* Save a pointer to the current assembly */
+    if (sameWord(db, cur->name))
+        selAssembly = cur->description;
+
+    if (allowInactive ||
+        ((cur->active || sameWord(cur->name, db)) 
+                && haveDatabase(cur->name)))
         {
         assemblyList[numAssemblies] = cur->description;
         values[numAssemblies] = cur->name;
@@ -398,15 +412,11 @@ for (cur = dbList; cur != NULL; cur = cur->next)
 	    internalErr();
         }
 
-    /* Save a pointer to the current assembly */
-    if (strstrNoCase(db, cur->name))
-       {
-       selAssembly = cur->description;
-       }
     }
-
-cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, selAssembly, javascript);
+cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, 
+                                selAssembly, javascript);
 }
+
 void printSomeAssemblyListHtmlParm(char *db, struct dbDb *dbList, 
                                         char *dbCgi, char *javascript)
 {
