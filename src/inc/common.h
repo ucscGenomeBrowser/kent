@@ -542,6 +542,9 @@ int intAbs(int a);
 #define round(a) ((int)((a)+0.5))
 /* Round floating point val to nearest integer. */
 
+#define roundll(a) ((long long)((a)+0.5))
+/* Round floating point val to nearest long long. */
+
 #ifndef min
 #define min(a,b) ( (a) < (b) ? (a) : (b) )
 /* Return min of a and b. */
