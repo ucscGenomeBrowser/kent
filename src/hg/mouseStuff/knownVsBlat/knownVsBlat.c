@@ -11,6 +11,7 @@
 #include "refLink.h"
 #include "nib.h"
 #include "bed.h"
+#include "blatStats.h"
 
 /* Variables that can be set from command line. */
 int dotEvery = 0;	/* How often to print I'm alive dots. */
@@ -47,143 +48,6 @@ if (dotEvery > 0)
 	}
     }
 }
-
-struct stat
-/* One type of stat. */
-    {
-    int features;	/* Number of this type of feature. */
-    int hits;		/* Number of hits to this type of features. */
-    int basesTotal;	/* Total bases in all features. */
-    int basesPainted;	/* Total bases hit. */
-    double cumIdRatio;	/* Identity ratio times basesTotal. */
-    };
-
-struct blatStats 
-/* Blat summary statistics. */
-    {
-    struct blatStats	*next;
-    struct stat upstream100;	/* 100 bases upstream of txn start. */
-    struct stat upstream200;	/* 200 bases upstream of txn start. */
-    struct stat upstream400;	/* 400 bases upstream of txn start. */
-    struct stat upstream800;	/* 800 bases upstream of txn start. */
-    struct stat mrnaTotal;	/* CDS + UTR's. */
-    struct stat utr5;		/* 5' UTR. */
-    struct stat firstCds;	/* Coding part of first coding exon. */
-    struct stat firstIntron;	/* First intron. */
-    struct stat middleCds;	/* Middle coding exons. */
-    struct stat onlyCds;	/* Case where only one CDS exon. */
-    struct stat middleIntron;	/* Middle introns. */
-    struct stat onlyIntron;	/* Case where only single intron. */
-    struct stat endCds;		/* Coding part of last coding exon. */
-    struct stat endIntron;	/* Last intron. */
-    struct stat splice5;	/* First 10 bases of intron. */
-    struct stat splice3;	/* Last 10 bases of intron. */
-    struct stat utr3;		/* 3' UTR. */
-    struct stat downstream200;	/* 200 bases past end of UTR. */
-    };
-
-float divAsPercent(double a, double b)
-/* Return a/b * 100. */
-{
-if (b == 0)
-   return 0.0;
-return 100.0 * a / b;
-}
-
-void reportStat(FILE *f, char *name, struct stat *stat)
-/* Print out one set of stats. */
-{
-char buf[64];
-fprintf(f, "%-15s ", name);
-sprintf(buf, "%4.1f%% (%d/%d)", 
-	divAsPercent(stat->basesPainted, stat->basesTotal),
-	stat->basesPainted, stat->basesTotal);
-fprintf(f, "%-25s ", buf);
-sprintf(buf, "%4.1f%% (%d/%d)", 
-	divAsPercent(stat->hits, stat->features),
-	stat->hits, stat->features);
-fprintf(f, "%-20s ", buf);
-if (reportPercentId)
-    fprintf(f, "%4.1f%%", divAsPercent(stat->cumIdRatio, stat->basesPainted));
-fprintf(f, "\n");
-}
-
-void reportStats(FILE *f, struct blatStats *stats, char *name)
-/* Print out stats. */
-{
-fprintf(f, "%s stats:\n", name);
-fprintf(f, "region         bases hit           features hit ");
-if (reportPercentId)
-    fprintf(f, "percent identity");
-fprintf(f, "\n");
-fprintf(f, "------------------------------------------------");
-if (reportPercentId)
-    fprintf(f, "---------------------");
-fprintf(f, "\n");
-reportStat(f, "upstream 100", &stats->upstream100);
-reportStat(f, "upstream 200", &stats->upstream200);
-reportStat(f, "upstream 400", &stats->upstream400);
-reportStat(f, "upstream 800", &stats->upstream800);
-reportStat(f, "downstream 200", &stats->downstream200);
-reportStat(f, "mrna total", &stats->mrnaTotal);
-reportStat(f, "5' UTR", &stats->utr5);
-reportStat(f, "3' UTR", &stats->utr3);
-reportStat(f, "first CDS", &stats->firstCds);
-reportStat(f, "middle CDS", &stats->middleCds);
-reportStat(f, "end CDS", &stats->endCds);
-reportStat(f, "only CDS", &stats->onlyCds);
-reportStat(f, "5' splice", &stats->splice5);
-reportStat(f, "3' splice", &stats->splice3);
-reportStat(f, "first intron", &stats->firstIntron);
-reportStat(f, "middle intron", &stats->middleIntron);
-reportStat(f, "end intron", &stats->endIntron);
-reportStat(f, "only intron", &stats->onlyIntron);
-fprintf(f, "\n");
-}
-
-void addStat(struct stat *a, struct stat *acc)
-/* Add stat from a into acc. */
-{
-acc->features += a->features;
-acc->hits += a->hits;
-acc->basesTotal += a->basesTotal;
-acc->basesPainted += a->basesPainted;
-acc->cumIdRatio += a->cumIdRatio;
-}
-
-struct blatStats *addStats(struct blatStats *a, struct blatStats *acc)
-/* Add stats in a to acc. */
-{
-addStat(&a->upstream100, &acc->upstream100);
-addStat(&a->upstream200, &acc->upstream200);
-addStat(&a->upstream400, &acc->upstream400);
-addStat(&a->upstream800, &acc->upstream800);
-addStat(&a->mrnaTotal, &acc->mrnaTotal);
-addStat(&a->utr5, &acc->utr5);
-addStat(&a->firstCds, &acc->firstCds);
-addStat(&a->firstIntron, &acc->firstIntron);
-addStat(&a->middleCds, &acc->middleCds);
-addStat(&a->onlyCds, &acc->onlyCds);
-addStat(&a->middleIntron, &acc->middleIntron);
-addStat(&a->onlyIntron, &acc->onlyIntron);
-addStat(&a->endCds, &acc->endCds);
-addStat(&a->endIntron, &acc->endIntron);
-addStat(&a->utr3, &acc->utr3);
-addStat(&a->splice5, &acc->splice5);
-addStat(&a->splice3, &acc->splice3);
-addStat(&a->downstream200, &acc->downstream200);
-}
-
-struct blatStats *sumStatsList(struct blatStats *list)
-/* Return sum of all stats. */
-{
-struct blatStats *el, *stats;
-AllocVar(stats);
-for (el = list; el != NULL; el = el->next)
-    addStats(el, stats);
-return stats;
-}
-
 void addPslBestMilli(struct psl *psl, int *milliMatches, 
 	struct dnaSeq *geno, int genoStart, int genoEnd,
 	struct dnaSeq *query)
@@ -849,7 +713,7 @@ slReverse(&allChroms);
 for (chrom = allChroms; chrom != NULL; chrom = chrom->next)
     {
     stats = chromStats(chrom->name, nmToGeneHash, table);
-    reportStats(f, stats, chrom->name);
+    reportStats(f, stats, chrom->name, reportPercentId);
     fprintf(f, "\n");
     slAddHead(&statsList, stats);
     }
@@ -857,7 +721,7 @@ slReverse(statsList);
 sumStats = sumStatsList(statsList);
 if (sameWord(clChrom, "all"))
     {
-    reportStats(f, sumStats, "total");
+    reportStats(f, sumStats, "total", reportPercentId);
     }
 freeHashAndVals(&nmToGeneHash);
 carefulClose(&f);
