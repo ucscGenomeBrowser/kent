@@ -27,6 +27,7 @@
 static struct optionSpec optionSpecs[] = {
     {"db", OPTION_STRING},
     {"ver", OPTION_STRING},
+    {"der", OPTION_STRING},
     {"verbose", OPTION_BOOLEAN},
     {"xeno", OPTION_BOOLEAN},
     {"indels", OPTION_BOOLEAN},
@@ -56,6 +57,12 @@ struct clone
   struct clone *next;
   int id;
   int imageId;
+};
+
+struct refseq
+{
+  struct refseq *next;
+  struct acc *accList;
 };
 
 /* indel object is now used for tracking several, these constants
@@ -144,6 +151,7 @@ struct pslInfo
   int loci;
   struct indel *codonSubList;
   struct clone *mrnaCloneId;
+  struct refseq *refseq;
 } *piList = NULL;
 
 struct hash *cdsStarts = NULL;
@@ -151,6 +159,7 @@ struct hash *cdsEnds = NULL;
 struct hash *loci = NULL;
 struct hash *rnaSeqs = NULL;
 struct hash *version = NULL;
+struct hash *derived = NULL;
 
 int indels[128];
 
@@ -358,6 +367,81 @@ while (lineFileChopNext(lf, words, 2))
     }
 }
 
+char *findVersion(char *name)
+/* Determine the version for an mrna/est accession */
+{
+struct sqlConnection *conn = hAllocConn();
+char *ret = NULL;
+char query[256];
+struct sqlResult *sr;
+char **row;
+
+sprintf(query, "select version from mrna where acc = '%s'", name); 
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    ret = cloneString(row[0]);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+
+return(ret);
+}
+
+
+struct acc *createAcc(char *name)
+{
+struct acc *ret;
+char *a;
+char *accs[4];
+int wordCount, id = -1;
+  
+AllocVar(ret);
+ ret->next = NULL;
+wordCount = chopByChar(name, '.', accs, ArraySize(accs)); 
+if (wordCount > 2) 
+  errAbort("Accession not standard, %s\n", name);
+ret->name = accs[0];
+if (wordCount = 1)
+     {
+     if ((!version) || (!hashLookup(version, name)))
+       ret->version = findVersion(name);
+     else 
+       ret->version = cloneString(hashFindVal(version, name));
+     }
+else
+     ret->version = accs[1];
+ret->organism = NULL;
+/* fprintf(stderr, "accession %s created\n", accFmt(ret));*/
+
+return(ret);
+}
+
+void readRsDerived(struct lineFile *lf)
+/* Read in file of derived accessions for refseq mrnas */
+{
+char *words[4];
+char *rs, *acc;
+struct refseq *r;
+struct acc *a;
+
+derived = newHash(16);
+
+while (lineFileChopNext(lf, words, 2))
+    {
+    rs = cloneString(words[0]);
+    acc = cloneString(words[1]);
+    a = createAcc(acc);
+    if (!hashLookup(derived, rs))
+      {
+	AllocVar(r);
+	r->next = NULL;
+	r->accList = NULL;
+	hashAdd(derived, rs, r);
+      }
+    r = hashFindVal(derived, rs);
+    slAddHead(&r->accList, a);
+    }
+}
+
 int countIntrons(unsigned count, unsigned *sizes, unsigned *starts)
 /* Count the number of introns in an alignment where an intron is
    defined as a gap greater than 30 bases */
@@ -465,54 +549,6 @@ if ((haveSnpNih) && (!ret))
 return(ret);
 }
 
-char *findVersion(char *name)
-/* Determine the version for an mrna/est accession */
-{
-struct sqlConnection *conn = hAllocConn();
-char *ret = NULL;
-char query[256];
-struct sqlResult *sr;
-char **row;
-
-sprintf(query, "select version from mrna where acc = '%s'", name); 
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    ret = cloneString(row[0]);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-
-return(ret);
-}
-
-
-struct acc *createAcc(char *name)
-{
-struct acc *ret;
-char *a;
-char *accs[4];
-int wordCount, id = -1;
-  
-AllocVar(ret);
- ret->next = NULL;
-wordCount = chopByChar(name, '.', accs, ArraySize(accs)); 
-if (wordCount > 2) 
-  errAbort("Accession not standard, %s\n", name);
-ret->name = accs[0];
-if (wordCount = 1)
-     {
-     if ((!version) || (!hashLookup(version, name)))
-       ret->version = findVersion(name);
-     else 
-       ret->version = cloneString(hashFindVal(version, name));
-     }
-else
-     ret->version = accs[1];
-ret->organism = NULL;
-/* fprintf(stderr, "accession %s created\n", accFmt(ret));*/
-
-return(ret);
-}
-
 void findOrganism(struct sqlConnection *conn, struct acc *acc)
 /* Determine organism for each non-human mrna/est in the list */
 {
@@ -560,10 +596,7 @@ struct clone *ret = NULL;
 
 AllocVar(ret);
 ret->next = NULL;
-/* a = cloneString(acc);
-wordCount = chopByChar(a, '.', accs, ArraySize(accs)); 
-if (wordCount > 2) 
-errAbort("Accession not standard, %s\n", acc);*/
+
 sprintf(query, "select mrnaClone from mrna where acc = '%s'", acc); 
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -577,6 +610,23 @@ sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     ret->imageId = sqlUnsigned(row[0]);
 sqlFreeResult(&sr);
+return(ret);
+}
+
+boolean refseqAcc(struct refseq *r, char *name, char* rs)
+/* Check if accession was used to create refseq sequence */
+{
+  /*struct refseq *r;*/
+struct acc *a;
+boolean ret = FALSE;
+
+/*if (hashLookup(derived, rs))
+  {
+  r = hashFindVal(derived, rs);*/
+  for (a = r->accList; a != NULL; a = a->next)
+    if (sameString(a->name, name))
+      ret = TRUE;
+  /*}*/
 return(ret);
 }
 
@@ -871,9 +921,12 @@ struct dnaSeq *gseq;
 char thisStrand[2];
 struct acc *acc;
 char *name;
+struct refseq *rs = NULL;
 
 if (type == CODONSUB)
     assert(((ni->mrnaEnd-ni->mrnaStart)+1) == 3);
+if ((derived) && (hashLookup(derived, ni->mrna->name)))
+     rs = hashFindVal(derived, ni->mrna->name);
 
 /* Determine the sequence, If indel, add one base on each side */
  if ((type == INDEL) || (type == UNALIGNED))
@@ -918,6 +971,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     acc = createAcc(name);
     cloneId = getMrnaCloneId(conn2, acc->name);
     if ((!sameAcc(acc,ni->mrna)) && (!sameClone(cloneId,mrnaCloneId)) && 
+	((!rs) || (!refseqAcc(rs, acc->name, ni->mrna->name))) &&
 	(!usedClone(cloneId, ni->clones)) && (!usedAcc(acc, ni->accs)))
       {
 	slAddHead(&(ni->clones), cloneId);
@@ -1408,6 +1462,10 @@ pi->loci = hashIntVal(loci, pi->mrna->name);
 pi->indelCount = 0;
 pi->totalIndel = 0;
 pi->mrnaCloneId = getMrnaCloneId(conn, pi->mrna->name);
+if (derived && hashLookup(derived, pi->mrna->name))
+   pi->refseq = hashFindVal(derived, pi->mrna->name);
+else 
+  pi->refseq = NULL;
 
 /* Get the corresponding sequences */
 rnaSeq = hashFindVal(rnaSeqs, pi->mrna->name);
@@ -1637,20 +1695,21 @@ hFreeConn(&conn);
 
 int main(int argc, char *argv[])
 {
-struct lineFile *pf, *cf, *lf, *vf=NULL;
+struct lineFile *pf, *cf, *lf, *vf=NULL, *df=NULL;
 FILE *of, *in=NULL, *mm=NULL, *cs=NULL, *un=NULL;
-char *faFile, *db, filename[64], *vfName = NULL;
+char *faFile, *db, filename[64], *vfName = NULL, *dfName = NULL;
 char *user = cfgOption("db.user");
 char *password = cfgOption("db.password");
 
 optionInit(&argc, argv, optionSpecs);
 if (argc != 6)
     {
-    fprintf(stderr, "USAGE: pslAnal [-db=db -ver=<mrna versions> -verbose -xeno -indels -mismatches -codonsub] <psl file> <cds file> <loci file> <fa file> <out file prefix>\n");
+    fprintf(stderr, "USAGE: pslAnal [-db=db -ver=<mrna versions> -der=<refseq derived accs> -verbose -xeno -indels -mismatches -codonsub] <psl file> <cds file> <loci file> <fa file> <out file prefix>\n");
     return 1;
     }
 db = optionVal("db", "hg15");
 vfName = optionVal("ver", NULL);
+dfName = optionVal("der", NULL);
 verbose = optionExists("verbose");
 indelReport = optionExists("indels");
 unaliReport = optionExists("unaligned");
@@ -1667,6 +1726,8 @@ fprintf(of, "Acc\tChr\tStart\tEnd\tmStart\tmEnd\tSize\tLoci\tCov\tID\tCdsStart\t
 fprintf(of, "10\t10\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10\t10N\n");
 if (vfName) 
   vf = lineFileOpen(vfName, FALSE);
+if (dfName) 
+  df = lineFileOpen(dfName, FALSE);
 if (indelReport) 
     {
     sprintf(filename, "%s.indel", argv[5]);
@@ -1705,6 +1766,12 @@ if (vf)
     if (verbose)
         printf("Reading version file\n");
     readVersion(vf);
+    }
+if (df) 
+    {
+    if (verbose)
+        printf("Reading refseq derived accessions file\n");
+    readRsDerived(df);
     }
 if (verbose)
     printf("Processing psl file\n");
