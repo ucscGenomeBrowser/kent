@@ -2588,7 +2588,7 @@ if (hTableExists("jaxOrtholog"))
     while ((row = sqlNextRow(sr)) != NULL)
         {
 	jaxOrthologStaticLoad(row, &jo);
-	printf("<B>Mouse Ortholog:</B> ");
+	printf("<B>MGI Mouse Ortholog:</B> ");
 	printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?id=%s\" target=_BLANK>", jo.mgiId);
 	printf("%s</A><BR>\n", jo.mouseSymbol);
 	}
