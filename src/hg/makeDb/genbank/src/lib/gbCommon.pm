@@ -3,6 +3,7 @@
 #
 package gbCommon;
 use strict;
+use English;
 use warnings FATAL => qw(all);
 use Carp;
 use FindBin;
@@ -22,8 +23,9 @@ BEGIN {
                            runProg runProgNoAbort callProg runPipe md5Files
                            gbChmod getReleases getLastRelease getUpdates
                            parseOptEq inList getTmpDir readFile makeAbs
-                           backgroundStart backgroundWait);
-
+                           backgroundStart backgroundWait
+                           getConf getConfNo getDbConf getDbConfNo splitSpaceList);
+    
     # make stdout/stderr always line buffered
     STDOUT->autoflush(1);
     STDERR->autoflush(1);
@@ -38,16 +40,17 @@ BEGIN {
     $main::ENV{PATH} = $newPath . $main::ENV{PATH};
 
     # set umask to preserve group writability
-    umask 0022
+    umask 0022;
+        
+    @gbCommon::savedArgv = @ARGV;
 }
 
 # Enable to track programs execution for debugging.
 $gbCommon::verbose = 0;
 
-# list of available iservers
-@gbCommon::ISERVERS = ("kkr1u00", "kkr2u00", "kkr3u00", "kkr4u00",
-                       "kkr5u00", "kkr6u00", "kkr7u00", "kkr8u00");
-
+# Hash table of config parameters, read on first use.
+$gbCommon::confFile = "etc/genbank.conf";
+$gbCommon::conf = undef;
 
 # Directory to use for var files
 $gbCommon::varDir = "var";
@@ -187,11 +190,17 @@ sub gbError($) {
     exit(1);
 }
 
+# log the command line at was saved when module was loaded
+sub logCmdLine() {
+    prMsg("command: $PROGRAM_NAME " . join(" ", @gbCommon::savedArgv));
+}
+
 # Set the task name. This is used when a script is run that is not
 # a top-level step script setting semaphores.
 sub setTaskName($) {
     my($name) = @_;
     $taskName = $name;
+    logCmdLine();
 }
 
 # Setup task logging, redirect the process stdout/stderr to a log file.
@@ -226,6 +235,7 @@ sub beginTask($$;$) {
     } else {
         prMsg("begin");
     }
+    logCmdLine();
 }
 
 # Begin a task without using semaphores, redirect the process
@@ -238,6 +248,7 @@ sub beginTaskNoLock($$;$) {
     } else {
         prMsg("begin");
     }
+    logCmdLine();
 }
 
 # End the task, log message and remove running semaphore
@@ -252,6 +263,12 @@ sub endTask(;$) {
     if (defined($lockFile)) {
         unlink($lockFile);
     }
+}
+
+# set directory mode to rwxrwsr-x
+sub setDirMode($) {
+  my($dir) = @_;
+  chmod(02775, $dir) || gbError("chmod $dir");
 }
 
 # create a directory (and parent directories) if they don't exist
@@ -274,8 +291,7 @@ sub makeDir($) {
           $path .= $part;
           if (!-d $path) {
               mkdir($path) || gbError("mkdir $path");
-              # make sure group write/stick is maintained
-              chmod(02775, $path) || gbError("chmod $path");
+              setDirMode($path);
           }
       }
   }
@@ -573,6 +589,100 @@ sub makeAbs($) {
         $path = $cwd . "/" . $path;
     }
     return $path;
+}
+
+# trim whitespace from start and end.
+sub trim($) {
+    my($str) = @_;
+    $str =~ s/^\s+//;
+    $str =~ s/\s+$//;
+    return $str;
+}
+
+# read the configuration file into global has.
+sub loadConf() {
+    open(CONFIG, $gbCommon::confFile) || die("can't open $gbCommon::confFile");
+    my $line;
+    while ($line = <CONFIG>) {
+        $line = trim($line);
+        if (!(($line =~ /^$/) || ($line =~ /^\#/))) {
+            if ($line =~ /^([^=]+)=(.*)$/) {
+                my $name = trim($1);
+                my $value = trim($2);
+                $gbCommon::conf{$name} = $value;
+            } else {
+                die("invalid line in $gbCommon::confFile: $line");
+            }
+        }
+    }
+    close(CONFIG);
+}
+
+# get a configuration value, or undef if not defined.
+sub findConf($) {
+    my($name) = @_;
+    if (!defined($gbCommon::conf)) {
+        loadConf();
+    }
+    return $gbCommon::conf{$name};
+}
+
+# get a configuration value, or error if not defined.
+sub getConf($) {
+    my($name) = @_;
+    my $value = findConf($name);
+    if (!defined($value)) {
+        die("no $name in $gbCommon::confFile");
+    }
+    return $value;
+}
+
+# get a configuration value, or error if not defined.
+# If the values is empty or "no", undef is returned.
+sub getConfNo($) {
+    my($name) = @_;
+    my $value = getConf($name);
+    if (($value eq "") || ($value eq "no")) {
+        return undef;
+    } else {
+        return $value;
+    }
+}
+
+# get a configuration value for a database, or the default, or an error
+# if neither are specified
+sub getDbConf($$) {
+    my($db, $name) = @_;
+    my $value = findConf("$db.$name");
+    if (!defined($value)) {
+        $value = findConf("default.$name");
+    }
+    if (!defined($value)) {
+        die("no $db.$name or default for $name in $gbCommon::confFile");
+    }
+    return $value;
+}
+
+# get a configuration value for a database, or the default, or an error
+# if neither are specified.  If the values is empty or "no", undef is returned.
+sub getDbConfNo($$) {
+    my($db, $name) = @_;
+    my $value = getDbConf($db, $name);
+    if (($value eq "") || ($value eq "no")) {
+        return undef;
+    } else {
+        return $value;
+    }
+}
+
+# convert a space seperate list into a list, pass back undef
+sub splitSpaceList($) {
+    my($strList) = @_;
+    if (!defined($strList)) {
+        return undef;
+    } else {
+        return split(/\s+/, $strList);
+    }
 }
 
 # perl requires a true value at the end

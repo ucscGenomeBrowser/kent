@@ -26,7 +26,7 @@
 #include "gbBuildState.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: gbAlignData.c,v 1.5 2003/06/28 04:02:21 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignData.c,v 1.6 2003/07/10 16:49:28 markd Exp $";
 
 /* table names */
 static char *REF_SEQ_ALI = "refSeqAli";
@@ -43,7 +43,7 @@ static char *gXenoRefGeneTableDef = NULL;
 static char *gXenoRefFlatTableDef = NULL;
 
 /* global conf */
-static unsigned gDbLoadOptions = 0;   /* options */
+static struct dbLoadOptions* gOptions; /* options from cmdline and conf */
 static char gTmpDir[PATH_LEN];
 static struct slName* gChroms = NULL;  /* global list of chromsome */
 
@@ -90,10 +90,10 @@ safef(editDef, sizeof(editDef),
 free(tmpDef);
 }
 
-void gbAlignDataInit(char *tmpDirPath, unsigned dbLoadOptions)
+void gbAlignDataInit(char *tmpDirPath, struct dbLoadOptions* options)
 /* initialize for outputing PSL files, called once per genbank type */
 {
-gDbLoadOptions = dbLoadOptions;
+gOptions = options;
 strcpy(gTmpDir, tmpDirPath);
 if (gChroms == NULL)
     gChroms = hAllChromNames();
@@ -228,7 +228,7 @@ writePsl(fh, psl);
 
 /* per-chromosome for table for native */
 if ((status->entry->orgCat == GB_NATIVE) && 
-    (gDbLoadOptions & DBLOAD_PER_CHROM_ALIGN))
+    (gOptions->flags & DBLOAD_PER_CHROM_ALIGN))
     {
     if (select->type == GB_MRNA)
         fh = getChromPslTabFile("mrna", psl->tName, &gPerChromMRnaPsls, conn);
@@ -394,7 +394,7 @@ if ((status != NULL) && (status->selectAlign != NULL)
     {
     /* replace with acc without version */
     strcpy(psl->qName, acc);
-    if (gDbLoadOptions & DBLOAD_PER_CHROM_ALIGN)
+    if (gOptions->flags & DBLOAD_PER_CHROM_ALIGN)
         fh = getChromPslTabFile("intronEst", psl->tName, &gIntronEstPsls, conn);
     else
         fh = getPslTabFile("intronEst", conn, &gIntronEstUpd);

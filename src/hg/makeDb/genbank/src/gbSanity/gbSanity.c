@@ -35,31 +35,31 @@
 #include "chkMetaDataTbls.h"
 #include "chkGbIndex.h"
 #include "chkAlignTbls.h"
+#include "../dbload/dbLoadOptions.h"
 #include <stdarg.h>
 
-static char const rcsid[] = "$Id: gbSanity.c,v 1.3 2003/06/28 04:02:21 markd Exp $";
+static char const rcsid[] = "$Id: gbSanity.c,v 1.4 2003/07/10 16:49:28 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"gbdbCurrent", OPTION_STRING},
     {"release", OPTION_STRING},
+    {"srcDb", OPTION_STRING},
     {"type", OPTION_STRING},
-    {"xenoRefSeq", OPTION_BOOLEAN},
-    {"xenoMrnaDesc", OPTION_BOOLEAN},
     {"accPrefix", OPTION_STRING},
     {"test", OPTION_BOOLEAN},
     {"checkExtSeqRecs", OPTION_BOOLEAN},
-    {"noPerChrom", OPTION_BOOLEAN},
+    {"conf", OPTION_STRING},
     {"verbose", OPTION_INT},
     {NULL, 0}
 };
 
+// FIXME: use of gbLoadRna options parsing is a bit of a hack.
+
 /* global parameters from command line */
 static char* gGbdbMapToCurrent = NULL;  /* map this gbdb root to current */
-static boolean gNoPerChrom = FALSE;    /* don't check per-chrom tables */
-static boolean gXenoRefSeq = FALSE;    /* have xeno RefSeq tables */
-static boolean gXenoMrnaDesc = FALSE;    /* Have descriptions for xeno mRNAs */
 static boolean gCheckExtSeqRecs = FALSE;
+static struct dbLoadOptions gOptions; /* options from cmdline and conf */
 
 void checkMrnaStrKeys(struct sqlConnection* conn)
 /* Verify that the ids appear valid for all of the unique string tables
@@ -105,31 +105,53 @@ gbReleaseUnload(select->release);
 gbVerbLeave(1, "check: %s", gbSelectDesc(select));
 }
 
+unsigned getLoadOrgCats(char* database, unsigned srcDb, unsigned type)
+/* determine orgCats that should be loaded, or zero if none */
+{
+struct dbLoadAttr* attr;
+unsigned orgCats = 0;
+
+attr = dbLoadOptionsGetAttr(&gOptions, srcDb, type, GB_NATIVE);
+if (attr->load)
+    orgCats |= GB_NATIVE;
+attr = dbLoadOptionsGetAttr(&gOptions, srcDb, type, GB_XENO);
+if (attr->load)
+    orgCats |= GB_XENO;
+return orgCats;
+}
+
+unsigned shouldHaveDesc(struct gbSelect* select)
+/* determine orgcats that should be descriptions */
+{
+struct dbLoadAttr* attr;
+unsigned descOrgCats = 0;
+
+attr = dbLoadOptionsGetAttr(&gOptions, select->release->srcDb,
+                            select->type, GB_NATIVE);
+if (attr->load && attr->loadDesc)
+    descOrgCats |= GB_NATIVE;
+attr = dbLoadOptionsGetAttr(&gOptions, select->release->srcDb,
+                            select->type, GB_XENO);
+if (attr->load && attr->loadDesc)
+    descOrgCats |= GB_XENO;
+return descOrgCats;
+}
+
 void checkSanity(struct gbSelect* select,
                  struct sqlConnection* conn)
 /* check sanity on a select partation */
 {
 /* load and validate all metadata */
 struct metaDataTbls* metaDataTbls;
-unsigned descOrgCats = 0;
-
-/* determine if there should be descriptions */
-if (select->type == GB_MRNA)
-    {
-    if (select->release->srcDb == GB_REFSEQ)
-        descOrgCats |= GB_NATIVE|GB_XENO;
-    else if (gXenoMrnaDesc)
-        descOrgCats |= GB_NATIVE|GB_XENO;
-    else
-        descOrgCats |= GB_NATIVE;
-    }
+unsigned descOrgCats = shouldHaveDesc(select);
 
 metaDataTbls= chkMetaDataTbls(select, conn, gCheckExtSeqRecs, descOrgCats,
                               gGbdbMapToCurrent);
 chkGbRelease(select, metaDataTbls);
 
 /* check the alignment tables */
-chkAlignTables(select, conn, metaDataTbls, gNoPerChrom);
+chkAlignTables(select, conn, metaDataTbls,
+               ((gOptions.flags & DBLOAD_PER_CHROM_ALIGN) != 0));
 
 metaDataTblsFree(&metaDataTbls);
 }
@@ -151,17 +173,22 @@ checkSanity(&select, conn);
 hFreeConn(&conn);
 }
 
-void releaseSanity(struct gbRelease* release, char *database,
-                   unsigned types, unsigned orgCats, char* limitAccPrefix)
+void releaseSanity(struct gbRelease* release, char *database)
 /* Run sanity checks on a release */
 {
-if (types & GB_MRNA)
+unsigned orgCats;
+
+/* check if native, and/or xeno should be included */
+orgCats = getLoadOrgCats(database, release->srcDb, GB_MRNA);
+if (orgCats != 0)
     checkRelease(release, database, GB_MRNA, orgCats, NULL);
-if ((types & GB_EST) && (release->srcDb == GB_GENBANK))
+
+orgCats = getLoadOrgCats(database, release->srcDb, GB_EST);
+if (orgCats != 0)
     {
     struct slName* prefixes, *prefix;
-    if (limitAccPrefix != NULL)
-        prefixes = newSlName(limitAccPrefix);
+    if (gOptions.accPrefixRestrict != NULL)
+        prefixes = newSlName(gOptions.accPrefixRestrict);
     else
         prefixes = gbReleaseGetAccPrefixes(release, GB_PROCESSED, GB_EST);
     for (prefix = prefixes; prefix != NULL; prefix = prefix->next)
@@ -196,43 +223,31 @@ for (release = index->rels[gbSrcDbIdx(srcDb)]; release != NULL;
 return NULL;
 }
 
-void gbSanity(char* database, char* relName, char* typesStr,
-              char* limitAccPrefix)
+void gbSanity(char* database)
 /* Run sanity checks */
 {
 struct gbIndex* index = gbIndexNew(database, NULL);
 struct sqlConnection *conn;
-unsigned types = GB_MRNA|GB_EST;
 struct gbRelease* release;
-unsigned orgCats;
 hgSetDb(database);
 gbErrorSetDb(database);
 
-if (typesStr != NULL)
-    types = gbParseType(typesStr);
-
-if (relName == NULL)
+if (gOptions.relRestrict == NULL)
     {
-    /* Check each partation of the genbank/refseq using the newest aligned
+    /* Check each partition of the genbank/refseq using the newest aligned
      * release */
     release = newestReleaseWithAligns(index, database, GB_GENBANK);
     if (release != NULL)
-        {
-        orgCats = GB_NATIVE|GB_XENO;
-        releaseSanity(release, database, types, orgCats, limitAccPrefix);
-        }
+        releaseSanity(release, database);
 
     release = newestReleaseWithAligns(index, database, GB_REFSEQ);
     if (release != NULL)
-        {
-        orgCats = gXenoRefSeq ? (GB_NATIVE|GB_XENO) : GB_NATIVE;
-        releaseSanity(release, database, types, orgCats, NULL);
-        }
+        releaseSanity(release, database);
     }
 else
     {
-    release = gbIndexMustFindRelease(index, relName);
-    releaseSanity(release, database, types, orgCats, NULL);
+    release = gbIndexMustFindRelease(index, gOptions.relRestrict);
+    releaseSanity(release, database);
     }
     
 gbIndexFree(&index);
@@ -275,7 +290,6 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 char *database;
-char *relName, *typeStr, *limitAccPrefix;
 
 optionInit(&argc, argv, optionSpecs);
 if (argc != 2)
@@ -292,18 +306,13 @@ if (optionExists("gbdbCurrent"))
 gbVerbInit(optionInt("verbose", 0));
 if (verbose >= 5)
     sqlTrace = TRUE;  /* global flag in jksql */
-relName = optionVal("release", NULL);
-typeStr = optionVal("type", NULL);
-limitAccPrefix = optionVal("accPrefix", NULL);
+database = argv[1];
+gOptions = dbLoadOptionsParse(database);
 testMode = optionExists("test");
 gCheckExtSeqRecs = optionExists("checkExtSeqRecs");
-gNoPerChrom = optionExists("noPerChrom");
-gXenoRefSeq = optionExists("xenoRefSeq");
-gXenoMrnaDesc = optionExists("xenoMrnaDesc");
-database = argv[1];
 
 gbVerbEnter(0, "gbSanity: begin: %s", database);
-gbSanity(database, relName, typeStr, limitAccPrefix);
+gbSanity(database);
 gbVerbLeave(0, "gbSanity: completed: %d errors", errorCnt);
 return ((errorCnt == 0) ? 0 : 1);
 }

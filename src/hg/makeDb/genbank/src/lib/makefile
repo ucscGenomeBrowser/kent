@@ -5,7 +5,7 @@ O = gbFileOps.o gbDefs.o gbIndex.o gbRelease.o gbGenome.o gbUpdate.o \
     gbProcessed.o gbEntry.o gbAligned.o uniqueStrTbl.o extFileTbl.o \
     gbStatusTbl.o sqlUpdater.o seqTbl.o gbFa.o imageCloneTbl.o \
     gbIgnore.o gbVerb.o sqlDeleter.o gbLoadedTbl.o mgcStatusTbl.o \
-    gbPipeline.o
+    gbPipeline.o gbConf.o
 
 # files to compile into lib without compiling
 LIBSRCS = gbCommon.pm gbFtp.pm gbCommon.sh

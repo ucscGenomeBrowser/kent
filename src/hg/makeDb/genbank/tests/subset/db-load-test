@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-# db-load-test [-initialLoad] [-noPerChrom] [-reloadList file] [-xenoRefSeq] name
+# db-load-test [-initialLoad] [-reloadList file] [-conf conf] name
 # run load tests on the current set of readable data files.
 
 # find GBROOT based location of this script.
@@ -18,14 +18,12 @@ while [[ $1 == -* ]] ; do
     case $opt in
         -initialLoad)
             flags="$flags -initialLoad";;
-        -noPerChrom) 
-            flags="$flags -noPerChrom"
-            chkFlags="$chkFlags -noPerChrom";;
-        -xenoRefSeq) 
-            flags="$flags -xenoRefSeq"
-            chkFlags="$chkFlags -xenoRefSeq";;
         -reloadList) 
             flags="$flags -reloadList=$1"
+            shift;;
+        -conf) 
+            flags="$flags -conf=$1"
+            chkFlags="$chkFlags -conf=$1"
             shift;;
         *)  echo "invalid option $opt" >&2
             exit 1;;
@@ -33,7 +31,7 @@ while [[ $1 == -* ]] ; do
 done
 
 if [ $# != 1 ] ; then
-    echo "wrong # args: db-load-test -initialLoad -noPerChrom -reloadList file name" >&2
+    echo "wrong # args: db-load-test -initialLoad [-reloadList file] [-conf file] name" >&2
     exit 1
 fi
 name="$1"

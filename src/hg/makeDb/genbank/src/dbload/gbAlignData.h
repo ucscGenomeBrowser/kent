@@ -12,8 +12,9 @@ struct gbStatusTbl;
 struct gbGenome;
 struct slName;
 struct sqlDeleter;
+struct dbLoadOptions;
 
-void gbAlignDataInit(char *tmpDirPath, unsigned dbLoadOptions);
+void gbAlignDataInit(char *tmpDirPath, struct dbLoadOptions* options);
 /* initialize for outputing PSL files, called once per genbank type */
 
 void gbAlignDataProcess(struct sqlConnection *conn, struct gbSelect* select,

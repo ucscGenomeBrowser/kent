@@ -1,11 +1,10 @@
 #!/usr/bin/perl
 #
-# gbAlignStep [options] database genomeGlob liftFile ...
+# gbAlignStep [options] database ...
 #
 # Options:
 #   -initial - Default the parameters for the initial alignment of a genome:
 #      -workdir=work/initial.$db/align
-#      -clusterdir=/iscratch/genbank
 #    Doesn't create a semaphone file and will log to 
 #       var/build/logs/2003.05.23-21:51:12.$db.initalign.log
 #
@@ -18,18 +17,16 @@
 #    directory includes the alignment date.  Maybe a longer or fully qualified
 #    path.
 #
-#   -clusterdir=dir - The directory where the files will exist on the
+#   -clusterRootDir=dir - The directory where the files will exist on the
 #    cluster. They will be rsynced to this location on the iserver.  The
 #    lowest two levels of the workdir are included, resulting, e.g.:
-#    /dir/work/align.  Specifying this does the iserver rsync.
+#    /dir/work/align.  Overrides cluster.rootDir conf item.
 #
-#   -parahost=kk - name of parasol host, must have rsh access.
+#   -paraHub=kk - name of parasol host, must have ssh access.
 #
-#   -omit-iserver=host - Specify an iserver to omit from the default list.
-#    use if an iserver is down and remapped.
-#
-#   -iserver=host - explictly specify an iserver to use.  Maybe repeated.
-#    If none are specified, the default list is used.
+#   -iserver=host - explictly specify an iservers to use.  Maybe repeated.
+#    If none are specified, the servers are obtained from the cluster.iserver
+#    Specify "no" when using global file system.
 #
 #   -continue=subtask - continue processing of a failed alignment run
 #    of this script.   Values for subtask are:
@@ -48,7 +45,7 @@
 #   -type=name - Restrict the type of sequence processeed to either "mrna"
 #    or "est".
 #
-#   -noPslReps=db - don't run PSL reps for this database.
+# Obtains other parameters from etc/genbank.conf.
 #
 # Alignment step, runs:
 #  - gbAlignSetup - Extract sequences to align, create jobs files.
@@ -67,16 +64,16 @@ use gbCommon;
 # Entry
 my $workDir;
 my $verbArg = "";
-my $paraHost;
+my $paraHub;
 my $keep = 0;
-my $clusterDir;
-my @omitIServers;
+my $clusterRootDir;
+my $clusterWorkDir;
+my $localWorkDir;
 my @iservers;
 my @srcDbs;
 my @types;
 my $initialBuild = 0;
 my $continueTask;
-my %noPslReps;
 while (($#ARGV >= 0) && ($ARGV[0] =~/^-.*/)) {
     my $opt = $ARGV[0];
     shift @ARGV;
@@ -84,10 +81,8 @@ while (($#ARGV >= 0) && ($ARGV[0] =~/^-.*/)) {
         $workDir = parseOptEq($opt);
     } elsif ($opt eq "-initial") {
         $initialBuild = 1;
-    } elsif ($opt =~ /^-clusterdir($|=)/) {
-        $clusterDir = parseOptEq($opt);
-    } elsif ($opt =~ /^-omit-iserver($|=)/) {
-        push(@omitIServers, parseOptEq($opt));
+    } elsif ($opt =~ /^-clusterRootDir($|=)/) {
+        $clusterRootDir = parseOptEq($opt);
     } elsif ($opt =~ /^-iserver($|=)/) {
         push(@iservers, parseOptEq($opt));
     } elsif ($opt =~ /^-continue($|=)/) {
@@ -100,8 +95,8 @@ while (($#ARGV >= 0) && ($ARGV[0] =~/^-.*/)) {
         $verbArg = "-verbose=$gbCommon::verbose";
     } elsif ($opt eq "-keep") {
         $keep = 1;
-    } elsif ($opt =~ /^-parahost($|=)/) {
-        $paraHost = parseOptEq($opt);
+    } elsif ($opt =~ /^-paraHub($|=)/) {
+        $paraHub = parseOptEq($opt);
     } elsif ($opt =~ /^-srcDb($|=)/) {
         # value check in gbAlignSetup
         my $srcDb = parseOptEq($opt);
@@ -110,27 +105,17 @@ while (($#ARGV >= 0) && ($ARGV[0] =~/^-.*/)) {
         # value check in gbAlignSetup
         my $type = parseOptEq($opt);
         push(@types, $type);
-    } elsif ($opt =~ /^-noPslReps($|=)/) {
-        my $noDb = parseOptEq($opt);
-        $noPslReps{$noDb} = 1;
     } else {
         gbError("invalid option \"$opt\"");
     }
 }
 
-if (($#ARGV < 1) || (($#ARGV+1) % 3) != 0) {
-    gbError("wrong # args: gbAlignStep [options] database genomeGlob liftFile ...");
+if ($#ARGV < 0) {
+    gbError("wrong # args: gbAlignStep [options] database ...");
 }
 my @databases;
-my %genomeGlobs;
-my %liftFiles;
 while ($#ARGV >= 0) {
-    my $db = $ARGV[0];
-    push(@databases, $db);
-    shift @ARGV;
-    $genomeGlobs{$db} = $ARGV[0];
-    shift @ARGV;
-    $liftFiles{$db} = $ARGV[0];
+    push(@databases, $ARGV[0]);
     shift @ARGV;
 }
 
@@ -144,23 +129,41 @@ if ($initialBuild) {
     if (!defined($workDir)) {
         $workDir = "work/initial.$initialDb/align";
     }
-    if (!defined($clusterDir)) {
-        $clusterDir = "/iscratch/genbank";
+    if (!defined($clusterRootDir)) {
+        $clusterRootDir = "/iscratch/genbank";
     }
 }
 
-# default other parameters
+# need to know if we are using the iservers
+my @iserverList = @iservers;
+if ($#iserverList < 0) {
+    @iserverList = splitSpaceList(getConfNo("cluster.iservers"));
+}
+my $usingIservers = !(($#iserverList < 0) || ($iserverList[0] eq "no"));
+
+# figure out workDir.  If no iservers are used, we write directly
+# to cluster dir.
 if (!defined($workDir)) {
     $workDir = "work/align";
 }
-if (dirname($workDir) eq ".") {
-    gbError("work directory must have at least two level, got: $workDir");
+if ($usingIservers) {
+    if (dirname($workDir) eq ".") {
+        gbError("work directory must have at least two level, got: $workDir");
+    }
+    # use last two directories in workDir on cluster
+    $clusterWorkDir = $clusterRootDir . "/" . basename(dirname($workDir)) . "/"
+        . basename($workDir);
+    $localWorkDir = $workDir;
+} else {
+    $clusterWorkDir = "$clusterRootDir/$workDir";
+    $localWorkDir = $clusterWorkDir;
 }
-my $workDirArg = "-workdir=$workDir";
+my $workDirArg = "-workdir=$localWorkDir";
+my $iserverArg = "";
+foreach my $iserver (@iservers) {
+    $iserverArg .= " -iserver=$iserver";
+}
 
-if (!defined($paraHost)) {
-    $paraHost = "kk";
-}
 
 # convert continue task to a list of task to execute
 my @tasks;
@@ -176,9 +179,9 @@ if (!defined($continueTask)) {
     gbError("invalid value for -continue, expected one of \"copy\", \"run\", or \"finish\"");
 }
 
-my $alignNone = "$workDir/align.none";  # indicates nothing to align
-my $alignJobs = "$workDir/align.jobs";
-my $alignDone = "$workDir/align.done";
+my $alignNone = "$localWorkDir/align.none";  # indicates nothing to align
+my $alignJobs = "$localWorkDir/align.jobs";
+my $alignDone = "$localWorkDir/align.done";
 
 # If TMPDIR is not set, set it to a local directory. /var/tmp doesn't
 # usually have enough space, so we use a tmp dir in the gbRoot
@@ -197,8 +200,8 @@ if ($initialBuild) {
 # setup
 if (inList("setup", @tasks)) {
     my $cmd = "gbAlignSetup $workDirArg $verbArg";
-    if (defined($clusterDir)) {
-        $cmd .= " -clusterdir=$clusterDir";
+    if (defined($clusterRootDir)) {
+        $cmd .= " -clusterWorkDir=$clusterWorkDir";
     }
     foreach my $srcDb (@srcDbs) {
         $cmd .= " -srcDb=$srcDb";
@@ -207,9 +210,8 @@ if (inList("setup", @tasks)) {
         $cmd .= " -type=$type";
     }
     
-    # must protect glob from shell expansion, and allow lift to be empty
     foreach my $db (@databases) {
-        $cmd .= " $db '" . $genomeGlobs{$db} . "' '" . $liftFiles{$db} .  "'";
+        $cmd .= " $db";
     }
     runProg($cmd);
 
@@ -223,25 +225,26 @@ if (! (-e $alignNone || -e $alignJobs)) {
     gbError("no $alignJobs or $alignNone file found");
 }
 
-# copy
-if (inList("copy", @tasks) && !-e $alignNone) {
+# copy if using iservers
+if ($usingIservers && inList("copy", @tasks) && !-e $alignNone) {
     # copy to iserver if needed
-    if (defined($clusterDir)) {
-        my $cmd = "gbAlignIServerCopy $verbArg";
-        foreach my $iserver (@iservers) {
-            $cmd .= " -iserver=$iserver";
+    if (defined($clusterRootDir)) {
+        my $cmd = "gbAlignIServerCopy $verbArg $iserverArg";
+        if (defined($clusterRootDir)) {
+            $cmd .= " -clusterRootDir=$clusterRootDir";
         }
-        foreach my $omit (@omitIServers) {
-            $cmd .= " -omit-iserver=$omit";
-        }
-        $cmd .= " " . $workDir . " $clusterDir";
+        $cmd .= " " . $workDir;
         runProg($cmd);
     }
 }
 
 # run alignment
 if (inList("run", @tasks) && !-e $alignNone) {
-    runProg("gbAlignRun $workDirArg -parahost=$paraHost $verbArg");
+    my $cmd = "gbAlignRun $workDirArg $verbArg";
+    if (defined($paraHub)) {
+        $cmd .= " -paraHub=$paraHub";
+    }
+    runProg($cmd);
 }
 
 # If -continue=finish is specified, force the create of a jobs.done file
@@ -255,22 +258,17 @@ if (inList("finish", @tasks) && !-e $alignNone) {
     # finish, lift and installing alignments
     my $cmd = "gbAlignFinish $workDirArg $verbArg";
     foreach my $db (@databases) {
-        if (defined($noPslReps{$db})) {
-            $cmd .= " -noPslReps=$db";
-        }
-    }
-    foreach my $db (@databases) {
-        $cmd .= " $db '" . $liftFiles{$db} .  "'";
+        $cmd .= " $db";
     }
     runProg($cmd);
 }
 if (!$keep && !$initialBuild) {
-    runProg("rm -rf $workDir");
-    my $workParent = dirname($workDir);
+    runProg("rm -rf $localWorkDir");
+    my $workParent = dirname($localWorkDir);
     rmdir($workParent);  # don't complain if can't remove
 }
 if ($initialBuild) {
     print STDERR "*** Note: -initial doesn't remove working directory:\n";
-    print STDERR "***       $workDir\n";
+    print STDERR "***       $localWorkDir\n";
 }
 endTask();

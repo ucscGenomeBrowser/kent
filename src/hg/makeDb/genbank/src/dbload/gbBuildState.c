@@ -18,11 +18,11 @@
 #include "gbProcessed.h"
 #include "gbStatusTbl.h"
 
-static char const rcsid[] = "$Id: gbBuildState.c,v 1.3 2003/06/28 04:02:21 markd Exp $";
+static char const rcsid[] = "$Id: gbBuildState.c,v 1.4 2003/07/10 16:49:28 markd Exp $";
 
 #define DO_EXT_CHANGE FALSE
 
-static unsigned gDbLoadOptions = 0;   /* options */
+static struct dbLoadOptions* gOptions; /* options from cmdline and conf */
 static int gErrorCnt = 0;  /* count of errors during build */
 
 static void traceSelect(char* which, struct gbStatus *status)
@@ -496,7 +496,7 @@ return TRUE;
 
 struct gbStatusTbl* gbBuildState(struct sqlConnection *conn,
                                  struct gbSelect* select, 
-                                 unsigned dbLoadOptions,
+                                 struct dbLoadOptions* options,
                                  float maxShrinkage,
                                  char* tmpDir,
                                  int verboseLevel,
@@ -508,7 +508,7 @@ struct gbStatusTbl* statusTbl;
 struct selectStatusData ssData;
 unsigned selectFlags = (select->type | select->release->srcDb);
 
-gDbLoadOptions = dbLoadOptions;
+gOptions = options;
 *maxShrinkageExceeded = FALSE;
 verbose = verboseLevel;
 gErrorCnt = 0;
@@ -525,7 +525,7 @@ statusTbl = gbStatusTblSelectLoad(conn, selectFlags, select->accPrefix,
 findNewEntries(select, statusTbl);
 
 /* check shrinkage unless override */
-if ((gDbLoadOptions & DBLOAD_LARGE_DELETES) == 0)
+if ((gOptions->flags & DBLOAD_LARGE_DELETES) == 0)
     {
     if (!checkShrinkage(select, maxShrinkage, statusTbl))
         *maxShrinkageExceeded = TRUE;
@@ -537,7 +537,7 @@ if (!*maxShrinkageExceeded)
     gbVerbMsg(1, "checking for orphans");
     findOrphans(conn, select, ssData.seqHash, statusTbl);
 
-    if (((gDbLoadOptions & DBLOAD_INITIAL) == 0))
+    if (((gOptions->flags & DBLOAD_INITIAL) == 0))
         {
         gbVerbMsg(1, "checking for type change");
         checkForTypeChange(conn, select, statusTbl);

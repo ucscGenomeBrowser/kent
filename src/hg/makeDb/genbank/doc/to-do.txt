@@ -530,7 +530,7 @@
 
 - move species names to conf.
 
-
+- have scripts print full usage message.
 
 - alignment seems slower" build times for old hg15:
     mrna: Completed: 546 of 546 jobs
@@ -563,10 +563,17 @@
     
     refSeq: Completed: 44 of 44 jobs
     CPU time in finished jobs:      11930s     198.84m     3.31h    0.14d  0.000 y
-    IO & Wait Time:                 16931s     282.18m     p4.70h    0.20d  0.001 y
+    IO & Wait Time:                 16931s     282.18m     4.70h    0.20d  0.001 y
     Average job time:                 656s      10.93m     0.18h    0.01d
     Longest job:                     2355s      39.25m     0.65h    0.03d
     Submission to last job:          2402s      40.03m     0.67h    0.03d
 
     total CPU: 41.42+186.29+755.90+16823.93+3.31 = 17810.85h
     total wait: 32.29+487.80+21.13+893.93+4.70   =  1439.85h
+
+without refseq:
+    total CPU: 41.42+186.29+755.90+16823.93 = 17807.54h
+    total wait: 32.29+487.80+21.13+893.93   =  1435.15h
+
+ 
+- version remains on refseq pep sequences in seq table: NP_787018.1

@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 
-static char const rcsid[] = "$Id: gbFileOps.c,v 1.1 2003/06/03 01:27:46 markd Exp $";
+static char const rcsid[] = "$Id: gbFileOps.c,v 1.2 2003/07/10 16:49:28 markd Exp $";
 
 boolean gbIsReadable(char* path)
 /* Test if a file exists and is readable by the user. */
@@ -16,6 +16,19 @@ boolean gbIsReadable(char* path)
 if (access(path, R_OK) < 0)
     return FALSE;
 return TRUE;
+}
+
+static void makeDirPerms(char* path)
+/* make a directory if it doesnt exist, and set the permissions to
+ * rwxrwsr-x */
+{
+if (makeDir(path))
+    {
+    if (chmod(path, S_IRUSR|S_IWUSR|S_IXUSR
+              |S_IRGRP|S_IWGRP|S_IXGRP|S_ISGID
+              |S_IROTH|S_IXOTH) < 0)
+        errnoAbort("can't set perms on %s", path);
+    }
 }
 
 void gbMakeDirs(char* path)
@@ -32,11 +45,11 @@ while((*next != '\0')
       && (next = strchr(next, '/')) != NULL)
     {
     *next = '\0';
-    makeDir(pathBuf);
+    makeDirPerms(pathBuf);
     *next = '/';
     next++;
     }
-makeDir(pathBuf);
+makeDirPerms(pathBuf);
 }
 
 void gbMakeFileDirs(char* path)

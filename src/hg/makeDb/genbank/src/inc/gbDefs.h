@@ -29,11 +29,17 @@
 #define GB_SRC_DB_MASK  (GB_GENBANK|GB_REFSEQ)
 #define GB_NUM_SRC_DB   2
 
+/* Size for array indexed by combination attributes of srcDb, type, and,
+ * orgCat */
+#define GB_NUM_ATTRS (GB_NUM_SRC_DB * GB_NUM_TYPES * GB_NUM_ORG_CATS)
+
+
 /* Processing state */
 #define GB_ALIGNED     0x100
 #define GB_PROCESSED   0x200
 #define GB_STATE_MASK  (GB_ALIGNED|GB_PROCESSED)
 #define GB_NUM_STATES  2
+
 
 /* Enumerated type for RefSeq status */
 enum refSeqStatus {

@@ -7,14 +7,14 @@ struct gbRelease;
 struct gbGenome;
 struct gbSelect;
 struct gbStatus;
-
+struct dbLoadOptions;
 
 /* Special values to store in gbEntry.selectVer */
 #define GB_UNCHG_SELECT_VER -2
 
 struct gbStatusTbl* gbBuildState(struct sqlConnection *conn,
                                  struct gbSelect* select,
-                                 unsigned dbLoadOptions,
+                                 struct dbLoadOptions* options,
                                  float maxShrinkage,
                                  char* tmpDir, int verboseLevel,
                                  boolean* maxShrinkageExceeded);

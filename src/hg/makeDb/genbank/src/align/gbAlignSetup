@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# gbAlignSetup [options] database genomeGlob liftFile ...
+# gbAlignSetup [options] database ...
 #
 # Do setup for the alignment step.
 #
@@ -8,8 +8,7 @@
 #   -workdir=work/align - work directory where alignment is built.
 #    See gbAlignStep for details;.
 #
-#   -clusterdir=dir - The directory where the files will exist on the
-#    cluster. See gbAlignStep for details;.
+#   -clusterWorkDir=dir - location of work directory on cluster.
 #
 #   -verbose=n - print details
 #
@@ -19,14 +18,17 @@
 #    or "est".
 #
 # Arguments:
-#   - database genomeGlob liftFile - Triples of database name, a glob
-#     patttern (quoted to prevent shell expansion) of where to find the genome
-#     contig or chromosome fasta or nib files, and the liftFile.  For example:
+#   - database - databases to align
 #
-#       hg13 '/scratch/hg/gs.14/build31/trfFa.1204/NT_*.fa.trf'
+# Obtains other parameters from etc/genbank.conf:
+# 
+# - $db.genome - a glob pattern of where to find the genome
+#    contig or chromosome fasta or nib files on the cluster.
+#    For example: 
+#      hg13.genome = /scratch/hg/gs.14/build31/trfFa.1204/NT_*.fa.trf
 #
-#     the lift file is used to split up nibs.  If fasta files or whole nibs
-#     are used, it is ignored and can be empty.
+# - $db.lift - the lift file is used to split up nibs.  If fasta files or
+#    whole nibs are used, it is ignored and can be empty or no.
 #
 # Does:
 #  - Find updates that are missing alignments in the latest releases for
@@ -52,6 +54,16 @@ my $maxFaSize = 64*1024*1024; # 64mb
 # global table to make sure we don't generate output file more than
 # once
 my %gOutPsls;
+
+# other globals
+my $workDir;
+my $clusterWorkDir;
+my $gbBlatPath;
+my $srcDbs;
+my $cwd;
+my @srcDbs;
+my @types;
+
 
 # split unaligned string into it's component names
 sub splitUnaligned($) {
@@ -106,7 +118,7 @@ sub extractMRnaFastas($) {
     my($release, $db, $update, $typeAccPrefix) = splitUnaligned($unaligned);
 
     # check if it already extracted
-    my @alignsList = glob("$main::workDir/$unaligned.*.aligns");
+    my @alignsList = glob("$workDir/$unaligned.*.aligns");
     if ($#alignsList >= 0) {
         gbError("setup already done, don't know why we found: "
                 . join(" ", @alignsList));
@@ -120,7 +132,7 @@ sub extractMRnaFastas($) {
     if ($gbCommon::verbose) {
         $cmd .= " -verbose=$gbCommon::verbose";
     }
-    $cmd .= " -workdir=$main::workDir $release $update $typeAccPrefix $db";
+    $cmd .= " -workdir=$workDir $release $update $typeAccPrefix $db";
     my $out = callProg($cmd);
     my $numAlign;
     my @mrnaFas = ();
@@ -197,8 +209,8 @@ sub getOutPslPath($$$) {
 }
 
 # Partition a nib file using the lift file.
-sub partitionNibFile($$) {
-    my($db, $nibFile) = @_;
+sub partitionNibFile($$$) {
+    my($db, $nibFile, $liftFile) = @_;
     my @nibSpecs;
 
     # Get chrom from nib path
@@ -207,11 +219,10 @@ sub partitionNibFile($$) {
     
     # lift format: offset oldName oldSize newName newSize
     # old name maybe in the form 1/NT_034471
-    my $liftFile = $main::dbLiftFiles{$db};
-    open(NIBFH, $liftFile) || die("can't open $liftFile");
+    open(LIFTFH, $liftFile) || die("can't open $liftFile");
     my $line;
     my $lineCnt = 0;
-    while (($line = <NIBFH>)) {
+    while (($line = <LIFTFH>)) {
         $lineCnt++;
         if (!($line =~ /\#.*$/)) {
             my($offset, $oldName, $oldSize, $newName, $newSize) = split(/\t/,$line);
@@ -228,7 +239,7 @@ sub partitionNibFile($$) {
             }
         }
     }
-    close(NIBFH) || die("close failed");
+    close(LIFTFH) || die("close failed");
     return @nibSpecs;
 }
 
@@ -238,18 +249,19 @@ sub partitionNibFile($$) {
 sub getGenomeFileSpecs($) {
     my($db) = @_;
     
-    my $genomeGlob = $main::dbGenomGlobs{$db};
+    my $genomeGlob = getDbConf($db, "genome");
     my @gfiles = glob($genomeGlob);
     if ($#gfiles < 0) {
-        gbError("no files matching genomeGlob: $genomeGlob");
+        gbError("no files matching genome glob: $genomeGlob");
     }
+    my $liftFile = getDbConfNo($db, "lift");
 
-    # genrate specs, validating that node are generated twice.
+    # genrate specs, validating that none are generated twice.
     my @fileSpecs;
     foreach my $gfile (@gfiles) {
         # partation if a nib and we have a lift file, otherwise use the entire file
-        if (($gfile =~ /.*\.nib$/) && defined($main::dbLiftFiles{$db})) {
-            push(@fileSpecs, partitionNibFile($db, $gfile));
+        if (($gfile =~ /.*\.nib$/) && defined($liftFile)) {
+            push(@fileSpecs, partitionNibFile($db, $gfile, $liftFile));
         } else {
             push(@fileSpecs, $gfile);
         }
@@ -270,24 +282,24 @@ sub writeBlatJob($$$$$$) {
 
     # add to list of expected
     print($expectedFh $outPsl . "\n");
-    if (-e "$main::workDir/$outPsl") {
+    if (-e "$workDir/$outPsl") {
         if ($gbCommon::verbose) {
             print(STDERR "output psl already exists, skipping: $outPsl\n");
         }
         return;  # exists
     }
     # make mrna fa relative to workdir (make . not wild in RE)
-    my $qWorkDir = $main::workDir;
+    my $qWorkDir = $workDir;
     $qWorkDir =~ s/\./\\./g;
     my $qWorkDirRE = "^(\.\/)?$qWorkDir\/";
     $mrnaFa =~ s/$qWorkDirRE//;
         
     # if all the cluster, prefix with that dir.
-    if (defined($main::clusterWorkDir)) {
-        $mrnaFa = $main::clusterWorkDir . "/" . $mrnaFa;
+    if (defined($clusterWorkDir)) {
+        $mrnaFa = $clusterWorkDir . "/" . $mrnaFa;
     }
         
-    my $cmd = "$main::gbBlatPath";
+    my $cmd = $gbBlatPath;
     $cmd .= " $db $genomeFile $mrnaFa {check out exists $outPsl}\n";
     print $jobFh $cmd;
 }
@@ -335,93 +347,79 @@ sub genAlignJobs($$$$$) {
 setTaskName("gbAlignSetup");
 
 # parse into globals used in program
-$main::cwd = `pwd`;
-chomp($main::cwd);
-$main::workDir = "work/align";
-@main::srcDbs = ();
-@main::types = ();
+$cwd = `pwd`;
+chomp($cwd);
+$workDir = "work/align";
+@srcDbs = ();
+@types = ();
 while (($#ARGV >= 0) && ($ARGV[0] =~/^-.*/)) {
     my $opt = $ARGV[0];
     shift @ARGV;
     if ($opt =~ /^-workdir($|=)/) {
-        $main::workDir = parseOptEq($opt);
+        $workDir = parseOptEq($opt);
+    } elsif ($opt =~ /^-clusterWorkDir($|=)/) {
+        $clusterWorkDir = parseOptEq($opt);
     } elsif ($opt eq "-verbose") {
         $gbCommon::verbose = 1;
     } elsif ($opt =~ /^-verbose=/) {
         $gbCommon::verbose = parseOptEq($opt);
-    } elsif ($opt =~ /^-clusterdir($|=)/) {
-        $main::clusterDir = parseOptEq($opt);
     } elsif ($opt =~ /^-srcDb($|=)/) {
         my $srcDb = parseOptEq($opt);
         if (!inList($srcDb, ("genbank", "refseq"))) {
             gbError("-srcDb must have a value of \"genbank\" or \"refseq\", got \"$srcDb\"");
         }
-        push(@main::srcDbs, $srcDb);
+        push(@srcDbs, $srcDb);
     } elsif ($opt =~ /^-type($|=)/) {
         my $type = parseOptEq($opt);
         if (!inList($type, ("mrna", "est"))) {
             gbError("-type must have a value of \"mrna\" or \"est\", got \"$type\"");
         }
-        push(@main::types, $type);
+        push(@types, $type);
     } else {
         gbError("invalid option \"$opt\"");
     }
 }
 
-if (($#ARGV < 1) || (($#ARGV+1) % 3) != 0) {
-    gbError("wrong # args: gbAlignSetup [options] database genomeGlob liftFile ...");
+if ($#ARGV < 0) {
+    gbError("wrong # args: gbAlignSetup [options] database ...");
 }
 
 my @databases;
 while ($#ARGV >= 0) {
-    my $db = $ARGV[0];
-    push(@databases, $db);
-    shift @ARGV;
-    $main::dbGenomGlobs{$db} = $ARGV[0];
-    shift @ARGV;
-    if ($ARGV[0] ne "") {
-        $main::dbLiftFiles{$db} = $ARGV[0];
-    }
+    push(@databases, $ARGV[0]);
     shift @ARGV;
 }
 
-$main::gbBlatPath = callProg("sh -c 'which gbBlat'");
-chomp($main::gbBlatPath);
+makeDir($workDir);
+
+$gbBlatPath = callProg("sh -c 'which gbBlat'");
+chomp($gbBlatPath);
 
 # default options
-if ($#main::srcDbs < 0) {
-    @main::srcDbs = ("genbank", "refseq");
+if ($#srcDbs < 0) {
+    @srcDbs = ("genbank", "refseq");
 }
-if ($#main::types < 0) {
-    @main::types = ("mrna", "est");
+if ($#types < 0) {
+    @types = ("mrna", "est");
 }
-$main::clusterWorkDir = undef;
-if (defined($main::clusterDir)) {
-    # use last two directories in workDir on cluster
-    $main::clusterWorkDir = $main::clusterDir . "/"
-        . basename(dirname($main::workDir)) . "/"
-        . basename($main::workDir);
-}
-
-makeDir($main::workDir);
 
 # Get last releases, allow one to be missing for testing
 my $gbRelease = undef;
-if (inList("genbank", @main::srcDbs)) {
+if (inList("genbank", @srcDbs)) {
     $gbRelease = getLastRelease("processed", "genbank");
 }
 
 my $rsRelease = undef;
-if (inList("refseq", @main::srcDbs)) {
+if (inList("refseq", @srcDbs)) {
     $rsRelease = getLastRelease("processed", "refseq");
 }
 if (!(defined($gbRelease) || defined($rsRelease))) {
     gbError("no data/processed/genbank.* or data/processed/refseq.* directories found in "
-            . $main::cwd);
+            . $cwd);
 }
 
 # setup jobs file
-my $alignJobs = "$main::workDir/align.jobs";
+my $alignJobs = "$workDir/align.jobs";
 my $alignJobsTmp = "$alignJobs.tmp";
 
 if (-e $alignJobs) {
@@ -436,7 +434,7 @@ open(JOBS, ">>", $alignJobsTmp)
 my $jobFh = \*JOBS;  # gag..
 
 # setup expected file
-my $alignExpected = "$main::workDir/align.expected";
+my $alignExpected = "$workDir/align.expected";
 my $alignExpectedTmp = "$alignExpected.tmp";
 
 open(EXPECTED, ">>", $alignExpectedTmp)
@@ -448,10 +446,10 @@ my $totalNumAlign = 0;
 # GenBank releases
 if (defined($gbRelease)) {
     foreach my $db (@databases) {
-        if (inList("mrna", @main::types)) {
+        if (inList("mrna", @types)) {
             $totalNumAlign += genAlignJobs($jobFh, $expectedFh, $gbRelease, $db, "mrna");
         }
-        if (inList("est", @main::types)) {
+        if (inList("est", @types)) {
             $totalNumAlign += genAlignJobs($jobFh, $expectedFh, $gbRelease, $db, "est");
         }
     }
@@ -475,7 +473,7 @@ if ($totalNumAlign > 0) {
     unlink($alignExpectedTmp, $alignJobsTmp);
     
     # leave flag indicating nothing to align
-    my $alignNone = "$main::workDir/align.none";
+    my $alignNone = "$workDir/align.none";
     open(NONE, ">$alignNone") || die("can't create $alignNone");
     close(NONE) || die("close failed");
 }

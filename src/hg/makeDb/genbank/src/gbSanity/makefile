@@ -1,7 +1,9 @@
 GBROOT = ../..
 include ${GBROOT}/common.mk
 
-O = metaData.o chkMetaDataTbls.o chkGbIndex.o chkAlignTbls.o gbSanity.o
+O = metaData.o chkMetaDataTbls.o chkGbIndex.o chkAlignTbls.o \
+	../dbload/dbLoadOptions.o gbSanity.o
+
 
 PROGS = $(BINARCH)/gbSanity
 

@@ -10,9 +10,7 @@ GBROOT=`dirname $dir`
 # FIXME: need to parameterize or figure out version; check for unreadable dirs.
 
 doOrphanTest=NO
-
-#doNoPerChrom="-noPerChrom"
-doXenoRefSeq="-xenoRefSeq"
+confFile='-conf refseq,xeno.conf'
 
 shopt -s nullglob
 
@@ -21,14 +19,16 @@ rm -rf out
 mkdir -p out
 reset-db 
 chmod ug+rwx data/processed/*/* data/aligned/*/${TESTDB}/*
-db-load-test -initialLoad $doNoPerChrom $doXenoRefSeq all
+
+
+db-load-test -initialLoad $confFile all
 
 dailies=`(cd data/processed/genbank.${RELVERSION} && echo daily.*)`
 
 reset-db 
 chmod a-rwx data/processed/*/daily.* data/aligned/*/${TESTDB}/daily.*
 
-db-load-test $doNoPerChrom $doXenoRefSeq full
+db-load-test $confFile full
 
 if [ $doOrphanTest = "YES" ] ; then
     echo "NOTE: doing orphan test"
@@ -45,7 +45,7 @@ for daily in $dailies ; do
     chmod ug+rwx data/aligned/genbank.${RELVERSION}/${TESTDB}/$daily
     chmod ug+rwx data/processed/refseq.${RELVERSION}/*
     chmod ug+rwx data/aligned/refseq.${RELVERSION}/${TESTDB}/*
-    db-load-test $doNoPerChrom $doXenoRefSeq $reloadList $daily
+    db-load-test $confFile $reloadList $daily
     reloadList=""
 done
 

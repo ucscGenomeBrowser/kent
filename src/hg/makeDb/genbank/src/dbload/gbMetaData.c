@@ -30,7 +30,7 @@
 #include "sqlDeleter.h"
 #include "genbank.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.6 2003/06/30 11:02:01 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.7 2003/07/10 16:49:28 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -108,10 +108,12 @@ static char *raFieldTables[] =
     };
 
 /* global configuration */
-static unsigned gDbLoadOptions = 0;   /* options */
+static struct dbLoadOptions* gOptions; /* options from cmdline and conf */
 static char gTmpDir[PATH_LEN];      /* tmp dir for load file */
 static unsigned gSrcDb = 0;         /* source database */
-static char gbdbGenBank[PATH_LEN]; /* root dir to store in database */
+static char gbdbGenBank[PATH_LEN];  /* root dir to store in database */
+
+/* FIXME: maybe should drop gSrcDb ??? */
 
 /* Update objects for each table */
 static struct seqTbl* seqTbl = NULL;
@@ -174,7 +176,7 @@ hel = hashAdd(gRaFields, raName, raf);
 raf->raName = hel->name;
 raf->valBuf = dyStringNew(0);
 raf->ust = uniqueStrTblNew(conn, table, hashPow2Size,
-                           ((gDbLoadOptions & DBLOAD_GO_FASTER) != 0),
+                           ((gOptions->flags & DBLOAD_GO_FASTER) != 0),
                            gTmpDir, (verbose >= 2));
 raf->next = gRaFieldTableList;
 gRaFieldTableList = raf;
@@ -303,11 +305,11 @@ return ((s == NULL) ? "" : s);
 }
 
 void gbMetaDataInit(struct sqlConnection *conn, unsigned srcDb,
-                    unsigned dbLoadOptions, char *gbdbGenBankPath,
+                    struct dbLoadOptions* options, char *gbdbGenBankPath,
                     char *tmpDir)
 /* initialize for parsing metadata */
 {
-gDbLoadOptions = dbLoadOptions;
+gOptions = options;
 gSrcDb = srcDb;
 gbdbGenBank[0] = '\0';
 if (gbdbGenBankPath != NULL)
@@ -634,14 +636,9 @@ if (raProtFaOff >= 0)
 }
 
 static boolean keepDesc(struct gbStatus* status)
-/* Check if description should be stored.  Skip description for EST, or the
- * table will get huge.  Xeno mRNA descriptions are optional, normally
- * omitted. Always save refSeq description. */
+/* Check if description should be stored. */
 {
-return ((status->type == GB_MRNA) && 
-        ((status->orgCat == GB_NATIVE)
-         || (gDbLoadOptions & DBLOAD_XENO_MRNA_DESC)
-         || (status->srcDb == GB_REFSEQ)));
+return dbLoadOptionsGetAttr(gOptions, status->srcDb, status->type, status->orgCat)->loadDesc;
 }
 
 static void updateMetaData(struct sqlConnection *conn, struct gbStatus* status,
@@ -794,7 +791,7 @@ mrnaUpd = NULL;
 refSeqStatusUpd = NULL;
 refLinkUpd = NULL;
 /* cache unique string tables in goFaster mode */
-if ((gDbLoadOptions & DBLOAD_GO_FASTER) == 0)
+if ((gOptions->flags & DBLOAD_GO_FASTER) == 0)
     raFieldsFree();
 }
 

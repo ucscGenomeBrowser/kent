@@ -13,9 +13,10 @@ struct gbProcessed;
 struct gbStatusTbl;
 struct gbSelect;
 struct sqlDeleter;
+struct dbLoadOptions;
 
 void gbMetaDataInit(struct sqlConnection *conn, unsigned srcDb,
-                    unsigned dbLoadOptions, char *gbdbGenBankPath, 
+                    struct dbLoadOptions* options, char *gbdbGenBankPath, 
                     char *tmpDir);
 /* initialize for parsing metadata */
 
