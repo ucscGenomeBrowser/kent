@@ -43,7 +43,7 @@ set chainDest Hg15,Hg16,Pt0,Mm2,Mm3,Mm4,Rn2,Rn3,Cb1,Dp1,PanTro1,GalGal2
 
 # Define databases that support known genes
 set kgDb $hg,$mm,$rn
-set pbDb hg16,mm4
+set pbDb hg16,mm4,rn3
 
 # Define databases that support family browser
 set familyDb $hg,$mm,$ce,$sacCer,$dm
