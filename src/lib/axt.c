@@ -15,11 +15,12 @@
  * granted for all use - public, private or commercial. */
 
 #include "common.h"
+#include "obscure.h"
 #include "linefile.h"
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.25 2003/09/04 23:58:51 braney Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.26 2003/09/08 15:12:00 braney Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -514,22 +515,11 @@ freez(pObj);
 
 struct axtScoreScheme *axtScoreSchemeProteinRead(char *fileName)
 {
-FILE* file = (FILE *) NULL;
-int length;
 char *string;
 struct axtScoreScheme *ss;
 
-/*	find out how long the file is	*/
-file = mustOpen(fileName,"r");
-(void) fseek( file, (long) 0, SEEK_END );
-length = ftell(file);
-string = needMem( length + 1 );
-rewind(file);
-fread(string, 1, length, file );
-fclose(file);
-
+readInGulp(fileName, &string, NULL);
 ss = axtScoreSchemeFromProteinText(string, fileName);
-
 freeMem(string);
 
 return ss;
