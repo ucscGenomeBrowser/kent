@@ -84,3 +84,11 @@ priority 145.7
 visibility dense
 spectrum on
 type netAlign seq chainHg16
+
+track humanDels
+shortLabel Human Deletions
+longLabel Deletions in Human (hg16) Relative to Chimp
+group compGeno
+priority 147
+visibility dense
+type bed
