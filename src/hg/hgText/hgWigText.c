@@ -784,21 +784,21 @@ for (chromPtr=chromList;  chromPtr != NULL && (linesOutput < maxLinesOut);
 	    else if (bedLength > 0)
 		{
 		struct bed *bedEl = bedListWig[WIG_TABLE_1];
-		struct bed *bedNext;
 		for ( ; linesOutput < maxLinesOut && bedEl;
-			bedEl = bedNext)
+			bedEl = bedEl->next)
 		    {
-		    bedNext = bedEl->next;
 		    if (doCt)
 			{
-			slAddHead(&bedList, bedEl);
+			struct bed *newBed = cloneBed(bedEl);
+			slAddHead(&bedList, newBed);
 			}
 		    else
 			printBedEl(bedEl);
 		    ++linesOutput;
 		    }
-		if (!doCt)
+		if (doCt)
 		    bedFreeList(&bedListWig[WIG_TABLE_1]);
+		    bedLength = 0;
 		}
 	    else
 		if (!doCt)
@@ -838,7 +838,7 @@ if (doCt)
     {
     char browserUrl[128];
     char headerText[256];
-    int redirDelay = 165;
+    int redirDelay = 5;
 
     if (linesOutput < 1)
 	{
@@ -849,21 +849,20 @@ if (doCt)
 	}
     else
 	{
-    safef(browserUrl, sizeof(browserUrl),
-	  "%s?db=%s&position=%s:%d-%d",
-	  hgTracksName(), database, chrom, winStart, winEnd);
-    safef(headerText, sizeof(headerText),
-	  "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"%d;URL=%s\">",
-	  redirDelay, browserUrl);
-    webStartHeader(cart, headerText,
-		   "Table Browser: %s %s: %s", hOrganism(database), 
-		   freezeName, getCtPhase);
-    printf("You will be automatically redirected to the genome browser in\n"
-	   "%d seconds, or you can <BR>\n"
-	   "<A HREF=\"%s\">click here to continue</A>.\n",
-	   redirDelay, browserUrl);
-    printf("<BR><HR><BR>hgTracksName: %s, database: %s position=%s:%d-%d<BR><HR>\n",
-	hgTracksName(), database, chrom, winStart, winEnd);
+	safef(browserUrl, sizeof(browserUrl),
+	      "%s?db=%s&position=%s:%d-%d",
+	      hgTracksName(), database, chrom, winStart, winEnd);
+	safef(headerText, sizeof(headerText),
+	      "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"%d;URL=%s\">",
+	      redirDelay, browserUrl);
+	webStartHeader(cart, headerText,
+		       "Table Browser: %s %s: %s", hOrganism(database), 
+		       freezeName, getCtPhase);
+	printf("You will be automatically redirected to the genome browser in\n"
+	       "%d seconds, or you can <BR>\n"
+	       "<A HREF=\"%s\">click here to continue</A>.\n",
+	       redirDelay, browserUrl);
+	webEnd();
 	}
     }
 else
