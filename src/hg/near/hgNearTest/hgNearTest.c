@@ -13,7 +13,7 @@
 #include "hdb.h"
 #include "qa.h"
 
-static char const rcsid[] = "$Id: hgNearTest.c,v 1.18 2004/11/07 00:55:33 kent Exp $";
+static char const rcsid[] = "$Id: hgNearTest.c,v 1.19 2004/11/10 15:15:38 kent Exp $";
 
 /* Command line variables. */
 char *dataDir = "/usr/local/apache/cgi-bin/hgNearData";
@@ -345,7 +345,6 @@ void testDbFilters(struct htmlPage *dbPage, char *org, char *db,
 struct slName *gene;
 int rowCount;
 char accFilter[256];
-safef(accFilter, sizeof(accFilter), "near.as.%s.wild", accColumn);
 
 /* Start out with filter page. */
 struct htmlPage *page = quickSubmit(dbPage, NULL, org, db, accColumn, NULL,
@@ -355,6 +354,7 @@ if (page == NULL)
     return;
 
 /* Set up to filter exactly one gene. */
+safef(accFilter, sizeof(accFilter), "near.as.%s.wild", accColumn);
     {
     htmlPageSetVar(page, NULL, accFilter, geneList->name);
     htmlPageSetVar(page, NULL, searchVarName, geneList->name);
@@ -517,9 +517,9 @@ void reportSummary(struct nearTest *list, FILE *f)
 {
 struct qaStatistics *stats;
 struct nearTest *test;
-AllocVar(stats);
 int i;
 
+AllocVar(stats);
 for (i=0; i<=ntiiCol; ++i)
     statsOnSubsets(list, i, f);
 for (test = list; test != NULL; test = test->next)

@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.25 2004/11/10 04:44:27 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.26 2004/11/10 15:15:32 kent Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -941,9 +941,9 @@ void reportSummary(struct tablesTest *list, FILE *f)
 {
 struct qaStatistics *stats;
 struct tablesTest *test;
-AllocVar(stats);
 int i;
 
+AllocVar(stats);
 for (i=0; i<ntiiTotalCount; ++i)
     statsOnSubsets(list, i, f);
 for (test = list; test != NULL; test = test->next)
