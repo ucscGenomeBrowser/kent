@@ -72,6 +72,12 @@ void wiggleOutput(struct wiggle *el, FILE *f, char sep, char lastSep);
 
 /* -------------- End autoSql Generated Code -------------------------- */
 
+/*	BASE_0 and BASE_1 - use where any coordinate conversions are to
+ *	be done, this will allow them to easily be found in case of
+ *	confusion.
+ */
+#define	BASE_0(x)	(x-1)
+#define	BASE_1(x)	(x+1)
 #define DEFAULT_MIN_Yv	0.0
 #define DEFAULT_MAX_Yv	127.0
 #define DEFAULT_HEIGHT_PER	"128"
