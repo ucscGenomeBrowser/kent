@@ -750,6 +750,9 @@ stored in a single table rather than one table per chromosome:</P>
   href="#EnsemblXref2">ensemblXref2</A> 
   - Cross-reference info between transcript entries and translation entries of Ensembl genes (alternative table used in some assemblies)</LI>
   <LI><A 
+  href="#EnsemblXref3">ensemblXref3</A> 
+  - Cross-reference info between transcript entries and translation entries of Ensembl genes (alternative table used in some assemblies)</LI>
+  <LI><A 
   href="#GenePredictions">ensEst</A> 
   - Ensembl gene predictions based on ESTs</LI>
   <LI><A 
@@ -996,6 +999,9 @@ stored in a single table rather than one table per chromosome:</P>
   href="#HgFindSpec">hgFindSpec</A> 
   - Information that defines a search performed by hgFind binary</LI>
   <LI><A 
+  href="#Hugo">hugo</A> 
+  - Cross reference between hugo and other databases
+  <LI><A 
   href="#Chain">humanChain</A> 
   - Summary info about chain of human alignments </LI>
   <LI><A 
@@ -1013,6 +1019,9 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#ImageClone">imageClone</A> 
   - Used with image consortium's cumulative_plate files at: ftp://image.llnl.gov/image/outgoing"</LI>
+  <LI><A 
+  href="#InterProXref">interProXref</A> 
+  - Associates InterPro ID with Swiss-Prot accessions
   <LI><A 
   href="#BED">intersectingMCS</A> 
   - Multi-Species Conserved Sequences (MCS) found by intersecting MCSs generated using binomial-based and parsimony p-value-based methods (Zoo) </LI>
@@ -1314,6 +1323,9 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#PbStamp">pbStamp</A> 
   - Proteome Browser stamp information
   <LI><A 
+  href="#PdbSP">pdbSP</A> 
+  - Links a Swiss-Prot accession ID with a PDB ID
+  <LI><A 
   href="#PepCCntDist">pepCCntDist</A> 
   - Proteome Browser cysteine count distribution
   <LI><A 
@@ -1346,6 +1358,12 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   <LI><A 
   href="#BED">perlegen</A> 
   - Perlegen Common High-Resolution Haplotype Blocks (chr21 only) </LI>
+  <LI><A 
+  href="#PfamDesc">pfamDesc</A> 
+  - Description of Pfam table
+  <LI><A 
+  href="#PfamXref">pfamXref</A> 
+  - Links Pfam and Swiss-Prot IDs
   <LI><A 
   href="#WiggleTrack">pGC</A> 
   - Percentage of bases that are G or C in small regions across the genome </LI>
@@ -1598,8 +1616,20 @@ cover the same region (replaced by snpMap starting with hg13) </LI>
   href="#PepPredictions">softberryPep</A> 
   - Translations of Fgenesh++ gene predictions into corresponding amino acid sequences </LI>
   <LI><A 
+  href="#SpDisease">spDisease</A> 
+  - Associates SwissProt IDs with a disease description
+  <LI><A 
   href="#SpMrna">spMrna</A> 
   - Associates SwissProt IDs with mRNA IDs
+  <LI><A 
+  href="#SpOrganism">spOrganism</A> 
+  - Associates SwissProt IDs with a taxonomy number
+  <LI><A 
+  href="#SpSecondaryID">spSecondaryID</A> 
+  - Associates SwissProt IDs with secondary accession IDs
+  <LI><A 
+  href="#SpXref2">spXref2</A> 
+  - Associates SwissProt IDs with other databases
   <LI><A 
   href="#STSalias">stsAlias</A> 
   - STS marker aliases and associated identification numbers  </LI>
@@ -1640,6 +1670,9 @@ cover the same region (replaced by snpMap starting with hg13) </LI>
   <LI><A 
   href="#BED">superfamily</A> 
   - Superfamily proteins</LI>
+  <LI><A 
+  href="#SwInterPro">swInterPro</A> 
+  - Associates Swiss-Prot accession IDs with InterPro IDs
   <LI><A 
   href="#BED">syntenyHg16</A> 
   - Human synteny alignnments (hg16)</LI>
@@ -2373,6 +2406,22 @@ genes (alternative table used in some assemblies)"
    )
 </PRE>
 
+<H4><A name=EnsemblXref3></A>EnsemblXref3</H4>
+<PRE>table ensemblXref3
+"A cross-reference table for Ensembl Genes."
+   (
+   string gene;            "Ensembl gene ID"
+   string geneVer;         "Ensembl gene ID version number"
+   string transcript;      "Ensembl transcript ID"
+   string transcriptVer;   "Ensembl transcript ID version number"
+   string protein;         "Ensembl protein ID"
+   string proteinVer;      "Ensembl protein version number"
+   string tremblAcc;       "TrEMBL  protein accession number"
+   string swissDisplayId;  "Swiss-Prot protein display ID"
+   string swissAcc;        "Swiss-Prot protein accession number"
+   )
+</PRE>
+
 <H4><A name=EnsGeneXref></A>Ensembl gene_xref Table</H4>
 Ensemble gene_xref table downloaded directly from the Ensembl ftp site (18.34 
 release 11/04). Refer to the Ensembl site for details.  CAUTION: Ensembl sometimes
@@ -2767,6 +2816,26 @@ The following definition is used for tables that link a predicted peptide to a p
 )
 </PRE>
 
+<H4><A name=Hugo></A>Hugo Cross-Reference</H4>
+<PRE>table hugo
+"A cross-reference table between hugo and other databases."
+   (
+   string hgnc;            "HGNC number"
+   string symbol;          "HUGO gene symbol"
+   string name;            "HUGO gene name"
+   string map;             "Gene map location"
+   string mim;             "MIM ID"
+   string pmid1;           "pmid 1"
+   string pmid2;           "pmid 2"
+   string refseq;          "RefSeq ID"
+   string aliases;         "Aliases"
+   string widthdraws;      "Withdrawn gene symbols"
+   string locuslink;       "LocusLink ID"
+   string gdbID;           "GDB ID"
+   string swissprot;       "Swiss-Prot ID"
+   )
+</PRE>
+
 <H4><A name=SyntenyHuman></A>Human Synteny Alignments</H4>
 <PRE>table syntenyHuman
 "Human synteny alignnments from blastz single coverage"
@@ -2799,6 +2868,19 @@ The following definition is used for tables that link a predicted peptide to a p
     int numGenbank; 		"Number of GenBank records"
     string[numGenbank] genbankIds; "GenBank accession number(s)"
     )
+</PRE>
+
+<H4><A name=InterProXref></A>InterPro Cross Reference</H4>
+<PRE>table interProXref
+"A cross-reference table for InterPro."
+        (
+        string accession;       "SWISS-PROT accession number"
+        string method;          "Method"
+        int start;              "Start position"
+        int end;                "End position"
+        string interProId;      "InterPro ID"
+        string description;     "Description"
+        )
 </PRE>
 
 <H4><A name=JaxOrtholog></A>Jackson Labs Mouse Orthologs</H4>
@@ -3255,6 +3337,26 @@ The following definition is used by the mrnaOrientInfo and estOrientInfo tables.
    )
 </PRE>
 
+<H4><A name=PfamDesc></A>Pfam Description</H4>
+<PRE>table pfamDesc 
+"Pfam description table"
+   (
+   string pfamAC;          "Pfam accession number"
+   string pfamID;          "Pfam ID"
+   string description;     "Description"
+   )
+</PRE>
+
+<H4><A name=PfamXref></A>Pfam and Swiss-Prot Cross Reference</H4>
+<PRE>table pfamXref
+"A cross-reference table between Pfam ID and Swiss-Prot IDs."
+   (
+   string pfamAC;          "Pfam accession number"
+   string swissAC;         "SWISS-PROT accession number"
+   string swissDisplayID;  "SWISS-PROT display ID"
+   )
+</PRE>
+
 <H4><A name=PbAaDistX></A>Proteome Browser Amino Acid Distribution</H4>
 <PRE>table pbAaDistX
 "Distribution for a specific amino acid X"
@@ -3376,8 +3478,7 @@ The following definition is used by the mrnaOrientInfo and estOrientInfo tables.
 </PRE>
 
 <H4><A name=PbStamp></A>Proteome Browser Stamp Information</H4>
-<PRE>
-table pbStamp
+<PRE>table pbStamp
 "Info needed for a Proteome Browser stamp"
     (
     char[40] stampName; 	"Short Name of stamp"
@@ -3389,6 +3490,15 @@ table pbStamp
     float  ymin;        	"y minimum"
     float  ymax;        	"y maximum"
     string stampDesc;   	"Description of the stamp"
+    )
+</PRE>
+
+<H4><A name=PdbSP></A>PDB and Swiss-Prot ID links</H4>
+<PRE>table pdbSP
+"A cross-reference table between Swiss-Prot accession IDs and PDB IDs."
+    (
+    string pdb;             "PDB ID"
+    string sp;              "SWISS-PROT display ID"
     )
 </PRE>
 
@@ -4355,6 +4465,59 @@ The bacEndPairs table uses all fields.
     string proteinID; 	     "ID of corresponding Ensembl translation"
     string description;	     "Domain description"
    )                                                                           
+</PRE>
+
+<H4><A name=SpDisease></A>Swiss-Prot IDs Linked to Disease Descriptions</H4>
+<PRE>table spDisease
+"A cross-reference table between Swiss-Prot IDs and disease description."
+   (
+   string accession;       "SWISS-PROT accession number"
+   string displayID;       "SWISS-PROT display ID"
+   lstring diseaseDesc;    "Disease description"
+   )
+</PRE>
+
+<H4><A name=SwInterPro></A>Swiss-Prot IDs Linked to InterPro IDs</H4>
+<PRE>table swInterPro
+"A cross-reference table between Swiss-Prot accession IDs and InterPro IDs."
+        (
+        string accession;       "SWISS-PROT accession number"
+        string  interProId;      "InterPro ID"
+        )
+</PRE>
+
+<H4><A name=SpOrganism></A>Swiss-Prot IDs Linked to Organisms</H4>
+<PRE>table spOrganism 
+"A cross-reference table between Swiss-Prot display IDs and taxonomy numbers."
+   (
+   string displayID;       "SWISS-PROT display ID"
+   string organism;        "Taxonomy number"
+   )
+</PRE>
+
+<H4><A name=SpXref2></A>Swiss-Prot IDs Linked to Other Databases</H4>
+<PRE>table spXref2
+"A xref table between SWISS-PROT ids and other databases."
+   (
+   string accession;       "SWISS-PROT accession number"
+   string displayID;       "SWISS-PROT display ID"
+   string division;        "SWISS-PROT division"
+   int    bioentryID;      "Biosql bioentry ID"
+   int    biodatabaseID;   "Biosql biodatabase ID"
+   string description;     "Description"
+   string hugoSymbol;      "HUGO gene symbol"
+   string hugoDesc;        "HUGO gene description"
+   )
+</PRE>
+
+<H4><A name=SpSecondaryID></A>Swiss-Prot IDs Linked to Secondary IDs</H4>
+<PRE>table spSecondaryID 
+"A cross-reference table between Swiss-Prot accession IDs and secondary accessions."
+   (
+   string displayID;       "SWISS-PROT display ID"
+   string accession;       "SWISS-PROT accession number"
+   string accession2;      "SWISS-PROT secondary accession number"
+   )
 </PRE>
 
 <H4><A name=TilingPath></A>Tiling Path of Clones through a Chromosome</H4>
