@@ -17,7 +17,7 @@
 # 2. contig.idmap - has an additional column "contig label"
 # This required changing the jkStuff ncbi* utilities (7/1/03 KRR)
 #
-# DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2004-06-15 - Fan)
+# DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2004-06-27 - Fan)
     ssh kksilo
     mkdir -p /cluster/store6/mm5/ncbi
     ln -s /cluster/store6/mm5 /cluster/data
@@ -32,54 +32,59 @@
       quit
     gunzip *.agp.gz
 
-# Received chrMT data 6/16/04
-	got chrMT/*
-	cp chrMT/*.fa.gz chrfasta -p
+# compress chrY.fa (at NCBI site, this one file some how was not compressed)
+	cd chrfasta
+gzip chrY.fa
+cd ..
 
-# Fixed allcontig.agp and allrefcontig.chr.agp by appending 1 line each copied from mm4 corresponding files.
-
-# Check chromosome files  (DONE - 2004-06-15 - Fan)
-    cd chrfasta
-    foreach f (*.fa.gz)
-        echo $f:r >> faSize.out
-	gunzip $f
-        /cluster/bin/i386/faSize $f:r >> faSize.out
-	echo $f:r done
-    end
-   /cluster/bin/i386/faSize *.fa >> faSize.out
-   grep "^>" *.fa > ../chrfasta.all.fa.headers
-   gzip *.fa
-   cd ../contigfasta
-   gunzip *.fa.gz
-   grep "^>" *.fa > ../contigfasta.all.fa.headers
-   gzip *.fa
-
-# After discovering that chr2.fa.gz is much shorter than 
-# mm4, notified Deanna and received a new chr2.fa.gz under chrfasta
-# fix chr2 6/20/04
-    ssh kksilo
-    cd /cluster/data/mm5/ncbi/chrfasta
-    foreach f (chr2.fa.gz)
-        echo $f:r >> faSize.out
-	gunzip $f
-        /cluster/bin/i386/faSize $f:r >> faSize.out
-	echo $f:r done
-    end
-
-   /cluster/bin/i386/faSize chr2.fa >> faSize.out
-   edit faSize.out to move the 2 newly added 2 lines for chr2 before the old
-   2 chr2 lines and then delete the 2 old lines.
-
-   grep "^>" chr2.fa >> ../chrfasta.all.fa.headers 
+#use chrMT.fa.gz from mm4 instead because its first line format is correct
  
-# Edit ../chrfasta.all.fa.headers to fix chr2 line.  It turned out the original
-# file actually is fine.
+	cp -p /cluster/store6/mm4/ncbi/chrfasta/chrMT.fa.gz chrfasta
+cp -p /cluster/store6/mm4/ncbi/contigfasta/chrMT.fa.gz contigfasta
 
-   gzip chr2.fa
+# Fix the troubles caused by chrMT released later separately
 
-  
+# Fixed allcontig.agp
+# add the last line of .../mm4/ncbi/allcontig.agp to allcontig.agp
+
+# Fixed allrefcontig.chr.agp
+# add the last line of .../mm4/ncbi/allrefcontig.chr.agp to allrefcontig.chr.agp
+
+# Fix contig.idmap
+    cat contig.idmap chrMT/contig.idmap >new.idmap
+    mv new.idmap contig.idmap
+
+# Fix seq_contig.md
+# Edit seq_contig.md to add 3 lines (from mm4) in its middle before  Un|...
+10090   MT      0       0       +       start   -1      CONTIG  C57BL/6J        
+1010090   MT      1       16299   +       NC_005089       GI:34538597     CONTIG  
+C57BL/6J        na10090   MT      16299   16299   +       end     -2      CONTIG  C57BL/6J        
+10
+
+# ctg_coords, contig_overlaps.agp and sequence.inf not fixed.
+
+# Check chromosome files  (DONE - 2004-06-27 - Fan)
+cd chrfasta
+
+foreach f (*.fa.gz)
+echo $f:r >> faSize.out
+gunzip $f
+/cluster/bin/i386/faSize $f:r >> faSize.out
+echo $f:r done
+end
+
+/cluster/bin/i386/faSize *.fa >> faSize.out
+grep "^>" *.fa > ../chrfasta.all.fa.headers
+
+gzip *.fa
+
+cd ../contigfasta
+gunzip *.fa.gz
+grep "^>" *.fa > ../contigfasta.all.fa.headers
+gzip *.fa
+
 # BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS
-#					(DONE - 2004-06-16 - Fan)
+#					(DONE - 2004-06-27 - Fan)
 
     ssh kksilo
     cd /cluster/data/mm5
@@ -98,51 +103,9 @@
           stdin /cluster/data/mm5 -nSize=5000000
     end
 
-# redid above 6/22/04 11:21 AM.
+#    gzip ncbi/chrfasta/chr*.fa
 
-
-
-
-# Did above 6/15/04
-    gzip ncbi/chrfasta/chr*.fa
-
-    use chrMT.fa.gz from mm4 instead of from Deanna.
-
-    foreach c (MT)
-      mkdir $c
-      perl -we "while(<>){if (/^chr$c\t/) {print;}}" \
-        ./ncbi/allrefcontig.chr.agp \
-        > $c/chr$c.agp
-      gunzip -c ./ncbi/chrfasta/chr$c.fa.gz \
-        | perl -wpe 's/^>lcl\|(chr\w+)\.fa.*/>$1/' \
-        | splitFaIntoContigs $c/chr$c.agp \
-          stdin /cluster/data/mm5 -nSize=5000000
-    end
-
-# fix chr2 6/20/04
-  
-    ssh kksilo
-    cd /cluster/data/mm5
-    mv 2 2_old
-
-    gunzip ncbi/allrefcontig.chr.agp.gz
-    # splitFaIntoContigs doesn't do right with agp lines arriving in a
-    # different order than fasta chrom sequences.  so split up the agp
-    # into one per chrom.
-    foreach c (2)
-      mkdir $c
-      perl -we "while(<>){if (/^chr$c\t/) {print;}}" \
-        ./ncbi/allrefcontig.chr.agp \
-        > $c/chr$c.agp
-      gunzip -c ./ncbi/chrfasta/chr$c.fa.gz \
-        | perl -wpe 's/^>lcl\|(chr\w+)\.fa.*/>$1/' \
-        | splitFaIntoContigs $c/chr$c.agp \
-          stdin /cluster/data/mm5 -nSize=5000000
-    end
-
-
-# start 6/17/04
-# CREATE CHROM-LEVEL AGP AND FASTA FOR _RANDOMS (DONE 2004-06-17 - Fan)
+# CREATE CHROM-LEVEL AGP AND FASTA FOR _RANDOMS (DONE 2004-06-27 - Fan)
     ssh kksilo
     cd /cluster/data/mm5/ncbi
 
@@ -154,21 +117,13 @@
     #	lines better, and to do the MT/NC_ mitochondrion thing
 
     mkdir /cluster/store6/mm5/jkStuff
-    cp -p /cluster/store6/mm4/jkStuff/* /cluster/store6/mm5/jkStuff
-    
+
+# copy scripts used from previous trial mm5 build
+    cd /cluster/data/mm5
+    cp -p ~/mm50/jkStuff/* jkStuff
+    cd /cluster/data/mm5/ncbi
     ../jkStuff/ncbiFixAgp allrefcontig.chr.agp > \
                         allrefcontig.chr.ordered.agp
-
-#Edit seq_contig.md to add the following 3 lines (from mm4) in its middle
-10090   MT      0       0       +       start   -1      CONTIG  C57BL/6J        
-1010090   MT      1       16299   +       NC_005089       GI:34538597     CONTIG  
-C57BL/6J        na10090   MT      16299   16299   +       end     -2      CONTIG  C57BL/6J        
-10
-
-
-#add the following line to contig.idmap after the last Un ref_strain line
-
-NC_005089.1     NC_005089       Un/41019        ref_strain      C57BL/6J        C57BL/6J
 
 #Edit MANUALLY ../jkStuff/ncbiToRandomAgps, to change build 32 to build 33.
 
@@ -197,46 +152,36 @@ NC_005089.1     NC_005089       Un/41019        ref_strain      C57BL/6J        
     # building 1/chr1_random.fa
     # ... etc ...
     # building Un/chrUn_random.fa
-    # Writing 85112544 bases to Un/chrUn_random.fa
-
+    # Writing 102265694 bases to Un/chrUn_random.fa
 
     # Clean these up to avoid confusion later... they're easily rebuilt
     #	with the ncbiToRandomAgps script above
     rm ?/*.ctg.agp ??/*.ctg.agp
 
-# BREAK UP _RANDOMS INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS (RE-DONE 2004-06-21 - Fan)
+# BREAK UP _RANDOMS INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS (DONE 2004-06-27 - Fan)
     ssh kksilo
     cd /cluster/data/mm5
-    rm -rf ?_random
-    rm -rf ??_random
     foreach c (?{,?})
       if (-e $c/chr${c}_random.agp) then
         splitFaIntoContigs $c/chr${c}_random.agp $c/chr${c}_random.fa . \
           -nSize=5000000
-#!!! do not use the rm -rf below for normal processing !!!
-#!!! this caused lose of $/lift/order*.* files
-	  rm -rf $c/lift
         mkdir -p $c/lift
         mv ${c}_random/lift/oOut.lst $c/lift/rOut.lst
         mv ${c}_random/lift/ordered.lft $c/lift/random.lft
         mv ${c}_random/lift/ordered.lst $c/lift/random.lst
         rmdir ${c}_random/lift
         rm ${c}_random/chr${c}_random.{agp,fa}
-	  rm -rf $c/chr${c}_random_?
-	  rm -rf $c/chr${c}_random_??
         mv ${c}_random/* $c
         rmdir ${c}_random
       endif
     end
-    #  Above done 5:51 AM 6/21/04, after several corrections/retrials.
-    #  Scripting output saved random.log3.
     #  This has a lot of output.  It is difficult to see if anything
-    #	 goes wrong.
+    #   goes wrong.
 
-#  Fixup chrMT name to be chrM (DONE - 2004-06-17 - Fan)
+#  Fixup chrMT name to be chrM (DONE - 2004-06-27 - Fan)
 
     ssh kksilo
-
+    cd /cluster/data/mm5
     mv MT MT.ncbi
     mkdir M
     mkdir M/chrM_1
@@ -249,18 +194,20 @@ NC_005089.1     NC_005089       Un/41019        ref_strain      C57BL/6J        
 	NF=`echo $FN | sed -e "s/MT/M/g"`
 	sed -e "s/chrMT/chrM/g" $FN > ../M/$NF
     done
-#	The RepeatMasker for this was re-run separately since RM was
-#	already done by the time this was renamed.
 
-# MAKE LIFTALL.LFT (DONE - 2003-06-17 - Fan)
+# MAKE LIFTALL.LFT (DONE - 2003-06-27 - Fan)
 
     cd /cluster/data/mm5
     cat ?{,?}/lift/{ordered,random}.lft > jkStuff/liftAll.lft
 
-# Redid it 6/22/04
+# 7:40 PM 6/27/04, used dark blue color above.
+# Now changed to use dark pink color for things done. 
 
+# CREATING DATABASE (DONE 2004-06-27 - Fan)
 
-# CREATING DATABASE (DONE 2004-06-21 - Fan)
+# First, clean out mm5 tables built by previous trail build.
+# Rename all mm5.* tables to mm5_old4.*,
+# then drop database mm5
 
 o - Create the database.
     ssh hgwdev
@@ -270,19 +217,18 @@ o - Create the database.
 o - Use df to make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
     df -h /var/lib/mysql
     Filesystem            Size  Used Avail Use% Mounted on
-    /dev/sdc1             1.8T  357G  1.3T  22% /var/lib/mysql
+    /dev/sdc1             1.8T  383G  1.3T  24% /var/lib/mysql
 
-# CREATING GRP TABLE FOR TRACK GROUPING (DONE - 2004-06-21 - Fan)
+# CREATING GRP TABLE FOR TRACK GROUPING (DONE - 2004-06-27 - Fan)
     #	Use any of the newest databases to ensure that the organization
     #	of the grp table is up to date
     ssh hgwdev
     hgsql -e "create table grp (PRIMARY KEY(NAME)) select * from hg16.grp" mm5
 
-# STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE - 2003-10-21 - Fan)
+# STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE - 2004-06-27 - Fan)
     # Create (unmasked) nib files
     ssh kksilo
     cd /cluster/data/mm5
-    mv unmaskedNib unmaskedNib_old
     mkdir -p unmaskedNib
     foreach f (?{,?}/chr?{,?}{,_random}.fa)
       echo $f:t:r
@@ -303,15 +249,10 @@ o - Use df to make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
     cd /cluster/data/mm5
     hgsql mm5  < ~/kent/src/hg/lib/chromInfo.sql
     hgNibSeq -preMadeNib mm5 /gbdb/mm5/nib ?{,?}/chr?{,?}{,_random}.fa
-    # 3029657861 total bases
-    # NOTE: mm4 was 2952612207, an increase of 77 Mb (~2.6%)
+    # 3164952073 total bases
+    # NOTE: mm4 was 2952612207, an increase of 212 Mb (~7.2%)
     hgsql -N -e "select chrom,size from chromInfo;" mm5 > chrom.sizes
     # check the resulting file chrom.sizes
-    # Discovered that chrom2 is significantly shorter than mm4
-    # Notified Deanna and received an update of chr2.fa.gz on 6/18/04 
-
-    # This time (8:30 AM, 6/21/04), chrom2 size is 181,686,250, 
-    # other numbers stayed the same.
 
     # Store o+o info in database.
     cd /cluster/data/mm5/ncbi
@@ -337,7 +278,15 @@ o - Use df to make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
     # 202319873 bases of 2505900260 (8.074%) in intersection
 
 
-# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR MM5 (DONE - 2003-10-21 - Fan)
+# Make and load GC percent table	(DONE - 2004-06-27 - Fan)
+     ssh hgwdev
+     mkdir -p /cluster/data/mm5/bed/gcPercent
+     cd /cluster/data/mm5/bed/gcPercent
+     hgsql mm5  < ~/kent/src/hg/lib/gcPercent.sql
+     hgGcPercent mm5 ../../unmaskedNib
+
+
+# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR MM5 (DONE - 2004-06-27 - Fan)
     #	using the Mm3 position blatted onto Mm5:
     # Enter mm5 into hgcentraltest.dbDb so test browser knows about it:
     hgsql -e 'INSERT INTO dbDb \
@@ -350,8 +299,7 @@ o - Use df to make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
 	0, 0, "NCBI Build 33");' \
 	-h genome-testdb hgcentraltest
     #	If you need to delete that entry:
-    	hgsql -e 'delete from dbDb where name="mm5";' \
-	-h genome-testdb hgcentraltest
+    hgsql -e 'delete from dbDb where name="mm5";' -h genome-testdb hgcentraltest
 
     # Make trackDb table so browser knows what tracks to expect:
     ssh hgwdev
@@ -362,7 +310,7 @@ o - Use df to make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
     make alpha
     cvs commit makefile
 
-# MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR MM5 (DONE - 2004-06-21 Fan)
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR MM5 (DONE - 2004-06-27 Fan)
     ssh hgwdev
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans) \
 	    VALUES ("mm5", "blat5", "17778", "1"); \
@@ -370,7 +318,7 @@ o - Use df to make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
 	    VALUES ("mm5", "blat5", "17779", "0");' \
 	-h genome-testdb hgcentraltest
 
-# REPEAT MASKING (DONE 2004-06-22 Fan)
+# REPEAT MASKING (Working on 2004-06-27 Fan)
     #	TRF simpleRepeat below can be run at the same time
     # Split contigs, run RepeatMasker, lift results
     # * Contigs (*/chr*_*/chr*_*.fa) are split into 500kb chunks to make
@@ -404,7 +352,7 @@ pushd .
 /bin/mkdir -p /tmp/mm5/$2
 /bin/cp $2 /tmp/mm5/$2
 cd /tmp/mm5/$2
-/scratch/hg/RepeatMasker/RepeatMasker -ali -s -species mus $2
+/cluster/bluearc/RepeatMasker/RepeatMasker -ali -s -species mus $2
 popd
 /bin/cp /tmp/mm5/$2/$2.out ./
 if (-e /tmp/mm5/$2/$2.align) /bin/cp /tmp/mm5/$2/$2.align ./
@@ -434,13 +382,24 @@ if (-e /tmp/mm5/$2/$2.cat) /bin/cp /tmp/mm5/$2/$2.cat ./
     para create RMJobs
     para try, para check, para check, para push, para check,...
 
-# Completed: 6885 of 6885 jobs
-# CPU time in finished jobs:   39212883s  653548.05m 10892.47h  453.85d  1.243 y
-# IO & Wait Time:                152750s    2545.83m    42.43h    1.77d  0.005 y
-# Average job time:                5718s      95.29m     1.59h    0.07d
-# Longest job:                     9694s     161.57m     2.69h    0.11d
-# Submission to last job:         62782s    1046.37m    17.44h    0.73d
-# Done around 8:48 AM 6/22/04
+[kk:RMRun> para check
+6885 jobs in batch
+8 jobs (including everybody's) in Parasol queue.
+Checking finished jobs.
+ranOk: 6885
+total jobs in batch: 6885
+[kk:RMRun> para time
+6885 jobs in batch
+8 jobs (including everybody's) in Parasol queue.
+Checking finished jobs
+Completed: 6885 of 6885 jobs
+CPU time in finished jobs:   40084305s  668071.74m 11134.53h  463.94d  1.271 y
+IO & Wait Time:                122589s    2043.16m    34.05h    1.42d  0.004 y
+Average job time:                5840s      97.33m     1.62h    0.07d
+Longest job:                     9804s     163.40m     2.72h    0.11d
+Submission to last job:         46771s     779.52m    12.99h    0.54d
+
+# Done 11:57 AM 6/28/04
 
     #- Lift up the split-contig .out's to contig-level .out's
     ssh kksilo
@@ -455,8 +414,6 @@ if (-e /tmp/mm5/$2/$2.cat) /bin/cp /tmp/mm5/$2/$2.cat ./
     #- Lift up the contig-level .out's to chr-level
     ssh kksilo
     cd /cluster/data/mm5
-
-    #6/24/04 starting here ...
     ./jkStuff/liftOut5.csh
     #	This one error is OK
     #	Can not find Un/lift/ordered.lft .
@@ -469,18 +426,21 @@ if (-e /tmp/mm5/$2/$2.cat) /bin/cp /tmp/mm5/$2/$2.cat ./
     # make sure there's no chrUn -- rm Un/chrUn.fa.out
     hgLoadOut mm5 ?/*.fa.out ??/*.fa.out
 
-# VERIFY REPEATMASKER RESULTS (DONE - 2004-06-24 Fan)
+# VERIFY REPEATMASKER RESULTS (DONE - 2004-06-28 Fan)
 
     # Run featureBits on mm5 and on a comparable genome build, and compare:
     ssh hgwdev
-#featureBits mm5 rmsk
-#1129042491 bases of 2615483787 (43.168%) in intersection
+featureBits mm5 rmsk
+#1137310280 bases of 2615483787 (43.484%) in intersection
 #featureBits mm4 rmsk
 1130883581 bases of 2627444668 (43.041%) in intersection
 #featureBits mm3 rmsk
 1080265553 bases of 2505900260 (43.109%) in intersection
 
-# SIMPLE REPEAT TRACK (working on - 2004-06-24 Fan)
+#cd /cluster/data/mm5
+#awk '{print $1}' chrom.sizes | sed -e "s/chr//" | grep -v random > chrom.lst
+
+# SIMPLE REPEAT TRACK (DONE - 2004-06-29 Fan)
     # TRF can be run in parallel with RepeatMasker on the file server
     #	since it doesn't require masked input sequence.
     ssh kksilo
@@ -504,6 +464,7 @@ if (-e /tmp/mm5/$2/$2.cat) /bin/cp /tmp/mm5/$2/$2.cat ./
     ./jobs.csh >&! jobs.log &
     # in bash:  ./jobs.csh > jobs.log 2>&1 &
     tail -f jobs.log
+    # Done 3:07 PM 6/29/04, took about 6 hours.
 
     # When job is done lift output files
     liftUp simpleRepeat.bed /cluster/data/mm5/jkStuff/liftAll.lft warn trf/*.bed
@@ -513,14 +474,17 @@ if (-e /tmp/mm5/$2/$2.cat) /bin/cp /tmp/mm5/$2/$2.cat ./
     cd /cluster/data/mm5/bed/simpleRepeat
     hgLoadBed mm5 simpleRepeat simpleRepeat.bed \
       -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
-    # Loaded 1164675 elements of size 16
+    # Loaded 1150615 elements of size 16
+
     featureBits mm5 simpleRepeat
+    # 81414259 bases of 2615483787 (3.113%) in intersection
+    featureBits mm4 simpleRepeat
     # 82600648 bases of 2627444668 (3.144%) in intersection
     featureBits mm3 simpleRepeat
     # 75457193 bases of 2505900260 (3.011%) in intersection
 
 
-# PROCESS SIMPLE REPEATS INTO MASK (TO_BE_DONE - 2003-10-21 - FAn)
+# PROCESS SIMPLE REPEATS INTO MASK (DONE - 2004-06-29 - Fan)
 
     # After the simpleRepeats track has been built, make a filtered version
     # of the trf output: keep trf's with period <= 12:
@@ -554,7 +518,7 @@ if (-e /tmp/mm5/$2/$2.cat) /bin/cp /tmp/mm5/$2/$2.cat ./
     # since there is no chrUn
 
 # MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF
-#				(TO_BE_DONE - 2003-10-21 FAn)
+#				(Working on - 2004-06-29 Fan)
     ssh kksilo
     cd /cluster/data/mm5
     #- Soft-mask (lower-case) the contig and chr .fa's
@@ -564,6 +528,26 @@ if (-e /tmp/mm5/$2/$2.cat) /bin/cp /tmp/mm5/$2/$2.cat ./
 
     #- Make hard-masked .fa.masked files as well:
     ./jkStuff/makeHardMasked.csh
+
+Edited ./jkStuff/makeNib.csh to comment out "if ..." and "endif" as below:
+
+#!/bin/csh -fe
+
+mkdir -p nib mixedNib maskedNib
+foreach i (?{,?})
+   cd $I
+#   foreach j (chr$i{,_random}.fa)
+   foreach j (*.fa)
+#       if (-e "${j}")
+        set r = $j:r
+       /cluster/bin/i386/faToNib $j ../nib/$r.nib
+       /cluster/bin/i386/faToNib -softMask $j ../mixedNib/$r.nib
+       /cluster/bin/i386/faToNib -hardMask $j ../maskedNib/$r.nib
+#       endif
+       echo done $j
+   end
+   cd ..
+end
 
     #- Rebuild the nib, mixedNib, maskedNib files:
     ./jkStuff/makeNib.csh
@@ -579,151 +563,98 @@ if (-e /tmp/mm5/$2/$2.cat) /bin/cp /tmp/mm5/$2/$2.cat ./
     ssh kksilo
 
     # masked contigs
-    rm -fr /cluster/bluearc/mm5/trfFa
-    mkdir -p /cluster/bluearc/mm5/trfFa
+    rm -fr /cluster/bluearc/scratch/mus/mm5/trfFa
+    mkdir -p /cluster/bluearc/scratch/mus/mm5/trfFa
     cp -p /cluster/data/mm5/?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa \
-	/cluster/bluearc/mm5/trfFa
+	/cluster/bluearc/scratch/mus/mm5/trfFa
 
     # masked chrom nibs
     cd /cluster/data/mm5
-    rm -fr /cluster/bluearc/mm5/softNib
-    mkdir -p /cluster/bluearc/mm5/softNib
-    cp -p mixedNib/chr*.nib /cluster/bluearc/mm5/softNib
-    rm -fr /cluster/bluearc/mm5/hardNib
-    mkdir -p /cluster/bluearc/mm5/hardNib
-    cp -p maskedNib/chr*.nib /cluster/bluearc/mm5/hardNib
+    rm -fr /cluster/bluearc/scratch/mus/mm5/softNib
+    mkdir -p /cluster/bluearc/scratch/mus/mm5/softNib
+    cp -p mixedNib/chr*.nib /cluster/bluearc/scratch/mus/mm5/softNib
+    rm -fr /cluster/bluearc/scratch/mus/mm5/hardNib
+    mkdir -p /cluster/bluearc/scratch/mus/mm5/hardNib
+    cp -p maskedNib/chr*.nib /cluster/bluearc/scratch/mus/mm5/hardNib
 
     # fasta files
-    rm -fr /cluster/bluearc/mm5/fasta
-    mkdir -p /cluster/bluearc/mm5/fasta
-    cp -p ?/*.fa ??/*.fa /cluster/bluearc/mm5/fasta
+    rm -fr /cluster/bluearc/scratch/mus/mm5/fasta
+    mkdir -p /cluster/bluearc/scratch/mus/mm5/fasta
+    cp -p ?/*.fa ??/*.fa /cluster/bluearc/scratch/mus/mm5/fasta
 
     # RepeatMasker *.out files
-    rm -rf /cluster/bluearc/mm5/rmsk
-    mkdir -p /cluster/bluearc/mm5/rmsk
-    cp -p ?{,?}/chr?{,?}{,_random}.fa.out /cluster/bluearc/mm5/rmsk
+    rm -rf /cluster/bluearc/scratch/mus/mm5/rmsk
+    mkdir -p /cluster/bluearc/scratch/mus/mm5/rmsk
+    cp -p ?{,?}/chr?{,?}{,_random}.fa.out /cluster/bluearc/scratch/mus/mm5/rmsk
 
     # lift file, for mrna processing
-    cp -p jkStuff/liftAll.lft /cluster/bluearc/mm5
-
-    # also copy to /scratch
-    ssh kksilo
-    mkdir -p /cluster/bluearc/scratch/mus/mm5
-    cp -Rp /cluster/bluearc/mm5/fasta /cluster/bluearc/scratch/mus/mm5
-    cp -Rp /cluster/bluearc/mm5/hardNib /cluster/bluearc/scratch/mus/mm5
-    cp -Rp /cluster/bluearc/mm5/softNib /cluster/bluearc/scratch/mus/mm5
-    cp -Rp /cluster/bluearc/mm5/rmsk /cluster/bluearc/scratch/mus/mm5
-    cp -Rp /cluster/bluearc/mm5/trfFa /cluster/bluearc/scratch/mus/mm5
-    mkdir -p /cluster/bluearc/scratch/mus/mm5/rmsk.spec
-    cp -Rp /cluster/bluearc/mm5/rmsk.spec/* /cluster/bluearc/scratch/mus/mm5/rmsk.spec
+    cp -p jkStuff/liftAll.lft /cluster/bluearc/scratch/mus/mm5
+#above was done 6/29/04 4:50PM
 
     # also copy to iservers
     ssh kkr1u00
-    cd ~/mm5
-    cp -p liftAll.lft /iscratch/i/mm5
-    mkdir -p /iscratch/i/mm5/softNib
-    cp -p /cluster/bluearc/mm5/softNib/chr*.nib /iscratch/i/softNib
-    mkdir -p /iscratch/i/mm5/trfFa
-    cp ?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa /cluster/bluearc/mm5/trfFa
+    #cd ~/mm5
+    cd /cluster/bluearc/scratch/mus/mm5
+
+    mkdir /iscratch/i/mus/mm5
+    cp -p liftAll.lft /iscratch/i/mus/mm5
+    mkdir -p /iscratch/i/mus/mm5/softNib
+    cp -p /cluster/bluearc/scratch/mus/mm5/softNib/chr*.nib /iscratch/i/mus/mm5/softNib
+
+    mkdir -p /iscratch/i/mus/mm5/trfFa
+    cd /cluster/store6/mm5
+    cp ?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa /cluster/bluearc/scratch/mus/mm5/trfFa
     /cluster/bin/scripts/iSync
 
-#  GC5BASE WIGGLE TRACK (DONE - 2004-06-24 - Hiram)
-    #	This previously was a script that ran through each nib.
-    #	Recently transformed into a mini cluster run.
-    ssh kki
-    mkdir /cluster/data/mm5/bed/gc5Base
-    cd /cluster/data/mm5/bed/gc5Base
+ssh kkr1u00
+mkdir /iscratch/i/mus/mm5
+cd /iscratch/i/mus
+rsync -arlv /cluster/bluearc/scratch/mus/mm5 .
 
-    mkdir wigData5 dataLimits5 wigData5_1K dataLimits5_1K
+#wrote 8660800915 bytes  read 15380 bytes  17729409.00 bytes/sec
+#total size is 10242205742  speedup is 1.18
 
-    cat << '_EOF_' > kkRun.sh
+cd /iserver/kkr1u00/i/mus/mm5
+mv trfFa maskedContigs
+cd /cluster/bluearc/scratch/mus/mm5
+mv trfFa maskedContigs
+
+# PREPARE CLUSTER FOR BLASTZ RUN (DONE - 2004-06-29 - Fan)
+
+    ssh kksilo
+    mkdir -p /cluster/bluearc/scratch/mus/mm5/rmsk.spec
+    cd /cluster/bluearc/scratch/mus/mm5/rmsk.spec
+    ln -s ../rmsk/*.out .
+
+# NOTE: DON't leave indentations in the script below.
+cat << '_EOF_' > runArian.sh
 #!/bin/sh
-NIB=$1
-
-chr=${NIB/.nib/}
-chrom=${chr#chr}
-
-hgGcPercent -chr=${chr} -doGaps -file=stdout -win=5 mm5 \
-        /cluster/data/mm5/mixedNib | \
-    grep -w GC | \
-    awk '{if (($3-$2) >= 5) {printf "%d\t%.1f\n", $2+1, $5/10.0} }' | \
-    wigAsciiToBinary -dataSpan=5 -chrom=${chr} \
-        -wibFile=wigData5/gc5Base_${chrom} \
-            -name=${chrom} stdin 2> dataLimits5/${chr}
+for FN in *.out
+do
+echo ${FN}
+/cluster/bluearc/RepeatMasker/DateRepsinRMoutput.pl \
+${FN} -query mouse -comp human -comp rat
+done
 '_EOF_'
-    # << this line makes emacs coloring happy
-    chmod +x kkRun.sh
 
-    ls /cluster/data/mm5/mixedNib > nibList
-    cat << '_EOF_' > gsub
-#LOOP
-./kkRun.sh $(path1)
-#ENDLOOP
-'_EOF_'
-    # << this line makes emacs coloring happy
+    chmod +x runArian.sh
+    ./runArian.sh 
 
-    gensub2 nibList single gsub jobList
-    para create jobList
-    para try, check, ... etc
-# Completed: 43 of 43 jobs
-# CPU time in finished jobs:       4969s      82.81m     1.38h    0.06d  0.000 y
-# IO & Wait Time:                   611s      10.19m     0.17h    0.01d  0.000 y
-# Average job time:                 130s       2.16m     0.04h    0.00d
-# Longest job:                      370s       6.17m     0.10h    0.00d
-# Submission to last job:           598s       9.97m     0.17h    0.01d
+    cd /cluster/bluearc/scratch/mus/mm5
+    mkdir linSpecRep.notInHuman
+    mkdir linSpecRep.notInRat
+    foreach f (rmsk.spec/*.out_hum_rat)
+        set base = $f:t:r:r
+        echo $base.out.spec
+        /cluster/bin/scripts/extractLinSpecReps 1 $f > \
+                        linSpecRep.notInHuman/$base.out.spec
+    end
 
-    # load the .wig files back on hgwdev:
-    ssh hgwdev
-    cd /cluster/data/mm5/bed/gc5Base
-    hgLoadWiggle -pathPrefix=/gbdb/mm5/wib/gc5Base mm5 gc5Base wigData5/*.wig
-    # and symlink the .wib files into /gbdb
-    mkdir /gbdb/mm5/wib/gc5Base
-    ln -s `pwd`/wigData5/*.wib /gbdb/mm5/wib/gc5Base
+    cp rmsk.spec /iscratch/i/mus/mm5 -Rp
+    cp linSpecRep.notInRat /iscratch/i/mus/mm5 -Rp
+    cp linSpecRep.notInHuman /iscratch/i/mus/mm5 -Rp
 
-    #	And then the zoomed data view
-    ssh kki
-    cd /cluster/data/mm5/bed/gc5Base
-    mkdir wigData5_1K dataLimits5_1K
+    /cluster/bin/scripts/iSync
 
-    cat << '_EOF_' > kkRunZoom.sh
-#!/bin/sh
-NIB=$1
+    # Request rsync /cluster/bluearc/scratch/mus/mm5 to the KiloKluster
 
-chr=${NIB/.nib/}
-chrom=${chr#chr}
-
-hgGcPercent -chr=${chr} -doGaps -file=stdout -win=5 mm5 \
-        /cluster/data/mm5/mixedNib | \
-    grep -w GC | \
-    awk '{if (($3-$2) >= 5) {printf "%d\t%.1f\n", $2+1, $5/10.0} }' | \
-    wigZoom -dataSpan=1000 stdin | wigAsciiToBinary -dataSpan=1000 \
-	-chrom=${chr} -wibFile=wigData5_1K/gc5Base_${chrom}_1K \
-            -name=${chrom} stdin 2> dataLimits5_1K/${chr}
-'_EOF_'
-    # << this line makes emacs coloring happy
-    chmod +x kkRunZoom.sh
-
-    cat << '_EOF_' > gsubZoom
-#LOOP
-./kkRunZoom.sh $(path1)
-#ENDLOOP
-'_EOF_'
-    # << this line makes emacs coloring happy
-
-    gensub2 nibList single gsubZoom jobListZoom
-    para create jobListZoom
-    para try ... check ... etc ...
-# Completed: 43 of 43 jobs
-# CPU time in finished jobs:       4878s      81.29m     1.35h    0.06d  0.000 y
-# IO & Wait Time:                   488s       8.14m     0.14h    0.01d  0.000 y
-# Average job time:                 125s       2.08m     0.03h    0.00d
-# Longest job:                      378s       6.30m     0.10h    0.00d
-# Submission to last job:           665s      11.08m     0.18h    0.01d
-
-    #	Then load these .wig files into the same database as above
-    ssh hgwdev
-    cd /cluster/data/mm5/bed/gc5Base
-    hgLoadWiggle -pathPrefix=/gbdb/mm5/wib/gc5Base \
-	-oldTable mm5 gc5Base wigData5_1K/*.wig
-    # and symlink these .wib files into /gbdb
-    ln -s `pwd`/wigData5_1K/*.wib /gbdb/mm5/wib/gc5Base
