@@ -327,6 +327,7 @@ static void ipPrintInRange(struct tfCond *condList,
 {
 struct tfCond *cond;
 boolean isFirst = TRUE;
+boolean gotAny = FALSE;
 
 printf("<TD>");
 for (cond = condList; cond != NULL; cond = cond->next)
@@ -339,8 +340,11 @@ for (cond = condList; cond != NULL; cond = cond->next)
 	    printf(", ");
 	printf("%s", cond->name);
 	hashAdd(boundHash, cond->name, NULL);
+	gotAny = TRUE;
 	}
     }
+if (!gotAny)
+    printf("&nbsp;");
 printf("</TD>");
 }
 
@@ -390,6 +394,7 @@ for (tf = tfList; tf != NULL; tf = tf->next)
 	 char query[256], **row;
 	 struct sqlResult *sr;
 	 boolean isFirst = TRUE;
+	 boolean gotAny = FALSE;
 	 safef(query, sizeof(query), 
 	 	"select growthCondition from %s where name='%s'",
 		tfToConditionTable, tf->name);
@@ -404,9 +409,12 @@ for (tf = tfList; tf != NULL; tf = tf->next)
 		 else
 		     printf(", ");
 		 printf("%s", row[0]);
+		 gotAny = TRUE;
 		 }
 	     }
 	 sqlFreeResult(&sr);
+	if (!gotAny)
+	    printf("&nbsp;");
 	 printf("</TD>");
 	 }
 
