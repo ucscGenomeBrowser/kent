@@ -18,7 +18,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.24 2004/09/25 05:09:02 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.25 2004/10/31 04:25:35 kent Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -229,6 +229,37 @@ return diff;
 }
 
 
+static boolean isViaIndex(struct joinerSet *jsPrimary, struct joinerDtf *dtf)
+/* Return's TRUE if dtf is part of identifier only by an array index. */
+{
+struct joinerField *jf;
+struct slRef *chain, *link;
+struct joinerSet *js;
+boolean retVal = FALSE;
+boolean gotRetVal = FALSE;
+
+chain = joinerSetInheritanceChain(jsPrimary);
+for (link = chain; link != NULL; link = link->next)
+    {
+    js = link->val;
+    for (jf = js->fieldList; jf != NULL; jf = jf->next)
+	{
+	if (sameString(jf->table, dtf->table))
+	    if (sameString(jf->field, dtf->field))
+		if (slNameInList(jf->dbList, dtf->database))
+		    {
+		    retVal = jf->indexOf;
+		    gotRetVal = TRUE;
+		    break;
+		    }
+	}
+    if (gotRetVal)
+        break;
+    }
+slFreeList(&chain);
+return retVal;
+}
+
 static void showSchemaDb(char *db, char *table)
 /* Show schema to open html page. */
 {
@@ -254,6 +285,8 @@ if (jpList != NULL)
     webNewSection("Connected Tables and Joining Fields");
     for (jp = jpList; jp != NULL; jp = jp->next)
 	{
+	struct joinerSet *js = jp->identifier;
+	boolean aViaIndex, bViaIndex;
 	hPrintSpaces(6);
 	hPrintf("%s.", jp->b->database);
 	hPrintf("<A HREF=\"../cgi-bin/hgTables?");
@@ -263,8 +296,32 @@ if (jpList != NULL)
 	hPrintf("\">");
 	hPrintf("%s", jp->b->table);
 	hPrintf("</A>");
-	hPrintf(".%s (via %s)<BR>\n", 
-	    jp->b->field, jp->a->field);
+	aViaIndex = isViaIndex(js, jp->a);
+	bViaIndex = isViaIndex(js, jp->b);
+	hPrintf(".%s ", jp->b->field);
+	if (aViaIndex && bViaIndex)
+	    {
+	    hPrintf("(%s.%s and %s.%s are arrays sharing an index)",
+	        jp->a->table, jp->a->field,
+	        jp->b->table, jp->b->field);
+	    	
+	    }
+	else if (aViaIndex)
+	    {
+	    hPrintf("(which is an array index into %s.%s)", 
+	    	jp->a->table, jp->a->field);
+	    }
+	else if (bViaIndex)
+	    {
+	    hPrintf("(%s.%s is an array index into %s.%s)", 
+		jp->a->table, jp->a->field,
+	    	jp->b->table, jp->b->field);
+	    }
+	else
+	    {
+	    hPrintf("(via %s.%s)", jp->a->table, jp->a->field);
+	    }
+	hPrintf("<BR>\n");
 	}
     }
 webNewSection("Sample Rows");
