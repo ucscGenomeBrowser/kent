@@ -117,6 +117,7 @@ char *words[256];
 int wordCount, i;
 struct elChild *ec;
 struct element *el;
+boolean isOr;
 
 word = needNextWord(&line, lf);
 if ((el = hashFindVal(elHash, word)) != NULL)
@@ -131,18 +132,22 @@ if ((s = strchr(line, '(')) != NULL)
     if ((e = strchr(line, ')')) == NULL)
         errAbort("Missing ')' line %d of %s", lf->lineIx, lf->fileName);
     *e = 0;
-    wordCount = chopString(s, " ,\t", words, ArraySize(words));
+    isOr = (strchr(s, '|') != NULL);
+    wordCount = chopString(s, "| ,\t", words, ArraySize(words));
     if (wordCount == ArraySize(words))
-        errAbort("Too many children in list line %d of %s", lf->lineIx, lf->fileName);
+	errAbort("Too many children in list line %d of %s", lf->lineIx, lf->fileName);
     for (i=0; i<wordCount; ++i)
-        {
+	{
 	char *name = words[i];
 	int len = strlen(name);
 	char lastC = name[len-1];
 	if (name[0] == '#')
 	    {
+	    if (isOr)
+	        errAbort("# character in enumeration not allowed line %d of %s",
+		   lf->lineIx, lf->fileName);
 	    if (el->textType != NULL)
-	        errAbort("Multiple types for text between tags line %d of %s", 
+		errAbort("Multiple types for text between tags line %d of %s", 
 			lf->lineIx, lf->fileName);
 	    el->textType = cloneString(name);
 	    }
@@ -150,15 +155,20 @@ if ((s = strchr(line, '(')) != NULL)
 	    {
 	    AllocVar(ec);
 	    slAddHead(&el->children, ec);
-	    if (lastC == '+' || lastC == '?' || lastC == '*')
-		{
-		ec->copyCode = lastC;
-		name[len-1] = 0;
-		}
+	    if (isOr)
+	       ec->copyCode = '?';
 	    else
-	        ec->copyCode = '1';
+		{
+		if (lastC == '+' || lastC == '?' || lastC == '*')
+		    {
+		    ec->copyCode = lastC;
+		    name[len-1] = 0;
+		    }
+		else
+		    ec->copyCode = '1';
+		}
 	    if (sameString(name, textField))
-	        errAbort("Name conflict with default text field name line %d of %s", lf->lineIx, lf->fileName);
+		errAbort("Name conflict with default text field name line %d of %s", lf->lineIx, lf->fileName);
 	    ec->name = cloneString(name);
 	    }
 	}
@@ -228,7 +238,7 @@ for (el = elList; el != NULL; el = el->next)
     for (ec = el->children; ec != NULL; ec = ec->next)
         {
 	if ((child = hashFindVal(elHash, ec->name)) == NULL)
-	    errAbort("%s's child %d undefined line %d of %s", el->name, ec->name, el->lineIx, fileName);
+	    errAbort("%s's child %s undefined line %d of %s", el->name, ec->name, el->lineIx, fileName);
 	ec->el = child;
 	}
     }
