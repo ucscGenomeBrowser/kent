@@ -507,4 +507,8 @@ void removeReturns(char* dest, char* src);
  * the source and destination strings can be the same, 
  * if there are no threads */
 		
+int intExp(char *text);
+/* Convert text to integer expression and evaluate. 
+ * Throws if it finds a non-number. */
+
 #endif /* COMMON_H */

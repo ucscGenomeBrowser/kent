@@ -35,6 +35,10 @@ int cgiInt(char *varName);
 double cgiDouble(char *varName);
 boolean cgiBoolean(char *varName);
 
+int cgiIntExp(char *varName);
+/* Evaluate an integer expression in varName and
+ * return value. */
+
 char *cgiOptionalString(char *varName);
 /* Return value of string if it exists in cgi environment, else NULL */
 

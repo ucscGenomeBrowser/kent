@@ -462,6 +462,13 @@ if (!(isdigit(c) || (c == '-' && isdigit(data[1]))))
 return atoi(data);
 }
 
+int cgiIntExp(char *varName)
+/* Evaluate an integer expression in varName and
+ * return value. */
+{
+return intExp(cgiString(varName));
+}
+
 int cgiOptionalInt(char *varName, int defaultVal)
 /* This returns integer value of varName if it exists in cgi environment
  * and it's not just the empty string otherwise it returns defaultVal. */

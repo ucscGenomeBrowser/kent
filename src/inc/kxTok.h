@@ -36,7 +36,9 @@ struct kxTok
     char string[1];  /* Allocated at run time */
     };
 
-struct kxTok *kxTokenize(char *text);
-/* Convert text to stream of tokens. */
+struct kxTok *kxTokenize(char *text, boolean wildAst);
+/* Convert text to stream of tokens. If 'wildAst' is
+ * TRUE then '*' character will be treated as wildcard
+ * rather than multiplication sign. */
 
 #endif /* KXTOK_K */
