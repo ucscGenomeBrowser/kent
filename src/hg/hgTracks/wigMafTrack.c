@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.32 2004/08/25 16:52:37 hiram Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.33 2004/08/31 22:49:41 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -94,7 +94,7 @@ char buf[64];
 char *otherOrganism;
 char *myOrg = hgDirForOrg(hOrganism(database));
 struct sqlConnection *conn = hAllocConn();
-tolowers(myOrg);
+*myOrg = tolower(*myOrg);
 
 /* load up mafs */
 track->customPt = wigMafLoadInRegion(conn, track->mapName, 
@@ -143,7 +143,7 @@ slAddHead(&miList, mi);
                 mi->name = 
                     (otherOrganism == NULL ? cloneString(buf) :
 		                             hgDirForOrg(otherOrganism));
-                tolowers(mi->name);
+                *mi->name = tolower(*mi->name);
 		mi->height = tl.fontHeight;
 		hashAdd(hash, mi->name, mi);
 		}
@@ -152,6 +152,7 @@ slAddHead(&miList, mi);
     /* build item list in species order */
     for (i = 0; i < speciesCt; i++)
         {
+        *species[i] = tolower(*species[i]);
         if ((el = hashLookup(hash, species[i])) != NULL)
             slAddHead(&miList, (struct wigMafItem *)el->val);
         }
@@ -821,7 +822,8 @@ return y;
 
 static int wigMafDrawScoreGraph(struct track *track, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis, boolean zoomedToBaseLevel)
+        MgFont *font, Color color, enum trackVisibility vis, 
+        boolean zoomedToBaseLevel)
 {
 /* Draw routine for score graph, returns new Y offset */
 struct track *wigTrack = track->subtracks;
@@ -840,8 +842,9 @@ if (wigTrack != NULL)
     if (zoomedToBaseLevel && (vis == tvSquish || vis == tvPack))
         {
         /* display squished wiggle by reducing wigTrack height */
-        wigTrack->height = wigTrack->lineHeight = wigTrack->heightPer =
-                                                            tl.fontHeight - 1;
+        wigTrack->height = 
+            wigTrack->lineHeight = 
+            wigTrack->heightPer = tl.fontHeight - 1;
         vgSetClip(vg, xOff, yOff, width, wigTrack->height - 1);
         }
     else
@@ -865,7 +868,7 @@ if (zoomedToBaseLevel)
     {
     y = wigMafDrawBases(track, seqStart, seqEnd, vg, xOff, y, width, font,
                                 color, vis);
-    wigMafDrawScoreGraph(track, seqStart, seqEnd, vg, xOff, y, width,
+    y = wigMafDrawScoreGraph(track, seqStart, seqEnd, vg, xOff, y, width,
                                 font, color, vis, zoomedToBaseLevel);
     }
 else 
