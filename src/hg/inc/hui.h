@@ -9,12 +9,15 @@ char *hUserCookie();
 char *wrapWhiteFont(char *s);
 /* Write white font around s */
 
+/* Definitions for ruler pseudo-track.  It's not yet a full-fledged
+ * track, so it can't appear in trackDb. */
 #define RULER_TRACK_NAME        "ruler"
 #define RULER_TRACK_LABEL       "Base Position"
 #define RULER_TRACK_LONGLABEL   "Genome Base Position"
 
-/* The base position ruler is not yet a full-fledged track, and does
-   not appear in trackDb */
+/* Display of bases on the ruler, and multiple alignments.
+ * If present, indicates reverse strand */
+#define COMPLEMENT_BASES_VAR    "complement"
 
 /******  Some stuff for tables of controls ******/
 #define CONTROL_TABLE_WIDTH 610
