@@ -67,6 +67,7 @@ struct joiner
     char *fileName;		/* Associated file name */
     struct joinerSet *jsList;	/* List of identifiers. */
     struct hash *symHash;	/* Hash of symbols from file. */
+    struct hash *exclusiveList; /* List of hashes of exclusive databases. */
     };
 
 void joinerFree(struct joiner **pJoiner);
@@ -74,6 +75,12 @@ void joinerFree(struct joiner **pJoiner);
 
 struct joiner *joinerRead(char *fileName);
 /* Read in a .joiner file. */
+
+boolean joinerExclusiveCheck(struct joiner *joiner, char *aDatabase, 
+	char *bDatabase);
+/* Check that aDatabase and bDatabase are not in the same
+ * exclusivity hash.  Return TRUE if join can happen between
+ * these two databases. */
 
 struct joinerDtf
 /* Just database, table, and field. */

@@ -24,6 +24,9 @@ set plaFac falciparum
 # Define all organism/assembly specific databases.
 set gbd $hg,$mm,$rn,$fr,$ce,$ci,$cb,$dm,$dp,$sc,$sacCer,$panTro,$galGal,$pyrFur,$plaFac
 
+# Only consider one of members of gbd at a time.
+exclusiveSet $gbd
+
 # Define other databases that we check
 set otherDb swissProt,go,hgFixed
 
@@ -700,8 +703,7 @@ identifier pfamId external=Pfam fuzzy
 identifier superfamilyId external=SCOP
 "Protein SCOP/Superfamily ID"
     hgFixed.scopDes.sunid    
-# The gbd.sfDes table seems entirely redundant with hgFixed.scopDes
-    $gbd.sfDes.id
+    $gbd.sfDes.id	# This table is redundant with hgFixed.scopDes
     $kgDb.knownToSuper.superfamily
     $gbd.sfAssign.sfID
 

@@ -57,6 +57,7 @@ if (js != NULL)
     freeMem(js->name);
     joinerFieldFreeList(&js->fieldList);
     freeMem(js->typeOf);
+    slFreeList(&js->children);
     freeMem(js->external);
     freeMem(js->description);
     freez(pJs);
@@ -85,6 +86,7 @@ if (joiner != NULL)
     freeMem(joiner->fileName);
     joinerSetFreeList(&joiner->jsList);
     freeHashAndVals(&joiner->symHash);
+    hashFreeList(&joiner->exclusiveList);
     freez(pJoiner);
     }
 }
@@ -191,15 +193,25 @@ return dy->string;
 
 static char *nextSubbedLine(struct lineFile *lf, struct hash *hash, 
 	struct dyString *dy)
-/* Return next line after string substitutions.  This skips comments. */
+/* Return next line after string substitutions.  This removes comments too. */
 {
-char *line;
+char *line, *s;
 for (;;)
     {
     if (!lineFileNext(lf, &line, NULL))
 	return NULL;
-    if (line[0] != '#')
+    s = strchr(line, '#');
+    if (s == NULL)	/* No sharp, it's a real line. */
 	break;
+    else
+        {
+	if (skipLeadingSpaces(line) != s)  
+	    {
+	    *s = 0;	/* Terminate line at sharp. */
+	    break;
+	    }
+	/* Eat line if starts with sharp */
+	}
     }
 return subThroughHash(lf, hash, dy, line);
 }
@@ -392,7 +404,7 @@ return js;
 }
 
 static struct joinerSet *joinerParsePassOne(struct lineFile *lf, 
-	struct hash *symHash)
+	struct hash *symHash, struct hash **pJeList)
 /* Do first pass parsing of joiner file and return list of
  * joinerSets. */
 {
@@ -421,6 +433,14 @@ while ((line = nextSubbedLine(lf, symHash, dyBuf)) != NULL)
 	    js = parseOneJoiner(lf, line, symHash, dyBuf);
 	    if (js != NULL)
 	        slAddHead(&jsList, js);
+	    }
+	else if (sameString("exclusiveSet", word))
+	    {
+	    struct hash *exHash = newHash(8);
+	    struct slName *db, *dbList = slNameListFromComma(trimSpaces(line));
+	    for (db = dbList; db != NULL; db = db->next)
+		hashAdd(exHash, db->name, NULL);
+	    slAddHead(pJeList, exHash);
 	    }
         else
             {
@@ -576,7 +596,8 @@ struct joiner *joinerRead(char *fileName)
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct hash *symHash = hashNew(10);
-struct joinerSet *jsList = joinerParsePassOne(lf, symHash);
+struct hash *jeList = NULL;
+struct joinerSet *jsList = joinerParsePassOne(lf, symHash, &jeList);
 struct joiner *joiner;
 
 lineFileClose(&lf);
@@ -585,6 +606,7 @@ joinerParsePassTwo(jsList, fileName);
 AllocVar(joiner);
 joiner->jsList = jsList;
 joiner->symHash = symHash;
+joiner->exclusiveList = jeList;
 joiner->fileName = cloneString(fileName);
 return joiner;
 }
@@ -715,6 +737,22 @@ jp->b = joinerDtfNew(bDatabase, bJf->table, bJf->field);
 return jp;
 }
 
+boolean joinerExclusiveCheck(struct joiner *joiner, char *aDatabase, 
+	char *bDatabase)
+/* Check that aDatabase and bDatabase are not in the same
+ * exclusivity hash.  Return TRUE if join can happen between
+ * these two databases. */
+{
+struct hash *exHash;
+if (sameString(aDatabase, bDatabase))
+    return TRUE;
+for (exHash = joiner->exclusiveList; exHash != NULL; exHash = exHash->next)
+    {
+    if (hashLookup(exHash, aDatabase) && hashLookup(exHash, bDatabase))
+        return FALSE;
+    }
+return TRUE;
+}
 
 struct joinerPair *joinerRelate(struct joiner *joiner, char *database, 
 	char *table)
@@ -740,26 +778,19 @@ for (js = joiner->jsList; js != NULL; js = js->next)
 	    jsChain = chainEl->val;
 	    for (jf = jsChain->fieldList; jf != NULL; jf = jf->next)
 		{
-		if (slNameInList(jf->dbList, database))
+		struct slName *db;
+		for (db = jf->dbList; db != NULL; db = db->next)
 		    {
-		    if (!sameString(table, jf->table))
+		    if (joinerExclusiveCheck(joiner, database, db->name))
 			{
-			if (tableExists(database, jf->table))
+			if (!sameString(database, db->name) 
+				|| !sameString(table, jf->table))
 			    {
-			    jp = joinerToField(database, jfBase, database, jf);
-			    slAddHead(&jpList, jp);
-			    }
-			}
-		    }
-		else
-		    {
-		    struct slName *db;
-		    for (db = jf->dbList; db != NULL; db = db->next)
-			{
-			if (tableExists(db->name, jf->table))
-			    {
-			    jp = joinerToField(database, jfBase, db->name, jf);
-			    slAddHead(&jpList, jp);
+			    if (tableExists(db->name, jf->table))
+				{
+				jp = joinerToField(database, jfBase, db->name, jf);
+				slAddHead(&jpList, jp);
+				}
 			    }
 			}
 		    }

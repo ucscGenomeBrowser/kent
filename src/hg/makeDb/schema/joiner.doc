@@ -138,9 +138,11 @@ identifier chainRn2Id
     $gbd.netRn2.chainId
 
 
-Handling of Identifiers Spread Across Multiple Databases
+Coping with Multiple Parallel Databases.
 
-When an identifier involves more than one database the
-primary key must either be in a single database, or in
-all databases.
+There is one additional statement type, exclusiveSet, which is
+used to indicate that only one out of a group of set of databases
+should be considered at one time.  At UCSC this is used to group
+together all of the genome/assembly specific databases so that
+spurious links are not generated between them.
 
