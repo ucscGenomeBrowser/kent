@@ -37,6 +37,14 @@ visibility dense
 altColor 128,128,255,
 type bed 5 +
 
+track mouseMap
+shortLabel STS Markers
+longLabel STS Markers on Genetic Maps
+priority 3
+visibility dense
+altColor 128,128,255,
+type bed 5 +
+
 track mouseSyn
 shortLabel Mouse Synteny
 longLabel Corresponding Chromosome in Mouse
