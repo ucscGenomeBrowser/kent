@@ -1267,6 +1267,17 @@ type psl protein
 pred hg16.blastKGPep00
 blastRef hg16.blastKGRef00
 
+track blastSacCer1SG
+shortLabel Yeast Proteins
+longLabel  Yeast Proteins from SGD
+group compGeno
+priority 142
+visibility hide
+colorChromDefault off
+type psl protein
+pred sacCer1.blastSGPep00
+blastRef sacCer1.blastSGRef00
+
 track blastHg17KG
 shortLabel Hg17  Proteins
 longLabel Hg17 Proteins
