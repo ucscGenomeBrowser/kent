@@ -1447,6 +1447,7 @@ netSendLongString(fd, buf);
 sprintf(buf, "Days up: %f", (now - startupTime)/(3600.0 * 24.0));
 netSendLongString(fd, buf);
 sprintf(buf, "Version: %d", version);
+netSendLongString(fd, buf);
 netSendLongString(fd, "");
 }
 
