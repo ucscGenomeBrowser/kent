@@ -1,5 +1,5 @@
 .c.o:
-	gcc -O -Wimplicit -I../inc -I../../inc -c $*.c
+	gcc -O -Wimplicit -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -I../inc -I../../inc -c $*.c
 
 L = 
 MYLIBDIR = ../../lib/$(MACHTYPE)

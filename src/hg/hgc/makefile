@@ -1,11 +1,13 @@
 
+F64 = -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE
+
 # For performance
 #.c.o:
-#	gcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -I../../inc -I../../../inc -c $*.c
+#	gcc -ggdb -O ${F64} -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -I../../inc -I../../../inc -c $*.c
 
 #For debugging:
 .c.o:
-	gcc -ggdb -Wformat -Wimplicit  -Wreturn-type -I../inc -I../../inc -I../../../inc -c $*.c
+	gcc -ggdb ${F64} -Wformat -Wimplicit -Wreturn-type -I../inc -I../../inc -I../../../inc -c $*.c
 
 L = -lm $(MYSQLLIBS) 
 MYLIBDIR = ../../lib/$(MACHTYPE)
@@ -29,7 +31,7 @@ beta: compile
 
 
 compile: $O 
-	gcc $O $(MYLIBS) $(L) 
+	gcc $O ${F64} $(MYLIBS) $(L) 
 	mv a.out $A
 	strip $A
 	chmod a+rx $A
