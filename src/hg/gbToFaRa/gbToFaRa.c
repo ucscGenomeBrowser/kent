@@ -1086,7 +1086,7 @@ void procOneGbFile(char *inName,
                    FILE *faFile, char *faDir, 
                    FILE *raFile, char *raName, 
                    struct hash *uniqueNameHash, struct hash *estAuthorHash,
-                   struct hash *faHash, struct hash *raHash, 
+                   struct hash *faHash, struct hash *orgHash, 
                    struct filter *filter)
 /* Process one genBank file into fa and ra files. */
 {
@@ -1097,8 +1097,9 @@ static int gbCount = 0;
 DNA *dna;
 int dnaSize;
 char sizeString[16];
+char *oldOrg = NULL;
 struct dyString *ctgDs = newDyString(512);
-int modder = 1000;  /* How often to print an I'm still alive dot. */
+int modder = 100;  /* How often to print an I'm still alive dot. */
 
 if (formatType == ftBac)
     modder = 100;
@@ -1117,11 +1118,20 @@ while (readGbInfo(lf))
 
     if (gByOrganism) 
         {
-        if (!hashLookup(raHash, org))
+        char *orgDir = NULL;
+        char command[PATH_LEN];
+        char path[PATH_LEN];
+
+        /* If we are on a new organism, open a new file,
+           other wise just reuse our old file handles. */
+        if (NULL == oldOrg || 0 != strcmp(oldOrg, org)) 
             {
-            char *orgDir = NULL;
-            char command[PATH_LEN];
-            char path[PATH_LEN];
+            oldOrg = needMem(strlen(org) + 1);
+            strcpy(oldOrg, org);
+            fflush(raFile);
+            fflush(faFile);
+            carefulClose(&raFile);
+            carefulClose(&faFile);
 
             if (NULL == org)
                 {
@@ -1130,40 +1140,26 @@ while (readGbInfo(lf))
             else
                 {
                 /* Replace illegal directory chars */
-                orgDir = replaceChars(org, " ()", ".##");
+                orgDir = replaceChars(org, " ()'", ".###");
                 }
             
-            sprintf(command, "mkdir -p %s/%s", gOutputDir, orgDir);
-            system(command);
+            if (!hashLookup(orgHash, org))
+                {
+                sprintf(command, "mkdir -p %s/%s", gOutputDir, orgDir);
+                system(command);
+                hashAdd(orgHash, org, orgDir);
+                printf("\n%s\n", command);
+                }
 
             sprintf(path, "%s/%s/%s", gOutputDir, orgDir, raName); 
             /*printf ("RA PATH: %s\n", path);*/
-            fflush(stdout);
-            raFile = mustOpen(path, "wb");
-
+            raFile = mustOpen(path, "ab");
             sprintf(path, "%s/%s/%s", gOutputDir, orgDir, faDir); 
             /*printf("FA PATH: %s\n", path);*/
-            fflush(stdout);
-            faFile = mustOpen(path, "wb");
-
+            faFile = mustOpen(path, "ab");
+                    
             freez(&orgDir);
-            hashAdd(raHash, org, raFile);   
-            hashAdd(faHash, org, faFile);   
             }
-
-        if (NULL == raFile) 
-            {
-            raFile = (FILE*) hashMustFindVal(raHash, org);
-            }
-
-        if (NULL == faFile) 
-            {
-            faFile = (FILE*) hashMustFindVal(faHash, org);
-            }
-
-        printf("ORG = : %s\n", org);
-        printf("raFile = %d\n", raFile);
-        printf("faFile = %d\n\n", faFile);
         }
 
     if (++gbCount % modder == 0)
@@ -1383,7 +1379,7 @@ while (readGbInfo(lf))
                     }
                 }
             }
-
+        
         /* Handle sequence part of read. */
         readSequence(lf, &dna, &dnaSize);
         doneSequence = TRUE;
@@ -1451,13 +1447,16 @@ while (readGbInfo(lf))
             seqKey->val = NULL; /* Don't write out sequence here. */
             if (commentKey != NULL)
                 commentKey->val = NULL;  /* Don't write out comment either. */
+//            printf("kvtWriteAll()\n");
             kvtWriteAll(kvt, raFile, filter->hideKeys);
             if (formatType == ftBac)
                 {
+                printf("bacWrite()\n");
                 bacWrite(faDir, accession, version, dna, dnaSize);
                 }
             else
 		{
+//                printf("faWriteNext()\n");
                 faWriteNext(faFile, accession, dna, dnaSize);
 		}
             }
@@ -1471,7 +1470,8 @@ while (readGbInfo(lf))
             if (startsWith("//", line))
                 break;
         }
-    }
+    } /* End of outermost while loop */
+    
 freeDyString(&ctgDs);
 lineFileClose(&lf);
 printf(" %d\n", gbCount);
