@@ -157,7 +157,6 @@ void removeMachine(char *machine)
 /* Tell hub to get rid of machine. */
 {
 char buf[512];
-mustBeRoot();
 sprintf(buf, "%s %s", "removeMachine", machine);
 commandHub(buf);
 }
