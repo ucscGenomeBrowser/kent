@@ -33,7 +33,7 @@
 #include "botDelay.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.125 2004/03/24 21:22:10 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.125.2.1 2004/03/26 22:57:21 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -1397,7 +1397,6 @@ struct hashEl *posTableList = NULL;
 struct hashEl *nonposTableList = NULL;
 char *table = getTableName();
 char *db = getTableDb();
-struct sqlConnection *conn = hAllocOrConnect(db);
 struct trackDb *tdb;
 char *track = getTrackName();
 int wordCount = 0;
@@ -1405,17 +1404,21 @@ char *words[128];
 char *trackType = (char *) NULL;
 boolean typeWiggle = FALSE;
 
-tdb = hMaybeTrackInfo(conn, track);
-if (tdb && tdb->type)
+if (! sameString(customTrackPseudoDb, db))
     {
-    wordCount = chopLine(tdb->type,words);
-    if (wordCount > 0)
-	trackType = words[0];
-    }
-hFreeOrDisconnect(&conn);
+    struct sqlConnection *conn = hAllocOrConnect(db);
+    tdb = hMaybeTrackInfo(conn, track);
+    if (tdb && tdb->type)
+	{
+	wordCount = chopLine(tdb->type,words);
+	if (wordCount > 0)
+	    trackType = words[0];
+	}
+    hFreeOrDisconnect(&conn);
 
-if ((trackType != (char *) NULL) && sameString(trackType,"wig"))
-    typeWiggle = TRUE;
+    if ((trackType != (char *) NULL) && sameString(trackType,"wig"))
+	typeWiggle = TRUE;
+    }
 
 saveChooseTableState();
 
@@ -4021,21 +4024,24 @@ char *words[128];
 char *trackType2 = (char *) NULL;
 boolean typeWiggle2 = FALSE;
 
-if ((table2 != (char *)NULL) && (db2 != (char *)NULL))
+if (! sameString(customTrackPseudoDb, db2))
     {
-    conn2 = hAllocOrConnect(db2);
-    tdb2 = hMaybeTrackInfo(conn2, track2);
-    hFreeOrDisconnect(&conn2);
-    if (tdb2 && tdb2->type)
+    if ((table2 != (char *)NULL) && (db2 != (char *)NULL))
 	{
-	typeLine2 = cloneString(tdb2->type);
-	wordCount = chopLine(typeLine2,words);
-	if (wordCount > 0)
-	    trackType2 = words[0];
+	conn2 = hAllocOrConnect(db2);
+	tdb2 = hMaybeTrackInfo(conn2, track2);
+	hFreeOrDisconnect(&conn2);
+	if (tdb2 && tdb2->type)
+	    {
+	    typeLine2 = cloneString(tdb2->type);
+	    wordCount = chopLine(typeLine2,words);
+	    if (wordCount > 0)
+		trackType2 = words[0];
+	    }
 	}
+    if ((trackType2 != (char *) NULL) && sameString(trackType2,"wig"))
+	typeWiggle2 = TRUE;
     }
-if ((trackType2 != (char *) NULL) && sameString(trackType2,"wig"))
-    typeWiggle2 = TRUE;
 
 saveOutputOptionsState();
 
@@ -4588,12 +4594,8 @@ int **utr3Arrs;
 int **blockCountArrs;
 int **blockSizeArrs;
 int i, j;
-struct sqlConnection *conn = hAllocOrConnect(db);
-struct sqlConnection *conn2;
 struct trackDb *tdb;
 struct trackDb *tdb2;
-char *track = getTrackName();
-char *track2 = getTrack2Name();
 char *typeLine;
 char *typeLine2;
 char *trackType = (char *) NULL;
@@ -4607,37 +4609,53 @@ boolean wiggleDone = FALSE;
 saveOutputOptionsState();
 saveIntersectOptionsState();
 
-tdb = hMaybeTrackInfo(conn, track);
-if (tdb && tdb->type)
+if (! sameString(customTrackPseudoDb, db))
     {
-    typeLine = cloneString(tdb->type);
-    wordCount = chopLine(typeLine,words);
-    if (wordCount > 0)
-	trackType = words[0];
-    }
-hFreeOrDisconnect(&conn);
+    struct sqlConnection *conn;
+    char *track;
 
-if ((trackType != (char *) NULL) && sameString(trackType,"wig"))
-    typeWiggle = TRUE;
+    conn = hAllocOrConnect(db);
+    track = getTrackName();
+
+    tdb = hMaybeTrackInfo(conn, track);
+    hFreeOrDisconnect(&conn);
+    if (tdb && tdb->type)
+	{
+	typeLine = cloneString(tdb->type);
+	wordCount = chopLine(typeLine,words);
+	if (wordCount > 0)
+	    trackType = words[0];
+	}
+
+    if ((trackType != (char *) NULL) && sameString(trackType,"wig"))
+	typeWiggle = TRUE;
+    }
 
 if (op == NULL)
     table2 = NULL;
 
-if ((table2 != (char *)NULL) && (db2 != (char *)NULL))
+if ((db2 != (char *)NULL) && ! sameString(customTrackPseudoDb, db2))
     {
-    conn2 = hAllocOrConnect(db2);
-    tdb2 = hMaybeTrackInfo(conn2, track2);
-    hFreeOrDisconnect(&conn2);
-    if (tdb2 && tdb2->type)
+    if ((table2 != (char *)NULL) && (db2 != (char *)NULL))
 	{
-	typeLine2 = cloneString(tdb2->type);
-	wordCount = chopLine(typeLine2,words);
-	if (wordCount > 0)
-	    trackType2 = words[0];
+	struct sqlConnection *conn2;
+	char *track2;
+
+	conn2 = hAllocOrConnect(db2);
+	track2 = getTrack2Name();
+	tdb2 = hMaybeTrackInfo(conn2, track2);
+	hFreeOrDisconnect(&conn2);
+	if (tdb2 && tdb2->type)
+	    {
+	    typeLine2 = cloneString(tdb2->type);
+	    wordCount = chopLine(typeLine2,words);
+	    if (wordCount > 0)
+		trackType2 = words[0];
+	    }
 	}
+    if ((trackType2 != (char *) NULL) && sameString(trackType2,"wig"))
+	typeWiggle2 = TRUE;
     }
-if ((trackType2 != (char *) NULL) && sameString(trackType2,"wig"))
-    typeWiggle2 = TRUE;
 
 if (allGenome)
     chromList = getOrderedChromList();
@@ -5063,49 +5081,15 @@ char *db = getTableDb();
 char *table = getTableName();
 struct wiggleData *wigData = (struct wiggleData *) NULL;
 struct wiggleData *wdPtr = (struct wiggleData *) NULL;
-struct trackDb *tdb;
-struct sqlConnection *conn = hAllocOrConnect(db);
+struct trackDb *tdb = (struct trackDb *)NULL;
 char *track = getTrackName();
-char *typeLine;
-char *longLabel;
-unsigned char visibility;
-unsigned char colorR, colorG, colorB;
-unsigned char altColorR, altColorG, altColorB;
-float priority;
-int wordCount;
-char *words[128];
-char *trackType = (char *) NULL;
-char *visibilities[] = {
-    "hide",
-    "dense",
-    "full",
-    "pack",
-    "squish",
-};
 
-tdb = hMaybeTrackInfo(conn, track);
-if (tdb && tdb->type)
+if (! sameString(customTrackPseudoDb, db))
     {
-    typeLine = cloneString(tdb->type);
-    longLabel = cloneString(tdb->longLabel);
-    priority = tdb->priority;
-    wordCount = chopLine(typeLine,words);
-    if (wordCount > 0)
-	trackType = words[0];
-    colorR = tdb->colorR; colorG = tdb->colorG; colorB = tdb->colorB;
-    altColorR = tdb->altColorR; altColorG = tdb->altColorG;
-    altColorB = tdb->altColorB;
-    visibility = tdb->visibility;
+    struct sqlConnection *conn = hAllocOrConnect(db);
+    tdb = hMaybeTrackInfo(conn, track);
+    hFreeOrDisconnect(&conn);
     }
-else
-    {
-    priority = 42;
-    longLabel = cloneString("wiggle data");
-    colorR = colorG = colorB = 255;
-    altColorR = altColorG = altColorB = 128;
-    visibility = 2;
-    }
-hFreeOrDisconnect(&conn);
 
 saveOutputOptionsState();
 saveIntersectOptionsState();
@@ -5124,6 +5108,44 @@ if (wigData)
     {
     unsigned span = 0;
     char *chrom = (char *) NULL;
+    char *longLabel;
+    unsigned char visibility;
+    unsigned char colorR, colorG, colorB;
+    unsigned char altColorR, altColorG, altColorB;
+    float priority;
+    int wordCount;
+    char *words[128];
+    char *trackType = (char *) NULL;
+    char *visibilities[] = {
+	"hide",
+	"dense",
+	"full",
+	"pack",
+	"squish",
+    };
+
+    if (tdb && tdb->type)
+	{
+	char *typeLine;
+	typeLine = cloneString(tdb->type);
+	longLabel = cloneString(tdb->longLabel);
+	priority = tdb->priority;
+	wordCount = chopLine(typeLine,words);
+	if (wordCount > 0)
+	    trackType = words[0];
+	colorR = tdb->colorR; colorG = tdb->colorG; colorB = tdb->colorB;
+	altColorR = tdb->altColorR; altColorG = tdb->altColorG;
+	altColorB = tdb->altColorB;
+	visibility = tdb->visibility;
+	}
+    else
+	{
+	priority = 42;
+	longLabel = cloneString("wiggle data");
+	colorR = colorG = colorB = 255;
+	altColorR = altColorG = altColorB = 128;
+	visibility = 2;
+	}
     printf("track type=wiggle_0 name=%s description=\"%s\" "
 	"visibility=%s color=%d,%d,%d altColor=%d,%d,%d "
 	"priority=%g\n", table, longLabel, visibilities[visibility],
