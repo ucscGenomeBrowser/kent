@@ -131,6 +131,16 @@ exit; # don't actually run this like a script :)
   ssh hgwdev
   load data local infile 'ctgPos2' into table ctgPos2
   # 9 skipped
+  # Contig24811
+  # Contig368174
+  # Contig44331
+  # Contig55201
+  # Contig59195
+  # Contig64664
+  # Contig67471
+  # Contig88377
+  # Contig89200
+  # 9 with size 0
 
 # CREATE CHROMINFO TABLE (DONE Oct. 5, 2004, Heather)
 # an improvement here would be to have getMaxCoord output the 2bit file name
