@@ -15,7 +15,7 @@
 #include "joiner.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: fields.c,v 1.21 2004/07/19 17:47:08 kent Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.1 2004/07/19 20:17:48 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
