@@ -27,7 +27,7 @@
 #include "portable.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.95 2003/10/02 05:48:38 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.96 2003/10/02 15:50:34 angie Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -119,9 +119,10 @@ static char *onChangeDb = "onchange=\"document.orgForm.db.value = document.mainF
 static char *onChangeOrg = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.db.value = 0; document.orgForm.submit();\"";
 /* User can choose from Track, Positional or Non-positional tables.  
  * When one is selected, clear the others: */
-static char *onChangeTrack = "onchange=\"document.mainForm.table0.value = document.mainForm.table0.options[0].value; document.mainForm.table1.value = document.mainForm.table1.options[0].value;\"";
-static char *onChangePos = "onchange=\"document.mainForm.tbTrack.value = document.mainForm.tbTrack.options[0].value; document.mainForm.table1.value = document.mainForm.table1.options[0].value;\"";
-static char *onChangeNonPos = "onchange=\"document.mainForm.tbTrack.value = document.mainForm.tbTrack.options[0].value; document.mainForm.table0.value = document.mainForm.table0.options[0].value;\"";
+static char *onChangeTrack = "onchange=\"document.mainForm.tbCustomTrack.value = document.mainForm.tbCustomTrack.options[0].value; document.mainForm.table0.value = document.mainForm.table0.options[0].value; document.mainForm.table1.value = document.mainForm.table1.options[0].value;\"";
+static char *onChangeCT = "onchange=\"document.mainForm.tbTrack.value = document.mainForm.tbTrack.options[0].value; document.mainForm.table0.value = document.mainForm.table0.options[0].value; document.mainForm.table1.value = document.mainForm.table1.options[0].value;\"";
+static char *onChangePos = "onchange=\"document.mainForm.tbTrack.value = document.mainForm.tbTrack.options[0].value; document.mainForm.tbCustomTrack.value = document.mainForm.tbCustomTrack.options[0].value; document.mainForm.table1.value = document.mainForm.table1.options[0].value;\"";
+static char *onChangeNonPos = "onchange=\"document.mainForm.tbTrack.value = document.mainForm.tbTrack.options[0].value; document.mainForm.tbCustomTrack.value = document.mainForm.tbCustomTrack.options[0].value; document.mainForm.table0.value = document.mainForm.table0.options[0].value;\"";
 
 /* Droplist menu for selecting output type: */
 #define allFieldsPhase      "Tab-separated, All fields"
@@ -235,6 +236,7 @@ void saveChooseTableState()
 /* Store in cart the user's settings in doChooseTable() form */
 {
 storeStringIfSet("tbTrack");
+storeStringIfSet("tbCustomTrack");
 storeStringIfSet("table0");
 storeStringIfSet("table1");
 storeStringIfSet("tbPosOrKeys");
@@ -449,6 +451,7 @@ char *getTableVar()
 {
 char *table  = cgiOptionalString("table");
 char *track  = cartCgiUsualString(cart, "tbTrack", NULL);
+char *ct     = cartCgiUsualString(cart, "tbCustomTrack", NULL);
 char *table0 = cartCgiUsualString(cart, "table0", NULL);
 char *table1 = cartCgiUsualString(cart, "table1", NULL);
 
@@ -457,6 +460,9 @@ if (table != NULL && strcmp(table, "Choose table") == 0)
 
 if (track != NULL && strcmp(track, "Choose table") == 0)
     track = NULL;
+
+if (ct != NULL && strcmp(ct, "Choose table") == 0)
+    ct = NULL;
 
 if (table0 != NULL && strcmp(table0, "Choose table") == 0)
     table0 = NULL;
@@ -468,6 +474,8 @@ if (table != NULL)
     return table;
 else if (track != NULL)
     return track;
+else if (ct != NULL)
+    return ct;
 else if (table0 != NULL)
     return table0;
 else
@@ -840,6 +848,7 @@ cgiMakeHiddenVar("table", getTableVar());
 cgiMakeHiddenVar("phase", chooseTablePhase);
 cgiMakeHiddenVar("tbPosOrKeys", "keys");
 cgiContinueHiddenVar("tbTrack");
+cgiContinueHiddenVar("tbCustomTrack");
 cgiContinueHiddenVar("table0");
 cgiContinueHiddenVar("table1");
 puts("<TEXTAREA NAME=tbUserKeys ROWS=10 COLS=80></TEXTAREA><BR>\n");
@@ -866,6 +875,7 @@ cgiMakeHiddenVar("table", getTableVar());
 cgiMakeHiddenVar("phase", chooseTablePhase);
 cgiMakeHiddenVar("tbPosOrKeys", "keys");
 cgiContinueHiddenVar("tbTrack");
+cgiContinueHiddenVar("tbCustomTrack");
 cgiContinueHiddenVar("table0");
 cgiContinueHiddenVar("table1");
 puts("Please enter the name of a file in your computer containing a space, tab, or ");
@@ -1011,7 +1021,6 @@ struct hashEl *posTableList = NULL;
 struct hashEl *nonposTableList = NULL;
 struct hashEl *fixedPosTableList = NULL;
 struct hashEl *fixedNonposTableList = NULL;
-struct hashEl *ctPosTableList = NULL;
 
 /* get table names from the database */
 conn = hAllocConn();
@@ -1021,12 +1030,10 @@ hFreeConn(&conn);
 conn = sqlConnect(hgFixed);
 getTableNames(hgFixed, conn, &fixedPosTableList, &fixedNonposTableList);
 sqlDisconnect(&conn);
-/* get custom track names */
-ctPosTableList = getCustomTrackNames();
-/* prepend ct, append hgFixed db lists onto default db lists and return */
+/* append hgFixed db lists onto default db lists and return */
 posTableList = slCat(posTableList, fixedPosTableList);
 slSort(&posTableList, compareTable);
-*retPosTableList = slCat(ctPosTableList, posTableList);
+*retPosTableList = posTableList;
 *retNonposTableList = slCat(nonposTableList, fixedNonposTableList);
 slSort(retNonposTableList, compareTable);
 }
@@ -1034,6 +1041,7 @@ slSort(retNonposTableList, compareTable);
 void doChooseTable()
 /* Offer the user choice of tracks/tables, positions, actions */
 {
+struct hashEl *ctPosTableList = NULL;
 struct hashEl *posTableList;
 struct hashEl *nonposTableList;
 char *keyStr = getUserKeys();
@@ -1051,9 +1059,14 @@ cgiContinueHiddenVar("tbUserKeys");
 puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#ChooseTable\">"
      "<B>Help</B></A>");
 
+ctPosTableList = getCustomTrackNames();
 categorizeTables(&posTableList, &nonposTableList);
 puts("<P> Choose a table: <BR>");
 printTrackDropList(database, onChangeTrack);
+printf("<SELECT NAME=tbCustomTrack SIZE=1 %s>\n", onChangeCT);
+printf("<OPTION VALUE=\"Choose table\">Custom tracks</OPTION>\n");
+printSelectOptions(ctPosTableList, "tbCustomTrack");
+puts("</SELECT>");
 printf("<SELECT NAME=table0 SIZE=1 %s>\n", onChangePos);
 printf("<OPTION VALUE=\"Choose table\">Positional tables</OPTION>\n");
 printSelectOptions(posTableList, "table0");
@@ -4474,6 +4487,7 @@ else if (existsAndEqual("phase", chooseTablePhase))
 else
     {
     if (existsAndEqual("tbTrack", "Choose table") &&
+	existsAndEqual("tbCustomTrack", "Choose table") &&
 	existsAndEqual("table0", "Choose table") &&
 	existsAndEqual("table1", "Choose table"))
 	webAbort("Missing table selection", "Please choose a table.");
