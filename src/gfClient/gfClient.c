@@ -54,38 +54,36 @@ while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, qType != gftProt)
 	outputOptions(&outForm, out);
 	outForm.reportTargetStrand = TRUE;
 	outForm.qIsProt = TRUE;
-	gfAlignTrans(conn, nibDir, &seq, minScore, gfSavePslx, &outForm);
+	gfAlignTrans(&conn, nibDir, &seq, minScore, gfSavePslx, &outForm);
 	}
     else if ((qType == gftRnaX || qType == gftDnaX) && (tType == gftDnaX || tType == gftRnaX))
         {
 	static struct gfSavePslxData outForm;
 	outputOptions(&outForm, out);
 	outForm.reportTargetStrand = TRUE;
-	gfAlignTransTrans(conn, nibDir, &seq, FALSE, minScore, gfSavePslx, &outForm, qType == gftRnaX);
+	gfAlignTransTrans(&conn, nibDir, &seq, FALSE, minScore, gfSavePslx, &outForm, qType == gftRnaX);
 	if (qType == gftDnaX)
 	    {
 	    reverseComplement(seq.dna, seq.size);
 	    close(conn);
 	    conn = gfConnect(hostName, portName);
-	    gfAlignTransTrans(conn, nibDir, &seq, TRUE, minScore, gfSavePslx, &outForm, FALSE);
+	    gfAlignTransTrans(&conn, nibDir, &seq, TRUE, minScore, gfSavePslx, &outForm, FALSE);
 	    }
 	}
     else if ((tType == gftDna || tType == gftRna) && (qType == gftDna || qType == gftRna))
 	{
 	static struct gfSavePslxData outForm;
 	outputOptions(&outForm, out);
-	gfAlignStrand(conn, nibDir, &seq, FALSE, minScore, gfSavePslx, &outForm);
-	close(conn);
+	gfAlignStrand(&conn, nibDir, &seq, FALSE, minScore, gfSavePslx, &outForm);
 	conn = gfConnect(hostName, portName);
 	reverseComplement(seq.dna, seq.size);
-	gfAlignStrand(conn, nibDir, &seq, TRUE,  36, gfSavePslx, &outForm);
+	gfAlignStrand(&conn, nibDir, &seq, TRUE,  36, gfSavePslx, &outForm);
 	}
     else
         {
 	errAbort("Comparisons between %s queries and %s databases not yet supported",
 		qTypeName, tTypeName);
 	}
-    close(conn);
     }
 if (out != stdout)
     printf("Output is in %s\n", outName);

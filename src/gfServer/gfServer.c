@@ -300,12 +300,33 @@ printf("Server ready for queries!\n");
 for (;;)
     {
     connectionHandle = accept(socketHandle, NULL, &fromLen);
+    if (connectionHandle < 0)
+        {
+	warn("Error accepting the connection");
+	++warnCount;
+	continue;
+	}
     readSize = read(connectionHandle, buf, sizeof(buf)-1);
+    if (readSize < 0)
+        {
+	warn("Error reading from socket: %s", strerror(errno));
+	++warnCount;
+	close(connectionHandle);
+	continue;
+	}
+    if (readSize == 0)
+        {
+	warn("Zero sized query");
+	++warnCount;
+	close(connectionHandle);
+	continue;
+	}
     buf[readSize] = 0;
     logIt("%s\n", buf);
     if (!startsWith(gfSignature(), buf))
         {
 	++noSigCount;
+	close(connectionHandle);
 	continue;
 	}
     line = buf + strlen(gfSignature());
