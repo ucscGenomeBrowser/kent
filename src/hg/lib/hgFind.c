@@ -22,6 +22,7 @@
 #include "stsMarker.h"
 #include "stsMap.h"
 #include "stsMapMouse.h"
+#include "stsMapMouseNew.h"
 #include "stsMapRat.h"
 #include "knownInfo.h"
 #include "cart.h"
@@ -993,49 +994,56 @@ boolean ok = FALSE;
 char *alias = NULL, *temp;
 struct stsMap sm;
 struct stsMapMouse smm;
+struct stsMapMouseNew smm_n;
 struct stsMapRat smr;
 char *tableName, *tableAlias;
-boolean newFormat = FALSE, mouse = FALSE, rat = FALSE;
+boolean newFormat = FALSE, mouse = FALSE, rat = FALSE, mouse_n=FALSE;
 char *chrom;
 char buf[64];
 struct hgPosTable *table = NULL;
 struct hgPos *pos = NULL;
 
-if (hTableExists("stsMapMouse"))
-    {
-    mouse = TRUE;
-    tableName = "stsMapMouse";
-    tableAlias = "stsAliasMouse";
-    }
-else if (hTableExists("stsMapRat"))
-    {
-    rat = TRUE;
+ if (hTableExists("stsMapMouse"))
+   {
+     mouse = TRUE;
+     tableName = "stsMapMouse";
+     tableAlias = "stsAliasMouse";
+   }
+ else if (hTableExists("stsMapMouseNew"))
+   {
+    mouse_n = TRUE;
+    tableName = "stsMapMouseNew";
+    tableAlias = "stsAlias";
+   }
+ else if (hTableExists("stsMapRat"))
+   {
+     rat = TRUE;
     tableName = "stsMapRat";
     tableAlias = "stsAlias";
-    }
-else if (hTableExists("stsMap"))
-    {
-    newFormat = TRUE;
-    tableName = "stsMap";
-    tableAlias = "stsAlias";
-    }
-else if (hTableExists("stsMarker"))
-    {
+   }
+ else if (hTableExists("stsMap"))
+   {
+     newFormat = TRUE;
+     tableName = "stsMap";
+     tableAlias = "stsAlias";
+   }
+ else if (hTableExists("stsMarker"))
+   {
     newFormat = FALSE;
     tableName = "stsMarker";
     tableAlias = "stsAlias";
-    }
-else
-    return FALSE;
-
-conn = hAllocConn();
-query = newDyString(256);
-if (hTableExists(tableAlias))
+   }
+ else
+   return FALSE;
+ 
+ conn = hAllocConn();
+ query = newDyString(256);
+ if (hTableExists(tableAlias))
     {
-    dyStringPrintf(query, 
-        "select trueName from %s where alias = '%s'", tableAlias, spec);
-    alias = sqlQuickQuery(conn, query->string, buf, sizeof(buf));
-    if ((alias != NULL) && (!sameString(alias, spec)))
+      dyStringPrintf(query, 
+		     "select trueName from %s where alias = '%s'", tableAlias, spec);
+      alias = sqlQuickQuery(conn, query->string, buf, sizeof(buf));
+      if ((alias != NULL) && (!sameString(alias, spec)))
         {
 	hgp->useAlias = TRUE;
 	temp = spec;
@@ -1062,7 +1070,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	slAddHead(&hgp->tableList, table);
 	}
     if (mouse)
-	stsMapMouseStaticLoad(row, &smm);
+      stsMapMouseStaticLoad(row, &smm);
+    else if (mouse_n)
+     stsMapMouseNewStaticLoad(row, &smm_n);
     else if (rat)
 	stsMapRatStaticLoad(row, &smr);
     else if (newFormat)
@@ -1078,6 +1088,12 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if ((chrom = hgOfficialChromName(smm.chrom)) == NULL)
 	errAbort("Internal Database error: Odd chromosome name '%s' in %s",
 		 smm.chrom, tableName);
+	}
+    else if (mouse_n) 
+	{
+	if ((chrom = hgOfficialChromName(smm_n.chrom)) == NULL)
+	errAbort("Internal Database error: Odd chromosome name '%s' in %s",
+		 smm_n.chrom, tableName);
 	}
     else if (rat) 
 	{
@@ -1097,6 +1113,11 @@ while ((row = sqlNextRow(sr)) != NULL)
 	{
 	pos->chromStart = smm.chromStart - 100000;
 	pos->chromEnd = smm.chromEnd + 100000;
+	}
+    else if (mouse_n) 
+	{
+	pos->chromStart = smm_n.chromStart - 100000;
+	pos->chromEnd = smm_n.chromEnd + 100000;
 	}
     else if (rat) 
 	{
