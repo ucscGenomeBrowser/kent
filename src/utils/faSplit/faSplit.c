@@ -9,7 +9,7 @@
 #include "options.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: faSplit.c,v 1.14 2004/02/02 15:13:31 angie Exp $";
+static char const rcsid[] = "$Id: faSplit.c,v 1.15 2004/02/04 16:41:43 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -50,6 +50,10 @@ errAbort(
   "                   pieces in file.lft.  Only used with size and gap.\n"
   "    -minGapSize=X Consider a block of Ns to be a gap if block size >= X.\n"
   "                  Only used with gap."
+  "    -outDirDepth=n Create n-levels of output directory under outRoot.\n"
+  "                   This helps prevent NFS problems with a large number of\n"
+  "                   file in a directory.  Using -outDirDepth=3 would\n"
+  "                   produce rootDir/1/2/3/foo.123.fa.\n"
 );
 
 }
@@ -62,10 +66,12 @@ static struct optionSpec optionSpecs[] = {
     {"out", OPTION_STRING},
     {"lift", OPTION_STRING},
     {"minGapSize", OPTION_INT},
+    {"outDirDepth", OPTION_INT},
     {NULL, 0}
 };
 
 boolean verbose = FALSE;
+int outDirDepth = 0;
 
 unsigned long estimateFaSize(char *fileName)
 /* Estimate number of bases from file size. */
@@ -86,6 +92,32 @@ else
     }
 }
 
+void mkOutPath(char *outPath, char* outRoot, int digits, int fileCount)
+/* generate output file name */
+{
+char dir[PATH_LEN], fname[PATH_LEN];
+splitPath(outRoot, dir, fname, NULL);
+
+strcpy(outPath, dir);
+if (outDirDepth > 0)
+    {
+    /* add directory levels, using training digits for names */
+    char fcntStr[64], dirBuf[3];
+    int i, iDir;
+    safef(fcntStr, sizeof(fcntStr), "%0*d", outDirDepth, fileCount);
+    iDir = strlen(fcntStr)-outDirDepth;
+    strcpy(dirBuf, "X/");
+    for (i = 0; i < outDirDepth; i++, iDir++)
+        {
+        dirBuf[0] = fcntStr[iDir];
+        strcat(outPath, dirBuf);
+        makeDir(outPath);
+        }
+    }
+
+sprintf(outPath+strlen(outPath), "%s%0*d.fa", fname, digits, fileCount);
+}
+
 void splitByBase(char *inName, int splitCount, char *outRoot, unsigned long estSize)
 /* Split into a file base by base. */
 {
@@ -93,11 +125,8 @@ struct lineFile *lf = lineFileOpen(inName, TRUE);
 int lineSize;
 char *line;
 char c;
-DNA b;
-char dir[256], outFile[128], seqName[128], ext[64];
-char outPathName[512];
+char dir[PATH_LEN], seqName[128], outFile[128], outPathName[PATH_LEN];
 int digits = digitsBaseTen(splitCount);
-boolean warnedBadBases = FALSE;
 boolean warnedMultipleRecords = FALSE;
 int fileCount = 0;
 unsigned long nextEnd = 0;
@@ -118,10 +147,10 @@ if (line[0] == '>')
     }
 else
     {
-    splitPath(inName, dir, seqName, ext);
+    splitPath(inName, dir, seqName, NULL);
     lineFileReuse(lf);
     }
-splitPath(outRoot, dir, outFile, ext);
+splitPath(outRoot, NULL, outFile, NULL);
 while (lineFileNext(lf, &line, &lineSize))
     {
     if (line[0] == '>')
@@ -148,8 +177,7 @@ while (lineFileNext(lf, &line, &lineSize))
 		    fputc('\n', f);
 		fclose(f);
 		}
-	    sprintf(outPathName, "%s%s%0*d.fa", dir, outFile, 
-	    	digits, fileCount);
+            mkOutPath(outPathName, outRoot, digits, fileCount);
             if (verbose)
                 printf("writing %s\n", outPathName);
 	    f = mustOpen(outPathName, "w");
@@ -179,24 +207,22 @@ void splitByRecord(char *inName, int splitCount, char *outRoot, unsigned long es
 /* Split into a file base by base. */
 {
 struct dnaSeq seq;
-int len;
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 int digits = digitsBaseTen(splitCount);
 unsigned long nextEnd = 0;
 unsigned long curPos = 0;
 int fileCount = 0;
 FILE *f = NULL;
-char outDir[256], outFile[128], ext[64], outPath[512];
+char outPath[PATH_LEN];
 ZeroVar(&seq);
 
-splitPath(outRoot, outDir, outFile, ext);
 while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
     {
     curPos += seq.size;
     if (curPos > nextEnd)
         {
 	carefulClose(&f);
-	sprintf(outPath, "%s%s%0*d.fa", outDir, outFile, digits, fileCount++);
+        mkOutPath(outPath, outRoot, digits, fileCount++);
         if (verbose)
             printf("writing %s\n", outPath);
 	f = mustOpen(outPath, "w");
@@ -213,23 +239,21 @@ void splitAbout(char *inName, unsigned long approxSize, char *outRoot)
  * sequence though. */
 {
 struct dnaSeq seq;
-int len;
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 int digits = 2;
 unsigned long curPos = approxSize;
 int fileCount = 0;
 FILE *f = NULL;
-char outDir[256], outFile[128], ext[64], outPath[512];
+char outPath[PATH_LEN];
 ZeroVar(&seq);
 
-splitPath(outRoot, outDir, outFile, ext);
 while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
     {
     if (curPos >= approxSize)
         {
 	carefulClose(&f);
 	curPos = 0;
-	sprintf(outPath, "%s%s%0*d.fa", outDir, outFile, digits, fileCount++);
+        mkOutPath(outPath, outRoot, digits, fileCount++);
         if (verbose)
             printf("writing %s\n", outPath);
 	f = mustOpen(outPath, "w");
@@ -348,9 +372,8 @@ unsigned long pieces = (estSize + pieceSize-1)/pieceSize;
 int digits = digitsBaseTen(pieces);
 int maxN = optionInt("maxN", pieceSize-1);
 boolean oneFile = optionExists("oneFile");
-char fileName[512];
-char dirOnly[256], noPath[128];
-char numOut[128];
+char fileName[PATH_LEN];
+char dirOnly[PATH_LEN], noPath[128];
 int pos, pieceIx = 0, writeCount = 0;
 struct dnaSeq seq;
 struct lineFile *lf = lineFileOpen(inName, TRUE);
@@ -391,14 +414,14 @@ while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
 	int thisSize = seq.size - pos;
 	if (thisSize > pieceSize) 
 	    thisSize = pieceSize;
-	sprintf(numOut, "%s%0*d", noPath, digits, pieceIx++);
 	if (bitCountRange(bits, pos, thisSize) <= maxN)
 	    {
 	    if (!oneFile)
 	        {
-		sprintf(fileName, "%s%s.fa", dirOnly, numOut);
+                mkOutPath(fileName, outRoot, digits, pieceIx);
 		f = mustOpen(fileName, "w");
 		}
+            sprintf(numOut, "%s%0*d", noPath, digits, pieceIx);
 	    faWriteNext(f, numOut, seq.dna + pos, thisSize);
 	    if (lift)
 	        fprintf(lift, "%d\t%s\t%d\t%s\t%d\n",
@@ -407,6 +430,7 @@ while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
 	    if (!oneFile)
 	        carefulClose(&f);
 	    }
+        pieceIx++;
 	}
     bitFree(&bits);
     }
@@ -534,9 +558,10 @@ while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
 	    {
 	    if (!oneFile)
 	        {
-		sprintf(fileName, "%s%s.fa", dirOnly, numOut);
+                mkOutPath(fileName, outRoot, digits, pieceIx);
 		f = mustOpen(fileName, "w");
 		}
+            sprintf(numOut, "%s%0*d", noPath, digits, pieceIx);
 	    faWriteNext(f, numOut, seq.dna + pos, thisSize);
 	    if (lift)
 	        fprintf(lift, "%d\t%s\t%d\t%s\t%d\n",
@@ -545,6 +570,7 @@ while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
 	    if (!oneFile)
 	        carefulClose(&f);
 	    }
+        pieceIx++;
 	pos += thisSize;
 	if (gotGap)
 	    pos += gapSize;
@@ -573,6 +599,7 @@ inName = argv[2];
 if (argc < 4 )
     usage();
 verbose = optionExists("verbose");
+outDirDepth = optionInt("outDirDepth", 0);
 
 if (sameWord(how, "byname"))
     {
