@@ -370,7 +370,8 @@ void specificUi(struct trackDb *tdb)
 	else if (sameString(track, "zoo"))
 		genericWiggleUi(tdb,6);
 	else if (sameString(track, "humMusL") ||
-		 sameString( track, "musHumL" ))
+		 sameString( track, "musHumL") ||
+		 sameString( track, "regPotential") )
 		humMusUi(tdb,7);
 else if (startsWith("blastz", track))
     colorCrossSpeciesUi(tdb, FALSE);
