@@ -142,7 +142,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.733 2004/08/29 00:54:42 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.734 2004/08/30 19:38:38 hiram Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -13761,21 +13761,31 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 	break;
     }
 if (ct == NULL)
-    errAbort("Couldn't find %s in %s", trackId, fileName);
-for (bed = ct->bedList; bed != NULL; bed = bed->next)
+    errAbort("Couldn't find '%s' in '%s'", trackId, fileName);
+
+if (ct->wiggle)
     {
-    if (bed->chromStart == start && sameString(seqName, bed->chrom))
+    /*	the NULL is for conn, don't need that for custom tracks */
+    genericWiggleClick(NULL, ct->tdb, fileItem, start);
+    }
+else
+    {
+    for (bed = ct->bedList; bed != NULL; bed = bed->next)
 	{
-	if (bed->name == NULL || sameString(itemName, bed->name) )
+	if (bed->chromStart == start && sameString(seqName, bed->chrom))
 	    {
-	    break;
+	    if (bed->name == NULL || sameString(itemName, bed->name) )
+		{
+		break;
+		}
 	    }
 	}
+    if (bed == NULL)
+	errAbort("Couldn't find %s@%s:%d in %s", itemName, seqName,
+		start, fileName);
+    printCustomUrl(ct->tdb, itemName, TRUE);
+    bedPrintPos(bed, ct->fieldCount);
     }
-if (bed == NULL)
-    errAbort("Couldn't find %s@%s:%d in %s", itemName, seqName, start, fileName);
-printCustomUrl(ct->tdb, itemName, TRUE);
-bedPrintPos(bed, ct->fieldCount);
 }
 
 void blastProtein(struct trackDb *tdb, char *itemName)
