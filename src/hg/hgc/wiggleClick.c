@@ -68,8 +68,10 @@ valuesMatched = wds->getData(wds, database, table,
 
 statsPreamble(wds, chrom, winStart, winEnd, span, valuesMatched, NULL);
 
-/*	output statistics table	*/
-wds->statsOut(wds, "stdout", TRUE, TRUE);
+/*	output statistics table
+ *		(+sort, +html output, +with header, +close table)
+ */
+wds->statsOut(wds, "stdout", TRUE, TRUE, TRUE, FALSE);
 
 /*	convert the ascii data listings to one giant float array 	*/
 valuesArray = wds->asciiToDataArray(wds, valuesMatched, &valueCount);
