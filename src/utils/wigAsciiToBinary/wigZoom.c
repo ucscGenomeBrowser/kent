@@ -12,15 +12,17 @@
 #include	"options.h"
 #include	"linefile.h"
 
-static char const rcsid[] = "$Id: wigZoom.c,v 1.4 2004/03/11 23:14:33 hiram Exp $";
+static char const rcsid[] = "$Id: wigZoom.c,v 1.5 2004/12/15 20:17:56 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"dataSpan", OPTION_LONG_LONG},
+    {"obsolete", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
 static long long dataSpan = 1024;	/* bases spanned per data point */
+static boolean obsolete = FALSE;/*use this program even though it is obsolete*/
 
 static void usage()
 {
@@ -28,6 +30,7 @@ errAbort(
     "wigZoom - process wiggle data to a zoomed view\n"
     "usage: wigZoom [-verbose=2] [-dataSpan=N] <file names>\n"
     "\t-dataSpan=N - # of bases spanned for each data point, default 1024\n"
+    "\t-obsolete - Use this program even though it is obsolete.\n"
     "\t-verbose=2 - display process while underway\n"
     "\t<file names> - list of files to process\n"
     "Each ascii file is a two column file.  Whitespace separator\n"
@@ -135,6 +138,14 @@ for (i = 1; i < argc; ++i)
 int main( int argc, char *argv[] )
 {
 optionInit(&argc, argv, optionSpecs);
+
+obsolete = optionExists("obsolete");
+if (! obsolete)
+    {
+    verbose(1,"ERROR: This loader is obsolete.  Please use: 'wigEncode'\n");
+    verbose(1,"\t(use -obsolete flag to run this encoder despite it being obsolete)\n");
+    errAbort("ERROR: wigZoom is obsolete, use 'wigEncode' instead");
+    }
 
 if (argc < 2)
     usage();
