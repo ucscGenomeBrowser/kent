@@ -76,8 +76,9 @@
 #include "cdsColors.h"
 #include "cds.h"
 #include "simpleNucDiff.h"
+#include "tfbsCons.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.665 2004/02/01 18:28:08 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.666 2004/02/03 22:26:41 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -3192,6 +3193,40 @@ tg->itemStart = bedItemStart;
 tg->itemEnd = bedItemEnd;
 }
 
+void loadtfbsCons(struct track *tg)
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+char *lastName = NULL;
+struct tfbsCons *tfbs, *list = NULL;
+
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    tfbs = tfbsConsLoad(row+rowOffset);
+    if (lastName == NULL)
+	lastName = cloneString(tfbs->name);
+    else if (!sameString(lastName, tfbs->name))
+	{
+	slAddHead(&list, tfbs);
+	freeMem(lastName);
+	lastName = cloneString(tfbs->name);
+	}
+    }
+freeMem(lastName);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&list);
+tg->items = list;
+}
+
+void tfbsConsMethods(struct track *tg)
+{
+    bedMethods(tg);
+    tg->loadItems = loadtfbsCons;
+}
 
 void isochoreLoad(struct track *tg)
 /* Load up isochores from database table to track items. */
@@ -7476,6 +7511,7 @@ registerTrackHandler("celeraDupPositive", celeraDupPositiveMethods);
 registerTrackHandler("celeraCoverage", celeraCoverageMethods);
 registerTrackHandler("jkDuplicon", jkDupliconMethods);
 registerTrackHandler("chimpSimpleDiff", chimpSimpleDiffMethods);
+registerTrackHandler("tfbsCons", tfbsConsMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
