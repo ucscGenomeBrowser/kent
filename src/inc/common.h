@@ -203,6 +203,7 @@ void *slCat(void *a, void *b);
  *   struct slName *a = getNames("a");
  *   struct slName *b = getNames("b");
  *   struct slName *ab = slCat(a,b)
+ * After this it is no longer safe to use a or b. 
  */
 
 void *slLastEl(void *list);
@@ -514,7 +515,7 @@ int  rangeIntersection(int start1, int end1, int start2, int end2);
  * intersection. */
 
 int  positiveRangeIntersection(int start1, int end1, int start2, int end2);
-/* Return amount of bases two ranges intersect over, 0 or negative if no
+/* Return amount of bases two ranges intersect over, 0 if no
  * intersection. */
 
 bits32 byteSwap32(bits32 a);
