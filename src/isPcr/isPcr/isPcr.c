@@ -147,6 +147,10 @@ while (lineFileRow(lf, row))
     {
     struct gfPcrInput gpi;
     gfPcrInputStaticLoad(row, &gpi);
+    //printf("PCR on %s %s %s\n", gpi.name, gpi.fPrimer, gpi.rPrimer);
+    if (strlen(gpi.fPrimer) < 11 || strlen(gpi.rPrimer) < 11)
+            errAbort("Primer too short (<10): %s %s %s", 
+                                gpi.name, gpi.fPrimer, gpi.rPrimer);
     pcrStrand(gf, gpi.name, gpi.fPrimer, gpi.rPrimer, 0, maxSize, '+', out, f);
     pcrStrand(gf, gpi.name, gpi.fPrimer, gpi.rPrimer, 0, maxSize, '-', out, f);
     }
