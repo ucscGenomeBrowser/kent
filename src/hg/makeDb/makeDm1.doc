@@ -1848,19 +1848,19 @@ axtFilter -notQ=chrUn_random $1 \
     netFilter -minGap=10 yakubaSyn.net | hgLoadNet dm1 netSyntenyDroYak1 stdin
 
 
-# MAKE VSDROYAK1 DOWNLOADABLES (DONE 5/27/04 angie)
+# MAKE VSDROYAK1 DOWNLOADABLES (DONE 10/5/04 angie)
     ssh kksilo
     cd /cluster/data/dm1/bed/blastz.droYak1.2004-05-22/axtChain
-    cp all.chain yakuba.chain
-    zip /cluster/data/dm1/zips/yakuba.chain.zip yakuba.chain
-    rm yakuba.chain
-    zip /cluster/data/dm1/zips/yakuba.net.zip yakuba.net
+    gzip -c all.chain > ../../../zips/yakuba.chain.gz
+    gzip -c yakuba.net > ../../../zips/yakuba.net.gz
+    # axtNet/* already compressed...
 
     ssh hgwdev
     mkdir /usr/local/apache/htdocs/goldenPath/dm1/vsDroYak1
     cd /usr/local/apache/htdocs/goldenPath/dm1/vsDroYak1
-    mv /cluster/data/dm1/zips/yakuba*.zip .
-    md5sum *.zip > md5sum.txt
+    mv /cluster/data/dm1/zips/yakuba*.gz .
+    cp -pR /cluster/data/dm1/bed/blastz.droYak1.2004-05-22/axtNet .
+    md5sum *.gz */*.gz > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
 
 
@@ -2265,19 +2265,23 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     netFilter -minGap=10 anophelesSyn.net | hgLoadNet dm1 netSyntenyAnoGam1 stdin
 
 
-# MAKE VSANOGAM1 DOWNLOADABLES (DONE 6/17/04 angie)
+# MAKE VSANOGAM1 DOWNLOADABLES (DONE 10/5/04 angie)
     ssh kksilo
     cd /cluster/data/dm1/bed/blastz.anoGam1.2004-06-10/axtChain
-    cp all.chain anopheles.chain
-    zip /cluster/data/dm1/zips/anopheles.chain.zip anopheles.chain
-    rm anopheles.chain
-    zip /cluster/data/dm1/zips/anopheles.net.zip anopheles.net
+    gzip -c all.chain > ../../../zips/anopheles.chain.gz
+    gzip -c anopheles.net > ../../../zips/anopheles.net.gz
+    cd ..
+    mkdir ../../zips/axtNet
+    foreach f (axtNet/chr*.axt)
+      gzip -c $f > ../../zips/axtNet/$f:t.gz
+    end
 
     ssh hgwdev
     mkdir /usr/local/apache/htdocs/goldenPath/dm1/vsAnoGam1
     cd /usr/local/apache/htdocs/goldenPath/dm1/vsAnoGam1
-    mv /cluster/data/dm1/zips/anopheles*.zip .
-    md5sum *.zip > md5sum.txt
+    mv /cluster/data/dm1/zips/anopheles*.gz .
+    mv /cluster/data/dm1/zips/axtNet .
+    md5sum *.gz */*.gz > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
 
 
@@ -2342,11 +2346,6 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     # clean up bluearc
     rm -r /cluster/bluearc/multiz.flymo
 
-    # zip it for download
-    ssh kksilo
-    cd /cluster/data/dm1/bed/multiz.dm1droYak1dp2anoGam1
-    zip -j /cluster/data/dm1/zips/multizDm1DroYak1Dp2AnoGam1.zip mypa/*.maf
-
     # setup external files for database reference
     ssh hgwdev
     mkdir /gbdb/dm1/mzDy1Dp2Ag1_phast
@@ -2370,11 +2369,19 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
       /gbdb/dm1/a_gambiae_myp2a
     hgLoadMaf -WARN dm1 a_gambiae_myp2a
 
-    # put it out for download
+    # put it out for download (10/5/04)
+    ssh kksilo
+    cd /cluster/data/dm1/bed/multiz.dm1droYak1dp2anoGam1
+    mkdir ../../zips/mzMafs
+    foreach f (mypa/*.maf)
+      gzip -c $f > ../../zips/mzMafs/$f:t.gz
+    end
+    ssh hgwdev
     mkdir /usr/local/apache/htdocs/goldenPath/dm1/multizDroYak1Dp2AnoGam1
     cd /usr/local/apache/htdocs/goldenPath/dm1/multizDroYak1Dp2AnoGam1
-    mv /cluster/data/dm1/zips/multizDm1DroYak1Dp2AnoGam1.zip .
-    md5sum *.zip > md5sum.txt
+    mv /cluster/data/dm1/zips/mzMafs/* .
+    rmdir /cluster/data/dm1/zips/mzMafs
+    md5sum *.gz > md5sum.txt
 
 
 # PHASTCONS MELANOGASTER/YAKUBA/PSEUDOOBSCURA (first cut 6/1/04 acs)
