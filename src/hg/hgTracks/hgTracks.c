@@ -7025,10 +7025,10 @@ int lfZooCmp(const void *va, const void *vb)
 /* Compare based on name, then chromStart, used for
    sorting sample based tracks. */
 {
-const struct linkedFeatures *a = *((struct linkedFeatures **)va);
-const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
-char *aVal = (char*) hashFindVal(zooSpeciesHash, a->name);
-char *bVal = (char*) hashFindVal(zooSpeciesHash, b->name);
+struct linkedFeatures *a = *((struct linkedFeatures **)va);
+struct linkedFeatures *b = *((struct linkedFeatures **)vb);
+char *aVal =  hashFindVal(zooSpeciesHash, a->name);
+char *bVal =  hashFindVal(zooSpeciesHash, b->name);
 int aV = atoi(aVal);
 int bV = atoi(bVal);
 return aV - bV;
