@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadPsl.c,v 1.23 2004/03/05 04:57:01 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadPsl.c,v 1.24 2004/04/24 19:45:37 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -71,45 +71,49 @@ else
 freez(&sqlCmd);
 }
 
-void copyPslsToTab(char *tabFile, int pslCount, char *pslNames[])
-/* copy a the PSL to a tab file */
+void copyPslToTab(FILE *tabFh, char *pslFile)
+/* copy a single PSL to the tab file */
 {
-FILE *f = mustOpen(tabFile, "w");
+verbose(1, "Processing %s\n", pslFile);
+if (pslCreateOpts & PSL_XA_FORMAT)
+    {
+    struct xAli *xa;
+    char *row[23];
+    struct lineFile *lf = lineFileOpen(pslFile, TRUE);
+    while (lineFileRow(lf, row))
+        {
+        xa = xAliLoad(row);
+        if (pslCreateOpts & PSL_WITH_BIN)
+            fprintf(tabFh, "%u\t", hFindBin(xa->tStart, xa->tEnd));
+        xAliTabOut(xa, tabFh);
+        xAliFree(&xa);
+        }
+    lineFileClose(&lf);
+    }
+else
+    {
+    struct psl *psl;
+    struct lineFile *lf = pslFileOpen(pslFile);
+    while ((psl = pslNext(lf)) != NULL)
+        {
+        if (pslCreateOpts & PSL_WITH_BIN)
+            fprintf(tabFh, "%u\t", hFindBin(psl->tStart, psl->tEnd));
+        pslTabOut(psl, tabFh);
+        pslFree(&psl);
+        }
+    lineFileClose(&lf);
+    }
+}
+
+void copyPslsToTab(char *tabFile, int pslCount, char *pslNames[])
+/* copy all the PSL to a tab file */
+{
+FILE *tabFh = mustOpen(tabFile, "w");
 int i;
 
 for (i = 0; i<pslCount; ++i)
-    {
-    verbose(1, "Processing %s\n", pslNames[i]);
-    if (pslCreateOpts & PSL_XA_FORMAT)
-        {
-        struct xAli *xa;
-        char *row[23];
-	struct lineFile *lf = lineFileOpen(pslNames[i], TRUE);
-        while (lineFileRow(lf, row))
-            {
-            xa = xAliLoad(row);
-            if (pslCreateOpts & PSL_WITH_BIN)
-                fprintf(f, "%u\t", hFindBin(xa->tStart, xa->tEnd));
-            xAliTabOut(xa, f);
-            xAliFree(&xa);
-            }
-        lineFileClose(&lf);
-        }
-    else
-        {
-        struct psl *psl;
-        struct lineFile *lf = pslFileOpen(pslNames[i]);
-        while ((psl = pslNext(lf)) != NULL)
-            {
-            if (pslCreateOpts & PSL_WITH_BIN)
-                fprintf(f, "%u\t", hFindBin(psl->tStart, psl->tEnd));
-            pslTabOut(psl, f);
-            pslFree(&psl);
-            }
-        lineFileClose(&lf);
-        }
-    }
-carefulClose(&f);
+    copyPslToTab(tabFh, pslNames[i]);
+carefulClose(&tabFh);
 }
 
 void hgLoadPsl(char *database, int pslCount, char *pslNames[])
@@ -128,10 +132,7 @@ if (clTableName != NULL)
 else
     splitPath(pslNames[0], NULL, table, NULL);
 
-/* not bin and only one PSL, load directly */
-if ((pslCount == 1) && !(pslCreateOpts & PSL_WITH_BIN) && !exportOutput)
-    strcpy(tabFile, pslNames[0]);
-else if (exportOutput)
+if (exportOutput)
     sprintf(tabFile, "%s.txt", table);
 else
     strcpy(tabFile, "psl.tab");
