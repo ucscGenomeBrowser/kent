@@ -10,7 +10,7 @@
 #include "bed.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: cutter.c,v 1.2 2005/03/17 00:42:32 aamp Exp $";
+static char const rcsid[] = "$Id: cutter.c,v 1.3 2005/03/25 00:54:42 aamp Exp $";
 
 struct cutter *cutterLoad(char **row)
 /* Load a cutter from row fetched with select * from cutter
@@ -568,6 +568,9 @@ struct cutter *enz, *A = NULL, *C = NULL, *G = NULL, *T = NULL, *other = NULL;
 struct bed *bedList = NULL;
 int seqPos = 0, i;
 
+if (!cutters)
+    return NULL;
+
 /* Put each of the enzymes in either a hash table of six-cutters or */
 
 enz = cutters;
@@ -575,7 +578,7 @@ while (enz != NULL)
     {
     int acgtCount = 0;
     struct cutter *next = enz->next, *garb = NULL;
-    if (!searchPalindromes && enz->palindromic)
+    if (enz->palindromic && !searchPalindromes)
 	{
 	enz = next;
 	continue;
@@ -599,60 +602,71 @@ while (enz != NULL)
 	}
     enz = next;
     }
-A = slCat(A, other);
-C = slCat(C, other);
-G = slCat(G, other);
-T = slCat(T, other);
-for (seqPos = 0; seqPos < seq->size; seqPos++)
+
+if (other)
     {
-    struct cutter *enzList = NULL;
-    boolean inHash = FALSE;
-    char sixer[7];
-    if (seq->size - seqPos >= 6)
+    if (A)
+	A = slCat(A, other);
+    if (C)
+	C = slCat(C, other);
+    if (G)
+	G = slCat(G, other);
+    if (T)
+	T = slCat(T, other);
+    }
+
+if (A || C || G || T) 
+    for (seqPos = 0; seqPos < seq->size; seqPos++)
 	{
-	struct hashEl *el = NULL;
-	sixer[6] = '\0';
-	memcpy(sixer, seq->dna+seqPos, 6);
-	el = hashLookup(sixers, sixer);
-	if (el)
+	struct cutter *enzList = NULL;
+	boolean inHash = FALSE;
+	char sixer[7];
+	if (seq->size - seqPos >= 6)
 	    {
-	    struct bed *add;
-	    inHash = TRUE;
-	    enz = el->val;
-	    add = allocBedEnz(enz, seq->name, seqPos, strand);
-	    slAddHead(&bedList, add);
-	    while (el = hashLookupNext(el))
-		{
+	    struct hashEl *el = NULL;
+	    sixer[6] = '\0';
+	    memcpy(sixer, seq->dna+seqPos, 6);
+	    el = hashLookup(sixers, sixer);
+	    if (el)
+		{	    
+		struct bed *add;
+		inHash = TRUE;
 		enz = el->val;
 		add = allocBedEnz(enz, seq->name, seqPos, strand);
+		slAddHead(&bedList, add);
+		while (el = hashLookupNext(el))
+		    {
+		    enz = el->val;
+		    add = allocBedEnz(enz, seq->name, seqPos, strand);
+		    slAddHead(&bedList, add);
+		    }
+		}
+	    }
+	if (seq->dna[seqPos] == 'A')
+	    enzList = A;
+	else if (seq->dna[seqPos] == 'C')
+	    enzList = C;
+	else if (seq->dna[seqPos] == 'G')
+	    enzList = G;
+	else if (seq->dna[seqPos] == 'T')
+	    enzList = T;
+	for (enz = enzList; enz != NULL; enz = enz->next)
+	    {
+	    int enzPos = 0;
+	    int seqCurPos = seqPos;	
+	    while (enzPos < enz->size && seqCurPos < seq->size && matchingBase(enz->seq[enzPos],seq->dna[seqCurPos]))
+		{
+		enzPos++; seqCurPos++;
+		}
+	    if (enzPos == enz->size)
+		{
+		struct bed *add = allocBedEnz(enz, seq->name, seqPos + startOffset, strand);
 		slAddHead(&bedList, add);
 		}
 	    }
 	}
-    if (seq->dna[seqPos] == 'A')
-	enzList = A;
-    else if (seq->dna[seqPos] == 'C')
-	enzList = C;
-    else if (seq->dna[seqPos] == 'G')
-	enzList = G;
-    else if (seq->dna[seqPos] == 'T')
-	enzList = T;
-    for (enz = enzList; enz != NULL; enz = enz->next)
-	{
-	int enzPos = 0;
-	int seqCurPos = seqPos;	
-	while (enzPos < enz->size && seqCurPos < seq->size && matchingBase(enz->seq[enzPos],seq->dna[seqCurPos]))
-	    {
-	    enzPos++; seqCurPos++;
-	    }
-	if (enzPos == enz->size)
-	    {
-	    struct bed *add = allocBedEnz(enz, seq->name, seqPos + startOffset, strand);
-	    slAddHead(&bedList, add);
-	    }
-	}
-    }
-slReverse(&bedList);
+if (bedList)
+    slReverse(&bedList);
 return bedList;
 }
 

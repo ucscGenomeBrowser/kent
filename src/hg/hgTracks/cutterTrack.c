@@ -16,7 +16,7 @@ struct trackDb *tdb = tg->tdb;
 int scoreMin, scoreMax;
 if (!zoomedToBaseLevel)
     bedDrawSimpleAt(tg, item, vg, xOff, y, scale, font, color, vis);
-else
+else 
     {
     heightPer = tg->heightPer;
     x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
@@ -115,17 +115,27 @@ cutters = cutterLoadByQuery(conn, "select * from cutters");
 windowDna = hDnaFromSeq(chromName, winStart, winEnd, dnaUpper);
 
 /* Do different things based on window size. */
-if (winSize < 50000)
-    cullCutters(cutters, FALSE, NULL, NULL, 6);
-else if (winSize >= 5000 && winSize < 50000)
-    cullCutters(cutters, FALSE, NULL, NULL, 8);
-else 
-    cullCutters(cutters, FALSE, NULL, NULL, 1000000);
-plus = matchEnzymes(cutters, windowDna, '+', TRUE, winStart);
-reverseComplement(windowDna->dna, windowDna->size);
-minus = matchEnzymes(cutters, windowDna, '-', FALSE, winStart);
-bedList = slCat(plus, minus);
-tg->items = bedList;
+
+if (winSize < 200000)
+    {
+    if (zoomedToBaseLevel)
+	cullCutters(cutters, TRUE, NULL, NULL, 0);
+    else if (winSize >= 20000 && winSize < 200000)
+	cullCutters(cutters, FALSE, NULL, NULL, 7);
+    else
+	cullCutters(cutters, FALSE, NULL, NULL, 6);
+ /*    printf("<-- %d -->\n", slCount(cutters)); */
+    plus = matchEnzymes(cutters, windowDna, '+', TRUE, winStart);
+    reverseComplement(windowDna->dna, windowDna->size);
+    minus = matchEnzymes(cutters, windowDna, '-', FALSE, winStart);
+    if (plus && minus)
+	bedList = slCat(plus, minus);
+    else if (plus)
+	bedList = plus;
+    else 
+	bedList = minus;
+    tg->items = bedList;
+    }
 hFreeConn2(&conn);
 }
 
