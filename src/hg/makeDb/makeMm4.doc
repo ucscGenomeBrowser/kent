@@ -2357,34 +2357,37 @@ while (<>) {
     # Mm4 wc stsMarkers_pos.rdb
     # 24058  168406 1133400 stsMarkers_pos.rdb
 
-XXXX
-    # I'm getting an empty result from this
     /projects/compbio/usr/booch/booch/scripts/combineAllSeqPrimer \
-	-mouse /cluster/store5/mouseMarker/stsInfoMouse.bed \
-	dummy primer/primers.initial.acc > stsMarkers_pos_all.rdb
+	-rat /cluster/store5/mouseMarker/stsInfoMouse.bed \
+	dummy primer/primers.final > stsMarkers_pos_all.rdb
+    # can not find this result for Mm3
+    # Mm4 wc stsMarkers_pos_all.rdb
+    # 22107   46165  293258 stsMarkers_pos_all.rdb
 
 XXXX this createSTSbed is only for Human, does not work here
+XXXX  Need something that converts stsMarkers_pos.rdb to stsMapMouse.bed
     /projects/compbio/usr/booch/booch/scripts/createSTSbed \
 	/cluster/store5/mouseMarker/stsInfoMouse.bed \
 	stsMarkers_pos.rdb > stsMapMouse.bed
 
 #  STS Markers plots - needs to wait until stsMarkers_pos_all.rdb
-#	is created correctly from above
+#	is created correctly from above, also needs the three maps files
     mkdir /cluster/data/mm4/bed/STSmarkers/html
     cd /cluster/data/mm4/bed/STSmarkers/html
     mkdir maps plots sts
 
-    /projects/compbio/usr/booch/booch/scripts/mergeTPFsts -rat
+    # not sure how to make the three maps/*.map files
+    /projects/compbio/usr/booch/booch/scripts/mergeTPFsts -rat \
 	../primer/accession_info.rdb ../stsMarkers_pos.rdb \
 	maps/wi_rh.id.map 3.0 ../stsMarkers_pos_all.rdb \
 	/cluster/store5/mouseMarker/stsInfoMouse.bed > rh.rdb
     mv map.ranges rh.ranges
-    /projects/compbio/usr/booch/booch/scripts/mergeTPFsts -rat
+    /projects/compbio/usr/booch/booch/scripts/mergeTPFsts -rat \
 	../primer/accession_info.rdb ../stsMarkers_pos.rdb \
 	maps/wi_gen.id.map 3.0 ../stsMarkers_pos_all.rdb \
 	/cluster/store5/mouseMarker/stsInfoMouse.bed > wi_gen.rdb
     mv map.ranges wi_gen.ranges
-    /projects/compbio/usr/booch/booch/scripts/mergeTPFsts -rat
+    /projects/compbio/usr/booch/booch/scripts/mergeTPFsts -rat \
 	../primer/accession_info.rdb ../stsMarkers_pos.rdb \
 	maps/mgd_gen.id.map 3.0 ../stsMarkers_pos_all.rdb \
 	/cluster/store5/mouseMarker/stsInfoMouse.bed > mgd.rdb
