@@ -648,8 +648,8 @@ int prevQclass=INTERGENIC;
 int posStrand;
 DNA qCodon[4];
 DNA tCodon[4];
-AA qProt, tProt ;
-int tPtr ;
+AA qProt, tProt = 0;
+int tPtr = 0;
 
 if (gp->strand[0] == '+')
     {
@@ -2288,22 +2288,17 @@ struct trackDb *tdbList = hTrackDb(seqName), *tdb;
 struct trackDb *ctdbList = tdbForCustomTracks();
 struct trackDb *utdbList = tdbForUserPsl();
 char *pos = NULL;
-
-Bits *uBits = bitAlloc(winSize);	/* Underline bits. */
-Bits *iBits = bitAlloc(winSize);	/* Italic bits. */
-Bits *bBits = bitAlloc(winSize);	/* Bold bits. */
+Bits *uBits;	/* Underline bits. */
+Bits *iBits;    /* Italic bits. */
+Bits *bBits;    /* Bold bits. */
 
 if (NULL != (pos = cartOptionalString(cart, "getDnaPos")))
-    {
     hgParseChromRange(pos, &seqName, &winStart, &winEnd);
-    }
 
-/* The range entry input is 1-based, to be consistent with the coord range 
- * displayed to the user. Adjust it back here: */
-/* winStart -= 1; Commented out because this is inconsistent
-with how getDna2 works
-*/
 winSize = winEnd - winStart;
+uBits = bitAlloc(winSize);	/* Underline bits. */
+iBits = bitAlloc(winSize);	/* Italic bits. */
+bBits = bitAlloc(winSize);	/* Bold bits. */
 
 ctdbList = slCat(ctdbList, tdbList);
 tdbList = slCat(utdbList, ctdbList);
@@ -4559,7 +4554,7 @@ char **row;
 char query[256];
 
 char cond_str[128];
-char *refSeqName;
+char *refSeqName = NULL;
 char *descID;
 char *mrnaDesc;
 char *proteinID;
@@ -4568,7 +4563,6 @@ char *pdbID;
 char *freezeName;
 char *mgiID;
 struct refLink *rl;
-
 char *seqType;
 boolean dnaBased;
 char *proteinAC;
@@ -4591,7 +4585,7 @@ if (hTableExists("knownGeneLink"))
     }
 
 // Display mRNA or DNA info and NCBI link
-if (dnaBased)
+if (dnaBased && refSeqName != NULL)
     {
     printf("This gene is based on RefSeq %s, which is derived from a DNA sequence.", refSeqName);
     printf("  Please follow the link below for further details.<br>\n");
@@ -6178,8 +6172,8 @@ char **row, **row1;
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 struct stsMap stsRow;
-struct stsInfo *infoRow;
-struct stsInfo2 *info2Row;
+struct stsInfo *infoRow = NULL;
+struct stsInfo2 *info2Row = NULL;
 char band[32], stsid[20];
 int i;
 struct psl *pslList = NULL, *psl;
@@ -6318,7 +6312,7 @@ if (row != NULL)
 	/* Print out information from STS maps for this marker */
 	if ((!sameString(infoRow->genethonName,"")) 
 	    || (!sameString(infoRow->marshfieldName,""))
-	    || ((stsInfo2Exists) && (!sameString(info2Row->decodeName,""))))
+	    || (stsInfo2Exists && info2Row != NULL && (!sameString(info2Row->decodeName,""))))
 	    {
 	    printf("<H3>Genetic Map Positions</H3>\n");  
 	    printf("<TABLE>\n");
