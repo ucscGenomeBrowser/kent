@@ -10832,7 +10832,7 @@ else if (sameWord(track, "genieKnown"))
     {
     doKnownGene(tdb, item);
     }
-else if (sameWord(track, "viralProt"))
+else if (startsWith("viralProt", track))
     {
     doViralProt(tdb, item);
     }
