@@ -120,3 +120,12 @@ altColor 255,240,200
 spectrum on
 type psl xeno mm2
 
+
+track refFullAli
+shortLabel DBTSS mRNA
+longLabel RefSeq mRNA extended to the 5' end from DBTSS
+group rna
+priority 75
+visibility hide
+color 0, 0, 100
+type psl .
