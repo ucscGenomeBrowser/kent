@@ -2194,13 +2194,7 @@ while (<>) {
     mkdir -p /cluster/data/mm4/bed/STSmarkers/primer
     mkdir -p /cluster/data/mm4/bed/STSmarkers/ePCR
     cd /cluster/data/mm4/bed/STSmarkers/primer
-    # concerning the question of where musPrimer.fa comes from, according
-    # to Yontao:
-    # Usually there is not much new data, as I know. There are two place to
-    # check, one is dbsts from NCBI the other is MGI. But after large scale of
-    # mapping project, these markers is usually stable and not many new stuff.  
-    # But it is good to check after a while and then adding any new ones to the
-    # current version.
+    # we need to document where musPrimer.fa comes from
     echo "/cluster/bluearc/scratch/mus/mm4/musPrimer.fa" > primers.lst
     cat << '_EOF_' > template
 #LOOP
@@ -2242,8 +2236,7 @@ XXX next step needs all.epcr
 /cluster/bin/scripts/luRunEpcr $(path1) $(path2) epcr.out/$(num2).epcr
 #ENDLOOP
 '_EOF_'
-    # Same comment as above from Yontao.  I don't know where these files
-    # came from exactly.
+    # we need to document where mmPrimer.info comes from
     echo "/cluster/bluearc/scratch/mus/mm4/mmPrimer.info" > epcr.lst
     gensub2 epcr.lst contig.lst template jobList
     para create jobList
