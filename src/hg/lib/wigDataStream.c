@@ -4,7 +4,7 @@
 #include "common.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.10 2004/08/10 21:53:24 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.11 2004/08/10 23:25:09 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -131,6 +131,22 @@ if (statsCount > 0)
 	}
     slAddHead(&wDS->stats, ws);
     }
+}
+
+static struct bed *bedElement(char *chrom, unsigned start, unsigned end,
+        unsigned lineCount)
+{
+struct bed *bed;
+char name[128];
+
+AllocVar(bed);
+bed->chrom = cloneString(chrom);
+bed->chromStart = start;
+bed->chromEnd = end;
+snprintf(name, sizeof(name), "%s.%u",
+    chrom, lineCount);
+bed->name = cloneString(name);
+return bed;
 }
 
 /*	PUBLIC	METHODS   **************************************************/
@@ -325,6 +341,10 @@ unsigned statsCount = 0;
 long int chromStart = -1;
 long int chromEnd = 0;
 boolean summaryOnly = TRUE;
+unsigned bedElStart = 0;
+unsigned bedElEnd = 0;
+unsigned bedElCount = 0;
+boolean firstSpanDone = FALSE;	/*	to prevent multiple bed lists */
 
 doAscii = operations & wigFetchAscii;
 doBed = operations & wigFetchBed;
@@ -390,6 +410,25 @@ while (nextRow(wDS, row, WIGGLE_NUM_COLS))
 	    (wDS->currentChrom &&
 		differentString(wDS->currentChrom, wiggle->chrom)))
 	{
+	/*	if we have been working on one, then last doBed	*/
+	if (!firstSpanDone && doBed && wDS->currentChrom)
+	    {
+	    if (bedElEnd > bedElStart)
+		{
+		struct bed *bedEl;
+		bedEl = bedElement(wDS->currentChrom,
+			bedElStart, bedElEnd, ++bedElCount);
+		slAddHead(&wDS->bed, bedEl);
+		}
+	    bedElStart = 0;
+	    bedElEnd = 0;
+	    bedElCount = 0;
+	    }
+	if (wDS->currentSpan && (wDS->currentSpan |= wiggle->span))
+	    firstSpanDone = TRUE;
+	if (wDS->currentChrom &&
+		differentString(wDS->currentChrom, wiggle->chrom))
+	    firstSpanDone = FALSE;
 	/*	if we have been working on one, then doStats	*/
 	if (doStats && wDS->currentChrom)
 	    {
@@ -400,6 +439,7 @@ while (nextRow(wDS, row, WIGGLE_NUM_COLS))
 	    }
 	freeMem(wDS->currentChrom);
 	wDS->currentChrom = cloneString(wiggle->chrom);
+	if (wDS->currentSpan |= wiggle->span)
 	wDS->currentSpan = wiggle->span;
 verbose(2, "#\tnew chrom, span: %s, %u\n", wDS->currentChrom, wDS->currentSpan );
 	}
@@ -419,7 +459,6 @@ verbose(2, "#\tnew chrom, span: %s, %u\n", wDS->currentChrom, wDS->currentSpan )
 	    (sizeof(struct asciiDatum) * wiggle->validCount));
 	asciiOut = wigAscii->data;
 	slAddHead(&wDS->ascii,wigAscii);
-verbose(2, "#\tnew ascii element chrom, span: %s, %u\n", wigAscii->chrom, wigAscii->span );
 	}
 
     verbose(3, "#\trow: %llu, start: %u, data range: %g: [%g:%g]\n",
@@ -575,6 +614,27 @@ verbose(2, "#\tnew ascii element chrom, span: %s, %u\n", wigAscii->chrom, wigAsc
 			++asciiOut;
 			++wigAscii->count;
 			}
+		    /*	beware, coords are coming in backwards */
+		    /*	this is not going to work with them backwards	*/
+		    if (!firstSpanDone && doBed)
+			{
+			if (chromPosition == bedElEnd)
+			    bedElEnd += wiggle->span;
+			else if (chromPosition < bedElStart)
+				;
+			else
+			    {
+			    if (bedElEnd > bedElStart)
+				{
+				struct bed *bedEl;
+				bedEl = bedElement(wiggle->chrom,
+					bedElStart, bedElEnd, ++bedElCount);
+				slAddHead(&wDS->bed, bedEl);
+				}
+			    bedElStart = chromPosition;
+			    bedElEnd = bedElStart + wiggle->span;
+			    }
+			}
 		    if (doStats)
 			{
 			if (value < lowerLimit)
@@ -604,6 +664,18 @@ verbose(2, "#\tnew ascii element chrom, span: %s, %u\n", wigAscii->chrom, wigAsc
     wiggleFree(&wiggle);
     }		/*	while (nextRow())	*/
 
+/*	there may be one last bed element to output	*/
+if (!firstSpanDone && doBed)
+    {
+    if (bedElEnd > bedElStart)
+	{
+	struct bed *bedEl;
+	bedEl = bedElement(wDS->currentChrom,
+		bedElStart, bedElEnd, ++bedElCount);
+	slAddHead(&wDS->bed, bedEl);
+	}
+    }
+
 /*	there are accumulated stats to complete	*/
 if (doStats)
     {
@@ -617,9 +689,13 @@ if (doStats)
  *	select statement.  All ordering situations were taken care of by
  *	that.  * HOWEVER * allowing MySQL to order business appears to
  *	slow it down dramatically !  Will have to investigate.
+ *	PLUS - it makes it difficult, if not impossible, to create the bed list
+ *	we will need a sort routine here to sort the ascii list
+ */
 if (doAscii)
     slReverse(&wDS->ascii);
- */
+if (doBed)
+    slReverse(&wDS->bed);
 
 wDS->rowsRead += rowCount;
 wDS->validPoints += validData;
@@ -629,6 +705,29 @@ wDS->bytesSkipped += bytesSkipped;
 
 }	/*	void getData()	*/
 
+static void bedOut(struct wiggleDataStream *wDS, char *fileName)
+/*	print to fileName the bed list */
+{
+FILE * fh;
+fh = mustOpen(fileName, "w");
+if (wDS->bed)
+    {
+    struct bed *bedEl, *next;
+
+    for (bedEl = wDS->bed; bedEl; bedEl = next )
+	{
+	fprintf(fh,"%s\t%u\t%u\t%s\n", bedEl->chrom, bedEl->chromStart,
+	    bedEl->chromEnd, bedEl->name);
+	next = bedEl->next;
+	}
+    }
+else
+    {
+    fprintf(fh, "#\tno data points found for bed format output\n");
+    }
+carefulClose(&fh);
+}
+
 static void statsOut(struct wiggleDataStream *wDS, char *fileName)
 /*	print to fileName the statistics */
 {
@@ -637,7 +736,7 @@ fh = mustOpen(fileName, "w");
 if (wDS->stats)
     {
     struct wiggleStats *stats, *next;
-    int rowsDisplayed = 0;
+    int itemsDisplayed = 0;
 
     fprintf(fh,"<TABLE COLS=12 ALIGN=CENTER HSPACE=0>\n");
     fprintf(fh,"<TR><TH> Chrom </TH><TH> Data <BR> start </TH>");
@@ -664,10 +763,10 @@ if (wDS->stats)
 	fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->stddev);
 	fprintf(fh,"<TR>\n");
 
-	++rowsDisplayed;
+	++itemsDisplayed;
 	next = stats->next;
 	}
-    if (!rowsDisplayed)
+    if (!itemsDisplayed)
 	fprintf(fh,"<TR><TH ALIGN=CENTER COLSPAN=12> No data found matching this request </TH></TR>");
     fprintf(fh,"</TABLE>\n");
     }
@@ -703,8 +802,6 @@ if (wDS->ascii)
 	    span = asciiData->span;
 	    if (wDS->useDataConstraint)
 		{
-		fprintf (fh, "#\tdata constraint in use: %s\n",
-			wDS->dataConstraint );
 		if ((wDS->dataConstraint) &&
 		    sameWord(wDS->dataConstraint,"in range"))
 			fprintf (fh, "#\tdata values in range [%g : %g]\n",
@@ -784,10 +881,10 @@ else
 	    wDS->sqlConstraint);
     dyStringPrintf(query, " order by ");
     if (!wDS->chrName)
-	dyStringPrintf(query, " chrom DESC,");
+	dyStringPrintf(query, " chrom ASC,");
     if (!wDS->spanLimit)
-	dyStringPrintf(query, " span DESC,");
-    dyStringPrintf(query, " chromStart DESC");
+	dyStringPrintf(query, " span ASC,");
+    dyStringPrintf(query, " chromStart ASC");
     verbose(2, "#\t%s\n", query->string);
     if (!wDS->conn)
 	wDS->conn = sqlConnect(wDS->db);
@@ -840,6 +937,7 @@ wds->setPositionConstraint = setPositionConstraint;
 wds->setChromConstraint = setChromConstraint;
 wds->setSpanConstraint = setSpanConstraint;
 wds->setDataConstraint = setDataConstraint;
+wds->bedOut = bedOut;
 wds->statsOut = statsOut;
 wds->asciiOut = asciiOut;
 wds->getData = getData;

@@ -11,11 +11,12 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.13 2004/08/10 21:00:54 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.14 2004/08/10 23:25:35 hiram Exp $";
 
 /* Command line switches. */
 static boolean noAscii = FALSE;	/*	do not output ascii data */
 static boolean doStats = FALSE;	/*	perform stats measurement */
+static boolean doBed = FALSE;	/*	output bed format */
 static boolean silent = FALSE;	/*	no data points output */
 static boolean fetchNothing = FALSE;	/*  no ascii, bed, or stats returned */
 static boolean timing = FALSE;	/*	turn timing on	*/
@@ -31,6 +32,7 @@ static struct optionSpec optionSpecs[] = {
     {"dataConstraint", OPTION_STRING},
     {"noAscii", OPTION_BOOLEAN},
     {"doStats", OPTION_BOOLEAN},
+    {"doBed", OPTION_BOOLEAN},
     {"silent", OPTION_BOOLEAN},
     {"fetchNothing", OPTION_BOOLEAN},
     {"timing", OPTION_BOOLEAN},
@@ -54,6 +56,7 @@ errAbort(
   "   -chromLst=<file> - file with list of chroms to examine\n"
   "   -noAscii - do *not* perform the default ascii output\n"
   "   -doStats - perform stats measurement\n"
+  "   -doBed - output bed format\n"
   "   -silent - no output, scanning data only and prepares result\n"
   "   -fetchNothing - scanning data only, *NOT* preparing result\n"
   "   -timing - display timing statistics\n"
@@ -137,6 +140,8 @@ for (i=0; i<trackCount; ++i)
 		whatToDo &= ~wigFetchAscii;
 	if (doStats)
 		whatToDo |= wigFetchStats;
+	if (doBed)
+		whatToDo |= wigFetchBed;
 	if (fetchNothing)
 		whatToDo |= wigFetchNoOp;
 
@@ -146,9 +151,12 @@ for (i=0; i<trackCount; ++i)
 	    {
 	    if (doStats)
 		wDS->statsOut(wDS, "stdout");
+	    if (doBed)
+		wDS->bedOut(wDS, "stdout");
 	    if (!noAscii)
 		wDS->asciiOut(wDS, "stdout");
 	    }
+	wDS->freeBed(wDS);
 	wDS->freeAscii(wDS);
 	wDS->freeStats(wDS);
 	if (timing)
@@ -221,6 +229,7 @@ chromLst = optionVal("chromLst", NULL);
 dataConstraint = optionVal("dataConstraint", NULL);
 noAscii = optionExists("noAscii");
 doStats = optionExists("doStats");
+doBed = optionExists("doBed");
 silent = optionExists("silent");
 fetchNothing = optionExists("fetchNothing");
 timing = optionExists("timing");
@@ -251,6 +260,8 @@ if (chr)
     }
 if (noAscii)
     verbose(2, "#\tnoAscii option on, do not perform the default ascii output\n");
+if (doBed)
+    verbose(2, "#\tdoBed option on, output bed format\n");
 if (doStats)
     verbose(2, "#\tdoStats option on, perform statistics measurements\n");
 if (silent)
