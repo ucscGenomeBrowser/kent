@@ -155,7 +155,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.807 2005/01/03 21:50:27 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.808 2005/01/05 23:40:24 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -588,14 +588,7 @@ printPos(bed->chrom, bed->chromStart, bed->chromEnd, strand, TRUE, bed->name);
 void genericHeader(struct trackDb *tdb, char *item)
 /* Put up generic track info. */
 {
-char *dupe, *words[16], *type = "";
-int wordCount;
-dupe = cloneString(tdb->type);
-wordCount = chopLine(dupe, words);
-if (wordCount > 0)
-    type = words[0];
-
-if (item != NULL && item[0] != 0 && (!sameString(type, "netAlign") ) )
+if (item != NULL && item[0] != 0)
     cartWebStart(cart, "%s (%s)", tdb->longLabel, item);
 else
     cartWebStart(cart, "%s", tdb->longLabel);
@@ -2165,10 +2158,12 @@ snprintf(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     errAbort("Couldn't find %s:%d in %s", seqName, start, table);
+
 net = netAlignLoad(row+rowOffset);
 sqlFreeResult(&sr);
 tSize = net->tEnd - net->tStart;
 qSize = net->qEnd - net->qStart;
+
 if (net->chainId != 0)
     {
     netWinSize = min(winEnd-winStart, net->tEnd - net->tStart);
@@ -2520,7 +2515,7 @@ void genericClickHandlerPlus(
         struct trackDb *tdb, char *item, char *itemForUrl, char *plus)
 /* Put up generic track info, with additional text appended after item. */
 {
-char *dupe, *type, *words[16];
+char *dupe, *type, *words[16], *headerItem;
 int wordCount;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
@@ -2530,15 +2525,17 @@ if (itemForUrl == NULL)
     itemForUrl = item;
 dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
+headerItem = cloneString(item);
+
 if (wordCount > 0)
     {
     type = words[0];
-    if (sameString(type, "maf") || sameString(type, "wigMaf"))
+    if (sameString(type, "maf") || sameString(type, "wigMaf") || sameString(type, "netAlign") )
         /* suppress printing item name in page header, as it is
            not informative for these track types */
-        item = NULL;
+        headerItem = NULL;
     }
-genericHeader(tdb, item);
+genericHeader(tdb, headerItem);
 printCustomUrl(tdb, itemForUrl, item == itemForUrl);
 if (plus != NULL)
     {
