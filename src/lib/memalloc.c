@@ -12,7 +12,7 @@
 #include "memalloc.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: memalloc.c,v 1.18 2004/10/30 02:04:04 kent Exp $";
+static char const rcsid[] = "$Id: memalloc.c,v 1.19 2005/01/10 00:22:39 kent Exp $";
 
 static void *defaultAlloc(size_t size)
 /* Default allocator. */
@@ -71,7 +71,7 @@ mhStack = &defaultMemHandler;
 }
 
 /*	128*4*1024*1024 == 536870912 == 2^29	*/
-static size_t maxAlloc = 128*4*1024*1024;
+static size_t maxAlloc = 128*8*1024*1024;
 
 void setMaxAlloc(size_t s)
 /* Set large allocation limit. */
