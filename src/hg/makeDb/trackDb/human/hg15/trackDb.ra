@@ -105,7 +105,7 @@ type bed 4 .
 
 track blastzTightRn2
 shortLabel Tight Rat 
-longLabel Blastz Rat, Tight Subset of Best Alignments
+longLabel Blastz Rat (Jan, 03), Tight Subset of Best Alignments
 group compGeno
 priority 140
 visibility hide
@@ -116,7 +116,7 @@ type psl xeno rn2
 
 track blastzBestRn2
 shortLabel Best Rat
-longLabel Blastz Rat Best in Genome Alignments
+longLabel Blastz Rat (Jan, 03) Best in Genome Alignments
 group compGeno
 priority 141
 visibility hide
@@ -127,7 +127,7 @@ type psl xeno rn2
 
 track blastzRn2
 shortLabel Blastz Rat
-longLabel Merged Blastz Rat Alignments
+longLabel Merged Blastz Rat (Jan, 03) Alignments
 group compGeno
 priority 142
 visibility dense
