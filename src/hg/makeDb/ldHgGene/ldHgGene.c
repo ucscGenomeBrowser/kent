@@ -11,15 +11,11 @@
 #include "genePred.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.27 2004/03/03 17:59:24 sugnet Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.28 2004/03/04 16:22:40 sugnet Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
-<<<<<<< ldHgGene.c
-boolean noDbLoad = FALSE;      /* Do we skip loading into the database? */
-=======
 boolean requireCDS = FALSE;     /* should genes with CDS be dropped */
 char *outFile = NULL;	        /* Output file as alternative to database. */
->>>>>>> 1.15
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -28,20 +24,12 @@ static struct optionSpec optionSpecs[] = {
     {"noncoding", OPTION_BOOLEAN},
     {"nonCoding", OPTION_BOOLEAN},
     {"gtf", OPTION_BOOLEAN},
-<<<<<<< ldHgGene.c
-    {"gpFile", OPTION_STRING},
-    {"noDbLoad", OPTION_BOOLEAN},
-=======
     {"predTab", OPTION_BOOLEAN},
-<<<<<<< ldHgGene.c
->>>>>>> 1.13
-=======
     {"requireCDS", OPTION_BOOLEAN},
     {"frame", OPTION_BOOLEAN},
     {"geneName", OPTION_BOOLEAN},
     {"id", OPTION_BOOLEAN},
     {"out", OPTION_STRING},
->>>>>>> 1.15
     {NULL, 0}
 };
 
@@ -52,42 +40,17 @@ errAbort(
     "usage:\n"
     "     ldHgGene database table file(s).gff\n"
     "options:\n"
-<<<<<<< ldHgGene.c
-    "     -exon=type     Sets type field for exons to specific value.\n"
-    "     -oldTable      Don't overwrite what's already in table.\n"
-    "     -noncoding     Forces whole prediction to be UTR.\n"
-    "     -gtf           input is GTF, stop codon is not in CDS.\n"
-    "     -gpFile=<file> Name of file to save genePred records in.\n"
-    "     -noDbLoad      Don't actually load the database, just generate file.\n");
-=======
     "     -exon=type   Sets type field for exons to specific value\n"
     "     -oldTable    Don't overwrite what's already in table\n"
     "     -noncoding   Forces whole prediction to be UTR\n"
     "     -gtf         input is GTF, stop codon is not in CDS\n"
-<<<<<<< ldHgGene.c
-<<<<<<< ldHgGene.c
-    "     -predTab     input is already in genePredTab format (one file only)\n");
->>>>>>> 1.13
-=======
-    "     -predTab     input is already in genePredTab format (one file only)\n"
-=======
     "     -predTab     input is already in genePredTab format\n"
->>>>>>> 1.22
     "     -requireCDS  discard genes that don't have CDS annotation\n"
     "     -out=gpfile  write output, in genePred format, instead of loading\n"
-<<<<<<< ldHgGene.c
-    "                  table. Database is ignored.\n");
->>>>>>> 1.15
-=======
     "                  table. Database is ignored.\n"
-<<<<<<< ldHgGene.c
-    "     -frame       load frame information\n");
->>>>>>> 1.22
-=======
     "     -frame       load frame information\n"
     "     -geneName    load gene name from gene_id in GTF\n"
     "     -id          generate unique id and store in optional field\n");
->>>>>>> 1.25
 }
 
 boolean gOptFields = 0;  /* optional fields from cmdline */
@@ -163,7 +126,7 @@ struct gffGroup *group;
 int i;
 int lineCount;
 struct genePred *gpList = NULL, *gp;
-char *tabName = optionVal("gpFile", "genePred.tab");
+char *tabName = "genePred.tab";
 FILE *f;
 boolean nonCoding = optionExists("noncoding") || optionExists("nonCoding");
 boolean isGtf = optionExists("gtf");
@@ -219,20 +182,10 @@ for (gp = gpList; gp != NULL; gp = gp->next)
     {
     genePredTabOut(gp, f);
     }
-<<<<<<< ldHgGene.c
-fclose(f);
-if(!noDbLoad) 
-    loadIntoDatabase(database, table, tabName);
-=======
 carefulClose(&f);
 
 if (outFile == NULL)
-<<<<<<< ldHgGene.c
-    loadIntoDatabase(database, table, tabName);
->>>>>>> 1.15
-=======
     loadIntoDatabase(database, table, tabName, optionExists("oldTable"));
->>>>>>> 1.22
 }
 
 int main(int argc, char *argv[])
@@ -244,31 +197,16 @@ if (argc < 3)
 if (optionExists("exon") && optionExists("gtf"))
     errAbort("can't specify -exon= with -gtf");
 exonType = optionVal("exon", exonType);
-<<<<<<< ldHgGene.c
-<<<<<<< ldHgGene.c
-noDbLoad = optionExists("noDbLoad");
-ldHgGene(argv[1], argv[2], argc-3, argv+3);
-=======
-=======
 outFile = optionVal("out", NULL);
 requireCDS = optionExists("requireCDS");
-<<<<<<< ldHgGene.c
-<<<<<<< ldHgGene.c
->>>>>>> 1.15
-=======
-gFrame = optionExists("frame");
-=======
  if (optionExists("frame"))
      gOptFields |= (genePredCdsStatFld|genePredExonFramesFld);
  if (optionExists("geneName"))
      gOptFields |= genePredName2Fld;
->>>>>>> 1.25
 
->>>>>>> 1.22
 if (optionExists("predTab"))
     ldHgGenePred(argv[1], argv[2], argc-3, argv+3);
 else
     ldHgGene(argv[1], argv[2], argc-3, argv+3);
->>>>>>> 1.13
 return 0;
 }
