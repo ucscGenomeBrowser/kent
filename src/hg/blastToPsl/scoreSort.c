@@ -5,7 +5,7 @@
 #include "psl.h"
 #include "options.h"
 
-int maxIns = 1000000;
+int maxIns = 100000000;
 boolean singleQ = FALSE;
 struct score
 {
