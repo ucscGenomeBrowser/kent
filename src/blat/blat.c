@@ -330,7 +330,7 @@ struct gfClump *clumpList = gfFindClumps(gf, seq, lm, &hitCount);
 data.f = psl;
 data.maskHash = maskHash;
 data.minGood = round(10*minIdentity);
-gfAlignDnaClumps(clumpList, seq, isRc, minScore, gfSavePslx, &data);
+gfAlignDnaClumps(gf, clumpList, seq, isRc, minScore, gfSavePslx, &data, FALSE);
 gfClumpFreeList(&clumpList);
 lmCleanup(&lm);
 }
