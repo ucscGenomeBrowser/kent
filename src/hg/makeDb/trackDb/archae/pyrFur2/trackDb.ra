@@ -3,7 +3,7 @@ shortLabel Promoter Plus
 longLabel Patricia's log-odds scan of promoters on plus strand
 group regulation
 priority 81
-visibility dense
+visibility hide
 autoScaleDefault Off
 maxHeightPixels 128:36:16
 graphTypeDefault Bar
@@ -18,7 +18,7 @@ shortLabel Promoter Minus
 longLabel Patricia's log-odds scan of promoters on minus strand
 group regulation
 priority 82
-visibility dense
+visibility hide
 autoScaleDefault Off
 maxHeightPixels 128:36:16
 graphTypeDefault Bar
@@ -33,7 +33,7 @@ shortLabel LL microarray A
 longLabel Lowe lab and DiRuggiero lab full-genome P. furiosus microarray experiments
 group regulation
 priority 85.0
-visibility dense
+visibility hide
 type expRatio
 expScale 4.0
 expStep 0.5
@@ -67,4 +67,3 @@ yLineOnOff Off
 autoScaleDefault Off
 pairwise pwMaf
 speciesOrder pyrAby1 pyrHor1
-
