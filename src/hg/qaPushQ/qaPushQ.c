@@ -23,7 +23,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.31 2004/05/20 17:30:55 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.32 2004/05/20 17:32:50 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -890,7 +890,7 @@ if (!sameString(month,""))
 safef(query, sizeof(query), "select * from %s%s%s", 
     pushQtbl,
     monthsql,
-    " order by priority,rank, pushdate desc, qid desc limit 100"
+    " order by priority, rank, qadate desc, qid desc limit 100"
     );
 
 // debug printf("query=%s",query); 
