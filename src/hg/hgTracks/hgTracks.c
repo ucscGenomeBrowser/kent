@@ -76,7 +76,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.556 2003/07/10 13:27:40 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.557 2003/07/10 15:59:36 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -1287,6 +1287,13 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, color, lf->score);
 	}
 
+    /* The idea here is to draw one or two lines
+     * based on whether the gap in the target
+     * is similar to the gap in the query.
+     * If the gap in the target is more than 
+     * GAPFACTOR times the gap in the query
+     * we draw only one line, otherwise two.
+     */
     if (chainLines  && (sf->next != NULL))
 	{
 	int qGap, tGap;
