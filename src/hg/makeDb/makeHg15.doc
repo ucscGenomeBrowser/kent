@@ -1934,8 +1934,8 @@ LOAD SNPS (Done.  Daryl Thomas; April 14, 2003)
     mysql> drop table snpTsc; # for new dbSnp builds between assemblies
     mysql> drop table snpNih; # for new dbSnp builds between assemblies
 
-    hgLoadBed hg14 snpTsc snpTsc.bed
-    hgLoadBed hg14 snpNih snpNih.bed
+    hgLoadBed hg15 snpTsc snpTsc.bed
+    hgLoadBed hg15 snpNih snpNih.bed
     gzip *.flipped snp*.txt *.bed 
     rm bed.tab
 
