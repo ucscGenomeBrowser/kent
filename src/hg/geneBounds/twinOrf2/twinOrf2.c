@@ -42,7 +42,8 @@ enum aStates
     aUtr3,			/* 3' UTR. */
     
     aKoz0, aKoz1, aKoz2, aKoz3, aKoz4,  /* Kozak preamble. */
-    aStart1, aStart2, aStart3,  /* Start codon. */
+    aKoz5, aKoz6, aKoz7,        /* Start codon. */
+    aKoz8, aKoz9,               /* Two bases after start */
     aC1, aC2, aC3,              /* Regular codon. */
     aStop1, aStop2, aStop3,     /* Stop codon. */
 
@@ -62,7 +63,7 @@ char visStates[] =
     'u',                     /* 3' UTR. */
     
     'k', 'k', 'k', 'k', 'k',  /* Kozak */
-    'A', 'A', 'A',  /* Start codon. */
+    'A', 'A', 'A',  '1', '2', /* Start codon. */
     '1', '2', '3',               /* Regular codon. */
     'Z', 'Z', 'Z',        /* Stop codon. */
 
@@ -132,10 +133,12 @@ transProbLookup[aKoz0][aKoz1] = always;
 transProbLookup[aKoz1][aKoz2] = always;
 transProbLookup[aKoz2][aKoz3] = always;
 transProbLookup[aKoz3][aKoz4] = always;
-transProbLookup[aKoz4][aStart1] = always;
-transProbLookup[aStart1][aStart2] = always;
-transProbLookup[aStart2][aStart3] = always;
-transProbLookup[aStart3][aC1] = always;
+transProbLookup[aKoz4][aKoz5] = always;
+transProbLookup[aKoz5][aKoz6] = always;
+transProbLookup[aKoz6][aKoz7] = always;
+transProbLookup[aKoz7][aKoz8] = always;
+transProbLookup[aKoz8][aKoz9] = always;
+transProbLookup[aKoz9][aC3] = always;
 transProbLookup[aC1][aC2] = scaledLog(0.9999);
 transProbLookup[aC2][aC3] = scaledLog(0.9999);
 transProbLookup[aC3][aC1] = scaledLog(0.9969);
@@ -283,7 +286,7 @@ for (i=0; i<ArraySize(ixToSym); ++i)
     }
 }
 
-struct baseOdds
+struct markov0
 /* Log odds matrix */
     {
     double odds[7][7];
@@ -304,10 +307,10 @@ struct markov2
     int observations;
     };
 
-struct baseOdds *readBaseOdds(struct lineFile *lf, char **initRow)
+struct markov0 *readBaseOdds(struct lineFile *lf, char **initRow)
 /* Read a base odds table. */
 {
-struct baseOdds *o;
+struct markov0 *o;
 int i, j;
 double p;
 char *row[7+1], *name;
@@ -330,7 +333,7 @@ for (i=0; i<7; ++i)
 return o;
 }
 
-void dumpBaseOdds(struct baseOdds *o)
+void dumpBaseOdds(struct markov0 *o)
 {
 int i, j;
 for (i=0; i<7; ++i)
@@ -553,13 +556,13 @@ struct trainingData
 /* Stuff loaded from training stats file. */
     {
     struct trainingData *next;
-    struct baseOdds *m0Utr5;	/* 5' UTR */
+    struct markov0 *m0Utr5;	/* 5' UTR */
     struct markov1  *m1Utr5;	/* Markov 1st order of 5' UTR */
     struct markov2  *m2Utr5;	/* Markov 2nd order of 5' UTR */
-    struct baseOdds *m0Utr3;	/* 3' UTR */
+    struct markov0 *m0Utr3;	/* 3' UTR */
     struct markov1  *m1Utr3;	/* Markov 1st order of 3' UTR */
     struct markov2  *m2Utr3;	/* Markov 2nd order of 3' UTR */
-    struct baseOdds *m0Kozak[10]; /* Kozak (start codon) consensus */
+    struct markov0 *m0Kozak[10]; /* Kozak (start codon) consensus */
     struct markov1 *m1Kozak[10]; /* Kozak (start codon) consensus */
     struct markov2 *cod1;	/* 1st codon position */
     struct markov2 *cod2;	/* 2nd codon position */
@@ -661,41 +664,53 @@ killInsertsInCodons(td->cod3);
 return td;
 }
 
-#ifdef SOON
-double prob1(struct baseOdds *o, char q, char t)
+
+double probM0(struct markov0 *o, char q, char t)
 /* Find probability of simple q/t pair. */
 {
 return o->odds[symToIx[t]][symToIx[q]];
 }
 
 double probM1(struct markov1 *o, char *q, char *t)
-/* Find probability of double */
+/* Find probability of 1st order markov hit. */
 {
-int qIx = symToIx[t[0]]*7 + symToIx[q[0]];
-int tIx = symToIx[t[1]]*7 + symToIx[q[1]];
 double x;
-x = o->odds[tIx][qIx];
-// uglyf("  probM1(%c%c %c%c) = %f\n", t[0], t[1], q[0], q[1], x);
+x = o->odds[symIx2(t[0],q[0])][symIx2(t[1],q[1])];
 return x;
 }
 
-
-double prob3(struct codonOdds *o, char *q, char *t)
-/* Find probability of triple. */
+double probM2(struct markov2 *o, char *q, char *t)
+/* Find probability of 2st order markov hit. */
 {
-int qIx = 0, tIx = 0, i;
 double x;
-for (i=0; i<3; ++i)
-    {
-    qIx *= 7;
-    qIx += symToIx[q[i]];
-    tIx *= 7;
-    tIx += symToIx[t[i]];
-    }
-x =  o->odds[tIx][qIx];
-// uglyf("  prob3(%s %s) = %f\n", t, q, x);
+x = o->odds[symIx2(t[0],q[0])][symIx2(t[1],q[1])][symIx2(t[2],q[2])];
 return x;
 }
+
+double probUpToM2(struct markov0 *m0, struct markov1 *m1, struct markov2 *m2,
+	char *q, char *t, int curIx)
+/* Return probability from markov 0 if on 1st base,  markov 1 if on 2nd,
+ * and otherwise markov 2 */
+{
+if (curIx == 0)
+    return probM0(m0, *q, *t);
+else if (curIx == 1)
+    return probM1(m1, q, t);
+else
+    return probM2(m2, q+curIx-2, t+curIx-2);
+}
+
+double probUpToM1(struct markov0 *m0, struct markov1 *m1,
+	char *q, char *t, int curIx)
+/* Return probability from markov 0 if on 1st base,  
+ * and otherwiser markov 1 */
+{
+if (curIx == 0)
+    return probM0(m0, *q, *t);
+else
+    return probM1(m1, q+curIx-1, t+curIx-1);
+}
+
 
 #define startState(curState) \
     { \
@@ -739,7 +754,7 @@ for (i=symIx; i >= 0; --i)
 return (baseIx < 0);
 }
 
-double lastCodonProb(struct codonOdds *o, char *qSym, char *tSym, int symIx)
+double lastCodonProb(struct markov2 *o, char *qSym, char *tSym, int symIx)
 /* Return probability of last codon. */
 {
 static char qCodon[4], tCodon[4];
@@ -747,27 +762,14 @@ int i;
 if (!getPrevNonInsert(qSym, tSym, symIx, qCodon, tCodon, 3))
     return never;
 // uglyf("%c%c%c %c%c%c  vs %c%c%c %c%c%c\n", tSym[symIx-2], tSym[symIx-1], tSym[symIx], qSym[symIx-2], qSym[symIx-1], qSym[symIx], tCodon[0], tCodon[1], tCodon[2], qCodon[0], qCodon[1], qCodon[2]);
-return prob3(o, qCodon, tCodon);
-}
-
-double kozakProb(struct baseOdds *kozak[8], char *qSym, char *tSym, int symIx)
-/* Return probability of kozak consensus. */
-{
-char qs[8], ts[8], q, t;
-double odds = 0;
-int i;
-struct baseOdds *o;
-if (!getPrevNonInsert(qSym, tSym, symIx, qs, ts, 8))
-    return never;
-for (i=0; i<8; ++i)
-    odds += prob1(kozak[i], qs[i], ts[i]);
-return odds;
+return probM2(o, qCodon, tCodon);
 }
 
 double fullDynamo(struct trainingData *td, struct dynoData *dyno, struct axt *axt, 
 	struct hash *checkInHash, FILE *checkOut, FILE *f)
 /* Run dynamic programming algorithm on HMM. Return score. */
 {
+double score = 0;
 char *qSym = axt->qSym;
 char *tSym = axt->tSym;
 int symCount = axt->symCount;
@@ -779,7 +781,6 @@ int i;
 int symIx;
 int scanSize = symCount;
 double reallyUnlikely = 10*never;
-double score;
 double tNotIns, tIsIns;
 
 /* Allocate state tables. */
@@ -794,7 +795,7 @@ for (i=0; i<stateCount; ++i)
 for (i=0; i<stateCount; ++i)
     dyno->prevScores[i] = never;
 dyno->prevScores[aUtr5] = scaledLog(0.58);
-dyno->prevScores[aStart1] = scaledLog(0.02);
+dyno->prevScores[aKoz5] = scaledLog(0.02);
 dyno->prevScores[aC1] = scaledLog(0.10);
 dyno->prevScores[aC2] = scaledLog(0.10);
 dyno->prevScores[aC3] = scaledLog(0.10);
@@ -820,68 +821,93 @@ for (symIx=0; symIx<scanSize; symIx += 1)
 
     /* Utr5 state. */
     startState(aUtr5)
-        double b;
-	if (symIx == 0 )
-	    b = prob1(td->m0Utr5, qc, tc);
-	else
-	    b = probM1(td->m1Utr5, q-1, t-1);
-        source(aUtr5, b);
+        double b = probUpToM2(td->m0Utr5, td->m1Utr5, td->m2Utr5, 
+		qSym, tSym, symIx);
+	source(aUtr5, b);
     endState(aUtr5)
-
 
     /* Near start codon states. */
     startState(aKoz0)
-        source(aUtr5, always);
+	double b = probUpToM1(td->m0Kozak[0], td->m1Kozak[0], 
+		qSym, tSym, symIx);
+        source(aUtr5, b);
     endState(aKoz0)
 
     startState(aKoz1)
-        source(aKoz0, always);
+	double b = probUpToM1(td->m0Kozak[1], td->m1Kozak[1], 
+		qSym, tSym, symIx);
+        source(aUtr5, b);
     endState(aKoz1)
 
     startState(aKoz2)
-        source(aKoz1, always);
+	double b = probUpToM1(td->m0Kozak[2], td->m1Kozak[2], 
+		qSym, tSym, symIx);
+        source(aKoz1, b);
     endState(aKoz2)
 
     startState(aKoz3)
-        source(aKoz2, always);
+	double b = probUpToM1(td->m0Kozak[3], td->m1Kozak[3], 
+		qSym, tSym, symIx);
+        source(aKoz2, b);
     endState(aKoz3)
 
     startState(aKoz4)
-        source(aKoz3, always);
+	double b = probUpToM1(td->m0Kozak[4], td->m1Kozak[4], 
+		qSym, tSym, symIx);
+        source(aKoz3, b);
     endState(aKoz4)
 
-    startState(aStart1)
-        source(aKoz4, always);
-    endState(aStart1)
+    startState(aKoz5)
+	double b = probUpToM1(td->m0Kozak[5], td->m1Kozak[5], 
+		qSym, tSym, symIx);
+        source(aKoz4, b);
+    endState(aKoz5)
 
-    startState(aStart2)
-        source(aStart1, always);
-    endState(aStart2)
+    startState(aKoz6)
+	double b = probUpToM1(td->m0Kozak[6], td->m1Kozak[6], 
+		qSym, tSym, symIx);
+        source(aKoz5, b);
+    endState(aKoz6)
 
-    startState(aStart3)
-        double b = kozakProb(td->kozak, qSym, tSym, symIx);
-        source(aStart2, b);
-    endState(aStart3)
+    startState(aKoz7)
+	double b = probUpToM1(td->m0Kozak[7], td->m1Kozak[7], 
+		qSym, tSym, symIx);
+        source(aKoz6, b);
+    endState(aKoz7)
+
+    startState(aKoz8)
+	double b = probUpToM1(td->m0Kozak[8], td->m1Kozak[8], 
+		qSym, tSym, symIx);
+        source(aKoz7, b);
+    endState(aKoz8)
+
+    startState(aKoz9)
+	double b = probUpToM1(td->m0Kozak[9], td->m1Kozak[9], 
+		qSym, tSym, symIx);
+        source(aKoz8, b);
+    endState(aKoz9)
 
     /* Coding main states */
     startState(aC1)
-        source(aC3, tNotIns);	
-        source(aStart3, always);
-	source(aInsC3, tNotIns);
-	source(aI3C3, tNotIns);
+	double b = lastCodonProb(td->cod1, qSym, tSym, symIx);
+        source(aC3, b);	
+	source(aInsC3, b);
+	source(aI3C3, b);
     endState(aC1)
 
     startState(aC2)
-        source(aC1, tNotIns);
-	source(aInsC1, tNotIns);
-	source(aI3C1, tNotIns);
+	double b = lastCodonProb(td->cod2, qSym, tSym, symIx);
+        source(aC1, b);
+	source(aInsC1, b);
+	source(aI3C1, b);
     endState(aC2)
 
     startState(aC3)
-	double b = lastCodonProb(td->codon, qSym, tSym, symIx);
+	double b = lastCodonProb(td->cod3, qSym, tSym, symIx);
+        source(aKoz9, b);
 	source(aC2, b);
-	source(aInsC2, tNotIns);
-	source(aI3C2, tNotIns);
+	source(aInsC2, b);
+	source(aI3C2, b);
     endState(aC3)
 
     /* Coding short inserts. */
@@ -970,14 +996,10 @@ for (symIx=0; symIx<scanSize; symIx += 1)
         source(aStop2, b);
     endState(aStop3)
 
-
     /* UTR states. */
     startState(aUtr3)
-        double b;
-	if (symIx == 0 )
-	    b = prob1(td->m0Utr3, qc, tc);
-	else
-	    b = probM1(td->m1Utr3, q-1, t-1);
+        double b = probUpToM2(td->m0Utr3, td->m1Utr3, td->m2Utr3, 
+		qSym, tSym, symIx);
         source(aUtr3, b);
 	source(aStop3, b);
     endState(aUtr3)
@@ -1028,7 +1050,6 @@ else
     }
 }
 
-#endif /* SOON */
 
 void twinOrf2(char *statsFile, char *axtFile, char *outFile, 
 	char *checkInFile, char *checkOutFile)
@@ -1036,7 +1057,6 @@ void twinOrf2(char *statsFile, char *axtFile, char *outFile,
  * alignment. */
 {
 struct trainingData *td = loadTrainingData(statsFile);
-#ifdef SOON
 struct dynoData *dyno = newDynoData(aStateCount);
 struct lineFile *lf = lineFileOpen(axtFile, TRUE);
 FILE *f = mustOpen(outFile, "w");
@@ -1059,7 +1079,6 @@ while ((axt = axtRead(lf)) != NULL)
     }
 lineFileClose(&lf);
 carefulClose(&f);
-#endif /* SOON */
 }
 
 int main(int argc, char *argv[])
