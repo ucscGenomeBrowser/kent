@@ -6548,9 +6548,14 @@ else if (sameWord(track, "blatMouse") || sameWord(track, "bestMouse")
     {
     doBlatMouse(tdb, item);
     }
-else if (sameWord(track, "blatMus"))
+ else if (sameWord(track, "blatMus"))
     {
     doBlatMus(tdb, item);
+    }
+else if (startsWith(track, "blastzMm2") || startsWith(track, "aarMm2"))
+    {
+    /* markd: tmp hack, mm2 not loader in db, also no code to display xAli */
+    genericHeader(tdb, item);
     }
 else if (sameWord(track, "blatHuman"))
     {
