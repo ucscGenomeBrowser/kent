@@ -48,6 +48,35 @@ DOWNLOAD SEQUENCE (DONE 2003-05-12 - Hiram)
     	mkdir sangerFa/${f}
         ln -s ~/ce1/sanger/CHROMOSOME_${f}.agp sangerFa/${f}/chr${f}.agp
     end
+    # hgGoldGap does not handle dir names over 2 characters:
+    mv sangerFa/III sangerFa/3
+
+# CREATING DATABASE (DONE 2003-05-12 - Hiram)
+
+    # Create the database.
+    # next machine
+    ssh hgwdev
+    echo 'create database ce1' | hgsql ''
+    # if you need to delete that database:  !!! WILL DELETE EVERYTHING !!!
+	echo 'drop database ce1' | hgsql ce1
+    # make a semi-permanent read-only alias:
+    alias ce1 "mysql -u hguser -phguserstuff -A ce1"
+    # Use df to ake sure there is at least 5 gig free on 
+    df -h /var/lib/mysql
+# Before loading data:
+# Filesystem            Size  Used Avail Use% Mounted on
+# /dev/sda1             472G  389G   58G  87% /var/lib/mysql
+
+
+# CREATING GRP TABLE FOR TRACK GROUPING (DONE 2003-05-12 - Hiram)
+    # next machine
+    ssh hgwdev
+    #  the following command copies all the data from the table
+    #	grp in the database rn1 to our new database ce1
+    echo "create table grp (PRIMARY KEY(NAME)) select * from rn1.grp" \
+      | hgsql ce1
+    # if you need to delete that table:   !!! WILL DELETE ALL grp data !!!
+	echo 'drop table grp;' | hgsql ce1
 
 # PREPARE Split contigs into 100,000 bp chunks for cluster runs
     # next machine
@@ -79,7 +108,7 @@ DOWNLOAD SEQUENCE (DONE 2003-05-12 - Hiram)
     end
     ~kent/bin/iSync
 
-# Run RepeatMasker on the chromosomes (DONE 2003-05-27 - Hiram)
+# Run RepeatMasker on the chromosomes (DONE 2003-06-04 - Hiram)
     # next machine
     ssh kk
     cd ~/ce1
@@ -138,12 +167,17 @@ if( -e /tmp/$3/$1/$3.align ) /bin/cp /tmp/$3/$1/$3.align ./
     ssh hgwdev
     cd ~/ce1/RMRun
     hgLoadOut ce1 chr*.fa.out
+    # Noticed one error in this load:
+    # Processing chrI.fa.out
+    # Strange perc. field -0.6 line 791 of chrI.fa.out
 
-# SIMPLE REPEAT [TRF] TRACK (DONE 2003-05-27 - Hiram)
+
+# SIMPLE REPEAT [TRF] TRACK (DONE 2003-06-05 - Hiram)
     # ensure chr*.fa files exist on /iscratch/i
     # next machine
     ssh kkr1u00
-    cp -p /cluster/store5/worm/ce1/*.fa  /iscratch/i/worms/Celegans
+    cp -p /cluster/store5/worm/ce1/sangerFa/*.fa \
+	/iscratch/i/worms/Celegans/unmaskedFa
     ~kent/bin/iSync
 
     # Create cluster parasol job:
@@ -152,14 +186,20 @@ if( -e /tmp/$3/$1/$3.align ) /bin/cp /tmp/$3/$1/$3.align ./
     mkdir -p ~/ce1/bed/simpleRepeat
     cd ~/ce1/bed/simpleRepeat
     mkdir trf
-    ls -1S /iscratch/i/worms/Celegans/chr*.fa > genome.lst
-    cp ~/hg15/bed/simpleRepeat/gsub .
+    ls -1S /iscratch/i/worms/Celegans/unmaskedFa/chr*.fa > genome.lst
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf {check in line+ $(path1)}  /dev/null -bedAt={check out line trf/$(root1).bed} -tempDir=/tmp
+#ENDLOOP
+'_EOF_'
+
     echo "" > dummy.lst
     gensub2 genome.lst dummy.lst gsub spec
     para create spec
     para try    # there are only 7, so this runs them all
     para check
-# Longest job:                      983s      16.38m     0.27h    0.01d
+Average job time:                 468s       7.80m     0.13h    0.01d
+Longest job:                      963s      16.05m     0.27h    0.01d
 
     #  When cluster run is done, combine into one:
     cat trf/*.bed > simpleRepeat.bed
@@ -170,8 +210,9 @@ if( -e /tmp/$3/$1/$3.align ) /bin/cp /tmp/$3/$1/$3.align ./
     cd ~/ce1/bed/simpleRepeat
     /cluster/bin/i386/hgLoadBed ce1 simpleRepeat simpleRepeat.bed \
       -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+    # Loaded 28590 elements
 
-# PROCESS SIMPLE REPEATS INTO MASK (DONE 2003-05-27 - Hiram)
+# PROCESS SIMPLE REPEATS INTO MASK (DONE 2003-06-05 - Hiram)
     # next machine
     ssh eieio
     cd ~/ce1/bed/simpleRepeat
@@ -189,13 +230,22 @@ if( -e /tmp/$3/$1/$3.align ) /bin/cp /tmp/$3/$1/$3.align ./
     cd ~/ce1
     foreach c (I II III IV V X M)
         echo -n "masking chr${c} "
-	/cluster/bin/i386/maskOutFa chr${c}.fa RMRun/chr${c}.fa.out \
+	/cluster/bin/i386/maskOutFa sangerFa/chr${c}.fa RMRun/chr${c}.fa.out \
 		softMask/chr${c}.fa -soft
 	/cluster/bin/i386/maskOutFa softMask/chr${c}.fa \
 		bed/simpleRepeat/trfMask/chr${c}.bed \
 		softMask/chr${c}.fa -softAdd
 		faToNib -softMask softMask/chr${c}.fa nib/chr${c}.nib
     end
+    # output:
+    # masking chrI Writing 15080473 bases in 7540245 bytes
+    # masking chrII Writing 15279303 bases in 7639660 bytes
+    # masking chrIII Writing 13783268 bases in 6891642 bytes
+    # masking chrIV Writing 17493790 bases in 8746903 bytes
+    # masking chrV Writing 20922238 bases in 10461127 bytes
+    # masking chrX Writing 17705013 bases in 8852515 bytes
+    # masking chrM Writing 13794 bases in 6905 bytes
+
     # unknown if hardMasks are actually needed for anything
     mkdir hardMask
     foreach c (I II III IV V X M)
@@ -208,35 +258,12 @@ if( -e /tmp/$3/$1/$3.align ) /bin/cp /tmp/$3/$1/$3.align ./
     # next machine
     ssh kkr1u00
     cd ~/ce1/softMask
-    mkdir -p /iscratch/i/worms/Celegans/trfFa
-    cp -p *.fa /iscratch/i/worms/Celegans/trfFa
-
-CREATING DATABASE (DONE 2003-05-12 - Hiram)
-
-    # Create the database.
-    # next machine
-    ssh hgwdev
-    echo 'create database ce1' | hgsql ''
-    # if you need to delete that database:  !!! WILL DELETE EVERYTHING !!!
-	echo 'drop database ce1' | hgsql ce1
-    # make a semi-permanent read-only alias:
-    alias ce1 "mysql -u hguser -phguserstuff -A ce1"
-    # Use df to ake sure there is at least 5 gig free on 
-    df -h /var/lib/mysql
-# Before loading data:
-# Filesystem            Size  Used Avail Use% Mounted on
-# /dev/sda1             472G  389G   58G  87% /var/lib/mysql
-
-
-CREATING GRP TABLE FOR TRACK GROUPING (DONE 2003-05-12 - Hiram)
-    # next machine
-    ssh hgwdev
-    #  the following command copies all the data from the table
-    #	grp in the database rn1 to our new database ce1
-    echo "create table grp (PRIMARY KEY(NAME)) select * from rn1.grp" \
-      | hgsql ce1
-    # if you need to delete that table:   !!! WILL DELETE ALL grp data !!!
-	echo 'drop table grp;' | hgsql ce1
+    mkdir -p /iscratch/i/worms/Celegans/bothMasksFa
+    mkdir -p /iscratch/i/worms/Celegans/bothMasksNib
+    cp -p *.fa /iscratch/i/worms/Celegans/bothMasksFa
+    cd ~/ce1/nib
+    cp -p c*.nib /iscratch/i/worms/Celegans/bothMasksNib
+    ~kent/bin/iSync
 
 STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE 2003-05-12 - Hiram)
 
@@ -251,7 +278,7 @@ STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE 2003-05-12 - Hiram)
     hgsql ce1  < ~/kent/src/hg/lib/chromInfo.sql
     # if you need to delete that table:   !!! DELETES ALL DATA IN TABLE !!!
 	echo 'drop table chromInfo;' | hgsql ce1
-    hgNibSeq -preMadeNib ce1 /gbdb/ce1/nib chr*.fa
+    hgNibSeq -preMadeNib ce1 /gbdb/ce1/nib sangerFa/chr*.fa
 # Typical output:
 # Processing chrI.fa to /gbdb/ce1/nib/chrI.nib
 # Processing chrII.fa to /gbdb/ce1/nib/chrII.nib
@@ -284,7 +311,6 @@ drop table history; drop table keyword; drop table library; drop table mrna; \
 drop table mrnaClone; drop table organism; drop table productName; \
 drop table seq; drop table sex; drop table source; drop table tissue;' \
 	| hgsql ce1
-
 
 MAKE GCPERCENT AND GAP tracks (DONE 2003-05-12 - Hiram)
     # next machine
@@ -379,18 +405,24 @@ MAKE SANGER GENE TRACK (DONE - 2003-05-19 - Hiram)
     mkdir mrna est
     cd mrna
     mkdir psl
-    ls -1S /cluster/store5/worm/ce1/nib/chr*.nib > worm.lst
+    ls -1S /iscratch/i/worms/Celegans/bothMasksNib/chr*.nib > worm.lst
     ls -1S /iscratch/i/worms/Celegans/mRNA/m*.fa > mrna.lst
-    echo '#LOOP
-/cluster/bin/i386/blat -q=dna -t=dna -mask=lower {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
-#ENDLOOP' > gsub
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat -q=dnax -t=dnax -mask=lower {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+
     gensub2 worm.lst mrna.lst gsub spec
     para create spec
     para try
     para check
     para push
     ... etc ...
-# Longest job:                      328s       5.47m     0.09h    0.00d
+    #  These jobs are a bit on the short side.  I wonder if the mrna
+    #  fa's could be put together in larger chunks ?
+# Average job time:                  13s       0.22m     0.00h    0.00d
+# Longest job:                      109s       1.82m     0.03h    0.00d
 
     # cluster run done
     pslSort dirs raw.psl /tmp psl
@@ -407,41 +439,46 @@ MAKE SANGER GENE TRACK (DONE - 2003-05-19 - Hiram)
 	rm -f chr${d}_mrna.psl
 	mv chr${d}.psl chr${d}_mrna.psl
     end
-    # there is no chrM file, above will display error on that one
+    # this load command rewrites these table entirely if they exist
     hgLoadPsl ce1 *.psl
     mkdir /gbdb/ce1/mrna.134
     ln -s /cluster/store5/mrna.134/org/Caenorhabditis_elegans/mrna.fa \
 	/gbdb/ce1/mrna.134
     hgLoadRna add -type=mRNA ce1 /gbdb/ce1/mrna.134/mrna.fa \
 	/cluster/store5/mrna.134/org/Caenorhabditis_elegans/mrna.ra
+    hgLoadPsl ce1 all_mrna.psl
 
     # setup /iscratch/i with the est.fa file for blat run
     # next machine
     ssh kkr1u00
     mkdir -p /iscratch/i/worms/Celegans/EST
     cd /iscratch/i/worms/Celegans/EST
-    # create about a 1000 files to provide about 7000 jobs to the cluster
-    #	(these jobs are too small)
+    # create about a 200 files to provide about 1400 jobs to the cluster
+    #	(these jobs are very small despite this small number of est files)
     faSplit sequence \
-	/cluster/store5/mrna.134/org/Caenorhabditis_elegans/est.fa 1000 e
+	/cluster/store5/mrna.134/org/Caenorhabditis_elegans/est.fa 200 e
     ~kent/bin/iSync
 
     # next machine
     ssh kk
     cd ~/ce1/bed/est
     mkdir psl
-    ls -1S /cluster/store5/worm/ce1/nib/chr*.nib > worm.lst
+    ls -1S /iscratch/i/worms/Celegans/bothMasksNib/chr*.nib > worm.lst
     ls -1S /iscratch/i/worms/Celegans/EST/e*.fa > est.lst
-    echo '#LOOP
-/cluster/bin/i386/blat -q=dna -t=dna -mask=lower {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
-#ENDLOOP' > gsub
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat -q=dnax -t=dnax -mask=lower {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+
     gensub2 worm.lst est.lst gsub spec
     para create spec
     para try
     para check
     para push
-    # those 7000 jobs were too small:
-# Longest job:                       35s       0.58m     0.01h    0.00d
+    # These 1358 jobs are pretty short:
+# Average job time:                  43s       0.71m     0.01h    0.00d
+# Longest job:                       77s       1.28m     0.02h    0.00d
 
     # cluster run done
     # next machine
@@ -457,25 +494,14 @@ MAKE SANGER GENE TRACK (DONE - 2003-05-19 - Hiram)
 	rm -f chr${d}_est.psl
 	mv chr${d}.psl chr${d}_est.psl
     end
+    # this load command rewrites these table entirely if they exist
     hgLoadPsl ce1 *.psl
-
 
     ln -s /cluster/store5/mrna.134/org/Caenorhabditis_elegans/est.fa \
 	/gbdb/ce1/mrna.134
     hgLoadRna add -mrnaType=EST -type=EST ce1 /gbdb/ce1/mrna.134/est.fa \
 	/cluster/store5/mrna.134/org/Caenorhabditis_elegans/est.ra
     hgLoadPsl ce1 all_est.psl -nobin
-
-    
-    # next machine
-    ssh kk
-    cd ~/ce1/bed/mrna
-    mkdir psl
-    ls -1S /scratch/hiram/Celegans/mrna.fa > mrna.lst
-    cp -p ../../gsub .	# this will be from previous version when there is one
-    gensub2 genome.lst mrna.lst gsub spec
-    para create spec
-    para try
 
 MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR CE1 (DONE - 2003-05-29 - Hiram)
     # next machine
@@ -491,34 +517,6 @@ MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR CE1 (DONE - 2003-05-29 - Hiram)
 	echo 'select * from blatServers where db="ce1";' \
         | hgsql -h genome-testdb hgcentraltest
 
-SIMPLE REPEAT TRACK (DONE 2003-05-20 - 12:37 - Hiram)
-    # This TRF run takes about an hour on eieio
-    # so instead of binrsyncing and para-running, just do this on eieio:
-    # next machine
-    ssh eieio
-    mkdir ~/ce1/bed/simpleRepeat
-    cd ~/ce1/bed/simpleRepeat
-    mkdir trf
-    rm -f jobs.csh
-    touch jobs.csh
-    foreach f (/cluster/store5/worm/ce1/*.fa)
-      set fout = $f:t:r.bed
-      echo "/cluster/home/kent/bin/i386/trfBig -trf=/cluster/home/kent/bin/i386/trf $f /dev/null -bedAt=trf/$fout -tempDir=/tmp" \
-        >> jobs.csh
-    end
-    tcsh jobs.csh |& tee jobs.log
-    wc -l jobs.csh
-    ls -1 trf | wc -l
-
-    # When jobs are done,
-    # To Load this into the database as so
-    # next machine
-    ssh hgwdev
-    cd ~/ce1/bed/simpleRepeat
-    cat trf/chr*.bed > simpleRepeat.bed
-    hgLoadBed ce1 simpleRepeat simpleRepeat.bed \
-      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
-
 PRODUCING FUGU FISH ALIGNMENTS  (DONE 2003-05-28 - Hiram)
     # Assumes masked NIBs have been prepared as above
     # and Fugu pieces are already on kluster /iscratch/i.
@@ -528,10 +526,12 @@ PRODUCING FUGU FISH ALIGNMENTS  (DONE 2003-05-28 - Hiram)
     cd ~/ce1/bed/blatFugu
     mkdir psl
     ls -1S /iscratch/i/fugu/*.fa > fugu.lst
-    ls -1S /cluster/store5/worm/ce1/nib/chr*.nib > worm.lst
-    echo '#LOOP
+    ls -1S /iscratch/i/worms/Celegans/bothMasksNib/chr*.nib > worm.lst
+    cat << '_EOF_' > gsub
+#LOOP
 /cluster/bin/i386/blat -q=dnax -t=dnax -mask=lower {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
-#ENDLOOP' > gsub
+#ENDLOOP
+'_EOF_'
 
     gensub2 worm.lst fugu.lst gsub spec
     para create spec
