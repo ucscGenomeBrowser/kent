@@ -20,7 +20,7 @@
 #include "cheapcgi.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.44 2004/05/10 23:43:41 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.45 2004/05/14 22:16:03 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -1178,6 +1178,7 @@ for (track = trackList; track != NULL; track = track->next)
 	    sprintf(buf, "wig %g %g", lowerLimit, upperLimit);
 	    freeMem(track->tdb->type);
 	    track->tdb->type = cloneString(buf);
+	    unlink(track->wigAscii);	/*	done with this, remove it */
 	    }
 	}
 
