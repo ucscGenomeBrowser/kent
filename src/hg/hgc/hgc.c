@@ -2391,7 +2391,7 @@ for(i = 0; i < expList->numExp; i++)
     for(exp = expList;exp != NULL; exp = exp->next)
 	{
 	/* use the background colors to creat patterns */
-	struct rgbColor rgb = getColorForExprBed(exp->scores[i], 2.0, TRUE);
+	struct rgbColor rgb = getColorForExprBed(exp->scores[i], 0.7, TRUE);
 	printf("<td height=%d width=%d bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", square, square, rgb.r, rgb.g, rgb.b);
 	}
     printf("</tr>\n");
