@@ -67,7 +67,7 @@
 #include "machSpec.h"
 #include "log.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.78 2004/09/29 05:54:23 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.79 2004/09/30 01:40:34 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -281,7 +281,7 @@ struct dlNode *node;
 for (node = queuedUsers->head; !dlEnd(node); node = node->next)
     {
     struct user *user = node->val;
-    if (!dlEmpty(user->curBatches) && (user->runningCount * user->priority) < minCount)
+    if (!dlEmpty(user->curBatches) && ((user->runningCount+1) * user->priority) < minCount)
         {
 	minCount = user->runningCount * user->priority;
 	minUser = user;
@@ -299,7 +299,7 @@ struct dlNode *node;
 for (node = user->curBatches->head; !dlEnd(node); node = node->next)
     {
     struct batch *batch = node->val;
-    if ((batch->runningCount * batch->priority) < minCount)
+    if (((batch->runningCount+1) * batch->priority) < minCount)
         {
 	minCount = batch->runningCount * batch->priority;
 	minBatch = batch;
