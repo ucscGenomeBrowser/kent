@@ -5,6 +5,8 @@
 #ifndef STSMAP_H
 #define STSMAP_H
 
+#include "stsMarker.h"
+
 struct stsMap
 /* STS marker and its position on golden path and various maps */
     {
