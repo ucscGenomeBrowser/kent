@@ -1,5 +1,5 @@
 .c.o:
-	gcc -ggdb -O -Wimplicit -I../inc -I../../inc -I$(MYSQLINC) -c $*.c
+	gcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -I../inc -I../../inc -I$(MYSQLINC) -c $*.c
 
 L = 
 MYLIBDIR = ../../lib/$(MACHTYPE)

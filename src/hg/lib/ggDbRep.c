@@ -145,19 +145,19 @@ void altGraphOutput(struct altGraph *el, FILE *f, char sep, char lastSep)
 /* Print out altGraph.  Separate fields with sep. Follow last field with lastSep. */
 {
 int i;
-fprintf(f, "%u", el->id, sep);
+fprintf(f, "%u", el->id);
 fputc(sep,f);
-fprintf(f, "%d", el->orientation, sep);
+fprintf(f, "%d", el->orientation);
 fputc(sep,f);
-fprintf(f, "%u", el->startBac, sep);
+fprintf(f, "%u", el->startBac);
 fputc(sep,f);
-fprintf(f, "%u", el->startPos, sep);
+fprintf(f, "%u", el->startPos);
 fputc(sep,f);
-fprintf(f, "%u", el->endBac, sep);
+fprintf(f, "%u", el->endBac);
 fputc(sep,f);
-fprintf(f, "%u", el->endPos, sep);
+fprintf(f, "%u", el->endPos);
 fputc(sep,f);
-fprintf(f, "%u", el->vertexCount, sep);
+fprintf(f, "%u", el->vertexCount);
 fputc(sep,f);
 if (sep == ',') fputc('{',f);
 for (i=0; i<el->vertexCount; ++i)
@@ -183,7 +183,7 @@ for (i=0; i<el->vertexCount; ++i)
     }
 if (sep == ',') fputc('}',f);
 fputc(sep,f);
-fprintf(f, "%u", el->edgeCount, sep);
+fprintf(f, "%u", el->edgeCount);
 fputc(sep,f);
 if (sep == ',') fputc('{',f);
 for (i=0; i<el->edgeCount; ++i)
@@ -201,7 +201,7 @@ for (i=0; i<el->edgeCount; ++i)
     }
 if (sep == ',') fputc('}',f);
 fputc(sep,f);
-fprintf(f, "%d", el->mrnaRefCount, sep);
+fprintf(f, "%d", el->mrnaRefCount);
 fputc(sep,f);
 if (sep == ',') fputc('{',f);
 for (i=0; i<el->mrnaRefCount; ++i)

@@ -77,11 +77,11 @@ void stsAliasOutput(struct stsAlias *el, FILE *f, char sep, char lastSep)
 {
 int i;
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->alias, sep);
+fprintf(f, "%s", el->alias);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->trueName, lastSep);
+fprintf(f, "%s", el->trueName);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

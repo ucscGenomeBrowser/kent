@@ -81,15 +81,15 @@ void softberryHomOutput(struct softberryHom *el, FILE *f, char sep, char lastSep
 {
 int i;
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->name, sep);
+fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->giString, sep);
+fprintf(f, "%s", el->giString);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->description, lastSep);
+fprintf(f, "%s", el->description);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

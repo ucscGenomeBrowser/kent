@@ -10,7 +10,7 @@
 static char charForType(int type)
 /* Return character corresponding to edge. */
 {
-char c;
+char c = 0;
 switch (type)
     {
     case ggSoftStart:

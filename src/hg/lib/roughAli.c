@@ -114,26 +114,26 @@ void roughAliOutput(struct roughAli *el, FILE *f, char sep, char lastSep)
 {
 int i;
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->chrom, sep);
+fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->chromStart, sep);
+fprintf(f, "%u", el->chromStart);
 fputc(sep,f);
-fprintf(f, "%u", el->chromEnd, sep);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->name, sep);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-fprintf(f, "%u", el->score, sep);
+fprintf(f, "%u", el->chromEnd);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->strand, sep);
+fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->otherStart, sep);
+fprintf(f, "%u", el->score);
 fputc(sep,f);
-fprintf(f, "%u", el->otherEnd, lastSep);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->strand);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->otherStart);
+fputc(sep,f);
+fprintf(f, "%u", el->otherEnd);
 fputc(lastSep,f);
 }
 

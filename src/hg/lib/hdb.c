@@ -66,21 +66,25 @@ hFreeConn(&conn);
 return size;
 }
 
+void hNibForChrom(char *chromName, char retNibName[512])
+/* Get .nib file associated with chromosome. */
+{
+struct sqlConnection *conn;
+char query[256];
+conn = hAllocConn();
+sprintf(query, "select fileName from chromInfo where chrom = '%s'", chromName);
+if (sqlQuickQuery(conn, query, retNibName, 512) == NULL)
+    errAbort("Sequence %s isn't in database", chromName);
+hFreeConn(&conn);
+}
+
 struct dnaSeq *hDnaFromSeq(char *seqName, int start, int end, enum dnaCase dnaCase)
 /* Fetch DNA */
 {
-struct sqlConnection *conn;
-int size;
-char query[256];
 char fileName[512];
 struct dnaSeq *seq;
 
-
-conn = hAllocConn();
-sprintf(query, "select fileName from chromInfo where chrom = '%s'", seqName);
-if (sqlQuickQuery(conn, query, fileName, sizeof(fileName)) == NULL)
-    errAbort("Sequence %s isn't in database", seqName);
-hFreeConn(&conn);
+hNibForChrom(seqName, fileName);
 seq = nibLoadPart(fileName, start, end-start);
 if (dnaCase == dnaUpper)
     touppers(seq->dna);

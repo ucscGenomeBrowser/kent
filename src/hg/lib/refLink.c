@@ -116,28 +116,28 @@ void refLinkOutput(struct refLink *el, FILE *f, char sep, char lastSep)
 {
 int i;
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->name, sep);
+fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->product, sep);
+fprintf(f, "%s", el->product);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->mrnaAcc, sep);
+fprintf(f, "%s", el->mrnaAcc);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->protAcc, sep);
+fprintf(f, "%s", el->protAcc);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->geneId, sep);
+fprintf(f, "%u", el->geneId);
 fputc(sep,f);
-fprintf(f, "%u", el->prodId, sep);
+fprintf(f, "%u", el->prodId);
 fputc(sep,f);
-fprintf(f, "%u", el->locusLinkId, lastSep);
+fprintf(f, "%u", el->locusLinkId);
 fputc(sep,f);
-fprintf(f, "%u", el->omimId, lastSep);
+fprintf(f, "%u", el->omimId);
 fputc(lastSep,f);
 }
 

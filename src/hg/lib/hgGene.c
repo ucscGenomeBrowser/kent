@@ -77,7 +77,7 @@ void geneFinderOutput(struct geneFinder *el, FILE *f, char sep, char lastSep)
 /* Print out geneFinder.  Separate fields with sep. Follow last field with lastSep. */
 {
 int i;
-fprintf(f, "%u", el->id, sep);
+fprintf(f, "%u", el->id);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name, lastSep);
@@ -166,25 +166,25 @@ void hgGeneOutput(struct hgGene *el, FILE *f, char sep, char lastSep)
 /* Print out hgGene.  Separate fields with sep. Follow last field with lastSep. */
 {
 int i;
-fprintf(f, "%u", el->id, sep);
+fprintf(f, "%u", el->id);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->name, sep);
+fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->geneFinder, sep);
+fprintf(f, "%u", el->geneFinder);
 fputc(sep,f);
-fprintf(f, "%u", el->startBac, sep);
+fprintf(f, "%u", el->startBac);
 fputc(sep,f);
-fprintf(f, "%u", el->startPos, sep);
+fprintf(f, "%u", el->startPos);
 fputc(sep,f);
-fprintf(f, "%u", el->endBac, sep);
+fprintf(f, "%u", el->endBac);
 fputc(sep,f);
-fprintf(f, "%u", el->endPos, sep);
+fprintf(f, "%u", el->endPos);
 fputc(sep,f);
-fprintf(f, "%d", el->orientation, sep);
+fprintf(f, "%d", el->orientation);
 fputc(sep,f);
-fprintf(f, "%u", el->transcriptCount, sep);
+fprintf(f, "%u", el->transcriptCount);
 fputc(sep,f);
 if (sep == ',') fputc('{',f);
 for (i=0; i<el->transcriptCount; ++i)
@@ -318,33 +318,33 @@ void hgTranscriptOutput(struct hgTranscript *el, FILE *f, char sep, char lastSep
 /* Print out hgTranscript.  Separate fields with sep. Follow last field with lastSep. */
 {
 int i;
-fprintf(f, "%u", el->id, sep);
+fprintf(f, "%u", el->id);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->name, sep);
+fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->hgGene, sep);
+fprintf(f, "%u", el->hgGene);
 fputc(sep,f);
-fprintf(f, "%u", el->startBac, sep);
+fprintf(f, "%u", el->startBac);
 fputc(sep,f);
-fprintf(f, "%u", el->startPos, sep);
+fprintf(f, "%u", el->startPos);
 fputc(sep,f);
-fprintf(f, "%u", el->endBac, sep);
+fprintf(f, "%u", el->endBac);
 fputc(sep,f);
-fprintf(f, "%u", el->endPos, sep);
+fprintf(f, "%u", el->endPos);
 fputc(sep,f);
-fprintf(f, "%u", el->cdsStartBac, sep);
+fprintf(f, "%u", el->cdsStartBac);
 fputc(sep,f);
-fprintf(f, "%u", el->cdsStartPos, sep);
+fprintf(f, "%u", el->cdsStartPos);
 fputc(sep,f);
-fprintf(f, "%u", el->cdsEndBac, sep);
+fprintf(f, "%u", el->cdsEndBac);
 fputc(sep,f);
-fprintf(f, "%u", el->cdsEndPos, sep);
+fprintf(f, "%u", el->cdsEndPos);
 fputc(sep,f);
-fprintf(f, "%d", el->orientation, sep);
+fprintf(f, "%d", el->orientation);
 fputc(sep,f);
-fprintf(f, "%u", el->exonCount, sep);
+fprintf(f, "%u", el->exonCount);
 fputc(sep,f);
 if (sep == ',') fputc('{',f);
 for (i=0; i<el->exonCount; ++i)

@@ -86,18 +86,18 @@ void ctgPosOutput(struct ctgPos *el, FILE *f, char sep, char lastSep)
 {
 int i;
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->contig, sep);
+fprintf(f, "%s", el->contig);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->size, sep);
+fprintf(f, "%u", el->size);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->chrom, sep);
+fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->chromStart, sep);
+fprintf(f, "%u", el->chromStart);
 fputc(sep,f);
-fprintf(f, "%u", el->chromEnd, lastSep);
+fprintf(f, "%u", el->chromEnd);
 fputc(lastSep,f);
 }
 

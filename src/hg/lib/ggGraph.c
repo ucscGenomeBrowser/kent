@@ -119,7 +119,7 @@ struct ggVertex *vertices = gg->vertices;
 bool **em = gg->edgeMatrix;
 int startIx;
 int startPos;
-int bestStartIx;
+int bestStartIx = 0;
 int bestStartPos = 0x3fffffff;
 
 
@@ -179,7 +179,7 @@ bool **em = gg->edgeMatrix;
 bool *edgesOut = em[startIx];
 int endIx;
 int endPos;
-int bestEndIx;
+int bestEndIx = 0;
 int bestEndPos = -0x3fffffff;
 
 

@@ -80,13 +80,13 @@ void chromInfoOutput(struct chromInfo *el, FILE *f, char sep, char lastSep)
 {
 int i;
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->chrom, sep);
+fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->size, sep);
+fprintf(f, "%u", el->size);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->fileName, lastSep);
+fprintf(f, "%s", el->fileName);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

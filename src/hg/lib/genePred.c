@@ -100,26 +100,26 @@ void genePredOutput(struct genePred *el, FILE *f, char sep, char lastSep)
 {
 int i;
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->name, sep);
+fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->chrom, sep);
+fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->strand, sep);
+fprintf(f, "%s", el->strand);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->txStart, sep);
+fprintf(f, "%u", el->txStart);
 fputc(sep,f);
-fprintf(f, "%u", el->txEnd, sep);
+fprintf(f, "%u", el->txEnd);
 fputc(sep,f);
-fprintf(f, "%u", el->cdsStart, sep);
+fprintf(f, "%u", el->cdsStart);
 fputc(sep,f);
-fprintf(f, "%u", el->cdsEnd, sep);
+fprintf(f, "%u", el->cdsEnd);
 fputc(sep,f);
-fprintf(f, "%u", el->exonCount, sep);
+fprintf(f, "%u", el->exonCount);
 fputc(sep,f);
 if (sep == ',') fputc('{',f);
 for (i=0; i<el->exonCount; ++i)
