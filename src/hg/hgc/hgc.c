@@ -3903,7 +3903,9 @@ htmlHorizontalLine();
 geneShowPosAndLinks(rl->mrnaAcc, rl->protAcc, tdb, "refPep", "htcTranslatedProtein",
 	"htcRefMrna", "htcGeneInGenome", "mRNA Sequence");
 
-puts(
+printTrackHtml(tdb);
+
+/*puts(
    "<P>RefSeq genes are derived from the "
    "<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/refseq.html\" TARGET=_blank>"
    "RefSeq</A> mRNA database. "
@@ -3913,6 +3915,7 @@ puts(
 puts(
    "<P>Additional information may be available by clicking on the "
    "mRNA associated with this gene in the main browser window.</P>");
+*/
 hFreeConn(&conn);
 }
 
