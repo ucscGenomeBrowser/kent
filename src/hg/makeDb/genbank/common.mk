@@ -2,9 +2,10 @@
 #OPT= -ggdb -O
 OPT= -ggdb
 
-KENT = ${GBROOT}/../rh9/kent/src
-#export MYSQLINC=/projects/hg2/usr/markd/genefind/mysql/include/mysql
-#export MYSQLLIBS=/projects/hg2/usr/markd/genefind/mysql/lib/mysql/libmysqlclient.a
+#KENT = ${GBROOT}/../rh9/kent/src
+KENT = ${GBROOT}/../kent/src
+export MYSQLINC=/projects/hg2/usr/markd/genefind/mysql/include/mysql
+export MYSQLLIBS=/projects/hg2/usr/markd/genefind/mysql/lib/mysql/libmysqlclient.a
 ifeq ($(wildcard ${MYSQLLIBS}),)
     export MYSQLINC=/usr/include/mysql
     export MYSQLLIBS=-lmysqlclient

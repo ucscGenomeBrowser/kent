@@ -12,9 +12,9 @@ clean: ${SUBDIRS:%=%.subclean}
 #
 # Install built files.  The etc directory is maintained using CVS, so
 # any changes must be committed (and this is checked).
-install: check-etc check-data all
+install: check-etc all
 	@test -n "${PREFIX}" || (echo "must specify PREFIX= to install"; exit 1)
-	mkdir -p ${PREFIX}
+	mkdir -p ${PREFIX}/etc
 	cp -fr bin ${PREFIX}
 	cp -rf lib ${PREFIX}
 	test -e ${PREFIX}/etc/CVS || cp -r etc/CVS ${PREFIX}/etc
