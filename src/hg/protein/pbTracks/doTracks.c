@@ -1,4 +1,4 @@
-/* draw various tracks for Proteome Browser */
+/* doTracks.c draw various tracks for Proteome Browser */
 #include "common.h"
 #include "hCommon.h"
 #include "portable.h"
@@ -19,6 +19,7 @@ void calxy(int xin, int yin, int *outxp, int *outyp)
    drawing coordinate with scaling and minor adjustments */
 {
 *outxp = xin*pbScale + 120;
+//*outxp = xin*pbScale + 120;
 *outyp = yin         + currentYoffset;
 }
 
@@ -375,9 +376,6 @@ exonGenomeEndPos   = blockGenomeEndPositive[exonNumber-1];
 
 currentYoffset = *yOffp;
     
-calxy(0, *yOffp, &xx, &yy);
-vgTextRight(g_vg, xx-25, yy-9, 10, 10, MG_BLACK, g_font, "Genome Browser");
-
 for (j = 0; j < mrnaLen; j++)
     {
     color = defaultColor;
@@ -418,6 +416,7 @@ for (j = 0; j < mrnaLen; j++)
 
     if ((currentPos >= prevGBStartPos) && (currentPos <= prevGBEndPos))
 	{
+	//printf("<br>j=%d currentPos=%d prevGBStartPos=%d prevGBEndPos=%d\n", j, currentPos, prevGBStartPos, prevGBEndPos);fflush(stdout);
 	jcnt++;
 	if (j < jPrevStart) jPrevStart = j;
 	if (j > jPrevEnd)   jPrevEnd   = j;
@@ -425,29 +424,39 @@ for (j = 0; j < mrnaLen; j++)
     }
 
 positionStr = strdup(cartOptionalString(cart, "position"));
-
-calxy(jPrevStart/3, *yOffp, &xx, &yy);
-if (pbScale > 6)
+if (jcnt > 0)
     {
-    vgBox(g_vg,  xx+(jPrevStart%3)*6, yy-2, (jPrevEnd-jPrevStart+1)*pbScale/3, 2, MG_BLACK);
+    calxy(jPrevStart/3, *yOffp, &xx, &yy);
+    if (pbScale > 6)
+    	{
+    	vgBox(g_vg,  xx+(jPrevStart%3)*6, yy-2, (jPrevEnd-jPrevStart+1)*pbScale/3, 2, MG_BLACK);
+    	}
+    else
+    	{
+    	vgBox(g_vg,  xx, yy-2, (jPrevEnd-jPrevStart+1)*pbScale/3, 2, MG_BLACK);
+    	}
+
+    mapBoxPrevGB(xx+(jPrevStart%3)*6, yy-2, (jPrevEnd-jPrevStart+1)*pbScale/3, 2, positionStr);
+    sprintf(prevPosMessage, "You were at: %s", positionStr);
+    if (jPrevStart < (mrnaLen/2))
+   	{
+   	vgText(g_vg, xx+(jPrevStart%3)*pbScale/3, yy-10, MG_BLACK, g_font, prevPosMessage);
+   	}
+    else
+   	{
+   	calxy(jPrevEnd/3, *yOffp, &xx, &yy);
+   	vgTextRight(g_vg, xx-6, yy-10, 10, 10, MG_BLACK, g_font, prevPosMessage);
+   	}
     }
 else
     {
-    vgBox(g_vg,  xx, yy-2, (jPrevEnd-jPrevStart+1)*pbScale/3, 2, MG_BLACK);
+    sprintf(prevPosMessage, "You were at: %s (inside an intron)", positionStr);
+    calxy(0, *yOffp, &xx, &yy);
+    //vgText(g_vg, xx, yy-8, MG_BLACK, g_font, prevPosMessage);
+    vgTextRight(g_vg, xx+6*strlen(prevPosMessage)-10, yy-8, 10, 10, MG_BLACK, g_font, prevPosMessage);
     }
-
-mapBoxPrevGB(xx+(jPrevStart%3)*6, yy-2, (jPrevEnd-jPrevStart+1)*pbScale/3, 2, positionStr);
-sprintf(prevPosMessage, "You were at: %s", positionStr);
-if (jPrevStart < (mrnaLen/2))
-   {
-   vgText(g_vg, xx+(jPrevStart%3)*pbScale/3, yy-10, MG_BLACK, g_font, prevPosMessage);
-   }
-else
-   {
-   calxy(jPrevEnd/3, *yOffp, &xx, &yy);
-   vgTextRight(g_vg, xx-6, yy-10, 10, 10, MG_BLACK, g_font, prevPosMessage);
-   }
-
+calxy(0, *yOffp, &xx, &yy);
+vgTextRight(g_vg, xx-25, yy-8, 10, 10, MG_BLACK, g_font, "Genome Browser");
 *yOffp = *yOffp + 7;
 }
 
@@ -892,13 +901,9 @@ void doTracks(char *proteinID, char *mrnaID, char *aa, struct vGfx *vg, int *yOf
 /* draw various protein tracks */
 {
 int i,j,l;
-
-//int y0 = 5;
-//char ensPepName[200];
 char *exonNumStr;
 int exonNum;
 
-//int sf_cnt;
 double pI, aaLen;
 double exonCount;
 char *chp;
@@ -929,13 +934,6 @@ g_vg = vg;
 g_font = mgSmallFont();
 
 dnaUtilOpen();
-/*if ((exonNumStr=cgiOptionalString("exonNum")) != NULL)
-    {
-    sscanf(exonNumStr, "%d", &exonNum);
-    printExonAA(proteinID, aa, exonNum);
-    }
-*/
-
 
 l=strlen(aa);
 doAAScale(l, yOffp, 1);
@@ -956,19 +954,17 @@ if (mrnaID != NULL)
     {
     doExon(exCount, chrom, l, yOffp, proteinID, mrnaID);
     }
+
 doCharge(aa, l, yOffp);
 
 doHydrophobicity(aa, l, yOffp);
 
 doCysteines(aa, l, yOffp);
 
-// Temporarily disable superfamily track until suprfam data built for hg16
-//sf_cnt = get_superfamilies(proteinID, ensPepName);
-//printf("<br>sf_cnt = %d\n", sf_cnt);fflush(stdout);
-
 if (sfCount > 0) doSuperfamily(ensPepName, sfCount, yOffp); 
 
 if (hasResFreq) doAnomalies(aa, l, yOffp);
+
 doAAScale(l, yOffp, -1);
 }
 
