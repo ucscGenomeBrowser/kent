@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.155 2005/01/10 23:47:19 daryl Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.156 2005/01/14 20:09:38 daryl Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2172,11 +2172,11 @@ char *canonicalRangeExp =
 		     "([0-9,]+)"
 		     "[[:space:]]*-[[:space:]]*"
 		     "([0-9,]+)$";
-char *gbrowseRangeExp = 
+char *gbrowserRangeExp = 
 		     "^([[:alnum:]._\\-]+)"
 		     "[[:space:]]*:[[:space:]]*"
 		     "([0-9,]+)"
-		     "[[:space:]]*..[[:space:]]*"
+		     "[[:space:]]*\\.\\.[[:space:]]*"
 		     "([0-9,]+)$";
 char *lengthRangeExp = 
 		     "^([[:alnum:]._\\-]+)"
@@ -2205,7 +2205,7 @@ struct hgPositions *hgPositionsFind(char *term, char *extraCgi,
 struct hgPositions *hgp = NULL, *hgpItem = NULL;
 regmatch_t substrs[4];
 boolean canonicalSpec = FALSE;
-boolean gbrowseSpec = FALSE;
+boolean gbrowserSpec = FALSE;
 boolean lengthSpec = FALSE;
 boolean relativeFlag = FALSE;
 int relStart = 0, relEnd = 0;
@@ -2231,8 +2231,8 @@ hgp->extraCgi = cloneString(extraCgi);
 if ((canonicalSpec = 
         matchRegexSubstr(term, canonicalRangeExp,
 				  substrs, ArraySize(substrs))) ||
-    (gbrowseSpec = 
-        matchRegexSubstr(term, gbrowseRangeExp, 
+    (gbrowserSpec = 
+        matchRegexSubstr(term, gbrowserRangeExp, 
                                 substrs, ArraySize(substrs))) ||
     (lengthSpec = 
         matchRegexSubstr(term, lengthRangeExp, 
@@ -2248,7 +2248,7 @@ if ((canonicalSpec =
     relStart = atoi(stripCommas(term+substrs[2].rm_so));
     term[substrs[3].rm_eo] = 0;
     relEnd   = atoi(stripCommas(term+substrs[3].rm_so));
-    if (canonicalSpec || gbrowseSpec || lengthSpec)
+    if (canonicalSpec || gbrowserSpec || lengthSpec)
 	relStart--;
     if (lengthSpec)
         relEnd += relStart;

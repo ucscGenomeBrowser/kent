@@ -157,7 +157,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.815 2005/01/13 01:02:11 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.816 2005/01/14 01:33:06 markd Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1643,6 +1643,27 @@ if (gp->strand[0] == '+')
     slReverse(&axtList);
 return axtList ;
 }
+
+void printCdsStatus(enum cdsStatus cdsStatus)
+/* print a description of a genePred cds status */
+{
+switch (cdsStatus)
+    {
+    case cdsNone:        /* "none" - No CDS (non-coding)  */
+        printf("none (non-coding)<br>\n");
+        break;
+    case cdsUnknown:     /* "unk" - CDS is unknown (coding, but not known)  */
+        printf("unknown (coding, but not known)<br>\n");
+        break;
+    case cdsIncomplete:  /* "incmpl" - CDS is not complete at this end  */
+        printf("<em>not</em> complete<br>\n");
+        break;
+    case cdsComplete:    /* "cmpl" - CDS is complete at this end  */
+        printf("complete<br>\n");
+        break;
+    }
+}
+
 void showGenePos(char *name, struct trackDb *tdb)
 /* Show gene prediction position and other info. */
 {
@@ -1663,38 +1684,15 @@ for (gp = gpList; gp != NULL; gp = gp->next)
         {
         printf("<b>Alternate Name:</b> %s<br>\n",gp->name2);
         }
-    if (gp->exonFrames != NULL ) 
-        switch (gp->cdsStartStat)
-            {
-            case cdsNone:        /* "none" - No CDS (non-coding)  */
-                printf("<b>No CDS Start (non-coding)</b><br>\n");
-                break;
-            case cdsUnknown:     /* "unk" - CDS is unknown (coding, but not known)  */
-                printf("<b>CDS Start is unknown. (coding, but not known)</b><br>\n");
-                break;
-            case cdsIncomplete:  /* "incmpl" - CDS is not complete at this end  */
-                printf("CDS Start is <b>not</b> complete. <br>\n");
-                break;
-            case cdsComplete:    /* "cmpl" - CDS is complete at this end  */
-                printf("<b>CDS Start is complete. </b><br>\n");
-                break;
-            }
-    if (gp->exonFrames != NULL ) 
-        switch (gp->cdsEndStat)
-            {
-            case cdsNone:        /* "none" - No CDS (non-coding)  */
-                printf("<b>No CDS End (non-coding)</b><br>\n");
-                break;
-            case cdsUnknown:     /* "unk" - CDS is unknown (coding, but not known)  */
-                printf("<b>CDS End is unknown. (coding, but not known)</b><br>\n");
-                break;
-            case cdsIncomplete:  /* "incmpl" - CDS is not complete at this end  */
-                printf("CDS End is <b>not</b> complete. <br>\n");
-                break;
-            case cdsComplete:    /* "cmpl" - CDS is complete at this end  */
-                printf("<b>CDS End is complete. </b><br>\n");
-                break;
-            }
+    if (gp->exonFrames != NULL) 
+        {
+        printf("<b>CDS Start: </b>");
+        printCdsStatus((gp->strand[0] == '+') ? gp->cdsStartStat : gp->cdsEndStat);
+        printf("<b>CDS End: </b>");
+        printCdsStatus((gp->strand[0] == '+') ? gp->cdsEndStat : gp->cdsStartStat);
+        }
+    if (gp->next != NULL)
+        printf("<br>");
     }
 genePredFreeList(&gpList);
 hFreeConn(&conn);
