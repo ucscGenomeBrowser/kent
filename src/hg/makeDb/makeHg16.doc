@@ -2539,6 +2539,9 @@ XXXX - DropOverlap above proceeding 2003-09-02 - Hiram
       echo $c
       mkdir -p psl/$c
     end
+    # special case for NG_002432
+    mkdir -p psl/NG_002432
+
     ls -1S /iscratch/i/fugu/trfFa/*.fa > fugu.lst
     ls -1S /scratch/hg/gs.17/build34/trfFa/*.fa > human.lst
 cat << 'EOF' > gsub
@@ -2879,6 +2882,35 @@ XXXX - Running 2003-08-27 21:32
 hgLoadBed hg16 syntenySelf ucsc100k.bed
 
 
+# TWINSCAN GENE PREDICTIONS (9/2/03 KRR)
+
+    cd /cluster/data/hg16/bed
+    rm -fr twinscan
+    mkdir twinscan
+    cd twinscan
+    set dir = genome.cs.wustl.edu/predictions/human/NCBI34 
+    set tarFile = NCBI34_Hs_09_01_03.tgz
+    wget http://$dir/$tarFile
+    wget http://$dir/md5sum.txt
+
+    # check file transferred correctly
+    #md5sum $tarFile | diff - md5sum.txt
+    # sum file has header line, so excise it
+    sed '1d' md5sum.txt > md5sum.txt.fixed
+    md5sum $tarFile | diff - md5sum.txt.fixed
+    tar xvfz $tarFile
+    unset tarFile dir
+
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y)
+      # pare down protein FASTA header to id and add missing .a:
+      echo chr$c
+      perl -wpe 's/^(\>\S+)\s.*$/$1.a/' \
+                    < chr_ptx/chr$c.ptx > chr_ptx/chr$c-fixed.fa
+    end
+    ldHgGene hg16 twinscan chr_gtf/chr*.gtf -gtf
+    hgPepPred hg16 generic twinscanPep chr_ptx/chr*-fixed.fa
+
+
 # LOAD GENEID GENES (TBD)
     mkdir -p /cluster/data/hg16/bed/geneid/download
     cd /cluster/data/hg16/bed/geneid/download
@@ -2904,3 +2936,7 @@ hgLoadBed hg16 syntenySelf ucsc100k.bed
 #	32255 gene predictions
     hgPepPred hg16 generic geneidPep download/*-fixed.prot
 
+
+# HUMAN/MOUSE/RAT ALIGMNMENT USING HUMOR(MULTIZ) (IN PROGRESS 2003-0829 kate)
+# Multiple alignment with Mm3, Rn3
+# /cluster/data/hg16/bed/blastz.rn3/axtNet300
