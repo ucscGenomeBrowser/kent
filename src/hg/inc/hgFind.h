@@ -1,5 +1,12 @@
 /* hgFind.h - Find things in human genome annotations. */
 
+#ifndef HGFIND_H
+#define HGFIND_H
+
+#ifndef CART_H
+#include "cart.h"
+#endif
+
 boolean handleTwoSites(char *spec, char **retChromName, int *retWinStart, int *retWinEnd);
 /* Handle queries of the form site1,site2. */
 
@@ -84,3 +91,6 @@ void hgPosFreeList(struct hgPos **pList);
 char *hgPosBrowserRange(struct hgPos *pos, char range[64]);
 /* Convert pos to chrN:123-456 format.  If range parameter is NULL it returns
  * static buffer, otherwise writes and returns range. */
+
+#endif /* HGFIND_H */
+
