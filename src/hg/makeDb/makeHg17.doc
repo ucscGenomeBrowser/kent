@@ -3967,35 +3967,43 @@ blat -fine -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.18/build35/maskedContigs/$(
     hgLoadBed hg17 gnfAtlas2 gnfAtlas2.bed
     #	Loaded 34319 elements of size 15
 
-# LOAD SNPS (TO BE DONE)
-    # SNP processing has been condensed into a single script,
-    # which makes snpNih, snpTsc, and snpMap
-    #   ${HOME}/kent/src/hg/snp/locations/processSnpLocations.csh
+# LOAD SNPS ( Daryl Thomas; November 7, 2004 )
+    set db    = hg17
+    set org   = human
+    set build = 123
+    set dir   = /cluster/bluearc/snp/$db/build$build
 
-    #	take a look at the directory:
-    #	ftp://ftp.ncbi.nlm.nih.gov/snp/human/genome_reports/
-    #	To see what snpBuild is available and if available for this
-    #	human build 35 - as of 2004-07-15 - do not see anything for b35
+    # ssh to some quiet machine with fast access to the bluearc
+    # it takes 2.5-3 hours to download the data
+    mkdir -p $dir
+    cd $dir
+    screen
+    ftp ftp.ncbi.nih.gov
+    cd snp/$org/XML
+    prompt
+    mget ds_ch*.xml.gz
+    exit # screen
+    exit # machine
 
-    # snpBuild = 119
-    # Run from directory $oo/bed/snp/build$snpBuild/snpMap
-    mkdir -p $oo/bed/snp/build$snpBuild/snpMap
-    cd       $oo/bed/snp/build$snpBuild/snpMap
-    processSnpLocations.csh hg16 human 34_2 119 >& log &
+    cp -f {$HOME}/kent/src/hg/snp/parseDbSnpXML /cluster/bin/scripts
+    chmod 775 /cluster/bin/scripts/parseDbSnpXML
 
-    # check data:
-    # wc -l snpTsc.bed; hgsql -e "select count(*) from snpTsc;" hg17
-    # wc -l snpNih.bed; hgsql -e "select count(*) from snpNih;" hg17
-    # wc -l snpMap.bed; hgsql -e "select count(*) from snpMap;" hg17
-    # select * from snpNih limit 5; desc snpNih; show indexes from
-    # snpNih"
-    # select * from snpTsc limit 5; desc snpTsc; show indexes from
-    # snpTsc"
-    # select * from snpMap limit 5; desc snpMap; show indexes from
-    # snpMap"
+    #ssh kk
+    touch jobList
+    foreach file ( /cluster/bluearc/snp/$db/build$build/ds_ch*.xml.gz )
+	    set out = $file:t:r
+	    echo /cluster/bin/scripts/parseDbSnpXML $file /cluster/bluearc/snp/$db/build$build $out.contig >> jobList
+    end
+    # para create jobList; para push; para check ... ( ~ 35 minutes for hg16.build121 chr1 )
+    exit # kk
 
-    # remove temp files
-    # rm human* *bed.gz
+    cd $dir
+    time cat *.det > $db.build$build.contig.bed # ~2 minutes
+    ln -s /cluster/data/$db/jkStuff/liftAll.lft .
+    time liftUp $db.build$build.bed liftAll.lft warn $db.build$build.contig.bed # ~7 minutes
+    time hgLoadBed $db snp $db.build$build.bed -sqlTable=${HOME}/kent/src/hg/lib/snp.sql # ~45 minutes
+    mv -r $dir /cluster/data/$db/bed/snp/build$build
+
 
 # GENE SORTER (AKA: FAMILY BROWSER) (DONE - 2004-06-16 - Hiram)
 # Added knownToU133Plus2 track (2004-10-14)
