@@ -33,6 +33,7 @@ struct axt
     int score;	                /* Score.  Zero for unknown.  Units arbitrary. */
     int symCount;               /* Size of alignments. */
     char *qSym, *tSym;          /* Alignments. */
+    int frame;			/* If non-zero then translation frame. */
     };
 
 void axtFree(struct axt **pEl);
@@ -69,13 +70,18 @@ struct axtScoreScheme
     int gapExtend;	/* Gap extension. */
     };
 
+void axtScoreSchemeFree(struct axtScoreScheme **pObj);
+/* Free up score scheme. */
+
 struct axtScoreScheme *axtScoreSchemeDefault();
-/* Return default scoring scheme (after blastz). */
+/* Return default scoring scheme (after blastz).  Do NOT axtScoreSchemeFree
+ * this. */
 
 struct axtScoreScheme *axtScoreSchemeProteinDefault();
 /* Returns default protein scoring scheme.  This is
+ * scaled to be compatible with the blastz one.  Don't
+ * axtScoreSchemeFree this. */
 
- * scaled to be compatible with the blastz one. */
 struct axtScoreScheme *axtScoreSchemeRead(char *fileName);
 /* Read in scoring scheme from file. Looks like
     A    C    G    T
@@ -84,7 +90,7 @@ struct axtScoreScheme *axtScoreSchemeRead(char *fileName);
     -31 -125  100 -114
     -123  -31 -114   91
     O = 400, E = 30
-*/
+ * axtScoreSchemeFree this when done. */
 
 int axtScore(struct axt *axt, struct axtScoreScheme *ss);
 /* Return calculated score of axt. */

@@ -165,9 +165,32 @@ void gfClumpDump(struct genoFind *gf, struct gfClump *clump, FILE *f);
 /* Print out info on clump */
 
 typedef void (*GfSaveAli)(char *chromName, int chromSize, int chromOffset,
-	struct ffAli *ali, bioSeq *genoSeq, bioSeq *otherSeq, 
+	struct ffAli *ali, bioSeq *genoSeq, struct hash *t3Hash, bioSeq *otherSeq, 
 	boolean isRc, enum ffStringency stringency, int minMatch, void  *outputData);
-/* This is the type of a client provided function to save an alignment. */
+/* This is the type of a client provided function to save an alignment. 
+ * The parameters are:
+ *     chromName - name of target (aka genomic or database) sequence.
+ *     chromSize - size of target sequence.
+ *     chromOffset - offset of genoSequence in target.
+ *     ffAli - alignment with pointers into genoSeq/otherSeq or in
+ *             translated target case, into t3Hash.
+ *     genoSeq - part of target sequence in normal case.   In translated
+ *             target case look at t3Hash instead.
+ *     t3Hash - used only in translated target case.  A hash keyed by
+ *             target sequence name with values *lists* of trans3 structures.
+ *             This hash can be searched to find both the translated and
+ *             untranslated versions of the bits of the target that are in 
+ *             memory.  (You can assume at this point all parts needed for
+ *             output are indeed in memory.)
+ *     otherSeq - query sequence (this isn't segmented at all). 
+ *     isRc - True if query is reverse complemented.
+ *     stringency - ffCdna, etc.  I'm hoping to move this elsewhere.
+ *     minMatch - minimum score to output.  Also should be moved elsewhere.
+ *     outputData - custom data for specific output function.
+ * The interface is a bit complex - partly from the demands of translated
+ * output, and partly from trying not to have the entire target sequence in
+ * memory.
+ */
 
 
 void gfAlignAaClumps(struct genoFind *gf,  struct gfClump *clumpList, aaSeq *seq,
@@ -199,7 +222,7 @@ struct gfSavePslxData
 /* This is the data structure passed as output data for gfSavePslx below. */
     {
     FILE *f;			/* Output file. */
-    struct hash *t3Hash;	/* Hash to associate names and frames. */
+    // uglyf struct hash *t3Hash;	/* Hash to associate names and frames. */
     boolean reportTargetStrand; /* Report target as well as query strand? */
     boolean targetRc;		/* Is target reverse complemented? */
     struct hash *maskHash;	/* Hash to associate target sequence name and mask. */
@@ -210,7 +233,8 @@ struct gfSavePslxData
     };
 
 void gfSavePslx(char *chromName, int chromSize, int chromOffset,
-	struct ffAli *ali, struct dnaSeq *genoSeq, struct dnaSeq *otherSeq, 
+	struct ffAli *ali, 
+	struct dnaSeq *genoSeq, struct hash *t3Hash, struct dnaSeq *otherSeq, 
 	boolean isRc, enum ffStringency stringency, int minMatch, void *outputData);
 /* Analyse one alignment and if it looks good enough write it out to file in
  * pslx format.  This is meant for translated alignments. */
@@ -228,7 +252,8 @@ struct gfSaveAxtData
     };
 
 void gfSaveAxtBundle(char *chromName, int chromSize, int chromOffset,
-	struct ffAli *ali, struct dnaSeq *genoSeq, struct dnaSeq *otherSeq, 
+	struct ffAli *ali, 
+	struct dnaSeq *genoSeq, struct hash *t3Hash, struct dnaSeq *otherSeq, 
 	boolean isRc, enum ffStringency stringency, int minMatch, void *outputData);
 /* Analyse one alignment and if it looks good enough save it in axtBundle. */
 

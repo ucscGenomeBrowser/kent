@@ -151,7 +151,7 @@ return pos;
 }
 
 static void blastiodAxtOutput(FILE *f, struct axt *axt, int tSize, int qSize, 
-	int lineSize)
+	int lineSize, boolean isProt)
 /* Output base-by-base part of alignment in blast-like fashion. */
 {
 int tOff = axt->tStart;
@@ -160,7 +160,10 @@ int lineStart, lineEnd, i;
 int tDig = digitsBaseTen(axt->tEnd);
 int qDig = digitsBaseTen(axt->qEnd);
 int digits = max(tDig, qDig);
+struct axtScoreScheme *ss = NULL;
 
+if (isProt)
+    ss = axtScoreSchemeProteinDefault();
 for (lineStart = 0; lineStart < axt->symCount; lineStart = lineEnd)
     {
     lineEnd = lineStart + lineSize;
@@ -177,7 +180,21 @@ for (lineStart = 0; lineStart < axt->symCount; lineStart = lineEnd)
     fprintf(f, "       %*s ", digits, " ");
     for (i=lineStart; i<lineEnd; ++i)
         {
-	char c = ((axt->qSym[i] == axt->tSym[i]) ? '|' : ' ');
+	char q, t, c;
+	q = axt->qSym[i];
+	t = axt->tSym[i];
+	if (isProt)
+	    {
+	    if (q == t)
+	        c = q;
+	    else if (ss->matrix[q][t] > 0)
+	        c = '+';
+	    else
+	        c = ' ';
+	    }
+	else
+	    c = ((toupper(q) == toupper(t)) ? '|' : ' ');
+
 	fputc(c, f);
 	}
     fprintf(f, "\n");
@@ -338,7 +355,7 @@ for (target = targetList; target != NULL; target = target->next)
 		     matches, axt->symCount, round(100.0 * matches / axt->symCount),
 		     strandName);
 		fprintf(f, "\n");
-		blastiodAxtOutput(f, axt, target->size, querySize, 60);
+		blastiodAxtOutput(f, axt, target->size, querySize, 60, isProt);
 		}
 	    }
 	}
@@ -439,7 +456,7 @@ for (target = targetList; target != NULL; target = target->next)
 	    nameForStrand(axt->tStrand));
 	fprintf(f, "\n");
 	fprintf(f, "\n");
-	blastiodAxtOutput(f, axt, target->size, querySize, 60);
+	blastiodAxtOutput(f, axt, target->size, querySize, 60, isProt);
 	}
     }
 
@@ -448,8 +465,8 @@ targetHitsFreeList(&targetList);
 }
 
 
-void axtBlastOut(struct axtBundle *abList, int queryIx, boolean isProt, FILE *f, 
-	char *databaseName, int databaseSeqCount, double databaseLetterCount, 
+void axtBlastOut(struct axtBundle *abList, int queryIx, boolean isProt, 
+	FILE *f, char *databaseName, int databaseSeqCount, double databaseLetterCount, 
 	boolean isWu, char *ourId)
 /* Output a bundle of axt's on the same query sequence in blast format.
  * The parameters in detail are:

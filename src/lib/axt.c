@@ -289,12 +289,15 @@ errAbort("Scoring matrix file %s too short\n", lf->fileName);
 }
 
 struct axtScoreScheme *axtScoreSchemeDefault()
-/* Return default scoring scheme (after blastz). */
+/* Return default scoring scheme (after blastz).  Do NOT axtScoreSchemeFree
+ * this. */
 {
-struct axtScoreScheme *ss;
-int twoCase[2][4] = {{'a', 'g', 'c', 't'},{'A','C','G','T'},};
+static struct axtScoreScheme *ss;
+static int twoCase[2][4] = {{'a', 'g', 'c', 't'},{'A','C','G','T'},};
 int i1,i2,j1,j2;
 
+if (ss != NULL)
+    return ss;
 AllocVar(ss);
 
 /* Set up lower case elements of matrix. */
@@ -440,8 +443,10 @@ struct axtScoreScheme *axtScoreSchemeProteinDefault()
 /* Returns default protein scoring scheme.  This is
  * scaled to be compatible with the blastz one. */
 {
-struct axtScoreScheme *ss;
+static struct axtScoreScheme *ss;
 int i,j;
+if (ss != NULL)
+    return ss;
 ss = axtScoreSchemeFromProteinText(blosumText, "blosum62");
 for (i=0; i<128; ++i)
     for (j=0; j<128; ++j)

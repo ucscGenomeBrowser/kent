@@ -407,7 +407,8 @@ for (gab = aod->bundleList; gab != NULL; gab = gab->next)
 axtBundleFreeList(&aod->bundleList);
 }
 
-void axtBlastOut(struct axtBundle *abList, int queryIx, boolean isProt, FILE *f, 
+void axtBlastOut(struct axtBundle *abList, int queryIx, 
+	boolean isProt, FILE *f, 
 	char *databaseName, int databaseSeqCount, double databaseLetterCount, 
 	boolean isWu, char *ourId);
 
@@ -463,7 +464,7 @@ else if (sameWord(format, "blast") ||
     axtOutData.minGood = goodPpt;
     axtOutData.qIsProt = qIsProt;
     axtOutData.tIsProt = tIsProt;
-    if (qIsProt ^ tIsProt)
+    if (tIsProt && !qIsProt)
         errAbort("Sorry, at the moment %s output doesn't support dna/protein alignments", format);
     if (sameWord(format, "wu-blast"))
 	gvo.queryOut = wuBlastQueryOut;
@@ -684,7 +685,6 @@ return t3List;
 void tripleSearch(aaSeq *qSeq, struct genoFind *gfs[3], struct hash *t3Hash, boolean dbIsRc, FILE *f)
 /* Look for qSeq in indices for three frames.  Then do rest of alignment. */
 {
-pslxOutData.t3Hash = t3Hash;
 pslxOutData.targetRc = dbIsRc;
 pslxOutData.reportTargetStrand = TRUE;
 gfFindAlignAaTrans(gfs, qSeq, t3Hash, minScore, gvo.out, gvo.data);
@@ -695,7 +695,6 @@ void transTripleSearch(struct dnaSeq *qSeq, struct genoFind *gfs[3], struct hash
 /* Translate qSeq three ways and look for each in three frames of index. */
 {
 int qIsRc;
-pslxOutData.t3Hash = NULL;
 pslxOutData.reportTargetStrand = TRUE;
 pslxOutData.targetRc = dbIsRc;
 

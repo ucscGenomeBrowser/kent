@@ -483,7 +483,7 @@ return gotAny;
 }
 
 static void saveAlignments(char *chromName, int chromSize, int chromOffset, 
-	struct ssBundle *bun, void *outData, boolean isRc, 
+	struct ssBundle *bun, struct hash *t3Hash, void *outData, boolean isRc, 
 	enum ffStringency stringency, int minMatch, GfSaveAli outFunction)
 /* Save significant alignments to file in .psl format. */
 {
@@ -494,7 +494,8 @@ if (minMatch > qSeq->size/2) minMatch = qSeq->size/2;
 for (ffi = bun->ffList; ffi != NULL; ffi = ffi->next)
     {
     struct ffAli *ff = ffi->ff;
-    (*outFunction)(chromName, chromSize, chromOffset, ff, tSeq, qSeq, isRc, stringency, minMatch, outData);
+    (*outFunction)(chromName, chromSize, chromOffset, ff, tSeq, t3Hash, qSeq, 
+    	isRc, stringency, minMatch, outData);
     }
 }
 
@@ -527,7 +528,7 @@ for (range = rangeList; range != NULL; range = range->next)
     alignComponents(range, bun, ffCdna);
     ssStitch(bun, ffCdna);
     saveAlignments(chromName, range->tTotalSize, range->tStart, 
-	bun, outData, isRc, ffCdna, minMatch, outFunction);
+	bun, NULL, outData, isRc, ffCdna, minMatch, outFunction);
     ssBundleFree(&bun);
     freeDnaSeq(&targetSeq);
     }
@@ -826,7 +827,7 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->isProt = isProt;
     ssStitch(bun, stringency);
     saveAlignments(targetSeq->name, targetSeq->size, 0, 
-	bun, outData, isRc, stringency, minMatch, outFunction);
+	bun, NULL, outData, isRc, stringency, minMatch, outFunction);
     ssBundleFree(&bun);
     }
 gfRangeFreeList(&rangeList);
@@ -897,7 +898,7 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->t3List = t3;
     ssStitch(bun, ffCdna);
     saveAlignments(targetSeq->name, t3->seq->size, 0, 
-	bun, outData, FALSE, ffCdna, minMatch, outFunction);
+	bun, t3Hash, outData, FALSE, ffCdna, minMatch, outFunction);
     ssBundleFree(&bun);
     }
 gfRangeFreeList(&rangeList);
@@ -976,7 +977,7 @@ for (range = rangeList; range != NULL; range = range->next)
 
 
 void gfAlignTrans(int *pConn, char *nibDir, aaSeq *seq, int minMatch, 
-    GfSaveAli outFunction, struct gfSavePslxData *outData)
+    GfSaveAli outFunction, struct gfSavePslxData *outData /* ~~~ Needs rework, should be void. uglyf */)
 /* Search indexed translated genome on server with an amino acid sequence. 
  * Then load homologous bits of genome locally and do detailed alignment.
  * Call 'outFunction' with each alignment that is found. */
@@ -1051,10 +1052,9 @@ for (isRc = 0; isRc <= 1;  ++isRc)
 	bun->t3List = t3;
 	ssStitch(bun, ffCdna);
 	outData->targetRc = isRc;
-	outData->t3Hash = t3Hash;
 	splitPath(range->tName, dir, chromName, ext);
 	saveAlignments(chromName, t3->nibSize, 0, 
-	    bun, outData, FALSE, ffCdna, minMatch, outFunction);
+	    bun, t3Hash, outData, FALSE, ffCdna, minMatch, outFunction);
 	ssBundleFree(&bun);
 	}
 
@@ -1184,7 +1184,7 @@ for (tIsRc=0; tIsRc <= 1; ++tIsRc)
 	splitPath(range->tName, dir, chromName, ext);
 	t3 = range->t3;
 	saveAlignments(chromName, t3->nibSize, t3->start, 
-	    bun, outData, qIsRc, stringency, minMatch, outFunction);
+	    bun, NULL, outData, qIsRc, stringency, minMatch, outFunction);
 	ssBundleFree(&bun);
 	}
 
@@ -1481,14 +1481,14 @@ if (score >= minMatch)
 }
 
 void gfSavePslx(char *chromName, int chromSize, int chromOffset,
-	struct ffAli *ali, struct dnaSeq *genoSeq, struct dnaSeq *otherSeq, 
+	struct ffAli *ali, struct dnaSeq *genoSeq, struct hash *t3Hash, struct dnaSeq *otherSeq, 
 	boolean isRc, enum ffStringency stringency, int minMatch, void *outputData)
 /* Save psl for more complex alignments. */
 {
 struct gfSavePslxData *outForm = outputData;
 
 gfSavePslOrPslx(chromName, chromSize, chromOffset, ali, genoSeq, otherSeq,
-    isRc, stringency, minMatch, outForm->f, outForm->t3Hash, 
+    isRc, stringency, minMatch, outForm->f, t3Hash, 
     outForm->reportTargetStrand, outForm->targetRc,
     outForm->maskHash, outForm->minGood, outForm->qIsProt, outForm->tIsProt, outForm->saveSeq);
 }
@@ -1518,7 +1518,8 @@ return rt;
 
 
 void gfSaveAxtBundle(char *chromName, int chromSize, int chromOffset,
-	struct ffAli *ali, struct dnaSeq *genoSeq, struct dnaSeq *otherSeq, 
+	struct ffAli *ali, 
+	struct dnaSeq *genoSeq, struct hash *t3Hash, struct dnaSeq *otherSeq, 
 	boolean isRc, enum ffStringency stringency, int minMatch, void *outputData)
 /* Save alignment to axtBundle. */
 {
@@ -1528,6 +1529,7 @@ char *he = NULL, *ne = NULL;
 struct axt *axt;
 struct dyString *q = newDyString(1024), *t = newDyString(1024);
 struct axtBundle *gab;
+boolean isTrans = (ad->qIsProt && !ad->tIsProt);
 
 AllocVar(gab);
 gab->tSize = genoSeq->size;
@@ -1577,7 +1579,9 @@ for (sAli = ali; sAli != NULL; sAli = eAli)
     axt->qSym = cloneString(q->string);
     axt->tSym = cloneString(t->string);
     if (ad->qIsProt && ad->tIsProt)
+	{
 	axt->score = axtScoreProteinDefault(axt);
+	}
     else 
 	axt->score = axtScoreDnaDefault(axt);
     slAddHead(&gab->axtList, axt);
@@ -1773,7 +1777,7 @@ for (bun = bigBunList; bun != NULL; bun = bun->next)
     ssStitch(bun, ffCdna);
     refineSmallExonsInBundle(bun);
     saveAlignments(bun->genoSeq->name, bun->genoSeq->size, 0, 
-	bun, outData, isRc, ffCdna, minScore, outFunction);
+	bun, NULL, outData, isRc, ffCdna, minScore, outFunction);
     }
 freeHash(&bunHash);
 lmCleanup(&lm);
@@ -1831,7 +1835,7 @@ for (bun = bigBunList; bun != NULL; bun = bun->next)
     {
     ssStitch(bun, ffCdna);
     saveAlignments(bun->genoSeq->name, bun->genoSeq->size, 0, 
-	bun, outData, qIsRc, stringency, minScore, outFunction);
+	bun, NULL, outData, qIsRc, stringency, minScore, outFunction);
     }
 hashFree(&bunHash);
 ssBundleFreeList(&bigBunList);
