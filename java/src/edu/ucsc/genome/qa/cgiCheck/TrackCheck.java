@@ -17,7 +17,26 @@ import java.util.Properties;
  *  For all pages viewed, check for non-200 return code.
  *  For hgc pages, check for HGERROR.  
  */
+
 public class TrackCheck {
+
+ static void usage() {
+    System.out.println(
+      "TrackCheck - check hgTrack cgi by iterating over tracks.\n" +
+      "Enable each track in full mode, check MAXLINK details.\n" +
+      "Check for non-200 return code and HGERROR.\n" +
+      "Perform zoom out 10x, twice.\n" +
+      "Uses defaultPos.\n" +
+      "Uses all assemblies.\n" +
+      
+      "usage:\n" +
+      "   java TrackCheck propertiesFile\n" +
+      "where properties files may contain database, table." +
+      "   java TrackCheck default\n" +
+      "This will use the default properties\n"
+      );
+    System.exit(0);
+ }
 
  /** 
   *  Runs all assemblies.  Checks zoom out at default position.
@@ -26,8 +45,11 @@ public class TrackCheck {
 
     boolean debug = false;
 
-    // String machine = "dhcp-55-107.cse.ucsc.edu";
-    String machine = "hgwbeta.cse.ucsc.edu";
+    /* Process command line properties, and load them
+     * into machine and table. */
+    if (args.length != 1)
+        usage();
+    TestTarget target = new TestTarget(args[0]);
 
     // make sure CLASSPATH has been set for JDBC driver
     if (!QADBLibrary.checkDriver()) return;
@@ -88,7 +110,7 @@ public class TrackCheck {
         }
 
         // get tracks for this assembly (read track controls from web)
-        String hgtracksURL = "http://" + machine + "/cgi-bin/hgTracks?db=";
+        String hgtracksURL = "http://" + target.machine + "/cgi-bin/hgTracks?db=";
         hgtracksURL = hgtracksURL + assembly;
         ArrayList trackList = 
           HgTracks.getTrackControls(hgtracksURL, defaultPos, debug);
@@ -103,13 +125,13 @@ public class TrackCheck {
           System.out.println(track);
           String mode = "default";
           // String mode = "all";
-          HgTracks.exerciseTrack(machine, assembly, chroms, 
+          HgTracks.exerciseTrack(target.machine, assembly, chroms, 
                                      track, mode, defaultPos, "full");
-          // HgTracks.exerciseTrack(machine, assembly, chroms, 
+          // HgTracks.exerciseTrack(target.machine, assembly, chroms, 
                                      // track, mode, defaultPos, "dense");
-          // HgTracks.exerciseTrack(machine, assembly, chroms, 
+          // HgTracks.exerciseTrack(target.machine, assembly, chroms, 
                                      // track, mode, defaultPos, "pack");
-          // HgTracks.exerciseTrack(machine, assembly, chroms, 
+          // HgTracks.exerciseTrack(target.machine, assembly, chroms, 
                                      // track, mode, defaultPos, "squish");
           System.out.println();
         }

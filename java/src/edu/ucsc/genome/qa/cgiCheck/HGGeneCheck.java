@@ -42,18 +42,7 @@ public class HGGeneCheck {
      * into machine and table. */
     if (args.length != 1)
         usage();
-    Properties mainProps;
-    if (!args[0].equals("default"))
-         mainProps = QALibrary.readProps(args[0]); 
-    else
-         mainProps = new Properties();
-    String machine;
-    machine = mainProps.getProperty("machine", "hgwbeta.cse.ucsc.edu");
-    String table;
-    table = mainProps.getProperty("table", "knownGene");
-    String quick;
-    quick = mainProps.getProperty("quick", "off");
-    boolean quickOn = quick.equals("on");
+    TestTarget target = new TestTarget(args[0]);
 
     // make sure CLASSPATH has been set for JDBC driver
     if (!QADBLibrary.checkDriver()) return;
@@ -98,7 +87,7 @@ public class HGGeneCheck {
         // could write a helper routine to do this
 
         // get tracks for this assembly (read track controls from web)
-        String hgtracksURL = "http://" + machine + "/cgi-bin/hgTracks?db=";
+        String hgtracksURL = "http://" + target.machine + "/cgi-bin/hgTracks?db=";
         hgtracksURL = hgtracksURL + assembly;
         String defaultPos = QADBLibrary.getDefaultPosition(metadbinfo,assembly);
         ArrayList trackList = 
@@ -111,9 +100,10 @@ public class HGGeneCheck {
         Iterator trackIter = trackList.iterator();
         while (trackIter.hasNext()) {
           String track = (String) trackIter.next();
-          if (!track.equals(table)) continue;
+          if (!track.equals(target.table)) continue;
           System.out.println(track);
-          HgTracks.hggene(dbinfo, machine, assembly, track, table, quickOn);
+          HgTracks.hggene(dbinfo, target.machine, assembly, track, 
+                          target.table, target.quickOn);
           System.out.println();
         }
       } catch (Exception e) {

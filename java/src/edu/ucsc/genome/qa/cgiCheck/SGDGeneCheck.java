@@ -68,7 +68,7 @@ public class SGDGeneCheck {
       while (trackIter.hasNext()) {
         String track = (String) trackIter.next();
         if (!track.equals(table)) continue;
-        HgTracks.hggene(dbinfo, machine, assembly, track, table);
+        HgTracks.hggene(dbinfo, machine, assembly, track, table, false);
         System.out.println();
       }
     } catch (Exception e) {
