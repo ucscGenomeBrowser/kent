@@ -554,7 +554,7 @@ axtChain -verbose=0 $1 \
     iSync
 
 
-# AUTO UPDATE GENBANK MRNA RUN  (IN PROGRESS 11/16/04 angie)
+# AUTO UPDATE GENBANK MRNA RUN  (DONE 1/28/05 angie)
     ssh hgwdev
     # Update genbank config and source in CVS:
     cd ~/kent/src/hg/makeDb/genbank
@@ -599,31 +599,20 @@ dp3.downloadDir = dp3
     # This is an -initial run, mRNA only:
     nice bin/gbAlignStep -srcDb=genbank -type=mrna -initial dp3 &
     tail -f [its logfile]
-#TODO
     # Load results:
     ssh hgwdev
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad dp3
     featureBits dp3 mrna
-#17931 bases of 135845121 (0.013%) in intersection
-    # Wow.  that is so paltry, perhaps we shouldn't even bother having a 
-    # mrna track??
+#28204 bases of 134584124 (0.021%) in intersection
+    # Still pretty paltry, but enough so that it would be a shame to not 
+    # have them.  
     featureBits dp3 xenoMrna
-#15763946 bases of 135845121 (11.604%) in intersection
+#16380659 bases of 134584124 (12.171%) in intersection
     # Clean up:
     rm -rf work/initial.dp3
 
-    # -initial for ESTs
-    nice bin/gbAlignStep -srcDb=genbank -type=est -initial dp3 &
-    tail -f [its logfile]
-    # Load results:
-    ssh hgwdev
-    cd /cluster/data/genbank
-    nice bin/gbDbLoadStep -verbose=1 dp3 &
-    # Doh!  wow, surprised that there are really no ESTs:
-#eieio 2004.08.04-19:18:53 dp3.initalign: nothing to align
-    # Clean up:
-    rm -rf work/initial.dp3
+    # no ESTs.
 
 
 # MAKE GCPERCENT (DONE 11/15/04 angie)
@@ -845,5 +834,126 @@ chainSome $(path1)
     hgsql dp3 < $HOME/kent/src/hg/lib/flyBase2004Xref.sql
     hgsql dp3 -e 'load data local infile "flyBase2004Xref.tab" \
       into table flyBase2004Xref'
+
+
+# SWAP DM2-DP3 BLASTZ (DONE 1/28/05 angie)
+    ssh kksilo
+    mkdir -p /cluster/data/dp3/bed/blastz.dm2.swap.2005-01-17/axtChrom
+    ln -s blastz.dm2.swap.2005-01-17 /cluster/data/dp3/bed/blastz.dm2
+    cd /cluster/data/dp3/bed/blastz.dm2
+    set aliDir = /cluster/data/dm2/bed/blastz.dp3
+    cp $aliDir/S1.len S2.len
+    cp $aliDir/S2.len S1.len
+    mkdir unsorted axtChrom
+    cat $aliDir/axtChrom/chr*.axt \
+    | axtSwap stdin $aliDir/S1.len $aliDir/S2.len stdout \
+    | axtSplitByTarget stdin unsorted
+    # Sort the shuffled .axt files.
+    foreach f (unsorted/*.axt)
+      echo sorting $f:t:r
+      axtSort $f axtChrom/$f:t
+    end
+    du -sh $aliDir/axtChrom unsorted axtChrom
+#298M    /cluster/data/dm2/bed/blastz.dp3/axtChrom
+#298M    unsorted
+#298M    axtChrom
+    rm -r unsorted
+
+
+# CHAIN MELANOGASTER BLASTZ (DONE 1/28/05 angie)
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/dp3/bed/blastz.dm2
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir chain
+    ls -1S /cluster/data/dp3/bed/blastz.dm2/axtChrom/*.axt \
+      > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh -ef
+axtChain -verbose=0 $1 \
+  /iscratch/i/dp3/nib \
+  /iscratch/i/dm2/nib stdout \
+| chainAntiRepeat /iscratch/i/dp3/nib /iscratch/i/dm2/nib stdin $2
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+#Completed: 17 of 17 jobs
+#Average job time:                  11s       0.19m     0.00h    0.00d
+#Longest job:                       20s       0.33m     0.01h    0.00d
+#Submission to last job:            19s       0.32m     0.01h    0.00d
+
+    # now on the fileserver, sort chains
+    ssh kksilo
+    cd /cluster/data/dp3/bed/blastz.dm2/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    rm run1/chain/*.chain
+
+    # Load chains into database
+    ssh hgwdev
+    cd /cluster/data/dp3/bed/blastz.dm2/axtChain/chain
+    cat *.chain | hgLoadChain -tIndex dp3 chainDm2 stdin
+
+
+# NET MELANOGASTER BLASTZ (DONE 1/28/05 angie)
+    ssh kksilo
+    cd /cluster/data/dp3/bed/blastz.dm2/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+
+    # Add classification info using db tables:
+    ssh hgwdev
+    cd /cluster/data/dp3/bed/blastz.dm2/axtChain
+    netClass -noAr noClass.net dp3 dm2 melanogaster.net
+    rm noClass.net
+    # Load the nets into database 
+    netFilter -minGap=10 melanogaster.net |  hgLoadNet dp3 netDm2 stdin
+
+
+# MAKE AXTNET (DONE 1/28/05 angie)
+    ssh kksilo
+    cd /cluster/data/dp3/bed/blastz.dm2/axtChain
+    netSplit melanogaster.net net
+    cd ..
+    mkdir axtNet
+    foreach f (axtChain/net/*)
+      set chr = $f:t:r
+      netToAxt $f axtChain/chain/$chr.chain /cluster/data/dp3/nib \
+        /cluster/data/dm2/nib stdout \
+      | axtSort stdin axtNet/$chr.axt
+    end
+
+
+# MAKE VSDM2 DOWNLOADABLES (DONE 1/28/05 angie)
+    ssh kksilo
+    gzip -c \
+      /cluster/data/dp3/bed/blastz.dm2/axtChain/all.chain \
+      > /cluster/data/dp3/zips/melanogaster.chain.gz
+    gzip -c \
+      /cluster/data/dp3/bed/blastz.dm2/axtChain/melanogaster.net \
+      > /cluster/data/dp3/zips/melanogaster.net.gz
+    mkdir /cluster/data/dp3/zips/axtNet
+    foreach f (/cluster/data/dp3/bed/blastz.dm2/axtNet/*.axt)
+      gzip -c $f > /cluster/data/dp3/zips/axtNet/$f:t.gz
+    end
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/dp3/vsDm2
+    cd /usr/local/apache/htdocs/goldenPath/dp3/vsDm2
+    mv /cluster/data/dp3/zips/mel*.gz .
+    mv /cluster/data/dp3/zips/axtNet .
+    md5sum *.gz */*.gz > md5sum.txt
+    # Make a README.txt which explains the files & formats.
 
 
