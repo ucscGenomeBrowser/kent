@@ -105,7 +105,7 @@
 #include "hgc.h"
 #include "genbank.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.417 2003/05/17 06:35:27 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.418 2003/05/20 17:52:49 braney Exp $";
 
 
 struct cart *cart;	/* User's settings. */
@@ -6716,6 +6716,44 @@ printAlignments(pslList, start, "htcBlatXeno", track, itemName);
 printTrackHtml(tdb);
 }
 
+void doBlatSquirt(struct trackDb *tdb, char *itemName)
+/* Handle click on blatSquirt track. */
+{
+char *track = tdb->tableName;
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+int start = cartInt(cart, "o");
+struct psl *pslList = NULL, *psl;
+struct dnaSeq *seq;
+boolean hasBin;
+char table[64];
+
+cartWebStart(cart, itemName);
+printf("<H1>Information on Ciona intestinalis Sequence %s</H1>", itemName);
+
+printf("Get ");
+printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
+       hgcPathAndSettings(), seqName, winStart, winEnd, itemName);
+printf("Ciona intestinalis DNA</A><BR>\n");
+
+/* Get alignment info and print. */
+printf("<H2>Alignments</H2>\n");
+hFindSplitTable(seqName, track, table, &hasBin);
+sprintf(query, "select * from %s where qName = '%s'", table, itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    psl = pslLoad(row+hasBin);
+    slAddHead(&pslList, psl);
+    }
+sqlFreeResult(&sr);
+slReverse(&pslList);
+printAlignments(pslList, start, "htcBlatXeno", track, itemName);
+printTrackHtml(tdb);
+}
+
 void doTSS(struct trackDb *tdb, char *itemName)
 /* Handle click on DBTSS track. */
 {
@@ -11444,6 +11482,10 @@ else if (sameWord(track, "blatTetra"))
 else if (sameWord(track, "blatFugu"))
     {
     doBlatFish(tdb, item);
+    }
+else if (sameWord(track, "blatSquirt"))
+    {
+    doBlatSquirt(tdb, item);
     }
 /* This is a catch-all for blastz/blat tracks -- any special cases must be 
  * above this point! */
