@@ -16,7 +16,6 @@ struct pt *ptCommaIn(char **pS, struct pt *ret)
  * return a new pt */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -29,7 +28,6 @@ return ret;
 void ptOutput(struct pt *el, FILE *f, char sep, char lastSep) 
 /* Print out pt.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 fprintf(f, "%d", el->x);
 fputc(sep,f);
 fprintf(f, "%d", el->y);
@@ -42,7 +40,6 @@ struct point *pointCommaIn(char **pS, struct point *ret)
  * return a new point */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -84,7 +81,6 @@ for (el = *pList; el != NULL; el = next)
 void pointOutput(struct point *el, FILE *f, char sep, char lastSep) 
 /* Print out point.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->acc);
 if (sep == ',') fputc('"',f);
@@ -106,13 +102,13 @@ struct polygon *polygonLoad(char **row)
  * from database.  Dispose of this with polygonFree(). */
 {
 struct polygon *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->pointCount = sqlSigned(row[1]);
 ret->id = sqlUnsigned(row[0]);
-s = row[2];
+{
+int i;
+char *s = row[2];
 for (i=0; i<ret->pointCount; ++i)
     {
     s = sqlEatChar(s, '{');
@@ -121,7 +117,10 @@ for (i=0; i<ret->pointCount; ++i)
     s = sqlEatChar(s, ',');
     }
 slReverse(&ret->points);
-s = row[3];
+}
+{
+int i;
+char *s = row[3];
 AllocArray(ret->persp, ret->pointCount);
 for (i=0; i<ret->pointCount; ++i)
     {
@@ -130,6 +129,7 @@ for (i=0; i<ret->pointCount; ++i)
     s = sqlEatChar(s, '}');
     s = sqlEatChar(s, ',');
     }
+}
 return ret;
 }
 
@@ -175,12 +175,13 @@ struct polygon *polygonCommaIn(char **pS, struct polygon *ret)
  * return a new polygon */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
 ret->id = sqlUnsignedComma(&s);
 ret->pointCount = sqlSignedComma(&s);
+{
+int i;
 s = sqlEatChar(s, '{');
 for (i=0; i<ret->pointCount; ++i)
     {
@@ -192,6 +193,9 @@ for (i=0; i<ret->pointCount; ++i)
 slReverse(&ret->points);
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
+}
+{
+int i;
 s = sqlEatChar(s, '{');
 AllocArray(ret->persp, ret->pointCount);
 for (i=0; i<ret->pointCount; ++i)
@@ -203,6 +207,7 @@ for (i=0; i<ret->pointCount; ++i)
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
+}
 *pS = s;
 return ret;
 }
@@ -235,11 +240,12 @@ for (el = *pList; el != NULL; el = next)
 void polygonOutput(struct polygon *el, FILE *f, char sep, char lastSep) 
 /* Print out polygon.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 fprintf(f, "%u", el->id);
 fputc(sep,f);
 fprintf(f, "%d", el->pointCount);
 fputc(sep,f);
+{
+int i;
 /* Loading point list. */
     {
     struct point *it = el->points;
@@ -254,7 +260,10 @@ fputc(sep,f);
         }
     if (sep == ',') fputc('}',f);
     }
+}
 fputc(sep,f);
+{
+int i;
 /* Loading pt list. */
     {
     struct pt *it = el->persp;
@@ -268,6 +277,7 @@ fputc(sep,f);
         }
     if (sep == ',') fputc('}',f);
     }
+}
 fputc(lastSep,f);
 }
 
@@ -276,15 +286,17 @@ struct polyhedron *polyhedronLoad(char **row)
  * from database.  Dispose of this with polyhedronFree(). */
 {
 struct polyhedron *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->polygonCount = sqlSigned(row[2]);
 ret->id = sqlUnsigned(row[0]);
-s = cloneString(row[1]);
+{
+char *s = cloneString(row[1]);
 sqlStringArray(s, ret->names, 2);
-s = row[3];
+}
+{
+int i;
+char *s = row[3];
 for (i=0; i<ret->polygonCount; ++i)
     {
     s = sqlEatChar(s, '{');
@@ -293,7 +305,10 @@ for (i=0; i<ret->polygonCount; ++i)
     s = sqlEatChar(s, ',');
     }
 slReverse(&ret->polygons);
-s = row[4];
+}
+{
+int i;
+char *s = row[4];
 for (i=0; i<2; ++i)
     {
     s = sqlEatChar(s, '{');
@@ -301,6 +316,7 @@ for (i=0; i<2; ++i)
     s = sqlEatChar(s, '}');
     s = sqlEatChar(s, ',');
     }
+}
 return ret;
 }
 
@@ -346,11 +362,12 @@ struct polyhedron *polyhedronCommaIn(char **pS, struct polyhedron *ret)
  * return a new polyhedron */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
 ret->id = sqlUnsignedComma(&s);
+{
+int i;
 s = sqlEatChar(s, '{');
 for (i=0; i<2; ++i)
     {
@@ -358,7 +375,10 @@ for (i=0; i<2; ++i)
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
+}
 ret->polygonCount = sqlSignedComma(&s);
+{
+int i;
 s = sqlEatChar(s, '{');
 for (i=0; i<ret->polygonCount; ++i)
     {
@@ -370,6 +390,9 @@ for (i=0; i<ret->polygonCount; ++i)
 slReverse(&ret->polygons);
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
+}
+{
+int i;
 s = sqlEatChar(s, '{');
 for (i=0; i<2; ++i)
     {
@@ -380,6 +403,7 @@ for (i=0; i<2; ++i)
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
+}
 *pS = s;
 return ret;
 }
@@ -414,9 +438,10 @@ for (el = *pList; el != NULL; el = next)
 void polyhedronOutput(struct polyhedron *el, FILE *f, char sep, char lastSep) 
 /* Print out polyhedron.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 fprintf(f, "%u", el->id);
 fputc(sep,f);
+{
+int i;
 if (sep == ',') fputc('{',f);
 for (i=0; i<2; ++i)
     {
@@ -426,9 +451,12 @@ for (i=0; i<2; ++i)
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);
+}
 fputc(sep,f);
 fprintf(f, "%d", el->polygonCount);
 fputc(sep,f);
+{
+int i;
 /* Loading polygon list. */
     {
     struct polygon *it = el->polygons;
@@ -443,7 +471,10 @@ fputc(sep,f);
         }
     if (sep == ',') fputc('}',f);
     }
+}
 fputc(sep,f);
+{
+int i;
 /* Loading pt list. */
     {
     struct pt *it = el->screenBox;
@@ -457,6 +488,7 @@ fputc(sep,f);
         }
     if (sep == ',') fputc('}',f);
     }
+}
 fputc(lastSep,f);
 }
 
@@ -466,7 +498,6 @@ struct twoPoint *twoPointCommaIn(char **pS, struct twoPoint *ret)
  * return a new twoPoint */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -479,6 +510,8 @@ s = sqlEatChar(s, '{');
 if(s[0] != '}')    ptCommaIn(&s, &ret->b);
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
+{
+int i;
 s = sqlEatChar(s, '{');
 for (i=0; i<2; ++i)
     {
@@ -489,6 +522,7 @@ for (i=0; i<2; ++i)
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
+}
 *pS = s;
 return ret;
 }
@@ -496,7 +530,6 @@ return ret;
 void twoPointOutput(struct twoPoint *el, FILE *f, char sep, char lastSep) 
 /* Print out twoPoint.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
@@ -509,6 +542,8 @@ if (sep == ',') fputc('{',f);
 ptCommaOut(&el->b,f);
 if (sep == ',') fputc('}',f);
 fputc(sep,f);
+{
+int i;
 /* Loading pt list. */
     {
     struct pt *it = el->points;
@@ -522,6 +557,7 @@ fputc(sep,f);
         }
     if (sep == ',') fputc('}',f);
     }
+}
 fputc(lastSep,f);
 }
 
@@ -530,13 +566,14 @@ struct stringArray *stringArrayLoad(char **row)
  * from database.  Dispose of this with stringArrayFree(). */
 {
 struct stringArray *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->numNames = sqlSigned(row[0]);
+{
+int sizeOne;
 sqlStringDynamicArray(row[1], &ret->names, &sizeOne);
 assert(sizeOne == ret->numNames);
+}
 return ret;
 }
 
@@ -582,11 +619,12 @@ struct stringArray *stringArrayCommaIn(char **pS, struct stringArray *ret)
  * return a new stringArray */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
 ret->numNames = sqlSignedComma(&s);
+{
+int i;
 s = sqlEatChar(s, '{');
 AllocArray(ret->names, ret->numNames);
 for (i=0; i<ret->numNames; ++i)
@@ -595,6 +633,7 @@ for (i=0; i<ret->numNames; ++i)
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
+}
 *pS = s;
 return ret;
 }
@@ -629,9 +668,10 @@ for (el = *pList; el != NULL; el = next)
 void stringArrayOutput(struct stringArray *el, FILE *f, char sep, char lastSep) 
 /* Print out stringArray.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 fprintf(f, "%d", el->numNames);
 fputc(sep,f);
+{
+int i;
 if (sep == ',') fputc('{',f);
 for (i=0; i<el->numNames; ++i)
     {
@@ -641,6 +681,7 @@ for (i=0; i<el->numNames; ++i)
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);
+}
 fputc(lastSep,f);
 }
 

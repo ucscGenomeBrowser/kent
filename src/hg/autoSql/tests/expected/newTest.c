@@ -16,7 +16,6 @@ struct point *pointCommaIn(char **pS, struct point *ret)
  * return a new point */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -52,7 +51,6 @@ for (el = *pList; el != NULL; el = next)
 void pointOutput(struct point *el, FILE *f, char sep, char lastSep) 
 /* Print out point.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 fprintf(f, "%d", el->x);
 fputc(sep,f);
 fprintf(f, "%d", el->y);
@@ -64,8 +62,6 @@ struct autoTest *autoTestLoad(char **row)
  * from database.  Dispose of this with autoTestFree(). */
 {
 struct autoTest *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->ptCount = sqlSigned(row[4]);
@@ -74,17 +70,31 @@ ret->valCount = sqlSigned(row[9]);
 ret->id = sqlUnsigned(row[0]);
 strcpy(ret->shortName, row[1]);
 ret->longName = cloneString(row[2]);
-s = cloneString(row[3]);
+{
+char *s = cloneString(row[3]);
 sqlStringArray(s, ret->aliases, 3);
+}
+{
+int sizeOne;
 sqlShortDynamicArray(row[5], &ret->pts, &sizeOne);
 assert(sizeOne == ret->ptCount);
+}
+{
+int sizeOne;
 sqlUbyteDynamicArray(row[7], &ret->difs, &sizeOne);
 assert(sizeOne == ret->difCount);
-s = row[8];
+}
+{
+int sizeOne;
+char *s = row[8];
 if(s != NULL && differentString(s, ""))
    ret->xy = pointCommaIn(&s, NULL);
+}
+{
+int sizeOne;
 sqlStringDynamicArray(row[10], &ret->vals, &sizeOne);
 assert(sizeOne == ret->valCount);
+}
 return ret;
 }
 
@@ -207,13 +217,14 @@ struct autoTest *autoTestCommaIn(char **pS, struct autoTest *ret)
  * return a new autoTest */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
 ret->id = sqlUnsignedComma(&s);
 sqlFixedStringComma(&s, ret->shortName, sizeof(ret->shortName));
 ret->longName = sqlStringComma(&s);
+{
+int i;
 s = sqlEatChar(s, '{');
 for (i=0; i<3; ++i)
     {
@@ -221,7 +232,10 @@ for (i=0; i<3; ++i)
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
+}
 ret->ptCount = sqlSignedComma(&s);
+{
+int i;
 s = sqlEatChar(s, '{');
 AllocArray(ret->pts, ret->ptCount);
 for (i=0; i<ret->ptCount; ++i)
@@ -230,7 +244,10 @@ for (i=0; i<ret->ptCount; ++i)
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
+}
 ret->difCount = sqlSignedComma(&s);
+{
+int i;
 s = sqlEatChar(s, '{');
 AllocArray(ret->difs, ret->difCount);
 for (i=0; i<ret->difCount; ++i)
@@ -239,11 +256,14 @@ for (i=0; i<ret->difCount; ++i)
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
+}
 s = sqlEatChar(s, '{');
 if(s[0] != '}')    slSafeAddHead(&ret->xy, pointCommaIn(&s,NULL));
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
 ret->valCount = sqlSignedComma(&s);
+{
+int i;
 s = sqlEatChar(s, '{');
 AllocArray(ret->vals, ret->valCount);
 for (i=0; i<ret->valCount; ++i)
@@ -252,6 +272,7 @@ for (i=0; i<ret->valCount; ++i)
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
+}
 *pS = s;
 return ret;
 }
@@ -293,7 +314,6 @@ for (el = *pList; el != NULL; el = next)
 void autoTestOutput(struct autoTest *el, FILE *f, char sep, char lastSep) 
 /* Print out autoTest.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 fprintf(f, "%u", el->id);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
@@ -304,6 +324,8 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->longName);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
+{
+int i;
 if (sep == ',') fputc('{',f);
 for (i=0; i<3; ++i)
     {
@@ -313,9 +335,12 @@ for (i=0; i<3; ++i)
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);
+}
 fputc(sep,f);
 fprintf(f, "%d", el->ptCount);
 fputc(sep,f);
+{
+int i;
 if (sep == ',') fputc('{',f);
 for (i=0; i<el->ptCount; ++i)
     {
@@ -323,9 +348,12 @@ for (i=0; i<el->ptCount; ++i)
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);
+}
 fputc(sep,f);
 fprintf(f, "%d", el->difCount);
 fputc(sep,f);
+{
+int i;
 if (sep == ',') fputc('{',f);
 for (i=0; i<el->difCount; ++i)
     {
@@ -333,6 +361,7 @@ for (i=0; i<el->difCount; ++i)
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);
+}
 fputc(sep,f);
 if (sep == ',') fputc('{',f);
 if(el->xy != NULL)    pointCommaOut(el->xy,f);
@@ -340,6 +369,8 @@ if (sep == ',') fputc('}',f);
 fputc(sep,f);
 fprintf(f, "%d", el->valCount);
 fputc(sep,f);
+{
+int i;
 if (sep == ',') fputc('{',f);
 for (i=0; i<el->valCount; ++i)
     {
@@ -349,6 +380,7 @@ for (i=0; i<el->valCount; ++i)
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);
+}
 fputc(lastSep,f);
 }
 

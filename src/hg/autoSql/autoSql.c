@@ -16,7 +16,7 @@
 #include "cheapcgi.h"
 #include "asParse.h"
 
-static char const rcsid[] = "$Id: autoSql.c,v 1.24 2004/05/19 23:56:24 angie Exp $";
+static char const rcsid[] = "$Id: autoSql.c,v 1.25 2004/07/31 20:34:05 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -210,7 +210,9 @@ if (col->isSizeLink == isSizeLink)
 	    errAbort("Sorry, lists of %s not implemented.", lt->name);
 	if (obType)
 	    {
-	    fprintf(f, "s = row[%d];\n", colIx);
+            fprintf(f, "{\n");
+            fprintf(f, "int i;\n");
+	    fprintf(f, "char *s = row[%d];\n", colIx);
 	    if (col->fixedSize)
 		{
 		fprintf(f, "for (i=0; i<%d; ++i)\n", col->fixedSize);
@@ -242,6 +244,7 @@ if (col->isSizeLink == isSizeLink)
 	    fprintf(f, "    }\n");
 	    if (type == t_object)
 		fprintf(f, "slReverse(&ret->%s);\n", col->name);
+            fprintf(f, "}\n");
 	    }
 	else
 	    {
@@ -249,9 +252,11 @@ if (col->isSizeLink == isSizeLink)
 		{
 		if (isDynamic && lt->stringy)
 		    {
-		    fprintf(f, "s = cloneString(row[%d]);\n", colIx);
+                    fprintf(f, "{\n");
+		    fprintf(f, "char *s = cloneString(row[%d]);\n", colIx);
 		    fprintf(f, "sql%sArray(s, ret->%s, %d);\n",
 			       lName, col->name, col->fixedSize);
+                    fprintf(f, "}\n");
 		    }
 		else
 		    {
@@ -262,10 +267,13 @@ if (col->isSizeLink == isSizeLink)
 	    else
 		{
 		struct asColumn *ls;
+		fprintf(f, "{\n");
+		fprintf(f, "int sizeOne;\n");
 		fprintf(f, "sql%s%sArray(row[%d], &ret->%s, &sizeOne);\n",
 			   lName, staDyn, colIx, col->name); 
 		if ((ls = col->linkedSize) != NULL)
 		    fprintf(f, "assert(sizeOne == ret->%s);\n", ls->name);
+		fprintf(f, "}\n");
 		}
 	    }
 	}
@@ -294,17 +302,23 @@ if (col->isSizeLink == isSizeLink)
 	    case t_object:
 		{
 		struct asObject *obj = col->obType;
-		fprintf(f, "s = row[%d];\n", colIx);
+		fprintf(f, "{\n");
+		fprintf(f, "int sizeOne;\n");
+		fprintf(f, "char *s = row[%d];\n", colIx);
 		fprintf(f, "if(s != NULL && differentString(s, \"\"))\n");
 		fprintf(f, "   ret->%s = %sCommaIn(&s, NULL);\n", col->name, obj->name);
+		fprintf(f, "}\n");
 		break;
 		}
 	    case t_simple:
 		{
 		struct asObject *obj = col->obType;
-		fprintf(f, "s = row[%d];\n", colIx);
+		fprintf(f, "{\n");
+		fprintf(f, "int sizeOne;\n");
+		fprintf(f, "char *s = row[%d];\n", colIx);
 		fprintf(f, "if(s != NULL && differentString(s, \"\"))\n");
 		fprintf(f, "   %sCommaIn(&s, &ret->%s);\n", obj->name, col->name);
+		fprintf(f, "}\n");
 		break;
 		}
 	    default:
@@ -337,7 +351,6 @@ fprintf(f, " * This will fill in ret if non-null, otherwise will\n");
 fprintf(f, " * return a new %s */\n", tableName);
 fprintf(f, "{\n");
 fprintf(f, "char *s = *pS;\n");
-fprintf(f, "int i;\n");
 fprintf(f, "\n");
 fprintf(f, "if (ret == NULL)\n");
 fprintf(f, "    AllocVar(ret);\n");
@@ -346,6 +359,8 @@ for (col = table->columnList; col != NULL; col = col->next)
     {
     if (col->isList)
 	{
+        fprintf(f, "{\n");
+        fprintf(f, "int i;\n");
 	fprintf(f, "s = sqlEatChar(s, '{');\n");
 	if (col->fixedSize)
 	    {
@@ -364,9 +379,12 @@ for (col = table->columnList; col != NULL; col = col->next)
 	    fprintf(f, "slReverse(&ret->%s);\n", col->name);
 	fprintf(f, "s = sqlEatChar(s, '}');\n");
 	fprintf(f, "s = sqlEatChar(s, ',');\n");
+        fprintf(f, "}\n");
 	}
     else if (col->isArray)
 	{
+        fprintf(f, "{\n");
+        fprintf(f, "int i;\n");
 	fprintf(f, "s = sqlEatChar(s, '{');\n");
 	if (col->fixedSize)
 	    {
@@ -382,6 +400,7 @@ for (col = table->columnList; col != NULL; col = col->next)
 	fprintf(f, "    }\n");
 	fprintf(f, "s = sqlEatChar(s, '}');\n");
 	fprintf(f, "s = sqlEatChar(s, ',');\n");
+        fprintf(f, "}\n");
 	}
     else
 	{
@@ -437,8 +456,6 @@ fprintf(f, "void %sStaticLoad(char **row, struct %s *ret)\n", tableName, tableNa
 fprintf(f, "/* Load a row from %s table into ret.  The contents of ret will\n", tableName);
 fprintf(f, " * be replaced at the next call to this function. */\n");
 fprintf(f, "{\n");
-fprintf(f, "int sizeOne,i;\n");
-fprintf(f, "char *s;\n");
 fprintf(f, "\n");
 for (tfIx = 0; tfIx < 2; ++tfIx)
     {
@@ -470,8 +487,6 @@ fprintf(f, "/* Load a %s from row fetched with select * from %s\n", tableName, t
 fprintf(f, " * from database.  Dispose of this with %sFree(). */\n", tableName);
 fprintf(f, "{\n");
 fprintf(f, "struct %s *ret;\n", tableName);
-fprintf(f, "int sizeOne,i;\n");
-fprintf(f, "char *s;\n");
 fprintf(f, "\n");
 fprintf(f, "AllocVar(ret);\n");
 for (tfIx = 0; tfIx < 2; ++tfIx)
@@ -1005,7 +1020,6 @@ fprintf(hFile,
    	tableName);
 
 fprintf(f, "{\n");
-fprintf(f, "int i;\n");
 for (col = table->columnList; col != NULL; col = col->next)
     {
     char *colName = col->name;
@@ -1035,6 +1049,8 @@ for (col = table->columnList; col != NULL; col = col->next)
     if (col->isList || col->isArray)
 	{
 	char *indent = "";
+        fprintf(f, "{\n");
+        fprintf(f, "int i;\n");
 	if (obType != NULL)
 	    {
 	    fprintf(f, "/* Loading %s list. */\n", obType->name);
@@ -1077,6 +1093,7 @@ for (col = table->columnList; col != NULL; col = col->next)
 	fprintf(f, "%sif (sep == ',') fputc('}',f);\n", indent);
 	if (obType != NULL)
 	    fprintf(f, "    }\n");
+        fprintf(f, "}\n");
 	fprintf(f, "fputc(%s,f);\n", lineEnd);
 	}
     else
@@ -1178,7 +1195,7 @@ fprintf(cFile, "#include \"dystring.h\"\n");
 fprintf(cFile, "#include \"jksql.h\"\n");
 fprintf(cFile, "#include \"%s\"\n", dotH);
 fprintf(cFile, "\n");
-fprintf(cFile, "static char const rcsid[] = \"$Id: autoSql.c,v 1.24 2004/05/19 23:56:24 angie Exp $\";\n");
+fprintf(cFile, "static char const rcsid[] = \"$Id: autoSql.c,v 1.25 2004/07/31 20:34:05 markd Exp $\";\n");
 fprintf(cFile, "\n");
 
 /* Process each object in specification file and output to .c, 
