@@ -36,6 +36,7 @@
 #include "isochores.h"
 #include "simpleRepeat.h"
 #include "cpgIsland.h"
+#include "cpgIslandExt.h"
 #include "genePred.h"
 #include "pepPred.h"
 #include "wabAli.h"
@@ -133,7 +134,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.590 2004/03/24 18:44:50 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.591 2004/03/24 18:56:33 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5252,6 +5253,7 @@ printf("<H2>CpG Island Info</H2>\n");
 if (cgiVarExists("o"))
     {
     struct cpgIsland *island;
+    struct cpgIslandExt *islandExt = NULL;
     struct sqlConnection *conn = hAllocConn();
     struct sqlResult *sr;
     char **row;
@@ -5263,18 +5265,23 @@ if (cgiVarExists("o"))
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
-	island = cpgIslandLoad(row+rowOffset);
+	if (sameString("cpgIslandExt", table))
+	    {
+	    islandExt = cpgIslandExtLoad(row+rowOffset);
+	    island = (struct cpgIsland *)islandExt;
+	    }
+	else
+	    island = cpgIslandLoad(row+rowOffset);
 	bedPrintPos((struct bed *)island, 3);
 	printf("<B>Size:</B> %d<BR>\n", island->chromEnd - island->chromStart);
 	printf("<B>CpG count:</B> %d<BR>\n", island->cpgNum);
 	printf("<B>C count plus G count:</B> %d<BR>\n", island->gcNum);
 	printf("<B>Percentage CpG:</B> %1.1f%%<BR>\n", island->perCpg);
 	printf("<B>Percentage C or G:</B> %1.1f%%<BR>\n", island->perGc);
+	if (islandExt != NULL)
+	    printf("<B>Ratio of observed to expected CpG:</B> %1.2f<BR>\n",
+		   islandExt->obsExp);
 	printf("<BR>\n");
-#ifdef OLD
-	htmlHorizontalLine();
-	printCappedSequence(island->chromStart, island->chromEnd, 100);
-#endif /* OLD */
 	cpgIslandFree(&island);
 	}
     hFreeConn(&conn);
@@ -13473,7 +13480,7 @@ else if (sameWord(track, "simpleRepeat"))
     {
     doSimpleRepeat(tdb, item);
     }
-else if (sameWord(track, "cpgIsland") || sameWord(track, "cpgIsland2"))
+else if (startsWith("cpgIsland", track))
     {
     doCpgIsland(tdb, item);
     }
