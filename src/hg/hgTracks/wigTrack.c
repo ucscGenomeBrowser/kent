@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.17 2003/11/07 01:03:06 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.18 2003/11/07 23:49:30 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -30,11 +30,20 @@ struct wigCartOptions
     int heightFromCart;	/*	requested height from cart	*/
     };
 
+struct preDrawElement
+    {
+	double	max;	/*	maximum value seen for this point	*/
+	double	min;	/*	minimum value seen for this point	*/
+	unsigned long long	count;	/* number of datum at this point */
+	double	sum;	/*	sum of all values at this point	*/
+	double  sumSquares;	/* sum of (values squared) at this point */
+    };
+
 struct wigItem
 /* A wig track item. */
     {
     struct wigItem *next;
-    int start, end;	/* Start/end in browser coordinates. */
+    int start, end;	/* Start/end in chrom (aka browser) coordinates. */
     int grayIx;         /* Level of gray usually. */
     char *name;		/* Common name */
     char *db;		/* Database */
@@ -86,7 +95,7 @@ for (el = *pList; el != NULL; el = next)
  */
 static struct hash *trackSpans = NULL;	/* hash of hashes */
 
-#if defined(DEBUG)
+#if ! defined(DEBUG)
 /****           some simple debug output during development	*/
 static char dbgFile[] = "/tmp/wig.dbg";
 static boolean debugOpened = FALSE;
@@ -347,7 +356,15 @@ Color shadesOfAlt[EXPR_DATA_SHADES];
 Color black = vgFindColorIx(vg, 0, 0, 0);
 struct rgbColor blackColor = {0, 0, 0};
 struct rgbColor whiteColor = {255, 255, 255};
-int totalLoopCount = 0;	/*	to measure loop performance */
+struct preDrawElement *preDraw;	/* to accumulate everything in prep for draw */
+int preDrawZero;		/* location in preDraw where screen starts */
+int preDrawSize;		/* size of preDraw array */
+int i;				/* an integer loop counter	*/
+double overallUpperLimit = -1.0e+300;
+double overallLowerLimit = 1.0e+300;
+double overallRange;
+int x1 = 0;			/*	screen coordinates	*/
+int x2 = 0;			/*	screen coordinates	*/
 
 /*
 vgMakeColorGradient(vg, &blackColor, &tg->color, 4, shadesOfPrimary);
@@ -369,33 +386,34 @@ if (pixelsPerBase > 0.0)
  *	basesPerPixel - calculated as 1.0/pixelsPerBase
  */
 itemCount = 0;
+/*	we are going to keep an array that is three times the size of
+ *	the screen to allow a screen full on either side of the visible
+ *	region.  Those side screens can be used in the smoothing
+ *	operation so there won't be any discontinuity at the visible screen
+ *	boundaries.
+ */
+preDrawSize = width * 3;
+preDraw = (struct preDrawElement *) needMem ((size_t)
+		preDrawSize * sizeof(struct preDrawElement) );
+preDrawZero = width / 3;
+for (i = 0; i < preDrawSize; ++i) {
+	preDraw[i].count = 0;
+	preDraw[i].max = -1.0e+300;
+	preDraw[i].min = 1.0e+300;
+}
 
+snprintf(dbgMsg, DBGMSGSZ, "going into pre-draw prep");
+wigDebugPrint("wigDrawItems");
+
+/*	walk through all the data and prepare the preDraw array	*/
 for (wi = tg->items; wi != NULL; wi = wi->next)
     {
-    int usingDataSpan = 1;	/* will become larger if possible */
     unsigned char *ReadData;	/* the bytes read in from the file */
-    int pixelToDraw = 0;
-    unsigned char *dataStarts;	/* pointer into ReadData	*/
-    int dataViewStarts;	/*	chrom coords	*/
-    int dataViewEnds;	/*	chrom coords	*/
-    int dataOffsetStart;	/*	offset into data file	*/
-    int dataOffsetEnd;		/*	offset into data file	*/
-    int dataSpan;	/*	chrom coords	*/
-    double dataPointsInView;	/*	number of data points to use */
-    double dataValuesPerPixel;	/*  values in the data file per pixel */
-    int pixelsPerDataValue;	/*  to specify drawing box width */
-    int x1 = 0;			/*	screen coordinates	*/
-    int x1Starts = 0;		/*	drawing for this block starts */
-    int x1Ends = 0;		/*	drawing for this block ends */
-    int x1Span = 0;		/*	number of pixels to draw	*/
-    int w,h,x2,y2;
-    int loopCount = 0;	/*	to catch a runaway drawing loop */
     int dataOffset = 0;		/*	within data block during drawing */
-    int prevDataOffset = 0;	/*	previous data block item used  */
-    int OffsetIncrement = 1;	/*	for loop control	*/
-    int minimalSpan = 1000000;	/*	a lower limit safety check */
+    int usingDataSpan = 1;		/* will become larger if possible */
+    int minimalSpan = 100000000;	/*	a lower limit safety check */
 
-    h = tg->lineHeight;
+    ++itemCount;
     /*	Take a look through the potential spans, and given what we have
      *	here for basesPerPixel, pick the largest usingDataSpan that is
      *	not greater than the basesPerPixel
@@ -423,7 +441,7 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
     if (usingDataSpan == wi->Span)
 	{
 	/*	Check our data file, see if we need to open a new one */
-	if ( currentFile)
+	if (currentFile)
 	    {
 	    if (differentString(currentFile,wi->File))
 		{
@@ -441,7 +459,6 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 	    currentFile = cloneString(wi->File);
 	    f = mustOpen(currentFile, "r");
 	    }
-	++itemCount;
 /*	Ready to draw, what do we know:
  *	the feature being processed:
  *	chrom coords:  [wi->start : wi-end)
@@ -459,144 +476,169 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 	ReadData = (unsigned char *) needMem((size_t) (wi->Count + 1));
 	fread(ReadData, (size_t) wi->Count, (size_t) sizeof(unsigned char), f);
 
-	dataViewStarts = max(wi->start,seqStart);
-	dataViewEnds = min(wi->end,seqEnd);
-	dataOffsetStart = (dataViewStarts - wi->start)/ usingDataSpan;
-	dataOffsetEnd = wi->Count - ((wi->end - dataViewEnds) / usingDataSpan);
-	dataSpan = dataViewEnds - dataViewStarts;
-	x1Starts = xOff + ((dataViewStarts - seqStart) * pixelsPerBase);
-	x1Ends = xOff + ((dataViewEnds - seqStart) * pixelsPerBase);
-	x1Span = x1Ends - x1Starts;
+	/*	let's check end point screen coordinates.  If they are
+ 	 *	the same, then this entire data block lands on one pixel,
+ 	 *	no need to walk through it, just use the block's specified
+ 	 *	max/min.  It is OK if these end up + or -, we do want to
+ 	 *	keep track of pixels before and after the screen for
+ 	 *	later smoothing operations
+	 */
+	x1 = (wi->start - seqStart) * pixelsPerBase;
+	x2 = ((wi->start+(wi->Count * usingDataSpan))-seqStart) * pixelsPerBase;
 
-/* If this data block doesn't span any data (for some unknown reason)
- *	then move on to the next block of data.
- */
-	if (dataSpan < 1) continue;
-
-	dataPointsInView = (double) dataSpan / (double) usingDataSpan;
-	w = (int)round((double)(dataViewEnds - dataViewStarts) * pixelsPerBase);
-	if (w < 1) w = 1;
-	dataValuesPerPixel = dataPointsInView / (double) w;
-	pixelsPerDataValue = (int) round(1.0 / dataValuesPerPixel);
-	if (pixelsPerDataValue < 1) pixelsPerDataValue = 1;
-    	dataStarts = ReadData + dataOffsetStart;
-
-	loopCount = 0;	/*	A safety timeout for the loop below	*/
-	x1 = 0;
-	prevDataOffset = -1;	/* -1 will cause the first one to be used */
-	OffsetIncrement = 1;
-
-	/*	Examine every point in this data block	*/
-	for (dataOffset = 0;
-		(dataOffset < (int) dataPointsInView) && (loopCount < 1000000);
-		dataOffset += OffsetIncrement)
-	    {
-	    int validData = 0;	/* count while scanning a bin	*/
-	    int data = 0;
-	    int dataValue = 0;
-	    int dataValueMax = 0;
-	    int dataValueMin = 255;
-	    int skippedDataPoints = dataOffset - prevDataOffset;
-	    int j;
-	    double dY;
-	    double dataScale = (wigCart->maxY - wigCart->minY) /
-		(double) MAX_WIG_VALUE;
-	    double dataPoint = 0.0;
-	    double dataPointMax;
-	    double dataPointMin;
-
-	    ++loopCount;	/*	safety timeout	*/
-
-	    /*	Pixel coordinate for this data point	*/
-	    x1 = xOff + ((dataViewStarts - seqStart) * pixelsPerBase) +
-		(dataOffset*usingDataSpan)*pixelsPerBase;
-
-	    /*	OffsetIncrement is calculated such that the next point
-	     *	to check will be at least (x1 + 1) pixel coordinates,
-	     *	thus a new point to graph.  It is the above equation
-	     *	solved for OffsetIncrement with (x1 + 1) in place
-	     *	of x1, and (dataOffset+OffsetIncrement) in place of
-	     *	dataOffset.
-	     */
-	    if ((int) basesPerPixel >= dataSpan) {
-		dataOffset = dataPointsInView;
-		skippedDataPoints = dataPointsInView;
-		OffsetIncrement = dataPointsInView;
-	    } else {
-	    OffsetIncrement =
-	((x1 + 1 - xOff - ((dataViewStarts - seqStart) * pixelsPerBase)) /
-	(usingDataSpan*pixelsPerBase)) - dataOffset;
-	    }
-	    /*	Must be at least one to be moving on	*/
-	    if (OffsetIncrement < 1) OffsetIncrement = 1;
-
-	    if (OffsetIncrement > skippedDataPoints)
-		skippedDataPoints = OffsetIncrement;
-	    /*	Between the point previously checked and this one, look
-	     *	at all the points in between and find the max.  This is
-	     *	the zooming function.  Might want other functions here
-	     *	other than max()
-	     *	This loop will be at least one data point.
-	     */
-	    dataValueMax = 0;
-	    dataValueMin = MAX_WIG_VALUE;
-	    if ((int) basesPerPixel >= dataSpan)
+	if (x2 > x1) {
+	    /*	walk through all the data in this block	*/
+	    for (dataOffset = 0; dataOffset < wi->Count; ++dataOffset)
 		{
-		if ((data = wi->Max) < WIG_NO_DATA)
+		unsigned char datum = ReadData[dataOffset];
+		if (datum != WIG_NO_DATA)
 		    {
-		    dataValueMax = max(dataValueMax,data);
-		    dataValueMin = min(dataValueMin,data);
-		    ++validData;
-		    }
-		if ((data = wi->Min) < WIG_NO_DATA)
-		    {
-		    dataValueMax = max(dataValueMax,data);
-		    dataValueMin = min(dataValueMin,data);
-		    ++validData;
-		    }
-		} else {
-		    int LookedAt = 0;
-		for (j = 0; (j < skippedDataPoints) &&
-			((prevDataOffset + 1 + j) < dataOffsetEnd); ++j)
-		    {
-		    ++LookedAt;
-		    data = *(dataStarts + prevDataOffset + 1 + j);
-		    if (data < WIG_NO_DATA)
+    x1 = ((wi->start-seqStart) + (dataOffset * usingDataSpan)) * pixelsPerBase;
+		    x2 = x1 + (usingDataSpan * pixelsPerBase);
+		    for (i = x1; i <= x2; ++i)
 			{
-			dataValueMax = max(dataValueMax,data);
-			dataValueMin = min(dataValueMin,data);
-			++validData;
+			int xCoord = preDrawZero + i;
+			if ((xCoord >= 0) && (xCoord < preDrawSize) )
+			    {
+			double dataValue =
+	wi->lowerLimit+(((double)datum/(double)MAX_WIG_VALUE)*wi->dataRange);
+			    ++preDraw[xCoord].count;
+			    if (dataValue > preDraw[xCoord].max)
+				preDraw[xCoord].max = dataValue;
+			    if (dataValue < preDraw[xCoord].min)
+				preDraw[xCoord].min = dataValue;
+			    preDraw[xCoord].sum += dataValue;
+			    preDraw[xCoord].sumSquares += dataValue * dataValue;
+			    }
 			}
 		    }
-		    if (skippedDataPoints > OffsetIncrement)
-			OffsetIncrement = skippedDataPoints;
 		}
-	    if (validData)
-		{
-		dY = (double) dataValueMax * dataScale;
-		dataPointMax = wigCart->minY + dY;
-		dY = (double) dataValueMin * dataScale;
-		dataPointMin = wigCart->minY + dY;
-		if (fabs(dataPointMin) > fabs(dataPointMax))
-		    {
-		    dataValue = dataValueMin;
-		    dataPoint = dataPointMin;
-		    } else {
-		    dataValue = dataValueMax;
-		    dataPoint = dataPointMax;
-		    }
-		}
-
-	    prevDataOffset = dataOffset;
-	    /*	did we end up with some valid data here ?
-	     *	Yes, this is a double test here.  If validData is not
-	     *	true it is not true because dataValue is < WIG_NO_DATA
-	     *	But just in case something went wrong above, make sure
-	     *	dataValue is OK.
+	} else {	/*	only one pixel for this block of data */
+	    int xCoord = preDrawZero + x1;
+	    /*	if the point falls within our array, record it.
+	     *	the (wi->validCount > 0) is a safety check.  It
+	     *	should always be true unless the data was
+	     *	prepared incorrectly.
 	     */
-	    if (validData && (dataValue < WIG_NO_DATA))
+	    if ((wi->validCount > 0) && (xCoord >= 0) && (xCoord < preDrawSize) )
 		{
-		int boxHeight = tg->lineHeight;
+		double upperLimit;
+		preDraw[xCoord].count += wi->validCount;
+		upperLimit = wi->lowerLimit + wi->dataRange;
+		if (upperLimit > preDraw[xCoord].max)
+		    preDraw[xCoord].max = upperLimit;
+		if (wi->lowerLimit < preDraw[xCoord].min)
+		    preDraw[xCoord].min = wi->lowerLimit;
+		/*	looks like we will need sum and sumSquares for a
+ 		 *	data block to be able to keep track of that here
+		 */
+snprintf(dbgMsg, DBGMSGSZ, "one whole block at item %d, with %d points", itemCount, wi->Count);
+wigDebugPrint("wigDrawItems");
+		}
+	}
+	freeMem(ReadData);
+	}	/*	Draw if span is correct	*/
+    }	/*	for (wi = tg->items; wi != NULL; wi = wi->next)	*/
+if (f != (FILE *) NULL)
+    {
+    fclose(f);
+    }
+if (currentFile)
+    freeMem(currentFile);
+
+for (i = preDrawZero; i < preDrawZero+width; ++i)
+    {
+    if (preDraw[i].max > overallUpperLimit)
+	overallUpperLimit = preDraw[i].max;
+    if (preDraw[i].min < overallLowerLimit)
+	overallLowerLimit = preDraw[i].min;
+    }
+overallRange = overallUpperLimit - overallLowerLimit;
+
+snprintf(dbgMsg, DBGMSGSZ, "done preDraw, %d items, range: [%g:%g]", itemCount, overallLowerLimit, overallUpperLimit );
+wigDebugPrint("wigDrawItems");
+
+/*	now we are ready to draw.  Each element in the preDraw[] array
+ *	cooresponds to a single pixel on the screen
+ */
+
+/*	right now this is a simple pixel by pixel loop.  Future
+ *	enhancements will smooth this data and draw boxes where pixels
+ *	are all the same height in a run.
+ */
+for (x1 = 0; x1 < width; ++x1)
+    {
+    int preDrawIndex = x1 + preDrawZero;
+    /*	count is non-zero meaning valid data exists here	*/
+    if (preDraw[preDrawIndex].count)
+	{
+	int h = tg->lineHeight;	/*	the height of our drawing window */
+	int boxHeight;		/*	the size of our box to draw	*/
+	int boxTop;		/*	box top starts here	*/
+	int y1;			/*	special y coordinate for points draw */
+	double dataValue;	/*	the data value in data space	*/
+
+	/*	here is the auto-scaling in operation.  The size of the viewing
+	 *	data window is (overallRange * 1.2) - 10% margin on top and
+	 *	bottom.  The bottom view limit is
+	 *	(overallLowerLimit - (overallRange * 0.1))
+	 *	is from (overallLowerLimit - (overallRange * 0.1)) to
+	 *	The upper limit, not needed here, would be
+	 *	(overallLowerLimit + (overallRange * 1.2))
+	 */
+	/*	See if the zero line is between the limits
+	 *	If it is, we need to decide which point to draw.
+	 *	We want to draw the one that is farther from zero
+	 *	(we could draw them both if there is more than one data
+	 *	value here, show the high and the low)
+	 */
+	/*	THIS IS NOT DONE YET - IT WILL NOT DO negative values
+ 	 *	CORRECTLY !
+	 */
+	/*	Assume .max is the data value to draw,  if the .min is
+ 	 *	farther away from zero, then it is the one to draw
+	 */
+	dataValue = preDraw[preDrawIndex].max;
+	if (fabs(0.0 - preDraw[preDrawIndex].min) >
+		fabs(0.0 - preDraw[preDrawIndex].max) ) {
+	    dataValue = preDraw[preDrawIndex].min;
+	}
+	drawColor = tg->ixColor;
+	if (dataValue < 0.0) drawColor = tg->ixAltColor;
+	boxHeight = h * ((dataValue - (overallLowerLimit - overallRange*0.1)) /
+		(overallRange * 1.2));
+	if (boxHeight > h) boxHeight = h;
+	if (boxHeight < 1) boxHeight = 1;
+	boxTop = h - boxHeight;
+	y1 = yOff+boxTop;
+	if ( (0.0 > overallLowerLimit) && (0.0 < overallUpperLimit) )
+	    {
+		boxHeight = h * (fabs(dataValue) / (overallRange * 1.2));
+		if (boxHeight > h) boxHeight = h;
+		if (boxHeight < 1) boxHeight = 1;
+		if (dataValue > 0.0) {
+			boxTop =
+	(h * ((overallUpperLimit + overallRange*0.1)/ (overallRange * 1.2)));
+			boxTop -= boxHeight;
+			y1 = yOff+boxTop;
+		} else {
+			boxTop = h -
+			(h * (((0.0-(overallLowerLimit - overallRange*0.1)) /
+				(overallRange * 1.2))));
+			y1 = yOff+boxTop + boxHeight;
+		}
+	    } else if (overallUpperLimit < 0.0)
+	    {
+		boxHeight= h *
+	(((overallUpperLimit + overallRange*0.1)-dataValue) /
+			(overallRange * 1.2));
+		if (boxHeight > h) boxHeight = h;
+		if (boxHeight < 1) boxHeight = 1;
+		boxTop = 0;
+		y1 = yOff+boxTop + boxHeight;
+	    }
+	    if (boxTop > h-1) boxTop = h - 1;
+	    if (boxTop < 0) boxTop = 0;
 
 /*	drawing region here is from upper left (x1,yOff)
  *	with width of pixelsPerDataValue
@@ -609,160 +651,66 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
  *
 		dY = (double) dataValue * dataScale;
 		dataPoint = wigCart->minY + dY;
+
+vgBox(v,x,y,width,height,color)
+
  */
-		if (vis == tvFull)
-		    {
-		    double viewRange = tg->maxRange - tg->minRange;
-		    double dataZeroOffset;
-		    double viewZero = 0.0;
-		    int zeroLine = h;	/*	often at the bottom	*/
-		    int boxTop = 0;	/*	will be adjusted below	*/
-
-		    /*	Graph only if data point is in viewing window.
-		     *	If the user has selected upper and lower
-		     *	boundaries to view, these become filtering
-		     *	devices.  The viewer can select a range of
-		     *	values to see and only values in that range can
-		     *	be seen.
-		     */
-		    if ((dataPoint >= (tg->minRange - (viewRange/1000.0))) &&
-			    (dataPoint <= (tg->maxRange + (viewRange/1000.0))))
-			{
-
-			viewZero = 0.0;
-			if (tg->minRange > 0.0) {
-			    viewZero = tg->minRange;
-			    zeroLine = h-1;	/*	under the bottom */
-			} else if (tg->maxRange < 0.0) {
-			    viewZero = tg->maxRange;
-			    zeroLine = 0;	/*	over the top	*/
-			} else {
-			    zeroLine = (int) ((double) h *
-				((tg->maxRange - 0.0) / viewRange));
-			}
-			dataZeroOffset = fabs(dataPoint - viewZero);
-			boxHeight = (int) ((double) h *
-				(dataZeroOffset / viewRange));
-
-		    /* we are going to draw a box of boxHeight starting
-		     * at Y = yOff + boxTop
-		     */
-			if (zeroLine < 0) zeroLine = 0;
-			if (zeroLine > h) zeroLine = h;
-
-		drawColor = tg->ixColor;
-		    if (dataPoint < 0.0)
-			{
-			boxTop = zeroLine;
-			drawColor = tg->ixAltColor;
-			}
-		    else if (dataPoint > 0.0)
-			{
-			boxTop = zeroLine - boxHeight;
-			}
-		    else
-		        {
-			boxHeight = 1;
-			boxTop = zeroLine;
-		        }
-
-		    if (boxTop > h-1) boxTop = h - 1;
-		    if (boxTop < 0) boxTop = 0;
-
-		    if (boxHeight + boxTop > h) boxHeight = h - boxTop;
-		    if (boxHeight < 1) boxHeight = 1;
-
-		    if (lineBar == wiggleGraphBar)
-			{
-			vgBox(vg, x1, yOff+boxTop,
-				pixelsPerDataValue, boxHeight, drawColor);
-			}
-		    else
-			{
-			int y1 = yOff+boxTop+boxHeight;
-			if (dataPoint > viewZero) y1 = yOff+boxTop;
-			vgBox(vg, x1, y1-1, pixelsPerDataValue, 3, black);
-			}
-			}	/*	if data point in view	*/
-		    }	/*	vis == tvFull	*/
-		else if (vis == tvDense)
-		    {
- /*
-		    double dataZero;
-		    int iMin = 0;
-		    int iMax = MAX_WIG_VALUE;
-		    int iZero = MAX_WIG_VALUE/2;
-	    double dataScale = (wigCart->maxY - wigCart->minY) /
-		(double) MAX_WIG_VALUE;
-			drawColor =
-tg->colorShades[grayInRange(dataValue, tg->maxRange, tg->minRange)];
-		    if (tg->colorShades)
-			{
-			drawColor =
-tg->colorShades[grayInRange(dataValue, wigCart->minY, wigCart->maxY)],
-			}
-		    dataZero = 0.0;
-		    if (wigCart->minY > 0.0) {
-			    dataZero = wigCart->minY;
-		    } else if (wigCart->maxY < 0.0) {
-			    dataZero = wigCart->maxY;
-		    } else {
-				iMin = (dataZero - wigCart->minY) / dataScale;
-				iMax = (wigCart->maxY - dataZero) / dataScale;
-				iZero = iMin;
-		    }
-		    if (dataPoint < 0.0)
-			{
-			drawColor =
-shadesOfAlt[grayInRange(dataValue, 0, iZero)];
-			} else {
-			drawColor =
-shadesOfPrimary[grayInRange(dataValue-iZero, 0, iMax)];
-			}
-*/
-		    drawColor =
-shadesOfPrimary[grayInRange(dataValue, 0, MAX_WIG_VALUE)];
-
-		    boxHeight = tg->lineHeight;
-		    vgBox(vg, x1, yOff, pixelsPerDataValue,
-			    boxHeight, drawColor);
-		    }	/*	vis == tvDense	*/
-		}	/*	we have valid data here	*/
-	    }	/*	loop working through this data block	*/
-    totalLoopCount += loopCount;
-	freeMem(ReadData);
-	}	/*	Draw if span is correct	*/
-    }	/*	for ( each item)	*/
-
-    /*	Do we need to draw a horizontalGrid ?	*/
-    if ((vis == tvFull) && (horizontalGrid == wiggleHorizontalGridOn))
-	{
-	double yRange;
-	int x1, x2, y1, y2;
-	int gridLines = 2;
-	int drewLines = 0;
-
-	yRange = tg->maxRange - tg->minRange;
-	x1 = xOff;
-	x2 = x1 + width;
-	if (tg->lineHeight > 64)
-	    gridLines = 4;
-	else if (tg->lineHeight > 32)
-	    gridLines = 3;
-	for (y1 = yOff; y1 <= tg->lineHeight+yOff;
-		y1 += (int)((double)(tg->lineHeight-1)/(double)gridLines))
+	if (vis == tvFull)
 	    {
-	    y2 = y1;
-	    ++drewLines;
-	    vgLine(vg,x1,y1,x2,y2,black);
-	    }
-	}	/*	drawing horizontalGrid	*/
+	    if (lineBar == wiggleGraphBar)
+		{
+		vgBox(vg, x1+xOff, yOff+boxTop,
+				1, boxHeight, drawColor);
+		}
+	    else
+		{
+		vgBox(vg, x1+xOff, y1-1, 1, 3, drawColor);
+		}
 
-if (f != (FILE *) NULL)
+	    }	/*	vis == tvFull	*/
+	else if (vis == tvDense)
+	    {
+	    double dataValue;
+	    int grayIndex;
+	    dataValue = preDraw[preDrawIndex].max -
+			(overallLowerLimit - (overallRange * 0.1));
+	    grayIndex = (dataValue/overallRange) * MAX_WIG_VALUE;
+			
+	    drawColor =
+shadesOfPrimary[grayInRange(grayIndex, 0, MAX_WIG_VALUE)];
+
+	    boxHeight = tg->lineHeight;
+	    vgBox(vg, x1+xOff, yOff, 1,
+			    boxHeight, drawColor);
+	    }	/*	vis == tvDense	*/
+	}	/*	if (preDraw[].count)	*/
+    }	/*	for (x1 = 0; x1 < width; ++x1)	*/
+
+/*	Do we need to draw a horizontalGrid ?	*/
+if ((vis == tvFull) && (horizontalGrid == wiggleHorizontalGridOn))
     {
-    fclose(f);
-    freeMem(currentFile);
-    }
+    double yRange;
+    int x1, x2, y1, y2;
+    int gridLines = 2;
+    int drewLines = 0;
+
+    yRange = tg->maxRange - tg->minRange;
+    x1 = xOff;
+    x2 = x1 + width;
+    if (tg->lineHeight > 64)
+	gridLines = 4;
+    else if (tg->lineHeight > 32)
+	gridLines = 3;
+    for (y1 = yOff; y1 <= tg->lineHeight+yOff;
+		y1 += (int)((double)(tg->lineHeight-1)/(double)gridLines))
+	{
+	y2 = y1;
+	++drewLines;
+	vgLine(vg,x1,y1,x2,y2,black);
+	}
+    }	/*	drawing horizontalGrid	*/
+
+freeMem(preDraw);
 }	/*	wigDrawItems()	*/
 
 /* Make track group for wig multiple alignment.
