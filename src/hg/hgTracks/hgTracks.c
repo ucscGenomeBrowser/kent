@@ -6234,7 +6234,7 @@ if (((pos = hgp->singlePos) != NULL) && (!hgp->useAlias))
     }
 else
     {
-    hgPositionsHtml(hgp, stdout, TRUE);
+    hgPositionsHtml(hgp,  stdout, TRUE);
     hgPositionsFree(&hgp);
     return FALSE;
     }
