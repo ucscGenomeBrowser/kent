@@ -33,7 +33,7 @@
 #include "web.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.84 2003/06/19 01:16:22 sugnet Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.85 2003/06/19 15:27:13 donnak Exp $";
 
 char *MrnaIDforGeneName(char *geneName)
 /* return mRNA ID for a gene name */
@@ -2457,13 +2457,40 @@ void hgPositionsHelpHtml(char *organism)
 {
 if (strstrNoCase(organism, "human"))
     {
+    puts("<P><H3>About the Homo sapiens assembly</P></H3>\n");
     puts(
-"<P>A genome position can be specified by the accession number of a "
+"<P>The latest human reference sequence (UCSC version hg15) is based on NCBI \n" 
+"Build 33 and was produced by the International Human \n"
+"Genome Sequencing Consortium. The sequence covers about 99 percent of \n"
+"the gene-containing regions in the genome, and has been sequenced to an accuracy of \n"
+"99.99 percent. The missing portions are essentially contained in approximately \n"
+"400 defined gaps in the euchromatic region representing DNA regions with unusual structures \n"
+"that can't be reliably sequenced using current technology. The reference \n"
+"sequence is considered to be &quot;finished&quot;, a technical term indicating that \n"
+"the sequence is highly accurate (with fewer than one error per 10,000 \n"
+"bases) and highly contiguous (with the only remaining gaps corresponding \n"
+"to regions whose sequence cannot be reliably resolved with current \n"
+"technology). Future work on the reference sequence will focus on improving \n"
+"accuracy and reducing gaps in the sequence.\n<P></P>");
+
+    puts("<P><H3>Statistical information</P></H3>\n");
+    puts(
+"<UL>"
+"<LI><A HREF=\"http://genome.ucsc.edu/goldenPath/certTable.html\">Non-standard Join Certificates (April 2003 Human Genome only)</A>"
+"<LI><A HREF=\"http://genome.ucsc.edu/goldenPath/stats.html\">Summary statistics</A>"
+"<LI><A HREF=\"http://genome.ucsc.edu/goldenPath/chromReports\">Chromosome Reports</A>"
+"<LI><A HREF=\"http://genome.ucsc.edu/goldenPath/mapPlots/\">Genome Map Plots</A>"
+"</UL></P>"
+"<P></P>"
+);
+    puts("<P><H3>Sample position queries</P></H3>\n");
+    puts(
+"<P>A genome position can be specified by the accession number of a \n"
 "sequenced genomic clone, an mRNA or EST or STS marker, or \n"
-"a cytological band, a chromosomal coordinate range, or keywords from "
-"the Genbank description of an mRNA. The following list provides "
-"examples of various types of position queries for the human genome. "
-"See the "
+"a cytological band, a chromosomal coordinate range, or keywords from \n"
+"the Genbank description of an mRNA. The following list provides \n"
+"examples of various types of position queries for the human genome. \n"
+"See the \n"
 "<A HREF=\"http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html\" TARGET=_blank>"
 "User Guide</A> for more help. \n"
 "<P>\n"
@@ -2567,10 +2594,24 @@ if (strstrNoCase(organism, "human"))
 "format, GenBank entries themselves use Evans,J.E.  internally.\n"
 "</TABLE>\n"
 "\n");
+
     }
 else if (strstrNoCase(organism, "mouse"))
     {
-    puts("<P><H2>Mouse</P></H2>\n");
+    puts("<P><H3>About the Mus musculus assembly</P></H3>\n");
+    puts(
+"<P>The latest mouse genome assembly (UCSC version mm3) \n"
+"is based on NCBI Build 30, a composite assembly of MGSCv3 produced by \n"
+"the Mouse Genome Sequencing Consortium and finished BAC sequence. There \n"
+"is a slight difference between the UCSC and NCBI versions: the NCBI  \n"
+"assembly includes contigs from several strains, but the UCSC \n"
+"version  contains only the reference strain (C57BL/6J). The current assembly \n"
+"includes 705 megabases of finished sequence. While there are \n"
+"many gaps in the sequence, the order and orientation of the contigs on \n"
+"either side of a gap are known in almost all cases. We estimate \n"
+"that 90-96 percent of the mouse genome is present in the assembly.\n</P>");
+
+    puts("<P><H3>Sample position queries</P></H3>\n");
     puts(
 "<P>A genome position can be specified by the accession number of a "
 "sequenced genomic clone, an mRNA or EST or STS marker, or \n"
@@ -2643,7 +2684,14 @@ else if (strstrNoCase(organism, "mouse"))
     }
 else if (strstrNoCase(organism, "rat"))
     {
-    puts("<P><H2>Rat</P></H2>\n");
+    puts("<P><H3>About the Rattus norvegicus assembly</P></H3>\n");
+    puts(
+"<P>The latest rat genome assembly (UCSC version rn2) is based on version \n"
+"2.1 provided by the Rat Genome Sequencing Consortium. \n"
+"The sequence was assembled using a hybrid approach that combines the \n"
+"clone by clone and whole genome shotgun methods. The current assembly \n"
+"provides approximately 6.5-fold coverage of the rat genome.</P> \n");
+    puts("<P><H3>Sample position queries</P></H3>\n");
     puts(
 "<P>A genome position can be specified by the accession number of a "
 "sequenced genomic clone, an mRNA or EST or STS marker, \n"
@@ -2718,7 +2766,20 @@ else if (strstrNoCase(organism, "rat"))
     }
 else if (strstrNoCase(organism, "SARS"))
     {
-    puts("<P><H2>SARS</P></H2>\n");
+    puts("<P><H3>About the SARS coronavirus TOR2 assembly</P></H3>\n");
+    puts(
+"<P>The SARS draft genome assembly (UCSC version sc1) \n"
+"is based on sequence deposited into GenBank as of 14 April 2003. \n"
+"is browser - which represents a departure from UCSC's usual focus on vertebrate \n"
+"nomes - shows gene predictions, locations of putative proteins, and \n"
+"viral mRNA and protein alignments. Protein structure analysis and \n"
+"predictions were determined by using the  \n"
+"<A HREF=\"http://www.cse.ucsc.edu/research/compbio/sam.html\" TARGET=_blank> \n"
+"Sequence Alignment and Modeling (SAM) T02</A> \n"
+"tool. UCSC does not plan to provide a comprehensive set of browsers for viruses.  \n"
+"However, this browser will be maintained as long as there is strong scientific  \n"
+"and public interest in the SARS conronavirus TOR2.\n</P>");
+    puts("<P><H3>Sample position queries</P></H3>\n");
     puts(
 "<P>A genome position can be specified by the accession number of an "
 "mRNA, a coordinate range, a gene identifier, or keywords from "
@@ -2766,6 +2827,27 @@ else if (strstrNoCase(organism, "SARS"))
 "format, GenBank entries themselves use Chouljenko,V. internally.\n"
 "</TABLE>\n"
 "\n");
+    }
+else if (strstrNoCase(organism, "zoo"))
+    {
+    puts("<P><H3>About the NISC Comparative Sequencing Program</P></H3>\n");
+    puts(
+"<P>This site contains data generated by the \n"
+"<A HREF=\"http://www.nisc.nih.gov/open_page.html?/projects/zooseq/pubmap/PubZooSeq_Targets.cgi\" TARGET=_blank> \n"
+"NISC Comparative Sequencing Program</A>, \n"
+"which aims to sequence the same targeted genomic regions in multiple \n"
+"vertebrates. Currently, data from the first target (corresponding to a \n"
+"1.8-Mb region of human chromosome 7q31) is available. Future builds will \n"
+"include data from additional targeted regions. </P>\n"
+"<P>The sequence data represented here was compiled from existing GenBank \n"
+"records. In addition to long-range assembly and standard feature \n"
+"annotation, the results of several analyses are displayed, including \n"
+"pair-wise sequence alignments, intrinsic sequence properties, and \n"
+"sequence comparisons that reveal regions highly conserved across \n"
+"multiple species.</P>\n"
+"<P>Please see the \n"
+"<A HREF=\"http://www.nisc.nih.gov/projects/NISC_DataUsePolicy.html\" TARGET=_blank>\n"
+"data release and usage policy</A> for the NISC Comparative Sequencing Program.</P> \n");
     }
 else 
     {
