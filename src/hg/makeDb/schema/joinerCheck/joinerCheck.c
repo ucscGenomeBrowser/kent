@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.28 2004/08/10 20:17:44 heather Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.29 2004/11/19 19:26:35 fanhsu Exp $";
 
 /* Variable that are set from command line. */
 char *fieldListIn;
@@ -429,6 +429,7 @@ static void addHitMiss(struct hash *keyHash, char *id, struct joinerField *jf,
 /* Record info about one hit or miss to keyHash */
 {
 id = doChops(jf, id);
+touppers(id);
 if (jf->exclude == NULL || !slNameInList(jf->exclude, id))
     {
     struct keyHitInfo *khi;
@@ -508,6 +509,7 @@ if (conn != NULL)
 	sr = sqlGetResult(conn, query);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
+	    touppers(row[0]);
 	    if (jf->separator == NULL)
 		{
 		addHitMiss(keyHash, row[0], jf, &hits, &miss, &total);
