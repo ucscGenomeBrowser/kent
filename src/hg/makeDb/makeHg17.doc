@@ -230,7 +230,8 @@ exit; # don't actually run this like a script :)
     # Copy over grp table (for track grouping) from another database:
     hgsql -e "create table grp (PRIMARY KEY(NAME)) select * from hg16.grp" hg17
 
-# MAKE CHROMINFO TABLE WITH (TEMPORARILY UNMASKED) NIBS (DONE 2/24/04 angie)
+# MAKE CHROMINFO TABLE WITH (TEMPORARILY UNMASKED) NIBS
+#	(DONE - 2004-05-21 - Hiram)
     # Make nib/, unmasked until RepeatMasker and TRF steps are done.
     # Do this now so that the chromInfo table will exist and thus the
     #	trackDb tables can be built in the next step.
@@ -271,7 +272,7 @@ exit; # don't actually run this like a script :)
     sort chrom.sizes | grep -v random > s1
     diff s0 s1
 
-# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE (
+# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE (DONE - 2004-05-21 - Hiram)
     ssh hgwdev
     # Enter hg17 into hgcentraltest.dbDb so test browser knows about it:
     hgsql -e 'INSERT INTO dbDb (name, description, nibPath, organism, \
@@ -289,7 +290,7 @@ exit; # don't actually run this like a script :)
     make alpha
     cvs commit makefile
 
-# MAKE LIFTALL.LFT, NCBI.LFT (DONE - 2003-07-26 - Hiram)
+# MAKE LIFTALL.LFT, NCBI.LFT (DONE - 2004-05-21 - Hiram)
     cd /cluster/data/hg17
     mkdir -p jkStuff
     cat */lift/{ordered,random}.lft > jkStuff/liftAll.lft
@@ -297,9 +298,10 @@ exit; # don't actually run this like a script :)
     # Note: this ncbi.lift will not lift floating contigs to chr_random coords,
     # but it will show the strand orientation of the floating contigs 
     # (grep for '|').
-    mdToNcbiLift seq_contig.md jkStuff/ncbi.lft 
+    #   mdToNcbiLift seq_contig.md jkStuff/ncbi.lft 
+    #	XXXX - appears to be unused, not done - Hiram
 
-# REPEAT MASKING
+# REPEAT MASKING (DONE - 2004-05-24 - Hiram)
     # Split contigs, run RepeatMasker, lift results
 
     #	This split takes about 8 minutes
@@ -371,50 +373,108 @@ if (-e /tmp/hg17/$2/$2.tbl) /bin/cp /tmp/hg17/$2/$2.tbl ./
     cd /cluster/data/hg17/RMRun
     para create RMJobs
     para try, para check, para check, para push, para check,...
-XXXX - Running 2004-05-21 00:12
 
     #- While that is running, you can run TRF (simpleRepeat) on the small
     # cluster.  See SIMPLE REPEAT section below
-# CPU time in finished jobs:   33575296s  559588.26m  9326.47h  388.60d  1.065 y
-# IO & Wait Time:                238878s    3981.30m    66.36h    2.76d  0.008 y
-# Average job time:                7513s     125.21m     2.09h    0.09d
-# Longest job:                    18457s     307.62m     5.13h    0.21d
-# Submission to last job:         55537s     925.62m    15.43h    0.64d
+# Completed: 5970 of 5970 jobs
+# CPU time in finished jobs:   45189516s  753158.60m 12552.64h  523.03d  1.433 y
+# IO & Wait Time:                141333s    2355.55m    39.26h    1.64d  0.004 y
+# Average job time:                7593s     126.55m     2.11h    0.09d
+# Longest job:                    10268s     171.13m     2.85h    0.12d
+# Submission to last job:         81484s    1358.07m    22.63h    0.94d
 
-
-    #- Lift up the split-contig .out's to contig-level .out's
+    #	Lift up the split-contig .out's to contig-level .out's
+    #
+    #	If a mistake is made in the following it would be possible to
+    #	destroy all the RM output.  So, just to be paranoid, save all
+    #	the RM output in bluearc for the time being:
     ssh eieio
+
     cd /cluster/data/hg17
-    foreach d ( ?{,?}/N{T,G}_* )
-        cd $d
+    mkdir /cluster/bluearc/hg17/RMOutput
+    foreach c ( `cat chrom.lst` )
+     foreach d ( ${c}/N{C,G,T}_* )
+	set T = /cluster/bluearc/hg17/RMOutput/${d}
+	mkdir -p ${T}
+        cd ${d}
         set contig = $d:t
-        liftUp $contig.fa.out $contig.lft warn ${contig}_?{,?,??}.fa.out 
+        cp -p ${contig}_?{,?,??}.fa.out \
+		${T}
         cd ../..
+	echo "${d} done"
+     end
     end
+    #	Make sure we got them all:
+    find . -name "*.fa.out" -print | wc -l
+    #	5970
+    find /cluster/bluearc/hg17/RMOutput -type f | wc -l
+    #	5970
+    #	same count
+
+    #	OK, now you can try this operation, do it in a script like this
+    #	and save the output of the script for a record of what happened.
+
+    cat << '_EOF_' > jkStuff/liftRM.csh
+#!/bin/csh -fe
+foreach c ( `cat chrom.lst` )
+ foreach d ( ${c}/N{C,G,T}_* )
+    cd $d
+    set contig = $d:t
+    liftUp $contig.fa.out $contig.lft warn ${contig}_?{,?,??}.fa.out 
+    cd ../..
+ end
+end
+'_EOF_'
+    chmod +x jkStuff/liftRM.csh
+    mkdir scriptsOutput
+    time jkStuff/liftRM.csh > scriptsOutput/liftRM 2>&1
+    #	real    4m37.572s
+    #	user    1m19.130s
+    #	sys     0m32.950s
+    #	Check that they all were done:
+    grep "fa.out" scriptsOutput/liftRM | wc -l
+    #	5970
+    #	same count as above
 
     #- Lift up RepeatMask .out files to chromosome coordinates via
-    # picked up jkStuff/liftOut2.sh from the hg15 build.  Reset the
-    # liftUp command from ~kent/bin/$MACHTYPE to be from
-    # /cluster/bin/i386.  Took the redirection to dev/null off of the
-    # command and capture the output here to see what errors we have.
+    # picked up jkStuff/liftOut2.sh from the hg16 build.  Renamed to
+    # liftOut2.csh, changed the line that does the chrom listing
 
-    ./jkStuff/liftOut2.sh > liftOut2.out 2>&1 &
+    time ./jkStuff/liftOut2.csh > scriptsOutput/liftOut2 2>&1
+    #	real    9m46.780s
+    #	user    1m18.900s
+    #	sys     7m33.990s
 
     #- By this point, the database should have been created (above):
     ssh hgwdev
     cd /cluster/data/hg17
-    hgLoadOut hg17 ?/*.fa.out ??/*.fa.out
+    time hgLoadOut hg17 ?/*.fa.out ??/*.fa.out 6_hla_hap?/*.fa.out > \
+	scriptsOutput/hgLoadOut 2>&1
+    #	real    9m2.258s
+    #	user    1m53.710s
+    #	sys     0m23.240s
 
-    # errors during this load:
+    # errors during this load:  (there are always a couple of these)
 Processing 2/chr2.fa.out
-Strange perc. field -6.1 line 243430 of 2/chr2.fa.out
-Strange perc. field -5.6 line 243430 of 2/chr2.fa.out
-Strange perc. field -6.1 line 243432 of 2/chr2.fa.out
-Strange perc. field -5.6 line 243432 of 2/chr2.fa.out
-Processing 5/chr5.fa.out
-Strange perc. field -0.3 line 4339 of 5/chr5.fa.out
+Strange perc. field -6.1 line 243543 of 2/chr2.fa.out
+Strange perc. field -5.6 line 243543 of 2/chr2.fa.out
+Strange perc. field -6.1 line 243545 of 2/chr2.fa.out
+Strange perc. field -5.6 line 243545 of 2/chr2.fa.out
+Processing 17/chr17.fa.out
+Strange perc. field -0.2 line 30322 of 17/chr17.fa.out
+Strange perc. field -0.2 line 30324 of 17/chr17.fa.out
+Strange perc. field -0.2 line 30326 of 17/chr17.fa.out
+Strange perc. field -0.2 line 30328 of 17/chr17.fa.out
 Processing 19/chr19.fa.out
-Strange perc. field -18.6 line 77032 of 19/chr19.fa.out
+Strange perc. field -18.6 line 77034 of 19/chr19.fa.out
+
+    #	Verify we have similar results to previous assembly:
+    #	featureBits hg17 rmsk
+    #	1391378842 bases of 2867328468 (48.525%) in intersection
+    #	featureBits hg16 rmsk
+    #	1388770568 bases of 2865248791 (48.469%) in intersection
+    #	Now proceed to MASK SEQUENCE BOTH REPEATMASKER AND SIMPLE REPEAT/TRF
+    #	following the SIMPLE REPEAT sections below
 
 # SIMPLE REPEAT [TRF] TRACK (DONE - 2004-05-21 - Hiram)
     #	Copy the contigs, first to the bluearc, then to /iscratch/i
@@ -512,6 +572,12 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
     #	54964044 bases of 3096628158 (1.775%) in intersection
     featureBits hg16 simpleRepeat
     #	54320136 bases of 2865248791 (1.896%) in intersection
+    #	GAPS weren't in hg17 yet at this point, after gaps added:
+    #	featureBits hg17 simpleRepeat
+    #	54964044 bases of 2867328468 (1.917%) in intersection
+    #	featureBits -countGaps hg17 simpleRepeat
+    #	54964044 bases of 3096628158 (1.775%) in intersection
+
 
 # PROCESS SIMPLE REPEATS INTO MASK (DONE - 2004-05-21 - Hiram)
     # After the simpleRepeats track has been built, make a filtered version 
@@ -520,9 +586,9 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
     cd /cluster/data/hg17/bed/simpleRepeat
     mkdir -p trfMask
     foreach f (trf/*.bed)
-      awk '{if ($5 <= 9) print;}' $f > trfMask/$f:t
-    end
       awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
+    end
+
     #	EXPERIMENT, at a filter of <= 12, we have coverage:
     #	20904399 bases of 2867328468 (0.729%) in intersection
     #	at a filter of <= 9, we have coverage:
@@ -531,7 +597,7 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
 
     # Lift up filtered trf output to chrom coords as well:
     cd /cluster/data/hg17
-    mkdir -p bed/simpleRepeat/trfMaskChrom
+    mkdir bed/simpleRepeat/trfMaskChrom
     foreach c ( `cat chrom.lst` )
       if (-e $c/lift/ordered.lst) then
         perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
@@ -546,9 +612,6 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
           jkStuff/liftAll.lft warn `cat $c/lift/rTrf.lst`
       endif
     end
-    #	Tried an experiment with this business.  at a filter of 12
-    #	we have coverage:
-    featureBits hg17 trfMask/*.bed
 
 # MASK SEQUENCE BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (WORKING - 2004-05-21)
 #							 -Hiram
@@ -557,30 +620,46 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
     #	and after Repeat Masker is complete.
     ssh eieio
     cd /cluster/data/hg17
-XXXXXXX
 
-    # copied these three scripts from hg15 - fixup path names to
-    # reference /cluster/bin instead of ~kent/bin
+    # copied these three scripts from hg16 - reset the lines that make
+    # the chrom list to work on, reset the wild cards that find all the
+    # contig .fa's
 
     #- Soft-mask (lower-case) the contig and chr .fa's
-    tcsh ./jkStuff/makeFaMasked.sh > maFaMasked.out 2>&1
+    time ./jkStuff/makeFaMasked.csh > scriptsOutput/maFaMasked.out 2>&1
+    #	real    46m0.950s
+    #	user    13m57.310s
+    #	sys     20m45.400s
     #- Make hard-masked .fa.masked files as well:
-    tcsh ./jkStuff/makeHardMasked.sh > maHardMasked.out 2>&1
-    #- Rebuild the nib, mixedNib, maskedNib files:
-    tcsh ./jkStuff/makeNib.sh > maNib.out 2>&1
+    time ./jkStuff/makeHardMasked.csh > maHardMasked.out 2>&1
+
+    #- Create the bothMasksNib/ directory
+    time ./jkStuff/makeNib.sh > maNib.out 2>&1
+    #	real    14m41.694s
+    #	user    6m28.000s
+    #	sys     1m42.500s
 
     # Make symbolic links from /gbdb/hg17/nib to the real nibs.
     ssh hgwdev
-    mkdir -p /gbdb/hg17/nib
-    foreach f (/cluster/store5/gs.18/build35/nib/chr*.nib)
-      ln -s $f /gbdb/hg17/nib
-    end
+    mv nib nib.raw
+    mv bothMasksNib nib
+    rm /gbdb/hg17/nib/*.nib
+    ln -s `pwd`/nib/* /gbdb/hg17/nib
+
     # Load /gbdb/hg17/nib paths into database and save size info.
     hgsql hg17  < ~/kent/src/hg/lib/chromInfo.sql
     cd /cluster/data/hg17
-    hgNibSeq -preMadeNib hg17 /gbdb/hg17/nib ?{,?}/chr?{,?}{,_random}.fa
-    echo "select chrom,size from chromInfo" | hgsql -N hg17 > chrom.sizes
+    hgNibSeq -preMadeNib hg17 /gbdb/hg17/nib */chr*.fa
+    #	3096628158 total bases
 
+    #	Should be the same size as before
+    hgsql -N -e "select chrom,size from chromInfo order by chrom" hg17 \
+	> chrom.sizes.masked
+    diff chrom.sizes chrom.sizes.masked
+    #	should be no output at all, thus:
+    rm chrom.sizes.masked
+
+XXXXXXX
     # Copy the masked contig fa to /iscratch and /scratch:
     #	And everything else we will need for blastz runs, etc ...
     ssh kkr1u00
@@ -615,6 +694,25 @@ XXXXXXX
     ssh hgwdev
     cd /cluster/data/hg17
     hgGoldGapGl -noGl -chromLst=chrom.lst hg17 /cluster/data/hg17 .
+    #	EXPERIMENT with a single table structure instead of all the
+    #	split tables (reworked hgGoldGapGl)
+    cd /cluster/data/hg17
+    hgsql -e "drop table gap;" hg17
+    hgsql -e "drop table gold;" hg17
+    $HOME/bin/i386/hgGoldGapGl -noGl -oldTable -noSplit \
+	-chromLst=chrom.lst hg17 /cluster/store5/gs.18 build35
+    #	single table structure:
+    #	featureBits hg17 gap
+    #	161117923 bases of 2935510235 (5.489%) in intersection
+    #	featureBits hg17 gold
+    #	2860314851 bases of 2935510235 (97.438%) in intersection
+    #	split table structure:
+    #	featureBits hg17 gold
+    #	2867022268 bases of 2867328468 (99.989%) in intersection
+    #	featureBits hg17 gap
+    #	229299690 bases of 2867328468 (7.997%) in intersection
+    #	The single table version loses some of the entries because
+    #	the table structure has chromStart as the primary key.
 
 XXX - Come back to this after contig_overlaps.agp has been created
 # O+O: ASSEMBLY [GOLD], GAP, COVERAGE, MAP CONTIGS TRACKS (WAIT - 2004-05-21)
@@ -642,7 +740,7 @@ XXX - Come back to this after contig_overlaps.agp has been created
     # 7/30/04.
     hgCtgPos hg17 build35 
 
-#  gc5Base wiggle TRACK (WORKING - 2004-05-21 - Hiram)
+#  gc5Base wiggle TRACK (DONE - 2004-05-22 - Hiram)
     #	This is going to take hours to run.  It is a lot of
     #	data.  make sure you do it on the fileserver:
     ssh eieio
@@ -670,6 +768,10 @@ done
     chmod +x runGcPercent.sh
     cd /cluster/data/hg17/bed/gc5Base
     time ./runGcPercent.sh
+    #	real    198m12.800s
+    #	user    255m43.460s
+    #	sys     9m58.390s
+
     # load the .wig files back on hgwdev:
     ssh hgwdev
     cd /cluster/data/hg17/bed/gc5Base
@@ -703,9 +805,10 @@ done
     #	on the fileserver
     ssh eieio
     time ./runZoom.sh
-real    232m3.265s
-user    302m37.050s
-sys     16m13.770s
+    #	real    195m40.677s
+    #	user    251m8.760s
+    #	sys     9m20.740s
+
     #	Then load these .wig files into the same database as above
     ssh hgwdev
     hgLoadWiggle -pathPrefix=/gbdb/hg17/wib/gc5Base -oldTable hg17 gc5Base \
