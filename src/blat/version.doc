@@ -2,6 +2,10 @@
      b) Fixed bug where it wasn't closeing genome files, resulting in
         it only being able to process 250 files on the genome side
 	on most systems.
+     c) Fixed bug in sort gfHitSort2.  I'm amazed blat has worked
+        as well as it has as long as it has with this bug!
+     d) Put back in old stitcher to handle small cases, with less than
+        10 blocks.  It's faster in these cases.
 18 - a) Fixed bug where you had to do -oneOff=1 rather than -oneOff
      in command line of blat.  
      b) Clarified makeOoc usage message.

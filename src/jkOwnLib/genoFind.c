@@ -159,7 +159,7 @@ gf->maxPat = maxPat;
 if (oocFile != NULL)
     {
     if (segSize > 0)
-        uglyAbort("Don't yet support ooc on large tile sizes");
+        errAbort("Don't yet support ooc on large tile sizes");
     oocMaskCounts(oocFile, gf->listSizes, tileSize, maxPat);
     oocMaskSimpleRepeats(gf->listSizes, tileSize, maxPat);
     }
@@ -481,7 +481,7 @@ char *nibName;
 struct gfSeqSource *ss;
 
 if (allowOneMismatch)
-    uglyAbort("Don't currently support allowOneMismatch in gfIndexNibs");
+    errAbort("Don't currently support allowOneMismatch in gfIndexNibs");
 for (i=0; i<nibCount; ++i)
     gfCountTilesInNib(gf, nibNames[i]);
 gfAllocLists(gf);
@@ -564,7 +564,7 @@ struct dnaSeq *seq;
 struct trans3 *t3;
 
 if (allowOneMismatch)
-    uglyAbort("Don't currently support allowOneMismatch in gfIndexNibs");
+    errAbort("Don't currently support allowOneMismatch in gfIndexNibs");
 /* Allocate indices for all reading frames. */
 for (isRc=0; isRc <= 1; ++isRc)
     {
@@ -839,7 +839,7 @@ pt2 =  ptArray + n1;
  * here.  Otherwise recurse to sort. */
 if (n1 > 2)
     gfHitSort2(pt1, n1);
-else if (n1 == 2 && pt1[0] > pt1[1])
+else if (n1 == 2 && pt1[0]->diagonal > pt1[1]->diagonal)
     {
     nosSwap = pt1[1];
     pt1[1] = pt1[0];
@@ -847,7 +847,7 @@ else if (n1 == 2 && pt1[0] > pt1[1])
     }
 if (n2 > 2)
     gfHitSort2(pt2, n2);
-else if (n2 == 2 && pt2[0] > pt2[1])
+else if (n2 == 2 && pt2[0]->diagonal > pt2[1]->diagonal)
     {
     nosSwap = pt2[1];
     pt2[1] = pt2[0];
@@ -872,6 +872,7 @@ while (n1 > 0 && n2 > 0)
 	}
     }
 /* One or both sides are now fully merged. */
+assert(tmp + n1 + n2 == nosTemp + n);
 
 /* If some of first side left to merge copy it to end of temp buf. */
 if (n1 > 0)
@@ -1553,7 +1554,9 @@ if (seq->size < gf->tileSize * (gf->minMatch+1))
      minMatch = 1;
 
 if (gf->segSize == 0 && !gf->isPep && !gf->allowOneMismatch)
+    {
     hitList = gfFastFindDnaHits(gf, seq, qMaskBits, qMaskOffset, lm, retHitCount);
+    }
 else
     {
     if (gf->segSize == 0)
@@ -1630,7 +1633,7 @@ char *inName;
 FILE *f = mustOpen(outName, "w");
 
 if (gf->segSize > 0)
-    uglyAbort("Don't yet know how to make ooc files for large tile sizes.");
+    errAbort("Don't yet know how to make ooc files for large tile sizes.");
 for (i=0; i<fileCount; ++i)
     {
     inName = files[i];

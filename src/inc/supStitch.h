@@ -29,7 +29,6 @@ struct ssFfItem
     {
     struct ssFfItem *next;      /* Next in list. */
     struct ffAli *ff;		/* Alignment (owned by ssFfItem) */
-    int trimScore;              /* Alignment score during trimming. */
     };
 
 void ssFfItemFree(struct ssFfItem **pEl);

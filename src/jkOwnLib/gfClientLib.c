@@ -1266,8 +1266,6 @@ for (oneBun = *pOneList; oneBun != NULL; oneBun = oneBun->next)
 	bigBun->genoSeq = oneBun->genoSeq;
 	bigBun->isProt = oneBun->isProt;
 	}
-    for (ffi = oneBun->ffList; ffi != NULL; ffi = ffi->next)
-        ffi->trimScore = 0;
     bigBun->ffList = slCat(bigBun->ffList, oneBun->ffList);
     oneBun->ffList = NULL;
     }
@@ -1384,7 +1382,6 @@ DNA saveEnd, *endPos;
 struct ssBundle *oneBunList = NULL, *bigBunList = NULL, *bun;
 struct hash *bunHash = newHash(8);
 
-// uglyf("gfLongDnaInMem %s %d\n", query->name, query->size);
 for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     {
     struct gfClump *clumpList;
@@ -1431,7 +1428,6 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     }
 for (bun = bigBunList; bun != NULL; bun = bun->next)
     {
-    // uglyf("finalStitch on bun\n");
     ssStitch(bun, ffCdna, minScore);
     refineSmallExonsInBundle(bun);
     saveAlignments(bun->genoSeq->name, bun->genoSeq->size, 0, 
