@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.135 2004/04/26 23:40:43 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.136 2004/04/29 17:00:48 sugnet Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -35,6 +35,7 @@ char *hgAppName = "";
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
 static char *mrnaTables[] = { "all_mrna", "xenoMrna", NULL};
+static struct dyString *hgpMatchNames = NULL;
 
 static void hgPosFree(struct hgPos **pEl)
 /* Free up hgPos. */
@@ -2188,6 +2189,7 @@ for (tPtr = tableList;  tPtr != NULL;  tPtr = tPtr->next)
 	    }
 	slAddHead(&table->posList, pos);
 	}
+
     }
 if (table != NULL)
     slReverse(&table->posList);
@@ -2264,13 +2266,15 @@ struct hgPositions *hgPositionsFind(char *term, char *extraCgi,
 	char *hgAppNameIn, struct cart *cart, boolean multiTerm)
 /* Return table of positions that match term or NULL if none such. */
 {
-struct hgPositions *hgp = NULL;
+struct hgPositions *hgp = NULL, *hgpItem = NULL;
 regmatch_t substrs[4];
 boolean canonical = FALSE;
 boolean relativeFlag = FALSE;
 int relStart = 0, relEnd = 0;
 
+char *excludeTables = "knownGene,refGene";
 hgAppName = hgAppNameIn;
+
 
 AllocVar(hgp);
 hgp->useAlias = FALSE;
@@ -2361,8 +2365,25 @@ else
 	}
     hgFindSpecFreeList(&shortList);
     hgFindSpecFreeList(&longList);
+    if(hgpMatchNames == NULL)
+	hgpMatchNames = newDyString(256);
+    for(hgpItem = hgp; hgpItem != NULL; hgpItem = hgpItem->next)
+	{
+	struct hgPosTable *hpTable = NULL;
+	for(hpTable = hgpItem->tableList; hpTable != NULL; hpTable = hpTable->next)
+	    {
+	    if(stringIn(hpTable->name, excludeTables))
+		continue;
+	    struct hgPos *pos = NULL;
+	    for(pos = hpTable->posList; pos != NULL; pos = pos->next)
+		{
+		if(sameWord(pos->name, hgpItem->query))
+		    dyStringPrintf(hgpMatchNames, "%s,", pos->name);
+		}
+	    }
+	}
+    cartSetString(cart, "hgFind.matches", hgpMatchNames->string);
     }
-
 slReverse(&hgp->tableList);
 fixSinglePos(hgp);
 return hgp;
@@ -2394,6 +2415,6 @@ else
 	printf("\n<!-- No dbDb.htmlPath for %s -->\n", database);
     else
 	printf("\n<!-- Couldn't get contents of %s -->\n", htmlPath);
-    }
+   } 
 }
 
