@@ -238,12 +238,14 @@ void slReverse(void *listPt);
  *    slReverse(&list);
  */
 
-void slSort(void *pList, int (*compare )(const void *elem1,  const void *elem2));
+typedef int CmpFunction(const void *elem1, const void *elem2);
+
+void slSort(void *pList, CmpFunction *compare);
 /* Sort a singly linked list with Qsort and a temporary array. 
  * The arguments to the compare function in real, non-void, life
  * are pointers to pointers. */
 
-void slUniqify(void *pList, int (*compare )(const void *elem1,  const void *elem2), void (*free)());
+void slUniqify(void *pList, CmpFunction *compare, void (*free)());
 /* Return sorted list with duplicates removed. 
  * Compare should be same type of function as slSort's compare (taking
  * pointers to pointers to elements.  Free should take a simple
@@ -258,6 +260,44 @@ void slFreeList(void *listPt);
  * Usage:
  *    slFreeList(&list);
  */
+
+struct slInt
+/* List of integers. */
+    {
+    struct slInt *next;	/* Next in list. */
+    int val;		/* Integer value. */
+    };
+
+struct slInt *slIntNew(int x);
+#define newSlInt slIntNew
+/* Return a new double. */
+
+int slIntCmp(const void *va, const void *vb);
+/* Compare two slInts. */
+
+void doubleSort(int count, double *array);
+/* Sort an array of doubles. */
+
+double doubleMedian(int count, double *array);
+/* Return median value in array.  This will sort
+ * the array as a side effect. */
+
+struct slDouble
+/* List of double-precision numbers. */
+    {
+    struct slDouble *next;	/* Next in list. */
+    double val;			/* Double-precision value. */
+    };
+
+struct slDouble *slDoubleNew(double x);
+#define newSlDouble slDoubleNew
+/* Return a new int. */
+
+int slDoubleCmp(const void *va, const void *vb);
+/* Compare two slNames. */
+
+double slDoubleMedian(struct slDouble *list);
+/* Return median value on list. */
 
 struct slName
 /* List of names. The name array is allocated to accommodate full name
@@ -287,6 +327,7 @@ void *slNameFind(void *list, char *string);
 char *slNameStore(struct slName **pList, char *string);
 /* Put string into list if it's not there already.  
  * Return the version of string stored in list. */
+
 
 struct slRef
 /* Singly linked list of generic references. */
@@ -382,6 +423,9 @@ void subChar(char *s, char oldChar, char newChar);
 void stripChar(char *s, char c);
 /* Remove all occurences of c from s. */
 
+void stripString(char *s, char *strip);
+/* Remove all occurences of strip from s. */
+
 int countChars(char *s, char c);
 /* Return number of characters c in string s. */
 
@@ -434,6 +478,9 @@ char *trimSpaces(char *s);
 
 void spaceOut(FILE *f, int count);
 /* Put out some spaces to file. */
+
+boolean hasWhiteSpace(char *s);
+/* Return TRUE if there is white space in string. */
 
 char *firstWordInLine(char *line);
 /* Returns first word in line if any (white space separated).
