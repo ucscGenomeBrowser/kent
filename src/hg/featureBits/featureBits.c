@@ -14,7 +14,7 @@
 #include "agpGap.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.27 2004/08/23 05:59:37 markd Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.28 2004/12/15 19:35:32 markd Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -28,6 +28,7 @@ static struct optionSpec optionSpecs[] =
     {"not", OPTION_BOOLEAN},
     {"countGaps", OPTION_BOOLEAN},
     {"noRandom", OPTION_BOOLEAN},
+    {"noHap", OPTION_BOOLEAN},
     {"minFeatureSize", OPTION_INT},
     {"enrichment", OPTION_BOOLEAN},
     {"where", OPTION_STRING},
@@ -41,6 +42,7 @@ boolean notResults = FALSE;   /* negate results? */
 char *where = NULL;		/* Extra selection info. */
 boolean countGaps = FALSE;	/* Count gaps in denominator? */
 boolean noRandom = FALSE;	/* Exclude _random chromosomes? */
+boolean noHap = FALSE;	/* Exclude _hap chromosomes? */
 boolean calcEnrichment = FALSE;	/* Calculate coverage/enrichment? */
 
 void usage()
@@ -61,6 +63,7 @@ errAbort(
   "   -not              Output negation of resultsing bit set.\n"
   "   -countGaps        Count gaps in denominator\n"
   "   -noRandom         Don't include _random (or Un) chromosomes\n"
+  "   -noHap            Don't include _hap chromosomes\n"
   "   -minFeatureSize=n Don't include bits of the track that are smaller than\n"
   "                     minFeatureSize, useful for differentiating between\n"
   "                     alignment gaps and introns.\n"
@@ -84,6 +87,14 @@ errAbort(
   "used in dir/chrN_something*.bed you'd do:\n"
   "   featureBits database dir/_something.bed\n"
   );
+}
+
+bool inclChrom(struct slName *chrom)
+/* check if a chromosome should be included */
+{
+return  !((noRandom && (endsWith(chrom->name, "_random")
+                        || startsWith("chrUn", chrom->name)))
+          || (noHap && stringIn( "_hap", chrom->name)));
 }
 
 void bitsToBed(Bits *bits, char *chrom, int chromSize, FILE *bed, FILE *fa, 
@@ -521,8 +532,7 @@ if (!faIndependent)
 	}
     for (chrom = allChroms; chrom != NULL; chrom = chrom->next)
 	{
-	if (! (noRandom && (endsWith(chrom->name, "_random") ||
-			    startsWith("chrUn", chrom->name))))
+	if (inclChrom(chrom))
 	    {
 	    int chromSize, chromBitSize;
 	    chromFeatureBits(conn, chrom->name, tableCount, tables,
@@ -555,7 +565,7 @@ else
     int itemCount, baseCount;
     for (chrom = allChroms; chrom != NULL; chrom = chrom->next)
         {
-	if (!noRandom || !endsWith(chrom->name, "_random"))
+	if (inclChrom(chrom))
 	    {
 	    chromFeatureSeq(conn, chrom->name, tables[0],
 		    bedFile, faFile, &itemCount, &baseCount);
@@ -579,6 +589,7 @@ orLogic = optionExists("or");
 notResults = optionExists("not");
 countGaps = optionExists("countGaps");
 noRandom = optionExists("noRandom");
+noHap = optionExists("noHap");
 where = optionVal("where", NULL);
 calcEnrichment = optionExists("enrichment");
 if (calcEnrichment && argc != 4)
