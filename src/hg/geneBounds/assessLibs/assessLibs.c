@@ -8,9 +8,8 @@
 #include "psl.h"
 #include "genePred.h"
 #include "bits.h"
-#include "libStats.h"
 
-static char const rcsid[] = "$Id: assessLibs.c,v 1.3 2003/05/06 07:22:17 kate Exp $";
+static char const rcsid[] = "$Id: assessLibs.c,v 1.4 2003/06/14 16:49:37 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -21,6 +20,7 @@ errAbort(
   "   assessLibs database refTrack\n"
   "options:\n"
   "   -chrom=chrNN - restrict this to chromosome NN\n"
+  "NOTE - CURRENTLY A WORK IN PROGRESS, NOT YET USEFUL TO RUN\n"
   );
 }
 
@@ -131,14 +131,6 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
         {
 	bitClear(bits, seq->size);
 	setEstsInHash(bits, estList, lib->estHash);
-#ifdef SOON
-	if ((stats = lib->stats) == NULL)
-	    {
-	    AllocVar(stats);
-	    lib->stats = stats;
-	    }
-	uglyf("%d bases of %d in %s on %s\n", bitCountRange(bits, 0, seq->size), seq->size, lib->name, chrom->name);
-#endif
 	uglyf("%s\n", lib->name);
 	}
     pslFreeList(&estList);
