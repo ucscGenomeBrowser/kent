@@ -16,7 +16,7 @@
 #include "hgSeq.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.6 2004/07/23 22:20:09 kent Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.7 2004/07/23 22:32:29 kent Exp $";
 
 static char *genePredMenu[] = 
     {
@@ -155,7 +155,8 @@ char *dupType = cloneString(curTrack->type);
 char *typeWords[3];
 char *table;
 struct lm *lm = lmInit(64*1024);
-struct bed *bed, *bedList = getAllIntersectedBeds(conn, curTrack, lm);
+struct bed *bed, *bedList = cookedBedsOnRegions(conn, curTrack, getRegions(),
+	lm);
 int typeWordCount;
 
 textOpen();

@@ -201,6 +201,10 @@ struct bed *cookedBedList(struct sqlConnection *conn,
 /* Get data for track in region after all processing steps (filtering
  * intersecting etc.) in BED format. */
 
+struct bed *cookedBedsOnRegions(struct sqlConnection *conn, 
+	struct trackDb *track, struct region *regionList, struct lm *lm);
+/* Get cooked beds on all regions. */
+
 struct hTableInfo *getHti(char *db, char *table);
 /* Return primary table info. */
 
