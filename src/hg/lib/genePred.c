@@ -10,7 +10,7 @@
 #include "genePred.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.21 2003/12/31 22:50:22 weber Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.22 2004/01/06 05:01:10 weber Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -373,10 +373,9 @@ gp->exonCount= i;
 return gp;
 }
 
-void findCdsStartEndInGenome(struct psl *psl,
+static void findCdsStartEndInGenome(struct psl *psl,
                                     int rnaCdsStart, int rnaCdsEnd,
-                                    int *retCdsStart, int *retCdsEnd,
-                                    boolean haveRefSeqInfo)
+                                    int *retCdsStart, int *retCdsEnd)
 /* Convert cdsStart/End from mrna to genomic coordinates. */
 {
 int startOffset, endOffset;
@@ -396,10 +395,11 @@ else
     }
 
 /* Adjust starting pos. */
-for (i=0; i<psl->blockCount; ++i)
+for (i=0; i<psl->blockCount; i++)
     {
     int blockSize = psl->blockSizes[i];
-    if (startOffset < 0) startOffset = 0;
+    if (startOffset < 0)
+        startOffset = 0;
     if (startOffset < blockSize)
 	{
         cdsStart = psl->tStarts[i] + startOffset;
@@ -433,25 +433,23 @@ for (i=psl->blockCount-1; i >= 0; --i)
         {
 	int skip =  psl->qStarts[i] - (psl->qStarts[i-1] + psl->blockSizes[i-1]);
 	endOffset -= skip;
-
-    if (haveRefSeqInfo && endOffset < 0)  /* CDS end was in gap, ugh! */
-        {       
-        cdsEnd = psl->tStarts[i] + blockSize;
-        break;  
-        }
 	}
     }
 
-/* one or both not found, mark as no CDS annotation */ 
 if ((cdsStart == -1) || (cdsEnd == -1))
-    cdsEnd = cdsStart = psl->tEnd;
-else if(!haveRefSeqInfo)
     {
+    /* one or both not found, mark as no CDS annotation */ 
+    *retCdsStart = psl->tEnd;
+    *retCdsEnd = psl->tEnd;
+    }
+else
+    {
+    /* return in genomic coords */
     if (psl->strand[1] == '-')
         reverseIntRange(&cdsStart, &cdsEnd, psl->tSize);
+    *retCdsStart = cdsStart;
+    *retCdsEnd = cdsEnd;
     }
-*retCdsStart = cdsStart;
-*retCdsEnd = cdsEnd;
 }
 
 static void pslToExons(struct psl *psl, struct genePred *gene,
@@ -484,7 +482,7 @@ for (iBlk = startIdx; iBlk != stopIdx; iBlk += idxIncr)
     unsigned tEnd = tStart + psl->blockSizes[iBlk];
     if (psl->strand[1] == '-')
         reverseIntRange(&tStart, &tEnd, psl->tSize);
-    if ((iExon < 0) || ((int)(tStart - gene->exonEnds[iExon]) > insertMergeSize))
+    if ((iExon < 0) || ((tStart - gene->exonEnds[iExon]) > insertMergeSize))
         {
         iExon++;
         gene->exonStarts[iExon] = tStart;
@@ -527,7 +525,7 @@ if ((cdsStart == -1) || (cdsEnd == -1))
     }
 else
     findCdsStartEndInGenome(psl, cdsStart, cdsEnd,
-                            &gene->cdsStart, &gene->cdsEnd,FALSE);
+                            &gene->cdsStart, &gene->cdsEnd);
 pslToExons(psl, gene, insertMergeSize);
 return gene;
 }
