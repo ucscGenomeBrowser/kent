@@ -54,7 +54,6 @@ CREATE TABLE defaultDb (
 
 
 INSERT INTO defaultDb (genome, name) VALUES ('C. briggsae','cb1');
-INSERT INTO defaultDb (genome, name) VALUES ('Human','hg15');
 
 --
 -- Table structure for table 'blatServers'
@@ -90,6 +89,8 @@ CREATE TABLE dbDb (
   orderKey int(11) default '1000000',
   genome varchar(255) NOT NULL default '',
   scientificName varchar(255) default NULL,
+  htmlPath varchar(255) NOT NULL default '',
+  hgNearOk tinyint(1) NOT NULL default '0'
   UNIQUE KEY name (name)
 ) TYPE=MyISAM PACK_KEYS=1;
 
@@ -97,22 +98,23 @@ CREATE TABLE dbDb (
 -- Dumping data for table 'dbDb'
 --
 
+INSERT INTO dbDb (name, description, nibPath, organism, defaultPos, active, orderKey, genome, scientificName, htmlPath, hgNearOk) VALUES ('cb1','July 2002','/gbdb/cb1/nib','Worm','chrUn:74980670-74998831',1,70,'C. briggsae','Caenorhabditis briggsae','/gbdb/cb1/html/description.html',0);
 
-INSERT INTO dbDb (name, description, nibPath, organism, defaultPos, active, orderKey, genome, scientificName) VALUES ('cb1','July 2002','/gbdb/cb1/nib','Worm','chrUn:74980670-74998831',1,10,'C. briggsae','Caenorhabditis briggsae');
-INSERT INTO dbDb (name, description, nibPath, organism, defaultPos, active, orderKey, genome, scientificName) VALUES ('hg15','April 2003','/gbdb/hg15/nib','Human','Select C. briggsae genome',1,70,'Human','Homo sapiens');
 
 --
 -- Table structure for table 'gdbPdb'
 --
 
-CREATE TABLE gdbPdb (
-  genomeDb char(32) NOT NULL default '',
-  proteomeDb char(32) NOT NULL default ''
-) TYPE=MyISAM;
+#CREATE TABLE gdbPdb (
+#  genomeDb char(32) NOT NULL default '',
+#  proteomeDb char(32) NOT NULL default ''
+#  KEY genomeDb (genomeDb),
+#  KEY proteomeDb (proteomeDb)
+#) TYPE=MyISAM;
 
 --
 -- Dumping data for table 'gdbPdb'
 --
 
-# INSERT INTO gdbPdb (genomeDb, proteomeDb) VALUES ('hg15','proteins0405');
+# INSERT INTO gdbPdb (genomeDb, proteomeDb) VALUES ('default','proteins0405');
 

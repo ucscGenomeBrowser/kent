@@ -48,9 +48,11 @@ to perform the following at a root login prompt:
 
 Create a MySQL user called "browser" with password
 "genome" and give access to selected MySQL commands
-for the following list of databases:
+for the following list of databases.  When you add other
+databases, you will need to add these permissions to your
+databases.
 
-for DBVERSION in hg15 cb1 hgcentral hgcentraltest
+for DBVERSION in hgFixed cb1 hgcentral hgcentraltest
 do
     echo "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, ALTER \
 	on ${DBVERSION}.* TO browser@localhost \
@@ -68,7 +70,7 @@ need "GRANT SELECT" permissions.  For example, you could
 create a special user for the browser genome databases only.
 In this example, user: "readonly" with password: "access"
 
-for DBVERSION in cb1 hg15
+for DBVERSION in cb1 hgFixed
 do
     echo "GRANT SELECT on ${DBVERSION}.* TO readonly@localhost \
 	IDENTIFIED BY 'access';" | \
