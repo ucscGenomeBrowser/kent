@@ -144,8 +144,9 @@ if (s < psl->tStart || s >= psl->tEnd)
 
 for ( i=0; i<psl->blockCount; i++ )
     {
+    unsigned tEnd;
     tStart = psl->tStarts[i];
-    unsigned tEnd = tStart + psl->blockSizes[i];
+    tEnd = tStart + psl->blockSizes[i];
     if (psl->strand[1] == '-') 
          reverseIntRange(&tStart, &tEnd, psl->tSize);
 
