@@ -11,7 +11,7 @@
 #include "obscure.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: hgRefSeqMrna.c,v 1.19 2004/01/15 21:53:02 weber Exp $";
+static char const rcsid[] = "$Id: hgRefSeqMrna.c,v 1.20 2004/01/15 23:30:24 weber Exp $";
 
 
 /* Variables that can be set from command line. */
@@ -490,7 +490,7 @@ lf = pslFileOpen(pslFile);
 dotMod = 0;
 while ((psl = pslNext(lf)) != NULL)
     {
-    struct genePred *gp;
+    struct genePred *gp = NULL;
     if (clDots > 0 && ++dotMod == clDots )
         {
 	dotMod = 0;
