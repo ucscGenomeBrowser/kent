@@ -100,6 +100,8 @@ struct wiggleData
     struct wiggleDatum *data;	/* many individual data items here */
     };
 
+#include "hdb.h"
+
 /*	anonymous declaration of track to take care of the use of this struct
  *	in the wigSetCart definition below.  Prevents compiler warnings on
  *	lib/wiggleCart.c and doesn't disturb the usage in hg/hgTracks/...c
