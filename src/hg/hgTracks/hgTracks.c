@@ -6605,6 +6605,25 @@ sprintf(buf, "<FONT COLOR=\"#FFFFFF\">%s</FONT>", s);
 return buf;
 }
 
+void hideAllTracks(struct trackGroup *tGroupList)
+/* hide all the tracks (and any in trackDb too) */
+{
+struct sqlConnection *conn = hAllocConn();
+char *name;
+struct sqlResult *sr;
+char **row;
+char *query = "select tableName from trackDb";
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    assert(row[0]);
+    cartSetString(cart, row[0], "hide");
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
+
 void hotLinks()
 /* Put up the hot links bar. */
 {
@@ -6733,8 +6752,8 @@ if(hideAll)
     for (group = tGroupList; group != NULL; group = group->next)
 	{
 	group->visibility = tvHide;
-	cartSetString(cart, group->mapName, "hide");
 	}
+    hideAllTracks(tGroupList);
     }
 
 /* Tell groups to load their items. */
