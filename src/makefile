@@ -1,4 +1,4 @@
-all: cgi
+all: cgi utils
 
 alpha: clean cgi-alpha blat
 
@@ -54,7 +54,7 @@ utils: libs
                 x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
             fi ;\
 	done
-	# cd hg && ${MAKE};
+	cd hg && ${MAKE} utils;
 
 DIRS = ameme cdnaAli dnaDust fuzzyFind \
        idbQuery index protDust reformat \
