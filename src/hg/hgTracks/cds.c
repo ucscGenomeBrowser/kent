@@ -362,8 +362,19 @@ unsigned *retGaps = NULL;
 boolean extraInfo = (displayOption != CDS_DRAW_GENOMIC_CODONS);
 struct genbankCds cds;
 
-/*get CDS from genBank*/
-getMrnaCds(psl->qName, &cds);
+if (pslIsProtein(psl))
+    {
+    cds.start=0;
+    cds.end=psl->qSize*3;
+    cds.startComplete = TRUE;
+    cds.endComplete = TRUE; 
+    cds.complement = (psl->strand[1] == '-');   
+    }
+else
+    {
+    /*get CDS from genBank*/
+    getMrnaCds(psl->qName, &cds);
+    }
 
 /*cds not in genbank - revert to normal*/
 if (!(cds.startComplete || cds.endComplete))

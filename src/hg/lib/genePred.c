@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.51 2004/05/15 21:26:00 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.52 2004/07/03 23:41:23 braney Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -762,7 +762,10 @@ for (iBlk = 0; (iBlk < psl->blockCount) && (cdsEnd < 0); iBlk++)
 if (cdsEnd < 0)
     {
     /* after last block, set to end of that block */
-    cdsEnd = psl->tStarts[iBlk-1] + psl->blockSizes[iBlk-1];
+    if (pslIsProtein(psl))
+	cdsEnd = psl->tStarts[iBlk-1] + psl->blockSizes[iBlk-1] * 3;
+    else
+	cdsEnd = psl->tStarts[iBlk-1] + psl->blockSizes[iBlk-1];
     if (gene->strand[0] == '+')
         cds->endComplete = FALSE;
     else
@@ -908,6 +911,8 @@ for (iBlk = startIdx; iBlk != stopIdx; iBlk += idxIncr)
     {
     unsigned tStart = psl->tStarts[iBlk];
     unsigned tEnd = tStart + psl->blockSizes[iBlk];
+    if (pslIsProtein(psl))
+	tEnd = tStart + psl->blockSizes[iBlk] * 3;
     if (psl->strand[1] == '-')
         reverseIntRange(&tStart, &tEnd, psl->tSize);
     if ((iExon < 0) || (insertMergeSize < 0)
@@ -919,7 +924,12 @@ for (iBlk = startIdx; iBlk != stopIdx; iBlk += idxIncr)
 	}
     gene->exonEnds[iExon] = tEnd;
     if (gene->optFields & genePredExonFramesFld)
-        gene->exonFrames[iExon] = getFrame(psl, mrnaStart, mrnaStart+psl->blockSizes[iBlk], cds);
+	{
+	if (pslIsProtein(psl))
+	    gene->exonFrames[iExon] = getFrame(psl, mrnaStart, mrnaStart+3*psl->blockSizes[iBlk], cds);
+	else
+	    gene->exonFrames[iExon] = getFrame(psl, mrnaStart, mrnaStart+psl->blockSizes[iBlk], cds);
+	}
     }
 gene->exonCount = iExon+1;
 }
