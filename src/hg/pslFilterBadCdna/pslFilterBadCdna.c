@@ -24,7 +24,7 @@ int minAliT = 0;
 
 #define GOOD 0
 #define BAD 1
-#define GPRIME 1
+#define GPRIME 2
 #define POLYAREGION 40
 
 void usage()
@@ -156,12 +156,6 @@ int polyAend = 0;
 int polyA = polyACalc(psl->tStart, psl->tEnd, psl->strand, nibDir, psl->tName, 
                         POLYAREGION, &polyAstart, &polyAend);
 int diff = psl->strand[0] == '+' ? polyAstart-(psl->tEnd) : polyAstart -(psl->tStart);
-if ( polyA >= 15 && psl->blockCount <= 1 && psl->misMatch < 5 && abs(diff) < 3 && (psl->qSize - psl->match) < 30)
-    {
-    printf("%s polyA %d start %d strand %c blocks %d %s:%d-%d\n",psl->qName, polyA, 
-            diff, psl->strand[0], psl->blockCount, psl->tName, psl->tStart, psl->tEnd);
-    return GPRIME;
-    }
 if (psl->match + psl->repMatch < minMatch)
     return BAD;
 if (psl->match < minUniqueMatch)
@@ -177,6 +171,12 @@ score = (psl->match + psl->repMatch)*reward - psl->misMatch*cost
 	- log(psl->qBaseInsert + psl->tBaseInsert + 1) * gapSizeLogMod;
 if (score < minScore)
     return BAD;
+if ( polyA >= 15 && psl->blockCount <= 1 && psl->misMatch < 5 && abs(diff) < 3 && (psl->qSize - psl->match) < 30)
+    {
+    printf("%s polyA %d start %d strand %c blocks %d %s:%d-%d\n",psl->qName, polyA, 
+            diff, psl->strand[0], psl->blockCount, psl->tName, psl->tStart, psl->tEnd);
+    return GPRIME;
+    }
 return GOOD;
 }
 
