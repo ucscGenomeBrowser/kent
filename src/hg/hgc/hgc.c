@@ -1223,6 +1223,46 @@ if (hTableExists("axtInfo"))
 printf("</UL>\n");
 }
 
+void geneShowPosAndLinksDNARefseq(char *geneName, char *pepName, struct trackDb *tdb,
+        char *pepTable, char *pepClick,
+        char *mrnaClick, char *genomicClick, char *mrnaDescription)
+/* Show parts of a DNA based RefSeq gene */
+{
+char *geneTable = tdb->tableName;
+char other[256];
+
+showGenePos(geneName, tdb);
+printf("<H3>Links to sequence:</H3>\n");
+printf("<UL>\n");
+/*
+if (pepTable != NULL && hTableExists(pepTable))
+    {
+    puts("<LI>\n");
+    hgcAnchorSomewhere(pepClick, pepName, pepTable, seqName);
+    printf("Predicted Protein</A> \n");
+    puts("</LI>\n");
+    }
+puts("<LI>\n");
+hgcAnchorSomewhere(mrnaClick, geneName, geneTable, seqName);
+printf("%s</A> may be different from the genomic sequence.\n",
+       mrnaDescription);
+puts("</LI>\n");
+*/
+puts("<LI>\n");
+hgcAnchorSomewhere(genomicClick, geneName, geneTable, seqName);
+printf("Genomic Sequence</A> from assembly\n");
+puts("</LI>\n");
+
+if (hTableExists("axtInfo"))
+    {
+    puts("<LI>\n");
+    hgcAnchorGenePsl(geneName, geneTable, seqName, "startcodon");
+    printf("Comparative Sequence</A> Annotated codons and translated protein with alignment to another species <BR>\n");
+    puts("</LI>\n");
+    }
+printf("</UL>\n");
+}
+
 void geneShowPosAndLinksMouse(char *geneName, char *pepName, 
 	struct trackDb *tdb, char *pepTable, 
 	struct sqlConnection *connMm, char *pepClick, 
@@ -4487,20 +4527,53 @@ char *freezeName;
 char *mgiID;
 struct refLink *rl;
 
+char *seqType;
+boolean dnaBased;
+char *proteinAC;
+
 cartWebStart(cart, "Known Gene");
 
-// Display mRNA description and NCBI link
-printf("<B>mRNA:</B> ");
-sprintf(cond_str, "acc='%s'", mrnaName);
-descID = sqlGetField(conn, database, "mrna", "description", cond_str);
-sprintf(cond_str, "id=%s", descID);
-mrnaDesc = sqlGetField(conn, database, "description", "name", cond_str);
-if (mrnaDesc != NULL) printf("%s\n", mrnaDesc);
+dnaBased = FALSE;
+if (hTableExists("knownGeneLink"))
+    {
+    sprintf(cond_str, "name='%s' and seqType='g'", mrnaName);
+    seqType = sqlGetField(conn, database, "knownGeneLink", "seqType", cond_str);
 
-printf("<UL><LI>");
-printf("<B>NCBI: </B> <A HREF =\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=nucleotide&cmd=search&term=%s\" TARGET=_blank>%s</A><BR>\n", 
+    if (seqType != NULL)
+        {
+        dnaBased = TRUE;
+        refSeqName = strdup(mrnaName);
+        sprintf(cond_str, "name='%s'", refSeqName);
+        proteinAC = sqlGetField(conn, database, "knownGeneLink", "proteinID", cond_str);
+        }
+    }
+
+// Display mRNA or DNA info and NCBI link
+if (dnaBased)
+    {
+    printf("This gene is based on RefSeq %s, which is derived from a DNA sequence.", refSeqName);
+    printf("  Please follow the link below for further details.<br>\n");
+
+    printf("<UL><LI>");
+    printf("<B>NCBI: </B> <A HREF =\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi");
+    printf("?db=nucleotide&cmd=search&term=%s\" TARGET=_blank>%s</A><BR>\n",
+            refSeqName, refSeqName);
+    printf("</UL>");
+    }
+else
+    {
+    printf("<B>mRNA:</B> ");
+    sprintf(cond_str, "acc='%s'", mrnaName);
+    descID = sqlGetField(conn, database, "mrna", "description", cond_str);
+    sprintf(cond_str, "id=%s", descID);
+    mrnaDesc = sqlGetField(conn, database, "description", "name", cond_str);
+    if (mrnaDesc != NULL) printf("%s\n", mrnaDesc);
+
+    printf("<UL><LI>");
+    printf("<B>NCBI: </B> <A HREF =\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=nucleotide&cmd=search&term=%s\" TARGET=_blank>%s</A><BR>\n", 
         mrnaName, mrnaName);
-printf("</UL>");
+    printf("</UL>");
+    }
 
 // Display protein description and links
 printf("<B>Protein:</B> ");
@@ -4587,7 +4660,7 @@ fflush(stdout);
 sprintf(query, "select refseq from %s.mrnaRefseq where mrna = '%s'",  database, mrnaName);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
-if (row == NULL)
+if ((row == NULL) && (!dnaBased))
     {
     printf("<B>RefSeq:</B>"); 
     printf(" No corresponding RefSeq entry found for %s.<br>\n", mrnaName);
@@ -4595,8 +4668,16 @@ if (row == NULL)
     }
 else
     {
-    refSeqName = strdup(row[0]);
-    sprintf(query, "select * from refLink where mrnaAcc = '%s'", row[0]);
+    if (dnaBased)
+        {
+        refSeqName = strdup(mrnaName);
+        }
+    else
+        {
+        refSeqName = strdup(row[0]);
+        }
+    sprintf(query, "select * from refLink where mrnaAcc = '%s'", refSeqName);
+
     sqlFreeResult(&sr);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) == NULL) 
@@ -4713,8 +4794,16 @@ else
     	}
 
     htmlHorizontalLine();
-    geneShowPosAndLinks(mrnaName, mrnaName, tdb, "knownGenePep", "htcTranslatedProtein",
-			"htcKnownGeneMrna", "htcGeneInGenome", "mRNA Sequence");
+    if (dnaBased)
+        {
+        geneShowPosAndLinksDNARefseq(mrnaName, mrnaName, tdb, "knownGenePep", "htcTranslatedProtein",
+                        "htcKnownGeneMrna", "htcGeneInGenome", "mRNA Sequence");
+        }
+    else
+        {
+        geneShowPosAndLinks(mrnaName, mrnaName, tdb, "knownGenePep", "htcTranslatedProtein",
+                        "htcKnownGeneMrna", "htcGeneInGenome", "mRNA Sequence");
+        }
     }
 
 printTrackHtml(tdb);
