@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.806 2004/09/29 21:44:20 kschneid Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.807 2004/09/30 21:20:14 angie Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -8678,25 +8678,31 @@ if (!hideControls)
     if(freezeName == NULL)
 	freezeName = "Unknown";
     hPrintf("<FONT SIZE=5><B>");
-    if (hIsMgcServer()) {
-	if(strcmp(organism, "Archaea")==0)
+    if (hIsMgcServer())
+	{
+	if (sameString(organism, "Archaea"))
             hPrintf("MGC Genome Browser on Archaeon %s Assembly", freezeName);
 	else
             hPrintf("MGC Genome Browser on %s %s Assembly", organism, freezeName); 
-    	    
-	} else {
-	if( startsWith("zoo",database) ) {
+	}
+    else
+	{
+	if (startsWith("zoo",database) )
+	    {
 /* HACK ALERT - same alert as in hgGateway - The Zoo needs its own
  * mechanism of producing this title with its date and target.
  */
-	    hPrintf("UCSC Genome Browser on %s June 2002 Assembly %s target1", organism, freezeName); 
-	} else {
-	    if(strcmp(organism, "Archaea")==0)
-                hPrintf("MGC Genome Browser on Archaeon %s Assembly", freezeName);
+	    hPrintf("UCSC Genome Browser on %s June 2002 Assembly %s target1",
+		    organism, freezeName); 
+	    }
+	else
+	    {
+	    if (sameString(organism, "Archaea"))
+                hPrintf("UCSC Genome Browser on Archaeon %s Assembly", freezeName);
 	    else
-                hPrintf("MGC Genome Browser on %s %s Assembly", organism, freezeName); 
+                hPrintf("UCSC Genome Browser on %s %s Assembly", organism, freezeName); 
+	    }
 	}
-    }
     hPrintf("</B></FONT><BR>\n");
 
     /* This is a clear submit button that browsers will use by default when enter is pressed in position box. */
