@@ -4865,9 +4865,12 @@ mkdir -p $3:h
    - wait one day for nightly build to align and load them into the db
    - rebuild trackDb
 
-# Create rn3GeneList.html (to be used by Google and other users).
+# Create rn3GeneList.html (to be used by Google).
 # This step was done 12/08/04.
 
+    cd /cluster/data/rn3/bed
+    mkdir geneList
+    cd geneList
     wget -O rn3GeneList.html "http://hgwdev-fanhsu.cse.ucsc.edu/cgi-bin/hgGeneList?db=rn3"
-    cp -p rn3GeneList.html /usr/local/apache/goldenpath
+    cp -p rn3GeneList.html /usr/local/apache/htdocs/goldenPath
 # Check this html file into CVS.

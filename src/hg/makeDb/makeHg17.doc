@@ -10013,11 +10013,14 @@ hgsql kgHg17B -e 'load data local infile "chromInfo.tab" into table chromInfo ig
     delete from gdbPdb where genomeDb='hg17';
     insert into gdbPdb values('hg17', 'proteins041115');
 
-# Create hg17GeneList.html (to be used by Google and other users).
+# Create hg17GeneList.html (to be used by Google).
 # This step was done 12/08/04.
 
+    cd /cluster/data/hg17/bed
+    mkdir geneList
+    cd geneList
     wget -O hg17GeneList.html "http://hgwdev-fanhsu.cse.ucsc.edu/cgi-bin/hgGeneList?db=hg17"
-    cp -p hg17GeneList.html /usr/local/apache/goldenpath
+    cp -p hg17GeneList.html /usr/local/apache/htdocs/goldenPath
 # Check this html file into CVS.
 
 # UPDATE TABLES NEEDED BY hgGene (DONE 11/30/04 Fan)

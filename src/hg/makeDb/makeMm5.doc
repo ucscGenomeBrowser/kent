@@ -6281,10 +6281,13 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     featureBits -enrichment mm5 refGene twinscan
 #refGene 1.551%, twinscan 1.245%, both 0.783%, cover 50.46%, enrich 40.52x
 
-# Create mm5GeneList.html (to be used by Google and other users).
+# Create mm5GeneList.html (to be used by Google).
 # This step was done 12/08/04.
-
+    
+    cd /cluster/data/mm5/bed
+    mkdir geneList
+    cd geneList
     wget -O mm5GeneList.html "http://hgwdev-fanhsu.cse.ucsc.edu/cgi-bin/hgGeneList?db=mm5"
-    cp -p mm5GeneList.html /usr/local/apache/goldenpath
+    cp -p mm5GeneList.html /usr/local/apache/htdocs/goldenPath
 # Check this html file into CVS.
 
