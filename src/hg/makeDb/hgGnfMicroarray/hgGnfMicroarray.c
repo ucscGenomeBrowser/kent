@@ -8,7 +8,7 @@
 #include "expRecord.h"
 #include "expData.h"
 
-static char const rcsid[] = "$Id: hgGnfMicroarray.c,v 1.3 2004/03/30 01:23:26 kent Exp $";
+static char const rcsid[] = "$Id: hgGnfMicroarray.c,v 1.4 2004/03/30 06:49:21 kent Exp $";
 
 char *chip = "HG-U95Av2";
 char *database = "hgFixed";
@@ -64,32 +64,6 @@ struct expCounter
     char *name;	/* Not allocated here. */
     int count;	/* Count of times seen. */
     };
-
-char *nextTabWord(char **pLine)
-/* Return next tab-separated word. */
-{
-char *s = *pLine;
-char *e;
-if (s == NULL || *s == '\n' || *s == 0)
-    {
-    *pLine = NULL;
-    return NULL;
-    }
-e = strchr(s, '\t');
-if (e == NULL)
-    {
-    e = strchr(s, '\n');
-    if (e != NULL)
-        *e = 0;
-    *pLine = NULL;
-    }
-else
-    {
-    *e++ = 0;
-    *pLine = e;
-    }
-return s;
-}
 
 int lineToExp(char *line, FILE *f)
 /* Convert line to an expression record file. 
