@@ -53,15 +53,15 @@ char tmpDir[PATH_LEN];
 /* Need to force load of ignore table, as release might not be initialized yet */
 gbReleaseLoadIgnore(release);
 
-if (sqlTableExists(conn, GB_STATUS_TBL))
-    {
-    safef(tmpDir, sizeof(tmpDir), "%s/ignore", workDir);
+safef(tmpDir, sizeof(tmpDir), "%s/ignore", workDir);
 
-    /* build delete object */
-    cookie = hashFirst(release->ignore->accHash);
-    while ((hel = hashNext(&cookie)) != NULL)
+/* build delete object */
+cookie = hashFirst(release->ignore->accHash);
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    struct gbIgnoreAcc* igAcc;
+    for (igAcc = hel->val; igAcc != NULL; igAcc = igAcc->next)
         {
-        struct gbIgnoreAcc* igAcc = hel->val;
         if (inGbStatusTable(conn, igAcc->acc, igAcc->modDate))
             {
             if (deleter == NULL)
@@ -70,6 +70,7 @@ if (sqlTableExists(conn, GB_STATUS_TBL))
             gbVerbMsg(1, "%s %s ignored, will delete", igAcc->acc, 
                       gbFormatDate(igAcc->modDate));
             }
+
         }
     }
 return deleter;
@@ -80,7 +81,11 @@ static void deleteIgnoredRelease(struct gbRelease* release, char* workDir)
  * in the gbStatus table for a release. */
 {
 struct sqlConnection *conn = hAllocConn();
-struct sqlDeleter* deleter = buildIgnoredDeleters(conn, release, workDir);
+struct sqlDeleter* deleter =  NULL;
+
+
+if (sqlTableExists(conn, GB_STATUS_TBL))
+    deleter = buildIgnoredDeleters(conn, release, workDir);
 
 /* drop what we found in the gbStatus table */
 if (deleter != NULL)
