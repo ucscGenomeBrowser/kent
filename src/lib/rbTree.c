@@ -9,7 +9,7 @@
 #include "localmem.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: rbTree.c,v 1.8 2004/11/16 22:29:11 kent Exp $";
+static char const rcsid[] = "$Id: rbTree.c,v 1.9 2005/01/10 00:24:44 kent Exp $";
 
 
 static struct rbTreeNode *restructure(struct rbTree *t, int tos, 
@@ -71,7 +71,7 @@ return midNode;
 }
 
 struct rbTree *rbTreeNewDetailed(int (*compare)(void *, void *), struct lm *lm, 
-	struct rbTreeNode *stack[256])
+	struct rbTreeNode *stack[128])
 /* Allocate rbTree on an existing local memory & stack.  This is for cases
  * where you want a lot of trees, and don't want the overhead for each one. 
  * Note, to clean these up, just do freez(&rbTree) rather than rbFreeTree(&rbTree). */
@@ -98,10 +98,10 @@ struct rbTree *rbTreeNew(int (*compare)(void *, void *))
  * of tree.  Since the whole point of rb trees is
  * that they are self-balancing, this is not all
  * that deep, just 2*log2(N).  Therefore a stack of
- * 256 is good for up to 2^128 items in stack, which
- * should keep us for the next couple of millenia... */
+ * 128 is good for up to 2^64 items in stack, which
+ * should keep us for the next couple of decades... */
 struct lm *lm = lmInit(0);
-struct rbTreeNode **stack = lmAlloc(lm, 256 * sizeof(stack[0]));	
+struct rbTreeNode **stack = lmAlloc(lm, 128 * sizeof(stack[0]));	
 return rbTreeNewDetailed(compare, lm, stack);
 }
 

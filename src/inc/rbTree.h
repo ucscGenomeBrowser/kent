@@ -39,7 +39,7 @@ void rbTreeFree(struct rbTree **pTree);
 /* Frees space used by the red-black tree pointed to by t. */
 
 struct rbTree *rbTreeNewDetailed(int (*compare)(void *, void *), struct lm *lm, 
-	struct rbTreeNode *stack[256]);
+	struct rbTreeNode *stack[128]);
 /* Allocate rbTree on an existing local memory & stack.  This is for cases
  * where you want a lot of trees, and don't want the overhead for each one. 
  * Note, to clean these up, just do freez(&rbTree) rather than rbFreeTree(&rbTree). */
