@@ -776,6 +776,15 @@ visibility hide
 spectrum on
 type bed 6
 
+track eponine
+shortLabel Eponine TSS
+longLabel Eponine Predicted Transcription Start Sites
+group regulation
+priority 91.9
+visibility dense
+color 0,100,100
+type bed 4 +
+
 track triangleSelf
 shortLabel Golden Triangle  
 longLabel Golden Triangle Possible Transcription Factor Binding Sites
@@ -1231,6 +1240,7 @@ type wig 0.0 1.0
 autoScaleDefault Off
 
 
+
 searchTable ctgPos
 searchMethod exact
 shortCircuit 1
@@ -1242,7 +1252,7 @@ searchTable cytoBand
 searchMethod exact
 searchType cytoBand
 shortCircuit 1
-termRegex (x|y|[1-9][0-9]?)(p|q)[0-9]+(.[0-9]+)?
+termRegex (x|y|[1-9][0-9]?)(p|q)[0-9]+(\.[0-9]+)?
 searchPriority 6
 padding 500000
 
@@ -1484,7 +1494,7 @@ searchPriority 63
 searchTable rnaCluster
 searchMethod exact
 searchType bed
-termRegex chr[0-9A-Z]+[.][0-9]+
+termRegex chr[0-9a-z_]+[.][0-9]+
 searchPriority 50
 
 
