@@ -913,6 +913,23 @@ priority 203
 visibility hide
 type bed 4 .
 
+track scoreMm3X
+shortLabel scoreMm3X
+longLabel scoreMm3X 
+group x
+priority 200.9
+visibility hide
+type bed 14 .
+
+track scoreMm2X
+shortLabel scoreMm2X
+longLabel scoreMm2X 
+group x
+priority 201.9
+visibility hide
+type bed 14 .
+
+
 track mapMm3X
 shortLabel Mapped 3X
 longLabel  Mm3X alignments mapped through mm5 net
