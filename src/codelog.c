@@ -659,4 +659,19 @@
 400 - gfServer takes tileSize and minMatch command line parameters.  Various
       other Intronerator update stuff.  Made hgBlat produce big input
       box.
-401 - (Not yet saved) fixed Y chromosome bug in assembly.
+401 - Fixed Y chromosome bug in assembly.  Fixed a few blat bugs and made
+      a stand-alone command line version of blat.  Chuck and I working on
+      Rosetta expression track.
+402 - Starting work on blatp, blatx and tblatx
+403 - blatp, blatx and tblatx are working in stand-alone.
+404 - blatx client/server starting to work.
+405 - protein/translated DNA blat searches starting to work on the web.
+      Displays well in hgTracks.  hgc still needs to show detailed
+      alignment.
+406 - hgc shows detailed protein/translated DNA alignments.  Major
+      blat speed tweaking (about 5x as fast as before) from:
+           o - Putting hit list in local memory.
+	   o - Partial bucket sort on target start to break
+	       up (taming nlogn a little) major sort on hit
+	       diagonal.
+	   o - Custom hit diagonal sort routine.
