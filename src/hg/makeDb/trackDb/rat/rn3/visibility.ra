@@ -14,10 +14,10 @@ track           est
 visibility      full
 
 track           xenoMrna
-visibility      full
+visibility      hide
 
 track           mrna
-visibility      pack
+visibility      hide
 
 track           gold
 visibility      pack
