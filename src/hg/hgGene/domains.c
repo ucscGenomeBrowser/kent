@@ -7,7 +7,7 @@
 #include "spDb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.9 2004/01/09 15:35:17 fanhsu Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.10 2004/01/29 20:19:56 donnak Exp $";
 
 static boolean domainsExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -33,10 +33,10 @@ if (list != NULL)
     {
     char query[256], **row;
     struct sqlResult *sr;
-    hPrintf("<B>InterPro Domains</B> - ");
+    hPrintf("<B>InterPro Domains: </B> ");
     hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/ISpy?mode=single&ac=%s\" TARGET=_blank>",
     	swissProtAcc);
-    hPrintf("Graphical view of domain structure.</A><BR>");
+    hPrintf("Graphical view of domain structure</A><BR>");
     safef(query, sizeof(query),
     	"select extAcc1,extAcc2 from extDbRef,extDb"
 	" where extDbRef.acc = '%s'"
@@ -56,7 +56,7 @@ list = spExtDbAcc1List(spConn, swissProtAcc, "Pfam");
 if (list != NULL)
     {
     char *pfamDescSql = genomeSetting("pfamDescSql");
-    hPrintf("<B>Pfam Domains</B><BR>");
+    hPrintf("<B>Pfam Domains:</B><BR>");
     for (el = list; el != NULL; el = el->next)
 	{
 	char query[256];
@@ -96,7 +96,7 @@ if (list != NULL)
 	    column = 1;
 	    if (rowCount == 0)
 	        {
-		hPrintf("<TD ALIGN=CENTER COLSPAN=4><I>To conserve bandwidth only images from the first %d structures are shown.</I>", maxColumn);
+		hPrintf("<TD ALIGN=CENTER COLSPAN=4><I>To conserve bandwidth, only the images from the first %d structures are shown.</I>", maxColumn);
 		hPrintf("</TR><TR>");
 		}
 	    ++rowCount;
@@ -115,9 +115,9 @@ if (list != NULL)
 
 /* Do modBase link. */
     {
-    hPrintf("<B>ModBase Predicted Comparative 3D Structure on");
+    hPrintf("<B>ModBase Predicted Comparative 3D Structure on ");
     modBaseAnchor(swissProtAcc);
-    hPrintf(" %s", swissProtAcc);
+    hPrintf("%s", swissProtAcc);
     hPrintf("</A></B><BR>\n");
     hPrintf("<TABLE><TR>");
     hPrintf("<TD>");
@@ -136,7 +136,7 @@ if (list != NULL)
     hPrintf("</TR></TABLE>\n");
     hPrintf("<I>The pictures above may be empty if there is no "
             "ModBase structure for the protein.  The ModBase structure "
-	    "frequently just covers a fragment of the protein.  You may "
+	    "frequently covers just a fragment of the protein.  You may "
 	    "be asked to log onto ModBase the first time you click on the "
 	    "pictures. It is simplest after logging in to just click on "
 	    "the picture again to get to the specific info on that model.</I>");
