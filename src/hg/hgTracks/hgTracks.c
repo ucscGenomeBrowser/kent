@@ -6303,7 +6303,7 @@ group->altColor.g = tdb->altColorG;
 group->altColor.b = tdb->altColorB;
 group->lineHeight = mgFontLineHeight(tl.font)+1;
 group->heightPer = group->lineHeight - 1;
-group->private = tdb->priv;
+group->private = tdb->private;
 group->priority = tdb->priority;
 if (tdb->useScore)
     {
