@@ -1,0 +1,14 @@
+#
+# load database on hgwdev server
+#
+
+SHELL=/bin/sh
+MAILTO=genbank@cse.ucsc.edu
+
+# poll every hour at half-past, but only at night, machine gets a 
+# lot of use.
+30 1-8 * * *	/cluster/genbank/etc/hgwdev-dbload
+
+
+
+
