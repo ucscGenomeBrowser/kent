@@ -107,5 +107,17 @@ wget ftp://ftp.genetics.wustl.edu/pub/Pfam/swisspfam.gz
 See README in /cluster/store1/geneOntology.
 
 # Create knownToEnsembl column
-hgMapToGene $db ensGene knownToEnsembl
+hgMapToGene $db ensGene knownGene knownToEnsembl
+
+# Make knownToCdsSnp column.  This is a little complicated by
+# having to merge data form the snpTsc and the snpNih tracks.
+hgMapToGene $db snpTsc knownGene knownToCdsSnp -createOnly -all -cds
+hgMapToGene $db snpTsc knownGene snp1 -noLoad -all -cds
+hgMapToGene $db snpNih knownGene snp2 -noLoad -all -cds
+sort snp1.tab snp2.tab > knownToCdsSnp.tab
+rm snp1.tab snp2.tab
+hgsql $db <<end
+load data local infile 'knownToCdsSnp.tab' into table knownToCdsSnp;
+end
+
 

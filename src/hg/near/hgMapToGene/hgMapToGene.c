@@ -8,7 +8,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgMapToGene.c,v 1.1 2003/09/12 11:07:12 kent Exp $";
+static char const rcsid[] = "$Id: hgMapToGene.c,v 1.2 2003/09/13 04:17:23 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -27,36 +27,94 @@ errAbort(
   "For each gene in geneTrack this will select the most\n"
   "overlapping item in track to associate\n"
   "Options:\n"
-  "   type=xxx - Set the type line here rather than looking it up in\n"
+  "   -type=xxx - Set the type line here rather than looking it up in\n"
   "              the trackDb table.\n"
+  "   -all - Put all elements of track that intersect with geneTrack\n"
+  "          into mapTable, not just the best for each gene.\n"
+  "   -cds - Only consider coding portions of gene.\n"
+  "   -noLoad - Don't load database, just create mapTable.tab file\n"
+  "   -verbose - Print intermediate status info\n"
+  "   -intronsToo - Include introns\n"
+  "   -createOnly - Just create mapTable, don't populate it\n"
   );
 }
 
 boolean verbose = FALSE;
+boolean cdsOnly = FALSE;
+boolean intronsToo = FALSE;
+boolean createOnly = FALSE;
 
 static struct optionSpec options[] = {
    {"type", OPTION_STRING},
+   {"all", OPTION_BOOLEAN},
+   {"cds", OPTION_BOOLEAN},
+   {"intronsToo", OPTION_BOOLEAN},
+   {"noLoad", OPTION_BOOLEAN},
+   {"createOnly", OPTION_BOOLEAN},
    {"verbose", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
-int gpBedOverlap(struct genePred *gp, struct bed *bed)
+
+int bedIntersectRange(struct bed *bed, int rStart, int rEnd)
+/* Return intersection of bed with range rStart-rEnd */
+{
+int bedStart = bed->chromStart;
+int overlap = 0;
+
+if (bed->blockCount > 1)
+    {
+    int bedIx;
+    for (bedIx = 0; bedIx < bed->blockCount; ++bedIx)
+	{
+	int start = bedStart + bed->chromStarts[bedIx];
+	int end = start + bed->blockSizes[bedIx];
+	overlap += positiveRangeIntersection(rStart, rEnd, start, end);
+	}
+    }
+else
+    {
+    overlap = positiveRangeIntersection(rStart, rEnd, bed->chromStart, bed->chromEnd);
+    }
+return overlap;
+}
+
+int gpBedOverlap(struct genePred *gp, boolean cdsOnly, boolean intronsToo, struct bed *bed)
 /* Return total amount of overlap between gp and bed12. */
 {
 /* This could be implemented more efficiently, but this
  * way is really simple. */
-int bedStart = bed->chromStart;
-int gpIx, bedIx;
+int gpIx;
 int overlap = 0;
-for (gpIx = 0; gpIx < gp->exonCount; ++gpIx)
+int geneStart, geneEnd;
+if (cdsOnly)
     {
-    int gpStart = gp->exonStarts[gpIx];
-    int gpEnd = gp->exonEnds[gpIx];
-    for (bedIx = 0; bedIx < bed->blockCount; ++bedIx)
-        {
-	int start = bedStart + bed->chromStarts[bedIx];
-	int end = start + bed->blockSizes[bedIx];
-	overlap += positiveRangeIntersection(gpStart, gpEnd, start, end);
+    geneStart = gp->cdsStart;
+    geneEnd = gp->cdsEnd;
+    }
+else
+    {
+    geneStart = gp->txStart;
+    geneEnd = gp->txEnd;
+    }
+if (intronsToo)
+    {
+    overlap = bedIntersectRange(bed, geneStart, geneEnd);
+    }
+else
+    {
+    for (gpIx = 0; gpIx < gp->exonCount; ++gpIx)
+	{
+	int gpStart = gp->exonStarts[gpIx];
+	int gpEnd = gp->exonEnds[gpIx];
+	if (cdsOnly)
+	    {
+	    if (gpStart < geneStart) gpStart = geneStart;
+	    if (gpEnd > geneEnd) gpEnd = geneEnd;
+	    if (gpStart >= gpEnd)
+	        continue;
+	    }
+	overlap += bedIntersectRange(bed, gpStart, gpEnd);
 	}
     }
 return overlap;
@@ -72,7 +130,7 @@ struct binElement *el, *elList = binKeeperFind(bk, gp->txStart, gp->txEnd);
 for (el = elList; el != NULL; el = el->next)
     {
     bed = el->val;
-    overlap = gpBedOverlap(gp, bed);
+    overlap = gpBedOverlap(gp, cdsOnly, intronsToo, bed);
     if (overlap > bestOverlap)
         {
 	bestOverlap = overlap;
@@ -85,25 +143,40 @@ return bestBed;
 void oneChromStrandBedToGene(struct sqlConnection *conn, 
 	char *chrom, char strand,
 	char *genePredTable, char *otherTable,  char *otherType,
-	struct hash *dupeHash, FILE *f)
+	struct hash *dupeHash, boolean doAll, FILE *f)
 /* Find most overlapping bed for each genePred in one
  * strand of a chromosome, and write it to file.  */
 {
 int chromSize = hChromSize(chrom);
 struct binKeeper *bk = binKeeperNew(0, chromSize);
 struct sqlResult *sr;
-char extra[256], **row;
+char extraBuf[256], *extra = NULL, **row;
 int rowOffset;
 struct bed *bedList = NULL, *bed;
+int bedNum;	/* Number of bed fields*/
 
 /* Read data into binKeeper. */
-safef(extra, sizeof(extra), "strand = '%c'", strand);
-sr = hChromQuery(conn, otherTable, chrom, extra, &rowOffset);
-if (startsWith("bed 12", otherType))
+if (startsWith("bed", otherType))
     {
+    char *numString = otherType + 4;
+    bedNum = atoi(numString);
+    if (bedNum < 6)	/* Just one strand in bed. */
+        {
+	if (strand == '-')
+	    {
+	    binKeeperFree(&bk);
+	    return;
+	    }
+	}
+    else
+	{
+	safef(extraBuf, sizeof(extraBuf), "strand = '%c'", strand);
+	extra = extraBuf;
+	}
+    sr = hChromQuery(conn, otherTable, chrom, NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
-	bed = bedLoad12(row+rowOffset);
+	bed = bedLoadN(row+rowOffset, bedNum);
 	slAddHead(&bedList, bed);
 	binKeeperAdd(bk, bed->chromStart, bed->chromEnd, bed);
 	}
@@ -111,6 +184,10 @@ if (startsWith("bed 12", otherType))
 else if (startsWith("genePred", otherType))
     {
     struct genePred *gp;
+    bedNum = 12;
+    safef(extraBuf, sizeof(extraBuf), "strand = '%c'", strand);
+    extra = extraBuf;
+    sr = hChromQuery(conn, otherTable, chrom, extra, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	gp = genePredLoad(row + rowOffset);
@@ -126,6 +203,7 @@ else
     }
 sqlFreeResult(&sr);
 
+
 /* Scan through gene preds looking for best overlap if any. */
 sr = hChromQuery(conn, genePredTable, chrom, extra, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -135,8 +213,21 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (!hashLookup(dupeHash, name))	/* Only take first occurrence. */
 	{
 	hashAdd(dupeHash, name, NULL);
-	if ((bed = mostOverlappingBed(bk, gp)) != NULL)
-	    fprintf(f, "%s\t%s\n", gp->name, bed->name);
+	if (doAll)
+	    {
+	    struct binElement *el, *elList = binKeeperFind(bk, gp->txStart, gp->txEnd);
+	    for (el = elList; el != NULL; el = el->next)
+		{
+		bed = el->val;
+		if (gpBedOverlap(gp, cdsOnly, intronsToo, bed) > 0)
+		    fprintf(f, "%s\t%s\n", gp->name, bed->name);
+		}
+	    }
+	else
+	    {
+	    if ((bed = mostOverlappingBed(bk, gp)) != NULL)
+		fprintf(f, "%s\t%s\n", gp->name, bed->name);
+	    }
 	}
     genePredFree(&gp);
     }
@@ -144,18 +235,19 @@ bedFreeList(&bedList);
 binKeeperFree(&bk);
 }
 
-void createTable(struct sqlConnection *conn, char *tableName)
+void createTable(struct sqlConnection *conn, char *tableName, boolean unique)
 /* Create our name/value table, dropping if it already exists. */
 {
+char *indexType =  (unique ? "UNIQUE" : "INDEX");
 struct dyString *dy = dyStringNew(512);
 dyStringPrintf(dy, 
 "CREATE TABLE  %s (\n"
 "    name varchar(255) not null,\n"
 "    value varchar(255) not null,\n"
 "              #Indices\n"
-"    PRIMARY KEY(name(16)),\n"
+"    %s(name(16)),\n"
 "    INDEX(value(16))\n"
-")\n",  tableName);
+")\n",  tableName, indexType);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 }
@@ -170,25 +262,38 @@ struct slName *chromList, *chrom;
 char *tempDir = ".";
 FILE *f;
 int fieldIx;
-struct hash *dupeHash = newHash(16);
+boolean doAll = optionExists("all");
 
 /* Process each strand of each chromosome into tab-separated file. */
-f = hgCreateTabFile(tempDir, outTable);
-chromList = hAllChromNames();
-for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+if (!createOnly)
     {
-    oneChromStrandBedToGene(conn, chrom->name, '+', genePredTable, 
-    	otherTable, otherType, dupeHash, f);
-    oneChromStrandBedToGene(conn, chrom->name, '-', genePredTable, 
-    	otherTable, otherType, dupeHash, f);
+    struct hash *dupeHash = newHash(16);
+    f = hgCreateTabFile(tempDir, outTable);
+    chromList = hAllChromNames();
+    for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+	{
+	if (verbose)
+	    printf("%s\n", chrom->name);
+	oneChromStrandBedToGene(conn, chrom->name, '+', genePredTable, 
+	    otherTable, otherType, dupeHash, doAll, f);
+	oneChromStrandBedToGene(conn, chrom->name, '-', genePredTable, 
+	    otherTable, otherType, dupeHash, doAll, f);
+	}
+    hashFree(&dupeHash);
     }
 
 /* Create and load table from tab file. */
-createTable(conn, outTable);
-hgLoadTabFile(conn, tempDir, outTable, &f);
+if (createOnly)
+    {
+    createTable(conn, outTable, !doAll);
+    }
+else if (!optionExists("noLoad"))
+    {
+    createTable(conn, outTable, !doAll);
+    hgLoadTabFile(conn, tempDir, outTable, &f);
+    hgRemoveTabFile(tempDir, outTable);
+    }
 
-/* Clean up and go home. */
-// hgRemoveTabFile(tempDir, outTable);
 }
 
 char *tdbType(struct sqlConnection *conn, char *track)
@@ -223,6 +328,11 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+verbose = optionExists("verbose");
+cdsOnly = optionExists("cds");
+intronsToo = optionExists("intronsToo");
+createOnly = optionExists("createOnly");
+
 if (argc != 5)
     usage();
 hgMapToGene(argv[1], argv[2], argv[3], argv[4]);
