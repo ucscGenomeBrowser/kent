@@ -21,7 +21,7 @@
 #include "web.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgPcr.c,v 1.8 2004/07/22 17:48:47 donnak Exp $";
+static char const rcsid[] = "$Id: hgPcr.c,v 1.9 2004/12/06 23:06:11 hiram Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -230,8 +230,6 @@ void doGetPrimers(char *db, char *organism, struct pcrServer *serverList,
 	boolean flipReverse)
 /* Put up form to get primers. */
 {
-struct pcrServer *server;
-
 redoDbAndOrgIfNoServer(serverList, &db, &organism);
 
 printf("<FORM ACTION=\"../cgi-bin/hgPcr\" METHOD=\"GET\" NAME=\"mainForm\">\n");
@@ -367,9 +365,7 @@ return ok;
 void dispatch()
 /* Look at input variables and figure out which page to show. */
 {
-char *userSeq;
 char *db, *organism;
-char *showPage = FALSE;
 int maxSize = 4000;
 int minPerfect = 15;
 int minGood = 15;
