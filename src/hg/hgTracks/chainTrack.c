@@ -13,8 +13,42 @@
 #include "chainLink.h"
 #include "chainDb.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.10 2003/07/07 21:06:47 braney Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.11 2003/07/09 22:31:21 braney Exp $";
 
+
+static void doQuery(struct sqlConnection *conn, 
+			char *fullName, struct lm *lm, struct hash *hash, 
+			int start, int end)
+{
+struct sqlResult *sr = NULL;
+char **row;
+struct linkedFeatures *lf;
+struct simpleFeature *sf;
+struct dyString *query = newDyString(1024);
+
+dyStringPrintf(query, 
+	"select chainId,tStart,tEnd,qStart from %sLink where ",fullName);
+hAddBinToQuery(start, end, query);
+dyStringPrintf(query, "tStart<%u and tEnd>%u", end, start);
+sr = sqlGetResult(conn, query->string);
+
+/* Loop through making up simple features and adding them
+ * to the corresponding linkedFeature. */
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    lf = hashFindVal(hash, row[0]);
+    if (lf != NULL)
+	{
+	lmAllocVar(lm, sf);
+	sf->start = sqlUnsigned(row[1]);
+	sf->end = sqlUnsigned(row[2]);
+	sf->grayIx = sqlUnsigned(row[3]); /* actually qStart */
+	slAddHead(&lf->components, sf);
+	}
+    }
+sqlFreeResult(&sr);
+dyStringFree(&query);
+}
 
 static void chainDraw(struct track *tg, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
@@ -24,15 +58,15 @@ static void chainDraw(struct track *tg, int seqStart, int seqEnd,
  * frees the simple features again. */
 {
 struct linkedFeatures *lf;
+struct lm *lm = lmInit(1024*4);
 struct simpleFeature *sf;
 struct hash *hash = newHash(0);	/* Hash of chain ids. */
-struct dyString *query = newDyString(1024);
 struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-struct lm *lm = lmInit(1024*4);
-char **row;
 double scale = ((double)(winEnd - winStart))/width;
 char fullName[64];
+int start, end, extra;
+boolean keepGoing;
+struct simpleFeature *components, *lastSf;
 
 if (tg->items != NULL)
     {
@@ -63,41 +97,56 @@ if (tg->items != NULL)
     sprintf(fullName, "%s_%s", chromName, tg->mapName);
     if (!hTableExistsDb(hGetDb(), fullName))
 	strcpy(fullName, tg->mapName);
-    dyStringPrintf(query, 
-	    "select chainId,tStart,tEnd,qStart from %sLink where ",fullName);
-    hAddBinToQuery(seqStart, seqEnd, query);
-    dyStringPrintf(query, "tStart<%u and tEnd>%u", seqEnd, seqStart);
-    sr = sqlGetResult(conn, query->string);
 
-    /* Loop through making up simple features and adding them
-     * to the corresponding linkedFeature. */
-    while ((row = sqlNextRow(sr)) != NULL)
+#define STARTSLOP	1
+    extra = STARTSLOP;
+    start = seqStart - extra;
+    end = seqEnd + extra;
+    doQuery(conn, fullName, lm,  hash, start, end);
+
+    for (lf = tg->items; lf != NULL; lf = lf->next)
+	if (lf->components != NULL)
+	    slSort(&lf->components, linkedFeaturesCmpStart);
+
+    for (lf = tg->items; lf != NULL; lf = lf->next)
 	{
-	lf = hashFindVal(hash, row[0]);
-	if (lf != NULL)
+	end = seqEnd + extra;
+	while (lf->end > end )
 	    {
-	    lmAllocVar(lm, sf);
-	    sf->start = sqlUnsigned(row[1]);
-	    sf->end = sqlUnsigned(row[2]);
-	    sf->grayIx = sqlUnsigned(row[3]);
-	    slAddHead(&lf->components, sf);
+	    for(lastSf=sf=lf->components;sf;lastSf=sf,sf=sf->next)
+		;
+
+	    if ( (lastSf != NULL) &&(lastSf->end > seqEnd))
+		break;
+
+	    extra *= 10;
+	    start = end;
+	    end = start + extra;
+	    doQuery(conn, fullName, lm,  hash, start, end);
+	    slSort(&lf->components, linkedFeaturesCmpStart);
+	    }
+
+	extra = STARTSLOP;
+	start = seqStart - extra; 
+	while((lf->start < start) && 
+	    (lf->components->start > seqStart))
+	{
+	    extra *= 10;
+	    end = start;
+	    start = end - extra;
+	    doQuery(conn, fullName, lm,  hash, start, end);
+	    slSort(&lf->components, linkedFeaturesCmpStart);
 	    }
 	}
 
-    /* Someday we may need to put in a sort on the simple features
-     * here.  For now though nobody cares. */
-    /* Besides we sort in linkedFeaturesDrawAt says braney */
     linkedFeaturesDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width,
 	    font, color, vis);
-
     }
 /* Cleanup time. */
 for (lf = tg->items; lf != NULL; lf = lf->next)
     lf->components = NULL;
 lmCleanup(&lm);
 freeHash(&hash);
-dyStringFree(&query);
-sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
