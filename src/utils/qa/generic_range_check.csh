@@ -70,6 +70,7 @@ while ( $del_num != $linenum )
 	if ($col_type =~ varchar* || \
 	$col_type =~ longblob || \
 	$col_type =~ enum* || \
+	$col_type =~ text || \
 	$col_type =~ char* ) then
                        set cnt_min="na"
                        set cnt_max="na"
