@@ -36,8 +36,8 @@ color 150,0,0
 type genePred ensMergeTierDPep
 
 track slamHuman
-shortLabel Slam Human
-longLabel SLAM gene predictions using human/mouse homology
+shortLabel SLAM Human
+longLabel SLAM Gene Predictions Using Human/Mouse Homology
 group genes
 priority 45.5
 visibility hide
@@ -46,8 +46,8 @@ altColor 175,150,128
 type genePred 
 
 track slamNonCodingHuman
-shortLabel Slam Non Coding Human
-longLabel SLAM predictions of human/mouse conserved non-coding regions
+shortLabel SLAM Non Coding Human
+longLabel SLAM Predictions of Human/Mouse Conserved Non-Coding Regions
 group compGeno
 priority 120
 visibility hide
@@ -69,7 +69,7 @@ type psl .
 
 track blastzTightRat
 shortLabel Tight Rat 
-longLabel Blastz Rat, Tight Subset of Best Alignments
+longLabel BLASTZ Rat, Tight Subset of Best Alignments
 group compGeno
 priority 140
 visibility hide
@@ -80,7 +80,7 @@ type psl xeno rn1
 
 track blastzBestRat
 shortLabel Best Rat
-longLabel Blastz Rat Best in Genome Alignments
+longLabel BLASTZ Rat Best in Genome Alignments
 group compGeno
 priority 141
 visibility hide
@@ -90,8 +90,8 @@ spectrum on
 type psl xeno rn1
 
 track blastzRn1
-shortLabel Blastz Rat
-longLabel Merged Blastz Rat Alignments
+shortLabel BLASTZ Rat
+longLabel Merged BLASTZ Rat Alignments
 group compGeno
 priority 142
 visibility hide
@@ -102,7 +102,7 @@ type psl xeno rn1
 
 track blastzBestMouse
 shortLabel Best Self 
-longLabel Blastz Self Best in Genome Alignments
+longLabel BLASTZ Self Best in Genome Alignments
 group varRep
 priority 156
 visibility hide
@@ -112,8 +112,8 @@ spectrum on
 type psl xeno mm2
 
 track blastzMm2
-shortLabel Blastz Self
-longLabel All Blastz Self Alignments
+shortLabel BLASTZ Self
+longLabel All BLASTZ Self Alignments
 group varRep
 priority 160
 visibility hide
@@ -124,7 +124,7 @@ type psl xeno mm2
 
 track blastzBestHuman
 shortLabel Best Human
-longLabel Blastz Human(Jun02) Best in Genome Alignments
+longLabel BLASTZ Human(Jun02) Best in Genome Alignments
 group compGeno
 priority 127
 visibility hide
@@ -135,7 +135,7 @@ type psl xeno hg12
 
 track blastzTightHuman
 shortLabel Tight Human
-longLabel Blastz Human(Jun02), Tight Subset of Alignments
+longLabel BLASTZ Human (Jun. 02), Tight Subset of Alignments
 group compGeno
 priority 124
 visibility hide
@@ -145,8 +145,8 @@ spectrum on
 type psl xeno hg12
 
 track blastzMmHg
-shortLabel Blastz Human
-longLabel Merged Blastz Human(Dec01) Freeze Alignments
+shortLabel BLASTZ Human
+longLabel Merged BLASTZ Human (Dec. 01) Freeze Alignments
 group compGeno
 priority 131
 visibility hide
@@ -156,8 +156,8 @@ spectrum on
 type psl xeno hg10
 
 track blatHuman
-shortLabel Human Blat
-longLabel Human(Dec01) Translated Blat Alignments
+shortLabel Human BLAT
+longLabel Human (Dec. 01) Translated BLAT Alignments
 group compGeno
 priority 122
 visibility hide
