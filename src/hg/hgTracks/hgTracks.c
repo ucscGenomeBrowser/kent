@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.902 2005/02/10 20:57:06 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.903 2005/02/11 23:37:00 hartera Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8440,8 +8440,8 @@ if (classTable != NULL && hTableExists(classTable))
             return sameClass;
         }
     conn = hAllocConn();
-    sprintf(query, "select class from %s where name = '%s'", classTable,
-lf->name);
+    safef(query, sizeof(query),
+         "select class from %s where name = \"%s\"", classTable, lf->name);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
         {
@@ -8508,7 +8508,8 @@ if (geneClasses)
    }
 if (hTableExists(classTable))
    {
-   sprintf(query, "select class from %s where name = '%s'", classTable, lf->name);   
+   safef(query, sizeof(query), 
+        "select class from %s where name = \"%s\"", classTable, lf->name);   
    sr = sqlGetResult(conn, query);
    if ((row = sqlNextRow(sr)) != NULL)
         {
