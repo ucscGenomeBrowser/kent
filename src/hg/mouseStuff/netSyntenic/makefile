@@ -9,4 +9,4 @@ O = netSyntenic.o
 
 netSyntenic: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/netSyntenic $O $(MYLIBS) $L
-#	strip $(HOME)/bin/$(MACHTYPE)/netSyntenic
+	strip $(HOME)/bin/$(MACHTYPE)/netSyntenic
