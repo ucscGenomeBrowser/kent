@@ -148,6 +148,7 @@ spectrum on
 color 0,60,120
 altColor 200,220,255
 exonArrows off
+showTopScorers 200
 type bed 12 .
 
 track phastCons4wayElements
@@ -160,6 +161,7 @@ spectrum on
 color 0,60,120
 altColor 200,220,255
 exonArrows off
+showTopScorers 200
 type bed 12 .
 
 track b100i100
@@ -177,4 +179,13 @@ priority 107
 group compGeno
 visibility dense
 type bed 4 +
+
+track pscreen
+shortLabel BDGP Insertions
+longLabel BDGP Gene Disruption Project P-element Insertion Locations
+group map
+priority 12
+visibility hide
+color 50,50,250
+type bed 6 +
 
