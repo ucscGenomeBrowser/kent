@@ -290,13 +290,22 @@ visibility hide
 color 12,12,120
 type genePred refPep refMrna
 
+track mgcAListGene
+shortLabel MGC A-List
+longLabel MGC A-List RefSeq Genes
+group genes
+priority 35.9
+visibility hide
+color 200,0,50
+type genePred
+
 track mgcGenes
 shortLabel MGC Genes
 longLabel Mammalian Gene Collection Full ORF mRNAs
 group genes
 priority 36
 visibility hide
-color 12,12,120
+color 34,139,34
 type genePred
 
 track genieAlt
@@ -624,16 +633,16 @@ longLabel Mammalian Gene Collection Incomplete mRNAs
 group rna
 priority 75
 visibility hide
-color 12,12,120
+color 120,12,12
 type psl
 
 track mgcPickedEst
 shortLabel MGC In-progress
-longLabel Mammalian Gene Collection EST in Sequencing Pipeline
+longLabel Mammalian Gene Collection ESTs in Sequencing Pipeline
 group rna
 priority 75.1
 visibility hide
-color 12,12,120
+color 12,100,120
 type psl est
 
 track mgcFailedEst
@@ -642,7 +651,7 @@ longLabel Mammalian Gene Collection Failed ESTs
 group rna
 priority 75.2
 visibility hide
-color 12,12,120
+color 120,12,0
 type psl est
 
 track mgcUnpickedEst
@@ -651,7 +660,7 @@ longLabel Mammalian Gene Collection EST Libraries
 group rna
 priority 75.3
 visibility hide
-color 12,12,120
+color 120,120,220
 type psl est
 
 track cpgIsland

@@ -1,5 +1,8 @@
+track mgcAListGene
+visibility pack
+
 track mgcGenes
-visibility full
+visibility pack
 
 track mgcIncompleteMrna
 visibility dense
