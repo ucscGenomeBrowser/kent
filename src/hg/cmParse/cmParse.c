@@ -841,10 +841,8 @@ while (lineFileNext(lf, &line, &lineSize))
     imreCloneStaticLoad(words, &im);
     if (hashLookup(badHash, im.accession))
         {
-	if (stringIn(im.source, "TPF"))
-	   {
+	if (stringIn("TPF", im.source))
 	   hashRemove(badHash, im.accession);
-	   }
 	else
 	    continue;
 	}
@@ -877,7 +875,7 @@ while (lineFileNext(lf, &line, &lineSize))
 	cl->line = cName->name;
 	slAddTail(&contig->cloneList, cl);
 	}
-    if (sameString(im.source, "TPF"))
+    if (stringIn("TPF", im.source))
         clonePos += 100;
     }
 printf("%d clones in Imre map missing from freeze\n", missingFromFreeze);
