@@ -8,7 +8,7 @@
 #include "fa.h"
 #include "sig.h"
 
-static char const rcsid[] = "$Id: faToTwoBit.c,v 1.1 2004/02/23 02:35:53 kent Exp $";
+static char const rcsid[] = "$Id: faToTwoBit.c,v 1.2 2004/02/23 06:08:33 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -165,7 +165,6 @@ DNA last4[4];	/* Holds few bases. */
 DNA *dna;
 int i, end;
 
-uglyf("Converting %s\n", seq->name);
 /* Allocate structure and fill in name. */
 AllocVar(twoBit);
 pt = AllocArray(twoBit->data, ubyteSize);
@@ -281,13 +280,31 @@ for (twoBit = twoBitList; twoBit != NULL; twoBit = twoBit->next)
 /* Write out index. */
 for (twoBit = twoBitList; twoBit != NULL; twoBit = twoBit->next)
     {
-    uglyf("indexing %s %d\n", twoBit->name, (int)offset);
     writeString(f, twoBit->name);
     writeOne(f, offset);
     offset += twoBitSizeInFile(twoBit);
     }
 }
 
+static void unknownToN(char *s, int size)
+/* Convert non ACGT characters to N. */
+{
+char c;
+int i;
+for (i=0; i<size; ++i)
+    {
+    c = s[i];
+    if (ntChars[c] == 0)
+        {
+	if (isupper(c))
+	    s[i] = 'N';
+	else
+	    s[i] = 'n';
+	}
+    }
+}
+
+	    
 void faToTwoBit(char *inFiles[], int inFileCount, char *outFile)
 /* Convert inFiles in fasta format to outfile in 2 bit 
  * format. */
@@ -305,12 +322,13 @@ for (i=0; i<inFileCount; ++i)
     ZeroVar(&seq);
     while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
         {
-	uglyf("Processing %s\n", seq.name);
 	if (hashLookup(uniqHash, seq.name))
 	    errAbort("Duplicate sequence name %s", seq.name);
 	hashAdd(uniqHash, seq.name, NULL);
 	if (noMask)
 	    faToDna(seq.dna, seq.size);
+	else
+	    unknownToN(seq.dna, seq.size);
 	twoBit = twoBitFromDnaSeq(&seq, !noMask);
 	slAddHead(&twoBitList, twoBit);
 	}
@@ -320,7 +338,6 @@ f = mustOpen(outFile, "wb");
 twoBitWriteHeader(twoBitList, f);
 for (twoBit = twoBitList; twoBit != NULL; twoBit = twoBit->next)
     {
-    uglyf("Writing %s at %ld\n", twoBit->name, ftell(f));
     twoBitWriteOne(twoBit, f);
     }
 carefulClose(&f);
