@@ -125,8 +125,8 @@ MgFont *font;
 char *s;
 
 font = tl.font = mgSmallFont();
-tl.leftLabelWidth = 100;
-tl.picWidth = 610;
+tl.leftLabelWidth = 110;
+tl.picWidth = 620;
 setPicWidth(cartOptionalString(cart, "pix"));
 }
 
@@ -5547,6 +5547,18 @@ if (withLeftLabels)
 return x;
 }
 
+void drawButtonBox(struct memGfx *mg, int x, int y, int w, int h)
+/* Draw a min-raised looking button. */
+{
+int light = shadesOfGray[1], mid = shadesOfGray[2], dark = shadesOfGray[4];
+mgDrawBox(mg, x, y, w, 1, light);
+mgDrawBox(mg, x, y+1, 1, h-1, light);
+mgDrawBox(mg, x+1, y+1, w-2, h-2, mid);
+mgDrawBox(mg, x+1, y+h-1, w-1, 1, dark);
+mgDrawBox(mg, x+w-1, y+1, 1, h-1, dark);
+}
+
+
 void makeActiveImage(struct trackGroup *groupList)
 /* Make image and image map. */
 {
@@ -5555,27 +5567,18 @@ MgFont *font = tl.font;
 struct memGfx *mg;
 struct tempName gifTn;
 char *mapName = "map";
-
 int fontHeight = mgFontLineHeight(font);
 int insideHeight = fontHeight-1;
-int gfxBorder = 1;
-int xOff = trackOffsetX();
+int insideX = trackOffsetX();
+int trackTabX = gfxBorder;
+int trackTabWidth = 11;
+int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
+int trackPastTabWidth = tl.picWidth - trackPastTabX;
 int pixWidth, pixHeight;
 int insideWidth;
 int y;
-
-/* Coordinates of open/close/hide buttons. */
-#ifdef SOMEDAY
-int openCloseHideWidth = 150;
-#endif
-int openCloseHideWidth = 0;
-int openWidth = 50, openOffset = 0;
-int closeWidth = 50, closeOffset = 50;
-int hideWidth = 50, hideOffset = 100;
-
 int typeCount = slCount(groupList);
 int leftLabelWidth = 0;
-
 int rulerHeight = fontHeight;
 int yAfterRuler = gfxBorder;
 int relNumOff;
@@ -5583,7 +5586,7 @@ int i;
 
 /* Figure out dimensions and allocate drawing space. */
 pixWidth = tl.picWidth;
-insideWidth = pixWidth-gfxBorder-xOff;
+insideWidth = pixWidth-gfxBorder-insideX;
 pixHeight = gfxBorder;
 if (withRuler)
     {
@@ -5622,9 +5625,10 @@ for (group = groupList; group != NULL; group = group->next)
 /* Draw left labels. */
 if (withLeftLabels)
     {
-    int inWid = xOff-gfxBorder*3;
-    int lastY;
-    mgDrawBox(mg, xOff-gfxBorder*2, 0, gfxBorder, pixHeight, mgFindColor(mg, 0, 0, 200));
+    int inWid = insideX-gfxBorder*3;
+    int nextY, lastY, trackIx = 0;
+
+    mgDrawBox(mg, insideX-gfxBorder*2, 0, gfxBorder, pixHeight, mgFindColor(mg, 0, 0, 200));
     mgSetClip(mg, gfxBorder, gfxBorder, inWid, pixHeight-2*gfxBorder);
     y = gfxBorder;
     if (withRuler)
@@ -5638,6 +5642,17 @@ if (withLeftLabels)
 	struct slList *item;
 	int h;
 	lastY = y;
+	if (group->limitedVis != tvHide)
+	    {
+	    nextY = lastY + group->totalHeight(group, group->limitedVis);
+	    if (withCenterLabels)
+		nextY += fontHeight;
+	    h = nextY - lastY - 1;
+	    drawButtonBox(mg, trackTabX, lastY, trackTabWidth, h);
+	    if (group->hasUi)
+		mapBoxTrackUi(trackTabX, lastY, trackTabWidth, 
+		    h,  group);
+	    }
 	switch (group->limitedVis)
 	    {
 	    case tvHide:
@@ -5661,29 +5676,23 @@ if (withLeftLabels)
 		y += group->lineHeight;
 		break;
 	    }
-	if (group->hasUi)
-	    {
-	    h = y - lastY;
-	    if (h > 0)
-		mapBoxTrackUi(0, lastY, inWid, h,  group);
-	    }
         }
     }
 
 /* Draw guidelines. */
 if (withGuidelines)
     {
-    int clWidth = insideWidth-openCloseHideWidth;
-    int ochXoff = xOff + clWidth;
+    int clWidth = insideWidth;
+    int ochXoff = insideX + clWidth;
     int height = pixHeight - 2*gfxBorder;
     int x;
     Color color = mgFindColor(mg, 220, 220, 255);
     int lineHeight = mgFontLineHeight(tl.font)+1;
 
-    mgSetClip(mg, xOff, gfxBorder, insideWidth, height);
+    mgSetClip(mg, insideX, gfxBorder, insideWidth, height);
     y = gfxBorder;
 
-    for (x = xOff+guidelineSpacing-1; x<pixWidth; x += guidelineSpacing)
+    for (x = insideX+guidelineSpacing-1; x<pixWidth; x += guidelineSpacing)
 	mgDrawBox(mg, x, y, 1, height, color);
     }
 
@@ -5691,9 +5700,9 @@ if (withGuidelines)
 if (withRuler)
     {
     y = 0;
-    mgSetClip(mg, xOff, y, insideWidth, rulerHeight);
+    mgSetClip(mg, insideX, y, insideWidth, rulerHeight);
     relNumOff = winStart;
-    mgDrawRulerBumpText(mg, xOff, y, rulerHeight, insideWidth, MG_BLACK, font,
+    mgDrawRulerBumpText(mg, insideX, y, rulerHeight, insideWidth, MG_BLACK, font,
 	relNumOff, winBaseCount, 0, 1);
 
     /* Make hit boxes that will zoom program around ruler. */
@@ -5724,7 +5733,7 @@ if (withRuler)
 		ns -= (ne - seqBaseCount);
 		ne = seqBaseCount;
 		}
-	    mapBoxJumpTo(ps+xOff,y,pe-ps,rulerHeight,
+	    mapBoxJumpTo(ps+insideX,y,pe-ps,rulerHeight,
 		chromName, ns, ne, "3x zoom");
 	    }
 	}
@@ -5734,17 +5743,19 @@ if (withRuler)
 /* Draw center labels. */
 if (withCenterLabels)
     {
-    int clWidth = insideWidth-openCloseHideWidth;
-    int ochXoff = xOff + clWidth;
-    mgSetClip(mg, xOff, gfxBorder, insideWidth, pixHeight - 2*gfxBorder);
+    int clWidth = insideWidth;
+    int ochXoff = insideX + clWidth;
+    mgSetClip(mg, insideX, gfxBorder, insideWidth, pixHeight - 2*gfxBorder);
     y = yAfterRuler;
     for (group = groupList; group != NULL; group = group->next)
         {
 	if (group->limitedVis != tvHide)
 	    {
 	    Color color = group->ixColor;
-	    mgTextCentered(mg, xOff, y+1, clWidth, insideHeight, color, font, group->longLabel);
-	    mapBoxToggleVis(xOff, y+1, clWidth, insideHeight, group);
+	    mgTextCentered(mg, insideX, y+1, 
+	    	clWidth, insideHeight, color, font, group->longLabel);
+	    mapBoxToggleVis(trackPastTabX, y+1, 
+	    	trackPastTabWidth, insideHeight, group);
 	    y += fontHeight;
 	    y += group->height;
 	    }
@@ -5759,9 +5770,9 @@ for (group = groupList; group != NULL; group = group->next)
 	{
 	if (withCenterLabels)
 	    y += fontHeight;
-	mgSetClip(mg, xOff, y, insideWidth, group->height);
+	mgSetClip(mg, insideX, y, insideWidth, group->height);
 	group->drawItems(group, winStart, winEnd,
-	    mg, xOff, y, insideWidth, 
+	    mg, insideX, y, insideWidth, 
 	    font, group->ixColor, group->limitedVis);
 	y += group->height;
 	}
@@ -5786,7 +5797,7 @@ for (group = groupList; group != NULL; group = group->next)
 		    if (!group->mapsSelf)
 			{
 			mapBoxHc(group->itemStart(group, item), group->itemEnd(group, item),
-			    0,y,pixWidth,height, group->mapName, 
+			    trackPastTabX,y,trackPastTabWidth,height, group->mapName, 
 			    group->mapItemName(group, item), 
 			    group->itemName(group, item));
 			}
@@ -5796,7 +5807,7 @@ for (group = groupList; group != NULL; group = group->next)
 	    case tvDense:
 		if (withCenterLabels)
 		    y += fontHeight;
-		mapBoxToggleVis(0,y,pixWidth,group->lineHeight,group);
+		mapBoxToggleVis(trackPastTabX,y,trackPastTabWidth,group->lineHeight,group);
 		y += group->lineHeight;
 		break;
 	    }
@@ -6423,15 +6434,17 @@ if (!hideControls)
     struct controlGrid *cg = NULL;
 
     printf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1 WIDTH=%d COLS=%d><TR>\n", 
-    	tl.picWidth, 26);
+    	tl.picWidth, 27);
     printf("<TD COLSPAN=6 ALIGN=CENTER>");
     printf("move start<BR>");
     cgiMakeButton("hgt.dinkLL", " < ");
     cgiMakeTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
     cgiMakeButton("hgt.dinkLR", " > ");
-    printf("<TD COLSPAN=14>");
+    printf("<TD COLSPAN=15>");
     fputs("Click on a feature for details. "
-	  "Click on base position to zoom in around cursor.", stdout);
+	  "Click on base position to zoom in around cursor. "
+	  "Click on left mini-buttons for track-specific options." 
+	  , stdout);
     printf("<TD COLSPAN=6 ALIGN=CENTER>");
     printf("move end<BR>");
     cgiMakeButton("hgt.dinkRL", " < ");
