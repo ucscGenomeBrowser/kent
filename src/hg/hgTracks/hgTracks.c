@@ -102,6 +102,8 @@ struct trackLayout
     int picWidth;		/* Width of entire picture. */
     } tl;
 
+
+
 void setPicWidth(char *s)
 /* Set pixel width from ascii string. */
 {
@@ -6781,6 +6783,49 @@ boolean findGenomePos(char *spec, char **retChromName,
 struct hgPositions *hgp;
 struct hgPos *pos;
 struct dyString *ui;
+char firststring[512];
+char secondstring[512];
+int commaspot;
+char *firstChromName;
+int firstWinStart;
+int firstWinEnd;
+char *secondChromName;
+int secondWinStart;
+int secondWinEnd;
+boolean firstSuccess;
+boolean secondSuccess;
+
+/* begin MarkE code */
+
+if (strstr(spec,",") != NULL)
+    {
+    commaspot = strcspn(spec,",");
+    strncpy(firststring,spec,commaspot);
+    firststring[commaspot] = '\0';
+    strncpy(secondstring,spec + commaspot + 1,strlen(spec));
+    firstSuccess = findGenomePos(firststring,&firstChromName,&firstWinStart,&firstWinEnd);
+    secondSuccess = findGenomePos(secondstring,&secondChromName,&secondWinStart,&secondWinEnd); 
+    if (firstSuccess == FALSE)
+	{
+	errAbort("%s not uniquely determined.",firststring);
+	return TRUE;
+	}
+    if (secondSuccess == FALSE)
+	{
+	errAbort("%s not uniquely determined.",secondstring);
+	return TRUE;
+	}
+    if (strcmp(firstChromName,secondChromName) != 0)
+	{
+	errAbort("Sites occur on different chromosomes: %s,%s.",firstChromName,secondChromName);
+	return TRUE;
+	}
+    *retChromName = firstChromName;
+    *retWinStart = min(firstWinStart,secondWinStart);
+    *retWinEnd = max(firstWinEnd,secondWinEnd);
+    return TRUE;
+    }
+/* end MarkE code */
 
 hgp = hgPositionsFind(spec, "", TRUE, cart);
 if (hgp == NULL || hgp->posCount == 0)
