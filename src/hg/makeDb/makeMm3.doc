@@ -1848,3 +1848,68 @@ hgsql <<end
 load data local infile 'affyGnfU74C' into table affyGnfU74C;
 end
 
+MAKE ALIAS TABLES FOR hgFind
+----------------------------------
+
+o Create alias tables to facilitate hgFind.
+
+  First create tables of kgXref, kgAlias and kgProtAlias in mm3, using
+
+	kgXref.sql
+	kgAlias.sql  
+	kgProtAlias.sql  
+
+o Build kgXref table
+ 
+  Generate xref .tab file for KG
+
+	kgXref mm3 proteins0305
+
+  Load it into mySQL
+
+	load data local infile "kgXref.tab" into table mm3.kgXref;
+  
+o Build gene aliases
+
+  Generate aliases from hugo, etc
+
+	kgAliasM mm3 proteins0305
+
+  Generate gene aliases from SWISS-PROT data 
+
+    kgAliasP mm3 /cluster/store5/swissprot/0305/sprot.dat      sp.lis
+    kgAliasP mm3 /cluster/store5/swissprot/0305/trembl.dat     tr.lis
+    kgAliasP mm3 /cluster/store5/swissprot/0305/trembl_new.dat new.lis
+    cat sp.lis tr.lis new.lis |sort|uniq >kgAliasP.tab
+    rm  sp.lis tr.lis new.lis 
+
+  Generate gene aliases from RefSeq data
+
+    	kgAliasRefseq mm3 
+
+  Concatenate all 3 files
+
+	cat kgAliasM.tab kgAliasRefseq.tab kgAliasP.tab|sort|uniq > kgAlias.tab
+
+  Load it into mySQL table
+
+	load data local infile "kgAlias.tab" into table mm3.kgAlias;
+
+o Build protein aliases
+
+  Generate protein aliases
+
+	kgProtAlias mm3 proteins0305
+
+  Generate protein aliases from NCBI data
+
+	kgProtAliasNCBI mm3
+
+  Concatenate both files
+
+	cat kgProtAliasNCBI.tab kgProtAlias.tab|sort|uniq > kgProtAliasBoth.tab
+
+  Load it into mySQL tables
+
+	load data local infile "kgProtAliasBoth.tab" into table mm3.kgProtAlias;
+
