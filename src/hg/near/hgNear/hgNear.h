@@ -113,6 +113,13 @@ struct column
 
       /* The GO column uses this. */
    struct sqlConnection *goConn;  /* Connection to go database. */
+
+   /* Association tables use this. */
+   char *tablesUsed;	/* Space delimited list of tables. */
+   char *queryFull;	/* Query that returns 2 columns key/value. */
+   char *queryOne;	/* Query that returns value given key. */
+   char *invQueryOne;	/* Query that returns key given value. */
+   boolean protKey;	/* Use protein rather than geneId for key. */
    };
 
 struct order
@@ -314,8 +321,9 @@ boolean simpleTableExists(struct column *col, struct sqlConnection *conn);
 void lookupAdvFilterControls(struct column *col, struct sqlConnection *conn);
 /* Print out controls for advanced filter. */
 
-void lookupTypeMethods(struct column *col, char *table, char *key, char *val);
-/* Set up the methods for a simple lookup column. */
+struct searchResult *lookupTypeSimpleSearch(struct column *col, 
+    struct sqlConnection *conn, char *search);
+/* Search lookup type column. */
 
 struct searchResult *knownGeneSearchResult(struct sqlConnection *conn, 
 	char *kgID, char *alias);
@@ -451,6 +459,10 @@ void setupColumnNum(struct column *col, char *parameters);
 
 void setupColumnLookup(struct column *col, char *parameters);
 /* Set up column that just looks up one field in a table
+ * keyed by the geneId. */
+
+void setupColumnAssociation(struct column *col, char *parameters);
+/* Set up a column that looks for an association table 
  * keyed by the geneId. */
 
 void setupColumnAcc(struct column *col, char *parameters);

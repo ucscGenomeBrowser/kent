@@ -100,14 +100,16 @@ noKeys on
 searchLabel Known Gene Descriptions
 colWidth 50
 
-name domains
+name pfamDomains
 shortLabel Pfam Domains
-longLabel The domain structure of SWISSPROT and TrEMBL proteins 
+longLabel Protein family domain structure.
 priority 9
 visibility off
-type lookup kgDomain kgID domains
-search fuzzy
-colWidth 50
+type association proteins072003.pfamXref proteins072003.pfamDesc
+queryFull select swissDisplayID,description from proteins072003.pfamXref,proteins072003.pfamDesc where pfamXref.pfamAC = pfamDesc.pfamAC
+queryOne select description from proteins072003.pfamXref,proteins072003.pfamDesc where swissDisplayID = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC order by description
+invQueryOne select swissDisplayID from proteins072003.pfamXref,proteins072003.pfamDesc where description = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC
+protKey on
 
 name go
 shortLabel Gene Ontology
@@ -116,4 +118,3 @@ priority 10
 visibility off
 type go
 colWidth 50
-

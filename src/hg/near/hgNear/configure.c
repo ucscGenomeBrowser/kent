@@ -12,7 +12,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.23 2003/09/07 19:28:31 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.24 2003/09/11 05:31:19 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -271,22 +271,6 @@ void doConfigShowAll(struct sqlConnection *conn, struct column *colList)
 {
 configAllVis(conn, colList, "on");
 }
-
-#ifdef OLD
-void doConfigSaveCurrent(struct sqlConnection *conn, struct column *colList)
-/* Respond to Save Current Settings buttin in configuration page. */
-{
-struct hashEl *colVars;
-char wild[64];
-struct dyString *dy;
-
-safef(wild, sizeof(wild), "%s*", colConfigPrefix);
-colVars = cartFindLike(cart, wild);
-dy = hashElsToSettings(colVars);
-cartSetString(cart, savedColSettingsVarName, dy->string);
-doConfigure(conn, colList, NULL);
-}
-#endif /* OLD */
 
 void doConfigUseSaved(struct sqlConnection *conn, struct column *colList)
 /* Respond to Use Saved Settings button in configuration page. */

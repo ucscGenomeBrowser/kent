@@ -16,7 +16,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.65 2003/09/10 04:46:44 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.66 2003/09/11 05:31:19 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -250,9 +250,6 @@ if (fileName == NULL)
     return NULL;
 return hashWordsInFile(fileName, 16);
 }
-
-char *cellLookupVal(struct column *col, struct genePos *gp, struct sqlConnection *conn);
-/* Get a field in a table defined by col->table, col->keyField, col->valField. */
 
 char *cellLookupVal(struct column *col, struct genePos *gp, 
 	struct sqlConnection *conn)
@@ -500,7 +497,7 @@ col->cellPrint = cellSelfLinkPrint;
 
 /* ---- Simple table lookup type columns ---- */
 
-static struct searchResult *lookupTypeSimpleSearch(struct column *col, 
+struct searchResult *lookupTypeSimpleSearch(struct column *col, 
     struct sqlConnection *conn, char *search)
 /* Search lookup type column. */
 {
@@ -599,32 +596,21 @@ hashFree(&keyHash);
 return list;
 }
 
-void lookupTypeMethods(struct column *col, char *table, char *key, char *val)
-/* Set up the methods for a simple lookup column. */
-{
-col->table = cloneString(table);
-col->keyField = cloneString(key);
-col->valField = cloneString(val);
-col->exists = simpleTableExists;
-col->cellVal = cellLookupVal;
-if (columnSetting(col, "search", NULL))
-    {
-    col->simpleSearch = lookupTypeSimpleSearch;
-    }
-col->filterControls = lookupAdvFilterControls;
-col->advFilter = lookupAdvFilter;
-}
-
 void setupColumnLookup(struct column *col, char *parameters)
 /* Set up column that just looks up one field in a table
  * keyed by the geneId. */
 {
-char *table = nextWord(&parameters);
-char *keyField = nextWord(&parameters);
-char *valField = nextWord(&parameters);
-if (valField == NULL)
+col->table = cloneString(nextWord(&parameters));
+col->keyField = cloneString(nextWord(&parameters));
+col->valField = cloneString(nextWord(&parameters));
+if (col->valField == NULL)
     errAbort("Not enough fields in type lookup for %s", col->name);
-lookupTypeMethods(col, table, keyField, valField);
+col->exists = simpleTableExists;
+col->cellVal = cellLookupVal;
+if (columnSetting(col, "search", NULL))
+    col->simpleSearch = lookupTypeSimpleSearch;
+col->filterControls = lookupAdvFilterControls;
+col->advFilter = lookupAdvFilter;
 }
 
 /* ---- Distance table type columns ---- */
@@ -926,6 +912,8 @@ if (sameString(type, "num"))
     setupColumnNum(col, s);
 else if (sameString(type, "lookup"))
     setupColumnLookup(col, s);
+else if (sameString(type, "association"))
+    setupColumnAssociation(col, s);
 else if (sameString(type, "acc"))
     setupColumnAcc(col, s);
 else if (sameString(type, "distance"))
