@@ -237,6 +237,7 @@ BEGIN { name="" }
     mkdir -p /cluster/bluearc/monDom1
     #	copy to bluearc for cluster run
     cp -Rp ./chunks500k /cluster/bluearc/monDom1
+    #	this business in /cluster/bluearc/monDom1/ was later removed
     #	and to iservers:
     ssh kkr1u00
     mkdir /iscratch/i/monDom1
@@ -525,4 +526,83 @@ Submission to last job:          1309s      21.82m     0.36h    0.02d
     #	sequence
     # Now clean up the unmasked split scaffolds to avoid confusion later.
     rm -r chunks500k scaffoldsSplit.fa jkStuff/scaffoldsSplit.lft
+
+# PUT SEQUENCE ON SCRATCH FOR BLASTZ (DONE - 2004-12-07 - Hiram)
+    ssh kksilo
+    cd /tmp
+    #	Make sure you have enough room for this: (~ 4 Gb)
+    df -h .
+    #	Filesystem            Size  Used Avail Use% Mounted on
+    #	/dev/sda2              32G   23G  8.0G  74% /
+
+    #	split scaffolds that are over 500,000
+    faSplit size /cluster/data/monDom1/maskedScaffolds.fa 500000 -oneFile \
+	scaf_ \
+	-lift=/cluster/data/monDom1/jkStuff/chunkedScaffolds.lft
+
+    mkdir /cluster/bluearc/scratch/monDom1
+    cd /cluster/bluearc/scratch/monDom1
+    mkdir chunks
+    #	Collect the split scaffolds into reasonably sized chunks
+    #	This produces over 5000 files of size 500,000 
+    #	a few smaller, a few larger, 7627 total files
+    faSplit about /tmp/scaf_.fa 200000 chunks/chunk_
+    #	done with this temp file
+    rm /tmp/scaf_.fa
+    #	a list for convenience
+    ls -1S chunks > chunk.list
+    cp -p /cluster/data/monDom1/jkStuff/chunkedScaffolds.lft .
+    cp -p /cluster/data/monDom1/monDom1.2bit .
+    #	Create our lineage specific repeat files from the repeat masker
+    #	outputs.  The sed changes the name from the time the RM run was
+    #	done, the same split is in effect, it is just a name change.
+    mkdir linSpecRep.notInOpossum
+    ls /cluster/data/monDom1/RMOut | while read FA_OUT
+    do
+	sed -e "s/scaffoldsSplit/scaf_/" \
+	    /cluster/data/monDom1/RMOut/${FA_OUT} > \
+	    linSpecRep.notInOpossum/${FA_OUT}.spec
+	echo ${FA_OUT}
+    done
+    #	request rsync of scratch to the cluster
+
+# PRODUCING GENSCAN PREDICTIONS (TBD)
+    ssh kolossus
+    cd /scratch/monDom1
+    time maskOutFa maskedScaffolds.fa hard hardMaskedScaffolds.fa
+    #	Clean out the /cluster/bluearc/monDom1/ files that were used
+    #	during repeat masking, then, this copy
+    cp -p hardMaskedScaffolds.fa /cluster/bluearc/monDom1
+    cd /cluster/bluearc/monDom1
+    mkdir hardChunks
+    faSplit about hardMaskedScaffolds.fa 200000 hardChunks/chunk_
+    #	This leaves some rather large pieces, will have to see if
+    #	genscan can handle it.  (2086 files)
+
+    ssh hgwdev
+    mkdir /cluster/data/monDom1/bed/genscan
+    cd /cluster/data/monDom1/bed/genscan
+    # Check out hg3rdParty/genscanlinux to get latest genscan:
+    cvs co hg3rdParty/genscanlinux
+    # Make 3 subdirectories for genscan to place output files
+    mkdir gtf pep subopt
+
+    ssh kk9
+    cd /cluster/data/monDom1/bed/genscan
+    ls -1S /cluster/bluearc/monDom1/hardChunks/chunk*.fa > chunks.list
+    cat << '_EOF_' > gsub
+#LOOP
+gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    gensub2 chunks.list single gsub jobList
+    para create jobList
+    para try, check, push, check, ...
+XXXX - RUNNING - 2004-12-07
+#Completed: 184 of 185 jobs
+#Crashed: 1 jobs
+#Average job time:                  26s       0.43m     0.01h    0.00d
+#Longest job:                       55s       0.92m     0.02h    0.00d
+#Submission to last job:           357s       5.95m     0.10h    0.00d
 
