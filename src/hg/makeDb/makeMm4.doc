@@ -4032,7 +4032,7 @@ done
     # and symlink these .wib files into /gbdb
     ln -s `pwd`/wigData5_1K/*.wib /gbdb/mm4/wib/gc5Base
 
-# MOUSE AFFYMETRIX MOE430 TRACK (in progress, 2004-04-16, hartera)
+# MOUSE AFFYMETRIX MOE430 TRACK (DONE, 2004-04-19, hartera)
     mkdir -p /projects/compbio/data/microarray/affyMouse
     # Download MOE430A and MOE430B consensus sequences from Affymetrix web site
     # http://www.affymetrix.com/support/technical/byproduct.affx?product=moe430
