@@ -16,25 +16,24 @@ transcripts's details page to access the NCBI AceView web site. <\P>
 <P>Each AceView transcript model belongs to a gene cluster that is categorized 
 into a <b>Prediction Class</b> of main or putative.</P>
 
-<P><b>Prediction Class:</b> main 
+<P><b>Prediction Class:</b> main
 <BR> Class of genes that includes the protein coding genes (defined
 here by CDS &gt; 100 amino acids) and all genes with at least one
-well-defined standard intron, i.e. an intron with a gt-ag or gc-ag
+well-defined standard intron, i.e., an intron with a GT-AG or GC-AG
 boundary, supported by at least one clone matching exactly, and with
-no uncalled base, the 16 bp bordering the intron (identical to the
-genome over the last and first 8 bp of the successive exons). Also
-included are some genes for which the CDS is smaller than 100
-aminoacid, provided they have a NCBI RefSeq sequence (NM_#) or an
-OMIM, or they encode a protein with BlastP homology (&lt; 10e-3) to
-a cDNA-supported nematode AceView protein.</P>
-
+no ambigious bases, and the 8 bases on either side of the intron are
+identical to the genome. Also included are some genes for which the
+CDS is smaller than 100 amino acids, provided they have a NCBI RefSeq
+sequence (NM_#) or an OMIM identifier, or they encode a protein with
+BlastP homology (&lt; 1e-3) to a cDNA-supported nematode AceView protein.</P>
+                                                                                                                                              
 <P><b>Prediction Class:</b> putative
 <BR>Class of genes that have no standard intron and do not
-encode CDS of more than 100 aminoacids, yet they belong to a category
+encode CDS of more than 100 amino acids, yet they belong to a category
 that may be useful not to disregard completely. They may be of two
-types: either they are supported by more than 6 cDNA clones, or they
+types: either they are supported by more than six cDNA clones, or they
 encode a putative protein with an interesting annotation, for example
-a PFAM motif, a BlastP hit to another species than itself (&lt; 10e-3), 
+a PFAM motif, a BlastP hit to another species than itself (&lt; 1e-3),
 a transmembrane domain or other rare and meaningful domains
 identified by Psort2, or a highly probable localization in a cell
 compartment (excluding cytoplasm and nucleus).</P>
