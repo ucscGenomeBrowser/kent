@@ -6,6 +6,7 @@
 #include "portable.h"
 #include "hash.h"
 #include "psl.h"
+#include "xAli.h"
 #include "rmskOut.h"
 #include "chromInserts.h"
 
@@ -256,8 +257,20 @@ for (i=0; i<sourceCount; ++i)
 fclose(dest);
 }
 
+void freePslOrXa(struct psl *psl, boolean isXa)
+/* Free a psl that may be extended. */
+{
+if (isXa)
+    {
+    struct xAli *xa = (struct xAli *)psl;
+    xAliFree(&xa);
+    }
+else
+    pslFree(&psl);
+}
+
 void liftPsl(char *destFile, struct hash *liftHash, int sourceCount, char *sources[],
-	boolean querySide)
+	boolean querySide, boolean isExtended)
 /* Lift up coordinates in .psl file. */
 {
 FILE *dest = mustOpen(destFile, "w");
@@ -267,6 +280,7 @@ struct lineFile *lf;
 int lineSize, wordCount;
 char *line, *words[32];
 struct psl *psl;
+struct xAli *xa;
 unsigned *starts;
 struct liftSpec *spec;
 int offset;
@@ -288,8 +302,17 @@ for (i=0; i<sourceCount; ++i)
 	}
     if (!pipeOut) printf("Lifting %s\n", source);
     lf = pslFileOpen(source);
-    while ((psl = pslNext(lf)) != NULL)
-	{
+    for (;;)
+        {
+	if (isExtended)
+	    {
+	    xa = xAliNext(lf);
+	    psl = (struct psl *)xa;
+	    }
+	else
+	    psl = pslNext(lf);
+	if (psl == NULL)
+	    break;
 	if (dots > 0)
 	    {
 	    if (--dotMod <= 0)
@@ -308,7 +331,7 @@ for (i=0; i<sourceCount; ++i)
 	    {
 	    if (!carryMissing)
 	        {
-		pslFree(&psl);
+		freePslOrXa(psl, isExtended);
 		continue;
 		}
 	    }
@@ -355,12 +378,19 @@ for (i=0; i<sourceCount; ++i)
 		psl->tName = spec->newName;
 		}
 	    }
-	pslTabOut(psl, dest);
+	if (isExtended)
+	    {
+	    xAliTabOut(xa, dest);
+	    }
+	else
+	    {
+	    pslTabOut(psl, dest);
+	    }
 	if (querySide)
 	    psl->qName = seqName;
 	else
 	    psl->tName = seqName;
-	pslFree(&psl);
+	freePslOrXa(psl, isExtended);
 	}
     lineFileClose(&lf);
     }
@@ -751,11 +781,12 @@ if (endsWith(destType, ".out"))
     liftHash = hashLift(lifts);
     liftOut(destFile, liftHash, sourceCount, sources);
     }
-else if (endsWith(destType, ".psl") || endsWith(destType, ".pslx"))
+else if (endsWith(destType, ".pslx") || endsWith(destType, ".xa") || endsWith(destType, ".psl"))
     {
     rmChromPart(lifts);
     liftHash = hashLift(lifts);
-    liftPsl(destFile, liftHash, sourceCount, sources, cgiBoolean("pslQ") || cgiBoolean("pslq"));
+    liftPsl(destFile, liftHash, sourceCount, sources, 
+    	cgiBoolean("pslQ") || cgiBoolean("pslq"), !endsWith(destType, ".psl"));
     }
 else if (endsWith(destType, ".agp"))
     {
