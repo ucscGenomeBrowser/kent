@@ -21,6 +21,7 @@ DIRS = \
 	catUncomment \
 	ccCp \
 	chopFaLines \
+	countChars \
 	detab \
 	dnsInfo \
 	endsInLf \
@@ -67,7 +68,6 @@ DIRS = \
 
 BAD_DIRS= \
 	ccCpLock \
-	countChars \
 	geneStarts \
 	jimgrep \
 	jkShell \
