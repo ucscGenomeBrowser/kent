@@ -1370,8 +1370,8 @@ spectrum on
 type bed 6
 
 track HInvGeneMrna
-shortLabel H-INV mRNA
-longLabel H-Invitational Gene mRNA Alignment
+shortLabel H-Inv
+longLabel H-Invitational Genes mRNA Alignments
 group rna
 priority 67.5
 visibility hide
