@@ -35,7 +35,7 @@
 #include "hgText.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.154 2004/08/06 22:30:51 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.155 2004/08/18 21:59:35 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -2186,7 +2186,7 @@ if (db != NULL && table != NULL)
     if (sameString(customTrackPseudoDb, db))
 	{
 	struct customTrack *ct = lookupCt(table);
-	if (ct->wiggle)
+	if (ct && ct->wiggle)
 	    typeWiggle = FALSE;	/*	TEMPORARY, until we handle this case */
 				/*	this is actually the TRUE condition */
 	}
@@ -3404,7 +3404,15 @@ gff->score = bed->score;
 gff->strand = bed->strand[0];
 gff->frame = frame;
 gff->group = cloneString(txName);
-gff->geneId = cloneString(bed->name);
+if (bed->name)
+    gff->geneId = cloneString(bed->name);
+else
+    {
+    char name[64];
+    safef(name, sizeof(name), "%s.%d", bed->chrom, bed->chromStart);
+    gff->geneId = cloneString(name);
+    }
+
 slAddHead(pGffList, gff);
 }
 
@@ -3465,8 +3473,17 @@ char txName[256];
 for (bed = bedList;  bed != NULL;  bed = bed->next)
     {
     /* Enforce unique transcript_ids. */
-    struct hashEl *hel = hashLookup(nameHash, bed->name);
-    int dupCount = (hel != NULL ? ptToInt(hel->val) : 0);
+    char name[64];
+    struct hashEl *hel = NULL;
+    int dupCount = 0;
+    if (bed->name)
+	hel = hashLookup(nameHash, bed->name);
+    else
+	{
+	safef(name, sizeof(name), "%s.%d", bed->chrom, bed->chromStart);
+	hel = hashLookup(nameHash, name);
+	}
+    dupCount = (hel != NULL ? ptToInt(hel->val) : 0);
     if (dupCount > 0)
 	{
 	safef(txName, sizeof(txName), "%s_dup%d", bed->name, dupCount);
@@ -3474,8 +3491,16 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	}
     else
 	{
-	safef(txName, sizeof(txName), "%s", bed->name);
-	hashAddInt(nameHash, bed->name, 1);
+	if (bed->name)
+	    {
+	    safef(txName, sizeof(txName), "%s", bed->name);
+	    hashAddInt(nameHash, bed->name, 1);
+	    }
+	else
+	    {
+	    safef(txName, sizeof(txName), "%s", name);
+	    hashAddInt(nameHash, name, 1);
+	    }
 	}
     if (hti->hasBlocks && hti->hasCDS)
 	{
@@ -3789,7 +3814,9 @@ if ((fbQual == NULL) || (fbQual[0] == 0))
     {
     for (bedPtr = bedList;  bedPtr != NULL;  bedPtr = bedPtr->next)
 	{
-	char *ptr = strchr(bedPtr->name, ' ');
+	char *ptr = NULL;
+	if (bedPtr->name)
+	    ptr = strchr(bedPtr->name, ' ');
 	if (ptr != NULL)
 	    *ptr = 0;
 	if (! doCt)
@@ -3910,10 +3937,12 @@ for (bedPtr = bedList;  bedPtr != NULL;  bedPtr = bedPtr->next)
 	   cartSessionId(cart));
     snprintf(posBuf, sizeof(posBuf), "%s:%d-%d", bedPtr->chrom,
 	     bedPtr->chromStart+1, bedPtr->chromEnd);
-    if (sameString(bedPtr->name, posBuf))
+    if (bedPtr->name && sameString(bedPtr->name, posBuf))
 	printf(" TARGET=_blank> %s <BR>\n", posBuf);
-    else
+    else if (bedPtr->name)
 	printf(" TARGET=_blank> %s %s <BR>\n", bedPtr->name, posBuf);
+    else
+	printf(" TARGET=_blank> %s <BR>\n", posBuf);
     itemCount++;
     }
 bedFreeList(&bedList);
