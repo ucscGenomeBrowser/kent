@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "options.h"
 #include "dnautil.h"
+#include "memgfx.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -20,10 +21,10 @@ errAbort(
 void test(char *in)
 /* test - Test something. */
 {
-int len = strlen(in);
-int trimSize;
-trimSize = maskHeadPolyT(in, len);
-printf("%s - trimmed %d\n", in, trimSize);
+MgFont *font = mgSmallFont();
+printf("small font height = %d\n", mgFontLineHeight(font));
+font = mgSmallishFont();
+printf("smallish font height = %d\n", mgFontLineHeight(font));
 }
 
 int main(int argc, char *argv[])
