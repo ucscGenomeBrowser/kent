@@ -122,6 +122,7 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 
 #define confVarName "near.configure"	/* Configuration button */
 #define countVarName "near.count"	/* How many items to display. */
+#define colInfoVarName "near.colInfo"	/* Display column info. */
 #define searchVarName "near.search"	/* Search term. */
 #define idVarName "near.id"         	
 	/* Overrides searchVarName if it exists */
@@ -377,6 +378,9 @@ void setupColumnKnownDetails(struct column *col, char *parameters);
 
 void setupColumnKnownName(struct column *col, char *parameters);
 /* Set up a column that looks up name to display, and selects on a click. */
+
+void setupColumnSwissProt(struct column *col, char *parameters);
+/* Set up a column that protein name and links to SwissProt. */
 
 void setupColumnExpRatio(struct column *col, char *parameters);
 /* Set up expression ration type column. */

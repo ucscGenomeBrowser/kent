@@ -19,7 +19,7 @@ shortLabel Protein
 longLabel SwissProt protein display ID
 priority 2.1
 visibility off
-type lookup  kgXref kgID spDisplayID
+type swissProt  kgXref kgID spDisplayID
 search fuzzy
 
 name expDense

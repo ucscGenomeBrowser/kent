@@ -10,7 +10,7 @@ O = $X.o advSearch.o configure.o expRatio.o getSeq.o \
 
 my: compile
 	mv $X /usr/local/apache/cgi-bin-$(USER)/$X
-	cp columnDb.ra /usr/local/apache/cgi-bin-$(USER)
+	rsync -ar --delete hgNearData /usr/local/apache/cgi-bin-$(USER)/
 
 alpha: compile
 	mv $X /usr/local/apache/cgi-bin/$X

@@ -15,9 +15,9 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.52 2003/09/03 18:33:21 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.53 2003/09/03 20:10:31 kent Exp $";
 
-char *excludeVars[] = { "submit", "Submit", confVarName, 
+char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
 	saveCurrentConfName, useSavedConfName,
 	getSeqVarName, getSeqPageVarName, getGenomicSeqVarName, getTextVarName, 
@@ -237,6 +237,20 @@ while (--count >= 0)
     hPrintf(" ");
 }
 
+void colInfoAnchor(struct column *col)
+/* Print anchor tag that leads to column info page. */
+{
+hPrintf("<A HREF=\"../cgi-bin/hgNear?%s&%s=%s\">", 
+	cartSidUrlString(cart), colInfoVarName, col->name);
+}
+
+void colInfoLink(struct column *col)
+/* Print link to column. */
+{
+colInfoAnchor(col);
+hPrintf("%s</A>", col->shortLabel);
+}
+
 void labelSimplePrint(struct column *col)
 /* This just prints cell->shortLabel.  If colWidth is
  * set it will add spaces, center justifying it.  */
@@ -250,14 +264,16 @@ hPrintf("<TH VALIGN=BOTTOM><B><PRE>");
  * makes the expression display less effective so we try
  * to minimize it.  -jk */
 if (colWidth == 0)
-    hPrintf("%s", col->shortLabel);
+    {
+    colInfoLink(col);
+    }
 else
     {
     int labelLen = strlen(col->shortLabel);
     int diff = colWidth - labelLen;
     if (diff < 0) diff = 0;
     hPrintSpaces(diff/2);
-    hPrintf("%s", col->shortLabel);
+    colInfoLink(col);
     hPrintSpaces((diff+1)/2);
     }
 hPrintf("</PRE></B></TH>");
@@ -1093,6 +1109,8 @@ else if (sameString(type, "knownName"))
     setupColumnKnownName(col, s);
 else if (sameString(type, "expRatio"))
     setupColumnExpRatio(col, s);
+else if (sameString(type, "swissProt"))
+    setupColumnSwissProt(col, s);
 else
     errAbort("Unrecognized type %s for %s", col->type, col->name);
 freez(&dupe);
@@ -1102,7 +1120,7 @@ freez(&dupe);
 struct column *getColumns(struct sqlConnection *conn)
 /* Return list of columns for big table. */
 {
-char *raName = "columnDb.ra";
+char *raName = "hgNearData/columnDb.ra";
 struct lineFile *lf = lineFileOpen(raName, TRUE);
 struct column *col, *colList = NULL;
 struct hash *raHash;
@@ -1231,6 +1249,7 @@ if (geneList == NULL)
     return;
     }
 hPrintf("<TT><PRE>");
+
 /* Print labels. */
 hPrintf("#");
 for (col = colList; col != NULL; col = col->next)
@@ -1365,6 +1384,39 @@ hPrintf("%s",
  );
 }
 
+static char *colHtmlFileName(struct column *col)
+/* Return html file associated with column.  You can
+ * freeMem this when done. */
+{
+char name[PATH_LEN];
+safef(name, sizeof(name), "hgNearData/%s.html", col->name);
+return cloneString(name);
+}
+
+void doColInfo(struct sqlConnection *conn, struct column *colList,
+	char *colName)
+/* Put up info page on column. */
+{
+struct column *col = findNamedColumn(colList, colName);
+char *htmlFileName = colHtmlFileName(col);
+if (col == NULL)
+    errAbort("Can't find column '%s'", colName);
+hPrintf("<H2>Column %s - %s</H2>\n", col->shortLabel, col->longLabel);
+if (fileExists(htmlFileName))
+    {
+    char *html;
+    readInGulp(htmlFileName, &html, NULL);
+    hPrintf("%s", html);
+    freeMem(html);
+    }
+else
+    {
+    hPrintf("No additional info available on %s column", col->shortLabel);
+    }
+freeMem(htmlFileName);
+}
+
+
 void doMiddle(struct cart *theCart)
 /* Write the middle parts of the HTML page. 
  * This routine sets up some globals and then
@@ -1373,7 +1425,6 @@ void doMiddle(struct cart *theCart)
 char *var = NULL, *val;
 struct sqlConnection *conn;
 struct column *colList, *col;
-long startTime = clock1000();
 cart = theCart;
 
 #ifdef SOON
@@ -1396,6 +1447,8 @@ displayCount = atoi(val);
 colList = getColumns(conn);
 if (cartVarExists(cart, confVarName))
     doConfigure(conn, colList, NULL);
+else if (cartVarExists(cart, colInfoVarName))
+    doColInfo(conn, colList, cartString(cart, colInfoVarName));
 else if ((var = cartFindFirstLike(cart, "near.up.*")) != NULL)
     {
     doConfigure(conn, colList, var);
@@ -1441,7 +1494,6 @@ else if (cartNonemptyString(cart, searchVarName))
 else
     doExamples(conn, colList);
 hFreeConn(&conn);
-uglyf("<HR>Total time %ld<BR>\n", clock1000() - startTime);
 }
 
 void usage()

@@ -14,7 +14,7 @@
 #include "kgAlias.h"
 #include "findKGAlias.h"
 
-static char const rcsid[] = "$Id: knownGene.c,v 1.13 2003/09/03 18:33:21 kent Exp $";
+static char const rcsid[] = "$Id: knownGene.c,v 1.14 2003/09/03 20:10:31 kent Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
@@ -339,3 +339,31 @@ setupColumnLookup(col, parameters);
 col->cellPrint = cellSelfLinkPrint;
 col->simpleSearch = knownNameSimpleSearch;
 }
+
+static void swissProtCellPrint(struct column *col, struct genePos *gp, 
+	struct sqlConnection *conn)
+/* Print a link to SwissProt. */
+{
+char *s = col->cellVal(col, gp, conn);
+if (s == NULL) 
+    {
+    hPrintf("<TD>n/a</TD>", s);
+    }
+else
+    {
+    hPrintf("<TD>");
+    fillInKnownPos(gp, conn);
+    hPrintf("<A HREF=\"http://us.expasy.org/cgi-bin/niceprot.pl?%s\">", s);
+    hPrintf("%s</A></TD>", s);
+    freeMem(s);
+    }
+}
+
+void setupColumnSwissProt(struct column *col, char *parameters)
+/* Set up a column that protein name and links to SwissProt. */
+{
+setupColumnLookup(col, parameters);
+col->cellPrint =swissProtCellPrint;
+}
+
+
