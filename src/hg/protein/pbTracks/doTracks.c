@@ -1004,7 +1004,7 @@ void mapBoxSuperfamily(int x, int y, int width, int height, char *sf_name, int s
 {
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x-1, y-1, x+width+1, y+height+1);
 hPrintf("HREF=\"%s?sunid=%d\"",
-	"http://supfam.org/SUPERFAMILY/cgi-bin/scop.cgi", sfID);
+	"http://supfam.mrc-lmb.cam.ac.uk/SUPERFAMILY/cgi-bin/scop.cgi", sfID);
 hPrintf(" target=_blank ALT=\"%s\">\n", sf_name);
 }
 
