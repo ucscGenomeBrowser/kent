@@ -13,7 +13,7 @@
 #include "net.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.32 2004/10/25 22:30:50 angie Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.33 2005/01/06 15:50:31 kent Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -515,7 +515,11 @@ static char sbuf[256];
 UBYTE len = 0;
 int length;
 if (buf == NULL) buf = sbuf;
-if (read(sd, &len, 1)<0)
+int sz;
+sz = netReadAll(sd, &len, 1);
+if (sz == 0)
+    return NULL;
+if (sz < 0)
     {
     warn("Couldn't read string length");
     return NULL;
