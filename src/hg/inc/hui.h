@@ -54,6 +54,8 @@ char *wrapWhiteFont(char *s);
 /******  Some stuff for tables of controls ******/
 #define CONTROL_TABLE_WIDTH 610
 
+#define EXTENDED_DNA_BUTTON "extended case/color options"
+
 struct controlGrid
 /* Keep track of a control grid (table) */
     {
