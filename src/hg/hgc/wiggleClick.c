@@ -16,22 +16,7 @@ void genericWiggleClick(struct sqlConnection *conn, struct trackDb *tdb,
 char *chrom = cartString(cart, "c");
 char table[64];
 boolean hasBin;
-int pixWidth = atoi(cartUsualString(cart, "pix", "620" ));
-char *itemName = NULL;
-boolean withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE);
-int insideWidth;
-int insideX = hgDefaultGfxBorder;
-char **row;
-struct sqlResult *sr;
-char query[256];
-int minSpan = BIGNUM;
-int maxSpan = 0;
-int spanCount = 0;
-struct hash *spans = newHash(0);	/*	list of spans in this table */
-struct hashEl *el;
-struct hashCookie cookie;
-float basesPerPixel = 0.0;
-int spanInUse = 0;
+int span = 0;
 struct wiggleDataStream *wDS = newWigDataStream();
 unsigned long long valuesMatched = 0;
 struct histoResult *histoGramResult;
@@ -43,55 +28,13 @@ char num1Buf[64], num2Buf[64]; /* big enough for 2^64 (and then some) */
 
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
 
-/*	We need to take this span finding business into the library */
-safef(query, ArraySize(query),
-    "SELECT span from %s where chrom = '%s' group by span", table, chrom);
+span = spanInUse(conn, table, chrom, winStart, winEnd, cart);
 
-sr = sqlMustGetResult(conn,query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {   
-    char spanName[128];
-    unsigned span = sqlUnsigned(row[0]);
-
-    safef(spanName, ArraySize(spanName), "%u", span);
-    el = hashLookup(spans, spanName);
-    if ( el == NULL)
-	{
-	if (span > maxSpan) maxSpan = span;
-	if (span < minSpan) minSpan = span;
-	++spanCount;
-	hashAddInt(spans, spanName, span);
-	}
-    }
-sqlFreeResult(&sr);
-
-spanInUse = minSpan;
-
-if (withLeftLabels)
-	insideX += hgDefaultLeftLabelWidth + hgDefaultGfxBorder;
-
-insideWidth = pixWidth - insideX - hgDefaultGfxBorder;
-
-if (item)
-	itemName = cloneString(item);
-else
-	itemName = cloneString("No item string");
-
-basesPerPixel = (winEnd - winStart) / insideWidth;
-cookie = hashFirst(spans);
-
-while ((el = hashNext(&cookie)) != NULL)
-    {
-    int span = sqlSigned(el->name);
-    
-    if ((float) span <= basesPerPixel) 
-	spanInUse = span;
-    }
 /*	if for some reason we don't have a chrom and win positions, this
  *	should be run in a loop that does one chrom at a time.  In the
  *	case of hgc, there seems to be a chrom and a position.
  */
-wDS->setSpanConstraint(wDS, spanInUse);
+wDS->setSpanConstraint(wDS, span);
 wDS->setChromConstraint(wDS, chrom);
 wDS->setPositionConstraint(wDS, winStart, winEnd);
 
@@ -110,6 +53,12 @@ sprintLongWithCommas(num2Buf, winEnd);
 printf ("<P><B> Position: </B> %s:%s-%s</P>\n", chrom, num1Buf, num2Buf );
 sprintLongWithCommas(num1Buf, winEnd - winStart);
 printf ("<P><B> Total Bases in view: </B> %s </P>\n", num1Buf);
+if (valuesMatched == 0)
+    {
+    puts ("<P><B> no data found in this region </B></P>\n");
+    }
+else
+    {
 sprintLongWithCommas(num1Buf, wDS->stats->count * wDS->stats->span);
 printf ("<P><B> Statistics on: </B> %s <B> bases </B> (%% %.4f coverage)</P>\n",
     num1Buf, 100.0*(wDS->stats->count * wDS->stats->span)/(winEnd - winStart));
@@ -217,5 +166,6 @@ puts ("</TD></TR></TABLE></P>\n");
 
 freeHistoGram(&histoGramResult);
 freeMem(valuesArray);
+    }
 destroyWigDataStream(&wDS);
 }
