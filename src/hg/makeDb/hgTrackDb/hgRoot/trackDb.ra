@@ -265,7 +265,7 @@ longLabel Affymetrix Gene Predictions
 priority 14
 visibility dense
 color 125,0,150
-type genePred geniePep
+type genePred genieAltPep
 
 track acembly
 shortLabel Acembly Genes
@@ -300,6 +300,20 @@ longLabel $Organism ESTs From Ensembl
 priority 15
 visibility dense
 type genePred ensEstPep
+
+track ncbiGenes
+shortLabel NCBI Gene Models
+longLabel $Organism Gene Models from NCBI
+priority 15
+visibility dense
+type genePred ncbiPep
+
+track genomeScan
+shortLabel NCBI GenomeScan
+longLabel $Organism GenomeScan Models from NCBI
+priority 15
+visibility dense
+type genePred genomeScanPep
 
 track mouseOrtho
 shortLabel Mouse Ortholog
@@ -945,3 +959,12 @@ longLabel Multiple species alignments
 priority 51
 visibility hide
 type psl xeno
+
+track twinscan
+shortLabel Twinscan
+longLabel Twinscan Gene Predictions Using Mouse/Human Homology
+priority 30
+visibility dense
+color 0,100,100
+altColor 0,50,50
+type genePred twinscanPep
