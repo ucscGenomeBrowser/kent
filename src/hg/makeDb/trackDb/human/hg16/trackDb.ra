@@ -958,22 +958,6 @@ spectrum on
 type netAlign mm4 chainMm4
 otherDb mm4
 
-track blast22Br
-shortLabel chr22 protein blast
-longLabel chr22 protein blast
-group x
-priority 1101
-visibility hide
-type psl protein
-
-track tblastGg0
-shortLabel Chicken Best Exon
-longLabel best gg0 blast hit/hg16 knownGene exon
-group compGeno
-priority 145.98
-visibility hide
-type psl xeno
-
 track phyloHMMcons_CFTR
 shortLabel phyloHMMcons CFTR
 longLabel phylo-HMM-based conservation, CFTR (post. prob. of slowest of 10 rates)
@@ -1122,4 +1106,22 @@ visibility hide
 color 0,100,0
 altColor 255,240,200
 type netAlign galGal1 chainGalGal1
+
+track tblastGalGal1
+shortLabel Chicken Best Exon
+longLabel best galGal1 tblastn hit/hg16 knownGene exon
+group compGeno
+spectrum on
+priority 158
+visibility hide
+type psl xeno
+
+
+track blast22Br
+shortLabel chr22 protein blast
+longLabel chr22 protein blast
+group x
+priority 1101
+visibility hide
+type psl protein
 
