@@ -16,7 +16,7 @@ CREATE TABLE tfbsCons (
     factor char(64) not null,	# factor 
     id char(10) not null,	# id
               #Indices
-    INDEX(chrom(8),bin),
-    INDEX(name(16)),
-    INDEX(chromStart)
+    INDEX(name(10)),
+    INDEX(chrom(12),chromStart),
+    INDEX(chrom(12),chromEnd)
 );
