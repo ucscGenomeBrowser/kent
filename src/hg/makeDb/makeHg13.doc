@@ -1817,7 +1817,7 @@ o - # ssh hgwdev
     mkdir /cluster/store4/gs.14/build31/bed/affyGnf
     rm -rf psl tmp err *.psl *.bed HG-U95Av2_target 
 
-LOAD SAGE DATA (DONE 02/14/03)
+LOAD SAGE DATA (DONE 02/18/03)
     ssh hgwdev
     cd ~/kent/src/hg/sage
     make
@@ -1866,100 +1866,7 @@ LOAD SAGE DATA (DONE 02/14/03)
     # with current uniGene date. 
 
     
-RECONSTRUCT PREVIOUS VERSION OF UNIGENE (DONE 02/14/02)
-    # Hopefully we will not have to do this again!  The most recent SAGEmap 
-    # was built on UniGene 157, which is no longer available (just 158).  
-    # The SAGEmap folks do not plan to build with UniGene 158 until the 
-    # next human genome assembly is out... ouch.  So, using the Hs.retired.lst 
-    # file which maps current UniGene ID's to the previous version, we're 
-    # going to reconstruct the previous version and hopefully it'll jive 
-    # with SAGEmap.  
-    cd /projects/cc/hgs/ugnet/uniGene
-    ncftp ftp.ncbi.nih.gov
-      cd repository/UniGene/
-      mget Hs.info Hs.seq.uniq.gz Hs.data.gz Hs.retired.lst.gz
-      quit
-    set version = `perl -e '$t=<>;$t=~/\#(\d+)/;print "$1\n";' < Hs.info`
-    set prev = `expr $version - 1`
-    mkdir uniGene.$prev
-    mv Hs.* uniGene.$prev
-    cd uniGene.$prev
-    gunzip Hs.*.gz 
-    foreach h (Hs.*)
-      mv $h $h.$version
-    end
-    perl -we  'open(MAP, "Hs.retired.lst.'$version'") || die; \
-               %map = (); \
-               print STDERR "Reading Hs.retired.lst....\n"; \
-               while (<MAP>) { \
-                 if (/^(Hs.\w+)\s+Hs.\w+\s+(Hs#\w+)\s+\w+\s*$/) { \
-                   die "dupl map: $2->$map{$2}, $2->$1" \
-                     if ((defined $map{$2}) && ($map{$2} ne $1)); \
-                   $map{$2} = $1; \
-                   $prevs{$1} = $2; \
-                 } \
-               } \
-               close(MAP); \
-               print STDERR "Done with Hs.retired.lst, processing input.\n"; \
-               open(DUPL, ">dupls") || die; \
-               %prevs = (); \
-               while (<>) { \
-                 if (/^>gnl\|UG\|(Hs#\w+)/) { \
-                   $id = $1;  $prevID = $map{$id}; \
-                   print DUPL "$prevID: $prevs{$prevID} $id\n" \
-                     if ((defined $prevs{$prevID}) && \
-                         ($prevs{$prevID} ne $id)); \
-                   die "cant map $id" if (! defined $prevID); \
-                   s/\/ug=Hs.\w+/\/ug=$prevID/; \
-                   $prevs{$prevID} = $id; \
-                 } \
-                 print; \
-               } \
-               close(DUPL); \
-               ' < Hs.seq.uniq.$version \
-      > Hs.seq.uniq
-    # Make sure it looks reasonable:
-    diff Hs.seq.uniq.$version Hs.seq.uniq | less
-
-    # Remove duplicate FASTA records from sequences which were from the same 
-    # cluster in 157 but were in different clusters in 158... since we don't 
-    # know which sequence was *the* sequence in 157, remove all instances!
-    awk -F: '{print $1;}' dupls | sort | uniq > duplIDs
-    perl -we  'open(DUPL, "duplIDs") || die; \
-               %dupls = (); \
-               while (<DUPL>) { \
-                 chop; $dupls{$_} = 1; \
-               } \
-               close(DUPL); \
-               $hdr = undef; \
-               $seq = ""; \
-               while (<>) { \
-                 if (/^>gnl.* \/ug=(Hs.\w+)/) { \
-                   print "$hdr$seq" if (defined $hdr); \
-                   if ($dupls{$1}) { \
-                     $hdr = undef; \
-                   } else { \
-                     $hdr = $_; \
-                   } \
-                   $seq = ""; \
-                 } else { \
-                   $seq = $seq . $_; \
-                 } \
-               } \
-               print "$hdr$seq" if (defined $hdr); \
-              ' Hs.seq.uniq \
-      > Hs.seq.uniq2
-    # make sure it looks reasonable:
-    diff Hs.seq.uniq Hs.seq.uniq2 | less
-    mv Hs.seq.uniq2 Hs.seq.uniq
-    # Do the parseUnigene.pl as if we had just done the usual download:
-    ../parseUnigene.pl Hs.seq.uniq Hs.seq.uniq.simpleHeader.fa leftoverData.tab
-    set version = $prev
-    # Go to the "ssh kkstore" comment below, and pretend we're really 
-    # using the $prev version of UniGene.  
-
-
-MAKE UNIGENE ALIGNMENTS (DONE 02/14/03)
+MAKE UNIGENE ALIGNMENTS (DONE 02/18/03)
     cd /projects/cc/hg/sugnet/uniGene
     ncftp ftp.ncbi.nih.gov
       cd repository/UniGene/
