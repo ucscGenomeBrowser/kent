@@ -191,4 +191,57 @@ The types are:
 	        By default is 'tissue'.  
 
 orderDb.ra - This file contains a record for each potential way of
-sorting the columns.
+sorting the columns. Here are the fields common to all types.
+    name - Symbolic name for column.  The user doesn't see this.
+    shortLabel - Short (one or two word) user visible label for order.
+    longLabel - One line description of order.  Currently not visible.
+    priority - Defines default order in sort by list.  A floating point number.
+    type - Order type. This defines what code is associated with the
+        column.  The first word in the field is the type itself.  
+	In some cases there may be additional words which act as
+	parameters.  See below for a detailed description of this field.
+The type of ordering is determined by the first word in type field.
+There may be additional parameters in subsequent words in the type field.
+The types are:
+    pair - Ordering determined by looking up distance value in a table
+        indexed by selected gene and other gene.
+	Parameters:
+	    table - Table to look up distance in
+	    curGeneField - Field that corresponds to selected gene ID.
+	    otherGeneField - Field that corresponds to row's gene.
+	    distanceField - A floating point value.
+	    multiplier - Usually 1 or -1 (if want to invert order)
+    group - Order that partitions genes into non-overlapping groups.
+        All genes that share a group with the selected gene will have 
+	logical distance of 0 and other genes logically infinite distance.
+	Parameters:
+	    table - Table to look up group value in
+	    geneField - Field in table with gene ID's
+	    groupField - Field in table with group (an integer).
+    association - Order that sorts genes by how many associated values
+        they share with the current gene.
+	Parameters: list of tables that must exist for order to be applied
+	Associated fields:
+	    queryOne - SQL statement that selects all association values
+	       for a single gene.
+	    queryAll - SQL statement that scans full table returning two 
+	       columns - gene ID and associated value.
+    abc - Alphabetical ordering
+        Parameters: 
+	    table - Table to look up name from gene ID.
+	    geneIdField - Field in table for gene ID.
+	    nameField - Field in table with gene name.
+    nameSimilarity - Sort based how similar gene name is to name of
+        selected gene.  Similarity is just based on how many initial
+	letters are shared.
+        Parameters: 
+	    table - Table to look up name from gene ID.
+	    geneIdField - Field in table for gene ID.
+	    nameField - Field in table with gene name.
+    genomePos - Position in genome starting with P end of chromosome 1.
+         Parameters: none
+    genomeDistance - Distance in bases from selected gene.
+         Paremeters: none
+
+    
+
