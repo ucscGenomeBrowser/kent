@@ -11,18 +11,19 @@ struct stsInfoMouse
     struct stsInfoMouse *next;  /* Next in singly linked list. */
     unsigned identNo;	/* UCSC identification number */
     char *name;	/* Official UCSC name */
-    unsigned MGIPrimerID;	/* sts Primer's MGI ID or -1 if N/A */
+    unsigned MGIPrimerID;	/* sts Primer's MGI ID or 0 if N/A */
     char *primerName;	/* sts Primer's name */
     char *primerSymbol;	/* sts Primer's symbol */
     char *primer1;	/* primer1 sequence */
     char *primer2;	/* primer2 sequence */
     char *distance;	/* Length of STS sequence */
     unsigned sequence;	/* Whether the full sequence is available (1) or not (0) for STS */
-    unsigned MGIMarkerID;	/* sts Marker's MGI ID or -1 if N/A */
+    unsigned MGIMarkerID;	/* sts Marker's MGI ID or 0 if N/A */
     char *stsMarkerSymbol;	/* symbol of  STS marker */
     char *Chr;	/* Chromosome in Genetic map */
     float geneticPos;	/* Position in Genetic map. -2 if N/A, -1 if syntenic  */
     char *stsMarkerName;	/* Name of sts Marker. */
+    unsigned LocusLinkID;	/* Locuslink Id, 0 if N/A */
     };
 
 void stsInfoMouseStaticLoad(char **row, struct stsInfoMouse *ret);

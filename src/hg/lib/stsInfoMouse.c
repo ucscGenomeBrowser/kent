@@ -29,6 +29,7 @@ ret->stsMarkerSymbol = row[10];
 ret->Chr = row[11];
 ret->geneticPos = atof(row[12]);
 ret->stsMarkerName = row[13];
+ret->LocusLinkID = sqlUnsigned(row[14]);
 }
 
 struct stsInfoMouse *stsInfoMouseLoad(char **row)
@@ -54,6 +55,7 @@ ret->stsMarkerSymbol = cloneString(row[10]);
 ret->Chr = cloneString(row[11]);
 ret->geneticPos = atof(row[12]);
 ret->stsMarkerName = cloneString(row[13]);
+ret->LocusLinkID = sqlUnsigned(row[14]);
 return ret;
 }
 
@@ -63,7 +65,7 @@ struct stsInfoMouse *stsInfoMouseLoadAll(char *fileName)
 {
 struct stsInfoMouse *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[14];
+char *row[15];
 
 while (lineFileRow(lf, row))
     {
@@ -124,6 +126,7 @@ ret->stsMarkerSymbol = sqlStringComma(&s);
 ret->Chr = sqlStringComma(&s);
 ret->geneticPos = sqlFloatComma(&s);
 ret->stsMarkerName = sqlStringComma(&s);
+ret->LocusLinkID = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -209,6 +212,8 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->stsMarkerName);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->LocusLinkID);
 fputc(lastSep,f);
 }
 
