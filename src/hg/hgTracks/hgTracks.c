@@ -106,7 +106,7 @@ int z;
 int maxCount;
 int bestColor;
 int maxChromShade = CHROMOSOME_SHADES - 1;
-int maxItemsInFullTrack = 300;  /* Maximum number of items displayed in full */
+int maxItemsInFullTrack = 200;  /* Maximum number of items displayed in full */
 int guidelineSpacing = 10;	/* Pixels between guidelines. */
 
 struct cart *cart;	/* The cart where we keep persistent variables. */
@@ -338,7 +338,7 @@ int tgFixedItemHeight(struct track *tg, void *item)
 return tg->lineHeight;
 }
 
-int packFixedHeight(struct track *tg)
+int packCountRows(struct track *tg, int maxCount, boolean withLabels)
 /* Return packed height. */
 {
 struct spaceSaver *ss;
@@ -347,45 +347,60 @@ MgFont *font = tl.font;
 int extraWidth = tl.mWidth * 2;
 int start, end, height;
 double scale = (double)insideWidth/(winEnd - winStart);
-ss = tg->ss = spaceSaverNew(0, insideWidth);
+spaceSaverFree(&tg->ss);
+ss = tg->ss = spaceSaverNew(0, insideWidth, maxCount);
 for (item = tg->items; item != NULL; item = item->next)
     {
     int baseStart = tg->itemStart(tg, item);
     int baseEnd = tg->itemEnd(tg, item);
     start = round((double)(baseStart - winStart)*scale);
-    if (!tg->drawName && withLeftLabels)
+    if (!tg->drawName && withLabels)
 	start -= mgFontStringWidth(font, tg->itemName(tg, item)) + extraWidth;
     end = round((baseEnd - winStart)*scale);
     if (start < insideWidth && end > 0)
         {
 	if (start < 0) start = 0;
 	if (end > insideWidth) end = insideWidth;
-	spaceSaverAdd(ss, start, end, item);
+	if (spaceSaverAdd(ss, start, end, item) == NULL)
+	    break;
 	}
     }
 spaceSaverFinish(ss);
-height = ss->rowCount * tg->lineHeight;
-return height;
+return ss->rowCount;
 }
 
 int tgFixedTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Most fixed height track groups will use this to figure out the height 
  * they use. */
 {
+int rows;
+tg->heightPer = tl.fontHeight;
 tg->lineHeight = tl.fontHeight+1;
-tg->heightPer = tg->lineHeight - 1;
 switch (vis)
     {
     case tvFull:
-	tg->height = slCount(tg->items) * tg->lineHeight;
-	break;
-    case tvDense:
-	tg->height = tg->lineHeight;
+	rows = slCount(tg->items);
 	break;
     case tvPack:
-        tg->height = packFixedHeight(tg);
+	{
+	rows = packCountRows(tg, maxItemsInFullTrack+1, TRUE);
+	break;
+	}
+    case tvSquish:
+        {
+	tg->heightPer = tl.fontHeight/2;
+	if ((tg->heightPer & 1) == 0)
+	    tg->heightPer -= 1;
+	tg->lineHeight = tg->heightPer + 1;
+	rows = packCountRows(tg, 3*maxItemsInFullTrack+1, FALSE);
+	break;
+	}
+    case tvDense:
+    default:
+        rows = 1;
 	break;
     }
+tg->height = rows * tg->lineHeight;
 return tg->height;
 }
 
@@ -455,6 +470,7 @@ switch (vis)
 	tg->height = lines * tg->lineHeight;
 	break;
     case tvPack:
+    case tvSquish:
         errAbort("Sorry can't handle pack in sampleTotalHeight");
 	break;
     case tvDense:
@@ -491,16 +507,23 @@ if (!tg->limitedVisSet)
     {
     enum trackVisibility vis = tg->visibility;
     int h;
-    int maxHeight = maxItemsInFullTrack * (tl.fontHeight+1);
+    int maxHeight = maxItemsInFullTrack * tl.fontHeight;
     tg->limitedVisSet = TRUE;
     h = tg->totalHeight(tg, vis);
     if (h > maxHeight)
         {
 	if (vis == tvFull && tg->canPack)
 	    vis = tvPack;
+	else if (vis == tvPack)
+	    vis = tvSquish;
 	else
 	    vis = tvDense;
 	h = tg->totalHeight(tg, vis);
+	if (h > maxHeight && vis == tvPack)
+	    {
+	    vis = tvSquish;
+	    h = tg->totalHeight(tg, vis);
+	    }
 	if (h > maxHeight)
 	    {
 	    vis = tvDense;
@@ -763,10 +786,10 @@ if (color)
    {
    slReverse(&oldList);
    /* Draw stuff that passes filter first in full mode, last in dense. */
-   if (vis == tvPack || vis == tvFull)
-       newList = slCat(newList, oldList);
-   else
+   if (vis == tvDense)
        newList = slCat(oldList, newList);
+   else
+       newList = slCat(newList, oldList);
    }
 tg->items = newList;
 }
@@ -1220,9 +1243,9 @@ if (!hideLine)
     x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
     x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
     w = x2-x1;
-    if (vis != tvDense)
+    if (vis == tvFull || vis == tvPack)
 	{
-	clippedBarbs(vg, x1, midY, x2-x1, 2, 5, 
+	clippedBarbs(vg, x1, midY, w, 2, 5, 
 		 lf->orientation, bColor, FALSE);
 	}
     innerLine(vg, x1, midY, w, color);
@@ -1264,9 +1287,9 @@ if (start != -1 && !lfs->noLine)
     int w = x2-x1;
     if (w > 0)
 	{
-	if (vis != tvDense) 
+	if (vis == tvFull || vis == tvPack) 
 	  clippedBarbs(vg, x1, midY, w, 2, 5, lfs->orientation, bColor, TRUE);
-	innerLine(vg, x1, midY, w, color);
+	vgLine(vg, x1, midY, x2, midY, color);
 	}
     }
 }
@@ -1328,8 +1351,9 @@ int lineHeight = tg->lineHeight;
 int heightPer = tg->heightPer;
 int s, e;
 int y, x1, x2, w;
+boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
 
-if (vis == tvPack)
+if (vis == tvPack || vis == tvSquish)
     {
     struct spaceSaver *ss = tg->ss;
     struct spaceNode *sn;
@@ -1347,7 +1371,7 @@ if (vis == tvPack)
 
 	y = yOff + lineHeight * sn->row;
 	tg->drawItemAt(tg, item, vg, xOff, y, scale, font, color, vis);
-	if (withLeftLabels && !tg->drawName)
+	if (withLabels)
 	    {
 	    int nameWidth = mgFontStringWidth(font, name);
 	    int dotWidth = tl.nWidth/2;
@@ -2165,7 +2189,7 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 struct sqlConnection *conn = NULL;
-boolean isFull;
+boolean isDense;
 
 if (*pLfList == NULL || mud == NULL)
     return;
@@ -2181,7 +2205,7 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 if (!anyFilter)
     return;
 
-isFull = (limitVisibility(tg) == tvFull);
+isDense = (limitVisibility(tg) == tvDense);
 
 type = cartUsualString(cart, mud->filterTypeVar, "red");
 if (sameString(type, "exclude"))
@@ -2298,13 +2322,13 @@ slReverse(&oldList);
 if (colorIx > 0)
    {
    /* Draw stuff that passes filter first in full mode, last in dense. */
-   if (isFull)
+   if (isDense)
        {
-       newList = slCat(newList, oldList);
+       newList = slCat(oldList, newList);
        }
    else
        {
-       newList = slCat(oldList, newList);
+       newList = slCat(newList, oldList);
        }
    }
 *pLfList = newList;
@@ -2335,15 +2359,15 @@ char extraWhere[128] ;
 snprintf( optionChr, sizeof(optionChr), "%s.chromFilter", tg->mapName);
 optionChrStr = cartUsualString(cart, optionChr, "All");
 if (startsWith("chr",optionChrStr)) 
-	{
-	snprintf(extraWhere, sizeof(extraWhere), "qName = \"%s\"",optionChrStr);
-	sr = hRangeQuery(conn, track, chromName, start, end, extraWhere, &rowOffset);
-	}
+    {
+    snprintf(extraWhere, sizeof(extraWhere), "qName = \"%s\"",optionChrStr);
+    sr = hRangeQuery(conn, track, chromName, start, end, extraWhere, &rowOffset);
+    }
 else
-	{
-	snprintf(extraWhere, sizeof(extraWhere), " ");
-	sr = hRangeQuery(conn, track, chromName, start, end, NULL, &rowOffset);
-	}
+    {
+    snprintf(extraWhere, sizeof(extraWhere), " ");
+    sr = hRangeQuery(conn, track, chromName, start, end, NULL, &rowOffset);
+    }
 
 if (sqlCountColumns(sr) < 21+rowOffset)
     errAbort("trackDb has incorrect table type for table \"%s\"",
@@ -2356,11 +2380,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     pslFree(&psl);
     }
 slReverse(&lfList);
-tg->items = lfList;
+tg->items = lfList;	/* Do this twice for benefit of limit visibility */
 if (limitVisibility(tg) != tvDense)
     slSort(&lfList, linkedFeaturesCmpStart);
 if (tg->extraUiData)
     filterMrna(tg, &lfList);
+tg->items = lfList;
 sqlFreeResult(&sr);
 }
 
@@ -3571,7 +3596,7 @@ if (w < 1)
 if (color)
     {
     vgBox(vg, x1, y, w, heightPer, color);
-    if (tg->drawName)
+    if (tg->drawName && vis != tvSquish)
 	{
 	/* Clip here so that text will tend to be more visible... */
 	char *s = tg->itemName(tg, bed);
@@ -4195,11 +4220,14 @@ w = x2-x1;
 if (w < 1)
     w = 1;
 col = cytoBandColor(tg, band, vg);
-textCol = contrastingColor(vg, col);
 vgBox(vg, x1, y, w, heightPer, col);
-s = abbreviatedBandName(tg, band, font, w);
-if (s != NULL)
-    vgTextCentered(vg, x1, y, w, heightPer, textCol, font, s);
+if (vis != tvSquish)
+    {
+    textCol = contrastingColor(vg, col);
+    s = abbreviatedBandName(tg, band, font, w);
+    if (s != NULL)
+	vgTextCentered(vg, x1, y, w, heightPer, textCol, font, s);
+    }
 mapBoxHc(band->chromStart, band->chromEnd, x1,y,w,heightPer, tg->mapName, 
     band->name, band->name);
 }
@@ -6126,7 +6154,7 @@ struct cloneFragPos *cfa;
 int start = 0x3fffffff;
 int end = 0;
 
-ss = ci->ss = spaceSaverNew(winStart, winEnd);
+ss = ci->ss = spaceSaverNew(winStart, winEnd, 100);
 for (cfa = ci->cfaList; cfa != NULL; cfa = cfa->next)
     {
     spaceSaverAdd(ss, cfa->start, cfa->end, cfa);
@@ -8800,10 +8828,12 @@ for (track = trackList; track != NULL; track = track->next)
     {
     if (track->visibility != tvHide)
 	{
+	int h;
 	if (withCenterLabels)
 	    pixHeight += fontHeight;
 	limitVisibility(track);
-	pixHeight += track->height;
+	h = track->height;
+	pixHeight += h;
 	}
     else
         track->limitedVis = tvHide;
@@ -8850,12 +8880,13 @@ if (withLeftLabels)
 	    if (withCenterLabels)
 		y += fontHeight;
 	    y += track->height;
+	    yEnd = y;
+	    h = yEnd - yStart - 1;
+	    drawButtonBox(vg, trackTabX, yStart, trackTabWidth, 
+	    	h, track->hasUi); 
+	    if (track->hasUi)
+		mapBoxTrackUi(trackTabX, yStart, trackTabWidth, h, track);
 	    }
-	yEnd = y;
-	h = yEnd - yStart - 1;
-	drawButtonBox(vg, trackTabX, yStart, trackTabWidth, h, track->hasUi); 
-	if (track->hasUi)
-	    mapBoxTrackUi(trackTabX, yStart, trackTabWidth, h, track);
 	}
     butOff = trackTabX + trackTabWidth;
     leftLabelX += butOff;
@@ -8962,6 +8993,7 @@ if (withLeftLabels)
 	    case tvHide:
 		break;	/* Do nothing; */
 	    case tvPack:
+	    case tvSquish:
 		if (withCenterLabels)
 		    y += fontHeight;
 	        y += track->height;
@@ -9183,6 +9215,7 @@ for (track = trackList; track != NULL; track = track->next)
 	case tvHide:
 	    break;	/* Do nothing; */
 	case tvPack:
+	case tvSquish:
 	    if (withCenterLabels)
 		y += fontHeight;
 	    y += track->height;
