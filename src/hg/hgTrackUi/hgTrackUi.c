@@ -24,7 +24,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.177 2005/02/09 23:43:05 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.178 2005/02/10 00:49:36 kent Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -614,7 +614,7 @@ filterSetting = cartUsualString(cart, filterVar, filterVal);
 cgiMakeTextVar(filterVar, cartUsualString(cart, filterVar, ""), 5);
 }
 
-void scoreUi(struct trackDb *tdb)
+void scoreUi(struct trackDb *tdb, int maxScore)
 /* Put up UI for filtering bed track based on a score */
 {
 char option[256];
@@ -633,7 +633,7 @@ snprintf(option, sizeof(option), "%s.scoreFilter", tdb->tableName);
 scoreSetting = cartUsualInt(cart,  option,  scoreVal);
 safef(tempScore, sizeof(tempScore), "%d",scoreSetting);
 cgiMakeTextVar( option, tempScore, 11);
-printf("&nbsp;&nbsp;(range: 0&nbsp;to&nbsp;2000000000)");
+printf("&nbsp;&nbsp;(range: 0&nbsp;to&nbsp;%d)", maxScore);
 }
 
 void crossSpeciesUi(struct trackDb *tdb)
@@ -660,7 +660,7 @@ void transRegCodeUi(struct trackDb *tdb)
 /* Put up UI for transcriptional regulatory code - not
  * much more than score UI. */
 {
-scoreUi(tdb);
+scoreUi(tdb, 1000);
 printf("%s",
 	"<P>The scoring ranges from 0 to 1000 and is based on the number of lines "
 	"of evidence that support the motif being active.  Each of the two "
@@ -775,7 +775,7 @@ if (chainDbNormScoreAvailable(chromosome, tdb->tableName, NULL))
 
     freeMem (colorOpt);
     filterByChrom(tdb);
-    scoreUi(tdb);
+    scoreUi(tdb, 2000000000);
     }
 else
     crossSpeciesUi(tdb);
@@ -1374,7 +1374,7 @@ else if (tdb->type != NULL)
 		     and from which to determine the display color of each entry.
 	    */
 	    if ((atoi(words[1])>4) && !sameString(track,"jaxQTL3") && !sameString(track, "wgRna"))
-		scoreUi(tdb);
+		scoreUi(tdb, 1000);
 	    }
 	else if (sameWord(words[0], "psl"))
 	    {
