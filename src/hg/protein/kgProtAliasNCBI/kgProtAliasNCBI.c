@@ -47,6 +47,18 @@ while (row2 != NULL)
     kgID = row2[0];
     proteinID = row2[1];
 
+    // get RefSeq protein AC numbers (NP_xxxxx) if they exist
+    sprintf(cond_str, "kgID='%s'", kgID);
+    proteinAC = sqlGetField(conn, database, "kgXref", "protAcc", cond_str);
+    if (proteinAC != NULL)
+	{
+	if (strlen(proteinAC) > 0)
+	    {
+	    fprintf(o2, "%s\t%s\t%s\n", kgID, proteinID, proteinAC);
+	    }
+	}
+
+    // get Genbank protein accession numbers
     if (strstr(kgID, "NM_") != NULL)
 	{
 	sprintf(query,"select protAcc from %s.refLink where mrnaAcc = '%s';", database, kgID);
