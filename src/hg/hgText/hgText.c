@@ -34,7 +34,7 @@
 #include "wiggle.h"
 #include "hgText.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.147 2004/05/13 00:41:59 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.148 2004/05/14 00:13:50 angie Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -2963,6 +2963,13 @@ int count = 0;
 int numberColumns = 0;
 int i = 0;
 
+if (sameString(table, "mrna"))
+    {
+    struct slName *slNew = newSlName(table);
+    slFreeList(&tableList);
+    tableList = slNew;
+    }
+
 for (tPtr=tableList;  tPtr != NULL;  tPtr=tPtr->next)
     {
     count += sqlTableSize(conn, tPtr->name);
@@ -3830,12 +3837,20 @@ if (! gotResults)
     }
 else if (doCt)
     {
-    char browserUrl[128];
-    char headerText[256];
+    char browserUrl[256];
+    char headerText[512];
     int redirDelay = 5;
+    char *newChrom = chrom;
+    int newStart = winStart, newEnd = winEnd;
+    if (allGenome)
+	{
+	newChrom = ctNew->bedList->chrom;
+	newStart = ctNew->bedList->chromStart;
+	newEnd   = ctNew->bedList->chromEnd;
+	}
     safef(browserUrl, sizeof(browserUrl),
 	  "%s?db=%s&position=%s:%d-%d",
-	  hgTracksName(), database, chrom, winStart, winEnd);
+	  hgTracksName(), database, newChrom, newStart, newEnd);
     safef(headerText, sizeof(headerText),
 	  "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"%d;URL=%s\">",
 	  redirDelay, browserUrl);
@@ -3872,16 +3887,18 @@ puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Hyperlinks\">"
      "<B>Help</B></A><P>");
 
 if ((track2 != NULL) && (track2[0] != 0))
-    snprintf(track2CGI, sizeof(track2CGI), "&%s=full", track2);
+    safef(track2CGI, sizeof(track2CGI), "&%s=%s", track2,
+	  hTrackOpenVis(track2));
 else
     track2CGI[0] = 0;
 
 itemCount = 0;
 for (bedPtr = bedList;  bedPtr != NULL;  bedPtr = bedPtr->next)
     {
-    printf("<A HREF=\"%s?db=%s&position=%s:%d-%d&%s=full%s&hgsid=%d\"",
+    printf("<A HREF=\"%s?db=%s&position=%s:%d-%d&%s=%s%s&hgsid=%d\"",
 	   hgTracksName(), hGetDb(), bedPtr->chrom, bedPtr->chromStart+1,
-	   bedPtr->chromEnd, track, track2CGI, cartSessionId(cart));
+	   bedPtr->chromEnd, track, hTrackOpenVis(track), track2CGI,
+	   cartSessionId(cart));
     snprintf(posBuf, sizeof(posBuf), "%s:%d-%d", bedPtr->chrom,
 	     bedPtr->chromStart+1, bedPtr->chromEnd);
     if (sameString(bedPtr->name, posBuf))
