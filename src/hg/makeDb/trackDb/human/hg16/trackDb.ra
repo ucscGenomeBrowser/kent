@@ -1508,7 +1508,7 @@ expScale 999
 expStep 100
 chip x
 
-track encode_NHGRI_DNaseHS
+track encode_NHGRI_DNAseHS
 shortLabel DNaseI-HS/NHGRI
 longLabel NHGRI DNaseI-Hypersensitive Sites in ENCODE Regions
 group encode
@@ -1518,7 +1518,7 @@ visibility hide
 type bed 4
 
 track encode_UCSD_ChIP_RNAP_HELA
-shortLabel ChIP/LI Pol II HeLa
+shortLabel ChIP/LI PolII HeLa
 longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II HeLa) in ENCODE Regions
 group encode
 priority 30.1
@@ -1528,7 +1528,7 @@ maxHeightPixels 128:16:16
 autoScaleDefault Off
 
 track encode_UCSD_ChIP_RNAP_THP1
-shortLabel ChIP/LI Pol II THP1
+shortLabel ChIP/LI PolII THP1
 longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II THP1) in ENCODE Regions
 group encode
 priority 30.2
@@ -1539,7 +1539,7 @@ maxHeightPixels 128:16:16
 autoScaleDefault Off
 
 track encode_UCSD_ChIP_RNAP_IMR90
-shortLabel ChIP/LI Pol II IMR90
+shortLabel ChIP/LI PolII IMR90
 longLabel Ludwig Institute,UCSD ChIP/Chip (Pol II IMR90) in ENCODE Regions
 group encode
 priority 30.3
@@ -1550,7 +1550,7 @@ maxHeightPixels 128:16:16
 autoScaleDefault Off
 
 track encode_UCSD_ChIP_RNAP_HCT116
-shortLabel ChIP/LI RNAP HCT116
+shortLabel ChIP/LI POLII HCT116
 longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II HCT116) in ENCODE Regions
 group encode
 priority 30.4
@@ -1605,45 +1605,45 @@ autoScaleDefault Off
 
 track encode_UVa_ORI_0_2
 shortLabel Ori/UVa 0-2
-longLabel Univ Virginia Replication Origins (0-2 hrs) in ENCODE Regions
+longLabel Univ. Virginia Replication Origins (0-2 hrs) in ENCODE Regions
 group encode
 priority 40.1
 visibility hide
-color 12,125,12
+color 50,50,50
 type bed 3
 
 track encode_UVa_ORI_2_4
 shortLabel Ori/UVa 2-4
-longLabel Univ Virginia Replication Origins (2-4 hrs) in ENCODE Regions
+longLabel Univ. Virginia Replication Origins (2-4 hrs) in ENCODE Regions
 group encode
 priority 40.2
 visibility hide
-color 12,125,12
+color 40,70,40
 type bed 3
 
 track encode_UVa_ORI_4_6
 shortLabel Ori/UVa 4-6
-longLabel Univ Virginia Replication Origins (4-6 hrs) in ENCODE Regions
+longLabel Univ. Virginia Replication Origins (4-6 hrs) in ENCODE Regions
 group encode
 priority 40.3
 visibility hide
-color 12,125,12
+color 30,90,30
 type bed 3
 
 track encode_UVa_ORI_6_8
 shortLabel Ori/UVa 6-8
-longLabel Univ Virginia Replication Origins (6-8 hrs) in ENCODE Regions
+longLabel Univ. Virginia Replication Origins (6-8 hrs) in ENCODE Regions
 group encode
 priority 40.4
 visibility hide
-color 12,125,12
+color 20,110,20
 type bed 3
 
 track encode_UVa_ORI_8_10
 shortLabel Ori/UVa 8-10
-longLabel Univ Virginia Replication Origins (8-10 hrs) in ENCODE Regions
+longLabel Univ. Virginia Replication Origins (8-10 hrs) in ENCODE Regions
 group encode
 priority 40.5
 visibility hide
-color 12,125,12
+color 10,130,10
 type bed 3
