@@ -10,7 +10,7 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgDumpWiggle.c,v 1.4 2004/02/23 18:10:33 kent Exp $";
+static char const rcsid[] = "$Id: hgDumpWiggle.c,v 1.5 2004/05/19 23:08:39 hiram Exp $";
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* do not expect a bin column in the table */
@@ -37,7 +37,8 @@ errAbort(
   "options:\n"
   "   -chr=chrN\twork on only chrN\n"
   "   -noBin\ttable has no bin column\n"
-  "   Specify either a database with a track or a .wig file, not both"
+  "   Specify either a database with a track or a .wig file, not both\n"
+  "   The -file option has not been implemented yet."
   );
 }
 
@@ -48,7 +49,7 @@ int i;
 struct wiggle *wiggle;
 
 for (i=0; i<trackCount; ++i)
-    verbose(2, "track: %s\n", tracks[i]);
+    verbose(2, "#\ttrack: %s\n", tracks[i]);
 
 if (db)
     {
@@ -69,14 +70,14 @@ if (db)
 	    snprintf(query, 256, "select * from %s where chrom = \"%s\"\n", tracks[i], chr);
 	else
 	    snprintf(query, 256, "select * from %s\n", tracks[i]);
-	verbose(2, "%s\n", query);
+	verbose(2, "#\t%s\n", query);
 	sr = sqlGetResult(conn,query);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    ++rowCount;
 	    wiggle = wiggleLoad(row + 1);  /* the +1 avoids the bin column*/
-	    verbose(2, "row: %d, start: %u, data range: %g: [%g:%g]\n", rowCount, wiggle->chromStart, wiggle->dataRange, wiggle->lowerLimit, wiggle->lowerLimit+wiggle->dataRange);
-	    verbose(2, "\tresolution: %g per bin\n",wiggle->dataRange/(double)MAX_WIG_VALUE);
+	    verbose(2, "#\trow: %d, start: %u, data range: %g: [%g:%g]\n", rowCount, wiggle->chromStart, wiggle->dataRange, wiggle->lowerLimit, wiggle->lowerLimit+wiggle->dataRange);
+	    verbose(2, "#\tresolution: %g per bin\n",wiggle->dataRange/(double)MAX_WIG_VALUE);
 	    if (wibFile)
 		{
 		if (differentString(wibFile,wiggle->file))
@@ -99,7 +100,7 @@ if (db)
 	    ReadData = (unsigned char *) needMem((size_t) (wiggle->count + 1));
 	    fread(ReadData, (size_t) wiggle->count,
 		(size_t) sizeof(unsigned char), f);
-	    verbose(2, "row: %d, reading: %u bytes\n", rowCount, wiggle->count);
+	    verbose(2, "#\trow: %d, reading: %u bytes\n", rowCount, wiggle->count);
 	    for (dataOffset = 0; dataOffset < wiggle->count; ++dataOffset)
                 {
                 unsigned char datum = ReadData[dataOffset];
@@ -141,13 +142,13 @@ file = optionVal("file", NULL);
 chr = optionVal("chr", NULL);
 noBin = optionExists("noBin");
 if (db)
-    verbose(2, "database: %s\n", db);
+    verbose(2, "#\tdatabase: %s\n", db);
 if (file)
-    verbose(2, ".wig file: %s\n", file);
+    verbose(2, "#\t.wig file: %s\n", file);
 if (chr)
-    verbose(2, "select chrom: %s\n", chr);
+    verbose(2, "#\tselect chrom: %s\n", chr);
 if (noBin)
-    verbose(2, "expect no bin column in table\n");
+    verbose(2, "#\texpect no bin column in table\n");
 if (db && file)
     {
     warn("ERROR: specify only one of db or file, not both");
