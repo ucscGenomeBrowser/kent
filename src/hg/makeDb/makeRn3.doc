@@ -4915,16 +4915,16 @@ mkdir -p $3:h
     #	add links to this image in the description.html page, request push
 
 # UPDATE kgSpAlias TABLE WITH NEW UNIPROT DISPLAY ID ENTRIES (done 2/11/05 Fan)
-# Add new mm5 protein display IDs to the alias table to support user search
+# Add new rn3 protein display IDs to the alias table to support user search
     
     ssh hgwdev
-    mkdir -p /cluster/data/mm5/bed/pb/newDisplayId
-    cd /cluster/data/mm5/bed/pb/newDisplayId
+    mkdir -p /cluster/data/rn3/bed/pb/newDisplayId
+    cd /cluster/data/rn3/bed/pb/newDisplayId
  
-    hgsql proteome -e 'select mm5.kgSpAlias.kgID, mm5.kgSpAlias.SpID, spOldNew.newDisplayId from spOldNew, mm5.kgSpAlias where spOldNew.acc=mm5.kgSpAlias.spID and oldDisplayId != newDisplayId' |sort -u >mm5.tab
+    hgsql proteome -e 'select rn3.kgSpAlias.kgID, rn3.kgSpAlias.SpID, spOldNew.newDisplayId from spOldNew, rn3.kgSpAlias where spOldNew.acc=rn3.kgSpAlias.spID and oldDisplayId != newDisplayId' |sort -u >rn3.tab
    
 # get rid of the header line at the end of the file
-    vi mm5.tab
+    vi rn3.tab
 
-    hgsql mm5 -e 'load data local infile "mm5.tab" into table mm5.kgSpAlias'
+    hgsql rn3 -e 'load data local infile "rn3.tab" into table rn3.kgSpAlias'
 
