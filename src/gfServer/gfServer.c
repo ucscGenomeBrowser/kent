@@ -329,7 +329,7 @@ for (;;)
     command = nextWord(&line);
     if (sameString("quit", command))
         {
-	printf("Quitting genoFind server\n");
+	logIt("Ignoring quit message\n");
 	break;
 	}
     else if (sameString("status", command))
@@ -355,11 +355,11 @@ for (;;)
 	    sprintf(buf, "aa %ld", aaCount);
 	    gfSendString(connectionHandle, buf);
 	    }
-	sprintf(buf, "misses %ld", missCount);
+	sprintf(buf, "misses %d", missCount);
 	gfSendString(connectionHandle, buf);
 	sprintf(buf, "noSig %d", noSigCount);
 	gfSendString(connectionHandle, buf);
-	sprintf(buf, "trimmed %ld", trimCount);
+	sprintf(buf, "trimmed %d", trimCount);
 	gfSendString(connectionHandle, buf);
 	sprintf(buf, "warnings %d", warnCount);
 	gfSendString(connectionHandle, buf);
