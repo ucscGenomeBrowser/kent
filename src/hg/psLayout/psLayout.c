@@ -19,7 +19,7 @@
 #include "cheapcgi.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: psLayout.c,v 1.7 2003/05/06 07:22:33 kate Exp $";
+static char const rcsid[] = "$Id: psLayout.c,v 1.8 2003/07/15 22:17:21 heather Exp $";
 
 /* Variables that can be set by command line options. */
 int minMatch = 4;
@@ -533,7 +533,7 @@ for (i=0; i<genoListSize; ++i)
 
 patSpace = makePatSpace(seqListList, genoListSize, seedSize, oocFileName, minMatch, 2000);
 endTime = clock1();
-printf("Made index in %d seconds\n",  (endTime-startTime));
+printf("Made index in %ld seconds\n",  (endTime-startTime));
 startTime = endTime;
 
 for (i=0; i<otherListSize; ++i)
@@ -566,7 +566,7 @@ for (i=0; i<otherListSize; ++i)
     }
 freePatSpace(&patSpace);
 endTime = clock1();
-printf("Alignment time is %d sec\n", (endTime-startTime));
+printf("Alignment time is %ld sec\n", (endTime-startTime));
 startTime = endTime;
 fclose(out);
 return 0;
