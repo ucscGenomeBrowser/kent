@@ -272,6 +272,7 @@ char *wildCard = NULL;
 if (!sameString(user, userName) && !sameString("root", userName))
     errAbort("You can only remove your own jobs (unless you are root).");
 if (argc > 0) wildCard = argv[0];
+slReverse(&jobList);	/* Improves performance to remove from tail first. */
 for (job = jobList; job != NULL; job = job->next)
     {
     if (sameString(user, job->user) && 
