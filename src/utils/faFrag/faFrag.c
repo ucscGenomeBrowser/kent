@@ -9,10 +9,12 @@ void usage()
 errAbort(
   "faFrag - Extract a piece of DNA from a .fa file.\n"
   "usage:\n"
-  "   faFrag in.fa start end out.fa\n");
+  "   faFrag in.fa start end out.fa\n"
+  "options:\n"
+  "   -mixed - preserve mixed-case in FASTA file\n");
 }
 
-void faFrag(char *inName, int start, int end, char *outName)
+void faFrag(char *inName, int start, int end, char *outName, boolean mixed)
 /* faFrag - Extract a piece of DNA from a .fa file.. */
 {
 struct dnaSeq *seq;
@@ -21,7 +23,10 @@ char name[512];
 
 if (start >= end)
     usage();
-seq = faReadAllDna(inName);
+if (mixed)
+    seq = faReadAllMixed(inName);
+else
+    seq = faReadAllDna(inName);
 if (seq->next != NULL)
     warn("More than one sequence in %s, just using first\n", inName);
 if (end > seq->size)
@@ -39,10 +44,11 @@ printf("Wrote %d bases to %s\n", end-start, outName);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+optionHash(&argc, argv);
 if (argc != 5)
     usage();
 if (!isdigit(argv[2][0]) || !isdigit(argv[3][0]))
     usage();
-faFrag(argv[1], atoi(argv[2]), atoi(argv[3]), argv[4]);
+faFrag(argv[1], atoi(argv[2]), atoi(argv[3]), argv[4], optionExists("mixed"));
 return 0;
 }
