@@ -15,7 +15,7 @@
 #include "chainNet.h"
 #include "liftUp.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.26 2004/01/25 20:19:32 markd Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.27 2004/01/31 01:43:09 kate Exp $";
 
 boolean isPtoG = TRUE;  /* is protein to genome lift */
 boolean nohead = FALSE;	/* No header for psl files? */
@@ -27,7 +27,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
- "liftUp - change coordinates of .psl, .agp, .gl, .out, .gff, .gtf .bscore \n"
+ "liftUp - change coordinates of .psl, .agp, .gap, .gl, .out, .gff, .gtf .bscore \n"
  ".tab .gdup .axt .chain .net, genePred or .bed files to parent coordinate\n"
  "system.\n"
  "\n"
@@ -477,289 +477,367 @@ for (sourceIx = 0; sourceIx < sourceCount; ++sourceIx)
 		a.tEnd += offset;
 		a.tName = spec->newName;
 		if (strand == '-')
-		    warn("Target minus strand, please double check results.");
-		}
-	    }
-	axtWrite(&a, f);
-	axtFree(&axt);
-	doDots(&dotMod);
-	}
+                    warn("Target minus strand, please double check results.");
+                }
+            }
+        axtWrite(&a, f);
+        axtFree(&axt);
+        doDots(&dotMod);
+        }
     lineFileClose(&lf);
     }
 }
 
 void liftChain(char *destFile, struct hash *liftHash, 
-	int sourceCount, char *sources[], boolean querySide)
+        int sourceCount, char *sources[], boolean querySide)
 /* Lift up coordinates in .chain file. */
 {
-FILE *f = mustOpen(destFile, "w");
-int sourceIx;
-int dotMod = dots;
+    FILE *f = mustOpen(destFile, "w");
+    int sourceIx;
+    int dotMod = dots;
 
-for (sourceIx = 0; sourceIx < sourceCount; ++sourceIx)
-    {
-    char *source = sources[sourceIx];
-    struct lineFile *lf = lineFileOpen(source, TRUE);
-    struct chain *chain;
-    if (!pipeOut) printf("Lifting %s\n", source);
-    while ((chain = chainRead(lf)) != NULL)
+    for (sourceIx = 0; sourceIx < sourceCount; ++sourceIx)
         {
-	struct liftSpec *spec;
-	char *seqName = querySide ? chain->qName : chain->tName;
-	spec = findLift(liftHash, seqName, lf);
-	if (spec == NULL)
-	    {
-	    if (!carryMissing)
-	        {
-		chainFree(&chain);
-		continue;
-		}
-	    }
-	else
-	    {
-	    struct boxIn *b = NULL;
-	    int offset = spec->offset;
-	    if (querySide)
-		{
-		if (chain->qStrand == '-')
-		    offset = spec->newSize - (spec->offset + spec->oldSize);
-		freeMem(chain->qName);
-		chain->qName = cloneString(spec->newName);
-		chain->qSize = spec->newSize;
-		chain->qStart += offset;
-		chain->qEnd   += offset;
-		for (b=chain->blockList;  b != NULL;  b=b->next)
-		    {
-		    b->qStart += offset;
-		    b->qEnd   += offset;
-		    }
-		}
-	    else
-		{
-		freeMem(chain->tName);
-		chain->tName = cloneString(spec->newName);
-		chain->tSize = spec->newSize;
-		chain->tStart += offset;
-		chain->tEnd   += offset;
-		for (b=chain->blockList;  b != NULL;  b=b->next)
-		    {
-		    b->tStart += offset;
-		    b->tEnd   += offset;
-		    }
-		}
-	    }
-	chainWrite(chain, f);
-	chainFree(&chain);
-	doDots(&dotMod);
-	}
-    lineFileClose(&lf);
-    }
+        char *source = sources[sourceIx];
+        struct lineFile *lf = lineFileOpen(source, TRUE);
+        struct chain *chain;
+        if (!pipeOut) printf("Lifting %s\n", source);
+        while ((chain = chainRead(lf)) != NULL)
+            {
+            struct liftSpec *spec;
+            char *seqName = querySide ? chain->qName : chain->tName;
+            spec = findLift(liftHash, seqName, lf);
+            if (spec == NULL)
+                {
+                if (!carryMissing)
+                    {
+                    chainFree(&chain);
+                    continue;
+                    }
+                }
+            else
+                {
+                struct boxIn *b = NULL;
+                int offset = spec->offset;
+                if (querySide)
+                    {
+                    if (chain->qStrand == '-')
+                        offset = spec->newSize - (spec->offset + spec->oldSize);
+                    freeMem(chain->qName);
+                    chain->qName = cloneString(spec->newName);
+                    chain->qSize = spec->newSize;
+                    chain->qStart += offset;
+                    chain->qEnd   += offset;
+                    for (b=chain->blockList;  b != NULL;  b=b->next)
+                        {
+                        b->qStart += offset;
+                        b->qEnd   += offset;
+                        }
+                    }
+                else
+                    {
+                    freeMem(chain->tName);
+                    chain->tName = cloneString(spec->newName);
+                    chain->tSize = spec->newSize;
+                    chain->tStart += offset;
+                    chain->tEnd   += offset;
+                    for (b=chain->blockList;  b != NULL;  b=b->next)
+                        {
+                        b->tStart += offset;
+                        b->tEnd   += offset;
+                        }
+                    }
+                }
+            chainWrite(chain, f);
+            chainFree(&chain);
+            doDots(&dotMod);
+            }
+        lineFileClose(&lf);
+        }
 }
 
 void liftFillsT(struct cnFill *fillList, struct liftSpec *spec)
-/* Lift target coords in each element of fillList and recursively descend to 
- * children of each element if necessary. */
+    /* Lift target coords in each element of fillList and recursively descend to 
+     * children of each element if necessary. */
 {
-struct cnFill *fill;
-for (fill=fillList;  fill != NULL;  fill=fill->next)
-    {
-    fill->tStart += spec->offset;
-    if (fill->children != NULL)
-	liftFillsT(fill->children, spec);
-    }
+    struct cnFill *fill;
+    for (fill=fillList;  fill != NULL;  fill=fill->next)
+        {
+        fill->tStart += spec->offset;
+        if (fill->children != NULL)
+            liftFillsT(fill->children, spec);
+        }
 }
 
 void liftFillsQ(struct cnFill *fillList, struct hash *nameHash,
-		struct hash *liftHash, struct lineFile *lf)
+        struct hash *liftHash, struct lineFile *lf)
 /* Lift query coords in each element of fillList and recursively descend to 
  * children of each element if necessary.  lf is only for err reporting. */
 {
-struct cnFill *fill;
-for (fill=fillList;  fill != NULL;  fill=fill->next)
-    {
-    struct liftSpec *spec = findLift(liftHash, fill->qName, lf);
-    if (spec == NULL)
-	{
-	if (!carryMissing)
-	    {
-	    errAbort("Can't lift fill->qName %s and don't support dropping lifts",
-		     fill->qName);
-	    }
-	}
-    else
-	{
-	fill->qName = spec->newName;
-	fill->qStart += spec->offset;
-	}
-    // nameHash needs to be completely rebuilt with all strings it contained 
-    // before (see chainNet.c::cnFillFromLine), regardless of whether we're 
-    // changing their values:
-    fill->qName = hashStoreName(nameHash, fill->qName);
-    fill->type  = hashStoreName(nameHash, fill->type);
+    struct cnFill *fill;
+    for (fill=fillList;  fill != NULL;  fill=fill->next)
+        {
+        struct liftSpec *spec = findLift(liftHash, fill->qName, lf);
+        if (spec == NULL)
+            {
+            if (!carryMissing)
+                {
+                errAbort("Can't lift fill->qName %s and don't support dropping lifts",
+                        fill->qName);
+                }
+            }
+        else
+            {
+            fill->qName = spec->newName;
+            fill->qStart += spec->offset;
+            }
+        // nameHash needs to be completely rebuilt with all strings it contained 
+        // before (see chainNet.c::cnFillFromLine), regardless of whether we're 
+        // changing their values:
+        fill->qName = hashStoreName(nameHash, fill->qName);
+        fill->type  = hashStoreName(nameHash, fill->type);
 
-    if (fill->children != NULL)
-	liftFillsQ(fill->children, nameHash, liftHash, lf);
-    }
+        if (fill->children != NULL)
+            liftFillsQ(fill->children, nameHash, liftHash, lf);
+        }
 }
 
 
 void liftNet(char *destFile, struct hash *liftHash, 
-	int sourceCount, char *sources[], boolean querySide)
+        int sourceCount, char *sources[], boolean querySide)
 /* Lift up coordinates in .net file. */
 {
-FILE *f = mustOpen(destFile, "w");
-int sourceIx;
-int dotMod = dots;
+    FILE *f = mustOpen(destFile, "w");
+    int sourceIx;
+    int dotMod = dots;
 
-for (sourceIx = 0; sourceIx < sourceCount; ++sourceIx)
-    {
-    char *source = sources[sourceIx];
-    struct lineFile *lf = lineFileOpen(source, TRUE);
-    struct chainNet *net;
-    if (!pipeOut) printf("Lifting %s\n", source);
-    while ((net = chainNetRead(lf)) != NULL)
+    for (sourceIx = 0; sourceIx < sourceCount; ++sourceIx)
         {
-	if (querySide)
-	    {
-	    struct hash *newNameHash = hashNew(6);
-	    liftFillsQ(net->fillList, newNameHash, liftHash, lf);
-	    hashFree(&(net->nameHash));
-	    net->nameHash = newNameHash;
-	    }
-	else
-	    {
-	    struct liftSpec *spec = findLift(liftHash, net->name, lf);
-	    if (spec == NULL)
-		{
-		if (!carryMissing)
-		    {
-		    chainNetFree(&net);
-		    continue;
-		    }
-		}
-	    else
-		{
-		freeMem(net->name);
-		net->name = cloneString(spec->newName);
-		net->size = spec->newSize;
-		liftFillsT(net->fillList, spec);
-		}
-	    }
-	chainNetWrite(net, f);
-	chainNetFree(&net);
-	doDots(&dotMod);
-	}
-    lineFileClose(&lf);
-    }
+        char *source = sources[sourceIx];
+        struct lineFile *lf = lineFileOpen(source, TRUE);
+        struct chainNet *net;
+        if (!pipeOut) printf("Lifting %s\n", source);
+        while ((net = chainNetRead(lf)) != NULL)
+            {
+            if (querySide)
+                {
+                struct hash *newNameHash = hashNew(6);
+                liftFillsQ(net->fillList, newNameHash, liftHash, lf);
+                hashFree(&(net->nameHash));
+                net->nameHash = newNameHash;
+                }
+            else
+                {
+                struct liftSpec *spec = findLift(liftHash, net->name, lf);
+                if (spec == NULL)
+                    {
+                    if (!carryMissing)
+                        {
+                        chainNetFree(&net);
+                        continue;
+                        }
+                    }
+                else
+                    {
+                    freeMem(net->name);
+                    net->name = cloneString(spec->newName);
+                    net->size = spec->newSize;
+                    liftFillsT(net->fillList, spec);
+                    }
+                }
+            chainNetWrite(net, f);
+            chainNetFree(&net);
+            doDots(&dotMod);
+            }
+        lineFileClose(&lf);
+        }
 }
 
 void malformedAgp(struct lineFile *lf)
-/* Report error in .agp. */
+    /* Report error in .agp. */
 {
-errAbort("Bad line %d in %s\n", lf->lineIx, lf->fileName);
+    errAbort("Bad line %d in %s\n", lf->lineIx, lf->fileName);
 }
 
 void liftAgp(char *destFile, struct hash *liftHash, int sourceCount, char *sources[])
-/* Lift up coordinates in .agp file. */
+    /* Lift up coordinates in .agp file. */
 {
-FILE *dest = mustOpen(destFile, "w");
-char *source;
-int i;
-struct lineFile *lf;
-int lineSize, wordCount;
-char *line, *words[32];
-char *s;
-struct liftSpec *spec;
-int start = 0;
-int end = 0;
-int ix = 0;
-char newDir[256], newName[128], newExt[64];
-struct bigInsert *bi;
-struct chromInserts *chromInserts;
-struct hash *insertHash = newHash(8);
-struct hash *contigsHash = newHash(10);
-boolean firstContig = TRUE;
-char lastContig[256];
-char *contig;
-int lastEnd = 0;
+    FILE *dest = mustOpen(destFile, "w");
+    char *source;
+    int i;
+    struct lineFile *lf;
+    int lineSize, wordCount;
+    char *line, *words[32];
+    char *s;
+    struct liftSpec *spec;
+    int start = 0;
+    int end = 0;
+    int ix = 0;
+    char newDir[256], newName[128], newExt[64];
+    struct bigInsert *bi;
+    struct chromInserts *chromInserts;
+    struct hash *insertHash = newHash(8);
+    struct hash *contigsHash = newHash(10);
+    boolean firstContig = TRUE;
+    char lastContig[256];
+    char *contig;
+    int lastEnd = 0;
 
-if (sourceCount < 2)
-    usage();
+    if (sourceCount < 2)
+        usage();
 
-if (carryMissing)
-    warn("'carry' doesn't work for .agp files, ignoring");
+    if (carryMissing)
+        warn("'carry' doesn't work for .agp files, ignoring");
 
-splitPath(destFile, newDir, newName, newExt);
+    splitPath(destFile, newDir, newName, newExt);
 
-/* Read in inserts file and process it. */
-chromInsertsRead(sources[0], insertHash);
-chromInserts = hashFindVal(insertHash, newName);
+    /* Read in inserts file and process it. */
+    chromInsertsRead(sources[0], insertHash);
+    chromInserts = hashFindVal(insertHash, newName);
 
-strcpy(lastContig, "");
-for (i=1; i<sourceCount; ++i)
-    {
-    source = sources[i];
-    if (!pipeOut) printf("Lifting %s\n", source);
-    lf = lineFileMayOpen(source, TRUE);
-    if (lf != NULL)
-	{
-	while (lineFileNext(lf, &line, &lineSize))
-	    {
-	    /* Check for comments and just pass them through. */
-	    s = skipLeadingSpaces(line);
-	    if (s[0] == '#')
-		{
-		fprintf(dest, "%s\n", line);
-		continue;
-		}
-	    /* Parse line, adjust offsets, write */
-	    wordCount = chopLine(line, words);
-	    if (wordCount != 8 && wordCount != 9)
-		malformedAgp(lf);
-	    contig = words[0];
-	    if (!sameString(contig, lastContig))
-	        {
-		char *gapType = "contig";
-		char *ctg = rmChromPrefix(contig);
-		int gapSize = chromInsertsGapSize(chromInserts, 
-			ctg, firstContig);
-		if (hashLookup(contigsHash, contig))
-		    errAbort("Contig repeated line %d of %s", lf->lineIx, lf->fileName);
-		hashAdd(contigsHash, contig, NULL);
-		if (gapSize != 0)
-		    {
-		    if ((bi = bigInsertBeforeContig(chromInserts, ctg)) != NULL)
-		        {
-			gapType = bi->type;
-			}
-		    fprintf(dest, "%s\t%d\t%d\t%d\tN\t%d\t%s\tno\n",
-			newName, end+1, end+gapSize, ++ix, gapSize, gapType);
-		    }
-		firstContig = FALSE;
-		strcpy(lastContig, contig);
-		}
-	    spec = findLift(liftHash, contig, lf);
-	    start = numField(words, 1, 0, lf) + spec->offset;
-	    end = numField(words, 2, 0, lf) + spec->offset;
+    strcpy(lastContig, "");
+    for (i=1; i<sourceCount; ++i)
+        {
+        source = sources[i];
+        if (!pipeOut) printf("Lifting %s\n", source);
+        lf = lineFileMayOpen(source, TRUE);
+        if (lf != NULL)
+            {
+            while (lineFileNext(lf, &line, &lineSize))
+                {
+                /* Check for comments and just pass them through. */
+                s = skipLeadingSpaces(line);
+                if (s[0] == '#')
+                    {
+                    fprintf(dest, "%s\n", line);
+                    continue;
+                    }
+                /* Parse line, adjust offsets, write */
+                wordCount = chopLine(line, words);
+                if (wordCount != 8 && wordCount != 9)
+                    malformedAgp(lf);
+                contig = words[0];
+                if (!sameString(contig, lastContig))
+                    {
+                    char *gapType = "contig";
+                    char *ctg = rmChromPrefix(contig);
+                    int gapSize = chromInsertsGapSize(chromInserts, 
+                            ctg, firstContig);
+                    if (hashLookup(contigsHash, contig))
+                        errAbort("Contig repeated line %d of %s", lf->lineIx, lf->fileName);
+                    hashAdd(contigsHash, contig, NULL);
+                    if (gapSize != 0)
+                        {
+                        if ((bi = bigInsertBeforeContig(chromInserts, ctg)) != NULL)
+                            {
+                            gapType = bi->type;
+                            }
+                        fprintf(dest, "%s\t%d\t%d\t%d\tN\t%d\t%s\tno\n",
+                                newName, end+1, end+gapSize, ++ix, gapSize, gapType);
+                        }
+                    firstContig = FALSE;
+                    strcpy(lastContig, contig);
+                    }
+                spec = findLift(liftHash, contig, lf);
+                start = numField(words, 1, 0, lf) + spec->offset;
+                end = numField(words, 2, 0, lf) + spec->offset;
+                if (end > lastEnd) lastEnd = end;
+                if (!sameString(newName, spec->newName))
+                    errAbort("Mismatch in new name between %s and %s", newName, spec->newName);
+                fprintf(dest, "%s\t%d\t%d\t%d\t%s\t%s\t%s\t%s",
+                        newName, start, end, ++ix,
+                        words[4], words[5], words[6], words[7]);
+                if (wordCount == 9)
+                    fprintf(dest, "\t%s", words[8]);
+                fputc('\n', dest);
+                }
+            lineFileClose(&lf);
+            }
+        }
+    if (chromInserts != NULL)
+        {
+        if ((bi = chromInserts->terminal) != NULL)
+            {
+            fprintf(dest, "%s\t%d\t%d\t%d\tN\t%d\t%s\tno\n",
+                    newName, lastEnd+1, lastEnd+bi->size, ++ix, bi->size, bi->type);
+            }
+        }
+    if (ferror(dest))
+        errAbort("error writing %s", destFile);
+    fclose(dest);
+}
+
+void liftGap(char *destFile, struct hash *liftHash, int sourceCount, char *sources[])
+    /* Lift up coordinates in .gap file (just the gaps from .agp).  Negative strad allowed */
+{
+    FILE *dest = mustOpen(destFile, "w");
+    char *source;
+    int i;
+    struct lineFile *lf;
+    int lineSize, wordCount;
+    char *line, *words[32];
+    char *s;
+    struct liftSpec *spec;
+    int start = 0;
+    int end = 0;
+    int ix = 0;
+    char newDir[256], newName[128], newExt[64];
+    struct hash *contigsHash = newHash(10);
+    boolean firstContig = TRUE;
+    char lastContig[256];
+    char *contig;
+    int lastEnd = 0;
+    int fragStart, fragEnd;
+
+    if (carryMissing)
+        warn("'carry' doesn't work for .gap files, ignoring");
+
+    splitPath(destFile, newDir, newName, newExt);
+
+    strcpy(lastContig, "");
+    for (i=0; i<sourceCount; ++i)
+        {
+        source = sources[i];
+        if (!pipeOut) printf("Lifting %s\n", source);
+        lf = lineFileMayOpen(source, TRUE);
+        if (lf != NULL)
+            {
+            while (lineFileNext(lf, &line, &lineSize))
+                {
+                /* Check for comments and just pass them through. */
+                s = skipLeadingSpaces(line);
+                if (s[0] == '#')
+                    {
+                    fprintf(dest, "%s\n", line);
+                    continue;
+                    }
+                /* Parse line, adjust offsets, write */
+                wordCount = chopLine(line, words);
+                if (wordCount != 8 && wordCount != 9)
+                    malformedAgp(lf);
+                if (*words[4] != 'N')
+                    errAbort("Found non-gap in .gap file: %s", words[4]);
+                contig = words[0];
+                spec = findLift(liftHash, contig, lf);
+                start = fragStart = numField(words, 1, 0, lf);
+                end = fragEnd = numField(words, 2, 0, lf);
+                end = fragEnd;
+                if (spec->strand == '-')
+                    {
+                    start = spec->oldSize - fragEnd + 1;
+                    end = spec->oldSize - fragStart + 1;
+                }
+            start += spec->offset;
+            end += spec->offset;
 	    if (end > lastEnd) lastEnd = end;
-	    if (!sameString(newName, spec->newName))
-	        errAbort("Mismatch in new name between %s and %s", newName, spec->newName);
 	    fprintf(dest, "%s\t%d\t%d\t%d\t%s\t%s\t%s\t%s",
-		    newName, start, end, ++ix,
+		    spec->newName, start, end, ++ix,
 		    words[4], words[5], words[6], words[7]);
 	    if (wordCount == 9)
 		fprintf(dest, "\t%s", words[8]);
 	    fputc('\n', dest);
 	    }
 	lineFileClose(&lf);
-	}
-    }
-if (chromInserts != NULL)
-    {
-    if ((bi = chromInserts->terminal) != NULL)
-        {
-	fprintf(dest, "%s\t%d\t%d\t%d\tN\t%d\t%s\tno\n",
-	    newName, lastEnd+1, lastEnd+bi->size, ++ix, bi->size, bi->type);
 	}
     }
 if (ferror(dest))
@@ -1147,6 +1225,11 @@ else if (endsWith(destType, ".agp"))
     {
     liftHash = hashLift(lifts, FALSE);
     liftAgp(destFile, liftHash, sourceCount, sources);
+    }
+else if (endsWith(destType, ".gap"))
+    {
+    liftHash = hashLift(lifts, TRUE);
+    liftGap(destFile, liftHash, sourceCount, sources);
     }
 else if (endsWith(destType, ".gl"))
     {

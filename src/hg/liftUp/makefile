@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = liftUp.o
 
-all: liftUp test
+all: liftUp
 
 liftUp: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/liftUp $O $(MYLIBS) $L
