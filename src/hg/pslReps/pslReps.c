@@ -8,7 +8,7 @@
 #include "psl.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: pslReps.c,v 1.14 2003/08/11 21:28:33 sugnet Exp $";
+static char const rcsid[] = "$Id: pslReps.c,v 1.15 2003/09/29 19:50:13 braney Exp $";
 
 double minAli = 0.93;
 double nearTop = 0.01;
@@ -339,9 +339,12 @@ while (lineFileNext(in, &line, &lineSize))
 	fflush(stdout);
 	}
     wordCount = chopTabs(line, words);
-    if (wordCount != 21)
+    if (wordCount == 21)
+	psl = pslLoad(words);
+    else if (wordCount == 23)
+	psl = pslxLoad(words);
+    else
 	errAbort("Bad line %d of %s\n", in->lineIx, in->fileName);
-    psl = pslLoad(words);
     if (!sameString(lastName, psl->qName))
 	{
 	doOneAcc(lastName, pslList, bestFile, repFile);

@@ -7,7 +7,7 @@
 #include "options.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslSort.c,v 1.3 2003/05/06 07:22:34 kate Exp $";
+static char const rcsid[] = "$Id: pslSort.c,v 1.4 2003/09/29 19:50:51 braney Exp $";
 
 
 void usage()
@@ -68,6 +68,10 @@ if (wordCount == 21)
     {
     return pslLoad(words);
     }
+else if (wordCount == 23)
+    {
+    return pslxLoad(words);
+    }
 else
     {
     warn("Bad line %d of %s", lf->lineIx, lf->fileName);
@@ -92,6 +96,10 @@ wordCount = chopTabs(line, words);
 if (wordCount == 21)
     {
     return pslLoadLm(words, lm);
+    }
+else if (wordCount == 23)
+    {
+    return pslxLoadLm(words, lm);
     }
 else
     {
