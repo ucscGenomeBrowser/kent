@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.28 2004/11/10 16:18:56 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.29 2004/11/11 02:45:53 kent Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -23,7 +23,7 @@ char *clGroup = NULL;	/* Group from command line. */
 char *clTrack = NULL;	/* Track from command line. */
 char *clTable = NULL;	/* Table from command line. */
 int clGroups = BIGNUM;	/* Number of groups to test. */
-int clTracks = 2;	/* Number of track to test. */
+int clTracks = 4;	/* Number of track to test. */
 int clTables = 2;	/* Number of tables to test. */
 int clDbs = 1;		/* Number of databases per organism. */
 int clOrgs = 2;		/* Number of organisms to test. */
