@@ -2,10 +2,10 @@
  * -DNO_SYSLOG for systems without syslog. */
 
 #include "common.h"
-#include "errabort.h"
 #include "log.h"
+#include "errabort.h"
+#include "dystring.h"
 #ifndef NO_SYSLOG
-#define SYSLOG_NAMES  /* this gets the facilitynames compiled in */
 #include <syslog.h>
 #endif
 #include <time.h>
@@ -13,6 +13,44 @@
 static char *gProgram = "unknown";  /* name of program */
 static boolean gSysLogOn = FALSE;   /* syslog logging enabled? */
 static FILE *gLogFh = NULL;         /* logging file */
+
+#ifndef NO_SYSLOG
+
+static struct {
+    char *name;   /* string name for facility */
+    int   fac;    /* integer value */
+} facilityNameTbl[] =
+/* not all version of syslog have the facilitynames table, so  define out own */
+{
+    {"auth",         LOG_AUTH},
+#ifdef LOG_AUTHPRIV
+    {"authpriv",     LOG_AUTHPRIV},
+#endif
+    {"cron",         LOG_CRON},
+    {"daemon",       LOG_DAEMON},
+#ifdef LOG_FTP
+    {"ftp",          LOG_FTP},
+#endif
+    {"kern",         LOG_KERN},
+    {"lpr",          LOG_LPR},
+    {"mail",         LOG_MAIL},
+    {"news",         LOG_NEWS},
+    {"syslog",       LOG_SYSLOG},
+    {"user",         LOG_USER},
+#ifdef LOG_UUCP
+    {"uucp",         LOG_UUCP},
+#endif
+    {"local0",       LOG_LOCAL0},
+    {"local1",       LOG_LOCAL1},
+    {"local2",       LOG_LOCAL2},
+    {"local3",       LOG_LOCAL3},
+    {"local4",       LOG_LOCAL4},
+    {"local5",       LOG_LOCAL5},
+    {"local6",       LOG_LOCAL6},
+    {"local7",       LOG_LOCAL7},
+    {NULL,           0}
+};
+#endif
 
 static void logWarnHander(char *format, va_list args)
 /* Warn handler that logs message. */
@@ -47,17 +85,24 @@ static int parseFacility(char *facility)
 /* parse a facility name into a number, or use default if NULL. */
 {
 int i;
-/* it appears that defining SYSLOG_NAMES before including syslog.h gets the
- * facilitynames compiled in on most (all?) implementations.  if this doesn't
- * prove portable, will have have a fixed list here */
+struct dyString *msg;
 if (facility == NULL)
     return LOG_LOCAL0;
-for (i = 0; facilitynames[i].c_name != NULL; i++)
+for (i = 0; facilityNameTbl[i].name != NULL; i++)
     {
-    if (sameString(facilitynames[i].c_name, facility))
-        return facilitynames[i].c_val;
+    if (sameString(facilityNameTbl[i].name, facility))
+        return facilityNameTbl[i].fac;
     }
-errAbort("invalid log facility: %s", facility);
+msg = dyStringNew(256);
+
+for (i = 0; facilityNameTbl[i].name != NULL; i++)
+    {
+    if (i > 0)
+        dyStringAppend(msg, ", ");
+    dyStringAppend(msg, facilityNameTbl[i].name);
+    }
+
+errAbort("invalid log facility: %s, expected one of: ", facility, msg->string);
 return 0; /* never reached */
 }
 #endif
