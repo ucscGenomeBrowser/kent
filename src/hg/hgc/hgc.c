@@ -3006,14 +3006,11 @@ int start = cgiInt("o");
 char *url;
 
 htmlStart("Custom Track");
-uglyf("trackId %s, fileItem %s<BR>\n", trackId, fileItem);
 fileName = nextWord(&fileItem);
 itemName = skipLeadingSpaces(fileItem);
 if (fileName == NULL || itemName == NULL)
     errAbort("Misformed fileItem in hgCustom");
-uglyf("fileName %s, itemName %s<BR>\n", fileName, itemName);
 ctList = customTracksFromFile(fileName);
-uglyf("Loaded %d custom tracks<BR>\n", slCount(ctList));
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
     if (sameString(trackId, ct->bt->mapName))
@@ -3035,7 +3032,6 @@ if ((url = ct->bt->url) != NULL)
     char *before, *after = "", *s;
     struct dyString *dy = newDyString(0);
     char fixedUrl[1024];
-    uglyf("url is %s<BR>\n", url);
     before = url;
     s = stringIn("$$", url);
     if (s != NULL)
@@ -3047,7 +3043,6 @@ if ((url = ct->bt->url) != NULL)
        }
     else
        dyStringPrintf(dy, "%s", url);
-    uglyf("fixed URL is %s<BR>\n", dy->string);
     printf("<B>outside link: </B>");
     printf("<A HREF=\"%s\">", dy->string);
     printf("%s</A><BR>\n", dy->string);
