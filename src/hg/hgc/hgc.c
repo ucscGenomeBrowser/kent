@@ -157,7 +157,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.819 2005/01/17 20:31:23 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.820 2005/01/17 21:59:18 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -10581,12 +10581,14 @@ if (multiplePositions)
     safef(query, sizeof(query), "select * from snp where name='%s'", itemName);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr))!=NULL)
-	if (differentString(chrom,snp.chrom) && chromStart!=snp.chromStart)
+	{
+	snpStaticLoad(row+rowOffset, &snp);
+	if (differentString(chrom,snp.chrom) || chromStart!=snp.chromStart)
 	    {
-	    snpStaticLoad(row+rowOffset, &snp);
 	    bedPrintPos((struct bed *)&snp, 3);
 	    printf("<BR>\n");
 	    }
+	}
     }
 }
 
