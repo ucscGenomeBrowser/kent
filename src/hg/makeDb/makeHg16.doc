@@ -3645,7 +3645,7 @@ LOAD AffyUclaRatio [in progress jk Sept 19, 2003]
     # added to hashPsls to process shorter Affy probe set names
     # assumes that names has 2 colons but when shortened to fit in the seq 
     # database, there is only 1.
-    # e.g. full name: consensus:HG-U133A:212933_x_at; short name: HG-U133A:212933_x_at;
+    # e.g. full name: "consensus:HG-U133A:212933_x_at;" short name: "HG-U133A:212933_x_at;"
     affyUclaMergePslData affyUclaMergePslData -pslFile=affyU133.psl -affyFile=/projects/compbio/data/microarray/affyUcla/data/030602_ucla_normal_human_tissue_snapshot.txt -bedOut=affyUcla.bed -expRecordOut=affyUcla.expRecords -expFile=/projects/compbio/data/microarray/affyUcla/data/expNames -toDiffFile=toDiff.txt
     hgLoadBed -sqlTable=$HOME/src/hg/lib/affyUcla.sql hg16 affyUcla affyUcla.bed
     hgLoadPsl hg16 affyU133.psl
@@ -3659,7 +3659,12 @@ LOAD AffyUclaRatio [in progress jk Sept 19, 2003]
     cd /gbdb/hgFixed/affyProbes
     ln -s /projects/compbio/data/microarray/affyGnf/sequences/HG-U95/HG-U95Av2_all.fa .
     ln -s /projects/compbio/data/microarray/affyUcla/sequences/HG-U133AB_all.fa .
-    hgLoadSeq hg16 /gbdb/hgFixed/affyProbes/HG-U95Av2_all.fa
+    
+    # use perl -pi.bak -e 's/;/ /' <file> to remove ";" after probe name
+    # in HG-U95Av2_all.fa seque
+    # reload sequences with "U95Av2" prefix removed so acc matches name used 
+    # in other dependent tables for affyU95Av2 only
+    hgLoadSeq -abbr=U95Av2: hg16 /gbdb/hgFixed/affyProbes/HG-U95Av2_all.fa
     hgLoadSeq hg16 /gbdb/hgFixed/affyProbes/HG-U133AB_all.fa
 
 # Load AFFYUCLANORM, extended version of affyUcla track. Hopefully
