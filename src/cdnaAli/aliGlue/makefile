@@ -1,5 +1,4 @@
-.c.o:
-	gcc -ggdb -O -I../inc -I../../inc -c $*.c
+include ../../inc/makefile.h
 
 O =  aliGlue.o
 

@@ -1,5 +1,4 @@
-.c.o:
-	gcc -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -c $*.c
+include ../inc/makefile.h
 
 O = crudeali.o fuzzyFind.o genoFind.o gfClientLib.o gfOut.o ooc.o \
 patSpace.o supStitch.o trans3.o xenbig.o xensmall.o 

@@ -1,5 +1,5 @@
-.c.o:
-	gcc -O -I/usr/include/mysql -I../../inc -c $*.c
+include ../../inc/makefile.h
+
 
 L = /usr/lib/mysql/libmysqlclient.a -lm
 O = jksql.o 

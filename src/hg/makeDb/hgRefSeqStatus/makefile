@@ -1,5 +1,4 @@
-.c.o:
-	gcc -ggdb -Wimplicit -I../../inc -I../../../inc -c $*.c
+include ../../../inc/makefile.h
 
 L = $(MYSQLLIBS) -lm
 MYLIBDIR = ../../../lib/$(MACHTYPE)

@@ -1,5 +1,5 @@
-.c.o:
-	gcc -Wformat -Wimplicit -Wuninitialized -O -ggdb -I../../inc -c $*.c
+include ../../inc/makefile.h
+
 
 O = catUncomment.o 
 

@@ -1,5 +1,4 @@
-.c.o:
-	gcc -ggdb -O -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -Wimplicit -I../../inc -I../../../inc -c $*.c
+include ../../../inc/makefile.h
 
 L = -lm
 MYLIBDIR = ../../../lib/$(MACHTYPE)

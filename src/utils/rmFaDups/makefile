@@ -1,5 +1,5 @@
-.c.o:
-	gcc -O -ggdb -I../../inc -c $*.c
+include ../../inc/makefile.h
+
 
 O = rmFaDups.o 
 

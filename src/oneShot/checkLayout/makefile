@@ -1,5 +1,5 @@
-.c.o:
-	gcc -D$(HOST) -O -I../../inc -c $*.c
+include ../../inc/makefile.h
+
 
 O = checkLayout.o 
 

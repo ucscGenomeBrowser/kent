@@ -119,7 +119,7 @@ C) Loading a psl file
    	hgLoadPsl database -table=tableName file.psl -tNameIx
    This will load everything into one big table.  For huge numbers of
    alignments the browser will be faster if you first split up the
-   date into one file for each chromosome.  Name these files 
+   data into one file for each chromosome.  Name these files 
    chr1_tableName.psl  chr2_tableName.psl and so forth.  Then do
         hgLoadPsl database chr*_tableName.psl
    This will end up making a separate table for each chromosome.

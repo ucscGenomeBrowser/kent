@@ -1,13 +1,4 @@
-
-F64 = -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE
-
-# For performance
-#.c.o:
-#	gcc -ggdb -O ${F64} -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -I../../inc -I../../../inc -c $*.c
-
-#For debugging:
-.c.o:
-	gcc -ggdb ${F64} -Wformat -Wimplicit -Wreturn-type -I../inc -I../../inc -I../../../inc -c $*.c
+include ../../inc/makefile.h
 
 L = -lm $(MYSQLLIBS) 
 MYLIBDIR = ../../lib/$(MACHTYPE)

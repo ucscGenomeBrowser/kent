@@ -1,5 +1,5 @@
-.c.o:
-	gcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -I../../inc -c $*.c
+include ../../inc/makefile.h
+
 
 L = /projects/cc/hg/jk/outSrc/expat/lib/.libs/libexpat.a -lm
 MYLIBDIR = ../../lib/$(MACHTYPE)

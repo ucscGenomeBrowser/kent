@@ -1,5 +1,5 @@
-.c.o:
-	gcc -O -ggdb -I/cse/guests/kent/src/inc -I/cse/guests/kent/src/hg/inc -c $*.c
+include ../../inc/makefile.h
+
 
 O = geneStarts.o 
 

@@ -1,5 +1,4 @@
-.c.o:
-	gcc -I../../inc -c $*.c
+include ../../inc/makefile.h
 
 O = xenWorm.o 
 

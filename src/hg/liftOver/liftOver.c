@@ -7,6 +7,7 @@
 #include "chain.h"
 #include "bed.h"
 #include "genePred.h"
+#include "sample.h"
 
 double minMatch = 0.95;
 
@@ -26,6 +27,7 @@ errAbort(
   "         that the lines that make up a gene model still make a plausible gene\n"
   "         after liftOver\n"
   "   -genePred - File is in genePred format\n"
+  "   -sample - File is in sample format\n"
   , minMatch
   );
 }
@@ -112,6 +114,8 @@ int newCover = 0;
 int ok = TRUE;
 
 chainSubsetOnT(chain, s, e, &subChain, &freeChain);
+if (subChain == NULL)
+    return FALSE;
 newCover = chainAliSize(subChain);
 if (newCover < oldSize * minRatio)
     ok = FALSE;
@@ -389,7 +393,6 @@ if (b == NULL || r == NULL)
     return NULL;
 for (;;)
     {
-    // uglyf("b: %d %d (%d %d),  r: %d %d\n", b->tStart, b->tEnd, b->qStart, b->qEnd, r->start, r->end);
 
     while (b->tEnd <= r->start)
 	{
@@ -665,7 +668,8 @@ for (i=0; i<count; ++i)
 return bed;
 }
 
-void liftOverGenePred(char *fileName, struct hash *chainHash, FILE *mapped, FILE *unmapped)
+void liftOverGenePred(char *fileName, struct hash *chainHash, FILE *mapped, 
+	FILE *unmapped)
 /* Lift over file in genePred format. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
@@ -675,11 +679,10 @@ struct genePred *gp;
 char *error;
 FILE *f;
 
-ZeroVar(&bed);
 while (lineFileRow(lf, row))
     {
     gp = genePredLoad(row);
-    uglyf("%s %s %d %d %s\n", gp->name, gp->chrom, gp->txStart, gp->txEnd, gp->strand);
+    // uglyf("%s %s %d %d %s\n", gp->name, gp->chrom, gp->txStart, gp->txEnd, gp->strand);
     f = mapped;
     bed = genePredToBed(gp);
     error = remapBlockedBed(chainHash, bed);
@@ -708,12 +711,66 @@ while (lineFileRow(lf, row))
 	    }
 	}
     genePredTabOut(gp, f);
-    fflush(f);		//uglyf
-
     bedFree(&bed);
     genePredFree(&gp);
     }
 }
+
+void liftOverSample(char *fileName, struct hash *chainHash, FILE *mapped, 
+	FILE *unmapped)
+/* Open up file, decide what type of bed it is, and lift it. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+int wordCount;
+char *line;
+char *row[9];
+struct bed *bed;
+struct sample *sample;
+int i;
+FILE *f;
+char *error;
+
+while (lineFileRow(lf, row))
+    {
+    sample = sampleLoad(row);
+    AllocVar(bed);
+    bed->chrom = cloneString(sample->chrom);
+    bed->chromStart = bed->thickStart = sample->chromStart;
+    bed->chromEnd = bed->thickEnd = sample->chromEnd;
+    bed->name = cloneString(sample->name);
+    bed->score = sample->score;
+    bed->blockCount = sample->sampleCount;
+    AllocArray(bed->blockSizes, bed->blockCount);
+    AllocArray(bed->chromStarts, bed->blockCount);
+    for (i=0; i<bed->blockCount; ++i)
+        {
+	bed->blockSizes[i] = 1;
+	bed->chromStarts[i] = sample->samplePosition[i];
+	}
+    f = mapped;
+    error = remapBlockedBed(chainHash, bed);
+    if (error == NULL)
+        {
+	freeMem(sample->chrom);
+	sample->chrom = cloneString(bed->chrom);
+	sample->chromStart = bed->chromStart;
+	sample->chromEnd = bed->chromEnd;
+	sample->strand[0] = bed->strand[0];
+	for (i=0; i<bed->blockCount; ++i)
+	    sample->samplePosition[i] = bed->chromStarts[i];
+	}
+    else
+        {
+	fprintf(unmapped, "# %s\n", error);
+	f = unmapped;
+	}
+    sampleTabOut(sample, f);
+    sampleFree(&sample);
+    bedFree(&bed);
+    }
+lineFileClose(&lf);
+}
+
 
 void liftOver(char *oldFile, char *mapFile, char *newFile, char *unmappedFile)
 /* liftOver - Move annotations from one assembly to another. */
@@ -727,6 +784,8 @@ if (optionExists("gff"))
     liftOverGff(oldFile, chainHash, mapped, unmapped);
 else if (optionExists("genePred"))
     liftOverGenePred(oldFile, chainHash, mapped, unmapped);
+else if (optionExists("sample"))
+    liftOverSample(oldFile, chainHash, mapped, unmapped);
 else
     liftOverBed(oldFile, chainHash, mapped, unmapped);
 carefulClose(&mapped);

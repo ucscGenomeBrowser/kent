@@ -1,5 +1,4 @@
-.c.o:
-	gcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -c $*.c
+include ../inc/makefile.h
 
 O = protDust.o 
 

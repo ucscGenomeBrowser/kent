@@ -1,5 +1,5 @@
-.c.o:
-	gcc -I../inc -I../../inc -c $*.c
+include ../../inc/makefile.h
+
 
 cdnaAli.o: cdnaAli.c
 

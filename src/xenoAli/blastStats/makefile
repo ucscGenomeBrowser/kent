@@ -1,5 +1,5 @@
-.c.o:
-	gcc -ggdb -I../../inc -c $*.c
+include ../../inc/makefile.h
+
 
 O = blastStats.o
 

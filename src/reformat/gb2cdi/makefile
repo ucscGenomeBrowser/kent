@@ -1,5 +1,5 @@
-.c.o:
-	gcc -O -Wimplicit -ggdb -I../../inc -c $*.c
+include ../../inc/makefile.h
+
 
 O = gb2cdi.o 
 

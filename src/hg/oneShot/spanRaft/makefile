@@ -1,5 +1,4 @@
-.c.o:
-	cc -O -I../../../inc -c $*.c
+include ../../../inc/makefile.h
 
 O = spanRaft.o 
 

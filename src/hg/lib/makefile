@@ -1,12 +1,5 @@
-OPT= -ggdb 
-
-#Optimized for performance
-.c.o:
-	gcc -ggdb -O -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -Wformat -Wimplicit -Wuninitialized -I../inc -I../../inc -I$(MYSQLINC) -c $*.c
-
-#For debugging
-#.c.o:
-#	gcc -ggdb -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -Wformat -Wimplicit  -I../inc -I../../inc -I$(MYSQLINC) -c $*.c
+XINC = -I $(MYSQLINC)
+include ../../inc/makefile.h
 
 L = -lm $(MYSQLLIBS)
 MYLIBDIR = ../../lib/$(MACHTYPE)
@@ -24,8 +17,7 @@ O = agpFrag.o agpGap.o axtInfo.o bbRepMask.o bed.o blatServers.o blastzNet.o \
     ggCluster.o altGraph.o ggDbIo.o \
     ggGraph.o grp.o hCommon.o hdb.o hgConfig.o hgFind.o \
     hgGene.o hgRelate.o hui.o humanParalog.o isochores.o jaxOrtholog.o jaxQTL.o\
-    jksql.o knownInfo.o knownMore.o lfs.o stsMap.o stsMapMouse.o \
-    jksql.o knownInfo.o knownMore.o lfs.o \
+    knownInfo.o knownMore.o lfs.o stsMap.o stsMapMouse.o \
     mapSts.o mcnBreakpoints.o mouseSyn.o mouseSynWhd.o mouseOrtho.o \
     ensPhusionBlast.o netAlign.o \
     ooUtils.o pepPred.o plasEndPairs.o pslWScore.o \
@@ -43,7 +35,7 @@ O = agpFrag.o agpGap.o axtInfo.o bbRepMask.o bed.o blatServers.o blastzNet.o \
     dbSnpRS.o synMap.o refSeqStatus.o web.o affyPairs.o affyOffset.o columnInfo.o \
     affyAtlas.o imageClone.o stanMad.o jaxQTL.o hgSeq.o bactigPos.o 
 
-../../lib/$(MACHTYPE)/jkhgap.a: $(O) 
+../../lib/$(MACHTYPE)/jkhgap.a: $(O) jksql.o
 	ar rcus ../../lib/$(MACHTYPE)/jkhgap.a $(O)
 
 clean:

@@ -1,6 +1,4 @@
-COPT=-ggdb -O3
-.c.o:
-	gcc -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE ${COPT} -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -c $*.c
+include ../inc/makefile.h
 
 O = aliType.o axt.o bits.o binRange.o \
     blastOut.o blastParse.o boxClump.o browserGfx.o \

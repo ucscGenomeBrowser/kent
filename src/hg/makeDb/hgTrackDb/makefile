@@ -1,5 +1,4 @@
-.c.o:
-	gcc -ggdb -Wformat -Wimplicit -Wreturn-type -I../inc -I../../inc -I../../../inc -c $*.c
+include ../../../inc/makefile.h
 
 L = -lm $(MYSQLLIBS)
 MYLIBDIR = ../../../lib/$(MACHTYPE)

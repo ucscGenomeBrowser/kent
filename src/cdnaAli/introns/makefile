@@ -1,5 +1,5 @@
-.c.o:
-	gcc -I../inc -I../../inc -c $*.c
+include ../../inc/makefile.h
+
 
 O =  introns.o ../lib/cdnaAli.o
 

@@ -1,5 +1,4 @@
-.c.o:
-	gcc -I../../inc -I../../../inc -c $*.c
+include ../../../inc/makefile.h
 
 L = 
 MYLIBDIR = ../../../lib/$(MACHTYPE)

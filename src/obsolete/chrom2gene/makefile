@@ -1,5 +1,5 @@
-.c.o:
-	gcc -I../../inc -c $*.c
+include ../../inc/makefile.h
+
 
 chrom2gene: chrom2gene.o
 	gcc -o chrom2gene chrom2gene.o ../../lib/$(MACHTYPE)/jkweb.a

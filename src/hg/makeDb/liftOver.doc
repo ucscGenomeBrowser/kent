@@ -57,7 +57,7 @@ chainMergeSort chainRaw/*.chain | chainSplit chain stdin
 mkdir net
 cd chain
 foreach i (*.chain)
-    chainNet $i ~/oo/chrom.sizes ~/lastOo/chrom.sizes ../net/$i:r.net /dev/null
+    chainNet $i ~/lastOo/chrom.sizes ~/oo/chrom.sizes ../net/$i:r.net /dev/null
     echo done $i
 end
 
@@ -67,18 +67,17 @@ foreach i (*.chain)
     netChainSubset ../net/$i:r.net $i ../over/$i
     echo done $i
 end
-cat ../over/*.chain ~/oo/over.chain
+mkdir ~/oo/bedOver
+cat ../over/*.chain ~/oo/bedOver/over.chain
 
 # V - Lifting Ensembl:
 # Get onto hgwdev
-cd ~/oo
-mkdir bedOver
-cd bedOver
+cd ~/oo/bedOver
 mkdir ensembl
 cd ensembl
 hgsql -N hg12 > old.gp <<end
 select * from ensGene
 end
-liftOver old.gp ~/oo/over.chain new.gp unmapped.gp
+liftOver -genePred old.gp ../over.chain new.gp unmapped.gp
 
 

@@ -1,5 +1,5 @@
-.c.o:
-	gcc -ggdb -I../inc -I../../inc -c $*.c
+include ../../inc/makefile.h
+
 
 L = -lm
 MYLIBDIR = ../../lib/$(MACHTYPE)

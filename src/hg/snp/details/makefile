@@ -1,6 +1,4 @@
-.c.o:
-	gcc -ggdb -O -Wall -I$(KENTROOT)/inc -I$(KENTROOT)/hg/inc -c $*.c
-#	gcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I$(KENTROOT)/inc -I$(KENTROOT)/hg/inc -c $*.c
+include ../../../inc/makefile.h
 
 L = $(MYSQLLIBS) -lm
 MYLIBDIR = $(KENTROOT)/lib/$(MACHTYPE)

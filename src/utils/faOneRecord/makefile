@@ -1,5 +1,5 @@
-.c.o:
-	gcc -O -ggdb -Wformat -Wimplicit -Wuninitialized -I../../inc -c $*.c
+include ../../inc/makefile.h
+
 
 O = faOneRecord.o 
 

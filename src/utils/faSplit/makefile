@@ -1,6 +1,5 @@
-F64 = -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE
-.c.o:
-	gcc -O ${F64} -ggdb -I../../inc -c $*.c
+include ../../inc/makefile.h
+
 
 O = faSplit.o 
 
