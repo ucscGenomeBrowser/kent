@@ -27,6 +27,7 @@
 
 /* Command line options and defaults. */
 char *abbr = NULL;
+boolean ignore = FALSE;
 
 char historyTable[] =	
 /* This contains a row for each update made to database.
@@ -255,7 +256,14 @@ if (extFilesHash == NULL)
         gotSize = fileSize(ex->path);
 	if (lastChar != '/' && ex->size != gotSize)
 	    {
-	    errAbort("External file %s out of sync.\n Expected size: %ul, got size %ul\n", ex->path, ex->size, gotSize);
+            if(ignore) 
+                {
+                fprintf(stderr, "WARNING: External file %s out of sync.\n Expected size: %ul, got size %ul\n", ex->path, ex->size, gotSize);
+                }
+            else 
+                {
+                errAbort("ERROR: External file %s out of sync.\n Expected size: %ul, got size %ul\n", ex->path, ex->size, gotSize);
+                }
 	    }
 	}
     sqlFreeResult(&sr);
@@ -336,14 +344,17 @@ errAbort(
   "usage:\n"
   "   hgLoadRna new database\n"
   "This creates freshly the RNA part of the database\n"
-  "   hgLoadRna add [-type=type] database /full/path/mrna.fa mrna.ra\n"
+  "   hgLoadRna add [-type=type] database /full/path/mrna.fa mrna.ra [-ignore]\n"
   "      type can be mRNA or EST or whatever goes into extFile.name\n"
   "This adds mrna info to the database\n"
   "   hgLoadRna drop database\n"
   "This drops the tables created by hgLoadRna from database.\n"
-  "   hgLoadRna addSeq [-abbr=junk] database file(s).fa\n"
+  "   hgLoadRna addSeq [-abbr=junk] database file(s).fa [-ignore]\n"
   "This loads sequence files only, no auxiliarry info.  Typically\n"
   "these are more likely to be mouse reads than rna actually....\n"
+  "The -ignore flag tells hgLoadRna not to validate the contents of the extFile table.\n"
+  "It is only to be used if a normal load fails.\n"
+  "Please notify someone responsible if an error is flagged.\n"
   );
 }
 
@@ -710,9 +721,14 @@ char *command;
 
 cgiSpoof(&argc, argv);
 if (argc < 2)
+    {
     usage();
+    }
+
 abbr = cgiOptionalString("abbr");
+ignore = (NULL != cgiOptionalString("ignore"));
 command = argv[1];
+
 if (sameString(command, "new"))
     {
     if (argc != 3)
