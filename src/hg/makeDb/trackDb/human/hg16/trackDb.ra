@@ -1378,8 +1378,13 @@ visibility dense
 color 0,100,100
 type bed 4 +
 
-
-
+track pHMM_5_WayTop1
+shortLabel 1% Conserved
+longLabel Top 1 % of Human/Chimp/Mouse/Rat/Chicken PhyloHMM Cons
+priority 160
+group x
+visibility hide
+type bed 5
 
 searchTable HInvGeneMrna
 searchMethod exact
