@@ -7,6 +7,9 @@
 #include "cheapcgi.h"
 #include "hCommon.h"
 #include "hgText.h"
+#include "hui.h"
+#include "customTrack.h"
+#include "portable.h"
 
 /*	possible two sets of data could be existing	*/
 static struct wiggleData *wigData[2] =
@@ -121,6 +124,58 @@ if (summaryOnly)
 else
    ret = (value > wigDataConstraint[tableId][0]);
 return ret;
+}
+
+static void showConstraints(char *constraints, int tableId, boolean htmlOutput)
+{
+boolean foundSome = FALSE;
+
+if (htmlOutput)
+    printf("<P>Constraints in effect: ");
+
+if ((constraints != NULL) && (constraints[0] != 0))
+    {
+    foundSome = TRUE;
+    if (htmlOutput)
+	printf("%s\n", constraints);
+    else
+	printf("#\tSQL query constraint: %s\n", constraints);
+    }
+if (wigConstraint[tableId])
+    {
+    if (htmlOutput)
+	if (foundSome)
+	    printf(" AND ");
+    foundSome = TRUE;
+    if (sameWord(wigConstraint[tableId],"in range"))
+	{
+	if (htmlOutput)
+	    printf("(data value %s [%g , %g])",
+		wigConstraint[tableId], wigDataConstraint[tableId][0],
+		wigDataConstraint[tableId][1]);
+	else
+	    printf("#\tdata value constraint range: %s [%g , %g]\n",
+		wigConstraint[tableId], wigDataConstraint[tableId][0],
+		wigDataConstraint[tableId][1]);
+	}
+    else
+	{
+	if (htmlOutput)
+	    printf("(data value %s %g)",
+		wigConstraint[tableId], wigDataConstraint[tableId][0]);
+	else
+	    printf("#\tdata value constraint: %s %g\n",
+		wigConstraint[tableId], wigDataConstraint[tableId][0]);
+	}
+    }
+
+if (htmlOutput)
+    {
+    if (foundSome)
+	printf("</P>\n");
+    else
+	printf("NONE</P>\n");
+    }
 }
 
 void wiggleConstraints(char *cmp, char *pat, int tableIndex)
@@ -255,6 +310,7 @@ char wigFullTableName[256];
 char *setting = cartCgiUsualString(cart, "tbWigCount", ctWigCountMenu[1]);
 unsigned maxLinesOut = MAX_LINES_OUT;
 int numChroms = 0;
+int tableRowsDisplayed = 0;
 
 if (setting != (char *) NULL)
     maxLinesOut = sqlUnsigned(setting);
@@ -333,13 +389,22 @@ for (chromPtr=chromList;  chromPtr != NULL; chromPtr=chromPtr->next)
 	}
 
     if (wigStatsDone(tableId, chrom))
+	{
 	wigPrintStats(&wigStatsList[tableId], chrom);
+	if (wigStatsList[tableId] != (struct wiggleStats *) NULL)
+	    ++tableRowsDisplayed;
+	}
     else
 	{
 	printf("<TR><TH ALIGN=LEFT> %s </TH>", chrom);
 	printf("<TH COLSPAN=11> No data </TH></TR>\n");
+	++tableRowsDisplayed;
 	}
     }
+
+/*	No rows in table, indicate this no result */
+if (!tableRowsDisplayed)
+    puts("<TR><TH ALIGN=CENTER COLSPAN=12> No data found matching this request </TH></TR>");
 
 printf("</TABLE>\n");
 puts("</TD></TR></TABLE></P>");
@@ -357,6 +422,7 @@ char *phase = (existsAndEqual("phase", getOutputPhase) ?
 	       cgiString("outputType") : cgiString("phase"));
 char *setting = NULL;
 char buf[256];
+char *constraints = constrainFields(NULL);
 
 saveOutputOptionsState();
 saveIntersectOptionsState();
@@ -411,45 +477,58 @@ setting = cartCgiUsualString(cart, "tbCtVis", ctWigVisMenu[2]);
 cgiMakeDropList("tbCtVis", ctWigVisMenu, ctWigVisMenuSize, setting);
 puts("</TD></TR><TR><TD></TD></TR></TABLE>");
 
+showConstraints(constraints, WIG_TABLE_1, TRUE);
+
+printf("<P> <B> Select type of data output: </B> <BR>\n");
+if (doCt)
+    setting = cartCgiUsualString(cart, "tbWigDataType", "bedData");
+else
+    setting = cartCgiUsualString(cart, "tbWigDataType", "wigData");
+cgiMakeRadioButton("tbWigDataType", "bedData", sameString(setting, "bedData"));
+printf("BED format (no data value information, only position)<BR>\n");
+cgiMakeRadioButton("tbWigDataType", "wigData", sameString(setting, "wigData"));
+printf("DATA VALUE format (position and real valued data)</P>\n");
+
 puts("<P> <B> Limit output to: </B>");
 setting = cartCgiUsualString(cart, "tbWigCount", ctWigCountMenu[1]);
 cgiMakeDropList("tbWigCount", ctWigCountMenu, ctWigCountMenuSize, setting);
-puts("<B> data values </B> (to avoid browser overload)</P>\n");
+puts("<B> lines of data </B> (to avoid browser overload)</P>\n");
 
 if (doCt)
     {
-    /*cgiMakeButton("phase", getCtPhase);*/
-    cgiMakeButton("phase", getCtWigglePhase);
-    puts("<P>This type of data custom track is under development.<BR>\n"
-	"Expected to be in operation April 2004<BR>\n"
-	"Currently only the data values are available.</P>\n");
+    cartSetBoolean(cart, "tbDoCustomTrack", TRUE);
+    cgiMakeButton("phase", getCtWiggleTrackPhase);
+    cgiMakeButton("phase", getCtWiggleFilePhase);
+    puts("<P>NOTE: Only BED format tracks are produced at this time.<BR>\n"
+	"This type of data custom track is under development.<BR>\n"
+	"Expected to be fully operational early May 2004<BR>\n");
     }
 else
     {
     cgiMakeButton("phase", getWigglePhase);
-    cgiMakeButton("phase", getWiggleBedPhase);
     }
 puts("</FORM>");
 webEnd();
 }	/*	void doWiggleCtOptions(boolean doCt)	*/
 
-static void showConstraints(char *constraints, int tableId)
+static void dyConstraints(char *constraints, int tableId,
+    struct dyString *dy)
 {
 if (constraints)
-	printf("#\tSQL query constraint: %s\n", constraints);
+	dyStringPrintf(dy, "#\tSQL query constraint: %s\n", constraints);
 if (wigConstraint[tableId])
     {
     if (sameWord(wigConstraint[tableId],"in range"))
-	printf("#\tdata value constraint range: %s [%g , %g]\n",
+	dyStringPrintf(dy,"#\tdata value constraint range: %s [%g , %g]\n",
 	    wigConstraint[tableId], wigDataConstraint[tableId][0],
 		wigDataConstraint[tableId][1]);
     else
-	printf("#\tdata value constraint: %s %g\n",
+	dyStringPrintf(dy,"#\tdata value constraint: %s %g\n",
 	    wigConstraint[tableId], wigDataConstraint[tableId][0]);
     }
 }
 
-void doGetWiggleData(boolean doCt, boolean wigBED)
+void doGetWiggleData(boolean doCt)
 /* Find wiggle data and display it */
 {
 struct slName *chromList, *chromPtr;
@@ -460,7 +539,7 @@ struct wiggleData *wdPtr = (struct wiggleData *) NULL;
 struct trackDb *tdb = (struct trackDb *)NULL;
 char *track = getTrackName();
 unsigned linesOutput = 0;
-boolean doCtHdr = (cgiBoolean("tbDoCustomTrack") || doCt);
+boolean doCtHdr = (cartCgiUsualBoolean(cart, "tbDoCustomTrack", FALSE) || doCt);
 char *constraints;
 char *setting = cartCgiUsualString(cart, "tbWigCount", ctWigCountMenu[1]);
 unsigned maxLinesOut = MAX_LINES_OUT;
@@ -468,8 +547,14 @@ char *longLabel = cloneString("User Supplied Track");
 char *ctDesc = cgiUsualString("tbCtDesc", table);
 char *ctName = cgiUsualString("tbCtName", table);
 char *ctVis  = cgiUsualString("tbCtVis", "hide");
+char *ctUrl  = cgiUsualString("tbCtUrl", "");
+struct customTrack *ctNew = NULL;
 char tableName[128];
 char *visibility;
+int visNum = 0;
+boolean wigBED = FALSE;
+struct bed *bedList = NULL;
+struct dyString *wigAsciiData = newDyString(0);
 
 if (! sameString(customTrackPseudoDb, db))
     {
@@ -481,6 +566,13 @@ if (! sameString(customTrackPseudoDb, db))
 if (setting != (char *) NULL)
     maxLinesOut = sqlUnsigned(setting);
 
+setting = cartCgiUsualString(cart, "tbWigDataType", "wigData");
+if ( sameString(setting, "bedData") )
+    wigBED = TRUE;
+
+if (doCt)		/*	TEMPORARY UNTIL WIGGLE TRACKS DRAW */
+    wigBED = TRUE;	/*	FOR SOURCE RELEASE 2004-04-28 */
+
 saveOutputOptionsState();
 saveIntersectOptionsState();
 
@@ -488,8 +580,11 @@ constraints = constrainFields(NULL);
 if ((constraints != NULL) && (constraints[0] == 0))
     constraints = NULL;
 
-printf("Content-Type: text/plain\n\n");
-webStartText();
+if (!doCt)
+    {
+    printf("Content-Type: text/plain\n\n");
+    webStartText();
+    }
 
 if (differentWord(ctName,table) )
     snprintf(tableName, sizeof(tableName), "%s", ctName);
@@ -507,17 +602,33 @@ if (ctVis != (char *)NULL)
 else
     visibility = cloneString("hide");
 
+visNum = (int) hTvFromStringNoAbort(visibility);
+if (visNum < 0)
+    visNum = 0;
+
 if (allGenome)
     chromList = getOrderedChromList();
 else
     chromList = newSlName(chrom);
 
-if (doCtHdr && wigBED)
+if (doCtHdr && wigBED && !doCt)
     {
-    printf("track name=%s description=\"%s\" "
+    printf("track name=\"%s\" description=\"%s\" "
 	"visibility=%s\n", tableName, longLabel, visibility);
+    showConstraints(constraints, WIG_TABLE_1, FALSE);
     }
-showConstraints(constraints, WIG_TABLE_1);
+
+if (doCt)
+    {
+    int fields=0;
+    if (wigBED)
+	fields=6;
+    ctNew = newCT(tableName, longLabel, visNum, ctUrl, fields);
+    if (wigBED)
+	ctNew->wiggle = FALSE;
+    else
+	ctNew->wiggle = TRUE;
+    }
 
 for (chromPtr=chromList;  chromPtr != NULL && (linesOutput < maxLinesOut);
 	chromPtr=chromPtr->next)
@@ -563,8 +674,11 @@ for (chromPtr=chromList;  chromPtr != NULL && (linesOutput < maxLinesOut);
 	if (tdb && tdb->type)
 	    {
 	    char *typeLine = cloneString(tdb->type);
-	    freeMem(longLabel);
-	    longLabel = cloneString(tdb->longLabel);
+	    if (ctDesc == (char *)NULL)
+		{
+		freeMem(longLabel);
+		longLabel = cloneString(tdb->longLabel);
+		}
 	    priority = tdb->priority;
 	    wordCount = chopLine(typeLine,words);
 	    if (wordCount > 0)
@@ -576,18 +690,41 @@ for (chromPtr=chromList;  chromPtr != NULL && (linesOutput < maxLinesOut);
 	else
 	    {
 	    priority = 42;
-	    freeMem(longLabel);
-	    longLabel = cloneString("User Supplied Track");
+	    if (ctDesc == (char *)NULL)
+		{
+		freeMem(longLabel);
+		longLabel = cloneString("User Supplied Track");
+		}
 	    colorR = colorG = colorB = 255;
 	    altColorR = altColorG = altColorB = 128;
 	    }
+	if (doCt)
+	    ctNew->tdb->longLabel = longLabel;
 
 	if (doCtHdr && (!wigBED))
 	    {
-	    printf("track type=wiggle_0 name=%s description=\"%s\" "
-		"visibility=%s color=%d,%d,%d altColor=%d,%d,%d "
-		"priority=%g\n", tableName, longLabel, visibility,
-		colorR, colorG, colorB, altColorR, altColorG, altColorB, priority);
+	    if (doCt)
+		{
+		ctNew->tdb->priority = priority;
+		ctNew->tdb->colorR = colorR;
+		ctNew->tdb->colorG = colorB;
+		ctNew->tdb->colorB = colorB;
+		ctNew->tdb->altColorR = altColorR;
+		ctNew->tdb->altColorG = altColorB;
+		ctNew->tdb->altColorB = altColorB;
+		/*	settings to be done */
+		ctNew->tdb->settings = cloneString("type='wiggle_0'");
+		dyConstraints(constraints, WIG_TABLE_1, wigAsciiData);
+		}
+	    else
+		{
+		printf("track type=wiggle_0 name=%s description=\"%s\" "
+		    "visibility=%s color=%d,%d,%d altColor=%d,%d,%d "
+		    "priority=%g\n", tableName, longLabel, visibility,
+		    colorR, colorG, colorB, altColorR, altColorG, altColorB,
+		    priority);
+		showConstraints(constraints, WIG_TABLE_1, FALSE);
+		}
 	    }
 
 	for (wdPtr = wigData; (linesOutput < maxLinesOut) &&
@@ -596,10 +733,20 @@ for (chromPtr=chromList;  chromPtr != NULL && (linesOutput < maxLinesOut);
 	    if ((chrom == (char *) NULL) || differentWord(chrom,wdPtr->chrom))
 		{
 		if (!(doCtHdr | wigBED))
-		    printf("#\t");
+		    {
+		    if (!doCt)
+			printf("#\t");
+		    }
 		if (!wigBED)
-		    printf("variableStep chrom=%s span=%u\n",
-			wdPtr->chrom, wdPtr->span);
+		    {
+		    if (doCt)
+			dyStringPrintf(wigAsciiData,
+			    "variableStep chrom=%s span=%u\n",
+			    wdPtr->chrom, wdPtr->span);
+		    else
+			printf("variableStep chrom=%s span=%u\n",
+			    wdPtr->chrom, wdPtr->span);
+		    }
 		chrom = wdPtr->chrom;
 		span = wdPtr->span;
 		}
@@ -608,8 +755,15 @@ for (chromPtr=chromList;  chromPtr != NULL && (linesOutput < maxLinesOut);
 		if (!(doCtHdr | wigBED))
 		    printf("#\t");
 		if (!wigBED)
-		    printf("variableStep chrom=%s span=%u\n",
-			wdPtr->chrom, wdPtr->span);
+		    {
+		    if (doCt)
+			dyStringPrintf(wigAsciiData,
+			    "variableStep chrom=%s span=%u\n",
+			    wdPtr->chrom, wdPtr->span);
+		    else
+			printf("variableStep chrom=%s span=%u\n",
+			    wdPtr->chrom, wdPtr->span);
+		    }
 		span = wdPtr->span;
 		}
 	    if (wdPtr->data)
@@ -619,35 +773,108 @@ for (chromPtr=chromList;  chromPtr != NULL && (linesOutput < maxLinesOut);
 		for (i = 0; (!nextSpan) && (linesOutput < maxLinesOut) &&
 			    (i < wdPtr->count); ++i, ++wd)
 		    {
-		    printf("%u\t%g\n", wd->chromStart+1, wd->value);
+		    if (doCt)
+			dyStringPrintf(wigAsciiData, "%u\t%g\n",
+			    wd->chromStart+1, wd->value);
+		    else
+			printf("%u\t%g\n", wd->chromStart+1, wd->value);
 		    ++linesOutput;
 		    }
 		}
 	    else if (bedLength > 0)
 		{
 		struct bed *bedEl = bedListWig[WIG_TABLE_1];
+		struct bed *bedNext;
 		for ( ; linesOutput < maxLinesOut && bedEl;
-			bedEl = bedEl->next)
+			bedEl = bedNext)
 		    {
-		    printBedEl(bedEl);
+		    bedNext = bedEl->next;
+		    if (doCt)
+			{
+			slAddHead(&bedList, bedEl);
+			}
+		    else
+			printBedEl(bedEl);
 		    ++linesOutput;
 		    }
-		bedFreeList(&bedListWig[WIG_TABLE_1]);
+		if (!doCt)
+		    bedFreeList(&bedListWig[WIG_TABLE_1]);
 		}
 	    else
-		printf("#\tno data in this block ?  (may be a data table ERROR)\n");
+		if (!doCt)
+		    printf("#\tno data in this block ?  (may be a data table ERROR)\n");
 	    }
 	wigFreeData(&wigData);
 	}
     }
 
-if (linesOutput < 1)
-    {
-    showConstraints(constraints, WIG_TABLE_1);
-    printf("#\tno results returned from query\n");
-    }
-else if (linesOutput >= maxLinesOut)
-    printf("#\tmaximum data output of %u lines reached\n", maxLinesOut);
+if ((ctNew != NULL) && (wigAsciiData->stringSize > 0))
+    ctNew->wigData = dyStringCannibalize(&wigAsciiData);
 
-webEnd();
+if ((ctNew != NULL) && (bedList != NULL))
+    {
+    slReverse(&bedList);
+    ctNew->bedList = bedList;
+    }
+
+if ((ctNew != NULL) && ((ctNew->bedList != NULL) || (ctNew->wigData != NULL)))
+    {
+    /* Load existing custom tracks and add this new one: */
+    struct customTrack *ctList = getCustomTracks();
+    char *ctFileName = cartOptionalString(cart, "ct");
+    struct tempName tn;
+    slAddHead(&ctList, ctNew);
+    /* Save the custom tracks out to file (overwrite the old file): */
+    if (ctFileName == NULL)
+	{
+	makeTempName(&tn, "hgtct", ".bed");
+	ctFileName = cloneString(tn.forCgi);
+	}
+    customTrackSave(ctList, ctFileName);
+    cartSetString(cart, "ct", ctFileName);
+    }
+
+if (doCt)
+    {
+    char browserUrl[128];
+    char headerText[256];
+    int redirDelay = 165;
+
+    if (linesOutput < 1)
+	{
+	printf("Content-Type: text/plain\n\n");
+	webStartText();
+	printf("#\tno results returned from query\n");
+	webEnd();
+	}
+    else
+	{
+    safef(browserUrl, sizeof(browserUrl),
+	  "%s?db=%s&position=%s:%d-%d",
+	  hgTracksName(), database, chrom, winStart, winEnd);
+    safef(headerText, sizeof(headerText),
+	  "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"%d;URL=%s\">",
+	  redirDelay, browserUrl);
+    webStartHeader(cart, headerText,
+		   "Table Browser: %s %s: %s", hOrganism(database), 
+		   freezeName, getCtPhase);
+    printf("You will be automatically redirected to the genome browser in\n"
+	   "%d seconds, or you can <BR>\n"
+	   "<A HREF=\"%s\">click here to continue</A>.\n",
+	   redirDelay, browserUrl);
+    printf("<BR><HR><BR>hgTracksName: %s, database: %s position=%s:%d-%d<BR><HR>\n",
+	hgTracksName(), database, chrom, winStart, winEnd);
+	}
+    }
+else
+    {
+    if (linesOutput < 1)
+	{
+	printf("#\tno results returned from query\n");
+	}
+    else if (linesOutput >= maxLinesOut)
+	printf("#\tmaximum data output of %u lines reached\n", maxLinesOut);
+
+	webEnd();
+    }
 }	/*	void doGetWiggleData(boolean doCt)	*/

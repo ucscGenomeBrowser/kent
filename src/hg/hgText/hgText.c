@@ -34,7 +34,7 @@
 #include "wiggle.h"
 #include "hgText.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.140 2004/04/21 22:49:18 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.141 2004/04/28 21:58:08 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -3653,6 +3653,7 @@ struct customTrack *newCT(char *ctName, char *ctDesc, int visNum, char *ctUrl,
 struct customTrack *ct;
 struct trackDb *tdb;
 char buf[256];
+
 AllocVar(ct);
 AllocVar(tdb);
 snprintf(buf, sizeof(buf), "ct_%s", ctName);
@@ -3667,6 +3668,8 @@ ct->tdb = tdb;
 ct->fieldCount = fields;
 ct->needsLift = FALSE;
 ct->fromPsl = FALSE;
+ct->wiggle = FALSE;
+ct->wigData = (char *)NULL;
 return(ct);
 }
 
@@ -3677,7 +3680,6 @@ struct bed *bedList;
 struct bed *bedPtr;
 struct featureBits *fbList = NULL, *fbPtr;
 struct customTrack *ctNew = NULL;
-struct tempName tn;
 char *table = getTableName();
 char *phase = (existsAndEqual("phase", getOutputPhase) ?
 	       cgiString("outputType") : cgiString("phase"));
@@ -3687,7 +3689,6 @@ char *ctName = cgiUsualString("tbCtName", table);
 char *ctDesc = cgiUsualString("tbCtDesc", table);
 char *ctVis  = cgiUsualString("tbCtVis", "dense");
 char *ctUrl  = cgiUsualString("tbCtUrl", "");
-char *ctFileName = NULL;
 char *fbQual = fbOptionsToQualifier();
 char fbTQ[128];
 int fields;
@@ -3718,11 +3719,9 @@ else
 
 if (doCtHdr && (bedList != NULL))
     {
-    int visNum = (sameString("hide", ctVis)   ? 0 :
-		  sameString("dense", ctVis)  ? 1 :
-		  sameString("squish", ctVis) ? 2 : 
-		  sameString("pack", ctVis)   ? 3 : 
-		  sameString("full", ctVis)   ? 4 : 3);
+    int visNum = (int) hTvFromStringNoAbort(ctVis);
+    if (visNum < 0)
+	visNum = 0;
     if (doCt)
 	ctNew = newCT(ctName, ctDesc, visNum, ctUrl, fields);
     else
@@ -3772,9 +3771,10 @@ if ((ctNew != NULL) && (ctNew->bedList != NULL))
     {
     /* Load existing custom tracks and add this new one: */
     struct customTrack *ctList = getCustomTracks();
+    char *ctFileName = cartOptionalString(cart, "ct");
+    struct tempName tn;
     slAddHead(&ctList, ctNew);
     /* Save the custom tracks out to file (overwrite the old file): */
-    ctFileName = cartOptionalString(cart, "ct");
     if (ctFileName == NULL)
 	{
 	makeTempName(&tn, "hgtct", ".bed");
@@ -5009,16 +5009,16 @@ else
 	doGetGFF();
     else if (existsAndEqual("phase", bedOptionsPhase))
 	doBedCtOptions(FALSE);
-    else if (existsAndEqual("phase", getCtWigglePhase))
-	doGetWiggleData(DO_CT_DATA,DATA_AS_POINTS);
+    else if (existsAndEqual("phase", getCtWiggleTrackPhase))
+	doGetWiggleData(DO_CT_DATA);
+    else if (existsAndEqual("phase", getCtWiggleFilePhase))
+	doGetWiggleData(NOT_CT_DATA);
     else if (existsAndEqual("phase", ctWigOptionsPhase))
 	doWiggleCtOptions(TRUE);
     else if (existsAndEqual("phase", wigOptionsPhase))
 	doWiggleCtOptions(FALSE);
     else if (existsAndEqual("phase", getWigglePhase))
-	doGetWiggleData(NOT_CT_DATA,DATA_AS_POINTS);
-    else if (existsAndEqual("phase", getWiggleBedPhase))
-	doGetWiggleData(NOT_CT_DATA,DATA_AS_BED);
+	doGetWiggleData(NOT_CT_DATA);
     else if (existsAndEqual("phase", ctOptionsPhase))
 	doBedCtOptions(TRUE);
     else if (existsAndEqual("phase", getBedPhase))
