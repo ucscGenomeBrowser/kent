@@ -465,3 +465,30 @@ searchType bed
 termRegex Hs\.[0-9]+
 searchPriority 20
 
+track affyTranscription
+shortLabel Transcription
+longLabel Affy. SK-N-AS Transcript Abundance
+group x
+priority 164
+visibility hide
+autoScaleDefault Off
+color 175,150,128
+altColor 255,128,0
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+defaultViewLimits -800:800
+type wig -2504.86 4396.07
+
+track affyTransfrags
+shortLabel Transfrags
+longLabel Affy. SK-N-AS Transfrags
+group x
+priority 165
+visibility hide
+color 175,150,128
+altColor 255,128,0
+type bed 4 +
+
+
+
