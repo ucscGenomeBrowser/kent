@@ -1046,6 +1046,17 @@ directory may contain some or all of the following files:<BR>
 
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>mrna.zip:</B>
 	a zipped-up file of mRNA from GenBank. 
+
+	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>upstream1000.zip:</B>
+	Sequences 1000 bases upstream of annotated transcription start of RefSeq 
+	genes.  This includes only cases where the transcription start is 
+	annotated separately from the coding region start.
+
+	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>upstream2000.zip:</B>
+	Same as upstream1000, but with 2000 bases. 
+
+	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>upstream5000.zip:</B>
+	Same as upstream1000, but with 5000 bases. 
 	</TD></TR> 
 
 </TABLE> 
@@ -1466,7 +1477,7 @@ the short p arm. The coordinates differ between assemblies.
 	None.</TD></TR>
 </TABLE></P>
 
-<P><B>Mouse Blat </B><BR>
+<P><B>Chimp BAC Ends </B><BR>
 This track displays BAC alignments of the chimp genome (Pan troglodytes) to human, based on Blat alignments from Ingo Ebersberger, Joshua Bacher, and Svante P‰‰bo at the <A HREF="http://www.eva.mpg.de" TARGET=_blank>MPI for Evolutionary Anthropology</A>. 
 
 <TABLE CELLPADDING=0 CELLSPACING=0>
@@ -2074,6 +2085,81 @@ to be kept.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
+<P><B>Human Synteny</B><BR>
+This track shows syntenous (corresponding) regions between mouse and human 
+chromosomes. The track was created by passing a 100k non-overlapping window over 
+the genome and using the blastz best in human genome alignments to look for
+high-scoring regions where at least 40% of the bases aligned with the same 
+region in mouse. 100k segments were joined together if they agreed in direction 
+and were within 500kb of each other in the mouse genome and within 4mb of each 
+other in the human. Gaps were joined between syntenic anchors if the bases 
+between two flanking regions agreed with synteny (direction and human location). 
+The syntenic block was extended to include these areas.
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for synteny tracks.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an item in full display mode shows details of the
+	mouse-human correspondence and provides a link to the genomic sequence 
+	for this feature. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>syntenyHuman</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="../gbdDescriptions.html#SyntenyHuman"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>Known Genes </B><BR>
+The Known Genes track shows known protein coding genes based on proteins from 
+SWISS-PROT, TrEMBL, and TrEMBL-NEW and their corresponding mRNAs from Genbank. 
+Features are colored according to origin and review status:
+<UL>
+<LI>
+<B>Black</B>: Feature has a corresponding entry in the Protein Data Bank (PDB).
+<LI>
+<B>Dark blue</B>: Feature has a corresponding protein in SWISS-PROT or a corresponding 
+NCBI Reference Sequence mRNA with a "Reviewed" status. 
+<LI>
+<B>Lighter blue</B>: Feature has a corresponding NCBI Reference 
+Sequence mRNA with "Provisional" status. 
+<LI>
+<B>Lightest blue</B>: All other features.
+</UL>
+All mRNAs of a species are aligned against the genome using the BLAT program. 
+When a single mRNA aligns in multiple places, only the best alignments with at
+least 98% sequence identity are kept. The set of alignments is further reduced 
+by keeping only those mRNAs that are referenced by a protein in SWISS-PROT, 
+TrEMBL, or TrEMBL-NEW. When a single protein references multiple mRNAs, the best 
+mRNA is chosen based on a quality score that depends on its length, how good its 
+translation matches the protein sequence, and its release date. The resulting 
+list of mRNA and protein pairs is trimmed by removing short invalid entries and 
+consolidating entries with identical CDS regions. Finally, RefSeq entries 
+derived from DNA sequences instead of mRNA sequences are added. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for known genes and gene 
+	predictions tracks. See above description of color coding conventions. 
+	</TD></TR> 
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display provides provides links to the 
+	corresponding protein, mRNA, and genomic sequences, and related links to 
+	several outside databases. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>knownGene</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#KnownGene"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
 
 <P><B>Map Contigs</B><BR>
 This track shows the locations of contigs of clones on the physical map. 
@@ -2241,13 +2327,16 @@ near-best-in-genome filter.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
-<P><B>Mouse Synteny </B><BR>
+<P><B>Mouse Synteny (hg13)</B><BR>
 This track shows syntenous (corresponding) regions between human and mouse 
-chromosomes. This track was created by looking for homology to known mouse
-genes in the draft assembly. The mouse data is provided at the chromosome 
-(not cytoband) level. The data for this track was provided by NCBI. Refer to the 
-<A HREF="http://www.ncbi.nlm.nih.gov/Homology/">NCBI Homology site</A> 
-for more details.
+chromosomes. The track was created by passing a 100k non-overlapping window over 
+the genome and using the blastz best in mouse genome alignments to look for
+high-scoring regions where at least 40% of the bases aligned with the same 
+region in mouse. 100k segments were joined together if they agreed in direction 
+and were within 500kb of each other in the human genome and within 4mb of each 
+other in the mouse. Gaps were joined between syntenic anchors if the bases 
+between two flanking regions agreed with synteny (direction and mouse location). 
+The syntenic block was extended to include these areas.
 
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
@@ -2255,14 +2344,35 @@ for more details.
 	This track uses the display conventions for synteny tracks.</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
-	Clicking on an item in full display mode will show details of the
-	mouse-human correspondence. </TD></TR>
+	Clicking on an item in full display mode shows details of the
+	mouse-human correspondence and provides a link to the genomic sequence 
+	for this feature. </TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Table details:</I></B> 
 	To view a text version of the data set, select the 
-	<I>mouseSyn</I> position table in the Table Browser. To view the table
+	<I>syntenyMouse</I> position table in the Table Browser. To view the table
 	definition, click <A
-	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#MouseSyn"
+	HREF="../gbdDescriptions.html#SyntenyMouse"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>Mouse Synteny (hg12 only)</B><BR>
+This track shows orthologous (syntenic) regions between mouse and human chromosomes based on data from Michael Kamal at the Whitehead Institute.
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for synteny tracks.</TD></TR>
+	<B><I>Track details:</I></B> 
+	Clicking on an item in full display mode will show details of the
+	mouse-human correspondence, as well links to genomic dotplots, 
+	additional information, and an alternative synteny map based on 
+	orthologous genes. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>mouseSynWhd</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#mouseSynWhd"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
@@ -2429,6 +2539,35 @@ Consortium</A>.
 	<I>snpTsc</I> position table in the Table Browser. To view the table
 	definition, click <A
 	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#SNPsites"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>Rat Synteny </B><BR>
+This track shows syntenous (corresponding) regions between human and rat 
+chromosomes. The track was created by passing a 100k non-overlapping window over 
+the genome and using the blastz best in mouse genome alignments to look for
+high-scoring regions where at least 40% of the bases aligned with the same 
+region in rat. 100k segments were joined together if they agreed in direction 
+and were within 500kb of each other in the human genome and within 4mb of each 
+other in the rat. Gaps were joined between syntenic anchors if the bases 
+between two flanking regions agreed with synteny (direction and rat location). 
+The syntenic block was extended to include these areas.
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for synteny tracks.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an item in full display mode shows details of the
+	rat-human correspondence and provides a link to the genomic sequence 
+	for this feature. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>syntenyRat</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="../gbdDescriptions.html#SyntenyRat"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
@@ -2794,26 +2933,6 @@ average value to be the same for each chip.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
-<P><B>Whitehead Synteny</B><BR>
-This track shows orthologous (syntenic) regions between mouse and human chromosomes based on data from Michael Kamal at the Whitehead Institute.
-<TABLE CELLPADDING=0 CELLSPACING=0>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Display conventions:</I></B>
-	This track uses the display conventions for synteny tracks.</TD></TR>
-	<B><I>Track details:</I></B> 
-	Clicking on an item in full display mode will show details of the
-	mouse-human correspondence, as well links to genomic dotplots, 
-	additional information, and an alternative synteny map based on 
-	orthologous genes. </TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Table details:</I></B> 
-	To view a text version of the data set, select the 
-	<I>mouseSynWhd</I> position table in the Table Browser. To view the table
-	definition, click <A
-	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#mouseSynWhd"
-	TARGET=_blank>here</A>.</TD></TR>
-</TABLE></P>
-
 <P><B>UniGene</B><BR>
 This track shows <A HREF="http://www.ncbi.nlm.nih.gov/UniGene/">UniGene</A> 
 clusters of ESTs aligned to the genome using BLAT. This data imperfectly 
@@ -2838,6 +2957,7 @@ UniGene track in the assembled and annotated genome.
 	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
+
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
     <br></TD></TR></TABLE>
