@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.747 2004/06/02 20:18:08 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.748 2004/06/02 23:01:50 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -2895,6 +2895,58 @@ if (hTableExists("refLink"))
     for (lf = tg->items; lf != NULL; lf = lf->next)
 	{
 	sprintf(query, "select name from refLink where mrnaAcc = '%s'", lf->name);
+	sr = sqlGetResult(conn, query);
+	if ((row = sqlNextRow(sr)) != NULL)
+	    {
+            if (strlen(row[0]) > 0)
+                {
+                /* allow space for both */
+                int size = strlen(row[0]) + strlen(lf->name) + 2;
+                lf->extra = needMem(size);
+                if (useGeneName)
+                    strcat(lf->extra, row[0]);
+                if (useGeneName && useAcc)
+                    strcat(lf->extra, "/");
+                if (useAcc)
+                    strcat(lf->extra, lf->name);
+                }
+            else
+                {
+                /* no reflink, use name unless none is selected  */
+                if (useGeneName || useAcc)
+                    lf->extra = cloneString(lf->name);
+                else
+                    lf->extra = cloneString("");
+                }
+	    }
+	sqlFreeResult(&sr);
+	}
+    }
+hFreeConn(&conn);
+}
+
+void lookupProteinNames(struct track *tg)
+/* This converts the knownGene accession to a gene name where possible. */
+{
+struct linkedFeatures *lf;
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+char *newName;
+char *refGeneLabel = cartUsualString(cart, "blastHg16KG.label", "gene");
+boolean useGeneName = sameString(refGeneLabel, "gene")
+    || sameString(refGeneLabel, "both");
+boolean useAcc = sameString(refGeneLabel, "accession")
+    || sameString(refGeneLabel, "both");
+
+if (hTableExists("kgMapName"))
+    {
+    struct knownMore *km;
+    struct sqlResult *sr;
+    char **row;
+
+    for (lf = tg->items; lf != NULL; lf = lf->next)
+	{
+	sprintf(query, "select geneName from kgMapName where kgPepId = '%s'", lf->name);
 	sr = sqlGetResult(conn, query);
 	if ((row = sqlNextRow(sr)) != NULL)
 	    {
@@ -7179,6 +7231,29 @@ tg->items = lfList;
 }
 
 
+void loadBlast(struct track *tg)
+{
+enum trackVisibility vis = tg->visibility;
+struct sqlConnection *conn = hAllocConn();
+loadProteinPsl(tg);
+if (vis != tvDense)
+    {
+    lookupProteinNames(tg);
+    slSort(&tg->items, linkedFeaturesCmpStart);
+    }
+vis = limitVisibility(tg);
+}
+
+void blastMethods(struct track *tg)
+/* blast protein track methods */
+{
+tg->loadItems = loadBlast;
+tg->itemName = refGeneName;
+tg->mapItemName = refGeneMapName;
+tg->itemColor = refGeneColor;
+}
+
+
 void loadGenePred(struct track *tg)
 /* Convert bed info in window to linked feature. */
 {
@@ -7881,6 +7956,7 @@ registerTrackHandler("genieKnown", genieKnownMethods);
 registerTrackHandler("knownGene", knownGeneMethods);
 registerTrackHandler("superfamily", superfamilyMethods);
 registerTrackHandler("refGene", refGeneMethods);
+registerTrackHandler("blastHg16KG", blastMethods);
 registerTrackHandler("xenoRefGene", refGeneMethods);
 registerTrackHandler("sanger22", sanger22Methods);
 registerTrackHandler("sanger22pseudo", sanger22Methods);
