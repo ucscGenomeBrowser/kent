@@ -20,7 +20,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.3 2004/05/01 00:33:28 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.4 2004/05/05 08:35:28 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -449,7 +449,7 @@ if (ki->sizeMB == 0)
     }
 
 replaceInStr(html, sizeof(html) , "<!qid>"         , ki->qid       ); 
-replaceSelectOptions("priority" , "A,B,C,L"        , ki->priority  );
+replaceSelectOptions("priority" , "A,B,C,D,L"      , ki->priority  );
 replaceInStr(html, sizeof(html) , "<!qadate>"      , ki->qadate    ); 
 replaceSelectOptions("newYN"    ,"Y,N"             , ki->newYN     );
 replaceInStr(html, sizeof(html) , "<!track>"       , ki->track     ); 
@@ -839,7 +839,7 @@ char *tbl = "pushQ";
 char *meta = ""
 "<head>"
 "<title>Meta Redirect Code</title>"
-"<meta http-equiv=\"refresh\" content=\"1;url=/cgi-bin/qaPushQ?action=display\">"
+"<meta http-equiv=\"refresh\" content=\"0;url=/cgi-bin/qaPushQ?action=display\">"
 "</head>";
 
 
@@ -883,7 +883,7 @@ char newQid[sizeof(q.qid)] = "";
 char *meta = ""
 "<head>"
 "<title>Meta Redirect Code</title>"
-"<meta http-equiv=\"refresh\" content=\"1;url=/cgi-bin/qaPushQ?action=display\">"
+"<meta http-equiv=\"refresh\" content=\"0;url=/cgi-bin/qaPushQ?action=display\">"
 "</head>";
 
 safef(newQid, sizeof(newQid), cgiString("qid"));
@@ -973,6 +973,94 @@ return q.rank;
 }
 
 
+/* too bad this isn't part of autoSql's code generation */
+
+void pushQUpdateEscaped(struct sqlConnection *conn, struct pushQ *el, char *tableName, int updateSize)
+/* Update pushQ row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than pushQSaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
+{
+struct dyString *update = newDyString(updateSize);
+char  *qid, *pqid, *priority, *qadate, *newYN, *track, *dbs, *tbls, *cgis, *files, *currLoc, *makeDocYN, *onlineHelp, *ndxYN, *joinerYN, *stat, *sponsor, *reviewer, *extSource, *openIssues, *notes, *reqdate, *pushedYN;
+qid = sqlEscapeString(el->qid);
+pqid = sqlEscapeString(el->pqid);
+priority = sqlEscapeString(el->priority);
+qadate = sqlEscapeString(el->qadate);
+newYN = sqlEscapeString(el->newYN);
+track = sqlEscapeString(el->track);
+dbs = sqlEscapeString(el->dbs);
+tbls = sqlEscapeString(el->tbls);
+cgis = sqlEscapeString(el->cgis);
+files = sqlEscapeString(el->files);
+currLoc = sqlEscapeString(el->currLoc);
+makeDocYN = sqlEscapeString(el->makeDocYN);
+onlineHelp = sqlEscapeString(el->onlineHelp);
+ndxYN = sqlEscapeString(el->ndxYN);
+joinerYN = sqlEscapeString(el->joinerYN);
+stat = sqlEscapeString(el->stat);
+sponsor = sqlEscapeString(el->sponsor);
+reviewer = sqlEscapeString(el->reviewer);
+extSource = sqlEscapeString(el->extSource);
+openIssues = sqlEscapeString(el->openIssues);
+notes = sqlEscapeString(el->notes);
+reqdate = sqlEscapeString(el->reqdate);
+pushedYN = sqlEscapeString(el->pushedYN);
+
+dyStringPrintf(update, 
+"update %s set "
+"pqid='%s',priority='%s',rank=%u,qadate='%s',newYN='%s',"
+"track='%s',dbs='%s',tbls='%s',cgis='%s',files='%s',sizeMB=%u,currLoc='%s',"
+"makeDocYN='%s',onlineHelp='%s',ndxYN='%s',joinerYN='%s',stat='%s',"
+"sponsor='%s',reviewer='%s',extSource='%s',"
+"openIssues='%s',notes='%s',reqdate='%s',pushedYN='%s' "
+"where qid='%s'", 
+	tableName,  
+	pqid,  priority, el->rank,  qadate, newYN, track, dbs, 
+	tbls,  cgis,  files, el->sizeMB ,  currLoc,  makeDocYN,  
+	onlineHelp,  ndxYN,  joinerYN,  stat,  
+	sponsor,  reviewer,  extSource,  
+	openIssues,  notes,  reqdate,  pushedYN,
+	qid
+	);
+
+//debug
+//safef(msg, sizeof(msg), update->string);
+//htmShell(TITLE, doMsg, NULL);
+//exit(0);
+
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+freez(&qid);
+freez(&pqid);
+freez(&priority);
+freez(&qadate);
+freez(&newYN);
+freez(&track);
+freez(&dbs);
+freez(&tbls);
+freez(&cgis);
+freez(&files);
+freez(&currLoc);
+freez(&makeDocYN);
+freez(&onlineHelp);
+freez(&ndxYN);
+freez(&joinerYN);
+freez(&stat);
+freez(&sponsor);
+freez(&reviewer);
+freez(&extSource);
+freez(&openIssues);
+freez(&notes);
+freez(&reqdate);
+freez(&pushedYN);
+}
+
+
+
 
 void doPost()
 /* handle the  post (really just a get for now) from Add or Edit of a pushQ record */
@@ -991,7 +1079,7 @@ char *clonebutton = cgiUsualString("clonebutton","");
 char *meta = ""
 "<head>"
 "<title>Meta Redirect Code</title>"
-"<meta http-equiv=\"refresh\" content=\"1;url={url}\">"
+"<meta http-equiv=\"refresh\" content=\"0;url={url}\">"
 "</head>";
 
 char **row;
@@ -1104,6 +1192,11 @@ safef(q.reqdate   , sizeof(q.reqdate   ), cgiString("reqdate"   ));
 safef(q.pushedYN  , sizeof(q.pushedYN  ), cgiString("pushedYN"  ));
 */
 
+/* debug!
+safef(msg, sizeof(msg), "Got to past loading q.qid priority data. %d %d <br>\n",newqid,sizeof(newQid));
+htmShell(TITLE, doMsg, NULL);
+return;
+*/
 
 
 /* need to do this before delete or will lose the record */
@@ -1149,26 +1242,6 @@ if ((sameString(clonebutton,"clone"))&&(sameString(q.priority,"L")))
     return;
     }
 
-if (sameString(newQid,""))
-    {
-    safef(msg, sizeof(msg), "%%0%dd", sizeof(q.qid)-1);
-    safef(newQid,sizeof(newQid),msg,newqid);
-    safef(q.qid, sizeof(q.qid), newQid);
-    }
-else
-    {
-    /* delete old record */
-    safef(query, sizeof(query), "delete from %s where qid ='%s'", tbl, q.qid);
-    sqlUpdate(conn, query);
-    }
-
-/* debug!
-safef(msg, sizeof(msg), "Got to past loading q.qid priority data. %d %d <br>\n",newqid,sizeof(newQid));
-htmShell(TITLE, doMsg, NULL);
-return;
-*/
-
-
 if (sameString(pushbutton,"push requested")) 
     {
     /* set to today's date */
@@ -1177,11 +1250,26 @@ if (sameString(pushbutton,"push requested"))
     safef(q.pushedYN,sizeof(q.pushedYN),"N");
     }
 
-if (!sameString(delbutton,"delete")) 
-    {  
+if (sameString(delbutton,"delete")) 
+    {
+    /* delete old record */
+    safef(query, sizeof(query), "delete from %s where qid ='%s'", tbl, q.qid);
+    sqlUpdate(conn, query);
+    }
+else if (sameString(newQid,""))
+    {
     /* save new record */
+    safef(msg, sizeof(msg), "%%0%dd", sizeof(q.qid)-1);
+    safef(newQid,sizeof(newQid),msg,newqid);
+    safef(q.qid, sizeof(q.qid), newQid);
     pushQSaveToDbEscaped(conn, &q, tbl, updateSize);
     }
+else
+    {  
+    /* update existing record */
+    pushQUpdateEscaped(conn, &q, tbl, updateSize);
+    }
+
 
 if (sameString(clonebutton,"clone")) 
     {  
@@ -1289,7 +1377,7 @@ void doCookieReset()
 char *meta = ""
 "<head>"
 "<title>Meta Redirect Code</title>"
-"<meta http-equiv=\"refresh\" content=\"1;url=/cgi-bin/qaPushQ?action=display\">"
+"<meta http-equiv=\"refresh\" content=\"0;url=/cgi-bin/qaPushQ?action=display\">"
 "</head>";
 
 htmlSetCookie("qapushq", "", NULL, NULL, NULL, FALSE);
@@ -1385,7 +1473,7 @@ char query[256];
 char *meta = ""
 "<head>"
 "<title>Meta Redirect Code</title>"
-"<meta http-equiv=\"refresh\" content=\"1;url={url}\">"
+"<meta http-equiv=\"refresh\" content=\"0;url={url}\">"
 "</head>";
 
 char **row;
@@ -1528,7 +1616,7 @@ char target[256] = "";
 char *meta = ""
 "<head>"
 "<title>Meta Redirect Code</title>"
-"<meta http-equiv=\"refresh\" content=\"1;url=/cgi-bin/qaPushQ?action=display\">"
+"<meta http-equiv=\"refresh\" content=\"0;url=/cgi-bin/qaPushQ?action=display\">"
 "</head>";
 
 int i = 0;  
@@ -1606,7 +1694,7 @@ struct dyString * s = newDyString(2048);  /* need room */
 char *meta = ""
 "<head>"
 "<title>Meta Redirect Code</title>"
-"<meta http-equiv=\"refresh\" content=\"1;url=/cgi-bin/qaPushQ?action=display\">"
+"<meta http-equiv=\"refresh\" content=\"0;url=/cgi-bin/qaPushQ?action=display\">"
 "</head>";
 
 
@@ -1644,7 +1732,7 @@ struct dyString * s = newDyString(2048);  /* need room */
 char *meta = ""
 "<head>"
 "<title>Meta Redirect Code</title>"
-"<meta http-equiv=\"refresh\" content=\"1;url=/cgi-bin/qaPushQ?action=display\">"
+"<meta http-equiv=\"refresh\" content=\"0;url=/cgi-bin/qaPushQ?action=display\">"
 "</head>";
 
 

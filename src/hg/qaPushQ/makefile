@@ -50,5 +50,5 @@ push:
 
 clean:
 	rm -f *.o
-	rm qaPushQ
+	rm $(EXE)
 

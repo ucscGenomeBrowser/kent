@@ -18,6 +18,7 @@ char formQ[] =
 "<option <!sel-priority-A> value=\"A\">A</option>"
 "<option <!sel-priority-B> value=\"B\">B</option>"
 "<option <!sel-priority-C> value=\"C\">C</option>"
+"<option <!sel-priority-D> value=\"D\">D</option>"
 "<option <!sel-priority-L> value=\"L\">L</option>"
 "</select>"
 "</td></tr>"
