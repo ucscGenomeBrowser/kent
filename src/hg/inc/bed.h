@@ -259,7 +259,7 @@ struct bed *bedCommaInN(char **pS, struct bed *ret, int fieldCount);
 struct hash *readBedToBinKeeper(char *sizeFileName, char *bedFileName, int wordCount);
 /* read a list of beds and return results in hash of binKeeper structure for fast query*/
 
-int parseRgb(char *itemRgb);
+int bedParseRgb(char *itemRgb);
 /*	parse a string: "r,g,b" into three unsigned char values
 	returned as 24 bit number, or -1 for failure */
 
