@@ -216,6 +216,13 @@ priority 10.11
 visibility hide
 type bed 6 +
 
+track fosEndPairsLong
+shortLabel Long Fosmid End Pairs
+longLabel Long Fosmid End Pairs
+priority 10.12
+visibility hide
+type bed 6 +
+
 track genomicSuperDups
 shortLabel filtered WGAC
 longLabel Duplications of >1000 Bases of non-repeatMasked Sequence
