@@ -171,6 +171,7 @@ int numCols, iBlk;
 struct chromAnn* ca;
 struct psl *psl;
 char strand;
+boolean blkSizeMult = 1;  /* 3 if protein */;
 
 /* save copy of line before chopping; don't free this, ownership is passed */
 if (opts & chromAnnSaveLines)
@@ -180,6 +181,8 @@ numCols = chopTabs(line, row);
 lineFileExpectAtLeast(lf, PSL_NUM_COLS, numCols);
 
 psl = pslLoad(row);
+if (pslIsProtein(psl))
+    blkSizeMult = 3;
 if (psl->strand[1] == '\0')
     strand = psl->strand[0];
 else
@@ -189,7 +192,7 @@ ca = chromAnnNew(psl->tName, psl->strand[0], psl->qName, recLine);
 for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
     {
     int start = psl->tStarts[iBlk];
-    int end = start + psl->blockSizes[iBlk];
+    int end = start + (blkSizeMult * psl->blockSizes[iBlk]);
     if (psl->strand[1] == '-')
         reverseIntRange(&start, &end, psl->tSize);
     chromAnnBlkNew(ca, start, end);

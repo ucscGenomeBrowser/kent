@@ -13,7 +13,8 @@ test:   pslSelectTests \
 	statsOutputTests \
 	thresholdTests \
 	similarityTests \
-	aggregateTests
+	aggregateTests \
+	protTests
 
 ###
 # selecting PSLs
@@ -441,6 +442,32 @@ gp_gp_aggregateCds100: mkout
 	${OVERSEL} -aggregate -idOutput -overlapThreshold=1.0 -selectCds -inCds input/NM_015110Similar.gp input/NM_015110.gp output/gp_gp_aggregateCds100Rev.ids
 	${DIFF} expected/gp_gp_aggregateCds100.ids output/gp_gp_aggregateCds100.ids
 	${DIFF} expected/gp_gp_aggregateCds100Rev.ids output/gp_gp_aggregateCds100Rev.ids
+
+
+###
+# protein tests
+###
+protTests: gp_psl_prot80 gp_psl_protStats psl_gp_prot80 psl_gp_protStats
+
+# select from a protein psl with a genePred, using only cds of genePred.
+# since this uses similarity, it will only select if the psl has been
+# translated to query base coords, otherwise it appears to be 1/3 the size.
+# Also checks if the strand was correctly translated.
+gp_psl_prot80: mkout
+	${OVERSEL} -strand -overlapSimilarity=0.9 -selectCds input/refGeneForProt.gp  input/prot.psl output/gp_psl_prot80.psl
+	${DIFF} expected/gp_psl_prot80.psl output/gp_psl_prot80.psl
+
+gp_psl_protStats: mkout
+	${OVERSEL} -statsOutput -strand -selectCds input/refGeneForProt.gp  input/prot.psl output/gp_psl_protStats.stats
+	${DIFF} expected/gp_psl_protStats.stats output/gp_psl_protStats.stats
+
+psl_gp_prot80: mkout
+	${OVERSEL} -strand -overlapSimilarity=0.9 -inCds input/prot.psl input/refGeneForProt.gp  output/psl_gp_prot80.gp
+	${DIFF} expected/psl_gp_prot80.gp output/psl_gp_prot80.gp
+
+psl_gp_protStats: mkout
+	${OVERSEL} -statsOutput -strand -inCds input/prot.psl input/refGeneForProt.gp output/psl_gp_protStats.stats
+	${DIFF} expected/psl_gp_protStats.stats output/psl_gp_protStats.stats
 
 mkout:
 	@${MKDIR} output

@@ -195,6 +195,26 @@ for (orl = newRecs; orl != NULL; orl = orl->next)
         refAdd(overlappingRecs, orl->val);
     }
 }
+static boolean selectOverlappingEntry(unsigned opts, struct chromAnn *inCa,
+                                      struct chromAnn* selCa,
+                                      float overlapThreshold, float overlapSimilarity)
+/* select based on a single select chromAnn */
+{
+boolean overlapped = FALSE;
+verbose(2, "\toverlapping: enter %s: %d-%d, %c\n", selCa->name, selCa->start, selCa->end,
+        ((selCa->strand == '\0') ? '?' : selCa->strand));
+if (!passCriteria(opts, inCa, selCa))
+    {
+    verbose(2, "\toverlapping: leave %s: fail criteria\n", selCa->name);
+    }
+else
+    {
+    overlapped = isOverlapped(opts, inCa, selCa, overlapThreshold, overlapSimilarity);
+    verbose(2, "\toverlapping: leave %s: %s\n", selCa->name,
+            (overlapped ? "yes" : "no"));
+    }
+return overlapped;
+}
 
 static boolean selectWithOverlapping(unsigned opts, struct chromAnn *inCa,
                                      struct binElement* overlapping,
@@ -211,8 +231,7 @@ struct binElement* o;
 for (o = overlapping; o != NULL; o = o->next)
     {
     struct chromAnn* selCa = o->val;
-    if (passCriteria(opts, inCa, selCa)
-        && isOverlapped(opts, inCa, selCa, overlapThreshold, overlapSimilarity))
+    if (selectOverlappingEntry(opts, inCa, selCa, overlapThreshold, overlapSimilarity))
         {
         anyHits = TRUE;
         if (overlappingRecs != NULL)
@@ -240,6 +259,8 @@ boolean selectIsOverlapped(unsigned opts, struct chromAnn *inCa,
 {
 boolean hit = FALSE;
 struct binKeeper* bins = selectGetChromBins(inCa->chrom, FALSE, NULL);
+verbose(2, "selectIsOverlapping: enter %s: %s %d-%d, %c\n", inCa->name, inCa->chrom, inCa->start, inCa->end,
+        ((inCa->strand == '\0') ? '?' : inCa->strand));
 if (bins != NULL)
     {
     struct binElement* overlapping = binKeeperFind(bins, inCa->start, inCa->end);
@@ -247,9 +268,7 @@ if (bins != NULL)
                                 overlapSimilarity, overlappingRecs);
     slFreeList(&overlapping);
     }
-if (verboseLevel() >= 2)
-    verboseLevel(2, "selectIsOverlapping: %s: %s %d-%d, %c => %s\n", inCa->name, inCa->chrom, inCa->start, inCa->end,
-            ((inCa->strand == '\0') ? '?' : inCa->strand), (hit ? "yes" : "no"));
+verbose(2, "selectIsOverlapping: leave %s %s\n", inCa->name, (hit ? "yes" : "no"));
 return hit;
 }
 
@@ -311,9 +330,8 @@ if (bins != NULL)
     overlap = computeAggregateOverlap(opts, inCa, overlapping);
     slFreeList(&overlapping);
     }
-if (verboseLevel() >= 2)
-    verboseLevel(2, "selectAggregateOverlap: %s: %s %d-%d, %c => %0.3g\n", inCa->name, inCa->chrom, inCa->start, inCa->end,
-            ((inCa->strand == '\0') ? '?' : inCa->strand), overlap);
+verbose(2, "selectAggregateOverlap: %s: %s %d-%d, %c => %0.3g\n", inCa->name, inCa->chrom, inCa->start, inCa->end,
+        ((inCa->strand == '\0') ? '?' : inCa->strand), overlap);
 return overlap;
 }
 
