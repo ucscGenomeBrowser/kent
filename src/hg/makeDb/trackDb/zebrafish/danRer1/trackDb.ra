@@ -1,6 +1,14 @@
+track ctgPos2
+shortLabel Contigs
+longLabel Assembly Contigs
+group map
+priority 9
+visibility hide
+color 150,0,0
+
 track gold
-shortLabel Assembly
-longLabel Assembly from Fragments
+shortLabel Scaffolds
+longLabel Assembly Scaffolds (Supercontigs)
 group map
 priority 10
 visibility hide
@@ -74,4 +82,11 @@ spectrum on
 type netAlign fr1 chainFr1
 otherDb fr1
 
+track affyZebrafish
+shortLabel Affy Zebrafish
+longLabel Alignments of Affymetrix Consensus Sequences from Zebrafish chip
+group regulation
+priority 80
+visibility hide
+type psl .
 
