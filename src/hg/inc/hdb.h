@@ -46,6 +46,9 @@ struct hTableInfo
 void hDefaultConnect();
 /* read the default settings from the config file */
 
+char *hTrackDbName();
+/* return the name of the track database from the config file. Freez when done */
+
 void hSetDbConnect(char* host, char *db, char *user, char *password);
 /* set the connection information for the database */
 

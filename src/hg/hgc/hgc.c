@@ -6446,8 +6446,10 @@ struct hash *trackHash = newHash(7);
 struct sqlResult *sr;
 char **row;
 struct trackDb *tdb;
-
-sr = sqlGetResult(conn, "select * from trackDb");
+char *trackDb = hTrackDbName();
+char query[256];
+snprintf(query, sizeof(query), "select * from %s", trackDb);
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     tdb = trackDbLoad(row);
@@ -6457,6 +6459,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
         trackDbFree(&tdb);
     }
+freez(&trackDb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 return trackHash;

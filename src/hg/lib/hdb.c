@@ -26,18 +26,27 @@ static char *hdbHost;
 static char *hdbName = "hg10";
 static char *hdbUser;
 static char *hdbPassword;
-
+static char *hdbTrackDb = NULL;
 void hDefaultConnect()
 /* read in the connection options from config file */
 {
 hdbHost 	= cfgOption("db.host");
 hdbUser 	= cfgOption("db.user");
 hdbPassword	= cfgOption("db.password");
-
+hdbTrackDb      = cfgOption("db.trackDb");
 if(hdbHost == NULL || hdbUser == NULL || hdbPassword == NULL)
     errAbort("cannot read in connection setting from configuration file.");
 }
 
+char *hTrackDbName()
+/* return the name of the track database from the config file. Freez when done */
+{
+if(hdbTrackDb == NULL)
+    hdbTrackDb = cfgOption("db.trackDb");
+if(hdbTrackDb == NULL)
+    errAbort("Please set the db.trackDb field in the hg.conf config file.");
+return hdbTrackDb;
+}
 
 void hSetDbConnect(char* host, char *db, char *user, char *password)
 /* set the connection information for the database */
@@ -894,8 +903,13 @@ boolean privateToo = hIsPrivateHost();
 struct sqlResult *sr;
 char **row;
 char *database = hGetDb();
+char query[256];
 
-sr = sqlGetResult(conn, "select * from trackDb");
+if(hdbTrackDb == NULL)
+    errAbort("Please contact the system administrator to set the hg.trackDb in hg.conf");
+snprintf(query, sizeof(query), "select * from %s", hdbTrackDb);
+
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     boolean keeper = FALSE;
@@ -1168,3 +1182,4 @@ sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
 return &st;
 }
+

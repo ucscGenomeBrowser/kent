@@ -252,6 +252,30 @@ printf("&nbsp;pixels");
 
 }
 
+void affyTranscriptomeUi(struct trackDb *tdb)
+/* put up UI for the GC percent track (a sample track)*/
+{
+int affyTranscriptomeHeightPer = atoi(cartUsualString(cart, "affyTranscriptome.heightPer", "100"));
+char *interpolate = cartUsualString(cart, "affyTranscriptome.linear.interp", "Only samples");
+char *aa = cartUsualString(cart, "affyTranscriptome.anti.alias", "on");
+char *fill = cartUsualString(cart, "affyTranscriptome.fill", "1");
+
+
+
+printf("<br><br>");
+printf(" <b>Fill Blocks</b>: ");
+cgiMakeRadioButton("affyTranscriptome.fill", "1", sameString(fill, "1"));
+printf(" on ");
+
+cgiMakeRadioButton("affyTranscriptome.fill", "0", sameString(fill, "0"));
+printf(" off ");
+
+printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
+cgiMakeIntVar("affyTranscriptome.heightPer", affyTranscriptomeHeightPer, 5 );
+printf("&nbsp;pixels");
+
+}
+
 
 void chimpUi(struct trackDb *tdb)
 /* put up UI for the chimp track (a sample track)*/
@@ -371,6 +395,8 @@ else if (sameString(track, "ancientR"))
     ancientRUi(tdb);
 else if (sameString(track, "humMus"))
     humMusUi(tdb);
+else if (sameString(track, "affyTranscriptome"))
+    affyTranscriptomeUi(tdb);
 }
 
 void trackUi(struct trackDb *tdb)
@@ -400,7 +426,7 @@ struct trackDb *tdb;
 struct sqlConnection *conn;
 char where[256];
 char *track;
-
+char *trackDb = hTrackDbName();
 cart = theCart;
 track = cartString(cart, "g");
 database = cartUsualString(cart, "db", hGetDb());
@@ -408,7 +434,7 @@ hSetDb(database);
 chromosome = cartString(cart, "c");
 conn = hAllocConn();
 sprintf(where, "tableName = '%s'", track);
-tdb = trackDbLoadWhere(conn, "trackDb", where);
+tdb = trackDbLoadWhere(conn, trackDb, where);
 hLookupStringsInTdb(tdb, database);
 if (tdb == NULL)
    errAbort("Can't find %s in track database %s chromosome %s", track, database, chromosome);
