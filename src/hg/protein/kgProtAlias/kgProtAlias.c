@@ -11,8 +11,8 @@ errAbort(
   "usage:\n"
   "   kgProtAlias xxxx yyyy\n"
   "            xxxx is genome  database name\n"
-  "            yyyy is protein database name \n"
-  "example: kgProtAlias hg15 proteins0405\n");
+  "            yyyy is protein database date \n"
+  "example: kgProtAlias hg16 040315\n");
 }
 
 int main(int argc, char *argv[])
@@ -27,17 +27,22 @@ int main(int argc, char *argv[])
 
     char cond_str[256];
     char *database;
-    char *proteinDB;
+    char spDB[256];
+    char proteinDB[256];
 
     char *alias;
+    char *chp;
 
     char *alignID;
     char *displayID, *secondaryID, *pdbID;
     char *proteinAC;
+    char *ncbiProtAc;
 
     if (argc != 3) usage();
     database  = cloneString(argv[1]);
-    proteinDB = cloneString(argv[2]);
+    
+    sprintf(spDB, "sp%s", argv[2]);
+    sprintf(proteinDB, "proteins%s", argv[2]);
 
     conn = hAllocConn();
     conn2= hAllocConn();
@@ -61,6 +66,15 @@ int main(int argc, char *argv[])
         if (proteinAC != NULL)
 		{
 		fprintf(o1, "%s\t%s\t%s\n", kgID, displayID, proteinAC);
+        
+		sprintf(cond_str, "acc = '%s' and extDb=1", proteinAC);
+        	ncbiProtAc = sqlGetField(conn, spDB, "extDbRef", "extAcc2", cond_str);
+		if (ncbiProtAc != NULL)
+		    {
+		    chp = strstr(ncbiProtAc, ".");
+		    if (chp != NULL) *chp = '\0';
+		    fprintf(o1, "%s\t%s\t%s\n", kgID, displayID, ncbiProtAc);
+		    }
 		}
 	else
 		{
