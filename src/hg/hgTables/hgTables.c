@@ -17,7 +17,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.38 2004/07/20 08:22:17 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.39 2004/07/20 09:25:09 kent Exp $";
 
 
 void usage()
@@ -622,6 +622,8 @@ else if (sameString(output, outBed))
     doOutBed(track, conn);
 else if (sameString(output, outCustomTrack))
     doOutCustomTrack(track, conn);
+else if (sameString(output, outGff))
+    doOutGff(track, conn);
 else
     errAbort("Don't know how to handle %s output yet", output);
 }

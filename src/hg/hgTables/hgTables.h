@@ -220,7 +220,7 @@ char *filterFieldVarName(char *db, char *table, char *field, char *type);
 #define outSchema "schema"
 #define outStats "stats"
 #define outBed "bed"
-#define outGtf "gtf"
+#define outGff "gff"
 #define outCustomTrack "customTrack"
 
 /* Identifier list handling stuff. */
@@ -320,6 +320,9 @@ void doOutSequence(struct trackDb *track, struct sqlConnection *conn);
 
 void doOutBed(struct trackDb *track, struct sqlConnection *conn);
 /* Put up form to select BED output format. */
+
+void doOutGff(struct trackDb *track, struct sqlConnection *conn);
+/* Save as GFF. */
 
 void doOutCustomTrack(struct trackDb *track, struct sqlConnection *conn);
 /* Put up form to select Custom Track output format. */
