@@ -191,6 +191,12 @@ printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s\">",
 	hgcPathAndSettings(), group, item, chrom, winStart, winEnd, other);
 }
 
+void hgcAnchorSomewhereTag(char *group, char *item, char *other, char *chrom, char *tag)
+/* Generate an anchor that calls click processing program with item and other parameters. */
+{
+printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s#%s\">",
+	hgcPathAndSettings(), group, item, chrom, winStart, winEnd, other, tag);
+}
 
 void hgcAnchorSomewhereDb(char *group, char *item, char *other, char *chrom, char *db)
 /* Generate an anchor that calls click processing program with item and other parameters. */
@@ -436,6 +442,19 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 }
 
+#define INTRON 10 
+#define CODINGA 11 
+#define CODINGB 12 
+#define UTR5 13 
+#define UTR3 14
+#define STARTCODON 15
+#define STOPCODON 16
+#define SPLICESITE 17
+#define NONCONSPLICE 18
+#define INFRAMESTOP 19
+#define INTERGENIC 20
+#define REGULATORY 21
+
 #define RED 0xFF0000
 #define GREEN 0x00FF00
 #define BLUE 0x0000FF
@@ -447,6 +466,38 @@ while ((row = sqlNextRow(sr)) != NULL)
 #define YELLOW 0xFFFF00
 #define MAGENTA 0xFF00FF
 #define GRAY 0xcccccc
+#define LTGRAY 0x999999
+
+int setAttributeColor(int class)
+{
+switch (class)
+   {
+   case STARTCODON:
+      return GREEN;
+   case STOPCODON:
+      return RED;
+   case CODINGA:
+      return BLUE;
+   case CODINGB:
+      return PURPLE;
+   case UTR5:
+   case UTR3:
+      return GRAY;
+      return GRAY;
+   case INTRON:
+      return LTGRAY;
+   case SPLICESITE:
+   case NONCONSPLICE:
+      return BLACK;
+   case INFRAMESTOP:
+      return MAGENTA;
+   case REGULATORY:
+      return YELLOW;
+   case INTERGENIC:
+   default:
+      return BLACK;
+    }
+}
 
 void startColor(FILE *f, int color)
 {
@@ -464,6 +515,31 @@ void stopColorStr(struct dyString *dy)
 {
     dyStringPrintf(dy,"</FONT>");
 }
+
+void setClass(FILE *f, int class)
+{
+startColor(f,setAttributeColor(class));
+if (class == STARTCODON)
+    fprintf(f,"<A name=startcodon></a>");
+}
+
+void setClassStr(struct dyString *dy, int class)
+{
+startColorStr(dy,setAttributeColor(class));
+if (class == STARTCODON)
+    dyStringAppend(dy,"<A name=startcodon></a>");
+}
+
+void resetClass(FILE *f)
+{
+    stopColor(f);
+}
+
+void resetClassStr(struct dyString *dy)
+{
+    stopColorStr(dy);
+}
+
 void axtOneGeneOut(struct axt *axtList, int lineSize, FILE *f, struct genePred *gp)
 /* Output axt and orf in pretty format. */
 {
@@ -487,8 +563,8 @@ int nextEndIndex = 0;
 int coding=FALSE;
 int tFlip=TRUE; /* flag to control target alternating colors for exons (blue and purple) */
 int qFlip=TRUE; /* flag to control query alternating colors for exons (blue and purple) */
-int qColor=BLACK;
-int tColor=BLACK;
+int qClass=INTERGENIC;
+int tClass=INTERGENIC;
 int posStrand;
 DNA qCodon[4];
 DNA tCodon[4];
@@ -558,31 +634,31 @@ for (axt = axtList; axt != NULL; axt = axt->next)
             {
             if (posStrand)
                 {
-                if ((tColor==BLACK) && (tPtr >= nextStart) && (tPtr >= tStart) && (tPtr < tEnd))
+                if ((tClass==INTRON) && (tPtr >= nextStart) && (tPtr >= tStart) && (tPtr < tEnd))
                     {
                     coding=TRUE;
                     }
                 }
             else{
-                if ((tColor==BLACK) && (tPtr <= nextStart) && (tPtr <= tStart) && (tPtr > tEnd))
+                if ((tClass==INTRON) && (tPtr <= nextStart) && (tPtr <= tStart) && (tPtr > tEnd))
                     {
                     coding=TRUE;
                     }
                 }
             if (coding && tFlip )
-                tColor=BLUE;
+                tClass=CODINGA;
             if (coding && (tFlip == FALSE) )
-                tColor=PURPLE;
+                tClass=CODINGB;
             if (coding && qFlip )
-                qColor=BLUE;
+                qClass=CODINGA;
             if (coding && (qFlip == FALSE) )
-                qColor=PURPLE;
+                qClass=CODINGB;
             if (posStrand)
                 {
                 if ((tPtr >= (tStart)) && (tPtr <=(tStart+2)))
                     {
-                    tColor=GREEN;
-                    qColor=GREEN;
+                    tClass=STARTCODON;
+                    qClass=STARTCODON;
                     coding=TRUE;
                     if (tPtr == tStart) 
                         {
@@ -592,7 +668,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                     }
                 if ((tPtr >= tEnd) && (tPtr <= (tEnd+2)))
                     {
-                    tColor=RED;
+                    tClass=STOPCODON;
                     coding=FALSE;
                     }
                 }
@@ -600,8 +676,8 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 {
                 if ((tPtr <= (tStart+1)) && (tPtr >=(tStart-1)))
                     {
-                    tColor=GREEN;
-                    qColor=GREEN;
+                    tClass=STARTCODON;
+                    qClass=STARTCODON;
                     coding=TRUE;
                     if (tPtr == tStart+1) 
                         {
@@ -611,25 +687,25 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                     }
                 if ((tPtr <= tEnd+2) && (tPtr >= (tEnd)))
                     {
-                    tColor=RED;
+                    tClass=STOPCODON;
                     coding=FALSE;
                     }
                 }
             if (posStrand)
                 {
                 if (tPtr == (tEnd +3) )
-                        tColor = BLACK;
+                        tClass = UTR3;
                 }
             else 
                 {
                 if (tPtr == (tEnd -1) )
-                        tColor = BLACK;
+                        tClass = UTR3;
                 }
             if (tPtr == nextEnd)
                 {
                 coding=FALSE;
-                tColor=BLACK;
-                qColor=BLACK;
+                tClass=INTRON;
+                qClass=INTRON;
                 if (posStrand)
                     {
                     nextEndIndex++;
@@ -643,16 +719,16 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                     nextEnd = (gp->exonStarts[nextEndIndex]);
                     }
                 }
-            if (tColor != BLACK)
-                startColorStr(dyT,tColor);
+            if (tClass != INTERGENIC)
+                setClassStr(dyT,tClass);
             dyStringAppendC(dyT,t[i]);
-            if (tColor != BLACK)
-                stopColorStr(dyT);
-            if (qColor != BLACK)
-                startColorStr(dyQ,qColor);
+            if (tClass != INTERGENIC)
+                resetClassStr(dyT);
+            if (qClass != INTERGENIC)
+                setClassStr(dyQ,qClass);
             dyStringAppendC(dyQ,q[i]);
-            if (qColor != BLACK)
-                stopColorStr(dyQ);
+            if (qClass != INTERGENIC)
+                resetClassStr(dyQ);
             if (coding && tFlip && (tCodonPos == 3))
                 {
                 tFlip=FALSE;
@@ -717,7 +793,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 }
             else
                 {
-                tColor=BLACK;
+                tClass=INTRON;
                 }
             if (q[i] != '-')
                 {
@@ -730,7 +806,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 }
             else
                 {
-                qColor=BLACK;
+                qClass=INTRON;
                 }
             }
         dyStringPrintf(dyT, " %d thisExon=%d-%d xon %d",tPtr, gp->exonStarts[(nextEndIndex == 0) ? 0 : nextEndIndex - 1]+1, gp->exonEnds[(nextEndIndex == 0) ? 0 : nextEndIndex - 1],(nextEndIndex == 0) ? 1 : nextEndIndex);
@@ -939,8 +1015,11 @@ hgcAnchorSomewhere(mrnaClick, geneName, geneTable, seqName);
 printf("<LI>%s</A>\n", mrnaDescription);
 hgcAnchorSomewhere(genomicClick, geneName, geneTable, seqName);
 printf("<LI>Genomic Sequence</A>\n");
-hgcAnchorSomewhere("htcGenePsl", geneName, geneTable, seqName);
-printf("<LI>Comparative Sequence</A><BR>\n");
+if (hTableExists("axtInfo"))
+    {
+    hgcAnchorSomewhereTag("htcGenePsl", geneName, geneTable, seqName,"STARTCODON");
+    printf("<LI>Comparative Sequence</A><BR>\n");
+    }
 printf("</UL>\n");
 }
 
