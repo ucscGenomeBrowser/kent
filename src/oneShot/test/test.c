@@ -15,37 +15,27 @@ void usage()
 errAbort(
   "test - Test something\n"
   "usage:\n"
-  "   test a b\n"
+  "   test a\n"
   "options:\n"
   );
 }
 
-void test(char *a, char *b)
+void test(char *a)
 /* test - Test something. */
 {
-int aSize = strlen(a);
-int bSize = strlen(b);
-int maxSize = max(aSize, bSize)*2;
-int symCount;
-char *aSym, *bSym;
-int aStart, bStart;
-struct axtScoreScheme *ss = axtScoreSchemeRnaDefault();
-
-AllocArray(aSym, maxSize);
-AllocArray(bSym, maxSize);
-bandExt(TRUE, ss, 2, a, aSize, b, bSize, 1,
-	maxSize, &symCount, aSym, bSym, &aStart, &bStart);
-printf("score %d\n", axtScoreSym(ss, symCount, aSym, bSym));
-puts(aSym);
-puts(bSym);
+FILE *f = mustOpen(a, "w");
+char *s = "Hiya boss!\n";
+mustWrite(f, s, strlen(s));
+sleep(10);
+carefulClose(&f);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionHash(&argc, argv);
-if (argc != 3)
+if (argc != 2)
     usage();
-test(argv[1], argv[2]);
+test(argv[1]);
 return 0;
 }
