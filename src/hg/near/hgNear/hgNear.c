@@ -20,7 +20,7 @@
 #include "hgNear.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.149 2004/06/24 19:54:08 angie Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.150 2004/07/06 16:30:25 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -434,6 +434,8 @@ else
 	    hPrintf("&%s=%d", col->urlStartVar, gp->start);
 	if (col->urlEndVar)
 	    hPrintf("&%s=%d", col->urlEndVar, gp->end);
+	if (col->urlOtherGeneVar)
+	    hPrintf("&%s=%s", col->urlOtherGeneVar, curGeneId->name);
 	hPrintf("\" TARGET=_blank>");
 	hPrintNonBreak(s);
         hPrintf("</A>");
@@ -923,6 +925,7 @@ col->valField = cloneString(valField);
 col->curGeneField = cloneString(curGene);
 col->exists = simpleTableExists;
 col->cellVal = cellDistanceVal;
+col->cellPrint = cellSimplePrintNoLookupUrl;
 col->filterControls = minMaxAdvFilterControls;
 col->advFilter = distanceAdvFilter;
 }
@@ -1388,6 +1391,7 @@ col->useHgsid = columnSettingExists(col, "hgsid");
 col->urlChromVar = hashFindVal(settings, "urlChromVar");
 col->urlStartVar = hashFindVal(settings, "urlStartVar");
 col->urlEndVar = hashFindVal(settings, "urlEndVar");
+col->urlOtherGeneVar = hashFindVal(settings, "urlOtherGeneVar");
 selfLink = hashFindVal(settings, "selfLink");
 if (selfLink != NULL && selfLink[0] != '0')
     col->selfLink = TRUE;
@@ -1896,6 +1900,8 @@ else if (cartVarExists(cart, customFromUrlDoName))
     doCustomFromUrl(conn, colList);
 else if (cartVarExists(cart, orderInfoDoName))
     doOrderInfo(conn);
+else if (cartVarExists(cart, affineAliVarName))
+    doAffineAlignment(conn);
 else if (cartNonemptyString(cart, searchVarName))
     doSearch(conn, colList);
 else

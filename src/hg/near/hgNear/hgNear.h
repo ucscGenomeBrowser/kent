@@ -72,6 +72,7 @@ struct column
    char *urlStartVar;		/* Start var for URL. */
    char *urlEndVar;		/* End var for URL. */
    char *urlDbVar;		/* Database var for URL. */
+   char *urlOtherGeneVar;	/* Variable for other (selected) gene. */
    struct hash *settings;	/* Settings from ra file. */
 
    /* -- Methods -- */
@@ -230,7 +231,8 @@ extern struct hash *columnHash;		  /* Hash of active columns keyed by name. */
 #define countVarName "near.count"	/* How many items to display. */
 #define colInfoVarName "near.do.colInfo"	/* Display column info. */
 #define searchVarName "near_search"	
-	/* Search term - underbar for Javascript.  Hardcoded in Javascript. */
+	/* Search term - underbar for Javascript.  Hardcoded in Javascript. 
+	 * and in columnDb.ra. */
 #define idVarName "near.do.id"         	
 	/* Overrides searchVarName if it exists */
 #define idPosVarName "near.idPos"      	
@@ -247,6 +249,8 @@ extern struct hash *columnHash;		  /* Hash of active columns keyed by name. */
 #define proIncludeFiveOnly "near.proIncludeFiveOnly" 
 	/* Include without 5' UTR? */
 #define getTextVarName "near.do.getText"	/* Button to get as text. */
+#define affineAliVarName "near.do.affineAli"  
+	/* Show alignment, in columnDb.ra as well. */
 
 #define advFilterPrefix "near.as."      
 	/* Prefix for advanced filter variables. */
@@ -723,6 +727,8 @@ void doExamples(struct sqlConnection *conn, struct column *colList);
 void doOrderInfo(struct sqlConnection *conn);
 /* Put up page with ordering info. */
 
+void doAffineAlignment(struct sqlConnection *conn);
+/* Put up page that shows affine alignment. */
 
 /* ---- User settings stuff - soon to be moved to library I hope. */
 

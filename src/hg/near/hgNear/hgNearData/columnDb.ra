@@ -97,6 +97,9 @@ longLabel NCBI Blastp E-Value
 priority 5
 visibility on
 type distance knownBlastTab query target eValue
+itemUrl ../cgi-bin/hgNear?near_search=%s
+urlOtherGeneVar near.do.affineAli
+hgsid on
 
 name percentId
 shortLabel %ID

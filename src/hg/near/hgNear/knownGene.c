@@ -14,7 +14,7 @@
 #include "kgAlias.h"
 #include "findKGAlias.h"
 
-static char const rcsid[] = "$Id: knownGene.c,v 1.24 2003/10/14 07:16:57 kent Exp $";
+static char const rcsid[] = "$Id: knownGene.c,v 1.25 2004/07/06 16:30:26 kent Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
@@ -243,19 +243,13 @@ else
     {
     hPrintf("<TD>");
     fillInKnownPos(gp, conn);
-#ifdef OLD
-    hPrintf("<A HREF=\"../cgi-bin/hgc?%s&g=knownGene&i=%s&c=%s&l=%d&r=%d\">",
-	    cartSidUrlString(cart), gp->name, gp->chrom, gp->start, gp->end);
-    hPrintf("<A HREF=\"../cgi-bin/hgGene?%s&%s=%s\">", 
-	cartSidUrlString(cart), 
-	"hgg_gene", gp->name);
-#endif /* OLD */
-    hPrintf("<A HREF=\"../cgi-bin/hgGene?%s&%s=%s&%s=%s&%s=%d&%s=%d\">", 
+    hPrintf("<A HREF=\"../cgi-bin/hgGene?%s&%s=%s&%s=%s&%s=%d&%s=%d&%s=%s\">", 
 	cartSidUrlString(cart), 
 	"hgg_gene", gp->name,
 	"hgg_chrom", gp->chrom,
 	"hgg_start", gp->start,
-	"hgg_end", gp->end);
+	"hgg_end", gp->end,
+	"hgg_aliWith", curGeneId->name);
     hPrintNonBreak(s);
     hPrintf("</A></TD>", s);
     freeMem(s);
