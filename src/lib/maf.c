@@ -7,7 +7,7 @@
 #include "axt.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: maf.c,v 1.15 2004/08/05 22:27:00 krish Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.16 2004/08/10 22:07:17 krish Exp $";
 
 struct mafFile *mafMayOpen(char *fileName)
 /* Open up a maf file and verify header. */
@@ -369,7 +369,7 @@ struct mafComp *mc;
 char prefix[256];
 
 if (sep == NULL)
-    sep = '\0';
+    sep = "";
 snprintf(prefix, 256, "%s%s", pre, sep);
 
 for (mc = maf->components; mc != NULL; mc = mc->next)
