@@ -5408,7 +5408,7 @@ EOF
     zcat /cluster/store1/superFamily/genomes/ass_26-Oct-2003.tab.gz | hgKnownToSuper hg16 hs stdin
 
 
-# LOAD ECgene tables
+# LOAD ECgene tables ((redone with existing data) braney, 2004-01-30)
     cd /cluster/data/hg16/bed
     rm -f ECgene
     mkdir ECgene.2003-12-18
@@ -5419,6 +5419,7 @@ EOF
     gunzip *.gz
     ldHgGene -predTab hg16 ECgene ECgene_hg16_v1.1_25oct2003_genes.txt 
     hgPepPred hg16 tab ECgenePep ECgene_hg16_v1.1_25oct2003_genepep.txt
+    rm genePred.tab
     gzip *
 
 # MULTIZ HUMAN/MOUSE/RAT/CHIMP (kpollard, 12/16/03)
