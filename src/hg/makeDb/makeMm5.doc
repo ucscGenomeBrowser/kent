@@ -6237,3 +6237,26 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     Added and edited NIAGene.html and trackDb.ra under
     
         kent/src/hg/makeDb/trackDb/mouse/mm5
+
+# CREATE jaxQTL3 (MOUSE QTL) TRACK (DONE - 2004-22-18 Fan)
+
+    cd /cluster/data/mm5/bed
+    mkdir qtl.2004-11-08
+    ln -s qtl.2004-11-08 qtl
+    cd qtl
+
+# Get the raw data file, mouse_qtl_100804.txt, sent by Carol Bult [cjb@informatics.jax.org].
+
+    hgsql mm5 -e 'drop table jaxQtlRaw'
+    hgsql mm5 < ~/src/hg/lib/jaxQtlRaw.sql
+    hgsql mm5 -e 'load data local infile "mouse_qtl_100804.txt" into table jaxQtlRaw ignore 1 lines'
+
+# Make sure hgJaxQtl binary executable exist.  hgJaxQtl is under ~/src/hg/hgJaxQtl
+
+    hgJaxQtl mm5
+    wc jaxQTL3.tab
+#    981   15310  105164 jaxQTL3.tab
+
+    hgLoadBed -nobin -tab -sqlTable=$HOME/src/hg/lib/jaxQTL3.sql mm5 jaxQTL3 jaxQTL3.tab
+
+	
