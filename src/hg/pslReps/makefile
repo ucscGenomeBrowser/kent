@@ -10,7 +10,6 @@ O = pslReps.o
 
 pslReps: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/pslReps $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/pslReps${EXE}
 
 lib:
 	cd ../../lib; make
