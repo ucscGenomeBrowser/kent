@@ -823,6 +823,16 @@ priority 25.7
 visibility hide
 type sample 9 
 
+track musHumL
+shortLabel Human Cons
+longLabel Mouse/Human Evolutionary Conservation Score
+altColor 0,0,255
+priority 25.8
+visibility hide
+type sample 9 
+
+
+
 
 track exoFish
 shortLabel Exofish Ecores
