@@ -44,7 +44,7 @@ char formQ[] =
 "</td></tr>\n"
 "\n"
 "<tr><td align=\"right\">\n"
-"Date Opened:\n"
+"Date:\n"
 "</td>\n"
 "<td>\n"
 "<input TYPE=\"text\" NAME=\"qadate\" SIZE=\"10\" VALUE=\"<!qadate>\" <!READONLY>>\n"
