@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.624 2003/11/01 02:54:07 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.625 2003/11/05 19:49:35 hiram Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6499,8 +6499,10 @@ registerTrackHandler("chr18deletions", chr18deletionsMethods);
 registerTrackHandler("mouseSyn", mouseSynMethods);
 registerTrackHandler("mouseSynWhd", mouseSynWhdMethods);
 registerTrackHandler("ensRatMusHom", ensPhusionBlastMethods);
+registerTrackHandler("syntenyMm4", syntenyMethods);
 registerTrackHandler("syntenyMm3", syntenyMethods);
 registerTrackHandler("syntenyRn3", syntenyMethods);
+registerTrackHandler("syntenyHg15", syntenyMethods);
 registerTrackHandler("syntenyHg16", syntenyMethods);
 registerTrackHandler("syntenyHuman", syntenyMethods);
 registerTrackHandler("syntenyMouse", syntenyMethods);
