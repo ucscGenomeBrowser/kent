@@ -35,6 +35,7 @@ old_update:
 	hgTrackDb human hg9 trackDb_$(USER) ../../lib/trackDb.sql .
 
 alpha:
+	cvs up -d -P .
 	hgTrackDb human hg10 trackDb ../../lib/trackDb.sql .
 	hgTrackDb human hg11 trackDb ../../lib/trackDb.sql .
 	hgTrackDb human hg12 trackDb ../../lib/trackDb.sql .
@@ -52,6 +53,7 @@ alpha:
 beta:
 	# this will fail if we are not in a beta checkout:
 	cvs status trackDb.ra | egrep 'v[0-9]+_branch' > /dev/null
+	cvs up -d -P .
 	hgTrackDb human hg10 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb human hg11 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb human hg12 trackDb_beta ../../lib/trackDb.sql .
