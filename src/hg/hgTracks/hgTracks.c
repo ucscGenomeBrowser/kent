@@ -274,6 +274,27 @@ switch (vis)
 return tg->height;
 }
 
+
+static int tgUserDefinedTotalHeight(struct trackGroup *tg, enum trackVisibility vis)
+/* Wiggle track groups will use this to figure out the height they use
+as defined in the cart */
+{
+int heightFromCart = atoi(cartUsualString(cart, "wiggle.heightPer", "10"));
+tg->lineHeight = max(mgFontLineHeight(tl.font)+1, heightFromCart);
+tg->heightPer = tg->lineHeight - 1;
+switch (vis)
+    {
+    case tvFull:
+	tg->height = slCount(tg->items) * tg->lineHeight;
+	break;
+    case tvDense:
+	tg->height = tg->lineHeight;
+	break;
+    }
+
+return tg->height;
+}
+
 int tgWeirdItemStart(struct trackGroup *tg, void *item)
 /* Space filler function for tracks without regular items. */
 {
@@ -5017,12 +5038,13 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
     
     for (sf = lf->components; sf != NULL; sf = sf->next)
 	    {
-	    heightPer = tg->heightPer;
+	    heightPer = tg->heightPer+1;
 	    s = sf->start;
 	    e = sf->end;
 
+        //errAbort( "heightPer = %d\n", heightPer );
         x1 = round((double)((int)s+1-winStart)*scale) + xOff;
-        y1 = (int)((double)y+((double)s-e)/10.0+10.0);
+        y1 = (int)((double)y+((double)s-e)*(double)heightPer/100.0+(double)heightPer);
 
         if (prevEnd > 0)
 	        {
@@ -5913,6 +5935,7 @@ void wiggleMethods(struct trackGroup *tg)
 /* setup special methods for wiggle track */
 {
 tg->drawItems = wiggleLinkedFeaturesDraw;
+tg->totalHeight = tgUserDefinedTotalHeight;
 }
 
 
