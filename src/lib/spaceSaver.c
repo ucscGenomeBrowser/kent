@@ -8,7 +8,7 @@
 #include "common.h"
 #include "spaceSaver.h"
 
-static char const rcsid[] = "$Id: spaceSaver.c,v 1.8 2004/03/03 18:12:28 sugnet Exp $";
+static char const rcsid[] = "$Id: spaceSaver.c,v 1.9 2004/09/01 00:20:21 sugnet Exp $";
 
 
 struct spaceSaver *spaceSaverMaxCellsNew(int winStart, int winEnd, int maxRows, int maxCells)
@@ -60,10 +60,12 @@ for (i=0; i<count; ++i)
 return TRUE;
 }
 
-struct spaceNode *spaceSaverAdd(struct spaceSaver *ss, 
-	int start, int end, void *val)
-/* Add a new node to space saver. Returns NULL if can't fit
- * item in. */
+struct spaceNode *spaceSaverAddOverflow(struct spaceSaver *ss, int start, int end, 
+					void *val, boolean allowOverflow)
+/* Add a new node to space saver. Returns NULL if can't fit item in
+ * and allowOverflow == FALSE. If allowOverflow == TRUE then put items
+ * that won't fit in first row (ends up being last row after
+ * spaceSaverFinish()). */
 {
 int cellStart, cellEnd, cellWidth;
 struct spaceRowTracker *srt, *freeSrt = NULL;
@@ -93,28 +95,48 @@ for (srt = ss->rowList; srt != NULL; srt = srt->next)
 	}
     ++rowIx;
     }
+
 /* If no free row make new row. */
 if (freeSrt == NULL)
     {
     if (ss->rowCount >= ss->maxRows)
 	{
-	ss->isFull = TRUE;
-	return NULL;
+	/* Abort if too many rows and no
+	   overflow allowed. */
+	if(!allowOverflow) 
+	    {
+	    ss->isFull = TRUE;
+	    return NULL;
+	    }
 	}
-    AllocVar(freeSrt);
-    freeSrt->used = needMem(ss->cellsInRow);
-    slAddTail(&ss->rowList, freeSrt);
-    ++ss->rowCount;
+    else 
+	{
+	AllocVar(freeSrt);
+	freeSrt->used = needMem(ss->cellsInRow);
+	slAddTail(&ss->rowList, freeSrt);
+	++ss->rowCount;
+	}
     }
-/* Mark that part of row used. */
-memset(freeSrt->used + cellStart, 1, cellWidth);
 
-/* Make a space node. */
+/* Mark that part of row used. */
+if(freeSrt != NULL)
+    memset(freeSrt->used + cellStart, 1, cellWidth);
+
+/* Make a space node. If allowing overflow it will
+ all end up in the last row. */
 AllocVar(sn);
 sn->row = rowIx;
 sn->val = val;
 slAddHead(&ss->nodeList, sn);
 return sn;
+}
+
+struct spaceNode *spaceSaverAdd(struct spaceSaver *ss, 
+	int start, int end, void *val)
+/* Add a new node to space saver. Returns NULL if can't fit
+ * item in. */
+{
+return spaceSaverAddOverflow(ss, start, end, val, FALSE);
 }
 
 void spaceSaverFinish(struct spaceSaver *ss)

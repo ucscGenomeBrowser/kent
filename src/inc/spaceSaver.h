@@ -51,6 +51,14 @@ void spaceSaverFree(struct spaceSaver **pSs);
 struct spaceNode *spaceSaverAdd(struct spaceSaver *ss, int start, int end, void *val);
 /* Add a new node to space saver. */
 
+
+struct spaceNode *spaceSaverAddOverflow(struct spaceSaver *ss, int start, int end, 
+					void *val, boolean allowOverflow);
+/* Add a new node to space saver. Returns NULL if can't fit item in
+ * and allowOverflow == FALSE. If allowOverflow == TRUE then put items
+ * that won't fit in first row (ends up being last row after
+ * spaceSaverFinish()). */
+
 void spaceSaverFinish(struct spaceSaver *ss);
 /* Tell spaceSaver done adding nodes. */
 #endif /* SPACESAVER_H */

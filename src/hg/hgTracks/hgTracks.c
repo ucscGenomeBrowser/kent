@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.789 2004/08/27 04:58:07 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.790 2004/09/01 00:20:20 sugnet Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -121,6 +121,7 @@ int z;
 int maxCount;
 int bestColor;
 int maxItemsInFullTrack = 250;  /* Maximum number of items displayed in full */
+int maxItemsToUseOverflow = 10000; /* Maximum number of items to allow overflow mode. */
 int guidelineSpacing = 12;	/* Pixels between guidelines. */
 
 struct cart *cart;	/* The cart where we keep persistent variables. */
@@ -364,7 +365,8 @@ int tgFixedItemHeight(struct track *tg, void *item)
 return tg->lineHeight;
 }
 
-int packCountRows(struct track *tg, int maxCount, boolean withLabels)
+int packCountRowsOverflow(struct track *tg, int maxCount, 
+			  boolean withLabels, boolean allowOverflow)
 /* Return packed height. */
 {
 struct spaceSaver *ss;
@@ -393,7 +395,7 @@ for (item = tg->items; item != NULL; item = item->next)
 	else
 	    end = round((baseEnd - winStart)*scale);
 	if (start < 0) start = 0;
-	if (spaceSaverAdd(ss, start, end, item) == NULL)
+	if (spaceSaverAddOverflow(ss, start, end, item, allowOverflow) == NULL)
 	    break;
 	}
     }
@@ -401,13 +403,26 @@ spaceSaverFinish(ss);
 return ss->rowCount;
 }
 
-int tgFixedTotalHeight(struct track *tg, enum trackVisibility vis)
+int packCountRows(struct track *tg, int maxCount, boolean withLabels)
+/* Return packed height. */
+{
+return packCountRowsOverflow(tg, maxCount, withLabels, FALSE);
+}
+
+int tgFixedTotalHeightOverflow(struct track *tg, enum trackVisibility vis, 
+			       int lineHeight, int heightPer, boolean allowOverflow)
 /* Most fixed height track groups will use this to figure out the height 
  * they use. */
 {
 int rows;
-tg->heightPer = tl.fontHeight;
-tg->lineHeight = tl.fontHeight+1;
+tg->heightPer = heightPer;
+tg->lineHeight = lineHeight;
+double maxHeight = maxItemsInFullTrack * tl.fontHeight;
+int itemCount = slCount(tg->items);
+
+/* Note that the maxCount variable passed to packCountRowsOverflow() 
+   is tied to the maximum height allowed for a track and influences
+   decisions about when to squish, dense, or overflow a track. */
 switch (vis)
     {
     case tvFull:
@@ -415,16 +430,22 @@ switch (vis)
 	break;
     case tvPack:
 	{
-	rows = packCountRows(tg, maxItemsInFullTrack+1, TRUE);
+	if(allowOverflow && itemCount < maxItemsToUseOverflow)
+	    rows = packCountRowsOverflow(tg, floor(maxHeight/tg->lineHeight), TRUE, allowOverflow);
+	else
+	    rows = packCountRowsOverflow(tg, floor(maxHeight/tg->lineHeight)+1, TRUE, FALSE);
 	break;
 	}
     case tvSquish:
         {
-	tg->heightPer = tl.fontHeight/2;
+	tg->heightPer = heightPer/2;
 	if ((tg->heightPer & 1) == 0)
 	    tg->heightPer -= 1;
 	tg->lineHeight = tg->heightPer + 1;
-	rows = packCountRows(tg, 3*maxItemsInFullTrack+1, FALSE);
+	if(allowOverflow && itemCount < maxItemsToUseOverflow)
+	    rows = packCountRowsOverflow(tg, floor(maxHeight/tg->lineHeight), FALSE, allowOverflow);
+	else
+	    rows = packCountRowsOverflow(tg, floor(maxHeight/tg->lineHeight)+1, FALSE, FALSE);
 	break;
 	}
     case tvDense:
@@ -436,6 +457,22 @@ tg->height = rows * tg->lineHeight;
 return tg->height;
 }
 
+
+int tgFixedTotalHeight(struct track *tg, enum trackVisibility vis)
+/* Most fixed height track groups will use this to figure out the height 
+ * they use. */
+{
+return tgFixedTotalHeightOverflow(tg,vis, tl.fontHeight+1, tl.fontHeight, FALSE);
+}
+
+int tgFixedTotalMaxHeight(struct track *tg, enum trackVisibility vis)
+/* Returns how much height this track will use, but ensures that the max
+   reported is never more than maxItemsInFullTrack * tl.fontHeight. */
+{
+int height = tgFixedTotalHeightOverflow(tg, vis, tl.fontHeight+1, tl.fontHeight, TRUE);
+return height;
+}
+
 char *dnaInWindow()
 /* This returns the DNA in the window, all in lower case. */
 {
@@ -444,6 +481,7 @@ if (seq == NULL)
     seq = hDnaFromSeq(chromName, winStart, winEnd, dnaLower);
 return seq->dna;
 }
+
 
 int orientFromChar(char c)
 /* Return 1 or -1 in place of + or - */
@@ -1485,8 +1523,28 @@ if (vis == tvPack || vis == tvSquish)
     {
     struct spaceSaver *ss = tg->ss;
     struct spaceNode *sn;
+    /* These variables keep track of state if there are
+       too many items and there is going to be an overflow row. */
+    int maxHeight = maxItemsInFullTrack * tl.fontHeight;
+    int restRow = (maxHeight - tl.fontHeight +1) / lineHeight;
+    int restRowCount = 0;
+    boolean overflowDrawn = FALSE;
+    char nameBuff[128];
+    boolean origWithLabels = withLabels;
+    enum trackVisibility origVis = tg->limitedVis;
+    int origLineHeight = lineHeight;
+    int origHeightPer = heightPer;
+
     vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
     assert(ss);
+
+    /* Loop though and count number of entries that will 
+       end up in overflow. */
+    for (sn = ss->nodeList; sn != NULL; sn = sn->next)
+	if(sn->row >= restRow)
+	    restRowCount++;
+
+    /* Loop through and draw each item individually. */
     for (sn = ss->nodeList; sn != NULL; sn = sn->next)
         {
 	struct slList *item = sn->val;
@@ -1499,16 +1557,31 @@ if (vis == tvPack || vis == tvSquish)
 	int textX = x1;
 	char *name = tg->itemName(tg, item);
 	boolean drawNameInverted = FALSE;
+	int origRow = sn->row;
+	boolean doingOverflow = FALSE;
+
 	if(tg->itemNameColor != NULL) 
 	    color = tg->itemNameColor(tg, item, vg);
 
-	y = yOff + lineHeight * sn->row;
+	/* If this row falls outside of the last row have to
+	   change some state to paint it in the "overflow" row. */
+	if(sn->row >= restRow)
+	    {
+	    doingOverflow = TRUE;
+	    sn->row = restRow;
+	    vis = tg->limitedVis = tvDense;
+	    heightPer = tg->heightPer = tl.fontHeight;
+	    lineHeight = tg->lineHeight = tl.fontHeight+1;
+	    withLabels = FALSE;
+	    }
+	y = yOff + origLineHeight * sn->row;
         tg->drawItemAt(tg, item, vg, xOff, y, scale, font, color, vis);
-	drawNameInverted = highlightItem(tg, item);
+
         if (withLabels)
             {
             int nameWidth = mgFontStringWidth(font, name);
             int dotWidth = tl.nWidth/2;
+	    drawNameInverted = highlightItem(tg, item);
             textX -= nameWidth + dotWidth;
             if (textX < insideX)        /* Snap label to the left. */
 		{
@@ -1539,13 +1612,39 @@ if (vis == tvPack || vis == tvSquish)
 		    vgTextRight(vg, textX, y, nameWidth, heightPer, color, font, name);
 		}
             }
-        if (!tg->mapsSelf)
+        if (!tg->mapsSelf && !doingOverflow)
             {
             int w = x2-textX;
             if (w > 0)
                 mapBoxHgcOrHgGene(s, e, textX, y, w, heightPer, tg->mapName, 
 				  tg->mapItemName(tg, item), name, doHgGene);
             }
+
+	/* If printing things to the "overflow" row return state to original 
+	   configuration and print label. */
+	if(doingOverflow)
+	    {
+	    /* Draw label if we haven't yet. */
+	    if(withLeftLabels && !overflowDrawn)
+		{
+		int nameWidth = 0;
+		vgUnclip(vg);
+		vgSetClip(vg, leftLabelX, yOff, insideWidth, tg->height);
+		safef(nameBuff, sizeof(nameBuff), "%d Not Shown", restRowCount);
+		mgFontStringWidth(font, nameBuff);
+		vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, lineHeight, 
+			    color, font, nameBuff);
+		vgUnclip(vg);
+		vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
+		overflowDrawn = TRUE;
+		}
+	    /* Put state back to original state. */
+	    withLabels = origWithLabels;
+	    sn->row = origRow;
+	    vis = tg->limitedVis = origVis;
+	    heightPer = tg->heightPer = origHeightPer;
+	    lineHeight = tg->lineHeight = origLineHeight;
+	    }
         }
     vgUnclip(vg);
     }
@@ -3358,6 +3457,7 @@ void estMethods(struct track *tg)
 {
 tg->drawItems = linkedFeaturesAverageDenseOrientEst;
 tg->extraUiData = newMrnaUiData(tg->mapName, FALSE);
+tg->totalHeight = tgFixedTotalMaxHeight;
 }
 
 void mrnaMethods(struct track *tg)
@@ -8479,7 +8579,7 @@ registerTrackHandler("jkDuplicon", jkDupliconMethods);
 registerTrackHandler("altGraphXCon2", altGraphXMethods ); 
 registerTrackHandler("altGraphXPsb2004", altGraphXMethods ); 
 /* registerTrackHandler("altGraphXOrtho", altGraphXMethods ); */
-/* registerTrackHandler("altGraphXT6Con", altGraphXMethods ); */
+registerTrackHandler("altGraphXT6Con", altGraphXMethods ); 
 registerTrackHandler("affyTransfrags", affyTransfragsMethods);
 registerTrackHandler("chimpSimpleDiff", chimpSimpleDiffMethods);
 registerTrackHandler("tfbsCons", tfbsConsMethods);
