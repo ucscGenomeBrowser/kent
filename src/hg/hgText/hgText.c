@@ -155,7 +155,8 @@ webStart(cart, "Table Browser: %s: Choose Organism &amp; Assembly",
 puts(
      "<P>This tool allows you to download portions of the database used 
 	by the genome browser in several output formats.
-	Please enter a position in the genome and press the submit button:\n"
+	Please enter a position in the genome (or enter \"genome\" to 
+        search all chromosomes) and press the submit button:\n"
      );
 
 printf("(Use <A HREF=\"/cgi-bin/hgBlat?db=%s&hgsid=%d\">BLAT Search</A> to 
@@ -606,6 +607,11 @@ because of newly filled gaps or assembly procedure refinements." "\n"
 coordinates), such as submitting author of a GenBank EST, tissue of
 origin , or link to a RefSeq.  These data types are accessed
 separately." "\n"
+     "<P>" "\n"
+     "The \"Positional tables\" selection takes precedence over the 
+\"Non-positional tables\" selection.  In other words, if both a 
+positional and a non-positional table are selected, the positional 
+table is used and the non-positional table is ignored. " "\n"
      "<P>" "\n");
 printf("Familiarize yourself with the table browser tool by a <B>few minutes
 of exploration</B>. Starting at the top of the form, use the default
@@ -623,6 +629,8 @@ data will be returned)." "\n"
 typically returns a choice of several mRNAs.  Selecting one of these
 returns the table browser to its starting place but with the
 chromosomal location automatically entered in the text box." "\n"
+     "<P>" "\n"
+     "To search all chromosomes, enter <B>\"genome\"</B> as the position. \n"
      "<P>" "\n"
      "For either type of table, a user not familiar with what the table
 offers should select \"%s\".  ", outputOptionsPhase);
@@ -1659,6 +1667,12 @@ else
 	    dyStringAppend(fieldSpec, varPtr->name + strlen("field_"));
 	    }
 	}
+
+if (strlen(fieldSpec->string) < 1)
+    {
+    printf("\n# Error: at least one field must be selected.\n\n");
+    return;
+    }
 
 hFindChromStartEndFieldsDb(getTableDb(), fullTableName, chromField,
 			   startField, endField);
