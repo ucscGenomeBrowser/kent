@@ -27,5 +27,9 @@ float sqlFloat(char *s);
 /* Convert string to a float.  Assumes all of string is number
  * and aborts on an error. */
 
+float sqlDouble(char *s);
+/* Convert string to a double.  Assumes all of string is number
+ * and aborts on an error. */
+
 #endif /* SQLNUM_H */
  
