@@ -10,7 +10,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.48 2003/06/24 07:07:29 kent Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.49 2003/06/25 15:18:54 kent Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -645,6 +645,8 @@ void cgiMakeTextVar(char *varName, char *initialVal, int charSize)
 /* Make a text control filled with initial value.  If charSize
  * is zero it's calculated from initialVal size. */
 {
+if (initialVal == NULL)
+    initialVal = "";
 if (charSize == 0) charSize = strlen(initialVal);
 if (charSize == 0) charSize = 8;
 
