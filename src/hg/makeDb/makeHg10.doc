@@ -741,7 +741,7 @@ LOAD GENIE (todo)
          mysql> delete * from genieAlt where name like 'RS.%';
          mysql> delete * from genieAlt where name like 'C.%';
 
-LOAD SOFTBERRY GENES (todo)
+LOAD SOFTBERRY GENES (done)
      - ln -s /cluster/store1/gs.11/build28/ ~/oo
      - cd ~/oo/bed
      - mkdir softberry
@@ -757,6 +757,17 @@ LOAD SOFTBERRY GENES (todo)
      ldHgGene hg10 softberryGene chr*.gff
      hgPepPred hg10 softberry *.pro
      hgSoftberryHom hg10 *.pro
+
+LOAD GENEID GENES (done)
+     mkdir ~/oo/bed/geneid
+     cd ~/oo/bed/geneid
+     mkdir download
+     cd download
+   Now download *.gtf and *.cds from 
+   http://www1.imim.es/genepredictions/H.sapiens/golden_path_20011222/geneid_v1.1/
+     cd ..
+     ldHgGene hg10 geneid download/*.gtf -exon=CDS
+     hgPepPred hg10 generic geneidPep download/*.cds
 
 LOAD ACEMBLY
     - Get acembly*gene.gff from Jean and Michelle Thierry-Miegs and

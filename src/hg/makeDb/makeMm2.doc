@@ -541,18 +541,17 @@ LOAD SNPS (todo)
 	hgLoadBed mm2 snpNih snpNih.bed
 
 LOAD CPGISSLANDS (todo)
-     - login to hgwdev
-     - cd /cluster/store2/mm.2002.02/mm2/bed
-     - mkdir cpgIsland
-     - cd cpgIsland
-     - mm2 < ~kent/src/hg/lib/cpgIsland.sql
-     - wget http://genome.wustl.edu:8021/pub/gsc1/achinwal/MapAccessions/cpg_aug.oo33.tar
-     - tar -xf cpg*.tar
-     - awk -f filter.awk */ctg*/*.cpg > contig.bed
-     - liftUp cpgIsland.bed ../../jkStuff/liftAll.lft warn contig.bed
-     - Enter database with "mm2" command.
-     - At mysql> prompt type in:
-          load data local infile 'cpgIsland.bed' into table cpgIsland
+     login to hgwdev
+       cd /cluster/store2/mm.2002.02/mm2/bed
+       mkdir cpgIsland
+       cd cpgIsland
+     Get cpgisland tarball out of email from Asif (achinwal@watson.wustl.edu)
+     and unpack it.
+       awk -f filter.awk */ctg*/*.cpg > cpgIsland.bed
+       mysql -u hgcat -pBIGSECRET -A mm2 < ~/src/hg/lib/cpgIsland.sql
+       mysql -u hgcat -pBIGSECRET -A mm2 
+     At mysql> prompt type in:
+       load data local infile 'cpgIsland.bed' into table cpgIsland
 
 LOAD ENSEMBLE GENES (todo)
      cd ~/mm/bed
