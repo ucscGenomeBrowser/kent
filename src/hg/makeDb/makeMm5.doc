@@ -4296,117 +4296,84 @@ echo "Done" >> ${WINDOWS}/$c.done
     mkdir run.cons
     cd run.cons
 
-    # Use tree model file from the hg17 8-way, # with the TREE adjusted to (as per ACS instructions): 
-    #   1. reorder nodes
-    #   2. remove chimp, zebrafish, fugu,
-    #   3. remove unnecessary subtrees, summing branch lengths
-   # WAS:
-   # (((((human chimp) (rat mouse)) dog) chicken) (fugu zebrafish))
-   # TREE: (((((1:0.006523,2:0.007997):0.103779,(3:0.104867,4:0.078911):0.265676):0.0196,5:0.2051):0.3906,6:0.5293):0.5557,(7:0.9558,8:0.9375):0.5557);
-   # WILL BE:
-   # ((((mouse rat) human) dog) chicken)
-   # Step 1: Reorder nodes to match desired tree order (e.g. first value is human -- will be node #3 in the new tree)
-   #            and assign X to nodes to delete
-   # TREE: (((((3:0.006523,X:0.007997):0.103779,(2:0.104867,1:0.078911):0.265676):0.0196,4:0.2051):0.3906,5:0.5293):0.5557,(X:0.9558,X:0.9375):0.5557);
-   # Step 2: Remove X nodes
-   # TREE: (((((3:0.006523):0.103779,(2:0.104867,1:0.078911):0.265676):0.0196,4:0.2051):0.3906,5:0.5293):0.5557,():0.5557);
-   # Step 3: Collapse subtrees, summing branch lengths
-   # TREE: ((((3:0.110302,(2:0.104867,1:0.078911):0.265676):0.0196,4:0.2051):0.3906,5:0.5293):0.5557);
-   # since (0.110302 = 0.006523 + 0.103779
+    # skip parameter estimation step: use parameters already estimated for
+    # hg17 (see makeHg17.doc)
+    cp /cluster/data/hg17/bed/multiz.2004-07-13/cons/run.elements/ave.cons.mod /cluster/data/hg17/bed/multiz.2004-07-13/cons/run.elements/ave.noncons.mod .
 
-cat > mm5rn3hg17canFam1galGal2.mod << 'EOF'
-ALPHABET: A C G T
-ORDER: 0
-SUBST_MOD: REV
-NRATECATS: 10
-ALPHA: 4.658942
-TRAINING_LNL: -6889216721.159384
-BACKGROUND: 0.294633 0.205082 0.205189 0.295097
-RATE_MAT:
-  -0.865237    0.159990    0.554805    0.150442
-   0.229851   -1.194646    0.168269    0.796526
-   0.796651    0.168182   -1.194919    0.230086
-   0.150205    0.553556    0.159985   -0.863747
-TREE: (((3:0.110302,(2:0.104867,1:0.078911):0.265676):0.0196,4:0.2051):0.3906,5:0.5293);
-'EOF'
-# << for emacs
-    
-    # set up wrapper for phastCons
-    # WARNING: watch load on fileserver -- may need to write output 
-    # elsewhere and copy back
-    # for this run, kksilo is at nearly 400 load -- it only takes
-    # 20 minutes, but this isn't acceptable -- next time, try output to panFs
-    # (output to bluearc hangs bluarc)
-    cat << '_EOF_' > doPhastCons.sh
+    cat << 'EOF' > doPhastCons.sh
 #!/bin/sh
 
-PHAST=/cluster/bin/phast
-TMP=/tmp/phastCons
-OUTDIR=/cluster/data/mm5/bed/multiz.2004-07-29/cons/run.cons/PHASTCONS
-
-file=$1
-root=`basename $file .ss.gz`
-chrom=`echo $root | awk -F\. '{print $1}'`
-
-mkdir -p $TMP 
-zcat $file | $PHAST/phastCons - mm5rn3hg17canFam1galGal2.mod --nrates 40 --transitions 0.080,0.008 --quiet > $TMP/$root.pp
-[ $? -eq 0 ] || exit 1
-mkdir -p $OUTDIR/$chrom
-nice gzip -c $TMP/$root.pp > $OUTDIR/$chrom/$root.pp.gz
-[ $? -eq 0 ] || exit 1
-rm $TMP/$root.pp
-'_EOF_'
-# << for emacs
+mkdir -p /cluster/bluearc/mm5/phastCons/POSTPROBS /cluster/bluearc/mm5/phastCons/ELEMENTS
+pref=`basename $1 .ss.gz`
+chr=`echo $pref | awk -F\. '{print $1}'`
+tmpfile=/scratch/phastCons.$$
+zcat $1 | /cluster/bin/phast/phastCons - ave.cons.mod,ave.noncons.mod --transitions 0.015959 --target-coverage 0.125 --quiet --seqname $chr --idpref $pref --viterbi /cluster/bluearc/mm5/phastCons/ELEMENTS/$pref.bed --score --min-informative-types 0 > $tmpfile
+gzip -c $tmpfile > /cluster/bluearc/mm5/phastCons/POSTPROBS/$pref.pp.gz
+rm $tmpfile
+EOF
     chmod u+x doPhastCons.sh
-    rm -fr /cluster/data/mm5/bed/multz.2004-07-29/cons/run.cons/PHASTCONS
 
-    # the --transitions arguments are approximate maximum likelihood
-    # estimates obtained by running the program *without* --cut-params
-    # (causes estimation by EM) on five randomly selected 1M bp
-    # windows.  All estimates were in the same ballpark (took a rough average)
+    rm -fr /cluster/bluearc/mm5/phastCons/POSTPROBS /cluster/bluearc/mm5/phastCons/ELEMENTS
+    rm -f jobs.lst
+    for f in /cluster/bluearc/mm5/multiz.2004-07-29/cons/WINDOWS/*.ss.gz ; do echo doPhastCons.sh $f >> jobs.lst ; done
 
-    # set up cluster job
-    rm -f jobList
-    foreach f (/cluster/bluearc/mm5/multiz.2004-07-29/cons/WINDOWS/*.ss.gz)
-        set b = $f:t:r:r
-        set c = $b:r
-        echo "doPhastCons.sh $f {check out exists+ /cluster/data/mm5/bed/multiz.2004-07-29/cons/run.cons/PHASTCONS/$c/$b.pp.gz}">> jobList
-    end
-    para create jobList
-        # 3291 jobs
-    para try ; para push ... etc.
-# IO & Wait Time:                123862s    2064.37m    34.41h    1.43d  0.004 y
-# Average job time:                  62s       1.04m     0.02h    0.00d
-# Longest job:                      185s       3.08m     0.05h    0.00d
-# Submission to last job:          1216s      20.27m     0.34h    0.01d
+    # run cluster job
+    para create, ...
+    # took about 10 minutes
 
-    # load wiggle table
-    ssh kksilo
-    cd /cluster/data/mm5/bed/multiz.2004-07-29/cons
-    cd run.cons
-    mkdir -p PHASTCONS/wib
-    bash
-    for dir in PHASTCONS/chr* ; do \
-        echo $dir ;\
-        chr=`basename $dir` ;\
-        zcat `ls $dir/*.pp.gz | sort -t\. -k2,2n` | \
-            wigAsciiToBinary -chrom=$chr \
-            -wibFile=PHASTCONS/wib/${chr}_multiz5wayCons stdin ;\
-    done
+    # combine predictions and transform scores to be in 0-1000 interval
+    # do in a way that avoids limits on numbers of args
+    find /cluster/bluearc/mm5/phastCons/ELEMENTS -name "*.bed" > files
+    rm -f splitfiles* all.raw.bed
+    split files splitfiles
+    for s in splitfiles* ; do awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' `cat $s` >> all.raw.bed ; done
+    /cluster/bin/scripts/lodToBedScore all.raw.bed > all.bed
+    rm files splitfiles* 
 
-    # load data for track name "multiz5way"
-    ssh hgwdev
-    cd /cluster/data/mm5/bed/multiz.2004-07-29/cons
-    cd run.cons
-    hgLoadWiggle mm5 multiz5wayCons -pathPrefix=/gbdb/mm5/multiz5way/wib \
-                PHASTCONS/wib/chr*_multiz5wayCons.wig
-    mkdir -p /gbdb/mm5/multiz5way/wib
-    rm -f /gbdb/mm5/wib/chr*phastCons.wib
-    ln -s `pwd`/PHASTCONS/wib/*.wib /gbdb/mm5/multiz5way/wib
-    chmod 775 . PHASTCONS PHASTCONS/wib
-    chmod 664 PHASTCONS/wib/*.wib
-    
-    # GOT HERE
+    hgLoadBed mm5 phastConsElements all.bed
+
+    # check coverage
+    featureBits mm5 phastConsElements
+#171108093 bases of 2615483787 (6.542%) in intersection
+    # (this should be close enough; if necessary, you can try
+    # rerunning the steps above with a different target coverage)
+
+    # set up wiggle
+    mkdir -p /cluster/bluearc/mm5/phastCons/wib
+    cat << 'EOF' > doWigAsciiToBinary.sh
+#!/bin/sh
+chr=$1
+zcat `ls /cluster/bluearc/mm5/phastCons/POSTPROBS/$chr.*.pp.gz | sort -t\. -k2,2n` | wigAsciiToBinary -chrom=$chr -wibFile=/cluster/bluearc/mm5/phastCons/wib/${chr}_phastCons stdin 
+EOF
+    chmod u+x doWigAsciiToBinary.sh
+
+    rm -f jobs2.lst
+    for chr in `ls /cluster/bluearc/mm5/phastCons/POSTPROBS | awk -F\. '{print $1}' | sort -u` ; do echo doWigAsciiToBinary.sh $chr >> jobs2.lst ; done
+
+    # run a little wigAsciiToBinary cluster job
+    ssh kk, etc.
+
+    # copy wibs and wigs from bluearc
+    rsync -av /cluster/bluearc/mm5/phastCons/wib .
+
+    # load track
+    hgLoadWiggle mm5 phastCons -pathPrefix=/gbdb/mm5/phastCons/wib \
+                wib/chr*_phastCons.wig
+    mkdir -p /gbdb/mm5/phastCons/wib
+    rm -f /gbdb/mm5/phastCons/wib/chr*phastCons.wib
+    ln -s /cluster/data/mm5/bed/multiz.2004-07-29/cons/run.cons/wib/*.wib /gbdb/mm5/phastCons/wib
+    chmod 775 . wib /gbdb/mm5/phastCons /gbdb/mm5/phastCons/wib
+    chmod 664 wib/*.wib
+
+    # move postprobs over and clean up bluearc 
+    rsync -av /cluster/bluearc/mm5/phastCons/POSTPROBS .
+    # (people sometimes want the raw scores)
+    rm -r /cluster/bluearc/mm5/phastCons/ELEMENTS /cluster/bluearc/mm5/phastCons/POSTPROBS /cluster/bluearc/mm5/phastCons/wib
+
+    # (The steps below assume a wiggle track called multiz5wayCons, as
+    # originally used by Kate, instead of phastCons, as above.)
+
+    # load data for track name "multiz5way"    
 
     # load multiz maf tables 
     ssh hgwdev
@@ -4438,7 +4405,6 @@ cat > multiz5way/loadMaf.csh << 'EOF'
     end
 'EOF'
     csh multiz5way/loadMaf.csh >&! multiz5way/loadMaf.log &
-
     
 # track multiz5way
 # shortLabel Conservation
