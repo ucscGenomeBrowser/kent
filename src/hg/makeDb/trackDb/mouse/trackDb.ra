@@ -39,8 +39,8 @@ altColor 175,150,128
 type genePred 
 
 track blatFish
-shortLabel Tetraodon BLAT
-longLabel Tetraodon nigriviridis Translated BLAT Alignments
+shortLabel Tetraodon Blat
+longLabel Tetraodon nigriviridis Translated Blat Alignments
 group compGeno
 priority 112
 visibility dense
@@ -50,8 +50,8 @@ spectrum on
 type psl xeno
 
 track blatFugu
-shortLabel Fugu BLAT
-longLabel Takifugu rubripes Translated BLAT Alignments
+shortLabel Fugu Blat
+longLabel Takifugu rubripes Translated Blat Alignments
 group compGeno
 priority 113
 visibility dense

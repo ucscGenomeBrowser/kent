@@ -135,7 +135,7 @@ type netAlign mm3 mouseChain
 
 track syntenyMouse
 shortLabel Mouse Synteny
-longLabel Human/Mouse Synteny using blastz single coverage (100k window)
+longLabel Human/Mouse Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 138
 visibility hide
@@ -156,7 +156,7 @@ type psl xeno rn2
 
 track syntenyRat
 shortLabel Rat Synteny
-longLabel $Organism/Rat Synteny using blastz single coverage (100k window)
+longLabel $Organism/Rat Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 140.5
 visibility hide
@@ -208,7 +208,7 @@ type bed 12
 
 track blastzCe1
 shortLabel Worm blastz
-longLabel C elegans blastz alignments
+longLabel C elegans Blastz Alignments
 group compGeno
 priority 109
 visibility hide
