@@ -43,7 +43,7 @@ printf("<B>gene:</B> %s ", naForNull(geneName));
 printf("<B>accession:</B> %s ", naForNull(bioImageAccession(conn,id)));
 printf("<B>type:</B> %s<BR>\n", naForNull(bioImageType(conn,id)));
 printf("<B>organism:</B> %s  ", bioImageOrganism(conn, id));
-printf("<B>stage:</B> %s<BR>\n", bioImageStage(conn, id));
+printf("<B>stage:</B> %s<BR>\n", bioImageStage(conn, id, TRUE));
 printf("<B>body part:</B> %s ", naForNull(bioImageBodyPart(conn,id)));
 printf("<B>section type:</B> %s<BR>\n", naForNull(bioImageSliceType(conn,id)));
 treatment = bioImageTreatment(conn,id);
