@@ -1,222 +1,63 @@
 #!/bin/csh -f # set emacs mode
 exit; # don't actually run this like a script :)
 
-# This file describes how we made the browser database on the 
 # Ciona Intestinalis V1.0 from JGI
-# April 24, 2003
 
-DOWNLOAD SEQUENCE (DONE 04/24/03)
+DOWNLOAD SEQUENCE 
 
     ssh eieio
-    mkdir /cluster/store5/Ciona_Intestinalis_V1
-    cd /cluster/store5/Ciona_Intestinalis_V1
+    mkdir /cluster/store5/squirt
+    cd /cluster/store5/squirt
     wget ftp://ftp.jgi-psf.org/pub/JGI_data/Ciona/v1.0/ciona.rm.fasta.gz
-    wget ftp://ftp.jgi-psf.org/pub/JGI_data/Ciona/v1.0/ciona.mrna.fasta.gz
+    gunzip ciona.rm.fasta
+
     # translate to nib
-    ln -s /cluster/store5/Ciona_Intestinalis_V1 ~/ci1
+    ln -s /cluster/store5/squirt/ci1 ~/ci1
     cd ~/ci1
+    mkdir scaffolds
+    cd scaffolds
+
+    # spoof faSplit into making one file per scaffold
+    # assumes # of scaffolds is less than 9999
+    faSplit sequence ../ciona.rm.fasta 9999 Scaffold_
+    cd ..
+
     mkdir nib
-    ln -s ciona.rm.fasta chr1.fa
-    faToNib chr1.fa nib/chr1.nib
+    foreach i (../scaffolds/*.fa)
+        faToNib $i `basename $i .fa`.nib
+    end
 
-
-CREATING DATABASE (DONE 04/15/03)
-
+CREATE DATABASE
     # Create the database.
     ssh hgwdev
     echo 'create database ci1' | hgsql ''
-    # make a semi-permanent read-only alias:
-    alias ci1 "mysql -u hguser -phguserstuff -A sc1"
-    # Use df to ake sure there is at least 5 gig free on 
-    # hgwdev:/var/lib/mysql
 
 
-CREATING GRP TABLE FOR TRACK GROUPING (DONE 04/15/03)
+CREATING GRP TABLE FOR TRACK GROUPING 
     ssh hgwdev
     echo "create table grp (PRIMARY KEY(NAME)) select * from rn1.grp" \
       | hgsql ci1
 
 
-STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE 04/15/03)
-
-    # Make symbolic links from /gbdb/ci1/nib to the real nibs.
+STORING O+O SEQUENCE AND ASSEMBLY INFORMATION
+    # Make symbolic links in /gbdb/ci1/nib to the real nibs.
     ssh hgwdev
     mkdir -p /gbdb/ci1/nib
-    foreach f (/cluster/store5/Ciona_Intestinalis_V1/nib/*.nib)
+    foreach f (/cluster/store5/squirt/ci1/nib/*.nib)
       ln -s $f /gbdb/ci1/nib
     end
-    # Load /gbdb/ci1/nib paths into database and save size info.
-    hgsql ci1  < ~/src/hg/lib/chromInfo.sql
+    # Load /gbdb/ci1/nib paths into database 
+    hgsql ci1  < ~kent/src/hg/lib/chromInfo.sql
     cd ~/ci1
-    hgNibSeq -preMadeNib ci1 /gbdb/ci1/nib chr1.fa
-#   hgNibSeq -preMadeNib ci1 /gbdb/ci1/nib scaffolds/*.fa
-    echo "select chrom,size from chromInfo" | hgsql -N ci1 > chrom.sizes
-    # Set up relational mrna tables.
-    hgLoadRna new ci1
-    ln -s /cluster/store2/mrna.133/org/Ciona_intestinalis/mrna.fa /gbdb/ci1/mrna.133
-    ln -s /cluster/store2/mrna.133/org/Ciona_intestinalis/est.fa /gbdb/ci1/mrna.133
-    hgLoadRna add -type=mRNA ci1 /gbdb/ci1/mrna.133/mrna.fa \
-      /cluster/store2/mrna.133/org/Ciona_intestinalis/mrna.ra
-    hgLoadRna add -type=EST ci1 /gbdb/ci1/mrna.133/est.fa \
-      /cluster/store2/mrna.133/org/Ciona_intestinalis/est.ra
+    hgNibSeq -preMadeNib ci1 /gbdb/ci1/nib scaffolds/*.fa
 
-
-MAKE GCPERCENT (DONE 04/15/03)
-     ssh hgwdev
-     mkdir -p /cluster/store5/Ciona_Intestinalis_V1/bed/gcPercent
-     cd /cluster/store5/Ciona_Intestinalis_V1/bed/gcPercent
-     hgsql ci1  < ~/src/hg/lib/gcPercent.sql
-     mkdir bed/gcPercent
-     cd bed/gcPercent
-     hgGcPercent ci1 ../../nib
-
-MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR SC1 (DONE 04/15/03)
-    echo 'insert into defaultDb values("Ciona intestinalis", "ci1");' \
-      | hgsql -h genome-testdb hgcentraltest
-    echo 'insert into dbDb values("ci1", "Ciona intestinalis v1", \
-          "/gbdb/ci1/nib", "Ciona intestinalis", "chr1", 1, 10, "Ciona intestinalis");' \
-      | hgsql -h genome-testdb hgcentraltest
-    # Make trackDb table so browser knows what tracks to expect:
+    # make gcPercent table
     ssh hgwdev
-    cd ~/src/hg/makeDb/trackDb
-    cvs up -d -P
-    # Edit that makefile to add sc1 in all the right places and do
-    make update
-    make alpha
-    cvs commit makefile
+    mkdir -p ~/ci1/bed/gcPercent
+    cd ~/ci1/bed/gcPercent
+    hgsql ci1  < ~/kent/src/hg/lib/gcPercent.sql
+    hgGcPercent ci1 ../../nib
 
-MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR SC1 (TODO)
-    ssh hgwdev
-    echo 'insert into blatServers values("sc1", "blat10", "17778", "1"); \
-          insert into blatServers values("sc1", "blat10", "17779", "0");' \
-      | hgsql -h genome-testdb hgcentraltest
-
-
-SIMPLE REPEAT TRACK (DONE 04/15/03)
-    # TRF runs pretty quickly now... it takes a few hours total runtime, 
-    # so instead of binrsyncing and para-running, just do this on eieio:
-    ssh eieio
-    mkdir ~/sc1/bed/simpleRepeat
-    cd ~/sc1/bed/simpleRepeat
-    mkdir trf
-    rm -f jobs.csh
-    touch jobs.csh
-    foreach f (/cluster/store5/SARS_Coronavirus_TOR2/*.fa)
-      set fout = $f:t:r.bed
-      echo "/cluster/home/kent/bin/i386/trfBig -trf=/cluster/home/kent/bin/i386/trf $f /dev/null -bedAt=trf/$fout -tempDir=/tmp" \
-        >> jobs.csh
-    end
-    tcsh jobs.csh |& tee jobs.log
-    wc -l jobs.csh
-    ls -1 trf | wc -l
-# STOPPED HERE -- no simple repeats found.
-
-    # When job is done do:
-    liftUp simpleRepeat.bed ~/sc1/jkStuff/liftAll.lft warn trf/*.bed
-
-    # Load this into the database as so
-    ssh hgwdev
-    cd ~/sc1/bed/simpleRepeat
-    hgLoadBed sc1 simpleRepeat simpleRepeat.bed \
-      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
-
-
-MAKING VIRAL mRNA FILES (DONE 04/15/03)
-    cd /cluster/store5/mrna.134
-    gunzip -c \
-      /cluster/store5/genbank.134/gbvrl* \
-    | gbToFaRa anyRna.fil viralRna.{fa,ra,ta} stdin
-    mkdir /gbdb/sc1/mrna.134
-    ln -s  /cluster/store5/mrna.134/viralRna.fa /gbdb/sc1/mrna.134/
-    hgLoadRna add -type=mrna sc1 /gbdb/sc1/mrna.134/viralRna.fa \
-      /cluster/store5/mrna.134/viralRna.ra
-    # distribute to /iscratch/i/
-    ssh kkr1u00
-    mkdir -p /iscratch/i/mrna.134
-    cp -p /cluster/store5/mrna.134/viralRna.fa  /iscratch/i/mrna.134
-    ~kent/bin/iSync
-
-
-ALIGNING VIRAL RNA (DONE 04/15/03)
-    ssh kkr1u00
-    mkdir -p ~/sc1/bed/mrna
-    cd ~/sc1/bed/mrna
-    ls -1S /cluster/store5/Ciona_Intestinalis_V1/*.fa > genome.lst
-    ls -1 /iscratch/i/mrna.133/Ciona_intestinalis/mrna.fa > mrna.lst
-    cp ~angie/lastRn/bed/mrna/gsub .
-    mkdir psl
-    gensub2 genome.lst mrna.lst gsub spec
-    para create spec
-    para try, para check, para push, para check....
-    para time > time
-      
-    # Process alignments into near best in genome.
-    ssh eieio
-    cd ~/sc1/bed/mrna
-    pslSort dirs raw.psl /cluster/store2/temp psl
-    pslReps -nohead -minAli=0.90 -sizeMatters -nearTop=0.02 raw.psl stdout \
-      /dev/null \
-    | sed -e 's/TOR2_draft_genome_assembly_140403/chr1/' \
-    > all_mrna.psl
-    pslSortAcc nohead chrom /cluster/store2/temp all_mrna.psl
-
-    # Load mRNA alignments into database.
-    ssh hgwdev
-    cd ~/sc1/bed/mrna/chrom
-    foreach i (chr?{,?}{,_random}.psl)
-        mv $i $i:r_mrna.psl
-    end
-    hgLoadPsl sc1 *.psl
-    cd ..
-    hgLoadPsl sc1 all_mrna.psl -nobin
-
-    LOAD SWISS PROT CORONAVIRUS PROTEINS
-    cd ~/sc1/bed/swissprot
-    download all ORGANISM=coronavirus proteins from SRS into file viralProt.fa
-    ssh kkr1u00
-    mkdir psl
-    para create spec
-    para push
-    cd psl
-    mv chr1_viralProt.psl chr1_viralProtLoose.psl
-    pslReps -minAli=0.67 chr1_viralProtLoose.psl chr1_viralProt.psl    
-    hgLoadPsl sc1 chr1_viralProt.psl chr1_viralProtLoose.psl
-
-    LOAD CPGISSLANDS (DONE 04/15/03)
-    ssh eieio
-    mkdir -p ~/sc1/bed/cpgIsland
-    cd ~/sc1/bed/cpgIsland
-    # Build software emailed from Asif Chinwalla (achinwal@watson.wustl.edu)
-    # copy the tar file to the current directory
-    cp ~/lastRn/bed/cpgIsland/cpg_dist.tar .
-    tar xvf cpg_dist.tar 
-    cd cpg_dist
-    gcc readseq.c cpg_lh.c -o cpglh.exe
-    cd ..
-    foreach f (../../*.fa)
-      set fout=$f:t:r:r.cpg
-      echo running cpglh on $f to $fout
-      ./cpg_dist/cpglh.exe $f > $fout.cpg
-    end
-    # copy filter.awk from a previous release
-    cp ~/lastRn/bed/cpgIsland/filter.awk .
-    awk -f filter.awk chr*.cpg > cpgIsland.bed
-# STOPPED HERE -- NO CPG ISLANDS FOUND
-    # load into database:
-    ssh hgwdev
-    cd ~/sc1/bed/cpgIsland
-    hgLoadBed sc1 cpgIsland -tab -noBin \
-      -sqlTable=$HOME/kent/src/hg/lib/cpgIsland.sql cpgIsland.bed
-
-LOAD SOFTBERRY GENES 
-     mkdir -p ~/sc1/bed/softberry
-     cd ~/sc1/bed/softberry
-  # Copy in email attachment Soft_genes_SARS_Tor2.tar.gz
-  # from Victor Solovyev
-     gtar -zxvf Soft_gene*.gz
-  # Substitute chr1 for subs in the gff file 
-     ldHgGene sc1 softberryGene SARS.gff
-     hgPepPred sc1 softberry *.protein
-     hgSoftberryHom sc1 *.protein
-
-
+    # Load genbank entries
+    cd /cluster/store5/genbank
+    ./bin/gbDbLoadStep -initialLoad ci1
