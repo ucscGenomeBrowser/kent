@@ -259,7 +259,8 @@ struct map *createMap(char *mapInfo, char *center, char *chr)
   else
     wordCount = chopByChar(mapInfo, '-', bands, ArraySize(bands));
   ret->band1 = cloneString(bands[0]);
-  if (wordCount == 1) 
+  if (wordCount == 1 || *bands[1] == 0) 
+    /* check for empty end band safeguards against bad input data (e.g. "Yp0")*/
     ret->band2 = cloneString(bands[0]);
   else 
     ret->band2 = cloneString(bands[1]);
