@@ -21,6 +21,7 @@ errAbort(
   "options:\n"
   "   -hubInPort=N (default %d)\n"
   "   -nodeInPort=N (default %d)\n"
+  "   -log=fileName - where to write log messages\n"
   "   -drop=N - Drop every Nth packet\n"
   "   -ip=NNN.NNN.NNN.NNN ip address of current machine, usually needed.\n"
   , bdHubInPort, bdNodeInPort
@@ -48,7 +49,6 @@ if (bind(sd, (struct sockaddr *)&sai, sizeof(sai)) < 0)
     errAbort("Couldn't bind socket");
 if ((err = getsockopt(sd, SOL_SOCKET, SO_RCVBUF, &size, &sizeSize)) != 0)
     errAbort("Couldn't get socket size");
-uglyf("input socket default size %d\n", size);
 if (size < 32000)
     {
     size = 64*1024;
@@ -71,7 +71,6 @@ bits32 ipForName(char *name)
 {
 struct hostent *hostent;
 bits32 ret;
-uglyf("ipForName %s\n", name);
 hostent = gethostbyname(name);
 if (hostent == NULL)
     errAbort("Couldn't find host %s. h_errno %d", name, h_errno);
@@ -304,12 +303,12 @@ else
 		}
 	    }
 	}
-    uglyf("%d missing %d of %d\n", sectionIx, missingCount, blockCount);
+    logIt("%d missing %d of %d\n", sectionIx, missingCount, blockCount);
     bdMakeMissingBlocksMessage(m, ownIp, m->id, fileId, missingCount, missingList);
     }
 }
 
-void broadNode(char *nothing)
+void broadNode()
 /* broadNode - Daemon that runs on cluster nodes in broadcast data system. */
 {
 int port = 0;
@@ -331,7 +330,7 @@ while (alive)
 	warn("bdReceive error %s", strerror(err));
     else
 	{
-	// uglyf("got message type %d size %d sourceIp %x\n", m->type, m->size, sourceIp);
+	// logIt("got message type %d size %d sourceIp %x\n", m->type, m->size, sourceIp);
 	if (dropTest != 0)
 	    {
 	    if (--drop <= 0)
@@ -360,9 +359,8 @@ while (alive)
 		personallyAck(outSd, m, ownIp, sourceIp, hubInPort, err);
 		break;
 	    case bdmPing:
-		uglyf("<PING>\n%s</PING>\n", m->data);
+		logIt("<PING>\n%s</PING>\n", m->data);
 		personallyAck(outSd, m, ownIp, sourceIp, hubInPort, 0);
-		// bdSendTo(sd, m, destIp, hubInPort); // uglyf
 		break;
 	    case bdmSectionQuery:
 		pSectionQuery(m, ftList, ownIp);
@@ -379,6 +377,31 @@ close(inSd);
 close(outSd);
 }
 
+void forkDaemon()
+/* Fork off real daemon and exit.  This effectively
+ * removes dependence of paraNode daemon on terminal. 
+ * Set up log file if any here as well. */
+{
+char *log = optionVal("log", NULL);
+
+/* Close standard file handles. */
+close(0);
+if (log == NULL || !sameString(log, "stdout"))
+    close(1);
+close(2);
+
+if (fork() == 0)
+    {
+    /* Set up log handler. */
+    setupDaemonLog(log);
+    logFlush = TRUE;
+
+    /* Execute daemon. */
+    broadNode();
+    }
+}
+
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
@@ -388,6 +411,6 @@ if (argc != 2)
 nodeInPort = optionInt("nodeInPort", bdNodeInPort);
 hubInPort = optionInt("hubInPort", bdHubInPort);
 dropTest = optionInt("drop", 0);
-broadNode(argv[1]);
+forkDaemon();
 return 0;
 }
