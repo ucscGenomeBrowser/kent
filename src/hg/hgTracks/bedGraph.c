@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: bedGraph.c,v 1.1 2005/02/09 00:29:28 hiram Exp $";
+static char const rcsid[] = "$Id: bedGraph.c,v 1.2 2005/02/09 01:06:23 hiram Exp $";
 
 /*	bedGraphCartOptions structure - to carry cart options from
  *	bedGraphMethods to all the other methods via the
@@ -39,13 +39,13 @@ struct bedGraphCartOptions
 
 struct preDrawElement
     {
-	double	max;	/*	maximum value seen for this point	*/
-	double	min;	/*	minimum value seen for this point	*/
-	unsigned long long	count;	/* number of datum at this point */
-	double	sumData;	/*	sum of all values at this point	*/
-	double  sumSquares;	/* sum of (values squared) at this point */
-	double  plotValue;	/*	raw data to plot	*/
-	double  smooth;	/*	smooth data values	*/
+    double	max;	/*	maximum value seen for this point	*/
+    double	min;	/*	minimum value seen for this point	*/
+    unsigned long long	count;	/* number of datum at this point */
+    double	sumData;	/*	sum of all values at this point	*/
+    double  sumSquares;	/* sum of (values squared) at this point */
+    double  plotValue;	/*	raw data to plot	*/
+    double  smooth;	/*	smooth data values	*/
     };
 
 struct bedGraphItem
@@ -251,6 +251,7 @@ int graphColumn = 5;
 
 bedGraphCart = (struct bedGraphCartOptions *) tg->extraUiData;
 graphColumn = bedGraphCart->graphColumn;
+fprintf(stderr, "graphColumn: %d\n", graphColumn);
 
 /*	Verify this is NOT a custom track	*/
 if (tg->customPt != (void *)NULL)
@@ -269,7 +270,8 @@ if (colCount < graphColumn)
 	tg->mapName, colCount, graphColumn);
 
 /*	before loop, determine actual row[graphColumn] index */
-graphColumn = (rowOffset - 1);
+graphColumn += (rowOffset - 1);
+fprintf(stderr, "graphColumn: %d, colCount: %d\n", graphColumn, colCount);
 
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -293,6 +295,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	bg->name = cloneString(name);
 	}
     bg->dataValue = sqlFloat(row[graphColumn]);
+fprintf(stderr, "load Items: %d: %f\n", itemsLoaded, bg->dataValue);
     bg->graphUpperLimit = -1.0e+300; /* filled in by DrawItems	*/
     bg->graphLowerLimit = 1.0e+300; /* filled in by DrawItems	*/
     slAddHead(&bgList, bg);
@@ -325,9 +328,6 @@ double pixelsPerBase = scaleForPixels(width);
 double basesPerPixel = 1.0;
 Color drawColor = vgFindColorIx(vg, 0, 0, 0);
 int itemCount = 0;
-char *currentFile = (char *) NULL;	/*	the binary file name */
-int wibFH = 0;		/*	file handle to binary file */
-struct hashEl *el, *elList;
 struct bedGraphCartOptions *bedGraphCart;
 enum wiggleGridOptEnum horizontalGrid;
 enum wiggleGraphOptEnum lineBar;
@@ -385,157 +385,69 @@ for (i = 0; i < preDrawSize; ++i) {
 	preDraw[i].min = 1.0e+300;
 }
 
-#ifdef NOT
 /*	walk through all the data and prepare the preDraw array	*/
 for (wi = tg->items; wi != NULL; wi = wi->next)
     {
-    size_t bytesRead;		/* to check fread being OK */
-    unsigned char *readData;	/* the bytes read in from the file */
-    int dataOffset = 0;		/*	within data block during drawing */
-    int usingDataSpan = 1;		/* will become larger if possible */
-    int minimalSpan = 100000000;	/*	a lower limit safety check */
+    double dataValue = wi->dataValue;	/* the data value to graph */
 
     ++itemCount;
 
-    /*	Take a look through the potential spans, and given what we have
-     *	here for basesPerPixel, pick the largest usingDataSpan that is
-     *	not greater than the basesPerPixel
+    /*	Ready to draw, what do we know:
+    *	the feature being processed:
+    *	chrom coords:  [wi->start : wi->end)
+    *	its data value: dataValue = wi->dataValue
+    *
+    *	The drawing window, in pixels:
+    *	xOff = left margin, yOff = top margin, h = height of drawing window
+    *	drawing window in chrom coords: seqStart, seqEnd
+    *	'basesPerPixel' is known, 'pixelsPerBase' is known
+    */
+    /*	let's check end point screen coordinates.  If they are
+     *	the same, then this entire data block lands on one pixel,
+     *	It is OK if these end up + or -, we do want to
+     *	keep track of pixels before and after the screen for
+     *	later smoothing operations
      */
-    el = hashLookup(trackSpans, wi->name);	/*  What Spans do we have */
-    elList = hashElListHash(el->val);		/* Our pointer to spans hash */
-    for (el = elList; el != NULL; el = el->next)
+    x1 = (wi->start - seqStart) * pixelsPerBase;
+    x2 = (wi->end - seqStart) * pixelsPerBase;
+
+    if (x2 > x1)
 	{
-	int Span;
-	Span = (int) el->val;
-	if ((Span < basesPerPixel) && (Span > usingDataSpan))
-	    usingDataSpan = Span;
-	if (Span < minimalSpan)
-	    minimalSpan = Span;
-	}
-    hashElFreeList(&elList);
-
-    /*	There may not be a span of 1, use whatever is lowest	*/
-    if (minimalSpan > usingDataSpan)
-	usingDataSpan = minimalSpan;
-
-
-    /*	Now that we know what Span to draw, see if this item should be
-     *	drawn at all.
-     */
-    if (usingDataSpan == wi->span)
-	{
-	/*	Check our data file, see if we need to open a new one */
-	if (currentFile)
+	for (i = x1; i <= x2; ++i)
 	    {
-	    if (differentString(currentFile,wi->file))
+	    int xCoord = preDrawZero + i;
+	    if ((xCoord >= 0) && (xCoord < preDrawSize))
 		{
-		if (wibFH > 0)
-		    {
-		    close(wibFH);
-		    freeMem(currentFile);
-		    }
-		currentFile = cloneString(wi->file);
-		wibFH = open(currentFile, O_RDONLY);
-		if (-1 == wibFH)
-		    errAbort("openWibFile: failed to open %s", currentFile);
+		++preDraw[xCoord].count;
+		if (dataValue > preDraw[xCoord].max)
+		    preDraw[xCoord].max = dataValue;
+		if (dataValue < preDraw[xCoord].min)
+		    preDraw[xCoord].min = dataValue;
+		preDraw[xCoord].sumData += dataValue;
+		preDraw[xCoord].sumSquares += dataValue * dataValue;
 		}
 	    }
+	}
 	else
-	    {
-	    currentFile = cloneString(wi->file);
-	    wibFH = open(currentFile, O_RDONLY);
-	    if (-1 == wibFH)
-		errAbort("openWibFile: failed to open %s", currentFile);
-	    }
-/*	Ready to draw, what do we know:
- *	the feature being processed:
- *	chrom coords:  [wi->start : wi-end)
- *
- *	The data to be drawn: to be read from file f at offset wi->Offset
- *	data points available: wi->Count, representing wi->Span bases
- *	for each data point
- *
- *	The drawing window, in pixels:
- *	xOff = left margin, yOff = top margin, h = height of drawing window
- *	drawing window in chrom coords: seqStart, seqEnd
- *	'basesPerPixel' is known, 'pixelsPerBase' is known
- */
-	lseek(wibFH, wi->offset, SEEK_SET);
-
-	readData = (unsigned char *) needMem((size_t) (wi->count + 1));
-	bytesRead = read(wibFH, readData,
-	    (size_t) wi->count * (size_t) sizeof(unsigned char));
- 
-	/*	let's check end point screen coordinates.  If they are
- 	 *	the same, then this entire data block lands on one pixel,
- 	 *	no need to walk through it, just use the block's specified
- 	 *	max/min.  It is OK if these end up + or -, we do want to
- 	 *	keep track of pixels before and after the screen for
- 	 *	later smoothing operations
+	{	/*	only one pixel for this block of data */
+	int xCoord = preDrawZero + x1;
+	/*	if the point falls within our array, record it.
+	 *	the (wi->validCount > 0) is a safety check.  It
+	 *	should always be true unless the data was
+	 *	prepared incorrectly.
 	 */
-	x1 = (wi->start - seqStart) * pixelsPerBase;
-	x2 = ((wi->start+(wi->count * usingDataSpan))-seqStart) * pixelsPerBase;
-
-	if (x2 > x1) {
-	    /*	walk through all the data in this block	*/
-	    for (dataOffset = 0; dataOffset < wi->count; ++dataOffset)
-		{
-		unsigned char datum = readData[dataOffset];
-		if (datum != WIG_NO_DATA)
-		    {
-		    x1 = ((wi->start-seqStart) + (dataOffset * usingDataSpan)) * pixelsPerBase;
-		    x2 = x1 + (usingDataSpan * pixelsPerBase);
-		    for (i = x1; i <= x2; ++i)
-			{
-			int xCoord = preDrawZero + i;
-			if ((xCoord >= 0) && (xCoord < preDrawSize))
-			    {
-			    double dataValue =
-			       BIN_TO_VALUE(datum,wi->lowerLimit,wi->dataRange);
-
-			    ++preDraw[xCoord].count;
-			    if (dataValue > preDraw[xCoord].max)
-				preDraw[xCoord].max = dataValue;
-			    if (dataValue < preDraw[xCoord].min)
-				preDraw[xCoord].min = dataValue;
-			    preDraw[xCoord].sumData += dataValue;
-			    preDraw[xCoord].sumSquares += dataValue * dataValue;
-			    }
-			}
-		    }
-		}
-	} else {	/*	only one pixel for this block of data */
-	    int xCoord = preDrawZero + x1;
-	    /*	if the point falls within our array, record it.
-	     *	the (wi->validCount > 0) is a safety check.  It
-	     *	should always be true unless the data was
-	     *	prepared incorrectly.
-	     */
-	    if ((wi->validCount > 0) && (xCoord >= 0) && (xCoord < preDrawSize))
-		{
-		double upperLimit;
-		preDraw[xCoord].count += wi->validCount;
-		upperLimit = wi->lowerLimit + wi->dataRange;
-		if (upperLimit > preDraw[xCoord].max)
-		    preDraw[xCoord].max = upperLimit;
-		if (wi->lowerLimit < preDraw[xCoord].min)
-		    preDraw[xCoord].min = wi->lowerLimit;
-		preDraw[xCoord].sumData += wi->sumData;
-		preDraw[xCoord].sumSquares += wi->sumSquares;
-		}
+	if ((xCoord >= 0) && (xCoord < preDrawSize))
+	    {
+	    ++preDraw[xCoord].count;
+	    if (dataValue > preDraw[xCoord].max)
+		preDraw[xCoord].max = dataValue;
+	    if (dataValue < preDraw[xCoord].min)
+		preDraw[xCoord].min = dataValue;
+	    preDraw[xCoord].sumData += dataValue;
+	    preDraw[xCoord].sumSquares += dataValue * dataValue;
+	    }
 	}
-	freeMem(readData);
-	}	/*	Draw if span is correct	*/
     }	/*	for (wi = tg->items; wi != NULL; wi = wi->next)	*/
-
-if (wibFH > 0)
-    {
-    close(wibFH);
-    wibFH = 0;
-    }
-
-if (currentFile)
-    freeMem(currentFile);
 
 /*	now we are ready to draw.  Each element in the preDraw[] array
  *	cooresponds to a single pixel on the screen
@@ -573,6 +485,7 @@ for (i = 0; i < preDrawSize; ++i)
 	preDraw[i].smooth = dataValue;
 	}
     }
+
 
 /*	Are we perhaps doing smoothing ?  smoothingWindow is 1 off due
  *	to enum funny business in inc/hui.h and lib/hui.c 	*/
@@ -660,6 +573,8 @@ if (autoScale == wiggleScaleAuto)
     }
 graphRange = graphUpperLimit - graphLowerLimit;
 epsilon = graphRange / tg->lineHeight;
+
+warn("DrawItems: u,l,range: %g - %g, %g", graphUpperLimit, graphLowerLimit, graphRange);
 
 /*
  *	We need to put the graphing limits back into the items
@@ -865,10 +780,6 @@ if ((vis == tvFull) && (yLineOnOff == wiggleYLineMarkOn))
 
     }	/*	drawing y= line marker	*/
 
-#endif	/*	NOT	*/
-
-warn("doing mapsSelf");
-
 /*	Map this wiggle area if we are self mapping	*/
 if (tg->mapsSelf)
     {
@@ -887,13 +798,8 @@ if (tg->mapsSelf)
     freeMem(itemName);
     }
 
-warn("finished with mapsSelf");
-#ifdef NOT
 freez(&colorArray);
-#endif	/*	NOT	*/
 freeMem(preDraw);
-
-warn("finished with bedGraphDrawItems");
 }	/*	bedGraphDrawItems()	*/
 
 static void bedGraphLeftLabels(struct track *tg, int seqStart, int seqEnd,
@@ -1061,9 +967,13 @@ bedGraphCart->defaultHeight = defaultHeight;
 bedGraphCart->minHeight = minHeight;
 
 minY = 0.0;
-maxY = 1000.0;
+maxY = 100.0;
 
 /*wigFetchMinMaxY(tdb, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);*/
+fprintf(stderr, "wordCount: %d\n", wordCount);
+fprintf(stderr, "words 0: %s\n", words[0]);
+fprintf(stderr, "words 1: %s\n", words[1]);
+
 switch (wordCount)
     {
 	case 2:
