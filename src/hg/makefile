@@ -113,6 +113,7 @@ UTIL_DIRS = \
 	fakeOut \
 	featureBits \
 	ffaToFa \
+	fishClones \
 	fqToQa \
 	fqToQac \
 	fragPart \
@@ -155,6 +156,7 @@ UTIL_DIRS = \
 	pslHitPercent \
 	pslIntronsOnly \
 	pslMap \
+	pslPairs \
 	pslPretty \
 	pslReps \
 	pslSelect \
