@@ -15,7 +15,7 @@ boolean faReadNext(FILE *f, char *defaultName, boolean mustStartWithComment,
 /* Read next sequence from .fa file. Return sequence in retSeq.  If retCommentLine is non-null
  * return the '>' line in retCommentLine.   The whole thing returns FALSE at end of file. */
 {
-char lineBuf[512];
+char lineBuf[1024];
 int lineSize;
 char *words[1];
 int c;
