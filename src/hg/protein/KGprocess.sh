@@ -10,7 +10,7 @@
 #	are created.  See also, scripts:
 #	mkSwissProtDB.sh and mkProteinsDB.sh
 #
-#	"$Id: KGprocess.sh,v 1.18 2004/04/19 22:57:33 fanhsu Exp $"
+#	"$Id: KGprocess.sh,v 1.19 2004/06/11 19:13:46 fanhsu Exp $"
 #
 #	Thu Nov 20 11:16:16 PST 2003 - Created - Hiram
 #		Initial version is a translation of makeKgMm3.doc
@@ -715,7 +715,7 @@ TablePopulated "kgAlias" ${DB} || { \
 #	to create kgProtAliasNCBI.tab
 if [ ! -s kgProtAliasBoth.tab ]; then
     echo "`date` running kgProtAlias ${DB} ${PDB}"
-    kgProtAlias ${DB} ${PDB}
+    kgProtAlias ${DB} ${DATE}
     echo "`date` running kgProtAliasNCBI ${DB} ${RO_DB}"
     kgProtAliasNCBI ${DB} ${RO_DB}
     cat kgProtAliasNCBI.tab kgProtAlias.tab | sort | uniq > kgProtAliasBoth.tab
