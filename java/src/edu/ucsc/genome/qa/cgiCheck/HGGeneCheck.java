@@ -26,7 +26,7 @@ public class HGGeneCheck {
       "usage:\n" +
       "   HGGeneCheck propertiesFile\n" +
       "\nwhere properties files may contain machine, database, quick." +
-      "   \nHGGeneCheck default\n" +
+      "\n   HGGeneCheck default\n" +
       "This will use the default properties\n"
       );
     System.exit(-1);
