@@ -9,7 +9,7 @@
 #include "options.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: faSplit.c,v 1.9 2003/05/11 21:07:50 braney Exp $";
+static char const rcsid[] = "$Id: faSplit.c,v 1.10 2003/05/12 19:25:15 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -402,6 +402,9 @@ int count;
 char *outRoot;
 
 optionHash(&argc, argv);
+
+if (argc < 4 )
+    usage();
 
 if (sameWord(how, "byname"))
     {
