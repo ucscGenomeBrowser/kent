@@ -19,7 +19,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.51 2004/08/25 15:35:44 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.52 2004/08/26 21:05:43 markd Exp $";
 
 
 void usage()
@@ -607,8 +607,6 @@ if (doIntersection)
     dyStringAppend(fieldSpec, bedFields);
     freez(&bedFields);
     }
-
-uglyf("fields to fetch: %s\n", fieldSpec->string);
 
 /* Loop through each region. */
 for (region = regionList; region != NULL; region = region->next)

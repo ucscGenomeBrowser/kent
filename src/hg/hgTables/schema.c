@@ -18,7 +18,34 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.18 2004/07/23 03:18:31 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.19 2004/08/26 21:05:44 markd Exp $";
+
+static char *nbForNothing(char *val)
+/* substitute &nbsp; for empty strings to keep table formating sane */
+{
+char *s = skipLeadingSpaces(val);
+if ((s == NULL) || (s[0] == '\0'))
+    return "&nbsp;";
+else
+    return val;
+}
+
+static char *abbreviateInPlace(char *val, int len)
+/* Abbreviate a string to len characters.  */
+{
+int vlen = strlen(val);
+if (vlen > len)
+    strcpy(val+len-3, "...");
+return val;
+}
+
+static char *cleanExample(char *val)
+/* Abbreviate example if necessary and add non-breaking space if need be */
+{
+val = abbreviateInPlace(val, 30);
+val = nbForNothing(val);
+return val;
+}
 
 static struct slName *storeRow(struct sqlConnection *conn, char *query)
 /* Just save the results of a single row query in a string list. */
@@ -75,7 +102,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         {
 	hPrintf("<TD>");
 	if (example != NULL)
-	     hPrintf("%s", example->name);
+	     hPrintf("%s", cleanExample(example->name));
 	else
 	     hPrintf("n/a");
 	hPrintf("</TD>");
