@@ -1091,7 +1091,7 @@ dependency $mm.affyGnfU74ADistance $mm.knownToU74  hgFixed.gnfMouseU74aMedianRat
 dependency $mm.affyGnfU74BDistance $mm.knownToU74  hgFixed.gnfMouseU74bMedianRatio
 dependency $mm.affyGnfU74CDistance $mm.knownToU74  hgFixed.gnfMouseU74cMedianRatio
 dependency $hg.gnfU95Distance $hg.knownToU95 hgFixed.gnfHumanU95MedianRatio
-dependency $hg.gnfAtlasDistance $hg.knownToGnfAtlas2 hgFixed.gnfHumanAtlas2MedianRatio
+dependency $hg.gnfAtlas2Distance $hg.knownToGnfAtlas2 hgFixed.gnfHumanAtlas2MedianRatio
 dependency $ce.kimExpDistance hgFixed.kimWormLifeMedianRatio
 dependency $dm.arbExpDistance $dm.bdgpToCanonical hgFixed.arbFlyLifeMedianRatio 
 dependency $sacCer.choExpDistance hgFixed.yeastChoCellCycle
