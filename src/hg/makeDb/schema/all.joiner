@@ -1351,10 +1351,10 @@ identifier blastHg16KGPepId
      $fr.blastHg16KG.qName
      $galGal.blastHg16KG.qName
 
-identifier blastHg17KGPep00Id 
-"hg17 proteins 00"
-     $hg.blastKGPep00.name
-     $xenTro.blastHg17KG.qName
+# identifier blastHg17KGPep00Id  (knownGene upgraded)
+# "hg17 proteins 00"
+#      $hg.blastKGPep00.name
+#      $xenTro.blastHg17KG.qName
 
 identifier blastKG01 
 "hg17 proteins 01"
