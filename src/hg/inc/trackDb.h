@@ -49,7 +49,7 @@ struct trackDb *trackDbLoadWhere(struct sqlConnection *conn, char *table,
 	char *where);
 /* Load all trackDb from table that satisfy where clause. The
  * where clause may be NULL in which case whole table is loaded
- * Dispose of this with cartDbFreeList(). */
+ * Dispose of this with trackDbFreeList(). */
 
 struct trackDb *trackDbLoadAllByChar(char *fileName, char chopper);
 /* Load all trackDb from chopper separated file.

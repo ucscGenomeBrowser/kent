@@ -14,7 +14,7 @@
 #include "cdsColors.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.85 2004/02/03 00:11:37 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.86 2004/02/06 09:41:32 markd Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -754,19 +754,13 @@ void doMiddle(struct cart *theCart)
 /* Write body of web page. */
 {
 struct trackDb *tdb;
-struct sqlConnection *conn;
-char where[256];
 char *track;
-char *trackDb = hTrackDbName();
 cart = theCart;
 track = cartString(cart, "g");
 database = cartUsualString(cart, "db", hGetDb());
 hSetDb(database);
 chromosome = cartString(cart, "c");
-conn = hAllocConn();
-sprintf(where, "tableName = '%s'", track);
-tdb = trackDbLoadWhere(conn, trackDb, where);
-hLookupStringsInTdb(tdb, database);
+tdb = hTrackDbForTrack(track);
 if (tdb == NULL)
    errAbort("Can't find %s in track database %s chromosome %s", track, database, chromosome);
 printf("<FORM ACTION=\"%s\">\n\n", hgTracksName());

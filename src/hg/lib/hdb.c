@@ -27,7 +27,7 @@
 #include "maf.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.162 2004/01/29 09:17:40 genbank Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.163 2004/02/06 09:41:32 markd Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -45,6 +45,7 @@ static char *hdbName2 = "Mouse";
 static char *hdbUser = NULL;
 static char *hdbPassword = NULL;
 static char *hdbTrackDb = NULL;
+static char *hdbTrackDbLocal = NULL;
 static char *protDbName = DEFAULT_PROTEINS;
 
 static char* getCfgValue(char* envName, char* cfgName)
@@ -172,6 +173,22 @@ if(hdbTrackDb == NULL)
 if(hdbTrackDb == NULL)
     errAbort("Please set the db.trackDb field in the hg.conf config file.");
 return cloneString(hdbTrackDb);
+}
+
+char *hTrackDbLocalName()
+/* return the name of the trackDbLocal from the config file, or NULL if none.
+ * Freez when done */
+{
+static boolean first = TRUE;
+if (first)
+    {
+    hdbTrackDbLocal = cfgOption("db.trackDbLocal");
+    first = FALSE;
+    }
+if (hdbTrackDbLocal == NULL)
+    return NULL;
+else
+    return cloneString(hdbTrackDbLocal);
 }
 
 void hSetDbConnect(char* host, char *db, char *user, char *password)
@@ -508,7 +525,7 @@ if (cartCc == NULL)
         char *password = cfgOption("cart.password");;
 
         if (database == NULL || host == NULL || user == NULL || password == NULL)
-            errAbort("Must specify either or none of the cart options in the hg.conf file.");
+            errAbort("Must specify either all or none of the cart options in the hg.conf file.");
         cartCc = sqlNewRemoteConnCache(database, host, user, password);
         }
     else
@@ -2426,44 +2443,99 @@ return (chromOk &&
 	);
 }
 
+static struct trackDb* loadTrackDb(struct sqlConnection *conn, char* where)
+/* load list of trackDb objects, with optional where */
+{
+char *trackDb = hTrackDbName();
+struct trackDb *tdbList = trackDbLoadWhere(conn, trackDb, NULL);
+freez(&trackDb);
+return tdbList;
+}
+
+static struct trackDb* loadTrackDbLocal(struct sqlConnection *conn, char* where)
+/* load list of trackDbLocal objects, with optional where */
+{
+char *trackDbLocal = hTrackDbLocalName();
+struct trackDb *tdbList = NULL;
+if ((trackDbLocal != NULL) && sqlTableExists(conn, trackDbLocal))
+    tdbList = trackDbLoadWhere(conn, trackDbLocal, NULL);
+freez(&trackDbLocal);
+return tdbList;
+}
+
+static struct trackDb* findTrackDb(struct trackDb** tdbList, char* table)
+/* search a list of trackDb objects for a object associated with a particular
+ * track, and remove from list.  Return NULL if not found  */
+{
+struct trackDb *tdb, *prevTdb = NULL;
+for (tdb = *tdbList; tdb != NULL; prevTdb = tdb, tdb = tdb->next)
+    {
+    if (sameString(tdb->tableName, table))
+        {
+        if (prevTdb == NULL)
+            *tdbList = tdb->next;
+        else
+            prevTdb->next = tdb->next;
+        return tdb;
+        }
+    }
+return NULL;
+}
+
 struct trackDb *hTrackDb(char *chrom)
-/* Load tracks associated with current chromosome (which may
- * be NULL */
+/* Load tracks associated with current chromosome (which may be NULL for
+ * all). If trackDbLocal exists, then it's row either override or are added to
+ * the standard trackDb. */
 {
 struct sqlConnection *conn = hAllocConn();
-struct trackDb *tdbList = NULL, *tdb;
-boolean privateToo = hIsPrivateHost();
-struct sqlResult *sr;
-char **row;
+struct trackDb *tdbList = loadTrackDb(conn, NULL);
+struct trackDb *tdbLocalList = loadTrackDbLocal(conn, NULL);
+struct trackDb *tdbRetList = NULL;
 char *database = hGetDb();
-char query[256];
-char *trackDb = hTrackDbName();
-if(hdbTrackDb == NULL)
-    errAbort("Please contact the system administrator to set the hg.trackDb in hg.conf");
-snprintf(query, sizeof(query), "select * from %s", trackDb);
+boolean privateToo = hIsPrivateHost();
 
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+while (tdbList != NULL)
     {
-    boolean keeper = FALSE;
-    tdb = trackDbLoad(row);
+    struct trackDb *tdb = slPopHead(&tdbList);
+    struct trackDb *tdbLoc = findTrackDb(&tdbLocalList, tdb->tableName);
+    if (tdbLoc != NULL)
+        {
+        /* use local */
+        trackDbFree(&tdb);
+        tdb = tdbLoc;
+        }
     hLookupStringsInTdb(tdb, database);
-    if (!tdb->private || privateToo)
-	{
-	if (hTrackOnChrom(tdb, chrom))
-	    {
-	    slAddHead(&tdbList, tdb);
-	    keeper = TRUE;
-	    }
-	}
-    if (!keeper)
-       trackDbFree(&tdb);
+    if ((!tdb->private || privateToo) && hTrackOnChrom(tdb, chrom))
+        slAddHead(&tdbRetList, tdb);
+    else
+        trackDbFree(&tdb);
     }
-freez(&trackDb);
-sqlFreeResult(&sr);
+
+/* add remaing local trackDbs */
+tdbRetList = slCat(tdbRetList, tdbLocalList);
+
 hFreeConn(&conn);
-slReverse(&tdbList);
-return tdbList;
+slReverse(&tdbRetList);
+return tdbRetList;
+}
+
+struct trackDb *hTrackDbForTrack(char *track)
+/* Load trackDb object for a track. If trackDbLocal exists, then it's row is
+ * used if it exists. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct trackDb *tdb;
+char where[256];
+
+safef(where, sizeof(where), "tableName = '%s'", track);
+
+tdb = loadTrackDbLocal(conn, where);
+if (tdb == NULL)
+    tdb = loadTrackDb(conn, where);
+if (tdb != NULL)
+    hLookupStringsInTdb(tdb, hGetDb());
+hFreeConn(&conn);
+return tdb;
 }
 
 boolean hgParseChromRangeDb(char *spec, char **retChromName, 

@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.15 2004/01/23 17:06:38 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.16 2004/02/06 09:41:32 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -32,8 +32,19 @@ errAbort(
   "   for special-purpose browsers.  All visibility will be set to hide and\n"
   "   then specific track are modified using the track and visibility fields\n"
   "   in this file.\n"
+  "\n"
+  "  -raName=trackDb.ra - Specify a file name to use other than trackDb.ra\n"
+  "   for the ra files.\n" 
   );
 }
+
+static struct optionSpec optionSpecs[] = {
+    {"visibility", OPTION_STRING},
+    {"raName", OPTION_STRING},
+    {"strict", OPTION_STRING},
+};
+
+static char *raName = "trackDb.ra";
 
 void addVersion(char *strict, char *database, char *dirName, char *raName, 
     struct hash *uniqHash,
@@ -173,7 +184,7 @@ void layerOn(char *strict, char *database, char *dir, struct hash *uniqHash,
  * and layer them on top of whatever is in tdList. */
 {
 char raFile[512];
-sprintf(raFile, "%s/trackDb.ra", dir);
+sprintf(raFile, "%s/%s", dir, raName);
 if (fileExists(raFile))
     {
     addVersion(strict, database, dir, raFile, uniqHash, htmlHash, tdList);
@@ -281,9 +292,11 @@ printf("Loaded %d track descriptions total\n", slCount(tdList));
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionHash(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (argc != 6)
     usage();
+raName = optionVal("raName", raName);
+
 hgTrackDb(argv[1], argv[2], argv[3], argv[4], argv[5],
           optionVal("visibility", NULL), optionVal("strict", NULL));
 return 0;
