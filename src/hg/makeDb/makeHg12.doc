@@ -410,7 +410,7 @@ o - Create subset of ESTs with introns and load into database.
       hgLoadPsl hg12 *.psl
 
 o - Put orientation info on ESTs and mRNAs into database:
-    Note: the cluster run requires /scratch/.../trfFa/ to be in place,
+    Note: the cluster run requires /scratch/.../trfFa.0730/ to be in place,
     so this step should be run after "PREPARING SEQUENCE FOR CROSS SPECIES 
     ALIGNMENTS" below.
      ssh kk
@@ -501,7 +501,7 @@ o - Add Jackson labs info
      load data local infile 'jaxOrtholog.tab' into table jaxOrtholog;
 
 
-SIMPLE REPEAT TRACK (TODO)
+SIMPLE REPEAT TRACK (IN PROGRESS)
 
 o - Create cluster parasol job like so:
         ssh kk
@@ -514,7 +514,7 @@ Ask the admins to push /scratch/hg/gs.13/build30/ to the cluster
 	ls -1S /scratch/hg/gs.13/build30/contig.0729/*.fa > genome.lst
 	gensub2 genome.lst single gsub spec
 	para create spec
-	para try
+TODO	para try
 	para check
 	para push
         liftUp simpleRepeat.bed ~/oo/jkStuff/liftAll.lft warn trf/*.bed
@@ -525,7 +525,7 @@ o - Load this into the database as so
 	hgLoadBed hg12 simpleRepeat simpleRepeat.bed -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
 
 
-PRODUCING GENSCAN PREDICTIONS (TODO)
+PRODUCING GENSCAN PREDICTIONS (DONE 7/31/02)
 	mkdir -p ~/oo/bed/genscan
 	cd ~/oo/bed/genscan
 o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
@@ -557,7 +557,7 @@ o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
         stuff) which would cause genscan to run forever.
                 rm -f genome.list
                 touch genome.list
-                foreach f (./mContigs/*.masked)
+                foreach f ( `ls -1S ./mContigs/*.masked` )
                   egrep '[ACGT]' $f > /dev/null
                   if ($status == 0) echo $f >> genome.list
                 end
@@ -586,6 +586,10 @@ o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
         status of the cluster and your jobs, until they are done.
                 parasol status
                 para check
+        If there were out-of-memory problems (run "para problems"), then 
+        re-run those jobs by hand but change the -window arg from 2400000
+        to 1200000.  In gs.13/build30, this was the job for 
+        mContigs/NT_011519.fa.masked .
 
 o - Convert these to chromosome level files as so:     
      cd ~/oo/bed/genscan
@@ -602,7 +606,7 @@ o - Load into the database as so:
      hgLoadBed hg12 genscanSubopt genscanSubopt.bed > /dev/null
 
 
-PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (TODO)
+PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (DONE 7/30/02)
 
 Make sure that the NT*.fa files are lower-case repeat masked.
 Do something much like the simpleRepeat track, but only
@@ -620,22 +624,30 @@ masking out stuff with a period of 12 or less as so:
     para push
 When that is done do:
     ssh kkstore
-    mkdir /scratch/hg/gs.13/build30/trfFa
+    mkdir /scratch/hg/gs.13/build30/trfFa.0730
     cd ~/oo
 NOTE:Below is a tcsh script
     foreach i (? ??)
-	cd $i
+        cd $i
         foreach j (NT*)
-        echo Processing $i/$j ...
-	    maskOutFa $j/$j.fa ../bed/trfMask/trf/$j.bed -softAdd /scratch/hg/gs.13/build30/trfFa/$j.fa.trf
-	echo done $i/$j
-	end
-	cd ..
+            maskOutFa $j/$j.fa ../bed/trfMask/trf/$j.bed -softAdd \
+              /scratch/hg/gs.13/build30/trfFa.0730/$j.fa.trf
+            echo done $i/$j
+        end
+        cd ..
     end
-
 
 Then ask admins to do a binrsync.
 
+PREPARING CHROM-LEVEL MIXED NIBs for mouse blastz (DONE 7/31/02)
+
+Edited jkStuff/makeNib.sh to include a -softMask run into mixedNib.
+I'm calling the /scratch dir .0729 because that's when the soft-masking 
+was done (after RepeatMasking)... it'll be consistent with contig.0729.
+   cd ~/oo
+   mkdir mixedNib
+   tcsh jkStuff/makeNib.sh
+   cp -Rp mixedNib /scratch/hg/gs.13/build30/chromMixedNib.0729
 
 CREATE GOLDEN TRIANGLE (todo)
 
@@ -920,7 +932,7 @@ Human contigs:
 mkdir /scratch/hg/gs.13/build30/rmsk
 cp /cluster/store1/gs.13/build30/?/*/*.out /scratch/hg/gs.13/build30/rmsk
 cp /cluster/store1/gs.13/build30/??/*/*.out /scratch/hg/gs.13/build30/rmsk
-cp -R /cluster/store1/gs.13/build30/bed/trfFa/trf /scratch/hg/gs.13/build30/trfFa
+#- (handled in trfFa gen step) cp -R /cluster/store1/gs.13/build30/bed/trfFa/trf /scratch/hg/gs.13/build30/trfFa.0730
 
     Then
         ssh kkstore
@@ -935,7 +947,7 @@ cp -R /cluster/store1/gs.13/build30/bed/trfFa/trf /scratch/hg/gs.13/build30/trfF
 	ls -1 mm/* > mouse.lst
     Then bundle up the human into pieces of less than 12
     meg mostly by
-	ls -lhS /scratch/hg/gs.13/build30/trfFa/*.fa.trf > bigHuman
+	ls -lhS /scratch/hg/gs.13/build30/trfFa.0730/*.fa.trf > bigHuman
     edit this file and move all of the lines less than 3 meg
     into the file smallHuman.  Then do
         awk '{printf("%s\n", $9);}' bigHuman > bigH
@@ -1030,7 +1042,7 @@ o - Process these out of genbank flat files as so:
 Request binrysnc of /scratch/hg/mrna.130 from the admins
 
 Set up cluster run.  First make sure genome is in
-kkstore:/scratch/hg/gs.13/build30/trfFa in RepeatMasked + trf form.
+kkstore:/scratch/hg/gs.13/build30/trfFa.0730 in RepeatMasked + trf form.
 (This is probably done already in mouse alignment stage).  Also make
 sure /scratch/hg/mrna.130 is loaded with xenoRna.fa Then do:
 
@@ -1038,7 +1050,7 @@ sure /scratch/hg/mrna.130 is loaded with xenoRna.fa Then do:
        mkdir -p ~/oo/bed/xenoMrna
        cd ~/oo/bed/xenoMrna
        mkdir psl
-       ls -1S /scratch/hg/gs.13/build30/trfFa/*.fa.trf > human.lst
+       ls -1S /scratch/hg/gs.13/build30/trfFa.0730/*.fa.trf > human.lst
        ls -1S /scratch/hg/mrna.130/xenoRna?*.fa > mrna.lst
        cp ~/hg11/bed/xenoMrna/gsub .
        gensub2 human.lst mrna.lst gsub spec
@@ -1076,7 +1088,7 @@ Similarly do xenoEst aligments:
        mkdir xenoEst
        cd xenoEst
        mkdir psl
-       ls -1S /scratch/hg/gs.13/build30/trfFa/*.fa.trf > human.lst
+       ls -1S /scratch/hg/gs.13/build30/trfFa.0730/*.fa.trf > human.lst
        cp /cluster/store1/mrna.130/xenoEst?*.fa /scratch/hg/mrna.130
        ls -1S /scratch/hg/mrna.130/xenoEst?*.fa > mrna.lst
        cp ~hg11/bed/xenoEst/gsub .
@@ -1113,7 +1125,7 @@ o - Do fish/human alignments.
        cd blatFish
        mkdir psl
        ls -1S /scratch/hg/fish/*.fa > fish.lst
-       ls -1S /scratch/hg/gs.13/build30/trfFa/*.fa.trf > human.lst
+       ls -1S /scratch/hg/gs.13/build30/trfFa.0730/*.fa.trf > human.lst
        # Copy over gsub from previous version.
        gensub2 human.lst fish.lst gsub spec
        para create spec 
@@ -1441,9 +1453,9 @@ o - # ssh hgwdev
     mkdi20r gs.13/build30/affyGnf
     cd gs.13/build30/affyGnf
     cp /projects/compbiodata/microarray/affyGnf/sequences/HG-U95Av2_target ./
-    ls -1 /cluster/store3/gs.13/build30/trfFa/ > allctg.lst
+    ls -1 /cluster/store3/gs.13/build30/trfFa.0730/ > allctg.lst
     echo "/cluster/store1/sugnet/gs.13/build30/affyGnf/HG-U95Av2_target" > affy.lst
-    echo '#LOOP\n/cluster/bin/i386/blat -mask=lower -minIdentity=95 -ooc=/cluster/store3/gs.13/build30/jkStuff/post.refCheck.old/11.ooc /cluster/store3/gs.13/build30/trfFa/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+    echo '#LOOP\n/cluster/bin/i386/blat -mask=lower -minIdentity=95 -ooc=/cluster/store3/gs.13/build30/jkStuff/post.refCheck.old/11.ooc /cluster/store3/gs.13/build30/trfFa.0730/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
     gensub2 allctg.lst affy.lst template.sub para.spec
     # ssh kkr1u00
     para create para.spec
@@ -1515,9 +1527,9 @@ o - cd /projects/cc/hg/sugnet/uniGene
     cd  /cluster/store1/sugnet/gs.13/build30
     mkdir uniGene
     cd uniGene
-    ls -1 /cluster/store3/gs.13/build30/trfFa/ > allctg.lst
+    ls -1 /cluster/store3/gs.13/build30/trfFa.0730/ > allctg.lst
     echo "/scratch/hg/gs.13/build30/uniGene/Hs.seq.uniq.simpleHeader.fa" > uniGene.lst
-    echo '#LOOP\n/cluster/bin/i386/blat -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc /cluster/store3/gs.13/build30/trfFa/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+    echo '#LOOP\n/cluster/bin/i386/blat -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc /cluster/store3/gs.13/build30/trfFa.0730/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
     gensub2 allctg.lst uniGene.lst template.sub para.spec
     # ssh kk
     para create para.spec
