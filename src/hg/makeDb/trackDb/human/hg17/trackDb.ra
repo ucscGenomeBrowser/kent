@@ -93,6 +93,21 @@ autoScaleDefault Off
 pairwise netBlastz
 speciesOrder chimp dog mouse rat chicken fugu zebrafish
 
+track multizOldWorld
+shortLabel Old World Cons
+longLabel Hu/Chimp/Rhesus Macaque Multiz Alignments & Conservation 
+group compGeno
+priority 109.8
+visibility pack
+#color 0, 10, 100
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle secretPhastCons
+yLineOnOff Off
+autoScaleDefault Off
+pairwise netBlastz
+speciesOrder chimp monkey 
+
 track phastConsElements
 shortLabel Most Conserved
 longLabel PhastCons Conserved Elements, Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish 
