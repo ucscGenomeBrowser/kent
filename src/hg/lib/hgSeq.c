@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgSeq.c,v 1.22 2004/06/26 16:09:06 braney Exp $";
+static char const rcsid[] = "$Id: hgSeq.c,v 1.23 2004/11/08 19:35:51 kent Exp $";
 
 /* I don't like using this global, but don't want to do a zillion 
  * hChromSizes in addFeature and don't want to add it as a param of 
@@ -295,8 +295,8 @@ void hgSeqConcatRegionsDb(char *db, char *chrom, char strand, char *name,
 			  boolean *exonFlags, boolean *cdsFlags)
 /* Concatenate and print out dna for a series of regions. */
 {
-struct dnaSeq *rSeq;
-struct dnaSeq *cSeq;
+struct dnaSeq *rSeq = NULL;
+struct dnaSeq *cSeq = NULL;
 char recName[256];
 int seqStart, seqEnd;
 int offset, cSize;
@@ -369,7 +369,7 @@ for (i=0;  i < rCount;  i++)
     }
 cSize += (padding5 + padding3);
 AllocVar(cSeq);
-cSeq->dna = needMem(cSize+1);
+cSeq->dna = needLargeMem(cSize+1);
 cSeq->size = cSize;
 
 if (maskRep)
@@ -414,6 +414,7 @@ sprintf(recName, "%s%s%s_%s range=%s:%d-%d 5'pad=%d 3'pad=%d revComp=%s strand=%
 	strand,
 	(maskRep ? repMasking : "none"));
 faWriteNext(stdout, recName, cSeq->dna, cSeq->size);
+freeDnaSeq(&cSeq);
 }
 
 
