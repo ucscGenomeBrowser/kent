@@ -3,7 +3,7 @@
 #include "common.h"
 #include "histogram.h"
 
-static char const rcsid[] = "$Id: histogram.c,v 1.2 2004/08/26 19:29:56 hiram Exp $";
+static char const rcsid[] = "$Id: histogram.c,v 1.3 2004/09/13 20:18:08 hiram Exp $";
 
 static unsigned autoScale(float *values, size_t N, float *binSize,
 	unsigned *binCount, float *minValue, float *min, float *max)
@@ -11,7 +11,9 @@ static unsigned autoScale(float *values, size_t N, float *binSize,
  *	If any of those are given, use them instead of calculating.
  *	A given minValue means ignore data below that.
  *	NAN's for binSize or minValue are the signals to not use them.
- *	non-zero for binCount to use it.
+ *	non-zero for binCount to use it.  NOTE: binCount is actually one
+ *	too high to get the minimum and maximum values in the first and
+ *	last (binCount-1) bins correctly.
  */
 {
 float minFound = INFINITY;
@@ -70,40 +72,43 @@ else
 	}
     }
 
-/*	if the caller asked us to find min,max, return them	*/
-if (findMinMax)
+if (count > 0)
     {
-    *min = minFound;
-    *max = maxFound;
-    }
+    /*	if the caller asked us to find min,max, return them	*/
+    if (findMinMax)
+	{
+	*min = minFound;
+	*max = maxFound;
+	}
 
-/*	If the caller did not specify a minValue, return it	*/
-if (isnan(*minValue))
-    *minValue = minFound;
+    /*	If the caller did not specify a minValue, return it	*/
+    if (isnan(*minValue))
+	*minValue = minFound;
 
-range = maxFound - minFound;
+    range = maxFound - minFound;
 
-/*	if they gave us a binCount, use it	*/
-if (*binCount > 0)
-    bins = *binCount;
-else
-    *binCount = bins;
-
-if ( (range > 0.0) && (bins > 0))
-    {
-    /*  need to make binSize slightly larger to get the last data point
-     *  in the last bin.  This is a floating point round off situation.
-     */
-    if (isnan(*binSize))
-	*binSize = (range + (range/1000000.0)) / bins;
-
-    if (*binSize > 0.0)
-	return count;
+    /*	if they gave us a binCount, use it	*/
+    if (*binCount > 0)
+	bins = *binCount;
     else
-	return 0;	/*	did not work	*/
+	*binCount = bins;
+
+    if ( (range > 0.0) && (bins > 1))
+	{
+	/*  binSize is calculated on (bins - 1) to allow the minimum value
+	 *  to be in the middle of the first bin, and the highest value to be
+	 *	in the middle of the last bin
+	 */
+	if (isnan(*binSize))
+	    *binSize = range / (bins - 1);
+
+	if (*binSize > 0.0)
+	    return count;
+	else
+	    return 0;	/*	did not work	*/
+	}
     }
-else
-    return 0;	/*	did not work	*/
+return 0;	/*	did not work	*/
 }	/*	static unsigned autoScale()	*/
 
 void freeHistoGram(struct histoResult **histoResults)
@@ -138,6 +143,10 @@ struct histoResult *histoGram(float *values, size_t N, float binSize,
  *	known, pass those in on min,max to aid the calculation of auto
  *	scaled values.  NAN's can be in the values[N] array and will be
  *	ignored.
+ *	NOTE: when giving a binCount, it is actually one
+ *	higher to get the minimum and maximum values in the first and
+ *	last (binCount-1) bins correctly.  The resulting histogram will
+ *	appear to be (binCount-1) number of bins.
  *	When given a pointer to accumHisto, use that existing histo gram
  *	and continue accumulations in it.
  */
@@ -167,7 +176,7 @@ else
     }
 
 /*	Caller may give us any of the binCount, binSize, minValue */
-if (binCount > 0)
+if (binCount > 1)
     autoBinCount = binCount;
 else if (!autoScaling)
     autoBinCount = DEFAULT_BIN_COUNT;
@@ -175,7 +184,7 @@ else if (!autoScaling)
 if (!isnan(binSize))
     autoBinSize = binSize;
 else if (!autoScaling)
-    autoBinSize = (range + (range/1000000.0)) / autoBinCount;
+    autoBinSize = range / (autoBinCount - 1);
 
 if (!isnan(minValue))
     autoMinValue = minValue;
