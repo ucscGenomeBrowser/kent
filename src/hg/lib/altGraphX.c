@@ -8,6 +8,9 @@
 #include "jksql.h"
 #include "altGraphX.h"
 #include "geneGraph.h"
+#include "bed.h"
+
+struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
 struct evidence *evidenceCommaIn(char **pS, struct evidence *ret)
 /* Create a evidence out of a comma separated string. 
@@ -867,6 +870,156 @@ for(i=0;i<size; i++)
 return TRUE;
 }
 
+int edgePopularityCmp(const void *va, const void *vb)
+/* Compare to sort on commonness edge. */
+{
+int cmp = 0;
+const int *a = ((int *)va);
+const int *b = ((int *)vb);
+cmp = _agxSortable->evidence[*b].evCount - _agxSortable->evidence[*a].evCount;
+return cmp;
+}
+
+int findMostCommonEdge(struct altGraphX *ag, int *edgeArray, int edgeCount)
+/* Find the most common edge in the edge array. */
+{
+assert(edgeArray);
+assert(ag);
+_agxSortable = ag;
+qsort(edgeArray, edgeCount, sizeof(int *), edgePopularityCmp);
+_agxSortable =  NULL;
+return (edgeArray[0]);
+}
+
+int findUpStartFrom(struct altGraphX *ag, int fpSplice)
+/* Given a five prime splice site, find the three prime splice that
+   makes an exon. Returns -1 if can't find any. */
+{
+int *exonStartEdges = NULL;
+int exonStartCount = 0;
+int eCount = ag->edgeCount;
+int tpSite = 0;
+int i;
+AllocArray(exonStartEdges, eCount);
+for(i = 0; i < eCount; i++)
+    {
+    if(ag->edgeEnds[i] == ag->edgeStarts[fpSplice])
+	assignToArray(exonStartEdges, eCount, exonStartCount++, i);
+    }
+if(exonStartCount == 0)
+    tpSite =-1;
+else
+    tpSite = findMostCommonEdge(ag, exonStartEdges, exonStartCount);
+freez(&exonStartEdges);
+return tpSite;
+}
+
+int findDownEndFrom(struct altGraphX *ag, int tpSplice)
+/* Given a three prime splice site, find the downstream five prime splice that
+   makes an exon. Returns -1 if can't find any. */
+{
+int *exonEndEdges = NULL;
+int exonEndCount = 0;
+int eCount = ag->edgeCount;
+int tpSite = 0;
+int i;
+AllocArray(exonEndEdges, eCount);
+for(i = 0; i < eCount; i++)
+    {
+    if(ag->edgeStarts[i] == ag->edgeEnds[tpSplice])
+	assignToArray(exonEndEdges, eCount, exonEndCount++, i);
+    }
+if(exonEndCount == 0)
+    tpSite =-1;
+else
+    tpSite = findMostCommonEdge(ag, exonEndEdges, exonEndCount);
+freez(&exonEndEdges);
+return tpSite;
+}
+
+struct bed *createBedFromEdges( struct altGraphX *ag, int fpEdge, int cassEdge, int tpEdge)
+/* Put the edges together to from a bed structure. */
+{
+int *vPos = ag->vPositions;
+int *starts = ag->edgeStarts;
+int *ends = ag->edgeEnds;
+struct bed *bed;
+AllocVar(bed);
+bed->chrom = cloneString(ag->tName);
+snprintf(bed->strand, sizeof(bed->strand), "%s", ag->strand);
+bed->chromStart = bed->thickStart = vPos[starts[fpEdge]];
+bed->chromEnd = bed->thickEnd = vPos[ends[tpEdge]];
+bed->name = cloneString(ag->name);
+bed->blockCount = 3;
+bed->blockSizes = AllocArray(bed->blockSizes, 3);
+bed->chromStarts = AllocArray(bed->chromStarts, 3);
+bed->blockSizes[0] = vPos[ends[fpEdge]] - vPos[starts[fpEdge]];
+bed->blockSizes[1] = vPos[ends[cassEdge]] - vPos[starts[cassEdge]];
+bed->blockSizes[2] = vPos[ends[tpEdge]] - vPos[starts[tpEdge]];
+bed->chromStarts[0] = vPos[starts[fpEdge]] -bed->chromStart;
+bed->chromStarts[1] = vPos[starts[cassEdge]] - bed->chromStart;
+bed->chromStarts[2] = vPos[starts[tpEdge]] -bed->chromStart;
+bed->score = ag->evidence[fpEdge].evCount + ag->evidence[tpEdge].evCount;
+return bed;
+}
+
+struct bed *altGraphGetExonCassette(struct altGraphX *ag, int eIx)
+/* Get a bed which corresponds to the exons involved in a cassette exon. */
+{
+int eStart =0, eEnd = 0;
+int *intStartEdges = NULL, *intEndEdges =NULL, *altEdges = NULL;
+int intStartCount = 0, intEndCount =0, altCount =0;
+int i,j,k;
+int conf = 0;
+int eCount = ag->edgeCount;
+struct bed *bedList = NULL;
+AllocArray(intStartEdges, ag->edgeCount);
+AllocArray(intEndEdges, ag->edgeCount);
+AllocArray(altEdges, ag->edgeCount);
+eStart = ag->edgeStarts[eIx];
+eEnd = ag->edgeEnds[eIx];
+/* First find the introns that connect to our edge of interest. */
+for(i = 0; i < ag->edgeCount; i++)
+    {
+    if(ag->edgeEnds[i] == eStart)
+	assignToArray(intStartEdges, eCount, intStartCount++, i);
+    if(ag->edgeStarts[i] == eEnd)
+	assignToArray(intEndEdges, eCount, intEndCount++, i);
+    }
+/* for each intron that connects to our exon. */
+for(i = 0; i < intStartCount; i++)
+    {
+    for(j =0; j < ag->edgeCount; j++)
+	{
+	/* Look for and edge that starts at the same place as our introns. */
+	if(intStartEdges[i] != j && (ag->edgeStarts[j] == ag->edgeStarts[intStartEdges[i]]))
+	    {
+	    for(k=0; k < intEndCount; k++) 
+		{
+		/* Then connects to one of the same ends. */
+		if(ag->edgeEnds[j] == ag->edgeEnds[intEndEdges[k]])
+		    {
+		    /* If it is new... */
+		    if(uniqeInArray(altEdges, altCount, j))
+			{
+			struct bed *bed = NULL;
+			int upStart = findUpStartFrom(ag, intStartEdges[i]);
+			int downEnd = findDownEndFrom(ag, intEndEdges[k]);
+			bed = createBedFromEdges(ag, upStart, eIx, downEnd);
+			assignToArray(altEdges, eCount, altCount++, j);
+			slAddHead(&bedList, bed);
+			}
+		    }
+		}
+	    }
+	}
+    }
+freez(&altEdges);
+freez(&intStartEdges);
+freez(&intEndEdges);
+return bedList;
+}
+
 int altGraphTimesNotSeenEdge(struct altGraphX *ag, int eIx) 
 /* Discover how many times there is a transcript that uses an alternative
    to the edge eIx. */
@@ -914,7 +1067,6 @@ for(i=0; i< altCount; i++)
     {
     conf += altGraphTimesSeenEdge(ag, altEdges[i]);
     }
-
 freez(&altEdges);
 freez(&intStartEdges);
 freez(&intEndEdges);

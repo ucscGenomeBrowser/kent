@@ -9,6 +9,10 @@
 #include "jksql.h"
 #endif
 
+#ifndef BED_H
+#include "bed.h"
+#endif
+
 struct evidence
 /* List of mRNA/ests supporting a given edge */
     {
@@ -142,11 +146,15 @@ void altGraphXFreeEdgeMatrix(bool ***pEm, int vertCount);
 
 float altGraphCassetteConfForEdge(struct altGraphX *ag, int eIx, float prior);
 /* Return the score for this cassette exon. Want to have cassette exons
-that are present in multiple transcripts and that are not present in multiple
-exons. We want to see both forms of the cassette exon, we don't want to have
-one outlier be chosen. Thus we count the times that the exon is seen, we
-count the times that the exon isn't seen and we calculate a final score by:
-(seen + notseen + prior)/(abs(seen - notSeen+prior) + 1) . Thus larger scores are better. */
+   that are present in multiple transcripts and that are not present in multiple
+   exons. We want to see both forms of the cassette exon, we don't want to have
+   one outlier be chosen. Thus we count the times that the exon is seen, we
+   count the times that the exon isn't seen and we calculate a final score by:
+   (seen + notseen + prior)/(abs(seen - notSeen+prior) + 1) . Thus larger scores are better. 
+*/
+
+struct bed *altGraphGetExonCassette(struct altGraphX *ag, int eIx);
+/* Get a bed which corresponds to the exons involved in a cassette exon. */
 
 #endif /* ALTGRAPHX_H */
 
