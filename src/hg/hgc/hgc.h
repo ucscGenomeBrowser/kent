@@ -70,6 +70,14 @@ void bedPrintPos(struct bed *bed, int bedSize);
 void genericHeader(struct trackDb *tdb, char *item);
 /* Put up generic track info. */
 
+void genericBedClick(struct sqlConnection *conn, struct trackDb *tdb, 
+		     char *item, int start, int bedSize);
+/* Handle click in generic BED track. */
+
+void printPosOnChrom(char *chrom, int start, int end, char *strand,
+		     boolean featDna, char *item);
+/* Print position lines referenced to chromosome. Strand argument may be NULL */
+
 void printTrackHtml(struct trackDb *tdb);
 /* If there's some html associated with track print it out. */
 
@@ -131,3 +139,9 @@ void doScaffoldEcores(struct trackDb *tdb, char *item);
 
 struct customTrack *lookupCt(char *name);
 /* Return custom track for name, or NULL. */
+
+void doTriangle(struct trackDb *tdb, char *item, char *motifTable);
+/* Display detailed info on a regulatory triangle item. */
+
+void doTransRegCode(struct trackDb *tdb, char *item, char *motifTable);
+/* Display detailed info on a transcriptional regulatory code item. */
