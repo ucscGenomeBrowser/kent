@@ -25,7 +25,7 @@ BEGIN {
                            parseOptEq inList getTmpDir readFile makeAbs
                            backgroundStart backgroundWait
                            findConf getConf getConfNo getDbConf getDbConfNo splitSpaceList
-                           getHgConf setupHgConf callMysql runMysqlDump);
+                           getHgConf setupHgConf callMysql runMysqlDump runMysql);
     
     # make stdout/stderr always line buffered
     STDOUT->autoflush(1);
@@ -796,6 +796,14 @@ sub runMysqlDump($) {
 
     my($user, $pass) = getMysqlUser();
     runProg("mysqldump -u$user -p$pass $args");
+}
+
+# execute a mysql with genome user/password
+sub runMysql($) {
+    my($args) = @_;
+
+    my($user, $pass) = getMysqlUser();
+    runProg("mysql -u$user -p$pass $args");
 }
 
 # perl requires a true value at the end

@@ -2,7 +2,7 @@
 #
 # dumpTableStats
 #
-# $Id: dumpTableStats,v 1.1 2004/05/15 16:12:27 markd Exp $
+# $Id: dumpTableStats,v 1.2 2004/05/18 16:01:18 markd Exp $
 #
 use strict;
 use warnings;
@@ -31,7 +31,7 @@ sub sqlQuery($$;$) {
     if (!defined($db)) {
         $db = "";
     }
-    runProg("hgsql -e '$query' $db >$tsv.tmp");
+    runMysql("-e '$query' $db >$tsv.tmp");
     renameFile("$tsv.tmp", $tsv);
 }
 
