@@ -3087,7 +3087,7 @@ Submission to last job:          8029s     133.82m     2.23h    0.09d
     end
     cd /cluster/bluearc/hg16/bed/blastzSelf/axtChromDropped
     gzip *.axt
-    #  Needed a deliver of these right away:
+    #  Needed a deliver of these right away:  (REMOVED 2005-01-27)
     ssh hgwdev
     mkdir -p /usr/local/apache/htdocs/goldenPath/hg16/vsSelf
     cd /usr/local/apache/htdocs/goldenPath/hg16/vsSelf
@@ -3464,6 +3464,13 @@ cp -p chain/chr19*.chain ../run1/chain
         hgLoadChain hg16 ${c}_chainSelf $i
         echo done $c
     end
+
+    #	DELIVER these chain files to hgdownload (2005-01-27 - Hiram)
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/hg16/vsSelf
+    cd /cluster/data/hg16/bed/blastzSelf/axtChain/chain
+    cp -p *.chain.gz /usr/local/apache/htdocs/goldenPath/hg16/vsSelf
+    #	fixup README file, request push
 
 
 # NET SELF BLASTZ (RE-DONE 2003-09-09 - DONE - 2003-08-27 - Hiram)
