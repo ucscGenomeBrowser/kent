@@ -167,14 +167,26 @@ if (pp->type == pptVarInit)
     }
 }
 
+void evalFunctionType(struct pfParse *pp, struct pfBaseType *base)
+/* Fill in type info on to/para/flow node. */
+{
+struct pfParse *name = pp->children;
+struct pfParse *input = name->next;
+struct pfParse *output = input->next;
+struct pfType *ty = pfTypeNew(base);
+ty->isFunction = TRUE;
+pp->ty = ty;
+ty->children = input->ty;
+ty->children->next = output->ty;
+}
 
-void evalTypes(struct pfParse *pp)
+void evalTypes(struct pfCompile *pfc, struct pfParse *pp)
 /* Go through and fill in pp->ct field on type
  * expressions. */
 {
 struct pfParse *p;
 for (p = pp->children; p != NULL; p = p->next)
-    evalTypes(p);
+    evalTypes(pfc, p);
 switch (pp->type)
     {
     case pptVarDec:
@@ -186,6 +198,15 @@ switch (pp->type)
 	pp->ty = type->ty;
 	break;
 	}
+    case pptToDec:
+        evalFunctionType(pp, pfc->toType);
+	break;
+    case pptParaDec:
+        evalFunctionType(pp, pfc->paraType);
+	break;
+    case pptFlowDec:
+        evalFunctionType(pp, pfc->flowType);
+	break;
     case pptOf:
         {
 	/* The symbols 'tree of dir of string' get converted
@@ -426,7 +447,7 @@ slAddHead(&program->children, pp);
 slReverse(&program->children);
 
 varDecAndAssignToInit(program);
-evalTypes(program);
+evalTypes(pfc, program);
 addDeclaredVarsToScopes(program);
 bindVars(program);
 
