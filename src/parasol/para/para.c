@@ -1456,7 +1456,11 @@ int main(int argc, char *argv[])
 {
 char *command;
 char *batch;
-doHappytDots = isatty(1);  /* stdout */
+char *term = getenv("TERM");
+
+/* only do happy dots if stdout is a tty and TERM is not dumb, which
+ * probably indicates running in emacs shell mode. */
+doHappytDots = isatty(1) && ((term == NULL) || !sameString(term, "dumb"));
 
 optionInit(&argc, argv, optionSpecs);
 if (argc < 2)
