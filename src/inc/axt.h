@@ -199,5 +199,11 @@ void axtPrintTraditional(struct axt *axt, int maxLine, struct axtScoreScheme *ss
 	FILE *f);
 /* Print out an alignment with line-breaks. */
 
+double axtIdWithGaps(struct axt *axt);
+/* Return ratio of matching bases to total symbols in alignment. */
+
+double axtCoverage(struct axt *axt, int qSize, int tSize);
+/* Return % of q and t covered. */
+
 #endif /* AXT_H */
 

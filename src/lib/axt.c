@@ -20,7 +20,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.38 2004/11/22 20:36:33 kent Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.39 2004/11/22 23:04:41 kent Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -834,5 +834,25 @@ for (symPos = 0; symPos < axt->symCount; symPos += maxLine)
     /* Draw extra empty line. */
     fputc('\n', f);
     }
+}
+
+double axtIdWithGaps(struct axt *axt)
+/* Return ratio of matching bases to total symbols in alignment. */
+{
+int i;
+int matchCount = 0;
+for (i=0; i<axt->symCount; ++i)
+    {
+    if (toupper(axt->qSym[i]) == toupper(axt->tSym[i]))
+        ++matchCount;
+    }
+return (double)matchCount/axt->symCount;
+}
+
+double axtCoverage(struct axt *axt, int qSize, int tSize)
+/* Return % of q and t covered. */
+{
+double cov = axt->tEnd - axt->tStart + axt->qEnd - axt->qStart;
+return cov/(qSize+tSize);
 }
 
