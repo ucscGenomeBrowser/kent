@@ -9,7 +9,7 @@
 #include "nib.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslPretty.c,v 1.20 2003/05/06 07:22:34 kate Exp $";
+static char const rcsid[] = "$Id: pslPretty.c,v 1.21 2003/05/23 02:04:10 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -222,6 +222,7 @@ void axtOutString(char *q, char *t, int size, int lineSize,
 	struct psl *psl, FILE *f)
 /* Output string side-by-side in Scott's axt format. */
 {
+    int i;
 static int ix = 0;
 int qs = psl->qStart, qe = psl->qEnd;
 
@@ -230,10 +231,19 @@ if (psl->strand[0] == '-')
 
 if (psl->strand[1] == '-')
     errAbort("axt option can't handle two character strands in psl");
-if (psl->strand[1] == 0)
-fprintf(f, "%d %s %d %d %s %d %d %c%c 0\n", ++ix, psl->tName, psl->tStart+1, 
-	psl->tEnd, psl->qName, qs+1, qe, psl->strand[1], psl->strand[0]);
-fprintf(f, "%s\n%s\n\n", t, q);
+if (psl->strand[1] != 0)
+    fprintf(f, "%d %s %d %d %s %d %d %c%c 0\n", ++ix, psl->tName, psl->tStart+1, 
+            psl->tEnd, psl->qName, qs+1, qe, psl->strand[1], psl->strand[0]);
+else
+    fprintf(f, "%d %s %d %d %s %d %d %c 0\n", ++ix, psl->tName, psl->tStart+1, 
+            psl->tEnd, psl->qName, qs+1, qe, psl->strand[0]);
+for (i=0; i<size ; i++) 
+    fputc(t[i],f);
+fputc('\n',f);
+for (i=0; i<size ; i++) 
+    fputc(t[i],f);
+fputc('\n',f);
+fputc('\n',f);
 }
 
 void prettyOutString(char *q, char *t, int size, int lineSize, 
@@ -244,6 +254,7 @@ int oneSize, sizeLeft = size;
 int i;
 char tStrand = (psl->strand[1] == '-' ? '-' : '+');
 
+printf("output %d\n",size);
 fprintf(f, ">%s:%d%c%d of %d %s:%d%c%d of %d\n", 
 	psl->qName, psl->qStart, psl->strand[0], psl->qEnd, psl->qSize,
 	psl->tName, psl->tStart, tStrand, psl->tEnd, psl->tSize);
@@ -339,10 +350,19 @@ void writeGap(struct dyString *aRes, int aGap, struct dyString *bRes, int bGap)
  *     ...4123.... */
 {
 char abbrev[16];
-fillShortGapString(abbrev, aGap, '.', 13);
-dyStringAppend(aRes, abbrev);
-fillShortGapString(abbrev, bGap, '.', 13);
-dyStringAppend(bRes, abbrev);
+int minToAbbreviate = 16;
+if (doShort && aGap >= minToAbbreviate && bGap >= minToAbbreviate)
+    {
+    fillShortGapString(abbrev, aGap, '.', 13);
+    dyStringAppend(aRes, abbrev);
+    fillShortGapString(abbrev, bGap, '.', 13);
+    dyStringAppend(bRes, abbrev);
+    }
+else
+    {
+    dyStringAppendMultiC(aRes, '-', aGap);
+    dyStringAppendMultiC(bRes, '-', bGap);
+    }
 }
 
 int smallSize = 8;	/* What our definition of 'small' is */
@@ -590,9 +610,13 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     /* Output sequence. */
     size = psl->blockSizes[blockIx];
     dyStringAppendN(q, qSeq->dna + qs, size);
-    dyStringAppendN(t, tSeq->dna + ts, size);
     lastQ = qs + size;
+    dyStringAppendN(t, tSeq->dna + ts, size);
     lastT = ts + size;
+    if(q->stringSize != t->stringSize)
+        {
+//        printf("%d BLK %s q size %d t size %d diff %d qs size %d ts size %d\n",blockIx, psl->qName, q->stringSize, t->stringSize, q->stringSize - t->stringSize, qSeq->size, tSeq->size );
+        }
     }
 
 if (checkFile != NULL)
@@ -606,13 +630,13 @@ if (psl->strand[1] == '-' && !tIsNib)
 
 if(q->stringSize != t->stringSize)
     {
-    printf("AF q size %d t size %d qs size %d ts size %d\n",q->stringSize, t->stringSize, qSeq->size, tSeq->size );
+ //   printf("AF %s q size %d t size %d qs size %d ts size %d\n",psl->qName, q->stringSize, t->stringSize, qSeq->size, tSeq->size );
     }
-assert(q->stringSize == t->stringSize);
+//assert(q->stringSize == t->stringSize);
 if (axt)
-    axtOutString(q->string, t->string, q->stringSize, 60, psl, f);
+    axtOutString(q->string, t->string, min(q->stringSize,t->stringSize), 60, psl, f);
 else
-    prettyOutString(q->string, t->string, q->stringSize, 60, psl, f);
+    prettyOutString(q->string, t->string, min(q->stringSize,t->stringSize), 60, psl, f);
 dyStringFree(&q);
 dyStringFree(&t);
 if (qIsNib)
