@@ -253,6 +253,7 @@ priority 4.1
 visibility hide
 spectrum on
 color 0,100,0
+altColor 255,240,200
 type bed 5+
 
 track softberryGene
