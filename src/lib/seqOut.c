@@ -10,8 +10,9 @@
 #include "fuzzyFind.h"
 #include "seqOut.h"
 #include "htmshell.h"
+#include "axt.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.17 2004/02/23 06:46:35 kent Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.18 2004/06/02 15:14:56 braney Exp $";
 
 struct cfm *cfmNew(int wordLen, int lineLen, 
 	boolean lineNumbers, boolean countDown, FILE *out, int numOff)
@@ -118,13 +119,15 @@ if (cfm != NULL)
     }
 }
 
-int seqOutColorLookup[5] = 
+int seqOutColorLookup[] = 
     {
     0x000000,
     0x3300FF,
     0x22EEEE,
     0xFF0033,
     0xFFcc22,
+    0x00FF00,
+    0xFF0000,
     };
 
 
@@ -191,6 +194,14 @@ int startDigits = maxDigits(nStart, hStart);
 int endDigits = maxDigits(nEnd, hEnd);
 int hStartNum, hEndNum;
 int nStartNum, nEndNum;
+static struct axtScoreScheme *ss = 0;  /* Scoring scheme. */
+struct cfm cfm;
+extern char blosumText[];
+extern struct axtScoreScheme *axtScoreSchemeFromProteinText(char *text, char *fileName);
+
+cfm.out = baf->out;
+if (ss == 0)
+    ss = axtScoreSchemeFromProteinText(blosumText, "fake");
 
 if (baf->nCountDown)
     {
@@ -226,16 +237,32 @@ for (i=0; i<count; ++i)
 	    codon[2] = baf->hChars[i+1];
 	    codon[3] = 0;
 	    tolowers(codon);
+	    c  = lookupCodon(codon);
+	    cfmPushFormat(&cfm);
 	    if (toupper(n) == lookupCodon(codon))
-	        c = '|';
+		cfmOut(&cfm, '|', seqOutColorLookup[0]);
+	    else
+		{
+		int color;
+		if (ss->matrix[toupper(n)][c] > 0)
+		    color = 5;
+		else
+		    color = 6;
+		cfmOut(&cfm, c, seqOutColorLookup[color]);
+		}
+	    cfmPopFormat(&cfm);
+	    }
+	else
+	    {
+	    fputc(c, baf->out);
 	    }
 	}
     else 
         {
 	if (toupper(n) == toupper(h))
 	     c = '|';
+	fputc(c, baf->out);
 	}
-    fputc(c, baf->out);
     }
 fputc(' ', baf->out);
 for (i=0; i<endDigits; ++i)
