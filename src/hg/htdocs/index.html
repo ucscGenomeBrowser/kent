@@ -7,62 +7,6 @@
 	<TITLE>UCSC Genome Bioinformatics Home</TITLE>
 	<LINK REL="STYLESHEET" HREF="style/HGStyle.css">
 
-<SCRIPT LANGUAGE="JavaScript">
-<!--
-
-var theDb = 'human';
-
-function setDb()
-{
-  theDb = document.dbForm.genome.options[document.dbForm.genome.selectedIndex].value;
-}
-
-function initDb()
-{
-  theDb = document.dbForm.genome.options[document.dbForm.genome.selectedIndex].value;
-  var queryString = document.location.search.substring(1, document.location.search.length);
-  var dbIndex = queryString.indexOf('org=');
-  var ampIndex = queryString.indexOf('&');
-  
-  if (dbIndex >= 0)
-  {
-    if (ampIndex > 0) {
-      theDb = queryString.substring(dbIndex + 4, ampIndex);
-  } else {
-      theDb = queryString.substring(dbIndex + 4);
-  }   
-
-    for (var items = 0; items < document.dbForm.genome.options.length; items++)
-    {
-      if(sameOrganism(theDb, document.dbForm.genome.options[items].value))
-      {
-        document.dbForm.genome.options[items].selected = true;
-      }
-    }     
-  }
-}
-
-function sameOrganism(db1, db2)
-{
-  if (db1.toLowerCase() == db2.toLowerCase())
-  {
-    return true;
-  }
-  else
-  {
-    return false;
-  }
-}
-
-function dbGo(theUrl)
-{
-document.location = theUrl + 'org=' + theDb;
-}
-
-//-->
-</SCRIPT>
-
-
 </HEAD>
 <BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#6600FF" onLoad="initDb()">
 <A NAME="TOP"></A>
@@ -74,11 +18,11 @@ document.location = theUrl + 'org=' + theDb;
 	<table bgcolor="000000" cellpadding="1" cellspacing="1" width="99%" height="27"><tr bgcolor="2636D1"><td valign="middle">
 	<table BORDER=0 CELLSPACING=0 CELLPADDING=0 bgcolor="2636D1" height="24">
 		<TR><TD VALIGN="middle"><font color="#89A1DE">&nbsp; 
-			<a href="javascript:dbGo('/cgi-bin/hgGateway?');" class="topbar">
+			<a href="../../cgi-bin/hgGateway?command=start&" class="topbar">
 				Genome Browser</a> &nbsp; - &nbsp; 
-			<A HREF="javascript:dbGo('/cgi-bin/hgBlat?command=start&');" class="topbar">
+			<A HREF="../../cgi-bin/hgBlat?command=start&" class="topbar">
 				Blat Search</a> &nbsp; - &nbsp; 
-			<A HREF="javascript:dbGo('/cgi-bin/hgText?command=start&');" class="topbar">
+			<A HREF="../../cgi-bin/hgText?command=start&" class="topbar">
 				Table Browser</a> &nbsp; - &nbsp; 
 			<A HREF="FAQ.html" class="topbar">
 				FAQ</a> &nbsp; - &nbsp; 
@@ -100,21 +44,11 @@ document.location = theUrl + 'org=' + theDb;
 		<TR HEIGHT="100%">
 			<TD BGCOLOR="738ED3" VALIGN="top" HEIGHT="100%"> 
 				<FORM NAME="dbForm">
-			<table cellpadding="" cellspacing="0" margins="0" border="0"><tr><td valign="top">
-				<FONT CLASS="leftbar">Genome</FONT>
-			</td></tr><tr valign="bottom"><td valign="bottom">
-					<SELECT NAME="genome" onChange="setDb();">
-						<OPTION VALUE="human">Human
-						<OPTION VALUE="mouse">Mouse 
-						<OPTION VALUE="rat">Rat 
-						<OPTION VALUE="SARS">SARS 
-					</SELECT>
-			</td></tr></table><hr>
-			<A CLASS="leftbar" HREF="javascript:dbGo('/cgi-bin/hgGateway?');">
+			<A CLASS="leftbar" HREF="../cgi-bin/hgGateway">
 				Browser</A><hr>
-			<A CLASS="leftbar" HREF="javascript:dbGo('/cgi-bin/hgBlat?command=start&');">
+			<A CLASS="leftbar" HREF="../cgi-bin/hgBlat?command=start&">
 				Blat</A><hr>
-			<A CLASS="leftbar" HREF="javascript:dbGo('/cgi-bin/hgText?');">
+			<A CLASS="leftbar" HREF="../cgi-bin/hgText">
 				Tables</A><hr>
 			<A CLASS="leftbar" HREF="downloads.html">
 				Downloads</A><hr>
@@ -155,49 +89,6 @@ document.location = theUrl + 'org=' + theDb;
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=3></TH></TR><TR><TD WIDTH=10></TD><TD>
 	<P>This site contains the reference sequence for the human
 	genome and working drafts for the mouse, rat, and SARS genomes. 
-	<P>
-	<B>Homo sapiens</B> - The human reference sequence (UCSC version hg15) is based on NCBI Build 33 and was produced by the International Human
-	Genome Sequencing Consortium. The sequence covers about 99 percent of 
-	the gene-containing regions in the genome, and has been sequenced to an accuracy of 
-	99.99 percent. The missing portions are essentially contained in approximately 
-	400 defined gaps in the euchromatic region representing DNA regions with unusual structures 
-	that can't be reliably sequenced using current technology. The reference
-	sequence is considered to be "finished", a technical term indicating that 
-	the sequence is highly accurate (with fewer than one error per 10,000 
-	bases) and highly contiguous (with the only remaining gaps corresponding 
-	to regions whose sequence cannot be reliably resolved with current 
-	technology). Future work on the reference sequence will focus on improving
-	accuracy and reducing gaps in the sequence. 
-
-	<P><B>Mus musculus</B> - The current mouse genome assembly (UCSC version mm3) 
-	is based on NCBI Build 30, a composite assembly of MGSCv3 produced by 
-	the Mouse Genome Sequencing Consortium and finished BAC sequence. There 
-	is a slight difference between the UCSC and NCBI versions: the NCBI assembly includes contigs from several strains, but the UCSC 
-	version  contains only the reference strain (C57BL/6J). The current 
-	assembly
-	includes 705 megabases of finished sequence. While there are 
-	many gaps in the sequence, the order and orientation of the contigs on 
-	either side of a gap are known in almost all cases. We estimate
-	that 90-96% of the mouse genome is present in the
-	assembly. 
-
-	<P>
-	<B>Rattus norvegicus</B> - The latest rat genome assembly (UCSC version rn2) is based on version 2.1 provided by the Rat Genome Sequencing Consortium.
-	The sequence was assembled using a hybrid approach that combines the 
-	clone by clone and whole genome shotgun methods. The current assembly
-	provides approximately 6.5-fold coverage of the rat genome.
-	
-	<P>
-	<B>SARS coronavirus TOR2</B> - The SARS draft genome assembly (UCSC version sc1)
-	is based on sequence deposited into GenBank as of 14 April 2003.
-	This browser - which represents a departure from UCSC's usual focus on vertebrate 
-	genomes - shows gene predictions, locations of putative proteins, and 
-	viral mRNA and protein alignments. Protein structure analysis and 
-	predictions were determined by using the <A HREF="http://www.cse.ucsc.edu/research/compbio/sam.html" TARGET=_blank>Sequence Alignment and Modeling (SAM) T02</A> 
-	tool. UCSC does not plan to provide a 
-	comprehensive set of browsers for viruses. However, this browser 
-	will be maintained as long as there is strong scientific and public interest in
-	the SARS conronavirus TOR2.
 	<P>
 	We encourage you to explore the reference sequence and working drafts 
 	with the UCSC Genome Browser, which displays the work of many annotators 
@@ -281,13 +172,6 @@ document.location = theUrl + 'org=' + theDb;
 	<LI><A HREF="goldenPath/gbdDescriptions.html"><FONT SIZE="4">Description of the annotation database</FONT></A>
 	<LI><A HREF="goldenPath/datorg.html"><FONT SIZE="4">Data organization and format</FONT></A>
 	<LI><A HREF="goldenPath/term.html"><FONT SIZE="4">Terminology</FONT></A>
-</UL>
-<P><FONT SIZE="4">Additional information on the human genome: </FONT>
-<UL>
-	<LI><A HREF="goldenPath/certTable.html"><FONT SIZE="4">Non-standard Join Certificates (April 2003 Human Genome only)</FONT></A>
-	<LI><A HREF="goldenPath/stats.html"><FONT SIZE="4">Summary statistics</FONT></A>
-	<LI><A HREF="goldenPath/chromReports"><FONT SIZE="4">Chromosome Reports</FONT></A>
-         <LI><A HREF="goldenPath/mapPlots/"><FONT SIZE="4">Genome Map Plots</FONT></A>
 </UL>
 </TD><TD WIDTH=15>&nbsp;</TD></TR></TABLE>
 	<BR></TD></TR></TABLE>
