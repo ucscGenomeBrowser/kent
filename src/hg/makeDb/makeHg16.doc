@@ -8055,6 +8055,32 @@ EOF
 #exonArrows on
 #type bed 12
 
+<<<<<<< makeHg16.doc
+#
+# Load tfbsCons track DONE 2004-03-31 braney
+#
+
+set humordir=/gbdb/hg16/humorMm3Rn3
+set transfacdir=/projects/compbio/data/transfac
+set outdir=hg16_tfbsCons
+
+ssh hgwdev
+mkdir /cluster/data/hg16/bed/tfbsCons
+cd /cluster/data/hg16/bed/tfbsCons
+# Get tfbsConsUtils.tar.gz from Matt Weirauch with Perl scripts  weirauch@soe.ucsc.edu
+set tarfile=/cluster/data/hg15/bed/tfbsCons/tfbsConsUtils.tar.gz
+tar zxf $tarfile
+# the following takes days (says Matt)
+nice getTfbsConsData.pl `pwd` $humordir $transfacdir ./IDS.txt $outdir -over &
+cd $outdir
+rm chr*.bed
+hgLoadBed -noSort hg16 tfbsCons -sqlTable=$HOME/kent/src/hg/lib/tfbsCons.sql tfbsCons.bed -tab
+
+# Get mapping of ID's from Matt so we can link into the TRANSFAC database
+set idmap=/cluster/data/hg16/bed/tfbsCons/tfbsConsMap
+hgsql hg16 < ~/kent/src/hg/lib/tfbsConsMap.sql
+echo "load data local infile '$idmap' into table tfbsConsMap;" | hgsql hg16
+=======
 
 # PREP FOR LIFTOVER CHAINS TO HG16
 #    This is doc'ed in bed/bedOver/liftOver.doc
@@ -8187,3 +8213,4 @@ cat > makeNet.csh << 'EOF'
     # add entries in kent/src/hg/makeDb/trackDb/human/hg16/trackDb.ra
     # add html for details pages to this directory:
     # ecoresFr1.html and ecoresTetraodon.html
+>>>>>>> 1.147
