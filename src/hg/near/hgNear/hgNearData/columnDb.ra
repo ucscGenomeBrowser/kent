@@ -51,7 +51,7 @@ itemUrl http://www.ensembl.org/Homo_sapiens/geneview?transcript=%s
 
 name expDense
 shortLabel Short Expression
-longLabel Selected UCLA expression data
+longLabel Selected UCLA expression data.
 priority 2.7
 visibility on
 type expRatio knownToAffyUcla affyUcla hgFixed.affyUclaExps
@@ -60,7 +60,7 @@ representatives 9,37,24,17,34,12,19,21,22,35,
 
 name expAll
 shortLabel Long Expression
-longLabel All UCLA expression data
+longLabel All UCLA expression data from normal tissues on U133 chip.
 priority 2.8
 visibility off
 type expRatio knownToAffyUcla affyUcla hgFixed.affyUclaExps
@@ -75,8 +75,8 @@ visibility off
 type distance knownExpDistance query target distance
 
 name expId
-shortLabel Exp ID
-longLabel ID of Associated expression data
+shortLabel U133 ID
+longLabel ID of Associated Affymetrix U133 expression data 
 priority 3.0
 visibility off
 type lookup knownToAffyUcla name value
