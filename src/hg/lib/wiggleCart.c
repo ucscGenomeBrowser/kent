@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.7 2004/03/30 21:55:03 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.8 2004/04/02 23:42:46 hiram Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -18,7 +18,7 @@ extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 	{ double d; d = max; max = min; min = d; }
 /* check a min,max pair (doubles) and keep them properly in order */
 
-#if ! defined(DEBUG)
+#if defined(DEBUG)
 
 #include "portable.h"
 
@@ -44,6 +44,8 @@ static FILE * dF;
 static void wigDebugOpen(char * name) {
 if (debugOpened) return;
 dF = fopen( dbgFile, "w");
+if ((FILE *)NULL == dF)
+	errAbort("wigDebugOpen: can not open %s", dbgFile);
 fprintf( dF, "opened by %s\n", name);
 chmod(dbgFile, S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IWGRP | S_IXGRP  | S_IROTH | S_IWOTH | S_IXOTH);
 debugOpened = TRUE;
