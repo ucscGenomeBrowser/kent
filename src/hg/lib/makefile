@@ -11,10 +11,12 @@ O = affyAtlas.o affyGenoDetails.o affyOffset.o affyPairs.o agpFrag.o \
     blastTab.o blastzNet.o blatServers.o borf.o borkPseudoHom.o \
     cart.o cartDb.o celeraCoverage.o celeraDupPositive.o cgh.o \
     chainDb.o chainLink.o chainNet.o chainNetDbLoad.o chr18deletions.o \
-    chromInfo.o chromInserts.o clonePos.o columnInfo.o coordConv.o \
+    chromInfo.o chromInserts.o chromKeeper.o \
+    clonePos.o columnInfo.o coordConv.o \
     cpgIsland.o ctgPos.o customTrack.o cytoBand.o dbDb.o \
     dbSnpRS.o defaultDb.o dnaMotif.o dnaProbe.o encodeRegionInfo.o \
-    encodeRegionInfoCustom.o ensFace.o ensPhusionBlast.o est3.o estOrientInfo.o \
+    encodeRegionInfoCustom.o ensFace.o ensPhusionBlast.o \
+    est3.o estOrientInfo.o \
     estPair.o exoFish.o expData.o expRecord.o exprBed.o \
     fbTables.o featureBits.o findKGAlias.o findKGProtAlias.o fishClones.o \
     flyBaseSwissProt.o gbProtAnn.o gcPercent.o genMapDb.o genbank.o \
@@ -31,13 +33,14 @@ O = affyAtlas.o affyGenoDetails.o affyOffset.o affyPairs.o agpFrag.o \
     recombRate.o refLink.o refSeqStatus.o riken.o rikenBest.o \
     rikenCluster.o rmskOut.o rnaFold.o rnaGene.o rnaGroup.o \
     roughAli.o sage.o sageCounts.o sageExp.o sample.o \
-    sanger22extra.o scopDes.o scoredRef.o sgdOther.o simpleRepeat.o snp.o \
+    sanger22extra.o scopDes.o scoredRef.o sgdClone.o \
+    sgdOther.o simpleRepeat.o snp.o \
     softPromoter.o softberryHom.o spDb.o stanMad.o stsAlias.o \
     stsInfo.o stsInfo2.o stsInfoMouse.o stsInfoMouseNew.o stsInfoRat.o \
     stsMap.o stsMapMouse.o stsMapMouseNew.o stsMapRat.o stsMarker.o \
     synMap.o synteny100000.o syntenyBerk.o syntenySanger.o tableDescriptions.o \
     tigrCmrGene.o tilingPath.o traceInfo.o trackDb.o trackDbCustom.o \
-    trackTable.o vegaInfo.o wabAli.o web.o wiggle.o chromKeeper.o
+    trackTable.o vegaInfo.o wabAli.o web.o wiggle.o 
 
 
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) 
