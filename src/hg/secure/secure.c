@@ -56,6 +56,13 @@ struct lineFile *lf = NULL;
 char *line = NULL;
 int len = 0;
 
+/* Protect against ../.. URL hacking */
+if(strstr(filename, "../"))
+{
+printf("INVALID FILE PATH %s", filename);
+return;
+}
+
 snprintf(path, 256, "%s/%s", secureDir, filename);
 lf = lineFileOpen(path, TRUE);
 while (lineFileNext(lf, &line, &len))
