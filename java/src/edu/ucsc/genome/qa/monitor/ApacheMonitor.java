@@ -68,6 +68,20 @@ public class ApacheMonitor {
       int secondsDelta = target.minutes * 60;
       int timeDelta = secondsNow - secondsDelta;
 
+      // check for any rows within time delta
+      String nullquery = "select count(*) as cnt from ";
+      nullquery = nullquery + target.sourceTable + " ";
+      nullquery = nullquery + "where time_stamp > " + timeDelta;
+      if (!allMachines) {
+        nullquery = nullquery + " and machine_id = " + target.targetMachine;
+      }
+      System.out.println(nullquery);
+      ResultSet nullRS = stmt.executeQuery(nullquery);
+      nullRS.next();
+      int nullcnt = nullRS.getInt("cnt");
+      System.out.println("Count of rows with any status code = " + nullcnt);
+
+
       // check for matching rows
       String testquery = "select count(*) as cnt from ";
       testquery = testquery + target.sourceTable + " ";
@@ -108,6 +122,9 @@ public class ApacheMonitor {
 	System.out.print("Status " + target.errorCode + " from " + request_uri + " on ");
 	System.out.println(machine_id + "; " + deltaMinutes + " minutes ago");
       }
+
+      stmt.close();
+      conn.close();
 
     } catch (Exception e) {
       System.err.println(e.getMessage());
