@@ -26,47 +26,54 @@ double xDist[1000];
 FILE *o3;
 int i,j;
 int highestCnt, totalCnt;
+int lowCnt, hiCnt;
 
 assert(nDist < ArraySize(distCnt));
 
 o3 = mustOpen(oFileName, "w");
-for (j=0; j<=nDist; j++)
+for (j=0; j<=(nDist+1); j++)
     {
     distCnt[j] = 0;
     xDist[j] = xMin + xDelta * (double)j;
     }
 
+lowCnt = 0;
+hiCnt  = 0;
 for (i=0; i<nInput; i++)
     {
-    if (measure[i] <= xDist[0])
+    /* count values below xmin */
+    if (measure[i] < xDist[0])
 	{
-	distCnt[0]++;
+	lowCnt++;
 	}
-    for (j=1; j<nDist; j++)
+    
+    for (j=0; j<nDist; j++)
 	{
-	if ((measure[i] > xDist[j-1]) && (measure[i] <= xDist[j]))
+	if ((measure[i] >= xDist[j]) && (measure[i] < xDist[j+1]))
  	    {
 	    distCnt[j]++;
 	    }
 	}
-    if (measure[i] > xDist[nDist-1])
+
+    /* count values above xmax */
+    if (measure[i] >= xDist[nDist])
 	{
-	distCnt[nDist]++;
+	hiCnt++;
 	}
     }
 
 highestCnt = 0;
 totalCnt   = 0;
-for (j=0; j<=nDist; j++)
+for (j=0; j<nDist; j++)
     {
     if (distCnt[j] > highestCnt) highestCnt = distCnt[j];
     totalCnt = totalCnt + distCnt[j];
     }
     
+totalCnt = totalCnt + hiCnt + lowCnt;
 if (totalCnt != nInput)
     errAbort("nInput %d is not equal totalCnt %d, aborting ...\n", nInput, totalCnt);
-   
-// do not print out count of the last inteval, which is everything beyond xMax 
+  
 for (j=0; j<nDist; j++)
     {
     fprintf(o3, "%f\t%d\n", xDist[j], distCnt[j]);
@@ -159,10 +166,7 @@ protDbName 	    = argv[2];
 taxon 	 	    = argv[3];
 database 	    = argv[4];
 
-//o1 = mustOpen("pepProp.tab",    "w");
 o2 = mustOpen("pepResDist.tab", "w");
-//o4 = mustOpen("pfamCount.tab",  "w");
-//o5 = mustOpen("interProCount.tab",  "w");
 
 conn  = hAllocConn();
 conn2 = hAllocConn();
@@ -173,10 +177,8 @@ for (j=0; j<23; j++)
     }
 
 icnt = jExon = pcnt = 0;
-//interProCount = 0;
 pIcnt = 0;
 molWtCnt = 0;
-//pfamCount = 0;
 
 sprintf(query2,"select acc from %s.accToTaxon where taxon=%s;", proteinDatabaseName, taxon);
 sr2  = sqlMustGetResult(conn2, query2);
@@ -201,7 +203,6 @@ while (row2 != NULL)
 	    {
 	    interProCount = interProCount + atoi(answer2);
 	    interProCountDouble[ipcnt] = (double)(atoi(answer2));
-	    //fprintf(o5, "%s\t%s\n", accession, answer2);
 	    ipcnt++;
 	    }
 	else
@@ -209,24 +210,6 @@ while (row2 != NULL)
 	    printf("%s is not in  InterPro DB.\n", accession);fflush(stdout);
 	    }
 	}
-    
-    // count Pfam domains
-    // This part is replaced by InterPro count
-    /*
-    if (answer != NULL)
-	{
-	kgId = answer;;
-    	sprintf(cond_str, "name='%s'", kgId);
-    	answer2 = sqlGetField(conn, database, "knownToPfam", "count(*)", cond_str);
-	if (answer2 != NULL)
-	    {
-	    pfamCount = pfamCount + atoi(answer2);
-	    pfamCountDouble[pcnt] = (double)(atoi(answer2));
-	    fprintf(o4, "%s\t%s\n", accession, answer2);
-	    pcnt++;
-	    }
-	}
-    */
     
     // count exons, using coding exons from kgProtMap table
     sprintf(cond_str, "qName='%s'", accession);
@@ -313,8 +296,6 @@ while (row2 != NULL)
     aaLenDouble[icnt]  = len;
     cCountDouble[icnt] = (double)cCnt;
     avgHydro[icnt] = hydroSum/(double)len; 
-    //fprintf(o1, "%s\t%s\t%d\t%s\t%d\t%f\n", 
-    // 	    accession, protDisplayId, len, exonCnt, cCnt, avgHydro[icnt]);fflush(stdout);
     icnt++;
     sqlFreeResult(&sr);
     row2 = sqlNextRow(sr2);
@@ -336,16 +317,12 @@ fprintf(o2, "%d\t%f\n", i+1, 0.0);
 carefulClose(&o2);
 
 // calculate and write out various distributions
-calDist(molWt,  	 molWtCnt, 20, 10000.0, 10000.0,"pepMolWtDist.tab");
+calDist(molWt,  	 molWtCnt, 21, 0.0, 10000.0,"pepMolWtDist.tab");
 calDist(pI,  	         pIcnt,    61,     3.0, 0.2, 	"pepPiDist.tab");
 calDist(avgHydro,     	  icnt,    41,    -2.0, 0.1, 	"pepHydroDist.tab");
 calDist(cCountDouble, 	  icnt,    51,     0.0, 1.0, 	"pepCCntDist.tab");
 calDist(exonCountDouble, jExon,    31,     0.0, 1.0, 	"pepExonCntDist.tab");
 calDist(interProCountDouble,  ipcnt,    16,     0.0, 1.0, 	"pepIPCntDist.tab");
-//calDist(pfamCountDouble,  pcnt,    16,     0.0, 1.0, 	"pfamCntDist.tab");
-
-//carefulClose(&o1);
-//carefulClose(&o4);
 
 sqlFreeResult(&sr2);
 hFreeConn(&conn);
