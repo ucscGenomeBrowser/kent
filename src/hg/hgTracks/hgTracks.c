@@ -90,7 +90,7 @@
 #include "cytoBand.h"
 #include "gencodeIntron.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.929 2005/03/22 01:22:13 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.930 2005/03/23 23:29:44 heather Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9533,6 +9533,7 @@ registerTrackHandler("syntenyHg16", syntenyMethods);
 registerTrackHandler("syntenyHuman", syntenyMethods);
 registerTrackHandler("syntenyMouse", syntenyMethods);
 registerTrackHandler("syntenyRat", syntenyMethods);
+registerTrackHandler("syntenyCow", syntenyMethods);
 registerTrackHandler("synteny100000", syntenyMethods);
 registerTrackHandler("syntenyBuild30", syntenyMethods);
 registerTrackHandler("syntenyBerk", syntenyMethods);
