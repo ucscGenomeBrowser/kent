@@ -77,5 +77,23 @@ void nibStreamOne(struct nibStream *ns, DNA base);
 void nibStreamMany(struct nibStream *ns, DNA *dna, int size);
 /* Write many bases to nibStream. */
 
+struct nibInfo
+/* Info on a nib file. */
+    {
+    struct nibInfo *next;
+    char *fileName;	/* Name of nib file. */
+    int size;		/* Number of bases in nib. */
+    FILE *f;		/* Open file. */
+    };
+
+struct nibInfo *nibInfoNew(char *path);
+/* Make a new nibInfo with open nib file. */
+
+void nibInfoFree(struct nibInfo **pNib);
+/* Free up nib info and close file if open. */
+
+struct nibInfo *nibInfoFromCache(struct hash *hash, char *nibDir, char *nibName);
+/* Get nibInfo on nibDir/nibName.nib from cache, filling cache if need be. */
+
 #endif /* NIB_H */
 

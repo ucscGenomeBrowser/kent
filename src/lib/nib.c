@@ -4,12 +4,13 @@
  * granted for all use - public, private or commercial. */
 
 #include "common.h"
+#include "hash.h"
 #include "dnautil.h"
 #include "dnaseq.h"
 #include "nib.h"
 #include "sig.h"
 
-static char const rcsid[] = "$Id: nib.c,v 1.14 2003/05/06 07:33:43 kate Exp $";
+static char const rcsid[] = "$Id: nib.c,v 1.15 2003/06/14 07:43:39 kent Exp $";
 
 static char *findNibSubrange(char *fileName)
 /* find the colon starting a nib seq name/subrange in a nib file name, or NULL
@@ -411,5 +412,42 @@ if (subrange == NULL)
 isANib = endsWith(fileName, ".nib") || endsWith(fileName, ".NIB");
 *subrange = ':';
 return isANib;
+}
+
+struct nibInfo *nibInfoNew(char *path)
+/* Make a new nibInfo with open nib file. */
+{
+struct nibInfo *nib;
+AllocVar(nib);
+nib->fileName = cloneString(path);
+nibOpenVerify(path, &nib->f, &nib->size);
+return nib;
+}
+
+void nibInfoFree(struct nibInfo **pNib)
+/* Free up nib info and close file if open. */
+{
+struct nibInfo *nib = *pNib;
+if (nib != NULL)
+    {
+    carefulClose(&nib->f);
+    freeMem(nib->fileName);
+    freez(pNib);
+    }
+}
+
+struct nibInfo *nibInfoFromCache(struct hash *hash, char *nibDir, char *nibName)
+/* Get nibInfo on nibDir/nibName.nib from cache, filling cache if need be. */
+{
+struct nibInfo *nib;
+char path[PATH_LEN];
+safef(path, sizeof(path), "%s/%s.nib", nibDir, nibName);
+nib = hashFindVal(hash, path);
+if (nib == NULL)
+    {
+    nib = nibInfoNew(path);
+    hashAdd(hash, path, nib);
+    }
+return nib;
 }
 

@@ -7,13 +7,14 @@
 #include "chainNet.h"
 #include "dnautil.h"
 #include "dnaseq.h"
+#include "chainToAxt.h"
 #include "nib.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: netToAxt.c,v 1.11 2003/05/06 07:22:28 kate Exp $";
+static char const rcsid[] = "$Id: netToAxt.c,v 1.12 2003/06/14 07:43:39 kent Exp $";
 
 boolean qChain = FALSE;  /* Do chain from query side. */
-int maxGap = 200;
+int maxGap = 100;
 
 void usage()
 /* Explain usage and exit. */
@@ -63,123 +64,6 @@ sprintf(nameBuf, "%x", id);
 return hashMustFindVal(hash, nameBuf);
 }
 
-struct nibInfo
-/* Info on a nib file. */
-    {
-    struct nibInfo *next;
-    char *fileName;	/* Name of nib file. */
-    int size;		/* Number of bases in nib. */
-    FILE *f;		/* Open file. */
-    };
-
-
-struct axt *axtFromBlocks(
-	struct chain *chain,
-	struct boxIn *startB, struct boxIn *endB,
-	struct dnaSeq *qSeq, int qOffset,
-	struct dnaSeq *tSeq, int tOffset)
-/* Convert a list of blocks (guaranteed not to have inserts in both
- * strands between them) to an axt. */
-{
-int symCount = 0;
-int dq, dt, blockSize = 0, symIx = 0;
-struct boxIn *b, *a = NULL;
-struct axt *axt;
-char *qSym, *tSym;
-
-/* Make a pass through figuring out how big output will be. */
-for (b = startB; b != endB; b = b->next)
-    {
-    if (a != NULL)
-        {
-	dq = b->qStart - a->qEnd;
-	dt = b->tStart - a->tEnd;
-	symCount += dq + dt;
-	}
-    blockSize = b->qEnd - b->qStart;
-    symCount += blockSize;
-    a = b;
-    }
-
-/* Allocate axt and fill in most fields. */
-AllocVar(axt);
-axt->qName = cloneString(chain->qName);
-axt->qStart = startB->qStart;
-axt->qEnd = a->qEnd;
-axt->qStrand = chain->qStrand;
-axt->tName = cloneString(chain->tName);
-axt->tStart = startB->tStart;
-axt->tEnd = a->tEnd;
-axt->tStrand = '+';
-axt->symCount = symCount;
-axt->qSym = qSym = needLargeMem(symCount+1);
-qSym[symCount] = 0;
-axt->tSym = tSym = needLargeMem(symCount+1);
-tSym[symCount] = 0;
-
-/* Fill in symbols. */
-a = NULL;
-for (b = startB; b != endB; b = b->next)
-    {
-    if (a != NULL)
-        {
-	dq = b->qStart - a->qEnd;
-	dt = b->tStart - a->tEnd;
-	if (dq == 0)
-	    {
-	    memset(qSym+symIx, '-', dt);
-	    memcpy(tSym+symIx, tSeq->dna + a->tEnd - tOffset, dt);
-	    symIx += dt;
-	    }
-	else
-	    {
-	    assert(dt == 0);
-	    memset(tSym+symIx, '-', dq);
-	    memcpy(qSym+symIx, qSeq->dna + a->qEnd - qOffset, dq);
-	    symIx += dq;
-	    }
-	}
-    blockSize = b->qEnd - b->qStart;
-    memcpy(qSym+symIx, qSeq->dna + b->qStart - qOffset, blockSize);
-    memcpy(tSym+symIx, tSeq->dna + b->tStart - tOffset, blockSize);
-    symIx += blockSize;
-    a = b;
-    }
-assert(symIx == symCount);
-
-/* Fill in score and return. */
-axt->score = axtScoreDnaDefault(axt);
-return axt;
-}
-
-struct axt *axtListFromChain(struct chain *chain, 
-	struct dnaSeq *qSeq, int qOffset,
-	struct dnaSeq *tSeq, int tOffset)
-/* Convert a chain to a list of axt's. */
-{
-struct boxIn *startB = chain->blockList, *endB, *a = NULL, *b;
-struct axt *axtList = NULL, *axt;
-
-for (b = chain->blockList; b != NULL; b = b->next)
-    {
-    if (a != NULL)
-        {
-	int dq = b->qStart - a->qEnd;
-	int dt = b->tStart - a->tEnd;
-	if ((dq > 0 && dt > 0) || dt > maxGap || dq > maxGap)
-	    {
-	    axt = axtFromBlocks(chain, startB, b, qSeq, qOffset, tSeq, tOffset);
-	    slAddHead(&axtList, axt);
-	    startB = b;
-	    }
-	}
-    a = b;
-    }
-axt = axtFromBlocks(chain, startB, NULL, qSeq, qOffset, tSeq, tOffset);
-slAddHead(&axtList, axt);
-slReverse(&axtList);
-return axtList;
-}
 
 void writeGaps(struct chain *chain, FILE *f)
 /* Write gaps to simple two column file. */
@@ -201,7 +85,7 @@ struct axt *axt, *axtList;
 
 if (gapFile != NULL)
     writeGaps(chain, gapFile);
-axtList = axtListFromChain(chain, qSeq, qOffset, tSeq, tOffset);
+axtList = chainToAxt(chain, qSeq, qOffset, tSeq, tOffset, maxGap);
 for (axt = axtList; axt != NULL; axt = axt->next)
     axtWrite(axt, f);
 axtFreeList(&axtList);
@@ -219,16 +103,7 @@ int qOffset;
 
 /* Get query sequence fragment. */
     {
-    struct nibInfo *nib = hashFindVal(qChromHash, fill->qName);
-    if (nib == NULL)
-        {
-	char path[512];
-	AllocVar(nib);
-	sprintf(path, "%s/%s.nib", nibDir, fill->qName);
-	nib->fileName = cloneString(path);
-	nibOpenVerify(path, &nib->f, &nib->size);
-	hashAdd(qChromHash, fill->qName, nib);
-	}
+    struct nibInfo *nib = nibInfoFromCache(qChromHash, nibDir, fill->qName);
     qSeq = nibLoadPartMasked(NIB_MASK_MIXED, nib->fileName, 
     	fill->qStart, fill->qSize);
     if (isRev)
