@@ -9499,6 +9499,7 @@ registerTrackHandler("blastzMmHgRef", longXenoPslMethods);
 registerTrackHandler("blastzMmHg12", longXenoPslMethods);
 registerTrackHandler("blastzBestHuman", longXenoPslMethods);
 registerTrackHandler("blastBestHuman_75", longXenoPslMethods);
+registerTrackHandler("blastBestHuman_08_30", longXenoPslMethods);
 registerTrackHandler("blastBestHuman", longXenoPslMethods);
 registerTrackHandler("blastzBestHuman12", longXenoPslMethods);
 registerTrackHandler("blastzAllHuman", longXenoPslMethods);
