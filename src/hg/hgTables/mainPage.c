@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.35 2004/09/11 15:24:25 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.36 2004/09/13 18:56:41 donnak Exp $";
 
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -478,9 +478,9 @@ void mainPageAfterOpen(struct sqlConnection *conn)
 {
 hPrintf("%s", 
   "Use this program to get the data associated with a track in text "
-  "format, to calculate intersections between tracks, and to fetch "
-  "DNA sequence covered by a track. Please <A HREF=\"#Help\">see "
-  "below</A> for a description of the controls in this form. ");
+  "format, to calculate intersections between tracks, and to retrieve "
+  "DNA sequence covered by a track. See <A HREF=\"#Help\">Using the Table "
+  "Browser</A> for a description of the controls in this form. ");
 
 /* Main form. */
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" NAME=\"mainForm\" METHOD=GET>\n");
