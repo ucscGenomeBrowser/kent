@@ -5,24 +5,33 @@
 
 #links a gene/pseudogene prediction to an ortholog or paralog.
 CREATE TABLE pseudoGeneLink (
+    bin smallint not null,	# bin for browser speedup
+    chrom varchar(255) not null,	# Chromosome name for pseudogene
+    chromStart int unsigned not null,	# pseudogene alignment start position
+    chromEnd int unsigned not null,	# pseudogene alignment end position
     name varchar(255) not null,	# Name of pseudogene
     score int unsigned not null,	# score of pseudogene with gene
+    strand varchar(255) not null,	# strand of pseudoegene
     assembly varchar(255) not null,	# assembly for gene
     geneTable varchar(255) not null,	# mysql table of gene
     gene varchar(255) not null,	# Name of gene
-    chrom varchar(255) not null,	# Chromosome name
+    gChrom varchar(255) not null,	# Chromosome name
     gStart int unsigned not null,	# gene alignment start position
     gEnd int unsigned not null,	# gene alignment end position
     score2 int unsigned not null,	# intron score of pseudogene with gap
     score3 int unsigned not null,	# intron score of pseudogene
     chainId int unsigned not null,	# chain id of gene/pseudogene alignment
-    strand varchar(255) not null,	# strand of gene
+    gStrand varchar(255) not null,	# strand of gene
     polyA int unsigned not null,	# length of polyA
     polyAstart int unsigned not null,	# start f polyA
-    pchrom varchar(255) not null,	# Chromosome name for pseudogene
-    pStart int unsigned not null,	# pseudogene alignment start position
-    pEnd int unsigned not null,	# pseudogene alignment end position
-    pStrand varchar(255) not null,	# strand of pseudoegene
+    exonCover int unsigned not null,	# number of exons in Gene covered
+    intronCount int unsigned not null,	# number of introns in pseudogene
+    bestAliCount int unsigned not null,	# number of good mrnas aligning
+    matches int unsigned not null,	# matches + repMatches
+    qSize int unsigned not null,	# aligning bases in pseudogene
+    tReps int unsigned not null,	# repeats in gene
+    qReps int unsigned not null,	# repeats in pseudogene
+    overlapDiag int unsigned not null,	# bases on the diagonal to mouse
               #Indices
-    PRIMARY KEY(name,pchrom(5),pStart)
+    PRIMARY KEY(chrom(8),bin,chromStart,name(10))
 );
