@@ -85,7 +85,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.842 2004/11/30 18:07:30 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.843 2004/12/01 00:40:35 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -6960,8 +6960,7 @@ return y;
 }
 
 static int doCenterLabels(struct track *track, struct track *parentTrack,
-                                struct vGfx *vg, MgFont *font, 
-                                        int y)
+                                struct vGfx *vg, MgFont *font, int y)
 /* Draw center labels.  Return y coord */
 {
 int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
@@ -7070,6 +7069,40 @@ limitVisibility(track);
 h = track->height;
 pixHeight += h;
 return pixHeight;
+}
+
+static int doOwnLeftLabels(struct track *track, struct vGfx *vg, 
+                                                MgFont *font, int y)
+/* Track draws it own, custom left labels */
+{
+int tHeight = track->height;
+int pixWidth = tl.picWidth;
+int fontHeight = mgFontLineHeight(font);
+Color labelColor = (track->labelColor ? track->labelColor : track->ixColor);
+if (withCenterLabels)
+    tHeight += fontHeight;
+if (track->limitedVis == tvPack)
+    { /*XXX This needs to be looked at, no example yet*/
+    vgSetClip(vg, gfxBorder+trackTabWidth+1, y, 
+              pixWidth-2*gfxBorder-trackTabWidth-1, track->height);
+    }
+else
+    {
+    vgSetClip(vg, leftLabelX, y, leftLabelWidth, tHeight);
+    
+    /* when the limitedVis == tvPack is correct above,
+     *	this should be outside this else clause
+     */
+    track->drawLeftLabels(track, winStart, winEnd,
+                          vg, leftLabelX, y, leftLabelWidth, tHeight,
+                          withCenterLabels, font, labelColor, 
+                          track->limitedVis);
+    }
+vgUnclip(vg);
+if (withCenterLabels)
+    y += fontHeight;
+y += track->height;
+return y;
 }
 
 static bool isCompositeTrack(struct track *track)
@@ -7477,18 +7510,17 @@ if (withCenterLabels)
         lastTime = clock1000();
     for (track = trackList; track != NULL; track = track->next)
 	{
-	if (track->limitedVis != tvHide)
-	    {
-            if (isCompositeTrack(track))
-                {
-                struct track *subtrack;
-                for (subtrack = track->subtracks; subtrack != NULL;
-                             subtrack = subtrack->next)
-                    y = doDrawItems(subtrack, vg, font, y, &lastTime);
-                }
-            else
-                y = doDrawItems(track, vg, font, y, &lastTime);
+	if (track->limitedVis == tvHide)
+            continue;
+        if (isCompositeTrack(track))
+            {
+            struct track *subtrack;
+            for (subtrack = track->subtracks; subtrack != NULL;
+                         subtrack = subtrack->next)
+                y = doDrawItems(subtrack, vg, font, y, &lastTime);
             }
+        else
+            y = doDrawItems(track, vg, font, y, &lastTime);
         }
 }
 /* if a track can draw its left labels, now is the time since it
@@ -7499,39 +7531,34 @@ if (withLeftLabels)
     y = yAfterRuler;
     for (track = trackList; track != NULL; track = track->next)
 	{
-	if (track->limitedVis != tvHide)
-	    {
-	    if (track->drawLeftLabels != NULL)
-		{
-		int tHeight = track->height;
-		Color labelColor = (track->labelColor ? track->labelColor : track->ixColor);
-		if (withCenterLabels)
-		    tHeight += fontHeight;
-		if (track->limitedVis == tvPack)
-		    { /*XXX This needs to be looked at, no example yet*/
-		    vgSetClip(vg, gfxBorder+trackTabWidth+1, y, 
-			      pixWidth-2*gfxBorder-trackTabWidth-1, track->height);
-		    }
-		else
-		    {
-		    vgSetClip(vg, leftLabelX, y, leftLabelWidth, tHeight);
-		    
-		    /* when the limitedVis == tvPack is correct above,
-		     *	this should be outside this else clause
-		     */
-		    track->drawLeftLabels(track, winStart, winEnd,
-					  vg, leftLabelX, y, leftLabelWidth, tHeight,
-					  withCenterLabels, font, labelColor, 
-					  track->limitedVis);
-		    }
-		vgUnclip(vg);
-		}
-	    if (withCenterLabels)
-		y += fontHeight;
-	    y += track->height;
-	    }
-	}
+        int labelCt = 1;
+	if (track->limitedVis == tvHide)
+            continue;
+        if (isCompositeTrack(track))
+            labelCt = slCount(track->subtracks);
+        if (track->drawLeftLabels != NULL)
+            {
+            if (isCompositeTrack(track))
+                {
+                struct track *subtrack;
+                for (subtrack = track->subtracks; subtrack != NULL;
+                             subtrack = subtrack->next)
+                    {
+                    y = doOwnLeftLabels(subtrack, vg, font, y);
+                    }
+                }
+            else
+                y = doOwnLeftLabels(track, vg, font, y);
+            }
+        else
+            {
+            if (withCenterLabels)
+                y += (fontHeight * labelCt);
+            y += track->height;
+            }
+        }
     }
+
 
 /* Make map background. */
 y = yAfterRuler;
