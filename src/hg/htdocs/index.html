@@ -177,6 +177,43 @@ document.location = theUrl + 'db=' + theDb;
 	</TD></TR></TABLE>
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=3></TH></TR><TR><TD WIDTH=10></TD><TD>
 
+	<P><FONT FACE="courier" SIZE=2>Oct. 18, 2002</FONT><BR>
+	We've rolled out a new version of the Genome Browser - v.16. In 
+	addition to several bug fixes, this release contains some interesting 
+	new features. 
+	<P>
+	The Table Browser has undergone major enhancements. Users 
+	can now restrict their queries by specifying a value or range for any of 
+	the fields in a table, and by selecting which fields should be displayed in 
+	the output. The Table Browser also provides the ability to do a free-form SQL 
+	query on a table and supports several new output formats. 
+	<P>	
+	We've extended the capabilities of the DNA retrieval functionality
+	in the Genome Browser and the Table Browser. The new 
+	mechanism offers the user several options for configuring the amount and 
+	type of sequence region that is retrieved, and options for formatting the 
+	sequence output. The retrieval options vary based on the type of table 
+	selected.
+	<P>	
+	The Genome Browser's gene prediction tracks now offer a Comparative 
+	Sequence link in addition to the predicted protein, mRNA sequence, and 
+	genomic sequence links. The Comparative Sequence feature displays 
+	annotated codons and translated protein for the region in alignment to 
+	another species. 
+	<P>	
+	We've recently added a few new tracks/tables to the hg12 and mm2 Browsers. On the 
+	latest human assembly (hg12), we now have Chimp Blat and Chimp BAC tracks 
+	provided by Ingo Ebersberger, Joshua Bacher, and Svante P‰‰bo at the Max
+	Plank Institute for Evolutionary Anthropology. Jim Kent at UCSC has generated a 
+	new annotation - Gene Boundaries - that shows the boundaries of genes 
+	and the direction of transcription as deduced from clustering spliced 
+	ESTs and mRNAs against the genome. We've also added SNP tracks to both 
+	hg12 and the latest mouse assembly (mm2).
+	<P>	
+	We encourage you to experiment with these new features. Comments, 
+	questions, and suggestions are always welcome at 
+	<A HREF="mailto:genome@soe.ucsc.edu">genome@soe.ucsc.edu</A>. 
+
 	<P><FONT FACE="courier" SIZE=2>Oct. 17, 2002</FONT><BR>
 	We have found errors with the RepeatMasker track on the 
 	Feb. '02 mouse assembly (mm2). This problem affects the RepeatMasker track 
@@ -197,50 +234,6 @@ document.location = theUrl + 'db=' + theDb;
 	of NCBI and Sanger. The Ensembl Genome Browser is consistent with the
 	UCSC browser.
 	
-	<P><FONT FACE="courier" SIZE=2>Sep. 19, 2002</FONT><BR>
-	We're pleased to announce the release of the Mouse Cons (Human/Mouse
-	Evolutionary Conservation Score) annotation track for the <A
-	HREF="http://genome.cse.ucsc.edu/cgi-bin/hgTracks?db=hg12">June 2002
-	human genome assembly</A>. This track allows a user to interactively explore 
-	conservation between the human and mouse genomes and identify highly conserved 
-	regions. Highest levels of conservation are typically seen over coding exons. 
-	High levels of conservation are also frequently associated with noncoding RNA,
-	promoters, other regulatory elements, and pseudogenes.
-
-	<P>The Mouse Cons annotation is displayed using a new type of Genome
-	Browser graphical track that plots a continuous function along a chromosome. The
-	conservation levels are calculated over 50bp  windows in the human genome
-	that have at least 15 bp aligned to mouse. The score for a window reflects
-	the probability that the level of observed conservation in that 50bp region
-	would occur by chance under neutral evolution. This information is given on
-	a logarithmic scale and displays in the track as "mountain ranges". Details
-	pages associated with the individual peaks in the track provide access to
-	the base level alignments for the whole region and for the individual 50bp
-	windows.
-
-	<P>The team that produced this track includes Ryan Weber, Krishna Roskin,
-	Mark Diekhans, Jim Kent, Scott Schwartz, and Webb Miller. 
-
-	<P><FONT FACE="courier" SIZE=2>Sep. 12, 2002</FONT><BR>
-	<I>Nature Genetics</I> has just published <A
-	HREF="http://www.nature.com/cgi-taf/DynaPage.taf?file=/ng/journal/v32/n1s/index.html"
-	TARGET=_blank>User's Guide to the Human Genome</A>, a
-	hands-on tutorial for using genome browsers as web tools for browsing and
-	analyzing data from the Human Genome Project and other sequencing efforts. The 
-	3 browsers featured in the tutorial include the UCSC Genome Browser, NCBI's 
-	Map Viewer, and the Ensembl Genome Browser. The guide is organized around a 
-	collection of step-by-step solutions to 13 typical research questions,
-	and serves as a nice supplement to the documentation materials
-	available on the UCSC Genome Browser web site. The guide is accessible as a 
-	link off the <I>Nature Genetics</I> home page at 
-	<A HREF="http://www.nature.com/ng/" TARGET=_blank>http://www.nature.com.ng</A>. 
-	
-	<P><FONT FACE="courier" SIZE=2>Sep. 12, 2002</FONT><BR>
-	We've corrected a problem with the Human June 2002 (hg12) cytoBand annotation 
-	track that affected chromosome Y. The clones on this chromosome were
-	erroneously pushed from the q-arm onto the p-arm, creating some confusion. The
-	currently available version of the cytoBand data on this website contains this 
-	correction.
 
     </TD><TD WIDTH=15></TD></TR></TABLE>
 	<BR></TD></TR></TABLE>
