@@ -15,6 +15,7 @@ struct job
     char *err;			/* Stderr. */
     time_t submitTime;          /* Time job submitted. */
     time_t startTime;           /* Start job run time in seconds past 1972 */
+    time_t lastClockIn;		/* Last time we got a message from machine about job. */
     struct machine *machine;	/* Machine it's running on if any. */
     };
 

@@ -81,6 +81,8 @@ int version = 2;	/* Version number. */
 /* Some command-line configurable quantities and their defaults. */
 int jobCheckPeriod = 10;	/* Minutes between checking running jobs. */
 int machineCheckPeriod = 20;	/* Minutes between checking dead machines. */
+int assumeDeadPeriod = 120;     /* If haven't heard from job in this long assume
+                                 * machine running it is dead. */
 int initialSpokes = 30;		/* Number of spokes to start with. */
 unsigned char subnet[4] = {255,255,255,255};   /* Subnet to check. */
 int nextJobId = 0;		/* Next free job id. */
@@ -480,6 +482,16 @@ mach->isDead = TRUE;
 dlAddTail(deadMachines, mach->node);
 }
 
+void buryMachine(struct machine *machine)
+/* Reassign job that machine is processing and bury machine
+ * in dead list. */
+{
+struct job *job;
+if ((job = machine->job) != NULL)
+    requeueJob(job);
+machineDown(machine);
+}
+
 void nodeDown(char *line)
 /* Deal with a node going down - move it to dead list and
  * put job back on head of job list. */
@@ -488,17 +500,12 @@ struct machine *mach;
 char *machName = nextWord(&line);
 char *jobIdString = nextWord(&line);
 int jobId;
-struct job *job;
 
 if (jobIdString == NULL)
     return;
 jobId = atoi(jobIdString);
 if ((mach = findMachineWithJob(machName, jobId)) != NULL)
-    {
-    if ((job = mach->job) != NULL)
-	requeueJob(job);
-    machineDown(mach);
-    }
+    buryMachine(mach);
 runner(1);
 }
 
@@ -639,9 +646,16 @@ for (i=0; i<spokesToUse; ++i)
     job = machine->job;
     if (job != NULL)
         {
-	char message[512];
-	sprintf(message, "check %s %d", hubHost, job->id);
-	sendViaSpoke(machine, message);
+	if (now - job->lastClockIn >= MINUTE * assumeDeadPeriod)
+	    {
+	    buryMachine(machine);
+	    }
+	else
+	    {
+	    char message[512];
+	    sprintf(message, "check %s %d", hubHost, job->id);
+	    sendViaSpoke(machine, message);
+	    }
 	}
     }
 }
@@ -877,11 +891,13 @@ char *status = nextWord(&line);
 int jobId = atoi(jobIdString);
 if (status != NULL)
     {
-    /* Node thinks it's free, we think it has a job.  Node
-     * must have missed our job assignment... */
+    struct job *job = jobFind(runningJobs, jobId);
+    if (job != NULL)
+        job->lastClockIn = now;
     if (sameString(status, "free"))
 	{
-	struct job *job = jobFind(runningJobs, jobId);
+	/* Node thinks it's free, we think it has a job.  Node
+	 * must have missed our job assignment... */
 	struct user *user = job->batch->user;
 	if (job != NULL)
 	    {
@@ -1679,7 +1695,7 @@ else
     dlAddTail(runningJobs, job->node);
     dlRemove(mach->node);
     dlAddTail(busyMachines, mach->node);
-    mach->lastChecked = job->submitTime = job->startTime = now;
+    mach->lastChecked = job->submitTime = job->startTime = job->lastClockIn = now;
     }
 }
 
