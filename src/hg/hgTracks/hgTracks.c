@@ -5219,7 +5219,7 @@ float val = lf->score;
 float absVal = fabs(val);
 int colorIndex = 0;
 float maxDeviation = 1.0;
-char *colorScheme = cartUsualString(cart, "cghNci60.color", "rg");
+char *colorScheme = cartUsualString(cart, "cghNci60.color", "gr");
 /* colorScheme should be stored somewhere not looked up every time... */
 
 /* Make sure colors available */
@@ -5227,17 +5227,18 @@ if(!exprBedColorsMade)
     makeRedGreenShades(mg);
 if(val == -10000)
     return shadesOfGray[5];
-if(tg->visibility == tvDense)
-    val = val/100;
+if(tg->visibility == tvDense) 
+    /* True value stored as integer in score field and was multiplied by 100 */ 
+    absVal = absVal/100;
 
 /* Check on mode */
 if (tg->visibility == tvFull)
     {
-    maxDeviation = 0.3;
+    maxDeviation = 0.7;
     } 
  else 
     {
-    maxDeviation = 0.1;
+    maxDeviation = 0.5;
     }
 
 /* cap the value to be less than or equal to maxDeviation */
@@ -5250,12 +5251,17 @@ if(absVal > maxDeviation)
  */
 colorIndex = (int)(absVal * maxRGBShade/maxDeviation);
 if(val < 0) 
-    return shadesOfRed[colorIndex];
+    if (sameString(colorScheme, "gr")) 
+        return shadesOfRed[colorIndex];
+    else
+        return shadesOfGreen[colorIndex];    
 else 
     {
-    if(sameString(colorScheme, "rg"))
+    if (sameString(colorScheme, "gr"))
 	return shadesOfGreen[colorIndex];
-    else 
+    else if (sameString(colorScheme, "rg"))
+        return shadesOfRed[colorIndex];
+    else
 	return shadesOfBlue[colorIndex];
     }
 }
