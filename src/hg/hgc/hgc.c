@@ -157,7 +157,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.827 2005/01/28 22:59:38 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.828 2005/01/31 00:19:00 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -10666,16 +10666,16 @@ printf("<BR><B><A HREF=\"#Func\">Function</A>: </B>%s\n",           snp.func);
 printf("<BR><B><A HREF=\"#LocType\">Location Type</A>: </B>%s\n",   snp.locType);
 if (snp.avHet>0)
     printf("<BR><B><A HREF=\"#AvHet\">Average Heterozygosity</A>: </B>%.3f +/- %.3f", snp.avHet, snp.avHetSE);
-/*
 if (stringIn("nonsynon",snp.func)!=NULL)
     {
-    printf("<P><A HREF=\"http://alto.compbio.ucsf.edu/LS-SNP-cgi/SNP_query.pl?");
-    printf("PropertySelect=Functional&idtype=rsID&idvalue=%s\" TARGET=_blank>LS-SNP Protein Function</A>\n", snp.name);
-    printf("<BR><A HREF=\"http://alto.compbio.ucsf.edu/LS-SNP-cgi/SNP_query.pl?");
-    printf("PropertySelect=Protein_structure&idtype=rsID&idvalue=%s\" TARGET=_blank>LS-SNP Protein Structure</A>\n", snp.name);
-    printf("<BR><a href=\"#LSSNP\" >LS-SNP description</A></P>\n");
+    printf("<BR><BR><a href=\"#LSSNP\">LS-SNP description</A> &nbsp;--&nbsp;\n");
+    printf("<A HREF=\"http://alto.compbio.ucsf.edu/LS-SNP-cgi/SNP_query.pl?");
+    printf("RequestType=QueryById&PropertySelect=Functional&idtype=rsID&idvalue=");
+    printf("%s\" TARGET=_blank>Protein Function</A>&nbsp;&nbsp;\n", snp.name);
+    printf("<A HREF=\"http://alto.compbio.ucsf.edu/LS-SNP-cgi/SNP_query.pl?");
+    printf("RequestType=QueryById&PropertySelect=Protein_structure&idtype=rsID&idvalue=");
+    printf("%s\" TARGET=_blank>Protein Structure</A><BR>\n", snp.name);
     }
-*/
 printf("<P>\n");
 }
 
