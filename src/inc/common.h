@@ -500,6 +500,9 @@ void stripString(char *s, char *strip);
 int countChars(char *s, char c);
 /* Return number of characters c in string s. */
 
+int countCharsN(char *s, char c, int size);
+/* Return number of characters c in string s of given size. */
+
 int countLeadingChars(char *s, char c);
 /* Count number of characters c at start of string. */
 

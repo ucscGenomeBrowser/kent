@@ -7,7 +7,7 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.52 2004/03/03 08:00:25 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.53 2004/03/04 07:58:24 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -850,6 +850,17 @@ char a;
 int count = 0;
 while ((a = *s++) != 0)
     if (a == c)
+        ++count;
+return count;
+}
+
+int countCharsN(char *s, char c, int size)
+/* Return number of characters c in string s of given size. */
+{
+int i;
+int count = 0;
+for (i=0; i<size; ++i)
+    if (s[i] == c)
         ++count;
 return count;
 }
