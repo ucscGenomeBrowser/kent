@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: getRnaPred.c,v 1.10 2004/01/20 05:29:05 markd Exp $";
+static char const rcsid[] = "$Id: getRnaPred.c,v 1.11 2004/01/25 20:20:21 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -132,7 +132,7 @@ psl.tSize =  hChromSize(gp->chrom);
 psl.tStart = gp->txStart;
 psl.tEnd = gp->txEnd;
 
-/* fill in blocks */
+/* fill in blocks in chrom order */
 AllocArray(psl.blockSizes, 3 * gp->exonCount);
 psl.qStarts = psl.blockSizes + gp->exonCount;
 psl.tStarts = psl.qStarts + gp->exonCount;
@@ -154,6 +154,12 @@ for (iExon = 0; iExon < gp->exonCount; iExon++)
     }
 assert(qStart == rnaSize);
 
+if (pslCheck("from genePred", stderr, &psl) > 0)
+    {
+    fprintf(stderr, "psl: ");
+    pslTabOut(&psl, stderr);
+    errAbort("invalid psl created");
+    }
 pslTabOut(&psl, pslFh);
 freeMem(psl.blockSizes);
 }
