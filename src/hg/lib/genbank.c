@@ -97,17 +97,21 @@ boolean genbankParseCds(char *cdsStr, unsigned *cdsStart, unsigned *cdsEnd)
 /* Parse a genbank CDS, returning TRUE if it can be successfuly parsed,
  * FALSE if there are problems.  If a join() is specified, the first and last
  * coordinates are used for the CDS.  Incomplete CDS specifications will still
- * return the start or end.
+ * return the start or end.  cdsStart and cdsEnd are set to -1 on error.
  */
 {
+boolean isOk;
 char *cdsBuf = alloca(strlen(cdsStr)+1);
 strcpy(cdsBuf, cdsStr); /* copy that can be modified */
 
 if (startsWith(JOIN_PREFIX, cdsBuf))
-    return parseJoin(cdsBuf, cdsStart, cdsEnd);
+    isOk = parseJoin(cdsBuf, cdsStart, cdsEnd);
 else if (startsWith(COMPLEMENT_PREFIX, cdsBuf))
-    return parseComplement(cdsBuf, cdsStart, cdsEnd);
+    isOk = parseComplement(cdsBuf, cdsStart, cdsEnd);
 else
-    return parseRange(cdsBuf, cdsStart, cdsEnd);
+    isOk = parseRange(cdsBuf, cdsStart, cdsEnd);
+if (!isOk)
+    *cdsStart = *cdsEnd = -1;
+return isOk;
 }
 

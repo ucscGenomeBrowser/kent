@@ -54,7 +54,7 @@ FILE *hgCreateTabFile(char *tmpDir, char *tableName);
 /* Open a tab file with name corresponding to tableName in tmpDir. */
 
 void hgLoadTabFile(struct sqlConnection *conn, char *tmpDir, char *tableName,
-                   FILE **fh);
+                   FILE **tabFh);
 /* Load tab delimited file corresponding to tableName. close fh if not NULL */
 
 HGID hgGetMaxId(struct sqlConnection *conn, char *tableName);

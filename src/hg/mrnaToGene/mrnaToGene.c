@@ -44,8 +44,6 @@ if (!stat)
     fprintf(stderr, "Warning: invalid CDS for %s: %s\n", psl->qName, cdsStr);
     if (!keepInvalid)
         return NULL;
-    cdsStart = -1;
-    cdsEnd = -1;
     }
 else
     {

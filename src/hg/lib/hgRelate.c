@@ -117,12 +117,12 @@ return mustOpen(path, "w");
 }
 
 void hgLoadTabFile(struct sqlConnection *conn, char *tmpDir, char *tableName,
-                   FILE **fh)
+                   FILE **tabFh)
 /* Load tab delimited file corresponding to tableName. close fh if not NULL */
 {
 char path[PATH_LEN];
 getTabFile(tmpDir, tableName, path);
-carefulClose(fh);
+carefulClose(tabFh);
 sqlLoadTabFile(conn, path, tableName, 0);
 }
 
