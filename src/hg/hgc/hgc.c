@@ -136,7 +136,7 @@
 #include "botDelay.h"
 #include "zdobnovSynt.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.613 2004/04/22 19:42:34 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.614 2004/04/23 06:34:28 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7462,6 +7462,7 @@ else
     org[0] = tolower(org[0]);
     safef(chainTable,sizeof(chainTable), "%sChain", org);
     }
+printf("<B>PseudoGene Confidence:</B> %4.3f \n",pg->posConf);
 printf("<B>PseudoGene Score:</B> %d \n",pg->score);
 printf("<B>Syntenic with mouse:</B> %d %%\n",pg->overlapDiag);
 printf("<B>PolyA tail:</B> %d \n",pg->polyA);
