@@ -16,7 +16,7 @@
 #include "genoFind.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: genoFind.c,v 1.13 2004/02/25 08:52:44 kent Exp $";
+static char const rcsid[] = "$Id: genoFind.c,v 1.14 2004/02/25 19:52:24 kent Exp $";
 
 static int blockSize = 1024;
 static int blockShift = 10;
@@ -668,12 +668,13 @@ for (isRc=0; isRc <= 1; ++isRc)
 
 static void transIndexBothStrands(struct dnaSeq *seq, 
     struct genoFind *transGf[2][3], bits32 offset[2][3],
-    struct gfSeqSource *ss, char *fileName)
+    int sourceIx, char *fileName)
 /* Add unmasked tiles on both strands of sequence to
  * index.  As a side effect this will reverse-complement seq. */
 {
 int isRc, frame;
 struct trans3 *t3;
+struct gfSeqSource *ss;
 for (isRc=0; isRc <= 1; ++isRc)
     {
     if (isRc)
@@ -684,6 +685,7 @@ for (isRc=0; isRc <= 1; ++isRc)
     for (frame = 0; frame < 3; ++frame)
 	{
 	struct genoFind *gf = transGf[isRc][frame];
+	ss = gf->sources + sourceIx;
 	gfAddSeq(gf, t3->trans[frame], offset[isRc][frame]);
 	ss->fileName = cloneString(fileName);
 	ss->start = offset[isRc][frame];
@@ -776,7 +778,7 @@ for (isRc=0; isRc <= 1; ++isRc)
     }
 
 /* Scan through nibs a second time building index. */
-ss = gf->sources;
+sourceCount = 0;
 for (i=0; i<fileCount; ++i)
     {
     fileName = fileNames[i];
@@ -784,9 +786,9 @@ for (i=0; i<fileCount; ++i)
     if (nibIsFile(fileName))
 	{
 	seq = readMaskedNib(fileName, doMask);
-	transIndexBothStrands(seq, transGf, offset, ss, fileName);
-	ss += 1;
+	transIndexBothStrands(seq, transGf, offset, sourceCount, fileName);
 	freeDnaSeq(&seq);
+	sourceCount += 1;
 	}
     else	/* .2bit file */
         {
@@ -797,8 +799,8 @@ for (i=0; i<fileCount; ++i)
 	    char nameBuf[PATH_LEN+256];
 	    safef(nameBuf, sizeof(nameBuf), "%s:%s", fileName, index->name);
 	    seq = readMaskedTwoBit(tbf, index->name, doMask);
-	    transIndexBothStrands(seq, transGf, offset, ss, nameBuf);
-	    ss += 1;
+	    transIndexBothStrands(seq, transGf, offset, sourceCount, nameBuf);
+	    sourceCount += 1;
 	    freeDnaSeq(&seq);
 	    }
 	twoBitClose(&tbf);
