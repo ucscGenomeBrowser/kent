@@ -9879,6 +9879,111 @@ line+ psl/$(root1)_$(root2).psl}
     gunzip ensemblPep.fa.gz
     hgPepPred hg17 ensembl ensemblPep.fa
 
+# UPDATE KNOWN GENES TABLES (DONE 11/22/04 Fan)
+
+# Make sure the protein databases (sp041115 and proteins041115) were built first.
+  
+  hgsql hg17 -e "create database kgHg17B"
+  
+  mkdir -p /cluster/store8/kg/kgHg17B
+  cd /cluster/store6/kgDB/bed
+  ln -s /cluster/store8/kg/kgHg17B kgHg17B
+  cd kgHg17B
+
+    ~/src/hg/protein/KGprocess.sh kgHg17B hg17 041115
+
+# Found gbGetSeqs changed the format of mrna.fa output file 
+# (extra version number).  Updated Kgprocess.sh and manually
+# re-ran the following manually:
+
+    grep "^>" mrna.fa |awk '{print $1}' > mrna.lis
+
+    kgGetPep 041115 > mrnaPep.fa
+
+    hgKgMrna kgH17BTemp mrna.fa mrna.ra tight_mrna.psl ll/loc2ref \
+        mrnaPep.fa ll/mim2loc ${PDB} > kgHg17BKgMrna.out 2> kgHg17BKgMrna.err
+
+# then run Kgprocess.sh again to continue processing.
+
+    ~/src/hg/protein/KGprocess.sh kgHg17B hg17 041115
+
+hgsql hg17 -e "select * from chromInfo" > chromInfo.tab
+getDbTabDef hg17 chromInfo >chromInfo.sql
+hgsql kgHg17B <chromInfo.sql
+hgsql kgHg17B -e 'load data local infile "chromInfo.tab" into table chromInfo ignore 1 lines'
+
+# Build kgProtMap table.  This table is needed by the Proteome Browser and 
+# it should be built before all the KG tables be moved from kgHg17B to hg17.
+
+    ~/src/hg/protein/kgProtMap.sh kgHg17B hg17 041115
+
+# Completed: 7923 of 7923 jobs
+# CPU time in finished jobs:    2502923s   41715.39m   695.26h   28.97d  0.079 y
+# IO & Wait Time:                175358s    2922.63m    48.71h    2.03d  0.006 y
+# Average job time:                 338s       5.63m     0.09h    0.00d
+# Longest job:                     2403s      40.05m     0.67h    0.03d
+# Submission to last job:          7164s     119.40m     1.99h    0.08d
+  
+# The script ran successfully with the last message:
+# Mon Nov 22 17:11:59 PST 2004 DONE =========================
+
+# Create database hg17Kg1 to store the old KG tables, just in case.
+
+  hgsql hg17
+
+  create database hg17Kg1;
+
+  alter table cgapAlias rename as hg17Kg1.cgapAlias;
+  alter table cgapBiocDesc rename as hg17Kg1.cgapBiocDesc;
+  alter table cgapBiocPathway rename as hg17Kg1.cgapBiocPathway;
+  alter table dupSpMrna rename as hg17Kg1.dupSpMrna;
+  alter table keggMapDesc rename as hg17Kg1.keggMapDesc;
+  alter table keggPathway rename as hg17Kg1.keggPathway;
+  alter table kgAlias rename as hg17Kg1.kgAlias;
+  alter table kgProtAlias rename as hg17Kg1.kgProtAlias;
+  alter table kgXref rename as hg17Kg1.kgXref;
+  alter table knownGene rename as hg17Kg1.knownGene;
+  alter table knownGeneLink rename as hg17Kg1.knownGeneLink;
+  alter table knownGeneMrna rename as hg17Kg1.knownGeneMrna;
+  alter table knownGenePep rename as hg17Kg1.knownGenePep;
+  alter table mrnaRefseq rename as hg17Kg1.mrnaRefseq;
+  alter table spMrna rename as hg17Kg1.spMrna;
+  alter table kgProtMap rename as hg17Kg1.kgProtMap;
+
+# After initial inspection of tables in kgHg17B, do the following
+# from mySql prompt:
+
+  alter table kgHg17B.cgapAlias rename as hg17.cgapAlias;
+  alter table kgHg17B.cgapBiocDesc rename as hg17.cgapBiocDesc;
+  alter table kgHg17B.cgapBiocPathway rename as hg17.cgapBiocPathway;
+  alter table kgHg17B.dupSpMrna rename as hg17.dupSpMrna;
+  alter table kgHg17B.keggMapDesc rename as hg17.keggMapDesc;
+  alter table kgHg17B.keggPathway rename as hg17.keggPathway;
+  alter table kgHg17B.kgAlias rename as hg17.kgAlias;
+  alter table kgHg17B.kgProtAlias rename as hg17.kgProtAlias;
+  alter table kgHg17B.kgXref rename as hg17.kgXref;
+  alter table kgHg17B.knownGene rename as hg17.knownGene;
+  alter table kgHg17B.knownGeneLink rename as hg17.knownGeneLink;
+  alter table kgHg17B.knownGeneMrna rename as hg17.knownGeneMrna;
+  alter table kgHg17B.knownGenePep rename as hg17.knownGenePep;
+  alter table kgHg17B.mrnaRefseq rename as hg17.mrnaRefseq;
+  alter table kgHg17B.spMrna rename as hg17.spMrna;
+  alter table kgHg17B.kgProtMap rename as hg17.kgProtMap;
+
+# Old hg17.knownGene has 43,401 entries and the new one has 44,338 entries.
+# Previously:
+  
+    featureBits hg17 knownGene
+#      65728598 bases of 2866216770 (2.293%) in intersection
+# Previously, was:
+#    	 63983072 bases of 2866216770 (2.232%) in intersection
+  
+# Connect to genome-testdb and use hgcentraltest DB.
+# Update the entry in gdbPdb table:
+
+    delete from gdbPdb where genomeDb='hg17';
+    insert into gdbPdb values('hg17', 'proteins041115');
+
 # UPDATE GENE SORTER TABLES (AKA: FAMILY BROWSER) (DONE - 2004-11-29 - Fan)
 #	This should be done after knownGene tables are complete from known gene
 #	process.
