@@ -10,7 +10,6 @@
 
 /* Variables that can be overridden from command line. */
 char *goldName = NULL;
-boolean imreFormat = FALSE;
 
 char *finChroms[] = 
 /* Chromosomes that are finished - no need to assemble these. */
@@ -29,7 +28,10 @@ errAbort(
  "large inserts in inserts file.\n"
  "options:\n"
  "   -goldName=gold.NN - use gold.NN instead of contig.agp\n"
- "   -imre  - cloneMap is Imre TPF/FPC directory format rather than Wash U\n");
+ "   -imre  - cloneMap is Imre TPF/FPC directory format rather than Wash U\n"
+ "   -imreMerge=dir - Merge WashU and TPF maps.  You need to also specify fpcChrom\n"
+ "    -fpcChrom=M,N - List of chromosomes where the WashU map should predominate.\n"
+ );
 }
 
 struct contigInfo 
@@ -221,7 +223,7 @@ writeListType(fileName, ciList, ".agp");
 
 
 void wuLiftSpec(char *mapName, struct hash *insertsHash, 
-	char *ooDir, struct hash *contigHash)
+	char *ooDir, struct hash *contigHash, struct hash *useHash)
 /* This will make ordered.lft and random.lft 'lift specifications' in
  * each chromosome subdir of ooDir based on WashU format clonemap. */
 {
@@ -288,8 +290,10 @@ while (lineFileNext(lf, &line, &lineSize))
 	hashStore(contigHash, ci->name);
     gotSizes |= fillInSizes(ciList, ooDir, shortName);
 
-    outputLifts(ooDir, ciList, chromName, shortName, 
-    	type, shortType, chromInserts);
+    if (sameString(type, "random") || 
+	    useHash == NULL || hashLookup(useHash, shortName))
+	outputLifts(ooDir, ciList, chromName, shortName, 
+	    type, shortType, chromInserts);
     }
 if (!gotSizes)
     warn("All contigs size 0??? Maybe you need to run goldToAgp.");
@@ -348,7 +352,7 @@ return gotSizes;
 }
 
 void imreLiftSpec(char *mapDir, struct hash *insertsHash, char *ooDir,
-	struct hash *contigHash)
+	struct hash *contigHash, struct hash *avoidHash)
 /* This will make ordered.lft and random.lft 'lift specifications' in
  * each chromosome subdir of ooDir based on Imre format clonemap. */
 {
@@ -378,7 +382,8 @@ for (fi1 = fiList1; fi1 != NULL; fi1 = fi1->next)
 	    sprintf(chromName, "chr%s", shortName);
 
 	    /* Call routine to parse file and produce lift. */
-	    if (stringArrayIx(shortName, finChroms, ArraySize(finChroms)) < 0)
+	    if (stringArrayIx(shortName, finChroms, ArraySize(finChroms)) < 0
+	     && (avoidHash == NULL || hashLookup(avoidHash, shortName) == NULL))
 		{
 		gotSizes |= imreLiftOne(fi2->name, chromName, shortName, insertsHash, 
 		    ooDir, contigHash);
@@ -392,6 +397,36 @@ if (!gotSizes)
     warn("All contigs size 0??? Maybe you need to run goldToAgp.");
 }
 
+struct hash *commaListToHash(char *commaList)
+/* Convert a comma separated list to hash. */
+{
+char *dup = cloneString(commaList), *s;
+char *words[128];
+int wordCount, i;
+struct hash *hash = newHash(5);
+
+wordCount = chopCommas(dup, words);
+for (i=0; i<wordCount; ++i)
+    {
+    s = words[i];
+    if (s[0] != 0)
+	hashAdd(hash, s, NULL);
+    }
+freeMem(dup);
+return hash;
+}
+
+void mergeLiftSpec(char *imreDir, char *wuFile, char *fpcChrom, 
+	struct hash *insertsHash, char *ooDir, struct hash *contigHash)
+/* This will make ordered.lft and random.lft 'lift specifications' in
+ * each chromosome subdir of ooDir map in imreDir for most chromosomes,
+ * but in wuFile map for the fpcChrom chromosomes. */
+{
+struct hash *fpcHash = commaListToHash(fpcChrom);
+imreLiftSpec(imreDir, insertsHash, ooDir, contigHash, fpcHash);
+wuLiftSpec(wuFile, insertsHash, ooDir, contigHash, fpcHash);
+}
+
 void ooLiftSpec(char *mapName, char *inserts, char *ooDir)
 /* This will make ordered.lft and random.lft 'lift specifications' in
  * each chromosome subdir of ooDir based on cloneMap. */
@@ -401,10 +436,19 @@ struct hash *insertsHash = newHash(8);
 struct hash *contigHash = newHash(0);
 
 chromInsertList = chromInsertsRead(inserts, insertsHash);
-if (imreFormat)
-    imreLiftSpec(mapName, insertsHash, ooDir, contigHash);
+if (cgiBoolean("imre"))
+    imreLiftSpec(mapName, insertsHash, ooDir, contigHash, NULL);
+else if (cgiVarExists("imreMerge"))
+    {
+    char *imreDir = cgiString("imreMerge");
+    char *wuFile = mapName;
+    char *fpcChrom = cgiOptionalString("fpcChrom");
+    if (fpcChrom == NULL)
+        errAbort("You need to specify fpcChrom with imreDir");
+    mergeLiftSpec(imreDir, wuFile, fpcChrom, insertsHash, ooDir, contigHash);
+    }
 else
-    wuLiftSpec(mapName, insertsHash, ooDir, contigHash);
+    wuLiftSpec(mapName, insertsHash, ooDir, contigHash, NULL);
 
 /* Check that all contigs in insert file are actually used. */
 for (chromInserts = chromInsertList; chromInserts != NULL; chromInserts = chromInserts->next)
@@ -425,6 +469,5 @@ cgiSpoof(&argc, argv);
 if (argc != 4)
     usage();
 goldName = cgiOptionalString("goldName");
-imreFormat = cgiBoolean("imre");
 ooLiftSpec(argv[1], argv[2], argv[3]);
 }
