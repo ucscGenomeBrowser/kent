@@ -13,7 +13,7 @@
 #include "grp.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.4 2004/07/13 09:14:39 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.5 2004/07/13 09:41:45 kent Exp $";
 
 
 void usage()
@@ -433,7 +433,7 @@ hPrintf("<TABLE BORDER=0>\n");
     char *outputType = cartUsualString(cart, hgtaOutputType, outPrimaryTable);
     static char *symbols[] = 
         {outPrimaryTable, outSequence, outSelectedFields, outSchema,
-	 outStats, outBed, outGff, outCustomTrack };
+	 outStats, outBed, outGtf, outCustomTrack };
     static char *labels[] =
         {"primary table", "sequence", "selected fields", "schema",
 	 "statistics", "BED", "GFF", "custom track"};
@@ -550,16 +550,19 @@ hPrintf("%s",
 "   include:\n"
 "   \n"
 "   <UL>\n"
-"      <LI>Fields - each item takes a line with fields separated by\n"
-"      tabs. This is easy to import into spreadsheets and relational\n"
-"      databases as well as being human readable.</LI>\n"
-"      \n"
+"      <LI>Primary Table - the primary table associated with the track\n"
+"      in a tab-separated format suitable for import into spreadsheets\n"
+"      and relational databases.  This format is reasonably human readable \n"
+"      as well.\n"
 "      <LI>Sequence - get DNA or for some tracks protein sequence\n"
 "      associated with track.</LI>\n"
-"      \n"
-"      <LI>Custom Track - this creates a custom track in the browser\n"
-"      based on the results of the query.</LI>\n"
-"      \n"
+"      <LI>Selected Fields - select fields from the various tables associated\n"
+"      with the track.  The result is tab-separated\n"
+"      <LI>Schema - output description of tables associated with track, but\n"
+"      not the actual data in the tables\n"
+"      <LI>Statistics - this calculates summary information such as\n"
+"      number of items and how many bases are coverd by the results of\n"
+"      a query.</LI>\n"
 "      <LI>BED - saves the positions of all the items in a standard\n"
 "      UCSC Browser format.</LI>\n"
 "      \n"
@@ -567,9 +570,9 @@ hPrintf("%s",
 "      format for gene predictions. (Both BED&nbsp;and&nbsp;GTF can be\n"
 "      used as the basis for custom tracks).</LI>\n"
 "      \n"
-"      <LI>Statistics - this calculates summary information such as\n"
-"      number of items and how many bases are coverd by the results of\n"
-"      a query.</LI>\n"
+"      <LI>Custom Track - this creates a custom track in the browser\n"
+"      based on the results of the query.</LI>\n"
+"      \n"
 "   </UL>\n"
 "   </LI>\n"
 "   \n"
