@@ -6,12 +6,12 @@ longLabel FlyBase Biological Roles
 priority 101
 
 name flyBasePhenotypes
-shortLabel FlyBase Phenotypes
+shortLabel Phenotypes
 longLabel FlyBase Phenotypes of Various Alleles of Gene 
 priority 102
 
 name flyBaseSynonyms
-shortLabel FlyBase Synonyms
+shortLabel Synonyms
 longLabel FlyBase Synonyms for Gene and Its Alleles
 priority 103
 
