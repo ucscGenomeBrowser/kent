@@ -1384,7 +1384,7 @@ return maxWeight;
 int iterateProfile(struct profile *prof, struct profile *rcProf, 
     struct seqList *seqList, int seqElSize,
     struct profile **retProfile, struct profile **retRcProfile, boolean erase,
-    FILE *hitOut, int profileId)
+    FILE *hitOut, int profileId, boolean hitTrombaFormat)
 /* Run a profile over sequence list and return the score.  Possibly update
  * the profile or erase where the profile hits from the sequences. 
  * If hitOut is non-NULL store info on hit there.*/
@@ -1398,6 +1398,7 @@ double maxWeight = 0;
 double mean = 0;
 boolean saveWeight = (retProfile != NULL || erase);
 struct position *posList = NULL, *pos, *newPosList;
+int seqIx = 0;
 
 
 /* Go through sequence list and collect best hit on each sequence. 
@@ -1411,12 +1412,20 @@ for (seqEl = seqList; seqEl != NULL; seqEl = seqEl->next)
         profScore += pos->score; 
 	if (hitOut != NULL && pos->score > 0)
 	    {
-	    fprintf(hitOut, "%d\t%2.3f\t%s\t%d\n", 
-	    	profileId, invSlogScale*pos->score, 
-	    	seqEl->seq->name, pos->pos);
+	    if (hitTrombaFormat)
+		{
+	        fprintf(hitOut, "%d,%d,", seqIx, seqEl->seq->size - pos->pos);
+		mustWrite(hitOut, seqEl->seq->dna + pos->pos, prof->columnCount);
+		fprintf(hitOut, "\n");
+		}
+	    else
+		fprintf(hitOut, "%d\t%2.3f\t%s\t%d\n", 
+		    profileId, invSlogScale*pos->score, 
+		    seqEl->seq->name, pos->pos);
 	    }
         }
     posList = slCat(newPosList, posList);
+    ++seqIx;
     }
 profScore /= seqCount;
 
@@ -1647,7 +1656,7 @@ void maskProfileFromSeqList(struct profile *profile, struct profile *rcProfile, 
 /* Skew the soft mask of the seqList so that things the profile matches will
  * become unlikely to be matched by something else. */
 {
-iterateProfile(profile, rcProfile, seqList, seqElSize, NULL, NULL, TRUE, NULL, 0);
+iterateProfile(profile, rcProfile, seqList, seqElSize, NULL, NULL, TRUE, NULL, 0, FALSE);
 }
 
 struct profile *scanStartProfiles(struct seqList *goodSeq, int scanLimit, boolean considerRc)
@@ -1678,7 +1687,7 @@ for (seqEl = goodSeq; seqEl != NULL; seqEl = seqEl->next)
             if (considerRc)
                 rcProfile =  rcProfileCopy(profile);
 	    profile->score = iterateProfile(profile, rcProfile, goodSeq, 
-	    	goodSeqElSize, NULL, NULL, FALSE, NULL, 0);
+	    	goodSeqElSize, NULL, NULL, FALSE, NULL, 0, FALSE);
 	    freeProfile(&rcProfile);
             slAddHead(&profileList, profile);
 	    if (++progTime >= 50)
@@ -2018,7 +2027,7 @@ for (i=0; i<maxIterations; ++i)
     lastScore = score;
     lastHash = profHash;
     score = iterateProfile(prof, rcProf, goodSeq,  goodSeqElSize, 
-    	&newProf, &rcNewProf, FALSE, NULL, 0);
+    	&newProf, &rcNewProf, FALSE, NULL, 0, FALSE);
     if (prof != initProf)
         freeProfile(&prof);
     freeProfile(&rcProf);
@@ -3014,6 +3023,7 @@ char *motifInName;
 char *seqFileName, *backFileName;
 char *hitFileName = cgiOptionalString("hits");
 FILE *hitFile = NULL;
+boolean hitTrombaFormat = cgiBoolean("hitTrombaFormat");
 int profIx = 0;
 
 if ((motifOutName = cgiOptionalString("motifOutput")) != NULL)
@@ -3092,7 +3102,7 @@ for (prof = profList; prof != NULL; prof = prof->next)
     if (considerRc)
         rcProf = rcProfileCopy(prof);
     prof->score = iterateProfile(prof, rcProf, seqList, seqElSize, 
-    	NULL, NULL, FALSE, hitFile, ++profIx);  
+    	NULL, NULL, FALSE, hitFile, ++profIx, hitTrombaFormat);  
     horizontalLine();
     printProfile(htmlOut, prof);
     if (motifOutFile)
