@@ -116,7 +116,7 @@
 #include "encodeRegionInfo.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.507 2003/10/29 19:03:59 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.508 2003/11/01 00:41:15 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11160,6 +11160,8 @@ void printSageGraphUrl(struct sage *sgList)
 /* print out a url to a cgi script which will graph the results */
 {
 struct sage *sg = NULL;
+if (sgList == NULL)
+    return;
 printf("Please click ");
 printf("<a target=other href=\"../cgi-bin/sageVisCGI?");
 for(sg = sgList; sg != NULL; sg = sg->next)
