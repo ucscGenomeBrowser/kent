@@ -12,6 +12,10 @@
 #include "dnautil.h"
 #endif 
 
+#ifndef HASH_H
+#include "hash.h"
+#endif
+
 /** Options for controlling masking  */
 #define NIB_MASK_MIXED    0x01 /* Read uses case to indicate masking.
                                 * Write sets mask bit for lower-case */
