@@ -127,4 +127,8 @@ struct sqlResult *hChromQuery(struct sqlConnection *conn,
  * that may be split and/or
  * binned. */
 
+int hOffsetPastBin(char *chrom, char *table);
+/* Return offset into a row of table that skips past bin
+ * field if any. */
+
 #endif /* HDB_H */

@@ -490,6 +490,8 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row;
 char *type = (isEst ? "est" : "mrna");
+boolean hasBin;
+char table[64];
 int start = cgiInt("o");
 struct psl *pslList = NULL, *psl;
 
@@ -499,12 +501,15 @@ htmlStart(acc);
 printRnaSpecs(acc);
 
 /* Get alignment info. */
-sprintf(query, "select * from all_%s where qName = '%s'",
-    type, acc);
+sprintf(table, "all_%s", type);
+hFindSplitTable(seqName, table, table, &hasBin);
+
+sprintf(query, "select * from %s where qName = '%s'",
+    table, acc);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    psl = pslLoad(row);
+    psl = pslLoad(row+hasBin);
     slAddHead(&pslList, psl);
     }
 sqlFreeResult(&sr);
@@ -934,6 +939,10 @@ dnaSeq = hDnaFromSeq(seqName, tStart, tEnd, dnaMixed);
 freez(&dnaSeq->name);
 dnaSeq->name = cloneString(psl->tName);
 
+/* Write body heading info. */
+fprintf(body, "<H2>Alignment of %s and %s:%d-%d</H2>\n", psl->qName, psl->tName, psl->tStart, psl->tEnd);
+fprintf(body, "Click on links in the frame to left to navigate through alignment.\n");
+
 /* Convert psl alignment to ffAli. */
 tRcAdjustedStart = tStart;
 if (psl->strand[0] == '-')
@@ -945,9 +954,6 @@ if (psl->strand[0] == '-')
     }
 ffAli = pslToFfAli(psl, rnaSeq, dnaSeq, tRcAdjustedStart);
 
-/* Write body. */
-fprintf(body, "<H2>Alignment of %s and %s:%d-%d</H2>\n", psl->qName, psl->tName, psl->tStart, psl->tEnd);
-fprintf(body, "Click on links in the frame to left to navigate through alignment.\n");
 blockCount = ffShAliPart(body, ffAli, psl->qName, rna, rnaSize, 0, 
 	dnaSeq->name, dnaSeq->dna, dnaSeq->size, tStart, 
 	8, FALSE, isRc, FALSE, TRUE, TRUE, TRUE);
@@ -1004,6 +1010,7 @@ void htcCdnaAli(char *acc)
 /* Show alignment for accession. */
 {
 char query[256];
+char table[64];
 struct sqlConnection *conn;
 struct sqlResult *sr;
 char **row;
@@ -1011,6 +1018,7 @@ struct psl *psl;
 struct dnaSeq *rnaSeq;
 char *type;
 int start;
+boolean hasBin;
 
 /* Print start of HTML. */
 puts("Content-Type:text/html\n");
@@ -1023,12 +1031,13 @@ start = cgiInt("o");
 
 /* Look up alignments in database */
 conn = hAllocConn();
-sprintf(query, "select * from %s_%s where qName = '%s' and tStart=%d",
-    seqName, type, acc, start);
+hFindSplitTable(seqName, type, table, &hasBin);
+sprintf(query, "select * from %s where qName = '%s' and tStart=%d",
+    table, acc, start);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     errAbort("Couldn't find alignment for %s at %d", acc, start);
-psl = pslLoad(row);
+psl = pslLoad(row+hasBin);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 
@@ -1078,12 +1087,7 @@ showSomeAlignment(psl, oSeq, qt);
 char *blatMouseTable()
 /* Return name of blatMouse table. */
 {
-static char buf[64];
-sprintf(buf, "%s_blatMouse", seqName);
-if (hTableExists(buf))
-    return buf;
-else
-    return "blatMouse";
+return "blatMouse";
 }
 
 void htcBlatMouse(char *readName, char *table)
@@ -1100,6 +1104,8 @@ struct sqlResult *sr;
 struct sqlConnection *conn = hAllocConn();
 struct dnaSeq *seq;
 char query[256], **row;
+char fullTable[64];
+boolean hasBin;
 
 /* Print start of HTML. */
 puts("Content-Type:text/html\n");
@@ -1107,12 +1113,13 @@ printf("<HEAD>\n<TITLE>Mouse Read %s</TITLE>\n</HEAD>\n\n", readName);
 puts("<HTML>");
 
 start = cgiInt("o");
+hFindSplitTable(seqName, table, fullTable, &hasBin);
 sprintf(query, "select * from %s where qName = '%s' and tName = '%s' and tStart=%d",
-    table, readName, seqName, start);
+    fullTable, readName, seqName, start);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     errAbort("Couldn't find alignment for %s at %d", readName, start);
-psl = pslLoad(row);
+psl = pslLoad(row+hasBin);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 seq = hExtSeq(readName);
@@ -2304,6 +2311,8 @@ int start = cgiInt("o");
 struct psl *pslList = NULL, *psl;
 struct dnaSeq *seq;
 char *tiNum = strrchr(itemName, '|');
+boolean hasBin;
+char table[64];
 
 /* Print heading info including link to NCBI. */
 if (tiNum == NULL) 
@@ -2354,11 +2363,12 @@ if (sqlTableExists(conn, "mouseTraceInfo"))
 
 /* Get alignment info and print. */
 printf("<H2>Alignments</H2>\n");
-sprintf(query, "select * from %s where qName = '%s'", tableName, itemName);
+hFindSplitTable(seqName, tableName, table, &hasBin);
+sprintf(query, "select * from %s where qName = '%s'", table, itemName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    psl = pslLoad(row);
+    psl = pslLoad(row+hasBin);
     slAddHead(&pslList, psl);
     }
 sqlFreeResult(&sr);

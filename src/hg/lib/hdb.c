@@ -414,6 +414,12 @@ else if (fitFields(hash, "chrom", "txStart", "txEnd", retChrom, retStart, retEnd
 /* Look for repeatMasker names. */
 else if (fitFields(hash, "genoName", "genoStart", "genoEnd", retChrom, retStart, retEnd))
     ;
+else if (startsWith("chr", table) && endsWith(table, "_gl") && hashLookup(hash, "start") && hashLookup(hash, "end"))
+    {
+    strcpy(retChrom, "");
+    strcpy(retStart, "start");
+    strcpy(retEnd, "end");
+    }
 else
     gotIt = FALSE;
 freeHash(&hash);
@@ -452,6 +458,8 @@ struct hTableInfo *hti;
 char fullName[64];
 boolean isSplit = FALSE;
 
+if (chrom == NULL)
+    chrom = "chr22";
 if (hash == NULL)
     hash = newHash(7);
 if ((hti = hashFindVal(hash, rootName)) == NULL)
@@ -496,6 +504,15 @@ else
 return TRUE;
 }
 
+int hOffsetPastBin(char *chrom, char *table)
+/* Return offset into a row of table that skips past bin
+ * field if any. */
+{
+struct hTableInfo *hti = hFindTableInfo(chrom, table);
+if (hti == NULL)
+    return 0;
+return hti->hasBin;
+}
 
 /* Stuff to handle binning - which helps us restrict our
  * attention to the parts of database that contain info
@@ -601,14 +618,14 @@ else
 	else
 	    {
 	    table = fullTable;
-	    dyStringPrintf(query, "%s where %s='%s' and ", 
-	    	table, hti->chromField, chrom);
+	    dyStringPrintf(query, "%s where ", table);
 	    }
 	}
     else
         {
 	table = rootTable;
-	dyStringPrintf(query, "%s where ", table);
+	dyStringPrintf(query, "%s where %s='%s' and ", 
+	    table, hti->chromField, chrom);
 	}
     }
 if (table != NULL)

@@ -1266,26 +1266,16 @@ return lfFromPslx(psl, 1, isXeno);
 struct linkedFeatures *lfFromPslsInRange(char *table, int start, int end, char *chromName, boolean isXeno)
 /* Return linked features from range of table. */
 {
-char query[256];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row;
+int rowOffset;
 struct linkedFeatures *lfList = NULL, *lf;
 
-if (chromName == NULL)
-    {
-    sprintf(query, "select * from %s where tStart<%u and tEnd>%u",
-	table, winEnd, winStart);
-    }
-else
-    {
-    sprintf(query, "select * from %s where tName = '%s' and tStart<%u and tEnd>%u",
-	table, chromName, winEnd, winStart);
-    }
-sr = sqlGetResult(conn, query);
+sr = hRangeQuery(conn, table, chromName, start, end, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    struct psl *psl = pslLoad(row);
+    struct psl *psl = pslLoad(row+rowOffset);
     lf = lfFromPsl(psl, isXeno);
     slAddHead(&lfList, lf);
     pslFree(&psl);
@@ -1299,16 +1289,14 @@ return lfList;
 void loadMrnaAli(struct trackGroup *tg)
 /* Load up rnas from table into trackGroup items. */
 {
-char table[64];
-sprintf(table, "%s_mrna", chromName);
-tg->items = lfFromPslsInRange(table, winStart, winEnd, NULL, FALSE);
+tg->items = lfFromPslsInRange("mrna", winStart, winEnd, chromName, FALSE);
 }
 
 #ifdef FUREY_CODE
 void loadBacEnds(struct trackGroup *tg)
 /* Load up bac ends from table into trackGroup items. */
 {
-tg->items = lfFromPslsInRange("bacEnds", winStart, winEnd, NULL, FALSE);
+tg->items = lfFromPslsInRange("bacEnds", winStart, winEnd, chromName, FALSE);
 }
 #endif /* FUREY_CODE */
 
@@ -1556,9 +1544,7 @@ return tg;
 void loadEstAli(struct trackGroup *tg)
 /* Load up rnas from table into trackGroup items. */
 {
-char table[64];
-sprintf(table, "%s_est", chromName);
-tg->items = lfFromPslsInRange(table, winStart, winEnd, NULL, FALSE);
+tg->items = lfFromPslsInRange("est", winStart, winEnd, chromName, FALSE);
 }
 
 struct trackGroup *estTg()
@@ -1577,9 +1563,7 @@ return tg;
 void loadIntronEstAli(struct trackGroup *tg)
 /* Load up rnas from table into trackGroup items. */
 {
-char table[64];
-sprintf(table, "%s_intronEst", chromName);
-tg->items = lfFromPslsInRange(table, winStart, winEnd, NULL, FALSE);
+tg->items = lfFromPslsInRange("intronEst", winStart, winEnd, chromName, FALSE);
 }
 
 struct trackGroup *intronEstTg()
@@ -1598,9 +1582,7 @@ return tg;
 void loadMusTest1(struct trackGroup *tg)
 /* Load up mouse alignments (psl format) from table. */
 {
-char table[64];
-sprintf(table, "%s_musTest1", chromName);
-tg->items = lfFromPslsInRange(table, winStart, winEnd, NULL, TRUE);
+tg->items = lfFromPslsInRange("musTest1", winStart, winEnd, chromName, TRUE);
 }
 
 struct trackGroup *musTest1Tg()
@@ -1618,9 +1600,7 @@ return tg;
 void loadMusTest2(struct trackGroup *tg)
 /* Load up mouse alignments (psl format) from table. */
 {
-char table[64];
-sprintf(table, "%s_musTest2", chromName);
-tg->items = lfFromPslsInRange(table, winStart, winEnd, NULL, TRUE);
+tg->items = lfFromPslsInRange("musTest2", winStart, winEnd, chromName, TRUE);
 }
 
 struct trackGroup *musTest2Tg()
@@ -1638,9 +1618,7 @@ return tg;
 void loadBlatMouse(struct trackGroup *tg)
 /* Load up mouse alignments (psl format) from table. */
 {
-char table[64];
-sprintf(table, "%s_blatMouse", chromName);
-tg->items = lfFromPslsInRange(table, winStart, winEnd, NULL, TRUE);
+tg->items = lfFromPslsInRange("blatMouse", winStart, winEnd, chromName, TRUE);
 }
 
 struct trackGroup *blatMouseTg()
@@ -1664,9 +1642,7 @@ return tg;
 void loadBlatFish(struct trackGroup *tg)
 /* Load up mouse alignments (psl format) from table. */
 {
-char table[64];
-sprintf(table, "%s_blatFish", chromName);
-tg->items = lfFromPslsInRange(table, winStart, winEnd, NULL, TRUE);
+tg->items = lfFromPslsInRange("blatFish", winStart, winEnd, chromName, TRUE);
 }
 
 struct trackGroup *blatFishTg()
@@ -1690,7 +1666,7 @@ return tg;
 void loadMus7of8(struct trackGroup *tg)
 /* Load up mouse alignments (psl format) from table. */
 {
-tg->items = lfFromPslsInRange("mus7of8", winStart, winEnd, NULL, TRUE);
+tg->items = lfFromPslsInRange("mus7of8", winStart, winEnd, chromName, TRUE);
 }
 
 struct trackGroup *mus7of8Tg()
@@ -1713,7 +1689,7 @@ return tg;
 void loadMusPairOf4(struct trackGroup *tg)
 /* Load up mouse alignments (psl format) from table. */
 {
-tg->items = lfFromPslsInRange("musPairOf4", winStart, winEnd, NULL, TRUE);
+tg->items = lfFromPslsInRange("musPairOf4", winStart, winEnd, chromName, TRUE);
 }
 
 struct trackGroup *musPairOf4Tg()
@@ -4482,16 +4458,14 @@ if (glCloneList == NULL)
     struct cloneFragPos *cfa;
     struct clonePos cp;
     char *s;
+    int rowOffset;
 
     /* Load in clone extents from database. */
     glCloneHash = newHash(12);
-    sprintf(query, 
-    	"select * from clonePos where chrom='%s'and chromStart<%u and chromEnd>%u",
-	chromName, winEnd, winStart);
-    sr = sqlGetResult(conn, query);
+    sr = hRangeQuery(conn, "clonePos", chromName, winStart, winEnd, NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
-	clonePosStaticLoad(row, &cp);
+	clonePosStaticLoad(row+rowOffset, &cp);
 	AllocVar(ci);
 	hel = hashAdd(glCloneHash, cp.name, ci);
 	ci->name = hel->name;
@@ -4503,13 +4477,11 @@ if (glCloneList == NULL)
 	}
     sqlFreeResult(&sr);
 
-    /* Load in alignments from database and sort them by clone. */
-    sprintf(query, "select * from %s_gl where start<%u and end>%u",
-	chromName, winEnd, winStart);
-    sr = sqlGetResult(conn, query);
+    /* Load in gl from database and sort them by clone. */
+    sr = hRangeQuery(conn, "gl", chromName, winStart, winEnd, NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
-	gl = glLoad(row);
+	gl = glLoad(row+rowOffset);
 	fragName = gl->frag;
 	strcpy(cloneName, fragName);
 	s = strchr(cloneName, '_');
