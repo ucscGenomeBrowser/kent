@@ -68,6 +68,7 @@ dnaUtilOpen();
 if (withHttpHeader)
     puts("Content-type:text/html\n");
 
+puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
 puts(
     "<HTML>" "\n"
     "<HEAD>" "\n"
