@@ -321,7 +321,9 @@ return field->name;
 int sqlCountColumns(struct sqlResult *sr)
 /* Count the number of columns in result. */
 {
-return mysql_field_count(sr->conn->conn);
+if(sr != 0)
+	return mysql_field_count(sr->conn->conn);
+return 0;
 }
 
 #ifdef SOMETIMES  /* Not available for all MYSQL environments. */

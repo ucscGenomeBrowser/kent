@@ -5,7 +5,9 @@
 #include "cheapcgi.h"
 
 /* the file to read the global configuration info from */
-#define GLOBAL_CONFIG_FILE "/usr/local/apache/cgi-bin/hg.conf"
+#define GLOBAL_CONFIG_PATH "."
+#define GLOBAL_CONFIG_FILE "hg.conf"
+//#define GLOBAL_CONFIG_FILE "/usr/local/apache/cgi-bin/hg.conf"
 /* the file to read the user configuration info from, starting at the user's home */
 #define USER_CONFIG_FILE ".hg.conf"
 /* the line buffer size */
@@ -36,7 +38,7 @@ if(!cgiIsOnWeb() ||	/* not a cgi, read from home director, e.g. ~/.hg.conf */
 	}
 else	/* on the web, read from global config file */
 	{
-	strcpy(filename, GLOBAL_CONFIG_FILE);
+	sprintf(filename, "%s/%s", GLOBAL_CONFIG_PATH, GLOBAL_CONFIG_FILE);
 	}
 
 if((file = fopen(filename, "r")) != 0)
