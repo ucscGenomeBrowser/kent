@@ -79,6 +79,7 @@
 #include "celeraDupPositive.h"
 #include "celeraCoverage.h"
 #include "plasPairs.h"
+#include "sample.h"
 
 #define ROGIC_CODE 1
 #define FUREY_CODE 1
@@ -112,6 +113,13 @@ static void hgcStart(char *title)
 {
 cartHtmlStart(title);
 }
+
+ /*gets range nums. from bin values*/
+ double whichNum( double tmp, double min0, double max0, int n)
+ {
+    return( (max0 - min0)/(double)n * tmp + min0 );
+  }
+
 
 void printEntrezNucleotideUrl(FILE *f, char *accession)
 /* Print URL for Entrez browser on a nucleotide. */
@@ -280,6 +288,21 @@ if (featDna)
     }
 }
 
+
+void samplePrintPos(struct sample *smp, int smpSize)
+/* Print first three fields of a sample 9 type structure in
+ * standard format. */
+{
+    if( smpSize != 9 ) 
+        errAbort( "Invalid sample entry!\n It has %d fields instead of 9\n" );
+
+    printf("<B>Item:</B> %s<BR>\n", smp->name);
+    printf("<B>Score:</B> %d<BR>\n", smp->score);
+    printf("<B>Strand:</B> %s<BR>\n", smp->strand);
+printPos(smp->chrom, smp->chromStart, smp->chromEnd, NULL, TRUE);
+}
+
+
 void bedPrintPos(struct bed *bed, int bedSize)
 /* Print first three fields of a bed type structure in
  * standard format. */
@@ -370,6 +393,66 @@ if (url != NULL && url[0] != 0)
     freeDyString(&eUrl);
     }
 }
+
+void humMusSampleClick(struct sqlConnection *conn, struct trackDb *tdb, 
+	char *item, int start, int smpSize)
+/* Handle click in humMus sample (wiggle) track. */
+{
+char table[64];
+boolean hasBin;
+struct sample *smp;
+char query[512];
+struct sqlResult *sr;
+char **row;
+boolean firstTime = TRUE;
+
+hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
+        table, item, seqName, start);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (firstTime)
+	firstTime = FALSE;
+    else
+	htmlHorizontalLine();
+    smp = sampleLoad(row+hasBin);
+    printf("<B>Item:</B> %s<BR>\n", smp->name);
+    printf("<B>Score:</B> %g<BR>\n", whichNum(smp->score,0.0,3.66958,1000));
+    printf("<B>Strand:</B> %s<BR>\n", smp->strand);
+    printPos(smp->chrom, smp->chromStart, smp->chromEnd, NULL, TRUE);
+    }
+}
+
+
+
+void genericSampleClick(struct sqlConnection *conn, struct trackDb *tdb, 
+	char *item, int start, int smpSize)
+/* Handle click in generic sample (wiggle) track. */
+{
+char table[64];
+boolean hasBin;
+struct sample *smp;
+char query[512];
+struct sqlResult *sr;
+char **row;
+boolean firstTime = TRUE;
+
+hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
+        table, item, seqName, start);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (firstTime)
+	firstTime = FALSE;
+    else
+	htmlHorizontalLine();
+    smp = sampleLoad(row+hasBin);
+    samplePrintPos(smp, smpSize);
+    }
+}
+
 
 void genericBedClick(struct sqlConnection *conn, struct trackDb *tdb, 
 	char *item, int start, int bedSize)
@@ -553,6 +636,36 @@ if (tdb->html != NULL && tdb->html[0] != 0)
     }
 }
 
+void humMusClickHandler(struct trackDb *tdb, char *item )
+/* Put up generic track info. */
+{
+char *dupe, *type, *words[16];
+ char title[256];
+ int num;
+int wordCount;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+
+dupe = cloneString(tdb->type);
+genericHeader(tdb, item);
+wordCount = chopLine(dupe, words);
+if (wordCount > 0)
+    {
+    type = words[0];
+
+	num = 0;
+	if (wordCount > 1)
+	    num = atoi(words[1]);
+	if (num < 3) num = 3;
+        humMusSampleClick(conn, tdb, item, start, num);
+    }
+printTrackHtml(tdb);
+freez(&dupe);
+hFreeConn(&conn);
+}
+
+
+
 void genericClickHandler(struct trackDb *tdb, char *item, char *itemForUrl)
 /* Put up generic track info. */
 {
@@ -578,6 +691,14 @@ if (wordCount > 0)
 	    num = atoi(words[1]);
 	if (num < 3) num = 3;
         genericBedClick(conn, tdb, item, start, num);
+	}
+    else if (sameString(type, "sample"))
+	{
+	int num = 0;
+	if (wordCount > 1)
+	    num = atoi(words[1]);
+	if (num < 3) num = 3;
+        genericSampleClick(conn, tdb, item, start, num);
 	}
     else if (sameString(type, "genePred"))
         {
@@ -7311,6 +7432,10 @@ else if (sameWord(track, "triangle") || sameWord(track, "triangleSelf") || sameW
     {
     doTriangle(tdb, item);
     }
+else if( sameWord( track, "humMusL" ))
+        {
+        humMusClickHandler( tdb, item );
+        }
 else if (tdb != NULL)
    {
    genericClickHandler(tdb, item, NULL);
