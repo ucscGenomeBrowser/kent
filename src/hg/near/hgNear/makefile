@@ -7,7 +7,7 @@ A = hgNear
 
 O = $A.o advFilter.o association.o configure.o \
 	examples.o expRatio.o getSeq.o \
-	go.o gifLabel.o knownGene.o order.o pfam.o search.o userSettings.o
+	go.o knownGene.o order.o pfam.o search.o userSettings.o
 
 include ../../../inc/cgi_build_rules.mk
 

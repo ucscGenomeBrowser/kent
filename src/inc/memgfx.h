@@ -181,4 +181,7 @@ void mgFillUnder(struct memGfx *mg, int x1, int y1, int x2, int y2,
  * vertical lines from the bottom to y1 on the left and bottom to
  * y2 on the right. */
 
+struct memGfx *mgRotate90(struct memGfx *in);
+/* Create a copy of input that is rotated 90 degrees clockwise. */
+
 #endif /* MEMGFX_H */

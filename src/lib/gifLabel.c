@@ -1,11 +1,10 @@
 /* gifLabel - create labels as GIF files. */
 
 #include "common.h"
-#include "linefile.h"
 #include "memgfx.h"
-#include "hgNear.h"
+#include "gifLabel.h"
 
-static char const rcsid[] = "$Id: gifLabel.c,v 1.2 2003/09/10 04:46:44 kent Exp $";
+static char const rcsid[] = "$Id: gifLabel.c,v 1.1 2003/10/13 19:27:48 kent Exp $";
 
 int gifLabelMaxWidth(char **labels, int labelCount)
 /* Return maximum pixel width of labels.  It's ok to have
@@ -54,34 +53,10 @@ for (i=labelCount-1; i >= 0; --i)
 return mg;
 }
 
-struct memGfx *mgRotate90(struct memGfx *in)
-/* Create a copy of input that is rotated 90 degrees clockwise. */
-{
-int iWidth = in->width, iHeight = in->height;
-struct memGfx *out = mgNew(iHeight, iWidth);
-Color *inCol, *outRow, *outRowStart;
-int i,j;
-
-memcpy(out->colorMap, in->colorMap, sizeof(out->colorMap));
-outRowStart = out->pixels;
-for (i=0; i<iWidth; ++i)
-    {
-    inCol = in->pixels + i;
-    outRow = outRowStart;
-    outRowStart += _mgBpr(out);
-    j = iHeight;
-    while (--j >= 0)
-        {
-	outRow[j] = *inCol;
-	inCol += _mgBpr(in);
-	}
-    }
-return out;
-}
-
 void gifLabelVerticalText(char *fileName, char **labels, int labelCount, 
 	int height)
-/* Make a gif file with given labels. */
+/* Make a gif file with given labels.  This will check to see if fileName
+ * exists already, and if so do nothing. */
 {
 if (!fileExists(fileName))
     {

@@ -8,7 +8,7 @@ O = aliType.o axt.o bits.o binRange.o \
     dnaseq.o dnautil.o dystring.o emblParse.o errabort.o \
     fa.o ffAli.o ffScore.o fixColor.o flydna.o fof.o \
     fuzzyShow.o gdf.o gemfont.o gfNet.o gff.o \
-    gifcomp.o gifdecomp.o gifread.o gifwrite.o hash.o \
+    gifcomp.o gifdecomp.o gifLabel.o gifread.o gifwrite.o hash.o \
     hmmstats.o htmshell.o hugefnt.o internet.o intExp.o jointalign.o\
     keys.o kxTok.o largefnt.o linefile.o localmem.o \
     maf.o mafFromAxt.o mafScore.o md5.o medfnt.o \
