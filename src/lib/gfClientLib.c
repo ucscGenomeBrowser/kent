@@ -1088,7 +1088,7 @@ struct trans3 *qTrans = trans3New(qSeq), *t3;
 struct slRef *t3RefList = NULL, *t3Ref;
 struct hash *t3Hash = NULL;
 struct dnaSeq *tSeqList = NULL;
-enum ffStringency stringency = (isRna ? ffCdna : ffTight);
+enum ffStringency stringency = (isRna ? ffCdna : ffLoose);
 
 /* Query server for clumps. */
 gfQuerySeqTransTrans(conn, qSeq, clumps, lm, &ssList, &tileSize);
@@ -1192,7 +1192,7 @@ bioSeq *targetSeq;
 struct ssBundle *bun, *bunList = NULL;
 int hitCount;
 struct lm *lm = lmInit(0);
-enum ffStringency stringency = (isRna ? ffCdna : ffTight);
+enum ffStringency stringency = (isRna ? ffCdna : ffLoose);
 
 gfTransTransFindClumps(gfs, qTrans->trans, clumps, lm, &hitCount);
 for (qFrame = 0; qFrame<3; ++qFrame)
@@ -1557,7 +1557,7 @@ void gfLongTransTransInMem(struct dnaSeq *query, struct genoFind *gfs[3],
 /* Chop up query into pieces, align each in translated space, and stitch back
  * together again as nucleotides. */
 {
-enum ffStringency stringency = (qIsRna ? ffCdna : ffTight);
+enum ffStringency stringency = (qIsRna ? ffCdna : ffLoose);
 int hitCount;
 int maxSize = 1500;
 int preferredSize = 1200;	/* PreferredSize - overlapSize might need to be multiple of 3. */

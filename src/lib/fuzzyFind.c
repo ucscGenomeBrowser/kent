@@ -262,8 +262,6 @@ for (i=0; i<size; ++i)
     }
 return score;
 }
-#ifdef OLD   /* This got renamed to dnaScoreMatch and moved to dnaUtils. */
-#endif /* OLD */
 
 int ffCalcCdnaGapPenalty(int hGap, int nGap)
 /* Return gap penalty for given h and n gaps. */
