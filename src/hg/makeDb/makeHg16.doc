@@ -1999,11 +1999,16 @@ mv ucsc100k.bed ucsc100k.bed.Mm3
 ./joinsmallgaps.pl
 # fillgap.pl creates genomeBestFinal
 ./fillgap.pl -db=hg16 -table=blastzBestRn3
-XXXX
 # synteny2bed.pl creates ucsc100k.bed
 ./synteny2bed.pl
 hgLoadBed hg16 syntenyRn3 ucsc100k.bed
 # Loaded 1537 elements
+# save data files from above operation on Rn3
+mv genomeBest1phase genomeBest1phase.Rn3
+mv genomeBest2phase genomeBest2phase.Rn3
+mv genomeBest3phase genomeBest3phase.Rn3
+mv genomeBestFinal genomeBestFinal.Rn3
+mv ucsc100k.bed ucsc100k.bed.Rn3
 
 # NET RAT BLASTZ (WORKING - 2003-08-11 - Hiram)
 
