@@ -15,8 +15,8 @@ struct submission
     unsigned submitTime;	/* Time submitted */
     unsigned startTime;	/* Start time of job */
     unsigned endTime;	/* End time of job */
-    int retVal;	/* Return value of job */
-    unsigned char gotRetVal;	/* True if got return value */
+    int status;	/* wait status of job */
+    unsigned char gotStatus;	/* True if got status */
     unsigned char submitError;	/* An error occurred submitting it */
     unsigned char inQueue;	/* Currently in queuing system */
     unsigned char queueError;	/* In error state in queue */

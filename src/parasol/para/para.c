@@ -639,13 +639,10 @@ if ((hash = *pHash) != NULL)
 }
 
 
-int statusToRetVal(int status)
+boolean isStatusOk(int status)
 /* Convert wait() return status to return value. */
 {
-if (WIFEXITED(status))
-    return WEXITSTATUS(status);
-else 
-    return -666;
+return WIFEXITED(status) && (WEXITSTATUS(status) == 0);
 }
 
 double jrCpuTime(struct jobResult *jr)
@@ -690,12 +687,12 @@ for (job=db->jobList; job != NULL; job = job->next)
 		sub->startTime = jr->startTime;
 		sub->endTime = jr->endTime;
 		sub->cpuTime = jrCpuTime(jr);
-		sub->retVal = statusToRetVal(jr->status);
-		sub->gotRetVal = TRUE;
+		sub->status = jr->status;
+		sub->gotStatus = TRUE;
 		sub->host = cloneString(jr->host);
 		sub->inQueue = FALSE;
 		sub->running = FALSE;
-		if (sub->retVal == 0 && checkOneJob(job, "out", checkHash) == 0)
+		if (isStatusOk(sub->status) && checkOneJob(job, "out", checkHash) == 0)
 		    sub->ranOk = TRUE;
 		else
 		    sub->crashed = TRUE;
@@ -1005,7 +1002,15 @@ else
     time_t startTime = jr->startTime;
     printf("host: %s\n", jr->host);
     printf("start time: %s", ctime(&startTime));
-    printf("return: %d\n", statusToRetVal(jr->status));
+    printf("return: ");
+    if (WIFEXITED(jr->status))
+        printf("%d\n", WEXITSTATUS(jr->status));
+    else if (WIFSIGNALED(jr->status))
+        printf("signal %d\n", WTERMSIG(jr->status));
+    else if (WIFSTOPPED(jr->status))
+        printf("stopped %d\n", WSTOPSIG(jr->status));
+    else 
+        printf("unknow wait status %d", jr->status);
     for (check = job->checkList; check != NULL; check = check->next)
 	doOneCheck(check, hash, stdout);
     printErrFile(sub, jr);
