@@ -349,12 +349,11 @@ else
     int cid;
     int sd;
     struct paraMessage pm;
-    struct rudp *ru = rudpOpen();
+    struct rudp *ru = NULL;
     struct tms tms;
     unsigned long uTime = 0;
     unsigned long sTime = 0;
 
-    ru->maxRetries = 20;
     if (grandChildId >= 0)
 	{
 	signal(SIGTERM, termHandler);
@@ -365,8 +364,10 @@ else
 	uTime = ticksToHundreths*tms.tms_cutime;
 	sTime = ticksToHundreths*tms.tms_cstime;
 	}
+    ru = rudpOpen();
     if (ru != NULL)
 	{
+	ru->maxRetries = 20;
 	pmInit(&pm, localIp, paraNodePort);
 	pmPrintf(&pm, "jobDone %s %s %d %lu %lu", managingHost, 
 	    jobIdString, status, uTime, sTime);
