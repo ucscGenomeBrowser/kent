@@ -362,77 +362,49 @@ struct dbDb *dbList = hGetBlatIndexedDatabases();
 printSomeAssemblyListHtml(db, dbList);
 }
 
-void printOrgAssemblyListHtmlParm(char *db, struct dbDb *dbList, char *dbCgi, char *javascript)
+void printOrgAssemblyListAxtInfo(char *dbCgi, char *javascript)
+/* Find all the organisms/assemblies that are referenced in axtInfo, 
+ * and print the dropdown list. */
 {
-/* Find all the organisms/assemblies and that have
-BLAT servers set up.
-Prints to stdout the HTML to render a dropdown list containing a list of the possible
-orgs/assemblies to choose from.
-
-param curDb - The assembly (the database name) to choose as selected. 
-If NULL, no default selection.
- */
+struct dbDb *dbList = hGetAxtInfoDbs();
 char *assemblyList[128];
 char *values[128];
 int numAssemblies = 0;
 struct dbDb *cur = NULL;
-struct hash *hash = hashNew(7); // 2^^7 entries = 128
+char *db = hGetDb();
 char *organism = hOrganism(db);
-char *assembly = NULL;
+char *assembly = cgiOptionalString(dbCgi);
 
-for (cur = dbList; cur != NULL; cur = cur->next)
+for (cur = dbList; ((cur != NULL) && (numAssemblies < 128)); cur = cur->next)
     {
-    /* If we are looking at a zoo database then show the zoo database list */
-    if ((strstrNoCase(db, "zoo") || strstrNoCase(organism, "zoo")) &&
-        strstrNoCase(cur->name, "zoo"))
-        {
-        assemblyList[numAssemblies] = cur->description;
-        values[numAssemblies] = cur->name;
-        numAssemblies++;
-        }
-    else if ( !strstrNoCase(cur->organism, "archae") &&
-                !strstrNoCase(cur->name, "zoo") &&
-                !strstrNoCase(cur->description, "Aug. 2001") &&
-                !strstrNoCase(cur->description, "April 2002") &&
-             (cur->active || strstrNoCase(cur->name, db)))
-        {
-        assemblyList[numAssemblies] = cur->description;
-        values[numAssemblies] = cur->name;
-        numAssemblies++;
-        }
-
-    /* Save a pointer to the current assembly */
-    if (strstrNoCase(db, cur->name))
-       {
-       assembly = cur->description;
-       }
+    assemblyList[numAssemblies] = cur->description;
+    values[numAssemblies] = cur->name;
+    numAssemblies++;
     }
 
-if (javascript == NULL)
-    cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, assembly, NULL);
-else
-    cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, assembly, javascript);
-}
-void printAlignmentListHtml(char *db)
-{
-/* Find all the alignments (from axtInfo) that pertain to the selected genome 
-Prints to stdout the HTML to render a dropdown list containing a list of the possible
-alignments to choose from.
+// Have to use the "menu" name, not the value, to mark selected:
+if (assembly != NULL)
+    assembly = hFreezeFromDb(assembly);
 
-param curDb - The alignment (the database name) to choose as selected. 
-If NULL, no default selection.
+cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, assembly,
+		    javascript);
+}
+
+void printAlignmentListHtml(char *db, char *alCgiName)
+{
+/* Find all the alignments (from axtInfo) that pertain to the selected
+ * genome.  Prints to stdout the HTML to render a dropdown list
+ * containing a list of the possible alignments to choose from.
  */
 char *alignmentList[128];
 char *values[128];
-char *dbCgiName = "alignment";
 int numAlignments = 0;
 struct axtInfo *alignList = hGetAxtAlignments(db);
 struct axtInfo *cur = NULL;
-struct hash *hash = hashNew(7); // 2^^7 entries = 128
 char *organism = hOrganism(db);
 char *alignment = NULL;
 
-for (cur = alignList; cur != NULL; cur = cur->next)
+for (cur = alignList; ((cur != NULL) && (numAlignments < 128)); cur = cur->next)
     {
     /* If we are looking at a zoo database then show the zoo database list */
     if ((strstrNoCase(db, "zoo") || strstrNoCase(organism, "zoo")) &&
@@ -457,8 +429,7 @@ for (cur = alignList; cur != NULL; cur = cur->next)
        alignment = cur->alignment;
        }
     }
-
-cgiMakeDropListFull(dbCgiName, alignmentList, values, numAlignments, alignment, NULL);
+cgiMakeDropListFull(alCgiName, alignmentList, values, numAlignments, alignment, NULL);
 }
 
 char *getDbForOrganism(char *organism, struct cart *cart)
