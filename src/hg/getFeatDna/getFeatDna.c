@@ -36,7 +36,7 @@ errAbort(
   "   output.fa is where to put the output in Fasta format\n"
   "options:\n"
   "   -chromStart=NNN   restrict to features that start after NNN\n"
-  "   -chromStart=NNN     restrict to features that end after NNN\n"
+  "   -chromEnd=NNN     restrict to features that end before NNN\n"
   "   '-where=some sql pattern'  restrict to features matching some sql pattern\n"
   "   -breakUp=how break up alignments into pieces.  How is one of\n"
   "                exons - parts that align\n"
