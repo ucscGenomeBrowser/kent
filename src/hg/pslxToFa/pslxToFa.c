@@ -31,9 +31,9 @@ struct psl *psl;
 while ((psl = pslNext(in)) != NULL)
     {
     int ii=0;
-    fprintf(out,"%s\t%c\t%d\t%d\t%d\n>%s\n",psl->qName, psl->strand[1], psl->blockCount,psl->blockSizes[0], psl->tBaseInsert, psl->qSequence[0]);
+    fprintf(out,">%s_%d\t%d\t%d\n%s\n",psl->qName, 0,psl->blockSizes[0]*3, psl->tBaseInsert, psl->qSequence[0]);
     for(ii=1; ii < psl->blockCount; ii++)
-	fprintf(out,">%s\t%d\t%d\t%d\n%s\n",psl->qName, ii,psl->blockSizes[ii], psl->tStarts[ii] - (psl->tStarts[ii -1] + psl->blockSizes[ii-1]), psl->qSequence[ii]);
+	fprintf(out,">%s_%d\t%d\t%d\n%s\n",psl->qName, ii,psl->blockSizes[ii]*3, psl->tStarts[ii] - (psl->tStarts[ii -1] + 3*psl->blockSizes[ii-1]), psl->qSequence[ii]);
     pslFree(&psl);
     }
 }
