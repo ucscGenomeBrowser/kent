@@ -207,7 +207,7 @@ if (argc < 3)
 noBin = (cgiBoolean("nobin") || cgiBoolean("noBin"));
 suffix = cgiOptionalString("table");
 if (suffix == NULL) 
-    strcpy(suffix,"rmsk");
+    suffix = "rmsk";
 tabFileName = cgiOptionalString("tabFile");
 if (tabFileName == NULL) tabFileName = cgiOptionalString("tabfile");
 if (tabFileName != NULL)
