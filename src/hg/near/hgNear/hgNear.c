@@ -14,7 +14,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.37 2003/07/31 06:26:09 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.38 2003/08/02 00:00:38 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	defaultConfName, hideAllConfName, 
@@ -308,10 +308,11 @@ hPrintf("<BR>\n");
 hPrintf("Include if ");
 advSearchAnyAllMenu(col, "logic", TRUE);
 hPrintf("words in search term match.");
-#ifdef MAYBE_SOMEDAY
 hPrintf("<BR>\nMust also match a word in file: ");
-// hPrintf("<INPUT TYPE=FILE NAME=\"%s\" VALUE=\"%s\"><BR>\n", 
-hPrintf("<INPUT TYPE=FILE NAME=\"%s\"><BR>\n", 
+#ifdef MAYBE_SOMEDAY
+oldFileName = "MY FAVORITE";
+hPrintf("<INPUT TYPE=FILE NAME=\"%s\" VALUE=\"%s\"><BR>\n", 
+// hPrintf("<INPUT TYPE=FILE NAME=\"%s\"><BR>\n", 
 	advSearchName(col, "keys"),
 	oldFileName);
 #endif /* MAYBE_SOMEDAY */
@@ -1153,7 +1154,7 @@ groupOn = cartUsualString(cart, groupVarName, "expression");
 if (!gotAdvSearch() && sameString(groupOn, "search"))
     groupOn = "expression";
 
-val = cartUsualString(cart, countVarName, "25");
+val = cartUsualString(cart, countVarName, "50");
 displayCount = atoi(val);
 colList = getColumns(conn);
 if (cartVarExists(cart, confVarName))

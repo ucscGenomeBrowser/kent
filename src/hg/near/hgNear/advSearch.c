@@ -9,11 +9,11 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advSearch.c,v 1.12 2003/07/31 06:26:08 kent Exp $";
+static char const rcsid[] = "$Id: advSearch.c,v 1.13 2003/08/02 00:00:38 kent Exp $";
 
 struct genePos *advancedSearchResults(struct column *colList, 
 	struct sqlConnection *conn)
-/* First get full list. */
+/* Get list of genes that pass all advanced search filters. */
 {
 struct genePos *list = knownPosAll(conn);
 struct column *col;
@@ -234,6 +234,7 @@ else
     hPrintf("#No search limits activated. List contains all genes.\n");
     list = knownPosAll(conn);
     }
+slSort(&list, genePosCmpName);
 for (gp = list; gp != NULL; gp = gp->next)
     hPrintf("%s\n", gp->name);
 hPrintf("</PRE></TT>");
