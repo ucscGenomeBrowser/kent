@@ -19,6 +19,12 @@ errAbort("spliceStats - counts the number of cassette exons from an altGraphX fi
 	 "usage:\n\t"
 	 "spliceStats <altGraphXFile> <minConf=5> <db=hgN> <optional: faFile=fastaFileOut> <optional: estPrior=10.0>\n"
 	 "\t\t<optional: bedFile=bedFileName>\n"
+	 "\n"
+	 "Optional filters:\n"
+	 "<minSize=N size of cassette exon>\n"
+	 "<minFlankingSize=N size of flanking exons>\n"
+	 "<minFlankingNum=N minimum number of transcripts supporting flanking exons\n"
+	 "<mrnaFilter={on|off} trump the minFlankingNum if mrna is one transcript.\n"
 	 "\n\nConfidence note from the function that returns confidence:\n"
 	 "Return the score for this cassette exon. Want to have cassette exons\n"
 	 "that are present in multiple transcripts and that are not present in multiple\n"
@@ -148,7 +154,7 @@ return FALSE;
 
 boolean bedPassFilters(struct bed *bed, struct altGraphX *ag, int cassetteEdge)
 {
-int minNum = cgiUsualInt("minNum", 2);
+int minFlankingNum = cgiUsualInt("minFlankingNum", 2);
 int minFlankingSize = cgiUsualInt("minFlankingSize", 0);
 boolean mrnaFilter = cgiBoolean("mrnaFilter");
 boolean passed = TRUE;
@@ -157,7 +163,7 @@ for(i = 0; i<bed->blockCount; i++)
     {
     if(bed->expIds[i] != cassetteEdge)
 	{
-	passed &= passFilter(bed, i, ag, minNum, minFlankingSize, mrnaFilter);
+	passed &= passFilter(bed, i, ag, minFlankingNum, minFlankingSize, mrnaFilter);
 	}
     }
 return passed;
@@ -202,7 +208,7 @@ for(ag = agList; ag != NULL; ag = ag->next)
 		snprintf(buff, sizeof(buff), "%s.%d", ag->name, counter);
 		bed->name = cloneString(buff);
 		fprintf(log, "%f\n", conf);
-		fprintf(sizes, "%d\n", size);
+		fprintf(sizes, "%d\n%d\n%d\n", bed->blockSizes[0], bed->blockSizes[1], bed->blockSizes[2]);
 		filtersOk = bedPassFilters(bed, ag, i);
 		if(conf >= minConfidence && size >= minSize && filtersOk) 
 		    {
@@ -224,15 +230,13 @@ warn("%d cassettes are mod 3", mod3);
 return cassetteCount;
 }
 
-void printCommandState(char *progName, FILE *out)
+void printCommandState(int argc, char *argv[], FILE *out)
 {
 struct cgiVar *c = NULL, *cList = NULL;
 int i;
 fprintf(out, "#");
-if(progName != NULL)
-    fprintf(out, "%s ", progName);
-else
-    fprintf(out, "noProgName ");
+for(i=0; i<argc; i++)
+    fprintf(out, "%s ", argv[i]);
 cList = cgiVarList();
 for(c = cList; c != NULL; c = c->next)
     {
@@ -271,7 +275,7 @@ warn("Counting cassette exons from %d clusters above confidence: %f", slCount(ag
 if(bedFileName != NULL)
     {
     bedOut = mustOpen(bedFileName, "w");
-    printCommandState(argv[0], bedOut);
+    printCommandState(argc, argv, bedOut);
     fprintf(bedOut, "track name=cass_conf-%4.2f_est-%3.2f description=\"spliceStats minConf=%4.2f estPrior=%3.2f minSize=%d\"\n", 
 	    minConfidence, estPrior, minConfidence, estPrior, minSize);
     }
