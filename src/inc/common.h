@@ -82,7 +82,10 @@ void freeMem(void *pt);
 
 void freez(void *ppt);
 /* Pass address of pointer.  Will free pointer and set it 
- * to NULL. */
+ * to NULL. Typical use:
+ *     s = needMem(1024);
+ *          ...
+ *     freez(&s); */
 
 #define AllocVar(pt) (pt = needMem(sizeof(*pt)))
 /* Shortcut to allocating a single variable on the heap and
@@ -93,7 +96,7 @@ void freez(void *ppt);
 #define AllocA(type) needMem(sizeof(type))
 /* Shortcut to allocating a variable on heap of a specific type. */
 
-#define AllocN(type,count) ((type*)needMem(sizeof(type) * (count)))
+#define AllocN(type,count) ((type*)needLargeZeroedMem(sizeof(type) * (count)))
 /* Shortcut to allocating an array on the heap of a specific type. */
 
 #define ExpandArray(array, oldCount, newCount) \
@@ -150,11 +153,17 @@ int slIxFromElement(void *list, void *el);
 void slSafeAddHead(void *listPt, void *node); 
 /* Add new node to start of list.
  * Usage:
- *    slAddHead(&list, node);
+ *    slSafeAddHead(&list, node);
  * where list and nodes are both pointers to structure
  * that begin with a next pointer. 
  */
 
+/* The macro below is faster.  For some reason under
+ * GNU C the braces below are ignored.  This leads
+ * to problems if slAddHead is a single statement
+ * after an if/for/while.  Either use slSafeAddHead
+ * or enclose the slAddHead line in braces in these
+ * situations. */
 #define slAddHead(listPt, node) \
     { \
     (node)->next = *(listPt); \
@@ -166,7 +175,9 @@ void slAddTail(void *listPt, void *node);
  * Usage:
  *    slAddTail(&list, node);
  * where list and nodes are both pointers to structure
- * that begin with a next pointer. 
+ * that begin with a next pointer. This is sometimes
+ * convenient but relatively slow.  For longer lists
+ * it's better to slAddHead, and slReverse when done. 
  */
 
 void *slPopHead(void *listPt);
@@ -204,7 +215,7 @@ void slUniqify(void *pList, int (*compare )(const void *elem1,  const void *elem
  * pointer to dispose of duplicate element, and can be NULL. */
 
 void slRemoveEl(void *pList, void *el);
-/* Remove element from doubly linked list.  Usage:
+/* Remove element from singly linked list.  Usage:
  *    slRemove(&list, el);  */
 
 void slFreeList(void *listPt);
@@ -254,7 +265,8 @@ void refAddUnique(struct slRef **pRefList, void *val);
 /* Add reference to list if not already on list. */
 
 void gentleFree(void *pt);
-/* check pointer for NULL before freeing. */
+/* check pointer for NULL before freeing. 
+ * (Actually plain old freeMem does that these days.) */
 
 /*******  Some stuff for processing strings. *******/
 
@@ -365,7 +377,7 @@ char *firstWordInLine(char *line);
 
 char *nextWord(char **pLine);
 /* Return next word in *pLine and advance *pLine to next
- * word. */
+ * word. Returns NULL when no more words. */
 
 int stringArrayIx(char *string, char *array[], int arraySize);
 /* Return index of string in array or -1 if not there. */
