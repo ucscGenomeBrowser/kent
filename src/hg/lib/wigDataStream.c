@@ -5,7 +5,7 @@
 #include "memalloc.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.19 2004/08/17 19:48:58 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.20 2004/08/17 22:22:40 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -665,6 +665,8 @@ else if (doDataArray && !(doNoOp || doAscii || doBed || doStats))
 setDbTable(wDS, db, table);
 openWigConn(wDS);
 
+if (doStats && wDS->useDataConstraint)
+    summaryOnly = FALSE;
 if (doDataArray)
     summaryOnly = FALSE;
 if (doAscii)
@@ -724,7 +726,7 @@ while (nextRow(wDS, row, WIGGLE_NUM_COLS))
 	    bedElEnd = 0;
 	    bedElCount = 0;
 	    }
-	if (wDS->currentSpan && (wDS->currentSpan |= wiggle->span))
+	if (wDS->currentSpan && (wDS->currentSpan != wiggle->span))
 	    firstSpanDone = TRUE;
 	if (wDS->currentChrom &&
 		differentString(wDS->currentChrom, wiggle->chrom))
@@ -760,11 +762,10 @@ while (nextRow(wDS, row, WIGGLE_NUM_COLS))
 	slAddHead(&wDS->ascii,wigAscii);
 	}
 
-    verbose(VERBOSE_PER_VALUE_LEVEL,
-	    "#\trow: %llu, start: %u, data range: %g: [%g:%g]\n",
+    verbose(VERBOSE_SQL_ROW_LEVEL,
+"#\trow: %llu, start: %u, data range: %g: [%g:%g], resolution: %g per bin\n",
 	    rowCount, wiggle->chromStart, wiggle->dataRange,
-	    wiggle->lowerLimit, wiggle->lowerLimit+wiggle->dataRange);
-    verbose(VERBOSE_SQL_ROW_LEVEL, "#\tresolution: %g per bin\n",
+	    wiggle->lowerLimit, wiggle->lowerLimit+wiggle->dataRange,
 	    wiggle->dataRange/(double)MAX_WIG_VALUE);
     if (wDS->useDataConstraint)
 	{
@@ -1534,7 +1535,8 @@ else
 carefulClose(&fh);
 }	/*	static void bedOut()	*/
 
-static void statsOut(struct wiggleDataStream *wDS, char *fileName, boolean sort)
+static void statsOut(struct wiggleDataStream *wDS, char *fileName,
+	boolean sort, boolean htmlOut)
 /*	print to fileName the statistics */
 {
 FILE * fh;
@@ -1547,43 +1549,91 @@ if (wDS->stats)
     if (sort)
 	slSort(&wDS->stats, statsDataCmp);
 
-    fprintf (fh, "<TABLE COLS=12 ALIGN=CENTER HSPACE=0><TR><TH COLSPAN=6 ALIGN=CENTER> ");
-    if (wDS->db)
-	fprintf(fh, "Database: %s </TH><TH COLSPAN=6 ALIGN=CENTER> Table: %s </TH></TR></TABLE>\n", wDS->db, wDS->tblName);
-    if (wDS->isFile)
-	fprintf(fh, "from file </TH><TH COLSPAN=6 ALIGN=CENTER> Table: %s </TH></TR></TABLE>\n", wDS->tblName);
+    if (htmlOut)
+	{
+	fprintf (fh, "<TABLE COLS=12 ALIGN=CENTER HSPACE=0><TR><TH COLSPAN=6 ALIGN=CENTER> ");
+	if (wDS->db)
+	    fprintf(fh, "Database: %s </TH><TH COLSPAN=6 ALIGN=CENTER> Table: %s </TH></TR></TABLE>\n", wDS->db, wDS->tblName);
+	if (wDS->isFile)
+	    fprintf(fh, "from file </TH><TH COLSPAN=6 ALIGN=CENTER> Table: %s </TH></TR></TABLE>\n", wDS->tblName);
 
-    fprintf(fh,"<TABLE COLS=12 ALIGN=CENTER HSPACE=0>\n");
-    fprintf(fh,"<TR><TH> Chrom </TH><TH> Data <BR> start </TH>");
-    fprintf(fh,"<TH> Data <BR> end </TH>");
-    fprintf(fh,"<TH> # of Data <BR> values </TH><TH> Data <BR> span </TH>");
-    fprintf(fh,"<TH> Bases <BR> covered </TH><TH> Minimum </TH>");
-    fprintf(fh,"<TH> Maximum </TH><TH> Range </TH><TH> Mean </TH>");
-    fprintf(fh,"<TH> Variance </TH><TH> Standard <BR> deviation </TH></TR>\n");
+	fprintf(fh,"<TABLE COLS=12 ALIGN=CENTER HSPACE=0>\n");
+	fprintf(fh,"<TR><TH> Chrom </TH><TH> Data <BR> start </TH>");
+	fprintf(fh,"<TH> Data <BR> end </TH>");
+	fprintf(fh,"<TH> # of Data <BR> values </TH><TH> Data <BR> span </TH>");
+	fprintf(fh,"<TH> Bases <BR> covered </TH><TH> Minimum </TH>");
+	fprintf(fh,"<TH> Maximum </TH><TH> Range </TH><TH> Mean </TH>");
+	fprintf(fh,"<TH> Variance </TH><TH> Standard <BR> deviation </TH></TR>\n");
+	}
+    else
+	{
+	if (wDS->db)
+	    fprintf(fh, "#\t Database: %s, Table: %s\n", wDS->db, wDS->tblName);
+	if (wDS->isFile)
+	    fprintf(fh, "#\t from file, Table: %s\n", wDS->tblName);
+
+	fprintf(fh,"Chrom\tData\tData");
+	fprintf(fh,"\t# Data\tData");
+	fprintf(fh,"\tBases\tMinimum");
+	fprintf(fh,"\tMaximum\tRange\tMean");
+	fprintf(fh,"\tVariance Standard\n");
+
+	fprintf(fh,"\tstart\tend");
+	fprintf(fh,"\tvalues\tspan");
+	fprintf(fh,"\tcovered\t");
+	fprintf(fh,"\t\t\t");
+	fprintf(fh,"\t\tdeviation\n");
+	}
 
     for (stats = wDS->stats; stats; stats = next )
 	{
-	fprintf(fh,"<TR><TH ALIGN=LEFT> %s </TH>\n", stats->chrom);
-	fprintf(fh,"\t<TD ALIGN=RIGHT> %u </TD>\n", stats->chromStart+1);
-                                        	/* display closed coords */
-	fprintf(fh,"\t<TD ALIGN=RIGHT> %u </TD>\n", stats->chromEnd);
-	fprintf(fh,"\t<TD ALIGN=RIGHT> %u </TD>\n", stats->count);
-	fprintf(fh,"\t<TD ALIGN=RIGHT> %d </TD>\n", stats->span);
-	fprintf(fh,"\t<TD ALIGN=RIGHT> %u </TD>\n", stats->count*stats->span);
-	fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->lowerLimit);
-	fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->lowerLimit+stats->dataRange);
-	fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->dataRange);
-	fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->mean);
-	fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->variance);
-	fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->stddev);
-	fprintf(fh,"<TR>\n");
-
+	if (htmlOut)
+	    {
+	    fprintf(fh,"<TR><TH ALIGN=LEFT> %s </TH>\n", stats->chrom);
+	    fprintf(fh,"\t<TD ALIGN=RIGHT> %u </TD>\n", stats->chromStart+1);
+						    /* display closed coords */
+	    fprintf(fh,"\t<TD ALIGN=RIGHT> %u </TD>\n", stats->chromEnd);
+	    fprintf(fh,"\t<TD ALIGN=RIGHT> %u </TD>\n", stats->count);
+	    fprintf(fh,"\t<TD ALIGN=RIGHT> %d </TD>\n", stats->span);
+	    fprintf(fh,"\t<TD ALIGN=RIGHT> %u </TD>\n", stats->count*stats->span);
+	    fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->lowerLimit);
+	    fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->lowerLimit+stats->dataRange);
+	    fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->dataRange);
+	    fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->mean);
+	    fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->variance);
+	    fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->stddev);
+	    fprintf(fh,"<TR>\n");
+	    }
+	else
+	    {
+	    fprintf(fh,"%s", stats->chrom);
+	    fprintf(fh,"\t%u", stats->chromStart+1);
+						    /* display closed coords */
+	    fprintf(fh,"\t%u", stats->chromEnd);
+	    fprintf(fh,"\t%u", stats->count);
+	    fprintf(fh,"\t%d", stats->span);
+	    fprintf(fh,"\t%u", stats->count*stats->span);
+	    fprintf(fh,"\t%g", stats->lowerLimit);
+	    fprintf(fh,"\t%g", stats->lowerLimit+stats->dataRange);
+	    fprintf(fh,"\t%g", stats->dataRange);
+	    fprintf(fh,"\t%g", stats->mean);
+	    fprintf(fh,"\t%g", stats->variance);
+	    fprintf(fh,"\t%g", stats->stddev);
+	    fprintf(fh,"\n");
+	    }
 	++itemsDisplayed;
 	next = stats->next;
 	}
     if (!itemsDisplayed)
-	fprintf(fh,"<TR><TH ALIGN=CENTER COLSPAN=12> No data found matching this request </TH></TR>");
-    fprintf(fh,"</TABLE>\n");
+	{
+	if (htmlOut)
+	    fprintf(fh,"<TR><TH ALIGN=CENTER COLSPAN=12> No data found matching this request </TH></TR>\n");
+	else
+	    fprintf(fh,"#\tNo data found matching this request\n");
+	}
+
+    if (htmlOut)
+	fprintf(fh,"</TABLE>\n");
     }
 else
     {
