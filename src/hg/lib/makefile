@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = affyAtlas.o affyGenoDetails.o affyOffset.o affyPairs.o agpFrag.o \
     agpGap.o altGraph.o altGraphX.o ancientRref.o axtInfo.o \
-    axtLib.o bactigPos.o bbRepMask.o bdgpGeneInfo.o bed.o \
+    axtLib.o bactigPos.o bbRepMask.o bdgpExprLink.o bdgpGeneInfo.o bed.o \
     blastTab.o blastzNet.o blatServers.o borf.o borkPseudoHom.o \
     cart.o cartDb.o celeraCoverage.o celeraDupPositive.o cgh.o \
     chainDb.o chainLink.o chainNet.o chainNetDbLoad.o chr18deletions.o \
