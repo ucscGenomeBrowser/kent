@@ -11,7 +11,7 @@
 #include "fa.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: fa.c,v 1.22 2003/06/04 16:17:01 kate Exp $";
+static char const rcsid[] = "$Id: fa.c,v 1.23 2003/06/18 16:41:57 sugnet Exp $";
 
 boolean faReadNext(FILE *f, char *defaultName, boolean mustStartWithComment,
                          char **retCommentLine, struct dnaSeq **retSeq) 
@@ -404,7 +404,7 @@ boolean faMixedSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, ch
 {
 char c;
 int bufIx = 0;
-static char name[256];
+static char name[512];
 int nameIx = 0;
 boolean gotSpace = FALSE;
 int lineSize, i;
@@ -427,6 +427,7 @@ if (line[0] == '>')
     if (line == NULL)
         errAbort("Expecting sequence name after '>' line %d of %s", lf->lineIx, lf->fileName);
     strncpy(name, line, sizeof(name));
+    name[sizeof(name)-1] = '\0'; /* Just to make sure name is NULL terminated. */
     }
 else
     {
