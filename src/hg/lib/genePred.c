@@ -10,7 +10,7 @@
 #include "genePred.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.23 2004/01/10 05:36:09 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.24 2004/01/15 18:57:46 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -314,12 +314,13 @@ if (exonCount == 0)
     return NULL;
 if (cdsStart > cdsEnd)
     {
-    cdsStart = group->start;
-    cdsEnd = group->end;
+    /* no cds annotated */
+    cdsStart = 0;
+    cdsEnd = 0;
     }
-/* adjust CDS to include stop codon */
-if (stopCodonStart >= 0)
+else if (stopCodonStart >= 0)
     {
+    /* adjust CDS to include stop codon */
     if (group->strand == '+')
         cdsEnd = stopCodonEnd;
     else
