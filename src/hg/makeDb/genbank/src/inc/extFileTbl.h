@@ -40,8 +40,10 @@ void extFileTblFree(struct extFileTbl **eftPtr);
 /* Free a extFileTbl object */
 
 void extFileTblClean(struct sqlConnection *conn);
-/* remove rows in the file table (and entries in this table) that are not
- * referenced in the seq table.  This is fast. */
+/* Remove rows in the gbExtFile table that are not referenced in the gbSeq
+ * table.  This is fast.  Also remove pep.fa file that are not associated with
+ * any mrna.fa file.  This is a hack that gets around the refseq peptides not
+ * being in gbSeq table. */
 
 #endif
 /*

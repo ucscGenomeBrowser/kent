@@ -157,7 +157,7 @@
 
     <OL>
       <LI> If automated alignment or update has been enabled for the database,
-           disable it by editing the scripts in <CODE>$gbRoot/etc/</CODE>.
+           disable it by editing <CODE>$gbRoot/etc/align.dbs</CODE>.
       <LI> Make sure an automated alignment isn't current running.
       <LI> To triger a realignment, on needs to remove the related files
            for some partation of the data for all updates.  These live
@@ -196,6 +196,7 @@ FIXME:
     ssh hgwbeta
     cd /genbank
     ./bin/gbDbLoadStep  -inclEsts -getDownloadSeqs=1 yourDb
+    document configuration
 -->
 
   </BODY>

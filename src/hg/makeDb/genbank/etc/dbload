@@ -49,7 +49,7 @@ if [ $# != 4 ] ; then
 fi
 
 gbRoot=$1
-databases=$2
+databases="$2"
 timeFile=$3
 workdir=$4
 
@@ -57,7 +57,7 @@ cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
 
 verb=""
-verb="-verbose=1"
+#verb="-verbose=1"
 
 # allow 250mb core dumps
 ulimit -c 256000

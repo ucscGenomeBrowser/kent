@@ -19,7 +19,7 @@
 #include "gbProcessed.h"
 #include "gbStatusTbl.h"
 
-static char const rcsid[] = "$Id: gbBuildState.c,v 1.13 2004/05/15 16:12:27 markd Exp $";
+static char const rcsid[] = "$Id: gbBuildState.c,v 1.13.60.1 2005/04/04 16:59:25 markd Exp $";
 
 static struct dbLoadOptions* gOptions; /* options from cmdline and conf */
 static int gErrorCnt = 0;  /* count of errors during build */
@@ -571,7 +571,7 @@ if (!*maxShrinkageExceeded)
 hashFree(&ssData.seqHash);
 
 /* always print stats */
-fprintf(stderr, "gbLoadRna: %s: delete=%u seqChg=%u metaChg=%u extChg=%u new=%u orphan=%u noChg=%u\n",
+fprintf(stderr, "gbLoadRna: selected %s: delete=%u seqChg=%u metaChg=%u extChg=%u new=%u orphan=%u noChg=%u\n",
         gbSelectDesc(select), statusTbl->numDelete, statusTbl->numSeqChg,
         statusTbl->numMetaChg, statusTbl->numExtChg, statusTbl->numNew,
         statusTbl->numOrphan, statusTbl->numNoChg);

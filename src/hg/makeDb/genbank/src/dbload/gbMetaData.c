@@ -31,7 +31,7 @@
 #include "genbank.h"
 #include "gbSql.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.24.18.1 2005/02/15 17:15:41 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.24.18.2 2005/04/04 16:59:25 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -614,7 +614,14 @@ static void refSeqPepClean(struct sqlConnection *conn)
 char query[1024];
 struct sqlResult* sr;
 char **row;
-struct sqlDeleter* deleter = sqlDeleterNew(gTmpDir, (gbVerbose >= 2));
+struct sqlDeleter* deleter;
+
+/* don't do anything if we don't have the refLink table.  This can
+ * happen if refSeq was enabled after the initial load */
+if (!sqlTableExists(conn, "refLink"))
+    return;
+
+deleter = sqlDeleterNew(gTmpDir, (gbVerbose >= 2));
 
 /* Use a join to get list of acc, which proved reasonable fastly because
 * the the list is small */

@@ -5,7 +5,7 @@
 #include "jksql.h"
 #include "gbFileOps.h"
 
-static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.10.42.1 2005/02/15 17:15:41 markd Exp $";
+static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.10.42.2 2005/04/04 16:59:26 markd Exp $";
 
 /* 
  * Clone detailed status values.
@@ -37,7 +37,7 @@ struct mgcStatusType MGC_NO_DECISION = {
 struct mgcStatusType MGC_FULL_LENGTH = {
     "fullLength", 6, "full length", MGC_STATE_FULL_LENGTH};
 struct mgcStatusType MGC_FULL_LENGTH_SHORT = {
-    "cantSequence", 7, "full length (short isoform)", MGC_STATE_FULL_LENGTH};
+    "fullLengthShort", 7, "full length (short isoform)", MGC_STATE_FULL_LENGTH};
 
 /*** these are error status ***/
 struct mgcStatusType MGC_INCOMPLETE = {
@@ -411,7 +411,7 @@ void mgcStatusTblFullTabOut(struct mgcStatusTbl *mst, FILE *f)
 struct mgcStatus *mgcStatus;
 for (mgcStatus = sortTable(mst); mgcStatus != NULL;
      mgcStatus = mgcStatus->next)
-    if (mgcStatus->status == &MGC_FULL_LENGTH)
+    if (mgcStatus->status->state == MGC_STATE_FULL_LENGTH)
         mgcStatusTabOut(mgcStatus, f);
 }
 

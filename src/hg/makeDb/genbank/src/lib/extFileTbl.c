@@ -5,7 +5,7 @@
 #include "sqlDeleter.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: extFileTbl.c,v 1.2 2003/07/25 18:25:33 markd Exp $";
+static char const rcsid[] = "$Id: extFileTbl.c,v 1.2.112.1 2005/04/04 16:59:26 markd Exp $";
 
 /*
  * Note: this use immediate inserts rather than batch, because the tables
@@ -61,7 +61,7 @@ static void parseRow(struct extFileTbl *eft, char **row)
 {
 HGID id = gbParseUnsigned(NULL, row[0]);
 if (id != 0)
-    addEntry(eft, id, row[1], gbParseFileOff(NULL,row[2]));
+    addEntry(eft, id, row[1], gbParseFileOff(NULL, row[2]));
 }
 
 struct extFileTbl *extFileTblLoad(struct sqlConnection *conn)
@@ -155,24 +155,62 @@ if (sqlTableExists(conn, EXT_FILE_TBL))
 return idList;
 }
 
+static void cleanUnusedEntries(struct sqlConnection *conn,
+                               struct slName* idList)
+/* Remove unreferenced rows */
+{
+struct sqlDeleter* deleter = sqlDeleterNew(NULL, FALSE);
+struct slName* id;
+for (id = idList; id != NULL; id = id->next)
+    sqlDeleterAddAcc(deleter, id->name);
+sqlDeleterDel(deleter, conn, EXT_FILE_TBL, "id");
+sqlDeleterFree(&deleter);
+}
+
+static boolean haveMrnaForPep(struct extFileTbl *extFileTbl,
+                              struct extFile *pepExtFile)
+/* see if there is a mrna.fa file for this pep.fa file */
+{
+char mrnaFaPath[PATH_LEN];
+splitPath(pepExtFile->path, mrnaFaPath, NULL, NULL);
+strcat(mrnaFaPath, "mrna.fa");
+return (hashLookup(extFileTbl->pathHash, mrnaFaPath) != NULL);
+}
+
+static void cleanRefPep(struct sqlConnection *conn)
+/* remove pep.fa file that are not associated with mrna.fa files */
+{
+/* slow way to do it, but this table is small */
+struct extFileTbl *extFileTbl = extFileTblLoad(conn);
+struct hashCookie pepScan = hashFirst(extFileTbl->idHash);
+struct hashEl *pepEl;
+char sql[256];
+
+while ((pepEl = hashNext(&pepScan)) != NULL)
+    {
+    struct extFile *pepExtFile = pepEl->val;
+    if (endsWith(pepExtFile->path, "/pep.fa")
+        && !haveMrnaForPep(extFileTbl, pepExtFile))
+        {
+        safef(sql, sizeof(sql), "delete from gbExtFile where id = %d",
+              pepExtFile->id);
+        sqlUpdate(conn, sql);
+        }
+    }
+}
+
 void extFileTblClean(struct sqlConnection *conn)
-/* remove rows in the file table (and entries in this table) that are not
- * referenced in the seq table.  This is fast. */
+/* Remove rows in the gbExtFile table that are not referenced in the gbSeq
+ * table.  This is fast.  Also remove pep.fa file that are not associated with
+ * any mrna.fa file.  This is a hack that gets around the refseq peptides not
+ * being in gbSeq table. */
 {
 struct slName* idList = getUnusedIds(conn);
 if (idList != NULL)
-    {
-    struct sqlDeleter* deleter = sqlDeleterNew(NULL, FALSE);
-    struct slName* id;
-    
-    for (id = idList; id != NULL; id = id->next)
-        {
-        sqlDeleterAddAcc(deleter, id->name);
-        }
-    sqlDeleterDel(deleter, conn, EXT_FILE_TBL, "id");
-    sqlDeleterFree(&deleter);
-    slFreeList(&idList);
-    }
+    cleanUnusedEntries(conn, idList);
+slFreeList(&idList);
+
+cleanRefPep(conn);
 }
 
 /*

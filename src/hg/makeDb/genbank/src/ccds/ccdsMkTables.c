@@ -10,7 +10,7 @@
 #include "verbose.h"
 #include "ccdsLocationsJoin.h"
 
-static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.2 2005/03/18 07:20:02 markd Exp $";
+static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.2.4.1 2005/04/04 16:59:24 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -107,17 +107,18 @@ void processCcdsInfoRow(char **row, FILE *outFh)
 /* process a row from ccdsInfoSelect */
 {
 struct ccdsInfo ci;
+ZeroVar(&ci);
 safef(ci.ccds, sizeof(ci.ccds), "CCDS%s.%s", row[0], row[1]);
 if (sameString(row[2], "NCBI"))
     {
     /* NCBI has separate version numbers */
-    strcpy(ci.srcDb, "N");
+    ci.srcDb = ccdsInfoNcbi;
     safef(ci.mrnaAcc, sizeof(ci.mrnaAcc), "%s.%s", row[3], row[4]);
     safef(ci.protAcc, sizeof(ci.protAcc), "%s.%s", row[5], row[6]);
     }
 else
     {
-    strcpy(ci.srcDb, "H");
+    ci.srcDb = ccdsInfoHinxton;
     safef(ci.mrnaAcc, sizeof(ci.mrnaAcc), "%s", row[3]);
     safef(ci.protAcc, sizeof(ci.protAcc), "%s", row[5]);
     }

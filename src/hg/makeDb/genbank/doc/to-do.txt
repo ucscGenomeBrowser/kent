@@ -792,8 +792,14 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
   drop old refseq build programs from tree.
 
 - dna based ones: 
-      select * from kgXref where kgID like "NM_%" limit 10;
+      - select * from kgXref where kgID like "NM_%" limit 10;
         NM_000050 -> P00966 swiss Cross-references ->  L00084 is dna
+
+      - others
+       SPRY3:
+          AJ271735 is a DNA, thus it was not included in our current build process.
+          AF041038 seems to cover only part of SPY3_HUMAN.
+
 
         use kgHg17BTemp
             locus2Acc0;
@@ -834,12 +840,5 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 - tmp load files should be removed first or they get write permission
   errors if loaded by a different user.
 
-- Weird cases to look at with new cdna filtering:
-
-  - KG gets both of these; RS just gets a cr22_random, although
-    CCDS places it on chr11.
-    NM_000039 at chr22_random:13497-15365 - (BC005380) apolipoprotein A-I
-    NM_000039 at chr11:116211680-116213334 - (BC005380) apolipoprotein A-I
-    NM_000039 at chr22_random:13976-15367 - (M29068) APOA1 protein (Fragment).
-    NM_000039 at chr11:116211678-116213033 - (M29068) APOA1 protein (Fragment).
-
+- mrna cell column comes from /cell_line, but some have /cell_type,
+  eg AY911673.

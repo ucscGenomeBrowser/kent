@@ -10,7 +10,7 @@
 #include "gbFileOps.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbParse.c,v 1.8.80.1 2005/02/15 17:15:41 markd Exp $";
+static char const rcsid[] = "$Id: gbParse.c,v 1.8.80.2 2005/04/04 16:59:26 markd Exp $";
 
 
 /* Some fields we'll want to use directly. */
@@ -720,7 +720,7 @@ static void refSeqParse()
 /* do special parsing of RefSeq data that was stuck in a comment */
 {
 char *next, *name, *value;
-if (!startsWith("XM_", getCurAcc()))
+if (!(startsWith("XM_", getCurAcc()) || (startsWith("NW_", getCurAcc()))))
     {
     parseRefSeqStatus();
     if (!startsWith("XR_", getCurAcc()))
