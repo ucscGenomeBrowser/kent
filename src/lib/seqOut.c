@@ -11,7 +11,7 @@
 #include "seqOut.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.14 2003/05/06 07:33:44 kate Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.15 2003/05/12 14:41:06 booch Exp $";
 
 struct cfm *cfmNew(int wordLen, int lineLen, 
 	boolean lineNumbers, boolean countDown, FILE *out, int numOff)
@@ -118,11 +118,13 @@ if (cfm != NULL)
     }
 }
 
-int seqOutColorLookup[3] = 
+int seqOutColorLookup[5] = 
     {
     0x000000,
     0x3300FF,
     0x22aaFF,
+    0xFF0033,
+    0xFFaa22,
     };
 
 
