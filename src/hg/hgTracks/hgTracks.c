@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.593 2003/09/11 15:23:41 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.594 2003/09/16 04:31:15 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -2551,7 +2551,16 @@ void loadRefGene(struct track *tg)
 /* Load up RefSeq known genes. */
 {
 enum trackVisibility vis = tg->visibility;
-tg->items = lfFromGenePredInRange("refGene", chromName, winStart, winEnd);
+char *refGene = "refGene";
+char *xenoRefGene = "xenoRefGene";
+struct sqlConnection *conn = hAllocConn();
+
+if (!sqlTableExists(conn, refGene))
+    if (sqlTableExists(conn, xenoRefGene))
+	refGene = xenoRefGene;
+hFreeConn(&conn);
+
+tg->items = lfFromGenePredInRange(refGene, chromName, winStart, winEnd);
 if (vis != tvDense)
     {
     lookupRefNames(tg->items);
@@ -6414,6 +6423,7 @@ registerTrackHandler("clonePos", coverageMethods);
 registerTrackHandler("genieKnown", genieKnownMethods);
 registerTrackHandler("knownGene", knownGeneMethods);
 registerTrackHandler("superfamily", superfamilyMethods);
+registerTrackHandler("xenoRefGene", refGeneMethods);
 registerTrackHandler("refGene", refGeneMethods);
 registerTrackHandler("sanger22", sanger22Methods);
 registerTrackHandler("sanger22pseudo", sanger22Methods);
