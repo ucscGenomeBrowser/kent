@@ -24,7 +24,9 @@ errAbort(
   "       $(file1)  - name without dir of first file\n"
   "       $(file2)  - name without dir of second file\n"
   "       $(num1)   - index of first file in list\n"
-  "       $(num2)   - index of second file in list\n");
+  "       $(num2)   - index of second file in list\n"
+  "The <file list 2> parameter can be 'single' if there is only one\n"
+  "file list.\n");
 }
 
 void writeSubbed(char *string, struct subText *subList, FILE *f)
@@ -49,6 +51,7 @@ struct subText *subList = NULL, *sub;
 char numBuf1[16], numBuf2[16];
 char dir1[256], root1[128], ext1[64], file1[265];
 char dir2[256], root2[128], ext2[64], file2[265];
+boolean twoLists = !sameWord(list2Name, "single");
 
 /* Print up to #LOOP. */
 while (lineFileNext(lfT, &lineT, &lineSize))
@@ -83,15 +86,37 @@ slReverse(&loopList);
 i=1;
 while (lineFileNext(lf1, &path1, &lineSize))
     {
-    struct lineFile *lf2 = lineFileOpen(list2Name, TRUE);
+    struct lineFile *lf2 = NULL;
     path1 = trimSpaces(path1);
-    j=1;
-    while (lineFileNext(lf2, &path2, &lineSize))
-        {
-	path2 = trimSpaces(path2);
+    splitPath(path1, dir1, root1, ext1);
+    sprintf(file1, "%s%s", root1, ext1);
 
-	splitPath(path1, dir1, root1, ext1);
-	sprintf(file1, "%s%s", root1, ext1);
+    j=1;
+    if (twoLists)
+	lf2 = lineFileOpen(list2Name, TRUE);
+    for (;;)
+        {
+	if (twoLists)
+	    {
+	    if (!lineFileNext(lf2, &path2, &lineSize))
+	        break;
+	    path2 = trimSpaces(path2);
+	    splitPath(path2, dir2, root2, ext2);
+	    sprintf(file2, "%s%s", root2, ext2);
+	    sub = subTextNew("$(path2)", path2);
+	    slAddHead(&subList, sub);
+	    sub = subTextNew("$(dir2)", dir2);
+	    slAddHead(&subList, sub);
+	    sub = subTextNew("$(root2)", root2);
+	    slAddHead(&subList, sub);
+	    sub = subTextNew("$(ext2)", ext2);
+	    slAddHead(&subList, sub);
+	    sub = subTextNew("$(file2)", file2);
+	    slAddHead(&subList, sub);
+	    sprintf(numBuf2, "%d", j);
+	    sub = subTextNew("$(num2)", numBuf2);
+	    slAddHead(&subList, sub);
+	    }
 	sub = subTextNew("$(path1)", path1);
 	slAddHead(&subList, sub);
 	sub = subTextNew("$(dir1)", dir1);
@@ -106,26 +131,12 @@ while (lineFileNext(lf1, &path1, &lineSize))
 	sub = subTextNew("$(num1)", numBuf1);
 	slAddHead(&subList, sub);
 
-	splitPath(path2, dir2, root2, ext2);
-	sprintf(file2, "%s%s", root2, ext2);
-	sub = subTextNew("$(path2)", path2);
-	slAddHead(&subList, sub);
-	sub = subTextNew("$(dir2)", dir2);
-	slAddHead(&subList, sub);
-	sub = subTextNew("$(root2)", root2);
-	slAddHead(&subList, sub);
-	sub = subTextNew("$(ext2)", ext2);
-	slAddHead(&subList, sub);
-	sub = subTextNew("$(file2)", file2);
-	slAddHead(&subList, sub);
-	sprintf(numBuf2, "%d", j);
-	sub = subTextNew("$(num2)", numBuf2);
-	slAddHead(&subList, sub);
-
 	for (loopEl = loopList; loopEl != NULL; loopEl = loopEl->next)
 	    writeSubbed(loopEl->name, subList, f);
 	slFreeList(&subList);
 	++j;
+	if (!twoLists)
+	    break;
 	}
     lineFileClose(&lf2);
     ++i;
@@ -133,9 +144,7 @@ while (lineFileNext(lf1, &path1, &lineSize))
 
 /* Write after #ENDLOOP */
 while (lineFileNext(lfT, &lineT, &lineSize))
-    {
     fprintf(f, "%s\n", lineT);
-    }
 }
 
 int main(int argc, char *argv[])
