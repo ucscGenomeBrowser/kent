@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "dystring.h"
 #include "options.h"
-#include "dnaSeq.h"
+#include "dnaseq.h"
 #include "fa.h"
 
 char *exe = "primer3_core";
@@ -31,6 +31,8 @@ errAbort(
 }
 
 static struct optionSpec options[] = {
+   {"minTm", OPTION_DOUBLE},
+   {"maxTm", OPTION_DOUBLE},
    {NULL, 0},
 };
 
@@ -255,8 +257,8 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 exe = optionVal("exe", exe);
-minTm = optionFloat("minTm", minTm);
-maxTm = optionFloat("maxTm", maxTm);
+minTm = optionDouble("minTm", minTm);
+maxTm = optionDouble("maxTm", maxTm);
 regionToPrimer3(argv[1], argv[2]);
 return 0;
 }
