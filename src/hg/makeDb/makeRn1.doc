@@ -1,4 +1,4 @@
-# This file describes how we made the browser database on the Rattus 
+ This file describes how we made the browser database on the Rattus 
 # Norvegicus genome, November 2002 build.
 
 CREATING DATABASE (DONE 11/25/02)
@@ -936,7 +936,7 @@ o - Load best in genome into database as so:
         cd ~/rat/vsOo33/bestRat
         hgLoadPsl rn1 *.psl
 
-PRODUCING CROSS_SPECIES mRNA ALIGMENTS (IN PROGRESS - MATT)
+PRODUCING CROSS_SPECIES mRNA ALIGMENTS (DONE 12/03/02 - MATT)
 
 Here you align vertebrate mRNAs against the masked genome on the
 cluster you set up during the previous step.
@@ -949,16 +949,21 @@ Set up cluster run more or less as so:
       cd ~/rn1/bed
       mkdir xenoMrna
       cd xenoMrna
+      mkdir psl
       ls -1S /scratch/hg/rn1/contigs.1126/* > genome.lst
-      ls -1S /scratch/hg/mrna.132/org/*/mrna.fa > allMrna
-Then edit allMrna removing the Mus.musculus Rattus_norvegicus,  and writing
+      # If it hasn't been done already do:
+      # cp -r /cluster/store2/mrna.132/orgFa /scratch/hg/mrna.132/org
+      find /scratch/hg/mrna.132/org/ -name mrna.fa | xargs ls -lS | awk {'print $5 " " $9'} \
+        | sort -nr | awk {'print $2'} > xenoRna.lst
+This produces a size-sorted file of all organism's mrna.
+Then edit xenoRna.lst removing the Rattus_norvegicus line, and writing
 the first line into 1.org, the second line into 2.org,  and
 so forth.  After the 6th line just leave the rest in 7.org.
 Then
-      ls -1 *.org > rna.lst
+      ls -1 *.org > ratXenoRna.lst
       cp ~/rn1/bed/xenoMrna/gsub .
-      gensub2 genome.lst rna.lst gsub spec
-      para create
+      gensub2 genome.lst ratZenoRna.lst gsub spec
+      para create spec
       para try
       para check
 If all looks well do
@@ -978,13 +983,15 @@ Load into database as so:
        ssh hgwdev
        cd ~/rn1/bed/xenoMrna
        hgLoadPsl rn1 xenoMrna.psl -tNameIx
-Load other RNA into database as so:
-       cd /cluster/store2/mrna.132/topOrg
-Note - need to describe how topOrg was made.  See topOrg/README...
-       foreach i (*/mrna.fa)
-           hgLoadRna add rn1 /cluster/store2/mrna.132/org/$i $i:r.ra -type=$i:r
-           echo done $i
-        end
+
+Make the xenoRna file
+        cd /cluster/store2/mrna.132
+        gunzip -c /cluster/store2/genbank.132/gb{pri,rod,v,mam,inv,bct,htc,pat,phg,pln}* \
+        | gbToFaRa -byOrganism=org mouseXenoRna.fil mouseXenoRna.fa mouseXenoRna.ra mouseXenoRna.ta stdin
+
+
+       hgLoadRna add rn1 /cluster/store2/mrna.132/mouseXenoRna.fa  /cluster/store2/mrna.132/mouseXenoRna.ra
+
 
 
 PRODUCING TETRAODON FISH ALIGNMENTS (TODO)
