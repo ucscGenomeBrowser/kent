@@ -1136,7 +1136,11 @@ if( sameString( tg->mapName, "humMus" ) )
     minRange = 500.0;
     maxRange = 1000.0;
 
-    /*draw horizontal line across track at 2.0 and 5.0*/
+    /*draw horizontal line across track at 0.0, 2.0, and 5.0*/
+    tmp = -whichBin( 0.0, -1.8805, 9.1808, 1000 );
+    y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
+    mgDrawHorizontalLine( mg, y1, lineColor );
+
     tmp = -whichBin( 2.0, -1.8805, 9.1808, 1000 );
     y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
     mgDrawHorizontalLine( mg, y1, lineColor );
