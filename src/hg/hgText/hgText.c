@@ -28,6 +28,123 @@ char *outputType = "fasta";	/* Type of output. */
 
 static int blockIx = 0;	/* Index of block written. */
 
+boolean webHeadAlreadyOutputed = FALSE;
+boolean webInTextMode = FALSE;
+
+void webStartText()
+{
+printf("Content-Type: text/plain\n\n");
+
+webHeadAlreadyOutputed = TRUE;
+webInTextMode = TRUE;
+}
+
+void webStart(char* title)
+{
+/* Preamble. */
+dnaUtilOpen();
+
+puts("Content-type:text/html\n");
+
+puts(
+	"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">" "\n"
+	"<HTML>" "\n"
+	"<HEAD>" "\n"
+	"	<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1\">" "\n"
+	"	<TITLE>"
+);
+
+printf("%s", title);
+
+puts(
+	"</TITLE>" "\n"
+	"	<LINK REL=\"STYLESHEET\" HREF=\"/style/HGStyle.css\">" "\n"
+	"</HEAD>" "\n"
+	"<BODY BGCOLOR=\"FFF9D2\" LINK=\"0000CC\" VLINK=\"#330066\" ALINK=\"#6600FF\">" "\n"
+	"<A NAME=\"TOP\"></A>" "\n"
+	"" "\n"
+	"<TABLE BORDER=0 WIDTH=\"100%\">" "\n"
+	"<TH COLSPAN=2 ALIGN=\"left\">	<IMG SRC=\"/images/title.jpg\"></TH>" "\n"
+	"" "\n"
+	"<!--HOTLINKS BAR----------------------------------------------------------->" "\n"
+	"<TR><TD COLSPAN=2 HEIGHT=40>" "\n"
+	"   <CENTER>" "\n"
+	"	<TABLE BACKGROUND=\"images/hl_mid.jpg\" BGCOLOR=\"253BDE\" WIDTH=100% CELLSPACING=0 CELLPADDING=0 BORDER=0 HEIGHT=\"22\"><TR><TD>" "\n"
+	"		<TABLE WIDTH=431 CELLSPACING=4 CELLPADDING=0 BORDER=0><TR>" "\n"
+	"		<TD WIDTH=1></TD>" "\n"
+	"		<TD WIDTH=75>" "\n"
+	"			<A HREF=\"/index.html\" onMouseOver=\"HOME.src='/images/hl_home.jpg'\" onMouseOut=\"HOME.src='/images/h_home.jpg'\">" "\n"
+	"			<IMG SRC=\"/images/h_home.jpg\" ALIGN=\"absmiddle\" BORDER=\"0\" NAME=\"HOME\" ALT=\"Home\" ></A></TD>" "\n"
+	"		<TD WIDTH=155>" "\n"
+	"			<A HREF=\"/goldenPath/hgTracks.html\" onMouseOver=\"BROWSER.src='/images/hl_browser.jpg'\" onMouseOut=\"BROWSER.src='/images/h_browser.jpg'\">" "\n"
+	"			<IMG SRC=\"/images/h_browser.jpg\" ALIGN=\"absmiddle\" BORDER=\"0\" NAME=\"BROWSER\" ALT=\"&nbsp;&nbsp; Genome Browser\"></A></TD>		" "\n"
+	"		<TD WIDTH=100>" "\n"
+	"			<A HREF=\"/cgi-bin/hgBlat?command=start\" onMouseOver=\"SEARCH.src='/images/hl_blat.jpg'\" onMouseOut=\"SEARCH.src='/images/h_blat.jpg'\">" "\n"
+	"			<IMG SRC=\"/images/h_blat.jpg\" ALIGN=\"absmiddle\" BORDER=\"0\" NAME=\"SEARCH\" ALT=\"&nbsp;&nbsp; BLAT Search\"></A></TD>	" "\n"
+	"		<TD WIDTH=100>" "\n"
+	"			<A HREF=\"/FAQ.html\" onMouseOver=\"GUIDE.src='/images/hl_faq.jpg'\" onMouseOut=\"GUIDE.src='/images/h_faq.jpg'\">" "\n"
+	"			<IMG SRC=\"/images/h_faq.jpg\" ALIGN=\"absmiddle\" BORDER=\"0\" NAME=\"GUIDE\" ALT=\"&nbsp;&nbsp; FAQ\"></A></TD>" "\n"
+	"		</TR></TABLE>" "\n"
+	"	 </TR></TABLE>" "\n"
+	"	 </CENTER>" "\n"
+	"    </TD>" "\n"
+	"</TR>" "\n"
+	"" "\n"
+	"<!--Content Tables------------------------------------------------------->" "\n"
+	"<TR><TD CELLPADDING=10>	" "\n"
+	"	<TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\" BORDERCOLOR=\"888888\" BORDER=1><TR><TD>" "\n"
+	"	<TABLE BGCOLOR=\"ffffff\" BACKGROUND=\"/images/hr.gif\" WIDTH=100%><TR><TD>" "\n"
+	"		<FONT SIZE=\"4\"><b>&nbsp;  "
+);
+
+printf("%s", title);
+
+puts(
+	"</b></FONT>" "\n"
+	"	</TD></TR></TABLE>" "\n"
+	"	<TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\" CELLPADDING=0><TH HEIGHT=10></TH>" "\n"
+	"	<TR><TD WIDTH=10>&nbsp;</TD><TD>" "\n"
+	"" "\n"
+);
+
+webHeadAlreadyOutputed = TRUE;
+
+}
+
+
+void webEnd()
+{
+if(!webInTextMode)
+	puts(
+		"" "\n"
+		"	</TD><TD WIDTH=15></TD></TR></TABLE>" "\n"
+		"	<br></TD></TR></TABLE>" "\n"
+		"	" "\n"
+		"</TD></TR></TABLE>" "\n"
+		"</BODY></HTML>" "\n"
+	);
+}
+
+
+void webAbort(char* format, ...)
+{
+va_list args;
+va_start(args, format);
+
+if(!webHeadAlreadyOutputed)
+	webStart("Error");
+
+if(webInTextMode)
+	printf("\n\n\n          Error: ");
+
+vprintf(format, args);
+
+webEnd();
+
+va_end(args);
+exit(1);
+}
+
 
 static boolean existsAndEqual(char* var, char* value)
 /* returns true is the given CGI var exists and equals value */
@@ -52,7 +169,7 @@ hgp = hgPositionsFind(spec, "", FALSE);
 if (hgp == NULL || hgp->posCount == 0)
     {
     hgPositionsFree(&hgp);
-    errAbort("Sorry, couldn't locate %s in genome database\n", spec);
+    webAbort("Sorry, couldn't locate %s in genome database\n", spec);
     return TRUE;
     }
 if ((pos = hgp->singlePos) != NULL)
@@ -72,6 +189,7 @@ else
 freeDyString(&ui);
 }
 
+
 static boolean allLetters(char* s)
 /* returns true if the string only has letters number and underscores */
 {
@@ -82,6 +200,7 @@ for(i = 0; i < strlen(s); i++)
 
 return TRUE;
 }
+
 
 static void printTables(struct hashEl *hel)
 /* this function is used to iterates over a hash table and prints out
@@ -173,6 +292,9 @@ strcpy(query, "SHOW TABLES");
 sr = sqlGetResult(conn, query);
 while((row = sqlNextRow(sr)) != NULL)
 	{
+	if(strcmp(row[0], "all_est") == 0)
+		continue;
+
 	/* if they are positional, print them */
 	if(hFindChromStartEndFields(row[0], query, query, query))
 		{
@@ -300,8 +422,7 @@ if(strcmp(position, "genome"))
 /* if they haven't choosen a table tell them */
 if(existsAndEqual("table", "Choose table"))
 	{
-	printf("Content-type: text/plain\n\n");
-	printf("\n\nPlease choose a table.");
+	webAbort("Please choose a table");
 	}
 
 /* get the real name of the table */
@@ -309,7 +430,7 @@ parseTableName(table, choosenChromName);
 
 /* make sure that the table name doesn't have anything "weird" in it */
 if(!allLetters(table))
-	errAbort("Malformated table name.");
+	webAbort("Malformated table name.");
 	
 /* get the name of the start and end fields */
 if(hFindChromStartEndFields(table, chromFieldName, startName, endName))
@@ -325,7 +446,7 @@ conn = hAllocConn();
 sr = sqlGetResult(conn, query);
 numberColumns = sqlCountColumns(sr);
 
-printf("Content-Type: text/plain\n\n");
+webStartText();
 
 /* print the columns names */
 printf("#");
@@ -373,6 +494,12 @@ boolean allGenome = FALSE;	/* this flag is true if we are fetching the whole gen
 
 position = cgiOptionalString("position");
 
+/* if they haven't choosen a table tell them */
+if(existsAndEqual("table", "Choose table"))
+	webAbort("Please choose a table.");
+
+webStart("Genome Text Browser");
+
 /* select the database */
 database = cgiOptionalString("db");
 if (database == NULL)
@@ -406,10 +533,6 @@ if(freezeName == NULL)
 	freezeName = "Unknown";
 printf("<H2>UCSC Genome Text Browser on %s Freeze</H2>\n",freezeName);
 
-/* if they haven't choosen a table tell them */
-if(existsAndEqual("table", "Choose table"))
-	errAbort("Please choose a table.");
-
 if(!allGenome)
 	{
 	/* get the real name of the table */
@@ -425,7 +548,7 @@ else	/* if all the genome */
 
 /* make sure that the table name doesn't have anything "weird" in it */
 if(!allLetters(table))
-	errAbort("Malformated table name.");
+	webAbort("Malformated table name.");
 
 /* print the location and a jump button if the table is positional */
 if(hFindChromStartEndFields(table, query, query, query))
@@ -459,6 +582,8 @@ puts("</TD></TR></TABLE>");
 puts("</FORM>");
 puts("</CENTER>");
 sqlDisconnect(&conn);
+
+webEnd();
 }
 
 void getSomeFields()
@@ -502,7 +627,7 @@ parseTableName(table, choosenChromName);
 
 /* make sure that the table name doesn't have anything "weird" in it */
 if(!allLetters(table))
-	errAbort("Malformated table name.");
+	webAbort("Malformated table name.");
 
 strcpy(query, "SELECT");
 
@@ -513,7 +638,7 @@ while(current != 0)
 		{	
 		/* make sure that the field names don't have anything "weird" in them */
 		if(!allLetters(current->name + strlen("field_")))
-			errAbort("Malformated field name.");
+			webAbort("Malformated field name.");
 
 		sprintf(query, "%s %s", query, current->name + strlen("field_"));
 		break; /* only process the first field this way */
@@ -525,8 +650,9 @@ while(current != 0)
 /* if there are no fields sellected, say so */
 if(current == 0)
 	{
-	printf("Content-Type: text/plain\n\n");
-	printf("\n\nNo fields selected.\n");
+	webAbort("No fields selected.");
+	//printf("Content-Type: text/plain\n\n");
+	//printf("\n\nNo fields selected.\n");
 	return;
 	}
 else
@@ -539,7 +665,7 @@ while(current != 0)
 		{	
 		/* make sure that the field names don't have anything "weird" in them */
 		if(!allLetters(current->name + strlen("field_")))
-			errAbort("Malformated field name.");
+			webAbort("Malformated field name.");
 
 		sprintf(query, "%s, %s", query, current->name + strlen("field_"));
 		}
@@ -554,15 +680,14 @@ if(hFindChromStartEndFields(table, chromFieldName, startName, endName))
 	{
 	/* build the rest of the query */
 	sprintf(query, "%s WHERE %s = \"%s\" AND %s >= %d AND %s <= %d",
-			table, chromFieldName, choosenChromName, startName, winStart, endName, winEnd);
+			query, chromFieldName, choosenChromName, startName, winStart, endName, winEnd);
 	}
 	
 conn = hAllocConn();
-//puts(query);
 sr = sqlGetResult(conn, query);
 numberColumns = sqlCountColumns(sr);
 
-printf("Content-Type: text/plain\n\n");
+webStartText();
 //puts(query);
 /* print the field names */
 printf("#");
@@ -615,7 +740,7 @@ while(current != 0)
 		{	
 		/* make sure that the field names don't have anything "weird" in them */
 		if(!allLetters(current->name + strlen("field_")))
-			errAbort("Malformated field name.");
+			webAbort("Malformated field name.");
 
 		sprintf(query, "%s %s", query, current->name + strlen("field_"));
 		break; /* only process the first field this way */
@@ -627,8 +752,9 @@ while(current != 0)
 /* if there are no fields sellected, say so */
 if(current == 0)
 	{
-	printf("Content-Type: text/plain\n\n");
-	printf("\n\nNo fields selected.\n");
+	webAbort("No fields selected.\n");
+	//printf("Content-Type: text/plain\n\n");
+	//printf("\n\nNo fields selected.\n");
 	return;
 	}
 else
@@ -641,7 +767,7 @@ while(current != 0)
 		{	
 		/* make sure that the field names don't have anything "weird" in them */
 		if(!allLetters(current->name + strlen("field_")))
-			errAbort("Malformated field name.");
+			webAbort("Malformated field name.");
 
 		sprintf(query, "%s, %s", query, current->name + strlen("field_"));
 		}
@@ -657,7 +783,7 @@ conn = hAllocConn();
 sr = sqlGetResult(conn, query);
 numberColumns = sqlCountColumns(sr);
 
-printf("Content-Type: text/plain\n\n");
+webStartText();
 //puts(query);
 /* print the field names */
 printf("#");
@@ -752,7 +878,7 @@ while(current != 0)
 		{	
 		/* make sure that the field names don't have anything "weird" in them */
 		if(!allLetters(current->name + strlen("field_")))
-			errAbort("Malformated field name.");
+			webAbort("Malformated field name.");
 
 		sprintf(fields, "%s %s", fields, current->name + strlen("field_"));
 		break; /* only process the first field this way */
@@ -764,8 +890,9 @@ while(current != 0)
 /* if there are no fields sellected, say so */
 if(current == 0)
 	{
-	printf("Content-Type: text/plain\n\n");
-	printf("\n\nNo fields selected.\n");
+	webAbort("No fields selected.");
+	//printf("Content-Type: text/plain\n\n");
+	//printf("\n\nNo fields selected.\n");
 	return;
 	}
 else
@@ -778,7 +905,7 @@ while(current != 0)
 		{	
 		/* make sure that the field names don't have anything "weird" in them */
 		if(!allLetters(current->name + strlen("field_")))
-			errAbort("Malformated field name.");
+			webAbort("Malformated field name.");
 
 		sprintf(fields, "%s, %s", fields, current->name + strlen("field_"));
 		}
@@ -789,7 +916,7 @@ while(current != 0)
 /* build the rest of the query */
 table = strstr(table, "_");
 
-printf("Content-type: text/plain\n\n");
+webStartText();
 
 snprintf(parsedTableName, 256, "chr%d%s", 1, table);
 snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
@@ -868,8 +995,9 @@ table = cgiString("table");
 /* make sure that the table name doesn't have anything "weird" in it */
 if(!allLetters(table))
 	{
-	printf("Content-Type: text/plain\n\n");
-	printf("Malformated table name.");
+	webAbort("Malformated table name.");
+	//printf("Content-Type: text/plain\n\n");
+	//printf("Malformated table name.");
 	return;
 	}
 
@@ -878,7 +1006,7 @@ snprintf(query, 256, "SELECT * FROM %s", table);
 
 conn = hAllocConn();
 
-printf("Content-Type: text/plain\n\n");
+webStartText();
 outputTabData(query, table, conn, TRUE);
 }
 
@@ -904,7 +1032,7 @@ conn = hAllocConn();
 /* build the rest of the query */
 table = strstr(table, "_");
 
-printf("Content-type: text/plain\n\n");
+webStartText();
 
 snprintf(parsedTableName, 256, "chr%d%s", 1, table);
 snprintf(query, 256, "SELECT * FROM %s", parsedTableName);
@@ -960,9 +1088,10 @@ char* table = cgiString("table");
 /* if they haven't choosen a table tell them */
 if(existsAndEqual("table", "Choose table"))
 	{
-	printf("Content-type: text/plain\n\n");
-	printf("\n\nPlease choose a table.");
-	exit(0);
+	webAbort("Please choose a table.");
+	//printf("Content-type: text/plain\n\n");
+	//printf("\n\nPlease choose a table.");
+	exit(1);
 	}
 
 if(strstr(table, "chrN_") == table)
@@ -1002,7 +1131,7 @@ if (sameWord(outputType, "pos"))
 else if (sameWord(outputType, "fasta"))
     faWriteNext(f, faHeader, dna, size);
 else
-    errAbort("Unknown output type %s\n", outputType);
+    webAbort("Unknown output type %s\n", outputType);
 }
 
 
@@ -1047,7 +1176,7 @@ int nibSize;
 s = size = 0;
 
 if (!hFindChromStartEndFields(table, chromField, startField, endField))
-    errAbort("Couldn't find chrom/start/end fields in table %s", table);
+    webAbort("Couldn't find chrom/start/end fields in table");
 
 if (merge >= 0)
     {
@@ -1116,7 +1245,7 @@ if (breakUp)
 	}
     else
         {
-        errAbort("Can only use breakUp parameter with psl or genePred formatted tables");
+        webAbort("Can only use breakUp parameter with psl or genePred formatted tables");
 	}
     }
 else
@@ -1134,7 +1263,7 @@ else
 	e = sqlUnsigned(row[1]);
 	sz = e - s;
 	if (seq != NULL && (sz < 0 || e >= size))
-	    errAbort("Coordinates out of range %d %d (%s size is %d)", s, e, chrom, size);
+	    webAbort("Coordinates out of range %d %d (%s size is %d)", s, e, chrom, size);
 	outputDna(f, chrom, table, s, sz, dna, nibFileName, nibFile, nibSize, '+');
 	}
     }
@@ -1207,7 +1336,7 @@ for (chromEl = chromList; chromEl != NULL; chromEl = chromEl->next)
         {
 	sprintf(chrTable, "%s_%s", chrom, table);
 	if (!hTableExists(table))
-	    errAbort("table %s (and %s) don't exist in %s", table, 
+	    webAbort("table %s (and %s) don't exist in %s", table, 
 	         chrTable, database);
 	}
     if (!toStdout)
@@ -1225,17 +1354,16 @@ void getDNA()
 {
 char* table = cgiString("table");
 char* position = cgiString("position");
-char *choosenChromName;        /* Name of chromosome sequence . */
-int winStart;           /* Start of window in sequence. */
-int winEnd;         /* End of window in sequence. */
+char *choosenChromName;		/* Name of chromosome sequence . */
+int winStart;				/* Start of window in sequence. */
+int winEnd;					/* End of window in sequence. */
 char parsedTableName[256];
 int c;
 
 /* if they haven't choosen a table, tell them */
 if(existsAndEqual("table", "Choose table"))
 	{
-	errAbort("Please choose a table.");
-	exit(0);
+	webAbort("Please choose a table.");
 	}
 	
 /* select the database */
@@ -1258,7 +1386,9 @@ if(strcmp(position, "genome"))
 
 /* make sure that the table name doesn't have anything "weird" in it */
 if(!allLetters(table))
-	errAbort("Malformated table name.");
+	webAbort("Malformated table name.");
+
+webStartText();
 
 if(existsAndEqual("position", "genome"))
 	{
@@ -1308,11 +1438,8 @@ else
 	chromStart = winStart;
 	chromEnd = winEnd;
 	
-	puts("<PRE>");
 	getFeatDna(parsedTableName, choosenChromName, "stdout");
 	}
-
-puts("</PRE>");
 }
 
 
@@ -1327,16 +1454,14 @@ hDefaultConnect();	/* read in the default connection options */
  * of the choose table form, we ask for the table again */
 if(table == NULL || existsAndEqual("phase", "table"))
 	{
-	htmlSetBackground("../images/floret.jpg");
-	htmShell("Genome Text Browser", getTable, NULL);
+	webStart("Genome Text Browser");
+	getTable();
+	webEnd();
 	}
 else
 	{
 	if(table != 0 && existsAndEqual("phase", "Choose fields"))
-		{
-		htmlSetBackground("../images/floret.jpg");
-		htmShell("Genome Text Browser", getChoosenFields, NULL);
-		}
+		getChoosenFields();
 	else if(table != 0 && existsAndEqual("phase", "Get all fields"))
 		{	
 		if(existsAndEqual("position", "genome"))
@@ -1352,10 +1477,7 @@ else
 			getSomeFields();
 		}
 	else if(existsAndEqual("phase", "Get DNA"))
-		{
-		htmlSetBackground("../images/floret.jpg");
-		htmShell("DNA Sequence", getDNA, NULL);;
-		}
+		getDNA();
 	}
 }
 
