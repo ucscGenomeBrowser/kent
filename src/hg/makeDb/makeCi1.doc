@@ -36,6 +36,12 @@ CREATING GRP TABLE FOR TRACK GROUPING
       | hgsql ci1
 
 
+MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR SC1 (TODO)
+    ssh hgwdev
+    echo 'insert into blatServers values("ci1", "blat10", "17780", "1"); \
+          insert into blatServers values("ci1", "blat10", "17781", "0");' \
+      | hgsql -h genome-testdb hgcentraltest
+
 STORING O+O SEQUENCE AND ASSEMBLY INFORMATION
     # Make symbolic links in /gbdb/ci1/nib to the real nibs.
     ssh hgwdev
