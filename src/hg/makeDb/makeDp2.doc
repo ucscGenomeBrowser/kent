@@ -267,12 +267,13 @@ popd
     # with defaultDb values
     echo 'INSERT INTO dbDb \
         (name, description, nibPath, organism, \
-                defaultPos, active, orderKey, genome, scientificName, \
-                htmlPath, hgNearOk) values \
+             defaultPos, active, orderKey, genome, scientificName, \
+             htmlPath, hgNearOk, hgPbOk, sourceName) values \
         ("dp2", "Aug. 2003", "/gbdb/dp2/nib", "D. pseudoobscura", \
-               "Contig1045_Contig3832:27700-45800", 1, 56, "D. pseudoobscura", \
-                "Drosophila pseudoobscura", "/gbdb/dp2/html/description.html", \
-                0);' \
+             "Contig1006_Contig943:3363975-3378814", 1, 56, \
+             "D. pseudoobscura", \
+             "Drosophila pseudoobscura", "/gbdb/dp2/html/description.html", \
+             0, 0, "Baylor HGSC Freeze 1");' \
       | hgsql -h genome-testdb hgcentraltest
     echo 'update defaultDb set name = "dp2" where genome = "D. pseudoobscura"' \
       | hgsql -h genome-testdb hgcentraltest
@@ -540,7 +541,7 @@ axtChain -verbose=0 $1 \
     iSync
 
 
-# AUTO UPDATE GENBANK MRNA RUN  (IN PROGRESS 8/4/04 angie)
+# AUTO UPDATE GENBANK MRNA RUN  (DONE 8/4/04 angie)
     ssh hgwdev
     # Update genbank config and source in CVS:
     cd ~/kent/src/hg/makeDb/genbank
@@ -549,16 +550,17 @@ axtChain -verbose=0 $1 \
     # edits, check them in if necessary:
     diff /cluster/data/genbank/etc/genbank.conf etc/genbank.conf
 
-    # Edit etc/genbank.conf and add these lines:
+    # Edit etc/genbank.conf and add these lines (note scaffold-browser settings):
 # dp2 (D. pseudoobscura)
-dp2.genome = /iscratch/i/dp2/nib/chr*.nib
-dp2.lift = /cluster/data/dp2/jkStuff/liftAll.lft
+dp2.genome = /iscratch/i/dp2/nib/*.nib
+dp2.lift = no
 dp2.refseq.mrna.native.load = no
 dp2.refseq.mrna.xeno.load = yes
 dp2.refseq.mrna.xeno.pslReps = -minCover=0.15 -minAli=0.75 -nearTop=0.005
 dp2.genbank.mrna.xeno.load = yes
 dp2.genbank.est.xeno.load = no
 dp2.downloadDir = dp2
+dp2.perChromTables = no
 
     cvs ci etc/genbank.conf
     # Since D. pseudoobscura is a new species for us, edit src/lib/gbGenome.c.  
@@ -579,12 +581,12 @@ dp2.downloadDir = dp2
     # This is an -initial run, (xeno) RefSeq only:
     nice bin/gbAlignStep -srcDb=refseq -type=mrna -initial dp2 &
     tail -f [its logfile]
-#TODO
     # Load results:
     ssh hgwdev
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad dp2
     featureBits dp2 xenoRefGene
+#14616774 bases of 135845121 (10.760%) in intersection
     # Clean up:
     rm -rf work/initial.dp2
 
@@ -596,20 +598,26 @@ dp2.downloadDir = dp2
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad dp2
     featureBits dp2 mrna
+#SELECT ,,,,,,,,,, FROM mrna WHERE  < 3647374 AND  > 0
+    # oops, try this instead:
+    featureBits dp2 all_mrna
+#17931 bases of 135845121 (0.013%) in intersection
+    # Wow.  that is so paltry, perhaps we shouldn't even bother having a 
+    # mrna track??
     featureBits dp2 xenoMrna
+#15763946 bases of 135845121 (11.604%) in intersection
     # Clean up:
     rm -rf work/initial.dp2
 
-    ssh eieio
-    # -initial for ESTs (now with /cluster/store7 and iservers):
+    # -initial for ESTs
     nice bin/gbAlignStep -srcDb=genbank -type=est -initial dp2 &
     tail -f [its logfile]
     # Load results:
     ssh hgwdev
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 dp2 &
-    featureBits dp2 intronEst
-    featureBits dp2 est
+    # Doh!  wow, surprised that there are really no ESTs:
+#eieio 2004.08.04-19:18:53 dp2.initalign: nothing to align
     # Clean up:
     rm -rf work/initial.dp2
 
@@ -623,7 +631,44 @@ dp2.downloadDir = dp2
     hgGcPercent dp2 ../../nib
 
 
-# MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR CANFAM1 (TODO 8/?/04 angie)
+# MAKE EMPTY GAP TABLE (DONE 8/4/04 angie)
+    # featureBits prints out 759 warnings (1 per scaffold) about there 
+    # being no gap table.  So does netClass.  There's no gap information 
+    # provided with the assembly.  We could make guesses about gaps based 
+    # on runs of N over a certain size but that's potentially misleading.  
+    # For now, make an empty gap table.  
+    hgsql dp2 -e 'create table gap select * from dm1.chr2L_gap where 0'
+    # Made a dp2/trackDb.ra entry with a bogus chromosomes setting to prevent 
+    # the track/track control from appearing in hgTracks.
+
+
+# TWINSCAN (FROM BAYLOR) (DONE 8/4/04 angie)
+    ssk kksilo
+    mkdir /cluster/data/dp2/bed/twinscan
+    cd /cluster/data/dp2/bed/twinscan
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Dpseudoobscura/gene_predictions/freeze01_twinscan.pep.fa
+    wget -r ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Dpseudoobscura/gene_predictions/twinscan
+    cat ftp.hgsc.bcm.tmc.edu/pub/data/Dpseudoobscura/gene_predictions/twinscan/*/*.gff \
+    | sed -e 's/\.fon\.ace_linear//g' > twinscan.gtf
+    # Doh, freeze01_twinscan.pep.fa has names that don't match with the names 
+    # in the GTF.... and the pep names have coords that don't quite jive with 
+    # the coords in the GTF.  Looks like a version difference -- discard.
+    rm freeze01_twinscan.pep.fa
+    ssh hgwdev
+    cd /cluster/data/dp2/bed/twinscan
+    ldHgGene -gtf -genePredExt dp2 twinscan twinscan.gtf
+    featureBits -enrichment dp2 xenoRefGene twinscan
+#xenoRefGene 10.760%, twinscan 15.319%, both 8.474%, cover 78.76%, enrich 5.14x
+    # Compare with genscan:
+    featureBits -enrichment dp2 xenoRefGene genscan
+#xenoRefGene 10.760%, genscan 18.141%, both 9.393%, cover 87.30%, enrich 4.81x
+
+
+#TODO : ask somebody at Baylor about AGP/gap info for the scaffolds, and the 
+#twinscan coord differences.  
+
+
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY (TODO 8/?/04 angie)
     ssh hgwdev
     echo 'insert into blatServers values("dp2", "blat?", "17780", 1, 0); \
           insert into blatServers values("dp2", "blat?", "17781", 0, 1);' \
