@@ -314,6 +314,18 @@ if (s == NULL)
 return s;
 }
 
+char *cartCgiUsualString(struct cart *cart, char *var, char *usual)
+/* Look for var in CGI, then in cart, if not found then return usual. */
+{
+char *val = cgiOptionalString(var);
+if (val != NULL)
+    return(val);
+if (cart != NULL)
+    return cartUsualString(cart, var, usual);
+return(usual);
+}
+
+
 void cartSetString(struct cart *cart, char *var, char *val)
 /* Set string valued cart variable. */
 {
@@ -343,6 +355,17 @@ if (s == NULL)
 return atoi(s);
 }
 
+int cartCgiUsualInt(struct cart *cart, char *var, int usual)
+/* Look for var in CGI, then in cart, if not found then return usual. */
+{
+char *val = cgiOptionalString(var);
+if (val != NULL)
+    return atoi(val);
+if (cart != NULL)
+    return cartUsualInt(cart, var, usual);
+return(usual);
+}
+
 void cartSetInt(struct cart *cart, char *var, int val)
 /* Set integer value. */
 {
@@ -367,6 +390,17 @@ if (s == NULL)
 return atof(s);
 }
 
+double cartCgiUsualDouble(struct cart *cart, char *var, double usual)
+/* Look for var in CGI, then in cart, if not found then return usual. */
+{
+char *val = cgiOptionalString(var);
+if (val != NULL)
+    return atof(val);
+if (cart != NULL)
+    return cartUsualDouble(cart, var, usual);
+return(usual);
+}
+
 void cartSetDouble(struct cart *cart, char *var, double val)
 /* Set double value. */
 {
@@ -385,6 +419,16 @@ boolean cartUsualBoolean(struct cart *cart, char *var, boolean usual)
 /* Return variable value if it exists or usual if not. */
 {
 return cartUsualInt(cart, var, usual);
+}
+
+boolean cartCgiUsualBoolean(struct cart *cart, char *var, boolean usual)
+/* Look for var in CGI, then in cart, if not found then return usual. */
+{
+if (cgiBooleanDefined(var))
+    return cgiBoolean(var);
+if (cart != NULL)
+    return cgiBoolean(var) || cartUsualBoolean(cart, var, usual);
+return(usual);
 }
 
 void cartSetBoolean(struct cart *cart, char *var, boolean val)

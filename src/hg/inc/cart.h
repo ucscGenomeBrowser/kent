@@ -71,6 +71,9 @@ char *cartOptionalString(struct cart *cart, char *var);
 char *cartUsualString(struct cart *cart, char *var, char *usual);
 /* Return variable value if it exists or usual if not. */
 
+char *cartCgiUsualString(struct cart *cart, char *var, char *usual);
+/* Look for var in CGI, then in cart, if not found then return usual. */
+
 void cartSetString(struct cart *cart, char *var, char *val);
 /* Set string valued cart variable. */
 
@@ -83,6 +86,9 @@ int cartIntExp(struct cart *cart, char *var);
 int cartUsualInt(struct cart *cart, char *var, int usual);
 /* Return variable value if it exists or usual if not. */
 
+int cartCgiUsualInt(struct cart *cart, char *var, int usual);
+/* Look for var in CGI, then in cart, if not found then return usual. */
+
 void cartSetInt(struct cart *cart, char *var, int val);
 /* Set integer value. */
 
@@ -92,6 +98,9 @@ double cartDouble(struct cart *cart, char *var);
 double cartUsualDouble(struct cart *cart, char *var, double usual);
 /* Return variable value if it exists or usual if not. */
 
+double cartCgiUsualDouble(struct cart *cart, char *var, double usual);
+/* Look for var in CGI, then in cart, if not found then return usual. */
+
 void cartSetDouble(struct cart *cart, char *var, double val);
 /* Set double value. */
 
@@ -100,6 +109,9 @@ boolean cartBoolean(struct cart *cart, char *var);
 
 boolean cartUsualBoolean(struct cart *cart, char *var, boolean usual);
 /* Return variable value if it exists or usual if not.  */
+
+boolean cartCgiUsualBoolean(struct cart *cart, char *var, boolean usual);
+/* Look for var in CGI, then in cart, if not found then return usual. */
 
 void cartSetBoolean(struct cart *cart, char *var, boolean val);
 /* Set boolean value. */
