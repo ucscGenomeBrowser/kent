@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgSeq.c,v 1.20 2004/03/17 00:43:02 angie Exp $";
+static char const rcsid[] = "$Id: hgSeq.c,v 1.21 2004/03/24 23:34:59 angie Exp $";
 
 /* I don't like using this global, but don't want to do a zillion 
  * hChromSizes in addFeature and don't want to add it as a param of 
@@ -306,9 +306,21 @@ seqStart = rStarts[0]             - (isRc ? padding3 : padding5);
 seqEnd   = rStarts[i] + rSizes[i] + (isRc ? padding5 : padding3);
 /* Padding might push us off the edge of the chrom; if so, truncate: */
 if (seqStart < 0)
+    {
+    if (isRc)
+	padding3 += seqStart;
+    else
+	padding5 += seqStart;
     seqStart = 0;
+    }
 if (seqEnd > chromSize)
+    {
+    if (isRc)
+	padding5 += (chromSize - seqEnd);
+    else
+	padding3 += (chromSize - seqEnd);
     seqEnd = chromSize;
+    }
 if (seqEnd <= seqStart)
     {
     printf("# Null range for %s%s%s_%s (range=%s:%d-%d 5'pad=%d 3'pad=%d)\n",
