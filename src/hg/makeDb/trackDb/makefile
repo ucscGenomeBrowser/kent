@@ -34,7 +34,8 @@ DBS = 	hg13 hg15 hg16 hg17 \
 	sacCer1 \
 	pyrAer1 \
 	pyrFur2 \
-	sc1
+	sc1 \
+	vibCho1
 
 MGC_DBS = \
 	hg16 hg17 \
