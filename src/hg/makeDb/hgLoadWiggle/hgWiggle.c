@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.18 2004/08/12 18:35:05 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.19 2004/08/17 18:17:07 hiram Exp $";
 
 /* Command line switches. */
 static boolean noAscii = FALSE;	/*	do not output ascii data */
@@ -21,6 +21,7 @@ static boolean silent = FALSE;	/*	no data points output */
 static boolean fetchNothing = FALSE;	/*  no ascii, bed, or stats returned */
 static boolean timing = FALSE;	/*	turn timing on	*/
 static boolean skipDataRead = FALSE;	/*	do not read the wib data */
+static boolean rawDataOut = FALSE;	/*	just the values, no positions */
 static char *db = NULL;			/* database specification	*/
 static char *chr = NULL;		/* work on this chromosome only */
 static char *chromLst = NULL;	/*	file with list of chroms to process */
@@ -44,6 +45,7 @@ static struct optionSpec optionSpecs[] = {
     {"fetchNothing", OPTION_BOOLEAN},
     {"timing", OPTION_BOOLEAN},
     {"skipDataRead", OPTION_BOOLEAN},
+    {"rawDataOut", OPTION_BOOLEAN},
     {"span", OPTION_INT},
     {"ll", OPTION_FLOAT},
     {"ul", OPTION_FLOAT},
@@ -64,6 +66,7 @@ errAbort(
   "             (the chrN: is optional)\n"
   "   -chromLst=<file> - file with list of chroms to examine\n"
   "   -noAscii - do *not* perform the default ascii output\n"
+  "   -rawDataOut - output just the data values, nothing else ( | textHistogram )\n"
   "   -doStats - perform stats measurement\n"
   "   -doBed - output bed format\n"
   "   -silent - no output, scanning data only and prepares result\n"
@@ -92,6 +95,7 @@ struct slName *chromList = NULL;	/*	list of chroms to process */
 int i;
 long startClock;
 long endClock;
+unsigned long long totalMatched = 0;
 
 if (chromLst)
     {
@@ -135,10 +139,11 @@ for (i=0; i<trackCount; ++i)
     unsigned long long chrRowsStart = 0;
     unsigned long long chrValuesMatchedStart = 0;
 
-    for (chromPtr=chromList;  (once == 1) || (chromPtr != NULL); )
+    for (chromPtr=chromList;  (once == 1) || (chromPtr != NULL); --once )
 	{
 	long chrStartClock = clock1000();
-	int operations = wigFetchAscii;
+	int operations = wigFetchAscii;	/*	default operation */
+	unsigned long long valuesMatched;
 
 	if (chromPtr)
 	    {
@@ -158,13 +163,16 @@ for (i=0; i<trackCount; ++i)
 	if (bedFile)
 	    {
 	    struct bed *bedList = bedLoadNAllChrom(bedFile, 3, wDS->chrName);
-	    wDS->getDataViaBed(wDS, db, tracks[i], operations, &bedList);
+	    valuesMatched = wDS->getDataViaBed(wDS, db, tracks[i],
+		operations, &bedList);
 	    bedFreeList(&bedList);
 	    }
 	else
-	    wDS->getData(wDS, db, tracks[i], operations);
+	    valuesMatched = wDS->getData(wDS, db, tracks[i], operations);
 
-	if (!silent)
+	totalMatched += valuesMatched;
+
+	if ((valuesMatched > 0) && !silent)
 	    {
 	    /*	the TRUE means sort the results.  The FALSE case is
 	     *	possible if you are accumulating results via numerous calls
@@ -179,7 +187,7 @@ for (i=0; i<trackCount; ++i)
 	    if (doBed)
 		wDS->bedOut(wDS, "stdout", TRUE);
 	    if (!noAscii)
-		wDS->asciiOut(wDS, "stdout", TRUE);
+		wDS->asciiOut(wDS, "stdout", TRUE, rawDataOut);
 	    }
 	wDS->freeBed(wDS);
 	wDS->freeAscii(wDS);
@@ -210,7 +218,6 @@ for (i=0; i<trackCount; ++i)
 	    }
 	if (chromPtr)
 	    chromPtr = chromPtr->next;
-	--once;
 	}
 	/*	when working through a chrom list, stats only at the end */
 	if (doStats && chromList)
@@ -220,6 +227,9 @@ for (i=0; i<trackCount; ++i)
 	    }
     }
 endClock = clock1000();
+
+if (0 == totalMatched)
+    verbose(1,"#\tno values found with these constraints\n");
 
 if (timing)
     {
@@ -267,6 +277,7 @@ silent = optionExists("silent");
 fetchNothing = optionExists("fetchNothing");
 timing = optionExists("timing");
 skipDataRead = optionExists("skipDataRead");
+rawDataOut = optionExists("rawDataOut");
 span = optionInt("span", 0);
 lowerLimit = optionFloat("ll", -1 * INFINITY);
 upperLimit = optionFloat("ul", INFINITY);
@@ -298,6 +309,7 @@ if (position)
     /*	allow chrN: or not	*/
     if (2 == chopByChar(stripped, ':', startEnd, 2))
 	{
+	char *freeThis;
 	if (chr)
 	    {
 	    if (differentString(chr, startEnd[0]))
@@ -309,11 +321,12 @@ if (position)
 	    }
 	    else
 		chr = cloneString(startEnd[0]);
-	freeMem(stripped);
+	freeThis = stripped;
 	stripped = stripCommas(startEnd[1]);
+	freeMem(freeThis);
 	}
     if (2 != chopByChar(stripped, '-', startEnd, 2))
-	errAbort("can not parse position: '%s'", position);
+	errAbort("can not parse position: '%s' '%s'", position, stripped);
     winStart = sqlUnsigned(startEnd[0]) - 1;	/* !!! 1-relative coming in */
     winEnd = sqlUnsigned(startEnd[1]);
     freeMem(stripped);
@@ -334,6 +347,8 @@ if (timing)
     verbose(2, "#\ttiming option on\n");
 if (skipDataRead)
     verbose(2, "#\tskipDataRead option on, do not read .wib data\n");
+if (rawDataOut)
+    verbose(2, "#\trawDataOut option on, only data values are output\n");
 if (span)
     {
     wDS->setSpanConstraint(wDS, span);
