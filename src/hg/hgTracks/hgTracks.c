@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.743 2004/05/28 01:32:38 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.744 2004/05/28 23:23:30 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6514,11 +6514,26 @@ if (rulerMode != RULER_MODE_OFF)
     /* Make hit boxes that will zoom program around ruler. */
     int boxes = 30;
     int winWidth = winEnd - winStart;
-    int newWinWidth = winWidth/3;
+    int newWinWidth = winWidth;
     int i, ws, we = 0, ps, pe = 0;
     int mid, ns, ne;
     double wScale = (double)winWidth/boxes;
     double pScale = (double)insideWidth/boxes;
+    char message[32];
+    char *zoomType = cartCgiUsualString(cart, RULER_BASE_ZOOM_VAR, ZOOM_3X);
+
+    safef(message, sizeof(message), "%s zoom", zoomType);
+    if (sameString(zoomType, ZOOM_1PT5X))
+        newWinWidth = winWidth/1.5;
+    else if (sameString(zoomType, ZOOM_3X))
+        newWinWidth = winWidth/3;
+    else if (sameString(zoomType, ZOOM_10X))
+        newWinWidth = winWidth/10;
+    else if (sameString(zoomType, ZOOM_BASE))
+        newWinWidth = insideWidth/tl.mWidth;
+    else
+        errAbort("invalid zoom type %s", zoomType);
+
     for (i=1; i<=boxes; ++i)
 	{
 	ps = pe;
@@ -6539,7 +6554,7 @@ if (rulerMode != RULER_MODE_OFF)
 	    ne = seqBaseCount;
 	    }
 	mapBoxJumpTo(ps+insideX,y,pe-ps,rulerHeight,
-		     chromName, ns, ne, "3x zoom");
+		        chromName, ns, ne, message);
 	}
     }
     if (zoomedToBaseLevel)
@@ -7986,14 +8001,14 @@ if (!hideControls)
     hButton("hgt.right2", ">> ");
     hButton("hgt.right3", ">>>");
     hWrites(" zoom in ");
-    hButton("hgt.in1", "1.5x");
-    hButton("hgt.in2", " 3x ");
-    hButton("hgt.in3", "10x");
-    hButton("hgt.inBase", "base");
+    hButton("hgt.in1", ZOOM_1PT5X);
+    hButton("hgt.in2", ZOOM_3X);
+    hButton("hgt.in3", ZOOM_10X);
+    hButton("hgt.inBase", ZOOM_BASE);
     hWrites(" zoom out ");
-    hButton("hgt.out1", "1.5x");
-    hButton("hgt.out2", " 3x ");
-    hButton("hgt.out3", "10x");
+    hButton("hgt.out1", ZOOM_1PT5X);
+    hButton("hgt.out2", ZOOM_3X);
+    hButton("hgt.out3", ZOOM_10X);
     hWrites("<BR>\n");
 
     /* Break into a second form so that zooming and scrolling

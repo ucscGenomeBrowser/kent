@@ -19,6 +19,9 @@ char *wrapWhiteFont(char *s);
  * If present, indicates reverse strand */
 #define COMPLEMENT_BASES_VAR    "complement"
 
+/* Configuration variable to cause ruler zoom to zoom to base level */
+#define RULER_BASE_ZOOM_VAR      "rulerBaseZoom"
+
 /******  Some stuff for tables of controls ******/
 #define CONTROL_TABLE_WIDTH 610
 
@@ -454,6 +457,30 @@ char *cdsColorEnumToString(enum cdsColorOptEnum x);
 
 void cdsColorDropDown(char *var, char *curVal, int size);
 /* Make drop down of options.*/
+
+/*** Some Stuff for the base position (ruler) controls ***/
+
+#define ZOOM_1PT5X      "1.5x"
+#define ZOOM_3X         "3x"
+#define ZOOM_10X        "10x"
+#define ZOOM_BASE       "base"
+
+enum zoomOptEnum {
+   zoom1pt5x = 0,
+   zoom3x = 1,
+   zoom10x = 2,
+   zoomBase = 3
+};
+
+void zoomRadioButtons(char *var, char *curVal);
+/* Make a list of radio buttons for all zoom options */
+
+enum zoomOptEnum zoomStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *zoomEnumToString(enum zoomOptEnum x);
+/* Convert from enum to string representation. */
+
 
 /*** Some Stuff for the wiggle track ***/
 

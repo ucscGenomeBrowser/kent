@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.40 2004/04/01 23:06:36 daryl Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.41 2004/05/28 23:23:30 kate Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -670,6 +670,43 @@ if(size<0)
 else
     cgiMakeDropList(var, cdsColorOptions, size, curVal);
 
+}
+
+/****** base position (ruler) controls *******/
+
+static char *zoomOptions[] = {
+    ZOOM_1PT5X,
+    ZOOM_3X,
+    ZOOM_10X,
+    ZOOM_BASE
+    };
+
+void zoomRadioButtons(char *var, char *curVal)
+/* Make a list of radio buttons for all zoom options */
+{
+int i;
+int size = ArraySize(zoomOptions);
+for (i = 0; i < size; i++)
+    {
+    char *s = zoomOptions[i];
+    printf("&nbsp; &nbsp; %s &nbsp;", s);   
+    cgiMakeRadioButton(var, s, sameString(s, curVal));
+    }
+}
+
+enum zoomOptEnum zoomStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, zoomOptions);
+if (x < 0)
+   errAbort("hui::zoomStringToEnum() - Unknown option %s", string);
+return x;
+}
+
+char *zoomEnumToString(enum zoomOptEnum x)
+/* Convert from enum to string representation. */
+{
+return zoomOptions[x];
 }
 
 /****** Some stuff for affy related controls *******/
