@@ -99,6 +99,8 @@
 #include "netAlign.h"
 #include "stsMapRat.h"
 #include "stsInfoRat.h"
+#include "stsMapMouseNew.h"
+#include "stsInfoMouseNew.h"
 #include "vegaInfo.h"
 #include "mafRef.h"
 #include "hgc.h"
@@ -1223,10 +1225,11 @@ if (pepTable != NULL && hTableExists(pepTable))
     char query[256];
     struct sqlResult *sr;
     char **row;
+    char *pepNameCol = sameString(pepTable, "gbSeq") ? "acc" : "name";
     conn = hAllocConn();
     // simple query to see if pepName has a record in pepTable:
-    safef(query, sizeof(query), "select 0 from %s where name = '%s'",
-	  pepTable, pepName);
+    safef(query, sizeof(query), "select 0 from %s where %s = '%s'",
+	  pepTable, pepNameCol, pepName);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -1368,6 +1371,8 @@ void qChainRangePlusStrand(struct chain *chain, int *retQs, int *retQe)
 /* Return range of bases covered by chain on q side on the plus
  * strand. */
 {
+if (chain == NULL)
+    errAbort("Can't find range in null query chain.");
 if (chain->qStrand == '-')
     {
     *retQs = chain->qSize - chain->qEnd+1;
@@ -1412,10 +1417,13 @@ void chainToOtherBrowser(struct chain *chain, char *otherDb, char *otherOrg)
 struct chain *subChain = NULL, *toFree = NULL;
 int qs,qe;
 chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
-qChainRangePlusStrand(subChain, &qs, &qe);
-printf("<A target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">",
-       otherDb, subChain->qName, qs, qe);
-printf("Open %s browser </A> at position corresponding to the part of chain that is in this window.<BR>\n", otherOrg);
+if (subChain != NULL)
+    {
+    qChainRangePlusStrand(subChain, &qs, &qe);
+    printf("<A target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">",
+	   otherDb, subChain->qName, qs, qe);
+    printf("Open %s browser </A> at position corresponding to the part of chain that is in this window.<BR>\n", otherOrg);
+    }
 chainFree(&toFree);
 }
 
@@ -1425,19 +1433,32 @@ void genericChainClick(struct sqlConnection *conn, struct trackDb *tdb,
 {
 char *track = tdb->tableName;
 char *thisOrg = hOrganism(database);
-char *otherOrg = hOrganism(otherDb);
+char *otherOrg = NULL;
 struct chain *chain = NULL, *subChain = NULL, *toFree = NULL;
 int chainWinSize;
 int qs, qe;
+
+if (! sameWord(otherDb, "seq"))
+    {
+    otherOrg = hOrganism(otherDb);
+    }
 
 chain = chainDbLoad(conn, track, seqName, atoi(item));
 printf("<B>%s position:</B> %s:%d-%d</a>  size: %d <BR>\n",
        thisOrg, chain->tName, chain->tStart+1, chain->tEnd, chain->tEnd-chain->tStart);
 printf("<B>strand:</B> %c<BR>\n", chain->qStrand);
 qChainRangePlusStrand(chain, &qs, &qe);
-printf("<B>%s position:</B> <A target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</A>  size: %d<BR>\n",
-       otherOrg, otherDb, chain->qName, qs, qe, chain->qName, 
-       qs, qe, chain->qEnd - chain->qStart);
+if (sameWord(otherDb, "seq"))
+    {
+    printf("<B>%s position:</B> %s:%d-%d  size: %d<BR>\n",
+	   chain->qName, chain->qName, qs, qe, chain->qEnd - chain->qStart);
+    }
+else
+    {
+    printf("<B>%s position:</B> <A target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</A>  size: %d<BR>\n",
+	   otherOrg, otherDb, chain->qName, qs, qe, chain->qName, 
+	   qs, qe, chain->qEnd - chain->qStart);
+    }
 printf("<B>chain id:</B> %s<BR>\n", item);
 printf("<B>score:</B> %1.0f<BR>\n", chain->score);
 printf("<BR>\n");
@@ -1453,7 +1474,11 @@ else
     printf("Zoom so that browser window covers 1,000,000 bases or less "
            "and return here to see alignment details.<BR>\n");
     }
-chainToOtherBrowser(chain, otherDb, otherOrg);
+if (! sameWord(otherDb, "seq"))
+    {
+    chainToOtherBrowser(chain, otherDb, otherOrg);
+    }
+
 chainFree(&chain);
 }
 
@@ -2832,7 +2857,8 @@ if (row != NULL)
     /* Now we have all the info out of the database and into nicely named
      * local variables.  There's still a few hoops to jump through to 
      * format this prettily on the web with hyperlinks to NCBI. */
-    printf("<H2>Information on %s <A HREF=\"", type);
+    printf("<H2>Information on %s%s <A HREF=\"", 
+           (isMgcTrack ? "MGC " : ""), type);
     printEntrezNucleotideUrl(stdout, acc);
     printf("\" TARGET=_blank>%s</A></H2>\n", acc);
 
@@ -2978,6 +3004,11 @@ else if (startsWith("psu", track))
     {
     type = "Pseudo & Real Genes";
     table = "psu";
+    }
+else if (sameWord("xenoBlastzMrna", track))
+    {
+    type = "Blastz to foreign mRNA";
+    table = "xenoBlastzMrna";
     }
 else 
     {
@@ -3807,15 +3838,18 @@ int id = atoi(item);
 char *track = cartString(cart, "o");
 char *type = trackTypeInfo(track);
 char *typeWords[2];
-char *otherDb, *org, *otherOrg;
-struct dnaSeq *qSeq;
+char *otherDb = NULL, *org = NULL, *otherOrg = NULL;
+struct dnaSeq *qSeq = NULL;
 char name[128];
 
 /* Figure out other database. */
 if (chopLine(type, typeWords) < ArraySize(typeWords))
     errAbort("type line for %s is short in trackDb", track);
 otherDb = typeWords[1];
-otherOrg = hOrganism(otherDb);
+if (! sameWord(otherDb, "seq"))
+    {
+    otherOrg = hOrganism(otherDb);
+    }
 org = hOrganism(database);
 
 /* Load up subset of chain and convert it to part of psl
@@ -3833,12 +3867,20 @@ chainFree(&chain);
 psl = pslTrimToTargetRange(fatPsl, winStart, winEnd);
 pslFree(&fatPsl);
 
-qSeq = loadGenomePart(otherDb, psl->qName, psl->qStart, psl->qEnd);
+if (sameWord(otherDb, "seq"))
+    {
+    qSeq = hExtSeq(psl->qName);
+    sprintf(name, "%s", psl->qName);
+    }
+else
+    {
+    qSeq = loadGenomePart(otherDb, psl->qName, psl->qStart, psl->qEnd);
+    sprintf(name, "%s.%s", otherOrg, psl->qName);
+    }
 writeFramesetType();
 puts("<HTML>");
-sprintf(name, "%s.%s", otherOrg, psl->qName);
 printf("<HEAD>\n<TITLE>%s %s vs %s %s </TITLE>\n</HEAD>\n\n", 
-       otherOrg, psl->qName, org, psl->tName );
+       (otherOrg == NULL ? "" : otherOrg), psl->qName, org, psl->tName );
 showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name);
 }
 
@@ -4891,72 +4933,7 @@ pslList = getAlignments(conn, "chr1_viralProt", geneName);
 htmlHorizontalLine();
 printf("<H3>Protein Alignments</H3>");
 printAlignments(pslList, start, "htcProteinAli", "chr1_viralProt", geneName);
-
-if (hTableExists("knownMore"))
-    {
-    knownMoreExists = TRUE;
-    knownTable = "knownMore";
-    }
-    
-if (knownMoreExists)
-    {
-    char query[256];
-    struct sqlResult *sr;
-    char **row;
-    struct sqlConnection *conn = hAllocConn();
-
-    upgraded = TRUE;
-    sprintf(query, "select * from knownMore where transId = '%s'", transName);
-    sr = sqlGetResult(conn, query);
-    if ((row = sqlNextRow(sr)) != NULL)
-	{
-	km = knownMoreLoad(row);
-	}
-    sqlFreeResult(&sr);
-
-    hFreeConn(&conn);
-    }
-
-if (km != NULL)
-    {
-    geneName = km->name;
-    if (km->hugoName != NULL && km->hugoName[0] != 0)
-	medlineLinkedLine("Name", km->hugoName, km->hugoName);
-    if (km->aliases[0] != 0)
-	printf("<B>Aliases:</B> %s<BR>\n", km->aliases);
-    if (km->omimId != 0)
-	{
-	printf("<B>OMIM:</B> <A HREF=\"");
-	printEntrezOMIMUrl(stdout, km->omimId);
-	printf("\" TARGET=_blank>%d</A><BR>\n", km->omimId);
-	}
-    if (km->locusLinkId != 0)
-        {
-	printf("<B>LocusLink:</B> ");
-	printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l=%d\" TARGET=_blank>",
-	       km->locusLinkId);
-	printf("%d</A><BR>\n", km->locusLinkId);
-	}
-    anyMore = TRUE;
-    }
-/*
-  if (geneName != NULL) 
-  {
-  medlineLinkedLine("Symbol", geneName, geneName);
-  printGeneLynxName(geneName);
-  printf("<B>GeneCards:</B> ");
-  printf("<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?search=%s\" TARGET=_blank>",
-  geneName);
-  printf("%s</A><BR>\n", geneName);
-  anyMore = TRUE;
-  }
-*/
-if (anyMore)
-    htmlHorizontalLine();
-
-/*
-  geneShowCommon(transName, tdb, "genieKnownPep");
-*/
+printTrackHtml(tdb);
 }
 
 void doPslDetailed(struct trackDb *tdb, char *item)
@@ -5638,7 +5615,7 @@ printStanSource(rl->mrnaAcc, "mrna");
 htmlHorizontalLine();
 
 /* older databases have peptide sequence in a table, newer have in ext file */
-pepTbl = sqlTableExists(conn, "refPep") ? "refPep" : "seq";
+pepTbl = sqlTableExists(conn, "gbSeq") ? "gbSeq" : "refPep" ;
 geneShowPosAndLinks(rl->mrnaAcc, rl->protAcc, tdb, pepTbl, "htcTranslatedProtein",
 		    "htcRefMrna", "htcGeneInGenome", "mRNA Sequence");
 
@@ -7294,6 +7271,202 @@ hFreeConn(&conn1);
 
 
 
+void doStsMapMouseNew(struct trackDb *tdb, char *marker)
+/* Respond to click on an STS marker. */
+{
+char *table = tdb->tableName;
+char title[256];
+char query[256];
+char query1[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn1 = hAllocConn();
+struct sqlResult *sr = NULL, *sr1 = NULL, *sr2 = NULL;
+char **row, **row1;
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+int hgsid = cartSessionId(cart);
+struct stsMapMouseNew stsRow;
+struct stsInfoMouseNew *infoRow;
+char stsid[20];
+char stsPrimer[40];
+char stsClone[45];
+int i;
+struct psl *pslList = NULL, *psl;
+int pslStart;
+
+/* Print out non-sequence info */
+
+sprintf(title, "STS Marker %s\n", marker);
+/* sprintf(title, "STS Marker <A HREF=\"http://www.informatics.jax.org/searches/marker_report.cgi?string\%%3AmousemarkerID=%s\">%s</A>\n", marker, marker); */
+cartWebStart(cart, title);
+
+/* Find the instance of the object in the bed table */ 
+sprintf(query, "SELECT * FROM %s WHERE name = '%s' 
+                AND chrom = '%s' AND chromStart = %d
+                AND chromEnd = %d",
+	        table, marker, seqName, start, end);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL)
+    {
+    stsMapMouseNewStaticLoad(row, &stsRow);
+    /* Find the instance of the object in the stsInfo table */ 
+    sqlFreeResult(&sr);
+    sprintf(query, "SELECT * FROM stsInfoMouseNew WHERE identNo = '%d'", stsRow.identNo);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+	{
+	infoRow = stsInfoMouseNewLoad(row);
+	printf("<TABLE>\n");
+	printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
+	printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start+1);
+	printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
+	printf("</TABLE>\n");
+	htmlHorizontalLine();
+	printf("<TABLE>\n");
+	printf("<TR><TH ALIGN=left>UCSC STS Marker ID:</TH><TD>%d</TD></TR>\n", infoRow->identNo);
+	if( infoRow->UiStsId != 0)
+	    {
+	    printf("<TR><TH ALIGN=left>UniSts Marker ID:</TH><TD><A HREF=\"http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=%d\">%d</A></TD></TR>\n", infoRow->UiStsId, infoRow->UiStsId);
+	    }
+	if( infoRow->RGDId != 0)
+	    {
+	      printf("<TR><TH ALIGN=left>RGD Marker ID:</TH><TD><B><A HREF=\"http://rgd.mcw.edu/tools/query/query.cgi?id=%d\">%d</A></TD></TR>\n",infoRow->RGDId,infoRow->RGDId ); 
+	    }
+	if( strcmp(infoRow->RGDName, "") )
+	    {
+	    printf("<TR><TH ALIGN=left>RGD Marker Name:</TH><TD>%s</TD></TR>\n", infoRow->RGDName);
+	    }
+	printf("</TABLE>\n");
+	htmlHorizontalLine();
+	/* Print out primer information */
+	printf("<TABLE>\n");
+	printf("<TR><TH ALIGN=left>Left Primer:</TH><TD>%s</TD></TR>\n",infoRow->primer1);
+	printf("<TR><TH ALIGN=left>Right Primer:</TH><TD>%s</TD></TR>\n",infoRow->primer2);
+	printf("<TR><TH ALIGN=left>Distance:</TH><TD>%s bps</TD></TR>\n",infoRow->distance);
+	printf("</TABLE>\n");
+	htmlHorizontalLine();
+	/* Print out information from genetic maps for this marker */
+	if(strcmp(infoRow->fhhName, "") || strcmp(infoRow->shrspName, "") || strcmp(infoRow->rhName, ""))
+	  {
+	    printf("<H3>Map Position</H3>\n");  
+	    printf("<TABLE>\n");
+	  }
+	if(strcmp(infoRow->fhhName, ""))
+	    {
+	    printf("<TR><TH>&nbsp</TH><TH ALIGN=left WIDTH=150>Name</TH><TH ALIGN=left WIDTH=150>Chromosome</TH><TH ALIGN=left WIDTH=150>Position</TH></TR>\n");
+	    printf("<TR><TH ALIGN=left>&nbsp</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD></TR>\n",
+	       infoRow->fhhName, infoRow->fhhChr, infoRow->fhhGeneticPos); 
+	    }
+	if(strcmp(infoRow->shrspName, ""))
+	    {
+	    printf("<TR><TH>&nbsp</TH><TH ALIGN=left WIDTH=150>Name</TH><TH ALIGN=left WIDTH=150>Chromosome</TH><TH ALIGN=left WIDTH=150>Position</TH></TR>\n");
+	    printf("<TR><TH ALIGN=left>&nbsp</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD></TR>\n",
+	       infoRow->shrspName, infoRow->shrspChr, infoRow->shrspGeneticPos); 
+	    }
+	if(strcmp(infoRow->rhName, ""))
+	    {
+	    printf("<TR><TH>&nbsp</TH><TH ALIGN=left WIDTH=150>Name</TH><TH ALIGN=left WIDTH=150>Chromosome</TH><TH ALIGN=left WIDTH=150>Position</TH><TH ALIGN=left WIDTH=150>Score</TH?</TR>\n");
+	    printf("<TR><TH ALIGN=left>&nbsp</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD><TD WIDTH=150>%.2f</TD></TR>\n",
+	       infoRow->rhName, infoRow->rhChr, infoRow->rhGeneticPos, infoRow->RHLOD); 
+	    }
+	printf("</TABLE><P>\n");
+
+	/* Print out alignment information - full sequence */
+	webNewSection("Genomic Alignments:");
+	sprintf(stsid,"%d",infoRow->identNo);
+	sprintf(stsPrimer, "%d_%s", infoRow->identNo, infoRow->name);
+	sprintf(stsClone, "%d_%s_clone", infoRow->identNo, infoRow->name);
+
+	/* find sts in primer alignment info */
+	sprintf(query, "SELECT * FROM all_sts_primer WHERE  qName = '%s' AND  tStart = '%d' AND tEnd = '%d'",stsPrimer, start, end); 
+	sr1 = sqlGetResult(conn1, query);
+	i = 0;
+	pslStart = 0;
+	while ((row = sqlNextRow(sr1)) != NULL )
+	  {  
+	    psl = pslLoad(row);
+	    fflush(stdout);
+	    if ((sameString(psl->tName, seqName)) 
+		&& (abs(psl->tStart - start) < 1000))
+	      {
+		pslStart = psl->tStart;
+	      }
+	    slAddHead(&pslList, psl);
+	    i++;
+	  }
+	slReverse(&pslList);
+	if (i > 0) 
+	  {
+	    printf("<H3>Primers:</H3>\n");
+	    printAlignments(pslList, pslStart, "htcCdnaAli", "all_sts_primer", stsPrimer);
+	    sqlFreeResult(&sr1);
+	  }
+	slFreeList(&pslList);
+	stsInfoMouseNewFree(&infoRow);
+       
+	/* Find sts in clone sequece alignment info */
+        sprintf(query1, "SELECT * FROM all_sts_primer WHERE  qName = '%s' AND  tStart = '%d' AND tEnd = '%d'",stsClone, start, end);
+	sr2 = sqlGetResult(conn1, query1);
+	i = 0;
+	pslStart = 0;
+	while ((row = sqlNextRow(sr2)) != NULL )
+	  {  
+	    psl = pslLoad(row);
+	    fflush(stdout);
+	    if ((sameString(psl->tName, seqName)) 
+		&& (abs(psl->tStart - start) < 1000))
+	      {
+		pslStart = psl->tStart;
+	      }
+	    slAddHead(&pslList, psl);
+	    i++;
+	  }
+	slReverse(&pslList);
+	if (i > 0) 
+	  {
+	    printf("<H3>Clone:</H3>\n");
+	    printAlignments(pslList, pslStart, "htcCdnaAli", "all_sts_primer", stsClone);
+	    sqlFreeResult(&sr1);
+	  }
+	slFreeList(&pslList);
+	stsInfoMouseNewFree(&infoRow);
+	}
+
+	htmlHorizontalLine();
+
+	if (stsRow.score == 1000)
+	    {
+	    printf("<H3>This is the only location found for %s</H3>\n",marker);
+            }
+        else
+	    {
+	    sqlFreeResult(&sr);
+            printf("<H4>Other locations found for %s in the genome:</H4>\n", marker);
+            printf("<TABLE>\n");
+	    sprintf(query, "SELECT * FROM %s WHERE name = '%s' 
+                           AND (chrom != '%s' OR chromStart != %d OR chromEnd != %d)",
+	            table, marker, seqName, start, end); 
+            sr = sqlGetResult(conn,query);
+            while ((row = sqlNextRow(sr)) != NULL)
+		{
+		stsMapMouseNewStaticLoad(row, &stsRow);
+		printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%d&o=%u&t=%d&g=stsMapMouseNew&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
+		       stsRow.chrom, hgsid, stsRow.chromStart,stsRow.chromEnd, stsRow.name, stsRow.chrom,(stsRow.chromStart+stsRow.chromEnd)>>1);
+		}
+	    printf("</TABLE>\n");
+	    }
+    }
+webNewSection("Notes:");
+puts(tdb->html);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+hFreeConn(&conn1);
+}
+
+
+
 
 void doStsMapRat(struct trackDb *tdb, char *marker)
 /* Respond to click on an STS marker. */
@@ -7350,11 +7523,11 @@ if (row != NULL)
 	printf("<TR><TH ALIGN=left>UCSC STS Marker ID:</TH><TD>%d</TD></TR>\n", infoRow->identNo);
 	if( infoRow->UiStsId != 0)
 	    {
-	    printf("<TR><TH ALIGN=left>UniSts Marker ID:</TH><TD>%d</TD></TR>\n", infoRow->UiStsId);
+	    printf("<TR><TH ALIGN=left>UniSts Marker ID:</TH><TD><A HREF=\"http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=%d\">%d</A></TD></TR>\n", infoRow->UiStsId, infoRow->UiStsId);
 	    }
 	if( infoRow->RGDId != 0)
 	    {
-	    printf("<TR><TH ALIGN=left>RGD Marker ID:</TH><TD><B>%d</TD></TR>\n",infoRow->RGDId);	
+	      printf("<TR><TH ALIGN=left>RGD Marker ID:</TH><TD><B><A HREF=\"http://rgd.mcw.edu/tools/query/query.cgi?id=%d\">%d</A></TD></TR>\n",infoRow->RGDId,infoRow->RGDId ); 
 	    }
 	if( strcmp(infoRow->RGDName, "") )
 	    {
@@ -11259,6 +11432,10 @@ else if (sameWord(track, "stsMarker"))
 else if (sameWord(track, "stsMapMouse"))
     {
     doStsMapMouse(tdb, item);
+    }
+else if (sameWord(track, "stsMapMouseNew")) /*steal map rat code for new mouse sts track. */
+    {
+    doStsMapMouseNew(tdb, item);
     }
 else if(sameWord(track, "stsMapRat"))
     {
