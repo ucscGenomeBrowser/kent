@@ -135,7 +135,7 @@ void loadDatabase(char *database, char *track, int bedSize, struct bedStub *bedL
 struct sqlConnection *conn = sqlConnect(database);
 struct dyString *dy = newDyString(1024);
 char *tab = "bed.tab";
-int loadOptions = (cgiBoolean("onServer") ? SQL_SERVER_TAB_FILE : 0);
+int loadOptions = (cgiBoolean("onServer") ? SQL_TAB_FILE_ON_SERVER : 0);
 
 /* First make table definition. */
 if (sqlTable != NULL)
