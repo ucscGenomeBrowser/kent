@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.13 2004/09/10 03:41:56 hiram Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.14 2004/09/13 21:58:58 hiram Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -374,7 +374,7 @@ if (isWiggle(database, table))
     {
     char *setting = NULL;
     hPrintf("<P> <B> Select type of data output: </B> <BR>\n");
-    setting = cgiUsualString(hgtaCtWigOutType, outWigData);
+    setting = cartCgiUsualString(cart, hgtaCtWigOutType, outWigData);
     cgiMakeRadioButton(hgtaCtWigOutType, outWigBed, sameString(setting, outWigBed));
     hPrintf("BED format (no data value information, only position)<BR>\n");
     cgiMakeRadioButton(hgtaCtWigOutType, outWigData, sameString(setting, outWigData));
@@ -442,13 +442,14 @@ char *ctName = cgiUsualString(hgtaCtName, table);
 char *ctDesc = cgiUsualString(hgtaCtDesc, table);
 char *ctVis  = cgiUsualString(hgtaCtVis, "dense");
 char *ctUrl  = cgiUsualString(hgtaCtUrl, "");
-char *ctWigOutType = cgiUsualString(hgtaCtWigOutType, outWigData);
+char *ctWigOutType = cartCgiUsualString(cart, hgtaCtWigOutType, outWigData);
 char *fbQual = fbOptionsToQualifier();
 char fbTQ[128];
 int fields = hTableInfoBedFieldCount(hti);
 boolean gotResults = FALSE;
 struct region *region, *regionList = getRegions();
 boolean wigOutData = FALSE;
+boolean isWig = FALSE;
 struct wigAsciiData *wigDataList = NULL;
 
 if (!doCt)
@@ -456,7 +457,9 @@ if (!doCt)
     textOpen();
     }
 
-if (sameString(outWigData, ctWigOutType))
+isWig = isWiggle(database, table);
+
+if (isWig && sameString(outWigData, ctWigOutType))
     wigOutData = TRUE;
 
 for (region = regionList; region != NULL; region = region->next)
@@ -464,7 +467,7 @@ for (region = regionList; region != NULL; region = region->next)
     struct bed *bedList = NULL, *bed;
     struct lm *lm = lmInit(64*1024);
 
-    if (wigOutData)
+    if (isWig && wigOutData)
 	{
 	int count = 0;
 	struct wigAsciiData *wigData = NULL;
@@ -494,7 +497,7 @@ for (region = regionList; region != NULL; region = region->next)
 	if (doCt)
 	    {
 	    ctNew = newCt(ctName, ctDesc, visNum, ctUrl, fields);
-	    if (wigOutData)
+	    if (isWig && wigOutData)
 		{
 		struct dyString *wigSettings = newDyString(0);
 		struct tempName tn;
@@ -518,7 +521,7 @@ for (region = regionList; region != NULL; region = region->next)
 	    }
 	}
 
-    if (wigOutData && wigDataList)
+    if (isWig && wigOutData && wigDataList)
 	gotResults = TRUE;
     else
 	{
@@ -529,13 +532,14 @@ for (region = regionList; region != NULL; region = region->next)
 		char *ptr = strchr(bed->name, ' ');
 		if (ptr != NULL)
 		    *ptr = 0;
-		if (!doCt)
-		    bedTabOutN(bed, fields, stdout);
-		else
+		if (doCt)
 		    {
 		    struct bed *dupe = cloneBed(bed); /* Out of local memory. */
 		    slAddHead(&ctNew->bedList, dupe);
 		    }
+		else
+		    bedTabOutN(bed, fields, stdout);
+
 		gotResults = TRUE;
 		}
 	    }
@@ -548,7 +552,7 @@ for (region = regionList; region != NULL; region = region->next)
 		char *ptr = strchr(fbPtr->name, ' ');
 		if (ptr != NULL)
 		    *ptr = 0;
-		if (! doCt)
+		if (doCt)
 		    {
 		    struct bed *fbBed = fbToBedOne(fbPtr);
 		    slAddHead(&ctNew->bedList, fbBed );
@@ -583,7 +587,7 @@ else if (doCt)
 	char *ctFileName = cartOptionalString(cart, "ct");
 	struct tempName tn;
 	removeNamedCustom(&ctList, ctNew->tdb->shortLabel);
-	if (wigOutData)
+	if (isWig && wigOutData)
 	    {
 	    unsigned i;
 	    unsigned chromEnd;
@@ -634,7 +638,7 @@ else if (doCt)
 	int redirDelay = 3;
 	if (position == NULL)
 	    {
-	    if (wigOutData)
+	    if (isWig && wigOutData)
 		position = wigPosition;
 	    else
 		{
@@ -658,7 +662,7 @@ else if (doCt)
 	       redirDelay, browserUrl);
 	}
     }
-else if (wigOutData)
+else if (isWig && wigOutData)
     {
     /*	create an otherwise empty wds so we can print out the list */
     struct wiggleDataStream *wds = NULL;
