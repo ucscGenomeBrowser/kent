@@ -4295,7 +4295,7 @@ else
 
 /* Print out a header row */
 printf("<HTML><BODY><PRE>\n");
-printf("Name\tChr\tChrStart\tChrEnd");
+printf("Name\tChr\tChrStart\tChrEnd\tTallChrStart\tTallChrEnd");
 for (er = erList; er != NULL; er = er->next)
     if (sameString(bedTable, "cghNci60"))
 	printf("\t%s(%s)",er->name, er->extras[1]);
@@ -4306,7 +4306,7 @@ printf("\n");
 /* Print out a row for each of the record in the bedList */
 for (b = bedList; b != NULL; b = b->next)
     {
-    printf("%s\t%s\t%d\t%d",b->name, b->chrom, b->chromStart, b->chromEnd);
+    printf("%s\t%s\t%d\t%d\t%d\t%d",b->name, b->chrom, b->chromStart, b->chromEnd, b->thickStart, b->thickEnd);
     for (i = 0; i < b->expCount; i++)
 	if (i == b->expIds[i])
 	    printf("\t%f",b->expScores[i]);
