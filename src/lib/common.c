@@ -7,7 +7,7 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.63 2004/07/14 05:46:33 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.64 2004/07/16 19:04:21 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -338,13 +338,15 @@ slReverse(&newList);
 *pSlList = newList;
 }
 
-void slRemoveEl(void *vpList, void *vToRemove)
+boolean slRemoveEl(void *vpList, void *vToRemove)
 /* Remove element from doubly linked list.  Usage:
- *    slRemove(&list, el);  */
+ *    slRemove(&list, el);  
+ * Returns TRUE if element in list.  */
 {
 struct slList **pList = vpList;
 struct slList *toRemove = vToRemove;
 struct slList *el, *next, *newList = NULL;
+boolean didRemove = FALSE;
 
 for (el = *pList; el != NULL; el = next)
     {
@@ -353,9 +355,12 @@ for (el = *pList; el != NULL; el = next)
 	{
 	slAddHead(&newList, el);
 	}
+    else
+        didRemove = TRUE;
     }
 slReverse(&newList);
 *pList = newList;
+return didRemove;
 }
 
 struct slInt *slIntNew(int x)

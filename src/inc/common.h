@@ -291,9 +291,10 @@ void slUniqify(void *pList, CmpFunction *compare, void (*free)());
  * pointers to pointers to elements.  Free should take a simple
  * pointer to dispose of duplicate element, and can be NULL. */
 
-void slRemoveEl(void *pList, void *el);
-/* Remove element from singly linked list.  Usage:
- *    slRemove(&list, el);  */
+boolean slRemoveEl(void *vpList, void *vToRemove);
+/* Remove element from doubly linked list.  Usage:
+ *    slRemove(&list, el);  
+ * Returns TRUE if element in list.  */
 
 void slFreeList(void *listPt);
 /* Free all elements in list and set list pointer to null. 
