@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.46 2004/01/17 09:35:13 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.47 2004/01/29 22:04:03 hartera Exp $";
 
 boolean sqlTrace = FALSE;  /* setting to true prints each query */
 int sqlTraceIndent = 0;    /* number of spaces to indent traces */
@@ -305,6 +305,49 @@ if (sqlTableExists(sc, table))
     sprintf(query, "drop table %s", table);
     sqlUpdate(sc, query);
     }
+}
+
+void sqlGetLock(struct sqlConnection *sc, char *name)
+/* Sets an advisory lock on the process for 1000s returns 1 if successful,*/
+/* 0 if name already locked or NULL if error occurred */
+/* blocks another client from obtaining a lock with the same name */
+{
+char query[256];
+struct sqlResult *res;
+char **row = NULL;
+                                                                                
+sprintf(query, "select get_lock('%s', 1000)", name);
+res = sqlGetResult(sc, query);
+while ((row=sqlNextRow(res)))
+    {
+    if (sameWord(*row, "1"))
+        printf("Advisory lock created\n");
+    else if (sameWord(*row, "0"))
+        errAbort("Attempt to GET_LOCK timed out.\nAnother client may have locked this name, %s\n.", name);
+    else if (*row == NULL)
+        errAbort("Attempt to GET_LOCK of name, %s, caused an error\n", name);
+    }
+sqlFreeResult(&res);
+}
+
+void sqlReleaseLock(struct sqlConnection *sc, char *name)
+/* Releases an advisory lock created by GET_LOCK in sqlGetLock */
+{
+char query[256];
+                                                                                
+sprintf(query, "select release_lock('%s')", name);
+sqlUpdate(sc, query);
+printf("Advisory lock has been released\n");
+}
+                                                                                
+boolean sqlMaybeMakeTable(struct sqlConnection *sc, char *table, char *query)
+/* Create table from query if it doesn't exist already.
+ * Returns FALSE if didn't make table. */
+{
+if (sqlTableExists(sc, table))
+    return FALSE;
+sqlUpdate(sc, query);
+return TRUE;
 }
 
 boolean sqlMaybeMakeTable(struct sqlConnection *sc, char *table, char *query)
