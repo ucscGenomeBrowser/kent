@@ -428,6 +428,9 @@ struct linkedFeatures *lfFromBed(struct bed *bed);
 void linkedFeaturesFreeList(struct linkedFeatures **pList);
 /* Free up a linked features list. */
 
+void freeLinkedFeaturesSeries(struct linkedFeaturesSeries **pList);
+/* Free up a linked features series list. */
+
 int linkedFeaturesCmpStart(const void *va, const void *vb);
 /* Help sort linkedFeatures by starting pos. */
 
