@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.23 2004/04/19 21:32:28 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.24 2004/04/21 22:24:07 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -167,13 +167,51 @@ slReverse(&miList);
 return miList;
 }
 
-static int pairwiseWigHeight(struct track *wigTrack)
-/* Return the height of a pairwise wiggle for this track
+static char *pairwiseSuffix(struct track *track)
+/* Return the suffix for the wiggle tables for the pairwise alignments,
+ * or NULL if none set  */
+{
+char *suffix = trackDbSetting(track->tdb, PAIRWISE_VAR);
+if (suffix != NULL)
+    suffix = firstWordInLine(cloneString(suffix));
+return suffix;
+}
+
+static int pairwiseWigHeight(struct track *track)
+/* Return the height of a pairwise wiggle for this track, or 0 if n/a
  * NOTE: set one pixel smaller than we actually want, to 
  * leave a border at the bottom of the wiggle.
  */
 {
-    return max(wigTotalHeight(wigTrack, tvFull)/3 - 1, tl.fontHeight);
+char *words[2];
+int wordCount;
+int defaultHeight;
+char *settings;
+struct track *wigTrack = track->subtracks;
+int pairwiseHeight;
+
+if (wigTrack == NULL)
+    return 0;
+settings = cloneString(trackDbSetting(track->tdb, PAIRWISE_VAR));
+if (settings == NULL)
+    return 0;
+
+/* get height for pairwise wiggles */
+/* default height */
+pairwiseHeight = max(wigTotalHeight(wigTrack, tvFull)/3 - 1, tl.fontHeight);
+wordCount = chopLine(settings, words);
+if (wordCount > 1)
+    {
+    int height = atoi(words[1]);
+    if (height < tl.fontHeight)
+       pairwiseHeight = tl.fontHeight;
+    else if (height > wigTotalHeight(wigTrack, tvFull))
+        pairwiseHeight = wigTotalHeight(wigTrack, tvFull);
+    else
+        pairwiseHeight = height;
+    }
+freez(&settings);
+return pairwiseHeight;
 }
 
 static char *getWigTablename(char *species, char *suffix)
@@ -203,7 +241,6 @@ static struct wigMafItem *loadPairwiseItems(struct track *track)
 struct wigMafItem *miList = NULL, *mi;
 char *otherOrganism;
 struct track *wigTrack = track->subtracks;
-int smallWigHeight = pairwiseWigHeight(wigTrack);
 char *suffix;
 
 if (wigTrack != NULL)
@@ -213,7 +250,7 @@ if (wigTrack != NULL)
     mi->ix = -1;
     slAddHead(&miList, mi);
     }
-suffix = trackDbSetting(track->tdb, "pairwise");
+suffix = pairwiseSuffix(track);
 if (suffix != NULL)
     /* make up items for other organisms by scanning through
      * all mafs and looking at database prefix to source. */
@@ -234,11 +271,12 @@ if (suffix != NULL)
         AllocVar(mi);
         mi->name = species[i];
         if (track->visibility == tvFull)
-            mi->height = smallWigHeight;
+            mi->height = pairwiseWigHeight(track);
         else
             mi->height = tl.fontHeight;
         slAddHead(&miList, mi);
         }
+    freez(&suffix);
     }
 slReverse(&miList);
 return miList;
@@ -495,17 +533,17 @@ char *suffix;
 char *tableName;
 Color newColor;
 struct track *wigTrack = track->subtracks;
-int pairwiseHeight = pairwiseWigHeight(wigTrack);
+int pairwiseHeight = pairwiseWigHeight(track);
 struct wigMafItem *miList = track->items, *mi = miList;
 int seqSize = seqEnd - seqStart;
 
 if (miList == NULL)
     return FALSE;
 
-/* obtain suffix for pairwise wiggle tables */
-suffix = trackDbSetting(track->tdb, PAIRWISE_VAR);
-if (suffix == NULL)
+/* get pairwise wiggle suffix from trackDb */
+if ((suffix = pairwiseSuffix(track)) == NULL)
     return FALSE;
+
 
 /* we will display pairwise, either a graph (wiggle or on-the-fly),
    or density plot */
@@ -580,6 +618,7 @@ for (mi = miList; mi != NULL; mi = mi->next)
         }
     yOff += mi->height;
     }
+freez(&suffix);
 return ret;
 }
 
@@ -692,11 +731,7 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 /* draw inserts line */
 charifyInserts(insertLine, winBaseCount);
 mi = miList;
-x -= (width/winBaseCount)/2;
-/* adjust x offset a bit */
-x += 2;
-
-spreadString(vg, x, y, width, mi->height-1, color,
+spreadString(vg, x - (width/winBaseCount)/2, y, width, mi->height-1, color,
                 font, insertLine, winBaseCount);
 y += mi->height;
 
