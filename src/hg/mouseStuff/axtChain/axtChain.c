@@ -13,10 +13,11 @@
 #include "chainBlock.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: axtChain.c,v 1.16 2003/05/06 07:22:27 kate Exp $";
+static char const rcsid[] = "$Id: axtChain.c,v 1.17 2003/07/08 05:59:02 baertsch Exp $";
 
 int minScore = 1000;
 char *detailsName = NULL;
+char *gapFileName = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -27,9 +28,19 @@ errAbort(
   "   axtChain in.axt tNibDir qNibDir out.chain\n"
   "options:\n"
   "   -psl Use psl instead of axt format for input\n"
+  "   -faQ qNibDir is a fasta file with multiple sequences for query\n"
   "   -minScore=N  Minimum score for chain, default %d\n"
   "   -details=fileName Output some additional chain details\n"
+  "   -linearGap=filename Read piecewise linear gap from tab delimited file\n"
+  "   sample linearGap file \n"
+  "tablesize 11\n"
+  "smallSize 111\n"
+  "position 1 2 3 11 111 2111 12111 32111 72111 152111 252111\n"
+  "qGap 350 425 450 600 900 2900 22900 57900 117900 217900 317900\n"
+  "tGap 350 425 450 600 900 2900 22900 57900 117900 217900 317900\n"
+  "bothGap 750 825 850 1000 1300 3300 23300 58300 118300 218300 318300\n"
   , minScore
+
   );
 }
 
@@ -137,6 +148,34 @@ else
     }
 }
 
+void loadFaSeq(struct hash *faHash, char *newName, char strand, 
+	char **pName, struct dnaSeq **pSeq, char *pStrand)
+/* retrieve sequence from hash.  Reverse complement
+ * if necessary. */
+{
+struct dnaSeq *seq;
+if (sameString(newName, *pName))
+    {
+    if (strand != *pStrand)
+        {
+	seq = *pSeq;
+	reverseComplement(seq->dna, seq->size);
+	*pStrand = strand;
+	}
+    }
+else
+    {
+    char fileName[512];
+    if (pSeq != NULL)
+        freeDnaSeq(pSeq);
+    *pName = newName;
+    *pSeq = seq = hashFindVal(faHash, newName);
+    *pStrand = strand;
+    if (strand == '-')
+        reverseComplement(seq->dna, seq->size);
+    uglyf("Loaded %d bases from %s fa\n", seq->size, newName);
+    }
+}
 int boxInCmpBoth(const void *va, const void *vb)
 /* Compare to sort based on query, then target. */
 {
@@ -252,16 +291,21 @@ dv = v[sCount-1] - v[sCount-2];
 return v[sCount-2] + dv * (x - s[sCount-2]) / ds;
 }
 
-static int gapInitPos[] = { 
+static int *gapInitPos ;  
+static double *gapInitQGap ;  
+static double *gapInitTGap ;  
+static double *gapInitBothGap ;
+
+static int gapInitPosDefault[] = { 
    1,   2,   3,   11,  111, 2111, 12111, 32111,  72111, 152111, 252111,
 };
-static double gapInitQGap[] = { 
+static double gapInitQGapDefault[] = { 
    350, 425, 450, 600, 900, 2900, 22900, 57900, 117900, 217900, 317900,
 };
-static double gapInitTGap[] = { 
+static double gapInitTGapDefault[] = { 
    350, 425, 450, 600, 900, 2900, 22900, 57900, 117900, 217900, 317900,
 };
-static double gapInitBothGap[] = { 
+static double gapInitBothGapDefault[] = { 
    400+350, 400+425, 400+450, 400+600, 400+900, 400+2900, 
    400+22900, 400+57900, 400+117900, 400+217900, 400+317900,
 };
@@ -301,63 +345,124 @@ double calcSlope(double y2, double y1, double x2, double x1)
 return (y2-y1)/(x2-x1);
 }
 
-void initGapAid()
+void initGapAid(char *gapFileName)
 /* Initialize gap aid structure for faster gap
  * computations. */
 {
-int i, startLong = -1;
+int i, tableSize, startLong = -1;
+char *sizeDesc[2];
+char *words[128];
 
-/* Set up to handle small values */
-aid.smallSize = 111;
-AllocArray(aid.qSmall, aid.smallSize);
-AllocArray(aid.tSmall, aid.smallSize);
-AllocArray(aid.bSmall, aid.smallSize);
-for (i=1; i<aid.smallSize; ++i)
+if (gapFileName != NULL)
     {
-    aid.qSmall[i] = 
-    	interpolate(i, gapInitPos, gapInitQGap, ArraySize(gapInitQGap));
-    aid.tSmall[i] = 
-    	interpolate(i, gapInitPos, gapInitTGap, ArraySize(gapInitTGap));
-    aid.bSmall[i] = interpolate(i, gapInitPos, 
-    	gapInitBothGap, ArraySize(gapInitBothGap));
-    }
+    struct lineFile *lf = lineFileOpen(gapFileName, TRUE);
+    int count;
 
-/* Set up to handle intermediate values. */
-for (i=0; i<ArraySize(gapInitPos); ++i)
+    lineFileNextRowTab(lf, sizeDesc, 2);
+    tableSize = atoi(sizeDesc[1]);
+    AllocArray(gapInitPos,tableSize);
+    AllocArray(gapInitQGap,tableSize);
+    AllocArray(gapInitTGap,tableSize);
+    AllocArray(gapInitBothGap,tableSize);
+    while (count = lineFileChopNext(lf, words, tableSize+1))
+        {
+        if (sameString(words[0],"smallSize"))
+            {
+            aid.smallSize = atoi(words[1]);
+            }
+        if (sameString(words[0],"position"))
+            {
+            for (i=0 ; i<count-1 ; i++)
+                gapInitPos[i] = atoi(words[i+1]);
+            }
+        if (sameString(words[0],"qGap"))
+            {
+            for (i=0 ; i<count-1 ; i++)
+                gapInitQGap[i] = atoi(words[i+1]);
+            }
+        if (sameString(words[0],"tGap"))
+            {
+            for (i=0 ; i<count-1 ; i++)
+                gapInitTGap[i] = atoi(words[i+1]);
+            }
+        if (sameString(words[0],"bothGap"))
+            {
+            for (i=0 ; i<count-1 ; i++)
+                gapInitBothGap[i] = atoi(words[i+1]);
+            }
+            
+        }
+    if (aid.smallSize == 0)
+        errAbort("missing smallSize parameter in %s\n",gapFileName);
+    lineFileClose(&lf);
+    }
+else
     {
-    if (aid.smallSize == gapInitPos[i])
-	{
-        startLong = i;
-	break;
-	}
+    /* if no gap file, then setup default values */ 
+    /* Set up to handle small values */
+    aid.smallSize = 111;
+    tableSize = 11;
+    AllocArray(gapInitPos,tableSize);
+    AllocArray(gapInitQGap,tableSize);
+    AllocArray(gapInitTGap,tableSize);
+    AllocArray(gapInitBothGap,tableSize);
+    for (i = 0 ; i < tableSize ; i++)
+        {
+        gapInitPos[i] = gapInitPosDefault[i];
+        gapInitTGap[i] = gapInitTGapDefault[i];
+        gapInitQGap[i] = gapInitQGapDefault[i];
+        gapInitBothGap[i] = gapInitBothGapDefault[i];
+        }
     }
-if (startLong < 0)
-    errAbort("No position %d in initGapAid()\n", aid.smallSize);
-aid.longCount = ArraySize(gapInitPos) - startLong;
-aid.qPosCount = ArraySize(gapInitQGap) - startLong;
-aid.tPosCount = ArraySize(gapInitTGap) - startLong;
-aid.bPosCount = ArraySize(gapInitBothGap) - startLong;
-aid.longPos = cloneMem(gapInitPos + startLong, aid.longCount * sizeof(int));
-aid.qLong = cloneMem(gapInitQGap + startLong, aid.qPosCount * sizeof(double));
-aid.tLong = cloneMem(gapInitTGap + startLong, aid.tPosCount * sizeof(double));
-aid.bLong = cloneMem(gapInitBothGap + startLong, aid.bPosCount * sizeof(double));
+    AllocArray(aid.qSmall, aid.smallSize);
+    AllocArray(aid.tSmall, aid.smallSize);
+    AllocArray(aid.bSmall, aid.smallSize);
+    for (i=1; i<aid.smallSize; ++i)
+        {
+        aid.qSmall[i] = 
+            interpolate(i, gapInitPos, gapInitQGap, tableSize);
+        aid.tSmall[i] = 
+            interpolate(i, gapInitPos, gapInitTGap, tableSize);
+        aid.bSmall[i] = interpolate(i, gapInitPos, 
+            gapInitBothGap, tableSize);
+        }
 
-/* Set up to handle huge values. */
-aid.qLastPos = aid.longPos[aid.qPosCount-1];
-aid.tLastPos = aid.longPos[aid.tPosCount-1];
-aid.bLastPos = aid.longPos[aid.bPosCount-1];
-aid.qLastPosVal = aid.qLong[aid.qPosCount-1];
-aid.tLastPosVal = aid.tLong[aid.tPosCount-1];
-aid.bLastPosVal = aid.bLong[aid.bPosCount-1];
-aid.qLastSlope = calcSlope(aid.qLastPosVal, aid.qLong[aid.qPosCount-2],
-			   aid.qLastPos, aid.longPos[aid.qPosCount-2]);
-aid.tLastSlope = calcSlope(aid.tLastPosVal, aid.tLong[aid.tPosCount-2],
-			   aid.tLastPos, aid.longPos[aid.tPosCount-2]);
-aid.bLastSlope = calcSlope(aid.bLastPosVal, aid.bLong[aid.bPosCount-2],
-			   aid.bLastPos, aid.longPos[aid.bPosCount-2]);
-// uglyf("qLastPos %d, qlastPosVal %f, qLastSlope %f\n", aid.qLastPos, aid.qLastPosVal, aid.qLastSlope);
-// uglyf("tLastPos %d, tlastPosVal %f, tLastSlope %f\n", aid.tLastPos, aid.tLastPosVal, aid.tLastSlope);
-// uglyf("bLastPos %d, blastPosVal %f, bLastSlope %f\n", aid.bLastPos, aid.bLastPosVal, aid.bLastSlope);
+    /* Set up to handle intermediate values. */
+    for (i=0; i<tableSize; ++i)
+        {
+        if (aid.smallSize == gapInitPos[i])
+            {
+            startLong = i;
+            break;
+            }
+        }
+    if (startLong < 0)
+        errAbort("No position %d in initGapAid()\n", aid.smallSize);
+    aid.longCount = tableSize - startLong;
+    aid.qPosCount = tableSize - startLong;
+    aid.tPosCount = tableSize - startLong;
+    aid.bPosCount = tableSize - startLong;
+    aid.longPos = cloneMem(gapInitPos + startLong, aid.longCount * sizeof(int));
+    aid.qLong = cloneMem(gapInitQGap + startLong, aid.qPosCount * sizeof(double));
+    aid.tLong = cloneMem(gapInitTGap + startLong, aid.tPosCount * sizeof(double));
+    aid.bLong = cloneMem(gapInitBothGap + startLong, aid.bPosCount * sizeof(double));
+
+    /* Set up to handle huge values. */
+    aid.qLastPos = aid.longPos[aid.qPosCount-1];
+    aid.tLastPos = aid.longPos[aid.tPosCount-1];
+    aid.bLastPos = aid.longPos[aid.bPosCount-1];
+    aid.qLastPosVal = aid.qLong[aid.qPosCount-1];
+    aid.tLastPosVal = aid.tLong[aid.tPosCount-1];
+    aid.bLastPosVal = aid.bLong[aid.bPosCount-1];
+    aid.qLastSlope = calcSlope(aid.qLastPosVal, aid.qLong[aid.qPosCount-2],
+                               aid.qLastPos, aid.longPos[aid.qPosCount-2]);
+    aid.tLastSlope = calcSlope(aid.tLastPosVal, aid.tLong[aid.tPosCount-2],
+                               aid.tLastPos, aid.longPos[aid.tPosCount-2]);
+    aid.bLastSlope = calcSlope(aid.bLastPosVal, aid.bLong[aid.bPosCount-2],
+                               aid.bLastPos, aid.longPos[aid.bPosCount-2]);
+    // uglyf("qLastPos %d, qlastPosVal %f, qLastSlope %f\n", aid.qLastPos, aid.qLastPosVal, aid.qLastSlope);
+    // uglyf("tLastPos %d, tlastPosVal %f, tLastSlope %f\n", aid.tLastPos, aid.tLastPosVal, aid.tLastSlope);
+    // uglyf("bLastPos %d, blastPosVal %f, bLastSlope %f\n", aid.bLastPos, aid.bLastPosVal, aid.bLastSlope);
 }
 
 int gapCost(int dq, int dt)
@@ -366,7 +471,7 @@ int gapCost(int dq, int dt)
 if (dt < 0) dt = 0;
 if (dq < 0) dq = 0;
 if (dt == 0)
-    {
+    { 
     if (dq < aid.smallSize)
         return aid.qSmall[dq];
     else if (dq >= aid.qLastPos)
@@ -516,7 +621,7 @@ do
 	       findCrossover(b, nextB, scoreData.qSeq, scoreData.tSeq, overlap, 
 		    scoreData.ss->matrix,
 		    &crossover, &overlapAdjustment);
-	       nextB->qStart += crossover;
+               nextB->qStart += crossover;
 	       nextB->tStart += crossover;
 	       invCross = overlap - crossover;
 	       b->qEnd -= invCross;
@@ -560,8 +665,8 @@ if (maxScore < chain->score)
         {
 	int size = b->qEnd - b->qStart;
 	oneScore = scoreBlock(qSeq->dna + b->qStart, tSeq->dna + b->tStart, size, scoreData.ss->matrix);
-	uglyf(" q %d, t %d, size %d, score %d\n",
-		b->qStart, b->tStart, size, oneScore);
+        uglyf(" q %d, t %d, size %d, score %d\n",
+             b->qStart, b->tStart, size, oneScore);
 	gaplessScore += oneScore;
 	}
     uglyf("gaplessScore %d\n", gaplessScore);
@@ -714,6 +819,11 @@ struct dnaSeq *qSeq = NULL, *tSeq = NULL;
 char qStrand = 0, tStrand = 0;
 struct chain *chainList = NULL, *chain;
 FILE *details = NULL;
+struct lineFile *lf = NULL;
+struct dnaSeq *seq, *seqList = NULL;
+struct hash *faHash = newHash(0);
+char comment[1024];
+FILE *faF;
 
 if (detailsName != NULL)
     details = mustOpen(detailsName, "w");
@@ -722,12 +832,31 @@ if (optionExists("psl"))
     spList = readPslBlocks(axtIn, pairHash);
 else
     spList = readAxtBlocks(axtIn, pairHash);
+
+if (optionExists("faQ"))
+    {
+    faF = mustOpen(qNibDir, "r");
+    AllocVar(seq);
+    while ( faReadMixedNext(faF, TRUE, NULL, TRUE, NULL, &seq))
+        {
+        hashAdd(faHash, seq->name, seq);
+        slAddHead(&seqList, seq);
+        AllocVar(seq);
+        }
+    fclose(faF);
+    }
 for (sp = spList; sp != NULL; sp = sp->next)
     {
     slReverse(&sp->blockList);
     removeExactOverlaps(&sp->blockList);
     uglyf("%d blocks after duplicate removal\n", slCount(sp->blockList));
-    loadIfNewSeq(qNibDir, sp->qName, sp->qStrand, &qName, &qSeq, &qStrand);
+    if (optionExists("faQ"))
+        {
+        assert (faHash != NULL);
+        loadFaSeq(faHash, sp->qName, sp->qStrand, &qName, &qSeq, &qStrand);
+        }
+    else
+        loadIfNewSeq(qNibDir, sp->qName, sp->qStrand, &qName, &qSeq, &qStrand);
     loadIfNewSeq(tNibDir, sp->tName, '+', &tName, &tSeq, &tStrand);
     chainPair(sp, qSeq, tSeq, &chainList, details);
     }
@@ -767,8 +896,9 @@ int main(int argc, char *argv[])
 optionHash(&argc, argv);
 minScore = optionInt("minScore", minScore);
 detailsName = optionVal("details", NULL);
+gapFileName = optionVal("linearGap", NULL);
 dnaUtilOpen();
-initGapAid();
+initGapAid(gapFileName);
 // testGaps();
 if (argc != 5)
     usage();
