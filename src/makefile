@@ -5,6 +5,19 @@ alpha: clean cgi-alpha blat
 beta: check-beta clean cgi-beta
 
 libs:
+	@if test "$$MACHTYPE x" = " x" ; then \
+		echo "missing MACHTYPE definition in environment" ; \
+		echo "it should be one of: i386 i686 sparc alpha x86_64 ppc" ; \
+		exit 255 ; \
+	else \
+		echo $$MACHTYPE | grep -q -e- ; \
+		if test "$$?" = "0" ; then \
+		echo "can not use a MACHTYPE with - character" ; \
+		echo "MACHTYPE: $$MACHTYPE" ; \
+		echo "it should be one of: i386 i686 sparc alpha x86_64 ppc" ; \
+		exit 255 ; \
+		fi ; \
+	fi ;
 	cd lib && ${MAKE}
 	cd jkOwnLib && ${MAKE}
 	cd hg/lib && ${MAKE}
