@@ -20,30 +20,21 @@
 #include "subText.h"
 #include "blatServers.h"
 #include "bed.h"
+#include "defaultDb.h"
+
+#define DEFAULT_PROTEINS "proteins"
+#define DEFAULT_GENOME "Human"
 
 static struct sqlConnCache *hdbCc = NULL;  /* cache for primary database connection */
 static struct sqlConnCache *hdbCc2 = NULL;  /* cache for second database connection (ortholog) */
 static struct sqlConnCache *centralCc = NULL;
 
-#define DEFAULT_HUMAN "hg13"
-#define DEFAULT_MOUSE "mm3"
-#define DEFAULT_RAT   "rn1"
-#define DEFAULT_ZOO   "zooHuman3"
-#define DEFAULT_DB "hg13"
-#define DEFAULT_PROTEINS   "proteins"
-
-static char *defaultHuman = DEFAULT_HUMAN;
-static char *defaultMouse = DEFAULT_MOUSE;
-static char *defaultRat   = DEFAULT_RAT;
-static char *defaultZoo   = DEFAULT_ZOO;
-
-static char *hdbHost;
-static char *hdbName = DEFAULT_HUMAN;
-static char *hdbName2 = DEFAULT_MOUSE;
-static char *hdbUser;
-static char *hdbPassword;
+static char *hdbHost = NULL;
+static char *hdbName = NULL;
+static char *hdbName2 = NULL;
+static char *hdbUser = NULL;
+static char *hdbPassword = NULL;
 static char *hdbTrackDb = NULL;
-
 static char *protDbName = DEFAULT_PROTEINS;
 
 static char* getCfgValue(char* envName, char* cfgName)
@@ -126,21 +117,69 @@ if (hdbCc2 != NULL)
 hdbName2 = dbName;
 }
 
+char *hDefaultDbForGenome(char *genome)
+/*
+Purpose: Return the default database matching the Genome.
+
+param Genome - The Genome for which we are trying to get the 
+    default database.
+return - The default database name for this Genome
+Free the returned database name.
+ */
+{
+struct sqlConnection *conn = hConnectCentral();
+struct sqlResult *sr = NULL;
+char **row;
+struct defaultDb *db = NULL;
+char query [256];
+char *result = NULL;
+
+if (NULL == genome)
+    {
+    genome = DEFAULT_GENOME;
+    }
+
+/* Get proper default from defaultDb table */
+sprintf(query, "select * from defaultDb where genome = '%s'", genome);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    db = defaultDbLoad(row);
+    }
+
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+AllocArray(result, strlen(db->name) + 1);
+strcpy(result, db->name);
+defaultDbFree(&db);
+return result;
+}
+
 char *hDefaultDb()
 /* Return the default db if all else fails */
 {
-return DEFAULT_DB;
+return hDefaultDbForGenome(DEFAULT_GENOME);
 }
 
 char *hGetDb()
 /* Return the current database name. */
 {
+if (NULL == hdbName)
+    {
+    hdbName = hDefaultDb();
+    }
+
 return hdbName;
 }
 
 char *hGetDb2()
 /* Return the current database name. */
 {
+if (NULL == hdbName)
+    {
+    hdbName = hDefaultDbForGenome("Mouse");
+    }
+
 return hdbName2;
 }
 
@@ -2143,37 +2182,6 @@ st.nibDir = cloneString(row[5]);
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
 return &st;
-}
-
-char *hDefaultDbForGenome(char *genome)
-/*
-Purpose: Return the default database matching the Genome.
-
-param Genome - The Genome for which we are trying to get the 
-    default database.
-return - The default database name for this Genome
- */
-{
-char *result = hGetDb();
-
-if (strstrNoCase(genome, "mouse"))
-    {
-    result = defaultMouse;
-    }
-else if (strstrNoCase(genome, "rat"))
-    {
-    result = defaultRat;
-    }
-else if (strstrNoCase(genome, "zoo"))
-    {
-    result = defaultZoo;
-    }
-else if (strstrNoCase(genome, "human"))
-    {
-    result = defaultHuman;
-    }
-
-return result;
 }
 
 char *sqlGetField(struct sqlConnection *connIn, 
