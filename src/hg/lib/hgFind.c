@@ -2665,6 +2665,57 @@ else if (strstrNoCase(organism, "rat"))
 "</TABLE>\n"
 "\n");
     }
+else if (strstrNoCase(organism, "SARS coronavirus TOR2"))
+    {
+    puts("<P><H2>SARS coronavirus TOR2</P></H2>\n");
+    puts(
+"<P>A genome position can be specified by the accession number of an "
+"mRNA, a coordinate range, a gene identifier, or keywords from "
+"the Genbank description of an mRNA. The following list provides "
+"examples of various types of position queries for the SARS coronavirus TOR2 genome. "
+"See the "
+"<A HREF=\"http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html\" TARGET=_blank>"
+"User Guide</A> for more help. \n"
+"<P>\n"
+"\n"
+"<P>\n"
+"<TABLE  border=0 CELLPADDING=0 CELLSPACING=0>\n"
+"<TR><TD VALIGN=Top NOWRAP><B>Request:</B><br></TD>\n"
+"	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD></TR>\n"
+"	\n"
+"<TR><TD VALIGN=Top><br></TD></TR>\n"
+"	\n"
+"<TR><TD VALIGN=Top NOWRAP>chr1</TD>\n"
+"	<TD WIDTH=14></TD>\n"
+"	<TD VALIGN=Top>Displays the entire genome for SARS coronavirus TOR2</TD></TR>\n"
+"<TR><TD VALIGN=Top NOWRAP>chr1:15720-186200</TD>\n"
+"	<TD WIDTH=14></TD>\n"
+"	<TD VALIGN=Top>Displays the region between bases 15720 and 186200 showing the protein NP_828870.1.</TD></TR>\n"
+"<TR><TD VALIGN=Top><br></TD></TR>\n"
+"\n"
+"<TR><TD VALIGN=Top NOWRAP>AF391541</TD>\n"
+"	<TD WIDTH=14></TD>\n"
+"	<TD VALIGN=Top>Displays region of mRNA with GenBank accession AF391541</TD></TR>\n"
+"<TR><TD VALIGN=Top NOWRAP>CS000003</TD>\n"
+"	<TD WIDTH=14></TD>\n"
+"	<TD VALIGN=Top>Displays region of genome with fgenesv+ gene identifier CS000003</TD></TR>\n"
+"<TR><TD VALIGN=Top><br></TD></TR>\n"
+"\n"
+"<TR><TD VALIGN=Top NOWRAP>bovine coronavirus</TD>\n"
+"	<TD WIDTH=14></TD>\n"
+"	<TD VALIGN=Top>Lists mRNAs associated with bovine coronavirus </TD></TR>\n"
+"<TR><TD VALIGN=Top NOWRAP>Chouljenko,V.</TD>\n"
+"	<TD WIDTH=14></TD>\n"
+"	<TD VALIGN=Top>Lists mRNAs deposited by co-author V. Chouljenko</TD></TR>\n"
+"\n"
+"<TR><TD VALIGN=Top><br></TD></TR>\n"
+"	\n"
+"<TR><TD COLSPAN=\"3\" > Use this last format for entry authors -- "
+"even though Genbank searches require Chouljenko V "
+"format, GenBank entries themselves use Chouljenko,V. internally.\n"
+"</TABLE>\n"
+"\n");
+    }
 else 
     {
     printf("<H2>%s</H2>", organism);
