@@ -7,13 +7,6 @@ idSql select swissProt.extDbRef.extAcc1 from swissProt.extDbRef,swissProt.extDb,
 priority 25
 url http://www.informatics.jax.org/searches/accession_report.cgi?id=%s
 
-name geneLynx
-shortLabel GeneLynx
-tables kgXref
-idSql select geneSymbol from kgXref where kgID = '%s'
-url http://www.genelynx.org/cgi-bin/linklist?tableitem=GLID_NAME.name&IDlist=%s&dir=1
-priority 70
-
 name geneCards
 shortLabel GeneCards
 tables kgXref
