@@ -1,3 +1,4 @@
+/* hgText - a.k.a. Table Browser. */
 #include "common.h"
 #include "hCommon.h"
 #include "linefile.h"
@@ -26,7 +27,7 @@
 #include "portable.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.94 2003/09/25 16:58:22 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.95 2003/10/02 05:48:38 angie Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -116,10 +117,11 @@ retStats->stdev = sqrt(total / N);
 /* copied from hgGateway: */
 static char *onChangeDb = "onchange=\"document.orgForm.db.value = document.mainForm.db.options[document.mainForm.db.selectedIndex].value; document.orgForm.submit();\"";
 static char *onChangeOrg = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.db.value = 0; document.orgForm.submit();\"";
-/* User can choose from Positional or Non-positional tables.  When one is 
- * selected, clear the other: */
-static char *onChangePos = "onchange=\"document.mainForm.table1.value = document.mainForm.table1.options[0].value;\"";
-static char *onChangeNonPos = "onchange=\"document.mainForm.table0.value = document.mainForm.table0.options[0].value;\"";
+/* User can choose from Track, Positional or Non-positional tables.  
+ * When one is selected, clear the others: */
+static char *onChangeTrack = "onchange=\"document.mainForm.table0.value = document.mainForm.table0.options[0].value; document.mainForm.table1.value = document.mainForm.table1.options[0].value;\"";
+static char *onChangePos = "onchange=\"document.mainForm.tbTrack.value = document.mainForm.tbTrack.options[0].value; document.mainForm.table1.value = document.mainForm.table1.options[0].value;\"";
+static char *onChangeNonPos = "onchange=\"document.mainForm.tbTrack.value = document.mainForm.tbTrack.options[0].value; document.mainForm.table0.value = document.mainForm.table0.options[0].value;\"";
 
 /* Droplist menu for selecting output type: */
 #define allFieldsPhase      "Tab-separated, All fields"
@@ -151,6 +153,8 @@ char *outputTypeNonPosMenu[] =
 int outputTypeNonPosMenuSize = 3;
 /* Other values that the "phase" var can take on: */
 #define chooseTablePhase    "table"
+#define pasteKeywordsPhase  "Paste in Keywords"
+#define uploadKeywordsPhase "Upload Keyword File"
 #define outputOptionsPhase  "Advanced query..."
 #define getOutputPhase      "Get results"
 #define getSomeFieldsPhase  "Get these fields"
@@ -161,6 +165,7 @@ int outputTypeNonPosMenuSize = 3;
 #define histPhase           "Get histogram"
 /* Old "phase" values handled for backwards compatibility: */
 #define oldAllFieldsPhase   "Get all fields"
+#define oldSeqOptionsPhase  "Get sequence..."
 
 /* Droplist menus for filtering on fields: */
 char *ddOpMenu[] =
@@ -229,8 +234,10 @@ if (cgiBooleanDefined(var) || val)
 void saveChooseTableState()
 /* Store in cart the user's settings in doChooseTable() form */
 {
+storeStringIfSet("tbTrack");
 storeStringIfSet("table0");
 storeStringIfSet("table1");
+storeStringIfSet("tbPosOrKeys");
 }
 
 void saveOutputOptionsState()
@@ -281,49 +288,88 @@ for (cv=cgiVarList();  cv != NULL;  cv=cv->next)
 void saveBedCtOptionsState()
 /* Store in cart the user's settings in doBedCtOptions() form */
 {
-storeBooleanIfSet("hgt.doCustomTrack");
-storeStringIfSet("hgt.ctName");
-storeStringIfSet("hgt.ctDesc");
-storeStringIfSet("hgt.ctVis");
-storeStringIfSet("hgt.ctUrl");
+storeBooleanIfSet("tbDoCustomTrack");
+storeStringIfSet("tbCtName");
+storeStringIfSet("tbCtDesc");
+storeStringIfSet("tbCtVis");
+storeStringIfSet("tbCtUrl");
 }
 
 void saveIntersectOptionsState()
 /* Store in cart the user's settings in doIntersectOptions() form */
 {
-storeStringIfSet("hgt.intersectOp");
-storeStringIfSet("hgt.moreThresh");
-storeStringIfSet("hgt.lessThresh");
+storeStringIfSet("tbIntersectOp");
+storeStringIfSet("tbMoreThresh");
+storeStringIfSet("tbLessThresh");
 }
 
 boolean isGenome(char *pos)
 /* Return TRUE if pos is genome. */
 {
+if (pos == NULL)
+    pos = "";
 pos = trimSpaces(pos);
-return(sameWord(pos, "genome") || sameWord(pos, "hgBatch"));
+return(sameWord(pos, "genome"));
 }
 
-boolean isBatch(char *pos)
-/* Return TRUE if pos is genome. */
+boolean isBatch()
+/* Return TRUE if user has selected to filter by name/keyword, and table 
+ * is positional. */
 {
-pos = trimSpaces(pos);
-return(sameWord(pos, "hgBatch"));
+char *posOrKeys = cartCgiUsualString(cart, "tbPosOrKeys", "undef");
+return(sameWord(posOrKeys, "keys") && tableIsPositional);
 }
 
 void positionLookup(char *phase)
 /* print the location and a jump button */
 {
-char pos[64];
+if (position == NULL || position[0] == 0)
+    position = cloneString("genome");
 
-if (! isGenome(position))
-    {
-    snprintf(pos, sizeof(pos), "%s:%d-%d", chrom, winStart+1, winEnd);
-    position = cloneString(pos);
-    }
 cgiMakeTextVar("position", position, 30);
 cgiMakeHiddenVar("origPhase", phase);
 cgiMakeButton("submit", "Look up");
 }
+
+char *getUserKeys()
+/* return a string with the user's keywords (item names) */
+{
+//#*** instead of tbUserKeys, should read these in from a file!
+char *ret = cartCgiUsualString(cart, "tbUserKeys", "");
+ret = trimSpaces(ret);
+if (ret[0] == 0)
+    ret = NULL;
+else
+    ret = cloneString(ret);
+if (isBatch() && (ret == NULL))
+    webAbort("Missing item names/keywords",
+	     "Item names/keywords must be given if \"Item name\" "
+	     "is chosen as the way to select table items.  Please go back "
+	     "and paste or upload item names/keywords.");
+return(ret);
+}
+
+void checkUserKeys()
+{
+char *keyStr = getUserKeys();
+freeMem(keyStr);
+return;
+}
+
+void printFirstNWords(char *str, int n, char *sep)
+/* Print out the first N words of str, separated by sep. Destructive to str! */
+{
+char *word=NULL;
+int i=0;
+while ((word = nextWord(&str)) != NULL && i < n)
+    {
+    printf("%s%s", ((i > 0) ? sep : ""), word);
+    i++;
+    }
+if (word != NULL)
+    puts("...");
+}
+
 
 void displayPosition()
 /* print the location if the table is positional. preserve batch-position. */
@@ -331,18 +377,22 @@ void displayPosition()
 cgiMakeHiddenVar("position", position);
 if (tableIsPositional)
     {
-    if (isBatch(position))
-	printf("position: previously uploaded set of accessions/names<P>\n");
+    if (isBatch())
+	{
+	printf("position: previously uploaded set of accessions/names (");
+	printFirstNWords(getUserKeys(), 3, " ");
+	puts(")<P>");
+	}
     else
 	printf("position: %s<P>\n", position);
     }
-/* Changed following from hgBatch to hgText until hgBatch online */
-printf("<A HREF=\"/cgi-bin/hgText?db=%s\">Change position</A><P>",
-       database);
-cgiContinueHiddenVar("hgb.showPasteResults");
-cgiContinueHiddenVar("hgb.showUploadResults");
+printf("<A HREF=\"%s?hgsid=%d&phase=table&tbPosOrKeys=pos\">New query</A><P>",
+       hgTextName(), cartSessionId(cart));
+cgiContinueHiddenVar("tbPosOrKeys");
+cgiContinueHiddenVar("tbShowPasteResults");
+cgiContinueHiddenVar("tbShowUploadResults");
 //#*** Really need to save this off to a local file!
-cgiContinueHiddenVar("hgb.userKeys");
+cgiContinueHiddenVar("tbUserKeys");
 }
 
 
@@ -352,11 +402,20 @@ char *searchPosition(char *pos, char **retChrom, int *retStart, int *retEnd)
 {
 if (! isGenome(pos))
     {
-    struct hgPositions *hgp = findGenomePosWeb(pos, retChrom, retStart, retEnd,
-					       cart, TRUE, hgTextName());
+    struct hgPositions *hgp = NULL;
+    char *phase = cgiUsualString("phase", "table");
+    char retAddr[512];
+
+    saveChooseTableState();
+    safef(retAddr, sizeof(retAddr), "%s?phase=%s", hgTextName(), phase);
+    hgp = findGenomePosWeb(pos, retChrom, retStart, retEnd,
+			   cart, TRUE, retAddr);
 
     if ((hgp == NULL) || (hgp->singlePos == NULL))
+	{
+	cartCheckout(&cart);
 	return NULL;
+	}
     }
 return(pos);
 }
@@ -386,12 +445,166 @@ if ((oldDb != NULL) && (! sameWord(oldDb, database)))
     }
 }
 
+char *getTableVar()
+{
+char *table  = cgiOptionalString("table");
+char *track  = cartCgiUsualString(cart, "tbTrack", NULL);
+char *table0 = cartCgiUsualString(cart, "table0", NULL);
+char *table1 = cartCgiUsualString(cart, "table1", NULL);
+
+if (table != NULL && strcmp(table, "Choose table") == 0)
+    table = NULL;
+
+if (track != NULL && strcmp(track, "Choose table") == 0)
+    track = NULL;
+
+if (table0 != NULL && strcmp(table0, "Choose table") == 0)
+    table0 = NULL;
+	
+if (table1 != NULL && strcmp(table1, "Choose table") == 0)
+    table1 = NULL;
+
+if (table != NULL)
+    return table;
+else if (track != NULL)
+    return track;
+else if (table0 != NULL)
+    return table0;
+else
+    return table1;
+}
+
+char *getTableName()
+{
+char *val, *ptr;
+	
+val = getTableVar();
+if (val == NULL)
+    return val;
+else if ((ptr = strchr(val, '.')) != NULL)
+    return ptr + 1;
+else
+    return val;
+}
+
+char *getTableDb()
+{
+char *val, *ptr;
+	
+val = cloneString(getTableVar());
+if (val == NULL)
+    return NULL;
+if ((ptr = strchr(val, '.')) != NULL)
+    *ptr = 0;
+return(val);
+}
+
+char *getTrackName()
+{
+char *trackName = cloneString(getTableName());
+if (trackName == NULL)
+    return NULL;
+if (startsWith("chrN_", trackName))
+    strcpy(trackName, trackName+strlen("chrN_"));
+return trackName;
+}
+
+char *getTable2Var()
+{
+char *table2  = cgiOptionalString("table2");
+if ((table2 != NULL) && sameString(table2, "Choose table"))
+    table2 = NULL;
+return table2;
+}
+
+char *getTable2Name()
+{
+char *val, *ptr;
+	
+val = getTable2Var();
+if (val == NULL)
+    return val;
+else if ((ptr = strchr(val, '.')) != NULL)
+    return ptr + 1;
+else
+    return val;
+}
+
+char *getTable2Db()
+{
+char *val, *ptr;
+	
+val = cloneString(getTable2Var());
+if (val == NULL)
+    return(val);
+if ((ptr = strchr(val, '.')) != NULL)
+    *ptr = 0;
+return(val);
+}
+
+char *getTrack2Name()
+{
+char *trackName = cloneString(getTable2Name());
+if ((trackName != NULL) && startsWith("chrN_", trackName))
+    strcpy(trackName, trackName+strlen("chrN_"));
+return trackName;
+}
+
+void printTrackDropList(char *db, char *javascript)
+/* Print tracks for this database */
+{
+struct trackDb *trackList = hTrackDb(NULL), *t;
+char *tbTrack = cartCgiUsualString(cart, "tbTrack", NULL);
+int trackCount = slCount(trackList);
+char **trackLabels, **trackNames;
+char *selected = NULL;
+char chrN_track[256];
+char tbl[256];
+int i;
+
+AllocArray(trackLabels, trackCount+1);
+AllocArray(trackNames, trackCount+1);
+trackLabels[0] = "Browser tracks";
+trackNames[0] = "Choose table";
+for (t = trackList, i=1; t != NULL; t = t->next, ++i)
+    {
+    trackLabels[i] = t->shortLabel;
+    safef(chrN_track, sizeof(chrN_track), "%s_%s", hDefaultChrom(),
+	  t->tableName);
+    if (hTableExists(chrN_track))
+	safef(tbl, sizeof(tbl), "%s.chrN_%s", database, t->tableName);
+    else
+	safef(tbl, sizeof(tbl), "%s.%s", database, t->tableName);
+    trackNames[i] = cloneString(tbl);
+    if (tbTrack != NULL && sameString(tbTrack, tbl))
+        selected = t->shortLabel;
+    }
+if (selected == NULL)
+    {
+    selected = trackLabels[0];
+    }
+cgiMakeDropListFull("tbTrack", trackLabels, trackNames, 
+	trackCount+1, selected, javascript);
+}
+
+
+boolean anyWildMatch(char *s, struct slName *wildList)
+/* Return TRUE if s matches anything on wildList */
+{
+struct slName *wild;
+for (wild = wildList; wild != NULL; wild = wild->next)
+    {
+    if (wildMatch(wild->name, s))
+        return TRUE;
+    }
+return FALSE;
+}
+
 void doGateway()
 /* Table Browser gateway page: select organism, db, position */
 {
 char *oldDb;
 
-position = cloneString(cartCgiUsualString(cart, "position", hDefaultPos(database)));
 webStart(cart, "Table Browser: Choose Organism &amp; Assembly");
 
 handleDbChange();
@@ -420,20 +633,18 @@ puts(
 );
 
 puts("<P>This tool allows you to download portions of the Genome Browser \n"
-"\tdatabase in several output formats. \n"
-"\tEnter a genome position (or enter <B>genome</B> to \n"
-"\tsearch all chromosomes), then press the Submit button.\n");
-
-printf("Use <A HREF=\"/cgi-bin/hgBlat?db=%s&hgsid=%d\">BLAT Search</A> to\n"
-"\tlocate a particular sequence in the genome.\n",
-       database, cartSessionId(cart));
+     "database in several output formats. \n"
+     "Choose a genome and assembly, \n"
+     "then press the Submit button.\n");
 puts("See the <A HREF=\"/goldenPath/help/hgTextHelp.html\">Table Browser "
      "User Guide</A> for more information.<P>\n");
 
 cgiMakeHiddenVar("org", organism);
 
+puts("<center>");
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\"\">\n",
+       hgTextName(), httpFormMethod);
 puts(
-"<center>\n"
 "<table bgcolor=\"cccc99\" border=\"0\" CELLPADDING=1 CELLSPACING=0>\n"
 "<tr><td>\n"
 "<table BGCOLOR=\"FEFDEF\" BORDERCOLOR=\"CCCC99\" BORDER=0 CELLPADDING=0 CELLSPACING=0>\n"  
@@ -445,15 +656,12 @@ puts(
 "<tr>\n"
 "<td>\n"
 );
-printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\"\">\n",
-       hgTextName(), httpFormMethod);
 cartSaveSession(cart);
 puts(
-"<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"/images/DOT.gif\">\n"
+"<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"tbDummyEnterButton\" src=\"/images/DOT.gif\">\n"
 "<table><tr>\n"
 "<td align=center valign=baseline>genome</td>\n"
 "<td align=center valign=baseline>assembly</td>\n"
-"<td align=center valign=baseline>position</td>\n"
 );
 
 puts("<tr><td align=center>\n");
@@ -461,23 +669,25 @@ printGenomeListHtml(database, onChangeOrg);
 puts("</td>\n");
 
 puts("<td align=center>\n");
-printAssemblyListHtml(database, onChangeDb);
-puts("</td>\n");
-
-puts("<td align=center>\n");
-cgiMakeTextVar("position", position, 30);
-cgiMakeHiddenVar("phase", chooseTablePhase);
+printAssemblyListHtml(database, "");
 puts("</td><td>");
 cgiMakeButton("submit", "Submit");
 puts(
 "</td></tr></table>\n"
-"</FORM>"
 "</td></tr>\n"
 "</table>\n"
 "</td></tr></table>\n"
 "</td></tr></table>\n"
+);
+cgiMakeHiddenVar("phase", chooseTablePhase);
+puts(
+"</FORM>"
 "</center>\n"
 );
+
+printf("To reset <B>all</B> user cart settings (including custom tracks), \n"
+       "<A HREF=\"/cgi-bin/cartReset?destination=%s\">click here</A>.\n",
+       hgTextName());
 
 printf("<FORM ACTION=\"%s\" METHOD=\"%s\" NAME=\"orgForm\">\n", hgTextName(),
        httpFormMethod);
@@ -524,114 +734,28 @@ char *getPosition(char **retChrom, int *retStart, int *retEnd)
  * if we had to display the gateway page or hgFind's selection page. */
 {
 char *pos = cloneString(cgiOptionalString("position"));
+char rawPos[64];
 
-if (pos == NULL)
-    pos = "";
-if (pos[0] == '\0')
+if ((pos != NULL) && (pos[0] != 0))
     {
-    doGateway();
-    return NULL;
+    char *newPos = searchPosition(pos, retChrom, retStart, retEnd);
+    if (newPos == NULL)
+	exit(0);
+    else
+	{
+	if (! isGenome(newPos))
+	    {
+	    snprintf(rawPos, sizeof(rawPos), "%s:%d-%d",
+		     chrom, winStart+1, winEnd);
+	    newPos = rawPos;
+	    }
+	return(cloneString(newPos));
+	}
     }
-return(searchPosition(pos, retChrom, retStart, retEnd));
-}
-
-
-char *getTableVar()
-{
-char *table  = cgiOptionalString("table");
-char *table0 = cgiOptionalString("table0");
-char *table1 = cgiOptionalString("table1");
-	
-if (table != 0 && strcmp(table, "Choose table") == 0)
-    table = 0;
-
-if (table0 != 0 && strcmp(table0, "Choose table") == 0)
-    table0 = 0;
-	
-if (table1 != 0 && strcmp(table1, "Choose table") == 0)
-    table1 = 0;
-
-if (table != 0)
-    return table;
-else if (table0 != 0)
-    return table0;
 else
-    return table1;
+    return(NULL);
 }
 
-char *getTableName()
-{
-char *val, *ptr;
-	
-val = getTableVar();
-if (val == NULL)
-    return val;
-else if ((ptr = strchr(val, '.')) != NULL)
-    return ptr + 1;
-else
-    return val;
-}
-
-char *getTableDb()
-{
-char *val, *ptr;
-	
-val = cloneString(getTableVar());
-if (val == NULL)
-    return NULL;
-if ((ptr = strchr(val, '.')) != NULL)
-    *ptr = 0;
-return(val);
-}
-
-char *getTrackName()
-{
-char *trackName = cloneString(getTableName());
-if (startsWith("chrN_", trackName))
-    strcpy(trackName, trackName+strlen("chrN_"));
-return trackName;
-}
-
-char *getTable2Var()
-{
-char *table2  = cgiOptionalString("table2");
-if ((table2 != NULL) && sameString(table2, "Choose table"))
-    table2 = NULL;
-return table2;
-}
-
-char *getTable2Name()
-{
-char *val, *ptr;
-	
-val = getTable2Var();
-if (val == NULL)
-    return val;
-else if ((ptr = strchr(val, '.')) != NULL)
-    return ptr + 1;
-else
-    return val;
-}
-
-char *getTable2Db()
-{
-char *val, *ptr;
-	
-val = cloneString(getTable2Var());
-if (val == NULL)
-    return(val);
-if ((ptr = strchr(val, '.')) != NULL)
-    *ptr = 0;
-return(val);
-}
-
-char *getTrack2Name()
-{
-char *trackName = cloneString(getTable2Name());
-if ((trackName != NULL) && startsWith("chrN_", trackName))
-    strcpy(trackName, trackName+strlen("chrN_"));
-return trackName;
-}
 
 struct customTrack *getCustomTracks()
 {
@@ -699,6 +823,60 @@ else
     return FALSE;
 }
 
+
+void pasteForm()
+/* Put up form that lets them paste in keys. */
+{
+webStart(cart, "Table Browser: Paste in Keys for Batch Query");
+puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#PasteKeys\">"
+     "<B>Help</B></A>");
+puts("Please paste in a list of keys to match.  These may include "
+       "* and ? wildcard characters.");
+printf("<FORM ACTION=\"%s\" METHOD=\"%s\">", hgTextName(), httpFormMethod);
+cgiContinueHiddenVar("org");
+cgiContinueHiddenVar("db");
+cgiMakeHiddenVar("position", "genome");
+cgiMakeHiddenVar("table", getTableVar());
+cgiMakeHiddenVar("phase", chooseTablePhase);
+cgiMakeHiddenVar("tbPosOrKeys", "keys");
+cgiContinueHiddenVar("tbTrack");
+cgiContinueHiddenVar("table0");
+cgiContinueHiddenVar("table1");
+puts("<TEXTAREA NAME=tbUserKeys ROWS=10 COLS=80></TEXTAREA><BR>\n");
+puts("<CENTER>");
+puts(" <INPUT TYPE=SUBMIT Name=tbShowPasteResults VALUE=\"Submit\"><P>\n");
+puts("</CENTER>");
+cartSaveSession(cart);
+printf("</FORM>\n");
+webEnd();
+}
+
+void uploadForm()
+/* Put up upload form. */
+{
+webStart(cart, "Table Browser: Upload File of Keys for Batch Query");
+puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#UploadKeys\">"
+     "<B>Help</B></A>");
+printf("<FORM ACTION=\"%s\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n",
+       hgTextName());
+cgiContinueHiddenVar("org");
+cgiContinueHiddenVar("db");
+cgiMakeHiddenVar("position", "genome");
+cgiMakeHiddenVar("table", getTableVar());
+cgiMakeHiddenVar("phase", chooseTablePhase);
+cgiMakeHiddenVar("tbPosOrKeys", "keys");
+cgiContinueHiddenVar("tbTrack");
+cgiContinueHiddenVar("table0");
+cgiContinueHiddenVar("table1");
+puts("Please enter the name of a file in your computer containing a space, tab, or ");
+puts("line separated list of the key names you want to look up in the database.");
+puts("Unlike in the paste option, wildcards don't work in this list.<BR>");
+puts("Upload sequence: <INPUT TYPE=FILE NAME=\"tbUserKeys\">");
+puts("<INPUT TYPE=SUBMIT Name=tbShowUploadResults VALUE=\"Submit File\"><P>\n");
+cartSaveSession(cart);
+puts("</FORM>\n");
+webEnd();
+}
 
 static void printSelectOptions(struct hashEl *optList, char *varName)
 /* Print out an HTML select option for each element in a hashEl list.
@@ -854,56 +1032,61 @@ slSort(retNonposTableList, compareTable);
 }
 
 void doChooseTable()
-/* get the table selection from the user */
+/* Offer the user choice of tracks/tables, positions, actions */
 {
 struct hashEl *posTableList;
 struct hashEl *nonposTableList;
+char *keyStr = getUserKeys();
+char *posOrKeys;
 
-webStart(cart, "Table Browser: %s %s: Choose a table", hOrganism(database),freezeName);
+webStart(cart, "Table Browser: %s %s: Choose a table",
+	 hOrganism(database), freezeName);
 handleDbChange();
 
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n\n",
        hgTextName(), httpFormMethod);
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
-puts("<TABLE CELLPADDING=\"8\">");
-puts("<TR><TD>");
+cgiContinueHiddenVar("tbUserKeys");
 puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#ChooseTable\">"
      "<B>Help</B></A>");
-puts("</TD></TR>");
-puts("<TR><TD>");
-
-puts("Choose a position: ");
-puts("</TD><TD>");
-positionLookup(chooseTablePhase);
-puts("</TD></TR>");
-
-puts("<TR><TD>");
 
 categorizeTables(&posTableList, &nonposTableList);
-puts("Choose a table:");
-puts("</TD><TD>");
+puts("<P> Choose a table: <BR>");
+printTrackDropList(database, onChangeTrack);
 printf("<SELECT NAME=table0 SIZE=1 %s>\n", onChangePos);
 printf("<OPTION VALUE=\"Choose table\">Positional tables</OPTION>\n");
 printSelectOptions(posTableList, "table0");
 puts("</SELECT>");
-
 printf("<SELECT NAME=table1 SIZE=1 %s>\n", onChangeNonPos);
 printf("<OPTION VALUE=\"Choose table\">Non-positional tables</OPTION>\n");
 printSelectOptions(nonposTableList, "table1");
 puts("</SELECT>");
 hashElFreeList(&posTableList);
 hashElFreeList(&nonposTableList);
-puts("</TD></TR>");
 
-puts("<TR><TD>");
-puts("Choose an action: ");
-puts("</TD><TD>");
+puts("<P> Select items from tracks or positional tables by: <BR>");
+posOrKeys = cartCgiUsualString(cart, "tbPosOrKeys", "pos");
+cgiMakeRadioButton("tbPosOrKeys", "pos", sameString(posOrKeys, "pos"));
+puts("Position: ");
+positionLookup(chooseTablePhase);
+puts("<BR>");
+cgiMakeRadioButton("tbPosOrKeys", "keys", !sameString(posOrKeys, "pos"));
+puts("Item name: ");
+cgiMakeButton("phase", pasteKeywordsPhase);
+printf(" ");
+cgiMakeButton("phase", uploadKeywordsPhase);
+if (keyStr != NULL)
+    {
+    puts("<BR> Previously loaded keywords: ");
+    printFirstNWords(keyStr, 3, " ");
+    }
+
+puts("<P> Choose an action: <BR>");
 cgiMakeButton("phase", oldAllFieldsPhase);
+cgiMakeButton("phase", oldSeqOptionsPhase);
 cgiMakeButton("phase", outputOptionsPhase);
-puts("</TD></TR>");
 
-puts("</TABLE>");
 puts("</FORM>");
 webEnd();
 }
@@ -912,23 +1095,10 @@ void getFullTableName(char *dest, char *newChrom, char *table)
 /* given a chrom return the table name of the table selected by the user */
 {
 char post[64];
-char buf[128];
 
 if (newChrom == NULL)
     {
-    struct sqlConnection *conn = hAllocConn();
-    newChrom = sqlQuickQuery(conn, "select chrom from chromInfo limit 1",
-			     buf, sizeof(buf));
-    hFreeConn(&conn);
-    if (newChrom == NULL)
-	{
-	webAbort("Database Error",
-		 "Can't find first chromosome in %s.chromInfo", database);
-	}
-    else
-	{
-	newChrom = cloneString(newChrom);
-	}
+    newChrom = hDefaultChrom();
     }
 chrom = newChrom;
 if (allGenome)
@@ -1821,17 +1991,17 @@ for (current = cgiVarList();  current != NULL;  current = current->next)
 void preserveTable2()
 {
 char *table2 = getTable2Name();
-char *op = cgiOptionalString("hgt.intersectOp");
+char *op = cgiOptionalString("tbIntersectOp");
 if ((table2 != NULL) && (table2[0] != 0) && (op != NULL))
     {
     char *db2 = getTable2Db();
     char fullTableName2[256];
     cgiContinueHiddenVar("table2");
-    cgiContinueHiddenVar("hgt.intersectOp");
-    cgiMakeHiddenVar("hgt.moreThresh", cgiUsualString("hgt.moreThresh", "0"));
-    cgiMakeHiddenVar("hgt.lessThresh", cgiUsualString("hgt.lessThresh", "100"));
-    cgiContinueHiddenVar("hgt.invertTable");
-    cgiContinueHiddenVar("hgt.invertTable2");
+    cgiContinueHiddenVar("tbIntersectOp");
+    cgiMakeHiddenVar("tbMoreThresh", cgiUsualString("tbMoreThresh", "0"));
+    cgiMakeHiddenVar("tbLessThresh", cgiUsualString("tbLessThresh", "100"));
+    cgiContinueHiddenVar("tbInvertTable");
+    cgiContinueHiddenVar("tbInvertTable2");
     getFullTableName(fullTableName2, chrom, table2);
     preserveConstraints(fullTableName2, db2, "2");
     }
@@ -1920,7 +2090,7 @@ char *db = getTableDb();
 char *table = getTableName();
 struct hTableInfo *hti = getHti(db, table);
 char *table2 = getTable2Name();
-char *op = cgiOptionalString("hgt.intersectOp");
+char *op = cgiOptionalString("tbIntersectOp");
 
 if ((table2 != NULL) && (table2[0] != 0) && (op != NULL))
     {
@@ -1959,12 +2129,12 @@ return(hti);
 void bedFilterBatch(struct bed **bedListPtr)
 /* If position is batch, filter by name. */
 {
-if (isBatch(position))
+if (isBatch())
     {
     struct bed *bedListOut = NULL;
-//#*** instead of hgb.userKeys, should read these in from a file!
-    char *keyStr = cloneString(cgiString("hgb.userKeys")), *word;
-    if (cgiVarExists("hgb.showUploadResults"))
+    char *keyStr = getUserKeys();
+    char *word;
+    if (cgiVarExists("tbShowUploadResults"))
 	{
 	struct hash *nameHash = newHash(18);
 	while ((word = nextWord(&keyStr)) != NULL)
@@ -2085,7 +2255,7 @@ char *table = getTableName();
 struct hTableInfo *hti = getHti(db, table);
 char *constraints;
 char *table2 = getTable2Name();
-char *op = cgiOptionalString("hgt.intersectOp");
+char *op = cgiOptionalString("tbIntersectOp");
 char *track = getTrackName();
 int fields;
 int i, totalCount;
@@ -2123,10 +2293,10 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	struct featureBits *fbListT2 = NULL;
 	struct bed *bed;
 	Bits *bitsT2;
-	int moreThresh = cgiOptionalInt("hgt.moreThresh", 0);
-	int lessThresh = cgiOptionalInt("hgt.lessThresh", 100);
-	boolean invTable = cgiBoolean("hgt.invertTable");
-	boolean invTable2 = cgiBoolean("hgt.invertTable2");
+	int moreThresh = cgiOptionalInt("tbMoreThresh", 0);
+	int lessThresh = cgiOptionalInt("tbLessThresh", 100);
+	boolean invTable = cgiBoolean("tbInvertTable");
+	boolean invTable2 = cgiBoolean("tbInvertTable2");
 	char *track2 = getTrack2Name();
 	char *db2 = getTable2Db();
 	char *constraints2 = constrainFields("2");
@@ -2139,7 +2309,7 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	    (!sameString("and", op)) &&
 	    (!sameString("or", op)))
 	    {
-	    webAbort("Error", "Invalid value \"%s\" of CGI variable hgt.intersectOp", op);
+	    webAbort("Error", "Invalid value \"%s\" of CGI variable tbIntersectOp", op);
 	    }
 	if (ignoreConstraints ||
 	    ((constraints2 != NULL) && (constraints2[0] == 0)))
@@ -2352,8 +2522,14 @@ else
 
 boolean printTabbedResults(struct sqlResult *sr, boolean initialized)
 {
+struct hash *nameHash = newHash(18);
+struct slName *wildNames = NULL, *wild=NULL;
+struct hTableInfo *hti = NULL;
+char *table = getTableName();
+char *db = getTableDb();
+char *keyStr = getUserKeys();
+char *word;
 char **row;
-char *field;
 int i;
 int numberColumns = sqlCountColumns(sr);
 
@@ -2361,22 +2537,52 @@ row = sqlNextRow(sr);
 if (row == NULL)
     return(initialized);
 
+hti = getHti(db, table);
+if (isBatch() && hti->nameField[0] != 0)
+    {
+    // last column is name (for batch filtering) -- don't print it out.
+    numberColumns = numberColumns - 1;
+    if (cgiVarExists("tbShowUploadResults"))
+	{
+	while ((word = nextWord(&keyStr)) != NULL)
+	    {
+	    hashAdd(nameHash, word, NULL);
+	    }
+	}
+    else
+	{
+	while ((word = nextWord(&keyStr)) != NULL)
+	    {
+	    wild = slNameNew(word);
+	    slAddHead(&wildNames, wild);
+	    }
+	}
+    }
+
 if (! initialized)
     {
     initialized = TRUE;
     /* print the columns names */
     printf("#");
-    while((field = sqlFieldName(sr)) != NULL)
-	printf("%s\t", field);
+    for (i = 0; i < numberColumns; i++)
+	{
+	printf("%s\t", sqlFieldName(sr));
+	}
     printf("\n");
     }
 
 /* print the data */
 do
     {
-    for (i = 0; i < numberColumns; i++)
-	printf("%s\t", row[i]);
-    printf("\n");
+    if ((! isBatch()) || (hti->nameField[0] == 0) ||
+	(cgiVarExists("tbShowUploadResults") &&
+	 (hashLookup(nameHash, row[numberColumns]) != NULL)) ||
+	(anyWildMatch(row[numberColumns], wildNames)))
+	{
+	for (i = 0; i < numberColumns; i++)
+	    printf("%s\t", row[i]);
+	printf("\n");
+	}
     }
 while((row = sqlNextRow(sr)) != NULL);
 return(initialized);
@@ -2459,7 +2665,6 @@ return(initialized);
 
 void doTabSeparatedCT(boolean allFields)
 {
-struct slName *chromList, *chromPtr;
 struct bed *bedList, *bed;
 char *table = getTableName();
 struct customTrack *ct = lookupCt(table);
@@ -2472,11 +2677,6 @@ webStartText();
 checkTableExists(fullTableName);
 bf = constrainBedFields(NULL);
 
-if (allGenome)
-    chromList = hAllChromNames();
-else
-    chromList = newSlName(chrom);
-
 chosenFields = getChosenFields(allFields);
 if (chosenFields == NULL)
     {
@@ -2484,14 +2684,13 @@ if (chosenFields == NULL)
     return;
     }
 
-gotResults = FALSE;
-for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
-    {
-    getFullTableName(fullTableName, chromPtr->name, table);
+if (allGenome)
+    bedList = ct->bedList;
+else
     bedList = bedFilterListInRange(ct->bedList, bf, chrom, winStart, winEnd);
-    gotResults = printTabbedBed(bedList, chosenFields, gotResults);
-    bedFreeList(&bedList);
-    }
+bedFilterBatch(&bedList);
+gotResults = printTabbedBed(bedList, chosenFields, FALSE);
+bedFreeList(&bedList);
 
 if (! gotResults)
     printf("\n# No results returned from query.\n\n");
@@ -2504,14 +2703,13 @@ struct sqlConnection *conn;
 struct sqlResult *sr;
 struct dyString *query = newDyString(512);
 struct dyString *fieldSpec = newDyString(256);
+struct hTableInfo *hti = NULL;
 char *table = getTableName();
 char *db = getTableDb();
-char chromField[32];
-char startField[32];
-char endField[32];
 char *constraints;
 boolean gotResults;
 
+checkUserKeys();
 saveChooseTableState();
 saveChooseFieldsState();
 saveOutputOptionsState();
@@ -2526,6 +2724,7 @@ if (sameString(customTrackPseudoDb, db))
 printf("Content-Type: text/plain\n\n");
 webStartText();
 checkTableExists(fullTableName);
+hti = getHti(db, table);
 constraints = constrainFields(NULL);
 
 if (allGenome)
@@ -2560,8 +2759,12 @@ else
 	dyStringAppend(fieldSpec, field->name);
 	}
     }
+if (isBatch() && hti->nameField[0] != 0)
+    {
+    dyStringAppend(fieldSpec, ",");
+    dyStringAppend(fieldSpec, hti->nameField);
+    }
 
-hFindChromStartEndFieldsDb(db, fullTableName, chromField, startField, endField);
 gotResults = FALSE;
 if (tableIsSplit)
     {
@@ -2574,7 +2777,7 @@ if (tableIsSplit)
 	if ((! allGenome) && tableIsPositional)
 	    {
 	    dyStringPrintf(query, " WHERE %s < %d AND %s > %d",
-			   startField, winEnd, endField, winStart);
+			   hti->startField, winEnd, hti->endField, winStart);
 	    if ((constraints != NULL) && (constraints[0] != 0))
 		dyStringPrintf(query, " AND %s", constraints);
 	    }
@@ -2593,10 +2796,10 @@ else
     if ((! allGenome) && tableIsPositional)
 	{
 	dyStringPrintf(query, " WHERE %s < %d AND %s > %d",
-		       startField, winEnd, endField, winStart);
-	if (! sameString("", chromField))
+		       hti->startField, winEnd, hti->endField, winStart);
+	if (! sameString("", hti->chromField))
 	    dyStringPrintf(query, " AND %s = \'%s\'",
-			   chromField, chrom);
+			   hti->chromField, chrom);
 	if ((constraints != NULL) && (constraints[0] != 0))
 	    dyStringPrintf(query, " AND %s", constraints);
 	}
@@ -2675,8 +2878,14 @@ void doSequenceOptions()
 struct hTableInfo *hti = getOutputHti();
 char *outputType = cgiUsualString("outputType", cgiString("phase"));
 
+saveChooseTableState();
 saveOutputOptionsState();
 saveIntersectOptionsState();
+
+if (! tableIsPositional)
+    webAbort("Table must be positional",
+	    "Sorry, can't get sequence for items from a non-positional table. "
+	    "Please go back and select a browser track or positional table.");
 
 webStart(cart, "Table Browser: %s %s: %s", hOrganism(database),freezeName, seqOptionsPhase);
 checkTableExists(fullTableName);
@@ -2937,7 +3146,7 @@ void doBedCtOptions(boolean doCt)
 struct hTableInfo *hti = getOutputHti();
 char *table = getTableName();
 char *table2 = getTable2Name();
-char *op = cgiOptionalString("hgt.intersectOp");
+char *op = cgiOptionalString("tbIntersectOp");
 char *track = getTrackName();
 char *db = getTableDb();
 char *outputType = cgiUsualString("outputType", cgiString("phase"));
@@ -2974,8 +3183,8 @@ if (doCt)
     }
 else
     {
-    cgiMakeCheckBox("hgt.doCustomTrack",
-		    cartCgiUsualBoolean(cart, "hgt.doCustomTrack", FALSE));
+    cgiMakeCheckBox("tbDoCustomTrack",
+		    cartCgiUsualBoolean(cart, "tbDoCustomTrack", FALSE));
     puts("</TD><TD> <B> Include "
 	 "<A HREF=\"/goldenPath/help/customTrack.html\" TARGET=_blank>"
 	 "custom track</A> header: </B>");
@@ -2986,21 +3195,21 @@ if (op == NULL)
 snprintf(buf, sizeof(buf), "tb_%s%s%s", hti->rootName,
 	 (table2 ? "_" : ""),
 	 (table2 ? table2 : ""));
-setting = cgiUsualString("hgt.ctName", buf);
-cgiMakeTextVar("hgt.ctName", setting, 16);
+setting = cgiUsualString("tbCtName", buf);
+cgiMakeTextVar("tbCtName", setting, 16);
 puts("</TD></TR><TR><TD></TD><TD>description=");
 snprintf(buf, sizeof(buf), "table browser query on %s%s%s",
 	 hti->rootName,
 	 (table2 ? ", " : ""),
 	 (table2 ? table2 : ""));
-setting = cgiUsualString("hgt.ctDesc", buf);
-cgiMakeTextVar("hgt.ctDesc", setting, 50);
+setting = cgiUsualString("tbCtDesc", buf);
+cgiMakeTextVar("tbCtDesc", setting, 50);
 puts("</TD></TR><TR><TD></TD><TD>visibility=");
-setting = cartCgiUsualString(cart, "hgt.ctVis", ctVisMenu[3]);
-cgiMakeDropList("hgt.ctVis", ctVisMenu, ctVisMenuSize, setting);
+setting = cartCgiUsualString(cart, "tbCtVis", ctVisMenu[3]);
+cgiMakeDropList("tbCtVis", ctVisMenu, ctVisMenuSize, setting);
 puts("</TD></TR><TR><TD></TD><TD>url=");
-setting = cartCgiUsualString(cart, "hgt.ctUrl", "");
-cgiMakeTextVar("hgt.ctUrl", setting, 50);
+setting = cartCgiUsualString(cart, "tbCtUrl", "");
+cgiMakeTextVar("tbCtUrl", setting, 50);
 puts("</TD></TR><TR><TD></TD><TD>");
 puts("</TD></TR></TABLE>");
 puts("<P> <B> Create one BED record per: </B>");
@@ -3045,11 +3254,11 @@ struct customTrack *ctNew = NULL;
 struct tempName tn;
 char *table = getTableName();
 char *track = getTrackName();
-boolean doCtHdr = cgiBoolean("hgt.doCustomTrack") || doCt;
-char *ctName = cgiUsualString("hgt.ctName", table);
-char *ctDesc = cgiUsualString("hgt.ctDesc", table);
-char *ctVis  = cgiUsualString("hgt.ctVis", "dense");
-char *ctUrl  = cgiUsualString("hgt.ctUrl", "");
+boolean doCtHdr = cgiBoolean("tbDoCustomTrack") || doCt;
+char *ctName = cgiUsualString("tbCtName", table);
+char *ctDesc = cgiUsualString("tbCtDesc", table);
+char *ctVis  = cgiUsualString("tbCtVis", "dense");
+char *ctUrl  = cgiUsualString("tbCtUrl", "");
 char *ctFileName = NULL;
 char *fbQual = fbOptionsToQualifier();
 char fbTQ[128];
@@ -3156,8 +3365,8 @@ else if (doCt)
     char headerText[256];
     int redirDelay = 5;
     safef(browserUrl, sizeof(browserUrl),
-	  "/cgi-bin/hgTracks?db=%s&position=%s:%d-%d",
-	  database, chrom, winStart, winEnd);
+	  "%s?db=%s&position=%s:%d-%d",
+	  hgTracksName(), database, chrom, winStart, winEnd);
     safef(headerText, sizeof(headerText),
 	  "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"%d;URL=%s\">",
 	  redirDelay, browserUrl);
@@ -3277,39 +3486,39 @@ puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Intersection\">"
 
 printf("These combinations will maintain the gene/alignment structure (if any) of %s: <P>\n",
        table);
-op = cartCgiUsualString(cart, "hgt.intersectOp", "any");
-cgiMakeRadioButton("hgt.intersectOp", "any", sameString(op, "any"));
+op = cartCgiUsualString(cart, "tbIntersectOp", "any");
+cgiMakeRadioButton("tbIntersectOp", "any", sameString(op, "any"));
 printf("All %s records that have any overlap with %s <P>\n",
        table, table2);
-cgiMakeRadioButton("hgt.intersectOp", "none", sameString(op, "none"));
+cgiMakeRadioButton("tbIntersectOp", "none", sameString(op, "none"));
 printf("All %s records that have no overlap with %s <P>\n",
        table, table2);
-cgiMakeRadioButton("hgt.intersectOp", "more", sameString(op, "more"));
+cgiMakeRadioButton("tbIntersectOp", "more", sameString(op, "more"));
 printf("All %s records that have at least ",
        table);
-setting = cartCgiUsualString(cart, "hgt.moreThresh", "80");
-cgiMakeTextVar("hgt.moreThresh", setting, 3);
+setting = cartCgiUsualString(cart, "tbMoreThresh", "80");
+cgiMakeTextVar("tbMoreThresh", setting, 3);
 printf(" %% overlap with %s <P>\n", table2);
-cgiMakeRadioButton("hgt.intersectOp", "less", sameString(op, "less"));
+cgiMakeRadioButton("tbIntersectOp", "less", sameString(op, "less"));
 printf("All %s records that have at most ",
        table);
-setting = cartCgiUsualString(cart, "hgt.lessThresh", "80");
-cgiMakeTextVar("hgt.lessThresh", setting, 3);
+setting = cartCgiUsualString(cart, "tbLessThresh", "80");
+cgiMakeTextVar("tbLessThresh", setting, 3);
 printf(" %% overlap with %s <P>\n", table2);
 
 printf("These combinations will discard the gene/alignment structure (if any) of %s and produce a simple list of position ranges.\n",
        table);
 puts("To complement a table means to consider a position included if it \n"
      "is <I>not</I> included in the table. <P>");
-cgiMakeRadioButton("hgt.intersectOp", "and", sameString(op, "and"));
+cgiMakeRadioButton("tbIntersectOp", "and", sameString(op, "and"));
 printf("Base-pair-wise intersection (AND) of %s and %s <P>\n",
        table, table2);
-cgiMakeRadioButton("hgt.intersectOp", "or", sameString(op, "or"));
+cgiMakeRadioButton("tbIntersectOp", "or", sameString(op, "or"));
 printf("Base-pair-wise union (OR) of %s and %s <P>\n",
        table, table2);
-cgiMakeCheckBox("hgt.invertTable", cgiBoolean("hgt.invertTable"));
+cgiMakeCheckBox("tbInvertTable", cgiBoolean("tbInvertTable"));
 printf("Complement %s before intersection/union <P>\n", table);
-cgiMakeCheckBox("hgt.invertTable2", cgiBoolean("hgt.invertTable2"));
+cgiMakeCheckBox("tbInvertTable2", cgiBoolean("tbInvertTable2"));
 printf("Complement %s before intersection/union <P>\n", table2);
 
 cgiMakeButton("phase", outputType);
@@ -3358,6 +3567,8 @@ cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
 preserveConstraints(fullTableName, db, NULL);
 cgiContinueHiddenVar("position");
+//#*** Really need to save this off to a local file!
+cgiContinueHiddenVar("tbUserKeys");
 printf("<H4> Fields of %s: </H4>\n", table);
 puts("<TABLE BORDER=1> <TR> <TH>name</TH> <TH>type</TH> <TH></TH> </TR>");
 while ((row = sqlNextRow(sr)) != NULL)
@@ -3493,15 +3704,22 @@ if (num > 1)
     {
     int i;
     int offset = 0;
-    Xarrs[0] = needMem(Ns[0] * sizeof(int));
-    for (i=1;  i <= num;  i++)
+    if (Ns[0] > 0)
 	{
-	memcpy(Xarrs[0]+offset, Xarrs[i], Ns[i] * sizeof(int));
-	freez(&(Xarrs[i]));
-	offset += Ns[i];
+	Xarrs[0] = needMem(Ns[0] * sizeof(int));
+	for (i=1;  i <= num;  i++)
+	    {
+	    memcpy(Xarrs[0]+offset, Xarrs[i], Ns[i] * sizeof(int));
+	    freez(&(Xarrs[i]));
+	    offset += Ns[i];
+	    }
+	assert(offset == Ns[0]);
+	intStatsFromArr(Xarrs[0], Ns[0], stats);
 	}
-    assert(offset == Ns[0]);
-    intStatsFromArr(Xarrs[0], Ns[0], stats);
+    else
+	{
+	Xarrs[0] = NULL;
+	}
     }
 else
     {
@@ -3625,7 +3843,7 @@ char *db = getTableDb();
 char *table = getTableName();
 char *db2 = getTable2Db();
 char *table2 = getTable2Name();
-char *op = cgiOptionalString("hgt.intersectOp");
+char *op = cgiOptionalString("tbIntersectOp");
 char *constraints, *constraints2;
 char fullTableName2[256];
 int numChroms;
@@ -3707,7 +3925,14 @@ constraints2 = constrainFields("2");
 if ((constraints2 != NULL) && (constraints2[0] == 0))
     constraints2 = NULL;
 
-printf("Position range: %s\n", position);
+if (isBatch())
+    {
+    printf("Position range: previously uploaded set of accessions/names (");
+    printFirstNWords(getUserKeys(), 3, " ");
+    puts(")");
+    }
+else
+    printf("Position range: %s\n", position);
 printf("<P> Primary table: %s\n", table);
 if (constraints != NULL)
     printf("<P> Constraints on %s: %s \n", table, constraints);
@@ -3722,11 +3947,11 @@ if (table2 != NULL)
     else
 	printf("<P> No additional constraints selected on fields of %s.\n",
 	       table2);
-    if (cgiBoolean("hgt.invertTable"))
+    if (cgiBoolean("tbInvertTable"))
 	snprintf(tableUse, sizeof(tableUse), "complement of %s", table);
     else
 	strncpy(tableUse, table, sizeof(tableUse));
-    if (cgiBoolean("hgt.invertTable2"))
+    if (cgiBoolean("tbInvertTable2"))
 	snprintf(table2Use, sizeof(table2Use), "complement of %s", table2);
     else
 	strncpy(table2Use, table2, sizeof(table2Use));
@@ -3739,10 +3964,10 @@ if (table2 != NULL)
 	       table, table2);
     else if (sameString(op, "more"))
 	printf("Include %s records that have at least %s%% overlap with %s <P>\n",
-	       table, cgiString("hgt.moreThresh"), table2);
+	       table, cgiString("tbMoreThresh"), table2);
     else if (sameString(op, "less"))
 	printf("Include %s records that have at most %s%% overlap with %s <P>\n",
-	       table, cgiString("hgt.lessThresh"), table2);
+	       table, cgiString("tbLessThresh"), table2);
     else if (sameString(op, "and"))
 	printf("List positions of base pairs covered by both %s and %s <P>\n",
 	       tableUse, table2Use);
@@ -4049,11 +4274,15 @@ struct dyString *query = newDyString(256);
 struct hash *freqHash = newHash(16);
 struct hashEl *els, *el;
 struct slName *chromList, *chromPtr;
+struct hash *nameHash = newHash(18);
+struct slName *wildNames = NULL, *wild=NULL;
 char **row;
 char *words[5];
 char *constraints;
 char *table = getTableName();
 char *db = getTableDb();
+char *keyStr = getUserKeys();
+char *word;
 struct hTableInfo *hti = getHti(db, table);
 char *phase = cgiString("phase");
 char *field;
@@ -4078,10 +4307,28 @@ if (sameString(customTrackPseudoDb, db))
 constraints = constrainFields(NULL);
 if ((constraints != NULL) && (constraints[0] == 0))
     constraints = NULL;
-if (allGenome)
+if (allGenome && tableIsPositional)
     chromList = hAllChromNames();
 else
     chromList = newSlName(chrom);
+if (isBatch() && hti->nameField[0] != 0)
+    {
+    if (cgiVarExists("tbShowUploadResults"))
+	{
+	while ((word = nextWord(&keyStr)) != NULL)
+	    {
+	    hashAdd(nameHash, word, NULL);
+	    }
+	}
+    else
+	{
+	while ((word = nextWord(&keyStr)) != NULL)
+	    {
+	    wild = slNameNew(word);
+	    slAddHead(&wildNames, wild);
+	    }
+	}
+    }
 
 if (sameString(database, db))
     conn = hAllocConn();
@@ -4091,7 +4338,13 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr=chromPtr->next)
     {
     getFullTableName(fullTableName, chromPtr->name, table);
     dyStringClear(query);
-    dyStringPrintf(query, "SELECT %s FROM %s", field, fullTableName);
+    if (isBatch() && hti->nameField[0] != 0)
+	{
+	dyStringPrintf(query, "SELECT %s,%s FROM %s", field, hti->nameField,
+		       fullTableName);
+	}
+    else
+	dyStringPrintf(query, "SELECT %s FROM %s", field, fullTableName);
     if (tableIsPositional)
 	{
 	dyStringPrintf(query, " WHERE %s < %d AND %s > %d",
@@ -4105,17 +4358,24 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr=chromPtr->next)
     else if (constraints)
 	dyStringPrintf(query, " WHERE %s", constraints);
     sr = sqlGetResult(conn, query->string);
-    // make a hash of field values to frequencies:
+    // make a hash of field values to frequencies,
+    // filtering with user keys if specified:
     while ((row = sqlNextRow(sr)) != NULL)
 	{
-	if ((el = hashLookup(freqHash, row[0])) == NULL)
-	    hashAddInt(freqHash, row[0], 1);
-	else
+	if ((! isBatch()) || (hti->nameField[0] == 0) ||
+	    (cgiVarExists("tbShowUploadResults") &&
+	     (hashLookup(nameHash, row[1]) != NULL)) ||
+	    (anyWildMatch(row[1], wildNames)))
 	    {
-	    if (! sameString(el->name, row[0]))
-		printf("Hash-collision warning: %s --> %s<P>\n",
-		       el->name, row[0]);
+	    if ((el = hashLookup(freqHash, row[0])) == NULL)
+		hashAddInt(freqHash, row[0], 1);
+	    else
+		{
+		if (! sameString(el->name, row[0]))
+		    printf("Hash-collision warning: %s --> %s<P>\n",
+			   el->name, row[0]);
 		(el->val) = (void *)((int)(el->val) + 1);
+		}
 	    }
 	}
     sqlFreeResult(&sr);
@@ -4124,6 +4384,8 @@ if (sameString(database, db))
     hFreeConn(&conn);
 else
     hFreeConn2(&conn);
+hashFree(&nameHash);
+slFreeList(&wildNames);
 
 // sort the elements by count, descending:
 els = hashElListHash(freqHash);
@@ -4168,11 +4430,13 @@ webEnd();
 void doMiddle(struct cart *theCart)
 /* the main body of the program */
 {
-char *table = getTableName();
+char *table = NULL;
+char *db = NULL;
 char trash[32];
-char *db = getTableDb();
 
 cart = theCart;
+table = getTableName();
+db = getTableDb();
 getDbAndGenome(cart, &database, &organism);
 database = cloneString(database);
 hSetDb(database);
@@ -4184,8 +4448,6 @@ if (freezeName == NULL)
 
 fullTableName[0] = 0;
 position = getPosition(&chrom, &winStart, &winEnd);
-if (position == NULL)
-    return;
 allGenome = isGenome(position);
 
 if (existsAndEqual("submit", "Look up") ||
@@ -4194,30 +4456,31 @@ if (existsAndEqual("submit", "Look up") ||
     // Stay in same phase if we're just looking up position.
     char *origPhase = cgiOptionalString("origPhase");
     if (origPhase != NULL)
+	{
 	cgiVarSet("phase", origPhase);
+	cgiVarSet("tbPosOrKeys", "pos");
+	}
     }
 
-if (table == NULL || existsAndEqual("phase", chooseTablePhase))
+if (cgiOptionalString("phase") == NULL)
     {
-    if (existsAndEqual("table0", "Choose table") &&
-	existsAndEqual("table1", "Choose table") &&
-	!existsAndEqual("submit", "Look up"))
-	webAbort("Missing table selection",
-		 "Please choose a table and try again.");
-    else
-	{
-	doChooseTable();
-	}
+    doGateway();
+    return;
+    }
+else if (existsAndEqual("phase", chooseTablePhase))
+    {
+    doChooseTable();
     }
 else
     {
+    if (existsAndEqual("tbTrack", "Choose table") &&
+	existsAndEqual("table0", "Choose table") &&
+	existsAndEqual("table1", "Choose table"))
+	webAbort("Missing table selection", "Please choose a table.");
+
     if ((! sameString(database, db)) && (! sameString(hGetDb2(), db)) &&
 	(! sameString(customTrackPseudoDb, db)))
 	hSetDb2(db);
-
-    if (existsAndEqual("table0", "Choose table") &&
-	existsAndEqual("table1", "Choose table"))
-	webAbort("Missing table selection", "Please choose a table.");
 
     if (allGenome)
 	getFullTableName(fullTableName, NULL, table);
@@ -4241,7 +4504,8 @@ else
 	    doTabSeparated(TRUE);
 	else if (existsAndEqual("outputType", chooseFieldsPhase))
 	    doChooseFields();
-	else if (existsAndEqual("outputType", seqOptionsPhase))
+	else if (existsAndEqual("outputType", seqOptionsPhase) ||
+		 existsAndEqual("outputType", oldSeqOptionsPhase))
 	    doSequenceOptions();
 	else if (existsAndEqual("outputType", gffPhase))
 	    doGetGFF();
@@ -4258,6 +4522,10 @@ else
 		     "Error: unrecognized value of CGI var outputType: %s",
 		     cgiUsualString("outputType", "(Undefined)"));
 	}
+    else if (existsAndEqual("phase", pasteKeywordsPhase))
+	pasteForm();
+    else if (existsAndEqual("phase", uploadKeywordsPhase))
+	uploadForm();
     else if (existsAndEqual("phase", allFieldsPhase) ||
 	     existsAndEqual("phase", oldAllFieldsPhase))
 	doTabSeparated(TRUE);
@@ -4265,7 +4533,8 @@ else
 	doChooseFields();
     else if (existsAndEqual("phase", getSomeFieldsPhase))
 	doTabSeparated(FALSE);
-    else if (existsAndEqual("phase", seqOptionsPhase))
+    else if (existsAndEqual("phase", seqOptionsPhase) ||
+	     existsAndEqual("phase", oldSeqOptionsPhase))
 	doSequenceOptions();
     else if (existsAndEqual("phase", getSequencePhase))
 	doGetSequence();
@@ -4294,15 +4563,22 @@ else
     }
 cartSetString(cart, "db", database);
 cartSetString(cart, "org", organism);
-cartSetString(cart, "position", position);
+if (position != NULL)
+    cartSetString(cart, "position", position);
 }
+
+
+/* Null terminated list of CGI Variables we don't want to save
+ * permanently. */
+char *excludeVars[] = {"Submit", "submit", 
+	"tbUserKeys",
+	"tbShowPasteResults", "tbShowUploadResults"};
 
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 struct cart *theCart;
-char *excludeVars[] = {NULL};
 
 oldVars = hashNew(8);
 cgiSpoof(&argc, argv);
