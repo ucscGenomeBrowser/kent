@@ -14,6 +14,11 @@
 #include "vGfxPrivate.h"
 
 
+static struct pscmGfx *boxPscm;	 /* Used to keep from drawing the same box again
+                                  * and again with no other calls between.  This
+				  * ends up cutting down the file size by 5x
+				  * in the whole chromosome case of the browser. */
+
 void pscmSetClip(struct pscmGfx *pscm, int x, int y, int width, int height)
 /* Set clipping rectangle. */
 {
@@ -148,8 +153,23 @@ void pscmBox(struct pscmGfx *pscm, int x, int y,
 	int width, int height, int color)
 /* Draw a box. */
 {
-pscmSetColor(pscm, color);
-psDrawBox(pscm->ps, x, y, width, height);
+/* When viewing whole chromosomes the browser tends
+ * to draw the same little vertical tick over and
+ * over again.  This tries to remove the worst of
+ * the redundancy anyway. */
+static int lx, ly, lw, lh, lc=-1;
+if (x != lx || y != ly || width != lw || height != lh || color != lc || 
+	pscm != boxPscm)
+    {
+    pscmSetColor(pscm, color);
+    psDrawBox(pscm->ps, x, y, width, height);
+    lx = x;
+    ly = y;
+    lw = width;
+    lh = height;
+    lc = color;
+    boxPscm = pscm;
+    }
 }
 
 void pscmDot(struct pscmGfx *pscm, int x, int y, int color)
@@ -165,6 +185,7 @@ void pscmLine(struct pscmGfx *pscm,
 {
 pscmSetColor(pscm, color);
 psDrawLine(pscm->ps, x1+0.5, y1+0.5, x2+0.5, y2+0.5);
+boxPscm = NULL;
 }
 
 static void pscmVerticalSmear(struct pscmGfx *pscm,
@@ -210,6 +231,7 @@ void pscmText(struct pscmGfx *pscm, int x, int y, int color,
 pscmSetColor(pscm, color);
 pscmSetFont(pscm, font);
 psTextAt(pscm->ps, x, y, text);
+boxPscm = NULL;
 }
 
 void pscmTextRight(struct pscmGfx *pscm, int x, int y, int width, int height,
@@ -219,6 +241,7 @@ void pscmTextRight(struct pscmGfx *pscm, int x, int y, int width, int height,
 pscmSetColor(pscm, color);
 pscmSetFont(pscm, font);
 psTextRight(pscm->ps, x, y, width, height, text);
+boxPscm = NULL;
 }
 
 void pscmTextCentered(struct pscmGfx *pscm, int x, int y, 
@@ -228,6 +251,7 @@ void pscmTextCentered(struct pscmGfx *pscm, int x, int y,
 pscmSetColor(pscm, color);
 pscmSetFont(pscm, font);
 psTextCentered(pscm->ps, x, y, width, height, text);
+boxPscm = NULL;
 }
 
 void pscmFillUnder(struct pscmGfx *pscm, int x1, int y1, int x2, int y2, 
@@ -239,6 +263,7 @@ void pscmFillUnder(struct pscmGfx *pscm, int x1, int y1, int x2, int y2,
 {
 pscmSetColor(pscm, color);
 psFillUnder(pscm->ps, x1, y1, x2, y2, bottom);
+boxPscm = NULL;
 }
 
 struct vGfx *vgOpenPostScript(int width, int height, char *fileName)
