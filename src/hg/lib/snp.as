@@ -16,4 +16,5 @@ table snp
     string  func;       "The functional category of the SNP"
     string  locType;    "How the variant affects the reference sequence"
     string  source;     "Source of the data - dbSnp, Affymetrix, ..."
+    string  exception;  "List of exceptionIds for 'invariant' conditions"
     )

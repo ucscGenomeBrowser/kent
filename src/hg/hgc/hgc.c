@@ -62,6 +62,8 @@
 #include "knownMore.h"
 #include "snp.h"
 #include "snpMap.h"
+#include "snpExceptions.h"
+#include "tokenizer.h"
 #include "softberryHom.h"
 #include "borkPseudoHom.h"
 #include "sanger22extra.h"
@@ -153,7 +155,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.806 2005/01/01 20:40:45 genbank Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.807 2005/01/03 21:50:27 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11147,6 +11149,54 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void writeSnpException(char *exceptionList)
+{
+char *tokens;
+struct lineFile *lf;
+struct tokenizer *tkz;
+struct snpExceptions se;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+char *id;
+/* int firstOne=1; */
+
+if (sameString(exceptionList,"0"))
+    return;
+tokens=cloneString(exceptionList);
+lf=lineFileOnString("snpExceptions", TRUE, tokens);
+tkz=tokenizerOnLineFile(lf);
+while ((id=tokenizerNext(tkz))!=NULL)
+    {
+    if (sameString(id,","))
+	continue;
+    safef(query, sizeof(query), "select * from snpExceptions where exceptionId = %s", id);
+    sr = sqlGetResult(conn, query);
+    if (sr == NULL)
+	printf("<B>Unknown Exception %s!</B><BR>\n", id);
+     /* exceptionId is a primary key; at most 1 record returned */
+    while ((row = sqlNextRow(sr))!=NULL)
+	{
+	snpExceptionsStaticLoad(row, &se);
+	printf("<font color=red><B>Data Exception:&nbsp;%s</B></font><BR>\n",se.description);
+/*	if (firstOne)
+	    {
+	    printf("<font color=red><B>Data Exception!<BR>\n");
+	    firstOne=0;
+	    }
+*/
+/*	printf("<BR>ExceptionId:&nbsp;%d\n",se.exceptionId); */
+/*	printf("<BR>Query:&nbsp;%s;\n",se.query); */
+/*	printf("<BR>Description :&nbsp;%s\n",se.description); */
+/*	printf("<BR>Description of exception:&nbsp;%s\n",se.description); */
+/*	printf("<BR>\n"); */
+	}
+    }
+/* printf("</B></font><BR><HR><BR>\n"); */
+printf("<BR><HR><BR>\n");
+}
+
 void doSnp(struct trackDb *tdb, char *itemName)
 /* Put up info on a SNP. */
 {
@@ -11162,7 +11212,7 @@ int firstOne=1;
 
 cartWebStart(cart, "Simple Nucleotide Polymorphism (SNP)");
 printf("<H2>Simple Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
-sprintf(query, 
+safef(query, sizeof(query),
 	"select * "
 	"from   %s "
 	"where  chrom = '%s' "
@@ -11171,11 +11221,13 @@ sprintf(query,
         group, seqName, start, itemName);
 rowOffset = hOffsetPastBin(seqName, group);
 sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+while ((row = sqlNextRow(sr))!=NULL)
     {
     snpStaticLoad(row+rowOffset, &snp);
     if (firstOne)
 	{
+	if (differentString(snp.exception,"0"))
+	    writeSnpException(snp.exception);
 	bedPrintPos((struct bed *)&snp, 3);
 	printf("<BR>\n");
 	firstOne=0; /* rs5886636 is good to test this */
@@ -11190,14 +11242,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<BR><B><A HREF=\"#LocType\">Location Type</A>: </B>%s\n",   snp.locType);
     if (snp.avHet>0)
 	printf("<BR><B><A HREF=\"#AvHet\">Average Heterozygosity</A>: </B>%.3f +/- %.3f", snp.avHet, snp.avHetSE);
-/*    printf("<BR><B><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_legend.cgi?legend=validation\" target=\"_blank\">Validation Status</A>: </B>%s\n", snp.valid);
- *    printf("<BR><B><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_legend.cgi?legend=snpFxnColor\" target=\"_blank\">Function</A>: </B>%s\n",          snp.func);
- *    if (snp.avHet>0) {printf("<BR><B><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/Hetfreq.html\" target=\"_blank\">Average Heterozygosity</A>: </B>%.3f +/- %.3f", snp.avHet, snp.avHetSE);} */
-/*   printf("<BR><B>Hit Quality: </B>%s\n",       snp.hitQuality);
- *   if (snp.mapWeight>0)  {printf("<BR><B>Map Weight: </B>%d", snp.mapWeight);}
- *   if (snp.chromHits>0)  {printf("<BR><B>Chromosome Hits: </B>%d", snp.chromHits);}
- *   if (snp.contigHits>0) {printf("<BR><B>Contig Hits: </B>%d", snp.contigHits);}
- *   if (snp.seqHits>0)    {printf("<BR><B>Sequence Hits: </B>%d", snp.seqHits);} */
     printf("<P>\n");
     }
 printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");

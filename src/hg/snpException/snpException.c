@@ -13,7 +13,7 @@
 #include "snp.h"
 #include "snpExceptions.h"
 
-static char const rcsid[] = "";
+static char const rcsid[] = "$Id: snpException.c,v 1.2 2005/01/03 21:50:49 daryl Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -28,22 +28,20 @@ errAbort("snpException - Get exceptions to a snp invariant rule.\n"
 struct slName *getChromList()
 /* Get list of all chromosomes. */
 {
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-char **row = NULL;
-struct slName *list = NULL;
-struct slName *el = NULL;
-char  *queryString = "select chrom from chromInfo ";
-/*                     "where    chrom not like '%random' " */
-/*                     "where    chrom = 'chrY' "*/
-/*                     "order by size desc";*/
-sr = sqlGetResult(conn, queryString);
-while ((row=sqlNextRow(sr)))
+struct sqlConnection *conn  = hAllocConn();
+struct sqlResult     *sr    = NULL;
+char                **row   = NULL;
+struct slName        *list  = NULL;
+struct slName        *el    = NULL;
+char                 *query = "select chrom from chromInfo";
+
+sr = sqlGetResult(conn, query);
+while (row=sqlNextRow(sr))
     {
     el = newSlName(row[0]);
     slAddHead(&list, el);
     }
-slReverse(&list);  /* Restore order */
+slReverse(&list);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 return list;
@@ -52,54 +50,36 @@ return list;
 struct snpExceptions *getExceptionList(int inputExceptionId)
 /* Get list of all exceptions to be tested. */
 {
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-char **row = NULL;
-struct snpExceptions *list = NULL;
-struct snpExceptions *el = NULL;
-char   queryString[256] = "select * from snpExceptions";
+struct sqlConnection *conn       = hAllocConn();
+struct sqlResult     *sr         = NULL;
+char                **row        = NULL;
+struct snpExceptions *list       = NULL;
+struct snpExceptions *el         = NULL;
+char                  query[256] = "select * from snpExceptions";
 
 if (inputExceptionId>0)
-    safef(queryString, sizeof(queryString), 
+    safef(query, sizeof(query), 
 	  "select * from snpExceptions where exceptionId=%d", inputExceptionId);
-
-sr = sqlGetResult(conn, queryString);
-while ((row=sqlNextRow(sr)) != NULL )
+sr = sqlGetResult(conn, query);
+while (row=sqlNextRow(sr))
     {
     el = snpExceptionsLoad(row);
     slAddHead(&list, el);
     }
-slReverse(&list);  /* Restore order */
+slReverse(&list);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 return list;
 }
 
-boolean isLargeInDel(char *observed)
-/* check to see if an allele was written as LARGEDELETION or LARGEINSERTION */
-{
-if (strstr(observed,"LARGE"))
-    return FALSE;
-else
-    return TRUE;
-}
-
-void getWobbleBase(char *dna, char* wobble)
-/* return the first wobble base not found in the input string */
-{
-char iupac[]="nxbdhryumwskv";
-int  offset = strcspn(dna, iupac);
-
-strncpy(wobble, dna+offset, 1);
-}
-
-void getInvariants(struct snpExceptions *exceptionList, struct slName *chromList, char *fileBase)
+void getInvariants(struct snpExceptions *exceptionList, 
+		   struct slName *chromList, char *fileBase)
 /* write list of invariants to output file */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn  = hAllocConn();
 struct sqlResult     *sr;
 char                  query[1024];
-char                **row = NULL;
+char                **row   = NULL;
 struct snpExceptions *el    = NULL;
 struct slName        *chrom = NULL;
 unsigned long int     invariantCount;
@@ -109,37 +89,42 @@ int                   colCount, i;
 
 for (el=exceptionList; el!=NULL; el=el->next)
     {
-    safef(thisFile,sizeof(thisFile),"%s.%u.bed",fileBase,el->exceptionId);
-    outFile = mustOpen(thisFile,"w");
+    safef(thisFile, sizeof(thisFile), "%s.%d.bed", fileBase, el->exceptionId);
+    outFile = mustOpen(thisFile, "w");
+    fprintf(outFile, "# exceptionId:\t%d\n# query:\t%s;\n", el->exceptionId, el->query);
+    fflush(outFile); /* to keep an eye on output progress */
     invariantCount = 0;
     for (chrom=chromList; chrom!=NULL; chrom=chrom->next)
 	{
-	safef(query,sizeof(query),"%s and chrom='%s'", el->query, chrom->name);
+	safef(query, sizeof(query),
+	      "%s and chrom='%s'", el->query, chrom->name);
 	sr = sqlGetResult(conn, query);
 	colCount = sqlCountColumns(sr);
-	while ((row = sqlNextRow(sr)) != NULL)
+	while (row = sqlNextRow(sr))
 	    {
 	    invariantCount++; 
-	    fprintf(outFile,"%s\t%d", row[0], el->exceptionId);
-	    for (i=1; i<colCount; i++)
-		fprintf(outFile,"\t%s", row[i]);
-	    fprintf(outFile,"\n");
+	    fprintf(outFile, "%s\t%s\t%s\t%s\t%d", 
+		    row[0], row[1], row[2], row[3], el->exceptionId);
+	    for (i=4; i<colCount; i++)
+		fprintf(outFile, "\t%s", row[i]);
+	    fprintf(outFile, "\n");
 	    }
 	}
     carefulClose(&outFile);
     printf("Invariant %d has %lu exceptions, written to this file: %s\n", 
 	   el->exceptionId, invariantCount, thisFile);
-    safef(query,sizeof(query),"update snpExceptions set num=%lu where exceptionId=%d",
+    safef(query, sizeof(query),
+	  "update snpExceptions set num=%lu where exceptionId=%d",
 	  invariantCount, el->exceptionId);    
-    sr=sqlGetResult(conn,query);
+    sr=sqlGetResult(conn, query); /* there's probably a better way to do this */
     }
 }
 
 int main(int argc, char *argv[])
-/* error check, process command line input, and call getSnpDetails */
+/* error check, process command line input, and call getInvariants */
 {
 struct snpExceptions *exceptionList = NULL;
-struct slName        *chromList = NULL;
+struct slName        *chromList     = NULL;
 
 if (argc != 4)
     {

@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snp.h"
 
-static char const rcsid[] = "$Id: snp.c,v 1.11 2004/11/29 01:01:18 daryl Exp $";
+static char const rcsid[] = "$Id: snp.c,v 1.12 2005/01/03 21:50:42 daryl Exp $";
 
 void snpStaticLoad(char **row, struct snp *ret)
 /* Load a row from snp table into ret.  The contents of ret will
@@ -30,6 +30,7 @@ ret->avHetSE = atof(row[11]);
 ret->func = row[12];
 ret->locType = row[13];
 ret->source = row[14];
+ret->exception = row[15];
 }
 
 struct snp *snpLoad(char **row)
@@ -54,6 +55,7 @@ ret->avHetSE = atof(row[11]);
 ret->func = cloneString(row[12]);
 ret->locType = cloneString(row[13]);
 ret->source = cloneString(row[14]);
+ret->exception = cloneString(row[15]);
 return ret;
 }
 
@@ -63,7 +65,7 @@ struct snp *snpLoadAll(char *fileName)
 {
 struct snp *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[15];
+char *row[16];
 
 while (lineFileRow(lf, row))
     {
@@ -81,7 +83,7 @@ struct snp *snpLoadAllByChar(char *fileName, char chopper)
 {
 struct snp *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[15];
+char *row[16];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -125,8 +127,8 @@ void snpSaveToDb(struct sqlConnection *conn, struct snp *el, char *tableName, in
  * If worried about this use snpSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s',%g,%g,'%s','%s','%s')", 
-	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->observed,  el->molType,  el->class,  el->valid,  el->avHet,  el->avHetSE,  el->func,  el->locType,  el->source);
+dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s',%g,%g,'%s','%s','%s','%s')", 
+	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->observed,  el->molType,  el->class,  el->valid,  el->avHet,  el->avHetSE,  el->func,  el->locType,  el->source,  el->exception);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -141,7 +143,7 @@ void snpSaveToDbEscaped(struct sqlConnection *conn, struct snp *el, char *tableN
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *strand, *observed, *molType, *class, *valid, *func, *locType, *source;
+char  *chrom, *name, *strand, *observed, *molType, *class, *valid, *func, *locType, *source, *exception;
 chrom = sqlEscapeString(el->chrom);
 name = sqlEscapeString(el->name);
 strand = sqlEscapeString(el->strand);
@@ -152,9 +154,10 @@ valid = sqlEscapeString(el->valid);
 func = sqlEscapeString(el->func);
 locType = sqlEscapeString(el->locType);
 source = sqlEscapeString(el->source);
+exception = sqlEscapeString(el->exception);
 
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s',%g,%g,'%s','%s','%s')", 
-	tableName,  chrom, el->chromStart , el->chromEnd ,  name, el->score ,  strand,  observed,  molType,  class,  valid, el->avHet , el->avHetSE ,  func,  locType,  source);
+dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s',%g,%g,'%s','%s','%s','%s')", 
+	tableName,  chrom, el->chromStart , el->chromEnd ,  name, el->score ,  strand,  observed,  molType,  class,  valid, el->avHet , el->avHetSE ,  func,  locType,  source,  exception);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&chrom);
@@ -167,6 +170,7 @@ freez(&valid);
 freez(&func);
 freez(&locType);
 freez(&source);
+freez(&exception);
 }
 
 struct snp *snpCommaIn(char **pS, struct snp *ret)
@@ -193,6 +197,7 @@ ret->avHetSE = sqlFloatComma(&s);
 ret->func = sqlStringComma(&s);
 ret->locType = sqlStringComma(&s);
 ret->source = sqlStringComma(&s);
+ret->exception = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -213,6 +218,7 @@ freeMem(el->valid);
 freeMem(el->func);
 freeMem(el->locType);
 freeMem(el->source);
+freeMem(el->exception);
 freez(pEl);
 }
 
@@ -280,6 +286,10 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->source);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->exception);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
