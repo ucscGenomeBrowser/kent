@@ -12,6 +12,15 @@ struct hgPositions *findGenomePos(char *spec, char **retChromName, int *retWinSt
 Return TRUE if the query results in a unique position.  
 Otherwise display list of positions and return FALSE. */
 
+struct hgPositions *findGenomePosWeb(char *spec, char **retChromName, 
+	int *retWinStart, int *retWinEnd, struct cart *cart,
+	boolean useWeb, char *hgAppName);
+/* Search for positions in genome that match user query.   
+ * If useWeb, use the web library to print out HTML headers if necessary.
+ * Use hgAppName when forming URLs (instead of "hgTracks").  
+ * Return TRUE if the query results in a unique position.  
+ * Otherwise display list of positions and return FALSE. */
+
 boolean hgFindCytoBand(char *spec, char **retChromName, int *retWinStart, int *retWinEnd);
 /* Return position associated with cytological band if spec looks to be in that form. */
 
@@ -51,11 +60,11 @@ void hgPositionsFreeList(struct hgPositions **pList);
 /* Free a list of dynamically allocated hgPos's */
 
 struct hgPositions *hgPositionsFind(char *query, char *extraCgi, 
-	boolean useHgTracks, struct cart *cart);
+	char *hgAppName, struct cart *cart);
 /* Return table of positions that match query or NULL if none such. */
 
-void hgPositionsHtml(struct hgPositions *positions, FILE *f, boolean useHgTracks, 
-	struct cart *cart);
+void hgPositionsHtml(struct hgPositions *positions, FILE *f,
+	boolean useWeb, char *hgAppName, struct cart *cart);
 /* Write out positions table as HTML to file. */
 
 void hgPositionsHelpHtml(char *organism);
