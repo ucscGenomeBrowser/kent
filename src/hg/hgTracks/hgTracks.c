@@ -4701,6 +4701,9 @@ struct linkedFeaturesSeries *lfsFromMsBedSimple(struct bed *bedList, char * name
 struct linkedFeaturesSeries *lfs;
 struct linkedFeatures *lf;
 struct bed *bed = NULL;
+
+if(bedList == NULL)
+    return NULL;
 /* create one linkedFeatureSeries with average score for each lf
    in bed->score */
 AllocVar(lfs);
@@ -4755,7 +4758,8 @@ for(er = erList; er != NULL; er = er->next)
 	slAddTail(&srList,sr);
 	}
     }
-/* need to free all the slRefs in the 'seen' hash here */
+
+hashTraverseVals(seen, freeMem);
 hashFree(&seen);
 *numIndexes = unique;
 }
@@ -4771,15 +4775,27 @@ struct linkedFeaturesSeries *msBedGroupByIndex(struct bed *bedList, char *databa
 {
 struct linkedFeaturesSeries *lfsList = NULL, *lfs, **lfsArray;
 struct linkedFeatures *lf = NULL;
-struct sqlConnection *conn = sqlConnect(database);
-struct hash *indexes = newHash(2);
-struct hash *expTypes = newHash(2);
-struct hash *expIndexesToNames = newHash(2);
+struct sqlConnection *conn;
+struct hash *indexes;
+struct hash *expTypes;
+struct hash *expIndexesToNames;
 int numIndexes = 0, currentIndex, i;
 struct expRecord *erList = NULL, *er=NULL;
 struct slRef *srList = NULL, *sr=NULL;
 char buff[256];
 struct bed *bed;
+
+/* traditionally if there is nothing to show
+   show nothing .... */
+if(bedList == NULL)
+    return NULL;
+
+/* otherwise if we're goint to do some filtering
+   set up the data structures */
+conn = sqlConnect(database);
+indexes = newHash(2);
+expTypes = newHash(2);
+expIndexesToNames = newHash(2);
 
 /* load the experiment information */
 snprintf(buff, sizeof(buff), "select * from %s", table);
@@ -4861,7 +4877,11 @@ for(i=0; i<numIndexes; i++)
     }
 slSort(&lfsList,lfsSortByName);
 
-/* need to do some cleanup here, i.e. free bedList etc. */
+hashTraverseVals(indexes, freeMem);
+expRecordFreeList(&erList);
+freeHash(&indexes);
+freeHash(&expTypes);
+freeHash(&expIndexesToNames);
 return lfsList;
 }
 
@@ -4887,6 +4907,7 @@ else
     {
     tg->items = msBedGroupByIndex(bedList, "hgFixed", "nci60Exps", 0);
     }
+bedFreeList(&bedList);
 }
 
 struct linkedFeaturesSeries *lfsFromMsBed(struct trackGroup *tg, struct bed *bedList)
@@ -4951,7 +4972,7 @@ float val = lf->score;
 float absVal = fabs(val);
 int colorIndex = 0;
 float maxDeviation = 1.0;
-char *colorScheme = cartUsualString(cart, "nci60.color", "rb");
+char *colorScheme = cartUsualString(cart, "nci60.color", "rg");
 /* colorScheme should be stored somewhere not looked up every time... */
 if(val == -10000)
     return shadesOfGray[5];
