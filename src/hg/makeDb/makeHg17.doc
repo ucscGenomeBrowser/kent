@@ -8340,3 +8340,135 @@ scp data from washU
 ldHgGene hg17 twinscan twinscan.gtf -gtf -genePredExt
 
 
+# elephant human blastz alignment by Robert Aug 11 2004
+mkdir /cluster/bluearc/elephant
+cd /cluster/bluearc/elephant
+
+#get reads and qual scores from trace repository
+for i in `cat trace.lst`; do echo $i ; wget ftp://ftp.ncbi.nih.gov/pub/TraceDB/loxodonta_africana/fasta.loxodonta_africana.$i.gz ; done
+for i in `cat trace.lst`; do echo $i ; wget ftp://ftp.ncbi.nih.gov/pub/TraceDB/loxodonta_africana/qual.loxodonta_africana.$i.gz ; done
+for i in `cat trace.lst` ; do zcat fasta.loxodonta_africana.$i.gz > loxodonta_africana.$i.fa ; done     
+
+#trim reads
+for i in `cat trace.lst` ; do nice gunzip -c qual.loxodonta_africana.$i.gz > qual.loxodonta_africana.$i; faTrimRead loxodonta_africana.$i.fa qual.loxodonta_africana.$i tmp.$i.fa lift.$i.lft; mv -f tmp.$i.fa loxodonta_africana.$i.fa ; rm -f qual.loxodonta_africana.$i ; done
+for i in `cat trace.lst`; do faSize -detailed=on loxodonta_africana.$i.fa > mac.$i.len ; done  
+cat mac.0*.len > S2.len
+for i in `cat trace.lst`; do sed -e s/S2.len/mac.$i.len/ < DEF > DEF.$i ; done
+
+#split fa reads into 10mb chunks for blastz run and distribute to i-servers.
+ssh kkr1u00
+for i in `cat trace.lst`; do nice faSplit about loxodonta_africana.$i.fa 10000000 /iscratch/i/elephant/${i}.mac. ; done
+cd /iscratch/i/elephant
+find split -name \*.fa > /cluster/bluearc/elephant/mac.lst
+cd /cluster/bluearc/elephant
+hgsql hg17 -N < chromLen.sql > S1.len
+cd /iscratch/i/elephant
+iSync
+
+#setup cluster run to blastz reads to human genome
+ssh kk
+cd /cluster/bluearc/elephant
+BlastZ_run0.sh
+cd run.0
+para create jobList
+para push
+
+#94798 jobs in batch
+#149 jobs (including everybody's) in Parasol queue.
+#Checking finished jobs
+#Completed: 94797 of 94798 jobs
+#Crashed: 1 jobs
+#CPU time in finished jobs:   14183153s  236385.89m  3939.76h  164.16d  0.450 y
+#IO & Wait Time:                310938s    5182.30m    86.37h    3.60d  0.010 y
+#Average job time:                 153s       2.55m     0.04h    0.00d
+#Longest job:                     1770s      29.50m     0.49h    0.02d
+#Submission to last job:         52186s     869.77m    14.50h    0.60d
+
+ssh kkr9
+BlastZ_run1.sh
+cd run.1
+para create jobList
+para push
+#341 jobs in batch
+#151 jobs (including everybody's) in Parasol queue.
+#Checking finished jobs
+#Completed: 341 of 341 jobs
+#CPU time in finished jobs:     142914s    2381.91m    39.70h    1.65d  0.005 y
+#IO & Wait Time:                 14078s     234.63m     3.91h    0.16d  0.000 y
+#Average job time:                 460s       7.67m     0.13h    0.01d
+#Longest job:                      782s      13.03m     0.22h    0.01d
+#Submission to last job:          1954s      32.57m     0.54h    0.02d
+
+#generate lst and fa files for each chromosome for faster lavToAxt
+cd /cluster/bluearc/elephant
+echo "select chrom from chromInfo;" > chrom.sql
+hgsql hg17 -B -N < chrom.sql > chrom.lst
+
+for i in `cat chrom.lst` ; do grep -h '>' lav/$i/* | awk '{print $1}' | sed -e 's/"//g' | sed -e 's/>//g' > mac.$i.lst ; echo $i ; done
+
+ssh kki
+cd /cluster/bluearc/elephant
+mkdir -p splitChrom
+/bin/rm splitChrom/*
+gensub2 trace.lst chrom.lst gsub.split spec.split
+para create spec.split
+para push
+#322 jobs in batch
+#Checking finished jobs
+#Completed: 322 of 322 jobs
+#CPU time in finished jobs:        819s      13.65m     0.23h    0.01d  0.000 y
+#IO & Wait Time:                  3278s      54.63m     0.91h    0.04d  0.000 y
+#Average job time:                  13s       0.21m     0.00h    0.00d
+#Longest job:                       51s       0.85m     0.01h    0.00d
+#Submission to last job:           462s       7.70m     0.13h    0.01d
+
+
+cd /cluster/bluearc/elephant/splitChrom
+for i in `cat /cluster/bluearc/elephant/chrom.lst` ; do cat mac.*.$i.fa > mac.$i.fa ; echo $i ; done
+
+#lav to axt run
+ssh kk
+cd /cluster/bluearc/elephant
+mkdir -p run.2
+#NOTE: chr19 must be run on kolossus with 64bit executables
+#change SEQ1_DIR form /scratch to /iscratch for mini cluster
+. DEF
+echo "#LOOP" > run.2/gsub
+echo '/cluster/bin/scripts/blastz-contiglav2axt '${BASE}'/lav/$(root1) {check out line+ '${BASE}'/axtChrom/$(root1).axt} '${SEQ1_DIR}' /cluster/bluearc/elephant/splitChrom/mac.$(root1).fa' >> run.2/gsub
+echo "#ENDLOOP" >> run.2/gsub
+cd run.2
+gensub2 ../chrom.lst single gsub jobList
+para create jobList
+para push
+#chrM has no data and crashed
+#46 jobs in batch
+#Checking finished jobs
+#Completed: 45 of 46 jobs
+#Crashed: 1 jobs
+#CPU time in finished jobs:     249970s    4166.17m    69.44h    2.89d  0.008 y
+#IO & Wait Time:                  5407s      90.11m     1.50h    0.06d  0.000 y
+#Average job time:                5675s      94.58m     1.58h    0.07d
+#Longest job:                    27065s     451.08m     7.52h    0.31d
+#Submission to last job:         47744s     795.73m    13.26h    0.55d
+
+
+
+#split reads by prefix so axtBest will fit in memory
+mkdir axtByQ
+cat mac*.lst | awk -F\| '{print substr($3,1,3)}' | sort -nu >prefix.lst
+for i in `cat prefix.lst` ; do cat axtChrom/*.axt | axtFilter -qStartsWith=gnl\|ti\|$i stdin | axtSwap stdin S1.len S2.len stdout | axtSort stdin axtByQ/q$i.axt ; done
+mkdir axtByQBest
+#lots of memory needed for reciprocal best
+ssh kolossus
+cd /cluster/bluearc/elephant/axtByQ
+for i in `ls *.axt` ; do axtBest -quiet i all stdout | axtSwap stdin ../S2.len ../S1.len ../axtByQBest/$i ; echo $i done ; done
+cd ../cluster/bluearc/elephant/axtByQBest
+cat q*.axt | axtSplitByTarget stdin .
+mkdir axtRecipBest
+for i in `cat chrom.lst` ; do axtSort axtByQBest/$i.axt stdout | axtBest stdin $i axtRecipBest/$i.axt ; echo $i ;done 
+for i in `cat chrom.lst` ; do axtToMaf axtRecipBest/$i.axt S1.len S2.len maf/$i.maf -tPrefix=hg17. -qPrefix=rm1. -scoreZero ; done 
+for i in `cat chrom.lst` ; do mafFilter -minScore=1000 maf/$i.maf > mafFilter/$i.maf ; done 
+# record coverage
+cd mafFilter
+for i in `cat ../chrom.lst` ; do nice mafCoverage hg17 $i.maf -count=2 > $i.cov ; echo done $i ; done   
+
