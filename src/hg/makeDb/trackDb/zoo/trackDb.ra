@@ -227,6 +227,18 @@ color 0,60,120
 altColor 0,128,0
 type sample 500 1000
 
+track zooNew
+shortLabel zooSeqNew 
+longLabel New Blastz Alignments
+group compGeno
+priority 25.5
+visibility full
+chromosomes target1,chr7,
+color 0,60,120
+altColor 0,128,0
+type sample 500 1000
+
+
 track blastzStrictChainHuman
 shortLabel Blastz Human
 longLabel Strict Chain Blastz Human Alignments
