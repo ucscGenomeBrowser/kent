@@ -2721,6 +2721,9 @@ o - Load Ensembl peptides:
 
 ### MAKE THE affyU74 TRACK - needed for the Family browser
 #                              (DONE - 2003-01-06 - Hiram)
+# MAKE THE affyU74 TRACK using Affy consensus sequences instead of 
+# target sequences. Recalculate alignments and load data
+# [DONE, hartera, 2004-02-06]
 ----------------------------------
 # Load up semi-local disk with target sequences for Affy mouse U74 chips.
 ssh kkr1u00
@@ -2728,19 +2731,20 @@ mkdir -p /iscratch/i/affy
 #	This /projects filesystem is not available on kkr1u00
 #	but it is on kk
 ssh kk
-cp /projects/compbio/data/microarray/affyGnfMouse/sequences/u74*.fa /iscratch/i/affy
+cp /projects/compbio/data/microarray/affyGnfMouse/sequences/U74*consensus.fa /iscratch/i/affy
+
 ssh kkr1u00
 iSync
 
 # Run cluster job to do alignments
 ssh kk
-mkdir /cluster/data/mm4/bed/affyU74
-cd /cluster/data/mm4/bed/affyU74
+mkdir /cluster/data/mm4/bed/affyU74.2004-02-06
+cd /cluster/data/mm4/bed/affyU74.2004-02-06
 mkdir run
 cd run
 mkdir psl
 echo /scratch/mus/mm4/trfFa/*.fa | wordLine stdin > genome.lst
-ls -1 /iscratch/i/affy/u74*.fa > affy.lst
+ls -1 /iscratch/i/affy/U74*consensus.fa > affy.lst
 cat << '_EOF_' > gsub
 #LOOP
 /cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc  {check in line+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
@@ -2750,51 +2754,73 @@ cat << '_EOF_' > gsub
 gensub2 genome.lst affy.lst gsub jobList
 para create jobList
 para try
-# the full job takes less than a minute:
+# do usual para check/para push etc. until the job is done. 
+# para time: 2004-02-06
 # Completed: 1797 of 1797 jobs
-# CPU time in finished jobs:       8190s     136.49m     2.27h    0.09d  0.000 y
-# IO & Wait Time:                  9399s     156.66m     2.61h    0.11d  0.000 y
-# Average job time:                  10s       0.16m     0.00h    0.00d
-# Longest job:                       31s       0.52m     0.01h    0.00d
-# Submission to last job:            56s       0.93m     0.02h    0.00d
+# CPU time in finished jobs:      13759s     229.31m     3.82h    0.16d  0.000 y
+# IO & Wait Time:                 37615s     626.92m    10.45h    0.44d  0.001 y
+# Average job time:                  29s       0.48m     0.01h    0.00d
+# Longest job:                       73s       1.22m     0.02h    0.00d
+# Submission to last job:           176s       2.93m     0.05h    0.00d
 
 # Do sort, best in genome filter, and convert to chromosome coordinates
 # to create affyU74.psl.
 ssh kksilo
 cd /cluster/data/mm4/bed/affyU74/run
 pslSort dirs raw.psl tmp psl
-pslReps -minCover=0.85 -minAli=0.95 raw.psl contig.psl /dev/null
-# Processed 40118 alignments
+
+# change filter parameters for these sequences. only use alignments that
+# cover 30% of sequence and have at least minAli = 0.95.
+# minAli = 0.97 too high. low minCover as a lot of n's in these sequences
+pslReps -minCover=0.3 -sizeMatters -minAli=0.95 -nearTop=0.005 raw.psl contig.psl /dev/null
+
+# Processed 44630 alignments
 liftUp ../all_affyU74.psl ../../../jkStuff/liftAll.lft warn contig.psl
 
 # Sort by chromosome and load into database.
 ssh hgwdev
-cd /cluster/data/mm4/bed/affyU74
+cd /cluster/data/mm4/bed/affyU74.2004-02-06
 pslSortAcc nohead chrom temp all_affyU74.psl
 cat chrom/*.psl > affyU74.psl
 hgLoadPsl mm4 affyU74.psl -tNameIx
 rm -fr chrom temp run
 
 ##   MAKE THE affyGnfU74 TRACKs (DONE - 2004-01-06 - Hiram)
+# Make bed files and load consensus sequences for Affy U74 chip set.
+# [DONE, hartera, 2004-02-06]
+
 ----------------------------------
 
 #This needs to be done after affyU74 is already made.
 ssh hgwdev
-mkdir -p /cluster/data/mm4/bed/affyGnf
-cd /cluster/data/mm4/bed/affyGnf
+mkdir -p /cluster/data/mm4/bed/affyGnf.2004-02-06
+cd /cluster/data/mm4/bed/affyGnf.2004-02-06
 #	may need to build this command in src/hg/affyGnf
-affyPslAndAtlasToBed ../affyU74/affyU74.psl \
+affyPslAndAtlasToBed ../affyU74.2004-02-06/affyU74.psl \
 	/projects/compbio/data/microarray/affyGnfMouse/data/data_public_U74 \
-	affyGnfU74A.bed affyGnfU74A.exp -newType -chip=MG_U74A
-affyPslAndAtlasToBed ../affyU74/affyU74.psl \
+	affyGnfU74A.bed affyGnfU74A.exp -newType -chip=U74Av2
+affyPslAndAtlasToBed ../affyU74.2004-02-06/affyU74.psl \
 	/projects/compbio/data/microarray/affyGnfMouse/data/U74B_b.txt \
-	affyGnfU74B.bed affyGnfU74B.exp -newType -chip=MG_U74B
-affyPslAndAtlasToBed ../affyU74/affyU74.psl \
+	affyGnfU74B.bed affyGnfU74B.exp -newType -chip=U74Bv2
+affyPslAndAtlasToBed ../affyU74.2004-02-06/affyU74.psl \
 	/projects/compbio/data/microarray/affyGnfMouse/data/U74C_b.txt \
-	affyGnfU74C.bed affyGnfU74C.exp -newType -chip=MG_U74C
+	affyGnfU74C.bed affyGnfU74C.exp -newType -chip=U74Cv2
 hgLoadBed mm4 affyGnfU74A affyGnfU74A.bed
 hgLoadBed mm4 affyGnfU74B affyGnfU74B.bed
 hgLoadBed mm4 affyGnfU74C affyGnfU74C.bed
+
+# Add in sequence data for U74 tracks.
+# Copy consensus sequence to /gbdb if it isn't already
+# [DONE, hartera, Feb 6, 2004]
+    mkdir -p /gbdb/hgFixed/affyProbes
+    cd /gbdb/hgFixed/affyProbes
+    ln -s /projects/compbiodata/microarray/affyGnfMouse/sequences/U74Av2_consensus.fa .
+    ln -s /projects/compbiodata/microarray/affyGnfMouse/sequences/U74Bv2_consensus.fa .
+    ln -s /projects/compbiodata/microarray/affyGnfMouse/sequences/U74Cv2_consensus.fa .
+                                                                                
+    hgLoadSeq mm4 /gbdb/hgFixed/affyProbes/U74Av2_consensus.fa
+    hgLoadSeq mm4 /gbdb/hgFixed/affyProbes/U74Bv2_consensus.fa
+    hgLoadSeq mm4 /gbdb/hgFixed/affyProbes/U74Cv2_consensus.fa
 
 ######## MAKING FAMILY BROWSER TABLES #######  (WORKING - 2004-01-06 - Hiram)
 # These are instructions for building the
