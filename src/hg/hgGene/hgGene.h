@@ -72,6 +72,10 @@ struct section *flyBaseSynonymsSection(struct sqlConnection *conn,
 	struct hash *sectionRa);
 /* Create FlyBase synonyms section. */
 
+struct section *bdgpExprInSituSection(struct sqlConnection *conn,
+	struct hash *sectionRa);
+/* Create BDGP Expression in situ image links section. */
+
 struct section *goSection(struct sqlConnection *conn,
 	struct hash *sectionRa);
 /* Create GO annotations section. */
