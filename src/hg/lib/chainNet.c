@@ -79,17 +79,79 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
+struct cnFill *cnFillFromLine(struct hash *nameHash, 
+	struct lineFile *lf, char *line)
+/* Create cnFill structure from line.  This will chop up
+ * line as a side effect. */
+{
+static char *words[64];
+int i, wordCount;
+enum {basicFields = 7};
+struct cnFill *fill;
+
+wordCount = chopLine(line, words);
+lineFileExpectAtLeast(lf, basicFields, wordCount);
+fill = cnFillNew();
+fill->tStart = lineFileNeedNum(lf, words, 1);
+fill->tSize = lineFileNeedNum(lf, words, 2);
+fill->qName = hashStoreName(nameHash, words[3]);
+fill->qStrand = words[4][0];
+fill->qStart = lineFileNeedNum(lf, words, 5);
+fill->qSize = lineFileNeedNum(lf, words, 6);
+for (i=basicFields; i<wordCount; i += 2)
+    {
+    char *name = words[i];
+
+    if (sameString(name, "score"))
+	fill->score = atof(words[i+1]);
+    else if (sameString(name, "type"))
+	fill->type = hashStoreName(nameHash, words[i+1]);
+    else
+	{
+	/* Cope with integer values. */
+	int iVal = lineFileNeedNum(lf, words, i+1);
+	if (sameString(name, "id"))
+	    fill->chainId = iVal;
+	else if (sameString(name, "ali"))
+	    fill->ali = iVal;
+	else if (sameString(name, "tN"))
+	    fill->tN = iVal;
+	else if (sameString(name, "qN"))
+	    fill->qN = iVal;
+	else if (sameString(name, "tR"))
+	    fill->tR = iVal;
+	else if (sameString(name, "qR"))
+	    fill->qR = iVal;
+	else if (sameString(name, "tNewR"))
+	    fill->tNewR = iVal;
+	else if (sameString(name, "qNewR"))
+	    fill->qNewR = iVal;
+	else if (sameString(name, "tOldR"))
+	    fill->tOldR = iVal;
+	else if (sameString(name, "qOldR"))
+	    fill->qOldR = iVal;
+	else if (sameString(name, "tTrf"))
+	    fill->tTrf = iVal;
+	else if (sameString(name, "qTrf"))
+	    fill->qTrf = iVal;
+	else if (sameString(name, "qOver"))
+	    fill->qOver = iVal;
+	else if (sameString(name, "qFar"))
+	    fill->qFar = iVal;
+	else if (sameString(name, "qDup"))
+	    fill->qDup = iVal;
+	}
+    }
+return fill;
+}
 
 struct cnFill *cnFillRead(struct chainNet *net, struct lineFile *lf)
 /* Recursively read in list and children from file. */
 {
-static char *words[64];
-int i, wordCount;
 char *line;
 int d, depth = 0;
 struct cnFill *fillList = NULL;
 struct cnFill *fill = NULL;
-enum {basicFields = 7};
 
 for (;;)
     {
@@ -110,60 +172,8 @@ for (;;)
 	}
     else
         {
-	wordCount = chopLine(line, words);
-	lineFileExpectAtLeast(lf, basicFields, wordCount);
-	fill = cnFillNew();
+	fill = cnFillFromLine(net->nameHash, lf, line);
 	slAddHead(&fillList, fill);
-	fill->tStart = lineFileNeedNum(lf, words, 1);
-	fill->tSize = lineFileNeedNum(lf, words, 2);
-	fill->qName = hashStoreName(net->nameHash, words[3]);
-	fill->qStrand = words[4][0];
-	fill->qStart = lineFileNeedNum(lf, words, 5);
-	fill->qSize = lineFileNeedNum(lf, words, 6);
-	for (i=basicFields; i<wordCount; i += 2)
-	    {
-	    char *name = words[i];
-
-	    if (sameString(name, "score"))
-	        fill->score = atof(words[i+1]);
-	    else if (sameString(name, "type"))
-	        fill->type = hashStoreName(net->nameHash, words[i+1]);
-	    else
-		{
-		/* Cope with integer values. */
-		int iVal = lineFileNeedNum(lf, words, i+1);
-		if (sameString(name, "id"))
-		    fill->chainId = iVal;
-		else if (sameString(name, "ali"))
-		    fill->ali = iVal;
-		else if (sameString(name, "tN"))
-		    fill->tN = iVal;
-		else if (sameString(name, "qN"))
-		    fill->qN = iVal;
-		else if (sameString(name, "tR"))
-		    fill->tR = iVal;
-		else if (sameString(name, "qR"))
-		    fill->qR = iVal;
-		else if (sameString(name, "tNewR"))
-		    fill->tNewR = iVal;
-		else if (sameString(name, "qNewR"))
-		    fill->qNewR = iVal;
-		else if (sameString(name, "tOldR"))
-		    fill->tOldR = iVal;
-		else if (sameString(name, "qOldR"))
-		    fill->qOldR = iVal;
-		else if (sameString(name, "tTrf"))
-		    fill->tTrf = iVal;
-		else if (sameString(name, "qTrf"))
-		    fill->qTrf = iVal;
-		else if (sameString(name, "qOver"))
-		    fill->qOver = iVal;
-		else if (sameString(name, "qFar"))
-		    fill->qFar = iVal;
-		else if (sameString(name, "qDup"))
-		    fill->qDup = iVal;
-		}
-	    }
 	}
     }
 slReverse(&fillList);

@@ -72,6 +72,11 @@ int cnFillCmpTarget(const void *va, const void *vb);
 struct cnFill *cnFillRead(struct chainNet *net, struct lineFile *lf);
 /* Recursively read in list and children from file. */
 
+struct cnFill *cnFillFromLine(struct hash *nameHash, 
+	struct lineFile *lf, char *line);
+/* Create cnFill structure from line.  This will chop up
+ * line as a side effect. */
+
 void cnFillWrite(struct cnFill *fillList, FILE *f, int depth);
 /* Recursively write out fill list. */
 
