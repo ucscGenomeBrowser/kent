@@ -1875,9 +1875,10 @@ fetchAndShowWaba("waba_tet", name);
 webEnd();
 }
 
-void doHgRepeat(char *track, char *repeat)
+void doHgRepeat(struct trackDb *tdb, char *repeat)
 /* Do click on a repeat track. */
 {
+char *track = tdb->tableName;
 int offset = cartInt(cart, "o");
 cartWebStart("Repeat");
 if (offset >= 0)
@@ -1913,7 +1914,6 @@ if (offset >= 0)
 	printf("<B>Begin in chromosome:</B> %d<BR>\n", ro->genoStart);
 	printf("<B>End in chromosome:</B> %d<BR>\n", ro->genoEnd);
 	printPos(seqName, ro->genoStart, ro->genoEnd, ro->strand, TRUE);
-	htmlHorizontalLine();
 	}
     hFreeConn(&conn);
     }
@@ -1928,13 +1928,8 @@ else
     else
         printf("This track contains the %s class of repeats<BR>\n", repeat);
     printf("Click right on top of an individual repeat for more information on that repeat<BR>\n");
-    htmlHorizontalLine();
     }
-puts(
-  "This track was created by Arian Smit's RepeatMasker program "
-  "which uses the RepBase library of repeats from the Genetic "
-  "Information Research Institute.  RepBase is described in "
-  "J. Jurka,  RepBase Update, <I>Trends in Genetics</I> 16:418-420, 2000");
+printTrackHtml(tdb);
 webEnd();
 }
 
@@ -1973,9 +1968,10 @@ printTrackHtml(tdb);
 webEnd();
 }
 
-void doSimpleRepeat(char *track, char *item)
+void doSimpleRepeat(struct trackDb *tdb, char *item)
 /* Print info on simple repeat. */
 {
+char *track = tdb->tableName;
 cartWebStart("Simple Repeat Info");
 printf("<H2>Simple Tandem Repeat Information</H2>\n");
 if (cgiVarExists("o"))
@@ -2014,10 +2010,7 @@ else
     {
     puts("<P>Click directly on a repeat for specific information on that repeat</P>");
     }
-htmlHorizontalLine();
-puts("<P>The Simple Tandem Repeats were located with the program "
-     "<A HREF=\"http://c3.biomath.mssm.edu/trf.html\">Tandem Repeat Finder</A> "
-     "by G. Benson</P>");
+printTrackHtml(tdb);
 webEnd();
 }
 
@@ -2081,29 +2074,12 @@ puts("using the TSSW program. "
 webEnd();
 }
 
-void doCpgIsland(char *table, char *item)
+void doCpgIsland(struct trackDb *tdb, char *item)
 /* Print info on CpG Island. */
 {
+char *table = tdb->tableName;
 cartWebStart("CpG Island Info");
 printf("<H2>CpG Island Info</H2>\n");
-puts("<P>CpG islands are associated with genes, particularly housekeeping genes, in vertebrates. "
- "CpG islands are particularly common near transcription start sites, and may be associated "
- "with promoter regions.  Normally a C followed immediately by a G (a CpG) "
- "is rare in vertebrate DNA since the C's in such an arrangement tend to be "
- "methylated.  This methylation helps distinguish the newly synthesized DNA "
- "strand from the parent strand, which aids in the final stages of DNA "
- "proofreading after duplication.  However over evolutionary time methylated "
- "C's tend to turn into T's because of spontanious deamination.  The result "
- "is that CpG's are "
- "relatively rare unless there is selective pressure to keep them or a "
- "region is not methylated for some reason, perhaps having to do with "
- "the regulation of gene expression.  CpG islands "
- "are regions where CpG's are present at significantly higher levels than "
- "is typical for the genome as a whole." 
- "The CpG islands displayed in this browser are all also at least 200 "
- "bases long, and have a GC content of at least 50%.</P>");
-
-htmlHorizontalLine();
 if (cgiVarExists("o"))
     {
     struct cpgIsland *island;
@@ -2136,6 +2112,7 @@ else
     {
     puts("<P>Click directly on a CpG island for specific information on that island</P>");
     }
+printTrackHtml(tdb);
 webEnd();
 }
 
@@ -3502,9 +3479,10 @@ puts("<P>This track syntenous (corresponding) regions between human "
 webEnd();
 }
 
-void doSnp(char *group, char *itemName)
+void doSnp(struct trackDb *tdb, char *itemName)
 /* Put up info on a SNP. */
 {
+char *group = tdb->tableName;
 struct snp snp;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
@@ -3530,9 +3508,7 @@ printf(
   "<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s\" TARGET=_blank>", 
   snp.name);
 printf("dbSNP link</A></P>\n");
-htmlHorizontalLine();
-puts("<P>This track shows locations of Single Nucleotide Polymorphisms. "
-     "Thanks to the SNP Consortium and NIH for providing this data.</P>");
+printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 webEnd();
@@ -4727,7 +4703,7 @@ else if (sameWord(track, "tet_waba"))
     }
 else if (sameWord(track, "rmsk"))
     {
-    doHgRepeat(track, item);
+    doHgRepeat(tdb, item);
     }
 else if (sameWord(track, "isochores"))
     {
@@ -4735,11 +4711,11 @@ else if (sameWord(track, "isochores"))
     }
 else if (sameWord(track, "simpleRepeat"))
     {
-    doSimpleRepeat(track, item);
+    doSimpleRepeat(tdb, item);
     }
 else if (sameWord(track, "cpgIsland") || sameWord(track, "cpgIsland2"))
     {
-    doCpgIsland(track, item);
+    doCpgIsland(tdb, item);
     }
 else if (sameWord(track, "refGene"))
     {
@@ -4804,7 +4780,7 @@ else if (startsWith("ct_", track))
    }
 else if (sameWord(track, "snpTsc") || sameWord(track, "snpNih"))
     {
-    doSnp(track, item);
+    doSnp(tdb, item);
     }
 #ifdef CHUCK_CODE
 else if (sameWord(track, "exprBed"))
