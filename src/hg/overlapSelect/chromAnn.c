@@ -110,7 +110,9 @@ return ca;
 }
 
 struct chromAnn* chromAnnFromGenePred(unsigned opts, struct lineFile *lf, char *line)
-/* create a chromAnn object from line read from a GenePred file */
+/* create a chromAnn object from line read from a GenePred file.  If there is
+ * no CDS, and chromAnnCds is specified, it will return a record with
+ * zero-length range.*/
 {
 char *recLine = NULL;
 char* row[GENEPRED_NUM_COLS];  /* allow for extra columns */

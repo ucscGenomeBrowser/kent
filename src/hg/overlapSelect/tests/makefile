@@ -15,7 +15,7 @@ test:   psl_over_NM_015110gp psl_nonover_NM_015110gp \
 	exludeself_over_mrna1 exludeself_nonover_mrna1 \
 	exludeself_over_mrna2 exludeself_nonover_mrna2 \
 	colSelect colExclude cdsOverlapCdsCds cdsOverlapCdsExon \
-	cdsOverlapExonCds \
+	cdsOverlapExonCds noCdsSelect noCdsSelectNoOver \
 	psl_over_NM_015110gpMerge psl_over_NM_001206bedMerge bed_over_NM_015110bedMerge colSelectMerge \
 	psl_gp_threshold psl_gp_non_threshold
 
@@ -194,7 +194,13 @@ psl_gp_non_threshold: mkout
 	${DIFF} expected/psl_gp_non_threshold.psl output/psl_gp_non_threshold.psl
 	${DIFF} expected/psl_gp_non_threshold.drop.psl output/psl_gp_non_threshold.drop.psl
 
-
+# regression: select with CDS and a genePred with no CDS
+noCdsSelect: mkout
+	${OVERSEL} -selectCds input/noCds.gp input/noCds2.gp output/noCdsSelect.gp
+	${DIFF} expected/noCdsSelect.gp output/noCdsSelect.gp
+noCdsSelectNoOver: mkout
+	${OVERSEL} -nonOverlapping -selectCds input/noCds.gp input/noCds2.gp output/noCdsSelectNoOver.gp
+	${DIFF} expected/noCdsSelectNoOver.gp output/noCdsSelectNoOver.gp
 
 mkout:
 	@${MKDIR} output

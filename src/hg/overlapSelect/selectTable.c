@@ -51,7 +51,11 @@ if (verboseLevel() >= 2)
             verbose(3, "    blk: %d-%d\n", cab->start, cab->end);
         }
     }
-binKeeperAdd(bins, ca->start, ca->end, ca);
+/* don't add zero-length, they can't select */
+if (ca->start < ca->end)
+    binKeeperAdd(bins, ca->start, ca->end, ca);
+else
+    chromAnnFree(&ca);
 }
 
 static unsigned getChomAnnOpts(unsigned selOpts)
