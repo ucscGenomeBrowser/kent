@@ -11,6 +11,7 @@
 #define OPTION_INT        0x04
 #define OPTION_FLOAT      0x10
 #define OPTION_LONG_LONG  0x20
+#define OPTION_MULTI      0x40
 
 struct optionSpec
 /* Specification of a single option.  An array of these are passed
@@ -33,6 +34,9 @@ long long optionLongLong(char *name, long long defaultVal);
 
 float optionFloat(char *name, float defaultVal);
 /* Return floating point value or default value if not set. */
+
+struct slName *optionMultiVal(char *name, struct slName *defaultVal);
+/* Returns a list of the values assocated with a named option if in options hash, otherwise default. */
 
 boolean optionExists(char *name);
 /* Return TRUE if option has been set. */

@@ -12,7 +12,7 @@
 #include "verbose.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: options.c,v 1.17 2004/02/23 09:07:24 kent Exp $";
+static char const rcsid[] = "$Id: options.c,v 1.18 2004/08/04 01:10:33 krish Exp $";
 
 #ifdef MACHTYPE_alpha
     #define strtoll strtol
@@ -87,6 +87,25 @@ default:
 }
 }
 
+void parseMultiOption(struct hash *hash, char *name, char* val, struct optionSpec *spec) {
+/* process multiple instances of an option, requres that the optionSpec of the option */
+struct slName *valList;
+switch(spec->flags & OPTION_TYPE_MASK) {
+    case OPTION_STRING:
+        valList = hashFindVal(hash, name);
+        if(valList == NULL) {   /* first multi option */
+            valList = newSlName(val);
+            hashAdd(hash, name, valList);
+        } else {
+            struct slName *el = newSlName(val);
+            slAddTail(valList, el); /* added next multi option */
+        }
+        break;
+    default:
+        errAbort("UNIMPLEMENTED: multiple instances of a non-string option is not currently implemented");
+}
+}
+
 static boolean parseAnOption(struct hash *hash, char *arg, struct optionSpec *optionSpecs)
 /* Parse a single option argument and add to the hash, validating if
  * optionSpecs is not NULL.  Return TRUE if it's arg is an option argument
@@ -119,7 +138,17 @@ if (optionSpecs != NULL)
     validateOption(name, val, optionSpecs);
 if (val == NULL)
     val = "on";
-hashAdd(hash, name, val);
+if(optionSpecs == NULL) {
+    hashAdd(hash, name, val);
+} else {
+    struct optionSpec *spec = matchingOption(name, optionSpecs);
+    if(spec->flags & OPTION_MULTI) {    /* process multiple instances of option */
+        parseMultiOption(hash, name, val, spec);
+    } else {
+        hashAdd(hash, name, val);
+    }
+}
+
 if (eqPtr != NULL)
     *eqPtr = '=';
 return TRUE;
@@ -180,6 +209,7 @@ return parseOptions(pArgc, argv, justFirst, NULL);
 }
 
 static struct hash *options = NULL;
+static struct optionSpec *optionSpecification = NULL;
 
 static void setOptions(struct hash *hash)
 /* Set global options hash to hash, and also do processing
@@ -235,6 +265,7 @@ if (options == NULL)
     {
     struct hash *hash = parseOptions(pArgc, argv, FALSE, optionSpecs);
     setOptions(hash);
+    optionSpecification = optionSpecs;
     }
 }
 
@@ -249,7 +280,15 @@ return hashFindVal(options, name);
 char *optionVal(char *name, char *defaultVal)
 /* Return named option if in options hash, otherwise default. */
 {
-char *ret = optGet(name);
+char *ret;
+/* if a optionSpec was used, make sure this option is not a multi option */
+if(optionSpecification != NULL) {
+    struct optionSpec *spec = matchingOption(name, optionSpecification);
+    if(spec != NULL && (spec->flags & OPTION_MULTI))    
+        errAbort("ERROR: optionVal cannot be used to get the value of an OPTION_MULTI");
+}
+
+ret = optGet(name);
 if (ret == NULL)
      ret = defaultVal;
 return ret;
@@ -302,6 +341,20 @@ val = strtod(s, &valEnd);
 if ((*s == '\0') || (*valEnd != '\0'))
     errAbort("value of -%s is not a valid float: \"%s\"", name, s);
 return val;
+}
+
+struct slName *optionMultiVal(char *name, struct slName *defaultVal)
+/* Return named option if in options hash, otherwise default. */
+{
+struct slName *ret;
+if(optionSpecification == NULL)
+    errAbort("ERROR: optionMultiVal can only be used after optionInit is called "
+             "with a non-NULL optionSpecs");
+
+ret = hashFindVal(options, name);
+if (ret == NULL)
+     ret = defaultVal;
+return ret;
 }
 
 boolean optionExists(char *name)
