@@ -68,6 +68,7 @@ void htmlVaWarn(char *format, va_list args)
 {
 htmlHorizontalLine();
 htmlVaParagraph(format,args);
+printf("<!-- HGERROR -->\n");
 htmlHorizontalLine();
 }
 
