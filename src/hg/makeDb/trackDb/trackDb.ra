@@ -383,7 +383,7 @@ shortLabel Ensembl Genes
 longLabel Ensembl Gene Predictions
 group genes
 priority 40
-visibility dense
+visibility hide
 color 150,0,0
 type genePred ensPep
 url http://www.ensembl.org/perl/transview?transcript=$$
@@ -503,7 +503,7 @@ shortLabel Genscan Genes
 longLabel Genscan Gene Predictions
 group genes
 priority 50
-visibility dense
+visibility hide
 color 170,100,0
 type genePred genscanPep
 
