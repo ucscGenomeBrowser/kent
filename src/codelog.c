@@ -675,3 +675,4 @@
 	       up (taming nlogn a little) major sort on hit
 	       diagonal.
 	   o - Custom hit diagonal sort routine.
+407 - Bringing stuff over to Lincoln Stein's lab.
