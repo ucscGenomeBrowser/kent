@@ -111,9 +111,6 @@ for (j=0; j<20; j++)
 
 currentYoffset = *yOffp;
     
-calxy(0, *yOffp, &xx, &yy);
-vgTextRight(g_vg, xx-25, yy-4, 10, 10, MG_BLACK, g_font, "AA Anomalies");
-    
 for (index=0; index < len; index++)
     {
     res = aa[index];
@@ -142,6 +139,10 @@ for (index=0; index < len; index++)
     vgBox(g_vg, xx, yy, 1*pbScale, 1, MG_BLACK);
     }
 
+calxy0(0, *yOffp, &xx, &yy);
+vgBox(g_vg, 0, yy-10, xx, 20, bkgColor);
+vgTextRight(g_vg, xx-25, yy-4, 10, 10, MG_BLACK, g_font, "AA Anomalies");
+
 // update y offset
 *yOffp = *yOffp + 15;
 }
@@ -155,12 +156,6 @@ int index;
 int xx, yy;
 	
 currentYoffset = *yOffp;
-    
-calxy(0, *yOffp, &xx, &yy);
-
-vgTextRight(g_vg, xx-25, yy-4, 10, 10, MG_BLACK, g_font, "Polarity");
-vgTextRight(g_vg, xx-14, yy-10, 10, 10, MG_RED,  g_font, "+");
-vgTextRight(g_vg, xx-14, yy, 10, 10, MG_BLUE, g_font, "-");
     
 for (index=0; index < len; index++)
     {
@@ -188,6 +183,12 @@ for (index=0; index < len; index++)
 	}
     }
 
+calxy0(0, *yOffp, &xx, &yy);
+vgBox(g_vg, 0, yy-10, xx, 30, bkgColor);
+vgTextRight(g_vg, xx-25, yy-4, 10, 10, MG_BLACK, g_font, "Polarity");
+vgTextRight(g_vg, xx-14, yy-10, 10, 10, MG_RED,  g_font, "+");
+vgTextRight(g_vg, xx-14, yy, 10, 10, MG_BLUE, g_font, "-");
+
 *yOffp = *yOffp + 15;
 }
 
@@ -206,9 +207,6 @@ int iw = 5;
 float sum, avg;
 	
 currentYoffset = *yOffp;
-    
-calxy(0, *yOffp, &xx, &yy);
-vgTextRight(g_vg, xx-25, yy-7, 10, 10, MG_BLACK, g_font, "Hydrophobicity");
     
 for (index=0; index < len; index++)
     {
@@ -244,7 +242,9 @@ for (index=0; index < len; index++)
 	    }
 	}
     }
-
+calxy0(0, *yOffp, &xx, &yy);
+vgBox(g_vg, 0, yy-17, xx, 40, bkgColor);
+vgTextRight(g_vg, xx-25, yy-7, 10, 10, MG_BLACK, g_font, "Hydrophobicity");
 *yOffp = *yOffp + 15;
 }
 
@@ -260,12 +260,6 @@ int iw = 5;
 float sum;
 	
 currentYoffset = *yOffp;
-    
-calxy(0, *yOffp, &xx, &yy);
-vgTextRight(g_vg, xx-25, yy-8, 10, 10, MG_RED, g_font, "Cysteines");
-    
-vgTextRight(g_vg, xx-25, yy, 10, 10, MG_BLUE, g_font, "Glycosylation");
-vgTextRight(g_vg, xx-25, yy+10, 10, 10, MG_BLUE, g_font, "(potential)");
     
 for (index=0; index < len; index++)
     {
@@ -295,6 +289,12 @@ for (index=1; index < (len-1); index++)
 	    }
 	}
     }
+
+calxy0(0, *yOffp, &xx, &yy);
+vgBox(g_vg, 0, yy-15, xx, 33, bkgColor);
+vgTextRight(g_vg, xx-25, yy-8, 10, 10, MG_RED, g_font, "Cysteines");
+vgTextRight(g_vg, xx-25, yy, 10, 10, MG_BLUE, g_font, "Glycosylation");
+vgTextRight(g_vg, xx-25, yy+10, 10, 10, MG_BLUE, g_font, "(potential)");
     
 *yOffp = *yOffp + 15;
 }
@@ -325,9 +325,6 @@ currentYoffset = *yOffp;
 imax = len/100 * 100;
 if ((len % 100) != 0) imax = imax + 100;
     
-calxy(0, *yOffp, &xx, &yy);
-vgTextRight(g_vg, xx-25, yy-9*tb, 10, 10, MG_BLACK, g_font, "AA Scale");
-   
 calxy(1, *yOffp, &xx, &yy);
 vgBox(g_vg, xx-pbScale/2, yy-tb, (len-1)*pbScale+pbScale/2, 1, MG_BLACK);
 
@@ -354,9 +351,10 @@ for (i=0; i<len; i++)
 	}
     }
 
-//calxy0(0, *yOffp, &xx, &yy);
-//vgTextRight(g_vg, xx-25, yy-9*tb, 10, 10, MG_BLACK, g_font, "AA Scale");
-   
+calxy0(0, *yOffp, &xx, &yy);
+vgBox(g_vg, 0, yy-tb*9-1, xx, 20, bkgColor);
+vgTextRight(g_vg, xx-25, yy-9*tb, 10, 10, MG_BLACK, g_font, "AA Scale");
+
 *yOffp = *yOffp + 12;
 }
 
@@ -546,7 +544,6 @@ exonGenomeEndPos   = blockGenomeEndPositive[exonNumber-1];
 
 currentYoffset = *yOffp;
 
-//printf("<br>%d %d<br><br>\n",prevGBStartPos, prevGBEndPos);
 if (strand == '-')
     {
     for (i=0; i<(exonCount-2); i++)
@@ -580,11 +577,7 @@ else
 	    {
 	    iPrevExon = i;
 	    jPrevExonPos = blockEndPositive[i];
-    	    //printf("<br>*%d %d %d %d\n",i,blockGenomeEndPositive[i], 
-	    //prevGBStartPos, blockGenomeStartPositive[i+1]);fflush(stdout);
 	    }
-    	//printf("<br>%d %d %d",i,blockGenomeStartPositive[i],
-	//	blockGenomeEndPositive[i]);fflush(stdout);
     	}
 
     // handle special cases at both ends when previous GB position is outside CDS
@@ -634,8 +627,6 @@ for (j = 0; j < mrnaLen; j++)
 
     if ((currentPos >= prevGBStartPos) && (currentPos <= prevGBEndPos))
 	{
-	//printf("<br>j=%d currentPos=%d prevGBStartPos=%d prevGBEndPos=%d\n", 
-	//j, currentPos, prevGBStartPos, prevGBEndPos);fflush(stdout);
 	jcnt++;
 	if (j < jPrevStart) jPrevStart = j;
 	if (j > jPrevEnd)   jPrevEnd   = j;
@@ -698,8 +689,11 @@ else
     	vgTextCentered(g_vg, xx, yy-8, 10, 10, MG_BLACK, g_font, prevPosMessage);
     	}
     }
-calxy(0, *yOffp, &xx, &yy);
+
+calxy0(0, *yOffp, &xx, &yy);
+vgBox(g_vg, 0, yy-10, xx, 20, bkgColor);
 vgTextRight(g_vg, xx-25, yy-8, 10, 10, MG_BLACK, g_font, "Genome Browser");
+
 *yOffp = *yOffp + 7;
 }
 
@@ -736,9 +730,6 @@ exonGenomeEndPos   = blockGenomeEndPositive[exonNumber-1];
 
 currentYoffset = *yOffp;
     
-calxy(0, *yOffp, &xx, &yy);
-vgTextRight(g_vg, xx-25, yy-9, 10, 10, MG_BLACK, g_font, "Exons");
-
 for (j = 0; j < mrnaLen; j++)
     {
     color = defaultColor;
@@ -790,6 +781,10 @@ mapBoxExon(xx - (exonEndPos - exonStartPos)*pbScale/3, yy-9,
 	   exonNumber, chrom, 
 	   blockGenomeStartPositive[exonNumber-1], 
 	   blockGenomeEndPositive[exonNumber-1]);
+
+calxy0(0, *yOffp, &xx, &yy);
+vgBox(g_vg, 0, yy-10, xx, 12, bkgColor);
+vgTextRight(g_vg, xx-25, yy-9, 10, 10, MG_BLACK, g_font, "Exons");
 
 *yOffp = *yOffp + 10;
 }
@@ -952,7 +947,6 @@ color2 = vgFindColorIx(g_vg, 0, 180, 0);
 currentYoffset = *yOffp;
    
 calxy(0, *yOffp, &xx, &yy);
-vgTextRight(g_vg, xx-25, yy-9, 10, 10, MG_BLACK, g_font, "Superfamily/SCOP");
     
 jj = 0;
 for (ii=0; ii<sf_cnt; ii++)
@@ -985,6 +979,9 @@ for (ii=0; ii<sf_cnt; ii++)
 				   yy-9+(jj%3)*4, 10, 10, MG_BLACK, g_font, superfam_name[ii]);
 	}
     }
+calxy0(0, *yOffp, &xx, &yy);
+vgBox(g_vg, 0, yy-10, xx, 20, bkgColor);
+vgTextRight(g_vg, xx-25, yy-9, 10, 10, MG_BLACK, g_font, "Superfamily/SCOP");
 
 *yOffp = *yOffp + 20;
 }
@@ -1007,7 +1004,6 @@ float sum;
 currentYoffset = *yOffp;
     
 calxy(0, *yOffp, &xx, &yy);
-vgTextRight(g_vg, xx-25, yy, 10, 10, MG_BLACK, g_font, "Sequence");
     
 res_str[1] = '\0';
 for (index=0; index < len; index++)
@@ -1026,7 +1022,11 @@ for (index=0; index < len; index++)
     	}
 
     }
-    
+
+calxy0(0, *yOffp, &xx, &yy);
+vgBox(g_vg, 0, yy-10, xx, 20, bkgColor);
+vgTextRight(g_vg, xx-25, yy, 10, 10, MG_BLACK, g_font, "Protein Sequence");
+ 
 *yOffp = *yOffp + 12;
 }
 
@@ -1082,9 +1082,6 @@ exonGenomeEndPos   = blockGenomeEndPositive[exonNumber-1];
 dna = hChromSeq(chrom, exonGenomeStartPos, exonGenomeEndPos+1);
 dnaLen = strlen(dna->dna);
 
-vgTextRight(g_vg, xx-25, yy, 10, 10, MG_BLACK, g_font, "DNA Sequence");
-if (strand == '-') vgTextRight(g_vg, xx-25, yy+9, 10, 10, MG_BLACK, g_font, "& complement");
-
 k=0;
 for (j = 0; j < mrnaLen; j++)
     {
@@ -1129,7 +1126,12 @@ for (j = 0; j < mrnaLen; j++)
         }
     color = MG_BLUE;
     }
-    
+   
+calxy0(0, *yOffp, &xx, &yy);
+vgBox(g_vg, 0, yy-10, xx, 30, bkgColor);
+vgTextRight(g_vg, xx-25, yy, 10, 10, MG_BLACK, g_font, "DNA Sequence");
+if (strand == '-') vgTextRight(g_vg, xx-25, yy+9, 10, 10, MG_BLACK, g_font, "& complement");
+ 
 if (strand == '-')
     {
     *yOffp = *yOffp + 20;
@@ -1167,8 +1169,6 @@ double molWeight, hydroSum;
 struct pbStamp *stampDataPtr;
 char *chrom;
 char strand;
-
-Color bkgColor;
 
 g_font = mgSmallFont();
 
@@ -1271,7 +1271,6 @@ vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi);
 g_vg = vg;
 
 bkgColor = vgFindColorIx(vg, 255, 254, 232);
-
 vgBox(vg, 0, 0, insideWidth, pixHeight, bkgColor);
 
 /* Start up client side map. */
