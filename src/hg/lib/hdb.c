@@ -904,10 +904,10 @@ struct sqlResult *sr;
 char **row;
 char *database = hGetDb();
 char query[256];
-
+char *trackDb = hTrackDbName();
 if(hdbTrackDb == NULL)
     errAbort("Please contact the system administrator to set the hg.trackDb in hg.conf");
-snprintf(query, sizeof(query), "select * from %s", hdbTrackDb);
+snprintf(query, sizeof(query), "select * from %s", trackDb);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -926,6 +926,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (!keeper)
        trackDbFree(&tdb);
     }
+freez(&trackDb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 slReverse(&tdbList);
