@@ -3251,7 +3251,7 @@ cp -p chain/chr19*.chain ../run1/chain
     end
 
 
-# NET SELF BLASTZ (RE-DONE 2003-09-08 - DONE - 2003-08-27 - Hiram)
+# NET SELF BLASTZ (RE-DONE 2003-09-09 - DONE - 2003-08-27 - Hiram)
 
     ssh eieio
     cd /cluster/data/hg16/bed/blastzSelf/axtChain
@@ -3282,7 +3282,6 @@ cp -p chain/chr19*.chain ../run1/chain
     cat n1/*.net | /cluster/bin/i386/netSyntenic stdin hNoClass.net
     #	memory usage 200167424, utime 2489 s/100, stime 161
 
-XXXX WORKING 2003-09-05
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastzSelf/axtChain
     ~/bin/i386/netClass hNoClass.net hg16 hg16 human.net \
@@ -3304,35 +3303,18 @@ XXXX WORKING 2003-09-05
 
     # Add entries for net and chain to human/hg16 trackDb
 
------ replacement -----
-# MAKING SELF AXTTIGHT FROM AXTCHROM ()
-    # After creating axtBest alignments above, use subsetAxt to get axtTight:
+# MAKING SELF AXTTIGHT FROM AXTCHROM (DONE - 2003-09-09 - Hiram)
 
     ssh eieio
     cd /cluster/data/hg16/bed/blastzSelf/axtChrom
-    mkdir -p ../axtTight
+    mkdir -p /cluster/data/hg16/bed/blastzSelf/axtTight
     tcsh
 
     foreach i (*.axt)
       echo $i
-      subsetAxt  $i ../axtTight/$i \
+      subsetAxt  $i /cluster/data/hg16/bed/blastzSelf/axtTight/$i \
         ~kent/src/hg/mouseStuff/subsetAxt/90.mat 5000
     end
------ replacement -----
-# MAKING SELF AXTTIGHT FROM AXTBEST (DONE - 2003-08-26 - Hiram)
-    # After creating axtBest alignments above, use subsetAxt to get axtTight:
-
-    ssh eieio
-    cd /cluster/data/hg16/bed/blastzSelf/axtNet
-    mkdir -p ../axtTight
-    tcsh
-
-    foreach i (*.axt)
-      echo $i
-      subsetAxt  $i ../axtTight/$i \
-        ~kent/src/hg/mouseStuff/subsetAxt/coding.mat 3400
-    end
------ replacement -----
 
     # translate to psl
     cd ../axtTight
@@ -3348,7 +3330,7 @@ XXXX WORKING 2003-09-05
     cd /cluster/data/hg16/bed/blastzSelf/pslTight
     hgLoadPsl hg16 chr*_blastzTightSelf.psl
 
-# MAKING SELF SYNTENY - Can be done after Best
+# MAKING SELF SYNTENY - Can be done after Best (NEEDS TO BE REDONE 2003-09-09)
 
 ssh hgwdev
 mkdir -p /cluster/data/hg16/bed/syntenySelf
