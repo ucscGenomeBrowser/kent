@@ -177,7 +177,17 @@ if (wordCount > 6)
 else
      bed->thickStart = bed->chromStart;
 if (wordCount > 7)
+     {
      bed->thickEnd = needNum(row[7], lineIx, 7);
+     if (bed->thickEnd < bed->thickStart)
+	 errAbort("line %d of custom input: thickStart after thickEnd", lineIx);
+     if ((bed->thickStart < bed->chromStart) ||
+	 (bed->thickStart > bed->chromEnd))
+	 errAbort("line %d of custom input: thickStart out of range (chromStart to chromEnd)", lineIx);
+     if ((bed->thickEnd < bed->chromStart) ||
+	 (bed->thickEnd > bed->chromEnd))
+	 errAbort("line %d of custom input: thickEnd out of range (chromStart to chromEnd)", lineIx);
+     }
 else
      bed->thickEnd = bed->chromEnd;
 if (wordCount > 8)
@@ -194,9 +204,42 @@ if (wordCount > 10)
     }
 if (wordCount > 11)
     {
+    int i;
+    int lastEnd, lastStart;
     sqlSignedDynamicArray(row[11], &bed->chromStarts, &count);
     if (count != bed->blockCount)
-	errAbort("line %d of custom input: expecting %d elements in array", lineIx);
+	errAbort("line %d of custom input: expecting %d elements in array",
+		 lineIx);
+    // tell the user if they appear to be using absolute starts rather than 
+    // relative... easy to forget!  Also check block order, coord ranges...
+    lastStart = -1;
+    lastEnd = 0;
+    for (i=0;  i < bed->blockCount;  i++)
+	{
+	if (bed->chromStarts[i]+bed->chromStart >= bed->chromEnd)
+	    if (bed->chromStarts[i] >= bed->chromStart)
+		errAbort("line %d of custom input: BED chromStarts offsets must be relative to chromStart, not absolute.  Try subtracting chromStart from each offset in chromStarts.",
+			 lineIx);
+	    else
+		errAbort("line %d of custom input: BED chromStarts[i]+chromStart must be less than chromEnd.",
+			 lineIx);
+	if (bed->chromStarts[i] <= lastStart)
+	    errAbort("line %d of custom input: BED chromStarts[i] must be in ascending order.",
+		     lineIx);
+	lastStart = bed->chromStarts[i];
+	if (bed->chromStart + bed->chromStarts[i] < lastEnd)
+	    errAbort("line %d of custom input: BED blocks must not overlap, i.e. the end of block i should be less than or equal to the start of block i+1.",
+		     lineIx);
+	lastEnd = bed->chromStart + bed->chromStarts[i] + bed->blockSizes[i];
+	}
+    if (bed->chromStarts[0] != 0)
+	errAbort("line %d of custom input: BED blocks must span chromStart to chromEnd.  BED chromStarts[0] must be 0 so that (chromStart + chromStarts[0]) equals chromStart.",
+		 lineIx);
+    i = bed->blockCount-1;
+    if ((bed->chromStart + bed->chromStarts[i] + bed->blockSizes[i]) !=
+	bed->chromEnd)
+	errAbort("line %d of custom input: BED blocks must span chromStart to chromEnd.  (chromStart + chromStarts[last] + blockSizes[last]) must equal chromEnd.",
+		 lineIx);
     }
 return bed;
 }
