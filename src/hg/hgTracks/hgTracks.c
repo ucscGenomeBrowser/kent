@@ -2867,7 +2867,7 @@ void loadknownGene(struct track *tg)
 /* Load up known genes. */
 {
 tg->items = lfFromGenePredInRange("knownGene", chromName, winStart, winEnd);
-if (limitVisibility(tg) == tvFull)
+if ((limitVisibility(tg) == tvFull) ||  (limitVisibility(tg) == tvPack) )
     {
     lookupKnownGeneNames(tg->items);
     }
