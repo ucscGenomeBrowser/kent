@@ -580,3 +580,11 @@ visibility dense
 chromosomes chr22,
 type bed 15 +
 
+track wiggle
+shortLabel Wiggle
+longLabel Wiggle Test Track
+priority 41
+visibility hide
+chromosomes chr21,
+type bed 12
+private on
