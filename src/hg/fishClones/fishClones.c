@@ -859,6 +859,8 @@ int scorePlace(struct place *p, struct map *m)
 	  ret += 5;
 	else if (n->phase == 2)
 	  ret += 3;
+	else if (n->phase == 1)
+	  ret += 2;
 	else
 	  ret += 1;
 	new = createName(n->name);
