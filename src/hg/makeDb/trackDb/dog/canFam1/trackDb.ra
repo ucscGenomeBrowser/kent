@@ -96,3 +96,12 @@ group map
 visibility dense
 type bed 3 +
 
+track twinscan
+shortLabel Twinscan
+longLabel Twinscan Gene Predictions Using $Organism/Human Homology
+group genes
+priority 45
+visibility hide
+color 0,100,100
+type genePred twinscanPep
+
