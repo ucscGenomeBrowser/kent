@@ -113,7 +113,7 @@
 #include "flyBaseSwissProt.h"
 #include "affyGenoDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.491 2003/10/09 09:43:28 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.492 2003/10/09 17:05:11 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6094,8 +6094,25 @@ if (cgapID != NULL)
     	}
     printf("<LI><B>NCI Cancer Genome Anatomy:&nbsp</B>");
     printf("<A HREF = \"");
-    printf("http://cgap.nci.nih.gov/Genes/GeneInfo?ORG=Hs&CID=%s", cgapID);
-    printf("\" TARGET=_blank>%s</A> </LI>\n", cgapID);
+    printf("http://cgap.nci.nih.gov/Genes/GeneInfo?ORG=");
+
+    // select appropriate two letters used by CGAP for organism
+    if (sameWord(organism, "Human"))
+	{
+	printf("Hs");
+	}
+    else
+	{
+    	if (sameWord(organism, "Mouse"))
+	    {
+	    printf("Mm");
+	    }
+	else
+	    {
+	    errAbort("Our current database table for NCI CGAP does not cover oganism %s.\n", organism); 
+	    }
+	}
+    printf("&CID=%s\" TARGET=_blank>%s</A> </LI>\n", cgapID, cgapID);
     }
 
 // process links to Atlas of Genetics and Cytogenetics in Oncology and Haematology 
