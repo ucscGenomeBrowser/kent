@@ -41,6 +41,10 @@ struct hashEl *hashLookup(struct hash *hash, char *name);
 /* Looks for name in hash table. Returns associated element,
  * if found, or NULL if not. */
 
+struct hashEl *hashLookupUpperCase(struct hash *hash, char *name);
+/* Lookup upper cased name in hash. (Assumes all elements of hash
+ * are themselves already in upper case.) */
+
 struct hashEl *hashLookupNext(struct hashEl *hashEl);
 /* Find the next occurance of name that may occur in the table multiple times,
  * or NULL if not found. */

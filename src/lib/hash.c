@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.21 2004/03/15 17:22:07 kent Exp $";
+static char const rcsid[] = "$Id: hash.c,v 1.22 2004/04/15 07:27:55 kent Exp $";
 
 bits32 hashCrc(char *string)
 /* Returns a CRC value on string. */
@@ -40,6 +40,17 @@ while (el != NULL)
     }
 return el;
 }
+
+struct hashEl *hashLookupUpperCase(struct hash *hash, char *name)
+/* Lookup upper cased name in hash. (Assumes all elements of hash
+ * are themselves already in upper case.) */
+{
+char s[256];
+safef(s, sizeof(s), "%s", name);
+touppers(s);
+return hashLookup(hash, s);
+}
+
 
 struct hashEl *hashLookupNext(struct hashEl *hashEl)
 /* Find the next occurance of name that may occur in the table multiple times,
