@@ -10,7 +10,7 @@ opts="$*"
 databases="rn3 hg16"
 
 # gbRoot on hgnfs1
-gbRoot=/genbank
+gbRoot=/cluster/data/genbank
 
 # load directly, no copy needed
 buildTime=var/build/build.time
