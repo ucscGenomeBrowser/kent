@@ -698,10 +698,10 @@ identifier pfamId external=Pfam fuzzy
 
 identifier superfamilyId external=SCOP
 "Protein SCOP/Superfamily ID"
+    hgFixed.scopDes.sunid    
     $gbd.sfDes.id
     $kgDb.knownToSuper.superfamily
     $gbd.sfAssign.sfID
-    hgFixed.scopDes.sunid    
 
 identifier mouseGeneName fuzzy
 "Mouse gene name from Jackson Labs/RefSeq"
@@ -720,7 +720,7 @@ identifier wormBaseIsoformCluster
 identifier wormBaseId external=WormBase
 "WormBase (C. elegans) ORF ID"
     $ce.sangerGene.name
-    $gbd.ceBlastTab.target
+    $gbd.ceBlastTab.target minCheck=0.95
     $ce.kimExpDistance.query
     $ce.kimExpDistance.target
     $ce.orfToGene.name
@@ -747,21 +747,21 @@ identifier flyBaseRefId
 identifier flyBaseAlleleId
 "FlyBase (Drosophila) Allele ID"
     $dm.fbAllele.id
-    $dm.fbPhenotype.fbAllele
+    $dm.fbPhenotype.fbAllele exclude=0
 
 identifier flyBaseGeneId external=FlyBase
 "FlyBase (Drosophila) Gene ID"
     $dm.fbGene.geneId
-    $gbd.dmBlastTab.target
-    $dm.bdgpExprLink.flyBaseId
-    $dm.bdgpGeneInfo.flyBaseId
-    $dm.bdgpNonCodingInfo.flyBaseId
-    $dm.bdgpSwissProt.flyBaseId
+    $dm.bdgpExprLink.flyBaseId minCheck=0.95
+    $dm.bdgpGeneInfo.flyBaseId minCheck=0.95
+    $dm.bdgpNonCodingInfo.flyBaseId minCheck=0.20
+    $dm.bdgpSwissProt.flyBaseId minCheck=0.95
     $dm.fbAllele.geneId
     $dm.fbPhenotype.geneId
     $dm.fbSynonym.geneId
-    $dm.fbTranscript.geneId
-    $dm.flyBaseSwissProt.flyBaseId
+    $dm.fbTranscript.geneId minCheck=0.95
+    $dm.flyBaseSwissProt.flyBaseId minCheck=0.95
+    $gbd.dmBlastTab.target minCheck=0.90
 
 identifier bdgpIsoformCluster
 "Overlapping (after splicing) BDGP Drosophila transcripts"
@@ -771,7 +771,7 @@ identifier bdgpIsoformCluster
 identifier bdgpGeneId external=BDGP
 "Berkeley Drosophila Genome Project Gene ID"
     $dm.bdgpGeneInfo.bdgpName
-    $dm.bdgpExprLink.bdgpName
+    $dm.bdgpExprLink.bdgpName minCheck=0.99
     $dm.bdgpToCanonical.value
 
 identifier bdgpTranscriptId external=BDGP
@@ -821,15 +821,15 @@ identifier sgdCodingId typeOf=sgdId
     $sacCer.drBlastTab.query
     $sacCer.hgBlastTab.query
     $sacCer.mmBlastTab.query
-    $sacCer.choExpDistance.target
-    $sacCer.choExpDistance.query
+    $sacCer.choExpDistance.target minCheck=0.60
+    $sacCer.choExpDistance.query minCheck=0.60
     $sacCer.sgdCanonical.transcript
     $sacCer.sgdDescription.name
     $sacCer.sgdIsoforms.transcript
-    $sacCer.sgdAbundance.name
-    $sacCer.sgdLocalization.name
+    $sacCer.sgdAbundance.name minCheck=0.95
+    $sacCer.sgdLocalization.name minCheck=0.95
     $sacCer.sgdPep.name
-    $sacCer.sgdToSwissProt.name
+    $sacCer.sgdToSwissProt.name minCheck=0.85
 
 identifier sgdNoncodingId typeOf=sgdId
 "Sacchromyces Genome Database Noncoding/Dubious feature ID"
@@ -838,31 +838,31 @@ identifier sgdNoncodingId typeOf=sgdId
 
 identifier ensemblGeneId external=Ensembl
 "Ensemble Gene ID"
-    $gbd.ensGtp.gene chopAfter=.
+    $gbd.ensTranscript.gene_name dupeOk
+    $gbd.ensGtp.gene chopAfter=. 
     $gbd.ensGeneXref.gene_name
     mm3,hg13.ensemblXref.gene_name
-    $gbd.ensTranscript.gene_name
 
 identifier ensemblProteinId external=Ensembl
 "Ensemble Translated Protein ID"
+    $gbd.ensTranscript.translation_name dupeOk
     $gbd.ensGtp.protein chopAfter=.
-    $gbd.ensTranscript.translation_name
     mm3.ensemblXref2.translation_name
-    $gbd.sfDescription.proteinID
-    $gbd.sfAssign.seqID
+    $gbd.sfDescription.proteinID minCheck=0.10
+    $gbd.sfAssign.seqID minCheck=0.01
 
 identifier ensemblTranscriptId external=Ensembl
 "Ensembl Transcript ID"
-    $gbd.ensGene.name
-    $gbd.ensGeneXref.transcript_name
-    mm3,hg13.ensemblXref.transcript_name
-    mm3.ensemblXref2.transcript_name
+    $gbd.ensGene.name chopAfter=.
+    $gbd.ensGeneXref.transcript_name chopAfter=.
+    mm3,hg13.ensemblXref.transcript_name chopAfter=.
+    mm3.ensemblXref2.transcript_name chopAfter=.
     $gbd.ensGtp.transcript chopAfter=.
-    $gbd.ensPep.name
-    $gbd.ensTranscript.transcript_name
-    $kgDb.knownToEnsembl.value
-    $gbd.sfDescription.name
-    mm2,mm3.superfamily.name
+    $gbd.ensPep.name chopAfter=.
+    $gbd.ensTranscript.transcript_name chopAfter=.
+    $kgDb.knownToEnsembl.value chopAfter=.
+    $gbd.sfDescription.name chopAfter=.
+    mm3.superfamily.name chopAfter=.
 
 identifier cgapId
 "NCI Cancer Genome Annotation Project Gene ID"
