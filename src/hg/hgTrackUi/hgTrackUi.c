@@ -20,7 +20,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.107 2004/06/02 22:05:30 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.108 2004/06/02 22:55:10 braney Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -272,6 +272,22 @@ void cdsColorOptions(struct trackDb *tdb, int value)
         printf("(<a href=%s>Codon coloring help</a>)<br>",CDS_HELP_PAGE);
     else
         printf("(<a href=%s>mRNA coloring help</a>)<br>",CDS_MRNA_HELP_PAGE);
+}
+
+void blastUi(struct trackDb *tdb)
+{
+char varName[64];
+char *refGeneLabel;
+
+safef(varName, sizeof(varName), "%s.label", tdb->tableName);
+refGeneLabel = cartUsualString(cart, varName, "gene");
+printf("<P><B>Label:</B> ");
+radioButton(varName, refGeneLabel, "gene");
+radioButton(varName, refGeneLabel, "accession");
+radioButton(varName, refGeneLabel, "both");
+radioButton(varName, refGeneLabel, "none");
+
+//cdsColorOptions(tdb, 2);
 }
 
 void refGeneUI(struct trackDb *tdb)
@@ -810,6 +826,8 @@ else if (sameString(track, "xenoEst"))
         mrnaUi(tdb, TRUE);
 else if (sameString(track, "rosetta"))
         rosettaUi(tdb);
+else if (sameString(track, "blastHg16KG"))
+        blastUi(tdb);
 else if (startsWith("wig", tdb->type))
         {
         if (startsWith("wigMaf", tdb->type))
