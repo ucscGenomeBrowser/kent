@@ -16,7 +16,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.60 2003/09/07 02:44:05 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.61 2003/09/07 19:28:31 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -24,7 +24,7 @@ char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	filSaveCurrentVarName, filUseSavedVarName,
 	getSeqVarName, getSeqPageVarName, getGenomicSeqVarName, getTextVarName, 
 	advFilterVarName, advFilterClearVarName, advFilterBrowseVarName,
-	advFilterListVarName, resetConfName, idVarName, idPosVarName, NULL }; 
+	advFilterListVarName, idVarName, idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. */
 
 /* ---- Global variables. ---- */

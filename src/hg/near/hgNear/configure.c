@@ -12,7 +12,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.22 2003/09/07 02:44:05 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.23 2003/09/07 19:28:31 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -177,8 +177,12 @@ return !cartUsualBoolean(cart, showAllSpliceVarName, FALSE);
 struct userSettings *colUserSettings()
 /* Return userSettings object for columns. */
 {
-return userSettingsNew(cart, colConfigPrefix, 
+struct userSettings *us = userSettingsNew(cart, 
+	"Save Current Column Configuration",
 	savedCurrentConfName, colSaveSettingsPrefix);
+userSettingsCapturePrefix(us, colConfigPrefix);
+userSettingsCaptureVar(us, colOrderVar);
+return us;
 }
 
 void doConfigure(struct sqlConnection *conn, struct column *colList, char *bumpVar)
@@ -219,12 +223,12 @@ if (userSettingsAnySaved(us))
     hPrintf(" ");
     userSettingsDropDown(us);
     hPrintf(" ");
-    cgiMakeButton(useSavedConfName, "Use Saved Settings");
+    cgiMakeButton(useSavedConfName, "Load Settings");
     }
 hPrintf("</TD><TD>");
 hPrintf("&nbsp;");
 hPrintf("</TD><TD>");
-cgiMakeButton(defaultConfName, "Default Columns");
+cgiMakeButton(defaultConfName, "Default Settings");
 hPrintf("</TD></TR></TABLE>");
 configTable(colList, conn);
 hPrintf("</FORM>");
@@ -296,7 +300,7 @@ void doNameCurrentColumns()
 /* Put up page to save current column configuration. */
 {
 struct userSettings *us = colUserSettings();
-userSettingsSaveForm(us, "Save Current Column Configuration");
+userSettingsSaveForm(us);
 }
 
 void doSaveCurrentColumns(struct sqlConnection *conn, struct column *colList)

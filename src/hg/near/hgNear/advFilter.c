@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.3 2003/09/07 02:44:05 kent Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.4 2003/09/07 19:28:31 kent Exp $";
 
 struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -252,8 +252,7 @@ static void bigButtons()
 /* Put up the big clear/submit buttons. */
 {
 hPrintf("<TABLE><TR><TD>");
-hPrintf("Filter form: ");
-cgiMakeButton(advFilterClearVarName, "Clear All");
+cgiMakeButton(advFilterClearVarName, "Clear Filter");
 hPrintf(" ");
 cgiMakeButton(advFilterListVarName, "List Names");
 hPrintf(" ");
@@ -264,10 +263,13 @@ hPrintf("</TD></TR></TABLE>\n");
 struct userSettings *filUserSettings()
 /* Return userSettings object for columns. */
 {
-return userSettingsNew(cart, advFilterPrefix, 
+struct userSettings *us = userSettingsNew(cart, 
+	"Save Current Filter Settings", 
 	filSavedCurrentVarName, filSaveSettingsPrefix);
+userSettingsCapturePrefix(us, advFilterPrefix);
+userSettingsCapturePrefix(us, advFilterPrefixI);
+return us;
 }
-
 
 void doAdvFilter(struct sqlConnection *conn, struct column *colList)
 /* Put up advanced filter page. */
@@ -284,7 +286,7 @@ cartSaveSession(cart);
 
 /* Put up little table with clear all/submit */
 bigButtons();
-hPrintf("Hint: you can combine filters by copying the results of 'List Matching Names' "
+hPrintf("Hint: you can combine filters by copying the results of 'List Matching Names'<BR>\n"
         "and then doing a 'Paste List' in the Name controls.<BR>");
 if (userSettingsAnySaved(us))
     {
@@ -427,7 +429,7 @@ return outList;
 void doNameCurrentFilters()
 /* Put up page to save current filter settings. */
 {
-userSettingsSaveForm(filUserSettings(), "Save Current Filter Configuration");
+userSettingsSaveForm(filUserSettings());
 }
 
 void doSaveCurrentFilters(struct sqlConnection *conn, struct column *colList)

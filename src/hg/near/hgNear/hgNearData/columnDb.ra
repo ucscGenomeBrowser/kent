@@ -79,7 +79,7 @@ name percentId
 shortLabel %ID
 longLabel NCBI BLASTP percent identity
 priority 6
-visibility on
+visibility off
 type distance knownBlastTab query target identity
 
 name knownPos
