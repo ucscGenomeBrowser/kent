@@ -1,6 +1,9 @@
 26:
      o Made it so that gfServer does not abort when it runs out
        of memory.
+     o Fixed bug in pslPretty in case where there is a small
+       gap in both query and target sides of alignment.
+
 25:
      o Fixed crash when aligning translated sequences of less than 3 bases.
      o Added extendThroughN flag.
