@@ -5,7 +5,7 @@
 #ifndef PSEUDOGENELINK_H
 #define PSEUDOGENELINK_H
 
-#define PSEUDOGENELINK_NUM_COLS 33
+#define PSEUDOGENELINK_NUM_COLS 35
 
 struct pseudoGeneLink
 /* links a gene/pseudogene prediction to an ortholog or paralog. */
@@ -30,10 +30,9 @@ struct pseudoGeneLink
     char *gChrom;	/* Chromosome name */
     unsigned gStart;	/* gene alignment start position */
     unsigned gEnd;	/* gene alignment end position */
-    unsigned score2;	/* intron score of pseudogene with gap */
-    unsigned score3;	/* intron score of pseudogene */
-    unsigned chainId;	/* chain id of gene/pseudogene alignment */
     char *gStrand;	/* strand of gene */
+    unsigned exonCount;	/* # of exons in gene  */
+    unsigned geneOverlap;	/* bases overlapping */
     unsigned polyA;	/* length of polyA */
     unsigned polyAstart;	/* start f polyA */
     unsigned exonCover;	/* number of exons in Gene covered */
@@ -41,9 +40,12 @@ struct pseudoGeneLink
     unsigned bestAliCount;	/* number of good mrnas aligning */
     unsigned matches;	/* matches + repMatches */
     unsigned qSize;	/* aligning bases in pseudogene */
+    unsigned qEnd;	/* end of cdna alignment */
     unsigned tReps;	/* repeats in gene */
     unsigned qReps;	/* repeats in pseudogene */
     unsigned overlapDiag;	/* bases on the diagonal to mouse */
+    unsigned coverage;	/* bases on the diagonal to mouse */
+    unsigned chainId;	/* chain id of gene/pseudogene alignment */
     };
 
 struct pseudoGeneLink *pseudoGeneLinkLoad(char **row);
