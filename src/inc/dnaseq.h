@@ -25,6 +25,9 @@ typedef struct dnaSeq aaSeq;	/* Preferred use if protein. */
 struct dnaSeq *newDnaSeq(DNA *dna, int size, char *name);
 /* Create a new DNA seq. */
 
+struct dnaSeq *cloneDnaSeq(struct dnaSeq *seq);
+/* Duplicate dna sequence in RAM. */
+
 void freeDnaSeq(struct dnaSeq **pSeq);
 /* Free up DNA seq.  */
 

@@ -78,6 +78,20 @@ boolean faPepSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, char
 boolean faSomeSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, char **retName, boolean isDna);
 /* Read in DNA or Peptide FA record. */
 
+boolean faMixedSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, char **retName);
+/* Read in DNA or Peptide FA record in mixed case.   Allow any upper or lower case
+ * letter, or the dash character in. */
+
+void faToProtein(char *poly, int size);
+/* Convert possibly mixed-case protein to upper case.  Also
+ * convert any strange characters to 'X'.  Does not change size.
+ * of sequence. */
+
+void faToDna(char *poly, int size);
+/* Convert possibly mixed-case DNA to lower case.  Also turn
+ * any strange characters to 'n'.  Does not change size.
+ * of sequence. */
+
 void faFreeFastBuf();
 /* Free up buffers used in fa fast and speedreading. */
 
