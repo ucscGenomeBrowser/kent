@@ -6261,3 +6261,36 @@ zcat `ls -1 /cluster/bluearc/dm1/phastCons/POSTPROBS/$chr.*.pp.gz \
     rm -r /cluster/bluearc/dm1/chrom
 
 
+# SELF ALIGNMENTS (DONE 2/24/05 angie)
+    # Doing this partly as a test of doBlastzChainNet.pl...
+    ssh kksilo
+    mkdir /cluster/data/dm1/bed/blastz.dm1.2005-02-24
+    cd /cluster/data/dm1/bed/blastz.dm1.2005-02-24
+    cat << '_EOF_' > DEF
+# D. melanogaster vs. self
+
+# TARGET - D. melanogaster
+SEQ1_DIR=/iscratch/i/dm1/nib
+SEQ1_CHUNK=5000000
+SEQ1_LAP=10000
+SEQ1_LEN=/cluster/data/dm1/chrom.sizes
+
+# QUERY - D. melanogaster
+SEQ2_DIR=/iscratch/i/dm1/nib
+SEQ2_CHUNK=5000000
+SEQ2_LAP=10000
+SEQ2_LEN=/cluster/data/dm1/chrom.sizes
+
+BASE=/cluster/data/dm1/bed/blastz.dm1.2005-02-24
+
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    ~/kent/src/utils/doBlastzChainNet.pl DEF \
+      -blastzOutRoot /panasas/store/dm1SelfOut >& do.log &
+    tail -f do.log
+    rmdir /panasas/store/dm1SelfOut
+    ln -s blastz.dm1.2005-02-24 /cluster/data/dm1/bed/blastz.dm1
+    # chainSelf is already in top-level trackDb.ra, so no need to add.
+    # Add /usr/local/apache/htdocs/goldenPath/dm1/vsSelf/README.txt
+
+

@@ -1413,6 +1413,7 @@ zcat `ls -1 /cluster/bluearc/dm2/phastCons/POSTPROBS/$chr.*.pp.gz \
 
 
 # FLYBASE ANNOTATIONS (DONE 1/12/05 angie)
+# REPLACED 2/23/05 -- SEE "FLYBASE 4.1" BELOW
     ssh kksilo
     mkdir /cluster/data/dm2/bed/flybase
     cd /cluster/data/dm2/bed/flybase
@@ -3769,6 +3770,19 @@ zcat `ls -1 /cluster/bluearc/dm2/phastCons/POSTPROBS/$chr.*.pp.gz \
     hgsql dm2 < $HOME/kent/src/hg/lib/flyBase2004Xref.sql
     hgsql dm2 -e 'load data local infile "flyBase2004Xref.tab" \
       into table flyBase2004Xref'
+    # Some featureBits comparisons with refGene which is pretty much like 
+    # version 4.0 but apparently includes some noncoding genes too:
+    featureBits dm2 refGene \!flyBaseGene -minSize=1000 -bed=stdout
+#chr3R   8221731 8222987 chr3R.1
+#...
+#87577 bases of 131698467 (0.066%) in intersection
+    # This shows only the dropped isoforms/duplicates (ignores noncoding):
+    featureBits dm2 refGene \!flyBaseGene \!flyBaseNoncoding -minSize=1000 \
+       -bed=stdout
+#chr3R   15620310        15621493        chr3R.1
+#chr2L   4698094 4700940 chr2L.1
+#chrX    3638700 3639895 chrX.1
+#49911 bases of 131698467 (0.038%) in intersection
 
     # add upstream* downloadable files
     cd /usr/local/apache/htdocs/goldenPath/dm2/bigZips
@@ -3777,7 +3791,7 @@ zcat `ls -1 /cluster/bluearc/dm2/phastCons/POSTPROBS/$chr.*.pp.gz \
       nice featureBits dm2 flyBaseGene:upstream:$size -fa=stdout \
       | nice gzip -c > upstream$size.fa.gz
     end
-    md5sum upstream*.fa.gz >> md5sum.txt
+    md5sum *.zip *.gz > md5sum.txt
 
 
 # FLYREG (DONE 2/23/05 angie)
@@ -3806,5 +3820,45 @@ zcat `ls -1 /cluster/bluearc/dm2/phastCons/POSTPROBS/$chr.*.pp.gz \
     > flyregMotif.sql
     hgsql dm2 < flyregMotif.sql
     hgsql dm2 -e 'load data local infile "flyregMotif.tab" into table flyregMotif'
+
+
+# SELF ALIGNMENTS (DONE 2/24/05 angie)
+    # Doing this largely as a test of doBlastzChainNet.pl...
+    ssh kksilo
+    mkdir /cluster/data/dm2/bed/blastz.dm2.2005-02-23
+    cd /cluster/data/dm2/bed/blastz.dm2.2005-02-23
+    cat << '_EOF_' > DEF
+# D. melanogaster vs. self
+
+# TARGET - D. melanogaster
+SEQ1_DIR=/iscratch/i/dm2/nib
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LEN=/cluster/data/dm2/chrom.sizes
+
+# QUERY - D. melanogaster
+SEQ2_DIR=/iscratch/i/dm2/nib
+SEQ2_CHUNK=10000000
+SEQ2_LAP=10000
+SEQ2_LEN=/cluster/data/dm2/chrom.sizes
+
+BASE=/cluster/data/dm2/bed/blastz.dm2.2005-02-23
+
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    ~/kent/src/utils/doBlastzChainNet.pl DEF \
+      -blastzOutRoot /panasas/store/dm2SelfOut >& do.log &
+    tail -f do.log
+    # The script died at the start of the cat step when kki couldn't see 
+    # /panasas (doh!).  Asked cluster-admin to fix that.  
+    # When fixed, restarted with -continue, appending to do.log:
+    rm -r run.cat
+    ~/kent/src/utils/doBlastzChainNet.pl -continue cat DEF \
+      -blastzOutRoot /panasas/store/dm2SelfOut >>& do.log &
+    tail -f do.log
+    rmdir /panasas/store/dm2SelfOut
+    ln -s blastz.dm2.2005-02-23 /cluster/data/dm2/bed/blastz.dm2
+    # chainSelf is already in top-level trackDb.ra, so no need to add.
+    # Add /usr/local/apache/htdocs/goldenPath/dm2/vsSelf/README.txt
 
 
