@@ -524,7 +524,6 @@ priority 54
 visibility pack
 spectrum on
 type psl .
-intronGap 30
 
 track mrnaBlastz
 shortLabel $Organism mRNAs Blastz
@@ -552,7 +551,6 @@ priority 56
 visibility dense
 spectrum on
 type psl est
-intronGap 30
 
 track est
 shortLabel $Organism ESTs
@@ -562,7 +560,6 @@ priority 57
 visibility hide
 spectrum on
 type psl est
-intronGap 30
 
 track tightEst
 shortLabel Tight ESTs
@@ -638,6 +635,15 @@ visibility hide
 spectrum on
 type bed 12 
 
+track orthoIntrons
+shortLabel orthoIntrons
+longLabel Bed version of AltGraphX Mapped Inrons from Mouse
+group rna
+color 107,74,34,
+priority 72.2
+visibility dense
+type bed 12
+
 track uniGene
 shortLabel UniGene
 longLabel UniGene Alignments and SAGE Info
@@ -680,14 +686,6 @@ group rna
 priority 73
 visibility hide
 type psl .
-
-track altGraphX
-shortLabel Alt-Splicing
-longLabel Alternative Splicing from ESTs/mRNAs
-group rna
-priority 74
-visibility hide
-type bed 3
 
 track mgcIncompleteMrna
 shortLabel MGC Incomplete
