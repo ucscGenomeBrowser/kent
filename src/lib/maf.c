@@ -63,6 +63,7 @@ for (;;)
     }
 }
 
+
 struct mafAli *mafNext(struct mafFile *mf)
 /* Return next alignment in FILE or NULL if at end. */
 {
@@ -70,81 +71,99 @@ struct lineFile *lf = mf->lf;
 struct mafAli *ali;
 char *line, *word;
 
-/* Get alignment header line.  If it's not there assume end of file. */
-if (!nextLine(lf, &line))
-    {
-    lineFileClose(&mf->lf);
-    return NULL;
-    }
-
-/* Parse alignment header line. */
-word = nextWord(&line);
-if (word == NULL || !sameString(word, "a"))
-    errAbort("Expecting 'a' at start of line %d of %s\n", lf->lineIx, lf->fileName);
-AllocVar(ali);
-while ((word = nextWord(&line)) != NULL)
-    {
-    /* Parse name=val. */
-    char *name = word;
-    char *val = strchr(word, '=');
-    if (val == NULL)
-       errAbort("Missing = after %s line 1 of %s", name, lf->fileName);
-    *val++ = 0;
-
-    if (sameString(name, "score"))
-        ali->score = atof(val);
-    }
-
-/* Parse alignment components until blank line. */
+/* Loop until get an alignment paragraph or reach end of file. */
 for (;;)
     {
+    /* Get alignment header line.  If it's not there assume end of file. */
     if (!nextLine(lf, &line))
-	errAbort("Unexpected end of file %s", lf->fileName);
+	{
+	lineFileClose(&mf->lf);
+	return NULL;
+	}
+
+    /* Parse alignment header line. */
     word = nextWord(&line);
     if (word == NULL)
-        break;
-    if (sameString(word, "s"))
-        {
-	struct mafComp *comp;
-	int wordCount;
-	char *row[7];
-	int textSize;
+	continue;	/* Ignore blank lines. */
+	
+    if (sameString(word, "a"))
+	{
+	AllocVar(ali);
+	while ((word = nextWord(&line)) != NULL)
+	    {
+	    /* Parse name=val. */
+	    char *name = word;
+	    char *val = strchr(word, '=');
+	    if (val == NULL)
+	       errAbort("Missing = after %s line 1 of %s", name, lf->fileName);
+	    *val++ = 0;
 
-	/* Chop line up by white space.  This involves a few +-1's because
-	 * have already chopped out first word. */
-	row[0] = word;
-	wordCount = chopByWhite(line, row+1, ArraySize(row)-1) + 1; /* +-1 because of "s" */
-	lineFileExpectWords(lf, ArraySize(row), wordCount);
-	AllocVar(comp);
+	    if (sameString(name, "score"))
+		ali->score = atof(val);
+	    }
 
-	/* Convert ascii text representation to mafComp structure. */
-	comp->src = cloneString(row[1]);
-	comp->srcSize = lineFileNeedNum(lf, row, 5);
-	comp->strand = row[4][0];
-	comp->start = lineFileNeedNum(lf, row, 2);
-	comp->size = lineFileNeedNum(lf, row, 3);
-	comp->text = cloneString(row[6]);
-	textSize = strlen(comp->text);
+	/* Parse alignment components until blank line. */
+	for (;;)
+	    {
+	    if (!nextLine(lf, &line))
+		errAbort("Unexpected end of file %s", lf->fileName);
+	    word = nextWord(&line);
+	    if (word == NULL)
+		break;
+	    if (sameString(word, "s"))
+		{
+		struct mafComp *comp;
+		int wordCount;
+		char *row[7];
+		int textSize;
 
-	/* Fill in ali->text size. */
-	if (ali->textSize == 0)
-	    ali->textSize = textSize;
-	else
-	    errAbort("Text size inconsistent (%d vs %d) line %d of %s",
-	        textSize, ali->textSize, lf->lineIx, lf->fileName);
+		/* Chop line up by white space.  This involves a few +-1's because
+		 * have already chopped out first word. */
+		row[0] = word;
+		wordCount = chopByWhite(line, row+1, ArraySize(row)-1) + 1; /* +-1 because of "s" */
+		lineFileExpectWords(lf, ArraySize(row), wordCount);
+		AllocVar(comp);
 
-	/* Do some sanity checking. */
-	if (comp->srcSize <= 0 || comp->size <= 0)
-             errAbort("Got a zero or negative size line %d of %s", lf->lineIx, lf->fileName);
-	if (comp->start < 0 || comp->start + comp->size > comp->srcSize)
-	     errAbort("Coordinates out of range line %d of %s", lf->lineIx, lf->fileName);
-          
-	/* Add component to head of list. */
-	slAddHead(&ali->components, comp);
+		/* Convert ascii text representation to mafComp structure. */
+		comp->src = cloneString(row[1]);
+		comp->srcSize = lineFileNeedNum(lf, row, 5);
+		comp->strand = row[4][0];
+		comp->start = lineFileNeedNum(lf, row, 2);
+		comp->size = lineFileNeedNum(lf, row, 3);
+		comp->text = cloneString(row[6]);
+		textSize = strlen(comp->text);
+
+		/* Fill in ali->text size. */
+		if (ali->textSize == 0)
+		    ali->textSize = textSize;
+		else if (ali->textSize != textSize)
+		    errAbort("Text size inconsistent (%d vs %d) line %d of %s",
+			textSize, ali->textSize, lf->lineIx, lf->fileName);
+
+		/* Do some sanity checking. */
+		if (comp->srcSize <= 0 || comp->size <= 0)
+		     errAbort("Got a zero or negative size line %d of %s", lf->lineIx, lf->fileName);
+		if (comp->start < 0 || comp->start + comp->size > comp->srcSize)
+		     errAbort("Coordinates out of range line %d of %s", lf->lineIx, lf->fileName);
+		  
+		/* Add component to head of list. */
+		slAddHead(&ali->components, comp);
+		}
+	    }
+	slReverse(&ali->components);
+	return ali;
+	}
+    else  /* Skip over paragraph we don't understand. */
+	{
+	for (;;)
+	    {
+	    if (!nextLine(lf, &line))
+		return NULL;
+            if (nextWord(&line) == NULL)
+		break;
+	    }
 	}
     }
-slReverse(&ali->components);
-return ali;
 }
 
 struct mafFile *mafReadAll(char *fileName)
