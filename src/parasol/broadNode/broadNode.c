@@ -90,6 +90,7 @@ if (hostent == NULL)
     }
 
 memcpy(&ret, hostent->h_addr_list[0], sizeof(ret));
+ret = ntohl(ret);
 return ret;
 }
 
@@ -339,7 +340,6 @@ while (alive)
 		continue;
 		}
 	    }
-	m->machine = ownIp;
 	switch (m->type)
 	    {
 	    case bdmQuit:
@@ -360,7 +360,7 @@ while (alive)
 		personallyAck(outSd, m, ownIp, sourceIp, hubInPort, err);
 		break;
 	    case bdmPing:
-		logIt("<PING>\n%s</PING>\n", m->data);
+		// logIt("<PING>\n%s</PING>\n", m->data);
 		personallyAck(outSd, m, ownIp, sourceIp, hubInPort, 0);
 		break;
 	    case bdmSectionQuery:
