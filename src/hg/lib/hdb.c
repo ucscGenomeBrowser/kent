@@ -31,7 +31,7 @@
 #include "grp.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.208 2004/10/05 02:55:48 heather Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.209 2004/10/11 20:18:31 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1523,7 +1523,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	else
 	    strncpy(bedItem->strand, row[4], 2);
     else
-	strcpy(bedItem->strand, "?");
+	strcpy(bedItem->strand, ".");
     if (canDoUTR)
 	{
 	bedItem->thickStart = atoi(row[5]);
