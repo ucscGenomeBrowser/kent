@@ -696,114 +696,39 @@ XXXXXXXXXXXXXXXXXX  The following needs to be done with Mark's new
 XXXXXXXXXXXXXXXXXX  system of auto-update genbank data.  Will start
 XXXXXXXXXXXXXXXXXX  on this later today.
 
-AUTO UPDATE GENBANK MRNA RUN
+AUTO UPDATE GENBANK MRNA RUN  (DONE - 2003-07-07 - Hiram)
 
     ssh eieio
     cd /cluster/store5/genbank
     set db = rn3
     set nibGlob = '/cluster/bluearc/rat/rn3/bothMaskedNibs/chr*.nib'
     set liftFile = /cluster/bluearc/rat/rn3/liftAll.lft
-    nice bin/gbAlignStep -verbose=1 -initial -srcDb=genbank -type=mrna \
-	$db "$nibGlob" $liftFile &
+    # the iservers were acting up, the following uses the bluearc instead
+    # make sure 'ssh localhost' works before running this:
+    nice bin/gbAlignStep -verbose=1 -initial -iserver=localhost \
+	-clusterdir=/cluster/bluearc/genbank/work \
+	-srcDb=genbank $db "$nibGlob" $liftFile &
+    # This job took almost two days
+# Checking finished jobsCompleted: 216306 of 216306 jobs
+# CPU time in finished jobs:   74560544s 1242675.73m 20711.26h  862.97d  2.364 y
+# IO & Wait Time:               1371840s   22864.00m   381.07h   15.88d  0.044 y
+# Average job time:                 351s       5.85m     0.10h    0.00d
+# Longest job:                     2478s      41.30m     0.69h    0.03d
+# Submission to last job:        151934s    2532.23m    42.20h    1.76d
+
     # To watch the progress of your cluster job, go to machine kk and
     # cd /cluster/store5/genbank/work/initial.rn3/align
     # where the batch file is.  You can now do normal parasol checking
     # operations.  Beware of "para check" it can take quite a bit of time
     # if your batch job is very large.  'parasol list batches' or
     # 'parasol list users' may be quicker to take a look at status.
-    #  On this particular run, some jobs got stuck, seemed to be hung
-    #  on I/O.  To recover, simply do a 'para stop' in this directory,
-    #  the jobs will be restarted automatically by the controlling
-    #  gbAlignRun which is running all of this business.
 
     #  After that is finished successfully, load the mRNAs:
-    nice bin/gbDbLoadStep -verbose=1 -initialLoad rn3
-
-
-MAKING AND STORING mRNA AND EST ALIGNMENTS  (TO DO)
-
-    # Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
-    # from /cluster/store2/mrna.133  into /scratch/hg/mrna.133
-    # Make sure that /scratch/hg/rn3/trfFa is loaded with chr*_*.fa and pushed 
-    # to the cluster nodes.  
-    ssh kk
-    cd ~/rn3/bed
-    foreach i (refSeq mrna est)
-      mkdir -p $i
-      cd $i
-      ls -1S /scratch/hg/rn3/trfFa/* > genome.lst
-      ls -1 /mnt/scratch/hg/mrna.133/Rattus_norvegicus/$i.fa > mrna.lst
-      cp ~/lastRn/bed/$i/gsub .
-      mkdir psl
-      gensub2 genome.lst mrna.lst gsub spec
-      para create spec
-      cd ..
-    end 
-
-    # In each dir: para try, para check, para push, para check....
-    # para time > time
-      
-    # Process refSeq, mRNA, and EST alignments into near best in genome.
-    ssh kkstore
-    cd ~/rn3/bed
-    cd refSeq
-    pslSort dirs raw.psl /cluster/store2/temp psl
-    pslReps -minCover=0.2 -sizeMatters -minAli=0.98 -nearTop=0.002 raw.psl \
-      contig.psl /dev/null
-    liftUp -nohead all_refSeq.psl ../../jkStuff/liftAll.lft warn contig.psl
-    pslSortAcc nohead chrom /cluster/store2/temp all_refSeq.psl
-    cd ..
-
-    cd mrna
-    pslSort dirs raw.psl /cluster/store2/temp psl
-    pslReps -minAli=0.98 -sizeMatters -nearTop=0.005 raw.psl contig.psl \
-      /dev/null
-    liftUp -nohead all_mrna.psl ../../jkStuff/liftAll.lft warn contig.psl
-    pslSortAcc nohead chrom /cluster/store2/temp all_mrna.psl
-    cd ..
-
-    cd est
-    pslSort dirs raw.psl /cluster/store2/temp psl
-    pslReps -minAli=0.98 -sizeMatters -nearTop=0.005 raw.psl contig.psl \
-      /dev/null
-    liftUp -nohead all_est.psl ../../jkStuff/liftAll.lft warn contig.psl
-    pslSortAcc nohead chrom /cluster/store2/temp all_est.psl
-    cd ..
-
-    # Load mRNA alignments into database.
+    #  The drop and load is faster if tables have been loaded before.
     ssh hgwdev
-    cd ~/rn3/bed/mrna/chrom
-    foreach i (chr?{,?}{,_random}.psl)
-        mv $i $i:r_mrna.psl
-    end
-    hgLoadPsl rn3 *.psl
-    cd ..
-    hgLoadPsl rn3 all_mrna.psl -nobin
-
-    # Load EST alignments into database.
-    ssh hgwdev
-    cd ~/rn3/bed/est/chrom
-    foreach i (chr?{,?}{,_random}.psl)
-        echo mv $i $i:r_est.psl
-    end
-    hgLoadPsl rn3 *.psl
-    cd ..
-    hgLoadPsl rn3 all_est.psl -nobin
-
-    # Create subset of ESTs with introns and load into database.
-    ssh kkstore
-    cd ~/rn3
-    tcsh jkStuff/makeIntronEst.sh
-    ssh hgwdev
-    cd ~/rn3/bed/est/intronEst
-    hgLoadPsl rn3 *.psl
-
-    # Load refSeq alignments into database
-    ssh hgwdev
-    cd ~/rn3/bed/refSeq
-    pslCat -dir chrom > refSeqAli.psl
-    hgLoadPsl rn3 -tNameIx refSeqAli.psl
-
+    cd /cluster/store5/genbank
+    ./bin/i386/gbLoadRna -drop  rn3
+    nice ./bin/gbDbLoadStep -verbose=1 -initialLoad rn3
 
 CREATE REFSEQ GENES TRACK (TO DO)
     # Load the refSeq mRNA
