@@ -113,7 +113,7 @@ for (chrFi = chrFiList; chrFi != NULL; chrFi = chrFi->next)
     if (chrFi->isDir && strlen(chrFi->name) <= 2)
         {
 	sprintf(pathName, "%s/%s", ooDir, chrFi->name);
-	glFiList = listDirX(pathName, "*.gl2", TRUE);
+	glFiList = listDirX(pathName, "*.gl", TRUE);
 	for (glFi = glFiList; glFi != NULL; glFi = glFi->next)
 	    addCloneInfo(glFi->name, cloneHash, &cloneList);
 	slFreeList(&glFiList);
@@ -123,7 +123,9 @@ slFreeList(&chrFiList);
 slReverse(&cloneList);
 slSort(&cloneList, cmpClonePos);
 if (slCount(cloneList) < 0)
-   errAbort("No .gl2 files in %s\n", ooDir);
+   errAbort("No .gl files in %s\n", ooDir);
+printf("Got %d clones\n", slCount(cloneList));
+uglyAbort("All for now");
 return cloneList;
 }
 
