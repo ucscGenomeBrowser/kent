@@ -2101,18 +2101,9 @@ cd /cluster/data/mm3/bed/affyGnf
 affyPslAndAtlasToBed ../affyU74/affyU74.psl /projects/compbio/data/microarray/affyGnfMouse/data/data_public_U74 affyGnfU74A.bed affyGnfU74A.exp -newType -chip=MG_U74A
 affyPslAndAtlasToBed ../affyU74/affyU74.psl /projects/compbio/data/microarray/affyGnfMouse/data/U74B_b.txt affyGnfU74B.bed affyGnfU74B.exp -newType -chip=MG_U74B
 affyPslAndAtlasToBed ../affyU74/affyU74.psl /projects/compbio/data/microarray/affyGnfMouse/data/U74C_b.txt affyGnfU74C.bed affyGnfU74C.exp -newType -chip=MG_U74C
-hgsql mm3 < ~/src/hg/lib/affyGnfU74A.sql
-hgsql mm3 < ~/src/hg/lib/affyGnfU74B.sql
-hgsql mm3 < ~/src/hg/lib/affyGnfU74C.sql
-hgsql <<end
-load data local infile 'affyGnfU74A' into table affyGnfU74A;
-end
-hgsql <<end
-load data local infile 'affyGnfU74B' into table affyGnfU74B;
-end
-hgsql <<end
-load data local infile 'affyGnfU74C' into table affyGnfU74C;
-end
+hgLoadBed mm3 affyGnfU74A affyGnfU74A.bed
+hgLoadBed mm3 affyGnfU74B affyGnfU74B.bed
+hgLoadBed mm3 affyGnfU74C affyGnfU74C.bed
 
 MAKE ALIAS TABLES FOR hgFind
 ----------------------------------
