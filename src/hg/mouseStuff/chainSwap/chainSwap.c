@@ -25,6 +25,7 @@ while ((chain = chainRead(lf)) != NULL)
     {
     chainSwap(chain);
     chainWrite(chain, f);
+    chainFree(&chain);
     }
 }
 
