@@ -66,11 +66,7 @@ puts(
 "<A HREF=\"http://www.soe.ucsc.edu/~sugnet\">Charles Sugnet</A>, "
 "<A HREF=\"http://www.soe.ucsc.edu/~booch\">Terry Furey</A> and "
 "<A HREF=\"http://www.soe.ucsc.edu/~haussler\">David Haussler</A> "
-"of UC Santa Cruz.<BR></CENTER>\n");
-
-printf("<FORM ACTION=\"/cgi-bin/hgGateway\" METHOD=\"GET\" NAME=\"orgForm\"><input type=\"hidden\" name=\"%s\" value=\"%s\">\n", orgCgiName, organism);
-cartSaveSession(cart);
-printf("</FORM>");
+"of UC Santa Cruz.<P></CENTER><P>\n");
 
 puts(
 "<center>\n"
@@ -85,6 +81,7 @@ puts(
 "<tr>\n"
 "<td>\n"
 "<FORM ACTION=\"/cgi-bin/hgTracks\" NAME=\"trackForm\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n"
+"<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"/images/DOT.gif\">\n"
 "<table><tr>\n"
 "<td align=center valign=baseline>genome</td>\n"
 "<td align=center valign=baseline>assembly</td>\n"
@@ -374,6 +371,11 @@ puts(
 "	Annotation File: <INPUT TYPE=FILE NAME=\"hgt.customFile\"><BR>\n"
 "	<TEXTAREA NAME=\"hgt.customText\" ROWS=14 COLS=80></TEXTAREA>\n"
 "	</FORM>\n"
+);
+
+printf("<FORM ACTION=\"/cgi-bin/hgGateway\" METHOD=\"GET\" NAME=\"orgForm\"><input type=\"hidden\" name=\"%s\" value=\"%s\">\n", orgCgiName, organism);
+cartSaveSession(cart);
+puts("</FORM>"
 "	<BR></TD><TD WIDTH=15>&nbsp;</TD></TR></TABLE>\n"
 "	</TD></TR></TABLE>\n"
 "			\n"
@@ -439,7 +441,7 @@ else
     organism = hOrganism(db);
     }
 
-cartWebStart("%s Genome Browser Gateway \n", organism);
+cartWebStart(theCart, "%s Genome Browser Gateway \n", organism);
 hgGateway();
 cartWebEnd();
 }

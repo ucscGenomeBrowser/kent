@@ -251,7 +251,7 @@ printf("<i><font size=-1>Comments, Questions, Bug Reports: <a href=\"mailto:sugn
 void doGoodReport(FILE *dummy, struct coordConvRep *ccr) 
 /** output the result of a successful conversion */
 {
-cartWebStart("Coordinate Conversion for %s %s:%d-%d", 
+cartWebStart(cart, "Coordinate Conversion for %s %s:%d-%d", 
 	     ccr->from->date, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd);
 printWebWarnings();
 printf("<p><b>Success:</b> %s\n", ccr->msg);
@@ -274,7 +274,7 @@ cartWebEnd();
 
 void doBadReport(FILE *dummy, struct coordConvRep *ccr) 
 /** output the result of a flawed conversion */{
-cartWebStart("Coordinate Conversion for %s %s:%d-%d", 
+cartWebStart(cart, "Coordinate Conversion for %s %s:%d-%d", 
 	     ccr->from->date, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd);
 printWebWarnings();
 printf("<p><b>Conversion Not Successful:</B> %s\n", ccr->msg);
@@ -351,7 +351,7 @@ int genomeCount = 0;
 char *dbChoice = NULL;
 int i = 0;
 cart = lCart;
-cartWebStart("Converting Coordinates Between Drafts");
+cartWebStart(cart, "Converting Coordinates Between Drafts");
 puts( 
      "<p>This page attempts to convert coordinates from one draft of the human genome\n"
      "to another. The mechanism for doing this is to cut out and align pieces from the\n"

@@ -748,7 +748,6 @@ o - Do the cluster run as so
        cd ~/oo/bed/blatMus
        mkdir psl
        para create specE
-ABOVE IS ALL DONE - FAILING WITH SEG FAULT IN PARA TRY - DO PARA PROBLEMS TO SEE THIS.
        para try
     and then do para push/check/push/check/shove etc.
 

@@ -5,21 +5,32 @@ use strict;
 # notation and converts it into hs notation, writing
 # to the liftHs.lft file as output
 
-my $infile = "/cluster/store2/mm.2001.11/mm1/assembly/mouse.oo.03.agp.fasta";
-my $outdir = "/cluster/store2/mm.2001.11/mm1";
+if (1 != $#ARGV) {
+    print "Usage: verify.pl genome-file.fa contigDir"
+         . "verify.pl - Takes a genome fasta file and a set of contig"
+         . " directories and compares them to make sure they contain identical sequence\n";
+    exit -1;
+}
+
+my $infile = $ARGV[0];
+my $outdir = $ARGV[1];
 my $ext = ".fa";
 my $chromo;
 my $line;
 
-open(INFILE, "<$infile");
+print "Verifying genome at $infile against contigs in $outdir\n";
 
+open(INFILE, "<$infile");
 while ($line = <INFILE>) {
     chomp($line);
     $chromo = getChromoName($line);
     processDir($outdir, $chromo);
 }
-
 close(INFILE);
+
+############### End of main routine
+
+############### Subroutines
 
 sub getChromoName {
     my ($line) = @_;
@@ -49,12 +60,12 @@ sub processDir {
 	print("OPENING SUBFILE: " . $filename . "\n");
 	open(SUBFILE, $filename);
 	$subLine = <SUBFILE>;
-	$index = index($subLine, " ");
+	$index = index($subLine, " ") - 1;
 
         print "DIRNAME is: " . $dirName . "\n";
 
 	if (substr($subLine, 1, $index) ne $dirName) {
-	    die("Invalid directory" . $dirName . "\n");
+	    die("Invalid directory: " . $dirName . "\n");
 	}
 
         my @subChars;
