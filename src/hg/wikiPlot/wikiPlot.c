@@ -8,9 +8,9 @@
 #include "memgfx.h"
 
 /* Variables that can be overridden by CGI. */
-char *contigDir = "/projects/hg3/gs.8/oo.31/Y/ctgY1";
-char *mapX = "info";
-char *mapY = "mmBarge";
+char *contigDir = "/projects/hg3/gs.7/oo.29/19/ctg18433";
+char *mapX = "info.noNt";
+char *mapY = "gold.99";
 int pix = 500;
 double xOff = 0, yOff = 0, zoom = 1.0;
 
@@ -63,6 +63,41 @@ while (lineFileRow(lf, row))
 	hashAddSaveName(hash, row[0], cp, &cp->name);
 	cp->pos = lineFileNeedNum(lf, row, 1);
 	cp->phase = lineFileNeedNum(lf, row, 2);
+	slAddHead(&cpList, cp);
+	}
+    }
+lineFileClose(&lf);
+slReverse(&cpList);
+*retList = cpList;
+*retHash = hash;
+}
+
+void readGold(char *fileName, struct clonePos **retList, struct hash **retHash)
+/* Read .agp/gold formatted file */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line, *words[12];
+struct clonePos *cpList = NULL, *cp;
+struct hash *hash = newHash(0);
+int wordCount;
+
+while ((wordCount = lineFileChop(lf, words)) != 0)
+    {
+    char *type = words[4];
+    char *clone = words[5];
+    if (type[0] == 'N')
+        continue;
+    lineFileExpectWords(lf, 9, wordCount);
+    chopSuffix(clone);
+    if ((cp = hashFindVal(hash, clone)) == NULL)
+        {
+	AllocVar(cp);
+	hashAddSaveName(hash, clone, cp, &cp->name);
+	cp->pos = lineFileNeedNum(lf, words, 1);
+	if (type[0] == 'F') 
+	    cp->phase = 3;
+	else
+	    cp->phase = 1;
 	slAddHead(&cpList, cp);
 	}
     }
@@ -127,6 +162,8 @@ if (startsWith("info", file))
     return readInfo(fileName, retList, retHash);
 else if (startsWith("mmBarge", file))
     return readMmBarge(fileName, retList, retHash);
+else if (startsWith("gold", file) || sameString(".agp", ext))
+    return readGold(fileName, retList, retHash);
 else
     errAbort("Unrecognized file type %s%s", file, ext);
 }
@@ -180,6 +217,8 @@ double invZoom = 1.0/zoom;
 double magnify = 2.0;
 double newZoom = zoom*magnify;
 double invNewZoom = 1.0/newZoom;
+int xCount = slCount(xList);
+plotName = (xCount/zoom < 40);
 
 if (xList == NULL || yList == NULL)
     return;
@@ -237,6 +276,7 @@ printf("Y has %d elements ranging from %d to %d<BR>\n", slCount(yList), yStart, 
 void wikiPlot()
 /* wikiPlot - Quick plots of maps vs. each other. */
 {
+boolean gotDir = cgiVarExists("contigDir");
 contigDir = cgiUsualString("contigDir", contigDir);
 mapX = cgiUsualString("mapX", mapX);
 mapY = cgiUsualString("mapY", mapY);
@@ -251,14 +291,17 @@ printf("<B>Contig: </B>");
 cgiMakeTextVar("contigDir", contigDir, 0);
 printf("<B>Pixels: </B>");
 cgiMakeIntVar("pix", pix, 4);
-cgiMakeButton("submit", "submit");
+if (gotDir)
+    cgiMakeButton("refresh", "refresh");
+else
+    cgiMakeButton("submit", "submit");
 printf("<BR>\n");
 printf("<B>Map X (horizontal): </B>");
 cgiMakeTextVar("mapX", mapX, 12);
 printf("<B>Map Y (vertical): </B>");
 cgiMakeTextVar("mapY", mapY, 12);
 printf("<BR>\n");
-if (cgiVarExists("contigDir"))
+if (gotDir)
     {
     char xFile[512], yFile[512];
     struct hash *xHash = NULL, *yHash = NULL;
