@@ -9,6 +9,7 @@
 
 int maxGap=250000;
 boolean outPsl = FALSE;
+int sizeMul = 1;
  
 void usage()
 /* Explain usage and exit. */
@@ -18,6 +19,7 @@ errAbort(
   "usage:\n"
   "   simpleChain psls outChains \n"
   "options:\n"
+  "   -prot        input and output are protein psls\n"
   "   -maxGap=N    defines max gap possible (default 250,000)\n"
   "   -outPsl      output psl format instead of chain\n"
   "   -ignoreQ     ignore query name and link together everything\n"
@@ -26,6 +28,7 @@ errAbort(
 
 static struct optionSpec options[] = {
    {"maxGap", OPTION_INT},
+   {"prot", OPTION_BOOLEAN},
    {"outPsl", OPTION_BOOLEAN},
    {"ignoreQ", OPTION_BOOLEAN},
    {NULL, 0},
@@ -57,7 +60,7 @@ for (i=0; i<psl->blockCount; ++i)
     b->qStart = b->qEnd = psl->qStarts[i];
     b->qEnd += size;
     b->tStart = b->tEnd = psl->tStarts[i];
-    b->tEnd += size;
+    b->tEnd += sizeMul *size;
     slAddHead(pList, b);
     }
 slReverse(pList);
@@ -70,7 +73,7 @@ struct boxIn *chainBlock , *nextChainBlock = NULL, *prevChainBlock = NULL;
 int qStart = psl->qStarts[0];
 int qEnd = psl->qStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
 int tStart = psl->tStarts[0];
-int tEnd = psl->tStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
+int tEnd = psl->tStarts[psl->blockCount - 1] + sizeMul * psl->blockSizes[psl->blockCount - 1];
 struct psl *totalPsl = (struct psl *)chain->id;
 
 prevChainBlock = NULL;
@@ -200,7 +203,7 @@ for(psl = *pslList; psl ;  psl = nextPsl)
     int qStart = psl->qStarts[0];
     int qEnd = psl->qStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
     int tStart = psl->tStarts[0];
-    int tEnd = psl->tStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
+    int tEnd = psl->tStarts[psl->blockCount - 1] + sizeMul * psl->blockSizes[psl->blockCount - 1];
 
     assert(tEnd > tStart);
     assert(qEnd > qStart);
@@ -306,7 +309,7 @@ for(chainBlock = inChain->blockList; chainBlock; prevChainBlock = chainBlock, ch
 
     lastTEnd = chainBlock->tEnd;
     lastQEnd = chainBlock->qEnd;
-    blockSizes[blockNum] = chainBlock->tEnd - chainBlock->tStart;
+    blockSizes[blockNum] = chainBlock->qEnd - chainBlock->qStart;
     psl.match += blockSizes[blockNum];
     qStarts[blockNum] = chainBlock->qStart;
     tStarts[blockNum] = chainBlock->tStart;
@@ -326,12 +329,12 @@ psl.strand[1] = totalPsl->strand[1];
 if (totalPsl->strand[1] == '-')
     {
     psl.tEnd = psl.tSize - psl.tStarts[0];
-    psl.tStart = psl.tSize - (psl.tStarts[blockNum - 1] + 3*psl.blockSizes[blockNum - 1]);
+    psl.tStart = psl.tSize - (psl.tStarts[blockNum - 1] + sizeMul*psl.blockSizes[blockNum - 1]);
     }
 else
     {
     psl.tStart = psl.tStarts[0];
-    psl.tEnd = psl.tStarts[blockNum - 1] + 3*psl.blockSizes[blockNum - 1];
+    psl.tEnd = psl.tStarts[blockNum - 1] + sizeMul*psl.blockSizes[blockNum - 1];
     }
 pslTabOut(&psl, outFile);
 }
@@ -413,7 +416,7 @@ for(sp = spList; sp; sp = sp->next)
 	int qStart = psl->qStarts[0];
 	int qEnd = psl->qStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
 	int tStart = psl->tStarts[0];
-	int tEnd = psl->tStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
+	int tEnd = psl->tStarts[psl->blockCount - 1] + sizeMul * psl->blockSizes[psl->blockCount - 1];
 
 	assert(tEnd > tStart);
 	assert(qEnd > qStart);
@@ -440,7 +443,7 @@ for(sp = spList; sp; sp = sp->next)
 	AllocVar(chain);
 	chain->tStart = psl->tStarts[0];
 	chain->qStart = psl->qStarts[0];
-	chain->tEnd = psl->tStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
+	chain->tEnd = psl->tStarts[psl->blockCount - 1] + sizeMul * psl->blockSizes[psl->blockCount - 1];
 	chain->qEnd = psl->qStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
 	chain->tSize = psl->tSize;
 	chain->qSize = psl->qSize;
@@ -493,6 +496,7 @@ if (argc != 3)
     usage();
 maxGap = optionInt("maxGap", maxGap);
 outPsl = optionExists("outPsl");
+sizeMul = optionExists("prot") ? 3 : 1;
 simpleChain(argv[1], argv[2]);
 return 0;
 }
