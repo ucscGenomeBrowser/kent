@@ -53,6 +53,18 @@ ret->bitScore = atof(row[11]);
 return ret;
 }
 
+struct blastTab *blastTabNext(struct lineFile *lf) 
+{
+char *row[12];
+struct blastTab *el;
+
+if (!lineFileRow(lf, row))
+    return NULL;
+
+el = blastTabLoad(row);
+return el;
+}
+
 struct blastTab *blastTabLoadAll(char *fileName) 
 /* Load all blastTab from a whitespace-separated file.
  * Dispose of this with blastTabFreeList(). */
