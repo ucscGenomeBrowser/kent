@@ -3102,6 +3102,11 @@ cat << 'EOF' > gsub
         echo $r
         mv $i ${r}_blatFr1.psl
     end
+
+    # Next assembly, lift fugu scaffolds to Fugu browser chrUn,
+    # so you can link to other browser.  And don't need to load sequence
+    # liftUp -pslQ all.psl /cluster/data/fr1/fugu_v3.masked.lft warn chrom/*.psl
+
     hgLoadPsl hg16 *.psl
         # $ featureBits hg16 blatFr1 refGene:CDS
         # 12787423 bases of 2865248791 (0.446%) in intersection
@@ -3109,8 +3114,10 @@ cat << 'EOF' > gsub
         # 12427544 bases of 2866466359 (0.434%) in intersection
 
     # Edit trackDb.ra to include blatFr1
+    # NOTE: already in top-level trackDb.ra
 
     # Make fugu /gbdb/ symlink and load Fugu sequence data.
+    # NOTE: don't need to do this in next assembly
     mkdir /gbdb/hg16/fuguSeq
     cd /gbdb/hg16/fuguSeq
     ln -s /cluster/data/fr1/fugu_v3.masked.fa
@@ -4141,7 +4148,7 @@ end
         -tPrefix=hg16. -qPrefix=panTro1.
     end
 
-    # load renumbered chains into database  (2003-03-14 kate)
+    # load renumbered chains into database  (2004-03-14 kate)
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz-blat.panTro1.lifted/rBestChain
     foreach i (*.chain)
@@ -4150,7 +4157,21 @@ end
         echo done $c
     end
 
-    # load net into database  (2003-03-14 kate)
+    # save for download (2004-05-14 kate)
+    ssh kksilo
+    cd /cluster/data/hg16/bed/blastz-blat.panTro1.lifted/rBestChain
+    chainMergeSort -saveId *.chain > ../rBest.chain
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blastz-blat.panTro1.lifted/rBestChain
+    set dir = /usr/local/apache/htdocs/goldenPath/hg16/vsPanTro1
+    mkdir -p $dir
+    cp -p ../rBest.chain $dir/human.best.chain
+    cd $dir
+    gzip *.chain
+    # copy README file
+    
+
+    # load net into database  (2004-03-14 kate)
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz-blat.panTro1.lifted
     cat rBestNet/*.net | /cluster/bin/i386/netSyntenic stdin noClass.net
@@ -5211,6 +5232,7 @@ o - Load genomic dupes
 # CHIMP BEST CHAINS, IN CHROMOSOME COORDINATES (2004-02-25 kate)
 #       NOTE: start with scaffold-based human-reference reciprocal best chains 
 #       doc'ed in makePt0.doc, then lift using scaffold lift file in panTro1
+#  NOTENOTENOTE:  Angie redid this with chain renumbering
     ssh kksilo
     mkdir -p /cluster/data/hg16/bed/blastz-blat.panTro1
     cd /cluster/data/hg16/bed/blastz-blat.panTro1
@@ -5227,6 +5249,7 @@ o - Load genomic dupes
         echo loading $c
         hgLoadChain hg16 ${c}_bestChainPanTro1 $i
     end
+
 
 # CHIMP ALL CHAINS, IN CHROMOSOME COORDINATES (2004-02-25 kate)
     ssh kksilo
@@ -7444,8 +7467,9 @@ done
     checkTableCoords hg16 acembly
     #	should display no errors
 
+
 # MAKE HUMAN-CHIMP OVER.CHAIN FOR LIFTOVER (DONE 3/2/04 angie)
-g 
+
     ssh kolossus
     mkdir /cluster/data/hg16/bed/bedOver/hg16toPt0
     cd /cluster/data/hg16/bed/bedOver/hg16toPt0
@@ -8577,7 +8601,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     ssh kksilo
     mkdir /cluster/data/hinv
     cd /cluster/data/hinv
-    wget https://www.jbirc.aist.go.jp/hinv/download/alldata/flatfile/FCDNA.gz
+    wget http://www.jbirc.aist.go.jp/hinv/download/alldata/flatfile/FCDNA.gz
     gunzip FCDNA.gz
     mv FCDNA FCDNA.1.0
 
