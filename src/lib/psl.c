@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.37 2004/01/09 19:49:53 heather Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.38 2004/01/09 20:27:54 angie Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -1400,8 +1400,7 @@ struct psl* pslFromAlign(char *qName, int qSize, int qStart, int qEnd, char *qSt
  * bases indicate repeat masking.  Returns NULL if alignment is empty after
  * triming leading and trailing indels.*/
 {
-struct psl* psl;
-AllocVar(psl);
+struct psl* psl = NULL;
 int aliSize = strlen(qString);
 boolean qInInsert = FALSE; /* True if in insert state on query. */
 boolean tInInsert = FALSE; /* True if in insert state on target. */
@@ -1409,6 +1408,8 @@ boolean eitherInsert = FALSE;	/* True if either in insert state. */
 int blockIx=0;
 boolean qIsRc = FALSE;
 int i, qs,qe,ts,te;
+AllocVar(psl);
+
 if (strlen(tString) != aliSize)
     errAbort("query and target alignment strings are different lengths");
 
