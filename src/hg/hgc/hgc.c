@@ -4287,8 +4287,7 @@ cartWebStart(cart, tdb->longLabel);
 
 if( sameString( otherOrg, "Mouse" ) )
 {
-    //marie
-    printf("<B>%s position:</B> <a target=\"_blank\" href=\"http:/cgi-bin/hgTracks?db=mm2&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
+   printf("<B>%s position:</B> <a target=\"_blank\" href=\"/cgi-bin/hgTracks?db=mm2&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
         otherOrg, psl->qName, psl->qStart+1, psl->qEnd, 
 	    psl->qName, psl->qStart+1, psl->qEnd);
 }
@@ -4453,7 +4452,7 @@ void doBlatMus(struct trackDb *tdb, char *item)
 /* Put up cross-species alignment when the second species
  * sequence is in a nib file. */
 {
-longXenoPsl1(tdb, item, "Mouse", "mouseChrom", "mm2");
+longXenoPsl1(tdb, item, "Mouse", "chromInfo", "mm2");
 }
 
 
@@ -4492,7 +4491,7 @@ void doBlatHuman(struct trackDb *tdb, char *item)
 /* Put up cross-species alignment when the second species
  * sequence is in a nib file. */
 {
-longXenoPsl1(tdb, item, "Human", "humanChrom", "hg12");
+longXenoPsl1(tdb, item, "Human", "chromInfo", "hg12");
 }
 
 void doBlatHuman12(struct trackDb *tdb, char *item)
