@@ -41,3 +41,10 @@ tables kgXref
 idSql select geneSymbol from kgXref where kgID = '%s'
 priority 110
 url http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=%s
+
+name jaxOrtholog
+shortLabel Jackson Labs
+tables kgXref
+idSql select geneSymbol from kgXref where kgID = '%s'
+url http://www.informatics.jax.org/javawi/servlet/SearchTool?query=%s&selectedQuery=Genes+and+Markers
+priority 111
