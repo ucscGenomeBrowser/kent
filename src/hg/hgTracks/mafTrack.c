@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.21 2004/03/04 07:46:54 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.22 2004/04/19 21:32:28 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -320,11 +320,11 @@ int i;
 char c;
 for (i=0; i<size; ++i)
     {
-    c = insertLine[i];
-    if (c == 0)
+    unsigned char b = insertLine[i];
+    if (b == 0)
        c = ' ';
-    else if (c <= 9)
-       c += '0';
+    else if (b <= 9)
+       c = b + '0';
     else
        c = '+';
     insertLine[i] = c;
