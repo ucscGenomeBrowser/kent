@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgGoAssociation.c,v 1.1 2003/10/02 06:00:49 kent Exp $";
+static char const rcsid[] = "$Id: hgGoAssociation.c,v 1.2 2003/10/12 20:07:20 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -103,7 +103,7 @@ while (lineFileNextRowTab(lf, row, 15))
 	    {
 	    hashAdd(uniqHash, uniqName, NULL);
 	    fprintf(f, "%s\t%s\t%s\t%s\t%s\n",
-	    	row[1], row[2], row[3], row[4], row[7]);
+	    	row[1], row[2], row[3], row[4], row[8]);
 	    uniqCount += 1;
 	    if (limit != 0 && uniqCount >= limit)
 	        break;
