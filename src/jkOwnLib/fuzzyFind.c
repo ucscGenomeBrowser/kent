@@ -40,7 +40,7 @@
  * scanned for.
  */
 
-static char const rcsid[] = "$Id: fuzzyFind.c,v 1.14 2003/10/21 22:06:34 kent Exp $";
+static char const rcsid[] = "$Id: fuzzyFind.c,v 1.15 2004/01/22 22:31:59 kent Exp $";
 
 #include "common.h"
 #include "dnautil.h"
@@ -67,6 +67,9 @@ static char const rcsid[] = "$Id: fuzzyFind.c,v 1.14 2003/10/21 22:06:34 kent Ex
  *    you're scanning though.)
  *    
  */
+
+/* debugging stuff. */
+void dumpFf(struct ffAli *left, DNA *needle, DNA *hay); 
 
 /* settable parameter, defaults to constant value */
 static jmp_buf ffRecover;
@@ -1047,6 +1050,7 @@ memcpy(retProto, &proto, sizeof(*retProto));
 return retProto;
 }
 
+#ifdef OLD
 void removeThrowbackHits(struct protoGene *proto)
 /* Remove hits that cause backtracking in hay coordinates. */
 {
@@ -1070,6 +1074,7 @@ for (;;)
 if (gotThrowback)
     proto->hits = ffRemoveEmptyAlis(proto->hits, FALSE);
 }
+#endif /* OLD */
 
 
 void thinProtoList(struct protoGene **pList, int maxToTake)
@@ -1135,7 +1140,7 @@ lumpProtoGenes(&protoList, ns, hs, stringency );
 for (proto = protoList; proto != NULL; proto = proto->right)
     {
     ffAliSort((struct ffAli**)&proto->hits, ffCmpHitsNeedleFirst);
-    removeThrowbackHits(proto);
+/*    removeThrowbackHits(proto); */
     proto->score = ffScore(proto->hits,stringency);
     }
 

@@ -14,7 +14,7 @@
 #include "supStitch.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: supStitch.c,v 1.18 2003/09/09 21:44:03 kent Exp $";
+static char const rcsid[] = "$Id: supStitch.c,v 1.19 2004/01/22 22:31:59 kent Exp $";
 
 void ssFfItemFree(struct ssFfItem **pEl)
 /* Free a single ssFfItem. */
@@ -690,6 +690,7 @@ int score;
 int newAliCount = 0;
 int totalFfCount = 0;
 boolean firstTime = TRUE;
+
 
 if (bundle->ffList == NULL)
     return 0;

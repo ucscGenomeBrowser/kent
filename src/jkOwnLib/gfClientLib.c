@@ -15,7 +15,7 @@
 #include "nib.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfClientLib.c,v 1.24 2003/12/18 04:28:53 kent Exp $";
+static char const rcsid[] = "$Id: gfClientLib.c,v 1.25 2004/01/22 22:31:59 kent Exp $";
 
 void dumpRange(struct gfRange *r, FILE *f)
 /* Dump range to file. */
@@ -505,8 +505,6 @@ if (minMatch > qSeq->size/2) minMatch = qSeq->size/2;
 for (ffi = bun->ffList; ffi != NULL; ffi = ffi->next)
     {
     struct ffAli *ff = ffi->ff;
-  // uglyf("FINAL:\n");
-  // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
     out->out(chromName, chromSize, chromOffset, ff, tSeq, t3Hash, qSeq, 
     	qIsRc, tIsRc, stringency, minMatch, out);
     }
@@ -528,6 +526,7 @@ rangeList = gfQuerySeq(*pConn, seq);
 close(*pConn);
 *pConn = -1;
 slSort(&rangeList, gfRangeCmpTarget);
+/* Dump range list to file for debugging. */
 rangeList = gfRangesBundle(rangeList, ffIntronMax);
 for (range = rangeList; range != NULL; range = range->next)
     {

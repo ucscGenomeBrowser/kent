@@ -1,5 +1,9 @@
-25:
+26:
      o fixed pslPretty to allow '--' strands in axt output format
+     o fixed bug that was causing blat to drop an exon in around
+       1% of genes.
+
+25:
      o Made it so that gfServer does not abort when it runs out
        of memory.
      o Fixed bug in pslPretty in case where there is a small
