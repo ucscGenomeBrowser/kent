@@ -17,29 +17,27 @@
 <!--HOTLINKS BAR-->
 <TR><TD COLSPAN=2 HEIGHT=40>
    <CENTER>
-	<TABLE BACKGROUND="images/hl_mid.jpg" BGCOLOR="253BDE" WIDTH=100% CELLSPACING=0 CELLPADDING=0 BORDER=0 HEIGHT="22"><TR><TD>
+	<TABLE WIDTH="100%" BGCOLOR="#000000" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>
+	<TABLE WIDTH="100%" BGCOLOR="#2636D1" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>
 		<TABLE WIDTH=431 CELLSPACING=4 CELLPADDING=0 BORDER=0><TR>
 		<TD WIDTH=1></TD>
 		<TD WIDTH=75>
-			<A HREF="index.html" onMouseOver="HOME.src='images/hl_home.jpg'" onMouseOut="HOME.src='images/h_home.jpg'">
-			<IMG SRC="images/h_home.jpg" ALIGN="absmiddle" BORDER="0" NAME="HOME" ALT="Home" ></A></TD>
-
+			<A HREF="/index.html" onMouseOver="HOME.src='/images/hl_home.jpg'" onMouseOut="HOME.src='/images/h_home.jpg'">
+			<IMG SRC="/images/h_home.jpg" ALIGN="absmiddle" BORDER="0" NAME="HOME" ALT="Home" ></A></TD>
 		<TD WIDTH=155>
-			<A HREF="goldenPath/hgTracks.html" onMouseOver="BROWSER.src='images/hl_browser.jpg'" onMouseOut="BROWSER.src='images/h_browser.jpg'">
-			<IMG SRC="images/h_browser.jpg" ALIGN="absmiddle" BORDER="0" NAME="BROWSER" ALT="&nbsp;&nbsp; Genome Browser"></A></TD>
-			
+			<A HREF="/goldenPath/hgTracks.html" onMouseOver="BROWSER.src='/images/hl_browser.jpg'" onMouseOut="BROWSER.src='/images/h_browser.jpg'">
+			<IMG SRC="/images/h_browser.jpg" ALIGN="absmiddle" BORDER="0" NAME="BROWSER" ALT="&nbsp;&nbsp; Genome Browser"></A></TD>		
 		<TD WIDTH=100>
-			<A HREF="cgi-bin/hgBlat?command=start" onMouseOver="SEARCH.src='images/hl_blat.jpg'" onMouseOut="SEARCH.src='images/h_blat.jpg'">
-			<IMG SRC="images/h_blat.jpg" ALIGN="absmiddle" BORDER="0" NAME="SEARCH" ALT="&nbsp;&nbsp; BLAT Search"></A></TD>
-			
+			<A HREF="/cgi-bin/hgBlat?command=start" onMouseOver="SEARCH.src='/images/hl_blat.jpg'" onMouseOut="SEARCH.src='/images/h_blat.jpg'">
+			<IMG SRC="/images/h_blat.jpg" ALIGN="absmiddle" BORDER="0" NAME="SEARCH" ALT="&nbsp;&nbsp; BLAT Search"></A></TD>	
 		<TD WIDTH=100>
-			<A HREF="FAQ.html" onMouseOver="GUIDE.src='images/hl_faq.jpg'" onMouseOut="GUIDE.src='images/h_faq.jpg'">
-			<IMG SRC="images/h_faq.jpg" ALIGN="absmiddle" BORDER="0" NAME="GUIDE" ALT="&nbsp;&nbsp; FAQ"></A></TD>
+			<A HREF="/FAQ.html" onMouseOver="GUIDE.src='/images/hl_faq.jpg'" onMouseOut="GUIDE.src='/images/h_faq.jpg'">
+			<IMG SRC="/images/h_faq.jpg" ALIGN="absmiddle" BORDER="0" NAME="GUIDE" ALT="&nbsp;&nbsp; FAQ"></A></TD>
 		</TR></TABLE>
-	 </TR></TABLE>
+	 </TD></TR></TABLE>
+	 </TD></TR></TABLE>
 	 </CENTER>
-    </TD>
-</TR>
+</TD></TR>
 
 <TR>
 <!--Content Tables-->  
@@ -55,27 +53,30 @@ in collaboration with the <BR>
 <A HREF="http://www.nature.com/genomics/human/papers/409860a0_fs_1.html">genome analysis group of the International Human Genome Project</A><BR>
 and the <A HREF="http://www.cse.ucsc.edu/centers/cbe/Genome/">UCSC Human Genome Project</A>.<BR>
 Individual tracks contributed by various <A HREF="http://genome.cse.ucsc.edu/goldenPath/credits.html">individuals</A> and <A HREF="http://genome.cse.ucsc.edu/goldenPath/other.resources.html">institutions</A>.<BR>
-User Guide last updated 27 Dec 00; comments and suggestions welcome.</FONT></CENTER>
+Last updated 21 Jan 02; questions and suggestions welcome.</FONT></CENTER>
 </TD></TR></TABLE></CENTER>
 
-<BR>
 <B><FONT COLOR="#006666" SIZE=4> Table of Contents: </FONT></B>
 <table border=0 nowrap cellpadding=0 cellspacing=0 margins=0><th height=10></th>
 <tr><td valign="top"><ul><b>
-  		<li><A CLASS="toc" HREF="goldenPath/help/hgTracksHelp2.html#What">
+  		<li><A CLASS="toc" HREF="#What">
 			What does it do?</A>
-  		<li><A CLASS="toc" HREF="goldenPath/help/hgTracksHelp2.html#GetStarted">
-			Getting Started</A>
-  		<li><A CLASS="toc" HREF="goldenPath/help/hgTracksHelp2.html#FineTuning">
+  		<li><A CLASS="toc" HREF="#GetStarted">
+			Getting started: browser gateways</A>
+  		<li><A CLASS="toc" HREF="#FineTuning">
 			Fine-tuning the Display</A>
-	</b></ul></td><td><ul><b>
-  		<li><A CLASS="toc" HREF="goldenPath/help/hgTracksHelp2.html#UnderstandDisplay">
-			Understand the display </A>
-  		<li><A CLASS="toc" HREF="goldenPath/help/hgTracksHelp2.html#IndivTracks">
+  		<li><A CLASS="toc" HREF="#IndivTracks">
 			Details on individual tracks </A>
-  		<li><A CLASS="toc" HREF="goldenPath/help/hgTracksHelp2.html#OlderTracks">
-			Details on older tracks </A>
-	</b></ul></td></tr></table>
+	</b></ul></td><td><b><ul>
+  		<li><A CLASS="toc" HREF="BLATAlign">
+			BLAT alignments </A>
+  		<li><A CLASS="toc" HREF="TableBrowser">
+			Table Browser </A>
+		<li><A CLASS="toc" HREF="#TrackFormatDNA">
+			Track-formatted DNA </A>
+		<li><A CLASS="toc" HREF="#CustomTracks">
+			Custom tracks </A>
+</b></ul></td></tr></table>
 </TD><TD WIDTH=15></TD></TR></TABLE>
 	</TD></TR></TABLE>
 
@@ -89,16 +90,18 @@ User Guide last updated 27 Dec 00; comments and suggestions welcome.</FONT></CEN
 		</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TH HEIGHT=10></TH><TR><TD WIDTH=10></TD><TD>
+<p>
+As the human and mouse genome sequences near completion and research re-focuses on their analysis, the issue of effective sequence display becomes critical -- it is not helpful to have 3 billion letters of genomic DNA shown as plain text. As an alternative, the UCSC  Genome Browser provides a rapid and reliable display of any requested portion of the genome at any scale aligned in register with dozens of annotation tracks (known genes, predicted genes, ESTs, mRNAs, CpG islands, assembly gaps and coverage, chromosomal bands, mouse homologies, and more.). 
+<p>
+The genome browser stacks experimental and predicted features as tracks beneath genome coordinate position, encouraging rapid visual correlation of different types of information. The visitor can look at a whole chromosome to get a feeling for gene density, open a particular cytogenetic band to see posiltionally mapped disease gene candidatew, or zoom into a particular gene for its spliced ESTs and possible alternative splicing. The browser itself does not draw conclusions; rather, it collates all relevent information in one location, leaving exploration and interpretation to the visitor.
 <P>
-The sequence of the human genome is too big to see at all at once; few people
-want to look at raw DNA sequence anyway. The alternative is the <A
-HREF="http://genome.cse.ucsc.edu/hgTracks.html">Human Genome
-Browser</A> for a quick display of any requested portion of the genome at any
-scale, along with more than two dozen tracks of information (genes, ESTs, CpG islands, assembly gaps, chromosomal band, ...) associated with the complete human genome sequence.
+To control information overload, tracks need not be displayed in full -- options allow hidden, flattened, or filtered display according to user criteria. A browser window will not display more than 300 total tracks. Zooming and scrolling controls also help manage the display to just the desired region. 
 <P>
-The genome browser stacks features in tracks registered with genome coordinate position, encouraging rapid visual correlation of different types of information. Look at a whole chromosome to get a feeling for gene density, open a cytogenetic band to see its predicted genes, or zoom into a particular gene and its ESTs with introns for details of alternative splicing. 
+A blue navigation bar link at the top allows convenient capture of raw genomic DNA sequence for the coordinate range displayed in the browser window. This DNA can encode track features via elaborate text formating options. Other links tie the genome browser to the BLAT alignment tool, provide table browser access to the underlying relational database, convert coordinates across different assembly dates, and open the window at the complementary <A HREF="http://www.ensembl.org/">Ensembl</A> annotation.
+<p>
+A linked details page provides summaries of properties of individual features and links off-site to PubMed, GenBank, LocusLink, OMIM, and other major repositories. Position, cytoband, strand, data source, and any encoded protein, mRNA, genomic sequence and alignment are furnished as appropriate to the nature of the track.
 <P>
-Clicking on a displayed feature opens a second window providing protein sequence, coordinates and accession numbers, as appropriate. Clicking in the corner of the display calls up raw DNA sequence corresponding to the display window boundaries. This look-up feature is far more convenient than manual retrieval of a precise coordinate range from GenBank entries.
+The browser data represents an immense<A HREF="http://genome.cse.ucsc.edu/goldenPath/credits.html"> collaborative effort </A> involving thousands of people from the international biomedical research community. UCSC itself does no sequencing and creates only about half of the tracks in-house; its other major roles are building genome assemblies, creating the genome browser work environment, and serving it all online. Sequence data, annotation tracks, and even software are in the public domain (with rare caveats) and available to everyone from the <A HREF="http://genome.cse.ucsc.edu/#Downloading">download</A> page. 
 </TD><TD WIDTH=15></TD></TR></TABLE>
 	<BR></TD></TR></TABLE>
 
@@ -108,31 +111,32 @@ Clicking on a displayed feature opens a second window providing protein sequence
 	<TABLE BGCOLOR="ffffff" BACKGROUND="images/hr.gif" WIDTH=100% BORDER=0><TR><TD>
 		<!--cheap trick to get background on row to be continuous-->
 		<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH=100%><TR><TD ALIGN="left">
-			<FONT SIZE="4"><a NAME="TOC"></a><b>&nbsp; Getting started:  </FONT>
+			<FONT SIZE="4"><a NAME="TOC"></a><b>&nbsp; Getting started: browser gateways</FONT>
 		</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TH HEIGHT=10></TH><TR><TD WIDTH=10></TD><TD>
+<p>
+To get oriented, it is best to jump to a gene or region of the genome that you are already familiar with. To do this, choose an assembly date from the <A HREF="http://genome.cse.ucsc.edu/">main page</A>, locate the position text box in the gateway page, and enter a gene symbol, mRNA or EST accession number, chromosome band, descriptive term likely to occur in GenBank text, or a specific chromosomal range (eg, chr20:1-25000), or simply accept the default. Proceed to the active track browser window and <B>experiment for 15 minutes</B> with the scroll adjustments, window width, track controllers, and auxillary links.
+<p>
+The genome browser sometimes returns several matches in response to a position search instead of an active window. Clicking on any item opens the track window to the indicated segment of the genome. Base position numbering begins at the telomere of short p arm at the far left. A track may be hidden, projected, displayed selectively according to a filter, or displayed in full according to how its controller is set.
 <P>
-To get oriented, it is best to jump to a region of the genome that you are
-already familiar with. In the genome position window, enter a gene symbol,
-contig, EST or STS marker, cytogenetically mapped clone (e.g. RP11-36J16), GenBank mRNA accession, chromosome band, concept
-(iron response element, vitamin D receptor, zinc finger, homeobox, Huntington
-disease, tRNA, etc.), or a specific chromosomal range (chr20:514273-514309). 
+Once the browser is correctly displaying the region of interest, save the coordinate range (or bookmark the page) if you plan to return to that view or share it. Coordinates of a given feature on an unfinished chromosome will change with each genome assembly because of filled gaps, fewer artefactual duplications, and corrected strand orientations. Coordinates thus become obsolete; it is usually best to work with the most recent assembly even though a full set of tracks might not yet be ready. Note however the browser offers a tool that can correctly convert coordinates between different assembly dates.
+<p>
+The keyword gateway doesn't alway find its query. It is not a sitewide search engine but instead derives primarily from GenBank mRNA records whose text annotations can include gene names, gene symbols, journal title words, author names, and RefSeq mRNAs (NM series). Queries such as post-freeze GenBank entries, withdrawn gene names, abandoned synonyms, and genomic intervals (eg, NT contigs) will not work. UniGene and NP protein accession numbers will shortly be accepted as queries. LocusLink and OMIM accessions are difficult to support being plain 4 to 6 digit numbers lacking diagnostic letters; however <A HREF="http://www3.ncbi.nlm.nih.gov/omim/">OMIM</A> links to <A HREF="http://www.ncbi.nlm.nih.gov/LocusLink/">LocusLink</A> which now carries map links to the UCSC browser. Additional text can be found in detail pages for individual features and in searchable non-positional tables such as refLink (see below).
 <P>
-The keyword database was built primarily from GenBank mRNA records, which can include gene names, gene symbols, annotation, article titles and authors. Some types of accession numbers, such as NT_xxxxxx, UniGene, and LocusLink do not work. However, synonomous <A HREF="http://www.gene.ucl.ac.uk/nomenclature/">HGNC</A> gene names, <A HREF="http://www.ncbi.nlm.nih.gov/LocusLink/build.html">RefSeqs</A> (NP_xxxxxx and NM_xxxxxx), and <A HREF="http://www3.ncbi.nlm.nih.gov/omim/">OMIM</A> (6 digits, same as <A HREF="http://www.ncbi.nlm.nih.gov/LocusLink/">LocusLink</A>) accessions will soon be recognized. 
+ If you have genomic, mRNA, or protein sequence but no name or no idea where it maps to in the genome, the BLAT gateway will rapidly locate it by homology alignment, provided the region has been sequenced. Close members of the gene family will be found at the same time, as well assembly duplication artefacts. A whole set of query sequences can be looked up at once when provided in fasta format. In BLAT output, first look at details of the alignment and then procede into the browser itself if warranted by match quality. When too many hits occur, try resubmitting the query sequence after filtering in slow mode at <A HREF="http://ftp.genome.washington.edu/cgi-bin/RepeatMasker">RepeatMasker</A>.
 <P>
- Frequent assembly updates change genome coordinates, requiring revision of thousands of gene coordinates: only non-manual methods are feasible. This limits keyword lookup possibilities until the human genome sequence is finalized.
+The table browser, a friendly portal to the underlying open source <A HREF="http://www.MySQL.com">MySQL</A> relational database driving the genome browser, allows genomic data to be viewed as columns of text rather than as graphical tracks. Select a positional table for any track and enter a chromosomal range (enter "genome" to get all). Choose fields to limit the columns displayed; get DNA to obtain fasta sequences. Positional tables have chrom, chromStart, and chromEnd fields which coalesce to a genome browser gateway position (eg chrX:12345-67890). Non-positional tables offer various kinds of accessory information needed to build the detail pages. The genome and table browsers are necessarily in synchrony with each other being just different views of the same fundamental MySQL database they reference. Technical explanations of individual fields are provided <A HREF="http://genome.cse.ucsc.edu/goldenPath/gbdDescriptions.html">onsite</A> but opening up that column usually offers adequate clues.
 <P>
-If you have a DNA or protein sequence, but have no idea where it maps to in the genome, simply blast the NCBI <A HREF="http://www.ncbi.nlm.nih.gov/genome/seq/page.cgi?F=HsBlast.html&&ORG=Hs">finished</A>, <A HREF="http://www.ncbi.nlm.nih.gov/blast/blast.cgi?Jform=1">unfinished </A> (htgs), or dbEST human databases to recover a recognized accession number. The Genome Browser may offer its own direct-to-genome blast service in the near future. 
+External gateways can also provide direct links into the UCSC genome browser, for example <A HREF="http://www.ncbi.nlm.nih.gov/LocusLink/">LocusLink</A>, <A HREF="http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/index.html">AceView</A>, <A HREF="http://www.ensembl.org/">Ensembl</A>, <A HREF="http://stash.mrc-lmb.cam.ac.uk/SUPERFAMILY/">SuperFamily</A>, <A HREF="http://www.genelynx.org/">GeneLynx</A>, and <A HREF="http://bioinformatics.weizmann.ac.il/cards/">GeneCards</A>. Journal articles can also link to the browser and provide custom tracks; be sure to use the assembly date appropriate to the provided coordinates.
 <P>
-The Genome Browser usually returns a short list of matches in response to a text search. Clicking on any item opens the track window to the appropriate segment of the genome. You may wish to zoom out to display more flanking sequence or scroll over at the same scale (telomere of short p arm is to the left). Then add a bookmark to return easily later. 
-<P>
-Keep in mind that the Genome Browser can do no better than the quality of the draft genome; many assembly errors and gaps<A HREF="http://genome.cse.ucsc.edu/goldenPath/limits.html">still exist</A>. Duplications, both legitimate and assembly error, mean any genome coordinates found by blast are subject to ambiguity, pseudo-matches, and outright error. The Genome Browser does the best it can <A HREF="http://genome.cse.ucsc.edu/goldenPath/wdaccu.html">under the circumstances</A>.
-</TD><TD WIDTH=15></TD></TR></TABLE>
+To insure uninterupted browser services for your research during UCSC server maintainence and power outages, bookmark a geographically convenient <A HREF="http://genome.cse.ucsc.edu/mirror.html">mirror</A> site that replicates the UCSC genome browser.
+<p>
+Please bear in mind that the genome browser cannot outperform the underlying quality of the draft genome -- assembly errors and sequence gaps may still occur well into 2003 due to intrinsically difficult-to-sequence regions. Artefactual duplications arise as unavoidable compromises during a build, causing misleading matches in genome coordinates found by alignment. Post-freeze GenBank submissions lead to gradual track obsolescence (which can be addressed by supplemental <A HREF="http://www.ncbi.nlm.nih.gov/blast/index.nojs.cgi">Blast</A> searches). The genome browser does the best it can to operate under this environment.
+ </TD><TD WIDTH=15></TD></TR></TABLE>
 	<BR></TD></TR></TABLE>
 
-	<A NAME="FineTuning"></A><BR>
-	
+<A NAME="FineTuning"></A><BR>
 	<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDERCOLOR="888888" BORDER=1><TR><TD>
 	<TABLE BGCOLOR="ffffff" BACKGROUND="images/hr.gif" WIDTH=100% BORDER=0><TR><TD>
 		<!--cheap trick to get background on row to be continuous-->
@@ -141,56 +145,34 @@ Keep in mind that the Genome Browser can do no better than the quality of the dr
 		</TD></TR></TABLE>
 	</TD></TR></TABLE>
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TH HEIGHT=10></TH><TR><TD WIDTH=10></TD><TD>
-<P>
-The track window opens to default values that may need adjustment. First set the pixel width to take maximum advantage of your monitor. For example, setting a 19" monitor to 1100 pixels means more of the genome is visible without redrawing. The maximum virtual width is 5000 pixels, but stick to your monitor width at first.
-<P>
-Tracks have controls with three display choices:
+<p>
+The browser track window opens to default values that may need adjustment. First set the pixel width to take advantage of your monitor. For example, setting a 19" monitor to 1100 pixels makes more of the genome visible without redraws. The maximum width supported is 5000 pixels but it is best not to exceed your monitor width initially. Adjust the track controllers according to your interest in individual tracks. The browser can remember many user preferences from session to session (however it never monitors visitor activities or records submitted data). Use the reset button periodically to restore default settings.
+<p>
+Tracks offer considerable control over what is displayed: 
 <TABLE>
-	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>If "<B>hide</B>" is chosen, the track will not be displayed at all. Someone not interested in sequencing gaps, SNPs, or mouse synteny would want these tracks hidden.</TD></TR>
-	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>If "<B>dense</B>" is chosen, the track will display all relevent features condensed to a single line. For example, to show where predicted genes exist without giving excessive detail, set the Genie track to dense.</TD></TR>
-	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>If "<B>full</B>" is chosen, the track will be displayed in great detail, with a separate line for each constituent. There might be hundreds of ESTs relevent to genes displayed in the track window, so use sparingly. This option tops out at 300 items -- image height becomes overwhelming. </TD></TR>
+	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>If "<B>hide</B>" is chosen, the track will not be displayed at all. Someone not interested in SNPs or mouse synteny might want these tracks hidden to reduce track clutter and improve speed. Some tracks may pertain to only one chromosome (eg, the Sanger annotation of chromosome 20); no controller will display when other chromosomes are in the browser.</TD></TR>
+	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>If "<B>dense</B>" is chosen, the track will display all relevent features condensed (projected) to a single line. To get a feel for known gene density without excessive detail, open a whole chromosome and set the known gene track to dense. </TD></TR>
+	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>If "<B>full</B>" is chosen, the track will display a separate line for each constituent feature. Use this option sparingly as hundreds of ESTs might align with a given gene. When the number of requested tracks exceeds 300, the browser defaults to dense mode. Narrowing the chromosomal range or using a track filter (eg, restricting the EST track to a specified tissue or library) reduces the number of items displayed, re-enabling full display.</TD></TR>
 </TABLE> 
+<p>
+Usually the amount of flanking region needs adjustment. Zoom in and out using the 1.5, 3 and 10-fold buttons available at the top of the browser, or scroll sideways by 10%, 50%, or 95% of the displayed size (given in base pairs). It is also possible to hold one edge fixed and adjust the other by any multiple of the vertical blue line interval. Another option is to manually adjust position range numbers and refresh the display with the jump button.
+<p>
+The browser graphic responds to mouse clicks on tracks and labels:<P>
 <P>
-Take some time to play around with the track settings to see the effects on the
-display when a half dozen genes are showing. Controls to pan left and right,
-and to zoom in and out 1.5, 3 and 10-fold are available at the top of the
-browser.
-After determining your preferences, save track settings to a bookmark so you won't have to reset defaults each time you return to the site. (Using the jump button to move to a different location retains settings, so even if the project has changed the settings bookmark is still helpful.) 
+-- If the base position track is clicked, the display zooms in 3-fold, re-centered on the coordinate of the click.
 <P>
-As an alternative to bookmarks, set up web links on your lab web site to open the Genome Browser with preferred defaults to frequently visited regions. 
+-- If the click is on the optional explanatory label in the center of the display or left panel, the track toggles between full and dense mode. <P>
+<P>
+-- If the track is already in full mode, clicking on a specific feature opens a details window with name, sequence, and off-site links. <P>
+<p>
+At 1 pixel per base pair scale, the browser display of genes will accurately provide exon and intron width and direction of transcription by hatches for multi-exon features (consult the details page for strand of single exon genes). At larger scale, thin exons would soon disappear unless favored; this comes at the expense of intron width and overall display fidelity -- an exon may falsely appear to fall within a RepeatMasker feature at some scales. The browser seeks to maintain a useful view even at scales where a whole chromosome is shown in a 610 pixel window.
+<p>
+The genome browser can open from a lab web site or journal article link to preferred defaults to provide a consistent visitor experience. This also applies to custom tracks. A simpler static alternative is to save the browser window as a gif graphic. This can be done as a screen shot to embed chromosomal range, size, and scale. Browser text in the left panel is already rendered as image, meaning it cannot be copied into a text editor. However text can be extracted from "source" html or more conveniently from the table browser.
 </TD><TD WIDTH=15></TD></TR></TABLE>
 	<BR></TD></TR></TABLE>
 
-	<A NAME="UnderstandDisplay"></A><BR>
-	
-	<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDERCOLOR="888888" BORDER=1><TR><TD>
-	<TABLE BGCOLOR="ffffff" BACKGROUND="images/hr.gif" WIDTH=100% BORDER=0><TR><TD>
-		<!--cheap trick to get background on row to be continuous-->
-		<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH=100%><TR><TD ALIGN="left">
-			<FONT SIZE="4"><a NAME="TOC"></a><b>&nbsp; Understanding the display window: </FONT>
-		</TD></TR></TABLE>
-	</TD></TR></TABLE>
-	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TH HEIGHT=10></TH><TR><TD WIDTH=10></TD><TD>
-<P>
-The window displaying the tracks is fully clickable. Three things can happen: 
-<TABLE>
-<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>a window opens with name, sequence, and off-site links for the feature clicked upon. </TD></TR> 
-<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>optional explanatory label in the center of the display toggles its track between full and dense. </TD></TR> 
-<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>the display zooms 3-fold, re-centering on where the base position track was clicked.</TD></TR>
-</TABLE> 
-<P>
-At 1 pixel per base scale, genes accurately display exons, UTR, introns, and direction of transcription as expected. At coarser scales, exons would soon disappear unless favoritism is shown; this comes at the expense of introns and overall display accuracy.
-<P>
- After getting everything perfect, the display graphic can be saved as a gif image to your local computer. Another option is a screen shot if settings are to be captured too. The gif can be used for a lab web site (or printed) or it may be further processed in a photo editor; for example, the display is quite dramatic with its colors inverted. The scale (base pairs per pixel of width) can be calculated from data shown but will be an embedded feature shortly.
-<P>
- The text itself is rendered as image, meaning it cannot be copied to a text editor. However, by viewing as source html (a feature of all web browsers), a long list of genes, mRNAs or ESTs can quickly be recovered as ordinary text. It will shortly be possible to directly query the underlying database to extract all manner of information without this html step.
-<P>
- Example: hide all tracks but set Known Genes to full. Then choose a small chromosome, refresh, and view html. This gives an ordered list of all well-established genes (names and start-stop coordinates) on the chosen chromosome beginning with the p arm telomere. 
-</TD><TD WIDTH=15></TD></TR></TABLE>
-	<BR></TD></TR></TABLE>
 
-	<A NAME="IndivTracks"></A><BR>
-	
+<A NAME="IndivTracks"></A><BR>
 	<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDERCOLOR="888888" BORDER=1><TR><TD>
 	<TABLE BGCOLOR="ffffff" BACKGROUND="images/hr.gif" WIDTH=100% BORDER=0><TR><TD>
 		<!--cheap trick to get background on row to be continuous-->
@@ -202,97 +184,118 @@ At 1 pixel per base scale, genes accurately display exons, UTR, introns, and dir
 <B>Remember:</B><BR>
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	A track does not appear if display mode is set to hide.</TD></TR> 
+	<A HREF="http://genome.cse.ucsc.edu/goldenPath/credits.html">Credit</A> goes to many individuals and institutions for generously contributing tracks.</TD></TR> 
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	Clicking a track in dense display refreshes window to full display.</TD></TR> 
+	A track does not appear if its display mode is set to hide. </TD></TR> 
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	Clicking a track feature or its name in full display brings up detailed sequence information.</TD></TR>  
+	If not interested in technical assembly details, hide the associated tracks.
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	Clicking on central explanatory text toggles full and dense display.</TD></TR> 
+	A track set to full mode will display as dense if total tracks exceed 300.</TD></TR>  
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	Clicking on central explanatory text toggles between full and dense display.</TD></TR> 
+			<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	Clicking a track feature or name in full display brings up a details page. </TD></TR> 
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	Only the three most recent assemblies are fully active; older assemblies are <A HREF="http://genome-archive.cse.ucsc.edu/">archived</A>.</TD></TR>  
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	Not all tracks appear in all assemblies. Only basic tracks appear at first in a new assembly.</TD></TR> 
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	Tracks can be viewed equivalently in columns as text tables. Individual field names (columns) are explained <A HREF="http://genome.cse.ucsc.edu/goldenPath/gbdDescriptions.html">elsewhere</A>.</TD></TR> 
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	The tracks briefly described below are those found in recent assemblies. Further information can often be found on the track filter pages. </TD></TR> 
 </TABLE>
 <P>
 <B>Base Position</B><BR>
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
-	Shows chromosomal coordinates, numbered from the telomere of the short arm. </TD></TR>
+	Shows chromosomal coordinates as numbered from the telomere of the short p arm. Coordinates change in new assemblies.
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
-	Clicking zooms in 3x centered about the click.</TD></TR>
+	Clicking here zooms in 3x centered about click. </TD></TR>
+		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
+	On or off, no dense mode</TD></TR>
 </TD></TR></TABLE></P>
 
-<P><B>Chromosome Band</B><BR>
-<TABLE CELLPADDING=0 CELLSPACING=0
+<P><B>Chromosome Bands</B><BR>
+<TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
-	Light and dark blocks show traditional cytological bands seen with Giemsa
-	staining. The correspondence between bands and sequence coordinate became more 
-	accurate beginning with the 5 Sept 2000 assembly but is still subject to a few 
-	megabases of uncertainty due to the vagaries of FISH mapping and band staining. 
-	Track supplied by Terry Furey at UCSC. </TD></TR>
+	Light and dark blocks show traditional cytological bands seen with Giemsa staining 
+	<A HREF="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=11237021&dopt=Abstract">
+	as mapped</A> by FISH of large-insert clones with sequence tags, STS markers, and BAC 
+	end sequence locations giving a resolution of 862 bands genomewide. The uncertainty of 
+	mapping to band staining is still a megabase or more. </TD></TR>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
-	Clicking in full display brings up detailed bibiographic information on how 
-	cytological bands were molecularly mapped.
+	Clicking on a band in full display brings up details, a discussion of mapping methods used, and 
+	lab credits. The corresponding table, cytoBand, in the table browser provides the complete data set.
 </TD></TR></TABLE></P>
+
+<P><B>FISH Clones</B><BR>
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
+	Shows location of fluorescent in situ hybridization (FISH) mapped clones along the 
+	draft assembly sequence used for cytogenetic map. </TD></TR>
+		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
+	Clicking on a specific marker in full display brings up information on clone placement, 
+	clone registry, its STS markers, and BAC end sequences.</TD></TR>
+</TABLE></P>
 
 <P><B>STS Markers</B><BR>
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
-	Shows location of markers from genetic, RH, YAC, and FISH maps. The many
-	sources of this data are described in 
-	<a href="http://genome.ucsc.edu/goldenPath/other.resources.html">DataSources</A>. 
-	Track supplied by Terry Furey and Sanja Rogic at UCSC.</TD></TR>
+	Shows location of sequence tagged site (STS) markers on genetic maps 
+	(Genethon and Marshfield) in blue and radiation hybrid maps (Stanford, Whitehead 
+	RH, and GeneMap99) in black. FISH-mapped clones first received their own track 
+	in the August 01 assembly.</TD></TR>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
-	Clicking on a specific marker in full display brings up information on a particular 
-	STS and hyperlinks to STS data as a whole.</TD></TR>
+	Clicking on a specific marker in full display 
+	brings up synonyms, primers, YAC map position and uniSTS link.</TD></TR>
 </TABLE></P>
 
-<P><B>Mouse Synteny</B><BR>
-<TABLE CELLPADDING=0 CELLSPACING=0>
-		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
-	Shows syntenic chromosomal region in mouse if known. Supplied by Deanna
-	Church at NCBI.</TD></TR>
-		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
-	Clicking calls up details on position and hyperlink to NCBI human/mouse 
-	homology area.</TD></TR>
-</TD></TR></TABLE></P>
-	
 <P><B>GC Percent</B><BR>
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
-	Darker shades of gray correspond to higher percentages of GC figured for to a
-	window of 20 kbp. Track supplied by Terry Furey at UCSC.</TD></TR>
+	Darker shades of gray show higher GC content, as figured from chromosome 
+	partition into 20,000 bp blocks. Both Celera and public consortium reported 
+	isochore concept in conflict with human genome sequence data. </TD></TR>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
-	Clicking in full mode does not provide further information.</TD></TR>
+	Clicking in full mode provides minimal additional information.</TD></TR>
 </TD></TR></TABLE></P>
 
-<P><B>FPC Contigs</B><BR>
+<P><B>Map Contigs</B><BR>
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
-	Large dark red blocks correspond to fingerprint map contigs at the Washington 
-	University <A HREF="http://genome.wustl.edu/gsc/">WUGSC</A>.</TD></TR>
+	Starting with the 6 August 01 assembly, this track uses tiling path fingerprint 
+	(TPF) maps curated by sequencing centers responsible for individual chromosomes to 
+	merge with the fingerprint contig (FPC) map used in earlier assemblies (see 
+	<A HREF="http://www.genome.wustl.edu/gsc/">WU GSC</A>) to determine the UCSC assembly. 
+	In the event of conflict, the TPF map is used.</TD></TR>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
-	Clicking in full mode brings up a very brief description of the extent and 
-	number of clones in contig.</TD></TR>
+	Clicking in full mode brings up a brief description of the extent and number of 
+	clones in contig.</TD></TR>
 </TD></TR></TABLE></P>
 
 <P><B>Assembly</B><BR>
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
-	An individual box shows the assembly extracted from a single clone fragment. 
-	Gaps in the path appear as white space between the boxes at an adequate zoom 
-	level, with a thin horizontal line connecting boxes bridged over a gap.</TD></TR>
+	An individual box shows the assembly extractable from a single clone fragment. 
+	Gaps in the path appear as white space between the boxes at an adequate zoom level, 
+	with a thin horizontal line connecting boxes bridged over a gap.</TD></TR>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD> 
-	Clicking in full mode brings up a brief description of clone fragment parts used.</TD></TR>
+	Clicking in full mode brings up a brief description of how clone fragment 
+	parts were used in golden path.</TD></TR>
 </TD></TR></TABLE></P>
 
 <P><B>Gap</B><BR>
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
-	Shows locations of gaps in the assembly with black boxes. At zoom levels with 
-	much of a chromosome in view, small gaps can artefactually coalesce in the 
-	graphic. Gaps spanned by mRNA and paired reads have a white horizontal line 
-	through the black box to indicate bridging. Contig orientation errors can occur 
-	around unbridged gaps.</TD></TR>
+	Shows locations of gaps in the assembly in black. Small gaps can artefactually 
+	coalesce in the graphic at coarse scales. Gaps bridged by mRNAs, ESTs or paired BAC 
+	end reads appear horizontally split. Strand misorientation errors can occur adjacent 
+	to unbridged gaps. Gaps are assigned somewhat arbitrary sequence sizes (run's of N's 
+	in genomic DNA); uncertainty is less with bridged gaps. A gap within contig fragments 
+	of a clone is typically smaller than a gap between draft clones. </TD></TR>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD> 
-	In full mode, clicking may bring up a specific description of the gap. </TD></TR>
+	In full mode, clicking brings up a specific description of the gap. Unfinished 
+	clones may have gaps of uncertain size between fragments.</TD></TR>
 </TD></TR></TABLE></P>
 
 <P><B>Coverage</B><BR>
@@ -300,239 +303,475 @@ At 1 pixel per base scale, genes accurately display exons, UTR, introns, and dir
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
 	In dense display, the level of gray gives level of coverage:<BR>
 	<BLOCKQUOTE>
-	White/Clear: no coverage (gap)<BR>
-	Light Gray:  predraft (less than 4x shotgun)<BR>
-	Medium Gray: draft (at least 4x shotgun)<BR>
-	Dark Gray:   multiple draft, covered by more than one draft clone<BR>
-	Finished:    covered by a finished clone</BLOCKQUOTE></TD></TR>
+		White: no coverage (gap) <BR>
+		Light Gray: predraft (less than 4x shotgun) <BR>
+		Medium Gray: draft (at least 4x shotgun) <BR>
+		Dark Gray: covered by multiple draft clones <BR>
+		Finished: covered by a finished clone
+	</BLOCKQUOTE>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD> 
-	In full display, each clone is represented as a gray box. The fragments inside 
-	a clone are shown as black boxes. The position of fragments corresponds to 
-	placement in the assembly.</TD></TR>
+	In full display, each clone coverage is represented as a double gray box. 
+	The fragments inside a clone are shown as black boxes; their position corresponds 
+	to assembly placement including strand assignment.</TD></TR>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD> 
-	Clicking in full mode brings up clone hyperlinks to Genbank record and fasta 
-	format sequences (one per fragment). </TD></TR>
+	Clicking in full mode brings up clone hyperlink to Genbank record and fasta 
+	format sequence (one per fragment). The associated table is called clonePos.</TD></TR>
 </TD></TR></TABLE></P>
 
-<P><B>Known Genes</B><BR>
+<P><B>BAC End Pairs</B><BR>
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
-	Shows known protein coding genes from LocusLink. Track data supplied by David
-	Kulp at <A HREF="http://www.affymetrix.com">Affymetrix</A>. Blue boxes representing 
-	exons are connected by thin lines representing introns. In the full view, the 
-	arrows on the introns indicate direction of transcription. </TD></TR>
+	Shows genome sequence in bacterial artificial chromosomes (BACs) sequenced a 
+	short way in from both ends to place full insert on the assembly. A valid BAC 
+	end pair has 50-600Kb of separation and opposite orientations. Strand assignment 
+	follows <a href="http://www.ncbi.nlm.nih.gov/genome/clone/">Clone Registry</a> 
+	storage convention. </TD></TR>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD> 
-	Clicking in full display brings up the corresponding protein sequence
-	and link to <A HREF="http://bioinfo.weizmann.ac.il/cards/">GeneCards</A>.</TD></TR>
+	Clicking in full display brings up a wealth of detail including any alignment 
+	ambiguity. </TD></TR>
 </TD></TR></TABLE></P>
 
-<P><B>Genie</B><BR>
+<P><B>Duplications </B><BR>
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
-	Gene predictions based on ESTs, mRNA, codon usage, and splice site statistics
-	by the proprietary program Genie, supplied by David Kulp at Affymetrix. Purple 
-	boxes representing exons are connected by lines representing introns. In the full 
-	view, the arrows on the introns indicate direction of transcription. </TD></TR>
+	Shows genomic 
+	<a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=11381028&dopt=Abstract">
+	duplications</a> greater than 1,000 bp if not overly repeat-masked: 
+	as red if 99%+ identity (likely unmerged assembly overlap artefact), as yellow 
+	for 98-99% identity (origin uncertain), and as gray for 90-98% identity (below 
+	draft sequencing error, often genuine pericentromeric or subtelomeric duplication). 
+	Duplications are more common in unordered and unassigned contigs (ie, difficult 
+	to assign to their proper position). </TD></TR>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD> 
-	Clicking in full mode does not bring up a protein translation at this time. 
-	Viewing html allows start and stop positions to be recovered; opening Genome 
-	Browser to these coordinates allows recovery of DNA for the predicted gene.</TD></TR>
+	In the left panel of the browser, duplications are named by the chromosome and start 
+	of the other member of the duplication pair. Clicking on an individual duplication 
+	gives details of both locations and match quality parameters. </TD></TR>
 </TD></TR></TABLE></P>
 
-<P><B>Full mRNAs</B><BR>
+<P><B>Known Genes </B><BR>
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
-	Shows aligning regions (exons usually) as black boxes connected by lines for gaps 
-	(spliced out introns usually). In full display, arrows on the introns indicate the 
-	direction of transcription.</TD></TR>
+	Shows known protein coding genes taken from mRNA reference sequences compiled at 
+	LocusLink (interim FLJ-prefixed entries await a permanent gene name and symbol). 
+	Coding exons are displayed taller than 5' and 3' untranslated regions (UTR); 
+	connecting introns are one-pixel lines with hatch marks indicating direction of 
+	transcription. Non-coding RNA genes have their own track in some assemblies. </TD></TR>
+		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD> 
+	Clicking in full display brings up the corresponding protein, mRNA, and genomic 
+	sequence and links to outside databases. </TD></TR>
+</TD></TR></TABLE></P>
+
+<P><B>Acembly Genes</B><BR>
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
+	A predicted gene track showing gene models reconstructed solely from mRNA and EST data. 
+	The same track display conventions as known genes are used. </TD></TR>
+		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD> 
+	Clicking in full display brings up basic track information plus a link to an extensive 
+	text and graphical annotation of supporting data at NCBI's 
+	<A HREF="http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/index.html">AceView</A></TD></TR>
+</TD></TR></TABLE></P>
+
+<P><B>Ensembl Genes</B><BR>
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
+	A predicted gene track from <A HREF="http://www.ensembl.org">Ensembl</A> 
+	based on Blast matches to various EMBL databases of GenScan predictions. Track 
+	display conventions are the same as for known genes.<br>- Clicking in full 
+	display brings up basic track information plus a link to detailed supporting evidence.</TD></TR>
+</TD></TR></TABLE></P>
+
+<P><B>Fgenesh++ Genes</B><BR>
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
+	A predicted gene track from <A HREF="http://www.softberry.com">Softberry</A> 
+	based on hidden Markov models (HMM) and protein similarity, with less emphasis on 
+	cDNA/EST data . The same track display conventions as Known Genes are used.  </TD></TR>
+		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD> 
+	Clicking in full display brings up basic track information plus a link to the 
+	best matching protein at GenBank. </TD></TR>
+</TD></TR></TABLE></P>
+
+<P><B>Genscan Genes</B><BR>
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
+	An empirical predicted gene track from <A HREF="http://genes.mit.edu/GENSCAN.html">
+	GenScan</A> based on transcriptional, translational and donor and acceptor splicing signals 
+	plus and length and compositional distributions of exons, introns and intergenic regions; 
+	does not use similarity to known proteins like 
+	<A HREF="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=11337476&dopt=Abstract">
+	GenomeScan</A>. Track display conventions are those of known genes. </TD></TR>
+		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD> 
+	Clicking in full display brings up the final prediction without GenScan program 
+	details on exon phases and coordinates -- the BLAT details page can provide these. </TD></TR>
+</TD></TR></TABLE></P>
+
+<P><B>Tigr Gene Index</B><BR>
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
+	The <A HREF="http://www.tigr.org/tdb/hgi/index.html ">TIGR Gene Index</A> is 
+	based mainly on assembled EST sequences from public databases and TIGR. Entries are 
+	actual assemblies providing a consensus sequence, not simply clusters of overlapping 
+	sequences, but don't generally predict whole genes. Gene indexes for mouse, rat, cow, 
+	and pig also contribute to the track. </TD></TR>
+</TD></TR></TABLE></P>
+
+<P><B>Rosetta</B><BR>
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
+	This innovative track displays microarray tissue 
+	<A HREF="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=11237012&dopt=Abstract">
+	expression data</A> provided by <A HREF="http://www.rii.com">Rosetta Inpharmatics</A>. 
+	It helps catalogue genes and transcriptome, complements computational gene predictions, 
+	and seeks to define gene boundaries via co-regulated expression of nearby exons. The data 
+	is stratified by various tissue and disease-specific conditions of gene expression. 
+	Confirmed and predicted exons are placed in separate tracks. </TD></TR>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>  
-	Clicking in dense display brings up a good summary of the Genbank entry on that 
-	mRNA, plus hyperlink to that full record and launches of PubMed searches by gene 
-	name, product, and author.</TD></TR>
+	Clicking in full mode on a Rosetta exon brings up an averaged display that can be 
+	expanded via checkboxes to reflect user interests. By using the frame option, expression 
+	summary plots can be placed directly under the browser. Clicking on a new exon in the 
+	browser frame affords coordinated adjustment of the expression frame.</TD></TR>
+</TD></TR></TABLE></P>
+
+<P><B>UniGene</B><BR>
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
+ 	This track shows <A HREF="http://www.ncbi.nlm.nih.gov/UniGene/">UniGene</A> 
+ 	clusters of ESTs aligned to the genome using BLAT. This data imperfectly indicates 
+ 	exon/intron boundaries and to a lesser extent genes. The Serial Analysis of Gene 
+ 	Expression <A HREF="http://www.ncbi.nlm.nih.gov/SAGE/ ">(SAGE)</A> project at NCBI, 
+ 	a quantative measurement of gene expression in various tissues and disease states, 
+ 	mapped small 10bp bar-coded expression markers onto these UniGene clusters in the 
+ 	SageMap project. The genome browser uses this mapping to provide access to the SAGE 
+ 	data associated with the UniGene track in the assembled and annotated genome. </TD></TR>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>  
-	Clicking on an mRNA/genomic alignment brings up a base-by-base alignment.</TD></TR>
+	Clicking on a UniGene feature calls up an elaborate display of tabular and 
+	graphical data from the SAGE project relevent to that cluster.</TD></TR>
+</TD></TR></TABLE></P>
+
+<P><B>Human mRNAs</B><BR>
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
+ 	GenBank mRNA are aligned to the genome, typically giving a set of blocks 
+	(exons) connected by one pixel lines (spliced-out introns). In full display, 
+	hatches on the introns indicate the direction of transcription. Some mRNAs align 
+	to multiple locations with varying degrees of match quality; only near-perfect 
+	are retained.</TD></TR>
+		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>  
+	Clicking in full display mode brings up a summary of the Genbank entry on 
+	that mRNA, plus convenient hyperlinks to major databases, along with base-by-base 
+	alignments. </TD></TR>
 </TD></TR></TABLE></P>
 
 <P><B>Spliced ESTs</B><BR>
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
-	Shows spliced human ESTs (introns are the gaps after alignment with genomic 
-	sequence). Requiring introns eliminates more than 99% of the contamination of 
-	dbEST by genomic sequence. (Missing here, but found in the Human EST track, are
-	authentic 3' ESTs and single-exon genes.) This track may suggest alternative 
-	splicings.</TD></TR>
+	This track shows a highly relevent subset of human ESTs, those that are
+	spliced. Quality control has excluded  some ESTs that seem to be spliced
+	but whose exons and introns are more likely assembly or mismatch artefacts.
+	Requiring introns eliminates more than 99% of the contamination of dbEST by
+	genomic sequence. This track may also suggest alternate splices. The GT-AG
+	splice donor/acceptor rule has not been applied.  Single-exon genes and 3'
+	UTR ESTs are located in the all-inclusive EST track.</TD></TR>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>  
-	In dense mode, the level of gray in this track indicates the number of aligning 
-	ESTs for the region. Genome Browser cannot display in full mode if more than 300 
-	ESTs align in the window, so it may be necessary to zoom in to see individual 
-	ESTs. Direction arrows on the "introns" are unreliable (3' and 5' read info is 
-	missing at dbEST), though the sense strand can often be inferred from the GT-AG 
-	splice donor/acceptor rule. </TD></TR>
-		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>  
-	Clicking in full display provides sequence, accession number, GenBank highlights, 
-	and Medline link. </TD></TR>
+	In dense mode, the degree of gray in the track 
+	indicates the extent of spliced ESTs projecting to the region. In full mode only 
+	400 tracks can be displayed in the browser, so zoom in to a smaller region to see 
+	individual ESTs. Blue and red spliced ESTs indicate 5' and 3' read directions, 
+	respectively. Black indicates no read direction was available in the GenBank entry. 
+	Hatch marks indicate direction of transcription according to the entry; these should 
+	be verified in the details page alignment on the basis of the GT-AG splice 
+	donor/acceptor rule. Clicking on an individual mRNA provides sequence, accession number, 
+	GenBank highlights, and Medline link.</TD></TR>
 </TD></TR></TABLE></P>
 
-<P><B>Human ESTs</B><BR>
+<P><B>Human ESTs </B><BR>
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
-	In dense mode the level of gray in this track represents the number of ESTs that 
-	align at that region. The program will always display in dense mode if there are 
-	more than 300 ESTs aligning in the window. It may be necessary to zoom in to 
-	open up this track. Beware that the direction arrows on the 'introns' are 
-	unreliable in this track because the EST database is missing info on whether 
-	many ESTs are 3' or 5' reads.</TD></TR>
+	This track shows all human expressed sequence tags (ESTs) at GenBank aligned to the 
+	genome assembly, spliced and unspliced. It may be necessary to filter or zoom in to 
+	open this track in full mode because the browser will display in dense mode whenever 
+	the number of total tracks exceeds 300. Color conventions and hatching are the same 
+	as for the spliced EST track. </TD></TR>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>  
 	Clicking in full display provides sequence, accession number, GenBank highlights, 
-	and Medline link. </TD></TR>
+	Medline link. </TD></TR>
 </TD></TR></TABLE></P>
 
-<P><B>CpG Islands</B><BR>
+<P><B>CpG Islands  </B><BR>
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
-	Green boxes display CpG islands, taken here as 50+ bases with 50% or higher
-	GC content, with CpG dinucleotides disproportionate to composition. CpG tracks 
-	are provided by Kim Worley and John Bouck at the Baylor College of Medicine
-	and also by LaDeana Hillier at Washington University Genome Sequencing Center.</TD></TR>
+	This track shows CpG islands, areas rich in the dinucleotide CG often found around the 
+	promoter/ first exon of housekeeping genes (where they are protected from methylation 
+	and subsequent deamidation of the C). CpG islands are defined here as 200 or more bases 
+	with 50% or higher GC content having CpG dinucleotides significantly disproportionate 
+	to this composition. </TD></TR>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>  
-	Clicking in full mode brings detailed information and sequence for individual 
-	CpG islands.</TD></TR>
+	Darker green shows CpG islands exceeding 400 occurences. Clicking in full mode brings 
+	detailed information and sequence for individual CpG islands. </TD></TR>
+</TD></TR></TABLE></P>
+
+<P><B>Nonhuman mRNAs </B><BR>
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
+	This track places GenBank mRNAs from other species onto the genome using BLAT, 
+	with level of gray indicating quality of match. For a distant vertebrate, alignment 
+	requires a fairly slowly evolving gene. The matches are often plausible ortholog 
+	candidates. </TD></TR>
+		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>  
+	Clicking in full display brings up a summary of the Genbank entry and links to other 
+	major databases. Clicking on an mRNA/genomic alignment brings up a base-by-base 
+	alignment. Some mRNAs align to multiple places but only the near-best are retained. </TD></TR>
+</TD></TR></TABLE></P>
+
+<P><B>Nonhuman ESTs </B><BR>
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
+	This track shows all alignable nonhuman expressed sequence tags (ESTs) at GenBank, 
+	with level of gray indicating quality of match. Matches help validate human exon 
+	identification. It may be necessary to filter or zoom in to open this track in full 
+	mode as the number of total tracks can exceed 400. Other conventions and hatching 
+	are the same as for the human EST track.</TD></TR>
+		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>  
+	Clicking in full display brings up a summary of the Genbank entry plus hyperlink to 
+	that full record and launches of PubMed searches by gene name, product, and author. 
+	The mRNA/genomic alignment offers a base-by-base alignment. Some ESTs align to 
+	multiple places in the genome but only the near-best are retained. </TD></TR>
+</TD></TR></TABLE></P>
+
+<P><B>Mouse BLAT </B><BR>
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
+	This track displays alignments of mouse genome to human. The mouse genomic 
+	DNA is from the Arachne assembly of mouse whole genome shotgun reads available 
+	at the <A HREF="http://www.ncbi.nlm.nih.gov/Traces/">Trace Repository</A>. 
+	The alignments were done with BLAT in translated protein mode requiring 2 nearby 
+	4-mer matches to trigger a detailed alignment. The human genome was masked with 
+	<A HREF="http://ftp.genome.washington.edu/cgi-bin/RepeatMasker">RepeatMasker</A> 
+	and <A HREF="http://c3.biomath.mssm.edu/trf.html">Tandem Repeat Finder</A> prior 
+	to running BLAT. Regions with more than 300 aligned reads were assumed novel repeat 
+	elements and filtered out. Alignments of greater than 97% identity may represent 
+	mouse contamination of human or vice versa.</TD></TR>
+		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>  
+	Clicking calls up details on mouse sequence fragment and its alignment details. </TD></TR>
+</TD></TR></TABLE></P>
+
+<P><B>Mouse Synteny </B><BR>
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
+	This track shows the syntenic chromosomal region in mouse if known. NCBI 
+	<A HREF="http://www.ncbi.nlm.nih.gov/Homology/">made</A> by seeking patches 
+	of homology of mapped adjacent mouse genes to the draft human assembly. Mouse 
+	is provided at the level of chromosome (not cytoband); the proteins used are a 
+	subset of the displayed human orthologs.</TD></TR>
+		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>  
+	Clicking in full mode calls up details of the correspondence. This track 
+will be greatly improved with the availability of a mouse genome assembly.</TD></TR>
 </TD></TR></TABLE></P>
 
 <P><B>Exofish ecores</B><BR>
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
-	Displays conserved regions (generally protein-coding) from a <A HREF=
-	"http://www.genoscope.cns.fr/externe/tetraodon/">genomics project</A>
-	(long random reads) in the pufferfish, Tetraodon nigroviridis. Regions of
-	greater homology are displayed in a darker gray. Ecore is an acronym for
-	<U><B>e</B></U>volutionary <U><B>co</B></U>nserved <u><b>re</b></u>gion. Track is provided by
-	Olivier Jaillon at Genoscope.</TD></TR>
+	The track displays conserved regions, generally protein-coding homologs, 
+	from a genomics project of long random reads in the 
+	<A HREF="http://www.genoscope.cns.fr/exofish">pufferfish</A>, Tetraodon 
+	nigroviridis. Regions of greater homology are displayed in a darker blue. 
+	Ecore is an acronym for <B>e</B>volutionary <B>co</B>nserved <b>re</b>gion; the data was 
+	<A HREF="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=10835645&dopt=Abstract">
+	used</A> to estimate the number of human genes. </TD></TR>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>  
-	Clicking in full mode brings up information on a particular ecore and background 
-	notes on the track as a whole.</TD></TR>
+	Clicking in full mode brings up information on a particular ecore, access 
+	the relevent Genoscope page, and the relevent DNA.</TD></TR>
 </TD></TR></TABLE></P>
 
 <P><B>RNA Genes</B><BR>
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
-	This track shows where non-protein coding RNA genes and pseudogenes are
-	located. This includes tRNAs, rRNAs, SRPs, C/D box methylation guide snoRNAs,
-	U6 etc. RNA-like, HBII, and hVS-like elements, as determined by Sean Eddy at
-	Washington University. The density of these elements can range from 10-40 per
-	ten million bp in some chromosomes. They are not displayed in the Known Genes track.</TD></TR>
+	This track shows human non-protein-coding RNA genes and RNA pseudogenes. This 
+	includes tRNAs, rRNAs, SRPs, methylation guide snoRNAs, U2-U6 RNA-like, and 
+	similar elements both known and predicted (by tRNAscanSE etc). The density of 
+	these elements can range from 1-4 per million bp in some chromosomes. (Protein 
+	coding genes are displayed elsewhere, in the Known Genes track.)</TD></TR>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>  
-	Clicking in full mode brings up data on type of feature and score.</TD></TR>
+	Clicking in full mode brings up feature classification, method of prediction,
+	 location, and reliability score. </TD></TR>
 </TD></TR></TABLE></P>
 
 <P><B>Overlap SNPs</B><BR>
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
-	This track shows single nucleotide polymorphisms found on overlapping contigs
-	that are useful markers in mapping genes and diseases. Track is provided by
-	Lincoln Stein at Cold Spring Harbor, in conjunction with the SNP Consortium.</TD></TR>
+	This track shows single nucleotide polymorphisms found on overlapping contigs 
+	that are useful markers in mapping genes and diseases using data provided by the 
+	<A HREF="http://snp.cshl.org/">SNP Consortium</A>.</TD></TR>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>  
-	Clicking in full mode brings up SNP report with dbSNP link.</TD></TR>
+	Clicking in full mode brings up a location description and 
+<A HREF="http://www.ncbi.nlm.nih.gov/SNP/">dbSNP</A> link.</TD></TR>
 </TD></TR></TABLE></P>
 
-<P><B>Random SNPs</B><BR>
+<P><B>Random SNPs</B><BR> 
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
-	This track shows single nucleotide polymorphisms found by random sequencing that 
-	are useful markers in mapping genes and diseases.</TD></TR>
+	 This track displays single nucleotide polymorphisms found by random 
+ 	sequencing that are useful markers in mapping genes and complex traits 
+ 	using data provided by the <A HREF="http://snp.cshl.org/">SNP 
+ 	Consortium</A>.</TR></TD>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>  
-	Track is provided by Lincoln Stein at Cold Spring Harbor, in conjunction with 
-	the SNP Consortium.</TD></TR>
-		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>  
-	Clicking in full mode brings up SNP report with dbSNP link.</TD></TR>
+ 	Clicking in full mode brings up a location description 
+ 	and <A HREF="http://www.ncbi.nlm.nih.gov/SNP/">dbSNP</A> link.</TD></TR>
 </TD></TR></TABLE></P>
 
 <P><B>RepeatMasker</B><BR>
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>
-	Full display opens 9 tracks - one each for SINE, LINE, LTR, DNA, simple, low 
-	complexity, micro-satellite, tRNA, and other repeat families, as determined by. 
-	Arian Smit's <A HREF="http://ftp.genome.washington.edu/cgi-bin/RepeatMasker">
-	RepeatMasker</A>. Each individual repeat is represented by a gray box, with darker 
-	gray indicating more recent age (dating by alignment to a canonical repeat). </TD></TR>
+	The track shows dispersed repeats as determined by 
+	<A HREF="http://ftp.genome.washington.edu/cgi-bin/RepeatMasker">RepeatMasker</A>. 
+	These elements include SINE, LINE, LTR, DNA, simple, low complexity, 
+	micro-satellite, tRNA, and other repeat families. Darker gray indicates a more 
+	recent age (as dated by alignment to a canonical repeat).</TD></TR>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>  
 	In dense mode for large chromosomal regions, the black boxes representing repeats 
-	may merge into single blocks in the display.</TD></TR>
+	may merge into misleading single blocks in the display. Full mode shows 9 tracks 
+	for the major repeat classes.</TD></TR>
 </TD></TR></TABLE></P>
 
  <P><B>Simple Repeats</B><BR>
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD> 
-	This track contains not only simple repeats of the RepeatMasker track, but
-	also imperfect tandem repeats of longer period. Data provided by Kim Worley and
-	John Bouck at the Baylor College of Medicine.</TD></TR>
+ 	This track displays simple tandem repeats (possibly imperfect) located by 
+ 	<A HREF="http://c3.biomath.mssm.edu/trf.html">Tandem Repeat Finder </A> which 
+ 	is specialized to this purpose. These can occur within coding regions of genes, 
+ 	may be quite polymorphic, and repeat expansions are sometimes associated with 
+ 	specific diseases.</TD></TR>
 		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>  
-	Clicking in full mode brings up detailed simple repeat sequence and score.</TD></TR>
+	 Clicking in full mode brings up the simple repeat sequence, copy number, 
+ 	and quality of match statistics.</TD></TR>
 </TD></TR></TABLE></P>
 </TD><TD WIDTH=15></TD></TR></TABLE>
 	<BR></TD></TR></TABLE>
 	
 	
-	<A NAME="OlderTracks"></A><BR>
-	
-	
-	<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDERCOLOR="888888" BORDER=1><TR><TD>
-	<TABLE BGCOLOR="ffffff" BACKGROUND="images/hr.gif" WIDTH=100% BORDER=0><TR><TD>
-		<!--cheap trick to get background on row to be continuous-->
-		<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH=100%><TR><TD ALIGN="left">
-			<FONT SIZE="4"><b>&nbsp; Details on tracks available for older assemblies only: </FONT>
-		</TD></TR></TABLE>
+<A NAME="BLATAlign"></A><BR>	
+<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDERCOLOR="888888" BORDER=1><TR><TD>
+<TABLE BGCOLOR="ffffff" BACKGROUND="images/hr.gif" WIDTH=100% BORDER=0><TR><TD>
+	<!--cheap trick to get background on row to be continuous-->
+	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH=100%><TR><TD ALIGN="left">
+			<FONT SIZE="4"><b>&nbsp; BLAT Alignments </FONT>
 	</TD></TR></TABLE>
+</TD></TR></TABLE>
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TH HEIGHT=10></TH><TR><TD WIDTH=10></TD><TD>
-<P><B>Isochores</B><BR>
-<TABLE CELLPADDING=0 CELLSPACING=0>
-		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD> 
-	This track is only available in the July 2000 browser. Dark blocks correspond
-	to GC-rich sections and light blocks to AT-rich sections. These isoforms were
-	defined with a HMM with 100,000 bp windows. Theoretically there might be an
-	inverse relationship between the grayscale value of the blocks in this track
-	and that of the chromosome band track; in practice the relationship is not very
-	apparent. Track supplied by Terry Furey at UCSC. </TD></TR>
-		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>  
-	This brings up a more detailed description of the item and the track.</TD></TR>
-</TD></TR></TABLE></P>
- 
-<P><B>Ensembl Genes</B><BR>
-<TABLE CELLPADDING=0 CELLSPACING=0>
-		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD> 
-	This track contains gene predictions from <A HREF=
-	"http://www.ensembl.org/perl/mapview?chr=20">Ensembl</A>. Maroon boxes representing 
-	exons are connected by lines representing introns. In the full view, the arrows on 
-	the introns indicate direction of transcription. Data provided by Ewan Birney.</TD></TR>
-		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>  
-	Clicking in full display brings up a protein translation.</TD></TR>
-</TD></TR></TABLE></P>
-
-<P><B>Pufferfish Homologies</B><BR>
-<TABLE CELLPADDING=0 CELLSPACING=0>
-		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD> 
-	This track is only available in the July 2000 freeze browser. Blue boxes show 
-	regions with significant homology to the pufferfish genome (Tetraodon nigroviridu). 
-	About a third of the compact Tetraodon genome has been sequenced by single-read 
-	shotgun. Homology strength is shown by darkness of blue (strong homology states 
-	are often coding); gaps between boxes inside of a track represent long inserts.</TD></TR>
-		<TR><TD WIDTH="10" VALIGN="top">-</TD><TD>  
-	Clicking on an individual line brings up a base-by-base alignment of Tetraodon 
-	vs. human with the Tetraodon sequence on top. Underneath the alignments are a row 
-	of symbols with the following significance:
-	<PRE> 
-	H - high degree of homology 
-	L: low degree of homology 
-	1: probable coding region 
-	2: probable coding region 
-	3: probable coding region (wobble codon) 
-	Q: Long insert in query (Tetraodon) 
-	T: Long insert in target (human) 
-	</PRE></TD></TR>
+		To locate a nucleotide or protein within the human genome, paste in a sequence or fasta formatted list (header lines start with > and contain a unique name), select the preferred assembly date, sort order, and output option. Numbers, spaces, and extraneous characters are ignored. Alternatively, upload an unformatted plain text file containing the sequences from your desktop using the file browse button.
+		<P>
+		A single DNA sequence over 20,000 bp will be rejected, but with multiple sequences 50,000 bp is acceptible (eg, 25 sequences of length 2,000). For protein, these limits are 4,000 and 12,500 amino acids, respectively.  
+		<P>
+		For a DNA query, BLAT quickly finds sequences with 95% or greater similarity over 40 bp or more. BLAT may not locate more diverged or shorter genomic sequences, though perfect sequence matches of 33 bp are found and sometimes as few as 22 bp. Large inserts (eg, introns) do not throw off alignment. A primate query will generally work but more remote tetrapod DNA will often be too distant.
+		<P>
+		For a protein query, BLAT rapidly locates genomic sequences with 80% or greater similarity over 20 amino acids or more. This means gene family members that arose within the last 350 million years can generally be detected. More diverged sequences can be aligned to human genome using NCBI's Blast and psi-Blast followed by BLAT of the resulting match into the UCSC genome assembly.
+		<P>
+		A single query, whether DNA or protein, can generate multiple hits. This happens when the genome contains multiple copies, paralogs, pseudogenes, statistical coincidences, artefactual assembly duplications, or when the query itself contains repeats or common retrotransposons. When several nearby BLAT matches occur on a single chromosome, a simple trick can quickly adjust the genome browser view to display them all: open the match having the smallest initial coordinate, then paste in the most distant coordinate from the BLAT output page and refresh the browser view. 
+		<P>
+		Common uses of BLAT are finding genomic coordinates of a mRNA or protein within the current assembly, determining exon structure of a gene, displaying a coding region within a full length gene, isolating an EST of special interest as its own track, searching for gene family members, and finding human homologs of a query from another species. Set the sort order option at the time of query submission to reflect your research interests. The highest scoring output line is the closest in sequence to the query. A BLAT track can be added at any time from within a genome browser view or used simultaneously with custom tracks. 
+		<P>
+		To make a custom track directly from BLAT, select the<A HREF="http://genome.cse.ucsc.edu/goldenPath/help/customTrack.html"> psl format</A> output option. The custom track can be launched by pasting it into the bottom of the main browser gateway page.
+		<P>
+		Ordinary BLAT output is a flat database file that summarizes any alignments found and provides further links to sequence alignment details and the appropriate genome browser view. The details link gives the letter-by-letter alignment to genomic. The score is figured as matches - mismatches in the final alignment of query to genome. Details of BLAT's internal scoring schemes and its overall n-mer alignment seed strategy will be described shortly in a paper by WJ Kent.
+		<p>
+		BLAT is not BLAST. With DNA, BLAT uses an index of the entire genome kept in memory. The index consists of all non-overlapping 11-mers except for those heavily associated with repeats. The index occupies a gigabyte of RAM. Once index matches are found, corresponding regions of genomic sequence are then loaded into memory for a detailed alignment. Thus the genome itself need not be kept in memory. With protein queries, BLAT works similarly but with 4-mers of genome translated in all frames. The protein index for a mammalian genome requires 2.5 gigabytes of RAM and a separate server. 
+		<P>
+		The BLAT servers are <A HREF="http://genome.cse.ucsc.edu/mirror.html">mirrored</A> at several institutions to ensure continuous availability. For large batch jobs and internal parameter changes, it is best to install command line BLAT on your own Linux server. Sources and executables are free for academic, personal, and non-profit purposes. Non-exclusive commercial licenses are also available; contact <A HREF="http://www.cse.ucsc.edu/~kent">Jim Kent</A>. 
+		<P>
+	</TD><TD WIDTH=15></TD></TR></TABLE>
 </TD></TR></TABLE>
 
-</TD><TD WIDTH=15></TD></TR></TABLE>
+<A NAME="TableBrowser"></A><BR>	
+<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDERCOLOR="888888" BORDER=1><TR><TD>
+<TABLE BGCOLOR="ffffff" BACKGROUND="images/hr.gif" WIDTH=100% BORDER=0><TR><TD>
+	<!--cheap trick to get background on row to be continuous-->
+	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH=100%><TR><TD ALIGN="left">
+			<FONT SIZE="4"><b>&nbsp; Getting started on the Table Browser </FONT>
 	</TD></TR></TABLE>
+</TD></TR></TABLE>
+	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TH HEIGHT=10></TH><TR><TD WIDTH=10></TD><TD>
+		The table browser allows convenient and precise access to the primary database text tables containing the human genome sequence and associated annotation tracks. By specifying chromosomal range, table type, and desired columns, the exact data set of interest can be displayed without information overload. This is equivalent to but far more convenient than downloading and manipulating the whole human genome file with its multi-gigabyte data tracks (though that option always remains <A HREF="http://genome.cse.ucsc.edu/index.html#Downloading">available</A>.)
+		<P>
+		After each round of genome assembly, features such as mRNAs are located within the genome by BLAT alignment. This process generates <B>positional</B> stop-start coordinates and other descriptive data which are then stored within MySQL relational database tables. It is these tables that drive the graphical tracks in the Genome Browser, meaning that the two views of the data, tabular or graphic, are always in agreement (a week's lag can occur in downloadable files). Chromosomal coordinates usually change with each build because of newly filled gaps or assembly procedure refinements.
+		<P>
+		Other data is inherently <B>non-positional</B> (not tied to genome coordinates), such as submitting author of a GenBank EST, tissue of origin , or link to a RefSeq. These data types are accessed separately.
+		<P>
+		Familiarize yourself with the table browser tool by a <B>few minutes of exploration</B>. Starting at the top of the form, use the default position (or enter a cytological band, eg 20p12, or type in a keyword from a GenBank entry to look up). Notice that if you look up a gene, the tool can return a choice of several mRNAs. Clicking on one automatically enters the chromosomal range in the text box.Next select a positional table from the menu, for example, chrN_mrna which holds mRNA alignment data broken down by individual chromosome. Now choose the fields you wish to view, or bypass this step to see all, or view a fasta list of relevent sequences without any table attributes other than chromosome, freeze date, and start-stop genomic coordinates. If the chromosomal range is too narrow, it may happen that no mRNA occurs there (meaning no data will be returned).
+		<P>
+		Visitors not already familiar with what the table offers should select "Choose fields". Some tables offer many columns of data (explained <A HREF="http://genome.cse.ucsc.edu/goldenPath/gbdDescriptions.html">elsewhere</A>) of which only a few might be relevent. The fewer fields selected, the simpler the next stage of data return. UCSC plans to add record filtering shortly. This will reduce the size of huge tables by allowing both row and column selection.
+		<P>
+		Limited boolean logic processing (eg, joins of two tracks) may be offered in the future. For now, post-processing of table browser output can be done in the visitor's spreadsheet or database. These steps can produce output in the format needed for custom tracks. 
+ 		<P>
+	</TD><TD WIDTH=15></TD></TR></TABLE>
+</TD></TR></TABLE>
+
+<A NAME="TrackFormatDNA"></A><BR>	
+<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDERCOLOR="888888" BORDER=1><TR><TD>
+<TABLE BGCOLOR="ffffff" BACKGROUND="images/hr.gif" WIDTH=100% BORDER=0><TR><TD>
+	<!--cheap trick to get background on row to be continuous-->
+	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH=100%><TR><TD ALIGN="left">
+			<FONT SIZE="4"><b>&nbsp; Track-formatted DNA </FONT>
+	</TD></TR></TABLE>
+</TD></TR></TABLE>
+	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TH HEIGHT=10></TH><TR><TD WIDTH=10></TD><TD>
+		<P>
+		This aspect of the browser allows features to be displayed via text formatting of the DNA underlying a browser window. It is accessed from the navigation bar at the top of the main browser or from appropriate detail pages. Formatting can range from simply putting exons in upper case to elaborately mark-up of sequence according to multiple track data -- DNA covered by various tracks can be highlighted by case, underlining, bold, italic, and color.  
+		<P>
+		Color values range from 0 (darkest) to 255 (lightest) and are additive (red and green make yellow etc.). The examples below show a few ways to highlight individual tracks and their interplay. Keep it simple at first -- it is easy to make pretty but completely cryptic displays. 
+		<P>
+		<TABLE>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>To put exons from the Known Genes track in upper case red text, check the appropriate box in the Toggle Case column and set the color to pure red, RGB (255,0,0). Upon submitting, any known gene within the designated chromosomal interval will appear in red capital letters. 
+		</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>To see the overlap between Known Genes and Genscan predictions, try setting Known Genes to red (255,0,0) and Genscan to green (0,255,0). Places where the Known Genes and Genscan overlap will be painted yellow (255,255,0). 
+		</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>To get a level-of-coverage effect for tracks like Spliced Ests with many overlapping features in full mode, initially select a darker color such as deep green, RGB (0,64,0). Nucleotides covered by a single EST will appear dark green, while regions covered with more ESTs get progressively brighter -- saturating at 4 ESTs.
+		</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>To use a track to mask unwanted features, for example set the RepeatMasker track to RGB (255,255,255) to white-out Genscan predictions of LINEs that are not mainstream host genes. Similarly, masking with Known Genes will show what is new in the gene prediction sector. 
+		</TABLE>
+		<P>
+		The default line width of 60 characters is conventional; set this higher to see more DNA at once with fewer line breaks  if you plan on locating specific sequences with your web browser search tool. 
+		<P>
+		Be careful about requesting complex formatting for very large chromosomal regions. After all the html tags are added to the output page, the file size may exceed size limits that your browser, clipboard, and other software can safely display. The tool will format about 10 Mbp.</P>
+		<P>
+		Now copying and pasting the web page output to a text editor such as Word will retain upper case but lose colors and other formatting. That's still useful because other web tools such as <A HREF="http://www.ncbi.nlm.nih.gov/blast/index.nojs.cgi">Blast</A> can be set to ignore lower case. To fully capture formatting such as color and underlining, view the output as "source" html in your web browser, copy the output page into an html editor, and display on a web page. It is also possible via selective deletion to process formatted text into a Blat query that will result in a custom track.
+		<P>
+		The items in the track column usable for masking are auto-generated and so correctly correspond to browser tracks currently offered for particular assembly dates. Formatting is available on all actively supported assemblies. 
+		<P>
+		Further features under consideration include a menu of pre-cooked palettes that do common tasks effectively (to avoid re-entry of a successful but complex coding scheme) and a legend gif on the output page displaying track formattings chosen.
+		<P>
+	</TD><TD WIDTH=15></TD></TR></TABLE>
+</TD></TR></TABLE>
+
+<A NAME="CustomTracks"></A><BR>	
+<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDERCOLOR="888888" BORDER=1><TR><TD>
+<TABLE BGCOLOR="ffffff" BACKGROUND="images/hr.gif" WIDTH=100% BORDER=0><TR><TD>
+	<!--cheap trick to get background on row to be continuous-->
+	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH=100%><TR><TD ALIGN="left">
+			<FONT SIZE="4"><b>&nbsp; Custom Tracks </FONT>
+	</TD></TR></TABLE>
+</TD></TR></TABLE>
+	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TH HEIGHT=10></TH><TR><TD WIDTH=10></TD><TD>
+		<P>
+		Custom tracks are a very important research feature of the browser. Because space on the main genome browser is very tight, some excellent potential genomewide tracks cannot be offered. Researchers also develop track data for a portion of a chromosome that might not be of general interest or that cannot be shared until journal publication.
+		<P>
+		Custom tracks work very similarly to ordinary tracks, except that they never become part of the MySQL genome database. They have their own controller and persist as long as their launching window is kept open, even if some portion of the genome is displayed where they are not represented.  Custom tracks are normally aligned under genomic sequence but they can also be completely unrelated to human data and run under strings of millions of N's that occur in some assemblies.
+		<P>
+		Custom tracks are made in one of four <A HREF="http://genome.cse.ucsc.edu/goldenPath/help/customTrack.html">formats</A>  adhered to fairly strictly. The easiest way to make correctly formatted custom tracks is to collect Blat psl output.  Advanced users can make custom tracks from the table browser and track-formatted DNA. To make a custom track from scratch, begin with the examples and experiment with new lines and altered values in a spreadsheet or text editor. 
+		<P>
+		A custom track can be launched by pasting or uploading it into the bottom of the main browser gateway page.  An external custom track (a  correctly formatted plain text web page) can be included by adding a separate line starting with http://   Custom tracks can appear in conjunction with ordinary Blat tracks.
+		<P>
+		After getting your data to display within the UCSC genome browser, you may wish to create your own detail pages from individual track items.  This can be done using an attribute of the Track Lines formatting instructions: "url - A URL for an external link associated with this track. Any '$$' in this string this will be substituted with the item name."  This creates a chimeric browser, with browser display at UCSC but details at the visitor's site (or some other database).  All the detail pages can reside in a single document if the name denotes an html anchor (eg, #name).
+		<P>
+		To share your custom tracks with the biomedical research community, construct a link from your own web pages to the browser based on this <A HREF="http://genome.ucsc.edu/cgi-bin/hgTracks?position=chr22:1-20000&db=hg8&customText=http://genome-test.cse.ucsc.edu/test.bed">example</A>. The position variable tells the browser which part of the genome to display, here chr22:1-20000. The db variable provides the freeze number with  'hg8' corresponding to the  August 2001 assembly (only the last 3 are supported). The customText variable refers to any web URL, in the example a UCSC <A HREF="http://genome-test.cse.ucsc.edu/test.bed">page</A> containing a custom track as plain text in one of the <A HREF="http://genome.cse.ucsc.edu/goldenPath/help/customTrack.html">allowed formats</A>. The visitor normally would change this link to their own track data site.
+		<P>
+<PRE>http://genome.ucsc.edu/cgi-bin/hgTracks?position=chr22:1-20000
+       &db=hg8&customText=http://genome-test.cse.ucsc.edu/test.bed </PRE>
+		<P>
+		Please <A HREF="mailto:genome@cse.ucsc.edu">send in</A> links to tracks you'd like to share, along with a one paragraph description of the track and the genome version it is tied to. UCSC plans to create a gallery of examples of supplemental and interesting custom tracks. 
+ 		<P>
+	</TD><TD WIDTH=15></TD></TR></TABLE>
+</TD></TR></TABLE>
 
 </TD></TR></TABLE>
 </BODY></HTML>
