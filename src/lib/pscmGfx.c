@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: pscmGfx.c,v 1.7 2003/05/05 06:45:35 kate Exp $";
-
 /* pscmGfx - routines for making postScript output seem a
  * lot like 256 color bitmap output. 
  *
@@ -14,6 +12,8 @@ static char const rcsid[] = "$Id: pscmGfx.c,v 1.7 2003/05/05 06:45:35 kate Exp $
 #include "gemfont.h"
 #include "vGfx.h"
 #include "vGfxPrivate.h"
+
+static char const rcsid[] = "$Id: pscmGfx.c,v 1.8 2003/05/06 07:33:43 kate Exp $";
 
 
 static struct pscmGfx *boxPscm;	 /* Used to keep from drawing the same box again

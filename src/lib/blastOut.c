@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: blastOut.c,v 1.6 2003/05/05 06:45:31 kate Exp $";
-
 /* blastOut.c - stuff to output an alignment in blast format. */
 #include "common.h"
 #include "linefile.h"
@@ -7,6 +5,8 @@ static char const rcsid[] = "$Id: blastOut.c,v 1.6 2003/05/05 06:45:31 kate Exp 
 #include "axt.h"
 #include "obscure.h"
 #include "genoFind.h"
+
+static char const rcsid[] = "$Id: blastOut.c,v 1.7 2003/05/06 07:33:41 kate Exp $";
 
 struct axtRef
 /* A reference to an axt. */

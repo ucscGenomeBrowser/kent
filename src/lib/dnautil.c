@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: dnautil.c,v 1.18 2003/05/05 06:45:32 kate Exp $";
-
 /* Some stuff that you'll likely need in any program that works with
  * DNA.  Includes stuff for amino acids as well. 
  *
@@ -16,6 +14,8 @@ static char const rcsid[] = "$Id: dnautil.c,v 1.18 2003/05/05 06:45:32 kate Exp 
 
 #include "common.h"
 #include "dnautil.h"
+
+static char const rcsid[] = "$Id: dnautil.c,v 1.19 2003/05/06 07:33:42 kate Exp $";
 
 struct codonTable
 /* The dread codon table. */

@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: vGif.c,v 1.3 2003/05/05 06:45:37 kate Exp $";
-
 /* vGif - a virtual graphic object wrapper around
  * an in-memory buffer destined to become a 
  * 256-color GIF file. */
@@ -8,6 +6,8 @@ static char const rcsid[] = "$Id: vGif.c,v 1.3 2003/05/05 06:45:37 kate Exp $";
 #include "memgfx.h"
 #include "vGfx.h"
 #include "vGfxPrivate.h"
+
+static char const rcsid[] = "$Id: vGif.c,v 1.4 2003/05/06 07:33:44 kate Exp $";
 
 struct memGif
 /* Something that handles a gif. */

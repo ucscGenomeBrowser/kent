@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: rbTree.c,v 1.5 2003/05/05 06:45:36 kate Exp $";
-
 /* rbTree - rbTreeRed-rbTreeBlack Tree - a type of binary tree which 
  * automatically keeps relatively balanced during
  * inserts and deletions.
@@ -10,6 +8,8 @@ static char const rcsid[] = "$Id: rbTree.c,v 1.5 2003/05/05 06:45:36 kate Exp $"
 #include "common.h"
 #include "localmem.h"
 #include "rbTree.h"
+
+static char const rcsid[] = "$Id: rbTree.c,v 1.6 2003/05/06 07:33:44 kate Exp $";
 
 
 static struct rbTreeNode *restructure(struct rbTree *t, int tos, 

@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: xp.c,v 1.7 2003/05/05 06:45:37 kate Exp $";
-
 /* xp - A minimal non-verifying xml parser.  It's
  * stream oriented much like expas.  It's a bit faster
  * and smaller than expas.  I'm not sure it handles unicode
@@ -13,6 +11,8 @@ static char const rcsid[] = "$Id: xp.c,v 1.7 2003/05/05 06:45:37 kate Exp $";
 #include "errabort.h"
 #include "hash.h"
 #include "xp.h"
+
+static char const rcsid[] = "$Id: xp.c,v 1.8 2003/05/06 07:33:44 kate Exp $";
 
 
 char xpNextBuf(struct xp *xp)

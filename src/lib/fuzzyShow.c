@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: fuzzyShow.c,v 1.10 2003/05/05 06:45:33 kate Exp $";
-
 /* fuzzyShow - routines to show ffAli alignments in text
  * or html. 
  *
@@ -13,6 +11,8 @@ static char const rcsid[] = "$Id: fuzzyShow.c,v 1.10 2003/05/05 06:45:33 kate Ex
 #include "htmshell.h"
 #include "cda.h"
 #include "seqOut.h"
+
+static char const rcsid[] = "$Id: fuzzyShow.c,v 1.11 2003/05/06 07:33:42 kate Exp $";
 
 int ffShAliPart(FILE *f, struct ffAli *aliList, 
     char *needleName, DNA *needle, int needleSize, int needleNumOffset,

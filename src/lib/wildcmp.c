@@ -1,11 +1,11 @@
-static char const rcsid[] = "$Id: wildcmp.c,v 1.4 2003/05/05 06:45:37 kate Exp $";
-
 /* Wildcard matching. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
 
 #include "common.h"
+
+static char const rcsid[] = "$Id: wildcmp.c,v 1.5 2003/05/06 07:33:44 kate Exp $";
 
 static int subMatch(char *str, char *wild)
 /* Returns number of characters that match between str and wild up

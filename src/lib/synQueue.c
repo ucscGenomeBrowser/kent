@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: synQueue.c,v 1.2 2003/05/05 06:45:37 kate Exp $";
-
 /* synQueue - a sychronized message queue for messages between
  * threads. */
 
@@ -7,6 +5,8 @@ static char const rcsid[] = "$Id: synQueue.c,v 1.2 2003/05/05 06:45:37 kate Exp 
 #include "dlist.h"
 #include "pthreadWrap.h"
 #include "synQueue.h"
+
+static char const rcsid[] = "$Id: synQueue.c,v 1.3 2003/05/06 07:33:44 kate Exp $";
 
 struct synQueue
 /* A synchronized queue for messages between threads. */

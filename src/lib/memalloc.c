@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: memalloc.c,v 1.8 2003/05/05 06:45:35 kate Exp $";
-
 /* memalloc.c - Routines to allocate and deallocate dynamic memory. 
  * This lets you have a stack of memory handlers.  The default
  * memory handler is a thin shell around malloc/free.  You can
@@ -13,6 +11,8 @@ static char const rcsid[] = "$Id: memalloc.c,v 1.8 2003/05/05 06:45:35 kate Exp 
 #include "common.h"
 #include "memalloc.h"
 #include "dlist.h"
+
+static char const rcsid[] = "$Id: memalloc.c,v 1.9 2003/05/06 07:33:43 kate Exp $";
 
 static void *defaultAlloc(size_t size)
 /* Default allocator. */

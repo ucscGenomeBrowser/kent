@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: localmem.c,v 1.5 2003/05/05 06:45:34 kate Exp $";
-
 /* LocalMem.c - local memory routines. 
  * 
  * These routines are meant for the sort of scenario where
@@ -12,6 +10,8 @@ static char const rcsid[] = "$Id: localmem.c,v 1.5 2003/05/05 06:45:34 kate Exp 
 
 #include "common.h"
 #include "localmem.h"
+
+static char const rcsid[] = "$Id: localmem.c,v 1.6 2003/05/06 07:33:43 kate Exp $";
 
 struct lm
     {

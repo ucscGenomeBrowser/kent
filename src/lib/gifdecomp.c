@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: gifdecomp.c,v 1.2 2003/05/05 06:45:33 kate Exp $";
-
 /* decode.c - An LZW decoder for GIF
  * Copyright (C) 1987, by Steven A. Bennett
  *
@@ -20,6 +18,8 @@ static char const rcsid[] = "$Id: gifdecomp.c,v 1.2 2003/05/05 06:45:33 kate Exp
 
 #include "common.h"
 #include "gifcodes.h"
+
+static char const rcsid[] = "$Id: gifdecomp.c,v 1.3 2003/05/06 07:33:42 kate Exp $";
 
 
 /* extern int gif_get_byte()

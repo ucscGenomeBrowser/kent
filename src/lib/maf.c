@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: maf.c,v 1.9 2003/05/05 07:26:12 kent Exp $";
-
 /* maf.c - Read/write maf format. */
 #include "common.h"
 #include "linefile.h"
@@ -8,6 +6,8 @@ static char const rcsid[] = "$Id: maf.c,v 1.9 2003/05/05 07:26:12 kent Exp $";
 #include "dnautil.h"
 #include "axt.h"
 #include "maf.h"
+
+static char const rcsid[] = "$Id: maf.c,v 1.10 2003/05/06 07:33:43 kate Exp $";
 
 struct mafFile *mafMayOpen(char *fileName)
 /* Open up a maf file and verify header. */

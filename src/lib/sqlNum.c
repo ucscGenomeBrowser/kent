@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: sqlNum.c,v 1.6 2003/05/05 06:45:37 kate Exp $";
-
 /* sqlnum.c - Routines to convert from ascii to integer
  * representation of numbers. 
  *
@@ -8,6 +6,8 @@ static char const rcsid[] = "$Id: sqlNum.c,v 1.6 2003/05/05 06:45:37 kate Exp $"
 
 #include "common.h"
 #include "sqlNum.h"
+
+static char const rcsid[] = "$Id: sqlNum.c,v 1.7 2003/05/06 07:33:44 kate Exp $";
 
 unsigned sqlUnsigned(char *s)
 /* Convert series of digits to unsigned integer about

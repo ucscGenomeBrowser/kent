@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: ra.c,v 1.3 2003/05/05 06:45:36 kate Exp $";
-
 /* Stuff to parse .ra files. Ra files are simple text databases.
  * The database is broken into records by blank lines. 
  * Each field takes a line.  The name of the field is the first
@@ -13,6 +11,8 @@ static char const rcsid[] = "$Id: ra.c,v 1.3 2003/05/05 06:45:36 kate Exp $";
 #include "hash.h"
 #include "localmem.h"
 #include "ra.h"
+
+static char const rcsid[] = "$Id: ra.c,v 1.4 2003/05/06 07:33:44 kate Exp $";
 
 struct hash *raNextRecord(struct lineFile *lf)
 /* Return a hash containing next record.   

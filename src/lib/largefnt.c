@@ -1,8 +1,8 @@
-static char const rcsid[] = "$Id: largefnt.c,v 1.3 2003/05/05 06:45:34 kate Exp $";
-
 #include "common.h"
 #include "memgfx.h"
 #include "gemfont.h"
+
+static char const rcsid[] = "$Id: largefnt.c,v 1.4 2003/05/06 07:33:43 kate Exp $";
 
 static UBYTE largefnt_data[] = {
 0x0,0x0,0x0,0x0,0x0,0x0,0x40,0x0,

@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: errabort.c,v 1.9 2003/05/05 06:45:33 kate Exp $";
-
 /* ErrAbort.c - our error handler. 
  *
  * This maintains two stacks - a warning message printer
@@ -16,6 +14,8 @@ static char const rcsid[] = "$Id: errabort.c,v 1.9 2003/05/05 06:45:33 kate Exp 
 
 #include "common.h"
 #include "errabort.h"
+
+static char const rcsid[] = "$Id: errabort.c,v 1.10 2003/05/06 07:33:42 kate Exp $";
 
 static void defaultVaWarn(char *format, va_list args)
 /* Default error message handler. */

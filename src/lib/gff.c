@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: gff.c,v 1.10 2003/05/05 06:45:33 kate Exp $";
-
 /* gff - routines to read many types of gff and gtf files
  * and turn them into a relatively easy to deal with form
  * in memory.
@@ -11,6 +9,8 @@ static char const rcsid[] = "$Id: gff.c,v 1.10 2003/05/05 06:45:33 kate Exp $";
 #include "linefile.h"
 #include "gff.h"
 #include "obscure.h"
+
+static char const rcsid[] = "$Id: gff.c,v 1.11 2003/05/06 07:33:42 kate Exp $";
 
 void gffGroupFree(struct gffGroup **pGroup)
 /* Free up a gffGroup including lineList. */

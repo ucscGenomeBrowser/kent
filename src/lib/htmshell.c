@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: htmshell.c,v 1.16 2003/05/05 06:45:34 kate Exp $";
-
 /* htmshell - a shell to wrap around programs that generate
  * html files.  Write the html initial stuff (<head>, <body>, etc.)
  * and the final stuff too.  Also catch errors here so that
@@ -17,6 +15,8 @@ static char const rcsid[] = "$Id: htmshell.c,v 1.16 2003/05/05 06:45:34 kate Exp
 #include "htmshell.h"
 #include "errabort.h"
 #include "dnautil.h"
+
+static char const rcsid[] = "$Id: htmshell.c,v 1.17 2003/05/06 07:33:42 kate Exp $";
 
 jmp_buf htmlRecover;
 

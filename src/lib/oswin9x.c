@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: oswin9x.c,v 1.7 2003/05/05 06:45:35 kate Exp $";
-
 /* Stuff that's specific for Win95 goes here. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
@@ -8,6 +6,8 @@ static char const rcsid[] = "$Id: oswin9x.c,v 1.7 2003/05/05 06:45:35 kate Exp $
 #include <io.h>
 #include <direct.h>
 #include "portable.h"
+
+static char const rcsid[] = "$Id: oswin9x.c,v 1.8 2003/05/06 07:33:43 kate Exp $";
 
 /* Return how long the named file is in bytes. 
  * Return -1 if no such file. */

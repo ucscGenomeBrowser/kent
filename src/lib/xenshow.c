@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: xenshow.c,v 1.4 2003/05/05 06:45:37 kate Exp $";
-
 /* xenshow - show a cross-species alignment. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
@@ -7,6 +5,8 @@ static char const rcsid[] = "$Id: xenshow.c,v 1.4 2003/05/05 06:45:37 kate Exp $
 #include "common.h"
 #include "nt4.h"
 #include "xenalign.h"
+
+static char const rcsid[] = "$Id: xenshow.c,v 1.5 2003/05/06 07:33:44 kate Exp $";
 
 static void printMatchers(char *a, char *b, int lineSize, FILE *f)
 /* Print '|' where a[i] and b[i] match, ' ' where they don't */

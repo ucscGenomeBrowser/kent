@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: spaceSaver.c,v 1.6 2003/05/05 06:45:37 kate Exp $";
-
 /* spaceSaver - routines that help layout 1-D objects into a
  * minimum number of tracks so that no two objects overlap
  * within a single track. 
@@ -9,6 +7,8 @@ static char const rcsid[] = "$Id: spaceSaver.c,v 1.6 2003/05/05 06:45:37 kate Ex
 
 #include "common.h"
 #include "spaceSaver.h"
+
+static char const rcsid[] = "$Id: spaceSaver.c,v 1.7 2003/05/06 07:33:44 kate Exp $";
 
 struct spaceSaver *spaceSaverNew(int winStart, int winEnd, int maxRows)
 /* Create a new space saver around the given window.   */

@@ -1,11 +1,11 @@
-static char const rcsid[] = "$Id: ffScore.c,v 1.2 2003/05/05 06:45:33 kate Exp $";
-
 /* ffScore - stuff to score ffAli alignments. */
 
 #include "common.h"
 #include "dnautil.h"
 #include "obscure.h"
 #include "fuzzyFind.h"
+
+static char const rcsid[] = "$Id: ffScore.c,v 1.3 2003/05/06 07:33:42 kate Exp $";
 
 int ffScoreMatch(DNA *a, DNA *b, int size)
 /* Compare two pieces of DNA base by base. Total mismatches are

@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: dystring.c,v 1.10 2003/05/05 06:45:32 kate Exp $";
-
 /* dystring - dynamically resizing string. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
@@ -7,6 +5,8 @@ static char const rcsid[] = "$Id: dystring.c,v 1.10 2003/05/05 06:45:32 kate Exp
 
 #include "common.h"
 #include "dystring.h"
+
+static char const rcsid[] = "$Id: dystring.c,v 1.11 2003/05/06 07:33:42 kate Exp $";
 
 struct dyString *newDyString(int initialBufSize)
 /* Allocate dynamic string with initial buffer size.  (Pass zero for default) */

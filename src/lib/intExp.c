@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: intExp.c,v 1.5 2003/05/05 06:45:34 kate Exp $";
-
 /* Below is the worlds sleaziest little numerical expression
  * evaluator. Used to do only ints, now does doubles as well. 
  *
@@ -8,6 +6,8 @@ static char const rcsid[] = "$Id: intExp.c,v 1.5 2003/05/05 06:45:34 kate Exp $"
 
 #include "common.h"
 #include "kxTok.h"
+
+static char const rcsid[] = "$Id: intExp.c,v 1.6 2003/05/06 07:33:43 kate Exp $";
 
 static struct kxTok *tok;
 

@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: options.c,v 1.8 2003/05/05 06:45:35 kate Exp $";
-
 /* Options.c - stuff to handle command line options.
  * This is smaller and more flexible than the cgiSpoof
  * routines we used to use - though cgiSpoof is still the
@@ -11,6 +9,8 @@ static char const rcsid[] = "$Id: options.c,v 1.8 2003/05/05 06:45:35 kate Exp $
 #include "common.h"
 #include "hash.h"
 #include "options.h"
+
+static char const rcsid[] = "$Id: options.c,v 1.9 2003/05/06 07:33:43 kate Exp $";
 
 struct hash *optionParseIntoHash(int *pArgc, char *argv[], boolean justFirst)
 /* Read options in command line (only up to first real argument) into

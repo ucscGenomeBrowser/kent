@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: binRange.c,v 1.10 2003/05/05 06:45:31 kate Exp $";
-
 /* binRange Stuff to handle binning - which helps us restrict 
  * our attention to the parts of database that contain info
  * about a particular window on a chromosome. This scheme
@@ -14,6 +12,8 @@ static char const rcsid[] = "$Id: binRange.c,v 1.10 2003/05/05 06:45:31 kate Exp
 
 #include "common.h"
 #include "binRange.h"
+
+static char const rcsid[] = "$Id: binRange.c,v 1.11 2003/05/06 07:33:41 kate Exp $";
 
 static int binOffsets[] = {512+64+8+1, 64+8+1, 8+1, 1, 0};
 #define _binFirstShift 17	/* How much to shift to get to finest bin. */

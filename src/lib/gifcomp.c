@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: gifcomp.c,v 1.5 2003/05/05 06:45:33 kate Exp $";
-
 /* comprs.c - LZW compression code for GIF */
 
 /*
@@ -57,6 +55,8 @@ static char const rcsid[] = "$Id: gifcomp.c,v 1.5 2003/05/05 06:45:33 kate Exp $
 
 #include "common.h"
 #include <setjmp.h>
+
+static char const rcsid[] = "$Id: gifcomp.c,v 1.6 2003/05/06 07:33:42 kate Exp $";
 
 #define UBYTE unsigned char
 

@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: servcis.c,v 1.6 2003/05/05 06:45:36 kate Exp $";
-
 /* Stuff that's specific for Comp Science dept. web server goes here. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
@@ -10,6 +8,8 @@ static char const rcsid[] = "$Id: servcis.c,v 1.6 2003/05/05 06:45:36 kate Exp $
 #include "portimpl.h"
 #include "obscure.h"
 #include "hash.h"
+
+static char const rcsid[] = "$Id: servcis.c,v 1.7 2003/05/06 07:33:44 kate Exp $";
 
 
 static void _makeTempName(struct tempName *tn, char *base, char *suffix)

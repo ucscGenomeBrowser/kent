@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: codebias.c,v 1.4 2003/05/05 06:45:32 kate Exp $";
-
 /* codebias.c - stuff for managing codons and codon bias. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
@@ -9,6 +7,8 @@ static char const rcsid[] = "$Id: codebias.c,v 1.4 2003/05/05 06:45:32 kate Exp 
 #include "dnautil.h"
 #include "hmmstats.h"
 #include "codebias.h"
+
+static char const rcsid[] = "$Id: codebias.c,v 1.5 2003/05/06 07:33:41 kate Exp $";
 
 
 struct codonBias *codonLoadBias(char *fileName)

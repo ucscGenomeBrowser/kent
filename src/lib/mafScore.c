@@ -1,10 +1,10 @@
-static char const rcsid[] = "$Id: mafScore.c,v 1.4 2003/05/05 07:26:12 kent Exp $";
-
 /* Score mafs and subsets of maf. 
  * This module is from Webb Miller at PSU. */
 
 #include "common.h"
 #include "maf.h"
+
+static char const rcsid[] = "$Id: mafScore.c,v 1.5 2003/05/06 07:33:43 kate Exp $";
 
 
 typedef struct gap_scores {

@@ -1,10 +1,10 @@
-static char const rcsid[] = "$Id: gifwrite.c,v 1.4 2003/05/05 06:45:33 kate Exp $";
-
 /* writegif.c - stuff to write out a GIF file.  See also comprs.c */
 
 #include "common.h"
 #include "memgfx.h"
 #include "gifcodes.h"
+
+static char const rcsid[] = "$Id: gifwrite.c,v 1.5 2003/05/06 07:33:42 kate Exp $";
 
 static char gifsig[] = "GIF87a";
 

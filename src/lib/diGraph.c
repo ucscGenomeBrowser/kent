@@ -1,10 +1,10 @@
-static char const rcsid[] = "$Id: diGraph.c,v 1.4 2003/05/05 06:45:32 kate Exp $";
-
 /* diGraph - Directed graph routines. */
 #include "common.h"
 #include "hash.h"
 #include "dlist.h"
 #include "diGraph.h"
+
+static char const rcsid[] = "$Id: diGraph.c,v 1.5 2003/05/06 07:33:42 kate Exp $";
 
 struct diGraph *dgNew()
 /* Return a new directed graph object. */

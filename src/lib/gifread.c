@@ -1,11 +1,11 @@
-static char const rcsid[] = "$Id: gifread.c,v 1.2 2003/05/05 06:45:33 kate Exp $";
-
 /* gifread.c - The high level GIF reading routines.  See writegif for the
    write side.  Also gifdecode.c for lower level GIF reading code. */
 
 #include "common.h"
 #include "gifcodes.h"
 #include "memgfx.h"
+
+static char const rcsid[] = "$Id: gifread.c,v 1.3 2003/05/06 07:33:42 kate Exp $";
 
 static struct gif_header gif;
 static struct gif_image gim;

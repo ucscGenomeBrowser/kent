@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: nt4.c,v 1.3 2003/05/05 06:45:35 kate Exp $";
-
 /* nt4 - stuff to handle 2-bit-a-base representation of DNA.
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
@@ -11,6 +9,8 @@ static char const rcsid[] = "$Id: nt4.c,v 1.3 2003/05/05 06:45:35 kate Exp $";
 #include "dnaseq.h"
 #include "nt4.h"
 #include "sig.h"
+
+static char const rcsid[] = "$Id: nt4.c,v 1.4 2003/05/06 07:33:43 kate Exp $";
 
 static size_t bits32PaddedSize(size_t size)
 {

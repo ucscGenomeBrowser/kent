@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: slog.c,v 1.3 2003/05/05 06:45:36 kate Exp $";
-
 /* slog - fixed point scaled logarithm stuff. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
@@ -7,6 +5,8 @@ static char const rcsid[] = "$Id: slog.c,v 1.3 2003/05/05 06:45:36 kate Exp $";
 
 #include "common.h"
 #include "slog.h"
+
+static char const rcsid[] = "$Id: slog.c,v 1.4 2003/05/06 07:33:44 kate Exp $";
 
 double fSlogScale = 8192.0;	/* Convert to fixed point by multiplying by this. */
 double invSlogScale = 0.0001220703125; /* Conver back to floating point with this. */

@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: memgfx.c,v 1.33 2003/05/05 06:45:35 kate Exp $";
-
 /* memgfx - routines for drawing on bitmaps in memory.
  * Currently limited to 256 color bitmaps. 
  *
@@ -14,6 +12,8 @@ static char const rcsid[] = "$Id: memgfx.c,v 1.33 2003/05/05 06:45:35 kate Exp $
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 #include "colHash.h"
+
+static char const rcsid[] = "$Id: memgfx.c,v 1.34 2003/05/06 07:33:43 kate Exp $";
 
 static void mgSetDefaultColorMap(struct memGfx *mg)
 /* Set up default color map for a memGfx. */

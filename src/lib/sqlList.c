@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: sqlList.c,v 1.13 2003/05/05 06:45:37 kate Exp $";
-
 /* Stuff for processing comma separated lists - a little long so
  * in a separate module from jksql.c though interface is still
  * in jksql.c. 
@@ -11,6 +9,8 @@ static char const rcsid[] = "$Id: sqlList.c,v 1.13 2003/05/05 06:45:37 kate Exp 
 #include "sqlNum.h"
 #include "sqlList.h"
 #include "dystring.h"
+
+static char const rcsid[] = "$Id: sqlList.c,v 1.14 2003/05/06 07:33:44 kate Exp $";
 
 int sqlByteArray(char *s, signed char *array, int arraySize)
 /* Convert comma separated list of numbers to an array.  Pass in 

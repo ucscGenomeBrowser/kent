@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: dnaMarkov.c,v 1.2 2003/05/05 06:45:32 kate Exp $";
-
 /* dnaMarkov - stuff to build 1st, 2nd, 3rd, and coding
  * 3rd degree Markov models for DNA. */
 
@@ -8,6 +6,8 @@ static char const rcsid[] = "$Id: dnaMarkov.c,v 1.2 2003/05/05 06:45:32 kate Exp
 #include "dnaseq.h"
 #include "slog.h"
 #include "dnaMarkov.h"
+
+static char const rcsid[] = "$Id: dnaMarkov.c,v 1.3 2003/05/06 07:33:42 kate Exp $";
 
 void dnaMark0(struct dnaSeq *seqList, double mark0[5], int slogMark0[5])
 /* Figure out frequency of bases in input.  Results go into

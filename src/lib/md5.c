@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: md5.c,v 1.3 2003/05/05 06:45:34 kate Exp $";
-
 /*
  * RFC 1321 compliant MD5 implementation,
  * by Christophe Devine <devine@cr0.net>;
@@ -8,6 +6,8 @@ static char const rcsid[] = "$Id: md5.c,v 1.3 2003/05/05 06:45:34 kate Exp $";
 
 #include "common.h"
 #include "md5.h"
+
+static char const rcsid[] = "$Id: md5.c,v 1.4 2003/05/06 07:33:43 kate Exp $";
 
 #define GET_UINT32(n,b,i)					\
 {								\

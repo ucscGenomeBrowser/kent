@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: seqOut.c,v 1.13 2003/05/05 06:45:36 kate Exp $";
-
 /* seqOut - stuff to output sequences and alignments in web 
  * or ascii viewable form. 
  *
@@ -12,6 +10,8 @@ static char const rcsid[] = "$Id: seqOut.c,v 1.13 2003/05/05 06:45:36 kate Exp $
 #include "fuzzyFind.h"
 #include "seqOut.h"
 #include "htmshell.h"
+
+static char const rcsid[] = "$Id: seqOut.c,v 1.14 2003/05/06 07:33:44 kate Exp $";
 
 struct cfm *cfmNew(int wordLen, int lineLen, 
 	boolean lineNumbers, boolean countDown, FILE *out, int numOff)

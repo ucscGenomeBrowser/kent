@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: psGfx.c,v 1.10 2003/05/05 06:45:35 kate Exp $";
-
 /* PostScript graphics - 
  * This provides a bit of a shell around writing graphics to
  * a postScript file.  Perhaps the most important thing it
@@ -7,6 +5,8 @@ static char const rcsid[] = "$Id: psGfx.c,v 1.10 2003/05/05 06:45:35 kate Exp $"
  * being at the top left. */
 #include "common.h"
 #include "psGfx.h"
+
+static char const rcsid[] = "$Id: psGfx.c,v 1.11 2003/05/06 07:33:43 kate Exp $";
 
 static void psFloatOut(FILE *f, double x)
 /* Write out a floating point number, but not in too much

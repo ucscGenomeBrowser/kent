@@ -1,9 +1,9 @@
-static char const rcsid[] = "$Id: mafFromAxt.c,v 1.2 2003/05/05 06:45:34 kate Exp $";
-
 /* mafFromAxt - convert a axt into maf. */
 #include "common.h"
 #include "axt.h"
 #include "maf.h"
+
+static char const rcsid[] = "$Id: mafFromAxt.c,v 1.3 2003/05/06 07:33:43 kate Exp $";
 
 void mafFromAxtTemp(struct axt *axt, int tSize, int qSize,
 	struct mafAli *temp)

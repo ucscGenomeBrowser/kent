@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: xa.c,v 1.4 2003/05/05 06:45:37 kate Exp $";
-
 /* xao.c - Manage cross-species alignments in Intronerator database. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
@@ -7,6 +5,8 @@ static char const rcsid[] = "$Id: xa.c,v 1.4 2003/05/05 06:45:37 kate Exp $";
 #include "common.h"
 #include "sig.h"
 #include "xa.h"
+
+static char const rcsid[] = "$Id: xa.c,v 1.5 2003/05/06 07:33:44 kate Exp $";
 
 void xaAliFree(struct xaAli *xa)
 /* Free up a single xaAli. */

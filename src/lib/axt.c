@@ -19,7 +19,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.23 2003/05/06 07:33:41 kate Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -35,14 +35,10 @@ if (el != NULL)
     }
 }
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
 void axtFreeList(struct axt **pList)
 /* Free a list of dynamically allocated axt's */
 {
 struct axt *el, *next;
-
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
 
 for (el = *pList; el != NULL; el = next)
     {
@@ -52,10 +48,6 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
-
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
 
 struct axt *axtRead(struct lineFile *lf)
 /* Read in next record from .axt file and return it.
@@ -65,16 +57,12 @@ char *words[10], *line;
 int wordCount, symCount;
 struct axt *axt;
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
 wordCount = lineFileChop(lf, words);
 if (wordCount <= 0)
     return NULL;
 if (wordCount < 8)
     errAbort("Expecting at least 8 words line %d of %s\n", lf->lineIx, lf->fileName);
 AllocVar(axt);
-
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
 
 axt->qName = cloneString(words[4]);
 axt->qStart = lineFileNeedNum(lf, words, 5) - 1;
@@ -98,8 +86,6 @@ lineFileNext(lf, &line, NULL);	/* Skip blank line */
 return axt;
 }
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
 void axtWrite(struct axt *axt, FILE *f)
 /* Output axt to axt file. */
 {
@@ -116,8 +102,6 @@ fputc('\n', f);
 fputc('\n', f);
 }
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
 int axtCmpQuery(const void *va, const void *vb)
 /* Compare to sort based on query position. */
 {
@@ -129,8 +113,6 @@ if (dif == 0)
     dif = a->qStart - b->qStart;
 return dif;
 }
-
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
 
 int axtCmpTarget(const void *va, const void *vb)
 /* Compare to sort based on target position. */
@@ -144,8 +126,6 @@ if (dif == 0)
 return dif;
 }
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
 int axtCmpScore(const void *va, const void *vb)
 /* Compare to sort based on score. */
 {
@@ -154,10 +134,6 @@ const struct axt *b = *((struct axt **)vb);
 return b->score - a->score;
 }
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
-
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
 
 boolean axtCheck(struct axt *axt, struct lineFile *lf)
 /* Return FALSE if there's a problem with axt. */
@@ -179,8 +155,6 @@ if (qSize != axt->qEnd - axt->qStart)
 return TRUE;
 }
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
 int axtScoreUngapped(struct axtScoreScheme *ss, char *q, char *t, int size)
 /* Score ungapped alignment. */
 {
@@ -191,8 +165,6 @@ for (i=0; i<size; ++i)
 return score;
 }
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
 int axtScoreSym(struct axtScoreScheme *ss, int symCount, char *qSym, char *tSym)
 /* Return score without setting up an axt structure. */
 {
@@ -202,8 +174,6 @@ int score = 0;
 boolean lastGap = FALSE;
 int gapStart = ss->gapOpen;
 int gapExt = ss->gapExtend;
-
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
 
 dnaUtilOpen();
 for (i=0; i<symCount; ++i)
@@ -229,15 +199,11 @@ for (i=0; i<symCount; ++i)
 return score;
 }
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
 int axtScore(struct axt *axt, struct axtScoreScheme *ss)
 /* Return calculated score of axt. */
 {
 return axtScoreSym(ss, axt->symCount, axt->qSym, axt->tSym);
 }
-
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
 
 int axtScoreDnaDefault(struct axt *axt)
 /* Score DNA-based axt using default scheme. */
@@ -248,8 +214,6 @@ if (ss == NULL)
 return axtScore(axt, ss);
 }
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
 int axtScoreProteinDefault(struct axt *axt)
 /* Score protein-based axt using default scheme. */
 {
@@ -258,8 +222,6 @@ if (ss == NULL)
     ss = axtScoreSchemeProteinDefault();
 return axtScore(axt, ss);
 }
-
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
 
 void axtSubsetOnT(struct axt *axt, int newStart, int newEnd, 
 	struct axtScoreScheme *ss, FILE *f)
@@ -297,8 +259,6 @@ else
     }
 }
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
 int axtTransPosToQ(struct axt *axt, int tPos)
 /* Convert from t to q coordinates */
 {
@@ -308,15 +268,11 @@ int qPos = countNonDash(axt->qSym, symIx);
 return qPos + axt->qStart;
 }
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
 static void shortScoreScheme(struct lineFile *lf)
 /* Complain about score file being to short. */
 {
 errAbort("Scoring matrix file %s too short\n", lf->fileName);
 }
-
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
 
 static void propagateCase(struct axtScoreScheme *ss)
 /* Propagate score matrix from lower case to mixed case
@@ -324,8 +280,6 @@ static void propagateCase(struct axtScoreScheme *ss)
 {
 static int twoCase[2][4] = {{'a', 'c', 'g', 't'},{'A','C','G','T'},};
 int i1,i2,j1,j2;
-
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
 
 /* Propagate to other case combinations. */
 for (i1=0; i1<=1; ++i1)
@@ -341,21 +295,15 @@ for (i1=0; i1<=1; ++i1)
        }
 }
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
 struct axtScoreScheme *axtScoreSchemeDefault()
 /* Return default scoring scheme (after blastz).  Do NOT axtScoreSchemeFree
  * this. */
 {
 static struct axtScoreScheme *ss;
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
 if (ss != NULL)
     return ss;
 AllocVar(ss);
-
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
 
 /* Set up lower case elements of matrix. */
 ss->matrix['a']['a'] = 91;
@@ -363,28 +311,20 @@ ss->matrix['a']['c'] = -114;
 ss->matrix['a']['g'] = -31;
 ss->matrix['a']['t'] = -123;
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
 ss->matrix['c']['a'] = -114;
 ss->matrix['c']['c'] = 100;
 ss->matrix['c']['g'] = -125;
 ss->matrix['c']['t'] = -31;
-
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
 
 ss->matrix['g']['a'] = -31;
 ss->matrix['g']['c'] = -125;
 ss->matrix['g']['g'] = 100;
 ss->matrix['g']['t'] = -114;
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
 ss->matrix['t']['a'] = -123;
 ss->matrix['t']['c'] = -31;
 ss->matrix['t']['g'] = -114;
 ss->matrix['t']['t'] = 91;
-
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
 
 propagateCase(ss);
 ss->gapOpen = 400;
@@ -392,15 +332,11 @@ ss->gapExtend = 30;
 return ss;
 }
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
 struct axtScoreScheme *axtScoreSchemeSimpleDna(int match, int misMatch, int gapOpen, int gapExtend)
 /* Return a relatively simple scoring scheme for DNA. */
 {
 static struct axtScoreScheme *ss;
 AllocVar(ss);
-
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
 
 /* Set up lower case elements of matrix. */
 ss->matrix['a']['a'] = match;
@@ -408,36 +344,26 @@ ss->matrix['a']['c'] = -misMatch;
 ss->matrix['a']['g'] = -misMatch;
 ss->matrix['a']['t'] = -misMatch;
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
 ss->matrix['c']['a'] = -misMatch;
 ss->matrix['c']['c'] = match;
 ss->matrix['c']['g'] = -misMatch;
 ss->matrix['c']['t'] = -misMatch;
-
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
 
 ss->matrix['g']['a'] = -misMatch;
 ss->matrix['g']['c'] = -misMatch;
 ss->matrix['g']['g'] = match;
 ss->matrix['g']['t'] = -misMatch;
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
 ss->matrix['t']['a'] = -misMatch;
 ss->matrix['t']['c'] = -misMatch;
 ss->matrix['t']['g'] = -misMatch;
 ss->matrix['t']['t'] = match;
-
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
 
 propagateCase(ss);
 ss->gapOpen = gapOpen;
 ss->gapExtend = gapExtend;
 return ss;
 }
-
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
 
 struct axtScoreScheme *axtScoreSchemeRnaDefault()
 /* Return default scoring scheme for RNA/DNA alignments
@@ -449,8 +375,6 @@ if (ss == NULL)
 return ss;
 }
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
 struct axtScoreScheme *axtScoreSchemeRnaFill()
 /* Return scoreing scheme a little more relaxed than 
  * RNA/DNA defaults for filling in gaps. */
@@ -461,10 +385,6 @@ if (ss == NULL)
 return ss;
 }
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
-
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
 
 static char blosumText[] = {
 "#  Matrix made by matblas from blosum62.iij\n"
@@ -500,15 +420,11 @@ static char blosumText[] = {
 "* -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4  1 \n"
 };
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
 static void badProteinMatrixLine(int lineIx, char *fileName)
 /* Explain line syntax for protein matrix and abort */
 {
 errAbort("Expecting letter and 25 numbers line %d of %s", lineIx, fileName);
 }
-
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
 
 struct axtScoreScheme *axtScoreSchemeFromProteinText(char *text, char *fileName)
 /* Parse text into a scoring scheme.  This should be in BLAST protein matrix
@@ -521,8 +437,6 @@ char columns[24];
 char *row[25];
 int i;
 struct axtScoreScheme *ss;
-
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
 
 AllocVar(ss);
 for (line = text; line != NULL; line = nextLine)
@@ -572,8 +486,6 @@ if (realCount < 25)
 return ss;
 }
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
 struct axtScoreScheme *axtScoreSchemeProteinDefault()
 /* Returns default protein scoring scheme.  This is
  * scaled to be compatible with the blastz one. */
@@ -591,15 +503,11 @@ ss->gapExtend = 80;
 return ss;
 }
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
 void axtScoreSchemeFree(struct axtScoreScheme **pObj)
 /* Free up score scheme. */
 {
 freez(pObj);
 }
-
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
 
 struct axtScoreScheme *axtScoreSchemeRead(char *fileName)
 /* Read in scoring scheme from file. Looks like
@@ -617,8 +525,6 @@ int i,j, partCount;
 struct axtScoreScheme *ss;
 boolean gotO = FALSE, gotE = FALSE;
 static int trans[4] = {'a', 'c', 'g', 't'};
-
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
 
 AllocVar(ss);
 if (!lineFileRow(lf, row))
@@ -656,14 +562,10 @@ propagateCase(ss);
 return ss;
 }
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
 void axtSwap(struct axt *axt, int tSize, int qSize)
 /* Flip target and query on one axt. */
 {
 struct axt old = *axt;
-
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
 
 /* Copy non-strand dependent stuff */
 axt->qName = old.tName;
@@ -675,12 +577,8 @@ axt->qEnd = old.tEnd;
 axt->tStart = old.qStart;
 axt->tEnd = old.qEnd;
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
 /* Copy strand dependent stuff. */
 assert(axt->tStrand != '-');
-
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
 
 if (axt->qStrand == '-')
     {
@@ -695,8 +593,6 @@ if (axt->qStrand == '-')
     }
 }
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
 void axtBundleFree(struct axtBundle **pObj)
 /* Free a axtBundle. */
 {
@@ -708,14 +604,10 @@ if (obj != NULL)
     }
 }
 
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
-
 void axtBundleFreeList(struct axtBundle **pList)
 /* Free a list of axtBundles. */
 {
 struct axtBundle *el, *next;
-
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
 
 for (el = *pList; el != NULL; el = next)
     {
@@ -724,6 +616,4 @@ for (el = *pList; el != NULL; el = next)
     }
 *pList = NULL;
 }
-
-static char const rcsid[] = "$Id: axt.c,v 1.22 2003/05/06 07:00:16 kate Exp $";
 

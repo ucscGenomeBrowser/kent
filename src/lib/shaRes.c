@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: shaRes.c,v 1.3 2003/05/05 06:45:36 kate Exp $";
-
 /* ShaRes.c - implementation of shared resources 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
@@ -7,6 +5,8 @@ static char const rcsid[] = "$Id: shaRes.c,v 1.3 2003/05/05 06:45:36 kate Exp $"
 
 #include "common.h"
 #include "shaRes.h"
+
+static char const rcsid[] = "$Id: shaRes.c,v 1.4 2003/05/06 07:33:44 kate Exp $";
 
 static void shaFreeNode(struct shaResNode *node)
 /* Free a node.  (Don't look at link count, just do it.) */

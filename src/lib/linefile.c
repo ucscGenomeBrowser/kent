@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: linefile.c,v 1.19 2003/05/05 06:45:34 kate Exp $";
-
 /* lineFile - stuff to rapidly read text files and parse them into
  * lines. 
  *
@@ -12,6 +10,8 @@ static char const rcsid[] = "$Id: linefile.c,v 1.19 2003/05/05 06:45:34 kate Exp
 #include "errabort.h"
 #include "linefile.h"
 #include <sys/vfs.h>
+
+static char const rcsid[] = "$Id: linefile.c,v 1.20 2003/05/06 07:33:43 kate Exp $";
 
 struct lineFile *lineFileAttatch(char *fileName, bool zTerm, int fd)
 /* Wrap a line file around an open'd file. */

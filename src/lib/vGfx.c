@@ -1,11 +1,11 @@
-static char const rcsid[] = "$Id: vGfx.c,v 1.3 2003/05/05 06:45:37 kate Exp $";
-
 /* vGfx - interface to polymorphic graphic object
  * that currently can either be a memory buffer or
  * a postScript file. */
 
 #include "common.h"
 #include "vGfx.h"
+
+static char const rcsid[] = "$Id: vGfx.c,v 1.4 2003/05/06 07:33:44 kate Exp $";
 
 
 /* Most of the implementation of this is in macros in vGfx.h. */

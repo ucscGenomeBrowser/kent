@@ -1,11 +1,11 @@
-static char const rcsid[] = "$Id: dlist.c,v 1.5 2003/05/05 06:45:32 kate Exp $";
-
 /* dlist.c - Doubly-linked list routines. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
 #include "common.h"
 #include "dlist.h"
+
+static char const rcsid[] = "$Id: dlist.c,v 1.6 2003/05/06 07:33:42 kate Exp $";
 
 void dlListInit(struct dlList *dl)
 /* Initialize list to be empty */

@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: pthreadWrap.c,v 1.2 2003/05/05 06:45:35 kate Exp $";
-
 /* pthreadWrap - error checking wrappers around Posix
  * thread functions.  Most of the errors here are invariably
  * fatal, but shouldn't happen unless the kernal or
@@ -8,6 +6,8 @@ static char const rcsid[] = "$Id: pthreadWrap.c,v 1.2 2003/05/05 06:45:35 kate E
 #include "common.h"
 #include "errabort.h"
 #include "pthreadWrap.h"
+
+static char const rcsid[] = "$Id: pthreadWrap.c,v 1.3 2003/05/06 07:33:44 kate Exp $";
 
 static void pwarn(char *function, int err)
 /* Print a warning message on non-zero error code. */

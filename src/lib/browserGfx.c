@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: browserGfx.c,v 1.5 2003/05/05 06:45:32 kate Exp $";
-
 /* Browser graphics - stuff for drawing graphics displays that
  * are reasonably browser (human and intronerator) specific. */
 
@@ -7,6 +5,8 @@ static char const rcsid[] = "$Id: browserGfx.c,v 1.5 2003/05/05 06:45:32 kate Ex
 #include "memgfx.h"
 #include "vGfx.h"
 #include "browserGfx.h"
+
+static char const rcsid[] = "$Id: browserGfx.c,v 1.6 2003/05/06 07:33:41 kate Exp $";
 
 
 static long figureTickSpan(long totalLength, int maxNumTicks)

@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: chainToPsl.c,v 1.2 2003/05/05 06:45:32 kate Exp $";
-
 /* chainToPsl - convert between chains and psl.  Both of these
  * are alignment formats that can handle gaps in both strands
  * and do not include the sequence itself. */
@@ -9,6 +7,8 @@ static char const rcsid[] = "$Id: chainToPsl.c,v 1.2 2003/05/05 06:45:32 kate Ex
 #include "hash.h"
 #include "psl.h"
 #include "chain.h"
+
+static char const rcsid[] = "$Id: chainToPsl.c,v 1.3 2003/05/06 07:33:41 kate Exp $";
 
 
 struct psl *chainToPsl(struct chain *chain)

@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: net.c,v 1.24 2003/05/05 06:45:35 kate Exp $";
-
 /* net.c some stuff to wrap around net communications. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
@@ -13,6 +11,8 @@ static char const rcsid[] = "$Id: net.c,v 1.24 2003/05/05 06:45:35 kate Exp $";
 #include "errabort.h"
 #include "net.h"
 #include "linefile.h"
+
+static char const rcsid[] = "$Id: net.c,v 1.25 2003/05/06 07:33:43 kate Exp $";
 
 /* Brought errno in to get more useful error messages */
 

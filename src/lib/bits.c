@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: bits.c,v 1.9 2003/05/05 06:45:31 kate Exp $";
-
 /* bits - handle operations on arrays of bits. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
@@ -7,6 +5,8 @@ static char const rcsid[] = "$Id: bits.c,v 1.9 2003/05/05 06:45:31 kate Exp $";
 
 #include "common.h"
 #include "bits.h"
+
+static char const rcsid[] = "$Id: bits.c,v 1.10 2003/05/06 07:33:41 kate Exp $";
 
 
 static Bits oneBit[8] = { 0x80, 0x40, 0x20, 0x10, 0x8, 0x4, 0x2, 0x1};

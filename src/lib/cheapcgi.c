@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.45 2003/05/05 06:45:32 kate Exp $";
-
 /* Routines for getting variables passed in from web page
  * forms via CGI. 
  *
@@ -11,6 +9,8 @@ static char const rcsid[] = "$Id: cheapcgi.c,v 1.45 2003/05/05 06:45:32 kate Exp
 #include "cheapcgi.h"
 #include "portable.h"
 #include "linefile.h"
+
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.46 2003/05/06 07:33:41 kate Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;

@@ -1,9 +1,9 @@
-static char const rcsid[] = "$Id: internet.c,v 1.6 2003/05/05 06:45:34 kate Exp $";
-
 /* internet - some stuff to make it easier to use
  * internet sockets and the like. */
 #include "common.h"
 #include "internet.h"
+
+static char const rcsid[] = "$Id: internet.c,v 1.7 2003/05/06 07:33:43 kate Exp $";
 
 bits32 internetHostIp(char *hostName)
 /* Get IP v4 address (in host byte order) for hostName.

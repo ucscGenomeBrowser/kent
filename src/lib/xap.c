@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: xap.c,v 1.6 2003/05/05 06:45:37 kate Exp $";
-
 /* xap - XML Automatic Parser - together with autoXml this helps automatically
  * read in automatically generated data structures.  Calls lower level routine
  * in xp module, which originally was just a thin shell around expat. 
@@ -11,6 +9,8 @@ static char const rcsid[] = "$Id: xap.c,v 1.6 2003/05/05 06:45:37 kate Exp $";
 #include "xap.h"
 #include "errabort.h"
 #include "xp.h"
+
+static char const rcsid[] = "$Id: xap.c,v 1.7 2003/05/06 07:33:44 kate Exp $";
 
 void xapError(struct xap *xap, char *format, ...)
 /* Issue an error message and abort*/

@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: hash.c,v 1.12 2003/05/05 06:45:34 kate Exp $";
-
 /* Hash.c - implements hashing. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
@@ -9,6 +7,8 @@ static char const rcsid[] = "$Id: hash.c,v 1.12 2003/05/05 06:45:34 kate Exp $";
 #include "localmem.h"
 #include "hash.h"
 #include "obscure.h"
+
+static char const rcsid[] = "$Id: hash.c,v 1.13 2003/05/06 07:33:42 kate Exp $";
 
 bits32 hashCrc(char *string)
 /* Returns a CRC value on string. */

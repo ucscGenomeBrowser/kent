@@ -1,11 +1,11 @@
-static char const rcsid[] = "$Id: dgRange.c,v 1.2 2003/05/05 06:45:32 kate Exp $";
-
 /* dgRange - stuff to tell if a graph which has a range
  * of values associated with each edge is internally consistent.  
  * See comment under bfGraphFromRangeGraph for details. */
 
 #include "common.h"
 #include "diGraph.h"
+
+static char const rcsid[] = "$Id: dgRange.c,v 1.3 2003/05/06 07:33:42 kate Exp $";
 
 struct bfEdge
 /* An edge in a (lightweight) Belman Ford graph. */

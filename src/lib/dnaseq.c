@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: dnaseq.c,v 1.12 2003/05/05 06:45:32 kate Exp $";
-
 /* dnaSeq.c - stuff to manage DNA sequences. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
@@ -8,6 +6,8 @@ static char const rcsid[] = "$Id: dnaseq.c,v 1.12 2003/05/05 06:45:32 kate Exp $
 #include "common.h"
 #include "dnaseq.h"
 #include "bits.h"
+
+static char const rcsid[] = "$Id: dnaseq.c,v 1.13 2003/05/06 07:33:42 kate Exp $";
 
 
 struct dnaSeq *newDnaSeq(DNA *dna, int size, char *name)

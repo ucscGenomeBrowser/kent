@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: oldGff.c,v 1.4 2003/05/05 06:45:35 kate Exp $";
-
 /* oldGff - module for reading GFFs.  This is largely if not
  * entirely superceded by the gff module. 
  *
@@ -14,6 +12,8 @@ static char const rcsid[] = "$Id: oldGff.c,v 1.4 2003/05/05 06:45:35 kate Exp $"
 #include "htmshell.h"
 #include "portable.h"
 #include "localmem.h"
+
+static char const rcsid[] = "$Id: oldGff.c,v 1.5 2003/05/06 07:33:43 kate Exp $";
 
 #define errfile stdout
 

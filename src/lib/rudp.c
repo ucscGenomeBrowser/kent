@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: rudp.c,v 1.10 2003/05/05 06:45:36 kate Exp $";
-
 /* rudp - (semi) reliable UDP communication.  This adds an
  * acknowledgement and resend layer on top of UDP. 
  *
@@ -56,6 +54,8 @@ static char const rcsid[] = "$Id: rudp.c,v 1.10 2003/05/05 06:45:36 kate Exp $";
 #include <netinet/in.h>
 #include "errabort.h"
 #include "rudp.h"
+
+static char const rcsid[] = "$Id: rudp.c,v 1.11 2003/05/06 07:33:44 kate Exp $";
 
 #define MAX_TIME_OUT 999999
 

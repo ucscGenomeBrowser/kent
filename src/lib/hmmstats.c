@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: hmmstats.c,v 1.3 2003/05/05 06:45:34 kate Exp $";
-
 /* hmmstats.c - Stuff for doing statistical analysis in general and 
  * hidden Markov models in particular. 
  *
@@ -8,6 +6,8 @@ static char const rcsid[] = "$Id: hmmstats.c,v 1.3 2003/05/05 06:45:34 kate Exp 
 
 #include "common.h"
 #include "hmmstats.h"
+
+static char const rcsid[] = "$Id: hmmstats.c,v 1.4 2003/05/06 07:33:42 kate Exp $";
 
 int scaledLog(double val)
 /* Return scaled log of val. */

@@ -1,5 +1,3 @@
-static char const rcsid[] = "$Id: chain.c,v 1.5 2003/05/05 06:45:32 kate Exp $";
-
 /* chain - pairwise alignments that can include gaps in both
  * sequences at once.  This is similar in many ways to psl,
  * but more suitable to cross species genomic comparisons. */
@@ -7,6 +5,8 @@ static char const rcsid[] = "$Id: chain.c,v 1.5 2003/05/05 06:45:32 kate Exp $";
 #include "linefile.h"
 #include "dnautil.h"
 #include "chain.h"
+
+static char const rcsid[] = "$Id: chain.c,v 1.6 2003/05/06 07:33:41 kate Exp $";
 
 void chainFree(struct chain **pChain)
 /* Free up a chain. */
