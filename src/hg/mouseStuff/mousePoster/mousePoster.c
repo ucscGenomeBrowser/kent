@@ -28,6 +28,7 @@
 
 /* Which database to use */
 char *database = "mm2";
+char *humanDb = "hg10";
 
 /* Location of mouse/human axt files. */
 char *axtDir = "/cluster/store2/mm.2002.02/mm2/bed/blastz.gs11.2002-06-05/axtBestUnzip";
@@ -48,13 +49,16 @@ char *stockFile = "/cluster/store2/mm.2002.02/mm2/bed/poster/stockMice.rpt";
 char *diseaseStockFile = "/cluster/store2/mm.2002.02/mm2/bed/poster/diseaseStockMice.rpt";
 
 /* Quantitative trait locus file. */
-char *qtlFile = "/cluster/store2/mm.2002.02/mm2/bed/poster/mgi_qtl.rpt";
+char *qtlFile = "/cluster/store2/mm.2002.02/mm2/bed/poster/all.q";
 
 /* File with synteny info */
 char *syntenyFile = "/cluster/store2/mm.2002.02/mm2/bed/synteny/synteny.bed";
 
 /* Resolved duplications file. */
 char *bestDupFile = "/cluster/store2/mm.2002.02/mm2/bed/poster/dupe.rpt";
+
+/* Misplaced gene file. */
+char *misplacedFile = "/cluster/store2/mm.2002.02/mm2/bed/poster/misplace.rpt";
 
 /* Unresolved dupe output. */
 FILE *dupeFile;
@@ -166,6 +170,32 @@ slReverse(&rdList);
 uglyf("Got %d resolved duplications\n", slCount(rdList));
 }
 
+void makeMisplaced(struct hash *misplacedHash, struct hash *resolvedDupHash)
+/* Make up misplaced hash */
+{
+struct lineFile *lf = lineFileOpen(misplacedFile, TRUE);
+char *row[8];
+int missCount = 0, resolvedDupeCount = 0;
+while (lineFileRow(lf, row))
+    {
+    if (!sameString(row[0], row[2]))
+	{
+	char *name = row[1];
+	if (hashLookup(resolvedDupHash, name))
+	    {
+	    ++resolvedDupeCount;
+	    }
+	else
+	    {
+	    hashAdd(misplacedHash, row[1], NULL);
+	    ++missCount;
+	    }
+	}
+    }
+lineFileClose(&lf);
+printf("Found %d misplaced (%d resolved dupes) in %s\n", 
+	missCount, resolvedDupeCount, misplacedFile);
+}
 
 struct hash *makeLocusLinkToJaxHash(struct sqlConnection *conn)
 /* Make hash keyed by locus link ID with value 
@@ -374,9 +404,11 @@ return strcmp(a->name, b->name);
 }
 
 
-void getKnownGenes(struct chromGaps *cg, char *chrom, struct sqlConnection *conn, FILE *f, 
+void getKnownGenes(struct chromGaps *cg, char *chrom, 
+	struct sqlConnection *conn, FILE *f, 
 	struct hash *dupHash, struct hash *resolvedDupHash, 
-	struct hash *yellowHash, struct hash *redHash, struct hash *greenHash)
+	struct hash *yellowHash, struct hash *redHash, struct hash *greenHash,
+	struct hash *misplacedHash)
 /* Get info on known genes. */
 {
 int rowOffset;
@@ -386,8 +418,8 @@ char query[256];
 struct genePred *gpList = NULL, *gp;
 char geneName[64];
 static struct rgbColor red = {255, 0, 0};
-static struct rgbColor green = {0, 200, 0};
-static struct rgbColor yellow = {200, 200, 0};
+static struct rgbColor green = {0, 190, 0};
+static struct rgbColor yellow = {190, 150, 0};
 static struct rgbColor blue = {0, 0, 220};
 struct rgbColor *col;
 boolean keepGene;
@@ -460,6 +492,11 @@ for (gp = gpList; gp != NULL; gp = gp->next)
 	    else
 		showIt = FALSE;
 	    uglyf("Resolving dup %s (%d) at %s:%d-%d\n", geneName, showIt, chrom, gp->cdsStart, gp->cdsEnd);
+	    }
+	if (hashLookup(misplacedHash, geneName))
+	    {
+	    uglyf("Suppressing misplaced %s\n", geneName);
+	    showIt = FALSE;
 	    }
 	if (showIt)
 	    {
@@ -562,9 +599,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     rnaGeneStaticLoad(row + rowOffset, &el);
     if (el.isPsuedo)
         {
-	r = 255;
-	g = 215;
-	b = 180;
+	r = 250;
+	g = 210;
+	b = 175;
 	}
     else
         {
@@ -608,7 +645,7 @@ sqlFreeResult(&sr);
 void getFishBlatHits(struct chromGaps *cg, char *chrom, struct sqlConnection *conn, FILE *f)
 /* Get Fish Blat stuff. */
 {
-getPslTicks("blatFish", "tetraodon", 0, 70, 120, cg, chrom, conn, f);
+getPslTicks("blatFish", "tetraodon", 0, 90, 180, cg, chrom, conn, f);
 }
 
 
@@ -626,6 +663,7 @@ int rowOffset;
 struct sqlResult *sr = hChromQuery(conn, "gcPercent", chrom, NULL, &rowOffset);
 char **row;
 struct gcPercent *el;
+double minScale = 5, maxScale = 0;
 
 printf("  getting GC wiggle\n");
 while ((row = sqlNextRow(sr)) != NULL)
@@ -634,7 +672,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (el->gcPpt != 0)
         {
 	double scale;
-	scale = (el->gcPpt - 300)*0.00300;
+	scale = (el->gcPpt - 320.0)*1.0/(570-320);
+	if (scale < minScale) minScale = scale;
+	if (scale > maxScale) maxScale = scale;
 	if (scale > 1) scale = 1;
 	if (scale < 0) scale = 0;
 	printTabNum(f, cg, chrom, el->chromStart, el->chromEnd, 
@@ -642,6 +682,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     gcPercentFree(&el);
     }
+printf("   min %f, max %f\n", minScale, maxScale);
 sqlFreeResult(&sr);
 }
 
@@ -978,19 +1019,27 @@ return &chromColorTable[ix];
 void getSynteny(struct chromGaps *cg, char *chrom, FILE *f)
 /* Read synteny file and put relevant parts in output */
 {
+struct sqlConnection *hConn = sqlConnect(humanDb);
 struct lineFile *lf = lineFileOpen(syntenyFile, TRUE);
 char *row[7];
 while (lineFileRow(lf, row))
     {
     if (sameString(chrom, row[0]))
         {
-	char *mouse = row[3];
-	struct rgbColor *col = chromColor(mouse);
+	char *hChrom = row[3];
+	int hs = lineFileNeedNum(lf, row, 4);
+	int he = lineFileNeedNum(lf, row, 5);
+	char *strand = row[6];
+	char band[65];
+	struct rgbColor *col = chromColor(hChrom);
+	band[0] = strand[0];
+	hChromBandConn(hConn, hChrom, (hs+he)/2, band+1);
 	printTab(f, cg, chrom, atoi(row[1]), atoi(row[2]), 
-		"synteny", "box", col->r, col->g, col->b, mouse+3);
+		"synteny", "box", col->r, col->g, col->b, band);
 	}
     }
 lineFileClose(&lf);
+sqlDisconnect(&hConn);
 }
 
 void getQtl(struct chromGaps *cg, char *fileName, char *chrom, FILE *f)
@@ -998,36 +1047,33 @@ void getQtl(struct chromGaps *cg, char *fileName, char *chrom, FILE *f)
 {
 char *line;
 char *row[9];
-int fieldCount;
-int doLong;
-
-for (doLong = 0; doLong <= 1; ++doLong)
+int i, fieldCount;
+struct lineFile *lf = lineFileOpen(qtlFile, TRUE);
+while (lineFileNext(lf, &line, NULL))
     {
-    struct lineFile *lf = lineFileOpen(qtlFile, TRUE);
-    char *type = (doLong ? "QTL" : "QTL_SHORT");
-    int nameField = (doLong ? 3 : 2);
-    while (lineFileNext(lf, &line, NULL))
+    line = skipLeadingSpaces(line);
+    if (line[0] == '#' || line[0] == 0)
+	continue;
+    for (i=0; i<3; ++i)
+        row[i] = nextWord(&line);
+    line = skipLeadingSpaces(line);
+    if (line == NULL || line[0] == 0)
+        errAbort("Expecting at least 4 words line %d of %s\n", lf->lineIx, lf->fileName);
+    if (sameString(chrom, row[0]))
 	{
-	line = skipLeadingSpaces(line);
-	if (line[0] == '#' || line[0] == 0)
-	    continue;
-	fieldCount = chopTabs(line, row);
-	lineFileExpectWords(lf, 9, fieldCount);
-	if (sameString(chrom, row[0]))
-	    {
-	    int start = lineFileNeedNum(lf, row, 4);
-	    int end = lineFileNeedNum(lf, row, 5);
-	    printTab(f, cg, chrom, start, end, 
-		    type, "text", 0, 0, 0, row[nameField]);
-	    }
+	int start = lineFileNeedNum(lf, row, 1);
+	int end = lineFileNeedNum(lf, row, 2);
+	printTab(f, cg, chrom, start, end, 
+		"QTL", "text", 0, 0, 0, line);
 	}
-    lineFileClose(&lf);
     }
+lineFileClose(&lf);
 }
 
 void oneChrom(char *chrom, struct sqlConnection *conn, 
 	struct hash *dupHash, struct hash *resolvedDupHash, 
-	struct hash *diseaseStockHash, struct hash *diseaseHash, struct hash *stockHash,
+	struct hash *diseaseStockHash, struct hash *diseaseHash, 
+	struct hash *stockHash, struct hash *misplacedHash,
 	FILE *f)
 /* Get info for one chromosome.  */
 {
@@ -1044,18 +1090,18 @@ getMouseAli(cg, chrom, chromSize, axtFile, conn, f,
 getMouseId(cg, chrom, chromSize, axtFile, conn, f,
 	"HS_ID", 25000, 255, 0, 0);
 getGc(cg, chrom, conn, f);
-getRepeatDensity(cg, chrom, chromSize, conn, f, "SINE", 100000, 1.0/0.66, 255, 0, 0);
+getRepeatDensity(cg, chrom, chromSize, conn, f, "SINE", 100000, 1.0/0.33, 255, 0, 0);
 getRepeatDensity(cg, chrom, chromSize, conn, f, "LINE", 100000, 1.0/0.66, 0, 0, 255);
 getQtl(cg, qtlFile, chrom, f);
 getRnaGenes(cg, chrom, conn, f);
 getCpgIslands(cg, chrom, conn, f);
 getFishBlatHits(cg,chrom,conn,f);
 getEstTicks(cg, chrom, conn, f);
-getPredGenes(cg, chrom, conn, f, "genieAlt", 150, 0, 0);
-getPredGenes(cg, chrom, conn, f, "ensGene", 150, 0, 0);
+getPredGenes(cg, chrom, conn, f, "genieAlt", 160, 10, 0);
+getPredGenes(cg, chrom, conn, f, "ensGene", 160, 10, 0);
 getPredGenes(cg, chrom, conn, f, "refGene", blueGene.r, blueGene.g, blueGene.b);
 getKnownGenes(cg, chrom, conn, f, dupHash, resolvedDupHash, 
-	diseaseStockHash, diseaseHash, stockHash);
+	diseaseStockHash, diseaseHash, stockHash, misplacedHash);
 }
 
 void printDupes(struct hash *dupHash, FILE *f)
@@ -1101,11 +1147,13 @@ struct resolvedDup *rdList = NULL;
 struct hash *diseaseStockHash = newHash(0);
 struct hash *diseaseHash = newHash(0);
 struct hash *stockHash = newHash(0);
+struct hash *misplacedHash = newHash(0);
 
 dupeFile = mustOpen(dupeFileName, "w");
 hSetDb(database);
 makeDiseaseStockHash(conn, diseaseStockHash, diseaseHash, stockHash);
 makeResolvedDupes(resolvedDupHash, &rdList);
+makeMisplaced(misplacedHash, resolvedDupHash);
 for (i=0; i<chromCount; ++i)
     {
     char fileName[512];
@@ -1113,7 +1161,7 @@ for (i=0; i<chromCount; ++i)
     sprintf(fileName, "%s.tab", chromNames[i]);
     f = mustOpen(fileName, "w");
     oneChrom(chromNames[i], conn, dupHash, resolvedDupHash, 
-    	diseaseStockHash, diseaseHash, stockHash, f);
+    	diseaseStockHash, diseaseHash, stockHash, misplacedHash, f);
     fclose(f);
     }
 printDupes(dupHash, dupeFile);
