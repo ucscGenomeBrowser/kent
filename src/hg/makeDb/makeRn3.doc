@@ -4857,3 +4857,45 @@ mkdir -p $3:h
     
     gzip *.gff *TCs
 
+# UPDATE TIGR GENE INDEX (RE-DONE 2004-12-21 Fan)
+# This track is re-done due to an error (missing strand info) in the original files from TIGR.
+    cd /cluster/data/rn3/bed
+    mv tigr tigr_old_wrong
+    mkdir tigr-2004-12-21
+    ln -s tigr-2004-12-21 tigr
+    cd tigr
+    wget --timestamp ftp://ftp.tigr.org/pub/data/tgi/Rattus_norvegicus/TGI_track_RatGenome_rn3_12-2004.tgz 
+    
+    tar -xvzf TGI*.tgz
+    foreach f (*cattle*)
+      set f1 = `echo $f | sed -e 's/cattle/cow/g'`
+      mv $f $f1
+    end
+
+    foreach o (mouse cow human pig rat)
+      echo $o
+      setenv O $o
+      foreach f (chr*_$o*s)
+        tail +2 $f | perl -wpe 's /THC/TC/; s/(TH?C\d+)/$ENV{O}_$1/;' > $f.gff
+      end
+    end
+
+    ssh hgwdev
+    cd /cluster/data/rn3/bed/tigr
+    hgsql rn3 -e "drop table tigrGeneIndex"
+    hgsql rn3 < ~/kent/src/hg/lib/tigrGeneIndex.sql
+
+    foreach f (*.gff)
+        echo Processing $f ...
+        /cluster/home/fanhsu/bin/i386/ldHgGene -oldTable -exon=TC rn3 tigrGeneIndex $f
+        hgsql rn3 -e "select count(*) from tigrGeneIndex"
+    end
+    # Total of 367787 entries created in tigrGeneIndex table.
+
+    hgsql rn3 -e "update tigrGeneIndex set cdsStart = txStart;"
+    hgsql rn3 -e "update tigrGeneIndex set cdsEnd = txEnd;"
+
+    checkTableCoords rn3 tigrGeneIndex
+    
+    gzip *.gff *TCs
+
