@@ -20,7 +20,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.26 2003/09/08 15:12:00 braney Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.27 2003/09/08 23:45:58 kent Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -50,19 +50,25 @@ for (el = *pList; el != NULL; el = next)
 }
 
 
-struct axt *axtRead(struct lineFile *lf)
-/* Read in next record from .axt file and return it.
- * Returns NULL at EOF. */
+struct axt *axtReadWithPos(struct lineFile *lf, off_t *retOffset)
+/* Read next axt, and if retOffset is not-NULL, fill it with
+ * offset of start of axt. */
 {
 char *words[10], *line;
 int wordCount, symCount;
 struct axt *axt;
 
 wordCount = lineFileChop(lf, words);
+if (retOffset != NULL)
+    *retOffset = lineFileTell(lf);
 if (wordCount <= 0)
     return NULL;
 if (wordCount < 8)
-    errAbort("Expecting at least 8 words line %d of %s\n", lf->lineIx, lf->fileName);
+    {
+    warn("ugly word 0 = %s", words[0]);
+    errAbort("Expecting at least 8 words line %d of %s got %d\n", lf->lineIx, lf->fileName,
+    	wordCount);
+    }
 AllocVar(axt);
 
 axt->qName = cloneString(words[4]);
@@ -85,6 +91,13 @@ if (strlen(line) != symCount)
 axt->qSym = cloneMem(line, symCount+1);
 lineFileNext(lf, &line, NULL);	/* Skip blank line */
 return axt;
+}
+
+struct axt *axtRead(struct lineFile *lf)
+/* Read in next record from .axt file and return it.
+ * Returns NULL at EOF. */
+{
+return axtReadWithPos(lf, NULL);
 }
 
 void axtWrite(struct axt *axt, FILE *f)

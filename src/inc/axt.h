@@ -50,6 +50,10 @@ struct axt *axtRead(struct lineFile *lf);
 /* Read in next record from .axt file and return it.
  * Returns NULL at EOF. */
 
+struct axt *axtReadWithPos(struct lineFile *lf, off_t *retOffset);
+/* Read next axt, and if retOffset is not-NULL, fill it with
+ * offset of start of axt. */
+
 boolean axtCheck(struct axt *axt, struct lineFile *lf);
 /* Return FALSE if there's a problem with axt. */
 
