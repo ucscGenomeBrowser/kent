@@ -266,39 +266,37 @@ va_end(args);
 exit(0);
 }
 
-void printOrgListHtml(char *db, char *onChangeText)
+void printGenomeListHtml(char *db, char *onChangeText)
 /*
 Prints to stdout the HTML to render a dropdown list containing a list of the possible
-organisms to choose from.
+Genomes to choose from.
 
-param curOrganism - The organism to choose as selected. 
+param curGenome - The Genome to choose as selected. 
 If NULL, no default selection.
 
 param onChangeText - Optional (can be NULL) text to pass in any onChange javascript.
  */
 {
 char *orgList[128];
-int numOrganisms = 0;
+int numGenomes = 0;
 struct dbDb *dbList = hGetIndexedDatabases();
 struct dbDb *cur = NULL;
 struct hash *hash = hashNew(7); // 2^^7 entries = 128
-char *selOrganism = hOrganism(db);
+char *selGenome = hGenome(db);
 char *values [128];
 
 for (cur = dbList; cur != NULL; cur = cur->next)
     {
-    /* Only add mouse or human to menu */
-    if (!hashFindVal(hash, cur->organism) && 
-        (strstrNoCase(cur->organism, "mouse") || strstrNoCase(cur->organism, "human")))
+    if (!hashFindVal(hash, cur->genome))
         {
-        hashAdd(hash, cur->organism, cur);
-        orgList[numOrganisms] = cur->organism;
-        values[numOrganisms] = cur->organism;
-        numOrganisms++;
+        hashAdd(hash, cur->genome, cur);
+        orgList[numGenomes] = cur->genome;
+        values[numGenomes] = cur->genome;
+        numGenomes++;
         }
     }
 
-cgiMakeDropListFull(orgCgiName, orgList, values, numOrganisms, selOrganism, onChangeText);
+cgiMakeDropListFull(orgCgiName, orgList, values, numGenomes, selGenome, onChangeText);
 }
 
 void printSomeAssemblyListHtmlParm(char *db, struct dbDb *dbList, char *dbCgi, char *javascript)
@@ -316,23 +314,13 @@ char *values[128];
 int numAssemblies = 0;
 struct dbDb *cur = NULL;
 struct hash *hash = hashNew(7); // 2^^7 entries = 128
-char *organism = hOrganism(db);
-char *assembly = NULL;
+char *genome = hGenome(db);
+char *selAssembly = NULL;
 
 for (cur = dbList; cur != NULL; cur = cur->next)
     {
-    /* If we are looking at a zoo database then show the zoo database list */
-    if ((strstrNoCase(db, "zoo") || strstrNoCase(organism, "zoo")) &&
-        strstrNoCase(cur->name, "zoo"))
-        {
-        assemblyList[numAssemblies] = cur->description;
-        values[numAssemblies] = cur->name;
-        numAssemblies++;
-        }
-    else if (strstrNoCase(organism, cur->organism)
-             && !strstrNoCase(cur->name, "zoo")
-             && !strstrNoCase(db, "zoo")
-             && (cur->active || strstrNoCase(cur->name, db)))
+    if (strstrNoCase(genome, cur->genome)
+        && (cur->active || strstrNoCase(cur->name, db)))
         {
         assemblyList[numAssemblies] = cur->description;
         values[numAssemblies] = cur->name;
@@ -342,11 +330,11 @@ for (cur = dbList; cur != NULL; cur = cur->next)
     /* Save a pointer to the current assembly */
     if (strstrNoCase(db, cur->name))
        {
-       assembly = cur->description;
+       selAssembly = cur->description;
        }
     }
 
-    cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, assembly, javascript);
+    cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, selAssembly, javascript);
 }
 
 void printSomeAssemblyListHtml(char *db, struct dbDb *dbList)
@@ -450,30 +438,30 @@ for (cur = alignList; ((cur != NULL) && (numAlignments < 128)); cur = cur->next)
 cgiMakeDropListFull(alCgiName, alignmentList, values, numAlignments, alignment, NULL);
 }
 
-char *getDbForOrganism(char *organism, struct cart *cart)
+char *getDbForGenome(char *genome, struct cart *cart)
 {
 /*
-  Function to find the default database for the given organism.
-It looks in the cart first and then, if that database's organism matches the 
-passed-in organism, returns it. If the organism does not match, it returns the default
-database that does match that organism.
+  Function to find the default database for the given Genome.
+It looks in the cart first and then, if that database's Genome matches the 
+passed-in Genome, returns it. If the Genome does not match, it returns the default
+database that does match that Genome.
 
-param organism - The organism for which to find a database
+param Genome - The Genome for which to find a database
 param cart - The cart to use to first search for a suitable database name
-return - The database matching this organism type
+return - The database matching this Genome type
 */
 char *retDb = cartUsualString(cart, dbCgiName, hGetDb());
-char *queryOrganism = hOrganism(retDb);
+char *queryGenome = hGenome(retDb);
 
-if (!strstrNoCase(organism, queryOrganism))
+if (!strstrNoCase(genome, queryGenome))
     {
-    retDb = hDefaultDbForOrganism(organism);
+    retDb = hDefaultDbForGenome(genome);
     }
-//uglyf("\n<BR>GETDB = %s", retDb);
+
 return retDb;
 }
 
-void getDbAndOrganism(struct cart *cart, char **retDb, char **retOrganism)
+void getDbAndGenome(struct cart *cart, char **retDb, char **retGenome)
 /*
   The order of preference here is as follows:
 If we got a request that explicitly names the db, that takes
@@ -482,30 +470,25 @@ If we get a cgi request for a specific organism then we use that
 organism to choose the DB.
 
 In the cart only, we use the same order of preference.
-If someone requests an organism we try to give them the same db as
-was in their cart, unless the organism doesn't match.
+If someone requests an Genome we try to give them the same db as
+was in their cart, unless the Genome doesn't match.
 */
 {
 *retDb = cgiOptionalString(dbCgiName);
-//uglyf("\n<BR>CGI DB = %s", *retDb);
-*retOrganism = cgiOptionalString(orgCgiName);
-//uglyf("\n<BR>CGI ORG = %s", *retOrganism);
+*retGenome = cgiOptionalString(orgCgiName);
 
 if (*retDb)
     {
-    *retOrganism = hOrganism(*retDb);
-//    uglyf("\n<BR>HORGANISM = %s", *retOrganism);
+    *retGenome = hGenome(*retDb);
     }
-else if (*retOrganism)
+else if (*retGenome)
     {
-    *retDb = getDbForOrganism(*retOrganism, cart);
-//    uglyf("\n<BR>GETDB = %s", *retDb);
+    *retDb = getDbForGenome(*retGenome, cart);
+    *retGenome = hGenome(*retDb);
     }
 else
     {
     *retDb = cartUsualString(cart, dbCgiName, hGetDb());
-    *retOrganism = hOrganism(*retDb);
-//    uglyf("\n<BR>RET DB = %s", *retDb);
-//    uglyf("\n<BR>RET ORG = %s", *retOrganism);
+    *retGenome = hGenome(*retDb);
     }
 }

@@ -324,13 +324,17 @@ char *hOrganism(char *database);
 /* Return organism associated with database.   Use freeMem on
  * return value when done. */
 
+char *hGenome(char *database);
+/* Return genome associated with database.   Use freeMem on
+ * return value when done. */
+
 char *hLookupStringVars(char *in, char *database);
 /* Expand $ORGANISM and other variables in input. */
 
 void hLookupStringsInTdb(struct trackDb *tdb, char *database);
 /* Lookup strings in track database. */
 
-char *hDefaultDbForOrganism(char *organism);
+char *hDefaultDbForGenome(char *genome);
 /*
 Purpose: Return the default database matching the organism.
 

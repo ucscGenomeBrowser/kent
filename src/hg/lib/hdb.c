@@ -799,6 +799,23 @@ hDisconnectCentral(&conn);
 return res;
 }
 
+char *hGenome(char *database)
+/* Return genome associated with database.   
+use freeMem on this when done. */
+{
+struct sqlConnection *conn = hConnectCentral();
+char buf[128];
+char query[256];
+char *res = NULL;
+sprintf(query, "select genome from dbDb where name = '%s'", database);
+if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
+    res = cloneString(buf);
+else
+    errAbort("Can't find genome for %s", database);
+hDisconnectCentral(&conn);
+return res;
+}
+
 char *hLookupStringVars(char *in, char *database)
 /* Expand $ORGANISM and other variables in input. */
 {
@@ -1915,26 +1932,26 @@ hDisconnectCentral(&conn);
 return &st;
 }
 
-char *hDefaultDbForOrganism(char *organism)
+char *hDefaultDbForGenome(char *genome)
 /*
-Purpose: Return the default database matching the organism.
+Purpose: Return the default database matching the Genome.
 
-param organism - The organism for which we are trying to get the 
+param Genome - The Genome for which we are trying to get the 
     default database.
-return - The default database name for this organism
+return - The default database name for this Genome
  */
 {
 char *result = hGetDb();
 
-if (strstrNoCase(organism, "mouse"))
+if (strstrNoCase(genome, "mouse"))
     {
     result = defaultMouse;
     }
-else if (strstrNoCase(organism, "zoo"))
+else if (strstrNoCase(genome, "zoo"))
     {
     result = defaultZoo;
     }
-else if (strstrNoCase(organism, "human"))
+else if (strstrNoCase(genome, "human"))
     {
     result = defaultHuman;
     }

@@ -28,22 +28,21 @@ void webVaWarn(char *format, va_list args);
 void webAbort(char* title, char* format, ...);
 /* an abort function that outputs a error page */
 
-void webPushErrHandlers();
-/* Push warn and abort handler for errAbort(). */
-
-void webPopErrHandlers();
-/* Pop warn and abort handler for errAbort(). */
-
-void printOrgListHtml(char *selOrganism, char *onChangeText);
+void printGenomeListHtml(char *selOrganism, char *onChangeText);
 /*
-Prints to stdout the HTML to render a dropdown list containing a list of the possible
-organisms to choose from.
+Prints to stdout the HTML to render a dropdown list containing a list of the possible genomes to choose from.
 
 param curOrganism - The organism to choose as selected. 
 If NULL, no default selection.
 
 param onChangeText - Optional (can be NULL) text to pass in any onChange javascript.
  */
+
+void webPushErrHandlers();
+/* Push warn and abort handler for errAbort(). */
+
+void webPopErrHandlers();
+/* Pop warn and abort handler for errAbort(). */
 
 void printAssemblyListHtml(char *curDb);
 /*
@@ -73,7 +72,7 @@ param curDb - The assembly (the database name) to choose as selected.
 If NULL, no default selection.
  */
 
-void getDbAndOrganism(struct cart *cart, char **retDb, char **retOrganism);
+void getDbAndGenome(struct cart *cart, char **retDb, char **retGenome);
 /*
   The order of preference here is as follows:
 If we got a request that explicitly names the db, that takes
