@@ -2625,7 +2625,7 @@ while ((psl = pslNext(f)) != NULL)
 	}
     pslFree(&psl);
     }
-slReverse(&lfList);
+slSort(&lfList, linkedFeaturesCmpStart);
 lineFileClose(&f);
 tg->items = lfList;
 }
