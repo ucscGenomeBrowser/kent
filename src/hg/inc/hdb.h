@@ -255,6 +255,9 @@ int hFindBin(int start, int end);
  * and for each chromosome (which is assumed to be less than
  * 512M.)  A range goes into the smallest bin it will fit in. */
 
+void hAddBinToQueryGeneral(char *binField, int start, int end, struct dyString *query);
+/* Add clause that will restrict to relevant bins to query. allow bin field name to be specified */
+
 void hAddBinToQuery(int start, int end, struct dyString *query);
 /* Add clause that will restrict to relevant bins to query. */
 

@@ -1388,8 +1388,7 @@ int hFindBin(int start, int end)
 {
 return binFromRange(start, end);
 }
-
-void hAddBinToQuery(int start, int end, struct dyString *query)
+void hAddBinToQueryGeneral(char *binField, int start, int end, struct dyString *query)
 /* Add clause that will restrict to relevant bins to query. */
 {
 int bFirstShift = binFirstShift(), bNextShift = binNextShift();
@@ -1403,15 +1402,21 @@ for (i=0; i<levels; ++i)
     if (i != 0)
         dyStringAppend(query, " or ");
     if (startBin == endBin)
-        dyStringPrintf(query, "bin=%u", startBin + offset);
+        dyStringPrintf(query, "%s=%u", binField, startBin + offset);
     else
-        dyStringPrintf(query, "bin>=%u and bin<=%u", 
-		startBin + offset, endBin + offset);
+        dyStringPrintf(query, "%s>=%u and %s<=%u", 
+		binField, startBin + offset, binField, endBin + offset);
     startBin >>= bNextShift;
     endBin >>= bNextShift;
     }
 dyStringAppend(query, ")");
 dyStringAppend(query, " and ");
+}
+
+void hAddBinToQuery(int start, int end, struct dyString *query)
+/* Add clause that will restrict to relevant bins to query. */
+{
+hAddBinToQueryGeneral("bin", start, end, query);
 }
 
 static struct sqlResult *hExtendedRangeQuery(struct sqlConnection *conn,
@@ -1465,6 +1470,7 @@ if (table != NULL)
         dyStringPrintf(query, " and %s", extraWhere);
     if (order)
         dyStringPrintf(query, " order by %s", hti->startField);
+    //printf(" %s <p>",query->string);
     sr = sqlGetResult(conn, query->string);
     }
 freeDyString(&query);
