@@ -6868,3 +6868,40 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     nice gzip axtChain/all.chain.antirepeat axtChain/all.chain.filt5k axtChain/chainAR/*.chain &
     nice rm -fr axtChain/chain axtChain/chainRaw axtChain/preNet &
 
+#  MOUSE PHOTOGRAPH added to gateway page
+#	Obtained from Jackson Labs press office via email:
+#
+#	Subject: Re: mouse press photographs
+#	Date: Wed, 29 Dec 2004 14:26:15 -0500
+#	From: Joyce Peterson <joyce@jax.org>
+#	To: Hiram Clawson <hiram@soe.ucsc.edu>
+#	References: <41D2FF0B.3090207@soe.ucsc.edu>
+
+#	Hi, Hiram. You may use the attached photo, noting credit to "The 
+#	Jackson Laboratory."
+#	
+#	Cheers,
+#	--Joyce
+#
+#	Joyce Peterson
+#	Public Information Manager
+#	The Jackson Laboratory
+#	610 Main Street, Mailbox 664
+#	Bar Harbor, ME 04609-1526
+#	Tel. 207-288-6058
+#	Mobile 207-266-5745
+#	E-mail joyce@jax.org
+#	http://www.jax.org/news
+#
+#  Original from this email placed into /cluster/data/mm5/html/C57BL_6J.JPG
+
+    ssh hgwdev
+    cd /cluster/data/mm5/html
+    #	view that image in 'display' to determine crop edges, then:
+    convert -crop 890x690+330+70 -quality 80 -sharpen 0 \
+	-normalize C57BL_6J.JPG mm.jpg
+    convert -geometry 300x200 -quality 80 mm.jpg Mus_musculus.jpg
+    rm -f mm.jpg
+
+    cp -p Mus_musculus.jpg /usr/local/apache/htdocs/images
+    #	add links to this image in the description.html page, request push
