@@ -25,7 +25,8 @@ void hgExpLabelPrint(
 	char *url, 		/* URL of hyperlink, may be NULL */
 	int representativeCount,/* Number of representative experiments */ 
 	int *representatives,   /* ID's of each rep. -1's separate groups */
-	char *expTable);	/* Table (in hgFixed) where names stored. */
+	char *expTable,	/* Table (in hgFixed) where names stored. */
+	int gifStart);		/* If split deal with this. */
 /* Print out labels of various experiments - as cells filled
  * with gifs in a table. */
 

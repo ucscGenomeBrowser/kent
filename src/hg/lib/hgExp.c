@@ -8,7 +8,7 @@
 #include "cheapcgi.h"
 #include "hgExp.h"
 
-static char const rcsid[] = "$Id: hgExp.c,v 1.2 2003/10/13 23:53:26 kent Exp $";
+static char const rcsid[] = "$Id: hgExp.c,v 1.3 2003/10/15 23:15:39 kent Exp $";
 
 static char *colorSchemeVals[] = {
 /* Menu option for color scheme. */
@@ -92,11 +92,11 @@ return i;
 
 void hgExpLabelPrint(char *colName, char *subName, int skipName,
 	char *url, int representativeCount, int *representatives,
-	char *expTable)
+	char *expTable, int gifStart)
 /* Print out labels of various experiments. */
 {
 int i;
-int groupSize, gifCount = 0;
+int groupSize;
 char gifName[128];
 char **experiments = hgExpGetNames("hgFixed", 
 	expTable, representativeCount, representatives, skipName);
@@ -107,7 +107,7 @@ for (i=0; i<representativeCount; i += groupSize+1)
     printf("<TD VALIGN=\"BOTTOM\">");
     groupSize = countNonNull(experiments+i, representativeCount-i);
     safef(gifName, sizeof(gifName), "../trash/near_%s_%s%d.gif", 
-    	colName, subName, ++gifCount);
+    	colName, subName, ++gifStart);
     gifLabelVerticalText(gifName, experiments+i, groupSize, height);
     if (url != NULL)
        printf("<A HREF=\"%s\">", url); 

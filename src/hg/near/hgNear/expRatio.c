@@ -13,7 +13,7 @@
 #include "hgExp.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.28 2003/10/13 23:53:26 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.29 2003/10/15 23:16:03 kent Exp $";
 
 
 static char *expCellVal(struct genePos *gp,
@@ -544,7 +544,7 @@ void expMultiLabelPrint(struct column *col)
 {
 struct expMultiData *emd = col->emd;
 expLabelPrint(col, emd->name, emd->representativeCount, 
-	emd->representatives, emd->experimentTable);
+	emd->representatives, emd->experimentTable, 0);
 }
 
 static void expEmdControl(struct column *col)
