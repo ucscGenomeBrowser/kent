@@ -7,7 +7,7 @@
 #include "pairHmm.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtAffine.c,v 1.3 2004/12/08 20:53:07 galt Exp $";
+static char const rcsid[] = "$Id: axtAffine.c,v 1.4 2004/12/13 19:56:31 galt Exp $";
 
 
 boolean axtAffineSmallEnough(double querySize, double targetSize)
@@ -449,6 +449,8 @@ printf("\n");
 struct axt *axtAffine2Level(bioSeq *query, bioSeq *target, struct axtScoreScheme *ss)
 /* 
 
+   (Moving boundary version, allows target T size twice as large in same ram)
+
    Return alignment if any of query and target using scoring scheme. 
    
    2Level uses an economical amount of ram and should work for large target sequences.
@@ -486,10 +488,10 @@ int c = 0;                                 /* col matrix index */
 char dir=' ';                              /* dir for bt */
 int bestbest = WORST;                      /* best score in entire mtx */
 
-int k=sqrt(T);                             /* save every kth row */
-int ksize = 1 + k + (k>0? T/k : 0);        /* T/k saved rows plus k rows */
-int arrsize = ksize * lv;                  /* dynprg array size, +1 for 0 sentinel col. */
-struct cell2L *cells = needLargeMem(arrsize * sizeof(struct cell2L));   /* best score dyn prog array */
+int k=0;                                   /* save every kth row (k decreasing) */
+int ksize = 0;                             /* T+1 saved rows as ksize, ksize-1,...,1*/
+int arrsize = 0;                           /* dynprg array size, +1 for 0 sentinel col. */
+struct cell2L *cells = NULL;               /* best score dyn prog array */
 int ki = 0;                                /* base offset into array */
 int cmost = Q;                             /* track right edge shrinkage during backtrace */
 int kmax = 0;                              /* rows range from ki to kmax */
@@ -497,12 +499,18 @@ int rr = 0;                                /* maps ki base to actual target seq 
 int nrows = 0;                             /* num rows to do, usually k or less */
 int bestr = 0;                             /* remember best r,c,dir for local ali */
 int bestc = 0;           
-char bestdir = 0;           
+char bestdir = 0;
+int temp = 0;
 
 
 char *btq=NULL;      /* temp pointers to track ends of string while accumulating */
 char *btt=NULL;
 
+ksize = (int) (-1 + sqrt(8*lw+1))/2;    
+if (((ksize*(ksize+1))/2) < lw) 
+    {ksize++;}
+arrsize = (ksize+1) * lv;                 /* dynprg array size, +1 for lastrow that moves back up. */
+cells = needLargeMem(arrsize * sizeof(struct cell2L));   /* best score dyn prog array */
 
 #ifdef DEBUG
 printf("\n k=%d \n ksize=%d \n arrsize=%d \n Q,lv=%d,%d T=%d \n \n",k,ksize,arrsize,Q,lv,T);
@@ -572,6 +580,9 @@ for (c=2;c<lv;c++)
 printf("\n");
 printf("\n");
 #endif
+
+k=ksize;
+
 ki++;  /* advance to next row */
 
 r=1;   /* r is really the rows all done */
@@ -598,6 +609,7 @@ printf("\n");
     if (r >= lw){break;} /* we are done */
     
     ki++;
+    k--;        /* decreasing k is "moving boundary" */
 }
 
 #ifdef DEBUG
@@ -625,9 +637,12 @@ cmost = c;
 axt->qEnd=bestc;
 axt->tEnd=bestr;
 
-ki = bestr/k;
-kmax = ki+(bestr % k);
-rr = ki*k;
+temp = (2*ksize)+1;
+ki = (int)(temp-sqrt((temp*temp)-(8*r)))/2;
+rr = ((2*ksize*ki)+ki-(ki*ki))/2;
+kmax = ki+(r-rr);
+k = ksize - ki;
+
 
 /* now that we jumped back into saved start-points,
    let's fill the array forward and start backtrace from there.
@@ -701,6 +716,7 @@ while(1)
 
     /* back up and do it again */
     ki--;
+    k++;   /* k grows as we move back up */ 
     rr-=k;
     kmax = ki+k-1;
 
@@ -713,6 +729,10 @@ while(1)
        this is how we save memory, but have to regenerate half on average
        we are re-using the same call 
      */
+
+#ifdef DEBUG
+printf("bestr=%d, bestc=%d, bestdir=%c k=%d, ki=%d, kmax=%d\n",bestr,bestc,bestdir,k,ki,kmax);
+#endif
 
 
     kForwardAffine(cells, ki+1, kmax, rr-ki, cmost, lv, q, t, ss, &bestbest, &bestr, &bestc, &bestdir);
