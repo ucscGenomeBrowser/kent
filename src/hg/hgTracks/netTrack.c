@@ -11,7 +11,7 @@
 #include "chainNet.h"
 #include "chainNetDbLoad.h"
 
-static char const rcsid[] = "$Id: netTrack.c,v 1.13 2003/11/19 17:28:29 kate Exp $";
+static char const rcsid[] = "$Id: netTrack.c,v 1.14 2003/12/08 09:40:03 kate Exp $";
 
 struct netItem
 /* A net track item. */
@@ -82,14 +82,15 @@ static Color netColor(char *chrom, int level)
  * or else use alternating black/gray for level 1 if item is not a chromosome */
 {
 static Color color;
+char *pos;
 if (!sameString(chrom, netColorLastChrom))
     {
     color = getChromColor(chrom+3, rVg);
     if (isNonChromColor(color)) 
        {
-       if (startsWith("scaffold_", chrom))
+       if ((pos = stringIn("scaffold_", chrom)) != NULL)
            {
-            color = getScaffoldColor(chrom+9, rVg);
+            color = getScaffoldColor(pos+9, rVg);
             netColorLastChrom = chrom;
            }
         }
