@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.22 2004/11/23 23:25:52 hiram Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.23 2004/11/24 01:47:15 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -968,6 +968,82 @@ if (numLeftParen != numRightParen)
 slFreeList(&tokList);
 }
 
+static boolean wildReal(char *pat)
+/* Return TRUE if pat is something we really might want to search on. */
+{
+return pat != NULL && pat[0] != 0 && !sameString(pat, "*");
+}
+
+static boolean cmpReal(char *pat)
+/* Return TRUE if we have a real cmpOp. */
+{
+return pat != NULL && pat[0] != 0 && !sameString(pat, cmpOpMenu[0]);
+}
+
+struct joinerDtf *filteringTables()
+/* Get list of tables we're filtering on as joinerDtf list (with
+ * the field entry NULL). */
+{
+if (!anyFilter())
+    return NULL;
+else
+    {
+    struct joinerDtf *dtfList = NULL, *dtf;
+    struct hashEl *varList, *var;
+    struct hash *uniqHash = hashNew(0);
+    int prefixSize = strlen(hgtaFilterVarPrefix);
+    varList = cartFindPrefix(cart, hgtaFilterVarPrefix);
+    for (var = varList; var != NULL; var = var->next)
+        {
+	char *dupe = cloneString(var->name + prefixSize);
+	char *parts[5];
+	int partCount;
+	char dbTable[256];
+	char *db, *table, *field, *type;
+	partCount = chopByChar(dupe, '.', parts, ArraySize(parts));
+	if (partCount != 4)
+	    {
+	    warn("Part count != expected 4 line %d of %s", __LINE__, __FILE__);
+	    continue;
+	    }
+	db = parts[0];
+	table = parts[1];
+	field = parts[2];
+	type = parts[3];
+	safef(dbTable, sizeof(dbTable), "%s.%s", db, table);
+	if (!hashLookup(uniqHash, dbTable))
+	    {
+	    boolean gotFilter = FALSE;
+
+	    if (sameString(type, filterPatternVar))
+	        {
+		char *pat = trimSpaces(var->val);
+		gotFilter = wildReal(pat);
+		}
+	    else if (sameString(type, filterCmpVar))
+	        {
+		gotFilter = cmpReal(var->val);
+		}
+	    else if (sameString(type, filterRawQueryVar))
+	        {
+		char *pat = trimSpaces(var->val);
+		gotFilter = (pat != NULL && pat[0] != 0);
+		}
+	    if (gotFilter)
+		{
+		hashAdd(uniqHash, dbTable, NULL);
+		AllocVar(dtf);
+		dtf->database = cloneString(db);
+		dtf->table = cloneString(table);
+		slAddHead(&dtfList, dtf);
+		}
+	    }
+	freeMem(dupe);
+	}
+    hashFree(&uniqHash);
+    return dtfList;
+    }
+}
 
 char *filterClause(char *db, char *table, char *chrom)
 /* Get filter clause (something to put after 'where')
@@ -1030,7 +1106,7 @@ for (var = varList; var != NULL; var = var->next)
         {
 	char *patVar = filterPatternVarName(db, table, field);
 	char *pat = trimSpaces(cartOptionalString(cart, patVar));
-	if (pat != NULL && pat[0] != 0 && !sameString(pat, "*"))
+	if (wildReal(pat))
 	    {
 	    char *sqlPat = sqlLikeFromWild(pat);
 	    char *ddVal = cartString(cart, var->name);
@@ -1073,7 +1149,7 @@ for (var = varList; var != NULL; var = var->next)
 	char *patVar = filterPatternVarName(db, table, field);
 	char *pat = trimSpaces(cartOptionalString(cart, patVar));
 	char *cmpVal = cartString(cart, var->name);
-	if (pat != NULL && pat[0] != 0 && !sameString(cmpVal, cmpOpMenu[0]))
+	if (cmpReal(pat))
 	    {
 	    if (needAnd) dyStringAppend(dy, " and ");
 	    needAnd = TRUE;

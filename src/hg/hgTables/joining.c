@@ -15,7 +15,7 @@
 #include "hgTables.h"
 
 
-static char const rcsid[] = "$Id: joining.c,v 1.35 2004/11/23 19:49:12 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.36 2004/11/24 01:47:15 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -23,6 +23,8 @@ struct joinedRow
     struct joinedRow *next;
     struct slName **fields;	/* Fields user has requested. */
     struct slName **keys;	/* Fields to key from. */
+    bool passedFilter;		/* TRUE if row has passed filter at this stage. */
+    bool hitThisTable;		/* TRUE if hit on this table. */
     };
 
 struct joinedTables
@@ -46,13 +48,11 @@ static void joinedTablesTabOut(struct joinedTables *joined)
 struct joinedRow *jr;
 struct joinerDtf *field;
 int outCount = 0;
-boolean suppressEmpty = FALSE;
 
 /* Print out field names. */
 if (joined->filter)
     {
     hPrintf("#filter: %s\n", joined->filter->string);
-    suppressEmpty = TRUE;
     }
 hPrintf("#");
 for (field = joined->fieldList; field != NULL; field = field->next)
@@ -67,18 +67,7 @@ for (jr = joined->rowList; jr != NULL; jr = jr->next)
     {
     int i;
     boolean passRow = TRUE;
-    if (suppressEmpty)
-        {
-	for (i=0; i<joined->fieldCount; ++i)
-	    {
-	    if (jr->fields[i] == NULL)
-		{
-	        passRow = FALSE;
-		break;
-		}
-	    }
-	}
-    if (passRow)
+    if (jr->passedFilter)
 	{
 	for (i=0; i<joined->fieldCount; ++i)
 	    {
@@ -152,6 +141,7 @@ else
     lmAllocVar(lm, jr);
     lmAllocArray(lm, jr->fields, joined->fieldCount);
     lmAllocArray(lm, jr->keys, joined->keyCount);
+    jr->passedFilter = TRUE;
     for (i=0; i<fieldCount; ++i)
 	jr->fields[i] = lmSlName(lm, row[i]);
     row += fieldCount;
@@ -348,15 +338,14 @@ tj->fieldList = newList;
 freez(&splitTable);
 }
 
-
-struct tableJoiner *bundleFieldsIntoTables(struct joinerDtf *dtfList)
-/* Convert list of fields to list of tables.  */
+static void addDtfListToBundle(struct hash *hash, struct tableJoiner **pList,
+	struct joinerDtf *dtfList, boolean addField)
+/* Add table to hash/list if haven't seen it already.  Optionally add
+ * field to table. */
 {
-struct hash *hash = newHash(0);
 char fullName[256];
 struct joinerDtf *dtf, *dupe;
-struct tableJoiner *tjList = NULL, *tj;
-
+struct tableJoiner *tj;
 for (dtf = dtfList; dtf != NULL; dtf = dtf->next)
     {
     safef(fullName, sizeof(fullName), "%s.%s", dtf->database, dtf->table);
@@ -367,30 +356,41 @@ for (dtf = dtfList; dtf != NULL; dtf = dtf->next)
 	hashAdd(hash, fullName, tj);
 	tj->database = dtf->database;
 	tj->table = dtf->table;
-	slAddHead(&tjList, tj);
+	slAddHead(pList, tj);
 	}
-    dupe = joinerDtfClone(dtf);
-    slAddTail(&tj->fieldList, dupe);
+    if (addField)
+	{
+	dupe = joinerDtfClone(dtf);
+	slAddTail(&tj->fieldList, dupe);
+	}
     }
+}
+
+static struct tableJoiner *bundleFieldsIntoTables(struct joinerDtf *resultFields,
+	struct joinerDtf *filterTables)
+/* Convert list of fields to list of tables.  */
+{
+struct hash *hash = newHash(0);
+struct tableJoiner *tjList = NULL, *tj;
+
+addDtfListToBundle(hash, &tjList, resultFields, TRUE);
+addDtfListToBundle(hash, &tjList, filterTables, FALSE);
 slReverse(&tjList);
 for (tj = tjList; tj != NULL; tj = tj->next)
-    {
     orderFieldsInTable(tj);
-    }
 return tjList;
 }
 
-struct joinerDtf *tableFirstFieldList(struct tableJoiner *tjList)
-/* Make dtfList that is just the first one in each table's field list. */
+static struct joinerDtf *tableToDtfs(struct tableJoiner *tjList)
+/* Make dtfList from tjList, with empty field fields. */
 {
 struct joinerDtf *list = NULL, *dtf;
 struct tableJoiner *tj;
 
 for (tj = tjList; tj != NULL; tj = tj->next)
     {
-    struct joinerDtf *dtf = tj->fieldList;
-    struct joinerDtf *dupe = joinerDtfNew(dtf->database, dtf->table, dtf->field);
-    slAddHead(&list, dupe);
+    dtf = joinerDtfNew(tj->database, tj->table, NULL);
+    slAddHead(&list, dtf);
     }
 slReverse(&list);
 return list;
@@ -511,6 +511,25 @@ struct joinerPair *jp;
 int fieldCount = 0, keyCount = 0;
 int idFieldIx = -1;
 struct sqlConnection *conn = sqlConnect(tj->database);
+char *filter = filterClause(tj->database, tj->table, regionList->chrom);
+boolean needUpdateFilter = FALSE;
+struct joinedRow *jr;
+
+/* Record combined filter. */
+if (filter != NULL)
+    {
+    if (joined->filter == NULL)
+	joined->filter = dyStringNew(0);
+    else
+	dyStringAppend(joined->filter, " AND ");
+    dyStringAppend(joined->filter, filter);
+    if (!isFirst)
+	{
+        needUpdateFilter = TRUE;
+	for (jr = joined->rowList; jr != NULL; jr = jr->next)
+	    jr->hitThisTable = FALSE;
+	}
+    }
 
 /* Create field spec for sql - first fields user will see, and
  * second keys if any. */
@@ -544,14 +563,8 @@ for (region = regionList; region != NULL; region = region->next)
     char *filter = filterClause(tj->database, tj->table, region->chrom);
     struct sqlResult *sr = regionQuery(conn, tj->table, 
     	sqlFields->string, region, isPositional, filter);
-    if (filter != NULL && region == regionList)
-	{
-	if (joined->filter == NULL)
-	    joined->filter = dyStringNew(0);
-	else
-	    dyStringAppend(joined->filter, " AND ");
-	dyStringAppend(joined->filter, filter);
-	}
+    if (filter == NULL)	/* We free at end of loop so we get new one for each chromosome. */
+	filter = filterClause(tj->database, tj->table, region->chrom);
     while (sr != NULL && (row = sqlNextRow(sr)) != NULL)
         {
 	if (idFieldIx < 0)
@@ -573,13 +586,13 @@ for (region = regionList; region != NULL; region = region->next)
 		}
 	    else
 		{
-		struct joinedRow *jr;
 		struct hashEl *bucket;
 		id = chopKey(chopBefore, chopAfter, id);
 		for (bucket = hashLookup(idHash, id); bucket != NULL;
 		     bucket = hashLookupNext(bucket))
 		     {
 		     jr = bucket->val;
+		     jr->hitThisTable = TRUE;
 		     jrRowExpand(joined, jr, row, 
 		    	fieldOffset, fieldCount, keyOffset, keyCount);
 		     }
@@ -593,6 +606,13 @@ for (region = regionList; region != NULL; region = region->next)
     }
 if (isFirst)
     slReverse(&joined->rowList);
+if (needUpdateFilter)
+    {
+    for (jr = joined->rowList; jr != NULL; jr = jr->next)
+	{
+	jr->passedFilter &= jr->hitThisTable;
+	}
+    }
 tj->loaded = TRUE;
 sqlDisconnect(&conn);
 }
@@ -712,19 +732,20 @@ slFreeList(&chain);
 return ret;
 }
 
-struct joinedTables *joinedTablesCreate( struct joiner *joiner, 
+static struct joinedTables *joinedTablesCreate( struct joiner *joiner, 
 	char *primaryDb, char *primaryTable,
-	struct joinerDtf *fieldList, int maxRowCount)
+	struct joinerDtf *fieldList, struct joinerDtf *filterTables,
+	int maxRowCount)
 /* Create joinedTables structure from fields. */
 {
-struct tableJoiner *tj, *tjList = bundleFieldsIntoTables(fieldList);
+struct tableJoiner *tj, *tjList = bundleFieldsIntoTables(fieldList, filterTables);
 struct joinerPair *routeList = NULL, *route;
-struct joinerDtf *tableDtfs = NULL;
 struct joinedTables *joined = NULL;
 struct hash *tableHash = newHash(8);
 struct region *regionList = getRegions();
 int totalKeyCount = 0, totalFieldCount = 0;
 int curKeyCount = 0, curFieldCount = 0;
+struct joinerDtf *tableDtfs;
 
 for (tj = tjList; tj != NULL; tj = tj->next)
     {
@@ -733,7 +754,7 @@ for (tj = tjList; tj != NULL; tj = tj->next)
     hashAdd(tableHash, buf, tj);
     }
 orderTables(&tjList, primaryDb, primaryTable);
-tableDtfs = tableFirstFieldList(tjList);
+tableDtfs = tableToDtfs(tjList);
 routeList = joinerFindRouteThroughAll(joiner, tableDtfs);
 addOutKeys(tableHash, routeList, &tjList);
 
@@ -800,6 +821,21 @@ tableJoinerFreeList(&tjList);
 return joined;
 }
 
+static boolean allSameTable(struct joinerDtf *fieldList, struct joinerDtf *filterTables)
+/* Return TRUE if all db/tables in fieldList and filterTables are same. */
+{
+struct joinerDtf *first = fieldList, *dtf;
+
+if (first == NULL) internalErr();
+for (dtf = first->next; dtf != NULL; dtf = dtf->next)
+    if (!joinerDtfSameTable(first, dtf))
+        return FALSE;
+for (dtf = filterTables; dtf != NULL; dtf = dtf->next)
+    if (!joinerDtfSameTable(first, dtf))
+        return FALSE;
+return TRUE;
+}
+
 void tabOutSelectedFields(
 	char *primaryDb,		/* The primary database. */
 	char *primaryTable, 		/* The primary table. */
@@ -808,8 +844,9 @@ void tabOutSelectedFields(
  * or may not include multiple tables. */
 {
 struct joinerDtf *dtfList = fieldsToDtfs(fieldList);
+struct joinerDtf *filterTables = filteringTables();
 
-if (joinerDtfAllSameTable(dtfList))
+if (allSameTable(dtfList, filterTables))
     {
     struct sqlConnection *conn = sqlConnect(dtfList->database);
     struct dyString *dy = dyStringNew(0);
@@ -825,7 +862,7 @@ else
     {
     struct joiner *joiner = allJoiner;
     struct joinedTables *joined = joinedTablesCreate(joiner, 
-    	primaryDb, primaryTable, dtfList, 1000000);
+    	primaryDb, primaryTable, dtfList, filterTables, 1000000);
     joinedTablesTabOut(joined);
     joinedTablesFree(&joined);
     }

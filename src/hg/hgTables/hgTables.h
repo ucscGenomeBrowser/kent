@@ -300,6 +300,10 @@ void tabOutSelectedFields(
 boolean anyFilter();
 /* Return TRUE if any filter set. */
 
+struct joinerDtf *filteringTables();
+/* Get list of tables we're filtering on as joinerDtf list (with
+ * the field entry NULL). */
+
 char *filterClause(char *db, char *table, char *chrom);
 /* Get filter clause (something to put after 'where')
  * for table */
