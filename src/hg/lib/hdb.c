@@ -25,7 +25,7 @@ static struct sqlConnCache *hdbCc = NULL;  /* cache for primary database connect
 static struct sqlConnCache *hdbCc2 = NULL;  /* cache for second database connection (ortholog) */
 static struct sqlConnCache *centralCc = NULL;
 
-#define DEFAULT_HUMAN "hg12"
+#define DEFAULT_HUMAN "hg13"
 #define DEFAULT_MOUSE "mm2"
 #define DEFAULT_ZOO   "zooHuman3"
 #define DEFAULT_RAT   "rn1"
