@@ -314,6 +314,7 @@ done >> seq_contig.md
     cvs commit makefile
 
 # MAKE LIFTALL.LFT, NCBI.LFT (DONE - 2004-05-21 - Hiram)
+    #	Re-DONE with new randoms - 2004-06-03 - Hiram)
     cd /cluster/data/hg17
     mkdir -p jkStuff
     cat */lift/{ordered,random}.lft > jkStuff/liftAll.lft
@@ -973,6 +974,7 @@ hgGcPercent -chr=${chr} -doGaps -file=stdout -win=5 hg17 \
     ln -s `pwd`/wigData5_1K/*.wib /gbdb/hg17/wib/gc5Base
 
 # AUTO UPDATE GENBANK MRNA RUN  (WORKING - 2004-05-25 - Hiram)
+    #	re-done with reloaded DB - 2004-06-04 - Hiram
     ssh eieio
     cd /cluster/data/genbank
     # This is a new organism, edit the etc/genbank.conf file and add:
@@ -994,12 +996,12 @@ hgGcPercent -chr=${chr} -doGaps -file=stdout -win=5 hg17 \
     cd /cluster/store6/genbank/work/initial.hg17/align
     para time > time
     cat time
-Completed: 6256 of 6256 jobs
-CPU time in finished jobs:      55219s     920.31m    15.34h    0.64d  0.002 y
-IO & Wait Time:                 25704s     428.40m     7.14h    0.30d  0.001 y
-Average job time:                  13s       0.22m     0.00h    0.00d
-Longest job:                     1056s      17.60m     0.29h    0.01d
-Submission to last job:          1057s      17.62m     0.29h    0.01d
+# Completed: 9500 of 9500 jobs
+# CPU time in finished jobs:      62241s    1037.35m    17.29h    0.72d  0.002 y
+# IO & Wait Time:                 33719s     561.98m     9.37h    0.39d  0.001 y
+# Average job time:                  10s       0.17m     0.00h    0.00d
+# Longest job:                     1062s      17.70m     0.29h    0.01d
+# Submission to last job:          1063s      17.72m     0.30h    0.01d
 
     # Load the results from the above
     ssh hgwdev
@@ -1015,7 +1017,8 @@ Submission to last job:          1057s      17.62m     0.29h    0.01d
 
     cd /cluster/data/genbank
     nice bin/gbAlignStep -srcDb=genbank -type=mrna -verbose=1 -initial hg17
-    #	logFile: var/build/logs/2004.05.25-14:09:01.hg17.initalign.log
+    #	logFile: var/build/logs/2004.06.04-10:47:21.hg17.initalign.log
+XXXX - running 2004-06-04 10:48
 # Completed: 29325 of 29325 jobs
 # CPU time in finished jobs:    5095155s   84919.26m  1415.32h   58.97d  0.162 y
 # IO & Wait Time:                136863s    2281.04m    38.02h    1.58d  0.004 y
@@ -1046,6 +1049,7 @@ Submission to last job:          1057s      17.62m     0.29h    0.01d
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad hg17
 
 # CPGISLANDS (DONE - 2004-05-25 - Hiram)
+    #	Re-DONE with new randoms - 2004-06-04 - Hiram
     ssh hgwdev
     mkdir -p /cluster/data/hg17/bed/cpgIsland
     cd /cluster/data/hg17/bed/cpgIsland
@@ -1072,6 +1076,9 @@ Submission to last job:          1057s      17.62m     0.29h    0.01d
     # Bad char 0x4d = 'M' at line 1216113, base 60805573, sequence chr3
     # Bad char 0x52 = 'R' at line 1216118, base 60805801, sequence chr3
     # Bad char 0x52 = 'R' at line 1216118, base 60805801, sequence chr3
+    #	real    21m47.823s
+    #	user    18m30.810s
+    #	sys     1m13.420s
 
     # Transform cpglh output to bed +
     cat << '_EOF_' > filter.awk
@@ -1097,7 +1104,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     hgLoadBed hg17 cpgIslandExt -tab -noBin \
       -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
     #	Reading cpgIsland.bed
-    #	Loaded 27893 elements of size 10
+    #	Loaded 27801 elements of size 10
     #	Sorted
     #	Saving bed.tab
     #	Loading hg17
@@ -1111,6 +1118,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 	-h genome-testdb hgcentraltest
 
 # PREPARE CLUSTER FOR BLASTZ RUNS (DONE - 2004-05-26 - Hiram)
+    #	Re-DONE with new randoms - 2004-06-03 - Hiram
 
     ssh eieio
     mkdir /cluster/bluearc/scratch/hg/gs.18/build35/rmsk.spec
@@ -1142,7 +1150,7 @@ done
     #	Now extract each one, 1 = Rat, 2 = Mouse
     ssh eieio
     cd /cluster/bluearc/scratch/hg/gs.18/build35
-XXXX
+
     mkdir linSpecRep.notInRat linSpecRep.notInMouse
     foreach f (rmsk.spec/*.out_rat_mus)
         set base = $f:t:r:r
