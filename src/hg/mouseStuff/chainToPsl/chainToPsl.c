@@ -14,7 +14,7 @@
 #include "dystring.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: chainToPsl.c,v 1.7 2003/06/18 03:19:41 baertsch Exp $";
+static char const rcsid[] = "$Id: chainToPsl.c,v 1.8 2003/07/24 07:08:31 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -230,7 +230,9 @@ while (lineFileRow(lf, row))
     if (hashLookup(hash, name) != NULL)
         warn("Duplicate %s, ignoring all but first\n", name);
     else
+        {
 	hashAdd(hash, name, intToPt(size));
+        }
     }
 lineFileClose(&lf);
 return hash;
@@ -317,8 +319,8 @@ void aliStringToPsl(struct lineFile *lf, char *qNameParm, char *tNameParm,
 {
 static char *tName = NULL, *qName = NULL;
 static struct dnaSeq *tSeq = NULL, *qSeq = NULL;
-struct dyString *q = newDyString(16*1024);
-struct dyString *t = newDyString(16*1024);
+//struct dyString *q = newDyString(16*1024);
+//struct dyString *t = newDyString(16*1024);
 unsigned match = 0;	/* Number of bases that match */
 unsigned misMatch = 0;	/* Number of bases that don't match */
 unsigned qNumInsert = 0;	/* Number of inserts in query */
@@ -340,6 +342,7 @@ int *blocks = NULL, *qStarts = NULL, *tStarts = NULL;
 struct boxIn *b, *nextB;
 int qbSize = 0, tbSize = 0; /* sum of block sizes */
 int qtSize = 0, ttSize = 0; /* sum of block + gap sizes */
+boolean qInsert = FALSE, tInsert = FALSE;
 
 /* Don't ouput if either query or target is zero length */
  if ((qStart == qEnd) || (tStart == tEnd))
@@ -388,6 +391,8 @@ for (b = chain->blockList; b != NULL; b = nextB)
 	    tStarts[blockIx] = b->tStart;
 	    blocks[blockIx] = b->tEnd - b->tStart;
             j = b->tStart-tStart;
+            //printf("tStart %d b->tStart %d tEnd %d size %d block %d\n",tStart, b->tStart,  tEnd,tSeq->size, b->tEnd-b->tStart);
+            //printf("qStart %d b->qStart %d qEnd %d size %d qend-qstart %d loop start %d loopend %d\n",qStart, b->qStart,  qEnd, qSeq->size, qEnd-qStart, (b->qStart)-qStart, b->qStart+(b->tEnd - b->tStart)-qStart);
             for (i = (b->qStart)-qStart ; i < b->qStart+(b->tEnd - b->tStart)-qStart; i++)
                 {
                 char qq ;
@@ -395,8 +400,8 @@ for (b = chain->blockList; b != NULL; b = nextB)
                 if (j > tSeq->size || i > qSeq->size)
                     {
                     break;
-                    printf("tStart %d b->tStart %d tEnd %d size %d block %d\n",tStart, b->tStart,  tEnd,tSeq->size, b->tEnd-b->tStart);
-                    printf("qStart %d b->qStart %d qEnd %d size %d qend-qstart %d loop start %d loopend %d\n",qStart, b->qStart,  qEnd, qSeq->size, qEnd-qStart, (b->qStart)-qStart, b->qStart+(b->tEnd - b->tStart)-qStart);
+                    //printf("tStart %d b->tStart %d tEnd %d size %d block %d\n",tStart, b->tStart,  tEnd,tSeq->size, b->tEnd-b->tStart);
+                    //printf("qStart %d b->qStart %d qEnd %d size %d qend-qstart %d loop start %d loopend %d\n",qStart, b->qStart,  qEnd, qSeq->size, qEnd-qStart, (b->qStart)-qStart, b->qStart+(b->tEnd - b->tStart)-qStart);
                     assert(j <= tSeq->size);
                     assert(i <= qSeq->size);
                     }
