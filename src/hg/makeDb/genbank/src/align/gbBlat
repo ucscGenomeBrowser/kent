@@ -46,7 +46,7 @@
 # written in Tcl because bash version was getting hideously hard and wanted
 # a language with named fuction parameters, like fortran.
 #
-# $Id: gbBlat,v 1.37 2004/11/11 16:34:05 markd Exp $
+# $Id: gbBlat,v 1.38 2004/11/11 17:33:11 markd Exp $
 #
 
 # Tools are normally taken from /cluster/bin, however we allow them to be
@@ -477,7 +477,8 @@ set outIntronPsl $outPrefix.intronPsl
 
 # include user name in tmpDir name, since stale directories from another
 # user can't be removed
-set tmpDir /var/tmp/gbBlat.${USER}.[pid].tmp
+set user $env(USER)
+set tmpDir /var/tmp/gbBlat.$user.[pid].tmp
 
 # skip if output file already exists
 if {[file exists $outPsl] && !$overwrite} {
