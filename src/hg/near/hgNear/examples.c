@@ -61,9 +61,9 @@ hPrintf("%s",
  "import into a spreadsheet or relational database, click the <em>text</em> "
  "button. "
  "<P>The UCSC Gene Family Browser was designed and implemented by Jim Kent, "
- "Fan Hsu, David Haussler, and the UCSC Genome Bioinformatics Group. This "
- "work is supported by a grant from the National Human Genome Research "
- "Institute and by the Howard Hughes Medical Institute.</P>"
+ "Fan Hsu, Donna Karolchik, David Haussler, and the UCSC Genome Bioinformatics "
+ "Group. This work is supported by a grant from the National Human Genome "
+ "Research Institute and by the Howard Hughes Medical Institute.</P>"
  );
 }
 
