@@ -1232,12 +1232,21 @@ altColor 255,128,0
 type wig 0.0 1.0
 autoScaleDefault Off
 
-track blastHg16KG
-shortLabel Human knownGene tBLASTn
-longLabel Human knownGene tBLASTn
+track blatHg16KG
+shortLabel Human knownGene BLAT
+longLabel Human knownGene BLAT
 group compGeno
 priority 142
 visibility hide
+colorChromDefault off
+type psl protein
+
+track blastHg16KG
+shortLabel Human Proteins
+longLabel Human Proteins
+group compGeno
+priority 142
+visibility pack
 colorChromDefault off
 type psl protein
 
