@@ -488,7 +488,7 @@ altColor 0,160,0
 type maf
 speciesOrder human chimp orangutan baboon macaque vervet lemur rabbit rat mouse cow pig horse cat dog ajbat cpbat hedgehog opossum dunnart platypus chicken zfish tetra fugu
 
-track tbaLeptin
+track leptin
 shortLabel Leptin TBA
 longLabel Leptin Region TBA alignments (human,mouse,rat,chimp,baboon,cow,pig,cat,dog)
 group compGeno
