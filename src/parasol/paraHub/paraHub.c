@@ -1926,6 +1926,7 @@ for (;;)
 	{
 	if (netReadAll(connectionHandle, sig, sigLen) < sigLen || !sameString(sig, paraSig))
 	    {
+	    logIt("bad signature");
 	    close(connectionHandle);
 	    continue;
 	    }
