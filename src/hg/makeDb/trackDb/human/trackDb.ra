@@ -409,6 +409,30 @@ termRegex HG-U133:.+
 searchPriority 16
 termPrefix HG-U133:
 
+searchName affyUclaNoChip
+searchTable affyUcla
+searchMethod exact
+searchType bed
+shortCircuit 1
+termRegex [0-9]+[[:alnum:]_]*_at
+searchPriority 16
+
+searchTable affyU133
+searchMethod exact
+searchType psl
+shortCircuit 1
+termRegex HG-U133[A-Z]:.+
+query select tName,tStart,tEnd,qName from %s where qName like '%s;'
+searchPriority 16
+termPrefix HG-
+
+searchTable affyGnf1h
+searchMethod exact
+searchType psl
+shortCircuit 1
+termRegex gnf1h[0-9]+.+
+searchPriority 16
+
 searchName miRNAPrefix
 searchTable miRNA
 searchMethod prefix

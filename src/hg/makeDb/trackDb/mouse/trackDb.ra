@@ -217,6 +217,53 @@ searchDescription Alias of STS Marker
 searchPriority 11
 padding 100000
 
+searchTable affyU74
+searchMethod exact
+searchType psl
+shortCircuit 1
+termRegex MG-U74:.+
+searchPriority 16
+termPrefix MG-U74:
+
+searchName affyU74NoChip
+searchTable affyU74
+searchMethod exact
+searchType psl
+shortCircuit 1
+termRegex [0-9]+[[:alnum:]_]*_at
+searchPriority 16
+
+searchTable affyGnfU74A
+searchMethod exact
+searchType bed
+shortCircuit 1
+termRegex MG-U74A:.+
+searchPriority 16
+termPrefix MG-U74A:
+
+searchTable affyGnfU74B
+searchMethod exact
+searchType bed
+shortCircuit 1
+termRegex MG-U74B:.+
+searchPriority 16
+termPrefix MG-U74B:
+
+searchTable affyGnfU74C
+searchMethod exact
+searchType bed
+shortCircuit 1
+termRegex MG-U74C:.+
+searchPriority 16
+termPrefix MG-U74C:
+
+searchTable affyGnf1m
+searchMethod exact
+searchType psl
+shortCircuit 1
+termRegex gnf1m[0-9]+.+
+searchPriority 16
+
 searchName miRNAPrefix
 searchTable miRNA
 searchMethod prefix
