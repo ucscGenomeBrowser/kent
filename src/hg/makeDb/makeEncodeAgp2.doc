@@ -112,42 +112,67 @@ hgsql $chicken -s -e "select * from contigAcc" > chicken.contig.tab
 csh genomeAgps.csh $chicken chicken $chicken
 
 # Test a region
-# takes 10 minutes ?
-ssh hgwdev
+ssh kksilo
 cd /cluster/data/encode/ortho2/agp
-set chicken = galGal2
-mkdir test
-cd test
-/cluster/data/encode/bin/scripts/agpAccToContig.pl galGal2 \
-        ../$chicken/chicken_${region}.agp > test.agp
-set region = ENm005_1
+mkdir tests
+cd tests
 gunzip -c  /cluster/data/galGal2/chicken_contigs.tar.gz > \
                 test.chicken.contigs.fa
 
-ssh kksilo
+ssh hgwdev
 cd /cluster/data/encode/ortho2/agp/tests
-set chicken = galGal2
-time agpToFa test.agp chicken_$region test.fa -simpleMulti test.chicken.contigs.fa
-set coords = `awk -v REGION=$region '$4 == "$REGION" {printf "%s.%d.%d", $1, $2, $3}' /cluster/data/encode/ortho2/consensus/galGal2.bed`
+set db = galGal2
+set org = chicken
+set region = ENm001_1
+/cluster/data/encode/bin/scripts/agpAccToContig.pl $db \
+        ../$db/${org}_${region}.agp > test.$db.$region.agp
+
+ssh kolossus
+cd /cluster/data/encode/ortho2/agp/tests
+set org = chicken
+set db = galGal2
+set region = ENm002_1
+set coords = `awk -v REGION=$region '$4 == REGION {printf "%s.%d.%d", $1, $2, $3}' /cluster/data/encode/ortho2/consensus/galGal2.bed`
+echo $coords
 set chr = $coords:r:r
-nibFrag -upper /cluster/data/galGal2/nib/${chr}.nib \
-        $coords:r:e $coords:e + nibtest.fa
-faCmp nibtest.fa test.fa
+nibFrag -upper /cluster/data/$db/nib/${chr}.nib \
+        $coords:r:e $coords:e + nibTest.$db.$region.fa
+
+# takes 7 minutes on kksilo, 2-6 mins on kolossus
+set fa = test.chicken.contigs.fa
+time agpToFa test.$db.$region.agp ${org}_$region test.$db.$region.fa -simpleMulti $fa
+
+faCmp nibTest.$db.$region.fa test.$db.$region.fa
     # test.fa and nibtest.fa are the same
-rm test.agp test.contigs.fa test.fa nibtest.fa
+
+# Test all chicken
+ssh kolossus
+cd /cluster/data/encode/ortho2/agp/tests
+set org = chicken
+cat ../$db/*.agp | time agpAllToFaFile stdin $fa test.$db.fa
+foreach f (../$db/*.agp)
+    set region = $f:t:r
+    echo $region
+    set coords = `awk -v REGION=$region '$4 == REGION {printf "%s.%d.%d", $1, $2, $3}' /cluster/data/encode/ortho2/consensus/$db.bed`
+    echo $coords
+    set chr = $coords:r:r
+    nibFrag -upper /cluster/data/galGal2/nib/${chr}.nib \
+        $coords:r:e $coords:e + nibTest.$db.$region.fa
+    faCmp nibTest.$db.$region.fa test.$db.$region.fa
+end
 
 # Create packing list
 /cluster/data/encode/bin/scripts/encodeRegionPackingList \
-    $consensusDir/$chicken.bed5 $chicken chicken "Gallus gallus" \
-    9031 N/A FEB-2004 $chicken "CGSC Feb. 2004" > $chicken/$chicken.packing.list
+    $consensusDir/$db.bed5 $db $org "Gallus gallus" \
+    9031 N/A FEB-2004 $db "CGSC Feb. 2004" > ${db}/$db.packing.list
 
 # Copy  to downloads area
-cp -f $chicken/$chicken.packing.list $downloadDir
-tar cvfz $downloadDir/$chicken.agp.tar.gz $chicken/*.agp
+cp -f $db/$db.packing.list $downloadDir
+tar cvfz $downloadDir/$db.agp.tar.gz $db/*.agp
 
-hgsql -e "select count(*) from $chicken.encodeRegionConsensus"
-tar tvfz $downloadDir/$chicken.agp.tar.gz | wc -l
-grep Region $downloadDir/$chicken.packing.list | wc -l
+hgsql -e "select count(*) from $db.encodeRegionConsensus"
+tar tvfz $downloadDir/$db.agp.tar.gz | wc -l
+grep Region $downloadDir/$db.packing.list | wc -l
 
 
 ########################################################################
@@ -204,6 +229,10 @@ tar cvfz $downloadDir/$chimp.agp.tar.gz $chimp/*.agp
 hgsql -e "select count(*) from $chimp.encodeRegionConsensus"
 tar tvfz $downloadDir/$chimp.agp.tar.gz | wc -l
 grep Region $downloadDir/$chimp.packing.list | wc -l
+
+# Test
+ssh kolossus
+time agpToFa testChimp.agp chimp_ENm001_1 testChimp.fa -simpleMulti /cluster/data/panTro1/contigs.bases
 
 ########################################################################
 # cleanup
