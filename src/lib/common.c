@@ -1296,8 +1296,7 @@ char *strstrNoCase(char *haystack, char *needle)
   A case-insensitive strstr function
 Will also robustly handle null strings
 param haystack - The string to be searched
-param needle - The string to llok for in the haystack string
-
+param needle - The string to look for in the haystack string
 return - A pointer to the first occurence of the desired substring
  */
 {
