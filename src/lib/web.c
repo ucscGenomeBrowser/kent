@@ -11,7 +11,7 @@ boolean webInTextMode = FALSE;
 void webStartText()
 /* output the head for a text page */
 {
-printf("Content-Type: text/plain\n\n");
+/*printf("Content-Type: text/plain\n\n");*/
 
 webHeadAlreadyOutputed = TRUE;
 webInTextMode = TRUE;
