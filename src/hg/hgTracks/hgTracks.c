@@ -5255,6 +5255,91 @@ else
 tg->loadItems = loadXenoPslWithPos;
 }
 
+
+static void chainDraw(struct trackGroup *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw chained features. This loads up the simple features from 
+ * the chainLink table, calls linkedFeaturesDraw, and then
+ * frees the simple features again. */
+{
+char buf[16];
+struct linkedFeatures *lf;
+struct simpleFeature *sf;
+struct hash *hash = newHash(0);	/* Hash of chain ids. */
+struct dyString *query = newDyString(1024);
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+struct lm *lm = lmInit(1024*4);
+char **row;
+double scale = ((double)(winEnd - winStart))/width;
+
+/* Make sure this is sorted if in full mode. */
+if (vis == tvFull)
+    slSort(&tg->items, linkedFeaturesCmpStart);
+
+/* Make up a hash of all linked features keyed by
+ * id, which is held in the extras field.  To
+ * avoid burning memory on full chromosome views
+ * we'll just make a single simple feature and
+ * exclude from hash chains less than three pixels wide, 
+ * since these would always appear solid. */
+for (lf = tg->items; lf != NULL; lf = lf->next)
+    {
+    double pixelWidth = scale * (lf->end - lf->start);
+    if (pixelWidth >= 2.5)
+	{
+	sprintf(buf, "%d", ptToInt(lf->extra));
+	hashAdd(hash, buf, lf);
+	}
+    else
+        {
+	lmAllocVar(lm, sf);
+	sf->start = lf->start;
+	sf->end = lf->end;
+	sf->grayIx = lf->grayIx;
+	lf->components = sf;
+	}
+    }
+
+/* Make up range query. */
+dyStringPrintf(query, "select chainId,tStart,tEnd from %s_%sLink where ",
+	chromName, tg->mapName);
+hAddBinToQuery(seqStart, seqEnd, query);
+dyStringPrintf(query, "tStart<%u and tEnd>%u", seqEnd, seqStart);
+sr = sqlGetResult(conn, query->string);
+
+/* Loop through making up simple features and adding them
+ * to the corresponding linkedFeature. */
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    lf = hashFindVal(hash, row[0]);
+    if (lf != NULL)
+	{
+	lmAllocVar(lm, sf);
+	sf->start = sqlUnsigned(row[1]);
+	sf->end = sqlUnsigned(row[2]);
+	sf->grayIx = maxShade;
+	slAddHead(&lf->components, sf);
+	}
+    }
+
+/* Someday we may need to put in a sort on the simple features
+ * here.  For now though nobody cares. */
+
+linkedFeaturesDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width,
+	font, color, vis);
+
+/* Cleanup time. */
+for (lf = tg->items; lf != NULL; lf = lf->next)
+    lf->components = NULL;
+lmCleanup(&lm);
+freeHash(&hash);
+dyStringFree(&query);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 void chainLoadItems(struct trackGroup *tg)
 /* Load up all of the chains from correct table into tg->items 
  * item list.  At this stage to conserve memory for other tracks
@@ -5298,70 +5383,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 slReverse(&list);
 tg->items = list;
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-}
-
-static void chainDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw chained features. This loads up the simple features from 
- * the chainLink table, calls linkedFeaturesDraw, and then
- * frees the simple features again. */
-{
-char buf[16];
-struct linkedFeatures *lf;
-struct simpleFeature *sf;
-struct hash *hash = newHash(0);	/* Hash of chain ids. */
-struct dyString *query = newDyString(1024);
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-struct lm *lm = lmInit(1024*4);
-char **row;
-
-/* Make sure this is sorted if in full mode. */
-if (vis == tvFull)
-    slSort(&tg->items, linkedFeaturesCmpStart);
-
-/* Make up a hash of all linked features keyed by
- * id, which is held in the extras field. */
-for (lf = tg->items; lf != NULL; lf = lf->next)
-    {
-    sprintf(buf, "%d", ptToInt(lf->extra));
-    hashAdd(hash, buf, lf);
-    }
-
-/* Make up range query. */
-dyStringPrintf(query, "select chainId,tStart,tEnd from %s_%sLink where ",
-	chromName, tg->mapName);
-hAddBinToQuery(seqStart, seqEnd, query);
-dyStringPrintf(query, "tStart<%u and tEnd>%u", seqEnd, seqStart);
-sr = sqlGetResult(conn, query->string);
-
-/* Loop through making up simple features and adding them
- * to the corresponding linkedFeature. */
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    lf = hashMustFindVal(hash, row[0]);
-    lmAllocVar(lm, sf);
-    sf->start = sqlUnsigned(row[1]);
-    sf->end = sqlUnsigned(row[2]);
-    sf->grayIx = maxShade;
-    slAddHead(&lf->components, sf);
-    }
-
-/* Someday we may need to put in a sort on the simple features
- * here.  For now though nobody cares. */
-
-linkedFeaturesDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width,
-	font, color, vis);
-
-/* Cleanup time. */
-for (lf = tg->items; lf != NULL; lf = lf->next)
-    lf->components = NULL;
-lmCleanup(&lm);
-freeHash(&hash);
-dyStringFree(&query);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
