@@ -18,9 +18,7 @@
 #include "gbProcessed.h"
 #include "gbStatusTbl.h"
 
-static char const rcsid[] = "$Id: gbBuildState.c,v 1.5 2003/07/11 04:13:40 markd Exp $";
-
-#define DO_EXT_CHANGE FALSE
+static char const rcsid[] = "$Id: gbBuildState.c,v 1.6 2003/07/22 21:54:40 markd Exp $";
 
 static struct dbLoadOptions* gOptions; /* options from cmdline and conf */
 static int gErrorCnt = 0;  /* count of errors during build */
@@ -260,7 +258,7 @@ else
     else if (processed->modDate > tmpStatus->modDate)
         markMetaChanged(ssData->select, statusTbl, tmpStatus, processed,
                         aligned);
-    else if (DO_EXT_CHANGE
+    else if ((gOptions->flags & DBLOAD_EXT_FILE_UPDATE)
              && !sameString(tmpStatus->extRelease,
                             ssData->select->release->version))
         markExtChanged(statusTbl, tmpStatus, processed, aligned);

@@ -30,7 +30,7 @@
 #include "extFileTbl.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.6 2003/07/11 04:13:40 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.7 2003/07/22 21:54:40 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 /* FIXME: ignored deletion could be in it's own module */
@@ -53,6 +53,7 @@ static struct optionSpec optionSpecs[] = {
     {"allowLargeDeletes", OPTION_BOOLEAN},
     {"gbdbGenBank", OPTION_STRING},
     {"reloadList", OPTION_STRING},
+    {"extFileUpdate", OPTION_BOOLEAN},
     {"verbose", OPTION_INT},
     {"conf", OPTION_STRING},
     {NULL, 0}
@@ -870,6 +871,10 @@ errAbort(
   "      would require more memory.\n"
   "\n"
   "     -noPerChrom - don't build the per-chromosome tables.\n"
+  "\n"
+  "     -extFileUpdate - update the gbSeq table to link each sequence to\n"
+  "      the latest release.  This allows removing fasta files for older\n"
+  "      releases, but is very time consuming.\n"
   "\n"
   "     -verbose=n - enable verbose output, values greater than 1 increase \n"
   "                  verbosity:\n"

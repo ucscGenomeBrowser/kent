@@ -150,6 +150,8 @@ if (optionExists("initialLoad"))
     options.flags |= DBLOAD_INITIAL|DBLOAD_GO_FASTER;
 if (optionExists("allowLargeDeletes"))
     options.flags |= DBLOAD_LARGE_DELETES;
+if (optionExists("extFileUpdate"))
+    options.flags |= DBLOAD_EXT_FILE_UPDATE;
 
 /* Get restrictions on what to select from the command line, and combine
  * with conf file. */

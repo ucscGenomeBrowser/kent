@@ -9,6 +9,8 @@
 #define DBLOAD_LARGE_DELETES     0x04   /* don't enforce fraction deleted */
 #define DBLOAD_DRY_RUN           0x08   /* Don't modify database */
 #define DBLOAD_PER_CHROM_ALIGN   0x10   /* build per-chromosome alignment tables */
+#define DBLOAD_EXT_FILE_UPDATE   0x20   /* update gbSeq to link to the latest
+                                         * latest release's files. */
 
 struct dbLoadAttr
 /* attributes associated with a srcDb+type+orgCat */
