@@ -1811,3 +1811,50 @@ doPhast $(file1) $(root1)
     hgsql xenTro1 -e 'drop index chrom on phastCons5'
     hgsql xenTro1 -e 'create index chrom on phastCons5(chrom(16))'
 
+# MAKE DOWNLOADABLE SEQUENCE FILES (DONE, 2004-11-04, Fan)
+ssh kksilo
+cd /cluster/data/xenTro1
+#- Build the .zip files
+rm -rf zip
+mkdir zip
+# scaffolds
+zip -j zip/scaffolds.zip downloads/xenopus.041015.fasta &
+# RepeatMasker library
+zip -j zip/RmLib.zip downloads/xt3.lib1.fasta &
+# soft masked scaffold fasta
+zip -j zip/softmask2.zip xenTro1.softmask2.fa &
+# RepeatMasker out files
+zip -j zip/repeats.zip repeats/repeats.out &
+# hard masked scaffold fasta
+zip -j zip/hardmask2.zip xenTro1.hardmask2.fa &
+# TRF output files
+cd bed/simpleRepeat
+zip ../../zip/trf.zip trf.bed &
+cd ../..
+# get GenBank native mRNAs
+cd /cluster/data/genbank
+./bin/i386/gbGetSeqs -db=xenTro1 -native GenBank mrna \
+        /cluster/data/xenTro1/zip/mrna.fa
+# get GenBank xeno mRNAs
+./bin/i386/gbGetSeqs -db=xenTro1 -xeno GenBank mrna \
+        /cluster/data/xenTro1/zip/xenoMrna.fa &
+# get native GenBank ESTs
+./bin/i386/gbGetSeqs -db=xenTro1 -native GenBank est \
+/cluster/data/xenTro1/zip/est.fa &
+
+cd /cluster/data/xenTro1/zip
+# zip GenBank native and xeno mRNAs and native ESTs, 
+# after the above gbGetSeqs jobs are done.
+zip -j mrna.zip mrna.fa 
+zip -j xenoMrna.zip xenoMrna.fa 
+zip -j est.zip est.fa 
+
+ssh hgwdev
+cd /cluster/data/xenTro1/zip
+set gp = /usr/local/apache/htdocs/goldenPath/xenTro1
+mkdir -p $gp/bigZips
+cp -p *.zip $gp/bigZips
+cd $gp/bigZips
+md5sum *.zip > md5sum.txt
+# Take a look at bigZips, update README.txt.
+
