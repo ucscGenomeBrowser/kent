@@ -1,7 +1,7 @@
 include ../../../inc/common.mk
 
 L = -lm
-MYLIBDIR = ../../../../src/lib/$(MACHTYPE)
+MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkweb.a
 
 O = lavToPsl.o
