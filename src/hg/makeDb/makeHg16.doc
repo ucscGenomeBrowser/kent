@@ -3755,3 +3755,10 @@ end
     rm -r split fold err batch.bak
     cd ../utr3
     rm -r split fold err batch.bak
+
+# CREATING KNOWNtOsUPER (which enables superFamily stuff in hgNear/hgGene)
+# First see if need to update superfamily data from 
+# ftp server at supfam.mrc-lmb.cam.ac.uk following instructions
+# in /cluster/store1/superFamily/genomes/README.ucsc.  Then
+# make sure that knownToEnsembl and ensGtp tables are created, then:
+    zcat /cluster/store1/superFamily/genomes/ass_26-Oct-2003.tab.gz | hgKnownToSuper hg16 hs stdin

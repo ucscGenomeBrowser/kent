@@ -1983,16 +1983,16 @@ LOAD ENSEMBL GENES (Finished 2003-09-26 braney)
      gunzip Homo_sapiens.NCBI33.pep.fa.gz
      cp Homo_sapiens.NCBI33.pep.fa ensemblPep.fa
 
-     # munge fasta header to be >ENST<number>
-     sed 's/Translation:ENSP/ENST/g' < ensemblPep.fa > ensembl.pep
+     # Go use the data mart link on www.ensembl.org to
+     # download a tab-separated file with the columns
+     # geneId/transcriptId/protienId and put it in
+     # ensGtp.txt.  Then load it into database as so:
+     hgsql hg15 < ~/kent/src/hg/lib/ensGtp.sql
+     hgsql hg15 <<end
+     load data local infile 'ensGtp.txt' into table ensGtp
+end
 
-     # ../../jkStuff/ensemblFixPep.pl ensemblPep.fixed ensembl.pep
-        # Processing ensemblPep.fa into ensembl.pep
-        # 294245 total lines read
-        # 32035 comment lines processed
-
-     hgPepPred hg15 generic ensPep ensembl.pep
-     # NOTE: this stuff looks problematic
+     hgPepPred hg15 ensembl ensemblPep.fa
 
     # LOAD SANGER 22 Pseudogenes  (TODO)
     cd ~/hg15/bed/sanger22
@@ -3463,3 +3463,10 @@ Submission to last job:          1817s      30.28m     0.50h    0.02d
     end
     # load into database
     /cluster/bin/i386/hgLoadMaf -warn hg15 humor300
+
+# Creating knownToSuper (which enables superFamily stuff in hgNear/hgGene)
+# First see if need to update superfamily data from 
+# ftp server at supfam.mrc-lmb.cam.ac.uk following instructions
+# in /cluster/store1/superFamily/genomes/README.ucsc.  Then
+# make sure that knownToEnsembl and ensGtp tables are created, then:
+    zcat /cluster/store1/superFamily/genomes/ass_26-Oct-2003.tab.gz | hgKnownToSuper hg15 hs stdin
