@@ -16,7 +16,7 @@
 #include "psl.h"
 
 char *defaultOldDb = "Dec. 12, 2000";
-char *defaultNewDb = "April 1, 2001";
+char *defaultNewDb = "Aug. 6, 2001";
 char *newDb = NULL;
 char *oldDb = NULL;
 char *chrom = NULL;
@@ -62,7 +62,7 @@ struct namePair oldVersions[] = { // { "Oct. 7, 2000", "hg5" },
 struct serverTab serverTab[] =  {
 {"hg6", "Dec. 12, 2000", FALSE, "blat2", "17779", "/projects/hg2/gs.6/oo.27/nib"},
 {"hg7", "April 1, 2001", FALSE, "blat1", "17779", "/projects/hg3/gs.7/oo.29/nib"},
-{"hg8", "Aug. 6, 2001", FALSE, "cc", "17779", "/projects/hg3/gs.8/oo.31/nib"} 
+{"hg8", "Aug. 6, 2001", FALSE, "blat3", "17779", "/projects/hg3/gs.8/oo.33/nib"}
 };
 
 /** print usage and quit */
@@ -244,7 +244,7 @@ webEnd();
 void doBadReport(struct coordConvRep *ccr) 
 {
 webStart("Coordinate Conversion for %s %s:%d-%d", ccr->from->date, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd);
-printf("<p><b>Error:</b> %s\n", ccr->msg);
+printf("<p><b>Conversion Not Successful:</B> %s\n", ccr->msg);
 printf("<p><a href=\"%s\">View old Coordinates in %s browser.</a>\n", 
        makeBrowserUrl(ccr->from->version, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd),
        ccr->from->date);
@@ -345,10 +345,14 @@ printf("<form action=\"../cgi-bin/hgCoordConv\" method=get>\n");
 printf("<br><br>\n");
 printf("<table><tr>\n");
 printf("<b><td><table><tr><td>Original Draft: </b>\n");
+
+/* choose whether to use the db supplied by cgi or our default */
 dbChoice = chooseDb(origDb, defaultOldDb, oldVersions, ArraySize(oldVersions)); 
 cgiMakeDropList("origGenome", origChoices, ArraySize(origChoices), dbChoice);
 printf("</td></tr></table></td>\n");
 printf("  <b><td><table><tr><td>Original Position:  </b>\n");
+
+/* if someone has passed in a position fill it in for them */
 if(position == NULL) 
     cgiMakeTextVar("position",defaultPos, 30);
 else
