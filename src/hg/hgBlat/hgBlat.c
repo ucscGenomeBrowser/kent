@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.77 2004/06/09 01:03:55 kent Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.78 2004/06/30 22:33:49 angie Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -70,8 +70,11 @@ sprintf(query, "select dbDb.name,dbDb.description,blatServers.isTrans"
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     {
-    errAbort("Can't find a server for %s database %s\n",
-	    (isTrans ? "translated" : "DNA"), db);
+    errAbort("Can't find a server for %s database %s.  Click "
+	     "<A HREF=\"/cgi-bin/hgBlat?%s&command=start&db=%s\">here</A> "
+	     "to reset to default database.",
+	     (isTrans ? "translated" : "DNA"), db,
+	     cartSidUrlString(cart), hDefaultDb());
     }
 st.db = cloneString(row[0]);
 st.genome = cloneString(row[1]);
