@@ -1744,11 +1744,12 @@ LOAD GENIE (todo)
          mysql> delete * from genieAlt where name like 'RS.%';
          mysql> delete * from genieAlt where name like 'C.%';
 
-LOAD SOFTBERRY GENES (TODO)
+LOAD SOFTBERRY GENES (4/25/03 KRR)
      mkdir -p ~/hg15/bed/softberry
      cd ~/hg15/bed/softberry
-     wget ftp://www.softberry.com/pub/sc_fgenesh_hum_mar03up/sc_fgenesh_hum_mar03up.tar.gz
-     gunzip -c sc_fgenesh_hum_mar03up.tar.gz | tar xvf -
+     set file = Softb_fgenesh_models_apr03.tar.gz
+     wget ftp://www.softberry.com/pub/SC_HUM_APR03/$file
+     gunzip -c $file | tar xvf -
      ldHgGene hg15 softberryGene chr*.gff
      hgPepPred hg15 softberry *.protein
      hgSoftberryHom hg15 *.protein
