@@ -1,48 +1,24 @@
 <HTML>
-<HEAD>
+  <HEAD>
     <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
     <META name="description" content="UCSC Genome Browser">
     <META name="keywords" content="genome, genome browser, genome assembly, 
 	Blat, UCSC, genome browser source, bioinformatics, gene prediction, 
 	SNP, EST, mRNA">
     <TITLE>UCSC Genome Browser: Build and Installation Instructions</TITLE>
-    <LINK REL="STYLESHEET" HREF="/style/HGStyle.css">
-</HEAD>
+    <LINK REL="STYLESHEET" HREF="../style/HGStyle.css">
+  </HEAD>
 
-<BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#6600FF">
-<A NAME="TOP"></A>
+  <BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#6600FF">
+  <A NAME="TOP"></A>
 
-<TABLE BORDER=0 WIDTH="100%">
-    <TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="/images/title.jpg" ALT="UCSC Genome Bioinformatics"></TH></TR>
+    <TABLE BORDER=0 WIDTH="100%">
+      <TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="/images/title.jpg" ALT="UCSC Genome Bioinformatics"></TH></TR>
 
-<!--HOTLINKS BAR-->
-    <TR><TD COLSPAN=2 HEIGHT=40>
-	<TABLE bgcolor="000000" cellpadding="1" cellspacing="1" width="100%" height="27">
-	    <TR bgcolor="2636D1"><TD valign="middle">
-		<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 bgcolor="2636D1" height="24">
-		    <TR><TD VALIGN="middle"><font color="#89A1DE">&nbsp; 
-			<A HREF="/index.html" class="topbar">
-				Home</A> &nbsp; - &nbsp;
-			<A HREF="/cgi-bin/hgGateway" class="topbar">
-				Genome Browser</A> &nbsp; - &nbsp; 
-			<A HREF="/cgi-bin/hgNear" class="topbar">
-				Gene Sorter</A> &nbsp; - &nbsp; 
-			<A HREF="/cgi-bin/hgBlat?command=start" class="topbar">
-				Blat </A> &nbsp; - &nbsp; 
-			<A HREF="/cgi-bin/hgTables?command=start" class="topbar">
-				Table Browser</A> &nbsp; - &nbsp; 
-			<A HREF="/FAQ/" class="topbar">
-				FAQ</A> &nbsp; - &nbsp; 
-			<A HREF="/goldenPath/help/hgTracksHelp.html" class="topbar">
-				Help</A> &nbsp;</font>
-		    </TD></TR>
-		</TABLE>
-	    </TD></TR>
-	</TABLE>
-    </TD></TR>
+      <TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../inc/topbar.html"--></TD></TR>
 
 <!--Content Tables------------------------------------------------------->
-    <TR><TD>	
+      <TR><TD>	
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" BORDERCOLOR="888888" BORDER=1>
 	    <TR><TD>
 		<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
@@ -109,7 +85,7 @@ Create a directory named <em>jksrc</em> and go to it.
 <P>
 <LI>
 Unzip <em>jksrc.zip</em>. This creates the source hierarchy <em>./kent</em> (the source 
-tree is also available via <A HREF="/admin/cvs.html">CVS</A>).
+tree is also available via <A HREF="cvs.html">CVS</A>).
 <P>
 <LI>
 Go to the <em>kent/src</em> directory and type: <TT>make libs</TT>. This builds 
@@ -175,9 +151,11 @@ not Microsoft word doc files). </P>
 </em>.
 <BR><em>This page last modified: <!--#echo var="LAST_MODIFIED"-->.</em>
 <BR>
-
-	</TD><TD WIDTH=15></TD></TR></TABLE>
-	<BR></TD></TR></TABLE>
-	
-</TD></TR></TABLE>
-</BODY></HTML>
+	      </TD><TD WIDTH=15></TD></TR>
+	    </TABLE>
+	  <BR></TD></TR>
+	</TABLE>
+      </TD></TR>
+    </TABLE>
+  </BODY>
+</HTML>
