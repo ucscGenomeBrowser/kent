@@ -8,7 +8,7 @@
 #include "twoBit.h"
 #include <limits.h>
 
-static char const rcsid[] = "$Id: twoBit.c,v 1.11 2004/09/14 05:21:12 baertsch Exp $";
+static char const rcsid[] = "$Id: twoBit.c,v 1.12 2005/03/24 12:55:58 baertsch Exp $";
 
 static int countBlocksOfN(char *s, int size)
 /* Count number of blocks of N's (or n's) in s. */
@@ -605,19 +605,30 @@ struct dnaSeq *twoBitLoadAll(char *spec)
  * which is in format
  *    file/path/name:seqName:start-end
  * or
- *    file/path/name:seqName */
+ *    file/path/name:seqName 
+ * or
+ *    file/path/name:seqName1,seqName2,seqName3,...
+ */
 {
 struct dnaSeq *list = NULL, *seq;
 struct twoBitFile *tbf = NULL;
 FILE *f = NULL;
+char *seqArray[1024];
 if (twoBitIsRange(spec))
     {
     char *dupe = cloneString(spec);
     char *file, *seqName;
-    int start, end;
+    int start, end, i;
+    int seqCount = 0;
     twoBitParseRange(dupe, &file, &seqName, &start, &end);
     tbf = twoBitOpen(file);
-    list = twoBitReadSeqFrag(tbf, seqName, start, end);
+    seqCount = chopString(seqName, ",", seqArray, ArraySize(seqArray));
+    for (i = 0 ; i < seqCount ; i++)
+        {
+        seq = twoBitReadSeqFrag(tbf, seqArray[i], start, end);
+        slAddHead(&list, seq);
+        }
+    slReverse(&list);
     freez(&dupe);
     }
 else
@@ -663,6 +674,8 @@ boolean twoBitParseRange(char *rangeSpec, char **retFile,
  *    file/path/name:seqName:start-end
  * or
  *    file/path/name:seqName
+ * or
+ *    file/path/name:seqName1,seqName2,seqName3,...
  * This will destroy the input 'rangeSpec' in the process.  Returns FALSE if
  * it doesn't fit this format, setting retFile to rangeSpec, and retSet to
  * null.  If it is the shorter form then start and end will both be returned
