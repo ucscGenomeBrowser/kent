@@ -40,7 +40,7 @@
 
 #define	NO_DATA	128
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.6 2003/09/19 23:39:12 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.7 2003/09/24 16:06:21 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -48,6 +48,7 @@ static struct optionSpec optionSpecs[] = {
     {"binsize", OPTION_LONG_LONG},
     {"dataSpan", OPTION_LONG_LONG},
     {"chrom", OPTION_STRING},
+    {"wibFile", OPTION_STRING},
     {"name", OPTION_STRING},
     {"verbose", OPTION_BOOLEAN},
     {NULL, 0}
@@ -57,7 +58,8 @@ static long long add_offset = 0;	/* to allow "lifting" of the data */
 static long long binsize = 1024;	/* # of data points per table row */
 static long long dataSpan = 1;		/* bases spanned per data point */
 static boolean verbose = FALSE;		/* describe what happens	*/
-static char * chrom = (char *) NULL;	/* to specify chrN file name	*/
+static char * chrom = (char *) NULL;	/* to specify chrom name	*/
+static char * wibFile = (char *) NULL;	/* to name the .wib file	*/
 static char * name = (char *) NULL;	/* to specify feature name	*/
 
 static void usage()
@@ -65,16 +67,18 @@ static void usage()
 errAbort(
     "wigAsciiToBinary - convert ascii Wiggle data to binary file\n"
     "usage: wigAsciiToBinary [-offset=N] [-binsize=N] [-dataSpan=N] \\\n"
-    "\t[-chrom=chrN] [-name=<feature name>] [-verbose] <file names>\n"
+    "\t[-chrom=chrN] [-wibFile=<file name>] [-name=<feature name>] \\\n"
+    "\t[-verbose] <two column ascii data file names>\n"
     "\t-offset=N - add N to all coordinates, default 0\n"
     "\t-binsize=N - # of points per database row entry, default 1024\n"
     "\t-dataSpan=N - # of bases spanned for each data point, default 1\n"
-    "\t-chrom=chrN - this data is for chrN, to name output file\n"
-    "\t-name=<feature name> - to name the feature, default chrN\n"
+    "\t-chrom=chrN - this data is for chrN\n"
+    "\t-wibFile=chrN - to name the .wib output file\n"
+    "\t-name=<feature name> - to name the feature, default chrN or -chrom specified\n"
     "\t-verbose - display process while underway\n"
     "\t<file names> - list of files to process\n"
     "If the name of the input files are of the form: chrN.<....> this will\n"
-    "\tset the output file names.  Otherwise use the -chrom option.\n"
+    "\tset the output file names.  Otherwise use the -wibFile option.\n"
     "Each ascii file is a two column file.  Whitespace separator\n"
     "First column of data is a chromosome location.\n"
     "Second column is data value for that location, range [0:127]\n"
@@ -96,9 +100,9 @@ errAbort(
     if( bincount ) { \
 	chromEnd = chromStart + (bincount * dataSpan); \
 	fprintf( wigout, \
-"%s\t%llu\t%llu\t%s.%llu\t%d\t%c\t%llu\t%llu\t%llu\t%s\n", \
+"%s\t%llu\t%llu\t%s.%llu_%s\t%d\t%c\t%llu\t%llu\t%llu\t%s\n", \
 	    chromName, chromStart+add_offset, chromEnd+add_offset, \
-	    featureName, rowCount, maxScore, strand, dataSpan, \
+	    featureName, rowCount, spanName, maxScore, strand, dataSpan, \
 	    bincount, fileOffsetBegin, binfile ); \
 	++rowCount; \
 	} \
@@ -131,7 +135,7 @@ char *chromName = (char *) NULL;	/* pseudo bed-6 data to follow */
 unsigned long long chromStart = 0;	/* for table row data */
 unsigned long long chromEnd = 0;	/* for table row data */
 char strand = '+';			/* may never use - strand ? */
-/* char spanName[64];			/* short-hand name for dataSpan */
+char spanName[64];			/* short-hand name for dataSpan */
 char featureName[254];			/* the name of this feature */
 
 /*	for each input data file	*/
@@ -141,7 +145,6 @@ for( i = 1; i < argc; ++i )
     /* let's shorten the dataSpan name which will be used in the
      * "Name of item" column
      */
-    /*	the spanName idea is currently unused
     if ( dataSpan < 1024 )
 	{
 	    snprintf( spanName, sizeof(spanName)-1, "%llu", dataSpan );
@@ -154,20 +157,21 @@ for( i = 1; i < argc; ++i )
 	    snprintf( spanName, sizeof(spanName)-1, "%lluG",
 		    dataSpan/(1024*1024*1024) );
 	}
-    */
-    /*	Is the name of this feature specified ?	*/
-    if( name )
+    if( name )		/*	Is the name of this feature specified ?	*/
 	{
 	    snprintf( featureName, sizeof(featureName) - 1, "%s", name );
 	}
-    /*	Name mangling to determine output file name */
-    if( chrom )	/*	when specified, simply use it	*/
+    if( chrom )		/*	Is the chrom name specified ? */
 	{
-	binfile = addSuffix(chrom, ".wib");
-	wigfile = addSuffix(chrom, ".wig");
 	chromName = cloneString(chrom);
-	if( ! name )
+	if( ! name )	/*	that names the feature too if not already */
 	    snprintf( featureName, sizeof(featureName) - 1, "%s", chrom );
+	}
+    /*	Name mangling to determine output file name */
+    if( wibFile )	/*	when specified, simply use it	*/
+	{
+	binfile = addSuffix(wibFile, ".wib");
+	wigfile = addSuffix(wibFile, ".wig");
 	} else {	/*	not specified, construct from input names */
 	if( startsWith("chr",argv[i]) )
 	    {
@@ -176,14 +180,16 @@ for( i = 1; i < argc; ++i )
 	    chopSuffix(tmpString);
 	    binfile = addSuffix(tmpString, ".wib");
 	    wigfile = addSuffix(tmpString, ".wig");
-	    chromName = cloneString(tmpString);
-	    if( ! name )
+	    if( ! chrom )	/*	if not already taken care of	*/
+		chromName = cloneString(tmpString);
+	    if( ! name && ! chrom)	/*	if not already done	*/
 		snprintf(featureName, sizeof(featureName) - 1, "%s", tmpString);
 	    freeMem(tmpString);
 	    } else {
-errAbort("Can not determine output file name, no -chrom specified\n");
+errAbort("Can not determine output file name, no -wibFile specified\n");
 	    }
 	}
+
     if( verbose ) printf("output files: %s, %s\n", binfile, wigfile);
     rowCount = 0;	/* to count rows output */
     bincount = 0;	/* to count up to binsize	*/
@@ -304,6 +310,7 @@ add_offset = optionLongLong("offset", 0);
 binsize = optionLongLong("binsize", 1024);
 dataSpan = optionLongLong("dataSpan", 1);
 chrom = optionVal("chrom", NULL);
+wibFile = optionVal("wibFile", NULL);
 name = optionVal("name", NULL);
 verbose = optionExists("verbose");
 
@@ -312,6 +319,9 @@ if( verbose ) {
 	add_offset, binsize, dataSpan);
     if( chrom ) {
 	printf("-chrom=%s\n", chrom);
+    }
+    if( wibFile ) {
+	printf("-wibFile=%s\n", wibFile);
     }
     if( name ) {
 	printf("-name=%s\n", name);
