@@ -1331,7 +1331,7 @@ while (right != NULL)
 	    }
 	else
 	    {
-	    spLeft = "ca";
+	    spLeft = "ac";
 	    spRight = "ct";
 	    }
         for (creepIx=0; creepIx<4; ++creepIx)
