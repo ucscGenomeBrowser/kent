@@ -3,11 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
-#include "fa.h"
-#include "axt.h"
-#include "fuzzyFind.h"
-#include "bandExt.h"
-#include "localmem.h"
+#include "maf.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -20,14 +16,33 @@ errAbort(
   );
 }
 
-void test(char *a)
+double mafScoreParts(struct mafAli *maf, int stepSize)
+/* Figure score by doing it by parts. */
+{
+int textSize = maf->textSize;
+double acc = 0;
+int i, end;
+for (i=0; i<textSize; i = end)
+    {
+    end = i + stepSize;
+    if (end > textSize) end = textSize;
+    acc += mafScoreRangeMultiz(maf, i, end - i);
+    }
+return acc;
+}
+
+void test(char *fileName)
 /* test - Test something. */
 {
-FILE *f = mustOpen(a, "w");
-char *s = "Hiya boss!\n";
-mustWrite(f, s, strlen(s));
-sleep(10);
-carefulClose(&f);
+struct mafFile *mf = mafOpen(fileName);
+struct mafAli *maf;
+while ((maf = mafNext(mf)) != NULL)
+    {
+    printf("%6d %8.1f %8.1f %8.1f %8.1f\n", maf->textSize, maf->score, mafScoreMultiz(maf),
+        mafScoreParts(maf, 1),  mafScoreParts(maf, 10));
+    mafAliFree(&maf);
+    }
+mafFileFree(&mf);
 }
 
 int main(int argc, char *argv[])
