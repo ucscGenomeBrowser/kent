@@ -1277,6 +1277,7 @@ colorChromDefault off
 type psl protein
 pred sacCer1.blastSGPep00
 blastRef sacCer1.blastSGRef00
+url http://db.yeastgenome.org/cgi-bin/SGD/locus.pl?locus=
 
 track blastHg17KG
 shortLabel Hg17  Proteins
@@ -1644,10 +1645,28 @@ searchType bed
 query select tName,tStart,tEnd,qName from %s where qName like '%%%s%%'
 searchPriority 25
 
+searchTable blastSacCer1SG
+searchType psl
+query select tName,tStart,tEnd,qName from %s where qName like '%%%s%%'
+searchPriority 25
+
 searchTable blastHg16KG
 searchType psl
 query select tName,tStart,tEnd,qName from %s where qName like '%%%s%%'
 searchPriority 25
+
+searchName blastSacCer1SGSprot
+searchTable blastSacCer1SG
+searchType psl
+xrefTable sacCer1.blastSGRef00
+xrefQuery select acc,extra1 from %s where extra1 like '%%%s%%'
+searchPriority 25
+
+searchName blastSacCer1SGGene
+searchTable blastSacCer1SG
+searchType psl
+xrefTable sacCer1.blastSGRef00
+xrefQuery select acc,geneId from %s where geneId like '%%%s%%'
 
 searchName blastHg16KGSprot
 searchTable blastHg16KG
