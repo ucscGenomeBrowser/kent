@@ -135,7 +135,7 @@ ALIGNING VIRAL RNA (DONE 04/15/03)
     ssh kkr1u00
     mkdir -p ~/sc1/bed/mrna
     cd ~/sc1/bed/mrna
-    \ls -1S /cluster/store5/SARS_Coronavirus_TOR2/*.fa > genome.lst
+    ls -1S /cluster/store5/SARS_Coronavirus_TOR2/*.fa > genome.lst
     ls -1 /iscratch/i/mrna.134/viralRna.fa > mrna.lst
     cp ~/lastRn/bed/mrna/gsub .
     mkdir psl
@@ -164,8 +164,19 @@ ALIGNING VIRAL RNA (DONE 04/15/03)
     cd ..
     hgLoadPsl sc1 all_mrna.psl -nobin
 
+    LOAD SWISS PROT CORONAVIRUS PROTEINS
+    cd ~/sc1/bed/swissprot
+    download all ORGANISM=coronavirus proteins from SRS into file viralProt.fa
+    ssh kkr1u00
+    mkdir psl
+    para create spec
+    para push
+    cd psl
+    mv chr1_viralProt.psl viralProt.psl
+    pslReps -minAli=0.67 viralProt.psl chr1_viralProt.psl    
+    hgLoadPsl sc1 chr1_viralProt.psl
 
-LOAD CPGISSLANDS (DONE 04/15/03)
+    LOAD CPGISSLANDS (DONE 04/15/03)
     ssh eieio
     mkdir -p ~/sc1/bed/cpgIsland
     cd ~/sc1/bed/cpgIsland
