@@ -32,6 +32,7 @@ enum pfParseType
     pptCompound,
     pptTuple,
     pptDot,
+    pptKeyVal,
     pptOf,
     pptIf,
     pptElse,
@@ -48,6 +49,7 @@ enum pfParseType
     pptToDec,
     pptFlowDec,
     pptParaDec,
+    pptReturn,
     pptCall,
     pptAssignment,
     pptPlusEquals,
@@ -98,6 +100,8 @@ switch (type)
         return "pptOf";
     case pptDot:
         return "pptDot";
+    case pptKeyVal:
+        return "pptKeyVal";
     case pptIf:
     	return "pptIf";
     case pptElse:
@@ -126,6 +130,8 @@ switch (type)
 	return "pptFlowDec";
     case pptParaDec:
 	return "pptParaDec";
+    case pptReturn:
+	return "pptReturn";
     case pptCall:
 	return "pptCall";
     case pptAssignment:
@@ -342,7 +348,6 @@ if (tok->type != pftName || !sameString(tok->val.s, name))
     expectingGot(name, tok);
 *pTokList = tok->next;
 }
-
 
 struct pfParse *parseNameUse(struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope)
 /* Make sure have a name, and create a varUse type node
@@ -737,6 +742,9 @@ switch (tok->type)
     case pftModEquals:
 	type = pptModEquals;
 	break;
+    case ':':
+        type = pptKeyVal;
+	break;
     }
 if (type != pptNone)
     {
@@ -847,9 +855,11 @@ tok = tok->next;	/* Skip something (implicit in type) */
 name = parseNameUse(parent, &tok, scope);
 scope = pfScopeNew(scope, 0);
 
+uglyf("ok 1\n");
 if (tok->type != '(')
     expectingGot("(", tok);
 tok = tok->next;
+uglyf("ok 2\n");
 if (tok->type == ')')
     {
     input = emptyTuple(pp, tok);
@@ -867,15 +877,9 @@ else
 if (tok->type == pftInto)
     {
     tok = tok->next;
-    if (tok->type != '(')
-	expectingGot("(", tok);
-    tok = tok->next;
     output = pfParseExpression(pp, &tok, scope);
     if (output->type != pptTuple)
 	output = singleTuple(pp, tok, output);
-    if (tok->type != ')')
-	expectingGot(")", tok);
-    tok = tok->next;
     }
 else
     output = emptyTuple(pp, tok);
@@ -1097,6 +1101,13 @@ static struct pfParse *parseContinue(struct pfParse *parent,
 return parseWordStatement(parent, pTokList, scope, pptContinue);
 }
     	
+static struct pfParse *parseReturn(struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse continue statement */
+{
+return parseWordStatement(parent, pTokList, scope, pptReturn);
+}
+    	
 struct pfParse *pfParseStatement(struct pfParse *parent, 
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse a single statement, and add results to (head) of
@@ -1131,6 +1142,9 @@ switch (tok->type)
     case pftContinue:
         statement = parseContinue(parent, &tok, scope);
         break;
+    case pftReturn:
+    	statement = parseReturn(parent, &tok, scope);
+	break;
     case pftClass:
 	statement = parseClass(parent, &tok, scope);
 	break;
@@ -1201,6 +1215,7 @@ hashAddInt(hash, "of", pftOf);
 hashAddInt(hash, "if", pftIf);
 hashAddInt(hash, "else", pftElse);
 hashAddInt(hash, "break", pftBreak);
+hashAddInt(hash, "return", pftReturn);
 hashAddInt(hash, "continue", pftContinue);
 return hash;
 }

@@ -5,6 +5,8 @@ operator precedence:
      == != >= > <= <
      &&
      ||
+     = += -= /= *= %= :
+     ,
 
 program: statementList
 
