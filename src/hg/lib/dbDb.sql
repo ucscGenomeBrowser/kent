@@ -15,6 +15,7 @@ CREATE TABLE dbDb (
     genome varchar(255) not null,	# Unifying genome collection to which an assembly belongs
     scientificName varchar(255) not null,	# Genus and species of the organism; e.g. Homo sapiens
     htmlPath varchar(255) not null,	# path in /gbdb for assembly description
+    hgNearOk tinyint(1) not null,    # Have hgNear for this?
               #Indices
     PRIMARY KEY(name)
 );
