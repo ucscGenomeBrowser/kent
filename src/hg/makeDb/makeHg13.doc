@@ -1,4 +1,4 @@
-bgThis file describes how we made the browser database on 
+This file describes how we made the browser database on 
 NCBI build 31 (November, 2002 freeze)
 
 [For importing GTF tracks, use /projects/compbio/bin/validate_gtf.pl]
@@ -233,9 +233,14 @@ Create packed chromosome sequence files
 
 Load chromosome sequence info into database and save chrom sizes
      ssh hgwdev
+     mkdir -p /gbdb/hg13/nib
+     cd /gbdb/hg13/nib
+     foreach f (/cluster/store4/gs.14/build31/nib/chr*.nib)
+       ln -s $f
+     end
      hgsql hg13 < ~/src/hg/lib/chromInfo.sql
      cd ~/oo
-     hgNibSeq -preMadeNib hg13 /cluster/store4/gs.14/build31/nib ?{,?}/chr*.fa
+     hgNibSeq -preMadeNib hg13 /gbdb/hg13/nib ?{,?}/chr*.fa
      echo "select chrom,size from chromInfo" | hgsql -N hg13 > chrom.sizes
 
 Store o+o info in database.
@@ -1930,6 +1935,38 @@ MAKING THE AXTTIGHT FROM AXTBEST (DONE 12/6/02)
     ssh hgwdev
     cd ~/hg13/bed/blastz.mm2.2002-12-5-ASH/pslTight
     hgLoadPsl hg13 chr*_blastzTightMouse.psl
+
+
+LIFTING REPEATMASKER .ALIGN FILES (IN PROGRESS)
+
+foreach d (?{,?}/NT_??????)
+  set c=$d:t
+  cd $d
+  echo $c to $c.fa.align
+  /cluster/bin/scripts/liftRMAlign.pl $c.lft > $c.fa.align
+  cd ../..
+end
+
+foreach chr (?{,?})
+  cd $chr
+  echo making symbolic links for chr$chr NT .fa.align files
+  foreach ctg (NT_??????)
+    ln -s $ctg/$ctg.fa.align
+  end
+  cd ..
+  if (-e $chr/lift/ordered.lft) then
+    echo making $chr/chr$chr.fa.align
+    /cluster/bin/scripts/liftRMAlign.pl $chr/lift/ordered.lft \
+      > $chr/chr$chr.fa.align
+  endif
+  if (-e $chr/lift/random.lft) then
+    echo making $chr/chr${chr}_random.fa.align
+    /cluster/bin/scripts/liftRMAlign.pl $chr/lift/random.lft \
+      > $chr/chr${chr}_random.fa.align
+  endif
+  echo removing symbolic links for chr$chr NT .fa.align files
+  rm $chr/NT_??????.fa.align
+end
 
 
 MITOCHONDRIAL DNA PSEUDO-CHROMOSOME - TODO
