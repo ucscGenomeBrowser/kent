@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.36 2005/03/18 00:22:08 angie Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.37 2005/03/30 18:07:05 angie Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -1233,7 +1233,10 @@ char explicitDbTable[512];
 
 /* Return NULL if no filter on us. */
 if (! (anyFilter() && filteredOrLinked(db, table)))
+    {
+    sqlDisconnect(&conn);
     return NULL;
+    }
 
 safef(oldDb, sizeof(oldDb), "%s", db);
 dbOverrideFromTable(dbTableBuf, &db, &table);
@@ -1254,7 +1257,10 @@ safef(varPrefix, sizeof(varPrefix), "%s%s.%s.", hgtaFilterVarPrefix, db, table);
 varPrefixSize = strlen(varPrefix);
 varList = cartFindPrefix(cart, varPrefix);
 if (varList == NULL)
+    {
+    sqlDisconnect(&conn);
     return NULL;
+    }
 
 /* Create filter clause string, stepping through vars. */
 dy = dyStringNew(0);
