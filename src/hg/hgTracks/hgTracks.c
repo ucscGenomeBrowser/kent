@@ -76,7 +76,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.550 2003/07/04 05:14:08 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.551 2003/07/07 21:05:02 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -1212,7 +1212,8 @@ else if (tg->itemColor)
     }
 else if (tg->colorShades) 
     {
-    boolean isXeno = (tg->subType == lfSubXeno);
+    boolean isXeno = (tg->subType == lfSubXeno) 
+				|| (tg->subType == lfSubChain);
     *retColor =  tg->colorShades[lf->grayIx+isXeno];
     *retBarbColor =  tg->colorShades[(lf->grayIx>>1)];
     }
@@ -1235,8 +1236,12 @@ int x1,x2;
 int shortOff = 2, shortHeight = heightPer-4;
 int tallStart, tallEnd, s, e, e2, s2;
 Color bColor;
-boolean hideLine = (vis == tvDense && tg->subType == lfSubXeno);
+boolean chainLines = (vis != tvDense && tg->subType == lfSubChain);
+boolean hideLine = ((tg->subType == lfSubChain) || 
+	(vis == tvDense && tg->subType == lfSubXeno));
 int midY = y + (heightPer>>1);
+int midY1 = midY - (heightPer>>2);
+int midY2 = midY + (heightPer>>2);
 int w;
 
 lfColors(tg, lf, vg, &color, &bColor);
@@ -1254,6 +1259,8 @@ if (!hideLine)
 	}
     innerLine(vg, x1, midY, w, color);
     }
+if (chainLines)
+    slSort(&lf->components, linkedFeaturesCmpStart);
 for (sf = lf->components; sf != NULL; sf = sf->next)
     {
     s = sf->start; e = sf->end;
@@ -1275,6 +1282,32 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
     if (e > s)
 	{
 	drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, color, lf->score);
+	}
+
+    if (chainLines  && (sf->next != NULL))
+	{
+	int qGap, tGap;
+	qGap = sf->next->grayIx - sf->grayIx;
+	tGap = sf->next->start - sf->start;
+	s = e;
+	e = sf->next->start;
+
+	x1 = round((double)((int)s-winStart)*scale) + xOff;
+	x2 = round((double)((int)e-winStart)*scale) + xOff;
+	w = x2-x1;
+	if (w < 1)
+	    w=1;
+	w++; /* innerLine subtracts 1 from the width */
+	x1--; /* this causes some line to overwrite one
+		 pixel of the box */
+#define GAPFACTOR 10
+	if (tGap > GAPFACTOR * qGap)
+	    innerLine(vg, x1, midY, w, color);
+	else
+	    {
+	    innerLine(vg, x1, midY1, w, color);
+	    innerLine(vg, x1, midY2, w, color);
+	    }
 	}
     }
 }
@@ -6885,7 +6918,8 @@ int shortHeight = heightPer / 2;
 int s = 0;
 int e = 0;
 Color *shades = tg->colorShades;
-boolean isXeno = (tg->subType == lfSubXeno);
+boolean isXeno = (tg->subType == lfSubXeno) 
+    			|| (tg->subType == lfSubChain);
 boolean hideLine = (vis == tvDense && isXeno);
 
 /* draw haplotype thick line ... */
