@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.27 2005/02/08 01:03:59 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.28 2005/02/24 18:55:25 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -430,8 +430,13 @@ if (numScores >= masterSize)	 /* More pixels than bases */
     }
 else	/* More bases than pixels. */
     {
-    int b1=0,b2, deltaB;
-    int t1=0,t2, deltaT;
+    int b1=0, b2;       /* start and end in the rerence (master) genome */
+    int deltaB;
+    int t1=0, t2;       /* start and end in the maf text.  The spacing between
+                         * them may be larger than b1,b2 due to '-' chars in 
+                         * the * row of the alignment corresponding to 
+                         * the master genome. */ 
+    int deltaT;
     for (i=0; i<numScores; ++i)
         {
 	b2 = (i+1)*masterSize/numScores;
@@ -444,7 +449,13 @@ else	/* More bases than pixels. */
 		deltaB -= 1;
 	    }
 	deltaT = t2 - t1;
+
+        /* Take the score over the relevant range of text symbols in the maf,
+         * and divide it by the bases we cover in the master genome to 
+         * get a normalized by base score. */ 
 	score = mafScoreRangeMultiz(maf, t1, deltaT)/(b2-b1);
+
+        /* Scale the score so that it is between 0 and 1 */ 
 	score = (score - minScore) * scoreScale;
 	if (score < 0.0) score = 0.0;
 	if (score > 1.0) score = 1.0;
