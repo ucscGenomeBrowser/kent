@@ -1,10 +1,11 @@
 #!/bin/csh -f
 
+set schema = $1
 set tempfile = /tmp/encodeTdb.$$
 set newtable = trackDb_encodedev_new
 
 echo "DROP TABLE IF EXISTS $newtable" | hgsql hg16
-sed "s/trackDb/$newtable/" $HOME/kent/src/hg/lib/trackDb.sql | hgsql hg16
+sed "s/trackDb/$newtable/" $schema | hgsql hg16
 echo "SELECT * FROM trackDb WHERE grp <> 'encode'" | \
             hgsql hg16 -h hgwbeta -N > $tempfile
 echo "SELECT * FROM trackDb WHERE grp = 'encode'" | hgsql -N hg16 >> $tempfile
