@@ -20,7 +20,7 @@ pI that could be clues to function or location.
 <P>
 The pI algorithm uses pK values for relevant amino acids (C, D, E, H, K, R, 
 S, T, Y, and amino- and carboxy- termini) derived experimentally for model peptides in 
-9M urea at 25 degrees C. The prediction tool 
+9 M urea at 25 degrees C. The prediction tool 
 removes predicted signal peptides, but does not consider other modifications. It 
 is least accurate on small proteins with limited intrinsic buffering capacity, 
 with highly basic proteins where pI lacks a solid experimental foundation, and 

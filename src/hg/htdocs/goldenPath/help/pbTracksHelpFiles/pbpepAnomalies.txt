@@ -9,7 +9,7 @@ amino acid frequency from the expected value genome-wide.
 The histogram is based on amino acid data from the knownGene table in this
 assembly [FIXME - is this correct?]. Amino acids are flagged as anomalous if their occurrence in a
 protein falls outside the 2.5% to 97.5% genome-wide distribution range. 
-Proteins with less than 100 amino acids have been filtered from
+Proteins with fewer than 100 amino acids have been filtered from
 the sample to exclude variances attributable to short length.
 <P>
 See the <A HREF="pbpepRes.shtml">Amino Acid Frequencies histogram</A> to
