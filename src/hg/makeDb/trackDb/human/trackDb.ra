@@ -541,10 +541,17 @@ searchTable affyU133Plus2
 searchMethod exact
 searchType psl
 shortCircuit 1
-termRegex HG-U133Plus2:.+
-query select tName,tStart,tEnd,qName from %s where qName like '%s;'
+termRegex HG-U133_Plus_2:.+
 searchPriority 16
-termPrefix HG-U133Plus2:
+termPrefix HG-U133_Plus_2:
+
+searchName affyU133Plus2NoChip
+searchTable affyU133Plus2
+searchMethod exact
+searchType psl
+shortCircuit 1
+termRegex [0-9]+[[:alnum:]_]*_at
+searchPriority 16
 
 searchTable affyGnf1h
 searchMethod exact
