@@ -9,7 +9,7 @@
 #include "hCommon.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.31 2004/09/15 18:57:52 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.32 2004/10/05 23:04:10 hiram Exp $";
 
 void printHistoGram(struct histoResult *histoResults, boolean html)
 {
@@ -157,28 +157,35 @@ if (wds->useDataConstraint)
 if (table2)
     printf("<P><B> Intersection with table: %s </B></P>\n", table2);
 
-if (valuesMatched == 0)
+if (table2 && (valuesMatched == 0))
     {
-    if ( span < (3 * (winEnd - winStart)))
-	{
-	printf("<P><B> Viewpoint has too few bases to calculate statistics. </B></P>\n");
-	printf("<P><B> Zoom out to at least %d bases to see statistics. </B></P>\n", 3 * span);
-	}
-    else
-	printf("<P><B> No data found in this region. </B></P>\n");
+    printf("<P><B> No data found in this intersection. </B></P>\n");
     }
 else
     {
-    unsigned printSpan = wds->stats->span;
+    if (valuesMatched == 0)
+	{
+	if ( (span * 3) < (winEnd - winStart))
+	    {
+	    printf("<P><B> Viewpoint has too few bases to calculate statistics. </B></P>\n");
+	    printf("<P><B> Zoom out to at least %d bases to see statistics. </B></P>\n", 3 * span);
+	    }
+	else
+	    printf("<P><B> No data found in this region. </B></P>\n");
+	}
+    else
+	{
+	unsigned printSpan = wds->stats->span;
 
-    if ((span > 0) && (span < wds->stats->span))
-	printSpan = span;
+	if ((span > 0) && (span < wds->stats->span))
+	    printSpan = span;
 
-    sprintLongWithCommas(num1Buf, wds->stats->count * printSpan);
-    printf(
-	"<P><B> Statistics on: </B> %s <B> bases </B> (%% %.4f coverage)</P>\n",
-	num1Buf,
-	100.0*(wds->stats->count * printSpan)/(winEnd - winStart));
+	sprintLongWithCommas(num1Buf, wds->stats->count * printSpan);
+	printf(
+	    "<P><B> Statistics on: </B> %s <B> bases </B> (%% %.4f coverage)</P>\n",
+	    num1Buf,
+	    100.0*(wds->stats->count * printSpan)/(winEnd - winStart));
+	}
     }
 }
 
