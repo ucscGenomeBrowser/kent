@@ -4533,7 +4533,7 @@ cd /cluster/data/hg17/bed/geneSorter/blastp/dm1/run/out
 hgLoadBlastTab hg17 dmBlastTab -maxPer=1 *.tab
 #	row count went from 29322 to 29341
 
-####  Blat knownGene proteins to determine exons (braney 2004-06-20)
+####  Blat knownGene proteins to determine exons (braney 2004-06-20 DONE)
     ssh hgwdev
     cd /cluster/data/hg17/bed
     mkdir blat.hg17KG.2004-06-20
@@ -4541,8 +4541,12 @@ hgLoadBlastTab hg17 dmBlastTab -maxPer=1 *.tab
     ln -s  blat.hg17KG.2004-06-20 blat.hg17KG
     cd blat.hg17KG
     pepPredToFa hg17 knownGenePep known.fa
+    hgPepPred hg17 generic blastKGPep00 known.fa
     grep ">" known.fa | sed "s/>//" > kgName.lst
-    kgName hg17 kgName.lst kg.mapNames
+    kgName hg17 kgName.lst blastKGRef00
+    hgsql hg17 < ~/kent/src/lib/hg/blastRef.sql
+    echo "rename table blastRef to blastKGRef00" | hgsql hg17
+    echo "load data local infile 'blastKGRef00' into table blastKGRef00" | hgsql hg17
     ssh kk
     cd /cluster/data/hg17/bed/blat.hg17KG
     cat << '_EOF_' > blatSome
