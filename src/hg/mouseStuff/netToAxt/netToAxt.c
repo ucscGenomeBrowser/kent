@@ -8,6 +8,7 @@
 #include "dnautil.h"
 #include "dnaseq.h"
 #include "nib.h"
+#include "axt.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -132,6 +133,124 @@ if (bList != NULL)
 *retSubChain = *retChainToFree = sub;
 }
 
+struct axt *axtFromBlocks(
+	struct chain *chain,
+	struct boxIn *startB, struct boxIn *endB,
+	struct dnaSeq *qSeq, int qOffset,
+	struct dnaSeq *tSeq, int tOffset)
+/* Convert a list of blocks (guaranteed not to have inserts in both
+ * strands between them) to an axt. */
+{
+int symCount = 0;
+int dq, dt, blockSize = 0, symIx = 0;
+struct boxIn *b, *a = NULL;
+struct axt *axt;
+char *qSym, *tSym;
+
+/* Make a pass through figuring out how big output will be. */
+for (b = startB; b != endB; b = b->next)
+    {
+    if (a != NULL)
+        {
+	dq = b->qStart - a->qEnd;
+	dt = b->tStart - a->tEnd;
+	symCount += dq + dt;
+	}
+    blockSize = b->qEnd - b->qStart;
+    symCount += blockSize;
+    a = b;
+    }
+
+/* Allocate axt and fill in most fields. */
+AllocVar(axt);
+axt->qName = cloneString(chain->qName);
+axt->qStart = chain->qStart;
+axt->qEnd = chain->qEnd;
+axt->qStrand = chain->qStrand;
+axt->tName = cloneString(chain->tName);
+axt->tStart = chain->tStart;
+axt->tEnd = chain->tEnd;
+axt->tStrand = '+';
+axt->symCount = symCount;
+axt->qSym = qSym = needMem(symCount+1);
+axt->tSym = tSym = needMem(symCount+1);
+
+/* Fill in symbols. */
+a = NULL;
+for (b = startB; b != endB; b = b->next)
+    {
+    if (a != NULL)
+        {
+	dq = b->qStart - a->qEnd;
+	dt = b->tStart - a->tEnd;
+	if (dq == 0)
+	    {
+	    memset(qSym+symIx, '-', dt);
+	    memcpy(tSym+symIx, tSeq->dna + a->tEnd - tOffset, dt);
+	    symIx += dt;
+	    }
+	else
+	    {
+	    assert(dt == 0);
+	    memset(tSym+symIx, '-', dq);
+	    memcpy(qSym+symIx, qSeq->dna + a->qEnd - qOffset, dq);
+	    symIx += dq;
+	    }
+	}
+    blockSize = b->qEnd - b->qStart;
+    memcpy(qSym+symIx, qSeq->dna + b->qStart - qOffset, blockSize);
+    memcpy(tSym+symIx, tSeq->dna + b->tStart - tOffset, blockSize);
+    symIx += blockSize;
+    a = b;
+    }
+assert(symIx == symCount);
+
+/* Fill in score and return. */
+axt->score = axtScoreDnaDefault(axt);
+return axt;
+}
+	
+struct axt *axtListFromChain(struct chain *chain, 
+	struct dnaSeq *qSeq, int qOffset,
+	struct dnaSeq *tSeq, int tOffset)
+/* Convert a chain to a list of axt's. */
+{
+struct boxIn *startB = chain->blockList, *endB, *a = NULL, *b;
+struct axt *axtList = NULL, *axt;
+
+for (b = chain->blockList; b != NULL; b = b->next)
+    {
+    if (a != NULL)
+        {
+	int dq = b->qStart - a->qEnd;
+	int dt = b->tStart - a->tEnd;
+	if (dq > 0 && dt > 0)
+	    {
+	    axt = axtFromBlocks(chain, startB, b, qSeq, qOffset, tSeq, tOffset);
+	    slAddHead(&axtList, axt);
+	    startB = b;
+	    }
+	}
+    a = b;
+    }
+axt = axtFromBlocks(chain, startB, NULL, qSeq, qOffset, tSeq, tOffset);
+slAddHead(&axtList, axt);
+slReverse(&axtList);
+return axtList;
+}
+
+void writeAxtFromChain(struct chain *chain, struct dnaSeq *qSeq, int qOffset,
+	struct dnaSeq *tSeq, int tOffset, FILE *f)
+/* Write out axt's that correspond to chain. */
+{
+struct axt *axt, *axtList;
+
+axtList = axtListFromChain(chain, qSeq, qOffset, tSeq, tOffset);
+for (axt = axtList; axt != NULL; axt = axt->next)
+    axtWrite(axt, f);
+axtFreeList(&axtList);
+}
+
 void convertFill(struct cnFill *fill, struct dnaSeq *tChrom,
 	struct hash *qChromHash, char *nibDir,
 	struct chain *chain, FILE *f)
@@ -140,6 +259,7 @@ void convertFill(struct cnFill *fill, struct dnaSeq *tChrom,
 struct dnaSeq *qSeq;
 boolean isRev = (chain->qStrand == '-');
 struct chain *subChain, *chainToFree;
+int qOffset;
 
 /* Get query sequence fragment. */
     {
@@ -156,21 +276,17 @@ struct chain *subChain, *chainToFree;
     qSeq = nibLoadPartMasked(NIB_MASK_MIXED, nib->fileName, 
     	fill->qStart, fill->qSize);
     if (isRev)
+	{
         reverseComplement(qSeq->dna, qSeq->size);
-    uglyf("Read %s:%d %d\n", fill->qName, fill->qStart, fill->qSize);
+	qOffset = nib->size - (fill->qStart + fill->qSize);
+	}
+    else
+	qOffset = fill->qStart;
     }
-uglyf("ok1\n");
 subchainT(chain, fill->tStart, fill->tStart + fill->tSize, &subChain, &chainToFree);
 assert(subChain != NULL);
-uglyf("ok2 %p %p %p\n", chain, subChain, chainToFree);
-if (chain->tStart != subChain->tStart || chain->qStart != subChain->qStart)
-    {
-    chainWrite(chain, f);
-    chainWrite(subChain, f);
-    }
-uglyf("ok3\n");
+writeAxtFromChain(subChain, qSeq, qOffset, tChrom, 0, f);
 chainFree(&chainToFree);
-uglyf("ok4\n");
 freeDnaSeq(&qSeq);
 }
 
