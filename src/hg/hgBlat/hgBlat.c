@@ -278,7 +278,7 @@ else
     for (psl = pslList; psl != NULL; psl = psl->next)
 	{
 	printf("<A HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s%s\">",
-	    browserUrl, psl->tName, psl->tStart, psl->tEnd, database, 
+	    browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
 	    pslName, faName, uiState, unhideTrack);
 	printf("browser</A> ");
 	printf("<A HREF=\"%s?o=%d&g=htcUserAli&i=%s+%s+%s&c=%s&l=%d&r=%d&db=%s&%s\">", 
@@ -288,7 +288,7 @@ else
 	printf("%-14s %5d %5d %5d %5d %5.1f%%  %4s  %2s  %9d %9d\n",
 	    psl->qName, pslScore(psl), psl->qStart, psl->qEnd, psl->qSize,
 	    100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
-	    skipChr(psl->tName), psl->strand, psl->tStart + 1, psl->tEnd);
+	    skipChr(psl->tName), psl->strand, psl->tStart, psl->tEnd);
 	}
     }
 pslFreeList(&pslList);
@@ -467,10 +467,12 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	{
 	static struct gfSavePslxData outForm;
 	outForm.f = f;
-	gfAlignStrand(&conn, serve->nibDir, seq, FALSE, 20, gfSavePslx, &outForm);
+	uglyf("%s<BR>\n", seq->dna);
+	gfAlignStrand(&conn, serve->nibDir, seq, FALSE, 16, gfSavePslx, &outForm);
 	reverseComplement(seq->dna, seq->size);
+	uglyf("%s<BR>\n", seq->dna);
 	conn = gfConnect(serve->host, serve->port);
-	gfAlignStrand(&conn, serve->nibDir, seq, TRUE, 20, gfSavePslx, &outForm);
+	gfAlignStrand(&conn, serve->nibDir, seq, TRUE, 16, gfSavePslx, &outForm);
 	}
     }
 carefulClose(&f);
