@@ -2240,15 +2240,16 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
     hgLoadBed galGal2 isochore isochore.bed
 
 
-# SGP GENE PREDICTIONS (REDONE 5/13/04 angie)
-    # contact: "EYRAS, EDUARDO" <eeyras@imim.es> (Roderic Guigo's group)
+# SGP GENE PREDICTIONS (REDONE 9/27/04 angie)
+    # contact: "\"C%G�%@mara, Francisco\"" <FCamara@imim.es> (Roderic Guigo's group)
     ssh hgwdev
     mkdir /cluster/data/galGal2/bed/sgp
     cd /cluster/data/galGal2/bed/sgp
-    wget http://genome.imim.es/genepredictions/G.gallus/golden_path_200402xhs/chicken.sgp2.prot.tar.gz
-    wget http://genome.imim.es/genepredictions/G.gallus/golden_path_200402xhs/chicken.sgp2.gtf.tar.gz
-    tar xvzf chicken.sgp2.gtf.tar.gz
-    tar xvzf chicken.sgp2.prot.tar.gz
+    foreach chr (`awk '{print $1;}' ../../chrom.sizes`)
+      wget http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/SGP/humangp200307/$chr.gtf
+      wget http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/SGP/humangp200307/$chr.prot
+    end
+    # Add .1 suffix to proteins to match gtf transcript_id's:
     cat chr*.prot | perl -wpe 's/^>(\w+)/>$1.1/' > sgpPep.fa
     hgPepPred galGal2 generic sgpPep sgpPep.fa
     ldHgGene -gtf -genePredExt galGal2 sgpGene chr*.gtf
