@@ -179,6 +179,14 @@ visibility off
 type lookup mmBlastTab query target
 itemUrl ../cgi-bin/hgTracks?org=mouse&position=%s
 
+name ratOrthologs
+shortLabel Rat
+longLabel Rat Ortholog (Best Blastp Hit to UCSC Known rn3)
+priority 8.05
+visibility off
+type lookup rnBlastTab query target
+itemUrl ../cgi-bin/hgTracks?org=rat&position=%s
+
 name zebrafishOrthologs
 shortLabel Zebrafish
 longLabel <em>Danio rerio</em> Ortholog (Best Blastp Hit to Ensembl)
