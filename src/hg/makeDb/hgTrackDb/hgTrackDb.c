@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.14 2003/09/26 04:51:46 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.15 2004/01/23 17:06:38 heather Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -78,7 +78,7 @@ if (strict != NULL)
             }
         if (!longnameMatch)
             {
-            printf("%s missing\n", td->tableName);
+            // printf("%s missing\n", td->tableName);
             slRemoveEl(tdList, td);
             }
         }
