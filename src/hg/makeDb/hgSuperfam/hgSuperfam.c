@@ -12,10 +12,9 @@ void usage()
 errAbort(
   "hgSuperfam - Generate supfamily table for the Superfamily track.\n"
   "usage:\n"
-  "   hgSuperfam gDb sfDb\n"
+  "   hgSuperfam gDb\n"
   "      gDb   is the genome database\n"
-  "      sfDb  is the Superfamily database\n"
-  "example: hgSuperfam hg16 supfam03\n");
+  "example: hgSuperfam mm4\n");
 }
 
 int main(int argc, char *argv[])
@@ -35,7 +34,7 @@ float E,score;
 char *translation_id;
 char *translation_name;
 
-char *genomeDb, *ensDb, *sfDb;
+char *genomeDb, *ensDb;
 char gene_name[200];
 
 char *chp;
@@ -43,9 +42,8 @@ int  i,l;
 
 FILE *o3, *o4;
    
-if (argc != 3) usage();
+if (argc != 2) usage();
 genomeDb = argv[1];
-sfDb     = argv[2];
  
 o3 = mustOpen("j.dat", "w");
 o4 = mustOpen("jj.dat", "w");
@@ -86,7 +84,7 @@ while (row2 != NULL)
 	}
     else
 	{
-    	sprintf(query, "select * from %s.sfAssign where seqID='%s'", sfDb, translation_name);
+    	sprintf(query, "select * from %s.sfAssign where seqID='%s'", genomeDb, translation_name);
     	sr = sqlMustGetResult(conn, query);
     	row = sqlNextRow(sr);
 
@@ -107,7 +105,7 @@ while (row2 != NULL)
  	    sfDesc	= row[6];	// 0302 and other supfam releases has an error here
 		
 	    sprintf(cond_str, "id=%s", sfID);
-	    sfDesc  = sqlGetField(connSf, sfDb, "des", "description", cond_str);
+	    sfDesc  = sqlGetField(connSf, genomeDb, "sfDes", "description", cond_str);
 
 	    E = atof(eValue);
 	    if (E > 0.02) continue;
@@ -134,8 +132,8 @@ hFreeConn(&connSf);
 fclose(o3);
 fclose(o4);
 
-system("cat j.dat |sort|uniq  >     sf.tab");
-system("cat jj.dat|sort|uniq  > sfDesc.tab");
+system("cat j.dat |sort|uniq  > superfamily.tab");
+system("cat jj.dat|sort|uniq  > sfDescription.tab");
 system("rm j.dat");
 system("rm jj.dat");
    
