@@ -20,7 +20,7 @@ __attribute__((format(printf, 1, 2)))
 #endif
 ;
 
-static char const rcsid[] = "$Id: gbProcessedCheck.c,v 1.1 2003/07/12 23:32:25 markd Exp $";
+static char const rcsid[] = "$Id: gbProcessedCheck.c,v 1.2 2004/08/29 08:21:58 genbank Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -78,10 +78,13 @@ if (procNext != NULL)
          * NULL also a orgCat change. */
         if (orgNext != org0)
             {
-            gbError("%s: organism \"%s\" in %s change to \"%s\" in %s will result in organism category change",
-                    entry->acc, procNext->organism,
+            gbError("%s\t%s\t%s\t%s changes organism \"%s\" to \"%s\"",
+                    entry->acc, 
                     gbFormatDate(procNext->modDate),
-                    proc0->organism, gbFormatDate(proc0->modDate));
+                    gbSrcDbName(entry->processed->update->release->srcDb),
+                    gbFormatDate(proc0->modDate),
+                    procNext->organism,
+                    proc0->organism);
             break;  /* only report first error */
             }
         procNext = procNext->next;
@@ -97,14 +100,16 @@ void checkEst(struct gbRelease* mrnaRelease,
 struct gbEntry* mrnaEntry = gbReleaseFindEntry(mrnaRelease, estEntry->acc);
 if (mrnaEntry != NULL)
     {
-    /* type changed */
+    /* type changed, output in format for ignore.idx */
     if (mrnaEntry->processed->modDate > estEntry->processed->modDate)
-        gbError("%s: type changed from EST in %s to mRNA in %s",
+        gbError("%s\t%s\t%s\t%s changes type EST to mRNA",
                 mrnaEntry->acc, gbFormatDate(estEntry->processed->modDate),
+                gbSrcDbName(mrnaRelease->srcDb),
                 gbFormatDate(mrnaEntry->processed->modDate));
     else
-        gbError("%s: type changed from mRNA in %s to EST in %s",
+        gbError("%s\t%s\t%s\t%s changes type mRNA to EST",
                 mrnaEntry->acc, gbFormatDate(mrnaEntry->processed->modDate),
+                gbSrcDbName(mrnaRelease->srcDb),
                 gbFormatDate(estEntry->processed->modDate));
     }
 checkOrgCat(estEntry);
