@@ -4476,6 +4476,8 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     cd /cluster/data/hg17/bed/multiz.2004-06-24
     # wrapper script for multiz
     # NOTE: first arg is pairwise, 2nd arg is multiple (to add to) 
+    # NOTE: next time, modify script so it only needs one arg -- saves the
+    # multiple dirname in a file for use by the next run
     cat << 'EOF' > doMultiz.csh
 #!/bin/csh -fe
 mkdir -p $3:h
@@ -4552,19 +4554,41 @@ mkdir -p $3:h
     mkdir $workingDir/fr1
     cp /cluster/data/hg17/bed/blastz.fr1/mafNet/chr*.maf $workingDir/fr1
 
-    # GOT HERE
-
     ssh kki
     cd /cluster/data/hg17/bed/multiz.2004-06-24
     mkdir run.fr1
     cd run.fr1
     echo "fr1/panTro1mm4rn3galGal2" > species.lst
     gensub2 species.lst ../chrom.lst ../gsub jobList
-    # no alignment file for chr18_random -- create one so we can create jobList
+    # create empty alignment file for missing one (no alignments)
+    touch /cluster/bluearc/hg17/multiz.2004-06-24/fr1/chr6_hla_hap1.maf
     para create jobList
         # 46 jobs
     para try, check, push, check
     cd ..
+
+    # zebrafish
+    ssh eieio
+    set workingDir = /cluster/bluearc/hg17/multiz.2004-06-24
+    mkdir $workingDir/danRer1
+    cp /cluster/data/hg17/bed/blastz.danRer1.swap/mafNet/chr*.maf $workingDir/danRer1
+
+    ssh kki
+    cd /cluster/data/hg17/bed/multiz.2004-06-24
+    mkdir run.danRer1
+    cd run.danRer1
+    echo "danRer1/panTro1mm4rn3galGal2fr1" > species.lst
+    gensub2 species.lst ../chrom.lst ../gsub jobList
+    # create empty alignment file for missing one (no alignments)
+    para create jobList
+        # 46 jobs
+    para try, check, push, check
+    cd ..
+
+    # 7-WAY mafs are now in $workingDir/panTro1mm4rn3galGal2fr1/danRer1
+
+
+
 
 
 
