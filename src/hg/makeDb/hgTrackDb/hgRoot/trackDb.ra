@@ -93,7 +93,7 @@ track mouseOrthoSeed
 shortLabel Tight Ortholog
 longLabel Tight Mouse Orthology using Fgenesh++ Gene Predictions (only reciprocal best)
 priority 4.1
-visibility dense
+visibility hide
 spectrum on
 color 0,100,0
 altColor 255,240,200
@@ -880,19 +880,19 @@ type sample 9
 
 
 track humMusL 
-shortLabel Mouse Cons
+shortLabel Mouse Conserv
 longLabel Human/Mouse Evolutionary Conservation Score
 altColor 0,0,255 
 priority 25.7
-visibility dense
+visibility full
 type sample 9
 
 track musHumL
-shortLabel Human Cons
+shortLabel Human Conserv
 longLabel Mouse/Human Evolutionary Conservation Score
 altColor 0,0,255
 priority 25.8
-visibility hide
+visibility full
 type sample 9 
 
 track exoFish
