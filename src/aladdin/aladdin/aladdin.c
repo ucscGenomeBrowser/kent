@@ -310,7 +310,7 @@ for (i=0; i<dnaSize; i += lineSize)
     { \
     int destState = curState; \
     int newScore = -0x3fffffff; \
-    State parent; \
+    State parent = 0; \
     int oneScore; 
 
 #define endState(curState) \
