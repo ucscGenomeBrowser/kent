@@ -139,11 +139,17 @@ void gfAlignAaClumps(struct genoFind *gf,  struct gfClump *clumpList, aaSeq *seq
 /* Convert gfClumps to an actual alignment that gets saved via 
  * outFunction/outData. */
 
-void gfFindAlignAaTrans3Clumps(struct genoFind *gfs[3], aaSeq *qSeq, struct hash *t3Hash, 
-	boolean isRc, enum ffStringency stringency, int minMatch, 
+void gfFindAlignAaTrans(struct genoFind *gfs[3], aaSeq *qSeq, struct hash *t3Hash, 
+	enum ffStringency stringency, int minMatch, 
 	GfSaveAli outFunction, void *outData);
 /* Look for qSeq alignment in three translated reading frames. Save alignment
  * via outFunction/outData. */
+
+void gfFindAlignTransTrans(struct genoFind *gfs[3], struct dnaSeq *qSeq, struct hash *t3Hash, 
+	boolean isRc, enum ffStringency stringency, int minMatch, 
+	GfSaveAli outFunction, void *outData);
+/* Look for alignment to three translations of qSeq in three translated reading frames. 
+ * Save alignment via outFunction/outData. */
 
 /* ---  Some routines for dealing with gfServer at a low level ---- */
 
@@ -179,6 +185,8 @@ struct gfSavePslxData
     {
     FILE *f;			/* Output file. */
     struct hash *t3Hash;	/* Hash to associate names and frames. */
+    boolean reportTargetStrand; /* Report target as well as query strand? */
+    boolean targetRc;		/* Is target reverse complemented? */
     };
 
 void gfSavePslx(char *chromName, int chromSize, int chromOffset,

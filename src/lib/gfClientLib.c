@@ -174,8 +174,10 @@ static struct gfRange *gfRangesBundle(struct gfRange *exonList, int maxIntron)
 {
 struct gfRange *geneList = NULL, *gene = NULL, *lastExon = NULL, *exon, *nextExon;
 
+uglyf(" gfRangesBundle %d ranges, %d maxIntron\n", slCount(exonList), maxIntron);
 for (exon = exonList; exon != NULL; exon = nextExon)
     {
+    uglyf("  %d-%d hits %s %d-%d\n", exon->qStart, exon->qEnd, exon->tName, exon->tStart, exon->tEnd);
     nextExon = exon->next;
     if (lastExon == NULL || !sameString(lastExon->tName, exon->tName) 
         || exon->tStart - lastExon->tEnd > maxIntron)
@@ -311,6 +313,7 @@ if (minMatch > qSeq->size/2) minMatch = qSeq->size/2;
 for (ffi = bun->ffList; ffi != NULL; ffi = ffi->next)
     {
     struct ffAli *ff = ffi->ff;
+    uglyf(" possibly saving ali\n");
     (*outFunction)(chromName, chromSize, chromOffset, ff, tSeq, qSeq, isRc, stringency, minMatch, outData);
     }
 }
@@ -458,7 +461,7 @@ for (i=-1; i>=last; --i)
 	 }
     else
          {
-	 if (i - maxPos >= maxDown)
+	 if (maxPos - i>= maxDown)
 	     break;
 	 }
     }
@@ -482,6 +485,7 @@ struct gfHit *hit;
 int qStart, tStart, qEnd, tEnd, newQ, newT;
 boolean outOfIt = TRUE;		/* Logically outside of a clump. */
 struct gfRange *range;
+AA *lastQs = NULL, *lastQe = NULL, *lastTs = NULL, *lastTe = NULL;
 
 if (tSeq == NULL)
     internalErr();
@@ -497,6 +501,7 @@ for (hit = clump->hitList; ; hit = hit->next)
         {
 	newQ = hit->qStart;
 	newT = hit->tStart - target->start;
+	//  uglyf("   newQ %d, newT %d, qEnd %d, tEnd %d\n", newQ, newT, qEnd, tEnd);
 	}
 
     /* See if it's time to output merged (diagonally adjacent) hits. */
@@ -508,19 +513,28 @@ for (hit = clump->hitList; ; hit = hit->next)
 	    ts = tSeq->dna + tStart;
 	    qe = qSeq->dna + qEnd;
 	    te = tSeq->dna + tEnd;
+	    // uglyf(" extending range\n");
 	    extendHitRight(qSeq->size - qEnd, tSeq->size - tEnd,
 		&qe, &te, aaScore2);
 	    extendHitLeft(qStart, tStart, &qs, &ts, aaScore2);
-	    AllocVar(range);
-	    range->qStart = qs - qSeq->dna;
-	    range->qEnd = qe - qSeq->dna;
-	    range->tName = cloneString(tSeq->name);
-	    range->tSeq = tSeq;
-	    range->tStart = ts - tSeq->dna;
-	    range->tEnd = te - tSeq->dna;
-	    range->hitCount = qe - qs;
-	    range->frame = frame;
-	    slAddHead(pRangeList, range);
+	    if (qs != lastQs || ts != lastTs || qe != lastQe || qs !=  lastQs)
+		{
+		lastQs = qs;
+		lastTs = ts;
+		lastQe = qe;
+		lastTe = te;
+		AllocVar(range);
+		range->qStart = qs - qSeq->dna;
+		range->qEnd = qe - qSeq->dna;
+		range->tName = cloneString(tSeq->name);
+		range->tSeq = tSeq;
+		range->tStart = ts - tSeq->dna;
+		range->tEnd = te - tSeq->dna;
+		range->hitCount = qe - qs;
+		range->frame = frame;
+		slAddHead(pRangeList, range);
+		// uglyf(" outputRange %d-%d %s %d-%d\n", range->qStart, range->qEnd, range->tName, range->tStart, range->tEnd);
+		}
 	    outOfIt = TRUE;
 	    }
 	}
@@ -581,6 +595,7 @@ struct ssBundle *bun;
 
 for (clump = clumpList; clump != NULL; clump = clump->next)
     {
+    gfClumpDump(gf, clump, uglyOut);
     clumpToHspRange(clump, seq, gf->tileSize, 0, &rangeList);
     }
 slReverse(&rangeList);
@@ -603,8 +618,8 @@ for (range = rangeList; range != NULL; range = range->next)
 gfRangeFreeList(&rangeList);
 }
 
-void gfFindAlignAaTrans3Clumps(struct genoFind *gfs[3], aaSeq *qSeq, struct hash *t3Hash, 
-	boolean isRc, enum ffStringency stringency, int minMatch, 
+void gfFindAlignAaTrans(struct genoFind *gfs[3], aaSeq *qSeq, struct hash *t3Hash, 
+	enum ffStringency stringency, int minMatch, 
 	GfSaveAli outFunction, void *outData)
 /* Look for qSeq alignment in three translated reading frames. Save alignment
  * via outFunction/outData. */
@@ -623,7 +638,7 @@ for (frame=0; frame<3; ++frame)
     {
     for (clump = clumps[frame]; clump != NULL; clump = clump->next)
 	{
-	// gfClumpDump(gfs[frame], clump, uglyOut);
+	gfClumpDump(gfs[frame], clump, uglyOut);
 	clumpToHspRange(clump, qSeq, tileSize, frame, &rangeList);
 	}
     }
@@ -643,38 +658,79 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->tripleSeq = t3->trans;
     ssStitch(bun, stringency);
     saveAlignments(targetSeq->name, targetSeq->size, 0, 
-	bun, outData, isRc, stringency, minMatch, outFunction);
+	bun, outData, FALSE, stringency, minMatch, outFunction);
     ssBundleFree(&bun);
+    }
+/* ~~~ free clumps[3] ??? */
+}
+
+void untranslateRangeList(struct gfRange *rangeList, int qFrame, int tFrame, struct hash *t3Hash)
+/* Translate coordinates from protein to dna. */
+{
+struct gfRange *range;
+struct trans3 *t3;
+for (range = rangeList; range != NULL; range = range->next)
+    {
+    uglyf(" old %d-%d %d-%d ", range->qStart, range->qEnd, range->tStart, range->tEnd);
+    range->qStart = 3*range->qStart + qFrame;
+    range->qEnd = 3*range->qEnd + qFrame;
+    range->tStart = 3*range->tStart + tFrame;
+    range->tEnd = 3*range->tEnd + tFrame;
+    t3 = hashMustFindVal(t3Hash, range->tSeq->name);
+    range->tSeq = t3->seq;
+    uglyf(" new %d-%d %d-%d\n", range->qStart, range->qEnd, range->tStart, range->tEnd);
     }
 }
 
-
-static int calcMilliBad(int qAliSize, int tAliSize, 
-	int qNumInserts, int tNumInserts,
-	int match, int repMatch, int misMatch, boolean isMrna)
-/* Express mismatches and other problems in parts per thousand. 
- * Stolen straight from psLayout. */
+void gfFindAlignTransTrans(struct genoFind *gfs[3], struct dnaSeq *qSeq, struct hash *t3Hash, 
+	boolean isRc, enum ffStringency stringency, int minMatch, 
+	GfSaveAli outFunction, void *outData)
+/* Look for alignment to three translations of qSeq in three translated reading frames. 
+ * Save alignment via outFunction/outData. */
 {
-int aliSize;
-int milliBad;
-int sizeDif;
-int insertFactor;
+struct trans3 *qTrans = trans3New(qSeq), *t3;
+int qFrame, tFrame;
+struct gfClump *clumps[3][3], *clump;
+struct gfRange *rangeList = NULL, *range;
+int tileSize = gfs[0]->tileSize;
+bioSeq *targetSeq;
+struct ssBundle *bun;
 
-aliSize = min(qAliSize, tAliSize);
-sizeDif = qAliSize - tAliSize;
-if (sizeDif < 0)
+for (qFrame = 0; qFrame<3; ++qFrame)
     {
-    if (isMrna)
-	sizeDif = 0;
-    else
-	sizeDif = -sizeDif;
+    gfTransFindClumps(gfs, qTrans->trans[qFrame], clumps[qFrame]);
+    for (tFrame=0; tFrame<3; ++tFrame)
+	{
+	uglyf(" qFrame %d, tFrame %d, clumps %d\n", qFrame, tFrame, slCount(clumps[qFrame][tFrame]));
+	for (clump = clumps[qFrame][tFrame]; clump != NULL; clump = clump->next)
+	    {
+	    struct gfRange *rangeSet = NULL;
+	    gfClumpDump(gfs[tFrame], clump, uglyOut);
+	    clumpToHspRange(clump, qSeq, tileSize, tFrame, &rangeSet);
+	    untranslateRangeList(rangeSet, qFrame, tFrame, t3Hash);
+	    rangeList = slCat(rangeSet, rangeList);
+	    }
+	}
     }
-insertFactor = qNumInserts;
-if (!isMrna)
-    insertFactor += tNumInserts;
-
-milliBad = (1000 * (misMatch + insertFactor + sizeDif)) / (match + repMatch);
-return milliBad;
+uglyf("Got %d ranges before merge\n", slCount(rangeList));
+slSort(&rangeList, gfRangeCmpTarget);
+rangeList = gfRangesBundle(rangeList, 500000);
+uglyf("Got %d ranges after merge\n", slCount(rangeList));
+for (range = rangeList; range != NULL; range = range->next)
+    {
+    targetSeq = range->tSeq;
+    AllocVar(bun);
+    bun->qSeq = qSeq;
+    bun->genoSeq = targetSeq;
+    bun->data = range;
+    bun->ffList = rangesToFfItem(range->components, qSeq);
+    ssStitch(bun, stringency);
+    saveAlignments(targetSeq->name, targetSeq->size, 0, 
+	bun, outData, isRc, stringency, minMatch, outFunction);
+    ssBundleFree(&bun);
+    }
+trans3Free(&qTrans);
+/* ~~~ free clumps[3][3] ??? */
 }
 
 int t3Offset(char *pt, bioSeq *seq, struct hash *t3Hash)
@@ -689,14 +745,10 @@ if (t3Hash != NULL)
 return pt - seq->dna;
 }
 
-int t3Frame(char *pt, struct hash *t3Hash)
-{
-}
-
 void gfSavePslOrPslx(char *chromName, int chromSize, int chromOffset,
 	struct ffAli *ali, struct dnaSeq *genoSeq, struct dnaSeq *otherSeq, 
 	boolean isRc, enum ffStringency stringency, int minMatch, FILE *out,
-	struct hash *t3Hash)
+	struct hash *t3Hash, boolean reportTargetStrand, boolean targetIsRc)
 /* Analyse one alignment and if it looks good enough write it out to file in
  * psl format (or pslX format - if t3Hash is non-NULL).  */
 {
@@ -723,8 +775,6 @@ DNA *np, *hp, n, h;
 int blockSize;
 int i;
 int badScore;
-int milliBad;
-int passIt;
 struct trans3 *t3 = NULL;
 
 /* Count up matches, mismatches, inserts, etc. */
@@ -763,12 +813,9 @@ for (ff = ali; ff != NULL; ff = nextFf)
 	}
     }
 
+uglyf("  matchCount %d, minMatch %d\n", matchCount, minMatch);
 /* See if it looks good enough to output. */
-milliBad = calcMilliBad(nEnd - nStart, hEnd - hStart,
-	nInsertCount, hInsertCount, 
-	matchCount, repMatch, mismatchCount, stringency == ffCdna);
-passIt = (milliBad < 100 && matchCount >= minMatch);
-if (passIt)
+if (matchCount >= minMatch)
     {
     if (isRc)
 	{
@@ -778,12 +825,21 @@ if (passIt)
 	nStart = oSize - nEnd;
 	nEnd = oSize - temp;
 	}
-    fprintf(out, "%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t"
-                 "%c\t"
-		 "%s\t%d\t%d\t%d\t"
-		 "%s\t%d\t%d\t%d\t%d\t",
+    if (targetIsRc)
+        {
+	int temp;
+	int oSize = genoSeq->size;
+	temp = hStart;
+	hStart = oSize - hEnd;
+	hEnd = oSize - temp;
+	}
+    fprintf(out, "%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%c",
 	matchCount, mismatchCount, repMatch, countNs, nInsertCount, nInsertBaseCount, hInsertCount, hInsertBaseCount,
-	(isRc ? '-' : '+'),
+	(isRc ? '-' : '+'));
+    if (reportTargetStrand)
+        fprintf(out, "%c", (targetIsRc ? '-' : '+') );
+    fprintf(out, "\t%s\t%d\t%d\t%d\t"
+		 "%s\t%d\t%d\t%d\t%d\t",
 	otherSeq->name, otherSeq->size, nStart, nEnd,
 	chromName, chromSize, hStart, hEnd,
 	ffAliCount(ali));
@@ -819,7 +875,7 @@ void gfSavePsl(char *chromName, int chromSize, int chromOffset,
 	boolean isRc, enum ffStringency stringency, int minMatch, void *outputData)
 {
 gfSavePslOrPslx(chromName, chromSize, chromOffset, ali, genoSeq, otherSeq,
-    isRc, stringency, minMatch, outputData, NULL);
+    isRc, stringency, minMatch, outputData, NULL, FALSE, FALSE);
 }
 
 void gfSavePslx(char *chromName, int chromSize, int chromOffset,
@@ -828,6 +884,6 @@ void gfSavePslx(char *chromName, int chromSize, int chromOffset,
 {
 struct gfSavePslxData *data = outputData;
 gfSavePslOrPslx(chromName, chromSize, chromOffset, ali, genoSeq, otherSeq,
-    isRc, stringency, minMatch, data->f, data->t3Hash);
+    isRc, stringency, minMatch, data->f, data->t3Hash, data->reportTargetStrand, data->targetRc);
 }
 

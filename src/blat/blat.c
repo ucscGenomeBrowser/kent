@@ -275,21 +275,38 @@ for (frame = 0; frame < 3; ++frame)
 return t3List;
 }
 
-void tripleSearch(aaSeq *qSeq, struct genoFind *gfs[3], struct hash *t3Hash, boolean isRc, FILE *f)
+void tripleSearch(aaSeq *qSeq, struct genoFind *gfs[3], struct hash *t3Hash, boolean dbIsRc, FILE *f)
 /* Look for qSeq in indices for three frames.  Then do rest of alignment. */
 {
-struct gfClump *clumps[3];
-int frame;
 struct gfSavePslxData data;
-
 data.f = f;
 data.t3Hash = t3Hash;
-gfFindAlignAaTrans3Clumps(gfs, qSeq, t3Hash, isRc, ffCdna, minBases, gfSavePslx, &data);
+data.targetRc = dbIsRc;
+data.reportTargetStrand = TRUE;
+gfFindAlignAaTrans(gfs, qSeq, t3Hash, ffCdna, minBases, gfSavePslx, &data);
 }
 
-void blatx(struct dnaSeq *untransList, int queryCount, char *queryFiles[], char *outFile)
-/* Query is protein.  Run it against translated DNA database 
- * (3 frames on each strand). */
+void transTripleSearch(struct dnaSeq *qSeq, struct genoFind *gfs[3], struct hash *t3Hash, 
+	boolean dbIsRc, boolean rcQueryToo, FILE *f)
+/* Translate qSeq three ways and look for each in three frames of index. */
+{
+int qIsRc;
+struct gfSavePslxData data;
+data.f = f;
+data.t3Hash = NULL;
+data.reportTargetStrand = TRUE;
+data.targetRc = dbIsRc;
+
+for (qIsRc = 0; qIsRc <= rcQueryToo; qIsRc += 1)
+    {
+    gfFindAlignTransTrans(gfs, qSeq, t3Hash, qIsRc, ffCdna, minBases, gfSavePslx, &data);
+    if (rcQueryToo)
+        reverseComplement(qSeq->dna, qSeq->size);
+    }
+}
+
+void bigBlat(struct dnaSeq *untransList, int queryCount, char *queryFiles[], char *outFile, boolean transQuery, boolean rcQueryToo)
+/* Run query against translated DNA database (3 frames on each strand). */
 {
 int frame, i;
 struct dnaSeq *seq;
@@ -308,6 +325,8 @@ if (!noHead)
 
 for (isRc = FALSE; isRc <= 1; ++isRc)
     {
+    uglyf("Searching %c strand of database\n", (isRc ? '-' : '+'));
+
     /* Initialize local pointer arrays to NULL to prevent surprises. */
     for (frame = 0; frame < 3; ++frame)
 	{
@@ -326,9 +345,13 @@ for (isRc = FALSE; isRc <= 1; ++isRc)
 	aaSeq qSeq;
 
 	lf = lineFileOpen(queryFiles[i], TRUE);
-	while (faPepSpeedReadNext(lf, &qSeq.dna, &qSeq.size, &qSeq.name))
+	while (faSomeSpeedReadNext(lf, &qSeq.dna, &qSeq.size, &qSeq.name, transQuery))
 	    {
-	    tripleSearch(&qSeq, gfs, t3Hash, isRc, pslOut);
+	    uglyf("Searching %s of %d letters\n", qSeq.name, qSeq.size);
+	    if (transQuery)
+	        transTripleSearch(&qSeq, gfs, t3Hash, isRc, rcQueryToo, pslOut);
+	    else
+		tripleSearch(&qSeq, gfs, t3Hash, isRc, pslOut);
 	    }
 	}
 
@@ -370,7 +393,11 @@ if ((dType == gftDna && (qType == gftDna || qType == gftRna))
     }
 else if (dType == gftDnaX && qType == gftProt)
     {
-    blatx(dbSeqList, queryCount, queryFiles, pslOut);
+    bigBlat(dbSeqList, queryCount, queryFiles, pslOut, FALSE, TRUE);
+    }
+else if (dType == gftDnaX && (qType == gftDnaX || qType == gftRnaX))
+    {
+    bigBlat(dbSeqList, queryCount, queryFiles, pslOut, TRUE, qType == gftDnaX);
     }
 else
     {

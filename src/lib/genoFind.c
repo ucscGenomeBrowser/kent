@@ -355,7 +355,6 @@ for (i=0; i<tileSpaceSize; ++i)
 	++overCount;
 	}
     }
-printf("Got %d overused %d-mers\n", overCount, gf->tileSize);
 }
 
 static void gfZeroNonOverused(struct genoFind *gf)
@@ -429,7 +428,6 @@ for (seq = seqList; seq != NULL; seq = seq->next)
     {
     gfCountSeq(gf, seq);
     }
-printf("Done counting %d-mers\n", tileSize);
 gfAllocLists(gf);
 gfZeroNonOverused(gf);
 AllocArray(gf->sources, seqCount);
@@ -443,7 +441,6 @@ for (i=0, seq = seqList; i<seqCount; ++i, seq = seq->next)
     offset += seq->size;
     ss->end = offset;
     }
-printf("Done indexing %d-mers\n", tileSize);
 gfZeroOverused(gf);
 return gf;
 }
