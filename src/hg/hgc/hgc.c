@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.645 2004/05/28 21:43:59 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.646 2004/05/28 22:37:00 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7117,6 +7117,7 @@ void printRgdSslpCustomUrl(struct trackDb *tdb, char *itemName, boolean encode)
 {
 char *url = tdb->url;
 char *sslpId;
+char *chrom, *chromStart, *chromEnd;
 
 if (url != NULL && url[0] != 0)
     {
@@ -7137,7 +7138,20 @@ if (url != NULL && url[0] != 0)
         printf("RGD:%s</B></A>\n", sslpId);
         } 
     sqlFreeResult(&sr);
-    
+   
+    sprintf(query, "select chrom, chromStart, chromEnd from rgdSslp where name='%s';", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+        {
+        chrom      = row[0];
+        chromStart = row[1];
+        chromEnd   = row[2];
+        printf("<HR>");
+        printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, itemName);
+        }
+    sqlFreeResult(&sr);
+ 
     hFreeConn(&conn);
     }
 }
