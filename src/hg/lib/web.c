@@ -101,11 +101,13 @@ if (NULL != theCart)
     {
     char *theDb = NULL;
     char *theGenome = NULL;
+    char *genomeEnc = NULL;
 
     getDbAndGenome(theCart, &theDb, &theGenome);
+    genomeEnc = cgiEncode(theGenome);
 
     snprintf(uiState, sizeof(uiState), "?%s=%s&%s=%s&%s=%u", 
-	     orgCgiName, theGenome,
+	     orgCgiName, genomeEnc,
 	     dbCgiName, theDb,
 	     cartSessionVarName(), cartSessionId(theCart));
     }
