@@ -29,8 +29,9 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 #include "grp.h"
+#include "twoBit.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.207 2004/10/01 23:14:18 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.208 2004/10/05 02:55:48 heather Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -785,12 +786,28 @@ hFreeConn(&conn);
 return hash;
 }
 
+struct dnaSeq *fetchSeq(char *fileName, char *seqName, int start, int end)
+/* Fetch sequence from file.  If it is a .2bit file then fetch the named sequence.
+   If it is .nib then just ignore seqName. */
+{
+if (twoBitIsFile(fileName))
+    {
+    struct twoBitFile *tbf;
+    struct dnaSeq *seq;
+    tbf = twoBitOpen(fileName);
+    seq = twoBitReadSeqFrag(tbf, seqName, start, end);
+    twoBitClose(&tbf);
+    return seq;
+    }
+return nibLoadPart(fileName, start, end-start);
+}
+
 struct dnaSeq *hChromSeq(char *chrom, int start, int end)
 /* Return lower case DNA from chromosome. */
 {
 char fileName[512];
 hNibForChrom(chrom, fileName);
-return nibLoadPart(fileName, start, end-start);
+return fetchSeq(fileName, chrom, start, end);
 }
 
 struct dnaSeq *hChromSeq2(char *chrom, int start, int end)
@@ -798,7 +815,7 @@ struct dnaSeq *hChromSeq2(char *chrom, int start, int end)
 {
 char fileName[512];
 hNibForChrom2(chrom, fileName);
-return nibLoadPart(fileName, start, end-start);
+return fetchSeq(fileName, chrom, start, end);
 }
 
 struct dnaSeq *hSeqForBed(struct bed *bed)
@@ -823,7 +840,7 @@ else
     hNibForChrom(bed->chrom, fileName);
     for(i=0; i<bed->blockCount; i++)
 	{
-	block = nibLoadPart(fileName, offSet+bed->chromStarts[i], bed->blockSizes[i]);
+	block = fetchSeq(fileName, bed->chrom, offSet+bed->chromStarts[i], bed->blockSizes[i]);
 	dyStringAppendN(currentSeq, block->dna, block->size);
 	dnaSeqFree(&block);
 	}
