@@ -1183,7 +1183,7 @@ identifier locusLinkId external=LocusLink
 "NCBI LocusLink ID"
     $gbd.refLink.locusLinkId dupeOk
     $gbd.keggPathway.locusID minCheck=0.99
-    $kgDb.knownToLocusLink.value
+    $kgDb.knownToLocusLink.value minCheck=0.99
     $dm.bdgpToLocusLink.value minCheck=0.99
 
 identifier omimId external=OMIM
