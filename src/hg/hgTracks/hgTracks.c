@@ -72,7 +72,7 @@ char *thisFrame = NULL;
 /* end Chuck code */
 #endif /*CHUCK_CODE*/
 
-int maxItemsInFullTrack = 400;  /* Maximum number of items displayed in full */
+int maxItemsInFullTrack = 300;  /* Maximum number of items displayed in full */
 int guidelineSpacing = 10;	/* Pixels between guidelines. */
 
 struct cart *cart;	/* The cart where we keep persistent variables. */
@@ -314,7 +314,7 @@ if (!tg->limitedVisSet)
     tg->limitedVisSet = TRUE;
     if (vis == tvFull)
 	{
-	if (slCount(tg->items) > maxItemsInFullTrack)
+	if (slCount(items) > maxItemsInFullTrack)
 	    vis = tvDense;
 	}
     tg->limitedVis = vis;
@@ -1682,7 +1682,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     pslFree(&psl);
     }
 slReverse(&lfList);
-if (limitVisibility(tg, &lfList) == tvFull)
+if (limitVisibility(tg, lfList) == tvFull)
     slSort(&lfList, linkedFeaturesCmpStart);
 if (tg->extraUiData)
     filterMrna(tg, &lfList);
@@ -2794,7 +2794,7 @@ Color cpgIslandColor(struct trackGroup *tg, void *item, struct memGfx *mg)
 /* Return color of cpgIsland track item. */
 {
 struct cpgIsland *el = item;
-return (el->length < 400 ? tg->ixAltColor : tg->ixColor);
+return (el->length < 300 ? tg->ixAltColor : tg->ixColor);
 }
 
 void loadCpgIsland(struct trackGroup *tg)
@@ -6680,8 +6680,8 @@ if (!hideControls)
 	}
     /* now finish out the table */
     endControlGrid(&cg);
-    printf("Note: Tracks with more than 400 items are always displayed in "
-           "dense mode.");
+    printf("Note: Tracks with more than %d items are always displayed in "
+           "dense mode.", maxItemsInFullTrack);
 
     printf("</CENTER>\n");
     }
