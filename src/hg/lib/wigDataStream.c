@@ -8,7 +8,7 @@
 #include "hgColors.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.58 2004/10/27 21:27:27 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.59 2004/10/28 18:55:22 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wds, char *left, char *right)
@@ -1239,7 +1239,8 @@ if (bedList && *bedList)
     /*	Determine what will control which chrom to do.  If a chrom
      *	constraint has been set then that is the one to do.  If it has
      *	not been set, then allow the bedList to be the list of chroms to
-     *	do.
+     *	do.  This business finds the maximum extent for each chrom in
+     *	the bedList.
      */
     if (chromConstraint)
 	{
@@ -1254,8 +1255,8 @@ if (bedList && *bedList)
 	{
 	char *chrName = NULL;
 	struct bed *bed;
-	unsigned long bedStart = 0;
-	unsigned long bedEnd = 0;
+	unsigned long bedStart = 0;	/* current start and end */
+	unsigned long bedEnd = 0;	/* for chrName	*/
 
 	/*	no need to clone the name, it remains there, we are just
 	 *	pointing to it.
@@ -1264,7 +1265,42 @@ if (bedList && *bedList)
 	chrName = (*bedList)->chrom;
 	for (bed = *bedList; bed; bed = bed->next)
 	    {
-	    if (differentString(chrName, bed->chrom))
+	    if (differentString(chrName, bed->chrom)) /* finish chrName */
+		{
+		/*  out of order bed file ?  Maybe already saw this name */
+		if (hashLookup(chromSizes, chrName) != NULL)
+		    {
+		    chrStartEnd = hashFindVal(chromSizes, chrName); 
+		    chrStartEnd->chrStart = min(bedStart,chrStartEnd->chrStart);
+		    chrStartEnd->chrEnd = max(bedEnd,chrStartEnd->chrEnd);
+		    hashRemove(chromSizes,chrName);
+		    hashAdd(chromSizes, chrName, chrStartEnd);
+		    }
+		else
+		    {
+		    chr = newSlName(chrName);
+		    slAddHead(&chromList, chr);
+		    AllocVar(chrStartEnd);
+		    chrStartEnd->chrStart = bedStart;
+		    chrStartEnd->chrEnd = bedEnd;
+		    hashAdd(chromSizes, chrName, chrStartEnd);
+		    }
+		bedStart = bed->chromStart;
+		chrName = bed->chrom;
+		}
+	    bedEnd = max(bedEnd,bed->chromEnd); /* always move out */
+	    }
+	    /*	and the last one remains to be done	*/
+	    /*  out of order bed file ?  Maybe already saw this name */
+	    if (hashLookup(chromSizes, chrName) != NULL)
+		{
+		chrStartEnd = hashFindVal(chromSizes, chrName); 
+		chrStartEnd->chrStart = min(bedStart,chrStartEnd->chrStart);
+		chrStartEnd->chrEnd = max(bedEnd,chrStartEnd->chrEnd);
+		hashRemove(chromSizes,chrName);
+		hashAdd(chromSizes, chrName, chrStartEnd);
+		}
+	    else
 		{
 		chr = newSlName(chrName);
 		slAddHead(&chromList, chr);
@@ -1272,18 +1308,7 @@ if (bedList && *bedList)
 		chrStartEnd->chrStart = bedStart;
 		chrStartEnd->chrEnd = bedEnd;
 		hashAdd(chromSizes, chrName, chrStartEnd);
-		chrName = bed->chrom;
-		bedStart = bed->chromStart;
 		}
-	    bedEnd = bed->chromEnd;
-	    }
-	    /*	and the last one remains to be done	*/
-	    chr = newSlName(chrName);
-	    slAddHead(&chromList, chr);
-	    AllocVar(chrStartEnd);
-	    chrStartEnd->chrStart = bedStart;
-	    chrStartEnd->chrEnd = bedEnd;
-	    hashAdd(chromSizes, chrName, chrStartEnd);
 	    slReverse(&chromList);
 	}
 
