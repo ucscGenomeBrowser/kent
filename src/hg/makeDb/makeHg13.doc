@@ -1803,7 +1803,7 @@ o - # ssh hgwdev
     mkdir /cluster/store4/gs.14/build31/bed/affyGnf
     rm -rf psl tmp err *.psl *.bed HG-U95Av2_target 
 
-LOAD SAGE DATA (IN PROGRES)
+LOAD SAGE DATA (IN PROGRESS)
     cd /projects/cc/hg/sugnet/sage
     mkdir sage.XXX # XXX = current uniGene build
     cd sage.XXX
@@ -1917,14 +1917,14 @@ o - Rescuing STS track:
      - mv chrom.psl ../convert.psl
 
 
-LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 12/6/02)
+LOADING MOUSE MM3 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 02/10/03)
 
     # Translate Penn State .lav files into sorted axt:
     ssh eieio
-    set base="/cluster/store4/gs.14/build31/bed/blastz.mm2.2002-12-5-ASH"
+    set base="/cluster/store4/gs.14/build31/bed/blastz.mm3.2003-02-07-ASH"
     set seq1_dir="/cluster/store4/gs.14/build31/mixedNib/"
-    set seq2_dir="/cluster/store2/mm.2002.02/mm2/trfMixedNib/"
-    set tbl="blastzMm2"
+    set seq2_dir="/cluster/store2/mm.2003.02/mm3/mixedNib/"
+    set tbl="blastzMm"
     cd $base
     mkdir -p axtChrom
     foreach c (lav/*)
@@ -1965,16 +1965,16 @@ LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 12/6/02)
 
     # Load tables
     ssh hgwdev
-    set base="/cluster/store4/gs.14/build31/bed/blastz.mm2.2002-12-5-ASH"
-    set tbl="blastzMm2"
+    set base="/cluster/store4/gs.14/build31/bed/blastz.mm3.2003-02-07-ASH"
+    set tbl="blastzMm"
     cd $base/pslChrom
     hgLoadPsl hg13 chr*_${tbl}.psl
 
-MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM2 AXT FILES (DONE 12/6/02)
+MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM3 AXT FILES (DONE 02/10/03)
 
     # Consolidate AXT files to chrom level, sort, pick best, make psl.
     ssh eieio
-    set base="/cluster/store4/gs.14/build31/bed/blastz.mm2.2002-12-5-ASH"
+    set base="/cluster/store4/gs.14/build31/bed/blastz.mm3.2003-02-07-ASH"
     set tbl="blastzBestMouse"
     cd $base
     mkdir -p axtBest pslBest
@@ -2001,32 +2001,32 @@ MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM2 AXT FILES (DONE 12/6/02)
 
     # Load tables
      ssh hgwdev
-     set base="/cluster/store4/gs.14/build31/bed/blastz.mm2.2002-12-5-ASH"
+     set base="/cluster/store4/gs.14/build31/bed/blastz.mm3.2003-02-07-ASH"
      set tbl="blastzBestMouse"
      cd $base/pslBest
      hgLoadPsl hg13 chr*_${tbl}.psl
 
     # Make /gbdb links and add them to the axtInfo table:
-     mkdir -p /gbdb/hg13/axtBestMm2
-     cd /gbdb/hg13/axtBestMm2
+     mkdir -p /gbdb/hg13/axtBestMm3
+     cd /gbdb/hg13/axtBestMm3
      foreach f ($base/axtBest/chr*.axt)
        ln -s $f .
      end
      cd $base/axtBest
      rm -f axtInfoInserts.sql
      touch axtInfoInserts.sql
-     foreach f (/gbdb/hg13/axtBestMm2/chr*.axt)
+     foreach f (/gbdb/hg13/axtBestMm3/chr*.axt)
        set chr=$f:t:r
-       echo "INSERT INTO axtInfo VALUES ('mm2','Blastz Best in Genome','$chr','$f');" \
+       echo "INSERT INTO axtInfo VALUES ('mm3','Blastz Best in Genome','$chr','$f');" \
          >> axtInfoInserts.sql
      end
      hgsql hg13 < ~/kent/src/hg/lib/axtInfo.sql
      hgsql hg13 < axtInfoInserts.sql
 
-MAKING THE AXTTIGHT FROM AXTBEST (DONE 12/6/02)
+MAKING THE AXTTIGHT FROM AXTBEST (DONE 02/10/03)
     # After creating axtBest alignments above, use subsetAxt to get axtTight:
     ssh eieio
-    cd ~/hg13/bed/blastz.mm2.2002-12-5-ASH/axtBest
+    cd ~/hg13/bed/blastz.mm3.2003-02-07-ASH/axtBest
     mkdir -p ../axtTight
     foreach i (*.axt)
       subsetAxt  $i ../axtTight/$i \
@@ -2041,7 +2041,7 @@ MAKING THE AXTTIGHT FROM AXTBEST (DONE 12/6/02)
     end
     # Load tables into database
     ssh hgwdev
-    cd ~/hg13/bed/blastz.mm2.2002-12-5-ASH/pslTight
+    cd ~/hg13/bed/blastz.mm3.2003-02-07-ASH/pslTight
     hgLoadPsl hg13 chr*_blastzTightMouse.psl
 
 BEGINNING OF RAT BLASTZ
