@@ -62,7 +62,7 @@ type wigMaf 0.0 1.0
 # autoScaleDefault Off
 #pairwise fakePairwise
 summary tba12waySummary
-speciesOrder eutGli2 eutPri2 hg17 chimp rabbit mouse rat canFam1 cow armadillo elephant
+speciesOrder eutGli2 eutPri2 hg17 panTro1 rabbit mouse rat canFam1 bosTau1 armadillo elephant
 
 track webbMaf
 shortLabel Multiple Alignment
