@@ -2637,7 +2637,111 @@ else if(sameWord(type,"locusLink"))
     printf("<B>Stanford SOURCE Locus Link:</B> <A HREF=\"%soption=LLID&criteria=%s&choice=Gene\" TARGET=_blank>%s</A><BR>\n",stanSourceLink,acc,acc);
 }
 
-void printRnaSpecs(char *acc, boolean isMgcTrack)
+int getImageId(struct sqlConnection *conn, char *acc)
+/* get the image id for a clone, or 0 if none */
+{
+int imageId = 0;
+if (sqlTableExists(conn, "imageClone"))
+    {
+    struct sqlResult *sr;
+    char **row;
+    char query[128];
+    safef(query, sizeof(query),
+          "select imageId from imageClone where acc = '%s'", acc);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+        imageId = sqlUnsigned(row[0]);
+    sqlFreeResult(&sr);
+    }
+return imageId;
+}
+
+static char *mgcStatusDesc[][2] =
+/* Table of MGC status codes to descriptions.  This is essentially duplicated
+ * from MGC loading code, but we don't share the data to avoid creating some
+ * dependencies.  Might want to move these to a shared file or just put these
+ * in a table.  Although it is nice to be able to customize for the browser. */
+{
+    {"unpicked", "not picked"},
+    {"picked", "picked"},
+    {"notBack", "not back"},
+    {"noDecision", "no decision yet"},
+    {"fullLength", "full length"},
+    {"incomplete", "incomplete"},
+    {"chimeric", "chimeric"},
+    {"frameShift", "frame shifted"},
+    {"contaminated", "contaminated"},
+    {"retainedIntron", "retained intron"},
+    {"mixedWells", "mixed wells"},
+    {"noGrowth", "no growth"},
+    {"noInsert", "no insert"},
+    {"no5est", "no 5' EST match"},
+    {"microDel", "no cloning site / microdeletion"},
+    {"artifact", "library artifacts"},
+    {"noPloyATail", "no polyA-tail"},
+    {"cantSequence", "unable to sequence"},
+    {NULL, NULL}
+};
+
+char *getMgcStatusDesc(struct sqlConnection *conn, int imageId)
+/* get a description of the status of a MGC clone */
+{
+struct sqlResult *sr;
+char **row;
+char query[128];
+char *desc = NULL;
+
+safef(query, sizeof(query),
+      "SELECT status FROM mgcStatus WHERE (imageId = %d)", imageId);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row == NULL)
+    desc = "no MGC status available; please report to browser maintainers";
+else
+    {
+    int i;
+    for (i = 0; (mgcStatusDesc[i][0] != NULL) && (desc == NULL); i++)
+        {
+        if (sameString(row[0], mgcStatusDesc[i][0]))
+            desc = mgcStatusDesc[i][1];
+        }
+    if (desc == NULL)
+        desc = "unknown MGC status; please report to browser maintainers";
+    }
+
+sqlFreeResult(&sr);
+return desc;
+}                   
+
+void printMgcRnaSpecs(struct trackDb *tdb, char *acc, int imageId)
+/* print status information for MGC mRNA or EST; must have imageId */
+{
+struct sqlConnection *conn = hgAllocConn();
+char *mgcOrganism, *statusDesc;
+
+/* link to MGC site only for full-length mRNAs */
+if (sameString(tdb->tableName, "mgcGenes"))
+    {
+    if (startsWith("hg", database))
+        mgcOrganism = "Hs";
+    else if (startsWith("mm", database))
+        mgcOrganism = "Mm";
+    else
+        errAbort("can't map database \"%s\" to a MGC organism", database);
+    printf("<B>MGC clone information:</B> ");
+    printf("<A href=\"http://mgc.nci.nih.gov/Reagents/CloneInfo?ORG=%s&IMAGE=%d\" TARGET=_blank>IMAGE:%d</A><BR>", 
+           mgcOrganism, imageId, imageId);
+    }
+
+/* add status description */
+statusDesc = getMgcStatusDesc(conn, imageId);
+if (statusDesc != NULL)
+    printf("<B>MGC status:</B> %s<BR>", statusDesc);
+hFreeConn(&conn);
+}
+
+void printRnaSpecs(struct trackDb *tdb, char *acc)
 /* Print auxiliarry info on RNA. */
 {
 struct dyString *dy = newDyString(1024);
@@ -2647,8 +2751,8 @@ char **row;
 char *type,*direction,*source,*organism,*library,*clone,*sex,*tissue,
      *development,*cell,*cds,*description, *author,*geneName,
      *date,*productName;
-char mgcGeneName[64];
-int mgcImageId = 0;
+boolean isMgcTrack = startsWith("mgc", tdb->tableName);
+int imageId = (isMgcTrack ? getImageId(conn, acc) : 0);
 int seqSize,fileSize;
 long fileOffset;
 char *ext_file;	
@@ -2656,24 +2760,6 @@ boolean hasVersion = hHasField("mrna", "version");
 boolean haveGbSeq = sqlTableExists(conn, "gbSeq");
 char *seqTbl = haveGbSeq ? "gbSeq" : "seq";
 char *version = NULL;
-
-/* If this is an MGC mRNA table, we get some special info from
- * the mgcStatus table.*/
-strcpy(mgcGeneName, "");
-if (isMgcTrack)
-    {
-    char query[128];
-    safef(query, sizeof(query),
-          "select gene,imageId from mgcStatus where acc = '%s'", acc);
-    sr = sqlMustGetResult(conn, query);
-    row = sqlNextRow(sr);
-    if (row != NULL)
-        {
-        strcpy(mgcGeneName, row[0]);
-        mgcImageId = sqlUnsigned(row[1]);
-        }
-    sqlFreeResult(&sr);
-    }
 
 
 /* This sort of query and having to keep things in sync between
@@ -2741,33 +2827,15 @@ if (row != NULL)
     /* Now we have all the info out of the database and into nicely named
      * local variables.  There's still a few hoops to jump through to 
      * format this prettily on the web with hyperlinks to NCBI. */
-    if (isMgcTrack)
-        printf("<H2>Information on MGC Clone <A HREF=\"");
-    else
-        printf("<H2>Information on %s <A HREF=\"", type);
+    printf("<H2>Information on %s <A HREF=\"", type);
     printEntrezNucleotideUrl(stdout, acc);
     printf("\" TARGET=_blank>%s</A></H2>\n", acc);
 
-    if (isMgcTrack && (mgcImageId > 0))
-        {
-        char *mgcOrganism;
-        if (startsWith("hg", database))
-            mgcOrganism = "Hs";
-        else if (startsWith("mm", database))
-            mgcOrganism = "Mm";
-        else
-            errAbort("can't map database \"%s\" to a MGC organism", database);
-        
-        printf("<B>MGC clone information:</B> ");
-        printf("<A href=\"http://mgc.nci.nih.gov/Reagents/CloneInfo?ORG=%s&IMAGE=%d\" TARGET=_blank>IMAGE:%d</A><BR>", 
-               mgcOrganism, mgcImageId, mgcImageId);
-        }
+    if (isMgcTrack && (imageId > 0))
+        printMgcRnaSpecs(tdb, acc, imageId);
     printf("<B>description:</B> %s<BR>\n", description);
 
-    if (isMgcTrack && (strlen(mgcGeneName) > 0))
-        medlineLinkedLine("gene", mgcGeneName, mgcGeneName);
-    else
-        medlineLinkedLine("gene", geneName, geneName);
+    medlineLinkedLine("gene", geneName, geneName);
     medlineLinkedLine("product", productName, productName);
     dyStringClear(dy);
     gbToEntrezAuthor(author, dy);
@@ -2915,7 +2983,7 @@ else
 /* Print non-sequence info. */
 cartWebStart(cart, acc);
 
-printRnaSpecs(acc, FALSE);
+printRnaSpecs(tdb, acc);
 
 /* Get alignment info. */
 pslList = getAlignments(conn, table, acc);
@@ -5414,7 +5482,7 @@ struct psl *pslList = NULL;
 /* Print non-sequence info. */
 cartWebStart(cart, acc);
 
-printRnaSpecs(acc, TRUE);
+printRnaSpecs(tdb, acc);
 htmlHorizontalLine();
 geneShowPosAndLinks(acc, acc, tdb, NULL, NULL,
                     "htcGeneMrna", "htcGeneInGenome", "mRNA Sequence");
@@ -10577,9 +10645,10 @@ else if (sameWord(track, "mrna") || sameWord(track, "mrna2") ||
          sameWord(track, "xenoMrna") || sameWord(track, "xenoBestMrna") ||
          sameWord(track, "xenoEst") || sameWord(track, "psu") ||
          sameWord(track, "tightMrna") || sameWord(track, "tightEst") ||
-         sameWord(track, "mgcNcbiPicks") ||
-         sameWord(track, "mgcNcbiSplicedPicks") ||
-         sameWord(track, "mgcUcscPicks")
+         sameWord(track, "mgcIncompleteMrna") ||
+         sameWord(track, "mgcFailedEst") ||
+         sameWord(track, "mgcPickedEst") ||
+         sameWord(track, "mgcUnpickedEst")
          )
     {
     doHgRna(tdb, item);

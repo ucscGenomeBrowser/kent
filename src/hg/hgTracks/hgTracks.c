@@ -10103,9 +10103,11 @@ registerTrackHandler("triangle", triangleMethods );
 registerTrackHandler("triangleSelf", triangleMethods );
 registerTrackHandler("transfacHit", triangleMethods );
 /* MGC related */
-registerTrackHandler("mgcNcbiPicks", estMethods);
-registerTrackHandler("mgcNcbiSplicedPicks", intronEstMethods);
-registerTrackHandler("mgcUcscPicks", intronEstMethods);
+registerTrackHandler("mgcIncompleteMrna", mrnaMethods);
+registerTrackHandler("mgcFailedEst", intronEstMethods);
+registerTrackHandler("mgcPickedEst", intronEstMethods);
+registerTrackHandler("mgcUnpickedEst", intronEstMethods);
+
 registerTrackHandler("humMusL", humMusLMethods);
 registerTrackHandler("regpotent", humMusLMethods);
 registerTrackHandler("zoo", zooMethods);
