@@ -4,9 +4,10 @@
 #include "hash.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "hdb.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: spDb.c,v 1.7 2003/11/15 21:04:10 kent Exp $";
+static char const rcsid[] = "$Id: spDb.c,v 1.8 2005/02/07 21:57:52 fanhsu Exp $";
 
 boolean spIsPrimaryAcc(struct sqlConnection *conn, char *acc)
 /* Return TRUE if this is a primary accession in database. */
@@ -564,5 +565,64 @@ char query[256];
 safef(query, sizeof(query),
     "select acc from citation where reference = %d", refId);
 return sqlQuickList(conn, query);
+}
+
+char *newSpDisplayId(char *oldSpDisplayId)
+/* Convert from old Swiss-Prot display ID to new display ID */
+{
+static struct sqlConnection *conn=NULL;
+char condStr[255];
+char *newSpDisplayId;
+
+if (conn==NULL)
+    {
+    conn = sqlConnect(PROTEOME_DB_NAME);
+    if (conn == NULL) return NULL;
+    }
+    
+safef(condStr, sizeof(condStr), "oldDisplayId='%s'", oldSpDisplayId);
+newSpDisplayId = sqlGetField(conn, PROTEOME_DB_NAME, "spOldNew", "newDisplayId", condStr);
+    
+return(newSpDisplayId);
+}		   
+
+char *oldSpDisplayId(char *newSpDisplayId)
+/* Convert from new Swiss-Prot display ID to old display ID */
+{
+static struct sqlConnection *conn=NULL;
+char condStr[255];
+char *oldSpDisplayId;
+
+if (conn==NULL)
+    {
+    conn = sqlConnect(PROTEOME_DB_NAME);
+    if (conn == NULL) return NULL;
+    }
+
+safef(condStr, sizeof(condStr), "newDisplayId='%s'", newSpDisplayId);
+oldSpDisplayId = sqlGetField(conn, PROTEOME_DB_NAME, "spOldNew", "oldDisplayId", condStr);
+    
+return(oldSpDisplayId);
+}	
+
+char *uniProtFindPrimAcc(char *id)
+/* Return primary accession given an alias. */
+/* The alias could be an accession number, display ID, old display ID, etc. 
+ * NULL if not found. */
+{
+static struct sqlConnection *conn=NULL;
+char *acc;
+char query[256];
+
+if (conn==NULL)
+    {
+    conn = sqlConnect(PROTEOME_DB_NAME);
+    if (conn == NULL) return NULL;
+    }
+
+safef(query, sizeof(query), "select acc from uniProtAlias where alias = '%s'", id);
+    	
+acc = sqlQuickString(conn, query);
+return(acc);
 }
 
