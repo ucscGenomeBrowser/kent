@@ -1,10 +1,11 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/env perl
 
 # cvsup - do a cvs update, report results concisely
 
+use warnings;
 use strict;
 
-my $cvsdir = $ARGV[0] || "~/kent/src";
+my $cvsdir = $ARGV[0] || ".";
 my $cvscmd = "cvs up -d -P $cvsdir";
 
 #
@@ -41,6 +42,8 @@ print "Updating $cvsdir at $date\n\n";
 my @additions;
 my @updates;
 my @modifieds;
+my @removals;
+my @patches;
 my @conflicts;
 my @noncvsInteresting;
 my @noncvs;
@@ -52,6 +55,10 @@ while (<CVSUP>) {
     push @updates, $1;
   } elsif (/^M (\S+)/) {
     push @modifieds, $1;
+  } elsif (/^R (\S+)/) {
+    push @removals, $1;
+  } elsif (/^P (\S+)/) {
+    push @patches, $1;
   } elsif (/^C (\S+)/) {
     push @conflicts, $1;
   } elsif (/^\? (\S+)/) {
@@ -69,57 +76,71 @@ while (<CVSUP>) {
 # Report them.
 if (scalar(@unrecognized) > 0) {
   print "Unrecognized update types:\n";
-  foreach my $u (@unrecognized) {
-    print "  $u\n";
+  foreach my $f (@unrecognized) {
+    print "  $f\n";
   }
   print "\n";
 }
 if (scalar(@conflicts) > 0) {
   print "CONFLICTS -- manually edit to resolve:\n";
-  foreach my $u (@conflicts) {
-    print "  $u\n";
+  foreach my $f (@conflicts) {
+    print "  $f\n";
   }
   print "\n";
 }
 if (scalar(@additions) > 0) {
   print "Added (not checked in) files:\n";
-  foreach my $u (@additions) {
-    print "  $u\n";
+  foreach my $f (@additions) {
+    print "  $f\n";
+  }
+  print "\n";
+}
+if (scalar(@removals) > 0) {
+  print "Removed (not checked in) files:\n";
+  foreach my $f (@removals) {
+    print "  $f\n";
   }
   print "\n";
 }
 if (scalar(@modifieds) > 0) {
   print "Modified (possibly merged) files:\n";
-  foreach my $u (@modifieds) {
-    print "  $u\n";
+  foreach my $f (@modifieds) {
+    print "  $f\n";
+  }
+  print "\n";
+}
+if (scalar(@patches) > 0) {
+  print "Patched files:\n";
+  foreach my $f (@patches) {
+    print "  $f\n";
   }
   print "\n";
 }
 if (scalar(@updates) > 0) {
   print "Updated files:\n";
-  foreach my $u (@updates) {
-    print "  $u\n";
+  foreach my $f (@updates) {
+    print "  $f\n";
   }
   print "\n";
 }
 if (scalar(@noncvsInteresting) > 0) {
   print "Files/directories not checked in to CVS that look like source:\n";
-  foreach my $u (@noncvsInteresting) {
-    print "  $u\n";
+  foreach my $f (@noncvsInteresting) {
+    print "  $f\n";
   }
   print "\n";
 }
 if (scalar(@noncvs) > 0) {
   print "Files/directories not checked in to CVS that don't look like source:\n";
-  foreach my $u (@noncvs) {
-    print "  $u\n";
+  foreach my $f (@noncvs) {
+    print "  $f\n";
   }
   print "\n";
 }
 if (scalar(@conflicts) > 0) {
   print "CONFLICTS -- manually edit to resolve:\n";
-  foreach my $u (@conflicts) {
-    print "  $u\n";
+  foreach my $f (@conflicts) {
+    print "  $f\n";
   }
   print "\n";
 }

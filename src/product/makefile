@@ -114,13 +114,14 @@ goldenPath:	INST_DIR
 		${MKDIR} "${install_dir}/goldenPath/cbJul2002"; \
 		${MKDIR} "${install_dir}/goldenPath/cbJul2002/database"; \
 		${MKDIR} "${install_dir}/goldenPath/hgFixed"; \
+		${MKDIR} "${install_dir}/goldenPath/hgFixed/database"; \
 	fi
 	rsync -avzP \
 		rsync://hgdownload.cse.ucsc.edu/goldenPath/cbJul2002/database/ \
 		"${install_dir}/goldenPath/cbJul2002/database/"
 	rsync -avzP \
-		rsync://hgdownload.cse.ucsc.edu/goldenPath/hgFixed/kimWormLife* \
-		"${install_dir}/goldenPath/hgFixed/"
+		rsync://hgdownload.cse.ucsc.edu/goldenPath/hgFixed/database/kimWormLife* \
+		"${install_dir}/goldenPath/hgFixed/database/"
 	touch goldenPath
 
 webroot:	INST_DIR
