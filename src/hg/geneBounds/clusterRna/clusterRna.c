@@ -450,7 +450,7 @@ return size;
 boolean goodDa(struct ggAliInfo *da)
 /* Return TRUE if da looks good. */
 {
-return daAliSize(da) > 0.4 * da->ma->baseCount;
+return daAliSize(da) > 0.4 * da->ma->baseCount; /* Only .4 as ESTs may be untrimmed (was .8 at one time). */
 }
 
 int findStrandDistance(struct ggAliInfo *da, char strand, int start, int end)
@@ -750,7 +750,7 @@ int clusterNumber = 0;   /* Group number for each cluster. */
 struct binElement *el, *list = binKeeperFindSorted(bins, 0, chromSize);
 
 /* Read mRNA table and split into hashes. */
-uglyf("Scanning mrna table");
+uglyf("Scanning mrna table\n");
 sr = sqlGetResult(conn, "select acc,type,author from mrna");
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -791,7 +791,8 @@ char *row[1];
 char *line = NULL;
 while(lineFileRow(lf, row))
     {
-    line = cloneString(row[0]);    hashAddUnique(excludeHash, line, line);
+    line = cloneString(row[0]);    
+    hashAddUnique(excludeHash, line, line);
     }
 lineFileClose(&lf);
 }
@@ -858,11 +859,6 @@ printf("Loaded %d bases in %s\n", chrom->size, chromName);
 if(mRnaExclude != NULL)
     fillInRnaExcludeHash(excludeRnaHash, mRnaExclude);
     
-/* Load EST info and use it to categorize ESTs. */
-eoiList = loadEstOrientInfo(conn, chromName, orientTable);
-uglyf("Loaded %d eoi's\n", slCount(eoiList));
-categorizeEsts(eoiList, splicedHash, tailedHash, otherHash);
-
 /* Load mRNA info and use it to categorize mRNAs, mainly with Intron or not. */
 mRnaOiList = loadEstOrientInfo(conn, chromName, mRnaOrientTable);
 uglyf("Loaded %d mRnaOi's\n", slCount(mRnaOiList));
@@ -871,19 +867,31 @@ categorizeEsts(mRnaOiList, splicedRnaHash, tailedRnaHash, otherRnaHash);
 /* Load mRNA psls, then do any necessary filtering. */
 mrnaPslList = loadPsls(conn, rnaTable, chromName);
 mrnaPslList = filterByExcludeHash(mrnaPslList, excludeRnaHash);
-/* Create clusters from mRNAs that are spliced. */
+
+/* Create clusters from mRNAs that are spliced and clean up. */
 splicedRnaMaList = maFromSomePsls(mrnaPslList, chromName,
 				  chrom, splicedRnaHash, FALSE, FALSE); 
-
 hashAddSomePsls(pslHash, mrnaPslList);
+
+hashFree(&splicedRnaHash);
+hashFree(&tailedRnaHash);
+hashFree(&otherRnaHash);
+estOrientInfoFreeList(&mRnaOiList);
+
 /* Load RefGenes. */
 refSeqMaList = maFromPslTable(conn, "refSeqAli", chromName, 
 	chrom, TRUE, TRUE);
+
+/* Load EST info and use it to categorize ESTs. */
+eoiList = loadEstOrientInfo(conn, chromName, orientTable);
+uglyf("Loaded %d eoi's\n", slCount(eoiList));
+categorizeEsts(eoiList, splicedHash, tailedHash, otherHash);
 
 /* Load ESTs into three separate lists. */
 estPslList = loadPsls(conn, estTable, chromName);
 estPslList = filterByExcludeHash(estPslList, excludeRnaHash);
 hashAddSomePsls(pslHash, estPslList);
+freeHashAndVals(&excludeRnaHash);
 
 splicedEstMaList = maFromSomePsls(estPslList, chromName, 
 	chrom, splicedHash, FALSE, FALSE);
@@ -892,6 +900,7 @@ tailedEstMaList = maFromSomePsls(estPslList, chromName,
 otherEstMaList = maFromSomePsls(estPslList, chromName, 
 	chrom, otherHash, FALSE, FALSE);
 
+estOrientInfoFreeList(&eoiList);
 /* Create bin to put clusters in, and cluster
  * refSeq and mRNAs. */
 bins = binKeeperNew(0, chrom->size);
@@ -909,6 +918,11 @@ addCluster(splicedEstMaList, bins, splicedHash, chrom);
 // orientEstMa(tailedEstMaList, tailedHash);
 weedWeakClusters(bins, chrom->size);
 outputClusters(bins, chromName, chrom->size, estOut);
+
+hashFree(&splicedHash);
+hashFree(&tailedHash);
+hashFree(&otherHash);
+estOrientInfoFreeList(&eoiList);
 
 /* TODO: Merge clusters that share 3'/5' ESTs. */
 
