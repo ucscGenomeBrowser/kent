@@ -23,7 +23,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.37 2004/05/21 19:42:47 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.37.2.1 2004/05/24 18:34:42 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -1624,6 +1624,7 @@ else
 	safef(msg, sizeof(msg), "%%0%dd", sizeof(q.qid)-1);
 	safef(newQid,sizeof(newQid),msg,newqid);
 	safef(q.qid, sizeof(q.qid), newQid);
+	safef(msg, sizeof(msg), "");
 	pushQSaveToDbEscaped(conn, &q, pushQtbl, updateSize);
 	}
     else
@@ -1641,6 +1642,7 @@ if (sameString(clonebutton,"clone"))
     safef(msg, sizeof(msg), "%%0%dd", sizeof(q.qid)-1);
     safef(newQid,sizeof(newQid),msg,newqid);
     safef(q.qid, sizeof(q.qid), newQid);
+    safef(msg, sizeof(msg), "");
     q.rank = getNextAvailRank(q.priority);
     safef(q.pushState,sizeof(q.pushState),"N");  /* default to: push not done yet */
     pushQSaveToDbEscaped(conn, &q, pushQtbl, updateSize);
