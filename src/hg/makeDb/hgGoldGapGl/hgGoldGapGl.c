@@ -5,6 +5,8 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "hash.h"
+#include "agpFrag.h"
+#include "agpGap.h"
 #include "jksql.h"
 #include "ntContig.h"
 #include "glDbRep.h"
@@ -90,6 +92,9 @@ char oLine[512];
 fiList = listDirX(chromDir, "*.agp", TRUE);
 for (fi = fiList; fi != NULL; fi = fi->next)
     {
+    char *words[16];
+    int wordCount;
+
     /* Get full path name of .agp file and process it
      * into table names. */
     agpName = fi->name;
@@ -104,31 +109,29 @@ for (fi = fiList; fi != NULL; fi = fi->next)
     tmpnam(gapTabName);
     goldTab = mustOpen(goldTabName, "w");
     gapTab = mustOpen(gapTabName, "w");
-    lf = lineFileOpen(agpName, FALSE);
-    while (lineFileNext(lf, &line, &lineSize))
+    lf = lineFileOpen(agpName, TRUE);
+    while ((wordCount = lineFileChop(lf, words)) > 0)
         {
-	char buf[256], *words[16];
-	int wordCount;
 	int start, end;
-
-	if (lineSize >= sizeof(buf))
-	    errAbort("Line too long");
-	memcpy(buf, line, lineSize);
-	buf[lineSize] = 0;
-	wordCount = chopTabs(buf, words);
 	if (wordCount < 5)
 	    errAbort("Short line %d of %s", lf->lineIx, lf->fileName);
 	start = sqlUnsigned(words[1])-1;
 	end = sqlUnsigned(words[2]);
 	if (sameWord(words[4], "N"))
 	    {
+	    struct agpGap gap;
+	    agpGapStaticLoad(words, &gap);
+	    gap.chromStart -= 1;
 	    fprintf(gapTab, "%u\t", hFindBin(start, end));
-	    mustWrite(gapTab, line, lineSize);
+	    agpGapTabOut(&gap, gapTab);
 	    }
 	else
 	    {
+	    struct agpFrag gold;
+	    agpFragStaticLoad(words, &gold);
+	    gold.chromStart -= 1;
 	    fprintf(goldTab, "%u\t", hFindBin(start, end));
-	    mustWrite(goldTab, line, lineSize);
+	    agpFragTabOut(&gold, goldTab);
 	    }
 	}
     lineFileClose(&lf);
@@ -254,6 +257,7 @@ struct sqlConnection *conn = sqlConnect(database);
 char ooDir[512];
 char pathName[512];
 struct hash *cloneVerHash = newHash(0);
+boolean gotAny = FALSE;
 
 sprintf(ooDir, "%s/%s", gsDir, ooSubDir);
 
@@ -261,7 +265,6 @@ sprintf(pathName, "%s/ffa/sequence.inf", gsDir);
 makeCloneVerHash(pathName, cloneVerHash);
 
 chrFiList = listDirX(ooDir, "*", FALSE);
-uglyf("%d elements in list of %s\n", slCount(chrFiList), ooDir);
 for (chrFi = chrFiList; chrFi != NULL; chrFi = chrFi->next)
     {
     if (chrFi->isDir && strlen(chrFi->name) <= 2)
@@ -269,10 +272,14 @@ for (chrFi = chrFiList; chrFi != NULL; chrFi = chrFi->next)
 	sprintf(pathName, "%s/%s", ooDir, chrFi->name);
 	makeGoldAndGap(conn, pathName);
 	makeGl(conn, pathName, cloneVerHash);
+	gotAny = TRUE;
+	uglyf("done %s\n", chrFi->name);
         }
     }
 slFreeList(&chrFiList);
 sqlDisconnect(&conn);
+if (!gotAny)
+    errAbort("No contig agp and gold files found");
 }
 
 int main(int argc, char *argv[])
