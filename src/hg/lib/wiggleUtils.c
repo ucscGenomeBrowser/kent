@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.12 2004/04/02 23:42:07 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.13 2004/04/07 19:03:30 hiram Exp $";
 
 static char *currentFile = (char *) NULL;	/* the binary file name */
 static FILE *wibFH = (FILE *) NULL;		/* file handle to binary file */
@@ -56,10 +56,10 @@ if (wibFH != (FILE *) NULL)
 }
 
 static struct wiggleData * wigReadDataRow(struct wiggle *wiggle,
-    int chrStart, int winEnd, int tableId, boolean summaryOnly,
+    int winStart, int winEnd, int tableId, boolean summaryOnly,
 	boolean (*wiggleCompare)(int tableId, double value,
 	    boolean summaryOnly, struct wiggle *wiggle))
-/*  read one row of wiggle data, return data values between chrStart, winEnd */
+/*  read one row of wiggle data, return data values between winStart, winEnd */
 {
 unsigned char *readData = (unsigned char *) NULL;
 size_t itemsRead = 0;
@@ -122,7 +122,7 @@ else
 	    ++noData;
 	else
 	    {
-	    if (chromPosition >= chrStart && chromPosition < winEnd)
+	    if (chromPosition >= winStart && chromPosition < winEnd)
 		{
 		double value =
 		    BIN_TO_VALUE(datum,wiggle->lowerLimit,wiggle->dataRange);
@@ -209,7 +209,6 @@ struct wiggleData *wigFetchData(char *db, char *tableName, char *chromName,
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
-int chrStart = winStart - 1;	/* from user closed to DB open coords */
 char **row;
 int rowOffset;
 int rowCount = 0;
@@ -290,8 +289,9 @@ while ((el = hashNext(&cookie)) != NULL)
     else
 	snprintf(whereSpan, sizeof(whereSpan), "span = %s", el->name);
 
-    sr = hOrderedRangeQuery(conn, tableName, chromName, chrStart, winEnd,
+    sr = hOrderedRangeQuery(conn, tableName, chromName, winStart, winEnd,
         whereSpan, &rowOffset);
+
     rowCount = 0;
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -299,7 +299,7 @@ while ((el = hashNext(&cookie)) != NULL)
 	wiggle = wiggleLoad(row + rowOffset);
 	if (wiggle->count > 0)
 	    {
-	    wigData = wigReadDataRow(wiggle, chrStart, winEnd,
+	    wigData = wigReadDataRow(wiggle, winStart, winEnd,
 		    tableId, summaryOnly, wiggleCompare );
 	    if (wigData)
 		{
