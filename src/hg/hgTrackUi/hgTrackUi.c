@@ -22,7 +22,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.134 2004/08/27 05:20:04 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.135 2004/08/27 05:25:56 kent Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -684,7 +684,7 @@ void oligoMatchUi(struct trackDb *tdb)
 /* UI for oligo match track */
 {
 char *oligo = cartUsualString(cart, oligoMatchVar, oligoMatchDefault);
-puts("<P><B>short (2-30 base) sequence</B>");
+puts("<P><B>Short (2-30 base) sequence:</B>");
 cgiMakeTextVar(oligoMatchVar, oligo, 20);
 }
 
