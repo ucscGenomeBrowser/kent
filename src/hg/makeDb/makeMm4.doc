@@ -8,34 +8,43 @@
 #	Due to the global replace of mm3 with mm4, some comment
 #	references may not be correct.
 
-DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE 2003-06-17 - Hiram)
+# NOTE: The README_PREBUILD file for this assembly mentions several
+# differences from the previous release (build 30):
+# 1. seq_contig.md - new first line is a comment containing column name
+#       Also, last two columns (group label and weight, have been swapped)
+#       Also, some lines have id with CONTIG: prepended, and upper-case
+#               feature type (CONTIG)
+# 2. contig.idmap - has an additional column "contig label"
+# This required changing the jkStuff ncbi* utilities (7/1/03 KRR)
+
+# DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE 2003-06-17 - Hiram)
     ssh eieio
     mkdir -p /cluster/store5/mm.2003.06/ncbi
     cd /cluster/store5/mm.2003.06/ncbi
     mkdir chrfasta contigfasta
     ftp ftp.ncbi.nih.gov
       # user hgpguest, password from /cse/guests/kent/buildHg6.doc
-      cd mouse_30
+      cd mouse_31
       prompt
       bin
       mget *
       quit
     gunzip *.agp.gz
 
-GET UPDATED MOUSE ASSEMBLY FILES FROM NCBI (Maybe later if updates)
-    # Deanna regenerated allrefcontig.chr.agp for us with _random's.  
-    # While downloading that, I noticed some other new files.  I saved 
-    # the original copies of those to *.orig.  
+# GET MISSING FILES FROM NCBI (DONE 2003-07-01 - Kate)
+    # These were left out of the original release,
+    # and were provided on 6/30/03.
     cd /cluster/store5/mm.2003.06/ncbi
     ftp ftp.ncbi.nih.gov
       # user hgpguest, password from /cse/guests/kent/buildHg6.doc
-      cd mouse_30
+      cd mouse_31
       prompt
       bin
-      mget allrefcontig.chr.agp.gz contig.idmap ctg_coords seq_contig.md
+      mget contig_overlaps.agp.gz  ctg_coords.gz seq_contig.md.gz README_PREBUILD
       quit    
+      gunzip contig_overlaps.agp.gz ctg_coords.gz seq_contig.md.gz
 
-BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS (DONE 2003-06-18 - hc)
+# BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS (DONE 2003-06-18 - hc)
 
     # This version of the mouse sequence data is in 
     # /cluster/store5/mm.2003.06/mm4/assembly
@@ -62,12 +71,20 @@ BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS (DONE 2003-06-18 - hc)
           stdin /cluster/store5/mm.2003.06/mm4 -nSize=5000000
     end
 
-CREATE CHROM-LEVEL AGP AND FASTA FOR _RANDOMS (TBD)
-    #  At this time, I do not find any _random bits - 2003-06-18 - Hiram
+
+# CREATE CHROM-LEVEL AGP AND FASTA FOR _RANDOMS (2003-07-02 Kate)
     ssh eieio
     cd /cluster/store5/mm.2003.06/ncbi
-    ../mm4/jkStuff/ncbiToRandomAgps seq_contig.md allrefcontig.chr.agp \
-      contig.idmap ../mm4
+
+    # reorder random contigs in allrefcontig agp file to match seq_contig.md
+    # this is required by the ncbiToRandomAgps scripts
+    ../mm4/jkStuff/ncbiFixAgp allrefcontig.chr.agp > \
+                        allrefcontig.chr.ordered.agp
+    ../mm4/jkStuff/ncbiToRandomAgps seq_contig.md allrefcontig.chr.ordered.agp \
+                        contig.idmap ../mm4
+        # creating ../mm4/1/chr1_random.agp...
+        # ... creating ../mm4/Un/chrUn_random.agp...
+
     cd /cluster/store5/mm.2003.06/mm4
     foreach c (?{,?})
       if (-e $c/chr${c}_random.ctg.agp) then
@@ -80,12 +97,22 @@ CREATE CHROM-LEVEL AGP AND FASTA FOR _RANDOMS (TBD)
         rm tmp.fa
       endif
     end
-    # At 37402 sequences with 50000-long gaps in between, chrUn is just 
+        # building 1/chr1_random.fa
+        # Writing 8573794 bases to 1/chr1_random.fa ...
+        # building 19/chr19_random.fa
+        # Writing 2953240 bases to 19/chr19_random.fa
+        # building Un/chrUn_random.fa
+        # Program error: trying to allocate 1444837753 bytes in needLargeMem
+        # agpToFa: memalloc.c:82: needLargeMem: Assertion `0' failed.
+        # 20 minutes or so
+
+    # Rebuild chrUn
+    # With 50000-long gaps in between, chrUn is just 
     # too damn big to fit in memory on any of our machines!!  So use a 
     # gap size of 1000 (OK with Jim and Terry) just for chrUn.  
     cd /cluster/store5/mm.2003.06/ncbi
     ../mm4/jkStuff/ncbiToRandomAgps -gapLen 1000 -chrom Un \
-      seq_contig.md allrefcontig.chr.agp contig.idmap ../mm4
+      seq_contig.md allrefcontig.chr.ordered.agp contig.idmap ../mm4
     cd /cluster/store5/mm.2003.06/mm4
     set c=Un
     echo building $c/chr${c}_random.fa
@@ -95,10 +122,12 @@ CREATE CHROM-LEVEL AGP AND FASTA FOR _RANDOMS (TBD)
     agpToFa -simpleMulti $c/chr${c}_random.ctg.agp chr${c}_random \
       $c/chr${c}_random.fa ./tmp.fa
     rm tmp.fa
+        # Writing 85430752 bases to Un/chrUn_random.fa
+
     # Clean these up to avoid confusion later... they're easily rebuilt.
     rm ?{,?}/*.ctg.agp
 
-BREAK UP _RANDOMS INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS (TBD)
+# BREAK UP _RANDOMS INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS (2003-07-02 Kate)
     ssh eieio
     cd /cluster/store5/mm.2003.06/mm4
     foreach c (?{,?})
@@ -115,7 +144,7 @@ BREAK UP _RANDOMS INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS (TBD)
       endif
     end
 
-CREATING DATABASE (DONE - 2003-06-18 - Hiram)
+# CREATING DATABASE (DONE - 2003-06-18 - Hiram)
 
 o - Create the database.
     ssh hgwdev
@@ -129,19 +158,21 @@ o - Use df to make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
     # /dev/sda1             472G  378G   69G  85% /var/lib/mysql
 
 
-CREATING GRP TABLE FOR TRACK GROUPING (DONE - 2003-06-18 - Hiram)
+# CREATING GRP TABLE FOR TRACK GROUPING (DONE - 2003-06-18 - Hiram)
     ssh hgwdev
     echo "create table grp (PRIMARY KEY(NAME)) select * from mm3.grp" \
       | hgsql mm4
 
 
-STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE - 2003-06-18 - Hiram)
+# STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE - 2003-06-18 - Hiram)
+# (RANDOMS ADDED, except chrUn 2003-07-01 - Kate)
+# (chrUn random added  2003-07-02 - Kate)
 
     # Create (unmasked) nib files 
     ssh eieio
     cd /cluster/store5/mm.2003.06/mm4
     mkdir -p unmaskedNib
-    foreach f (?{,?}/chr*.fa)
+    foreach f (?{,?}/chr?{,?}{,_random}.fa)
       echo $f:t:r
       faToNib $f unmaskedNib/$f:t:r.nib
     end
@@ -156,23 +187,19 @@ STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE - 2003-06-18 - Hiram)
     ssh hgwdev
     hgsql mm4  < ~/src/hg/lib/chromInfo.sql
     cd /cluster/store5/mm.2003.06/mm4
-    hgNibSeq -preMadeNib mm4 /gbdb/mm4/nib ?/chr*.fa ??/chr*.fa 
+    hgNibSeq -preMadeNib mm4 /gbdb/mm4/nib ?{,?}/chr?{,?}{,_random}.fa
+    # 2968274392 total bases
+    # NOTE: mm3 was 2708220133, an increase of 260 Mb, or 10%
     echo "select chrom,size from chromInfo" | hgsql -N mm4 > chrom.sizes
-    # check the resulting file chrom.sizes for numbers such as:
-#    chr1    211105805
-#    chr2    185157585
-#    chr3    174736067
-#          ... etc ...
-#    chr17   104075538
-#    chr18   98331070
-#    chr19   64517277
-
+    # check the resulting file chrom.sizes
 
 Store o+o info in database.
      cd /cluster/store5/mm.2003.06/mm4
+     # remove so as not to confuse hgGoldGap -- they are easily regenerated
+     rm */chr*.ctg.agp
      hgGoldGapGl mm4 /cluster/store5/mm.2003.06 mm4 -noGl
 
-Make and load GC percent table
+# Make and load GC percent table
      ssh hgwdev
      mkdir -p /cluster/store5/mm.2003.06/mm4/bed/gcPercent
      cd /cluster/store5/mm.2003.06/mm4/bed/gcPercent
@@ -180,7 +207,7 @@ Make and load GC percent table
      hgGcPercent mm4 ../../unmaskedNib
 
 
-ADD MAP CONTIGS TRACK (TBD)
+ADD MAP CONTIGS TRACK (2003-07-03 Kate)
     ssh hgwdev
     mkdir -p ~/mm4/bed/ctgPos
     cd ~/mm4/bed/ctgPos
@@ -203,9 +230,14 @@ ADD MAP CONTIGS TRACK (TBD)
     # but we'd have to do some more work: duplicate the gaps of 50000 between 
     # contigs for all _random's except chrUn_random (1000 between).  
 
-MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR MM4 (TBD)
+MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR MM4 (DONE by Hiram)
     # Enter mm4 into hgcentraltest.dbDb so test browser knows about it:
-    echo 'insert into dbDb values("mm4", "June 2003", "/gbdb/mm4/nib", "Mouse", "USP18", 1, 30, "Mouse");' \
+    echo 'INSERT INTO dbDb \
+        (name, description, nibPath, organism, defaultPos, \
+         active, orderKey, genome, scientificName) \
+      VALUES(
+        "mm4", "June 2003", "/gbdb/mm4/nib", "Mouse", "USP18", \
+         1, 30, "Mouse", "Mus musculus");' \
       | hgsql -h genome-testdb hgcentraltest
     #	If you need to delete that entry:
     	echo 'delete from dbDb where name="mm4";' \
@@ -237,11 +269,12 @@ REPEAT MASKING (TBD)
    * Contigs (*/chr*_*/chr*_*.fa) are split into 500kb chunks to make 
      RepeatMasker runs manageable on the cluster ==> results need lifting.
    * For the NCBI assembly we repeat mask on the sensitive mode setting
-     (RepeatMasker -m -s)
+     (RepeatMasker -m -s -ali)
 
         #- Split contigs into 500kb chunks:
+        ssh eieio
         cd ~/mm4
-        foreach d ( */chr*_?{,?} )
+        foreach d ( */chr?{,?}{,_random}_?{,?} )
           cd $d
           set contig = $d:t
           faSplit size $contig.fa 500000 ${contig}_ -lift=$contig.lft \
@@ -250,14 +283,33 @@ REPEAT MASKING (TBD)
         end
 
         #- Make the run directory and job list:
+        # NOTE: no randoms in the job list ?
+
         cd ~/mm4
-        mkdir RMRun
+    cat << '_EOF_' > jkStuff/RMMouse
+#!/bin/csh -fe
+
+cd $1
+pushd .
+/bin/mkdir -p /tmp/$USER/$2
+/bin/cp $2 /tmp/$USER/$2/
+cd /tmp/$USER/$2
+/cluster/bluearc/RepeatMasker030619/RepeatMasker -ali -s -m $2   
+popd
+/bin/cp /tmp/$USER/$2/$2.out ./
+if (-e /tmp/$USER/$2/$2.align) /bin/cp /tmp/$USER/$2/$2.align ./
+# /bin/cp /tmp/$2*.masked ../masked/
+/bin/rm -r /tmp/$USER
+'_EOF_'
+        chmod +x jkStuff/RMMouse
+
+        mkdir -p RMRun
         rm -f RMRun/RMJobs
         touch RMRun/RMJobs
         foreach d ( ?{,?}/chr*_?{,?} )
-          foreach f ( $d/chr*_*_*.fa )
+          foreach f ( $d/chr*_?{,?}_?{,?}.fa )
             set f = $f:t
-            echo /cluster/bin/scripts/RMMouse \
+            echo /cluster/store5/mm.2003.06/mm4/jkStuff/RMMouse \
                  /cluster/store5/mm.2003.06/mm4/$d $f \
                '{'check out line+ /cluster/store5/mm.2003.06/mm4/$d/$f.out'}' \
               >> RMRun/RMJobs
