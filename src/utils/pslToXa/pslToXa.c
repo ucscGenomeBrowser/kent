@@ -112,7 +112,6 @@ DNA *dna;
 int seqOffset, seqSizeLoaded, seqSizeTotal;
 int blockIx;
 
-printf("%s:%d%c%d\n", name, start, strand, end);
 if (!seqFile->isNib)
     errAbort("Only nibs currently supported");
 
@@ -121,7 +120,6 @@ if (!seqFile->isNib)
     seqOffset = start;
     seqSizeLoaded = end-start;
     seqSizeTotal = seqFile->nibSize;
-    uglyf(" Loading from %s:%d size %d\n", seqFile->name, start, seqSizeLoaded);
     seq = nibLdPart(seqFile->name, seqFile->f, seqFile->nibSize,
          start, seqSizeLoaded);
     }
@@ -159,7 +157,6 @@ outputSeqBlocks(f, seqHash, seqName, psl->strand[1],
 	psl->tStart, psl->tEnd,
 	psl->blockCount, psl->tStarts, psl->blockSizes);
 fputc('\n', f);
-fflush(f);	/* uglyf */
 }
 
 void pslToXa(char *inName, char *outName, char *qSeqDir, char *tSeqDir)
