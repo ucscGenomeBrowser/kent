@@ -11,7 +11,7 @@
 #include "fa.h"
 
 struct dnaSeq *faList;
-static char const rcsid[] = "$Id: lavToAxt.c,v 1.16 2004/01/22 03:15:11 angie Exp $";
+static char const rcsid[] = "$Id: lavToAxt.c,v 1.17 2004/02/24 18:43:13 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -22,12 +22,16 @@ errAbort(
   "   lavToAxt in.lav tNibDir qNibDir out.axt\n"
   "options:\n"
   "   -fa  qNibDir is interpreted as a fasta file of multiple dna seq instead of directory of nibs\n"
-  "   -dropSelf  drops alignments on the diagonal for self alignments\n"
+  "   -dropSelf  drops alignment blocks on the diagonal for self alignments\n"
+  "   -scoreScheme=fileName Read the scoring matrix from a blastz-format file.\n"
+  "                (only used in conjunction with -dropSelf, to rescore \n"
+  "                alignments when blocks are dropped)\n"
   );
 }
 
 boolean qIsFa = FALSE;	/* Corresponds to -fa flag. */
 boolean dropSelf = FALSE;	/* Corresponds to -dropSelf flag. */
+struct axtScoreScheme *scoreScheme = NULL;  /* -scoreScheme flag. */
 
 struct block
 /* A block of an alignment. */
@@ -112,7 +116,8 @@ return nibLdPartMasked(NIB_MASK_MIXED, cn->fileName, cn->f, cn->size, start, siz
 void outputBlocks(struct lineFile *lf,
 	struct block *blockList, int score, FILE *f, boolean isRc, 
 	char *qName, int qSize, char *qNibDir, struct dlList *qCache,
-	char *tName, int tSize, char *tNibDir, struct dlList *tCache)
+	char *tName, int tSize, char *tNibDir, struct dlList *tCache,
+	boolean rescore)
 /* Output block list as an axt to file f. */
 {
 int qStart = BIGNUM, qEnd = 0, tStart = BIGNUM, tEnd = 0;
@@ -225,6 +230,10 @@ for (block = blockList; block != NULL; block = block->next)
 if (qSym->stringSize != tSym->stringSize)
     errAbort("qSize and tSize don't agree in alignment ending line %d of %s",
 	    lf->lineIx, lf->fileName);
+
+if (rescore)
+    score = axtScoreSym(scoreScheme, qSym->stringSize,
+			qSym->string, tSym->string);
 
 /* Fill in an axt and write it to output. */
 ZeroVar(&axt);
@@ -365,15 +374,16 @@ for (block = blockList; block != NULL; block = block->next)
         {
 	if (block->qStart == block->qEnd)
 	    {
-	    freeMem(block);
 	    if (lastBlock == NULL)  /* Only block on list. */
 		blockList = NULL;
 	    else
 	        lastBlock->next = NULL;
 	    }
 	}
-    lastBlock = block->next;
+    lastBlock = block;
     }
+if (lastBlock != NULL && lastBlock->qStart == lastBlock->qEnd)
+    freeMem(lastBlock);
 return blockList;
 }
 
@@ -427,39 +437,62 @@ blockList = removeFrayedEnds(blockList);
 *retScore = score;
 }
 
-struct block *removeDiagonal(struct block *blockList, boolean isRc,
-	char *qName, char *tName, int qSize, int tSize) 
-/* remove blocks that are on the diagonal of a self alignment */
-{
-struct block *block = NULL, *prevBlock = NULL;
 
-if (blockList == NULL)
-    return NULL;
-if (!sameString(qName,tName))
-    return blockList;
-for (block = blockList; block != NULL; block = block->next)
+static boolean breakUpIfOnDiagonal(struct block *blockList, boolean isRc,
+	char *qName, char *tName, int qSize, int tSize,
+	struct block *retBlockLists[], int maxBlockLists, int *retCount) 
+/* If any blocks are on diagonal, remove the blocks and separate the lists 
+ * of blocks before and after the diagonal. Store block list pointers in 
+ * retBlockLists, the number of lists in retCount, and return TRUE if 
+ * we found any blocks on diagonal so we know to rescore afterwards. */
+{
+int blockListIndex = 0;
+boolean brokenUp = FALSE;
+
+retBlockLists[blockListIndex] = blockList;
+if (sameString(qName, tName))
     {
-    int qStart = (block == NULL) ? -1 : block->qStart;
-    int qEnd   = (block == NULL) ? -1 : block->qEnd;
-    assert (block!= NULL);
-    if (isRc)
-        reverseIntRange(&qStart, &qEnd, qSize);
-    if (rangeIntersection(block->tStart, block->tEnd,  qStart, qEnd)> 0)
-        {
-        if (prevBlock != NULL)
-            {
-            prevBlock->next = block->next;
-            freeMem(block);
-            block = prevBlock;
-            }
-        else
-            {
-            blockList = blockList->next;
-            }
-        }
+    struct block *block = NULL, *lastBlock = NULL;
+    int i = 0;
+    for (block = blockList;  block != NULL;  block = block->next)
+	{
+	int qStart = block->qStart;
+	int qEnd   = block->qEnd;
+	if (lastBlock != NULL && block == retBlockLists[blockListIndex])
+	    freez(&lastBlock);
+	if (isRc)
+	    reverseIntRange(&qStart, &qEnd, qSize);
+	if (rangeIntersection(block->tStart, block->tEnd, qStart, qEnd) > 0)
+	    {
+	    brokenUp = TRUE;
+	    if (block != retBlockLists[blockListIndex])
+		{
+		assert(lastBlock != NULL);
+		lastBlock->next = NULL;
+		blockListIndex++;
+		if (blockListIndex >= maxBlockLists)
+		    errAbort("breakUpIfOnDiagonal: Too many fragmented block lists!");
+		}
+	    retBlockLists[blockListIndex] = block->next;
+	    }
+	lastBlock = block;
+	}
+    if (retBlockLists[blockListIndex] == NULL)
+	{
+	blockListIndex--;
+	if (lastBlock != NULL)
+	    freez(&lastBlock);
+	}
+    for (i=0;  i <= blockListIndex; i++)
+	{
+	retBlockLists[i] = removeFrayedEnds(retBlockLists[i]);
+	}
     }
-return blockList;
+*retCount = blockListIndex + 1;
+return brokenUp;
 }
+
+
 void parseIntoAxt(char *lavFile, FILE *f, 
 	char *tNibDir, struct dlList *tCache, 
 	char *qNibDir, struct dlList *qCache)
@@ -493,11 +526,28 @@ while (lineFileNext(lf, &line, NULL))
         {
 	parseA(lf, &blockList, &score);
         if (optionExists("dropSelf"))
-            blockList = removeDiagonal(blockList, isRc, qName, tName, qSize, tSize);
-	outputBlocks(lf, blockList, score, f, isRc, 
-		qName, qSize, qNibDir, qCache,
-		tName, tSize, tNibDir, tCache);
-	slFreeList(&blockList);
+	    {
+	    struct block *bArr[256];
+	    int numBLs = 0, i = 0;
+	    boolean rescore = FALSE;
+	    rescore = breakUpIfOnDiagonal(blockList, isRc, qName, tName,
+					  qSize, tSize, bArr, ArraySize(bArr),
+					  &numBLs);
+	    for (i=0;  i < numBLs;  i++)
+		{
+		outputBlocks(lf, bArr[i], score, f, isRc, 
+			     qName, qSize, qNibDir, qCache,
+			     tName, tSize, tNibDir, tCache, rescore);
+		slFreeList(&bArr[i]);
+		}
+	    }
+	else
+	    {
+	    outputBlocks(lf, blockList, score, f, isRc, 
+			 qName, qSize, qNibDir, qCache,
+			 tName, tSize, tNibDir, tCache, FALSE);
+	    slFreeList(&blockList);
+	    }
 	}
     }
 lineFileClose(&lf);
@@ -516,6 +566,7 @@ carefulClose(&f);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+char *scoreSchemeFile = NULL;
 optionHash(&argc, argv);
 if (argc != 5)
     usage();
@@ -524,6 +575,11 @@ if (optionExists("fa"))
     qIsFa = TRUE;
     faList = faReadAllMixed(argv[3]);
     }
+scoreSchemeFile = optionVal("scoreScheme", scoreSchemeFile);
+if (scoreSchemeFile != NULL)
+    scoreScheme = axtScoreSchemeRead(scoreSchemeFile);
+else
+    scoreScheme = axtScoreSchemeDefault();
 lavToAxt(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
