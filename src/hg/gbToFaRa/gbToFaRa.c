@@ -1109,7 +1109,8 @@ while (readGbInfo(lf))
 	    uglyf("\n");
             errAbort("Short LOCUS line in %s accession %s", inName, accession);
             }
-        if (wordCount >= 5 && sameString(words[4], "EST"))
+        if (wordCount >= 5 && sameString(words[4], "EST") || 
+	    wordCount >= 6 && sameString(words[5], "EST"))
             {
             /* Try and figure out if it's a 3' or 5' EST */
             char *def = definitionField->val;
