@@ -19,6 +19,8 @@
 #include "vGfx.h"
 #endif
 
+#include "spDb.h"
+
 extern Color pbRed, pbBlue;
 
 extern struct cart *cart; /* The cart where we keep persistent variables. */
@@ -144,7 +146,7 @@ void aaPropertyInit(int *hasResFreq);
 void printFASTA(char *proteinID, char *aa);
 int  searchProteinsInSupportedGenomes(char *proteinID, char **gDatabase);
 int  searchProteinsInSwissProtByGene(char *queryGeneID);
-void presentProteinSelections(char *proteinID);
+void presentProteinSelections(char *proteinID, int protCntInSwissByGene, int protCntInSupportedGenomeDb);
 char *hDbOrganism(char *database);
 
 #endif
