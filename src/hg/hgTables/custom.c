@@ -559,4 +559,38 @@ if (count == 0)
     explainWhyNoResults();
 }
 
+void removeNamedCustom(struct customTrack **pList, char *name)
+/* Remove named custom track from list if it's on there. */
+{
+struct customTrack *newList = NULL, *ct, *next;
+for (ct = *pList; ct != NULL; ct = next)
+    {
+    next = ct->next;
+    if (!sameString(ct->tdb->tableName, name))
+        {
+	slAddHead(&newList, ct);
+	}
+    }
+slReverse(&newList);
+*pList = newList;
+}
+
+
+void doRemoveCustomTrack(struct sqlConnection *conn)
+/* Remove custom track file. */
+{
+char *ctFileName = cartOptionalString(cart, "ct");
+getCustomTracks();
+if (ctFileName != NULL && theCtList != NULL)
+    {
+    removeNamedCustom(&theCtList, curTable);
+    customTrackSave(theCtList, ctFileName);
+    if (theCtList == NULL)
+        remove(ctFileName);
+    else
+	customTrackSave(theCtList, ctFileName);
+    }
+initGroupsTracksTables(conn);
+doMainPage(conn);
+}
 

@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.19 2004/10/01 21:26:43 kent Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.20 2004/10/14 21:54:34 kent Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -385,9 +385,11 @@ else
     }
 if (doCt)
     {
-    cgiMakeButton(hgtaDoGetCustomTrack, "Get Custom Track");
+    cgiMakeButton(hgtaDoGetCustomTrackTb, "Custom Track in Table Browser");
     hPrintf(" ");
-    cgiMakeButton(hgtaDoGetCustomTrackFile, "Get Custom Track File");
+    cgiMakeButton(hgtaDoGetCustomTrackGb, "Custom Track in Genome Browser");
+    hPrintf(" ");
+    cgiMakeButton(hgtaDoGetCustomTrackFile, "Custom Track File");
     }
 else
     {
@@ -411,23 +413,8 @@ void doOutCustomTrack(char *table, struct sqlConnection *conn)
 doBedOrCtOptions(table, conn, TRUE);
 }
 
-static void removeNamedCustom(struct customTrack **pList, char *name)
-/* Remove named custom track from list if it's on there. */
-{
-struct customTrack *newList = NULL, *ct, *next;
-for (ct = *pList; ct != NULL; ct = next)
-    {
-    next = ct->next;
-    if (!sameString(ct->tdb->shortLabel, name))
-        {
-	slAddHead(&newList, ct);
-	}
-    }
-slReverse(&newList);
-*pList = newList;
-}
-
-void doGetBedOrCt(struct sqlConnection *conn, boolean doCt, boolean doCtFile)
+void doGetBedOrCt(struct sqlConnection *conn, boolean doCt, 
+	boolean doCtFile, boolean redirectToGb)
 /* Actually output bed or custom track. */
 {
 char *table = curTable;
@@ -591,7 +578,7 @@ else if (doCt)
 	struct customTrack *ctList = getCustomTracks();
 	char *ctFileName = cartOptionalString(cart, "ct");
 	struct tempName tn;
-	removeNamedCustom(&ctList, ctNew->tdb->shortLabel);
+	removeNamedCustom(&ctList, ctNew->tdb->tableName);
 	if (isWig && wigOutData)
 	    {
 	    unsigned i;
@@ -635,6 +622,7 @@ else if (doCt)
 	cartSetString(cart, "ct", ctFileName);
 	}
     /*  Put up redirect-to-browser page. */
+    if (redirectToGb)
 	{
 	char browserUrl[256];
 	char headerText[512];
@@ -678,18 +666,26 @@ else if (isWig && wigOutData)
 void doGetBed(struct sqlConnection *conn)
 /* Get BED output (UI has already told us how). */
 {
-doGetBedOrCt(conn, FALSE, FALSE);
+doGetBedOrCt(conn, FALSE, FALSE, FALSE);
 }
 
-void doGetCustomTrack(struct sqlConnection *conn)
+void doGetCustomTrackGb(struct sqlConnection *conn)
 /* Get Custom Track output (UI has already told us how). */
 {
-doGetBedOrCt(conn, TRUE, FALSE);
+doGetBedOrCt(conn, TRUE, FALSE, TRUE);
+}
+
+void doGetCustomTrackTb(struct sqlConnection *conn)
+/* Get Custom Track output (UI has already told us how). */
+{
+doGetBedOrCt(conn, TRUE, FALSE, FALSE);
+initGroupsTracksTables(conn);
+doMainPage(conn);
 }
 
 void doGetCustomTrackFile(struct sqlConnection *conn)
 /* Get Custom Track file output (UI has already told us how). */
 {
-doGetBedOrCt(conn, FALSE, TRUE);
+doGetBedOrCt(conn, FALSE, TRUE, FALSE);
 }
 

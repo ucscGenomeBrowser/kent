@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.53 2004/10/03 05:31:11 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.54 2004/10/14 21:54:34 kent Exp $";
 
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
@@ -420,6 +420,11 @@ hPrintf("<TABLE BORDER=0>\n");
     if (isWig)
 	isPositional = TRUE;
     nbSpaces(1);
+    if (isCustomTrack(curTable))
+	{
+	cgiMakeButton(hgtaDoRemoveCustomTrack, "Remove Custom Track");
+        hPrintf(" ");
+	}
     cgiMakeButton(hgtaDoSchema, "Describe Table Schema");
     hPrintf("</TD></TR>\n");
     }

@@ -22,7 +22,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.78 2004/10/12 00:59:02 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.79 2004/10/14 21:54:34 kent Exp $";
 
 
 void usage()
@@ -401,12 +401,7 @@ char *trackTable(char *rawTable)
  * for mRNA if need be. */
 {
 char *table = rawTable;
-#ifdef NEEDED_UNTIL_GB_CDNA_INFO_CHANGE
-if (sameString(table, "mrna"))
-    return "all_mrna";
-else
-#endif /* NEEDED_UNTIL_GB_CDNA_INFO_CHANGE */
-    return table;
+return table;
 }
 
 char *connectingTableForTrack(char *rawTable)
@@ -1103,10 +1098,14 @@ else if (cartVarExists(cart, hgtaDoGenomicDna))
     doGenomicDna(conn);
 else if (cartVarExists(cart, hgtaDoGetBed))
     doGetBed(conn);
-else if (cartVarExists(cart, hgtaDoGetCustomTrack))
-    doGetCustomTrack(conn);
+else if (cartVarExists(cart, hgtaDoGetCustomTrackTb))
+    doGetCustomTrackTb(conn);
+else if (cartVarExists(cart, hgtaDoGetCustomTrackGb))
+    doGetCustomTrackGb(conn);
 else if (cartVarExists(cart, hgtaDoGetCustomTrackFile))
     doGetCustomTrackFile(conn);
+else if (cartVarExists(cart, hgtaDoRemoveCustomTrack))
+    doRemoveCustomTrack(conn);
 else if (cartVarExists(cart, hgtaDoMainPage))
     doMainPage(conn);
 else if (cartVarExists(cart, hgtaDoAllGalaQuery))
@@ -1121,6 +1120,19 @@ cartRemovePrefix(cart, hgtaDo);
 }
 
 char *excludeVars[] = {"Submit", "submit", NULL};
+
+void initGroupsTracksTables(struct sqlConnection *conn)
+/* Get list of groups that actually have something in them. */
+{
+fullTrackList = getFullTrackList();
+curTrack = findSelectedTrack(fullTrackList, NULL, hgtaTrack);
+fullGroupList = makeGroupList(conn, fullTrackList, TRUE);
+curGroup = findSelectedGroup(fullGroupList, hgtaGroup);
+if (sameString(curGroup->name, "allTables"))
+    curTrack = NULL;
+curTable = findSelectedTable(conn, curTrack, hgtaTable);
+}
+
 
 void hgTables()
 /* hgTables - Get table data associated with tracks and intersect tracks. 
@@ -1143,14 +1155,7 @@ conn = hAllocConn();
 
 lookupPosition();
 
-/* Get list of groups that actually have something in them. */
-fullTrackList = getFullTrackList();
-curTrack = findSelectedTrack(fullTrackList, NULL, hgtaTrack);
-fullGroupList = makeGroupList(conn, fullTrackList, TRUE);
-curGroup = findSelectedGroup(fullGroupList, hgtaGroup);
-if (sameString(curGroup->name, "allTables"))
-    curTrack = NULL;
-curTable = findSelectedTable(conn, curTrack, hgtaTable);
+initGroupsTracksTables(conn);
 
 /* Go figure out what page to put up. */
 dispatch(conn);

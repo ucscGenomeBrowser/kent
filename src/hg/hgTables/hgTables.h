@@ -133,6 +133,9 @@ struct trackDb *showTrackField(struct grp *selGroup,
 
 /* --------- Utility functions --------------------- */
 
+void initGroupsTracksTables(struct sqlConnection *conn);
+/* Get list of groups that actually have something in them. */
+
 struct region *getRegions();
 /* Consult cart to get list of regions to work on. */
 
@@ -176,6 +179,9 @@ struct trackDb *findSelectedTrack(struct trackDb *trackList,
 
 struct customTrack *getCustomTracks();
 /* Get custom track list. */
+
+void removeNamedCustom(struct customTrack **pList, char *name);
+/* Remove named custom track from list if it's on there. */
 
 struct trackDb *findTrack(char *name, struct trackDb *trackList);
 /* Find track, or return NULL if can't find it. */
@@ -351,8 +357,10 @@ boolean anyIntersection();
 #define hgtaDoGenePredSequence "hgta_doGenePredSequence"
 #define hgtaDoGenomicDna "hgta_doGenomicDna"
 #define hgtaDoGetBed "hgta_doGetBed"
-#define hgtaDoGetCustomTrack "hgta_doGetCustomTrack"
+#define hgtaDoGetCustomTrackGb "hgta_doGetCustomTrackGb"
+#define hgtaDoGetCustomTrackTb "hgta_doGetCustomTrackTb"
 #define hgtaDoGetCustomTrackFile "hgta_doGetCustomTrackFile"
+#define hgtaDoRemoveCustomTrack "hgta_doRemoveCustomTrack"
 #define hgtaDoGetGalaQuery "hgta_doGetGalaQuery"
 #define hgtaDoAllGalaQuery "hgta_doAllGalaQuery"
 #define hgtaDoLookupPosition "hgta_doLookupPosition"
@@ -632,11 +640,17 @@ void doGenomicDna(struct sqlConnection *conn);
 void doGetBed(struct sqlConnection *conn);
 /* Get BED output (UI has already told us how). */
 
-void doGetCustomTrack(struct sqlConnection *conn);
-/* Get Custom Track output (UI has already told us how). */
+void doGetCustomTrackTb(struct sqlConnection *conn);
+/* Get Custom Track output (UI has already told us how) in Table Browser. */
+
+void doGetCustomTrackGb(struct sqlConnection *conn);
+/* Get Custom Track output (UI has already told us how) in Genome Browser. */
 
 void doGetCustomTrackFile(struct sqlConnection *conn);
 /* Get Custom Track file output (UI has already told us how). */
+
+void doRemoveCustomTrack(struct sqlConnection *conn);
+/* Remove custom track file. */
 
 /* --------------- GALA functions --------------- */
 #define galaCmdBufferSize 160
