@@ -846,13 +846,13 @@ puts("The examples below show a few ways to hilight individual tracks, "
   "to make pretty but completely cryptic displays with this feature.");
 puts(
   "<UL>"
-  "<LI>To put exons from Known Genes in upper case red text, check the "
+  "<LI>To put exons from RefSeq Genes in upper case red text, check the "
   "appropriate box in the Toggle Case column and set the color to pure "
-  "red, RGB (255,0,0). Upon submitting, any Known Gene within the "
+  "red, RGB (255,0,0). Upon submitting, any RefSeq Gene within the "
   "designated chromosomal interval will now appear in red capital letters.\n"
-  "<LI>To see the overlap between Known Genes and Genscan predictions try "
-  "setting the Known Genes to red (255,0,0) and Genscan to green (0,255,0). "
-  "Places where the Known Genes and Genscan overlap will be painted yellow "
+  "<LI>To see the overlap between RefSeq Genes and Genscan predictions try "
+  "setting the RefSeq Genes to red (255,0,0) and Genscan to green (0,255,0). "
+  "Places where the RefSeq Genes and Genscan overlap will be painted yellow "
   "(255,255,0).\n"
   "<LI>To get a level-of-coverage effect for tracks like Spliced Ests with "
   "multiple overlapping items, initially select a darker color such as deep "
@@ -861,7 +861,7 @@ puts(
   "saturating at 4 ESTs."
   "<LI>Another track can be used to mask unwanted features. Setting the "
   "RepeatMasker track to RGB (255,255,255) will white-out Genscan predictions "
-  "of LINEs but not mainstream host genes; masking with Known Genes will show "
+  "of LINEs but not mainstream host genes; masking with RefSeq Genes will show "
   "what is new in the gene prediction sector."
   "</UL>");
 puts("<H3>Further Details and Ideas</H3>");
@@ -2981,8 +2981,8 @@ boolean upgraded = FALSE;
 char *knownTable = "knownInfo";
 boolean knownMoreExists = FALSE;
 
-cartWebStart(cart, "Known Gene");
-printf("<H2>Known Gene %s</H2>\n", geneName);
+cartWebStart(cart, "RefSeq Gene");
+printf("<H2>RefSeq Gene %s</H2>\n", geneName);
 if (hTableExists("knownMore"))
     {
     knownMoreExists = TRUE;
