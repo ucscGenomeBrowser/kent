@@ -30,7 +30,6 @@ BAD_DIRS = \
 	ooCloneOverlaps \
 	oneShot \
 	orthoMap \
-	pslCrudeCmp \
 	synMap \
 	wikiPlot 
 
