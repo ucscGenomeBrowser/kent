@@ -17,7 +17,7 @@ install:
 	cp -p --remove-destination compareWholeColumn.csh  ${SCRIPTS}
 	cp -p --remove-destination compareWholeTable.csh   ${SCRIPTS}
 	cp -p --remove-destination countRows.csh           ${SCRIPTS}
-	cp -p --remove-destination findColumns.csh         ${SCRIPTS}
+	cp -p --remove-destination findColumn.csh          ${SCRIPTS}
 	cp -p --remove-destination generic_range_check.csh ${SCRIPTS}
 	cp -p --remove-destination getAssemblies.csh       ${SCRIPTS}
 	cp -p --remove-destination getRRdatabases.csh      ${SCRIPTS}
