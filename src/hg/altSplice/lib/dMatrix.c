@@ -67,6 +67,26 @@ lineFileClose(&lf);
 return dM;
 }
 
+void dMatrixWrite(struct dMatrix *dm, FILE *out)
+/* Write out the matrix to a file. */
+{
+int i = 0, j = 0;
+assert(dm);
+for(i = 0; i < dm->colCount - 1; i++)
+    fprintf(out, "%s\t", dm->colNames[i]);
+fprintf(out, "%s\n", dm->colNames[i]);
+
+for(i = 0; i < dm->rowCount; i++)
+    {
+    fprintf(out, "%s\t", dm->rowNames[i]);
+    for(j = 0; j < dm->colCount-1; j++)
+	fprintf(out, "%f\t", dm->matrix[i][j]);
+    fprintf(out, "%f\n",  dm->matrix[i][j]);
+    }
+}
+		
+
+
 void dMatrixFree(struct dMatrix **pDMatrix)
 /* Free up the memory used by a dMatrix. */
 {

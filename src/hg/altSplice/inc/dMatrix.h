@@ -18,6 +18,9 @@ struct dMatrix
 struct dMatrix *dMatrixLoad(char *fileName);
 /* Read in an R style result table. */
 
+void dMatrixWrite(struct dMatrix *dm, FILE *out);
+/* Write out the matrix to a file. */
+
 void dMatrixFree(struct dMatrix **pDMatrix);
 /* Free up the memory used by a dMatrix. */
 

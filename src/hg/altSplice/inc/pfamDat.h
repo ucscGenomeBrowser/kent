@@ -126,6 +126,7 @@ struct pfamDat
 /* Structure to hold results of one hmmpfam run. Distributed by Sean Eddy. See http://www.genetics.wustl.edu/eddy/software/ */
     {
     struct pfamDat *next;  /* Next in singly linked list. */
+	char *header;      /* Usually NULL, just used for testing in diffs. */
     char *seqName;	/* Sequence name. */
     char *sequence;	/* Sequence run against library. */
     struct pfamHit *pfamHitList;	/* Global hits. */
