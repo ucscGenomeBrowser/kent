@@ -52,7 +52,7 @@ group compGeno
 visibility hide
 spectrum on
 exonArrows off
-type bed 6 .
+type bed 5 .
 
 track tba37CFTR
 shortLabel 37 Species CFTR
