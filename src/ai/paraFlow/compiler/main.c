@@ -9,6 +9,7 @@
 #include "pfScope.h"
 #include "pfToken.h"
 #include "pfParse.h"
+#include "pfCompile.h"
 
 void usage()
 /* Explain command line and exit. */
@@ -83,7 +84,7 @@ else
 }
 
 void expandInto(struct pfParse *program, 
-	struct pfTokenizer *tkz, struct pfParse *pp)
+	struct pfCompile *pfc, struct pfParse *pp)
 /* Go through program walking into modules. */
 {
 if (pp->type == pptInto)
@@ -94,12 +95,13 @@ if (pp->type == pptInto)
     collectDots(dy, pp->children);
     dyStringAppend(dy, ".pf");
 
-    hel = hashLookup(tkz->modules, dy->string);
+    hel = hashLookup(pfc->modules, dy->string);
     if (hel != NULL)
         module = hel->name;
 
     if (module == NULL)
         {
+	struct pfTokenizer *tkz = pfc->tkz;
 	struct pfSource *oldSource = tkz->source;
 	char *oldPos = tkz->pos;
 	char *oldEndPos = tkz->endPos;
@@ -107,19 +109,19 @@ if (pp->type == pptInto)
 	tkz->source = pfSourceNew(dy->string);
 	tkz->pos = tkz->source->contents;
 	tkz->endPos = tkz->pos + tkz->source->contentSize;
-	mod = pfParseFile(dy->string, tkz, program);
-	expandInto(program, tkz, mod);
+	mod = pfParseFile(dy->string, pfc, program);
+	expandInto(program, pfc, mod);
 	tkz->source = oldSource;
 	tkz->pos = oldPos;
 	tkz->endPos = oldEndPos;
 	slAddHead(&program->children, mod);
-	module = hashStoreName(tkz->modules, dy->string);
+	module = hashStoreName(pfc->modules, dy->string);
 	}
     pp->name = module;
     dyStringFree(&dy);
     }
 for (pp = pp->children; pp != NULL; pp = pp->next)
-    expandInto(program, tkz, pp);
+    expandInto(program, pfc, pp);
 }
 
 static void substituteType(struct pfParse *pp, enum pfParseType oldType,
@@ -344,16 +346,62 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     printScopeInfo(level+1, pp);
 }
 
+static void addBuiltInTypes(struct pfCompile *pfc)
+/* Add built in types . */
+{
+struct pfScope *scope = pfc->scope;
+
+/* Declare some basic types.  Types with names in parenthesis
+ * are never declared by user directly */
+pfc->varType = pfScopeAddType(scope, "var", FALSE, NULL);
+pfc->streamType = pfScopeAddType(scope, "(stream)", FALSE, pfc->varType);
+pfc->numType = pfScopeAddType(scope, "(number)", FALSE, pfc->varType);
+pfc->collectionType = pfScopeAddType(scope, "(collection)", TRUE, pfc->varType);
+pfc->tupleType = pfScopeAddType(scope, "(tuple)", TRUE, pfc->collectionType);
+pfc->classType = pfScopeAddType(scope, "(class)", TRUE, pfc->collectionType);
+pfc->functionType = pfScopeAddType(scope, "(function)", TRUE, pfc->varType);
+pfc->toType = pfScopeAddType(scope, "(to)", TRUE, pfc->functionType);
+pfc->paraType = pfScopeAddType(scope, "(para)", TRUE, pfc->functionType);
+pfc->flowType = pfScopeAddType(scope, "(flow)", TRUE, pfc->functionType);
+
+pfScopeAddType(scope, "string", FALSE, pfc->streamType);
+
+pfScopeAddType(scope, "bit", FALSE, pfc->numType);
+pfScopeAddType(scope, "byte", FALSE, pfc->numType);
+pfScopeAddType(scope, "short", FALSE, pfc->numType);
+pfScopeAddType(scope, "int", FALSE, pfc->numType);
+pfScopeAddType(scope, "long", FALSE, pfc->numType);
+pfScopeAddType(scope, "float", FALSE, pfc->numType);
+pfScopeAddType(scope, "double", FALSE, pfc->numType);
+
+pfScopeAddType(scope, "array", TRUE, pfc->collectionType);
+pfScopeAddType(scope, "list", TRUE, pfc->collectionType);
+pfScopeAddType(scope, "tree", TRUE, pfc->collectionType);
+pfScopeAddType(scope, "dir", TRUE, pfc->collectionType);
+}
+
+struct pfCompile *pfCompileNew(char *fileName)
+/* Make new compiler object. */
+{
+struct pfCompile *pfc;
+AllocVar(pfc);
+pfc->baseFile = cloneString(fileName);
+pfc->modules = hashNew(0);
+pfc->reservedWords = createReservedWords();
+pfc->scope = pfScopeNew(NULL, 8);
+addBuiltInTypes(pfc);
+pfc->tkz = pfTokenizerNew(fileName, pfc->reservedWords);
+return pfc;
+}
+
 void paraFlow(char *fileName)
 /* parse and dump. */
 {
-struct hash *reservedWords = createReservedWords();
-struct pfTokenizer *tkz = pfTokenizerNew(fileName, reservedWords);
-struct pfParse *program = pfParseNew(pptProgram, NULL, NULL, tkz->scope);
-struct pfParse *pp = pfParseFile(fileName, tkz, program);
+struct pfCompile *pfc = pfCompileNew(fileName);
+struct pfParse *program = pfParseNew(pptProgram, NULL, NULL, pfc->scope);
+struct pfParse *pp = pfParseFile(fileName, pfc, program);
 
-
-expandInto(program, tkz, pp);
+expandInto(program, pfc, pp);
 slAddHead(&program->children, pp);
 slReverse(&program->children);
 
@@ -365,7 +413,7 @@ bindVars(program);
 pfParseDump(program, 0, stdout);
 
 printf("%d modules, %d tokens, %d parseNodes\n",
-	tkz->modules->elCount, tkz->tokenCount, pfParseCount(program));
+	pfc->modules->elCount, pfc->tkz->tokenCount, pfParseCount(program));
 printScopeInfo(0, program);
 }
 

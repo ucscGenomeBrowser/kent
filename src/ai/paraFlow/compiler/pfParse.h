@@ -2,8 +2,8 @@
 #ifndef PFPARSE_H
 #define PFPARSE_H
 
-#ifndef PFSCOPE_H
-#include "pfScope.h"
+#ifndef PFCOMPILE_H
+#include "pfCompile.h"
 #endif
 
 enum pfParseType
@@ -100,7 +100,7 @@ struct pfParse *pfParseNew(enum pfParseType type,
 /* Return new parse node.  It's up to caller to fill in
  * children later. */
 
-struct pfParse *pfParseFile(char *fileName, struct pfTokenizer *tkz, 
+struct pfParse *pfParseFile(char *fileName, struct pfCompile *pfc, 
 	struct pfParse *parent);
 /* Convert file to parse tree using tkz. */
 

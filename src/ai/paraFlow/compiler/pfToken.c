@@ -130,36 +130,6 @@ readInGulp(fileName, &source->contents, &source->contentSize);
 return source;
 }
 
-static void addBuiltInTypes(struct pfScope *scope)
-/* Add built in types . */
-{
-// static char *basic[] = { "var" , "string" , "bit" , "byte" , "short" , "int" , "long", "float"};
-// static char *collections[] = { "array", "list", "tree", "dir" };
-
-struct pfBaseType *varBase = pfScopeAddType(scope, "var", FALSE, NULL);
-struct pfBaseType *streamBase = pfScopeAddType(scope, "$", FALSE, varBase);
-struct pfBaseType *numBase = pfScopeAddType(scope, "#", FALSE, varBase);
-struct pfBaseType *colBase = pfScopeAddType(scope, "[]", TRUE, varBase);
-
-pfScopeAddType(scope, "()", TRUE, colBase);
-pfScopeAddType(scope, "class", TRUE, colBase);
-
-pfScopeAddType(scope, "string", FALSE, streamBase);
-
-pfScopeAddType(scope, "bit", FALSE, numBase);
-pfScopeAddType(scope, "byte", FALSE, numBase);
-pfScopeAddType(scope, "short", FALSE, numBase);
-pfScopeAddType(scope, "int", FALSE, numBase);
-pfScopeAddType(scope, "long", FALSE, numBase);
-pfScopeAddType(scope, "float", FALSE, numBase);
-pfScopeAddType(scope, "double", FALSE, numBase);
-
-pfScopeAddType(scope, "array", TRUE, colBase);
-pfScopeAddType(scope, "list", TRUE, colBase);
-pfScopeAddType(scope, "tree", TRUE, colBase);
-pfScopeAddType(scope, "dir", TRUE, colBase);
-}
-
 struct pfTokenizer *pfTokenizerNew(char *fileName, struct hash *reservedWords)
 /* Create tokenizing structure on file.  Reserved words is an int valued hash
  * that may be NULL. */
@@ -172,13 +142,10 @@ tkz->pos = tkz->source->contents;
 tkz->endPos = tkz->pos + tkz->source->contentSize;
 tkz->symbols = hashNew(16);
 tkz->strings = hashNew(16);
-tkz->modules = hashNew(0);
 tkz->dy = dyStringNew(0);
 if (reservedWords == NULL)
     reservedWords = hashNew(1);
 tkz->reserved = reservedWords;
-tkz->scope = pfScopeNew(NULL, 8);
-addBuiltInTypes(tkz->scope);
 return tkz;
 }
 

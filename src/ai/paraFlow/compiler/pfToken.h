@@ -80,13 +80,11 @@ struct pfTokenizer
     struct pfTokenizer *next;	/* Next if any in list */
     struct lm *lm;		/* Local memory pool for tokens etc. */
     struct pfSource *source;	/* Current source file. */
-    struct pfScope *scope;	/* Outermost scope, includes reserved words. */
     char *pos;			/* Current position within source->contents. */
     char *endPos;		/* Last position within source->contents. */
     struct hash *reserved;	/* Hash of built-in reserved words. */
     struct hash *symbols;	/* Hash containing all symbols. */
     struct hash *strings;	/* Hash containing all strings. */
-    struct hash *modules;	/* Full path to all modules. */
     struct dyString *dy;	/* Dynamic string buffer - for symbols and
                                  * strings before they go in hash. */
     int tokenCount;		/* Count of calls to tokenNext. */

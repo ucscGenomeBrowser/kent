@@ -7,6 +7,7 @@
 #include "pfType.h"
 #include "pfScope.h"
 #include "pfToken.h"
+#include "pfCompile.h"
 #include "pfParse.h"
 
 char *pfParseTypeAsString(enum pfParseType type)
@@ -1279,15 +1280,16 @@ for (tok = tokList; tok->type != pftEnd; tok = tok->next)
     }
 }
 
-struct pfParse *pfParseFile(char *fileName, struct pfTokenizer *tkz, 
+struct pfParse *pfParseFile(char *fileName, struct pfCompile *pfc, 
 	struct pfParse *parent)
 /* Convert file to parse tree using tkz. */
 {
+struct pfTokenizer *tkz = pfc->tkz;
 struct pfToken *tokList = NULL, *tok;
 int endCount = 3;
-struct pfScope *scope = pfScopeNew(tkz->scope, 16);
+struct pfScope *scope = pfScopeNew(pfc->scope, 16);
 struct pfParse *modParse = pfParseNew(pptModule, NULL, parent, scope);
-char *module = hashStoreName(tkz->modules, fileName);
+char *module = hashStoreName(pfc->modules, fileName);
 
 modParse->name = module;
 
