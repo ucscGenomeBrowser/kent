@@ -89,7 +89,7 @@
 #include "bedCart.h"
 #include "cytoBand.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.908 2005/02/15 01:20:15 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.909 2005/02/16 09:54:17 sugnet Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -6827,7 +6827,7 @@ char *mapName = "ideoMap";
 struct vGfx *vg;
 struct tempName gifTn;
 boolean doIdeo = TRUE;
-int ideoWidth = round(.65 *tl.picWidth);
+int ideoWidth = round(.8 *tl.picWidth);
 int ideoHeight = 0;
 int textWidth = 0;
 
