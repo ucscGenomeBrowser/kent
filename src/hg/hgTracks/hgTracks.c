@@ -78,7 +78,7 @@
 #include "simpleNucDiff.h"
 #include "tfbsCons.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.668 2004/02/06 04:53:01 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.669 2004/02/07 18:44:38 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -1368,6 +1368,13 @@ int e = tg->itemEnd(tg, item);
 *retX2 = round((e - winStart)*scale) + xOff;
 }
 
+boolean trackWantsHgGene(struct track *tg)
+/* Return TRUE if track wants hgGene on details page. */
+{
+char *hgGene = trackDbSetting(tg->tdb, "hgGene");
+return hgGene != NULL && sameString(hgGene, "on");
+}
+
 void genericDrawItems(struct track *tg, 
         int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
@@ -1381,7 +1388,7 @@ int heightPer = tg->heightPer;
 int s, e;
 int y, x1, x2, w;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
-boolean doNear = (trackDbSetting(tg->tdb, "hgGene") != NULL);
+boolean doHgGene = trackWantsHgGene(tg);
 
 if (vis == tvPack || vis == tvSquish)
     {
@@ -1423,7 +1430,7 @@ if (vis == tvPack || vis == tvSquish)
             int w = x2-textX;
             if (w > 0)
                 mapBoxHgcOrHgGene(s, e, textX, y, w, heightPer, tg->mapName, 
-				  tg->mapItemName(tg, item), name, doNear);
+				  tg->mapItemName(tg, item), name, doHgGene);
             }
         }
     vgUnclip(vg);
@@ -4838,7 +4845,7 @@ int heightPer = tg->heightPer;
 int s, e;
 int y, x1, x2, w;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
-boolean doNear = (trackDbSetting(tg->tdb, "hgGene") != NULL);
+boolean doHgGene = trackWantsHgGene(tg);
 
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->mapName);
@@ -4885,7 +4892,7 @@ if (vis == tvPack || vis == tvSquish)
             int w = x2-textX;
             if (w > 0)
                 mapBoxHgcOrHgGene(s, e, textX, y, w, heightPer, tg->mapName, 
-				  tg->mapItemName(tg, item), name, doNear);
+				  tg->mapItemName(tg, item), name, doHgGene);
             }
         }
     vgUnclip(vg);
@@ -6551,7 +6558,7 @@ y = yAfterRuler;
 for (track = trackList; track != NULL; track = track->next)
     {
     struct slList *item;
-    boolean doNear = FALSE;
+    boolean doHgGene = FALSE;
     switch (track->limitedVis)
 	{
 	case tvHide:
@@ -6563,7 +6570,7 @@ for (track = trackList; track != NULL; track = track->next)
 	    y += track->height;
 	    break;
 	case tvFull:
-	    doNear = (trackDbSetting(track->tdb, "hgGene") != NULL);
+	    doHgGene = trackWantsHgGene(track);
 	    if (withCenterLabels)
 		y += fontHeight;
 	    start = 1;
@@ -6598,7 +6605,7 @@ for (track = trackList; track != NULL; track = track->next)
                         mapBoxHgcOrHgGene(track->itemStart(track, item), track->itemEnd(track, item),
 				 trackPastTabX,y,trackPastTabWidth,height, track->mapName,
 				 track->mapItemName(track, item),
-				 track->itemName(track, item), doNear);
+				 track->itemName(track, item), doHgGene);
 			}
 		    y += height;
 		    }
