@@ -36,16 +36,21 @@ pmPrintf(pm, "recycleSpoke %s", spokeName);
 hubMessagePut(pm);
 }
 
-static void spokeSendRemote(char *spokeName, char *machine, char *message)
+static void spokeSendRemote(char *spokeName, char *machine, char *dottedQuad, char *message)
 /* Send message to remote machine. */
 {
 boolean ok;
 struct paraMessage pm;
 struct rudp *ru = rudpOpen();
+bits32 ip;
 
 if (ru != NULL)
     {
-    pmInitFromName(&pm, machine, paraNodePort);
+    internetDottedQuadToIp(dottedQuad, &ip);
+    if (ip == 0)
+	pmInitFromName(&pm, machine, paraNodePort);
+    else
+        pmInit(&pm, ip, paraNodePort);
     pmSet(&pm, message);
     ok = pmSend(&pm, ru);
     if (!ok)
@@ -72,7 +77,7 @@ static void *spokeProcess(void *vptr)
 {
 struct spoke *spoke = vptr;
 int conn, fromLen;
-char *line, *machine;
+char *line, *machine, *dottedQuad;
 struct paraMessage *message = NULL;
 
 /* Wait on message and process it. */
@@ -89,10 +94,11 @@ for (;;)
     line = message->data;
     logIt("%s: %s\n", spoke->name, line);
     machine = nextWord(&line);
-    if (machine != NULL)
+    dottedQuad = nextWord(&line);
+    if (dottedQuad != NULL)
 	{
 	if (line != NULL && line[0] != 0)
-	    spokeSendRemote(spoke->name, machine, line);
+	    spokeSendRemote(spoke->name, machine, dottedQuad, line);
 	}
     pmFree(&message);
     }
@@ -130,6 +136,16 @@ void spokeFree(struct spoke **pSpoke)
 *pSpoke = NULL;
 }
 
+static struct paraMessage *messageWithHeader(struct machine *machine)
+/* Return a message with machine name filled in. */
+{
+struct paraMessage *pm = pmNew(0,0);
+char dottedQuad[17];
+internetIpToDottedQuad(machine->ip, dottedQuad);
+pmPrintf(pm, "%s %s ", machine->name, dottedQuad);
+return pm;
+}
+
 static void spokeSyncSendMessage(struct spoke *spoke, struct paraMessage *pm)
 /* Synchronize with spoke and update it's message pointer. */
 {
@@ -144,27 +160,22 @@ mutexUnlock(&spoke->messageMutex);
 void spokeSendMessage(struct spoke *spoke, struct machine *machine, char *message)
 /* Send a generic message to machine through spoke. */
 {
-struct paraMessage *pm = pmNew(0,0);
-freez(&spoke->machine);
-spoke->machine = cloneString(machine->name);
-pmPrintf(pm, "%s %s", spoke->machine, message);
+struct paraMessage *pm = messageWithHeader(machine);
+pmPrintf(pm, "%s", message);
 spokeSyncSendMessage(spoke, pm);
 }
-
 
 void spokeSendJob(struct spoke *spoke, struct machine *machine, struct job *job)
 /* Tell spoke to start up a job. */
 {
-struct paraMessage *pm = pmNew(0,0);
+struct paraMessage *pm = messageWithHeader(machine);
 char *reserved = "0";	/* An extra parameter to fill in some day */
 char err[512];
 
 fillInErrFile(err, job->id, machine->tempDir);
 freez(&job->err);
 job->err = cloneString(err);
-freez(&spoke->machine);
-spoke->machine = cloneString(machine->name);
-pmPrintf(pm, "%s %s", machine->name, runCmd);
+pmPrintf(pm, "%s", runCmd);
 pmPrintf(pm, " %s", hubHost);
 pmPrintf(pm, " %d", job->id);
 pmPrintf(pm, " %s", reserved);

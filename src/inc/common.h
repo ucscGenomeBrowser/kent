@@ -13,12 +13,18 @@
 #ifndef _LARGEFILE_SOURCE
 #define _LARGEFILE_SOURCE 1
 #endif
+
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
 #endif
 
 #ifndef _FILE_OFFSET_BITS
 #define _FILE_OFFSET_BITS 64
+#endif
+
+/* Some stuff for safer pthreads. */
+#ifndef _REENTRANT
+#define _REENTRANT
 #endif
 
 #include <stdio.h>

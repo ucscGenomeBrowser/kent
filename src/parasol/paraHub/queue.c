@@ -2,7 +2,7 @@
  * The queue is just a doubly-linked list with some protection
  * so that multiple threads don't trip on it.  */
 
-#include "common.h"
+#include "paraCommon.h"
 #include "dlist.h"
 #include "paraHub.h"
 

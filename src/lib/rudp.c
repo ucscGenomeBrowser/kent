@@ -42,11 +42,9 @@
 
 
 #include "common.h"
-#include <sys/types.h>
 #include <sys/time.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <errno.h>
 #include "errabort.h"
 #include "rudp.h"
 
@@ -318,7 +316,8 @@ for (;;)
 	}
     if (head->type != rudpData)
 	{
-	warn("skipping non-data message %d in rudpReceive", head->type);
+	if (head->type != rudpAck)
+	    warn("skipping non-data message %d in rudpReceive", head->type);
 	continue;
 	}
     ackHead = *head;

@@ -1,5 +1,5 @@
 /* paraNodeStart - Start up parasol node daemons on a list of machines. */
-#include "common.h"
+#include "paraCommon.h"
 #include "linefile.h"
 #include "dystring.h"
 #include "hash.h"
@@ -20,6 +20,7 @@ errAbort(
  "    exe=/path/to/paraNode\n"
  "    log=/path/to/log/file\n"
  "    umask=000 - set file creation mask, defaults to 002\n"
+ "    randomDelay=N - set random start delay in milliseconds, default 5000\n"
  "    userPath=bin:bin/i386 User dirs to add to path\n"
  "    sysPath=/sbin:/local/bin System dirs to add to path\n"
  "    hub=machineHostingParaHub - nodes will ignore messages from elsewhere\n"
@@ -58,6 +59,7 @@ while (lineFileRow(lf, row))
     carryOption("umask", dy);
     carryOption("sysPath", dy);
     carryOption("userPath", dy);
+    carryOption("randomDelay", dy);
     printf("%s\n", dy->string);
     system(dy->string);
     }

@@ -19,13 +19,14 @@ struct paraMessage
     };
 
 void pmInit(struct paraMessage *pm, rudpHost ipAddress, bits16 port);
-/* Initialize message (that might be on stack) */
+/* Initialize message (that might be on stack). ipAddress is in host
+ * order. */
 
 void pmInitFromName(struct paraMessage *pm, char *hostName, bits16 port);
 /* Initialize message with ascii ip address. */
 
 struct paraMessage *pmNew(rudpHost ipAddress, bits16 port);
-/* Create new message in memory */
+/* Create new message in memory.  ipAddress is in host order.  */
 
 struct paraMessage *pmNewFromName(char *hostName, bits16 port);
 /* Create new message in memory */

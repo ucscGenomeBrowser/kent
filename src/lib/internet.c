@@ -35,3 +35,36 @@ else
     }
 return TRUE;
 }
+
+boolean internetIpToDottedQuad(bits32 ip, char dottedQuad[17])
+/* Convert IP4 address in host byte order to dotted quad 
+ * notation.  Warn and return FALSE if there's a 
+ * problem. */
+{
+struct in_addr ia;
+zeroBytes(dottedQuad, 17);
+ZeroVar(&ia);
+ia.s_addr = htonl(ip);
+if (inet_ntop(AF_INET, &ia, dottedQuad, 16) == NULL)
+    {
+    warn("conversion problem on %x in internetIpToDottedQuad: %s", 
+    	strerror(errno));
+    return FALSE;
+    }
+return TRUE;
+}
+
+boolean internetDottedQuadToIp(char *dottedQuad, bits32 *retIp)
+/* Convert dotted quad format address to IP4 address in
+ * host byte order.  Warn and return FALSE if there's a 
+ * problem. */
+{
+struct in_addr ia;
+if (inet_pton(AF_INET, dottedQuad, &ia) < 0)
+    {
+    warn("internetDottedQuadToIp problem on %s: %s", strerror(errno));
+    return FALSE;
+    }
+*retIp = ntohl(ia.s_addr);
+return TRUE;
+}

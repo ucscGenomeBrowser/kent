@@ -1,8 +1,5 @@
+#include "paraCommon.h"
 #include <sys/utsname.h>
-#include <pwd.h>
-#include <sys/types.h>
-#include <signal.h>
-#include "common.h"
 #include "options.h"
 #include "errabort.h"
 #include "net.h"

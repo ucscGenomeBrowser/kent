@@ -1,5 +1,5 @@
 /* paraHubStop - Shut down paraHub daemon. */
-#include "common.h"
+#include "paraCommon.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"

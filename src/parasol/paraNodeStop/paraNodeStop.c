@@ -1,5 +1,5 @@
 /* paraNodeStop - Shut down parasol node daemons on a list of machines. */
-#include "common.h"
+#include "paraCommon.h"
 #include "linefile.h"
 #include "hash.h"
 #include "net.h"
@@ -21,16 +21,18 @@ void paraNodeStop(char *machineList)
 {
 struct lineFile *lf = lineFileOpen(machineList, FALSE);
 char *row[1];
-struct rudp *ru = rudpMustOpen();
 
 while (lineFileRow(lf, row))
     {
+    struct rudp *ru = rudpMustOpen();
     char *name = row[0];
     struct paraMessage pm;
+    ru->maxRetries = 6;
     printf("Telling %s to quit \n", name);
     pmInitFromName(&pm, name, paraNodePort);
     pmPrintf(&pm, "%s", "quit");
     pmSend(&pm, ru);
+    rudpClose(&ru);
     }
 }
 

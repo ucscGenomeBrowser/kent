@@ -2,7 +2,7 @@
  * generated jobResult.h and jobResult.sql.  This module links the database and
  * the RAM representation of objects. */
 
-#include "common.h"
+#include "paraCommon.h"
 #include "linefile.h"
 #include "dystring.h"
 #include "sqlNum.h"

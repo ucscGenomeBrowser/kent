@@ -1,5 +1,5 @@
 /* broadNodeStart - Start up broadcast node daemons on a list of machines. */
-#include "common.h"
+#include "paraCommon.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"

@@ -60,11 +60,7 @@
  * should gradually rescue the system in any case, but the throughput
  * will be greatly reduced. */
 
-#include <time.h>
-#include <netdb.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include "common.h"
+#include "paraCommon.h"
 #include "options.h"
 #include "linefile.h"
 #include "hash.h"
@@ -72,6 +68,7 @@
 #include "dystring.h"
 #include "dlist.h"
 #include "net.h"
+#include "internet.h"
 #include "paraHub.h"
 #include "machSpec.h"
 
@@ -377,11 +374,13 @@ if (mach != NULL)
     }
 }
 
-void doAddMachine(char *name, char *tempDir)
-/* Add machine to pool. */
+void doAddMachine(char *name, char *tempDir, bits32 ip)
+/* Add machine to pool.  If you don't know ip yet just pass
+ * in 0 for that argument. */
 {
 struct machine *mach;
 mach = machineNew(name, tempDir);
+mach->ip = ip;
 dlAddTail(freeMachines, mach->node);
 slAddHead(&machineList, mach);
 }
@@ -393,7 +392,7 @@ char *name = nextWord(&line);
 char *tempDir = nextWord(&line);
 if (tempDir != NULL)
     {
-    doAddMachine(name, tempDir);
+    doAddMachine(name, tempDir, 0);
     runner(1);
     }
 }
@@ -888,7 +887,7 @@ for (node = deadMachines->head; !dlEnd(node); node = node->next)
 	mach->isDead = FALSE;
 	if (mach->deadJobId != 0)
 	    {
-	    logIt("hub: node %s running %d came back.  What to do with job %d???\n", 
+	    logIt("hub: node %s assigned %d came back.\n", 
 	    	name, mach->deadJobId);
 	    while ((jobIdString = nextWord(&line)) != NULL)
 	        {
@@ -984,6 +983,7 @@ if (status != NULL)
 		}
 	    requeueJob(job);
 	    logIt("hub:  requeueing job in nodeCheckIn\n");
+	    runner(1);
 	    }
 	}
     }
@@ -1001,7 +1001,6 @@ for (node = busySpokes->head; !dlEnd(node); node = node->next)
     if (sameString(spoke->name, spokeName))
         {
 	dlRemove(spoke->node);
-	freez(&spoke->machine);
 	dlAddTail(freeSpokes, spoke->node);
 	foundSpoke = TRUE;
 	break;
@@ -1533,9 +1532,11 @@ while (lineFileRow(lf, row))
     {
     struct machSpec ms;
     int i;
+    bits32 ip;
     machSpecStaticLoad(row, &ms);
+    ip = internetHostIp(ms.name);
     for (i=0; i<ms.cpus; ++i)
-	doAddMachine(ms.name, ms.tempDir);
+	doAddMachine(ms.name, ms.tempDir, ip);
     }
 lineFileClose(&lf);
 }

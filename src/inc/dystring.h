@@ -56,5 +56,10 @@ struct dyString * dyStringSub(char *orig, char *in, char *out);
 /* Make up a duplicate of orig with all occurences of in substituted
  * with out. */
 
+char *dyStringCannibalize(struct dyString **pDy);
+/* Kill dyString, but return the string it is wrapping
+ * (formerly dy->string).  This should be free'd at your
+ * convenience. */
+
 #endif /* DYSTRING_H */
 

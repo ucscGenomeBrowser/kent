@@ -1,18 +1,15 @@
 /* paraMessage - routines to pack and unpack messages in
  * the parasol system, and also to send them via sockets. */
 
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <sys/time.h>
-#include "common.h"
+#include "paraCommon.h"
 #include "paraLib.h"
 #include "internet.h"
 #include "rudp.h"
 #include "paraMessage.h"
 
 void pmInit(struct paraMessage *pm, rudpHost ipAddress, bits16 port)
-/* Initialize message (that might be on stack). */
+/* Initialize message (that might be on stack). ipAddress is in host
+ * order. */
 {
 ZeroVar(pm);
 pm->ipAddress.sin_family = AF_INET;

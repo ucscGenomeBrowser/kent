@@ -1,5 +1,5 @@
 /* paraTestJob - A good test job to run on Parasol.  Can be configured to take a long time or crash. */
-#include "common.h"
+#include "paraCommon.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"

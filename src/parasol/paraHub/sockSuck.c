@@ -1,6 +1,6 @@
 /* SockSuck - A process that sucks messages from a socket
  * and puts them in the hub queue. */
-#include "common.h"
+#include "paraCommon.h"
 #include "paraHub.h"
 
 static pthread_t sockSuckThread;

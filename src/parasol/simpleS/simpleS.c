@@ -1,6 +1,5 @@
 /* simpleS - simple server. */
-#include "common.h"
-#include <sys/socket.h>
+#include "paraCommon.h"
 
 void usage()
 /* Explain usage and exit. */

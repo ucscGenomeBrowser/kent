@@ -1,5 +1,5 @@
 /* paraNodeStatus - Check status of paraNode on a list of machines. */
-#include "common.h"
+#include "paraCommon.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
@@ -81,7 +81,6 @@ void paraNodeStatus(char *machineList)
 {
 struct lineFile *lf = lineFileOpen(machineList, FALSE);
 boolean longFormat = optionExists("long");
-struct rudp *ru = rudpMustOpen();
 int size;
 char *row[1];
 int totalCpu = 0, totalBusy = 0, totalRecent = 0;
@@ -92,7 +91,9 @@ while (lineFileRow(lf, row))
     {
     char *name = row[0];
     struct paraMessage pm;
+    struct rudp *ru = rudpMustOpen();
 
+    ru->maxRetries = 6;
     pmInitFromName(&pm, name, paraNodePort);
     if (longFormat)
 	{
@@ -120,7 +121,12 @@ while (lineFileRow(lf, row))
 		printf("%s no status return: %s\n", name, strerror(errno));
 		}
 	    }
+	else
+	    {
+	    printf("%s unreachable\n", name);
+	    }
 	}
+    rudpClose(&ru);
     }
 if (longFormat)
     printf("%d running, %d recent\n", totalBusy, totalRecent);

@@ -27,6 +27,19 @@ if ((ds = *pDs) != NULL)
     }
 }
 
+char *dyStringCannibalize(struct dyString **pDy)
+/* Kill dyString, but return the string it is wrapping
+ * (formerly dy->string).  This should be free'd at your
+ * convenience. */
+{
+char *s;
+struct dyString *ds = *pDy;
+assert(ds != NULL);
+s = ds->string;
+freez(pDy);
+return s;
+}
+
 void freeDyStringList(struct dyString **pDs)
 /* free up a list of dyStrings */
 {

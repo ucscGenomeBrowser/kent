@@ -41,6 +41,7 @@ struct machine
     boolean isDead;		/* True if machine dead. */
     char *tempDir;		/* Name of local temp dir. */
     int deadJobId;		/* Id of a job that machine was running when it died. */
+    bits32	ip;		/* IP address in host order. */
     };
 
 struct batch
@@ -77,7 +78,6 @@ struct spoke
     struct spoke *next;		  /* Next spoke in master list. */
     struct dlNode *node;	  /* Node on doubly-linked list. */
     char *name;		  	  /* Spoke name. */
-    char *machine;		  /* Machine this spoke is communicating with or NULL */
     pthread_t thread;		  /* Concurrent thread data structure for spoke. */
     struct paraMessage *message;  /* Message to send to spoke or NULL. */
     pthread_mutex_t messageMutex; /* Mutex lock on message. */

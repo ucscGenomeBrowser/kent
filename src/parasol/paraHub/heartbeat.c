@@ -1,7 +1,7 @@
 /* This daemon just sends a heartbeat message to the hub
  * every now and again. */
 
-#include "common.h"
+#include "paraCommon.h"
 #include "errabort.h"
 #include "net.h"
 #include "paraHub.h"

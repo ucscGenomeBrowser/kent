@@ -1,3 +1,7 @@
+/* vGif - a virtual graphic object wrapper around
+ * an in-memory buffer destined to become a 
+ * 256-color GIF file. */
+
 #include "common.h"
 #include "memgfx.h"
 #include "vGfx.h"

@@ -1,11 +1,5 @@
 /* parasol - Parasol program - for launching programs in parallel on a computer cluster. */
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h>
-#include <unistd.h>
-#include <stdio.h>
-#include "common.h"
+#include "paraCommon.h"
 #include "net.h"
 #include "linefile.h"
 #include "errabort.h"

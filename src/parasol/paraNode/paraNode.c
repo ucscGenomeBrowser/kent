@@ -1,13 +1,5 @@
 /* paraNode - parasol node server. */
-#include <signal.h>
-#include <netdb.h>
-#include <sys/wait.h>
-#include <sys/times.h>
-#include <sys/socket.h>
-#include <sys/stat.h>
-#include <netinet/in.h>
-#include <pwd.h>
-#include "common.h"
+#include "paraCommon.h"
 #include "errabort.h"
 #include "dystring.h"
 #include "dlist.h"
@@ -327,7 +319,7 @@ else
     struct rudp *ru = rudpOpen();
     struct tms tms;
 
-    ru->maxRetries = 10;
+    ru->maxRetries = 12;
     signal(SIGTERM, termHandler);
     cid = wait(&status);
     times(&tms);
@@ -452,7 +444,7 @@ if (managingHost != NULL)
     {
     struct paraMessage pm;
     struct dlNode *node;
-    int jobsReported = TRUE;
+    int jobsReported = 0;
     pmInit(&pm, lookupIp(managingHost), paraHubPort);
     pmPrintf(&pm, "alive %s", hostName);
     for (node = jobsRunning->head; !dlEnd(node); node = node->next)
@@ -556,7 +548,7 @@ if (fileName != NULL)
 	int size;
 	for (;;)
 	    {
-	    size = fread(pmIn.data, sizeof(pmIn.data)-1, 1, f);
+	    size = fread(pmIn.data,1,  sizeof(pmIn.data)-1, f);
 	    if (size < 0)
 		{
 		size = 0;
@@ -666,7 +658,7 @@ sai.sin_family = AF_INET;
 sai.sin_port = htons(paraNodePort);
 sai.sin_addr.s_addr = INADDR_ANY;
 mainRudp = rudpMustOpenBound(&sai);
-mainRudp->maxRetries = 10;
+mainRudp->maxRetries = 12;
 
 /* Event loop. */
 findNow();

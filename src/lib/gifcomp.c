@@ -53,8 +53,8 @@
  *
  */
 
-#include <setjmp.h>
 #include "common.h"
+#include <setjmp.h>
 
 #define UBYTE unsigned char
 
