@@ -9,7 +9,7 @@
 #include "paraLib.h"
 #include "paraMessage.h"
 
-static char const rcsid[] = "";
+static char const rcsid[] = "$Id: parasol.c,v 1.29 2004/09/23 00:29:14 galt Exp $";
 
 struct rudp *hubRudp;	/* Network connection to paraHub. */
 char *userName;	/* Name of user. */

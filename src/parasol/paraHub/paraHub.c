@@ -67,7 +67,7 @@
 #include "machSpec.h"
 #include "log.h"
 
-static char const rcsid[] = "";
+static char const rcsid[] = "$Id: paraHub.c,v 1.74 2004/09/23 00:29:14 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
