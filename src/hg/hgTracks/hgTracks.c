@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.904 2005/02/12 20:08:49 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.905 2005/02/14 03:18:30 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -608,7 +608,7 @@ void mapStatusMessage(char *format, ...)
 {
 va_list(args);
 va_start(args, format);
-hPrintf(" ALT=\"");
+hPrintf(" TITLE=\"");
 hvPrintf(format, args);
 hPutc('"');
 va_end(args);
@@ -6280,27 +6280,6 @@ else
 	return shadesOfBlue[colorIndex];
     }
 }
-
-#ifdef OLD
-void mapBoxHcWTarget(int start, int end, int x, int y, int width, int height, 
-	char *track, char *item, char *statusLine, boolean target, char *otherFrame)
-/* Print out image map rectangle that would invoke the htc (human track click)
- * program. */
-{
-char *encodedItem = cgiEncode(item);
-hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
-    hgcNameAndSettings(), start, end, track, encodedItem, chromName, winStart, winEnd, 
-    database, tl.picWidth);
-if(target) 
-    {
-    hPrintf(" target=\"%s\" ", otherFrame);
-    } 
-hPrintf("ALT=\"%s\" TITLE=\"%s\">\n", statusLine, statusLine); 
-freeMem(encodedItem);
-}
-#endif /* OLD */
-
 
 /* Use the RepeatMasker style code to generate the
  * the Comparative Genomic Hybridization track */
