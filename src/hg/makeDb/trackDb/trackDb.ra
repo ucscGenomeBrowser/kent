@@ -685,6 +685,15 @@ visibility hide
 color 12,12,120
 type bed 6
 
+track promoterStanford
+longLabel promoters identified by Richard Myers at Stanford 
+shortLabel Promoter Myers 
+group regulation
+priority 82
+visibility hide
+color 30,130,210
+type bed 6 .
+
 track psuReg
 shortLabel Known Regulatory 
 longLabel Functional Regulatory Elements compiled by Penn State 
