@@ -1476,6 +1476,7 @@ for (bun = bigBunList; bun != NULL; bun = bun->next)
     saveAlignments(bun->genoSeq->name, bun->genoSeq->size, 0, 
 	bun, NULL, isRc, FALSE, ffCdna, minScore, out);
     }
+ssBundleFreeList(&bigBunList);
 freeHash(&bunHash);
 lmCleanup(&lm);
 }

@@ -1135,6 +1135,15 @@ else
     return 0;
 }
 
+static int trimGapPenalty(int nGap, int hGap)
+/* Calculate gap penalty for routine below. */
+{
+int penalty = log(hGap);
+if (nGap > 0)
+    penalty += 3;
+return penalty;
+}
+
 static struct ffAli *trimFlakyEnds(struct dnaSeq *qSeq, struct dnaSeq *tSeq,
 	struct ffAli *ffList)
 /* Get rid of small initial and terminal exons that seem to just
@@ -1161,7 +1170,7 @@ while (right != NULL)
     blockScore -= aPenalty(left->nStart, left->nEnd - left->nStart);
     iStart = left->hEnd;
     iEnd = right->hStart;
-    gapPenalty = 2*ffCalcCdnaGapPenalty(iEnd-iStart, 
+    gapPenalty = trimGapPenalty(iEnd-iStart, 
     	right->nStart - left->nEnd) + 4;
     gapPenalty -= ffScoreIntron(iStart[0], iStart[1], 
     	iEnd[-2], iEnd[-1], orientation);
@@ -1188,7 +1197,7 @@ while (left != NULL)
     blockScore -= aPenalty(right->nStart, right->nEnd - right->nStart);
     iStart = left->hEnd;
     iEnd = right->hStart;
-    gapPenalty = 2*ffCalcCdnaGapPenalty(iEnd-iStart, 
+    gapPenalty = trimGapPenalty(iEnd-iStart, 
     	right->nStart - left->nEnd) + 4;
     gapPenalty -= ffScoreIntron(iStart[0], iStart[1], 
     	iEnd[-2], iEnd[-1], orientation);
