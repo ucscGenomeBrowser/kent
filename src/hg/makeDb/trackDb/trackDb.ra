@@ -1544,8 +1544,13 @@ searchType bed
 termRegex chr[0-9a-z_]+[.][0-9]+
 searchPriority 50
 
+searchTable blastDm1FB
+searchType bed
+query select tName,tStart,tEnd,qName from %s where qName like '%%%s%%'
+searchPriority 25
+
 searchTable blastHg16KG
 searchType bed
 query select tName,tStart,tEnd,qName from %s where qName like '%%%s%%'
-searchPriority 50
+searchPriority 25
 
