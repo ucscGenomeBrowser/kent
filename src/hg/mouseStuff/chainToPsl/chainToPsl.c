@@ -14,7 +14,7 @@
 #include "dystring.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: chainToPsl.c,v 1.10 2004/08/12 10:16:56 baertsch Exp $";
+static char const rcsid[] = "$Id: chainToPsl.c,v 1.11 2004/10/13 18:05:40 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -57,16 +57,13 @@ void addNib(char *file, struct hash *fileHash, struct hash *seqHash)
 {
 struct seqFilePos *sfp;
 char root[128];
-int size;
 FILE *f = NULL;
 splitPath(file, NULL, root, NULL);
 AllocVar(sfp);
 hashAddSaveName(seqHash, root, sfp, &sfp->name);
 sfp->file = hashStoreName(fileHash, file);
 sfp->isNib = TRUE;
-nibOpenVerify(file, &f, &size);
-carefulClose(&f);
-sfp->pos = size;
+sfp->pos = 0;
 }
 
 void addFa(char *file, struct hash *fileHash, struct hash *seqHash)
@@ -104,7 +101,7 @@ struct cachedFile
     FILE *f;		/* Open file. */
     };
 
-FILE *openFromCache(struct dlList *cache, char *fileName)
+FILE *openFromCache(struct dlList *cache, struct seqFilePos *sfp)
 /* Return open file handle via cache.  The simple logic here
  * depends on not more than N files being returned at once. */
 {
@@ -112,6 +109,7 @@ static int maxCacheSize=16;
 int cacheSize = 0;
 struct dlNode *node;
 struct cachedFile *cf;
+int size;
 
 /* First loop through trying to find it in cache, counting
  * cache size as we go. */
@@ -119,7 +117,7 @@ for (node = cache->head; !dlEnd(node); node = node->next)
     {
     ++cacheSize;
     cf = node->val;
-    if (sameString(fileName, cf->name))
+    if (sameString(sfp->file, cf->name))
         {
 	dlRemove(node);
 	dlAddHead(cache, node);
@@ -140,8 +138,16 @@ if (cacheSize >= maxCacheSize)
 
 /* Cache new file. */
 AllocVar(cf);
-cf->name = cloneString(fileName);
-cf->f = mustOpen(fileName, "rb");
+cf->name = cloneString(sfp->file);
+if (sfp->isNib)
+    {
+    nibOpenVerify(sfp->file, &cf->f, &size);
+    if (cf->f == NULL)
+	errAbort("can't open nibfile %s\n",sfp->file);
+    sfp->pos = size;
+    }
+else
+    cf->f = mustOpen(sfp->file, "rb");
 dlAddValHead(cache, cf);
 return cf->f;
 }
@@ -160,7 +166,7 @@ struct dnaSeq *readCachedSeq(char *seqName, struct hash *hash,
 /* Read sequence hopefully using file cashe. */
 {
 struct seqFilePos *sfp = hashMustFindVal(hash, seqName);
-FILE *f = openFromCache(fileCache, sfp->file);
+FILE *f = openFromCache(fileCache, sfp);
 if (sfp->isNib)
     {
     return nibLdPart(sfp->file, f, sfp->pos, 0, sfp->pos);
@@ -178,7 +184,7 @@ void readCachedSeqPart(char *seqName, int start, int size,
  * file just read part of it. */
 {
 struct seqFilePos *sfp = hashMustFindVal(hash, seqName);
-FILE *f = openFromCache(fileCache, sfp->file);
+FILE *f = openFromCache(fileCache, sfp);
 if (sfp->isNib)
     {
     *retSeq = nibLdPart(sfp->file, f, sfp->pos, start, size);
