@@ -177,7 +177,7 @@ for (yCutIx = 0; yCutIx < yOutDim; ++yCutIx)
 	int xEnd = xCuts[xCutIx];
 	for (; x<xEnd; ++x)
 	    sum += rowSum[x];
-	printf("%5.3f ", sum);
+	printf("%f ", sum);
 	}
     printf("\n");
     }
