@@ -9,8 +9,8 @@ exit; # don't actually run this like a script :)
 DOWNLOAD SEQUENCE (DONE 2003-05-12 - Hiram)
 
     ssh eieio
-    mkdir -p /projects/compbio/experiments/worm/ce1/sanger
-    cd /projects/compbio/experiments/worm/ce1/sanger
+    mkdir -p /cluster/store4/worm/ce1/sanger
+    cd /cluster/store4/worm/ce1/sanger
     wget -o ce1.fetch.log -r -l1 --no-directories \
 	ftp://ftp.sanger.ac.uk/pub/wormbase/current_release/CHROMOSOMES/
 #   Takes about five minutes
@@ -19,15 +19,16 @@ DOWNLOAD SEQUENCE (DONE 2003-05-12 - Hiram)
 #   Check that you have some valid files. Should be chroms I II III IV V X
 #	in dna, gff and agp formats
     ls -ogrt
-#   There is a Mitochondria sequence.  I don't know where this came
-#	from originally.  Until we figure that out, we use the only
+#   There is a Mitochondria sequence.  It is supposedly from NCBI
+#	and it needs to be determined what query will fetch this
+#	sequence.  Until we figure that out, we use the only
 #	copy we have:
     cp -p /projects/compbio/experiments/worm/idb/nt4/M.dna.gz \
 	CHROMOSOME_M.dna.gz
 #   get out of this download data directory, and create your home symlink
 #	shortcut
     cd ..
-    ln -s /projects/compbio/experiments/worm/ce1 ~/ce1
+    ln -s /cluster/store4/worm/ce1 ~/ce1
     cd ~/ce1
     mkdir nib
 #   translate to unzipped .fa and to nib
@@ -51,7 +52,7 @@ CREATING DATABASE (DONE 2003-05-12 - Hiram)
     # Create the database.
     ssh hgwdev
     echo 'create database ce1' | hgsql ''
-    # if you need to delete that database:
+    # if you need to delete that database:  !!! WILL DELETE EVERYTHING !!!
 	echo 'drop database ce1' | hgsql ce1
     # make a semi-permanent read-only alias:
     alias ce1 "mysql -u hguser -phguserstuff -A ce1"
@@ -68,7 +69,7 @@ CREATING GRP TABLE FOR TRACK GROUPING (DONE 2003-05-12 - Hiram)
     #	grp in the database rn1 to our new database ce1
     echo "create table grp (PRIMARY KEY(NAME)) select * from rn1.grp" \
       | hgsql ce1
-    # if you need to delete that table:
+    # if you need to delete that table:   !!! WILL DELETE ALL grp data !!!
 	echo 'drop table grp;' | hgsql ce1
 
 STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE 2003-05-12 - Hiram)
@@ -76,12 +77,12 @@ STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE 2003-05-12 - Hiram)
     # Make symbolic links from /gbdb/ce1/nib to the real nibs.
     ssh hgwdev
     mkdir -p /gbdb/ce1/nib
-    foreach f (/projects/compbio/experiments/worm/ce1/nib/*.nib)
+    foreach f (/cluster/store4/worm/ce1/nib/*.nib)
       ln -s $f /gbdb/ce1/nib
     end
     # Load /gbdb/ce1/nib paths into database and save size info.
     hgsql ce1  < ~/kent/src/hg/lib/chromInfo.sql
-    # if you need to delete that table:
+    # if you need to delete that table:   !!! DELETES ALL DATA IN TABLE !!!
 	echo 'drop table chromInfo;' | hgsql ce1
     cd ~/ce1
     hgNibSeq -preMadeNib ce1 /gbdb/ce1/nib chr*.fa
@@ -121,8 +122,8 @@ drop table seq; drop table sex; drop table source; drop table tissue;' \
 
 MAKE GCPERCENT (DONE 2003-05-12 - Hiram)
      ssh hgwdev
-     mkdir -p /projects/compbio/experiments/worm/ce1/bed/gcPercent
-     cd /projects/compbio/experiments/worm/ce1/bed/gcPercent
+     mkdir -p /cluster/store4/worm/ce1/bed/gcPercent
+     cd /cluster/store4/worm/ce1/bed/gcPercent
      hgsql ce1  < ~/kent/src/hg/lib/gcPercent.sql
     #  If you need to delete that table created
 	echo 'drop table gcPercent;' | hgsql ce1;
@@ -150,7 +151,68 @@ MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR SC1 (DONE 2002-05-12 - Hiram)
     make alpha
     cvs commit makefile
 
-# *****************   END HERE 2003-05-12 10:50 - Hiram  ***************
+MAKE SANGER GENE TRACK (DONE - 2003-05-19 - Hiram)
+
+    ssh eieio
+    mkdir -p /cluster/store4/worm/ce1/bed/sangerGene
+    cd /cluster/store4/worm/ce1/bed/sangerGene
+    # the perl trims these files down to a reasonable size.  As they are
+    #	they cause ldHgGene to hangup due to memory size.
+    foreach f (I II III IV V X)
+	echo -n "${f} "
+	zcat ../../sanger/CHROMOSOME_${f}.gff.gz | \
+	sed -e "s/CHROMOSOME_III/chrIII/g" -e "s/CHROMOSOME_II/chrII/g" \
+	-e "s/CHROMOSOME_IV/chrIV/g" -e "s/CHROMOSOME_I/chrI/g" \
+	-e "s/CHROMOSOME_X/chrX/g" -e "s/CHROMOSOME_V/chrV/g" \
+	-e 's/Sequence "\(.*\)"$/\1/' -e 's/Transcript "\(.*\)"$/\1/' | \
+	perl -ne '@a = split; \
+        print if($a[1] =~ /curated|DNA|RNA/i && \
+        $a[2] =~ /intron|exon|cds|sequence|transcri/i);' > chr${f}.gff
+    end
+    echo
+    #  check file sizes, should be reasonable
+    ls -ogrt
+# [hiram@eieio sangerGene]$ ls -ogrt
+# total 22656
+# -rw-r--r--    1 hiram     3495873 May 19 11:52 chrI.gff
+# -rw-r--r--    1 hiram     3670984 May 19 11:54 chrII.gff
+# -rw-r--r--    1 hiram     3264917 May 19 11:56 chrIII.gff
+# -rw-r--r--    1 hiram     3642256 May 19 11:59 chrIV.gff
+# -rw-r--r--    1 hiram     4704564 May 19 12:02 chrV.gff
+# -rw-rw-r--    1 hiram     3787721 May 19 12:03 chrX.gff
+
+    # now load database with those transformed gff files
+    ssh hgwdev
+    cd /cluster/store4/worm/ce1/bed/sangerGene
+    ldHgGene ce1 sangerGene *.gff
+# Read 37330 transcripts in 411148 lines in 6 files
+#  37330 groups 6 seqs 11 sources 6 feature types
+#  22128 gene predictions
+
+    # if you need to delete that table:
+	echo 'drop table sangerGene' | hgsql ce1
+
+# *****************   END HERE 2003-05-19 12:05 - Hiram  ***************
+
+# MAKING AND STORING mRNA AND EST ALIGNMENTS (WORKING 2003-05-19 - Hiram)
+    ssh kkstore
+    cd ~ce1/bed
+    mkdir mrna est
+    cd mrna
+    ls -1S /scratch/hiram/Celegans/chr*.fa > genome.lst
+    cp -p /iscratch/i/mrna.134/Caenorhabditis_elegans/mrna.fa \
+	/scratch/hiram/Celegans
+    # push-request this /scratch/hiram/Celegans directory
+    # when that is done, then back on kk:
+
+    ssh kk
+    cd ~ce1/bed/mrna
+    mkdir psl
+    ls -1S /scratch/hiram/Celegans/mrna.fa > mrna.lst
+    cp -p ../../gsub .	# this will be from previous version when there is one
+    gensub2 genome.lst mrna.lst gsub spec
+    para create spec
+    para try
 
 MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR SC1 (TODO)
     ssh hgwdev
