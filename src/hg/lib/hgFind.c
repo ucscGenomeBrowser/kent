@@ -40,7 +40,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.116 2003/10/29 16:34:50 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.117 2003/10/31 18:05:04 angie Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -1965,7 +1965,8 @@ else
 
 safef(query, sizeof(query), 
     "select qName from %s where qName = '%s'", table, acc);
-if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
+if (sqlTableExists(conn, table) &&
+    sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
     {
     return TRUE;
     }
