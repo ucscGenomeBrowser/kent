@@ -1698,3 +1698,17 @@ cat << 'EOF' > gsub
     hgLoadSeq dm1 /gbdb/dm1/apiMel0/*.fa
 
 
+#  miRNA track (DONE - 2004-05-04 - Hiram)
+    #	data from: Sam Griffiths-Jones <sgj@sanger.ac.uk>
+    #	and Michel.Weber@ibcg.biotoul.fr
+    #	notify them if this assembly updates to renew this track
+    ssh hgwdev
+    mkdir /cluster/data/dm1/bed/miRNA
+    cd /cluster/data/dm1/bed/miRNA
+    wget --timestamping \
+    "ftp://ftp.sanger.ac.uk/pub/databases/Rfam/miRNA/genomes/dme_bdgp3.*"
+    grep -v "^track " dme_bdgp3.bed | sed -e "s/ /\t/g" > dm1.bed
+    hgLoadBed dm1 miRNA dm1.bed
+    # entry in trackDb/trackDb.ra already there
+    #	featureBits dm1 miRNA
+    #	6845 bases of 126527731 (0.005%) in intersection
