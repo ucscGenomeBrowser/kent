@@ -12,9 +12,10 @@ void usage()
 errAbort(
   "hgSuperfam - Generate supfamily table for the Superfamily track.\n"
   "usage:\n"
-  "   hgSuperfam gDb\n"
+  "   hgSuperfam gDb pDb\n"
   "      gDb   is the genome database\n"
-  "example: hgSuperfam mm4\n");
+  "      sDb   is the superfamily database\n"
+  "example: hgSuperfam mm5 superfam041128\n");
 }
 
 int main(int argc, char *argv[])
@@ -34,7 +35,7 @@ float E,score;
 char *translation_id;
 char *translation_name;
 
-char *genomeDb, *ensDb;
+char *genomeDb, *superfamDb;
 char gene_name[200];
 
 char *chp;
@@ -42,8 +43,9 @@ int  i,l;
 
 FILE *o3, *o4;
    
-if (argc != 2) usage();
+if (argc != 3) usage();
 genomeDb = argv[1];
+superfamDb = argv[2];
  
 o3 = mustOpen("j.dat", "w");
 o4 = mustOpen("jj.dat", "w");
@@ -78,8 +80,6 @@ while (row2 != NULL)
 
     sprintf(cond_str, "transcript='%s'", name);
     translation_name = sqlGetField(conn, genomeDb, "ensemblXref3", "protein", cond_str);
-    //sprintf(cond_str, "transcript='%s'", name);
-    //translation_name = sqlGetField(conn, genomeDb, "ensGtp2", "protein", cond_str);
     if (translation_name == NULL) 
 	{
 	printf("transcript not found, skipping %s\n", name);
@@ -91,7 +91,7 @@ while (row2 != NULL)
     	chp = strstr(translation_name, ".");
     	if (chp != NULL) *chp = '\0';
 
-    	sprintf(query, "select * from %s.sfAssign where seqID='%s'", genomeDb, translation_name);
+    	sprintf(query, "select * from %s.sfAssign where seqID='%s'", superfamDb, translation_name);
     	sr = sqlMustGetResult(conn, query);
     	row = sqlNextRow(sr);
 
@@ -103,16 +103,16 @@ while (row2 != NULL)
 
     	while (row != NULL)
             {      
- 	    genomeID= row[0];
+ 	    genomeID	= row[0];
  	    seqID 	= row[1];
- 	    modelID = row[2];
+ 	    modelID 	= row[2];
  	    region	= row[3];
  	    eValue	= row[4];
  	    sfID	= row[5];
  	    sfDesc	= row[6];	/* 0302 and other supfam releases has an error here */
 		
 	    sprintf(cond_str, "id=%s", sfID);
-	    sfDesc  = sqlGetField(connSf, genomeDb, "sfDes", "description", cond_str);
+	    sfDesc  = sqlGetField(connSf, superfamDb, "des", "description", cond_str);
 
 	    E = atof(eValue);
 	    if (E > 0.02) continue;
