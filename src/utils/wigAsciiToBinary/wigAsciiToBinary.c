@@ -1,4 +1,5 @@
 /* wigAsciiToBinary - convert ascii Wiggle data to binary file
+ *	plus, produces file read for load into database
  *
  *	The ascii data file is simply two columns, white space separated:
  *	first column: offset within chromosome, 1 relative closed end
@@ -9,28 +10,29 @@
  *	This first pass will assume the scores are specified for
  *	a single nucleotide base.  If the offset sequence has
  *	missing data in it, the missing data will be set to the "NO_DATA"
- *	indication.
+ *	indication.  (NO_DATA == 128)
  *
- *	Future ideas need to account for very large holes in the
- *	data.  There is no fundamental problem with this because it is
- *	only necessary to specify were data is, it is not necessary to
- *	specify where all the NO_DATA is.  I'm guessing some kind of
- *	threshold of hole size will trigger skipping holes.  There will
- *	need to be a file naming convention to go along with that.
+ *	The binary data file is simply one unsigned char value per byte.
+ *	The suffix for this binary data file is: .wib - wiggle binary
  *
- *	This process is related to the data load problem because the
- *	conversion to binary data needs to relate to the coordinates
- *	that will be loaded into the database.  I believe this process
- *	will become part of the database load function.  Right now it is
- *	just an exercise to see how to use Jim's libraries to read data,
- *	organize it and re-write to a second file.
+ *	The second file produced is a bed-like format file, with chrom,
+ *	chromStart, chromEnd, etc.  See hg/inc/wiggle.h for structure
+ *	definition.  The important thing about this file is that it will
+ *	have the pointers into the binary data file and definitions of
+ *	where the bytes belong.  This file extension is: .wig - wiggle
  *
- *	Besides the binary data file, this will also create a database
- *	bed-like row definition file to be used to load the track.
+ *	Holes in the data are allowed.  A command line argument can
+ *	specify the actual span of a data point == how many nucleotide
+ *	bases the value is representative of.
  *
- *	When we run into a string of missing data that is bigger than
- *	the binsize, that is time to start skipping rows for the missing
- *	data
+ *	There is a concept of a "bin" size which means how many values
+ *	should be maintained in a single table row entry.  This can be
+ *	controlled by command line argument.  Holes in the input data
+ *	will be filled with NO_DATA values up to the size of the current
+ *	"bin".  If the missing data continues past the next "bin" size
+ *	number of data points, that table row will be skipped.  Thus, it
+ *	is only necessary to have table rows which contain valid data.
+ *	The "bin" size is under control with a command line argument.
  */
 #include	"common.h"
 #include	"options.h"
@@ -38,7 +40,7 @@
 
 #define	NO_DATA	128
 
-static char const rcsid[] = "$Id:";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.3 2003/09/16 15:28:29 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -50,17 +52,18 @@ static struct optionSpec optionSpecs[] = {
     {NULL, 0}
 };
 
-static long long add_offset = 0;
-static long long binsize = 1024;
-static long long dataSpan = 1;
-static boolean verbose = FALSE;
-static char * chrom = (char *) NULL;
+static long long add_offset = 0;	/* to allow "lifting" of the data */
+static long long binsize = 1024;	/* # of data points per table row */
+static long long dataSpan = 1;		/* bases spanned per data point */
+static boolean verbose = FALSE;		/* describe what happens	*/
+static char * chrom = (char *) NULL;	/* to specify chrN file name	*/
 
 static void usage()
 {
 errAbort(
     "wigAsciiToBinary - convert ascii Wiggle data to binary file\n"
-    "usage: wigAsciiToBinary [-offset=N] -chrom=chrN [-verbose] <file names>\n"
+    "usage: wigAsciiToBinary [-offset=N] [-binsize=N] [-dataSpan=N] \\\n"
+    "\t[-chrom=chrN] [-verbose] <file names>\n"
     "\t-offset=N - add N to all coordinates, default 0\n"
     "\t-binsize=N - # of points per database row entry, default 1024\n"
     "\t-dataSpan=N - # of bases spanned for each data point, default 1\n"
@@ -68,7 +71,7 @@ errAbort(
     "\t-verbose - display process while underway\n"
     "\t<file names> - list of files to process\n"
     "If the name of the input files are of the form: chrN.<....> this will\n"
-    "\tset the chrom name.  Otherwise use the -chrom option.\n"
+    "\tset the output file names.  Otherwise use the -chrom option.\n"
     "Each ascii file is a two column file.  Whitespace separator\n"
     "First column of data is a chromosome location.\n"
     "Second column is data value for that location, range [0:127]\n"
@@ -85,39 +88,41 @@ errAbort(
     chromStart = Offset + dataSpan; \
     fileOffsetBin = fileOffset;
 
-void wigAsciiToBinary( int argc, char *argv[] ) {
-int i = 0;
-struct lineFile *lf;
-char *line = (char *) NULL;
-int wordCount = 0;
-char *words[2];
-int lineCount = 0;
+void wigAsciiToBinary( int argc, char *argv[] )
+{
+int i = 0;				/* general purpose int counter	*/
+struct lineFile *lf;			/* for line file utilities	*/
+char *line = (char *) NULL;		/* to receive data input line	*/
+char *words[2];				/* to split data input line	*/
+int wordCount = 0;			/* result of split	*/
+int lineCount = 0;			/* counting input lines	*/
 unsigned long long previousOffset = 0;	/* for data missing detection */
 unsigned long long bincount = 0;	/* to count binsize for wig file */
-unsigned long long Offset = 0;
-off_t fileOffset = 0;
-off_t fileOffsetBin = 0;
-int score = 0;
+unsigned long long Offset = 0;		/* from data input	*/
+off_t fileOffset = 0;			/* where are we in the binary data */
+off_t fileOffsetBin = 0;		/* where this bin started in binary */
+int score = 0;				/* from data input	*/
 char *binfile = (char *) NULL;	/*	file name of binary data file	*/
 char *wigfile = (char *) NULL;	/*	file name of wiggle database file */
 FILE *binout;	/*	file handle for binary data file	*/
 FILE *wigout;	/*	file handle for wiggle database file	*/
 unsigned long long rowCount = 0;	/* to count rows output */
 char *chromName = (char *) NULL;	/* pseudo bed-6 data to follow */
-unsigned long long chromStart = 0;
-unsigned long long chromEnd = 0;
+unsigned long long chromStart = 0;	/* for table row data */
+unsigned long long chromEnd = 0;	/* for table row data */
 char strand = '+';			/* may never use - strand ? */
 
+/*	for each input data file	*/
 for( i = 1; i < argc; ++i )
     {
     if( verbose ) printf("translating file: %s\n", argv[i]);
     /*	Name mangling to determine output file name */
-    if( chrom )
+    if( chrom )	/*	when specified, simply use it	*/
 	{
 	binfile = addSuffix(chrom, ".wib");
 	wigfile = addSuffix(chrom, ".wig");
 	chromName = cloneString(chrom);
-	} else {
+	} else {	/*	not specified, construct from input names */
 	if( startsWith("chr",argv[i]) )
 	    {
 	    char *tmpString;
@@ -134,15 +139,17 @@ errAbort("Can not determine output file name, no -chrom specified\n");
     if( verbose ) printf("output files: %s, %s\n", binfile, wigfile);
     rowCount = 0;	/* to count rows output */
     bincount = 0;	/* to count up to binsize	*/
-    fileOffset = 0;
-    fileOffsetBin = 0;
-    binout = mustOpen(binfile,"w");
-    wigout = mustOpen(wigfile,"w");
-    lf = lineFileOpen(argv[i], TRUE);
+    fileOffset = 0;	/* current location within binary data file	*/
+    fileOffsetBin = 0;	/* location in binary data file where this bin starts */
+    binout = mustOpen(binfile,"w");	/*	binary data file	*/
+    wigout = mustOpen(wigfile,"w");	/*	table row definition file */
+    lf = lineFileOpen(argv[i], TRUE);	/*	input file	*/
     while (lineFileNext(lf, &line, NULL))
 	{
 	++lineCount;
 	wordCount = chopByWhite(line, words, 2);
+	if( wordCount != 2 )
+errAbort("Expecting two words at line %d, found %d", lineCount, wordCount);
 	Offset = atoll(words[0]);
 	score = atoi(words[1]);
 	if( Offset < 1 )
@@ -161,30 +168,30 @@ warn("WARNING: truncating score %d to 127 at line %d\n", score, lineCount );
 	    }
 	/* see if this is the first time through, establish chromStart 	*/
 	if( lineCount == 1 )
-	    {
 	    chromStart = Offset;
-	    chromEnd = chromStart;
-	    }
-	/*	See if data is being skipped	*/
+	/*	Check to see if data is being skipped	*/
 	if( Offset > (previousOffset + dataSpan) )
 	    {
 	    unsigned long long off;
-	    int no_data = NO_DATA;
 	    if( verbose )
 printf("missing data offsets: %llu - %llu\n",previousOffset+1,Offset-1);
 	    /*	fill missing data with NO_DATA indication	*/
-	    for( off = previousOffset + dataSpan; off < Offset; ++off )
+	    for( off = previousOffset + dataSpan; off < Offset; off += dataSpan )
 		{
-		fputc(no_data,binout);
+		fputc(NO_DATA,binout);
 		++fileOffset;
 		++bincount;	/*	count scores in this bin */
 		if( bincount >= binsize ) break;
 		}
+		/*	If that finished off this bin, output it */
 		if( bincount >= binsize )
-		{
-		OUTPUT_ROW;
-		}
+		    {
+		    OUTPUT_ROW;
+		    }
 	    }
+	/*	With perhaps the missing data taken care of, back to the
+	 *	real data.
+	 */
 	fputc(score,binout);	/*	output a valid byte	*/
 	++fileOffset;
 	++bincount;	/*	count scores in this bin */
@@ -194,8 +201,8 @@ printf("missing data offsets: %llu - %llu\n",previousOffset+1,Offset-1);
 	    OUTPUT_ROW;
 	    }
 	previousOffset = Offset;
-        }
-    /*	Any data points left in this bin ?	*/
+        }	/*	reading file input loop end	*/
+    /*	Done with input file, any data points left in this bin ?	*/
     if( bincount )
 	{
 	OUTPUT_ROW;
@@ -208,7 +215,10 @@ printf("missing data offsets: %llu - %llu\n",previousOffset+1,Offset-1);
     freeMem(chromName);
     binfile = (char *) NULL;
     wigfile = (char *) NULL;
-    if( verbose ) printf("read %d lines in file %s\n", lineCount, argv[i] );
+    chromName = (char *) NULL;
+    if( verbose )
+printf("fini: %s, read %d lines, table rows: %llu, data bytes: %lld\n",
+	argv[i], lineCount, rowCount, fileOffset );
     }
 return;
 }
