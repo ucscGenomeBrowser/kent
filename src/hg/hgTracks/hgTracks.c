@@ -121,6 +121,7 @@ static char *position = NULL; 		/* Name of position. */
 static char *userSeqString = NULL;	/* User sequence .fa/.psl file. */
 static char *ctFileName = NULL;	/* Custom track file. */
 
+int gfxBorder = 1;		/* Width of graphics border. */
 int insideX;			/* Start of area to draw track in in pixels. */
 int insideWidth;		/* Width of area to draw tracks in in pixels. */
 int leftLabelX;			/* Start of area to draw left labels on. */
@@ -479,6 +480,7 @@ if (orient < 0)
 else
     return '+';
 }
+
 
 enum trackVisibility limitVisibility(struct track *tg, void *items)
 /* Return default visibility limited by number of items. 
@@ -1334,7 +1336,7 @@ if (vis == tvPack)
 
 	y = yOff + lineHeight * sn->row;
 	tg->drawItemAt(tg, item, vg, xOff, y, scale, font, color, vis);
-	if (withLeftLabels)
+	if (withLeftLabels && !tg->drawName)
 	    {
 	    int nameWidth = mgFontStringWidth(font, name);
 	    int dotWidth = tl.nWidth/2;
@@ -1430,7 +1432,6 @@ else
     return(0);
 }
 
-int gfxBorder = 1;
 
 int trackOffsetX()
 /* Return x offset where track display proper begins. */
@@ -3656,7 +3657,7 @@ Color contrastingColor(struct vGfx *vg, int backgroundIx)
 {
 struct rgbColor c = vgColorIxToRgb(vg, backgroundIx);
 int val = (int)c.r + c.g + c.g + c.b;
-if (val > 300)
+if (val > 512)
     return MG_BLACK;
 else
     return MG_WHITE;
@@ -4155,47 +4156,36 @@ else
     }
 }
 
-static void cytoBandDraw(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
+static void cytoBandDrawAt(struct track *tg, void *item,
+	struct vGfx *vg, int xOff, int y, double scale, 
+	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw cytoBand items. */
 {
-int baseWidth = seqEnd - seqStart;
-struct cytoBand *band;
-int y = yOff;
+struct cytoBand *band = item;
 int heightPer = tg->heightPer;
-int lineHeight = tg->lineHeight;
 int x1,x2,w;
 int midLineOff = heightPer/2;
-boolean isFull = (vis == tvFull);
 Color col, textCol;
-int ix = 0;
 char *s;
-double scale = scaleForPixels(width);
-for (band = tg->items; band != NULL; band = band->next)
-    {
-    x1 = round((double)((int)band->chromStart-winStart)*scale) + xOff;
-    x2 = round((double)((int)band->chromEnd-winStart)*scale) + xOff;
-    /* Clip here so that text will tend to be more visible... */
-    if (x1 < xOff)
-	x1 = xOff;
-    if (x2 > xOff + width)
-	x2 = xOff + width;
-    w = x2-x1;
-    if (w < 1)
-	w = 1;
-    col = cytoBandColor(tg, band, vg);
-    textCol = contrastingColor(vg, col);
-    vgBox(vg, x1, y, w, heightPer, col);
-    s = abbreviatedBandName(tg, band, tl.font, w);
-    if (s != NULL)
-	vgTextCentered(vg, x1, y, w, heightPer, textCol, tl.font, s);
-    mapBoxHc(band->chromStart, band->chromEnd, x1,y,w,heightPer, tg->mapName, 
-	band->name, band->name);
-    if (isFull)
-	y += lineHeight;
-    ++ix;
-    }
+
+x1 = round((double)((int)band->chromStart-winStart)*scale) + xOff;
+x2 = round((double)((int)band->chromEnd-winStart)*scale) + xOff;
+/* Clip here so that text will tend to be more visible... */
+if (x1 < xOff)
+    x1 = xOff;
+w = x2-x1;
+if (w < 1)
+    w = 1;
+if (w > insideWidth)
+    w = insideWidth;
+col = cytoBandColor(tg, band, vg);
+textCol = contrastingColor(vg, col);
+vgBox(vg, x1, y, w, heightPer, col);
+s = abbreviatedBandName(tg, band, font, w);
+if (s != NULL)
+    vgTextCentered(vg, x1, y, w, heightPer, textCol, font, s);
+mapBoxHc(band->chromStart, band->chromEnd, x1,y,w,heightPer, tg->mapName, 
+    band->name, band->name);
 }
 
 
@@ -4216,7 +4206,8 @@ void cytoBandMethods(struct track *tg)
 {
 tg->loadItems = loadCytoBands;
 tg->freeItems = freeCytoBands;
-tg->drawItems = cytoBandDraw;
+tg->drawItems = genericDrawItems;
+tg->drawItemAt = cytoBandDrawAt;
 tg->itemColor = cytoBandColor;
 tg->itemName = cytoBandName;
 tg->drawName = TRUE;
@@ -8824,8 +8815,6 @@ int newy;
 
 /* Figure out dimensions and allocate drawing space. */
 pixWidth = tl.picWidth;
-insideX = trackOffsetX();
-insideWidth = pixWidth-gfxBorder-insideX;
 
 /* Figure out height of each visible track. */
 pixHeight = gfxBorder;
@@ -10313,6 +10302,12 @@ if(hideAll)
 	}
     hideAllTracks(trackList);
     }
+
+/* Figure out basic dimensions of display.  Loaders
+ * as well as drawers want to know this, so that
+ * they don't have to load too much detail. */
+insideX = trackOffsetX();
+insideWidth = tl.picWidth-gfxBorder-insideX;
 
 /* Tell tracks to load their items. */
 for (track = trackList; track != NULL; track = track->next)
