@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: scoredRef.c,v 1.3 2003/05/16 04:01:22 kent Exp $";
+static char const rcsid[] = "$Id: scoredRef.c,v 1.4 2003/09/17 17:11:52 kent Exp $";
 
 void scoredRefStaticLoad(char **row, struct scoredRef *ret)
 /* Load a row from scoredRef table into ret.  The contents of ret will
@@ -139,7 +139,7 @@ static char *createString =
 "    chromEnd int unsigned not null,	# End position in chromosome\n"
 "    extFile int unsigned not null,	# Pointer to associated MAF file\n"
 "    offset bigint not null,	# Offset in MAF file\n"
-"    score float not null,	# Score\n"
+"    score double not null,	# Score\n"
 "              #Indices\n"
 "    INDEX(chrom(8),bin),\n"
 "    INDEX(chrom(8),chromStart),\n"
