@@ -39,7 +39,7 @@ $(EXE): pushQ.o $O
 	chmod a+rx $(EXE)
 	cp $(EXE) /usr/local/apache/cgi-bin
 
-backup:
+backup: clean
 	date +%Y-%m-%d-%H-%M | gawk '{printf("zip -r $(EXE)%s.zip *\n",$$1);}' > tempX
 	chmod 755 tempX
 	./tempX
