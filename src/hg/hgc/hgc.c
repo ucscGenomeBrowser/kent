@@ -110,7 +110,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.488 2003/10/02 05:17:32 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.489 2003/10/07 18:25:12 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5658,19 +5658,36 @@ char goAspectChar[10];
 int  iGoAsp;
 char *diseaseDesc;
 boolean hasGO, hasPathway, hasMedical;
+boolean showGeneSymbol;
 
-if (hTableExists("knownGeneLink"))
+showGeneSymbol = FALSE;
+
+if (hTableExists("kgXref"))
     {
     sprintf(cond_str, "kgID='%s'", mrnaName);
     geneSymbol = sqlGetField(conn, database, "kgXref", "geneSymbol", cond_str);
-    if (geneSymbol == NULL) geneSymbol = mrnaName;
+    if (geneSymbol == NULL) 
+	{
+	geneSymbol = mrnaName;
+	}
+    else
+	{
+	showGeneSymbol = TRUE;
+	}
     }
 else
     {
     geneSymbol = mrnaName;
     }
 
-sprintf(cart_name, "Known Gene: %s", geneSymbol);
+if (showGeneSymbol)
+    {
+    sprintf(cart_name, "Known Gene: %s", geneSymbol);
+    }
+else
+    {
+    sprintf(cart_name, "Known Gene");
+    }
 cartWebStart(cart, cart_name);
 
 dnaBased = FALSE;
@@ -5833,7 +5850,7 @@ printf("</UL>");
 if (sqlTableExists(conn, "knownCanonical"))
     {
     printf("<B>UCSC Gene Family Browser:</B> ");
-    printf("<A HREF=\"http:/cgi-bin/hgNear?near_search=%s\"", mrnaName);
+    printf("<A HREF=\"/cgi-bin/hgNear?near_search=%s\"", mrnaName);
     printf("TARGET=_blank>%s</A>&nbsp\n", geneSymbol);fflush(stdout);
     printf("<BR><BR>");
     }
