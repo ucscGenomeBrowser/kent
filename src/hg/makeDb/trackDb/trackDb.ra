@@ -366,7 +366,7 @@ url http://www.ensembl.org/perl/transview?transcript=$$
 
 track acembly
 shortLabel Acembly Genes
-longLabel Acembly Gene Predictions With Alt-Splicing
+longLabel AceView Gene Models With Alt-Splicing
 group genes
 priority 41
 visibility dense
