@@ -71,6 +71,8 @@
 #include "uPennClones.h"
 #include "geneGraph.h"
 #include "altGraphX.h"
+#include "stsMapMouse.h"
+#include "stsInfoMouse.h"
 
 #define ROGIC_CODE 1
 #define FUREY_CODE 1
@@ -3719,6 +3721,132 @@ hFreeConn(&conn);
 hFreeConn(&conn1);
 }
 
+void doStsMapMouse(struct trackDb *tdb, char *marker)
+/* Respond to click on an STS marker. */
+{
+char *table = tdb->tableName;
+char title[256];
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn1 = hAllocConn();
+struct sqlResult *sr = NULL, *sr1 = NULL;
+char **row, **row1;
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+struct stsMapMouse stsRow;
+struct stsInfoMouse *infoRow;
+char stsid[20];
+int i;
+struct psl *pslList = NULL, *psl;
+int pslStart;
+
+/* Print out non-sequence info */
+sprintf(title, "STS Marker %s", marker);
+cartWebStart(title);
+
+/* Find the instance of the object in the bed table */ 
+sprintf(query, "SELECT * FROM %s WHERE name = '%s' 
+                AND chrom = '%s' AND chromStart = %d
+                AND chromEnd = %d",
+	        table, marker, seqName, start, end);  
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL)
+    {
+    stsMapMouseStaticLoad(row, &stsRow);
+    /* Find the instance of the object in the stsInfo table */ 
+    sqlFreeResult(&sr);
+    sprintf(query, "SELECT * FROM stsInfoMouse WHERE MGIMarkerID = '%d'", stsRow.identNo);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+	{
+	infoRow = stsInfoMouseLoad(row);
+	printf("<TABLE>\n");
+	printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
+	printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start);
+	printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
+	printf("</TABLE>\n");
+	htmlHorizontalLine();
+	printf("<TABLE>\n");
+	printf("<TR><TH ALIGN=left>MGI Marker ID:</TH><TD>MGI:%d</TD></TR>\n", infoRow->MGIMarkerID);
+	printf("<TR><TH ALIGN=left>MGI Probe ID:</TH><TD>MGI:%d</TD></TR>\n", infoRow->MGIPrimerID);
+	printf("</TABLE>\n");
+	htmlHorizontalLine();
+	/* Print out primer information */
+	printf("<TABLE>\n");
+	printf("<TR><TH ALIGN=left>Left Primer:</TH><TD>%s</TD></TR>\n",infoRow->primer1);
+	printf("<TR><TH ALIGN=left>Right Primer:</TH><TD>%s</TD></TR>\n",infoRow->primer2);
+	printf("<TR><TH ALIGN=left>Distance:</TH><TD>%s bps</TD></TR>\n",infoRow->distance);
+	printf("</TABLE>\n");
+	htmlHorizontalLine();
+	/* Print out information from genetic maps for this marker */
+	printf("<H3>Genetic Map Position</H3>\n");  
+	printf("<TABLE>\n");
+	printf("<TH>&nbsp</TH><TH ALIGN=left WIDTH=150>Name</TH><TH ALIGN=left WIDTH=150>Chromosome</TH><TH ALIGN=left WIDTH=150>Position</TH></TR>\n");
+	printf("<TH ALIGN=left>&nbsp</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD></TR>\n",
+	       infoRow->stsMarkerName, infoRow->Chr, infoRow->geneticPos);   
+	printf("</TABLE><P>\n");
+
+	/* Print out alignment information - full sequence */
+	webNewSection("Genomic Alignments:");
+	sprintf(stsid,"%d",infoRow->MGIPrimerID);
+	sprintf(query, "SELECT * FROM all_sts_primer WHERE qName = '%s'", stsid);  
+	sr1 = sqlGetResult(conn1, query);
+	i = 0;
+	pslStart = 0;
+	while ((row = sqlNextRow(sr1)) != NULL)
+	    {  
+	    psl = pslLoad(row);
+	    if ((sameString(psl->tName, seqName)) 
+		&& (abs(psl->tStart - start) < 1000))
+		{
+		pslStart = psl->tStart;
+		}
+	    slAddHead(&pslList, psl);
+	    i++;
+	    }
+	slReverse(&pslList);
+	if (i > 0) 
+	    {
+	    printf("<H3>Primers:</H3>\n");
+	    printAlignments(pslList, pslStart, "htcCdnaAli", "all_sts_primer", stsid);
+	    sqlFreeResult(&sr1);
+	    }
+	slFreeList(&pslList);
+	stsInfoMouseFree(&infoRow);
+	}
+	htmlHorizontalLine();
+
+	if (stsRow.score == 1000)
+	    {
+	    printf("<H3>This is the only location found for %s</H3>\n",marker);
+            }
+        else
+	    {
+	    sqlFreeResult(&sr);
+            printf("<H4>Other locations found for %s in the genome:</H4>\n", marker);
+            printf("<TABLE>\n");
+	    sprintf(query, "SELECT * FROM %s WHERE name = '%s' 
+                           AND (chrom != '%s' OR chromStart != %d OR chromEnd != %d)",
+	            table, marker, seqName, start, end); 
+            sr = sqlGetResult(conn,query);
+            while ((row = sqlNextRow(sr)) != NULL)
+		{
+		stsMapMouseStaticLoad(row, &stsRow);
+		printf("<TR><TD>%s:</TD><TD>%d</TD></TR>\n",
+		       stsRow.chrom, (stsRow.chromStart+stsRow.chromEnd)>>1);
+		}
+	    printf("</TABLE>\n");
+	    }
+    }
+webNewSection("Notes:");
+puts(tdb->html);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+hFreeConn(&conn1);
+}
+
 void doFishClones(struct trackDb *tdb, char *clone)
 /* Handle click on the FISH clones track */
 {
@@ -6227,6 +6355,10 @@ else if (sameWord(track, "fishClones"))
 else if (sameWord(track, "stsMarker"))
     {
     doStsMarker(tdb, item);
+    }
+else if (sameWord(track, "stsMapMouse"))
+    {
+    doStsMapMouse(tdb, item);
     }
 else if (sameWord(track, "stsMap"))
     {
