@@ -326,7 +326,7 @@ void pslPairs()
     }
 }
 
-void printBed(FILE *out, struct pslPair *ppList, struct clone *clone)
+void printBed(FILE *out, struct pslPair *ppList, struct clone *clone, char *pslTable)
 {
   struct pslPair *pp, *ppPrev;
   int count = 0, best = 0;
@@ -371,14 +371,14 @@ void printBed(FILE *out, struct pslPair *ppList, struct clone *clone)
       
       if (!NOBIN) 
 	fprintf(out, "%d\t",bin);
-      fprintf(out, "%s\t%d\t%d\t%s\t%d\t%s\tall_fosends\t2\t%d,%d\t%d,%d\t%s,%s\n",
+      fprintf(out, "%s\t%d\t%d\t%s\t%d\t%s\t%s\t2\t%d,%d\t%d,%d\t%s,%s\n",
 	      pp->f->psl->tName,pp->f->psl->tStart,pp->r->psl->tEnd,clone->name,
-	      score, strand, pp->f->psl->tStart, pp->r->psl->tStart, d1, d2, 
+	      score, strand, pslTable, pp->f->psl->tStart, pp->r->psl->tStart, d1, d2, 
 	      pp->f->psl->qName, pp->r->psl->qName);
     }
 }
 
-void printOrphan(FILE *out, struct pslAli *paList, struct clone *clone)
+void printOrphan(FILE *out, struct pslAli *paList, struct clone *clone, char *pslTable)
 {
   struct pslAli *pa;
   int best = 0, count = 0;
@@ -387,55 +387,63 @@ void printOrphan(FILE *out, struct pslAli *paList, struct clone *clone)
     if (pa->score > best)
       best = pa->score;
   for (pa = paList; pa != NULL; pa=pa->next)
-    if ((((pa->score)/best) > NEARTOP) && (pa->id >= 0.98))
+    if ((((pa->score)/best) > NEARTOP) && (pa->id >= 0.96))
       count++;
   for (pa = paList; pa != NULL; pa=pa->next)
-    if ((((pa->score)/best) > NEARTOP) && (pa->id >= 0.98))
+    if ((((pa->score)/best) > NEARTOP) && (pa->id >= 0.96))
       {
       int bin = binFromRange(pa->psl->tStart,pa->psl->tEnd);
       int score = 1000;
       char *strand;
-      int d1;
+      int d1, genStart = 0, genEnd = 0;
 
       if (count != 1)
 	score = 1500/count;
       if (((!strcmp(clone->endName1,pa->psl->qName)) && (pa->psl->strand[0] == '+')) ||
 	  ((!strcmp(clone->endName2,pa->psl->qName)) && (pa->psl->strand[0] == '-')))
+	{
 	strand = "+";
+	genStart = pa->psl->tStart;
+	genEnd = pa->psl->tEnd+(MIN/2);
+	}
       else 
+	{
 	strand = "-";
+	genStart = pa->psl->tStart-(MIN/2);
+	genEnd = pa->psl->tEnd;
+	}
       d1 = pa->psl->tEnd - pa->psl->tStart + 1;
 
       if (!NOBIN) 
 	fprintf(out, "%d\t",bin);
-      fprintf(out, "%s\t%d\t%d\t%s\t%d\t%s\tall_fosends\t1\t%d\t%d\t%s\n",
-	      pa->psl->tName,pa->psl->tStart,pa->psl->tEnd,clone->name,
-	      score, strand, pa->psl->tStart, d1, pa->psl->qName);        
+      fprintf(out, "%s\t%d\t%d\t%s\t%d\t%s\t%s\t1\t%d\t%d\t%s\n",
+	      pa->psl->tName,genStart,genEnd,clone->name,
+	      score, strand, pslTable, pa->psl->tStart, d1, pa->psl->qName);        
       }
 }
 
-void printOut()
+void printOut(char *pslTable)
 {
   struct clone *clone = NULL;
 
   for (clone = cloneList; clone != NULL; clone = clone->next)
     {
       if (clone->pairs)
-	printBed(of, clone->pairs, clone);
+	printBed(of, clone->pairs, clone, pslTable);
       else if (clone->pairsRandom)
-	printBed(of, clone->pairsRandom, clone);
+	printBed(of, clone->pairsRandom, clone, pslTable);
       else if ((clone->pairsSlop) && (SLOP))
-	printBed(sf, clone->pairsSlop, clone);
+	printBed(sf, clone->pairsSlop, clone, pslTable);
       else if ((clone->pairsMM) && (MISMATCH))
-	printBed(mf, clone->pairsMM, clone);
+	printBed(mf, clone->pairsMM, clone, pslTable);
       else if ((clone->pairsExtremeS) && (SHORT))
-	printBed(esf, clone->pairsExtremeS, clone);
+	printBed(esf, clone->pairsExtremeS, clone, pslTable);
       else if ((clone->pairsExtremeL) && (LONG))
-	printBed(elf, clone->pairsExtremeL, clone);
+	printBed(elf, clone->pairsExtremeL, clone, pslTable);
       else if ((clone->orphan) && (ORPHAN))
 	{
-	printOrphan(orf, clone->end1, clone);
-	printOrphan(orf, clone->end2, clone);
+	printOrphan(orf, clone->end1, clone, pslTable);
+	printOrphan(orf, clone->end2, clone, pslTable);
 	}
     }
 }
@@ -443,12 +451,12 @@ void printOut()
 int main(int argc, char *argv[])
 {
   struct lineFile *pf, *prf;
-  char filename[64], *db;
-  
+  char filename[64], *db, *pslTable;
+
   optionInit(&argc, argv, optionSpecs);
-  if (argc < 2)
+  if (argc < 3)
     {
-      fprintf(stderr, "USAGE: pslPairs <psl file> <pair file> <out file prefix>\n  Options:\n\t-max=N\t\tmaximum length of clone sequence (default=50000)\n\t-min=N\t\tminimum length of clone sequence (default=30000)\n\t-slopval=N\tdeviation from max/min clone lengths allowed for slop report (default=5000)\n\t-nearTop=N\tmaximium deviation from best match allowed (default=0.001)\n\t-tInsert=N\tmaximum insert bases allowed in sequence alignment (default=500)\n\t-hardMax=N\tabsolute maximum clone length for long report (default=75000)\n\t-verbose\tdisplay all informational messages\n\t-slop\t\tcreate file of pairs that fall within slop length\n\t-short\t\tcreate file of pairs shorter than min size\n\t-long\t\tcreate file of pairs longer than max size, but less than hardMax size\n\t-mismatch\tcreate file of pairs with bad orientation of ends\n\t-orphan\t\tcreate file of unmatched end sequences\n");
+      fprintf(stderr, "USAGE: pslPairs <psl file> <pair file> <psl table name> <out file prefix>\n  Options:\n\t-max=N\t\tmaximum length of clone sequence (default=50000)\n\t-min=N\t\tminimum length of clone sequence (default=30000)\n\t-slopval=N\tdeviation from max/min clone lengths allowed for slop report (default=5000)\n\t-nearTop=N\tmaximium deviation from best match allowed (default=0.001)\n\t-tInsert=N\tmaximum insert bases allowed in sequence alignment (default=500)\n\t-hardMax=N\tabsolute maximum clone length for long report (default=75000)\n\t-verbose\tdisplay all informational messages\n\t-noBin\tdo not include bin column in output file\n\t-noRandom\tdo not include placements on random portions\n\t-slop\t\tcreate file of pairs that fall within slop length\n\t-short\t\tcreate file of pairs shorter than min size\n\t-long\t\tcreate file of pairs longer than max size, but less than hardMax size\n\t-mismatch\tcreate file of pairs with bad orientation of ends\n\t-orphan\t\tcreate file of unmatched end sequences\n");
       return 1;
     }
   VERBOSE = optionExists("verbose");
@@ -472,32 +480,33 @@ int main(int argc, char *argv[])
 
   pf = pslFileOpen(argv[1]);
   prf = lineFileOpen(argv[2],TRUE);
-  
-  sprintf(filename, "%s.pairs", argv[3]);
+  pslTable = cloneString(argv[3]);
+
+  sprintf(filename, "%s.pairs", argv[4]);
   of = mustOpen(filename, "w");
   if (SLOP)
     {
-      sprintf(filename, "%s.slop", argv[3]);
+      sprintf(filename, "%s.slop", argv[4]);
       sf = mustOpen(filename, "w");
     }
   if (ORPHAN)
     {
-      sprintf(filename, "%s.orphan", argv[3]);
+      sprintf(filename, "%s.orphan", argv[4]);
       orf = mustOpen(filename, "w");
     }
   if (MISMATCH)
     {
-      sprintf(filename, "%s.mismatch", argv[3]);
+      sprintf(filename, "%s.mismatch", argv[4]);
       mf = mustOpen(filename, "w");
     }
   if (SHORT)
     {
-      sprintf(filename, "%s.short", argv[3]);
+      sprintf(filename, "%s.short", argv[4]);
       esf = mustOpen(filename, "w");
     }
   if (LONG)
     {
-      sprintf(filename, "%s.long", argv[3]);
+      sprintf(filename, "%s.long", argv[4]);
       elf = mustOpen(filename, "w");
     }
       
@@ -514,7 +523,7 @@ int main(int argc, char *argv[])
   pslPairs();
   if (VERBOSE) 
     printf("Writing to files\n");
-  printOut();
+  printOut(pslTable);
   
   lineFileClose(&pf);
   lineFileClose(&prf);
