@@ -74,12 +74,15 @@ if (!isdigit(nums[0]))
 return atoi(nums);
 }
 
-static struct browserTable *btFromLine(char *line, int lineIx)
+static struct customTrack *trackFromLine(char *line, int lineIx)
 /* Convert a track specification line to a custom table. */
 {
+struct customTrack *track;
 struct browserTable *bt = btDefault();
 struct hash *hash = hashVarLine(line, lineIx);
 char *val;
+AllocVar(track);
+track->bt = bt;
 if ((val = hashFindVal(hash, "name")) != NULL)
     {
     char buf[256];
@@ -105,19 +108,21 @@ if ((val = hashFindVal(hash, "priority")) != NULL)
 if ((val = hashFindVal(hash, "color")) != NULL)
     {
     parseRgb(val, lineIx, &bt->colorR, &bt->colorG, &bt->colorB);
-    /* If they don't explicitly set the alt color make it a lighter version
-     * of color. */
-    if (!hashFindVal(hash, "altColor"))
-        {
-	bt->altColorR = (bt->colorR + 255)/2;
-	bt->altColorG = (bt->colorG + 255)/2;
-	bt->altColorB = (bt->colorB + 255)/2;
-	}
     }
 if ((val = hashFindVal(hash, "altColor")) != NULL)
     parseRgb(val, lineIx, &bt->altColorR, &bt->altColorG, &bt->altColorB);
+else
+    {
+    /* If they don't explicitly set the alt color make it a lighter version
+     * of color. */
+    bt->altColorR = (bt->colorR + 255)/2;
+    bt->altColorG = (bt->colorG + 255)/2;
+    bt->altColorB = (bt->colorB + 255)/2;
+    }
+if ((val = hashFindVal(hash, "offset")) != NULL)
+    track->offset = atoi(val);
 freeHashAndVals(&hash);
-return bt;
+return track;
 }
 
 static void customDefaultRows(char *row[13])
@@ -176,14 +181,16 @@ if (wordCount > 5)
 	  errAbort("line %d of custrom input: Expecting + or - in strand", lineIx);
      }
 if (wordCount > 6)
-     bed->reserved1 = needNum(row[6], lineIx);
+     bed->thickStart = needNum(row[6], lineIx);
+else
+     bed->thickStart = bed->chromStart;
 if (wordCount > 7)
-     {
-     bed->reserved2 = needNum(row[7], lineIx);
-     }
+     bed->thickEnd = needNum(row[7], lineIx);
+else
+     bed->thickEnd = bed->chromEnd;
 if (wordCount > 8)
     {
-    bed->reserved3 = needNum(row[8], lineIx);
+    bed->reserved = needNum(row[8], lineIx);
     }
 if (wordCount > 9)
     bed->blockCount = needNum(row[9], lineIx);
@@ -260,10 +267,7 @@ static int specialSize = sizeof(special)-1;
 /* Deal with line that defines new track. */
 if (startsWith(special, line) && (line[specialSize] == 0 || isspace(line[specialSize])))
     {
-    struct customTrack *track;
-    AllocVar(track);
-    track->bt = btFromLine(line+specialSize, lineIx);
-    *retTrack = track;
+    *retTrack = trackFromLine(line+specialSize, lineIx);
     return TRUE;
     }
 else
@@ -403,6 +407,8 @@ for (group = gff->groupList; group != NULL; group = group->next)
 	bed->name = cloneString(gp->name);
 	bed->score = 1000;
 	bed->strand[0] = gp->strand[0];
+	bed->thickStart = gp->cdsStart;
+	bed->thickEnd = gp->cdsEnd;
 	bed->blockCount = blockCount = gp->exonCount;
 	AllocArray(bed->blockSizes, blockCount);
 	AllocArray(bed->chromStarts, blockCount);
@@ -530,6 +536,14 @@ for (track = trackList; track != NULL; track = track->next)
 	 gffFileFree(&track->gffHelper);
          track->fieldCount = 12;
 	 }
+     if (track->offset != 0)
+	 {
+	 for (bed = track->bedList; track != NULL; track = track->next)
+	     {
+	     bed->chromStart += track->offset;
+	     bed->chromEnd += track->offset;
+	     }
+	 }
      }
 return trackList;
 }
@@ -626,11 +640,11 @@ if (fieldCount > 4)
 if (fieldCount > 5)
     fprintf(f, "\t%s", bed->strand);
 if (fieldCount > 6)
-    fprintf(f, "\t%d", bed->reserved1);
+    fprintf(f, "\t%d", bed->thickStart);
 if (fieldCount > 7)
-    fprintf(f, "\t%d", bed->reserved2);
+    fprintf(f, "\t%d", bed->thickEnd);
 if (fieldCount > 8)
-    fprintf(f, "\t%d", bed->reserved3);
+    fprintf(f, "\t%d", bed->reserved);
 if (fieldCount > 9)
     {
     count = bed->blockCount;
