@@ -9,7 +9,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtBest.c,v 1.12 2003/08/20 18:24:26 baertsch Exp $";
+static char const rcsid[] = "$Id: axtBest.c,v 1.13 2003/08/20 18:39:13 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -37,6 +37,7 @@ struct optionSpec options[] = {
    {"minScore", OPTION_INT},
    {"minOutSize", OPTION_INT},
    {"matrix", OPTION_STRING},
+   {NULL,0}
 };
 
 /* Variable that can be set from command line. */
