@@ -11,8 +11,8 @@ struct netGap
     struct netGap *next;  /* Next in singly linked list. */
     char *chrom;	/* gap on Chrom */
     unsigned level;	/* Level of alignment */
-    unsigned start;	/* Start of gap */
-    unsigned end;	/* End of gap */
+    unsigned chromStart;	/* Start of gap */
+    unsigned chromEnd;	/* End of gap */
     };
 
 void netGapStaticLoad(char **row, struct netGap *ret);
