@@ -87,7 +87,12 @@ int sqlUpdateRows(struct sqlConnection *conn, char *query, int* matched);
 boolean sqlExists(struct sqlConnection *conn, char *query);
 /* Query database and return TRUE if it had a non-empty result. */
 
+/* Return TRUE if row where field = key is in table. */
+
+boolean sqlRowExists(struct sqlConnection *conn,
+	char *table, char *field, char *key);
 /* Options to sqlLoadTabFile */
+
 #define SQL_TAB_FILE_ON_SERVER 0x01  /* tab file is directly accessable
                                      * by the sql server */
 #define SQL_TAB_FILE_WARN_ON_WARN  0x02 /* warn on warnings being returned

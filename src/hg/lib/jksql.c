@@ -12,7 +12,7 @@
 #include "jksql.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.40 2003/10/11 09:27:13 kent Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.41 2003/10/15 08:40:12 kent Exp $";
 
 boolean sqlTrace = FALSE;  /* setting to true prints each query */
 int sqlTraceIndent = 0;    /* number of spaces to indent traces */
@@ -498,19 +498,30 @@ struct sqlResult *sr;
 if ((sr = sqlGetResult(conn,query)) == NULL)
     return FALSE;
 else
+    {
+    if(sqlNextRow(sr) == NULL)
 	{
-	if(sqlNextRow(sr) == NULL)
-		{
-		sqlFreeResult(&sr);
-		return FALSE;
-		}
-	else
-		{
-		sqlFreeResult(&sr);
-		return TRUE;
-		}
+	sqlFreeResult(&sr);
+	return FALSE;
 	}
+    else
+	{
+	sqlFreeResult(&sr);
+	return TRUE;
+	}
+    }
 }
+
+boolean sqlRowExists(struct sqlConnection *conn,
+	char *table, char *field, char *key)
+/* Return TRUE if row where field = key is in table. */
+{
+char query[256];
+safef(query, sizeof(query), "select count(*) from %s where %s = '%s'",
+	table, field, key);
+return sqlQuickNum(conn, query) > 0;
+}
+
 
 struct sqlResult *sqlStoreResult(struct sqlConnection *sc, char *query)
 /* Returns NULL if result was empty.  Otherwise returns a structure
