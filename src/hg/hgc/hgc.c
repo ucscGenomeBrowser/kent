@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.705 2004/07/26 23:30:04 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.706 2004/07/28 14:53:13 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4763,12 +4763,19 @@ if (addp == 1)
     {
     char *ptr;
     sprintf(buffer, "%s",readName);
-    if ((ptr = strchr(buffer, '.')) != NULL)
+    if (sameString("blastDm1FB",table))
 	{
-	*ptr = 0;
 	psl->qName = cloneString(buffer);
+	ptr = &buffer[strlen(buffer)];
 	*ptr++ = 'p';
 	*ptr = 0;
+	}
+    else if ((ptr = strchr(buffer, '.')) != NULL)
+	{
+	*ptr = 0;
+	*ptr++ = 'p';
+	*ptr = 0;
+	psl->qName = cloneString(buffer);
 	}
     seq = hPepSeq(buffer);
     }
@@ -14388,7 +14395,7 @@ else if (sameWord(track, "firstEF"))
     firstEF(tdb, item);
     }
 else if ( sameWord(track, "blastHg16KG") ||  sameWord(track, "blatHg16KG" ) ||
-        sameWord(track, "tblastnHg16KGPep") )
+        sameWord(track, "tblastnHg16KGPep") || sameWord(track, "blastDm1FB") )
     {
     blastProtein(tdb, item);
     }
