@@ -13,7 +13,7 @@
  * indicated full reciept of it, or the node has been marked as dead.
  */
 
-#define bdBlockSize (1024)	        /* The block size of file data to send. */
+#define bdBlockSize (1444)	        /* The block size of file data to send. */
 #define bdSectionBlocks (bdBlockSize/4)	/* The number of blocks in a section. */
 #define bdSectionBytes (bdBlockSize * bdSectionSize) /* Number of bytes in a section */
 
