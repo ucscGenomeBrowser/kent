@@ -4,7 +4,7 @@
 #include "memgfx.h"
 #include "gifLabel.h"
 
-static char const rcsid[] = "$Id: gifLabel.c,v 1.2 2005/02/22 22:40:10 hiram Exp $";
+static char const rcsid[] = "$Id: gifLabel.c,v 1.3 2005/02/22 23:07:54 hiram Exp $";
 
 int gifLabelMaxWidth(char **labels, int labelCount)
 /* Return maximum pixel width of labels.  It's ok to have
@@ -33,7 +33,7 @@ struct memGfx *mg = NULL;
 Color c1,c2;
 MgFont *font = mgMediumFont();
 int lineHeight = mgFontLineHeight(font)-1;
-int height = lineHeight * labelCount, w, i;
+int height = lineHeight * labelCount, i;
 int y = 0;
 
 /* Allocate picture and set up colors. */
