@@ -20,12 +20,19 @@ struct mgcStatusType
  * IMPORTANT: changes here must be reflected in the parser in mgcImport.c
  * and in browser hgc.c mgcStatusDesc table.
  */
+/** has not been picked status */
 extern struct mgcStatusType MGC_UNPICKED;
+
+/*** these are in-progress status ***/
 extern struct mgcStatusType MGC_PICKED;
 extern struct mgcStatusType MGC_NOT_BACK;
 extern struct mgcStatusType MGC_NO_DECISION;
+
+/*** these are full-length status ***/
 extern struct mgcStatusType MGC_FULL_LENGTH;
 extern struct mgcStatusType MGC_FULL_LENGTH_SHORT;
+
+/*** these are error status ***/
 extern struct mgcStatusType MGC_INCOMPLETE;
 extern struct mgcStatusType MGC_CHIMERIC;
 extern struct mgcStatusType MGC_FRAME_SHIFTED;

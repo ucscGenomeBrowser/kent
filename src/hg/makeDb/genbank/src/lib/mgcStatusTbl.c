@@ -3,7 +3,7 @@
 #include "localmem.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.2 2003/06/17 03:10:57 markd Exp $";
+static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.3 2003/06/17 07:03:03 markd Exp $";
 
 /* 
  * Clone detailed status values.
@@ -18,18 +18,25 @@ static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.2 2003/06/17 03:10:57 markd
  * completely rebuilt by the load process and the browser access this
  * symbolicly.
  */
+/** has not been picked status */
 struct mgcStatusType MGC_UNPICKED = {
     "unpicked", 1, "not picked", FALSE};
+
+/*** these are in-progress status ***/
 struct mgcStatusType MGC_PICKED = {
     "picked", 2, "picked", FALSE};
 struct mgcStatusType MGC_NOT_BACK = {
     "notBack", 3, "not back", FALSE};
 struct mgcStatusType MGC_NO_DECISION = {
     "noDecision", 4, "no decision yet", FALSE};
+
+/*** these are full-length status ***/
 struct mgcStatusType MGC_FULL_LENGTH = {
     "fullLength", 5, "full length", FALSE};
 struct mgcStatusType MGC_FULL_LENGTH_SHORT = {
     "cantSequence", 6, "full length (short isoform)", TRUE};
+
+/*** these are error status ***/
 struct mgcStatusType MGC_INCOMPLETE = {
     "incomplete", 7, "incomplete", TRUE};
 struct mgcStatusType MGC_CHIMERIC = {
@@ -88,6 +95,7 @@ char *mgcStatusCreateSql =
 "       'notBack',"
 "       'noDecision',"
 "       'fullLength',"
+"       'fullLengthShort',"
 "       'incomplete',"
 "       'chimeric',"
 "       'frameShift',"
@@ -100,8 +108,7 @@ char *mgcStatusCreateSql =
 "       'microDel',"
 "       'artifact',"
 "       'noPolyATail',"
-"       'cantSequence',"
-"       'fullLengthShort'"
+"       'cantSequence'"
 "   ) NOT NULL,"
 "   acc CHAR(12) NOT NULL,"       /* genbank accession */
 "   organism CHAR(2) NOT NULL,"   /* two letter MGC organism */

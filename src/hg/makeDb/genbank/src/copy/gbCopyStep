@@ -75,7 +75,7 @@ sub rsyncBuildFiles($$$) {
     makeDir("data");
 
     # get ignore.idx
-    my $cmd = $baseCmd . " $buildServer:$buildRoot/data/ignore.idx data";
+    my $cmd = $baseCmd . " $buildServer:$buildRoot/etc/ignore.idx etc";
     runProg($cmd);
 
     # get processed

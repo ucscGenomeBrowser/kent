@@ -14,7 +14,7 @@
 #include "gbFileOps.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.2 2003/06/17 03:10:57 markd Exp $";
+static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.3 2003/06/17 07:03:03 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -228,9 +228,10 @@ safef(sql, sizeof(sql),
       "INSERT INTO %s"
       "  SELECT all_mrna.* FROM all_mrna, %s"
       "    WHERE (all_mrna.qName = %s.acc)"
-      "      AND (%s.status > %d)",
-      MGC_FULL_MRNA_TMP, statusTbl, statusTbl, statusTbl,
-      MGC_FULL_LENGTH_SHORT.dbIndex);
+      "      AND ((%s.status = %d) || (%s.status = %d))",
+      MGC_FULL_MRNA_TMP, statusTbl, statusTbl,
+      statusTbl, MGC_FULL_LENGTH.dbIndex,
+      statusTbl, MGC_FULL_LENGTH_SHORT.dbIndex);
 sqlUpdate(conn, sql);
 gbVerbLeave(2, "loading %s", MGC_FULL_MRNA_TMP);
 }
@@ -242,10 +243,15 @@ struct genePred *genePred;
 unsigned cdsStart, cdsEnd;
 struct psl *psl;
 
-/* this sets cds start/end to -1 on error, which results in not CDS */
+/* this sets cds start/end to -1 on error, which results in no CDS */
 genbankParseCds(row[0], &cdsStart, &cdsEnd);
 
 psl = pslLoad(row+1);
+
+if (sameString(row[0], "n/a"))
+    fprintf(stderr, "Warning: no cds annotation for MGC mRNA %s\n",
+            psl->qName);
+
 genePred = genePredFromPsl(psl, cdsStart, cdsEnd, SMALL_INSERT_SIZE);
 pslFree(&psl);
 return genePred;
@@ -271,9 +277,11 @@ freez(&sql);
 safef(tabFile, sizeof(tabFile), "%s/%s", workDir, MGC_GENES_TMP);
 tabFh = mustOpen(tabFile, "w");
 
+/* go ahead and get gene even if no CDS annotation (query returns string
+ * of "n/a" */
 safef(query, sizeof(query),
       "SELECT cds.name,matches,misMatches,repMatches,nCount,qNumInsert,qBaseInsert,tNumInsert,tBaseInsert,strand,qName,qSize,qStart,qEnd,tName,tSize,tStart,tEnd,blockCount,blockSizes,qStarts,tStarts "
-      "FROM cds,%s,mrna WHERE (%s.qName = mrna.acc) AND (mrna.cds !=0) AND (mrna.cds = cds.id)",
+      "FROM cds,%s,mrna WHERE (%s.qName = mrna.acc) AND (mrna.cds = cds.id)",
       MGC_FULL_MRNA_TMP, MGC_FULL_MRNA_TMP);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -299,7 +307,8 @@ gbVerbEnter(2, "loading %s", MGC_INCOMPLETE_MRNA_TMP);
 remakePslTable(conn, MGC_INCOMPLETE_MRNA_TMP, "all_mrna");
 
 /* insert a join by accession of the all_mrna table and mgcStatus rows not
- * having full-length or inprogress status values */
+ * having full-length or in-progress status values.  Wanring: This relies on
+ * order of enum */
 safef(sql, sizeof(sql),
       "INSERT INTO %s"
       "  SELECT all_mrna.* FROM all_mrna, mgcStatus_tmp"
