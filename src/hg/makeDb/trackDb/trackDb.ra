@@ -1265,7 +1265,7 @@ searchTable mrna
 searchMethod prefix
 searchType mrnaAcc
 shortCircuit 1
-termRegex ([^nx]|..[^_])
+termRegex [a-z][a-z0-9][0-9]+
 searchPriority 10
 
 searchTable encodeRegions
