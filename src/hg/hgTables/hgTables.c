@@ -13,7 +13,7 @@
 #include "grp.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.3 2004/07/13 08:24:11 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.4 2004/07/13 09:14:39 kent Exp $";
 
 
 void usage()
@@ -241,7 +241,7 @@ return track;
 void jsDropDownCarryOver(struct dyString *dy, char *var)
 /* Add statement to carry-over drop-down item to dy. */
 {
-dyStringPrintf(dy, "document.orgForm.%s.value=", var);
+dyStringPrintf(dy, "document.hiddenForm.%s.value=", var);
 dyStringPrintf(dy, "document.mainForm.%s.options", var);
 dyStringPrintf(dy, "[document.mainForm.%s.selectedIndex].value;", var);
 }
@@ -250,27 +250,31 @@ void jsTextCarryOver(struct dyString *dy, char *var)
 /* Add statement to carry-over text item to dy. */
 {
 dyStringPrintf(dy, 
-    " document.orgForm.%s.value=document.mainForm.%s.value;",
+    " document.hiddenForm.%s.value=document.mainForm.%s.value;",
     var, var);
 }
 
 struct dyString *onChangeStart()
-/* Start up a javascript onchange command */
+/* Start up a javascript onChange command */
 {
 struct dyString *dy = dyStringNew(1024);
-dyStringAppend(dy, "onchange=\"");
+dyStringAppend(dy, "onChange=\"");
 jsDropDownCarryOver(dy, hgtaTrack);
 jsDropDownCarryOver(dy, hgtaGroup);
 dyStringAppend(dy, 
-	" document.orgForm.hgta_regionType.value=regionType;");
+	" document.hiddenForm.hgta_regionType.value=regionType;");
 jsTextCarryOver(dy, hgtaRange);
+jsTextCarryOver(dy, hgtaOffsetStart);
+jsTextCarryOver(dy, hgtaOffsetEnd);
+jsDropDownCarryOver(dy, hgtaOffsetRelativeTo);
+jsDropDownCarryOver(dy, hgtaOutputType);
 return dy;
 }
 
 char *onChangeEnd(struct dyString **pDy)
-/* Finish up javascript onchange command. */
+/* Finish up javascript onChange command. */
 {
-dyStringAppend(*pDy, " document.orgForm.submit();\"");
+dyStringAppend(*pDy, " document.hiddenForm.submit();\"");
 return dyStringCannibalize(pDy);
 }
 
@@ -279,7 +283,7 @@ char *onChangeOrg()
 {
 struct dyString *dy = onChangeStart();
 jsDropDownCarryOver(dy, "org");
-dyStringAppend(dy, " document.orgForm.db.value=0;");
+dyStringAppend(dy, " document.hiddenForm.db.value=0;");
 return onChangeEnd(&dy);
 }
 
@@ -405,15 +409,49 @@ hPrintf("<TABLE BORDER=0>\n");
     hPrintf("</TD></TR>\n");
     }
 
-hPrintf("<TR><TD><B>offset:</B>\n");
-hPrintf("</TD></TR>\n");
-hPrintf("<TR><TD><B>output:</B>\n");
-hPrintf("</TD></TR>\n");
-hPrintf("<TR><TD>\n");
-cgiMakeButton(hgtaDoTopSubmit, "Submit");
-hPrintf(" ");
-cgiMakeButton(hgtaDoIntersect, "Intersect");
-hPrintf("</TD></TR>\n");
+/* Offset line. */
+    {
+    char *start = cartUsualString(cart, hgtaOffsetStart, "");
+    char *end = cartUsualString(cart, hgtaOffsetEnd, "");
+    char *rel = cartUsualString(cart, hgtaOffsetRelativeTo, "both");
+    static char *relMenu[3] = {"both", "start", "end"};
+    hPrintf("<TR><TD><B>offset:</B>\n");
+    hPrintf(" start: ");
+    cgiMakeTextVar(hgtaOffsetStart, start, 6);
+    hPrintf("\n");
+    hPrintf(" end: ");
+    cgiMakeTextVar(hgtaOffsetEnd, end, 6);
+    hPrintf("\n");
+    hPrintf(" relative to: ");
+    cgiMakeDropListFull(hgtaOffsetRelativeTo, relMenu, relMenu,
+    	ArraySize(relMenu), rel, NULL);
+    hPrintf("</TD></TR>\n");
+    }
+
+/* Output line. */
+    {
+    char *outputType = cartUsualString(cart, hgtaOutputType, outPrimaryTable);
+    static char *symbols[] = 
+        {outPrimaryTable, outSequence, outSelectedFields, outSchema,
+	 outStats, outBed, outGff, outCustomTrack };
+    static char *labels[] =
+        {"primary table", "sequence", "selected fields", "schema",
+	 "statistics", "BED", "GFF", "custom track"};
+    hPrintf("<TR><TD><B>output:</B>\n");
+    cgiMakeDropListFull(hgtaOutputType, labels, symbols, 
+    	ArraySize(symbols), outputType, NULL);
+    hPrintf("</TD></TR>\n");
+    }
+
+/* Submit buttons. */
+    {
+    hPrintf("<TR><TD>\n");
+    cgiMakeButton(hgtaDoTopSubmit, "Submit");
+    hPrintf(" ");
+    cgiMakeButton(hgtaDoIntersect, "Intersect");
+    hPrintf("</TD></TR>\n");
+    }
+
 hPrintf("</TABLE>\n");
 }
 
@@ -434,15 +472,19 @@ showMainControlTable(conn);
 hPrintf("</FORM>\n");
 
 /* Hidden form - for benefit of javascript. */
-hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=\"GET\" NAME=\"orgForm\">\n");
-hPrintf("<input type=\"hidden\" name=\"%s\" value=\"\">\n", "org");
-hPrintf("<input type=\"hidden\" name=\"%s\" value=\"\">\n", "db");
-hPrintf("<input type=\"hidden\" name=\"%s\" value=\"\">\n", hgtaGroup);
-hPrintf("<input type=\"hidden\" name=\"%s\" value=\"\">\n", hgtaTrack);
-hPrintf("<input type=\"hidden\" name=\"%s\" value=\"\">\n", hgtaRegionType);
-hPrintf("<input type=\"hidden\" name=\"%s\" value=\"\">\n", hgtaRange);
-cartSaveSession(cart);
-puts("</FORM>");
+    {
+    static char *saveVars[] = {
+      "org", "db", hgtaGroup, hgtaTrack, hgtaRegionType,
+      hgtaRange, hgtaOffsetStart, hgtaOffsetEnd, hgtaOffsetRelativeTo,
+      hgtaOutputType, };
+    int i;
+
+    hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=\"GET\" NAME=\"hiddenForm\">\n");
+    cartSaveSession(cart);
+    for (i=0; i<ArraySize(saveVars); ++i)
+	hPrintf("<input type=\"hidden\" name=\"%s\" value=\"\">\n", saveVars[i]);
+    puts("</FORM>");
+    }
 
 webNewSection("<A NAME=\"Help\"></A>Using the Table Browser\n");
 hPrintf("%s",
@@ -464,7 +506,9 @@ hPrintf("%s",
 "   \n"
 "   <LI><B>region: </B>With this one can restrict the query to a\n"
 "   particular chromosome or region. Select genome to apply the query\n"
-"   to the entire genome.</LI>\n"
+"   to the entire genome.  Alternatively select range and type in either \n"
+"   the chromosome name (such as chrX) or something like chrX:100000-200000 \n"
+"   in the text box.</LI>\n"
 "   \n"
 "   <LI><B>select identifiers: </B>You can restrict your attention to\n"
 "   a items in the track that match a list of identifiers (for\n"
@@ -563,13 +607,33 @@ uglyf("Theoretically making filter.");
 htmlClose();
 }
 
+void doOutPrimaryTable(struct sqlConnection *conn)
+/* Dump out primary table. */
+{
+textOpen();
+uglyf("The primary table will be dumped in a text mode.");
+}
+
+void doOutSchema(struct sqlConnection *conn)
+/* Dump schema. */
+{
+char *track = cartString(cart, hgtaTrack);
+htmlOpen("Local Schema for %s", track);
+uglyf("Not much here yet");
+htmlClose();
+}
+
 void doTopSubmit(struct sqlConnection *conn)
 /* Respond to submit button on top level page.
  * This basically just dispatches based on output type. */
 {
-htmlOpen("Table Browser Top Submit");
-uglyf("Processing submit button... too stupid to do anything real...");
-htmlClose();
+char *output = cartString(cart, hgtaOutputType);
+if (sameString(output, outPrimaryTable))
+    doOutPrimaryTable(conn);
+else if (sameString(output, outSchema))
+    doOutSchema(conn);
+else
+    errAbort("Don't know how to handle %s output yet", output);
 }
 
 void doIntersect(struct sqlConnection *conn)
