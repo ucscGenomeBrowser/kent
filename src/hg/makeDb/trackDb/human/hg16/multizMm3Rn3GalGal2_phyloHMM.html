@@ -21,6 +21,14 @@ alignment for all sequence in the window.
 
 <H2>Methods</H2>
 
+<P> Best-in-genome blastz pairwise alignments of human-mouse and
+human-rat were multiply aligned using a program called humor
+(HUman-MOuse-Rat), which is a special variant of the <em>Multiz</em>
+program.  Multiz was used to align the humor results with
+best-in-genome blastz human-chicken alignments.  The resulting
+human-mouse-rat-chicken multiple alignments were then assigned 
+conservation scores by phylo-HMM.</P>
+
     <P>A phylo-HMM is a generative probabilistic model that describes both
     the process of DNA substitution along the branches of a phylogeny at
     each site in an alignment, and changes in the mode of this process from
@@ -75,15 +83,22 @@ alignment for all sequence in the window.
     alignment.  We are looking at several possible ways of improving the
     handling of alignment gaps.</P>
 
+
+
 <H2>Credits</H2>
 <P>
-This track was at UCSC, using the blastz and multiz programs from 
-Scott Schartz and Webb Miller at PSU,
+This track was created at UCSC, using the blastz and multiz programs from 
+Scott Schartz and Webb Miller of the 
+<A HREF="http://bio.cse.psu.edu/" TARGET=_blank>
+ Penn State Bioinformatics Group</A>; 
+the axtBest, axtChain, chainNet, netSyntenic, and netClass programs 
+developed by Jim Kent at UCSC; 
 and the phylo-HMM package from Adam Siepel at UCSC.
 </P>
 
 <H2>References</H2>
 
+<H3>Phylo-HMM</H3>
 <P> J. Felsenstein and G. A. Churchill.  A hidden Markov model approach to
       variation among sites in rate of evolution.
       <em>Mol. Biol. Evol.</em> 13:93-104, 1996. </P>
@@ -104,3 +119,21 @@ and the phylo-HMM package from Adam Siepel at UCSC.
 <P> Z. Yang.  Maximum likelihood phylogenetic estimation from DNA sequences
     with variable rates over sites: approximate methods,
       <em>J. Mol. Evol.</em> 39:306-314, 1994.</P>
+
+<H3>Chain/Net</H3>
+<A HREF="http://www.pnas.org/cgi/content/abstract/1932072100v1" TARGET=_blank>Evolution's cauldron: 
+Duplication, deletion, and rearrangement in the mouse and human genomes</A>. 
+Kent, W.J., Baertsch, R., Hinrichs, A., Miller, W. and Haussler, D. (2003). 
+<I>P Natl Acad Sci USA</I> 100(20):11484-11489 Sep 30 2003.
+
+<H3>Multiz</H3>
+<P> Aligning Multiple Genomic Sequences with the Threaded Blockset Aligner.
+Blanchette M, Kent WJ, Riemer C, Elnitski L, Smit AFA, Roskin KM,
+Baertsch R, Rosenbloom K, Clawson H, Green ED, Haussler D, Miller W.
+Submitted for publication.</P>
+
+<H3>Blastz</H3>
+<P><A HREF="http://bio.cse.psu.edu/dist/blastz.pdf" TARGET=_blank>Human-Mouse Alignments with BLASTZ</A>. Schwartz S, Kent WJ, Smit A, Zhang Z, Baertsch R, Hardison R, Haussler D, and Miller W.  <em>Genome Research</em> 2003 Jan;13(1):103-7.</P>
+
+<P><A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=11928468&dopt=Abstract" TARGET=_blank>Scoring pairwise genomic sequence alignments</A>. Chiaromonte F, Yap VB, Miller W. <em>Pac Symp Biocomput</em> 2002;:115-26.</P>
+
