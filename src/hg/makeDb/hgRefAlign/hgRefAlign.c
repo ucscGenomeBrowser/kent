@@ -138,18 +138,6 @@ for (refAlign = refAlignList; refAlign != NULL; refAlign = refAlign->next)
 carefulClose(&tabFh);
 }
 
-static void dropTable(struct sqlConnection *conn,
-                      char* table)
-/* drop the table if it exists */
-{
-if (sqlTableExists(conn, table))
-    {
-    char sqlCmd[1024];
-    sprintf(sqlCmd, "drop table %s", table);
-    sqlUpdate(conn, sqlCmd);
-    }
-}
-
 static void createTable(struct sqlConnection *conn,
                         char* table)
 /* create a refAlign table, dropping old if it exists */
@@ -161,7 +149,7 @@ dyStringPrintf(sqlCmd, createTableCmd, table,
                (noBin ? "" : "bin smallint unsigned not null,\n"),
                (noBin ? "" : "INDEX(bin),\n"),
                extraIx, extraIx);
-sqlUpdate(conn, sqlCmd->string);
+sqlRemakeTable(conn, table, sqlCmd->string);
 dyStringFree(&sqlCmd);
 }
 
@@ -175,7 +163,6 @@ char query[512];
 
 printf("Creating table %s\n", table);
 createTabFile(refAlignList);
-dropTable(conn, table);
 createTable(conn, table);
 
 printf("Writing tab-delimited file %s\n", TMP_TAB_FILE);
@@ -211,15 +198,13 @@ struct refAlignChrom* chromList
     = refAlignChromListBuild(refAlignList);
 struct refAlignChrom* chromEntry = chromList;
 
-/* Only load tables with data, drop others */
+/* Only load tables with data */
 while (chromEntry != NULL)
     {
     char table[256];
     sprintf(table, "%s_%s", chromEntry->chrom, rootTable);
     if (chromEntry->refAlignList != NULL)
         loadTable(conn, database, table, chromEntry->refAlignList);
-    else
-        dropTable(conn, table);
     chromEntry = chromEntry->next;
     }
 
