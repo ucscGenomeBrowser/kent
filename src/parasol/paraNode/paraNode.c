@@ -350,7 +350,7 @@ if (socketHandle < 0)
 for (;;)
     {
     connectionHandle = netAccept(socketHandle);
-    if (netMustReadAll(connectionHandle, signature, sigLen))
+    if (netReadAll(connectionHandle, signature, sigLen) == sigLen)
 	{
 	if (sameString(paraSig, signature))
 	    {

@@ -331,7 +331,7 @@ reopenHub();
 if (sameString(command, "qsub"))
     {
     if (argc < 1)
-	usage;
+	usage();
     addJob(argc, argv, TRUE);
     }
 else if (sameString(command, "add"))
@@ -347,7 +347,7 @@ else if (sameString(command, "add"))
     else if (sameString(subType, "job"))
 	{
 	if (argc < 2)
-	    usage;
+	    usage();
         addJob(argc-1, argv+1, FALSE);
 	}
     else if (sameString(subType, "spoke"))
