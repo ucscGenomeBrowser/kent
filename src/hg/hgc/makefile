@@ -15,17 +15,18 @@ my: compile
 mgsc: compile
 	mv $A ${CGI_BIN}-mgsc/$A
 
-alpha: compile
+alpha: strip
 	mv $A ${CGI_BIN}/$A
 
-beta: compile
+beta: strip
 	mv $A ${CGI_BIN}-beta/$A
 
+strip:  compile
+	strip $A
 
 compile: $O 
 	${CC} $O ${F64} ${MYLIBS} ${L} 
 	mv a.out $A
-	strip $A
 	chmod a+rx $A
 
 install:	compile

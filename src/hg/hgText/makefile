@@ -12,19 +12,21 @@ O = $A.o
 my: compile
 	mv $A ${CGI_BIN}-${USER}/$A
 
-alpha: compile
+alpha: strip
 	mv $A ${CGI_BIN}/$A
 
-beta: compile
+beta: strip
 	mv $A ${CGI_BIN}-beta/$A
+
+strip: compile
+	strip $A
 
 compile: $O 
 	${CC} $O ${MYLIBS} ${L} 
 	mv a.out $A
 	chmod a+rx $A
 
-install: compile
-	strip $A
+install: strip
 	@if [ ! -d "${DESTDIR}${CGI_BIN}" ]; then \
 		${MKDIR} "${DESTDIR}${CGI_BIN}"; \
 	fi

@@ -15,10 +15,10 @@ O = $A.o altGraphXTrack.o chainTrack.o contigTrack.o \
 my: compile
 	mv $A ${CGI_BIN}-${USER}/$A
 
-alpha: compile
+alpha: strip
 	mv $A ${CGI_BIN}/$A
 
-beta: compile
+beta: strip
 	mv $A ${CGI_BIN}-beta/$A
 
 mgsc: compile
@@ -27,10 +27,12 @@ mgsc: compile
 compile: $O 
 	${CC} $O ${MYLIBS} ${L}
 	mv a.out $A
-	strip $A
 	chmod a+rx $A
 
-install:	compile
+strip: compile
+	strip $A
+
+install: strip
 	@if [ ! -d "${DESTDIR}${CGI_BIN}" ]; then \
 		${MKDIR} "${DESTDIR}${CGI_BIN}"; \
 	fi
