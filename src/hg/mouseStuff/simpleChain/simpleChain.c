@@ -386,7 +386,7 @@ while ((psl = pslNext(pslLf)) != NULL)
     slAddHead(&sp->psl, psl);
     }
 lineFileClose(&pslLf);
-verbose(1,"read in  %d psls\n",count);
+verbose(2,"read in  %d psls\n",count);
 
 addedBases = deletedBases = 0;
 for(sp = spList; sp; sp = sp->next)
@@ -476,7 +476,7 @@ for(sp = spList; sp; sp = sp->next)
 	    chainToPslWrite(chain, outChains, sp->tSize, sp->qSize);
 	else
 	    {
-	    chain->qEnd = (chain->qEnd < chain->qSize)? chain->qEnd : chain->qSize;
+	    //chain->qEnd = (chain->qEnd < chain->qSize)? chain->qEnd : chain->qSize;
 	    chainWrite(chain, outChains);
 	    }
 	}
