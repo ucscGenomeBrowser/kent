@@ -7,7 +7,7 @@
 #include "portable.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.29 2004/08/27 20:12:54 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.30 2004/08/27 23:11:38 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -191,7 +191,11 @@ if (wDS->isFile)
     {
     struct dyString *fileName = dyStringNew(256);
     lineFileClose(&wDS->lf);	/*	possibly a previous file */
-    dyStringPrintf(fileName, "%s.wig", wDS->tblName);
+    /*	don't add .wig if it is already there	*/
+    if (endsWith(wDS->tblName,".wig"))
+	dyStringPrintf(fileName, "%s", wDS->tblName);
+    else
+	dyStringPrintf(fileName, "%s.wig", wDS->tblName);
     wDS->lf = lineFileOpen(fileName->string, TRUE);
     dyStringFree(&fileName);
     }
@@ -243,7 +247,10 @@ if (!table)
     errAbort("setDbTable: table specification missing");
 
 /*	Check to see if there is a .wig file	*/
-dyStringPrintf(fileName, "%s.wig", table);
+if (endsWith(table, ".wig"))
+    dyStringPrintf(fileName, "%s", table);
+else
+    dyStringPrintf(fileName, "%s.wig", table);
 
 /*	file present ignores db specification	*/
 if (fileExists(fileName->string))
@@ -860,6 +867,7 @@ for ( ; nextRow(wDS, row, WIGGLE_NUM_COLS); wiggleFree(&wiggle) )
 	if (chromEnd < wiggle->chromEnd)
 	    chromEnd = wiggle->chromEnd;
 	statsCount += wiggle->validCount;
+	valuesMatched += wiggle->validCount;
 	bytesSkipped += wiggle->count;
 	continue;	/*	next SQL row	*/
 	}
@@ -1603,11 +1611,16 @@ if (wDS->stats)
 
     if (htmlOut)
 	{
-	fprintf (fh, "<TABLE COLS=12 BORDER=1 BGCOLOR=\""HG_COL_INSIDE"\" ALIGN=CENTER HSPACE=0><TR><TH COLSPAN=6 ALIGN=LEFT> ");
+	fprintf (fh, "<TABLE COLS=12 BORDER=1 BGCOLOR=\""HG_COL_INSIDE"\" ALIGN=CENTER HSPACE=0><TR>");
 	if (wDS->db)
-	    fprintf(fh, "Database: %s </TH><TH COLSPAN=6 ALIGN=RIGHT> Table: %s </TH></TR>\n", wDS->db, wDS->tblName);
+	    fprintf(fh, "<TH COLSPAN=6 ALIGN=LEFT> Database: %s </TH><TH COLSPAN=6 ALIGN=RIGHT> Table: %s </TH></TR>\n", wDS->db, wDS->tblName);
 	if (wDS->isFile)
-	    fprintf(fh, "from file </TH><TH COLSPAN=6 ALIGN=RIGHT> Table: %s </TH></TR>\n", wDS->tblName);
+	    {
+	    if (stringIn("trash/ct_",wDS->tblName))
+		fprintf(fh, "<TH COLSPAN=12 ALIGN=LEFT> custom track </TH></TR>\n" );
+	    else
+		fprintf(fh, "<TH COLSPAN=12 ALIGN=LEFT> from file %s </TH></TR>\n", wDS->tblName);
+	    }
 
 	fprintf(fh,"<TR><TH> Chrom </TH><TH> Data <BR> start </TH>");
 	fprintf(fh,"<TH> Data <BR> end </TH>");
