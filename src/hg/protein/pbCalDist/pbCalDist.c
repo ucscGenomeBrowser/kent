@@ -10,71 +10,71 @@ void usage()
 errAbort(
   "pbCalDist- Create tab delimited data files to be used by Proteome Browser stamps.\n"
   "usage:\n"
-  "   pbCalDist xx yy zz\n"
-  "      xx is the date of protein databases\n"
-  "      yy is the taxnomy number of the Taxonomy ID\n"
-  "      zz is the genome database name\n"
-  "Example: pbCalDist 031112 9606 hg16\n");
+  "   pbCalDist spDb protsDb taxn gnDb\n"
+  "      spDb is the name of SWISS-PROT database\n"
+  "      protsDb is the name of proteinsXXXXXX database\n"
+  "      taxn is the taxnomy number of the Taxonomy ID\n"
+  "      gnDb is the genome database name\n"
+  "Example: pbCalDist sp031112 proteins031112 9606 hg16\n");
 }
 
 int calDist(double *measure, int nInput, int nDist, double xMin, double xDelta, char *oFileName)
 /* calculate histogram distribution of a double array of nInput elements */ 
+{
+int distCnt[1000];
+double xDist[1000];
+FILE *o3;
+int i,j;
+int highestCnt, totalCnt;
+
+assert(nDist < ArraySize(distCnt));
+
+o3 = mustOpen(oFileName, "w");
+for (j=0; j<=nDist; j++)
     {
-    int distCnt[1000];
-    double xDist[1000];
-    FILE *o3;
-    int i,j;
-    int highestCnt, totalCnt;
-
-    o3 = fopen(oFileName, "w");
-    for (j=0; j<=nDist; j++)
-	{
-	distCnt[j] = 0;
-	xDist[j] = xMin + xDelta * (double)j;
-	}
-
-    for (i=0; i<nInput; i++)
-	{
-        if (measure[i] <= xDist[0])
-	    {
-	    distCnt[0]++;
-	    }
-        for (j=1; j<nDist; j++)
-	    {
-	    if ((measure[i] > xDist[j-1]) && (measure[i] <= xDist[j]))
- 		{
-		distCnt[j]++;
-		}
-	    }
-        if (measure[i] > xDist[nDist-1])
-	    {
-	    distCnt[nDist]++;
-	    }
-	}
-
-    highestCnt = 0;
-    totalCnt   = 0;
-    for (j=0; j<=nDist; j++)
-	{
-	if (distCnt[j] > highestCnt) highestCnt = distCnt[j];
-	totalCnt = totalCnt + distCnt[j];
-	}
-    
-    if (totalCnt != nInput)
-	{
-	fprintf(stderr, "nInput %d is not equal totalCnt %d, aborting ...\n", nInput, totalCnt);
-	exit(1);
-	} 
-   
-    // do not print out count of the last inteval, which is everything beyond xMax 
-    for (j=0; j<nDist; j++)
-	{
-	fprintf(o3, "%f\t%d\n", xDist[j], distCnt[j]);
-	}
-    fclose(o3);
-   
-    return(highestCnt);
+    distCnt[j] = 0;
+    xDist[j] = xMin + xDelta * (double)j;
     }
+
+for (i=0; i<nInput; i++)
+    {
+    if (measure[i] <= xDist[0])
+	{
+	distCnt[0]++;
+	}
+    for (j=1; j<nDist; j++)
+	{
+	if ((measure[i] > xDist[j-1]) && (measure[i] <= xDist[j]))
+ 	    {
+	    distCnt[j]++;
+	    }
+	}
+    if (measure[i] > xDist[nDist-1])
+	{
+	distCnt[nDist]++;
+	}
+    }
+
+highestCnt = 0;
+totalCnt   = 0;
+for (j=0; j<=nDist; j++)
+    {
+    if (distCnt[j] > highestCnt) highestCnt = distCnt[j];
+    totalCnt = totalCnt + distCnt[j];
+    }
+    
+if (totalCnt != nInput)
+    errAbort("nInput %d is not equal totalCnt %d, aborting ...\n", nInput, totalCnt);
+   
+// do not print out count of the last inteval, which is everything beyond xMax 
+for (j=0; j<nDist; j++)
+    {
+    fprintf(o3, "%f\t%d\n", xDist[j], distCnt[j]);
+    }
+carefulClose(&o3);
+   
+return(highestCnt);
+}
 
 int main(int argc, char *argv[])
 {
@@ -84,7 +84,8 @@ struct sqlResult *sr, *sr2, *sr3;
 char **row, **row2, **row3;
 char *r1, *r2, *r3, *r4;
 char cond_str[255];
-char proteinDatabaseName[40];
+char *proteinDatabaseName;	// example: sp031112
+char *protDbName;		// example: proteins031112
 char emptyStr[1] = {""};
 FILE *o1, *o2, *o3, *o4, *o5;
 char *accession;
@@ -119,10 +120,9 @@ char *database;
 char *exonCnt;
 int pfamCount;
 int interProCount;
-char protDbName[40];
 struct slName *taxonList, *name;
 
-if (argc != 4) usage();
+if (argc != 5) usage();
 
 strcpy(aaAlphabet, "WCMHYNFIDQKRTVPGEASLXZB");
 
@@ -154,9 +154,10 @@ aa_hydro['W'] = -0.900;
 aa_hydro['Y'] = -1.300;
 aa_hydro['V'] =  4.200;
 
-sprintf(proteinDatabaseName, "sp%s", argv[1]);
-taxon = argv[2];
-database = argv[3];
+proteinDatabaseName = argv[1];
+protDbName 	    = argv[2];
+taxon 	 	    = argv[3];
+database 	    = argv[4];
 
 o1 = mustOpen("pepProp.tab",    "w");
 o2 = mustOpen("pepResDist.tab", "w");
@@ -193,7 +194,6 @@ while (row2 != NULL)
     if (answer != NULL)
 	{
     	sprintf(cond_str, "accession='%s'", accession);
-	sprintf(protDbName, "proteins%s", argv[1]);
     	answer2 = sqlGetField(conn, protDbName, "swInterPro", "count(*)", cond_str);
 	if (answer2 != NULL)
 	    {
@@ -326,7 +326,7 @@ for (i=0; i<20; i++)
     fprintf(o2, "%d\t%f\n", i+1, (float)aaResCntDouble[i]);
     }
 fprintf(o2, "%d\t%f\n", i+1, 0.0);
-fclose(o2);
+carefulClose(&o2);
 
 // calculate and write out various distributions
 calDist(molWt,  	 molWtCnt, 20, 10000.0, 10000.0,"pepMolWtDist.tab");
@@ -337,8 +337,8 @@ calDist(exonCountDouble, jExon,    31,     0.0, 1.0, 	"exonCntDist.tab");
 calDist(pfamCountDouble,  pcnt,    16,     0.0, 1.0, 	"pfamCntDist.tab");
 calDist(interProCountDouble,  ipcnt,    16,     0.0, 1.0, 	"interProCntDist.tab");
 
-fclose(o1);
-fclose(o4);
+carefulClose(&o1);
+carefulClose(&o4);
 
 sqlFreeResult(&sr2);
 hFreeConn(&conn);
