@@ -272,8 +272,8 @@ identifier vegaPseudogeneName typeOf=vegaName
 
 identifier pseudoGeneName
 "Link together pseudo predicted gene structure and peptide"
-    hg16.pseudoMrna.qName dupeOk
-    hg16.pseudoGeneLink.name
+    $hg.pseudoMrna.qName dupeOk
+    $hg.pseudoGeneLink.name
 
 identifier mrnaBlastzName
 "Link together mrnaBlastz and pseudoMrna"
