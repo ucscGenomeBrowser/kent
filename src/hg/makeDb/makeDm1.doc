@@ -2503,6 +2503,12 @@ rm $TMP/$root.pp
     # is a little unstable.  Be sure to create a log file and monitor
     # for convergence.
 
+    # 2nd note: manually tried various parameter settings and settled
+    # on --cut-params 0.010,0.005.  Seems to give best results for
+    # both post probs and viterbi path.  At least until we settle on a
+    # better principle for setting the params, these are the
+    # recommended ones to use.
+
     # set up a jobs list
     rm -f jobs.lst
     for file in `find SS -name "*.ss"` ; do echo doPostProbs $file >> jobs.lst ; done
@@ -2567,6 +2573,8 @@ $PHAST/phastCons $file rev-dg.mod --rates-cut 1 --nrates 10 --viterbi PREDICTION
 '_EOF_'
     # << this line makes emacs coloring happy
     chmod 775 doViterbi
+
+    # see note above regarding --cut-params (0.010,0.005 recommended)
 
     rm -f jobs.viterbi.lst
     for file in `find SS -name "*.ss"` ; do echo doViterbi $file >> jobs.viterbi.lst ; done
