@@ -5,7 +5,7 @@
     <target name="init">
         <property name="build.dir" value="."/>
         <property name="src.dir" value="src"/>
-        <property name="doc.dir" value="."/>
+        <property name="doc.dir" value="/usr/local/apache/htdocs/qa"/>
         <property name="build.classes" value="${build.dir}/classes"/>
         <property name="build.debug" value="on" />
         <property name="build.optimize" value="off" />
