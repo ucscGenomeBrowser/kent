@@ -1088,6 +1088,13 @@ chainSome $(path1)
     /cluster/bin/i386/axtSort $f axtNetSort/$c.axt
   end
 
+  # make maf files
+  mkdir mafNet
+  foreach f (axtNetSort/*.axt)
+    set c = $f:t:r
+    echo "axtToMaf on $c"
+    /cluster/bin/i386/axtToMaf $f /cluster/data/hg17/chrom.sizes /cluster/data/bosTau1/chrom.sizes mafNet/$c.maf -tPrefix=hg17. -qPrefix=bosTau1.
+  end
 
 
 # MAKE 11.OOC FILE FOR BLAT (REDONE, Jan. 18, 2004, Heather)
