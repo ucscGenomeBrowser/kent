@@ -12,7 +12,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.17 2003/06/24 07:09:23 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.18 2003/06/24 18:44:02 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, defaultConfName,
 	resetConfName, NULL }; 
@@ -312,13 +312,42 @@ if (search != NULL)
 return result;
 }
 
-static struct slName *neighborhoodList(struct sqlConnection *conn, char *query, 
+struct genePos
+/* A gene and optionally a position */
+    {
+    struct genePos *next;
+    char *name;		/* Gene ID. */
+    char *chrom;	/* Chromosome. */
+    int start;		/* Chromosome start. */
+    int end;		/* End in chromosome. */
+    };
+
+struct genePos *genePosSimple(char *name)
+/* Return a simple gene pos - with no chrom info. */
+{
+struct genePos *gp;
+AllocVar(gp);
+gp->name = cloneString(name);
+return gp;
+}
+
+struct genePos *genePosFull(char *name, char *chrom, int start, int end)
+/* Return full gene position */
+{
+struct genePos *gp = genePosSimple(name);
+gp->chrom = cloneString(chrom);
+gp->start = start;
+gp->end = end;
+return gp;
+}
+
+static struct genePos *neighborhoodList(struct sqlConnection *conn, char *query, 
 	int maxCount)
 /* Get list of up to maxCount from query. */
 {
 struct sqlResult *sr;
 char **row;
-struct slName *list = NULL, *name;
+struct genePos *list = NULL, *name;
 struct hash *dupeHash = newHash(0);
 int count = 0;
 sr = sqlGetResult(conn, query);
@@ -327,7 +356,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (!hashLookup(dupeHash, row[0]))
 	{
 	hashAdd(dupeHash, row[0], NULL);
-	name = slNameNew(row[0]);
+	name = genePosSimple(row[0]);
 	slAddHead(&list, name);
 	if (++count >= maxCount)
 	    break;
@@ -339,11 +368,11 @@ slReverse(&list);
 return list;
 }
 
-struct slName *getExpressionNeighbors(struct sqlConnection *conn)
+struct genePos *getExpressionNeighbors(struct sqlConnection *conn)
 /* Get expression neighborhood. */
 {
 struct dyString *query = dyStringNew(1024);
-struct slName *list;
+struct genePos *list;
 
 /* Look for matchers.  Look for a few more than they ask for to
  * account for dupes. */
@@ -356,11 +385,11 @@ dyStringFree(&query);
 return list;
 }
 
-struct slName *getHomologyNeighbors(struct sqlConnection *conn)
+struct genePos *getHomologyNeighbors(struct sqlConnection *conn)
 /* Get homology neighborhood. */
 {
 struct dyString *query = dyStringNew(1024);
-struct slName *list;
+struct genePos *list;
 
 /* Look for matchers.  Look for a few more than they ask for to
  * account for dupes. */
@@ -374,25 +403,18 @@ return list;
 }
 
 
-struct slName *getGenomicNeighbors(struct sqlConnection *conn, char *geneId,
+struct genePos *getGenomicNeighbors(struct sqlConnection *conn, char *geneId,
 	char *chrom, int start, int end)
 /* Get neighbors in genome. */
 {
-struct genePos
-/* A gene position (a little local helper struct) */
-    {
-    struct genePos *next;
-    char *name;
-    int start;
-    int end;
-    } *gpList = NULL, *gp;
+struct genePos *gpList = NULL, *gp, *next;
 char query[256];
 struct sqlResult *sr;
 char **row;
 int i, ix = 0, chosenIx = -1;
 int startIx, endIx, listSize;
 int geneCount = 0;
-struct slName *geneList = NULL, *gene;
+struct genePos *geneList = NULL, *gene;
 
 /* Get list of all genes in chromosome */
 safef(query, sizeof(query), 
@@ -400,10 +422,8 @@ safef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    AllocVar(gp);
-    gp->name = cloneString(row[0]);
-    gp->start = sqlUnsigned(row[1]);
-    gp->end = sqlUnsigned(row[2]);
+    gp = genePosFull(row[0], chrom, 
+    	sqlUnsigned(row[1]), sqlUnsigned(row[2]));
     slAddHead(&gpList, gp);
     if (start == gp->start && end == gp->end && sameString(geneId, gp->name) )
         chosenIx = ix;
@@ -441,23 +461,18 @@ if (endIx > geneCount) endIx = geneCount;
 listSize = endIx - startIx;
 
 gp = slElementFromIx(gpList, startIx);
-for (i=0; i<listSize; ++i, gp=gp->next)
+for (i=0; i<listSize; ++i, gp=next)
     {
-    gene = slNameNew(gp->name);
-    slAddHead(&geneList, gene);
+    next = gp->next;
+    slAddHead(&geneList, gp);
     }
 slReverse(&geneList);
-
-/* Clean up. */
-for (gp = gpList; gp != NULL; gp = gp->next)
-    freez(&gp->name);
-slFreeList(&gpList);
 
 return geneList;
 }
 
 
-struct slName *getPositionNeighbors(struct sqlConnection *conn)
+struct genePos *getPositionNeighbors(struct sqlConnection *conn)
 /* Get genes in genomic neighborhood. */
 {
 char *pos = knownPosVal(NULL, curGeneId, conn);
@@ -475,7 +490,7 @@ else
     }
 }
 
-struct slName *getNeighbors(struct sqlConnection *conn)
+struct genePos *getNeighbors(struct sqlConnection *conn)
 /* Return gene neighbors. */
 {
 if (sameString(groupOn, "expression"))
@@ -636,7 +651,7 @@ void bigTable()
 /* Put up great big table. */
 {
 struct sqlConnection *conn = hAllocConn();
-struct slName *geneList = getNeighbors(conn), *gene;
+struct genePos *geneList = getNeighbors(conn), *gene;
 struct column *colList = getColumns(conn), *col;
 
 hPrintf("<TABLE BORDER=1 CELLSPACING=1 CELLPADDING=1>\n");
