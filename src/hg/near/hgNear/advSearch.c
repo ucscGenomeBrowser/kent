@@ -6,6 +6,8 @@
 #include "hdb.h"
 #include "hgNear.h"
 
+static char const rcsid[] = "$Id: advSearch.c,v 1.8 2003/06/26 05:36:48 kent Exp $";
+
 static boolean anyRealInCart(struct cart *cart, char *wild)
 /* Return TRUE if advanced search variables are set. */
 {

@@ -1,8 +1,12 @@
+/* search - manage simple searches - ones based on just a single name. */
+
 #include "common.h"
 #include "hash.h"
 #include "jksql.h"
 #include "hdb.h"
 #include "hgNear.h"
+
+static char const rcsid[] = "$Id: search.c,v 1.4 2003/06/26 05:36:48 kent Exp $";
 
 int searchResultCmpShortLabel(const void *va, const void *vb)
 /* Compare to sort based on short label. */

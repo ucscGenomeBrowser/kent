@@ -13,7 +13,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.31 2003/06/25 22:21:59 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.32 2003/06/26 05:36:48 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	defaultConfName, hideAllConfName, 
@@ -995,14 +995,6 @@ for (gene = geneList; gene != NULL; gene = gene->next)
     hPrintf("\n");
     }
 hPrintf("</PRE></TT>");
-}
-
-void doGetSeq(struct sqlConnection *conn, struct column *colList, 
-	struct genePos *geneList)
-/* Put up the get sequence page. */
-{
-hPrintf("Eventually this page will let you get protein, mRNA, and genomic "
-        "sequence associated with the displayed gene list. ");
 }
 
 void doMainDisplay(struct sqlConnection *conn, struct column *colList, 

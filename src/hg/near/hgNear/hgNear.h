@@ -264,5 +264,9 @@ void doDefaultConfigure(struct sqlConnection *conn, struct column *colList );
 void doConfigHideAll(struct sqlConnection *conn, struct column *colList);
 /* Respond to hide all button in configuration page. */
 
+void doGetSeq(struct sqlConnection *conn, struct column *colList, 
+	struct genePos *geneList);
+/* Put up the get sequence page. */
+
 #endif /* HGNEAR_H */
 
