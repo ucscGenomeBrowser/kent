@@ -1678,8 +1678,8 @@ priority 142
 visibility pack
 colorChromDefault off
 type psl protein
-pred hg17.blastKGPep00
-blastRef hg17.blastKGRef00
+pred hg17.blastKGPep01
+blastRef hg17.blastKGRef01
 
 track BRout
 shortLabel BRout
