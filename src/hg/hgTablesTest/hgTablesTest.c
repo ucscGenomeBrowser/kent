@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.15 2004/11/08 20:19:43 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.16 2004/11/08 20:45:56 kent Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -801,6 +801,47 @@ if (page != NULL)
     }
 }
 
+void testIdentifier(struct htmlPage *rootPage)
+/* Do simple check on identifiers. Relies on
+ * 8355	Xenopus laevis being stable taxon (and not being filtered out
+ * by testFilter). */
+{
+char *org = NULL, *db = "swissProt", *group = "allTables", *track="swissProt",
+	*table = "swissProt.taxon";
+struct htmlPage *page;
+page = quickSubmit(rootPage, org, db, group, "swissProt", 
+	table, "taxonId1", hgtaDoPasteIdentifiers, "submit");
+if (page != NULL)
+    {
+    htmlPageSetVar(page, NULL, hgtaPastedIdentifiers, "8355");
+    serialSubmit(&page, org, db, group, track, table, "taxonId2",
+    	hgtaDoPastedIdentifiers, "submit");
+    if (page != NULL)
+        {
+	htmlPageSetVar(page, NULL, hgtaOutputType, "selectedFields");
+	serialSubmit(&page, org, db, group, track, table, "taxonId3",
+	    hgtaDoTopSubmit, "submit");
+	if (page != NULL)
+	    {
+	    htmlPageSetVar(page, NULL, "hgta_fs.check.swissProt.taxon.binomial",
+	    	"on");
+	    serialSubmit(&page, org, db, group, track, table, "taxonId4",
+		hgtaDoPrintSelectedFields, "submit");
+	    if (page != NULL)
+		{
+		if (!stringIn("Xenopus laevis", page->htmlText))
+		    {
+		    qaStatusSoftError(tablesTestList->status, 
+			 "Can't find Xenopus laevis in swissProt.taxon #8355");
+		    }
+		checkExpectedSimpleRows(page, 1);
+		}
+	    htmlPageFree(&page);
+	    }
+	}
+    }
+}
+
 void statsOnSubsets(struct tablesTest *list, int subIx, FILE *f)
 /* Report tests of certain subtype. */
 {
@@ -902,6 +943,7 @@ else
     }
 testJoining(rootPage);
 testFilter(rootPage);
+testIdentifier(rootPage);
 htmlPageFree(&rootPage);
 slReverse(&tablesTestList);
 reportSummary(tablesTestList, stdout);
