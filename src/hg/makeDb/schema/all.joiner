@@ -66,6 +66,7 @@ identifier goId external=GO
 identifier swissProtId external=SwissProt
 "Swiss Prot ID. Same as accession for uncurated trEMBL proteins"
      swissProt.displayId.val 
+     go.goaPart.dbObjectSymbol
      $gbd.dupSpMrna.proteinID
      $gbd.dupSpMrna.dupProteinID
      $kgDb.kgProtAlias.displayID
@@ -74,8 +75,7 @@ identifier swissProtId external=SwissProt
      $kgDb.knownGene.proteinID
      $gbd.spMrna.spID
      $dm.bdgpSwissProt.spSymbol
-     $dm.flyBaseSwissProt.spSymbol
-     go.goaPart.dbObjectSymbol
+     $dm.flyBaseSwissProt.spSymbol 
 
 identifier swissProtAccession external=SwissProt
 "SwissProt Accession"
@@ -364,6 +364,7 @@ identifier chain[${chainDest}]Id
 "Link together chain info"
     $gbd.chain[].id $split
     $gbd.chain[]Link.chainId $split
+    $gbd.net[].chainId
     $gbd.allChain[].id
     $gbd.netRxBest[].chainId exclude=0
     $gbd.net[]NonGap.chainId exclude=0
