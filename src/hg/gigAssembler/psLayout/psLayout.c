@@ -19,7 +19,7 @@
 #include "cheapcgi.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: psLayout.c,v 1.8 2003/07/15 22:17:21 heather Exp $";
+static char const rcsid[] = "$Id: psLayout.c,v 1.9 2003/07/22 16:31:25 kent Exp $";
 
 /* Variables that can be set by command line options. */
 int minMatch = 4;
@@ -420,10 +420,10 @@ char *otherListBuf;
 char *genoName;
 int i;
 int blockCount = 0;
-struct dnaSeq **seqListList = NULL, *seq;
+struct dnaSeq **seqListList = NULL, *seq = NULL;
 char *outRoot;
 struct sqlConnection *conn;
-enum ffStringency stringency;
+enum ffStringency stringency = ffCdna;
 int seedSize = 10;
 FILE *out;
 boolean noHead = FALSE;
