@@ -21,13 +21,12 @@
 #include "botDelay.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.8 2004/03/24 04:15:41 kate Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.9 2004/03/24 04:20:51 kate Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft.userData"     /* typed/pasted in data */
 #define HGLFT_DATAFILE_VAR "hglft.dataFile"     /* file of data to convert */
 #define HGLFT_DATAFORMAT_VAR "hglft.dataFormat" /* format of data to convert */
-#define HGLFT_SHOWPAGE_CMD "hglft.do_showPage"  /* command to display output */
 
 /* Global Variables */
 struct cart *cart;	        /* CGI and other variables */
@@ -44,12 +43,9 @@ char *genomeList[] = {"Human", 0};
 char *origAssemblyList[] = {"April 2003"};
 char *newAssemblyList[] = {"July 2003"};
 
-void webMain(struct sqlConnection *conn, char *err)
+void webMain()
 /* set up page for entering data */
 {
-if (err != NULL)
-    printf("<H4 ALIGN=CENTER>ERROR: %s</H4>\n", err); 
-
 cgiParagraph(
     "This tool converts genome coordinates and genome annotation files "
     "between assemblies.&nbsp;&nbsp;"
@@ -169,13 +165,8 @@ void doMiddle(struct cart *theCart)
 char *userData;
 char *dataFile;
 char *db, *organism;    
-char *showPage = FALSE;
 char *err = NULL;
-struct sqlConnection *conn = NULL;
 cart = theCart;
-conn = hAllocConn();
-
-//getDbAndGenome(cart, &db, &organism);
 
 /* Get data to convert - from userData variable, or if 
  * that is empty from a file. */
@@ -184,11 +175,10 @@ if (cartOptionalString(cart, "SubmitFile"))
     userData = cartOptionalString(cart, HGLFT_DATAFILE_VAR);
 else
     userData = cartOptionalString(cart, HGLFT_USERDATA_VAR);
-showPage = cartOptionalString(cart, "showPage");
 cartWebStart(cart, "Lift Genome Annotations");
-webMain(conn, err);
+webMain();
 
-if (showPage || userData == NULL || userData[0] == '\0')
+if (userData == NULL || userData[0] == '\0')
     {
     /* display main form to enter input annotation data */
     webDataFormats();
@@ -255,9 +245,6 @@ else
         printf("</BLOCKQUOTE>\n");
         }
     webDataFormats();
-    /* remove temp files */
-    //remove(oldTn.forCgi);
-    cartRemove(cart, HGLFT_USERDATA_VAR);
     }
 cartWebEnd();
 }
@@ -267,7 +254,6 @@ cartWebEnd();
 char *excludeVars[] = {"Submit", "submit", "SubmitFile",
                         HGLFT_USERDATA_VAR,
                         HGLFT_DATAFILE_VAR,
-                        HGLFT_SHOWPAGE_CMD,
                         NULL};
 
 int main(int argc, char *argv[])
@@ -275,7 +261,6 @@ int main(int argc, char *argv[])
 {
 oldCart = hashNew(8);
 cgiSpoof(&argc, argv);
-//htmlSetBackground("../images/floret.jpg");
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldCart);
 return 0;
 }
