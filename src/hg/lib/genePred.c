@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.29 2004/02/15 02:21:27 baertsch Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.30 2004/02/15 04:57:44 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -689,14 +689,23 @@ else
 static int getFrame(struct psl *psl, int mrnaStart, int mrnaEnd,
                     struct genbankCds* cds)
 /* get the starting frame for a range of mRNA.  This handles strand stuff.
- * a range is allowed due to block merging  */
+ * A range is passed due to block merging. */
 {
 int frame = -1;
 if ((cds != NULL) && cds->startComplete)
     {
     if (psl->strand[0] == '-')
         reverseIntRange(&mrnaStart, &mrnaEnd, psl->qSize);
-    frame = mrnaStart % 3;
+    if ((cds->start >= mrnaStart) && (cds->start < mrnaEnd))
+        {
+        /* exon contains CDS start */
+        frame = 0;
+        }
+    else if ((cds->end > mrnaStart) && (cds->start < mrnaEnd))
+        {
+        /* exon overlaps CDS */
+        frame = (mrnaStart-cds->start) % 3;
+        }
     }
 return frame;
 }
