@@ -2358,11 +2358,11 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 	    fprintf(f, "<H2>%s</H2><PRE><TT>", table->description);
 	for (pos = table->posList; pos != NULL; pos = pos->next)
 	    {
-	    hgPosBrowserRange(pos, range);
 	    if (table->htmlOnePos)
 	        table->htmlOnePos(table, pos, f);
 	    else
 		{
+		hgPosBrowserRange(pos, range);
 		fprintf(f, "<A HREF=\"%s?position=%s",
 		    hgAppName, range);
 		if (ui != NULL)
