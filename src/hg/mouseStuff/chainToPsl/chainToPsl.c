@@ -14,7 +14,7 @@
 #include "dystring.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: chainToPsl.c,v 1.4 2003/05/16 23:11:52 baertsch Exp $";
+static char const rcsid[] = "$Id: chainToPsl.c,v 1.5 2003/05/17 04:32:37 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -65,6 +65,7 @@ hashAddSaveName(seqHash, root, sfp, &sfp->name);
 sfp->file = hashStoreName(fileHash, file);
 sfp->isNib = TRUE;
 nibOpenVerify(file, &f, &size);
+carefulClose(&f);
 sfp->pos = size;
 }
 
@@ -107,7 +108,7 @@ FILE *openFromCache(struct dlList *cache, char *fileName)
 /* Return open file handle via cache.  The simple logic here
  * depends on not more than N files being returned at once. */
 {
-static int maxCacheSize=32;
+static int maxCacheSize=16;
 int cacheSize = 0;
 struct dlNode *node;
 struct cachedFile *cf;
