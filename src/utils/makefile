@@ -34,6 +34,7 @@ DIRS = \
 	ccCp \
 	chopFaLines \
 	countChars \
+	convolve \
 	detab \
 	dnsInfo \
 	endsInLf \
@@ -79,6 +80,7 @@ DIRS = \
 	undupFa \
 	upper \
 	venn \
+	wigAsciiToBinary \
 	wordLine
 
 BAD_DIRS= \
