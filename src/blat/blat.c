@@ -381,6 +381,7 @@ for (isRc = FALSE; isRc <= 1; ++isRc)
 	    else
 		tripleSearch(&qSeq, gfs, t3Hash, isRc, pslOut);
 	    }
+	lineFileClose(&lf);
 	}
 
     /* Clean up time. */
