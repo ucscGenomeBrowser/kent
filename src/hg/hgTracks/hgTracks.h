@@ -186,6 +186,7 @@ struct linkedFeatures
     int orientation;                    /* Orientation. */
     struct simpleFeature *components;   /* List of component simple features. */
     void *extra;			/* Extra info that varies with type. */
+    void *customPt;                     /* Misc pointer variable unique to group. */
     char popUp[128];			/* text for popup */
     };
 

@@ -51,10 +51,12 @@ For psl types it's
       with other organism.  If present the display can be colored by
       chromosome and the chromosome and position in kilobases is shown
       as the item label.
-For gene predictions 
+For gene predictions; use `.' when a positional parameter must be skipped.
     1) genePred
     2) (optional) associated protein sequence table
     3) (optional) associated mRNA table.
+    4) (optional) 'exonArrows' to draw strand arrows on exons.
+    5) (optional) name of itemAttr table used to color individual genePreds.
 For chains it's
     1) chain
     2) database for other organism 

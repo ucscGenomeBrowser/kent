@@ -27,6 +27,7 @@
 #include "cgh.h"
 #include "bactigPos.h"
 #include "genePred.h"
+#include "genePredReader.h"
 #include "bed.h"
 #include "isochores.h"
 #include "simpleRepeat.h"
@@ -77,12 +78,16 @@
 #include "cds.h"
 #include "simpleNucDiff.h"
 #include "tfbsCons.h"
+<<<<<<< hgTracks.c
+#include "itemAttr.h"
+=======
 #include "encode.h"
 #include "variation.h"
+>>>>>>> 1.686
 
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.687 2004/03/22 21:48:12 donnak Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.688 2004/03/24 18:46:19 markd Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -1238,26 +1243,26 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	}
     if (e > s)
 	{
-            if (zoomedToCdsColorLevel && drawOptionNum>0 && 
-                    e + 6 >= winStart && s - 6 < winEnd) 
-                drawCdsColoredBox(tg, lf, sf->grayIx, cdsColor, vg, xOff, y, scale, 
+        if (zoomedToCdsColorLevel && drawOptionNum>0 && 
+            e + 6 >= winStart && s - 6 < winEnd) 
+            drawCdsColoredBox(tg, lf, sf->grayIx, cdsColor, vg, xOff, y, scale, 
 	            font, s, e, heightPer, zoomedToCodonLevel, mrnaSeq,
                     psl, drawOptionNum, errorColor, &foundStart,
                     MAXPIXELS, winStart);
         else
             {
-	        drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 
-                    color, lf->score );
+            drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 
+                                color, lf->score );
 
-	        if (exonArrows)
-	            {
-	            int nw = e - s - 2;
-	            x1 = round((double)((int)s-winStart)*scale) + xOff;
-	            x2 = round((double)((int)e-winStart)*scale) + xOff;
-	            w = x2-x1;
-	            clippedBarbs(vg, x1+1, midY, x2-x1-2, 2, 5, lf->orientation,
-	                MG_WHITE, TRUE);
-	            }
+            if (exonArrows)
+                {
+                int nw = e - s - 2;
+                x1 = round((double)((int)s-winStart)*scale) + xOff;
+                x2 = round((double)((int)e-winStart)*scale) + xOff;
+                w = x2-x1;
+                clippedBarbs(vg, x1+1, midY, x2-x1-2, 2, 5, lf->orientation,
+                             MG_WHITE, TRUE);
+                }
             }
 	}
 
@@ -2086,53 +2091,62 @@ tg->tdb = tdb;
 return tg;
 }
 
+static struct simpleFeature *sfFromGenePred(struct genePred *gp, int grayIx)
+/* build a list of simpleFeature objects from a genePred */
+{
+struct simpleFeature *sfList = NULL, *sf;
+unsigned *starts = gp->exonStarts;
+unsigned *ends = gp->exonEnds;
+int i, blockCount = gp->exonCount;
+
+for (i=0; i<blockCount; ++i)
+    {
+    AllocVar(sf);
+    sf->start = starts[i];
+    sf->end = ends[i];
+    sf->grayIx = grayIx;
+    slAddHead(&sfList, sf);
+    }
+slReverse(&sfList);
+return sfList;
+}
+        
 struct linkedFeatures *connectedLfFromGenePredInRange(
-        struct sqlConnection *conn, char *table, 
+        struct track *tg, struct sqlConnection *conn, char *table, 
 	char *chrom, int start, int end)
 /* Return linked features from range of a gene prediction table after 
  * we have already connected to database. */
 {
-struct sqlResult *sr = NULL;
-char **row;
 struct linkedFeatures *lfList = NULL, *lf;
 int grayIx = maxShade;
 int rowOffset;
+struct genePredReader *gpr = NULL;
+struct genePred *gp;
+struct itemAttrTbl *iat = tg->customPt;
 
 int drawOptionNum = 0; //off
 if (table != NULL)
     drawOptionNum = getCdsDrawOptionNum(table);
 
-sr = hRangeQuery(conn, table, chrom, start, end, NULL, &rowOffset);
+if (iat != NULL)
+    itemAttrTblLoad(iat, conn, chrom, start, end);
 
-while ((row = sqlNextRow(sr)) != NULL)
+gpr = genePredReaderRangeQuery(conn, table, chrom, start, end, NULL);
+while ((gp = genePredReaderNext(gpr)) != NULL)
     {
-    struct simpleFeature *sfList = NULL, *sf;
-    struct genePred *gp = genePredLoad(row + rowOffset);
     AllocVar(lf);
     lf->grayIx = grayIx;
     strncpy(lf->name, gp->name, sizeof(lf->name));
     lf->orientation = orientFromChar(gp->strand[0]);
 
     if (drawOptionNum>0 && zoomedToCdsColorLevel)
-        sfList = splitGenePredByCodon(chrom, lf, gp,NULL);
+        lf->components = splitGenePredByCodon(chrom, lf, gp,NULL);
     else
-        {
-        unsigned *starts = gp->exonStarts;
-        unsigned *ends = gp->exonEnds;
-        int i, blockCount = gp->exonCount;
+        lf->components = sfFromGenePred(gp, grayIx);
 
-        for (i=0; i<blockCount; ++i)
-            {
-            AllocVar(sf);
-            sf->start = starts[i];
-            sf->end = ends[i];
-            sf->grayIx = grayIx;
-            slAddHead(&sfList, sf);
-            }
-        slReverse(&sfList);
-        }
+    if ((iat != NULL) && (gp->optFields & genePredIdFld))
+        lf->customPt = itemAttrTblGet(iat, gp->id);
 
-    lf->components = sfList;
     linkedFeaturesBoundsAndGrays(lf);
 
     if (gp->cdsStart >= gp->cdsEnd)
@@ -2150,17 +2164,17 @@ while ((row = sqlNextRow(sr)) != NULL)
     genePredFree(&gp);
     }
 slReverse(&lfList);
-sqlFreeResult(&sr);
+genePredReaderFree(&gpr);
 return lfList;
 }
 
-struct linkedFeatures *lfFromGenePredInRange(char *table, 
+struct linkedFeatures *lfFromGenePredInRange(struct track *tg, char *table, 
 	char *chrom, int start, int end)
 /* Return linked features from range of a gene prediction table. */
 {
 struct linkedFeatures *lfList = NULL;
 struct sqlConnection *conn = hAllocConn();
-lfList = connectedLfFromGenePredInRange(conn, table, chrom, start, end);
+lfList = connectedLfFromGenePredInRange(tg, conn, table, chrom, start, end);
 hFreeConn(&conn);
 return lfList;
 }
@@ -2243,7 +2257,7 @@ hFreeConn(&conn);
 void loadGenieKnown(struct track *tg)
 /* Load up Genie known genes. */
 {
-tg->items = lfFromGenePredInRange("genieKnown", chromName, winStart, winEnd);
+tg->items = lfFromGenePredInRange(tg, "genieKnown", chromName, winStart, winEnd);
 if (limitVisibility(tg) == tvFull)
     {
     lookupKnownNames(tg->items);
@@ -2374,7 +2388,7 @@ void loadKnownGene(struct track *tg)
 /* Load up known genes. */
 {
 enum trackVisibility vis = tg->visibility;
-tg->items = lfFromGenePredInRange("knownGene", chromName, winStart, winEnd);
+tg->items = lfFromGenePredInRange(tg, "knownGene", chromName, winStart, winEnd);
 if (vis != tvDense)
     {
     lookupKnownGeneNames(tg->items);
@@ -2794,7 +2808,7 @@ if (!sqlTableExists(conn, refGene))
 	refGene = xenoRefGene;
 hFreeConn(&conn);
 
-tg->items = lfFromGenePredInRange(refGene, chromName, winStart, winEnd);
+tg->items = lfFromGenePredInRange(tg, refGene, chromName, winStart, winEnd);
 if (vis != tvDense)
     {
     lookupRefNames(tg->items);
@@ -2817,7 +2831,8 @@ char **row;
 char query[256];
 
 /* If refSeqStatus is available, use it to determine the color.
- * Reviewed -> normal, Provisional -> lighter, Predicted(other) -> lightest 
+ * Reviewed, Validated -> normal, Provisional -> lighter, 
+ * Predicted, Inferred(other) -> lightest 
  * If no refSeqStatus, color it normally. 
  */
 if (hTableExists("refSeqStatus"))
@@ -2827,7 +2842,7 @@ if (hTableExists("refSeqStatus"))
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
         {
-	if (startsWith("Reviewed", row[0]))
+	if (startsWith("Reviewed", row[0]) || startsWith("Validated", row[0]))
 	    {
 	    /* Use the usual color */
 	    }
@@ -2931,7 +2946,6 @@ void mrnaMethods(struct track *tg)
 {
 tg->extraUiData = newMrnaUiData(tg->mapName, FALSE);
 }
-
 
 char *sanger22Name(struct track *tg, void *item)
 /* Return Sanger22 name. */
@@ -6727,7 +6741,19 @@ tg->items = lfList;
 void loadGenePred(struct track *tg)
 /* Convert bed info in window to linked feature. */
 {
-tg->items = lfFromGenePredInRange(tg->mapName, chromName, winStart, winEnd);
+tg->items = lfFromGenePredInRange(tg, tg->mapName, chromName, winStart, winEnd);
+}
+
+Color genePredItemAttrColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color to draw a genePred in based on looking it up in a itemAttr
+ * table. */
+{
+struct linkedFeatures *lf = item;
+struct itemAttr *ia = lf->customPt;
+if (ia != NULL)
+    return vgFindColorIx(vg, ia->colorR, ia->colorG, ia->colorB);
+else
+    return tg->ixColor;
 }
 
 void drawColorMethods(struct track *tg)
@@ -6801,6 +6827,14 @@ else if (sameWord(type, "genePred"))
     linkedFeaturesMethods(track);
     track->loadItems = loadGenePred;
     track->colorShades = NULL;
+    if ((wordCount > 3) && sameString(words[3], "exonArrows"))
+        track->exonArrows = TRUE;
+    if ((wordCount > 4) && !sameString(words[4], "."))
+        {
+        assert(track->customPt == NULL);
+        track->customPt = itemAttrTblNew(words[4]);
+        track->itemColor = genePredItemAttrColor;
+        }
     }
 else if (sameWord(type, "psl"))
     {
