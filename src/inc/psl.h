@@ -166,5 +166,9 @@ struct psl *pslTrimToTargetRange(struct psl *oldPsl, int tMin, int tMax);
 /* Return psl trimmed to fit inside tMin/tMax.  Note this does not
  * update the match/misMatch and related fields. */
 
+char* pslGetCreateSql(char* table, boolean tNameIx, boolean withBin,
+                      boolean xaFormat);
+/* Get SQL required to create PSL table.  */
+
 #endif /* PSL_H */
 
