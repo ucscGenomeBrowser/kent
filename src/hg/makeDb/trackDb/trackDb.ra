@@ -2166,6 +2166,11 @@ xrefTable hg17.blastKGRef01
 xrefQuery select acc,geneId from %s where geneId like '%%%s%%'
 searchPriority 25
 
+searchTable blastHg17KG
+searchType psl
+query select tName,tStart,tEnd,qName from %s where qName like '%%%s%%'
+searchPriority 25
+
 searchName blastDm1FBGene
 searchTable blastDm1FB
 searchType psl
