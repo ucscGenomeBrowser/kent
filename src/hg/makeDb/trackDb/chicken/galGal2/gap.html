@@ -1,23 +1,34 @@
 <H2>Description</H2>
-This track depicts gaps in the assembly.  These gaps -- with the
-exception of intractable heterochromatic gaps -- will be closed during the
+This track depicts gaps in the assembly.  Many of these gaps -- with the
+exception of intractable heterochromatic gaps -- may be closed during the
 finishing process. 
 </P><P>
 Gaps are represented as black boxes in this track.
 If the relative order and orientation of the contigs on either side
-of the gap is known, it is a <em>bridged</em> gap and a white line is drawn 
+of the gap is supported by read pair data, 
+it is a <em>bridged</em> gap and a white line is drawn 
 through the black box representing the gap. 
 </P>
 <P>There are four principal types of gaps:
 <UL>
-<LI><B>Fragment</B> - gaps between the contigs of a supercontig.
-(In this context, a contig is a set of overlapping sequence reads.)
- These are represented
-by varying numbers of N's in the assembly if the gap size is known, 
-600 if ? and 8000 if ?.  
-<LI><B>Clone</B> - gaps between clones in the same supercontig.  These are represented
-by 10,000 N's for all chromosomes except chrUn (concatenation of unplaced 
-contigs), where gaps of 2,000 N's are used.  
-<LI><B>Contig</B> - gaps between supercontigs. These are represented by 10,000 N's in the assembly.
-<LI><B>Centromere</B> - gaps from centromeres (1,500,000 N's for chromosomes 1-8 and Z, 500,000 N's for chromosomes 9-13, 17, and 26).  
+<LI><B>Fragment</B> - gaps between the Whole Genome Shotgun contigs of a 
+    supercontig.
+    (In this context, a contig is a set of overlapping sequence reads.  
+     A supercontig is a set of contigs ordered and oriented during the 
+     Whole Genome Shotgun process using paired-end reads.)
+    These are represented by varying numbers of N's in the assembly.  
+    Fragment gap sizes are usually taken from read pair data.  
+<LI><B>Clone</B> - gaps between supercontigs linked by the fingerprint map.  
+    In general, these are represented by 10,000 N's in the assembly for all 
+    chromosomes except chrUn (concatenation of unplaced supercontigs), where 
+    gaps of 1,000 N's are used.  Gaps of other sizes were used when mRNA or 
+    other data suggested possible but not confirmed links between supercontigs.
+<LI><B>Contig</B> - gaps between supercontigs not linked by the fingerprint 
+    map, but instead by marker data.  (In this context, the "Contig" gap type 
+    refers to a map contig, not a sequence contig.)  
+    These are represented by 10,000 N's in the assembly.
+<LI><B>Centromere</B> - gaps for centromeres were included when they could be 
+    reasonably localized.  These are represented by 1,500,000 N's in the 
+    assembly for the macrochromosomes 1-10 and Z, and by 500,000 N's for 
+    all others (microchromosomes).  
 </UL></P>
