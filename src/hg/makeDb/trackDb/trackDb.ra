@@ -1353,6 +1353,19 @@ xrefQuery select transcript,protein from %s where protein like '%s%%'
 termRegex ENSP[0-9]+(\.[0-9]+)?
 searchPriority 50
 
+track phastConsElements
+shortLabel PhastConsElements
+longLabel PhastCons Conserved Elements
+group compGeno
+priority 105
+visibility hide
+spectrum on
+color 0,60,120
+altColor 200,220,255
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
 
 
 searchTable knownGene
