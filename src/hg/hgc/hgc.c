@@ -1343,7 +1343,7 @@ return name;
 }
 
 void geneShowPosAndLinks(char *geneName, char *pepName, char *geneTable, char *pepTable,
-	char *pepClick, char *mrnaClick, char *genomicClick)
+	char *pepClick, char *mrnaClick, char *genomicClick, char *mrnaDescription)
 /* Show parts of gene common to everything */
 {
 char other[256];
@@ -1356,7 +1356,7 @@ if (pepTable != NULL && hTableExists(pepTable))
     printf("<LI>Translated Protein</A>\n"); 
     }
 hgcAnchorSomewhere(mrnaClick, geneName, geneTable, seqName);
-printf("<LI>Predicted mRNA</A>\n");
+printf("<LI>%s</A>\n", mrnaDescription);
 hgcAnchorSomewhere(genomicClick, geneName, geneTable, seqName);
 printf("<LI>Genomic Sequence</A>\n");
 printf("</UL>\n");
@@ -1367,7 +1367,7 @@ void geneShowCommon(char *geneName, char *geneTable, char *pepTable)
 /* Show parts of gene common to everything */
 {
 geneShowPosAndLinks(geneName, geneName, geneTable, pepTable, "htcTranslatedProtein",
-	"htcGeneMrna", "htcGeneInGenome");
+	"htcGeneMrna", "htcGeneInGenome", "Predicted mRNA");
 }
 
 void htcTranslatedProtein(char *geneName)
@@ -1738,6 +1738,9 @@ rl = refLinkLoad(row);
 sqlFreeResult(&sr);
 printf("<H2>Known Gene %s</H2>\n", rl->name);
     
+printf("<B>RefSeq:</B> <A HREF=");
+printEntrezNucleotideUrl(stdout, rl->mrnaAcc);
+printf(" TARGET=_blank>%s</A><BR>", rl->mrnaAcc);
 if (rl->omimId != 0)
     {
     printf("<B>OMIM:</B> ");
@@ -1753,7 +1756,9 @@ if (rl->locusLinkId != 0)
     printf("%d</A><BR>\n", rl->locusLinkId);
     }
 
-medlineLinkedLine("Symbol", rl->name, rl->name);
+medlineLinkedLine("Gene", rl->name, rl->name);
+if (rl->product[0] != 0)
+    medlineLinkedLine("Product", rl->product, rl->product);
 printf("<B>GeneCards:</B> ");
 printf("<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?search=%s\" TARGET=_blank>",
 	rl->name);
@@ -1761,7 +1766,7 @@ printf("%s</A><BR>\n", rl->name);
 htmlHorizontalLine();
 
 geneShowPosAndLinks(rl->mrnaAcc, rl->protAcc, "refGene", "refPep", "htcTranslatedProtein",
-	"htcRefMrna", "htcGeneInGenome");
+	"htcRefMrna", "htcGeneInGenome", "mRNA Sequence");
 
 puts(
    "<P>Known genes are derived from the "
