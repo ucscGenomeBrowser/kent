@@ -145,6 +145,7 @@ UTIL_DIRS = \
 	pslUnpile \
 	qaToQac \
 	qacToQa \
+	qacToWig \
 	ratStuff \
 	relPairs \
 	recycleDb \
