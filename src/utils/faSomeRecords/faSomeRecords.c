@@ -5,6 +5,8 @@
 #include "fa.h"
 #include "options.h"
 
+static char const rcsid[] = "$Id: faSomeRecords.c,v 1.2 2003/05/06 07:41:06 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

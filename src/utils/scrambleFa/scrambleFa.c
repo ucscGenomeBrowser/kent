@@ -2,6 +2,8 @@
 #include "common.h"
 #include "fa.h"
 
+static char const rcsid[] = "$Id: scrambleFa.c,v 1.2 2003/05/06 07:41:08 kate Exp $";
+
 void scrambleFa(char *inName, char *outName)
 /* scrambleFa - scramble the order of records in an fa file. */
 {

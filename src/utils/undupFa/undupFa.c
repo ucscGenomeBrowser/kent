@@ -4,6 +4,8 @@
 #include "hash.h"
 #include "obscure.h"
 
+static char const rcsid[] = "$Id: undupFa.c,v 1.2 2003/05/06 07:41:09 kate Exp $";
+
 void usage()
 /* Print usage and exit. */
 {

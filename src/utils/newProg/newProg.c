@@ -4,6 +4,8 @@
 #include "dystring.h"
 #include "options.h"
 
+static char const rcsid[] = "$Id: newProg.c,v 1.12 2003/05/06 07:41:07 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

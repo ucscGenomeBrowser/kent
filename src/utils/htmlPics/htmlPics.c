@@ -2,6 +2,8 @@
 #include "common.h"
 #include "htmshell.h"
 
+static char const rcsid[] = "$Id: htmlPics.c,v 1.2 2003/05/06 07:41:07 kate Exp $";
+
 void usage()
 /* Print usage instructions and bail. */
 {

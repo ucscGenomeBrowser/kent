@@ -5,6 +5,8 @@
 #include "options.h"
 #include "psGfx.h"
 
+static char const rcsid[] = "$Id: textHist2.c,v 1.9 2003/05/06 07:41:08 kate Exp $";
+
 int xBins = 12, yBins = 12;
 int xBinSize = 1, yBinSize = 1;
 int xMin = 0, yMin = 0;

@@ -5,6 +5,8 @@
 #include "hash.h"
 #include "options.h"
 
+static char const rcsid[] = "$Id: tableSum.c,v 1.7 2003/05/06 07:41:08 kate Exp $";
+
 char *colDiv;
 char *rowDiv;
 double scale = 1.0;

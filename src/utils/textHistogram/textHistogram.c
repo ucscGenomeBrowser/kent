@@ -4,6 +4,8 @@
 #include "hash.h"
 #include "options.h"
 
+static char const rcsid[] = "$Id: textHistogram.c,v 1.8 2003/05/06 07:41:08 kate Exp $";
+
 int binSize = 1;
 int maxBinCount = 25;
 int minVal = 0;

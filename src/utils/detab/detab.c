@@ -4,6 +4,8 @@
 #include "hash.h"
 #include "options.h"
 
+static char const rcsid[] = "$Id: detab.c,v 1.3 2003/05/06 07:41:05 kate Exp $";
+
 int tabSize = 8;
 
 void usage()

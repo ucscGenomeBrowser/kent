@@ -1,7 +1,9 @@
-#pragma comment(exestr, "@(#) UCSC Hg $Id: t.c,v 1.1 2003/05/05 05:40:03 kate Exp $")
+#pragma comment(exestr, "@(#) UCSC Hg $Id: t.c,v 1.2 2003/05/06 07:41:06 kate Exp $")
 /* Test program */
 
 #include <stdio.h>
+
+static char const rcsid[] = "$Id: t.c,v 1.2 2003/05/06 07:41:06 kate Exp $";
 
 int countFaRecords(char *file) 
 /* Count fasta records in a file */

@@ -4,6 +4,8 @@
 #include "hash.h"
 #include "cheapcgi.h"
 
+static char const rcsid[] = "$Id: splitFile.c,v 1.4 2003/05/06 07:41:08 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

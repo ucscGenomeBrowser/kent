@@ -4,6 +4,8 @@
 #include "dnautil.h"
 #include "options.h"
 
+static char const rcsid[] = "$Id: faCount.c,v 1.2 2003/05/06 07:41:05 kate Exp $";
+
 void usage()
 /* Print usage info and exit. */
 {

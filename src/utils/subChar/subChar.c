@@ -2,6 +2,8 @@
 #include "common.h"
 #include "obscure.h"
 
+static char const rcsid[] = "$Id: subChar.c,v 1.2 2003/05/06 07:41:08 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

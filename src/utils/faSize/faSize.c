@@ -4,6 +4,8 @@
 #include "dnautil.h"
 #include "cheapcgi.h"
 
+static char const rcsid[] = "$Id: faSize.c,v 1.5 2003/05/06 07:41:06 kate Exp $";
+
 void usage()
 /* Print usage info and exit. */
 {

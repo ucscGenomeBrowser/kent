@@ -6,6 +6,8 @@
 #include <stdarg.h>
 #include <string.h>
 
+static char const rcsid[] = "$Id: subs.c,v 1.4 2003/05/06 07:41:08 kate Exp $";
+
 #define TRUE 1
 #define FALSE 0
 #define uglyf printf            /* Debugging print statement. */

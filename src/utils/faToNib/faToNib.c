@@ -4,6 +4,8 @@
 #include "nib.h"
 #include "fa.h"
 
+static char const rcsid[] = "$Id: faToNib.c,v 1.5 2003/05/06 07:41:06 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

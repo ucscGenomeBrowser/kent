@@ -1,6 +1,8 @@
 #include "common.h"
 #include "linefile.h"
 
+static char const rcsid[] = "$Id: fixCr.c,v 1.2 2003/05/06 07:41:06 kate Exp $";
+
 int main(int argc, char *argv[])
 /* Fix carraige returns. */
 {
