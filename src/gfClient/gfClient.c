@@ -15,12 +15,12 @@ static bioSeq seq;
 struct ssBundle *bundleList;
 enum ffStringency stringency = ffCdna;
 FILE *out = mustOpen(outName, "w");
-int conn = gfConnect(hostName, portName);
 
 if (!cgiVarExists("nohead"))
     pslWriteHead(out);
 while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, !tx))
     {
+    int conn = gfConnect(hostName, portName);
     printf("Processing %s\n", seq.name);
     if (tx)
         {
@@ -38,9 +38,9 @@ while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, !tx))
 	reverseComplement(seq.dna, seq.size);
 	gfAlignStrand(conn, nibDir, &seq, TRUE,  stringency, 36, gfSavePsl, out);
 	}
+    close(conn);
     }
 printf("Output is in %s\n", outName);
-close(conn);
 }
 
 void usage()

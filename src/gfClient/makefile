@@ -9,5 +9,4 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = gfClient.o
 
 gfClient: $O $(MYLIBS)
-	gcc -ggdb -o gfClient $O $(MYLIBS) $L
-#	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/gfClient $O $(MYLIBS) $L
+	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/gfClient $O $(MYLIBS) $L

@@ -132,7 +132,8 @@ slReverse(&rangeList);
 return rangeList;
 }
 
-static void gfQuerySeqTrans(int conn, aaSeq *seq, struct gfClump *clumps[2][3], struct gfSeqSource **retSsList, int *retTileSize)
+static void gfQuerySeqTrans(int conn, aaSeq *seq, struct gfClump *clumps[2][3], 
+    struct lm *lm, struct gfSeqSource **retSsList, int *retTileSize)
 /* Query server for clumps where aa sequence hits translated index. */
 {
 int frame, isRc, rowSize;
@@ -207,7 +208,7 @@ for (;;)
 	     break;
 	if ((row[1] = nextWord(&line)) == NULL)
 	     internalErr();
-	AllocVar(hit);
+	lmAllocVar(lm, hit);
 	hit->qStart = sqlUnsigned(row[0]);
 	hit->tStart = sqlUnsigned(row[1]);
 	slAddHead(&clump->hitList, hit);
@@ -732,8 +733,9 @@ struct ssBundle *bun;
 int tileSize = gfs[0]->tileSize;
 struct trans3 *t3;
 int hitCount;
+struct lm *lm = lmInit(0);
 
-gfTransFindClumps(gfs, qSeq, clumps, &hitCount);
+gfTransFindClumps(gfs, qSeq, clumps, lm, &hitCount);
 for (frame=0; frame<3; ++frame)
     {
     for (clump = clumps[frame]; clump != NULL; clump = clump->next)
@@ -763,6 +765,7 @@ for (range = rangeList; range != NULL; range = range->next)
     }
 for (frame=0; frame<3; ++frame)
     gfClumpFreeList(&clumps[frame]);
+lmCleanup(&lm);
 }
 
 struct trans3 *findTrans3(struct hash *t3Hash, char *name, int start, int end)
@@ -780,7 +783,8 @@ return NULL;
 }
 
 void gfAlignTrans(int conn, char *nibDir, aaSeq *seq,
-    int minMatch, GfSaveAli outFunction, struct gfSavePslxData *outData)
+    int minMatch, 
+    GfSaveAli outFunction, struct gfSavePslxData *outData)
 /* Search indexed translated genome on server with an amino acid sequence. 
  * Then load homologous bits of genome locally and do detailed alignment.
  * Call 'outFunction' with each alignment that is found. */
@@ -796,9 +800,10 @@ struct hash *t3Hash = NULL;
 struct slRef *t3RefList = NULL, *ref;
 struct gfSeqSource *ssList = NULL, *ss;
 struct trans3 *t3;
+struct lm *lm = lmInit(0);
 
 /* Get clumps from server. */
-gfQuerySeqTrans(conn, seq, clumps, &ssList, &tileSize);
+gfQuerySeqTrans(conn, seq, clumps, lm, &ssList, &tileSize);
 
 for (isRc = 0; isRc <= 1;  ++isRc)
     {
@@ -909,6 +914,7 @@ for (isRc=0; isRc<=1; ++isRc)
 for (ss = ssList; ss != NULL; ss = ss->next)
     freeMem(ss->fileName);
 slFreeList(&ssList);
+lmCleanup(&lm);
 }
 
 void untranslateRangeList(struct gfRange *rangeList, int qFrame, int tFrame, struct hash *t3Hash)
@@ -941,8 +947,9 @@ int tileSize = gfs[0]->tileSize;
 bioSeq *targetSeq;
 struct ssBundle *bun;
 int hitCount;
+struct lm *lm = lmInit(0);
 
-gfTransTransFindClumps(gfs, qTrans->trans, clumps, &hitCount);
+gfTransTransFindClumps(gfs, qTrans->trans, clumps, lm, &hitCount);
 for (qFrame = 0; qFrame<3; ++qFrame)
     {
     for (tFrame=0; tFrame<3; ++tFrame)
@@ -976,6 +983,7 @@ trans3Free(&qTrans);
 for (qFrame = 0; qFrame<3; ++qFrame)
     for (tFrame=0; tFrame<3; ++tFrame)
 	gfClumpFreeList(&clumps[qFrame][tFrame]);
+lmCleanup(&lm);
 }
 
 void trans3Offset(struct trans3 *t3List, AA *aa, int *retOffset, int *retFrame)

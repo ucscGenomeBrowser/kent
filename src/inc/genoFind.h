@@ -60,7 +60,7 @@ struct gfClump
     struct gfSeqSource *target;	/* Target source sequence. */
     bits32 tStart, tEnd;	/* Position in target. */
     int hitCount;		/* Number of hits. */
-    struct gfHit *hitList;	/* List of hits. */
+    struct gfHit *hitList;	/* List of hits. Not allocated here. */
     };
 
 void gfClumpFree(struct gfClump **pClump);
@@ -111,17 +111,17 @@ void gfIndexTransNibs(struct genoFind *transGf[2][3], int nibCount, char *nibNam
     int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile);
 /* Make translated (6 frame) index for all nib files. */
 
-struct gfClump *gfFindClumps(struct genoFind *gf, struct dnaSeq *seq, int *retHitCount);
+struct gfClump *gfFindClumps(struct genoFind *gf, struct dnaSeq *seq, struct lm *lm, int *retHitCount);
 /* Find clumps associated with one sequence. */
 
-struct gfClump *gfPepFindClumps(struct genoFind *gf, aaSeq *seq, int *retHitCount);
+struct gfClump *gfPepFindClumps(struct genoFind *gf, aaSeq *seq, struct lm *lm, int *retHitCount);
 /* Find clumps associated with one sequence. */
 
-void gfTransFindClumps(struct genoFind *gfs[3], aaSeq *seq, struct gfClump *clumps[3], int *retHitCount);
+void gfTransFindClumps(struct genoFind *gfs[3], aaSeq *seq, struct gfClump *clumps[3], struct lm *lm, int *retHitCount);
 /* Find clumps associated with one sequence in three translated reading frames. */
 
 void gfTransTransFindClumps(struct genoFind *gfs[3], aaSeq *seqs[3], 
-	struct gfClump *clumps[3][3], int *retHitCount);
+	struct gfClump *clumps[3][3], struct lm *lm, int *retHitCount);
 /* Find clumps associated with three sequences in three translated 
  * reading frames. Used for translated/translated protein comparisons. */
 
@@ -141,19 +141,19 @@ void gfAlignDnaClumps(struct gfClump *clumpList, struct dnaSeq *seq,
  * a FILE as outData in this case.. */
 
 void gfAlignAaClumps(struct genoFind *gf,  struct gfClump *clumpList, aaSeq *seq,
-    boolean isRc,  enum ffStringency stringency, int minMatch, 
+    boolean isRc,  enum ffStringency stringency, int minMatch,  
     GfSaveAli outFunction, void *outData);
 /* Convert gfClumps to an actual alignment that gets saved via 
  * outFunction/outData. */
 
 void gfFindAlignAaTrans(struct genoFind *gfs[3], aaSeq *qSeq, struct hash *t3Hash, 
-	enum ffStringency stringency, int minMatch, 
+	enum ffStringency stringency, int minMatch,  
 	GfSaveAli outFunction, void *outData);
 /* Look for qSeq alignment in three translated reading frames. Save alignment
  * via outFunction/outData. */
 
 void gfFindAlignTransTrans(struct genoFind *gfs[3], struct dnaSeq *qSeq, struct hash *t3Hash, 
-	boolean isRc, enum ffStringency stringency, int minMatch, 
+	boolean isRc, enum ffStringency stringency, int minMatch,  
 	GfSaveAli outFunction, void *outData);
 /* Look for alignment to three translations of qSeq in three translated reading frames. 
  * Save alignment via outFunction/outData. */

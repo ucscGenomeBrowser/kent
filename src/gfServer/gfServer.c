@@ -14,7 +14,7 @@
 #include "cheapcgi.h"
 #include "trans3.h"
 
-int version = 8;
+int version = 9;
 int maxSeqSize = 20000;
 int maxAaSize = 6000;
 
@@ -71,7 +71,8 @@ gfIndexNibs(nibCount, nibFiles, minMatch, gfMaxGap, tileSize, repMatch, FALSE);
 
 while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
     {
-    struct gfClump *clumpList = gfFindClumps(gf, &seq, &oneHit), *clump;
+    struct lm *lm = lmInit(0);
+    struct gfClump *clumpList = gfFindClumps(gf, &seq, lm, &oneHit), *clump;
     hitCount += oneHit;
     for (clump = clumpList; clump != NULL; clump = clump->next)
 	{
@@ -80,6 +81,7 @@ while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
 	gfClumpDump(gf, clump, stdout);
 	}
     gfClumpFreeList(&clumpList);
+    lmCleanup(&lm);
     }
 lineFileClose(&lf);
 genoFindFree(&gf);
@@ -141,8 +143,9 @@ void dnaQuery(struct genoFind *gf, struct dnaSeq *seq, FILE *logFile,
 struct gfClump *clumpList = NULL, *clump;
 int limit = 100;
 int clumpCount = 0, hitCount;
+struct lm *lm = lmInit(0);
 
-clumpList = gfFindClumps(gf, seq, &hitCount);
+clumpList = gfFindClumps(gf, seq, lm, &hitCount);
 if (clumpList == NULL)
     ++missCount;
 for (clump = clumpList; clump != NULL; clump = clump->next)
@@ -157,6 +160,7 @@ for (clump = clumpList; clump != NULL; clump = clump->next)
 	break;
     }
 gfClumpFreeList(&clumpList);
+lmCleanup(&lm);
 logIt("%d clumps, %d hits\n", clumpCount, hitCount);
 }
 
@@ -170,6 +174,7 @@ char strand;
 struct dyString *dy  = newDyString(1024);
 struct gfHit *hit;
 int clumpCount = 0, hitCount = 0, oneHit;
+struct lm *lm = lmInit(0);
 
 sprintf(buf, "tileSize %d", tileSize);
 gfSendString(connectionHandle, buf);
@@ -178,7 +183,7 @@ for (frame = 0; frame < 3; ++frame)
 for (isRc = 0; isRc <= 1; ++isRc)
     {
     strand = (isRc ? '-' : '+');
-    gfTransFindClumps(transGf[isRc], seq, clumps, &oneHit);
+    gfTransFindClumps(transGf[isRc], seq, clumps, lm, &oneHit);
     hitCount += oneHit;
     for (frame = 0; frame < 3; ++frame)
         {
@@ -205,6 +210,7 @@ for (isRc = 0; isRc <= 1; ++isRc)
 if (clumpCount == 0)
     ++missCount;
 freeDyString(&dy);
+lmCleanup(&lm);
 logIt("%d clumps, %d hits\n", clumpCount, hitCount);
 }
 
@@ -227,8 +233,9 @@ for (qFrame = 0; qFrame<3; ++qFrame)
 	clumps[qFrame][tFrame] = NULL;
 for (isRc = 0; isRc <= 1; ++isRc)
     {
+    struct lm *lm = lmInit(0);
     strand = (isRc ? '-' : '+');
-    gfTransTransFindClumps(transGf[isRc], t3->trans, clumps, &oneCount);
+    gfTransTransFindClumps(transGf[isRc], t3->trans, clumps, lm, &oneCount);
     hitCount += oneCount;
     for (qFrame = 0; qFrame<3; ++qFrame)
 	{
@@ -256,6 +263,7 @@ for (isRc = 0; isRc <= 1; ++isRc)
 	    gfClumpFreeList(&clumps[qFrame][tFrame]);
 	    }
 	}
+    lmCleanup(&lm);
     }
 trans3Free(&t3);
 if (clumpCount == 0)
