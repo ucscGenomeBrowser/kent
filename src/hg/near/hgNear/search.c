@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: search.c,v 1.14 2003/11/04 07:01:16 angie Exp $";
+static char const rcsid[] = "$Id: search.c,v 1.15 2003/11/09 02:26:45 kent Exp $";
 
 int searchResultCmpShortLabel(const void *va, const void *vb)
 /* Compare to sort based on short label. */
@@ -135,6 +135,34 @@ for (sr = srList; sr != NULL; sr = sr->next)
     }
 }
 
+static boolean allSame(struct columnSearchResults *csrList)
+/* Return TRUE if all search results point to the same place. */
+{
+struct hash *dupeHash = newHash(0);
+char hashName[512];
+int sepCount = 0;
+struct columnSearchResults *csr;
+struct searchResult *sr;
+
+for (csr = csrList; csr != NULL && sepCount < 2; csr = csr->next)
+    {
+    for (sr = csr->results; sr != NULL && sepCount < 2; sr = sr->next)
+        {
+	char *chrom = sr->gp.chrom;
+	if (chrom == NULL) chrom = "n/a";
+	safef(hashName, sizeof(hashName), "%s %s:%d-%d", 
+		sr->gp.name, chrom, sr->gp.start, sr->gp.end);
+	if (!hashLookup(dupeHash, hashName))
+	    {
+	    hashAdd(dupeHash, hashName, NULL);
+	    ++sepCount;
+	    }
+	}
+    }
+hashFree(&dupeHash);
+return sepCount <= 1;
+}
+
 static void searchAllColumns(struct sqlConnection *conn, 
 	struct column *colList, char *search)
 /* Call search on each column. */
@@ -178,7 +206,8 @@ if (totalCount == 0)
     else
 	warn("Sorry, couldn't find '%s'", search);
     }
-else if (totalCount == 1)
+else if (totalCount == 1 || allSame(csrList))
+// else if (totalCount == 1)
     displayData(conn, colList, &srOne->gp);
 else
     {

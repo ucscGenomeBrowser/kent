@@ -38,7 +38,16 @@ longLabel NCBI RefSeq Gene Accession
 priority 2.2
 visibility off
 type lookup knownToRefSeq name value
-itemUrl http://www.ncbi.nlm.nih.gov/LocusLink/list.cgi?V=0&Q=%s
+search exact
+itemUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
+
+name locusLink
+shortLabel LocusLink
+longLabel NCBI LocusLink ID
+priority 2.25
+visibility off
+type lookup knownToLocusLink name value
+itemUrl http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l=%s
 
 name acc
 shortLabel GenBank
