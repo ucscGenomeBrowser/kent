@@ -1948,6 +1948,42 @@ should contact <A HREF="http://www.softberry.com" TARGET=_blank>Softberry Inc.</
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
+<P><B>First EF</B><BR>
+This track displays predictions from First Exon Finder (FirstEF), a 5' terminal 
+exon and promoter prediction program.
+Three types of predictions are shown: exon, promoter and CpG window. If two 
+consecutive predictions are separated by less than 1000 bp, FirstEF treats them 
+as one cluster of alternative first exons that may belong to same gene. 
+Each predicted exon is either CpG-related or non-CpG-related, based on a score 
+of the frequency of CpG dinucleotides. An exon is classified as CpG-related if 
+the CpG score is greater than a threshhold value and non-CpG-related if 
+less than the threshold. If an exon is CpG-related, its associated CpG-window is displayed. 
+
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for BLAT tracks. Higher CpG 
+	scores are shown in darker shades of gray/black. The cluster 
+	number is displayed in parentheses in the item label. For example, 
+	&quot;exon(405-)&quot; represents the exon prediction in cluster number 
+	405 on the minus strand. The exon, promoter and CpG-window are 
+	interconnected by this cluster number. Alternative predictions within 
+	the same cluster are denoted by &quot;#N&quot; where &quot;N&quot; is the 
+	serial number of an alternative prediction in the cluster.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode displays probability, size, 
+	and position information, and a link to the DNA sequence. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>firstEF</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#BED"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
 <P><B>Fish Blat </B><BR>
 This track displays translated alignments of 728 million bases
 of Tetraodon nigroviridis whole genome shotgun reads vs. the
