@@ -140,7 +140,6 @@ sqlFreeResult(&sr);
 
 if (hit != NULL)
     {
-    int i;
     seq = hDnaFromSeq(hit->chrom, hit->chromStart, hit->chromEnd, dnaLower);
     if (hit->strand[0] == '-')
 	reverseComplement(seq->dna, seq->size);
@@ -180,7 +179,6 @@ sqlFreeResult(&sr);
 static void transRegCodeAnchor(struct transRegCode *trc)
 /* Print anchor to transRegCode details page. */
 {
-int hgsid = cartSessionId(cart);
 printf("<A HREF=\"../cgi-bin/hgc?%s", cartSidUrlString(cart));
 printf("&g=transRegCode");
 printf("&i=%s", trc->name);

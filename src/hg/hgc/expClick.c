@@ -10,7 +10,7 @@
 #include "cheapcgi.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: expClick.c,v 1.7 2004/04/26 21:48:17 kent Exp $";
+static char const rcsid[] = "$Id: expClick.c,v 1.8 2004/12/07 18:16:44 kate Exp $";
 
 static struct rgbColor getColorForExprBed(float val, float max)
 /* Return the correct color for a given score */
@@ -151,7 +151,6 @@ static char *abbrevExprBedName(char *name)
    local static char* */
 {
 static char abbrev[32];
-char *ret;
 strncpy(abbrev, name, sizeof(abbrev));
 abbr(abbrev, "LINK_Em:");
 return abbrev;
@@ -180,7 +179,6 @@ static void printExprssnColorKey(float minVal, float maxVal, float stepSize, int
 /* print out a little table which provides a color->score key */
 {
 float currentVal = -1 * maxVal;
-int square = 15;
 int numColumns;
 assert(stepSize != 0);
 
@@ -209,7 +207,6 @@ static void printAffyExprssnColorKey(float minVal, float maxVal, float stepSize,
 /* print out a little table which provides a color->score key */
 {
 float currentVal = -1 * maxVal;
-int square = 15;
 int numColumns;
 
 assert(maxVal != 0);
@@ -300,9 +297,7 @@ static void msBedPrintTable(struct bed *bedList, struct hash *erHash, char *item
 		     struct rgbColor(*getColor)(float val, float max))
 /* prints out a table from the data present in the bedList */
 {
-int i,featureCount=0, currnetRow=0, square=10;
-struct bed *bed = NULL;
-char buff[32];
+int i,featureCount=0;
 if(bedList == NULL)
     errAbort("hgc::msBedPrintTable() - bedList is NULL");
 
@@ -399,7 +394,6 @@ char *expTable = cartString(cart, "i");
 char *bedTable = cartString(cart, "o");
 struct expRecord *er, *erList=NULL;
 struct bed *b, *bedList=NULL;
-char line[1024];
 int i;
 
 /* Get all of the expression record details */
@@ -757,7 +751,6 @@ static struct rgbColor getColorForCghBed(float val, float max)
 /* Return the correct color for a given score */
 {
 char *colorScheme = cartUsualString(cart, "cghNci60.color", "gr");
-boolean redColor = sameString(colorScheme, "rg");
 float absVal = fabs(val);
 struct rgbColor color; 
 int colorIndex = 0;

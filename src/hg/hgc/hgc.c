@@ -153,7 +153,7 @@
 #include "jalview.h"
 #include "flyreg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.796 2004/12/07 15:44:07 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.797 2004/12/07 18:16:44 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2193,7 +2193,6 @@ netAlignFree(&net);
 void tfbsConsSites(struct trackDb *tdb, char *item)
 /* detail page for tfbsConsSites track */
 {
-boolean printFactors = FALSE;
 boolean printedPlus = FALSE;
 boolean printedMinus = FALSE;
 char *dupe, *words[16];
