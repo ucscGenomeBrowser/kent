@@ -27,8 +27,8 @@ struct stsInfo
     unsigned sequence;	/* Whether the full sequence is available (1) or not (0) for STS */
     unsigned otherUCSCcount;	/* Number of related active UCSC ids */
     unsigned *otherUCSC;	/* Related active UCSC ids */
-    unsigned otherUCSCcount;	/* Number of merged inactive UCSC ids */
-    unsigned *otherUCSC;	/* Related merged inactive UCSC ids */
+    unsigned mergeUCSCcount;	/* Number of merged inactive UCSC ids */
+    unsigned *mergeUCSC;	/* Related merged inactive UCSC ids */
     char *genethonName;	/* Name in Genethon map */
     char *genethonChr;	/* Chromosome in Genethon map */
     float genethonPos;	/* Position in Genethon map */
