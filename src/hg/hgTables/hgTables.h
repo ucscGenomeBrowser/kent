@@ -55,7 +55,7 @@ void hTableEnd();
 
 /* --------- Utility functions --------------------- */
 
-struct region *getRegions(struct sqlConnection *conn);
+struct region *getRegions();
 /* Consult cart to get list of regions to work on. */
 
 struct sqlResult *regionQuery(struct sqlConnection *conn, char *table,
@@ -93,7 +93,8 @@ char *chrnTable(struct sqlConnection *conn, char *table);
 /* Return chrN_table if table is split, otherwise table. 
  * You can freeMem this when done. */
 
-void doTabOutTable(char *table, struct sqlConnection *conn, char *fields);
+void doTabOutTable(char *database, char *table, 
+	struct sqlConnection *conn, char *fields);
 /* Do tab-separated output on table. */
 
 struct hTableInfo *getHti(char *db, char *table);

@@ -14,7 +14,7 @@
 #include "hdb.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: joining.c,v 1.15 2004/07/18 02:29:03 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.16 2004/07/18 02:57:21 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -209,7 +209,8 @@ static struct dyString *makeOrderedCommaFieldList(struct sqlConnection *conn,
  * in database. */
 {
 struct joinerDtf *dtf;
-struct slName *dbField, *dbFieldList = sqlListFields(conn, table);
+char *split = chromTable(conn, table);
+struct slName *dbField, *dbFieldList = sqlListFields(conn, split);
 boolean first = TRUE;
 struct dyString *dy = dyStringNew(0);
 struct hash *dtfHash = newHash(8);
@@ -230,6 +231,7 @@ for (dbField = dbFieldList; dbField != NULL; dbField = dbField->next)
     }
 hashFree(&dtfHash);
 slFreeList(&dbFieldList);
+freez(&split);
 return dy;
 }
 
@@ -607,7 +609,7 @@ struct joinerDtf *tableDtfs = NULL;
 struct joinedTables *joined = NULL;
 struct hash *tableHash = newHash(8);
 struct sqlConnection *conn = sqlConnect(primaryDb);
-struct region *regionList = getRegions(conn);
+struct region *regionList = getRegions();
 int totalKeyCount = 0, totalFieldCount = 0;
 int curKeyCount = 0, curFieldCount = 0;
 
@@ -695,7 +697,7 @@ if (joinerDtfAllSameTable(dtfList))
     struct sqlConnection *conn = sqlConnect(dtfList->database);
     struct dyString *dy = makeOrderedCommaFieldList(conn, 
     	dtfList->table, dtfList);
-    doTabOutTable(dtfList->table, conn, dy->string);
+    doTabOutTable(dtfList->database, dtfList->table, conn, dy->string);
     sqlDisconnect(&conn);
     }
 else

@@ -16,7 +16,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.24 2004/07/18 01:09:10 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.25 2004/07/18 02:57:21 kent Exp $";
 
 
 void usage()
@@ -156,7 +156,7 @@ slFreeList(&chromList);
 return regionList;
 }
 
-struct region *getRegions(struct sqlConnection *conn)
+struct region *getRegions()
 /* Consult cart to get list of regions to work on. */
 {
 char *regionType = cartUsualString(cart, hgtaRegionType, "genome");
@@ -365,7 +365,7 @@ struct hTableInfo *hti = maybeGetHti(db, table);
 
 if (hti == NULL)
     {
-    errAbort("Error", "Could not find table info for table %s in db %s",
+    errAbort("Could not find table info for table %s in db %s",
 	     table, db);
     }
 return(hti);
@@ -444,7 +444,7 @@ void doFilterPage(struct sqlConnection *conn)
 /* Respond to filter create/edit button */
 {
 htmlOpen("Table Browser Filter");
-uglyf("Theoretically making filter.");
+hPrintf("Theoretically making filter.");
 htmlClose();
 }
 
@@ -470,7 +470,11 @@ return hti->chromField[0] && hti->startField[0] && hti->endField[0];
 }
 
 
-void doTabOutTable(char *table, struct sqlConnection *conn, char *fields)
+void doTabOutTable(
+	char *database, 
+	char *table, 
+	struct sqlConnection *conn, 
+	char *fields)
 /* Do tab-separated output on fields of a single table. */
 {
 struct region *region, *regionList = NULL;
@@ -480,8 +484,7 @@ struct hash *idHash = NULL;
 int outCount = 0;
 boolean isPositional;
 
-regionList = getRegions(conn);
-checkTableExists(conn, table);
+regionList = getRegions();
 hti = getHti(database, table);
 
 /* If they didn't pass in a field list assume they want all fields. */
@@ -567,7 +570,7 @@ void doOutPrimaryTable(struct trackDb *track,
 /* Dump out primary table. */
 {
 textOpen();
-doTabOutTable(track->tableName, conn, NULL);
+doTabOutTable(database, track->tableName, conn, NULL);
 }
 
 void doTopSubmit(struct sqlConnection *conn)
@@ -593,7 +596,7 @@ void doIntersect(struct sqlConnection *conn)
 /* Respond to intersection button. */
 {
 htmlOpen("Table Browser Intersect");
-uglyf("Processing intersect button... not yet doing anything real...");
+hPrintf("Processing intersect button... not yet doing anything real...");
 htmlClose();
 }
 

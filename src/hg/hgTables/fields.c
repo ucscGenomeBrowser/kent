@@ -196,32 +196,35 @@ for (in = inList; in != NULL; in = in->next)
 slSort(&outList, dbTableCmp);
 
 /* Print html. */
-webNewSection("Linked Tables");
-hTableStart();
-for (out = outList; out != NULL; out = out->next)
+if (outList != NULL)
     {
-    struct sqlConnection *conn = sqlConnect(out->db);
-    struct asObject *asObj = asForTable(conn, out->table);
-    char *var = linkedTableVar(out->db, out->table);
-    hPrintf("<TR>");
-    hPrintf("<TD>");
-    cgiMakeCheckBox(var, varOn(var));
-    hPrintf("</TD>");
-    hPrintf("<TD>%s</TD>", out->db);
-    hPrintf("<TD>%s</TD>", out->table);
-    hPrintf("<TD>");
-    if (asObj != NULL)
-        hPrintf("%s", asObj->comment);
-    else
-        hPrintf("&nbsp;");
-    hPrintf("</TD>");
-    hPrintf("</TR>");
-    sqlDisconnect(&conn);
-    }
-hTableEnd();
-hPrintf("<BR>");
+    webNewSection("Linked Tables");
+    hTableStart();
+    for (out = outList; out != NULL; out = out->next)
+	{
+	struct sqlConnection *conn = sqlConnect(out->db);
+	struct asObject *asObj = asForTable(conn, out->table);
+	char *var = linkedTableVar(out->db, out->table);
+	hPrintf("<TR>");
+	hPrintf("<TD>");
+	cgiMakeCheckBox(var, varOn(var));
+	hPrintf("</TD>");
+	hPrintf("<TD>%s</TD>", out->db);
+	hPrintf("<TD>%s</TD>", out->table);
+	hPrintf("<TD>");
+	if (asObj != NULL)
+	    hPrintf("%s", asObj->comment);
+	else
+	    hPrintf("&nbsp;");
+	hPrintf("</TD>");
+	hPrintf("</TR>");
+	sqlDisconnect(&conn);
+	}
+    hTableEnd();
+    hPrintf("<BR>");
 
-cgiMakeButton(hgtaDoSelectFieldsMore, "Allow Selection From Checked Tables");
+    cgiMakeButton(hgtaDoSelectFieldsMore, "Allow Selection From Checked Tables");
+    }
 }
 
 struct dbTable *extraTableList()
