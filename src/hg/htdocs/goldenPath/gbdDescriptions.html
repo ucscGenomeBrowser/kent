@@ -486,13 +486,19 @@ TrEMBL-NEW and their corresponding mRNAs from Genbank
   - Constant STS marker information - revised version used in later releases</LI>
   <LI><A 
   href="#STSinfoMouse">stsInfoMouse</A> 
-  - Constant STS marker information </LI>
+  - Constant STS marker information (MGI)</LI>
+  <LI><A 
+  href="#STSinfoMouseNew">stsInfoMouseNew</A> 
+  - Constant STS marker information (NCBI)</LI>
   <LI><A 
   href="#STSmap">stsMap</A> 
   - STS markers on genetic (blue) and radiation hybrid (black) maps </LI> 
   <LI><A 
   href="#STSmapMouse">stsMapMouse</A> 
-  - STS markers and postions on mouse assembly
+  - STS markers and postions on mouse assembly (MGI)
+  <LI><A 
+  href="#STSmapMouseNew">stsMapMouseNew</A> 
+  - STS markers and postions on mouse assembly (NCBI)
   <LI><A 
   href="#STSsites">stsMarker</A> 
   - STS marker mappings from various maps and FISH clone mappings from the BAC 
@@ -677,7 +683,7 @@ The following definition is used for several tables as follows:<BR>
     uint thickEnd;     "End of where display should be thick (stop codon)"
     uint reserved;     "Always zero for now"
     int blockCount;    "Number of blocks"
-    int[blockCount] blockSizes; "Comma separated list of block sizes"
+    int[blockCount] blockSizes; "Comma-separated list of block sizes"
     int[blockCount] blockStarts; "Start positions relative to chromStart."
     int expCount;      "Number of experiments."
     int[expCount] expIds; "Experiment IDs."
@@ -864,21 +870,21 @@ Last used Apr. 2001.
 <PRE>table fosEndPairs
 "Positions of end pairs for fosmids"
    (
-   short  bin;        	"Bin number for browser speedup"
-   string chrom;      	"Human chromosome"
-   uint   chromStart; 	"Start position of fosmid in chromosome"
-   uint   chromEnd;   	"End position of fosmid in chromosome"
-   string name;       	"Name of fosmid"
+   short  bin;        	      "Bin number for browser speedup"
+   string chrom;      	      "Human chromosome"
+   uint   chromStart; 	      "Start position of fosmid in chromosome"
+   uint   chromEnd;   	      "End position of fosmid in chromosome"
+   string name;       	      "Name of fosmid"
 
-   uint   score;      	"Score = 1000/(# of times fosmid appears in assembly)"
-   char[1] strand;    	"Value should be + or -"
-   string pslTable;   	"Table which contains corresponding PSL records for linked features"
-   uint   lfCount;    	"Number of linked features in the series"
-   uint[lfCount]   lfStarts;  "Comma separated list of start positions of each linked 
+   uint   score;      	      "Score = 1000/(# of times fosmid appears in assembly)"
+   char[1] strand;    	      "Value should be + or -"
+   string pslTable;   	      "Table which contains corresponding PSL records for linked features"
+   uint   lfCount;    	      "Number of linked features in the series"
+   uint[lfCount]   lfStarts;  "Comma-separated list of start positions of each linked 
 				feature in genomic"
-   uint[lfCount]   lfSizes;   "Comma separated list of sizes of each linked feature 
+   uint[lfCount]   lfSizes;   "Comma-separated list of sizes of each linked feature 
 				in genomic"
-   string[lfCount] lfNames;   "Comma separated list of names of linked features"
+   string[lfCount] lfNames;   "Comma-separated list of names of linked features"
    )
 </PRE>
 
@@ -951,14 +957,14 @@ each transcript has a row in this table.
 <PRE>table genePred
 "A gene prediction."
     (
-    string  name;       "Name of gene"
-    string  chrom;      "Chromosome name"
-    char[1] strand;     "+ or - for strand"
-    uint    txStart;    "Transcription start position"
-    uint    txEnd;      "Transcription end position"
-    uint    cdsStart;   "Coding region start"
-    uint    cdsEnd;     "Coding region end"
-    uint    exonCount;  "Number of exons"
+    string  name;               "Name of gene"
+    string  chrom;              "Chromosome name"
+    char[1] strand;             "+ or - for strand"
+    uint    txStart;            "Transcription start position"
+    uint    txEnd;              "Transcription end position"
+    uint    cdsStart;           "Coding region start"
+    uint    cdsEnd;             "Coding region end"
+    uint    exonCount;          "Number of exons"
     uint[exonCount] exonStarts; "Exon start positions"
     uint[exonCount] exonEnds;   "Exon end positions"
     )
@@ -970,15 +976,15 @@ information. In alternative splicing situations each transcript has a row in thi
 <PRE>table refFlat
 "A gene prediction with additional geneName field."
     (
-    string  geneName;   "Name of gene as it appears in genome browser."
-    string  name;       "Name of gene"
-    string  chrom;      "Chromosome name"
-    char[1] strand;     "+ or - for strand"
-    uint    txStart;    "Transcription start position"
-    uint    txEnd;      "Transcription end position"
-    uint    cdsStart;   "Coding region start"
-    uint    cdsEnd;     "Coding region end"
-    uint    exonCount;  "Number of exons"
+    string  geneName;           "Name of gene as it appears in genome browser."
+    string  name;               "Name of gene"
+    string  chrom;              "Chromosome name"
+    char[1] strand;             "+ or - for strand"
+    uint    txStart;            "Transcription start position"
+    uint    txEnd;              "Transcription end position"
+    uint    cdsStart;           "Coding region start"
+    uint    cdsEnd;             "Coding region end"
+    uint    exonCount;          "Number of exons"
     uint[exonCount] exonStarts; "Exon start positions"
     uint[exonCount] exonEnds;   "Exon end positions"
     )
@@ -1079,12 +1085,12 @@ The following definition is used for tables that link a predicted peptide to a p
 "Jackson Labs Mouse Orthologs"
     (
     string humanSymbol;	"Human HUGO symbol"
-    string humanBand; "Human chromosomal location"
-    string mgiId;     "Mouse database id"
+    string humanBand;   "Human chromosomal location"
+    string mgiId;       "Mouse database id"
     string mouseSymbol; "Mouse human symbol"
-    string mouseChr; "Mouse chromosome"
-    string mouseCm; "Mouse genetic map positionin centimorgans"
-    string mouseBand; "Mouse chromosome band if any"
+    string mouseChr;    "Mouse chromosome"
+    string mouseCm;     "Mouse genetic map positionin centimorgans"
+    string mouseBand;   "Mouse chromosome band if any"
     )
 </PRE>
 
@@ -1110,18 +1116,19 @@ The following definition is used for tables that link a predicted peptide to a p
 "Protein coding genes based on proteins from SWISS-PROT, TrEMBL, and 
 TrEMBL-NEW and their corresponding mRNAs from Genbank"
     (
-    string  name;       "Name of gene"
-    string  chrom;      "Chromosome name"
-    char[1] strand;     "+ or - for strand"
-    uint    txStart;    "Transcription start position"
-    uint    txEnd;      "Transcription end position"
-    uint    cdsStart;   "Coding region start"
-    uint    cdsEnd;     "Coding region end"
-    uint    exonCount;  "Number of exons"
+    string  name;               "Name of gene"
+    string  chrom;              "Chromosome name"
+    char[1] strand;             "+ or - for strand"
+    uint    txStart;            "Transcription start position"
+    uint    txEnd;              "Transcription end position"
+    uint    cdsStart;           "Coding region start"
+    uint    cdsEnd;             "Coding region end"
+    uint    exonCount;          "Number of exons"
     uint[exonCount] exonStarts; "Exon start positions"
     uint[exonCount] exonEnds;   "Exon end positions"
-    string  proteinID;  "SWISS-PROT ID" 
-    string  alignID;    "Unique identifier for each (known gene, alignment position) pair"
+    string  proteinID;          "SWISS-PROT ID" 
+    string  alignID;            "Unique identifier for each (known gene, alignment 
+                                 position) pair"
     )
 </PRE>
 
@@ -1554,15 +1561,15 @@ L-scores with the formula: L = 8.0 * X / 1000.0 for sampleHeight X.
 
 <PRE>table sample9
 "Describes (x,y) pairs of samples"
-    ushort bin;           "A field to speed indexing added to many
-                           tables August 2001"
-    string  chrom;        "Chromosome alignment is on."
-    uint    chromStart;   "Start position in chromosome"
-    uint    chromEnd;     "End position in chromosome"
-    string  name;         "Unique index given to each block of samples"
-    uint    score;        "Overall block score from 0 to 1000 (chrN_humMusL only)"
-    char[1] strand;       "Strand: + or -"
-    uint    sampleCount   "Number of samples in this block"
+    ushort bin;                         "A field to speed indexing added to many
+                                         tables August 2001"
+    string  chrom;                      "Chromosome alignment is on."
+    uint    chromStart;                 "Start position in chromosome"
+    uint    chromEnd;                   "End position in chromosome"
+    string  name;                       "Unique index given to each block of samples"
+    uint    score;                      "Overall block score from 0 to 1000 (chrN_humMusL only)"
+    char[1] strand;                     "Strand: + or -"
+    uint    sampleCount                 "Number of samples in this block"
     uint[sampleCount]   samplePosition  "Base position of each sample in this
                                          block, relative to chromStart"
     uint[sampleCount]   sampleHeight    "Score for each sample (y-value) from 0 to 1000"
@@ -1572,17 +1579,14 @@ L-scores with the formula: L = 8.0 * X / 1000.0 for sampleHeight X.
 <PRE>table sanger22extra
 "Table with additional information about a Sanger 22 gene"
     (
-    string name;	"Transcript name"
-    string locus;	"Possibly biological short name"
-    lstring description; "Description from Sanger gene GFFs"
-    string geneType;	"Type field from Sanger gene GFFs"
-    string cdsType;	"Type field from Sanger CDS GFFs"
+    string name;	  "Transcript name"
+    string locus;	  "Possibly biological short name"
+    lstring description;  "Description from Sanger gene GFFs"
+    string geneType;	  "Type field from Sanger gene GFFs"
+    string cdsType;	  "Type field from Sanger CDS GFFs"
     )
 </PRE>
 
-  <LI><A 
-  href="#Seq">seq</A> 
-  - 
 <H4><A name=Seq></A>Seq</H4>
 <PRE>table seq
 "Locations of database table sequences referenced in external fasta files"
@@ -1647,9 +1651,9 @@ This table is used for both the snpNih and snpTsc tables.
 <PRE>table softberryHom
 "Protein homologies behind Softberry genes"
     (
-    string name;        "Softberry gene name"
-    string giString;    "String with Genbank gi and accession"
-    lstring description; "Freeform (except for no tabs) description"
+    string name;          "Softberry gene name"
+    string giString;      "String with Genbank gi and accession"
+    lstring description;  "Freeform (except for no tabs) description"
     )
 </PRE>
 
@@ -1659,21 +1663,21 @@ The bacEndPairs table uses all fields.
 <PRE>table lfs
 "Standard linked features series table"
    (
-   short  bin;        "Bin number for browser speedup"
-   string chrom;      "Human chromosome or FPC contig"
-   uint   chromStart; "Start position of clone in chromosome"
-   uint   chromEnd;   "End position of clone in chromosome"
-   string name;       "Name of clone"
+   short  bin;                  "Bin number for browser speedup"
+   string chrom;                "Human chromosome or FPC contig"
+   uint   chromStart;           "Start position of clone in chromosome"
+   uint   chromEnd;             "End position of clone in chromosome"
+   string name;                 "Name of clone"
 
-   uint   score;      "Score = 1000/(# of times clone appears in assembly)"
-   char[1] strand;    "Value should be + or -"
-   string pslTable;   "Table which contains corresponding PSL records for linked features"
-   uint   lfCount;    "Number of linked features in the series"
-   uint[lfCount]   lfStarts;  "Comma separated list of start positions of each linked 
-				feature in genomic"
-   uint[lfCount]   lfSizes;   "Comma separated list of sizes of each linked feature 
-				in genomic"
-   string[lfCount] lfNames;   "Comma separated list of names of linked features"
+   uint   score;                "Score = 1000/(# of times clone appears in assembly)"
+   char[1] strand;              "Value should be + or -"
+   string pslTable;             "Table which contains corresponding PSL records for linked features"
+   uint   lfCount;              "Number of linked features in the series"
+   uint[lfCount]   lfStarts;    "Comma-separated list of start positions of each linked 
+				 feature in genomic"
+   uint[lfCount]   lfSizes;     "Comma-separated list of sizes of each linked feature 
+				 in genomic"
+   string[lfCount] lfNames;     "Comma-separated list of names of linked features"
    )
 </PRE>
 
@@ -1686,13 +1690,117 @@ The bacEndPairs table uses all fields.
     )
 </PRE>
 
-<H4><A name=STSalias></A>STS marker aliases and associated identification numbers</H4>
+<H4><A name=STSsites></A>STS and FISH Clone Positions</H4>
+(obsolete as of Apr. 2001, replaced by <A href="#STSmap">stsMap</A>)
+<PRE>table stsMarker  
+"STS marker and its position on golden path and various maps"
+    ( 
+    string chrom;            "Chromosome or 'unknown'"
+    int    chromStart;       "Start position in chrom (-1 if unpositioned)"
+    uint   chromEnd;         "End position in chrom" 
+    string name;             "Name of STS marker"  
+    uint   score;            "Score of a marker - depends on how many contigs it hits"  
+    uint   identNo;          "Identification number of STS" 
+    string ctgAcc;           "Contig accession number
+    string otherAcc;         "Accession number of other contigs that the marker hits"  
+    string genethonChrom;    "Chromosome from Genethon map or 0 if none" 
+    float  genethonPos;      "Position on Genethon map"
+    string marshfieldChrom;  "Chromosome from Marshfield map or 0 if none"
+    float  marshfieldPos;    "Position on Marshfield map" 
+    string gm99Gb4Chrom;     "Chromosome from GeneMap99 map or 0 if none"
+    float  gm99Gb4Pos;       "Position on GeneMap99 map" 
+    string shgcG3Chrom;      "Chromosome from G3 map or 0 if none"
+    float  shgcG3Pos;        "Position on G3 map" 
+    string wiYacChrom;       "Chromosome from Whitehead YAC map or 0 if none"
+    float  wiYacPos;         "Position on Whitehead YAC map" 
+    string shgcTngChrom;     "Chromosome from TNG map or 0 if none" 
+    float  shgcTngPos;       "Position on TNG map" 
+    string fishChrom;        "Chromosome from FISH map or 0 if none" 
+    string beginBand;        "Beginning of range of bands on FISH map"
+    string endBand;          "End of range of bands on FISH map"
+    string lab;              "Laboratory that placed the FISH clone"
+    )             
+</PRE>
+
+<H4><A name=STSmap></A>STS Clone Positions</H4>
+<PRE>table stsMap
+"STS marker and its position on golden path and various maps"
+    (
+    string chrom;	        "Chromosome or 'unknown'"
+    int chromStart;             "Start position in chrom - negative 1 if unpositioned"
+    uint chromEnd;        	"End position in chrom"
+    string name;	        "Name of STS marker"
+    uint score;	                "Score of a marker = 1000/(# of placements)"
+    uint identNo;        	"Identification number of STS"
+    string ctgAcc;	        "Contig accession number"
+    string otherAcc;	        "Accession number of other contigs that the marker hits"
+
+    string genethonChrom;	"Chromosome (no chr) from Genethon map or 0 if none"
+    float genethonPos;		"Position on Genethon map"
+    string marshfieldChrom;	"Chromosome (no chr) from Marshfield map or 0 if none"
+    float marshfieldPos;	"Position on Marshfield map"
+    string gm99Gb4Chrom;	"Chromosome (no chr) from GeneMap99 map or 0 if none"
+    float gm99Gb4Pos;		"Position on gm99_bg4 map"
+    string shgcTngChrom;	"Chromosome (no chr) from shgc_tng map or 0 if none"
+    float shgcTngPos;		"Position on shgc_tng map"
+    string shgcG3Chrom;		"Chromosome (no chr) from Stanford G3 map or 0 if none"
+    float shgcG3Pos;		"Position on shgc_g3 map"
+    string wiYacChrom;		"Chromosome (no chr) from Whitehead YAC map or 0 if none"
+    float wiYacPos;		"Position on wi_yac map"
+    string wiRhChrom;		"Chromosome (no chr) from Whitehead RH map or 0 if none"
+    float wiRhPos;		"Position on wi_rh map"
+    string fishChrom;		"Chromosome (no chr) from FISH map or 0 if none"
+    string beginBand;		"Beginning of range of bands on FISH map"
+    string endBand;		"End of range of bands on FISH map"
+    string lab;			"Laboratory that placed the FISH clone"
+    )
+</PRE>
+
+<H4><A name=STSmapMouse></A>STS Clone Positions (MGI)</H4>
+<PRE>table stsMapMouse
+"STS marker and its position on mouse assembly"
+    (
+    string chrom;       "Chromosome or 'unknown'"
+    int chromStart;     "Start position in chromosome (-1 if unpositioned)"
+    uint chromEnd;      "End position in chromosome"
+    string name;        "Name of STS marker"
+    uint score;         "Score of a marker = 1000/(# of placements)"
+    uint identNo;       "UCSC ID number"
+    uint probeId;       "Probe identification number of STS"
+    uint markerId;      "Marker identification number of STS"
+    )
+</PRE>
+
+<H4><A name=STSmapMouseNew></A>STS Clone Positions (NCBI)</H4>
+<PRE>table stsMapMouseNew
+"STS marker and its position on mouse assembly - mm3 and higher"
+    (
+    string chrom;       "Chromosome or 'unknown'"
+    int chromStart;     "Start position in chromosome (-1 if unpositioned)"
+    uint chromEnd;      "End position in chromosome"
+    string name;        "Name of STS marker"
+    uint score;         "Score of a marker = 1000/(# of placements)"
+    uint identNo;       "Identification number of STS"
+    string ctgAcc;      "Contig accession number"
+    string otherAcc;    "Accession number of other contigs that the marker hits"
+    string rhChrom;     "Chromosome (no chr) from RH map or 0 if none"
+    float rhPos;        "Position on RH map"
+    float rhLod;        "LOD score of RH map"
+    string fhhChr;      "Chromosome (no chr) from FHHxACI genetic or 0 if none"
+    float fhhPos;       "Position on FHHxACI map"
+    string shrspChrom;  "Chromosome (no chr) from SHRSPxBN geneticmap or 0 if none"
+    float shrspPos;     "Position on SHRSPxBN genetic map"
+    )
+</PRE>
+
+
+<H4><A name=STSalias></A>STS Marker Aliases and Associated Identification Numbers</H4>
 <PRE>table stsAlias
 "STS marker aliases and associated identification numbers"
     (
     string alias;       "STS marker name"
     uint identNo;       "Identification number of STS marker"
-    string trueName;        "Official UCSC name for marker"
+    string trueName;    "Official UCSC name for marker"
     )
 </PRE>
 
@@ -1812,7 +1920,7 @@ The bacEndPairs table uses all fields.
     )
 </PRE>
 
-<H4><A name=STSinfoMouse></A>STS Marker Constant Information (Mouse)</H4>
+<H4><A name=STSinfoMouse></A>STS Marker Constant Information (Mouse - mm1, mm2)</H4>
 <PRE>table stsInfoMouse
 "Constant STS marker information for the mouse genome"
     (
@@ -1836,88 +1944,43 @@ The bacEndPairs table uses all fields.
     )
 </PRE>
 
-<H4><A name=STSmap></A>STS Clone Positions</H4>
-<PRE>table stsMap
-"STS marker and its position on golden path and various maps"
+<H4><A name=STSinfoMouseNew></A>STS Marker Constant Information (Mouse - mm3 and higher)</H4>
+<PRE>table stsInfoMouseNew
+"Constant STS marker information for the mouse genome - mm3 and higher"
     (
-    string chrom;	        "Chromosome or 'unknown'"
-    int chromStart;             "Start position in chrom - negative 1 if unpositioned"
-    uint chromEnd;        	"End position in chrom"
-    string name;	        "Name of STS marker"
-    uint score;	                "Score of a marker = 1000/(# of placements)"
-    uint identNo;        	"Identification number of STS"
-    string ctgAcc;	        "Contig accession number"
-    string otherAcc;	        "Accession number of other contigs that the marker hits"
+    uint identNo;                "UCSC identification number"
+    string name;                 "Official UCSC name"
+    uint RGDId;		   	 "Marker's RGD ID"
+    string RGDName;		 "Marker's RGD name"	
+    uint UiStsId;		 "Marker's UiStsId"	   
+    uint nameCount;		 "Number of alias"
+    string alias;		 "Alias, or N/A"
 
-    string genethonChrom;	"Chromosome (no chr) from Genethon map or 0 if none"
-    float genethonPos;		"Position on Genethon map"
-    string marshfieldChrom;	"Chromosome (no chr) from Marshfield map or 0 if none"
-    float marshfieldPos;	"Position on Marshfield map"
-    string gm99Gb4Chrom;	"Chromosome (no chr) from GeneMap99 map or 0 if none"
-    float gm99Gb4Pos;		"Position on gm99_bg4 map"
-    string shgcTngChrom;	"Chromosome (no chr) from shgc_tng map or 0 if none"
-    float shgcTngPos;		"Position on shgc_tng map"
-    string shgcG3Chrom;		"Chromosome (no chr) from Stanford G3 map or 0 if none"
-    float shgcG3Pos;		"Position on shgc_g3 map"
-    string wiYacChrom;		"Chromosome (no chr) from Whitehead YAC map or 0 if none"
-    float wiYacPos;		"Position on wi_yac map"
-    string wiRhChrom;		"Chromosome (no chr) from Whitehead RH map or 0 if none"
-    float wiRhPos;		"Position on wi_rh map"
-    string fishChrom;		"Chromosome (no chr) from FISH map or 0 if none"
-    string beginBand;		"Beginning of range of bands on FISH map"
-    string endBand;		"End of range of bands on FISH map"
-    string lab;			"Laboratory that placed the FISH clone"
+    
+    string primer1;          	 "Primer1 sequence"
+    string primer2;          	 "Primer2 sequence"
+    string distance;             "Length of STS sequence"
+    uint sequence;               "Whether the full sequence is available (1) or not (0) for STS"
+    string organis; 		 "Organism for which STS discovered"
+   
+    string fhhName;	         "WI_Mouse_Genetic map"
+    string fhhChr;               "Chromosome in Genetic map"
+    float fhhGeneticPos;         "Position in Genetic map"
+    
+    string shrspName;	         "MGD map"
+    string shrspChr;             "Chromosome in Genetic map"
+    float shrspGeneticPos;       "Position in Genetic map"
+
+    string rhName;	    	 "MRC_RH map"
+    string rhChr;                "Chromosome in Genetic map"
+    float rhGeneticPos;          "Position in Genetic map"
+    float RHLOD;		 "LOD score of RH map"
+
+
+    string GeneName;             "Associated gene name"
+    string GeneID;               "Associated gene ID"
+    string clone;		 "Clone sequence"
     )
-</PRE>
-
-<H4><A name=STSmapMouse></A>STS Clone Positions (Mouse)</H4>
-<PRE>table stsMapMouse
-"STS marker and its position on mouse assembly"
-    (
-    string chrom;       "Chromosome or 'unknown'"
-    int chromStart;     "Start position in chromosome (-1 if unpositioned)"
-    uint chromEnd;      "End position in chromosome"
-    string name;        "Name of STS marker"
-    uint score;         "Score of a marker = 1000/(# of placements)"
-    uint identNo;       "UCSC ID number"
-    uint probeId;       "Probe identification number of STS"
-    uint markerId;      "Marker identification number of STS"
-    )
-</PRE>
-
-<H4><A name=STSsites></A>STS and FISH Clone Positions</H4>
-(obsolete as of Apr. 2001, replaced by <A href="#STSmap">stsMap</A>)
-<PRE>table stsMarker  
-"STS marker and its position on golden path and various maps"
-    ( 
-    string chrom;            "Chromosome or 'unknown'"
-    int    chromStart;       "Start position in chrom (-1 if
-                                unpositioned)"
-    uint   chromEnd;         "End position in chrom" 
-    string name;             "Name of STS marker"  
-    uint   score;            "Score of a marker - depends on how 
-                                many contigs it hits"  
-    uint   identNo;          "Identification number of STS" 
-    string ctgAcc;           "Contig accession number
-    string otherAcc;         "Accession number of other 
-                                contigs that the marker hits"  
-    string genethonChrom;    "Chromosome from Genethon map or 0 if none" 
-    float  genethonPos;      "Position on Genethon map"
-    string marshfieldChrom;  "Chromosome from Marshfield map or 0 if none"
-    float  marshfieldPos;    "Position on Marshfield map" 
-    string gm99Gb4Chrom;     "Chromosome from GeneMap99 map or 0 if none"
-    float  gm99Gb4Pos;       "Position on GeneMap99 map" 
-    string shgcG3Chrom;      "Chromosome from G3 map or 0 if none"
-    float  shgcG3Pos;        "Position on G3 map" 
-    string wiYacChrom;       "Chromosome from Whitehead YAC map or 0 if none"
-    float  wiYacPos;         "Position on Whitehead YAC map" 
-    string shgcTngChrom;     "Chromosome from TNG map or 0 if none" 
-    float  shgcTngPos;       "Position on TNG map" 
-    string fishChrom;        "Chromosome from FISH map or 0 if none" 
-    string beginBand;        "Beginning of range of bands on FISH map"
-    string endBand;          "End of range of bands on FISH map"
-    string lab;              "Laboratory that placed the FISH clone"
-    )             
 </PRE>
 
 
@@ -1925,9 +1988,9 @@ The bacEndPairs table uses all fields.
 <PRE>table sfDescription
 "Stores domain descriptions for the Superfamily track"
    (
-    string name; 		"Superfamily ID (same as Ensembl transcript name)"
-    string proteinID; 		"ID of corresponding Ensembl translation"
-    string description;		"Domain description"
+    string name; 	     "Superfamily ID (same as Ensembl transcript name)"
+    string proteinID; 	     "ID of corresponding Ensembl translation"
+    string description;	     "Domain description"
    )                                                                           
 </PRE>
 
@@ -1936,10 +1999,10 @@ The bacEndPairs table uses all fields.
 "A tiling path of clones through a chromosome"
     (
     string chrom;	"Chromosome name: chr1, chr2, etc."
-    string accession; "Clone accession or ? or GAP"
-    string clone;     "Clone name in BAC library"
-    string contig;    "Contig (or gap size)"
-    int chromIx;      "Number of clone in tiling path starting chrom start"
+    string accession;   "Clone accession or ? or GAP"
+    string clone;       "Clone name in BAC library"
+    string contig;      "Contig (or gap size)"
+    int chromIx;        "Number of clone in tiling path starting chrom start"
     )
 </PRE>
 
