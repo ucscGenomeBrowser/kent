@@ -11,6 +11,7 @@ enum gfType
     gftProt = 2,         /* Protein. */
     gftDnaX = 3,		/* Genomic DNA translated to protein */
     gftRnaX = 4,         /* RNA translated to protein */
+    gftProtChes = 5,         /* experimental protein */
     };
 
 char *gfTypeName(enum gfType type);
