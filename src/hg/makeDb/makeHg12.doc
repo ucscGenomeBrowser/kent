@@ -1402,7 +1402,7 @@ o - Load genomic dupes
     mysql -u hgcat -pbigSECRET hg12 < ~/src/hg/lib/genomicDups.sql
     hgLoadBed hg12 -oldTable genomicDups genomicDupes.bed
 
-LOAD AFFYRATIO (GNF)
+LOAD AFFYRATIO [GNF] (Done: Chuck Sugnet 7/24/02)
 o - # ssh hgwdev
     cd /cluster/store1/sugnet/
     mkdir gs.13
