@@ -202,4 +202,14 @@ ALIGNING VIRAL RNA (DONE 04/15/03)
     hgLoadBed sc1 cpgIsland -tab -noBin \
       -sqlTable=$HOME/kent/src/hg/lib/cpgIsland.sql cpgIsland.bed
 
+LOAD SOFTBERRY GENES 
+     mkdir -p ~/sc1/bed/softberry
+     cd ~/sc1/bed/softberry
+  # Copy in email attachment Soft_genes_SARS_Tor2.tar.gz
+  # from Victor Solovyev
+     gtar -zxvf Soft_gene*.gz
+  # Substitute chr1 for subs in the gff file 
+     ldHgGene sc1 softberryGene SARS.gff
+     hgPepPred sc1 softberry *.protein
+     hgSoftberryHom sc1 *.protein
 
