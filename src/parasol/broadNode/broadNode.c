@@ -136,10 +136,12 @@ struct fileTracker
    time_t openTime;	/* Time file opened. */
    off_t pos;		/* Position in file. */
    int curSectionIx;	/* Which section are we working on? */
-   int curSectionSize;	/* Which section are we working on? */
+   int curSectionSize;	/* Size of current section. */
    struct fileSection section; /* Keep track of blocks in this section. */
    char sectionData[bdSectionBytes]; /* Data for this section. */
-   boolean sectionClosed;	/* True if this section is closed. */
+   bool sectionClosed;	/* True if this section is closed. */
+   unsigned char md5[16];	/* Keep the md5 checksum here. */
+   bool doneMd5;	/* Calculated md5. */
    };
 
 void fileTrackerFree(struct fileTracker **pFt)
@@ -219,11 +221,15 @@ if (ft != NULL)
 	    return -222;
 	    }
 	ft->curSectionIx = sectionIx;
+	ft->curSectionSize = 0;
+	ft->sectionClosed = FALSE;
+	ft->doneMd5 = FALSE;
 	memset(section->blockTracker, 0, sizeof(section->blockTracker));
 	}
     if (section->blockTracker[blockIx] == FALSE)
 	{
 	int dataOffset = blockIx * bdBlockSize;
+	int dataEnd = dataOffset + size;
 	startOffset = bdBlockOffset(sectionIx, blockIx);
 	if (ft->pos != startOffset)
 	    {
@@ -231,6 +237,7 @@ if (ft != NULL)
 		return errno;
 	    ft->pos = startOffset;
 	    }
+	if (dataEnd > ft->curSectionSize) ft->curSectionSize = dataEnd;
 	memcpy(ft->sectionData + dataOffset, data, size);
 	size = write(ft->fh, data, size);
 	if (size == -1)
@@ -264,6 +271,37 @@ if (ft != NULL)
 return 0;
 }
 
+void calcMd5OnSection(struct fileTracker *ft)
+/* Calculate md5. */
+{
+struct md5_context ctx;
+if (!ft->doneMd5)
+    {
+    md5_starts(&ctx);
+    md5_update(&ctx, (uint8 *)ft->sectionData, ft->curSectionSize);
+    md5_finish(&ctx, ft->md5);
+    ft->doneMd5 = TRUE;
+    }
+}
+
+void pSectionDone(struct bdMessage *m, struct fileTracker *ftList, bits32 ownIp)
+/* Try to get ahead on md5 count. */
+{
+struct fileTracker *ft;
+bits32 fileId, sectionIx, blockCount, i;
+bdParseSectionDoneMessage(m, &fileId, &sectionIx, &blockCount);
+ft = findTracker(ftList, fileId);
+if (ft != NULL && sectionIx == ft->curSectionIx)
+    {
+    struct fileSection *section = &ft->section;
+    int missingCount = 0;
+    for (i=0; i<blockCount; ++i)
+	++missingCount;
+    if (missingCount == 0)
+	calcMd5OnSection(ft);
+    }
+}
+
 void pSectionQuery(struct bdMessage *m, struct fileTracker *ftList, bits32 ownIp)
 /* Process section query.  Set up message so that it contains list
  * of missing blocks. */
@@ -273,15 +311,17 @@ bits32 fileId, sectionIx, blockCount;
 unsigned char *md5;
 bdParseSectionQueryMessage(m, &fileId, &sectionIx, &blockCount, &md5);
 ft = findTracker(ftList, fileId);
-if (ft == NULL)
+if (ft == NULL || sectionIx < ft->curSectionIx)
     {
-    /* We aren't even supposed to know about this file, so
-     * don't complain about missing stuff. */
+    /* Don't complain about missing stuff.  Supposively at least
+     * we've already dealt with this, and this is just a late message
+     * coming into the socket. */
     bdMakeMissingBlocksMessage(m, ownIp, m->id, fileId, 0, NULL);
     }
 else
     {
     /* Go through section and store missing blockIx's. */
+    struct fileSection *section = &ft->section;
     bits32 *missingList = ((bits32 *)m->data) + 2;
     bits32 *ml = missingList;
     int i, missingCount = 0;
@@ -297,7 +337,6 @@ else
 	}
     else
 	{
-	struct fileSection *section = &ft->section;
 	for (i=0; i<blockCount; ++i)
 	    {
 	    if (!section->blockTracker[i])
@@ -309,7 +348,24 @@ else
 	}
     logIt("%d missing %d of %d\n", sectionIx, missingCount, blockCount);
     if (missingCount == 0)
-	ft->sectionClosed = TRUE;
+	{
+	/* Check md5 signature.  If it matches we're good to go, otherwise
+	 * set up things to tell server to resend the whole section. */
+	calcMd5OnSection(ft);
+	if (memcmp(ft->md5, md5, sizeof(ft->md5)) == 0)
+	    ft->sectionClosed = TRUE;
+	else
+	    {
+	    logIt("Section %d of %s failed md5 check\n", sectionIx, ft->fileName);
+	    for (i=0; i<blockCount; ++i)
+		{
+		section->blockTracker[i] = FALSE;
+		*ml++ = i;
+		++missingCount;
+		}
+	    ft->doneMd5 = FALSE;
+	    }
+	}
     bdMakeMissingBlocksMessage(m, ownIp, m->id, fileId, missingCount, missingList);
     }
 }
@@ -378,6 +434,8 @@ while (alive)
 		break;
 	    case bdmMissingBlocks:
 		break;
+	    case bdmSectionDone:
+	        break;
 	    default:
 		break;
 	    }

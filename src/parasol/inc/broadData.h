@@ -34,6 +34,7 @@ enum bdMessageTypes
     bdmPing = 5,	/* Ask node daemon to show it's alive. */
     bdmSectionQuery = 6,  /* Ask node about status of file section */
     bdmMissingBlocks = 7, /* Reply about file section status */
+    bdmSectionDone = 8,   /* Tell node that section is done, can start calculating MD5 */
     };
 
 
@@ -117,6 +118,14 @@ void bdMakeMissingBlocksMessage(struct bdMessage *m, bits32 machine,
 void bdParseMissingBlocksMessage(struct bdMessage *m, bits32 *retFileId, 
 	bits32 *retMissingCount, bits32 **retMissingList);
 /* Parse out the specific parts of message listing missing blocks. */
+
+void bdMakeSectionDoneMessage(struct bdMessage *m, bits32 machine,
+	bits32 messageId, bits32 fileId, bits32 sectionIx, bits32 blockCount);
+/* Send message saying section is done. */
+
+void bdParseSectionDoneMessage(struct bdMessage *m, bits32 *retFileId,
+	bits32 *retSectionIx, bits32 *retBlockCount);
+/* Parse out section done message. */
 
 #endif /* BROADDATA_H */
 

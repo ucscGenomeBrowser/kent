@@ -252,3 +252,23 @@ for (i=0; i<missingCount; ++i)
     }
 }
 
+void bdMakeSectionDoneMessage(struct bdMessage *m, bits32 machine,
+	bits32 messageId, bits32 fileId, bits32 sectionIx, bits32 blockCount)
+/* Send message saying section is done. */
+{
+char *data = m->data;
+bdInitMessage(m, machine, messageId, bdmSectionDone, 3*sizeof(bits32));
+data = addLongData(data, fileId);
+data = addLongData(data, sectionIx);
+data = addLongData(data, blockCount);
+}
+
+void bdParseSectionDoneMessage(struct bdMessage *m, bits32 *retFileId,
+	bits32 *retSectionIx, bits32 *retBlockCount)
+/* Parse out section done message. */
+{
+char *data = m->data;
+*retFileId = getLongData(&data);
+*retSectionIx = getLongData(&data);
+*retBlockCount = getLongData(&data);
+}

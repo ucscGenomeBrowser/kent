@@ -254,7 +254,7 @@ void sendFile(struct dlList *machineList, struct dlList *deadList,
 struct dlNode *mNode, *nextNode;
 struct machine *machine;
 int tryIx, maxTry = 4, maxBroadTry = maxTry*10;
-int fileIx = 0;
+int fileId = 0;
 int messageIx = 0, lastReceivedMessageIx = 0;
 int firstOpenMessage = messageIx + 1;
 int firstCloseMessage;
@@ -281,7 +281,7 @@ if (f == NULL)
 
 /* Tell nodes things are coming twice by broadcast and then one at a time. */
 t1 = microTime();
-bdMakeFileOpenMessage(m, 0, ++messageIx, fileIx, fileName);
+bdMakeFileOpenMessage(m, 0, ++messageIx, fileId, fileName);
 err = broadcast(outSd, m);
 err = broadcast(outSd, m);
 for (tryIx = 0; tryIx < maxTry; ++tryIx)
@@ -292,7 +292,7 @@ for (tryIx = 0; tryIx < maxTry; ++tryIx)
 	if (!machine->didOpen && !machine->isDead)
 	    {
 	    int err;
-	    bdMakeFileOpenMessage(m, machine->ip, ++messageIx, fileIx, fileName);
+	    bdMakeFileOpenMessage(m, machine->ip, ++messageIx, fileId, fileName);
 	    err = bdSendTo(outSd, m, machine->ip, nodeInPort);
 	    if ((err = bdReceive(inSd, m, &ip)) >= 0)
 		{
@@ -381,7 +381,7 @@ else
 		if (readSize < 0)
 		    errAbort("Read error on %s", fileName, machine->name);
 		md5_update(&ctx, (uint8 *)fileDataArea, readSize);
-		bdMakeBlockMessage(m, machine->ip, ++messageIx, fileIx, sectionIx, 
+		bdMakeBlockMessage(m, machine->ip, ++messageIx, fileId, sectionIx, 
 		    blockIx, readSize, fileDataArea);
 		broadcast(outSd, m);
 		++subBlockCount;
@@ -396,6 +396,9 @@ else
 	    blockIx = subStart;
 	    receiveAndIgnore(inSd, m, subBlockCount);
 	    }
+	/* Give nodes heads up so they can start computing md5 and stuff. */
+	bdMakeSectionDoneMessage(m, 0, ++messageIx, fileId, sectionIx, blockCount);
+	broadcast(outSd, m);
 	md5_finish(&ctx, md5sum);
 	primaryTime += microTime() - t2;
 
@@ -415,7 +418,7 @@ else
 		if (!machine->gotCleanStatus)
 		    {
 		    boolean gotReply = FALSE;
-		    bdMakeSectionQueryMessage(m, machine->ip, ++messageIx, fileIx, 
+		    bdMakeSectionQueryMessage(m, machine->ip, ++messageIx, fileId, 
 			sectionIx, blockCount, md5sum);
 		    bdSendTo(outSd, m, machine->ip, nodeInPort);
 		    /* Try to find reply to us, skipping any previous messages. */
@@ -440,8 +443,8 @@ else
 			}
 		    if (gotReply)
 			{
-			bits32 fileIx, missingCount, *missingList;
-			bdParseMissingBlocksMessage(m, &fileIx, &missingCount, &missingList);
+			bits32 fileId, missingCount, *missingList;
+			bdParseMissingBlocksMessage(m, &fileId, &missingCount, &missingList);
 			if (missingCount == 0)
 			    machine->gotCleanStatus = TRUE;
 			else
@@ -461,7 +464,7 @@ else
 				    errnoAbort("Couldn't seek in %s", fileName);
 				//readSize = netReadAll(fd, dataArea2, bdBlockSize);
 				readSize = fread(dataArea2, 1, bdBlockSize, f);
-				bdMakeBlockMessage(m2, ip, ++messageIx, fileIx, sectionIx, 
+				bdMakeBlockMessage(m2, ip, ++messageIx, fileId, sectionIx, 
 					blockIx, readSize, dataArea2);
 				broadcast(outSd, m2);
 				if (++ackPending >= bdSubSectionSize)
@@ -511,7 +514,7 @@ else
 	    if (!machine->didClose && !machine->isDead)
 		{
 		boolean gotReply = FALSE;
-		bdMakeFileCloseMessage(m, machine->ip, ++messageIx, fileIx, fileName);
+		bdMakeFileCloseMessage(m, machine->ip, ++messageIx, fileId, fileName);
 		bdSendTo(outSd, m, machine->ip, nodeInPort);
 		/* Get message, skipping over non-closing ones. */
 		for (;;)
