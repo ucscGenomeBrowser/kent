@@ -38,7 +38,8 @@ void hgBotDelay()
 /* High level bot delay call - looks up bottleneck server
  * in hg.conf. */
 {
-char *host = cfgVal("bottleneck.host");
-char *port = cfgVal("bottleneck.port");
-botDelayCgi(host, atoi(port));
+char *host = cfgOption("bottleneck.host");
+char *port = cfgOption("bottleneck.port");
+if (host != NULL && port != NULL)
+    botDelayCgi(host, atoi(port));
 }
