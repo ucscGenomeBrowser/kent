@@ -185,6 +185,9 @@ extern char *database;	  /* Name of database we're using. */
 extern char *organism;	  /* Name of organism we're working on. */
 extern int winStart;	  /* Start of window in sequence. */
 extern int winEnd;	  /* End of window in sequence. */
+extern int maxItemsInFullTrack;  /* Maximum number of items displayed in full */
+extern int insideWidth;		/* Width of area to draw tracks in in pixels. */
+extern int insideX;			/* Start of area to draw track in in pixels. */
 extern int seqBaseCount;  /* Number of bases in sequence. */
 extern int winBaseCount;  /* Number of bases in window. */
 extern boolean zoomedToBaseLevel; /* TRUE if zoomed so we can draw bases. */
@@ -348,6 +351,9 @@ void netMethods(struct track *tg);
 
 void mafMethods(struct track *tg);
 /* Make track group for maf multiple alignment. */
+
+void altGraphXMethods(struct track *tg);
+/* setup special methods for altGraphX track */
 
 void axtMethods(struct track *tg, char *otherDb);
 /* Make track group for axt alignments. */
