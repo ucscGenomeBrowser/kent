@@ -1,4 +1,4 @@
-/* netSyntenic - Prune net of non-syntenic elements and gather stats. */
+/* netSyntenic - Add synteny info to net. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -11,7 +11,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "netSyntenic - Prune net of non-syntenic elements and gather stats\n"
+  "netSyntenic - Add synteny info to net.\n"
   "usage:\n"
   "   netSyntenic in.net out.net\n"
   "options:\n"
@@ -260,7 +260,7 @@ for (fill = fillList; fill != NULL; fill = fill->next)
 }
 
 void netSyntenic(char *inFile, char *outFile)
-/* netSyntenic - Prune net of non-syntenic elements and gather stats. */
+/* netSyntenic - Add synteny info to net. */
 {
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
 FILE *f = mustOpen(outFile, "w");
