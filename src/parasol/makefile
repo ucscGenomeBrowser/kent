@@ -11,6 +11,10 @@ all:
 	cd paraTestJob; make; cd ..
 	cd parasol; make; cd ..
 
+install:
+	cp bin/para* bin/gensub2 $(HOME)/bin/i386
+	cp bin/para* bin/gensub2 /cluster/bin/i386
+
 clean:
 	rm */*.o
 
