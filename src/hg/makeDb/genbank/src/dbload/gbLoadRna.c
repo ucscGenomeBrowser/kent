@@ -27,11 +27,10 @@
 #include "gbIgnore.h"
 #include "sqlUpdater.h"
 #include "sqlDeleter.h"
-#include "seqTbl.h"
 #include "extFileTbl.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.2 2003/06/15 07:11:25 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.3 2003/06/25 17:49:01 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 /* FIXME: ignored deletion could be in it's own module */

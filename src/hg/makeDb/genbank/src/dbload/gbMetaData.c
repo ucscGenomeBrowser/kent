@@ -29,7 +29,7 @@
 #include "sqlDeleter.h"
 #include "genbank.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.2 2003/06/14 07:52:59 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.3 2003/06/25 17:49:01 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -729,16 +729,18 @@ struct sqlUpdater *nextUpd;
 assert(imageCloneTbl != NULL);
 assert(seqTbl != NULL);
 
-/* unique string tables must be first */
+/* seq must be first */
+seqTblCommit(seqTbl, conn);
+seqTblFree(&seqTbl);
+
+/* unique string tables next, before mrna */
 for (nextRa = raFieldTableList; nextRa != NULL; nextRa = nextRa->next)
     uniqueStrTblCommit(nextRa->ust, conn);
 
-/* image ids are loaded next; doesn't matter if stale */
+/* image ids are loaded next */
 imageCloneTblCommit(imageCloneTbl, conn);
 
-/* seq must be next */
-seqTblCommit(seqTbl, conn);
-seqTblFree(&seqTbl);
+/* other metadata */
 while ((nextUpd = slPopHead(&allUpdaters)) != NULL)
     {
     sqlUpdaterCommit(nextUpd, conn);
@@ -776,6 +778,7 @@ if (srcDb == GB_REFSEQ)
     sqlDeleterDel(deleter, conn, "refSeqStatus", "mrnaAcc");
     sqlDeleterDel(deleter, conn, "refLink", "mrnaAcc");
     }
+sqlDeleterDel(deleter, conn, IMAGE_CLONE_TBL, "acc");
 sqlDeleterDel(deleter, conn, "mrna", "acc");
 /* seq must be last */
 sqlDeleterDel(deleter, conn, SEQ_TBL, "acc");
