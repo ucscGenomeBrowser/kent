@@ -1,0 +1,9 @@
+track genscan
+shortLabel Genscan Genes
+longLabel Genscan Gene Predictions
+group genes
+priority 50
+visibility hide
+color 170,100,0
+type genePred genscanPep
+

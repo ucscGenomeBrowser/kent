@@ -1,0 +1,562 @@
+track pGC
+shortLabel GC Samples 
+longLabel GC Percent Sample Track
+group map
+priority 1
+visibility full
+type sample 9
+
+track ctgPos
+shortLabel Map Contigs
+longLabel Physical Map Contigs
+group map
+priority 2
+visibility hide
+color 150,0,0
+
+track gold
+shortLabel Assembly
+longLabel Assembly from Fragments
+group map
+priority 3
+visibility hide
+color 150,100,30
+altColor 230,170,40
+type bed 3 +
+
+track gap
+shortLabel Gap
+longLabel Gap Locations
+group map
+priority 4
+visibility hide
+type bed 3 +
+
+track clonePos
+shortLabel Coverage
+longLabel Clone Coverage/Fragment Position
+group map
+priority 5
+visibility hide
+altColor 180,180,180 
+
+track pjt_gene
+shortLabel Gene Annotations
+longLabel Curated Gene Annotations
+group genes
+priority 6
+visibility hide
+color 0,100,180
+type bed 12 .
+
+track refGene
+shortLabel RefSeq Genes
+longLabel RefSeq Genes
+group genes
+priority 7
+visibility full
+color 12,12,120
+type genePred refPep refMrna
+
+track pjt_genscan
+shortLabel Genscan 
+longLabel Genscan Gene Predictions
+group genes
+priority 8
+visibility hide
+color 170,100,0
+type bed 12 .
+
+track mrna
+shortLabel $Organism mRNAs
+longLabel $Organism mRNAs from Genbank 
+group rna
+priority 9
+visibility hide
+spectrum on
+type psl .
+
+track intronEst
+shortLabel Spliced ESTs
+longLabel $Organism ESTs That Have Been Spliced
+group rna
+priority 10
+visibility dense
+spectrum on
+type psl est
+
+track est
+shortLabel $Organism ESTs
+longLabel $Organism ESTs Including Unspliced
+group rna
+priority 11
+visibility hide
+spectrum on
+type psl est
+
+track xenoMrna
+shortLabel Non$organism mRNA
+longLabel Non$organism mRNAs from Genbank
+group rna
+priority 12
+visibility hide
+spectrum on
+type psl xeno
+
+track xenoEst
+shortLabel Non$organism EST
+longLabel Non$organism ESTs from Genbank 
+group rna
+priority 13
+visibility hide
+spectrum on
+type psl xeno
+url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
+
+track blatFish
+shortLabel Tetraodon Blat
+longLabel Tetraodon nigriviridis Translated Blat Alignments
+group compGeno
+priority 14
+visibility dense
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno
+
+track blatTetra
+shortLabel Tetra Blat
+longLabel Tetraodon nigriviridis Translated Blat Alignments
+group compGeno
+priority 15
+visibility dense
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno
+
+track mcs_b
+shortLabel MCS (Binomial)
+longLabel Binomial-based MCSs
+group compGeno
+priority 16
+visibility dense
+color 160,0,0
+type bed 5 .
+
+track binomialCons
+shortLabel Binomial
+longLabel Binomial Conservation Scores
+group compGeno
+priority 17
+altColor 160,0,0
+visibility hide
+type sample 9
+
+track binomialCons2
+shortLabel Binomial Conservation Score
+longLabel Binomial_25 Conservation Scores
+group compGeno
+priority 18
+altColor 160,0,0
+visibility full
+type sample 9
+
+track mcs_p
+shortLabel MCS (ParsPVal)
+longLabel Parsimony P_Value based MCSs
+group compGeno
+priority 19
+visibility dense
+color 0,0,160
+type bed 3 .
+
+track parsPValues
+shortLabel Parsimony P-Values
+longLabel Parsimony P-Values Conservation Score
+group compGeno
+priority 20
+altColor 0,0,160
+visibility full
+type sample 9
+
+track mcs_u
+shortLabel MCS (Uniform)
+longLabel Uniform P-Value based MCSs
+group compGeno
+priority 21
+visibility dense
+color 0,120,0
+type bed 3 .
+
+track uniformPValues
+shortLabel Uniform P-Values
+longLabel Uniform PValues Conservation Score
+group compGeno
+priority 22
+altColor 0,120,0
+visibility full
+type sample 9
+
+track footPrinter
+shortLabel FootPrinter
+longLabel FootPrinter Conservation Score
+group compGeno
+priority 23
+altColor 0,160,0
+visibility hide
+type sample 9
+
+track footPrinterHMR
+shortLabel FootPrinterHMR
+longLabel FootPrinter Conservation Score, Human/Mouse/Rat
+group compGeno
+priority 24
+altColor 0,160,0
+visibility hide
+type sample 9
+
+track zoo
+shortLabel ZooSeq
+longLabel Blastz Alignments
+group compGeno
+priority 25
+visibility full
+chromosomes target1,chr7,
+color 0,60,120
+altColor 0,128,0
+type sample 9
+
+track blastzStrictChainHuman
+shortLabel Blastz Human
+longLabel Strict Chain Blastz Human Alignments
+group compGeno
+priority 26
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzStrictChainChimp
+shortLabel Blastz Chimp
+longLabel Strict Chain Blastz Chimp Alignments
+group compGeno
+priority 27
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzStrictChainBaboon
+shortLabel Blastz Baboon
+longLabel Strict Chain Blastz Baboon Alignments
+group compGeno
+priority 28
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzStrictChainCat
+shortLabel Blastz Cat
+longLabel Strict Chain Blastz Cat Alignments
+group compGeno
+priority 29
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzStrictChainDog
+shortLabel Blastz Dog
+longLabel Strict Chain Blastz Dog Alignments
+group compGeno
+priority 30
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzStrictChainCow
+shortLabel Blastz Cow
+longLabel Strict Chain Blastz Cow Alignments
+group compGeno
+priority 31
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzStrictChainPig
+shortLabel Blastz Pig
+longLabel Strict Chain Blastz Pig Alignments
+group compGeno
+priority 32
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzStrictChainRat
+shortLabel Blastz Rat
+longLabel Strict Chain Blastz Rat Alignments
+group compGeno
+priority 33
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzStrictChainMouse
+shortLabel Blastz Mouse
+longLabel Strict Chain Blastz Mouse Alignments
+group compGeno
+priority 34
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzStrictChainChicken
+shortLabel Blastz Chicken
+longLabel Strict Chain Blastz Chicken Alignments
+group compGeno
+priority 35
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzStrictChainFugu
+shortLabel Blastz Fugu
+longLabel Strict Chain Blastz Fugu Alignments
+group compGeno
+priority 36
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzStrictChainTetra
+shortLabel Blastz Tetra
+longLabel Strict Chain Blastz Tetra Alignments
+group compGeno
+priority 37
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzStrictChainZebrafish
+shortLabel Blastz Zebrafish
+longLabel Strict Chain Blastz Zebrafish Alignments
+group compGeno
+priority 38
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track rodentsGaps
+shortLabel rodentGaps 
+longLabel rodentGaps
+group compGeno
+priority 39
+visibility hide
+color 170,100,0
+type bed 4 .
+
+track ACGaps
+shortLabel ACGaps 
+longLabel ACGaps
+group compGeno
+priority 40
+visibility hide
+color 0,60,120
+type bed 4 .
+
+track chimpSeq
+shortLabel ChimpSeq 
+longLabel Chimp Sequence
+group compGeno
+priority 41
+visibility hide
+color 0,60,120
+type bed 4 .
+
+track baboonSeq
+shortLabel BaboonSeq 
+longLabel Baboon Sequence
+group compGeno
+priority 42
+visibility hide
+color 0,60,120
+type bed 4 .
+
+track catSeq
+shortLabel CatSeq 
+longLabel Cat Sequence
+group compGeno
+priority 43
+visibility hide
+color 0,60,120
+type bed 4 .
+
+track dogSeq
+shortLabel DogSeq 
+longLabel Dog Sequence
+group compGeno
+priority 44
+visibility hide
+color 0,60,120
+type bed 4 .
+
+track cowSeq
+shortLabel CowSeq 
+longLabel Cow Sequence
+group compGeno
+priority 45
+visibility hide
+color 0,60,120
+type bed 4 .
+
+track ratSeq
+shortLabel RatSeq 
+longLabel Rat Sequence
+group compGeno
+priority 46
+visibility hide
+color 0,60,120
+type bed 4 .
+
+track mouseSeq
+shortLabel MouseSeq 
+longLabel Mouse Sequence
+group compGeno
+priority 47
+visibility hide
+color 0,60,120
+type bed 4 .
+
+track RachelMSA
+shortLabel RachelMSA
+longLabel Rachel's MSA
+group compGeno
+priority 48
+visibility hide
+color 0,60,120
+altColor 0,128,0
+type sample 9
+
+track parsPValHMM
+shortLabel Parsimony P-Values HMM
+longLabel Parsimony P-Values HMM
+group compGeno
+priority 49
+altColor 0,0,160
+visibility full
+type sample 9
+
+track longMCS
+shortLabel Long MCSs
+longLabel Long MCSs
+group compGeno
+priority 50
+visibility hide
+color 0,0,160
+type bed 4 .
+
+track dhs
+shortLabel DHS
+longLabel DNAase I hypersensitive sites
+group regulation
+priority 51
+visibility hide
+color 120,0,120
+type bed 4 .
+
+track transfac
+shortLabel Transfac PValues
+longLabel Transfac PValues
+group regulation
+priority 52
+visibility hide
+color 12,12,120
+type bed 6
+
+track transfacRatios
+shortLabel Transfac LikeRatios
+longLabel Transfac Likelihood Ratios
+group regulation
+priority 53
+visibility hide
+color 12,12,120
+type bed 6
+
+track transfacRatios2
+shortLabel Transfac LikeRatios2
+longLabel Transfac Likelihood Ratios2
+group regulation
+priority 54
+visibility hide
+color 12,12,120
+type bed 6
+
+track spliceSitesPValues
+shortLabel Splice Sites PValues
+longLabel Splice Sites PValues
+group regulation
+priority 55
+visibility hide
+color 12,12,120
+type bed 6
+
+track spliceSitesRatios
+shortLabel Splice Sites Ratios
+longLabel Slice sites Likelihood Ratios
+group regulation
+priority 56
+visibility hide
+color 12,12,120
+type bed 6
+
+track rmsk
+shortLabel RepeatMasker
+longLabel Repeating Elements by RepeatMasker
+group varRep
+priority 57
+visibility hide
+spectrum on
+type rmsk
+
+track simpleRepeat
+shortLabel Simple Repeats
+longLabel Simple Tandem Repeats by TRF
+group varRep
+priority 58
+visibility hide
+type bed 4 +
+
+track zooCons
+shortLabel Empirical
+longLabel Empirical Conservation L-Scores
+group compGeno
+priority 59
+color 100,100,100
+altColor 0,0,160
+visibility hide
+type sample 9
+
