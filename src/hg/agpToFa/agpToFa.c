@@ -7,7 +7,7 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: agpToFa.c,v 1.7 2003/10/10 19:35:28 angie Exp $";
+static char const rcsid[] = "$Id: agpToFa.c,v 1.8 2003/10/10 21:05:00 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -234,7 +234,7 @@ void agpToFa(char *agpFile, char *agpSeq, char *faOut, char *seqDir)
 struct lineFile *lf = lineFileOpen(agpFile, TRUE);
 char *line, *words[16];
 int lineSize, wordCount;
-int lastPos = 1; // file is 1-based but agpFragLoad() now assumes 0-based.
+int lastPos = 0;
 struct agpFrag *agpList = NULL, *agp;
 DNA *dna;
 
@@ -251,6 +251,9 @@ while (lineFileNext(lf, &line, &lineSize))
 	if (sameWord(words[0], agpSeq))
 	    {
 	    agp = agpFragLoad(words);
+	    // file is 1-based but agpFragLoad() now assumes 0-based:
+	    agp->chromStart -= 1;
+	    agp->fragStart  -= 1;
 	    if (agp->chromStart != lastPos)
 		errAbort("Start doesn't match previous end line %d of %s\n", lf->lineIx, lf->fileName);
 	    if (agp->chromEnd - agp->chromStart != agp->fragEnd - agp->fragStart)
@@ -258,15 +261,11 @@ while (lineFileNext(lf, &line, &lineSize))
 		    agp->chrom, agp->frag, lf->lineIx, lf->fileName);
 	    slAddHead(&agpList, agp);
 	    lastPos = agp->chromEnd;
-	    // file is 1-based but agpFragLoad() now assumes 0-based:
-	    lastPos++;
 	    }
 	}
     else
         {
 	lastPos = lineFileNeedNum(lf, words, 2);
-	// file is 1-based but agpFragLoad() now assumes 0-based:
-	lastPos++;
 	}
     }
 slReverse(&agpList);
