@@ -7,7 +7,7 @@
 #include "bed.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: affyUclaMergePslData.c,v 1.2 2003/09/14 23:04:43 sugnet Exp $";
+static char const rcsid[] = "$Id: affyUclaMergePslData.c,v 1.3 2004/02/04 19:52:06 hartera Exp $";
 static boolean doHappyDots;   /* output activity dots? */
 char *prefix = ":";  /* Prefext to our affymetrix names. */
 
@@ -78,8 +78,15 @@ for(psl = pslList; psl != NULL; psl = psl->next)
     *tmp = '\0';
     tmp = strstr(psl->qName,prefix);
     assert(tmp);
-    tmp = strstr(tmp+1,prefix);
-    assert(tmp);
+    /* checks if there are 2 occurrences of ":" in probe name as in full name */
+    /* if probe name is shortened to fit in the seq table, there is only 1 ":"*/
+    /* e.g. full: consensus:HG-U133A:212933_x_at; short:HG-U133A:212933_x_at;*/
+
+    if (countChars(psl->qName, *prefix) == 2) 
+        {
+        tmp = strstr(tmp+1,prefix);
+        assert(tmp);
+        }
     tmp = tmp + strlen(prefix);
     safef(psl->qName, strlen(psl->qName), "%s", tmp);
     }
