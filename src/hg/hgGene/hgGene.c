@@ -14,7 +14,7 @@
 #include "spDb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.7 2003/10/12 19:36:07 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.8 2003/10/12 20:21:52 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -80,17 +80,23 @@ genomeSettings = hash;
 }
 
 char *swissProtAcc(struct sqlConnection *conn, struct sqlConnection *spConn, char *geneId)
-/* Look up SwissProt id.  Return NULL if not found.  FreeMem this when done.*/
+/* Look up SwissProt id.  Return NULL if not found.  FreeMem this when done.
+ * spConn is existing SwissProt database conn.  May be NULL. */
 {
 char *proteinSql = genomeSetting("proteinSql");
 char query[256];
-char *someAcc, *primaryAcc;
+char *someAcc, *primaryAcc = NULL;
+struct sqlConnection *lConn = NULL;
 safef(query, sizeof(query), proteinSql, geneId);
 someAcc = sqlQuickString(conn, query);
 if (someAcc == NULL)
     return NULL;
-primaryAcc = spFindAcc(spConn, someAcc);
+if (spConn == NULL)
+    spConn = lConn = sqlMayConnect("swissProt");
+if (spConn != NULL)
+    primaryAcc = spFindAcc(spConn, someAcc);
 freeMem(someAcc);
+sqlDisconnect(&lConn);
 return primaryAcc;
 }
 
@@ -282,7 +288,7 @@ addGoodSection(sequenceSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(altSpliceSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(multipleAlignmentsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(swissProtCommentsSection(conn, sectionRa), conn, &sectionList);
-// addGoodSection(goSection(conn, sectionRa), conn, &sectionList);
+addGoodSection(goSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(xyzSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(xyzSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(xyzSection(conn, sectionRa), conn, &sectionList);

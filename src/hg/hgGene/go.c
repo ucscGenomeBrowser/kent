@@ -1,0 +1,77 @@
+/* go - Gene Ontology annotations. */
+
+#include "common.h"
+#include "hash.h"
+#include "linefile.h"
+#include "dystring.h"
+#include "spDb.h"
+#include "hgGene.h"
+
+static boolean goExists(struct section *section, 
+	struct sqlConnection *conn, char *geneId)
+/* Return TRUE if GO database exists and has something
+ * on this one. */
+{
+return swissProtAcc(conn, NULL, geneId) != NULL 
+	&& sqlDatabaseExists("go") && sqlTableExists(conn, "go.goaPart");
+}
+
+static void goPrint(struct section *section, 
+	struct sqlConnection *conn, char *geneId)
+/* Print out GO annotations. */
+{
+struct sqlConnection *goConn = sqlConnect("go");
+char *acc = swissProtAcc(conn, NULL, geneId);
+char query[512];
+struct sqlResult *sr;
+char **row;
+char *lastType;
+static char *aspects[3] = {"F", "P", "C"};
+static char *aspectNames[3] = {
+    "Molecular Function",
+    "Biological Process",
+    "Cellular Component",
+};
+int aspectIx;
+
+for (aspectIx = 0; aspectIx < ArraySize(aspects); ++aspectIx)
+    {
+    boolean hasFirst = FALSE;
+    safef(query, sizeof(query),
+	    "select term.acc,term.name"
+	    " from goaPart,term"
+	    " where goaPart.dbObjectId = '%s'"
+	    " and goaPart.goId = term.acc"
+	    " and goaPart.aspect = '%s'"
+	    , acc, aspects[aspectIx]);
+    sr = sqlGetResult(goConn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	char *goID = row[0];
+	char *goTermName = row[1];
+	if (!hasFirst)
+	    {
+	    hPrintf("<B>%s:</B><UL>", aspectNames[aspectIx]);
+	    hasFirst = TRUE;
+	    }
+        hPrintf("<LI><A HREF = \"");
+	hPrintf("http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=%s", goID);
+	hPrintf("\" TARGET=_blank>%s</A> %s</LI>\n", goID, goTermName);
+	}
+    if (hasFirst)
+        hPrintf("</UL>");
+    sqlFreeResult(&sr);
+    }
+sqlDisconnect(&goConn);
+}
+
+struct section *goSection(struct sqlConnection *conn,
+	struct hash *sectionRa)
+/* Create GO annotations section. */
+{
+struct section *section = sectionNew(sectionRa, "go");
+section->exists = goExists;
+section->print = goPrint;
+return section;
+}
+

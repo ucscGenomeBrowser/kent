@@ -53,6 +53,10 @@ struct section *swissProtCommentsSection(struct sqlConnection *conn,
 	struct hash *sectionRa);
 /* Create SwissProt comments section. */
 
+struct section *goSection(struct sqlConnection *conn,
+	struct hash *sectionRa);
+/* Create GO annotations section. */
+
 #ifdef EXAMPLE
 struct section *xyzOrgsSection(struct sqlConnection *conn, 
 	struct hash *sectionRa);

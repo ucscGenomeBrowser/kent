@@ -56,6 +56,10 @@ static void swissProtCommentsPrint(struct section *section,
 {
 struct sqlConnection *spConn = sqlConnect("swissProt");
 struct spComment *com;
+char *acc = swissProtAcc(conn, spConn, geneId);
+char *description = spDescription(spConn, acc);
+if (description != NULL)
+    hPrintf("<B>DESCRIPTION:</B> %s<BR>\n", description);
 for (com = section->items; com != NULL; com = com->next)
     {
     char *type = spCommentType(spConn, com->typeId);
@@ -66,6 +70,8 @@ for (com = section->items; com != NULL; com = com->next)
     }
 slFreeList(&section->items);
 sqlDisconnect(&spConn);
+freeMem(description);
+freeMem(acc);
 }
 
 struct section *swissProtCommentsSection(struct sqlConnection *conn,
