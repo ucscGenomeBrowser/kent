@@ -20,7 +20,7 @@
 #include "hgNear.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.151 2004/07/07 01:14:00 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.152 2004/09/10 21:26:34 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1907,6 +1907,8 @@ else if (cartVarExists(cart, affineAliVarName))
     doAffineAlignment(conn);
 else if (cartNonemptyString(cart, searchVarName))
     doSearch(conn, colList);
+else if (gotAdvFilter())
+    displayData(conn, colList, knownPosFirst(conn));
 else
     doExamples(conn, colList);
 hFreeConn(&conn);

@@ -464,6 +464,9 @@ struct genePos *knownPosAll(struct sqlConnection *conn);
 struct genePos *knownPosOne(struct sqlConnection *conn, char *name);
 /* Get all positions of named gene. */
 
+struct genePos *knownPosFirst(struct sqlConnection *conn);
+/* Get first gene in known gene table. */
+
 void fillInKnownPos(struct genePos *gp, struct sqlConnection *conn);
 /* If gp->chrom is not filled in go look it up. */
 

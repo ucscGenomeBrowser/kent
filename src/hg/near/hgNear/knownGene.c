@@ -14,7 +14,7 @@
 #include "kgAlias.h"
 #include "findKGAlias.h"
 
-static char const rcsid[] = "$Id: knownGene.c,v 1.25 2004/07/06 16:30:26 kent Exp $";
+static char const rcsid[] = "$Id: knownGene.c,v 1.26 2004/09/10 21:26:34 kent Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
@@ -187,7 +187,7 @@ if (pos == NULL)
 return pos;
 }
 
-static struct genePos *genePosFromQuery(struct sqlConnection *conn, char *query)
+static struct genePos *genePosFromQuery(struct sqlConnection *conn, char *query, boolean oneOnly)
 /* Get all positions from a query that returns 5 columns. */
 {
 struct sqlResult *sr;
@@ -200,6 +200,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     AllocVar(gp);
     genePosFillFrom5(gp, row);
     slAddHead(&gpList, gp);
+    if (oneOnly)
+        break;
     }
 sqlFreeResult(&sr);
 return gpList;
@@ -209,9 +211,9 @@ struct genePos *knownPosAll(struct sqlConnection *conn)
 /* Get all positions in knownGene table. */
 {
 if (showOnlyCanonical())
-    return genePosFromQuery(conn, genomeSetting("allGeneQuery"));
+    return genePosFromQuery(conn, genomeSetting("allGeneQuery"), FALSE);
 else
-    return genePosFromQuery(conn, genomeSetting("allTranscriptQuery"));
+    return genePosFromQuery(conn, genomeSetting("allTranscriptQuery"), FALSE);
 }
 
 struct genePos *knownPosOne(struct sqlConnection *conn, char *name)
@@ -219,7 +221,15 @@ struct genePos *knownPosOne(struct sqlConnection *conn, char *name)
 {
 char query[1024];
 safef(query, sizeof(query), genomeSetting("oneGeneQuery"), name);
-return genePosFromQuery(conn, query);
+return genePosFromQuery(conn, query, FALSE);
+}
+
+struct genePos *knownPosFirst(struct sqlConnection *conn)
+/* Get first gene in known gene table. */
+{
+char *query = genomeSetting("allGeneQuery");
+struct genePos *gp = genePosFromQuery(conn, query, TRUE);
+return gp;
 }
 
 void setupColumnKnownPos(struct column *col, char *parameters)
