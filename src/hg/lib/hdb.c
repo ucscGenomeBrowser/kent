@@ -354,7 +354,7 @@ struct slName *hDbList()
 {
 struct slName *nList = NULL, *n;
 int i;
-for(i=2;i<ArraySize(dbTable);i++)
+for(i=3;i<ArraySize(dbTable);i++)
     {
     n = newSlName(dbTable[i].db);
     slAddTail(&nList, n);
