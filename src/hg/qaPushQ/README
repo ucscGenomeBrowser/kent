@@ -29,6 +29,8 @@ To prevent lost updates record-lock fields are implemented.
 To prevent incorrect states or accidentally reposting twice,
  cache-busting cb=randomDigits is added to all links and forms except popup help.
 
+backdoor to unlock a record:
+add action=unlock&qid=000027 as URL parms to cgi-bin/qaPushQ will unlock record 27.
 
 Currently users must be added manually to the database:
 hgsql qapushq

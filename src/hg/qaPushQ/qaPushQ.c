@@ -23,7 +23,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.29 2004/05/19 16:36:57 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.30 2004/05/19 22:57:57 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -675,9 +675,10 @@ if (sameString(myUser.role,"dev"))
     {
     safef(msg, sizeof(msg), "%s", 
 	"Developer: Please leave priority and date alone. "
-	"Do specify if the track is new. Enter the ShortLabel for the track name. "
+	"Do specify if the track is new. Enter the shortLabel for the track name. "
 	"Be sure to fill out the database, tables,  and external files, if any. "
 	"If relevant cgis have changed since last branch, please list them. "
+	"Enter collaborator if applicable. "
 	"Leave the other fields for QA. You may leave a note for QA staff in the notes field. "
 	"Thanks very much!"
 	);
@@ -1328,6 +1329,7 @@ struct pushQ q;
 bool isNew  = FALSE;   /* new rec */
 bool isRedo = FALSE;   /* need to return to edit form with error msg */
 bool isOK   = TRUE;    /* is data valid length (not too large) */
+bool lockOK = TRUE;    /* assume for now lock state OK */
 
 char newQid     [sizeof(q.qid)]      = "";
 char newPriority[sizeof(q.priority)] = "";
@@ -1377,29 +1379,23 @@ if (!isNew)
 	safef(q.lockUser, sizeof(q.lockUser), "");
 	safef(q.lockDateTime, sizeof(q.lockDateTime), "");
 	pushQUpdateEscaped(conn, &q, pushQtbl, updateSize);
-	doEdit();
-	return;
+	lockOK = FALSE;
 	}
-
-    if (sameString(lockbutton,"Lock"))  /* try to lock the record for editing */
+    else if (sameString(lockbutton,"Lock"))  /* try to lock the record for editing */
 	{
 	if (sameString(q.lockUser,""))  /* q.lockUser blank if nobody has lock */
 	    {
 	    safef(q.lockUser, sizeof(q.lockUser), qaUser);
 	    strftime(q.lockDateTime, sizeof(q.lockDateTime), "%Y-%m-%d %H:%M", loctime);
 	    pushQUpdateEscaped(conn, &q, pushQtbl, updateSize);
-	    doEdit();
-	    return;
+	    lockOK = FALSE;
 	    }
 	else
 	    { /* somebody else has lock. */
-	    //replacePushQFields(&q, isNew);  /* call this one so msg not overwritten */
-	    doEdit();
-	    return;
+	    lockOK = FALSE;
 	    }
 	}
-
-    if (!sameString(q.lockUser,qaUser))  /* User supposed to already have lock, verify. */
+    else if (!sameString(q.lockUser,qaUser))  /* User supposed to already have lock, verify. */
 	{ /* if lock was lost, what do we do now? */
 	if (sameString(q.lockUser,""))
 	    {
@@ -1410,7 +1406,11 @@ if (!isNew)
 	    safef(msg,sizeof(msg),"Lost lock. User %s currently has lock on Queue Id %s since %s.",
 		q.lockUser,q.qid,q.lockDateTime);
 	    }
-	//replacePushQFields(&q, isNew);  
+	lockOK = FALSE;
+	}
+	
+    if (!lockOK)
+	{
 	doEdit();
 	return;
 	}
@@ -1677,20 +1677,30 @@ doDisplay();
 void doEdit()
 /* Handle edit request for a pushQ entry */
 {
-
 struct pushQ q;
-char tempSizeMB[10];
-
 ZeroVar(&q);
-
 safef(q.qid, sizeof(q.qid), cgiString("qid"));
-
 if (!loadPushQ(q.qid, &q,TRUE))
     {
     printf("Queue Id %s not found.", q.qid);
     return;
     }
+replacePushQFields(&q, FALSE);  /* new rec = false */
+}
 
+void doSetSize()
+/* save sizeMB */
+{
+struct pushQ q;
+char tempSizeMB[10];
+int updateSize=2456;
+ZeroVar(&q);
+safef(q.qid, sizeof(q.qid), cgiString("qid"));
+if (!loadPushQ(q.qid, &q,TRUE))
+    {
+    printf("Queue Id %s not found.", q.qid);
+    return;
+    }
 safef(tempSizeMB,sizeof(tempSizeMB), cgiUsualString("sizeMB",""));
 if (!sameString(tempSizeMB,""))
     {
@@ -1699,11 +1709,8 @@ if (!sameString(tempSizeMB,""))
 	q.sizeMB = 0;
 	}
     }
-
-
-replacePushQFields(&q, FALSE);  /* new rec = false */
-
-
+pushQUpdateEscaped(conn, &q, pushQtbl, updateSize);
+doEdit();
 }
 
 
@@ -2692,8 +2699,9 @@ sprintLongWithCommas(nicenumber, sizeMB );
 printf("<p style=\"color:red\">Total: %s MB</p>\n",nicenumber);
 
 printf(" <br>\n");
-printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s&sizeMB=%d&cb=%s\">"
+printf("<a href=\"/cgi-bin/qaPushQ?action=setSize&qid=%s&sizeMB=%d&cb=%s\">"
        "Set Size as %s MB</a> <br>\n",newQid,sizeMB,newRandState,nicenumber);
+printf(" <br>\n");
 printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s&cb=%s\">RETURN</a> <br>\n",newQid,newRandState);
 }
 
@@ -2743,8 +2751,8 @@ printf("HELP - click to see this help.<br>\n");
 printf("<br>\n");
 printf("Initial submission - displays date automatically generated when push queue record is created.<br>\n");
 printf("Date Opened - date QA (re)opened. (YYYY-MM-DD) Defaults originally to current date to save typing.<br>\n");
-printf("New track? - choose Y if this is a new track.<br>\n");
-printf("Track - enter the track name as it will appear in the genome browser (use the ShortLabel).<br>\n");
+printf("New track? - choose Y if this is a new track (i.e. has never before appeared on beta).<br>\n");
+printf("Track - enter the track name as it will appear in the genome browser (use the shortLabel).<br>\n");
 printf("Databases - enter db name. May be comma-separated list if more than one organism, etc.<br>\n");
 printf("Tables - enter as comma-separated list all tables that apply. They must exist in the database specified. Wildcard * supported. (Put comments in parentheses).<br>\n");
 printf("CGIs - enter names of any new cgis that are applicable. Must be found on hgwbeta.<br>\n");
@@ -2759,7 +2767,7 @@ printf("All.joiner verified? - choose Y if the all.joiner in /hg/makeDb/schema h
 printf("Status - enter current status (255 char max). Put long notes in Open Issues or Notes.<br>\n");
 printf("Sponsor - usually the developer.<br>\n");
 printf("Reviewer - usually the QA person handling the push queue for the track.<br>\n");
-printf("External Source or Collaborator - external contact outside our staff that may be involved. <br>\n");
+printf("External Source or Collaborator - external contact outside our staff that may be involved.<br>\n");
 printf("Open Issues - Record any remaining open issues that are not completely resolved (no size limit here).<br>\n");
 printf("Notes - Any other notes you would like to make (no size limit here).<br>\n");
 printf("<br>\n");
@@ -2767,6 +2775,8 @@ printf("Submit button - save changes and return to main display.<br>\n");
 printf("delete button - delete this push queue record and return to main display.<br>\n");
 printf("push requested button - press only if you are QA staff and about to submit the push-request. It will try to verify that required entries are present.<br>\n");
 printf("clone button - press if you wish to split the original push queue record into multiple parts. Saves typing, used rarely.<br>\n");
+printf("bounce button - press to bounce from priority A, the QA queue, to B, the developer queue if it needs developer attention.<br>\n");
+printf("lock - press lock to lock the record and edit it.  When in edit mode, make your changes and submit.  Do not leave the record locked.<br>\n");
 printf("<br>\n");
 printf("<a href=\"javascript:window.close();\">CLOSE</a> <br>\n",q.qid);
 }
@@ -2843,7 +2853,9 @@ safef(q.lockDateTime, sizeof(q.lockDateTime), "");
 
 /* update existing record */
 pushQUpdateEscaped(conn, &q, pushQtbl, updateSize);
-						
+
+doDisplay();
+
 }
 
 
@@ -3003,6 +3015,11 @@ else if (sameString(action,"showGateway" ))
 else if (sameString(action,"unlock" )) 
     {
     doUnlock();
+    }
+
+else if (sameString(action,"setSize" )) 
+    {
+    doSetSize();
     }
 
 else
