@@ -6617,6 +6617,8 @@ void tracksDisplay()
 /* Put up main tracks display. This routine handles zooming and
  * scrolling. */
 {
+char newPos[256];
+
 /* Read in input from CGI. */
 position = cartString(cart, "position");
 if (!findGenomePos(position, &chromName, &winStart, &winEnd))
@@ -6678,6 +6680,10 @@ if (winEnd > seqBaseCount)
 winBaseCount = winEnd - winStart;
 if (winBaseCount <= 0)
     errAbort("Window out of range on %s", chromName);
+
+/* Save computed position in cart. */
+sprintf(newPos, "%s:%d-%d", chromName, winStart+1, winEnd);
+cartSetString(cart, "position", newPos);
 
 
 /* Chuck code for synching with different frames */
