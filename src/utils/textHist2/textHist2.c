@@ -9,6 +9,8 @@ int xBinSize = 1, yBinSize = 1;
 int xMin = 0, yMin = 0;
 char *psFile = NULL;
 boolean doLog = FALSE;
+int margin = 0;
+int psSize = 5*72;
 
 void usage()
 /* Explain usage and exit. */
@@ -25,42 +27,56 @@ errAbort(
   "   -yBinSize=N - size of bins in x dimension\n"
   "   -xMin=N - minimum x number to record\n"
   "   -yMin=N - minimum y number to record\n"
-  "   -ps=output.ps - make postscript output\n"
+  "   -ps=output.ps - make PostScript output\n"
+  "   -psSize=N - Size in points (1/72th of inch)\n"
+  "   -margin=N - Margin in points for PostScript output\n"
   "   -log    - Logarithmic output (only works with ps now)\n"
   );
 }
 
-double pixToPoint = 72 * (8.5 - 2) / 640;
-/* Pixel to point conversion for postScript.  This is based
- * on browser at default pixel width (640) corresponding to
- * width of a 8.5 inch standard American piece of paper
- * allowing for one inch margins on either side.  PostScript
- * works in 'points' which are 1/72th of an inch. */
 
 struct psOutput 
 /* A postScript output file. */
     {
-    FILE *f;   /* File to write to. */
-    int pixWidth, pixHeight;		/* Size of image in virtual pixels. */
-    double ptWidth, ptHeight;	        /* Size of image in points (1/72 of an inch) */
-    double xScale, yScale;              /* Conversion from pixels to points. */
-    double xOff, yOff;                  /* Offset from pixels to points. */
+    FILE *f;                    /* File to write to. */
+    int pixWidth, pixHeight;	/* Size of image in virtual pixels. */
+    double ptWidth, ptHeight;   /* Size of image in points (1/72 of an inch) */
+    double xScale, yScale;      /* Conversion from pixels to points. */
+    double xOff, yOff;          /* Offset from pixels to points. */
     };
 
-void psWriteHeader(FILE *f)
-/* Write postScript header. */
+void psFloatOut(FILE *f, double x)
+/* Write out a floating point number, but not in too much
+ * precision. */
+{
+int i = round(x);
+if (i == x)
+   fprintf(f, "%d ", i);
+else
+   fprintf(f, "%0.3f ", x);
+}
+
+void psWriteHeader(FILE *f, double width, double height)
+/* Write postScript header.  It's encapsulated PostScript
+ * actually, so you need to supply image width and height
+ * in points. */
 {
 char *s =
 #include "common.pss"
 ;
 
+fprintf(f, "%%!PS-Adobe-3.1 EPSF-3.0\n");
+fprintf(f, "%%%%BoundingBox: 0 0 ");
+psFloatOut(f, width);
+psFloatOut(f, height);
+fprintf(f, "\n\n");
 fprintf(f, "%s", s);
 }
 
 struct psOutput *psOpen(char *fileName, 
-	int pixWidth, int pixHeight, 	/* Dimension of image in pixels. */
-	double ptWidth, double ptHeight,      /* Dimension of image in points. */
-	double ptMargin)                   /* Image margin in points (72 is good). */
+	int pixWidth, int pixHeight, 	 /* Dimension of image in pixels. */
+	double ptWidth, double ptHeight, /* Dimension of image in points. */
+	double ptMargin)                 /* Image margin in points. */
 /* Open up a new postscript file.  If ptHeight is 0, it will be
  * calculated to keep pixels square. */
 {
@@ -69,7 +85,7 @@ struct psOutput *ps;
 /* Allocate structure and open file. */
 AllocVar(ps);
 ps->f = mustOpen(fileName, "w");
-psWriteHeader(ps->f);
+psWriteHeader(ps->f, ptWidth, ptHeight);
 
 /* Save page dimensions and calculate scaling factors. */
 ps->pixWidth = pixWidth;
@@ -103,21 +119,9 @@ void psClose(struct psOutput **pPs)
 struct psOutput *ps = *pPs;
 if (ps != NULL)
     {
-    fprintf(ps->f, "showpage\n");
     carefulClose(&ps->f);
     freez(pPs);
     }
-}
-
-void floatOut(FILE *f, double x)
-/* Write out a floating point number, but not in too much
- * precision. */
-{
-int i = round(x);
-if (i == x)
-   fprintf(f, "%d ", i);
-else
-   fprintf(f, "%4.3f ", x);
 }
 
 void psDrawBox(struct psOutput *ps, int x, int y, int width, int height)
@@ -125,10 +129,10 @@ void psDrawBox(struct psOutput *ps, int x, int y, int width, int height)
 {
 FILE *f = ps->f;
 int yEnd = y + height;
-floatOut(f, width * ps->xScale);
-floatOut(f, height * -ps->yScale);
-floatOut(f, x * ps->xScale + ps->xOff);
-floatOut(f, yEnd * ps->yScale + ps->yOff);
+psFloatOut(f, width * ps->xScale);
+psFloatOut(f, height * -ps->yScale);
+psFloatOut(f, x * ps->xScale + ps->xOff);
+psFloatOut(f, yEnd * ps->yScale + ps->yOff);
 fprintf(f, "fillBox\n");
 }
 
@@ -139,14 +143,14 @@ FILE *f = ps->f;
 double scale = 1.0/255;
 if (r == g && g == b)
     {
-    floatOut(f, scale * r);
+    psFloatOut(f, scale * r);
     fprintf(f, "setgray\n");
     }
 else
     {
-    floatOut(f, scale * r);
-    floatOut(f, scale * g);
-    floatOut(f, scale * b);
+    psFloatOut(f, scale * r);
+    psFloatOut(f, scale * g);
+    psFloatOut(f, scale * b);
     fprintf(f, "setrgbcolor\n");
     }
 }
@@ -154,32 +158,48 @@ else
 void psSetGray(struct psOutput *ps, double grayVal)
 /* Set gray value. */
 {
-fprintf(ps->f, "%f setgray\n", grayVal);
+FILE *f = ps->f;
+if (grayVal < 0) grayVal = 0;
+if (grayVal > 1) grayVal = 1;
+psFloatOut(f, grayVal);
+fprintf(f, "setgray\n");
 }
 
-void psOutput(int *hist, char *psFile)
-/* Output histogram in postscript format. */
+double findMaxVal(int *hist)
+/* Find maximum val in histogram. */
 {
-struct psOutput *ps = psOpen(psFile, xBins, yBins, 6*72, 6*72, 1*72);
 int bothBins = xBins * yBins;
-double maxVal = 0;
-int i, x, y, both;
-double grayScale;
-
+int i;
+double val, maxVal = 0;
 for (i=0; i<bothBins; ++i)
     {
-    double val = hist[i];
+    val = hist[i];
     if (doLog)
         val = log(1+val);
     if (maxVal < val)
         maxVal = val;
     }
+return maxVal;
+}
+
+void psOutput(int *hist, char *psFile)
+/* Output histogram in postscript format. */
+{
+double psInnerSize = psSize;
+double labelSize = 72.0/2;
+double tickSize = labelSize/4;
+double textSize = labelSize - tickSize;
+struct psOutput *ps = psOpen(psFile, psSize, psSize, psSize, psSize, margin);
+double val, maxVal = findMaxVal(hist);
+int x, y, both;
+double grayScale;
+
 grayScale = 1.0 / maxVal;
 for (y=0; y<yBins; ++y)
     {
     for (x=0; x<xBins; ++x)
         {
-	double val;
+	val;
 	both = y*xBins + x;
 	val = hist[both];
 	if (doLog)
@@ -191,6 +211,39 @@ for (y=0; y<yBins; ++y)
 psClose(&ps);
 }
 
+void textOutput(int *hist)
+/* Output 2D histogram as 2D text table. */
+{
+int x, y, both;
+int *digits = needMem(xBins * sizeof(int));
+
+/* Figure out longest number in each column. */
+for (x=0; x<xBins; ++x)
+    {
+    int dig, maxDig = 0;
+    char s[32];
+    for (y=0; y<yBins; ++y)
+	{
+	both = y*xBins + x;
+	dig = sprintf(s, "%d", hist[both]);
+	if (maxDig < dig) maxDig = dig;
+	}
+    digits[x] = maxDig;
+    }
+
+
+for (y=0; y<yBins; ++y)
+    {
+    for (x=0; x<xBins; ++x)
+	{
+	both = y*xBins + x;
+	printf("%*d ", digits[x], hist[both]);
+	}
+    printf("\n");
+    }
+freez(&digits);
+}
+
 void textHist2(char *inFile)
 /* textHist2 - Make two dimensional histogram. */
 {
@@ -199,7 +252,6 @@ int *hist = needMem(bothBins * sizeof(int));
 char *row[2];
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
 int x, y, both;
-int *digits = needMem(xBins * sizeof(int));
 
 
 /* Read file and make counts. */
@@ -219,36 +271,11 @@ while (lineFileRow(lf, row))
 	}
     }
 
+/* Output it. */
 if (psFile != NULL)
     psOutput(hist, psFile);
 else
-    {
-    /* Figure out longest number in each column. */
-    for (x=0; x<xBins; ++x)
-	{
-	int dig, maxDig = 0;
-	char s[32];
-	for (y=0; y<yBins; ++y)
-	    {
-	    both = y*xBins + x;
-	    dig = sprintf(s, "%d", hist[both]);
-	    if (maxDig < dig) maxDig = dig;
-	    }
-	digits[x] = maxDig;
-	}
-
-
-    for (y=0; y<yBins; ++y)
-	{
-	for (x=0; x<xBins; ++x)
-	    {
-	    both = y*xBins + x;
-	    printf("%*d ", digits[x], hist[both]);
-	    }
-	printf("\n");
-	}
-
-    }
+    textOutput(hist);
 }
 
 int main(int argc, char *argv[])
@@ -264,6 +291,8 @@ yBinSize = optionInt("yBinSize", yBinSize);
 xMin = optionInt("xMin", xMin);
 yMin = optionInt("yMin", yMin);
 psFile = optionVal("ps", NULL);
+psSize = optionInt("psSize", psSize);
+margin = optionInt("margin", margin);
 doLog = optionExists("log");
 textHist2(argv[1]);
 return 0;
