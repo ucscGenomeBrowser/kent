@@ -128,7 +128,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.571 2004/02/21 21:31:32 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.572 2004/02/22 01:03:33 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -10115,69 +10115,100 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-char *doDbSnpRs(char *name)
-/* print additional SNP details */
+char *validateOrGetRsId(char *name, struct sqlConnection *conn)
+/* If necessary, get the rsId from the affy120K or affy10K table, 
+   given the affyId.  rsId is more common, affy120K is next, affy10K least.
+ * returns "valid" if name is already a valid rsId, 
+           new rsId if it is found in the affy tables, or 
+           0 if no valid rsId is found */
 {
-struct dyString *printId = newDyString(128);
-char *rsId = cloneString(name);
-struct sqlConnection *conn = sqlConnect("hgFixed");
-char query[512];
+char  *rsId = cloneString(name);
 struct affy120KDetails *a120K = NULL;
 struct affy10KDetails *a10K = NULL;
-struct dbSnpRs *snp = NULL;
-char *dbOrg = cloneStringZ(database,2);
+char   query[512];
 
-/* If necessary, get the rsId from the affy120K or affy10K table, given the affyId */
-if (strncmp(name,"rs",2))
+if (strncmp(rsId,"rs",2)) /* is not a valid rsId, so it must be an affyId */
     {
-    safef(query, sizeof(query), "select * from affy120KDetails where affyId = '%s'", name);
+    safef(query, sizeof(query), /* more likely to be affy120K, so check first */
+	  "select * from affy120KDetails where affyId = '%s'", name);
     a120K = affy120KDetailsLoadByQuery(conn, query);
-    if (a120K != NULL)
+    if (a120K != NULL) /* found affy120K record */
 	safef(rsId, strlen(a120K->rsId)+3, "rs%s", a120K->rsId);
     affy120KDetailsFree(&a120K);
-    if (strncmp(rsId,"rs",2))
+    if (strncmp(rsId,"rs",2)) /* not a valid affy120K snp, might be affy10K */
 	{
-	safef(query, sizeof(query), "select * from affy10KDetails where affyId = '%s'", name);
+	safef(query, sizeof(query), 
+	      "select * from affy10KDetails where affyId = '%s'", name);
 	a10K = affy10KDetailsLoadByQuery(conn, query);
-	if (a10K != NULL)
+	if (a10K != NULL) /* found affy10K record */
 	    rsId = cloneString(a10K->rsId);
 	affy10KDetailsFree(&a10K);
-	if (strncmp(rsId,"rs",2))
-	    {
-	    sqlDisconnect(&conn);
-	    return printId->string;
-	    }
+	if (strncmp(rsId,"rs",2)) /* not valid affy10K snp */
+	    return 0;
 	}
-    if (strcmp(rsId,"rs0"))
-	dyStringPrintf(printId, " (%s)",rsId);
+    /* not all affy snps have valid rsIds, so return if it is invalid */
+    if (strncmp(rsId,"rs",2) || strlen(rsId)<4 || !strcmp(rsId,"rs0")) /* not a valid rsId */
+	return 0;
     }
+else
+    rsId = strdup("valid");
+return rsId;
+}
+
+char *doDbSnpRs(char *name)
+/* print additional SNP details 
+ * returns "valid" if name is already a valid rsId, 
+           new rsId if it is found in the affy tables, or 
+           0 if no valid rsId is found */
+{
+struct sqlConnection *conn = sqlConnect("hgFixed");
+char  *rsId = validateOrGetRsId(name, conn);
+char   query[512];
+struct dbSnpRs *snp = NULL;
+char  *dbOrg = cloneStringZ(database,2);
+
 toUpperN(dbOrg,1); /* capitalize first letter */
-safef(query, sizeof(query),
-      "select rsId, avHet, avHetSE, valid, allele1, allele2, assembly, alternate "
-      "from   dbSnpRs%s "
-      "where  rsId = '%s'", dbOrg, rsId);
-snp = dbSnpRsLoadByQuery(conn, query);
-if (snp!=NULL)
+if (rsId) /* a valid rsId exists */
     {
-    if(snp->avHetSE>0)
-	{
-	printf("<BR>\n<B>Average Heterozygosity:</B> %f<BR>\n",snp->avHet);
-	printf("<B>Standard Error of Average Heterozygosity:</B> %f<BR>\n",snp->avHetSE);
-	}
+    if (!strcmp(rsId, "valid"))
+	safef(query, sizeof(query),
+	      "select rsId, avHet, avHetSE, valid, allele1, allele2, "
+	      "       assembly, alternate "
+	      "from   dbSnpRs%s "
+	      "where  rsId = '%s'", dbOrg, name);
     else
+	safef(query, sizeof(query),
+	      "select rsId, avHet, avHetSE, valid, allele1, allele2, "
+	      "       assembly, alternate "
+	      "from   dbSnpRs%s "
+	      "where  rsId = '%s'", dbOrg, rsId);
+    snp = dbSnpRsLoadByQuery(conn, query);
+    if (snp != NULL)
 	{
-	printf("<BR>\n<B>Average Heterozygosity:</B> Not Known<BR>\n");
-	printf("<B>Standard Error of Average Heterozygosity:</B> Not Known<BR>\n");
+	if(snp->avHetSE>0)
+	    {
+	    printf("<BR>\n<B>Average Heterozygosity:</B> %f<BR>\n",snp->avHet);
+	    printf("<B>Standard Error of Avg. Het.: </B> %f<BR>\n", snp->avHetSE);
+	    }
+	else
+	    {
+	    printf("<BR>\n<B>Average Heterozygosity:</B> Not Known<BR>\n");
+	    printf("<B>Standard Error of Avg. Het.: </B> Not Known<BR>\n");
+	    }
+	printf("<B>Validation Status:</B> <font face=\"Courier\">%s<BR></font>\n",
+	       snp->valid);
+	printf("<B>Allele1:          </B> <font face=\"Courier\">%s<BR></font>\n",
+	       snp->allele1);
+	printf("<B>Allele2:          </B> <font face=\"Courier\">%s<BR>\n",
+	       snp->allele2);
+	printf("Sequence in Assembly:&nbsp;%s<BR>\n",snp->assembly);
+	printf("Alternate Sequence:&nbsp;&nbsp;&nbsp;%s<BR></font>\n",
+	       snp->alternate);
 	}
-    printf("<B>Validation Status:</B> <font face=\"Courier\">%s<BR></font>\n",snp->valid);
-    printf("<B>Allele1:          </B> <font face=\"Courier\">%s<BR></font>\n",snp->allele1);
-    printf("<B>Allele2:          </B> <font face=\"Courier\">%s<BR>\n",snp->allele2);
-    printf("Sequence in Assembly:&nbsp;%s<BR>\n",snp->assembly);
-    printf("Alternate Sequence:&nbsp;&nbsp;&nbsp;%s<BR></font>\n",snp->alternate);
+    dbSnpRsFree(&snp);
     }
-dbSnpRsFree(&snp);
 sqlDisconnect(&conn);
-return printId->string;
+return rsId;
 }
 
 void doSnpLocusLink(struct trackDb *tdb, char *name)
@@ -10255,10 +10286,23 @@ else /* snpMap */
 	snpMapStaticLoad(row+rowOffset, &snpMap);
 	bedPrintPos((struct bed *)&snpMap, 3);
 	}
+/* write dbSnpRs details if found. */
 printId = doDbSnpRs(itemName);
-printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link%s</A></P>\n", itemName, printId);
-doSnpLocusLink(tdb, itemName);
+if (printId)
+    {
+    printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+    if (!strcmp(printId, "valid"))
+	{
+	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link</A></P>\n", itemName);
+	doSnpLocusLink(tdb, itemName);
+	}
+    else
+	{
+	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link (%s)</A></P>\n", 
+	       printId, printId);
+	doSnpLocusLink(tdb, printId);
+	}
+    }
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -10290,14 +10334,19 @@ if (snp!=NULL)
     printf("<B>Sample Prep Enzyme:</B> <I>%s</I><BR>\n",snp->enzyme);
     printf("<B>Minimum Allele Frequency:</B> %.3f<BR>\n",snp->minFreq);
     printf("<B>Heterozygosity:</B> %.3f<BR>\n",snp->hetzyg);
-    printf("<B>Base A:          </B> <font face=\"Courier\">%s<BR></font>\n",snp->baseA);
-    printf("<B>Base B:          </B> <font face=\"Courier\">%s<BR></font>\n",snp->baseB);
-    printf("<B>Sequence of Allele A:</B>&nbsp;<font face=\"Courier\">%s</font><BR>\n",snp->sequenceA);
-    printf("<B>Sequence of Allele B:</B>&nbsp;<font face=\"Courier\">%s</font><BR>\n",snp->sequenceB);
+    printf("<B>Base A:          </B> <font face=\"Courier\">%s<BR></font>\n",
+	   snp->baseA);
+    printf("<B>Base B:          </B> <font face=\"Courier\">%s<BR></font>\n",
+	   snp->baseB);
+    printf("<B>Sequence of Allele A:</B>&nbsp;<font face=\"Courier\">");
+    printf("%s</font><BR>\n",snp->sequenceA);
+    printf("<B>Sequence of Allele B:</B>&nbsp;<font face=\"Courier\">");
+    printf("%s</font><BR>\n",snp->sequenceB);
     if (snp->rsId>0)
 	{
 	printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-	printf("type=rs&rs=rs%s\" TARGET=_blank>dbSNP link for rs%s</A></P>\n", snp->rsId, snp->rsId);
+	printf("type=rs&rs=rs%s\" TARGET=_blank>dbSNP link for rs%s</A></P>\n",
+	       snp->rsId, snp->rsId);
 	}
     doSnpLocusLink(tdb, name);
     printf("<BR>Genotypes:<BR>");
@@ -10404,7 +10453,8 @@ char query[1024];
 struct affy10KDetails *snp=NULL;
 
 safef(query, sizeof(query),
-         "select  affyId, rsId, tscId, baseA, baseB, sequenceA, sequenceB, enzyme "
+         "select  affyId, rsId, tscId, baseA, baseB, "
+         "sequenceA, sequenceB, enzyme "
 /** minFreq, hetzyg, and avHetSE are waiting for additional data from Affy **/
 /*	 "        , minFreq, hetzyg, avHetSE "*/
          "from    affy10KDetails "
@@ -10418,22 +10468,30 @@ if (snp!=NULL)
 /*  printf("<B>Minimum Allele Frequency:</B> %.3f<BR>\n",snp->minFreq);*/
 /*  printf("<B>Heterozygosity:          </B> %.3f<BR>\n",snp->hetzyg);*/
 /*  printf("<B>Average Heterozygosity:  </B> %.3f<BR>\n",snp->avHetSE);*/
-    printf("<B>Base A:                  </B> <font face=\"Courier\">%s<BR></font>\n",snp->baseA);
-    printf("<B>Base B:                  </B> <font face=\"Courier\">%s<BR></font>\n",snp->baseB);
-    printf("<B>Sequence of Allele A:    </B>&nbsp;<font face=\"Courier\">%s</font><BR>\n",snp->sequenceA);
-    printf("<B>Sequence of Allele B:    </B>&nbsp;<font face=\"Courier\">%s</font><BR>\n",snp->sequenceB);
+    printf("<B>Base A:                  </B> <font face=\"Courier\">");
+    printf("%s<BR></font>\n",snp->baseA);
+    printf("<B>Base B:                  </B> <font face=\"Courier\">");
+    printf("%s<BR></font>\n",snp->baseB);
+    printf("<B>Sequence of Allele A:    </B>&nbsp;<font face=\"Courier\">");
+    printf("%s</font><BR>\n",snp->sequenceA);
+    printf("<B>Sequence of Allele B:    </B>&nbsp;<font face=\"Courier\">");
+    printf("%s</font><BR>\n",snp->sequenceB);
 
     printf("<P><A HREF=\"https://www.affymetrix.com/LinkServlet?probeset=");
-    printf("%s\" TARGET=_blank>Affymetrix NetAffx Analysis Center link for %s</A></P>\n",snp->affyId, snp->affyId);
+    printf("%s", snp->affyId);
+    printf("\" TARGET=_blank>Affymetrix NetAffx Analysis Center link for ");
+    printf("%s</A></P>\n", snp->affyId);
 
     if (strncmp(snp->rsId,"unmapped",8))
 	{
 	printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link for rs%s</A></P>\n", snp->rsId, snp->rsId);
+	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link for rs%s</A></P>\n", 
+	       snp->rsId, snp->rsId);
 	}
 
     printf("<P><A HREF=\"http://snp.cshl.org/cgi-bin/snp?name=");
-    printf("%s\" TARGET=_blank>TSC link for %s</A></P>\n",snp->tscId, snp->tscId);
+    printf("%s\" TARGET=_blank>TSC link for %s</A></P>\n",
+	   snp->tscId, snp->tscId);
 
     doSnpLocusLink(tdb, name);
     }
@@ -10494,7 +10552,6 @@ if (sameString(animal, "cow"))
 sprintf(buf, "species=%s&tc=%s ", animal, id);
 genericClickHandler(tdb, item, buf);
 }
-
 
 void doJaxQTL(struct trackDb *tdb, char *item)
 /* Put up info on Quantitative Trait Locus from Jackson Labs. */
