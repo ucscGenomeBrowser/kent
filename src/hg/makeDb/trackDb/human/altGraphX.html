@@ -5,7 +5,7 @@ EST tracks. The blocks represent exons and the lines are the possible
 splice junctions.  When the track is in full mode
 and the resolution is approximately gene level the exons are laid out
 such that alternative exons don't overlap each other and are easier to
-see.  The more ESTs and mRNAs that contained that exon or splice
+see.  The more ESTs and mRNAs that contain that exon or splice
 junction the darker they are drawn.
 
 <p> To help filter out the noise present in the EST libraries both
@@ -26,9 +26,9 @@ The outline for generating this track is:
     <ul>
 
     <li> Align mRNAs and ESTs to the genomic sequence using <a
-    href="../cgi-bin/hgBlat">BLAT</a>. A near best in genome filter is
+    href="../cgi-bin/hgBlat">BLAT</a>. A near-best-in-genome filter is
     applied where only alignments with 97% identity over 90% of the
-    transcript and with a score no more than .5% lower than the best
+    transcript and with a score no more than 0.5% lower than the best
     score are kept.</li>
 
     <li> Retrieve genomic sequence and use it to orient ESTs and mRNAs
@@ -37,7 +37,7 @@ The outline for generating this track is:
 
     <li> Cluster alignments together by sequence overlap in exons. As
     new splice sites are discovered, they are entered into the graphs
-    as vertexes, and the exons, introns, and splice junctions
+    as vertices, and the exons, introns, and splice junctions
     connecting them are recorded as edges. Each graph is considered to
     be a single locus, although they may be fragments of an actual
     gene structure. The supporting mRNA and EST accessions for each
