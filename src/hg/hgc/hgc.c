@@ -84,7 +84,7 @@
 #include "stsMapMouse.h"
 #include "stsInfoMouse.h"
 #include "dnaMotif.h"
-#include "dbSnpRS.h"
+#include "dbSnpRs.h"
 #include "genomicSuperDups.h"
 #include "celeraDupPositive.h"
 #include "celeraCoverage.h"
@@ -116,8 +116,8 @@
 #include "ensFace.h"
 #include "bdgpGeneInfo.h"
 #include "flyBaseSwissProt.h"
-#include "affyGenoDetails.h"
 #include "affy10KDetails.h"
+#include "affy120KDetails.h"
 #include "encodeRegionInfo.h"
 #include "encodeErge.h"
 #include "encodeErgeHssCellLines.h"
@@ -128,7 +128,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.566 2004/02/17 20:29:46 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.567 2004/02/19 02:24:52 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7407,7 +7407,6 @@ if (sqlTableExists(conn, tdb->tableName))
 	{
         bed = bedLoadN(row+1, 6);
         }
-//    sqlFreeResult(&sr);
     pseudoPrintPosHeader(bed);
     sprintf(query, "select * from pseudoGeneLink where name = '%s'", geneName);
     sr = sqlGetResult(conn, query);
@@ -7427,7 +7426,9 @@ printf("<p><A HREF=\"%s&o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
 	   bed->chromStart, cgiEncode(bed->name), bed->chrom, bed->chromStart,
            bed->chromEnd, "+", tbl);
 printTrackHtml(tdb);
+sqlFreeResult(&sr);
 }
+
 void doSoftberryPred(struct trackDb *tdb, char *geneName)
 /* Handle click on Softberry gene track. */
 {
@@ -10122,35 +10123,58 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void doDbSnpRS(char *name)
+char *doDbSnpRs(char *name)
 /* print additional SNP details */
 {
+struct dyString *printId = newDyString(128);
+char *rsId = cloneString(name);
 struct sqlConnection *conn = sqlConnect("hgFixed");
-char query[256];
-struct dbSnpRS *snp=NULL;
+char query[512];
+struct affy120KDetails *a120K = NULL;
+struct affy10KDetails *a10K = NULL;
+struct dbSnpRs *snp = NULL;
+char *dbOrg = cloneStringZ(database,2);
+
+/* If necessary, get the rsId from the affy120K or affy10K table, given the affyId */
+if (strncmp(name,"rs",2))
+    {
+    safef(query, sizeof(query), "select * from affy120KDetails where affyId = '%s'", name);
+    a120K = affy120KDetailsLoadByQuery(conn, query);
+    if (a120K != NULL)
+	safef(rsId, strlen(a120K->rsId)+3, "rs%s", a120K->rsId);
+    affy120KDetailsFree(&a120K);
+    if (strncmp(rsId,"rs",2))
+	{
+	safef(query, sizeof(query), "select * from affy10KDetails where affyId = '%s'", name);
+	a10K = affy10KDetailsLoadByQuery(conn, query);
+	if (a10K != NULL)
+	    rsId = cloneString(a10K->rsId);
+	affy10KDetailsFree(&a10K);
+	if (strncmp(rsId,"rs",2))
+	    {
+	    sqlDisconnect(&conn);
+	    return printId->string;
+	    }
+	}
+    if (strcmp(rsId,"rs0"))
+	dyStringPrintf(printId, " (%s)",rsId);
+    }
+toUpperN(dbOrg,1); /* capitalize first letter */
 safef(query, sizeof(query),
-	 "select rsId, "
-	 "       avHet, "
-	 "       avHetSE, "
-	 "       valid, "
-	 "       base1, "
-	 "       base2, "
-	 "       assembly, "
-	 "       alternate "
-	 "from   dbSnpRS "
-	 "where  rsId = '%s'", name);
-snp = dbSnpRSLoadByQuery(conn, query);
+      "select rsId, avHet, avHetSE, valid, allele1, allele2, assembly, alternate "
+      "from   dbSnpRs%s "
+      "where  rsId = '%s'", dbOrg, rsId);
+snp = dbSnpRsLoadByQuery(conn, query);
 if (snp!=NULL)
     {
-    printf("<BR>\n");
     if(snp->avHetSE>0)
 	{
-	printf("<B>Average Heterozygosity:</B> %f<BR>\n",snp->avHet);
+	printf("<BR>\n<B>Average Heterozygosity:</B> %f<BR>\n",snp->avHet);
 	printf("<B>Standard Error of Average Heterozygosity:</B> %f<BR>\n",snp->avHetSE);
 	}
     else
 	{
-	printf("<B>Average Heterozygosity:</B> Not Known<BR>\n");
+	printf("<BR>\n<B>Average Heterozygosity:</B> Not Known<BR>\n");
 	printf("<B>Standard Error of Average Heterozygosity:</B> Not Known<BR>\n");
 	}
     printf("<B>Validation Status:</B> <font face=\"Courier\">%s<BR></font>\n",snp->valid);
@@ -10159,9 +10183,9 @@ if (snp!=NULL)
     printf("Sequence in Assembly:&nbsp;%s<BR>\n",snp->assembly);
     printf("Alternate Sequence:&nbsp;&nbsp;&nbsp;%s<BR></font>\n",snp->alternate);
     }
-else printf("<BR>Supporting details are currently unavailable for this SNP.\n");
-dbSnpRSFree(&snp);
+dbSnpRsFree(&snp);
 sqlDisconnect(&conn);
+return printId->string;
 }
 
 void doSnpLocusLink(struct trackDb *tdb, char *name)
@@ -10173,6 +10197,7 @@ struct sqlResult *sr;
 char **row;
 char query[512];
 int rowOffset;
+
 safef(query, sizeof(query),
          "select distinct        "
          "       rl.locusLinkID, "
@@ -10205,46 +10230,54 @@ void doSnp(struct trackDb *tdb, char *itemName)
 /* Put up info on a SNP. */
 {
 char *group = tdb->tableName;
-char *ncbiName = itemName;
 struct snp snp;
+struct snpMap snpMap;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char query[256];
 int rowOffset;
+char *printId;
 
-ncbiName += 2;
 cartWebStart(cart, "Simple Nucleotide Polymorphism (SNP)");
 printf("<H2>Simple Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
-sprintf(query, "select * "
-	       "from   %s "
-	       "where  chrom = '%s' "
-	       "  and  chromStart = %d "
-	       "  and name = '%s'",
+sprintf(query, 
+	"select * "
+	"from   %s "
+	"where  chrom = '%s' "
+	"  and  chromStart = %d "
+	"  and  name = '%s'",
         group, seqName, start, itemName);
 rowOffset = hOffsetPastBin(seqName, group);
 sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    snpStaticLoad(row+rowOffset, &snp);
-    bedPrintPos((struct bed *)&snp, 3);
-    }
-doDbSnpRS(ncbiName);
+if (strcmp(group,"snpMap")) /* snpNih and snpTsc */
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	snpStaticLoad(row+rowOffset, &snp);
+	bedPrintPos((struct bed *)&snp, 3);
+	}
+else /* snpMap */
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	snpMapStaticLoad(row+rowOffset, &snpMap);
+	bedPrintPos((struct bed *)&snpMap, 3);
+	}
+printId = doDbSnpRs(itemName);
 printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link</A></P>\n", snp.name);
+printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link%s</A></P>\n", itemName, printId);
 doSnpLocusLink(tdb, itemName);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void doAffyGenoDetails(struct trackDb *tdb, char *name)
+void doAffy120KDetails(struct trackDb *tdb, char *name)
 /* print additional SNP details */
 {
 struct sqlConnection *conn = sqlConnect("hgFixed");
 char query[1024];
-struct affyGenoDetails *snp=NULL;
+struct affy120KDetails *snp = NULL;
 safef(query, sizeof(query),
          "select  affyId, rsId, baseA, baseB, sequenceA, sequenceB, "
 	 "        enzyme, minFreq, hetzyg, avHetSE, "
@@ -10253,12 +10286,12 @@ safef(query, sizeof(query),
          "        NA17101, NA17102, NA17103, NA17104, NA17105, NA17106, "
          "        NA17201, NA17202, NA17203, NA17204, NA17205, NA17206, "
          "        NA17207, NA17208, NA17210, NA17211, NA17212, NA17213, "
-         "        PD01, PD02, PD03, PD04, PD05, PD06, PD07, PD08, PD09, "
-         "        PD10, PD11, PD12, PD13, PD14, PD15, PD16, PD17, PD18, "
-         "        PD19, PD20, PD21, PD22, PD23, PD24 "
-         "from    affyGenoDetails "
+         "        PD01, PD02, PD03, PD04, PD05, PD06, PD07, PD08, "
+         "        PD09, PD10, PD11, PD12, PD13, PD14, PD15, PD16, "
+         "        PD17, PD18, PD19, PD20, PD21, PD22, PD23, PD24  "
+         "from    affy120KDetails "
          "where   affyId = '%s'", name);
-snp = affyGenoDetailsLoadByQuery(conn, query);
+snp = affy120KDetailsLoadByQuery(conn, query);
 if (snp!=NULL)
     {
     printf("<BR>\n");
@@ -10272,7 +10305,7 @@ if (snp!=NULL)
     if (snp->rsId>0)
 	{
 	printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-	printf("type=rs&rs=rs%d\" TARGET=_blank>dbSNP link for rs%d</A></P>\n", snp->rsId, snp->rsId);
+	printf("type=rs&rs=rs%s\" TARGET=_blank>dbSNP link for rs%s</A></P>\n", snp->rsId, snp->rsId);
 	}
     doSnpLocusLink(tdb, name);
     printf("<BR>Genotypes:<BR>");
@@ -10334,11 +10367,11 @@ if (snp!=NULL)
     printf("\n</font>\n");
     }
 /* else errAbort("<BR>%s<BR>\n",query); */
-affyGenoDetailsFree(&snp);
+affy120KDetailsFree(&snp);
 sqlDisconnect(&conn);
 }
 
-void doAffyGeno(struct trackDb *tdb, char *itemName)
+void doAffy120K(struct trackDb *tdb, char *itemName)
 /* Put up info on an Affymetrix SNP. */
 {
 char *group = tdb->tableName;
@@ -10349,12 +10382,11 @@ struct sqlResult *sr;
 char **row;
 char query[256];
 int rowOffset;
-int rsId = 0;
 
 cartWebStart(cart, "Single Nucleotide Polymorphism (SNP)");
 printf("<H2>Single Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
 sprintf(query, "select * "
-	       "from   affyGeno "
+	       "from   affy120K "
 	       "where  chrom = '%s' "
 	       "  and  chromStart = %d "
 	       "  and  name = '%s'",
@@ -10366,7 +10398,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     snpStaticLoad(row+rowOffset, &snp);
     bedPrintPos((struct bed *)&snp, 3);
     }
-doAffyGenoDetails(tdb, itemName);
+doAffy120KDetails(tdb, itemName);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -10405,7 +10437,7 @@ if (snp!=NULL)
     if (strncmp(snp->rsId,"unmapped",8))
 	{
 	printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link for %s</A></P>\n", snp->rsId, snp->rsId);
+	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link for rs%s</A></P>\n", snp->rsId, snp->rsId);
 	}
 
     printf("<P><A HREF=\"http://snp.cshl.org/cgi-bin/snp?name=");
@@ -10429,7 +10461,6 @@ struct sqlResult *sr;
 char **row;
 char query[256];
 int rowOffset;
-int rsId = 0;
 
 cartWebStart(cart, "Single Nucleotide Polymorphism (SNP)");
 printf("<H2>Single Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
@@ -10451,45 +10482,6 @@ printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
-
-void doSnpMap(struct trackDb *tdb, char *itemName)
-/* Put up info on a SNP. */
-{
-char *group = tdb->tableName;
-char *ncbiName = itemName;
-struct snpMap snp;
-int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char query[256];
-int rowOffset;
-
-ncbiName += 2;
-cartWebStart(cart, "Simple Nucleotide Polymorphism (SNP)");
-printf("<H2>Simple Nucleotide Polymorphism (SNP) %s </H2>\n", itemName);
-sprintf(query, "select * "
-	       "from   %s "
-	       "where  chrom = '%s' "
-	       "  and  chromStart = %d "
-	       "  and name = '%s'",
-        group, seqName, start, itemName);
-rowOffset = hOffsetPastBin(seqName, group);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    snpMapStaticLoad(row+rowOffset, &snp);
-    bedPrintPos((struct bed *)&snp, 3);
-    }
-doDbSnpRS(ncbiName);
-printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link</A></P>\n", snp.name);
-doSnpLocusLink(tdb, itemName);
-printTrackHtml(tdb);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-}
-
 
 void doTigrGeneIndex(struct trackDb *tdb, char *item)
 /* Put up info on tigr gene index item. */
@@ -13273,17 +13265,13 @@ else if (startsWith("ct_", track))
     {
     hgCustom(track, item);
     }
-else if (sameWord(track, "snpTsc") || sameWord(track, "snpNih"))
+else if (sameWord(track, "snpTsc") || sameWord(track, "snpNih") || sameWord(track, "snpMap"))
     {
     doSnp(tdb, item);
     }
-else if (sameWord(track, "snpMap"))
+else if (sameWord(track, "affy120K"))
     {
-    doSnpMap(tdb, item);
-    }
-else if (sameWord(track, "affyGeno"))
-    {
-    doAffyGeno(tdb, item);
+    doAffy120K(tdb, item);
     }
 else if (sameWord(track, "affy10K"))
     {
