@@ -15,7 +15,7 @@
 #include "psl.h"
 #include "qaSeq.h"
 
-int version = 20;       /* Current version number. */
+int version = 21;       /* Current version number. */
 int maxMapDeviation = 700000;   /* No map deviations further than this allowed. */
 boolean isPlaced;	/* TRUE if want to really follow map. */
 FILE *logFile;	/* File to write decision steps to. */
@@ -565,7 +565,7 @@ while (lineFileRow(lf, words))
     ocp->b = hashMustFindVal(cloneHash, words[4]);
     ocp->overlap = lineFileNeedNum(lf, words, 8);
     ocp->sloppyOverlap = lineFileNeedNum(lf, words, 9);
-    ocp->sloppyOverlap = lineFileNeedNum(lf, words, 10);
+    ocp->obliviousOverlap = lineFileNeedNum(lf, words, 10);
     ocp->aHitS = words[2][0];
     ocp->aHitT = words[3][0];
     ocp->bHitS = words[6][0];
