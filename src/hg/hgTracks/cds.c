@@ -128,7 +128,7 @@ static void getCodonDna(char *retStr, char *chrom, int n, unsigned *exonStarts, 
            if (i >= exonCount)
                {
                //uglyf("Already on last block\n");
-               return;
+               break;
                }
 
            theStart = exonStarts[i];
@@ -152,20 +152,22 @@ static void getCodonDna(char *retStr, char *chrom, int n, unsigned *exonStarts, 
                }
            i++;
            }
+           retStr[thisN] = '\0';
+       
        }
    else
        {
-     
-       thisN = n;
+       retStr[n] = '\0';
+       thisN = n-1;
        //move to previous block end
        i = startI-1;
-       while(thisN > 0)
+       while(thisN >= 0)
            {
 
            if (i < 0)
                {
                //uglyf("Neg. Strand: Already on first block\n");
-               return;
+               break;
                }
 
            theStart = exonStarts[i];
@@ -184,7 +186,7 @@ static void getCodonDna(char *retStr, char *chrom, int n, unsigned *exonStarts, 
                    retStr[thisN] = hDnaFromSeq( chrom, 
                           theEnd-j-1, theEnd-j, dnaUpper)->dna[0];
                thisN--;
-               if (thisN <= 0) 
+               if (thisN < 0) 
                    break;
                }
                i--;
@@ -549,6 +551,7 @@ if (lf->orientation > 0 ) //positive strand
                 //get next 'frame' nt's to see what codon will be (skipping intron sequence)
                 getCodonDna(theRestOfCodon, chrom, frame, starts, ends, 
                         blockCount, cdsStart, cdsEnd, i, FALSE, NULL);
+
                 safef(tempCodonSeq, 4, "%s%s", partialCodonSeq, theRestOfCodon);
 
                 sf->grayIx = (currentEnd <= cdsEnd)?
@@ -661,6 +664,7 @@ else  //negative strand
                  * (skipping intron sequence)*/
                 getCodonDna(theRestOfCodon, chrom, frame, starts, ends, 
                         blockCount, cdsStart, cdsEnd, i, TRUE, NULL );
+
                 safef(tempCodonSeq, 4, "%s%s", trimSpaces(theRestOfCodon), 
                         partialCodonSeq );
 
