@@ -77,6 +77,7 @@ For expRatio
        expScale - maximum expression value
        expStep - amount to step in visible expression scale.  Some
            round number close to expScale/8 is best
+       expColorDense On - show avg. color in dense mode
        chip - Name of microarray chip.
 For wigMaf tracks:
     o track name is table name of the multiple alignment maf table,
