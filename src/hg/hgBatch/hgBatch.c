@@ -11,7 +11,9 @@
 #include "hdb.h"
 #include "dbDb.h"
 #include "web.h"
+#include "hui.h"
 
+#define hgTextPhase  "Advanced query..."
 char *db;	/* Current database. */
 char *organism;	/* Current organism. */
 char *track;	/* Current track. */
@@ -63,83 +65,28 @@ cgiMakeDropListFull("hgbTrack", trackLabels, trackNames,
 }
 
 
-void printFieldList(char *db, char *javascript)
-/* Print key field list. */
-{
-struct slName *fieldList = NULL, *field;
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char query[256];
-char **row;
-char tableName[256];
-char defaultChrom[64];
-struct hTableInfo *hti;
-int i, fieldCount = 0;
-char **fieldNames;
-boolean keyExists = FALSE;
-
-/* Get info on track and figure out name of a table
- * associated with it. */
-hFindDefaultChrom(db, defaultChrom);
-hti = hFindTableInfo(defaultChrom, track);
-if (hti->isSplit)
-   sprintf(tableName, "%s_%s", defaultChrom, track);
-else
-   sprintf(tableName, "%s", track);
-if (keyField == NULL)
-    keyField = hti->nameField;
-
-/* Get all the fields from database into fieldList. */
-snprintf(query, sizeof(query), "DESCRIBE %s", tableName);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    field = newSlName(row[0]);
-    if (sameString(field->name, keyField))
-        keyExists = TRUE;
-    slAddHead(&fieldList, field);
-    ++fieldCount;
-    }
-sqlFreeResult(&sr);
-slReverse(&fieldList);
-
-/* Move fields into an array. */
-AllocArray(fieldNames, fieldCount);
-for (field = fieldList, i=0; field != NULL; field = field->next, ++i)
-    fieldNames[i] = field->name;
-
-/* Make drop-down. */
-if (!keyExists)
-    keyField = hti->nameField;
-cgiMakeDropListFull("hgbKeyField", fieldNames, fieldNames, 
-	fieldCount, keyField, javascript);
-}
-
 void selectTrack()
 /* Put up a form that lets them choose organism, assembly, track
  * and key field. */
 {
 char *onChangeOrg = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.submit();\"";
 
-
+webStart(cart, "Table Browser: Batch Download Database Info");
 puts("<FORM ACTION=\"/cgi-bin/hgBatch\" NAME=\"mainForm\" METHOD=\"GET\">\n");
-printf("<H2>Batch Download Database Info</H2>\n");
 printf("Use this form when you want to grab many items from the database "
        "all at once.  This is most frequently used with GenBank accession "
        "numbers as the keys.<BR>\n");
 printf("<BR>");
 
+printf("<CENTER>");
 printf("organism: ");
 printGenomeListHtml(db, onChangeOrg);
 printf("assembly: ");
 printAssemblyListHtmlExtra(db, autoSubmit);
 printf("track: ");
 printTrackDropList(db, autoSubmit);
-printf("key field: ");
-printFieldList(db, autoSubmit);
 printf("<BR>");
 printf("<BR>");
-printf("<CENTER>");
 cgiMakeButton("hgb.pasteKeys", "Paste in Keywords");
 printf(" ");
 cgiMakeButton("hgb.uploadKeys", "Upload Keyword File");
@@ -158,9 +105,17 @@ printf("</FORM>\n");
 void pasteForm()
 /* Put up form that lets them paste in keys. */
 {
+char tbl[256];
+safef(tbl, sizeof(tbl), "%s.%s", cgiString("db"), cgiString("hgbTrack"));
+webStart(cart, "Table Browser: Paste in Keys for Batch Query");
 puts("Please paste in a list of keys to match.  These may include "
        "* and ? wildcard characters.");
-printf("<FORM ACTION=\"/cgi-bin/hgBatch\" METHOD=\"POST\">");
+printf("<FORM ACTION=\"/cgi-bin/hgText\" METHOD=\"GET\">");
+cgiContinueHiddenVar("org");
+cgiContinueHiddenVar("db");
+cgiMakeHiddenVar("position", "hgBatch");
+cgiMakeHiddenVar("table", tbl);
+cgiMakeHiddenVar("phase", hgTextPhase);
 puts("<TEXTAREA NAME=hgb.userKeys ROWS=10 COLS=80></TEXTAREA><BR>\n");
 puts("<CENTER>");
 puts(" <INPUT TYPE=SUBMIT Name=hgb.showPasteResults VALUE=\"Submit\"><P>\n");
@@ -172,7 +127,15 @@ printf("</FORM>\n");
 void uploadForm()
 /* Put up upload form. */
 {
-puts("<FORM ACTION=\"/cgi-bin/hgBatch\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n");
+char tbl[256];
+safef(tbl, sizeof(tbl), "%s.%s", cgiString("db"), cgiString("hgbTrack"));
+webStart(cart, "Table Browser: Upload File of Keys for Batch Query");
+puts("<FORM ACTION=\"/cgi-bin/hgText\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n");
+cgiContinueHiddenVar("org");
+cgiContinueHiddenVar("db");
+cgiMakeHiddenVar("position", "hgBatch");
+cgiMakeHiddenVar("table", tbl);
+cgiMakeHiddenVar("phase", hgTextPhase);
 printf("Please enter the name of a file in your computer containing a space, tab, or ");
 printf("line separated list of the key names you want to look up in the database.");
 printf("Unlike in the paste option, wildcards don't work in this list.<BR>");
@@ -199,10 +162,19 @@ void findKeyIndex(char *table, boolean printHead, int *retIx, int *retCount)
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
+struct hTableInfo *hti;
 char **row;
 struct slName *fieldList = NULL, *field;
 char query[256];
+char defaultChrom[64];
 int keyIx = -1, fieldCount = 0;
+
+/* Get info on track and figure out name of a table
+ * associated with it. */
+hFindDefaultChrom(db, defaultChrom);
+hti = hFindTableInfo(defaultChrom, track);
+if (keyField == NULL)
+    keyField = hti->nameField;
 
 printf("<TT><PRE>");
 
@@ -365,7 +337,7 @@ cart = theCart;
 getDbAndGenome(cart, &db, &organism);
 hSetDb(db);
 track = cartUsualString(cart, "hgbTrack", "mrna");
-keyField = cartOptionalString(cart, "hgbKeyField");
+keyField = cgiOptionalString("hgbKeyField");
 if (cgiVarExists("hgb.pasteKeys"))
     pasteForm();
 else if (cgiVarExists("hgb.uploadKeys"))
@@ -391,10 +363,14 @@ char *excludeVars[] = {"Submit", "submit",
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+struct cart *theCart;
 oldVars = hashNew(8);
 cgiSpoof(&argc, argv);
-htmlSetBackground("../images/floret.jpg");
-cartHtmlShell("Batch query", doMiddle, "hguid", excludeVars, oldVars);
+// Sometimes we output HTML and sometimes plain text; let each outputter 
+// take care of headers instead of using a fixed cart*Shell().
+theCart = cartAndCookieWithHtml(hUserCookie(), excludeVars, oldVars, FALSE);
+doMiddle(theCart);
+cartCheckout(&theCart);
 return 0;
 }
 
