@@ -78,6 +78,10 @@ clean::
 	touch non-empty-rm.o
 	- find . -name \*.o -print | xargs rm
 
+clean_utils::
+	@for D in ${UTIL_DIRS}; do \
+		(cd $${D} && ${MAKE} clean;) \
+	done
 
 test::
 	cd lib && ${MAKE} test
