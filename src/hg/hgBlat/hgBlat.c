@@ -350,13 +350,13 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	data.reportTargetStrand = TRUE;
 	if (isTxTx)
 	    {
-	    gfAlignTransTrans(conn, serve->nibDir, seq, FALSE, 5, gfSavePslx, &data);
+	    gfAlignTransTrans(conn, serve->nibDir, seq, FALSE, 5, gfSavePslx, &data, !txTxBoth);
 	    if (txTxBoth)
 		{
 		close(conn);
 		reverseComplement(seq->dna, seq->size);
 		conn = gfConnect(serve->host, serve->port);
-		gfAlignTransTrans(conn, serve->nibDir, seq, TRUE, 5, gfSavePslx, &data);
+		gfAlignTransTrans(conn, serve->nibDir, seq, TRUE, 5, gfSavePslx, &data, FALSE);
 		}
 	    }
 	else
