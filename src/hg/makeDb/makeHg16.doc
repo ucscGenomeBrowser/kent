@@ -4782,3 +4782,140 @@ o - Load genomic dupes
 	'update genomicDups set name = concat(otherChrom,":",otherStart);' \
 	hg16
 >>>>>>> 1.74
+
+
+# UPDATE WOODY BINARIES (see PHYLOHMM CONSERVATION entries below)
+# done, acs, 2003-11-19
+    ssh hgwdev
+    cd /cluster/data/woody   # better place?  don't have permission in /cluster/install
+    cvs update -dP
+    cd src
+    make
+    # make sure Makefile has INSTALLDIR = /cluster/bin/woody
+    make install
+
+# CFTR PHYLOHMM CONSERVERVATION
+# done, acs, 2003-11-19 (currently using 9-way alignment)
+
+# NOTE: essentially the same procedure applies for any Zoo or ENCODE
+# target, as long as a suitable tree topology is available for the
+# species in question (when distant species are included, e.g.,
+# chicken and fish, the branch-length estimation procedure may need to
+# be adapted slightly -- details to come)
+
+    ssh hgwdev
+    # (update woody binaries, if necessary -- see above)
+    # make sure /cluster/bin/penn/tbaBin and /cluster/bin/woody in path
+
+    mkdir -p /cluster/data/nisc/targets/cftr/phyloHMMcons
+    cd /cluster/data/nisc/targets/cftr/phyloHMMcons
+    # extract sufficient stats for phylog. analysis from MAF file
+    CFTR_START=115365025      # boundaries of CFTR region in hg16 coords 
+    CFTR_END=117242450	      # (these don't have to be perfect)
+    maf_project /cluster/data/nisc/targets/cftr/tba9way.maf /cluster/data/nisc/targets/cftr/tba9Mammal/human > cftr9_humanref.maf
+    msa_view cftr9_humanref.maf -i MAF -o SS -s ${CFTR_START} -e ${CFTR_END} -r 1 -O hg16,chimp,baboon,mm3,rn3,cow,pig,cat,dog > cftr9.ss
+    head cftr9.ss            
+#NSEQS = 9
+#LENGTH = 2063003
+#TUPLE_SIZE = 1
+#NTUPLES = 57302
+#NAMES = hg16,chimp,baboon,mm3,rn3,cow,pig,cat,dog
+#ALPHABET = ACGTN
+#IDX_OFFSET = 115365024
+#NCATS = -1
+# 
+#0       C--------       26480
+
+    # fit a phylogenetic model to the data, with rate variation
+    echo "((((1,2),3),(4,5)),((6,7),(8,9)))" > cftr9.nh
+    # (indexes refer to sequences in the order of the NAMES line in
+    # the *.ss file)
+    fit_tree_model -m cftr9.ss -i SS -t cftr9.nh -s REV -o cftr9_rev -E -l fit.log -k 5 -a 4.8 -T -p MED
+    # (takes about 5 min.  Watch log file for convergence --
+    # single lines correspond to outer maximization algorithm,
+    # interleaved sets of lines correspond to inner maximization
+    # algorithms [see http://www.cse.ucsc.edu/~acs/Siepel-03-0304.pdf
+    # for background])
+    # Note: k=5 is adequate for a good estimate of the alpha
+    # parameter, even though we'll use k=10 in the next step.  The -a
+    # argument just provides a reasonable starting value for alpha, to
+    # speed convergence
+
+    # (check estimated branch lengths to be sure they make sense)
+    cat cftr9_rev.nh
+#((((hg16:0.005601,chimp:0.005707):0.019356,baboon:0.034458):0.080743,(mm3:0.072487,rn3:0.079445):0.287368):0.035643,((cow:0.107791,pig:0.102431):0.040419,(cat:0.074444,dog:0.104476):0.053251):0.035643);
+    # (small deviations from one data set to the next are normal)
+
+    # you can also do "draw_tree cftr9_rev.nh > cftr9_rev.ps" to get a
+    # simple postscript rendering of the tree.  Zero- or
+    # near-zero-length branches usually indicate a problem, e.g.,
+    # incorrect topology
+
+    # (also check cftr9_rev.mod; look in particular at ALPHA)
+    cat cftr9_rev.mod
+#ALPHABET: A C G T
+#ORDER: 0
+#SUBST_MOD: REV
+#NRATECATS: 5
+#ALPHA: 4.778715
+#TRAINING_LNL: -6471907.615171
+#BACKGROUND: 0.304536 0.191156 0.191907 0.312401
+#RATE_MAT:
+#  -0.848833    0.150792    0.552489    0.145552
+#   0.240232   -1.259134    0.166198    0.852704
+#   0.876738    0.165547   -1.285792    0.243507
+#   0.141887    0.521764    0.149586   -0.813238
+#TREE: ((((1:0.005601,2:0.005707):0.019356,3:0.034458):0.080743,(4:0.072487,5:0.079445):0.287368):0.035643,((6:0.107791,7:0.102431):0.040419,(8:0.074444,9:0.104476):0.053251):0.035643);
+
+    # now compute the posterior probabilities of interest, according to
+    # a phylo-HMM
+    label -m cftr9.ss -d cftr9_rev.mod -i SS -o cftr9 -k 10 -L 0.9 -A -p 0 -j 1 -x -s chr7
+    # (takes 12 min)
+    # (check postprob file)
+    wc cftr9.postprob
+#1752168 3504336 31539024 cftr9.postprob
+    head cftr9.postprob
+#115370785       0.0664
+#115370786       0.0583
+#115370787       0.0448
+#115370788       0.0271
+#115370789       0.0217
+#115370790       0.0232
+#115370791       0.0331
+#115370792       0.0396
+#115370793       0.0417
+#115370794       0.0557
+
+    # load as a (Hiramesque) wiggle track
+    wigAsciiToBinary -chrom=chr7 -binsize=1024 -dataSpan=1 -wibFile=chr7_phyloHMMcons_CFTR -name=cftr9 cftr9.postprob
+    rm -r /gbdb/hg16/wib/chr7_phyloHMMcons_CFTR.wib
+    ln -s /cluster/data/nisc/targets/cftr/phyloHMMcons/chr7_phyloHMMcons_CFTR.wib /gbdb/hg16/wib/chr7_phyloHMMcons_CFTR.wib
+    hgLoadWiggle hg16 chr7_phyloHMMcons_CFTR chr7_phyloHMMcons_CFTR.wig
+    chmod 664 chr7_phyloHMMcons_CFTR.wib
+    chmod 775 .
+
+    # add trackDb.ra entry, e.g.,
+#track phyloHMMcons_CFTR
+#shortLabel phyloHMMcons CFTR
+#longLabel phylo-HMM-based conservation, CFTR (post. prob. of slowest of 10 rates)
+#group compGeno
+#priority 150
+#visibility hide
+#color 175,150,128
+#altColor 255,128,0
+#type wig 0.0 1.0
+#autoScaleDefault Off
+
+    # adapt HTML for details page, if necessary (e.g., copy an existing
+    # phyloHMMcons*.html page to phyloHMMcons_CFTR.html, edit to
+    # reflect data set, do "make update", don't forget to cvs add and
+    # commit)
+
+    # cleanup
+    rm cftr9.ss cftr9_humanref.maf   # easy to regenerate
+    gzip cftr9.postprob
+
+# HMR PHYLOHMM CONSERVATION
+# (in progress, acs, 2003-11-19)
+
+    ssh hgwdev
