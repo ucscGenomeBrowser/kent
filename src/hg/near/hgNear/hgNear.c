@@ -13,7 +13,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.22 2003/06/25 02:56:45 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.23 2003/06/25 03:25:13 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, defaultConfName,
         resetConfName, idVarName, idPosVarName, NULL }; 
@@ -339,7 +339,7 @@ hPrintf("<TR><TD ALIGN=CENTER>");
 
 /* Do sort by drop-down */
     {
-    static char *menu[] = {"expression", "homology", "position"};
+    static char *menu[] = {"expression", "homology", "name", "position"};
     hPrintf("group by ");
     cgiMakeDropList(groupVarName, menu, ArraySize(menu), groupOn);
     }
@@ -514,6 +514,102 @@ struct genePos *getPositionNeighbors(struct sqlConnection *conn)
 return getGenomicNeighbors(conn, curGeneId);
 }
 
+struct scoredIdName
+/* A structure that stores a key, a name, and a score. */
+    {
+    struct scoredIdName *next;
+    char *id;		/* GeneID */
+    char *name;		/* Gene name. */
+    int score;		/* Big is better. */
+    };
+
+int scoredIdNameCmpScore(const void *va, const void *vb)
+/* Compare to sort based on score. */
+{
+const struct scoredIdName *a = *((struct scoredIdName **)va);
+const struct scoredIdName *b = *((struct scoredIdName **)vb);
+int diff = b->score - a->score;
+if (diff == 0)
+    diff = strcmp(a->name, b->name);
+return diff;
+}
+
+int countStartSame(char *prefix, char *name)
+/* Return how many letters of prefix match first characters of name. */
+{
+int i;
+char c;
+for (i=0; ;++i)
+    {
+    c = prefix[i];
+    if (c == 0 || c != name[i])
+        break;
+    }
+return i;
+}
+
+struct scoredIdName *scorePrefixMatch(char *prefix, char *id, char *name)
+/* Return scoredIdName structure based on name and how many
+ * characters match prefix. */
+{
+struct scoredIdName *sin;
+AllocVar(sin);
+sin->id = cloneString(id);
+sin->name = cloneString(name);
+sin->score = countStartSame(prefix, name);
+return sin;
+}
+
+struct genePos *getNameborhood(struct sqlConnection *conn,
+	char *curName, char *table, char *idField, char *nameField)
+/* Get list of all genes that are similarly prefixed. */
+{
+struct sqlResult *sr;
+char **row;
+char query[512];
+struct scoredIdName *sinList = NULL, *sin;
+int i;
+struct genePos *gpList = NULL, *gp;
+
+/* Scan table for names and sort by similarity. */
+safef(query, sizeof(query), "select %s,%s from %s", idField, nameField, table);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    sin = scorePrefixMatch(curName, row[0], row[1]);
+    slAddHead(&sinList, sin);
+    }
+sqlFreeResult(&sr);
+slSort(&sinList, scoredIdNameCmpScore);
+
+/* Make list of top ones. */
+for (i=0, sin=sinList; i<displayCount && sin != NULL; ++i, sin = sin->next)
+    {
+    AllocVar(gp);
+    gp->name = sin->id;
+    sin->id = NULL;
+    slAddHead(&gpList, gp);
+    }
+slReverse(&gpList);
+return gpList;
+}
+
+struct genePos *getNameNeighbors(struct sqlConnection *conn)
+/* Get genes in genomic neighborhood. */
+{
+char query[256];
+char name[128];
+safef(query, sizeof(query), 
+	"select geneSymbol from kgXref where kgID = '%s'", curGeneId->name);
+if (sqlQuickQuery(conn, query, name, sizeof(name)))
+    return getNameborhood(conn, name, "kgXref", "kgID", "geneSymbol");
+else
+    {
+    warn("Couldn't find name for %s", curGeneId->name);
+    return NULL;
+    }
+}
+
 struct genePos *getNeighbors(struct sqlConnection *conn)
 /* Return gene neighbors. */
 {
@@ -523,6 +619,8 @@ else if (sameString(groupOn, "homology"))
     return getHomologyNeighbors(conn);
 else if (sameString(groupOn, "position"))
     return getPositionNeighbors(conn);
+else if (sameString(groupOn, "name"))
+    return getNameNeighbors(conn);
 else
     {
     errAbort("Unknown sort value %s", groupOn);
