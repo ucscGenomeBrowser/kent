@@ -878,7 +878,7 @@ shortLabel Hu/Mouse/Rat/Chick
 longLabel Human/Mouse/Rat/Chicken Multiz Alignments & PhyloHMM Cons 
 group compGeno
 priority 101
-visibility hide
+visibility pack
 color 0, 10, 100
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
