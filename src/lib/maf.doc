@@ -7,7 +7,7 @@ alignments in a format that is easy to parse and relatively
 easy to read.  We apologize for creating yet another
 multiple alignment format.  We realize that there are
 many in existence.  What motivates this format is
-to storage multiple alignments at the dna level between
+to store multiple alignments at the dna level between
 entire genomes. The existing formats we are aware of
 are geared towards multiple alignments of single proteins,
 and would require considerable extension at the least to
