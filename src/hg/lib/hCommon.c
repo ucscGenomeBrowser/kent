@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hCommon.c,v 1.24 2004/10/12 00:56:52 fanhsu Exp $";
+static char const rcsid[] = "$Id: hCommon.c,v 1.25 2004/10/12 21:49:35 fanhsu Exp $";
 
 static char *_hgcName = "../cgi-bin/hgc";	/* Path to click processing program. */
 static char *_hgTracksName = "../cgi-bin/hgTracks"; /* Path back to self. */
@@ -15,7 +15,7 @@ static char *_hgcFullName = "http://genome.ucsc.edu/cgi-bin/hgc";	/* Path to cli
 static char *_hgTracksFullName = "http://genome.ucsc.edu/cgi-bin/hgTracks"; /* Path back to self. */
 static char *_hgTrackUiFullName = "http://genome.ucsc.edu/cgi-bin/hgTrackUi"; /* Path back to extended ui program. */
 
-static char *_hgTextName = "../cgi-bin/hgText"; /* Path back to the text browser. */
+static char *_hgTextName = "/cgi-bin/hgText"; /* Path back to the text browser. */
 static char *_hgTextFullName = "http://genome.ucsc.edu/cgi-bin/hgText"; /* Path back to the text browser. */
 
 char *hgcName()
