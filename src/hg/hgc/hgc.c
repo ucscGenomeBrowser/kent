@@ -437,6 +437,11 @@ boolean firstTime = TRUE;
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
         table, item, seqName, start);
+
+//errAbort( "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
+//        table, item, seqName, start);
+
+
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -1313,9 +1318,16 @@ dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
 printCustomUrl(tdb, itemForUrl, item == itemForUrl);
+
+
 if (wordCount > 0)
     {
     type = words[0];
+
+
+//errAbort( "%s,%s\n", type, tdb->shortLabel );
+
+
     if (sameString(type, "bed"))
 	{
 	int num = 0;
@@ -8575,8 +8587,9 @@ while ((row = sqlNextRow(sr)) != NULL)
                  otherDb, thisPsl, pslTableName );
 
 
+
         sprintf(otherString, "%d&win=T", thisPsl->tStart );
-        hgcAnchorSomewhere("humMusL", cgiEncode(item), otherString, thisPsl->tName );
+        hgcAnchorSomewhere( tdb->tableName, cgiEncode(item), otherString, thisPsl->tName );
         printf("View individual alignment windows\n</a>");
         printf("<br><br>");
     }
@@ -8733,7 +8746,7 @@ if (wordCount > 0)
             "Mouse", "mm2", "blastzBestMouse", printWindowFlag );
     else
         humMusSampleClick( conn, tdb, item, start, num,
-            "Human", "hg12", "blastzBestHuman", printWindowFlag );
+            "Human", "hg12", "blastzBestHuman_08_30", printWindowFlag );
     }
 printTrackHtml(tdb);
 freez(&dupe);
