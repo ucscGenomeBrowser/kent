@@ -7,7 +7,7 @@
 #include "portable.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.49 2004/09/24 19:01:22 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.50 2004/09/24 20:35:19 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wds, char *left, char *right)
@@ -1496,7 +1496,14 @@ if (bedList && *bedList)
 		wigAscii->chrom = cloneString(wds->chrName);
 		wigAscii->span = 1;	/* span information has been lost */
 		wigAscii->count = 0;	/* will count up as values added */
-		setMaxAlloc((size_t)2100000000);  /*2^31 = 2,147,483,648 */
+		if (sizeof(size_t) > 4)
+		    setMaxAlloc((size_t)17179869184);  /*2^34  = 16 Gb */
+		else
+		    setMaxAlloc((size_t)2100000000);  /*2^31 = 2,147,483,648 */
+		verbose(VERBOSE_CHR_LEVEL,
+		    "#\tworst case ascii array needLargeMem (%u * %u = %u)\n",
+			sizeof(struct asciiDatum), dataArraySize,
+			    (sizeof(struct asciiDatum) * dataArraySize));
 		wigAscii->data = (struct asciiDatum *) needLargeMem((size_t)
 		    (sizeof(struct asciiDatum) * dataArraySize));
 			/*	maximum area needed, may use less 	*/
@@ -1613,7 +1620,14 @@ if (bedList && *bedList)
 		size_t newSize;
 		newSize = sizeof(struct asciiDatum) * wigAscii->count;
 
-		setMaxAlloc((size_t)2100000000); /*2^31 = 2,147,483,648 */
+		if (sizeof(size_t) > 4)
+		    setMaxAlloc((size_t)17179869184);  /*2^34  = 16 Gb */
+		else
+		    setMaxAlloc((size_t)2100000000);  /*2^31 = 2,147,483,648 */
+		verbose(VERBOSE_CHR_LEVEL,
+	"#\tmoving to smaller ascii array needLargeMem( %u * %u = %u)\n",
+		    sizeof(struct asciiDatum), wigAscii->count,
+		    (sizeof(struct asciiDatum) * wigAscii->count));
 		smallerDataArea = (struct asciiDatum *) needLargeMem(newSize);
 		memcpy(smallerDataArea, wigAscii->data, newSize);
 		freeMem(wigAscii->data);
