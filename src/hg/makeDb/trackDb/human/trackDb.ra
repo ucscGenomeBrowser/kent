@@ -537,6 +537,15 @@ query select tName,tStart,tEnd,qName from %s where qName like '%s;'
 searchPriority 16
 termPrefix HG-
 
+searchTable affyU133Plus2
+searchMethod exact
+searchType psl
+shortCircuit 1
+termRegex HG-U133Plus2:.+
+query select tName,tStart,tEnd,qName from %s where qName like '%s;'
+searchPriority 16
+termPrefix HG-U133Plus2:
+
 searchTable affyGnf1h
 searchMethod exact
 searchType psl
