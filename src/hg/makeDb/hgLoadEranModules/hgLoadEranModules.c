@@ -7,7 +7,7 @@
 #include "dystring.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadEranModules.c,v 1.1 2004/01/16 21:57:55 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadEranModules.c,v 1.2 2004/01/24 02:22:21 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -25,7 +25,37 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void loadGeneToModule(struct sqlConnection *conn, char *fileName, char *table)
+struct hashEl *hashLookup2(struct hash *hash, char *key1, char *key2)
+/* Return value associated with key1&key2 */
+{
+char buf[64];
+safef(buf, sizeof(buf), "%s&%s", key1, key2);
+return hashLookup(hash, buf);
+}
+
+void hashAdd2(struct hash *hash, char *key1, char *key2, void *val)
+/* Add value associated with key1&key2 to hash */
+{
+char buf[64];
+safef(buf, sizeof(buf), "%s&%s", key1, key2);
+hashAdd(hash, buf, val);
+}
+
+struct hash *hashTwoColumnFile(char *fileName, int hashSize)
+/* Return hash from two-column file keyed by first column with values
+ * of second column. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct hash *hash = hashNew(hashSize);
+char *row[2];
+while (lineFileRow(lf, row))
+    hashAdd(hash, row[0], cloneString(row[1]));
+lineFileClose(&lf);
+return hash;
+}
+
+
+struct hash *loadGeneToModule(struct sqlConnection *conn, char *fileName, char *table)
 /* Load up simple two-column file into a lookup type table. */
 {
 struct dyString *dy = dyStringNew(512);
@@ -40,12 +70,17 @@ dyStringPrintf(dy,
 sqlRemakeTable(conn, table, dy->string);
 sqlLoadTabFile(conn, fileName, table, 0);
 printf("Loaded %s table\n", table);
+return hashTwoColumnFile(fileName, 0);
 }
 
-void loadGeneToMotif(struct sqlConnection *conn, char *fileName, char *table)
+void loadGeneToMotif(struct sqlConnection *conn, char *fileName, char *table,
+	struct hash *geneToModuleHash, struct hash *moduleAndMotifHash)
 /* Load file which is a big matrix with genes for rows and motifs for
  * columns.  There is a 1 in the matrix where a gene has the motif.
- * The first column and the first row are labels. */
+ * The first column and the first row are labels. 
+ *
+ * Only load bits of this where motif actually occurs in module associated with
+ * gene. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line;
@@ -53,7 +88,7 @@ char *tmpDir = ".";
 FILE *f = hgCreateTabFile(tmpDir, table);
 char *motifNames[32*1024], *row[32*1024];
 int motifCount, rowSize, i;
-char *gene;
+char *gene, *module;
 int geneCount = 0, total = 0;
 struct dyString *dy = dyStringNew(512);
 
@@ -73,12 +108,19 @@ while ((rowSize = lineFileChop(lf, row)) != 0)
     {
     lineFileExpectWords(lf, motifCount, rowSize);
     gene = row[0];
+    module = hashFindVal(geneToModuleHash, gene);
+    if (module == NULL)
+        errAbort("Gene %s in line %d of %s but not geneToModuleHash\n", gene, 
+		lf->lineIx, lf->fileName);
     for (i=1; i<rowSize; ++i)
         {
 	if (row[i][0] == '1')
 	    {
-	    fprintf(f, "%s\t%s\n", gene, motifNames[i]);
-	    ++total;
+	    if (hashLookup2(moduleAndMotifHash, module, motifNames[i]))
+		{
+		fprintf(f, "%s\t%s\n", gene, motifNames[i]);
+		++total;
+		}
 	    }
 	}
     ++geneCount;
@@ -100,9 +142,12 @@ printf("Loaded %s table\n", table);
 lineFileClose(&lf);
 }
 
-void loadModuleToMotif(struct sqlConnection *conn, char *fileName, char *table)
+
+struct hash *loadModuleToMotif(struct sqlConnection *conn, char *fileName, 
+	char *table)
 /* Load up file which has a line per module.  The first word is the module
- * number, the rest of the tab-separated fields are motif names. */
+ * number, the rest of the tab-separated fields are motif names. 
+ * Return hash keyed by module&motif. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line, *module, *motif;
@@ -110,6 +155,7 @@ char *tmpDir = ".";
 FILE *f = hgCreateTabFile(tmpDir, table);
 struct dyString *dy = dyStringNew(512);
 int motifCount = 0, moduleCount = 0;
+struct hash *hash = newHash(18);
 
 while (lineFileNextReal(lf, &line))
     {
@@ -120,6 +166,7 @@ while (lineFileNextReal(lf, &line))
 	{
 	++motifCount;
         fprintf(f, "%s\t%s\n", module, motif);
+	hashAdd2(hash, module, motif, NULL);
 	}
     }
 dyStringPrintf(dy,
@@ -137,6 +184,7 @@ hgLoadTabFile(conn, tmpDir, table, &f);
 hgRemoveTabFile(tmpDir, table);
 printf("Loaded %s table\n", table);
 lineFileClose(&lf);
+return hash;
 }
 
 void crossCheck(struct sqlConnection *conn,
@@ -154,10 +202,9 @@ char **row;
 int reusedMotifCount = 0;
 int fatalErrorCount = 0;
 
-printf("Cross-checking tables\n");
 
 /* Load up moduleToMotif table and note how many times
- * a module is used more than once just for curiousity
+ * a motif is used more than once just for curiousity
  * (this is not an error condition). */
 safef(query, sizeof(query), "select module,motif from %s", moduleToMotif);
 sr = sqlGetResult(conn, query);
@@ -173,6 +220,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     hashAdd(modMotHash, modMot, NULL);
     }
 sqlFreeResult(&sr);
+printf("%d motifs reuses in modules\n", reusedMotifCount);
+
+printf("Cross-checking tables\n");
 
 /* Load up geneToModule table, and make sure that all modules actually
  * exist in moduleToMotif table. */
@@ -196,6 +246,7 @@ sqlFreeResult(&sr);
 /* Scan again through moduleToMotif table and make sure that
  * all modules are present in geneToModule. */
 safef(query, sizeof(query), "select module from %s", moduleToMotif);
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *module = row[0];
@@ -210,6 +261,7 @@ sqlFreeResult(&sr);
 
 /* Scan through geneToMotif table checking things. */
 safef(query, sizeof(query), "select gene,motif from %s", geneToMotif);
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *gene = row[0];
@@ -221,7 +273,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	++fatalErrorCount;
 	}
     safef(modMot, sizeof(modMot), "%s %s", module, motif);
-    if (!hashLookup(modMotHash, modMot))
+    if (hashLookup(modMotHash, modMot) == NULL)
         {
 	warn("Gene %s has motif %s, but that motif isn't in %s\n",
 	    gene, motif, module);
@@ -238,9 +290,9 @@ void hgLoadEranModules(char *database, char *geneToModule,
 /* hgLoadEranModules - Load regulatory modules from Eran Segal. */
 {
 struct sqlConnection *conn = sqlConnect(database);
-loadGeneToModule(conn, geneToModule, "esRegGeneToModule");
-loadGeneToMotif(conn, geneToMotif, "esRegGeneToMotif");
-loadModuleToMotif(conn, moduleToMotif, "esRegModuleToMotif");
+struct hash *moduleAndMotifHash = loadModuleToMotif(conn, moduleToMotif, "esRegModuleToMotif");
+struct hash *geneToModuleHash = loadGeneToModule(conn, geneToModule, "esRegGeneToModule");
+loadGeneToMotif(conn, geneToMotif, "esRegGeneToMotif", geneToModuleHash, moduleAndMotifHash);
 crossCheck(conn, "esRegGeneToModule", "esRegGeneToMotif", "esRegModuleToMotif");
 }
 
