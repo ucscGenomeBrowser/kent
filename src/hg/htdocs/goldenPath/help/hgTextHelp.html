@@ -95,7 +95,7 @@ All rights reserved.
       Output Data Formats</A>
       <UL>
         <LI><A CLASS="toc" HREF="#BED">
-        BED/CustomTrack</A>
+        BED/Custom Track</A>
         <LI><A CLASS="toc" HREF="#FASTA">
         FASTA (DNA Sequence)</A>
         <LI><A CLASS="toc" HREF="#GTF">
@@ -189,9 +189,11 @@ for Genome Browser tracks or for intersections/unions of tracks, over
 a given position range or over the whole genome.  
 It can display some basic statistics calculated over selected data.  
 It can generate a 
-<A HREF="/goldenPath/help/customTracks.html">custom track</A> and 
+<A HREF="/goldenPath/help/customTrack.html">custom track</A> and 
 automatically add it to the user's session, so that it can be graphically 
-displayed in the genome browser.  
+displayed in the genome browser.  It allows 
+<A HREF="#Intersection">combined queries</A> on two tables, or on a 
+user custom track and a table, so compound queries are possible.  
 
 <P>
 One goal of the Table Browser is to provide an extremely flexible 
@@ -302,6 +304,14 @@ It lists the
 database tables, and prompts the user to select one.  
 Having selected a table, the user can click a button to 
 "Get all fields" or specify an "Advanced Query".  
+
+<P>
+In addition to database tables, the table browser can also retrieve 
+information from the user's 
+<A HREF="/goldenPath/help/customTrack.html">custom tracks</A>.  
+Custom tracks are always positional; if the user's session contains 
+any custom tracks, then they appear at the beginning of the list of 
+positional tables.  
 
 <P>
 The positional table selection takes precedence over non-positional.  
@@ -500,29 +510,121 @@ the "Tab Separated, Choose Fields..." output format.
 <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
 <TR><TD WIDTH=10>&nbsp;</TD><TD>
 
+The Table Browser returns query results in one of the following formats.  
+<B>Note:</B> When querying 
+non-positional 
+tables, only the 
+<A HREF="#TabSep">Tab Separated</A> and 
+<A HREF="#Stats">Summary/Statistics</A> formats are available.  
+
+
 <A NAME="BED"></A>
-<H4> BED/CustomTrack </H4>
+<H4> BED/Custom Track </H4>
+
+BED stands for Browser Extensible Data.  It is a plain-text data format, 
+and is the internal representation used for all 
+<A HREF="/goldenPath/help/customTrack.html">user custom tracks</A> 
+and for many Genome Browser tracks.  
+The BED format is described 
+<A HREF="/goldenPath/help/customTrack.html#BED">here</A>.  
+
+<P>
+Selecting BED as the output data format allows the user to retain 
+their query results as user custom tracks, which can then be viewed 
+in the Genome Browser or queried again in the Table Browser to form 
+compound queries.  
 
 
 <A NAME="FASTA"></A>
 <H4> FASTA (DNA Sequence) </H4>
 
+FASTA is a very simple plain text format for displaying nucleotide or 
+protein sequence.  
+(The Table Browser only outputs DNA sequence, not protein sequence, 
+at this time.)  
+For each record in FASTA output, there is one 
+header line which begins with "&gt;" and contains a description of 
+the record, followed by one or more lines whose letters represent 
+the sequence.  
+
+<P>
+Below is an example FASTA record returned by the Table Browser, 
+with an explanation of the header description fields.  
+
+<PRE><TT>
+>hg12_acembly_glutee_0 range=chr22:15586756-15586867 5'pad=0 3'pad=0 revComp=TRUE strand=- repeatMasking=none
+GGCACTGACAGGACTTGACACATTCTAATCTCCTGAGGGCCGCTAACAAC
+ATAGATGACAGTCTGGACAACACAAAGGGTCAACAGGTGCTCCGAGTGTC
+CGGCAGGGCTAA
+</TT></PRE>
+
+<UL>
+<LI> <B><TT>hg12_acembly_glutee_0</TT></B>: The database is hg12 
+     (Human June 2002),
+     the table is acembly,
+     the feature name is glutee,
+     and the user has selected to return a separate FASTA record for 
+     each exon/intron on the 
+     <A HREF="#FASTAOptions">FASTA/DNA Sequence options form</A> and 
+     this is the first (_0) record (the first exon).  
+<LI> <B><TT>range=chr22:15586756-15586867</TT></B>: The feature 
+     extends from 15586756 to 15586867 on chr22.  Note: the user may 
+     choose to generate a single FASTA record for all exons, excluding 
+     introns.  In that case, the record may be shorter than the length 
+     implied by the range.  
+<LI> <B><TT>5'pad=0 3'pad=0</TT></B>: The user has chosen to include no 
+     extra bases at the 5' and 3' ends of each feature.  
+<LI> <B><TT>revComp=TRUE strand=-</TT></B>: This feature is on the '-' 
+     strand, so the sequence has been reverse complemented relative to 
+     the genomic sequence at the given range.  
+<LI> <B><TT>repeatMasking=none</TT></B>: The user has chosen not to mask 
+     out (i.e. force to 'N' or lower-case) the bases that have been 
+     identified as repeats by RepeatMasker.  
+</UL>
+
 
 <A NAME="GTF"></A>
 <H4> GTF </H4>
+
+GTF stands for Gene Transfer format.  It is also known as 
+GFF version 2.  The spec can be found 
+<A HREF="http://www.sanger.ac.uk/Software/formats/GFF/GFF_Spec.shtml">
+here</A>.  
 
 
 <A NAME="Hyperlinks"></A>
 <H4> Hyperlinks to Genome Browser </H4>
 
+For convenience, the Table Browser can generate links to the 
+Genome Browser at the location of each feature identified by 
+a query on a positional table.  
+
 
 <A NAME="TabSep"></A>
 <H4> Tab Separated </H4>
+
+This plain text output format simply contains the contents of a table, 
+one table record per line, 
+with fields (columns) separated by tab characters.  
+The first line of output is a comment, starting with "#" and displaying 
+the field names separated by tab characters.
+This format is easy to load into spreadsheets or process with scripts, 
+if the user wishes to perform additional analysis on a table.  
 
 
 <A NAME="Stats"></A>
 <H4> Summary/Statistics </H4>
 
+This format summarizes the user's query (including any 
+<A HREF="#Constraints">filtering constraints</A> or 
+<A HREF="#Intersection">comparison of tables</A>.  
+For 
+positional
+tables, some statistics about the features are computed 
+(count, min/max/average/stdev of length, etc.) and displayed.  
+For all tables, the fields of the table and their SQL database types 
+are displayed.  For text fields, the user may click to obtain a 
+frequency histogram of a field's values in the query results.  
 
 
 </TD></TR></TABLE>
@@ -612,19 +714,19 @@ parentheses as needed for clarity.
 Free-form query examples (taken from the refGene table):
 <UL>
 <LI> <FONT COLOR="#0000FF">txStart = cdsStart</FONT> 
-
-searches for gene models missing expected 5' UTR upstream sequence 
-(if strand is '+'; 3' UTR downstream if strand is '-'). </LI>
+     searches for gene models missing expected 5' UTR upstream sequence 
+     (if strand is '+'; 3' UTR downstream if strand is '-'). </LI>
 <LI> <FONT COLOR="#0000FF">chrom NOT LIKE "chr??"</FONT> 
-filters search to chromosomes 1-9 plus X and Y. </LI> 
+     filters search to chromosomes 1-9 plus X and Y. </LI> 
 <LI> <FONT COLOR="#0000FF">(cdsEnd - cdsStart) &gt; 10000</FONT> 
-selects genes whose coding regions span over 10 kbp. </LI> 
+     selects genes whose coding regions span over 10 kbp. </LI> 
 <LI> <FONT COLOR="#0000FF">(txStart != cdsStart) AND (txEnd != cdsEnd) 
      AND exonCount = 1</FONT> 
      finds single exon genes with both 3' and 5' flanking UTR.</LI> 
-<LI><FONT COLOR="#0000FF">((cdsEnd - cdsStart) &gt; 30000) 
+<LI> <FONT COLOR="#0000FF">((cdsEnd - cdsStart) &gt; 30000) 
      AND (exonCount=2 OR exonCount=3)</FONT> 
-     finds genes with long spans but only 2-3 exons.</LI></UL>
+     finds genes with long spans but only 2-3 exons.</LI>
+</UL>
 </P>
 
 </TD></TR></TABLE>
