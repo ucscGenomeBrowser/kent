@@ -155,7 +155,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.810 2005/01/06 22:57:00 galt Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.811 2005/01/08 01:06:54 jill Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4844,7 +4844,7 @@ tStart = psl->tStart - 100;
 if (tStart < 0) tStart = 0;
 tEnd  = psl->tEnd + 100;
 if (tEnd > psl->tSize) tEnd = psl->tSize;
-dnaSeq = hDnaFromSeq(seqName, tStart, tEnd, dnaMixed);
+dnaSeq = hDnaFromSeq(seqName, tStart, tEnd, dnaLower);
 freez(&dnaSeq->name);
 dnaSeq->name = cloneString(psl->tName);
 
