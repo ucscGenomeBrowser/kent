@@ -4805,7 +4805,7 @@ char *gnfDetailed = "http://expression.gnf.org/cgi-bin/index.cgi?text=";
 if(name != NULL)
     {
     printf("<p>More information about individual probes and probe sets is available ");
-    printf("at Affymetrix's netaffx.com website. [registration required]\n");
+    printf("at Affymetrix's <a href=\"https://www.netaffx.com/index2.jsp\">netaffx.com</a> website. [registration required]\n");
     printf("<ul>\n");
     printf("<li> Information about probe sequences is <a href=\"%s%s\">available there</a></li>\n",
 	   netaffx, name);
