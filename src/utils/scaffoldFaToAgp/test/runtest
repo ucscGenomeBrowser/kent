@@ -1,0 +1,10 @@
+#!/bin/csh -f
+
+# run on test file, diff with "golden" file
+
+scaffoldFaToAgp test.fa  > /dev/null
+
+diff test.agp test.agp.gold > /dev/null
+if ($status) then
+    echo '*** FAIL ***'
+endif
