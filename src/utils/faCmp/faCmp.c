@@ -4,8 +4,10 @@
 #include "hash.h"
 #include "cheapcgi.h"
 #include "fa.h"
+#include "options.h"
+#include "nib.h"
 
-static char const rcsid[] = "$Id: faCmp.c,v 1.3 2003/05/06 07:41:05 kate Exp $";
+static char const rcsid[] = "$Id: faCmp.c,v 1.4 2003/07/07 22:04:11 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -13,20 +15,36 @@ void usage()
 errAbort(
   "faCmp - Compare two .fa files\n"
   "usage:\n"
-  "   faCmp a.fa b.fa\n");
+  "   faCmp [options] a.fa b.fa\n"
+  "options:\n"
+  "    -softMask - use the soft masking information during the compare\n"
+  "                Differences will be noted if the masking is different.\n"
+  "default:\n"
+  "    no masking information is used during compare.  It is as if both\n"
+  "    sequences were not masked.\n"
+  );
 }
 
-void faCmp(char *aFile, char *bFile)
+void faCmp(int options, char *aFile, char *bFile)
 /* faCmp - Compare two .fa files. */
 {
-struct dnaSeq *aList = faReadAllDna(aFile);
-struct dnaSeq *bList = faReadAllDna(bFile);
-int aCount = slCount(aList);
-int bCount = slCount(bList);
+struct dnaSeq *aList = (struct dnaSeq *) NULL;
+struct dnaSeq *bList = (struct dnaSeq *) NULL;
+int aCount = 0;
+int bCount = 0;
 struct dnaSeq *a, *b;
 DNA *aDna, *bDna;
 int size, i;
 
+if ( NIB_MASK_MIXED & options ) {
+	aList = faReadAllMixed(aFile);
+	bList = faReadAllMixed(bFile);
+} else {
+	aList = faReadAllDna(aFile);
+	bList = faReadAllDna(bFile);
+}
+aCount = slCount(aList);
+bCount = slCount(bList);
 
 if (aCount != bCount)
    errAbort("%d sequences in %s, %d in %s", aCount, aFile, bCount, bFile);
@@ -51,9 +69,12 @@ printf("%s and %s are the same\n", aFile, bFile);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
+int options = 0;
+optionHash(&argc, argv);
+if ( optionExists("softMask") )
+    options |= NIB_MASK_MIXED;
 if (argc != 3)
     usage();
-faCmp(argv[1], argv[2]);
+faCmp(options, argv[1], argv[2]);
 return 0;
 }
