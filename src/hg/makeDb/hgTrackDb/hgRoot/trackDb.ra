@@ -67,7 +67,7 @@ track synteny100000
 shortLabel Mouse2 Synteny
 longLabel Mouse Synteny using blastz single coverage with 100,000 base window
 priority 4.3
-visibility dense
+visibility hide
 color 0,100,0
 altColor 255,240,200
 type bed 4 .
@@ -123,7 +123,7 @@ track clonePos
 priority 9.5
 shortLabel Coverage
 longLabel Clone Coverage/Fragment Position
-visibility dense
+visibility hide
 altColor 180,180,180 
 
 track bacEndPairs
@@ -285,7 +285,7 @@ track softberryGene
 shortLabel Fgenesh++ Genes
 longLabel Fgenesh++ Gene Predictions
 priority 16
-visibility dense
+visibility hide
 color 0,100,0
 type genePred softberryPep
 
@@ -326,7 +326,7 @@ track npredGene
 shortLabel NCBI Prediction
 longLabel NCBI Gene Predictions
 priority 17.8
-visibility full
+visibility hide
 color 170,100,0
 type genePred npredPep 
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=nucleotide&cmd=search&term=$$
@@ -359,7 +359,7 @@ track transfacHit
 shortLabel Transfac Hits 
 longLabel Transfac Transcription Factor Binding Sites Near Transcription Start
 priority 18.28
-visibility dense
+visibility hide
 spectrum on
 type bed 6
 
@@ -367,7 +367,7 @@ track triangleSelf
 shortLabel Golden Triangle  
 longLabel Golden Triangle Possible Transcription Factor Binding Sites
 priority 18.29
-visibility dense
+visibility hide
 spectrum on
 type bed 6
 
@@ -424,7 +424,7 @@ track uniGene
 shortLabel UniGene
 longLabel UniGene Alignments and SAGE Info
 priority 20.5
-visibility dense
+visibility hide
 type psl .
 
 track mgc_mrna
@@ -653,6 +653,14 @@ spectrum on
 chromosomes chr22,
 type bed 5 +
 
+track humMus
+shortLabel Mouse Evolution
+longLabel Human/Mouse Evolutionary Mutual Information
+altColor 10,50,100
+priority 25.6
+visibility hide
+type sample 9 
+
 track exoFish
 shortLabel Exofish Ecores
 longLabel Exofish Tetraodon/Human Evolutionarily Conserved Regions
@@ -724,14 +732,6 @@ priority 33.5
 visibility hide
 spectrum on
 type bed 12
-
-track humMus
-shortLabel Mouse Evolution
-longLabel Human/Mouse Evolutionary Mutual Information
-altColor 10,50,100
-priority 33.6
-visibility hide
-type sample 9 
 
 track rmsk
 shortLabel RepeatMasker
