@@ -4,7 +4,7 @@
 #include "gbFileOps.h"
 #include "gbFa.h"
 
-static char const rcsid[] = "$Id: gbFa.c,v 1.1 2003/06/03 01:27:46 markd Exp $";
+static char const rcsid[] = "$Id: gbFa.c,v 1.2 2005/01/17 16:55:29 markd Exp $";
 
 /* 16kb seems like a good size by experiment */
 #define FA_STDIO_BUFSIZ (16*1024)
@@ -90,7 +90,7 @@ unsigned iHdr = 0, hdrCap = fa->headerCap;
 fa->seq = NULL;
 
 /* find next header */
-while (((c = fgetc(fa->fh)) != EOF) && !((c == '>') && atBOLN))
+while (((c = getc_unlocked(fa->fh)) != EOF) && !((c == '>') && atBOLN))
     {
     atBOLN = (c == '\n');
     }
@@ -98,7 +98,7 @@ if (c == EOF)
     return FALSE;
 
 /* read header */
-while ((c = fgetc(fa->fh)) != EOF)
+while ((c = getc_unlocked(fa->fh)) != EOF)
     {
     if (iHdr == hdrCap)
         hdrCap = expandHeader(fa);
@@ -144,7 +144,7 @@ if (fa->seq == NULL)
     unsigned iSeq = 0, seqCap = fa->seqCap;
 
     /* read seq */
-    while (((c = fgetc(fa->fh)) != EOF) && (c != '>'))
+    while (((c = getc_unlocked(fa->fh)) != EOF) && (c != '>'))
         {
         if (iSeq == seqCap)
             seqCap = expandSeq(fa);
