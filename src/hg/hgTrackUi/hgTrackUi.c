@@ -219,7 +219,7 @@ printf("&nbsp;pixels");
 if( optionNum >= 5 )
     {
     printf("<p><b>Maximum Interval to Interpolate Across</b>:&nbsp;&nbsp;");
-    cgiMakeIntVar(&options[5][0], thisLineGap, 10 );
+    cgiMakeIntVar(&options[4][0], thisLineGap, 10 );
     printf("&nbsp;bases");
     }
 
