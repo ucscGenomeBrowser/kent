@@ -106,7 +106,7 @@
 #include "maf.h"
 #include "hgc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.409 2003/05/09 00:23:52 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.410 2003/05/11 22:22:28 kent Exp $";
 
 
 struct cart *cart;	/* User's settings. */
@@ -1531,7 +1531,7 @@ int rowOffset;
 char query[256];
 struct sqlResult *sr;
 char **row;
-struct netAlign net;
+struct netAlign *net;
 char *org = hOrganism(database);
 char *otherOrg = hOrganism(otherDb);
 int tSize, qSize;
@@ -1546,61 +1546,24 @@ snprintf(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     errAbort("Couldn't find %s:%d in %s", seqName, start, table);
-netAlignStaticLoad(row+rowOffset, &net);
-tSize = net.tEnd - net.tStart;
-qSize = net.qEnd - net.qStart;
-printf("<B>type:</B> %s<BR>\n", net.type);
-printf("<B>level:</B> %d<BR>\n", net.level/2 + 1);
-printf("<B>%s position:</B> %s:%d-%d<BR>\n", 
-       org, net.tName, net.tStart+1, net.tEnd);
-printf("<B>%s position:</B> %s:%d-%d<BR>\n", 
-       otherOrg, net.qName, net.qStart+1, net.qEnd);
-printf("<B>strand:</B> %c<BR>\n", net.strand[0]);
-printf("<B>score:</B> %1.1f<BR>\n", net.score);
-if (net.chainId)
-    {
-    printf("<B>chain ID:</B> %u<BR>\n", net.chainId);
-    printf("<B>bases aligning:</B> %u<BR>\n", net.ali);
-    printf("<B>%s parent overlap:</B> %u<BR>\n", otherOrg, net.qOver);
-    printf("<B>%s parent distance:</B> %u<BR>\n", otherOrg, net.qFar);
-    printf("<B>%s bases duplicated:</B> %u<BR>\n", otherOrg, net.qDup);
-    }
-printf("<B>N's in %s:</B> %u (%1.1f%%)<BR>\n", org, net.tN, 100.0*net.tN/tSize);
-printf("<B>N's in %s:</B> %u (%1.1f%%)<BR>\n", otherOrg, net.qN, 100.0*net.qN/qSize);
-printf("<B>%s tandem repeat (trf) bases:</B> %u (%1.1f%%)<BR>\n", 
-       org, net.tTrf, 100.0*net.tTrf/tSize);
-printf("<B>%s tandem repeat (trf) bases:</B> %u (%1.1f%%)<BR>\n", 
-       otherOrg, net.qTrf, 100.0*net.qTrf/qSize);
-printf("<B>%s RepeatMasker bases:</B> %u (%1.1f%%)<BR>\n", 
-       org, net.tR, 100.0*net.tR/tSize);
-printf("<B>%s RepeatMasker bases:</B> %u (%1.1f%%)<BR>\n", 
-       otherOrg, net.qR, 100.0*net.qR/qSize);
-printf("<B>%s old repeat bases:</B> %u (%1.1f%%)<BR>\n", 
-       org, net.tOldR, 100.0*net.tOldR/tSize);
-printf("<B>%s old repeat bases:</B> %u (%1.1f%%)<BR>\n", 
-       otherOrg, net.qOldR, 100.0*net.qOldR/qSize);
-printf("<B>%s new repeat bases:</B> %u (%1.1f%%)<BR>\n", 
-       org, net.tNewR, 100.0*net.tNewR/tSize);
-printf("<B>%s new repeat bases:</B> %u (%1.1f%%)<BR>\n", 
-       otherOrg, net.qNewR, 100.0*net.qNewR/qSize);
-printf("<B>%s size:</B> %d<BR>\n", org, net.tEnd - net.tStart);
-printf("<B>%s size:</B> %d<BR>\n", otherOrg, net.qEnd - net.qStart);
+net = netAlignLoad(row+rowOffset);
 sqlFreeResult(&sr);
-
-if (net.chainId != 0)
+tSize = net->tEnd - net->tStart;
+qSize = net->qEnd - net->qStart;
+if (net->chainId != 0)
     {
-    netWinSize = min(winEnd-winStart, net.tEnd - net.tStart);
+    netWinSize = min(winEnd-winStart, net->tEnd - net->tStart);
     printf("<BR>\n");
     if (netWinSize < 1000000)
 	{
-	int ns = max(winStart, net.tStart);
-	int ne = min(winEnd, net.tEnd);
+	int ns = max(winStart, net->tStart);
+	int ne = min(winEnd, net->tEnd);
 	if (ns < ne)
 	    {
 	    char id[20];
-	    snprintf(id, sizeof(id), "%d", net.chainId);
+	    snprintf(id, sizeof(id), "%d", net->chainId);
 	    hgcAnchorWindow("htcChainAli", id, ns, ne, chainTrack, seqName);
-	    printf("View details of parts of net within browser window.</A><BR>\n");
+	    printf("View alignment details of parts of net within browser window.</A><BR>\n");
 	    }
 	else
 	    {
@@ -1611,13 +1574,51 @@ if (net.chainId != 0)
 	{
 	printf("Too see alignment details zoom so that the browser window covers 1,000,000 bases or less.<BR>\n");
 	}
-    chain = chainDbLoad(conn, chainTrack, seqName, net.chainId);
+    chain = chainDbLoad(conn, chainTrack, seqName, net->chainId);
     if (chain != NULL)
         {
 	chainToOtherBrowser(chain, otherDb, otherOrg);
 	chainFree(&chain);
 	}
+    htmlHorizontalLine();
     }
+printf("<B>type:</B> %s<BR>\n", net->type);
+printf("<B>level:</B> %d<BR>\n", net->level/2 + 1);
+printf("<B>%s position:</B> %s:%d-%d<BR>\n", 
+       org, net->tName, net->tStart+1, net->tEnd);
+printf("<B>%s position:</B> %s:%d-%d<BR>\n", 
+       otherOrg, net->qName, net->qStart+1, net->qEnd);
+printf("<B>strand:</B> %c<BR>\n", net->strand[0]);
+printf("<B>score:</B> %1.1f<BR>\n", net->score);
+if (net->chainId)
+    {
+    printf("<B>chain ID:</B> %u<BR>\n", net->chainId);
+    printf("<B>bases aligning:</B> %u<BR>\n", net->ali);
+    printf("<B>%s parent overlap:</B> %u<BR>\n", otherOrg, net->qOver);
+    printf("<B>%s parent distance:</B> %u<BR>\n", otherOrg, net->qFar);
+    printf("<B>%s bases duplicated:</B> %u<BR>\n", otherOrg, net->qDup);
+    }
+printf("<B>N's in %s:</B> %u (%1.1f%%)<BR>\n", org, net->tN, 100.0*net->tN/tSize);
+printf("<B>N's in %s:</B> %u (%1.1f%%)<BR>\n", otherOrg, net->qN, 100.0*net->qN/qSize);
+printf("<B>%s tandem repeat (trf) bases:</B> %u (%1.1f%%)<BR>\n", 
+       org, net->tTrf, 100.0*net->tTrf/tSize);
+printf("<B>%s tandem repeat (trf) bases:</B> %u (%1.1f%%)<BR>\n", 
+       otherOrg, net->qTrf, 100.0*net->qTrf/qSize);
+printf("<B>%s RepeatMasker bases:</B> %u (%1.1f%%)<BR>\n", 
+       org, net->tR, 100.0*net->tR/tSize);
+printf("<B>%s RepeatMasker bases:</B> %u (%1.1f%%)<BR>\n", 
+       otherOrg, net->qR, 100.0*net->qR/qSize);
+printf("<B>%s old repeat bases:</B> %u (%1.1f%%)<BR>\n", 
+       org, net->tOldR, 100.0*net->tOldR/tSize);
+printf("<B>%s old repeat bases:</B> %u (%1.1f%%)<BR>\n", 
+       otherOrg, net->qOldR, 100.0*net->qOldR/qSize);
+printf("<B>%s new repeat bases:</B> %u (%1.1f%%)<BR>\n", 
+       org, net->tNewR, 100.0*net->tNewR/tSize);
+printf("<B>%s new repeat bases:</B> %u (%1.1f%%)<BR>\n", 
+       otherOrg, net->qNewR, 100.0*net->qNewR/qSize);
+printf("<B>%s size:</B> %d<BR>\n", org, net->tEnd - net->tStart);
+printf("<B>%s size:</B> %d<BR>\n", otherOrg, net->qEnd - net->qStart);
+netAlignFree(&net);
 }
 
 void genericMafClick(struct sqlConnection *conn, struct trackDb *tdb, 
