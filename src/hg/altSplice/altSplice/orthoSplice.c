@@ -12,7 +12,7 @@
 #include "chainNetDbLoad.h"
 #include "geneGraph.h"
 
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.2 2003/05/22 22:02:53 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.3 2003/05/23 06:15:52 sugnet Exp $";
 
 struct orthoAgReport
 /* Some summary information on comparison of splice graphs. */
@@ -218,7 +218,7 @@ if (chain->qStrand == '-')
     }
 else
     {
-    *retQs = chain->qStart+1;
+    *retQs = chain->qStart;
     *retQe = chain->qEnd;
     }
 }
@@ -257,7 +257,7 @@ return v;
 }
 
 void makeVertexMap(struct altGraphX *ag, struct altGraphX *orthoAg, struct chain *chain,
-		   int **vertexMap, int *vertexCount, struct orthoAgReport *agRep)
+		   int **vertexMap, int *vertexCount, struct orthoAgReport *agRep, bool reverse)
 /** Make a mapping from the vertexes in ag to the vertexes in orthoAg. */
 {
 struct chain *subChain = NULL, *toFree = NULL;
@@ -286,12 +286,12 @@ for(se = seList; se != NULL; se = se->next)
 	agRep->exonsFound++;
 	qChainRangePlusStrand(subChain, &qs, &qe);
 	v1 = vertexForPosition(orthoAg, qs, agRep);
-	if(subChain->qStrand == '-')
+	if(reverse)
 	    assignVertex(*vertexMap, vCount, se->v2, v1, agRep);
 	else
 	    assignVertex(*vertexMap, vCount, se->v1, v1, agRep);
 	v2 = vertexForPosition(orthoAg, qe, agRep);
-	if(subChain->qStrand == '-')
+	if(reverse)
 	    assignVertex(*vertexMap, vCount, se->v1, v2, agRep);
 	else
 	    assignVertex(*vertexMap, vCount, se->v2, v2, agRep);
@@ -375,7 +375,8 @@ qChainRangePlusStrand(subChain, &qs, &qe);
 safef(query, sizeof(query), "select * from %s where tName='%s' and tStart<%d and tEnd>%d",
       altTable, subChain->qName, qe, qs);
 orthoAg = altGraphXLoadByQuery(orthoConn, query);
-reverse =  (subChain->qStrand == '-');
+if ((subChain->qStrand == '-'))
+    reverse = TRUE;
 hFreeConn2(&orthoConn);
 chainFreeList(&toFree);
 if(orthoAg == NULL)
@@ -383,7 +384,7 @@ if(orthoAg == NULL)
 
 /* Got an orhtologous graph. Do some analysis. */
 agRep = newOrthoAgReport(ag->name, orthoAg->name);
-makeVertexMap(ag, orthoAg, chain, &vertexMap, &vCount, agRep);
+makeVertexMap(ag, orthoAg, chain, &vertexMap, &vCount, agRep, reverse);
 em = altGraphXCreateEdgeMatrix(ag);
 orthoEm = altGraphXCreateEdgeMatrix(orthoAg);
 commonAg = commonAgInit(ag);
@@ -415,8 +416,12 @@ for(i=0;i<vCount; i++)
     }
 altGraphXFreeEdgeMatrix(&em, vCount);
 altGraphXFreeEdgeMatrix(&orthoEm, orthoAg->vertexCount);
-altGraphXTabOut(commonAg, stdout);
-
+if(commonAg->edgeCount > 0)
+    {
+    altGraphXTabOut(commonAg, stdout);
+    }
+else
+    freeCommonAg(&commonAg);
 freez(&vertexMap);
 orthoAgReportTabOut(agRep, rFile);
 slAddTail(&agReportList, agRep);
