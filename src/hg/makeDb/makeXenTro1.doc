@@ -61,6 +61,8 @@ exit; # don't actually run this like a script :)
   create database xenTro1;
   use xenTro1;
   create table grp (PRIMARY KEY(NAME)) select * from hg17.grp;
+  # add rows to hgcentraltest on hgwbeta in dbDb and defaultDb
+  # set orderKey past chicken, before Zebrafish
 
 # CREATE AGP FILES AND GAP/GOLD TABLES (DONE JK 10/23/04)
   ssh kksilo
@@ -70,3 +72,172 @@ exit; # don't actually run this like a script :)
   ssh hgwdev
   cd /cluster/data/xenTro1
   hgGoldGapGl xenTro1 xenTro1.agp
+
+# CREATE CHROMINFO TABLE (DONE 10/18/04, Fan)
+# an improvement here would be to have getMaxCoord output the 2bit file name
+  ssh hgwdev
+  cd /cluster/data/xenTro1
+  faSize -detailed=on downloads/xenopus.041015.fasta \
+    | awk '{printf("%s\t%s\t%s\n", $1, $2, "/gbdb/xenTro1/nib/xenTro1.2bit");}' \
+    > chromInfo.tab
+  hgsql xenTro1 < ~/src/hg/lib/chromInfo.sql
+  hgsql xenTro1 -e 'load data local infile "chromInfo.tab" into table chromInfo'
+
+# REPEATMASKER (DONE,10/20/04, Fan)
+# using the split scaffold fa files generated earlier
+# do a trial run
+  ssh hgwdev
+  cd /cluster/data/xenTro1/scaffolds/0/0/0
+  /cluster/bluearc/RepeatMasker/RepeatMasker -ali -s -spec bos SCAFFOLD1000.fa
+# configure
+  cd /cluster/data/xenTro1
+  cp -p downloads/xt3.lib1.fasta /cluster/bluearc/RepeatMasker/Libraries/xt3_JGI.lib
+  cp /cluster/data/anoGam1/jkStuff/RMAnopheles jkStuff/RMXenTro
+  # edit jkStuff/RMXenTro to change all references anoGam1 --> xenTro1
+  # and use the following line to run RepeatMasker
+  # /cluster/bluearc/RepeatMasker/RepeatMasker -ali -s -xsmall -lib /cluster/bluearc/RepeatMasker/Librari
+es/xt3_JGI.lib $2
+  mkdir RMRun
+
+  # /bin/csh makeJoblist-RM.csh  
+  # what the above line is for?
+
+  cd scaffolds
+  foreach i (0 1 2 3 4 5 6 7 8 9)
+    cd $i
+    foreach j (0 1 2 3 4 5 6 7 8 9)
+      cd $j
+      foreach k (0 1 2 3 4 5 6 7 8 9)
+        cd $k
+        foreach f (*.fa)
+          echo /cluster/data/xenTro1/jkStuff/RMXenTro \
+	       /cluster/data/xenTro1/scaffolds/$i/$j/$k $f \
+	      '{'check out line+ /cluster/data/xenTro1/scaffolds/$i/$j/$k/$f.out'}' \
+	  >> /cluster/data/xenTro1/RMRun/RMJobs
+	end
+      cd ..
+      end
+    cd ..
+    end
+  cd ..
+  end
+
+  # do the run
+  ssh kk
+  cd /cluster/data/xenTro1/RMRun
+  para create RMJobs
+  para try
+  para check
+  para push
+  para check
+  para time
+# Completed: 27064 of 27064 jobs
+# CPU time in finished jobs:    8152873s  135881.22m  2264.69h   94.36d  0.259 y
+# IO & Wait Time:                287040s    4784.00m    79.73h    3.32d  0.009 y
+# Average job time:                 312s       5.20m     0.09h    0.00d
+# Longest job:                    46100s     768.33m    12.81h    0.53d
+# Submission to last job:         46220s     770.33m    12.84h    0.53d
+
+# Our RepeatMasker results are not exactly the same as JGI's, but close.
+# JGI has not provided .out files requested earlier as of 10/24/04.
+# With Jim's approval, proceeded with our RepeatMasker results.
+# Note: Jim earlier went ahead with JGI's repeat masked result for 
+# his blastz run.
++-----------+-----------+-------------+------------+------------+------------+
+| sum(a)    | sum(b)    | sum(abBoth) | sum(aOnly) | sum(bOnly) | sum(total) |
++-----------+-----------+-------------+------------+------------+------------+
+| 177141183 | 177367102 |   174224057 |    2917126 |    3143045 | 1630713514 |
++-----------+-----------+-------------+------------+------------+------------+
+
+  # concatenate into one output file; took about 90 minutes
+  ssh kksilo
+  cd /cluster/data/xenTro1
+  mkdir repeats
+  /bin/tcsh concatRM.tcsh
+  cd repeats
+  head -2 repeats.all >repeats.out
+  fgrep scaffold_ repeats.all |grep -v >>repeats.out
+
+  # get the header (first 2 lines) to make hgLoadOut happy
+  head -2 repeats.all >repeats.out
+
+  # filter out no repetitive sequence found ... message lines
+  fgrep scaffold_ repeats.all |grep -v 'no repetitive' >>repeats.out
+  
+  ssh hgwdev
+  cd /cluster/data/xenTro1/repeats
+  hgLoadOut xenTro1 repeats.out
+  hgsql xenTro1
+  rename table repeats_rmsk to rmsk
+
+  # select count(*) from rmsk;
+  # 1140362
+  # select count(*) from rmsk where repName like "TE_ORF%";
+  # 164354
+
+# SIMPLE REPEATS (DONE 10/22/04, Fan)
+# put the results throughout the scaffold 0/0/0 directories,
+# same as RepeatMasker, to avoid too many files in the same directory
+  ssh kksilo
+  cd /cluster/data/xenTro1
+  mkdir bed
+  cd bed
+  mkdir simpleRepeat
+  cd simpleRepeat
+
+  # /bin/csh makeJoblist-trf.csh
+
+  # do the run; took about 12 hours
+  tcsh trf-run.csh > trf.log
+
+  # concatenate into one output file; took about an hour
+  /bin/tcsh concatTRF.csh
+
+  # load
+  ssh hgwdev
+  cd /cluster/data/xenTro1/bed/simpleRepeat
+  /cluster/bin/i386/hgLoadBed xenTro1 simpleRepeat trf.bed \
+    -sqlTable=/cluster/home/fanhsu/src/hg/lib/simpleRepeat.sql
+
+  # Reading trf.all
+  # Loaded 505308 elements of size 16
+  # Sorted
+  # Saving bed.tab
+  # Loading xenTro1
+
+# CREATE MASKED FA USING REPEATMASKER AND FILTERED TRF FILES (DONE Oct. 22, 2004, Fan) 
+
+  ssh kksilo
+  cd /cluster/data/xenTro1
+  /cluster/bin/i386/maskOutFa -soft downloads/xenopus.041015.fasta repeats/repeats.out xenTro1.softmask.fa
+
+  # 1 warnings about negative rEnd
+  # WARNING: negative rEnd: -18 scaffold_69:2353795-2354532 XL1723L
+  # matches select count(*) from rmsk where repEnd < 0;
+
+  /cluster/bin/i386/maskOutFa -softAdd xenTro1.softmask.fa bed/simpleRepeat/trf.bed xenTro1.softmask2.fa
+
+  # hard masking (Ns instead of lower case) for download files
+
+# REGENERATE 2BIT NIB (DONE, 10/22/04, Fan)
+  ssh kksilo
+  cd /cluster/data/xenTro1
+  /cluster/bin/i386/faToTwoBit xenTro1.softmask2.fa xenTro1.softmask.2bit
+  /cluster/bin/i386/twoBitToFa xenTro1.softmask.2bit check.softmask.fa
+  diff -q xenTro1.softmask2.fa check.softmask.fa
+# They are the same.
+  mv xenTro1.2bit xenTro1.2bit.unmasked
+  mv xenTro1.softmask.2bit xenTro1.2bit
+
+# MAKE 11.OOC FILE FOR BLAT (DONE, 10/22/04, Fan)
+  ssh kkr1u00
+  mkdir /cluster/data/xenTro1/bed/ooc
+  cd /cluster/data/xenTro1/bed/ooc
+  ls -1 /cluster/data/xenTro1/xenTro1.2bit > nib.lst
+  mkdir /cluster/bluearc/xenTro1
+  /cluster/bin/i386/blat nib.lst /dev/null /dev/null -tileSize=11 \
+    -makeOoc=/cluster/bluearc/xenTro1/11.ooc -repMatch=540
+  # Wrote 26600 overused 11-mers to /cluster/bluearc/xenTro1/11.ooc
+  cp -p /cluster/bluearc/xenTro1/11.ooc /iscratch/i/xenTro1/
+  iSync
+
