@@ -261,7 +261,7 @@ chromosomes chr22,
 
 track mrna
 shortLabel Human mRNAs
-longLabel Human mRNAs from Genbank
+longLabel Human mRNAs from Genbank 
 priority 18
 visibility full
 spectrum on
