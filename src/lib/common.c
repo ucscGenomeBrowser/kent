@@ -429,6 +429,7 @@ struct slRef *ref;
 for (ref = refList; ref != NULL; ref = ref->next)
     if (ref->val == val)
         return ref;
+return NULL;
 }
 
 void refAdd(struct slRef **pRefList, void *val)

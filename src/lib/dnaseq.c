@@ -110,5 +110,6 @@ for (i=0; i<seqCount; ++i)
         return seq;
     }
 internalErr();
+return NULL;
 }
 

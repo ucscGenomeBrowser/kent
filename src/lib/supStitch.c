@@ -520,7 +520,7 @@ int totalFfCount = 0;
 int trimCount = qSeq->size/200 + 2000;
 
 if (bundle->ffList == NULL)
-    return;
+    return 0;
 
 for (ffl = bundle->ffList; ffl != NULL; ffl = ffl->next)
     totalFfCount += ffAliCount(ffl->ff);
@@ -537,7 +537,7 @@ if (totalFfCount > trimCount)
     if (!trimBundle(bundle, trimCount, stringency))
 	{
 	warn("Skipping %s vs. %s\n", qSeq->name, genoSeq->name);
-        return;
+        return 0;
 	}
     }
 

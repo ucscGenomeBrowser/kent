@@ -576,7 +576,10 @@ if (caTileSize == 8)
 else if (caTileSize == 16)
     return makeHits16(fp, target, hits, maxHitCount);
 else
+    {
     errAbort("Can only do tile sizes of 8 or 16 in makeHits");
+    return 0;
+    }
 }
 
 static int findCrudeGenes(struct fastProber *fp, struct nt4Seq *target,

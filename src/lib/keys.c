@@ -296,6 +296,11 @@ switch (exp->type)
         {
         return rkeyEval(kvt, exp->left) ^ rkeyEval(kvt, exp->right);
         }
+    default:
+        {
+	errAbort("unknown expression type %d", exp->type);
+	return 0;
+	}
     }
 }
 
@@ -533,6 +538,7 @@ else if (token->type == kxtGT || token->type == kxtGE || token->type == kxtLT ||
     }
 else
     errAbort("Expecting = got %s", token->string);
+return NULL;
 }
 
 static struct exp *parseParenthesized()

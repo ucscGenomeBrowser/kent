@@ -128,7 +128,9 @@ if ((err = mkdir(dirName, 0777)) < 0)
 	perror("");
 	errAbort("Couldn't make directory %s", dirName);
 	}
+    return FALSE;
     }
+return TRUE;
 }
 
 

@@ -98,7 +98,7 @@ if (inputString == NULL)
 }
 
 
-void *cgiParseInput(char *input, struct hash **retHash, struct cgiVar **retList)
+static void cgiParseInput(char *input, struct hash **retHash, struct cgiVar **retList)
 /* Parse cgi-style input into a hash table and list.  This will alter
  * the input data.  The hash table will contain references back 
  * into input, so please don't free input until you're done with 
@@ -426,7 +426,7 @@ boolean startDash;
 boolean gotEq;
 
 if (cgiIsOnWeb())
-    return;	/* No spoofing required! */
+    return TRUE;	/* No spoofing required! */
 q += sprintf(q, "%s", "QUERY_STRING=cgiSpoof=on");
 for (i=0; i<argcLeft; )
     {

@@ -11,6 +11,7 @@ if (type == gftProt) return "protein";
 if (type == gftDnaX) return "DNAX";
 if (type == gftRnaX) return "RNAX";
 internalErr();
+return NULL;
 }
 
 enum gfType gfTypeFromName(char *name)
@@ -23,5 +24,6 @@ if (sameWord(name, "prot")) return gftProt;
 if (sameWord(name, "DNAX")) return gftDnaX;
 if (sameWord(name, "RNAX")) return gftRnaX;
 errAbort("Unknown sequence type '%s'", name);
+return 0;
 }
 

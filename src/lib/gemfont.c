@@ -143,6 +143,9 @@ switch (f->id)
 			}
 		return(width);
 		}
+    default:
+         internalErr();
+	 return 0;
     }
 }
 

@@ -159,7 +159,7 @@ struct dgEdge *dgConnect(struct diGraph *dg, struct dgNode *a, struct dgNode *b)
  * Not an error to reconnect.  However all connects can 
  * be broken with a single disconnect. */
 {
-dgConnectWithVal(dg, a, b, NULL);
+return dgConnectWithVal(dg, a, b, NULL);
 }
 
 struct dgEdge *dgConnectWithVal(struct diGraph *dg, struct dgNode *a, 
@@ -454,7 +454,7 @@ int dgConnectedComponents(struct diGraph *dg)
  * of each node to reflect which component it is in. */
 {
 rMustHaveVal = FALSE;
-connectedComponents(dg);
+return connectedComponents(dg);
 }
 
 int dgConnectedComponentsWithVals(struct diGraph *dg)
@@ -463,7 +463,7 @@ int dgConnectedComponentsWithVals(struct diGraph *dg)
  * consider components with values. */
 {
 rMustHaveVal = TRUE;
-connectedComponents(dg);
+return connectedComponents(dg);
 }
 
 struct dgNodeRef *dgFindNewConnected(struct diGraph *dg, struct dgNode *a)

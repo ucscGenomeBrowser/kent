@@ -98,5 +98,6 @@ if (!gotIt)
     else
 	return (host = getenv("MYSQLHOST"));
     }
+return host;
 }
 

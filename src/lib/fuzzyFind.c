@@ -337,6 +337,9 @@ switch (stringency)
 	return calcTightGap(hGap,nGap);
     case ffLoose:
 	return calcLooseGap(hGap,nGap);
+    default:
+        errAbort("Unknown stringency type %d", stringency);
+	return 0;
     }
 }
 
