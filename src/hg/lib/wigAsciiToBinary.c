@@ -40,7 +40,7 @@
 #include	"wiggle.h"
 
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.9 2004/08/04 21:30:46 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.10 2004/10/29 23:45:42 hiram Exp $";
 
 /*	This list of static variables is here because the several
  *	subroutines in this source file need access to all this business
@@ -426,19 +426,19 @@ while (lineFileNext(lf, &line, NULL))
 	bedChromStart = sqlLongLong(words[1]);
 	bedChromEnd = sqlLongLong(words[2]);
 	bedDataValue = sqlDouble(words[3]);
-	if (bedChromStart == 0)
-	    errAbort("Found chromStart=0 at line %lu, the first chrom position is 1, not 0",
-		lineCount);
-	else
-	    bedChromStart -= 1;	/* zero relative half-open */
-	if (bedChromStart > bedChromEnd)
-	    errAbort("Found chromStart > chromEnd at line %lu (%llu > %llu)",
-		lineCount, bedChromStart+1, bedChromEnd);
+	/* the bed format coordinate system is zero relative, half-open,
+	 * hence, no adjustment of bedChromStart is needed here, unlike the
+	 * fixed and variable step formats which will subtract one from the
+	 * incoming coordinate.
+	 */
+	if (bedChromStart >= bedChromEnd)
+	    errAbort("Found chromStart >= chromEnd at line %lu (%llu > %llu)",
+		lineCount, bedChromStart, bedChromEnd);
 	if (bedChromEnd > (bedChromStart + 10000000))
 	    errAbort("Limit of 10,000,000 length specification for bed format at line %lu, found: %llu)",
 		lineCount, bedChromEnd-bedChromStart);
 	if ((validLines > 0) && (bedChromStart < previousOffset))
-	    errAbort("chrom positions not in numerical order at line %lu. previous: %llu > %llu <-current", lineCount, previousOffset+1, bedChromStart+1);
+	    errAbort("chrom positions not in numerical order at line %lu. previous: %llu > %llu <-current", lineCount, previousOffset, bedChromStart);
 	freez(&prevChromName);
 	prevChromName = cloneString(chromName);
 	}
@@ -459,7 +459,7 @@ while (lineFileNext(lf, &line, NULL))
     ++validLines;		/*	counting good lines of data input */
 
     /*	Offset is the incoming specified position for this value,
-     *	fixedStart and bedChromStart have already been converted to zero
+     *	fixedStart has already been converted to zero
      *	relative half open
      */
     if (variableStep)
