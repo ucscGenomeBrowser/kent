@@ -1,4 +1,5 @@
-/* gensub2 - Generate condor submission file from template and two file lists. */
+/* gensub2 - Generate job submission file from template and two file lists. */
+
 #include "common.h"
 #include "linefile.h"
 #include "subText.h"
