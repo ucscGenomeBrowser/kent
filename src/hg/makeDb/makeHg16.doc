@@ -5396,8 +5396,10 @@ EOF
     drop table ensGtp_old;  
     drop table ensPep_old;  
 
-    # Create knownToEnsembl column
+    # Create knownToEnsembl column and knownToSuperfamily column
     hgMapToGene hg16 ensGene knownGene knownToEnsembl
+    zcat /cluster/store1/superFamily/genomes/ass_26-Oct-2003.tab.gz | hgKnownToSuper hg16 hs stdin
+
 
 # LOAD ECgene tables
     cd /cluster/data/hg16/bed
