@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.55 2004/06/08 21:05:18 angie Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.56 2004/06/15 20:29:43 baertsch Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -64,6 +64,8 @@ void webStartWrapperGatewayHeader(struct cart *theCart, char *headerText,
 char uiState[256];
 char *scriptName = cgiScriptName();
 
+if (scriptName == NULL)
+    scriptName = cloneString("");
 /* don't output two headers */
 if(webHeadAlreadyOutputed)
     return;
