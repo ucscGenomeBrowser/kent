@@ -33,7 +33,7 @@
 #include "botDelay.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.126 2004/03/27 00:36:42 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.127 2004/03/30 00:16:33 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -59,6 +59,8 @@ char *chrom = NULL;
 int winStart = 0;
 int winEnd = 0;
 boolean allGenome = FALSE;
+boolean typeWiggle = FALSE;
+boolean typeWiggle2 = FALSE;
 
 /* main() sets this: */
 struct hash *oldVars = NULL;
@@ -1315,7 +1317,7 @@ puts("</TABLE>");
 }
 
 void filterOptionsTableDb(char *fullTblName, char *db, char *tableId,
-    boolean typeWiggle)
+    boolean filterWiggle)
 /* Print out an HTML table with form inputs for constraints on table fields */
 {
 struct sqlConnection *conn = hAllocOrConnect(db);
@@ -1373,7 +1375,7 @@ puts("Free-form query: ");
 snprintf(name, sizeof(name), "rawQuery%s", tableId);
 cgiMakeTextVar(name, cgiUsualString(name, ""), 50);
 puts("</TD></TR>");
-if (typeWiggle)
+if (filterWiggle)
     {
     printf("<TR VALIGN=BOTTOM><TD><TABLE><TR VALIGN=BOTTOM><TD> data value </TD><TD>\n");
     puts(" is \n");
@@ -1388,106 +1390,6 @@ if (typeWiggle)
     }
 puts("</TABLE>");
 }
-
-
-void doOutputOptions()
-/* print out a form with output table format & filtering options */
-{
-struct hashEl *ctPosTableList = NULL;
-struct hashEl *posTableList = NULL;
-struct hashEl *nonposTableList = NULL;
-char *table = getTableName();
-char *db = getTableDb();
-struct trackDb *tdb;
-char *track = getTrackName();
-int wordCount = 0;
-char *words[128];
-char *trackType = (char *) NULL;
-boolean typeWiggle = FALSE;
-
-if (! sameString(customTrackPseudoDb, db))
-    {
-    struct sqlConnection *conn = hAllocOrConnect(db);
-    tdb = hMaybeTrackInfo(conn, track);
-    if (tdb && tdb->type)
-	{
-	wordCount = chopLine(tdb->type,words);
-	if (wordCount > 0)
-	    trackType = words[0];
-	}
-    hFreeOrDisconnect(&conn);
-
-    if ((trackType != (char *) NULL) && sameString(trackType,"wig"))
-	typeWiggle = TRUE;
-    }
-
-saveChooseTableState();
-
-webStart(cart, "Table Browser: %s %s: %s",  hOrganism(database),freezeName, outputOptionsPhase);
-checkTableExists(fullTableName);
-printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n\n",
-       hgTextName(), httpFormMethod);
-cartSaveSession(cart);
-cgiMakeHiddenVar("db", database);
-
-cgiMakeHiddenVar("table", getTableVar());
-displayPosition();
-
-printf("<P><HR><H3> Select Output Format for %s </H3>\n", table);
-puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Formats\">"
-     "<B>Help</B></A><P>");
-if (tableIsPositional)
-    cgiMakeDropList("outputType", outputTypePosMenu, outputTypePosMenuSize,
-		    cartCgiUsualString(cart, "outputType",
-				       outputTypePosMenu[0]));
-else
-    cgiMakeDropList("outputType", outputTypeNonPosMenu,
-		    outputTypeNonPosMenuSize,
-		    cartCgiUsualString(cart, "outputType",
-				       outputTypeNonPosMenu[0]));
-cgiMakeButton("phase", getOutputPhase);
-
-printf("<P><HR><H3> (Optional) Filter %s Records by Field Values </H3>",
-       table);
-puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Constraints\">"
-     "<B>Help</B></A><P>");
-if (sameString(customTrackPseudoDb, db))
-    filterOptionsCustomTrack(table, "");
-else
-    filterOptionsTableDb(fullTableName, db, "", typeWiggle);
-cgiMakeButton("phase", getOutputPhase);
-
-if (tableIsPositional)
-    {
-    puts("<P><HR><H3> (Optional) Intersect Results with Another Table </H3>");
-    puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Intersection\">"
-	 "<B>Help</B></A><P>");
-    puts("Note: Output Format must be FASTA, BED, Hyperlinks, GTF \n"
-	 "or Summary/Statistics "
-	 "for this feature.  <P>");
-    ctPosTableList = getCustomTrackNames();
-    categorizeTables(&posTableList, &nonposTableList);
-    puts("Choose a second table:");
-    printTrackDropList(database, onChangeTrack2, "tbTrack2");
-    printf("<SELECT NAME=tbCustomTrack2 SIZE=1 %s>\n", onChangeCT2);
-    printf("<OPTION VALUE=\"Choose table\">Custom tracks</OPTION>\n");
-    printSelectOptions(ctPosTableList, "tbCustomTrack2");
-    puts("</SELECT>");
-    printf("<SELECT NAME=table2 SIZE=1 %s>", onChangePos2);
-    printf("<OPTION VALUE=\"Choose table\">Positional tables</OPTION>\n");
-    printSelectOptions(posTableList, "table2");
-    puts("</SELECT>");
-    hashElFreeList(&posTableList);
-    hashElFreeList(&nonposTableList);
-    
-    puts("<P>");
-    cgiMakeButton("phase", intersectOptionsPhase);
-    }
-
-puts("</FORM>");
-webEnd();
-}
-
 
 void parseNum(char *fieldName, struct kxTok **tok, struct dyString *q)
 {
@@ -2392,6 +2294,81 @@ if ((table2 != NULL) && (table2[0] != 0) && (op != NULL))
 return(hti);
 }
 
+void doOutputOptions()
+/* print out a form with output table format & filtering options */
+{
+struct hashEl *ctPosTableList = NULL;
+struct hashEl *posTableList = NULL;
+struct hashEl *nonposTableList = NULL;
+char *table = getTableName();
+char *db = getTableDb();
+
+saveChooseTableState();
+
+webStart(cart, "Table Browser: %s %s: %s",  hOrganism(database),freezeName, outputOptionsPhase);
+checkTableExists(fullTableName);
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n\n",
+       hgTextName(), httpFormMethod);
+cartSaveSession(cart);
+cgiMakeHiddenVar("db", database);
+
+cgiMakeHiddenVar("table", getTableVar());
+displayPosition();
+
+printf("<P><HR><H3> Select Output Format for %s </H3>\n", table);
+puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Formats\">"
+     "<B>Help</B></A><P>");
+if (tableIsPositional)
+    cgiMakeDropList("outputType", outputTypePosMenu, outputTypePosMenuSize,
+		    cartCgiUsualString(cart, "outputType",
+				       outputTypePosMenu[0]));
+else
+    cgiMakeDropList("outputType", outputTypeNonPosMenu,
+		    outputTypeNonPosMenuSize,
+		    cartCgiUsualString(cart, "outputType",
+				       outputTypeNonPosMenu[0]));
+cgiMakeButton("phase", getOutputPhase);
+
+printf("<P><HR><H3> (Optional) Filter %s Records by Field Values </H3>",
+       table);
+puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Constraints\">"
+     "<B>Help</B></A><P>");
+if (sameString(customTrackPseudoDb, db))
+    filterOptionsCustomTrack(table, "");
+else
+    filterOptionsTableDb(fullTableName, db, "", typeWiggle);
+cgiMakeButton("phase", getOutputPhase);
+
+if (tableIsPositional)
+    {
+    puts("<P><HR><H3> (Optional) Intersect Results with Another Table </H3>");
+    puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Intersection\">"
+	 "<B>Help</B></A><P>");
+    puts("Note: Output Format must be FASTA, BED, Hyperlinks, GTF \n"
+	 "or Summary/Statistics "
+	 "for this feature.  <P>");
+    ctPosTableList = getCustomTrackNames();
+    categorizeTables(&posTableList, &nonposTableList);
+    puts("Choose a second table:");
+    printTrackDropList(database, onChangeTrack2, "tbTrack2");
+    printf("<SELECT NAME=tbCustomTrack2 SIZE=1 %s>\n", onChangeCT2);
+    printf("<OPTION VALUE=\"Choose table\">Custom tracks</OPTION>\n");
+    printSelectOptions(ctPosTableList, "tbCustomTrack2");
+    puts("</SELECT>");
+    printf("<SELECT NAME=table2 SIZE=1 %s>", onChangePos2);
+    printf("<OPTION VALUE=\"Choose table\">Positional tables</OPTION>\n");
+    printSelectOptions(posTableList, "table2");
+    puts("</SELECT>");
+    hashElFreeList(&posTableList);
+    hashElFreeList(&nonposTableList);
+    
+    puts("<P>");
+    cgiMakeButton("phase", intersectOptionsPhase);
+    }
+
+puts("</FORM>");
+webEnd();
+}
 
 void bedFilterBatch(struct bed **bedListPtr)
 /* If position is batch, filter by name. */
@@ -3103,29 +3080,8 @@ struct sqlResult *sr;
 char **row;
 char button[64];
 char query[256];
-struct trackDb *tdb;
-char *track = getTrackName();
-int wordCount = 0;
-char *words[128];
-char *trackType = (char *) NULL;
-boolean typeWiggle = FALSE;
 
 conn = hAllocOrConnect(db);
-
-tdb = hMaybeTrackInfo(conn, track);
-/*	for some reason on Kates wigMaf tables, it doesn't return
- *	anything ?
- */
-
-if (tdb && tdb->type)
-    {
-    wordCount = chopLine(tdb->type,words);
-    if (wordCount > 0)
-	trackType = words[0];
-    }
-if ((trackType != (char *) NULL) && sameString(trackType,"wig"))
-    typeWiggle = TRUE;
-
 safef(query, sizeof(query), "desc %s", fullTableName);
 sr = sqlGetResult(conn, query);
 // For some reason BORDER=1 does not work in our web.c nested table scheme.
@@ -4007,32 +3963,12 @@ char *db = getTableDb();
 char *db2 = getTable2Db();
 char *setting, *op;
 char fullTableName2[256];
-int wordCount = 0;
-char *words[128];
-char *trackType2 = (char *) NULL;
-boolean typeWiggle2 = FALSE;
+struct hTableInfo *hti = NULL;
 
-if ((db2 != (char *)NULL) && (! sameString(customTrackPseudoDb, db2)))
-    {
-    if (table2 != (char *)NULL)
-	{
-	struct sqlConnection *conn2 = hAllocOrConnect(db2);
-	char *track2 = getTrack2Name();
-	struct trackDb *tdb2;
+hti = getHti(db2, table2);
 
-	tdb2 = hMaybeTrackInfo(conn2, track2);
-	hFreeOrDisconnect(&conn2);
-	if (tdb2 && tdb2->type)
-	    {
-	    char *typeLine2 = cloneString(tdb2->type);
-	    wordCount = chopLine(typeLine2,words);
-	    if (wordCount > 0)
-		trackType2 = words[0];
-	    }
-	}
-    if ((trackType2 != (char *) NULL) && sameString(trackType2,"wig"))
-	typeWiggle2 = TRUE;
-    }
+if (HTI_IS_WIGGLE)
+    typeWiggle2 = TRUE;
 
 saveOutputOptionsState();
 
@@ -4430,7 +4366,9 @@ char wigFullTableName[256];
 
 if (tableIsSplit)
     {
-    getFullTableName(wigFullTableName, "chr1", table);
+    char defaultChrom[64];
+    hFindDefaultChrom(db, defaultChrom);
+    getFullTableName(wigFullTableName, defaultChrom, table);
     snprintf(query, sizeof(query), "show table status like '%s'", wigFullTableName);
     }
 else
@@ -4482,11 +4420,12 @@ for (chromPtr=chromList;  chromPtr != NULL; chromPtr=chromPtr->next)
 
     if (numChroms > 1)
 	wigData = wigFetchData(database, tbl, chrom, winStart, winEnd,
-		WIG_SUMMARY_ONLY, tableId, wiggleCompare[tableId],
-		constraints);
+	    WIG_ALL_DATA, WIG_DATA_NOT_RETURNED,
+		tableId, wiggleCompare[tableId], constraints);
     else
 	wigData = wigFetchData(database, tbl, chrom, winStart, winEnd,
-		WIG_ALL_DATA, tableId, wiggleCompare[tableId], constraints);
+	    WIG_ALL_DATA, WIG_DATA_NOT_RETURNED, tableId,
+		wiggleCompare[tableId], constraints);
 
     if (wigData)
 	{
@@ -4582,61 +4521,19 @@ int **utr3Arrs;
 int **blockCountArrs;
 int **blockSizeArrs;
 int i, j;
-char *trackType = (char *) NULL;
-char *trackType2 = (char *) NULL;
-boolean typeWiggle = FALSE;
+struct hTableInfo *hti2 = NULL;
 boolean typeWiggle2 = FALSE;
-int wordCount;
-char *words[128];
 boolean wiggleDone = FALSE;
 
 saveOutputOptionsState();
 saveIntersectOptionsState();
 
-if (! sameString(customTrackPseudoDb, db))
-    {
-    struct sqlConnection *conn = hAllocOrConnect(db);
-    struct trackDb *tdb;
-    char *track = getTrackName();
-
-    tdb = hMaybeTrackInfo(conn, track);
-    if (tdb && tdb->type)
-	{
-	char *typeLine = cloneString(tdb->type);
-	wordCount = chopLine(typeLine,words);
-	if (wordCount > 0)
-	    trackType = words[0];
-	}
-    hFreeOrDisconnect(&conn);
-
-    if ((trackType != (char *) NULL) && sameString(trackType,"wig"))
-	typeWiggle = TRUE;
-    }
-
 if (op == NULL)
     table2 = NULL;
 
-if ((db2 != (char *)NULL) && ! sameString(customTrackPseudoDb, db2))
-    {
-    if (table2 != (char *)NULL)
-	{
-	struct sqlConnection *conn2 = hAllocOrConnect(db2);
-	struct trackDb *tdb2;
-	char *track2 = getTrack2Name();
-
-	tdb2 = hMaybeTrackInfo(conn2, track2);
-	hFreeOrDisconnect(&conn2);
-	if (tdb2 && tdb2->type)
-	    {
-	    char *typeLine2 = cloneString(tdb2->type);
-	    wordCount = chopLine(typeLine2,words);
-	    if (wordCount > 0)
-		trackType2 = words[0];
-	    }
-	}
-    if ((trackType2 != (char *) NULL) && sameString(trackType2,"wig"))
-	typeWiggle2 = TRUE;
-    }
+hti2 = getHti(db2, table2);
+if (hti2->spanField[0] !=0)
+    typeWiggle2 = TRUE;
 
 if (allGenome)
     chromList = getOrderedChromList();
@@ -5083,7 +4980,8 @@ webStartText();
  *	browser with a massive amount of output
 if (! allGenome)
     wigData = wigFetchData(database, table, chrom, winStart, winEnd,
-	WIG_ALL_DATA, WIG_TABLE_1, wiggleCompare[WIG_TABLE_1], (char *)NULL);
+	WIG_ALL_DATA, WIG_RETURN_DATA, WIG_TABLE_1,
+	    wiggleCompare[WIG_TABLE_1], (char *)NULL);
 */
 
 if (wigData)
@@ -5354,6 +5252,7 @@ void doMiddle(struct cart *theCart)
 char *table = NULL;
 char *db = NULL;
 char trash[32];
+struct hTableInfo *hti = NULL;
 
 cart = theCart;
 table = getTableName();
@@ -5362,6 +5261,11 @@ getDbAndGenome(cart, &database, &organism);
 database = cloneString(database);
 hSetDb(database);
 hDefaultConnect();
+
+hti = getHti(db, table);
+
+if (HTI_IS_WIGGLE)
+    typeWiggle = TRUE;
 
 freezeName = hFreezeFromDb(database);
 if (freezeName == NULL)
