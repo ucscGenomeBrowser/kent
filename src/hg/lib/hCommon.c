@@ -4,8 +4,9 @@
 #include "hCommon.h"
 #include "chromInfo.h"
 #include "portable.h"
+#include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hCommon.c,v 1.18 2003/05/25 16:12:25 baertsch Exp $";
+static char const rcsid[] = "$Id: hCommon.c,v 1.19 2003/06/23 00:12:29 markd Exp $";
 
 static char *_hgcName = "../cgi-bin/hgc";	/* Path to click processing program. */
 static char *_hgTracksName = "../cgi-bin/hgTracks"; /* Path back to self. */
@@ -175,15 +176,15 @@ if (startsWith("chr", s))
 return s;
 }
 boolean hIsMgcServer()
-/* Is this the MGC-custom server? */
+/* Is this the MGC-customized server? Change for config variable
+ * mgc.server=yes */
 {
 static boolean mgcHost = FALSE;
 static boolean haveChecked = FALSE;
 if (!haveChecked)
     {
-    char *name = getHost();
-    /* snort is a tmp test machine */
-    mgcHost = (startsWith("snort.", name) || startsWith("mgc.", name));
+    char *serverOpt = cfgOption("mgc.server");
+    mgcHost = (serverOpt != NULL) && sameString(serverOpt, "yes");
     haveChecked = TRUE;
     }
 return mgcHost;

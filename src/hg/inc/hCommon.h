@@ -50,6 +50,7 @@ char *skipChr(char *s);
 /* Skip leading 'chr' in string (to get the actual chromosome part). */
 
 boolean hIsMgcServer();
-/* Is this the MGC-custom server? */
+/* Is this the MGC-customized server? Change for config variable
+ * mgc.server=yes */
 
 #endif /* HCOMMON_H */
