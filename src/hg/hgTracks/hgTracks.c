@@ -435,7 +435,6 @@ tg->heightPer = tg->lineHeight - 1;
 switch (vis)
     {
     case tvFull:
-
 	lines = 1;
 	for (item = tg->items; item != NULL; item = item->next)
 	    {
@@ -444,6 +443,9 @@ switch (vis)
 		    lines++;
 	    }
 	tg->height = lines * tg->lineHeight;
+	break;
+    case tvPack:
+        uglyAbort("Sorry can't handle pack in tgUserDefinedTotalHeight");
 	break;
     case tvDense:
 	tg->height = tg->lineHeight;
@@ -502,8 +504,13 @@ for (tg = trackList; tg != NULL; tg = tg->next)
     if (tg == toggleGroup)
 	{
 	if (vis == tvDense)
-	    vis = tvFull;
-	else if (vis == tvFull)
+	    {
+	    if (tg->canPack)
+	        vis = tvPack;
+	    else
+		vis = tvFull;
+	    }
+	else if (vis == tvFull || vis == tvPack)
 	    vis = tvDense;
 	dyStringPrintf(dy, "&%s=%s", tg->mapName, hStringFromTv(vis));
 	}
@@ -1836,6 +1843,7 @@ void linkedFeaturesDrawAverage(struct track *tg, int seqStart, int seqEnd,
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw dense clone items. */
 {
+// uglyf - get rid of this conversion now!
 /* Convert to a linked features series object */
 linkedFeaturesToLinkedFeaturesSeries(tg);
 /* Draw items */
@@ -1850,30 +1858,10 @@ static void linkedFeaturesAverageDense(struct track *tg,
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw dense linked features items. */
 {
-/* Draw items */
-if (vis == tvFull)
-    {
-    linkedFeaturesDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
-    }
-else if (vis == tvDense)
-    {
+if (vis == tvDense)
     linkedFeaturesDrawAverage(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
-    }
-}
-
-static void linkedFeaturesSeriesAverageDense(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw dense linked features series items. */
-{
-  /*if (vis == tvFull)
-    {*/
-    linkedFeaturesSeriesDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
-    /*    }
-else if (vis == tvDense)
-    {
-    linkedFeaturesSeriesDrawAverage(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
-    }*/
+else
+    linkedFeaturesDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
 }
 
 int lfCalcGrayIx(struct linkedFeatures *lf)
@@ -1976,7 +1964,7 @@ void linkedFeaturesSeriesMethods(struct track *tg)
 /* Fill in track methods for linked features.series */
 {
 tg->freeItems = freeLinkedFeaturesSeriesItems;
-tg->drawItems = linkedFeaturesSeriesAverageDense;
+tg->drawItems = linkedFeaturesSeriesDraw;
 tg->drawItemAt = linkedFeaturesSeriesDrawAt;
 tg->itemName = linkedFeaturesSeriesName;
 tg->mapItemName = linkedFeaturesSeriesName;
