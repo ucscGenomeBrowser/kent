@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: links.c,v 1.15 2004/04/14 00:25:29 kent Exp $";
+static char const rcsid[] = "$Id: links.c,v 1.16 2004/05/25 18:07:19 fanhsu Exp $";
 
 struct link
 /* A link to another web site. */
@@ -118,6 +118,11 @@ char *url = NULL;
 if (sameString(link->name, "family"))
     {
     if (!hgNearOk(database))
+        return NULL;
+    }
+if (sameString(link->name, "protBrowser"))
+    {
+    if (!hgPbOk(database))
         return NULL;
     }
 geneId = cloneAndCut(geneId, link->preCutAt);
