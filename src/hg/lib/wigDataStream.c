@@ -8,7 +8,7 @@
 #include "hgColors.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.64 2004/11/16 21:43:10 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.65 2004/11/22 19:39:37 hiram Exp $";
 
 /*	Routines that are not strictly part of the wigDataStream object,
 	but they are used to do things with the object.
@@ -456,6 +456,12 @@ if (wds->isFile)
 	dateStamp);
 
 freeMem(dateStamp);
+}
+
+static void showResolution(double resolution, FILE *fh)
+{
+if (resolution > 0.0)
+    fprintf (fh, "#\tworst-case resolution of this data: %g\n", resolution);
 }
 
 static void showConstraints(struct wiggleDataStream *wds, FILE *fh)
@@ -988,6 +994,7 @@ for ( ; (!maxReached) && nextRow(wds, row, WIGGLE_NUM_COLS);
 	wigAscii->chrom = cloneString(wiggle->chrom);
 	wigAscii->span = wiggle->span;
 	wigAscii->count = 0;	/* will count up as values added */
+	wigAscii->dataRange = wiggle->dataRange;  /* for resolution calc */
 	wigAscii->data = (struct asciiDatum *) needMem((size_t)
 	    (sizeof(struct asciiDatum) * wiggle->validCount));
 	asciiOut = wigAscii->data;
@@ -1693,6 +1700,7 @@ if (bedList && *bedList)
 		wigAscii->chrom = cloneString(wds->chrName);
 		wigAscii->span = 1;	/* span information has been lost */
 		wigAscii->count = 0;	/* will count up as values added */
+		wigAscii->dataRange = 0.0;	/* to be determined */
 		if (sizeof(size_t) > 4)
 		    setMaxAlloc((size_t)17179869184);  /*2^34  = 16 Gb */
 		else
@@ -1754,6 +1762,15 @@ if (bedList && *bedList)
 		    /*	construct output listings here	*/
 		    if (doAscii)
 			{
+			/*	record limits when not also doing that
+			 *	for stats	*/ 
+			if (!doStats)
+			    {
+			    if (value < lowerLimit)
+				lowerLimit = value;
+			    if (value > upperLimit)
+				upperLimit = value;
+			    }
 			asciiOut->value = value;
 			asciiOut->chromStart = chromPosition;
 			++asciiOut;
@@ -1838,6 +1855,10 @@ if (bedList && *bedList)
 		    wigAscii->data = NULL;
 		    }
 		}
+	    /*	record dataRange for resolution accounting	*/
+	    if (doAscii && wigAscii->count)
+		wigAscii->dataRange = (upperLimit - lowerLimit) /
+			(MAX_WIG_VALUE+1);
 	    if (doBed)	/*	there may be one last element	*/
 		{
 		if (bedElEnd > bedElStart)
@@ -2059,9 +2080,18 @@ if (wds->ascii)
     struct wigAsciiData *asciiData;
     char *chrom = NULL;
     unsigned span = 0;
+    double worstCaseResolution = 0.0;
 
     if (sort)
 	slSort(&wds->ascii, asciiDataCmp);
+
+    /*	determine an over-all resolution measurement */
+    for (asciiData = wds->ascii; asciiData; asciiData = asciiData->next)
+	{
+	double resolution = asciiData->dataRange / (MAX_WIG_VALUE+1);
+	if (resolution > worstCaseResolution)
+	    worstCaseResolution = resolution;
+	}
 
     for (asciiData = wds->ascii; asciiData; asciiData = asciiData->next)
 	{
@@ -2087,6 +2117,7 @@ if (wds->ascii)
 			freeMem(dateStamp);
 			}
 		    showConstraints(wds, fh);
+		    showResolution(worstCaseResolution, fh);
 		    fprintf (fh, "variableStep chrom=%s span=%u\n",
 			chrom, span);
 		    }
