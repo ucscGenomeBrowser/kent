@@ -695,8 +695,8 @@ ffList = foldInExtras(qSeq, tSeq, ffList, extraList);
 return ffList;
 }
 
-static boolean tradeMismatchToCloseSpliceGap( struct ffAli *left, struct ffAli *right, 
-	int orientation)
+static boolean tradeMismatchToCloseSpliceGap( struct ffAli *left, 
+	struct ffAli *right, int orientation)
 /* Try extending one side or the other to close gap caused by
  * mismatch near splice site */
 {
@@ -704,24 +704,111 @@ if (intronOrientation(left->hEnd+1, right->hStart) == orientation)
     {
     left->hEnd += 1;
     left->nEnd += 1;
-    return;
+    return TRUE;
     }
 if (intronOrientation(left->hEnd, right->hStart-1) == orientation)
     {
     right->hStart -= 1;
     right->nStart -= 1;
+    return TRUE;
     }
+return FALSE;
+}
+
+int calcSpliceScore(struct axtScoreScheme *ss, 
+	char a1, char a2, char b1, char b2, int orientation)
+/* Return adjustment for match/mismatch of consensus. */
+{
+int score = 0;
+if (orientation >= 0)  /* gt/ag or gc/ag */
+    {
+    score += ss->matrix[a1]['g'];
+    if (a2 != 'c')
+        score += ss->matrix[a2]['t'];
+    score += ss->matrix[b1]['a'];
+    score += ss->matrix[b2]['g'];
+    }
+else		       /* ct/ac or ct/gc */
+    {
+    score += ss->matrix[a1]['c'];
+    score += ss->matrix[a2]['t'];
+    if (b1 != 'g')
+	score += ss->matrix[b1]['a'];
+    score += ss->matrix[b2]['c'];
+    }
+return score;
+}
+
+static void grabAroundIntron(char *hpStart, int iPos, int iSize,
+	int modPeelSize, char *hSeq)
+/* Grap sequence on either side of intron. */
+{
+memcpy(hSeq, hpStart, iPos);
+memcpy(hSeq+iPos, hpStart+iPos+iSize, modPeelSize - iPos);
+hSeq[modPeelSize] = 0;
 }
 
 static struct ffAli *hardRefineSplice(struct ffAli *left, struct ffAli *right,
-	struct dnaSeq *qSeq, struct dnaSeq *tSeq, struct ffAli *ffList)
+	struct dnaSeq *qSeq, struct dnaSeq *tSeq, struct ffAli *ffList, 
+	int orientation)
 /* Do difficult refinement of splice site.  See if
- * can get nice splice sites without breaking too much. */
+ * can get nice splice sites without breaking too much.  */
 {
-/* Strategy - peel back 6 bases on either side of putative intron.
- * try to realign with good intron ends. */
+/* Strategy: peel back about 6 bases on either side of intron.
+ * Then try positioning the intron at each position in the
+ * peeled area and assessing score. */
+int peelSize = 12;
+char nSeq[12+1], hSeq[12+1+1];
+char nSym[25], hSym[25];
+int symCount, dummy;
+int seqScore, spliceScore, score, maxScore = 0;
+int nGap = right->nStart - left->nEnd;
+int hGap = right->hStart - right->hEnd;
+int peelLeft = (peelSize - nGap)/2;
+int intronSize = hGap - nGap;
+char *npStart = left->nEnd - peelLeft;
+char *hpStart = left->hEnd - peelLeft;
+struct axtScoreScheme *ss = axtScoreSchemeRnaDefault();
+static int modSize[3] = {0, 1, -1};
+int modIx;
+int bestPos = -1, bestMod = 0;
+
+uglyf("peelLeft %d, intronSize %d\n", peelLeft, intronSize);
+memcpy(nSeq, npStart, peelSize);
+nSeq[peelSize] = 0;
+for (modIx=0; modIx < ArraySize(modSize); ++modIx)
+    {
+    int modOne = modSize[modIx];
+    int modPeelSize = peelSize - modOne;
+    int iSize = intronSize + modOne;
+    int iPos;
+    uglyf("-----modOne %d------\n", modOne);
+    for (iPos=0; iPos <= modPeelSize; iPos++)
+        {
+	grabAroundIntron(hpStart, iPos, iSize, modPeelSize, hSeq);
+	bandExt(TRUE, ss, 2, nSeq, peelSize, hSeq, modPeelSize, 1,
+		sizeof(hSym), &symCount, nSym, hSym, &dummy, &dummy);
+	seqScore = axtScoreSym(ss, symCount, nSym, hSym);
+	spliceScore = calcSpliceScore(ss, hpStart[iPos], hpStart[iPos+1],
+		hpStart[iPos+iSize-2], hpStart[iPos+iSize-1], orientation);
+	score = seqScore + spliceScore;
+	if (score > maxScore)
+	    {
+	    maxScore = score;
+	    bestPos = iPos;
+	    bestMod = modOne;
+	    }
+	uglyf("aligned: score %d, %c%c/%c%c %d [%d vs %d]\n", seqScore, hpStart[iPos], hpStart[iPos+1], hpStart[iPos+iSize-2], hpStart[iPos+iSize-1], spliceScore, score, maxScore);
+	uglyf(" %s\n %s\n\n", nSym, hSym);
+	}
+    }
 return ffList;
 }
+
+boolean bandExt(boolean global, struct axtScoreScheme *ss, int maxInsert,
+	char *aStart, int aSize, char *bStart, int bSize, int dir,
+	int symAlloc, int *retSymCount, char *retSymA, char *retSymB, 
+	int *retStartA, int *retStartB);
 
 static struct ffAli *refineSpliceSites(struct dnaSeq *qSeq, struct dnaSeq *tSeq,
 	struct ffAli *ffList)
@@ -753,7 +840,7 @@ for (ff = ffList; ff != NULL; ff = nextFf)
 	    if (tradeMismatchToCloseSpliceGap(ff, nextFf, orientation))
 	        continue;
 	    }
-	ffList = hardRefineSplice(ff, nextFf, qSeq, tSeq, ffList);
+	ffList = hardRefineSplice(ff, nextFf, qSeq, tSeq, ffList, orientation);
 	}
     }
 return ffList;
