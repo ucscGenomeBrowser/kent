@@ -13,7 +13,6 @@ group genes
 priority 48
 visibility pack
 color 0,0,200
-chromosomes chrI,chrII,chrIII,chrIV,chrV,chrX,chrM
 type genePred sangerPep
 url http://www.wormbase.org/db/gene/gene?name=$$
 hgGene on
@@ -25,7 +24,7 @@ group genes
 priority 50
 visibility pack
 color 178,34,34
-chromosomes chrI,chrII,chrIII,chrIV,chrV,chrX,chrM
+chromosomes chrI,chrII,chrIII,chrIV,chrV,chrX
 type genePred 
 url http://www.wormbase.org/db/gene/gene?name=$$
 
