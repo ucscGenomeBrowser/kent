@@ -8,6 +8,6 @@ BINDIR = $(HOME)/bin/$(MACHTYPE)
 O = simpleChain.o
 
 simpleChain: $O $(MYLIBS)
-	$(CC) -static -o simpleChain $O $(MYLIBS) $L
+	$(CC) -o simpleChain $O $(MYLIBS) $L
 	cp -f simpleChain $(BINDIR)
 #	${STRIP} $(BINDIR)/simpleChain${EXE}
