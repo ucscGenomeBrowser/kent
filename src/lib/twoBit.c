@@ -7,7 +7,7 @@
 #include "obscure.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: twoBit.c,v 1.8 2004/06/03 23:34:27 kent Exp $";
+static char const rcsid[] = "$Id: twoBit.c,v 1.9 2004/07/18 19:49:23 markd Exp $";
 
 static int countBlocksOfN(char *s, int size)
 /* Count number of blocks of N's (or n's) in s. */
@@ -637,43 +637,59 @@ boolean twoBitParseRange(char *rangeSpec, char **retFile,
  *    file/path/name:seqName:start-end
  * or
  *    file/path/name:seqName
- * This will destroy the input 'rangeSpec' in the process.
- * Returns FALSE if it doesn't fit this format. 
- * If it is the shorter form then start and end will both
- * be returned as zero, which is ok by twoBitReadSeqFrag. */
+ * This will destroy the input 'rangeSpec' in the process.  Returns FALSE if
+ * it doesn't fit this format, setting retFile to rangeSpec, and retSet to
+ * null.  If it is the shorter form then start and end will both be returned
+ * as zero, which is ok by twoBitReadSeqFrag.  Any of the return arguments
+ * maybe NULL.
+ */
 {
 char *s, *e;
+int n;
 
-/* Save file name. */
-*retFile = s = rangeSpec;
+/* default returns */
+if (retFile != NULL)
+    *retFile = rangeSpec;
+if (retSeq != NULL)
+    *retSeq = NULL;
+if (retStart != NULL)
+    *retStart = 0;
+if (retEnd != NULL)
+    *retEnd = 0;
+
+/* start with final name  */
+s = strrchr(rangeSpec, '/');
+if (s == NULL)
+    s = rangeSpec;
+else
+    s++;
 
 /* Grab seqName, zero terminate fileName. */
 s = strchr(s, ':');
 if (s == NULL)
     return FALSE;
 *s++ = 0;
-*retSeq = s;
+if (retSeq != NULL)
+    *retSeq = s;
 
 /* Grab start, zero terminate seqName. */
 s = strchr(s, ':');
 if (s == NULL)
-    {
-    *retStart = *retEnd = 0;
-    return TRUE;
-    }
+    return TRUE;  /* no range spec */
 *s++ = 0;
-if (!isdigit(s[0]))
-    return FALSE;
-*retStart = atoi(s);
+n = strtol(s, &e, 0);
+if (*e != '-')
+    return FALSE; /* not a valid range */
+if (retStart != NULL)
+    *retStart = n;
+s = e+1;
 
 /* Grab end. */
-s = strchr(s, '-');
-if (s == NULL)
-    return FALSE;
-s += 1;
-if (!isdigit(s[0]))
-    return FALSE;
-*retEnd = atoi(s);
+n = strtol(s, &e, 0);
+if (*e != '\0')
+    return FALSE; /* not a valid range */
+if (retEnd != NULL)
+    *retEnd = n;
 return TRUE;
 }
 
