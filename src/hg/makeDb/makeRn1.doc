@@ -248,69 +248,7 @@ MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR RN1 (DONE 11/26/02)
     cvs commit makefile
 
 
-GOLD AND GAP TRACKS (DONE 11/26/02)
-    ssh hgwdev
-    cd ~/rn1
-    hgGoldGapGl -noGl rn1 /cluster/store4/rn1 .
-
-
-GETTING FRESH mRNA, EST, REFSEQ SEQUENCE FROM GENBANK. (IN PROGRESS)
-
-This will create a genbank.132 directory containing compressed
-GenBank flat files and a mrna.132 containing unpacked sequence
-info and auxiliary info in a relatively easy to parse (.ra) 
-format.
-
-    # Point your browser to ftp://ftp.ncbi.nih.gov/genbank and
-    # look at the README.genbank.  Figure out the current release number
-    # (which is 132).
-    # Consider deleting one of the older genbank releases.  It's
-    # good to at least keep one previous release though.
-    # Where there is space make a new genbank directory.  Create a
-    # symbolic link to it:
-    ssh kkstore
-    mkdir /cluster/store2/genbank.132
-    cd /cluster/store2/genbank.132
-    ftp ftp.ncbi.nih.gov
-      # (do anonymous log-in).
-      cd genbank
-      prompt
-      mget README.genbank gbpri* gbrod* gbv* gbsts* gbest* gbmam* gbinv* \
-        gbbct* gbhtc* gbpat* gbphg* gbpln*
-      quit
-    # This will take at least 2 hours.
-    # Download files to /cluster/store1/refSeqCum/112602 (Matt)
-    mkdir -p /cluster/store1/refSeqCum/112602
-    cd /cluster/store1/refSeqCum/112602
-    ftp ftp.ncbi.nih.gov
-      # (do anonymous log-in).
-      cd refseq/cumulative
-      prompt
-      mget rscu.bna.Z rscu.fsa.Z rscu.fsa_nt.Z rscu.gbff.Z rscu.gnp.Z
-      quit
-    # Make sure you have the latest version of gbToFaRa in your path.
-    # Unpack the refSeq data with gbToFaRa:
-    uncompress *.Z
-    gbToFaRa -byOrganism=???? (Matt)
-    # Unpack the mrna data with gbToFaRa:
-    mkdir -p /cluster/store2/mrna.132
-    cd /cluster/store2/mrna.132
-    gunzip -c ../genbank.132/gb{pri,rod,v,mam,inv,bct,htc,pat,phg,pln}* | \
-      gbToFaRa -byOrganism=org \
-        ~kent/hg/h/xenoRna.fil xenoRna.fa xenoRna.ra xenoRna.ta stdin
-    gunzip -c ../genbank.132/gb{pri,rod,v,mam,inv,bct,htc,pat,phg,pln}* | \
-      gbToFaRa -byOrganism=org \
-        ~kent/hg/h/mrna.fil mrna.fa mrna.ra mrna.ta stdin
-    # This stuff is for human, but we need to do it when we download seq:
-    gunzip -c /cluster/store2/genbank.132/gbpri*.gz | \
-      gbToFaRa ~kent/hg/h/mrna.fil mrna.fa mrna.ra mrna.ta stdin
-    gunzip -c /cluster/store2/genbank.132/gbest*.gz | \
-      gbToFaRa ~kent/hg/h/mrna.fil est.fa est.ra est.ta stdin
-    gunzip -c /cluster/store2/genbank.132/gbest*.gz | \
-      gbToFaRa ~kent/hg/h/xenoRna.fil xenoEst.fa xenoEst.ra xenoEst.ta stdin
-
-
-COPY GENBANK MRNA DATA TO THE CLUSTER (already done)
+COPY GENBANK MRNA DATA TO THE CLUSTER (TODO for mrna.132)
    ssh kkstore
    # Copy the rna data to the cluster if it isn't there already:
    mkdir /scratch/hg/mrna.132
@@ -319,7 +257,13 @@ COPY GENBANK MRNA DATA TO THE CLUSTER (already done)
    sudo /cluster/install/utilities/updateLocal
 
 
-CREATE RELATIONAL MRNA DATABASE (TODO)
+GOLD AND GAP TRACKS (DONE 11/26/02)
+    ssh hgwdev
+    cd ~/rn1
+    hgGoldGapGl -noGl rn1 /cluster/store4/rn1 .
+
+
+CREATE RELATIONAL MRNA DATABASE (DONE)
     ssh hgwdev
     # Make symbolic links from hgwdev's /gbdb to the real .fa locations:
     mkdir -p /gbdb/rn1/mrna.132
@@ -330,43 +274,65 @@ CREATE RELATIONAL MRNA DATABASE (TODO)
     # Call hgLoadRna with the /gbdb locations:
     cd /cluster/store2/temp
     hgLoadRna new rn1
-    hgLoadRna add rn1 /gbdb/rn1/mrna.132/mrna.fa \
-      /cluster/store2/mrna.132/org/Rattus_norvegicus/mrna.ra
-    # This est load will take quite some time to complete:
-    hgLoadRna add rn1 /gbdb/rn1/mrna.132/est.fa \
-      /cluster/store2/mrna.132/org/Rattus_norvegicus/est.ra
-    hgLoadRna add -type=refSeq rn1 /gbdb/rn1/mrna.132/refSeq.fa \
-      /cluster/store1/refSeqCum/112602/org/Rattus_norvegicus/refSeq.ra
 
+    mkdir /cluster/store2/mrna.132
+    cd /cluster/store2/mrna.132
 
-MAKING AND STORING mRNA AND EST ALIGNMENTS  (TODO)
+Make the anyRna.fil file using this text:
+
+restrict mol=mRNA
+hide mol
+
+# Make the RNAs
+        gunzip -c /cluster/store2/genbank.132/gb{pri,rod,v,mam,inv,bct,htc,pat,phg,pln}* \
+        | gbToFaRa -byOrganism=org anyRna.fil mrna.fa mrna.ra mrna.ta stdin
+
+# Make the ESTs
+        gunzip -c /cluster/store2/genbank.132/gbest*.gz | \
+        gbToFaRa anyRna.fil est.fa est.ra est.ta stdin -byOrganism=org
+
+    mkdir -p /gbdb/rn1/mrna.132
+    cd /gbdb/rn1/mrna.132
+    ln -s /cluster/store2/mrna.132/org/Rattus_norvegicus/mrna.fa /gbdb/rn1/mrna.132/mrna.fa
+    ln -s /cluster/store2/mrna.132/org/Rattus_norvegicus/mrna.ra /gbdb/rn1/mrna.132/mrna.ra
+    ln -s /cluster/store2/mrna.132/org/Rattus_norvegicus/est.fa /gbdb/rn1/mrna.132/est.fa
+    ln -s /cluster/store2/mrna.132/org/Rattus_norvegicus/est.ra /gbdb/rn1/mrna.132/est.ra
+    ln -s /cluster/store1/refSeqCum/112602/org/Rattus_norvegicus/refSeq.fa /gbdb/rn1/mrna.132/refSeq.fa
+    ln -s /cluster/store1/refSeqCum/112602/org/Rattus_norvegicus/refSeq.ra /gbdb/rn1/mrna.132/refSeq.ra
+
+    cd /cluster/store2/temp
+    hgLoadRna add -type=mRNA rn1 /gbdb/rn1/mrna.132/mrna.fa /gbdb/rn1/mrna.132/mrna.ra
+    hgLoadRna add -type=EST rn1 /gbdb/rn1/mrna.132/est.fa /gbdb/rn1/mrna.132/est.ra
+
+MAKING AND STORING mRNA AND EST ALIGNMENTS  (TODO) DONE FOR ALL REFSEQ STEPS
+
 
     # Use BLAT to generate refSeq, mRNA and EST alignments as so:
     #  Make sure that /scratch/hg/rn1/contigs is loaded
     #  with chr*_*.fa and pushed to the cluster nodes.  
     ssh kk
     cd ~/rn1/bed
-    foreach i (refSeq mrna est)
+    foreach i (refSeq mrna est) # DONE FOR REFSEQ
       mkdir -p $i
       cd $i
       ls -1S /scratch/hg/rn1/contigs.1126/* > genome.lst
       ls -1 /scratch/hg/mrna.132/Rattus_norvegicus/$i.fa > mrna.lst
-      cp ~/lastRn/bed/$i/gsub .
+      cp ~/mm2/bed/$i/gsub .
       mkdir psl
       gensub2 genome.lst mrna.lst gsub spec
-      para create spec
-      para try
-      para push
       cd ..
     end 
 
     # check on progress with para check in mrna, est, and refSeq directories.
     # report on runtime when finished:
+      para create spec
+      para try
+      para push
     para time > time
 
       
-    # Process refSeq mRNA and EST alignments into near best in genome.
-    ssh eieio
+    # Process refSeq, mRNA, and EST alignments into near best in genome.
+    ssh eieio - DONE FOR REFSEQ
     cd ~/rn1/bed
     cd refSeq
     pslSort dirs raw.psl /cluster/store2/temp psl
@@ -420,7 +386,7 @@ MAKING AND STORING mRNA AND EST ALIGNMENTS  (TODO)
     cd ~/rn1/bed/est/intronEst
     hgLoadPsl rn1 *.psl
 
-    # Load refSeq alignments into database
+    # Load refSeq alignments into database - DONE
     ssh hgwdev
     cd ~/rn1/bed/refSeq
     pslCat -dir chrom > refSeqAli.psl
@@ -480,25 +446,38 @@ CREATE RNACLUSTER TABLE (TODO)
    end
    hgLoadBed rn1 rnaCluster est/*.bed
 
+PRODUCING KNOWN GENES (IN PROGRESS)
 
-PRODUCING KNOWN GENES (TODO)
-
-o - Download everything from ftp://ncbi.nlm.nih.gov/refseq/H_sapiens/mRNA_Prot/
-    into ~/rn1/bed/refSeq
-o - Unpack this into fa files and get extra info with:
-       cd ~/rn1/bed/refSeq
-       gunzip rat.faa.gz
-       gunzip rat.gbff.gz
-       gbToFaRa ~/hg/h/allRna.fil refSeq.fa refSeq.ra refSeq.ta rat.gbff
+o - Download everything from ftp://ftp.ncbi.nih.gov/refseq/cumulative
+    into /cluster/store1/refSeqCum/112602
+        cd /cluster/store1/refSeqCum/112602
+        uncompress rscu.gbff.Z
+        Put the following lines into anyRna.fil
+        restrict mol=mRNA
+        hide mol        
+        gbToFaRa anyRna.fil refSeq.fa refSeq.ra refSeq.ta -byOrganism=org
+        This will create fasta and annotations for the rat in refSeq/org
+        in refSeq.fa and refSeq.ra under the org/Rattus_norvegicus directory
 o - Get extra info from NCBI and produce refGene table as so:
-       wget ftp://ncbi.nlm.nih.gov/refseq/LocusLink/loc2ref 
-       wget ftp://ncbi.nlm.nih.gov/refseq/LocusLink/mim2loc
-o - Produce refGenn, refPep, refMrna, and refLink tables as so:
-       hgRefSeqMrna rn1 refSeq.fa refSeq.ra all_refSeq.psl loc2ref rat.faa mim2loc
-o - Add RefSeq status info (TODO)
-    hgRefSeqStatus rn1 loc2ref
+       wget ftp://ftp.ncbi.nih.gov/refseq/LocusLink/loc2ref 
+       wget ftp://ftp.ncbi.nih.gov/refseq/LocusLink/mim2loc
 
-REFFLAT
+o -   hgLoadRna add -type=refSeq rn1 /gbdb/rn1/mrna.132/refSeq.fa /gbdb/rn1/mrna.132/refSeq.ra
+
+o - Produce refGene, refPep, refMrna, and refLink tables as so:
+Get the rat proteins:
+        wget ftp://ftp.ncbi.nih.gov/refseq/R_norvegicus/mRNA_Prot/rat.faa.gz
+        gunzip rat.faa.gz
+        cd ~/rn1/bed/refSeq
+       hgRefSeqMrna rn1 /cluster/store1/refSeqCum/112602/org/Rattus_norvegicus/refSeq.fa \
+        /cluster/store1/refSeqCum/112602/org/Rattus_norvegicus/refSeq.ra \
+        all_refSeq.psl /cluster/store1/refSeqCum/112602/loc2ref \
+        /cluster/store1/refSeqCum/112602/rat.faa \
+        /cluster/store1/refSeqCum/112602/mim2loc
+o - Add RefSeq status info 
+    hgRefSeqStatus rn1 /cluster/store1/refSeqCum/112602/loc2ref
+
+REFFLAT - DONE
 
 o - create precomputed join of refFlat and refGene:
       echo 'CREATE TABLE refFlat (KEY geneName (geneName), KEY name (name), KEY chrom (chrom)) SELECT refLink.name as geneName, refGene.* FROM refLink,refGene WHERE refLink.mrnaAcc = refGene.name' | hgsql rn1
