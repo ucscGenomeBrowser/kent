@@ -73,6 +73,7 @@ return groupedList;
 
 
 void groupSamples(int grouping, char  *input, char *output)
+/* Pack together samples. */
 {
 FILE *out = NULL;
 struct sample *sampList = NULL, *groupedList = NULL, *samp = NULL;
@@ -90,6 +91,7 @@ sampleFreeList(&groupedList);
 }
 
 int main(int argc, char *argv[])
+/* Process command line. */
 {
 int grouping = 0;
 if(argc != 4)

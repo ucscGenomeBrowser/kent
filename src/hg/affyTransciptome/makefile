@@ -9,6 +9,6 @@ O = affyPairsToSample normalizeSampleFile avgTranscriptomeExps maxTranscriptomeE
 %: %.c 
 	gcc -Wimplicit -ggdb  -I../inc -I../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS)
 	cp $@ $(HOME)/bin/
-	cp $@ /cse/ugrads/weber/bin/$(MACHTYPE)
+#	cp $@ /cse/ugrads/weber/bin/$(MACHTYPE)
 
 all : $(O)
