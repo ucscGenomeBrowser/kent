@@ -89,7 +89,7 @@
 #include "bedCart.h"
 #include "cytoBand.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.927 2005/03/17 23:26:40 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.928 2005/03/20 23:06:47 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3434,6 +3434,10 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char query[256];
+
+/* allow itemAttr to override coloring */
+if (lf->itemAttr != NULL)
+    return vgFindColorIx(vg, lf->itemAttr->colorR, lf->itemAttr->colorG, lf->itemAttr->colorB);
 
 /* If refSeqStatus is available, use it to determine the color.
  * Reviewed, Validated -> normal, Provisional -> lighter, 
