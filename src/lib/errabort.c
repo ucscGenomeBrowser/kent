@@ -15,7 +15,7 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: errabort.c,v 1.10 2003/05/06 07:33:42 kate Exp $";
+static char const rcsid[] = "$Id: errabort.c,v 1.11 2003/09/12 21:57:10 weber Exp $";
 
 static void defaultVaWarn(char *format, va_list args)
 /* Default error message handler. */
@@ -77,7 +77,10 @@ if (warnIx <= 0)
 static void defaultAbort()
 /* Default error handler exits program. */
 {
-exit(-1);
+if( getenv( "ERRASSERT" ) != NULL )
+    assert(0);
+else
+    exit(-1);
 }
 
 #define maxAbortHandlers 12
