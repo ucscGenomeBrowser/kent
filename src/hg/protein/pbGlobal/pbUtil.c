@@ -743,16 +743,21 @@ char *org = NULL;
 char *spID, *displayID, *desc;
 
 char cond_str[255];
-struct sqlConnection *conn;
-char query[256];
-struct sqlResult *sr;
-char **row;
+struct sqlConnection *conn, *conn3;
+char query[256], query3[512];
+struct sqlResult *sr, *sr3;
+char **row, **row3;
 
 struct sqlConnection *connCentral, *proteinsConn;
 char queryCentral[256];
 struct sqlResult *srCentral;
-char **row3;
 char *answer;
+char *taxonId, *protAcc, *protDisp, *protOrg, *protDesc;
+char *oldOrg, *orgSciName;
+char *pbOrgSciName[MAX_PB_ORG];
+boolean pbOrgPresented[MAX_PB_ORG];
+boolean skipIt;
+int  i, maxPbOrg;
 
 connCentral = hConnectCentral();
 
@@ -767,15 +772,32 @@ hPrintf("</TR></TABLE>");
   
 hPrintf("<FONT SIZE=4><BR><B>Please select one of the following proteins:<BR><BR></B></FONT>\n");
 
-/* go through each genome DB with PB */
+
+/* remmember a list of scientific names for the genomes that supports PB */
 safef(queryCentral, sizeof(queryCentral),
-      "select defaultDb.name, dbDb.organism from dbDb,defaultDb where hgPbOk=1 and defaultDb.name=dbDb.name");
+      "select distinct dbDb.scientificName from dbDb where hgPbOk=1");
+srCentral = sqlMustGetResult(connCentral, queryCentral);
+row3 = sqlNextRow(srCentral);
+i=0;
+while (row3 != NULL)
+    {
+    pbOrgSciName[i] = strdup(row3[0]);
+    pbOrgPresented[i] = FALSE;
+    i++;
+    row3 = sqlNextRow(srCentral);
+    }
+maxPbOrg = i;
+
+/* go through each genome DB that supports PB */
+safef(queryCentral, sizeof(queryCentral),
+      "select defaultDb.name, dbDb.organism, dbDb.scientificName from dbDb,defaultDb where hgPbOk=1 and defaultDb.name=dbDb.name");
 srCentral = sqlMustGetResult(connCentral, queryCentral);
 row3 = sqlNextRow(srCentral);
 while (row3 != NULL)
     {
     gDatabase = row3[0];
     org       = row3[1];
+    orgSciName= row3[2];
     
     conn = sqlConnect(gDatabase);
     safef(cond_str, sizeof(cond_str), 
@@ -818,6 +840,15 @@ while (row3 != NULL)
 		{
 	    	hPrintf("%s</A> (aka %s) %s\n", spID, displayID, desc);
 		}
+
+	    /* remember the fact that a protein is shown under this PB supported genome */	
+	    for (i=0; i<maxPbOrg; i++) 
+	        {
+	    	if (sameWord(orgSciName, pbOrgSciName[i])) 
+		    {
+		    pbOrgPresented[i] = TRUE;
+		    }
+	        }
 	    row = sqlNextRow(sr);
 	    }
 	hPrintf("</UL>");fflush(stdout);
@@ -828,4 +859,106 @@ while (row3 != NULL)
 sqlFreeResult(&srCentral);
 hDisconnectCentral(&connCentral);
 sqlDisconnect(&conn);
+
+if (protCntInSwissByGene > protCntInSupportedGenomeDb)
+    {
+    if (protCntInSupportedGenomeDb >1)
+    	{
+    	hPrintf("<FONT SIZE=4><B>Other Oganisms:</B></FONT>\n");
+    	hPrintf("<UL>");
+	}
+    else
+        {
+    	hPrintf("<UL>");
+        }	
+    
+    oldOrg = strdup("");
+    conn3 = sqlConnect("swissProt");
+    safef(query3, sizeof(query3), 
+     "select taxon.id, gene.acc, displayId.val, binomial, description.val from gene, displayId, accToTaxon,taxon, description where gene.val='%s' and gene.acc=displayId.acc and accToTaxon.taxon=taxon.id and accToTaxon.acc=gene.acc and description.acc=gene.acc order by taxon.id", 
+     queryID);
+    sr3  = sqlMustGetResult(conn3, query3);
+    row3 = sqlNextRow(sr3);
+   
+   /* go through each protein */
+    while (row3 != NULL)
+    	{
+        taxonId  = row3[0];
+        protAcc  = row3[1];
+        protDisp = row3[2];
+        protOrg  = row3[3];
+        protDesc = row3[4];
+	
+	/* decide if this entry should be skipped */
+	skipIt = FALSE;
+	for (i=0; i<maxPbOrg; i++)
+	    {
+	    if (sameWord(pbOrgSciName[i], protOrg) && pbOrgPresented[i])
+	    	{
+	    	skipIt = TRUE;
+		}
+	    }
+
+	/* print organism name if organism changed */
+	if (!sameWord(protOrg, oldOrg))
+	    {
+	    if (!sameWord(oldOrg, ""))
+	        {
+	        hPrintf("</UL>\n");
+		}
+	    if (!skipIt) hPrintf("<FONT SIZE=3><B>%s:</B></FONT>\n", protOrg);
+            hPrintf("<UL>\n");
+	    }
+		
+	/* print protein entry, if it is not already displayed in the PB supported genome list */
+	if (!skipIt)
+	    {
+	    if (sameWord(protAcc, protDisp))
+		{
+		hPrintf("<LI><A HREF=\"http:/cgi-bin/pbGlobal?proteinID=%s\">",protDisp);
+		hPrintf("%s</A> %s\n", protAcc, protDesc);
+		}
+	    else
+		{
+		hPrintf("<LI><A HREF=\"http:/cgi-bin/pbGlobal?proteinID=%s\">",protDisp);
+		hPrintf("%s</A> (aka %s) %s\n", protAcc, protDisp, protDesc);
+		}
+	    }
+	oldOrg = strdup(protOrg);
+	row3 = sqlNextRow(sr3);
+	}
+    sqlFreeResult(&sr3);
+    sqlDisconnect(&conn3);
+    }
+}
+
+int searchProteinsInSwissProtByGene(char *queryGeneID)
+/* search Swiss-Prot database to see if it contains the protein 
+   Input: queryGeneID
+   return: number of proteins found in Swiss-Prot
+*/   
+{
+int  proteinCnt;
+struct sqlConnection *conn;
+char query[256];
+struct sqlResult *sr;
+char **row;
+
+conn = sqlConnect("swissProt");
+safef(query, sizeof(query), 
+     "select count(*) from gene, displayId, accToTaxon,taxon where gene.val='%s' and gene.acc=displayId.acc and accToTaxon.taxon=taxon.id and accToTaxon.acc=gene.acc order by taxon.id", 
+     queryGeneID);
+sr  = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+
+if (row == NULL)
+    {
+    errAbort("Error occured during mySQL query: %s\n", query);
+    }
+
+proteinCnt = atoi(row[0]);
+	
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
+return(proteinCnt);
 }
