@@ -6,6 +6,7 @@
 #include "portable.h"
 #include "hash.h"
 #include "psl.h"
+#include "genePred.h"
 #include "xAli.h"
 #include "rmskOut.h"
 #include "chromInserts.h"
@@ -14,7 +15,7 @@
 #include "chainNet.h"
 #include "liftUp.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.25 2003/12/17 22:06:10 braney Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.26 2004/01/25 20:19:32 markd Exp $";
 
 boolean isPtoG = TRUE;  /* is protein to genome lift */
 boolean nohead = FALSE;	/* No header for psl files? */
@@ -27,7 +28,9 @@ void usage()
 {
 errAbort(
  "liftUp - change coordinates of .psl, .agp, .gl, .out, .gff, .gtf .bscore \n"
- ".tab .gdup .axt .chain .net or .bed files to parent coordinate system.\n"
+ ".tab .gdup .axt .chain .net, genePred or .bed files to parent coordinate\n"
+ "system.\n"
+ "\n"
  "usage:\n"
  "   liftUp [-type=.xxx] destFile liftSpec how sourceFile(s)\n"
  "The optional -type parameter tells what type of files to lift\n"
@@ -764,6 +767,56 @@ if (ferror(dest))
 fclose(dest);
 }
 
+void liftGenePredObj(struct hash *liftHash, struct genePred* gp, struct lineFile* lf)
+/* lift a genePred  */
+{
+int iExon;
+struct liftSpec *spec = findLift(liftHash, gp->chrom, lf);
+
+gp->txStart += spec->offset;
+gp->txEnd += spec->offset;
+/* sometimes no cds is indicated by zero, sometimes by setting both to
+ * txEnd.  Don't lift zero case */
+if (!((gp->cdsStart == 0) && (gp->cdsEnd == 0)))
+    {
+    gp->cdsStart += spec->offset;
+    gp->cdsEnd += spec->offset;
+    }
+for (iExon = 0; iExon < gp->exonCount; iExon++)
+    {
+    gp->exonStarts[iExon] += spec->offset;
+    gp->exonEnds[iExon] += spec->offset;
+    }
+freez(&gp->chrom);
+gp->chrom = cloneString(spec->newName);
+}
+
+void liftGenePred(char *destFile, struct hash *liftHash, int sourceCount, char *sources[])
+/* Lift a genePred files. */
+{
+char *row[GENEPRED_NUM_COLS];
+struct lineFile* lf;
+FILE* dest = mustOpen(destFile, "w");
+int iSrc;
+
+for (iSrc = 0; iSrc < sourceCount; iSrc++)
+    {
+    if (!pipeOut)
+        printf("Lifting %s\n", sources[iSrc]);
+    lf = lineFileOpen(sources[iSrc], TRUE);
+    while (lineFileChopNextTab(lf, row, ArraySize(row)))
+        {
+        struct genePred* gp = genePredLoad(row);
+        liftGenePredObj(liftHash, gp, lf);
+        genePredTabOut(gp, dest);
+        genePredFree(&gp);
+        }
+    lineFileClose(&lf);
+    }
+
+carefulClose(&dest);
+}
+
 struct bedInfo
 /* Info on a line of a bed file. */
     {
@@ -1118,6 +1171,12 @@ else if (endsWith(destType, ".bed"))
     rmChromPart(lifts);
     liftHash = hashLift(lifts, TRUE);
     liftBed(destFile, liftHash, sourceCount, sources);
+    }
+else if (endsWith(destType, ".gp") || endsWith(destType, ".genepred"))
+    {
+    rmChromPart(lifts);
+    liftHash = hashLift(lifts, TRUE);
+    liftGenePred(destFile, liftHash, sourceCount, sources);
     }
 else if (endsWith(destType, ".bscore"))
     {

@@ -1,6 +1,8 @@
 include ../../../inc/common.mk
 
-all: chainQ chainT netQ netT
+all: test
+
+test: chainQ chainT netQ netT genePred
 
 chainQ: output
 	$(HOME)/bin/$(MACHTYPE)/liftUp -chainQ output/testOutQ.chain \
@@ -21,6 +23,11 @@ netT: output
 	$(HOME)/bin/$(MACHTYPE)/liftUp output/testOutT.net \
             input/testInChainT.lft warn input/testIn.net
 	diff expected/testOutT.net output/testOutT.net
+
+genePred: output
+	$(HOME)/bin/$(MACHTYPE)/liftUp output/testChrom.gp \
+            input/contig.lft warn input/testContig.gp
+	diff expected/testChrom.gp output/testChrom.gp
 
 output:
 	mkdir -p output
