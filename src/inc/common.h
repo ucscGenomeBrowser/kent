@@ -42,7 +42,9 @@
 #include <math.h>
 #include <errno.h>
 #include <unistd.h>
+#ifndef __CYGWIN32__
 #include <libgen.h>
+#endif
 
 /* Let's pretend C has a boolean type. */
 #define TRUE 1

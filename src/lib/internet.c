@@ -3,7 +3,7 @@
 #include "common.h"
 #include "internet.h"
 
-static char const rcsid[] = "$Id: internet.c,v 1.8 2004/01/31 21:22:50 kent Exp $";
+static char const rcsid[] = "$Id: internet.c,v 1.9 2004/08/09 21:03:09 angie Exp $";
 
 boolean internetIsDottedQuad(char *s)
 /* Returns TRUE if it looks like s is a dotted quad. */
@@ -68,6 +68,7 @@ boolean internetIpToDottedQuad(bits32 ip, char dottedQuad[17])
  * notation.  Warn and return FALSE if there's a 
  * problem. */
 {
+#ifndef __CYGWIN32__
 struct in_addr ia;
 zeroBytes(dottedQuad, 17);
 ZeroVar(&ia);
@@ -79,6 +80,10 @@ if (inet_ntop(AF_INET, &ia, dottedQuad, 16) == NULL)
     return FALSE;
     }
 return TRUE;
+#else
+warn("Sorry, internetIpToDottedQuad not supported in Windows.");
+return FALSE;
+#endif
 }
 
 boolean internetDottedQuadToIp(char *dottedQuad, bits32 *retIp)
@@ -86,6 +91,7 @@ boolean internetDottedQuadToIp(char *dottedQuad, bits32 *retIp)
  * host byte order.  Warn and return FALSE if there's a 
  * problem. */
 {
+#ifndef __CYGWIN32__
 struct in_addr ia;
 if (inet_pton(AF_INET, dottedQuad, &ia) < 0)
     {
@@ -94,6 +100,10 @@ if (inet_pton(AF_INET, dottedQuad, &ia) < 0)
     }
 *retIp = ntohl(ia.s_addr);
 return TRUE;
+#else
+warn("Sorry, internetDottedQuadToIp not supported in Windows.");
+return FALSE;
+#endif
 }
 
 void internetParseDottedQuad(char *dottedQuad, unsigned char quad[4])
