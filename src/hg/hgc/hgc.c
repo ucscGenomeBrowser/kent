@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.674 2004/06/23 03:36:31 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.675 2004/06/26 16:12:33 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2283,30 +2283,6 @@ cgiMakeButton("submit", "Get DNA");
 cgiMakeButton("submit", "Extended case/color options");
 puts("</FORM><P>");
 puts("Note: The \"Mask repeats\" option applies only to \"Get DNA\", not to \"Extended case/color options\". <P>");
-}
-
-void maskRepeats(char *chrom, int chromStart, int chromEnd, DNA *dna, int offset, boolean soft)
-/* Lower case bits corresponding to repeats. */
-{
-int rowOffset;
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-
-sr = hRangeQuery(conn, "rmsk", chrom, chromStart, chromEnd, NULL, &rowOffset);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct rmskOut ro;
-    rmskOutStaticLoad(row+rowOffset, &ro);
-    if (ro.genoEnd > chromEnd) ro.genoEnd = chromEnd;
-    if (ro.genoStart < chromStart) ro.genoStart = chromStart;
-    if (soft)
-	toLowerN(dna+ro.genoStart-offset, ro.genoEnd - ro.genoStart);
-    else
-        memset(dna+ro.genoStart-offset, 'n', ro.genoEnd - ro.genoStart);
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
 }
 
 boolean dnaIgnoreTrack(char *track)
