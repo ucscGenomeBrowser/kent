@@ -662,13 +662,23 @@ for (i=0; i<menuSize; ++i)
 printf("</SELECT>");
 }
 
-void cgiMakeDropListFull(char *name, char *menu[], char *values[], int menuSize, char *checked)
+void cgiMakeDropListFull(char *name, char *menu[], char *values[], 
+                         int menuSize, char *checked, char *extraAttribs)
 /* Make a drop-down list with names and values. */
 {
 int i;
 char *selString;
 if (checked == NULL) checked = menu[0];
-printf("<SELECT ALIGN=CENTER NAME=\"%s\">", name);
+
+if (NULL != extraAttribs)
+    {
+    printf("<SELECT ALIGN=CENTER NAME=\"%s\" %s>", name, extraAttribs);
+    }
+else
+    {
+    printf("<SELECT ALIGN=CENTER NAME=\"%s\">", name);
+    }
+
 for (i=0; i<menuSize; ++i)
     {
     if (!differentWord(menu[i], checked))
