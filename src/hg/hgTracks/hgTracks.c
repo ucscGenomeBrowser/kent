@@ -2019,12 +2019,13 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 hFreeConn(&conn);
 }
 
-void lfFromPslsInRange(struct trackGroup *tg, int start, int end, 
-	char *chromName, boolean isXeno, boolean nameGetsPos)
-/* Return linked features from range of table. */
+void connectedLfFromPslsInRange(struct sqlConnection *conn,
+    struct trackGroup *tg, int start, int end, char *chromName,
+    boolean isXeno, boolean nameGetsPos)
+/* Return linked features from range of table after have
+ * already connected to database.. */
 {
 char *track = tg->mapName;
-struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row;
 int rowOffset;
@@ -2044,8 +2045,17 @@ if (limitVisibility(tg, lfList) == tvFull)
 if (tg->extraUiData)
     filterMrna(tg, &lfList);
 sqlFreeResult(&sr);
-hFreeConn(&conn);
 tg->items = lfList;
+}
+
+void lfFromPslsInRange(struct trackGroup *tg, int start, int end, 
+	char *chromName, boolean isXeno, boolean nameGetsPos)
+/* Return linked features from range of table. */
+{
+struct sqlConnection *conn = hAllocConn();
+connectedLfFromPslsInRange(conn, tg, start, end, chromName, 
+	isXeno, nameGetsPos);
+hFreeConn(&conn);
 }
 
 #ifdef FUREY_CODE
@@ -6889,7 +6899,6 @@ void triangleMethods(struct trackGroup *tg)
 /* Register custom methods for regulatory triangle track. */
 {
 tg->drawItems = drawTriangle;
-// tg->itemName = nameTriangle;
 }
 
 void smallBreak()
@@ -7632,6 +7641,38 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     }
 }
 
+void rikenMrnaLoadItems(struct trackGroup *tg)
+/* Load riken mrna's  - have to get them from special secret database. */
+{
+struct sqlConnection *conn = sqlConnect("mgsc");
+connectedLfFromPslsInRange(conn, tg, winStart, winEnd, chromName, FALSE, FALSE);
+sqlDisconnect(&conn);
+}
+
+void rikenMethods(struct trackGroup *tg)
+/* Load up riken mRNA specific methods. */
+{
+tg->loadItems = rikenMrnaLoadItems;
+}
+
+void secretRikenTrack(struct trackGroup **pTrackList)
+/* If not on right host remove Riken track. */
+{
+if (!hIsMgscHost())
+    {
+    struct trackGroup *tg;
+    for (tg = *pTrackList; tg != NULL; tg = tg->next)
+        {
+	if (sameString(tg->mapName, "rikenMrna"))
+	     {
+	     slRemoveEl(pTrackList, tg);
+	     break;
+	     }
+	}
+    }
+}
+
+
 void ctLoadSimpleBed(struct trackGroup *tg)
 /* Load the items in one custom track - just move beds in
  * window... */
@@ -8029,17 +8070,23 @@ registerTrackHandler("ancientR", ancientRMethods );
 registerTrackHandler("altGraph", altGraphMethods );
 registerTrackHandler("altGraphX", altGraphXMethods );
 registerTrackHandler("triangle", triangleMethods );
+registerTrackHandler("transfacHit", triangleMethods );
 /* MGC related */
 registerTrackHandler("mgcNcbiPicks", estMethods);
 registerTrackHandler("mgcNcbiSplicedPicks", intronEstMethods);
 registerTrackHandler("mgcUcscPicks", intronEstMethods);
 registerTrackHandler("affyTranscriptome", affyTranscriptomeMethods);
+registerTrackHandler("rikenMrna", rikenMethods);
+
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
 loadFromTrackDb(&tGroupList);
+secretRikenTrack(&tGroupList);
 if (userSeqString != NULL) slSafeAddHead(&tGroupList, userPslTg());
 loadCustomTracks(&tGroupList);
+
+
 slSort(&tGroupList, tgCmpPriority);
 
 /* Get visibility values if any from ui. */

@@ -18,6 +18,9 @@ alpha: compile
 beta: compile
 	mv $A /usr/local/apache/cgi-bin-beta/$A
 
+mgsc: compile
+	mv $A /usr/local/apache/cgi-bin-mgsc/$A
+
 compile: $O 
 	gcc $O $(MYLIBS) $(L) 
 	mv a.out $A
