@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.42 2004/09/21 01:03:13 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.43 2004/09/21 01:33:33 kent Exp $";
 
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -282,7 +282,7 @@ static char *tracklessTypes[] =
      outSelectedFields};
 static char *tracklessLabels[] =
     {"all fields from primary table", 
-     "selected fields from related tables"};
+     "selected fields from primary and related tables"};
     
 static char *wigTypes[] = 
      {
@@ -389,6 +389,7 @@ if (isPositional)
 else
     {
     /* Need to put at least stubs of cgi variables in for JavaScript to work. */
+    jsTrackingVar("regionType", regionType);
     cgiMakeHiddenVar(hgtaRange, range);
     cgiMakeHiddenVar(hgtaRegionType, regionType);
     }
