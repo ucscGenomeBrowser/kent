@@ -107,7 +107,7 @@
 #include "pseudoGeneLink.h"
 #include "axtLib.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.425 2003/06/06 01:07:06 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.426 2003/06/06 13:02:41 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6090,7 +6090,7 @@ printf("<B>%s Gene:</B> %s %s in %s \n", hOrganism(pg->assembly), pg->gene, pg->
 linkToOtherBrowser(pg->assembly, pg->chrom, pg->gStart, pg->gEnd);
 printf("%s:%d-%d \n", pg->chrom, pg->gStart, pg->gEnd);
 printf("</A>");
-printf("<B>Score:</B> %d Gap Ration: %d Intron Ratio: %d<BR>\n", pg->score, pg->score2, pg->score3);
+printf("<B>Score:</B> %d Gap Ratio: %d Intron Ratio: %d<BR>\n", pg->score, pg->score2, pg->score3);
 printf("<B>Chain:</B> %d  <BR>\n",pg->chainId);
 printf("<p>");
 puts("<LI>\n");
