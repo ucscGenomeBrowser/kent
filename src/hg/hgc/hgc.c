@@ -147,7 +147,7 @@
 #include "pscreen.h"
 #include "transRegCode.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.756 2004/09/21 16:10:07 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.757 2004/09/21 16:15:19 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5372,7 +5372,6 @@ return motif;
 void motifHitSection(struct dnaSeq *seq, struct dnaMotif *motif)
 /* Print out section about motif. */
 {
-
 webNewSection("Motif:");
 printf("<PRE>");
 if (motif != NULL)
@@ -5437,6 +5436,7 @@ if (hit != NULL)
 	reverseComplement(seq->dna, seq->size);
     }
 motifHitSection(seq, motif);
+printTrackHtml(tdb);
 }
 
 void doTransRegCode(struct trackDb *tdb, char *item, char *motifTable)
@@ -5479,6 +5479,7 @@ if (trc != NULL)
     printPosOnChrom(trc->chrom, trc->chromStart, trc->chromEnd, strand, TRUE, trc->name);
     }
 motifHitSection(seq, motif);
+printTrackHtml(tdb);
 }
 
 
