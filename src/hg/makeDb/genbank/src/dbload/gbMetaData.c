@@ -30,7 +30,7 @@
 #include "sqlDeleter.h"
 #include "genbank.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.4 2003/06/28 04:02:21 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.5 2003/06/30 10:47:56 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -445,8 +445,10 @@ for (;;)
         raFaSize = gbParseUnsigned(raLf, val);
     else if (sameString(tag, "prt"))
         {
+        /* version is optional */
         safef(raProtAcc, sizeof(raProtAcc), "%s", val);
-        raProtVersion = gbSplitAccVer(val, NULL);
+        if (strchr(val, '.') != NULL)
+            raProtVersion = gbSplitAccVer(val, NULL);
         }
     else if (sameString(tag, "prs"))
         raProtSize = gbParseUnsigned(raLf, val);
