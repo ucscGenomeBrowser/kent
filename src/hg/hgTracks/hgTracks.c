@@ -76,7 +76,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.561 2003/07/16 22:24:21 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.562 2003/07/18 22:57:31 weber Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -151,7 +151,6 @@ boolean hideControls = FALSE;		/* Hide all controls? */
 struct hgPositions *hgp = NULL;
 
 struct hash *zooSpeciesHash = NULL;
-
 struct trackLayout tl;
 
 boolean suppressHtml = FALSE;	
@@ -1648,6 +1647,10 @@ heightPer = tg->heightPer+1;
 hFactor = (double)heightPer*tg->scaleRange;
 
 //errAbort( "min=%g, max=%g\n", minRangeCutoff, maxRangeCutoff );
+
+
+if( sameString( tg->mapName, "zoo" ) || sameString( tg->mapName, "zooNew" ) )
+    binCount = binCount - 100;    //save some space at top, between each zoo species
 
 minRange = whichSampleBin( minRangeCutoff, tg->minRange, tg->maxRange, binCount );
 maxRange = whichSampleBin( maxRangeCutoff, tg->minRange, tg->maxRange, binCount );
@@ -6999,41 +7002,102 @@ zooSpeciesHash = hashNew(6);
 name = cloneString("Human");
 val = cloneString("1");
 hashAdd(zooSpeciesHash, name, val);
+cartSetBoolean( cart, "zooSpecies.Human", TRUE );
+
 name = cloneString("Chimpanzee");
 val = cloneString("2");
 hashAdd(zooSpeciesHash, name, val);
+
 name = cloneString("Baboon");
 val = cloneString("3");
 hashAdd(zooSpeciesHash, name, val);
-name = cloneString("Cat");
+
+name = cloneString("Orangutan");
 val = cloneString("4");
 hashAdd(zooSpeciesHash, name, val);
-name = cloneString("Dog");
+
+name = cloneString("Macaque");
 val = cloneString("5");
 hashAdd(zooSpeciesHash, name, val);
-name = cloneString("Cow");
+
+name = cloneString("Vervet");
 val = cloneString("6");
 hashAdd(zooSpeciesHash, name, val);
-name = cloneString("Pig");
+
+name = cloneString("Lemur");
 val = cloneString("7");
 hashAdd(zooSpeciesHash, name, val);
-name = cloneString("Rat");
+
+name = cloneString("Cat");
 val = cloneString("8");
 hashAdd(zooSpeciesHash, name, val);
-name = cloneString("Mouse");
+
+name = cloneString("Dog");
 val = cloneString("9");
 hashAdd(zooSpeciesHash, name, val);
-name = cloneString("Chicken");
+
+name = cloneString("Cow");
 val = cloneString("10");
 hashAdd(zooSpeciesHash, name, val);
-name = cloneString("Fugu");
+
+name = cloneString("Pig");
 val = cloneString("11");
 hashAdd(zooSpeciesHash, name, val);
-name = cloneString("Tetraodon");
+
+name = cloneString("Horse");
 val = cloneString("12");
 hashAdd(zooSpeciesHash, name, val);
-name = cloneString("Zebrafish");
+
+name = cloneString("Rabbit");
 val = cloneString("13");
+hashAdd(zooSpeciesHash, name, val);
+
+name = cloneString("Hedgehog");
+val = cloneString("14");
+hashAdd(zooSpeciesHash, name, val);
+
+name = cloneString("ajBat");
+val = cloneString("15");
+hashAdd(zooSpeciesHash, name, val);
+
+name = cloneString("cpBat");
+val = cloneString("16");
+hashAdd(zooSpeciesHash, name, val);
+
+name = cloneString("Rat");
+val = cloneString("17");
+hashAdd(zooSpeciesHash, name, val);
+
+name = cloneString("Mouse");
+val = cloneString("18");
+hashAdd(zooSpeciesHash, name, val);
+
+name = cloneString("Platypus");
+val = cloneString("19");
+hashAdd(zooSpeciesHash, name, val);
+
+name = cloneString("Opossum");
+val = cloneString("20");
+hashAdd(zooSpeciesHash, name, val);
+
+name = cloneString("Dunnart");
+val = cloneString("21");
+hashAdd(zooSpeciesHash, name, val);
+
+name = cloneString("Chicken");
+val = cloneString("22");
+hashAdd(zooSpeciesHash, name, val);
+
+name = cloneString("Fugu");
+val = cloneString("23");
+hashAdd(zooSpeciesHash, name, val);
+
+name = cloneString("Tetraodon");
+val = cloneString("24");
+hashAdd(zooSpeciesHash, name, val);
+
+name = cloneString("Zebrafish");
+val = cloneString("25");
 hashAdd(zooSpeciesHash, name, val);
 }
 
@@ -9233,6 +9297,7 @@ struct linkedFeatures *lfList = NULL, *lf;
 char *hasDense = NULL;
 char *where = NULL;
 char query[256];
+char option[64];
 
 /*see if we have a summary table*/
 snprintf(query, sizeof(query), "select name from %s where name = '%s' limit 1", tg->mapName, tg->shortLabel);
@@ -9254,6 +9319,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     sample = sampleLoad(row + rowOffset);
     lf = lfFromSample(sample);
+    snprintf( option, sizeof(option), "zooSpecies.%s", sample->name );
+    if( cartUsualBoolean(cart, option, TRUE ))
     slAddHead(&lfList, lf);
     sampleFree(&sample);
     }
@@ -9275,6 +9342,7 @@ if( hasDense != NULL )
 
 /* Sort in species phylogenetic order */
 slSort(&lfList, lfZooCmp);
+
 
 tg->items = lfList;
 
@@ -10105,6 +10173,7 @@ registerTrackHandler("regpotent", humMusLMethods);
 registerTrackHandler("mm3Rn2L", humMusLMethods);
 registerTrackHandler("hg15Mm3L", humMusLMethods);
 registerTrackHandler("zoo", zooMethods);
+registerTrackHandler("zooNew", zooMethods); 
 registerTrackHandler("musHumL", humMusLMethods);
 registerTrackHandler("mm3Hg15L", humMusLMethods);
 registerTrackHandler("affyTranscriptome", affyTranscriptomeMethods);
@@ -10670,6 +10739,7 @@ cart = theCart;
  * is more than 4k */
 /*state = cgiUrlString();
  printf("State: %s\n", state->string);   */
+zooSpeciesHashInit();
 getDbAndGenome(cart, &database, &organism);
 hSetDb(database);
 protDbName = hPdbFromGdb(database);
@@ -10729,7 +10799,6 @@ cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
 if (cgiVarExists("hgt.reset"))
     resetVars();
-zooSpeciesHashInit();
 cartHtmlShell("UCSC Genome Browser v28", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }
