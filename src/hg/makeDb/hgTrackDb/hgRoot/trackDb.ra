@@ -262,13 +262,13 @@ visibility dense
 color 0,100,0
 type bed 5 +
 
-track genscan
-shortLabel Genscan Genes
-longLabel Genscan Gene Predictions
-priority 17.5
-visibility dense
-color 170,100,0
-type genePred genscanPep
+track geneid
+shortLabel Geneid Genes
+longLabel Geneid Gene Predictions
+priority 17.1
+visibility hide
+color 0,90,100
+type genePred geneidPep
 
 track genscanExtra
 shortLabel Genscan Extra
@@ -400,6 +400,16 @@ visibility hide
 spectrum on
 type psl xeno
 url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
+
+track blatHuman
+shortLabel Human Blat
+longLabel Human Translated Blat Alignments
+priority 23.9
+visibility dense
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
 
 track blatMus
 shortLabel Mouse Blat
