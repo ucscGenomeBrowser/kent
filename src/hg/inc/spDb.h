@@ -18,6 +18,7 @@
 #include "jksql.h"
 #endif
 
+#define PROTEOME_DB_NAME "proteome"
 
 typedef char SpAcc[9];	/* Enough space for accession and 0 terminator. */
 
@@ -210,5 +211,14 @@ char *spRefPubMed(struct sqlConnection *conn, int refId);
 
 struct slName *spRefToAccs(struct sqlConnection *conn, int refId);
 /* Get list of accessions associated with reference. */
+
+char *oldSpDisplayId(char *newSpDisplayId);
+/* Convert from new Swiss-Prot display ID to old display ID */
+
+char *newSpDisplayId(char *oldSpDisplayId);
+/* Convert from old Swiss-Prot display ID to new display ID */
+
+char *uniProtFindPrimAcc(char *id);
+/* Return primary accession given an alias. */
 
 #endif /* SPDB_H */
