@@ -18,7 +18,7 @@ baseName = (baseName == NULL) ? fileName : baseName+1;
 return strchr(baseName, ':');
 }
 
-static void parseSubrange(char *subrange, char *name, int *start,int *end)
+static void parseSubrange(char *subrange, char *name, int *start, int *end)
 /* parse the subrange specification */
 {
 char *rangePart = strchr(subrange+1, ':');
@@ -41,26 +41,27 @@ if ((sscanf(rangePart, "%u-%u", start, end) != 2) || (*start > *end))
              subrange);
 }
 
-static void parseNibName(unsigned options, char *fileName, char *filePath,
-                         char *name, unsigned *start,unsigned *end)
-/* parse the nib name, getting the file name, seq name to use, and
+static void parseNibName(unsigned options, char *fileSpec, char *filePath,
+                         char *name, unsigned *start, unsigned *end)
+/* Parse the nib name, getting the file name, seq name to use, and
  * optionally the start and end positions. Zero is return for start
- * and end if they are not specified. */
+ * and end if they are not specified. Return the path to the file
+S * and the name to use for the sequence. */
 {
-char *subrange = findNibSubrange(fileName);
+char *subrange = findNibSubrange(fileSpec);
 if (subrange != NULL)
     {
     *subrange = '\0';
     parseSubrange(subrange, name, start, end);
-    strcpy(filePath, fileName);
+    strcpy(filePath, fileSpec);
     *subrange = ':';
     if (strlen(name) == 0)
         {
-        /* no name in spec */
+        /* no name in spec, generate one */
         if (options & NIB_BASE_NAME)
-            splitPath(fileName, NULL, name, NULL);
+            splitPath(filePath, NULL, name, NULL);
         else
-            strcpy(name, fileName);
+            strcpy(name, filePath);
         sprintf(name+strlen(name), ":%u-%u", *start, *end);
         }
     }
@@ -68,11 +69,11 @@ else
     {
     *start = 0;
     *end = 0;
-    strcpy(filePath, fileName);
+    strcpy(filePath, fileSpec);
     if (options & NIB_BASE_NAME)
-        splitPath(fileName, NULL, name, NULL);
+        splitPath(fileSpec, NULL, name, NULL);
     else
-        strcpy(name, fileName);
+        strcpy(name, fileSpec);
     }
 }
 
