@@ -4860,7 +4860,7 @@ if (url != NULL && url[0] != 0)
     if (hTableExists("superfamily"))
 	{
     	sprintf(cond_str, "transcript_name='%s'", itemName);    
-    	proteinID = sqlGetField(conn, protDbName, "ensemblXref", "translation_name", cond_str);
+    	proteinID = sqlGetField(conn, database, "ensemblXref", "translation_name", cond_str);
    
         printf("<B>Ensembl Protein: </B>");
         printf("<A HREF=\"http://www.ensembl.org/%s/protview?peptide=%s\" target=_blank>", 
