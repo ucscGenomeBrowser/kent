@@ -33,7 +33,7 @@
 #include "botDelay.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.121 2004/03/24 16:23:56 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.122 2004/03/24 16:55:22 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -4372,7 +4372,7 @@ printf("<TR>\n");
 }
 
 static void wigDoStats(char *database, char *table, struct slName *chromList,
-    int winStart, int winEnd, int tableId)
+    int winStart, int winEnd, int tableId, char *constraints)
 {
 int spanCount = 0;
 struct wiggleData *wigData;
@@ -4439,10 +4439,10 @@ for (chromPtr=chromList;  chromPtr != NULL; chromPtr=chromPtr->next)
 
     if (numChroms > 1)
 	wigData = wigFetchData(database, tbl, chrom, winStart, winEnd, TRUE,
-		tableId, wiggleCompare[tableId]);
+		tableId, wiggleCompare[tableId], constraints);
     else
 	wigData = wigFetchData(database, tbl, chrom, winStart, winEnd, FALSE,
-		tableId, wiggleCompare[tableId]);
+		tableId, wiggleCompare[tableId], constraints);
 
     if (wigData)
 	{
@@ -4677,7 +4677,8 @@ if (typeWiggle)
 	    printf("<P> data value constraint: %s %g\n",
 		wigConstraint[0], wigDataConstraint[0][0]);
 	}
-    wigDoStats(database, table, chromList, winStart, winEnd, WIG_TABLE_1);
+    wigDoStats(database, table, chromList, winStart, winEnd, WIG_TABLE_1,
+	constraints);
     wiggleDone = TRUE;
     }
 
@@ -4693,7 +4694,8 @@ if (typeWiggle2)
 	    printf("<P> data value constraint: %s %g\n",
 		wigConstraint[1], wigDataConstraint[1][0]);
 	}
-    wigDoStats(db2, table2, chromList, winStart, winEnd, WIG_TABLE_2);
+    wigDoStats(db2, table2, chromList, winStart, winEnd, WIG_TABLE_2,
+	constraints2);
     }
 
 
@@ -5067,7 +5069,7 @@ webStartText();
  *	browser with a massive amount of output
 if (! allGenome)
     wigData = wigFetchData(database, table, chrom, winStart, winEnd, FALSE,
-	WIG_TABLE_1, wiggleCompare[WIG_TABLE_1]);
+	WIG_TABLE_1, wiggleCompare[WIG_TABLE_1], (char *)NULL);
 */
 
 if (wigData)
