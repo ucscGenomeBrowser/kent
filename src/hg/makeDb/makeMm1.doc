@@ -224,8 +224,8 @@ o - Add Jackson labs info
 
 SIMPLE REPEAT TRACK (todo)
 
-o - Create cluster jabba job like so:
-        ssh kkstore
+o - Create cluster parasol job like so:
+        ssh kk
 	cd ~/mm/bed
 	mkdir simpleRepeat
 	cd simpleRepeat
@@ -234,13 +234,11 @@ o - Create cluster jabba job like so:
 	echo single > single.lst
         echo /scratch/hg/gs.11/build28/contigs | wordLine stdin > genome.lst
 	gensub2 genome.lst single.lst gsub spec
-	jabba make hut spec
-        jabba push hut
-     Do jabba push huts until it is done.   This one is getting
-     erratic errors, requiring multiple runs on some jobs currently.
-     I'm not sure if the problem lies in the cluster, in trfBig, or trf.
-     Jorge suggested it might have been because some of the local
-     disks were full.
+	para make spec
+        para push 
+     This job had some problems this time combined with the
+     cluster going bizarre.  We ended up running it serially
+     which only takes about 8 hours anyway.
         liftUp simpleRepeat.bed ~/mm/jkStuff/liftAll.lft warn trf/*.bed
 
 o - Load this into the database as so
@@ -308,14 +306,15 @@ Make sure that the NT*.fa files are lower-case repeat masked, and that
 the simpleRepeat track is made.  Then put doubly (simple & interspersed)
 repeat mask files onto /cluster local drive as so.
     ssh kkstore
-    tcsh
-    mkdir /scratch/hg/gs.11/build28/trfFa
+    mkdir /scratch/hg/mm1/trfFa
     cd ~/mm
-    foreach i (? ??)
+    foreach i (? ?? NA_*)
 	cd $i
-        foreach j (NT*)
-	    maskOutFa $j/$j.fa ../bed/simpleRepeat/trf/$j.bed -softAdd /scratch/hg/gs.11/build28/trfFa/$j.fa.trf
-	echo done $i/$j
+        foreach j (chr${i}_*)
+	    if (-d $j) then
+		maskOutFa $j/$j.fa ../bed/simpleRepeat/trf/$j.bed -softAdd /scratch/hg/mm1/trfFa/$j.fa.trf
+		echo done $i/$j
+	    endif
 	end
 	cd ..
     end
