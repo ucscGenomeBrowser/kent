@@ -543,3 +543,29 @@ ln /cluster/data/hg17/bed/liftOver/hg17.rheMac0.over.chain /gbdb/hg17/liftOver/h
 #      (fromDb, toDb, path, minMatch, minSizeT, minSizeQ, multiple, minBlocks, fudgeThick) values ("rheMac0", "hg17", "/gbdb/rheMac0/liftOver/rheMac0.hg17.over.chain", 0.95, 0, 0, "Y", 1, "N");
 # insert into liftOverChain 
 #      (fromDb, toDb, path, minMatch, minSizeT, minSizeQ, multiple, minBlocks, fudgeThick) values ("hg17", "rheMac0", "/gbdb/hg17/liftOver/hg17ToRheMac0.over.chain", 0.95, 0, 0, "Y", 1, "N");
+
+
+# GC5BASE (DONE - 2005-04-01 - Galt)
+    ssh hgwdev
+    mkdir -p /cluster/data/rheMac0/bed/gc5Base
+    cd /cluster/data/rheMac0/bed/gc5Base
+    hgGcPercent -wigOut -doGaps -file=stdout -win=5 rheMac0 \
+        /cluster/data/rheMac0 | wigEncode stdin gc5Base.wig gc5Base.wib
+    #       Calculating gcPercent with window size 5
+    #       Using twoBit: /cluster/data/rheMac0/rheMac0.2bit
+    #       File stdout created
+    #   Converted stdin, upper limit 100.00, lower limit 0.00
+                                                                                                            
+    #   runs for about 1 hour
+                                                                                                            
+    mkdir /gbdb/rheMac0/wib
+    ln -s `pwd`/gc5Base.wib /gbdb/rheMac0/wib
+    hgLoadWiggle -pathPrefix=/gbdb/rheMac0/wib rheMac0 gc5Base gc5Base.wig
+                                                                                                            
+    #   analyze table to update the Cardinality column, so it's not NULL:
+    #   (Hiram is going to add this to hgLoadWiggle so it is done automatically)
+    hgsql rheMac0 -e "analyze table gc5Base;"
+    #   verify index is correct:
+    #   should see good numbers in Cardinality column, not NULL:
+    hgsql rheMac0 -e "show index from gc5Base;"
+
