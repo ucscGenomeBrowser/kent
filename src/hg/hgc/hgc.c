@@ -3084,6 +3084,14 @@ if (hTableExists("jaxOrtholog"))
 	}
     sqlFreeResult(&sr);
     }
+if (startsWith("hg", hGetDb()))
+    {
+    printf("\n");
+    printf("<B>AceView:</B> ");
+    printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/AceView/av.cgi?db=human&l=%s\" TARGET=_blank>",
+	   rl->name);
+    printf("%s</A><BR>\n", rl->name);
+    }
 htmlHorizontalLine();
 
 geneShowPosAndLinks(rl->mrnaAcc, rl->protAcc, tdb, "refPep", "htcTranslatedProtein",
