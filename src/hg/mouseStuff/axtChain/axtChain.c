@@ -13,7 +13,7 @@
 #include "chainBlock.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: axtChain.c,v 1.19 2003/11/24 05:20:24 kate Exp $";
+static char const rcsid[] = "$Id: axtChain.c,v 1.20 2003/11/24 07:15:39 baertsch Exp $";
 
 int minScore = 1000;
 char *detailsName = NULL;
@@ -180,12 +180,6 @@ if (sameString(newName, *pName))
 else
     {
     char fileName[512];
-    /*
-       Memory problem here -- SEGV 
-       What's the memory policy ?
-    if (pSeq != NULL)
-        freeDnaSeq(pSeq);
-        */
     *pName = newName;
     *pSeq = seq = hashFindVal(faHash, newName);
     *pStrand = strand;
@@ -855,12 +849,10 @@ else
 if (optionExists("faQ"))
     {
     faF = mustOpen(qNibDir, "r");
-    AllocVar(seq);
     while ( faReadMixedNext(faF, TRUE, NULL, TRUE, NULL, &seq))
         {
         hashAdd(faHash, seq->name, seq);
         slAddHead(&seqList, seq);
-        AllocVar(seq);
         }
     fclose(faF);
     }
