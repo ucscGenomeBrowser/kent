@@ -9,9 +9,10 @@
 
 #include "common.h"
 #include "hash.h"
+#include "log.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: options.c,v 1.15 2004/02/13 09:33:32 kent Exp $";
+static char const rcsid[] = "$Id: options.c,v 1.16 2004/02/15 01:10:12 kent Exp $";
 
 #ifdef MACHTYPE_alpha
     #define strtoll strtol
@@ -20,16 +21,33 @@ static char const rcsid[] = "$Id: options.c,v 1.15 2004/02/13 09:33:32 kent Exp 
 /* mask for type in optionSpec.flags */
 #define OPTION_TYPE_MASK (OPTION_BOOLEAN|OPTION_STRING|OPTION_INT|OPTION_FLOAT|OPTION_LONG_LONG)
 
+static struct optionSpec commonOptions[] = {
+   {"verbose", OPTION_INT},
+   {"logFile", OPTION_STRING},
+   {NULL, 0},
+};
+
+static struct optionSpec *matchingOption(char *name, struct optionSpec *optionSpecs)
+/* Go through spec table and return spec that matches name, or NULL
+ * if none. */
+{
+while (optionSpecs->name != NULL)
+    {
+    if (sameString(optionSpecs->name, name))
+        return optionSpecs;
+    optionSpecs += 1;
+    }
+return NULL;
+}
+
 static void validateOption(char *name, char *val, struct optionSpec *optionSpecs)
 /* validate an option against a list of values */
 {
-struct optionSpec *optionSpec = optionSpecs;
 char *valEnd;
-
-while ((optionSpec->name != NULL) && !sameString(optionSpec->name, name))
-    optionSpec++;
-
-if (optionSpec->name == NULL)
+struct optionSpec *optionSpec = matchingOption(name, optionSpecs);
+if (optionSpec == NULL)
+    optionSpec = matchingOption(name, commonOptions);
+if (optionSpec == NULL)
     errAbort("-%s is not a valid option", name);
 
 switch (optionSpec->flags & OPTION_TYPE_MASK) {
@@ -164,12 +182,26 @@ return parseOptions(pArgc, argv, justFirst, NULL);
 
 static struct hash *options = NULL;
 
+static void setOptions(struct hash *hash)
+/* Set global options hash to hash, and also do processing
+ * of log file and other common options. */
+{
+options = hash;
+if (optionExists("verbose"))
+    logSetVerbosity(optionInt("verbose", 0));
+if (optionExists("logFile"))
+    logToFile(optionVal("logFile", NULL));
+}
+
 void optionHashSome(int *pArgc, char *argv[], boolean justFirst)
 /* Set up option hash from command line, optionally only adding
  * up to first non-optional word. */
 {
 if (options == NULL)
-    options = parseOptions(pArgc, argv, justFirst, NULL);
+    {
+    struct hash *hash = parseOptions(pArgc, argv, justFirst, NULL);
+    setOptions(hash);
+    }
 }
 
 void optionHash(int *pArgc, char *argv[])
@@ -203,7 +235,10 @@ void optionInit(int *pArgc, char *argv[], struct optionSpec *optionSpecs)
  */
 {
 if (options == NULL)
-    options = parseOptions(pArgc, argv, FALSE, optionSpecs);
+    {
+    struct hash *hash = parseOptions(pArgc, argv, FALSE, optionSpecs);
+    setOptions(hash);
+    }
 }
 
 static char *optGet(char *name)

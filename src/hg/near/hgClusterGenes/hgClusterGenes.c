@@ -11,7 +11,7 @@
 #include "binRange.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: hgClusterGenes.c,v 1.8 2003/10/14 07:02:45 kent Exp $";
+static char const rcsid[] = "$Id: hgClusterGenes.c,v 1.9 2004/02/15 01:10:13 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -50,18 +50,18 @@ struct cluster
     int start,end;		/* Range covered by cluster. */
     };
 
-void clusterDump(struct cluster *cluster)
-/* Dump contents of cluster to stdout. */
+void clusterDump(int verbosity, struct cluster *cluster)
+/* Dump contents of cluster to log. */
 {
 struct hashEl *helList = hashElListHash(cluster->geneHash);
 struct hashEl *hel;
-printf("%d-%d", cluster->start, cluster->end);
+logPrintf(verbosity, "%d-%d", cluster->start, cluster->end);
 for (hel = helList; hel != NULL; hel = hel->next)
     {
     struct genePred *gp = hel->val;
-    printf(" %s", gp->name);
+    logPrintf(verbosity, " %s", gp->name);
     }
-printf("\n");
+logPrintf(verbosity, "\n");
 }
 
 struct cluster *clusterNew()
@@ -141,13 +141,10 @@ struct cluster *bCluster = bNode->val;
 struct binElement *bkEl;
 struct hashEl *hEl, *hList;
 
-if (verbose >= 3) 
-    {
-    printf(" a: ");
-    clusterDump(aCluster);
-    printf(" b: ");
-    clusterDump(bCluster);
-    }
+logPrintf(3, " a: ");
+clusterDump(3, aCluster);
+logPrintf(3, " b: ");
+clusterDump(3, bCluster);
 
 /* First change references to bNode. */
 binKeeperReplaceVal(bk, bCluster->start, bCluster->end, bNode, aNode);
@@ -169,11 +166,8 @@ if (aCluster->end < bCluster->end)
 /* Remove all traces of bNode. */
 dlRemove(bNode);
 clusterFree(&bCluster);
-if (verbose >= 3) 
-    {
-    printf(" ab: ");
-    clusterDump(aCluster);
-    }
+logPrintf(3, " ab: ");
+clusterDump(3, aCluster);
 }
 
 int totalGeneCount = 0;
@@ -200,15 +194,13 @@ for (gp = geneList; gp != NULL; gp = gp->next)
     {
     int exonIx;
     struct dlNode *oldNode = NULL;
-    if (verbose >= 2)
-	printf("%s %d-%d\n", gp->name, gp->txStart, gp->txEnd);
+    logPrintf(2, "%s %d-%d\n", gp->name, gp->txStart, gp->txEnd);
     for (exonIx = 0; exonIx < gp->exonCount; ++exonIx)
         {
 	int exonStart = gp->exonStarts[exonIx];
 	int exonEnd = gp->exonEnds[exonIx];
 	struct binElement *bEl, *bList = binKeeperFind(bk, exonStart, exonEnd);
-	if (verbose >= 4)
-	    printf("  %d %d\n", exonIx, exonStart);
+	logPrintf(4, "  %d %d\n", exonIx, exonStart);
 	if (bList == NULL)
 	    {
 	    if (oldNode == NULL)
@@ -233,8 +225,7 @@ for (gp = geneList; gp != NULL; gp = gp->next)
 		    else
 			{
 			/* Merge new cluster into old one. */
-			if (verbose >= 3)
-			    printf("Merging %p %p\n", oldNode, newNode);
+			logPrintf(3, "Merging %p %p\n", oldNode, newNode);
 			mergeClusters(bk, bEl->next, oldNode, newNode);
 			}
 		    }
@@ -316,8 +307,7 @@ struct cluster *clusterList = NULL, *cluster;
 int nameLen;
 struct hash *protHash = NULL;
 
-if (verbose >= 1)
-    printf("%s %c\n", chrom, strand);
+logPrintf(1, "%s %c\n", chrom, strand);
 safef(extraWhere, sizeof(extraWhere), "strand = '%c'", strand);
 sr = hChromQuery(conn, geneTable, chrom, extraWhere, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -406,10 +396,10 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     }
 createClusterTable(conn, clusterTable, longestName);
 createCannonicalTable(conn, cannonicalTable, longestName);
-if (verbose >= 1) printf("Loading database\n");
+logPrintf(1, "Loading database\n");
 hgLoadTabFile(conn, ".", clusterTable, &clusterFile);
 hgLoadTabFile(conn, ".", cannonicalTable, &canFile);
-printf("Got %d clusters, from %d genes in %d chromosomes\n",
+logPrintf(1, "Got %d clusters, from %d genes in %d chromosomes\n",
 	totalClusterCount, totalGeneCount, slCount(chromList));
 }
 
@@ -417,7 +407,6 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-verbose = optionInt("verbose", verbose);
 noProt = optionExists("noProt");
 sangerLinks = optionExists("sangerLinks");
 if (argc != 5)

@@ -11,7 +11,7 @@ O = aliType.o axt.o bits.o binRange.o \
     gifcomp.o gifdecomp.o gifLabel.o gifread.o gifwrite.o hash.o \
     hmmstats.o htmshell.o hugefnt.o internet.o intExp.o jointalign.o\
     keys.o kxTok.o largefnt.o linefile.o localmem.o \
-    maf.o mafFromAxt.o mafScore.o md5.o medfnt.o \
+    log.o maf.o mafFromAxt.o mafScore.o md5.o medfnt.o \
     memalloc.o memgfx.o net.o nib.o \
     nt4.o obscure.o oldGff.o options.o osunix.o \
     portimpl.o pscmGfx.o psGfx.o psl.o pthreadWrap.o ra.o rbTree.o \
