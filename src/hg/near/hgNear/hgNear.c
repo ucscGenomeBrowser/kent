@@ -13,7 +13,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.21 2003/06/25 02:47:31 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.22 2003/06/25 02:56:45 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, defaultConfName,
         resetConfName, idVarName, idPosVarName, NULL }; 
@@ -430,7 +430,8 @@ dyStringPrintf(query,
 dyStringPrintf(query, " order by distance limit %d", displayCount);
 list = neighborhoodList(conn, query->string, displayCount);
 dyStringFree(&query);
-warn("There is no expression data associated with %s.", curGeneId->name);
+if (list == NULL)
+    warn("There is no expression data associated with %s.", curGeneId->name);
 return list;
 }
 
