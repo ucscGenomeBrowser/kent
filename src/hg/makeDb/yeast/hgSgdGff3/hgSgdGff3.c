@@ -5,7 +5,7 @@
 #include "options.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: hgSgdGff3.c,v 1.3 2003/12/01 20:20:16 kent Exp $";
+static char const rcsid[] = "$Id: hgSgdGff3.c,v 1.4 2003/12/01 20:32:55 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -50,6 +50,7 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct tenFields *tfList = NULL, *tf;
 char *words[11];
 int wordCount, i;
+char *s;
 
 while ((wordCount = lineFileChopNextTab(lf, words, ArraySize(words))) != 0)
     {
@@ -58,7 +59,11 @@ while ((wordCount = lineFileChopNextTab(lf, words, ArraySize(words))) != 0)
 		wordCount, lf->lineIx, lf->fileName);
     AllocVar(tf);
     for (i=0; i<10; ++i)
-         tf->fields[i] = cloneString(words[i]);
+	{
+	char *s = words[i];
+	cgiDecode(s, s, strlen(s));
+	tf->fields[i] = cloneString(s);
+	}
     tf->lineIx = lf->lineIx;
     slAddHead(&tfList, tf);
     }
