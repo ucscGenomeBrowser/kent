@@ -64,8 +64,16 @@ char table[128];
 char *pslName;
 struct sqlConnection *conn = sqlConnect(database);
 struct dyString *ds = newDyString(2048);
-char *extraIx = (tNameIx ? "tName(12)," : "" );
+char *extraIx = (tNameIx ? "tName(8)," : "" );
+char *binIxString = "";
 
+if (!noBin)
+    {
+    if (tNameIx)
+	binIxString = "INDEX(tName(8),bin),\n";
+    else
+        binIxString = "INDEX(bin),\n";
+    }
 for (i = 0; i<pslCount; ++i)
     {
     pslName = pslNames[i];
@@ -83,7 +91,7 @@ for (i = 0; i<pslCount; ++i)
     dyStringClear(ds);
     dyStringPrintf(ds, createString, table, 
         (noBin ? "" : "bin smallint unsigned not null,\n"),
-        (noBin ? "" : "INDEX(bin),\n"),
+	binIxString,
     	extraIx, extraIx);
     sqlUpdate(conn, ds->string);
     dyStringClear(ds);
@@ -101,6 +109,7 @@ for (i = 0; i<pslCount; ++i)
 	struct lineFile *lf = pslFileOpen(pslName);
 	while ((psl = pslNext(lf)) != NULL)
 	    {
+	    uglyf("%s line %d\n", lf->fileName, lf->lineIx);
 	    fprintf(f, "%u\t", hFindBin(psl->tStart, psl->tEnd));
 	    pslTabOut(psl, f);
 	    pslFree(&psl);
