@@ -9,6 +9,7 @@
 #include "localmem.h"
 #include "agpGap.h"
 #include "simpleRepeat.h"
+#include "chainNet.h"
 
 char *tNewR = NULL;
 char *qNewR = NULL;
@@ -25,255 +26,6 @@ errAbort(
   "                lines describing lineage specific repeats in target\n"
   "   -qNewR=dir - Dir of chrN.out.spec files for query\n"
   );
-}
-
-struct chainNet
-/* A net on one chromosome. */
-    {
-    struct chainNet *next;
-    char *name;			/* Chromosome name. */
-    int size;			/* Chromosome size. */
-    struct cnFill *fillList;	/* Top level fills. */
-    struct hash *nameHash; 	/* Hash of all fill->qName names. */
-    };
-
-struct cnFill
-/* Filling sequence or a gap. */
-    {
-	/* Required fields */
-    struct cnFill *next;	   /* Next in list. */
-    int tStart, tSize;	   /* Range in target chromosome. */
-    char *qName;	   /* Other chromosome (not allocated here) */
-    char qStrand;	   /* Orientation + or - in other chrom. */
-    int qStart,	qSize;	   /* Range in query chromosome. */
-    struct cnFill *children; /* List of child gaps. */
-	/* Optional fields. */
-    int chainId;	   /* Chain id.  0 for a gap. */
-    double score;  /* Score of associated chain. */
-    int tN;	   /* Count of N's in target chromosome or -1 */
-    int qN;	   /* Count of N's in query chromosome or -1 */
-    int tR;	   /* Count of repeats in target chromosome or -1 */
-    int qR;	   /* Count of repeats in query chromosome or -1 */
-    int tNewR;	   /* Count of new (lineage specific) repeats in target */
-    int qNewR;	   /* Count of new (lineage specific) repeats in query */
-    int tOldR;	   /* Count of ancient repeats (pre-split) in target */
-    int qOldR;	   /* Count of ancient repeats (pre-split) in query */
-    int qTrf;	   /* Count of simple repeats, period 12 or less. */
-    int tTrf;	   /* Count of simple repeats, period 12 or less. */
-    };
-
-struct cnFill *cnFillNew()
-/* Return fill structure with some basic stuff filled in */
-{
-struct cnFill *fill;
-AllocVar(fill);
-fill->tN = fill->qN = fill->tR = fill->qR = 
-	fill->tNewR = fill->qNewR = fill->tOldR = fill->tNewR = 
-	fill->qTrf = fill->tTrf = -1;
-return fill;
-}
-
-void cnFillFreeList(struct cnFill **pList);
-
-void cnFillFree(struct cnFill **pFill)
-/* Free up a fill structure and all of it's children. */
-{
-struct cnFill *fill = *pFill;
-if (fill != NULL)
-    {
-    if (fill->children != NULL)
-        cnFillFreeList(&fill->children);
-    freez(pFill);
-    }
-}
-
-void cnFillFreeList(struct cnFill **pList)
-/* Free up a list of fills. */
-{
-struct cnFill *el, *next;
-
-for (el = *pList; el != NULL; el = next)
-    {
-    next = el->next;
-    cnFillFree(&el);
-    }
-*pList = NULL;
-}
-
-void chromNetFree(struct chainNet **pNet)
-/* Free up a chromosome net. */
-{
-struct chainNet *net = *pNet;
-if (net != NULL)
-    {
-    freeMem(net->name);
-    cnFillFreeList(&net->fillList);
-    hashFree(&net->nameHash);
-    freez(pNet);
-    }
-}
-
-void chromNetFreeList(struct chainNet **pList)
-/* Free up a list of chainNet. */
-{
-struct chainNet *el, *next;
-
-for (el = *pList; el != NULL; el = next)
-    {
-    next = el->next;
-    chromNetFree(&el);
-    }
-*pList = NULL;
-}
-
-
-struct cnFill *cnFillRead(struct chainNet *net, struct lineFile *lf)
-/* Recursively read in file. */
-{
-static char *words[64];
-int i, wordCount;
-char *line;
-int d, depth = 0;
-struct cnFill *fillList = NULL;
-struct cnFill *fill = NULL;
-enum {basicFields = 7};
-
-for (;;)
-    {
-    if (!lineFileNextReal(lf, &line))
-	break;
-    d = countLeadingChars(line, ' ');
-    if (fill == NULL)
-        depth = d;
-    if (d < depth)
-	{
-	lineFileReuse(lf);
-	break;
-	}
-    if (d > depth)
-        {
-	lineFileReuse(lf);
-	fill->children = cnFillRead(net, lf);
-	}
-    else
-        {
-	wordCount = chopLine(line, words);
-	lineFileExpectAtLeast(lf, basicFields, wordCount);
-	fill = cnFillNew();
-	slAddHead(&fillList, fill);
-	fill->tStart = lineFileNeedNum(lf, words, 1);
-	fill->tSize = lineFileNeedNum(lf, words, 2);
-	fill->qName = hashStoreName(net->nameHash, words[3]);
-	fill->qStrand = words[4][0];
-	fill->qStart = lineFileNeedNum(lf, words, 5);
-	fill->qSize = lineFileNeedNum(lf, words, 6);
-	for (i=basicFields; i<wordCount; i += 2)
-	    {
-	    char *name = words[i];
-
-	    if (sameString(name, "score"))
-	        fill->score = atof(words[i+1]);
-	    else
-		{
-		/* Cope with integer values. */
-		int iVal = lineFileNeedNum(lf, words, i+1);
-		if (sameString(name, "id"))
-		    fill->chainId = iVal;
-		else if (sameString(name, "tN"))
-		    fill->tN = iVal;
-		else if (sameString(name, "qN"))
-		    fill->qN = iVal;
-		else if (sameString(name, "tR"))
-		    fill->tR = iVal;
-		else if (sameString(name, "qR"))
-		    fill->qR = iVal;
-		else if (sameString(name, "tNewR"))
-		    fill->tNewR = iVal;
-		else if (sameString(name, "qNewR"))
-		    fill->qNewR = iVal;
-		else if (sameString(name, "tOldR"))
-		    fill->tOldR = iVal;
-		else if (sameString(name, "qOldR"))
-		    fill->qOldR = iVal;
-		else if (sameString(name, "tTrf"))
-		    fill->tTrf = iVal;
-		else if (sameString(name, "qTrf"))
-		    fill->qTrf = iVal;
-		}
-	    }
-	}
-    }
-slReverse(&fillList);
-return fillList;
-}
-
-void cnFillWrite(struct cnFill *fillList, FILE *f, int depth)
-/* Recursively write out fill list. */
-{
-struct cnFill *fill;
-for (fill = fillList; fill != NULL; fill = fill->next)
-    {
-    char *type = (fill->chainId ? "fill" : "gap");
-    spaceOut(f, depth);
-    fprintf(f, "%s %d %d %s %c %d %d", type, fill->tStart, fill->tSize,
-    	fill->qName, fill->qStrand, fill->qStart, fill->qSize);
-    if (fill->chainId)
-        fprintf(f, " id %d", fill->chainId);
-    if (fill->score > 0)
-        fprintf(f, " score %1.0f", fill->score);
-    if (fill->tN >= 0)
-        fprintf(f, " tN %d", fill->tN);
-    if (fill->qN >= 0)
-        fprintf(f, " qN %d", fill->qN);
-    if (fill->tR >= 0)
-        fprintf(f, " tR %d", fill->tR);
-    if (fill->qR >= 0)
-        fprintf(f, " qR %d", fill->qR);
-    if (fill->tNewR >= 0)
-        fprintf(f, " tNewR %d", fill->tNewR);
-    if (fill->qNewR >= 0)
-        fprintf(f, " qNewR %d", fill->qNewR);
-    if (fill->tOldR >= 0)
-        fprintf(f, " tOldR %d", fill->tOldR);
-    if (fill->qOldR >= 0)
-        fprintf(f, " qOldR %d", fill->qOldR);
-    if (fill->tTrf >= 0)
-        fprintf(f, " tTrf %d", fill->tTrf);
-    if (fill->qTrf >= 0)
-        fprintf(f, " qTrf %d", fill->qTrf);
-    fputc('\n', f);
-    if (fill->children)
-        cnFillWrite(fill->children, f, depth+1);
-    }
-}
-
-void chromNetWrite(struct chainNet *net, FILE *f)
-/* Write out chain net. */
-{
-fprintf(f, "net %s %d\n", net->name, net->size);
-cnFillWrite(net->fillList, f, 1);
-}
-
-struct chainNet *chromNetRead(struct lineFile *lf)
-/* Read next net from file. Return NULL at end of file.*/
-{
-char *line, *words[3];
-struct chainNet *net;
-int wordCount;
-
-if (!lineFileNextReal(lf, &line))
-   return NULL;
-if (!startsWith("net ", line))
-   errAbort("Expecting 'net' first word of line %d of %s", 
-   	lf->lineIx, lf->fileName);
-AllocVar(net);
-wordCount = chopLine(line, words);
-lineFileExpectAtLeast(lf, 3, wordCount);
-net->name = cloneString(words[1]);
-net->size = lineFileNeedNum(lf, words, 2);
-net->nameHash = hashNew(6);
-net->fillList = cnFillRead(net, lf);
-return net;
 }
 
 struct chrom
@@ -677,7 +429,7 @@ if (qNewR)
     }
 
 
-while ((net = chromNetRead(lf)) != NULL)
+while ((net = chainNetRead(lf)) != NULL)
     {
     struct rbTree *tN, *tRepeats, *tOldRepeats, *tTrf;
 
@@ -708,8 +460,8 @@ while ((net = chromNetRead(lf)) != NULL)
 	}
     if (qNewR)
         qAddNewR(net, net->fillList, qChromHash);
-    chromNetWrite(net, f);
-    chromNetFree(&net);
+    chainNetWrite(net, f);
+    chainNetFree(&net);
     }
 }
 
