@@ -595,10 +595,26 @@ SEQ2_LEN=$BASE/S2.len
   end
 
     # TODO: Load the nets into database 
-    # skipping netClass because of out of memory
+    # need to deal with netClass out of memory 
     ssh hgwdev
     cd /cluster/data/bosTau1/bed/blastz/axtChain
     /cluster/bin/i386/netFilter -minGap=10 hg17.net | /cluster/bin/i386/hgLoadNet hg17 netBosTau1 stdin
+
+
+# SWAP and REMAKE NET 
+    ssh kksilo
+    cd /cluster/data/bosTau1/bed
+    mkdir -p blastz.swap/axtChain
+    /cluster/bin/i386/chainSwap blastz/axtChain/all.chain blastz.swap/axtChain/all.chain
+
+    ssh kolossus
+    cd /cluster/data/bosTau1/bed/blastz.swap/axtChain
+    /cluster/home/heather/bin/x86_64/chainPreNet all.chain ../../blastz/S2.len ../../blastz/S1.len chainPreNet.out
+    /cluster/home/heather/bin/x86_64/chainNet chainPreNet.out -minSpace=1 ../../blastz/S2.len ../../blastz/S1.len chainNet.out /dev/null
+    /cluster/home/heather/bin/x86_64/netSyntenic chainNet.out noClass.net
+    mkdir ../axtNet
+    /cluster/home/heather/bin/x86_64/netToAxt noClass.net all.chain /cluster/data/bosTau1/bosTau1.2bit /cluster/data/hg17/nib ../axtNet/all.axt
+
 
 # GC5BASE - (DONE 2004-10-27 - Hiram)
     ssh kksilo
