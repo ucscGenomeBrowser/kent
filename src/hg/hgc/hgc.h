@@ -22,6 +22,7 @@ extern struct cart *cart;	/* User's settings. */
 extern char *seqName;		/* Name of sequence we're working on. */
 extern int winStart, winEnd;    /* Bounds of sequence. */
 extern char *database;		/* Name of mySQL database. */
+extern struct hash *trackHash;	/* A hash of all tracks - trackDb valued */
 
 void hgcStart(char *title);
 /* Print out header of web page with title.  Set

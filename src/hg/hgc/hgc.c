@@ -105,7 +105,7 @@
 #include "hgc.h"
 #include "genbank.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.415 2003/05/16 00:13:41 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.416 2003/05/16 02:59:50 kent Exp $";
 
 
 struct cart *cart;	/* User's settings. */
@@ -114,6 +114,7 @@ int winStart, winEnd;   /* Bounds of sequence. */
 char *database;		/* Name of mySQL database. */
 
 char *protDbName;	/* Name of proteome database */
+struct hash *trackHash;	/* A hash of all tracks - trackDb valued */
 
 char mousedb[] = "mm1";
 
@@ -389,9 +390,10 @@ printPos(bed->chrom, bed->chromStart, bed->chromEnd, NULL, TRUE);
 void genericHeader(struct trackDb *tdb, char *item)
 /* Put up generic track info. */
 {
-char buf[256];
-sprintf(buf, "%s (%s)\n", tdb->longLabel, item);
-cartWebStart(cart, buf);
+if (item != NULL && item[0] != 0)
+    cartWebStart(cart, "%s (%s)", tdb->longLabel, item);
+else
+    cartWebStart(cart, "%s", tdb->longLabel);
 }
 
 static struct dyString *subMulti(char *orig, int subCount, 
@@ -6002,11 +6004,9 @@ return trackHash;
 void doMouseOrtho(struct trackDb *tdb, char *geneName)
 /* Handle click on MouseOrtho gene track. */
 {
-struct hash *trackHash;
 struct sqlConnection *connMm = sqlConnect(mousedb);
 genericHeader(tdb, geneName);
 showOrthology(geneName, "softberryHom",connMm);
-trackHash = makeTrackHash(seqName);
 tdb = hashFindVal(trackHash, "softberryGene");
 geneShowMouse(geneName, tdb, "softberryPep", connMm);
 printTrackHtml(tdb);
@@ -10849,60 +10849,6 @@ freeMem(path);
 return lf;
 }
 
-#define JK_TESTING_ONLY
-#ifdef JK_TESTING_ONLY
-void doHmrConservation(struct trackDb *tdb, char *item)
-/* Details page for human/mouse/rat alignments. */
-{
-int winWidth = winEnd - winStart;
-
-cartWebStart(cart, "%s", tdb->longLabel);
-
-uglyf("This page shows human/mouse/rat alignments on %s:%d-%d in %s<BR>",
-   seqName, winStart, winEnd, database);
-if (winWidth > 100000)
-    {
-    printf("Zoom so that window is 100000 bases or less to see base-by-base alignments\n");
-    }
-else
-    {
-    struct sqlConnection *conn = hAllocConn();
-    int rowOffset;
-    struct sqlResult *sr = hRangeQuery(conn, "multizMm3Rn2", seqName, 
-    	winStart, winEnd, NULL, &rowOffset);
-    char **row;
-    unsigned int extFileId = 0;
-    struct lineFile *lf = NULL;
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-	struct scoredRef ref;
-	scoredRefStaticLoad(row + rowOffset, &ref);
-	if (ref.extFile != extFileId)
-	    {
-	    lineFileClose(&lf);
-	    lf = openExtLineFile(ref.extFile);
-	    extFileId = ref.extFile;
-	    }
-	lineFileSeek(lf, ref.offset, SEEK_SET);
-	printf("<TT><PRE>");
-	for (;;)
-	    {
-	    char *line;
-	    if (!lineFileNext(lf, &line, NULL))
-	        break;
-	    printf("%s\n", line);
-	    if (line[0] == 0)
-	        break;
-	    }
-	printf("</PRE></TT>");
-	}
-    sqlFreeResult(&sr);
-    hFreeConn(&conn);
-    }
-webEnd();
-}
-#endif /* JK_TESTING_ONLY */
-
 char *hgcNameAndSettings()
 /* Return path to hgc with variables to store UI settings.
  */
@@ -11289,7 +11235,6 @@ void doMiddle()
 char *track = cartString(cart, "g");
 char *item = cartOptionalString(cart, "i");
 char title[256];
-struct hash *trackHash;
 struct trackDb *tdb;
 
 database = cartUsualString(cart, "db", hGetDb());
@@ -11702,12 +11647,6 @@ else if( sameWord(track, "altGraphX"))
     {
     doAltGraphXDetails(tdb,item);
     }
-#ifdef JK_TESTING_ONLY
-else if (sameWord(track, "HMRConservation"))
-    {
-    doHmrConservation(tdb, item);
-    }
-#endif /* JK_TESTING_ONLY */
 
 /*Evan's stuff*/
 else if (sameWord(track, "genomicSuperDups"))
