@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.14 2004/02/29 18:08:57 kent Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.15 2004/02/29 18:15:30 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -556,7 +556,8 @@ page->fullText = fullText;
 page->status = status;
 page->header = htmlHeaderRead(&s);
 page->htmlText = fullText + (s - dupe);
-page->tags = htmlTagScan(s);
+freez(&dupe);
+page->tags = htmlTagScan(fullText);
 page->forms = htmlParseForms(page, page->tags, NULL);
 return page;
 }
