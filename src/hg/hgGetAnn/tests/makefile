@@ -48,7 +48,7 @@ chrRangeGenePredTsvHeaders: mkdirs
 ###
 # acc, name and textual queries
 ###
-textTests: geneNameQuery geneAccQuery mrnaAccQuery keywordQuery
+textTests: geneNameQuery geneAccQuery mrnaAccQuery keywordQuery multSameLoc
 
 geneNameQuery:
 	hgGetAnn ${DB} refGene CLOCK output/$@.gp
@@ -68,6 +68,12 @@ mrnaAccQuery:
 keywordQuery::
 	hgGetAnn ${DB} mrna "breast cancer early onset" output/$@.psl
 	diff expected/$@.psl output/$@.psl
+
+# acc query were there are multiple genes with same start/stop
+multSameLoc:
+	hgGetAnn ${DB} refGene NM_005522 output/$@.gp
+	diff expected/$@.gp output/$@.gp
+
 
 clean::
 	rm -rf output

@@ -7,7 +7,7 @@
 #include "hgFind.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: hgGetAnn.c,v 1.4 2004/07/23 17:30:18 markd Exp $";
+static char const rcsid[] = "$Id: hgGetAnn.c,v 1.5 2004/08/06 03:07:33 markd Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -72,11 +72,12 @@ va_end(args);
 void printHgPos(int indent, struct hgPos *pos)
 /* print a hgPos struct */
 {
+prIndent(indent, "%s", pos->name);
 if (pos->chrom != NULL)
-    prIndent(indent, "%s:%d-%d %s\n",
-             pos->chrom, pos->chromStart, pos->chromEnd, pos->name);
-else
-    prIndent(indent, "%s\n", pos->name);
+    fprintf(stderr, "  %s:%d-%d", pos->chrom, pos->chromStart, pos->chromEnd);
+if (pos->browserName != NULL)
+    fprintf(stderr, "  %s", pos->browserName);
+fprintf(stderr, "\n");
 }
 
 void printHgPosTable(int indent, struct hgPosTable *posTab)
@@ -129,25 +130,18 @@ else
     return TRUE;
 }
 
-int getChromCol(struct sqlResult *sr, struct hTableInfo *tableInfo)
-/* get the chromosome column in a result set, or -1 if it's not defined */
+int getResultCol(struct sqlResult *sr, char *colName)
+/* get the column in a result set, or -1 if it's not defined */
 {
-int iCol = 0;
-char *field;
-if (strlen(tableInfo->chromField) == 0)
-    return -1;
-
-while ((field = sqlFieldName(sr)) != NULL)
+int iCol = -1;
+if ((colName != NULL) && (strlen(colName) > 0))
     {
-    if (sameString(field, tableInfo->chromField))
-        return iCol;
-    iCol++;
+    iCol = sqlFieldColumn(sr, colName);
+    if (iCol < 0)
+        errAbort("field %s not in result set", colName);
     }
-errAbort("chrom field %s.%s not in result set", tableInfo->rootName,
-         tableInfo->chromField);
-return -1;
+return iCol;
 }
-
 
 int countFindMatches(struct hgPositions *positions)
 /* count number of matches to query */
@@ -293,20 +287,49 @@ for (i = 0; i < numCols; i++)
 fputc('\n', outFh);
 }
 
-int outputRows(FILE *outFh, struct hTableInfo *tableInfo, struct sqlResult *sr)
-/* read query resuts and output rows, */
+boolean sameStringNull(char *str1, char* str2)
+/* compare strings, allow NULLs (which always return false) */
 {
-int chromCol =  getChromCol(sr, tableInfo);
+if ((str1 == NULL)  || (str2 == NULL))
+    return FALSE;
+else
+    return sameString(str1, str2);
+}
+
+boolean inclRow(char **row, int chromCol, int nameCol, struct hgPos *nameSelect)
+/* check if a row should be included based on check optional criteria
+ * of chrom and name */
+{
+if ((chromCol >= 0) && !inclChrom(row[chromCol]))
+    return FALSE;
+if ((nameCol >= 0) && (nameSelect != NULL))
+    {
+    if (!(sameStringNull(row[nameCol], nameSelect->name)
+          || sameStringNull(row[nameCol], nameSelect->browserName)))
+        return FALSE;
+    }
+return TRUE;                                                                            
+}
+
+int outputRows(FILE *outFh, struct hTableInfo *tableInfo, struct sqlResult *sr,
+               struct hgPos *nameSelect)
+/* read query resuts and output rows.  Name will be checked against
+ * the  names in nameSelect if not null */
+{
+int chromCol =  getResultCol(sr, tableInfo->chromField);
+int nameCol = -1;
 int rowOff = tableInfo->hasBin ? 1 : 0;
 int numCols, rowCnt = 0;
 char **row;
+if (nameSelect != NULL)
+    nameCol = getResultCol(sr, tableInfo->nameField);
 if (keepBin)
     rowOff = 0;  /* force bin to be included */
 numCols = sqlCountColumns(sr) - rowOff;
 
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    if ((chromCol < 0) || inclChrom(row[chromCol]))
+    if (inclRow(row, chromCol, nameCol, nameSelect))
         {
         outputRow(outFh, row+rowOff, numCols);
         rowCnt++;
@@ -337,7 +360,7 @@ else
                      NULL, &rowOff);
     }
 
-rowCnt = outputRows(outFh, tableInfo, sr);
+rowCnt = outputRows(outFh, tableInfo, sr, NULL);
 
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -368,7 +391,7 @@ safef(query, sizeof(query), "select * from %s where (%s = '%s')",
       realTable, tableInfo->nameField, pos->name);
 
 sr = sqlGetResult(conn, query);
-rowCnt = outputRows(outFh, tableInfo, sr);
+rowCnt = outputRows(outFh, tableInfo, sr, NULL);
 
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -376,8 +399,7 @@ return rowCnt;
 }
 
 int outputByPosition(FILE *outFh, struct hTableInfo *tableInfo, struct hgPos *pos)
-/* Output results where there is a name and chrom location hgPos.  The
- * name may not match what is in the name field */
+/* Output results where there is a name and chrom location hgPos. */
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
@@ -391,7 +413,7 @@ safef(query, sizeof(query), "select * from %s where (%s = '%s') and (%s = %d) an
       tableInfo->endField, pos->chromEnd);
 
 sr = sqlGetResult(conn, query);
-rowCnt = outputRows(outFh, tableInfo, sr);
+rowCnt = outputRows(outFh, tableInfo, sr, pos);
 
 sqlFreeResult(&sr);
 hFreeConn(&conn);
