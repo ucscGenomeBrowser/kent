@@ -47,7 +47,7 @@ char *wellMapped[] =
     
 char *finChroms[] = 
 /* Chromosomes that are finished - no need to assemble these. */
-    { "20", "21", "22", };
+    { "20", "21", "22", "Y" };
 
 boolean isFinChrom(char *chrom)
 /* Return TRUE if is a finished chromosome. */
@@ -853,6 +853,8 @@ while (lineFileNext(lf, &line, &lineSize))
 	sprintf(contigName, "ctg%s", im.imreContig);
     if (contig == NULL || !sameString(contig->name, contigName))
         {
+	if (hashLookup(ctgHash, contigName))
+	   errAbort("Duplicate %s line %d of %s", contigName, lf->lineIx, lf->fileName);
 	AllocVar(contig);
 	slAddHead(&chrom->orderedList, contig);
 	hashAddSaveName(ctgHash, contigName, contig, &contig->name);
@@ -1101,39 +1103,6 @@ for (nt = ntList; nt != NULL; nt = nextNt)
 	slAddHead(&contig->ntList, nt);
 	}
     }
-
-#ifdef OLD
-	if ((nccp = hashFindVal(ntCloneHash, im.accession)) != NULL)
-	    {
-	    struct ntClonePos *ntPos;
-	    if (cbi == NULL)
-	    	warn("%s is in ctg_coords but not sequence.inf", im.accession);
-	    else
-		{
-		if ((nt = hashFindVal(ntHash, nccp->nt)) == NULL)
-		    {
-		    AllocVar(nt);
-		    hashAddSaveName(ntHash, nccp->nt, nt, &nt->name);
-		    nt->ctg = contig->name;
-		    slAddTail(&contig->ntList, nt);
-		    }
-	       if (nt->ctg != contig->name)
-		    {
-		    warn("Nt contig %s split between %s and %s, ignoring %s",
-			 nt->name, nt->ctg, contig->name, contig->name);
-		    }
-		else
-		    {
-		    AllocVar(ntPos);
-		    ntPos->clone = ci;
-		    ntPos->ntPos = nccp->start;
-		    ntPos->size = cbi->size;
-		    ntPos->orientation = (nccp->strand == '+' ? 1 : -1);
-		    slAddTail(&nt->cloneList, ntPos);
-		    }
-		}
-	    }
-#endif /* OLD */
 
 carefulClose(&splitNtFile);
 hashFree(&ntCloneHash);
