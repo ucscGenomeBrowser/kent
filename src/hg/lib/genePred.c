@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.41 2004/03/15 08:50:42 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.42 2004/03/15 19:17:52 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -383,11 +383,17 @@ return dif;
 static boolean isExon(char *feat, boolean isGtf, char *exonSelectWord)
 /* determine if a feature is an exon; different criteria for GFF ane GTF */
 {
-/* FIXME: shouldn't actually need to allow CDS here for GTF */
 if (isGtf)
-    return (sameWord(feat, "CDS") || sameWord(feat, "exon"));
+    {
+    /* must check for stop_codon here, because GTF put it outside of the
+     * CDS */
+    return (sameWord(feat, "CDS") || sameWord(feat, "stop_codon")
+            || sameWord(feat, "start_codon") || sameWord(feat, "exon"));
+    }
 else
+    {
     return ((exonSelectWord == NULL) || sameWord(feat, exonSelectWord));
+    }
 }
 
 static void chkGroupLine(struct gffGroup *group, struct gffLine *gl, struct genePred *gp)
@@ -407,7 +413,8 @@ if (!sameString(gl->seq, gp->chrom) && (gl->strand == gp->strand[0]))
 static boolean isCds(char *feat, boolean isGtf)
 /* determine if a feature is CDS */
 {
-return sameWord(feat, "CDS");
+return sameWord(feat, "CDS") ||  sameWord(feat, "stop_codon")
+    || sameWord(feat, "start_codon");
 }
 
 static struct genePred *mkFromGroupedGxf(struct gffFile *gff, struct gffGroup *group, char *name,
