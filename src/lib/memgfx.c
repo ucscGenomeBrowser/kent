@@ -72,15 +72,12 @@ static void mgSetDefaultColorMap(struct memGfx *mg)
 /* Set up default color map for a memGfx. */
 {
 /* Note dependency in order here and in MG_WHITE, MG_BLACK, etc. */
-mgAddColor(mg, 255, 255, 255);
-mgAddColor(mg, 0, 0, 0);
-mgAddColor(mg, 255, 0, 0);
-mgAddColor(mg, 0, 255, 0);
-mgAddColor(mg, 0, 0, 255);
-mgAddColor(mg, 0, 255, 255);
-mgAddColor(mg, 255, 0, 255);
-mgAddColor(mg, 255, 255, 0);
-mgAddColor(mg, 140, 140, 140);
+int i;
+for (i=0; i<ArraySize(mgFixedColors); ++i)
+    {
+    struct rgbColor *c = &mgFixedColors[i];
+    mgAddColor(mg, c->r, c->g, c->b);
+    }
 }
 
 void mgSetClip(struct memGfx *mg, int x, int y, int width, int height)
