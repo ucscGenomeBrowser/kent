@@ -18,7 +18,7 @@
 #include "gbFa.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbAlignGet.c,v 1.7 2004/02/23 09:07:19 kent Exp $";
+static char const rcsid[] = "$Id: gbAlignGet.c,v 1.8 2004/10/11 17:03:19 markd Exp $";
 
 /* version to set in gbEntry.selectVer to indicate an entry is being
  * migrated */
@@ -150,8 +150,7 @@ if (entry != NULL)
 else
     {
     if (gbVerbose >= 3)
-        gbVerbPr(3, "skip %s, no entry: %s", inFa->id,
-                 gbOrgCatName(entry->orgCat));
+        gbVerbPr(3, "skip %s, no entry", inFa->id);
     }
 
 return TRUE;
