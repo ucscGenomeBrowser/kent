@@ -8,7 +8,7 @@
 #include "errabort.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.73 2004/11/10 02:10:15 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.74 2004/11/16 22:08:53 hiram Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -464,6 +464,28 @@ median = doubleMedian(count, array);
 freeMem(array);
 return median;
 }
+
+static int intCmp(const void *va, const void *vb)
+/* Compare function to sort array of ints. */
+{
+const int *a = va;
+const int *b = vb;
+int diff = *a - *b;
+if (diff < 0)
+    return -1;
+else if (diff > 0)
+    return 1;
+else
+    return 0;
+}
+
+void intSort(int count, int *array)
+/* Sort an array of ints. */
+{
+if (count > 1)
+qsort(array, count, sizeof(array[0]), intCmp);
+}
+
 
 struct slName *newSlName(char *name)
 /* Return a new name. */
