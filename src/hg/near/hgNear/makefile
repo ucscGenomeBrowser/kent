@@ -23,3 +23,6 @@ compile: $O $(MYLIBS)
 	gcc -ggdb -o $X $O $(MYLIBS) $L
 #	strip $X
 	chmod a+rx $X
+
+clean:
+	rm *.o
