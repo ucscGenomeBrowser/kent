@@ -4820,4 +4820,25 @@ mkdir -p $3:h
     hgsql rn3 -e 'drop table kgSpAlias';
     hgsql rn3 < ~/src/hg/lib/kgSpAlis.sql
     hgsql rn3 -e 'load data local infile "rn3.kgSpAlias.tab" into table kgSpAlias'
-	 
+
+# ECGENE TRACK - RELOAD NEW DATA (DONE, 2004-10-29, hartera)
+    ssh eieio
+    rm -f /cluster/data/rn3/bed/ECgene
+    mkdir -p /cluster/data/rn3/bed/ECgene.2004-10-29
+    ln -s /cluster/data/rn3/bed/ECgene.2004-10-29 \
+          /cluster/data/rn3/bed/ECgene
+    cd /cluster/data/rn3/bed/ECgene
+    wget \
+"http://genome.ewha.ac.kr/ECgene/download/v1.2_ECgene/v1.2_rn3_low_gene.txt.gz"
+    wget \
+"http://genome.ewha.ac.kr/ECgene/download/v1.2_ECgene/v1.2_rn3_low_pep.txt.gz"
+    gunzip *.gz
+    # load database
+    ssh hgwdev
+    cd /cluster/data/rn3/bed/ECgene
+    ldHgGene -predTab rn3 ECgene v1.2_rn3_low_gene.txt
+    # 119846 gene predictions
+    # added peptide table 11/15/04
+    hgPepPred rn3 tab ECgenePep v1.2_rn3_low_pep.txt
+    rm *.tab
+    nice gzip *.txt
