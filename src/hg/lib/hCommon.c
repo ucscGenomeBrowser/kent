@@ -39,6 +39,7 @@ char *hgChromNames[] =
     "chr6_random",
     "chr7_random",
     "chr8_random",
+    "chr9_random",
     "chr10_random",
     "chr11_random",
     "chr12_random",
@@ -50,10 +51,9 @@ char *hgChromNames[] =
     "chr18_random",
     "chr19_random",
     "chr20_random",
-    "chr21_random",
-    "chr22_random",
     "chrX_random",
     "chrNA_random",
+    "chrUL_random",
     };
 int hgChromCount = ArraySize(hgChromNames);
 

@@ -27,7 +27,7 @@ static struct dbConv dbTable[] = {
     {"hg5","Oct. 7, 2000"},
     {"hg6","Dec. 12, 2000"},
     {"hg7","April 1, 2001"},
-    {"hg8","May 31, 2001"},
+//    {"hg8","Aug. 6, 2001"},
 };
 
 static char *hdbHost;
