@@ -22,4 +22,5 @@ install:
 	cp -p --remove-destination checkScaffoldGaps.csh   ${SCRIPTS}
 	cp -p --remove-destination checkOffend.csh         ${SCRIPTS}
 	cp -p --remove-destination updateTimesDb.csh       ${SCRIPTS}
+	cp -p --remove-destination bigPush.csh             ${SCRIPTS}
 
