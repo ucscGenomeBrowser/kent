@@ -1188,14 +1188,18 @@ if (offset >= 0)
     char **row;
     struct rmskOut *ro;
     char query[256];
+    char table[64];
+    boolean hasBin;
     int start = cgiInt("o");
-    sprintf(query, "select * from %s_rmsk where  repName = '%s' and genoName = '%s' and genoStart = %d",
-	    seqName, repeat, seqName, start);
+
+    hFindSplitTable(seqName, "rmsk", table, &hasBin);
+    sprintf(query, "select * from %s where  repName = '%s' and genoName = '%s' and genoStart = %d",
+	    table, repeat, seqName, start);
     sr = sqlGetResult(conn, query);
     printf("<H3>RepeatMasker Information</H3>\n");
     while ((row = sqlNextRow(sr)) != NULL)
 	{
-	ro = rmskOutLoad(row);
+	ro = rmskOutLoad(row+hasBin);
 	printf("<B>Name:</B> %s<BR>\n", ro->repName);
 	printf("<B>Family:</B> %s<BR>\n", ro->repFamily);
 	printf("<B>Class:</B> %s<BR>\n", ro->repClass);

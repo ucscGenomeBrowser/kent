@@ -552,17 +552,20 @@ void hAddBinToQuery(int start, int end, struct dyString *query)
 int startBin = (start>>binFirstShift), endBin = ((end-1)>>binFirstShift);
 int i;
 
+dyStringAppend(query, "(");
 for (i=0; i<ArraySize(binOffsets); ++i)
     {
     if (i != 0)
-        dyStringAppend(query, " and ");
+        dyStringAppend(query, " or ");
     if (startBin == endBin)
-        dyStringPrintf(query, "bin=%u", startBin);
+        dyStringPrintf(query, "bin=%u", startBin + binOffsets[i]);
     else
-        dyStringPrintf(query, "bin>=%u and bin<=%u", startBin, endBin);
+        dyStringPrintf(query, "bin>=%u and bin<=%u", 
+		startBin + binOffsets[i], endBin + binOffsets[i]);
     startBin >>= 3;
     endBin >>= 3;
     }
+dyStringAppend(query, ")");
 dyStringAppend(query, " and ");
 }
 
