@@ -9,5 +9,5 @@ CREATE TABLE growthConditions (
     shortLabel varchar(255) not null,	# Short description of growth condition
     longLabel varchar(255) not null,	# Longer description of growth condition
               #Indices
-    PRIMARY KEY(name)
+    PRIMARY KEY(name(32))
 );
