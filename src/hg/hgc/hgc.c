@@ -3544,7 +3544,8 @@ printTrackHtml(tdb);
 freez(&cgiItem);
 }
 
-void longXenoPsl1zoo(struct trackDb *tdb, char *item, 
+
+void longXenoPsl1zoo2(struct trackDb *tdb, char *item, 
 	char *otherOrg, char *otherChromTable)
 /* Put up cross-species alignment when the second species
  * sequence is in a nib file. */
@@ -3554,8 +3555,6 @@ char otherString[256];
 char anotherString[256];
 char *cgiItem = cgiEncode(item);
 char *thisOrg = hOrganism(database);
-
-//Make otherOrg first character upperCase to link to database
 
 cartWebStart(tdb->longLabel);
 psl = loadPslFromRangePair(tdb->tableName, item);
@@ -3571,9 +3570,12 @@ printf("<B>Number of Aligning Blocks:</B> %d<BR>\n", psl->blockCount );
 printf("<B>Percent identity within aligning blocks:</B> %3.1f%%<BR>\n", 0.1*(1000 - pslCalcMilliBad(psl, FALSE)));
 printf("<B>Browser window position:</B> %s:%d-%d<BR>\n", seqName, winStart, winEnd);
 printf("<B>Browser window size:</B> %d<BR>\n", winEnd - winStart);
+
 sprintf(anotherString, "%s",otherOrg);
 toUpperN(anotherString,1);
-printf("Link to <a href=\"http://hgwdev-tcbruen.cse.ucsc.edu/cgi-bin/hgTracks?db=zoo%s1&position=chr1:%d-%d&hgsid=%d\">%s database</a><BR>\n",anotherString,psl->qStart,psl->qEnd,cart->sessionId,otherOrg);
+printf("Link to <a href=\"http://hgwdev-tcbruen.cse.ucsc.edu/cgi-bin/hgTracks?db=zoo%s1&position=chr1:%d-%d\">%s database</a><BR>\n",anotherString,psl->qStart,psl->qEnd,otherOrg);
+
+
 sprintf(otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s", psl->tStart, 
 	tdb->tableName, otherOrg, otherChromTable);
 if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL)
@@ -3584,6 +3586,7 @@ if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL)
 printTrackHtml(tdb);
 freez(&cgiItem);
 }
+
 
 void doBlatMus(struct trackDb *tdb, char *item)
 /* Put up cross-species alignment when the second species
@@ -3598,8 +3601,9 @@ void doMultAlignZoo(struct trackDb *tdb, char *item, char *otherName )
 /* Put up cross-species alignment when the second species
  * sequence is in a nib file. */
 {
-//errAbort("(%s)\n", item );
 char chromStr[64];
+//errAbort("(%s)\n", item );
+
 
 // Check to see if name is one of zoo names
 if (!(strcmp(otherName,"human") 
@@ -3616,7 +3620,7 @@ if (!(strcmp(otherName,"human")
       && strcmp(otherName,"zebrafish")))
     {
     sprintf( chromStr, "%sChrom" , otherName );
-    longXenoPsl1zoo(tdb, item, otherName, chromStr );
+    longXenoPsl1zoo2(tdb, item, otherName, chromStr );
     }
 
 }
