@@ -20,7 +20,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.119 2004/07/06 20:53:09 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.120 2004/07/16 21:56:58 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -545,7 +545,7 @@ wigFetchMinMaxY(tdb, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
 (void) wigFetchYLineMark(tdb, &yLineMarkOnOff);
 wigFetchYLineMarkValue(tdb, &yLineMark);
 
-puts("<A HREF=\"/goldenPath/help/hgWiggleTrackHelp.html\">"
+puts("<A HREF=\"/goldenPath/help/hgWiggleTrackHelp.html\" TARGET=_blank>"
      "Graph configuration help</A>");
 printf("<TABLE BORDER=0><TR><TD ALIGN=LEFT>\n");
 
