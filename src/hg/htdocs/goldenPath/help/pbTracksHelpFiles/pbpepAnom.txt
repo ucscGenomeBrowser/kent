@@ -1,8 +1,0 @@
-<!------------Description---------->
-This track displays amino acids within the protein sequence that differ in 
-abundance from their average occurrence genome-wide. 
-Amino acids present in excess are shown above the line in red, and deficient 
-residues are shown below the line in blue. 
-<P>
-See the <A HREF="pbpepAnomalies.shtml">Amino Acid Anomalies histogram</A> to view amino 
-acid abundances in this assembly, based on the [FIXME - add table name] table.
