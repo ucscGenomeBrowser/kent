@@ -1760,7 +1760,8 @@ Submission to last job:          1261s      21.02m     0.35h    0.01d
      #  After going through the chain->net->axt operation:
 #  featureBits hg16 blastzBestMm3
 #   991468768 bases of 2865248791 (34.603%) in intersection
-
+     #  And finally after fixing a blastz execution problem on chr1:
+#  1007362800 bases of 2865248791 (35.158%) in intersection
 
 #  featureBits hg15 blastzBestMm3
 #  1035090465 bases of 2866466359 (36.110%) in intersection
@@ -2911,6 +2912,7 @@ Submission to last job:          8029s     133.82m     2.23h    0.09d
     end
     #	That takes about 20 minutes
 
+XXXX Pick this up tomorrow, 03-09-12 with pslChromDroppedFix
     # Load database tables
     ssh hgwdev
     set tbl = "blastzSelf"
@@ -3352,4 +3354,31 @@ XXXX - Running 2003-08-27 21:32
 ../syntenyMm3/synteny2bed.pl
 #    Load results
 hgLoadBed hg16 syntenySelf ucsc100k.bed
+
+
+
+# SGP GENE PREDICTIONS (DONE - 2003-09-14 - Hiram - to be verified)
+    mkdir -p /cluster/data/hg16/bed/sgp/download
+    cd /cluster/data/hg16/bed/sgp/download
+    foreach f (/cluster/data/hg16/?{,?}/chr?{,?}{,_random}.fa)
+      set chr = $f:t:r
+      wget http://genome.imim.es/genepredictions/H.sapiens/golden_path_200307/SGP/$chr.gtf
+      wget http://genome.imim.es/genepredictions/H.sapiens/golden_path_200307/SGP/$chr.prot
+    end
+    wget http://genome.imim.es/genepredictions/H.sapiens/golden_path_200307/SGP/chrUn.gtf -O chrUn_random.gtf
+    wget http://genome.imim.es/genepredictions/H.sapiens/golden_path_200307/SGP/chrUn.prot -O chrUn_random.prot
+    # Add missing .1 to protein id's
+    foreach f (*.prot)
+      perl -wpe 's/^(>chr\w+)$/$1.1/' $f > $f:r-fixed.prot
+    end
+    cd ..
+    ldHgGene hg16 sgpGene download/*.gtf -exon=CDS
+#  Read 43109 transcripts in 323911 lines in 39 files
+#    43109 groups 39 seqs 1 sources 3 feature types
+#  43109 gene predictions
+    hgPepPred hg16 generic sgpPep download/*-fixed.prot
+#  featureBits hg16 sgpGene
+#  39781330 bases of 2865248791 (1.388%) in intersection
+#  featureBits hg15 sgpGene
+#  40395614 bases of 2866466359 (1.409%) in intersection
 
