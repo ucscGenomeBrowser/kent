@@ -16,6 +16,7 @@
 #include "hCommon.h"
 #include "hgFind.h"
 #include "dbDb.h"
+#include "subText.h"
 #include "blatServers.h"
 
 static struct sqlConnCache *hdbCc = NULL;
@@ -269,7 +270,7 @@ for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
     lsf->path = path = cloneString(row[0]);
     size = sqlUnsigned(row[1]);
     if (fileSize(path) != size)
-        errAbort("External file %s has changed, need to resync database", path);
+        errAbort("External file %s has changed, need to resync database.  Old size %ld, new size %ld", path, size, fileSize(path));
     lsf->id = extId;
     if ((lsf->fd = open(path, O_RDONLY)) < 0)
         errAbort("Couldn't open external file %s", path);
@@ -383,6 +384,63 @@ char *hDbFromFreeze(char *freeze)
 {
 return hFreezeDbConversion(NULL, freeze);
 }
+
+char *hOrganism(char *database)
+/* Return organism associated with database.   use freeMem on
+ * this when done. */
+{
+struct sqlConnection *conn = hConnectCentral();
+char buf[128];
+char query[256];
+char *res = NULL;
+sprintf(query, "select organism from dbDb where name = '%s'", database);
+if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
+    res = cloneString(buf);
+else
+    errAbort("Can't find organism for %s", database);
+hDisconnectCentral(&conn);
+return res;
+}
+
+char *hLookupStringVars(char *in, char *database)
+/* Expand $ORGANISM and other variables in input. */
+{
+static struct subText *subList = NULL;
+static char *oldDatabase = NULL;
+
+if (oldDatabase != NULL && !sameString(database, oldDatabase))
+    {
+    subTextFreeList(&subList);
+    freez(&oldDatabase);
+    oldDatabase = cloneString(database);
+    }
+if (subList == NULL)
+    {
+    struct subText *sub;
+    char *organism = hOrganism(database);
+    sub = subTextNew("$ORGANISM", organism);
+    slAddHead(&subList, sub);
+    freez(&organism);
+    }
+return subTextString(subList, in);
+}
+
+static void subOut(char **pString, char *database)
+/* Substitute one string. */
+{
+char *old = *pString;
+*pString = hLookupStringVars(old, database);
+freeMem(old);
+}
+
+void hLookupStringsInTdb(struct trackDb *tdb, char *database)
+/* Lookup strings in track database. */
+{
+subOut(&tdb->shortLabel, database);
+subOut(&tdb->longLabel, database);
+subOut(&tdb->html, database);
+}
+
 
 struct dbDb *hDbDbList()
 /* Return list of databases that are actually online. 
@@ -763,12 +821,14 @@ struct trackDb *tdbList = NULL, *tdb;
 boolean privateToo = hIsPrivateHost();
 struct sqlResult *sr;
 char **row;
+char *database = hGetDb();
 
 sr = sqlGetResult(conn, "select * from trackDb");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     boolean keeper = FALSE;
     tdb = trackDbLoad(row);
+    hLookupStringsInTdb(tdb, database);
     if (!tdb->private || privateToo)
 	{
 	if (hTrackOnChrom(tdb, chrom))
@@ -922,6 +982,7 @@ sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     errAbort("Track %s not found", trackName);
 tdb = trackDbLoad(row);
+hLookupStringsInTdb(tdb, hGetDb());
 sqlFreeResult(&sr);
 return tdb;
 }

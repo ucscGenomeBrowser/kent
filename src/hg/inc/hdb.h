@@ -230,4 +230,14 @@ boolean hIsBlatIndexedDatabase(char *db);
 struct blatServerTable *hFindBlatServer(char *db, boolean isTrans);
 /* return the blat server information corresponding to the database */
 
+char *hOrganism(char *database);
+/* Return organism associated with database.   Use freeMem on
+ * return value when done. */
+
+char *hLookupStringVars(char *in, char *database);
+/* Expand $ORGANISM and other variables in input. */
+
+void hLookupStringsInTdb(struct trackDb *tdb, char *database);
+/* Lookup strings in track database. */
+
 #endif /* HDB_H */
