@@ -15,6 +15,7 @@ exit; # don't actually run this like a script :)
 # 0) Make gs.15 directory, gs.15/build32 directory, and gs.15/ffa directory.
     mkdir /cluster/store5/gs.15
     mkdir /cluster/store5/gs.15/build32
+    mkdir /cluster/store5/gs.15/agp
     mkdir /cluster/store5/gs.15/ffa
 
 #    Make a symbolic link from /cluster/store1 to this location
@@ -28,6 +29,8 @@ exit; # don't actually run this like a script :)
 
 # 1) Download seq_contig.md, ncbi_build32.agp, contig_overlaps.agp 
 # and contig fa file into gs.15/build32 directory. 
+
+# Download all finished agp's into gs.15/agp
 
 # Download sequence.inf and ncbi_build32.fa files into gs.15/ffa, and unzip
 # ncbi_build32.fa.
@@ -55,6 +58,8 @@ exit; # don't actually run this like a script :)
 # copy in chrM.fa, chrM.agp and chrM.gl from previous version.
     mkdir M/NT_999999
     cp chrM.fa NT_999999/NT_999999.fa
+
+# copied chrM.fa, chrM.agp, chrM.gl, chrM.trf.bed, lift directory, NT_999999/NT_999999.fa - not sure which ones we need
 
 # 4) Create lift files (this will create chromosome directory structure) and inserts file
 
@@ -100,7 +105,7 @@ exit; # don't actually run this like a script :)
     /cluster/bin/scripts/revCompNcbiCtgFa seq_contig.md .
 
 # (NOTE: STS placements may be done at this point before repeat masking and 
-# using the .fas on NFS for QC analysis - all other placements should be 
+# using the .fa's on NFS for QC analysis - all other placements should be 
 # done after repeat masking and distributing to cluster nodes)
 
 
