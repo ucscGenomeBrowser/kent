@@ -3,7 +3,7 @@
 #ifndef ENSFACE_H
 #define ENSFACE_H
 
-char *ensOrgName(char *ucscOrgName);
+char *ensOrgNameFromScientificName(char *scientificName);
 /* Convert from ucsc to Ensembl organism name */
 
 struct dyString *ensContigViewUrl(char *ensOrg, char *chrom, int chromSize,

@@ -5,6 +5,7 @@
 #define SPECIES_ORDER_VAR       "speciesOrder"
 #define PAIRWISE_VAR            "pairwise"
 #define BASE_COLORS_VAR         "baseColors"
+#define BASE_COLORS_OFFSET_VAR  "baseColorsOffset"
 
 struct mafAli *mafLoadInRegion(struct sqlConnection *conn, char *table,
 	char *chrom, int start, int end);
