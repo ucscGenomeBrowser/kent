@@ -15,7 +15,7 @@
 #include "mafTrack.h"
 #include "mafSummary.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.61 2005/03/14 22:35:31 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.62 2005/03/15 04:33:47 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -804,8 +804,7 @@ for (mi = miList; mi != NULL; mi = mi->next)
 
     /* using maf sequences from file */
     /* create pairwise maf list from the multiple maf */
-    for (maf = (struct mafAli *)track->customPt; 
-                    maf->next != NULL; maf = maf->next)
+    for (maf = (struct mafAli *)track->customPt; maf != NULL; maf = maf->next)
         {
         if ((mcThis = mafMayFindCompPrefix(maf, mi->db, "")) == NULL)
             continue;
