@@ -356,18 +356,19 @@ printf("<H3>%s/Genomic Alignments</H3>", (isEst ? "EST" : "mRNA"));
 printAlignments(pslList, start, "htcCdnaAli", type, acc);
 }
 
-void parseSs(char *ss, char **retPslName, char **retFaName)
+void parseSs(char *ss, char **retPslName, char **retFaName, char **retQName)
 /* Parse space separated 'ss' item. */
 {
 static char buf[512*2];
 int wordCount;
-char *words[2];
+char *words[4];
 strcpy(buf, ss);
 wordCount = chopLine(buf, words);
-if (wordCount != 2)
-    errAbort("Expecting 2 words in ss item");
+if (wordCount != 3)
+    errAbort("Expecting 3 words in ss item");
 *retPslName = words[0];
 *retFaName = words[1];
+*retQName = words[2];
 }
 
 void doUserPsl(char *item)
@@ -376,18 +377,27 @@ void doUserPsl(char *item)
 int start = cgiInt("o");
 struct lineFile *lf;
 struct psl *pslList = NULL, *psl;
-char *pslName, *faName;
+char *pslName, *faName, *qName;
 char *encItem = cgiEncode(item);
 enum gfType qt, tt;
+char *words[4];
+int wordCount;
 
 htmlStart("BLAT Search Alignments");
 printf("<H2>BLAT Search Alignments</H2>\n");
 printf("<H3>Click over a line to see detailed letter by letter display</H3>");
-parseSs(item, &pslName, &faName);
+parseSs(item, &pslName, &faName, &qName);
 pslxFileOpen(pslName, &qt, &tt, &lf);
 while ((psl = pslNext(lf)) != NULL)
     {
-    slAddHead(&pslList, psl);
+    if (sameString(psl->qName, qName))
+        {
+	slAddHead(&pslList, psl);
+	}
+    else
+        {
+	pslFree(&psl);
+	}
     }
 slReverse(&pslList);
 lineFileClose(&lf);
@@ -866,9 +876,9 @@ showSomeAlignment(psl, rnaSeq, gftDna);
 void htcUserAli(char *fileNames)
 /* Show alignment for accession. */
 {
-char *pslName, *faName;
+char *pslName, *faName, *qName;
 struct lineFile *lf;
-bioSeq *oSeq;
+bioSeq *oSeqList = NULL, *oSeq = NULL;
 struct psl *psl;
 int start;
 enum gfType tt, qt;
@@ -880,19 +890,25 @@ printf("<HEAD>\n<TITLE>User Sequence vs Genomic</TITLE>\n</HEAD>\n\n");
 puts("<HTML>");
 
 start = cgiInt("o");
-parseSs(fileNames, &pslName, &faName);
+parseSs(fileNames, &pslName, &faName, &qName);
 pslxFileOpen(pslName, &qt, &tt, &lf);
 isProt = (qt == gftProt);
 while ((psl = pslNext(lf)) != NULL)
     {
-    if (sameString(psl->tName, seqName) && psl->tStart == start)
+    if (sameString(psl->tName, seqName) && psl->tStart == start && sameString(psl->qName, qName))
         break;
     pslFree(&psl);
     }
 lineFileClose(&lf);
 if (psl == NULL)
     errAbort("Couldn't find alignment at %s:%d", seqName, start);
-oSeq = faReadSeq(faName, !isProt);
+oSeqList = faReadAllSeq(faName, !isProt);
+for (oSeq = oSeqList; oSeq != NULL; oSeq = oSeq->next)
+    {
+    if (sameString(oSeq->name, qName))
+         break;
+    }
+if (oSeq == NULL)  errAbort("%s is in %s but not in %s. Internal error.", qName, pslName, faName);
 showSomeAlignment(psl, oSeq, qt);
 }
 
@@ -1095,7 +1111,9 @@ else
     puts("<P>Click directly on a repeat for specific information on that repeat</P>");
     }
 htmlHorizontalLine();
-puts("<P>The Simple Tandem Repeats were calculated by James Durbin</P>");
+puts("<P>The Simple Tandem Repeats were located with the program "
+     "<A HREF=\"http://c3.biomath.mssm.edu/trf.html\">Tandem Repeat Finder</A> "
+     "by G. Benson</P>");
 }
 
 void printPos(char *chrom, int start, int end)

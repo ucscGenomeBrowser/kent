@@ -61,14 +61,22 @@ errAbort(
   "hgSeqSearch - CGI-script to manage fast human genome sequence searching\n");
 }
 
+int pslScore(const struct psl *psl)
+/* Return score for psl. */
+{
+int aScore = psl->match + (psl->repMatch>>1) - psl->misMatch - psl->qNumInsert
+  - psl->tNumInsert;
+}
+
 int pslCmpMatches(const void *va, const void *vb)
 /* Compare to sort based on query. */
 {
 const struct psl *a = *((struct psl **)va);
 const struct psl *b = *((struct psl **)vb);
-int aScore = a->match + (a->repMatch>>1) - a->misMatch - a->qNumInsert;
-int bScore = b->match - (b->repMatch>>1) - b->misMatch - b->qNumInsert;
-return bScore - aScore;
+int diff = strcmp(a->qName, b->qName);
+if (diff == 0)
+    diff = pslScore(b) - pslScore(a);
+return diff;
 }
 
 void showAliPlaces(char *pslName, char *faName, char *database)
@@ -89,35 +97,58 @@ if (pslList == NULL)
 
 slSort(&pslList, pslCmpMatches);
 printf("<TT><PRE>");
-printf(" SIZE IDENTITY CHROMOSOME STRAND  START     END       cDNA   START  END  TOTAL\n");
-printf("------------------------------------------------------------------------------\n");
+printf(" QUERY       SCORE START END  TOTAL IDENTITY CHROMOSOME STRAND  START    END  \n");
+printf("--------------------------------------------------------------------------------\n");
 for (psl = pslList; psl != NULL; psl = psl->next)
     {
     printf("<A HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s%s\">",
 	browserUrl, psl->tName, psl->tStart, psl->tEnd, database, 
 	pslName, faName, extraCgi);
-    printf("%5d  %5.1f%%  %9s     %s %9d %9d  %8s %5d %5d %5d</A>\n",
-	psl->match + psl->misMatch + psl->repMatch + psl->nCount,
+    printf("%-12s %5d %5d %5d %5d %5.1f%%  %9s  %2s  %9d %9d</A>\n",
+	psl->qName, pslScore(psl), psl->qStart, psl->qEnd, psl->qSize,
 	100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
-	skipChr(psl->tName), psl->strand, psl->tStart + 1, psl->tEnd,
-	psl->qName, psl->qStart+1, psl->qEnd, psl->qSize);
+	skipChr(psl->tName), psl->strand, psl->tStart + 1, psl->tEnd);
     }
 pslFreeList(&pslList);
 printf("</TT></PRE>");
+}
+
+void checkSeqNamesUniq(bioSeq *seqList)
+/* Check that all seq's in list have a unique name. */
+{
+struct hash *hash = newHash(0);
+bioSeq *seq;
+
+for (seq = seqList; seq != NULL; seq = seq->next)
+    hashAddUnique(hash, seq->name, hash);
+freeHash(&hash);
+}
+
+int realSeqSize(bioSeq *seq, boolean isDna)
+/* Return size of sequence without N's or (for proteins)
+ * X's. */
+{
+char unknown = (isDna ? 'n' : 'X');
+int i, size = seq->size, count = 0;
+char *s = seq->dna;
+for (i=0; i<size; ++i)
+    if (s[i] != unknown) ++count;
+return count;
 }
 
 void blatSeq(char *userSeq)
 /* Blat sequence user pasted in. */
 {
 FILE *f;
-static struct dnaSeq *seq;
+struct dnaSeq *seqList = NULL, *seq;
 struct tempName pslTn, faTn;
-int maxSize;
+int maxSingleSize, maxTotalSize;
 char *genome = cgiString("genome");
 char *type = cgiString("type");
 char *seqLetters = cloneString(userSeq);
 struct serverTable *serve;
 int conn;
+int oneSize, totalSize = 0;
 boolean isTx = FALSE;
 boolean isTxTx = FALSE;
 boolean txTxBoth = FALSE;
@@ -125,84 +156,114 @@ boolean txTxBoth = FALSE;
 /* Load user sequence and figure out if it is DNA or protein. */
 if (sameWord(type, "DNA"))
     {
-    seq = faSeqFromMemText(seqLetters, TRUE);
+    seqList = faSeqListFromMemText(seqLetters, TRUE);
     isTx = FALSE;
     }
 else if (sameWord(type, "translated RNA") || sameWord(type, "translated DNA"))
     {
-    seq = faSeqFromMemText(seqLetters, TRUE);
+    seqList = faSeqListFromMemText(seqLetters, TRUE);
     isTx = TRUE;
     isTxTx = TRUE;
     txTxBoth = sameWord(type, "translated DNA");
     }
 else if (sameWord(type, "protein"))
     {
-    seq = faSeqFromMemText(seqLetters, FALSE);
+    seqList = faSeqListFromMemText(seqLetters, FALSE);
     isTx = TRUE;
     }
 else 
     {
-    seq = faSeqFromMemText(seqLetters, FALSE);
-    isTx = !seqIsDna(seq);
+    seqList = faSeqListFromMemText(seqLetters, FALSE);
+    isTx = !seqIsDna(seqList);
     if (!isTx)
-        toLowerN(seq->dna, seq->size);
+	{
+	for (seq = seqList; seq != NULL; seq = seq->next)
+	    {
+	    toLowerN(seq->dna, seq->size);
+	    }
+	}
     }
+checkSeqNamesUniq(seqList);
 
-/* Truncate sequence if necessary and name it. */
-maxSize = (isTx ? 4000 : 20000);
-if (seq->size > maxSize)
-    {
-    warn("Sequence is %d letters long, truncating to %d",
-        seq->size, maxSize);
-    seq->size = maxSize;
-    seq->dna[maxSize] = 0;
-    }
-if (seq->name[0] == 0)
-    seq->name = cloneString("YourSeq");
-
+/* Figure out size allowed. */
+maxSingleSize = (isTx ? 4000 : 20000);
+maxTotalSize = maxSingleSize * 2;
 
 /* Create temporary file to store sequence. */
 makeTempName(&faTn, "hgSs", ".fa");
-faWrite(faTn.forCgi, seq->name, seq->dna, seq->size);
+faWriteAll(faTn.forCgi, seqList);
 
 /* Create a temporary .psl file with the alignments against genome. */
 serve = findServer(genome, isTx);
 makeTempName(&pslTn, "hgSs", ".pslx");
 f = mustOpen(pslTn.forCgi, "w");
-conn = gfConnect(serve->host, serve->port);
 if (isTx)
     {
-    static struct gfSavePslxData data;
-    data.f = f;
-    data.reportTargetStrand = TRUE;
     if (isTxTx)
         {
 	pslxWriteHead(f, gftDnaX, gftDnaX);
-	gfAlignTransTrans(conn, serve->nibDir, seq, FALSE, 12, gfSavePslx, &data);
-	if (txTxBoth)
-	    {
-	    close(conn);
-	    reverseComplement(seq->dna, seq->size);
-	    conn = gfConnect(serve->host, serve->port);
-	    gfAlignTransTrans(conn, serve->nibDir, seq, TRUE, 12, gfSavePslx, &data);
-	    }
 	}
     else
-	{
+        {
 	pslxWriteHead(f, gftProt, gftDnaX);
-	gfAlignTrans(conn, serve->nibDir, seq, 12, gfSavePslx, &data);
 	}
     }
 else
     {
     pslxWriteHead(f, gftDna, gftDna);
-    gfAlignStrand(conn, serve->nibDir, seq, FALSE, ffCdna, 36, gfSavePsl, f);
-    close(conn);
-    reverseComplement(seq->dna, seq->size);
-    conn = gfConnect(serve->host, serve->port);
-    gfAlignStrand(conn, serve->nibDir, seq, TRUE,  ffCdna, 36, gfSavePsl, f);
     }
-close(conn);
+
+/* Loop through each sequence. */
+for (seq = seqList; seq != NULL; seq = seq->next)
+    {
+    if (seq->name[0] == 0)
+	seq->name = cloneString("YourSeq");
+    oneSize = realSeqSize(seq, !isTx);
+    if (oneSize > maxSingleSize)
+	{
+	warn("Sequence %s is %d letters long (max is %d), skipping",
+	    seq->name, seq->size, maxSingleSize);
+	continue;
+	}
+    totalSize += oneSize;
+    if (totalSize > maxTotalSize)
+        {
+	warn("Sequence %s would take us over the %d letter limit, stopping here.",
+	     seq->name, maxTotalSize);
+	break;
+	}
+    conn = gfConnect(serve->host, serve->port);
+    if (isTx)
+	{
+	static struct gfSavePslxData data;
+	data.f = f;
+	data.reportTargetStrand = TRUE;
+	if (isTxTx)
+	    {
+	    gfAlignTransTrans(conn, serve->nibDir, seq, FALSE, 12, gfSavePslx, &data);
+	    if (txTxBoth)
+		{
+		close(conn);
+		reverseComplement(seq->dna, seq->size);
+		conn = gfConnect(serve->host, serve->port);
+		gfAlignTransTrans(conn, serve->nibDir, seq, TRUE, 12, gfSavePslx, &data);
+		}
+	    }
+	else
+	    {
+	    gfAlignTrans(conn, serve->nibDir, seq, 12, gfSavePslx, &data);
+	    }
+	}
+    else
+	{
+	gfAlignStrand(conn, serve->nibDir, seq, FALSE, 36, gfSavePsl, f);
+	close(conn);
+	reverseComplement(seq->dna, seq->size);
+	conn = gfConnect(serve->host, serve->port);
+	gfAlignStrand(conn, serve->nibDir, seq, TRUE, 36, gfSavePsl, f);
+	}
+    close(conn);
+    }
 carefulClose(&f);
 
 showAliPlaces(pslTn.forCgi, faTn.forCgi, serve->db);

@@ -988,7 +988,8 @@ void loadUserPsl(struct trackGroup *tg)
 {
 char *ss = cgiString("ss");
 char buf[1024];
-char *ssWords[2];
+char buf2[3*512];
+char *ssWords[4];
 int wordCount;
 char *faFileName, *pslFileName;
 struct lineFile *f;
@@ -1018,7 +1019,8 @@ while ((psl = pslNext(f)) != NULL)
     if (sameString(psl->tName, chromName) && psl->tStart < winEnd && psl->tEnd > winStart)
 	{
 	lf = lfFromPslx(psl, sizeMul);
-	lf->extra = ss;
+	sprintf(buf2, "%s %s", ss, psl->qName);
+	lf->extra = cloneString(buf2);
 	slAddHead(&lfList, lf);
 	}
     pslFree(&psl);
@@ -4684,7 +4686,7 @@ fputs("<TABLE BORDER=\"1\" WIDTH=\"100%\"><TR><TD><P ALIGN=CENTER>", stdout);
 printf("<A HREF=\"%s?o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s\">"
       "View DNA</A></TD>",  hgcName(),
       winStart, chromName, winStart, winEnd, database);
-if (sameString(database, "hg5"))
+if (sameString(database, "hg6"))
     {
     fputs("<TD><P ALIGN=CENTER>", stdout);
     printEnsemblAnchor();
