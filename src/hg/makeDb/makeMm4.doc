@@ -593,6 +593,34 @@ done
     cd /cluster/data/genbank
     nice ./bin/gbAlignStep -initial -type=est -verbose=1 \
 	-clusterRootDir=/cluster/bluearc/genbank -iserver=no mm4
+# Completed: 256925 of 256971 jobs
+# CPU time in finished jobs:   79788950s 1329815.83m 22163.60h  923.48d  2.530 y
+# IO & Wait Time:               7185609s  119760.16m  1996.00h   83.17d  0.228 y
+# Time in running jobs:          290862s    4847.70m    80.80h    3.37d  0.009 y
+# Average job time:                 339s       5.64m     0.09h    0.00d
+# Longest job:                    69850s    1164.17m    19.40h    0.81d
+# Submission to last job:        141340s    2355.67m    39.26h    1.64d
+    # cluster problems required that to be completed manually:
+    ssh kk
+    cd /cluster/bluearc/genbank/work/initial.mm4/align
+    para recover align.jobs recover.jobs
+    para create recover.jobs
+    para try, push, check, etc ...
+# Completed: 46 of 46 jobs
+# CPU time in finished jobs:      11250s     187.50m     3.13h    0.13d  0.000 y
+# IO & Wait Time:                   423s       7.05m     0.12h    0.00d  0.000 y
+# Average job time:                 254s       4.23m     0.07h    0.00d
+# Longest job:                     1532s      25.53m     0.43h    0.02d
+# Submission to last job:          1532s      25.53m     0.43h    0.02d
+    ssh eieio
+    cd /cluster/data/genbank
+    nice ./bin/gbAlignStep -initial -continue=finish -type=est -verbose=1 \
+	-clusterRootDir=/cluster/bluearc/genbank -iserver=no mm4
+    # Then for an efficient load of everything, drop the mrna tables and
+    #	load all:
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad mm4
 
 # LOAD CPGISSLANDS (DONE 2003-10-21 Hiram)
      ssh kksilo
@@ -745,16 +773,19 @@ echo "Ready for cluster run.  para try, check, push, etc ..."
     chmod +x ../../jkStuff/BlastZ_run1.sh
 
     #	Second cluster run to convert the .out's to .lav's
+    #	You do NOT want to run this on the big cluster.  It brings
+    #	the file server to its knees.  Run this on the small cluster.
+    ssh kkr1u00
     source DEF
     ../../jkStuff/BlastZ_run1.sh
     cd run.1
     para try, check, push, etc ...
-# Completed: 339 of 339 jobs
-# CPU time in finished jobs:      12386s     206.43m     3.44h    0.14d  0.000 y
-# IO & Wait Time:                255610s    4260.17m    71.00h    2.96d  0.008 y
-# Average job time:                 791s      13.18m     0.22h    0.01d
-# Longest job:                     5837s      97.28m     1.62h    0.07d
-# Submission to last job:          5852s      97.53m     1.63h    0.07d
+# Completed: 323 of 323 jobs
+# CPU time in finished jobs:      12410s     206.83m     3.45h    0.14d  0.000 y
+# IO & Wait Time:                335408s    5590.14m    93.17h    3.88d  0.011 y
+# Average job time:                1077s      17.95m     0.30h    0.01d
+# Longest job:                     1966s      32.77m     0.55h    0.02d
+# Submission to last job:          1992s      33.20m     0.55h    0.02d
 
     #	Prepare third cluster run script to convert lav's to axt's
 cat << '_EOF_' > ../../jkStuff/BlastZ_run2.sh
@@ -993,26 +1024,29 @@ SEQ2_LEN=$BASE/S2.len
     cd run.0
     para try, check, push, check, ....
 XXXXX - running 2003-10-4 14:10
-# Completed: 39936 of 39936 jobs
-# CPU time in finished jobs:   16181528s  269692.14m  4494.87h  187.29d  0.513 y
-# IO & Wait Time:               8090355s  134839.24m  2247.32h   93.64d  0.257 y
-# Average job time:                 608s      10.13m     0.17h    0.01d
-# Longest job:                     7953s     132.55m     2.21h    0.09d
-# Submission to last job:         87634s    1460.57m    24.34h    1.01d
+# Completed: 39728 of 39729 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:   16243094s  270718.23m  4511.97h  188.00d  0.515 y
+# IO & Wait Time:               1164706s   19411.77m   323.53h   13.48d  0.037 y
+# Average job time:                 438s       7.30m     0.12h    0.01d
+# Longest job:                     8391s     139.85m     2.33h    0.10d
+# Submission to last job:        189809s    3163.48m    52.72h    2.20d
 
     #	Second cluster run to convert the .out's to .lav's
-    ssh kk
+    #	You do NOT want to run this on the big cluster.  It brings
+    #	the file server to its knees.  Run this on the small cluster.
+    ssh kkr1u00
     cd /cluster/data/mm4/bed/blastz.rn3
     source DEF
     ../../jkStuff/BlastZ_run1.sh
     cd run.1
     para try, check, push, etc ...
-# Completed: 312 of 312 jobs
-# CPU time in finished jobs:      28753s     479.22m     7.99h    0.33d  0.001 y
-# IO & Wait Time:                751345s   12522.41m   208.71h    8.70d  0.024 y
-# Average job time:                2500s      41.67m     0.69h    0.03d
-# Longest job:                     3196s      53.27m     0.89h    0.04d
-# Submission to last job:          3208s      53.47m     0.89h    0.04d
+# Completed: 323 of 323 jobs
+# CPU time in finished jobs:      10597s     176.62m     2.94h    0.12d  0.000 y
+# IO & Wait Time:                207530s    3458.83m    57.65h    2.40d  0.007 y
+# Average job time:                 675s      11.26m     0.19h    0.01d
+# Longest job:                     1613s      26.88m     0.45h    0.02d
+# Submission to last job:          2456s      40.93m     0.68h    0.03d
 
     #	Third cluster run to convert lav's to axt's
     ssh kk
@@ -1194,6 +1228,15 @@ SEQ2_LEN=$BASE/S2.len
     source DEF
     ../../jkStuff/BlastZ_run0.sh
     para try, check, push, check, ....
+XXXX working 2003-10-27
+# Completed: 41343 of 41344 jobs
+# Jobs currently running: 1
+# CPU time in finished jobs:   20876450s  347940.84m  5799.01h  241.63d  0.662 y
+# IO & Wait Time:               2233069s   37217.81m   620.30h   25.85d  0.071 y
+# Time in running jobs:             380s       6.33m     0.11h    0.00d  0.000 y
+# Average job time:                 559s       9.32m     0.16h    0.01d
+# Longest job:                   213883s    3564.72m    59.41h    2.48d
+# Submission to last job:        359707s    5995.12m    99.92h    4.16d
 
     #	Second cluster run to convert the .out's to .lav's
     ssh kk
@@ -1211,7 +1254,7 @@ SEQ2_LEN=$BASE/S2.len
     cd run.2
     para try, check, push, etc ...
 
-# PRODUCING GENSCAN PREDICTIONS (IN PROGRESS 2003-10-22 - Hiram)
+# PRODUCING GENSCAN PREDICTIONS (DONE - 2003-10-27 - Hiram)
     
     #	Must run this on the small cluster since this
     #	process requires more memory than is found in the KK nodes
@@ -1235,33 +1278,41 @@ SEQ2_LEN=$BASE/S2.len
     para try
     para check
     para push
-XXXX - running 2003-10-24 14:30
     # with only 6 CPUs available:
-
-    # Issue either one of the following two commands to check the
-    # status of the cluster and your jobs, until they are done.
-    parasol status
-    para check
-    # If there were out-of-memory problems (run "para problems"), then
-    # re-run those jobs by hand but change the -window arg from 2400000
-    # to 1200000.
-    # chr7_15
+# Completed: 598 of 599 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:     906601s   15110.02m   251.83h   10.49d  0.029 y
+# IO & Wait Time:                206027s    3433.78m    57.23h    2.38d  0.007 y
+# Average job time:                1861s      31.01m     0.52h    0.02d
+# Longest job:                    76738s    1278.97m    21.32h    0.89d
+# Submission to last job:        196259s    3270.98m    54.52h    2.27d
+    #	The failed job, rerun on Itanium:
+    ssh snort
+    cd kent.ia64/src/hg/gsBig
+    make
+    cd /cluster/data/mm4/bed/genscan
+    #	It would not run at window=2400000, but it did with 2000000
+    $HOME/bin/$MACHTYPE/gsBig /cluster/data/mm4/2/chr2_15/chr2_15.fa.masked gtf/chr2_15.fa.gtf -trans=pep/chr2_15.fa.pep -subopt=subopt/chr2_15.fa.bed -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=2000000
+    # Run time 209 seconds :  0.2 s / kb
+    # Got 118 exons
+    # Got 18 genes
+    # Got 216 suboptimal exons
 
     # Convert these to chromosome level files as so:
     ssh kksilo
-    cd ~/mm4/bed/genscan
-    liftUp genscan.gtf ../../liftAll.lft warn gtf/chr*.gtf
-    liftUp genscanSubopt.bed ../../liftAll.lft warn subopt/chr*.bed > \
+    cd /cluster/data/mm4/bed/genscan
+    liftUp genscan.gtf ../../jkStuff/liftAll.lft warn gtf/chr*.gtf
+    liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft warn subopt/chr*.bed > \
       /dev/null
     cat pep/*.pep > genscan.pep
 
     # Load into the database as so:
     ssh hgwdev
-    cd ~/mm4/bed/genscan
+    cd /cluster/data/mm4/bed/genscan
     ldHgGene mm4 genscan genscan.gtf
-        # Read 50447 transcripts in 357519 lines in 1 files
-          # 50447 groups 43 seqs 1 sources 1 feature types
-        # 50447 gene predictions
+    # Read 46885 transcripts in 331775 lines in 1 files
+    # 46885 groups 44 seqs 1 sources 1 feature types
+    # 46885 gene predictions
     hgPepPred mm4 generic genscanPep genscan.pep
     hgLoadBed mm4 genscanSubopt genscanSubopt.bed > /dev/null
 
@@ -1465,3 +1516,148 @@ XXXX	The sections below will be deleted as they are performed above
     para check
     para push
     etc.
+
+# UPDATE BACEND SEQUENCES (DONE - 2003-10-27 - Hiram)
+
+    # Download new files
+    ssh kksilo
+    mkdir /cluster/data/mm4/bed/bacends/ncbi
+    cd /cluster/data/mm4/bed/bacends/ncbi
+    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/BACENDS/AllBACends.mfa.gz
+    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/BACENDS/cl_acc_gi_len.gz
+    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/BACENDS/README
+    gunzip AllBACends.mfa.gz
+    gunzip cl_acc_gi_len.gz
+
+    # Convert fa file
+    cat << '_EOF_' > convert.pl
+#!/usr/local/bin/perl -w
+
+use strict;
+
+while (my $line = <>) {
+    if (substr($line,0,1) ne ">") {
+        print $line;
+    } else {
+        my @fields = split(/\|/, $line);
+        my $printed = 0;
+        for (my $i = 0; $i < $#fields; $i++) {
+                if ($fields[$i] eq "gb") {
+                        (my $name, my $vers) = split(/\./,$fields[$i+1]);
+                        print ">$name\n";
+                        $i= $#fields;
+                        $printed = 1;
+                }
+        }
+        if (!$printed) {
+                die("Failed for $line\n");
+        }
+    }
+}
+'_EOF_'
+    chmod +x convert.pl
+    ./convert.pl < AllBACends.mfa > BACends.fa
+
+    # Create new pairs files
+    convertBacEndPairInfo cl_acc_gi_len
+
+    # Split file into pieces and copy to cluster to propagate
+    ssh kksilo
+    /cluster/bin/i386/faSplit sequence BACends.fa 100 BACends
+    cd /cluster/data/mm4/bed/bacends/ncbi
+    rm /cluster/bluearc/scratch/mus/mm4/bacEnds
+    mv BACends???.fa /cluster/bluearc/scratch/mus/mm4/bacEnds
+    cp -p BACends.fa /cluster/bluearc/scratch/mus/mm4/bacEnds
+
+    # Ask for propagation from sysadmin
+
+    # Load the sequences (change bacends.# to match correct location)
+    ssh hgwdev
+    mkdir /gbdb/mm4/bacends
+    cd /gbdb/mm4/bacends
+    ln -s /cluster/data/mm4/bed/bacends/ncbi/BACends.fa .
+    cd /tmp
+    hgLoadSeq mm4 /gbdb/mm4/bacends/BACends.fa
+    #Adding /gbdb/mm4/bacends/BACends.fa)
+    #452237 sequences
+    #Updating seq table
+    #All done
+
+# BACEND SEQUENCE ALIGNMENTS (DONE)
+    # (alignments done without RepeatMasking)
+    #	We need an ooc file for this genome
+    ssh kksilo
+    mkdir /cluster/data/mm4/ooc
+    cd /cluster/data/mm4/ooc
+    ls ../unmaskedNib/chr*.nib > nib.list
+    blat -dots=1000000 -makeOoc=11.ooc -repMatch=11 nib.list nib.list output.psl
+    # Wrote 3362700 overused 11-mers to 11.ooc
+
+    # Create full sequence alignments
+    ssh kk
+    cd /cluster/data/mm4/bed/bacends
+
+    mkdir bacEnds.out
+    /cluster/bin/scripts/splitContigList -scratch /scratch/mus/mm4/trfFa 1
+    cat << '_EOF_' > template
+#LOOP
+/cluster/bin/i386/blat $(path1) $(path2) -ooc=/cluster/data/mm4/ooc/11.ooc {check out line+ bacEnds.out/$(root1).$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    ls -1S /scratch/mus/mm4/bacEnds/BACends???.fa > bacEnds.lst
+    gensub2 contig.lst bacEnds.lst template jobList
+    para create jobList
+    # 58702 jobs written to batch
+    para try, check, push, etc ...
+XXXX read to run as soon as the rsync /scratch is done 2003-10-27
+
+# Compile alignments and lift the files (takes a while)
+	ssh eieio
+	make bacEnds.psl.lifted
+# Copy files to final destination and remove
+        make copy.assembly
+        make clean # DONT'T DO THIS (may want to wait until sure they're OK)
+
+
+# BACEND PAIRS TRACK (DONE 041703 - TERRY)
+
+# Add /projects/compbiousr/booch/booch/scripts to your path
+
+# Update Makefile with new location of pairs/singles 
+# files, if necessary (DONE)
+        cd /projects/hg2/booch/psl/gs.16/build33/bacends
+
+# Make initial file of alignments
+	make bacEnds.rdb
+ 
+# Try to fish out more pairs
+	make bacEndsMiss.psl
+
+# Re-make bacEnds.rdb with new info
+	make bacEnds.rdb
+ 
+# Create bacEndPairs track file
+        make bacEndPairs.bed
+
+# Create bacEndPairsBad and bacEndPairsLong files
+	make bacEndPairsBad.bed
+
+# Create psl file to load
+	make bacEnds.load.psl
+
+# Create database tables
+        ssh hgwdev
+        cd /projects/hg2/booch/psl/tables
+        hgsql hg15 < all_bacends.sql
+        hgsql hg15 < bacEndPairs.sql
+        hgsql hg15 < bacEndPairsBad.sql
+        hgsql hg15 < bacEndPairsLong.sql
+
+# Load the tables
+	cd /projects/hg2/booch/psl/gs.16/build33/bacends/
+        echo 'load data local infile "bacEnds.load.psl" into table all_bacends;' | hgsql hg15        
+        echo 'load data local infile "bacEndPairs.bed" into table bacEndPairs;' | hgsql hg15
+        echo 'load data local infile "bacEndPairsBad.bed" into table bacEndPairsBad;' | hgsql hg15
+        echo 'load data local infile "bacEndPairsLong.bed" into table bacEndPairsLong;' | hgsql hg15
+
+
