@@ -338,6 +338,7 @@ struct wiggleDataStream
     unsigned long long bytesRead;    /* reading stats, total wib bytes */
     unsigned long long bytesSkipped; /* reading stats, bytes not examined */
     unsigned long long valuesMatched;  /* reading stats, number of data bytes */
+    unsigned long long totalBedElements;  /* on all bed lists */
     };
 
 /*	in lib/wigDataStream.c	*/
