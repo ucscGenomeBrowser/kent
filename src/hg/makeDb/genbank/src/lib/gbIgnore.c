@@ -8,7 +8,7 @@
 #include "gbIndex.h"
 #include "gbRelease.h"
 
-static char const rcsid[] = "$Id: gbIgnore.c,v 1.2 2003/07/02 23:47:39 markd Exp $";
+static char const rcsid[] = "$Id: gbIgnore.c,v 1.3 2004/04/21 20:27:22 genbank Exp $";
 
 /* column indices in ignore.idx files */
 #define IGIDX_ACC_COL       0
@@ -86,7 +86,7 @@ while (igAcc != NULL)
     {
     if (igAcc->modDate == modDate)
         return igAcc;
-        igAcc = igAcc->next;
+    igAcc = igAcc->next;
     }
 return NULL;
 }
