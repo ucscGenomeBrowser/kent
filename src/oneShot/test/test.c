@@ -3,6 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "net.h"
 
 void usage()
 /* Explain usage and exit. */
