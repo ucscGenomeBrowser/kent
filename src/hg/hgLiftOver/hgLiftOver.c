@@ -21,13 +21,12 @@
 #include "botDelay.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.7 2004/03/24 04:12:56 kate Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.8 2004/03/24 04:15:41 kate Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft.userData"     /* typed/pasted in data */
 #define HGLFT_DATAFILE_VAR "hglft.dataFile"     /* file of data to convert */
 #define HGLFT_DATAFORMAT_VAR "hglft.dataFormat" /* format of data to convert */
-#define HGLFT_CMD_PREFIX "hglft.do_"            /* prefix for commands */
 #define HGLFT_SHOWPAGE_CMD "hglft.do_showPage"  /* command to display output */
 
 /* Global Variables */
@@ -60,10 +59,6 @@ cgiParagraph(
 /* create HMTL form */
 printf("<FORM ACTION=\"../cgi-bin/hgLiftOver\" METHOD=\"POST\" "
        " ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n");
-cgiMakeHiddenVar(HGLFT_USERDATA_VAR, "");
-cgiMakeHiddenVar(HGLFT_DATAFILE_VAR, "");
-cgiMakeHiddenVar(HGLFT_DATAFORMAT_VAR, "BED");
-cgiMakeHiddenVar(HGLFT_SHOWPAGE_CMD, "true");
 cartSaveSession(cart);
 
 /* create HTML table for layout purposes */
@@ -264,7 +259,6 @@ else
     //remove(oldTn.forCgi);
     cartRemove(cart, HGLFT_USERDATA_VAR);
     }
-cartRemovePrefix(cart, HGLFT_CMD_PREFIX);
 cartWebEnd();
 }
 
