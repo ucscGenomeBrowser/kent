@@ -24,7 +24,7 @@
 #define PSEUDO 1
 #define NOTPSEUDO -1
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.6 2003/12/03 16:54:36 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.7 2003/12/04 08:06:08 baertsch Exp $";
 
 double minAli = 0.98;
 double maxRep = 0.35;
@@ -102,12 +102,14 @@ void outputLink(struct psl *psl, char *type, char *bestqName, char *besttName,
 struct bed *bed = bedFromPsl(psl);
 bed->score = calcMilliScore(psl);
 bedOutputN( bed , 12, linkFile, ' ', ' ');
-fprintf(linkFile,"%s %s %s %s %d %d %d %d 0 %s %d %d %d %d %d %d %d %d %d %d %d %d\n",
-        hGetDb(), type, bestqName, besttName, 
-        besttStart, besttEnd, maxExons, geneOverlap, bestStrand, polyA, 
+fprintf(linkFile,"%s %s %s %s %d %d %s %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d\n",
+        hGetDb(), type, bestqName, besttName, besttStart, besttEnd, 
+        (bestStrand[0] == '+' || bestStrand[0] == '-') ? bestStrand : "0", 
+        maxExons, geneOverlap, polyA, 
         (psl->strand[0] == '+') ? polyAstart - psl->tEnd : psl->tStart - (polyAstart + polyA) , 
         exonCover, intronCount, bestAliCount, psl->match+psl->repMatch, 
-        psl->qSize, psl->qEnd, rep, qReps, overlapDiagonal, label);
+        psl->qSize, psl->qEnd, rep, qReps, overlapDiagonal, 
+        ((psl->match+psl->repMatch)*100)/psl->qSize, label);
 bedFree(&bed);
 }
 
@@ -353,6 +355,7 @@ pStart += seqStart;
 *polyAstart += seqStart;
 *polyAend += seqStart;
 printf("\nst=%d %s range %d %d cnt %d\n",seqStart, seq->dna, *polyAstart, *polyAend, count);
+freeDnaSeq(&seq);
 fclose(f);
 return count;
 }
