@@ -43,6 +43,11 @@ struct column
    char *keyField;		/* GeneId field in associated table. */
    char *valField;		/* Value field in associated table. */
    char *curGeneField;		/* curGeneId field in associated table. */
+   char *expTable;		/* Experiment table in hgFixed if any. */
+   char *posTable;		/* Positional table (bed12) for expression experiments. */
+   double expMax;		/* Maximum expression value. */
+   int representativeCount;	/* Count of representative experiments. */
+   int *representatives;	/* Array (may be null) of representatives. */
    };
 
 /* ---- global variables ---- */
@@ -144,6 +149,9 @@ void setupColumnKnownPos(struct column *col, char *parameters);
 
 void setupColumnLookupKnown(struct column *col, char *parameters);
 /* Set up a column that links to details page for known genes. */
+
+void setupColumnExpRatio(struct column *col, char *parameters);
+/* Set up expression ration type column. */
 
 #endif /* HGNEAR_H */
 

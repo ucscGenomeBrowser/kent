@@ -12,6 +12,23 @@ priority 2
 visibility on
 type lookupKnown kgXref kgID geneSymbol
 
+name expDense
+shortLabel Short Expression
+longLabel Selected UCLA expression data
+priority 2.5
+visibility on
+type expRatio knownToAffyUcla affyUcla hgFixed.affyUclaExps
+max 1.5
+representatives 7,3,9,19,21,28,24,35,21,
+
+name expAll
+shortLabel Long Expression
+longLabel All UCLA expression data
+priority 2.6
+visibility off
+type expRatio knownToAffyUcla affyUcla hgFixed.affyUclaExps
+max 1.5
+
 name acc
 shortLabel Accession
 longLabel mRNA accession

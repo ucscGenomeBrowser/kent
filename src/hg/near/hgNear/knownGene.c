@@ -4,15 +4,13 @@
 #include "linefile.h"
 #include "hash.h"
 #include "obscure.h"
-#include "cheapcgi.h"
 #include "jksql.h"
-#include "htmshell.h"
 #include "cart.h"
 #include "hdb.h"
 #include "hCommon.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: knownGene.c,v 1.1 2003/06/21 04:53:18 kent Exp $";
+static char const rcsid[] = "$Id: knownGene.c,v 1.2 2003/06/21 05:54:42 kent Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */

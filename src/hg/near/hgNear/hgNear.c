@@ -12,7 +12,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.13 2003/06/21 00:24:09 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.14 2003/06/21 05:54:42 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, defaultConfName,
 	resetConfName, NULL }; 
@@ -551,6 +551,8 @@ else if (sameString(type, "knownPos"))
     setupColumnKnownPos(col, s);
 else if (sameString(type, "lookupKnown"))
     setupColumnLookupKnown(col, s);
+else if (sameString(type, "expRatio"))
+    setupColumnExpRatio(col, s);
 else
     errAbort("Unrecognized type %s for %s", col->type, col->name);
 freez(&dupe);
