@@ -66,24 +66,6 @@ for (i=0; i<ArraySize(protQueryMenu); ++i)
 return FALSE;
 }
 
-int countSame(char *a, char *b)
-/* Count number of characters that from start in a,b that are same. */
-{
-char c;
-int i;
-int count = 0;
-for (i=0; ; ++i)
-   {
-   c = a[i];
-   if (b[i] != c)
-       break;
-   if (c == 0)
-       break;
-   ++count;
-   }
-return count;
-}
-
 int cmpSeqName(char *a, char *b)
 /* Compare two sequence names likely to be of form prefix followed by a number. */
 {
