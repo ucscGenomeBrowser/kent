@@ -699,8 +699,6 @@ for (i = 0; i < psl->blockCount; i++)
 	  gs = gstart;
 	  bStart = i;
 	  }
-       /*else if (gs == 0)
-	 gs = psl->tStarts[i];*/
        /* Determine the end position offset */
        if (gend <= (psl->tStarts[i]+psl->blockSizes[i]))
 	  {
@@ -708,19 +706,13 @@ for (i = 0; i < psl->blockCount; i++)
 	   ge = gend;
 	   bEnd = i;
 	  }
-
-       /*else if (ge == 0)
-	  ge = psl->tStarts[i]+psl->blockSizes[i];
-	  }*/
        }
-    if (gstart < psl->tStarts[i])
+    if ((gstart < psl->tStarts[i]) && (bStart < 0))
       bStart = i;
-    if ((gend > (psl->tStarts[i] + psl->blockSizes[i])) && (!bEnd))
+    if ((gend > (psl->tStarts[i] + psl->blockSizes[i])) && (!*end))
       bEnd = i;
     }
-/*printf("Extracting %s:%d-%d of %d-%d\n",psl->tName, gstart, gend, gstart, gend);*/
-/*if (retSeq)
-  ret = hDnaFromSeq(psl->tName, gstart, gend, dnaLower);*/
+
 /* If opposite strand alignment, reverse the start and end positions in the mRNA */
 if (((psl->strand[0] == '-')  && (psl->strand[1] != '-')) 
      || ((psl->strand[0] == '+') && (psl->strand[1] == '-')))
@@ -735,7 +727,7 @@ else
     sprintf(strand, "+");
    
 /* Check if mrna aligns completely in this region */
- if ((bStart == bEnd) && (bStart > 0))
+ if (((bEnd - bStart) == (gend - gstart)) && (bStart > 0))
    *nogap = TRUE;
 else if ((bStart < bEnd) && (bStart > 0))
   {
@@ -745,8 +737,6 @@ else if ((bStart < bEnd) && (bStart > 0))
 	*nogap = FALSE;
   }
 
-/*strcpy(strand, psl->strand); */
-/*return(ret);*/
 }
 
 void searchTransPsl(char *table, DNA *mdna, struct indel *ni, char *strand, unsigned type, struct psl* psl, struct dnaSeq *gseq, struct acc *acc)
@@ -762,9 +752,13 @@ int mrnaSize = ni->mrnaEnd - ni->mrnaStart;
 
 /* Get the start and end coordinates for the mRNA or EST sequence */
 if ((type == INDEL) || (type == UNALIGNED))
-    getCoords(psl, ni->chromStart-2, ni->chromEnd+1, &start, &end, thisStrand, &nogap);
+    if (ni->chromStart == ni->chromEnd)
+      getCoords(psl, ni->chromStart-3, ni->chromEnd+2, &start, &end, thisStrand, &nogap);
+    else
+      getCoords(psl, ni->chromStart-2, ni->chromEnd+2, &start, &end, thisStrand, &nogap);      
 else
     getCoords(psl, ni->chromStart-1, ni->chromEnd, &start, &end, thisStrand, &nogap);
+
 /* Get the corresponding mRNA or EST  sequence */
 struct dnaSeq *seq = hRnaSeq(psl->qName);
 if (thisStrand[0] != strand[0])
@@ -784,17 +778,29 @@ else
     dna = cloneString("");
 if ((type == INDEL) || (type == UNALIGNED))
   {
-    dnaStart = needMem(mrnaSize+4);
-    strncpy(dnaStart, seq->dna + start-1, mrnaSize + 3);
-    dnaStart[mrnaSize+3] = '\0';
-    dnaEnd = needMem(mrnaSize+4);
-    strncpy(dnaEnd, seq->dna + end - mrnaSize-4, mrnaSize + 3);
-    dnaEnd[mrnaSize+3] = '\0';
-  }    
+
+    if ((seq->size > (start + 4)) && (start >= 0))
+      {      
+	dnaStart = needMem(mrnaSize+5);
+	strncpy(dnaStart, seq->dna + start, mrnaSize + 4);
+	dnaStart[mrnaSize+4] = '\0';
+      }
+    if  ((end - mrnaSize - 4) > 0)
+      {
+	dnaEnd = needMem(mrnaSize+5);
+	strncpy(dnaEnd, seq->dna + end - mrnaSize - 4, mrnaSize + 4);
+	dnaEnd[mrnaSize+4] = '\0';
+      }    
+  }
+if (!dnaStart)
+   dnaStart = cloneString("");
+if (!dnaEnd)
+   dnaEnd = cloneString("");
+
 
 /* fprintf(stderr, "Comparing genomic %s at %d vs. %s %s vs. %s %s (%d-%d, %s vs. %s)\n", gseq->dna, ni->chromStart, ni->mrna->name, mdna, psl->qName, dna, start, end, thisStrand, strand);*/
 /* fprintf(stderr, "Comparing genomic at %d-%d vs. %s %s vs. %s %s (%d-%d, %s vs. %s)\n", ni->chromStart, ni->chromEnd, ni->mrna->name, mdna, psl->qName, dna, start, end, thisStrand, strand); */
-/*   fprintf(stderr, "\tfrom start - %s\n\tfrom end - %s\n", dnaStart, dnaEnd); */
+/*fprintf(stderr, "\tfrom start - %s\n\tfrom end - %s\n", dnaStart, dnaEnd);*/
 
 /* If it doesn't align to this region */
 if (start == end)
@@ -902,6 +908,12 @@ else
 	  slAddHead(&ni->xe->noEstAcc, acc);
 	}
     }  
+
+if (dnaStart)
+   {
+     freez(&dnaStart);
+     freez(&dnaEnd);
+   }
 freez(&dna);
 dnaSeqFree(&seq);
 hFreeConn(&conn2);
@@ -931,15 +943,19 @@ if ((derived) && (hashLookup(derived, ni->mrna->name)))
 /* Determine the sequence, If indel, add one base on each side */
  if ((type == INDEL) || (type == UNALIGNED))
     {
-    if ((ni->mrnaEnd-ni->mrnaStart) > 0)
-        {
-	assert((ni->mrnaEnd-ni->mrnaStart+4) < sizeof(mdna));
-        strncpy(mdna,rna->dna + ni->mrnaStart - 2,ni->mrnaEnd-ni->mrnaStart+3);
-        mdna[ni->mrnaEnd-ni->mrnaStart+3] = '\0';
-        /* printf("Indel at %d-%d (%d) in %s:%d-%d bases %s\n", ni->mrnaStart, ni->mrnaEnd, rna->size, ni->chrom, ni->chromStart, ni->chromEnd, mdna); */
-        }
-    else
-        mdna[0] = '\0';
+      if (ni->mrnaStart == ni->mrnaEnd) 
+	{
+	assert((ni->mrnaEnd-ni->mrnaStart+5) < sizeof(mdna));
+        strncpy(mdna,rna->dna + ni->mrnaStart - 2,ni->mrnaEnd-ni->mrnaStart+4);
+        mdna[ni->mrnaEnd-ni->mrnaStart+4] = '\0';
+	}
+      else
+	{
+	assert((ni->mrnaEnd-ni->mrnaStart+5) < sizeof(mdna));
+        strncpy(mdna,rna->dna + ni->mrnaStart - 2,ni->mrnaEnd-ni->mrnaStart+4);
+        mdna[ni->mrnaEnd-ni->mrnaStart+4] = '\0';
+	}
+      /*printf("Indel at %d-%d (%d) in %s:%d-%d bases %s\n", ni->mrnaStart, ni->mrnaEnd, rna->size, ni->chrom, ni->chromStart, ni->chromEnd, mdna);*/
     }
 else
     {
@@ -952,7 +968,10 @@ else
 
 /* Get dna sequence */
  if ((type == INDEL) || (type == UNALIGNED))
-  gseq = hDnaFromSeq(ni->chrom, ni->chromStart-2, ni->chromEnd+1, dnaLower);
+   if (ni->chromStart == ni->chromEnd)
+     gseq = hDnaFromSeq(ni->chrom, ni->chromStart-3, ni->chromEnd+2, dnaLower);
+   else
+     gseq = hDnaFromSeq(ni->chrom, ni->chromStart-2, ni->chromEnd+2, dnaLower);
 else
   gseq = hDnaFromSeq(ni->chrom, ni->chromStart-1, ni->chromEnd, dnaLower);
 if (strand[0] == '-')
@@ -961,7 +980,10 @@ if (strand[0] == '-')
 
 /* Find all sequences that span this region */
  if ((type == INDEL) || (type == UNALIGNED))
-    sr = hRangeQuery(conn, table, ni->chrom, ni->chromStart-2, ni->chromEnd+1, NULL, &offset);
+   if (ni->chromStart == ni->chromEnd)
+     sr = hRangeQuery(conn, table, ni->chrom, ni->chromStart-3, ni->chromEnd+2, NULL, &offset);
+   else
+     sr = hRangeQuery(conn, table, ni->chrom, ni->chromStart-2, ni->chromEnd+2, NULL, &offset);
 else 
     sr = hRangeQuery(conn, table, ni->chrom, ni->chromStart-1, ni->chromEnd, NULL, &offset);
 while ((row = sqlNextRow(sr)) != NULL) 
