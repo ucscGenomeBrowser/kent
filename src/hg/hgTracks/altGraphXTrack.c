@@ -40,7 +40,6 @@ int rowCount = 0;
 double scale = (double)insideWidth/(winEnd - winStart);
 spaceSaverFree(&tg->ss);
 for(ag = tg->items; ag != NULL; ag = ag->next)
-
     {
     maxDiff = max(maxDiff, (ag->tEnd-ag->tStart));
     minStart = min(minStart, ag->tStart);
@@ -137,105 +136,92 @@ else
 return c;
 }
 
-static void altGraphXDraw(struct track *tg, int seqStart, int seqEnd,         
-			 struct vGfx *vg, int xOff, int yOff, int width, 
-			 MgFont *font, Color color, enum trackVisibility vis)
-/* Draws the blocks for an alt-spliced gene and the connections. This
- * is more compact for both the dense an full modes than
- * altGraphXDrawPackTrack() but will overwrite on exon on top of
- * another so you may not see alternative 5' splice sites. If we're in close we
- * use altGraphXDrawPackTrack() otherwise we default to this. */
+static boolean isExon(struct altGraphX *ag, int edge)
+/* Is this edge an exon. */
 {
-int baseWidth = seqEnd - seqStart;
-int y = yOff;
-int heightPer = tg->heightPer;
-int lineHeight = tg->lineHeight;
-int x1,x2;
-boolean isFull = (vis == tvFull);
-double scale = scaleForPixels(width);
-int i;
-double y1, y2;
-int midLineOff = heightPer/2;
-struct altGraphX *ag=NULL, *agList = NULL;
-int s =0, e=0;
-agList = tg->items;
-for(ag = agList; ag != NULL; ag = ag->next)
-    {	   
-    x1 = round((double)((int)ag->tStart-winStart)*scale) + xOff;
-    x2 = round((double)((int)ag->tEnd-winStart)*scale) + xOff;
-    if(tg->mapsSelf && tg->mapItem)
-	{
-	tg->mapItem(tg, ag, "notUsed", ag->tStart, ag->tEnd, xOff, y, width, heightPer);
-	}
-    if(!isFull && (x2-x1 > 0))
-	{
-	vgBox(vg, x1, yOff+tg->heightPer/2, x2-x1, 1, MG_BLACK);
-	}
-    for(i= ag->edgeCount -1; i >= 0; i--)   // for(i=0; i< ag->edgeCount; i++)
-	{
-	char buff[16];
-	int textWidth;
-	int sx1 = 0;
-	int sx2 = 0;
-	int sw = 0;
-	s = ag->vPositions[ag->edgeStarts[i]];
-	e = ag->vPositions[ag->edgeEnds[i]];
-	sx1 = roundingScale(s-winStart, width, baseWidth)+xOff;
-	sx2 = roundingScale(e-winStart, width, baseWidth)+xOff;
-	sw = sx2 - sx1;
-	snprintf(buff, sizeof(buff), "%d-%d", ag->edgeStarts[i], ag->edgeEnds[i]);        /* draw exons as boxes */
-	if( (ag->vTypes[ag->edgeStarts[i]] == ggHardStart || ag->vTypes[ag->edgeStarts[i]] == ggSoftStart)  
-	    && (ag->vTypes[ag->edgeEnds[i]] == ggHardEnd || ag->vTypes[ag->edgeEnds[i]] == ggSoftEnd)) 
-	    {
-	    Color color2;
-	    if(sameString(tg->mapName, "altGraphXCon"))
-		color2 = MG_BLACK;
-	    else
-		color2 = altGraphXColorForEdge(vg, ag, i);
-	    if(isFull)
-		{
-		drawScaledBox(vg, s, e, scale, xOff, y+(heightPer/2), heightPer/2, color2);
-		textWidth = mgFontStringWidth(font, buff);
-		if (textWidth <= sw + 2 && 0 )
-		    vgTextCentered(vg, sx2-textWidth-2, y+(heightPer/2), textWidth+2, heightPer/2, MG_WHITE, font, buff);
-		}
-	    else
-		drawScaledBox(vg, s, e, scale, xOff, y, heightPer, color2);
-
-	    }
-	if(isFull)
-	    {
-	    /* draw introns as arcs */
-
-	    if( (ag->vTypes[ag->edgeStarts[i]] == ggHardEnd || ag->vTypes[ag->edgeStarts[i]] == ggSoftEnd) 
-		&& (ag->vTypes[ag->edgeEnds[i]] == ggHardStart || ag->vTypes[ag->edgeEnds[i]] == ggSoftStart))
-		{
-		Color color2;
-		int x1, x2;
-		int midX;   
-		int midY = y + heightPer/2;
-		if(sameString(tg->mapName, "altGraphXCon"))
-		    color2 = MG_BLACK;
-		else
-		    color2 = altGraphXColorForEdge(vg, ag, i);
-		s = ag->vPositions[ag->edgeStarts[i]];
-		e = ag->vPositions[ag->edgeEnds[i]];
-		x1 = round((double)((int) s - winStart)*scale) + xOff;
-		x2 = round((double)((int) e - winStart)*scale) + xOff;
-		midX = (x1+x2)/2;
-		vgLine(vg, x1, midY, midX, y, color2);
-		vgLine(vg, midX, y, x2, midY, color2);
-		textWidth = mgFontStringWidth(font, buff);
-		if (textWidth <= sw && 0 )
-		    vgTextCentered(vg, sx1, y+(heightPer/2), sw, heightPer/2, MG_BLACK, font, buff);
-		}
-	    }
-	}
-    if(isFull)
-	y += lineHeight;
-    }
+boolean exon = FALSE;
+if( (ag->vTypes[ag->edgeStarts[edge]] == ggHardStart || ag->vTypes[ag->edgeStarts[edge]] == ggSoftStart)  
+    && (ag->vTypes[ag->edgeEnds[edge]] == ggHardEnd || ag->vTypes[ag->edgeEnds[edge]] == ggSoftEnd))
+    exon = TRUE;
+return exon;
 }
 
+static void altGraphXDrawAt(struct track *tg, void *item, struct vGfx *vg, 
+			    int xOff, int yOff, double scale, 
+			    MgFont *font, Color color, enum trackVisibility vis)
+/* Draw an altGraphX at the specified location. */
+{
+int i = 0;
+int s =0, e=0;
+int heightPer = tg->heightPer;
+int lineHeight = tg->lineHeight;
+int start = 0, end = 0;
+struct altGraphX *ag = item;
+int width = 0;
+int x1, x2;
+
+/* Create a link to hgc. */
+if(tg->mapsSelf && tg->mapItem)
+    {
+    char name[256];
+    int nameWidth = 0;
+    int textX = 0;
+    start = max(winStart, ag->tStart);
+    end = min(winEnd, ag->tEnd);
+    width = (end - start) * scale;
+    x1 = round((double)((int) start - winStart)*scale) + xOff;
+    textX = x1;
+    if(width == 0)
+	width = 1;
+    /* If there isn't enough room on before the left edge snap the
+       label to the left edge. */
+    if(withLeftLabels && tg->limitedVis == tvPack)
+	{
+	safef(name, sizeof(name), "%s", tg->itemName(tg, ag));
+	nameWidth = mgFontStringWidth(font, name);
+	textX = textX - (nameWidth + tl.nWidth/2);
+	if(textX < insideX)
+	    textX = insideX - nameWidth;
+	width = width + (x1 - textX);
+	}
+    tg->mapItem(tg, ag, "notUsed", ag->tStart, ag->tEnd, textX, yOff, width, heightPer);
+    }
+
+/* Draw the edges (exons and introns). */
+for(i= 0; i <  ag->edgeCount; i++)
+    {
+    Color color2;
+    s = ag->vPositions[ag->edgeStarts[i]];
+    e = ag->vPositions[ag->edgeEnds[i]];
+    if(sameString(tg->mapName, "altGraphXCon"))
+	color2 = MG_BLACK;
+    else
+	color2 = altGraphXColorForEdge(vg, ag, i);
+    if(isExon(ag, i))
+	{
+	if(vis == tvPack)
+	    drawScaledBox(vg, s, e, scale, xOff, yOff+heightPer/2, heightPer/2, color2);
+	else
+	    drawScaledBox(vg, s, e, scale, xOff, yOff, heightPer, color2);
+	}
+    else 
+	{
+	int midX;   
+	s = ag->vPositions[ag->edgeStarts[i]];
+	e = ag->vPositions[ag->edgeEnds[i]];
+	x1 = round((double)((int) s - winStart)*scale) + xOff;
+	x2 = round((double)((int) e - winStart)*scale) + xOff;
+	if(vis == tvPack)
+	    {
+	    midX = (x1+x2)/2;
+	    vgLine(vg, x1, yOff+heightPer/2, midX, yOff, color2);
+	    vgLine(vg, midX, yOff, x2, yOff+heightPer/2, color2);
+	    }
+	else
+	    vgLine(vg, x1, yOff+heightPer/2, x2, yOff+heightPer/2, color2);
+	}
+    }
+}
 
 void altGraphXLoadItems(struct track *tg)
 /* Load the altGraphX data to a track. */
@@ -269,33 +255,33 @@ static int altGraphXCalcHeight(struct track *tg, enum trackVisibility vis)
  */
 {
 int rows = 0;
-switch (vis)
+if(vis == tvFull)
     {
-    case tvFull:
-	tg->lineHeight  = 2 * tl.fontHeight+1;
-	tg->heightPer = tg->lineHeight -1;
-	/* Try to layout the track in ultra full mode. */
-	rows = altGraphXLayoutTrack(tg, 3*maxItemsInFullTrack+1);
- 	if(rows >= altGraphXMaxRows) 
-	    {
-	    struct hash *tmp = NULL;
-	    rows = slCount(tg->items);
-	    tg->limitedVis = tvDense;
-	    tg->drawItems = altGraphXDraw;
-	    tmp = tg->customPt;
-	    freeHash(&tmp);
-	    tg->customPt = NULL;
-	    }
-	break;
-    case tvDense:
-	tg->lineHeight  = tl.fontHeight+1;
-	tg->heightPer = tg->lineHeight -1;
-	tg->drawItems = altGraphXDraw;
-	rows=1;
-	break;
+    tg->lineHeight  = 2 * tl.fontHeight+1;
+    tg->heightPer = tg->lineHeight -1;
+    /* Try to layout the track in ultra full mode. */
+    rows = altGraphXLayoutTrack(tg, 3*maxItemsInFullTrack+1);
+    if(rows >= altGraphXMaxRows) 
+	{
+	struct hash *tmp = NULL;
+	vis = tvPack;
+	}
+    tg->height = rows * tg->lineHeight;
     }
-
-tg->height = rows * tg->lineHeight;
+if(vis != tvFull)
+    {
+    tg->drawItemAt = altGraphXDrawAt;
+    tg->drawItems = genericDrawItems;
+    tg->totalHeight = tgFixedTotalHeight;
+    tg->itemHeight = tgFixedItemHeight;
+    vis = limitVisibility(tg);
+    if(vis == tvPack)
+	{
+	tg->lineHeight = 2 * tl.fontHeight + 1;
+        tg->heightPer = tg->lineHeight - 1;
+	tg->height = 2 * tg->height;
+	}
+    }
 return tg->height;
 }
 
@@ -315,7 +301,7 @@ while((row = sqlNextRow(sr)) != NULL)
     }
 slReverse(&agList);
 tg->items = agList;
-altGraphXCalcHeight(tg, tg->limitedVis);
+altGraphXCalcHeight(tg, tg->visibility);
 sqlFreeResult(&sr);
 tg->items = agList;
 }
@@ -357,7 +343,6 @@ else if(tg->limitedVis == tvFull)
 else
     return tg->heightPer;
 }
-	  
 
 void altGraphXMethods(struct track *tg)
 /* setup special methods for altGraphX track */
