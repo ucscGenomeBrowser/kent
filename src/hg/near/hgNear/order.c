@@ -123,7 +123,7 @@ char c;
 for (i=0; ;++i)
     {
     c = prefix[i];
-    if (c == 0 || c != name[i])
+    if (c == 0 || tolower(c) != tolower(name[i]))
         break;
     }
 return i;
@@ -171,6 +171,8 @@ static void nameSimilarityMethods(struct order *ord, char *parameters)
 ord->table = cloneString(nextWord(&parameters));
 ord->keyField = cloneString(nextWord(&parameters));
 ord->valField = cloneString(nextWord(&parameters));
+if( ord->valField == NULL )
+    errAbort("Missing parameters in %s", ord->name );
 ord->exists = tableExists;
 ord->calcDistances = nameSimilarityCalcDistances;
 }
