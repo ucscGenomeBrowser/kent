@@ -294,13 +294,32 @@ static void shortScoreScheme(struct lineFile *lf)
 errAbort("Scoring matrix file %s too short\n", lf->fileName);
 }
 
+static void propagateCase(struct axtScoreScheme *ss)
+/* Propagate score matrix from lower case to mixed case
+ * in matrix. */
+{
+static int twoCase[2][4] = {{'a', 'c', 'g', 't'},{'A','C','G','T'},};
+int i1,i2,j1,j2;
+
+/* Propagate to other case combinations. */
+for (i1=0; i1<=1; ++i1)
+    for (i2=0; i2<=1; ++i2)
+       {
+       if (i1 == 0 && i2 == 0)
+           continue;
+       for (j1=0; j1<4; ++j1)
+	   for (j2=0; j2<4; ++j2)
+	      {
+	      ss->matrix[twoCase[i1][j1]][twoCase[i2][j2]] = ss->matrix[twoCase[0][j1]][twoCase[0][j2]];
+	      }
+       }
+}
+
 struct axtScoreScheme *axtScoreSchemeDefault()
 /* Return default scoring scheme (after blastz).  Do NOT axtScoreSchemeFree
  * this. */
 {
 static struct axtScoreScheme *ss;
-static int twoCase[2][4] = {{'a', 'c', 'g', 't'},{'A','C','G','T'},};
-int i1,i2,j1,j2;
 
 if (ss != NULL)
     return ss;
@@ -327,23 +346,50 @@ ss->matrix['t']['c'] = -31;
 ss->matrix['t']['g'] = -114;
 ss->matrix['t']['t'] = 91;
 
-/* Propagate to other case combinations. */
-for (i1=0; i1<=1; ++i1)
-    for (i2=0; i2<=1; ++i2)
-       {
-       if (i1 == 0 && i2 == 0)
-           continue;
-       for (j1=0; j1<4; ++j1)
-	   for (j2=0; j2<4; ++j2)
-	      {
-	      ss->matrix[twoCase[i1][j1]][twoCase[i2][j2]] = ss->matrix[twoCase[0][j1]][twoCase[0][j2]];
-	      }
-       }
-
+propagateCase(ss);
 ss->gapOpen = 400;
 ss->gapExtend = 30;
 return ss;
 }
+
+struct axtScoreScheme *axtScoreSchemeRnaDefault()
+/* Return default scoring scheme for RNA/DNA alignments
+ * within the same species.  Do NOT axtScoreSchemeFree
+ * this. */
+{
+static struct axtScoreScheme *ss;
+
+if (ss != NULL)
+    return ss;
+AllocVar(ss);
+
+/* Set up lower case elements of matrix. */
+ss->matrix['a']['a'] = 100;
+ss->matrix['a']['c'] = -200;
+ss->matrix['a']['g'] = -200;
+ss->matrix['a']['t'] = -200;
+
+ss->matrix['c']['a'] = -200;
+ss->matrix['c']['c'] = 100;
+ss->matrix['c']['g'] = -200;
+ss->matrix['c']['t'] = -200;
+
+ss->matrix['g']['a'] = -200;
+ss->matrix['g']['c'] = -200;
+ss->matrix['g']['g'] = 100;
+ss->matrix['g']['t'] = -200;
+
+ss->matrix['t']['a'] = -200;
+ss->matrix['t']['c'] = -200;
+ss->matrix['t']['g'] = -200;
+ss->matrix['t']['t'] = 100;
+
+propagateCase(ss);
+ss->gapOpen = 400;
+ss->gapExtend = 400;
+return ss;
+}
+
 
 static char blosumText[] = {
 "#  Matrix made by matblas from blosum62.iij\n"
