@@ -13,7 +13,7 @@
 #include "trackTable.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: das.c,v 1.17 2003/09/03 02:48:07 kate Exp $";
+static char const rcsid[] = "$Id: das.c,v 1.18 2003/12/24 11:39:18 kent Exp $";
 
 char *version = "1.00";
 char *database = NULL;	
@@ -173,7 +173,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	isSplit = tableIsSplit(table);
 	if (isSplit)
 	    root = skipOverChrom(table);
-	if (hashLookup(skipHash, root) == NULL)
+	if (hashLookup(skipHash, root) == NULL && !startsWith("chain", root))
 	    {
 	    if ((td = hashFindVal(hash, root)) == NULL)
 		{
