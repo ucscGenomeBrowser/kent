@@ -4315,6 +4315,61 @@ hgLoadBlastTab hg17 mmBlastTab -maxPer=1 *.tab
 # Scanning through 7748 files
 #	row count went from 36471 to 36638
 
+# Make rat ortholog column using blastp on rat known genes.
+# First make rat protein database and copy it to cluster/bluearc
+# if it doesn't exist already
+#	This already exists.  See makeRn3.doc for procedure.
+#	Files were put in this directory: /cluster/bluearc/rn3/blastp/
+
+# Make parasol run directory 
+ssh kk
+mkdir /cluster/data/hg17/bed/geneSorter/blastp/rn3
+cd /cluster/data/hg17/bed/geneSorter/blastp/rn3
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data /cluster/bluearc/blast229/blastall \
+    -p blastp -d /cluster/bluearc/rn3/blastp/known \
+    -i $1 -o $2 -e 0.001 -m 8 -b 1
+'_EOF_'
+    # << keep emacs happy
+chmod a+x blastSome
+
+# Make gensub2 file
+cat << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs happy
+
+# Create parasol batch
+#	this echo trick is used because otherwise the command line is
+#	too long and you can not do a simple ls
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+para check
+para push ... etc ...
+#Completed: 7749 of 7749 jobs
+#CPU time in finished jobs:      31035s     517.25m     8.62h    0.36d  0.001 y
+#IO & Wait Time:                 38472s     641.20m    10.69h    0.45d  0.001 y
+#Average job time:                   9s       0.15m     0.00h    0.00d
+#Longest job:                       75s       1.25m     0.02h    0.00d
+#Submission to last job:           169s       2.82m     0.05h    0.00d
+
+# Load into database.  
+ssh hgwdev
+cd /cluster/data/hg17/bed/geneSorter/blastp/rn3/run/out
+hgLoadBlastTab hg17 rnBlastTab -maxPer=1 *.tab
+# Scanning through 7749 files
+#Loading database with 25574 rows
+
 # Make Danio rerio (zebrafish) ortholog column using blastp on Ensembl.
 # First make protein database and copy it to cluster/bluearc
 # if it doesn't exist already
@@ -5886,6 +5941,30 @@ EOF
 # autoScaleDefault Off
 # pairwise netBlastz
 # speciesOrder chimp mouse rat dog chicken fugu zebrafish
+
+
+# PHASTCONS SCORES DOWNLOADABLES (DONE 10/11/04 angie)
+    ssh eieio
+    mkdir /cluster/data/hg17/zip/mzPt1Mm5Rn3Cf1Gg2Fr1Dr1
+    foreach d (/cluster/data/hg17/bed/multiz8way/cons/run.cons/PHASTCONS/chr*)
+      cd $d
+      set chr = $d:t
+      echo $chr
+      nice zcat `ls -1 $chr.*.pp.gz | sort -t\. -k2,2n` \
+      | nice gzip -c \
+      > /cluster/data/hg17/zip/mzPt1Mm5Rn3Cf1Gg2Fr1Dr1/$chr.gz
+    end
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/hg17/phastCons
+    # Doh!  /cluster/data/hg17/zip/mzPt1Mm5Rn3Cf1Gg2Fr1Dr1 is 11G now -- 
+    # too much to dump on hgwdev's / which is at 94%.  So don't do this:
+    #mv /cluster/data/hg17/zip/mzPt1Mm5Rn3Cf1Gg2Fr1Dr1 .
+    # make symbolic links instead:
+    mkdir /usr/local/apache/htdocs/goldenPath/hg17/phastCons/mzPt1Mm5Rn3Cf1Gg2Fr1Dr1
+    cd /usr/local/apache/htdocs/goldenPath/hg17/phastCons/mzPt1Mm5Rn3Cf1Gg2Fr1Dr1
+    ln -s /cluster/data/hg17/zip/mzPt1Mm5Rn3Cf1Gg2Fr1Dr1/* .
+    md5sum *.gz > md5sum.txt
+    # make a README.txt.
 
 
 # PHYLOFIT AND TREE-DOCTOR FOR 8-WAY: ESTIMATE PHYLOGENETIC TREE (acs)
@@ -9254,6 +9333,7 @@ hgsql hg17 -e 'load data local infile "rgdQtlLink.tab" into table hg17.rgdQtlLin
 /cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/iscratch/i/gs.18/build35/hg17.11.ooc $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}
 #ENDLOOP
 '_EOF_'
+    # << for emacs
     gensub2 allctg.lst affy.lst template.sub para.spec
     mkdir psl
     para create para.spec
@@ -9290,3 +9370,89 @@ hgsql hg17 -e 'load data local infile "rgdQtlLink.tab" into table hg17.rgdQtlLin
     
     # clean up
     rm -r psl tmp err contig.psl raw.psl *.bak psl.tab seq.tab
+
+
+# MAF COVERAGE FIGURES FOR ADAM (DONE 10/13/04 angie)
+    # First, get ranges of target coverage:
+    ssh eieio
+    mkdir /cluster/data/hg17/bed/var_multiz.2004-08-12/coverage
+    cd /cluster/data/hg17/bed/var_multiz.2004-08-12/coverage/
+    cat /cluster/data/hg17/bed/var_multiz.2004-08-12/maf.09-12-04/*.maf \
+    | nice mafRanges stdin hg17 hg17.mafRanges.bed
+    # Get pairwise coverage as well.
+    ssh kolossus
+    cd /cluster/data/hg17/bed/var_multiz.2004-08-12/coverage/
+    cat /cluster/bluearc/hg17/multiz8way/rn3/*.maf \
+    | nice mafRanges stdin hg17 hg17.rn3.mafRanges.bed
+    cat /cluster/bluearc/hg17/multiz8way/mm5/*.maf \
+    | nice mafRanges stdin hg17 hg17.mm5.mafRanges.bed
+    cat /cluster/bluearc/hg17/multiz8way/galGal2/*.maf \
+    | nice mafRanges stdin hg17 hg17.galGal2.mafRanges.bed
+    cat /cluster/bluearc/hg17/multiz8way/fr1/*.maf \
+    | nice mafRanges stdin hg17 hg17.fr1.mafRanges.bed
+
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/var_multiz.2004-08-12/coverage
+    # To make subsequent intersections a bit quicker, output a bed with 
+    # duplicate/overlapping ranges collapsed:
+    nice featureBits hg17 hg17.mafRanges.bed \
+      -bed=hg17.mafRangesCollapsed.bed
+#1269322379 bases of 2866216770 (44.286%) in intersection
+    foreach other (mm5 rn3 galGal2 fr1)
+      nice featureBits hg17 hg17.$other.mafRanges.bed \
+      -bed=hg17.${other}.mafRangesCollapsed.bed
+    end
+#1136313433 bases of 2866216770 (39.645%) in intersection
+#1097183733 bases of 2866216770 (38.280%) in intersection
+#108042503 bases of 2866216770 (3.770%) in intersection
+#49394089 bases of 2866216770 (1.723%) in intersection
+
+    # mafCoverage barfs currently, so pass on this for now:
+    #cat ../maf.09-12-04/*.maf \
+    #| nice mafCoverage -count=2 hg17 stdin > hg17.mafCoverage
+
+    # Intersect maf target coverage with gene regions -- 
+    # use Adam's knownGene region files:
+    nice featureBits hg17 -enrichment \
+      ../phastCons/stats2/knownGenesCds.bed \
+      hg17.mafRangesCollapsed.bed \
+      -bed=hg17.mafCds.bed
+#knownGenesCds.bed 1.166%, hg17.mafRangesCollapsed.bed 44.286%, both 1.123%, cover 96.39%, enrich 2.18x
+
+    nice featureBits hg17 -enrichment \
+      ../phastCons/stats2/knownGenesUtr3.bed \
+      hg17.mafRangesCollapsed.bed \
+      -bed=hg17.mafUtr3.bed
+#knownGenesUtr3.bed 0.918%, hg17.mafRangesCollapsed.bed 44.286%, both 0.724%, cover 78.95%, enrich 1.78x
+    nice featureBits hg17 -enrichment \
+      ../phastCons/stats2/knownGenesUtr5.bed \
+      hg17.mafRangesCollapsed.bed \
+      -bed=hg17.mafUtr5.bed
+#knownGenesUtr5.bed 0.266%, hg17.mafRangesCollapsed.bed 44.286%, both 0.215%, cover 80.76%, enrich 1.82x
+
+    # Intersect pairwise target coverages with gene regions:
+    foreach other (mm5 rn3 galGal2 fr1)
+      nice featureBits hg17 -enrichment \
+        ../phastCons/stats2/knownGenesCds.bed \
+        hg17.$other.mafRangesCollapsed.bed -bed=hg17.${other}Cds.bed
+      nice featureBits hg17 -enrichment \
+        ../phastCons/stats2/knownGenesUtr3.bed \
+        hg17.$other.mafRangesCollapsed.bed -bed=hg17.${other}Utr3.bed
+      nice featureBits hg17 -enrichment \
+        ../phastCons/stats2/knownGenesUtr5.bed \
+        hg17.$other.mafRangesCollapsed.bed -bed=hg17.${other}Utr5.bed
+    end
+#knownGenesCds.bed 1.166%, hg17.mm5.mafRangesCollapsed.bed 39.645%, both 1.109%, cover 95.17%, enrich 2.40x
+#knownGenesUtr3.bed 0.918%, hg17.mm5.mafRangesCollapsed.bed 39.645%, both 0.691%, cover 75.35%, enrich 1.90x
+#knownGenesUtr5.bed 0.266%, hg17.mm5.mafRangesCollapsed.bed 39.645%, both 0.205%, cover 76.90%, enrich 1.94x
+#knownGenesCds.bed 1.166%, hg17.rn3.mafRangesCollapsed.bed 38.280%, both 1.087%, cover 93.26%, enrich 2.44x
+#knownGenesUtr3.bed 0.918%, hg17.rn3.mafRangesCollapsed.bed 38.280%, both 0.670%, cover 72.97%, enrich 1.91x
+#knownGenesUtr5.bed 0.266%, hg17.rn3.mafRangesCollapsed.bed 38.280%, both 0.198%, cover 74.22%, enrich 1.94x
+#knownGenesCds.bed 1.166%, hg17.galGal2.mafRangesCollapsed.bed 3.770%, both 0.791%, cover 67.91%, enrich 18.01x
+#knownGenesUtr3.bed 0.918%, hg17.galGal2.mafRangesCollapsed.bed 3.770%, both 0.208%, cover 22.67%, enrich 6.02x
+#knownGenesUtr5.bed 0.266%, hg17.galGal2.mafRangesCollapsed.bed 3.770%, both 0.060%, cover 22.37%, enrich 5.94x
+#knownGenesCds.bed 1.166%, hg17.fr1.mafRangesCollapsed.bed 1.723%, both 0.731%, cover 62.69%, enrich 36.38x
+#knownGenesUtr3.bed 0.918%, hg17.fr1.mafRangesCollapsed.bed 1.723%, both 0.077%, cover 8.43%, enrich 4.89x
+#knownGenesUtr5.bed 0.266%, hg17.fr1.mafRangesCollapsed.bed 1.723%, both 0.041%, cover 15.59%, enrich 9.05x
+
+
