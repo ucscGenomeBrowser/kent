@@ -16,7 +16,7 @@
 #include "fuzzyFind.h"
 #include "aliType.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.25 2003/06/11 06:51:24 markd Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.26 2003/06/11 07:04:01 markd Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -789,16 +789,12 @@ for (i=1; i<blockCount; ++i)
     end = qStarts[i];
     if (start == end)
         {
+        start = tStarts[i-1] + blockSize;
+        end = tStarts[i];
         if (psl->strand[1] == '-')
-            {
-            start = (psl->tSize-tStarts[i])-seqOffset;
-            end = (psl->tSize-(tStarts[i-1]+blockSize))-seqOffset;
-            }
-        else
-            {
-            start = (tStarts[i-1]+blockSize)-seqOffset;
-            end = tStarts[i]-seqOffset;
-            }
+            reverseIntRange(&start, &end, psl->tSize);
+        start -= seqOffset;
+        end -= seqOffset;
 	if (intronOrientation(dna+start, dna+end) != 0)
 	    return TRUE;
 	}

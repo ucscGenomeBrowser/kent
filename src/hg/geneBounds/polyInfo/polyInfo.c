@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "estOrientInfo.h"
 
-static char const rcsid[] = "$Id: polyInfo.c,v 1.7 2003/06/11 06:46:58 markd Exp $";
+static char const rcsid[] = "$Id: polyInfo.c,v 1.8 2003/06/11 07:04:01 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -70,16 +70,10 @@ unsigned *sizes = psl->blockSizes, *starts = psl->tStarts;
 
 for (i=1; i<blockCount; ++i)
     {
+    s = starts[i-1] + sizes[i-1];
+    e = starts[i];
     if (psl->strand[1] == '-')
-        {
-        s = psl->tSize - starts[i];
-        e = psl->tSize - (starts[i-1] + sizes[i-1]);
-        }
-    else
-        {
-        s = starts[i-1] + sizes[i-1];
-        e = starts[i];
-        }
+        reverseIntRange(&s, &e, psl->tSize);
     sumSplice += intronOrientation(dna+s,dna+e);
     }
 if (psl->strand[0] == '-')
