@@ -2,7 +2,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/lodToBedScore instead.
 
-# $Id: lodToBedScore,v 1.1 2004/08/24 22:48:19 angie Exp $
+# $Id: lodToBedScore,v 1.2 2004/10/11 00:07:59 acs Exp $
 
 use strict;
 
@@ -41,9 +41,11 @@ while (<>) {
     die "\nError: input must have at least 5 columns. (input line $.)\n\n";
   }
   if ($words[4] <= 0) {
-    die "\nError: all scores must be positive. (input line $.)\n\n";
+    printf STDERR "\nWarning: original scores must be positive; value of %f will be transformed to 0 (input line $.)\n\n", $words[4];
   }
-  push @scores, $words[4];
+  else {			# don't push non-positive scores
+    push @scores, $words[4];
+  }
   push @lines, \@words;
 }
 
@@ -68,7 +70,8 @@ my $a = (1000 - $b) / log($max);
 # Do the transform on the score column of saved input:
 foreach my $wRef (@lines) {
   my @words = @{$wRef};
-  $words[4] = int(($a * log($words[4])) + $b);
+  if ($words[4] <= 0) { $words[4] = 0; }
+  else { $words[4] = int(($a * log($words[4])) + $b); }
   print join("\t", @words) . "\n";
 }
 
