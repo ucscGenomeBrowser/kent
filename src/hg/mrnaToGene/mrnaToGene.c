@@ -26,7 +26,7 @@ errAbort(
   "annotations.\n"
   "\n"
   "Options:\n"
-  "  -smallInsertSize=n - Merge inserts smaller than this many bases (default 0)\n"
+  "  -smallInsertSize=5 - Merge inserts smaller than this many bases (default 5)\n"
   "  -requireUtr - Drop sequences that don't have both 5' and 3' UTR annotated.\n"
   "  -keepInvalid - Keep sequences with invalid CDS.\n"
   "\n");
@@ -122,7 +122,7 @@ database = argv[1];
 pslTable = argv[2];
 genePredFile = argv[3];
 requireUtr = optionExists("requireUtr");
-smallInsertSize = optionInt("smallInsertSize", 0);
+smallInsertSize = optionInt("smallInsertSize", 5);
 mrnaToGene(database, pslTable, genePredFile);
 return 0;
 }
