@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.802 2004/09/13 04:03:06 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.803 2004/09/15 21:50:09 heather Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -8283,21 +8283,30 @@ if (gotBlat)
 /* Print Ensembl anchor for latest assembly of organisms we have
  * supported by Ensembl (human, mouse, rat, fugu) */
 if (sameString(database, "hg16")
-            || sameString(database, "mm3")
-            /* Rat goes in when Ensembl rat annotations are ready ? */
-            /* || sameString(database, "rn3") */
+            || sameString(database, "mm5")
+            || sameString(database, "rn3") 
             || sameString(database, "fr1"))
     {
     hPuts("<TD ALIGN=CENTER>");
     printEnsemblAnchor(database);
     hPrintf("%s</A></TD>", wrapWhiteFont("Ensembl"));
     }
+
+/* Print NCBI MapView anchor */
 if (sameString(database, "hg17"))
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?CHR=%s&BEG=%d&END=%d\" TARGET=_blank>",
     	skipChr(chromName), winStart+1, winEnd);
     hPrintf("%s</A></TD>", wrapWhiteFont("NCBI"));
     }
+if (sameString(database, "mm5"))
+    {
+    hPrintf("<TD ALIGN=CENTER>");
+    hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=10090&CHR=%s&BEG=%d&END=%d\" TARGET=_blank>",
+    	skipChr(chromName), winStart+1, winEnd);
+    hPrintf("%s</A></TD>", wrapWhiteFont("NCBI"));
+    }
+
 if (sameString(database, "ce2"))
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"http://ws120.wormbase.org/db/seq/gbrowse/wormbase?name=%s:%d-%d\" TARGET=_blank>%s</A></TD>", 
