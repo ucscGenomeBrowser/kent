@@ -805,7 +805,7 @@ url http://www.genoscope.cns.fr/proxy/cgi-bin/exofish.cgi?Id=$$&Mode=Id
 
 track blatFish
 shortLabel Fish Blat
-longLabel Tetraodon nigroviridis Translated Blat Alignments
+longLabel Takifugu rubripes Translated Blat Alignments
 priority 28
 visibility dense
 color 0,60,120
