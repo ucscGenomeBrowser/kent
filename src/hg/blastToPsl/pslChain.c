@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslChain.c,v 1.4 2003/12/14 15:14:11 braney Exp $";
+static char const rcsid[] = "$Id: pslChain.c,v 1.5 2004/02/07 20:28:56 braney Exp $";
 
 struct score
 {
@@ -483,6 +483,8 @@ int gapCost(int dq, int dt)
 /* Figure out gap costs. */
 {
     
+    if (abs(dt) > 20500)
+	return 10000000;
 return 0;
 if (dt < 0) dt = 0;
 if (dq < 0) dq = 0;
