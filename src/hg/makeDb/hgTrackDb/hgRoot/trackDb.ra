@@ -526,7 +526,7 @@ track perlegen
 shortLabel Haplotype Blocks
 longLabel Perlegen Common High-Resolution Haplotype Blocks.  
 priority 38
-visibility full
+visibility dense
 chromosomes chr21,
 color 0,0,0
 altColor 0,0,0
