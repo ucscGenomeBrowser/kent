@@ -128,7 +128,7 @@ struct wiggleData *wigFetchData(char *db, char *tableName, char *chromName,
 #define	WIG_DATA_NOT_RETURNED	TRUE
 #define	WIG_RETURN_DATA	FALSE
 #define	WIG_ALL_DATA		FALSE
-void wigFreeData(struct wiggleData *wigData);
+void wigFreeData(struct wiggleData **wigData);
 /* free everything in the wiggleData structure */
 
 /*	in lib/wiggleCart.c	*/
