@@ -41,6 +41,9 @@
 #include "knownMore.h"
 #include "exprBed.h"
 
+#define CHUCK_CODE 1
+
+#ifdef CHUCK_CODE
 /* begin Chuck code */
 #define EXPR_DATA_SHADES 16
 
@@ -49,7 +52,9 @@ Color shadesOfGreen[EXPR_DATA_SHADES];
 Color shadesOfRed[EXPR_DATA_SHADES];
 Color shadesOfBlue[EXPR_DATA_SHADES];
 int maxRGBShade = EXPR_DATA_SHADES - 1;
+
 /* end Chuck code */
+#endif /*CHUCK_CODE*/
 
 int maxItemsInFullTrack = 300;
 
@@ -3838,96 +3843,140 @@ tg->itemEnd = gapItemEnd;
 return tg;
 }
 
+#ifdef CHUCK_CODE
 /* begin Chuck code */
+
+
+int calcExprBedFullSize(struct exprBed  *exp) 
+/* Because exprBedItemHeight and exprBedTotalHeight are also
+used to center the labels on the left hand side
+it was necessary to write this function which is essentially
+a duplication of exprBedTotalHeight */
+{
+if(exp != NULL) 
+    return 2*exp->numExp+1;
+else
+    return 0;
+}
+
+char *exprBedName(struct trackGroup *tg, void *item) 
+/* Return Name minus LINK_. */
+{
+struct exprBed *exp = item;
+char *full = exp->name;
+static char abbrev[32];
+strncpy(abbrev, full, sizeof(abbrev));
+abbr(abbrev, "LINK_");
+return abbrev;
+}
+
+char* exprBedItemName(struct trackGroup *tg, void *item)
+/* Checks to make sure there is enough room for the next item 
+   and returns the name if there is */
+{
+int maxHeight = tg->totalHeight(tg, tg->limitedVis);
+int numItems = slCount(tg->items);
+if(tg->items != item) 
+    return cloneString("");
+else 
+    return cloneString("Rosetta Data");
+}
 
 static int exprBedItemHeight(struct trackGroup *tg, void *item)
 /* Return item height for fixed height track. */
 {
+int minHeight;
 struct exprBed *exp = item;
-int minHeight = mgFontLineHeight(tl.font)+1;
-int height = 2*exp->numExp+1;
-if(height<minHeight) 
+if(tg->limitedVis == tvFull) 
+    minHeight = calcExprBedFullSize(exp);
+else 
+    minHeight = mgFontLineHeight(tl.font)+1;
+
+if(tg->items == item) 
     return minHeight;
-else
-    return height;
+else 
+    return 0;
 }
 
 static int exprBedTotalHeight(struct trackGroup *tg, enum trackVisibility vis)
-/* Most fixed height track groups will use this to figure out the height they use. */
+/* exprBed track groups will use this to figure out the height they use. */
 {
-if (tg->items == NULL)
-    return 0;
+struct exprBed *exp = tg->items;
 tg->lineHeight = tg->itemHeight(tg, tg->items);
 tg->heightPer = tg->lineHeight - 1;
 switch (vis)
     {
     case tvFull:
-	tg->height = slCount(tg->items) * tg->lineHeight;
+	tg->height = tg->lineHeight = tg->heightPer = calcExprBedFullSize(exp);
 	break;
     case tvDense:
-	tg->height = tg->lineHeight;
+	tg->height = mgFontLineHeight(tl.font)+1;
+	tg->lineHeight = tg->height;
+	tg->heightPer = tg->lineHeight;
 	break;
-    }
+    } 
 return tg->height;
 }
 
-void makeRedGreenShades(struct memGfx *mg) {
+void makeRedGreenShades(struct memGfx *mg) 
 /* Allocate the  shades of Red, Green and Blue */
-  int i;
-  int maxShade = ArraySize(shadesOfGreen) -1;
-  for(i=0; i<=maxShade; i++) {
+{
+int i;
+int maxShade = ArraySize(shadesOfGreen) -1;
+for(i=0; i<=maxShade; i++) 
+    {
     struct rgbColor rgbGreen, rgbRed, rgbBlue;
     int level = (255*i/(maxShade));
     if(level<0) level = 0;
     shadesOfRed[i] = mgFindColor(mg, level, 0, 0);
     shadesOfGreen[i] = mgFindColor(mg, 0, level, 0);
     shadesOfBlue[i] = mgFindColor(mg, 0, 0, level);
-  }
+    }
 }
 
+
+Color getExprDataColor(float val, float maxDeviation, boolean RG_COLOR_SCHEME ) 
 /** Returns the appropriate Color from the shadesOfGreen and shadesOfRed arrays
  * @param float val - acutual data to be represented
  * @param float maxDeviation - maximum (and implicitly minimum) values represented
  * @param boolean RG_COLOR_SCHEME - are we red/green(TRUE) or red/blue(FALSE) ?
  */
-
-Color getExprDataColor(float val, float maxDeviation, boolean RG_COLOR_SCHEME ) 
 {
-  float absVal = fabs(val);
+float absVal = fabs(val);
+int colorIndex = 0;
 
-  int colorIndex = 0;
+/* Rosetta has some crazy values and I've made -1,000,000.00 be the error code 
+ * so I'm going to assume that no really has > 2^100 fold change in expression */  
+if(absVal > 100) 
+    return lightGrayIndex(); 
 
-  if(absVal > 100) 
-     return lightGrayIndex(); 
-
-  /* cap the value to be less than or equal to maxDeviation */
-  /*    uglyf("abs is %f<BR>\n",absVal); */
-  if(absVal > maxDeviation)
+/* cap the value to be less than or equal to maxDeviation */
+if(absVal > maxDeviation)
     absVal = maxDeviation;
 
-  /* project the value into the number of colors we have.  
-   *   * i.e. if val = 1.0 and max is 2.0 and number of shades is 16 then index would be
-   * 1 * 15 /2.0 = 7.5 = 7
-   */
-  if(maxDeviation == 0) 
-    errAbort("ERROR: hgTracksExample::getExprDataColor() maxDeviation can't be zero"); 
+/* project the value into the number of colors we have.  
+ *   * i.e. if val = 1.0 and max is 2.0 and number of shades is 16 then index would be
+ * 1 * 15 /2.0 = 7.5 = 7
+ */
+if(maxDeviation == 0) 
+    errAbort("ERROR: hgTracksExample::getExprDataColor() maxDeviation can't be zero\n"); 
 
-  colorIndex = (int)(absVal * maxRGBShade/maxDeviation);
-  
-  /* Return the correct color depending on color scheme and shades */
-  if(RG_COLOR_SCHEME) 
+colorIndex = (int)(absVal * maxRGBShade/maxDeviation);
+
+/* Return the correct color depending on color scheme and shades */
+if(RG_COLOR_SCHEME) 
     {
     if(val > 0) 
-      return shadesOfRed[colorIndex];
+	return shadesOfRed[colorIndex];
     else 
-      return shadesOfGreen[colorIndex];
+	return shadesOfGreen[colorIndex];
     }
-  else 
+else 
     {
     if(val > 0) 
-      return shadesOfRed[colorIndex];
+	return shadesOfRed[colorIndex];
     else 
-      return shadesOfBlue[colorIndex];
+	return shadesOfBlue[colorIndex];
     }
 }
 
@@ -3941,43 +3990,43 @@ int color = 1;
 y2 = 0;
 for (i=0; i<strips; ++i)
     {
-      Color color = getExprDataColor(exp->scores[i],2.0,TRUE);
-      /*      uglyf("<PRE>item %d color is %d for score %f<BR></PRE>\n", i,color,exp->scores[i]);*/
+    Color color = getExprDataColor(exp->scores[i],2.0,TRUE);
     y1 = y2;
     y2 = (i+1)*height/strips;
     mgDrawBox(mg, xOff, yOff+y1, width, y2-y1, color);
     }
 }
 
-/**
- * Draw the box for a ExprBed.h
- */
+
 static void exprBedDraw(struct trackGroup *tg, int seqStart, int seqEnd,
 			struct memGfx *mg, int xOff, int yOff, int width,
 			MgFont *font, Color color, enum trackVisibility vis) 
+/**
+ * Draw the box for a ExprBed.h
+ */
 {
-  
-  int baseWidth = seqEnd - seqStart;
-  struct exprBed *item;
-  int y = yOff;
-  int heightPer = tg->heightPer;
-  int lineHeight = tg->lineHeight;
-  int x1,x2,w;
-  boolean isFull = (vis == tvFull);
-  double scale = width/(double)baseWidth;
-  makeRedGreenShades(mg);
-  for (item = tg->items; item != NULL; item = item->next)
+int baseWidth = seqEnd - seqStart;
+struct exprBed *item;
+int y = yOff;
+struct exprBed *exp;
+int heightPer;
+int lineHeight = tg->lineHeight;
+int x1,x2,w;
+boolean isFull = (vis == tvFull);
+double scale = width/(double)baseWidth;
+exp = tg->items;
+heightPer = calcExprBedFullSize(exp);
+makeRedGreenShades(mg);
+for (item = tg->items; item != NULL; item = item->next)
     {
-      x1 = round((double)((int)item->chromStart-winStart)*scale) + xOff;
-      x2 = round((double)((int)item->chromEnd-winStart)*scale) + xOff;
-      w = x2-x1;
-      if (tg->itemColor != NULL)
+    x1 = round((double)((int)item->chromStart-winStart)*scale) + xOff;
+    x2 = round((double)((int)item->chromEnd-winStart)*scale) + xOff;
+    w = x2-x1;
+    if (tg->itemColor != NULL)
         color = tg->itemColor(tg, item, mg);
-      if (w < 1)
+    if (w < 1)
 	w = 1;
-      mgExprBedBox(mg, x1, y, w, heightPer, item);
-      if (isFull)
-	y += lineHeight;
+    mgExprBedBox(mg, x1, y, w, heightPer, item);
     }
 }
 
@@ -3993,19 +4042,6 @@ void freeExprBed(struct trackGroup *tg)
 exprBedFreeList((struct exprBed**)&tg->items);
 }
 
-char *exprBedName(struct trackGroup *tg, void *item)
-/* Return full genie name. */
-{
-struct exprBed *exp = item;
-char *full = exp->name;
-static char abbrev[32];
-
-strncpy(abbrev, full, sizeof(abbrev));
-abbr(abbrev, "LINK_");
-return abbrev;
-}
-
-
 struct trackGroup *exprBedTg()
 /* Make track group for exprBed. */
 {
@@ -4015,17 +4051,17 @@ tg->drawItems = exprBedDraw;
 tg->mapName = "hgExprBed";
 tg->visibility = tvHide;
 tg->itemHeight = exprBedItemHeight;
-tg->itemName = exprBedName;
+tg->itemName = exprBedItemName;
 tg->totalHeight = exprBedTotalHeight;
-tg->longLabel = "exprBed";
-tg->shortLabel = "exprBed";
+tg->longLabel = "Rosetta Data";
+tg->shortLabel = "Rosetta Data";
 tg->loadItems = loadExprBed;
 tg->freeItems = freeExprBed;
 return tg;
 }
 
 /* end chuck */
-
+#endif /*CHUCK_CODE*/
 
 #ifdef SOMEDAY
 /* These next three vars are used to communicate info from the
@@ -4484,7 +4520,9 @@ if (chromTableExists("_mrna")) slSafeAddHead(&tGroupList, fullMrnaTg());
 if (chromTableExists("_intronEst")) slSafeAddHead(&tGroupList, intronEstTg());
 if (chromTableExists("_est")) slSafeAddHead(&tGroupList, estTg());
 if (hTableExists("est3")) slSafeAddHead(&tGroupList, est3Tg());
+#ifdef CHUCK_CODE
 if (hTableExists("exprBed")) slSafeAddHead(&tGroupList, exprBedTg());
+#endif /*CHUCK_CODE*/
 if (hTableExists("cpgIsland")) slSafeAddHead(&tGroupList, cpgIslandTg());
 if (hTableExists("cpgIsland2")) slSafeAddHead(&tGroupList, cpgIsland2Tg());
 if (hTableExists("exoMouse")) slSafeAddHead(&tGroupList, exoMouseTg());
