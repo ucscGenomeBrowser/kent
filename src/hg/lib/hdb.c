@@ -70,6 +70,14 @@ void hSetDbConnect(char* host, char *db, char *user, char *password)
     hdbUser = user;
     hdbPassword = password;
 }
+void hSetDbConnect2(char* host, char *db, char *user, char *password)
+/* set the connection information for the database */
+{
+    hdbHost = host;
+    hdbName2 = db;
+    hdbUser = user;
+    hdbPassword = password;
+}
 
 void hSetDb(char *dbName)
 /* Set the database name. */
@@ -79,10 +87,24 @@ if (hdbCc != NULL)
 hdbName = dbName;
 }
 
+void hSetDb2(char *dbName)
+/* Set the database name. */
+{
+if (hdbCc2 != NULL)
+    errAbort("Can't hgSetDb after an hgAllocConn2(), sorry.");
+hdbName2 = dbName;
+}
+
 char *hGetDb()
 /* Return the current database name. */
 {
 return hdbName;
+}
+
+char *hGetDb2()
+/* Return the current database name. */
+{
+return hdbName2;
 }
 
 char *hGetDbHost()
@@ -200,7 +222,7 @@ char query[256];
 conn = hAllocConn2();
 sprintf(query, "select size from chromInfo where chrom = '%s'", chromName);
 size = sqlQuickNum(conn, query);
-hFreeConn(&conn);
+hFreeConn2(&conn);
 return size;
 }
 
