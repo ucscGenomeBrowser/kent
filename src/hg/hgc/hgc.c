@@ -153,7 +153,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.804 2004/12/22 22:50:48 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.805 2004/12/23 03:19:33 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11442,6 +11442,9 @@ if (sameString(animal, "cow"))
     animal = "cattle";
 else if (sameString(animal, "chicken"))
     animal = "g_gallus";
+else if (sameString(animal, "Dmelano"))
+    animal = "drosoph";
+
 sprintf(buf, "species=%s&tc=%s ", animal, id);
 genericClickHandler(tdb, item, buf);
 }
