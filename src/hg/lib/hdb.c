@@ -32,7 +32,7 @@
 #include "twoBit.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.218 2004/11/05 06:13:38 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.219 2004/11/18 16:42:19 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -806,6 +806,21 @@ hFreeConn(&conn);
 return hash;
 }
 
+struct dnaSeq *hFetchSeqMixed(char *fileName, char *seqName, int start, int end)
+/* Fetch mixed case sequence. */
+{
+if (twoBitIsFile(fileName))
+    {
+    struct twoBitFile *tbf;
+    struct dnaSeq *seq;
+    tbf = twoBitOpen(fileName);
+    seq = twoBitReadSeqFrag(tbf, seqName, start, end);
+    twoBitClose(&tbf);
+    return seq;
+    }
+return nibLoadPartMasked(NIB_MASK_MIXED, fileName, start, end-start);
+}
+
 struct dnaSeq *hFetchSeq(char *fileName, char *seqName, int start, int end)
 /* Fetch sequence from file.  If it is a .2bit file then fetch the named sequence.
    If it is .nib then just ignore seqName. */
@@ -821,6 +836,14 @@ if (twoBitIsFile(fileName))
     return seq;
     }
 return nibLoadPart(fileName, start, end-start);
+}
+
+struct dnaSeq *hChromSeqMixed(char *chrom, int start, int end)
+/* Return mixed case (repeats in lower case) DNA from chromosome. */
+{
+char fileName[512];
+hNibForChrom(chrom, fileName);
+return hFetchSeqMixed(fileName, chrom, start, end);
 }
 
 struct dnaSeq *hChromSeq(char *chrom, int start, int end)

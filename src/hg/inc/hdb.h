@@ -230,8 +230,14 @@ struct dnaSeq *hFetchSeq(char *fileName, char *seqName, int start, int end);
 /* Fetch sequence from file.  If it is a .2bit file then fetch the named sequence.
 If it is .nib then just ignore seqName. */
 
+struct dnaSeq *hFetchSeqMixed(char *fileName, char *seqName, int start, int end);
+/* Fetch mixed case sequence. */
+
 struct dnaSeq *hChromSeq(char *chrom, int start, int end);
 /* Return lower case DNA from chromosome. */
+
+struct dnaSeq *hChromSeqMixed(char *chrom, int start, int end);
+/* Return mixed case (repeats in lower case) DNA from chromosome. */
 
 struct dnaSeq *hChromSeq2(char *chrom, int start, int end);
 /* Return lower case DNA from chromosome in db2.*/
