@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.14 2004/09/13 21:58:58 hiram Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.15 2004/09/13 23:10:06 hiram Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -472,13 +472,16 @@ for (region = regionList; region != NULL; region = region->next)
 	int count = 0;
 	struct wigAsciiData *wigData = NULL;
 	struct wigAsciiData *asciiData;
+	struct wigAsciiData *next;
 
 	wigData = getWiggleAsData(conn, curTable, region, lm);
-	for (asciiData = wigData; asciiData; asciiData = asciiData->next)
+	for (asciiData = wigData; asciiData; asciiData = next)
 	    {
+	    next = asciiData->next;
 	    slAddHead(&wigDataList, asciiData);
 	    ++count;
 	    }
+	slReverse(&wigDataList);
 	}
     else
 	{
@@ -516,7 +519,11 @@ for (region = regionList; region != NULL; region = region->next)
 	    }
 	else
 	    {
-	    hPrintf("track name=\"%s\" description=\"%s\" visibility=%d url=%s \n",
+	    if (isWig)
+		hPrintf("track type=wiggle_0 name=\"%s\" description=\"%s\" visibility=%d url=%s \n",
+		   ctName, ctDesc, visNum, ctUrl);
+	    else
+		hPrintf("track name=\"%s\" description=\"%s\" visibility=%d url=%s \n",
 		   ctName, ctDesc, visNum, ctUrl);
 	    }
 	}
