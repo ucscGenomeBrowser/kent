@@ -8,7 +8,7 @@
 #include <netdb.h>
 
 bits32 internetHostIp(char *hostName);
-/* Get IP v4 address (in network byte order) for hostName.
+/* Get IP v4 address (in host byte order) for hostName.
  * Warn and return 0 if there's a problem. */
 
 boolean internetFillInAddress(char *hostName, int port, struct sockaddr_in *address);

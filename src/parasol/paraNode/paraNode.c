@@ -356,20 +356,14 @@ for (;;)
 in_addr_t lookupIp(char *host)
 /* Return IP address of host. */
 {
-struct hostent *hostent = gethostbyname(host);
-struct sockaddr_in address;	
 static char *lastHost = NULL;
 static in_addr_t lastAddress;
 
 if (lastHost != NULL && sameString(lastHost, host))
     return lastAddress;
-if (hostent == NULL)
-    errAbort("Couldn't find hub %s", host);
-memcpy(&address.sin_addr.s_addr, hostent->h_addr_list[0], 
-	sizeof(address.sin_addr.s_addr));
 freez(&lastHost);
 lastHost = cloneString(host);
-lastAddress = address.sin_addr.s_addr;
+lastAddress = internetHostIp(host);
 return lastAddress;
 }
 
@@ -685,8 +679,8 @@ for (;;)
     if (pmReceive(&pmIn, mainRudp))
 	{
 	findNow();
-	if (hubName == NULL || pmIn.ipAddress.sin_addr.s_addr == hubIp 
-		|| pmIn.ipAddress.sin_addr.s_addr == localIp)
+	if (hubName == NULL || ntohl(pmIn.ipAddress.sin_addr.s_addr) == hubIp 
+		|| ntohl(pmIn.ipAddress.sin_addr.s_addr) == localIp)
 	    {
 	    /* Host and signature look ok,  read a string and
 	     * parse out first word as command. */

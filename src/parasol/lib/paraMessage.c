@@ -12,7 +12,7 @@
 #include "paraMessage.h"
 
 void pmInit(struct paraMessage *pm, rudpHost ipAddress, bits16 port)
-/* Initialize message (that might be on stack) */
+/* Initialize message (that might be on stack). */
 {
 ZeroVar(pm);
 pm->ipAddress.sin_family = AF_INET;

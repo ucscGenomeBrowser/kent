@@ -4,7 +4,7 @@
 #include "internet.h"
 
 bits32 internetHostIp(char *hostName)
-/* Get IP v4 address (in network byte order) for hostName.
+/* Get IP v4 address (in host byte order) for hostName.
  * Warn and return 0 if there's a problem. */
 {
 struct hostent *hostent;
@@ -16,6 +16,7 @@ if (hostent == NULL)
     return 0;
     }
 memcpy(&ret, hostent->h_addr_list[0], sizeof(ret));
+ret = ntohl(ret);
 return ret;
 }
 
@@ -29,7 +30,7 @@ if (hostName == NULL)
     address->sin_addr.s_addr = INADDR_ANY;
 else
     {
-    if ((address->sin_addr.s_addr = internetHostIp(hostName)) == 0)
+    if ((address->sin_addr.s_addr = htonl(internetHostIp(hostName))) == 0)
 	return FALSE;
     }
 return TRUE;
