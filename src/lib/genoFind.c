@@ -6,6 +6,7 @@
 #include "fa.h"
 #include "dystring.h"
 #include "errabort.h"
+#include "ooc.h"
 #include "genoFind.h"
 
 char *gfSignature()
@@ -99,8 +100,9 @@ if (gf != NULL)
     }
 }
 
-static struct genoFind *gfNewEmpty(int minMatch, int maxGap, int tileSize, int maxPat)
-/* Return an empty pattern space. */
+static struct genoFind *gfNewEmpty(int minMatch, int maxGap, int tileSize, int maxPat,
+	char *oocFile)
+/* Return an empty pattern space. oocFile parameter may be NULL*/
 {
 struct genoFind *gf;
 int seedBitSize = tileSize*2;
@@ -117,6 +119,11 @@ gf->listSizes = needHugeZeroedMem(tileSpaceSize * sizeof(gf->listSizes[0]));
 gf->minMatch = minMatch;
 gf->maxGap = maxGap;
 gf->maxPat = maxPat;
+if (oocFile != NULL)
+    {
+    oocMaskCounts(oocFile, gf->listSizes, tileSize, maxPat);
+    oocMaskSimpleRepeats(gf->listSizes, tileSize, maxPat);
+    }
 return gf;
 }
 
@@ -202,6 +209,7 @@ for (i=0; i < nibSize; i = endBuf)
 fclose(f);
 }
 
+
 int gfPepTile(DNA *dna, int n)
 /* Make up packed representation of translated protein. */
 {
@@ -280,11 +288,11 @@ static int gfAllocLists(struct genoFind *gf)
 int oneCount;
 int count = 0;
 int i;
-bits16 *listSizes = gf->listSizes;
+bits32 *listSizes = gf->listSizes;
 bits32 **lists = gf->lists;
 bits32 *allocated;
 int ignoreCount = 0;
-bits16 maxPat = gf->maxPat;
+bits32 maxPat = gf->maxPat;
 int size;
 int usedCount = 0, overusedCount = 0;
 int tileSpaceSize = gf->tileSpaceSize;
@@ -429,7 +437,7 @@ return nibSize;
 void gfZeroOverused(struct genoFind *gf)
 /* Zero out counts of overused tiles. */
 {
-bits16 *sizes = gf->listSizes;
+bits32 *sizes = gf->listSizes;
 int tileSpaceSize = gf->tileSpaceSize, i;
 int maxPat = gf->maxPat;
 int overCount = 0;
@@ -448,7 +456,7 @@ printf("Got %d overused %d-mers\n", overCount, gf->tileSize);
 static void gfZeroNonOverused(struct genoFind *gf)
 /* Zero out counts of non-overused tiles. */
 {
-bits16 *sizes = gf->listSizes;
+bits32 *sizes = gf->listSizes;
 int tileSpaceSize = gf->tileSpaceSize, i;
 int maxPat = gf->maxPat;
 int overCount = 0;
@@ -465,10 +473,15 @@ for (i=0; i<tileSpaceSize; ++i)
 
 
 struct genoFind *gfIndexNibs(int nibCount, char *nibNames[],
-	int minMatch, int maxGap, int tileSize, int maxPat)
-/* Make index for all nib files. */
+	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile)
+/* Make index for all seqs in list. 
+ *      minMatch - minimum number of matching tiles to trigger alignments
+ *      maxGap   - maximum deviation from diagonal of tiles
+ *      tileSize - size of tile in nucleotides
+ *      maxPat   - maximum use of tile to not be considered a repeat
+ *      oocFile  - .ooc format file that lists repeat tiles.  May be NULL. */
 {
-struct genoFind *gf = gfNewEmpty(minMatch, maxGap, tileSize, maxPat);
+struct genoFind *gf = gfNewEmpty(minMatch, maxGap, tileSize, maxPat, oocFile);
 int i;
 bits32 offset = 0, nibSize;
 char *nibName;
@@ -494,6 +507,42 @@ printf("Done adding\n");
 gfZeroOverused(gf);
 return gf;
 }
+
+struct genoFind *gfIndexSeq(struct dnaSeq *seqList,
+	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile)
+/* Make index for all seqs in list. */
+{
+struct genoFind *gf = gfNewEmpty(minMatch, maxGap, tileSize, maxPat, oocFile);
+int seqCount = slCount(seqList);
+struct dnaSeq *seq;
+int i;
+bits32 offset = 0, nibSize;
+char *nibName;
+struct gfSeqSource *ss;
+
+for (seq = seqList; seq != NULL; seq = seq->next)
+    {
+    gfCountSeq(gf, seq);
+    }
+printf("Done counting %d-mers\n", tileSize);
+gfAllocLists(gf);
+gfZeroNonOverused(gf);
+AllocArray(gf->sources, seqCount);
+gf->sourceCount = seqCount;
+for (i=0, seq = seqList; i<seqCount; ++i, seq = seq->next)
+    {
+    gfAddSeq(gf, seq, offset);
+    ss = gf->sources+i;
+    ss->seq = seq;
+    ss->start = offset;
+    offset += seq->size;
+    ss->end = offset;
+    }
+printf("Done indexing %d-mers\n", tileSize);
+gfZeroOverused(gf);
+return gf;
+}
+
 
 struct genoFind *gfPepIndexNibs(int nibCount, char *nibNames[],
 	int minMatch, int maxGap, int tileSize, int maxPat)

@@ -32,6 +32,11 @@ static double scale = 1000.0/CLOCKS_PER_SEC;
 return round(scale*clock());
 }
 
+long clock1()
+/* A seconds clock. */
+{
+return clock()/CLOCKS_PER_SEC;
+}
 
 void uglyfBreak()
 /* Go into debugger. */

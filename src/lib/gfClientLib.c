@@ -51,6 +51,7 @@ struct gfRange
     int qStart;	/* Start in query */
     int qEnd;	/* End in query */
     char *tName;	/* Target name */
+    struct dnaSeq *tSeq;	/* Target sequence. (May be NULL if in .nib.  Not allocated here.) */
     int tStart;	/* Start in target */
     int tEnd;	/* End in target */
     int hitCount;	/* Number of hits */
@@ -182,6 +183,7 @@ for (exon = exonList; exon != NULL; exon = nextExon)
 	gene->tStart = exon->tStart;
 	gene->tEnd = exon->tEnd;
 	gene->tName = cloneString(exon->tName);
+	gene->tSeq = exon->tSeq;
 	gene->qStart = exon->qStart;
 	gene->qEnd = exon->qEnd;
 	gene->hitCount = exon->hitCount;
@@ -345,6 +347,63 @@ for (range = rangeList; range != NULL; range = range->next)
     }
 gfRangeFreeList(&rangeList);
 }
+
+static struct gfRange *seqClumpToRangeList(struct gfClump *clumpList)
+/* Convert from clump list to range list. */
+{
+struct gfRange *rangeList = NULL, *range;
+struct gfClump *clump;
+struct dnaSeq *seq;
+for (clump = clumpList; clump != NULL; clump = clump->next)
+    {
+    AllocVar(range);
+    range->qStart = clump->qStart;
+    range->qEnd = clump->qEnd;
+    seq = clump->target->seq;
+    if (seq == NULL)
+        errAbort("Error gfClientLib.c. NULL target seq in range.");
+    range->tName = cloneString(seq->name);
+    range->tStart = clump->tStart;
+    range->tEnd = clump->tEnd;
+    range->tSeq = seq;
+    range->hitCount = clump->hitCount;
+    slAddHead(&rangeList, range);
+    }
+slReverse(&rangeList);
+return rangeList;
+}
+
+void gfAlignSeqClumps(struct gfClump *clumpList, struct dnaSeq *seq,
+    boolean isRc,  enum ffStringency stringency, int minMatch, 
+    GfSaveAli outFunction, void *outData)
+/* Convert gfClumps to an actual alignment that gets saved via 
+ * outFunction/outData. */
+{
+struct ssBundle *bun;
+struct gfRange *rangeList = NULL, *range;
+struct dnaSeq *targetSeq;
+
+rangeList = seqClumpToRangeList(clumpList);
+slSort(&rangeList, gfRangeCmpTarget);
+rangeList = gfRangesBundle(rangeList, 100000);
+for (range = rangeList; range != NULL; range = range->next)
+    {
+    targetSeq = range->tSeq;
+    range->tStart = 0;
+    range->tEnd = targetSeq->size;
+    AllocVar(bun);
+    bun->qSeq = seq;
+    bun->genoSeq = targetSeq;
+    bun->data = range;
+    alignComponents(range, bun, stringency);
+    ssStitch(bun, stringency);
+    saveAlignments(targetSeq->name, targetSeq->size, 0, 
+	bun, outData, isRc, stringency, minMatch, outFunction);
+    ssBundleFree(&bun);
+    }
+gfRangeFreeList(&rangeList);
+}
+
 
 static int calcMilliBad(int qAliSize, int tAliSize, 
 	int qNumInserts, int tNumInserts,
