@@ -257,6 +257,38 @@ struct pfParse
     struct pfVar *var;		/* Associated variable if any. */
     };
 
+static void pfDumpConst(struct pfToken *tok, FILE *f)
+/* Dump out constant to file */
+{
+switch (tok->type)
+    {
+    case pftString:
+	{
+	#define MAXLEN 32
+	char buf[MAXLEN+4];
+	char *s = tok->val.s;
+	int len = strlen(s);
+	strcpy(buf+MAXLEN, "...");
+	buf[MAXLEN-1] = 0;
+	if (len > MAXLEN) len = MAXLEN;
+	memcpy(buf, s, len);
+	fprintf(f, "\"%s\"", buf);
+	break;
+	#undef MAXLEN
+	}
+    case pftInt:
+        fprintf(f, "%lld", tok->val.i);
+	break;
+    case pftFloat:
+        fprintf(f, "%g", tok->val.x);
+	break;
+    default:
+        fprintf(f, "unknownType");
+	break;
+    }
+}
+
+
 void pfParseDump(struct pfParse *pp, int level, FILE *f)
 /* Write out pp (and it's children) to file */
 {
@@ -283,6 +315,13 @@ if (pp->var != NULL)
 	    }
 	}
     fprintf(f, " %s", var->name);
+    }
+switch (pp->type)
+    {
+    case pptConstUse:
+	fprintf(f, " ");
+	pfDumpConst(pp->tok, f);
+	break;
     }
 fprintf(f, "\n");
 for (child = pp->children; child != NULL; child = child->next)
@@ -515,9 +554,9 @@ for (;;)
 *pTokList = tok;
 }
 
-struct pfParse *pfParseExpression(struct pfParse *parent,
+struct pfParse *pfParseAtom(struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
-/* Parse expression. */
+/* Parse atomic expression - const, variable, or parenthesized expression. */
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *pp = NULL;
@@ -531,6 +570,17 @@ switch (tok->type)
     case pftFloat:
         pp = constUse(parent, &tok, scope);
 	break;
+    case '(':
+        {
+	struct pfToken *startTok = tok;
+	tok = tok->next;
+	pp = pfParseExpression(parent, &tok, scope);
+	if (tok->type != ')')
+	    errAbort("Unclosed parenthesis starting line %d of %s",
+	    	tok->startLine, tok->source->name);
+	tok = tok->next;
+	break;
+	}
     default:
         syntaxError(tok);
 	break;
@@ -539,6 +589,67 @@ switch (tok->type)
 return pp;
 }
 
+struct pfParse *pfParseNegation(struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse unary minus. */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *pp;
+if (tok->type == '-')
+    {
+    pp = pfParseNew(pptNegate, tok, parent);
+    tok = tok->next;
+    pp->children = pfParseAtom(pp, &tok, scope);
+    }
+else
+    {
+    pp = pfParseAtom(parent, &tok, scope);
+    }
+*pTokList = tok;
+return pp;
+}
+
+struct pfParse *pfParseProduct(struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse expression. */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *pp = pfParseNegation(parent, &tok, scope);
+while (tok->type == '*' || tok->type == '/')
+    {
+    struct pfParse *left = pp, *right;
+    enum pfTokType tt = (tok->type == '*' ? pptTimes : pptDiv);
+    pp = pfParseNew(tt, tok, parent);
+    left->parent = pp;
+    tok = tok->next;
+    right = pfParseNegation(pp, &tok, scope);
+    pp->children = left;
+    left->next = right;
+    }
+*pTokList = tok;
+return pp;
+}
+
+struct pfParse *pfParseExpression(struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse expression. */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *pp = pfParseProduct(parent, &tok, scope);
+while (tok->type == '+' || tok->type == '-')
+    {
+    struct pfParse *left = pp, *right;
+    enum pfTokType tt = (tok->type == '+' ? pptPlus : pptMinus);
+    pp = pfParseNew(tt, tok, parent);
+    left->parent = pp;
+    tok = tok->next;
+    right = pfParseProduct(pp, &tok, scope);
+    pp->children = left;
+    left->next = right;
+    }
+*pTokList = tok;
+return pp;
+}
 
 static void parseAssignOrCall(struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
