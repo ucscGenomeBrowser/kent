@@ -9520,7 +9520,7 @@ rm $TMP/$root.pp
     cp WINDOWS/*.ss.gz /cluster/bluearc/hg16/bed/hg16mm3rn3panTro1galGal2-SS/
     logout
     rm -f jobs.lst
-    for file in `/cluster/bluearc/hg16/bed/hg16mm3rn3panTro1galGal2-SS/*.ss.gz` ; do echo doPostProbs $file >> jobs.lst ; done
+    for file in /cluster/bluearc/hg16/bed/hg16mm3rn3panTro1galGal2-SS/*.ss.gz ; do echo doPostProbs $file >> jobs.lst ; done
     ssh kk
     cd /cluster/data/hg16/bed/multiz.hg16mm3rn3panTro1galGal2/phyloHMM
     para create ; para try ; para push ... etc.
