@@ -10,7 +10,7 @@
 #include "filePath.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.18 2004/03/01 06:03:36 kent Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.19 2004/03/01 06:31:42 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -600,8 +600,15 @@ for (tag = form->startTag->next; tag != form->endTag; tag = tag->next)
     if (sameWord(tag->name, "INPUT"))
         {
 	char *type = tagAttributeNeeded(page, tag, "TYPE");
-	char *varName = tagAttributeNeeded(page, tag, "NAME");
+	char *varName = tagAttributeVal(page, tag, "NAME", NULL);
 	char *value = tagAttributeVal(page, tag, "VALUE", NULL);
+	if (varName == NULL)
+	    {
+	    if (!sameWord(type, "SUBMIT") && !sameWord(type, "CLEAR")
+	    	&& !sameWord(type, "BUTTON"))
+		tagWarn(page, tag, "Missing NAME attribute");
+	    varName = "n/a";
+	    }
 	var = findOrMakeVar(page, varName, hash, tag, &varList); 
 	if (var->type != NULL && !sameWord(var->type, type))
 	    tagWarn(page, tag, "Mixing input types %s and %s", var->type, type);
@@ -1119,6 +1126,8 @@ for (c=0; c<256; ++c)
 /* This list is a little more inclusive than W3's. */
 okChars['='] = 1;
 okChars['-'] = 1;
+okChars['/'] = 1;
+okChars['%'] = 1;
 okChars['.'] = 1;
 okChars[';'] = 1;
 okChars['_'] = 1;
