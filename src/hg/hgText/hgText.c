@@ -347,10 +347,12 @@ void handleDbChange()
    If databases were changed then use the new default position too.
 */
 {
-char *oldDb = hashFindVal(oldVars, "db");
-if (! strstrNoCase(oldDb, database))
+char *oldDb  = hashFindVal(oldVars, "db");
+char *oldPos = hashFindVal(oldVars, "position");
+if ((oldDb != NULL) && (! sameWord(oldDb, database)))
     {
-    if (! isGenome(position))
+    if ((! isGenome(position)) &&
+	(oldPos != NULL) && sameWord(position, oldPos))
 	position = searchPosition(hDefaultPos(database),
 				  &chrom, &winStart, &winEnd);
     cartRemove(cart, "hgt.customText");
