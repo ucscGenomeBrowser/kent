@@ -5343,24 +5343,35 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     end
 
 
-# MAKE VSGALGAL2 DOWNLOADABLES (DONE 6/23/04 angie)
+# MAKE VSGALGAL2 DOWNLOADABLES (REDONE 9/13/04 angie)
     ssh eieio
     cd /cluster/data/hg17/bed/blastz.galGal2.2004-06-14/axtChain
-    ln all.chain chicken.chain
-    zip /cluster/data/hg17/zip/chicken.chain.zip chicken.chain
-    rm chicken.chain
-    ln human.net chicken.net
-    zip /cluster/data/hg17/zip/chicken.net.zip chicken.net
-    rm chicken.net
-    ln humanSyn.net chickenSyn.net
-    zip /cluster/data/hg17/zip/chickenSyn.net.zip chickenSyn.net
-    rm chickenSyn.net
+    gzip -c all.chain > /cluster/data/hg17/zip/chicken.chain.gz
+    gzip -c human.net > /cluster/data/hg17/zip/chicken.net.gz
+    mkdir /cluster/data/hg17/zip/axtNet
+    foreach f (axtNet/chr*axt)
+      gzip -c $f > /cluster/data/hg17/zip/$f.gz
+    end
+    # Doh! above for loop didn't work because all axt's have been removed 
+    # from this dir!  :|  Just this once, regenerate compressed axtNet on 
+    # the fly:
+    ssh kolossus
+    cd /cluster/data/hg17/bed/blastz.galGal2.2004-06-14/axtChain/net
+    foreach f (*.net)
+      set chr = $f:t:r
+      echo $chr
+      netToAxt $f ../chain/$chr.chain /cluster/data/hg17/nib \
+        /cluster/data/galGal2/nib stdout \
+      | axtSort stdin stdout \
+      | gzip -c > /cluster/data/hg17/zip/axtNet/$chr.axt.gz
+    end    
 
     ssh hgwdev
     mkdir /usr/local/apache/htdocs/goldenPath/hg17/vsGalGal2
     cd /usr/local/apache/htdocs/goldenPath/hg17/vsGalGal2
-    mv /cluster/data/hg17/zip/chicken*.zip .
-    md5sum *.zip > md5sum.txt
+    mv /cluster/data/hg17/zip/chicken*.gz .
+    mv /cluster/data/hg17/zip/axtNet .
+    md5sum *.gz */*.gz > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
 
 
@@ -8798,6 +8809,7 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     nice rm axtChain/run1/chain/* &
     nice gzip {axt,psl}Chrom/* axtChain/{all.chain,*.net} &
 
+
 # regulatory potential 2X track (WORKING - 2004-09-14 - Hiram)
     ssh eieio
     mkdir /cluster/store3/gs.18/build35/bed/regPotential2X
@@ -8925,3 +8937,24 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
 		-wibFile=wigData/$C stdin 2> dataLimits/$C.limits
     done
 XXX - running 2004-09-16 09:20
+
+
+# SGP GENES (DONE 9/17/04 angie)
+    ssh eieio
+    mkdir /cluster/data/hg17/bed/sgp
+    cd /cluster/data/hg17/bed/sgp
+    foreach chr (`awk '{print $1;}' ../../chrom.sizes`)
+      wget http://genome.imim.es/genepredictions/H.sapiens/golden_path_200405/SGP/$chr.gtf
+      wget http://genome.imim.es/genepredictions/H.sapiens/golden_path_200405/SGP/$chr.prot
+    end
+    # Add ".1" suffix to each item in .prot's, to match transcript_id's in gtf
+    cp /dev/null sgpPep.fa
+    foreach f (chr*.prot)
+      perl -wpe 's/^(>chr\S+)/$1.1/' $f >> sgpPep.fa
+    end
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/sgp
+    ldHgGene -gtf -genePredExt hg17 sgpGene chr*.gtf
+    hgPepPred hg17 generic sgpPep sgpPep.fa
+
+
