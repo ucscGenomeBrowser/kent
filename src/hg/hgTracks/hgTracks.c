@@ -4827,6 +4827,7 @@ int y = yOff;
 int heightPer = tg->heightPer;
 int lineHeight = tg->lineHeight;
 int x1,x2;
+int y1, y2;
 int midLineOff = heightPer/2;
 int shortOff = 2, shortHeight = heightPer-4;
 int s, e, e2, s2;
@@ -4845,20 +4846,33 @@ int prevEnd = -1;
 lf=tg->items;    
 for(lf = tg->items; lf != NULL; lf = lf->next) 
     {
-    if (lf->components != NULL && !hideLine)
-	{
-	x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
-	x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
-	w = x2-x1;
-	/* draw thick line ... */
-	//mgDrawBox(mg, x1, y+shortOff+1, w, shortHeight-2, blackIndex());
-	}
+    
     for (sf = lf->components; sf != NULL; sf = sf->next)
 	{
 	heightPer = tg->heightPer;
 	s = sf->start;
 	e = sf->end;
 	drawScaledBox(mg, s, s+1, scale, xOff, y-e+s+10, 1, blackIndex());
+
+
+    if (sf->next != NULL)
+	{
+	x1 = round((double)((int)sf->end-winStart)*scale) + xOff;
+	x2 = round((double)((int)sf->next->start-winStart)*scale) + xOff;
+    y1 =  y - sf->end + sf->start + 10;
+    y2 =  y - sf->next->end + sf->next->start + 10;
+	//mgDrawBox(mg, x1, y+shortOff+1, w, shortHeight-2, blackIndex());
+    //mgConnectingLine( mg, x1, y1, x2, y2, blackIndex());
+
+ //   if( (x2-x1) > 0 && (y2-y1) > 0 )
+ //   mgDrawBox(mg, x1, y1, x2-x1, y2-y1, color);
+    //
+	drawScaledBox(mg, s+1, sf->next->start, scale, xOff, y, 1, blackIndex());
+
+	}
+
+
+
 	}
     if (isFull)
 	y += lineHeight;
