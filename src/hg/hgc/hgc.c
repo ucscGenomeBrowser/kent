@@ -99,6 +99,7 @@
 #include "chainDb.h"
 #include "chainNetDbLoad.h"
 #include "chainToPsl.h"
+#include "chainToAxt.h"
 #include "netAlign.h"
 #include "stsMapRat.h"
 #include "stsInfoRat.h"
@@ -133,7 +134,7 @@
 #include "bgiGeneSnp.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.603 2004/04/03 02:35:59 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.604 2004/04/04 04:22:52 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3587,7 +3588,7 @@ else if (startsWith(track, "mrnaBlastz" ))
     type = "mRNA";
     table = track;
     }
-else if (startsWith(track,"pseudoMrna"))
+else if (startsWith(track,"pseudoMrna") || startsWith(track,"pseudoGeneLink"))
     {
     type = "mRNA";
     table = "mrnaBlastz";
@@ -7521,12 +7522,14 @@ char *tbl = cgiUsualString("table", cgiString("g"));
 int rowOffset = 0;
 
 /* Get alignment info. */
+if (startsWith(tbl,"pseudoGeneLink"))
+    tbl = cloneString("pseudoMrna");
 pslList = loadPslRangeT(tbl, acc, chrom, winStart, winEnd);
 slSort(&pslList, pslCmpScoreDesc);
 
 /* print header */
 genericHeader(tdb, acc);
-if (startsWith(track,"pseudoMrna"))
+if (startsWith(track,"pseudoMrna") || startsWith(track,"pseudoGeneLink"))
     {
     type = "mRNA";
     if (hTableExists("mrnaBlastz") )
@@ -8596,6 +8599,59 @@ if (!(strcmp(otherName,"human")
 }
 
 
+struct chain *getChainFromRange(char *chainTable, char *chrom, int chromStart, int chromEnd)
+/* get a list of chains for a range */
+{
+char chainTable_chrom[256];
+struct dyString *dy = newDyString(128);
+struct chain *chainList = NULL;
+struct sqlConnection *conn = hAllocConn();
+safef(chainTable_chrom, 256, "%s_%s",chrom, chainTable);
+
+
+if (hTableExists(chainTable_chrom) )
+    {
+    /* lookup chain if not stored */
+    char **row;
+    struct sqlResult *sr = NULL;
+        dyStringPrintf(dy,
+        "select id, score, qStart, qEnd, qStrand, qSize from %s where ", 
+        chainTable_chrom);
+    hAddBinToQuery(chromStart, chromEnd, dy);
+    dyStringPrintf(dy, "tEnd > %d and tStart < %d ", chromStart,chromEnd);
+    dyStringAppend(dy, " order by qStart");
+    sr = sqlGetResult(conn, dy->string);
+
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        int chainId = 0, score;
+        unsigned int qStart, qEnd, qSize;
+        struct chain *chain = NULL;
+        char qStrand;
+        chainId = sqlUnsigned(row[0]);
+        score = sqlUnsigned(row[1]);
+        qStart = sqlUnsigned(row[2]);
+        qEnd = sqlUnsigned(row[3]);
+        qStrand =row[4][0];
+        qSize = sqlUnsigned(row[5]);
+        if (qStrand == '-')
+            {
+            unsigned int tmp = qSize - qEnd;
+            qEnd = qSize - qStart;
+            qStart = tmp;
+            }
+        chain = NULL;
+        if (chainId != 0)
+            {
+            chain = chainLoadIdRange(hGetDb(), chainTable, chrom, chromStart, chromEnd, chainId);
+            if (chain != NULL)
+                slAddHead(&chainList, chain);
+            }
+        }
+    sqlFreeResult(&sr);
+    }
+return chainList;
+}
 
 void htcGenePsl(char *htcCommand, char *item)
 /* Interface for selecting & displaying alignments from axtInfo 
@@ -8605,18 +8661,28 @@ struct genePred *gp = NULL;
 struct axtInfo *aiList = NULL, *ai;
 struct axt *axtList = NULL;
 struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn2 = NULL;
 struct sqlResult *sr;
 char **row;
 char *track = cartString(cart, "o");
 char *chrom = cartString(cart, "c");
 char *name = cartOptionalString(cart, "i");
 char *alignment = cgiOptionalString("alignment");
+char *species = NULL;
 char *db2 = cartString(cart, "db2");
 int left = cgiInt("l");
 int right = cgiInt("r");
 char table[64];
 char query[512];
 char nibFile[512];
+char qNibFile[512];
+char chainTable[512];
+struct chain *chain = NULL;
+struct hash *nibHash = hashNew(0);
+struct dnaSeq *qSeq = NULL, *tSeq = NULL;
+struct nibInfo *qNib = NULL, *tNib = NULL;
+struct chain *subChain = NULL, *toFree = NULL;
+int qs,qe;
 boolean hasBin; 
 boolean alignmentOK;
 
@@ -8624,10 +8690,6 @@ cartWebStart(cart, "Alignment of %s in %s to %s using %s.",
 	     name, hOrganism(database), hOrganism(db2), alignment);
 hSetDb2(db2);
 
-// get nibFile
-sprintf(query, "select fileName from chromInfo where chrom = '%s'",  chrom);
-if (sqlQuickQuery(conn, query, nibFile, sizeof(nibFile)) == NULL)
-    errAbort("Sequence %s isn't in chromInfo", chrom);
 
 // get gp
 hFindSplitTable(chrom, track, table, &hasBin);
@@ -8640,7 +8702,6 @@ if ((row = sqlNextRow(sr)) != NULL)
     gp = genePredLoad(row + hasBin);
     }
 sqlFreeResult(&sr);
-hFreeConn(&conn);
 if (gp == NULL)
     errAbort("Could not locate gene prediction (db=%s, table=%s, name=%s, in range %s:%d-%d)",
 	     database, table, name, chrom, left+1, right);
@@ -8669,7 +8730,6 @@ cgiMakeButton("Submit", "Submit");
 printf("</td>\n");
 puts("</tr></TABLE>");
 puts("</FORM>");
-
 // Make sure alignment is not just a leftover from previous db2.
 aiList = hGetAxtAlignments(db2);
 if (alignment != NULL)
@@ -8684,18 +8744,82 @@ if (alignment != NULL)
 	    }
 	}
     if (! alignmentOK)
+        {
+        species = NULL;
 	alignment = NULL;
+        }
     }
 if ((alignment == NULL) && (aiList != NULL))
     {
     alignment = aiList->alignment;
+    species = aiList->species;
     }
+if (species == NULL)
+    species = aiList->species;
 
-puts("<PRE><TT>");
-axtList = getAxtListForGene(gp, nibFile, database, db2, alignment);
-axtOneGeneOut(axtList, LINESIZE, stdout , gp, nibFile);
-puts("</TT></PRE>");
+species[0] = (char)toupper(species[0]);
+safef(chainTable, sizeof(chainTable),"rBestChain%s",species);
+chain = getChainFromRange(chainTable, gp->chrom, gp->txStart, gp->txEnd);
+if (chain == NULL)
+    {
+    safef(chainTable, sizeof(chainTable),"bestChain%s",species);
+    chain = getChainFromRange(chainTable, gp->chrom, gp->txStart, gp->txEnd);
+    }
+if (chain == NULL)
+    {
+    safef(chainTable, sizeof(chainTable),"chain%s",species);
+    chain = getChainFromRange(chainTable, gp->chrom, gp->txStart, gp->txEnd);
+    }
+if (chain != NULL)
+    {
+    slSort(&chain, chainCmpScore);
+    chainSubsetOnT(chain, gp->txStart, gp->txEnd, &subChain, &toFree);
+    }
+if (subChain != NULL && db2 != NULL)
+    {
+    int size = subChain->qEnd - subChain->qStart;
+    qChainRangePlusStrand(subChain, &qs, &qe);
+    // get nibFile
+    sprintf(query, "select fileName from chromInfo where chrom = '%s'",  gp->chrom);
+    if (sqlQuickQuery(conn, query, nibFile, sizeof(nibFile)) == NULL)
+        errAbort("Sequence %s isn't in chromInfo", chrom);
+
+    // get nibFile for query in other species
+    conn2 = hAllocConnDb(db2);
+    sprintf(query, "select fileName from chromInfo where chrom = '%s'" ,subChain->qName);
+    if (sqlQuickQuery(conn2, query, qNibFile, sizeof(qNibFile)) == NULL)
+        errAbort("Sequence chr1 isn't in chromInfo");
+
+
+    tSeq = nibLoadPartMasked(NIB_MASK_MIXED, nibFile, subChain->tStart, subChain->tEnd-subChain->tStart);
+    if (subChain->qStrand == '-')
+        {
+        int start = qs-1;
+        int end = qe;
+        printf("chain %s:%d-%d %s:%d-%d %c\n",
+                subChain->tName, subChain->tStart, subChain->tEnd, 
+                subChain->qName, start, end, subChain->qStrand);
+        qSeq = nibLoadPartMasked(NIB_MASK_MIXED, qNibFile, start, size);
+        reverseComplement(qSeq->dna, qSeq->size);
+        }
+    else
+        {
+        printf("chain %s:%d-%d %s:%d-%d %c\n",
+                subChain->tName, subChain->tStart, subChain->tEnd, 
+                subChain->qName, subChain->qStart, subChain->qEnd, subChain->qStrand);
+        qSeq = nibLoadPartMasked(NIB_MASK_MIXED, qNibFile, subChain->qStart, size);
+        }
+    if (tSeq != NULL && qSeq != NULL)
+        {
+        puts("<PRE><TT>");
+        axtList = chainToAxt(subChain, qSeq, subChain->qStart, tSeq, subChain->tStart,40000,100000);
+
+        axtOneGeneOut(axtList, LINESIZE, stdout , gp, nibFile);
+        puts("</TT></PRE>");
+        }
+    }
 axtInfoFreeList(&aiList);
+hFreeConn(&conn);
 webEnd();
 }
 
@@ -13618,7 +13742,7 @@ else if (sameWord(track, "softberryGene"))
     {
     doSoftberryPred(tdb, item);
     }
-else if (startsWith(track, "pseudoMrna"))
+else if (startsWith(track, "pseudoMrna") || startsWith(track, "pseudoGeneLink"))
     {
     doPseudoPsl(tdb, item);
     }
