@@ -11914,15 +11914,6 @@ allMultiz.csh $(root1) {check out line+ /cluster/data/hg17/bed/multiz10way/maf/$
         ln -s `pwd`/*.maf $mafDir/$table
         hgLoadMaf hg17 -warn $table -pathPrefix=$mafDir/$table
     end
-        #set org = `echo "select organism from dbDb where name='$dir'" | hgsql -N hgcentraltest | tr '[A-Z]' '[a-z]'`
-    
-    #ln -s /cluster/data/hg17/bed/blastz.panTro1/mafNet $mafDir/chimp_netBlastz
-    #ln -s /cluster/data/hg17/bed/blastz.mm5/mafNet $mafDir/mouse_netBlastz
-    #ln -s /cluster/data/hg17/bed/blastz.rn3/mafNet $mafDir/rat_netBlastz
-    #ln -s /cluster/data/hg17/bed/blastz.canFam1.2004-07-08/mafNet $mafDir/dog_netBlastz
-    #ln -s /cluster/data/hg17/bed/blastz.galGal2/mafNet $mafDir/chicken_netBlastz
-    #ln -s /cluster/data/hg17/bed/blastz.fr1/mafNet $mafDir/fugu_netBlastz
-    #ln -s /cluster/data/hg17/bed/blastz.danRer1.swap/mafNet $mafDir/zebrafish_netBlastz
 
     # multiple alignment
     set mafDir = /gbdb/hg17/multiz10way/maf
@@ -12240,6 +12231,7 @@ rm $tmpfile
         hgsql -N hg17 | sort -n > chr1.maf.sizes
     # cleanup
     hgsql hg17 -e "DROP TABLE multiz10wayChr1"
+    rm -fr ../mafTemp
 
     # coverage of multiple alignment, and pairs
     ssh kolossus
