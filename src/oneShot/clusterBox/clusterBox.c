@@ -34,10 +34,11 @@ struct boxClump *clump;
 for (clump = clumpList; clump != NULL; clump = clump->next)
     {
     struct boxIn *box;
+    int diag = clump->tStart - clump->qStart;
     fprintf(f, "Cluster of %d %d,%d %d,%d\n", clump->boxCount,
 	clump->qStart, clump->qEnd, clump->tStart, clump->tEnd);
     for (box = clump->boxList; box != NULL; box = box->next)
-        fprintf(f, "  %d,%d %d,%d\n", 
+        fprintf(f, "  (%d) %d,%d %d,%d\n", diag - (box->tStart - box->qStart),
 		box->qStart, box->qEnd, box->tStart, box->tEnd);
     }
 }
