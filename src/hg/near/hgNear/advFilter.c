@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.10 2003/09/17 01:58:53 kent Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.11 2003/09/17 17:16:22 kent Exp $";
 
 struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -262,6 +262,8 @@ static void bigButtons()
 /* Put up the big clear/submit buttons. */
 {
 hPrintf("<TABLE><TR><TD>");
+cgiMakeButton(advFilterBrowseVarName, "Submit");
+hPrintf("</TD><TD>");
 cgiMakeButton(advFilterClearVarName, "Clear Filter");
 hPrintf("</TD><TD>");
 cgiMakeButton(filSaveCurrentVarName, "Save Filter");
@@ -271,8 +273,6 @@ hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\"", filUseSavedVarName,
 if (!userSettingsAnySaved(filUserSettings()))
     hPrintf(" DISABLED");
 hPrintf(">");
-hPrintf("</TD><TD>");
-cgiMakeButton(advFilterBrowseVarName, "Submit");
 hPrintf("</TD></TR></TABLE>");
 hPrintf("Submit will take you back to the main page "
  "with the current filter.<BR>To quickly get a list of gene "
