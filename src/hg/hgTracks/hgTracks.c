@@ -86,7 +86,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.849 2004/12/07 18:00:42 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.850 2004/12/08 18:15:47 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7217,7 +7217,9 @@ static bool isCompositeTrack(struct track *track)
 /* Determine if this is a composite track. This is currently defined
  * as a top-level dummy track, with a list of subtracks of the same type */
 {
-return (track->subtracks && differentString(track->tdb->type, "wigMaf"));
+if (track->tdb)
+    return trackDbIsComposite(track->tdb);
+return FALSE;
 }
 
 static bool subtrackVisible(char *tableName)
