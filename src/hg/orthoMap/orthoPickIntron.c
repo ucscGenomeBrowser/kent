@@ -21,7 +21,7 @@
 #include "dnautil.h"
 #include "orthoEval.h"
 
-static char const rcsid[] = "$Id: orthoPickIntron.c,v 1.2 2003/06/24 05:53:49 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoPickIntron.c,v 1.3 2003/06/25 01:12:29 sugnet Exp $";
 
 struct intronEv
 /** Data about one intron. */
@@ -185,21 +185,31 @@ hFreeConn(&conn);
 return foundSome;
 }
 
-boolean isOverlappedByRefSeq(struct intronEv *iv)
+
+boolean isOverlappedByTable(struct intronEv *iv, char *table)
 /* Return TRUE if there is a refSeq overlapping. */
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row;
 int rowOffset = 0;
-char *refSeqTable = "refGene";
 boolean foundSome = FALSE;
-sr = hRangeQuery(conn, refSeqTable, iv->chrom, iv->e1S, iv->e2E, NULL, &rowOffset); 
+sr = hRangeQuery(conn, table, iv->chrom, iv->e1S, iv->e2E, NULL, &rowOffset); 
 if(sqlNextRow(sr) != NULL)
     foundSome = TRUE;
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 return foundSome;
+}
+
+boolean isOverlappedByRefSeq(struct intronEv *iv)
+{
+return isOverlappedByTable(iv, "refGene");
+}
+
+boolean isOverlappedByMgcBad(struct intronEv *iv)
+{
+return isOverlappedByTable(iv, "chuckMgcBad");
 }
 
 int intronEvalCmp(const void *va, const void *vb)
@@ -295,7 +305,7 @@ struct orthoEval *ev=NULL, *evList = NULL;
 struct intronEv *iv=NULL, *ivList = NULL;
 int maxPicks = optionInt("numPicks", 100);
 int i=0;
-boolean isRefSeq=FALSE;
+boolean isRefSeq=FALSE, isMgcBad=FALSE;
 struct hash *posHash = newHash(12), *agxHash = newHash(12);
 struct bed *bed = NULL;
 
@@ -331,7 +341,7 @@ bedOut = mustOpen(bedFileName, "w");
 htmlFrameOut = mustOpen(htmlFrameFileName, "w");
 orthoBedOut = mustOpen(orthoBedFileName, "w");
 writeOutFrames(htmlFrameOut, htmlFileName, db);
-fprintf(htmlOut, "<html><body><table border=1><tr><th>Mouse Acc.</th><th>Score</th><th>RefSeq</th></tr>\n");
+fprintf(htmlOut, "<html><body><table border=1><tr><th>Mouse Acc.</th><th>Score</th><th>RefSeq</th><th>Mgc Frag</th></tr>\n");
 warn("Writing out");
 for(iv = ivList; iv != NULL && maxPicks > 0; iv = iv->next)
     {
@@ -339,10 +349,13 @@ for(iv = ivList; iv != NULL && maxPicks > 0; iv = iv->next)
 	{
 	bed = bedForIv(iv);
 	isRefSeq = isOverlappedByRefSeq(iv);
+	isMgcBad = isOverlappedByMgcBad(iv);
 	fprintf(htmlOut, "<tr><td><a target=\"browser\" "
 		"href=\"http://mgc.cse.ucsc.edu/cgi-bin/hgTracks?db=hg15&position=%s:%d-%d\"> "
-		"%s </a></td><td>%d</td><td>%s</td></tr>\n", 
-		bed->chrom, bed->chromStart-40, bed->chromEnd+50, bed->name, bed->score, isRefSeq ? "yes" : "no");
+		"%s </a></td><td>%d</td><td>%s</td><td>%s</td></tr>\n", 
+		bed->chrom, bed->chromStart-40, bed->chromEnd+50, bed->name, bed->score, 
+		isRefSeq ? "yes" : "no",
+		isMgcBad ? "yes" : "no");
 	bedTabOutN(bed, 12, bedOut);
 	bedTabOutN(iv->ev->orthoBed, 12, orthoBedOut);
 	bedFree(&bed);
