@@ -773,6 +773,7 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 - from gbAlignSetup: tmp job file exists: suggest course of action here.
 
 - current mondo job distribution runs longest jobs first.
+  - need to consider genome sequence size when partationing jobs.
 
 - if ignore.idx is modified between gbAlignGet and gbAlignFinish, gbAlignFinish
   will get an error.
@@ -789,7 +790,6 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
       /db_xref="GeneID:3952"
       /db_xref="LocusID:3952"
   drop old refseq build programs from tree.
-
 
 - dna based ones: 
       select * from kgXref where kgID like "NM_%" limit 10;
