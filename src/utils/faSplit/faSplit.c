@@ -9,7 +9,7 @@
 #include "options.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: faSplit.c,v 1.8 2003/05/06 07:08:34 kate Exp $";
+static char const rcsid[] = "$Id: faSplit.c,v 1.9 2003/05/11 21:07:50 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -34,6 +34,8 @@ errAbort(
   "This breaks up input.fa into 2000 base chunks\n"
   "   faSplit about est.fa 20000 outRoot\n"
   "This will break up est.fa into files of about 20000 bytes each.\n"
+  "   faSplit byname scaffolds.fa \n"
+  "This breaks up scaffolds.fa using sequence names as file names.\n"
   "\n"
   "Options:\n"
   "    -maxN=N - Suppress pieces with more than maxN n's.  Only used with size.\n"
@@ -216,6 +218,28 @@ carefulClose(&f);
 lineFileClose(&lf);
 }
 
+void splitByName(char *inName, char *outRoot)
+/* Split into chunks using sequence names.  */
+{
+struct dnaSeq seq;
+struct lineFile *lf = lineFileOpen(inName, TRUE);
+FILE *f = NULL;
+char outDir[256], outFile[128], ext[64], outPath[512];
+ZeroVar(&seq);
+
+splitPath(outRoot, outDir, outFile, ext);
+while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
+    {
+    carefulClose(&f);
+    sprintf(outPath, "%s%s.fa", outDir, seq.name);
+    printf("writing %s\n", outPath);
+    f = mustOpen(outPath, "w");
+    faWriteNext(f, seq.name, seq.dna, seq.size);
+    }
+carefulClose(&f);
+lineFileClose(&lf);
+}
+
 int countN(char *s, int size)
 /* Count number of N's from s[0] to s[size-1].
  * Treat any parts past end of string as N's. */
@@ -368,30 +392,46 @@ lineFileClose(&lf);
 printf("%d pieces of %d written\n", writeCount, pieceIx);
 }
 
-void faSplit(char *how, char *inName, int count, char *outRoot)
-/* faSplit - Split an fa file into several files.. */
-{
-unsigned long estSize = estimateFaSize(inName);
-
-if (sameWord(how, "sequence"))
-    splitByRecord(inName, count, outRoot, estSize);
-else if (sameWord(how, "base"))
-    splitByBase(inName, count, outRoot, estSize);
-else if (sameWord(how, "size"))
-    splitByCount(inName, count, outRoot, estSize);
-else if (sameWord(how, "about"))
-    splitAbout(inName, count, outRoot);
-else
-    usage();
-}
-
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+unsigned long estSize;
+char *how = argv[1];
+char *inName = argv[2];
+int count;
+char *outRoot;
+
 optionHash(&argc, argv);
-if (argc != 5 || !isdigit(argv[3][0]))
-    usage();
-dnaUtilOpen();
-faSplit(argv[1], argv[2], atoi(argv[3]), argv[4]);
+
+if (sameWord(how, "byname"))
+    {
+    if (argc != 4 )
+	usage();
+
+    dnaUtilOpen();
+    /* no count argument.  Make as many as needed */
+    outRoot = argv[3];
+    splitByName(inName, outRoot);
+    }
+else
+    {
+    if (argc != 5 || !isdigit(argv[3][0]))
+	usage();
+
+    dnaUtilOpen();
+    count = atoi(argv[3]);
+    outRoot=argv[4];
+    estSize = estimateFaSize(argv[2]);
+    if (sameWord(how, "sequence"))
+	splitByRecord(inName, count, outRoot, estSize);
+    else if (sameWord(how, "base"))
+	splitByBase(inName, count, outRoot, estSize);
+    else if (sameWord(how, "size"))
+	splitByCount(inName, count, outRoot, estSize);
+    else if (sameWord(how, "about"))
+	splitAbout(inName, count, outRoot);
+    else
+	usage();
+    }
 return 0;
 }
