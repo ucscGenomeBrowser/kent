@@ -17,7 +17,7 @@
 #include "hash.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.23 2004/04/22 02:28:31 kate Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.24 2004/05/05 22:29:29 kate Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -65,12 +65,12 @@ cgiParagraph(
     "");
 
 /* create HMTL form */
-printf("<FORM ACTION=\"../cgi-bin/hgLiftOver\" METHOD=\"POST\" "
+puts("<FORM ACTION=\"../cgi-bin/hgLiftOver\" METHOD=\"POST\" "
        " ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n");
 cartSaveSession(cart);
 
 /* create HTML table for layout purposes */
-printf("\n<TABLE WIDTH=\"100%%\">\n");
+puts("\n<TABLE WIDTH=\"100%%\">\n");
 
 /* top two rows -- genome and assembly menus */
 cgiSimpleTableRowStart();
@@ -141,12 +141,6 @@ cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
 cgiSimpleTableFieldStart();
-cgiMakeResetButton();
-cgiTableFieldEnd();
-cgiTableRowEnd();
-
-cgiSimpleTableRowStart();
-cgiSimpleTableFieldStart();
 cgiMakeClearButton("mainForm", HGLFT_USERDATA_VAR);
 cgiTableFieldEnd();
 cgiTableRowEnd();
@@ -162,10 +156,10 @@ cgiParagraph("&nbsp;Or upload data from a file:");
 cgiSimpleTableStart();
 cgiSimpleTableRowStart();
 printf("<TD><INPUT TYPE=FILE NAME=\"%s\"></TD>\n", HGLFT_DATAFILE_VAR);
-printf("<TD><INPUT TYPE=SUBMIT NAME=SubmitFile VALUE=\"Submit File\"></TD>\n");
+puts("<TD><INPUT TYPE=SUBMIT NAME=SubmitFile VALUE=\"Submit File\"></TD>\n");
 cgiTableRowEnd();
 cgiTableEnd();
-printf("</FORM>\n");
+puts("</FORM>\n");
 
 /* Hidden form to support menu pulldown behavior */
 printf("<FORM ACTION=\"/cgi-bin/hgLiftOver\""
@@ -175,9 +169,7 @@ printf("<FORM ACTION=\"/cgi-bin/hgLiftOver\""
 printf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n",
                         HGLFT_TODB_VAR, toDb);
 cartSaveSession(cart);
-puts("</FORM><BR>");
-
-cgiParagraph("Results will appear below.");
+puts("</FORM>");
 }
 
 void webDataFormats()
