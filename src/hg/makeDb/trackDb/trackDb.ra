@@ -310,6 +310,15 @@ visibility dense
 color 12,12,120
 type genePred refPep refMrna
 
+track ccdsGene
+shortLabel Consensus CDS
+longLabel Consensus CDS Genes
+group genes
+priority 35.2
+visibility full
+color 12,12,12
+type genePred refPep refMrna
+
 track rgdEst
 shortLabel RGD EST
 longLabel RGD EST
