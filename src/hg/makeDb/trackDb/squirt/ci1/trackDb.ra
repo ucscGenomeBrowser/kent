@@ -245,7 +245,15 @@ type bed 5
 track snapGene
 shortLabel SNAP Genes
 longLabel SNAP Gene Predictions
-group rna
+group compGeno
+priority 49
+visibility dense
+type genePred
+
+track jgiGene
+shortLabel JGI Genes
+longLabel JGI Gene Predictions
+group compGeno
 priority 49
 visibility dense
 type genePred
@@ -253,7 +261,7 @@ type genePred
 track xenoRefGene
 shortLabel xenoRefGene 
 longLabel xenoRefGene
-group rna
+group compGeno
 priority 50
 visibility dense
 type genePred refPep refMrna
@@ -264,6 +272,7 @@ longLabel human protein blast
 group x
 priority 1101
 visibility dense
+colorChromDefault off
 type psl protein
 
 track tblastHg16
