@@ -28,11 +28,13 @@ DIRS = \
 	faCmp \
 	faCount \
 	faFilterN \
+	faFlyBaseToUcsc \
 	faFrag \
 	faNcbiToUcsc \
 	faNoise \
 	faOneRecord \
 	faRc \
+	faSimplify \
 	faSize \
 	faSomeRecords \
 	faSplit \
