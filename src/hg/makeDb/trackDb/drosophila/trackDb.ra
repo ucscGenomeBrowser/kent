@@ -24,8 +24,7 @@ visibility dense
 color 0,60,120
 altColor 200,220,255
 spectrum on
-type psl xeno fr1
-otherDb fr1
+type psl xeno
 colorChromDefault off
 
 track bdgpGene
