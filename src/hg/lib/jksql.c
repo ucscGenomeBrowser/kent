@@ -393,6 +393,32 @@ sprintf(query, "select count(*) from %s", table);
 return sqlQuickNum(conn, query);
 }
 
+int sqlFieldIndex(struct sqlConnection *conn, char *table, char *field)
+/* Returns index of field in a row from table, or -1 if it 
+ * doesn't exist. */
+{
+char query[256];
+struct sqlResult *sr;
+char **row;
+int i = 0, ix=-1;
+
+/* Read table description into hash. */
+sprintf(query, "describe %s", table);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (sameString(row[0], field))
+        {
+	ix = i;
+	break;
+	}
+    ++i;
+    }
+sqlFreeResult(&sr);
+uglyf("Index of %s in %s is %d\n", field, table, ix);
+return ix;
+}
+
 /* Stuff to manage and cache up to 16 open connections on 
  * a database.  Typically you only need 3.
  * MySQL takes about 2 milliseconds on a local

@@ -103,6 +103,10 @@ char* sqlFieldName(struct sqlResult *sr);
 int sqlTableSize(struct sqlConnection *conn, char *table);
 /* Find number of rows in table. */
 
+int sqlFieldIndex(struct sqlConnection *conn, char *table, char *field);
+/* Returns index of field in a row from table, or -1 if it 
+ * doesn't exist. */
+
 void sqlVaWarn(struct sqlConnection *sc, char *format, va_list args);
 /* Error message handler. */
 
