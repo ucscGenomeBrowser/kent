@@ -21,7 +21,7 @@ name expDense
 shortLabel Short Expression
 longLabel Selected UCLA Expression Data
 priority 2.7
-visibility on
+visibility off
 type expRatio knownToU133 affyUcla hgFixed.affyUclaExps
 max 1.0
 representatives 9,37,24,17,34,12,19,21,22,35,
@@ -69,32 +69,6 @@ type distance knownExpDistance query target distance
 #visibility off
 #type distance knownGnfDistance query target distance
 #
-#name gnfShortU95
-#shortLabel Short GNF03
-#longLabel Selected Median GNF Expression Atlas Data on U95 Chip
-#priority 3.4
-#visibility off
-#type expRatio knownToU95 hgFixed.gnfHumanU95MedianRatio hgFixed.gnfHumanU95MedianExps
-#max 5.0
-#representatives 3,12,10,33,32,35,37,39,36,41
-#
-#name gnfMedianU95
-#shortLabel Median GNF03
-#longLabel Median GFN Expression Atlas Data on U95 Chip
-#priority 3.5
-#visibility off
-#type expRatio knownToU95 hgFixed.gnfHumanU95MedianRatio hgFixed.gnfHumanU95MedianExps
-#max 5.0
-#representatives 0,1,2,3,4,5,-1,6,7,8,9,-1,10,11,12,13,14,-1,15,16,17,18,19,20,-1,21,22,23,24,-1,25,26,27,28,-1,29,30,31,32,33,34,-1,35,36,37,38,39,40,-1,41,42,43,44,45,46
-#
-#name gnfAllU95
-#shortLabel Long GNF03
-#longLabel All GFN Expression Atlas Data on U95 Chip
-#priority 3.6
-#visibility off
-#type expRatio knownToU95 hgFixed.gnfHumanU95AllRatio hgFixed.gnfHumanU95Exps
-#max 5.0
-#representatives 0,1,4,5,6,2,3,-1,7,8,9,10,11,12,-1,13,14,15,16,17,48,49,-1,18,19,20,21,22,23,-1,58,56,57,73,74,75,-1,76,77,93,94,78,79,80,-1,95,96,99,100,89,90,-1,81,82,83,84,97,98,91,92,-1,31,32,30,59,60,87,88,-1,38,39,40,33,34,35,36,37,-1,50,51,26,27,-1,68,69,46,47,-1,52,53,54,55,61,62,63,-1,64,65,66,67,85,86,-1,24,25,41,42,43,44,45,-1,28,29,70,71,72,
 
 name gnfU95
 shortLabel GNF U95
