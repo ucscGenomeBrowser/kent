@@ -167,6 +167,19 @@ struct linkedFeatures
     char popUp[128];			/* text for popup */
     };
 
+struct linkedFeaturesSeries
+/* series of linked features that are comprised of multiple linked features */
+{
+    struct linkedFeaturesSeries *next; 
+    char *name;                      /* name for series of linked features */
+    int start, end;                     /* Start/end in browser coordinates. */
+    int orientation;                    /* Orientation. */
+    int grayIx;				/* Gray index (average of features) */
+    boolean noLine;                     /* if true don't draw line connecting features */
+    struct linkedFeatures *features;    /* linked features for a series */
+};
+
+
 struct trackLayout
 /* This structure controls the basic dimensions of display. */
     {
@@ -205,6 +218,17 @@ extern struct rgbColor guidelineColor;
 extern Color shadesOfSea[10+1];       /* Ten sea shades. */
 extern struct rgbColor darkSeaColor;
 extern struct rgbColor lightSeaColor;
+
+/* 16 shades from black to fully saturated of red/green/blue for
+ * expression data. */
+#define EXPR_DATA_SHADES 16
+extern Color shadesOfGreen[EXPR_DATA_SHADES];
+extern Color shadesOfRed[EXPR_DATA_SHADES];
+extern Color shadesOfBlue[EXPR_DATA_SHADES];
+extern boolean exprBedColorsMade; /* Have the shades of Green, Red, and Blue been allocated? */
+extern int maxRGBShade;
+void makeRedGreenShades(struct vGfx *vg);
+/* Allocate the  shades of Red, Green and Blue */
 
 
 void hPrintf(char *format, ...);
@@ -337,6 +361,9 @@ typedef struct slList *(*ItemLoader)(char **row);
 void bedLoadItem(struct track *tg, char *table, ItemLoader loader);
 /* Generic tg->item loader. */
 
+struct linkedFeatures *lfFromBed(struct bed *bed);
+/* Return a linked feature from a (full) bed. */
+
 void linkedFeaturesFreeList(struct linkedFeatures **pList);
 /* Free up a linked features list. */
 
@@ -427,6 +454,28 @@ struct linkedFeatures *lfFromPslx(struct psl *psl,
 
 struct linkedFeatures *lfFromPsl(struct psl *psl, boolean isXeno);
 /* Create a linked feature item from psl. */
+
+void rosettaMethods(struct track *tg);
+/* methods for Rosetta track using bed track */
+
+void nci60Methods(struct track *tg);
+/* set up special methods for NCI60 track and tracks with multiple
+   scores in general */
+
+void affyMethods(struct track *tg);
+/* set up special methods for NCI60 track and tracks with multiple
+   scores in general */
+
+void affyRatioMethods(struct track *tg);
+/* set up special methods for NCI60 track and tracks with multiple
+   scores in general */
+
+void affyUclaMethods(struct track *tg);
+/* set up special methods for affyUcla track and tracks with multiple
+   scores in general */
+
+void cghNci60Methods(struct track *tg);
+/* set up special methods for CGH NCI60 track */
 
 #define uglyh printHtmlComment
 /* Debugging aid. */
