@@ -21,7 +21,10 @@ DBS = 	hg13 hg15 hg16 hg17 \
 	rn2 rn3 \
 	bosTau1 \
 	monDom1 \
-	borEut1 \
+	cftRab0 \
+	borEut1 borEut2 \
+	eutGli1 \
+	eutPri1 \
 	galGal2 \
 	xenTro1 \
         tetNig1 \
