@@ -3,6 +3,8 @@
 #include <string.h>
 #include <math.h>
 
+static char const rcsid[] = "$Id: pslUnpackBlocks.c,v 1.2 2003/05/06 07:22:36 kate Exp $";
+
 
 #include "common.h"
 #include "psl.h"

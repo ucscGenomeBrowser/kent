@@ -6,6 +6,8 @@
 #include "jksql.h"
 #include "psLayHit.h"
 
+static char const rcsid[] = "$Id: psLayHit.c,v 1.2 2003/05/06 07:22:33 kate Exp $";
+
 struct psLayHit *psLayHitLoad(char **row)
 /* Load a psLayHit from row fetched with select * from psLayHit
  * from database.  Dispose of this with psLayHitFree(). */

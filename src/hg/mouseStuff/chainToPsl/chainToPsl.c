@@ -9,6 +9,8 @@
 #include "chainBlock.h"
 #include "dnautil.h"
 
+static char const rcsid[] = "$Id: chainToPsl.c,v 1.2 2003/05/06 07:22:27 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

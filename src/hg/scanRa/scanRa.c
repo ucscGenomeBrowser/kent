@@ -6,6 +6,8 @@
 #include "keys.h"
 #include "hdb.h"
 
+static char const rcsid[] = "$Id: scanRa.c,v 1.3 2003/05/06 07:22:35 kate Exp $";
+
 enum commandType
     {
     ctCount, ctPrint, ctStats, ctHist,

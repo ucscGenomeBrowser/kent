@@ -33,6 +33,8 @@
 #include "web.h"
 #include <regex.h>
 
+static char const rcsid[] = "$Id: hgFind.c,v 1.79 2003/05/06 07:22:22 kate Exp $";
+
 char *MrnaIDforGeneName(char *geneName)
 /* return mRNA ID for a gene name */
 {

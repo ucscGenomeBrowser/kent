@@ -2,6 +2,8 @@
 #include "common.h"
 #include "genbank.h"
 
+static char const rcsid[] = "$Id: genbank.c,v 1.4 2003/05/06 07:22:21 kate Exp $";
+
 static char *JOIN_PREFIX = "join(";
 static char *COMPLEMENT_PREFIX = "complement(";
 

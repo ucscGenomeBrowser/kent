@@ -10,6 +10,8 @@
 #include "bits.h"
 #include "libStats.h"
 
+static char const rcsid[] = "$Id: assessLibs.c,v 1.3 2003/05/06 07:22:17 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

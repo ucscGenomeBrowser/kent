@@ -6,6 +6,8 @@
 #include "portable.h"
 #include "axt.h"
 
+static char const rcsid[] = "$Id: axtSplitByTarget.c,v 1.4 2003/05/06 07:22:27 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

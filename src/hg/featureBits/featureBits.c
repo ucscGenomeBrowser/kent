@@ -14,6 +14,8 @@
 #include "agpGap.h"
 #include "chain.h"
 
+static char const rcsid[] = "$Id: featureBits.c,v 1.17 2003/05/06 07:22:16 kate Exp $";
+
 int minSize = 1;	/* Minimum size of feature. */
 char *clChrom = "all";	/* Which chromosome. */
 boolean orLogic = FALSE;  /* Do ors instead of ands? */

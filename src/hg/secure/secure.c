@@ -12,6 +12,8 @@
 #include "hgFind.h"
 #include "linefile.h"
 
+static char const rcsid[] = "$Id: secure.c,v 1.3 2003/05/06 07:22:35 kate Exp $";
+
 
 /* GLOBAL DECLARATIONS */
 char *keyFile = "/usr/local/apache/htdocs/license/secure/.keys";

@@ -14,6 +14,8 @@
 #include "hgRelate.h"
 #include "hdb.h"
 
+static char const rcsid[] = "$Id: hgRelate.c,v 1.8 2003/05/06 07:22:22 kate Exp $";
+
 void hgSetDb(char *dbName)
 /* Set the database name. */
 {

@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "columnInfo.h"
 
+static char const rcsid[] = "$Id: columnInfo.c,v 1.2 2003/05/06 07:22:21 kate Exp $";
+
 void columnInfoStaticLoad(char **row, struct columnInfo *ret)
 /* Load a row from columnInfo table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "stsMapMouseNew.h"
 
+static char const rcsid[] = "$Id: stsMapMouseNew.c,v 1.2 2003/05/06 07:22:23 kate Exp $";
+
 void stsMapMouseNewStaticLoad(char **row, struct stsMapMouseNew *ret)
 /* Load a row from stsMapMouseNew table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

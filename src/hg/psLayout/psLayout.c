@@ -19,6 +19,8 @@
 #include "cheapcgi.h"
 #include "psl.h"
 
+static char const rcsid[] = "$Id: psLayout.c,v 1.7 2003/05/06 07:22:33 kate Exp $";
+
 /* Variables that can be set by command line options. */
 int minMatch = 4;
 int maxBad = 100;

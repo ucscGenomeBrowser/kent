@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "scoredRef.h"
 
+static char const rcsid[] = "$Id: scoredRef.c,v 1.2 2003/05/06 07:22:23 kate Exp $";
+
 void scoredRefStaticLoad(char **row, struct scoredRef *ret)
 /* Load a row from scoredRef table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

@@ -11,6 +11,8 @@
 #include "hCommon.h"
 #include "hui.h"
 
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.58 2003/05/06 07:22:19 kate Exp $";
+
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
 char *chromosome;	/* Chromosome. */

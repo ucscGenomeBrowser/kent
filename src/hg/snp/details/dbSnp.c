@@ -11,6 +11,8 @@
 #include "hash.h"
 #include "jksql.h"
 
+static char const rcsid[] = "$Id: dbSnp.c,v 1.5 2003/05/06 07:22:35 kate Exp $";
+
 #define FLANK  20
 #define ALLELE 20
 #define REGION ((FLANK*2)+ALLELE)

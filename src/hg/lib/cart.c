@@ -11,6 +11,8 @@
 #include "hdb.h"
 #include "jksql.h"
 
+static char const rcsid[] = "$Id: cart.c,v 1.19 2003/05/06 07:22:21 kate Exp $";
+
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 
 DbConnector cartDefaultConnector = hConnectCentral;

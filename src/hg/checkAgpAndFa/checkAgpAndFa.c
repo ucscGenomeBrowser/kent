@@ -11,6 +11,8 @@ that they are in synch.
 #include "agpFrag.h"
 #include "agpGap.h"
 
+static char const rcsid[] = "$Id: checkAgpAndFa.c,v 1.3 2003/05/06 07:22:14 kate Exp $";
+
 void usage()
 /* 
 Explain usage and exit. 

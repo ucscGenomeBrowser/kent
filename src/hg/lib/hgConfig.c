@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+static char const rcsid[] = "$Id: hgConfig.c,v 1.7 2003/05/06 07:22:22 kate Exp $";
+
 #include "common.h"
 #include "hash.h"
 #include "cheapcgi.h"

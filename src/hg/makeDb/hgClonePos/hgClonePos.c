@@ -11,6 +11,8 @@
 #include "gsSeqInfo.h"
 #include "options.h"
 
+static char const rcsid[] = "$Id: hgClonePos.c,v 1.11 2003/05/06 07:22:24 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

@@ -11,6 +11,8 @@
 #include "refLink.h"
 #include "expRecord.h"
 
+static char const rcsid[] = "$Id: eisenInput.c,v 1.3 2003/05/06 07:22:17 kate Exp $";
+
 /* Some variables we should probably let people set from the
  * command line. */
 char *expTrack = "affyRatio";	/* Values positioned on chromosome. */

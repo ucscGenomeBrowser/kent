@@ -10,6 +10,8 @@
 #include "geneGraph.h"
 #include "bed.h"
 
+static char const rcsid[] = "$Id: altGraphX.c,v 1.8 2003/05/06 07:22:20 kate Exp $";
+
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
 struct evidence *evidenceCommaIn(char **pS, struct evidence *ret)

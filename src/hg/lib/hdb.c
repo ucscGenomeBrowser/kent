@@ -24,6 +24,8 @@
 #include "scoredRef.h"
 #include "maf.h"
 
+static char const rcsid[] = "$Id: hdb.c,v 1.106 2003/05/06 07:22:22 kate Exp $";
+
 #define DEFAULT_PROTEINS "proteins"
 #define DEFAULT_GENOME "Human"
 

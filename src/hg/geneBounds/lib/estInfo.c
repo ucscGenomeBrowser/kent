@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "estInfo.h"
 
+static char const rcsid[] = "$Id: estInfo.c,v 1.2 2003/05/06 07:22:18 kate Exp $";
+
 void estInfoStaticLoad(char **row, struct estInfo *ret)
 /* Load a row from estInfo table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

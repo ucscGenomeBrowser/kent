@@ -9,6 +9,8 @@
 #include "fa.h"
 #include "psl.h"
 
+static char const rcsid[] = "$Id: g2gSeqOverlap.c,v 1.2 2003/05/06 07:22:17 kate Exp $";
+
 char *faDirs[] = 
     {
     "/projects/cc/hg/gs.2/fin/fa",

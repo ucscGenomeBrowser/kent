@@ -3,6 +3,8 @@
 #include "linefile.h"
 #include "hash.h"
 
+static char const rcsid[] = "$Id: gpStats.c,v 1.2 2003/05/06 07:22:19 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

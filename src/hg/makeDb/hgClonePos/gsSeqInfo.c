@@ -6,6 +6,8 @@
 #include "jksql.h"
 #include "gsSeqInfo.h"
 
+static char const rcsid[] = "$Id: gsSeqInfo.c,v 1.2 2003/05/06 07:22:24 kate Exp $";
+
 void gsSeqInfoStaticLoad(char **row, struct gsSeqInfo *ret)
 /* Load a row from gsSeqInfo table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

@@ -8,6 +8,8 @@
 #include "fa.h"
 #include "nib.h"
 
+static char const rcsid[] = "$Id: correctEst.c,v 1.3 2003/05/06 07:22:28 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

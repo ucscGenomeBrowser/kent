@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "synMap.h"
 
+static char const rcsid[] = "$Id: synMap.c,v 1.2 2003/05/06 07:22:23 kate Exp $";
+
 void synMapStaticLoad(char **row, struct synMap *ret)
 /* Load a row from synMap table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

@@ -9,6 +9,8 @@
 #include "jksql.h"
 #include "rmskOut.h"
 
+static char const rcsid[] = "$Id: hgLoadOut.c,v 1.7 2003/05/06 07:22:25 kate Exp $";
+
 char *createRmskOut = "CREATE TABLE %s (\n"
 "%s"				/* Optional bin */
 "   swScore int unsigned not null,	# Smith Waterman alignment score\n"

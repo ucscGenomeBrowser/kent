@@ -5,6 +5,8 @@
 #include "cheapcgi.h"
 #include "obscure.h"
 
+static char const rcsid[] = "$Id: autoXml.c,v 1.15 2003/05/06 07:22:14 kate Exp $";
+
 /* Variables that can be over-ridden from command line. */
 char *textField = "text";
 char *fileComment = "autoXml generated file";

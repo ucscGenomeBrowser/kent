@@ -19,6 +19,8 @@
 #include "web.h"
 #include "hash.h"
 
+static char const rcsid[] = "$Id: hgBlat.c,v 1.63 2003/05/06 07:22:19 kate Exp $";
+
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
 

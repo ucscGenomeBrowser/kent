@@ -15,6 +15,8 @@
 #include "psl.h"
 #include "qaSeq.h"
 
+static char const rcsid[] = "$Id: mendMap.c,v 1.9 2003/05/06 07:22:26 kate Exp $";
+
 int version = 23;       /* Current version number. */
 int maxMapDeviation = 700000;   /* No map deviations further than this allowed. */
 boolean isPlaced;	/* TRUE if want to really follow map. */

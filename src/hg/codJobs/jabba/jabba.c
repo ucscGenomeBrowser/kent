@@ -9,6 +9,8 @@
 #include "jobDb.h"
 #include "portable.h"
 
+static char const rcsid[] = "$Id: jabba.c,v 1.17 2003/05/06 07:22:15 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

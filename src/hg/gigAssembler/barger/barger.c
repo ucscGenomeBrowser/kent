@@ -6,6 +6,8 @@
 #include "linefile.h"
 #include "portable.h"
 
+static char const rcsid[] = "$Id: barger.c,v 1.2 2003/05/06 07:22:14 kate Exp $";
+
 FILE *logFile;	/* File to write decision steps to. */
 
 void logg(char *format, ...)

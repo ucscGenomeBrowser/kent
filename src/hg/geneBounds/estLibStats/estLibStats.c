@@ -6,6 +6,8 @@
 #include "jksql.h"
 #include "estInfo.h"
 
+static char const rcsid[] = "$Id: estLibStats.c,v 1.4 2003/05/06 07:22:18 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

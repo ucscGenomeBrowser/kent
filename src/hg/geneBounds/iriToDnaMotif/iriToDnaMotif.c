@@ -7,6 +7,8 @@
 #include "improbRunInfo.h"
 #include "dnaMotif.h"
 
+static char const rcsid[] = "$Id: iriToDnaMotif.c,v 1.3 2003/05/06 07:22:18 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

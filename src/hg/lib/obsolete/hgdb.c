@@ -13,6 +13,8 @@
 #include "fof.h"
 #include "keys.h"
 
+static char const rcsid[] = "$Id: hgdb.c,v 1.2 2003/05/06 07:22:24 kate Exp $";
+
 char *hgdbRootDir()
 /* Return root directory of human genome database. */
 {

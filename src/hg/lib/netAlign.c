@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "netAlign.h"
 
+static char const rcsid[] = "$Id: netAlign.c,v 1.4 2003/05/06 07:22:22 kate Exp $";
+
 void netAlignStaticLoad(char **row, struct netAlign *ret)
 /* Load a row from netAlign table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

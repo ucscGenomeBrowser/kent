@@ -11,6 +11,8 @@
 #include "chromInserts.h"
 #include "axt.h"
 
+static char const rcsid[] = "$Id: liftUp.c,v 1.13 2003/05/06 07:22:24 kate Exp $";
+
 boolean nohead = FALSE;	/* No header for psl files? */
 boolean nosort = FALSE;	/* Don't sort files */
 int dots=0;	/* Put out I'm alive dot now and then? */

@@ -8,6 +8,8 @@
 #include "hash.h"
 #include "chromInserts.h"
 
+static char const rcsid[] = "$Id: ooLiftSpec.c,v 1.10 2003/05/06 07:22:33 kate Exp $";
+
 /* Variables that can be overridden from command line. */
 char *goldName = NULL;
 

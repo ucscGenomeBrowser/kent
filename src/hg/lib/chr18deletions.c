@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "chr18deletions.h"
 
+static char const rcsid[] = "$Id: chr18deletions.c,v 1.2 2003/05/06 07:22:21 kate Exp $";
+
 struct chr18deletions *chr18deletionsLoad(char **row)
 /* Load a chr18deletions from row fetched with select * from chr18deletions
  * from database.  Dispose of this with chr18deletionsFree(). */

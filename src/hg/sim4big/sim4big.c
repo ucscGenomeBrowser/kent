@@ -8,6 +8,8 @@
 #include "dnaseq.h"
 #include "fa.h"
 
+static char const rcsid[] = "$Id: sim4big.c,v 1.4 2003/05/06 07:22:35 kate Exp $";
+
 char *exePath = "sim4";	/*  executable name. */
 char *tempDir = NULL;	/* Temporary dir. */
 boolean pslOut;		/* PSL format output. */

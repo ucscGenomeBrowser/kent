@@ -7,6 +7,8 @@
 #include "linefile.h"
 #include "fa.h"
 
+static char const rcsid[] = "$Id: getRna.c,v 1.2 2003/05/06 07:22:19 kate Exp $";
+
 /* command line options */
 boolean cdsUpper = FALSE;
 

@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "simpleRepeat.h"
 
+static char const rcsid[] = "$Id: simpleRepeat.c,v 1.4 2003/05/06 07:22:23 kate Exp $";
+
 void simpleRepeatStaticLoad(char **row, struct simpleRepeat *ret)
 /* Load a row from simpleRepeat table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

@@ -10,6 +10,8 @@
 #include "hash.h"
 #include "portable.h"
 
+static char const rcsid[] = "$Id: freen.c,v 1.35 2003/05/06 07:22:30 kate Exp $";
+
 void usage()
 /* Print usage and exit. */
 {

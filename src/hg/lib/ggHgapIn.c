@@ -17,6 +17,8 @@ This file is depreciated.  Underlying database has changed radically.
 #include "ggPrivate.h"
 #include "maDbRep.h"
 
+static char const rcsid[] = "$Id: ggHgapIn.c,v 1.2 2003/05/06 07:22:22 kate Exp $";
+
 static void loadAliFromHgap(char *bacName, struct ggMrnaAli **retMaList)
 /* Get lists of mrna alignments and sort into convenient categories for UI.  The cloneHash
  * values are estClones. */

@@ -4,6 +4,8 @@
 #include "htmshell.h"
 #include "dnautil.h"
 
+static char const rcsid[] = "$Id: primeMate.c,v 1.2 2003/05/06 07:22:33 kate Exp $";
+
 
 char *skipFirstWord(char *s)
 {

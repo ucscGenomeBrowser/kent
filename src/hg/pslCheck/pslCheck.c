@@ -4,6 +4,8 @@
 #include "portable.h"
 #include "psl.h"
 
+static char const rcsid[] = "$Id: pslCheck.c,v 1.2 2003/05/06 07:22:34 kate Exp $";
+
 /* global count of errors */
 int errCount = 0;
 

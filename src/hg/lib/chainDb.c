@@ -15,6 +15,8 @@
 #include "chainDb.h"
 #include "hdb.h"
 
+static char const rcsid[] = "$Id: chainDb.c,v 1.4 2003/05/06 07:22:21 kate Exp $";
+
 void chainHeadStaticLoad(char **row, struct chain *ret)
 /* Load a row from chain table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

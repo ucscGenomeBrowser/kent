@@ -12,6 +12,8 @@
 #include "glDbRep.h"
 #include "hdb.h"
 
+static char const rcsid[] = "$Id: hgGoldGapGl.c,v 1.12 2003/05/06 07:22:24 kate Exp $";
+
 
 void usage()
 /* Explain usage and exit. */

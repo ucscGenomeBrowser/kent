@@ -27,6 +27,8 @@
 #include "knownMore.h"
 #include "hCommon.h"
 
+static char const rcsid[] = "$Id: foldDb.c,v 1.2 2003/05/06 07:22:16 kate Exp $";
+
 /* Coverage info file. */
 char *covFile = "coverage.oct";
 

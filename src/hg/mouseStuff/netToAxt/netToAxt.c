@@ -10,6 +10,8 @@
 #include "nib.h"
 #include "axt.h"
 
+static char const rcsid[] = "$Id: netToAxt.c,v 1.11 2003/05/06 07:22:28 kate Exp $";
+
 boolean qChain = FALSE;  /* Do chain from query side. */
 int maxGap = 200;
 

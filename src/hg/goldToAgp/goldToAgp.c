@@ -6,6 +6,8 @@
 #include "hash.h"
 #include "portable.h"
 
+static char const rcsid[] = "$Id: goldToAgp.c,v 1.3 2003/05/06 07:22:19 kate Exp $";
+
 
 void usage()
 /* Print usage instructions and exit */

@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "grp.h"
 
+static char const rcsid[] = "$Id: grp.c,v 1.2 2003/05/06 07:22:22 kate Exp $";
+
 void grpStaticLoad(char **row, struct grp *ret)
 /* Load a row from grp table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "ensPhusionBlast.h"
 
+static char const rcsid[] = "$Id: ensPhusionBlast.c,v 1.2 2003/05/06 07:22:21 kate Exp $";
+
 void ensPhusionBlastStaticLoad(char **row, struct ensPhusionBlast *ret)
 /* Load a row from ensPhusionBlast table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

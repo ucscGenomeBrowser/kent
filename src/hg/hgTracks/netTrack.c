@@ -11,6 +11,8 @@
 #include "chainNet.h"
 #include "chainNetDbLoad.h"
 
+static char const rcsid[] = "$Id: netTrack.c,v 1.7 2003/05/06 07:22:20 kate Exp $";
+
 struct netItem
 /* A net track item. */
     {

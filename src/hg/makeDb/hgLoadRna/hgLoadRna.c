@@ -25,6 +25,8 @@
 #include "fa.h"
 #include "hgRelate.h"
 
+static char const rcsid[] = "$Id: hgLoadRna.c,v 1.22 2003/05/06 07:22:25 kate Exp $";
+
 /* Command line options and defaults. */
 char *abbr = NULL;
 boolean ignore = FALSE;

@@ -7,6 +7,8 @@
 #include "jksql.h"
 #include "sageCounts.h"
 
+static char const rcsid[] = "$Id: sageCounts.c,v 1.3 2003/05/06 07:22:23 kate Exp $";
+
 struct sageCounts *sageCountsLoad(char **row)
 /* Load a sageCounts from row fetched with select * from sageCounts
  * from database.  Dispose of this with sageCountsFree(). */

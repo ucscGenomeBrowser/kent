@@ -74,6 +74,8 @@
 #include "web.h"
 #include "grp.h"
 
+static char const rcsid[] = "$Id: hgTracks.c,v 1.504 2003/05/06 07:22:19 kate Exp $";
+
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
 #define CHROMOSOME_SHADES 4

@@ -9,6 +9,8 @@
 #include "dystring.h"
 #include "bits.h"
 
+static char const rcsid[] = "$Id: gsBig.c,v 1.11 2003/05/06 07:22:19 kate Exp $";
+
 char *exePath = "/projects/compbio/bin/genscan-linux/genscan";
 char *parPath = "/projects/compbio/bin/genscan-linux/HumanIso.smat";
 char *tmpDir  = "/tmp";

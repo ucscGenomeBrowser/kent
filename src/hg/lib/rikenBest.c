@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "rikenBest.h"
 
+static char const rcsid[] = "$Id: rikenBest.c,v 1.2 2003/05/06 07:22:23 kate Exp $";
+
 void rikenBestStaticLoad(char **row, struct rikenBest *ret)
 /* Load a row from rikenBest table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

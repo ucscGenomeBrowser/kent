@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "stsInfo2.h"
 
+static char const rcsid[] = "$Id: stsInfo2.c,v 1.2 2003/05/06 07:22:23 kate Exp $";
+
 struct stsInfo2 *stsInfo2Load(char **row)
 /* Load a stsInfo2 from row fetched with select * from stsInfo2
  * from database.  Dispose of this with stsInfo2Free(). */

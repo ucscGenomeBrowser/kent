@@ -6,6 +6,8 @@
 #include "jksql.h"
 #include "celeraDupPositive.h"
 
+static char const rcsid[] = "$Id: celeraDupPositive.c,v 1.2 2003/05/06 07:22:21 kate Exp $";
+
 void celeraDupPositiveStaticLoad(char **row, struct celeraDupPositive *ret)
 /* Load a row from celeraDupPositive table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

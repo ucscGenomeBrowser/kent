@@ -26,6 +26,8 @@
 #include "hdb.h"
 #include "hui.h"
 
+static char const rcsid[] = "$Id: hgCoordConv.c,v 1.21 2003/05/06 07:22:19 kate Exp $";
+
 /* these variables are used for testing mode */
 boolean hgTest = FALSE;          /* are we in testing mode ? */
 int numTests = 0;               /* how many tests should we do */

@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "sample.h"
 
+static char const rcsid[] = "$Id: sample.c,v 1.6 2003/05/06 07:22:23 kate Exp $";
+
 struct sample *sampleLoad(char **row)
 /* Load a sample from row fetched with select * from sample
  * from database.  Dispose of this with sampleFree(). */

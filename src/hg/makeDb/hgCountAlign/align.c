@@ -4,6 +4,8 @@
 #include "axt.h"
 #include "bed.h"
 
+static char const rcsid[] = "$Id: align.c,v 1.2 2003/05/06 07:22:24 kate Exp $";
+
 struct align* alignNew(struct axt* axtList)
 /* Construct a new align object. */
 {

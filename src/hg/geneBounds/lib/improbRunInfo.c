@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "improbRunInfo.h"
 
+static char const rcsid[] = "$Id: improbRunInfo.c,v 1.2 2003/05/06 07:22:18 kate Exp $";
+
 struct improbRunInfo *improbRunInfoLoad(char **row)
 /* Load a improbRunInfo from row fetched with select * from improbRunInfo
  * from database.  Dispose of this with improbRunInfoFree(). */

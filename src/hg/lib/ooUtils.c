@@ -4,6 +4,8 @@
 #include "portable.h"
 #include "ooUtils.h"
 
+static char const rcsid[] = "$Id: ooUtils.c,v 1.2 2003/05/06 07:22:22 kate Exp $";
+
 void ooToAllContigs(char *ooDir, void (*doContig)(char *dir, char *chrom, char *contig))
 /* Apply "doContig" to all contig subdirectories of ooDir. */
 {

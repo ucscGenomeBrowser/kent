@@ -15,6 +15,8 @@
 #include "dystring.h"
 #include "cheapcgi.h"
 
+static char const rcsid[] = "$Id: autoSql.c,v 1.19 2003/05/06 07:22:14 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

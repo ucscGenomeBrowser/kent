@@ -8,6 +8,8 @@
 #include "trackTable.h"
 #include "hdb.h"
 
+static char const rcsid[] = "$Id: trackTable.c,v 1.4 2003/05/06 07:22:24 kate Exp $";
+
 void trackTableStaticLoad(char **row, struct trackTable *ret)
 /* Load a row from trackTable table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

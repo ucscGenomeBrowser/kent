@@ -6,6 +6,8 @@
 #include "portable.h"
 #include "chain.h"
 
+static char const rcsid[] = "$Id: chainSplit.c,v 1.4 2003/05/06 07:22:27 kate Exp $";
+
 boolean splitOnQ = FALSE;
 void usage()
 /* Explain usage and exit. */

@@ -7,6 +7,8 @@
 #include "rbTree.h"
 #include "chainBlock.h"
 
+static char const rcsid[] = "$Id: chainNet.c,v 1.26 2003/05/06 07:22:27 kate Exp $";
+
 int minSpace = 25;	/* Minimum gap size to fill. */
 int minFill;		/* Minimum fill to record. */
 double minScore = 2000;	/* Minimum chain score to look at. */

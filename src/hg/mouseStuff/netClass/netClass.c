@@ -11,6 +11,8 @@
 #include "simpleRepeat.h"
 #include "chainNet.h"
 
+static char const rcsid[] = "$Id: netClass.c,v 1.12 2003/05/06 07:22:28 kate Exp $";
+
 char *tNewR = NULL;
 char *qNewR = NULL;
 boolean noAr = FALSE;

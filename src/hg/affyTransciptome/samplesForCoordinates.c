@@ -10,6 +10,8 @@
 #include "bed.h"
 #include "linefile.h"
 
+static char const rcsid[] = "$Id: samplesForCoordinates.c,v 1.7 2003/05/06 07:22:13 kate Exp $";
+
 struct genomeBit
 /* Piece of the genome */
 {

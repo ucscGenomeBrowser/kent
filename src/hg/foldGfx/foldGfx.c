@@ -11,6 +11,8 @@
 #include "hdb.h"
 #include "nib.h"
 
+static char const rcsid[] = "$Id: foldGfx.c,v 1.2 2003/05/06 07:22:17 kate Exp $";
+
 char *nibDir = "/projects/cc/hg/gs.3/oo.15/nib";
 int totalPageDots = 15000;
 int totalPageBases = 300000000;

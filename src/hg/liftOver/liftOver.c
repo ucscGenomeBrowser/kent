@@ -9,6 +9,8 @@
 #include "genePred.h"
 #include "sample.h"
 
+static char const rcsid[] = "$Id: liftOver.c,v 1.8 2003/05/06 07:22:24 kate Exp $";
+
 double minMatch = 0.95;
 
 void usage()

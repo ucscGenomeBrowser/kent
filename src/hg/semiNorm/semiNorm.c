@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <limits.h>
 
+static char const rcsid[] = "$Id: semiNorm.c,v 1.7 2003/05/06 07:22:35 kate Exp $";
+
 #include "common.h"
 
 

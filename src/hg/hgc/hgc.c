@@ -106,6 +106,8 @@
 #include "maf.h"
 #include "hgc.h"
 
+static char const rcsid[] = "$Id: hgc.c,v 1.407 2003/05/06 07:22:20 kate Exp $";
+
 
 struct cart *cart;	/* User's settings. */
 char *seqName;		/* Name of sequence we're working on. */

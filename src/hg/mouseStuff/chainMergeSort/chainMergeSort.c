@@ -6,6 +6,8 @@
 #include "dlist.h"
 #include "chainBlock.h"
 
+static char const rcsid[] = "$Id: chainMergeSort.c,v 1.6 2003/05/06 07:22:27 kate Exp $";
+
 boolean saveId = FALSE;
 
 void usage()

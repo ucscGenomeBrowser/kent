@@ -7,6 +7,8 @@
 #include "agpFrag.h"
 #include "linefile.h"
 
+static char const rcsid[] = "$Id: agpFrag.c,v 1.5 2003/05/06 07:22:20 kate Exp $";
+
 void agpFragStaticLoad(char **row, struct agpFrag *ret)
 /* Load a row from agpFrag table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

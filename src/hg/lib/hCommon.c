@@ -5,6 +5,8 @@
 #include "chromInfo.h"
 #include "portable.h"
 
+static char const rcsid[] = "$Id: hCommon.c,v 1.16 2003/05/06 07:22:22 kate Exp $";
+
 static char *_hgcName = "../cgi-bin/hgc";	/* Path to click processing program. */
 static char *_hgTracksName = "../cgi-bin/hgTracks"; /* Path back to self. */
 static char *_hgTrackUiName = "../cgi-bin/hgTrackUi"; /* Path to extended ui program. */

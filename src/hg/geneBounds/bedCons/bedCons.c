@@ -10,6 +10,8 @@
 #include "hdb.h"
 #include "binRange.h"
 
+static char const rcsid[] = "$Id: bedCons.c,v 1.3 2003/05/06 07:22:17 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

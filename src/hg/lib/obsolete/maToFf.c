@@ -11,6 +11,8 @@
 #include "maDbRep.h"
 #include "maToFf.h"
 
+static char const rcsid[] = "$Id: maToFf.c,v 1.2 2003/05/06 07:22:24 kate Exp $";
+
 static int countFfBlocks(struct ffAli *ff)
 /* How many blocks in ff? */
 {

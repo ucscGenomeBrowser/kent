@@ -8,6 +8,8 @@
 #include "bed.h"
 #include "geneGraph.h"
 
+static char const rcsid[] = "$Id: spliceStats.c,v 1.8 2003/05/06 07:22:13 kate Exp $";
+
 char *db = NULL;
 struct hash *mrnaHash = NULL;
 

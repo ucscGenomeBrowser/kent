@@ -8,6 +8,8 @@
 #include "hdb.h"
 #include "options.h"
 
+static char const rcsid[] = "$Id: getRnaPred.c,v 1.6 2003/05/06 07:22:19 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

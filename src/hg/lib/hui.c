@@ -9,6 +9,8 @@
 #include "hdb.h"
 #include "hui.h"
 
+static char const rcsid[] = "$Id: hui.c,v 1.21 2003/05/06 07:22:22 kate Exp $";
+
 char *hUserCookie()
 /* Return our cookie name. */
 {

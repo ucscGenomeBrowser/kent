@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "dbSnpRS.h"
 
+static char const rcsid[] = "$Id: dbSnpRS.c,v 1.4 2003/05/06 07:22:21 kate Exp $";
+
 void dbSnpRSStaticLoad(char **row, struct dbSnpRS *ret)
 /* Load a row from dbSnpRS table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

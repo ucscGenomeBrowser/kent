@@ -9,6 +9,8 @@
 #include "ggMrnaAli.h"
 #include "dnautil.h"
 
+static char const rcsid[] = "$Id: ggMrnaAli.c,v 1.6 2003/05/06 07:22:22 kate Exp $";
+
 void ggMrnaBlockStaticLoad(char **row, struct ggMrnaBlock *ret)
 /* Load a row from ggMrnaBlock table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

@@ -13,6 +13,8 @@
 #include "chainBlock.h"
 #include "portable.h"
 
+static char const rcsid[] = "$Id: axtChain.c,v 1.16 2003/05/06 07:22:27 kate Exp $";
+
 int minScore = 1000;
 char *detailsName = NULL;
 

@@ -12,6 +12,8 @@
 #include "jksql.h"
 #include "hgConfig.h"
 
+static char const rcsid[] = "$Id: jksql.c,v 1.29 2003/05/06 07:22:22 kate Exp $";
+
 boolean sqlTrace = FALSE;  /* setting to true prints each query */
 int sqlTraceIndent = 0;    /* number of spaces to indent traces */
 

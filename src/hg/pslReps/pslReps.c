@@ -8,6 +8,8 @@
 #include "psl.h"
 #include "cheapcgi.h"
 
+static char const rcsid[] = "$Id: pslReps.c,v 1.13 2003/05/06 07:22:34 kate Exp $";
+
 double minAli = 0.93;
 double nearTop = 0.01;
 double minCover = 0.0;

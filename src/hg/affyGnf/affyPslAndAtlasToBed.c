@@ -8,6 +8,8 @@
 #include "dystring.h"
 #include "expRecord.h"
 
+static char const rcsid[] = "$Id: affyPslAndAtlasToBed.c,v 1.2 2003/05/06 07:22:13 kate Exp $";
+
 
 #define DEBUG 0
 FILE *scores = NULL;      /* output all scores here, used to generate a histogram of all results */

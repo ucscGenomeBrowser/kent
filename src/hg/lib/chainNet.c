@@ -6,6 +6,8 @@
 #include "hash.h"
 #include "chainNet.h"
 
+static char const rcsid[] = "$Id: chainNet.c,v 1.7 2003/05/06 07:22:21 kate Exp $";
+
 struct cnFill *cnFillNew()
 /* Return fill structure with some basic stuff filled in */
 {

@@ -18,6 +18,8 @@
 #include "hdb.h"
 #include "hui.h"
 
+static char const rcsid[] = "$Id: customTrack.c,v 1.33 2003/05/06 07:22:21 kate Exp $";
+
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
  *  name - any text up to 15 letters.  

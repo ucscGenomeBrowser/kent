@@ -10,6 +10,8 @@
 #include "jksql.h"
 #include "genePred.h"
 
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.9 2003/05/06 07:22:26 kate Exp $";
+
 char *exonType = "exon";	/* Type field that signifies exons. */
 
 void usage()

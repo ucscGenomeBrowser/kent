@@ -6,6 +6,8 @@
 #include "jksql.h"
 #include "tomRough.h"
 
+static char const rcsid[] = "$Id: tomRough.c,v 1.2 2003/05/06 07:22:26 kate Exp $";
+
 void tomRoughStaticLoad(char **row, struct tomRough *ret)
 /* Load a row from tomRough table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

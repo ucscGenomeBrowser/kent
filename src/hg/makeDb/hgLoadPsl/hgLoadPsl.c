@@ -7,6 +7,8 @@
 #include "xAli.h"
 #include "hdb.h"
 
+static char const rcsid[] = "$Id: hgLoadPsl.c,v 1.16 2003/05/06 07:22:25 kate Exp $";
+
 unsigned pslCreateOpts = 0;
 boolean append = FALSE;
 boolean exportOutput = FALSE;

@@ -13,6 +13,8 @@
 #include "errabort.h"
 #include "malloc.h"
 
+static char const rcsid[] = "$Id: exonWalk.c,v 1.7 2003/05/06 07:22:13 kate Exp $";
+
 void usage()
 {
 errAbort("exonWalk - uses altGraphX files to construct a splicing graph\n"

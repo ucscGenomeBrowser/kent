@@ -10,6 +10,8 @@
 #include "ra.h"
 #include "hash.h"
 
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.9 2003/05/06 07:22:24 kate Exp $";
+
 /* ----------- End of AutoSQL generated code --------------------- */
 
 int trackDbCmp(const void *va, const void *vb);

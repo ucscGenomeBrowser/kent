@@ -10,6 +10,8 @@
 #include "hdb.h"
 #include "genePred.h"
 
+static char const rcsid[] = "$Id: intronEnds.c,v 1.4 2003/05/06 07:22:20 kate Exp $";
+
 char *chromName;
 
 void usage()

@@ -13,6 +13,8 @@
 #include "geneGraph.h"
 #include "ggPrivate.h"
 
+static char const rcsid[] = "$Id: ggCluster.c,v 1.7 2003/05/06 07:22:22 kate Exp $";
+
 
 
 static void updateActiveClusters(struct ggMrnaCluster **pActiveClusters, 

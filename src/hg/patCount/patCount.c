@@ -7,6 +7,8 @@
 #include "fa.h"
 #include "sig.h"
 
+static char const rcsid[] = "$Id: patCount.c,v 1.3 2003/05/06 07:22:33 kate Exp $";
+
 void usage()
 {
 errAbort("patCount - counts up the number of occurences of each\n"

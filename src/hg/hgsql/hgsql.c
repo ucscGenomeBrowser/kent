@@ -4,6 +4,8 @@
 #include "options.h"
 #include "hgConfig.h"
 
+static char const rcsid[] = "$Id: hgsql.c,v 1.4 2003/05/06 07:22:20 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

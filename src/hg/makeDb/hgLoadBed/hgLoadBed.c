@@ -9,6 +9,8 @@
 #include "bed.h"
 #include "hdb.h"
 
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.15 2003/05/06 07:22:25 kate Exp $";
+
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
 boolean strictTab = FALSE;	/* Separate on tabs. */

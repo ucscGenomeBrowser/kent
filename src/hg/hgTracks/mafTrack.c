@@ -10,6 +10,8 @@
 #include "maf.h"
 #include "scoredRef.h"
 
+static char const rcsid[] = "$Id: mafTrack.c,v 1.6 2003/05/06 07:22:20 kate Exp $";
+
 enum mafState {
 /* Our three display modes */
     mafShort, 	/* Grayscale line. */

@@ -70,6 +70,8 @@
 #include "cheapcgi.h"
 #include "bed.h"
 
+static char const rcsid[] = "$Id: altSplice.c,v 1.3 2003/05/06 07:22:13 kate Exp $";
+
 int cassetteCount = 0; /* Number of cassette exons counted. */
 int misSense = 0;      /* Number of cassette exons that would introduce a missense mutation. */
 int clusterCount = 0;  /* Number of gene clusters identified. */

@@ -9,6 +9,8 @@
 #include "bed.h"
 #include "binRange.h"
 
+static char const rcsid[] = "$Id: expToRna.c,v 1.3 2003/05/06 07:22:18 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

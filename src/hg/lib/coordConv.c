@@ -13,6 +13,8 @@
 #include "hdb.h"
 #include "dbDb.h"
 
+static char const rcsid[] = "$Id: coordConv.c,v 1.7 2003/05/06 07:22:21 kate Exp $";
+
 /* #define DEBUG */
 
 struct possibleCoord 

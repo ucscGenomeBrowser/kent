@@ -12,6 +12,8 @@
 #include "rmskOut.h"
 #include "featureBits.h"
 
+static char const rcsid[] = "$Id: featureBits.c,v 1.22 2003/05/06 07:22:21 kate Exp $";
+
 /* By default, clip features to the search range.  It's important to clip 
  * when featureBits output will be used to populate Bits etc.  But allow 
  * the user to turn off clipping if they don't want it. */

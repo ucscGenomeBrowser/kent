@@ -8,6 +8,8 @@
 #include "binRange.h"
 #include "axt.h"
 
+static char const rcsid[] = "$Id: axtAndBed.c,v 1.5 2003/05/06 07:22:26 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

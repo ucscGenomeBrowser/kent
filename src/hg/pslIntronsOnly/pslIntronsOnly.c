@@ -7,6 +7,8 @@
 #include "nib.h"
 #include "fa.h"
 
+static char const rcsid[] = "$Id: pslIntronsOnly.c,v 1.6 2003/05/06 07:22:34 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

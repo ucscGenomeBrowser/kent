@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "estOrientInfo.h"
 
+static char const rcsid[] = "$Id: estOrientInfo.c,v 1.3 2003/05/06 07:22:21 kate Exp $";
+
 static char *createString = 
     "CREATE TABLE %s (\n"
     "    bin smallint unsigned not null,        # Bin for fast index\n"

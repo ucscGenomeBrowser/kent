@@ -4,6 +4,8 @@
 #include "cheapcgi.h"
 #include "psl.h"
 
+static char const rcsid[] = "$Id: pslUnpile.c,v 1.7 2003/05/06 07:22:34 kate Exp $";
+
 /* Constants that can be over-ridden by command line. */
 boolean doTarget = TRUE;
 boolean noHead = FALSE;

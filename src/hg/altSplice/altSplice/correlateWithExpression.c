@@ -12,6 +12,8 @@
 #include "affyPres.h"
 #include "psl.h"
 
+static char const rcsid[] = "$Id: correlateWithExpression.c,v 1.4 2003/05/06 07:22:13 kate Exp $";
+
 void usage()
 {
 errAbort("correlateWithExpression - Takes a altGraphX file and finds the corresponding\n"

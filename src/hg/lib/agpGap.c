@@ -6,6 +6,8 @@
 #include "jksql.h"
 #include "agpGap.h"
 
+static char const rcsid[] = "$Id: agpGap.c,v 1.3 2003/05/06 07:22:20 kate Exp $";
+
 void agpGapStaticLoad(char **row, struct agpGap *ret)
 /* Load a row from agpGap table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

@@ -2,6 +2,8 @@
 #include "jksql.h"
 #include "test.h"
 
+static char const rcsid[] = "$Id: testHarness.c,v 1.2 2003/05/06 07:22:14 kate Exp $";
+
 int nextId()
 {
 static int id = 1000;

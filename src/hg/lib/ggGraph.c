@@ -13,6 +13,8 @@
 #include "ggPrivate.h"
 #include "hdb.h"
 
+static char const rcsid[] = "$Id: ggGraph.c,v 1.5 2003/05/06 07:22:22 kate Exp $";
+
 enum{ softEndBleedLimit = 5};  /* For soft ends allow some bleeding into next intron */
 
 int ggEvidenceIx(struct ggEvidence *hayStack, struct ggEvidence *needle)

@@ -24,6 +24,8 @@
 #include "keys.h"
 #include "options.h"
 
+static char const rcsid[] = "$Id: gbToFaRa.c,v 1.20 2003/05/06 07:22:17 kate Exp $";
+
 enum formatType
 /* Are we working on genomic sequence or mRNA?  Need to write
  * one big .fa file, or a separate one for each sequence. */

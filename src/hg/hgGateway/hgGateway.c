@@ -12,6 +12,8 @@
 #include "hgFind.h"
 #include "hCommon.h"
 
+static char const rcsid[] = "$Id: hgGateway.c,v 1.42 2003/05/06 07:22:19 kate Exp $";
+
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
 static char * const orgCgiName = "org";

@@ -7,6 +7,8 @@
 #include "jksql.h"
 #include "options.h"
 
+static char const rcsid[] = "$Id: hgNibSeq.c,v 1.5 2003/05/06 07:22:25 kate Exp $";
+
 boolean preMadeNib = FALSE;
 char *tableName = "chromInfo";
 char *chromPrefix = "";

@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "borkPseudoHom.h"
 
+static char const rcsid[] = "$Id: borkPseudoHom.c,v 1.2 2003/05/06 07:22:21 kate Exp $";
+
 void borkPseudoHomStaticLoad(char **row, struct borkPseudoHom *ret)
 /* Load a row from borkPseudoHom table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

@@ -15,6 +15,8 @@ of tag counts for each experiment.
 #include "sage.h"
 #include "sageCounts.h"
 
+static char const rcsid[] = "$Id: createSageSummary.c,v 1.2 2003/05/06 07:22:35 kate Exp $";
+
 struct sage *createNewSage(int numExp) 
 {
     struct sage *sg = NULL;

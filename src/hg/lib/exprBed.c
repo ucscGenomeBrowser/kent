@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "exprBed.h"
 
+static char const rcsid[] = "$Id: exprBed.c,v 1.5 2003/05/06 07:22:21 kate Exp $";
+
 struct exprBed *exprBedLoad(char **row)
 /* Load a exprBed from row fetched with select * from exprBed
  * from database.  Dispose of this with exprBedFree(). */

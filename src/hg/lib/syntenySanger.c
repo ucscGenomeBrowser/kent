@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "syntenySanger.h"
 
+static char const rcsid[] = "$Id: syntenySanger.c,v 1.2 2003/05/06 07:22:23 kate Exp $";
+
 void syntenySangerStaticLoad(char **row, struct syntenySanger *ret)
 /* Load a row from syntenySanger table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

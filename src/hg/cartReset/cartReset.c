@@ -6,6 +6,8 @@
 #include "htmshell.h"
 #include "cart.h"
 
+static char const rcsid[] = "$Id: cartReset.c,v 1.4 2003/05/06 07:22:14 kate Exp $";
+
 
 void doMiddle()
 /* cartReset - Reset cart. */

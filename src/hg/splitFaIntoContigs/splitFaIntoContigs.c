@@ -13,6 +13,8 @@ and split each chromosomes into subdirs and files for each supercontig.
 #include "options.h"
 #include "portable.h"
 
+static char const rcsid[] = "$Id: splitFaIntoContigs.c,v 1.19 2003/05/06 07:22:35 kate Exp $";
+
 /* Default array size for file paths */
 #define DEFAULT_PATH_SIZE 1024
 

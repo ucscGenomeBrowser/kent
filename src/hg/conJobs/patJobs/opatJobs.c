@@ -3,6 +3,8 @@
 
 #include "common.h"
 
+static char const rcsid[] = "$Id: opatJobs.c,v 1.2 2003/05/06 07:22:15 kate Exp $";
+
 void usage()
 {
 errAbort("patJobs in serial.sh ");

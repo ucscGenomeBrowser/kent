@@ -6,6 +6,8 @@
 #include "htmshell.h"
 #include "cart.h"
 
+static char const rcsid[] = "$Id: testCart.c,v 1.9 2003/05/06 07:22:31 kate Exp $";
+
 
 void doMiddle(struct cart *cart)
 /* Print out middle parts. */

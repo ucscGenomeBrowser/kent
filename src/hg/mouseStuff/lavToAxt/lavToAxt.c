@@ -9,6 +9,8 @@
 #include "nib.h"
 #include "axt.h"
 
+static char const rcsid[] = "$Id: lavToAxt.c,v 1.8 2003/05/06 07:22:28 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

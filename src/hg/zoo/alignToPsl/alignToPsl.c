@@ -9,6 +9,8 @@
 #include <string.h>
 #include "misc.h"
 
+static char const rcsid[] = "$Id: alignToPsl.c,v 1.2 2003/05/06 07:22:36 kate Exp $";
+
 #define BLOCKMAX 1000
 #define MATCH 1
 #define TDELETE 2

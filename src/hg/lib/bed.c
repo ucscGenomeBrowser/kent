@@ -7,6 +7,8 @@
 #include "linefile.h"
 #include "bed.h"
 
+static char const rcsid[] = "$Id: bed.c,v 1.15 2003/05/06 07:22:20 kate Exp $";
+
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

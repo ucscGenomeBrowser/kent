@@ -5,6 +5,8 @@
 #include "jksql.h"
 #include "test.h"
 
+static char const rcsid[] = "$Id: hardTest.c,v 1.2 2003/05/06 07:22:14 kate Exp $";
+
 void pointStaticLoad(char **row, struct point *ret)
 /* Load a row from point table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

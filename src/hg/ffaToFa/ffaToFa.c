@@ -5,6 +5,8 @@
 #include "hash.h"
 #include "hCommon.h"
 
+static char const rcsid[] = "$Id: ffaToFa.c,v 1.2 2003/05/06 07:22:16 kate Exp $";
+
 FILE *errLog;
 
 void warnHandler(char *format, va_list args)

@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "gbProtAnn.h"
 
+static char const rcsid[] = "$Id: gbProtAnn.c,v 1.2 2003/05/06 07:22:21 kate Exp $";
+
 void gbProtAnnStaticLoad(char **row, struct gbProtAnn *ret)
 /* Load a row from gbProtAnn table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

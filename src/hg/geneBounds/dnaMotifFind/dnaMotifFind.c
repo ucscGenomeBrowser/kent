@@ -11,6 +11,8 @@
 #include "dnaMarkov.h"
 #include "dnaMotif.h"
 
+static char const rcsid[] = "$Id: dnaMotifFind.c,v 1.5 2003/05/06 07:22:17 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

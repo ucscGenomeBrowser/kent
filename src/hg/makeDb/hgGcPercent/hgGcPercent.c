@@ -7,6 +7,8 @@
 #include "jksql.h"
 #include "cheapcgi.h"
 
+static char const rcsid[] = "$Id: hgGcPercent.c,v 1.4 2003/05/06 07:22:24 kate Exp $";
+
 int winSize ;               /* window size */
 boolean noLoad = FALSE;		/* Suppress loading mysql table . */
 

@@ -7,6 +7,8 @@
 #include "chromInserts.h"
 #include "errabort.h"
 
+static char const rcsid[] = "$Id: ctgToChromFa.c,v 1.6 2003/05/06 07:22:16 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

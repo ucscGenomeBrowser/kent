@@ -5,6 +5,8 @@
 #include "cheapcgi.h"
 #include "cart.h"
 
+static char const rcsid[] = "$Id: cartDump.c,v 1.4 2003/05/06 07:22:14 kate Exp $";
+
 void doMiddle(struct cart *cart)
 /* cartDump - Dump contents of cart. */
 {

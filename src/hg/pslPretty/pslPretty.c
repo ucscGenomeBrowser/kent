@@ -9,6 +9,8 @@
 #include "nib.h"
 #include "psl.h"
 
+static char const rcsid[] = "$Id: pslPretty.c,v 1.20 2003/05/06 07:22:34 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

@@ -7,6 +7,8 @@
 #include "jksql.h"
 #include "cgh.h"
 
+static char const rcsid[] = "$Id: cgh.c,v 1.2 2003/05/06 07:22:21 kate Exp $";
+
 void cghStaticLoad(char **row, struct cgh *ret)
 /* Load a row from cgh table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

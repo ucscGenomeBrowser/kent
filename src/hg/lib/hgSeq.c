@@ -11,6 +11,8 @@
 #include "genePred.h"
 #include "bed.h"
 
+static char const rcsid[] = "$Id: hgSeq.c,v 1.17 2003/05/06 07:22:22 kate Exp $";
+
 /* I don't like using this global, but don't want to do a zillion 
  * hChromSizes in addFeature and don't want to add it as a param of 
  * every call to addFeature. */

@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "borf.h"
 
+static char const rcsid[] = "$Id: borf.c,v 1.2 2003/05/06 07:22:21 kate Exp $";
+
 void borfStaticLoad(char **row, struct borf *ret)
 /* Load a row from borf table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

@@ -6,6 +6,8 @@
 #include "psl.h"
 #include "fa.h"
 
+static char const rcsid[] = "$Id: pslMrnaCover.c,v 1.3 2003/05/06 07:22:29 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

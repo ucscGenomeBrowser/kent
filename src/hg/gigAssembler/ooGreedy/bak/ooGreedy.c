@@ -18,6 +18,8 @@
 #include "psl.h"
 #include "qaSeq.h"
 
+static char const rcsid[] = "$Id: ooGreedy.c,v 1.2 2003/05/06 07:22:33 kate Exp $";
+
 int version = 93;       /* Current version number. */
 
 int minFragSize = 1;            /* Minimum size of fragments we'll accept. */

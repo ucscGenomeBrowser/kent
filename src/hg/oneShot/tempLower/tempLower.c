@@ -5,6 +5,8 @@
 #include "linefile.h"
 #include "ctgPos.h"
 
+static char const rcsid[] = "$Id: tempLower.c,v 1.2 2003/05/06 07:22:31 kate Exp $";
+
 
 void usage()
 /* Explain usage and exit. */

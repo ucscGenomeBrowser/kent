@@ -5,6 +5,8 @@
 #include "hash.h"
 #include "portable.h"
 
+static char const rcsid[] = "$Id: checkOut.c,v 1.2 2003/05/06 07:22:15 kate Exp $";
+
 void checkOut(char *dir)
 /* Check out - check directory to make sure it has
  * a .out file for each .fa file, and that .out file

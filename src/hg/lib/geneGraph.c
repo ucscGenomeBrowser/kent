@@ -17,6 +17,8 @@
 #include "altGraphX.h"
 #include "geneGraph.h"
 
+static char const rcsid[] = "$Id: geneGraph.c,v 1.6 2003/05/06 07:22:22 kate Exp $";
+
 void ggEvidenceFree(struct ggEvidence **pEl)
 /* Free a single dynamically allocated ggEvidence */
 {

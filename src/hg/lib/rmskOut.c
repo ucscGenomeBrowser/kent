@@ -7,6 +7,8 @@
 #include "linefile.h"
 #include "rmskOut.h"
 
+static char const rcsid[] = "$Id: rmskOut.c,v 1.5 2003/05/06 07:22:23 kate Exp $";
+
 void rmskOutStaticLoad(char **row, struct rmskOut *ret)
 /* Load a row from rmskOut table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

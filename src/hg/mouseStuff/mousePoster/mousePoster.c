@@ -26,6 +26,8 @@
 #include "hCommon.h"
 #include "axt.h"
 
+static char const rcsid[] = "$Id: mousePoster.c,v 1.6 2003/05/06 07:22:28 kate Exp $";
+
 /* Which database to use */
 char *database = "mm2";
 char *humanDb = "hg10";

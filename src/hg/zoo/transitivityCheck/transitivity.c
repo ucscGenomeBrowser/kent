@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include "misc.h"
 
+static char const rcsid[] = "$Id: transitivity.c,v 1.3 2003/05/06 07:22:36 kate Exp $";
+
 #define MARKER -77
 
 struct Pair {

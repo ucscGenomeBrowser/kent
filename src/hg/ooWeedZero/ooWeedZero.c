@@ -7,6 +7,8 @@
 #include "portable.h"
 #include "obscure.h"
 
+static char const rcsid[] = "$Id: ooWeedZero.c,v 1.4 2003/05/06 07:22:33 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

@@ -7,6 +7,8 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
+static char const rcsid[] = "$Id: agpToFa.c,v 1.5 2003/05/06 07:22:13 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

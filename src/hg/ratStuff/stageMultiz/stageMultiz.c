@@ -10,6 +10,8 @@
 #include "dnautil.h"
 #include "maf.h"
 
+static char const rcsid[] = "$Id: stageMultiz.c,v 1.8 2003/05/06 07:22:34 kate Exp $";
+
 int winSize = 1010000;
 int overlapSize = 10000;
 boolean noDieMissing = FALSE;

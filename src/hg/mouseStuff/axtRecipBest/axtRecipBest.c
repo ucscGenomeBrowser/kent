@@ -11,6 +11,8 @@
 #include "binRange.h"
 #include "obscure.h"
 
+static char const rcsid[] = "$Id: axtRecipBest.c,v 1.3 2003/05/06 07:22:27 kate Exp $";
+
 #define minDistance 500000 /* minimum distance for reciprocal best alignment */
                             
 int baseInCount = 0;    /* Keep track of target bases input. */

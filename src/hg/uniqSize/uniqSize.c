@@ -7,6 +7,8 @@
 #include "sqlNum.h"
 #include "hash.h"
 
+static char const rcsid[] = "$Id: uniqSize.c,v 1.7 2003/05/06 07:22:35 kate Exp $";
+
 boolean stretch = FALSE;
 
 void usage()

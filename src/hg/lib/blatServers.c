@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "blatServers.h"
 
+static char const rcsid[] = "$Id: blatServers.c,v 1.2 2003/05/06 07:22:21 kate Exp $";
+
 void blatServersStaticLoad(char **row, struct blatServers *ret)
 /* Load a row from blatServers table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

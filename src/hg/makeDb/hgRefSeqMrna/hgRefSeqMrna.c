@@ -10,6 +10,8 @@
 #include "hgRelate.h"
 #include "obscure.h"
 
+static char const rcsid[] = "$Id: hgRefSeqMrna.c,v 1.11 2003/05/06 07:22:25 kate Exp $";
+
 
 /* Variables that can be set from command line. */
 boolean clTest = FALSE;

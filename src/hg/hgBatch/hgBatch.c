@@ -14,6 +14,8 @@
 #include "hui.h"
 #include "hgFind.h"
 
+static char const rcsid[] = "$Id: hgBatch.c,v 1.9 2003/05/06 07:22:19 kate Exp $";
+
 #define hgTextPhase  "Advanced query..."
 char *db;	/* Current database. */
 char *organism;	/* Current organism. */

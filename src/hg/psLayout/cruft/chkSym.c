@@ -3,6 +3,8 @@
 #include "linefile.h"
 #include "psLayHit.h"
 
+static char const rcsid[] = "$Id: chkSym.c,v 1.2 2003/05/06 07:22:33 kate Exp $";
+
 
 void usage()
 /* Print usage and exit. */

@@ -10,6 +10,8 @@
 #include "hdb.h"
 #include "chainNet.h"
 
+static char const rcsid[] = "$Id: hgLoadNet.c,v 1.8 2003/05/06 07:22:25 kate Exp $";
+
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
 boolean oldTable = FALSE;	/* Don't redo table. */

@@ -4,6 +4,8 @@
 #include "hash.h"
 #include "options.h"
 
+static char const rcsid[] = "$Id: lavToPsl.c,v 1.6 2003/05/06 07:22:28 kate Exp $";
+
 /* strand to us for target */
 char* targetStrand = "+";
 

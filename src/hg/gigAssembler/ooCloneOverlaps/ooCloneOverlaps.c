@@ -7,6 +7,8 @@
 #include "hCommon.h"
 #include "bits.h"
 
+static char const rcsid[] = "$Id: ooCloneOverlaps.c,v 1.4 2003/05/06 07:22:32 kate Exp $";
+
 struct clone
 /* Information on one clone. */
     {

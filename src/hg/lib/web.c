@@ -8,6 +8,8 @@
 #include "dbDb.h"
 #include "axtInfo.h"
 
+static char const rcsid[] = "$Id: web.c,v 1.33 2003/05/06 07:22:24 kate Exp $";
+
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
 /* flag that tell if text CGI header hsa been outputed */

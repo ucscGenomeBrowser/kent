@@ -3,6 +3,8 @@
 #include "memalloc.h"
 #include "dystring.h"
 
+static char const rcsid[] = "$Id: gpcrParser.c,v 1.7 2003/05/06 07:22:19 kate Exp $";
+
 /** Method prototypes */
 void catSeqFile(FILE* outfile, char* filename);
 void getTransFromFile(FILE* infile, char *path);

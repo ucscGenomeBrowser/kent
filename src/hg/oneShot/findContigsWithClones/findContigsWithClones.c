@@ -6,6 +6,8 @@
 #include "ooUtils.h"
 #include "obscure.h"
 
+static char const rcsid[] = "$Id: findContigsWithClones.c,v 1.3 2003/05/06 07:22:30 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

@@ -5,6 +5,8 @@
 #include "options.h"
 #include "chainNet.h"
 
+static char const rcsid[] = "$Id: netFilter.c,v 1.10 2003/05/06 07:22:28 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

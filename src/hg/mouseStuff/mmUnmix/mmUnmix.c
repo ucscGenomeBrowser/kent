@@ -13,6 +13,8 @@
 #include "featureBits.h"
 #include "hdb.h"
 
+static char const rcsid[] = "$Id: mmUnmix.c,v 1.5 2003/05/06 07:22:28 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

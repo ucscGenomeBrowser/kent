@@ -8,6 +8,8 @@
 #include "dystring.h"
 #include "trackDb.h"
 
+static char const rcsid[] = "$Id: trackDb.c,v 1.6 2003/05/06 07:22:23 kate Exp $";
+
 struct trackDb *trackDbLoad(char **row)
 /* Load a trackDb from row fetched with select * from trackDb
  * from database.  Dispose of this with trackDbFree(). */

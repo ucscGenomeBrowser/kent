@@ -9,6 +9,8 @@
 #include "cheapcgi.h"
 #include "hdb.h"
 
+static char const rcsid[] = "$Id: spliceWalk.c,v 1.6 2003/05/06 07:22:14 kate Exp $";
+
 void usage()
 {
 errAbort("spliceWalk - uses altGraphX files to construct a splicing graph\n"

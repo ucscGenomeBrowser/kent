@@ -5,6 +5,8 @@
 #include "options.h"
 #include "binRange.h"
 
+static char const rcsid[] = "$Id: bedIntersect.c,v 1.3 2003/05/06 07:22:14 kate Exp $";
+
 boolean aHitAny = FALSE;
 
 void usage()

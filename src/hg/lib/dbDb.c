@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "dbDb.h"
 
+static char const rcsid[] = "$Id: dbDb.c,v 1.7 2003/05/06 07:22:21 kate Exp $";
+
 void dbDbStaticLoad(char **row, struct dbDb *ret)
 /* Load a row from dbDb table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

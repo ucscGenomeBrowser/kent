@@ -6,6 +6,8 @@
 #include "chainBlock.h"
 #include "bits.h"
 
+static char const rcsid[] = "$Id: chainPreNet.c,v 1.6 2003/05/06 07:22:27 kate Exp $";
+
 int dots = 0;  /* How often to put out a dot. */
 int pad = 1;   /* How much to pad around chain. */
 

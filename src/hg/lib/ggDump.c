@@ -8,6 +8,8 @@
 #include "ggMrnaAli.h"
 #include "ggPrivate.h"
 
+static char const rcsid[] = "$Id: ggDump.c,v 1.5 2003/05/06 07:22:22 kate Exp $";
+
 static char charForType(int type)
 /* Return character corresponding to edge. */
 {

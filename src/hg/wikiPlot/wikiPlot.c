@@ -7,6 +7,8 @@
 #include "portable.h"
 #include "memgfx.h"
 
+static char const rcsid[] = "$Id: wikiPlot.c,v 1.7 2003/05/06 07:22:36 kate Exp $";
+
 /* Variables that can be overridden by CGI. */
 char *contigDir = "/projects/hg3/gs.7/oo.29/19/ctg18433";
 char *mapX = "info.noNt";

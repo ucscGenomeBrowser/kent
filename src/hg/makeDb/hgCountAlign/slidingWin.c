@@ -2,6 +2,8 @@
 #include "winCounts.h"
 #include "common.h"
 
+static char const rcsid[] = "$Id: slidingWin.c,v 1.2 2003/05/06 07:22:24 kate Exp $";
+
 #ifndef NDEBUG
 static void assertValid(struct slidingWin *win)
 /* assert sanity checks on window */

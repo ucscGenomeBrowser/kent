@@ -6,6 +6,8 @@
 #include "portable.h"
 #include "cheapcgi.h"
 
+static char const rcsid[] = "$Id: trfBig.c,v 1.11 2003/05/06 07:22:35 kate Exp $";
+
 /* Variables that can be set from command line. */
 char *trfExe = "trf";	/* trf executable name. */
 boolean doBed = FALSE;	/* Output .bed file. */

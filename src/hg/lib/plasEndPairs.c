@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "plasEndPairs.h"
 
+static char const rcsid[] = "$Id: plasEndPairs.c,v 1.3 2003/05/06 07:22:23 kate Exp $";
+
 struct plasEndPairs *plasEndPairsLoad(char **row)
 /* Load a plasEndPairs from row fetched with select * from plasEndPairs
  * from database.  Dispose of this with plasEndPairsFree(). */

@@ -2,6 +2,8 @@
 #include "synMap.h"
 #include "binMap.h"
 
+static char const rcsid[] = "$Id: createBinMap.c,v 1.2 2003/05/06 07:22:35 kate Exp $";
+
 void usage()
 {
 errAbort("createBinMap - using an all against all synMap from Lior at\n"

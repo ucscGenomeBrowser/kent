@@ -5,6 +5,8 @@
 #include "options.h"
 #include "psl.h"
 
+static char const rcsid[] = "$Id: pslCrudeCmp.c,v 1.6 2003/05/06 07:22:34 kate Exp $";
+
 boolean verbose = FALSE;
 
 /* output files */

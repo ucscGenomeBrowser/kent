@@ -13,6 +13,8 @@
 #include "chainLink.h"
 #include "chainDb.h"
 
+static char const rcsid[] = "$Id: chainTrack.c,v 1.8 2003/05/06 07:22:19 kate Exp $";
+
 
 static void chainDraw(struct track *tg, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 

@@ -10,6 +10,8 @@
 #include "jksql.h"
 #include "maDbRep.h"
 
+static char const rcsid[] = "$Id: maDbRep.c,v 1.2 2003/05/06 07:22:24 kate Exp $";
+
 struct mrnaAli *mrnaAliLoad(char **row)
 /* Load a mrnaAli from row fetched with select * from mrnaAli
  * from database.  Dispose of this with mrnaAliFree(). */

@@ -8,6 +8,8 @@
 #include "improbRunInfo.h"
 #include "fa.h"
 
+static char const rcsid[] = "$Id: motifSig.c,v 1.3 2003/05/06 07:22:18 kate Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {

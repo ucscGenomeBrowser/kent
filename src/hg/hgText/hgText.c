@@ -26,6 +26,8 @@
 #include "portable.h"
 #include "customTrack.h"
 
+static char const rcsid[] = "$Id: hgText.c,v 1.84 2003/05/06 07:22:19 kate Exp $";
+
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
 static char *customTrackPseudoDb = "customTrack";

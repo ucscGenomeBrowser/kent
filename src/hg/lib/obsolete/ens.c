@@ -13,6 +13,8 @@
 #include "jksql.h"
 #include "ens.h"
 
+static char const rcsid[] = "$Id: ens.c,v 1.2 2003/05/06 07:22:24 kate Exp $";
+
 static struct sqlConnCache *ecc = NULL;
 
 static struct sqlConnection *ensAllocConn()

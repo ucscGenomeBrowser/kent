@@ -13,6 +13,8 @@
 #include "bed.h"
 #include "blatStats.h"
 
+static char const rcsid[] = "$Id: knownVsBlat.c,v 1.12 2003/05/06 07:22:28 kate Exp $";
+
 /* Variables that can be set from command line. */
 int dotEvery = 0;	/* How often to print I'm alive dots. */
 char *clChrom = "all";	/* Which chromosome. */

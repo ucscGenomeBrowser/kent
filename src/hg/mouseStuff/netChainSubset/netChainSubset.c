@@ -6,6 +6,8 @@
 #include "chain.h"
 #include "chainNet.h"
 
+static char const rcsid[] = "$Id: netChainSubset.c,v 1.4 2003/05/06 07:22:28 kate Exp $";
+
 char *type = NULL;
 
 void usage()

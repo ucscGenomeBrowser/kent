@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "genomicSuperDups.h"
 
+static char const rcsid[] = "$Id: genomicSuperDups.c,v 1.2 2003/05/06 07:22:22 kate Exp $";
+
 void genomicSuperDupsStaticLoad(char **row, struct genomicSuperDups *ret)
 /* Load a row from genomicSuperDups table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

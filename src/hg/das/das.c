@@ -13,6 +13,8 @@
 #include "trackTable.h"
 #include <regex.h>
 
+static char const rcsid[] = "$Id: das.c,v 1.15 2003/05/06 07:22:16 kate Exp $";
+
 char *version = "1.00";
 char *database = NULL;	
 

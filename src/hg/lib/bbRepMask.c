@@ -7,6 +7,8 @@
 #include "jksql.h"
 #include "bbRepMask.h"
 
+static char const rcsid[] = "$Id: bbRepMask.c,v 1.2 2003/05/06 07:22:20 kate Exp $";
+
 void bbRepMaskStaticLoad(char **row, struct bbRepMask *ret)
 /* Load a row from bbRepMask table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "dnaMotif.h"
 
+static char const rcsid[] = "$Id: dnaMotif.c,v 1.2 2003/05/06 07:22:21 kate Exp $";
+
 struct dnaMotif *dnaMotifLoad(char **row)
 /* Load a dnaMotif from row fetched with select * from dnaMotif
  * from database.  Dispose of this with dnaMotifFree(). */
