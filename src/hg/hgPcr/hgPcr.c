@@ -21,7 +21,7 @@
 #include "web.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgPcr.c,v 1.6 2004/07/07 21:00:36 donnak Exp $";
+static char const rcsid[] = "$Id: hgPcr.c,v 1.7 2004/07/08 01:33:19 galt Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -108,8 +108,7 @@ puts(
 "<H3>Configuration Options</H3>\n"
 "<B>Genome and Assembly</B> - The sequence database to search.<BR>\n"
 "<B>Forward Primer</B> - Must be at least 15 bases in length.<BR>\n"
-"<B>Reverse Primer</B> - On the opposite strand from the forward primer. Minimum 
-length of 15 bases.<BR>\n"
+"<B>Reverse Primer</B> - On the opposite strand from the forward primer. Minimum length of 15 bases.<BR>\n"
 "<B>Max Product Size</B> - Maximum size of amplified region.<BR>\n"
 "<B>Min Perfect Match</B> - Number of bases that match exactly on 3' end of primers.  Minimum match size is 15.<BR>\n"
 "<B>Min Good Match</B> - Number of bases on 3' end of primers where at least 2 out of 3 bases match.<BR>\n"
