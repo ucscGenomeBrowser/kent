@@ -164,7 +164,7 @@
 #include "putaInfo.h"
 
 
-static char const rcsid[] = "$Id: hgc.c,v 1.849 2005/03/15 20:43:22 ytlu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.850 2005/03/15 21:16:43 ytlu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14847,50 +14847,6 @@ sqlFreeResult(&sr);
 putaInfoFree(&info);
 hFreeConn(&conn);
 }
-
-
-static void doFlyreg(struct trackDb *tdb, char *item)
-/* flyreg.org: Drosophila DNase I Footprint db. */
-{
-struct dyString *query = newDyString(256);
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-char **row;
-int start = cartInt(cart, "o");
-int end   = cartInt(cart, "t");
-char fullTable[64];
-boolean hasBin = FALSE;
-int i = 0;
-
-genericHeader(tdb, item);
-hFindSplitTable(seqName, tdb->tableName, fullTable, &hasBin);
-dyStringPrintf(query, "select * from %s where chrom = '%s' and ",
-	       fullTable, seqName);
-hAddBinToQuery(start, end, query);
-dyStringPrintf(query, "chromStart = %d and name = '%s'", start, item);
-sr = sqlGetResult(conn, query->string);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct flyreg fr;
-    flyregStaticLoad(row+hasBin, &fr);
-    if (i++ > 0)
-	htmlHorizontalLine();
-    printf("<B>Factor:</B> %s<BR>\n", fr.name);
-    printf("<B>Target:</B> %s<BR>\n", fr.target);
-    printf("<B>PubMed ID:</B> <A HREF=\"");
-    printEntrezPubMedUidUrl(stdout, fr.pmid);
-    printf("\" TARGET=_BLANK>%d</A><BR>\n", fr.pmid);
-    bedPrintPos((struct bed *)(&fr), 3);
-    }
-if (i == 0)
-    errAbort("query returned no results: \"%s\"", query);
-dyStringFree(&query);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-printTrackHtml(tdb);
-}
-
-
 
 
 void doMiddle()
