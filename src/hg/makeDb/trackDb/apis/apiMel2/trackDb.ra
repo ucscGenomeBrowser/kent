@@ -1,6 +1,6 @@
 track scaffolds
 shortLabel Scaffolds
-longLabel Assembly from Scaffolds
+longLabel Assembly Scaffolds
 group map
 priority 9.5
 visibility hide
