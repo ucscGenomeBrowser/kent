@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.736 2004/05/19 20:27:50 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.737 2004/05/19 20:56:20 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -578,18 +578,21 @@ if (message != NULL)
 hPrintf(">\n");
 }
 
-
-
-
-void mapBoxReinvoke(int x, int y, int width, int height, 
-	struct track *toggleGroup, char *chrom,
-	int start, int end, char *message)
+void mapBoxReinvokeExtra(int x, int y, int width, int height, 
+                            struct track *toggleGroup, char *chrom,
+                            int start, int end, char *message, char *extra)
 /* Print out image map rectangle that would invoke this program again.
  * If toggleGroup is non-NULL then toggle that track between full and dense.
- * If chrom is non-null then jump to chrom:start-end. */
+ * If chrom is non-null then jump to chrom:start-end.
+ * Add extra string to the URL if it's not NULL */
 {
 struct dyString *ui = uiStateUrlPart(toggleGroup);
 
+if (extra != NULL)
+    {
+    dyStringAppend(ui, "&");
+    dyStringAppend(ui, extra);
+    }
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
 if (chrom == NULL)
     {
@@ -606,6 +609,16 @@ if (message != NULL)
 hPrintf(">\n");
 }
 
+void mapBoxReinvoke(int x, int y, int width, int height, 
+	struct track *toggleGroup, char *chrom,
+	int start, int end, char *message)
+/* Print out image map rectangle that would invoke this program again.
+ * If toggleGroup is non-NULL then toggle that track between full and dense.
+ * If chrom is non-null then jump to chrom:start-end. */
+{
+mapBoxReinvokeExtra(x, y, width, height, toggleGroup, chrom, start, end, 
+                                message, NULL);
+}
 
 void mapBoxToggleVis(int x, int y, int width, int height, 
 	struct track *curGroup)
@@ -6477,13 +6490,27 @@ if (rulerMode != RULER_MODE_OFF)
             baseColor = MG_GRAY;
         // TODO: manage off-the-chromosome conditions
         extraSeq = hDnaFromSeq(chromName, winStart-3, winEnd+3, dnaUpper);
+
         /* clip off leading and trailing 3 bases, used for AA translation */
         seq = cloneDnaSeq(extraSeq);
         seq = newDnaSeq(seq->dna+3, seq->size-6, seq->name);
         drawBases(vg, insideX, y+rulerHeight, insideWidth, baseHeight, 
 		  baseColor, font, complementRulerBases, seq);
+
+        /* set up clickable area to toggle ruler visibility */
+            {
+            char newRulerVis[100];
+            safef(newRulerVis, 100, "%s=%s", RULER_TRACK_NAME,
+                         rulerMode == RULER_MODE_FULL ?  
+                                rulerMenu[RULER_MODE_ON] : 
+                                rulerMenu[RULER_MODE_FULL]);
+            mapBoxReinvokeExtra(insideX, y+rulerHeight, insideWidth,baseHeight, 
+                                //NULL, chromName, winStart, winEnd,
+                                NULL, NULL, 0, 0, "", newRulerVis);
+            }
         if (rulerMode == RULER_MODE_FULL && zoomedToBaseLevel)
             {
+            /* display codons */
             char codon[4];
             int frame;
             struct simpleFeature *sfList;
@@ -6547,9 +6574,10 @@ if (withCenterLabels)
         {
 	if (track->limitedVis != tvHide)
 	    {
-	    Color labelColor = (track->labelColor ? track->labelColor : track->ixColor);
-	    vgTextCentered(vg, insideX, y+1, 
-			   clWidth, insideHeight, labelColor, font, track->longLabel);
+	    Color labelColor = (track->labelColor ? 
+                                track->labelColor : track->ixColor);
+	    vgTextCentered(vg, insideX, y+1, clWidth, insideHeight, 
+                                labelColor, font, track->longLabel);
 	    mapBoxToggleVis(trackPastTabX, y+1, 
 			    trackPastTabWidth, insideHeight, track);
 	    y += fontHeight;
