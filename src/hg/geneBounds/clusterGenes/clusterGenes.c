@@ -9,7 +9,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.11 2004/02/28 19:59:53 angie Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.12 2004/03/06 23:00:16 markd Exp $";
 
 /* Command line driven variables. */
 char *clChrom = NULL;
@@ -507,7 +507,7 @@ void loadGenes(struct clusterMaker *cm, struct sqlConnection *conn,
                struct genePred **gpList)
 /* load genes into cluster from a table or file */
 {
-if (verboseLevel() >= 1)
+if (verboseLevel() >= 2)
     fprintf(stderr, "%s %s %c\n", table, chrom, strand);
 if (fileExists(table))
     loadGenesFromFile(cm, table, chrom, strand, gpList);
