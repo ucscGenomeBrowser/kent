@@ -4,7 +4,7 @@
 #include "jksql.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: usage.c,v 1.8 2004/09/27 18:15:39 kent Exp $";
+static char const rcsid[] = "$Id: usage.c,v 1.9 2004/11/22 04:13:23 kent Exp $";
 
 void printMainHelp()
 /* Put up main page help info. */
@@ -70,19 +70,14 @@ hPrintf("%s",
 "        <LI><B>output: </B>Specifies the output format (not all options are \n"
 "        available for some tracks). Formats include:\n"
 "        <UL>\n"
-"        <LI><em>Primary Table</em> - data from the primary table associated \n"
+"        <LI><em>All Fields From Primary Table</em> - data from the primary table associated \n"
 "        with the selected track, displayed in a tab-separated format suitable \n"
 "        for import into spreadsheets and relational databases. The ASCII \n"
 "        format may be read in any text browser.\n"
+"        <LI><em>Selected Fields from Primary and Related Tables</em> - user-selected set of tab-separated fields \n"
+"        from the primary table and optionally other related tables as well. \n"
 "        <LI><em>Sequence</em> - DNA (or protein sequence, in some cases) \n"
 "        associated with the table.</LI>\n"
-"        <LI>Selected Fields</em> - user-selected set of tab-separated fields \n"
-"        from the table. \n"
-"        <LI><em>Schema</em> - description of SQL schema of tables associated \n"
-"        with track, but not the actual data in the tables.\n"
-"        <LI><em>Statistics</em> - summary information about the data, such as\n"
-"        the number of items and how many bases are coverd by the results of\n"
-"        a query.</LI>\n"
 "        <LI><em>BED</em> - positions of data items in a standard\n"
 "        UCSC Browser format.</LI>\n"
 "        \n"
@@ -92,6 +87,11 @@ hPrintf("%s",
 "        \n"
 "        <LI><em>Custom Track</em> -  customized Genome Browser annotation  \n"
 "        track based on the results of the query.</LI>\n"
+"        <LI><em>Hyperlinks to Genome Browser</em> -  Returns a page full of\n"
+"        hyperlinks to the UCSC Genome Browser, one for each item in the table.</LI>\n"
+"        <LI><em>Data Points</em> -  The data points that make up a graph (aka wiggle)\n"
+"        track.</LI>\n"
+"        <LI><em>MAF</em> - Multiple alignments in MAF format</LI>\n"
 "        \n"
 "        </UL>\n"
 "        </LI>\n"
