@@ -8176,13 +8176,16 @@ _EOF_
     
     para create jobs.lst
     # etc... (run cluster job)
-    logout
 
-#
-#
-#
+#Completed: 59175 of 59175 jobs
+#CPU time in finished jobs:   49361849s  822697.48m 13711.62h  571.32d  1.565 y
+#IO & Wait Time:                258451s    4307.52m    71.79h    2.99d  0.008 y
+#Average job time:                 839s      13.98m     0.23h    0.01d
+#Longest job:                     1868s      31.13m     0.52h    0.02d
+#Submission to last job:         75584s    1259.73m    21.00h    0.87d
 
     # create track
+    logout
     ssh hgwdev
     cd /cluster/data/hg16/bed/exoniphy.hg16mm3rn3
     for dir in OUTPUT/* ; do 
