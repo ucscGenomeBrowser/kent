@@ -1,0 +1,4 @@
+
+2005-02-23: markd
+    Make parasol friendlier to multi-homed hosts.  Add option to specify
+    interface to use and use gethostbyaddr() to get host name.
