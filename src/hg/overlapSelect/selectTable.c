@@ -9,14 +9,9 @@
 #include "chromAnn.h"
 #include "verbose.h"
 
-extern FILE *fractionFh;
-float cdsOverlap;
-
-/* tables are never freed */
+/* tables are never freed; these should be real objects  */
 static struct hash* selectChromHash = NULL;  /* hash per-chrom binKeeper of
                                               * chromAnn objects */
-static struct chromAnn *selectObjs = NULL;  /* all chromAnn objects */
-
 static struct binKeeper* selectGetChromBins(char* chrom, boolean createMissing,
                                             char** key)
 /* get the bins for a chromsome, optionally creating if it doesn't exist.
@@ -143,98 +138,73 @@ if ((opts & selExcludeSelf) && isSelfMatch(opts, inCa, selCa))
 return TRUE;
 }
 
-static boolean checkOverlap(struct chromAnn *inCa, struct chromAnn *selCa,
-                            float overlapThreshold)
-/* check if inCa is overlapped by at least overlappedThreshold bases of
- * selCa */
+static int overlappedBases(struct chromAnn *ca1, struct chromAnn *ca2)
+/* determine the number of bases of overlap in two annotations */
 {
-int inBases = 0;
-int threshBases = 0, overBases = 0;
-boolean result;
-struct chromAnnBlk *inCaBlk, *selCaBlk;
+int overBases = 0;
+struct chromAnnBlk *ca1Blk, *ca2Blk;
 
-result = FALSE;
-if (overlapThreshold > 0.0)
+for (ca1Blk = ca1->blocks; ca1Blk != NULL; ca1Blk = ca1Blk->next)
     {
-    /* determine total required for overlap */
-    inBases = chromAnnTotalBLockSize(inCa);
-    threshBases = inBases * overlapThreshold;
-    }
-for (inCaBlk = inCa->blocks; inCaBlk != NULL; inCaBlk = inCaBlk->next)
-    {
-    for (selCaBlk = selCa->blocks; selCaBlk != NULL; selCaBlk = selCaBlk->next)
+    for (ca2Blk = ca2->blocks; ca2Blk != NULL; ca2Blk = ca2Blk->next)
         {
-        if ((inCaBlk->start < selCaBlk->end) && (inCaBlk->end > selCaBlk->start))
+        if ((ca1Blk->start < ca2Blk->end) && (ca1Blk->end > ca2Blk->start))
             {
-            overBases += min(inCaBlk->end, selCaBlk->end)
-                - max(inCaBlk->start, selCaBlk->start);
-            if (overBases >= threshBases)
-                result = TRUE;
+            overBases += min(ca1Blk->end, ca2Blk->end)
+                - max(ca1Blk->start, ca2Blk->start);
             }
         }
     }
-if (fractionFh != NULL)
-    {
-    if (overBases >= threshBases)
-    	{
-        cdsOverlap = (float)overBases / (float)inBases;
-	}
-    }
-return result;
+return overBases;
+}
+
+float selectFracOverlap(struct chromAnn *inCa, struct chromAnn *selCa)
+/* get the fraction of inCa overlapped by selCa */
+{
+return ((float)overlappedBases(inCa, selCa)) / ((float)inCa->totalSize);
 }
 
 static boolean isOverlapped(unsigned opts, struct chromAnn *inCa, struct chromAnn* selCa,
                             float overlapThreshold, float overlapSimilarity)
-/* see if a chromAnn objects overlap */
+/* see if a chromAnn objects overlap base on thresholds.  If thresholds are zero,
+ * any overlap will select. */
 {
-boolean isOverlap1, isOverlap2;
-float cdsOverlap1, cdsOverlap2;
-
 if (overlapSimilarity > 0.0)
     {
     /* bi-directional */
-    isOverlap1  = checkOverlap(inCa, selCa, overlapSimilarity);
-    cdsOverlap1 = cdsOverlap;
-    isOverlap2  = checkOverlap(selCa, inCa, overlapSimilarity);
-    cdsOverlap2 = cdsOverlap;
-    if ((isOverlap1 && isOverlap2) && (fractionFh != NULL))
-    	{
-	fprintf(fractionFh, "%s\t%s\t%f\n", inCa->name, selCa->name, cdsOverlap1);
-	}
-    return isOverlap1 && isOverlap2;
+    return (selectFracOverlap(inCa, selCa) >= overlapSimilarity)
+        && (selectFracOverlap(selCa, inCa) >= overlapSimilarity);
     }
 else
     {
     /* uni-directional */
-    isOverlap1  = checkOverlap(inCa, selCa, overlapThreshold);
-    cdsOverlap1 = cdsOverlap;
-    if (isOverlap1 && (fractionFh != NULL))
-    	{
-	fprintf(fractionFh, "%s\t%s\t%f\n", inCa->name, selCa->name, cdsOverlap1);
-	}
-    return isOverlap1;
+    if (overlapThreshold <= 0.0)
+        return (selectFracOverlap(inCa, selCa) > 0.0); /* any overlap */
+    else
+        return (selectFracOverlap(inCa, selCa) >= overlapThreshold);
     }
 }
 
-void addOverlapRecLines(struct slRef **overlappedRecLines, struct slRef *newRecLines)
+static void addOverlapRecs(struct slRef **overlappingRecs, struct slRef *newRecs)
 /* add overlapping records that are not dups */
 {
 struct slRef *orl;
-for (orl = newRecLines; orl != NULL; orl = orl->next)
+for (orl = newRecs; orl != NULL; orl = orl->next)
     {
-    if (!refOnList(*overlappedRecLines, orl->val))
-        refAdd(overlappedRecLines, orl->val);
+    if (!refOnList(*overlappingRecs, orl->val))
+        refAdd(overlappingRecs, orl->val);
     }
 }
 
 static boolean selectWithOverlapping(unsigned opts, struct chromAnn *inCa,
                                      struct binElement* overlapping,
                                      float overlapThreshold, float overlapSimilarity,
-                                     struct slRef **overlappedRecLines)
-/* given a list of overlapping elements, see if inCa is selected */
+                                     struct slRef **overlappingRecs)
+/* given a list of overlapping elements, see if inCa is selected, optionally returning
+ * the list of selected records */
 {
 boolean anyHits = FALSE;
-struct slRef *curOverRecLines = NULL;  /* don't add til the end */
+struct slRef *curOverRecs = NULL;  /* don't add til; the end */
 struct binElement* o;
 
 /* check each overlapping chomAnn */
@@ -245,26 +215,26 @@ for (o = overlapping; o != NULL; o = o->next)
         && isOverlapped(opts, inCa, selCa, overlapThreshold, overlapSimilarity))
         {
         anyHits = TRUE;
-        if (overlappedRecLines != NULL)
-            refAdd(&curOverRecLines, selCa);
+        if (overlappingRecs != NULL)
+            refAdd(&curOverRecs, selCa);
         else
             break;  /* only need one overlap */
         }
     }
 /* n.b. delayed adding to list so minCoverage can some day be implemented */
-if (overlappedRecLines != NULL)
+if (overlappingRecs != NULL)
     {
     if (anyHits)
-        addOverlapRecLines(overlappedRecLines, curOverRecLines);
-    slFreeList(&curOverRecLines);
+        addOverlapRecs(overlappingRecs, curOverRecs);
+    slFreeList(&curOverRecs);
     }
 return anyHits;
 }
 
 boolean selectIsOverlapped(unsigned opts, struct chromAnn *inCa,
                            float overlapThreshold, float overlapSimilarity,
-                           struct slRef **overlappedRecLines)
-/* Determine if a range is overlapped.  If overlappedRecLines is not null,
+                           struct slRef **overlappingRecs)
+/* Determine if a range is overlapped.  If overlappingRecs is not null,
  * a list of the line form of overlaping select records is returned.  Free
  * with slFreelList. */
 {
@@ -274,7 +244,7 @@ if (bins != NULL)
     {
     struct binElement* overlapping = binKeeperFind(bins, inCa->start, inCa->end);
     hit = selectWithOverlapping(opts, inCa, overlapping, overlapThreshold,
-                                overlapSimilarity, overlappedRecLines);
+                                overlapSimilarity, overlappingRecs);
     slFreeList(&overlapping);
     }
 if (verboseLevel() >= 2)

@@ -25,10 +25,11 @@ static struct optionSpec optionSpecs[] = {
     {"strand", OPTION_BOOLEAN},
     {"excludeSelf", OPTION_BOOLEAN},
     {"dropped", OPTION_STRING},
-    {"fraction", OPTION_STRING},
     {"merge", OPTION_BOOLEAN},
+    {"mergeOutput", OPTION_BOOLEAN},
     {"overlapThreshold", OPTION_FLOAT},
     {"overlapSimilarity", OPTION_FLOAT},
+    {"statsOutput", OPTION_BOOLEAN},
     {"idOutput", OPTION_BOOLEAN},
     {NULL, 0}
 };
@@ -47,12 +48,13 @@ unsigned selectOpts = 0;
 unsigned inCaOpts = 0;
 unsigned inFmt = UNKNOWN_FMT;
 struct coordCols inCoordCols;
-boolean doMerge = FALSE;
 boolean nonOverlapping = FALSE;
+boolean mergeOutput = FALSE;
 boolean idOutput = FALSE;
+boolean statsOutput = FALSE;
 float overlapThreshold = 0.0;
 float overlapSimilarity = 0.0;
-FILE* fractionFh = NULL;
+
 
 struct ioFiles
 /* object containing input files */
@@ -88,39 +90,46 @@ errAbort("can't determine file format of %s", path);
 return UNKNOWN_FMT;
 }
 
-static void writeId(struct chromAnn* ca, FILE* out)
-/* output and id, or <unknown> if not known */
+static char *getPrintId(struct chromAnn* ca)
+/* get id for output, or <unknown> if not known */
 {
-fputs(((ca->name == NULL) ? "<unknown>" : ca->name), out);
+return (ca->name == NULL) ? "<unknown>" : ca->name;
 }
 
 static void outputMerge(struct chromAnn* inCa, struct ioFiles *ioFiles,
-                        struct slRef *overlappedRecLines)
-/* output for the -merge option; pairs of inRec and overlap */
+                        struct slRef *overlappingRecs)
+/* output for the -mergeOutput option; pairs of inRec and overlap */
 {
 struct slRef *selectCaRef;
-for (selectCaRef = overlappedRecLines; selectCaRef != NULL; selectCaRef = selectCaRef->next)
+for (selectCaRef = overlappingRecs; selectCaRef != NULL; selectCaRef = selectCaRef->next)
     {
     struct chromAnn *selectCa = selectCaRef->val;
-    fputs(inCa->recLine, ioFiles->outFh);
-    fputc('\t', ioFiles->outFh);
-    fputs(selectCa->recLine, ioFiles->outFh);
-    fputc('\n', ioFiles->outFh);
+    fprintf(ioFiles->outFh, "%s\t%s\n", inCa->recLine, selectCa->recLine);
     }
 }
 
 static void outputIds(struct chromAnn* inCa, struct ioFiles *ioFiles,
-                        struct slRef *overlappedRecLines)
+                      struct slRef *overlappingRecs)
 /* output for the -idOutput option; pairs of inRec and overlap ids */
 {
 struct slRef *selectCaRef;
-for (selectCaRef = overlappedRecLines; selectCaRef != NULL; selectCaRef = selectCaRef->next)
+for (selectCaRef = overlappingRecs; selectCaRef != NULL; selectCaRef = selectCaRef->next)
     {
     struct chromAnn *selectCa = selectCaRef->val;
-    writeId(inCa, ioFiles->outFh);
-    fputc('\t', ioFiles->outFh);
-    writeId(selectCa, ioFiles->outFh);
-    fputc('\n', ioFiles->outFh);
+    fprintf(ioFiles->outFh, "%s\t%s\n", getPrintId(inCa), getPrintId(selectCa));
+    }
+}
+
+static void outputStats(struct chromAnn* inCa, struct ioFiles *ioFiles,
+                        struct slRef *overlappingRecs)
+/* output for the -idOutput option; pairs of inRec and overlap ids */
+{
+struct slRef *selectCaRef;
+for (selectCaRef = overlappingRecs; selectCaRef != NULL; selectCaRef = selectCaRef->next)
+    {
+    struct chromAnn *selectCa = selectCaRef->val;
+    fprintf(ioFiles->outFh, "%s\t%s\t%0.3g\t%0.3g\n", getPrintId(inCa), getPrintId(selectCa),
+            selectFracOverlap(inCa, selectCa), selectFracOverlap(selectCa, inCa));
     }
 }
 
@@ -128,34 +137,34 @@ static void doOverlap(struct chromAnn* inCa, struct ioFiles *ioFiles)
 /* Check if a chromAnn object is overlapped given the criteria, and if so
  * output */
 {
-struct slRef *overlappedRecLines = NULL, *selectCaRef;
+struct slRef *overlappingRecs = NULL;
+struct slRef **overlappingRecsPtr = NULL;  /* used to indicate if recs should be collected */
 boolean overlaps = FALSE;
+if (mergeOutput || idOutput || statsOutput)
+    overlappingRecsPtr = &overlappingRecs;
 
-overlaps = selectIsOverlapped(selectOpts, inCa, overlapThreshold,
-                              overlapSimilarity,
-                              ((doMerge || idOutput) ? &overlappedRecLines : NULL));
+overlaps = selectIsOverlapped(selectOpts, inCa, overlapThreshold, overlapSimilarity,
+                              overlappingRecsPtr);
 if ((nonOverlapping) ? !overlaps : overlaps)
     {
-    if (doMerge)
-        outputMerge(inCa, ioFiles, overlappedRecLines);
+    if (mergeOutput)
+        outputMerge(inCa, ioFiles, overlappingRecs);
     else if (idOutput)
-        outputIds(inCa, ioFiles, overlappedRecLines);
+        outputIds(inCa, ioFiles, overlappingRecs);
+    else if (statsOutput)
+        outputStats(inCa, ioFiles, overlappingRecs);
     else
-        {
-        fputs(inCa->recLine, ioFiles->outFh);
-        fputc('\n', ioFiles->outFh);
-        }
+        fprintf(ioFiles->outFh, "%s\n", inCa->recLine);
     }
 else if (ioFiles->dropFh != NULL)
     {
     if (idOutput)
-        writeId(inCa, ioFiles->dropFh);
+        fprintf(ioFiles->dropFh, "%s\n", getPrintId(inCa));
     else
-        fputs(inCa->recLine, ioFiles->dropFh);
-    fputc('\n', ioFiles->dropFh);
+        fprintf(ioFiles->dropFh, "%s\n", inCa->recLine);
     }
 
-slFreeList(&overlappedRecLines);
+slFreeList(&overlappingRecs);
 }
 
 void pslSelect(struct ioFiles *ioFiles)
@@ -236,10 +245,9 @@ switch (selectFmt)
 lineFileClose(&lf);
 }
 
-void overlapSelect(char *selectFile, char *inFile, char *outFile, char *dropFile, char *fractionFile)
+void overlapSelect(char *selectFile, char *inFile, char *outFile, char *dropFile)
 /* select records based on overlap of chromosome ranges */
 {
-struct slRef *overlappedRecLines = NULL;
 struct ioFiles ioFiles;
 ZeroVar(&ioFiles);
 ioFiles.inLf = (inFmt == PSL_FMT) ? pslFileOpen(inFile) : lineFileOpen(inFile, TRUE);
@@ -248,8 +256,8 @@ loadSelectTable(selectFile);
 ioFiles.outFh = mustOpen(outFile, "w");
 if (dropFile != NULL)
     ioFiles.dropFh = mustOpen(dropFile, "w");
-if (fractionFile != NULL)
-    fractionFh = mustOpen(fractionFile, "w");
+if (statsOutput)
+    fputs("#selectId\t" "inId\t" "inOverlap\t" "selectOverlap\n", ioFiles.outFh);
 
 switch (inFmt)
     {
@@ -269,7 +277,6 @@ switch (inFmt)
 lineFileClose(&ioFiles.inLf);
 carefulClose(&ioFiles.outFh);
 carefulClose(&ioFiles.dropFh);
-carefulClose(&fractionFh);
 }
 
 void usage(char *msg)
@@ -313,21 +320,28 @@ errAbort("%s:\n"
          "      Note that this is only coverage by a single select record and this is;\n"
          "      bidirectional inFile and selectFile must overlap by this amount.  A value of 1.0\n"
          "      will select identical records (or CDS if both CDS options are specified.\n"
-         "  -dropped=file  - output rows that were dropped to this file.\n"
-         "  -fraction=file - output rows that contains overlap fraction numbers.\n"
-         "  -merge - output file with be a merge of the input file with the\n"
+         "  -statsOutput - output overlap statistics instead of selected records. \n"
+         "      If no overlap criteria is specified, all overlapping entries are reported,\n"
+         "      Otherwise only the pairs passing the citeria are reported. This results\n"
+         "      in a tab-seperated file with the columns:\n"
+         "         inId selectId inOverlap selectOverlap \n"
+         "      Where inOverlap is the fraction of the inFile record overlapped by the select file\n"
+         "      record and selectOverlap is the fraction of the select record overlap by the in file\n"
+         "      record.\n"
+         "  -mergeOutput - output file with be a merge of the input file with the\n"
          "      selectFile records that selected it.  The format is\n"
          "         inRec<tab>selectRec.\n"
          "      if multiple select records hit, inRec is repeated.\n"
          "      This will increase the memory required\n"
          "  -idOutput - output a list of pairs of inId<tab>selectId\n"
+         "  -dropped=file  - output rows that were dropped to this file.\n"
          "  -verbose=n - verbose > 1 prints some details\n",
          msg);
 }
 
 /* entry */
 int main(int argc, char** argv) {
-char *selectFile, *inFile, *outFile, *dropFile, *fractionFile;
+char *selectFile, *inFile, *outFile, *dropFile;
 optionInit(&argc, argv, optionSpecs);
 if (argc != 4)
     usage("wrong # args");
@@ -335,6 +349,7 @@ selectFile = argv[1];
 inFile = argv[2];
 outFile = argv[3];
 
+/* file format options */
 if (optionExists("selectFmt") && optionExists("selectCoordCols"))
     errAbort("can't specify both -selectFmt and -selectCoordCols");
 if (optionExists("intFmt") && optionExists("intCoordCols"))
@@ -377,6 +392,8 @@ if (inCaOpts & chromAnnCds)
     if (inFmt != GENEPRED_FMT)
         errAbort("-inCds only allowed with genePred format in files");
     }
+
+/* select options */
 nonOverlapping = optionExists("nonOverlapping");
 if (optionExists("strand"))
     selectOpts |= selUseStrand;
@@ -387,20 +404,23 @@ overlapSimilarity = optionFloat("overlapSimilarity", 0.0);
 if ((overlapThreshold != 0.0) && (overlapSimilarity != 0.0))
     errAbort("can't specify both -overlapThreshold and -overlapSimilarity");
 
-doMerge = optionExists("merge");
+/* output options */
+if (optionExists("merge")) /* FIXME: this is tmp */
+    errAbort("please use -mergeOutput instead of -merge; trying to keep option names sane");
+mergeOutput = optionExists("mergeOutput");
 idOutput = optionExists("idOutput");
-if (doMerge && idOutput)
-    errAbort("can't specify both -merge and -idOutput");
-if (doMerge)
+statsOutput = optionExists("statsOutput");
+if ((mergeOutput + idOutput + statsOutput) > 1)
+    errAbort("can only specify one of -mergeOutput, -idOutput, or -statsOutput");
+if (mergeOutput)
     {
     if (nonOverlapping)
-        errAbort("can't use -merge with -nonOverlapping");
+        errAbort("can't use -mergeOutput with -nonOverlapping");
     selectOpts |= selSaveLines;
     }
 
 dropFile = optionVal("dropped", NULL);
-fractionFile = optionVal("fraction", NULL);
 
-overlapSelect(selectFile, inFile, outFile, dropFile, fractionFile);
+overlapSelect(selectFile, inFile, outFile, dropFile);
 return 0;
 }

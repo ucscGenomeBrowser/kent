@@ -27,11 +27,14 @@ void selectAddBeds(unsigned opts, struct lineFile* bedLf);
 void selectAddCoordCols(unsigned opts, struct lineFile *tabLf, struct coordCols* cols);
 /* add records with coordiates at a specified columns */
 
+float selectFracOverlap(struct chromAnn *inCa, struct chromAnn *selCa);
+/* get the fraction of inCa overlapped by selCa */
+
 boolean selectIsOverlapped(unsigned opts, struct chromAnn *inCa,
                            float overlapThreshold, float overlapSimilarity,
-                           struct slRef **overlappedRecLines);
-/* determine if an range is overlapped.  If overlappedRecLines is not null,
- * a list of the line form of overlapping chromAnn objects is returned.  Free
+                           struct slRef **overlappingRecs);
+/* Determine if a range is overlapped.  If overlappingRecs is not null,
+ * a list of the line form of overlaping select records is returned.  Free
  * with slFreelList. */
 
 #endif

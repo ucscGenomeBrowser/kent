@@ -10,6 +10,7 @@ test:   pslSelectTests \
 	cdsOverlapTests \
 	mergeTests \
 	idOutputTests \
+	statsOutputTests \
 	thresholdTests \
 	similarityTests
 
@@ -194,23 +195,23 @@ mergeTests: psl_over_NM_015110gpMerge psl_over_NM_001206bedMerge \
 
 # select psls overlaping NM_015110 with gp and merge
 psl_over_NM_015110gpMerge: mkout
-	${OVERSEL} -merge -dropped=output/psl_over_NM_015110gpMerge.drop.psl input/NM_015110.gp input/mrna.psl output/psl_over_NM_015110gpMerge.psl
+	${OVERSEL} -mergeOutput -dropped=output/psl_over_NM_015110gpMerge.drop.psl input/NM_015110.gp input/mrna.psl output/psl_over_NM_015110gpMerge.psl
 	${DIFF} expected/psl_over_NM_015110gpMerge.psl output/psl_over_NM_015110gpMerge.psl
 	${DIFF} expected/psl_over_NM_015110gp.drop.psl output/psl_over_NM_015110gpMerge.drop.psl
 
 # select psls overlaping NM_001206 with bed and merge
 psl_over_NM_001206bedMerge: mkout
-	${OVERSEL} -merge input/NM_001206.bed input/mrna.psl output/psl_over_NM_001206bedMerge.psl
+	${OVERSEL} -mergeOutput input/NM_001206.bed input/mrna.psl output/psl_over_NM_001206bedMerge.psl
 	${DIFF} expected/psl_over_NM_001206bedMerge.psl output/psl_over_NM_001206bedMerge.psl
 
 # select beds overlaping NM_015110 with bed and merge
 bed_over_NM_015110bedMerge: mkout
-	${OVERSEL} -merge input/NM_015110.bed input/mrna.bed output/bed_over_NM_015110bedMerge.bed
+	${OVERSEL} -mergeOutput input/NM_015110.bed input/mrna.bed output/bed_over_NM_015110bedMerge.bed
 	${DIFF} expected/bed_over_NM_015110bedMerge.bed output/bed_over_NM_015110bedMerge.bed
 
 # select by column and merge
 colSelectMerge: mkout
-	${OVERSEL} -merge -selectCoordCols=1,2,3 -inCoordCols=3,4,5 \
+	${OVERSEL} -mergeOutput -selectCoordCols=1,2,3 -inCoordCols=3,4,5 \
 	    input/gene.select input/gene.clusters output/colSelectMerge.cluster
 	${DIFF} expected/colSelectMerge.cluster output/colSelectMerge.cluster
 
@@ -235,6 +236,27 @@ psl_over_NM_001206bedIdOutput: mkout
 bed_over_NM_015110bedIdOutput: mkout
 	${OVERSEL} -idOutput input/NM_015110.bed input/mrna.bed output/bed_over_NM_015110bedIdOutput.ids
 	${DIFF} expected/bed_over_NM_015110bedIdOutput.ids output/bed_over_NM_015110bedIdOutput.ids
+
+###
+# -statsOutput tests
+###
+statsOutputTests: psl_over_NM_015110gpStatsOutput psl_over_NM_001206bedStatsOutput \
+	bed_over_NM_015110bedStatsOutput
+
+# select psls overlaping NM_015110 with gp and statsOutput
+psl_over_NM_015110gpStatsOutput: mkout
+	${OVERSEL} -statsOutput input/NM_015110.gp input/mrna.psl output/psl_over_NM_015110gpStatsOutput.stats
+	${DIFF} expected/psl_over_NM_015110gpStatsOutput.stats output/psl_over_NM_015110gpStatsOutput.stats
+
+# select psls overlaping NM_001206 with bed and statsOutput
+psl_over_NM_001206bedStatsOutput: mkout
+	${OVERSEL} -statsOutput input/NM_001206.bed input/mrna.psl output/psl_over_NM_001206bedStatsOutput.stats
+	${DIFF} expected/psl_over_NM_001206bedStatsOutput.stats output/psl_over_NM_001206bedStatsOutput.stats
+
+# select beds overlaping NM_015110 with bed and statsOutput
+bed_over_NM_015110bedStatsOutput: mkout
+	${OVERSEL} -statsOutput input/NM_015110.bed input/mrna.bed output/bed_over_NM_015110bedStatsOutput.stats
+	${DIFF} expected/bed_over_NM_015110bedStatsOutput.stats output/bed_over_NM_015110bedStatsOutput.stats
 
 ###
 # threshold tests

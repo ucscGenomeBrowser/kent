@@ -11,10 +11,13 @@
 #include "verbose.h"
 
 static struct chromAnnBlk* chromAnnBlkNew(struct chromAnn *ca, int start, int end)
-/* create new object */
+/* create new block object and add chromAnn object */
 {
 struct chromAnnBlk* caBlk;
 AllocVar(caBlk);
+if (end < start)
+    errAbort("invalid block coordinates for %s: start=%d end=%d", ca->name, start, end);
+
 caBlk->ca = ca;;
 caBlk->start = start;
 caBlk->end = end;
@@ -22,6 +25,7 @@ if (start < ca->start)
     ca->start = start;
 if (end > ca->end)
     ca->end = end;
+ca->totalSize += (end - start);
 slAddHead(&ca->blocks, caBlk);
 return caBlk;
 }
