@@ -16,7 +16,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.40 2005/02/08 23:59:24 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.41 2005/02/11 22:43:09 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -256,14 +256,21 @@ return name;
 }
 
 /* --------------- Page printers ----------------- */
-/* See this NCBI web doc for more info about entrezFormat:
- * http://www.ncbi.nlm.nih.gov/entrez/query/static/linking.html */
-char *entrezFormat = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=%s&term=%s&doptcmdl=%s&tool=genome.ucsc.edu";
 
-static void printEntrezNucleotideUrl(FILE *f, char *accession)
+static void printOurMrnaUrl(FILE *f, char *accession)
 /* Print URL for Entrez browser on a nucleotide. */
 {
-fprintf(f, entrezFormat, "Nucleotide", accession, "GenBank");
+fprintf(f, "../cgi-bin/hgc?%s&g=mrna&i=%s&c=%s&l=%d&r=%d&db=%s",
+    cartSidUrlString(cart),  accession, curGeneChrom, curGeneStart, curGeneEnd, database);
+}
+
+boolean idInAllMrna(char *id, struct sqlConnection *conn)
+/* Return TRUE if id is in allMrna table */
+{
+char query[256];
+safef(query, sizeof(query), 
+	"select count(*) from all_mrna where qName = '%s'", id);
+return sqlQuickNum(conn, query) > 0;
 }
 
 void printDescription(char *id, struct sqlConnection *conn)
@@ -273,6 +280,7 @@ char *description = NULL;
 char *summaryTables = genomeOptionalSetting("summaryTables");
 char *protAcc = getSwissProtAcc(conn, spConn, id);
 char *spDisplayId;
+boolean gotRnaAli = idInAllMrna(id, conn);
 
 description = genoQuery(id, "descriptionSql", conn);
 hPrintf("<B>Description:</B> ");
@@ -282,12 +290,15 @@ else
     hPrintf("%s<BR>", "No description available");
 freez(&description);
 
-hPrintf("<B>Representative mRNA: </B> <A HREF=\"");
-printEntrezNucleotideUrl(stdout, id);
-hPrintf("\" TARGET=_blank>%s</A>\n", id);
+if (gotRnaAli)
+    {
+    hPrintf("<B>Representative mRNA: </B> <A HREF=\"");
+    printOurMrnaUrl(stdout, id);
+    hPrintf("\">%s</A>\n", id);
+    hPrintf("&nbsp&nbsp&nbsp");
+    }
 if (protAcc != NULL)
     {
-    hPrintf("&nbsp&nbsp&nbsp");
     hPrintf("<B>Protein: ");
     hPrintf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" "
 	    "TARGET=_blank>%s</A></B>\n",
