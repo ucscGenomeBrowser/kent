@@ -62,6 +62,7 @@ extern struct mgcStatusType MGC_MICRODELETION;
 extern struct mgcStatusType MGC_LIBRARY_ARTIFACTS;
 extern struct mgcStatusType MGC_NO_POLYA_TAIL;
 extern struct mgcStatusType MGC_CANT_SEQUENCE;
+extern struct mgcStatusType MGC_INCONSISTENT_WITH_GENE;
 
 struct mgcStatus
 /* A row in the mgcStatus table.  None of the fields are unique, am image id
@@ -79,7 +80,7 @@ struct mgcStatus
 };
 
 struct mgcStatusTbl
-/* Object for creating and mgc table. */
+/* Object for creating and accessing mgc table. */
 {
     struct hash *imageIdHash;    /* hash of id to mgcStatus.  Status objects
                                   * also stored in localmem */
