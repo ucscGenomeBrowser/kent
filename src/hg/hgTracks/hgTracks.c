@@ -637,8 +637,8 @@ hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
 hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
     hgcNameAndSettings(), start, end, group, encodedItem, chromName, winStart, winEnd, 
     database, tl.picWidth);
-if (start !=-1)
-    hPrintf("onMouseOver=\"javascript:void(popup('%s'));\">\n",statusLine);
+/*if (start !=-1)*/
+    hPrintf(" onMouseOver=\"javascript:void(popup('%s'));\">\n",statusLine);
 freeMem(encodedItem);
 }
 
@@ -5290,7 +5290,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     struct chain *chain = chainLoad(row+rowOffset);
 
-    sprintf(query, "SELECT tStart, tEnd, qGap from %s where chainId = %d and tStart < %d and tEnd > %d and tStart >= %d and tEnd <= %d",
+    sprintf(query, "SELECT tName, tStart, tEnd, qStart from %s where chainId = %d and tStart < %d and tEnd > %d and tStart >= %d and tEnd <= %d",
                 trackGap, chain->id, chain->tEnd, chain->tStart, winStart, winEnd);
     srGap = sqlGetResult(conn2, query);
     while ((rowGap = sqlNextRow(srGap)) != NULL)
@@ -5301,7 +5301,8 @@ while ((row = sqlNextRow(sr)) != NULL)
         AllocVar(b);
         b->tStart = cg->tStart;
         b->tEnd = cg->tEnd;
-        b->qStart = cg->qGap;
+        b->qStart = cg->qStart;
+        b->qEnd = cg->qStart + cg->tEnd - cg->tStart;
         slAddHead(&bList, b);
         }
     slReverse(&bList);
