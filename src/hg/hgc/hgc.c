@@ -115,7 +115,7 @@
 #include "affyGenoDetails.h"
 #include "encodeRegionInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.504 2003/10/20 23:30:45 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.504.2.1 2003/10/27 22:40:59 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6491,12 +6491,6 @@ if (url != NULL && url[0] != 0)
 void doSuperfamily(struct trackDb *tdb, char *item, char *itemForUrl)
 /* Put up Superfamily track info. */
 {
-char *dupe, *type, *words[16];
-char title[256];
-int wordCount;
-int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
-
 if (itemForUrl == NULL)
     itemForUrl = item;
 
@@ -6505,9 +6499,6 @@ genericHeader(tdb, item);
 printSuperfamilyCustomUrl(tdb, itemForUrl, item == itemForUrl);
 
 printTrackHtml(tdb);
-
-freez(&dupe);
-hFreeConn(&conn);
 }
 
 void doRefGene(struct trackDb *tdb, char *rnaName)
